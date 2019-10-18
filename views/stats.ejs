@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%- calculated.display_name %> | SkyBlock Stats</title>
+        <meta charset="utf-8">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/resources/css/index.css">
+        <link rel="shortcut icon" href="https://visage.surgeplay.com/face/32/<%- calculated.uuid %>" type="image/png">
+    </head>
+    <body>
+        <%- include('../includes/header') %>
+        <div id="bg_blur"></div>
+        <div id="stats_display">
+            <div id="player_model" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
+        </div>
+        <div id="wrapper">
+            <div id="player_profile">Stats for <span id="stats_for_player"><%= calculated.display_name %></span> on <span id="stats_for_profile"><%= calculated.profile.cute_name %></span></div>
+            <div id="basic_stats">
+                <div class="basic-stat stat-health"><span class="stat-name">Health</span><%= calculated.stats.health %></div>
+                <div class="basic-stat stat-defense"><span class="stat-name">Defense</span><%= calculated.stats.defense %></div>
+                <div class="basic-stat stat-effective-health"><span class="stat-name">Effective Health</span><%= calculated.stats.effective_health %></div>
+                <div class="basic-stat stat-strength"><span class="stat-name">Strength</span><%= calculated.stats.strength %></div>
+                <div class="basic-stat stat-speed"><span class="stat-name">Speed</span><%= calculated.stats.speed %>%</div>
+                <div class="basic-stat stat-crit-chance"><span class="stat-name">Crit Chance</span><%= calculated.stats.crit_chance %>%</div>
+                <div class="basic-stat stat-crit-damage"><span class="stat-name">Crit Damage</span><%= calculated.stats.crit_damage %>%</div>
+                <div class="basic-stat stat-intelligence"><span class="stat-name">Intelligence</span><%= calculated.stats.intelligence %></div>
+            </div>
+            <div class="stat-container">
+                <div class="stat-header">Armor</div>
+                <div class="pieces">
+                    <% items.armor.slice().reverse().forEach(item => { %>
+                        <div data-item-index="<%= item.item_index %>" class="piece piece-<%= item.rarity %>-bg">
+                            <img class="piece-icon" src="<%= item.texture_path %>">
+                            <div class="stats-content">
+                                <div class="item-name piece-<%= item.rarity %>-bg"><%= item.display_name %></div>
+                                <div class="item-lore"><%- item.lore %></div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+            <div class="stat-container">
+                <div class="stat-header">Weapons</div>
+                <div class="pieces">
+                    <% items.weapons.forEach(item => { %>
+                        <div data-item-index="<%= item.item_index %>" class="piece piece-<%= item.rarity %>-bg">
+                            <img class="piece-icon" src="<%= item.texture_path %>">
+                            <div class="stats-content">
+                                <div class="item-name piece-<%= item.rarity %>-bg"><%= item.display_name %></div>
+                                <div class="item-lore"><%- item.lore %></div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+            <div class="stat-container">
+                <div class="stat-header">Accessories</div>
+                <div class="pieces">
+                    <% items.talismans.filter(a => !a.isInactive).forEach(item => { %>
+                        <div data-item-index="<%= item.item_index %>" class="piece piece-<%= item.rarity %>-bg">
+                            <img class="piece-icon" src="<%= item.texture_path %>">
+                            <div class="stats-content">
+                                <div class="item-name piece-<%= item.rarity %>-bg"><%= item.display_name %></div>
+                                <div class="item-lore"><%- item.lore %></div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.2/velocity.min.js"></script>
+        <script>
+            let items = <%- JSON.stringify(items) %>;
+            let calculated = <%- JSON.stringify(calculated) %>;
+
+            [].forEach.call(document.querySelectorAll('.piece'), element => {
+                let statsContent = element.querySelector('.stats-content');
+
+                let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
+
+                element.addEventListener('mouseenter', () => {
+                    Velocity.hook(statsContent, "translateY", "30px");
+                    Velocity.hook(statsContent, "opacity", "0");
+
+                    Velocity(statsContent, { translateY: 0, opacity: 1}, { duration: 200, queue: false });
+                });
+
+                element.addEventListener('mouseleave', () => {
+                    Velocity(statsContent, { translateY: -30, opacity: 0}, { duration: 200, queue: false });
+                });
+
+                element.addEventListener('mousemove', e => {
+                    console.log(maxTop, e.clientY - statsContent.offsetHeight / 2);
+
+                    let top = Math.max(70, Math.min(maxTop, e.clientY - statsContent.offsetHeight / 2));
+
+                    console.log(statsContent);
+
+                    statsContent.style.top = top + "px";
+
+                });
+            });
+        </script>
+    </body>
+</html>

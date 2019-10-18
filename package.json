@@ -1,0 +1,37 @@
+{
+  "name": "skyblock-stats",
+  "version": "1.0.0",
+  "description": "Player stats for Hypixel SkyBlock",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeaPhant/skyblock-stats.git"
+  },
+  "keywords": [
+    "hypixel",
+    "skyblock",
+    "minecraft",
+    "statistics"
+  ],
+  "author": "LeaPhant",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LeaPhant/skyblock-stats/issues"
+  },
+  "homepage": "https://github.com/LeaPhant/skyblock-stats#readme",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "canvas": "^2.6.0",
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "fs-extra": "^8.1.0",
+    "jimp": "^0.8.4",
+    "lodash": "^4.17.15",
+    "minecraft-data": "^2.39.1",
+    "object-path": "^0.11.4",
+    "prismarine-nbt": "^1.2.1"
+  }
+}

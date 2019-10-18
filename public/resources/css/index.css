@@ -1,0 +1,332 @@
+html{
+    background-color: rgb(20,20,20);
+    background: url(../img/bg.png) no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+}
+
+header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 45px;
+    background-color: #A6145D;
+    z-index: 1000;
+    line-height: 45px;
+}
+
+header:after{
+    content: "";
+    position: absolute;
+    top: 45px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: #780e43;
+}
+
+#site_name{
+    display: inline-block;
+    vertical-align: top;
+}
+
+#info_button{
+    vertical-align: top;
+    display: inline-block;
+    width: 35px;
+    height: 45px;
+    background-image: url(/resources/img/icons/information.png);
+    background-size: 20px 20px;
+    position: relative;
+    opacity: 0.8;
+    cursor: pointer;
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+#info_button:hover{
+    opacity: 1;
+}
+
+#top_navigation{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 30vw;
+    background-color:
+}
+
+#top_navigation .tab{
+    position: relative;
+    display: inline-block;
+    width: calc(70vw / 4 - 5px);
+    text-align: center;
+    cursor: pointer;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+#top_navigation .tab:not(.active):hover{
+    background-color: rgba(255,255,255,0.1);
+}
+
+#top_navigation .tab.active{
+    background-color: rgba(0,0,0,0.1);
+    cursor: default;
+}
+
+#site_name{
+    margin-left: 20px;
+    font-weight: 600;
+}
+
+#bg_blur{
+    background: url(../img/bg_blur.png) no-repeat center center fixed;
+    background-size: cover;
+    position: fixed;
+    left: 30vw;
+    top: 35px;
+    right: 0;
+    bottom: 0;
+}
+
+#wrapper{
+    position: absolute;
+    left: 30vw;
+    top: 45px;
+    right: 0;
+    min-height: 100%;
+    background-color: rgba(10,10,10,0.7);
+    box-sizing: border-box;
+}
+
+#stats_display{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 30vw;
+}
+
+.stats-content{
+    position: fixed;
+    right: calc(70vw + 20px);
+    background-color: rgba(15,15,15,0.9);
+    text-align: center;
+    width: 360px;
+    max-width: calc(30vw - 20px);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.stats-content .item-name{
+    padding: 20px;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-shadow: 0px 0px 7px rgba(0,0,0,0.3);
+}
+
+.stats-content .item-lore{
+    padding: 25px;
+    font-weight: 500;
+}
+
+.item-name{
+    text-align: center;
+}
+
+#player_model{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-position: 50% 70%;
+    background-repeat: no-repeat;
+    background-size: auto 60%;
+}
+
+#player_profile{
+    font-size: 45px;
+    margin-top: 50px;
+    margin-left: 50px;
+    margin-bottom: 30px;
+}
+
+#stats_for_player, #stats_for_profile{
+    color: #F94EA3;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#basic_stats{
+    width: 100%;
+    padding: 30px;
+    box-sizing: border-box;
+    background-color: rgba(0,0,0,0.3);
+}
+
+.basic-stat{
+    background-size: 24px 24px;
+    background-repeat: no-repeat;
+    padding-left: 28px;
+    line-height: 24px;
+    margin-top: 2px;
+    font-weight: 600;
+}
+
+.stat-name{
+    padding-right: 6px;
+}
+
+.stat-health{
+    background-image: url(../img/icons/health.png);
+}
+
+.stat-health .stat-name, .stat-effective-health .stat-name, .stat-strength .stat-name{
+    color: #EF5350;
+}
+
+.stat-defense{
+    background-image: url(../img/icons/defense.png);
+}
+
+.stat-defense .stat-name{
+    color: #66BB6A;
+}
+
+.stat-effective-health{
+    background-image: url(../img/icons/effective-health.png);
+}
+
+.stat-strength{
+    background-image: url(../img/icons/strength.png);
+}
+
+.stat-speed{
+    background-image: url(../img/icons/speed.png);
+}
+
+.stat-speed .stat-name{
+    color: white;
+}
+
+.stat-crit-chance{
+    background-image: url(../img/icons/crit-chance.png);
+}
+
+.stat-crit-damage{
+    background-image: url(../img/icons/crit-damage.png);
+}
+
+.stat-crit-chance .stat-name, .stat-crit-damage .stat-name{
+    color: #9FA8DA;
+}
+
+.stat-intelligence{
+    background-image: url(../img/icons/intelligence.png);
+}
+
+.stat-intelligence .stat-name{
+    color: #4FC3F7;
+}
+
+.stat-container{
+    margin-top: 40px;
+}
+
+.stat-header{
+    width: 400px;
+    height: 40px;
+    line-height: 40px;
+    background-color: #A6145D;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-align: center;
+    font-size: 22px;
+    text-shadow: 0px 0px 7px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.stat-header::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 40px 40px 0 0;
+    border-color: #a6145d transparent transparent transparent;
+}
+
+.pieces{
+    margin: 25px;
+}
+
+.piece{
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    background-color: rgba(0,0,0,0.5);
+    vertical-align: top;
+    margin: 5px;
+    margin-top: 13px;
+}
+
+.piece-icon{
+    position: absolute;
+    width: 64px;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
+}
+
+.piece-legendary-bg{
+    background-color: #FFAA00;
+}
+
+.piece-epic-bg{
+    background-color: #AA00AA;
+}
+
+.piece-rare-bg{
+    background-color: #5555FF;
+}
+
+.piece-uncommon-bg{
+    background-color: #3cbd3c;
+}
+
+.piece-common-bg{
+    background-color: #555555;
+}
+
+.piece-legendary-fg{
+    color: #FFAA00;
+}
+
+.piece-epic-fg{
+    color: #AA00AA;
+}
+
+.piece-rare-fg{
+    color: #5555FF;
+}
+
+.piece-uncommon-fg{
+    color: #3cbd3c;
+}
+
+.piece-common-fg{
+    color: white;
+}

@@ -59,3 +59,9 @@ typings/
 
 # next.js build output
 .next
+
+# texture cache
+cache
+
+# api credentials
+credentials.json
