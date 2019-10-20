@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const util = require('util');
 const renderer = require('./renderer');
-const helper = require('./helper');
+const lib = require('./lib');
 const _ = require('lodash');
 
 const low = require('lowdb');
@@ -68,10 +68,6 @@ app.set('view engine', 'ejs');
 
 app.use(cookieParser());
 app.use(express.static('public'));
-
-app.get('/', async (req, res, next) => {
-    res.render('index', { page: 'index '});
-});
 
 app.get('/stats/:player/:profile?', async (req, res, next) => {
     let { data } = await Hypixel.get('player', { params: { key: credentials.hypixel_api_key, name: req.params.player } });
@@ -208,6 +204,14 @@ app.get('/leather/:type/:color', async (req, res) => {
 
     res.contentType('image/png');
     res.send(file);
+});
+
+app.get('/', async (req, res, next) => {
+    res.render('index', { page: 'index '});
+});
+
+app.get('*', async (req, res, next) => {
+    res.redirect('/');
 });
 
 app.listen(port, () => console.log(`SkyBlock Stats running on http://localhost:${port}`));
