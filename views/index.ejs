@@ -15,6 +15,12 @@
                 <a href="" id="goto_target_username">Show me</a>
             </div>
         </div>
+        <div id="error_box_wrapper">
+            <div id="error_box">
+                <div id="error_title">Error</div><div id="error_text"></div>
+            </div>
+        </div>
+        <script src="/resources/js/js.cookie.min.js"></script>
         <script>
             let targetUsername = document.getElementById("inp_enter_username");
 
@@ -29,6 +35,14 @@
                 else
                     document.querySelector('#goto_target_username').href = `/stats/${playerName}`;
             });
+
+            let error = Cookies.get('error');
+
+            if(error){
+                document.querySelector('#error_box_wrapper').classList.add('show-error');
+                document.querySelector('#error_text').innerHTML = error;
+                Cookies.remove('error');
+            }
         </script>
     </body>
 </html>

@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser = require('cookie-parser')
 const axios = require('axios');
 const fs = require('fs-extra');
 const path = require('path');
@@ -64,6 +65,8 @@ const app = express();
 const port = 32464;
 
 app.set('view engine', 'ejs');
+
+app.use(cookieParser());
 app.use(express.static('public'));
 
 app.get('/', async (req, res, next) => {
@@ -74,16 +77,27 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
     let { data } = await Hypixel.get('player', { params: { key: credentials.hypixel_api_key, name: req.params.player } });
 
     if(data.player == null){
-        res.send('Player not found');
+        res
+        .cookie('error', 'Player not found.')
+        .redirect('/');
         return false;
     }
 
     if(!('SkyBlock' in data.player.stats)){
-        res.send("Player has not played SkyBlock yet");
+        res
+        .cookie('error', 'Player has not played SkyBlock yet.')
+        .redirect('/');
         return false;
     }
 
     let all_skyblock_profiles = data.player.stats.SkyBlock.profiles;
+
+    if(Object.keys(all_skyblock_profiles).length == 0){
+        res
+        .cookie('error', 'Player has no SkyBlock profiles.')
+        .redirect('/');
+        return false;
+    }
 
     let skyblock_profiles = {};
 

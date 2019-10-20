@@ -756,3 +756,54 @@ header::after{
 #goto_target_username:hover{
     background-color: #c92879;
 }
+
+#error_box_wrapper{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: 160px;
+    margin-left: -300px;
+    width: 600px;
+    height: 70px;
+    background: url(../img/bg_blur.png) no-repeat center center fixed;
+    background-size: cover;
+    visibility: hidden;
+}
+
+#error_box{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(10,10,10,0.7);
+}
+
+#error_box_wrapper.show-error{
+    visibility: visible;
+}
+
+#error_title{
+    font-weight: 600;
+    background-color: #A6145D;
+    color: white;
+    text-transform: uppercase;
+    height: 100%;
+    line-height: 70px;
+    width: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+}
+
+#error_text{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: calc(100% - 100px);
+    height: 100%;
+    text-align: center;
+    line-height: 70px;
+    font-size: 18px;
+}
