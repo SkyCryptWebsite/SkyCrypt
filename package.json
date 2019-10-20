@@ -30,8 +30,11 @@
     "fs-extra": "^8.1.0",
     "jimp": "^0.8.4",
     "lodash": "^4.17.15",
+    "lowdb": "^1.0.0",
     "minecraft-data": "^2.39.1",
+    "npm": "^6.12.0",
     "object-path": "^0.11.4",
-    "prismarine-nbt": "^1.2.1"
+    "prismarine-nbt": "^1.2.1",
+    "remove": "^0.1.5"
   }
 }

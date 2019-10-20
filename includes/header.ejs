@@ -1,7 +1,31 @@
 <header>
-    <div id="site_name">SkyBlock Stats</div>
-    <div id="info_button"></div>
-    <nav id="top_navigation">
-        <li class="tab active" data-tab="general">General</li><li class="tab" data-tab="combat">Combat</li><li class="tab" data-tab="fishing">Fishing</li><li class="tab" data-tab="slayer">Slayer</li>
-    </nav>
+    <a href="/" id="site_name">SkyBlock Stats</a>
+    <div id="info_button" onclick="toggleInfo()"></div>
+    <% if(page == 'stats'){ %>
+        <nav id="top_navigation">
+            <li class="tab active" data-tab="general"><span>General</span></li><li class="tab soon" data-tab="combat"><span>Combat</span></li><li class="tab soon" data-tab="fishing"><span>Fishing</span></li>
+        </nav>
+    <% } %>
 </header>
+<div id="info_box">
+    <div onclick="toggleInfo()" id="info_close"></div>
+    <p>This open-source project was created by <a class="link link-twitter" href="https://twitter.com/LeaPhant" target="_blank">LeaPhant</a> and is still under development. You can report bugs or contribute to the code on <a class="link link-github" href="https://github.com/LeaPhant/skyblock-stats" target="_blank">GitHub</a>.</p>
+    <p>If you want to support my work, you can do that via <a class="link link-patreon" href="https://www.patreon.com/LeaPhant" target="_blank">Patreon</a> or <a class="link link-kofi" href="https://www.ko-fi.com/leaphant" target="_blank">Ko-fi</a>. It would mean a lot to me!</p>
+    <h4>Used Resources</h4>
+    <ul>
+        <li>Data: <a href="https://api.hypixel.net/" target="_blank">Hypixel API</a> by <span class="name">Hypixel</span>.</li>
+        <li>Animated Custom Weapons and Armors: <a href="https://hypixel.net/threads/2138599/" target="_blank">FurfSky+</a> by <span class="name">Furf_</span>.</li>
+        <li>Default Textures: <a href="https://www.minecraft.net/" target="_blank">Minecraft</a> by <span class="name">Mojang</span>.</li>
+        <li>Player Heads: <a href="https://hypixel.net/forums/skyblock.157/" target="_blank">SkyBlock</a> by <span class="name">Hypixel</span>.</li>
+    </ul>
+</div>
+<script>
+    function toggleInfo(){
+        let infoBox = document.querySelector('#info_box');
+
+        if(infoBox.classList.contains('info-opened'))
+            infoBox.classList.remove('info-opened')
+        else
+            infoBox.classList.add('info-opened');
+    }
+</script>

@@ -65,3 +65,6 @@ cache
 
 # api credentials
 credentials.json
+
+# db
+db.json

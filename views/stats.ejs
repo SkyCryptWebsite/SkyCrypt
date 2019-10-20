@@ -14,91 +14,281 @@
             <div id="player_model" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
         </div>
         <div id="wrapper">
-            <div id="player_profile">Stats for <span id="stats_for_player"><%= calculated.display_name %></span> on <span id="stats_for_profile"><%= calculated.profile.cute_name %></span></div>
+            <div id="player_profile">Stats for
+                <div id="stats_for_player">
+                    <%= calculated.display_name %>
+                    <div id="other_players">
+                        <% calculated.members.forEach(member => { %>
+                            <a class="goto" href="/stats/<%= member.display_name %>/<%= calculated.profile.cute_name %>"><%= member.display_name %></a>
+                        <% }); %>
+                        <input type="text" id="enter_player" placeholder="Enter username"><a id="goto_player"></a>
+                    </div>
+                </div> on <div id="stats_for_profile">
+                    <%= calculated.profile.cute_name %>
+                    <div id="other_profiles">
+                        <% for(let profile_id in calculated.profiles){ %>
+                            <% let _profile = calculated.profiles[profile_id]; %>
+                            <a class="goto" href="/stats/<%= calculated.display_name %>/<%= _profile.cute_name %>"><%= _profile.cute_name %></a>
+                        <% } %>
+                    </div>
+                </div></div>
             <div id="basic_stats">
-                <div class="basic-stat stat-health"><span class="stat-name">Health</span><%= calculated.stats.health %></div>
-                <div class="basic-stat stat-defense"><span class="stat-name">Defense</span><%= calculated.stats.defense %></div>
-                <div class="basic-stat stat-effective-health"><span class="stat-name">Effective Health</span><%= calculated.stats.effective_health %></div>
-                <div class="basic-stat stat-strength"><span class="stat-name">Strength</span><%= calculated.stats.strength %></div>
-                <div class="basic-stat stat-speed"><span class="stat-name">Speed</span><%= calculated.stats.speed %>%</div>
-                <div class="basic-stat stat-crit-chance"><span class="stat-name">Crit Chance</span><%= calculated.stats.crit_chance %>%</div>
-                <div class="basic-stat stat-crit-damage"><span class="stat-name">Crit Damage</span><%= calculated.stats.crit_damage %>%</div>
-                <div class="basic-stat stat-intelligence"><span class="stat-name">Intelligence</span><%= calculated.stats.intelligence %></div>
+                <%
+                    let stats = Object.assign({}, calculated.stats);
+                    let sword = items.weapons.sort((a, b) => a.item_index - b.item_index);
+
+                    if(sword.length > 0)
+                        stats = calculated.weapon_stats[sword[0].item_index];
+                %>
+
+                <div id="base_stats_container">
+                    <div data-stat="health" class="basic-stat stat-health"><span class="stat-name">Health</span><span class="stat-value"><%= stats.health %></span></div>
+                    <div data-stat="defense" class="basic-stat stat-defense"><span class="stat-name">Defense</span><span class="stat-value"><%= stats.defense %></span></div>
+                    <div data-stat="effective_health" class="basic-stat stat-effective-health"><span class="stat-name">Effective Health</span><span class="stat-value"><%= stats.effective_health %></span></div>
+                    <div data-stat="strength" class="basic-stat stat-strength"><span class="stat-name">Strength</span><span class="stat-value"><%= stats.strength %></span></div>
+                    <div data-stat="speed" class="basic-stat stat-speed"><span class="stat-name">Speed</span><span class="stat-value"><%= stats.speed %></span>%</div>
+                    <div data-stat="crit_chance" class="basic-stat stat-crit-chance"><span class="stat-name">Crit Chance</span><span class="stat-value"><%= stats.crit_chance %></span>%</div>
+                    <div data-stat="crit_damage" class="basic-stat stat-crit-damage"><span class="stat-name">Crit Damage</span><span class="stat-value"><%= stats.crit_damage %></span>%</div>
+                    <div data-stat="intelligence" class="basic-stat stat-intelligence"><span class="stat-name">Intelligence</span><span class="stat-value"><%= stats.intelligence %></span></div>
+                </div>
+
+                <div id="skill_levels_container">
+                    <div class="skill">
+                        <div class="skill-icon"><img src="/head/b96923ad247310007f6ae5d326d847ad53864cf16c3565a181dc8e6b20be2387"></div>
+                        <div class="skill-name">Fairy Souls <span class="skill-level"><%= calculated.fairy_souls.collected %></span></div>
+                        <div class="skill-bar">
+                            <div class="skill-progress-bar" style="width: <%= calculated.fairy_souls.progress * 100 %>%"></div>
+                            <div class="skill-progress-text"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %> Fairy Souls</div>
+                        </div>
+                    </div>
+
+                    <% if('levels' in calculated){ %>
+                        <div class="skill">
+                            <div class="skill-icon"><img src="/resources/img/textures/item/golden_hoe.png"></div>
+                            <div class="skill-name">Farming <span class="skill-level"><%= calculated.levels.farming.level %></span></div>
+                            <div class="skill-bar">
+                                <div class="skill-progress-bar" style="width: <%= calculated.levels.farming.progress * 100 %>%"></div>
+                                <div class="skill-progress-text"><%= calculated.levels.farming.xpCurrent %> / <%= calculated.levels.farming.xpForNext %> XP</div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <div class="skill-icon"><img src="/resources/img/textures/item/stone_pickaxe.png"></div>
+                            <div class="skill-name">Mining <span class="skill-level"><%= calculated.levels.mining.level %></span></div>
+                            <div class="skill-bar">
+                                <div class="skill-progress-bar" style="width: <%= calculated.levels.mining.progress * 100 %>%"></div>
+                                <div class="skill-progress-text"><%= calculated.levels.mining.xpCurrent %> / <%= calculated.levels.mining.xpForNext %> XP</div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <div class="skill-icon"><img src="/resources/img/textures/item/stone_sword.png"></div>
+                            <div class="skill-name">Combat <span class="skill-level"><%= calculated.levels.combat.level %></span></div>
+                            <div class="skill-bar">
+                                <div class="skill-progress-bar" style="width: <%= calculated.levels.combat.progress * 100 %>%"></div>
+                                <div class="skill-progress-text"><%= calculated.levels.combat.xpCurrent %> / <%= calculated.levels.combat.xpForNext %> XP</div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <div class="skill-icon"><img src="/resources/img/textures/block/jungle_sapling.png"></div>
+                            <div class="skill-name">Foraging <span class="skill-level"><%= calculated.levels.foraging.level %></span></div>
+                            <div class="skill-bar">
+                                <div class="skill-progress-bar" style="width: <%= calculated.levels.foraging.progress * 100 %>%"></div>
+                                <div class="skill-progress-text"><%= calculated.levels.foraging.xpCurrent %> / <%= calculated.levels.foraging.xpForNext %> XP</div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <div class="skill-icon"><img src="/resources/img/textures/item/fishing_rod.png"></div>
+                            <div class="skill-name">Fishing <span class="skill-level"><%= calculated.levels.fishing.level %></span></div>
+                            <div class="skill-bar">
+                                <div class="skill-progress-bar" style="width: <%= calculated.levels.fishing.progress * 100 %>%"></div>
+                                <div class="skill-progress-text"><%= calculated.levels.fishing.xpCurrent %> / <%= calculated.levels.fishing.xpForNext %> XP</div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <div class="skill-icon"><img src="/resources/img/textures/item/enchantment_table.png"></div>
+                            <div class="skill-name">Enchanting <span class="skill-level"><%= calculated.levels.enchanting.level %></span></div>
+                            <div class="skill-bar">
+                                <div class="skill-progress-bar" style="width: <%= calculated.levels.enchanting.progress * 100 %>%"></div>
+                                <div class="skill-progress-text"><%= calculated.levels.enchanting.xpCurrent %> / <%= calculated.levels.enchanting.xpForNext %> XP</div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <div class="skill-icon"><img src="/resources/img/textures/item/brewing_stand.png"></div>
+                            <div class="skill-name">Alchemy <span class="skill-level"><%= calculated.levels.alchemy.level %></span></div>
+                            <div class="skill-bar">
+                                <div class="skill-progress-bar" style="width: <%= calculated.levels.alchemy.progress * 100 %>%"></div>
+                                <div class="skill-progress-text"><%= calculated.levels.alchemy.xpCurrent %> / <%= calculated.levels.alchemy.xpForNext %> XP</div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <div class="skill-icon"><img src="/resources/img/textures/item/crafting_table.png"></div>
+                            <div class="skill-name">Carpentry <span class="skill-level"><%= calculated.levels.carpentry.level %></span></div>
+                            <div class="skill-bar">
+                                <div class="skill-progress-bar" style="width: <%= calculated.levels.carpentry.progress * 100 %>%"></div>
+                                <div class="skill-progress-text"><%= calculated.levels.carpentry.xpCurrent %> / <%= calculated.levels.carpentry.xpForNext %> XP</div>
+                            </div>
+                        </div>
+                        <div class="skill">
+                            <div class="skill-icon"><img src="/resources/img/textures/item/magma_cream.png"></div>
+                            <div class="skill-name">Runecrafting <span class="skill-level"><%= calculated.levels.runecrafting.level %></span></div>
+                            <div class="skill-bar">
+                                <div class="skill-progress-bar" style="width: <%= calculated.levels.runecrafting.progress * 100 %>%"></div>
+                                <div class="skill-progress-text"><%= calculated.levels.runecrafting.xpCurrent %> / <%= calculated.levels.runecrafting.xpForNext %> XP</div>
+                            </div>
+                        </div>
+                    <% }else{ %>
+                        <div class="no-access"><%= calculated.display_name %> doesn't have skills access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
+                    <% } %>
+                </div>
             </div>
-            <div class="stat-container">
+            <div class="stat-container stat-armor">
                 <div class="stat-header">Armor</div>
-                <div class="pieces">
-                    <% items.armor.slice().reverse().forEach(item => { %>
-                        <div data-item-index="<%= item.item_index %>" class="piece piece-<%= item.rarity %>-bg">
-                            <img class="piece-icon" src="<%= item.texture_path %>">
-                            <div class="stats-content">
-                                <div class="item-name piece-<%= item.rarity %>-bg"><%= item.display_name %></div>
-                                <div class="item-lore"><%- item.lore %></div>
+                <% if(items.armor.length == 0){ %>
+                    <div class="no-access"><%= calculated.display_name %> doesn't have any armor equipped.</div>
+                <% }else{ %>
+                    <div class="pieces">
+                        <% items.armor.slice().reverse().forEach(item => { %>
+                            <div data-item-index="<%= item.item_index %>" class="piece piece-<%= item.rarity %>-bg">
+                                <% if(item.rarity == 'legendary'){ %>
+                                    <div class="piece-shine"></div>
+                                <% } %>
+                                <img class="piece-icon" src="<%= item.texture_path %>">
+                                <div class="stats-content">
+                                    <div class="item-name piece-<%= item.rarity %>-bg"><%= item.display_name %></div>
+                                    <div class="item-lore"><%- item.lore %></div>
+                                </div>
                             </div>
-                        </div>
-                    <% }) %>
-                </div>
+                        <% }) %>
+                    </div>
+                <% } %>
             </div>
-            <div class="stat-container">
+
+
+            <div class="stat-container stat-weapons">
                 <div class="stat-header">Weapons</div>
-                <div class="pieces">
-                    <% items.weapons.forEach(item => { %>
-                        <div data-item-index="<%= item.item_index %>" class="piece piece-<%= item.rarity %>-bg">
-                            <img class="piece-icon" src="<%= item.texture_path %>">
-                            <div class="stats-content">
-                                <div class="item-name piece-<%= item.rarity %>-bg"><%= item.display_name %></div>
-                                <div class="item-lore"><%- item.lore %></div>
-                            </div>
-                        </div>
-                    <% }) %>
-                </div>
+                <% if(items.no_inventory){ %>
+                    <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
+                <% }else if(items.weapons.length == 0){ %>
+                    <div class="no-access"><%= calculated.display_name %> doesn't have any weapons.</div>
+                <% }else{ %>
+                    <div class="pieces">
+                        <%
+                            let sword = items.weapons.sort((a, b) => a.item_index - b.item_index);
+
+                            items.weapons.forEach(item => { %>
+                                <div data-item-index="<%= item.item_index %>" class="piece <% if(sword.length > 0 && item.item_index == sword[0].item_index){ %>piece-selected<% } %> piece-<%= item.rarity %>-bg">
+                                    <% if(item.rarity == 'legendary'){ %>
+                                        <div class="piece-shine"></div>
+                                    <% } %>
+                                    <img class="piece-icon" src="<%= item.texture_path %>">
+                                    <div class="stats-content">
+                                        <div class="item-name piece-<%= item.rarity %>-bg"><%= item.display_name %></div>
+                                        <div class="item-lore"><%- item.lore %></div>
+                                    </div>
+                                </div>
+                        <%
+                            });
+                        %>
+                    </div>
+                <% } %>
             </div>
-            <div class="stat-container">
+            <div class="stat-container stat-Accessories">
                 <div class="stat-header">Accessories</div>
-                <div class="pieces">
-                    <% items.talismans.filter(a => !a.isInactive).forEach(item => { %>
-                        <div data-item-index="<%= item.item_index %>" class="piece piece-<%= item.rarity %>-bg">
-                            <img class="piece-icon" src="<%= item.texture_path %>">
-                            <div class="stats-content">
-                                <div class="item-name piece-<%= item.rarity %>-bg"><%= item.display_name %></div>
-                                <div class="item-lore"><%- item.lore %></div>
+                <% if(items.no_inventory){ %>
+                    <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
+                <% }else if(items.talismans.length == 0){ %>
+                    <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
+                <% }else{ %>
+                    <div class="pieces">
+                        <% items.talismans.filter(a => !a.isInactive).forEach(item => { %>
+                            <div data-item-index="<%= item.item_index %>" class="piece piece-<%= item.rarity %>-bg">
+                                <% if(item.rarity == 'legendary'){ %>
+                                    <div class="piece-shine"></div>
+                                <% } %>
+                                <img class="piece-icon" src="<%= item.texture_path %>">
+                                <div class="stats-content">
+                                    <div class="item-name piece-<%= item.rarity %>-bg"><%= item.display_name %></div>
+                                    <div class="item-lore"><%- item.lore %></div>
+                                </div>
                             </div>
-                        </div>
-                    <% }) %>
-                </div>
+                        <% }) %>
+                    </div>
+                <% } %>
             </div>
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.2/velocity.min.js"></script>
+        <script src="/resources/js/anime.min.js"></script>
         <script>
             let items = <%- JSON.stringify(items) %>;
             let calculated = <%- JSON.stringify(calculated) %>;
 
+            history.pushState({}, document.title, `/stats/${calculated.display_name}/${calculated.profile.cute_name}`);
+
+            [].forEach.call(document.querySelectorAll('.stat-weapons .piece'), element => {
+                let item_index = element.getAttribute('data-item-index');
+
+                let weapon_stats = calculated.weapon_stats[item_index];
+                let stats;
+
+                element.addEventListener('click', () => {
+                    if(element.classList.contains('piece-selected')){
+                        element.classList.remove("piece-selected");
+
+                        stats = calculated.stats;
+                    }else{
+                        [].forEach.call(document.querySelectorAll('.stat-weapons .piece'), _element => {
+                            _element.classList.remove("piece-selected");
+                        });
+
+                        element.classList.add("piece-selected");
+
+                        stats = weapon_stats;
+                    }
+
+                    for(let stat in stats){
+                        let element = document.querySelector(`.basic-stat[data-stat=${stat}] .stat-value`);
+
+                        if(!element)
+                            continue;
+
+                        let currentValue = Number(element.innerHTML);
+                        let newValue = stats[stat];
+
+                        if(newValue != currentValue){
+                            anime({
+                                targets: `.basic-stat[data-stat=${stat}] .stat-value`,
+                                innerHTML: newValue,
+                                backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
+                                duration: 500,
+                                round: 1,
+                                easing: 'easeOutCubic'
+                            });
+                        }
+                    }
+                });
+            });
+
             [].forEach.call(document.querySelectorAll('.piece'), element => {
                 let statsContent = element.querySelector('.stats-content');
 
-                let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
-
-                element.addEventListener('mouseenter', () => {
-                    Velocity.hook(statsContent, "translateY", "30px");
-                    Velocity.hook(statsContent, "opacity", "0");
-
-                    Velocity(statsContent, { translateY: 0, opacity: 1}, { duration: 200, queue: false });
-                });
-
-                element.addEventListener('mouseleave', () => {
-                    Velocity(statsContent, { translateY: -30, opacity: 0}, { duration: 200, queue: false });
-                });
-
                 element.addEventListener('mousemove', e => {
-                    console.log(maxTop, e.clientY - statsContent.offsetHeight / 2);
-
+                    let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
                     let top = Math.max(70, Math.min(maxTop, e.clientY - statsContent.offsetHeight / 2));
 
-                    console.log(statsContent);
-
                     statsContent.style.top = top + "px";
-
                 });
+            });
+
+            let enterPlayer = document.querySelector('#enter_player');
+
+            enterPlayer.addEventListener('keyup', e => {
+                let playerName = enterPlayer.value;
+
+                if(playerName.trim().length == 0)
+                    return;
+
+                if(e.keyCode == 13)
+                    document.location = `/stats/${playerName}`;
+                else
+                    document.querySelector('#goto_player').href = `/stats/${playerName}`;
             });
         </script>
     </body>

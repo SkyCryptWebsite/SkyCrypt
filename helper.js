@@ -81,7 +81,7 @@ function getEffectiveHealth(health, defense){
     if(defense <= 0)
         return health;
 
-    return health * (1 + defense / 100);
+    return Math.round(health * (1 + defense / 100));
 }
 
 async function getBackpackContents(arraybuf){
@@ -124,7 +124,13 @@ async function getItems(base64){
         }
     }
 
+    let index = 0;
+
     for(let item of items){
+        item.item_index = index;
+
+        index++;
+
         let mcdata = mcData.items[item.id];
 
         if(mcdata && 'name' in mcdata){
@@ -636,6 +642,18 @@ const bonus_stats = {
         }
     },
 
+    carpentry_skill: {
+        1: {
+
+        }
+    },
+
+    runecrafting_skill: {
+        1: {
+
+        }
+    },
+
     zombie_slayer: {
         1: {
             health: 2
@@ -996,7 +1014,7 @@ module.exports = {
     },
 
     getEffectiveHealth: (health, defense) => {
-        return health * (1 + defense / 100);
+        return getEffectiveHealth(health, defense);
     },
 
     renderLore: (text) => {
@@ -1064,6 +1082,10 @@ module.exports = {
 
         let items = inventory.concat(enderchest);
 
+        items.forEach((item, index) => {
+            item.item_index = index;
+        });
+
         let talismans = inventory.filter(a => a.type == 'accessory');
 
         talisman_bag.forEach(talisman => {
@@ -1087,12 +1109,12 @@ module.exports = {
         output.weapons = items.filter(a => a.type == 'sword' || a.type == 'bow');
         output.armor = armor;
 
-        for(items in output){
-            output[items] = output[items].sort((a, b) => rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity));
-            output[items].forEach((item, index) => {
-                item.item_index = index;
-            });
-        }
+        if(inventory.length == 0)
+            output.no_inventory = true;
+
+        for(items in output)
+            if(Array.isArray(output[items]))
+                output[items] = output[items].sort((a, b) => rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity));
 
         return output;
     },
@@ -1102,37 +1124,44 @@ module.exports = {
 
         output.stats = Object.assign({}, base_stats);
 
-        console.log(output.stats);
+        if(isNaN(profile.fairy_souls_collected))
+            profile.fairy_souls_collected = 0;
 
         let fairyBonus = getBonusStat(profile.fairy_souls_collected, 'fairy_souls', 180, 5);
 
         output.fairy_bonus = Object.assign({}, fairyBonus);
 
+        output.fairy_souls = { collected: profile.fairy_souls_collected, total: 180, progress: profile.fairy_souls_collected / 180 };
+
         for(let stat in fairyBonus)
             output.stats[stat] += fairyBonus[stat];
 
-        let levels = {
-            farming: getLevelByXp(profile.experience_skill_farming),
-            mining: getLevelByXp(profile.experience_skill_mining),
-            combat: getLevelByXp(profile.experience_skill_combat),
-            foraging: getLevelByXp(profile.experience_skill_foraging),
-            fishing: getLevelByXp(profile.experience_skill_fishing),
-            enchanting: getLevelByXp(profile.experience_skill_enchanting),
-            alchemy: getLevelByXp(profile.experience_skill_alchemy),
-        };
+        if('experience_skill_farming' in profile){
+            let levels = {
+                farming: getLevelByXp(profile.experience_skill_farming),
+                mining: getLevelByXp(profile.experience_skill_mining),
+                combat: getLevelByXp(profile.experience_skill_combat),
+                foraging: getLevelByXp(profile.experience_skill_foraging),
+                fishing: getLevelByXp(profile.experience_skill_fishing),
+                enchanting: getLevelByXp(profile.experience_skill_enchanting),
+                alchemy: getLevelByXp(profile.experience_skill_alchemy),
+                carpentry: getLevelByXp(profile.experience_skill_carpentry),
+                runecrafting: getLevelByXp(profile.experience_skill_runecrafting),
+            };
 
-        output.skill_bonus = {};
+            output.skill_bonus = {};
 
-        for(let skill in levels){
-            let skillBonus = getBonusStat(levels[skill].level, `${skill}_skill`, 50, 1);
+            for(let skill in levels){
+                let skillBonus = getBonusStat(levels[skill].level, `${skill}_skill`, 50, 1);
 
-            output.skill_bonus[skill] = Object.assign({}, skillBonus);
+                output.skill_bonus[skill] = Object.assign({}, skillBonus);
 
-            for(let stat in skillBonus)
-                output.stats[stat] += skillBonus[stat];
+                for(let stat in skillBonus)
+                    output.stats[stat] += skillBonus[stat];
+            }
+
+            output.levels = Object.assign({}, levels);
         }
-
-        output.levels = Object.assign({}, levels);
 
         if('slayer_bosses' in profile){
             output.slayer_bonus = {};
@@ -1175,7 +1204,7 @@ module.exports = {
             output.stats['strength'] += 5;
         }
 
-        output.stats.effective_health = Math.round(getEffectiveHealth(output.stats.health, output.stats.defense));
+        output.stats.effective_health = getEffectiveHealth(output.stats.health, output.stats.defense);
 
         output.weapon_stats = {};
 
@@ -1188,6 +1217,8 @@ module.exports = {
 
             if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
                 stats.health += 50 * item.stats.crit_damage;
+
+            stats.effective_health = getEffectiveHealth(stats.health, stats.defense);
 
             output.weapon_stats[item.item_index] = stats;
 

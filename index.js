@@ -7,19 +7,67 @@ const renderer = require('./renderer');
 const helper = require('./helper');
 const _ = require('lodash');
 
-const credentials = require('./credentials.json');
+const low = require('lowdb');
+const FileSync = require('lowdb/adapters/FileSync');
 
-const app = express();
-const port = 32464;
+const adapter = new FileSync('db.json');
+const db = low(adapter);
+
+db
+.defaults({ usernames: [] })
+.write();
+
+const credentials = require('./credentials.json');
 
 const Hypixel = axios.create({
     baseURL: 'https://api.hypixel.net/'
 });
+
+async function uuidToUsername(uuid){
+    let output;
+
+    let user = db
+    .get('usernames')
+    .find({ uuid: uuid })
+    .value();
+
+    if(user)
+        if(+new Date() - user.date < 3600 * 1000)
+            output = user.username;
+
+    if(!output){
+        try{
+            let { data } = await axios(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`);
+
+            if(user)
+                db
+                .get('usernames')
+                .find({ uuid: user.uuid })
+                .assign({ username: data.name, date: +new Date()  })
+                .write();
+            else
+                db
+                .get('usernames')
+                .push({ uuid: data.id, username: data.name, date: +new Date() })
+                .write();
+
+            output = data.name;
+        }catch(e){
+            return "";
+        }
+    }
+
+    return output;
+}
+
+const app = express();
+const port = 32464;
+
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
 app.get('/', async (req, res, next) => {
-    res.redirect('/stats/LeaPhant');
+    res.render('index', { page: 'index '});
 });
 
 app.get('/stats/:player/:profile?', async (req, res, next) => {
@@ -35,46 +83,66 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         return false;
     }
 
-    let skyblock_profiles = data.player.stats.SkyBlock.profiles;
+    let all_skyblock_profiles = data.player.stats.SkyBlock.profiles;
 
-    if(req.params.profile){
-        skyblock_profiles = _.pickBy(skyblock_profiles, a => a.cute_name.toLowerCase() == req.params.profile.toLowerCase());
-    }
+    let skyblock_profiles = {};
+
+    if(req.params.profile)
+        skyblock_profiles = _.pickBy(all_skyblock_profiles, a => a.cute_name.toLowerCase() == req.params.profile.toLowerCase());
+
+    if(Object.keys(skyblock_profiles).length == 0)
+        skyblock_profiles = all_skyblock_profiles;
 
     let profile_names = Object.keys(skyblock_profiles);
 
-    let responses = [];
+    let promises = [];
 
     for(let profile in skyblock_profiles)
-        responses.push(
-            await Hypixel.get('skyblock/profile', { params: { key: credentials.hypixel_api_key, profile: profile } })
+        promises.push(
+            Hypixel.get('skyblock/profile', { params: { key: credentials.hypixel_api_key, profile: profile } })
         );
+
+    let responses = await Promise.all(promises);
 
     let profiles = [];
 
     responses.forEach(response => {
-        profiles.push(response.data.profile.members[data.player.uuid]);
+        profiles.push(response.data.profile);
     });
 
     let highest = 0;
     let profile_id;
 
     profiles.forEach((_profile, index) => {
-        if(_profile.last_save > highest){
+        let user_profile = _profile.members[data.player.uuid];
+
+        if(user_profile.last_save > highest){
             profile = _profile;
-            highest = _profile.last_save;
+            highest = user_profile.last_save;
             profile_id = profile_names[index];
         }
     });
 
-    let items = await helper.getItems(profile);
-    let calculated = await helper.getStats(profile, items);
+    let user_profile = profile.members[data.player.uuid];
+
+    let member_uuids = Object.keys(profile.members);
+
+    let members = [];
+
+    for(let member of member_uuids)
+        if(member != data.player.uuid)
+            members.push({ uuid: member, display_name: await uuidToUsername(member) });
+
+    let items = await helper.getItems(user_profile);
+    let calculated = await helper.getStats(user_profile, items);
 
     calculated.uuid = data.player.uuid;
     calculated.display_name = data.player.displayname;
     calculated.profile = skyblock_profiles[profile_id];
+    calculated.profiles = _.pickBy(all_skyblock_profiles, a => a.profile_id != profile_id);
+    calculated.members = members;
 
-    res.render('stats', { items, calculated });
+    res.render('stats', { items, calculated, page: 'stats' });
 });
 
 app.get('/head/:uuid', async (req, res) => {
