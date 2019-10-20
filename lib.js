@@ -916,10 +916,10 @@ const replacement_textures = {
     "Miner Leggings": "/resources/img/textures/furfsky/mine_legs.png",
     "Miner Boots": "/resources/img/textures/furfsky/mine_boots.png",
 
-    "Armor of Magma Helmet": "/resources/img/textures/furfsky/armor_helm.png",
-    "Armor of Magma Chestplate": "/resources/img/textures/furfsky/armor_chest.png",
-    "Armor of Magma Leggings": "/resources/img/textures/furfsky/armor_legs.png",
-    "Armor of Magma Boots": "/resources/img/textures/furfsky/armor_boots.png",
+    "Armor of Magma Helmet": "/resources/img/textures/furfsky/magma_helm.png",
+    "Armor of Magma Chestplate": "/resources/img/textures/furfsky/magma_chest.png",
+    "Armor of Magma Leggings": "/resources/img/textures/furfsky/magma_legs.png",
+    "Armor of Magma Boots": "/resources/img/textures/furfsky/magma_boots.png",
 
     "Leaflet Helmet": "/resources/img/textures/furfsky/leaf_helm.png",
     "Leaflet Chestplate": "/resources/img/textures/furfsky/leaf_chest.png",

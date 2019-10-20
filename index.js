@@ -143,8 +143,8 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         if(member != data.player.uuid)
             members.push({ uuid: member, display_name: await uuidToUsername(member) });
 
-    let items = await helper.getItems(user_profile);
-    let calculated = await helper.getStats(user_profile, items);
+    let items = await lib.getItems(user_profile);
+    let calculated = await lib.getStats(user_profile, items);
 
     calculated.uuid = data.player.uuid;
     calculated.display_name = data.player.displayname;
