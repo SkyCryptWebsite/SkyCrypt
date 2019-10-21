@@ -18,6 +18,8 @@ db
 .defaults({ usernames: [] })
 .write();
 
+fs.ensureDirSync('cache');
+
 const credentials = require('./credentials.json');
 
 if(credentials.hypixel_api_key.length == 0)
