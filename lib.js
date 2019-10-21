@@ -1207,6 +1207,9 @@ module.exports = {
             output.stats['defense'] += emerald_bonus;
         }
 
+        if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('SPEEDSTER_')).length == 4)
+            output.stats['speed'] += 14;
+
         items.talismans.filter(a => !a.isInactive).forEach(item => {
             for(let stat in item.stats)
                 output.stats[stat] += item.stats[stat];
