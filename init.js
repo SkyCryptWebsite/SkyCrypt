@@ -6,3 +6,5 @@ const credentials = {
 
 if(!fs.existsSync('credentials.json'))
     fs.writeFileSync('credentials.json', JSON.stringify(credentials, null, 4));
+
+fs.ensureDirSync('cache');
