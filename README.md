@@ -16,7 +16,7 @@ You are free to report bugs or contribute to this project. Just open <a href="..
 <h3>Prerequisites</h3>
 
 - <a href="https://nodejs.org/">Node.js</a>
-- Hypixel API Key
+- <a href="https://api.hypixel.net/">Hypixel API Key</a>
 
 <h3>Installation</h3>
 
