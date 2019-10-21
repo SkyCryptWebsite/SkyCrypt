@@ -259,8 +259,16 @@ header::after{
     transition: transform .3s;
 }
 
+html.no-transform #info_box{
+    top: -100%;
+}
+
 #info_box.info-opened{
     transform: translateY(0%);
+}
+
+html.no-transform #info_box.opened{
+    top: 45px;
 }
 
 #info_close{
@@ -393,8 +401,16 @@ header::after{
     transition: clip-path .3s;
 }
 
+html.no-clip-path #other_players, html.no-clip-path #other_profiles{
+    display: none;
+}
+
 #stats_for_player:hover #other_players, #stats_for_profile:hover #other_profiles{
     clip-path: ellipse(200% 200% at 0% 0%);
+}
+
+html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #stats_for_profile:hover #other_profiles{
+    display: block;
 }
 
 #other_players .goto, #other_profiles .goto{

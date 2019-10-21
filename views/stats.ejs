@@ -228,21 +228,21 @@
             let items = <%- JSON.stringify(items) %>;
             let calculated = <%- JSON.stringify(calculated) %>;
 
-            history.pushState({}, document.title, `/stats/${calculated.display_name}/${calculated.profile.cute_name}`);
+            history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name);
 
-            [].forEach.call(document.querySelectorAll('.stat-weapons .piece'), element => {
+            [].forEach.call(document.querySelectorAll('.stat-weapons .piece'), function(element){
                 let item_index = element.getAttribute('data-item-index');
 
                 let weapon_stats = calculated.weapon_stats[item_index];
                 let stats;
 
-                element.addEventListener('click', () => {
+                element.addEventListener('click', function(){
                     if(element.classList.contains('piece-selected')){
                         element.classList.remove("piece-selected");
 
                         stats = calculated.stats;
                     }else{
-                        [].forEach.call(document.querySelectorAll('.stat-weapons .piece'), _element => {
+                        [].forEach.call(document.querySelectorAll('.stat-weapons .piece'), function(_element){
                             _element.classList.remove("piece-selected");
                         });
 
@@ -252,7 +252,7 @@
                     }
 
                     for(let stat in stats){
-                        let element = document.querySelector(`.basic-stat[data-stat=${stat}] .stat-value`);
+                        let element = document.querySelector('.basic-stat[data-stat=' + stat + '] .stat-value');
 
                         if(!element)
                             continue;
@@ -262,7 +262,7 @@
 
                         if(newValue != currentValue){
                             anime({
-                                targets: `.basic-stat[data-stat=${stat}] .stat-value`,
+                                targets: '.basic-stat[data-stat=' + stat + '] .stat-value',
                                 innerHTML: newValue,
                                 backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
                                 duration: 500,
@@ -274,10 +274,10 @@
                 });
             });
 
-            [].forEach.call(document.querySelectorAll('.piece'), element => {
+            [].forEach.call(document.querySelectorAll('.piece'), function(element){
                 let statsContent = element.querySelector('.stats-content');
 
-                element.addEventListener('mousemove', e => {
+                element.addEventListener('mousemove', function(e){
                     let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
                     let rect = statsContent.parentNode.getBoundingClientRect();
 
@@ -293,8 +293,8 @@
             let dimmer = document.querySelector("#dimmer");
             let enable_api_player = document.querySelector("#enable_api");
 
-            [].forEach.call(document.querySelectorAll('.enable-api'), element => {
-                element.addEventListener('click', e => {
+            [].forEach.call(document.querySelectorAll('.enable-api'), function(element){
+                element.addEventListener('click', function(e){
                     e.preventDefault();
                     dimmer.classList.add("show-dimmer");
 
@@ -310,7 +310,7 @@
                 });
             });
 
-            dimmer.addEventListener('click', e => {
+            dimmer.addEventListener('click', function(e){
                 if(e.target.id == 'enable_api'){
                     if(enable_api_player.paused)
                         enable_api_player.play();
@@ -322,7 +322,7 @@
                         opacity: [1, 0],
                         duration: 300,
                         easing: 'easeOutCubic',
-                        complete: () => {
+                        complete: function(){
                             dimmer.classList.remove('show-dimmer');
                         }
                     });
@@ -331,16 +331,16 @@
 
             let enterPlayer = document.querySelector('#enter_player');
 
-            enterPlayer.addEventListener('keyup', e => {
+            enterPlayer.addEventListener('keyup', function(e){
                 let playerName = enterPlayer.value;
 
                 if(playerName.trim().length == 0)
                     return;
 
                 if(e.keyCode == 13)
-                    document.location = `/stats/${playerName}`;
+                    document.location = '/stats/' + playerName;
                 else
-                    document.querySelector('#goto_player').href = `/stats/${playerName}`;
+                    document.querySelector('#goto_player').href = '/stats/' + playerName;
             });
         </script>
     </body>
