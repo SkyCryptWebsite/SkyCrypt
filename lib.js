@@ -1195,6 +1195,18 @@ module.exports = {
             for(let stat in output.stats)
                 output.stats[stat] = Math.round(output.stats[stat] * 1.05);
 
+        if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('LAPIS_ARMOR_')).length == 4)
+            output.stats['health'] += 60;
+
+        if(objectPath.has(profile, 'collection.EMERALD')
+        && !isNaN(profile.collection.EMERALD)
+        && items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('EMERALD_ARMOR_')).length == 4){
+            let emerald_bonus = Math.min(300, Math.floor(profile.collection.EMERALD / 3000));
+
+            output.stats['health'] += emerald_bonus;
+            output.stats['defense'] += emerald_bonus;
+        }
+
         items.talismans.filter(a => !a.isInactive).forEach(item => {
             for(let stat in item.stats)
                 output.stats[stat] += item.stats[stat];
