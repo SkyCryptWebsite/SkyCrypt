@@ -31,3 +31,9 @@ You can now run `npm start` to start it. You will be able to access the site on 
 - Make player stats (Health, Defense etc.) more accurate
 - Add Combat and Fishing Tab
 - Maybe add an Auctions Tab (?)
+
+<h2 align="center">Credits</h2>
+
+- **Animated Custom Weapons and Armors**: <a href="https://hypixel.net/threads/2138599/">FurfSky+</a> by Furf__
+- **Default Textures**: <a href="https://www.minecraft.net/">Minecraft</a> by Mojang
+- **Player Heads**: <a href="https://hypixel.net/forums/skyblock.157/">SkyBlock</a> by Hypixel.
