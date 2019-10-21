@@ -8,6 +8,16 @@ const parseNbt = util.promisify(nbt.parse);
 const rarity_order = ['legendary', 'epic', 'rare', 'uncommon', 'common'];
 
 function getLevelByXp(xp){
+    if(isNaN(xp)){
+        return {
+            xp: 0,
+            level: 0,
+            xpCurrent: 0,
+            xpForNext: leveling_xp[1],
+            progress: 0
+        };
+    }
+    
     let xpTotal = 0;
     let level = 0;
 
