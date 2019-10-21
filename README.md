@@ -28,6 +28,7 @@ You can now run `npm start` to start it. You will be able to access the site on 
 
 <h2 align="center">To-Do</h2>
 
+- Add a proper mobile layout
 - Make player stats (Health, Defense etc.) more accurate
 - Add Combat and Fishing Tab
 - Maybe add an Auctions Tab (?)
