@@ -17,7 +17,7 @@ function getLevelByXp(xp){
             progress: 0
         };
     }
-    
+
     let xpTotal = 0;
     let level = 0;
 
@@ -225,6 +225,22 @@ async function getItems(base64){
             if(index + 1 <= lore_raw.length)
                 item.lore += '<br>';
         });
+
+        if(objectPath.has(item, 'tag.ExtraAttributes.anvil_uses')){
+            let { anvil_uses } = item.tag.ExtraAttributes;
+
+            let hot_potato_count = 0;
+
+            if('hot_potato_count' in item.tag.ExtraAttributes)
+                ({ hot_potato_count } = item.tag.ExtraAttributes);
+
+            anvil_uses -= hot_potato_count;
+
+            console.log(anvil_uses);
+
+            if(anvil_uses > 0 && lore_raw)
+                item.lore += "<br>" +  module.exports.renderLore(`§7Anvil Uses: §c${anvil_uses}`);
+        }
 
         let lore = lore_raw.map(a => a = module.exports.getRawLore(a));
         let rarity, item_type;
