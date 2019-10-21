@@ -20,6 +20,9 @@ db
 
 const credentials = require('./credentials.json');
 
+if(credentials.hypixel_api_key.length == 0)
+    throw "Please enter a valid Hypixel API Key. Join mc.hypixel.net and enter /api to obtain one.";
+
 const Hypixel = axios.create({
     baseURL: 'https://api.hypixel.net/'
 });

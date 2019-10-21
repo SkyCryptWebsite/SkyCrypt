@@ -4,6 +4,8 @@
   "description": "Player stats for Hypixel SkyBlock",
   "main": "index.js",
   "scripts": {
+    "start": "node index",
+    "install": "node generate-credentials",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
