@@ -1199,6 +1199,10 @@ module.exports = {
         if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
             output.stats['health'] += 50 * output.stats.crit_damage;
 
+        if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4)
+            for(let stat in output.stats)
+                output.stats[stat] = Math.round(output.stats[stat] * 1.05);
+
         if(items.talismans.filter(a => ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(a.tag.ExtraAttributes.id)).length == 2){
             output.stats['defense'] += 5;
             output.stats['strength'] += 5;
