@@ -9,6 +9,9 @@
     </head>
     <body>
         <%- include('../includes/header') %>
+        <div id="dimmer">
+            <video id="enable_api" loop src="/resources/video/enable_api.webm"></video>
+        </div>
         <div id="bg_blur"></div>
         <div id="stats_display">
             <div id="player_model" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
@@ -275,6 +278,45 @@
 
                     statsContent.style.top = top + "px";
                 });
+            });
+
+            let dimmer = document.querySelector("#dimmer");
+            let enable_api_player = document.querySelector("#enable_api");
+
+            [].forEach.call(document.querySelectorAll('.enable-api'), element => {
+                element.addEventListener('click', e => {
+                    e.preventDefault();
+                    dimmer.classList.add("show-dimmer");
+
+                    anime({
+                        targets: dimmer,
+                        opacity: [0, 1],
+                        duration: 300,
+                        easing: 'easeOutCubic'
+                    });
+
+                    enable_api_player.currentTime = 0;
+                    enable_api_player.play();
+                });
+            });
+
+            dimmer.addEventListener('click', e => {
+                if(e.target.id == 'enable_api'){
+                    if(enable_api_player.paused)
+                        enable_api_player.play();
+                    else
+                        enable_api_player.pause();
+                }else{
+                    anime({
+                        targets: dimmer,
+                        opacity: [1, 0],
+                        duration: 300,
+                        easing: 'easeOutCubic',
+                        complete: () => {
+                            dimmer.classList.remove('show-dimmer');
+                        }
+                    });
+                }
             });
 
             let enterPlayer = document.querySelector('#enter_player');

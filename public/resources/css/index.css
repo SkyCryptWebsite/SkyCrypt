@@ -807,3 +807,37 @@ header::after{
     line-height: 70px;
     font-size: 18px;
 }
+
+#dimmer{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 9999;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+}
+
+#dimmer.show-dimmer{
+    visibility: visible;
+    opacity: 1;
+}
+
+#enable_api{
+    position: absolute;
+    width: 66vw;
+    height: calc(66vw * 9/16);
+    left: 50vw;
+    margin-left: -33vw;
+    top: 50vh;
+    margin-top: calc(-1 * ((66vw * 9/16) / 2));
+    border-radius: 1%;
+    cursor: default;
+}
+
+#enable_api:focus{
+    outline: 0 !important;
+}
