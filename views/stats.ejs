@@ -279,6 +279,11 @@
 
                 element.addEventListener('mousemove', e => {
                     let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
+                    let rect = statsContent.parentNode.getBoundingClientRect();
+
+                    if(rect.x)
+                        statsContent.style.left = rect.x - statsContent.offsetWidth - 10 + "px";
+
                     let top = Math.max(70, Math.min(maxTop, e.clientY - statsContent.offsetHeight / 2));
 
                     statsContent.style.top = top + "px";
