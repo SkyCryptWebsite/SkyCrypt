@@ -696,6 +696,12 @@ const bonus_stats = {
     spider_slayer: {
         1: {
             crit_damage: 1
+        },
+        6: {
+            crit_damage: 2
+        },
+        7: {
+            crit_chance: 1
         }
     },
 
