@@ -36,6 +36,25 @@ header::after{
     background-color: #780e43;
 }
 
+#not_supported{
+    position: fixed;
+    top: 45px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #111111;
+    color: white;
+    text-align: center;
+    z-index: 10000;
+    padding-top: 50px;
+    font-size: 22px;
+    display: none;
+}
+
+#not_supported.show-not-supported{
+    display: block;
+}
+
 #site_name{
     display: inline-block;
     vertical-align: top;
