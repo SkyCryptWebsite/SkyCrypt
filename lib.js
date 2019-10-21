@@ -236,8 +236,6 @@ async function getItems(base64){
 
             anvil_uses -= hot_potato_count;
 
-            console.log(anvil_uses);
-
             if(anvil_uses > 0 && lore_raw)
                 item.lore += "<br>" +  module.exports.renderLore(`§7Anvil Uses: §c${anvil_uses}`);
         }
