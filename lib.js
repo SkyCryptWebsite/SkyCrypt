@@ -114,7 +114,7 @@ async function getItems(base64){
     let items = data.i.filter(a => Object.keys(a).length > 0);
 
     for(let item of items){
-        if(item.tag.display.Name.endsWith('Backpack')){
+        if(objectPath.has(item, 'tag.display.Name') && item.tag.display.Name.endsWith('Backpack')){
 
             let keys = Object.keys(item.tag.ExtraAttributes);
 
@@ -215,86 +215,92 @@ async function getItems(base64){
             }
         }
 
-        let lore_raw = item.tag.display.Lore;
+        let lore_raw;
 
-        item.lore = '';
+        if(objectPath.has(item, 'tag.display.Lore')){
+            lore_raw = item.tag.display.Lore;
 
-        lore_raw.forEach((line, index) => {
-            item.lore += module.exports.renderLore(line);
+            item.lore = '';
 
-            if(index + 1 <= lore_raw.length)
-                item.lore += '<br>';
-        });
+            lore_raw.forEach((line, index) => {
+                item.lore += module.exports.renderLore(line);
 
-        if(objectPath.has(item, 'tag.ExtraAttributes.anvil_uses')){
-            let { anvil_uses } = item.tag.ExtraAttributes;
+                if(index + 1 <= lore_raw.length)
+                    item.lore += '<br>';
+            });
 
-            let hot_potato_count = 0;
+            if(objectPath.has(item, 'tag.ExtraAttributes.anvil_uses')){
+                let { anvil_uses } = item.tag.ExtraAttributes;
 
-            if('hot_potato_count' in item.tag.ExtraAttributes)
-                ({ hot_potato_count } = item.tag.ExtraAttributes);
+                let hot_potato_count = 0;
 
-            anvil_uses -= hot_potato_count;
+                if('hot_potato_count' in item.tag.ExtraAttributes)
+                    ({ hot_potato_count } = item.tag.ExtraAttributes);
 
-            if(anvil_uses > 0 && lore_raw)
-                item.lore += "<br>" +  module.exports.renderLore(`§7Anvil Uses: §c${anvil_uses}`);
+                anvil_uses -= hot_potato_count;
+
+                if(anvil_uses > 0 && lore_raw)
+                    item.lore += "<br>" +  module.exports.renderLore(`§7Anvil Uses: §c${anvil_uses}`);
+            }
         }
 
-        let lore = lore_raw.map(a => a = module.exports.getRawLore(a));
+        let lore = lore_raw ? lore_raw.map(a => a = module.exports.getRawLore(a)) : [];
         let rarity, item_type;
 
-        let rarity_type = lore[lore.length - 1];
+        if(lore.length > 0){
+            let rarity_type = lore[lore.length - 1];
 
-        rarity_type = module.exports.splitWithTail(rarity_type, " ", 1);
+            rarity_type = module.exports.splitWithTail(rarity_type, " ", 1);
 
-        rarity = rarity_type[0];
+            rarity = rarity_type[0];
 
-        if(rarity_type.length > 1)
-            item_type = rarity_type[1].trim();
+            if(rarity_type.length > 1)
+                item_type = rarity_type[1].trim();
 
-        item.rarity = rarity.toLowerCase();
+            item.rarity = rarity.toLowerCase();
 
-        if(item_type)
-            item.type = item_type.toLowerCase();
+            if(item_type)
+                item.type = item_type.toLowerCase();
 
-        item.stats = {};
+            item.stats = {};
 
-        lore.forEach(line => {
-            let split = line.split(":");
+            lore.forEach(line => {
+                let split = line.split(":");
 
-            if(split.length < 2)
-                return;
+                if(split.length < 2)
+                    return;
 
-            let stat_type = split[0];
-            let stat_value = parseInt(split[1].trim().replace(/,/g, ''));
+                let stat_type = split[0];
+                let stat_value = parseInt(split[1].trim().replace(/,/g, ''));
 
-            switch(stat_type){
-                case 'Damage':
-                    item.stats.damage = stat_value;
-                    break;
-                case 'Health':
-                    item.stats.health = stat_value;
-                    break;
-                case 'Defense':
-                    item.stats.defense = stat_value;
-                    break;
-                case 'Strength':
-                    item.stats.strength = stat_value;
-                    break;
-                case 'Speed':
-                    item.stats.speed = stat_value;
-                    break;
-                case 'Crit Chance':
-                    item.stats.crit_chance = stat_value;
-                    break;
-                case 'Crit Damage':
-                    item.stats.crit_damage = stat_value;
-                    break;
-                case 'Intelligence':
-                    item.stats.intelligence = stat_value;
-                    break;
-            }
-        });
+                switch(stat_type){
+                    case 'Damage':
+                        item.stats.damage = stat_value;
+                        break;
+                    case 'Health':
+                        item.stats.health = stat_value;
+                        break;
+                    case 'Defense':
+                        item.stats.defense = stat_value;
+                        break;
+                    case 'Strength':
+                        item.stats.strength = stat_value;
+                        break;
+                    case 'Speed':
+                        item.stats.speed = stat_value;
+                        break;
+                    case 'Crit Chance':
+                        item.stats.crit_chance = stat_value;
+                        break;
+                    case 'Crit Damage':
+                        item.stats.crit_damage = stat_value;
+                        break;
+                    case 'Intelligence':
+                        item.stats.intelligence = stat_value;
+                        break;
+                }
+            });
+        }
     }
 
     return items;
