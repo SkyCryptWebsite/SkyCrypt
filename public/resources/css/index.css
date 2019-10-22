@@ -707,6 +707,11 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
     right: 0;
     bottom: -4px;
     z-index: 10;
+    transition: background-color .2s;
+}
+
+.piece-hover-area:hover{
+    background-color: rgba(255,255,255,0.2);
 }
 
 .stat-weapons .piece{
