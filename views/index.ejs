@@ -4,11 +4,29 @@
         <title>SkyBlock Stats</title>
         <meta charset="utf-8">
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="/resources/css/index.css">
+        <link rel="stylesheet" href="/resources/css/index.css?v3">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta property="og:image" content="/resources/img/logo_square.png">
         <meta property="og:type" content="object">
         <meta property="og:title" content="SkyBlock Stats">
         <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🌹">
+        <style>
+            @media (max-width: 480px){
+                header{
+                    height: 45px;
+                    text-align: center;
+                    width: 100vw;
+                }
+
+                header::after{
+                    top: 45px;
+                }
+
+                #info_box{
+                    top: 45px;
+                }
+            }
+        </style>
     </head>
     <body>
         <%- include('../includes/header') %>
@@ -21,7 +39,7 @@
         </div>
         <div id="error_box_wrapper">
             <div id="error_box">
-                <div id="error_title">Error</div><div id="error_text"></div>
+                <div id="error_title">Error</div><div id="error_text"><span></span></div>
             </div>
         </div>
         <script src="/resources/js/js.cookie.min.js"></script>
@@ -32,7 +50,7 @@
 
             if(!Modernizr.testAllProps('transform', 'translateY(10px)'))
                 document.documentElement.classList.add('no-transform');
-                
+
             let targetUsername = document.getElementById("inp_enter_username");
 
             targetUsername.addEventListener('keyup', function(e){
@@ -51,7 +69,7 @@
 
             if(error){
                 document.querySelector('#error_box_wrapper').classList.add('show-error');
-                document.querySelector('#error_text').innerHTML = error;
+                document.querySelector('#error_text span').innerHTML = error;
                 Cookies.remove('error');
             }
         </script>

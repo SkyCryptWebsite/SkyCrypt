@@ -4,8 +4,9 @@
         <title><%- calculated.display_name %> | SkyBlock Stats</title>
         <meta charset="utf-8">
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="/resources/css/index.css">
+        <link rel="stylesheet" href="/resources/css/index.css?v3">
         <link rel="shortcut icon" href="https://visage.surgeplay.com/face/32/<%- calculated.uuid %>" type="image/png">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta property="og:image" content="https://visage.surgeplay.com/face/256/<%- calculated.uuid %>">
         <meta property="og:site_name" content="SkyBlock Stats">
         <meta property="og:type" content="object">
@@ -14,16 +15,15 @@
     </head>
     <body>
         <%- include('../includes/header') %>
-        <div id="dimmer">
-            <video id="enable_api" loop src="/resources/video/enable_api.webm"></video>
-        </div>
+        <div id="dimmer"></div>
+        <video id="enable_api" loop src="/resources/video/enable_api.webm"></video>
         <div id="bg_blur"></div>
         <div id="stats_display">
             <div id="player_model" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
         </div>
         <div id="wrapper">
-            <div id="player_profile">Stats for
-                <div id="stats_for_player">
+            <div id="player_profile"><span class="text-stats-for">Stats for</span>
+                <div tabindex="1" id="stats_for_player">
                     <%= calculated.display_name %>
                     <div id="other_players">
                         <% calculated.members.forEach(member => { %>
@@ -31,7 +31,7 @@
                         <% }); %>
                         <input type="text" id="enter_player" placeholder="Enter username"><a id="goto_player"></a>
                     </div>
-                </div> on <div id="stats_for_profile">
+                </div><span class="text-on"> on </span><div tabindex="2" id="stats_for_profile">
                     <%= calculated.profile.cute_name %>
                     <div id="other_profiles">
                         <% for(let profile_id in calculated.profiles){ %>
@@ -39,7 +39,8 @@
                             <a class="goto" href="/stats/<%= calculated.display_name %>/<%= _profile.cute_name %>"><%= _profile.cute_name %></a>
                         <% } %>
                     </div>
-                </div></div>
+                </div>
+            </div>
             <div id="basic_stats">
                 <%
                     let stats = Object.assign({}, calculated.stats);
@@ -52,12 +53,13 @@
                 <div id="base_stats_container">
                     <div data-stat="health" class="basic-stat stat-health"><span class="stat-name">Health</span><span class="stat-value"><%= stats.health %></span></div>
                     <div data-stat="defense" class="basic-stat stat-defense"><span class="stat-name">Defense</span><span class="stat-value"><%= stats.defense %></span></div>
-                    <div data-stat="effective_health" class="basic-stat stat-effective-health"><span class="stat-name">Effective Health</span><span class="stat-value"><%= stats.effective_health %></span></div>
+                    <div data-stat="effective_health" class="basic-stat stat-effective-health"><span class="stat-name">Effective HP</span><span class="stat-value"><%= stats.effective_health %></span></div>
                     <div data-stat="strength" class="basic-stat stat-strength"><span class="stat-name">Strength</span><span class="stat-value"><%= stats.strength %></span></div>
                     <div data-stat="speed" class="basic-stat stat-speed"><span class="stat-name">Speed</span><span class="stat-value"><%= stats.speed %></span>%</div>
                     <div data-stat="crit_chance" class="basic-stat stat-crit-chance"><span class="stat-name">Crit Chance</span><span class="stat-value"><%= stats.crit_chance %></span>%</div>
                     <div data-stat="crit_damage" class="basic-stat stat-crit-damage"><span class="stat-name">Crit Damage</span><span class="stat-value"><%= stats.crit_damage %></span>%</div>
                     <div data-stat="intelligence" class="basic-stat stat-intelligence"><span class="stat-name">Intelligence</span><span class="stat-value"><%= stats.intelligence %></span></div>
+                    <div id="player_model_mobile" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
                 </div>
 
                 <div id="skill_levels_container">
@@ -70,79 +72,104 @@
                         </div>
                     </div>
 
-                    <% if('levels' in calculated){ %>
-                        <div class="skill">
-                            <div class="skill-icon"><img src="/resources/img/textures/item/golden_hoe.png"></div>
-                            <div class="skill-name">Farming <span class="skill-level"><%= calculated.levels.farming.level %></span></div>
-                            <div class="skill-bar">
-                                <div class="skill-progress-bar" style="width: <%= calculated.levels.farming.progress * 100 %>%"></div>
-                                <div class="skill-progress-text"><%= calculated.levels.farming.xpCurrent %> / <%= calculated.levels.farming.xpForNext %> XP</div>
+                    <%
+                        function formatNumber(number, floor){
+                            if(number < 1000)
+                                return number;
+                            else if(number < 10000)
+                                if(floor)
+                                    return Math.floor(number / 1000 * 10) / 10 + 'K';
+                                else
+                                    return Math.ceil(number / 1000 * 10) / 10 + 'K';
+                            else if(number < 1000000)
+                                if(floor)
+                                    return Math.floor(number / 1000) + 'K';
+                                else
+                                    return Math.ceil(number / 1000) + 'K';
+                            else
+                                if(floor)
+                                    return Math.floor(number / 1000 * 10) / 10 + 'M';
+                                else
+                                    return Math.ceil(number / 1000 * 10) / 10 + 'M';
+                        }
+
+                        if('levels' in calculated){
+                    %>
+                        <div id="other_skills">
+                            <div class="skill">
+                                <div class="skill-icon"><img src="/resources/img/textures/item/golden_hoe.png"></div>
+                                <div class="skill-name">Farming <span class="skill-level"><%= calculated.levels.farming.level %></span></div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress-bar" style="width: <%= calculated.levels.farming.progress * 100 %>%"></div>
+                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.farming.xpCurrent, true) %> / <%= formatNumber(calculated.levels.farming.xpForNext) %> XP</div>
+                                </div>
+                            </div>
+                            <div class="skill">
+                                <div class="skill-icon"><img src="/resources/img/textures/item/stone_pickaxe.png"></div>
+                                <div class="skill-name">Mining <span class="skill-level"><%= calculated.levels.mining.level %></span></div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress-bar" style="width: <%= calculated.levels.mining.progress * 100 %>%"></div>
+                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.mining.xpCurrent, true) %> / <%= formatNumber(calculated.levels.mining.xpForNext) %> XP</div>
+                                </div>
+                            </div>
+                            <div class="skill">
+                                <div class="skill-icon"><img src="/resources/img/textures/item/stone_sword.png"></div>
+                                <div class="skill-name">Combat <span class="skill-level"><%= calculated.levels.combat.level %></span></div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress-bar" style="width: <%= calculated.levels.combat.progress * 100 %>%"></div>
+                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.combat.xpCurrent, true) %> / <%= formatNumber(calculated.levels.combat.xpForNext) %> XP</div>
+                                </div>
+                            </div>
+                            <div class="skill">
+                                <div class="skill-icon"><img src="/resources/img/textures/block/jungle_sapling.png"></div>
+                                <div class="skill-name">Foraging <span class="skill-level"><%= calculated.levels.foraging.level %></span></div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress-bar" style="width: <%= calculated.levels.foraging.progress * 100 %>%"></div>
+                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.foraging.xpCurrent, true) %> / <%= formatNumber(calculated.levels.foraging.xpForNext) %> XP</div>
+                                </div>
+                            </div>
+                            <div class="skill">
+                                <div class="skill-icon"><img src="/resources/img/textures/item/fishing_rod.png"></div>
+                                <div class="skill-name">Fishing <span class="skill-level"><%= calculated.levels.fishing.level %></span></div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress-bar" style="width: <%= calculated.levels.fishing.progress * 100 %>%"></div>
+                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.fishing.xpCurrent, true) %> / <%= formatNumber(calculated.levels.fishing.xpForNext) %> XP</div>
+                                </div>
+                            </div>
+                            <div class="skill">
+                                <div class="skill-icon"><img src="/resources/img/textures/item/enchantment_table.png"></div>
+                                <div class="skill-name">Enchanting <span class="skill-level"><%= calculated.levels.enchanting.level %></span></div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress-bar" style="width: <%= calculated.levels.enchanting.progress * 100 %>%"></div>
+                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.enchanting.xpCurrent, true) %> / <%= formatNumber(calculated.levels.enchanting.xpForNext) %> XP</div>
+                                </div>
+                            </div>
+                            <div class="skill">
+                                <div class="skill-icon"><img src="/resources/img/textures/item/brewing_stand.png"></div>
+                                <div class="skill-name">Alchemy <span class="skill-level"><%= calculated.levels.alchemy.level %></span></div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress-bar" style="width: <%= calculated.levels.alchemy.progress * 100 %>%"></div>
+                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.alchemy.xpCurrent, true) %> / <%= formatNumber(calculated.levels.alchemy.xpForNext) %> XP</div>
+                                </div>
+                            </div>
+                            <div class="skill">
+                                <div class="skill-icon"><img src="/resources/img/textures/item/crafting_table.png"></div>
+                                <div class="skill-name">Carpentry <span class="skill-level"><%= calculated.levels.carpentry.level %></span></div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress-bar" style="width: <%= calculated.levels.carpentry.progress * 100 %>%"></div>
+                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.carpentry.xpCurrent, true) %> / <%= formatNumber(calculated.levels.carpentry.xpForNext) %> XP</div>
+                                </div>
+                            </div>
+                            <div class="skill">
+                                <div class="skill-icon"><img src="/resources/img/textures/item/magma_cream.png"></div>
+                                <div class="skill-name">Runecrafting <span class="skill-level"><%= calculated.levels.runecrafting.level %></span></div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress-bar" style="width: <%= calculated.levels.runecrafting.progress * 100 %>%"></div>
+                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.runecrafting.xpCurrent, true) %> / <%= formatNumber(calculated.levels.runecrafting.xpForNext) %> XP</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="skill">
-                            <div class="skill-icon"><img src="/resources/img/textures/item/stone_pickaxe.png"></div>
-                            <div class="skill-name">Mining <span class="skill-level"><%= calculated.levels.mining.level %></span></div>
-                            <div class="skill-bar">
-                                <div class="skill-progress-bar" style="width: <%= calculated.levels.mining.progress * 100 %>%"></div>
-                                <div class="skill-progress-text"><%= calculated.levels.mining.xpCurrent %> / <%= calculated.levels.mining.xpForNext %> XP</div>
-                            </div>
-                        </div>
-                        <div class="skill">
-                            <div class="skill-icon"><img src="/resources/img/textures/item/stone_sword.png"></div>
-                            <div class="skill-name">Combat <span class="skill-level"><%= calculated.levels.combat.level %></span></div>
-                            <div class="skill-bar">
-                                <div class="skill-progress-bar" style="width: <%= calculated.levels.combat.progress * 100 %>%"></div>
-                                <div class="skill-progress-text"><%= calculated.levels.combat.xpCurrent %> / <%= calculated.levels.combat.xpForNext %> XP</div>
-                            </div>
-                        </div>
-                        <div class="skill">
-                            <div class="skill-icon"><img src="/resources/img/textures/block/jungle_sapling.png"></div>
-                            <div class="skill-name">Foraging <span class="skill-level"><%= calculated.levels.foraging.level %></span></div>
-                            <div class="skill-bar">
-                                <div class="skill-progress-bar" style="width: <%= calculated.levels.foraging.progress * 100 %>%"></div>
-                                <div class="skill-progress-text"><%= calculated.levels.foraging.xpCurrent %> / <%= calculated.levels.foraging.xpForNext %> XP</div>
-                            </div>
-                        </div>
-                        <div class="skill">
-                            <div class="skill-icon"><img src="/resources/img/textures/item/fishing_rod.png"></div>
-                            <div class="skill-name">Fishing <span class="skill-level"><%= calculated.levels.fishing.level %></span></div>
-                            <div class="skill-bar">
-                                <div class="skill-progress-bar" style="width: <%= calculated.levels.fishing.progress * 100 %>%"></div>
-                                <div class="skill-progress-text"><%= calculated.levels.fishing.xpCurrent %> / <%= calculated.levels.fishing.xpForNext %> XP</div>
-                            </div>
-                        </div>
-                        <div class="skill">
-                            <div class="skill-icon"><img src="/resources/img/textures/item/enchantment_table.png"></div>
-                            <div class="skill-name">Enchanting <span class="skill-level"><%= calculated.levels.enchanting.level %></span></div>
-                            <div class="skill-bar">
-                                <div class="skill-progress-bar" style="width: <%= calculated.levels.enchanting.progress * 100 %>%"></div>
-                                <div class="skill-progress-text"><%= calculated.levels.enchanting.xpCurrent %> / <%= calculated.levels.enchanting.xpForNext %> XP</div>
-                            </div>
-                        </div>
-                        <div class="skill">
-                            <div class="skill-icon"><img src="/resources/img/textures/item/brewing_stand.png"></div>
-                            <div class="skill-name">Alchemy <span class="skill-level"><%= calculated.levels.alchemy.level %></span></div>
-                            <div class="skill-bar">
-                                <div class="skill-progress-bar" style="width: <%= calculated.levels.alchemy.progress * 100 %>%"></div>
-                                <div class="skill-progress-text"><%= calculated.levels.alchemy.xpCurrent %> / <%= calculated.levels.alchemy.xpForNext %> XP</div>
-                            </div>
-                        </div>
-                        <div class="skill">
-                            <div class="skill-icon"><img src="/resources/img/textures/item/crafting_table.png"></div>
-                            <div class="skill-name">Carpentry <span class="skill-level"><%= calculated.levels.carpentry.level %></span></div>
-                            <div class="skill-bar">
-                                <div class="skill-progress-bar" style="width: <%= calculated.levels.carpentry.progress * 100 %>%"></div>
-                                <div class="skill-progress-text"><%= calculated.levels.carpentry.xpCurrent %> / <%= calculated.levels.carpentry.xpForNext %> XP</div>
-                            </div>
-                        </div>
-                        <div class="skill">
-                            <div class="skill-icon"><img src="/resources/img/textures/item/magma_cream.png"></div>
-                            <div class="skill-name">Runecrafting <span class="skill-level"><%= calculated.levels.runecrafting.level %></span></div>
-                            <div class="skill-bar">
-                                <div class="skill-progress-bar" style="width: <%= calculated.levels.runecrafting.progress * 100 %>%"></div>
-                                <div class="skill-progress-text"><%= calculated.levels.runecrafting.xpCurrent %> / <%= calculated.levels.runecrafting.xpForNext %> XP</div>
-                            </div>
-                        </div>
+                        <div id="show_skills">Show skills</div>
                     <% }else{ %>
                         <div class="no-access"><%= calculated.display_name %> doesn't have skills access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
                     <% } %>
@@ -155,13 +182,14 @@
                 <% }else{ %>
                     <div class="pieces">
                         <% items.armor.slice().reverse().forEach(item => { %>
-                            <div data-item-index="<%= item.item_index %>" class="piece piece-<%= item.rarity %>-bg">
+                            <div tabindex="3" data-item-index="<%= item.item_index %>" class="piece piece-<%= item.rarity %>-bg">
                                 <% if(item.rarity == 'legendary'){ %>
                                     <div class="piece-shine"></div>
                                 <% } %>
+                                <div class="piece-hover-area"></div>
                                 <img class="piece-icon" src="<%= item.texture_path %>">
                                 <div class="stats-content">
-                                    <div class="item-name piece-<%= item.rarity %>-bg"><%= item.display_name %></div>
+                                    <div class="item-name piece-<%= item.rarity %>-bg"><img class="stats-piece-icon" src="<%= item.texture_path %>"><%= item.display_name %></div>
                                     <div class="item-lore"><%- item.lore %></div>
                                 </div>
                             </div>
@@ -183,13 +211,15 @@
                             let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
 
                             items.weapons.forEach(item => { %>
-                                <div data-item-index="<%= item.item_index %>" class="piece <% if(sword.length > 0 && item.item_index == sword[0].item_index){ %>piece-selected<% } %> piece-<%= item.rarity %>-bg">
+                                <div tabindex="3" data-item-index="<%= item.item_index %>" class="piece <% if(sword.length > 0 && item.item_index == sword[0].item_index){ %>piece-selected<% } %> piece-<%= item.rarity %>-bg">
                                     <% if(item.rarity == 'legendary'){ %>
                                         <div class="piece-shine"></div>
                                     <% } %>
+                                    <div class="piece-hover-area"></div>
                                     <img class="piece-icon" src="<%= item.texture_path %>">
+                                    <div class="select-weapon"></div>
                                     <div class="stats-content">
-                                        <div class="item-name piece-<%= item.rarity %>-bg"><%= item.display_name %></div>
+                                        <div class="item-name piece-<%= item.rarity %>-bg"><img class="stats-piece-icon" src="<%= item.texture_path %>"><%= item.display_name %></div>
                                         <div class="item-lore"><%- item.lore %></div>
                                     </div>
                                 </div>
@@ -208,13 +238,14 @@
                 <% }else{ %>
                     <div class="pieces">
                         <% items.talismans.filter(a => !a.isInactive).forEach(item => { %>
-                            <div data-item-index="<%= item.item_index %>" class="piece piece-<%= item.rarity %>-bg">
+                            <div tabindex="3" data-item-index="<%= item.item_index %>" class="piece piece-<%= item.rarity %>-bg">
                                 <% if(item.rarity == 'legendary'){ %>
                                     <div class="piece-shine"></div>
                                 <% } %>
+                                <div class="piece-hover-area"></div>
                                 <img class="piece-icon" src="<%= item.texture_path %>">
                                 <div class="stats-content">
-                                    <div class="item-name piece-<%= item.rarity %>-bg"><%= item.display_name %></div>
+                                    <div class="item-name piece-<%= item.rarity %>-bg"><img class="stats-piece-icon" src="<%= item.texture_path %>"><%= item.display_name %></div>
                                     <div class="item-lore"><%- item.lore %></div>
                                 </div>
                             </div>
@@ -228,17 +259,37 @@
             let items = <%- JSON.stringify(items) %>;
             let calculated = <%- JSON.stringify(calculated) %>;
 
+            let dimmer = document.querySelector("#dimmer");
+
             history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name);
 
-            [].forEach.call(document.querySelectorAll('.stat-weapons .piece'), function(element){
-                let item_index = element.getAttribute('data-item-index');
+            function showLore(piece){
+                piece.classList.add('show-lore');
+                dimmer.classList.add('show-dimmer');
 
-                let weapon_stats = calculated.weapon_stats[item_index];
+                let statsContent = piece.querySelector('.stats-content');
+
+                /*let left = window.outerWidth / 2 - statsContent.offsetWidth / 2 + 'px';
+                let top = window.outerHeight / 2 - statsContent.offsetHeight / 2 + 'px';
+
+                anime({
+                    targets: statsContent,
+                    left: left,
+                    top: top,
+                    duration: 300,
+                    easing: 'easeOutCubic'
+                });*/
+            }
+
+            [].forEach.call(document.querySelectorAll('.stat-weapons .select-weapon'), function(element){
+                let item_index = element.parentNode.getAttribute('data-item-index');
+
+                let weaponStats = calculated.weapon_stats[item_index];
                 let stats;
 
                 element.addEventListener('click', function(){
-                    if(element.classList.contains('piece-selected')){
-                        element.classList.remove("piece-selected");
+                    if(element.parentNode.classList.contains('piece-selected')){
+                        element.parentNode.classList.remove("piece-selected");
 
                         stats = calculated.stats;
                     }else{
@@ -246,9 +297,9 @@
                             _element.classList.remove("piece-selected");
                         });
 
-                        element.classList.add("piece-selected");
+                        element.parentNode.classList.add("piece-selected");
 
-                        stats = weapon_stats;
+                        stats = weaponStats;
                     }
 
                     for(let stat in stats){
@@ -277,7 +328,19 @@
             [].forEach.call(document.querySelectorAll('.piece'), function(element){
                 let statsContent = element.querySelector('.stats-content');
 
+                let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
+                let rect = statsContent.parentNode.getBoundingClientRect();
+
+                if(rect.x)
+                    statsContent.style.left = rect.x - statsContent.offsetWidth - 10 + "px";
+
+                if(rect.y)
+                    statsContent.style.top = Math.max(70, Math.min(maxTop, (rect.y + statsContent.parentNode.offsetHeight / 2) - statsContent.offsetHeight / 2)) + 'px';
+
                 element.addEventListener('mousemove', function(e){
+                    if(element.classList.contains('show-lore'))
+                        return;
+
                     let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
                     let rect = statsContent.parentNode.getBoundingClientRect();
 
@@ -288,45 +351,44 @@
 
                     statsContent.style.top = top + "px";
                 });
+
+                element.addEventListener('click', function(e){
+                    if(e.target.classList.contains('piece-hover-area')){
+                        if(element.classList.contains('show-lore')){
+                            dimmer.classList.remove('show-dimmer');
+                            element.blur();
+                            document.querySelector('.piece.show-lore').classList.remove('show-lore');
+                        }else{
+                            showLore(element);
+                        }
+                    }
+                });
             });
 
-            let dimmer = document.querySelector("#dimmer");
-            let enable_api_player = document.querySelector("#enable_api");
+            let enableApiPlayer = document.querySelector('#enable_api');
 
             [].forEach.call(document.querySelectorAll('.enable-api'), function(element){
                 element.addEventListener('click', function(e){
                     e.preventDefault();
-                    dimmer.classList.add("show-dimmer");
+                    dimmer.classList.add('show-dimmer');
+                    enableApiPlayer.classList.add('show');
 
-                    anime({
-                        targets: dimmer,
-                        opacity: [0, 1],
-                        duration: 300,
-                        easing: 'easeOutCubic'
-                    });
-
-                    enable_api_player.currentTime = 0;
-                    enable_api_player.play();
+                    enableApiPlayer.currentTime = 0;
+                    enableApiPlayer.play();
                 });
             });
 
+            enableApiPlayer.addEventListener('click', function(){
+                if(enableApiPlayer.paused)
+                    enableApiPlayer.play();
+                else
+                    enableApiPlayer.pause();
+            });
+
             dimmer.addEventListener('click', function(e){
-                if(e.target.id == 'enable_api'){
-                    if(enable_api_player.paused)
-                        enable_api_player.play();
-                    else
-                        enable_api_player.pause();
-                }else{
-                    anime({
-                        targets: dimmer,
-                        opacity: [1, 0],
-                        duration: 300,
-                        easing: 'easeOutCubic',
-                        complete: function(){
-                            dimmer.classList.remove('show-dimmer');
-                        }
-                    });
-                }
+                dimmer.classList.remove('show-dimmer');
+                enableApiPlayer.classList.remove('show');
+                document.querySelector('.piece.show-lore').classList.remove('show-lore');
             });
 
             let enterPlayer = document.querySelector('#enter_player');
@@ -341,6 +403,39 @@
                     document.location = '/stats/' + playerName;
                 else
                     document.querySelector('#goto_player').href = '/stats/' + playerName;
+            });
+
+            let otherSkills = document.querySelector('#other_skills');
+            let showSkills = document.querySelector("#show_skills");
+
+            if(showSkills != null){
+                showSkills.addEventListener('click', function(){
+                    if(otherSkills.classList.contains('show-skills')){
+                        otherSkills.classList.remove('show-skills');
+                        showSkills.innerHTML = 'Show Skills';
+                    }else{
+                        otherSkills.classList.add('show-skills');
+                        show_skills.innerHTML = 'Hide Skills';
+                    }
+
+                });
+            }
+
+            window.addEventListener('keydown', function(e){
+                let selectedPiece = document.querySelector('.piece:focus');
+
+                if(selectedPiece !== null && e.keyCode == 13)
+                    showLore(selectedPiece);
+
+                if(e.keyCode == 27){
+                    dimmer.classList.remove('show-dimmer');
+                    enableApiPlayer.classList.remove('show');
+                    if(document.querySelector('.piece.show-lore') != null)
+                        document.querySelector('.piece.show-lore').classList.remove('show-lore');
+                }
+
+                if(document.querySelector('.piece.show-lore') != null && e.keyCode == 9)
+                    e.preventDefault();
             });
         </script>
     </body>

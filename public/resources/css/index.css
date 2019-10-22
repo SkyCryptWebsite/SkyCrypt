@@ -149,6 +149,13 @@ header::after{
     min-height: 100%;
     background-color: rgba(10,10,10,0.7);
     box-sizing: border-box;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+     user-select: none;
 }
 
 #base_stats_container{
@@ -157,6 +164,18 @@ header::after{
 
 #base_stats_container, #skill_levels_container{
     display: inline-block;
+}
+
+#show_skills{
+    display: none;
+    margin-top: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 10px;
+    border-radius: 1000px;
+    background-color: rgba(255,255,255,0.1);
+    cursor: pointer;
 }
 
 #skill_levels_container{
@@ -174,6 +193,14 @@ header::after{
     display: inline-block;
     position: relative;
     height: 36px;
+}
+
+#other_skills{
+    display: inline;
+}
+
+#other_skills .skill:first-child{
+    margin-top: 18px;
 }
 
 .skill-icon{
@@ -276,6 +303,7 @@ header::after{
     box-sizing: border-box;
     transform: translateY(-100%);
     transition: transform .3s;
+    z-index: 100;
 }
 
 html.no-transform #info_box{
@@ -362,20 +390,54 @@ html.no-transform #info_box.opened{
     opacity: 0;
     transform: translateX(-25px);
     pointer-events: none;
-    transition: opacity .2s, transform .2s;
+    transition: visibility .2s, opacity .2s, transform .2s;
+    visibility: hidden;
 }
 
-.piece:hover .stats-content{
+.stats-content .item-lore{
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.piece-hover-area:hover ~ .stats-content{
     opacity: 1;
     transform: translateX(0px);
+    visibility: visible;
+}
+
+.piece.show-lore{
+    z-index: 8000;
+}
+
+.piece.show-lore .stats-content{
+    opacity: 1;
+    transform: translateX(0px);
+    visibility: visible;
+    pointer-events: auto;
+    cursor: default;
+    user-select: text;
+}
+
+.stats-content .stats-piece-icon{
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
 }
 
 .stats-content .item-name{
+    position: relative;
     text-align: center;
     padding: 20px;
+    padding-left: 60px;
     text-transform: uppercase;
     font-weight: 600;
     text-shadow: 0px 0px 7px rgba(0,0,0,0.3);
+    box-sizing: border-box;
 }
 
 .stats-content .item-lore{
@@ -494,6 +556,12 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
     line-height: 24px;
     margin-top: 2px;
     font-weight: 600;
+    display: inline;
+}
+
+.basic-stat::after{
+    content: "\a";
+    white-space: pre;
 }
 
 .stat-name{
@@ -615,6 +683,8 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
     box-sizing: border-box;
     border-top: 4px solid transparent;
     border-bottom: 4px solid rgba(0,0,0,0.3);
+    user-select: none;
+    cursor: pointer;
 }
 
 .piece::after{
@@ -628,6 +698,41 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
     border: 4px solid rgba(255,255,255,0.9);
     opacity: 0;
     transition: transform .2s, opacity .2s;
+}
+
+.piece-hover-area{
+    position: absolute;
+    top: -4px;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    z-index: 10;
+}
+
+.stat-weapons .piece{
+    margin-bottom: 15px;
+    margin-top: 35px;
+}
+
+.stat-weapons .pieces{
+    margin-top: 0;
+}
+
+.piece .select-weapon{
+    top: calc(100% + 15px);
+    position: absolute;
+    left: 50%;
+    margin-left: -8px;
+    width: 16px;
+    height: 16px;
+    border: 3px solid white;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background-color .2s;
+}
+
+.piece-selected .select-weapon{
+    background-color: white;
 }
 
 .piece-shine{
@@ -669,11 +774,11 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
     }
 }
 
-.stat-weapons .piece{
-    cursor: pointer;
+.piece:focus{
+    outline: 0 !important;
 }
 
-.piece-selected::after{
+.piece.show-lore::after, .piece:focus::after{
     opacity: 1;
     transform: translateY(0px);
 }
@@ -839,8 +944,13 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
     width: calc(100% - 100px);
     height: 100%;
     text-align: center;
-    line-height: 70px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
     font-size: 18px;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
 }
 
 #dimmer{
@@ -850,10 +960,11 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
     bottom: 0;
     right: 0;
     background-color: rgba(0,0,0,0.7);
-    z-index: 9999;
+    z-index: 7500;
     cursor: pointer;
     opacity: 0;
     visibility: hidden;
+    transition: opacity .3s, visibility .3s;
 }
 
 #dimmer.show-dimmer{
@@ -862,7 +973,7 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
 }
 
 #enable_api{
-    position: absolute;
+    position: fixed;
     width: 66vw;
     height: calc(66vw * 9/16);
     left: 50vw;
@@ -871,8 +982,240 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
     margin-top: calc(-1 * ((66vw * 9/16) / 2));
     border-radius: 1%;
     cursor: default;
+    z-index: 8500;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s, visibility .3s;
+}
+
+#enable_api.show{
+    visibility: visible;
+    opacity: 1;
 }
 
 #enable_api:focus{
     outline: 0 !important;
+}
+
+@media (max-width: 1080px){
+    header{
+        height: 75px;
+        text-align: center;
+        width: 100vw;
+    }
+
+    header::after{
+        top: 75px;
+    }
+
+    #top_navigation{
+        top: 30px;
+        left: 0;
+        right: 0;
+        height: 35px;
+    }
+
+    #top_navigation .tab{
+        width: calc(100vw / 3 - 5px);
+        font-size: 12px;
+        border-radius: 1000px;
+        margin: 2px;
+        line-height: 30px;
+    }
+
+    #info_box{
+        top: 75px;
+        left: 0;
+        width: 100vw;
+        right: 0;
+    }
+
+    #stats_display{
+        visibility: hidden;
+    }
+
+    #wrapper, #bg_blur{
+        top: 75px;
+        left: 0;
+        right: 0;
+        width: 100vw;
+        overflow-x: hidden;
+    }
+
+    #player_profile{
+        font-size: 25px;
+        margin: 25px;
+    }
+
+    #player_profile .text-stats-for{
+        display: none;
+    }
+
+    #other_players, #other_profiles{
+        font-size: 17px;
+    }
+
+    #other_players{
+        min-width: 190px;
+    }
+
+    #enter_player{
+        font-size: 13px;
+    }
+
+    #other_profiles, stats_for_profile{
+        min-width: 130px;
+    }
+
+    #stats_for_player:focus #other_players, #stats_for_profile:focus #other_profiles {
+        clip-path: ellipse(200% 200% at 0% 0%);
+    }
+
+    #basic_stats{
+        text-align: center;
+        padding: 0;
+        background-color: transparent;
+    }
+
+    #base_stats_container{
+        width: 100%;
+        text-align: left;
+        background-color: rgba(0,0,0,0.3);
+        padding: 30px;
+        box-sizing: border-box;
+        position: relative;
+        padding-left: 150px;
+    }
+
+    #skill_levels_container .skill{
+        width: calc(50vw - 32px);
+    }
+
+    #player_model_mobile{
+        position: absolute;
+        top: 30px;
+        left: 20px;
+        bottom: 30px;
+        width: 110px;
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    #skill_levels_container{
+        width: 100%;
+        margin-top: 30px;
+        background-color: rgba(0,0,0,0.3);
+        padding: 30px;
+        box-sizing: border-box;
+        padding-bottom: 15px;
+    }
+
+    #skill_levels_container .no-access{
+        width: 100%;
+        text-align: left;
+    }
+
+    .stat-header{
+        width: 100vw;
+    }
+
+    .stat-header::before, .stat-header::after{
+        display: none;
+    }
+
+    .piece-hover-area:hover ~ .stats-content{
+        visibility: hidden;
+    }
+
+    .stats-content{
+        transition: opacity .2s, visibility .2s !important;
+    }
+
+    .piece.show-lore .stats-content{
+        visibility: visible;
+        left: 50% !important;
+        width: 360px;
+        top: 50% !important;
+        transform: translate(-50%, -50%);
+        max-width: 100% !important;
+    }
+
+    #enable_api{
+        width: 100vw;
+        left: 0;
+        margin-left: 0;
+        height: calc(100vw * 9/16);
+        margin-top: calc(-1 * ((100vw * 9/16) / 2));
+    }
+}
+
+@media (max-width: 480px){
+    #show_skills{
+        display: block;
+    }
+
+    #other_skills{
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height .4s;
+        display: block;
+    }
+
+    #other_skills.show-skills{
+        max-height: 500px;
+    }
+
+    #skill_levels_container .skill{
+        width: 100%;
+    }
+
+    #skill_levels_container .skill-bar{
+        right: 0;
+    }
+
+    .piece{
+        width: calc((100vw - 50px) / 4 - 14px);
+        height: calc((100vw - 50px) / 4 - 14px);
+    }
+
+    .piece::after{
+        width: calc((100vw - 50px) / 4 - 22px);
+        height: calc((100vw - 50px) / 4 - 22px);
+    }
+
+    .piece-icon{
+        width: 75%;
+    }
+
+    .piece.show-lore .stats-content{
+        width: calc(100vw - 40px) !important;
+        left: 20px !important;
+        right: auto !important;
+        transform: translateY(-50%);
+    }
+
+    #enter_player_box_wrapper{
+        width: calc(100vw - 20px);
+        left: 10px;
+        margin-left: 0;
+        height: 210px;
+        margin-top: -105px;
+        font-size: 12px;
+    }
+
+    #enter_player_box p{
+        font-size: 20px;
+    }
+
+    #enter_player_box input{
+        font-size: 20px;
+    }
+
+    #error_box_wrapper{
+        width: calc(100vw - 20px);
+        left: 10px;
+        margin-left: 0;
+        margin-top: 115px;
+    }
 }
