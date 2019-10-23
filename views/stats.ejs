@@ -266,19 +266,21 @@
             function showLore(piece){
                 piece.classList.add('show-lore');
                 dimmer.classList.add('show-dimmer');
+            }
 
-                let statsContent = piece.querySelector('.stats-content');
+            function resize(){
+                [].forEach.call(document.querySelectorAll('.piece'), function(element){
+                    let statsContent = element.querySelector('.stats-content');
 
-                /*let left = window.outerWidth / 2 - statsContent.offsetWidth / 2 + 'px';
-                let top = window.outerHeight / 2 - statsContent.offsetHeight / 2 + 'px';
+                    let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
+                    let rect = statsContent.parentNode.getBoundingClientRect();
 
-                anime({
-                    targets: statsContent,
-                    left: left,
-                    top: top,
-                    duration: 300,
-                    easing: 'easeOutCubic'
-                });*/
+                    if(rect.x)
+                        statsContent.style.left = rect.x - statsContent.offsetWidth - 10 + "px";
+
+                    if(rect.y)
+                        statsContent.style.top = Math.max(70, Math.min(maxTop, (rect.y + statsContent.parentNode.offsetHeight / 2) - statsContent.offsetHeight / 2)) + 'px';
+                });
             }
 
             [].forEach.call(document.querySelectorAll('.stat-weapons .select-weapon'), function(element){
@@ -331,11 +333,7 @@
                 let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
                 let rect = statsContent.parentNode.getBoundingClientRect();
 
-                if(rect.x)
-                    statsContent.style.left = rect.x - statsContent.offsetWidth - 10 + "px";
-
-                if(rect.y)
-                    statsContent.style.top = Math.max(70, Math.min(maxTop, (rect.y + statsContent.parentNode.offsetHeight / 2) - statsContent.offsetHeight / 2)) + 'px';
+                resize();
 
                 element.addEventListener('mousemove', function(e){
                     if(element.classList.contains('show-lore'))
@@ -444,6 +442,8 @@
                 if(document.querySelector('.piece.show-lore') != null && e.keyCode == 9)
                     e.preventDefault();
             });
+
+            window.addEventListener('resize', resize);
         </script>
     </body>
 </html>
