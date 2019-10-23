@@ -1149,7 +1149,7 @@ module.exports = {
             output.no_inventory = true;
 
         for(items in output)
-            if(Array.isArray(output[items]))
+            if(Array.isArray(output[items]) && items != 'armor')
                 output[items] = output[items].sort((a, b) => rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity));
 
         return output;
