@@ -1230,6 +1230,11 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
         padding-right: 60px;
     }
 
+    html{
+        min-width: 100vw;
+        min-height: 100vh;
+    }
+
     #enter_player_box_wrapper{
         width: calc(100vw - 20px);
         left: 10px;
@@ -1237,6 +1242,8 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
         height: 210px;
         margin-top: -105px;
         font-size: 12px;
+        background: transparent;
+        backdrop-filter: blur(15px);
     }
 
     #enter_player_box p{
