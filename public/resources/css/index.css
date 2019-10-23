@@ -414,7 +414,7 @@ html.no-transform #info_box.opened{
     transform: translateX(0px);
     visibility: visible;
     pointer-events: auto;
-    cursor: default;
+    cursor: auto;
     user-select: text;
 }
 
@@ -1093,7 +1093,13 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
     }
 
     #skill_levels_container .skill{
-        width: calc(50vw - 32px);
+        width: calc(50vw - 60px);
+        margin-left: 12px;
+        margin-right: 12px;
+    }
+
+    #skill_levels_container .skill-bar{
+        right: 0;
     }
 
     #player_model_mobile{
@@ -1173,6 +1179,7 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
 
     #skill_levels_container .skill{
         width: 100%;
+        margin: 0;
     }
 
     #skill_levels_container .skill-bar{
