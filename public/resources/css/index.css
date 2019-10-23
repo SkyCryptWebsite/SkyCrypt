@@ -429,6 +429,21 @@ html.no-transform #info_box.opened{
     filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
 }
 
+.stats-content .close-lore{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    background-image: url(/resources/img/icons/window-close.png);
+    background-size: 28px 28px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    visibility: hidden;
+    filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));
+    cursor: pointer;
+}
+
 .stats-content .item-name{
     position: relative;
     text-align: center;
@@ -1139,17 +1154,17 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
         visibility: hidden;
     }
 
-    .stats-content{
+    .piece .stats-content{
+        left: 50% !important;
+        width: 360px;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        max-width: 100% !important;
         transition: opacity .2s, visibility .2s !important;
     }
 
     .piece.show-lore .stats-content{
         visibility: visible;
-        left: 50% !important;
-        width: 360px;
-        top: 50% !important;
-        transform: translate(-50%, -50%);
-        max-width: 100% !important;
     }
 
     #enable_api{
@@ -1200,11 +1215,19 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
         width: 75%;
     }
 
-    .piece.show-lore .stats-content{
+    .piece .stats-content{
         width: calc(100vw - 40px) !important;
         left: 20px !important;
         right: auto !important;
-        transform: translateY(-50%);
+        transform: translateY(-50%) !important;
+    }
+
+    .stats-content .close-lore{
+        visibility: visible;
+    }
+
+    .stats-content .item-name{
+        padding-right: 60px;
     }
 
     #enter_player_box_wrapper{

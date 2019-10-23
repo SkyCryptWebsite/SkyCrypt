@@ -189,7 +189,7 @@
                                 <div class="piece-hover-area"></div>
                                 <img class="piece-icon" src="<%= item.texture_path %>">
                                 <div class="stats-content">
-                                    <div class="item-name piece-<%= item.rarity %>-bg"><img class="stats-piece-icon" src="<%= item.texture_path %>"><%= item.display_name %></div>
+                                    <div class="item-name piece-<%= item.rarity %>-bg"><img class="stats-piece-icon" src="<%= item.texture_path %>"><%= item.display_name %><div class="close-lore"></div></div>
                                     <div class="item-lore"><%- item.lore %></div>
                                 </div>
                             </div>
@@ -219,7 +219,7 @@
                                     <img class="piece-icon" src="<%= item.texture_path %>">
                                     <div class="select-weapon"></div>
                                     <div class="stats-content">
-                                        <div class="item-name piece-<%= item.rarity %>-bg"><img class="stats-piece-icon" src="<%= item.texture_path %>"><%= item.display_name %></div>
+                                        <div class="item-name piece-<%= item.rarity %>-bg"><img class="stats-piece-icon" src="<%= item.texture_path %>"><%= item.display_name %><div class="close-lore"></div></div>
                                         <div class="item-lore"><%- item.lore %></div>
                                     </div>
                                 </div>
@@ -245,7 +245,7 @@
                                 <div class="piece-hover-area"></div>
                                 <img class="piece-icon" src="<%= item.texture_path %>">
                                 <div class="stats-content">
-                                    <div class="item-name piece-<%= item.rarity %>-bg"><img class="stats-piece-icon" src="<%= item.texture_path %>"><%= item.display_name %></div>
+                                    <div class="item-name piece-<%= item.rarity %>-bg"><img class="stats-piece-icon" src="<%= item.texture_path %>"><%= item.display_name %><div class="close-lore"></div></div>
                                     <div class="item-lore"><%- item.lore %></div>
                                 </div>
                             </div>
@@ -389,6 +389,13 @@
                 dimmer.classList.remove('show-dimmer');
                 enableApiPlayer.classList.remove('show');
                 document.querySelector('.piece.show-lore').classList.remove('show-lore');
+            });
+
+            [].forEach.call(document.querySelectorAll('.close-lore'), function(element){
+                element.addEventListener('click', function(){
+                    dimmer.classList.remove('show-dimmer');
+                    document.querySelector('.piece.show-lore').classList.remove('show-lore');
+                });
             });
 
             let enterPlayer = document.querySelector('#enter_player');
