@@ -216,6 +216,7 @@ header::after{
 .skill-icon img{
     image-rendering: crisp-edges;
     image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
     width: 26px;
     position: absolute;
     top: 50%;
@@ -426,6 +427,7 @@ html.no-transform #info_box.opened{
     width: 32px;
     image-rendering: crisp-edges;
     image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
     filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
 }
 
@@ -808,6 +810,7 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
     width: 64px;
     image-rendering: crisp-edges;
     image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

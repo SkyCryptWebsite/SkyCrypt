@@ -43,14 +43,7 @@
             </div>
         </div>
         <script src="/resources/js/js.cookie.min.js"></script>
-        <script src="/resources/js/modernizr-custom.js"></script>
         <script>
-            if(!Modernizr.testAllProps('clip-path', 'ellipse(10px 10px at 10px 10px)'))
-                document.documentElement.classList.add('no-clip-path');
-
-            if(!Modernizr.testAllProps('transform', 'translateY(10px)'))
-                document.documentElement.classList.add('no-transform');
-
             let targetUsername = document.getElementById("inp_enter_username");
 
             targetUsername.addEventListener('keyup', function(e){

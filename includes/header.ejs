@@ -27,6 +27,7 @@
         <li>Player Heads: <a href="https://hypixel.net/forums/skyblock.157/" target="_blank">SkyBlock</a> by <span class="name">Hypixel</span>.</li>
     </ul>
 </div>
+<script src="/resources/js/modernizr-custom.js"></script>
 <script>
     function toggleInfo(){
         let infoBox = document.querySelector('#info_box');
@@ -36,4 +37,10 @@
         else
             infoBox.classList.add('info-opened');
     }
+
+    if(!Modernizr.testAllProps('clip-path', 'ellipse(10px 10px at 10px 10px)'))
+        document.documentElement.classList.add('no-clip-path');
+
+    if(!Modernizr.testAllProps('transform', 'translateY(10px)'))
+        document.documentElement.classList.add('no-transform');
 </script>
