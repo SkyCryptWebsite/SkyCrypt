@@ -93,14 +93,25 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
 
     let all_skyblock_profiles = data.player.stats.SkyBlock.profiles;
 
-    if(Object.keys(all_skyblock_profiles).length == 0){
-        res
-        .cookie('error', 'Player has no SkyBlock profiles.')
-        .redirect('/');
-        return false;
-    }
-
     let skyblock_profiles = {};
+
+    if(Object.keys(all_skyblock_profiles).length == 0){
+        let default_profile = await Hypixel.get('skyblock/profile', { params: { key: credentials.hypixel_api_key, profile: data.player.uuid }});
+
+        if(default_profile.data.profile == null){
+            res
+            .cookie('error', 'Player has no SkyBlock profiles.')
+            .redirect('/');
+            return false;
+        }else{
+            skyblock_profiles[data.player.uuid] = {
+                profile_id: data.player.uuid,
+                cute_name: 'Avocado'
+            };
+
+            all_skyblock_profiles = skyblock_profiles;
+        }
+    }
 
     if(req.params.profile)
         skyblock_profiles = _.pickBy(all_skyblock_profiles, a => a.cute_name.toLowerCase() == req.params.profile.toLowerCase());
