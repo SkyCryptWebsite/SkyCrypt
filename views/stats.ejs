@@ -88,9 +88,9 @@
                                     return Math.ceil(number / 1000) + 'K';
                             else
                                 if(floor)
-                                    return Math.floor(number / 1000 * 10) / 10 + 'M';
+                                    return Math.floor(number / 1000 / 1000 * 10) / 10 + 'M';
                                 else
-                                    return Math.ceil(number / 1000 * 10) / 10 + 'M';
+                                    return Math.ceil(number / 1000 / 1000 * 10) / 10 + 'M';
                         }
 
                         if('levels' in calculated){
