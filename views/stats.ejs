@@ -268,6 +268,16 @@
                 dimmer.classList.add('show-dimmer');
             }
 
+            function closeLore(){
+                let shownLore = document.querySelector('.piece.show-lore');
+
+                if(shownLore != null){
+                    dimmer.classList.remove('show-dimmer');
+                    shownLore.blur();
+                    shownLore.classList.remove('show-lore');
+                }
+            }
+
             function resize(){
                 [].forEach.call(document.querySelectorAll('.piece'), function(element){
                     let statsContent = element.querySelector('.stats-content');
@@ -289,7 +299,11 @@
                 let weaponStats = calculated.weapon_stats[item_index];
                 let stats;
 
-                element.addEventListener('click', function(){
+                element.addEventListener('mousedown', function(e){
+                    e.preventDefault();
+                });
+
+                element.addEventListener('click', function(e){
                     if(element.parentNode.classList.contains('piece-selected')){
                         element.parentNode.classList.remove("piece-selected");
 
@@ -386,14 +400,12 @@
             dimmer.addEventListener('click', function(e){
                 dimmer.classList.remove('show-dimmer');
                 enableApiPlayer.classList.remove('show');
-                document.querySelector('.piece.show-lore').classList.remove('show-lore');
+
+                closeLore();
             });
 
             [].forEach.call(document.querySelectorAll('.close-lore'), function(element){
-                element.addEventListener('click', function(){
-                    dimmer.classList.remove('show-dimmer');
-                    document.querySelector('.piece.show-lore').classList.remove('show-lore');
-                });
+                element.addEventListener('click', closeLore);
             });
 
             let enterPlayer = document.querySelector('#enter_player');
