@@ -730,7 +730,7 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
 }
 
 .stat-weapons .piece{
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     margin-top: 35px;
 }
 
@@ -742,9 +742,9 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
     top: calc(100% + 15px);
     position: absolute;
     left: 50%;
-    margin-left: -8px;
-    width: 16px;
-    height: 16px;
+    margin-left: -11px;
+    width: 22px;
+    height: 22px;
     border: 3px solid white;
     cursor: pointer;
     box-sizing: border-box;
