@@ -816,6 +816,8 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
     left: 50%;
     transform: translate(-50%, -50%);
     filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
+    z-index: 15;
+    pointer-events: none;
 }
 
 .piece-legendary-bg{
