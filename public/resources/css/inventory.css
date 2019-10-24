@@ -3,6 +3,10 @@
   background-image: url('/resources/img/inventory/inventory.webp');
 }
 
+.item-icon.no-webp {
+  background-image: url('/resources/img/inventory/inventory.png');
+}
+
 .icon-103_0 {
   background-position: -128px -0px;
   width: 128px;

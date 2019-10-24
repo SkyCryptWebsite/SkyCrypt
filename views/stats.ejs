@@ -288,6 +288,14 @@
 
             history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name);
 
+            Modernizr.on('webp', function(result){
+                if(!Modernizr.webp.lossless){
+                    [].forEach.call(document.querySelectorAll('.item-icon'), function(element){
+                        element.classList.add('no-webp');
+                    });
+                }
+            });
+
             function showLore(piece){
                 piece.classList.add('show-lore');
                 dimmer.classList.add('show-dimmer');
