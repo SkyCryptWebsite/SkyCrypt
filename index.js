@@ -29,6 +29,21 @@ const Hypixel = axios.create({
     baseURL: 'https://api.hypixel.net/'
 });
 
+let api_index = 0;
+let api_key = credentials.hypixel_api_key;
+
+if(!Array.isArray(api_key))
+    api_key = [api_key];
+
+function getApiKey(){
+    api_index++;
+
+    if(api_index >= api_key.length)
+        api_index = 0;
+
+    return api_key[api_index];
+}
+
 async function uuidToUsername(uuid){
     let output;
 
@@ -75,7 +90,7 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 app.get('/stats/:player/:profile?', async (req, res, next) => {
-    let { data } = await Hypixel.get('player', { params: { key: credentials.hypixel_api_key, name: req.params.player } });
+    let { data } = await Hypixel.get('player', { params: { key: getApiKey(), name: req.params.player } });
 
     if(data.player == null){
         res
@@ -96,7 +111,7 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
     let skyblock_profiles = {};
 
     if(Object.keys(all_skyblock_profiles).length == 0){
-        let default_profile = await Hypixel.get('skyblock/profile', { params: { key: credentials.hypixel_api_key, profile: data.player.uuid }});
+        let default_profile = await Hypixel.get('skyblock/profile', { params: { key: getApiKey(), profile: data.player.uuid }});
 
         if(default_profile.data.profile == null){
             res
@@ -125,7 +140,7 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
 
     for(let profile in skyblock_profiles)
         promises.push(
-            Hypixel.get('skyblock/profile', { params: { key: credentials.hypixel_api_key, profile: profile } })
+            Hypixel.get('skyblock/profile', { params: { key: getApiKey(), profile: profile } })
         );
 
     let responses = await Promise.all(promises);
