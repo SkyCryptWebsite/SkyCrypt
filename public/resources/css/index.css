@@ -1,6 +1,6 @@
 html{
     background-color: rgb(20,20,20);
-    background: url(../img/bg.png) no-repeat center center fixed;
+    background: url(../img/bg.jpg) no-repeat center center fixed;
     background-size: cover;
     font-family: 'Montserrat', sans-serif;
     color: white;
@@ -133,7 +133,7 @@ header::after{
 }
 
 #bg_blur{
-    background: url(../img/bg_blur.png) no-repeat center center fixed;
+    background: url(../img/bg_blur.jpg) no-repeat center center fixed;
     background-size: cover;
     position: fixed;
     left: 30vw;
@@ -868,7 +868,7 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
     margin-left: -300px;
     width: 600px;
     height: 260px;
-    background: url(../img/bg_blur.png) no-repeat center center fixed;
+    background: url(../img/bg_blur.jpg) no-repeat center center fixed;
     background-size: cover;
 }
 
@@ -931,7 +931,7 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
     margin-left: -300px;
     width: 600px;
     height: 70px;
-    background: url(../img/bg_blur.png) no-repeat center center fixed;
+    background: url(../img/bg_blur.jpg) no-repeat center center fixed;
     background-size: cover;
     visibility: hidden;
 }
