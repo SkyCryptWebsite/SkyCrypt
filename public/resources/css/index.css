@@ -1,10 +1,14 @@
 html{
     background-color: rgb(20,20,20);
-    background: url(../img/bg.jpg) no-repeat center center fixed;
+    background: url(../img/bg.webp) no-repeat center center fixed;
     background-size: cover;
     font-family: 'Montserrat', sans-serif;
     color: white;
     overflow-x: hidden;
+}
+
+html.no-webp{
+    background-image: url(../img/bg.jpg);
 }
 
 a{
@@ -133,13 +137,17 @@ header::after{
 }
 
 #bg_blur{
-    background: url(../img/bg_blur.jpg) no-repeat center center fixed;
+    background: url(../img/bg_blur.webp) no-repeat center center fixed;
     background-size: cover;
     position: fixed;
     left: 30vw;
     top: 35px;
     right: 0;
     bottom: 0;
+}
+
+html.no-webp #bg_blur{
+    background-image: url(../img/bg_blur.jpg)
 }
 
 #wrapper{
@@ -868,8 +876,12 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
     margin-left: -300px;
     width: 600px;
     height: 260px;
-    background: url(../img/bg_blur.jpg) no-repeat center center fixed;
+    background: url(../img/bg_blur.webp) no-repeat center center fixed;
     background-size: cover;
+}
+
+html.no-webp #enter_player_box_wrapper{
+    background-image: url(../img/bg_blur.jpg);
 }
 
 #enter_player_box{
@@ -931,9 +943,13 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
     margin-left: -300px;
     width: 600px;
     height: 70px;
-    background: url(../img/bg_blur.jpg) no-repeat center center fixed;
+    background: url(../img/bg_blur.webp) no-repeat center center fixed;
     background-size: cover;
     visibility: hidden;
+}
+
+html.no-webp #error_box_wrapper{
+    background-image: url(../img/bg_blur.jpg);
 }
 
 #error_box{
