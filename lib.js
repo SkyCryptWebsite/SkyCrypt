@@ -154,10 +154,13 @@ async function getItems(base64){
         if(objectPath.has(item, 'tag.display.Name'))
             item.display_name = module.exports.getRawLore(item.tag.display.Name);
 
-        if(objectPath.has(item, 'display_name'))
+        if(objectPath.has(item, 'display_name')){
+            if(item.display_name == 'Water Bottle')
+                item.Damage = 17;
             for(let texture in replacement_textures)
                 if(item.display_name.includes(texture))
                     item.texture_path = replacement_textures[texture];
+        }
 
 
         if(objectPath.has(item, 'tag.SkullOwner.Properties.textures') && Array.isArray(item.tag.SkullOwner.Properties.textures) && item.tag.SkullOwner.Properties.textures.length > 0){
@@ -1068,6 +1071,9 @@ module.exports = {
         let inventory = 'inv_contents' in profile ? await getItems(profile.inv_contents.data) : [];
         let talisman_bag = 'talisman_bag' in profile ? await getItems(profile.talisman_bag.data) : [];
         let enderchest = 'ender_chest_contents' in profile ? await getItems(profile.ender_chest_contents.data) : [];
+        let fishing_bag = 'fishing_bag' in profile ? await getItems(profile.fishing_bag.data) : [];
+        let quiver = 'quiver' in profile ? await getItems(profile.quiver.data) : [];
+        let potion_bag = 'potion_bag' in profile ? await getItems(profile.potion_bag.data) : [];
 
         let armor = await getItems(profile.inv_armor.data);
 
@@ -1095,6 +1101,9 @@ module.exports = {
         output.inventory = inventory
         output.enderchest = enderchest;
         output.talisman_bag = talisman_bag;
+        output.fishing_bag = fishing_bag;
+        output.quiver = quiver;
+        output.potion_bag = potion_bag;
 
         output.all = inventory.concat(enderchest, talisman_bag);
 
