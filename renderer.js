@@ -104,13 +104,15 @@ module.exports = {
     },
 
     renderArmor: async (type, color) => {
-        let canvas = createCanvas(16, 16);
+        let canvas = createCanvas(128, 128);
         let ctx = canvas.getContext('2d');
+
+        ctx.imageSmoothingEnabled = false;
 
         let armor_base = await loadImage(path.resolve(__dirname, 'public', 'resources', 'img', 'textures', 'item', `leather_${type}.png`));
         let armor_overlay = await loadImage(path.resolve(__dirname, 'public', 'resources', 'img', 'textures', 'item', `leather_${type}_overlay.png`));
 
-        ctx.drawImage(armor_base, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(armor_base, 0, 0, 16, 16, 0, 0, canvas.width, canvas.height);
 
         let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
@@ -126,7 +128,7 @@ module.exports = {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.putImageData(imageData, 0, 0);
 
-        ctx.drawImage(armor_overlay, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(armor_overlay, 0, 0, 16, 16, 0, 0, canvas.width, canvas.height);
 
         return await canvas.toBuffer('image/png');
     }

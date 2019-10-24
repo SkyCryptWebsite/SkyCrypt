@@ -182,6 +182,7 @@ header::after{
 #skill_levels_container{
     width: calc(70vw - 360px);
     vertical-align: top;
+    margin-top: -18px;
 }
 
 #skill_levels_container .no-access{
@@ -424,12 +425,12 @@ html.no-transform #info_box.opened{
     position: absolute;
     left: 14px;
     top: 50%;
-    transform: translateY(-50%);
-    width: 32px;
     image-rendering: crisp-edges;
     image-rendering: pixelated;
     -ms-interpolation-mode: nearest-neighbor;
     filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
+    transform: scale(0.25) translateY(-50%);
+    transform-origin: top left;
 }
 
 .stats-content .close-lore{
@@ -808,16 +809,21 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
 
 .piece-icon{
     position: absolute;
-    width: 64px;
     image-rendering: crisp-edges;
     image-rendering: pixelated;
     -ms-interpolation-mode: nearest-neighbor;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 2px;
+    left: 8px;
     filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
     z-index: 15;
     pointer-events: none;
+    transform: scale(0.5);
+    transform-origin: top left;
+}
+
+.custom-icon{
+    background-repeat: no-repeat;
+    background-position: center center !important;
 }
 
 .piece-legendary-bg{
@@ -1111,6 +1117,10 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
         box-sizing: border-box;
         position: relative;
         padding-left: 150px;
+    }
+
+    #skill_levels_container{
+        margin-top: 0;
     }
 
     #skill_levels_container .skill{

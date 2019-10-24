@@ -194,7 +194,7 @@ app.get('/head/:uuid', async (req, res) => {
     try{
         file = await fs.readFile(path.resolve(__dirname, 'cache', filename));
     }catch(e){
-        file = await renderer.renderHead(`http://textures.minecraft.net/texture/${uuid}`, 10);
+        file = await renderer.renderHead(`http://textures.minecraft.net/texture/${uuid}`, 6.4);
 
         fs.writeFile(path.resolve(__dirname, 'cache', filename), file, err => {
             if(err)

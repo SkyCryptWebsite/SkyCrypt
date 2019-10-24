@@ -4,7 +4,8 @@
         <title><%- calculated.display_name %> | SkyBlock Stats</title>
         <meta charset="utf-8">
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="/resources/css/index.css?v4">
+        <link rel="stylesheet" href="/resources/css/index.css?v5">
+        <link rel="stylesheet" href="/resources/css/inventory.css">
         <link rel="shortcut icon" href="https://visage.surgeplay.com/face/32/<%- calculated.uuid %>" type="image/png">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta property="og:image" content="https://visage.surgeplay.com/face/256/<%- calculated.uuid %>">
@@ -187,9 +188,17 @@
                                     <div class="piece-shine"></div>
                                 <% } %>
                                 <div class="piece-hover-area"></div>
-                                <img class="piece-icon" src="<%= item.texture_path %>">
+                                <div
+                                    <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
+                                    class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
+                                </div>
                                 <div class="stats-content">
-                                    <div class="item-name piece-<%= item.rarity %>-bg"><img class="stats-piece-icon" src="<%= item.texture_path %>"><%= item.display_name %><div class="close-lore"></div></div>
+                                    <div class="item-name piece-<%= item.rarity %>-bg">
+                                        <div
+                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
+                                            class="stats-piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
+                                        </div>
+                                        <%= item.display_name %><div class="close-lore"></div></div>
                                     <div class="item-lore"><%- item.lore %></div>
                                 </div>
                             </div>
@@ -216,10 +225,18 @@
                                         <div class="piece-shine"></div>
                                     <% } %>
                                     <div class="piece-hover-area"></div>
-                                    <img class="piece-icon" src="<%= item.texture_path %>">
                                     <div class="select-weapon"></div>
+                                    <div
+                                        <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
+                                        class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
+                                    </div>
                                     <div class="stats-content">
-                                        <div class="item-name piece-<%= item.rarity %>-bg"><img class="stats-piece-icon" src="<%= item.texture_path %>"><%= item.display_name %><div class="close-lore"></div></div>
+                                        <div class="item-name piece-<%= item.rarity %>-bg">
+                                            <div
+                                                <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
+                                                class="stats-piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
+                                            </div>
+                                            <%= item.display_name %><div class="close-lore"></div></div>
                                         <div class="item-lore"><%- item.lore %></div>
                                     </div>
                                 </div>
@@ -243,9 +260,17 @@
                                     <div class="piece-shine"></div>
                                 <% } %>
                                 <div class="piece-hover-area"></div>
-                                <img class="piece-icon" src="<%= item.texture_path %>">
+                                <div
+                                    <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
+                                    class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
+                                </div>
                                 <div class="stats-content">
-                                    <div class="item-name piece-<%= item.rarity %>-bg"><img class="stats-piece-icon" src="<%= item.texture_path %>"><%= item.display_name %><div class="close-lore"></div></div>
+                                    <div class="item-name piece-<%= item.rarity %>-bg">
+                                        <div
+                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
+                                            class="stats-piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
+                                        </div>
+                                        <%= item.display_name %><div class="close-lore"></div></div>
                                     <div class="item-lore"><%- item.lore %></div>
                                 </div>
                             </div>

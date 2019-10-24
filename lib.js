@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const nbt = require('prismarine-nbt');
 const util = require('util');
 const mcData = require("minecraft-data")("1.8.9");
@@ -137,65 +139,20 @@ async function getItems(base64){
     let index = 0;
 
     for(let item of items){
-        item.item_index = index;
+        if(item.id >= 298 && item.id <= 301){
+            let types
+            let color = [149, 94, 59];
 
-        index++;
+            if(objectPath.has(item, 'tag.ExtraAttributes.color'))
+                color = item.tag.ExtraAttributes.color.split(":");
 
-        let mcdata = mcData.items[item.id];
+            let type = ["leather_helmet", "leather_chestplate", "leather_leggings", "leather_boots"].reverse()[item.id - 298].replace('_', '/');
 
-        if(mcdata && 'name' in mcdata){
-            let item_name = mcData.items[mcdata.id].name;
-
-            item.texture_path = `/resources/img/textures/item/${item_name}.png`;
-            item.minecraft_tag = item_name;
-        }else{
-            mcdata = mcData.blocks[item.id];
-
-            if(mcdata && 'name' in mcdata){
-                let block_name = mcData.blocks[item.id];
-
-                item.texture_path = `/resources/img/textures/block/${block_name}.png`;
-                item.minecraft_tag = block_name;
-            }
-        }
-
-        if('minecraft_tag' in item){
-            if(["leather_helmet", "leather_chestplate", "leather_leggings", "leather_boots"].includes(item.minecraft_tag)){
-                let color = [149, 94, 59];
-
-                if(objectPath.has(item, 'tag.ExtraAttributes.color'))
-                    color = item.tag.ExtraAttributes.color.split(":");
-
-                let type = item.minecraft_tag.replace('_', '/');
-
-                item.texture_path = `/${type}/${color.join(',')}`;
-            }
+            item.texture_path = `/${type}/${color.join(',')}`;
         }
 
         if(objectPath.has(item, 'tag.display.Name'))
             item.display_name = module.exports.getRawLore(item.tag.display.Name);
-
-        if('minecraft_tag' in item && 'Damage' in item){
-            if(item.minecraft_tag == 'skull'){
-                switch(item.Damage){
-                    case 0:
-                        item.texture_path = '/resources/img/textures/item/skeleton_skull.png';
-                        break;
-                    case 1:
-                        item.texture_path = '/resources/img/textures/item/wither_skeleton_skull.png';
-                        break;
-                    case 2:
-                        item.texture_path = '/resources/img/textures/item/zombie_skull.png';
-                        break;
-                    case 4:
-                        item.texture_path = '/resources/img/textures/item/creeper_skull.png';
-                        break;
-                    case 5:
-                        item.texture_path = '/resources/img/textures/item/dragon_skull.png';
-                        break;
-                }
-            }
-        }
 
         if(objectPath.has(item, 'display_name'))
             for(let texture in replacement_textures)
