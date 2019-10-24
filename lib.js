@@ -146,7 +146,7 @@ async function getItems(base64){
             if(objectPath.has(item, 'tag.ExtraAttributes.color'))
                 color = item.tag.ExtraAttributes.color.split(":");
 
-            let type = ["leather_helmet", "leather_chestplate", "leather_leggings", "leather_boots"].reverse()[item.id - 298].replace('_', '/');
+            let type = ["leather_helmet", "leather_chestplate", "leather_leggings", "leather_boots"][item.id - 298].replace('_', '/');
 
             item.texture_path = `/${type}/${color.join(',')}`;
         }
