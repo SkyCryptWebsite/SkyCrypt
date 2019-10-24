@@ -425,9 +425,6 @@ html.no-transform #info_box.opened{
     position: absolute;
     left: 14px;
     top: 50%;
-    image-rendering: crisp-edges;
-    image-rendering: pixelated;
-    -ms-interpolation-mode: nearest-neighbor;
     filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
     transform: scale(0.25) translateY(-50%);
     transform-origin: top left;
@@ -809,9 +806,6 @@ html.no-clip-path #stats_for_player:hover #other_players, html.no-clip-path #sta
 
 .piece-icon{
     position: absolute;
-    image-rendering: crisp-edges;
-    image-rendering: pixelated;
-    -ms-interpolation-mode: nearest-neighbor;
     top: 2px;
     left: 8px;
     filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
