@@ -1268,11 +1268,16 @@ module.exports = {
         if('slayer_bosses' in profile){
             output.slayer_bonus = {};
 
-            let slayers = {
-                zombie: getSlayerLevel(profile.slayer_bosses.zombie),
-                spider: getSlayerLevel(profile.slayer_bosses.spider),
-                wolf: getSlayerLevel(profile.slayer_bosses.wolf)
-            };
+            let slayers = {};
+
+            if(objectPath.has(profile, 'slayer_bosses.zombie.claimed_levels'))
+                slayers.zombie = getSlayerLevel(profile.slayer_bosses.zombie);
+
+            if(objectPath.has(profile, 'slayer_bosses.spider.claimed_levels'))
+                slayers.zombie = getSlayerLevel(profile.slayer_bosses.spider);
+
+            if(objectPath.has(profile, 'slayer_bosses.wolf.claimed_levels'))
+                slayers.zombie = getSlayerLevel(profile.slayer_bosses.wolf);
 
             for(let slayer in slayers){
                 let slayerBonus = getBonusStat(slayers[slayer], `${slayer}_slayer`, 50, 1);
