@@ -1167,7 +1167,7 @@ module.exports = {
 
         output.talismans = talismans;
         output.weapons = items.filter(a => a.type == 'sword' || a.type == 'bow');
-        output.armor = armor;
+        output.armor = armor.filter(a => Object.keys(a).length != 0);
 
         if(inventory.length == 0)
             output.no_inventory = true;
@@ -1246,18 +1246,15 @@ module.exports = {
         output.base_stats = Object.assign({}, output.stats);
 
         items.armor.forEach(item => {
-            if(Object.keys(item).length == 0)
-                return;
-
             for(let stat in item.stats)
                 output.stats[stat] += item.stats[stat];
         });
 
-        if(items.armor.filter(a => Object.keys(a).length != 0 && a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4)
+        if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4)
             for(let stat in output.stats)
                 output.stats[stat] = Math.round(output.stats[stat] * 1.05);
 
-        if(items.armor.filter(a => Object.keys(a).length != 0 && a.tag.ExtraAttributes.id.startsWith('LAPIS_ARMOR_')).length == 4)
+        if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('LAPIS_ARMOR_')).length == 4)
             output.stats['health'] += 60;
 
         if(objectPath.has(profile, 'collection.EMERALD')
@@ -1269,7 +1266,7 @@ module.exports = {
             output.stats['defense'] += emerald_bonus;
         }
 
-        if(items.armor.filter(a => Object.keys(a).length != 0 && a.tag.ExtraAttributes.id.startsWith('SPEEDSTER_')).length == 4)
+        if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('SPEEDSTER_')).length == 4)
             output.stats['speed'] += 14;
 
         items.talismans.filter(a => Object.keys(a).length != 0 && !a.isInactive).forEach(item => {
@@ -1277,7 +1274,7 @@ module.exports = {
                 output.stats[stat] += item.stats[stat];
         });
 
-        if(items.armor.filter(a => Object.keys(a).length != 0 && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
+        if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
             output.stats['health'] += 50 * output.stats.crit_damage;
 
         if(items.talismans.filter(a => Object.keys(a).length != 0 && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(a.tag.ExtraAttributes.id)).length == 2){
