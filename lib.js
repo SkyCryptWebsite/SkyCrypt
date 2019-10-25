@@ -89,6 +89,7 @@ function getBonusStat(level, skill, max, incremention){
     return bonus;
 }
 
+// Calculate total health with defense
 function getEffectiveHealth(health, defense){
     if(defense <= 0)
         return health;
@@ -117,7 +118,9 @@ function getId(item){
     return null;
 }
 
+// Process items returned by API
 async function getItems(base64){
+    // API stores data as base64 encoded gzipped Minecraft NBT data
     let buf = Buffer.from(base64, 'base64');
 
     let data = await parseNbt(buf);
@@ -125,6 +128,7 @@ async function getItems(base64){
 
     let items = data.i;
 
+    // Check backpack contents and add them to the list of items
     for(let item of items){
         if(objectPath.has(item, 'tag.display.Name') && item.tag.display.Name.endsWith('Backpack')){
 
@@ -149,6 +153,7 @@ async function getItems(base64){
     let index = 0;
 
     for(let item of items){
+        // Set custom texture for colored leather armor
         if(objectPath.has(item, 'id') && item.id >= 298 && item.id <= 301){
             let types
             let color = [149, 94, 59];
@@ -161,18 +166,23 @@ async function getItems(base64){
             item.texture_path = `/${type}/${color.join(',')}`;
         }
 
+        // Set raw display name without color and formatting codes
         if(objectPath.has(item, 'tag.display.Name'))
             item.display_name = module.exports.getRawLore(item.tag.display.Name);
+
 
         if(objectPath.has(item, 'display_name')){
             if(item.display_name == 'Water Bottle')
                 item.Damage = 17;
+
+            // Replace all declared custom textures (mostly FurfSky+ replacements so far)
             for(let texture in replacement_textures)
                 if(item.display_name.includes(texture))
                     item.texture_path = replacement_textures[texture];
         }
 
 
+        // Resolve skull textures to their image path
         if(objectPath.has(item, 'tag.SkullOwner.Properties.textures') && Array.isArray(item.tag.SkullOwner.Properties.textures) && item.tag.SkullOwner.Properties.textures.length > 0){
             try{
                 let json = JSON.parse(Buffer.from(item.tag.SkullOwner.Properties.textures[0].Value, 'base64').toString());
@@ -187,6 +197,7 @@ async function getItems(base64){
 
         let lore_raw;
 
+        // Set HTML lore to be displayed on the website
         if(objectPath.has(item, 'tag.display.Lore')){
             lore_raw = item.tag.display.Lore;
 
@@ -218,6 +229,7 @@ async function getItems(base64){
         let rarity, item_type;
 
         if(lore.length > 0){
+            // Get item type (like "bow") and rarity (like "legendary") from last line of lore
             let rarity_type = lore[lore.length - 1];
 
             rarity_type = module.exports.splitWithTail(rarity_type, " ", 1);
@@ -234,6 +246,7 @@ async function getItems(base64){
 
             item.stats = {};
 
+            // Get item stats from lore
             lore.forEach(line => {
                 let split = line.split(":");
 
@@ -276,6 +289,7 @@ async function getItems(base64){
     return items;
 }
 
+// XP required for each level of a skill
 const leveling_xp = {
     1: 50,
     2: 125,
@@ -329,6 +343,7 @@ const leveling_xp = {
     50: 4000000
 };
 
+// Player stats on a completely new profile
 const base_stats = {
     damage: 0,
     health: 100,
@@ -355,6 +370,7 @@ const stat_template = {
     intelligence: 0
 };
 
+// Object with fairy soul, skill, slayer bonuses and enchantment bonuses
 const bonus_stats = {
     fairy_souls: {
         5: {
@@ -757,6 +773,7 @@ const bonus_stats = {
     }
 };
 
+// Minecraft color and formatting codes
 const minecraft_formatting = {
     0: {
         type: 'color',
@@ -868,6 +885,7 @@ const minecraft_formatting = {
     }
 };
 
+// List of items whose texture should be replaced with a custom one
 const replacement_textures = {
     "Undead Sword": "/resources/img/textures/furfsky/undead_sword.png",
     "Spider Sword": "/resources/img/textures/furfsky/spider_sword.png",
@@ -1017,6 +1035,7 @@ module.exports = {
         return level;
     },
 
+    // Get skill bonuses for a specific skill
     getBonusStat: (level, skill, incremention) => {
         let skill_stats = bonus_stats[skill];
         let steps = Object.keys(skill_stats).sort((a, b) => Number(a) - Number(b)).map(a => Number(a));
@@ -1052,6 +1071,7 @@ module.exports = {
         return getEffectiveHealth(health, defense);
     },
 
+    // Convert Minecraft lore to HTML
     renderLore: (text) => {
         let output = "";
         let spansOpened = 0;
@@ -1093,6 +1113,7 @@ module.exports = {
         return output;
     },
 
+    // Get Minecraft lore without the color and formatting codes
     getRawLore: (text) => {
         let output = "";
         let parts = text.split("§");
@@ -1107,6 +1128,7 @@ module.exports = {
     getItems: async (profile) => {
         let output = {};
 
+        // Process inventories returned by API
         let inventory = 'inv_contents' in profile ? await getItems(profile.inv_contents.data) : [];
         let talisman_bag = 'talisman_bag' in profile ? await getItems(profile.talisman_bag.data) : [];
         let enderchest = 'ender_chest_contents' in profile ? await getItems(profile.ender_chest_contents.data) : [];
@@ -1116,16 +1138,31 @@ module.exports = {
 
         let armor = await getItems(profile.inv_armor.data);
 
+        // All items not in the inventory or accessory bag should be inactive so they don't contribute to the total stats
         enderchest = enderchest.map(a => Object.assign({ isInactive: true}, a) );
 
         let items = inventory.concat(enderchest);
 
+        // Save the position of the item in inventory as we might sort by stuff like rarity later
         items.forEach((item, index) => {
             item.item_index = index;
         });
 
-        let talismans = inventory.filter(a => a.type == 'accessory');
+        let talismans = [];
 
+        // Add talismans from inventory
+        inventory.filter(a => a.type == 'accessory').forEach(talisman => {
+            let id = talisman.tag.ExtraAttributes.id;
+
+            if(talismans.filter(a => !a.isInactive && a.tag.ExtraAttributes.id == id).length == 0){
+                talismans.push(talisman);
+            }else{
+                let talisman_inactive = Object.assign({ isInactive: true }, talisman);
+                talismans.push(talisman_inactive);
+            }
+        });
+
+        // Add talismans from accessory bag if not already in inventory
         talisman_bag.forEach(talisman => {
             if(Object.keys(talisman).length == 0)
                 return;
@@ -1140,6 +1177,7 @@ module.exports = {
             }
         });
 
+        // Don't account for lower tier versions of the same talisman
         talismans.forEach(talisman => {
             let id = talisman.tag.ExtraAttributes.id;
 
@@ -1169,9 +1207,11 @@ module.exports = {
         output.weapons = items.filter(a => a.type == 'sword' || a.type == 'bow');
         output.armor = armor.filter(a => Object.keys(a).length != 0);
 
+        // Check if inventory access disabled by user
         if(inventory.length == 0)
             output.no_inventory = true;
 
+        // Sort talismans and weapons by rarity
         for(items of ['talismans', 'weapons'])
             output[items] = output[items].sort((a, b) => rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity));
 
@@ -1192,9 +1232,11 @@ module.exports = {
 
         output.fairy_souls = { collected: profile.fairy_souls_collected, total: 180, progress: profile.fairy_souls_collected / 180 };
 
+        // Apply fairy soul bonus
         for(let stat in fairyBonus)
             output.stats[stat] += fairyBonus[stat];
 
+        // Apply skill bonuses
         if('experience_skill_farming' in profile){
             let levels = {
                 farming: getLevelByXp(profile.experience_skill_farming),
@@ -1222,6 +1264,7 @@ module.exports = {
             output.levels = Object.assign({}, levels);
         }
 
+        // Apply slayer bonuses
         if('slayer_bosses' in profile){
             output.slayer_bonus = {};
 
@@ -1245,18 +1288,22 @@ module.exports = {
 
         output.base_stats = Object.assign({}, output.stats);
 
+        // Apply basic armor stats
         items.armor.forEach(item => {
             for(let stat in item.stats)
                 output.stats[stat] += item.stats[stat];
         });
 
+        // Apply Superior Dragon Armor full set bonus of 5% stat increase
         if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4)
             for(let stat in output.stats)
                 output.stats[stat] = Math.round(output.stats[stat] * 1.05);
 
+        // Apply Lapis Armor full set bonus of +60 HP
         if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('LAPIS_ARMOR_')).length == 4)
             output.stats['health'] += 60;
 
+        // Apply Emerald Armor full set bonus of +1 HP and +1 Defense per 3000 emeralds in collection with a maximum of 300
         if(objectPath.has(profile, 'collection.EMERALD')
         && !isNaN(profile.collection.EMERALD)
         && items.armor.filter(a => Object.keys(a).length != 0 && a.tag.ExtraAttributes.id.startsWith('EMERALD_ARMOR_')).length == 4){
@@ -1266,17 +1313,21 @@ module.exports = {
             output.stats['defense'] += emerald_bonus;
         }
 
+        // Apply Speedster Armor full set bonus of +14 Speed
         if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('SPEEDSTER_')).length == 4)
             output.stats['speed'] += 14;
 
+        // Apply stats of active talismans
         items.talismans.filter(a => Object.keys(a).length != 0 && !a.isInactive).forEach(item => {
             for(let stat in item.stats)
                 output.stats[stat] += item.stats[stat];
         });
 
+        // Apply Mastiff Armor full set bonus of +50 HP per 1% Crit Damage
         if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
             output.stats['health'] += 50 * output.stats.crit_damage;
 
+        // Apply +5 Defense and +5 Strength of Day/Night Crystal only if both are owned as this is required for a permanent bonus
         if(items.talismans.filter(a => Object.keys(a).length != 0 && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(a.tag.ExtraAttributes.id)).length == 2){
             output.stats['defense'] += 5;
             output.stats['strength'] += 5;
@@ -1289,10 +1340,12 @@ module.exports = {
         items.weapons.forEach(item => {
             let stats = Object.assign({}, output.stats);
 
+            // Apply held weapon stats
             for(let stat in item.stats){
                 stats[stat] += item.stats[stat];
             }
 
+            // Add crit damage from held weapon to Mastiff Armor full set bonus
             if(items.armor.filter(a => Object.keys(a).length != 0 && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
                 stats.health += 50 * item.stats.crit_damage;
 
@@ -1300,10 +1353,12 @@ module.exports = {
 
             output.weapon_stats[item.item_index] = stats;
 
+            // Stats shouldn't go into negative
             for(let stat in stats)
                 output.weapon_stats[item.item_index][stat] = Math.max(0, stats[stat]);
         });
 
+        // Stats shouldn't go into negative
         for(let stat in output.stats)
             output.stats[stat] = Math.max(0, output.stats[stat]);
 
