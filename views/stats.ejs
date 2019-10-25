@@ -17,7 +17,10 @@
     <body>
         <%- include('../includes/header') %>
         <div id="dimmer"></div>
-        <video id="enable_api" loop src="/resources/video/enable_api.webm"></video>
+        <video id="enable_api" loop>
+            <source type="video/webm" src="/resources/video/enable_api.webm"></source>
+            <source type="video/mp4" src="/resources/video/enable_api.mp4"></source>
+        </video>
         <div id="bg_blur"></div>
         <div id="stats_display">
             <div id="player_model" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
