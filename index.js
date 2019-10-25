@@ -155,6 +155,9 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
     let profile_id;
 
     profiles.forEach((_profile, index) => {
+        if(_profile === undefined)
+            return;
+
         let user_profile = _profile.members[data.player.uuid];
 
         if(user_profile.last_save > highest){

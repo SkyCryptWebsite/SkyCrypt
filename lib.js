@@ -102,9 +102,19 @@ async function getBackpackContents(arraybuf){
     let data = await parseNbt(buf);
     data = nbt.simplify(data);
 
-    let items = data.i.filter(a => Object.keys(a).length != 0).map(a => Object.assign({ isInactive: true}, a) );
+    let items = data.i;
+
+    for(let item of items)
+        if(Object.keys(item).length > 0)
+            item.isInactive = true;
 
     return items;
+}
+
+function getId(item){
+    if(objectPath.has(item, 'tag.ExtraAttributes.id'))
+        return item.tag.ExtraAttributes.id;
+    return null;
 }
 
 async function getItems(base64){
@@ -113,7 +123,7 @@ async function getItems(base64){
     let data = await parseNbt(buf);
     data = nbt.simplify(data);
 
-    let items = data.i.filter(a => Object.keys(a).length > 0);
+    let items = data.i;
 
     for(let item of items){
         if(objectPath.has(item, 'tag.display.Name') && item.tag.display.Name.endsWith('Backpack')){
@@ -139,7 +149,7 @@ async function getItems(base64){
     let index = 0;
 
     for(let item of items){
-        if(item.id >= 298 && item.id <= 301){
+        if(objectPath.has(item, 'id') && item.id >= 298 && item.id <= 301){
             let types
             let color = [149, 94, 59];
 
@@ -887,6 +897,15 @@ const replacement_textures = {
     "Slime Bow": "/resources/img/textures/furfsky/slime_standby.png",
     "Magma Bow": "/resources/img/textures/furfsky/magma_bow_standby.gif",
 
+    "Challenging Rod": "/resources/img/textures/furfsky/challenging_rod.png",
+    "Farmer's Rod": "/resources/img/textures/furfsky/farmers_rod.png",
+    "Prismarine Rod": "/resources/img/textures/furfsky/prismarine_rod.gif",
+    "Rod of Champions": "/resources/img/textures/furfsky/rod_of_champions.gif",
+    "Rod of Legends": "/resources/img/textures/furfsky/rod_of_legends.gif",
+    "Shredder": "/resources/img/textures/furfsky/shredder.png",
+    "Speedster Rod": "/resources/img/textures/furfsky/speedster_rod.png",
+    "Sponge Rod": "/resources/img/textures/furfsky/sponge_rod.png",
+
     "Speedster Helmet": "/resources/img/textures/furfsky/speedster_helm.png",
     "Speedster Chestplate": "/resources/img/textures/furfsky/speedster_chest.png",
     "Speedster Leggings": "/resources/img/textures/furfsky/speedster_legs.png",
@@ -946,6 +965,26 @@ const replacement_textures = {
     "Cactus Chestplate": "/resources/img/textures/furfsky/cactus_chest.png",
     "Cactus Leggings": "/resources/img/textures/furfsky/cactus_legs.png",
     "Cactus Boots": "/resources/img/textures/furfsky/cactus_boots.png",
+
+    "Budget Hopper": "/resources/img/textures/furfsky/budget_hopper.png",
+    "Enchanted Hopper": "/resources/img/textures/furfsky/enchanted_hopper.png",
+    "Grand Experience": "/resources/img/textures/furfsky/grand_bottle.png",
+    "Titanic Experience": "/resources/img/textures/furfsky/titanic_bottle.png",
+    "Grappling Hook": "/resources/img/textures/furfsky/grapple_hook.png",
+    "Jungle Axe": "/resources/img/textures/furfsky/jungle_axe.png",
+    "Stonk": "/resources/img/textures/furfsky/stonk.gif",
+    "Zombie Pickaxe": "/resources/img/textures/furfsky/zombie_pickaxe.png",
+
+    "Birch Forest Biome Stick": "/resources/img/textures/furfsky/birch_biome_stick.png",
+    "Roofed Forest Biome Stick": "/resources/img/textures/furfsky/roofed_biome_stick.png",
+    "Deep Ocean Biome Stick": "/resources/img/textures/furfsky/deepocean_biome_stick.png",
+    "Desert Biome Stick": "/resources/img/textures/furfsky/desert_biome_stick.png",
+    "End Biome Stick": "/resources/img/textures/furfsky/end_biome_stick.png",
+    "Forest Biome Stick": "/resources/img/textures/furfsky/forest_biome_stick.png",
+    "Jungle Biome Stick": "/resources/img/textures/furfsky/jungle_biome_stick.png",
+    "Forest Biome Stick": "/resources/img/textures/furfsky/forest_biome_stick.png",
+    "Savanna Biome Stick": "/resources/img/textures/furfsky/savanna_biome_stick.png",
+    "Taiga Biome Stick": "/resources/img/textures/furfsky/taiga_biome_stick.png",
 }
 
 module.exports = {
@@ -1088,12 +1127,31 @@ module.exports = {
         let talismans = inventory.filter(a => a.type == 'accessory');
 
         talisman_bag.forEach(talisman => {
-            if(talismans.filter(a => !a.isInactive && a.tag.ExtraAttributes.id == talisman.tag.ExtraAttributes.id).length == 0){
+            if(Object.keys(talisman).length == 0)
+                return;
+
+            let id = talisman.tag.ExtraAttributes.id;
+
+            if(talismans.filter(a => !a.isInactive && a.tag.ExtraAttributes.id == id).length == 0){
                 talismans.push(talisman);
             }else{
                 let talisman_inactive = Object.assign({ isInactive: true }, talisman);
                 talismans.push(talisman_inactive);
             }
+        });
+
+        talismans.forEach(talisman => {
+            let id = talisman.tag.ExtraAttributes.id;
+
+            if((id == 'RING_POTION_AFFINITY' && talismans.filter(a => !a.isInactive && getId(a) == 'ARTIFACT_POTION_AFFINITY').length > 0)
+            || (id == 'POTION_AFFINITY_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'RING_POTION_AFFINITY' || getId(a) == 'ARTIFACT_POTION_AFFINITY')).length > 0)
+            || (id == 'FEATHER_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'FEATHER_ARTIFACT').length > 0)
+            || (id == 'FEATHER_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'FEATHER_ARTIFACT' || getId(a) == 'FEATHER_RING')).length > 0)
+            || (id == 'SEA_CREATURE_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'SEA_CREATURE_ARTIFACT').length > 0)
+            || (id == 'SEA_CREATURE_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'SEA_CREATURE_ARTIFACT' || getId(a) == 'SEA_CREATURE_RING')).length > 0)
+            || (id == 'HEALING_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'HEALING_TALISMAN').length > 0)
+            )
+                talisman.isInactive = true;
         });
 
         talismans.push(...enderchest.filter(a => a.type == 'accessory'));
@@ -1114,9 +1172,8 @@ module.exports = {
         if(inventory.length == 0)
             output.no_inventory = true;
 
-        for(items in output)
-            if(Array.isArray(output[items]) && items != 'armor')
-                output[items] = output[items].sort((a, b) => rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity));
+        for(items of ['talismans', 'weapons'])
+            output[items] = output[items].sort((a, b) => rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity));
 
         return output;
     },
