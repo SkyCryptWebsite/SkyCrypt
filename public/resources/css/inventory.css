@@ -3,7 +3,7 @@
   background-image: url('/resources/img/inventory/items.webp');
 }
 
-.item-icon.no-webp {
+html.no-webp .item-icon {
   background-image: url('/resources/img/inventory/items.png');
 }
 
