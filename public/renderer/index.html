@@ -1,0 +1,132 @@
+ <html>
+ <head>
+ <meta charset="utf-8">
+ <style>
+ body {
+	background-color: #000;
+	margin: 0px;
+	overflow: hidden;
+}
+
+ </style>
+ </head>
+ <body>
+ <script src="http://threejs.org/build/three.min.js"></script>
+<script src="http://threejs.org/examples/js/controls/OrbitControls.js"></script>
+ <script>
+//three.js - Isometric Projection using an Orthographic Camera
+
+var mesh, renderer, scene, camera, controls, block;
+
+var loader = new THREE.TextureLoader()
+
+loader.load(
+	// resource URL
+	'stone.png',
+
+	// onLoad callback
+        function(texture){
+            texture.minFilter = THREE.NearestFilter;
+            texture.magFilter = THREE.NearestFilter;
+            
+            block = new THREE.MeshBasicMaterial( {
+    			map: texture
+    		});
+            init();
+            render();
+        },
+        undefined,
+        err => {
+            console.log(err);
+        }
+	);
+
+function init() {
+
+	// info
+	info = document.createElement( 'div' );
+	info.style.position = 'absolute';
+	info.style.top = '30px';
+	info.style.width = '100%';
+	info.style.textAlign = 'center';
+	info.style.color = '#fff';
+	info.style.fontWeight = 'bold';
+	info.style.backgroundColor = 'transparent';
+	info.style.zIndex = '1';
+	info.style.fontFamily = 'Monospace';
+	info.innerHTML = 'three.js - Isometric Projection<br/>drag mouse to rotate camera';
+	document.body.appendChild( info );
+
+	// renderer
+	renderer = new THREE.WebGLRenderer();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	document.body.appendChild( renderer.domElement );
+
+	// scene
+	scene = new THREE.Scene();
+
+	// camera
+	var aspect = window.innerWidth / window.innerHeight;
+	var d = 20;
+	camera = new THREE.OrthographicCamera( - d * aspect, d * aspect, d, - d, 1, 1000 );
+
+	// /////////////////////////////////////////////////////////////////////////
+
+	// method 1 - use lookAt
+		//camera.position.set( 20, 20, 20 );
+		//camera.lookAt( scene.position );
+
+	// method 2 - set the x-component of rotation
+		camera.position.set( 20, 17, 20 );
+		camera.rotation.order = 'YXZ';
+		camera.rotation.y = - Math.PI / 4;
+		camera.rotation.x = Math.atan( - 1 / Math.sqrt( 2 ) );
+
+	// /////////////////////////////////////////////////////////////////////////
+
+	// controls
+	controls = new THREE.OrbitControls( camera, renderer.domElement );
+	controls.addEventListener( 'change', render );
+	controls.enableZoom = false;
+	controls.enablePan = false;
+	controls.maxPolarAngle = Math.PI / 2;
+
+	// ambient
+	scene.add( new THREE.AmbientLight( 0x444444 ) );
+
+	// light
+	var light = new THREE.PointLight( 0xffffff, 0.8 );
+	light.position.set( 0, 50, 50 );
+	scene.add( light );
+
+	// axes
+	//scene.add( new THREE.AxisHelper( 40 ) );
+
+	// grid
+	var geometry = new THREE.PlaneBufferGeometry( 100, 100, 10, 10 );
+	var material = new THREE.MeshBasicMaterial( { wireframe: true, opacity: 0.5, transparent: true } );
+	var grid = new THREE.Mesh( geometry, material );
+	grid.rotation.order = 'YXZ';
+	grid.rotation.y = - Math.PI / 2;
+	grid.rotation.x = - Math.PI / 2;
+	//scene.add( grid );
+
+	// geometry
+	var geometry = new THREE.BoxGeometry( 10, 10, 10 );
+
+	// material
+	var material = new THREE.MeshNormalMaterial();
+
+	// mesh
+	mesh = new THREE.Mesh( geometry, block );
+	scene.add( mesh );
+
+}
+
+function render() {
+
+	renderer.render( scene, camera );
+
+}
+
+</script>
