@@ -92,124 +92,158 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 app.get('/stats/:player/:profile?', async (req, res, next) => {
-    let { data } = await Hypixel.get('player', { params: { key: getApiKey(), name: req.params.player } });
+    let response;
 
-    if(data.player == null){
-        res
-        .cookie('error', 'Player not found.')
-        .redirect('/');
-        return false;
-    }
+    try{
+        response = await Hypixel.get('player', { params: { key: getApiKey(), name: req.params.player } });
+        let { data } = response;
 
-    if(!objectPath.has(data, 'player.stats')){
-        res
-        .cookie('error', 'No data returned by Hypixel API, please try again.')
-        .redirect('/');
-        return false;
-    }
-
-    if(!('SkyBlock' in data.player.stats)){
-        res
-        .cookie('error', 'Player has not played SkyBlock yet.')
-        .redirect('/');
-        return false;
-    }
-
-    let all_skyblock_profiles = data.player.stats.SkyBlock.profiles;
-
-    let skyblock_profiles = {};
-
-    if(Object.keys(all_skyblock_profiles).length == 0){
-        let default_profile = await Hypixel.get('skyblock/profile', { params: { key: getApiKey(), profile: data.player.uuid }});
-
-        if(default_profile.data.profile == null){
+        if(!data.success){
             res
-            .cookie('error', 'Player has no SkyBlock profiles.')
+            .cookie('error', "Request to Hypixel API failed. Please try again!")
+            .cookie('player', req.params.player)
             .redirect('/');
             return false;
-        }else{
-            skyblock_profiles[data.player.uuid] = {
-                profile_id: data.player.uuid,
-                cute_name: 'Avocado'
-            };
-
-            all_skyblock_profiles = skyblock_profiles;
         }
+
+        if(data.player == null){
+            res
+            .cookie('error', 'Player not found.')
+            .cookie('player', req.params.player)
+            .redirect('/');
+            return false;
+        }
+
+        if(!objectPath.has(data, 'player.stats')){
+            res
+            .cookie('error', 'No data returned by Hypixel API, please try again!')
+            .cookie('player', req.params.player)
+            .redirect('/');
+            return false;
+        }
+
+        if(!('SkyBlock' in data.player.stats)){
+            res
+            .cookie('error', 'Player has not played SkyBlock yet.')
+            .cookie('player', req.params.player)
+            .redirect('/');
+            return false;
+        }
+
+        let all_skyblock_profiles = data.player.stats.SkyBlock.profiles;
+
+        let skyblock_profiles = {};
+
+        if(Object.keys(all_skyblock_profiles).length == 0){
+            let default_profile = await Hypixel.get('skyblock/profile', { params: { key: getApiKey(), profile: data.player.uuid }});
+
+            if(default_profile.data.profile == null){
+                res
+                .cookie('error', 'Player has no SkyBlock profiles.')
+                .cookie('player', req.params.player)
+                .redirect('/');
+                return false;
+            }else{
+                skyblock_profiles[data.player.uuid] = {
+                    profile_id: data.player.uuid,
+                    cute_name: 'Avocado'
+                };
+
+                all_skyblock_profiles = skyblock_profiles;
+            }
+        }
+
+        if(req.params.profile)
+            skyblock_profiles = _.pickBy(all_skyblock_profiles, a => a.cute_name.toLowerCase() == req.params.profile.toLowerCase());
+
+        if(Object.keys(skyblock_profiles).length == 0)
+            skyblock_profiles = all_skyblock_profiles;
+
+        let profile_names = Object.keys(skyblock_profiles);
+
+        let promises = [];
+
+        for(let profile in skyblock_profiles)
+            promises.push(
+                Hypixel.get('skyblock/profile', { params: { key: getApiKey(), profile: profile } })
+            );
+
+        let responses = await Promise.all(promises);
+
+        let profiles = [];
+
+        for(let profile_response of responses){
+            if(!profile_response.data.success){
+                res
+                .cookie('error', "Request to Hypixel API failed. Please try again!")
+                .cookie('player', req.params.player)
+                .redirect('/');
+                return false;
+            }
+
+            profiles.push(profile_response.data.profile);
+        }
+
+        let highest = 0;
+        let profile_id;
+
+        profiles.forEach((_profile, index) => {
+            if(_profile === undefined)
+                return;
+
+            let user_profile = _profile.members[data.player.uuid];
+
+            if(user_profile.last_save > highest){
+                profile = _profile;
+                highest = user_profile.last_save;
+                profile_id = profile_names[index];
+            }
+        });
+
+        let user_profile = profile.members[data.player.uuid];
+
+        let member_uuids = Object.keys(profile.members);
+
+        let members = [];
+
+        for(let member of member_uuids)
+            if(member != data.player.uuid)
+                members.push({ uuid: member, display_name: await uuidToUsername(member) });
+
+        let items = await lib.getItems(user_profile);
+        let calculated = await lib.getStats(user_profile, items);
+
+        calculated.uuid = data.player.uuid;
+        calculated.display_name = data.player.displayname;
+        calculated.profile = skyblock_profiles[profile_id];
+        calculated.profiles = _.pickBy(all_skyblock_profiles, a => a.profile_id != profile_id);
+        calculated.members = members;
+
+        let last_updated = user_profile.last_save;
+        let diff = (+new Date() - last_updated) / 1000;
+        let last_updated_text = moment(last_updated).fromNow();
+
+        if(diff < 3)
+            last_updated_text = `Right now`;
+        else if(diff < 60)
+            last_updated_text = `${Math.floor(diff)} seconds ago`;
+
+        calculated.last_updated = {
+            unix: last_updated,
+            text: last_updated_text
+        };
+
+        res.render('stats', { items, calculated, page: 'stats' });
+    }catch(e){
+        console.error(e);
+        console.error(response);
+
+        res
+        .cookie('error', "An unknown error occured. Please try again!")
+        .cookie('player', req.params.player)
+        .redirect('/');
+        return false;
     }
-
-    if(req.params.profile)
-        skyblock_profiles = _.pickBy(all_skyblock_profiles, a => a.cute_name.toLowerCase() == req.params.profile.toLowerCase());
-
-    if(Object.keys(skyblock_profiles).length == 0)
-        skyblock_profiles = all_skyblock_profiles;
-
-    let profile_names = Object.keys(skyblock_profiles);
-
-    let promises = [];
-
-    for(let profile in skyblock_profiles)
-        promises.push(
-            Hypixel.get('skyblock/profile', { params: { key: getApiKey(), profile: profile } })
-        );
-
-    let responses = await Promise.all(promises);
-
-    let profiles = [];
-
-    responses.forEach(response => {
-        profiles.push(response.data.profile);
-    });
-
-    let highest = 0;
-    let profile_id;
-
-    profiles.forEach((_profile, index) => {
-        if(_profile === undefined)
-            return;
-
-        let user_profile = _profile.members[data.player.uuid];
-
-        if(user_profile.last_save > highest){
-            profile = _profile;
-            highest = user_profile.last_save;
-            profile_id = profile_names[index];
-        }
-    });
-
-    let user_profile = profile.members[data.player.uuid];
-
-    let member_uuids = Object.keys(profile.members);
-
-    let members = [];
-
-    for(let member of member_uuids)
-        if(member != data.player.uuid)
-            members.push({ uuid: member, display_name: await uuidToUsername(member) });
-
-    let items = await lib.getItems(user_profile);
-    let calculated = await lib.getStats(user_profile, items);
-
-    calculated.uuid = data.player.uuid;
-    calculated.display_name = data.player.displayname;
-    calculated.profile = skyblock_profiles[profile_id];
-    calculated.profiles = _.pickBy(all_skyblock_profiles, a => a.profile_id != profile_id);
-    calculated.members = members;
-
-    let last_updated = user_profile.last_save;
-    let diff = (+new Date() - last_updated) / 1000;
-    let last_updated_text = moment(last_updated).fromNow();
-
-    if(diff < 3)
-        last_updated_text = `Right now`;
-    else if(diff < 60)
-        last_updated_text = `${Math.floor(diff)} seconds ago`;
-
-    calculated.last_updated = {
-        unix: last_updated,
-        text: last_updated_text
-    };
-
-    res.render('stats', { items, calculated, page: 'stats' });
 });
 
 app.get('/head/:uuid', async (req, res) => {

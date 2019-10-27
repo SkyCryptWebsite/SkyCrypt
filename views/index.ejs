@@ -65,6 +65,14 @@
                 document.querySelector('#error_text span').innerHTML = error;
                 Cookies.remove('error');
             }
+
+            let player = Cookies.get('player');
+
+            if(player){
+                document.querySelector('#inp_enter_username').value = player;
+                document.querySelector('#goto_target_username').href = '/stats/' + player;
+                Cookies.remove('player');
+            }
         </script>
     </body>
 </html>
