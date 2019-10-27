@@ -199,7 +199,9 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
     let diff = (+new Date() - last_updated) / 1000;
     let last_updated_text = moment(last_updated).fromNow();
 
-    if(diff < 60)
+    if(diff < 3)
+        last_updated_text = `Right now`;
+    else if(diff < 60)
         last_updated_text = `${Math.floor(diff)} seconds ago`;
 
     calculated.last_updated = {
