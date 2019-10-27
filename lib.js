@@ -1188,6 +1188,10 @@ module.exports = {
             || (id == 'SEA_CREATURE_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'SEA_CREATURE_ARTIFACT').length > 0)
             || (id == 'SEA_CREATURE_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'SEA_CREATURE_ARTIFACT' || getId(a) == 'SEA_CREATURE_RING')).length > 0)
             || (id == 'HEALING_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'HEALING_TALISMAN').length > 0)
+            || (id == 'CANDY_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'CANDY_ARTIFACT').length > 0)
+            || (id == 'CANDY_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'CANDY_ARTIFACT' || getId(a) == 'CANDY_RING')).length > 0)
+            || (id == 'INTIMIDATION_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'INTIMIDATION_ARTIFACT').length > 0)
+            || (id == 'INTIMIDATION_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'INTIMIDATION_ARTIFACT' || getId(a) == 'INTIMIDATION_RING')).length > 0)
             )
                 talisman.isInactive = true;
         });
