@@ -7,6 +7,7 @@ const util = require('util');
 const renderer = require('./renderer');
 const lib = require('./lib');
 const _ = require('lodash');
+const moment = require('moment');
 
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
@@ -185,6 +186,11 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
     calculated.profile = skyblock_profiles[profile_id];
     calculated.profiles = _.pickBy(all_skyblock_profiles, a => a.profile_id != profile_id);
     calculated.members = members;
+
+    calculated.last_updated = {
+        unix: user_profile.last_save,
+        text: moment.unix(user_profile.last_save / 1000).fromNow()
+    };
 
     res.render('stats', { items, calculated, page: 'stats' });
 });

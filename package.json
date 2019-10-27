@@ -35,6 +35,7 @@
     "lodash": "^4.17.15",
     "lowdb": "^1.0.0",
     "minecraft-data": "^2.39.1",
+    "moment": "^2.24.0",
     "npm": "^6.12.0",
     "object-path": "^0.11.4",
     "prismarine-nbt": "^1.2.1",
