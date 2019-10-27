@@ -7,6 +7,7 @@ const util = require('util');
 const renderer = require('./renderer');
 const lib = require('./lib');
 const _ = require('lodash');
+const objectPath = require('object-path');
 const moment = require('moment');
 
 const low = require('lowdb');
@@ -100,6 +101,13 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         return false;
     }
 
+    if(!objectPath.has(data, 'player.stats')){
+        res
+        .cookie('error', 'No data returned by Hypixel API, please try again.')
+        .redirect('/');
+        return false;
+    }
+
     if(!('SkyBlock' in data.player.stats)){
         res
         .cookie('error', 'Player has not played SkyBlock yet.')
@@ -187,9 +195,16 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
     calculated.profiles = _.pickBy(all_skyblock_profiles, a => a.profile_id != profile_id);
     calculated.members = members;
 
+    let last_updated = user_profile.last_save;
+    let diff = (+new Date() - last_updated) / 1000;
+    let last_updated_text = moment(last_updated).fromNow();
+
+    if(diff < 60)
+        last_updated_text = `${Math.floor(diff)} seconds ago`;
+
     calculated.last_updated = {
-        unix: user_profile.last_save,
-        text: moment.unix(user_profile.last_save / 1000).fromNow()
+        unix: last_updated,
+        text: last_updated_text
     };
 
     res.render('stats', { items, calculated, page: 'stats' });
