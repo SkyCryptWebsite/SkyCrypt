@@ -1301,18 +1301,18 @@ module.exports = {
         });
 
         // Apply Superior Dragon Armor full set bonus of 5% stat increase
-        if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4)
+        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4)
             for(let stat in output.stats)
                 output.stats[stat] = Math.round(output.stats[stat] * 1.05);
 
         // Apply Lapis Armor full set bonus of +60 HP
-        if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('LAPIS_ARMOR_')).length == 4)
+        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('LAPIS_ARMOR_')).length == 4)
             output.stats['health'] += 60;
 
         // Apply Emerald Armor full set bonus of +1 HP and +1 Defense per 3000 emeralds in collection with a maximum of 300
         if(objectPath.has(profile, 'collection.EMERALD')
         && !isNaN(profile.collection.EMERALD)
-        && items.armor.filter(a => Object.keys(a).length != 0 && a.tag.ExtraAttributes.id.startsWith('EMERALD_ARMOR_')).length == 4){
+        && items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('EMERALD_ARMOR_')).length == 4){
             let emerald_bonus = Math.min(300, Math.floor(profile.collection.EMERALD / 3000));
 
             output.stats['health'] += emerald_bonus;
@@ -1320,7 +1320,7 @@ module.exports = {
         }
 
         // Apply Speedster Armor full set bonus of +14 Speed
-        if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('SPEEDSTER_')).length == 4)
+        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SPEEDSTER_')).length == 4)
             output.stats['speed'] += 14;
 
         // Apply stats of active talismans
@@ -1330,11 +1330,11 @@ module.exports = {
         });
 
         // Apply Mastiff Armor full set bonus of +50 HP per 1% Crit Damage
-        if(items.armor.filter(a => a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
+        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
             output.stats['health'] += 50 * output.stats.crit_damage;
 
         // Apply +5 Defense and +5 Strength of Day/Night Crystal only if both are owned as this is required for a permanent bonus
-        if(items.talismans.filter(a => Object.keys(a).length != 0 && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(a.tag.ExtraAttributes.id)).length == 2){
+        if(items.talismans.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(a.tag.ExtraAttributes.id)).length == 2){
             output.stats['defense'] += 5;
             output.stats['strength'] += 5;
         }
@@ -1352,7 +1352,7 @@ module.exports = {
             }
 
             // Add crit damage from held weapon to Mastiff Armor full set bonus
-            if(items.armor.filter(a => Object.keys(a).length != 0 && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
+            if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
                 stats.health += 50 * item.stats.crit_damage;
 
             stats.effective_health = getEffectiveHealth(stats.health, stats.defense);
