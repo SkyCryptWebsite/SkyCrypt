@@ -4,7 +4,7 @@
         <title><%- calculated.display_name %> | SkyBlock Stats</title>
         <meta charset="utf-8">
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="/resources/css/index.css?v6">
+        <link rel="stylesheet" href="/resources/css/index.css?v7">
         <link rel="stylesheet" href="/resources/css/inventory.css">
         <link rel="shortcut icon" href="https://visage.surgeplay.com/face/32/<%- calculated.uuid %>" type="image/png">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -69,7 +69,7 @@
 
                 <div id="skill_levels_container">
                     <div class="skill">
-                        <div class="skill-icon"><img src="/head/b96923ad247310007f6ae5d326d847ad53864cf16c3565a181dc8e6b20be2387"></div>
+                        <div class="skill-icon"><div class="item-icon" style="background: url(/head/b96923ad247310007f6ae5d326d847ad53864cf16c3565a181dc8e6b20be2387) center no-repeat"></div></div>
                         <div class="skill-name">Fairy Souls <span class="skill-level"><%= calculated.fairy_souls.collected %></span></div>
                         <div class="skill-bar">
                             <div class="skill-progress-bar" style="width: <%= calculated.fairy_souls.progress * 100 %>%"></div>
@@ -102,7 +102,7 @@
                     %>
                         <div id="other_skills">
                             <div class="skill">
-                                <div class="skill-icon"><img src="/resources/img/textures/item/golden_hoe.png"></div>
+                                <div class="skill-icon"><div class="item-icon icon-294_0"></div></div>
                                 <div class="skill-name">Farming <span class="skill-level"><%= calculated.levels.farming.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.farming.progress * 100 %>%"></div>
@@ -110,7 +110,7 @@
                                 </div>
                             </div>
                             <div class="skill">
-                                <div class="skill-icon"><img src="/resources/img/textures/item/stone_pickaxe.png"></div>
+                                <div class="skill-icon"><div class="item-icon icon-274_0"></div></div>
                                 <div class="skill-name">Mining <span class="skill-level"><%= calculated.levels.mining.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.mining.progress * 100 %>%"></div>
@@ -118,7 +118,7 @@
                                 </div>
                             </div>
                             <div class="skill">
-                                <div class="skill-icon"><img src="/resources/img/textures/item/stone_sword.png"></div>
+                                <div class="skill-icon"><div class="item-icon icon-272_0"></div></div>
                                 <div class="skill-name">Combat <span class="skill-level"><%= calculated.levels.combat.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.combat.progress * 100 %>%"></div>
@@ -126,7 +126,7 @@
                                 </div>
                             </div>
                             <div class="skill">
-                                <div class="skill-icon"><img src="/resources/img/textures/block/jungle_sapling.png"></div>
+                                <div class="skill-icon"><div class="item-icon icon-6_3"></div></div>
                                 <div class="skill-name">Foraging <span class="skill-level"><%= calculated.levels.foraging.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.foraging.progress * 100 %>%"></div>
@@ -134,7 +134,7 @@
                                 </div>
                             </div>
                             <div class="skill">
-                                <div class="skill-icon"><img src="/resources/img/textures/item/fishing_rod.png"></div>
+                                <div class="skill-icon"><div class="item-icon icon-346_0"></div></div>
                                 <div class="skill-name">Fishing <span class="skill-level"><%= calculated.levels.fishing.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.fishing.progress * 100 %>%"></div>
@@ -142,7 +142,7 @@
                                 </div>
                             </div>
                             <div class="skill">
-                                <div class="skill-icon"><img src="/resources/img/textures/item/enchantment_table.png"></div>
+                                <div class="skill-icon"><div class="item-icon icon-116_0"></div></div>
                                 <div class="skill-name">Enchanting <span class="skill-level"><%= calculated.levels.enchanting.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.enchanting.progress * 100 %>%"></div>
@@ -150,7 +150,7 @@
                                 </div>
                             </div>
                             <div class="skill">
-                                <div class="skill-icon"><img src="/resources/img/textures/item/brewing_stand.png"></div>
+                                <div class="skill-icon"><div class="item-icon icon-379_0"></div></div>
                                 <div class="skill-name">Alchemy <span class="skill-level"><%= calculated.levels.alchemy.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.alchemy.progress * 100 %>%"></div>
@@ -158,7 +158,7 @@
                                 </div>
                             </div>
                             <div class="skill">
-                                <div class="skill-icon"><img src="/resources/img/textures/item/crafting_table.png"></div>
+                                <div class="skill-icon"><div class="item-icon icon-58_0"></div></div>
                                 <div class="skill-name">Carpentry <span class="skill-level"><%= calculated.levels.carpentry.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.carpentry.progress * 100 %>%"></div>
@@ -166,7 +166,7 @@
                                 </div>
                             </div>
                             <div class="skill">
-                                <div class="skill-icon"><img src="/resources/img/textures/item/magma_cream.png"></div>
+                                <div class="skill-icon"><div class="item-icon icon-378_0"></div></div>
                                 <div class="skill-name">Runecrafting <span class="skill-level"><%= calculated.levels.runecrafting.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.runecrafting.progress * 100 %>%"></div>
