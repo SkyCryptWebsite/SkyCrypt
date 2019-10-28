@@ -273,21 +273,29 @@
             history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name);
 
             function fillLore(element){
-                let item = all_items[element.getAttribute('data-item-index')];
+                let item = all_items.filter(a => a.item_index == Number(element.getAttribute('data-item-index')));
+
+                if(item.length == 0)
+                    return;
+
+                item = item[0];
 
                 statsContent.setAttribute("data-item-index", item.item_index);
-                itemName.className = 'item-name ' + 'piece-' + item.rarity + '-bg';
-                itemNameContent.innerHTML = item.display_name;
+                itemName.className = 'item-name ' + 'piece-' + (item.rarity || 'common') + '-bg';
+                itemNameContent.innerHTML = item.display_name || 'null';
+
+                console.log(item);
 
                 if(item.texture_path){
                     itemIcon.style.backgroundImage = 'url(' + item.texture_path + ')';
-                    itemIcon.classList.add('custom-icon');
+                    itemIcon.className = 'stats-piece-icon item-icon custom-icon';
                 }else{
                     itemIcon.removeAttribute('style');
                     itemIcon.classList.remove('custom-icon');
+                    itemIcon.className = 'stats-piece-icon item-icon icon-' + item.id + '_' + item.Damage;
                 }
 
-                itemLore.innerHTML = item.lore;
+                itemLore.innerHTML = item.lore || '';
             }
 
             function showLore(element, _resize){
