@@ -826,13 +826,13 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 
 .piece-icon{
     position: absolute;
-    top: 2px;
-    left: 8px;
     filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
     z-index: 15;
     pointer-events: none;
-    transform: scale(0.5);
-    transform-origin: top left;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    transform-origin: center center;
 }
 
 .custom-icon{
@@ -1188,10 +1188,6 @@ html.no-webp #error_box_wrapper{
         display: none;
     }
 
-    #stats_content.show-stats{
-        visibility: hidden;
-    }
-
     #stats_content{
         left: 50% !important;
         width: 360px;
@@ -1201,8 +1197,9 @@ html.no-webp #error_box_wrapper{
         transition: opacity .2s, visibility .2s !important;
     }
 
-    #stats_content.sticky-stats{
-        visibility: visible;
+    #stats_content.show-stats:not(.sticky-stats){
+        visibility: hidden;
+        opacity: 0;
     }
 
     #enable_api{
@@ -1249,11 +1246,7 @@ html.no-webp #error_box_wrapper{
         height: calc((100vw - 50px) / 4 - 22px);
     }
 
-    .piece-icon{
-        width: 75%;
-    }
-
-    .piece #stats_content{
+    #stats_content{
         width: calc(100vw - 40px) !important;
         left: 20px !important;
         right: auto !important;
