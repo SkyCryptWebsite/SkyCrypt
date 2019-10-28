@@ -348,19 +348,20 @@ html.no-transform #info_box.opened{
 #info_box a{
     font-weight: 600;
     text-decoration: none;
+    display: inline-block;
 }
 
 .link{
     position: relative;
-    margin-left: 21px;
+    padding-left: 23px;
 }
 
 .link::before{
     content: "";
     position: absolute;
     top: 0;
-    left: -25px;
-    width: 24px;
+    left: 0;
+    width: 21px;
     height: 100%;
     background-size: auto 100%;
     background-position: center center;
