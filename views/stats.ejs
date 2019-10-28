@@ -272,10 +272,31 @@
 
             history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name);
 
-            function showLore(element){
+            function fillLore(element){
+                let item = all_items[element.getAttribute('data-item-index')];
+
+                statsContent.setAttribute("data-item-index", item.item_index);
+                itemName.className = 'item-name ' + 'piece-' + item.rarity + '-bg';
+                itemNameContent.innerHTML = item.display_name;
+
+                if(item.texture_path){
+                    itemIcon.style.backgroundImage = 'url(' + item.texture_path + ')';
+                    itemIcon.classList.add('custom-icon');
+                }else{
+                    itemIcon.removeAttribute('style');
+                    itemIcon.classList.remove('custom-icon');
+                }
+
+                itemLore.innerHTML = item.lore;
+            }
+
+            function showLore(element, _resize){
                 statsContent.classList.add('sticky-stats');
                 element.classList.add('sticky-stats');
                 dimmer.classList.add('show-dimmer');
+
+                if(_resize != false)
+                    resize();
             }
 
             function closeLore(){
@@ -296,16 +317,19 @@
             }
 
             function resize(){
-                [].forEach.call(document.querySelectorAll('.piece'), function(element){
-                    let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
-                    let rect = element.getBoundingClientRect();
+                let element = document.querySelector('.piece.sticky-stats');
 
-                    if(rect.x)
-                        statsContent.style.left = rect.x - statsContent.offsetWidth - 10 + "px";
+                if(element == null)
+                    return;
 
-                    if(rect.y)
-                        statsContent.style.top = Math.max(70, Math.min(maxTop, (rect.y + element.offsetHeight / 2) - statsContent.offsetHeight / 2)) + 'px';
-                });
+                let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
+                let rect = element.getBoundingClientRect();
+
+                if(rect.x)
+                    statsContent.style.left = rect.x - statsContent.offsetWidth - 10 + "px";
+
+                if(rect.y)
+                    statsContent.style.top = Math.max(70, Math.min(maxTop, (rect.y + element.offsetHeight / 2) - statsContent.offsetHeight / 2)) + 'px';
             }
 
             [].forEach.call(document.querySelectorAll('.stat-weapons .select-weapon'), function(element){
@@ -363,25 +387,8 @@
             const itemLore = statsContent.querySelector('.item-lore');
 
             [].forEach.call(document.querySelectorAll('.piece'), function(element){
-                let item = all_items[element.getAttribute('data-item-index')];
-
-                resize();
-
                 element.addEventListener('mouseenter', function(e){
-                    statsContent.setAttribute("data-item-index", item.item_index);
-                    itemName.className = 'item-name ' + 'piece-' + item.rarity + '-bg';
-                    itemNameContent.innerHTML = item.display_name;
-
-                    if(item.texture_path){
-                        itemIcon.style.backgroundImage = 'url(' + item.texture_path + ')';
-                        itemIcon.classList.add('custom-icon');
-                    }else{
-                        itemIcon.removeAttribute('style');
-                        itemIcon.classList.remove('custom-icon');
-                    }
-
-                    itemLore.innerHTML = item.lore;
-
+                    fillLore(element, false);
                     statsContent.classList.add('show-stats');
                 });
 
@@ -412,7 +419,8 @@
                             element.classList.remove('sticky-stats');
                             statsContent.classList.remove('sticky-stats')
                         }else{
-                            showLore(element);
+                            showLore(element, false);
+                            fillLore(element);
                         }
                     }
                 });
@@ -482,17 +490,20 @@
             window.addEventListener('keydown', function(e){
                 let selectedPiece = document.querySelector('.piece:focus');
 
-                if(selectedPiece !== null && e.keyCode == 13)
+                if(selectedPiece !== null && e.keyCode == 13){
+                    fillLore(selectedPiece);
                     showLore(selectedPiece);
+                }
 
                 if(e.keyCode == 27){
                     dimmer.classList.remove('show-dimmer');
                     enableApiPlayer.classList.remove('show');
-                    if(document.querySelector('.piece.show-lore') != null)
-                        document.querySelector('.piece.show-lore').classList.remove('show-lore');
+                    if(document.querySelector('#stats_content.sticky-stats') != null){
+                        closeLore();
+                    }
                 }
 
-                if(document.querySelector('.piece.show-lore') != null && e.keyCode == 9)
+                if(document.querySelector('.piece.sticky-stats') != null && e.keyCode == 9)
                     e.preventDefault();
             });
 
