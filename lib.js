@@ -105,9 +105,10 @@ async function getBackpackContents(arraybuf){
 
     let items = data.i;
 
-    for(let item of items)
-        if(Object.keys(item).length > 0)
-            item.isInactive = true;
+    for(let item of items){
+        item.isInactive = true;
+        item.inBackpack = true;
+    }
 
     return items;
 }
@@ -146,7 +147,7 @@ async function getItems(base64){
 
             let backpackContents = await getBackpackContents(backpackData);
 
-            items.push(...backpackContents);
+            item.containsItems = backpackContents;
         }
     }
 
@@ -1129,29 +1130,35 @@ module.exports = {
         let output = {};
 
         // Process inventories returned by API
+        let armor = 'inv_armor' in profile ? await getItems(profile.inv_armor.data) : [];
         let inventory = 'inv_contents' in profile ? await getItems(profile.inv_contents.data) : [];
-        let talisman_bag = 'talisman_bag' in profile ? await getItems(profile.talisman_bag.data) : [];
         let enderchest = 'ender_chest_contents' in profile ? await getItems(profile.ender_chest_contents.data) : [];
+        let talisman_bag = 'talisman_bag' in profile ? await getItems(profile.talisman_bag.data) : [];
         let fishing_bag = 'fishing_bag' in profile ? await getItems(profile.fishing_bag.data) : [];
         let quiver = 'quiver' in profile ? await getItems(profile.quiver.data) : [];
         let potion_bag = 'potion_bag' in profile ? await getItems(profile.potion_bag.data) : [];
 
-        let armor = await getItems(profile.inv_armor.data);
+        output.armor = armor.filter(a => Object.keys(a).length != 0);
+        output.inventory = inventory
+        output.enderchest = enderchest;
+        output.talisman_bag = talisman_bag;
+        output.fishing_bag = fishing_bag;
+        output.quiver = quiver;
+        output.potion_bag = potion_bag;
+
+        const all_items = armor.concat(inventory, enderchest, talisman_bag, fishing_bag, quiver, potion_bag);
+
+        for(let [index, item] of all_items.entries()){
+            item.item_index = index;
+        }
 
         // All items not in the inventory or accessory bag should be inactive so they don't contribute to the total stats
         enderchest = enderchest.map(a => Object.assign({ isInactive: true}, a) );
 
-        let items = inventory.concat(enderchest);
-
-        // Save the position of the item in inventory as we might sort by stuff like rarity later
-        items.forEach((item, index) => {
-            item.item_index = index;
-        });
-
         let talismans = [];
 
         // Add talismans from inventory
-        inventory.filter(a => a.type == 'accessory').forEach(talisman => {
+        for(let talisman of inventory.filter(a => a.type == 'accessory')){
             let id = talisman.tag.ExtraAttributes.id;
 
             if(talismans.filter(a => !a.isInactive && a.tag.ExtraAttributes.id == id).length == 0){
@@ -1160,12 +1167,12 @@ module.exports = {
                 let talisman_inactive = Object.assign({ isInactive: true }, talisman);
                 talismans.push(talisman_inactive);
             }
-        });
+        }
 
         // Add talismans from accessory bag if not already in inventory
-        talisman_bag.forEach(talisman => {
-            if(Object.keys(talisman).length == 0)
-                return;
+        for(let talisman of talisman_bag){
+            if(!objectPath.has(talisman, 'tag.ExtraAttributes.id'))
+                continue;
 
             let id = talisman.tag.ExtraAttributes.id;
 
@@ -1175,10 +1182,10 @@ module.exports = {
                 let talisman_inactive = Object.assign({ isInactive: true }, talisman);
                 talismans.push(talisman_inactive);
             }
-        });
+        }
 
         // Don't account for lower tier versions of the same talisman
-        talismans.forEach(talisman => {
+        for(let talisman of talismans){
             let id = talisman.tag.ExtraAttributes.id;
 
             if((id == 'RING_POTION_AFFINITY' && talismans.filter(a => !a.isInactive && getId(a) == 'ARTIFACT_POTION_AFFINITY').length > 0)
@@ -1194,29 +1201,19 @@ module.exports = {
             || (id == 'INTIMIDATION_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'INTIMIDATION_ARTIFACT' || getId(a) == 'INTIMIDATION_RING')).length > 0)
             )
                 talisman.isInactive = true;
-        });
+        }
 
         talismans.push(...enderchest.filter(a => a.type == 'accessory'));
 
-        output.inventory = inventory
-        output.enderchest = enderchest;
-        output.talisman_bag = talisman_bag;
-        output.fishing_bag = fishing_bag;
-        output.quiver = quiver;
-        output.potion_bag = potion_bag;
-
-        output.all = inventory.concat(enderchest, talisman_bag);
-
         output.talismans = talismans;
-        output.weapons = items.filter(a => a.type == 'sword' || a.type == 'bow');
-        output.armor = armor.filter(a => Object.keys(a).length != 0);
+        output.weapons = all_items.filter(a => a.type == 'sword' || a.type == 'bow');
 
         // Check if inventory access disabled by user
         if(inventory.length == 0)
             output.no_inventory = true;
 
         // Sort talismans and weapons by rarity
-        for(items of ['talismans', 'weapons'])
+        for(let items of ['talismans', 'weapons'])
             output[items] = output[items].sort((a, b) => rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity));
 
         return output;

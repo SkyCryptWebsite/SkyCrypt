@@ -4,7 +4,7 @@
         <title><%- calculated.display_name %> | SkyBlock Stats</title>
         <meta charset="utf-8">
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="/resources/css/index.css?v7">
+        <link rel="stylesheet" href="/resources/css/index.css?v8">
         <link rel="stylesheet" href="/resources/css/inventory.css">
         <link rel="shortcut icon" href="https://visage.surgeplay.com/face/32/<%- calculated.uuid %>" type="image/png">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,6 +22,11 @@
             <source type="video/mp4" src="/resources/video/enable_api.mp4"></source>
         </video>
         <div id="bg_blur"></div>
+        <div id="stats_content">
+            <div class="item-name">
+                <div></div><span></span><div class="close-lore"></div></div>
+            <div class="item-lore"></div>
+        </div>
         <div id="stats_display">
             <div id="player_model" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
         </div>
@@ -196,15 +201,6 @@
                                     <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
                                     class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
                                 </div>
-                                <div class="stats-content">
-                                    <div class="item-name piece-<%= item.rarity %>-bg">
-                                        <div
-                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
-                                            class="stats-piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
-                                        </div>
-                                        <%= item.display_name %><div class="close-lore"></div></div>
-                                    <div class="item-lore"><%- item.lore %></div>
-                                </div>
                             </div>
                         <% }) %>
                     </div>
@@ -234,15 +230,6 @@
                                         <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
                                         class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
                                     </div>
-                                    <div class="stats-content">
-                                        <div class="item-name piece-<%= item.rarity %>-bg">
-                                            <div
-                                                <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
-                                                class="stats-piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
-                                            </div>
-                                            <%= item.display_name %><div class="close-lore"></div></div>
-                                        <div class="item-lore"><%- item.lore %></div>
-                                    </div>
                                 </div>
                         <%
                             });
@@ -268,15 +255,6 @@
                                     <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
                                     class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
                                 </div>
-                                <div class="stats-content">
-                                    <div class="item-name piece-<%= item.rarity %>-bg">
-                                        <div
-                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
-                                            class="stats-piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
-                                        </div>
-                                        <%= item.display_name %><div class="close-lore"></div></div>
-                                    <div class="item-lore"><%- item.lore %></div>
-                                </div>
                             </div>
                         <% }) %>
                     </div>
@@ -288,37 +266,45 @@
             let items = <%- JSON.stringify(items) %>;
             let calculated = <%- JSON.stringify(calculated) %>;
 
+            const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag);
+
             let dimmer = document.querySelector("#dimmer");
 
             history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name);
 
-            function showLore(piece){
-                piece.classList.add('show-lore');
+            function showLore(element){
+                statsContent.classList.add('sticky-stats');
+                element.classList.add('sticky-stats');
                 dimmer.classList.add('show-dimmer');
             }
 
             function closeLore(){
-                let shownLore = document.querySelector('.piece.show-lore');
+                let shownLore = document.querySelector('#stats_content.sticky-stats');
 
                 if(shownLore != null){
                     dimmer.classList.remove('show-dimmer');
-                    shownLore.blur();
-                    shownLore.classList.remove('show-lore');
+
+                    let stickyStatsPiece = document.querySelector('.piece.sticky-stats');
+
+                    if(stickyStatsPiece != null){
+                        stickyStatsPiece.blur();
+                        stickyStatsPiece.classList.remove('sticky-stats');
+                    }
+
+                    statsContent.classList.remove('sticky-stats');
                 }
             }
 
             function resize(){
                 [].forEach.call(document.querySelectorAll('.piece'), function(element){
-                    let statsContent = element.querySelector('.stats-content');
-
                     let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
-                    let rect = statsContent.parentNode.getBoundingClientRect();
+                    let rect = element.getBoundingClientRect();
 
                     if(rect.x)
                         statsContent.style.left = rect.x - statsContent.offsetWidth - 10 + "px";
 
                     if(rect.y)
-                        statsContent.style.top = Math.max(70, Math.min(maxTop, (rect.y + statsContent.parentNode.offsetHeight / 2) - statsContent.offsetHeight / 2)) + 'px';
+                        statsContent.style.top = Math.max(70, Math.min(maxTop, (rect.y + element.offsetHeight / 2) - statsContent.offsetHeight / 2)) + 'px';
                 });
             }
 
@@ -370,20 +356,45 @@
                 });
             });
 
-            [].forEach.call(document.querySelectorAll('.piece'), function(element){
-                let statsContent = element.querySelector('.stats-content');
+            const statsContent = document.querySelector('#stats_content');
+            const itemName = statsContent.querySelector('.item-name');
+            const itemIcon = itemName.querySelector('div:first-child');
+            const itemNameContent = itemName.querySelector('span');
+            const itemLore = statsContent.querySelector('.item-lore');
 
-                let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
-                let rect = statsContent.parentNode.getBoundingClientRect();
+            [].forEach.call(document.querySelectorAll('.piece'), function(element){
+                let item = all_items[element.getAttribute('data-item-index')];
 
                 resize();
 
+                element.addEventListener('mouseenter', function(e){
+                    statsContent.setAttribute("data-item-index", item.item_index);
+                    itemName.className = 'item-name ' + 'piece-' + item.rarity + '-bg';
+                    itemNameContent.innerHTML = item.display_name;
+
+                    if(item.texture_path){
+                        itemIcon.style.backgroundImage = 'url(' + item.texture_path + ')';
+                        itemIcon.classList.add('custom-icon');
+                    }else{
+                        itemIcon.removeAttribute('style');
+                        itemIcon.classList.remove('custom-icon');
+                    }
+
+                    itemLore.innerHTML = item.lore;
+
+                    statsContent.classList.add('show-stats');
+                });
+
+                element.addEventListener('mouseleave', function(e){
+                    statsContent.classList.remove('show-stats');
+                });
+
                 element.addEventListener('mousemove', function(e){
-                    if(element.classList.contains('show-lore'))
+                    if(statsContent.classList.contains('sticky-stats'))
                         return;
 
                     let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
-                    let rect = statsContent.parentNode.getBoundingClientRect();
+                    let rect = element.getBoundingClientRect();
 
                     if(rect.x)
                         statsContent.style.left = rect.x - statsContent.offsetWidth - 10 + "px";
@@ -395,10 +406,11 @@
 
                 element.addEventListener('click', function(e){
                     if(e.target.classList.contains('piece-hover-area')){
-                        if(element.classList.contains('show-lore')){
+                        if(statsContent.classList.contains('sticky-stats')){
                             dimmer.classList.remove('show-dimmer');
                             element.blur();
-                            document.querySelector('.piece.show-lore').classList.remove('show-lore');
+                            element.classList.remove('sticky-stats');
+                            statsContent.classList.remove('sticky-stats')
                         }else{
                             showLore(element);
                         }

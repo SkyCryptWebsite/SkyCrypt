@@ -387,7 +387,7 @@ html.no-transform #info_box.opened{
     color: rgba(255,255,255,0.7);
 }
 
-.stats-content{
+#stats_content{
     position: fixed;
     right: calc(70vw + 20px);
     background-color: rgba(15,15,15,0.9);
@@ -398,35 +398,36 @@ html.no-transform #info_box.opened{
     opacity: 0;
     transform: translateX(-25px);
     pointer-events: none;
-    transition: visibility .2s, opacity .2s, transform .2s;
+    transition: visibility .2s, opacity .2s, transform .2s, left .1s;
     visibility: hidden;
 }
 
-.stats-content .item-lore{
+#stats_content .item-lore{
     max-height: calc(100vh - 200px);
     overflow-y: auto;
 }
 
-.piece-hover-area:hover ~ .stats-content{
+#stats_content.show-stats{
     opacity: 1;
     transform: translateX(0px);
     visibility: visible;
 }
 
-.piece.show-lore{
-    z-index: 8000;
-}
-
-.piece.show-lore .stats-content{
+#stats_content.sticky-stats{
     opacity: 1;
     transform: translateX(0px);
     visibility: visible;
     pointer-events: auto;
     cursor: auto;
     user-select: text;
+    z-index: 8001;
 }
 
-.stats-content .stats-piece-icon{
+.sticky-stats{
+    z-index: 8000;
+}
+
+#stats_content .stats-piece-icon{
     position: absolute;
     left: 14px;
     top: 50%;
@@ -435,7 +436,7 @@ html.no-transform #info_box.opened{
     transform-origin: top left;
 }
 
-.stats-content .close-lore{
+#stats_content .close-lore{
     position: absolute;
     top: 0;
     bottom: 0;
@@ -450,7 +451,7 @@ html.no-transform #info_box.opened{
     cursor: pointer;
 }
 
-.stats-content .item-name{
+#stats_content .item-name{
     position: relative;
     text-align: center;
     padding: 20px;
@@ -461,7 +462,7 @@ html.no-transform #info_box.opened{
     box-sizing: border-box;
 }
 
-.stats-content .item-lore{
+#stats_content .item-lore{
     padding: 25px;
     font-weight: 500;
 }
@@ -718,6 +719,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     border-bottom: 4px solid rgba(0,0,0,0.3);
     user-select: none;
     cursor: pointer;
+    transition: z-index .2s;
 }
 
 .piece::after{
@@ -816,7 +818,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     outline: 0 !important;
 }
 
-.piece.show-lore::after, .piece:focus::after{
+.piece.sticky-stats::after, .piece:focus::after{
     opacity: 1;
     transform: translateY(0px);
 }
@@ -1185,11 +1187,11 @@ html.no-webp #error_box_wrapper{
         display: none;
     }
 
-    .piece-hover-area:hover ~ .stats-content{
+    #stats_content.show-stats{
         visibility: hidden;
     }
 
-    .piece .stats-content{
+    #stats_content{
         left: 50% !important;
         width: 360px;
         top: 50% !important;
@@ -1198,7 +1200,7 @@ html.no-webp #error_box_wrapper{
         transition: opacity .2s, visibility .2s !important;
     }
 
-    .piece.show-lore .stats-content{
+    #stats_content.sticky-stats{
         visibility: visible;
     }
 
@@ -1250,18 +1252,18 @@ html.no-webp #error_box_wrapper{
         width: 75%;
     }
 
-    .piece .stats-content{
+    .piece #stats_content{
         width: calc(100vw - 40px) !important;
         left: 20px !important;
         right: auto !important;
         transform: translateY(-50%) !important;
     }
 
-    .stats-content .close-lore{
+    #stats_content .close-lore{
         visibility: visible;
     }
 
-    .stats-content .item-name{
+    #stats_content .item-name{
         padding-right: 60px;
     }
 

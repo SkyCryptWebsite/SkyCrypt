@@ -236,7 +236,6 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         res.render('stats', { items, calculated, page: 'stats' });
     }catch(e){
         console.error(e);
-        console.error(response);
 
         res
         .cookie('error', "An unknown error occured. Please try again!")
