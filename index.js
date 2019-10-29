@@ -162,26 +162,35 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         let profile_names = Object.keys(skyblock_profiles);
 
         let promises = [];
+        let profile_ids = [];
 
-        for(let profile in skyblock_profiles)
+        for(let profile in skyblock_profiles){
+            profile_ids.push(profile);
+
             promises.push(
                 Hypixel.get('skyblock/profile', { params: { key: getApiKey(), profile: profile } })
             );
+        }
 
         let responses = await Promise.all(promises);
 
         let profiles = [];
 
-        for(let profile_response of responses){
+        for(let[index, profile_response] of responses.entries()){
             if(!profile_response.data.success){
-                res
-                .cookie('error', "Request to Hypixel API failed. Please try again!")
-                .cookie('player', req.params.player)
-                .redirect('/');
-                return false;
+                delete skyblock_profiles[profile_ids[index]];
+                continue;
             }
 
             profiles.push(profile_response.data.profile);
+        }
+
+        if(profiles.length == 0){
+            res
+            .cookie('error', 'No data returned by Hypixel API, please try again!')
+            .cookie('player', req.params.player)
+            .redirect('/');
+            return false;
         }
 
         let highest = 0;
