@@ -167,6 +167,11 @@ async function getItems(base64){
             item.texture_path = `/${type}/${color.join(',')}`;
         }
 
+        if(objectPath.has(item, 'id') && item.id == 373){
+            if(item.Damage > 17)
+                item.Damage -= 16384; // Convert splash potions to regular potions for now
+        }
+
         // Set raw display name without color and formatting codes
         if(objectPath.has(item, 'tag.display.Name'))
             item.display_name = module.exports.getRawLore(item.tag.display.Name);
