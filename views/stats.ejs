@@ -4,7 +4,7 @@
         <title><%- calculated.display_name %> | SkyBlock Stats</title>
         <meta charset="utf-8">
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="/resources/css/index.css?v9">
+        <link rel="stylesheet" href="/resources/css/index.css?v10">
         <link rel="stylesheet" href="/resources/css/inventory.css">
         <link rel="shortcut icon" href="https://visage.surgeplay.com/face/32/<%- calculated.uuid %>" type="image/png">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -192,7 +192,7 @@
                 <% }else{ %>
                     <div class="pieces">
                         <% items.armor.slice().reverse().forEach(item => { %>
-                            <div tabindex="3" data-item-index="<%= item.item_index %>" class="piece piece-<%= item.rarity %>-bg">
+                            <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
                                 <% if(item.rarity == 'legendary'){ %>
                                     <div class="piece-shine"></div>
                                 <% } %>
@@ -206,8 +206,6 @@
                     </div>
                 <% } %>
             </div>
-
-
             <div class="stat-container stat-weapons">
                 <div class="stat-header">Weapons</div>
                 <% if(items.no_inventory){ %>
@@ -220,7 +218,7 @@
                             let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
 
                             items.weapons.forEach(item => { %>
-                                <div tabindex="3" data-item-index="<%= item.item_index %>" class="piece <% if(sword.length > 0 && item.item_index == sword[0].item_index){ %>piece-selected<% } %> piece-<%= item.rarity %>-bg">
+                                <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece <% if(sword.length > 0 && item.item_index == sword[0].item_index){ %>piece-selected<% } %> piece-<%= item.rarity %>-bg">
                                     <% if(item.rarity == 'legendary'){ %>
                                         <div class="piece-shine"></div>
                                     <% } %>
@@ -246,7 +244,7 @@
                 <% }else{ %>
                     <div class="pieces">
                         <% items.talismans.filter(a => !a.isInactive).forEach(item => { %>
-                            <div tabindex="3" data-item-index="<%= item.item_index %>" class="piece piece-<%= item.rarity %>-bg">
+                            <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
                                 <% if(item.rarity == 'legendary'){ %>
                                     <div class="piece-shine"></div>
                                 <% } %>
@@ -260,6 +258,143 @@
                     </div>
                 <% } %>
             </div>
+            <div class="stat-container stat-inventory">
+                <div class="stat-header">Inventories</div>
+                <% if(items.no_inventory){ %>
+                    <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
+                <% }else{ %>
+                    <div id="inventory_container">
+                        <div id="inventory_header">
+                            <div class="inventory-tab active-inventory" data-inventory-type="inventory">Inventory</div><%
+                            if(items.enderchest.length > 0){ %><div class="inventory-tab" data-inventory-type="enderchest">Ender Chest</div><% }
+                            if(items.talisman_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="talisman_bag">Accessory Bag</div><% }
+                            if(items.potion_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="potion_bag">Potion Bag</div><% }
+                            if(items.fishing_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="fishing_bag">Fishing Bag</div><% }
+                            if(items.quiver.length > 0){ %><div class="inventory-tab" data-inventory-type="quiver">Quiver</div><% } %>
+                        </div>
+                        <div class="inventory-view current-inventory" data-inventory-type="inventory">
+                            <% for(let i = 9; i < items.inventory.length; i++){ %>
+                                <% let item = items.inventory[i]; %>
+                                <div class="inventory-slot">
+                                    <% if(Object.keys(item).length > 1){ %>
+                                    <div class="rich-item inventory-item" data-item-index="<%= item.item_index %>">
+                                        <div
+                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
+                                            class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
+                                        </div>
+                                        <% if(item.Count > 1){ %><div class="item-count"><%= item.Count %></div><% } %>
+                                    </div>
+                                    <% } %>
+                                </div><% if((i + 1) % 9 == 0) { %><br><% } %>
+                            <% } %>
+                            <% for(let i = 0; i < 9; i++){ %>
+                                <% let item = items.inventory[i]; %>
+                                <div class="inventory-slot">
+                                    <% if(Object.keys(item).length > 1){ %>
+                                    <div class="rich-item inventory-item" data-item-index="<%= item.item_index %>">
+                                        <div
+                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
+                                            class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
+                                        </div>
+                                        <% if(item.Count > 1){ %><div class="item-count"><%= item.Count %></div><% } %>
+                                    </div>
+                                    <% } %>
+                                </div>
+                            <% } %>
+                        </div>
+                        <% if(items.enderchest.length > 0){ %>
+                        <div class="inventory-view" data-inventory-type="enderchest">
+                            <% for(let i = 9; i < items.enderchest.length; i++){ %>
+                                <% let item = items.enderchest[i]; %>
+                                <div class="inventory-slot">
+                                    <% if(Object.keys(item).length > 1){ %>
+                                    <div class="rich-item inventory-item" data-item-index="<%= item.item_index %>">
+                                        <div
+                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
+                                            class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
+                                        </div>
+                                        <% if(item.Count > 1){ %><div class="item-count"><%= item.Count %></div><% } %>
+                                    </div>
+                                    <% } %>
+                                </div><% if((i + 1) % 9 == 0) { %><br><% } %>
+                            <% } %>
+                        </div>
+                        <% } %>
+                        <% if(items.talisman_bag.length > 0){ %>
+                        <div class="inventory-view" data-inventory-type="talisman_bag">
+                            <% for(let i = 0; i < Math.min(items.talisman_bag.length, 27); i++){ %>
+                                <% let item = items.talisman_bag[i]; %>
+                                <div class="inventory-slot">
+                                    <% if(Object.keys(item).length > 1){ %>
+                                    <div class="rich-item inventory-item" data-item-index="<%= item.item_index %>">
+                                        <div
+                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
+                                            class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
+                                        </div>
+                                        <% if(item.Count > 1){ %><div class="item-count"><%= item.Count %></div><% } %>
+                                    </div>
+                                    <% } %>
+                                </div><% if((i + 1) % 9 == 0) { %><br><% } %>
+                            <% } %>
+                        </div>
+                        <% } %>
+                        <% if(items.potion_bag.length > 0){ %>
+                        <div class="inventory-view" data-inventory-type="potion_bag">
+                            <% for(let i = 0; i < Math.min(items.potion_bag.length, 27); i++){ %>
+                                <% let item = items.potion_bag[i]; %>
+                                <div class="inventory-slot">
+                                    <% if(Object.keys(item).length > 1){ %>
+                                    <div class="rich-item inventory-item" data-item-index="<%= item.item_index %>">
+                                        <div
+                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
+                                            class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
+                                        </div>
+                                        <% if(item.Count > 1){ %><div class="item-count"><%= item.Count %></div><% } %>
+                                    </div>
+                                    <% } %>
+                                </div><% if((i + 1) % 9 == 0) { %><br><% } %>
+                            <% } %>
+                        </div>
+                        <% } %>
+                        <% if(items.fishing_bag.length > 0){ %>
+                        <div class="inventory-view" data-inventory-type="fishing_bag">
+                            <% for(let i = 0; i < Math.min(items.fishing_bag.length, 27); i++){ %>
+                                <% let item = items.fishing_bag[i]; %>
+                                <div class="inventory-slot">
+                                    <% if(Object.keys(item).length > 1){ %>
+                                    <div class="rich-item inventory-item" data-item-index="<%= item.item_index %>">
+                                        <div
+                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
+                                            class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
+                                        </div>
+                                        <% if(item.Count > 1){ %><div class="item-count"><%= item.Count %></div><% } %>
+                                    </div>
+                                    <% } %>
+                                </div><% if((i + 1) % 9 == 0) { %><br><% } %>
+                            <% } %>
+                        </div>
+                        <% } %>
+                        <% if(items.quiver.length > 0){ %>
+                        <div class="inventory-view" data-inventory-type="quiver">
+                            <% for(let i = 0; i < Math.min(items.quiver.length, 27); i++){ %>
+                                <% let item = items.quiver[i]; %>
+                                <div class="inventory-slot">
+                                    <% if(Object.keys(item).length > 1){ %>
+                                    <div class="rich-item inventory-item" data-item-index="<%= item.item_index %>">
+                                        <div
+                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
+                                            class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
+                                        </div>
+                                        <% if(item.Count > 1){ %><div class="item-count"><%= item.Count %></div><% } %>
+                                    </div>
+                                    <% } %>
+                                </div><% if((i + 1) % 9 == 0) { %><br><% } %>
+                            <% } %>
+                        </div>
+                        <% } %>
+                    </div>
+                <% } %>
+            </div>
         </div>
         <script src="/resources/js/anime.min.js"></script>
         <script>
@@ -269,6 +404,8 @@
             const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag);
 
             let dimmer = document.querySelector("#dimmer");
+
+            let inventoryContainer = document.querySelector('#inventory_container');
 
             history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name);
 
@@ -283,8 +420,6 @@
                 statsContent.setAttribute("data-item-index", item.item_index);
                 itemName.className = 'item-name ' + 'piece-' + (item.rarity || 'common') + '-bg';
                 itemNameContent.innerHTML = item.display_name || 'null';
-
-                console.log(item);
 
                 if(item.texture_path){
                     itemIcon.style.backgroundImage = 'url(' + item.texture_path + ')';
@@ -313,7 +448,7 @@
                 if(shownLore != null){
                     dimmer.classList.remove('show-dimmer');
 
-                    let stickyStatsPiece = document.querySelector('.piece.sticky-stats');
+                    let stickyStatsPiece = document.querySelector('.rich-item.sticky-stats');
 
                     if(stickyStatsPiece != null){
                         stickyStatsPiece.blur();
@@ -325,7 +460,43 @@
             }
 
             function resize(){
-                let element = document.querySelector('.piece.sticky-stats');
+                [].forEach.call(document.querySelectorAll('.inventory-view'), function(element){
+                    let width, height;
+
+                    element.classList.remove('processed');
+
+                    element.style.height = "auto";
+                    element.style.width = "auto";
+
+                    if(element.classList.contains('current-inventory')){
+                        inventoryContainer.style.width = "auto";
+                        inventoryContainer.style.height = "auto";
+                    }
+
+                    if(window.outerWidth <= 1200){
+                        height = element.offsetHeight;
+                        width = window.outerWidth;
+
+                        height += 15;
+                    }else{
+                        height = element.offsetHeight;
+                        width = element.offsetWidth;
+                    }
+
+                    element.style.width = width + "px";
+                    element.style.height = height + "px";
+
+                    element.classList.add('processed');
+                    element.setAttribute('data-height', height + 50 + "px");
+                    element.setAttribute('data-width', width + "px");
+
+                    if(element.classList.contains('current-inventory')){
+                        inventoryContainer.style.width = width + "px";
+                        inventoryContainer.style.height = height + 50 + "px";
+                    }
+                });
+
+                let element = document.querySelector('.rich-item.sticky-stats');
 
                 if(element == null)
                     return;
@@ -388,13 +559,32 @@
                 });
             });
 
+            [].forEach.call(document.querySelectorAll('.inventory-tab'), function(element){
+                let type = element.getAttribute('data-inventory-type');
+
+                element.addEventListener('click', function(){
+                    if(element.classList.contains('active-inventory'))
+                        return;
+
+                    document.querySelector('.inventory-tab.active-inventory').classList.remove('active-inventory');
+                    element.classList.add('active-inventory');
+
+                    let currentInventory = document.querySelector('.inventory-view[data-inventory-type=' + type + ']');
+
+                    document.querySelector('.inventory-view.current-inventory').classList.remove('current-inventory');
+                    currentInventory.classList.add('current-inventory');
+
+                    inventoryContainer.style.height = currentInventory.getAttribute('data-height');
+                });
+            });
+
             const statsContent = document.querySelector('#stats_content');
             const itemName = statsContent.querySelector('.item-name');
             const itemIcon = itemName.querySelector('div:first-child');
             const itemNameContent = itemName.querySelector('span');
             const itemLore = statsContent.querySelector('.item-lore');
 
-            [].forEach.call(document.querySelectorAll('.piece'), function(element){
+            [].forEach.call(document.querySelectorAll('.rich-item'), function(element){
                 element.addEventListener('mouseenter', function(e){
                     fillLore(element, false);
                     statsContent.classList.add('show-stats');
@@ -420,7 +610,7 @@
                 });
 
                 element.addEventListener('click', function(e){
-                    if(e.target.classList.contains('piece-hover-area')){
+                    if(!e.target.classList.contains('select-weapon')){
                         if(statsContent.classList.contains('sticky-stats')){
                             dimmer.classList.remove('show-dimmer');
                             element.blur();
@@ -496,7 +686,7 @@
             }
 
             window.addEventListener('keydown', function(e){
-                let selectedPiece = document.querySelector('.piece:focus');
+                let selectedPiece = document.querySelector('.rich-item:focus');
 
                 if(selectedPiece !== null && e.keyCode == 13){
                     fillLore(selectedPiece);
@@ -511,10 +701,11 @@
                     }
                 }
 
-                if(document.querySelector('.piece.sticky-stats') != null && e.keyCode == 9)
+                if(document.querySelector('.rich-item.sticky-stats') != null && e.keyCode == 9)
                     e.preventDefault();
             });
 
+            resize();
             window.addEventListener('resize', resize);
         </script>
     </body>
