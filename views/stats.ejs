@@ -305,7 +305,7 @@
                         </div>
                         <% if(items.enderchest.length > 0){ %>
                         <div class="inventory-view" data-inventory-type="enderchest">
-                            <% for(let i = 9; i < items.enderchest.length; i++){ %>
+                            <% for(let i = 0; i < items.enderchest.length; i++){ %>
                                 <% let item = items.enderchest[i]; %>
                                 <div class="inventory-slot">
                                     <% if(Object.keys(item).length > 1){ %>
