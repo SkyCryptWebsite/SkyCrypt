@@ -921,6 +921,8 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 
 .inventory-view{
     margin-top: 50px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .inventory-view.processed{
