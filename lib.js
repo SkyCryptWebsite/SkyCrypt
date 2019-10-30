@@ -131,14 +131,14 @@ async function getItems(base64){
 
     // Check backpack contents and add them to the list of items
     for(let item of items){
-        if(objectPath.has(item, 'tag.display.Name') && item.tag.display.Name.endsWith('Backpack')){
+        if(objectPath.has(item, 'tag.display.Name') && (item.tag.display.Name.endsWith('Backpack') || item.tag.display.Name.endsWith('Itchy New Year Cake Bag'))){
 
             let keys = Object.keys(item.tag.ExtraAttributes);
 
             let backpackData;
 
             keys.forEach(key => {
-                if(key.endsWith('backpack_data'))
+                if(key.endsWith('backpack_data') || key == 'new_year_cake_bag_data')
                     backpackData = item.tag.ExtraAttributes[key];
             });
 
@@ -1201,6 +1201,23 @@ module.exports = {
             || (id == 'INTIMIDATION_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'INTIMIDATION_ARTIFACT' || getId(a) == 'INTIMIDATION_RING')).length > 0)
             )
                 talisman.isInactive = true;
+        }
+
+        // Add New Year Cake Bag health bonus (1 per unique cake)
+        for(let talisman of talismans){
+            let id = talisman.tag.ExtraAttributes.id;
+            let cakes = [];
+
+            if(id == 'NEW_YEAR_CAKE_BAG' && objectPath.has('containsItems')){
+                talisman.stats.health = 0;
+
+                for(let item of talisman.containsItems){
+                    if(objectPath.has('tag.ExtraAttributes.new_years_cake') && !cakes.includes(item.tag.ExtraAttributes.new_years_cake)){
+                        talisman.stats.health++;
+                        cakes.push(item.tag.ExtraAttributes.new_years_cake);
+                    }
+                }
+            }
         }
 
         talismans.push(...enderchest.filter(a => a.type == 'accessory'));
