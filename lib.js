@@ -1208,7 +1208,7 @@ module.exports = {
             let id = talisman.tag.ExtraAttributes.id;
             let cakes = [];
 
-            if(id == 'NEW_YEAR_CAKE_BAG' && objectPath.has('containsItems') && Array.isArray(talisman.containsItems)){
+            if(id == 'NEW_YEAR_CAKE_BAG' && objectPath.has(talisman, 'containsItems') && Array.isArray(talisman.containsItems)){
                 talisman.stats.health = 0;
 
                 for(let item of talisman.containsItems){
