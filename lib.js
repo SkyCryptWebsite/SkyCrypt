@@ -1212,7 +1212,7 @@ module.exports = {
                 talisman.stats.health = 0;
 
                 for(let item of talisman.containsItems){
-                    if(objectPath.has('tag.ExtraAttributes.new_years_cake') && !cakes.includes(item.tag.ExtraAttributes.new_years_cake)){
+                    if(objectPath.has(item, 'tag.ExtraAttributes.new_years_cake') && !cakes.includes(item.tag.ExtraAttributes.new_years_cake)){
                         talisman.stats.health++;
                         cakes.push(item.tag.ExtraAttributes.new_years_cake);
                     }
