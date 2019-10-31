@@ -373,8 +373,8 @@ const runecrafting_xp = {
     20: 6200,
     21: 7800,
     22: 9800,
-    23: 12200, // not confirmed
-    24: 15300 // not confirmed
+    23: 12200,
+    24: 15300
 }
 
 // Player stats on a completely new profile
