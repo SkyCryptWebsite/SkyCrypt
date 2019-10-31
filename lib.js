@@ -7,7 +7,7 @@ const objectPath = require("object-path");
 
 const parseNbt = util.promisify(nbt.parse);
 
-const rarity_order = ['legendary', 'epic', 'rare', 'uncommon', 'common'];
+const rarity_order = ['special', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 
 function getLevelByXp(xp){
     if(isNaN(xp)){

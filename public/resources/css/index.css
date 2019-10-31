@@ -840,6 +840,10 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     background-position: center center !important;
 }
 
+.piece-special-bg{
+    background-color: #D762D7;
+}
+
 .piece-legendary-bg{
     background-color: #DD980E;
 }
@@ -858,6 +862,10 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 
 .piece-common-bg{
     background-color: #555555;
+}
+
+.piece-special-fg{
+    color: #D762D7;
 }
 
 .piece-legendary-fg{
