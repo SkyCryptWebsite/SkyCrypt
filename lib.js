@@ -9,13 +9,15 @@ const parseNbt = util.promisify(nbt.parse);
 
 const rarity_order = ['special', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 
-function getLevelByXp(xp){
+function getLevelByXp(xp, runecrafting){
+    let xp_table = runecrafting ? runecrafting_xp : leveling_xp;
+
     if(isNaN(xp)){
         return {
             xp: 0,
             level: 0,
             xpCurrent: 0,
-            xpForNext: leveling_xp[1],
+            xpForNext: xp_table[1],
             progress: 0
         };
     }
@@ -25,13 +27,13 @@ function getLevelByXp(xp){
 
     let xpForNext = Infinity;
 
-    let maxLevel = Object.keys(leveling_xp).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
+    let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
 
     for(let x = 1; x <= maxLevel; x++){
-        xpTotal += leveling_xp[x];
+        xpTotal += xp_table[x];
 
         if(xpTotal > xp){
-            xpTotal -= leveling_xp[x];
+            xpTotal -= xp_table[x];
             break;
         }else{
             level = x;
@@ -41,7 +43,7 @@ function getLevelByXp(xp){
     let xpCurrent = Math.floor(xp - xpTotal);
 
     if(level < maxLevel)
-        xpForNext = Math.ceil(leveling_xp[level + 1]);
+        xpForNext = Math.ceil(xp_table[level + 1]);
 
 
     return {
@@ -343,6 +345,33 @@ const leveling_xp = {
     49: 3700000,
     50: 4000000
 };
+
+const runecrafting_xp = {
+    1: 50,
+    2: 100,
+    3: 125,
+    4: 160,
+    5: 200,
+    6: 250,
+    7: 315,
+    8: 400,
+    9: 500,
+    10: 625,
+    11: 785,
+    12: 1000,
+    13: 1240,
+    14: 1500,
+    15: 2000, // guess
+    16: 2500, // guess
+    17: 3200, // guess
+    18: 4000,
+    19: 5000,
+    20: 6200,
+    21: 7800,
+    22: 9800,
+    23: 12000, // guess
+    24: 15000
+}
 
 // Player stats on a completely new profile
 const base_stats = {
@@ -1265,7 +1294,7 @@ module.exports = {
                 enchanting: getLevelByXp(profile.experience_skill_enchanting),
                 alchemy: getLevelByXp(profile.experience_skill_alchemy),
                 carpentry: getLevelByXp(profile.experience_skill_carpentry),
-                runecrafting: getLevelByXp(profile.experience_skill_runecrafting),
+                runecrafting: getLevelByXp(profile.experience_skill_runecrafting, true),
             };
 
             output.skill_bonus = {};
