@@ -45,13 +45,17 @@ function getLevelByXp(xp, runecrafting){
     if(level < maxLevel)
         xpForNext = Math.ceil(xp_table[level + 1]);
 
+    let progress = xpCurrent / xpForNext;
+
+    if(xpForNext == Infinity)
+        progress = 1;
 
     return {
         xp,
         level,
         xpCurrent,
         xpForNext,
-        progress: xpCurrent / xpForNext
+        progress
     };
 }
 

@@ -111,7 +111,9 @@
                                 <div class="skill-name">Farming <span class="skill-level"><%= calculated.levels.farming.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.farming.progress * 100 %>%"></div>
-                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.farming.xpCurrent, true) %> / <%= formatNumber(calculated.levels.farming.xpForNext) %> XP</div>
+                                    <div class="skill-progress-text">
+                                        <%= formatNumber(calculated.levels.farming.xpCurrent, true) %><% if(calculated.levels.farming.xpForNext != Infinity){ %> / <%= formatNumber(calculated.levels.farming.xpForNext) %><% } %> XP
+                                    </div>
                                 </div>
                             </div>
                             <div class="skill">
@@ -119,7 +121,9 @@
                                 <div class="skill-name">Mining <span class="skill-level"><%= calculated.levels.mining.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.mining.progress * 100 %>%"></div>
-                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.mining.xpCurrent, true) %> / <%= formatNumber(calculated.levels.mining.xpForNext) %> XP</div>
+                                    <div class="skill-progress-text">
+                                        <%= formatNumber(calculated.levels.mining.xpCurrent, true) %><% if(calculated.levels.mining.xpForNext != Infinity){ %> / <%= formatNumber(calculated.levels.mining.xpForNext) %><% } %> XP
+                                    </div>
                                 </div>
                             </div>
                             <div class="skill">
@@ -127,7 +131,9 @@
                                 <div class="skill-name">Combat <span class="skill-level"><%= calculated.levels.combat.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.combat.progress * 100 %>%"></div>
-                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.combat.xpCurrent, true) %> / <%= formatNumber(calculated.levels.combat.xpForNext) %> XP</div>
+                                    <div class="skill-progress-text">
+                                        <%= formatNumber(calculated.levels.combat.xpCurrent, true) %><% if(calculated.levels.combat.xpForNext != Infinity){ %> / <%= formatNumber(calculated.levels.combat.xpForNext) %><% } %> XP
+                                        </div>
                                 </div>
                             </div>
                             <div class="skill">
@@ -135,7 +141,9 @@
                                 <div class="skill-name">Foraging <span class="skill-level"><%= calculated.levels.foraging.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.foraging.progress * 100 %>%"></div>
-                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.foraging.xpCurrent, true) %> / <%= formatNumber(calculated.levels.foraging.xpForNext) %> XP</div>
+                                    <div class="skill-progress-text">
+                                        <%= formatNumber(calculated.levels.foraging.xpCurrent, true) %><% if(calculated.levels.foraging.xpForNext != Infinity){ %> / <%= formatNumber(calculated.levels.foraging.xpForNext) %><% } %> XP
+                                    </div>
                                 </div>
                             </div>
                             <div class="skill">
@@ -143,7 +151,9 @@
                                 <div class="skill-name">Fishing <span class="skill-level"><%= calculated.levels.fishing.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.fishing.progress * 100 %>%"></div>
-                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.fishing.xpCurrent, true) %> / <%= formatNumber(calculated.levels.fishing.xpForNext) %> XP</div>
+                                    <div class="skill-progress-text">
+                                        <%= formatNumber(calculated.levels.fishing.xpCurrent, true) %><% if(calculated.levels.fishing.xpForNext != Infinity){ %> / <%= formatNumber(calculated.levels.fishing.xpForNext) %><% } %> XP
+                                        </div>
                                 </div>
                             </div>
                             <div class="skill">
@@ -151,7 +161,9 @@
                                 <div class="skill-name">Enchanting <span class="skill-level"><%= calculated.levels.enchanting.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.enchanting.progress * 100 %>%"></div>
-                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.enchanting.xpCurrent, true) %> / <%= formatNumber(calculated.levels.enchanting.xpForNext) %> XP</div>
+                                    <div class="skill-progress-text">
+                                        <%= formatNumber(calculated.levels.enchanting.xpCurrent, true) %><% if(calculated.levels.enchanting.xpForNext != Infinity){ %> / <%= formatNumber(calculated.levels.enchanting.xpForNext) %><% } %> XP
+                                    </div>
                                 </div>
                             </div>
                             <div class="skill">
@@ -159,7 +171,9 @@
                                 <div class="skill-name">Alchemy <span class="skill-level"><%= calculated.levels.alchemy.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.alchemy.progress * 100 %>%"></div>
-                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.alchemy.xpCurrent, true) %> / <%= formatNumber(calculated.levels.alchemy.xpForNext) %> XP</div>
+                                    <div class="skill-progress-text">
+                                        <%= formatNumber(calculated.levels.alchemy.xpCurrent, true) %><% if(calculated.levels.alchemy.xpForNext != Infinity){ %> / <%= formatNumber(calculated.levels.alchemy.xpForNext) %><% } %> XP
+                                    </div>
                                 </div>
                             </div>
                             <div class="skill">
@@ -167,7 +181,9 @@
                                 <div class="skill-name">Carpentry <span class="skill-level"><%= calculated.levels.carpentry.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.carpentry.progress * 100 %>%"></div>
-                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.carpentry.xpCurrent, true) %> / <%= formatNumber(calculated.levels.carpentry.xpForNext) %> XP</div>
+                                    <div class="skill-progress-text">
+                                        <%= formatNumber(calculated.levels.carpentry.xpCurrent, true) %><% if(calculated.levels.carpentry.xpForNext != Infinity){ %> / <%= formatNumber(calculated.levels.carpentry.xpForNext) %><% } %> XP
+                                        </div>
                                 </div>
                             </div>
                             <div class="skill">
@@ -175,7 +191,9 @@
                                 <div class="skill-name">Runecrafting <span class="skill-level"><%= calculated.levels.runecrafting.level %></span></div>
                                 <div class="skill-bar">
                                     <div class="skill-progress-bar" style="width: <%= calculated.levels.runecrafting.progress * 100 %>%"></div>
-                                    <div class="skill-progress-text"><%= formatNumber(calculated.levels.runecrafting.xpCurrent, true) %> / <%= formatNumber(calculated.levels.runecrafting.xpForNext) %> XP</div>
+                                    <div class="skill-progress-text">
+                                        <%= formatNumber(calculated.levels.runecrafting.xpCurrent, true) %><% if(calculated.levels.runecrafting.xpForNext != Infinity){ %> / <%= formatNumber(calculated.levels.runecrafting.xpForNext) %><% } %> XP
+                                    </div>
                                 </div>
                             </div>
                         </div>
