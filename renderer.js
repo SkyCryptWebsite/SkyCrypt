@@ -60,10 +60,12 @@ module.exports = {
 
         let canvas = createCanvas(scale * 20, scale * 18.5);
         let hat_canvas = createCanvas(scale * 20, scale * 18.5);
+        let hat_bg_canvas = createCanvas(scale * 20, scale * 18.5);
         let head_canvas = createCanvas(scale * 20 * hat_factor, scale * 18.5 * hat_factor);
 
         let ctx = canvas.getContext('2d');
         let hat = hat_canvas.getContext('2d');
+        let hat_bg = hat_bg_canvas.getContext('2d');
         let head = head_canvas.getContext('2d');
 
         let skin = await loadImage(url);
@@ -72,38 +74,62 @@ module.exports = {
         let head_front = resize(removeTransparency(getPart(skin, 8, 8, 8, 8, 1)), scale * (hat_factor + 0.01));
         let head_right = resize(removeTransparency(getPart(skin, 0, 8, 8, 8, 1)), scale * (hat_factor + 0.01));
 
-        let head_top_overlay, head_front_overlay, head_right_overlay;
+        let head_top_overlay, head_front_overlay, head_right_overlay, head_back_overlay, head_bottom_overlay, head_left_overlay;
 
         if(hasTransparency(getPart(skin, 32, 0, 32, 32, 1))){
             // render head overlay
             head_top_overlay = resize(getPart(skin, 40, 0, 8, 8, 1), scale);
             head_front_overlay = resize(getPart(skin, 40, 8, 8, 8, 1), scale);
-            head_right_overlay =  resize(getPart(skin, 32, 8, 8, 8, 1), scale);
+            head_right_overlay = resize(getPart(skin, 32, 8, 8, 8, 1), scale);
+            head_back_overlay = resize(getPart(skin, 56, 8, 8, 8, 1), scale);
+            head_bottom_overlay = resize(getPart(skin, 48, 0, 8, 8, 1), scale);
+            head_left_overlay = resize(getPart(skin, 48, 8, 8, 8, 1), scale);
         }
 
+        let x = 0;
+        let y = 0;
+        let z = 0;
+
+        let z_offset = scale * 3;
+        let x_offset = scale * 2;
+
         if(head_top_overlay){
-            let x = 0;
-            let y = 0;
-            let z = 0;
+            // hat left
+            x = x_offset + 8 * scale;
+            y = 0;
+            z = z_offset - 8 * scale;
+            hat_bg.setTransform(1, skew_a, 0, skew_b, 0, 0);
+            hat_bg.drawImage(head_left_overlay, x + y, z - y - 0.5, head_left_overlay.width, head_left_overlay.height + 1);
 
-            let z_offset = scale * 3;
-            let x_offset = scale * 2;
+            // hat back
+            x = x_offset;
+            y = 0;
+            z = z_offset - 0.5;
+            hat_bg.setTransform(1, -skew_a, 0, skew_b, 0, skew_a);
+            hat_bg.drawImage(head_back_overlay, y + x, x + z, head_back_overlay.width, head_back_overlay.height);
 
-            // head top
+            // hat bottom
+            x = x_offset;
+            y = 0;
+            z = z_offset + 8 * scale;
+            hat_bg.setTransform(1, -skew_a, 1, skew_a, 0, 0);
+            hat_bg.drawImage(head_bottom_overlay, y - z, x + z, head_bottom_overlay.width, head_bottom_overlay.height + 1);
+
+            // hat top
             x = x_offset;
             y = -0.5;
             z = z_offset;
             hat.setTransform(1, -skew_a, 1, skew_a, 0, 0);
             hat.drawImage(head_top_overlay, y - z, x + z, head_top_overlay.width, head_top_overlay.height + 1);
 
-            // head front
+            // hat front
             x = x_offset + 8 * scale;
             y = 0;
             z = z_offset - 0.5;
             hat.setTransform(1, -skew_a, 0, skew_b, 0, skew_a);
             hat.drawImage(head_front_overlay, y + x, x + z, head_front_overlay.width, head_front_overlay.height);
 
-            // head right
+            // hat right
             x = x_offset;
             y = 0;
             z = z_offset;
@@ -112,13 +138,6 @@ module.exports = {
         }
 
         scale *= hat_factor;
-
-        let x = 0;
-        let y = 0;
-        let z = 0;
-
-        let z_offset = scale * 3;
-        let x_offset = scale * 2;
 
         // head top
         x = x_offset;
@@ -142,6 +161,7 @@ module.exports = {
         head.drawImage(head_right, x + y, z - y - 0.5, head_right.width, head_right.height + 1);
 
 
+        ctx.drawImage(hat_bg_canvas, 0, 0);
         ctx.drawImage(head_canvas, (scale * 20 - scale * 20 * hat_factor) / 2, (scale * 18.5 - scale * 18.5 * hat_factor) / 2);
         ctx.drawImage(hat_canvas, 0, 0);
 
