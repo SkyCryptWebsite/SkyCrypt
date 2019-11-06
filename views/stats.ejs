@@ -22,13 +22,10 @@ const isEnchanted = item => {
     if('texture_path' in item && item.texture_path.endsWith('.gif')) // disable enchanted overlay for gifs cause laggy
         return false;
 
-    if('display_name' in item && item.display_name.startsWith('Enchanted '))
-        return true;
-
     if('id' in item && [403, 384].includes(item.id))
         return true;
 
-    if('tag' in item && 'ExtraAttributes' in item.tag && 'enchantments' in item.tag.ExtraAttributes && Object.keys(item.tag.ExtraAttributes.enchantments).length > 0)
+    if('tag' in item && Array.isArray(item.tag.ench))
         return true;
 
     return false;
