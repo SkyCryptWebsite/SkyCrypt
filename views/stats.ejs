@@ -16,7 +16,41 @@
             return Math.floor(number / 1000 / 1000 * 10) / 10 + 'M';
         else
             return Math.ceil(number / 1000 / 1000 * 10) / 10 + 'M';
-}
+};
+
+const isEnchanted = item => {
+    if('texture_path' in item && item.texture_path.endsWith('.gif')) // disable enchanted overlay for gifs cause laggy
+        return false;
+
+    if('display_name' in item && item.display_name.startsWith('Enchanted '))
+        return true;
+
+    if('id' in item && [403, 384].includes(item.id))
+        return true;
+
+    if('tag' in item && 'ExtraAttributes' in item.tag && 'enchantments' in item.tag.ExtraAttributes && Object.keys(item.tag.ExtraAttributes.enchantments).length > 0)
+        return true;
+
+    return false;
+};
+
+const itemIcon = (item, classes) => { %>
+    <div
+        <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
+        class="<%= classes.join(" ") %> item-icon <% if(isEnchanted(item)){ %>is-enchanted <% } %> <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
+    </div>
+<% };
+
+const inventorySlot = item => { %>
+    <div class="inventory-slot">
+        <% if(Object.keys(item).length > 1){ %>
+        <div class="rich-item inventory-item" data-item-index="<%= item.item_index %>">
+            <% itemIcon(item, ['piece-icon']); %>
+            <% if(item.Count > 1){ %><div class="item-count"><%= item.Count %></div><% } %>
+        </div>
+        <% } %>
+    </div>
+<% };
 
 const skill_component = (skill, icon, level) => { %>
     <div class="skill">
@@ -29,7 +63,7 @@ const skill_component = (skill, icon, level) => { %>
             </div>
         </div>
     </div>
-<% } %>
+<% }; %>
 
 <!DOCTYPE html>
 <html>
@@ -37,8 +71,8 @@ const skill_component = (skill, icon, level) => { %>
         <title><%- calculated.display_name %> | SkyBlock Stats</title>
         <meta charset="utf-8">
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="/resources/css/index.css?v11">
-        <link rel="stylesheet" href="/resources/css/inventory.css?v4">
+        <link rel="stylesheet" href="/resources/css/index.css?v12">
+        <link rel="stylesheet" href="/resources/css/inventory.css?v5">
         <link rel="shortcut icon" href="https://visage.surgeplay.com/face/32/<%- calculated.uuid %>" type="image/png">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta property="og:image" content="https://visage.surgeplay.com/face/256/<%- calculated.uuid %>">
@@ -147,10 +181,7 @@ const skill_component = (skill, icon, level) => { %>
                                     <div class="piece-shine"></div>
                                 <% } %>
                                 <div class="piece-hover-area"></div>
-                                <div
-                                    <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
-                                    class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
-                                </div>
+                                <% itemIcon(item, ['piece-icon']); %>
                             </div>
                         <% }) %>
                     </div>
@@ -174,10 +205,7 @@ const skill_component = (skill, icon, level) => { %>
                                     <% } %>
                                     <div class="piece-hover-area"></div>
                                     <div class="select-weapon"></div>
-                                    <div
-                                        <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
-                                        class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
-                                    </div>
+                                    <% itemIcon(item, ['piece-icon']); %>
                                 </div>
                         <%
                             });
@@ -199,10 +227,7 @@ const skill_component = (skill, icon, level) => { %>
                                     <div class="piece-shine"></div>
                                 <% } %>
                                 <div class="piece-hover-area"></div>
-                                <div
-                                    <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
-                                    class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
-                                </div>
+                                <% itemIcon(item, ['piece-icon']); %>
                             </div>
                         <% }) %>
                     </div>
@@ -225,49 +250,21 @@ const skill_component = (skill, icon, level) => { %>
                         <div class="inventory-view current-inventory" data-inventory-type="inventory">
                             <% for(let i = 9; i < items.inventory.length; i++){ %>
                                 <% let item = items.inventory[i]; %>
-                                <div class="inventory-slot">
-                                    <% if(Object.keys(item).length > 1){ %>
-                                    <div class="rich-item inventory-item" data-item-index="<%= item.item_index %>">
-                                        <div
-                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
-                                            class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
-                                        </div>
-                                        <% if(item.Count > 1){ %><div class="item-count"><%= item.Count %></div><% } %>
-                                    </div>
-                                    <% } %>
-                                </div><% if((i + 1) % 9 == 0) { %><br><% } %>
+                                <%= inventorySlot(item); %>
+                                <% if((i + 1) % 9 == 0) { %><br><% } %>
                             <% } %>
                             <br>
                             <% for(let i = 0; i < 9; i++){ %>
                                 <% let item = items.inventory[i]; %>
-                                <div class="inventory-slot">
-                                    <% if(Object.keys(item).length > 1){ %>
-                                    <div class="rich-item inventory-item" data-item-index="<%= item.item_index %>">
-                                        <div
-                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
-                                            class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
-                                        </div>
-                                        <% if(item.Count > 1){ %><div class="item-count"><%= item.Count %></div><% } %>
-                                    </div>
-                                    <% } %>
-                                </div>
+                                <%= inventorySlot(item); %>
                             <% } %>
                         </div>
                         <% if(items.enderchest.length > 0){ %>
                         <div class="inventory-view" data-inventory-type="enderchest">
                             <% for(let i = 0; i < items.enderchest.length; i++){ %>
                                 <% let item = items.enderchest[i]; %>
-                                <div class="inventory-slot">
-                                    <% if(Object.keys(item).length > 1){ %>
-                                    <div class="rich-item inventory-item" data-item-index="<%= item.item_index %>">
-                                        <div
-                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
-                                            class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
-                                        </div>
-                                        <% if(item.Count > 1){ %><div class="item-count"><%= item.Count %></div><% } %>
-                                    </div>
-                                    <% } %>
-                                </div><% if((i + 1) % 9 == 0) { %><br><% } %>
+                                <%= inventorySlot(item); %>
+                                <% if((i + 1) % 9 == 0) { %><br><% } %>
                             <% } %>
                         </div>
                         <% } %>
@@ -275,17 +272,8 @@ const skill_component = (skill, icon, level) => { %>
                         <div class="inventory-view" data-inventory-type="talisman_bag">
                             <% for(let i = 0; i < Math.min(items.talisman_bag.length, 27); i++){ %>
                                 <% let item = items.talisman_bag[i]; %>
-                                <div class="inventory-slot">
-                                    <% if(Object.keys(item).length > 1){ %>
-                                    <div class="rich-item inventory-item" data-item-index="<%= item.item_index %>">
-                                        <div
-                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
-                                            class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
-                                        </div>
-                                        <% if(item.Count > 1){ %><div class="item-count"><%= item.Count %></div><% } %>
-                                    </div>
-                                    <% } %>
-                                </div><% if((i + 1) % 9 == 0) { %><br><% } %>
+                                <%= inventorySlot(item); %>
+                                <% if((i + 1) % 9 == 0) { %><br><% } %>
                             <% } %>
                         </div>
                         <% } %>
@@ -293,17 +281,8 @@ const skill_component = (skill, icon, level) => { %>
                         <div class="inventory-view" data-inventory-type="potion_bag">
                             <% for(let i = 0; i < Math.min(items.potion_bag.length, 27); i++){ %>
                                 <% let item = items.potion_bag[i]; %>
-                                <div class="inventory-slot">
-                                    <% if(Object.keys(item).length > 1){ %>
-                                    <div class="rich-item inventory-item" data-item-index="<%= item.item_index %>">
-                                        <div
-                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
-                                            class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
-                                        </div>
-                                        <% if(item.Count > 1){ %><div class="item-count"><%= item.Count %></div><% } %>
-                                    </div>
-                                    <% } %>
-                                </div><% if((i + 1) % 9 == 0) { %><br><% } %>
+                                <%= inventorySlot(item); %>
+                                <% if((i + 1) % 9 == 0) { %><br><% } %>
                             <% } %>
                         </div>
                         <% } %>
@@ -311,17 +290,8 @@ const skill_component = (skill, icon, level) => { %>
                         <div class="inventory-view" data-inventory-type="fishing_bag">
                             <% for(let i = 0; i < Math.min(items.fishing_bag.length, 27); i++){ %>
                                 <% let item = items.fishing_bag[i]; %>
-                                <div class="inventory-slot">
-                                    <% if(Object.keys(item).length > 1){ %>
-                                    <div class="rich-item inventory-item" data-item-index="<%= item.item_index %>">
-                                        <div
-                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
-                                            class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
-                                        </div>
-                                        <% if(item.Count > 1){ %><div class="item-count"><%= item.Count %></div><% } %>
-                                    </div>
-                                    <% } %>
-                                </div><% if((i + 1) % 9 == 0) { %><br><% } %>
+                                <%= inventorySlot(item); %>
+                                <% if((i + 1) % 9 == 0) { %><br><% } %>
                             <% } %>
                         </div>
                         <% } %>
@@ -329,17 +299,8 @@ const skill_component = (skill, icon, level) => { %>
                         <div class="inventory-view" data-inventory-type="quiver">
                             <% for(let i = 0; i < Math.min(items.quiver.length, 27); i++){ %>
                                 <% let item = items.quiver[i]; %>
-                                <div class="inventory-slot">
-                                    <% if(Object.keys(item).length > 1){ %>
-                                    <div class="rich-item inventory-item" data-item-index="<%= item.item_index %>">
-                                        <div
-                                            <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
-                                            class="piece-icon item-icon <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
-                                        </div>
-                                        <% if(item.Count > 1){ %><div class="item-count"><%= item.Count %></div><% } %>
-                                    </div>
-                                    <% } %>
-                                </div><% if((i + 1) % 9 == 0) { %><br><% } %>
+                                <%= inventorySlot(item); %>
+                                <% if((i + 1) % 9 == 0) { %><br><% } %>
                             <% } %>
                         </div>
                         <% } %>
@@ -509,6 +470,110 @@ const skill_component = (skill, icon, level) => { %>
                     }
                 });
             });
+
+            function getPart(src, x, y, width, height){
+                let dst = document.createElement('canvas');
+                dst.width = width;
+                dst.height = height;
+
+                let ctx = dst.getContext("2d");
+
+                // don't blur on resize
+                ctx.imageSmoothingEnabled = false;
+
+                ctx.drawImage(src, x, y, width, height, 0, 0, (width - src.width) / 2 + width, (height - src.height) / 2 + height);
+                return dst;
+            }
+
+            let enchantedOverlays = [];
+
+            [].forEach.call(document.querySelectorAll('.item-icon.is-enchanted'), function(element){
+                let size = 128;
+
+                let canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+
+                canvas.className = 'enchanted-overlay';
+
+                let ctx = canvas.getContext('2d');
+
+                let image = new Image(128, 128);
+                let src = window.getComputedStyle(element).backgroundImage.split('("').pop().split('")')[0];
+
+                if(src.endsWith('.gif') || src.includes('/head/'))
+                    return false;
+
+                image.onload = function(){
+                    console.log('loaded');
+
+                    if(element.classList.contains('custom-icon')){
+                        image = getPart(image, 0, 0, size, size);
+                    }else{
+                        let position = window.getComputedStyle(element).backgroundPosition.split(" ");
+                        let x = Math.abs(parseInt(position[0]));
+                        let y = Math.abs(parseInt(position[1]));
+                        image = getPart(image, x, y, size, size);
+                    }
+
+                    element.parentNode.appendChild(canvas);
+
+                    enchantedOverlays.push({
+                        src,
+                        offset: Math.random(),
+                        canvas,
+                        ctx,
+                        image
+                    });
+                };
+
+                image.src = src;
+            });
+
+            const enchantedGlintColors = [
+                '#9e43e3',
+                '#ab5ee6',
+                '#b875eb',
+                '#9e43e3'
+            ];
+
+            function updateEnchantedOverlays(){
+                enchantedOverlays.forEach(function(overlay, index){
+                    overlay.ctx.clearRect(0, 0, overlay.canvas.width, overlay.canvas.height);
+
+                    overlay.ctx.globalCompositeOperation = 'source-over';
+
+                    overlay.ctx.drawImage(overlay.image, 0, 0);
+
+                    overlay.ctx.globalCompositeOperation = 'source-in';
+
+                    let offset = +new Date() % 800 / 800 + overlay.offset;
+
+                    if(offset > 1)
+                        offset -= 1;
+
+                    let stops = [0, 0.4, 0.6, 1];
+
+                    let enchantedGlint = overlay.ctx.createLinearGradient(0, 0, 0, overlay.canvas.height);
+
+                    stops.forEach(function(stop, index){
+                        let _offset = stop - offset;
+
+                        if(_offset < 0)
+                            _offset = 1 - Math.abs(_offset);
+
+                        enchantedGlint.addColorStop(_offset, enchantedGlintColors[index]);
+                    });
+
+                    overlay.ctx.fillStyle = enchantedGlint;
+
+                    overlay.ctx.fillRect(0, 0, overlay.canvas.width, overlay.canvas.height);
+                });
+
+                window.requestAnimationFrame(updateEnchantedOverlays);
+            }
+
+            updateEnchantedOverlays();
 
             [].forEach.call(document.querySelectorAll('.inventory-tab'), function(element){
                 let type = element.getAttribute('data-inventory-type');

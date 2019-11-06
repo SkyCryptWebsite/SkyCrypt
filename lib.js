@@ -716,6 +716,9 @@ const bonus_stats = {
         },
         7: {
             health: 5
+        },
+        9: {
+            health: 6
         }
     },
 
@@ -723,11 +726,11 @@ const bonus_stats = {
         1: {
             crit_damage: 1
         },
-        6: {
+        5: {
             crit_damage: 2
         },
-        7: {
-            crit_chance: 1
+        9: {
+            crit_chance: 3
         }
     },
 
@@ -748,7 +751,7 @@ const bonus_stats = {
             crit_damage: 1
         },
         6: {
-            health: 3
+            // health: 3 (this one probably isn't being applied either)
         },
         7: {
             crit_damage: 2
