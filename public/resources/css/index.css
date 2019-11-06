@@ -842,7 +842,6 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     top: 50%;
     left: 50%;
     z-index: 20;
-    opacity: .25;
 }
 
 .custom-icon{

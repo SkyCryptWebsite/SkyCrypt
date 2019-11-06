@@ -516,19 +516,43 @@ const skill_component = (skill, icon, level) => { %>
                         image = getPart(image, x, y, size, size);
                     }
 
-                    element.parentNode.appendChild(canvas);
+                    ctx.globalAlpha = 1;
 
-                    enchantedOverlays.push({
-                        src,
-                        offset: Math.random(),
-                        canvas,
-                        ctx,
-                        image
+                    ctx.drawImage(image, 0, 0);
+
+                    ctx.globalAlpha = 0.25;
+                    ctx.globalCompositeOperation = 'source-atop';
+
+                    let enchantedGlint = ctx.createLinearGradient(0, 0, 0, canvas.height);
+
+                    enchantedGlintStops.forEach(function(stop, index){
+                        enchantedGlint.addColorStop(stop, enchantedGlintColors[index]);
                     });
+
+                    ctx.fillStyle = enchantedGlint;
+
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    if(window.innerWidth < 480){
+                        element.style.backgroundImage = 'url(' + canvas.toDataURL('image/png') + ')';
+                        element.classList.add('custom-icon');
+                    }else{
+                        element.parentNode.appendChild(canvas);
+
+                        enchantedOverlays.push({
+                            src,
+                            offset: Math.random(),
+                            canvas,
+                            ctx,
+                            image
+                        });
+                    }
                 };
 
                 image.src = src;
             });
+
+            const enchantedGlintStops = [0, 0.4, 0.6, 1];
 
             const enchantedGlintColors = [
                 '#9e43e3',
@@ -541,22 +565,22 @@ const skill_component = (skill, icon, level) => { %>
                 enchantedOverlays.forEach(function(overlay, index){
                     overlay.ctx.clearRect(0, 0, overlay.canvas.width, overlay.canvas.height);
 
+                    overlay.ctx.globalAlpha = 1;
                     overlay.ctx.globalCompositeOperation = 'source-over';
 
                     overlay.ctx.drawImage(overlay.image, 0, 0);
 
-                    overlay.ctx.globalCompositeOperation = 'source-in';
+                    overlay.ctx.globalAlpha = 0.25;
+                    overlay.ctx.globalCompositeOperation = 'source-atop';
 
                     let offset = +new Date() % 800 / 800 + overlay.offset;
 
                     if(offset > 1)
                         offset -= 1;
 
-                    let stops = [0, 0.4, 0.6, 1];
-
                     let enchantedGlint = overlay.ctx.createLinearGradient(0, 0, 0, overlay.canvas.height);
 
-                    stops.forEach(function(stop, index){
+                    enchantedGlintStops.forEach(function(stop, index){
                         let _offset = stop - offset;
 
                         if(_offset < 0)
@@ -573,7 +597,8 @@ const skill_component = (skill, icon, level) => { %>
                 window.requestAnimationFrame(updateEnchantedOverlays);
             }
 
-            updateEnchantedOverlays();
+            if(window.innerWidth >= 480) // don't animate on mobile
+                updateEnchantedOverlays();
 
             [].forEach.call(document.querySelectorAll('.inventory-tab'), function(element){
                 let type = element.getAttribute('data-inventory-type');
