@@ -949,7 +949,6 @@ const replacement_textures = {
     "Ender Bow": "/resources/img/textures/furfsky/ender_bow_standby.png",
     "Slime Bow": "/resources/img/textures/furfsky/slime_bow_standby.png",
     "Explosive Bow": "/resources/img/textures/furfsky/explosive_bow_standby.png",
-    "Slime Bow": "/resources/img/textures/furfsky/slime_standby.png",
     "Magma Bow": "/resources/img/textures/furfsky/magma_bow_standby.gif",
 
     "Challenging Rod": "/resources/img/textures/furfsky/challenging_rod.png",
