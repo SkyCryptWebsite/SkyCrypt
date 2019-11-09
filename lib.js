@@ -350,6 +350,7 @@ const leveling_xp = {
     50: 4000000
 };
 
+// XP required for each level of Runecrafting
 const runecrafting_xp = {
     1: 50,
     2: 100,
@@ -376,6 +377,17 @@ const runecrafting_xp = {
     23: 12200,
     24: 15300
 }
+
+const slayer_xp = {
+    1: 5,
+    2: 15,
+    3: 200,
+    4: 1000,
+    5: 5000,
+    6: 20000,
+    7: 100000,
+    8: 400000
+};
 
 // Player stats on a completely new profile
 const base_stats = {
@@ -949,7 +961,6 @@ const replacement_textures = {
     "Ender Bow": "/resources/img/textures/furfsky/ender_bow_standby.png",
     "Slime Bow": "/resources/img/textures/furfsky/slime_bow_standby.png",
     "Explosive Bow": "/resources/img/textures/furfsky/explosive_bow_standby.png",
-    "Slime Bow": "/resources/img/textures/furfsky/slime_standby.png",
     "Magma Bow": "/resources/img/textures/furfsky/magma_bow_standby.gif",
 
     "Challenging Rod": "/resources/img/textures/furfsky/challenging_rod.png",
@@ -966,10 +977,10 @@ const replacement_textures = {
     "Speedster Leggings": "/resources/img/textures/furfsky/speedster_legs.png",
     "Speedster Boots": "/resources/img/textures/furfsky/speedster_boots.png",
 
-    "Mushroom Helmet": "/resources/img/textures/furfsky/mushroom_helm.png",
-    "Mushroom Chestplate": "/resources/img/textures/furfsky/mushroom_chest.png",
-    "Mushroom Leggings": "/resources/img/textures/furfsky/mushroom_legs.png",
-    "Mushroom Boots": "/resources/img/textures/furfsky/mushroom_boots.png",
+    "Mushroom Helmet": "/resources/img/textures/furfsky/mush_helm.png",
+    "Mushroom Chestplate": "/resources/img/textures/furfsky/mush_chest.png",
+    "Mushroom Leggings": "/resources/img/textures/furfsky/mush_legs.png",
+    "Mushroom Boots": "/resources/img/textures/furfsky/mush_boots.png",
 
     "Skeleton's Helmet": "/resources/img/textures/furfsky/skeleton_helm.png",
     "Guardian Chestplate": "/resources/img/textures/furfsky/guardian_chest.png",
@@ -1390,6 +1401,17 @@ module.exports = {
         if(items.talismans.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(a.tag.ExtraAttributes.id)).length == 2){
             output.stats['defense'] += 5;
             output.stats['strength'] += 5;
+        }
+
+        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id == ('OBSIDIAN_CHESTPLATE')).length == 1){
+            let obsidian = 0;
+
+            for(let item of items.inventory){
+                if(item.id == 49)
+                    obsidian += item.Count;
+            }
+
+            output.stats['speed'] += Math.floor(obsidian / 20);
         }
 
         output.stats.effective_health = getEffectiveHealth(output.stats.health, output.stats.defense);
