@@ -62,28 +62,32 @@ header::after{
 
 #site_name{
     display: inline-block;
-    vertical-align: top;
+    vertical-align: middle;
     text-decoration: none;
     color: white;
 }
 
 #info_button{
-    vertical-align: top;
+    margin-left: 5px;
+    vertical-align: middle;
     display: inline-block;
-    width: 35px;
-    height: 45px;
-    background-image: url(/resources/img/icons/information.png);
-    background-size: 20px 20px;
     position: relative;
-    opacity: 0.8;
     cursor: pointer;
-    background-position: center center;
-    background-repeat: no-repeat;
     cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 13px;
+    background-color: rgba(255,255,255,0.7);
+    color: #A6145D;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 9999px;
+    line-height: normal;
 }
 
 #info_button:hover{
-    opacity: 1;
+    background-color: rgba(255,255,255,0.8);
 }
 
 #top_navigation{
@@ -386,6 +390,11 @@ html.no-transform #info_box.opened{
 
 #info_box .name{
     color: rgba(255,255,255,0.7);
+}
+
+#info_box .patron{
+    color: rgba(255,255,255,0.8);
+    font-weight: 500;
 }
 
 #stats_content{
@@ -1164,6 +1173,30 @@ html.no-webp #error_box_wrapper{
 
     header::after{
         top: 75px;
+    }
+
+    #info_button{
+        vertical-align: top;
+        display: inline-block;
+        width: 35px;
+        height: 45px;
+        background-image: url(/resources/img/icons/information.png);
+        background-size: 20px 20px;
+        position: relative;
+        opacity: 0.8;
+        cursor: pointer;
+        background-position: center center;
+        background-repeat: no-repeat;
+        cursor: pointer;
+        padding: 0;
+        color: transparent;
+        background-color: transparent;
+        margin: 0;
+    }
+
+    #info_button:hover{
+        opacity: 1;
+        background-color: transparent;
     }
 
     #top_navigation{
