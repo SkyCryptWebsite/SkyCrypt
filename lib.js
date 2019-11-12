@@ -45,10 +45,7 @@ function getLevelByXp(xp, runecrafting){
     if(level < maxLevel)
         xpForNext = Math.ceil(xp_table[level + 1]);
 
-    let progress = xpCurrent / xpForNext;
-
-    if(xpForNext == Infinity)
-        progress = 1;
+    let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
     return {
         xp,
@@ -1295,7 +1292,7 @@ module.exports = {
 
         output.fairy_bonus = Object.assign({}, fairyBonus);
 
-        output.fairy_souls = { collected: profile.fairy_souls_collected, total: 180, progress: profile.fairy_souls_collected / 180 };
+        output.fairy_souls = { collected: profile.fairy_souls_collected, total: 180, progress: Math.min(profile.fairy_souls_collected / 180, 1) };
 
         // Apply fairy soul bonus
         for(let stat in fairyBonus)
