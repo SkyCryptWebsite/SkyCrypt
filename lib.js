@@ -631,6 +631,12 @@ const bonus_stats = {
             defense: 1,
             strength: 1,
             speed: 0
+        },
+        185: {
+            health: 21,
+            defense: 1,
+            strength: 1,
+            speed: 0
         }
     },
 
