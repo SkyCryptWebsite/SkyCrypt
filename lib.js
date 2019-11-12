@@ -1288,11 +1288,11 @@ module.exports = {
         if(isNaN(profile.fairy_souls_collected))
             profile.fairy_souls_collected = 0;
 
-        let fairyBonus = getBonusStat(profile.fairy_souls_collected, 'fairy_souls', 180, 5);
+        let fairyBonus = getBonusStat(profile.fairy_souls_collected, 'fairy_souls', 185, 5);
 
         output.fairy_bonus = Object.assign({}, fairyBonus);
 
-        output.fairy_souls = { collected: profile.fairy_souls_collected, total: 180, progress: Math.min(profile.fairy_souls_collected / 180, 1) };
+        output.fairy_souls = { collected: profile.fairy_souls_collected, total: 185, progress: Math.min(profile.fairy_souls_collected / 185, 1) };
 
         // Apply fairy soul bonus
         for(let stat in fairyBonus)
