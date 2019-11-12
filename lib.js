@@ -748,19 +748,19 @@ const bonus_stats = {
             speed: 1
         },
         2: {
-            //health: 2 (bonus health doesn't seem to be applied ingame)
+            health: 2
         },
         3: {
             speed: 1
         },
         4: {
-            //health: 2 (this one probably isn't being applied either)
+            health: 2
         },
         5: {
             crit_damage: 1
         },
         6: {
-            // health: 3 (this one probably isn't being applied either)
+            health: 3
         },
         7: {
             crit_damage: 2
