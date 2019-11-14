@@ -1267,6 +1267,14 @@ module.exports = {
             || (id == 'CANDY_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'CANDY_ARTIFACT' || getId(a) == 'CANDY_RING')).length > 0)
             || (id == 'INTIMIDATION_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'INTIMIDATION_ARTIFACT').length > 0)
             || (id == 'INTIMIDATION_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'INTIMIDATION_ARTIFACT' || getId(a) == 'INTIMIDATION_RING')).length > 0)
+            || (id == 'SPIDER_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'SPIDER_ARTIFACT').length > 0)
+            || (id == 'SPIDER_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'SPIDER_ARTIFACT' || getId(a) == 'SPIDER_RING')).length > 0)
+            || (id == 'RED_CLAW_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'RED_CLAW_ARTIFACT').length > 0)
+            || (id == 'RED_CLAW_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'RED_CLAW_ARTIFACT' || getId(a) == 'RED_CLAW_RING')).length > 0)
+            || (id == 'HUNTER_TALISMAN' && talismans.filter(a => !a.isInactive && getId(a) == 'HUNTER_RING').length > 0)
+            || (id == 'ZOMBIE_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'ZOMBIE_ARTIFACT').length > 0)
+            || (id == 'ZOMBIE_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'ZOMBIE_ARTIFACT' || getId(a) == 'ZOMBIE_RING')).length > 0)
+            || (id == 'HEALING_TALISMAN' && talismans.filter(a => !a.isInactive && getId(a) == 'HEALING_RING').length > 0)
             )
                 talisman.isInactive = true;
         }
