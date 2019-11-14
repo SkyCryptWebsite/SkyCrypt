@@ -90,6 +90,7 @@ const skill_component = (skill, icon, level) => { %>
             <div class="item-name">
                 <div></div><span></span><div class="close-lore"></div></div>
             <div class="item-lore"></div>
+            <div class="backpack-contents"></div>
         </div>
         <div id="stats_display">
             <div id="player_model" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
@@ -318,6 +319,19 @@ const skill_component = (skill, icon, level) => { %>
 
             history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name);
 
+            function isEnchanted(item){
+                if('texture_path' in item && item.texture_path.endsWith('.gif')) // disable enchanted overlay for gifs cause laggy
+                    return false;
+
+                if('id' in item && [403, 384].includes(item.id))
+                    return true;
+
+                if('tag' in item && Array.isArray(item.tag.ench))
+                    return true;
+
+                return false;
+            };
+
             function fillLore(element){
                 let item = all_items.filter(a => a.item_index == Number(element.getAttribute('data-item-index')));
 
@@ -340,6 +354,46 @@ const skill_component = (skill, icon, level) => { %>
                 }
 
                 itemLore.innerHTML = item.lore || '';
+
+                backpackContents.innerHTML = '';
+
+                if(Array.isArray(item.containsItems)){
+                    item.containsItems.forEach((backpackItem, index) => {
+                        let inventorySlot = document.createElement('div');
+                        inventorySlot.className = 'inventory-slot backpack-slot';
+
+                        if(backpackItem.id){
+                            let inventoryItemIcon = document.createElement('div');
+                            let inventoryItemCount = document.createElement('div');
+
+                            inventoryItemIcon.className = 'piece-icon item-icon icon-' + backpackItem.id + '_' + backpackItem.Damage;
+
+                            if(backpackItem.texture_path){
+                                inventoryItemIcon.className += ' custom-icon';
+                                inventoryItemIcon.style.backgroundImage = 'url(' + backpackItem.texture_path + ')';
+                            }
+
+                            inventoryItemCount.className = 'item-count';
+                            inventoryItemCount.innerHTML = backpackItem.Count;
+
+                            let inventoryItem = document.createElement('div');
+
+                            inventoryItem.className = 'inventory-item';
+
+                            inventoryItem.appendChild(inventoryItemIcon);
+
+                            if(backpackItem.Count > 1)
+                                inventoryItem.appendChild(inventoryItemCount);
+
+                            inventorySlot.appendChild(inventoryItem);
+                        }
+
+                        backpackContents.appendChild(inventorySlot);
+
+                        if(index >= 8 && (index + 1) % 9 == 0)
+                            backpackContents.appendChild(document.createElement("br"));
+                    });
+                }
             }
 
             function showLore(element, _resize){
@@ -621,6 +675,7 @@ const skill_component = (skill, icon, level) => { %>
             const itemIcon = itemName.querySelector('div:first-child');
             const itemNameContent = itemName.querySelector('span');
             const itemLore = statsContent.querySelector('.item-lore');
+            const backpackContents = statsContent.querySelector('.backpack-contents');
 
             [].forEach.call(document.querySelectorAll('.rich-item'), function(element){
                 element.addEventListener('mouseenter', function(e){
