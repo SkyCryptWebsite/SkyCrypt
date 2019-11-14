@@ -230,6 +230,7 @@ async function getItems(base64){
         }
 
         let lore = lore_raw ? lore_raw.map(a => a = module.exports.getRawLore(a)) : [];
+
         let rarity, item_type;
 
         if(lore.length > 0){
@@ -287,6 +288,23 @@ async function getItems(base64){
                         break;
                 }
             });
+
+            // Apply Speed Talisman speed bonus
+            if(objectPath.has(item, 'tag.ExtraAttributes.id') && item.tag.ExtraAttributes.id == 'SPEED_TALISMAN'){
+                lore.forEach(line => {
+                    if(line.startsWith('Gives')){
+                        let split = line.split("Gives +");
+
+                        if(split.length < 2)
+                            return;
+
+                        let speed = parseInt(split[1]);
+
+                        if(!isNaN(speed))
+                            item.stats.speed = speed;
+                    }
+                })
+            }
         }
     }
 
