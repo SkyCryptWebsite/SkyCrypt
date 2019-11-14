@@ -1275,6 +1275,8 @@ module.exports = {
             || (id == 'ZOMBIE_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'ZOMBIE_ARTIFACT').length > 0)
             || (id == 'ZOMBIE_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'ZOMBIE_ARTIFACT' || getId(a) == 'ZOMBIE_RING')).length > 0)
             || (id == 'HEALING_TALISMAN' && talismans.filter(a => !a.isInactive && getId(a) == 'HEALING_RING').length > 0)
+            || (id == 'BAT_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'BAT_ARTIFACT').length > 0)
+            || (id == 'BAT_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'BAT_ARTIFACT' || getId(a) == 'BAT_RING')).length > 0)
             )
                 talisman.isInactive = true;
         }
