@@ -333,6 +333,7 @@ const skill_component = (skill, icon, level) => { %>
             };
 
             let currentBackpack;
+            let backpackEnchantedIndex = null;
 
             function showBackpack(item){
                 document.querySelector('.current-inventory').classList.remove('current-inventory');
@@ -389,6 +390,8 @@ const skill_component = (skill, icon, level) => { %>
                 });
 
                 document.querySelector('#inventory_container').appendChild(inventoryView);
+
+                backpackEnchantedIndex = enchantedOverlays.length;
 
                 [].forEach.call(inventoryView.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
             }
@@ -761,6 +764,11 @@ const skill_component = (skill, icon, level) => { %>
                     let currentInventory = document.querySelector('.inventory-view[data-inventory-type=' + type + ']');
 
                     visibleInventory.classList.remove('current-inventory');
+
+                    if(backpackEnchantedIndex !== null){
+                        enchantedOverlays.splice(backpackEnchantedIndex);
+                        backpackEnchantedIndex = null;
+                    }
 
                     if(visibleInventory.getAttribute('data-inventory-type') == 'backpack')
                         document.querySelector('#inventory_container').removeChild(visibleInventory);
