@@ -973,11 +973,53 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 
 .backpack-contents{
     white-space: nowrap;
+    position: relative;
+    margin-bottom: 5px;
+}
+
+.backpack-contents.contains-backpack{
+    min-height: 60px;
+}
+
+.view-backpack{
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    bottom: -10px;
+    opacity: 0;
+    background-color: rgba(0,0,0,0.4);
+    color: white;
+    transition: opacity .2s;
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 22px;
+    font-weight: 500;
+    text-shadow: 0px 0px 5px rgba(0,0,0,0.6);
+}
+
+.backpack-contents:hover .view-backpack{
+    opacity: 1;
+}
+
+.view-backpack span:nth-child(3){
+    font-size: 11.5px;
+}
+
+.view-backpack div{
+    left: 0;
+    right: 0;
+    text-align: center;
+    vertical-align: middle;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .inventory-slot.backpack-slot{
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
+    margin: 0;
 }
 
 .backpack-slot .piece-icon{
@@ -1510,5 +1552,12 @@ html.no-webp #error_box_wrapper{
         left: 10px;
         margin-left: 0;
         margin-top: 115px;
+    }
+}
+
+@media (max-width: 400px){
+    .inventory-slot.backpack-slot{
+        width: calc((100vw - 40px) / 9 - 5px);
+        height: calc((100vw - 40px) / 9 - 5px);
     }
 }
