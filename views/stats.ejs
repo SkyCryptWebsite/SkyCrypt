@@ -68,7 +68,7 @@ const skill_component = (skill, icon, level) => { %>
         <title><%- calculated.display_name %> | SkyBlock Stats</title>
         <meta charset="utf-8">
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="/resources/css/index.css?v13">
+        <link rel="stylesheet" href="/resources/css/index.css?v14">
         <link rel="stylesheet" href="/resources/css/inventory.css?v5">
         <link rel="shortcut icon" href="https://visage.surgeplay.com/face/32/<%- calculated.uuid %>" type="image/png">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -90,6 +90,7 @@ const skill_component = (skill, icon, level) => { %>
             <div class="item-name">
                 <div></div><span></span><div class="close-lore"></div></div>
             <div class="item-lore"></div>
+            <div class="backpack-contents"></div>
         </div>
         <div id="stats_display">
             <div id="player_model" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
@@ -318,15 +319,101 @@ const skill_component = (skill, icon, level) => { %>
 
             history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name);
 
+            function isEnchanted(item){
+                if('texture_path' in item && item.texture_path.endsWith('.gif')) // disable enchanted overlay for gifs cause laggy
+                    return false;
+
+                if('id' in item && [403, 384].includes(item.id))
+                    return true;
+
+                if('tag' in item && Array.isArray(item.tag.ench))
+                    return true;
+
+                return false;
+            };
+
+            let currentBackpack;
+            let backpackEnchantedIndex = null;
+
+            function showBackpack(item){
+                document.querySelector('.current-inventory').classList.remove('current-inventory');
+                document.querySelector('.inventory-tab.active-inventory').classList.remove('active-inventory');
+
+                let inventoryView = document.createElement('div');
+                inventoryView.className = 'inventory-view current-inventory processed';
+                inventoryView.setAttribute('data-inventory-type', 'backpack');
+
+                currentBackpack = item;
+
+                item.containsItems.forEach((backpackItem, index) => {
+                    let inventorySlot = document.createElement('div');
+                    inventorySlot.className = 'inventory-slot';
+
+                    if(backpackItem.id){
+                        let inventoryItemIcon = document.createElement('div');
+                        let inventoryItemCount = document.createElement('div');
+
+                        inventoryItemIcon.className = 'piece-icon item-icon icon-' + backpackItem.id + '_' + backpackItem.Damage;
+
+                        if(backpackItem.texture_path){
+                            inventoryItemIcon.className += ' custom-icon';
+                            inventoryItemIcon.style.backgroundImage = 'url(' + backpackItem.texture_path + ')';
+                        }
+
+                        if(isEnchanted(backpackItem))
+                            inventoryItemIcon.classList.add('is-enchanted');
+
+                        inventoryItemCount.className = 'item-count';
+                        inventoryItemCount.innerHTML = backpackItem.Count;
+
+                        let inventoryItem = document.createElement('div');
+
+                        bindLoreEvents(inventoryItem);
+
+                        inventoryItem.className = 'rich-item inventory-item';
+                        inventoryItem.setAttribute('data-backpack-item-index', index);
+
+                        inventoryItem.appendChild(inventoryItemIcon);
+
+                        if(backpackItem.Count > 1)
+                            inventoryItem.appendChild(inventoryItemCount);
+
+                        inventorySlot.appendChild(inventoryItem);
+                    }
+
+                    inventoryView.appendChild(inventorySlot);
+
+                    inventoryView.appendChild(document.createTextNode(" "));
+
+                    if((index + 1) % 9 == 0)
+                        inventoryView.appendChild(document.createElement("br"));
+                });
+
+                document.querySelector('#inventory_container').appendChild(inventoryView);
+
+                backpackEnchantedIndex = enchantedOverlays.length;
+
+                [].forEach.call(inventoryView.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
+            }
+
             function fillLore(element){
-                let item = all_items.filter(a => a.item_index == Number(element.getAttribute('data-item-index')));
+                let item = [];
+
+                if(element.hasAttribute('data-item-index'))
+                    item = all_items.filter(a => a.item_index == Number(element.getAttribute('data-item-index')));
+                else if(element.hasAttribute('data-backpack-item-index'))
+                    item = [currentBackpack.containsItems[Number(element.getAttribute('data-backpack-item-index'))]];
 
                 if(item.length == 0)
                     return;
 
                 item = item[0];
 
-                statsContent.setAttribute("data-item-index", item.item_index);
+                if(element.hasAttribute('data-item-index'))
+                    statsContent.setAttribute("data-item-index", item.item_index);
+                else if(element.hasAttribute('data-backpack-item-index'))
+                    statsContent.setAttribute("data-backpack-item-index", element.getAttribute('data-backpack-item-index'));
+
                 itemName.className = 'item-name ' + 'piece-' + (item.rarity || 'common') + '-bg';
                 itemNameContent.innerHTML = item.display_name || 'null';
 
@@ -340,6 +427,67 @@ const skill_component = (skill, icon, level) => { %>
                 }
 
                 itemLore.innerHTML = item.lore || '';
+
+                backpackContents.innerHTML = '';
+
+                if(Array.isArray(item.containsItems)){
+                    backpackContents.classList.add('contains-backpack');
+
+                    item.containsItems.forEach((backpackItem, index) => {
+                        let inventorySlot = document.createElement('div');
+                        inventorySlot.className = 'inventory-slot backpack-slot';
+
+                        if(backpackItem.id){
+                            let inventoryItemIcon = document.createElement('div');
+                            let inventoryItemCount = document.createElement('div');
+
+                            inventoryItemIcon.className = 'piece-icon item-icon icon-' + backpackItem.id + '_' + backpackItem.Damage;
+
+                            if(backpackItem.texture_path){
+                                inventoryItemIcon.className += ' custom-icon';
+                                inventoryItemIcon.style.backgroundImage = 'url(' + backpackItem.texture_path + ')';
+                            }
+
+                            inventoryItemCount.className = 'item-count';
+                            inventoryItemCount.innerHTML = backpackItem.Count;
+
+                            let inventoryItem = document.createElement('div');
+
+                            inventoryItem.className = 'inventory-item';
+
+                            inventoryItem.appendChild(inventoryItemIcon);
+
+                            if(backpackItem.Count > 1)
+                                inventoryItem.appendChild(inventoryItemCount);
+
+                            inventorySlot.appendChild(inventoryItem);
+                        }
+
+                        backpackContents.appendChild(inventorySlot);
+
+                        backpackContents.appendChild(document.createTextNode(" "));
+
+                        if((index + 1) % 9 == 0)
+                            backpackContents.appendChild(document.createElement("br"));
+                    });
+
+                    let viewBackpack = document.createElement('div');
+                    viewBackpack.classList = 'view-backpack';
+
+                    let viewBackpackText = document.createElement('div');
+                    viewBackpackText.innerHTML = '<span>View Backpack</span><br><span>(Hold CTRL while clicking backpack to immediately open)</span>';
+
+                    viewBackpack.appendChild(viewBackpackText);
+
+                    viewBackpack.addEventListener('click', function(){
+                        showBackpack(item);
+                        closeLore();
+                    });
+
+                    backpackContents.appendChild(viewBackpack);
+                }else{
+                    backpackContents.classList.remove('contains-backpack');
+                }
             }
 
             function showLore(element, _resize){
@@ -484,7 +632,7 @@ const skill_component = (skill, icon, level) => { %>
 
             let enchantedOverlays = [];
 
-            [].forEach.call(document.querySelectorAll('.item-icon.is-enchanted'), function(element){
+            function handleEnchanted(element){
                 let size = 128;
 
                 let canvas = document.createElement('canvas');
@@ -502,8 +650,6 @@ const skill_component = (skill, icon, level) => { %>
                     return false;
 
                 image.onload = function(){
-                    console.log('loaded');
-
                     if(element.classList.contains('custom-icon')){
                         image = getPart(image, 0, 0, size, size);
                     }else{
@@ -547,7 +693,9 @@ const skill_component = (skill, icon, level) => { %>
                 };
 
                 image.src = src;
-            });
+            }
+
+            [].forEach.call(document.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
 
             const enchantedGlintStops = [0, 0.4, 0.6, 1];
 
@@ -604,12 +752,27 @@ const skill_component = (skill, icon, level) => { %>
                     if(element.classList.contains('active-inventory'))
                         return;
 
-                    document.querySelector('.inventory-tab.active-inventory').classList.remove('active-inventory');
+                    let activeInventory = document.querySelector('.inventory-tab.active-inventory');
+
+                    let visibleInventory = document.querySelector('.inventory-view.current-inventory');
+
+                    if(activeInventory)
+                        activeInventory.classList.remove('active-inventory');
+
                     element.classList.add('active-inventory');
 
                     let currentInventory = document.querySelector('.inventory-view[data-inventory-type=' + type + ']');
 
-                    document.querySelector('.inventory-view.current-inventory').classList.remove('current-inventory');
+                    visibleInventory.classList.remove('current-inventory');
+
+                    if(backpackEnchantedIndex !== null){
+                        enchantedOverlays.splice(backpackEnchantedIndex);
+                        backpackEnchantedIndex = null;
+                    }
+
+                    if(visibleInventory.getAttribute('data-inventory-type') == 'backpack')
+                        document.querySelector('#inventory_container').removeChild(visibleInventory);
+
                     currentInventory.classList.add('current-inventory');
 
                     inventoryContainer.style.height = currentInventory.getAttribute('data-height');
@@ -621,8 +784,9 @@ const skill_component = (skill, icon, level) => { %>
             const itemIcon = itemName.querySelector('div:first-child');
             const itemNameContent = itemName.querySelector('span');
             const itemLore = statsContent.querySelector('.item-lore');
+            const backpackContents = statsContent.querySelector('.backpack-contents');
 
-            [].forEach.call(document.querySelectorAll('.rich-item'), function(element){
+            function bindLoreEvents(element){
                 element.addEventListener('mouseenter', function(e){
                     fillLore(element, false);
                     statsContent.classList.add('show-stats');
@@ -649,18 +813,30 @@ const skill_component = (skill, icon, level) => { %>
 
                 element.addEventListener('click', function(e){
                     if(!e.target.classList.contains('select-weapon')){
-                        if(statsContent.classList.contains('sticky-stats')){
-                            dimmer.classList.remove('show-dimmer');
-                            element.blur();
-                            element.classList.remove('sticky-stats');
-                            statsContent.classList.remove('sticky-stats')
+                        let itemIndex = Number(element.getAttribute('data-item-index'));
+                        let item = all_items.filter(a => a.item_index == itemIndex);
+
+                        if(item.length > 0)
+                            item = item[0];
+
+                        if(e.ctrlKey && item && Array.isArray(item.containsItems)){
+                            showBackpack(item);
                         }else{
-                            showLore(element, false);
-                            fillLore(element);
+                            if(statsContent.classList.contains('sticky-stats')){
+                                dimmer.classList.remove('show-dimmer');
+                                element.blur();
+                                element.classList.remove('sticky-stats');
+                                statsContent.classList.remove('sticky-stats')
+                            }else{
+                                showLore(element, false);
+                                fillLore(element);
+                            }
                         }
                     }
                 });
-            });
+            }
+
+            [].forEach.call(document.querySelectorAll('.rich-item'), bindLoreEvents);
 
             let enableApiPlayer = document.querySelector('#enable_api');
 

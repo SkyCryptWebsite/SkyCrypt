@@ -133,7 +133,7 @@ async function getItems(base64){
     let items = data.i;
 
     // Check backpack contents and add them to the list of items
-    for(let item of items){
+    for(let [index, item] of items.entries()){
         if(objectPath.has(item, 'tag.display.Name') && (item.tag.display.Name.endsWith('Backpack') || item.tag.display.Name.endsWith('Itchy New Year Cake Bag'))){
 
             let keys = Object.keys(item.tag.ExtraAttributes);
@@ -150,7 +150,13 @@ async function getItems(base64){
 
             let backpackContents = await getBackpackContents(backpackData);
 
-            item.containsItems = backpackContents;
+            backpackContents.forEach(backpackItem => {
+                backpackItem.backpackIndex = index;
+            });
+
+            item.containsItems = [];
+
+            items.push(...backpackContents);
         }
     }
 
@@ -307,6 +313,14 @@ async function getItems(base64){
             }
         }
     }
+
+    for(let item of items){
+        if(item.inBackpack){
+            items[item.backpackIndex].containsItems.push(Object.assign({}, item));
+        }
+    }
+
+    items = items.filter(a => !a.inBackpack);
 
     return items;
 }
