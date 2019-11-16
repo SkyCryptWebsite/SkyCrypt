@@ -1,13 +1,13 @@
 
 .item-icon {
-  background-image: url('/resources/img/inventory/items.webp?v6');
+  background-image: url('/resources/img/inventory/items.webp?v5');
   width: 128px;
   height: 128px;
   background-position: -128px -0px;
 }
 
 html.no-webp .item-icon {
-  background-image: url('/resources/img/inventory/items.png?v6');
+  background-image: url('/resources/img/inventory/items.png?v5');
 }
 
 .icon-0 {
@@ -16,7 +16,7 @@ html.no-webp .item-icon {
   height: 128px;
 }
 .icon-103_0 {
-  background-position: -1152px -2304px;
+  background-position: -1024px -2304px;
   width: 128px;
   height: 128px;
 }
@@ -1761,12 +1761,12 @@ html.no-webp .item-icon {
   height: 128px;
 }
 .icon-336_0 {
-  background-position: -1024px -2304px;
+  background-position: -0px -0px;
   width: 128px;
   height: 128px;
 }
 .icon-337_0 {
-  background-position: -0px -0px;
+  background-position: -1152px -2304px;
   width: 128px;
   height: 128px;
 }
@@ -3270,253 +3270,248 @@ html.no-webp .item-icon {
   width: 128px;
   height: 128px;
 }
-.icon-65_0 {
+.icon-6_5 {
   background-position: -256px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-6_5 {
+.icon-66_0 {
   background-position: -384px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-66_0 {
+.icon-67_0 {
   background-position: -512px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-67_0 {
+.icon-69_0 {
   background-position: -640px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-69_0 {
+.icon-70_0 {
   background-position: -768px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-70_0 {
+.icon-7_0 {
   background-position: -896px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-7_0 {
+.icon-72_0 {
   background-position: -1024px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-72_0 {
+.icon-73_0 {
   background-position: -1152px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-73_0 {
+.icon-76_0 {
   background-position: -1280px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-76_0 {
+.icon-77_0 {
   background-position: -1408px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-77_0 {
+.icon-78_0 {
   background-position: -1536px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-78_0 {
+.icon-79_0 {
   background-position: -1664px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-79_0 {
+.icon-80_0 {
   background-position: -1792px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-80_0 {
+.icon-81_0 {
   background-position: -1920px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-81_0 {
+.icon-82_0 {
   background-position: -2048px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-82_0 {
+.icon-84_0 {
   background-position: -2176px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-84_0 {
+.icon-85_0 {
   background-position: -2304px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-85_0 {
+.icon-86_0 {
   background-position: -2432px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-86_0 {
+.icon-87_0 {
   background-position: -2560px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-87_0 {
+.icon-88_0 {
   background-position: -2688px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-88_0 {
+.icon-89_0 {
   background-position: -2816px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-89_0 {
+.icon-91_0 {
   background-position: -2944px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-91_0 {
+.icon-95_0 {
   background-position: -3072px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-95_0 {
+.icon-95_10 {
   background-position: -3200px -3200px;
   width: 128px;
   height: 128px;
 }
-.icon-95_10 {
+.icon-95_11 {
   background-position: -3328px -0px;
   width: 128px;
   height: 128px;
 }
-.icon-95_11 {
+.icon-95_12 {
   background-position: -3328px -128px;
   width: 128px;
   height: 128px;
 }
-.icon-95_12 {
+.icon-95_13 {
   background-position: -3328px -256px;
   width: 128px;
   height: 128px;
 }
-.icon-95_13 {
+.icon-95_14 {
   background-position: -3328px -384px;
   width: 128px;
   height: 128px;
 }
-.icon-95_14 {
+.icon-95_15 {
   background-position: -3328px -512px;
   width: 128px;
   height: 128px;
 }
-.icon-95_15 {
+.icon-95_1 {
   background-position: -3328px -640px;
   width: 128px;
   height: 128px;
 }
-.icon-95_1 {
+.icon-95_2 {
   background-position: -3328px -768px;
   width: 128px;
   height: 128px;
 }
-.icon-95_2 {
+.icon-95_3 {
   background-position: -3328px -896px;
   width: 128px;
   height: 128px;
 }
-.icon-95_3 {
+.icon-95_4 {
   background-position: -3328px -1024px;
   width: 128px;
   height: 128px;
 }
-.icon-95_4 {
+.icon-95_5 {
   background-position: -3328px -1152px;
   width: 128px;
   height: 128px;
 }
-.icon-95_5 {
+.icon-95_6 {
   background-position: -3328px -1280px;
   width: 128px;
   height: 128px;
 }
-.icon-95_6 {
+.icon-95_7 {
   background-position: -3328px -1408px;
   width: 128px;
   height: 128px;
 }
-.icon-95_7 {
+.icon-95_8 {
   background-position: -3328px -1536px;
   width: 128px;
   height: 128px;
 }
-.icon-95_8 {
+.icon-95_9 {
   background-position: -3328px -1664px;
   width: 128px;
   height: 128px;
 }
-.icon-95_9 {
+.icon-96_0 {
   background-position: -3328px -1792px;
   width: 128px;
   height: 128px;
 }
-.icon-96_0 {
+.icon-97_0 {
   background-position: -3328px -1920px;
   width: 128px;
   height: 128px;
 }
-.icon-97_0 {
+.icon-97_1 {
   background-position: -3328px -2048px;
   width: 128px;
   height: 128px;
 }
-.icon-97_1 {
+.icon-97_2 {
   background-position: -3328px -2176px;
   width: 128px;
   height: 128px;
 }
-.icon-97_2 {
+.icon-97_3 {
   background-position: -3328px -2304px;
   width: 128px;
   height: 128px;
 }
-.icon-97_3 {
+.icon-97_4 {
   background-position: -3328px -2432px;
   width: 128px;
   height: 128px;
 }
-.icon-97_4 {
+.icon-97_5 {
   background-position: -3328px -2560px;
   width: 128px;
   height: 128px;
 }
-.icon-97_5 {
+.icon-98_0 {
   background-position: -3328px -2688px;
   width: 128px;
   height: 128px;
 }
-.icon-98_0 {
+.icon-98_1 {
   background-position: -3328px -2816px;
   width: 128px;
   height: 128px;
 }
-.icon-98_1 {
+.icon-98_2 {
   background-position: -3328px -2944px;
   width: 128px;
   height: 128px;
 }
-.icon-98_2 {
-  background-position: -3328px -3072px;
-  width: 128px;
-  height: 128px;
-}
 .icon-98_3 {
-  background-position: -3328px -3200px;
+  background-position: -3328px -3072px;
   width: 128px;
   height: 128px;
 }
