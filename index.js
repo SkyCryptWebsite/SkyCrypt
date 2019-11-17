@@ -95,8 +95,6 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 app.get('/stats/:player/:profile?', async (req, res, next) => {
-    res.write(await renderFile('includes/resources.ejs'));
-
     let response;
 
     let active_profile = db
@@ -205,6 +203,8 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
             return false;
         }
 
+        res.write(await renderFile('includes/resources.ejs'));
+
         let highest = 0;
         let profile_id;
 
@@ -252,7 +252,7 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
 
         if(objectPath.has(profile, 'banking.balance'))
             calculated.bank = profile.banking.balance;
-            
+
         calculated.uuid = data.player.uuid;
         calculated.display_name = data.player.displayname;
         calculated.profile = skyblock_profiles[profile_id];
