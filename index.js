@@ -1,5 +1,4 @@
 const express = require('express');
-const cookieParser = require('cookie-parser')
 const axios = require('axios');
 const fs = require('fs-extra');
 const path = require('path');
@@ -91,9 +90,6 @@ async function uuidToUsername(uuid){
 const app = express();
 const port = 32464;
 
-app.set('view engine', 'ejs');
-
-app.use(cookieParser());
 app.use(express.static('public', { maxAge: CACHE_DURATION }));
 
 app.get('/stats/:player/:profile?', async (req, res, next) => {
