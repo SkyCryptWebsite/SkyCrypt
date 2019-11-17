@@ -19,6 +19,8 @@ const db = low(adapter);
 
 const renderFile = util.promisify(ejs.renderFile);
 
+const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
+
 db
 .defaults({ usernames: [], profiles: [] })
 .write();
@@ -92,7 +94,7 @@ const port = 32464;
 app.set('view engine', 'ejs');
 
 app.use(cookieParser());
-app.use(express.static('public'));
+app.use(express.static('public', { maxAge: CACHE_DURATION }));
 
 app.get('/stats/:player/:profile?', async (req, res, next) => {
     res.write(await renderFile('includes/resources.ejs', { page: 'stats' }));
@@ -323,6 +325,7 @@ app.get('/head/:uuid', async (req, res) => {
         });
     }
 
+    res.setHeader('Cache-Control', `public, max-age=${CACHE_DURATION}`);
     res.contentType('image/png');
     res.send(file);
 });
@@ -354,6 +357,7 @@ app.get('/leather/:type/:color', async (req, res) => {
         });
     }
 
+    res.setHeader('Cache-Control', `public, max-age=${CACHE_DURATION}`);
     res.contentType('image/png');
     res.send(file);
 });
