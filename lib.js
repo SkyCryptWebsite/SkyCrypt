@@ -1348,6 +1348,8 @@ module.exports = {
 
         // Apply skill bonuses
         if('experience_skill_farming' in profile){
+            let average_level = 0;
+
             let levels = {
                 farming: getLevelByXp(profile.experience_skill_farming),
                 mining: getLevelByXp(profile.experience_skill_mining),
@@ -1363,6 +1365,8 @@ module.exports = {
             output.skill_bonus = {};
 
             for(let skill in levels){
+                average_level += levels[skill].level + levels[skill].progress;
+
                 let skillBonus = getBonusStat(levels[skill].level, `${skill}_skill`, 50, 1);
 
                 output.skill_bonus[skill] = Object.assign({}, skillBonus);
@@ -1370,6 +1374,8 @@ module.exports = {
                 for(let stat in skillBonus)
                     output.stats[stat] += skillBonus[stat];
             }
+
+            output.average_level = +(average_level / Object.keys(levels).length).toFixed(1);
 
             output.levels = Object.assign({}, levels);
         }

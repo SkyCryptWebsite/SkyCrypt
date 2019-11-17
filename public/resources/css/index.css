@@ -580,17 +580,33 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     background-color: rgba(0,0,0,0.3);
 }
 
-#last_updated{
-    margin-top: 20px;
+#additional_stats_container{
+    margin-top: 25px;
     font-size: 12px;
     font-weight: 600;
+    white-space: nowrap;
 }
 
-#last_updated::before{
-    content: "Last Updated: ";
-    text-transform: uppercase;
+.additional-stat{
+    display: inline-block;
+}
+
+.additional-stat:not(:first-child){
+    margin-left: 10px;
+}
+
+.additional-stat .stat-name{
     font-weight: bold;
     color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+}
+
+.additional-stat .stat-name::after{
+    content: ":";
+}
+
+.additional-stat .stat-value{
+    font-weight: 600;
 }
 
 .basic-stat{
@@ -1278,6 +1294,15 @@ html.no-webp #error_box_wrapper{
         left: 0;
         width: 100vw;
         right: 0;
+    }
+
+    #additional_stats_container{
+        white-space: normal;
+    }
+
+    .additional-stat:not(:first-child){
+        margin-left: 0;
+        margin-top: 4px;
     }
 
     #stats_display{

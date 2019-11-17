@@ -250,6 +250,9 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         let items = await lib.getItems(user_profile);
         let calculated = await lib.getStats(user_profile, items);
 
+        if(objectPath.has(profile, 'banking.balance'))
+            calculated.bank = profile.banking.balance;
+            
         calculated.uuid = data.player.uuid;
         calculated.display_name = data.player.displayname;
         calculated.profile = skyblock_profiles[profile_id];
