@@ -593,7 +593,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 }
 
 .additional-stat:not(:first-child){
-    margin-left: 10px;
+    margin-left: 6px;
 }
 
 .additional-stat .stat-name{
