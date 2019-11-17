@@ -585,6 +585,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     font-size: 12px;
     font-weight: 600;
     white-space: nowrap;
+    overflow: visible;
 }
 
 .additional-stat{
