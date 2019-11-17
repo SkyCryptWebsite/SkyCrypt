@@ -1,45 +1,38 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>SkyBlock Stats</title>
-        <meta charset="utf-8">
-        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="/resources/css/index.css?v15">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta property="og:image" content="/resources/img/logo_square.png">
-        <meta property="og:type" content="object">
-        <meta property="og:title" content="SkyBlock Stats">
-        <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🌹">
-        <style>
-            @media (max-width: 480px){
-                header{
-                    height: 45px;
-                    text-align: center;
-                    width: 100vw;
-                }
+<title>SkyBlock Stats</title>
+<meta charset="utf-8">
+<meta property="og:image" content="/resources/img/logo_square.png">
+<meta property="og:title" content="SkyBlock Stats">
+<meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🌹">
+<style>
+@media (max-width: 480px){
+    header{
+        height: 45px;
+        text-align: center;
+        width: 100vw;
+    }
 
-                header::after{
-                    top: 45px;
-                }
+    header::after{
+        top: 45px;
+    }
 
-                #info_box{
-                    top: 45px;
-                }
-            }
-        </style>
-    </head>
+    #info_box{
+        top: 45px;
+    }
+}
+</style>
+</head>
     <body>
         <%- include('../includes/header') %>
         <div id="enter_player_box_wrapper">
             <div id="enter_player_box">
                 <p>Show SkyBlock stats for</p>
-                <input id="inp_enter_username" type="text" placeholder="Enter username">
-                <a href="" id="goto_target_username">Show me</a>
+                <input <% if(player){ %> value="<%= player %>" <% }%> id="inp_enter_username" type="text" placeholder="Enter username">
+                <a href="<% if(player){ %>/stats/<%= player %><% }%>" id="goto_target_username">Show me</a>
             </div>
         </div>
-        <div id="error_box_wrapper">
+        <div id="error_box_wrapper" <% if(error){ %>class="show-error"<% } %>>
             <div id="error_box">
-                <div id="error_title">Error</div><div id="error_text"><span></span></div>
+                <div id="error_title">Error</div><div id="error_text"><%= error %></div>
             </div>
         </div>
         <script src="/resources/js/js.cookie.min.js"></script>
@@ -57,22 +50,6 @@
                 else
                     document.querySelector('#goto_target_username').href = '/stats/' + playerName;
             });
-
-            let error = Cookies.get('error');
-
-            if(error){
-                document.querySelector('#error_box_wrapper').classList.add('show-error');
-                document.querySelector('#error_text span').innerHTML = error;
-                Cookies.remove('error');
-            }
-
-            let player = Cookies.get('player');
-
-            if(player){
-                document.querySelector('#inp_enter_username').value = player;
-                document.querySelector('#goto_target_username').href = '/stats/' + player;
-                Cookies.remove('player');
-            }
         </script>
     </body>
 </html>

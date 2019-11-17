@@ -95,6 +95,8 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 app.get('/stats/:player/:profile?', async (req, res, next) => {
+    res.write(await renderFile('includes/resources.ejs', { page: 'stats' }));
+
     let response;
 
     let active_profile = db
@@ -107,34 +109,46 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         let { data } = response;
 
         if(!data.success){
-            res
-            .cookie('error', "Request to Hypixel API failed. Please try again!")
-            .cookie('player', req.params.player)
-            .redirect('/');
+            res.write(await renderFile('views/index.ejs', {
+                error: 'Request to Hypixel API failed. Please try again!',
+                player: req.params.player,
+                page: 'index'
+            }));
+            res.end();
+
             return false;
         }
 
         if(data.player == null){
-            res
-            .cookie('error', 'Player not found.')
-            .cookie('player', req.params.player)
-            .redirect('/');
+            res.write(await renderFile('views/index.ejs', {
+                error: 'Player not found.',
+                player: req.params.player,
+                page: 'index'
+            }));
+            res.end();
+
             return false;
         }
 
         if(!objectPath.has(data, 'player.stats')){
-            res
-            .cookie('error', 'No data returned by Hypixel API, please try again!')
-            .cookie('player', req.params.player)
-            .redirect('/');
+            res.write(await renderFile('views/index.ejs', {
+                error: 'No data returned by Hypixel API, please try again!',
+                player: req.params.player,
+                page: 'index'
+            }));
+            res.end();
+
             return false;
         }
 
         if(!('SkyBlock' in data.player.stats)){
-            res
-            .cookie('error', 'Player has not played SkyBlock yet.')
-            .cookie('player', req.params.player)
-            .redirect('/');
+            res.write(await renderFile('views/index.ejs', {
+                error: 'Player has not played SkyBlock yet.',
+                player: req.params.player,
+                page: 'index'
+            }));
+            res.end();
+
             return false;
         }
 
@@ -146,15 +160,18 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
             let default_profile = await Hypixel.get('skyblock/profile', { params: { key: getApiKey(), profile: data.player.uuid }});
 
             if(default_profile.data.profile == null){
-                res
-                .cookie('error', 'Player has no SkyBlock profiles.')
-                .cookie('player', req.params.player)
-                .redirect('/');
+                res.write(await renderFile('views/index.ejs', {
+                    error: 'Player has no SkyBlock profiles.',
+                    player: req.params.player,
+                    page: 'index'
+                }));
+                res.end();
+
                 return false;
             }else{
                 skyblock_profiles[data.player.uuid] = {
                     profile_id: data.player.uuid,
-                    cute_name: 'Avocado'
+                    cute_name: 'Avocado',
                 };
 
                 all_skyblock_profiles = skyblock_profiles;
@@ -196,14 +213,15 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         }
 
         if(profiles.length == 0){
-            res
-            .cookie('error', 'No data returned by Hypixel API, please try again!')
-            .cookie('player', req.params.player)
-            .redirect('/');
+            res.write(await renderFile('views/index.ejs', {
+                error: 'No data returned by Hypixel API, please try again!',
+                player: req.params.player,
+                page: 'index'
+            }));
+            res.end();
+
             return false;
         }
-
-        res.write(await renderFile('includes/resources.ejs'));
 
         let highest = 0;
         let profile_id;
@@ -278,10 +296,13 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
     }catch(e){
         console.error(e);
 
-        res
-        .cookie('error', "An unknown error occured. Please try again!")
-        .cookie('player', req.params.player)
-        .redirect('/');
+        res.write(await renderFile('views/index.ejs', {
+            error: 'An unknown error occured. Please try again!',
+            player: req.params.player,
+            page: 'index'
+        }));
+        res.end();
+
         return false;
     }
 });
@@ -338,7 +359,9 @@ app.get('/leather/:type/:color', async (req, res) => {
 });
 
 app.get('/', async (req, res, next) => {
-    res.render('index', { page: 'index '});
+    res.write(await renderFile('includes/resources.ejs', { page: 'index' }));
+    res.write(await renderFile('views/index.ejs', { error: null, player: null, page: 'index' }));
+    res.end();
 });
 
 app.get('*', async (req, res, next) => {
