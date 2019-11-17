@@ -21,49 +21,63 @@ document.addEventListener('DOMContentLoaded', function(){
     };
 
     let currentBackpack;
-    let backpackEnchantedIndex = null;
+    let dynamicEnchantedIndex = null;
 
-    function showBackpack(item){
-        document.querySelector('.current-inventory').classList.remove('current-inventory');
-        document.querySelector('.inventory-tab.active-inventory').classList.remove('active-inventory');
+    function renderInventory(inventory, type){
+        if(dynamicEnchantedIndex !== null){
+            enchantedOverlays.splice(dynamicEnchantedIndex);
+            dynamicEnchantedIndex = null;
+        }
+
+        let visibleInventory = document.querySelector('.inventory-view.current-inventory');
+
+        if(visibleInventory){
+            visibleInventory.classList.remove('current-inventory');
+            document.querySelector('#inventory_container').removeChild(visibleInventory);
+        }
 
         let inventoryView = document.createElement('div');
         inventoryView.className = 'inventory-view current-inventory processed';
-        inventoryView.setAttribute('data-inventory-type', 'backpack');
+        inventoryView.setAttribute('data-inventory-type', type);
 
-        currentBackpack = item;
+        if(type == 'inventory')
+            inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
 
-        item.containsItems.forEach((backpackItem, index) => {
+        inventory.forEach((item, index) => {
             let inventorySlot = document.createElement('div');
             inventorySlot.className = 'inventory-slot';
 
-            if(backpackItem.id){
+            if(item.id){
                 let inventoryItemIcon = document.createElement('div');
                 let inventoryItemCount = document.createElement('div');
 
-                inventoryItemIcon.className = 'piece-icon item-icon icon-' + backpackItem.id + '_' + backpackItem.Damage;
+                inventoryItemIcon.className = 'piece-icon item-icon icon-' + item.id + '_' + item.Damage;
 
-                if(backpackItem.texture_path){
+                if(item.texture_path){
                     inventoryItemIcon.className += ' custom-icon';
-                    inventoryItemIcon.style.backgroundImage = 'url(' + backpackItem.texture_path + ')';
+                    inventoryItemIcon.style.backgroundImage = 'url(' + item.texture_path + ')';
                 }
 
-                if(isEnchanted(backpackItem))
+                if(isEnchanted(item))
                     inventoryItemIcon.classList.add('is-enchanted');
 
                 inventoryItemCount.className = 'item-count';
-                inventoryItemCount.innerHTML = backpackItem.Count;
+                inventoryItemCount.innerHTML = item.Count;
 
                 let inventoryItem = document.createElement('div');
 
                 bindLoreEvents(inventoryItem);
 
                 inventoryItem.className = 'rich-item inventory-item';
-                inventoryItem.setAttribute('data-backpack-item-index', index);
+
+                if(type == 'backpack')
+                    inventoryItem.setAttribute('data-backpack-item-index', index);
+                else
+                    inventoryItem.setAttribute('data-item-index', item.item_index);
 
                 inventoryItem.appendChild(inventoryItemIcon);
 
-                if(backpackItem.Count > 1)
+                if(item.Count > 1)
                     inventoryItem.appendChild(inventoryItemCount);
 
                 inventorySlot.appendChild(inventoryItem);
@@ -75,13 +89,58 @@ document.addEventListener('DOMContentLoaded', function(){
 
             if((index + 1) % 9 == 0)
                 inventoryView.appendChild(document.createElement("br"));
+
+            if((index + 1) % 27 == 0 && type == 'inventory')
+                inventoryView.appendChild(document.createElement("br"));
         });
 
-        document.querySelector('#inventory_container').appendChild(inventoryView);
+        inventoryContainer.appendChild(inventoryView);
 
-        backpackEnchantedIndex = enchantedOverlays.length;
+        inventoryView.style.height = "auto";
+        inventoryView.style.width = "auto";
+
+        if(inventoryView.classList.contains('current-inventory')){
+            inventoryContainer.style.width = "auto";
+            inventoryContainer.style.height = "auto";
+        }
+
+        let width, height;
+
+        if(window.outerWidth <= 1200){
+            height = inventoryView.offsetHeight;
+            width = window.outerWidth;
+
+            height += 15;
+        }else{
+            height = inventoryView.offsetHeight;
+            width = inventoryView.offsetWidth;
+        }
+
+        inventoryView.style.width = width + "px";
+        inventoryView.style.height = height + "px";
+
+        inventoryView.classList.add('processed');
+        inventoryView.setAttribute('data-height', height + 50 + "px");
+        inventoryView.setAttribute('data-width', width + "px");
+
+        if(inventoryView.classList.contains('current-inventory')){
+            inventoryContainer.style.width = width + "px";
+            inventoryContainer.style.height = height + 50 + "px";
+        }
+
+        dynamicEnchantedIndex = enchantedOverlays.length;
 
         [].forEach.call(inventoryView.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
+
+        window.scrollTo(0, document.documentElement.scrollHeight);
+    }
+
+    function showBackpack(item){
+        document.querySelector('.inventory-tab.active-inventory').classList.remove('active-inventory');
+
+        renderInventory(item.containsItems, 'backpack');
+
+        currentBackpack = item;
     }
 
     function fillLore(element){
@@ -442,28 +501,12 @@ document.addEventListener('DOMContentLoaded', function(){
 
             let activeInventory = document.querySelector('.inventory-tab.active-inventory');
 
-            let visibleInventory = document.querySelector('.inventory-view.current-inventory');
-
             if(activeInventory)
                 activeInventory.classList.remove('active-inventory');
 
             element.classList.add('active-inventory');
 
-            let currentInventory = document.querySelector('.inventory-view[data-inventory-type=' + type + ']');
-
-            visibleInventory.classList.remove('current-inventory');
-
-            if(backpackEnchantedIndex !== null){
-                enchantedOverlays.splice(backpackEnchantedIndex);
-                backpackEnchantedIndex = null;
-            }
-
-            if(visibleInventory.getAttribute('data-inventory-type') == 'backpack')
-                document.querySelector('#inventory_container').removeChild(visibleInventory);
-
-            currentInventory.classList.add('current-inventory');
-
-            inventoryContainer.style.height = currentInventory.getAttribute('data-height');
+            renderInventory(items[type], type);
         });
     });
 

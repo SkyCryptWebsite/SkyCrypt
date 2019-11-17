@@ -254,51 +254,6 @@ const skill_component = (skill, icon, level) => { %>
                             <%= inventorySlot(item); %>
                         <% } %>
                     </div>
-                    <% if(items.enderchest.length > 0){ %>
-                    <div class="inventory-view" data-inventory-type="enderchest">
-                        <% for(let i = 0; i < items.enderchest.length; i++){ %>
-                            <% let item = items.enderchest[i]; %>
-                            <%= inventorySlot(item); %>
-                            <% if((i + 1) % 9 == 0) { %><br><% } %>
-                        <% } %>
-                    </div>
-                    <% } %>
-                    <% if(items.talisman_bag.length > 0){ %>
-                    <div class="inventory-view" data-inventory-type="talisman_bag">
-                        <% for(let i = 0; i < Math.min(items.talisman_bag.length, 27); i++){ %>
-                            <% let item = items.talisman_bag[i]; %>
-                            <%= inventorySlot(item); %>
-                            <% if((i + 1) % 9 == 0) { %><br><% } %>
-                        <% } %>
-                    </div>
-                    <% } %>
-                    <% if(items.potion_bag.length > 0){ %>
-                    <div class="inventory-view" data-inventory-type="potion_bag">
-                        <% for(let i = 0; i < Math.min(items.potion_bag.length, 27); i++){ %>
-                            <% let item = items.potion_bag[i]; %>
-                            <%= inventorySlot(item); %>
-                            <% if((i + 1) % 9 == 0) { %><br><% } %>
-                        <% } %>
-                    </div>
-                    <% } %>
-                    <% if(items.fishing_bag.length > 0){ %>
-                    <div class="inventory-view" data-inventory-type="fishing_bag">
-                        <% for(let i = 0; i < Math.min(items.fishing_bag.length, 27); i++){ %>
-                            <% let item = items.fishing_bag[i]; %>
-                            <%= inventorySlot(item); %>
-                            <% if((i + 1) % 9 == 0) { %><br><% } %>
-                        <% } %>
-                    </div>
-                    <% } %>
-                    <% if(items.quiver.length > 0){ %>
-                    <div class="inventory-view" data-inventory-type="quiver">
-                        <% for(let i = 0; i < Math.min(items.quiver.length, 27); i++){ %>
-                            <% let item = items.quiver[i]; %>
-                            <%= inventorySlot(item); %>
-                            <% if((i + 1) % 9 == 0) { %><br><% } %>
-                        <% } %>
-                    </div>
-                    <% } %>
                 </div>
             <% } %>
         </div>
