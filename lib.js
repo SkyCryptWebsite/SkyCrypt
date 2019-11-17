@@ -1365,7 +1365,8 @@ module.exports = {
             output.skill_bonus = {};
 
             for(let skill in levels){
-                average_level += levels[skill].level + levels[skill].progress;
+                if(skill != 'runecrafting')
+                    average_level += levels[skill].level + levels[skill].progress;
 
                 let skillBonus = getBonusStat(levels[skill].level, `${skill}_skill`, 50, 1);
 
@@ -1375,7 +1376,7 @@ module.exports = {
                     output.stats[stat] += skillBonus[stat];
             }
 
-            output.average_level = +(average_level / Object.keys(levels).length).toFixed(1);
+            output.average_level = +(average_level / (Object.keys(levels).length - 1)).toFixed(1);
 
             output.levels = Object.assign({}, levels);
         }
