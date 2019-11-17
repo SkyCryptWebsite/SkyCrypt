@@ -1336,7 +1336,7 @@ module.exports = {
         if(isNaN(profile.fairy_souls_collected))
             profile.fairy_souls_collected = 0;
 
-        let fairyBonus = getBonusStat(profile.fairy_souls_collected, 'fairy_souls', 185, 5);
+        let fairyBonus = getBonusStat(profile.fairy_exchanges * 5, 'fairy_souls', 185, 5);
 
         output.fairy_bonus = Object.assign({}, fairyBonus);
 
