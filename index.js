@@ -9,6 +9,7 @@ const lib = require('./lib');
 const _ = require('lodash');
 const objectPath = require('object-path');
 const moment = require('moment');
+const ejs = require('ejs');
 
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
@@ -16,8 +17,10 @@ const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('db.json');
 const db = low(adapter);
 
+const renderFile = util.promisify(ejs.renderFile);
+
 db
-.defaults({ usernames: [] })
+.defaults({ usernames: [], profiles: [] })
 .write();
 
 fs.ensureDirSync('cache');
@@ -92,7 +95,14 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 app.get('/stats/:player/:profile?', async (req, res, next) => {
+    res.write(await renderFile('includes/resources.ejs'));
+
     let response;
+
+    let active_profile = db
+    .get('profiles')
+    .find({ username: req.params.player.toLowerCase() })
+    .value();
 
     try{
         response = await Hypixel.get('player', { params: { key: getApiKey(), name: req.params.player } });
@@ -155,6 +165,8 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
 
         if(req.params.profile)
             skyblock_profiles = _.pickBy(all_skyblock_profiles, a => a.cute_name.toLowerCase() == req.params.profile.toLowerCase());
+        else if(active_profile)
+            skyblock_profiles = _.pickBy(all_skyblock_profiles, a => a.profile_id.toLowerCase() == active_profile.profile_id);
 
         if(Object.keys(skyblock_profiles).length == 0)
             skyblock_profiles = all_skyblock_profiles;
@@ -197,7 +209,7 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         let profile_id;
 
         profiles.forEach((_profile, index) => {
-            if(_profile === undefined)
+            if(_profile === undefined || _profile === null)
                 return;
 
             let user_profile = _profile.members[data.player.uuid];
@@ -210,6 +222,22 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         });
 
         let user_profile = profile.members[data.player.uuid];
+
+        if(active_profile){
+            if(user_profile.last_save > active_profile.last_save){
+                db
+                .get('profiles')
+                .find({ username: req.params.player.toLowerCase() })
+                .assign({ profile_id: profile_id, last_save: user_profile.last_save })
+                .write();
+            }
+        }else{
+            db
+            .get('profiles')
+            .push({ username: req.params.player.toLowerCase(), profile_id: profile_id, last_save: user_profile.last_save })
+            .write();
+        }
+
 
         let member_uuids = Object.keys(profile.members);
 
@@ -242,7 +270,8 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
             text: last_updated_text
         };
 
-        res.render('stats', { items, calculated, page: 'stats' });
+        res.write(await renderFile('views/stats.ejs', { items, calculated, page: 'stats' }));
+        res.end();
     }catch(e){
         console.error(e);
 
