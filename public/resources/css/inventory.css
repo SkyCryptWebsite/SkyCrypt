@@ -1,13 +1,13 @@
 
 .item-icon {
-  background-image: url('/resources/img/inventory/items.webp?v7');
+  background-image: url('/resources/img/inventory/items.webp?v8');
   width: 128px;
   height: 128px;
   background-position: -128px -0px;
 }
 
 html.no-webp .item-icon {
-  background-image: url('/resources/img/inventory/items.png?v7');
+  background-image: url('/resources/img/inventory/items.png?v8');
 }
 
 .icon-0 {
