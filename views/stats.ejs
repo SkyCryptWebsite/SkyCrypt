@@ -54,7 +54,7 @@ const skill_component = (skill, icon, level) => { %>
         <div class="skill-icon"><div class="item-icon <%= icon %>"></div></div>
         <div class="skill-name"><%= skill %> <span class="skill-level"><%= level.level %></span></div>
         <div class="skill-bar">
-            <div class="skill-progress-bar" style="width: <%= level.progress * 100 %>%"></div>
+            <div class="skill-progress-bar" style="width: <%= level.level == level.maxLevel ? 100 : level.progress * 100 %>%"></div>
             <div class="skill-progress-text">
                 <%= formatNumber(level.xpCurrent, true) %><% if(level.xpForNext != Infinity){ %> / <%= formatNumber(level.xpForNext) %><% } %> XP
             </div>

@@ -50,6 +50,7 @@ function getLevelByXp(xp, runecrafting){
     return {
         xp,
         level,
+        maxLevel,
         xpCurrent,
         xpForNext,
         progress
