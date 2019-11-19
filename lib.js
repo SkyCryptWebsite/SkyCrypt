@@ -1223,6 +1223,7 @@ module.exports = {
         let fishing_bag = 'fishing_bag' in profile ? await getItems(profile.fishing_bag.data) : [];
         let quiver = 'quiver' in profile ? await getItems(profile.quiver.data) : [];
         let potion_bag = 'potion_bag' in profile ? await getItems(profile.potion_bag.data) : [];
+        let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data) : [];
 
         output.armor = armor.filter(a => Object.keys(a).length != 0);
         output.inventory = inventory
@@ -1240,6 +1241,12 @@ module.exports = {
 
         // All items not in the inventory or accessory bag should be inactive so they don't contribute to the total stats
         enderchest = enderchest.map(a => Object.assign({ isInactive: true}, a) );
+
+        // Add candy bag contents as backpack contents to candy bag
+        for(let item of all_items){
+            if(objectPath.has(item, 'tag.ExtraAttributes.id') && item.tag.ExtraAttributes.id == 'TRICK_OR_TREAT_BAG')
+                item.containsItems = candy_bag;
+        }
 
         let talismans = [];
 
