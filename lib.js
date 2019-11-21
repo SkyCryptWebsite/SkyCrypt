@@ -1336,6 +1336,50 @@ module.exports = {
         for(let items of ['talismans', 'weapons'])
             output[items] = output[items].sort((a, b) => rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity));
 
+        let swords = output.weapons.filter(a => a.type == 'sword');
+        let bows = output.weapons.filter(a => a.type == 'bow');
+
+        if(swords.length > 0)
+            output.highest_rarity_sword = swords.filter(a => a.rarity == swords[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
+
+        if(bows.length > 0)
+            output.highest_rarity_bow = bows.filter(a => a.rarity == swords[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
+
+        if(armor.length == 4){
+            let output_name = "";
+
+            armor.forEach(armorPiece => {
+                let name = armor[0].display_name;
+
+                if(objectPath.has(armor[0], 'tag.ExtraAttributes.modifier')){
+                    let reforge = armor[0].tag.ExtraAttributes.modifier;
+
+                    reforge = reforge.charAt(0).toUpperCase() + reforge.slice(1);
+
+                    name = name.replace(reforge, "").replace("Very", "").replace("Highly", "").trim();
+                }
+
+                armorPiece.armor_name = name;
+            });
+
+            if(armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.modifier')
+            && a.tag.ExtraAttributes.modifier == armor[0].tag.ExtraAttributes.modifier).length == 4)
+                output_name +=
+                    armor[0].tag.ExtraAttributes.modifier.charAt(0).toUpperCase()
+                    + armor[0].tag.ExtraAttributes.modifier.slice(1)
+                    + " ";
+
+            if(armor.filter(a => a.armor_name.split(" ")[0] == armor[0].armor_name.split(" ")[0]).length == 4){
+                let base_name = armor[0].armor_name.split(" ");
+                base_name.pop();
+
+                output_name += base_name.join(" ") + " Armor";
+            }
+
+            if(output_name)
+                output.armor_set = output_name;
+        }
+
         return output;
     },
 

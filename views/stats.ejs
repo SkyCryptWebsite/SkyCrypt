@@ -60,7 +60,36 @@ const skill_component = (skill, icon, level) => { %>
             </div>
         </div>
     </div>
-<% }; %>
+<% };
+
+let description = "";
+
+if('levels' in calculated){
+    let stats = calculated.stats;
+
+    if(items.highest_rarity_sword)
+        stats = calculated.weapon_stats[items.highest_rarity_sword.item_index];
+
+    description += `❤️ ${stats.health} 🛡️ ${stats.defense} 💪 ${stats.strength}\n\n`;
+}
+
+if(items.armor_set)
+    description += `• ${items.armor_set}\n`;
+
+if(items.highest_rarity_sword)
+    description += `• ${items.highest_rarity_sword.display_name}\n`;
+
+if(items.highest_rarity_bow)
+    description += `• ${items.highest_rarity_bow.display_name}\n`;
+
+if(calculated.average_level){
+    description += `\nAverage Skill Level: ${calculated.average_level}`;
+
+    if(calculated.bank)
+        description += ` ✦ Bank Account: ${formatNumber(calculated.bank)} Coins`;
+}
+
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -69,7 +98,7 @@ const skill_component = (skill, icon, level) => { %>
     <link rel="shortcut icon" href="https://visage.surgeplay.com/face/32/<%- calculated.uuid %>" type="image/png">
     <meta property="og:title" content="<%- calculated.display_name %>">
     <meta property="og:image" content="https://visage.surgeplay.com/face/256/<%- calculated.uuid %>">
-    <meta property="og:description" content="Check out my Armor and Weapons!">
+    <meta property="og:description" content="<%= description %>">
 </head>
 <body>
     <%- include('../includes/header') %>
@@ -197,8 +226,13 @@ const skill_component = (skill, icon, level) => { %>
                     <%
                         let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
 
+                        if(items.highest_rarity_sword)
+                            sword = [items.highest_rarity_sword];
+
                         items.weapons.forEach(item => { %>
-                            <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece <% if(sword.length > 0 && item.item_index == sword[0].item_index){ %>piece-selected<% } %> piece-<%= item.rarity %>-bg">
+                            <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece
+                                <% if(sword.length > 0 && item.item_index == sword[0].item_index){ %>piece-selected<% } %>
+                                piece-<%= item.rarity %>-bg">
                                 <% if(item.rarity == 'legendary'){ %>
                                     <div class="piece-shine"></div>
                                 <% } %>
