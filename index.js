@@ -8,15 +8,12 @@ const lib = require('./lib');
 const _ = require('lodash');
 const objectPath = require('object-path');
 const moment = require('moment');
-const ejs = require('ejs');
 
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
 const adapter = new FileSync('db.json');
 const db = low(adapter);
-
-const renderFile = util.promisify(ejs.renderFile);
 
 const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
 
@@ -90,11 +87,10 @@ async function uuidToUsername(uuid){
 const app = express();
 const port = 32464;
 
+app.set('view engine', 'ejs');
 app.use(express.static('public', { maxAge: CACHE_DURATION }));
 
 app.get('/stats/:player/:profile?', async (req, res, next) => {
-    res.write(await renderFile('includes/resources.ejs', { page: 'stats' }));
-
     let response;
 
     let active_profile = db
@@ -107,45 +103,41 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         let { data } = response;
 
         if(!data.success){
-            res.write(await renderFile('views/index.ejs', {
+            res.render('index', {
                 error: 'Request to Hypixel API failed. Please try again!',
                 player: req.params.player,
                 page: 'index'
-            }));
-            res.end();
+            });
 
             return false;
         }
 
         if(data.player == null){
-            res.write(await renderFile('views/index.ejs', {
+            res.render('index', {
                 error: 'Player not found.',
                 player: req.params.player,
                 page: 'index'
-            }));
-            res.end();
+            });
 
             return false;
         }
 
         if(!objectPath.has(data, 'player.stats')){
-            res.write(await renderFile('views/index.ejs', {
+            res.render('index', {
                 error: 'No data returned by Hypixel API, please try again!',
                 player: req.params.player,
                 page: 'index'
-            }));
-            res.end();
+            });
 
             return false;
         }
 
         if(!('SkyBlock' in data.player.stats)){
-            res.write(await renderFile('views/index.ejs', {
+            res.render('index', {
                 error: 'Player has not played SkyBlock yet.',
                 player: req.params.player,
                 page: 'index'
-            }));
-            res.end();
+            });
 
             return false;
         }
@@ -158,12 +150,11 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
             let default_profile = await Hypixel.get('skyblock/profile', { params: { key: getApiKey(), profile: data.player.uuid }});
 
             if(default_profile.data.profile == null){
-                res.write(await renderFile('views/index.ejs', {
+                res.render('index', {
                     error: 'Player has no SkyBlock profiles.',
                     player: req.params.player,
                     page: 'index'
-                }));
-                res.end();
+                });
 
                 return false;
             }else{
@@ -211,12 +202,11 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         }
 
         if(profiles.length == 0){
-            res.write(await renderFile('views/index.ejs', {
+            res.render('index', {
                 error: 'No data returned by Hypixel API, please try again!',
                 player: req.params.player,
                 page: 'index'
-            }));
-            res.end();
+            });
 
             return false;
         }
@@ -289,17 +279,15 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
             text: last_updated_text
         };
 
-        res.write(await renderFile('views/stats.ejs', { items, calculated, page: 'stats' }));
-        res.end();
+        res.render('stats', { items, calculated, page: 'stats' });
     }catch(e){
         console.error(e);
 
-        res.write(await renderFile('views/index.ejs', {
+        res.render('index', {
             error: 'An unknown error occured. Please try again!',
             player: req.params.player,
             page: 'index'
-        }));
-        res.end();
+        });
 
         return false;
     }
@@ -359,9 +347,7 @@ app.get('/leather/:type/:color', async (req, res) => {
 });
 
 app.get('/', async (req, res, next) => {
-    res.write(await renderFile('includes/resources.ejs', { page: 'index' }));
-    res.write(await renderFile('views/index.ejs', { error: null, player: null, page: 'index' }));
-    res.end();
+    res.render('index', { error: null, player: null, page: 'index' });
 });
 
 app.get('*', async (req, res, next) => {

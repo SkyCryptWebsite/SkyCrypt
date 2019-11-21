@@ -61,11 +61,15 @@ const skill_component = (skill, icon, level) => { %>
         </div>
     </div>
 <% }; %>
-<title><%- calculated.display_name %> | SkyBlock Stats</title>
-<link rel="shortcut icon" href="https://visage.surgeplay.com/face/32/<%- calculated.uuid %>" type="image/png">
-<meta property="og:title" content="<%- calculated.display_name %>">
-<meta property="og:image" content="https://visage.surgeplay.com/face/256/<%- calculated.uuid %>">
-<meta property="og:description" content="Check out my Armor and Weapons!">
+<!DOCTYPE html>
+<html>
+<head>
+    <%- include('../includes/resources') %>
+    <title><%- calculated.display_name %> | SkyBlock Stats</title>
+    <link rel="shortcut icon" href="https://visage.surgeplay.com/face/32/<%- calculated.uuid %>" type="image/png">
+    <meta property="og:title" content="<%- calculated.display_name %>">
+    <meta property="og:image" content="https://visage.surgeplay.com/face/256/<%- calculated.uuid %>">
+    <meta property="og:description" content="Check out my Armor and Weapons!">
 </head>
 <body>
     <%- include('../includes/header') %>

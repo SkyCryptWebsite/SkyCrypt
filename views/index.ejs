@@ -1,25 +1,29 @@
-<title>SkyBlock Stats</title>
-<meta charset="utf-8">
-<meta property="og:image" content="/resources/img/logo_square.png">
-<meta property="og:title" content="SkyBlock Stats">
-<meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🌹">
-<style>
-@media (max-width: 480px){
-    header{
-        height: 45px;
-        text-align: center;
-        width: 100vw;
-    }
+<!DOCTYPE html>
+<html>
+<head>
+    <%- include('../includes/resources') %>
+    <title>SkyBlock Stats</title>
+    <meta charset="utf-8">
+    <meta property="og:image" content="/resources/img/logo_square.png">
+    <meta property="og:title" content="SkyBlock Stats">
+    <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🌹">
+    <style>
+    @media (max-width: 480px){
+        header{
+            height: 45px;
+            text-align: center;
+            width: 100vw;
+        }
 
-    header::after{
-        top: 45px;
-    }
+        header::after{
+            top: 45px;
+        }
 
-    #info_box{
-        top: 45px;
+        #info_box{
+            top: 45px;
+        }
     }
-}
-</style>
+    </style>
 </head>
     <body>
         <%- include('../includes/header') %>
