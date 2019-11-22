@@ -1345,7 +1345,7 @@ module.exports = {
         if(bows.length > 0)
             output.highest_rarity_bow = bows.filter(a => a.rarity == swords[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
 
-        if(armor.length == 4){
+        if(armor.filter(a => Object.keys(a).length > 1).length == 4){
             let output_name = "";
 
             armor.forEach(armorPiece => {
