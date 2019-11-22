@@ -1425,7 +1425,7 @@ module.exports = {
                     output.stats[stat] += skillBonus[stat];
             }
 
-            output.average_level = +(average_level / (Object.keys(levels).length - 1)).toFixed(1);
+            output.average_level = +(average_level / (Object.keys(levels).length - 2)).toFixed(1);
 
             output.levels = Object.assign({}, levels);
         }
