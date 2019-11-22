@@ -812,53 +812,55 @@ const bonus_stats = {
         }
     },
 
-    sharpness_enchantment: {
-        1: {
-            damage_multiplicator: 0.05
+    enchantments: {
+        sharpness: {
+            1: {
+                damage_multiplicator: 0.05
+            }
+        },
+
+        ender: {
+            1: {
+                damage_multiplicator: 0.12
+            }
+        },
+
+        giant_killer: {
+            1: {
+                damage_multiplicator: 0.05
+            }
+        },
+
+        cubism: {
+            1: {
+                damage_multiplicator: 0.1
+            }
+        },
+
+        impaling: {
+            1: {
+                damage_multiplicator: 0.125
+            }
+        },
+
+        critical: {
+            1: {
+                crit_damage: 10
+            }
+        },
+
+        first_strike: {
+            1: {
+                damage_multiplicator: 0.25
+            }
+        },
+
+        power: {
+            1: {
+                damage_multiplicator: 0.08
+            }
         }
     },
-
-    ender_slayer_enchantment: {
-        1: {
-            damage_multiplicator: 0.12
-        }
-    },
-
-    giant_killer_enchantment: {
-        1: {
-            damage_multiplicator: 0.05
-        }
-    },
-
-    cubism_enchantment: {
-        1: {
-            damage_multiplicator: 0.1
-        }
-    },
-
-    impaling_enchantment: {
-        1: {
-            damage_multiplicator: 0.125
-        }
-    },
-
-    critical_enchantment: {
-        1: {
-            crit_damage: 10
-        }
-    },
-
-    first_strike_enchantment: {
-        1: {
-            damage_multiplicator: 0.25
-        }
-    },
-
-    power_enchantment: {
-        1: {
-            damage_multiplicator: 0.08
-        }
-    }
 };
 
 // Minecraft color and formatting codes
@@ -1412,7 +1414,7 @@ module.exports = {
             output.skill_bonus = {};
 
             for(let skill in levels){
-                if(skill != 'runecrafting')
+                if(skill != 'runecrafting' && skill != 'carpentry')
                     average_level += levels[skill].level + levels[skill].progress;
 
                 let skillBonus = getBonusStat(levels[skill].level, `${skill}_skill`, 50, 1);
