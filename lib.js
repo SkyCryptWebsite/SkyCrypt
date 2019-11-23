@@ -1348,10 +1348,11 @@ module.exports = {
             output.highest_rarity_bow = bows.filter(a => a.rarity == bows[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
 
         if(armor.filter(a => Object.keys(a).length > 1).length == 4){
+
             let output_name = "";
 
             armor.forEach(armorPiece => {
-                let name = armor[0].display_name;
+                let name = armorPiece.display_name;
 
                 if(objectPath.has(armor[0], 'tag.ExtraAttributes.modifier'))
                     name = name.split(" ").slice(1).join(" ");
@@ -1368,10 +1369,9 @@ module.exports = {
                 base_name.pop();
 
                 output_name += base_name.join(" ") + " Armor";
-            }
 
-            if(output_name)
                 output.armor_set = output_name;
+            }
         }
 
         return output;
