@@ -1368,7 +1368,10 @@ module.exports = {
                 let base_name = armor[0].armor_name.split(" ");
                 base_name.pop();
 
-                output_name += base_name.join(" ") + " Armor";
+                output_name += base_name.join(" ");
+
+                if(!output_name.endsWith("Armor"))
+                    output_name += " Armor";
 
                 output.armor_set = output_name;
             }
