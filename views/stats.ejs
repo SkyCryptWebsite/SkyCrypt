@@ -82,6 +82,23 @@ if(items.highest_rarity_sword)
 if(items.highest_rarity_bow)
     description += `• ${items.highest_rarity_bow.display_name}\n`;
 
+if('levels' in calculated){
+    let highest_level = 0;
+    let highest_skill_name;
+
+    for(let skill in calculated.levels){
+        let level = calculated.levels[skill].level + calculated.levels[skill].progress;
+
+        if(level > highest_level){
+            highest_level = level;
+            highest_skill_name = skill.charAt(0).toUpperCase() + skill.slice(1);
+        }
+    }
+
+    if(highest_level > 0)
+        description += `• ${highest_skill_name} Level ${Math.floor(highest_level)}\n`;
+}
+
 if(calculated.average_level){
     description += `\nAverage Skill Level: ${calculated.average_level}`;
 
