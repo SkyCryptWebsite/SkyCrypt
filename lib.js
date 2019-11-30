@@ -313,6 +313,10 @@ async function getItems(base64){
                 })
             }
         }
+
+        if(objectPath.has(item, 'tag.ExtraAttributes.enchantments'))
+            if('sharpness' in item.tag.ExtraAttributes.enchantments)
+                item.type = 'sword';
     }
 
     for(let item of items){
@@ -1483,13 +1487,13 @@ module.exports = {
         && items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('EMERALD_ARMOR_')).length == 4){
             let emerald_bonus = Math.min(300, Math.floor(profile.collection.EMERALD / 3000));
 
-            output.stats['health'] += emerald_bonus;
-            output.stats['defense'] += emerald_bonus;
+            output.stats.health += emerald_bonus;
+            output.stats.defense += emerald_bonus;
         }
 
         // Apply Speedster Armor full set bonus of +14 Speed
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SPEEDSTER_')).length == 4)
-            output.stats['speed'] += 14;
+            output.stats.speed += 14;
 
         // Apply stats of active talismans
         items.talismans.filter(a => Object.keys(a).length != 0 && !a.isInactive).forEach(item => {
@@ -1499,14 +1503,15 @@ module.exports = {
 
         // Apply Mastiff Armor full set bonus of +50 HP per 1% Crit Damage
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
-            output.stats['health'] += 50 * output.stats.crit_damage;
+            output.stats.health += 50 * output.stats.crit_damage;
 
         // Apply +5 Defense and +5 Strength of Day/Night Crystal only if both are owned as this is required for a permanent bonus
         if(items.talismans.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(a.tag.ExtraAttributes.id)).length == 2){
-            output.stats['defense'] += 5;
-            output.stats['strength'] += 5;
+            output.stats.defense += 5;
+            output.stats.strength += 5;
         }
 
+        // Apply Obsidian Chestplate bonus of +1 Speed per 20 Obsidian in inventory
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id == ('OBSIDIAN_CHESTPLATE')).length == 1){
             let obsidian = 0;
 
@@ -1515,7 +1520,7 @@ module.exports = {
                     obsidian += item.Count;
             }
 
-            output.stats['speed'] += Math.floor(obsidian / 20);
+            output.stats.speed += Math.floor(obsidian / 20);
         }
 
         output.stats.effective_health = getEffectiveHealth(output.stats.health, output.stats.defense);
