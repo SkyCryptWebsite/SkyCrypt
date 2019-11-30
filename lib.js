@@ -314,9 +314,43 @@ async function getItems(base64){
             }
         }
 
-        if(objectPath.has(item, 'tag.ExtraAttributes.enchantments'))
-            if('sharpness' in item.tag.ExtraAttributes.enchantments)
+        if(objectPath.has(item, 'tag.ExtraAttributes.enchantments')){
+            if('sharpness' in item.tag.ExtraAttributes.enchantments
+            || 'crticial' in item.tag.ExtraAttributes.enchantments
+            || 'ender_slayer' in item.tag.ExtraAttributes.enchantments
+            || 'execute' in item.tag.ExtraAttributes.enchantments
+            || 'first_strike' in item.tag.ExtraAttributes.enchantments
+            || 'giant_killer' in item.tag.ExtraAttributes.enchantments
+            || 'lethality' in item.tag.ExtraAttributes.enchantments
+            || 'life_steal' in item.tag.ExtraAttributes.enchantments
+            || 'looting' in item.tag.ExtraAttributes.enchantments
+            || 'luck' in item.tag.ExtraAttributes.enchantments
+            || 'scavenger' in item.tag.ExtraAttributes.enchantments
+            || 'vampirism' in item.tag.ExtraAttributes.enchantments
+            || 'bane_of_arthropods' in item.tag.ExtraAttributes.enchantments
+            || 'smite' in item.tag.ExtraAttributes.enchantments)
                 item.type = 'sword';
+
+            if('power' in item.tag.ExtraAttributes.enchantments
+            || 'aiming' in item.tag.ExtraAttributes.enchantments
+            || 'dragon_hunter' in item.tag.ExtraAttributes.enchantments
+            || 'infinite_quiver' in item.tag.ExtraAttributes.enchantments
+            || 'power' in item.tag.ExtraAttributes.enchantments
+            || 'snipe' in item.tag.ExtraAttributes.enchantments
+            || 'punch' in item.tag.ExtraAttributes.enchantments
+            || 'flame' in item.tag.ExtraAttributes.enchantments
+            || 'piercing' in item.tag.ExtraAttributes.enchantments)
+                item.type = 'bow';
+
+            if('angler' in item.tag.ExtraAttributes.enchantments
+            || 'blessing' in item.tag.ExtraAttributes.enchantments
+            || 'caster' in item.tag.ExtraAttributes.enchantments
+            || 'frail' in item.tag.ExtraAttributes.enchantments
+            || 'luck_of_the_sea' in item.tag.ExtraAttributes.enchantments
+            || 'lure' in item.tag.ExtraAttributes.enchantments
+            || 'magnet' in item.tag.ExtraAttributes.enchantments)
+                item.type = 'fishing rod';
+        }
     }
 
     for(let item of items){
