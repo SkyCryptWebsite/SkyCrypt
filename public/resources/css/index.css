@@ -616,13 +616,9 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     padding-left: 28px;
     line-height: 24px;
     margin-top: 2px;
+    height: 24px;
     font-weight: 600;
-    display: inline;
-}
-
-.basic-stat::after{
-    content: "\a";
-    white-space: pre;
+    display: block;
 }
 
 .stat-name{
