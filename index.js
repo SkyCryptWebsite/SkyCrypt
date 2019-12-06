@@ -81,7 +81,7 @@ async function uuidToUsername(uuid){
         }
     }
 
-    return output;
+    return { uuid, display_name: output };
 }
 
 const app = express();
@@ -245,16 +245,20 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         }
 
 
-        let member_uuids = Object.keys(profile.members);
+        let memberUuids = Object.keys(profile.members);
 
-        let members = [];
+        let memberPromises = [];
 
-        for(let member of member_uuids)
+        for(let member of memberUuids)
             if(member != data.player.uuid)
-                members.push({ uuid: member, display_name: await uuidToUsername(member) });
+                memberPromises.push(uuidToUsername(member));
+
+        let members = await Promise.all(memberPromises);
 
         let items = await lib.getItems(user_profile);
         let calculated = await lib.getStats(user_profile, items);
+
+        console.log(profile.banking);
 
         if(objectPath.has(profile, 'banking.balance'))
             calculated.bank = profile.banking.balance;
