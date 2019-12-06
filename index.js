@@ -258,8 +258,6 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         let items = await lib.getItems(user_profile);
         let calculated = await lib.getStats(user_profile, items);
 
-        console.log(profile.banking);
-
         if(objectPath.has(profile, 'banking.balance'))
             calculated.bank = profile.banking.balance;
 
