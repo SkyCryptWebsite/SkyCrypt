@@ -1428,15 +1428,18 @@ module.exports = {
         if(isNaN(profile.fairy_souls_collected))
             profile.fairy_souls_collected = 0;
 
-        let fairyBonus = getBonusStat(profile.fairy_exchanges * 5, 'fairy_souls', 185, 5);
+        output.fairy_bonus = {};
 
-        output.fairy_bonus = Object.assign({}, fairyBonus);
+        if(profile.fairy_exchanges > 0){
+            let fairyBonus = getBonusStat(profile.fairy_exchanges * 5, 'fairy_souls', 185, 5);
+            output.fairy_bonus = Object.assign({}, fairyBonus);
+
+            // Apply fairy soul bonus
+            for(let stat in fairyBonus)
+                output.stats[stat] += fairyBonus[stat];
+        }
 
         output.fairy_souls = { collected: profile.fairy_souls_collected, total: 185, progress: Math.min(profile.fairy_souls_collected / 185, 1) };
-
-        // Apply fairy soul bonus
-        for(let stat in fairyBonus)
-            output.stats[stat] += fairyBonus[stat];
 
         // Apply skill bonuses
         if('experience_skill_farming' in profile){
