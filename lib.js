@@ -1442,7 +1442,15 @@ module.exports = {
         output.fairy_souls = { collected: profile.fairy_souls_collected, total: 185, progress: Math.min(profile.fairy_souls_collected / 185, 1) };
 
         // Apply skill bonuses
-        if('experience_skill_farming' in profile){
+        if('experience_skill_farming' in profile
+        || 'experience_skill_mining' in profile
+        || 'experience_skill_combat' in profile
+        || 'experience_skill_foraging' in profile
+        || 'experience_skill_fishing' in profile
+        || 'experience_skill_enchanting' in profile
+        || 'experience_skill_alchemy' in profile
+        || 'experience_skill_carpentry' in profile
+        || 'experience_skill_runecrafting' in profile){
             let average_level = 0;
 
             let levels = {
