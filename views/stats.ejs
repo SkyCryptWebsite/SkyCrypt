@@ -73,6 +73,8 @@ if('levels' in calculated){
     description += `❤️ ${stats.health} 🛡️ ${stats.defense} 💪 ${stats.strength}\n\n`;
 }
 
+description += `• ${calculated.fairy_souls.collected}/${calculated.fairy_souls.total} Fairy Souls\n`;
+
 if(items.armor_set)
     description += `• ${items.armor_set}\n`;
 
