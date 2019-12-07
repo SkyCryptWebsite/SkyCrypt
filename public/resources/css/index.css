@@ -62,28 +62,32 @@ header::after{
 
 #site_name{
     display: inline-block;
-    vertical-align: top;
+    vertical-align: middle;
     text-decoration: none;
     color: white;
 }
 
 #info_button{
-    vertical-align: top;
+    margin-left: 5px;
+    vertical-align: middle;
     display: inline-block;
-    width: 35px;
-    height: 45px;
-    background-image: url(/resources/img/icons/information.png);
-    background-size: 20px 20px;
     position: relative;
-    opacity: 0.8;
     cursor: pointer;
-    background-position: center center;
-    background-repeat: no-repeat;
     cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 13px;
+    background-color: rgba(255,255,255,0.7);
+    color: #A6145D;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 9999px;
+    line-height: normal;
 }
 
 #info_button:hover{
-    opacity: 1;
+    background-color: rgba(255,255,255,0.8);
 }
 
 #top_navigation{
@@ -388,6 +392,11 @@ html.no-transform #info_box.opened{
     color: rgba(255,255,255,0.7);
 }
 
+#info_box .patron{
+    color: rgba(255,255,255,0.8);
+    font-weight: 500;
+}
+
 #stats_content{
     position: fixed;
     right: calc(70vw + 20px);
@@ -571,17 +580,34 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     background-color: rgba(0,0,0,0.3);
 }
 
-#last_updated{
-    margin-top: 20px;
+#additional_stats_container{
+    margin-top: 25px;
     font-size: 12px;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: visible;
 }
 
-#last_updated::before{
-    content: "Last Updated: ";
-    text-transform: uppercase;
+.additional-stat{
+    display: inline-block;
+}
+
+.additional-stat:not(:first-child){
+    margin-left: 6px;
+}
+
+.additional-stat .stat-name{
     font-weight: bold;
     color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+}
+
+.additional-stat .stat-name::after{
+    content: ":";
+}
+
+.additional-stat .stat-value{
+    font-weight: 600;
 }
 
 .basic-stat{
@@ -589,14 +615,10 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     background-repeat: no-repeat;
     padding-left: 28px;
     line-height: 24px;
-    margin-top: 2px;
+    margin-top: 1px;
+    height: 24px;
     font-weight: 600;
-    display: inline;
-}
-
-.basic-stat::after{
-    content: "\a";
-    white-space: pre;
+    display: block;
 }
 
 .stat-name{
@@ -962,6 +984,65 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     margin: 1px;
 }
 
+.backpack-contents{
+    white-space: nowrap;
+    position: relative;
+    margin-bottom: 5px;
+}
+
+.backpack-contents.contains-backpack{
+    min-height: 60px;
+}
+
+.view-backpack{
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    bottom: -10px;
+    opacity: 0;
+    background-color: rgba(0,0,0,0.4);
+    color: white;
+    transition: opacity .2s;
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 22px;
+    font-weight: 500;
+    text-shadow: 0px 0px 5px rgba(0,0,0,0.6);
+}
+
+.backpack-contents:hover .view-backpack{
+    opacity: 1;
+}
+
+.view-backpack span:nth-child(3){
+    font-size: 11.5px;
+}
+
+.view-backpack div{
+    left: 0;
+    right: 0;
+    text-align: center;
+    vertical-align: middle;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.inventory-slot.backpack-slot{
+    width: 34px;
+    height: 34px;
+    margin: 0;
+}
+
+.backpack-slot .piece-icon{
+    transform: translate(-50%, -50%) scale(0.25);
+}
+
+.backpack-slot .inventory-item .item-count{
+    font-size: 15px;
+}
+
 .inventory-view .inventory-slot .inventory-item{
     width: 100%;
     height: 100%;
@@ -1166,6 +1247,30 @@ html.no-webp #error_box_wrapper{
         top: 75px;
     }
 
+    #info_button{
+        vertical-align: top;
+        display: inline-block;
+        width: 35px;
+        height: 45px;
+        background-image: url(/resources/img/icons/information.png);
+        background-size: 20px 20px;
+        position: relative;
+        opacity: 0.8;
+        cursor: pointer;
+        background-position: center center;
+        background-repeat: no-repeat;
+        cursor: pointer;
+        padding: 0;
+        color: transparent;
+        background-color: transparent;
+        margin: 0;
+    }
+
+    #info_button:hover{
+        opacity: 1;
+        background-color: transparent;
+    }
+
     #top_navigation{
         top: 30px;
         left: 0;
@@ -1186,6 +1291,15 @@ html.no-webp #error_box_wrapper{
         left: 0;
         width: 100vw;
         right: 0;
+    }
+
+    #additional_stats_container{
+        white-space: normal;
+    }
+
+    .additional-stat:not(:first-child){
+        margin-left: 0;
+        margin-top: 4px;
     }
 
     #stats_display{
@@ -1460,5 +1574,12 @@ html.no-webp #error_box_wrapper{
         left: 10px;
         margin-left: 0;
         margin-top: 115px;
+    }
+}
+
+@media (max-width: 400px){
+    .inventory-slot.backpack-slot{
+        width: calc((100vw - 40px) / 9 - 5px);
+        height: calc((100vw - 40px) / 9 - 5px);
     }
 }

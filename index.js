@@ -1,5 +1,4 @@
 const express = require('express');
-const cookieParser = require('cookie-parser')
 const axios = require('axios');
 const fs = require('fs-extra');
 const path = require('path');
@@ -16,8 +15,10 @@ const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('db.json');
 const db = low(adapter);
 
+const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
+
 db
-.defaults({ usernames: [] })
+.defaults({ usernames: [], profiles: [] })
 .write();
 
 fs.ensureDirSync('cache');
@@ -80,53 +81,64 @@ async function uuidToUsername(uuid){
         }
     }
 
-    return output;
+    return { uuid, display_name: output };
 }
 
 const app = express();
 const port = 32464;
 
 app.set('view engine', 'ejs');
-
-app.use(cookieParser());
-app.use(express.static('public'));
+app.use(express.static('public', { maxAge: CACHE_DURATION }));
 
 app.get('/stats/:player/:profile?', async (req, res, next) => {
     let response;
+
+    let active_profile = db
+    .get('profiles')
+    .find({ username: req.params.player.toLowerCase() })
+    .value();
 
     try{
         response = await Hypixel.get('player', { params: { key: getApiKey(), name: req.params.player } });
         let { data } = response;
 
         if(!data.success){
-            res
-            .cookie('error', "Request to Hypixel API failed. Please try again!")
-            .cookie('player', req.params.player)
-            .redirect('/');
+            res.render('index', {
+                error: 'Request to Hypixel API failed. Please try again!',
+                player: req.params.player,
+                page: 'index'
+            });
+
             return false;
         }
 
         if(data.player == null){
-            res
-            .cookie('error', 'Player not found.')
-            .cookie('player', req.params.player)
-            .redirect('/');
+            res.render('index', {
+                error: 'Player not found.',
+                player: req.params.player,
+                page: 'index'
+            });
+
             return false;
         }
 
         if(!objectPath.has(data, 'player.stats')){
-            res
-            .cookie('error', 'No data returned by Hypixel API, please try again!')
-            .cookie('player', req.params.player)
-            .redirect('/');
+            res.render('index', {
+                error: 'No data returned by Hypixel API, please try again!',
+                player: req.params.player,
+                page: 'index'
+            });
+
             return false;
         }
 
         if(!('SkyBlock' in data.player.stats)){
-            res
-            .cookie('error', 'Player has not played SkyBlock yet.')
-            .cookie('player', req.params.player)
-            .redirect('/');
+            res.render('index', {
+                error: 'Player has not played SkyBlock yet.',
+                player: req.params.player,
+                page: 'index'
+            });
+
             return false;
         }
 
@@ -138,15 +150,17 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
             let default_profile = await Hypixel.get('skyblock/profile', { params: { key: getApiKey(), profile: data.player.uuid }});
 
             if(default_profile.data.profile == null){
-                res
-                .cookie('error', 'Player has no SkyBlock profiles.')
-                .cookie('player', req.params.player)
-                .redirect('/');
+                res.render('index', {
+                    error: 'Player has no SkyBlock profiles.',
+                    player: req.params.player,
+                    page: 'index'
+                });
+
                 return false;
             }else{
                 skyblock_profiles[data.player.uuid] = {
                     profile_id: data.player.uuid,
-                    cute_name: 'Avocado'
+                    cute_name: 'Avocado',
                 };
 
                 all_skyblock_profiles = skyblock_profiles;
@@ -155,6 +169,8 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
 
         if(req.params.profile)
             skyblock_profiles = _.pickBy(all_skyblock_profiles, a => a.cute_name.toLowerCase() == req.params.profile.toLowerCase());
+        else if(active_profile)
+            skyblock_profiles = _.pickBy(all_skyblock_profiles, a => a.profile_id.toLowerCase() == active_profile.profile_id);
 
         if(Object.keys(skyblock_profiles).length == 0)
             skyblock_profiles = all_skyblock_profiles;
@@ -186,10 +202,12 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         }
 
         if(profiles.length == 0){
-            res
-            .cookie('error', 'No data returned by Hypixel API, please try again!')
-            .cookie('player', req.params.player)
-            .redirect('/');
+            res.render('index', {
+                error: 'No data returned by Hypixel API, please try again!',
+                player: req.params.player,
+                page: 'index'
+            });
+
             return false;
         }
 
@@ -197,7 +215,7 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         let profile_id;
 
         profiles.forEach((_profile, index) => {
-            if(_profile === undefined)
+            if(_profile === undefined || _profile === null)
                 return;
 
             let user_profile = _profile.members[data.player.uuid];
@@ -211,16 +229,37 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
 
         let user_profile = profile.members[data.player.uuid];
 
-        let member_uuids = Object.keys(profile.members);
+        if(active_profile){
+            if(user_profile.last_save > active_profile.last_save){
+                db
+                .get('profiles')
+                .find({ username: req.params.player.toLowerCase() })
+                .assign({ profile_id: profile_id, last_save: user_profile.last_save })
+                .write();
+            }
+        }else{
+            db
+            .get('profiles')
+            .push({ username: req.params.player.toLowerCase(), profile_id: profile_id, last_save: user_profile.last_save })
+            .write();
+        }
 
-        let members = [];
 
-        for(let member of member_uuids)
+        let memberUuids = Object.keys(profile.members);
+
+        let memberPromises = [];
+
+        for(let member of memberUuids)
             if(member != data.player.uuid)
-                members.push({ uuid: member, display_name: await uuidToUsername(member) });
+                memberPromises.push(uuidToUsername(member));
+
+        let members = await Promise.all(memberPromises);
 
         let items = await lib.getItems(user_profile);
         let calculated = await lib.getStats(user_profile, items);
+
+        if(objectPath.has(profile, 'banking.balance'))
+            calculated.bank = profile.banking.balance;
 
         calculated.uuid = data.player.uuid;
         calculated.display_name = data.player.displayname;
@@ -246,10 +285,12 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
     }catch(e){
         console.error(e);
 
-        res
-        .cookie('error', "An unknown error occured. Please try again!")
-        .cookie('player', req.params.player)
-        .redirect('/');
+        res.render('index', {
+            error: 'An unknown error occured. Please try again!',
+            player: req.params.player,
+            page: 'index'
+        });
+
         return false;
     }
 });
@@ -270,6 +311,7 @@ app.get('/head/:uuid', async (req, res) => {
         });
     }
 
+    res.setHeader('Cache-Control', `public, max-age=${CACHE_DURATION}`);
     res.contentType('image/png');
     res.send(file);
 });
@@ -301,12 +343,13 @@ app.get('/leather/:type/:color', async (req, res) => {
         });
     }
 
+    res.setHeader('Cache-Control', `public, max-age=${CACHE_DURATION}`);
     res.contentType('image/png');
     res.send(file);
 });
 
 app.get('/', async (req, res, next) => {
-    res.render('index', { page: 'index '});
+    res.render('index', { error: null, player: null, page: 'index' });
 });
 
 app.get('*', async (req, res, next) => {

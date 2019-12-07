@@ -54,697 +54,271 @@ const skill_component = (skill, icon, level) => { %>
         <div class="skill-icon"><div class="item-icon <%= icon %>"></div></div>
         <div class="skill-name"><%= skill %> <span class="skill-level"><%= level.level %></span></div>
         <div class="skill-bar">
-            <div class="skill-progress-bar" style="width: <%= level.progress * 100 %>%"></div>
+            <div class="skill-progress-bar" style="width: <%= level.level == level.maxLevel ? 100 : level.progress * 100 %>%"></div>
             <div class="skill-progress-text">
                 <%= formatNumber(level.xpCurrent, true) %><% if(level.xpForNext != Infinity){ %> / <%= formatNumber(level.xpForNext) %><% } %> XP
             </div>
         </div>
     </div>
-<% }; %>
+<% };
 
+let description = "";
+
+if('levels' in calculated){
+    let stats = calculated.stats;
+
+    if(items.highest_rarity_sword)
+        stats = calculated.weapon_stats[items.highest_rarity_sword.item_index];
+
+    description += `❤️ ${stats.health} 🛡️ ${stats.defense} 💪 ${stats.strength}\n\n`;
+}
+
+if(items.armor_set)
+    description += `• ${items.armor_set}\n`;
+
+if(items.highest_rarity_sword)
+    description += `• ${items.highest_rarity_sword.display_name}\n`;
+
+if(items.highest_rarity_bow)
+    description += `• ${items.highest_rarity_bow.display_name}\n`;
+
+if('levels' in calculated){
+    let highest_level = 0;
+    let highest_skill_name;
+
+    for(let skill in calculated.levels){
+        let level = calculated.levels[skill].level + calculated.levels[skill].progress;
+
+        if(level > highest_level){
+            highest_level = level;
+            highest_skill_name = skill.charAt(0).toUpperCase() + skill.slice(1);
+        }
+    }
+
+    if(highest_level > 0)
+        description += `• ${highest_skill_name} Level ${Math.floor(highest_level)}\n`;
+}
+
+if(calculated.average_level){
+    description += `\nAverage Skill Level: ${calculated.average_level}`;
+
+    if(calculated.bank)
+        description += ` ✦ Bank Account: ${formatNumber(calculated.bank, true)} Coins`;
+}
+
+%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <title><%- calculated.display_name %> | SkyBlock Stats</title>
-        <meta charset="utf-8">
-        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="/resources/css/index.css?v12">
-        <link rel="stylesheet" href="/resources/css/inventory.css?v5">
-        <link rel="shortcut icon" href="https://visage.surgeplay.com/face/32/<%- calculated.uuid %>" type="image/png">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta property="og:image" content="https://visage.surgeplay.com/face/256/<%- calculated.uuid %>">
-        <meta property="og:site_name" content="SkyBlock Stats">
-        <meta property="og:type" content="object">
-        <meta property="og:title" content="<%- calculated.display_name %>">
-        <meta property="og:description" content="Check out my Armor and Weapons!">
-    </head>
-    <body>
-        <%- include('../includes/header') %>
-        <div id="dimmer"></div>
-        <video id="enable_api" loop>
-            <source type="video/webm" src="/resources/video/enable_api.webm"></source>
-            <source type="video/mp4" src="/resources/video/enable_api.mp4"></source>
-        </video>
-        <div id="bg_blur"></div>
-        <div id="stats_content">
-            <div class="item-name">
-                <div></div><span></span><div class="close-lore"></div></div>
-            <div class="item-lore"></div>
-        </div>
-        <div id="stats_display">
-            <div id="player_model" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
-        </div>
-        <div id="wrapper">
-            <div id="player_profile"><span class="text-stats-for">Stats for</span>
-                <div tabindex="1" id="stats_for_player">
-                    <%= calculated.display_name %>
-                    <div id="other_players">
-                        <% calculated.members.forEach(member => { %>
-                            <a class="goto" href="/stats/<%= member.display_name %>/<%= calculated.profile.cute_name %>"><%= member.display_name %></a>
-                        <% }); %>
-                        <input type="text" id="enter_player" placeholder="Enter username"><a id="goto_player"></a>
-                    </div>
-                </div><span class="text-on"> on </span><div tabindex="2" id="stats_for_profile">
-                    <%= calculated.profile.cute_name %>
-                    <div id="other_profiles">
-                        <% for(let profile_id in calculated.profiles){ %>
-                            <% let _profile = calculated.profiles[profile_id]; %>
-                            <a class="goto" href="/stats/<%= calculated.display_name %>/<%= _profile.cute_name %>"><%= _profile.cute_name %></a>
-                        <% } %>
-                    </div>
+<head>
+    <%- include('../includes/resources') %>
+    <title><%- calculated.display_name %> | SkyBlock Stats</title>
+    <link rel="shortcut icon" href="https://visage.surgeplay.com/face/32/<%- calculated.uuid %>" type="image/png">
+    <meta property="og:title" content="<%- calculated.display_name %>">
+    <meta property="og:image" content="https://visage.surgeplay.com/face/256/<%- calculated.uuid %>">
+    <meta property="og:description" content="<%= description %>">
+</head>
+<body>
+    <%- include('../includes/header') %>
+    <div id="dimmer"></div>
+    <video id="enable_api" loop>
+        <source type="video/webm" src="/resources/video/enable_api.webm"></source>
+        <source type="video/mp4" src="/resources/video/enable_api.mp4"></source>
+    </video>
+    <div id="bg_blur"></div>
+    <div id="stats_content">
+        <div class="item-name">
+            <div></div><span></span><div class="close-lore"></div></div>
+        <div class="item-lore"></div>
+        <div class="backpack-contents"></div>
+    </div>
+    <div id="stats_display">
+        <div id="player_model" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
+    </div>
+    <div id="wrapper">
+        <div id="player_profile"><span class="text-stats-for">Stats for</span>
+            <div tabindex="1" id="stats_for_player">
+                <%= calculated.display_name %>
+                <div id="other_players">
+                    <% calculated.members.forEach(member => { %>
+                        <a class="goto" href="/stats/<%= member.display_name %>/<%= calculated.profile.cute_name %>"><%= member.display_name %></a>
+                    <% }); %>
+                    <input type="text" id="enter_player" placeholder="Enter username"><a id="goto_player"></a>
                 </div>
-            </div>
-            <div id="basic_stats">
-                <%
-                    let stats = Object.assign({}, calculated.stats);
-                    let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
-
-                    if(sword.length > 0)
-                        stats = calculated.weapon_stats[sword[0].item_index];
-                %>
-
-                <div id="base_stats_container">
-                    <div data-stat="health" class="basic-stat stat-health"><span class="stat-name">Health</span><span class="stat-value"><%= stats.health %></span></div>
-                    <div data-stat="defense" class="basic-stat stat-defense"><span class="stat-name">Defense</span><span class="stat-value"><%= stats.defense %></span></div>
-                    <div data-stat="effective_health" class="basic-stat stat-effective-health"><span class="stat-name">Effective HP</span><span class="stat-value"><%= stats.effective_health %></span></div>
-                    <div data-stat="strength" class="basic-stat stat-strength"><span class="stat-name">Strength</span><span class="stat-value"><%= stats.strength %></span></div>
-                    <div data-stat="speed" class="basic-stat stat-speed"><span class="stat-name">Speed</span><span class="stat-value"><%= stats.speed %></span>%</div>
-                    <div data-stat="crit_chance" class="basic-stat stat-crit-chance"><span class="stat-name">Crit Chance</span><span class="stat-value"><%= stats.crit_chance %></span>%</div>
-                    <div data-stat="crit_damage" class="basic-stat stat-crit-damage"><span class="stat-name">Crit Damage</span><span class="stat-value"><%= stats.crit_damage %></span>%</div>
-                    <div data-stat="intelligence" class="basic-stat stat-intelligence"><span class="stat-name">Intelligence</span><span class="stat-value"><%= stats.intelligence %></span></div>
-                    <div id="player_model_mobile" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
-                    <div id="last_updated"><%= calculated.last_updated.text %></div>
-                </div>
-
-                <div id="skill_levels_container">
-                    <div class="skill">
-                        <div class="skill-icon"><div class="item-icon" style="background: url(/head/b96923ad247310007f6ae5d326d847ad53864cf16c3565a181dc8e6b20be2387) center no-repeat"></div></div>
-                        <div class="skill-name">Fairy Souls <span class="skill-level"><%= calculated.fairy_souls.collected %></span></div>
-                        <div class="skill-bar">
-                            <div class="skill-progress-bar" style="width: <%= calculated.fairy_souls.progress * 100 %>%"></div>
-                            <div class="skill-progress-text"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %> Fairy Souls</div>
-                        </div>
-                    </div>
-
-                    <%
-                        if('levels' in calculated){
-                    %>
-                        <div id="other_skills">
-                            <%= skill_component('Farming', 'icon-294_0', calculated.levels.farming) %>
-                            <%= skill_component('Mining', 'icon-274_0', calculated.levels.mining) %>
-                            <%= skill_component('Combat', 'icon-272_0', calculated.levels.combat) %>
-                            <%= skill_component('Foraging', 'icon-6_3', calculated.levels.foraging) %>
-                            <%= skill_component('Fishing', 'icon-346_0', calculated.levels.fishing) %>
-                            <%= skill_component('Enchanting', 'icon-116_0', calculated.levels.enchanting) %>
-                            <%= skill_component('Alchemy', 'icon-379_0', calculated.levels.alchemy) %>
-                            <%= skill_component('Carpentry', 'icon-58_0', calculated.levels.carpentry) %>
-                            <%= skill_component('Runecrafting', 'icon-378_0', calculated.levels.runecrafting) %>
-                        </div>
-                        <div id="show_skills">Show skills</div>
-                    <% }else{ %>
-                        <div class="no-access"><%= calculated.display_name %> doesn't have skills access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
+            </div><span class="text-on"> on </span><div tabindex="2" id="stats_for_profile">
+                <%= calculated.profile.cute_name %>
+                <div id="other_profiles">
+                    <% for(let profile_id in calculated.profiles){ %>
+                        <% let _profile = calculated.profiles[profile_id]; %>
+                        <a class="goto" href="/stats/<%= calculated.display_name %>/<%= _profile.cute_name %>"><%= _profile.cute_name %></a>
                     <% } %>
                 </div>
             </div>
-            <div class="stat-container stat-armor">
-                <div class="stat-header">Armor</div>
-                <% if(items.armor.length == 0){ %>
-                    <div class="no-access"><%= calculated.display_name %> doesn't have any armor equipped.</div>
-                <% }else{ %>
-                    <div class="pieces">
-                        <% items.armor.slice().reverse().forEach(item => { %>
-                            <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
-                                <% if(item.rarity == 'legendary'){ %>
-                                    <div class="piece-shine"></div>
-                                <% } %>
-                                <div class="piece-hover-area"></div>
-                                <% itemIcon(item, ['piece-icon']); %>
-                            </div>
-                        <% }) %>
-                    </div>
-                <% } %>
-            </div>
-            <div class="stat-container stat-weapons">
-                <div class="stat-header">Weapons</div>
-                <% if(items.no_inventory){ %>
-                    <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
-                <% }else if(items.weapons.length == 0){ %>
-                    <div class="no-access"><%= calculated.display_name %> doesn't have any weapons.</div>
-                <% }else{ %>
-                    <div class="pieces">
-                        <%
-                            let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
+        </div>
+        <div id="basic_stats">
+            <%
+                let stats = Object.assign({}, calculated.stats);
+                let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
 
-                            items.weapons.forEach(item => { %>
-                                <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece <% if(sword.length > 0 && item.item_index == sword[0].item_index){ %>piece-selected<% } %> piece-<%= item.rarity %>-bg">
-                                    <% if(item.rarity == 'legendary'){ %>
-                                        <div class="piece-shine"></div>
-                                    <% } %>
-                                    <div class="piece-hover-area"></div>
-                                    <div class="select-weapon"></div>
-                                    <% itemIcon(item, ['piece-icon']); %>
-                                </div>
-                        <%
-                            });
-                        %>
-                    </div>
-                <% } %>
+                if(items.highest_rarity_sword)
+                    sword = [items.highest_rarity_sword];
+
+                if(sword.length > 0)
+                    stats = calculated.weapon_stats[sword[0].item_index];
+            %>
+
+            <div id="base_stats_container">
+                <div data-stat="health" class="basic-stat stat-health"><span class="stat-name">Health</span><span class="stat-value"><%= stats.health %></span></div>
+                <div data-stat="defense" class="basic-stat stat-defense"><span class="stat-name">Defense</span><span class="stat-value"><%= stats.defense %></span></div>
+                <div data-stat="effective_health" class="basic-stat stat-effective-health"><span class="stat-name">Effective HP</span><span class="stat-value"><%= stats.effective_health %></span></div>
+                <div data-stat="strength" class="basic-stat stat-strength"><span class="stat-name">Strength</span><span class="stat-value"><%= stats.strength %></span></div>
+                <div data-stat="speed" class="basic-stat stat-speed"><span class="stat-name">Speed</span><span class="stat-value"><%= stats.speed %></span>%</div>
+                <div data-stat="crit_chance" class="basic-stat stat-crit-chance"><span class="stat-name">Crit Chance</span><span class="stat-value"><%= stats.crit_chance %></span>%</div>
+                <div data-stat="crit_damage" class="basic-stat stat-crit-damage"><span class="stat-name">Crit Damage</span><span class="stat-value"><%= stats.crit_damage %></span>%</div>
+                <div data-stat="intelligence" class="basic-stat stat-intelligence"><span class="stat-name">Intelligence</span><span class="stat-value"><%= stats.intelligence %></span></div>
+                <div id="player_model_mobile" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
+                <div id="additional_stats_container">
+                    <div class="additional-stat"><span class="stat-name">Last Updated</span><span class="stat-value"><%= calculated.last_updated.text %></span></div>
+                    <% if('bank' in calculated){ %>
+                        <div class="additional-stat"><span class="stat-name">Bank Account</span><span class="stat-value"><%= Math.round(calculated.bank).toLocaleString() %> Coins</span></div>
+                    <% } %>
+                    <% if('levels' in calculated){ %>
+                        <div class="additional-stat"><span class="stat-name">Average Skill Level</span><span class="stat-value"><%= calculated.average_level %></span></div>
+                    <% } %>
+                </div>
             </div>
-            <div class="stat-container stat-Accessories">
-                <div class="stat-header">Accessories</div>
-                <% if(items.no_inventory){ %>
-                    <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
-                <% }else if(items.talismans.length == 0){ %>
-                    <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
-                <% }else{ %>
-                    <div class="pieces">
-                        <% items.talismans.filter(a => !a.isInactive).forEach(item => { %>
-                            <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
-                                <% if(item.rarity == 'legendary'){ %>
-                                    <div class="piece-shine"></div>
-                                <% } %>
-                                <div class="piece-hover-area"></div>
-                                <% itemIcon(item, ['piece-icon']); %>
-                            </div>
-                        <% }) %>
+
+            <div id="skill_levels_container">
+                <div class="skill">
+                    <div class="skill-icon"><div class="item-icon" style="background: url(/head/b96923ad247310007f6ae5d326d847ad53864cf16c3565a181dc8e6b20be2387) center no-repeat"></div></div>
+                    <div class="skill-name">Fairy Souls <span class="skill-level"><%= calculated.fairy_souls.collected %></span></div>
+                    <div class="skill-bar">
+                        <div class="skill-progress-bar" style="width: <%= calculated.fairy_souls.progress * 100 %>%"></div>
+                        <div class="skill-progress-text"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %> Fairy Souls</div>
                     </div>
-                <% } %>
-            </div>
-            <div class="stat-container stat-inventory">
-                <div class="stat-header">Inventories</div>
-                <% if(items.no_inventory){ %>
-                    <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
-                <% }else{ %>
-                    <div id="inventory_container">
-                        <div id="inventory_header">
-                            <div class="inventory-tab active-inventory" data-inventory-type="inventory">Inventory</div><%
-                            if(items.enderchest.length > 0){ %><div class="inventory-tab" data-inventory-type="enderchest">Ender Chest</div><% }
-                            if(items.talisman_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="talisman_bag">Accessory Bag</div><% }
-                            if(items.potion_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="potion_bag">Potion Bag</div><% }
-                            if(items.fishing_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="fishing_bag">Fishing Bag</div><% }
-                            if(items.quiver.length > 0){ %><div class="inventory-tab" data-inventory-type="quiver">Quiver</div><% } %>
-                        </div>
-                        <div class="inventory-view current-inventory" data-inventory-type="inventory">
-                            <% for(let i = 9; i < items.inventory.length; i++){ %>
-                                <% let item = items.inventory[i]; %>
-                                <%= inventorySlot(item); %>
-                                <% if((i + 1) % 9 == 0) { %><br><% } %>
-                            <% } %>
-                            <br>
-                            <% for(let i = 0; i < 9; i++){ %>
-                                <% let item = items.inventory[i]; %>
-                                <%= inventorySlot(item); %>
-                            <% } %>
-                        </div>
-                        <% if(items.enderchest.length > 0){ %>
-                        <div class="inventory-view" data-inventory-type="enderchest">
-                            <% for(let i = 0; i < items.enderchest.length; i++){ %>
-                                <% let item = items.enderchest[i]; %>
-                                <%= inventorySlot(item); %>
-                                <% if((i + 1) % 9 == 0) { %><br><% } %>
-                            <% } %>
-                        </div>
-                        <% } %>
-                        <% if(items.talisman_bag.length > 0){ %>
-                        <div class="inventory-view" data-inventory-type="talisman_bag">
-                            <% for(let i = 0; i < Math.min(items.talisman_bag.length, 27); i++){ %>
-                                <% let item = items.talisman_bag[i]; %>
-                                <%= inventorySlot(item); %>
-                                <% if((i + 1) % 9 == 0) { %><br><% } %>
-                            <% } %>
-                        </div>
-                        <% } %>
-                        <% if(items.potion_bag.length > 0){ %>
-                        <div class="inventory-view" data-inventory-type="potion_bag">
-                            <% for(let i = 0; i < Math.min(items.potion_bag.length, 27); i++){ %>
-                                <% let item = items.potion_bag[i]; %>
-                                <%= inventorySlot(item); %>
-                                <% if((i + 1) % 9 == 0) { %><br><% } %>
-                            <% } %>
-                        </div>
-                        <% } %>
-                        <% if(items.fishing_bag.length > 0){ %>
-                        <div class="inventory-view" data-inventory-type="fishing_bag">
-                            <% for(let i = 0; i < Math.min(items.fishing_bag.length, 27); i++){ %>
-                                <% let item = items.fishing_bag[i]; %>
-                                <%= inventorySlot(item); %>
-                                <% if((i + 1) % 9 == 0) { %><br><% } %>
-                            <% } %>
-                        </div>
-                        <% } %>
-                        <% if(items.quiver.length > 0){ %>
-                        <div class="inventory-view" data-inventory-type="quiver">
-                            <% for(let i = 0; i < Math.min(items.quiver.length, 27); i++){ %>
-                                <% let item = items.quiver[i]; %>
-                                <%= inventorySlot(item); %>
-                                <% if((i + 1) % 9 == 0) { %><br><% } %>
-                            <% } %>
-                        </div>
-                        <% } %>
+                </div>
+
+                <%
+                    if('levels' in calculated){
+                %>
+                    <div id="other_skills">
+                        <%= skill_component('Farming', 'icon-294_0', calculated.levels.farming) %>
+                        <%= skill_component('Mining', 'icon-274_0', calculated.levels.mining) %>
+                        <%= skill_component('Combat', 'icon-272_0', calculated.levels.combat) %>
+                        <%= skill_component('Foraging', 'icon-6_3', calculated.levels.foraging) %>
+                        <%= skill_component('Fishing', 'icon-346_0', calculated.levels.fishing) %>
+                        <%= skill_component('Enchanting', 'icon-116_0', calculated.levels.enchanting) %>
+                        <%= skill_component('Alchemy', 'icon-379_0', calculated.levels.alchemy) %>
+                        <%= skill_component('Carpentry', 'icon-58_0', calculated.levels.carpentry) %>
+                        <%= skill_component('Runecrafting', 'icon-378_0', calculated.levels.runecrafting) %>
                     </div>
+                    <div id="show_skills">Show skills</div>
+                <% }else{ %>
+                    <div class="no-access"><%= calculated.display_name %> doesn't have skills access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
                 <% } %>
             </div>
         </div>
-        <script src="/resources/js/anime.min.js"></script>
-        <script>
-            let items = <%- JSON.stringify(items) %>;
-            let calculated = <%- JSON.stringify(calculated) %>;
+        <div class="stat-container stat-armor">
+            <div class="stat-header">Armor</div>
+            <% if(items.armor.length == 0){ %>
+                <div class="no-access"><%= calculated.display_name %> doesn't have any armor equipped.</div>
+            <% }else{ %>
+                <div class="pieces">
+                    <% items.armor.slice().reverse().forEach(item => { %>
+                        <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
+                            <% if(item.rarity == 'legendary'){ %>
+                                <div class="piece-shine"></div>
+                            <% } %>
+                            <div class="piece-hover-area"></div>
+                            <% itemIcon(item, ['piece-icon']); %>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } %>
+        </div>
+        <div class="stat-container stat-weapons">
+            <div class="stat-header">Weapons</div>
+            <% if(items.no_inventory){ %>
+                <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
+            <% }else if(items.weapons.length == 0){ %>
+                <div class="no-access"><%= calculated.display_name %> doesn't have any weapons.</div>
+            <% }else{ %>
+                <div class="pieces">
+                    <%
+                        let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
 
-            const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag);
+                        if(items.highest_rarity_sword)
+                            sword = [items.highest_rarity_sword];
 
-            let dimmer = document.querySelector("#dimmer");
-
-            let inventoryContainer = document.querySelector('#inventory_container');
-
-            history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name);
-
-            function fillLore(element){
-                let item = all_items.filter(a => a.item_index == Number(element.getAttribute('data-item-index')));
-
-                if(item.length == 0)
-                    return;
-
-                item = item[0];
-
-                statsContent.setAttribute("data-item-index", item.item_index);
-                itemName.className = 'item-name ' + 'piece-' + (item.rarity || 'common') + '-bg';
-                itemNameContent.innerHTML = item.display_name || 'null';
-
-                if(item.texture_path){
-                    itemIcon.style.backgroundImage = 'url(' + item.texture_path + ')';
-                    itemIcon.className = 'stats-piece-icon item-icon custom-icon';
-                }else{
-                    itemIcon.removeAttribute('style');
-                    itemIcon.classList.remove('custom-icon');
-                    itemIcon.className = 'stats-piece-icon item-icon icon-' + item.id + '_' + item.Damage;
-                }
-
-                itemLore.innerHTML = item.lore || '';
-            }
-
-            function showLore(element, _resize){
-                statsContent.classList.add('sticky-stats');
-                element.classList.add('sticky-stats');
-                dimmer.classList.add('show-dimmer');
-
-                if(_resize != false)
-                    resize();
-            }
-
-            function closeLore(){
-                let shownLore = document.querySelector('#stats_content.sticky-stats');
-
-                if(shownLore != null){
-                    dimmer.classList.remove('show-dimmer');
-
-                    let stickyStatsPiece = document.querySelector('.rich-item.sticky-stats');
-
-                    if(stickyStatsPiece != null){
-                        stickyStatsPiece.blur();
-                        stickyStatsPiece.classList.remove('sticky-stats');
-                    }
-
-                    statsContent.classList.remove('sticky-stats');
-                }
-            }
-
-            function resize(){
-                [].forEach.call(document.querySelectorAll('.inventory-view'), function(element){
-                    let width, height;
-
-                    element.classList.remove('processed');
-
-                    element.style.height = "auto";
-                    element.style.width = "auto";
-
-                    if(element.classList.contains('current-inventory')){
-                        inventoryContainer.style.width = "auto";
-                        inventoryContainer.style.height = "auto";
-                    }
-
-                    if(window.outerWidth <= 1200){
-                        height = element.offsetHeight;
-                        width = window.outerWidth;
-
-                        height += 15;
-                    }else{
-                        height = element.offsetHeight;
-                        width = element.offsetWidth;
-                    }
-
-                    element.style.width = width + "px";
-                    element.style.height = height + "px";
-
-                    element.classList.add('processed');
-                    element.setAttribute('data-height', height + 50 + "px");
-                    element.setAttribute('data-width', width + "px");
-
-                    if(element.classList.contains('current-inventory')){
-                        inventoryContainer.style.width = width + "px";
-                        inventoryContainer.style.height = height + 50 + "px";
-                    }
-                });
-
-                let element = document.querySelector('.rich-item.sticky-stats');
-
-                if(element == null)
-                    return;
-
-                let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
-                let rect = element.getBoundingClientRect();
-
-                if(rect.x)
-                    statsContent.style.left = rect.x - statsContent.offsetWidth - 10 + "px";
-
-                if(rect.y)
-                    statsContent.style.top = Math.max(70, Math.min(maxTop, (rect.y + element.offsetHeight / 2) - statsContent.offsetHeight / 2)) + 'px';
-            }
-
-            [].forEach.call(document.querySelectorAll('.stat-weapons .select-weapon'), function(element){
-                let item_index = element.parentNode.getAttribute('data-item-index');
-
-                let weaponStats = calculated.weapon_stats[item_index];
-                let stats;
-
-                element.addEventListener('mousedown', function(e){
-                    e.preventDefault();
-                });
-
-                element.addEventListener('click', function(e){
-                    if(element.parentNode.classList.contains('piece-selected')){
-                        element.parentNode.classList.remove("piece-selected");
-
-                        stats = calculated.stats;
-                    }else{
-                        [].forEach.call(document.querySelectorAll('.stat-weapons .piece'), function(_element){
-                            _element.classList.remove("piece-selected");
+                        items.weapons.forEach(item => { %>
+                            <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece
+                                <% if(sword.length > 0 && item.item_index == sword[0].item_index){ %>piece-selected<% } %>
+                                piece-<%= item.rarity %>-bg">
+                                <% if(item.rarity == 'legendary'){ %>
+                                    <div class="piece-shine"></div>
+                                <% } %>
+                                <div class="piece-hover-area"></div>
+                                <div class="select-weapon"></div>
+                                <% itemIcon(item, ['piece-icon']); %>
+                            </div>
+                    <%
                         });
-
-                        element.parentNode.classList.add("piece-selected");
-
-                        stats = weaponStats;
-                    }
-
-                    for(let stat in stats){
-                        let element = document.querySelector('.basic-stat[data-stat=' + stat + '] .stat-value');
-
-                        if(!element)
-                            continue;
-
-                        let currentValue = Number(element.innerHTML);
-                        let newValue = stats[stat];
-
-                        if(newValue != currentValue){
-                            anime({
-                                targets: '.basic-stat[data-stat=' + stat + '] .stat-value',
-                                innerHTML: newValue,
-                                backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                                duration: 500,
-                                round: 1,
-                                easing: 'easeOutCubic'
-                            });
-                        }
-                    }
-                });
-            });
-
-            function getPart(src, x, y, width, height){
-                let dst = document.createElement('canvas');
-                dst.width = width;
-                dst.height = height;
-
-                let ctx = dst.getContext("2d");
-
-                // don't blur on resize
-                ctx.imageSmoothingEnabled = false;
-
-                ctx.drawImage(src, x, y, width, height, 0, 0, (width - src.width) / 2 + width, (height - src.height) / 2 + height);
-                return dst;
-            }
-
-            let enchantedOverlays = [];
-
-            [].forEach.call(document.querySelectorAll('.item-icon.is-enchanted'), function(element){
-                let size = 128;
-
-                let canvas = document.createElement('canvas');
-                canvas.width = size;
-                canvas.height = size;
-
-                canvas.className = 'enchanted-overlay';
-
-                let ctx = canvas.getContext('2d');
-
-                let image = new Image(128, 128);
-                let src = window.getComputedStyle(element).backgroundImage.split('("').pop().split('")')[0];
-
-                if(src.endsWith('.gif') || src.includes('/head/'))
-                    return false;
-
-                image.onload = function(){
-                    console.log('loaded');
-
-                    if(element.classList.contains('custom-icon')){
-                        image = getPart(image, 0, 0, size, size);
-                    }else{
-                        let position = window.getComputedStyle(element).backgroundPosition.split(" ");
-                        let x = Math.abs(parseInt(position[0]));
-                        let y = Math.abs(parseInt(position[1]));
-                        image = getPart(image, x, y, size, size);
-                    }
-
-                    ctx.globalAlpha = 1;
-
-                    ctx.drawImage(image, 0, 0);
-
-                    ctx.globalAlpha = 0.25;
-                    ctx.globalCompositeOperation = 'source-atop';
-
-                    let enchantedGlint = ctx.createLinearGradient(0, 0, 0, canvas.height);
-
-                    enchantedGlintStops.forEach(function(stop, index){
-                        enchantedGlint.addColorStop(stop, enchantedGlintColors[index]);
-                    });
-
-                    ctx.fillStyle = enchantedGlint;
-
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    if(window.innerWidth < 480){
-                        element.style.backgroundImage = 'url(' + canvas.toDataURL('image/png') + ')';
-                        element.classList.add('custom-icon');
-                    }else{
-                        element.parentNode.appendChild(canvas);
-
-                        enchantedOverlays.push({
-                            src,
-                            offset: Math.random(),
-                            canvas,
-                            ctx,
-                            image
-                        });
-                    }
-                };
-
-                image.src = src;
-            });
-
-            const enchantedGlintStops = [0, 0.4, 0.6, 1];
-
-            const enchantedGlintColors = [
-                '#9e43e3',
-                '#ab5ee6',
-                '#b875eb',
-                '#9e43e3'
-            ];
-
-            function updateEnchantedOverlays(){
-                enchantedOverlays.forEach(function(overlay, index){
-                    overlay.ctx.clearRect(0, 0, overlay.canvas.width, overlay.canvas.height);
-
-                    overlay.ctx.globalAlpha = 1;
-                    overlay.ctx.globalCompositeOperation = 'source-over';
-
-                    overlay.ctx.drawImage(overlay.image, 0, 0);
-
-                    overlay.ctx.globalAlpha = 0.25;
-                    overlay.ctx.globalCompositeOperation = 'source-atop';
-
-                    let offset = +new Date() % 800 / 800 + overlay.offset;
-
-                    if(offset > 1)
-                        offset -= 1;
-
-                    let enchantedGlint = overlay.ctx.createLinearGradient(0, 0, 0, overlay.canvas.height);
-
-                    enchantedGlintStops.forEach(function(stop, index){
-                        let _offset = stop - offset;
-
-                        if(_offset < 0)
-                            _offset = 1 - Math.abs(_offset);
-
-                        enchantedGlint.addColorStop(_offset, enchantedGlintColors[index]);
-                    });
-
-                    overlay.ctx.fillStyle = enchantedGlint;
-
-                    overlay.ctx.fillRect(0, 0, overlay.canvas.width, overlay.canvas.height);
-                });
-
-                window.requestAnimationFrame(updateEnchantedOverlays);
-            }
-
-            if(window.innerWidth >= 480) // don't animate on mobile
-                updateEnchantedOverlays();
-
-            [].forEach.call(document.querySelectorAll('.inventory-tab'), function(element){
-                let type = element.getAttribute('data-inventory-type');
-
-                element.addEventListener('click', function(){
-                    if(element.classList.contains('active-inventory'))
-                        return;
-
-                    document.querySelector('.inventory-tab.active-inventory').classList.remove('active-inventory');
-                    element.classList.add('active-inventory');
-
-                    let currentInventory = document.querySelector('.inventory-view[data-inventory-type=' + type + ']');
-
-                    document.querySelector('.inventory-view.current-inventory').classList.remove('current-inventory');
-                    currentInventory.classList.add('current-inventory');
-
-                    inventoryContainer.style.height = currentInventory.getAttribute('data-height');
-                });
-            });
-
-            const statsContent = document.querySelector('#stats_content');
-            const itemName = statsContent.querySelector('.item-name');
-            const itemIcon = itemName.querySelector('div:first-child');
-            const itemNameContent = itemName.querySelector('span');
-            const itemLore = statsContent.querySelector('.item-lore');
-
-            [].forEach.call(document.querySelectorAll('.rich-item'), function(element){
-                element.addEventListener('mouseenter', function(e){
-                    fillLore(element, false);
-                    statsContent.classList.add('show-stats');
-                });
-
-                element.addEventListener('mouseleave', function(e){
-                    statsContent.classList.remove('show-stats');
-                });
-
-                element.addEventListener('mousemove', function(e){
-                    if(statsContent.classList.contains('sticky-stats'))
-                        return;
-
-                    let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
-                    let rect = element.getBoundingClientRect();
-
-                    if(rect.x)
-                        statsContent.style.left = rect.x - statsContent.offsetWidth - 10 + "px";
-
-                    let top = Math.max(70, Math.min(maxTop, e.clientY - statsContent.offsetHeight / 2));
-
-                    statsContent.style.top = top + "px";
-                });
-
-                element.addEventListener('click', function(e){
-                    if(!e.target.classList.contains('select-weapon')){
-                        if(statsContent.classList.contains('sticky-stats')){
-                            dimmer.classList.remove('show-dimmer');
-                            element.blur();
-                            element.classList.remove('sticky-stats');
-                            statsContent.classList.remove('sticky-stats')
-                        }else{
-                            showLore(element, false);
-                            fillLore(element);
-                        }
-                    }
-                });
-            });
-
-            let enableApiPlayer = document.querySelector('#enable_api');
-
-            [].forEach.call(document.querySelectorAll('.enable-api'), function(element){
-                element.addEventListener('click', function(e){
-                    e.preventDefault();
-                    dimmer.classList.add('show-dimmer');
-                    enableApiPlayer.classList.add('show');
-
-                    enableApiPlayer.currentTime = 0;
-                    enableApiPlayer.play();
-                });
-            });
-
-            enableApiPlayer.addEventListener('click', function(){
-                if(enableApiPlayer.paused)
-                    enableApiPlayer.play();
-                else
-                    enableApiPlayer.pause();
-            });
-
-            dimmer.addEventListener('click', function(e){
-                dimmer.classList.remove('show-dimmer');
-                enableApiPlayer.classList.remove('show');
-
-                closeLore();
-            });
-
-            [].forEach.call(document.querySelectorAll('.close-lore'), function(element){
-                element.addEventListener('click', closeLore);
-            });
-
-            let enterPlayer = document.querySelector('#enter_player');
-
-            enterPlayer.addEventListener('keyup', function(e){
-                let playerName = enterPlayer.value;
-
-                if(playerName.trim().length == 0)
-                    return;
-
-                if(e.keyCode == 13)
-                    document.location = '/stats/' + playerName;
-                else
-                    document.querySelector('#goto_player').href = '/stats/' + playerName;
-            });
-
-            let otherSkills = document.querySelector('#other_skills');
-            let showSkills = document.querySelector("#show_skills");
-
-            if(showSkills != null){
-                showSkills.addEventListener('click', function(){
-                    if(otherSkills.classList.contains('show-skills')){
-                        otherSkills.classList.remove('show-skills');
-                        showSkills.innerHTML = 'Show Skills';
-                    }else{
-                        otherSkills.classList.add('show-skills');
-                        show_skills.innerHTML = 'Hide Skills';
-                    }
-
-                });
-            }
-
-            window.addEventListener('keydown', function(e){
-                let selectedPiece = document.querySelector('.rich-item:focus');
-
-                if(selectedPiece !== null && e.keyCode == 13){
-                    fillLore(selectedPiece);
-                    showLore(selectedPiece);
-                }
-
-                if(e.keyCode == 27){
-                    dimmer.classList.remove('show-dimmer');
-                    enableApiPlayer.classList.remove('show');
-                    if(document.querySelector('#stats_content.sticky-stats') != null){
-                        closeLore();
-                    }
-                }
-
-                if(document.querySelector('.rich-item.sticky-stats') != null && e.keyCode == 9)
-                    e.preventDefault();
-            });
-
-            resize();
-            window.addEventListener('resize', resize);
-        </script>
-    </body>
+                    %>
+                </div>
+            <% } %>
+        </div>
+        <div class="stat-container stat-Accessories">
+            <div class="stat-header">Accessories</div>
+            <% if(items.no_inventory){ %>
+                <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
+            <% }else if(items.talismans.length == 0){ %>
+                <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
+            <% }else{ %>
+                <div class="pieces">
+                    <% items.talismans.filter(a => !a.isInactive).forEach(item => { %>
+                        <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
+                            <% if(item.rarity == 'legendary'){ %>
+                                <div class="piece-shine"></div>
+                            <% } %>
+                            <div class="piece-hover-area"></div>
+                            <% itemIcon(item, ['piece-icon']); %>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } %>
+        </div>
+        <div class="stat-container stat-inventory">
+            <div class="stat-header">Inventories</div>
+            <% if(items.no_inventory){ %>
+                <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
+            <% }else{ %>
+                <div id="inventory_container">
+                    <div id="inventory_header">
+                        <div class="inventory-tab active-inventory" data-inventory-type="inventory">Inventory</div><%
+                        if(items.enderchest.length > 0){ %><div class="inventory-tab" data-inventory-type="enderchest">Ender Chest</div><% }
+                        if(items.talisman_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="talisman_bag">Accessory Bag</div><% }
+                        if(items.potion_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="potion_bag">Potion Bag</div><% }
+                        if(items.fishing_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="fishing_bag">Fishing Bag</div><% }
+                        if(items.quiver.length > 0){ %><div class="inventory-tab" data-inventory-type="quiver">Quiver</div><% } %>
+                    </div>
+                    <div class="inventory-view current-inventory" data-inventory-type="inventory">
+                        <% for(let i = 9; i < items.inventory.length; i++){ %>
+                            <% let item = items.inventory[i]; %>
+                            <%= inventorySlot(item); %>
+                            <% if((i + 1) % 9 == 0) { %><br><% } %>
+                        <% } %>
+                        <br>
+                        <% for(let i = 0; i < 9; i++){ %>
+                            <% let item = items.inventory[i]; %>
+                            <%= inventorySlot(item); %>
+                        <% } %>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+    <script>
+        let items = <%- JSON.stringify(items) %>;
+        let calculated = <%- JSON.stringify(calculated) %>;
+    </script>
+</body>
 </html>

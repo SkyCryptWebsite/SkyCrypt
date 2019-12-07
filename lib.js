@@ -45,14 +45,12 @@ function getLevelByXp(xp, runecrafting){
     if(level < maxLevel)
         xpForNext = Math.ceil(xp_table[level + 1]);
 
-    let progress = xpCurrent / xpForNext;
-
-    if(xpForNext == Infinity)
-        progress = 1;
+    let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
     return {
         xp,
         level,
+        maxLevel,
         xpCurrent,
         xpForNext,
         progress
@@ -136,7 +134,7 @@ async function getItems(base64){
     let items = data.i;
 
     // Check backpack contents and add them to the list of items
-    for(let item of items){
+    for(let [index, item] of items.entries()){
         if(objectPath.has(item, 'tag.display.Name') && (item.tag.display.Name.endsWith('Backpack') || item.tag.display.Name.endsWith('Itchy New Year Cake Bag'))){
 
             let keys = Object.keys(item.tag.ExtraAttributes);
@@ -153,7 +151,13 @@ async function getItems(base64){
 
             let backpackContents = await getBackpackContents(backpackData);
 
-            item.containsItems = backpackContents;
+            backpackContents.forEach(backpackItem => {
+                backpackItem.backpackIndex = index;
+            });
+
+            item.containsItems = [];
+
+            items.push(...backpackContents);
         }
     }
 
@@ -233,6 +237,7 @@ async function getItems(base64){
         }
 
         let lore = lore_raw ? lore_raw.map(a => a = module.exports.getRawLore(a)) : [];
+
         let rarity, item_type;
 
         if(lore.length > 0){
@@ -290,8 +295,73 @@ async function getItems(base64){
                         break;
                 }
             });
+
+            // Apply Speed Talisman speed bonus
+            if(objectPath.has(item, 'tag.ExtraAttributes.id') && item.tag.ExtraAttributes.id == 'SPEED_TALISMAN'){
+                lore.forEach(line => {
+                    if(line.startsWith('Gives')){
+                        let split = line.split("Gives +");
+
+                        if(split.length < 2)
+                            return;
+
+                        let speed = parseInt(split[1]);
+
+                        if(!isNaN(speed))
+                            item.stats.speed = speed;
+                    }
+                })
+            }
+        }
+
+        if(objectPath.has(item, 'tag.ExtraAttributes.id') && item.tag.ExtraAttributes.id != 'ENCHANTED_BOOK'){
+            if(objectPath.has(item, 'tag.ExtraAttributes.enchantments')){
+                if('sharpness' in item.tag.ExtraAttributes.enchantments
+                || 'crticial' in item.tag.ExtraAttributes.enchantments
+                || 'ender_slayer' in item.tag.ExtraAttributes.enchantments
+                || 'execute' in item.tag.ExtraAttributes.enchantments
+                || 'first_strike' in item.tag.ExtraAttributes.enchantments
+                || 'giant_killer' in item.tag.ExtraAttributes.enchantments
+                || 'lethality' in item.tag.ExtraAttributes.enchantments
+                || 'life_steal' in item.tag.ExtraAttributes.enchantments
+                || 'looting' in item.tag.ExtraAttributes.enchantments
+                || 'luck' in item.tag.ExtraAttributes.enchantments
+                || 'scavenger' in item.tag.ExtraAttributes.enchantments
+                || 'vampirism' in item.tag.ExtraAttributes.enchantments
+                || 'bane_of_arthropods' in item.tag.ExtraAttributes.enchantments
+                || 'smite' in item.tag.ExtraAttributes.enchantments)
+                    item.type = 'sword';
+
+                if('power' in item.tag.ExtraAttributes.enchantments
+                || 'aiming' in item.tag.ExtraAttributes.enchantments
+                || 'dragon_hunter' in item.tag.ExtraAttributes.enchantments
+                || 'infinite_quiver' in item.tag.ExtraAttributes.enchantments
+                || 'power' in item.tag.ExtraAttributes.enchantments
+                || 'snipe' in item.tag.ExtraAttributes.enchantments
+                || 'punch' in item.tag.ExtraAttributes.enchantments
+                || 'flame' in item.tag.ExtraAttributes.enchantments
+                || 'piercing' in item.tag.ExtraAttributes.enchantments)
+                    item.type = 'bow';
+
+                if('angler' in item.tag.ExtraAttributes.enchantments
+                || 'blessing' in item.tag.ExtraAttributes.enchantments
+                || 'caster' in item.tag.ExtraAttributes.enchantments
+                || 'frail' in item.tag.ExtraAttributes.enchantments
+                || 'luck_of_the_sea' in item.tag.ExtraAttributes.enchantments
+                || 'lure' in item.tag.ExtraAttributes.enchantments
+                || 'magnet' in item.tag.ExtraAttributes.enchantments)
+                    item.type = 'fishing rod';
+            }
         }
     }
+
+    for(let item of items){
+        if(item.inBackpack){
+            items[item.backpackIndex].containsItems.push(Object.assign({}, item));
+        }
+    }
+
+    items = items.filter(a => !a.inBackpack);
 
     return items;
 }
@@ -634,6 +704,12 @@ const bonus_stats = {
             defense: 1,
             strength: 1,
             speed: 0
+        },
+        185: {
+            health: 21,
+            defense: 1,
+            strength: 1,
+            speed: 0
         }
     },
 
@@ -646,6 +722,9 @@ const bonus_stats = {
         },
         20: {
             health: 4
+        },
+        26: {
+            health: 5
         }
     },
 
@@ -681,8 +760,8 @@ const bonus_stats = {
         15: {
             health: 3
         },
-        20: {
-            health: 4
+        26: {
+            health: 5
         }
     },
 
@@ -751,19 +830,19 @@ const bonus_stats = {
             speed: 1
         },
         2: {
-            //health: 2 (bonus health doesn't seem to be applied ingame)
+            health: 2
         },
         3: {
             speed: 1
         },
         4: {
-            //health: 2 (this one probably isn't being applied either)
+            health: 2
         },
         5: {
             crit_damage: 1
         },
         6: {
-            // health: 3 (this one probably isn't being applied either)
+            health: 3
         },
         7: {
             crit_damage: 2
@@ -773,53 +852,55 @@ const bonus_stats = {
         }
     },
 
-    sharpness_enchantment: {
-        1: {
-            damage_multiplicator: 0.05
+    enchantments: {
+        sharpness: {
+            1: {
+                damage_multiplicator: 0.05
+            }
+        },
+
+        ender: {
+            1: {
+                damage_multiplicator: 0.12
+            }
+        },
+
+        giant_killer: {
+            1: {
+                damage_multiplicator: 0.05
+            }
+        },
+
+        cubism: {
+            1: {
+                damage_multiplicator: 0.1
+            }
+        },
+
+        impaling: {
+            1: {
+                damage_multiplicator: 0.125
+            }
+        },
+
+        critical: {
+            1: {
+                crit_damage: 10
+            }
+        },
+
+        first_strike: {
+            1: {
+                damage_multiplicator: 0.25
+            }
+        },
+
+        power: {
+            1: {
+                damage_multiplicator: 0.08
+            }
         }
     },
-
-    ender_slayer_enchantment: {
-        1: {
-            damage_multiplicator: 0.12
-        }
-    },
-
-    giant_killer_enchantment: {
-        1: {
-            damage_multiplicator: 0.05
-        }
-    },
-
-    cubism_enchantment: {
-        1: {
-            damage_multiplicator: 0.1
-        }
-    },
-
-    impaling_enchantment: {
-        1: {
-            damage_multiplicator: 0.125
-        }
-    },
-
-    critical_enchantment: {
-        1: {
-            crit_damage: 10
-        }
-    },
-
-    first_strike_enchantment: {
-        1: {
-            damage_multiplicator: 0.25
-        }
-    },
-
-    power_enchantment: {
-        1: {
-            damage_multiplicator: 0.08
-        }
-    }
 };
 
 // Minecraft color and formatting codes
@@ -1184,6 +1265,7 @@ module.exports = {
         let fishing_bag = 'fishing_bag' in profile ? await getItems(profile.fishing_bag.data) : [];
         let quiver = 'quiver' in profile ? await getItems(profile.quiver.data) : [];
         let potion_bag = 'potion_bag' in profile ? await getItems(profile.potion_bag.data) : [];
+        let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data) : [];
 
         output.armor = armor.filter(a => Object.keys(a).length != 0);
         output.inventory = inventory
@@ -1201,6 +1283,12 @@ module.exports = {
 
         // All items not in the inventory or accessory bag should be inactive so they don't contribute to the total stats
         enderchest = enderchest.map(a => Object.assign({ isInactive: true}, a) );
+
+        // Add candy bag contents as backpack contents to candy bag
+        for(let item of all_items){
+            if(objectPath.has(item, 'tag.ExtraAttributes.id') && item.tag.ExtraAttributes.id == 'TRICK_OR_TREAT_BAG')
+                item.containsItems = candy_bag;
+        }
 
         let talismans = [];
 
@@ -1246,6 +1334,16 @@ module.exports = {
             || (id == 'CANDY_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'CANDY_ARTIFACT' || getId(a) == 'CANDY_RING')).length > 0)
             || (id == 'INTIMIDATION_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'INTIMIDATION_ARTIFACT').length > 0)
             || (id == 'INTIMIDATION_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'INTIMIDATION_ARTIFACT' || getId(a) == 'INTIMIDATION_RING')).length > 0)
+            || (id == 'SPIDER_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'SPIDER_ARTIFACT').length > 0)
+            || (id == 'SPIDER_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'SPIDER_ARTIFACT' || getId(a) == 'SPIDER_RING')).length > 0)
+            || (id == 'RED_CLAW_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'RED_CLAW_ARTIFACT').length > 0)
+            || (id == 'RED_CLAW_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'RED_CLAW_ARTIFACT' || getId(a) == 'RED_CLAW_RING')).length > 0)
+            || (id == 'HUNTER_TALISMAN' && talismans.filter(a => !a.isInactive && getId(a) == 'HUNTER_RING').length > 0)
+            || (id == 'ZOMBIE_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'ZOMBIE_ARTIFACT').length > 0)
+            || (id == 'ZOMBIE_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'ZOMBIE_ARTIFACT' || getId(a) == 'ZOMBIE_RING')).length > 0)
+            || (id == 'HEALING_TALISMAN' && talismans.filter(a => !a.isInactive && getId(a) == 'HEALING_RING').length > 0)
+            || (id == 'BAT_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'BAT_ARTIFACT').length > 0)
+            || (id == 'BAT_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'BAT_ARTIFACT' || getId(a) == 'BAT_RING')).length > 0)
             )
                 talisman.isInactive = true;
         }
@@ -1280,6 +1378,45 @@ module.exports = {
         for(let items of ['talismans', 'weapons'])
             output[items] = output[items].sort((a, b) => rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity));
 
+        let swords = output.weapons.filter(a => a.type == 'sword');
+        let bows = output.weapons.filter(a => a.type == 'bow');
+
+        if(swords.length > 0)
+            output.highest_rarity_sword = swords.filter(a => a.rarity == swords[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
+
+        if(bows.length > 0)
+            output.highest_rarity_bow = bows.filter(a => a.rarity == bows[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
+
+        if(armor.filter(a => Object.keys(a).length > 1).length == 4){
+
+            let output_name = "";
+
+            armor.forEach(armorPiece => {
+                let name = armorPiece.display_name;
+
+                if(objectPath.has(armor[0], 'tag.ExtraAttributes.modifier'))
+                    name = name.split(" ").slice(1).join(" ");
+
+                armorPiece.armor_name = name;
+            });
+
+            if(armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.modifier')
+            && a.tag.ExtraAttributes.modifier == armor[0].tag.ExtraAttributes.modifier).length == 4)
+                output_name += armor[0].display_name.split(" ")[0] + " ";
+
+            if(armor.filter(a => a.armor_name.split(" ")[0] == armor[0].armor_name.split(" ")[0]).length == 4){
+                let base_name = armor[0].armor_name.split(" ");
+                base_name.pop();
+
+                output_name += base_name.join(" ");
+
+                if(!output_name.endsWith("Armor"))
+                    output_name += " Armor";
+
+                output.armor_set = output_name;
+            }
+        }
+
         return output;
     },
 
@@ -1291,11 +1428,11 @@ module.exports = {
         if(isNaN(profile.fairy_souls_collected))
             profile.fairy_souls_collected = 0;
 
-        let fairyBonus = getBonusStat(profile.fairy_souls_collected, 'fairy_souls', 180, 5);
+        let fairyBonus = getBonusStat(profile.fairy_exchanges * 5, 'fairy_souls', 185, 5);
 
         output.fairy_bonus = Object.assign({}, fairyBonus);
 
-        output.fairy_souls = { collected: profile.fairy_souls_collected, total: 180, progress: profile.fairy_souls_collected / 180 };
+        output.fairy_souls = { collected: profile.fairy_souls_collected, total: 185, progress: Math.min(profile.fairy_souls_collected / 185, 1) };
 
         // Apply fairy soul bonus
         for(let stat in fairyBonus)
@@ -1303,6 +1440,8 @@ module.exports = {
 
         // Apply skill bonuses
         if('experience_skill_farming' in profile){
+            let average_level = 0;
+
             let levels = {
                 farming: getLevelByXp(profile.experience_skill_farming),
                 mining: getLevelByXp(profile.experience_skill_mining),
@@ -1318,6 +1457,9 @@ module.exports = {
             output.skill_bonus = {};
 
             for(let skill in levels){
+                if(skill != 'runecrafting' && skill != 'carpentry')
+                    average_level += levels[skill].level + levels[skill].progress;
+
                 let skillBonus = getBonusStat(levels[skill].level, `${skill}_skill`, 50, 1);
 
                 output.skill_bonus[skill] = Object.assign({}, skillBonus);
@@ -1325,6 +1467,8 @@ module.exports = {
                 for(let stat in skillBonus)
                     output.stats[stat] += skillBonus[stat];
             }
+
+            output.average_level = +(average_level / (Object.keys(levels).length - 2)).toFixed(1);
 
             output.levels = Object.assign({}, levels);
         }
@@ -1379,13 +1523,13 @@ module.exports = {
         && items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('EMERALD_ARMOR_')).length == 4){
             let emerald_bonus = Math.min(300, Math.floor(profile.collection.EMERALD / 3000));
 
-            output.stats['health'] += emerald_bonus;
-            output.stats['defense'] += emerald_bonus;
+            output.stats.health += emerald_bonus;
+            output.stats.defense += emerald_bonus;
         }
 
         // Apply Speedster Armor full set bonus of +14 Speed
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SPEEDSTER_')).length == 4)
-            output.stats['speed'] += 14;
+            output.stats.speed += 14;
 
         // Apply stats of active talismans
         items.talismans.filter(a => Object.keys(a).length != 0 && !a.isInactive).forEach(item => {
@@ -1395,14 +1539,15 @@ module.exports = {
 
         // Apply Mastiff Armor full set bonus of +50 HP per 1% Crit Damage
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
-            output.stats['health'] += 50 * output.stats.crit_damage;
+            output.stats.health += 50 * output.stats.crit_damage;
 
         // Apply +5 Defense and +5 Strength of Day/Night Crystal only if both are owned as this is required for a permanent bonus
         if(items.talismans.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(a.tag.ExtraAttributes.id)).length == 2){
-            output.stats['defense'] += 5;
-            output.stats['strength'] += 5;
+            output.stats.defense += 5;
+            output.stats.strength += 5;
         }
 
+        // Apply Obsidian Chestplate bonus of +1 Speed per 20 Obsidian in inventory
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id == ('OBSIDIAN_CHESTPLATE')).length == 1){
             let obsidian = 0;
 
@@ -1411,7 +1556,7 @@ module.exports = {
                     obsidian += item.Count;
             }
 
-            output.stats['speed'] += Math.floor(obsidian / 20);
+            output.stats.speed += Math.floor(obsidian / 20);
         }
 
         output.stats.effective_health = getEffectiveHealth(output.stats.health, output.stats.defense);
