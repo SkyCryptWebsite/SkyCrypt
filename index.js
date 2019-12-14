@@ -268,8 +268,12 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         calculated.members = members;
 
         let last_updated = user_profile.last_save;
+        let first_join = user_profile.first_join;
+
         let diff = (+new Date() - last_updated) / 1000;
+
         let last_updated_text = moment(last_updated).fromNow();
+        let first_join_text = moment(first_join).fromNow();
 
         if(diff < 3)
             last_updated_text = `Right now`;
@@ -279,6 +283,11 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         calculated.last_updated = {
             unix: last_updated,
             text: last_updated_text
+        };
+
+        calculated.first_join = {
+            unix: first_join,
+            text: first_join_text
         };
 
         res.render('stats', { items, calculated, page: 'stats' });

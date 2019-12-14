@@ -180,6 +180,7 @@ if(calculated.average_level){
                 <div id="player_model_mobile" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
                 <div id="additional_stats_container">
                     <div class="additional-stat"><span class="stat-name">Last Updated</span><span class="stat-value"><%= calculated.last_updated.text %></span></div>
+                    <div class="additional-stat"><span class="stat-name">Joined</span><span class="stat-value"><%= calculated.first_join.text %></span></div>
                     <% if('bank' in calculated){ %>
                         <div class="additional-stat"><span class="stat-name">Bank Account</span><span class="stat-value"><%= Math.round(calculated.bank).toLocaleString() %> Coins</span></div>
                     <% } %>
