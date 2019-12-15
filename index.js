@@ -56,10 +56,9 @@ async function uuidToUsername(uuid){
     .value();
 
     if(user)
-        if(+new Date() - user.date < 3600 * 1000)
-            output = user.username;
+        output = user.username;
 
-    if(!output){
+    if(+new Date() - user.date > 3600 * 1000){
         try{
             let { data } = await axios(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`);
 
@@ -74,8 +73,6 @@ async function uuidToUsername(uuid){
                 .get('usernames')
                 .push({ uuid: data.id, username: data.name, date: +new Date() })
                 .write();
-
-            output = data.name;
         }catch(e){
             return "";
         }
