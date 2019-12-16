@@ -81,9 +81,10 @@ function uuidToUsername(uuid){
                 console.error(err);
                 resolve({ uuid, display_name: uuid });
             });
-        }else{
-            resolve({ uuid, display_name: output });
         }
+        
+        if(output)
+            resolve({ uuid, display_name: output });
     });
 }
 
