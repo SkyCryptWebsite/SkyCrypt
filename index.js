@@ -47,38 +47,44 @@ function getApiKey(){
     return api_key[api_index];
 }
 
-async function uuidToUsername(uuid){
-    let output;
+function uuidToUsername(uuid){
+    return new Promise((resolve, reject) => {
+        let output;
 
-    let user = db
-    .get('usernames')
-    .find({ uuid: uuid })
-    .value();
+        let user = db
+        .get('usernames')
+        .find({ uuid: uuid })
+        .value();
 
-    if(user)
-        output = user.username;
+        if(user)
+            output = user.username;
 
-    if(+new Date() - user.date > 3600 * 1000){
-        axios(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`).then(response => {
-            let { data } = response;
+        if(!output || +new Date() - user.date > 3600 * 1000){
+            axios(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`).then(response => {
+                let { data } = response;
 
-            if(user)
-                db
-                .get('usernames')
-                .find({ uuid: user.uuid })
-                .assign({ username: data.name, date: +new Date()  })
-                .write();
-            else
-                db
-                .get('usernames')
-                .push({ uuid: data.id, username: data.name, date: +new Date() })
-                .write();
-        }).catch(err => {
-            console.error(err);
-        });
-    }
+                if(user)
+                    db
+                    .get('usernames')
+                    .find({ uuid: user.uuid })
+                    .assign({ username: data.name, date: +new Date()  })
+                    .write();
+                else
+                    db
+                    .get('usernames')
+                    .push({ uuid: data.id, username: data.name, date: +new Date() })
+                    .write();
 
-    return { uuid, display_name: output };
+                if(!output)
+                    resolve({ uuid, display_name: data.name });
+            }).catch(err => {
+                console.error(err);
+                resolve({ uuid, display_name: uuid });
+            });
+        }else{
+            resolve({ uuid, display_name: output });
+        }
+    });
 }
 
 const app = express();
