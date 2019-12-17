@@ -47,45 +47,43 @@ function getApiKey(){
     return api_key[api_index];
 }
 
-function uuidToUsername(uuid){
-    return new Promise((resolve, reject) => {
-        let output;
+async function uuidToUsername(uuid){
+    let output;
 
-        let user = db
-        .get('usernames')
-        .find({ uuid: uuid })
-        .value();
+    let user = db
+    .get('usernames')
+    .find({ uuid: uuid })
+    .value();
 
-        if(user)
-            output = user.username;
+    if(!user || +new Date() - user.date > 3600 * 1000){
+        let profileRequest = axios(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`);
 
-        if(!output || +new Date() - user.date > 3600 * 1000){
-            axios(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`).then(response => {
-                let { data } = response;
+        profileRequest.then(response => {
+            let { data } = response;
 
-                if(user)
-                    db
-                    .get('usernames')
-                    .find({ uuid: user.uuid })
-                    .assign({ username: data.name, date: +new Date()  })
-                    .write();
-                else
-                    db
-                    .get('usernames')
-                    .push({ uuid: data.id, username: data.name, date: +new Date() })
-                    .write();
+            if(user)
+                db
+                .get('usernames')
+                .find({ uuid: user.uuid })
+                .assign({ username: data.name, date: +new Date()  })
+                .write();
+            else
+                db
+                .get('usernames')
+                .push({ uuid: data.id, username: data.name, date: +new Date() })
+                .write();
+        }).catch(err => {
+            console.error(err);
+        });
 
-                if(!output)
-                    resolve({ uuid, display_name: data.name });
-            }).catch(err => {
-                console.error(err);
-                resolve({ uuid, display_name: uuid });
-            });
+        if(!user){
+            let { data } = await profileRequest;
+            return { uuid, display_name: data.name };
         }
-        
-        if(output)
-            resolve({ uuid, display_name: output });
-    });
+    }
+
+    if(user)
+        return { uuid, display_name: user.username };
 }
 
 const app = express();
