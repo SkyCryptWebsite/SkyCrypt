@@ -68,3 +68,5 @@ credentials.json
 
 # db
 db.json
+
+.DS_Store
