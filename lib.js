@@ -1538,9 +1538,13 @@ module.exports = {
             output.stats.defense += emerald_bonus;
         }
 
-        // Apply Speedster Armor full set bonus of +14 Speed
+        // Apply Speedster Armor full set bonus of +20 Speed
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SPEEDSTER_')).length == 4)
             output.stats.speed += 20;
+
+        // Apply Young Dragon Armor full set bonus of +70 Speed
+        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('YOUNG_DRAGON_')).length == 4)
+            output.stats.speed += 70;
 
         // Apply stats of active talismans
         items.talismans.filter(a => Object.keys(a).length != 0 && !a.isInactive).forEach(item => {
