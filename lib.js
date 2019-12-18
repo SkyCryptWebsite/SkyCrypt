@@ -1532,7 +1532,7 @@ module.exports = {
         if(objectPath.has(profile, 'collection.EMERALD')
         && !isNaN(profile.collection.EMERALD)
         && items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('EMERALD_ARMOR_')).length == 4){
-            let emerald_bonus = Math.min(300, Math.floor(profile.collection.EMERALD / 3000));
+            let emerald_bonus = Math.min(350, Math.floor(profile.collection.EMERALD / 3000));
 
             output.stats.health += emerald_bonus;
             output.stats.defense += emerald_bonus;
