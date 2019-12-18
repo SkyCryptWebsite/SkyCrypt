@@ -1540,7 +1540,7 @@ module.exports = {
 
         // Apply Speedster Armor full set bonus of +14 Speed
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SPEEDSTER_')).length == 4)
-            output.stats.speed += 14;
+            output.stats.speed += 20;
 
         // Apply stats of active talismans
         items.talismans.filter(a => Object.keys(a).length != 0 && !a.isInactive).forEach(item => {
