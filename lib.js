@@ -9,6 +9,8 @@ const parseNbt = util.promisify(nbt.parse);
 
 const rarity_order = ['special', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 
+const max_souls = 190;
+
 function getLevelByXp(xp, runecrafting){
     let xp_table = runecrafting ? runecrafting_xp : leveling_xp;
 
@@ -706,6 +708,12 @@ const bonus_stats = {
             speed: 0
         },
         185: {
+            health: 21,
+            defense: 1,
+            strength: 1,
+            speed: 0
+        },
+        190: {
             health: 21,
             defense: 1,
             strength: 1,
@@ -1431,7 +1439,7 @@ module.exports = {
         output.fairy_bonus = {};
 
         if(profile.fairy_exchanges > 0){
-            let fairyBonus = getBonusStat(profile.fairy_exchanges * 5, 'fairy_souls', 185, 5);
+            let fairyBonus = getBonusStat(profile.fairy_exchanges * 5, 'fairy_souls', max_souls, 5);
             output.fairy_bonus = Object.assign({}, fairyBonus);
 
             // Apply fairy soul bonus
@@ -1439,7 +1447,7 @@ module.exports = {
                 output.stats[stat] += fairyBonus[stat];
         }
 
-        output.fairy_souls = { collected: profile.fairy_souls_collected, total: 185, progress: Math.min(profile.fairy_souls_collected / 185, 1) };
+        output.fairy_souls = { collected: profile.fairy_souls_collected, total: max_souls, progress: Math.min(profile.fairy_souls_collected / max_souls, 1) };
 
         // Apply skill bonuses
         if('experience_skill_farming' in profile
