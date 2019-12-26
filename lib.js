@@ -183,7 +183,6 @@ async function getItems(base64){
         if(objectPath.has(item, 'tag.display.Name'))
             item.display_name = module.exports.getRawLore(item.tag.display.Name);
 
-
         if(objectPath.has(item, 'display_name')){
             if(item.display_name == 'Water Bottle')
                 item.Damage = 17;
@@ -316,6 +315,11 @@ async function getItems(base64){
             }
         }
 
+        // Add snow canon and blaster to weapons
+        if(objectPath.has(item, 'tag.ExtraAttributes.id') && ['SNOW_CANNON', 'SNOW_BLASTER'].includes(item.tag.ExtraAttributes.id))
+            item.type = 'bow';
+
+        // Workaround for detecting item types if another language is set by the player on Hypixel
         if(objectPath.has(item, 'tag.ExtraAttributes.id') && item.tag.ExtraAttributes.id != 'ENCHANTED_BOOK'){
             if(objectPath.has(item, 'tag.ExtraAttributes.enchantments')){
                 if('sharpness' in item.tag.ExtraAttributes.enchantments
