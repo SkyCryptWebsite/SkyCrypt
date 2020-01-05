@@ -269,7 +269,7 @@ if(calculated.average_level){
                 </div>
             <% } %>
         </div>
-        <div class="stat-container stat-Accessories">
+        <div class="stat-container stat-accessories">
             <div class="stat-header">Accessories</div>
             <% if(items.no_inventory){ %>
                 <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
@@ -317,6 +317,23 @@ if(calculated.average_level){
                     </div>
                 </div>
             <% } %>
+        </div>
+        <div class="stat-container stat-kills">
+            <div class="stat-header">Top Kills & Deaths</div>
+            <div class="kills-deaths-container">
+                <div class="top-kills">
+                    <div class="kills-header">Kills</div>
+                    <% calculated.kills.slice(0, 10).forEach((kill, index) => { %>
+                        <div class="kill-stat"><div class="kill-rank">#<%= index + 1 %></div><div class="kill-entity"><%= kill.entityName %></div><div class="kill-amount"><%= kill.amount.toLocaleString() %></div></div>
+                    <% }); %>
+                </div>
+                <div class="top-deaths">
+                    <div class="kills-header">Deaths</div>
+                    <% calculated.deaths.slice(0, 10).forEach((death, index) => { %>
+                        <div class="kill-stat"><div class="kill-rank">#<%= index + 1 %></div><div class="kill-entity"><%= death.entityName %></div><div class="kill-amount"><%= death.amount.toLocaleString() %></div></div>
+                    <% }); %>
+                </div>
+            </div>
         </div>
     </div>
     <script>

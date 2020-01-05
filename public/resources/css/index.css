@@ -678,7 +678,15 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 }
 
 .stat-container{
-    margin-top: 40px;
+    margin-top: 35px;
+}
+
+.stat-kills{
+    margin-top: 25px;
+}
+
+.stat-accessories{
+    margin-top: 45px;
 }
 
 .stat-header{
@@ -922,9 +930,10 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 #inventory_container{
     display: inline-block;
     background-color: rgba(0,0,0,0.3);
-    margin: 25px;
+    margin: 30px;
     padding: 20px;
     position: relative;
+    margin-bottom: 0px;
 }
 
 #inventory_header{
@@ -1063,6 +1072,66 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     font-size: 24px;
     text-shadow: 0px 0px 4px rgba(0,0,0,0.4);
     font-weight: 600;
+}
+
+.kills-deaths-container{
+    margin: 30px;
+}
+
+.kills-deaths-container > div{
+    position: relative;
+    min-width: 330px;
+    padding: 20px;
+    padding-top: 50px;
+    display: inline-block;
+    background-color: rgba(0,0,0,0.3);
+    vertical-align: top;
+}
+
+.kills-header{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 600;
+    background-color: #850f4a;
+    text-shadow: 0px 0px 7px rgba(0,0,0,0.3);
+}
+
+.top-deaths{
+    margin-left: 20px;
+}
+
+.kill-stat{
+    position: relative;
+    margin-top: 5px;
+}
+
+.kill-stat div{
+    display: inline-block;
+    font-weight: 600;
+}
+
+.kill-rank{
+    width: 30px;
+    font-weight: 600;
+    text-align: right;
+    margin-right: 7px;
+    color: rgba(255,255,255,0.7);
+}
+
+.kill-entity::after{
+    content: ":";
+    color: rgba(255,255,255,0.7);
+}
+
+.kill-amount{
+    margin-left: 5px;
+    color: rgba(255,255,255,0.7);
 }
 
 #enter_player_box_wrapper{
@@ -1456,6 +1525,11 @@ html.no-webp #error_box_wrapper{
         text-align: center;
         margin-top: 45px;
     }
+
+    .kills-deaths-container > div {
+        min-width: 0;
+        width: calc(100vw / 2 - 80px);
+    }
 }
 
 @media (max-width: 760px){
@@ -1483,6 +1557,15 @@ html.no-webp #error_box_wrapper{
     #inventory_header{
         white-space: nowrap;
         overflow-x: scroll;
+    }
+
+    .kills-deaths-container > div {
+        width: calc(100vw - 100px);
+    }
+
+    .top-deaths{
+        margin-left: 0;
+        margin-top: 25px;
     }
 }
 

@@ -11,6 +11,10 @@ const rarity_order = ['special', 'legendary', 'epic', 'rare', 'uncommon', 'commo
 
 const max_souls = 190;
 
+function replaceAll(target, search, replacement){
+    return target.split(search).join(replacement);
+}
+
 function getLevelByXp(xp, runecrafting){
     let xp_table = runecrafting ? runecrafting_xp : leveling_xp;
 
@@ -1614,6 +1618,32 @@ module.exports = {
         // Stats shouldn't go into negative
         for(let stat in output.stats)
             output.stats[stat] = Math.max(0, output.stats[stat]);
+
+        let killsDeaths = [];
+
+        for(let stat in profile.stats){
+            if(stat.startsWith("kills_"))
+                killsDeaths.push({ type: 'kills', entityId: stat.replace("kills_", ""), amount: profile.stats[stat] });
+
+            if(stat.startsWith("deaths_"))
+                killsDeaths.push({ type: 'deaths', entityId: stat.replace("deaths_", ""), amount: profile.stats[stat] });
+        }
+
+        killsDeaths.forEach(stat => {
+            let entityName = "";
+            let { entityId } = stat;
+            entityId.split("_").forEach((split, index) => {
+                entityName += split.charAt(0).toUpperCase() + split.slice(1);
+
+                if(index < entityId.split("_").length - 1)
+                    entityName += " ";
+            });
+
+            stat.entityName = entityName;
+        });
+
+        output.kills = killsDeaths.filter(a => a.type == 'kills').sort((a, b) => b.amount - a.amount);
+        output.deaths = killsDeaths.filter(a => a.type == 'deaths').sort((a, b) => b.amount - a.amount);
 
         return output;
     }
