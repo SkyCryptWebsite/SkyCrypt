@@ -1528,7 +1528,7 @@ html.no-webp #error_box_wrapper{
 
     .kills-deaths-container > div {
         min-width: 0;
-        width: calc(100vw / 2 - 80px);
+        width: calc(100vw / 2 - 85px);
     }
 }
 
