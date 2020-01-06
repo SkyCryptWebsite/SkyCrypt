@@ -776,6 +776,9 @@ const bonus_stats = {
         15: {
             health: 3
         },
+        20: {
+            health: 4
+        },
         26: {
             health: 5
         }
