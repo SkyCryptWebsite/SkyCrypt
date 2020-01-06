@@ -1666,3 +1666,11 @@ html.no-webp #error_box_wrapper{
         height: calc((100vw - 40px) / 9 - 5px);
     }
 }
+
+@media (max-width: 380px){
+    .basic-stat{
+        font-size: 13.5px;
+        line-height: 22px;
+        height: 22px;
+    }
+}
