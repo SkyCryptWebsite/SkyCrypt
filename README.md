@@ -11,7 +11,7 @@ This project allows you to share your SkyBlock profile with other players with a
 
 <h2 align="center">Contributing</h1>
 
-You are free to report bugs or contribute to this project. Just open <a href="../../issues">Issues</a> or <a href="../../pulls">Pull Requests</a> and I will look into them.
+You are free to report bugs or contribute to this project. Just open <a href="../../issues">Issues</a> or <a href="../../pulls">Pull Requests</a> and I will look into them, although changes to the design are pretty unlikely to be accepted.
 
 <h3>Prerequisites</h3>
 
