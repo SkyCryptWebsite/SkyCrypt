@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', function(){
     let dynamicEnchantedIndex = null;
 
     function renderInventory(inventory, type){
+        let scrollTop = window.pageYOffset;
+
         if(dynamicEnchantedIndex !== null){
             enchantedOverlays.splice(dynamicEnchantedIndex);
             dynamicEnchantedIndex = null;
@@ -132,7 +134,18 @@ document.addEventListener('DOMContentLoaded', function(){
 
         [].forEach.call(inventoryView.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
 
-        window.scrollTo(0, document.documentElement.scrollHeight);
+        window.scrollTo({
+            top: scrollTop
+        });
+
+        let inventoryStatContainer = document.querySelector('.stat-inventory');
+
+        let rect = inventoryStatContainer.getBoundingClientRect();
+
+        console.log(rect, rect.top < 0, rect.bottom > window.innerHeight);
+
+        if(rect.top < 0 || rect.bottom > window.innerHeight)
+            inventoryStatContainer.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }
 
     function showBackpack(item){
