@@ -308,7 +308,7 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         console.error(e);
 
         res.render('index', {
-            error: 'An unknown error occured. Please try again!',
+            error: 'Request to Hypixel API failed. Their API might be down right now so try again later.',
             player: req.params.player,
             page: 'index'
         });
