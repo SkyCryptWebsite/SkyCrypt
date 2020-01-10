@@ -112,7 +112,7 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
     .value();
 
     try{
-        response = await Hypixel.get('player', { params: { key: getApiKey(), name: req.params.player } });
+        response = await Hypixel.get('player', { params: { key: getApiKey(), name: req.params.player }, timeout: 5000 });
         let { data } = response;
 
         if(!data.success){
