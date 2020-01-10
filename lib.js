@@ -1387,7 +1387,7 @@ module.exports = {
         talismans.push(...enderchest.filter(a => a.type == 'accessory'));
 
         output.talismans = talismans;
-        output.weapons = all_items.filter(a => a.type == 'sword' || a.type == 'bow');
+        output.weapons = all_items.filter(a => a.type == 'sword' || a.type == 'bow' || a.type == 'fishing rod');
 
         // Check if inventory access disabled by user
         if(inventory.length == 0)

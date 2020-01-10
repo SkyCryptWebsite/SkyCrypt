@@ -43,7 +43,7 @@ const inventorySlot = item => { %>
         <% if(Object.keys(item).length > 1){ %>
         <div class="rich-item inventory-item" data-item-index="<%= item.item_index %>">
             <% itemIcon(item, ['piece-icon']); %>
-            <% if(item.Count > 1){ %><div class="item-count"><%= item.Count %></div><% } %>
+            <% if(item.Count != 1){ %><div class="item-count"><%= item.Count %></div><% } %>
         </div>
         <% } %>
     </div>
