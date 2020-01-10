@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 inventoryItem.appendChild(inventoryItemIcon);
 
-                if(item.Count > 1)
+                if(item.Count != 1)
                     inventoryItem.appendChild(inventoryItemCount);
 
                 inventorySlot.appendChild(inventoryItem);
