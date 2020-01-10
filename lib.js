@@ -363,6 +363,13 @@ async function getItems(base64){
                     item.type = 'fishing rod';
             }
         }
+
+        if(!objectPath.has(item, 'display_name') && objectPath.has(item, 'id')){
+            let vanillaItem = mcData.items[item.id];
+
+            if(vanillaItem && objectPath.has(vanillaItem, 'displayName'))
+                item.display_name = vanillaItem.displayName;
+        }
     }
 
     for(let item of items){
