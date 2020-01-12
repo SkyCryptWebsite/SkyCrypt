@@ -142,8 +142,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
         let rect = inventoryStatContainer.getBoundingClientRect();
 
-        console.log(rect, rect.top < 0, rect.bottom > window.innerHeight);
-
         if(rect.top < 0 || rect.bottom > window.innerHeight)
             inventoryStatContainer.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }
@@ -260,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     function closeLore(){
-        let shownLore = document.querySelector('#stats_content.sticky-stats');
+        let shownLore = document.querySelector('#stats_content.show-stats, #stats_content.sticky-stats');
 
         if(shownLore != null){
             dimmer.classList.remove('show-dimmer');
@@ -272,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 stickyStatsPiece.classList.remove('sticky-stats');
             }
 
-            statsContent.classList.remove('sticky-stats');
+            statsContent.classList.remove('sticky-stats', 'show-stats');
         }
     }
 
@@ -565,6 +563,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 if(e.ctrlKey && item && Array.isArray(item.containsItems)){
                     showBackpack(item);
+                    closeLore();
                 }else{
                     if(statsContent.classList.contains('sticky-stats')){
                         dimmer.classList.remove('show-dimmer');
