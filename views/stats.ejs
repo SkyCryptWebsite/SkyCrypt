@@ -171,7 +171,8 @@ if(calculated.average_level){
             <div id="base_stats_container">
                 <div data-stat="health" class="basic-stat stat-health"><span class="stat-name">Health</span><span class="stat-value"><%= stats.health %></span></div>
                 <div data-stat="defense" class="basic-stat stat-defense"><span class="stat-name">Defense</span><span class="stat-value"><%= stats.defense %></span></div>
-                <div data-stat="effective_health" class="basic-stat stat-effective-health"><span class="stat-name">Effective HP</span><span class="stat-value"><%= stats.effective_health %></span></div>
+                <div data-stat="effective_health" class="basic-stat stat-effective-health"  data-tippy-content="Effective Health based on Health + Defense.
+                → Formula: Health * (1 + Defense / 100)"><span class="stat-name">Effective HP</span><span class="stat-value"><%= stats.effective_health %></span></div>
                 <div data-stat="strength" class="basic-stat stat-strength"><span class="stat-name">Strength</span><span class="stat-value"><%= stats.strength %></span></div>
                 <div data-stat="speed" class="basic-stat stat-speed"><span class="stat-name">Speed</span><span class="stat-value"><%= stats.speed %></span>%</div>
                 <div data-stat="crit_chance" class="basic-stat stat-crit-chance"><span class="stat-name">Crit Chance</span><span class="stat-value"><%= stats.crit_chance %></span>%</div>
@@ -185,7 +186,7 @@ if(calculated.average_level){
                         <div class="additional-stat"><span class="stat-name">Bank Account</span><span class="stat-value"><%= Math.round(calculated.bank).toLocaleString() %> Coins</span></div>
                     <% } %>
                     <% if('levels' in calculated){ %>
-                        <div class="additional-stat" data-tippy-content="Average skill level over all skills except Carpentry and Runecrafting, includes progress to next level"><span class="stat-name">Average Skill Level</span><span class="stat-value"><%= calculated.average_level %></span></div>
+                        <div class="additional-stat" data-tippy-content="Average skill level over all skills except Carpentry and Runecrafting, includes progress to next level."><span class="stat-name">Average Skill Level</span><span class="stat-value"><%= calculated.average_level %></span></div>
                     <% } %>
                 </div>
             </div>
