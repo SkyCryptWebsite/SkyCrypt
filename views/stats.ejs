@@ -185,7 +185,7 @@ if(calculated.average_level){
                         <div class="additional-stat"><span class="stat-name">Bank Account</span><span class="stat-value"><%= Math.round(calculated.bank).toLocaleString() %> Coins</span></div>
                     <% } %>
                     <% if('levels' in calculated){ %>
-                        <div class="additional-stat"><span class="stat-name">Average Skill Level</span><span class="stat-value"><%= calculated.average_level %></span></div>
+                        <div class="additional-stat" data-tippy-content="Average skill level over all skills except Carpentry and Runecrafting, includes progress to next level"><span class="stat-name">Average Skill Level</span><span class="stat-value"><%= calculated.average_level %></span></div>
                     <% } %>
                 </div>
             </div>

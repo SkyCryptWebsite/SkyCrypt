@@ -665,4 +665,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
     resize();
     window.addEventListener('resize', resize);
+
+    tippy('*[data-tippy-content]')
 });

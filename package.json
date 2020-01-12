@@ -33,6 +33,7 @@
     "jimp": "^0.8.4",
     "lodash": "^4.17.15",
     "lowdb": "^1.0.0",
+    "micromatch": "^4.0.2",
     "minecraft-data": "^2.39.1",
     "moment": "^2.24.0",
     "npm": "^6.13.4",
