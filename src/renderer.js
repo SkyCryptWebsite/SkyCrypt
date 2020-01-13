@@ -54,6 +54,17 @@ function getPart(src, x, y, width, height, scale){
     return dst;
 }
 
+function flipX(src){
+    let dst = createCanvas(src.width, src.height);
+    let ctx = dst.getContext("2d");
+
+    ctx.translate(src.width, 0);
+    ctx.scale(-1, 1);
+
+    ctx.drawImage(src, 0, 0);
+    return dst;
+}
+
 module.exports = {
     renderHead: async (url, scale) => {
         let hat_factor = 0.94;
@@ -81,9 +92,9 @@ module.exports = {
             head_top_overlay = resize(getPart(skin, 40, 0, 8, 8, 1), scale);
             head_front_overlay = resize(getPart(skin, 40, 8, 8, 8, 1), scale);
             head_right_overlay = resize(getPart(skin, 32, 8, 8, 8, 1), scale);
-            head_back_overlay = resize(getPart(skin, 56, 8, 8, 8, 1), scale);
+            head_back_overlay = flipX(resize(getPart(skin, 56, 8, 8, 8, 1), scale));
             head_bottom_overlay = resize(getPart(skin, 48, 0, 8, 8, 1), scale);
-            head_left_overlay = resize(getPart(skin, 48, 8, 8, 8, 1), scale);
+            head_left_overlay = flipX(resize(getPart(skin, 48, 8, 8, 8, 1), scale));
         }
 
         let x = 0;
