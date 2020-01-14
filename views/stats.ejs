@@ -178,7 +178,7 @@ if(calculated.average_level){
                 Bonus Defense: +<%= stats.defense - calculated.base_stats.defense %>
                 <div class='tippy-explanation'>Additional bonuses by Armor, held items and Accessories.</div>"><span class="stat-name">Defense</span><span class="stat-value"><%= stats.defense %></span></div>
                 <div data-stat="effective_health" class="basic-stat stat-effective-health"  data-tippy-content="Effective Health based on Health + Defense.
-                → Formula: Health * (1 + Defense / 100)"><span class="stat-name">Effective HP</span><span class="stat-value"><%= stats.effective_health %></span></div>
+                <div class='tippy-explanation'>→ Formula: Health * (1 + Defense / 100)</div>"><span class="stat-name">Effective HP</span><span class="stat-value"><%= stats.effective_health %></span></div>
                 <div data-stat="strength" class="basic-stat stat-strength" data-tippy-content="Base Strength: <%= calculated.base_stats.strength %>
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls and leveling your Foraging skill.</div>
                 Bonus Strength: +<%= stats.strength - calculated.base_stats.strength %>
@@ -189,11 +189,11 @@ if(calculated.average_level){
                 <div class='tippy-explanation'>Additional bonuses by Armor, held items and Accessories.</div>"><span class="stat-name">Speed</span><span class="stat-value"><%= stats.speed %></span>%</div>
                 <div data-stat="crit_chance" class="basic-stat stat-crit-chance" data-tippy-content="Base Crit Chance: <%= calculated.base_stats.crit_chance %>%
                 <div class='tippy-explanation'>Increased by leveling your Combat skill.</div>
-                Bonus Speed: +<%= stats.crit_chance - calculated.base_stats.crit_chance %>%
+                Bonus Crit Chance: +<%= stats.crit_chance - calculated.base_stats.crit_chance %>%
                 <div class='tippy-explanation'>Additional bonuses by Armor, held items and Accessories.</div>"><span class="stat-name">Crit Chance</span><span class="stat-value"><%= stats.crit_chance %></span>%</div>
                 <div data-stat="crit_damage" class="basic-stat stat-crit-damage" data-tippy-content="Base Crit Damage: <%= calculated.base_stats.crit_damage %>%
                 <div class='tippy-explanation'>Increased by leveling up in Spider or Wolf Slayer.</div>
-                Bonus Speed: +<%= stats.crit_damage - calculated.base_stats.crit_damage %>%
+                Bonus Crit Damage: +<%= stats.crit_damage - calculated.base_stats.crit_damage %>%
                 <div class='tippy-explanation'>Additional bonuses by Armor, held items and Accessories.</div>"><span class="stat-name">Crit Damage</span><span class="stat-value"><%= stats.crit_damage %></span>%</div>
                 <div data-stat="intelligence" class="basic-stat stat-intelligence" data-tippy-content="Base Intelligence: <%= calculated.base_stats.intelligence %>
                 <div class='tippy-explanation'>Increased by leveling your Enchanting and Alchemy skills and completing songs on Melody's Harp.</div>
