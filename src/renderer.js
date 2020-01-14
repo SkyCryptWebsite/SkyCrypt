@@ -185,8 +185,8 @@ module.exports = {
 
         ctx.imageSmoothingEnabled = false;
 
-        let armor_base = await loadImage(path.resolve(__dirname, 'public', 'resources', 'img', 'textures', 'item', `leather_${type}.png`));
-        let armor_overlay = await loadImage(path.resolve(__dirname, 'public', 'resources', 'img', 'textures', 'item', `leather_${type}_overlay.png`));
+        let armor_base = await loadImage(path.resolve(__dirname, '..', 'public', 'resources', 'img', 'textures', 'item', `leather_${type}.png`));
+        let armor_overlay = await loadImage(path.resolve(__dirname, '..', 'public', 'resources', 'img', 'textures', 'item', `leather_${type}_overlay.png`));
 
         ctx.drawImage(armor_base, 0, 0, 16, 16, 0, 0, canvas.width, canvas.height);
 
