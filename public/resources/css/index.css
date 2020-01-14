@@ -25,6 +25,11 @@ html.no-webp{
     padding: 15px;
 }
 
+.tippy-explanation{
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 4px;
+}
+
 a{
     color: #F94EA3;
     transition: color .2s;
