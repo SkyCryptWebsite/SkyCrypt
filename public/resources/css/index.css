@@ -21,6 +21,10 @@ html.no-webp{
     border-top-color: rgb(166, 20, 93);
 }
 
+.tippy-tooltip[data-placement^="bottom"] > .tippy-arrow{
+    border-bottom-color: rgb(166, 20, 93);
+}
+
 .tippy-content{
     padding: 15px;
 }
