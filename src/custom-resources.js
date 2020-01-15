@@ -207,61 +207,89 @@ async function init(){
                 const pngFrames = [];
                 const pngDelays = [];
 
+                if(!('frames' in animation)){
+                    animation.frames = [];
+
+                    for(let i = 0; i < image.height / NORMALIZED_SIZE; i++)
+                        animation.frames.push(i);
+                }
+
+                let currentTime = 0;
+
+                for(const [index, frame] of animation.frames.entries()){
+                    if(typeof frame == 'number')
+                        animation.frames[index] = {
+                            index: frame,
+                            time: animation.frametime
+                        };
+
+                    animation.frames[index].time = animation.frames[index].time / 20 * 1000;
+                    animation.frames[index].totalTime = currentTime;
+                    currentTime += animation.frames[index].time;
+                }
+
+                animation.frametime = animation.frametime / 20 * 1000;
+
                 if('frames' in animation){
                     let frameCount = animation.frames.length;
-                    let frameTime = animation.frametime / 20 * 1000;
-
-                    for(const frame of animation.frames){
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                        if(typeof frame == 'object'){
-                            if(!('index' in frame) && !('time' in frame))
-                                continue;
-
-                            ctx.drawImage(getFrame(image, frame.index), 0, 0);
-
-                            pngDelays.push(frame.time / 20 * 1000);
-                        }else if(typeof frame == 'number'){
-                            ctx.drawImage(getFrame(image, frame), 0, 0);
-
-                            pngDelays.push(frameTime);
-                        }
-
-                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data.buffer;
-
-                        pngFrames.push(imageData);
-                    }
-                }else{
-                    let frameCount = image.height / NORMALIZED_SIZE;
-                    let frameCountInterpolated = frameCount;
-                    let frameTime = animation.frametime / 20 * 1000;
-                    let frameTimeInterpolated = frameTime;
 
                     if(animation.interpolate){
-                        frameTimeInterpolated = 2 / 20 * 1000;
-                        frameCountInterpolated = frameCount * (frameTime / frameTimeInterpolated);
-                    }
+                        let totalLength = 0;
 
-                    for(let i = 0; i < frameCountInterpolated; i++){
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        for(const frame of animation.frames)
+                            totalLength += frame.time;
 
-                        let frameCur = Math.floor(i / frameCountInterpolated * frameCount) - 1;
-                        let frameNext = Math.floor(i / frameCountInterpolated * frameCount);
-                        let opacity = (i / frameCountInterpolated * frameCount) - frameCur - 1;
+                        const frameTimeInterpolated = 2 / 20 * 1000;
 
-                        if(frameCur < 0)
-                            frameCur = frameCount - 1;
+                        let frameCountInterpolated = totalLength / frameTimeInterpolated;
 
-                        ctx.globalAlpha = 1;
-                        ctx.drawImage(getFrame(image, frameCur), 0, 0);
+                        for(let i = 0; i < frameCountInterpolated; i++){
+                            let frameCur, frameNext;
+                            let currentTime = i / frameCountInterpolated * totalLength;
 
-                        ctx.globalAlpha = opacity;
-                        ctx.drawImage(getFrame(image, frameNext), 0, 0);
+                            for(const [index, frame] of animation.frames.entries()){
+                                if(frame.totalTime + frame.time > currentTime){
+                                    frameCur = frame;
 
-                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data.buffer;
+                                    if(index >= animation.frames.length - 1)
+                                        frameNext = animation.frames[0];
+                                    else
+                                        frameNext = animation.frames[index + 1];
 
-                        pngFrames.push(imageData);
-                        pngDelays.push(frameTimeInterpolated);
+                                    break;
+                                }
+                            }
+
+                            const opacity = (currentTime - frameCur.totalTime) / frameCur.time;
+
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                            ctx.globalCompositeOperation = 'source-over';
+
+                            ctx.globalAlpha = 1;
+                            ctx.drawImage(getFrame(image, frameCur.index), 0, 0);
+
+                            ctx.globalCompositeOperation = 'source-atop';
+
+                            ctx.globalAlpha = opacity;
+                            ctx.drawImage(getFrame(image, frameNext.index), 0, 0);
+
+                            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data.buffer;
+
+                            pngFrames.push(imageData);
+                            pngDelays.push(frameTimeInterpolated);
+                        }
+                    }else{
+                        for(const frame of animation.frames){
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            ctx.drawImage(getFrame(image, frame.index), 0, 0);
+
+                            pngDelays.push(frame.time);
+
+                            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data.buffer;
+
+                            pngFrames.push(imageData);
+                        }
                     }
                 }
 
