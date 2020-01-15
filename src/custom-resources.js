@@ -327,9 +327,6 @@ module.exports = {
                 }
 
                 if(matches == texture.match.length){
-                    if(item.display_name.includes('XP Boost'))
-                        console.log(item.display_name, texture);
-
                     if(texture.weight < outputTexture.weight)
                         continue;
 
