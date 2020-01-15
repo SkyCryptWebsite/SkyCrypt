@@ -91,6 +91,30 @@ async function init(){
             if('texture.bow_standby' in properties)
                 textureFile = path.resolve(path.dirname(file), properties['texture.bow_standby']);
 
+            if('model' in properties){
+                const modelFile = path.resolve(path.dirname(file), properties['model']);
+
+                try{
+                    const model = RJSON.parse(await fs.readFile(modelFile, 'utf8'));
+
+                    if(model.parent != 'builtin/generated')
+                        continue;
+
+                    const layers = Object.keys(model.textures).sort((a, b) => a - b);
+                    const topLayer = layers.pop();
+
+                    if(!topLayer.startsWith('layer'))
+                        continue;
+
+                    textureFile = path.resolve(pack.basePath, 'assets', 'minecraft', model.textures[topLayer] + '.png');
+
+                    await fs.access(textureFile, fs.F_OK);
+
+                }catch(e){
+                    continue;
+                }
+            }
+
             try{
                 await fs.access(textureFile, fs.F_OK);
             }catch(e){
@@ -125,6 +149,9 @@ async function init(){
                     if(item)
                         texture.id = item.id;
                 }
+
+                if(property == 'damage')
+                    texture.damage = parseInt(properties[property]);
 
                 if(!property.startsWith('nbt.'))
                     continue;
@@ -271,6 +298,9 @@ module.exports = {
                 if(texture.id != item.id)
                     continue;
 
+                if('damage' in texture && texture.damage != item.Damage)
+                    continue;
+
                 let matches = 0;
 
                 for(const match of texture.match){
@@ -296,10 +326,13 @@ module.exports = {
                 }
 
                 if(matches == texture.match.length){
+                    if(item.display_name.includes('XP Boost'))
+                        console.log(item.display_name, texture);
+
                     if(texture.weight < outputTexture.weight)
                         continue;
 
-                    if(texture.weight == outputTexture.weight && texture.file < outputTexture.file)
+                    if((texture.weight == outputTexture.weight && texture.file < outputTexture.file) || (texture.file == 'water.properties' && outputTexture.file != 'water.properties'))
                         continue;
 
                     outputTexture = Object.assign({}, texture);
