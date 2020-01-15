@@ -1,0 +1,18 @@
+{
+    "parent": "builtin/generated",
+    "textures": {
+        "layer0": "items/diamond_sword"
+    },
+    "display": {
+        "thirdperson": {
+            "rotation": [ 0, 90, -35 ],
+            "translation": [ 0, 1.1, -4.4 ],
+            "scale": [ 1.2, 1.2, 1.2 ]
+        },
+        "firstperson": {
+            "rotation": [ 0, -135, 25 ],
+            "translation": [ 0, 5, 2 ],
+            "scale": [ 2, 2, 2 ]
+        }
+    }
+}
