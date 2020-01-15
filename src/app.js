@@ -7,7 +7,7 @@ const renderer = require('./renderer');
 const lib = require('./lib');
 const _ = require('lodash');
 const objectPath = require('object-path');
-const moment = require('moment');
+const moment = require('moment')
 
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
@@ -100,6 +100,7 @@ async function uuidToUsername(uuid){
 const app = express();
 const port = 32464;
 
+app.locals.moment = moment;
 app.set('view engine', 'ejs');
 app.use(express.static('public', { maxAge: CACHE_DURATION }));
 
