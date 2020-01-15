@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', function(){
     history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name);
 
     function isEnchanted(item){
+        if(item.animated)
+            return false;
+            
         if('texture_path' in item && item.texture_path.endsWith('.gif')) // disable enchanted overlay for gifs cause laggy
             return false;
 
