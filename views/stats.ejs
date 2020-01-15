@@ -19,6 +19,9 @@
 };
 
 const isEnchanted = item => {
+    if(item.animated)
+        return false;
+
     if('texture_path' in item && item.texture_path.endsWith('.gif')) // disable enchanted overlay for gifs cause laggy
         return false;
 
@@ -33,7 +36,7 @@ const isEnchanted = item => {
 
 const itemIcon = (item, classes) => { %>
     <div
-        <% if(item.texture_path){ %> style="background-image: url(<%= item.texture_path %>)" <% } %>
+        <% if(item.texture_path){ %> style="background-image: url('<%= item.texture_path %>')" <% } %>
         class="<%= classes.join(" ") %> item-icon <% if(isEnchanted(item)){ %>is-enchanted <% } %> <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
     </div>
 <% };

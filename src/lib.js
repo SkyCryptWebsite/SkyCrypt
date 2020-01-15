@@ -5,6 +5,8 @@ const util = require('util');
 const mcData = require("minecraft-data")("1.8.9");
 const objectPath = require("object-path");
 
+const customResources = require('./custom-resources');
+
 const parseNbt = util.promisify(nbt.parse);
 
 const rarity_order = ['special', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
@@ -187,14 +189,15 @@ async function getItems(base64){
         if(objectPath.has(item, 'tag.display.Name'))
             item.display_name = module.exports.getRawLore(item.tag.display.Name);
 
-        if(objectPath.has(item, 'display_name')){
+        if(objectPath.has(item, 'display_name'))
             if(item.display_name == 'Water Bottle')
                 item.Damage = 17;
 
-            // Replace all declared custom textures (mostly FurfSky+ replacements so far)
-            for(let texture in replacement_textures)
-                if(item.display_name.includes(texture))
-                    item.texture_path = replacement_textures[texture];
+        const customTexture = await customResources.getTexture(item);
+
+        if(customTexture){
+            item.animated = customTexture.animated;
+            item.texture_path = '/' + customTexture.path;
         }
 
 
@@ -1040,125 +1043,6 @@ const minecraft_formatting = {
         type: 'reset'
     }
 };
-
-// List of items whose texture should be replaced with a custom one
-const replacement_textures = {
-    "Undead Sword": "/resources/img/textures/furfsky/undead_sword.png",
-    "Spider Sword": "/resources/img/textures/furfsky/spider_sword.png",
-    "Silver Fang": "/resources/img/textures/furfsky/silver_fang.png",
-    "Rogue Sword": "/resources/img/textures/furfsky/rogue_sword.png",
-    "Prismarine Blade": "/resources/img/textures/furfsky/prismarine_blade.gif",
-    "Pigman Sword": "/resources/img/textures/furfsky/pigman_sword.gif",
-    "Midas' Sword": "/resources/img/textures/furfsky/midas_sword.gif",
-    "Leaping Sword": "/resources/img/textures/furfsky/leaping_sword.gif",
-    "Ink Wand": "/resources/img/textures/furfsky/ink_wand.gif",
-    "Golem Sword": "/resources/img/textures/furfsky/golem_sword.png",
-    "Ender Sword": "/resources/img/textures/furfsky/ender_sword.png",
-    "Emerald Blade": "/resources/img/textures/furfsky/emerald_blade.gif",
-    "Ember Rod": "/resources/img/textures/furfsky/ember_rod.gif",
-    "Cleaver": "/resources/img/textures/furfsky/cleaver.png",
-    "Aspect of the End": "/resources/img/textures/furfsky/aspect_sword.gif",
-    "Aspect of the Dragon": "/resources/img/textures/furfsky/aspect_dragon.gif",
-
-    "End Stone Bow": "/resources/img/textures/furfsky/endstone_bow_standby.png",
-    "Wither Bow": "/resources/img/textures/furfsky/wither_bow_standby.png",
-    "Savanna Bow": "/resources/img/textures/furfsky/savanna_bow_standby.png",
-    "Runaan's Bow": "/resources/img/textures/furfsky/runaan_bow_standby.gif",
-    "Hurricane Bow": "/resources/img/textures/furfsky/hurricane_bow_standby.gif",
-    "Ender Bow": "/resources/img/textures/furfsky/ender_bow_standby.png",
-    "Slime Bow": "/resources/img/textures/furfsky/slime_bow_standby.png",
-    "Explosive Bow": "/resources/img/textures/furfsky/explosive_bow_standby.png",
-    "Magma Bow": "/resources/img/textures/furfsky/magma_bow_standby.gif",
-
-    "Challenging Rod": "/resources/img/textures/furfsky/challenging_rod.png",
-    "Farmer's Rod": "/resources/img/textures/furfsky/farmers_rod.png",
-    "Prismarine Rod": "/resources/img/textures/furfsky/prismarine_rod.gif",
-    "Rod of Champions": "/resources/img/textures/furfsky/rod_of_champions.gif",
-    "Rod of Legends": "/resources/img/textures/furfsky/rod_of_legends.gif",
-    "Shredder": "/resources/img/textures/furfsky/shredder.png",
-    "Speedster Rod": "/resources/img/textures/furfsky/speedster_rod.png",
-    "Sponge Rod": "/resources/img/textures/furfsky/sponge_rod.png",
-
-    "Speedster Helmet": "/resources/img/textures/furfsky/speedster_helm.png",
-    "Speedster Chestplate": "/resources/img/textures/furfsky/speedster_chest.png",
-    "Speedster Leggings": "/resources/img/textures/furfsky/speedster_legs.png",
-    "Speedster Boots": "/resources/img/textures/furfsky/speedster_boots.png",
-
-    "Mushroom Helmet": "/resources/img/textures/furfsky/mush_helm.png",
-    "Mushroom Chestplate": "/resources/img/textures/furfsky/mush_chest.png",
-    "Mushroom Leggings": "/resources/img/textures/furfsky/mush_legs.png",
-    "Mushroom Boots": "/resources/img/textures/furfsky/mush_boots.png",
-
-    "Skeleton's Helmet": "/resources/img/textures/furfsky/skeleton_helm.png",
-    "Guardian Chestplate": "/resources/img/textures/furfsky/guardian_chest.png",
-    "Creeper Pants": "/resources/img/textures/furfsky/creeper_pants.png",
-    "Spider's Boots": "/resources/img/textures/furfsky/spider_boots.png",
-
-    "Miner's Outfit Helmet": "/resources/img/textures/furfsky/miner_helm.png",
-    "Miner's Outfit  Chestplate": "/resources/img/textures/furfsky/miner_chest.png",
-    "Miner's Outfit  Leggings": "/resources/img/textures/furfsky/miner_legs.png",
-    "Miner's Outfit  Boots": "/resources/img/textures/furfsky/miner_boots.png",
-
-    "Miner Helmet": "/resources/img/textures/furfsky/mine_helm.png",
-    "Miner Chestplate": "/resources/img/textures/furfsky/mine_chest.png",
-    "Miner Leggings": "/resources/img/textures/furfsky/mine_legs.png",
-    "Miner Boots": "/resources/img/textures/furfsky/mine_boots.png",
-
-    "Armor of Magma Helmet": "/resources/img/textures/furfsky/magma_helm.png",
-    "Armor of Magma Chestplate": "/resources/img/textures/furfsky/magma_chest.png",
-    "Armor of Magma Leggings": "/resources/img/textures/furfsky/magma_legs.png",
-    "Armor of Magma Boots": "/resources/img/textures/furfsky/magma_boots.png",
-
-    "Leaflet Helmet": "/resources/img/textures/furfsky/leaf_helm.png",
-    "Leaflet Chestplate": "/resources/img/textures/furfsky/leaf_chest.png",
-    "Leaflet Leggings": "/resources/img/textures/furfsky/leaf_legs.png",
-    "Leaflet Boots": "/resources/img/textures/furfsky/leaf_boots.png",
-
-    "Lapis Armor Helmet": "/resources/img/textures/furfsky/lapis_helm.png",
-    "Lapis Armor Chestplate": "/resources/img/textures/furfsky/lapis_chest.png",
-    "Lapis Armor Leggings": "/resources/img/textures/furfsky/lapis_legs.png",
-    "Lapis Armor Boots": "/resources/img/textures/furfsky/lapis_boots.png",
-
-    "Hardened Diamond Helmet": "/resources/img/textures/furfsky/hardened_diamond_helm.png",
-    "Hardened Diamond Chestplate": "/resources/img/textures/furfsky/hardened_diamond_chest.png",
-    "Hardened Diamond Leggings": "/resources/img/textures/furfsky/hardened_diamond_legs.png",
-    "Hardened Diamond Boots": "/resources/img/textures/furfsky/hardened_diamond_boots.png",
-
-    "Growth Helmet": "/resources/img/textures/furfsky/growth_helm.png",
-    "Growth Chestplate": "/resources/img/textures/furfsky/growth_chest.png",
-    "Growth Leggings": "/resources/img/textures/furfsky/growth_legs.png",
-    "Growth Boots": "/resources/img/textures/furfsky/growth_boots.png",
-
-    "Emerald Armor Helmet": "/resources/img/textures/furfsky/emerald_helm.png",
-    "Emerald Armor Chestplate": "/resources/img/textures/furfsky/emerald_chest.png",
-    "Emerald Armor Leggings": "/resources/img/textures/furfsky/emerald_legs.png",
-    "Emerald Armor Boots": "/resources/img/textures/furfsky/emerald_boots.png",
-
-    "Cactus Helmet": "/resources/img/textures/furfsky/cactus_helm.png",
-    "Cactus Chestplate": "/resources/img/textures/furfsky/cactus_chest.png",
-    "Cactus Leggings": "/resources/img/textures/furfsky/cactus_legs.png",
-    "Cactus Boots": "/resources/img/textures/furfsky/cactus_boots.png",
-
-    "Budget Hopper": "/resources/img/textures/furfsky/budget_hopper.png",
-    "Enchanted Hopper": "/resources/img/textures/furfsky/enchanted_hopper.png",
-    "Grand Experience": "/resources/img/textures/furfsky/grand_bottle.png",
-    "Titanic Experience": "/resources/img/textures/furfsky/titanic_bottle.png",
-    "Grappling Hook": "/resources/img/textures/furfsky/grapple_hook.png",
-    "Jungle Axe": "/resources/img/textures/furfsky/jungle_axe.png",
-    "Stonk": "/resources/img/textures/furfsky/stonk.gif",
-    "Zombie Pickaxe": "/resources/img/textures/furfsky/zombie_pickaxe.png",
-
-    "Birch Forest Biome Stick": "/resources/img/textures/furfsky/birch_biome_stick.png",
-    "Roofed Forest Biome Stick": "/resources/img/textures/furfsky/roofed_biome_stick.png",
-    "Deep Ocean Biome Stick": "/resources/img/textures/furfsky/deepocean_biome_stick.png",
-    "Desert Biome Stick": "/resources/img/textures/furfsky/desert_biome_stick.png",
-    "End Biome Stick": "/resources/img/textures/furfsky/end_biome_stick.png",
-    "Forest Biome Stick": "/resources/img/textures/furfsky/forest_biome_stick.png",
-    "Jungle Biome Stick": "/resources/img/textures/furfsky/jungle_biome_stick.png",
-    "Forest Biome Stick": "/resources/img/textures/furfsky/forest_biome_stick.png",
-    "Savanna Biome Stick": "/resources/img/textures/furfsky/savanna_biome_stick.png",
-    "Taiga Biome Stick": "/resources/img/textures/furfsky/taiga_biome_stick.png",
-}
 
 module.exports = {
     splitWithTail: (string, delimiter, count) => {
