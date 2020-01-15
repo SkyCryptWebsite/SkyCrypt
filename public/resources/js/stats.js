@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function(){
     function isEnchanted(item){
         if(item.animated)
             return false;
-            
+
         if('texture_path' in item && item.texture_path.endsWith('.gif')) // disable enchanted overlay for gifs cause laggy
             return false;
 
@@ -667,6 +667,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
     resize();
     window.addEventListener('resize', resize);
+
+    setTimeout(resize, 1000);
 
     tippy('*[data-tippy-content]')
 });
