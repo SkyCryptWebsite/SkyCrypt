@@ -100,13 +100,15 @@ async function init(){
                 try{
                     const model = RJSON.parse(await fs.readFile(modelFile, 'utf8'));
 
-                    if(model.parent != 'builtin/generated'){
+                    if(model.parent == 'builtin/generated'){
                         const layers = Object.keys(model.textures).sort((a, b) => a - b);
                         const topLayer = layers.pop();
 
                         if(topLayer.startsWith('layer')){
-                            await fs.access(textureFile, fs.F_OK);
-                            textureFile = path.resolve(pack.basePath, 'assets', 'minecraft', model.textures[topLayer] + '.png');
+                            const layerPath = path.resolve(pack.basePath, 'assets', 'minecraft', model.textures[topLayer] + '.png');
+                            await fs.access(layerPath, fs.F_OK);
+
+                            textureFile = layerPath;
                         }
                     }
                 }catch(e){
