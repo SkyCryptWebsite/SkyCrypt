@@ -52,6 +52,13 @@ function flipX(src){
     return dst;
 }
 
+const TALISMANS = [
+    "http://textures.minecraft.net/texture/5c577e7d31e5e04c2ce71e13e3962192d80bd54b55efaacaaea12966fe27bf9",
+    "http://textures.minecraft.net/texture/eaa44b170d749ce4099aa78d98945d193651484089efb87ba88892c6fed2af31",
+    "http://textures.minecraft.net/texture/651eb16f22dd7505be5dae06671803633a5abf8b2beeb5c60548670df0e59214",
+    "http://textures.minecraft.net/texture/317b51e086f201448a4b45b0b91e97faf4d1739071480be6d5cab0a054512164"
+];
+
 module.exports = {
     renderHead: async (url, scale) => {
         let hat_factor = 0.94;
@@ -102,12 +109,14 @@ module.exports = {
             hat_bg.setTransform(1, skew_a, 0, skew_b, 0, 0);
             hat_bg.drawImage(head_left_overlay, x + y, z - y - 0.5, head_left_overlay.width, head_left_overlay.height + 1);
 
-            // hat back
-            x = x_offset;
-            y = 0;
-            z = z_offset - 0.5;
-            hat_bg.setTransform(1, -skew_a, 0, skew_b, 0, skew_a);
-            hat_bg.drawImage(head_back_overlay, y + x, x + z, head_back_overlay.width, head_back_overlay.height);
+            if(!TALISMANS.includes(url)){
+                // hat back
+                x = x_offset;
+                y = 0;
+                z = z_offset - 0.5;
+                hat_bg.setTransform(1, -skew_a, 0, skew_b, 0, skew_a);
+                hat_bg.drawImage(head_back_overlay, y + x, x + z, head_back_overlay.width, head_back_overlay.height);
+            }
 
             // hat bottom
             x = x_offset;
