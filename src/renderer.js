@@ -8,19 +8,6 @@ const path = require('path');
 const skew_a = 26 / 45;
 const skew_b = skew_a * 2;
 
-function removeTransparency(canvas){
-    let ctx = canvas.getContext("2d");
-    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    let data = imageData.data;
-
-    for(let i = 0; i < data.length; i += 4)
-        data[i + 3] = 255;
-
-    ctx.putImageData(imageData, 0, 0);
-
-    return canvas;
-}
-
 function hasTransparency(canvas) {
     let ctx = canvas.getContext("2d");
     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
@@ -81,9 +68,12 @@ module.exports = {
 
         let skin = await loadImage(url);
 
-        let head_top = resize(removeTransparency(getPart(skin, 8, 0, 8, 8, 1)), scale * (hat_factor + 0.01));
-        let head_front = resize(removeTransparency(getPart(skin, 8, 8, 8, 8, 1)), scale * (hat_factor + 0.01));
-        let head_right = resize(removeTransparency(getPart(skin, 0, 8, 8, 8, 1)), scale * (hat_factor + 0.01));
+        let head_bottom = resize(getPart(skin, 16, 0, 8, 8, 1), scale * (hat_factor + 0.01));
+        let head_top = resize(getPart(skin, 8, 0, 8, 8, 1), scale * (hat_factor + 0.01));
+        let head_back = flipX(resize(getPart(skin, 24, 8, 8, 8, 1), scale * (hat_factor + 0.01)));
+        let head_front = resize(getPart(skin, 8, 8, 8, 8, 1), scale * (hat_factor + 0.01));
+        let head_left = flipX(resize(getPart(skin, 16, 8, 8, 8, 1), scale * (hat_factor + 0.01)));
+        let head_right = resize(getPart(skin, 0, 8, 8, 8, 1), scale * (hat_factor + 0.01));
 
         let head_top_overlay, head_front_overlay, head_right_overlay, head_back_overlay, head_bottom_overlay, head_left_overlay;
 
@@ -149,6 +139,27 @@ module.exports = {
         }
 
         scale *= hat_factor;
+
+        // head bottom
+        x = x_offset;
+        y = 0;
+        z = z_offset + 8 * scale;
+        head.setTransform(1, -skew_a, 1, skew_a, 0, 0);
+        head.drawImage(head_bottom, y - z, x + z, head_bottom.width, head_bottom.height + 1);
+
+        // head left
+        x = x_offset + 8 * scale;
+        y = 0;
+        z = z_offset - 8 * scale;
+        head.setTransform(1, skew_a, 0, skew_b, 0, 0);
+        head.drawImage(head_left, x + y, z - y - 0.5, head_left.width, head_left.height + 1);
+
+        // head back
+        x = x_offset;
+        y = 0;
+        z = z_offset - 0.5;
+        head.setTransform(1, -skew_a, 0, skew_b, 0, skew_a);
+        head.drawImage(head_back, y + x, x + z, head_back.width, head_back.height);
 
         // head top
         x = x_offset;
