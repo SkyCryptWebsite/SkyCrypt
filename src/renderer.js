@@ -66,7 +66,7 @@ module.exports = {
         let canvas = createCanvas(scale * 20, scale * 18.5);
         let hat_canvas = createCanvas(scale * 20, scale * 18.5);
         let hat_bg_canvas = createCanvas(scale * 20, scale * 18.5);
-        let head_canvas = createCanvas(scale * 20 * hat_factor, scale * 18.5 * hat_factor);
+        let head_canvas = createCanvas(scale * 20 * hat_factor, scale * 18.5);
 
         let ctx = canvas.getContext('2d');
         let hat = hat_canvas.getContext('2d');
@@ -107,7 +107,7 @@ module.exports = {
             y = 0;
             z = z_offset - 8 * scale;
             hat_bg.setTransform(1, skew_a, 0, skew_b, 0, 0);
-            hat_bg.drawImage(head_left_overlay, x + y, z - y - 0.5, head_left_overlay.width, head_left_overlay.height + 1);
+            hat_bg.drawImage(head_left_overlay, x + y, z - y, head_left_overlay.width, head_left_overlay.height);
 
             if(!TALISMANS.includes(url)){
                 // hat back
@@ -123,11 +123,11 @@ module.exports = {
             y = 0;
             z = z_offset + 8 * scale;
             hat_bg.setTransform(1, -skew_a, 1, skew_a, 0, 0);
-            hat_bg.drawImage(head_bottom_overlay, y - z, x + z, head_bottom_overlay.width, head_bottom_overlay.height + 1);
+            hat_bg.drawImage(head_bottom_overlay, y - z, x + z, head_bottom_overlay.width, head_bottom_overlay.height);
 
             // hat top
             x = x_offset;
-            y = -0.5;
+            y = 0;
             z = z_offset;
             hat.setTransform(1, -skew_a, 1, skew_a, 0, 0);
             hat.drawImage(head_top_overlay, y - z, x + z, head_top_overlay.width, head_top_overlay.height + 1);
@@ -144,7 +144,7 @@ module.exports = {
             y = 0;
             z = z_offset;
             hat.setTransform(1, skew_a, 0, skew_b, 0, 0);
-            hat.drawImage(head_right_overlay, x + y, z - y - 0.5, head_right_overlay.width, head_right_overlay.height + 1);
+            hat.drawImage(head_right_overlay, x + y, z - y, head_right_overlay.width, head_right_overlay.height);
         }
 
         scale *= hat_factor;
@@ -154,33 +154,33 @@ module.exports = {
         y = 0;
         z = z_offset + 8 * scale;
         head.setTransform(1, -skew_a, 1, skew_a, 0, 0);
-        head.drawImage(head_bottom, y - z, x + z, head_bottom.width, head_bottom.height + 1);
+        head.drawImage(head_bottom, y - z, x + z, head_bottom.width, head_bottom.height);
 
         // head left
         x = x_offset + 8 * scale;
         y = 0;
         z = z_offset - 8 * scale;
         head.setTransform(1, skew_a, 0, skew_b, 0, 0);
-        head.drawImage(head_left, x + y, z - y - 0.5, head_left.width, head_left.height + 1);
+        head.drawImage(head_left, x + y, z - y, head_left.width, head_left.height);
 
         // head back
         x = x_offset;
         y = 0;
-        z = z_offset - 0.5;
+        z = z_offset;
         head.setTransform(1, -skew_a, 0, skew_b, 0, skew_a);
         head.drawImage(head_back, y + x, x + z, head_back.width, head_back.height);
 
         // head top
         x = x_offset;
-        y = -0.5;
+        y = 0;
         z = z_offset;
         head.setTransform(1, -skew_a, 1, skew_a, 0, 0);
-        head.drawImage(head_top, y - z, x + z, head_top.width, head_top.height + 1);
+        head.drawImage(head_top, y - z, x + z, head_top.width, head_top.height);
 
         // head front
         x = x_offset + 8 * scale;
         y = 0;
-        z = z_offset - 0.5;
+        z = z_offset;
         head.setTransform(1, -skew_a, 0, skew_b, 0, skew_a);
         head.drawImage(head_front, y + x, x + z, head_front.width, head_front.height);
 
@@ -189,7 +189,7 @@ module.exports = {
         y = 0;
         z = z_offset;
         head.setTransform(1, skew_a, 0, skew_b, 0, 0);
-        head.drawImage(head_right, x + y, z - y - 0.5, head_right.width, head_right.height + 1);
+        head.drawImage(head_right, x + y, z - y, head_right.width, head_right.height);
 
 
         ctx.drawImage(hat_bg_canvas, 0, 0);
