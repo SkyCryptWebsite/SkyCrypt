@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', function(){
         if(item.animated)
             return false;
 
+        if(item.id == 399)
+            return true;
+
         if('texture_path' in item && item.texture_path.endsWith('.gif')) // disable enchanted overlay for gifs cause laggy
             return false;
 
