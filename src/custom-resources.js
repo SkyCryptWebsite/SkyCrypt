@@ -358,7 +358,7 @@ module.exports = {
                     if(texture.weight < outputTexture.weight)
                         continue;
 
-                    if((texture.weight == outputTexture.weight && texture.file < outputTexture.file) || (texture.file == 'water.properties' && outputTexture.file != 'water.properties'))
+                    if(texture.weight == outputTexture.weight && texture.file < outputTexture.file)
                         continue;
 
                     outputTexture = Object.assign({}, texture);
