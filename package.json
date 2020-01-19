@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/LeaPhant/skyblock-stats#readme",
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.19.1",
     "canvas": "^2.6.0",
     "ejs": "^2.7.1",
     "express": "^4.17.1",
