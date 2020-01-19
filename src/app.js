@@ -275,6 +275,7 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
         if(objectPath.has(profile, 'banking.balance'))
             calculated.bank = profile.banking.balance;
 
+        calculated.purse = user_profile.coin_purse;
         calculated.uuid = data.player.uuid;
         calculated.display_name = data.player.displayname;
         calculated.profile = skyblock_profiles[profile_id];

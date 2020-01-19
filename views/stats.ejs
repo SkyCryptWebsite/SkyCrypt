@@ -107,12 +107,15 @@ if('levels' in calculated){
         description += `• ${highest_skill_name} Level ${Math.floor(highest_level)}\n`;
 }
 
-if(calculated.average_level){
-    description += `\nAverage Skill Level: ${calculated.average_level}`;
+description += `\n`;
 
-    if(calculated.bank)
-        description += ` ✦ Bank Account: ${formatNumber(calculated.bank, true)} Coins`;
-}
+if(calculated.average_level)
+    description += `Average Skill Level: ${calculated.average_level} ✦ `;
+
+description += `Purse: ${formatNumber(calculated.purse, true)} Coins`;
+
+if(calculated.bank)
+    description += ` ✦ Bank Account: ${formatNumber(calculated.bank, true)} Coins`;
 
 %>
 <!DOCTYPE html>
@@ -209,6 +212,7 @@ if(calculated.average_level){
                 <div id="additional_stats_container">
                     <div class="additional-stat" data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Last Updated</span><span class="stat-value"><%= calculated.last_updated.text %></span></div>
                     <div class="additional-stat" data-tippy-content="Joined on <%= moment(calculated.first_join.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Joined</span><span class="stat-value"><%= calculated.first_join.text %></span></div>
+                    <div class="additional-stat"><span class="stat-name">Purse</span><span class="stat-value"><%= Math.round(calculated.purse).toLocaleString() %> Coins</span></div>
                     <% if('bank' in calculated){ %>
                         <div class="additional-stat"><span class="stat-name">Bank Account</span><span class="stat-value"><%= Math.round(calculated.bank).toLocaleString() %> Coins</span></div>
                     <% } %>
