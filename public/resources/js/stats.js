@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 if(item.texture_path){
                     inventoryItemIcon.className += ' custom-icon';
-                    inventoryItemIcon.style.backgroundImage = "url('" + item.texture_path + "')";
+                    inventoryItemIcon.style.backgroundImage = 'url("' +  item.texture_path + '")';
                 }
 
                 if(isEnchanted(item))
@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function(){
         itemNameContent.innerHTML = item.display_name || 'null';
 
         if(item.texture_path){
-            itemIcon.style.backgroundImage = "url('" + item.texture_path + "')";
+            itemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
             itemIcon.className = 'stats-piece-icon item-icon custom-icon';
         }else{
             itemIcon.removeAttribute('style');
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
                     if(backpackItem.texture_path){
                         inventoryItemIcon.className += ' custom-icon';
-                        inventoryItemIcon.style.backgroundImage = "url('" + backpackItem.texture_path + "')";
+                        inventoryItemIcon.style.backgroundImage = 'url("' + backpackItem.texture_path + '")';
                     }
 
                     inventoryItemCount.className = 'item-count';
