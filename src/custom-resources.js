@@ -116,6 +116,47 @@ async function init(){
                 }
             }
 
+            if(Object.keys(properties).filter(a => a.includes('texture.leather_')).length == 2){
+                try{
+                    const leatherProperties = Object.keys(properties).filter(a => a.includes('texture.leather_'));
+
+                    let leatherBase = properties[leatherProperties.filter(a => !a.includes('_overlay'))[0]];
+                    let leatherOverlay = properties[leatherProperties.filter(a => a.includes('_overlay'))[0]];
+
+                    if(!leatherBase.endsWith('.png'))
+                        leatherBase += '.png';
+
+                    if(!leatherOverlay.endsWith('.png'))
+                        leatherOverlay += '.png';
+
+                    const leather = {
+                        base: path.resolve(path.dirname(file), leatherBase),
+                        overlay: path.resolve(path.dirname(file), leatherOverlay)
+                    };
+
+                    for(const part in leather){
+                        await fs.access(leather[part], fs.F_OK);
+
+                        const leatherImage = sharp(leather[part]);
+                        const leatherMetadata = await leatherImage.metadata();
+
+                        if(leatherMetadata.width != NORMALIZED_SIZE)
+                            await
+                                fs.writeFile(leather[part], await
+                                    leatherImage
+                                    .resize(NORMALIZED_SIZE, leatherMetadata.height * (NORMALIZED_SIZE / leatherMetadata.width), {
+                                        kernel: sharp.kernel.nearest
+                                    })
+                                    .toBuffer()
+                                );
+                    }
+
+                    texture.leather = leather;
+                }catch(e){
+                    //
+                }
+            }
+
             try{
                 await fs.access(textureFile, fs.F_OK);
             }catch(e){
@@ -368,6 +409,48 @@ module.exports = {
 
         if(!('path' in outputTexture))
             return null;
+
+        if('leather' in outputTexture && objectPath.has(item, 'tag.ExtraAttributes.color')){
+            const color = item.tag.ExtraAttributes.color.split(":");
+
+            const leatherBasePath = path.resolve(path.dirname(outputTexture.path), 'leatherCache');
+            const leatherPath = path.resolve(leatherBasePath, path.basename(outputTexture.path, '.png') + '_' + color.join('_') + '.png');
+
+            await fs.ensureDir(leatherBasePath);
+
+            try{
+                await fs.access(leatherPath, fs.F_OK);
+                throw "";
+            }catch(e){
+                const canvas = createCanvas(128, 128);
+                const ctx = canvas.getContext('2d');
+
+                const armorBase = await loadImage(outputTexture.leather.base);
+                const armorOverlay = await loadImage(outputTexture.leather.overlay);
+
+                ctx.drawImage(armorBase, 0, 0);
+
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+                for(let i = 0; i < imageData.data.length; i += 4){
+                    const r = imageData.data[i];
+                    const alpha = r / 255;
+
+                    imageData.data[i] = color[0] * alpha;
+                    imageData.data[i + 1] = color[1] * alpha;
+                    imageData.data[i + 2] = color[2] * alpha;
+                }
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.putImageData(imageData, 0, 0);
+
+                ctx.drawImage(armorOverlay, 0, 0);
+
+                await fs.writeFile(leatherPath, canvas.toBuffer('image/png'));
+            }
+
+            outputTexture.path = leatherPath;
+        }
 
         outputTexture.path = path.relative(path.resolve(__dirname, '..', 'public'), outputTexture.path);
 
