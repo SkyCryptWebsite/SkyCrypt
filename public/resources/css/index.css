@@ -500,6 +500,37 @@ html.no-transform #info_box.opened{
     font-weight: 500;
 }
 
+#stats_content .pack-credit{
+    margin-top: 25px;
+    position: relative;
+    display: inline-block;
+    text-align: left;
+    padding-left: 42px;
+    font-size: 14px;
+}
+
+#stats_content .pack-icon{
+    width: 32px;
+    height: 32px;
+    image-rendering: crisp-edges;
+    position: absolute;
+    top: 4px;
+    left: 0;
+}
+
+#stats_content .pack-name{
+    display: block;
+    text-decoration: none;
+}
+
+#stats_content .pack-author{
+    color: rgba(255, 255, 255, 0.6);
+}
+
+#stats_content .pack-author span{
+    color: rgba(255, 255, 255, 0.8);
+}
+
 #player_model{
     position: absolute;
     top: 0;

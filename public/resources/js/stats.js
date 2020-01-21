@@ -192,6 +192,33 @@ document.addEventListener('DOMContentLoaded', function(){
 
         itemLore.innerHTML = item.lore || '';
 
+        if(item.texture_pack){
+            let packContent = document.createElement('div');
+            packContent.classList.add('pack-credit');
+
+            let packIcon = document.createElement('img');
+            packIcon.setAttribute('src', item.texture_pack.base_path + '/pack.png');
+            packIcon.classList.add('pack-icon');
+
+            let packName = document.createElement('a');
+            packName.setAttribute('href', item.texture_pack.url);
+            packName.setAttribute('target', '_blank');
+            packName.classList.add('pack-name');
+            packName.innerHTML = item.texture_pack.name;
+
+            let packAuthor = document.createElement('div');
+            packAuthor.classList.add('pack-author');
+            packAuthor.innerHTML = 'by <span>' + item.texture_pack.author + '</span>';
+
+            packContent.appendChild(packIcon);
+            packContent.appendChild(packName);
+            packContent.appendChild(packAuthor);
+
+            itemLore.appendChild(document.createElement('br'));
+
+            itemLore.appendChild(packContent);
+        }
+
         backpackContents.innerHTML = '';
 
         if(Array.isArray(item.containsItems)){

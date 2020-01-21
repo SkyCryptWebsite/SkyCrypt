@@ -402,7 +402,7 @@ module.exports = {
                     if(texture.weight == outputTexture.weight && texture.file < outputTexture.file)
                         continue;
 
-                    outputTexture = Object.assign({}, texture);
+                    outputTexture = Object.assign({ pack }, texture);
                 }
             }
         }
