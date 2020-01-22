@@ -513,6 +513,7 @@ html.no-transform #info_box.opened{
     width: 32px;
     height: 32px;
     image-rendering: crisp-edges;
+    image-rendering: pixelated;
     position: absolute;
     top: 4px;
     left: 0;
