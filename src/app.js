@@ -206,7 +206,7 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
 
         let profiles = [];
 
-        for(let[index, profile_response] of responses.entries()){
+        for(let [index, profile_response] of responses.entries()){
             if(!profile_response.data.success){
                 delete skyblock_profiles[profile_ids[index]];
                 continue;
