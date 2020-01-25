@@ -212,6 +212,18 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
                 continue;
             }
 
+            let memberCount = 0;
+
+            for(const member in profile_response.data.profile.members){
+                if('last_save' in profile_response.data.profile.members[member])
+                    memberCount++;
+            }
+
+            if(memberCount == 0){
+                delete skyblock_profiles[profile_ids[index]];
+                continue;
+            }
+
             profiles.push(profile_response.data.profile);
         }
 
@@ -258,6 +270,9 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
             .write();
         }
 
+        for(const member in profile.members)
+            if(!('last_save' in profile.members[member]))
+                delete profile.members[member];
 
         let memberUuids = Object.keys(profile.members);
 
