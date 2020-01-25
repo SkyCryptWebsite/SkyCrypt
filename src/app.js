@@ -221,6 +221,17 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
 
             if(memberCount == 0){
                 delete skyblock_profiles[profile_ids[index]];
+
+                if(req.params.profile){
+                    res.render('index', {
+                        error: 'Uh oh, this SkyBlock profile has no players.',
+                        player: req.params.player,
+                        page: 'index'
+                    });
+
+                    return false;
+                }
+
                 continue;
             }
 
