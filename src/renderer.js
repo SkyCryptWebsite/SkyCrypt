@@ -1,5 +1,6 @@
 /*
-Minecraft Head Rendering provided by Crafatar: https://github.com/crafatar/crafatar
+Minecraft Head Rendering base provided by Crafatar: https://github.com/crafatar/crafatar
+Hat layers, transparency and shading added by me
 */
 
 const { createCanvas, loadImage } = require('canvas');
@@ -52,6 +53,20 @@ function flipX(src){
     return dst;
 }
 
+function darken(src, factor){
+    let dst = createCanvas(src.width, src.height);
+    let ctx = dst.getContext("2d");
+
+    ctx.drawImage(src, 0, 0);
+
+    ctx.globalCompositeOperation = 'source-atop';
+
+    ctx.fillStyle = `rgba(0, 0, 0, ${factor})`;
+    ctx.fillRect(0, 0, src.width, src.height);
+
+    return dst;
+}
+
 const TALISMANS = [
     "http://textures.minecraft.net/texture/5c577e7d31e5e04c2ce71e13e3962192d80bd54b55efaacaaea12966fe27bf9",
     "http://textures.minecraft.net/texture/eaa44b170d749ce4099aa78d98945d193651484089efb87ba88892c6fed2af31",
@@ -82,6 +97,11 @@ module.exports = {
         let head_left = flipX(resize(getPart(skin, 16, 8, 8, 8, 1), scale * (hat_factor + 0.01)));
         let head_right = resize(getPart(skin, 0, 8, 8, 8, 1), scale * (hat_factor + 0.01));
 
+        head_right = darken(head_right, 0.15);
+        head_front = darken(head_front, 0.25);
+        head_bottom = darken(head_bottom, 0.3);
+        head_back = darken(head_back, 0.3);
+
         let head_top_overlay, head_front_overlay, head_right_overlay, head_back_overlay, head_bottom_overlay, head_left_overlay;
 
         if(hasTransparency(getPart(skin, 32, 0, 32, 32, 1))){
@@ -92,6 +112,11 @@ module.exports = {
             head_back_overlay = flipX(resize(getPart(skin, 56, 8, 8, 8, 1), scale));
             head_bottom_overlay = resize(getPart(skin, 48, 0, 8, 8, 1), scale);
             head_left_overlay = flipX(resize(getPart(skin, 48, 8, 8, 8, 1), scale));
+
+            head_right_overlay = darken(head_right_overlay, 0.15);
+            head_front_overlay = darken(head_front_overlay, 0.25);
+            head_bottom_overlay = darken(head_bottom_overlay, 0.3);
+            head_back_overlay = darken(head_back_overlay, 0.3);
         }
 
         let x = 0;

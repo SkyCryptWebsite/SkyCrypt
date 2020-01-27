@@ -210,7 +210,7 @@ async function getItems(base64){
                 let url = json.textures.SKIN.url;
                 let uuid = url.split("/").pop();
 
-                item.texture_path = `/head/${uuid}?v5`;
+                item.texture_path = `/head/${uuid}?v6`;
             }catch(e){
 
             }
