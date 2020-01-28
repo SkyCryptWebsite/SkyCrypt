@@ -740,6 +740,10 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     margin-top: 25px;
 }
 
+.info-container-wrapper ~ .stat-kills {
+    margin-top: 35px !important;
+}
+
 .stat-accessories{
     margin-top: 45px;
 }
