@@ -787,6 +787,39 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     padding: 30px;
 }
 
+.info-container{
+    background-color: rgba(0,0,0,0.3);
+    margin: 30px;
+    margin-bottom: 0px;
+    padding: 20px;
+    padding-top: 55px;
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    max-width: 500px;
+}
+
+.info-container span{
+    display: inline-block;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+.info-header{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    background-color: #A6145D;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-align: center;
+    font-size: 19px;
+}
+
 .pieces{
     margin: 25px;
 }
@@ -1520,6 +1553,10 @@ html.no-webp #error_box_wrapper{
     #skill_levels_container .no-access{
         width: 100%;
         text-align: left;
+    }
+
+    .info-container-wrapper{
+        text-align: center;
     }
 
     .stat-header{

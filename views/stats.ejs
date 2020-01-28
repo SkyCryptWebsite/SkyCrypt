@@ -252,6 +252,14 @@ if(calculated.bank)
                 <% } %>
             </div>
         </div>
+        <% if(items.no_inventory){ %>
+            <div class="info-container-wrapper">
+                <div class="info-container">
+                    <div class="info-header">Notice</div>
+                    Weapons, Accessories and Inventory not available for <%= calculated.display_name %> due to limited API access.<br><span><a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</span>
+                </div>
+            </div>
+        <% } %>
         <div class="stat-container stat-armor">
             <div class="stat-header">Armor</div>
             <% if(items.armor.length == 0){ %>
@@ -270,86 +278,86 @@ if(calculated.bank)
                 </div>
             <% } %>
         </div>
-        <div class="stat-container stat-weapons">
-            <div class="stat-header">Weapons</div>
-            <% if(items.no_inventory){ %>
-                <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
-            <% }else if(items.weapons.length == 0){ %>
-                <div class="no-access"><%= calculated.display_name %> doesn't have any weapons.</div>
-            <% }else{ %>
-                <div class="pieces">
-                    <%
-                        let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
+        <% if(!items.no_inventory){ %>
+            <div class="stat-container stat-weapons">
+                <div class="stat-header">Weapons</div>
+                <% if(items.weapons.length == 0){ %>
+                    <div class="no-access"><%= calculated.display_name %> doesn't have any weapons.</div>
+                <% }else{ %>
+                    <div class="pieces">
+                        <%
+                            let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
 
-                        if(items.highest_rarity_sword)
-                            sword = [items.highest_rarity_sword];
+                            if(items.highest_rarity_sword)
+                                sword = [items.highest_rarity_sword];
 
-                        items.weapons.forEach(item => { %>
-                            <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece
-                                <% if(sword.length > 0 && item.item_index == sword[0].item_index){ %>piece-selected<% } %>
-                                piece-<%= item.rarity %>-bg">
+                            items.weapons.forEach(item => { %>
+                                <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece
+                                    <% if(sword.length > 0 && item.item_index == sword[0].item_index){ %>piece-selected<% } %>
+                                    piece-<%= item.rarity %>-bg">
+                                    <% if(item.rarity == 'legendary'){ %>
+                                        <div class="piece-shine"></div>
+                                    <% } %>
+                                    <div class="piece-hover-area"></div>
+                                    <div class="select-weapon"></div>
+                                    <% itemIcon(item, ['piece-icon']); %>
+                                </div>
+                        <%
+                            });
+                        %>
+                    </div>
+                <% } %>
+            </div>
+            <div class="stat-container stat-accessories">
+                <div class="stat-header">Accessories</div>
+                <% if(items.no_inventory){ %>
+                    <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
+                <% }else if(items.talismans.length == 0){ %>
+                    <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
+                <% }else{ %>
+                    <div class="pieces">
+                        <% items.talismans.filter(a => !a.isInactive).forEach(item => { %>
+                            <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
                                 <% if(item.rarity == 'legendary'){ %>
                                     <div class="piece-shine"></div>
                                 <% } %>
                                 <div class="piece-hover-area"></div>
-                                <div class="select-weapon"></div>
                                 <% itemIcon(item, ['piece-icon']); %>
                             </div>
-                    <%
-                        });
-                    %>
-                </div>
-            <% } %>
-        </div>
-        <div class="stat-container stat-accessories">
-            <div class="stat-header">Accessories</div>
-            <% if(items.no_inventory){ %>
-                <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
-            <% }else if(items.talismans.length == 0){ %>
-                <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
-            <% }else{ %>
-                <div class="pieces">
-                    <% items.talismans.filter(a => !a.isInactive).forEach(item => { %>
-                        <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
-                            <% if(item.rarity == 'legendary'){ %>
-                                <div class="piece-shine"></div>
-                            <% } %>
-                            <div class="piece-hover-area"></div>
-                            <% itemIcon(item, ['piece-icon']); %>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </div>
+            <div class="stat-container stat-inventory">
+                <div class="stat-header">Inventories</div>
+                <% if(items.no_inventory){ %>
+                    <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
+                <% }else{ %>
+                    <div id="inventory_container">
+                        <div id="inventory_header">
+                            <div class="inventory-tab active-inventory" data-inventory-type="inventory">Inventory</div><%
+                            if(items.enderchest.length > 0){ %><div class="inventory-tab" data-inventory-type="enderchest">Ender Chest</div><% }
+                            if(items.talisman_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="talisman_bag">Accessory Bag</div><% }
+                            if(items.potion_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="potion_bag">Potion Bag</div><% }
+                            if(items.fishing_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="fishing_bag">Fishing Bag</div><% }
+                            if(items.quiver.length > 0){ %><div class="inventory-tab" data-inventory-type="quiver">Quiver</div><% } %>
                         </div>
-                    <% }) %>
-                </div>
-            <% } %>
-        </div>
-        <div class="stat-container stat-inventory">
-            <div class="stat-header">Inventories</div>
-            <% if(items.no_inventory){ %>
-                <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
-            <% }else{ %>
-                <div id="inventory_container">
-                    <div id="inventory_header">
-                        <div class="inventory-tab active-inventory" data-inventory-type="inventory">Inventory</div><%
-                        if(items.enderchest.length > 0){ %><div class="inventory-tab" data-inventory-type="enderchest">Ender Chest</div><% }
-                        if(items.talisman_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="talisman_bag">Accessory Bag</div><% }
-                        if(items.potion_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="potion_bag">Potion Bag</div><% }
-                        if(items.fishing_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="fishing_bag">Fishing Bag</div><% }
-                        if(items.quiver.length > 0){ %><div class="inventory-tab" data-inventory-type="quiver">Quiver</div><% } %>
+                        <div class="inventory-view current-inventory" data-inventory-type="inventory">
+                            <% for(let i = 9; i < items.inventory.length; i++){ %>
+                                <% let item = items.inventory[i]; %>
+                                <%= inventorySlot(item); %>
+                                <% if((i + 1) % 9 == 0) { %><br><% } %>
+                            <% } %>
+                            <br>
+                            <% for(let i = 0; i < 9; i++){ %>
+                                <% let item = items.inventory[i]; %>
+                                <%= inventorySlot(item); %>
+                            <% } %>
+                        </div>
                     </div>
-                    <div class="inventory-view current-inventory" data-inventory-type="inventory">
-                        <% for(let i = 9; i < items.inventory.length; i++){ %>
-                            <% let item = items.inventory[i]; %>
-                            <%= inventorySlot(item); %>
-                            <% if((i + 1) % 9 == 0) { %><br><% } %>
-                        <% } %>
-                        <br>
-                        <% for(let i = 0; i < 9; i++){ %>
-                            <% let item = items.inventory[i]; %>
-                            <%= inventorySlot(item); %>
-                        <% } %>
-                    </div>
-                </div>
-            <% } %>
-        </div>
+                <% } %>
+            </div>
+        <% } %>
         <div class="stat-container stat-kills">
             <div class="stat-header">Top Kills & Deaths</div>
             <div class="kills-deaths-container">
