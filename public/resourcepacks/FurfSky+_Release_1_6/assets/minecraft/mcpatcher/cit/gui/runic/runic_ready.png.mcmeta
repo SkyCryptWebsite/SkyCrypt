@@ -1,0 +1,4 @@
+{ "animation": {
+"frametime": 1,
+interpolate:false
+} }

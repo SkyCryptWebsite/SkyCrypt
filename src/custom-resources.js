@@ -79,7 +79,7 @@ async function init(){
             if(!('type' in properties))
                 continue;
 
-            if(!properties.type == 'item')
+            if(properties.type != 'item')
                 continue;
 
             let texture = {weight: 0, animated: false, file: path.basename(file), match: []};
@@ -87,9 +87,6 @@ async function init(){
             let textureFile = 'texture' in properties
             ? path.resolve(path.dirname(file), properties.texture)
             : path.resolve(path.dirname(file), path.basename(file, '.properties'));
-
-            if(!textureFile.endsWith('.png'))
-                textureFile += '.png';
 
             if('texture.bow_standby' in properties)
                 textureFile = path.resolve(path.dirname(file), properties['texture.bow_standby']);
@@ -155,7 +152,14 @@ async function init(){
                 }catch(e){
                     //
                 }
+            }else if(Object.keys(properties).filter(a => a.includes('texture.leather_') && a.includes('_overlay')).length == 1){
+                const leatherProperties = Object.keys(properties).filter(a => a.includes('texture.leather_') && a.includes('_overlay'))[0];
+
+                textureFile = path.resolve(path.dirname(file), properties[leatherProperties]);
             }
+
+            if(!textureFile.endsWith('.png'))
+                textureFile += '.png';
 
             try{
                 await fs.access(textureFile, fs.F_OK);
@@ -185,7 +189,7 @@ async function init(){
                 if(property == 'weight')
                     texture.weight = parseInt(properties[property]);
 
-                if(property == 'items'){
+                if(property == 'items' || property == 'matchItems'){
                     let item = mcData.findItemOrBlockByName(properties[property].replace('minecraft:', ''));
 
                     if(item)
