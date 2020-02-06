@@ -118,6 +118,15 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
 
     let active_profile;
 
+    if(!isPlayerUuid){
+        let playerObject = db.get('usernames').find(a => a.username.toLowerCase() == paramPlayer).value();
+
+        if(playerObject){
+            paramPlayer = playerObject.uuid;
+            isPlayerUuid = true;
+        }
+    }
+
     if(isPlayerUuid)
         active_profile = db
         .get('profiles')
