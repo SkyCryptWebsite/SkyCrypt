@@ -5,7 +5,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
     let inventoryContainer = document.querySelector('#inventory_container');
 
-    history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name);
+    if(calculated.profile.cute_name == 'Deleted')
+        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.profile_id);
+    else
+        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name);
 
     function isEnchanted(item){
         if(item.animated)

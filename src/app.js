@@ -214,7 +214,7 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
                 }else{
                     skyblock_profiles[paramProfile] = {
                         profile_id: paramProfile,
-                        cute_name: 'Avocado'
+                        cute_name: 'Deleted'
                     };
                 }
             }else{
