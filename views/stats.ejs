@@ -156,7 +156,7 @@ if(calculated.bank)
                 <%= calculated.display_name %>
                 <div id="other_players">
                     <% calculated.members.forEach(member => { %>
-                        <a class="goto" href="/stats/<%= member.display_name %>/<%= calculated.profile.cute_name %>"><%= member.display_name %></a>
+                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %>"><%= member.display_name %></a>
                     <% }); %>
                     <input type="text" id="enter_player" placeholder="Enter username"><a id="goto_player"></a>
                 </div>
@@ -165,7 +165,7 @@ if(calculated.bank)
                 <div id="other_profiles">
                     <% for(let profile_id in calculated.profiles){ %>
                         <% let _profile = calculated.profiles[profile_id]; %>
-                        <a class="goto" href="/stats/<%= calculated.display_name %>/<%= _profile.cute_name %>"><%= _profile.cute_name %></a>
+                        <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %>"><%= _profile.cute_name %></a>
                     <% } %>
                 </div>
             </div>

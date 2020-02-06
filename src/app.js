@@ -107,13 +107,39 @@ app.use(express.static('public', { maxAge: CACHE_DURATION }));
 app.get('/stats/:player/:profile?', async (req, res, next) => {
     let response;
 
-    let active_profile = db
-    .get('profiles')
-    .find({ username: req.params.player.toLowerCase() })
-    .value();
+    let paramPlayer = req.params.player.toLowerCase().replace(/\-/g, '');
+    let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
+
+    let isPlayerUuid = paramPlayer.length == 32;
+    let isProfileUuid = false;
+
+    if(paramProfile)
+        isProfileUuid = paramProfile.length == 32;
+
+    let active_profile;
+
+    if(isPlayerUuid)
+        active_profile = db
+        .get('profiles')
+        .find({ uuid: paramPlayer })
+        .value();
+    else
+        active_profile = db
+        .get('profiles')
+        .find({ username: paramPlayer })
+        .value();
+
+    let params = {
+        key: getApiKey()
+    };
+
+    if(isPlayerUuid)
+        params.uuid = paramPlayer;
+    else
+        params.name = paramPlayer;
 
     try{
-        response = await Hypixel.get('player', { params: { key: getApiKey(), name: req.params.player }, timeout: 5000 });
+        response = await Hypixel.get('player', { params, timeout: 5000 });
         let { data } = response;
 
         if(!data.success){
@@ -181,9 +207,20 @@ app.get('/stats/:player/:profile?', async (req, res, next) => {
             }
         }
 
-        if(req.params.profile)
-            skyblock_profiles = _.pickBy(all_skyblock_profiles, a => a.cute_name.toLowerCase() == req.params.profile.toLowerCase());
-        else if(active_profile)
+        if(paramProfile){
+            if(isProfileUuid){
+                if(Object.keys(all_skyblock_profiles).includes(paramProfile)){
+                    skyblock_profiles = _.pickBy(all_skyblock_profiles, a => a.profile_id.toLowerCase() == paramProfile);
+                }else{
+                    skyblock_profiles[paramProfile] = {
+                        profile_id: paramProfile,
+                        cute_name: 'Avocado'
+                    };
+                }
+            }else{
+                skyblock_profiles = _.pickBy(all_skyblock_profiles, a => a.cute_name.toLowerCase() == paramProfile);
+            }
+        }else if(active_profile)
             skyblock_profiles = _.pickBy(all_skyblock_profiles, a => a.profile_id.toLowerCase() == active_profile.profile_id);
 
         if(Object.keys(skyblock_profiles).length == 0)
