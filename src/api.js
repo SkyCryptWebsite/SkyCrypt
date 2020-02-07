@@ -1,6 +1,6 @@
 const axios = require('axios');
 const credentials = require('../credentials.json');
-const tableify = require('tableify');
+const tableify = require('@tillhub/tableify');
 const _ = require('lodash');
 
 const Hypixel = axios.create({
