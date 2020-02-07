@@ -79,37 +79,50 @@ if('levels' in calculated){
     description += `❤️ ${stats.health} 🛡️ ${stats.defense} 💪 ${stats.strength} 🌀 ${stats.crit_chance}% ☠️ ${stats.crit_damage}%\n\n`;
 }
 
-description += `• ${calculated.fairy_souls.collected}/${calculated.fairy_souls.total} Fairy Souls\n`;
+description += `🧚 ${calculated.fairy_souls.collected}/${calculated.fairy_souls.total} Fairy Souls\n`;
 
 if(items.armor_set)
-    description += `• ${items.armor_set}\n`;
+    description += `🛡️ ${items.armor_set}\n`;
 
 if(items.highest_rarity_sword){
     let swordName = items.highest_rarity_sword.display_name;
     if(items.highest_rarity_sword.tag.ExtraAttributes.id == 'MIDAS_SWORD')
         swordName = swordName.replace("Midas", `${formatNumber(items.highest_rarity_sword.tag.ExtraAttributes.winning_bid, true, 1)} Midas`);
 
-    description += `• ${swordName}\n`;
+    description += `🗡️ ${swordName}\n`;
  }
 
 if(items.highest_rarity_bow)
-    description += `• ${items.highest_rarity_bow.display_name}\n`;
+    description += `🏹 ${items.highest_rarity_bow.display_name}\n`;
+
+const skillEmojis = {
+    "alchemy": "⚗️",
+    "carpentry": "🪑",
+    "combat": "⚔️",
+    "enchanting": "🔮",
+    "farming": "🌾",
+    "fishing": "🎣",
+    "foraging": "🌳",
+    "mining": "⛏️",
+    "runecrafting": "✨"
+}
 
 if('levels' in calculated){
-    let highest_level = 0;
-    let highest_skill_name;
+    let { levels } = calculated;
 
-    for(let skill in calculated.levels){
-        let level = calculated.levels[skill].level + calculated.levels[skill].progress;
+    let skillsSorted = Object.keys(levels).sort((a, b) =>
+        (levels[b].level + levels[b].progress) - (levels[a].level + levels[a].progress)
+    );
 
-        if(level > highest_level){
-            highest_level = level;
-            highest_skill_name = skill.charAt(0).toUpperCase() + skill.slice(1);
-        }
+    for(let i = 0; i < 2; i++){
+        let skill = skillsSorted[i];
+        let skillName = skill.charAt(0).toUpperCase() + skill.slice(1);
+
+        if(levels[skill].level == 0)
+            break;
+
+        description += `${skillEmojis[skill]} ${skillName} Level ${levels[skill].level}\n`;
     }
-
-    if(highest_level > 0)
-        description += `• ${highest_skill_name} Level ${Math.floor(highest_level)}\n`;
 }
 
 description += `\n`;
