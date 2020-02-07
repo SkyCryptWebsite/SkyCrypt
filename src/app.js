@@ -1,6 +1,12 @@
 const cluster = require('cluster');
 const lib = require('./lib');
 
+const low = require('lowdb');
+const FileSync = require('lowdb/adapters/FileSync');
+
+const adapter = new FileSync('db.json');
+const db = low(adapter);
+
 if(cluster.isMaster){
     let cpus = require('os').cpus().length;
 
@@ -19,12 +25,6 @@ if(cluster.isMaster){
     const _ = require('lodash');
     const objectPath = require('object-path');
     const moment = require('moment')
-
-    const low = require('lowdb');
-    const FileSync = require('lowdb/adapters/FileSync');
-
-    const adapter = new FileSync('db.json');
-    const db = low(adapter);
 
     const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
 
