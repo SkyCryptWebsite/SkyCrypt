@@ -24,7 +24,7 @@ if(cluster.isMaster){
     const renderer = require('./renderer');
     const _ = require('lodash');
     const objectPath = require('object-path');
-    const moment = require('moment')
+    const moment = require('moment');
 
     const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
 
@@ -42,21 +42,6 @@ if(cluster.isMaster){
     const Hypixel = axios.create({
         baseURL: 'https://api.hypixel.net/'
     });
-
-    let api_index = 0;
-    let api_key = credentials.hypixel_api_key;
-
-    if(!Array.isArray(api_key))
-        api_key = [api_key];
-
-    function getApiKey(){
-        api_index++;
-
-        if(api_index >= api_key.length)
-            api_index = 0;
-
-        return api_key[api_index];
-    }
 
     async function uuidToUsername(uuid){
         let output;
@@ -115,6 +100,8 @@ if(cluster.isMaster){
     app.set('view engine', 'ejs');
     app.use(express.static('public', { maxAge: CACHE_DURATION }));
 
+    require('./api')(app);
+
     app.get('/stats/:player/:profile?', async (req, res, next) => {
         let response;
 
@@ -150,7 +137,7 @@ if(cluster.isMaster){
             .value();
 
         let params = {
-            key: getApiKey()
+            key: credentials.hypixel_api_key
         };
 
         if(isPlayerUuid)
@@ -207,7 +194,9 @@ if(cluster.isMaster){
             let skyblock_profiles = {};
 
             if(Object.keys(all_skyblock_profiles).length == 0){
-                let default_profile = await Hypixel.get('skyblock/profile', { params: { key: getApiKey(), profile: data.player.uuid }});
+                let default_profile = await Hypixel.get('skyblock/profile', {
+                    params: { key: credentials.hypixel_api_key, profile: data.player.uuid
+                }});
 
                 if(default_profile.data.profile == null){
                     res.render('index', {
@@ -255,7 +244,7 @@ if(cluster.isMaster){
                 profile_ids.push(profile);
 
                 promises.push(
-                    Hypixel.get('skyblock/profile', { params: { key: getApiKey(), profile: profile } })
+                    Hypixel.get('skyblock/profile', { params: { key: credentials.hypixel_api_key, profile: profile } })
                 );
             }
 
