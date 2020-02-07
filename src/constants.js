@@ -653,7 +653,7 @@ module.exports = {
         f: {
             type: 'color',
             color: '#FFFFFF',
-            color: '#000000',
+            niceColor: '#000000',
             css: 'color: #FFFFFF'
         },
 
