@@ -471,7 +471,7 @@ module.exports = {
             rankName = player.rank;
 
         if('prefix' in player)
-            rankName = getRawLore(player.prefix).replace(/\[|\]/g, '');
+            rankName = module.exports.getRawLore(player.prefix).replace(/\[|\]/g, '');
 
         if(rankName in constants.ranks)
             rank = constants.ranks[rankName];
@@ -479,22 +479,29 @@ module.exports = {
         if(!rank)
             return output;
 
-        let rankColor = constants.minecraft_formatting[rank.color].color;
+        let rankColor = constants.minecraft_formatting[rank.color];
+
+        rankColor = rankColor.niceColor || rankColor.color;
+
         let plusColor = null;
         let plusText = null;
 
-        if('monthlyRankColor' in player && 'monthlyPackageRank' in player && player.monthlyPackageRank != 'NONE')
-            rankColor = constants.minecraft_formatting[constants.color_names[player.monthlyRankColor]].color;
+        if('monthlyRankColor' in player && 'monthlyPackageRank' in player && player.monthlyPackageRank != 'NONE'){
+            rankColor = constants.minecraft_formatting[constants.color_names[player.monthlyRankColor]];
+            rankColor = rankColor.niceColor || rankColor.color;
+        }
 
         if('plus' in rank){
             plusText = rank.plus;
             plusColor = rankColor;
         }
 
-        if(plusText && 'rankPlusColor' in player)
-            plusColor = constants.minecraft_formatting[constants.color_names[player.rankPlusColor]].color;
+        if(plusText && 'rankPlusColor' in player){
+            plusColor = constants.minecraft_formatting[constants.color_names[player.rankPlusColor]];
+            plusColor = plusColor.niceColor || plusColor.color;
+        }
 
-        output = `<div class="rank-tag" style="background-color: ${rankColor}"><div class="rank-name">${rank.tag}</div>`;
+        output = `<div class="rank-tag ${plusText ? 'rank-plus' : ''}"><div class="rank-name" style="background-color: ${rankColor}">${rank.tag}</div>`;
 
         if(plusText)
             output += `<div class="rank-plus" style="background-color: ${plusColor}">${plusText}</div>`;
@@ -815,6 +822,10 @@ module.exports = {
             output.slayers = Object.assign({}, slayers);
         }
 
+        // Apply all harp bonuses when Melody's Hair has been acquired
+        if(items.talismans.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id == 'MELODY_HAIR').length == 1)
+            output.stats.intelligence += 26;
+
         output.base_stats = Object.assign({}, output.stats);
 
         // Apply basic armor stats
@@ -822,11 +833,6 @@ module.exports = {
             for(let stat in item.stats)
                 output.stats[stat] += item.stats[stat];
         });
-
-        // Apply Superior Dragon Armor full set bonus of 5% stat increase
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4)
-            for(let stat in output.stats)
-                output.stats[stat] = Math.round(output.stats[stat] * 1.05);
 
         // Apply Lapis Armor full set bonus of +60 HP
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('LAPIS_ARMOR_')).length == 4)
@@ -861,7 +867,7 @@ module.exports = {
             output.stats.health += 50 * output.stats.crit_damage;
 
         // Apply +5 Defense and +5 Strength of Day/Night Crystal only if both are owned as this is required for a permanent bonus
-        if(items.talismans.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(a.tag.ExtraAttributes.id)).length == 2){
+        if(items.talismans.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && !a.isInactive && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(a.tag.ExtraAttributes.id)).length == 2){
             output.stats.defense += 5;
             output.stats.strength += 5;
         }
@@ -896,12 +902,22 @@ module.exports = {
 
             stats.effective_health = getEffectiveHealth(stats.health, stats.defense);
 
+            // Apply Superior Dragon Armor full set bonus of 5% stat increase
+            if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4)
+                for(let stat in stats)
+                    stats[stat] = Math.floor(stats[stat] * 1.05);
+
             output.weapon_stats[item.item_index] = stats;
 
             // Stats shouldn't go into negative
             for(let stat in stats)
                 output.weapon_stats[item.item_index][stat] = Math.max(0, stats[stat]);
         });
+
+        // Apply Superior Dragon Armor full set bonus of 5% stat increase
+        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4)
+            for(let stat in output.stats)
+                output.stats[stat] = Math.floor(output.stats[stat] * 1.05);
 
         // Stats shouldn't go into negative
         for(let stat in output.stats)

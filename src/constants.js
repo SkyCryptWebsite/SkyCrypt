@@ -463,8 +463,13 @@ module.exports = {
             5: {
                 crit_damage: 2
             },
-            9: {
-                crit_chance: 3
+            7: {
+                crit_damage: 0,
+                crit_chance: 1
+            },
+            8: {
+                crit_chance: 0,
+                crit_damage: 3
             }
         },
 
@@ -557,6 +562,7 @@ module.exports = {
         1: {
             type: 'color',
             color: '#0000AA',
+            niceColor: '#3251AE',
             css: 'color: #0000AA'
         },
 
@@ -593,6 +599,7 @@ module.exports = {
         7: {
             type: 'color',
             color: '#AAAAAA',
+            niceColor: '#333333',
             css: 'color: #AAAAAA'
         },
 
@@ -611,36 +618,42 @@ module.exports = {
         a: {
             type: 'color',
             color: '#55FF55',
+            niceColor: '#40BB40',
             css: 'color: #55FF55'
         },
 
         b: {
             type: 'color',
             color: '#55FFFF',
+            niceColor: '#51C4D7',
             css: 'color: #55FFFF'
         },
 
         c: {
             type: 'color',
             color: '#FF5555',
+            niceColor: '#C43C3C',
             css: 'color: #FF5555'
         },
 
         d: {
             type: 'color',
             color: '#FF55FF',
+            niceColor: '#D985BC',
             css: 'color: #FF55FF'
         },
 
         e: {
             type: 'color',
             color: '#FFFF55',
+            niceColor: '#EAA522',
             css: 'color: #FFFF55'
         },
 
         f: {
             type: 'color',
             color: '#FFFFFF',
+            color: '#000000',
             css: 'color: #FFFFFF'
         },
 
