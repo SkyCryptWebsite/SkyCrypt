@@ -848,6 +848,10 @@ module.exports = {
             output.stats.defense += emerald_bonus;
         }
 
+        // Apply Fairy Armor full set bonus of +10 Speed
+        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('FAIRY_')).length == 4)
+            output.stats.speed += 10;
+
         // Apply Speedster Armor full set bonus of +20 Speed
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SPEEDSTER_')).length == 4)
             output.stats.speed += 20;
