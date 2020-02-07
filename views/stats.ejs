@@ -121,19 +121,19 @@ if('levels' in calculated){
         if(levels[skill].level == 0)
             break;
 
-        description += `${skillEmojis[skill]} ${skillName} Level ${levels[skill].level}\n`;
+        description += `${skillEmojis[skill]} ${skillName} ${levels[skill].level}\n`;
     }
 }
 
 description += `\n`;
 
 if(calculated.average_level)
-    description += `Average Skill Level: ${calculated.average_level} ✦ `;
+    description += `⚒ Average Skill Level: ${calculated.average_level} `;
 
-description += `Purse: ${formatNumber(calculated.purse, true)} Coins`;
+description += `💰 Purse: ${formatNumber(calculated.purse, true)} Coins`;
 
 if(calculated.bank)
-    description += ` ✦ Bank Account: ${formatNumber(calculated.bank, true)} Coins`;
+    description += `\n🏦 Bank Account: ${formatNumber(calculated.bank, true)} Coins`;
 
 %>
 <!DOCTYPE html>
