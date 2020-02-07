@@ -30,7 +30,7 @@ async function getProfile(req){
         });
 
         let profiles = playerResponse.data.player.stats.SkyBlock.profiles;
-        let selectedProfile = _.pickBy(profiles, a => a.cute_name.toLowerCase() == profile);
+        let selectedProfile = _.pickBy(profiles, a => a.cute_name.toLowerCase() == profile.toLowerCase());
 
         profileId = Object.keys(selectedProfile)[0];
     }
@@ -53,7 +53,7 @@ module.exports = app => {
                 profiles.push(skyBlockProfiles[profile]);
 
             if('html' in req.query){
-                res.send(tableify(profiles));
+                res.send(tableify(profiles, { showHeaders: false }));
             }else{
                 res.json(profiles);
             }
@@ -91,7 +91,7 @@ module.exports = app => {
             }
 
             if('html' in req.query){
-                res.send(tableify(minions));
+                res.send(tableify(minions, { showHeaders: false }));
             }else{
                 res.json(minions);
             }
