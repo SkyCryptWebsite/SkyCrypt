@@ -45,7 +45,7 @@ module.exports = (app, db) => {
 
     app.get('/api/:player/:profile/minions', async (req, res) => {
         try{
-            let profileResponse = await getProfile(req);
+            let profileResponse = await helper.getProfile(req);
 
             let minions = [];
 

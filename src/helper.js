@@ -1,6 +1,8 @@
 const axios = require('axios');
 require('axios-debug-log')
 
+const _ = require('lodash');
+
 const credentials = require('../credentials.json');
 
 const Hypixel = axios.create({
