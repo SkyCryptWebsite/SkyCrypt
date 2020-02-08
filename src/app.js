@@ -1,23 +1,14 @@
 const cluster = require('cluster');
 const lib = require('./lib');
 
-const low = require('lowdb');
-const FileSync = require('lowdb/adapters/FileSync');
+const dbUrl = 'mongodb://localhost:27017';
+const dbName = 'sbstats';
 
-const adapter = new FileSync('db.json');
-const db = low(adapter);
-
-if(cluster.isMaster){
-    let cpus = require('os').cpus().length;
-
-    for(let i = 0; i < cpus; i += 1){
-        cluster.fork();
-    }
-
-    console.log('Running SkyBlock Stats on %i cores', cpus);
-}else{
+async function main(){
     const express = require('express');
     const axios = require('axios');
+    require('axios-debug-log')
+
     const fs = require('fs-extra');
     const path = require('path');
     const util = require('util');
@@ -25,12 +16,14 @@ if(cluster.isMaster){
     const _ = require('lodash');
     const objectPath = require('object-path');
     const moment = require('moment');
+    const { MongoClient } = require('mongodb');
+    const helper = require('./helper');
+
+    const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
+    await mongo.connect();
+    const db = mongo.db(dbName);
 
     const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
-
-    db
-    .defaults({ usernames: [], profiles: [] })
-    .write();
 
     fs.ensureDirSync('../cache');
 
@@ -43,56 +36,6 @@ if(cluster.isMaster){
         baseURL: 'https://api.hypixel.net/'
     });
 
-    async function uuidToUsername(uuid){
-        let output;
-
-        let user = db
-        .get('usernames')
-        .find({ uuid: uuid })
-        .value();
-
-        if(!user || +new Date() - user.date > 3600 * 1000){
-            let profileRequest = axios(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`, { timeout: 2000 });
-
-            profileRequest.then(response => {
-                let { data } = response;
-
-                if(user)
-                    db
-                    .get('usernames')
-                    .find({ uuid: user.uuid })
-                    .assign({ username: data.name, date: +new Date()  })
-                    .write();
-                else
-                    db
-                    .get('usernames')
-                    .push({ uuid: data.id, username: data.name, date: +new Date() })
-                    .write();
-            }).catch(err => {
-                if(user)
-                    db
-                    .get('usernames')
-                    .find({ uuid: user.uuid })
-                    .assign({ date: +new Date()  })
-                    .write();
-
-                console.error(err);
-            });
-
-            if(!user){
-                try{
-                    let { data } = await profileRequest;
-                    return { uuid, display_name: data.name };
-                }catch(e){
-                    return { uuid, display_name: uuid };
-                }
-            }
-        }
-
-        if(user)
-            return { uuid, display_name: user.username };
-    }
-
     const app = express();
     const port = 32464;
 
@@ -100,7 +43,7 @@ if(cluster.isMaster){
     app.set('view engine', 'ejs');
     app.use(express.static('public', { maxAge: CACHE_DURATION }));
 
-    require('./api')(app);
+    require('./api')(app, db);
 
     app.get('/stats/:player/:profile?', async (req, res, next) => {
         let response;
@@ -114,10 +57,13 @@ if(cluster.isMaster){
         if(paramProfile)
             isProfileUuid = paramProfile.length == 32;
 
-        let active_profile;
+        let activeProfile;
 
         if(!isPlayerUuid){
-            let playerObject = db.get('usernames').find(a => a.username.toLowerCase() == paramPlayer).value();
+            let playerObject = await db
+            .collection('usernames')
+            .find({ username: new RegExp(paramPlayer, 'i') })
+            .next();
 
             if(playerObject){
                 paramPlayer = playerObject.uuid;
@@ -126,15 +72,15 @@ if(cluster.isMaster){
         }
 
         if(isPlayerUuid)
-            active_profile = db
-            .get('profiles')
+            activeProfile = await db
+            .collection('profiles')
             .find({ uuid: paramPlayer })
-            .value();
+            .next();
         else
-            active_profile = db
-            .get('profiles')
+            activeProfile = await db
+            .collection('profiles')
             .find({ username: paramPlayer })
-            .value();
+            .next();
 
         let params = {
             key: credentials.hypixel_api_key
@@ -189,11 +135,18 @@ if(cluster.isMaster){
                 return false;
             }
 
-            let all_skyblock_profiles = data.player.stats.SkyBlock.profiles;
+            const hypixelPlayer = data.player;
 
-            let skyblock_profiles = {};
+            if(await db.collection('usernames').find({ uuid: hypixelPlayer.uuid }).next() === null)
+                await db
+                .collection('usernames')
+                .insertOne({ uuid: hypixelPlayer.uuid, username: hypixelPlayer.displayname, date: +new Date() })
 
-            if(Object.keys(all_skyblock_profiles).length == 0){
+            let allSkyBlockProfiles = hypixelPlayer.stats.SkyBlock.profiles;
+
+            let skyBlockProfiles = {};
+
+            if(Object.keys(allSkyBlockProfiles).length == 0){
                 let default_profile = await Hypixel.get('skyblock/profile', {
                     params: { key: credentials.hypixel_api_key, profile: data.player.uuid
                 }});
@@ -207,41 +160,41 @@ if(cluster.isMaster){
 
                     return false;
                 }else{
-                    skyblock_profiles[data.player.uuid] = {
+                    skyBlockProfiles[data.player.uuid] = {
                         profile_id: data.player.uuid,
                         cute_name: 'Avocado',
                     };
 
-                    all_skyblock_profiles = skyblock_profiles;
+                    allSkyBlockProfiles = skyBlockProfiles;
                 }
             }
 
             if(paramProfile){
                 if(isProfileUuid){
-                    if(Object.keys(all_skyblock_profiles).includes(paramProfile)){
-                        skyblock_profiles = _.pickBy(all_skyblock_profiles, a => a.profile_id.toLowerCase() == paramProfile);
+                    if(Object.keys(allSkyBlockProfiles).includes(paramProfile)){
+                        skyBlockProfiles = _.pickBy(allSkyBlockProfiles, a => a.profile_id.toLowerCase() == paramProfile);
                     }else{
-                        skyblock_profiles[paramProfile] = {
+                        skyBlockProfiles[paramProfile] = {
                             profile_id: paramProfile,
                             cute_name: 'Deleted'
                         };
                     }
                 }else{
-                    skyblock_profiles = _.pickBy(all_skyblock_profiles, a => a.cute_name.toLowerCase() == paramProfile);
+                    skyBlockProfiles = _.pickBy(allSkyBlockProfiles, a => a.cute_name.toLowerCase() == paramProfile);
                 }
-            }else if(active_profile)
-                skyblock_profiles = _.pickBy(all_skyblock_profiles, a => a.profile_id.toLowerCase() == active_profile.profile_id);
+            }else if(activeProfile)
+                skyBlockProfiles = _.pickBy(allSkyBlockProfiles, a => a.profile_id.toLowerCase() == activeProfile.profile_id);
 
-            if(Object.keys(skyblock_profiles).length == 0)
-                skyblock_profiles = all_skyblock_profiles;
+            if(Object.keys(skyBlockProfiles).length == 0)
+                skyBlockProfiles = allSkyBlockProfiles;
 
-            let profile_names = Object.keys(skyblock_profiles);
+            let profileNames = Object.keys(skyBlockProfiles);
 
             let promises = [];
-            let profile_ids = [];
+            let profileIds = [];
 
-            for(let profile in skyblock_profiles){
-                profile_ids.push(profile);
+            for(let profile in skyBlockProfiles){
+                profileIds.push(profile);
 
                 promises.push(
                     Hypixel.get('skyblock/profile', { params: { key: credentials.hypixel_api_key, profile: profile } })
@@ -254,7 +207,7 @@ if(cluster.isMaster){
 
             for(let [index, profile_response] of responses.entries()){
                 if(!profile_response.data.success){
-                    delete skyblock_profiles[profile_ids[index]];
+                    delete skyBlockProfiles[profileIds[index]];
                     continue;
                 }
 
@@ -266,7 +219,7 @@ if(cluster.isMaster){
                 }
 
                 if(memberCount == 0){
-                    delete skyblock_profiles[profile_ids[index]];
+                    delete skyBlockProfiles[profileIds[index]];
 
                     if(req.params.profile){
                         res.render('index', {
@@ -295,36 +248,36 @@ if(cluster.isMaster){
             }
 
             let highest = 0;
-            let profile_id;
+            let profileId;
 
             profiles.forEach((_profile, index) => {
                 if(_profile === undefined || _profile === null)
                     return;
 
-                let user_profile = _profile.members[data.player.uuid];
+                let userProfile = _profile.members[data.player.uuid];
 
-                if(user_profile.last_save > highest){
+                if(userProfile.last_save > highest){
                     profile = _profile;
-                    highest = user_profile.last_save;
-                    profile_id = profile_names[index];
+                    highest = userProfile.last_save;
+                    profileId = profileNames[index];
                 }
             });
 
-            let user_profile = profile.members[data.player.uuid];
+            let userProfile = profile.members[data.player.uuid];
 
-            if(active_profile){
-                if(user_profile.last_save > active_profile.last_save){
-                    db
-                    .get('profiles')
-                    .find({ username: req.params.player.toLowerCase() })
-                    .assign({ profile_id: profile_id, last_save: user_profile.last_save })
-                    .write();
+            if(activeProfile){
+                if(userProfile.last_save > activeProfile.last_save){
+                    await db
+                    .collection('profiles')
+                    .updateOne(
+                        { uuid: activeProfile.uuid },
+                        { $set: { profile_id: profileId, last_save: userProfile.last_save } }
+                    );
                 }
             }else{
-                db
-                .get('profiles')
-                .push({ username: req.params.player.toLowerCase(), profile_id: profile_id, last_save: user_profile.last_save })
-                .write();
+                await db
+                .collection('profiles')
+                .insertOne({ uuid: hypixelPlayer.uuid, username: hypixelPlayer.displayname, profile_id: profileId, last_save: userProfile.last_save });
             }
 
             for(const member in profile.members)
@@ -337,26 +290,46 @@ if(cluster.isMaster){
 
             for(let member of memberUuids)
                 if(member != data.player.uuid)
-                    memberPromises.push(uuidToUsername(member));
+                    memberPromises.push(helper.uuidToUsername(member, db));
 
             let members = await Promise.all(memberPromises);
 
-            let items = await lib.getItems(user_profile);
-            let calculated = await lib.getStats(user_profile, items);
+            members.push({
+                uuid: hypixelPlayer.uuid,
+                display_name: hypixelPlayer.displayname
+            })
+
+            for(const member of members){
+                if(await db.collection('members').find({ profile_id: profileId, uuid: member.uuid }).next() == null){
+                    await db
+                    .collection('members')
+                    .insertOne({ profile_id: profileId, uuid: member.uuid, username: member.display_name })
+                }else{
+                    await db
+                    .collection('members')
+                    .updateOne(
+                        { profile_id: profileId, uuid: member.uuid },
+                        { $set: { username: member.display_name } }
+                    );
+                }
+            }
+
+            let items = await lib.getItems(userProfile);
+            let calculated = await lib.getStats(userProfile, items);
 
             if(objectPath.has(profile, 'banking.balance'))
                 calculated.bank = profile.banking.balance;
 
             calculated.rank_prefix = lib.rankPrefix(data.player);
-            calculated.purse = user_profile.coin_purse;
+            calculated.purse = userProfile.coin_purse;
             calculated.uuid = data.player.uuid;
             calculated.display_name = data.player.displayname;
-            calculated.profile = skyblock_profiles[profile_id];
-            calculated.profiles = _.pickBy(all_skyblock_profiles, a => a.profile_id != profile_id);
-            calculated.members = members;
+            calculated.profile = skyBlockProfiles[profileId];
+            calculated.profiles = _.pickBy(allSkyBlockProfiles, a => a.profile_id != profileId);
+            calculated.members = members.filter(a => a.uuid != hypixelPlayer.uuid);
 
-            let last_updated = user_profile.last_save;
-            let first_join = user_profile.first_join;
+            let last_updated = userProfile.last_save;
+            let first_join = userProfile.first_join;
 
             let diff = (+new Date() - last_updated) / 1000;
 
@@ -454,4 +427,16 @@ if(cluster.isMaster){
     });
 
     app.listen(port, () => console.log(`SkyBlock Stats running on http://localhost:${port}`));
+}
+
+if(cluster.isMaster){
+    let cpus = require('os').cpus().length;
+
+    for(let i = 0; i < cpus; i += 1){
+        cluster.fork();
+    }
+
+    console.log('Running SkyBlock Stats on %i cores', cpus);
+}else{
+    main();
 }

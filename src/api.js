@@ -1,4 +1,6 @@
 const axios = require('axios');
+require('axios-debug-log')
+
 const credentials = require('../credentials.json');
 const tableify = require('@tillhub/tableify');
 const _ = require('lodash');
