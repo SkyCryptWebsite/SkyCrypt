@@ -515,19 +515,19 @@ module.exports = {
     renderLore: text => {
         let output = "";
         let spansOpened = 0;
-        let parts = text.split("§");
 
-        parts.forEach(part => {
-            let code = part.substr(0, 1);
-            let content = part.substr(1);
+        const parts = text.split("§");
+
+        for(const part of parts){
+            const code = part.substring(0, 1);
+            const content = part.substring(1);
 
             if(code in constants.minecraft_formatting){
-                let format = constants.minecraft_formatting[code];
+                const format = constants.minecraft_formatting[code];
 
                 if(format.type == 'color'){
-                    for(; spansOpened > 0; spansOpened--){
+                    for(; spansOpened > 0; spansOpened--)
                         output += "</span>";
-                    }
 
                     output += `<span style="${format.css}">${content}`;
 
@@ -537,18 +537,16 @@ module.exports = {
 
                     spansOpened++;
                 }else if(format.type == 'reset'){
-                    for(; spansOpened > 0; spansOpened--){
+                    for(; spansOpened > 0; spansOpened--)
                         output += "</span>";
-                    }
 
                     output += content;
                 }
             }
-        });
-
-        for(; spansOpened > 0; spansOpened--){
-            output += "</span>";
         }
+
+        for(; spansOpened > 0; spansOpened--)
+            output += "</span>";
 
         return output;
     },
