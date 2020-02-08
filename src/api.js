@@ -2,43 +2,13 @@ const axios = require('axios');
 const credentials = require('../credentials.json');
 const tableify = require('@tillhub/tableify');
 const _ = require('lodash');
+const helper = require('./helper');
 
 const Hypixel = axios.create({
     baseURL: 'https://api.hypixel.net/'
 });
 
-async function getProfile(req){
-    let player = req.params.player;
-
-    let profile = req.params.profile;
-    let profileId;
-
-    if(profile.length == 32){
-        profileId = profile;
-    }else{
-        let params = {
-            key: credentials.hypixel_api_key
-        };
-
-        if(player.length == 32)
-            params.uuid = player;
-        else
-            params.name = player;
-
-        let playerResponse = await Hypixel.get('player', {
-            params, timeout: 5000
-        });
-
-        let profiles = playerResponse.data.player.stats.SkyBlock.profiles;
-        let selectedProfile = _.pickBy(profiles, a => a.cute_name.toLowerCase() == profile.toLowerCase());
-
-        profileId = Object.keys(selectedProfile)[0];
-    }
-
-    return await Hypixel.get('skyblock/profile', { params: { key: credentials.hypixel_api_key, profile: profileId } });
-}
-
-module.exports = app => {
+module.exports = (app, db) => {
     app.get('/api/:player/profiles', async (req, res) => {
         try{
             let playerResponse = await Hypixel.get('player', {
@@ -49,8 +19,14 @@ module.exports = app => {
 
             let profiles = [];
 
-            for(let profile in skyBlockProfiles)
+            for(let profile in skyBlockProfiles){
+                skyBlockProfiles[profile].members = await helper.fetchMembers(profile, db);
+
+                if('html' in req.query)
+                    skyBlockProfiles[profile].members = skyBlockProfiles[profile].members.join(", ");
+
                 profiles.push(skyBlockProfiles[profile]);
+            }
 
             if('html' in req.query){
                 res.send(tableify(profiles, { showHeaders: false }));
@@ -58,6 +34,8 @@ module.exports = app => {
                 res.json(profiles);
             }
         }catch(e){
+            console.error(e);
+
             res.set('Content-Type', 'text/plain');
             res.status(500).send('Something went wrong');
         }
@@ -90,11 +68,10 @@ module.exports = app => {
                 }
             }
 
-            if('html' in req.query){
+            if('html' in req.query)
                 res.send(tableify(minions, { showHeaders: false }));
-            }else{
+            else
                 res.json(minions);
-            }
         }catch(e){
             console.error(e);
 
