@@ -62,7 +62,7 @@ async function main(){
         if(!isPlayerUuid){
             let playerObject = await db
             .collection('usernames')
-            .find({ username: new RegExp(paramPlayer, 'i') })
+            .find({ username: new RegExp(`^${paramPlayer}\$`, 'i') })
             .next();
 
             if(playerObject){
