@@ -3,6 +3,7 @@ require('axios-debug-log')
 
 const _ = require('lodash');
 
+
 const credentials = require('../credentials.json');
 
 const Hypixel = axios.create({
@@ -68,29 +69,34 @@ module.exports = {
         let profile = req.params.profile;
         let profileId;
 
-        if(profile.length == 32){
-            profileId = profile;
-        }else{
-            let params = {
-                key: credentials.hypixel_api_key
-            };
+        let params = {
+            key: credentials.hypixel_api_key
+        };
 
-            if(player.length == 32)
-                params.uuid = player;
-            else
-                params.name = player;
+        if(player.length == 32)
+            params.uuid = player;
+        else
+            params.name = player;
 
-            let playerResponse = await Hypixel.get('player', {
-                params, timeout: 5000
-            });
+        let playerResponse = await Hypixel.get('player', {
+            params, timeout: 5000
+        });
 
-            let profiles = playerResponse.data.player.stats.SkyBlock.profiles;
-            let selectedProfile = _.pickBy(profiles, a => a.cute_name.toLowerCase() == profile.toLowerCase());
+        let profiles = playerResponse.data.player.stats.SkyBlock.profiles;
 
-            profileId = Object.keys(selectedProfile)[0];
-        }
+        let selectedProfile;
 
-        return await Hypixel.get('skyblock/profile', { params: { key: credentials.hypixel_api_key, profile: profileId } });
+        if(profile.length == 32)
+            selectedProfile = _.pickBy(profiles, a => a.profile_id.toLowerCase() == profile.toLowerCase());
+        else
+            selectedProfile = _.pickBy(profiles, a => a.cute_name.toLowerCase() == profile.toLowerCase());
+
+        profileId = Object.keys(selectedProfile)[0];
+
+        return {
+            playerResponse: playerResponse,
+            profileResponse: await Hypixel.get('skyblock/profile', { params: { key: credentials.hypixel_api_key, profile: profileId } })
+        };
     },
 
     fetchMembers: async (profileId, db) => {

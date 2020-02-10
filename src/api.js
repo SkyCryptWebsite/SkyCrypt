@@ -5,6 +5,8 @@ const credentials = require('../credentials.json');
 const tableify = require('@tillhub/tableify');
 const _ = require('lodash');
 const helper = require('./helper');
+const lib = require('./lib');
+const objectPath = require("object-path");
 
 const Hypixel = axios.create({
     baseURL: 'https://api.hypixel.net/'
@@ -45,11 +47,11 @@ module.exports = (app, db) => {
 
     app.get('/api/:player/:profile/minions', async (req, res) => {
         try{
-            let profileResponse = await helper.getProfile(req);
+            const { profileResponse } = await helper.getProfile(req);
 
             let minions = [];
 
-            let coopMembers = profileResponse.data.profile.members;
+            const coopMembers = profileResponse.data.profile.members;
 
             for(const member in coopMembers){
                 if(!('crafted_generators' in coopMembers[member]))
@@ -74,6 +76,44 @@ module.exports = (app, db) => {
                 res.send(tableify(minions, { showHeaders: false }));
             else
                 res.json(minions);
+        }catch(e){
+            console.error(e);
+
+            res.set('Content-Type', 'text/plain');
+            res.status(500).send('Something went wrong');
+        }
+    });
+
+    app.get('/api/:player/:profile/cakebag', async (req, res) => {
+        try{
+            const { playerResponse, profileResponse } = await helper.getProfile(req);
+
+            const userProfile = profileResponse.data.profile.members[playerResponse.data.player.uuid];
+
+            const items = await lib.getItems(userProfile);
+
+            const allItems = items.armor.concat(items.inventory, items.talisman_bag, items.enderchest);
+
+            const cakeBags = allItems.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id == 'NEW_YEAR_CAKE_BAG');
+
+            if(cakeBags.length == 0){
+                res.set('Content-Type', 'text/plain');
+                res.send('Player has no cake bag');
+            }else{
+                const cakeBag = cakeBags[0];
+
+                let cakes = [];
+
+                for(const item of cakeBag.containsItems)
+                    if(objectPath.has(item, 'tag.ExtraAttributes.new_years_cake'))
+                        cakes.push({cake: item.tag.ExtraAttributes.new_years_cake});
+
+                cakes = cakes.sort((a, b) => a.cake - b.cake);
+
+                console.log(cakes);
+
+                res.send(tableify(cakes, { showHeaders: false }));
+            }
         }catch(e){
             console.error(e);
 
