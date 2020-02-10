@@ -84,6 +84,13 @@ module.exports = (app, db) => {
         }
     });
 
+    app.get('/api/:player/:profile/stats', async (req, res) => {
+        try{
+            const { playerResponse, profileResponse } = await helper.getProfile(req);
+
+            const userProfile = profileResponse.data.profile.members[playerResponse.data.player.uuid];
+    });
+
     app.get('/api/:player/:profile/cakebag', async (req, res) => {
         try{
             const { playerResponse, profileResponse } = await helper.getProfile(req);
@@ -109,9 +116,7 @@ module.exports = (app, db) => {
                         cakes.push({cake: item.tag.ExtraAttributes.new_years_cake});
 
                 cakes = cakes.sort((a, b) => a.cake - b.cake);
-
-                console.log(cakes);
-
+                
                 res.send(tableify(cakes, { showHeaders: false }));
             }
         }catch(e){
