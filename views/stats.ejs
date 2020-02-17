@@ -18,6 +18,30 @@
             return Math.ceil(number / 1000 / 1000 * rounding) / rounding + 'M';
 };
 
+const rarityOrder = ['special', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
+
+const statSuffix = {
+    health: '',
+    defense: '',
+    effective_health: '',
+    strength: '',
+    speed: '%',
+    crit_chance: '%',
+    crit_damage: '%',
+    intelligence: ''
+};
+
+const statShort = {
+    health: 'HP',
+    defense: 'Def',
+    effective_health: 'EHP',
+    strength: 'Str',
+    speed: 'Spd',
+    crit_chance: 'CC',
+    crit_damage: 'CD',
+    intelligence: 'Int'
+};
+
 const isEnchanted = item => {
     if(item.animated)
         return false;
@@ -166,6 +190,7 @@ if(calculated.bank)
     <div id="wrapper">
         <div id="player_profile"><span class="text-stats-for">Stats for</span>
             <div tabindex="1" id="stats_for_player">
+                <%- calculated.rank_prefix %>
                 <%= calculated.display_name %>
                 <div id="other_players">
                     <% calculated.members.forEach(member => { %>
@@ -199,43 +224,43 @@ if(calculated.bank)
                 <div data-stat="health" class="basic-stat stat-health" data-tippy-content="Base Health: <%= calculated.base_stats.health %> HP
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls, leveling your Farming and Fishing skills and leveling up in Zombie or Wolf Slayer.</div>
                 Bonus Health: +<%= stats.health - calculated.base_stats.health %> HP
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Health</span><span class="stat-value"><%= stats.health %></span></div>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Health </span><span class="stat-value"><%= stats.health %></span></div>
                 <div data-stat="defense" class="basic-stat stat-defense" data-tippy-content="Base Defense: <%= calculated.base_stats.defense %>
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls and leveling your Mining skill.</div>
                 Bonus Defense: +<%= stats.defense - calculated.base_stats.defense %>
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Defense</span><span class="stat-value"><%= stats.defense %></span></div>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Defense </span><span class="stat-value"><%= stats.defense %></span></div>
                 <div data-stat="effective_health" class="basic-stat stat-effective-health"  data-tippy-content="Effective Health based on Health + Defense.
-                <div class='tippy-explanation'>→ Formula: Health * (1 + Defense / 100)</div>"><span class="stat-name">Effective HP</span><span class="stat-value"><%= stats.effective_health %></span></div>
+                <div class='tippy-explanation'>→ Formula: Health * (1 + Defense / 100)</div>"><span class="stat-name">Effective HP </span><span class="stat-value"><%= stats.effective_health %></span></div>
                 <div data-stat="strength" class="basic-stat stat-strength" data-tippy-content="Base Strength: <%= calculated.base_stats.strength %>
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls and leveling your Foraging skill.</div>
                 Bonus Strength: +<%= stats.strength - calculated.base_stats.strength %>
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Strength</span><span class="stat-value"><%= stats.strength %></span></div>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Strength </span><span class="stat-value"><%= stats.strength %></span></div>
                 <div data-stat="speed" class="basic-stat stat-speed" data-tippy-content="Base Speed: <%= calculated.base_stats.speed %>%
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls.</div>
                 Bonus Speed: +<%= stats.speed - calculated.base_stats.speed %>%
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Speed</span><span class="stat-value"><%= stats.speed %></span>%</div>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Speed </span><span class="stat-value"><%= stats.speed %></span>%</div>
                 <div data-stat="crit_chance" class="basic-stat stat-crit-chance" data-tippy-content="Base Crit Chance: <%= calculated.base_stats.crit_chance %>%
                 <div class='tippy-explanation'>Increased by leveling your Combat skill.</div>
                 Bonus Crit Chance: +<%= stats.crit_chance - calculated.base_stats.crit_chance %>%
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Crit Chance</span><span class="stat-value"><%= stats.crit_chance %></span>%</div>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Crit Chance </span><span class="stat-value"><%= stats.crit_chance %></span>%</div>
                 <div data-stat="crit_damage" class="basic-stat stat-crit-damage" data-tippy-content="Base Crit Damage: <%= calculated.base_stats.crit_damage %>%
                 <div class='tippy-explanation'>Increased by leveling up in Spider or Wolf Slayer.</div>
                 Bonus Crit Damage: +<%= stats.crit_damage - calculated.base_stats.crit_damage %>%
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Crit Damage</span><span class="stat-value"><%= stats.crit_damage %></span>%</div>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Crit Damage </span><span class="stat-value"><%= stats.crit_damage %></span>%</div>
                 <div data-stat="intelligence" class="basic-stat stat-intelligence" data-tippy-content="Base Intelligence: <%= calculated.base_stats.intelligence %>
                 <div class='tippy-explanation'>Increased by leveling your Enchanting and Alchemy skills and completing songs on Melody's Harp.</div>
                 Bonus Intelligence: +<%= stats.intelligence - calculated.base_stats.intelligence %>
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Intelligence</span><span class="stat-value"><%= stats.intelligence %></span></div>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Intelligence </span><span class="stat-value"><%= stats.intelligence %></span></div>
                 <div id="player_model_mobile" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
                 <div id="additional_stats_container">
-                    <div class="additional-stat" data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Last Updated</span><span class="stat-value"><%= calculated.last_updated.text %></span></div>
-                    <div class="additional-stat" data-tippy-content="Joined on <%= moment(calculated.first_join.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Joined</span><span class="stat-value"><%= calculated.first_join.text %></span></div>
-                    <div class="additional-stat"><span class="stat-name">Purse</span><span class="stat-value"><%= Math.round(calculated.purse).toLocaleString() %> Coins</span></div>
+                    <div class="additional-stat" data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></div>
+                    <div class="additional-stat" data-tippy-content="Joined on <%= moment(calculated.first_join.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></div>
+                    <div class="additional-stat"><span class="stat-name">Purse: </span><span class="stat-value"><%= Math.round(calculated.purse).toLocaleString() %> Coins</span></div>
                     <% if('bank' in calculated){ %>
-                        <div class="additional-stat"><span class="stat-name">Bank Account</span><span class="stat-value"><%= Math.round(calculated.bank).toLocaleString() %> Coins</span></div>
+                        <div class="additional-stat"><span class="stat-name">Bank Account: </span><span class="stat-value"><%= Math.round(calculated.bank).toLocaleString() %> Coins</span></div>
                     <% } %>
                     <% if('levels' in calculated){ %>
-                        <div class="additional-stat" data-tippy-content="Average skill level over all skills except Carpentry and Runecrafting, includes progress to next level."><span class="stat-name">Average Skill Level</span><span class="stat-value"><%= calculated.average_level %></span></div>
+                        <div class="additional-stat" data-tippy-content="Average skill level over all skills except Carpentry and Runecrafting, includes progress to next level."><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level %></span></div>
                     <% } %>
                 </div>
             </div>
@@ -279,62 +304,13 @@ if(calculated.bank)
             </div>
         <% } %>
         <div class="stat-container stat-armor">
-            <div class="stat-header">Armor</div>
-            <% if(items.armor.length == 0){ %>
-                <div class="no-access"><%= calculated.display_name %> doesn't have any armor equipped.</div>
-            <% }else{ %>
-                <div class="pieces">
-                    <% items.armor.slice().reverse().forEach(item => { %>
-                        <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
-                            <% if(item.rarity == 'legendary'){ %>
-                                <div class="piece-shine"></div>
-                            <% } %>
-                            <div class="piece-hover-area"></div>
-                            <% itemIcon(item, ['piece-icon']); %>
-                        </div>
-                    <% }) %>
-                </div>
-            <% } %>
-        </div>
-        <% if(!items.no_inventory){ %>
-            <div class="stat-container stat-weapons">
-                <div class="stat-header">Weapons</div>
-                <% if(items.weapons.length == 0){ %>
-                    <div class="no-access"><%= calculated.display_name %> doesn't have any weapons.</div>
+            <div class="stat-header"><span>Armor</span></div>
+            <div class="stat-content">
+                <% if(items.armor.length == 0){ %>
+                    <div class="no-access"><%= calculated.display_name %> doesn't have any armor equipped.</div>
                 <% }else{ %>
                     <div class="pieces">
-                        <%
-                            let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
-
-                            if(items.highest_rarity_sword)
-                                sword = [items.highest_rarity_sword];
-
-                            items.weapons.forEach(item => { %>
-                                <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece
-                                    <% if(sword.length > 0 && item.item_index == sword[0].item_index){ %>piece-selected<% } %>
-                                    piece-<%= item.rarity %>-bg">
-                                    <% if(item.rarity == 'legendary'){ %>
-                                        <div class="piece-shine"></div>
-                                    <% } %>
-                                    <div class="piece-hover-area"></div>
-                                    <div class="select-weapon"></div>
-                                    <% itemIcon(item, ['piece-icon']); %>
-                                </div>
-                        <%
-                            });
-                        %>
-                    </div>
-                <% } %>
-            </div>
-            <div class="stat-container stat-accessories">
-                <div class="stat-header">Accessories</div>
-                <% if(items.no_inventory){ %>
-                    <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
-                <% }else if(items.talismans.length == 0){ %>
-                    <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
-                <% }else{ %>
-                    <div class="pieces">
-                        <% items.talismans.filter(a => !a.isInactive).forEach(item => { %>
+                        <% items.armor.slice().reverse().forEach(item => { %>
                             <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
                                 <% if(item.rarity == 'legendary'){ %>
                                     <div class="piece-shine"></div>
@@ -346,50 +322,146 @@ if(calculated.bank)
                     </div>
                 <% } %>
             </div>
+        </div>
+        <% if(!items.no_inventory){ %>
+            <div class="stat-container stat-weapons">
+                <div class="stat-header"><span>Weapons</span></div>
+                <div class="stat-content">
+                    <% if(items.weapons.length == 0){ %>
+                        <div class="no-access"><%= calculated.display_name %> doesn't have any weapons.</div>
+                    <% }else{ %>
+                        <div class="pieces">
+                            <%
+                                let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
+
+                                if(items.highest_rarity_sword)
+                                    sword = [items.highest_rarity_sword];
+
+                                items.weapons.forEach(item => { %>
+                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-index="<%= item.item_index %>" class="rich-item piece
+                                        <% if(sword.length > 0 && item.item_index == sword[0].item_index){ %>piece-selected<% } %>
+                                        piece-<%= item.rarity %>-bg">
+                                        <% if(item.rarity == 'legendary'){ %>
+                                            <div class="piece-shine"></div>
+                                        <% } %>
+                                        <div class="piece-hover-area"></div>
+                                        <div class="select-weapon"></div>
+                                        <% itemIcon(item, ['piece-icon']); %>
+                                    </div>
+                            <%
+                                });
+                            %>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+            <div class="stat-container stat-accessories">
+                <div class="stat-header"><span>Accessories</span></div>
+                <div class="stat-content">
+                    <% if(items.no_inventory){ %>
+                        <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
+                    <% }else if(items.talismans.length == 0){ %>
+                        <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
+                    <% }else{ %>
+                        <div class="accessory-stats"><p>
+                            <span class="stat-name">Unique Accessories: </span><span class="stat-value"><%= items.talismans.filter(a => a.isUnique).length %> / 47</span><br>
+                            <span class="stat-name">Completion: </span><span class="stat-value"><%= Math.floor(items.talismans.filter(a => a.isUnique).length / 47 * 100) %>%</span>
+                        </p></div>
+                        <div class="pieces">
+                            <% items.talismans.filter(a => a.isUnique).forEach(item => { %>
+                                <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-index="<%= item.item_index %>"
+                                class="rich-item piece <% if(item.isInactive){ %>inactive-accessory<% } %> piece-<%= item.rarity %>-bg">
+                                    <% if(item.rarity == 'legendary'){ %>
+                                        <div class="piece-shine"></div>
+                                    <% } %>
+                                    <div class="piece-hover-area"></div>
+                                    <% itemIcon(item, ['piece-icon']); %>
+                                </div>
+                            <% }) %>
+                        </div>
+                        <div class="accessory-stats"><p>
+                        <span class="stat-name">Bonus: </span>
+                            <%
+                                const stats = {
+                                    health: 0,
+                                    defense: 0,
+                                    strength: 0,
+                                    speed: 0,
+                                    crit_chance: 0,
+                                    crit_damage: 0,
+                                    intelligence: 0
+                                };
+
+                                for(const talisman of items.talismans.filter(a => a.isUnique)){
+                                    for(const stat in talisman.stats){
+                                        if(!(stat in stats))
+                                            continue;
+
+                                        stats[stat] += talisman.stats[stat];
+                                    }
+                                }
+
+                                for(const [index, stat] of Object.keys(stats).entries()){
+                                    if(stats[stat] == 0)
+                                        continue;
+                                    %>
+                                    <!--<span style="margin-left: 5px; font-weight: 700" class="stat-name color-<%= stat.replace("_", "-") %>"><%= stats[stat] %><%= statSuffix[stat] %></span>-->
+                                    <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replace("_", "-") %>"><%= stats[stat] %><%= statSuffix[stat] %> <%= statShort[stat] %></span>
+                                    <% if(index < Object.keys(stats).length - 1){ %><strong style="opacity: 0.7">//</strong><% } %>
+                                <% }
+                            %>
+                        </p></div>
+                    <% } %>
+                </div>
+            </div>
             <div class="stat-container stat-inventory">
-                <div class="stat-header">Inventories</div>
-                <% if(items.no_inventory){ %>
-                    <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
-                <% }else{ %>
-                    <div id="inventory_container">
-                        <div id="inventory_header">
-                            <div class="inventory-tab active-inventory" data-inventory-type="inventory">Inventory</div><%
-                            if(items.enderchest.length > 0){ %><div class="inventory-tab" data-inventory-type="enderchest">Ender Chest</div><% }
-                            if(items.talisman_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="talisman_bag">Accessory Bag</div><% }
-                            if(items.potion_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="potion_bag">Potion Bag</div><% }
-                            if(items.fishing_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="fishing_bag">Fishing Bag</div><% }
-                            if(items.quiver.length > 0){ %><div class="inventory-tab" data-inventory-type="quiver">Quiver</div><% } %>
+                <div class="stat-header"><span>Inventory</span></div>
+                <div class="stat-content">
+                    <% if(items.no_inventory){ %>
+                        <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
+                    <% }else{ %>
+                        <div id="inventory_container">
+                            <div id="inventory_header">
+                                <div class="inventory-tab active-inventory" data-inventory-type="inventory">Inventory</div><%
+                                if(items.enderchest.length > 0){ %><div class="inventory-tab" data-inventory-type="enderchest">Ender Chest</div><% }
+                                if(items.talisman_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="talisman_bag">Accessory Bag</div><% }
+                                if(items.potion_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="potion_bag">Potion Bag</div><% }
+                                if(items.fishing_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="fishing_bag">Fishing Bag</div><% }
+                                if(items.quiver.length > 0){ %><div class="inventory-tab" data-inventory-type="quiver">Quiver</div><% } %>
+                            </div>
+                            <div class="inventory-view current-inventory" data-inventory-type="inventory">
+                                <% for(let i = 9; i < items.inventory.length; i++){ %>
+                                    <% let item = items.inventory[i]; %>
+                                    <%= inventorySlot(item); %>
+                                    <% if((i + 1) % 9 == 0) { %><br><% } %>
+                                <% } %>
+                                <br>
+                                <% for(let i = 0; i < 9; i++){ %>
+                                    <% let item = items.inventory[i]; %>
+                                    <%= inventorySlot(item); %>
+                                <% } %>
+                            </div>
                         </div>
-                        <div class="inventory-view current-inventory" data-inventory-type="inventory">
-                            <% for(let i = 9; i < items.inventory.length; i++){ %>
-                                <% let item = items.inventory[i]; %>
-                                <%= inventorySlot(item); %>
-                                <% if((i + 1) % 9 == 0) { %><br><% } %>
-                            <% } %>
-                            <br>
-                            <% for(let i = 0; i < 9; i++){ %>
-                                <% let item = items.inventory[i]; %>
-                                <%= inventorySlot(item); %>
-                            <% } %>
-                        </div>
-                    </div>
-                <% } %>
+                    <% } %>
+                </div>
             </div>
         <% } %>
         <div class="stat-container stat-kills">
-            <div class="stat-header">Top Kills & Deaths</div>
-            <div class="kills-deaths-container">
-                <div class="top-kills">
-                    <div class="kills-header">Kills</div>
-                    <% calculated.kills.slice(0, 10).forEach((kill, index) => { %>
-                        <div class="kill-stat"><div class="kill-rank">#<%= index + 1 %></div><div class="kill-entity"><%= kill.entityName %></div><div class="kill-amount"><%= kill.amount.toLocaleString() %></div></div>
-                    <% }); %>
-                </div>
-                <div class="top-deaths">
-                    <div class="kills-header">Deaths</div>
-                    <% calculated.deaths.slice(0, 10).forEach((death, index) => { %>
-                        <div class="kill-stat"><div class="kill-rank">#<%= index + 1 %></div><div class="kill-entity"><%= death.entityName %></div><div class="kill-amount"><%= death.amount.toLocaleString() %></div></div>
-                    <% }); %>
+            <div class="stat-header"><span>Top Kills & Deaths</span></div>
+            <div class="stat-content">
+                <div class="kills-deaths-container">
+                    <div class="top-kills">
+                        <div class="kills-header">Kills</div>
+                        <% calculated.kills.slice(0, 10).forEach((kill, index) => { %>
+                            <div class="kill-stat"><div class="kill-rank">#<%= index + 1 %></div><div class="kill-entity"><%= kill.entityName %></div><div class="kill-amount"><%= kill.amount.toLocaleString() %></div></div>
+                        <% }); %>
+                    </div>
+                    <div class="top-deaths">
+                        <div class="kills-header">Deaths</div>
+                        <% calculated.deaths.slice(0, 10).forEach((death, index) => { %>
+                            <div class="kill-stat"><div class="kill-rank">#<%= index + 1 %></div><div class="kill-entity"><%= death.entityName %></div><div class="kill-amount"><%= death.amount.toLocaleString() %></div></div>
+                        <% }); %>
+                    </div>
                 </div>
             </div>
         </div>

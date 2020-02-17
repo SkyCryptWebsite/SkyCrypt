@@ -166,7 +166,16 @@ document.addEventListener('DOMContentLoaded', function(){
     function fillLore(element){
         let item = [];
 
-        if(element.hasAttribute('data-item-index'))
+        if(element.hasAttribute('data-backpack-index')){
+            let backpack = all_items.filter(a => a.item_index == Number(element.getAttribute('data-backpack-index')));
+
+            if(backpack.length == 0)
+                return;
+
+            backpack = backpack[0];
+
+            item = backpack.containsItems.filter(a => a.item_index == Number(element.getAttribute('data-item-index')));
+        }else if(element.hasAttribute('data-item-index'))
             item = all_items.filter(a => a.item_index == Number(element.getAttribute('data-item-index')));
         else if(element.hasAttribute('data-backpack-item-index'))
             item = [currentBackpack.containsItems[Number(element.getAttribute('data-backpack-item-index'))]];

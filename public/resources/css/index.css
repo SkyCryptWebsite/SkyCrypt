@@ -7,6 +7,10 @@ html{
     overflow-x: hidden;
 }
 
+.stat-name, .stat-value, .skill-name, .skill-progress-text{
+    user-select: text !important;
+}
+
 html.no-webp{
     background-image: url(../img/bg.jpg);
 }
@@ -544,7 +548,7 @@ html.no-transform #info_box.opened{
 }
 
 #player_profile{
-    font-size: 45px;
+    font-size: 36px;
     margin-top: 50px;
     margin-left: 50px;
     margin-bottom: 30px;
@@ -553,9 +557,59 @@ html.no-transform #info_box.opened{
 #stats_for_player, #stats_for_profile{
     position: relative;
     display: inline-block;
-    color: #F94EA3;
+    color: white;
     font-weight: 600;
     cursor: pointer;
+    background-color: rgba(60,60,60,0.5);
+    border-radius: 100px;
+    padding: 0 15px;
+    height: 54px;
+    line-height: 54px;
+    vertical-align: middle;
+    font-size: 30px;
+}
+
+.rank-tag{
+    display: inline-block;
+    font-size: 18px;
+    height: 34px;
+    line-height: 34px;
+    margin-top: 10px;
+    margin-left: -5px;
+    overflow: hidden;
+    border-radius: 100px;
+    vertical-align: top;
+    font-weight: 700;
+}
+
+.rank-tag .rank-name{
+    border-radius: 100px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: 0 15px;
+}
+
+.rank-tag .rank-plus{
+    border-radius: 100px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding-right: 8px;
+    position: relative;
+}
+
+.rank-tag .rank-plus-before{
+    position: absolute;
+    top: 0;
+    left: -14px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0 34px 14px;
+    border-color: transparent transparent #D985BC transparent;
+}
+
+.rank-tag div{
+    display: inline-block;
 }
 
 #other_players, #other_profiles{
@@ -651,18 +705,23 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     margin-left: 6px;
 }
 
-.additional-stat .stat-name{
-    font-weight: bold;
-    color: rgba(255,255,255,0.6);
+.additional-stat .statname{
     text-transform: uppercase;
 }
 
-.additional-stat .stat-name::after{
-    content: ":";
+.stat-name, .stat-value{
+    line-height: 1.5;
 }
 
-.additional-stat .stat-value{
+.stat-name{
+    font-weight: bold;
+    color: rgba(255,255,255,0.6);
+    text-transform: capitalize;
+}
+
+.stat-value{
     font-weight: 600;
+    margin-left: 2px;
 }
 
 .basic-stat{
@@ -676,15 +735,11 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     display: block;
 }
 
-.stat-name{
-    padding-right: 6px;
-}
-
 .stat-health{
     background-image: url(../img/icons/health.png);
 }
 
-.stat-health .stat-name, .stat-effective-health .stat-name, .stat-strength .stat-name{
+.stat-health .stat-name, .stat-effective-health .stat-name, .stat-strength .stat-name, .color-health, .color-effective-health, .color-strength{
     color: #EF5350;
 }
 
@@ -692,7 +747,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     background-image: url(../img/icons/defense.png);
 }
 
-.stat-defense .stat-name{
+.stat-defense .stat-name, .color-defense{
     color: #66BB6A;
 }
 
@@ -708,7 +763,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     background-image: url(../img/icons/speed.png);
 }
 
-.stat-speed .stat-name{
+.stat-speed .stat-name, .color-speed{
     color: white;
 }
 
@@ -720,7 +775,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     background-image: url(../img/icons/crit-damage.png);
 }
 
-.stat-crit-chance .stat-name, .stat-crit-damage .stat-name{
+.stat-crit-chance .stat-name, .stat-crit-damage .stat-name, .color-crit-chance, .color-crit-damage{
     color: #9FA8DA;
 }
 
@@ -728,12 +783,22 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     background-image: url(../img/icons/intelligence.png);
 }
 
-.stat-intelligence .stat-name{
+.stat-intelligence .stat-name, .color-intelligence{
     color: #4FC3F7;
 }
 
 .stat-container{
     margin-top: 35px;
+}
+
+.stat-content{
+    padding-left: 30px;
+    margin-top: 20px;
+}
+
+.stat-container.stat-weapons{
+    padding-bottom: 10px;
+    padding-top: 5px;
 }
 
 .stat-kills{
@@ -744,47 +809,40 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     margin-top: 35px !important;
 }
 
-.stat-accessories{
-    margin-top: 45px;
+.accessory-stats{
+    margin-bottom: 10px;
+}
+
+.accessory-rarity{
+    font-weight: 700;
+    text-transform: uppercase;
+    padding-right: 10px;
+}
+
+.inactive-accessory{
+    opacity: 0.5;
+    transition: opacity .2s;
+}
+
+.inactive-accessory:hover{
+    opacity: 1;
 }
 
 .stat-header{
-    width: 400px;
     height: 40px;
     line-height: 40px;
-    background-color: #A6145D;
     text-transform: uppercase;
     font-weight: 600;
-    text-align: center;
+    text-align: left;
     font-size: 22px;
     text-shadow: 0px 0px 7px rgba(0,0,0,0.3);
     position: relative;
+    padding-left: 35px;
+    margin-bottom: 15px;
 }
 
-.stat-header::before{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 100%;
-    width: 8px;
-    height: 0;
-    border-style: solid;
-    border-width: 40px 40px 0 0;
-    border-color: #780e43 transparent transparent transparent;
-}
-
-
-.stat-header::after{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 100%;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 40px 40px 0 0;
-    border-color: #a6145d transparent transparent transparent;
-    z-index: 2;
+.stat-header span{
+    border-bottom: 4px solid #A6145D;
 }
 
 .stat-container .no-access{
@@ -824,22 +882,17 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     font-size: 19px;
 }
 
-.pieces{
-    margin: 25px;
-}
-
 .piece{
     display: inline-block;
     position: relative;
-    width: 80px;
-    height: 80px;
+    width: 75px;
+    height: 75px;
     background-color: rgba(0,0,0,0.5);
     vertical-align: top;
-    margin: 5px;
-    margin-top: 13px;
+    margin-right: 8px;
+    margin-top: 12px;
     box-sizing: border-box;
-    border-top: 4px solid transparent;
-    border-bottom: 4px solid rgba(0,0,0,0.3);
+    border-radius: 5px;
     user-select: none;
     cursor: pointer;
     transition: z-index .2s;
@@ -860,25 +913,23 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 
 .piece-hover-area{
     position: absolute;
-    top: -4px;
     left: 0;
     right: 0;
-    bottom: -4px;
     z-index: 10;
     transition: background-color .2s;
+    border-radius: 5px;
 }
 
 .piece-hover-area:hover{
     background-color: rgba(255,255,255,0.2);
 }
 
-.stat-weapons .piece{
-    margin-bottom: 20px;
-    margin-top: 35px;
+.pieces{
+    margin-top: -12px;
 }
 
-.stat-weapons .pieces{
-    margin-top: 0;
+.stat-weapons .piece{
+    margin-bottom: 20px;
 }
 
 .piece .select-weapon{
@@ -901,12 +952,13 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 .piece-shine{
     content: "";
     position: absolute;
-    top: -4px;
+    top: 0;
     left: 0;
     bottom: 0;
     right: 0;
     overflow: hidden;
     opacity: 0.7;
+    border-radius: 5px;
 }
 
 .piece-shine::before{
@@ -1000,32 +1052,33 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 }
 
 .piece-legendary-fg{
-    color: #DD980E;
+    color: #F9B837;
 }
 
 .piece-epic-fg{
-    color: #AA00AA;
+    color: #F23EF2;
 }
 
 .piece-rare-fg{
-    color: #5555FF;
+    color: #7070FD;
 }
 
 .piece-uncommon-fg{
-    color: #3cbd3c;
+    color: #61df61;
 }
 
 .piece-common-fg{
-    color: white;
+    color: #bfbfbf;
 }
 
 #inventory_container{
     display: inline-block;
     background-color: rgba(0,0,0,0.3);
-    margin: 30px;
     padding: 20px;
     position: relative;
     margin-bottom: 0px;
+    overflow: hidden;
+    border-radius: 10px;
 }
 
 #inventory_header{
@@ -1166,10 +1219,6 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     font-weight: 600;
 }
 
-.kills-deaths-container{
-    margin: 30px;
-}
-
 .kills-deaths-container > div{
     position: relative;
     min-width: 330px;
@@ -1178,6 +1227,8 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     display: inline-block;
     background-color: rgba(0,0,0,0.3);
     vertical-align: top;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .kills-header{

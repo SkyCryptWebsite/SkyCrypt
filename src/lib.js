@@ -118,9 +118,10 @@ async function getBackpackContents(arraybuf){
 
     let items = data.i;
 
-    for(let item of items){
+    for(const [index, item] of items.entries()){
         item.isInactive = true;
         item.inBackpack = true;
+        item.item_index = index;
     }
 
     return items;
@@ -143,7 +144,7 @@ async function getItems(base64){
     let items = data.i;
 
     // Check backpack contents and add them to the list of items
-    for(let [index, item] of items.entries()){
+    for(const [index, item] of items.entries()){
         if(objectPath.has(item, 'tag.display.Name') && (item.tag.display.Name.endsWith('Backpack') || item.tag.display.Name.endsWith('Itchy New Year Cake Bag'))){
 
             let keys = Object.keys(item.tag.ExtraAttributes);
@@ -467,6 +468,9 @@ module.exports = {
         if('newPackageRank'  in player)
             rankName = player.newPackageRank;
 
+        if('monthlyPackageRank' in player && player.monthlyPackageRank != 'NONE')
+            rankName = player.monthlyPackageRank;
+
         if('rank' in player)
             rankName = player.rank;
 
@@ -486,7 +490,10 @@ module.exports = {
         let plusColor = null;
         let plusText = null;
 
-        if('monthlyRankColor' in player && 'monthlyPackageRank' in player && player.monthlyPackageRank != 'NONE'){
+        if(rankName == 'SUPERSTAR'){
+            if(!('monthlyRankColor' in player))
+                player.monthlyRankColor = 'GOLD';
+
             rankColor = constants.minecraft_formatting[constants.color_names[player.monthlyRankColor]];
             rankColor = rankColor.niceColor || rankColor.color;
         }
@@ -504,7 +511,7 @@ module.exports = {
         output = `<div class="rank-tag ${plusText ? 'rank-plus' : ''}"><div class="rank-name" style="background-color: ${rankColor}">${rank.tag}</div>`;
 
         if(plusText)
-            output += `<div class="rank-plus" style="background-color: ${plusColor}">${plusText}</div>`;
+            output += `<div class="rank-plus" style="background-color: ${plusColor}"><div class="rank-plus-before" style="border-color: transparent transparent ${plusColor} transparent;"></div>${plusText}</div>`;
 
         output += `</div>`;
 
@@ -586,8 +593,11 @@ module.exports = {
 
         const all_items = armor.concat(inventory, enderchest, talisman_bag, fishing_bag, quiver, potion_bag);
 
-        for(let [index, item] of all_items.entries()){
+        for(const [index, item] of all_items.entries()){
             item.item_index = index;
+
+            if('containsItems' in item && Array.isArray(item.containsItems))
+                item.containsItems.forEach(a => a.backpackIndex = item.item_index);
         }
 
         // All items not in the inventory or accessory bag should be inactive so they don't contribute to the total stats
@@ -595,66 +605,87 @@ module.exports = {
 
         // Add candy bag contents as backpack contents to candy bag
         for(let item of all_items){
-            if(objectPath.has(item, 'tag.ExtraAttributes.id') && item.tag.ExtraAttributes.id == 'TRICK_OR_TREAT_BAG')
+            if(getId(item) == 'TRICK_OR_TREAT_BAG')
                 item.containsItems = candy_bag;
         }
 
-        let talismans = [];
+        const talismans = [];
 
         // Add talismans from inventory
-        for(let talisman of inventory.filter(a => a.type == 'accessory')){
-            let id = talisman.tag.ExtraAttributes.id;
+        for(const talisman of inventory.filter(a => a.type == 'accessory')){
+            const id = getId(talisman);
 
-            if(talismans.filter(a => !a.isInactive && a.tag.ExtraAttributes.id == id).length == 0){
-                talismans.push(talisman);
-            }else{
-                let talisman_inactive = Object.assign({ isInactive: true }, talisman);
-                talismans.push(talisman_inactive);
-            }
+            if(id === null)
+                continue;
+
+            const insertTalisman = Object.assign({ isUnique: true, isInactive: false }, talisman);
+
+            if(talismans.filter(a => !a.isInactive && getId(a) == id).length > 0)
+                insertTalisman.isInactive = true;
+
+            if(talismans.filter(a =>a.tag.ExtraAttributes.id == id).length > 0)
+                insertTalisman.isUnique = false;
+
+            talismans.push(insertTalisman);
         }
 
         // Add talismans from accessory bag if not already in inventory
-        for(let talisman of talisman_bag){
-            if(!objectPath.has(talisman, 'tag.ExtraAttributes.id'))
+        for(const talisman of talisman_bag){
+            const id = getId(talisman);
+
+            if(id === null)
                 continue;
 
-            let id = talisman.tag.ExtraAttributes.id;
+            const insertTalisman = Object.assign({ isUnique: true, isInactive: false }, talisman);
 
-            if(talismans.filter(a => !a.isInactive && a.tag.ExtraAttributes.id == id).length == 0){
-                talismans.push(talisman);
-            }else{
-                let talisman_inactive = Object.assign({ isInactive: true }, talisman);
-                talismans.push(talisman_inactive);
+            if(talismans.filter(a => !a.isInactive && getId(a) == id).length > 0)
+                insertTalisman.isInactive = true;
+
+            if(talismans.filter(a => a.tag.ExtraAttributes.id == id).length > 0)
+                insertTalisman.isUnique = false;
+
+            talismans.push(insertTalisman);
+        }
+
+        // Add inactive talismans from enderchest and backpacks
+        for(const item of inventory.concat(enderchest)){
+            let items = [item];
+
+            if('containsItems' in item && Array.isArray(item.containsItems))
+                items = item.containsItems.slice(0);
+
+            for(const talisman of items.filter(a => a.type == 'accessory')){
+                const id = talisman.tag.ExtraAttributes.id;
+
+                const insertTalisman = Object.assign({ isUnique: true, isInactive: true }, talisman);
+
+                if(talismans.filter(a => getId(a) == id).length > 0)
+                    insertTalisman.isUnique = false;
+
+                talismans.push(insertTalisman);
             }
         }
 
         // Don't account for lower tier versions of the same talisman
-        for(let talisman of talismans){
-            let id = talisman.tag.ExtraAttributes.id;
+        for(const talisman of talismans){
+            const id = getId(talisman);
 
-            if((id == 'RING_POTION_AFFINITY' && talismans.filter(a => !a.isInactive && getId(a) == 'ARTIFACT_POTION_AFFINITY').length > 0)
-            || (id == 'POTION_AFFINITY_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'RING_POTION_AFFINITY' || getId(a) == 'ARTIFACT_POTION_AFFINITY')).length > 0)
-            || (id == 'FEATHER_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'FEATHER_ARTIFACT').length > 0)
-            || (id == 'FEATHER_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'FEATHER_ARTIFACT' || getId(a) == 'FEATHER_RING')).length > 0)
-            || (id == 'SEA_CREATURE_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'SEA_CREATURE_ARTIFACT').length > 0)
-            || (id == 'SEA_CREATURE_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'SEA_CREATURE_ARTIFACT' || getId(a) == 'SEA_CREATURE_RING')).length > 0)
-            || (id == 'HEALING_TALISMAN' && talismans.filter(a => !a.isInactive && getId(a) == 'HEALING_RING').length > 0)
-            || (id == 'CANDY_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'CANDY_ARTIFACT').length > 0)
-            || (id == 'CANDY_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'CANDY_ARTIFACT' || getId(a) == 'CANDY_RING')).length > 0)
-            || (id == 'INTIMIDATION_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'INTIMIDATION_ARTIFACT').length > 0)
-            || (id == 'INTIMIDATION_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'INTIMIDATION_ARTIFACT' || getId(a) == 'INTIMIDATION_RING')).length > 0)
-            || (id == 'SPIDER_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'SPIDER_ARTIFACT').length > 0)
-            || (id == 'SPIDER_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'SPIDER_ARTIFACT' || getId(a) == 'SPIDER_RING')).length > 0)
-            || (id == 'RED_CLAW_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'RED_CLAW_ARTIFACT').length > 0)
-            || (id == 'RED_CLAW_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'RED_CLAW_ARTIFACT' || getId(a) == 'RED_CLAW_RING')).length > 0)
-            || (id == 'HUNTER_TALISMAN' && talismans.filter(a => !a.isInactive && getId(a) == 'HUNTER_RING').length > 0)
-            || (id == 'ZOMBIE_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'ZOMBIE_ARTIFACT').length > 0)
-            || (id == 'ZOMBIE_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'ZOMBIE_ARTIFACT' || getId(a) == 'ZOMBIE_RING')).length > 0)
-            || (id == 'HEALING_TALISMAN' && talismans.filter(a => !a.isInactive && getId(a) == 'HEALING_RING').length > 0)
-            || (id == 'BAT_RING' && talismans.filter(a => !a.isInactive && getId(a) == 'BAT_ARTIFACT').length > 0)
-            || (id == 'BAT_TALISMAN' && talismans.filter(a => !a.isInactive && (getId(a) == 'BAT_ARTIFACT' || getId(a) == 'BAT_RING')).length > 0)
-            )
-                talisman.isInactive = true;
+            if(id in constants.talisman_upgrades){
+                const talismanUpgrades = constants.talisman_upgrades[id];
+
+                if(talismans.filter(a => !a.isInactive && talismanUpgrades.includes(getId(a))).length > 0)
+                    talisman.isInactive = true;
+
+                if(talismans.filter(a => talismanUpgrades.includes(getId(a))).length > 0)
+                    talisman.isUnique = false;
+            }
+
+            if(id in constants.talisman_duplicates){
+                const talismanDuplicates = constants.talisman_duplicates[id];
+
+                if(talismans.filter(a => talismanDuplicates.includes(getId(a))).length > 0)
+                    talisman.isUnique = false;
+            }
         }
 
         // Add New Year Cake Bag health bonus (1 per unique cake)
@@ -684,8 +715,16 @@ module.exports = {
             output.no_inventory = true;
 
         // Sort talismans and weapons by rarity
-        for(let items of ['talismans', 'weapons'])
-            output[items] = output[items].sort((a, b) => rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity));
+        output.weapons = output.weapons.sort((a, b) => rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity));
+
+        output.talismans = output.talismans.sort((a, b) => {
+            const rarityOrder = rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);
+
+            if(rarityOrder == 0)
+                return (a.isInactive === b.isInactive) ? 0 : a.isInactive? 1 : -1;
+
+            return rarityOrder;
+        });
 
         let swords = output.weapons.filter(a => a.type == 'sword');
         let bows = output.weapons.filter(a => a.type == 'bow');

@@ -321,7 +321,7 @@ async function main(){
                 calculated.bank = profile.banking.balance;
 
             calculated.rank_prefix = lib.rankPrefix(data.player);
-            calculated.purse = userProfile.coin_purse;
+            calculated.purse = userProfile.coin_purse || 0;
             calculated.uuid = data.player.uuid;
             calculated.display_name = data.player.displayname;
             calculated.profile = skyBlockProfiles[profileId];
