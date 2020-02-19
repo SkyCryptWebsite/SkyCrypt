@@ -186,6 +186,7 @@ html.no-webp #bg_blur{
     left: 30vw;
     top: 45px;
     right: 0;
+    padding-bottom: 30px;
     min-height: 100%;
     background-color: rgba(10,10,10,0.7);
     box-sizing: border-box;
@@ -713,6 +714,16 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     line-height: 1.5;
 }
 
+.grey-text{
+    font-weight: bold;
+    color: rgba(255,255,255,0.6);
+}
+
+.white-text{
+    font-weight: bold;
+    color: white;
+}
+
 .stat-name{
     font-weight: bold;
     color: rgba(255,255,255,0.6);
@@ -796,11 +807,6 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     margin-top: 20px;
 }
 
-.stat-container.stat-weapons{
-    padding-bottom: 10px;
-    padding-top: 5px;
-}
-
 .stat-kills{
     margin-top: 25px;
 }
@@ -845,10 +851,6 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     border-bottom: 4px solid #A6145D;
 }
 
-.stat-container .no-access{
-    padding: 30px;
-}
-
 .info-container{
     background-color: rgba(0,0,0,0.3);
     margin: 30px;
@@ -859,6 +861,8 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     display: inline-block;
     text-align: center;
     max-width: 500px;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .info-container span{
@@ -928,8 +932,12 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     margin-top: -12px;
 }
 
+.stat-weapons{
+    margin-bottom: -10px;
+}
+
 .stat-weapons .piece{
-    margin-bottom: 20px;
+    margin-bottom: 50px;
 }
 
 .piece .select-weapon{
@@ -940,6 +948,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     width: 22px;
     height: 22px;
     border: 3px solid white;
+    border-radius: 3px;
     cursor: pointer;
     box-sizing: border-box;
     transition: background-color .2s;
@@ -1219,7 +1228,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     font-weight: 600;
 }
 
-.kills-deaths-container > div{
+.narrow-info-container{
     position: relative;
     min-width: 330px;
     padding: 20px;
@@ -1231,7 +1240,103 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     overflow: hidden;
 }
 
-.kills-header{
+.narrow-info-container:not(:first-of-type){
+    margin-left: 20px;
+}
+
+.stat-slayer .narrow-info-container{
+    min-width: 270px;
+    padding-bottom: 30px;
+}
+
+.slayer-header{
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+    height: 32px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.slayer-icon{
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    display: inline-block;
+    background-size: 32px auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    vertical-align: middle;
+}
+
+.slayer-section-header:not(:nth-child(2)){
+    margin-top: 20px;
+}
+
+.slayer-section-header{
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: rgba(255,255,255,0.8);
+}
+
+.slayer-kills{
+    display: flex;
+}
+
+.slayer-kill{
+    flex-grow: 1;
+    flex-basis: 0;
+    text-align: center;
+}
+
+.tier-name{
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.tier-kills{
+    font-weight: 600;
+}
+
+.slayer-drops{
+    margin-top: 10px;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.slayer-drop{
+    position: relative;
+    padding-left: 36px;
+    box-sizing: border-box;
+    line-height: 2.5;
+    height: 40px;
+}
+
+.slayer-drop-icon{
+    filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
+    transform: scale(0.25) translateY(-50%);
+    transform-origin: top left;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+}
+
+.slayer-bar{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 14px;
+    background-color: rgba(255,255,255,0.3);
+}
+
+.narrow-info-header{
     position: absolute;
     top: 0;
     left: 0;
@@ -1243,10 +1348,6 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     font-weight: 600;
     background-color: #951354;
     text-shadow: 0px 0px 7px rgba(0,0,0,0.3);
-}
-
-.top-deaths{
-    margin-left: 20px;
 }
 
 .kill-stat{

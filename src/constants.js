@@ -90,7 +90,8 @@ module.exports = {
         5: 5000,
         6: 20000,
         7: 100000,
-        8: 400000
+        8: 400000,
+        9: 1000000
     },
 
     // Player stats on a completely new profile
@@ -118,6 +119,13 @@ module.exports = {
         crit_chance: 0,
         crit_damage: 0,
         intelligence: 0
+    },
+
+    slayer_cost: {
+        1: 100,
+        2: 2000,
+        3: 10000,
+        4: 50000
     },
 
     // Object with fairy soul, skill, slayer bonuses and enchantment bonuses

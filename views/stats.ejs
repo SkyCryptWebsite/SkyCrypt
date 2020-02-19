@@ -42,6 +42,175 @@ const statShort = {
     intelligence: 'Int'
 };
 
+const statTemplate = {
+    health: 0,
+    defense: 0,
+    strength: 0,
+    speed: 0,
+    crit_chance: 0,
+    crit_damage: 0,
+    intelligence: 0
+};
+
+const MAX_MAGIC_FIND = 1.89;
+
+const romanize = num => {
+	if (!+num)
+		return false;
+	var	digits = String(+num).split(""),
+		key = ["","C","CC","CCC","CD","D","DC","DCC","DCCC","CM",
+		       "","X","XX","XXX","XL","L","LX","LXX","LXXX","XC",
+		       "","I","II","III","IV","V","VI","VII","VIII","IX"],
+		roman = "",
+		i = 3;
+	while (i--)
+		roman = (key[+digits.pop() + (i * 10)] || "") + roman;
+	return Array(+digits.join("") + 1).join("M") + roman;
+}
+
+const slayerInfo = {
+    zombie: {
+        boss: 'Revenant Horror',
+        head: '/head/1fc0184473fe882d2895ce7cbc8197bd40ff70bf10d3745de97b6c2a9c5fc78f',
+        drops: [
+            {
+                chance: {
+                    4: 42 / 13000
+                },
+                levelReq: 6,
+                name: 'Snake Rune',
+                icon: '/head/2c4a65c689b2d36409100a60c2ab8d3d0a67ce94eea3c1f7ac974fd893568b5d'
+            },
+            {
+                chance: {
+                    4: 21 / 13000
+                },
+                levelReq: 5,
+                name: 'Beheaded Horror',
+                icon: '/head/1fc0184473fe882d2895ce7cbc8197bd40ff70bf10d3745de97b6c2a9c5fc78f'
+            },
+            {
+                chance: {
+                    4: 7 / 13000
+                },
+                levelReq: 7,
+                name: 'Sycthe Blade',
+                id: 264,
+                damage: 0
+            }
+        ]
+    },
+    spider: {
+        boss: 'Tarantula Broodfather',
+        head: '/head/9d7e3b19ac4f3dee9c5677c135333b9d35a7f568b63d1ef4ada4b068b5a25',
+        drops: [
+            {
+                chance: {
+                    3: 42 / 130000,
+                    4: 42 / 13000
+                },
+                levelReq: 5,
+                name: 'Fly Swatter',
+                id: 284,
+                damage: 0
+            },
+            {
+                chance: {
+                    3: 21 / 130000,
+                    4: 21 / 13000
+                },
+                levelReq: 6,
+                name: 'Tarantula Talisman',
+                icon: '/head/442cf8ce487b78fa203d56cf01491434b4c33e5d236802c6d69146a51435b03d'
+            },
+            {
+                chance: {
+                    4: 7 / 13000
+                },
+                levelReq: 7,
+                name: 'Digested Mosquito',
+                id: 367,
+                damage: 0
+            }
+        ]
+    },
+    wolf: {
+        boss: 'Sven Packmaster',
+        head: '/head/f83a2aa9d3734b919ac24c9659e5e0f86ecafbf64d4788cfa433bbec189e8',
+        drops: [
+            {
+                chance: {
+                    4: 42 / 13000
+                },
+                levelReq: 6,
+                name: 'Couture Rune',
+                icon: '/head/734fb3203233efbae82628bd4fca7348cd071e5b7b52407f1d1d2794e31799ff'
+            },
+            {
+                chance: {
+                    3: 15 / 130000,
+                    4: 15 / 13000
+                },
+                levelReq: 5,
+                name: 'Red Claw Egg',
+                id: 383,
+                damage: "0_18"
+            },
+            {
+                chance: {
+                    4: 7 / 13000
+                },
+                levelReq: 7,
+                name: 'Grizzly Bait',
+                id: 349,
+                damage: 1
+            },
+            {
+                chance: {
+                    4: 5 / 13000
+                },
+                levelReq: 7,
+                name: 'Overflux Capacitor',
+                id: 406,
+                damage: 0
+            }
+        ]
+    }
+};
+
+getStats = items => {
+    const stats = Object.assign({}, statTemplate);
+
+    for(const item of items){
+        if(!('stats') in item)
+            continue;
+
+        for(const stat in item.stats){
+            if(!(stat in stats))
+                continue;
+
+            stats[stat] += item.stats[stat];
+        }
+    }
+
+    return stats;
+}
+
+const getBonus = stats => {
+    const statsNotZero = Object.keys(stats).filter(a => stats[a] > 0);
+
+    if(statsNotZero.length == 0)
+        return;
+
+    for(const [index, stat] of statsNotZero.entries()){
+        if(stats[stat] == 0)
+            continue;
+        %>
+        <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replace("_", "-") %>"><%= stats[stat] %><%= statSuffix[stat] %> <%= statShort[stat] %></span>
+        <% if(index < statsNotZero.length - 1){ %><strong style="opacity: 0.6">//</strong><% } %>
+    <% }
+}
+
 const isEnchanted = item => {
     if(item.animated)
         return false;
@@ -309,6 +478,11 @@ if(calculated.bank)
                 <% if(items.armor.length == 0){ %>
                     <div class="no-access"><%= calculated.display_name %> doesn't have any armor equipped.</div>
                 <% }else{ %>
+                    <% if(items.armor_set) { %>
+                        <p>
+                            <span class="stat-name">Set: </span><span class="stat-value"><%= items.armor_set %></span>
+                        </p>
+                    <% } %>
                     <div class="pieces">
                         <% items.armor.slice().reverse().forEach(item => { %>
                             <div tabindex="3" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
@@ -320,6 +494,10 @@ if(calculated.bank)
                             </div>
                         <% }) %>
                     </div>
+                    <p>
+                        <span class="stat-name">Bonus: </span>
+                        <%- getBonus(getStats(items.armor)) %>
+                    </p>
                 <% } %>
             </div>
         </div>
@@ -363,10 +541,10 @@ if(calculated.bank)
                     <% }else if(items.talismans.length == 0){ %>
                         <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
                     <% }else{ %>
-                        <div class="accessory-stats"><p>
+                        <p>
                             <span class="stat-name">Unique Accessories: </span><span class="stat-value"><%= items.talismans.filter(a => a.isUnique).length %> / 47</span><br>
                             <span class="stat-name">Completion: </span><span class="stat-value"><%= Math.floor(items.talismans.filter(a => a.isUnique).length / 47 * 100) %>%</span>
-                        </p></div>
+                        </p>
                         <div class="pieces">
                             <% items.talismans.filter(a => a.isUnique).forEach(item => { %>
                                 <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-index="<%= item.item_index %>"
@@ -379,41 +557,95 @@ if(calculated.bank)
                                 </div>
                             <% }) %>
                         </div>
-                        <div class="accessory-stats"><p>
+                        <p>
                         <span class="stat-name">Bonus: </span>
-                            <%
-                                const stats = {
-                                    health: 0,
-                                    defense: 0,
-                                    strength: 0,
-                                    speed: 0,
-                                    crit_chance: 0,
-                                    crit_damage: 0,
-                                    intelligence: 0
-                                };
-
-                                for(const talisman of items.talismans.filter(a => a.isUnique)){
-                                    for(const stat in talisman.stats){
-                                        if(!(stat in stats))
-                                            continue;
-
-                                        stats[stat] += talisman.stats[stat];
-                                    }
-                                }
-
-                                for(const [index, stat] of Object.keys(stats).entries()){
-                                    if(stats[stat] == 0)
-                                        continue;
-                                    %>
-                                    <!--<span style="margin-left: 5px; font-weight: 700" class="stat-name color-<%= stat.replace("_", "-") %>"><%= stats[stat] %><%= statSuffix[stat] %></span>-->
-                                    <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replace("_", "-") %>"><%= stats[stat] %><%= statSuffix[stat] %> <%= statShort[stat] %></span>
-                                    <% if(index < Object.keys(stats).length - 1){ %><strong style="opacity: 0.7">//</strong><% } %>
-                                <% }
-                            %>
-                        </p></div>
+                        <%- getBonus(getStats(items.talismans.filter(a => a.isUnique))) %>
+                        </p>
                     <% } %>
                 </div>
             </div>
+        <% } %>
+        <div class="stat-container stat-slayer">
+            <div class="stat-header"><span>Slayer</span></div>
+            <div class="stat-content">
+                <p>
+                    <span data-tippy-content="Total spent: <%= calculated.slayer_coins_spent.toLocaleString() %> Coins"><span class="stat-name">Total Slayer XP: </span><span class="stat-value"><%= calculated.slayer_xp.toLocaleString() %></span></span>
+                </p>
+                <% for(const slayerName in calculated.slayers){
+                    const slayer = calculated.slayers[slayerName];
+                    let totalKills = 0;
+
+                    for(const tier in slayer.kills)
+                        totalKills += slayer.kills[tier];
+
+                    %>
+                    <div class="narrow-info-container slayer-<%= slayerName %>">
+                        <div class="narrow-info-header"><%= slayerName %></div>
+                        <div class="slayer-section">
+                            <div class="slayer-header">
+                                <div class="slayer-icon" style="background-image:url(<%= slayerInfo[slayerName].head %>)"></div>
+                                <span><%= slayerInfo[slayerName].boss %> <span class="grey-text">x<%= totalKills %></span>
+                            </div>
+                            <div class="slayer-kills">
+                                <% for(const [index, tier] of Object.keys(slayer.kills).entries()){ %>
+                                    <div class="slayer-kill"><div class="tier-name">Tier <%= romanize(tier) %></div><div class="tier-kills"><%= slayer.kills[tier].toLocaleString() %></div></div>
+                                <% } %>
+                            </div>
+                        </div>
+                        <div class="slayer-section-header">Average Drops</div>
+                        <div class="slayer-section slayer-drops">
+                            <%
+                            for(const drop of slayerInfo[slayerName].drops){
+                                let dropsMin = 0;
+                                let dropsMax = 0;
+
+                                if(slayer.level.currentLevel >= drop.levelReq){
+                                    for(const tier in drop.chance){
+                                        dropsMin += slayer.kills[tier] * drop.chance[tier];
+                                        dropsMax += slayer.kills[tier] * drop.chance[tier] * MAX_MAGIC_FIND
+                                    }
+                                }
+
+                                let dropsText = "";
+
+                                if(dropsMin == 0)
+                                    dropsText = dropsMin;
+                                else
+                                    dropsText = `${dropsMin.toFixed(2)} - ${dropsMax.toFixed(2)}`;
+                            %>
+                                <div class="slayer-drop">
+                                    <div class="slayer-drop-icon item-icon
+                                    <% if('icon' in drop){ %>custom-icon<% } %>
+                                    <% if('id' in drop){ %>icon-<%= drop.id %>_<%= drop.damage %><% } %>"
+                                    <% if('icon' in drop){ %> style="background-image: url(<%= drop.icon %>)"<% } %>>
+                                    </div>
+                                    <span class="stat-name"><%= drop.name %>s: </span><span class="stat-value"><%= dropsText %></span>
+                                </div>
+                            <% } %>
+                        </div>
+                        <div class="slayer-section-header"><%= slayerName %> Level <span class="white-text"><%= slayer.level.currentLevel %></span></div>
+                        <div class="slayer-bar">
+                            <div class="skill-progress-bar slayer-progress-bar" style="width: <%= slayer.level.currentLevel == slayer.level.maxLevel ? 100 : slayer.level.progress * 100 %>%"></div>
+                            <div class="skill-progress-text slayer-progress-text">
+                                <%= slayer.level.xp.toLocaleString() %><% if(slayer.level.xpForNext != 0){ %> / <%= slayer.level.xpForNext.toLocaleString() %><% } %> XP
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+                <p>
+                    <span class="stat-name">Bonus: </span>
+                    <%
+                    const slayerBonus = Object.assign({}, statTemplate);
+
+                    for(const slayer in calculated.slayer_bonus)
+                        for(const stat in calculated.slayer_bonus[slayer])
+                            slayerBonus[stat] += calculated.slayer_bonus[slayer][stat];
+                    %>
+                    <%= getBonus(slayerBonus) %>
+                </p>
+            </div>
+        </div>
+        <% if(!items.no_inventory){ %>
             <div class="stat-container stat-inventory">
                 <div class="stat-header"><span>Inventory</span></div>
                 <div class="stat-content">
@@ -450,14 +682,14 @@ if(calculated.bank)
             <div class="stat-header"><span>Top Kills & Deaths</span></div>
             <div class="stat-content">
                 <div class="kills-deaths-container">
-                    <div class="top-kills">
-                        <div class="kills-header">Kills</div>
+                    <div class="narrow-info-container top-kills">
+                        <div class="narrow-info-header">Kills</div>
                         <% calculated.kills.slice(0, 10).forEach((kill, index) => { %>
                             <div class="kill-stat"><div class="kill-rank">#<%= index + 1 %></div><div class="kill-entity"><%= kill.entityName %></div><div class="kill-amount"><%= kill.amount.toLocaleString() %></div></div>
                         <% }); %>
                     </div>
-                    <div class="top-deaths">
-                        <div class="kills-header">Deaths</div>
+                    <div class="narrow-info-container top-deaths">
+                        <div class="narrow-info-header">Deaths</div>
                         <% calculated.deaths.slice(0, 10).forEach((death, index) => { %>
                             <div class="kill-stat"><div class="kill-rank">#<%= index + 1 %></div><div class="kill-entity"><%= death.entityName %></div><div class="kill-amount"><%= death.amount.toLocaleString() %></div></div>
                         <% }); %>

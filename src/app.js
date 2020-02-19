@@ -10,6 +10,7 @@ async function main(){
     require('axios-debug-log')
 
     const fs = require('fs-extra');
+
     const path = require('path');
     const util = require('util');
     const renderer = require('./renderer');
@@ -25,9 +26,11 @@ async function main(){
 
     const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
 
-    fs.ensureDirSync('../cache');
+    const cachePath = path.resolve(__dirname, '../cache');
 
-    const credentials = require('../credentials.json');
+    await fs.ensureDir(cachePath);
+
+    const credentials = require(path.resolve(__dirname, '../credentials.json'));
 
     if(credentials.hypixel_api_key.length == 0)
         throw "Please enter a valid Hypixel API Key. Join mc.hypixel.net and enter /api to obtain one.";
@@ -371,11 +374,11 @@ async function main(){
         let filename = `head_${uuid}.png`;
 
         try{
-            file = await fs.readFile(path.resolve(__dirname, '..', 'cache', filename));
+            file = await fs.readFile(path.resolve(cachePath, filename));
         }catch(e){
             file = await renderer.renderHead(`http://textures.minecraft.net/texture/${uuid}`, 6.4);
 
-            fs.writeFile(path.resolve(__dirname, '..', 'cache', filename), file, err => {
+            fs.writeFile(path.resolve(cachePath, filename), file, err => {
                 if(err)
                     console.error(err);
             });
@@ -403,11 +406,11 @@ async function main(){
         let filename = `leather_${type}_${color.join("_")}.png`;
 
         try{
-            file = await fs.readFile(path.resolve(__dirname, '..', 'cache', filename));
+            file = await fs.readFile(path.resolve(cachePath, filename));
         }catch(e){
             file = await renderer.renderArmor(type, color);
 
-            fs.writeFile(path.resolve(__dirname, '..', 'cache', filename), file, err => {
+            fs.writeFile(path.resolve(cachePath, filename), file, err => {
                 if(err)
                     console.error(err);
             });

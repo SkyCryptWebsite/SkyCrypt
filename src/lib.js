@@ -67,18 +67,31 @@ function getLevelByXp(xp, runecrafting){
 }
 
 function getSlayerLevel(slayer){
-    let { claimed_levels } = slayer;
+    let { xp, claimed_levels } = slayer;
 
-    let level = 0;
+    let currentLevel = 0;
+    let progress = 0;
+    let xpForNext = 0;
 
-    for(let level_name in claimed_levels){
-        let _level = parseInt(level_name.split("_").pop());
+    const maxLevel = Math.max(...Object.keys(constants.slayer_xp));
 
-        if(_level > level)
-            level = _level;
+    for(const level_name in claimed_levels){
+        const level = parseInt(level_name.split("_").pop());
+
+        if(level > currentLevel)
+            currentLevel = level;
     }
 
-    return level;
+    if(currentLevel < maxLevel){
+        const nextLevel = constants.slayer_xp[currentLevel + 1];
+
+        progress = xp / nextLevel;
+        xpForNext = nextLevel;
+    }else{
+        progress = 1;
+    }
+
+    return { currentLevel, xp, maxLevel, progress, xpForNext };
 }
 
 function getBonusStat(level, skill, max, incremention){
@@ -832,25 +845,48 @@ module.exports = {
             output.levels = Object.assign({}, levels);
         }
 
+        output.slayer_coins_spent = 0;
+
         // Apply slayer bonuses
         if('slayer_bosses' in profile){
             output.slayer_bonus = {};
 
             let slayers = {};
 
-            if(objectPath.has(profile, 'slayer_bosses.zombie.claimed_levels'))
-                slayers.zombie = getSlayerLevel(profile.slayer_bosses.zombie);
+            if(objectPath.has(profile, 'slayer_bosses')){
+                for(const slayerName in profile.slayer_bosses){
+                    const slayer = profile.slayer_bosses[slayerName];
 
-            if(objectPath.has(profile, 'slayer_bosses.spider.claimed_levels'))
-                slayers.spider = getSlayerLevel(profile.slayer_bosses.spider);
+                    slayers[slayerName] = {};
 
-            if(objectPath.has(profile, 'slayer_bosses.wolf.claimed_levels'))
-                slayers.wolf = getSlayerLevel(profile.slayer_bosses.wolf);
+                    if(!objectPath.has(slayer, 'claimed_levels'))
+                        continue;
 
-            for(let slayer in slayers){
-                let slayerBonus = getBonusStat(slayers[slayer], `${slayer}_slayer`, 50, 1);
+                    slayers[slayerName].level = getSlayerLevel(slayer);
+
+                    slayers[slayerName].kills = {};
+
+                    for(const property in slayer){
+                        slayers[slayerName][property] = slayer[property];
+
+                        if(property.startsWith('boss_kills_tier_')){
+                            const tier = parseInt(property.replace('boss_kills_tier_', '')) + 1;
+
+                            slayers[slayerName].kills[tier] = slayer[property];
+
+                            output.slayer_coins_spent += slayer[property] * constants.slayer_cost[tier];
+                        }
+                    }
+                }
+            }
+
+            output.slayer_xp = 0;
+
+            for(const slayer in slayers){
+                const slayerBonus = getBonusStat(slayers[slayer].level.currentLevel, `${slayer}_slayer`, 9, 1);
 
                 output.slayer_bonus[slayer] = Object.assign({}, slayerBonus);
+                output.slayer_xp += slayers[slayer].xp;
 
                 for(let stat in slayerBonus)
                     output.stats[stat] += slayerBonus[stat];
@@ -955,10 +991,23 @@ module.exports = {
                 output.weapon_stats[item.item_index][stat] = Math.max(0, stats[stat]);
         });
 
+        const superiorBonus = Object.assign({}, constants.stat_template);
+
         // Apply Superior Dragon Armor full set bonus of 5% stat increase
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4)
-            for(let stat in output.stats)
-                output.stats[stat] = Math.floor(output.stats[stat] * 1.05);
+        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4){
+            for(const stat in output.stats){
+                superiorBonus[stat] = Math.floor(output.stats[stat] * 0.05);
+            }
+
+            for(const stat in superiorBonus){
+                output.stats[stat] += superiorBonus[stat];
+
+                if(!(stat in items.armor[0].stats))
+                    items.armor[0].stats[stat] = 0;
+
+                items.armor[0].stats[stat] += superiorBonus[stat];
+            }
+        }
 
         // Stats shouldn't go into negative
         for(let stat in output.stats)
