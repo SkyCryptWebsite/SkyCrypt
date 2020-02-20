@@ -90,7 +90,15 @@ module.exports = {
         5: 5000,
         6: 20000,
         7: 100000,
-        8: 400000
+        8: 400000,
+        9: 1000000
+    },
+
+    slayer_boss_xp: {
+        1: 5,
+        2: 25,
+        3: 100,
+        4: 500
     },
 
     // Player stats on a completely new profile
@@ -118,6 +126,13 @@ module.exports = {
         crit_chance: 0,
         crit_damage: 0,
         intelligence: 0
+    },
+
+    slayer_cost: {
+        1: 100,
+        2: 2000,
+        3: 10000,
+        4: 50000
     },
 
     // Object with fairy soul, skill, slayer bonuses and enchantment bonuses
@@ -549,6 +564,88 @@ module.exports = {
                 }
             }
         },
+    },
+
+    talisman_upgrades: {
+        RING_POTION_AFFINITY: [
+            'ARTIFACT_POTION_AFFINITY'
+        ],
+        POTION_AFFINITY_TALISMAN: [
+            'RING_POTION_AFFINITY',
+            'ARTIFACT_POTION_AFFINITY'
+        ],
+        FEATHER_RING: [
+            'FEATHER_ARTIFACT'
+        ],
+        FEATHER_TALISMAN: [
+            'FEATHER_RING',
+            'FEATHER_ARTIFACT'
+        ],
+        SEA_CREATURE_RING: [
+            'SEA_CREATURE_ARTIFACT'
+        ],
+        SEA_CREATURE_TALISMAN: [
+            'SEA_CREATURE_RING',
+            'SEA_CREATURE_ARTIFACT'
+        ],
+        HEALING_TALISMAN: [
+            'HEALING_RING'
+        ],
+        CANDY_RING: [
+            'CANDY_ARTIFACT'
+        ],
+        CANDY_TALISMAN: [
+            'CANDY_RING',
+            'CANDY_ARTIFACT'
+        ],
+        INTIMIDATION_RING: [
+            'INTIMIDATION_ARTIFACT'
+        ],
+        INTIMIDATION_TALISMAN: [
+            'INTIMIDATION_RING',
+            'INTIMIDATION_ARTIFACT'
+        ],
+        SPIDER_RING: [
+            'SPIDER_ARTIFACT'
+        ],
+        SPIDER_TALISMAN: [
+            'SPIDER_RING',
+            'SPIDER_ARTIFACT'
+        ],
+        RED_CLAW_RING: [
+            'RED_CLAW_ARTIFACT'
+        ],
+        RED_CLAW_TALISMAN: [
+            'RED_CLAW_RING',
+            'RED_CLAW_ARTIFACT'
+        ],
+        HUNTER_TALISMAN: [
+            'HUNTER_RING'
+        ],
+        ZOMBIE_RING: [
+            'ZOMBIE_ARTIFACT'
+        ],
+        ZOMBIE_TALISMAN: [
+            'ZOMBIE_RING',
+            'ZOMBIE_ARTIFACT'
+        ],
+        BAT_RING: [
+            'BAT_ARTIFACT'
+        ],
+        BAT_TALISMAN: [
+            'BAT_RING',
+            'BAT_ARTIFACT'
+        ]
+    },
+
+    talisman_duplicates: {
+        BROKEN_PIGGY_BANK: [
+            'CRACKED_PIGGY_BANK',
+            'PIGGY_BANK'
+        ],
+        CRACKED_PIGGY_BANK: [
+            'PIGGY_BANK'
+        ]
     },
 
     // Minecraft color and formatting codes
