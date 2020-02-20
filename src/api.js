@@ -84,6 +84,35 @@ module.exports = (app, db) => {
         }
     });
 
+    app.get('/api/:player/:profile/accessories', async (req, res) => {
+        try{
+            const { playerResponse, profileResponse } = await helper.getProfile(req);
+
+            const userProfile = profileResponse.data.profile.members[playerResponse.data.player.uuid];
+
+            const items = await lib.getItems(userProfile);
+
+            const talismans = items.talismans.map(a => { return {
+                id: a.tag.ExtraAttributes.id,
+                rarity: a.rarity,
+                name: a.display_name,
+                isActive: a.isInactive ? 'false' : 'true',
+                isUnique: a.isUnique ? 'true' : 'false'
+            }});
+
+            if('html' in req.query){
+                res.send(tableify(talismans, { showHeaders: false }));
+            }else{
+                res.json(talismans);
+            }
+        }catch(e){
+            console.error(e);
+
+            res.set('Content-Type', 'text/plain');
+            res.status(500).send('Something went wrong');
+        }
+    });
+
     app.get('/api/:player/:profile/cakebag', async (req, res) => {
         try{
             const { playerResponse, profileResponse } = await helper.getProfile(req);
