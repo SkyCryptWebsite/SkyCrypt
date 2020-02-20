@@ -92,13 +92,14 @@ module.exports = (app, db) => {
 
             const items = await lib.getItems(userProfile);
 
-            const talismans = items.talismans.map(a => { return {
+            const talismans = items.talismans
+            .filter(a => a.isUnique)
+            .map(a => { return {
                 id: a.tag.ExtraAttributes.id,
                 rarity: a.rarity,
                 reforge: a.reforge,
                 name: a.base_name,
-                isActive: a.isInactive ? 'false' : 'true',
-                isUnique: a.isUnique ? 'true' : 'false'
+                isActive: a.isInactive ? 'false' : 'true'
             }});
 
             if('html' in req.query){
