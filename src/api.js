@@ -95,7 +95,8 @@ module.exports = (app, db) => {
             const talismans = items.talismans.map(a => { return {
                 id: a.tag.ExtraAttributes.id,
                 rarity: a.rarity,
-                name: a.display_name,
+                reforge: a.reforge,
+                name: a.base_name,
                 isActive: a.isInactive ? 'false' : 'true',
                 isUnique: a.isUnique ? 'true' : 'false'
             }});

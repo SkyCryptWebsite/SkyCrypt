@@ -644,7 +644,7 @@ module.exports = {
         for(const item of inventory.concat(enderchest)){
             let items = [item];
 
-            if('containsItems' in item && Array.isArray(item.containsItems))
+            if(item.type != 'accessory' && 'containsItems' in item && Array.isArray(item.containsItems))
                 items = item.containsItems.slice(0);
 
             for(const talisman of items.filter(a => a.type == 'accessory')){
@@ -698,7 +698,15 @@ module.exports = {
             }
         }
 
-        talismans.push(...enderchest.filter(a => a.type == 'accessory'));
+        // Add base name without reforge
+        for(const talisman of talismans){
+            talisman.base_name = talisman.display_name;
+
+            if(objectPath.has(talisman, 'tag.ExtraAttributes.modifier')){
+                talisman.base_name = talisman.display_name.split(" ").slice(1).join(" ");
+                talisman.reforge = talisman.tag.ExtraAttributes.modifier
+            }
+        }
 
         output.talismans = talismans;
         output.weapons = all_items.filter(a => a.type == 'sword' || a.type == 'bow' || a.type == 'fishing rod');
