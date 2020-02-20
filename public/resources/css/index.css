@@ -1270,7 +1270,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 }
 
 .slayer-section-header:not(:nth-child(2)){
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
 .slayer-section-header{
@@ -1306,7 +1306,6 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     height: 160px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
 }
 
 .slayer-drop{
@@ -1334,6 +1333,10 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     right: 0;
     height: 14px;
     background-color: rgba(255,255,255,0.3);
+}
+
+.slayer-progress-bar{
+    border-radius: 0 !important;
 }
 
 .narrow-info-header{

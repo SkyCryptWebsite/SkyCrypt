@@ -94,6 +94,13 @@ module.exports = {
         9: 1000000
     },
 
+    slayer_boss_xp: {
+        1: 5,
+        2: 25,
+        3: 100,
+        4: 500
+    },
+
     // Player stats on a completely new profile
     base_stats: {
         damage: 0,

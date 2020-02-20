@@ -19,6 +19,7 @@ async function main(){
     const moment = require('moment');
     const { MongoClient } = require('mongodb');
     const helper = require('./helper');
+    const constants = require('./constants');
 
     const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
@@ -354,7 +355,7 @@ async function main(){
                 text: first_join_text
             };
 
-            res.render('stats', { items, calculated, page: 'stats' });
+            res.render('stats', { items, calculated, page: 'stats', constants });
         }catch(e){
             console.error(e);
 

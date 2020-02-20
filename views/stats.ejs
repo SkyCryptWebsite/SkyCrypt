@@ -42,16 +42,6 @@ const statShort = {
     intelligence: 'Int'
 };
 
-const statTemplate = {
-    health: 0,
-    defense: 0,
-    strength: 0,
-    speed: 0,
-    crit_chance: 0,
-    crit_damage: 0,
-    intelligence: 0
-};
-
 const MAX_MAGIC_FIND = 1.89;
 
 const romanize = num => {
@@ -179,7 +169,7 @@ const slayerInfo = {
 };
 
 getStats = items => {
-    const stats = Object.assign({}, statTemplate);
+    const stats = Object.assign({}, constants.stat_template);
 
     for(const item of items){
         if(!('stats') in item)
@@ -600,9 +590,22 @@ if(calculated.bank)
                                 let dropsMax = 0;
 
                                 if(slayer.level.currentLevel >= drop.levelReq){
+                                    const slayerKills = Object.assign({}, slayer.kills);
+                                    let xpToLevel = constants.slayer_xp[drop.levelReq];
+
+                                    for(const tier of Object.keys(slayer.kills).sort((a, b) => a - b)){
+                                        for(let i = slayer.kills[tier]; i > 0; i--){
+                                            xpToLevel -= constants.slayer_boss_xp[tier];
+                                            slayerKills[tier] -= 1;
+
+                                            if(xpToLevel <= 0)
+                                                break;
+                                        }
+                                    }
+
                                     for(const tier in drop.chance){
-                                        dropsMin += slayer.kills[tier] * drop.chance[tier];
-                                        dropsMax += slayer.kills[tier] * drop.chance[tier] * MAX_MAGIC_FIND
+                                        dropsMin += slayerKills[tier] * drop.chance[tier];
+                                        dropsMax += slayerKills[tier] * drop.chance[tier] * MAX_MAGIC_FIND
                                     }
                                 }
 
@@ -635,7 +638,7 @@ if(calculated.bank)
                 <p>
                     <span class="stat-name">Bonus: </span>
                     <%
-                    const slayerBonus = Object.assign({}, statTemplate);
+                    const slayerBonus = Object.assign({}, constants.stat_template);
 
                     for(const slayer in calculated.slayer_bonus)
                         for(const stat in calculated.slayer_bonus[slayer])
