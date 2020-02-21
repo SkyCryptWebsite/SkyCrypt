@@ -3,6 +3,7 @@ const path = require('path');
 const nbt = require('prismarine-nbt');
 const util = require('util');
 const mcData = require("minecraft-data")("1.8.9");
+const _ = require('lodash');
 const objectPath = require("object-path");
 const constants = require('./constants');
 
@@ -572,7 +573,7 @@ module.exports = {
     },
 
     // Get Minecraft lore without the color and formatting codes
-    getRawLore: (text) => {
+    getRawLore: text => {
         let output = "";
         let parts = text.split("§");
 
@@ -583,8 +584,67 @@ module.exports = {
         return output;
     },
 
+    getMinions: coopMembers => {
+        const minions = [];
+
+        const craftedGenerators = [];
+
+        for(const member in coopMembers){
+            if(!('crafted_generators' in coopMembers[member]))
+                continue;
+
+            craftedGenerators.push(...coopMembers[member].crafted_generators);
+        }
+
+        for(const generator of craftedGenerators){
+            const split = generator.split("_");
+
+            const minionLevel = parseInt(split.pop());
+            const minionName = split.join("_");
+
+            const minion = minions.filter(a => a.id == minionName);
+
+            if(minion.length == 0)
+                minions.push(Object.assign({ id: minionName, maxLevel: 0, levels: [minionLevel] }, constants.minions[minionName]));
+            else
+                minion[0].levels.push(minionLevel);
+        }
+
+        for(const minion in constants.minions)
+            if(minions.filter(a => a.id == minion).length == 0)
+                minions.push(Object.assign({ id: minion, levels: [], maxLevel: 0 }, constants.minions[minion]));
+
+        for(const minion of minions){
+            minion.levels = minion.levels.sort((a, b) => a - b);
+            minion.maxLevel = minion.levels.length > 0 ? Math.max(...minion.levels) : 0;
+
+            if(!('name' in minion))
+                minion.name = _.startCase(_.toLower(minion.id));
+        }
+
+        return minions;
+    },
+
+    getMinionSlots: minions => {
+        const uniqueMinions = minions.reduce((a, b) => { return { maxLevel: a.maxLevel + b.maxLevel }}).maxLevel;
+        const output = { currentSlots: 5, toNext: 5 };
+
+        const uniquesRequired = Object.keys(constants.minion_slots).sort((a, b) => parseInt(a) - parseInt(b) );
+
+        for(const [index, uniques] of uniquesRequired.entries()){
+            if(parseInt(uniques) < uniqueMinions)
+                continue;
+
+            output.currentSlots = constants.minion_slots[uniquesRequired[index - 1]];
+            output.toNextSlot = uniquesRequired[index] - uniqueMinions;
+            break;
+        }
+
+        return output;
+    },
+
     getItems: async (profile) => {
-        let output = {};
+        const output = {};
 
         // Process inventories returned by API
         let armor = 'inv_armor' in profile ? await getItems(profile.inv_armor.data) : [];

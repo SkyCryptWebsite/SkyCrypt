@@ -804,6 +804,8 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 
 .stat-content{
     padding-left: 30px;
+    box-sizing: border-box;
+    padding-right: 30px;
     margin-top: 20px;
 }
 
@@ -840,7 +842,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     text-transform: uppercase;
     font-weight: 600;
     text-align: left;
-    font-size: 22px;
+    font-size: 24px;
     text-shadow: 0px 0px 7px rgba(0,0,0,0.3);
     position: relative;
     padding-left: 35px;
@@ -1337,6 +1339,74 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 
 .slayer-progress-bar{
     border-radius: 0 !important;
+}
+
+.minion-category-header{
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 19px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    height: 32px;
+    line-height: 32px;
+}
+
+.minion-category-icon{
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.minion-category-icon .item-icon{
+    transform: scale(0.25);
+    transform-origin: top left;
+}
+
+.minion{
+    position: relative;
+    display: inline-block;
+    height: 40px;
+    padding: 10px;
+    padding-left: 60px;
+    margin-left: 5px;
+    margin-bottom: 8px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    line-height: 40px;
+}
+
+.minion-icon{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    background-size: auto 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.max-minion .stat-name{
+    color: #DD980E;
+}
+
+.max-minion .stat-value{
+    color: #FDBB3C;
+}
+
+.minion-variant{
+    display: inline-block;
+    color: rgba(255,255,255,0.7);
+}
+
+.minion-variant:not(:first-child){
+    margin-left: 4px;
+}
+
+.minion-variant.minion-crafted{
+    color: #f5429b;
 }
 
 .narrow-info-header{

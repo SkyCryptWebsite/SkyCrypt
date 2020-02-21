@@ -192,12 +192,12 @@ async function main(){
             if(Object.keys(skyBlockProfiles).length == 0)
                 skyBlockProfiles = allSkyBlockProfiles;
 
-            let profileNames = Object.keys(skyBlockProfiles);
+            const profileNames = Object.keys(skyBlockProfiles);
 
-            let promises = [];
-            let profileIds = [];
+            const promises = [];
+            const profileIds = [];
 
-            for(let profile in skyBlockProfiles){
+            for(const profile in skyBlockProfiles){
                 profileIds.push(profile);
 
                 promises.push(
@@ -205,11 +205,11 @@ async function main(){
                 );
             }
 
-            let responses = await Promise.all(promises);
+            const responses = await Promise.all(promises);
 
-            let profiles = [];
+            const profiles = [];
 
-            for(let [index, profile_response] of responses.entries()){
+            for(const [index, profile_response] of responses.entries()){
                 if(!profile_response.data.success){
                     delete skyBlockProfiles[profileIds[index]];
                     continue;
@@ -267,7 +267,7 @@ async function main(){
                 }
             });
 
-            let userProfile = profile.members[data.player.uuid];
+            const userProfile = profile.members[data.player.uuid];
 
             if(activeProfile){
                 if(userProfile.last_save > activeProfile.last_save){
@@ -288,20 +288,20 @@ async function main(){
                 if(!('last_save' in profile.members[member]))
                     delete profile.members[member];
 
-            let memberUuids = Object.keys(profile.members);
+            const memberUuids = Object.keys(profile.members);
 
-            let memberPromises = [];
+            const memberPromises = [];
 
             for(let member of memberUuids)
                 if(member != data.player.uuid)
                     memberPromises.push(helper.uuidToUsername(member, db));
 
-            let members = await Promise.all(memberPromises);
+            const members = await Promise.all(memberPromises);
 
             members.push({
                 uuid: hypixelPlayer.uuid,
                 display_name: hypixelPlayer.displayname
-            })
+            });
 
             for(const member of members){
                 if(await db.collection('members').find({ profile_id: profileId, uuid: member.uuid }).next() == null){
@@ -318,8 +318,8 @@ async function main(){
                 }
             }
 
-            let items = await lib.getItems(userProfile);
-            let calculated = await lib.getStats(userProfile, items);
+            const items = await lib.getItems(userProfile);
+            const calculated = await lib.getStats(userProfile, items);
 
             if(objectPath.has(profile, 'banking.balance'))
                 calculated.bank = profile.banking.balance;
@@ -331,11 +331,13 @@ async function main(){
             calculated.profile = skyBlockProfiles[profileId];
             calculated.profiles = _.pickBy(allSkyBlockProfiles, a => a.profile_id != profileId);
             calculated.members = members.filter(a => a.uuid != hypixelPlayer.uuid);
+            calculated.minions = lib.getMinions(profile.members);
+            calculated.minion_slots = lib.getMinionSlots(calculated.minions);
 
-            let last_updated = userProfile.last_save;
-            let first_join = userProfile.first_join;
+            const last_updated = userProfile.last_save;
+            const first_join = userProfile.first_join;
 
-            let diff = (+new Date() - last_updated) / 1000;
+            const diff = (+new Date() - last_updated) / 1000;
 
             let last_updated_text = moment(last_updated).fromNow();
             let first_join_text = moment(first_join).fromNow();
@@ -370,9 +372,9 @@ async function main(){
     });
 
     app.get('/head/:uuid', async (req, res) => {
-        let uuid = req.params.uuid;
+        const { uuid } = req.params;
 
-        let filename = `head_${uuid}.png`;
+        const filename = `head_${uuid}.png`;
 
         try{
             file = await fs.readFile(path.resolve(cachePath, filename));
@@ -392,19 +394,18 @@ async function main(){
 
     app.get('/leather/:type/:color', async (req, res) => {
         let file;
-        let types = ["boots", "leggings", "chestplate", "helmet"];
 
-        if(!types.includes(req.params.type))
+        if(!["boots", "leggings", "chestplate", "helmet"].includes(req.params.type))
             throw new Error("invalid armor type");
 
-        let type = req.params.type;
+        const { type } = req.params;
 
-        let color = req.params.color.split(",");
+        const color = req.params.color.split(",");
 
         if(color.length < 3)
             throw new Error("invalid color");
 
-        let filename = `leather_${type}_${color.join("_")}.png`;
+        const filename = `leather_${type}_${color.join("_")}.png`;
 
         try{
             file = await fs.readFile(path.resolve(cachePath, filename));
@@ -434,7 +435,7 @@ async function main(){
 }
 
 if(cluster.isMaster){
-    let cpus = require('os').cpus().length;
+    const cpus = require('os').cpus().length;
 
     for(let i = 0; i < cpus; i += 1){
         cluster.fork();

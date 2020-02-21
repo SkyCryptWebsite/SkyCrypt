@@ -42,6 +42,18 @@ const statShort = {
     intelligence: 'Int'
 };
 
+const skillItems = {
+    farming: 'icon-294_0',
+    mining: 'icon-274_0',
+    combat: 'icon-272_0',
+    foraging: 'icon-6_3',
+    fishing: 'icon-346_0',
+    enchanting: 'icon-116_0',
+    alchemy: 'icon-379_0',
+    carpentry: 'icon-58_0',
+    runecrafting: 'icon-378_0'
+};
+
 const MAX_MAGIC_FIND = 1.89;
 
 const romanize = num => {
@@ -533,7 +545,7 @@ if(calculated.bank)
                     <% }else{ %>
                         <p>
                             <span class="stat-name">Unique Accessories: </span><span class="stat-value"><%= items.talismans.filter(a => a.isUnique).length %> / 47</span><br>
-                            <span class="stat-name">Completion: </span><span class="stat-value"><%= Math.floor(items.talismans.filter(a => a.isUnique).length / 47 * 100) %>%</span>
+                            <span class="stat-name">Completion: </span><span class="stat-value"><%= Math.round(items.talismans.filter(a => a.isUnique).length / 47 * 100) %>%</span>
                         </p>
                         <div class="pieces">
                             <% items.talismans.filter(a => a.isUnique).forEach(item => { %>
@@ -555,99 +567,6 @@ if(calculated.bank)
                 </div>
             </div>
         <% } %>
-        <div class="stat-container stat-slayer">
-            <div class="stat-header"><span>Slayer</span></div>
-            <div class="stat-content">
-                <p>
-                    <span data-tippy-content="Total spent: <%= calculated.slayer_coins_spent.toLocaleString() %> Coins"><span class="stat-name">Total Slayer XP: </span><span class="stat-value"><%= calculated.slayer_xp.toLocaleString() %></span></span>
-                </p>
-                <% for(const slayerName in calculated.slayers){
-                    const slayer = calculated.slayers[slayerName];
-                    let totalKills = 0;
-
-                    for(const tier in slayer.kills)
-                        totalKills += slayer.kills[tier];
-
-                    %>
-                    <div class="narrow-info-container slayer-<%= slayerName %>">
-                        <div class="narrow-info-header"><%= slayerName %></div>
-                        <div class="slayer-section">
-                            <div class="slayer-header">
-                                <div class="slayer-icon" style="background-image:url(<%= slayerInfo[slayerName].head %>)"></div>
-                                <span><%= slayerInfo[slayerName].boss %> <span class="grey-text">x<%= totalKills %></span>
-                            </div>
-                            <div class="slayer-kills">
-                                <% for(const [index, tier] of Object.keys(slayer.kills).entries()){ %>
-                                    <div class="slayer-kill"><div class="tier-name">Tier <%= romanize(tier) %></div><div class="tier-kills"><%= slayer.kills[tier].toLocaleString() %></div></div>
-                                <% } %>
-                            </div>
-                        </div>
-                        <div class="slayer-section-header">Average Drops</div>
-                        <div class="slayer-section slayer-drops">
-                            <%
-                            for(const drop of slayerInfo[slayerName].drops){
-                                let dropsMin = 0;
-                                let dropsMax = 0;
-
-                                if(slayer.level.currentLevel >= drop.levelReq){
-                                    const slayerKills = Object.assign({}, slayer.kills);
-                                    let xpToLevel = constants.slayer_xp[drop.levelReq];
-
-                                    for(const tier of Object.keys(slayer.kills).sort((a, b) => a - b)){
-                                        for(let i = slayer.kills[tier]; i > 0; i--){
-                                            xpToLevel -= constants.slayer_boss_xp[tier];
-                                            slayerKills[tier] -= 1;
-
-                                            if(xpToLevel <= 0)
-                                                break;
-                                        }
-                                    }
-
-                                    for(const tier in drop.chance){
-                                        dropsMin += slayerKills[tier] * drop.chance[tier];
-                                        dropsMax += slayerKills[tier] * drop.chance[tier] * MAX_MAGIC_FIND
-                                    }
-                                }
-
-                                let dropsText = "";
-
-                                if(dropsMin == 0)
-                                    dropsText = dropsMin;
-                                else
-                                    dropsText = `${dropsMin.toFixed(2)} - ${dropsMax.toFixed(2)}`;
-                            %>
-                                <div class="slayer-drop">
-                                    <div class="slayer-drop-icon item-icon
-                                    <% if('icon' in drop){ %>custom-icon<% } %>
-                                    <% if('id' in drop){ %>icon-<%= drop.id %>_<%= drop.damage %><% } %>"
-                                    <% if('icon' in drop){ %> style="background-image: url(<%= drop.icon %>)"<% } %>>
-                                    </div>
-                                    <span class="stat-name"><%= drop.name %>s: </span><span class="stat-value"><%= dropsText %></span>
-                                </div>
-                            <% } %>
-                        </div>
-                        <div class="slayer-section-header"><%= slayerName %> Level <span class="white-text"><%= slayer.level.currentLevel %></span></div>
-                        <div class="slayer-bar">
-                            <div class="skill-progress-bar slayer-progress-bar" style="width: <%= slayer.level.currentLevel == slayer.level.maxLevel ? 100 : slayer.level.progress * 100 %>%"></div>
-                            <div class="skill-progress-text slayer-progress-text">
-                                <%= slayer.level.xp.toLocaleString() %><% if(slayer.level.xpForNext != 0){ %> / <%= slayer.level.xpForNext.toLocaleString() %><% } %> XP
-                            </div>
-                        </div>
-                    </div>
-                <% } %>
-                <p>
-                    <span class="stat-name">Bonus: </span>
-                    <%
-                    const slayerBonus = Object.assign({}, constants.stat_template);
-
-                    for(const slayer in calculated.slayer_bonus)
-                        for(const stat in calculated.slayer_bonus[slayer])
-                            slayerBonus[stat] += calculated.slayer_bonus[slayer][stat];
-                    %>
-                    <%= getBonus(slayerBonus) %>
-                </p>
-            </div>
-        </div>
         <% if(!items.no_inventory){ %>
             <div class="stat-container stat-inventory">
                 <div class="stat-header"><span>Inventory</span></div>
@@ -681,6 +600,146 @@ if(calculated.bank)
                 </div>
             </div>
         <% } %>
+        <div class="stat-container stat-slayer">
+            <div class="stat-header"><span>Slayer</span></div>
+            <div class="stat-content">
+                <% if(calculated.slayer_coins_spent == 0){ %>
+                <p>
+                    <%= calculated.display_name %> hasn't played any Slayer yet.
+                </p>
+                <% }else{ %>
+                    <p>
+                        <span data-tippy-content="Total spent: <%= calculated.slayer_coins_spent.toLocaleString() %> Coins"><span class="stat-name">Total Slayer XP: </span><span class="stat-value"><%= calculated.slayer_xp.toLocaleString() %></span></span>
+                    </p>
+                    <% for(const slayerName in calculated.slayers){
+                        const slayer = calculated.slayers[slayerName];
+
+                        if(slayer.xp === undefined || slayer.xp == 0)
+                            continue;
+
+                        let totalKills = 0;
+
+                        for(const tier in slayer.kills)
+                            totalKills += slayer.kills[tier];
+
+                        %>
+                        <div class="narrow-info-container slayer-<%= slayerName %>">
+                            <div class="narrow-info-header"><%= slayerName %></div>
+                            <div class="slayer-section">
+                                <div class="slayer-header">
+                                    <div class="slayer-icon" style="background-image:url(<%= slayerInfo[slayerName].head %>)"></div>
+                                    <span><%= slayerInfo[slayerName].boss %> <span class="grey-text">x<%= totalKills %></span>
+                                </div>
+                                <div class="slayer-kills">
+                                    <% for(const [index, tier] of Object.keys(slayer.kills).entries()){ %>
+                                        <div class="slayer-kill"><div class="tier-name">Tier <%= romanize(tier) %></div><div class="tier-kills"><%= slayer.kills[tier].toLocaleString() %></div></div>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="slayer-section-header">Average Drops</div>
+                            <div class="slayer-section slayer-drops">
+                                <%
+                                for(const drop of slayerInfo[slayerName].drops){
+                                    let dropsMin = 0;
+                                    let dropsMax = 0;
+
+                                    if(slayer.level.currentLevel >= drop.levelReq){
+                                        const slayerKills = Object.assign({}, slayer.kills);
+                                        let xpToLevel = constants.slayer_xp[drop.levelReq];
+
+                                        for(const tier of Object.keys(slayer.kills).sort((a, b) => a - b)){
+                                            for(let i = slayer.kills[tier]; i > 0; i--){
+                                                xpToLevel -= constants.slayer_boss_xp[tier];
+                                                slayerKills[tier] -= 1;
+
+                                                if(xpToLevel <= 0)
+                                                    break;
+                                            }
+                                        }
+
+                                        for(const tier in drop.chance){
+                                            dropsMin += slayerKills[tier] * drop.chance[tier];
+                                            dropsMax += slayerKills[tier] * drop.chance[tier] * MAX_MAGIC_FIND
+                                        }
+                                    }
+
+                                    let dropsText = "";
+
+                                    if(dropsMin == 0)
+                                        dropsText = dropsMin;
+                                    else
+                                        dropsText = `${dropsMin.toFixed(2)} - ${dropsMax.toFixed(2)}`;
+                                %>
+                                    <div class="slayer-drop">
+                                        <div class="slayer-drop-icon item-icon
+                                        <% if('icon' in drop){ %>custom-icon<% } %>
+                                        <% if('id' in drop){ %>icon-<%= drop.id %>_<%= drop.damage %><% } %>"
+                                        <% if('icon' in drop){ %> style="background-image: url(<%= drop.icon %>)"<% } %>>
+                                        </div>
+                                        <span class="stat-name"><%= drop.name %>s: </span><span class="stat-value"><%= dropsText %></span>
+                                    </div>
+                                <% } %>
+                            </div>
+                            <div class="slayer-section-header"><%= slayerName %> Level <span class="white-text"><%= slayer.level.currentLevel %></span></div>
+                            <div class="slayer-bar">
+                                <div class="skill-progress-bar slayer-progress-bar" style="width: <%= slayer.level.currentLevel == slayer.level.maxLevel ? 100 : slayer.level.progress * 100 %>%"></div>
+                                <div class="skill-progress-text slayer-progress-text">
+                                    <%= slayer.level.xp.toLocaleString() %><% if(slayer.level.xpForNext != 0){ %> / <%= slayer.level.xpForNext.toLocaleString() %><% } %> XP
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                    <p>
+                        <span class="stat-name">Bonus: </span>
+                        <%
+                        const slayerBonus = Object.assign({}, constants.stat_template);
+
+                        for(const slayer in calculated.slayer_bonus)
+                            for(const stat in calculated.slayer_bonus[slayer])
+                                slayerBonus[stat] += calculated.slayer_bonus[slayer][stat];
+                        %>
+                        <%= getBonus(slayerBonus) %>
+                    </p>
+                <% } %>
+            </div>
+        </div>
+        <div class="stat-container stat-minions">
+            <div class="stat-header"><span>Minions</span></div>
+            <div class="stat-content">
+                <%
+                    const uniqueMinions = calculated.minions.reduce((a, b) => { return { maxLevel: a.maxLevel + b.maxLevel }}).maxLevel;
+                %>
+                <p>
+                    <span class="stat-name">Unique Minions: </span><span class="stat-value"><%= uniqueMinions %> / 572</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 572 * 100) %>%)</span><br>
+                    <span class="stat-name">Minion Slots: </span><span class="stat-value"><%= calculated.minion_slots.currentSlots %></span><span class="grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
+                </p>
+                <%
+                for(const type of constants.minion_types){
+                    const minions = calculated.minions.filter(a => a.type == type && a.maxLevel > 0).sort((a, b) => b.maxLevel - a.maxLevel);
+
+                    if(minions.length == 0)
+                        continue;
+
+                    %>
+                    <div class="minion-category">
+                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon <%= skillItems[type] %>"></div></div><span><%= type %></span></div>
+                    <%
+
+                    for(const minion of minions){ %>
+                        <div data-tippy-content="Crafted variants:<br><br>
+                        <% for(let i = 1; i < 11; i++){ %>
+                        <div class='minion-variant <% if(minion.levels.includes(i)){ %>minion-crafted<% } %>'><%= romanize(i) %></div>
+                        <% } %>
+                        " class="minion <%= minion.maxLevel == 0 ? 'no-minion' : '' %> <%= minion.maxLevel == 11 ? 'max-minion' : '' %>">
+                            <div class="minion-icon" style="background-image: url(<%= minion.head %>)"></div>
+                            <span class="stat-name"><%= minion.name %> </span><span class="stat-value"><%= minion.maxLevel %></span>
+                        </div>
+                    <% } %>
+                    </div>
+                    <%
+                } %>
+            </div>
+        </div>
         <div class="stat-container stat-kills">
             <div class="stat-header"><span>Top Kills & Deaths</span></div>
             <div class="stat-content">

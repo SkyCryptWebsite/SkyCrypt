@@ -49,7 +49,7 @@ module.exports = (app, db) => {
         try{
             const { profileResponse } = await helper.getProfile(req);
 
-            let minions = [];
+            const minions = [];
 
             const coopMembers = profileResponse.data.profile.members;
 
