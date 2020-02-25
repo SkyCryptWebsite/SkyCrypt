@@ -137,10 +137,13 @@ async function main(){
 
             const hypixelPlayer = data.player;
 
-            if(await db.collection('usernames').find({ uuid: hypixelPlayer.uuid }).next() === null)
-                await db
-                .collection('usernames')
-                .insertOne({ uuid: hypixelPlayer.uuid, username: hypixelPlayer.displayname, date: +new Date() })
+            await db
+            .collection('usernames')
+            .replaceOne(
+                { uuid: hypixelPlayer.uuid },
+                { uuid: hypixelPlayer.uuid, username: hypixelPlayer.displayname, date: +new Date() },
+                { upsert: true }
+            );
 
             let allSkyBlockProfiles = hypixelPlayer.stats.SkyBlock.profiles;
 
@@ -265,19 +268,14 @@ async function main(){
 
             let userProfile = profile.members[data.player.uuid];
 
-            if(activeProfile){
-                if(userProfile.last_save > activeProfile.last_save){
-                    await db
-                    .collection('profiles')
-                    .updateOne(
-                        { uuid: activeProfile.uuid },
-                        { $set: { profile_id: profileId, last_save: userProfile.last_save } }
-                    );
-                }
-            }else{
+            if(!activeProfile || userProfile.last_save > activeProfile.last_save){
                 await db
                 .collection('profiles')
-                .insertOne({ uuid: hypixelPlayer.uuid, username: hypixelPlayer.displayname, profile_id: profileId, last_save: userProfile.last_save });
+                .replaceOne(
+                    { uuid: hypixelPlayer.uuid },
+                    { uuid: hypixelPlayer.uuid, username: hypixelPlayer.displayname, profile_id: profileId, last_save: userProfile.last_save },
+                    { upsert: true }
+                );
             }
 
             for(const member in profile.members)
@@ -300,18 +298,13 @@ async function main(){
             })
 
             for(const member of members){
-                if(await db.collection('members').find({ profile_id: profileId, uuid: member.uuid }).next() == null){
-                    await db
-                    .collection('members')
-                    .insertOne({ profile_id: profileId, uuid: member.uuid, username: member.display_name })
-                }else{
-                    await db
-                    .collection('members')
-                    .updateOne(
-                        { profile_id: profileId, uuid: member.uuid },
-                        { $set: { username: member.display_name } }
-                    );
-                }
+                await db
+                .collection('members')
+                .replaceOne(
+                    { profile_id: profileId, uuid: member.uuid },
+                    { profile_id: profileId, uuid: member.uuid, username: member.display_name },
+                    { upsert: true}
+                );
             }
 
             let items = await lib.getItems(userProfile);
