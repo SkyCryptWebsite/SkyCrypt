@@ -29,6 +29,11 @@ html.no-webp{
     border-bottom-color: rgb(166, 20, 93);
 }
 
+*[data-tippy-content]::after{
+    content: "*";
+    color: rgba(255,255,255,0.6);
+}
+
 .tippy-content{
     padding: 15px;
 }
@@ -1339,6 +1344,63 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 
 .slayer-progress-bar{
     border-radius: 0 !important;
+}
+
+.sea-creatures{
+
+}
+
+.sea-creature{
+    display: inline-block;
+    width: 140px;
+    position: relative;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    height: 230px;
+}
+
+.sea-creature-name{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 50px;
+    line-height: 1.2;
+    text-align: center;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    background-color: #951354;
+}
+
+.sea-creature-name span{
+    text-shadow: 0px 0px 7px rgba(0,0,0,0.3);
+}
+
+.sea-creature-image{
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.sea-creature-kills{
+    position: absolute;
+    top: 195px;
+    height: 40px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    line-height: 4px;
 }
 
 .minion-category-header{

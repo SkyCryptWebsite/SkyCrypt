@@ -969,15 +969,9 @@ module.exports = {
 
         output.base_stats = Object.assign({}, output.stats);
 
-        // Apply basic armor stats
-        items.armor.forEach(item => {
-            for(let stat in item.stats)
-                output.stats[stat] += item.stats[stat];
-        });
-
         // Apply Lapis Armor full set bonus of +60 HP
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('LAPIS_ARMOR_')).length == 4)
-            output.stats['health'] += 60;
+            items.armor[0].stats.health += 60;
 
         // Apply Emerald Armor full set bonus of +1 HP and +1 Defense per 3000 emeralds in collection with a maximum of 300
         if(objectPath.has(profile, 'collection.EMERALD')
@@ -985,21 +979,27 @@ module.exports = {
         && items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('EMERALD_ARMOR_')).length == 4){
             let emerald_bonus = Math.min(350, Math.floor(profile.collection.EMERALD / 3000));
 
-            output.stats.health += emerald_bonus;
-            output.stats.defense += emerald_bonus;
+            items.armor[0].stats.health += emerald_bonus;
+            items.armor[0].stats.defense += emerald_bonus;
         }
 
         // Apply Fairy Armor full set bonus of +10 Speed
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('FAIRY_')).length == 4)
-            output.stats.speed += 10;
+            items.armor[0].stats.speed += 10;
 
         // Apply Speedster Armor full set bonus of +20 Speed
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SPEEDSTER_')).length == 4)
-            output.stats.speed += 20;
+            items.armor[0].stats.speed += 20;
 
         // Apply Young Dragon Armor full set bonus of +70 Speed
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('YOUNG_DRAGON_')).length == 4)
-            output.stats.speed += 70;
+            items.armor[0].stats.speed += 70;
+
+        // Apply basic armor stats
+        items.armor.forEach(item => {
+            for(let stat in item.stats)
+                output.stats[stat] += item.stats[stat];
+        });
 
         // Apply stats of active talismans
         items.talismans.filter(a => Object.keys(a).length != 0 && !a.isInactive).forEach(item => {
@@ -1008,8 +1008,10 @@ module.exports = {
         });
 
         // Apply Mastiff Armor full set bonus of +50 HP per 1% Crit Damage
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
+        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4){
             output.stats.health += 50 * output.stats.crit_damage;
+            items.armor[0].stats.health += 50 * output.stats.crit_damage;
+        }
 
         // Apply +5 Defense and +5 Strength of Day/Night Crystal only if both are owned as this is required for a permanent bonus
         if(items.talismans.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && !a.isInactive && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(a.tag.ExtraAttributes.id)).length == 2){
@@ -1042,7 +1044,7 @@ module.exports = {
             }
 
             // Add crit damage from held weapon to Mastiff Armor full set bonus
-            if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
+            if(item.stats.crit_damage > 0 && items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
                 stats.health += 50 * item.stats.crit_damage;
 
             stats.effective_health = getEffectiveHealth(stats.health, stats.defense);
@@ -1103,6 +1105,14 @@ module.exports = {
 
             stat.entityName = entityName;
         });
+
+        if('kills_guardian_emperor' in profile.stats || 'kills_skeleton_emperor' in profile.stats)
+            killsDeaths.push({
+                type: 'kills',
+                entityId: 'sea_emperor',
+                entityName: 'Sea Emperor',
+                amount: (profile.stats['kills_guardian_emperor'] || 0) + (profile.stats['kills_skeleton_emperor'] || 0)
+            });
 
         output.kills = killsDeaths.filter(a => a.type == 'kills').sort((a, b) => b.amount - a.amount);
         output.deaths = killsDeaths.filter(a => a.type == 'deaths').sort((a, b) => b.amount - a.amount);

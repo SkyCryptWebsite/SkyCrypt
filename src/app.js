@@ -334,6 +334,13 @@ async function main(){
             calculated.minions = lib.getMinions(profile.members);
             calculated.minion_slots = lib.getMinionSlots(calculated.minions);
 
+            calculated.fishing = {
+                total: userProfile.stats.items_fished || 0,
+                treasure: userProfile.stats.items_fished_treasure || 0,
+                treasure_large: userProfile.stats.items_fished_large_treasure || 0,
+                shredder_fished: userProfile.stats.shredder_fished || 0
+            };
+
             const last_updated = userProfile.last_save;
             const first_join = userProfile.first_join;
 

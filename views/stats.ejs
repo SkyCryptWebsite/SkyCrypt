@@ -130,7 +130,7 @@ const slayerInfo = {
                     4: 7 / 13000
                 },
                 levelReq: 7,
-                name: 'Digested Mosquito',
+                name: 'Digested Mosquitoe',
                 id: 367,
                 damage: 0
             }
@@ -179,6 +179,525 @@ const slayerInfo = {
         ]
     }
 };
+
+const seaCreatures = [
+    {
+        name: 'Squid',
+        id: 'pond_squid',
+        rarity: 'common',
+        fishingLevel: 1,
+        level: 1,
+        hp: 120,
+        xp: 30,
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Ink Sac'
+            }
+        ]
+    }, {
+        name: 'Sea Walker',
+        id: 'sea_walker',
+        rarity: 'common',
+        fishingLevel: 2,
+        level: 4,
+        hp: 750,
+        xp: 50,
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Raw Fish'
+            }, {
+                rarity: 'common',
+                name: 'Rotten Flesh'
+            }
+        ]
+    }, {
+        name: 'Night Squid',
+        id: 'night_squid',
+        rarity: 'common',
+        fishingLevel: 3,
+        level: 6,
+        hp: 250,
+        xp: 200,
+        requirements: [
+            'Dark Bait',
+            'Night Time (6:00pm - 6:00am)'
+        ],
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Ink Sac'
+            }, {
+                rarity: 'uncommon',
+                name: 'Squid Boots'
+            }
+        ]
+    }, {
+        name: 'Frozen Steve',
+        id: 'frozen_steve',
+        rarity: 'common',
+        fishingLevel: 4,
+        level: 7,
+        hp: 700,
+        xp: 80,
+        requirements: [
+            'Jerry Pond'
+        ],
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Ice'
+            }, {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Pufferfish'
+            }, {
+                rarity: 'common',
+                name: 'Raw Fish'
+            }, {
+                rarity: 'common',
+                name: 'Raw Salmon'
+            }, {
+                rarity: 'common',
+                name: 'White Gift'
+            }, {
+                rarity: 'uncommon',
+                name: 'Hunk of Ice'
+            }, {
+                rarity: 'rare',
+                name: 'Ice Rod'
+            }
+        ]
+    }, {
+        name: 'Sea Guardian',
+        id: 'sea_guardian',
+        rarity: 'common',
+        fishingLevel: 5,
+        level: 10,
+        hp: 2500,
+        xp: 75,
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Prismarine Shard'
+            }, {
+                rarity: 'common',
+                name: 'Prismarine Crystals'
+            }, {
+                rarity: 'common',
+                name: 'Sea Lantern'
+            }
+        ]
+    }, {
+        name: 'Frosty the Snowman',
+        id: 'frosty_the_snowman',
+        rarity: 'common',
+        fishingLevel: 6,
+        level: 13,
+        hp: 5000,
+        xp: 165,
+        requirements: [
+            'Jerry Pond'
+        ],
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Ice'
+            }, {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Carrot'
+            }, {
+                rarity: 'common',
+                name: 'Raw Fish'
+            }, {
+                rarity: 'common',
+                name: 'Snow Block'
+            }, {
+                rarity: 'common',
+                name: 'Sponge'
+            }, {
+                rarity: 'common',
+                name: 'White Gift'
+            }, {
+                rarity: 'uncommon',
+                name: 'Hunk of Ice'
+            }
+        ]
+    }, {
+        name: 'Sea Witch',
+        id: 'sea_witch',
+        rarity: 'uncommon',
+        fishingLevel: 7,
+        level: 15,
+        hp: 2700,
+        xp: 250,
+        requirements: [
+            'Light Bait',
+            'Day Time (6:00am - 6:00pm)'
+        ],
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Clownfish'
+            }, {
+                rarity: 'common',
+                name: 'Raw Salmon'
+            }, {
+                rarity: 'rare',
+                name: 'Fairy Armor'
+            }
+        ]
+    }, {
+        name: 'Sea Archer',
+        id: 'sea_archer',
+        rarity: 'uncommon',
+        fishingLevel: 9,
+        level: 15,
+        hp: 3000,
+        xp: 125,
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Raw Fish'
+            }, {
+                rarity: 'common',
+                name: 'Bone'
+            }, {
+                rarity: 'uncommon',
+                name: 'Enchanted Bone'
+            }
+        ]
+    }, {
+        name: 'Monster of the Deep',
+        id: 'chicken_deep',
+        rarity: 'uncommon',
+        fishingLevel: 11,
+        level: 20,
+        hp: 5000,
+        xp: 200,
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Sponge'
+            }, {
+                rarity: 'common',
+                name: 'Dark Bait'
+            }, {
+                rarity: 'common',
+                name: 'Enchanted Book (Magnet 6)'
+            }, {
+                rarity: 'uncommon',
+                name: 'Enchanted Rotten Flesh'
+            }, {
+                rarity: 'common',
+                name: 'Enchanted Feather'
+            }
+        ]
+    }, {
+        name: 'Grinch',
+        id: 'grinch',
+        rarity: 'uncommon',
+        fishingLevel: 13,
+        level: 21,
+        hp: 10,
+        xp: 300,
+        requirements: [
+            'Jerry Pond'
+        ],
+        drops: [
+            {
+                rarity: 'common',
+                name: 'White Gift'
+            }, {
+                rarity: 'uncommon',
+                name: 'Green Gift'
+            }
+        ]
+    }, {
+        name: 'Catfish',
+        id: 'catfish',
+        rarity: 'rare',
+        fishingLevel: 13,
+        level: 23,
+        hp: 6000,
+        xp: 300,
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Sponge'
+            }, {
+                rarity: 'common',
+                name: 'Pufferfish'
+            }, {
+                rarity: 'common',
+                name: 'Raw Fish'
+            }, {
+                rarity: 'common',
+                name: 'Raw Salmon'
+            }, {
+                rarity: 'common',
+                name: 'Enchanted Book (Frail 6)'
+            }
+        ]
+    }, {
+        name: 'Carrot King',
+        id: 'carrot_king',
+        rarity: 'rare',
+        fishingLevel: 15,
+        level: 25,
+        hp: 10000,
+        xp: 610,
+        requirements: [
+            'Carrot Bait'
+        ],
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Sponge'
+            }, {
+                rarity: 'common',
+                name: 'Enchanted Book (Caster 6)'
+            }, {
+                rarity: 'uncommon',
+                name: 'Rabbit Hat'
+            }, {
+                rarity: 'uncommon',
+                name: 'Enchanted Carrot'
+            }, {
+                rarity: 'rare',
+                name: 'Enchanted Rabbit Foot'
+            }
+        ]
+    }, {
+        name: 'Sea Leech',
+        id: 'sea_leech',
+        rarity: 'rare',
+        fishingLevel: 16,
+        level: 30,
+        hp: 15000,
+        xp: 500,
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Sponge'
+            }, {
+                rarity: 'common',
+                name: 'Clownfish'
+            }, {
+                rarity: 'common',
+                name: 'Raw Fish'
+            }, {
+                rarity: 'common',
+                name: 'Enchanted Book (Spiked Hook 6)'
+            }
+        ]
+    }, {
+        name: 'Guardian Defender',
+        id: 'guardian_defender',
+        rarity: 'epic',
+        fishingLevel: 17,
+        level: 45,
+        hp: 19000,
+        xp: 750,
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Sponge'
+            }, {
+                rarity: 'common',
+                name: 'Raw Fish'
+            }, {
+                rarity: 'common',
+                name: 'Enchanted Book (Lure 6)'
+            }, {
+                rarity: 'uncommon',
+                name: 'Enchanted Prismarine Shard'
+            }, {
+                rarity: 'uncommon',
+                name: 'Enchanted Prismarine Crystals'
+            }
+        ]
+    }, {
+        name: 'Deep Sea Protector',
+        id: 'deep_sea_protector',
+        rarity: 'epic',
+        fishingLevel: 18,
+        level: 60,
+        hp: 20000,
+        xp: 1000,
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Sponge'
+            }, {
+                rarity: 'common',
+                name: 'Clownfish'
+            }, {
+                rarity: 'common',
+                name: 'Enchanted Book (Angler 6)'
+            }, {
+                rarity: 'uncommon',
+                name: 'Enchanted Iron'
+            }
+        ]
+    }, {
+        name: 'Water Hydra',
+        id: 'water_hydra',
+        rarity: 'legendary',
+        fishingLevel: 19,
+        level: 100,
+        hp: 30000,
+        xp: 3000,
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Sponge'
+            }, {
+                rarity: 'common',
+                name: 'Clownfish'
+            }, {
+                rarity: 'common',
+                name: 'Pufferfish'
+            }, {
+                rarity: 'common',
+                name: 'Raw Fish'
+            }, {
+                rarity: 'common',
+                name: 'Raw Salmon'
+            }, {
+                rarity: 'common',
+                name: 'Enchanted Book (Luck of the Sea 6)'
+            }, {
+                rarity: 'rare',
+                name: 'Fish Affinity Talisman'
+            }, {
+                rarity: 'epic',
+                name: 'Water Hydra Head'
+            }
+        ]
+    }, {
+        name: 'Sea Emperor',
+        id: 'sea_emperor',
+        rarity: 'legendary',
+        fishingLevel: 20,
+        level: 150,
+        hp: 30000,
+        xp: 2500,
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Sponge'
+            }, {
+                rarity: 'common',
+                name: 'Raw Fish'
+            }, {
+                rarity: 'uncommon',
+                name: 'Enchanted Lily Pad'
+            }, {
+                rarity: 'uncommon',
+                name: 'Enchanted Prismarine Shard'
+            }, {
+                rarity: 'uncommon',
+                name: 'Enchanted Prismarine Crystals'
+            }, {
+                rarity: 'rare',
+                name: 'Emperor\'s Skull'
+            }, {
+                rarity: 'legendary',
+                name: 'Shredder'
+            }, {
+                rarity: 'special',
+                name: 'Flying Fish'
+            }
+        ]
+    }, {
+        name: 'Yeti',
+        id: 'yeti',
+        rarity: 'legendary',
+        fishingLevel: 25,
+        level: 175,
+        hp: 300000,
+        xp: 3000,
+        drops: [
+            {
+                rarity: 'common',
+                name: 'Ice'
+            }, {
+                rarity: 'common',
+                name: 'Lily Pad'
+            }, {
+                rarity: 'common',
+                name: 'Sponge'
+            }, {
+                rarity: 'common',
+                name: 'Raw Fish'
+            }, {
+                rarity: 'uncommon',
+                name: 'Enchanted Lily Pad'
+            }, {
+                rarity: 'rare',
+                name: 'Hunk of Blue Ice'
+            }, {
+                rarity: 'rare',
+                name: 'Red Gift'
+            }, {
+                rarity: 'legendary',
+                name: 'Yeti Rod'
+            }, {
+                rarity: 'legendary',
+                name: 'Hilt of True Ice'
+            }
+        ]
+    }
+];
 
 getStats = items => {
     const stats = Object.assign({}, constants.stat_template);
@@ -392,36 +911,36 @@ if(calculated.bank)
             %>
 
             <div id="base_stats_container">
-                <div data-stat="health" class="basic-stat stat-health" data-tippy-content="Base Health: <%= calculated.base_stats.health %> HP
+                <div data-stat="health" class="basic-stat stat-health"><span data-tippy-content="Base Health: <%= calculated.base_stats.health %> HP
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls, leveling your Farming and Fishing skills and leveling up in Zombie or Wolf Slayer.</div>
                 Bonus Health: +<%= stats.health - calculated.base_stats.health %> HP
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Health </span><span class="stat-value"><%= stats.health %></span></div>
-                <div data-stat="defense" class="basic-stat stat-defense" data-tippy-content="Base Defense: <%= calculated.base_stats.defense %>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Health </span><span class="stat-value"><%= stats.health %></span></span></div>
+                <div data-stat="defense" class="basic-stat stat-defense"><span data-tippy-content="Base Defense: <%= calculated.base_stats.defense %>
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls and leveling your Mining skill.</div>
                 Bonus Defense: +<%= stats.defense - calculated.base_stats.defense %>
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Defense </span><span class="stat-value"><%= stats.defense %></span></div>
-                <div data-stat="effective_health" class="basic-stat stat-effective-health"  data-tippy-content="Effective Health based on Health + Defense.
-                <div class='tippy-explanation'>→ Formula: Health * (1 + Defense / 100)</div>"><span class="stat-name">Effective HP </span><span class="stat-value"><%= stats.effective_health %></span></div>
-                <div data-stat="strength" class="basic-stat stat-strength" data-tippy-content="Base Strength: <%= calculated.base_stats.strength %>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Defense </span><span class="stat-value"><%= stats.defense %></span></span></div>
+                <div data-stat="effective_health" class="basic-stat stat-effective-health"><span data-tippy-content="Effective Health based on Health + Defense.
+                <div class='tippy-explanation'>→ Formula: Health * (1 + Defense / 100)</div>"><span class="stat-name">Effective HP </span><span class="stat-value"><%= stats.effective_health %></span></span></div>
+                <div data-stat="strength" class="basic-stat stat-strength"><span data-tippy-content="Base Strength: <%= calculated.base_stats.strength %>
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls and leveling your Foraging skill.</div>
                 Bonus Strength: +<%= stats.strength - calculated.base_stats.strength %>
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Strength </span><span class="stat-value"><%= stats.strength %></span></div>
-                <div data-stat="speed" class="basic-stat stat-speed" data-tippy-content="Base Speed: <%= calculated.base_stats.speed %>%
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Strength </span><span class="stat-value"><%= stats.strength %></span></span></div>
+                <div data-stat="speed" class="basic-stat stat-speed"><span data-tippy-content="Base Speed: <%= calculated.base_stats.speed %>%
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls.</div>
                 Bonus Speed: +<%= stats.speed - calculated.base_stats.speed %>%
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Speed </span><span class="stat-value"><%= stats.speed %></span>%</div>
-                <div data-stat="crit_chance" class="basic-stat stat-crit-chance" data-tippy-content="Base Crit Chance: <%= calculated.base_stats.crit_chance %>%
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Speed </span><span class="stat-value"><%= stats.speed %></span>%</span></div>
+                <div data-stat="crit_chance" class="basic-stat stat-crit-chance"><span data-tippy-content="Base Crit Chance: <%= calculated.base_stats.crit_chance %>%
                 <div class='tippy-explanation'>Increased by leveling your Combat skill.</div>
                 Bonus Crit Chance: +<%= stats.crit_chance - calculated.base_stats.crit_chance %>%
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Crit Chance </span><span class="stat-value"><%= stats.crit_chance %></span>%</div>
-                <div data-stat="crit_damage" class="basic-stat stat-crit-damage" data-tippy-content="Base Crit Damage: <%= calculated.base_stats.crit_damage %>%
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Crit Chance </span><span class="stat-value"><%= stats.crit_chance %></span>%</span></div>
+                <div data-stat="crit_damage" class="basic-stat stat-crit-damage"><span data-tippy-content="Base Crit Damage: <%= calculated.base_stats.crit_damage %>%
                 <div class='tippy-explanation'>Increased by leveling up in Spider or Wolf Slayer.</div>
                 Bonus Crit Damage: +<%= stats.crit_damage - calculated.base_stats.crit_damage %>%
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Crit Damage </span><span class="stat-value"><%= stats.crit_damage %></span>%</div>
-                <div data-stat="intelligence" class="basic-stat stat-intelligence" data-tippy-content="Base Intelligence: <%= calculated.base_stats.intelligence %>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Crit Damage </span><span class="stat-value"><%= stats.crit_damage %></span>%</span></div>
+                <div data-stat="intelligence" class="basic-stat stat-intelligence"><span data-tippy-content="Base Intelligence: <%= calculated.base_stats.intelligence %>
                 <div class='tippy-explanation'>Increased by leveling your Enchanting and Alchemy skills and completing songs on Melody's Harp.</div>
                 Bonus Intelligence: +<%= stats.intelligence - calculated.base_stats.intelligence %>
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Intelligence </span><span class="stat-value"><%= stats.intelligence %></span></div>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Intelligence </span><span class="stat-value"><%= stats.intelligence %></span></span></div>
                 <div id="player_model_mobile" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
                 <div id="additional_stats_container">
                     <div class="additional-stat" data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></div>
@@ -600,6 +1119,32 @@ if(calculated.bank)
                 </div>
             </div>
         <% } %>
+        <div class="stat-container stat-fishing">
+            <div class="stat-header"><span>Fishing</span></div>
+            <div class="stat-content">
+                <p>
+                    <span class="stat-name">Items fished: </span><span class="stat-value"><%= calculated.fishing.total.toLocaleString() %><br>
+                    <span class="stat-name">Treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure.toLocaleString() %><br>
+                    <span class="stat-name">Large treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure_large.toLocaleString() %><br>
+                    <% if(calculated.fishing.shredder_fished > 0){ %>
+                    <span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %><br>
+                    <% } %>
+                </p>
+                <div class="sea-creatures">
+                    <% for(const creature of seaCreatures) {
+                        let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
+
+                        mobKills = mobKills.length > 0 ? mobKills[0].amount : 0;
+                    %>
+                        <div class="sea-creature">
+                            <div class="sea-creature-name"><span><%= creature.name %></span></div>
+                            <div class="sea-creature-image" style="background-image: url(/resources/img/sea_creatures/<%= creature.id %>.png)"></div>
+                            <div class="sea-creature-kills"><span class="stat-value"><%= mobKills.toLocaleString() %></span><span class="stat-name"> Kills</span></div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
         <div class="stat-container stat-slayer">
             <div class="stat-header"><span>Slayer</span></div>
             <div class="stat-content">
