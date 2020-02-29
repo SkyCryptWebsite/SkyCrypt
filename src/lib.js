@@ -1017,9 +1017,16 @@ module.exports = {
                 killsDeaths.push({ type: 'deaths', entityId: stat.replace("deaths_", ""), amount: profile.stats[stat] });
         }
 
-        killsDeaths.forEach(stat => {
-            let entityName = "";
+        for(const stat of killsDeaths){
             let { entityId } = stat;
+
+            if(entityId in constants.mob_names){
+                stat.entityName = constants.mob_names[entityId];
+                continue;
+            }
+
+            let entityName = "";
+
             entityId.split("_").forEach((split, index) => {
                 entityName += split.charAt(0).toUpperCase() + split.slice(1);
 
@@ -1028,7 +1035,7 @@ module.exports = {
             });
 
             stat.entityName = entityName;
-        });
+        }
 
         output.kills = killsDeaths.filter(a => a.type == 'kills').sort((a, b) => b.amount - a.amount);
         output.deaths = killsDeaths.filter(a => a.type == 'deaths').sort((a, b) => b.amount - a.amount);
