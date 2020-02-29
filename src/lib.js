@@ -102,7 +102,7 @@ function getPetLevel(pet){
         }
     }
 
-    const xpCurrent = Math.floor(pet.exp - xpTotal);
+    let xpCurrent = Math.floor(pet.exp - xpTotal);
     let progress;
 
     if(level < 100){
