@@ -1076,7 +1076,7 @@ module.exports = {
                     levelBar += '-';
                 }
 
-                levelBar += ` §e${pet.level.xpCurrent.toLocaleString()}§6/§e${helper.formatNumber(pet.level.xpForNext, true, 1)}`;
+                levelBar += ` §e${pet.level.xpCurrent.toLocaleString()}§6/§e${helper.formatNumber(pet.level.xpForNext, false, 10)}`;
 
                 lore.push(levelBar);
             }
