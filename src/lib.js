@@ -1081,6 +1081,11 @@ module.exports = {
                 lore.push(levelBar);
             }
 
+            lore.push(
+                '',
+                `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)}`
+            );
+
             pet.lore = '';
 
             lore.forEach((line, index) => {
