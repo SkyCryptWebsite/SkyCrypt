@@ -1058,11 +1058,11 @@ module.exports = {
 
             let lore = [
                 `§8${helper.capitalizeFirstLetter(petData.type)} Pet`,
-                ''
             ];
 
             if(pet.level.level < 100){
                 lore.push(
+                    '',
                     `§7Progress to Level ${pet.level.level + 1}: §e${(pet.level.progress * 100).toFixed(1)}%`
                 );
 
