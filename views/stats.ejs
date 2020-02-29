@@ -1154,6 +1154,9 @@ if(calculated.bank)
                         let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
 
                         mobKills = mobKills.length > 0 ? mobKills[0].amount : 0;
+
+                        if(mobKills == 0)
+                            continue;
                     %>
                         <div class="sea-creature">
                             <div class="sea-creature-name"><span><%= creature.name %></span></div>
@@ -1271,11 +1274,20 @@ if(calculated.bank)
             <div class="stat-header"><span>Minions</span></div>
             <div class="stat-content">
                 <%
-                    const uniqueMinions = calculated.minions.reduce((a, b) => { return { maxLevel: a.maxLevel + b.maxLevel }}).maxLevel;
+                    let uniqueMinions = 0;
+                    let skippedMinions = 0;
+
+                    for(const minion of calculated.minions){
+                        uniqueMinions += minion.levels.length;
+                        skippedMinions += minion.maxLevel - minion.levels.length;
+                    }
                 %>
                 <p>
                     <span class="stat-name">Unique Minions: </span><span class="stat-value"><%= uniqueMinions %> / 572</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 572 * 100) %>%)</span><br>
                     <span class="stat-name">Minion Slots: </span><span class="stat-value"><%= calculated.minion_slots.currentSlots %></span><span class="grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
+                    <% if(skippedMinions > 0){ %>
+                    <span class="stat-name">Skipped Minion Tiers: </span><span class="stat-value"><%= skippedMinions %></span><br>
+                    <% } %>
                 </p>
                 <%
                 for(const type of constants.minion_types){
@@ -1291,10 +1303,14 @@ if(calculated.bank)
 
                     for(const minion of minions){ %>
                         <div data-tippy-content="Crafted variants:<br><br>
-                        <% for(let i = 1; i < 11; i++){ %>
+                        <% for(let i = 1; i <= 11; i++){ %>
                         <div class='minion-variant <% if(minion.levels.includes(i)){ %>minion-crafted<% } %>'><%= romanize(i) %></div>
                         <% } %>
-                        " class="minion <%= minion.maxLevel == 0 ? 'no-minion' : '' %> <%= minion.maxLevel == 11 ? 'max-minion' : '' %>">
+                        " class="minion
+                        <%= minion.maxLevel == 0 ? 'no-minion' : '' %>
+                        <%= minion.maxLevel == 11 ? 'max-minion' : '' %>
+                        <%= minion.maxLevel != minion.levels.length ? 'skipped-minion' : '' %>
+                        ">
                             <div class="minion-icon" style="background-image: url(<%= minion.head %>)"></div>
                             <span class="stat-name"><%= minion.name %> </span><span class="stat-value"><%= minion.maxLevel %></span>
                         </div>
@@ -1303,6 +1319,9 @@ if(calculated.bank)
                     <%
                 } %>
             </div>
+        </div>
+        <div class="stat-container stat-collections">
+            
         </div>
         <div class="stat-container stat-kills">
             <div class="stat-header"><span>Top Kills & Deaths</span></div>

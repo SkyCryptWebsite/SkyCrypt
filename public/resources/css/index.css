@@ -1093,6 +1093,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     font-weight: 500;
     font-size: 19px;
     color: rgba(255,255,255,0.8);
+    font-weight: 600;
 }
 
 .active-pet-info{
@@ -1476,6 +1477,10 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 5px;
     line-height: 40px;
+}
+
+.minion:not(.skipped-minion)::after{
+    content: "";
 }
 
 .minion-icon{
