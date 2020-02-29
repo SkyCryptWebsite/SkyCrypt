@@ -156,7 +156,10 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     function showBackpack(item){
-        document.querySelector('.inventory-tab.active-inventory').classList.remove('active-inventory');
+        let activeInventory = document.querySelector('.inventory-tab.active-inventory');
+
+        if(activeInventory)
+            activeInventory.classList.remove('active-inventory');
 
         renderInventory(item.containsItems, 'backpack');
 
@@ -179,6 +182,8 @@ document.addEventListener('DOMContentLoaded', function(){
             item = all_items.filter(a => a.item_index == Number(element.getAttribute('data-item-index')));
         else if(element.hasAttribute('data-backpack-item-index'))
             item = [currentBackpack.containsItems[Number(element.getAttribute('data-backpack-item-index'))]];
+        else if(element.hasAttribute('data-pet-index'))
+            item = [calculated.pets[parseInt(element.getAttribute('data-pet-index'))]];
 
         if(item.length == 0)
             return;
@@ -189,9 +194,14 @@ document.addEventListener('DOMContentLoaded', function(){
             statsContent.setAttribute("data-item-index", item.item_index);
         else if(element.hasAttribute('data-backpack-item-index'))
             statsContent.setAttribute("data-backpack-item-index", element.getAttribute('data-backpack-item-index'));
+        else if(element.hasAttribute('data-pet-index'))
+            statsContent.setAttribute("data-backpack-item-index", element.getAttribute('data-pet-index'));
 
         itemName.className = 'item-name ' + 'piece-' + (item.rarity || 'common') + '-bg';
         itemNameContent.innerHTML = item.display_name || 'null';
+
+        if(element.hasAttribute('data-pet-index'))
+            itemNameContent.innerHTML = `[Lvl ${item.level.level}] ${item.display_name}`;
 
         if(item.texture_path){
             itemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';

@@ -25,23 +25,18 @@ module.exports = {
             profileRequest.then(async response => {
                 let { data } = response;
 
-                if(user)
-                    await db
-                    .collection('usernames')
-                    .updateOne(
-                        { uuid: user.uuid },
-                        { $set: { username: data.name, date: +new Date() } }
-                    );
-                else
-                    await db
-                    .collection('usernames')
-                    .insertOne({ uuid: data.id, username: data.name, date: +new Date() });
-
+                await db
+                .collection('usernames')
+                .replaceOne(
+                    { uuid: data.id },
+                    { uuid: data.id, username: data.name, date: +new Date() },
+                    { upsert: true }
+                );
             }).catch(async err => {
                 if(user)
                     await db
                     .collection('usernames')
-                    .updateOne(
+                    .replaceOne(
                         { uuid: user.uuid },
                         { $set: { date: +new Date() } }
                     );
@@ -61,6 +56,39 @@ module.exports = {
 
         if(user)
             return { uuid, display_name: user.username };
+    },
+
+    capitalizeFirstLetter: word => {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    },
+
+    titleCase: string => {
+       let split = string.toLowerCase().split(' ');
+
+       for(let i = 0; i < split.length; i++)
+            split[i] = split[i].charAt(0).toUpperCase() + split[i].substring(1);
+
+        return split.join(' ');
+   },
+
+    formatNumber: (number, floor, rounding = 10) => {
+        if(number < 1000)
+            return Math.floor(number);
+        else if(number < 10000)
+            if(floor)
+                return Math.floor(number / 1000 * rounding) / rounding + 'K';
+            else
+                return Math.ceil(number / 1000 * rounding) / rounding + 'K';
+        else if(number < 1000000)
+            if(floor)
+                return Math.floor(number / 1000) + 'K';
+            else
+                return Math.ceil(number / 1000) + 'K';
+        else
+            if(floor)
+                return Math.floor(number / 1000 / 1000 * rounding) / rounding + 'M';
+            else
+                return Math.ceil(number / 1000 / 1000 * rounding) / rounding + 'M';
     },
 
     getProfile: async req => {
@@ -117,10 +145,15 @@ module.exports = {
 
             let profileMembers = await Promise.all(memberPromises);
 
-            for(const profileMember of profileMembers)
+            for(const profileMember of profileMembers){
                 await db
                 .collection('members')
-                .insertOne({ profile_id: profileId, uuid: profileMember.uuid, username: profileMember.display_name });
+                .replaceOne(
+                    { profile_id: profileId, uuid: profileMember.uuid },
+                    { profile_id: profileId, uuid: profileMember.uuid, username: profileMember.display_name },
+                    { upsert: true }
+                );
+            }
 
             output = profileMembers.map(a => a.display_name);
         }else{

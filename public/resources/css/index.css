@@ -443,6 +443,8 @@ html.no-transform #info_box.opened{
     pointer-events: none;
     transition: visibility .2s, opacity .2s, transform .2s, left .1s;
     visibility: hidden;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 #stats_content .item-lore{
@@ -1076,7 +1078,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 }
 
 .piece-rare-fg{
-    color: #7070FD;
+    color: #D731D7;
 }
 
 .piece-uncommon-fg{
@@ -1085,6 +1087,42 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 
 .piece-common-fg{
     color: #bfbfbf;
+}
+
+.pet-sub-header{
+    font-weight: 500;
+    font-size: 19px;
+    color: rgba(255,255,255,0.8);
+}
+
+.active-pet-info{
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.stat-pets .piece:not(.active-pet){
+    margin-bottom: 25px;
+}
+
+.active-pet-info div{
+    margin: 4px;
+}
+
+.pet-name{
+    text-transform: capitalize;
+    font-weight: 700;
+}
+
+.other-pet-level{
+    position: absolute;
+    top: calc(100% + 10px);
+    width: 100%;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 15px;
 }
 
 #inventory_container{
@@ -1370,6 +1408,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     line-height: 1.2;
     text-align: center;
     font-weight: 600;
+    font-size: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
