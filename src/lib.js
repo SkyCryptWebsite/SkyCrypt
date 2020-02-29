@@ -1040,7 +1040,10 @@ module.exports = {
             pet.rarity = pet.tier.toLowerCase();
             pet.level = getPetLevel(pet);
 
-            const petData = constants.pet_data[pet.type]
+            const petData = constants.pet_data[pet.type];
+
+            if(!petData)
+                continue;
 
             pet.texture_path = petData.head;
 
