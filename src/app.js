@@ -320,6 +320,7 @@ async function main(){
             calculated.profile = skyBlockProfiles[profileId];
             calculated.profiles = _.pickBy(allSkyBlockProfiles, a => a.profile_id != profileId);
             calculated.members = members.filter(a => a.uuid != hypixelPlayer.uuid);
+            calculated.pets = await lib.getPets(userProfile);
 
             let last_updated = userProfile.last_save;
             let first_join = userProfile.first_join;
@@ -344,7 +345,7 @@ async function main(){
                 text: first_join_text
             };
 
-            res.render('stats', { items, calculated, page: 'stats' });
+            res.render('stats', { items, calculated, helper, page: 'stats' });
         }catch(e){
             console.error(e);
 

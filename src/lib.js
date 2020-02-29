@@ -5,6 +5,7 @@ const util = require('util');
 const mcData = require("minecraft-data")("1.8.9");
 const objectPath = require("object-path");
 const constants = require('./constants');
+const helper = require('./helper');
 
 const customResources = require('./custom-resources');
 
@@ -79,6 +80,41 @@ function getSlayerLevel(slayer){
     }
 
     return level;
+}
+
+function getPetLevel(pet){
+    const rarityOffset = constants.pet_rarity_offset[pet.rarity];
+    const levels = constants.pet_levels.slice(rarityOffset, rarityOffset + 100);
+
+    let xpTotal = 0;
+    let level = 1;
+
+    let xpForNext = Infinity;
+
+    for(let i = 0; i < 100; i++){
+        xpTotal += levels[i];
+
+        if(xpTotal > pet.exp){
+            xpTotal -= levels[i];
+            break;
+        }else{
+            level++;
+        }
+    }
+
+    const xpCurrent = Math.floor(pet.exp - xpTotal);
+
+    if(level < 100)
+        xpForNext = Math.ceil(levels[level - 1]);
+
+    const progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+
+    return {
+        level,
+        xpCurrent,
+        xpForNext,
+        progress
+    };
 }
 
 function getBonusStat(level, skill, max, incremention){
@@ -990,6 +1026,72 @@ module.exports = {
 
         output.kills = killsDeaths.filter(a => a.type == 'kills').sort((a, b) => b.amount - a.amount);
         output.deaths = killsDeaths.filter(a => a.type == 'deaths').sort((a, b) => b.amount - a.amount);
+
+        return output;
+    },
+
+    getPets: async profile => {
+        let output = [];
+
+        if(!objectPath.has(profile, 'pets'))
+            return output;
+
+        for(const pet of profile.pets){
+            pet.rarity = pet.tier.toLowerCase();
+            pet.level = getPetLevel(pet);
+
+            const petData = constants.pet_data[pet.type]
+
+            pet.texture_path = petData.head;
+
+            let lore = [
+                `§8${helper.capitalizeFirstLetter(petData.type)} Pet`,
+                ''
+            ];
+
+            if(pet.level.level < 100){
+                lore.push(
+                    `§7Progress to Level ${pet.level.level + 1}: §e${(pet.level.progress * 100).toFixed(1)}%`
+                );
+
+                let levelBar = '';
+
+                for(let i = 0; i < 20; i++){
+                    if(pet.level.progress > i / 20)
+                        levelBar += '§2';
+                    else
+                        levelBar += '§f';
+                    levelBar += '-';
+                }
+
+                levelBar += ` §e${pet.level.xpCurrent.toLocaleString()}§6/§e${helper.formatNumber(pet.level.xpForNext, true, 1)}`;
+
+                lore.push(levelBar);
+            }
+
+            pet.lore = '';
+
+            lore.forEach((line, index) => {
+                pet.lore += module.exports.renderLore(line);
+
+                if(index + 1 <= lore.length)
+                    pet.lore += '<br>';
+            });
+
+            pet.display_name = helper.titleCase(pet.type.replace(/\_/g, ' '));
+
+            output.push(pet);
+        }
+
+        output = output.sort((a, b) => {
+            if(a.active === b.active)
+                if(a.rarity == b.rarity)
+                    return a.type < b.type ? -1 : 1;
+                else
+                    return rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity)
+
+            return a.active? -1 : 1
+        });
 
         return output;
     }

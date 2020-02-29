@@ -828,6 +828,11 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     margin: 25px;
 }
 
+.stat-pets .pieces{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .piece{
     display: inline-block;
     position: relative;
@@ -1004,11 +1009,11 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 }
 
 .piece-epic-fg{
-    color: #AA00AA;
+    color: #D731D7;
 }
 
 .piece-rare-fg{
-    color: #5555FF;
+    color: #8598FF;
 }
 
 .piece-uncommon-fg{
@@ -1017,6 +1022,29 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 
 .piece-common-fg{
     color: white;
+}
+
+.sub-header{
+    font-weight: 600;
+    margin: 25px;
+    font-size: 20px;
+    margin-bottom: 0px;
+}
+
+.active-pet-info{
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.active-pet-info div{
+    margin: 4px;
+}
+
+.pet-name{
+    text-transform: capitalize;
+    font-weight: 700;
 }
 
 #inventory_container{
