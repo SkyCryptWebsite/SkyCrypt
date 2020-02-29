@@ -377,7 +377,8 @@ module.exports = {
     },
 
     mob_names: {
-        "unburried_zombie": "Crypt Ghoul"
+        "unburried_zombie": "Crypt Ghoul",
+        "zealot_enderman": "Zealot",
     },
 
     // Object with fairy soul, skill, slayer bonuses and enchantment bonuses
