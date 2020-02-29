@@ -1043,6 +1043,9 @@ module.exports = {
             return output;
 
         for(const pet of profile.pets){
+            if(!('tier' in pet))
+                continue;
+
             pet.rarity = pet.tier.toLowerCase();
             pet.level = getPetLevel(pet);
 
