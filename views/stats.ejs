@@ -334,6 +334,8 @@ if(calculated.bank)
                 <% for(const [index, pet] of calculated.pets.entries()){
                     if(index == 0 && pet.active){ %>
                         <div class="sub-header">Active Pet</div>
+                    <% }else if(index == 0){ %>
+                        <p></p>
                         <div class="pieces">
                     <% } %>
                         <div data-pet-index="<%= index %>" class="rich-item piece piece-<%= pet.rarity %>-bg">
