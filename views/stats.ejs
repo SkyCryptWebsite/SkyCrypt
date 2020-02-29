@@ -327,34 +327,36 @@ if(calculated.bank)
                     </div>
                 <% } %>
             </div>
-            <div class="stat-container stat-pets">
-                <div class="stat-header">Pets</div>
-                <% for(const [index, pet] of calculated.pets.entries()){
-                    if(index == 0 && pet.active){ %>
-                        <div class="sub-header">Active Pet</div>
-                        <div class="pieces">
-                    <% } %>
-                        <div data-pet-index="<%= index %>" class="rich-item piece piece-<%= pet.rarity %>-bg">
-                            <% if(pet.rarity == 'legendary'){ %>
-                                <div class="piece-shine"></div>
-                            <% } %>
-                            <div class="piece-hover-area"></div>
-                            <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
-                        </div>
-                    <% if(index == 0 && pet.active) { %>
-                        <div class="active-pet-info">
-                            <div class="pet-name piece-<%= pet.rarity %>-fg"><%= pet.rarity %> <%= pet.display_name %></div>
-                            <div class="pet-level">Level <%= pet.level.level %></div>
-                        </div>
-                        </div>
-                        <% if(calculated.pets.length > 1){ %>
-                            <div class="sub-header">Other Pets</div>
+        <% } %>
+        <div class="stat-container stat-pets">
+            <div class="stat-header">Pets</div>
+            <% for(const [index, pet] of calculated.pets.entries()){
+                if(index == 0 && pet.active){ %>
+                    <div class="sub-header">Active Pet</div>
+                    <div class="pieces">
+                <% } %>
+                    <div data-pet-index="<%= index %>" class="rich-item piece piece-<%= pet.rarity %>-bg">
+                        <% if(pet.rarity == 'legendary'){ %>
+                            <div class="piece-shine"></div>
                         <% } %>
-                        <div class="pieces">
-                    <% }
-                } %>
-                </div>
+                        <div class="piece-hover-area"></div>
+                        <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                    </div>
+                <% if(index == 0 && pet.active) { %>
+                    <div class="active-pet-info">
+                        <div class="pet-name piece-<%= pet.rarity %>-fg"><%= pet.rarity %> <%= pet.display_name %></div>
+                        <div class="pet-level">Level <%= pet.level.level %></div>
+                    </div>
+                    </div>
+                    <% if(calculated.pets.length > 1){ %>
+                        <div class="sub-header">Other Pets</div>
+                    <% } %>
+                    <div class="pieces">
+                <% }
+            } %>
             </div>
+        </div>
+        <% if(!items.no_inventory){ %>
             <div class="stat-container stat-inventory">
                 <div class="stat-header">Inventories</div>
                 <% if(items.no_inventory){ %>
