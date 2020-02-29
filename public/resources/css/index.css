@@ -1038,6 +1038,10 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     font-weight: 500;
 }
 
+.stat-pets .piece:not(.active-pet){
+    margin-bottom: 25px;
+}
+
 .active-pet-info div{
     margin: 4px;
 }
@@ -1045,6 +1049,16 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 .pet-name{
     text-transform: capitalize;
     font-weight: 700;
+}
+
+.other-pet-level{
+    position: absolute;
+    top: calc(100% + 10px);
+    width: 100%;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 15px;
 }
 
 #inventory_container{
