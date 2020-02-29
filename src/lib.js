@@ -103,11 +103,17 @@ function getPetLevel(pet){
     }
 
     const xpCurrent = Math.floor(pet.exp - xpTotal);
+    let progress;
 
-    if(level < 100)
+    if(level < 100){
         xpForNext = Math.ceil(levels[level - 1]);
-
-    const progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+        progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+    }else{
+        level = 100;
+        xpCurrent = pet.exp - levels[99];
+        xpForNext = 0;
+        progress = 1;
+    }
 
     return {
         level,
