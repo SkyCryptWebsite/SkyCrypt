@@ -100,6 +100,7 @@ function getPetLevel(pet){
     const rarityOffset = constants.pet_rarity_offset[pet.rarity];
     const levels = constants.pet_levels.slice(rarityOffset, rarityOffset + 100);
 
+    const xpMaxLevel = levels.reduce((a, b) => a + b, 0)
     let xpTotal = 0;
     let level = 1;
 
@@ -133,7 +134,8 @@ function getPetLevel(pet){
         level,
         xpCurrent,
         xpForNext,
-        progress
+        progress,
+        xpMaxLevel
     };
 }
 
@@ -1135,9 +1137,16 @@ module.exports = {
                 killsDeaths.push({ type: 'deaths', entityId: stat.replace("deaths_", ""), amount: profile.stats[stat] });
         }
 
-        killsDeaths.forEach(stat => {
-            let entityName = "";
+        for(const stat of killsDeaths){
             let { entityId } = stat;
+
+            if(entityId in constants.mob_names){
+                stat.entityName = constants.mob_names[entityId];
+                continue;
+            }
+
+            let entityName = "";
+
             entityId.split("_").forEach((split, index) => {
                 entityName += split.charAt(0).toUpperCase() + split.slice(1);
 
@@ -1146,7 +1155,7 @@ module.exports = {
             });
 
             stat.entityName = entityName;
-        });
+        }
 
         if('kills_guardian_emperor' in profile.stats || 'kills_skeleton_emperor' in profile.stats)
             killsDeaths.push({
@@ -1186,9 +1195,10 @@ module.exports = {
                 `§8${helper.capitalizeFirstLetter(petData.type)} Pet`,
             ];
 
+            lore.push('');
+
             if(pet.level.level < 100){
                 lore.push(
-                    '',
                     `§7Progress to Level ${pet.level.level + 1}: §e${(pet.level.progress * 100).toFixed(1)}%`
                 );
 
@@ -1202,10 +1212,19 @@ module.exports = {
                     levelBar += '-';
                 }
 
-                levelBar += ` §e${pet.level.xpCurrent.toLocaleString()}§6/§e${helper.formatNumber(pet.level.xpForNext, false, 10)}`;
+                levelBar += ` §e${pet.level.xpCurrent.toLocaleString()} §6/ §e${helper.formatNumber(pet.level.xpForNext, false, 10)}`;
 
                 lore.push(levelBar);
+            }else{
+                lore.push(
+                    '§bMAX LEVEL'
+                );
             }
+
+            lore.push(
+                '',
+                `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)} §6/ §e${helper.formatNumber(pet.level.xpMaxLevel, true, 10)}`
+            );
 
             pet.lore = '';
 
