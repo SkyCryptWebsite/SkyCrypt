@@ -699,7 +699,7 @@ getStats = items => {
 }
 
 const getBonus = stats => {
-    const statsNotZero = Object.keys(stats).filter(a => stats[a] > 0);
+    const statsNotZero = Object.keys(stats).filter(a => stats[a] > 0 && a != 'effective_health');
 
     if(statsNotZero.length == 0)
         return;
@@ -858,7 +858,7 @@ if(calculated.bank)
     <div id="stats_display">
         <div id="player_model" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
     </div>
-    <div id="wrapper">
+    <div id="wrapper" data-sticky-container>
         <div id="player_profile"><span class="text-stats-for">Stats for</span>
             <div tabindex="1" id="stats_for_player">
                 <%- calculated.rank_prefix %>
@@ -966,6 +966,17 @@ if(calculated.bank)
                 <% } %>
             </div>
         </div>
+        <div id="nav_bar" data-margin-top="48" data-sticky-class="nav-bar-stickied">
+            <div class="nav-item active" data-target="armor">Armor</div>
+            <div class="nav-item" data-target="weapons">Weapons</div>
+            <div class="nav-item" data-target="accessories">Accessories</div>
+            <div class="nav-item" data-target="pets">Pets</div>
+            <div class="nav-item" data-target="inventory">Inventory</div>
+            <div class="nav-item" data-target="fishing">Fishing</div>
+            <div class="nav-item" data-target="slayer">Slayer</div>
+            <div class="nav-item" data-target="minions">Minions</div>
+            <div class="nav-item" data-target="kills">Kills</div>
+        </div>
         <% if(items.no_inventory){ %>
             <div class="info-container-wrapper">
                 <div class="info-container">
@@ -1010,6 +1021,9 @@ if(calculated.bank)
                     <% if(items.weapons.length == 0){ %>
                         <div class="no-access"><%= calculated.display_name %> doesn't have any weapons.</div>
                     <% }else{ %>
+                        <p>
+                            <span class="stat-name">Active Weapon: </span><span class="stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%= items.highest_rarity_sword.display_name %></span>
+                        </p>
                         <div class="pieces">
                             <%
                                 let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
@@ -1321,7 +1335,7 @@ if(calculated.bank)
             </div>
         </div>
         <div class="stat-container stat-collections">
-            
+
         </div>
         <div class="stat-container stat-kills">
             <div class="stat-header"><span>Top Kills & Deaths</span></div>

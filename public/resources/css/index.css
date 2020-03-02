@@ -7,7 +7,7 @@ html{
     overflow-x: hidden;
 }
 
-.stat-name, .stat-value, .skill-name, .skill-progress-text{
+.stat-name, .stat-value, .skill-name, .skill-progress-text, .grey-text{
     user-select: text !important;
 }
 
@@ -32,6 +32,11 @@ html.no-webp{
 *[data-tippy-content]::after{
     content: "*";
     color: rgba(255,255,255,0.6);
+    transition: color .2s;
+}
+
+*[data-tippy-content]:hover::after{
+    color: #db2580;
 }
 
 .tippy-content{
@@ -274,7 +279,6 @@ html.no-webp #bg_blur{
     left: 40px;
     top: 0;
     font-weight: 600;
-    text-transform: uppercase;
     font-size: 14px;
     height: 22px;
     line-height: 22px;
@@ -719,6 +723,55 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 
 .stat-name, .stat-value{
     line-height: 1.5;
+}
+
+#nav_bar{
+    width: 100%;
+    text-align: center;
+    background-color: rgba(0,0,0,0.3);
+    border-bottom: 2px solid #A6145D;
+}
+
+#nav_bar.nav-bar-stickied{
+    background-color: rgba(20,20,20,0.9);
+    z-index: 100;
+}
+
+.nav-item{
+    display: inline-block;
+    cursor: pointer;
+    padding: 10px;
+    margin-left: 10px;
+    font-weight: 600;
+    transition: background-color .1s, color .1s;
+    position: relative;
+    color: rgba(255,255,255,0.8);
+}
+
+.nav-item.active{
+    color: rgba(255,255,255,1);
+}
+
+.nav-item::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    top: 100%;
+    background-color: #A6145D;
+    border-radius: 4px;
+    transition: height .1s, top .1s;
+}
+
+.nav-item.active::after{
+    height: 8px;
+    top: calc(100% - 3px);
+}
+
+.nav-item:hover::after{
+    height: 8px;
+    top: calc(100% - 3px);
 }
 
 .grey-text{

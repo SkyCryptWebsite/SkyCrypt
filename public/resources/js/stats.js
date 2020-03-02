@@ -723,4 +723,6 @@ document.addEventListener('DOMContentLoaded', function(){
     setTimeout(resize, 1000);
 
     tippy('*[data-tippy-content]')
+
+    let navBarSticky = new Sticky('#nav_bar');
 });
