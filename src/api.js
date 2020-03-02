@@ -58,6 +58,7 @@ module.exports = (app, db) => {
 
                 const petLevel = Object.assign({}, pet.level);
                 delete pet.level;
+                delete pet.tier;
 
                 for(const key in petLevel)
                     pet[key] = petLevel[key];
