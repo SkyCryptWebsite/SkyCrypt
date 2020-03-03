@@ -358,7 +358,7 @@ async function main(){
                 text: first_join_text
             };
 
-            res.render('stats', { items, calculated, constants, helper, page: 'stats' });
+            res.render('stats', { items, calculated, _, constants, helper, page: 'stats' });
         }catch(e){
             console.error(e);
 

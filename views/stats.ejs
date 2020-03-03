@@ -49,7 +49,436 @@ const romanize = num => {
 	while (i--)
 		roman = (key[+digits.pop() + (i * 10)] || "") + roman;
 	return Array(+digits.join("") + 1).join("M") + roman;
-}
+};
+
+const collectionTypes = ['farming', 'mining', 'combat', 'foraging', 'fishing'];
+
+const collections = [
+    {
+        type: 'farming',
+        skyblockId: 'WHEAT',
+        name: 'Wheat',
+        id: 296,
+        damage: 0
+    },
+    {
+        type: 'farming',
+        skyblockId: 'CARROT_ITEM',
+        name: 'Carrot',
+        id: 391,
+        damage: 0
+    },
+    {
+        type: 'farming',
+        skyblockId: 'POTATO_ITEM',
+        name: 'Potato',
+        id: 392,
+        damage: 0
+    },
+    {
+        type: 'farming',
+        skyblockId: 'PUMPKIN',
+        name: 'Pumpkin',
+        id: 86,
+        damage: 0
+    },
+    {
+        type: 'farming',
+        skyblockId: 'MELON',
+        name: 'Melon',
+        id: 360,
+        damage: 0
+    },
+    {
+        type: 'farming',
+        skyblockId: 'SEEDS',
+        name: 'Seeds',
+        id: 295,
+        damage: 0
+    },
+    {
+        type: 'farming',
+        skyblockId: 'MUSHROOM_COLLECTION',
+        name: 'Mushroom',
+        id: 40,
+        damage: 0
+    },
+    {
+        type: 'farming',
+        skyblockId: 'INK_SACK:3',
+        name: 'Cocoa Beans',
+        id: 351,
+        damage: 3
+    },
+    {
+        type: 'farming',
+        skyblockId: 'CACTUS',
+        name: 'Cactus',
+        id: 81,
+        damage: 0
+    },
+    {
+        type: 'farming',
+        skyblockId: 'SUGAR_CANE',
+        name: 'Sugar Cane',
+        id: 338,
+        damage: 0
+    },
+    {
+        type: 'farming',
+        skyblockId: 'FEATHER',
+        name: 'Feather',
+        id: 288,
+        damage: 0
+    },
+    {
+        type: 'farming',
+        skyblockId: 'LEATHER',
+        name: 'Leather',
+        id: 334,
+        damage: 0
+    },
+    {
+        type: 'farming',
+        skyblockId: 'PORK',
+        name: 'Raw Porkchop',
+        id: 319,
+        damage: 0
+    },
+    {
+        type: 'farming',
+        skyblockId: 'RAW_CHICKEN',
+        name: 'Raw Chicken',
+        id: 365,
+        damage: 0
+    },
+    {
+        type: 'farming',
+        skyblockId: 'MUTTON',
+        name: 'Mutton',
+        id: 423,
+        damage: 0
+    },
+    {
+        type: 'farming',
+        skyblockId: 'RABBIT',
+        name: 'Raw Rabbit',
+        id: 411,
+        damage: 0
+    },
+    {
+        type: 'farming',
+        skyblockId: 'NETHER_STALK',
+        name: 'Nether Wart',
+        id: 372,
+        damage: 0
+    },
+
+    {
+        type: 'mining',
+        skyblockId: 'COBBLESTONE',
+        name: 'Cobblestone',
+        id: 4,
+        damage: 0
+    },
+    {
+        type: 'mining',
+        skyblockId: 'COAL',
+        name: 'Coal',
+        id: 263,
+        damage: 0
+    },
+    {
+        type: 'mining',
+        skyblockId: 'IRON_INGOT',
+        name: 'Iron Ingot',
+        id: 265,
+        damage: 0
+    },
+    {
+        type: 'mining',
+        skyblockId: 'GOLD_INGOT',
+        name: 'Gold Ingot',
+        id: 266,
+        damage: 0
+    },
+    {
+        type: 'mining',
+        skyblockId: 'DIAMOND',
+        name: 'Diamond',
+        id: 266,
+        damage: 0
+    },
+    {
+        type: 'mining',
+        skyblockId: 'INK_SACK:4',
+        name: 'Lapis Lazuli',
+        id: 351,
+        damage: 4
+    },
+    {
+        type: 'mining',
+        skyblockId: 'EMERALD',
+        name: 'Emerald',
+        id: 388,
+        damage: 0
+    },
+    {
+        type: 'mining',
+        skyblockId: 'EMERALD',
+        name: 'Emerald',
+        id: 388,
+        damage: 0
+    },
+    {
+        type: 'mining',
+        skyblockId: 'REDSTONE',
+        name: 'Redstone',
+        id: 331,
+        damage: 0
+    },
+    {
+        type: 'mining',
+        skyblockId: 'QUARTZ',
+        name: 'Nether Quartz',
+        id: 406,
+        damage: 0
+    },
+    {
+        type: 'mining',
+        skyblockId: 'OBSIDIAN',
+        name: 'Obsidian',
+        id: 49,
+        damage: 0
+    },
+    {
+        type: 'mining',
+        skyblockId: 'GLOWSTONE',
+        name: 'Glowstone',
+        id: 348,
+        damage: 0
+    },
+    {
+        type: 'mining',
+        skyblockId: 'GRAVEL',
+        name: 'Gravel',
+        id: 13,
+        damage: 0
+    },
+    {
+        type: 'mining',
+        skyblockId: 'ICE',
+        name: 'Ice',
+        id: 79,
+        damage: 0
+    },
+    {
+        type: 'mining',
+        skyblockId: 'NETHERRACK',
+        name: 'Netherrack',
+        id: 87,
+        damage: 0
+    },
+    {
+        type: 'mining',
+        skyblockId: 'NETHERRACK',
+        name: 'Netherrack',
+        id: 87,
+        damage: 0
+    },
+    {
+        type: 'mining',
+        skyblockId: 'SAND',
+        name: 'Sand',
+        id: 12,
+        damage: 0
+    },
+    {
+        type: 'mining',
+        skyblockId: 'ENDER_STONE',
+        name: 'End Stone',
+        id: 121,
+        damage: 0
+    },
+
+    {
+        type: 'combat',
+        skyblockId: 'ROTTEN_FLESH',
+        name: 'Rotten Flesh',
+        id: 367,
+        damage: 0
+    },
+    {
+        type: 'combat',
+        skyblockId: 'BONE',
+        name: 'Bone',
+        id: 352,
+        damage: 0
+    },
+    {
+        type: 'combat',
+        skyblockId: 'STRING',
+        name: 'String',
+        id: 287,
+        damage: 0
+    },
+    {
+        type: 'combat',
+        skyblockId: 'SULPHUR',
+        name: 'Gunpowder',
+        id: 289,
+        damage: 0
+    },
+    {
+        type: 'combat',
+        skyblockId: 'ENDER_PEARL',
+        name: 'Ender Pearl',
+        id: 368,
+        damage: 0
+    },
+    {
+        type: 'combat',
+        skyblockId: 'GHAST_TEAR',
+        name: 'Ghast Tear',
+        id: 370,
+        damage: 0
+    },
+    {
+        type: 'combat',
+        skyblockId: 'SLIME_BALL',
+        name: 'Slimeball',
+        id: 341,
+        damage: 0
+    },
+    {
+        type: 'combat',
+        skyblockId: 'BLAZE_ROD',
+        name: 'Blaze Rod',
+        id: 369,
+        damage: 0
+    },
+    {
+        type: 'combat',
+        skyblockId: 'MAGMA_CREAM',
+        name: 'Magma Cream',
+        id: 378,
+        damage: 0
+    },
+
+    {
+        type: 'foraging',
+        skyblockId: 'LOG',
+        name: 'Oak Wood',
+        id: 17,
+        damage: 0
+    },
+    {
+        type: 'foraging',
+        skyblockId: 'LOG:1',
+        name: 'Spruce Wood',
+        id: 17,
+        damage: 1
+    },
+    {
+        type: 'foraging',
+        skyblockId: 'LOG:2',
+        name: 'Birch Wood',
+        id: 17,
+        damage: 2
+    },
+    {
+        type: 'foraging',
+        skyblockId: 'LOG2:1',
+        name: 'Dark Oak Wood',
+        id: 162,
+        damage: 1
+    },
+    {
+        type: 'foraging',
+        skyblockId: 'LOG2',
+        name: 'Acacia Wood',
+        id: 162,
+        damage: 1
+    },
+    {
+        type: 'foraging',
+        skyblockId: 'LOG:3',
+        name: 'Jungle Wood',
+        id: 17,
+        damage: 3
+    },
+
+    {
+        type: 'fishing',
+        skyblockId: 'RAW_FISH',
+        name: 'Raw Fish',
+        id: 349,
+        damage: 0
+    },
+    {
+        type: 'fishing',
+        skyblockId: 'RAW_FISH:1',
+        name: 'Raw Salmon',
+        id: 349,
+        damage: 1
+    },
+    {
+        type: 'fishing',
+        skyblockId: 'RAW_FISH:2',
+        name: 'Clownfish',
+        id: 349,
+        damage: 2
+    },
+    {
+        type: 'fishing',
+        skyblockId: 'RAW_FISH:3',
+        name: 'Pufferfish',
+        id: 349,
+        damage: 3
+    },
+    {
+        type: 'fishing',
+        skyblockId: 'PRISMARINE_SHARD',
+        name: 'Prismarine Shard',
+        id: 409,
+        damage: 0
+    },
+    {
+        type: 'fishing',
+        skyblockId: 'PRISMARINE_CRYSTALS',
+        name: 'Prismarine Crystals',
+        id: 410,
+        damage: 0
+    },
+    {
+        type: 'fishing',
+        skyblockId: 'CLAY_BALL',
+        name: 'Clay',
+        id: 337,
+        damage: 0
+    },
+    {
+        type: 'fishing',
+        skyblockId: 'WATER_LILY',
+        name: 'Lily Pad',
+        id: 111,
+        damage: 0
+    },
+    {
+        type: 'fishing',
+        skyblockId: 'INK_SACK',
+        name: 'Ink Sac',
+        id: 351,
+        damage: 0
+    },
+    {
+        type: 'fishing',
+        skyblockId: 'SPONGE',
+        name: 'Sponge',
+        id: 19,
+        damage: 0
+    }
+];
 
 const slayerInfo = {
     zombie: {
@@ -867,7 +1296,6 @@ if(calculated.bank)
                     <% calculated.members.forEach(member => { %>
                         <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %>"><%= member.display_name %></a>
                     <% }); %>
-                    <input type="text" id="enter_player" placeholder="Enter username"><a id="goto_player"></a>
                 </div>
             </div><span class="text-on"> on </span><div tabindex="2" id="stats_for_profile">
                 <%= calculated.profile.cute_name %>
@@ -968,31 +1396,34 @@ if(calculated.bank)
         </div>
         <div id="nav_bar" data-margin-top="48" data-sticky-class="nav-bar-stickied">
             <div class="nav-item active" data-target="armor">Armor</div>
-            <div class="nav-item" data-target="weapons">Weapons</div>
-            <div class="nav-item" data-target="accessories">Accessories</div>
+            <% if(!items.no_inventory){ %><div class="nav-item" data-target="weapons">Weapons</div><% } %>
+            <% if(!items.no_inventory){ %><div class="nav-item" data-target="accessories">Accessories</div><% } %>
             <div class="nav-item" data-target="pets">Pets</div>
-            <div class="nav-item" data-target="inventory">Inventory</div>
+            <% if(!items.no_inventory){ %><div class="nav-item" data-target="inventory">Inventory</div><% } %>
             <div class="nav-item" data-target="fishing">Fishing</div>
             <div class="nav-item" data-target="slayer">Slayer</div>
             <div class="nav-item" data-target="minions">Minions</div>
-            <div class="nav-item" data-target="kills">Kills</div>
+            <div class="nav-item" data-target="collections">Collections</div>
+            <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){ %><div class="nav-item" data-target="kills">Kills</div><% } %>
         </div>
+        <div class="stat-containers">
         <% if(items.no_inventory){ %>
-            <div class="info-container-wrapper">
+            <div class="stat-container info-container-wrapper">
                 <div class="info-container">
                     <div class="info-header">Notice</div>
                     Weapons, Accessories and Inventory not available for <%= calculated.display_name %> due to limited API access.<br><span><a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</span>
                 </div>
             </div>
         <% } %>
-        <div class="stat-container stat-armor">
+        <div data-stat="armor" class="stat-container stat-armor">
+            <div class="stat-anchor"></div>
             <div class="stat-header"><span>Armor</span></div>
             <div class="stat-content">
                 <% if(items.armor.length == 0){ %>
                     <div class="no-access"><%= calculated.display_name %> doesn't have any armor equipped.</div>
                 <% }else{ %>
                     <% if(items.armor_set) { %>
-                        <p>
+                        <p class="stat-raw-values">
                             <span class="stat-name">Set: </span><span class="stat-value"><%= items.armor_set %></span>
                         </p>
                     <% } %>
@@ -1015,13 +1446,14 @@ if(calculated.bank)
             </div>
         </div>
         <% if(!items.no_inventory){ %>
-            <div class="stat-container stat-weapons">
+            <div data-stat="weapons" class="stat-container stat-weapons">
+                <div class="stat-anchor"></div>
                 <div class="stat-header"><span>Weapons</span></div>
                 <div class="stat-content">
                     <% if(items.weapons.length == 0){ %>
                         <div class="no-access"><%= calculated.display_name %> doesn't have any weapons.</div>
                     <% }else{ %>
-                        <p>
+                        <p class="stat-raw-values">
                             <span class="stat-name">Active Weapon: </span><span class="stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%= items.highest_rarity_sword.display_name %></span>
                         </p>
                         <div class="pieces">
@@ -1049,7 +1481,8 @@ if(calculated.bank)
                     <% } %>
                 </div>
             </div>
-            <div class="stat-container stat-accessories">
+            <div data-stat="accessories" class="stat-container stat-accessories">
+                <div class="stat-anchor"></div>
                 <div class="stat-header"><span>Accessories</span></div>
                 <div class="stat-content">
                     <% if(items.no_inventory){ %>
@@ -1057,37 +1490,62 @@ if(calculated.bank)
                     <% }else if(items.talismans.length == 0){ %>
                         <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
                     <% }else{ %>
-                        <p>
+                        <p class="stat-raw-values">
                             <span class="stat-name">Unique Accessories: </span><span class="stat-value"><%= items.talismans.filter(a => a.isUnique).length %> / 47</span><br>
                             <span class="stat-name">Completion: </span><span class="stat-value"><%= Math.round(items.talismans.filter(a => a.isUnique).length / 47 * 100) %>%</span>
                         </p>
-                        <div class="pieces">
-                            <% items.talismans.filter(a => a.isUnique).forEach(item => { %>
-                                <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-index="<%= item.item_index %>"
-                                class="rich-item piece <% if(item.isInactive){ %>inactive-accessory<% } %> piece-<%= item.rarity %>-bg">
-                                    <% if(item.rarity == 'legendary'){ %>
-                                        <div class="piece-shine"></div>
-                                    <% } %>
-                                    <div class="piece-hover-area"></div>
-                                    <% itemIcon(item, ['piece-icon']); %>
-                                </div>
-                            <% }) %>
-                        </div>
-                        <p>
-                        <span class="stat-name">Bonus: </span>
-                        <%- getBonus(getStats(items.talismans.filter(a => a.isUnique))) %>
-                        </p>
+                        <% if(items.talismans.filter(a => a.isUnique && !a.isInactive).length > 0){ %>
+                            <div class="accessory-list">
+                                <p class="stat-sub-header" style="margin-bottom: 5px">Active Accessories</p>
+                                <% items.talismans.filter(a => a.isUnique && !a.isInactive).forEach(item => { %>
+                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-index="<%= item.item_index %>"
+                                    class="rich-item piece piece-<%= item.rarity %>-bg">
+                                        <% if(item.rarity == 'legendary'){ %>
+                                            <div class="piece-shine"></div>
+                                        <% } %>
+                                        <div class="piece-hover-area"></div>
+                                        <% itemIcon(item, ['piece-icon']); %>
+                                    </div>
+                                <% }) %>
+                                <p>
+                                <span class="stat-name">Bonus: </span>
+                                <%- getBonus(getStats(items.talismans.filter(a => a.isUnique))) %>
+                                </p>
+                            </div>
+                        <% } %>
+                        <% if(items.talismans.filter(a => a.isUnique && a.isInactive).length > 0){ %>
+                            <div class="accessory-list">
+                                <p class="stat-sub-header">Inactive Accessories</p>
+                                <% items.talismans.filter(a => a.isUnique && a.isInactive).forEach(item => { %>
+                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-index="<%= item.item_index %>"
+                                    class="rich-item piece piece-<%= item.rarity %>-bg">
+                                        <% if(item.rarity == 'legendary'){ %>
+                                            <div class="piece-shine"></div>
+                                        <% } %>
+                                        <div class="piece-hover-area"></div>
+                                        <% itemIcon(item, ['piece-icon']); %>
+                                    </div>
+                                <% }) %>
+                            </div>
+                        <% } %>
                     <% } %>
                 </div>
             </div>
         <% } %>
         <% if(calculated.pets.length > 0){ %>
-            <div class="stat-container stat-pets">
+            <div data-stat="pets" class="stat-container stat-pets">
+                <div class="stat-anchor"></div>
                 <div class="stat-header"><span>Pets</span></div>
                 <div class="stat-content">
+                    <%
+                        const uniquePets = _.uniq(calculated.pets.map(a => a.type)).length;
+                    %>
+                    <p class="stat-raw-values">
+                        <span class="stat-name">Unique Pets: </span><span class="stat-value"><%= uniquePets %> / <%= Object.keys(constants.pet_data).length %></span>
+                    </p>
                     <% for(const [index, pet] of calculated.pets.entries()){
                         if(index == 0 && pet.active){ %>
-                            <p class="pet-sub-header">Active Pet</p>
+                            <p class="stat-sub-header">Active Pet</p>
                             <div class="pieces">
                         <% }else if(index == 0){ %>
                             <p></p>
@@ -1110,7 +1568,7 @@ if(calculated.bank)
                             </div>
                             </div>
                             <% if(calculated.pets.length > 1){ %>
-                                <p class="pet-sub-header">Other Pets</p>
+                                <p class="stat-sub-header">Other Pets</p>
                             <% } %>
                             <div class="pieces">
                         <% }
@@ -1120,7 +1578,8 @@ if(calculated.bank)
             </div>
         <% } %>
         <% if(!items.no_inventory){ %>
-            <div class="stat-container stat-inventory">
+            <div data-stat="inventory" class="stat-container stat-inventory">
+                <div class="stat-anchor"></div>
                 <div class="stat-header"><span>Inventory</span></div>
                 <div class="stat-content">
                     <% if(items.no_inventory){ %>
@@ -1152,44 +1611,58 @@ if(calculated.bank)
                 </div>
             </div>
         <% } %>
-        <div class="stat-container stat-fishing">
+        <div data-stat="fishing" class="stat-container stat-fishing">
+            <div class="stat-anchor"></div>
             <div class="stat-header"><span>Fishing</span></div>
             <div class="stat-content">
-                <p>
-                    <span class="stat-name">Items fished: </span><span class="stat-value"><%= calculated.fishing.total.toLocaleString() %><br>
-                    <span class="stat-name">Treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure.toLocaleString() %><br>
-                    <span class="stat-name">Large treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure_large.toLocaleString() %><br>
+                <p class="stat-raw-values">
+                    <span class="stat-name">Items fished: </span><span class="stat-value"><%= calculated.fishing.total.toLocaleString() %></span><br>
+                    <span class="stat-name">Treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure.toLocaleString() %></span><br>
+                    <span class="stat-name">Large treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure_large.toLocaleString() %></span><br>
                     <% if(calculated.fishing.shredder_fished > 0){ %>
-                    <span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %><br>
+                    <span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span><br>
                     <% } %>
                 </p>
-                <div class="sea-creatures">
-                    <% for(const creature of seaCreatures) {
-                        let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
+                <%
+                let totalSeaCreatureKills = 0;
 
-                        mobKills = mobKills.length > 0 ? mobKills[0].amount : 0;
+                for(const creature of seaCreatures){
+                    let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
 
-                        if(mobKills == 0)
-                            continue;
-                    %>
-                        <div class="sea-creature">
-                            <div class="sea-creature-name"><span><%= creature.name %></span></div>
-                            <div class="sea-creature-image" style="background-image: url(/resources/img/sea_creatures/<%= creature.id %>.png)"></div>
-                            <div class="sea-creature-kills"><span class="stat-value"><%= mobKills.toLocaleString() %></span><span class="stat-name"> Kills</span></div>
-                        </div>
-                    <% } %>
-                </div>
+                    totalSeaCreatureKills += mobKills.length > 0 ? mobKills[0].amount : 0;
+                }
+
+                if(totalSeaCreatureKills > 0){ %>
+                    <p class="stat-sub-header">Sea Creatures</p>
+                    <div class="sea-creatures">
+                        <% for(const creature of seaCreatures) {
+                            let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
+
+                            mobKills = mobKills.length > 0 ? mobKills[0].amount : 0;
+
+                            if(mobKills == 0)
+                                continue;
+                        %>
+                            <div class="sea-creature">
+                                <div class="sea-creature-name"><span><%= creature.name %></span></div>
+                                <div class="sea-creature-image" style="background-image: url(/resources/img/sea_creatures/<%= creature.id %>.png)"></div>
+                                <div class="sea-creature-kills"><span class="stat-value"><%= mobKills.toLocaleString() %></span><span class="stat-name"> Kills</span></div>
+                            </div>
+                        <% } %>
+                    </div>
+                <% } %>
             </div>
         </div>
-        <div class="stat-container stat-slayer">
+        <div data-stat="slayer" class="stat-container stat-slayer">
+            <div class="stat-anchor"></div>
             <div class="stat-header"><span>Slayer</span></div>
             <div class="stat-content">
                 <% if(calculated.slayer_coins_spent == 0){ %>
-                    <p>
+                    <p class="stat-raw-values">
                         <%= calculated.display_name %> hasn't played any Slayer yet.
                     </p>
                 <% }else{ %>
-                    <p>
+                    <p class="stat-raw-values">
                         <span data-tippy-content="Total spent: <%= calculated.slayer_coins_spent.toLocaleString() %> Coins"><span class="stat-name">Total Slayer XP: </span><span class="stat-value"><%= calculated.slayer_xp.toLocaleString() %></span></span>
                     </p>
                     <% for(const slayerName in calculated.slayers){
@@ -1284,7 +1757,8 @@ if(calculated.bank)
                 <% } %>
             </div>
         </div>
-        <div class="stat-container stat-minions">
+        <div data-stat="minions" class="stat-container stat-minions">
+            <div class="stat-anchor"></div>
             <div class="stat-header"><span>Minions</span></div>
             <div class="stat-content">
                 <%
@@ -1296,7 +1770,7 @@ if(calculated.bank)
                         skippedMinions += minion.maxLevel - minion.levels.length;
                     }
                 %>
-                <p>
+                <p class="stat-raw-values">
                     <span class="stat-name">Unique Minions: </span><span class="stat-value"><%= uniqueMinions %> / 572</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 572 * 100) %>%)</span><br>
                     <span class="stat-name">Minion Slots: </span><span class="stat-value"><%= calculated.minion_slots.currentSlots %></span><span class="grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
                     <% if(skippedMinions > 0){ %>
@@ -1334,27 +1808,55 @@ if(calculated.bank)
                 } %>
             </div>
         </div>
-        <div class="stat-container stat-collections">
-
-        </div>
-        <div class="stat-container stat-kills">
-            <div class="stat-header"><span>Top Kills & Deaths</span></div>
+        <div data-stat="collections" class="stat-container stat-collections">
+            <div class="stat-anchor"></div>
+            <div class="stat-header"><span>Collections</span></div>
             <div class="stat-content">
-                <div class="kills-deaths-container">
-                    <div class="narrow-info-container top-kills">
-                        <div class="narrow-info-header">Kills</div>
-                        <% calculated.kills.slice(0, 10).forEach((kill, index) => { %>
-                            <div class="kill-stat"><div class="kill-rank">#<%= index + 1 %></div><div class="kill-entity"><%= kill.entityName %></div><div class="kill-amount"><%= kill.amount.toLocaleString() %></div></div>
-                        <% }); %>
-                    </div>
-                    <div class="narrow-info-container top-deaths">
-                        <div class="narrow-info-header">Deaths</div>
-                        <% calculated.deaths.slice(0, 10).forEach((death, index) => { %>
-                            <div class="kill-stat"><div class="kill-rank">#<%= index + 1 %></div><div class="kill-entity"><%= death.entityName %></div><div class="kill-amount"><%= death.amount.toLocaleString() %></div></div>
-                        <% }); %>
+
+            </div>
+        </div>
+        <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){
+            let totalKills = calculated.kills.length;
+            let totalDeaths = calculated.deaths.length;
+
+            let rows = Math.min(Math.max(totalKills, totalDeaths), 10);
+
+            %>
+            <div data-stat="kills" class="stat-container stat-kills">
+                <div class="stat-anchor"></div>
+                <div class="stat-header"><span>Top Kills & Deaths</span></div>
+                <div class="stat-content">
+                    <div class="kills-deaths-container">
+                        <div class="narrow-info-container top-kills">
+                            <div class="narrow-info-header">Kills</div>
+                            <% for(let i = 0; i < rows; i++){
+                                const kill = calculated.kills[i];
+
+                                if(typeof calculated.kills[i] === 'undefined'){
+                                %>
+                                    <div class="kill-stat"><div class="kill-rank"></div></div>
+                                <% }else{ %>
+                                    <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %></div><div class="kill-entity"><%= kill.entityName %></div><div class="kill-amount"><%= kill.amount.toLocaleString() %></div></div>
+                                <% }
+                            } %>
+                        </div>
+                        <div class="narrow-info-container top-deaths">
+                            <div class="narrow-info-header">Deaths</div>
+                            <% for(let i = 0; i < rows; i++){
+                                const death = calculated.deaths[i];
+
+                                if(typeof death === 'undefined'){
+                                %>
+                                    <div class="kill-stat"><div class="kill-rank"></div></div>
+                                <% }else{ %>
+                                    <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %></div><div class="kill-entity"><%= death.entityName %></div><div class="kill-amount"><%= death.amount.toLocaleString() %></div></div>
+                                <% }
+                            } %>
+                        </div>
                     </div>
                 </div>
             </div>
+        <% } %>
         </div>
     </div>
     <script>
