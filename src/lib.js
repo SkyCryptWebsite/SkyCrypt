@@ -659,7 +659,7 @@ module.exports = {
                 minions.push(Object.assign({ id: minion, levels: [], maxLevel: 0 }, constants.minions[minion]));
 
         for(const minion of minions){
-            minion.levels = minion.levels.sort((a, b) => a - b);
+            minion.levels = _.uniq(minion.levels.sort((a, b) => a - b));
             minion.maxLevel = minion.levels.length > 0 ? Math.max(...minion.levels) : 0;
 
             if(!('name' in minion))
