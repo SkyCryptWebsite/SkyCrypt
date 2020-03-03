@@ -667,10 +667,10 @@ document.addEventListener('DOMContentLoaded', function(){
         element.addEventListener('click', closeLore);
     });
 
-    let enterPlayer = document.querySelector('#enter_player');
+    let searchUser = document.querySelector('#inp_search_user');
 
-    enterPlayer.addEventListener('keyup', function(e){
-        let playerName = enterPlayer.value;
+    searchUser.addEventListener('keyup', function(e){
+        let playerName = searchUser.value;
 
         if(playerName.trim().length == 0)
             return;
@@ -678,7 +678,51 @@ document.addEventListener('DOMContentLoaded', function(){
         if(e.keyCode == 13)
             document.location = '/stats/' + playerName;
         else
-            document.querySelector('#goto_player').href = '/stats/' + playerName;
+            document.querySelector('#btn_search_user').href = '/stats/' + playerName;
+    });
+
+    [].forEach.call(document.querySelectorAll('.nav-item'), function(element){
+        element.addEventListener('click', function(){
+            console.log(this.getAttribute('data-target'));
+
+            document
+            .querySelector('.stat-container[data-stat=' + this.getAttribute('data-target') + '] .stat-anchor')
+            .scrollIntoView({ block: "start", behavior: "smooth" });
+        });
+    });
+
+    let statContainers = document.querySelectorAll('.stat-container[data-stat]');
+    let wrapperHeight = document.querySelector('#wrapper').offsetHeight;
+
+    document.addEventListener('scroll', function(){
+        let rectYs = [];
+        let activeIndex = 0;
+        let activeY = -Infinity;
+        let activeStatContainer;
+
+        if((window.innerHeight + window.scrollY) >= wrapperHeight){
+            activeStatContainer = [].slice.call(statContainers).pop();
+        }else{
+            [].forEach.call(statContainers, function(statContainer){
+                rectYs.push(statContainer.getBoundingClientRect().y);
+            });
+
+            rectYs.forEach(function(rectY, index){
+                if(rectY < 250 && rectY > activeY){
+                    activeY = rectY;
+                    activeIndex = index;
+                }
+            });
+
+            activeStatContainer = statContainers[activeIndex];
+        }
+
+        let activeTab = document.querySelector('.nav-item[data-target=' + activeStatContainer.getAttribute('data-stat') + ']');
+
+        if(!activeTab.classList.contains('active')){
+            document.querySelector('.nav-item.active').classList.remove('active');
+            activeTab.classList.add('active');
+        }
     });
 
     let otherSkills = document.querySelector('#other_skills');
@@ -719,6 +763,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
     resize();
     window.addEventListener('resize', resize);
+
+    window.addEventListener('scroll', function(){
+
+    });
 
     setTimeout(resize, 1000);
 
