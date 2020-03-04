@@ -253,16 +253,6 @@ async function getItems(base64){
             if(item.display_name == 'Water Bottle')
                 item.Damage = 17;
 
-        const customTexture = await customResources.getTexture(item);
-
-        if(customTexture){
-            item.animated = customTexture.animated;
-            item.texture_path = '/' + customTexture.path;
-            item.texture_pack = customTexture.pack.config;
-            item.texture_pack.base_path = '/' + path.relative(path.resolve(__dirname, '..', 'public'), customTexture.pack.basePath);
-        }
-
-
         // Resolve skull textures to their image path
         if(objectPath.has(item, 'tag.SkullOwner.Properties.textures') && Array.isArray(item.tag.SkullOwner.Properties.textures) && item.tag.SkullOwner.Properties.textures.length > 0){
             try{
@@ -274,6 +264,15 @@ async function getItems(base64){
             }catch(e){
 
             }
+        }
+
+        const customTexture = await customResources.getTexture(item);
+
+        if(customTexture){
+            item.animated = customTexture.animated;
+            item.texture_path = '/' + customTexture.path;
+            item.texture_pack = customTexture.pack.config;
+            item.texture_pack.base_path = '/' + path.relative(path.resolve(__dirname, '..', 'public'), customTexture.pack.basePath);
         }
 
         let lore_raw;
