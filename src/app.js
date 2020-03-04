@@ -51,8 +51,6 @@ async function main(){
         let paramPlayer = req.params.player.toLowerCase().replace(/\-/g, '');
         let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
 
-        let playerUsername = paramPlayer;
-
         let isPlayerUuid = paramPlayer.length == 32;
         let isProfileUuid = false;
 
@@ -71,14 +69,6 @@ async function main(){
                 paramPlayer = playerObject.uuid;
                 isPlayerUuid = true;
             }
-        }else{
-            let playerObject = await db
-            .collection('usernames')
-            .find({ uuid: paramPlayer })
-            .next();
-
-            if(playerObject)
-                playerUsername = playerObject.username;
         }
 
         if(isPlayerUuid)
@@ -108,7 +98,7 @@ async function main(){
             if(!data.success){
                 res.render('index', {
                     error: 'Request to Hypixel API failed. Please try again!',
-                    player: playerUsername,
+                    player: req.params.player,
                     page: 'index'
                 });
 
@@ -118,7 +108,7 @@ async function main(){
             if(data.player == null){
                 res.render('index', {
                     error: 'Player not found.',
-                    player: playerUsername,
+                    player: req.params.player,
                     page: 'index'
                 });
 
@@ -128,7 +118,7 @@ async function main(){
             if(!objectPath.has(data, 'player.stats')){
                 res.render('index', {
                     error: 'No data returned by Hypixel API, please try again!',
-                    player: playerUsername,
+                    player: req.params.player,
                     page: 'index'
                 });
 
@@ -138,7 +128,7 @@ async function main(){
             if(!('SkyBlock' in data.player.stats)){
                 res.render('index', {
                     error: 'Player has not played SkyBlock yet.',
-                    player: playerUsername,
+                    player: req.params.player,
                     page: 'index'
                 });
 
@@ -167,7 +157,7 @@ async function main(){
                 if(default_profile.data.profile == null){
                     res.render('index', {
                         error: 'Player has no SkyBlock profiles.',
-                        player: playerUsername,
+                        player: req.params.player,
                         page: 'index'
                     });
 
@@ -237,7 +227,7 @@ async function main(){
                     if(req.params.profile){
                         res.render('index', {
                             error: 'Uh oh, this SkyBlock profile has no players.',
-                            player: playerUsername,
+                            player: req.params.player,
                             page: 'index'
                         });
 
@@ -253,7 +243,7 @@ async function main(){
             if(profiles.length == 0){
                 res.render('index', {
                     error: 'No data returned by Hypixel API, please try again!',
-                    player: playerUsername,
+                    player: req.params.player,
                     page: 'index'
                 });
 
@@ -262,7 +252,6 @@ async function main(){
 
             let highest = 0;
             let profileId;
-            let profile;
 
             profiles.forEach((_profile, index) => {
                 if(_profile === undefined || _profile === null)
@@ -270,22 +259,12 @@ async function main(){
 
                 let userProfile = _profile.members[data.player.uuid];
 
-                if('last_save' in userProfile && userProfile.last_save > highest){
+                if(userProfile.last_save > highest){
                     profile = _profile;
                     highest = userProfile.last_save;
                     profileId = profileNames[index];
                 }
             });
-
-            if(!profile){
-                res.render('index', {
-                    error: 'User not found in selected profile. This is probably due to a declined co-op invite.',
-                    player: playerUsername,
-                    page: 'index'
-                });
-
-                return false;
-            }
 
             let userProfile = profile.members[data.player.uuid];
 
@@ -372,7 +351,7 @@ async function main(){
 
             res.render('index', {
                 error: 'Request to Hypixel API failed. Their API might be down right now so try again later.',
-                player: playerUsername,
+                player: req.params.player,
                 page: 'index'
             });
 
