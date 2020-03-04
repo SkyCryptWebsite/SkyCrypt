@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube_all",
+	"textures": {
+        "all": "minecraft:mcpatcher/cit/gui/general/empty"
+    },
+    "display": {
+        "gui": {
+            "rotation": [ -30, 135, 0 ],
+            "scale": [ 1.77, 1.77, 1.77 ]
+        }
+    }
+}

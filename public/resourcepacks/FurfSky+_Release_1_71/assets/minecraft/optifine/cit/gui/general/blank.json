@@ -1,0 +1,11 @@
+{
+		"parent": "builtin/generated",
+	"textures": {
+		"layer0": "mcpatcher/cit/gui/general/empty"
+	},
+	"display": {
+		"gui": {
+			"scale": [ 1.11, 1.11, 1.11 ]
+		}
+	}
+}

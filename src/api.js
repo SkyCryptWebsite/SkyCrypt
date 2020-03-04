@@ -45,6 +45,37 @@ module.exports = (app, db) => {
         }
     });
 
+    app.get('/api/:player/:profile/pets', async (req, res) => {
+        try{
+            const { playerResponse, profileResponse } = await helper.getProfile(req);
+
+            const userProfile = profileResponse.data.profile.members[playerResponse.data.player.uuid];
+
+            const pets = await lib.getPets(userProfile);
+
+            for(const pet of pets){
+                delete pet.lore;
+
+                const petLevel = Object.assign({}, pet.level);
+                delete pet.level;
+                delete pet.tier;
+
+                for(const key in petLevel)
+                    pet[key] = petLevel[key];
+            }
+
+            if('html' in req.query)
+                res.send(tableify(pets, { showHeaders: false }));
+            else
+                res.json(pets);
+        }catch(e){
+            console.error(e);
+
+            res.set('Content-Type', 'text/plain');
+            res.status(500).send('Something went wrong');
+        }
+    });
+
     app.get('/api/:player/:profile/minions', async (req, res) => {
         try{
             const { profileResponse } = await helper.getProfile(req);

@@ -98,7 +98,7 @@ function getSlayerLevel(slayer){
 
 function getPetLevel(pet){
     const rarityOffset = constants.pet_rarity_offset[pet.rarity];
-    const levels = constants.pet_levels.slice(rarityOffset, rarityOffset + 100);
+    const levels = constants.pet_levels.slice(rarityOffset, rarityOffset + 99);
 
     const xpMaxLevel = levels.reduce((a, b) => a + b, 0)
     let xpTotal = 0;
