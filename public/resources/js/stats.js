@@ -585,11 +585,17 @@ document.addEventListener('DOMContentLoaded', function(){
 
     function bindLoreEvents(element){
         element.addEventListener('mouseenter', function(e){
+            if(e.target.classList.contains('select-weapon'))
+                return;
+
             fillLore(element, false);
             statsContent.classList.add('show-stats');
         });
 
         element.addEventListener('mouseleave', function(e){
+            if(e.target.classList.contains('select-weapon'))
+                return;
+
             statsContent.classList.remove('show-stats');
         });
 

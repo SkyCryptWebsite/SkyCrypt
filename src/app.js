@@ -6,6 +6,8 @@ const dbName = 'sbstats';
 
 async function main(){
     const express = require('express');
+    const bodyParser = require('body-parser');
+
     const axios = require('axios');
     require('axios-debug-log')
 
@@ -44,10 +46,29 @@ async function main(){
     const port = 32464;
 
     app.locals.moment = moment;
+    app.use(bodyParser.urlencoded({ extended: true }));
     app.set('view engine', 'ejs');
     app.use(express.static('public', { maxAge: CACHE_DURATION }));
 
     require('./api')(app, db);
+    require('./donations/kofi')(app, db);
+
+    async function getExtra(){
+        const output = {};
+
+        const kofiEntry = await db.collection('donations').find({type: 'kofi'}).next();
+        const patreonEntry = await db.collection('donations').find({type: 'patreon'}).next();
+
+        if(kofiEntry == null || patreonEntry == null)
+            return output;
+
+        output.donations = {
+            kofi: kofiEntry.amount || 0,
+            patreon: patreonEntry.amount || 0
+        };
+
+        return output;
+    }
 
     app.get('/stats/:player/:profile?', async (req, res, next) => {
         let response;
@@ -103,6 +124,7 @@ async function main(){
                 res.render('index', {
                     error: 'Request to Hypixel API failed. Please try again!',
                     player: req.params.player,
+                    extra: await getExtra(),
                     page: 'index'
                 });
 
@@ -113,6 +135,7 @@ async function main(){
                 res.render('index', {
                     error: 'Player not found.',
                     player: req.params.player,
+                    extra: await getExtra(),
                     page: 'index'
                 });
 
@@ -123,6 +146,7 @@ async function main(){
                 res.render('index', {
                     error: 'No data returned by Hypixel API, please try again!',
                     player: req.params.player,
+                    extra: await getExtra(),
                     page: 'index'
                 });
 
@@ -133,6 +157,7 @@ async function main(){
                 res.render('index', {
                     error: 'Player has not played SkyBlock yet.',
                     player: req.params.player,
+                    extra: await getExtra(),
                     page: 'index'
                 });
 
@@ -162,6 +187,7 @@ async function main(){
                     res.render('index', {
                         error: 'Player has no SkyBlock profiles.',
                         player: req.params.player,
+                        extra: await getExtra(),
                         page: 'index'
                     });
 
@@ -232,6 +258,7 @@ async function main(){
                         res.render('index', {
                             error: 'Uh oh, this SkyBlock profile has no players.',
                             player: req.params.player,
+                            extra: await getExtra(),
                             page: 'index'
                         });
 
@@ -248,6 +275,7 @@ async function main(){
                 res.render('index', {
                     error: 'No data returned by Hypixel API, please try again!',
                     player: req.params.player,
+                    extra: await getExtra(),
                     page: 'index'
                 });
 
@@ -358,13 +386,14 @@ async function main(){
                 text: first_join_text
             };
 
-            res.render('stats', { items, calculated, _, constants, helper, page: 'stats' });
+            res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
         }catch(e){
             console.error(e);
 
             res.render('index', {
                 error: 'Request to Hypixel API failed. Their API might be down right now so try again later.',
                 player: req.params.player,
+                extra: await getExtra(),
                 page: 'index'
             });
 
@@ -425,7 +454,7 @@ async function main(){
     });
 
     app.get('/', async (req, res, next) => {
-        res.render('index', { error: null, player: null, page: 'index' });
+        res.render('index', { error: null, player: null, extra: await getExtra(), page: 'index' });
     });
 
     app.get('*', async (req, res, next) => {
