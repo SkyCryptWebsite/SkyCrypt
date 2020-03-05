@@ -339,6 +339,10 @@ module.exports = {
         "SQUID": {
             head: "/head/01433be242366af126da434b8735df1eb5b3cb2cede39145974e9c483607bac",
             type: "fishing"
+        },
+        "GIRAFFE": {
+            head: "/head/176b4e390f2ecdb8a78dc611789ca0af1e7e09229319c3a7aa8209b63b9",
+            type: "foraging"
         }
     },
 
