@@ -84,8 +84,9 @@ function getSlayerLevel(slayer){
 
 function getPetLevel(pet){
     const rarityOffset = constants.pet_rarity_offset[pet.rarity];
-    const levels = constants.pet_levels.slice(rarityOffset, rarityOffset + 100);
+    const levels = constants.pet_levels.slice(rarityOffset, rarityOffset + 99);
 
+    const xpMaxLevel = levels.reduce((a, b) => a + b, 0)
     let xpTotal = 0;
     let level = 1;
 
@@ -119,7 +120,8 @@ function getPetLevel(pet){
         level,
         xpCurrent,
         xpForNext,
-        progress
+        progress,
+        xpMaxLevel
     };
 }
 
@@ -236,16 +238,6 @@ async function getItems(base64){
             if(item.display_name == 'Water Bottle')
                 item.Damage = 17;
 
-        const customTexture = await customResources.getTexture(item);
-
-        if(customTexture){
-            item.animated = customTexture.animated;
-            item.texture_path = '/' + customTexture.path;
-            item.texture_pack = customTexture.pack.config;
-            item.texture_pack.base_path = '/' + path.relative(path.resolve(__dirname, '..', 'public'), customTexture.pack.basePath);
-        }
-
-
         // Resolve skull textures to their image path
         if(objectPath.has(item, 'tag.SkullOwner.Properties.textures') && Array.isArray(item.tag.SkullOwner.Properties.textures) && item.tag.SkullOwner.Properties.textures.length > 0){
             try{
@@ -257,6 +249,15 @@ async function getItems(base64){
             }catch(e){
 
             }
+        }
+
+        const customTexture = await customResources.getTexture(item);
+
+        if(customTexture){
+            item.animated = customTexture.animated;
+            item.texture_path = '/' + customTexture.path;
+            item.texture_pack = customTexture.pack.config;
+            item.texture_pack.base_path = '/' + path.relative(path.resolve(__dirname, '..', 'public'), customTexture.pack.basePath);
         }
 
         let lore_raw;
@@ -1017,9 +1018,16 @@ module.exports = {
                 killsDeaths.push({ type: 'deaths', entityId: stat.replace("deaths_", ""), amount: profile.stats[stat] });
         }
 
-        killsDeaths.forEach(stat => {
-            let entityName = "";
+        for(const stat of killsDeaths){
             let { entityId } = stat;
+
+            if(entityId in constants.mob_names){
+                stat.entityName = constants.mob_names[entityId];
+                continue;
+            }
+
+            let entityName = "";
+
             entityId.split("_").forEach((split, index) => {
                 entityName += split.charAt(0).toUpperCase() + split.slice(1);
 
@@ -1028,7 +1036,7 @@ module.exports = {
             });
 
             stat.entityName = entityName;
-        });
+        }
 
         output.kills = killsDeaths.filter(a => a.type == 'kills').sort((a, b) => b.amount - a.amount);
         output.deaths = killsDeaths.filter(a => a.type == 'deaths').sort((a, b) => b.amount - a.amount);
@@ -1060,9 +1068,10 @@ module.exports = {
                 `§8${helper.capitalizeFirstLetter(petData.type)} Pet`,
             ];
 
+            lore.push('');
+
             if(pet.level.level < 100){
                 lore.push(
-                    '',
                     `§7Progress to Level ${pet.level.level + 1}: §e${(pet.level.progress * 100).toFixed(1)}%`
                 );
 
@@ -1076,10 +1085,19 @@ module.exports = {
                     levelBar += '-';
                 }
 
-                levelBar += ` §e${pet.level.xpCurrent.toLocaleString()}§6/§e${helper.formatNumber(pet.level.xpForNext, false, 10)}`;
+                levelBar += ` §e${pet.level.xpCurrent.toLocaleString()} §6/ §e${helper.formatNumber(pet.level.xpForNext, false, 10)}`;
 
                 lore.push(levelBar);
+            }else{
+                lore.push(
+                    '§bMAX LEVEL'
+                );
             }
+
+            lore.push(
+                '',
+                `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)} §6/ §e${helper.formatNumber(pet.level.xpMaxLevel, true, 10)}`
+            );
 
             pet.lore = '';
 

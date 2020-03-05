@@ -156,7 +156,10 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     function showBackpack(item){
-        document.querySelector('.inventory-tab.active-inventory').classList.remove('active-inventory');
+        let activeInventory = document.querySelector('.inventory-tab.active-inventory');
+
+        if(activeInventory)
+            activeInventory.classList.remove('active-inventory');
 
         renderInventory(item.containsItems, 'backpack');
 
