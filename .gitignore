@@ -73,3 +73,4 @@ db.json
 
 # custom dyed leather armor cache
 public/resourcepacks/**/leatherCache
+.vscode/settings.json
