@@ -1665,6 +1665,7 @@ if(calculated.bank)
                     <p class="stat-raw-values">
                         <span data-tippy-content="Total spent: <%= calculated.slayer_coins_spent.toLocaleString() %> Coins"><span class="stat-name">Total Slayer XP: </span><span class="stat-value"><%= calculated.slayer_xp.toLocaleString() %></span></span>
                     </p>
+                    <div class="slayer-containers">
                     <%
                     const slayerOrder = ['zombie', 'spider', 'wolf'];
 
@@ -1747,6 +1748,7 @@ if(calculated.bank)
                             </div>
                         </div>
                     <% } %>
+                    </div>
                     <p>
                         <span class="stat-name">Bonus: </span>
                         <%

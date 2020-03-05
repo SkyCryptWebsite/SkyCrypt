@@ -68,16 +68,6 @@ header{
     line-height: 48px;
 }
 
-/*header::after{
-    content: "";
-    position: absolute;
-    top: 45px;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background-color: #780e43;
-}*/
-
 #not_supported{
     position: fixed;
     top: 45px;
@@ -104,25 +94,6 @@ header{
     color: white;
 }
 
-/*#info_button{
-    margin-left: 5px;
-    vertical-align: middle;
-    display: inline-block;
-    position: relative;
-    cursor: pointer;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: 600;
-    font-size: 13px;
-    background-color: rgba(255,255,255,0.7);
-    color: #A6145D;
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-radius: 9999px;
-    line-height: normal;
-}*/
-
 .social-button{
     display: block;
     margin-left: 5px;
@@ -142,6 +113,7 @@ header{
     padding-right: 10px;
     border-radius: 9999px;
     line-height: normal;
+    transition: background-color .1s;
 }
 
 .social-button:hover{
@@ -156,6 +128,10 @@ header{
     text-decoration: none;
     text-transform: none;
     font-weight: 600;
+}
+
+.social-button.patreon:hover, .social-button.ko-fi:hover{
+    background-color: rgba(0,0,0,0.1);
 }
 
 .social-button .social-icon{
@@ -454,7 +430,8 @@ html.no-transform #info_box.opened{
     background-position: center center;
     background-repeat: no-repeat;
     background-color: rgba(255,255,255,0);
-    transition: background-color .2s;
+    transition: background-color .1s;
+    border-radius: 5px;
 }
 
 #info_close:hover{
@@ -500,12 +477,15 @@ html.no-transform #info_box.opened{
     background-image: url(/resources/img/icons/kofi.png);
 }
 
+.link-discord::before{
+    background-image: url(/resources/img/icons/discord.png);
+}
+
 #info_box .name{
     color: rgba(255,255,255,0.7);
 }
 
 #info_box .patron{
-    color: rgba(255,255,255,0.8);
     font-weight: 500;
 }
 
@@ -1865,15 +1845,9 @@ html.no-webp #error_box_wrapper{
     outline: 0 !important;
 }
 
-@media (max-width: 1200px){
+@media (max-width: 1540px){
     header{
-        height: 75px;
-        text-align: center;
         width: 100vw;
-    }
-
-    header::after{
-        top: 75px;
     }
 
     #info_button{
@@ -1900,23 +1874,7 @@ html.no-webp #error_box_wrapper{
         background-color: transparent;
     }
 
-    #top_navigation{
-        top: 30px;
-        left: 0;
-        right: 0;
-        height: 35px;
-    }
-
-    #top_navigation .tab{
-        width: calc(100vw / 3 - 5px);
-        font-size: 12px;
-        border-radius: 1000px;
-        margin: 2px;
-        line-height: 30px;
-    }
-
     #info_box{
-        top: 75px;
         left: 0;
         width: 100vw;
         right: 0;
@@ -1931,21 +1889,59 @@ html.no-webp #error_box_wrapper{
         margin-top: 4px;
     }
 
-    #stats_display{
-        visibility: hidden;
+    #base_stats_container{
+        position: relative;
+        padding-left: 150px;
+    }
+
+    #skill_levels_container{
+        width: calc(100vw - 510px);
+    }
+
+    #skill_levels_container .skill{
+        width: calc((100vw - 410px) / 2 - 60px);
+    }
+
+    #additional_stats_container{
+        width: 100vw;
     }
 
     #wrapper, #bg_blur{
-        top: 75px;
         left: 0;
         right: 0;
         width: 100vw;
         overflow-x: hidden;
     }
 
+    #stats_display{
+        visibility: hidden;
+    }
+
+    #player_model_mobile{
+        position: absolute;
+        top: 30px;
+        left: 0;
+        bottom: 30px;
+        width: 110px;
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+}
+
+@media (max-width: 1200px){
     #player_profile{
         font-size: 25px;
         margin: 25px;
+    }
+
+    #player_model_mobile{
+        left: 20px;
+    }
+
+    #search_user{
+        right: 10px;
+        left: auto;
     }
 
     #player_profile .text-stats-for{
@@ -1966,6 +1962,10 @@ html.no-webp #error_box_wrapper{
 
     #other_profiles, stats_for_profile{
         min-width: 130px;
+    }
+
+    .stat-inventory .stat-content{
+        padding-left: 0 !important;
     }
 
     #stats_for_player:focus #other_players, #stats_for_profile:focus #other_profiles {
@@ -2002,17 +2002,6 @@ html.no-webp #error_box_wrapper{
         right: 0;
     }
 
-    #player_model_mobile{
-        position: absolute;
-        top: 30px;
-        left: 20px;
-        bottom: 30px;
-        width: 110px;
-        background-size: 100% auto;
-        background-repeat: no-repeat;
-        background-position: center center;
-    }
-
     #skill_levels_container{
         width: 100%;
         margin-top: 30px;
@@ -2037,6 +2026,10 @@ html.no-webp #error_box_wrapper{
 
     .stat-header::before, .stat-header::after{
         display: none;
+    }
+
+    .additional-stat{
+        display: block;
     }
 
     #stats_content{
@@ -2090,9 +2083,25 @@ html.no-webp #error_box_wrapper{
         margin-top: 45px;
     }
 
-    .kills-deaths-container > div {
+    .stat-kills .narrow-info-container{
         min-width: 0;
         width: calc(100vw / 2 - 85px);
+    }
+
+    .stat-slayer .narrow-info-container{
+        width: calc(100vw / 3 - 85px);
+    }
+
+    .slayer-containers{
+        white-space: nowrap;
+        overflow-y: auto;
+        margin-left: -40px;
+        margin-right: -40px;
+        padding-left: 40px;
+    }
+
+    .slayer-containers .narrow-info-container:last-child{
+        margin-right: 40px;
     }
 }
 
@@ -2123,13 +2132,31 @@ html.no-webp #error_box_wrapper{
         overflow-x: scroll;
     }
 
-    .kills-deaths-container > div {
-        width: calc(100vw - 100px);
+    .sea-creatures{
+        white-space: nowrap;
+        overflow-x: auto;
+        margin-left: -40px;
+        margin-right: -40px;
+        padding-left: 40px;
+    }
+
+    .sea-creature-name{
+        white-space: break-spaces;
+    }
+
+    .sea-creature:last-child{
+        margin-right: 40px;
     }
 
     .top-deaths{
         margin-left: 0;
         margin-top: 25px;
+    }
+
+    .stat-kills .narrow-info-container{
+        width: calc(100vw - 100px);
+        margin-left: 0 !important;
+        margin-top: 20px;
     }
 }
 
@@ -2229,6 +2256,10 @@ html.no-webp #error_box_wrapper{
         width: calc((100vw - 40px) / 9 - 5px);
         height: calc((100vw - 40px) / 9 - 5px);
     }
+
+    .piece-icon{
+        transform: translate(-50%, -50%) scale(0.4);
+    }
 }
 
 @media (max-width: 380px){
@@ -2236,5 +2267,11 @@ html.no-webp #error_box_wrapper{
         font-size: 13.5px;
         line-height: 22px;
         height: 22px;
+    }
+}
+
+@media (max-width: 350px){
+    .piece-icon{
+        transform: translate(-50%, -50%) scale(0.35);
     }
 }

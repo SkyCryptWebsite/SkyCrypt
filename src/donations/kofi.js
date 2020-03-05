@@ -1,7 +1,14 @@
 const axios = require('axios');
+const credentials = require('../../credentials.json');
 
 module.exports = async (app, db) => {
+    if(!('kofi_key' in credentials))
+        return;
+
     app.post('/webhook/kofi', async (req, res) => {
+        if(req.query.key != credentials.kofi_key)
+            return;
+
         const kofiEntry = await db.collection('donations').find({type: 'kofi'}).next();
 
         if(kofiEntry == null)
