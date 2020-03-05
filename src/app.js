@@ -377,6 +377,7 @@ async function main(){
             calculated.minions = lib.getMinions(profile.members);
             calculated.minion_slots = lib.getMinionSlots(calculated.minions);
             calculated.pets = await lib.getPets(userProfile);
+            calculated.collections = await lib.getCollections(userProfile);
 
             calculated.fishing = {
                 total: userProfile.stats.items_fished || 0,

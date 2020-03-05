@@ -53,125 +53,142 @@ const romanize = num => {
 
 const collectionTypes = ['farming', 'mining', 'combat', 'foraging', 'fishing'];
 
-const collections = [
+const collectionData = [
     {
         type: 'farming',
         skyblockId: 'WHEAT',
         name: 'Wheat',
         id: 296,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'farming',
         skyblockId: 'CARROT_ITEM',
         name: 'Carrot',
         id: 391,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'farming',
         skyblockId: 'POTATO_ITEM',
         name: 'Potato',
         id: 392,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'farming',
         skyblockId: 'PUMPKIN',
         name: 'Pumpkin',
         id: 86,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'farming',
         skyblockId: 'MELON',
         name: 'Melon',
         id: 360,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'farming',
         skyblockId: 'SEEDS',
         name: 'Seeds',
         id: 295,
-        damage: 0
+        damage: 0,
+        maxTier: 6
     },
     {
         type: 'farming',
         skyblockId: 'MUSHROOM_COLLECTION',
         name: 'Mushroom',
         id: 40,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'farming',
         skyblockId: 'INK_SACK:3',
         name: 'Cocoa Beans',
         id: 351,
-        damage: 3
+        damage: 3,
+        maxTier: 9
     },
     {
         type: 'farming',
         skyblockId: 'CACTUS',
         name: 'Cactus',
         id: 81,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'farming',
         skyblockId: 'SUGAR_CANE',
         name: 'Sugar Cane',
         id: 338,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'farming',
         skyblockId: 'FEATHER',
         name: 'Feather',
         id: 288,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'farming',
         skyblockId: 'LEATHER',
         name: 'Leather',
         id: 334,
-        damage: 0
+        damage: 0,
+        maxTier: 10
     },
     {
         type: 'farming',
         skyblockId: 'PORK',
         name: 'Raw Porkchop',
         id: 319,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'farming',
         skyblockId: 'RAW_CHICKEN',
         name: 'Raw Chicken',
         id: 365,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'farming',
         skyblockId: 'MUTTON',
         name: 'Mutton',
         id: 423,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'farming',
         skyblockId: 'RABBIT',
         name: 'Raw Rabbit',
         id: 411,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'farming',
         skyblockId: 'NETHER_STALK',
         name: 'Nether Wart',
         id: 372,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
 
     {
@@ -179,126 +196,128 @@ const collections = [
         skyblockId: 'COBBLESTONE',
         name: 'Cobblestone',
         id: 4,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'mining',
         skyblockId: 'COAL',
         name: 'Coal',
         id: 263,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'mining',
         skyblockId: 'IRON_INGOT',
         name: 'Iron Ingot',
         id: 265,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'mining',
         skyblockId: 'GOLD_INGOT',
         name: 'Gold Ingot',
         id: 266,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'mining',
         skyblockId: 'DIAMOND',
         name: 'Diamond',
-        id: 266,
-        damage: 0
+        id: 264,
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'mining',
         skyblockId: 'INK_SACK:4',
         name: 'Lapis Lazuli',
         id: 351,
-        damage: 4
+        damage: 4,
+        maxTier: 9
     },
     {
         type: 'mining',
         skyblockId: 'EMERALD',
         name: 'Emerald',
         id: 388,
-        damage: 0
-    },
-    {
-        type: 'mining',
-        skyblockId: 'EMERALD',
-        name: 'Emerald',
-        id: 388,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'mining',
         skyblockId: 'REDSTONE',
         name: 'Redstone',
         id: 331,
-        damage: 0
+        damage: 0,
+        maxTier: 11
     },
     {
         type: 'mining',
         skyblockId: 'QUARTZ',
         name: 'Nether Quartz',
         id: 406,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'mining',
         skyblockId: 'OBSIDIAN',
         name: 'Obsidian',
         id: 49,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'mining',
-        skyblockId: 'GLOWSTONE',
+        skyblockId: 'GLOWSTONE_DUST',
         name: 'Glowstone',
         id: 348,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'mining',
         skyblockId: 'GRAVEL',
         name: 'Gravel',
         id: 13,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'mining',
         skyblockId: 'ICE',
         name: 'Ice',
         id: 79,
-        damage: 0
+        damage: 0,
+        maxTier: 10
     },
     {
         type: 'mining',
         skyblockId: 'NETHERRACK',
         name: 'Netherrack',
         id: 87,
-        damage: 0
-    },
-    {
-        type: 'mining',
-        skyblockId: 'NETHERRACK',
-        name: 'Netherrack',
-        id: 87,
-        damage: 0
+        damage: 0,
+        maxTier: 3
     },
     {
         type: 'mining',
         skyblockId: 'SAND',
         name: 'Sand',
         id: 12,
-        damage: 0
+        damage: 0,
+        maxTier: 7
     },
     {
         type: 'mining',
         skyblockId: 'ENDER_STONE',
         name: 'End Stone',
         id: 121,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
 
     {
@@ -306,63 +325,80 @@ const collections = [
         skyblockId: 'ROTTEN_FLESH',
         name: 'Rotten Flesh',
         id: 367,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'combat',
         skyblockId: 'BONE',
         name: 'Bone',
         id: 352,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'combat',
         skyblockId: 'STRING',
         name: 'String',
         id: 287,
-        damage: 0
+        damage: 0,
+        maxTier: 9
+    },
+    {
+        type: 'combat',
+        skyblockId: 'SPIDER_EYE',
+        name: 'Spider Eye',
+        id: 287,
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'combat',
         skyblockId: 'SULPHUR',
         name: 'Gunpowder',
         id: 289,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'combat',
         skyblockId: 'ENDER_PEARL',
         name: 'Ender Pearl',
         id: 368,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'combat',
         skyblockId: 'GHAST_TEAR',
         name: 'Ghast Tear',
         id: 370,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'combat',
         skyblockId: 'SLIME_BALL',
         name: 'Slimeball',
         id: 341,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'combat',
         skyblockId: 'BLAZE_ROD',
         name: 'Blaze Rod',
         id: 369,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'combat',
         skyblockId: 'MAGMA_CREAM',
         name: 'Magma Cream',
         id: 378,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
 
     {
@@ -370,42 +406,48 @@ const collections = [
         skyblockId: 'LOG',
         name: 'Oak Wood',
         id: 17,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'foraging',
         skyblockId: 'LOG:1',
         name: 'Spruce Wood',
         id: 17,
-        damage: 1
+        damage: 1,
+        maxTier: 9
     },
     {
         type: 'foraging',
         skyblockId: 'LOG:2',
         name: 'Birch Wood',
         id: 17,
-        damage: 2
+        damage: 2,
+        maxTier: 9
     },
     {
         type: 'foraging',
-        skyblockId: 'LOG2:1',
+        skyblockId: 'LOG_2:1',
         name: 'Dark Oak Wood',
         id: 162,
-        damage: 1
+        damage: 1,
+        maxTier: 9
     },
     {
         type: 'foraging',
-        skyblockId: 'LOG2',
+        skyblockId: 'LOG_2',
         name: 'Acacia Wood',
         id: 162,
-        damage: 1
+        damage: 1,
+        maxTier: 9
     },
     {
         type: 'foraging',
         skyblockId: 'LOG:3',
         name: 'Jungle Wood',
         id: 17,
-        damage: 3
+        damage: 3,
+        maxTier: 9
     },
 
     {
@@ -413,70 +455,80 @@ const collections = [
         skyblockId: 'RAW_FISH',
         name: 'Raw Fish',
         id: 349,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'fishing',
         skyblockId: 'RAW_FISH:1',
         name: 'Raw Salmon',
         id: 349,
-        damage: 1
+        damage: 1,
+        maxTier: 9
     },
     {
         type: 'fishing',
         skyblockId: 'RAW_FISH:2',
         name: 'Clownfish',
         id: 349,
-        damage: 2
+        damage: 2,
+        maxTier: 3
     },
     {
         type: 'fishing',
         skyblockId: 'RAW_FISH:3',
         name: 'Pufferfish',
         id: 349,
-        damage: 3
+        damage: 3,
+        maxTier: 6
     },
     {
         type: 'fishing',
         skyblockId: 'PRISMARINE_SHARD',
         name: 'Prismarine Shard',
         id: 409,
-        damage: 0
+        damage: 0,
+        maxTier: 5
     },
     {
         type: 'fishing',
         skyblockId: 'PRISMARINE_CRYSTALS',
         name: 'Prismarine Crystals',
         id: 410,
-        damage: 0
+        damage: 0,
+        maxTier: 7
     },
     {
         type: 'fishing',
         skyblockId: 'CLAY_BALL',
         name: 'Clay',
         id: 337,
-        damage: 0
+        damage: 0,
+        maxTier: 5
     },
     {
         type: 'fishing',
         skyblockId: 'WATER_LILY',
         name: 'Lily Pad',
         id: 111,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'fishing',
         skyblockId: 'INK_SACK',
         name: 'Ink Sac',
         id: 351,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     },
     {
         type: 'fishing',
         skyblockId: 'SPONGE',
         name: 'Sponge',
         id: 19,
-        damage: 0
+        damage: 0,
+        maxTier: 9
     }
 ];
 
@@ -1257,7 +1309,7 @@ if(calculated.average_level)
 description += `💰 Purse: ${helper.formatNumber(calculated.purse, true)} Coins`;
 
 if(calculated.bank)
-    description += `\n🏦 Bank Account: ${helper.formatNumber(calculated.bank, true)} Coins`;
+    description += `\n🏦 Bank Account: ${helper.formatNumber(calculated.bank, true)} Coin${Math.round(calculated.bank) == 1 ? '': 's'}`;
 
 %>
 <!DOCTYPE html>
@@ -1356,7 +1408,7 @@ if(calculated.bank)
                     <div class="additional-stat" data-tippy-content="Joined on <%= moment(calculated.first_join.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></div>
                     <div class="additional-stat"><span class="stat-name">Purse: </span><span class="stat-value"><%= Math.round(calculated.purse).toLocaleString() %> Coins</span></div>
                     <% if('bank' in calculated){ %>
-                        <div class="additional-stat"><span class="stat-name">Bank Account: </span><span class="stat-value"><%= Math.round(calculated.bank).toLocaleString() %> Coins</span></div>
+                        <div class="additional-stat"><span class="stat-name">Bank Account: </span><span class="stat-value"><%= Math.round(calculated.bank).toLocaleString() %> Coin<%= Math.round(calculated.bank) == 1 ? '': 's' %></span></div>
                     <% } %>
                     <% if('levels' in calculated){ %>
                         <div class="additional-stat" data-tippy-content="Average skill level over all skills except Carpentry and Runecrafting, includes progress to next level."><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level %></span></div>
@@ -1402,9 +1454,9 @@ if(calculated.bank)
             <% if(!items.no_inventory){ %><div class="nav-item" data-target="inventory">Inventory</div><% } %>
             <div class="nav-item" data-target="fishing">Fishing</div>
             <div class="nav-item" data-target="slayer">Slayer</div>
-            <div class="nav-item" data-target="minions">Minions</div>
-            <div class="nav-item" data-target="collections">Collections</div>
             <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){ %><div class="nav-item" data-target="kills">Kills</div><% } %>
+            <div class="nav-item" data-target="minions">Minions</div>
+            <% if(Object.keys(calculated.collections).length > 0){ %><div class="nav-item" data-target="collections">Collections</div><% } %>
         </div>
         <div class="stat-containers">
         <% if(items.no_inventory){ %>
@@ -1669,12 +1721,16 @@ if(calculated.bank)
                     <%
                     const slayerOrder = ['zombie', 'spider', 'wolf'];
 
+                    let maxSlayerLevel = 0;
+
                     for(const slayerName of Object.keys(calculated.slayers).sort((a, b) => slayerOrder.indexOf(a) - slayerOrder.indexOf(b))){
 
                         const slayer = calculated.slayers[slayerName];
 
-                        if(slayer.xp === undefined || slayer.xp == 0)
+                        if(slayer.xp === undefined || slayer.xp == 0 || Object.keys(slayer.kills).length == 0)
                             continue;
+
+                        maxSlayerLevel = Math.max(maxSlayerLevel, slayer.level.currentLevel);
 
                         let totalKills = 0;
 
@@ -1749,6 +1805,7 @@ if(calculated.bank)
                         </div>
                     <% } %>
                     </div>
+                    <% if(maxSlayerLevel > 0){ %>
                     <p>
                         <span class="stat-name">Bonus: </span>
                         <%
@@ -1760,9 +1817,52 @@ if(calculated.bank)
                         %>
                         <%= getBonus(slayerBonus) %>
                     </p>
+                    <% } %>
                 <% } %>
             </div>
         </div>
+        <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){
+            let totalKills = calculated.kills.length;
+            let totalDeaths = calculated.deaths.length;
+
+            let rows = Math.min(Math.max(totalKills, totalDeaths), 10);
+
+            %>
+            <div data-stat="kills" class="stat-container stat-kills">
+                <div class="stat-anchor"></div>
+                <div class="stat-header"><span>Top Kills & Deaths</span></div>
+                <div class="stat-content">
+                    <div class="kills-deaths-container">
+                        <div class="narrow-info-container top-kills">
+                            <div class="narrow-info-header">Kills</div>
+                            <% for(let i = 0; i < rows; i++){
+                                const kill = calculated.kills[i];
+
+                                if(typeof calculated.kills[i] === 'undefined'){
+                                %>
+                                    <div class="kill-stat"><div class="kill-rank"></div></div>
+                                <% }else{ %>
+                                    <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %></div><div class="kill-entity"><%= kill.entityName %></div><div class="kill-amount"><%= kill.amount.toLocaleString() %></div></div>
+                                <% }
+                            } %>
+                        </div>
+                        <div class="narrow-info-container top-deaths">
+                            <div class="narrow-info-header">Deaths</div>
+                            <% for(let i = 0; i < rows; i++){
+                                const death = calculated.deaths[i];
+
+                                if(typeof death === 'undefined'){
+                                %>
+                                    <div class="kill-stat"><div class="kill-rank"></div></div>
+                                <% }else{ %>
+                                    <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %></div><div class="kill-entity"><%= death.entityName %></div><div class="kill-amount"><%= death.amount.toLocaleString() %></div></div>
+                                <% }
+                            } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
         <div data-stat="minions" class="stat-container stat-minions">
             <div class="stat-anchor"></div>
             <div class="stat-header"><span>Minions</span></div>
@@ -1814,52 +1914,47 @@ if(calculated.bank)
                 } %>
             </div>
         </div>
-        <div data-stat="collections" class="stat-container stat-collections">
-            <div class="stat-anchor"></div>
-            <div class="stat-header"><span>Collections</span></div>
-            <div class="stat-content">
-
-            </div>
-        </div>
-        <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){
-            let totalKills = calculated.kills.length;
-            let totalDeaths = calculated.deaths.length;
-
-            let rows = Math.min(Math.max(totalKills, totalDeaths), 10);
-
-            %>
-            <div data-stat="kills" class="stat-container stat-kills">
+        <% if(Object.keys(calculated.collections).length > 0){ %>
+            <div data-stat="collections" class="stat-container stat-collections">
                 <div class="stat-anchor"></div>
-                <div class="stat-header"><span>Top Kills & Deaths</span></div>
+                <div class="stat-header"><span>Collections</span></div>
                 <div class="stat-content">
-                    <div class="kills-deaths-container">
-                        <div class="narrow-info-container top-kills">
-                            <div class="narrow-info-header">Kills</div>
-                            <% for(let i = 0; i < rows; i++){
-                                const kill = calculated.kills[i];
+                    <p class="stat-raw-values">
+                        <%
+                        let maxCollections = 0;
+                        for(const collection of collectionData)
+                            if(collection.skyblockId in calculated.collections
+                            && calculated.collections[collection.skyblockId].tier >= collection.maxTier)
+                                maxCollections++;
+                        %>
+                        <span class="stat-name">Maxed Collections: </span><span class="stat-value"><%= maxCollections %> / <%= collectionData.length %></span>
+                    </p>
+                    <% for(const type of constants.minion_types){
+                        const collections = [];
 
-                                if(typeof calculated.kills[i] === 'undefined'){
-                                %>
-                                    <div class="kill-stat"><div class="kill-rank"></div></div>
-                                <% }else{ %>
-                                    <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %></div><div class="kill-entity"><%= kill.entityName %></div><div class="kill-amount"><%= kill.amount.toLocaleString() %></div></div>
-                                <% }
-                            } %>
-                        </div>
-                        <div class="narrow-info-container top-deaths">
-                            <div class="narrow-info-header">Deaths</div>
-                            <% for(let i = 0; i < rows; i++){
-                                const death = calculated.deaths[i];
+                        for(const collection of collectionData.filter(a => a.type == type))
+                            if(collection.skyblockId in calculated.collections)
+                                collections.push(Object.assign(collection, calculated.collections[collection.skyblockId]));
 
-                                if(typeof death === 'undefined'){
-                                %>
-                                    <div class="kill-stat"><div class="kill-rank"></div></div>
-                                <% }else{ %>
-                                    <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %></div><div class="kill-entity"><%= death.entityName %></div><div class="kill-amount"><%= death.amount.toLocaleString() %></div></div>
-                                <% }
-                            } %>
+                        if(collections.length == 0)
+                            continue;
+
+                        %>
+                        <div class="minion-category">
+                            <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon <%= skillItems[type] %>"></div></div><span><%= type %></span></div>
+                        <%
+
+                        for(const collection of collections){ %>
+                            <div class="collection">
+                                <div class="collection-icon"><div class="item-icon icon-<%= collection.id %>_<%= collection.damage %>"></div></div>
+                                <div class="collection-stats">
+                                    <div class="collection-name <%= collection.tier == collection.maxTier ? 'max-minion' : '' %>"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
+                                    <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= collection.amount.toLocaleString() %></span></div>
+                                </div>
+                            </div>
+                        <% } %>
                         </div>
-                    </div>
+                    <% } %>
                 </div>
             </div>
         <% } %>

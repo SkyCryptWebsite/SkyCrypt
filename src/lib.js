@@ -997,7 +997,8 @@ module.exports = {
                 const slayerBonus = getBonusStat(slayers[slayer].level.currentLevel, `${slayer}_slayer`, 9, 1);
 
                 output.slayer_bonus[slayer] = Object.assign({}, slayerBonus);
-                output.slayer_xp += slayers[slayer].xp;
+
+                output.slayer_xp += slayers[slayer].xp || 0;
 
                 for(let stat in slayerBonus)
                     output.stats[stat] += slayerBonus[stat];
@@ -1248,6 +1249,24 @@ module.exports = {
 
             return a.active? -1 : 1
         });
+
+        return output;
+    },
+
+    getCollections: async profile => {
+        const output = {};
+
+        if(!('unlocked_coll_tiers' in profile) || !('collection' in profile))
+            return output;
+
+        for(const collection of profile.unlocked_coll_tiers){
+            const split = collection.split("_");
+            const tier = parseInt(split.pop());
+            const type = split.join("_");
+
+            if(!(type in output) || tier > output[type].tier)
+                output[type] = { tier, amount: profile.collection[type] };
+        }
 
         return output;
     }

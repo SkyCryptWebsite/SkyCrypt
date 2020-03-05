@@ -1625,6 +1625,46 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     color: #f5429b;
 }
 
+.collection{
+    display: inline-block;
+    padding: 7px;
+    padding-right: 15px;
+    margin-left: 5px;
+    margin-bottom: 8px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+}
+
+.collection-icon{
+    width: 42px;
+    height: 42px;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+}
+
+.collection-stats{
+    margin-left: 5px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.collection-name{
+    font-size: 18px;
+}
+
+.collection-amount{
+    font-size: 14px;
+}
+
+.collection-icon .item-icon{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.328125);
+    transform-origin: center center;
+}
+
 .narrow-info-header{
     position: absolute;
     top: 0;
