@@ -1447,16 +1447,20 @@ if(calculated.bank)
             </div>
         </div>
         <div id="nav_bar" data-margin-top="48" data-sticky-class="nav-bar-stickied">
-            <div class="nav-item active" data-target="armor">Armor</div>
-            <% if(!items.no_inventory){ %><div class="nav-item" data-target="weapons">Weapons</div><% } %>
-            <% if(!items.no_inventory){ %><div class="nav-item" data-target="accessories">Accessories</div><% } %>
-            <div class="nav-item" data-target="pets">Pets</div>
-            <% if(!items.no_inventory){ %><div class="nav-item" data-target="inventory">Inventory</div><% } %>
-            <div class="nav-item" data-target="fishing">Fishing</div>
-            <div class="nav-item" data-target="slayer">Slayer</div>
-            <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){ %><div class="nav-item" data-target="kills">Kills</div><% } %>
-            <div class="nav-item" data-target="minions">Minions</div>
-            <% if(Object.keys(calculated.collections).length > 0){ %><div class="nav-item" data-target="collections">Collections</div><% } %>
+            <div id="nav_bar_line"></div>
+            <div id="nav_bar_background"></div>
+            <div id="nav_items_container">
+                <div class="nav-item active" data-target="armor">Armor</div>
+                <% if(!items.no_inventory){ %><div class="nav-item" data-target="weapons">Weapons</div><% } %>
+                <% if(!items.no_inventory){ %><div class="nav-item" data-target="accessories">Accessories</div><% } %>
+                <div class="nav-item" data-target="pets">Pets</div>
+                <% if(!items.no_inventory){ %><div class="nav-item" data-target="inventory">Inventory</div><% } %>
+                <div class="nav-item" data-target="fishing">Fishing</div>
+                <div class="nav-item" data-target="slayer">Slayer</div>
+                <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){ %><div class="nav-item" data-target="kills">Kills</div><% } %>
+                <div class="nav-item" data-target="minions">Minions</div>
+                <% if(Object.keys(calculated.collections).length > 0){ %><div class="nav-item" data-target="collections">Collections</div><% } %>
+            </div>
         </div>
         <div class="stat-containers">
         <% if(items.no_inventory){ %>
@@ -1727,8 +1731,11 @@ if(calculated.bank)
 
                         const slayer = calculated.slayers[slayerName];
 
-                        if(slayer.xp === undefined || slayer.xp == 0 || Object.keys(slayer.kills).length == 0)
+                        if(slayer.xp === undefined || slayer.xp == 0)
                             continue;
+
+                        if(Object.keys(slayer.kills).length == 0)
+                            slayer.kills['1'] = 0;
 
                         maxSlayerLevel = Math.max(maxSlayerLevel, slayer.level.currentLevel);
 
@@ -1751,7 +1758,7 @@ if(calculated.bank)
                                     <% } %>
                                 </div>
                             </div>
-                            <div class="slayer-section-header">Average Drops</div>
+                            <div class="slayer-section-header"><span data-tippy-content="Average drops based on Slayer boss kills. The number ranges from no Magic Find to maximum Magic Find.">Average Drops</span></div>
                             <div class="slayer-section slayer-drops">
                                 <%
                                 for(const drop of slayerInfo[slayerName].drops){

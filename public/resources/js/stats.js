@@ -30,15 +30,9 @@ document.addEventListener('DOMContentLoaded', function(){
     };
 
     let currentBackpack;
-    let dynamicEnchantedIndex = null;
 
     function renderInventory(inventory, type){
         let scrollTop = window.pageYOffset;
-
-        if(dynamicEnchantedIndex !== null){
-            enchantedOverlays.splice(dynamicEnchantedIndex);
-            dynamicEnchantedIndex = null;
-        }
 
         let visibleInventory = document.querySelector('.inventory-view.current-inventory');
 
@@ -139,8 +133,6 @@ document.addEventListener('DOMContentLoaded', function(){
             inventoryContainer.style.height = height + 50 + "px";
         }
 
-        dynamicEnchantedIndex = enchantedOverlays.length;
-
         [].forEach.call(inventoryView.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
 
         window.scrollTo({
@@ -212,6 +204,9 @@ document.addEventListener('DOMContentLoaded', function(){
             itemIcon.className = 'stats-piece-icon item-icon icon-' + item.id + '_' + item.Damage;
         }
 
+        if(isEnchanted(item))
+            handleEnchanted(itemIcon);
+
         itemLore.innerHTML = item.lore || '';
 
         if(item.texture_pack){
@@ -254,7 +249,9 @@ document.addEventListener('DOMContentLoaded', function(){
                     let inventoryItemIcon = document.createElement('div');
                     let inventoryItemCount = document.createElement('div');
 
-                    inventoryItemIcon.className = 'piece-icon item-icon icon-' + backpackItem.id + '_' + backpackItem.Damage;
+                    let enchantedClass = isEnchanted(backpackItem) ? 'is-enchanted' : '';
+
+                    inventoryItemIcon.className = 'piece-icon item-icon ' + enchantedClass + ' icon-' + backpackItem.id + '_' + backpackItem.Damage;
 
                     if(backpackItem.texture_path){
                         inventoryItemIcon.className += ' custom-icon';
@@ -283,6 +280,8 @@ document.addEventListener('DOMContentLoaded', function(){
                 if((index + 1) % 9 == 0)
                     backpackContents.appendChild(document.createElement("br"));
             });
+
+            [].forEach.call(document.querySelectorAll('.contains-backpack .item-icon.is-enchanted'), handleEnchanted);
 
             let viewBackpack = document.createElement('div');
             viewBackpack.classList = 'view-backpack';
@@ -330,6 +329,8 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     function resize(){
+        navBarSticky = new Sticky('#nav_bar');
+        
         [].forEach.call(document.querySelectorAll('.inventory-view'), function(element){
             let width, height;
 
@@ -443,8 +444,6 @@ document.addEventListener('DOMContentLoaded', function(){
         return dst;
     }
 
-    let enchantedOverlays = [];
-
     function handleEnchanted(element){
         let size = 128;
 
@@ -456,16 +455,14 @@ document.addEventListener('DOMContentLoaded', function(){
 
         let ctx = canvas.getContext('2d');
 
-        let image = new Image(128, 128);
         let src = window.getComputedStyle(element).backgroundImage.split('("').pop().split('")')[0];
+        let image = new Image(128, src.includes('/head/') ? 118 : 128);
 
-        if(src.endsWith('.gif') || src.includes('/head/'))
+        if(src.endsWith('.gif'))
             return false;
 
         image.onload = function(){
-            if(element.classList.contains('custom-icon')){
-                image = getPart(image, 0, 0, size, size);
-            }else{
+            if(!element.classList.contains('custom-icon')){
                 let position = window.getComputedStyle(element).backgroundPosition.split(" ");
                 let x = Math.abs(parseInt(position[0]));
                 let y = Math.abs(parseInt(position[1]));
@@ -474,89 +471,27 @@ document.addEventListener('DOMContentLoaded', function(){
 
             ctx.globalAlpha = 1;
 
-            ctx.drawImage(image, 0, 0);
+            ctx.drawImage(image, 0, 128 / 2 - image.height / 2);
 
-            ctx.globalAlpha = 0.25;
+            ctx.globalAlpha = 0.65;
             ctx.globalCompositeOperation = 'source-atop';
 
-            let enchantedGlint = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            ctx.drawImage(enchantedGlint, 0, 0, canvas.width, canvas.height);
 
-            enchantedGlintStops.forEach(function(stop, index){
-                enchantedGlint.addColorStop(stop, enchantedGlintColors[index]);
-            });
-
-            ctx.fillStyle = enchantedGlint;
-
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            if(window.innerWidth < 480){
-                element.style.backgroundImage = 'url(' + canvas.toDataURL('image/png') + ')';
-                element.classList.add('custom-icon');
-            }else{
-                element.parentNode.appendChild(canvas);
-
-                enchantedOverlays.push({
-                    src,
-                    offset: Math.random(),
-                    canvas,
-                    ctx,
-                    image
-                });
-            }
+            element.style.backgroundImage = 'url(' + canvas.toDataURL('image/png') + ')';
+            element.classList.add('custom-icon');
         };
 
         image.src = src;
     }
 
-    [].forEach.call(document.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
+    let enchantedGlint = new Image(128, 128);
 
-    const enchantedGlintStops = [0, 0.4, 0.6, 1];
-
-    const enchantedGlintColors = [
-        '#9e43e3',
-        '#ab5ee6',
-        '#b875eb',
-        '#9e43e3'
-    ];
-
-    function updateEnchantedOverlays(){
-        enchantedOverlays.forEach(function(overlay, index){
-            overlay.ctx.clearRect(0, 0, overlay.canvas.width, overlay.canvas.height);
-
-            overlay.ctx.globalAlpha = 1;
-            overlay.ctx.globalCompositeOperation = 'source-over';
-
-            overlay.ctx.drawImage(overlay.image, 0, 0);
-
-            overlay.ctx.globalAlpha = 0.25;
-            overlay.ctx.globalCompositeOperation = 'source-atop';
-
-            let offset = +new Date() % 800 / 800 + overlay.offset;
-
-            if(offset > 1)
-                offset -= 1;
-
-            let enchantedGlint = overlay.ctx.createLinearGradient(0, 0, 0, overlay.canvas.height);
-
-            enchantedGlintStops.forEach(function(stop, index){
-                let _offset = stop - offset;
-
-                if(_offset < 0)
-                    _offset = 1 - Math.abs(_offset);
-
-                enchantedGlint.addColorStop(_offset, enchantedGlintColors[index]);
-            });
-
-            overlay.ctx.fillStyle = enchantedGlint;
-
-            overlay.ctx.fillRect(0, 0, overlay.canvas.width, overlay.canvas.height);
-        });
-
-        window.requestAnimationFrame(updateEnchantedOverlays);
+    enchantedGlint.onload = function(){
+        [].forEach.call(document.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
     }
 
-    if(window.innerWidth >= 480) // don't animate on mobile
-        updateEnchantedOverlays();
+    enchantedGlint.src = '/resources/img/glint.png';
 
     [].forEach.call(document.querySelectorAll('.inventory-tab'), function(element){
         let type = element.getAttribute('data-inventory-type');
@@ -687,20 +622,30 @@ document.addEventListener('DOMContentLoaded', function(){
             document.querySelector('#btn_search_user').href = '/stats/' + playerName;
     });
 
-    [].forEach.call(document.querySelectorAll('.nav-item'), function(element){
-        element.addEventListener('click', function(){
-            console.log(this.getAttribute('data-target'));
-
-            document
-            .querySelector('.stat-container[data-stat=' + this.getAttribute('data-target') + '] .stat-anchor')
-            .scrollIntoView({ block: "start", behavior: "smooth" });
-        });
-    });
-
     let statContainers = document.querySelectorAll('.stat-container[data-stat]');
     let wrapperHeight = document.querySelector('#wrapper').offsetHeight;
 
-    document.addEventListener('scroll', function(){
+    let positionY = {};
+
+    let navBarSticky = new Sticky('#nav_bar');
+
+    function updateStatsPositions(){
+        [].forEach.call(statContainers, function(statContainer){
+            positionY[statContainer.getAttribute('data-stat')] = statContainer.offsetTop;
+        });
+
+        navBarSticky = new Sticky('#nav_bar');
+    }
+
+    updateStatsPositions();
+
+    let updateTab = false;
+    let updateTabLock = false;
+
+    function updateActiveTab(){
+        if(!updateTab)
+            return false;
+
         let rectYs = [];
         let activeIndex = 0;
         let activeY = -Infinity;
@@ -726,9 +671,59 @@ document.addEventListener('DOMContentLoaded', function(){
         let activeTab = document.querySelector('.nav-item[data-target=' + activeStatContainer.getAttribute('data-stat') + ']');
 
         if(!activeTab.classList.contains('active')){
-            document.querySelector('.nav-item.active').classList.remove('active');
+            [].forEach.call(document.querySelectorAll('.nav-item.active'), function(statContainer){
+                statContainer.classList.remove('active');
+            });
+
+            anime({
+                targets: '#nav_items_container',
+                scrollLeft: activeTab.offsetLeft - window.innerWidth / 2 + activeTab.offsetWidth / 2,
+                duration: 350,
+                easing: 'easeOutCubic'
+            });
+
             activeTab.classList.add('active');
         }
+
+        updateTab = false;
+    }
+
+    setInterval(updateActiveTab, 100);
+
+    document.addEventListener('scroll', function(){
+        if(!updateTabLock)
+            updateTab = true;
+    });
+
+    [].forEach.call(document.querySelectorAll('.nav-item'), function(element){
+        element.addEventListener('click', function(){
+            updateTabLock = true;
+            updateTab = false;
+
+            let newActiveTab = this;
+
+            [].forEach.call(document.querySelectorAll('.nav-item.active'), function(statContainer){
+                statContainer.classList.remove('active');
+            });
+
+            anime({
+                targets: window.document.scrollingElement || window.document.body || window.document.documentElement,
+                scrollTop: positionY[newActiveTab.getAttribute('data-target')] - 60,
+                duration: 350,
+                easing: 'easeOutCubic',
+                complete: function(){
+                    updateTabLock = false;
+                    newActiveTab.classList.add('active');
+                }
+            });
+
+            anime({
+                targets: '#nav_items_container',
+                scrollLeft: newActiveTab.offsetLeft - window.innerWidth / 2 + newActiveTab.offsetWidth / 2,
+                duration: 350,
+                easing: 'easeOutCubic'
+            });
+        });
     });
 
     let otherSkills = document.querySelector('#other_skills');
@@ -744,6 +739,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 show_skills.innerHTML = 'Hide Skills';
             }
 
+            updateStatsPositions();
         });
     }
 
@@ -777,6 +773,4 @@ document.addEventListener('DOMContentLoaded', function(){
     setTimeout(resize, 1000);
 
     tippy('*[data-tippy-content]')
-
-    let navBarSticky = new Sticky('#nav_bar');
 });

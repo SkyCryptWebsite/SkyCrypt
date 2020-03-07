@@ -184,6 +184,18 @@ header{
     font-weight: 600;
 }
 
+::-webkit-input-placeholder { /* Edge */
+  color: rgba(255,255,255,0.8);
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: rgba(255,255,255,0.8);
+}
+
+::placeholder {
+  color: rgba(255,255,255,0.8);
+}
+
 #btn_search_user{
     display: block;
     position: absolute;
@@ -753,13 +765,47 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     position: absolute;
     width: 100%;
     text-align: center;
+    padding-bottom: 6px;
+    white-space: nowrap;
+}
+
+#nav_bar_background{
     background-color: rgba(0,0,0,0.3);
-    border-bottom: 2px solid #A6145D;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    z-index: 1;
+}
+
+#nav_bar_line{
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    height: 2px;
+    background-color: #A6145D;
+    z-index: 2;
+}
+
+#nav_items_container{
+    position: relative;
+    width: 100%;
+    padding-bottom: 6px;
+    z-index: 3;
 }
 
 #nav_bar.nav-bar-stickied{
-    background-color: rgba(20,20,20,0.9);
     z-index: 25;
+    width: auto !important;
+    left: 0;
+    right: 0;
+}
+
+#nav_bar.nav-bar-stickied #nav_bar_background{
+    background-color: rgba(20,20,20,0.9);
 }
 
 .nav-item{
@@ -773,6 +819,10 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     transition: background-color .1s, color .1s;
     position: relative;
     color: rgba(255,255,255,0.8);
+}
+
+.nav-item:last-child{
+    margin-right: 8px;
 }
 
 .nav-item.active{
@@ -892,11 +942,6 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 
 .stat-container:first-child{
     margin-top: 80px;
-}
-
-.stat-anchor{
-    position: absolute;
-    top: -110px;
 }
 
 .stat-content{
@@ -2145,7 +2190,18 @@ html.no-webp #error_box_wrapper{
     }
 }
 
+@media (max-width: 900px){
+    #nav_items_container{
+        overflow-x: scroll;
+    }
+}
+
 @media (max-width: 760px){
+    .nav-item:not(.active):hover::after{
+        height: 2px;
+        top: 100%;
+    }
+
     .inventory-slot{
         width: calc(100vw / 9 - 15px);
         height: calc(100vw / 9 - 15px);
@@ -2208,7 +2264,6 @@ html.no-webp #error_box_wrapper{
     #other_skills{
         max-height: 0;
         overflow: hidden;
-        transition: max-height .4s;
         display: block;
     }
 
