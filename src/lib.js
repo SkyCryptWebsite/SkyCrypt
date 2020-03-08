@@ -675,7 +675,7 @@ module.exports = {
         const uniquesRequired = Object.keys(constants.minion_slots).sort((a, b) => parseInt(a) - parseInt(b) );
 
         for(const [index, uniques] of uniquesRequired.entries()){
-            if(parseInt(uniques) < uniqueMinions)
+            if(parseInt(uniques) <= uniqueMinions)
                 continue;
 
             output.currentSlots = constants.minion_slots[uniquesRequired[index - 1]];
