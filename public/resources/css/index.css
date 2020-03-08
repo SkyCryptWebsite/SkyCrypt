@@ -887,6 +887,10 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     display: block;
 }
 
+.basic-stat [data-tippy-content]::after{
+    content: "";
+}
+
 .stat-health{
     background-image: url(../img/icons/health.png);
 }
@@ -1511,14 +1515,6 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     box-sizing: border-box;
     line-height: 2.5;
     height: 40px;
-}
-
-.slayer-drop .stat-name{
-    max-width: calc(100% - 90px);
-    display: inline-block;
-    overflow: hidden;
-    vertical-align: middle;
-    text-overflow: ellipsis;
 }
 
 .slayer-drop .stat-value{
@@ -2221,6 +2217,14 @@ html.no-webp #error_box_wrapper{
 @media (max-width: 760px){
     header > .social-button{
         display: none;
+    }
+
+    .slayer-drop .stat-name{
+        max-width: calc(100% - 95px);
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: middle;
+        text-overflow: ellipsis;
     }
 
     .stat-header{
