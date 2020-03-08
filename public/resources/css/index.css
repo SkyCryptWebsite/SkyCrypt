@@ -683,7 +683,7 @@ html.no-transform #info_box.opened{
 .rank-tag .rank-plus-before{
     position: absolute;
     top: 0;
-    left: -14px;
+    left: -13.5px;
     width: 0;
     height: 0;
     border-style: solid;
