@@ -2381,8 +2381,8 @@ html.no-webp #error_box_wrapper{
     }
 
     .piece::after{
-        width: calc((100vw - 50px) / 4 - 22px);
-        height: calc((100vw - 50px) / 4 - 22px);
+        width: calc((100vw - 50px) / 4 - 14px);
+        height: calc((100vw - 50px) / 4 - 14px);
     }
 
     #stats_content{
