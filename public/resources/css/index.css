@@ -1477,6 +1477,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 .slayer-section-header{
     text-align: center;
     font-weight: 600;
+    text-transform: capitalize;
     color: rgba(255,255,255,0.8);
 }
 
