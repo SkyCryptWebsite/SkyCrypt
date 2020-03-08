@@ -1463,11 +1463,20 @@ if(calculated.bank)
             </div>
         </div>
         <div class="stat-containers">
-        <% if(items.no_inventory){ %>
+        <%
+            const notAvailable = [];
+
+            if(items.no_inventory)
+                notAvailable.push('Weapons', 'Accessories', 'Inventory');
+
+            if(Object.keys(calculated.collections).length == 0)
+                notAvailable.push('Collections');
+        %>
+        <% if(notAvailable.length > 0){ %>
             <div class="stat-container info-container-wrapper">
                 <div class="info-container">
                     <div class="info-header">Notice</div>
-                    Weapons, Accessories and Inventory not available for <%= calculated.display_name %> due to limited API access.<br><span><a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</span>
+                    <%= notAvailable.join(', ') %> not available for <%= calculated.display_name %> due to limited API access.<br><span><a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</span>
                 </div>
             </div>
         <% } %>
