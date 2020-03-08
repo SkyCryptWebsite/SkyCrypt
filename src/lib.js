@@ -886,6 +886,7 @@ module.exports = {
                     output_name += " Armor";
 
                 output.armor_set = output_name;
+                output.armor_set_rarity = armor[0].rarity;
             }
         }
 
@@ -1261,11 +1262,11 @@ module.exports = {
 
         for(const collection of profile.unlocked_coll_tiers){
             const split = collection.split("_");
-            const tier = parseInt(split.pop());
+            const tier = Math.max(0, parseInt(split.pop()));
             const type = split.join("_");
 
             if(!(type in output) || tier > output[type].tier)
-                output[type] = { tier, amount: profile.collection[type] };
+                output[type] = { tier, amount: profile.collection[type] | 0 };
         }
 
         return output;
