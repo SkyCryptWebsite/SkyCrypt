@@ -17,8 +17,13 @@ html.no-webp{
 
 .tippy-tooltip{
     font-weight: 500;
-    background-color: rgb(30,30,30);
+    background-color: transparent;
     border-radius: 0;
+}
+
+.tippy-content{
+    border-radius: 5px;
+    background-color: rgb(30,30,30);
 }
 
 .tippy-tooltip[data-placement^="top"] > .tippy-arrow{
