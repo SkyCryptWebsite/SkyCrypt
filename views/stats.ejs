@@ -1509,9 +1509,11 @@ if(calculated.bank)
                     <% if(items.weapons.length == 0){ %>
                         <div class="no-access"><%= calculated.display_name %> doesn't have any weapons.</div>
                     <% }else{ %>
+                        <% if(items.highest_rarity_sword){ %>
                         <p class="stat-raw-values">
                             <span class="stat-name">Active Weapon: </span><span class="stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%= items.highest_rarity_sword.display_name %></span>
                         </p>
+                        <% } %>
                         <div class="pieces">
                             <%
                                 let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
