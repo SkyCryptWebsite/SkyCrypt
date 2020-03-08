@@ -410,7 +410,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             ctx.drawImage(image, 0, 128 / 2 - image.height / 2);
 
-            ctx.globalAlpha = 0.65;
+            ctx.globalAlpha = 0.5;
             ctx.globalCompositeOperation = 'source-atop';
 
             ctx.drawImage(enchantedGlint, 0, 0, canvas.width, canvas.height);
