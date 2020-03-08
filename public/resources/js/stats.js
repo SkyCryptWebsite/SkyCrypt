@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function(){
+    tippy('*[data-tippy-content]');
+
     const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag);
 
     let dimmer = document.querySelector("#dimmer");
@@ -30,15 +32,9 @@ document.addEventListener('DOMContentLoaded', function(){
     };
 
     let currentBackpack;
-    let dynamicEnchantedIndex = null;
 
     function renderInventory(inventory, type){
         let scrollTop = window.pageYOffset;
-
-        if(dynamicEnchantedIndex !== null){
-            enchantedOverlays.splice(dynamicEnchantedIndex);
-            dynamicEnchantedIndex = null;
-        }
 
         let visibleInventory = document.querySelector('.inventory-view.current-inventory');
 
@@ -107,40 +103,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
         inventoryContainer.appendChild(inventoryView);
 
-        inventoryView.style.height = "auto";
-        inventoryView.style.width = "auto";
-
-        if(inventoryView.classList.contains('current-inventory')){
-            inventoryContainer.style.width = "auto";
-            inventoryContainer.style.height = "auto";
-        }
-
-        let width, height;
-
-        if(window.outerWidth <= 1200){
-            height = inventoryView.offsetHeight;
-            width = window.outerWidth;
-
-            height += 15;
-        }else{
-            height = inventoryView.offsetHeight;
-            width = inventoryView.offsetWidth;
-        }
-
-        inventoryView.style.width = width + "px";
-        inventoryView.style.height = height + "px";
-
-        inventoryView.classList.add('processed');
-        inventoryView.setAttribute('data-height', height + 50 + "px");
-        inventoryView.setAttribute('data-width', width + "px");
-
-        if(inventoryView.classList.contains('current-inventory')){
-            inventoryContainer.style.width = width + "px";
-            inventoryContainer.style.height = height + 50 + "px";
-        }
-
-        dynamicEnchantedIndex = enchantedOverlays.length;
-
         [].forEach.call(inventoryView.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
 
         window.scrollTo({
@@ -169,7 +131,16 @@ document.addEventListener('DOMContentLoaded', function(){
     function fillLore(element){
         let item = [];
 
-        if(element.hasAttribute('data-item-index'))
+        if(element.hasAttribute('data-backpack-index')){
+            let backpack = all_items.filter(a => a.item_index == Number(element.getAttribute('data-backpack-index')));
+
+            if(backpack.length == 0)
+                return;
+
+            backpack = backpack[0];
+
+            item = backpack.containsItems.filter(a => a.item_index == Number(element.getAttribute('data-item-index')));
+        }else if(element.hasAttribute('data-item-index'))
             item = all_items.filter(a => a.item_index == Number(element.getAttribute('data-item-index')));
         else if(element.hasAttribute('data-backpack-item-index'))
             item = [currentBackpack.containsItems[Number(element.getAttribute('data-backpack-item-index'))]];
@@ -202,6 +173,9 @@ document.addEventListener('DOMContentLoaded', function(){
             itemIcon.classList.remove('custom-icon');
             itemIcon.className = 'stats-piece-icon item-icon icon-' + item.id + '_' + item.Damage;
         }
+
+        if(isEnchanted(item))
+            handleEnchanted(itemIcon);
 
         itemLore.innerHTML = item.lore || '';
 
@@ -245,7 +219,9 @@ document.addEventListener('DOMContentLoaded', function(){
                     let inventoryItemIcon = document.createElement('div');
                     let inventoryItemCount = document.createElement('div');
 
-                    inventoryItemIcon.className = 'piece-icon item-icon icon-' + backpackItem.id + '_' + backpackItem.Damage;
+                    let enchantedClass = isEnchanted(backpackItem) ? 'is-enchanted' : '';
+
+                    inventoryItemIcon.className = 'piece-icon item-icon ' + enchantedClass + ' icon-' + backpackItem.id + '_' + backpackItem.Damage;
 
                     if(backpackItem.texture_path){
                         inventoryItemIcon.className += ' custom-icon';
@@ -274,6 +250,8 @@ document.addEventListener('DOMContentLoaded', function(){
                 if((index + 1) % 9 == 0)
                     backpackContents.appendChild(document.createElement("br"));
             });
+
+            [].forEach.call(document.querySelectorAll('.contains-backpack .item-icon.is-enchanted'), handleEnchanted);
 
             let viewBackpack = document.createElement('div');
             viewBackpack.classList = 'view-backpack';
@@ -321,41 +299,10 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     function resize(){
-        [].forEach.call(document.querySelectorAll('.inventory-view'), function(element){
-            let width, height;
+        tippy('*[data-tippy-content]');
 
-            element.classList.remove('processed');
-
-            element.style.height = "auto";
-            element.style.width = "auto";
-
-            if(element.classList.contains('current-inventory')){
-                inventoryContainer.style.width = "auto";
-                inventoryContainer.style.height = "auto";
-            }
-
-            if(window.outerWidth <= 1200){
-                height = element.offsetHeight;
-                width = window.outerWidth;
-
-                height += 15;
-            }else{
-                height = element.offsetHeight;
-                width = element.offsetWidth;
-            }
-
-            element.style.width = width + "px";
-            element.style.height = height + "px";
-
-            element.classList.add('processed');
-            element.setAttribute('data-height', height + 50 + "px");
-            element.setAttribute('data-width', width + "px");
-
-            if(element.classList.contains('current-inventory')){
-                inventoryContainer.style.width = width + "px";
-                inventoryContainer.style.height = height + 50 + "px";
-            }
-        });
+        navBarSticky = new Sticky('#nav_bar');
+        updateStatsPositions();
 
         let element = document.querySelector('.rich-item.sticky-stats');
 
@@ -434,8 +381,6 @@ document.addEventListener('DOMContentLoaded', function(){
         return dst;
     }
 
-    let enchantedOverlays = [];
-
     function handleEnchanted(element){
         let size = 128;
 
@@ -447,16 +392,14 @@ document.addEventListener('DOMContentLoaded', function(){
 
         let ctx = canvas.getContext('2d');
 
-        let image = new Image(128, 128);
         let src = window.getComputedStyle(element).backgroundImage.split('("').pop().split('")')[0];
+        let image = new Image(128, src.includes('/head/') ? 118 : 128);
 
-        if(src.endsWith('.gif') || src.includes('/head/'))
+        if(src.endsWith('.gif'))
             return false;
 
         image.onload = function(){
-            if(element.classList.contains('custom-icon')){
-                image = getPart(image, 0, 0, size, size);
-            }else{
+            if(!element.classList.contains('custom-icon')){
                 let position = window.getComputedStyle(element).backgroundPosition.split(" ");
                 let x = Math.abs(parseInt(position[0]));
                 let y = Math.abs(parseInt(position[1]));
@@ -465,89 +408,27 @@ document.addEventListener('DOMContentLoaded', function(){
 
             ctx.globalAlpha = 1;
 
-            ctx.drawImage(image, 0, 0);
+            ctx.drawImage(image, 0, 128 / 2 - image.height / 2);
 
-            ctx.globalAlpha = 0.25;
+            ctx.globalAlpha = 0.5;
             ctx.globalCompositeOperation = 'source-atop';
 
-            let enchantedGlint = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            ctx.drawImage(enchantedGlint, 0, 0, canvas.width, canvas.height);
 
-            enchantedGlintStops.forEach(function(stop, index){
-                enchantedGlint.addColorStop(stop, enchantedGlintColors[index]);
-            });
-
-            ctx.fillStyle = enchantedGlint;
-
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            if(window.innerWidth < 480){
-                element.style.backgroundImage = 'url(' + canvas.toDataURL('image/png') + ')';
-                element.classList.add('custom-icon');
-            }else{
-                element.parentNode.appendChild(canvas);
-
-                enchantedOverlays.push({
-                    src,
-                    offset: Math.random(),
-                    canvas,
-                    ctx,
-                    image
-                });
-            }
+            element.style.backgroundImage = 'url(' + canvas.toDataURL('image/png') + ')';
+            element.classList.add('custom-icon');
         };
 
         image.src = src;
     }
 
-    [].forEach.call(document.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
+    let enchantedGlint = new Image(128, 128);
 
-    const enchantedGlintStops = [0, 0.4, 0.6, 1];
-
-    const enchantedGlintColors = [
-        '#9e43e3',
-        '#ab5ee6',
-        '#b875eb',
-        '#9e43e3'
-    ];
-
-    function updateEnchantedOverlays(){
-        enchantedOverlays.forEach(function(overlay, index){
-            overlay.ctx.clearRect(0, 0, overlay.canvas.width, overlay.canvas.height);
-
-            overlay.ctx.globalAlpha = 1;
-            overlay.ctx.globalCompositeOperation = 'source-over';
-
-            overlay.ctx.drawImage(overlay.image, 0, 0);
-
-            overlay.ctx.globalAlpha = 0.25;
-            overlay.ctx.globalCompositeOperation = 'source-atop';
-
-            let offset = +new Date() % 800 / 800 + overlay.offset;
-
-            if(offset > 1)
-                offset -= 1;
-
-            let enchantedGlint = overlay.ctx.createLinearGradient(0, 0, 0, overlay.canvas.height);
-
-            enchantedGlintStops.forEach(function(stop, index){
-                let _offset = stop - offset;
-
-                if(_offset < 0)
-                    _offset = 1 - Math.abs(_offset);
-
-                enchantedGlint.addColorStop(_offset, enchantedGlintColors[index]);
-            });
-
-            overlay.ctx.fillStyle = enchantedGlint;
-
-            overlay.ctx.fillRect(0, 0, overlay.canvas.width, overlay.canvas.height);
-        });
-
-        window.requestAnimationFrame(updateEnchantedOverlays);
+    enchantedGlint.onload = function(){
+        [].forEach.call(document.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
     }
 
-    if(window.innerWidth >= 480) // don't animate on mobile
-        updateEnchantedOverlays();
+    enchantedGlint.src = '/resources/img/glint.png';
 
     [].forEach.call(document.querySelectorAll('.inventory-tab'), function(element){
         let type = element.getAttribute('data-inventory-type');
@@ -576,11 +457,17 @@ document.addEventListener('DOMContentLoaded', function(){
 
     function bindLoreEvents(element){
         element.addEventListener('mouseenter', function(e){
+            if(e.target.classList.contains('select-weapon'))
+                return;
+
             fillLore(element, false);
             statsContent.classList.add('show-stats');
         });
 
         element.addEventListener('mouseleave', function(e){
+            if(e.target.classList.contains('select-weapon'))
+                return;
+
             statsContent.classList.remove('show-stats');
         });
 
@@ -591,8 +478,13 @@ document.addEventListener('DOMContentLoaded', function(){
             let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
             let rect = element.getBoundingClientRect();
 
+            let left = rect.x - statsContent.offsetWidth - 10;
+
+            if(left < 10)
+                left = rect.x + 90;
+
             if(rect.x)
-                statsContent.style.left = rect.x - statsContent.offsetWidth - 10 + "px";
+                statsContent.style.left = left + 'px';
 
             let top = Math.max(70, Math.min(maxTop, e.clientY - statsContent.offsetHeight / 2));
 
@@ -658,10 +550,10 @@ document.addEventListener('DOMContentLoaded', function(){
         element.addEventListener('click', closeLore);
     });
 
-    let enterPlayer = document.querySelector('#enter_player');
+    let searchUser = document.querySelector('#inp_search_user');
 
-    enterPlayer.addEventListener('keyup', function(e){
-        let playerName = enterPlayer.value;
+    searchUser.addEventListener('keyup', function(e){
+        let playerName = searchUser.value;
 
         if(playerName.trim().length == 0)
             return;
@@ -669,7 +561,111 @@ document.addEventListener('DOMContentLoaded', function(){
         if(e.keyCode == 13)
             document.location = '/stats/' + playerName;
         else
-            document.querySelector('#goto_player').href = '/stats/' + playerName;
+            document.querySelector('#btn_search_user').href = '/stats/' + playerName;
+    });
+
+    let statContainers = document.querySelectorAll('.stat-container[data-stat]');
+    let wrapperHeight = document.querySelector('#wrapper').offsetHeight;
+
+    let positionY = {};
+
+    let navBarSticky = new Sticky('#nav_bar');
+
+    function updateStatsPositions(){
+        [].forEach.call(statContainers, function(statContainer){
+            positionY[statContainer.getAttribute('data-stat')] = statContainer.offsetTop;
+        });
+
+        navBarSticky = new Sticky('#nav_bar');
+    }
+
+    updateStatsPositions();
+
+    let updateTab = false;
+    let updateTabLock = false;
+
+    function updateActiveTab(){
+        if(!updateTab)
+            return false;
+
+        let rectYs = [];
+        let activeIndex = 0;
+        let activeY = -Infinity;
+        let activeStatContainer;
+
+        if((window.innerHeight + window.scrollY) >= wrapperHeight){
+            activeStatContainer = [].slice.call(statContainers).pop();
+        }else{
+            [].forEach.call(statContainers, function(statContainer){
+                rectYs.push(statContainer.getBoundingClientRect().y);
+            });
+
+            rectYs.forEach(function(rectY, index){
+                if(rectY < 250 && rectY > activeY){
+                    activeY = rectY;
+                    activeIndex = index;
+                }
+            });
+
+            activeStatContainer = statContainers[activeIndex];
+        }
+
+        let activeTab = document.querySelector('.nav-item[data-target=' + activeStatContainer.getAttribute('data-stat') + ']');
+
+        if(!activeTab.classList.contains('active')){
+            [].forEach.call(document.querySelectorAll('.nav-item.active'), function(statContainer){
+                statContainer.classList.remove('active');
+            });
+
+            anime({
+                targets: '#nav_items_container',
+                scrollLeft: activeTab.offsetLeft - window.innerWidth / 2 + activeTab.offsetWidth / 2,
+                duration: 350,
+                easing: 'easeOutCubic'
+            });
+
+            activeTab.classList.add('active');
+        }
+
+        updateTab = false;
+    }
+
+    setInterval(updateActiveTab, 100);
+
+    document.addEventListener('scroll', function(){
+        if(!updateTabLock)
+            updateTab = true;
+    });
+
+    [].forEach.call(document.querySelectorAll('.nav-item'), function(element){
+        element.addEventListener('click', function(){
+            updateTabLock = true;
+            updateTab = false;
+
+            let newActiveTab = this;
+
+            [].forEach.call(document.querySelectorAll('.nav-item.active'), function(statContainer){
+                statContainer.classList.remove('active');
+            });
+
+            anime({
+                targets: window.document.scrollingElement || window.document.body || window.document.documentElement,
+                scrollTop: positionY[newActiveTab.getAttribute('data-target')] - 60,
+                duration: 350,
+                easing: 'easeOutCubic',
+                complete: function(){
+                    updateTabLock = false;
+                    newActiveTab.classList.add('active');
+                }
+            });
+
+            anime({
+                targets: '#nav_items_container',
+                scrollLeft: newActiveTab.offsetLeft - window.innerWidth / 2 + newActiveTab.offsetWidth / 2,
+                duration: 350,
+                easing: 'easeOutCubic'
+            });
+        });
     });
 
     let otherSkills = document.querySelector('#other_skills');
@@ -685,6 +681,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 show_skills.innerHTML = 'Hide Skills';
             }
 
+            updateStatsPositions();
         });
     }
 
@@ -711,7 +708,9 @@ document.addEventListener('DOMContentLoaded', function(){
     resize();
     window.addEventListener('resize', resize);
 
-    setTimeout(resize, 1000);
+    window.addEventListener('scroll', function(){
 
-    tippy('*[data-tippy-content]')
+    });
+
+    setTimeout(resize, 1000);
 });

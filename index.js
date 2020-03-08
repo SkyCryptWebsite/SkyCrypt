@@ -1,1 +1,2 @@
-module.exports = require('./src/app');
+require('./src/app');
+require('./src/donations/patreon');

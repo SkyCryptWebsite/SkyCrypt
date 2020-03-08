@@ -6,10 +6,13 @@ const dbName = 'sbstats';
 
 async function main(){
     const express = require('express');
+    const bodyParser = require('body-parser');
+
     const axios = require('axios');
     require('axios-debug-log')
 
     const fs = require('fs-extra');
+
     const path = require('path');
     const util = require('util');
     const renderer = require('./renderer');
@@ -18,6 +21,7 @@ async function main(){
     const moment = require('moment');
     const { MongoClient } = require('mongodb');
     const helper = require('./helper');
+    const constants = require('./constants');
 
     const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
@@ -25,9 +29,11 @@ async function main(){
 
     const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
 
-    fs.ensureDirSync('../cache');
+    const cachePath = path.resolve(__dirname, '../cache');
 
-    const credentials = require('../credentials.json');
+    await fs.ensureDir(cachePath);
+
+    const credentials = require(path.resolve(__dirname, '../credentials.json'));
 
     if(credentials.hypixel_api_key.length == 0)
         throw "Please enter a valid Hypixel API Key. Join mc.hypixel.net and enter /api to obtain one.";
@@ -40,10 +46,29 @@ async function main(){
     const port = 32464;
 
     app.locals.moment = moment;
+    app.use(bodyParser.urlencoded({ extended: true }));
     app.set('view engine', 'ejs');
     app.use(express.static('public', { maxAge: CACHE_DURATION }));
 
     require('./api')(app, db);
+    require('./donations/kofi')(app, db);
+
+    async function getExtra(){
+        const output = {};
+
+        const kofiEntry = await db.collection('donations').find({type: 'kofi'}).next();
+        const patreonEntry = await db.collection('donations').find({type: 'patreon'}).next();
+
+        if(kofiEntry == null || patreonEntry == null)
+            return output;
+
+        output.donations = {
+            kofi: kofiEntry.amount || 0,
+            patreon: patreonEntry.amount || 0
+        };
+
+        return output;
+    }
 
     app.get('/stats/:player/:profile?', async (req, res, next) => {
         let response;
@@ -109,6 +134,7 @@ async function main(){
                 res.render('index', {
                     error: 'Request to Hypixel API failed. Please try again!',
                     player: playerUsername,
+                    extra: await getExtra(),
                     page: 'index'
                 });
 
@@ -119,6 +145,7 @@ async function main(){
                 res.render('index', {
                     error: 'Player not found.',
                     player: playerUsername,
+                    extra: await getExtra(),
                     page: 'index'
                 });
 
@@ -129,6 +156,7 @@ async function main(){
                 res.render('index', {
                     error: 'No data returned by Hypixel API, please try again!',
                     player: playerUsername,
+                    extra: await getExtra(),
                     page: 'index'
                 });
 
@@ -139,6 +167,7 @@ async function main(){
                 res.render('index', {
                     error: 'Player has not played SkyBlock yet.',
                     player: playerUsername,
+                    extra: await getExtra(),
                     page: 'index'
                 });
 
@@ -168,6 +197,7 @@ async function main(){
                     res.render('index', {
                         error: 'Player has no SkyBlock profiles.',
                         player: playerUsername,
+                        extra: await getExtra(),
                         page: 'index'
                     });
 
@@ -201,12 +231,12 @@ async function main(){
             if(Object.keys(skyBlockProfiles).length == 0)
                 skyBlockProfiles = allSkyBlockProfiles;
 
-            let profileNames = Object.keys(skyBlockProfiles);
+            const profileNames = Object.keys(skyBlockProfiles);
 
-            let promises = [];
-            let profileIds = [];
+            const promises = [];
+            const profileIds = [];
 
-            for(let profile in skyBlockProfiles){
+            for(const profile in skyBlockProfiles){
                 profileIds.push(profile);
 
                 promises.push(
@@ -214,11 +244,11 @@ async function main(){
                 );
             }
 
-            let responses = await Promise.all(promises);
+            const responses = await Promise.all(promises);
 
-            let profiles = [];
+            const profiles = [];
 
-            for(let [index, profile_response] of responses.entries()){
+            for(const [index, profile_response] of responses.entries()){
                 if(!profile_response.data.success){
                     delete skyBlockProfiles[profileIds[index]];
                     continue;
@@ -238,6 +268,7 @@ async function main(){
                         res.render('index', {
                             error: 'Uh oh, this SkyBlock profile has no players.',
                             player: playerUsername,
+                            extra: await getExtra(),
                             page: 'index'
                         });
 
@@ -254,6 +285,7 @@ async function main(){
                 res.render('index', {
                     error: 'No data returned by Hypixel API, please try again!',
                     player: playerUsername,
+                    extra: await getExtra(),
                     page: 'index'
                 });
 
@@ -281,6 +313,7 @@ async function main(){
                 res.render('index', {
                     error: 'User not found in selected profile. This is probably due to a declined co-op invite.',
                     player: playerUsername,
+                    extra: await getExtra(),
                     page: 'index'
                 });
 
@@ -303,20 +336,20 @@ async function main(){
                 if(!('last_save' in profile.members[member]))
                     delete profile.members[member];
 
-            let memberUuids = Object.keys(profile.members);
+            const memberUuids = Object.keys(profile.members);
 
-            let memberPromises = [];
+            const memberPromises = [];
 
             for(let member of memberUuids)
                 if(member != data.player.uuid)
                     memberPromises.push(helper.uuidToUsername(member, db));
 
-            let members = await Promise.all(memberPromises);
+            const members = await Promise.all(memberPromises);
 
             members.push({
                 uuid: hypixelPlayer.uuid,
                 display_name: hypixelPlayer.displayname
-            })
+            });
 
             for(const member of members){
                 await db
@@ -328,25 +361,35 @@ async function main(){
                 );
             }
 
-            let items = await lib.getItems(userProfile);
-            let calculated = await lib.getStats(userProfile, items);
+            const items = await lib.getItems(userProfile);
+            const calculated = await lib.getStats(userProfile, items);
 
             if(objectPath.has(profile, 'banking.balance'))
                 calculated.bank = profile.banking.balance;
 
             calculated.rank_prefix = lib.rankPrefix(data.player);
-            calculated.purse = userProfile.coin_purse;
+            calculated.purse = userProfile.coin_purse || 0;
             calculated.uuid = data.player.uuid;
             calculated.display_name = data.player.displayname;
             calculated.profile = skyBlockProfiles[profileId];
             calculated.profiles = _.pickBy(allSkyBlockProfiles, a => a.profile_id != profileId);
             calculated.members = members.filter(a => a.uuid != hypixelPlayer.uuid);
+            calculated.minions = lib.getMinions(profile.members);
+            calculated.minion_slots = lib.getMinionSlots(calculated.minions);
             calculated.pets = await lib.getPets(userProfile);
+            calculated.collections = await lib.getCollections(userProfile);
 
-            let last_updated = userProfile.last_save;
-            let first_join = userProfile.first_join;
+            calculated.fishing = {
+                total: userProfile.stats.items_fished || 0,
+                treasure: userProfile.stats.items_fished_treasure || 0,
+                treasure_large: userProfile.stats.items_fished_large_treasure || 0,
+                shredder_fished: userProfile.stats.shredder_fished || 0
+            };
 
-            let diff = (+new Date() - last_updated) / 1000;
+            const last_updated = userProfile.last_save;
+            const first_join = userProfile.first_join;
+
+            const diff = (+new Date() - last_updated) / 1000;
 
             let last_updated_text = moment(last_updated).fromNow();
             let first_join_text = moment(first_join).fromNow();
@@ -366,13 +409,14 @@ async function main(){
                 text: first_join_text
             };
 
-            res.render('stats', { items, calculated, helper, page: 'stats' });
+            res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
         }catch(e){
             console.error(e);
 
             res.render('index', {
                 error: 'Request to Hypixel API failed. Their API might be down right now so try again later.',
                 player: playerUsername,
+                extra: await getExtra(),
                 page: 'index'
             });
 
@@ -381,16 +425,16 @@ async function main(){
     });
 
     app.get('/head/:uuid', async (req, res) => {
-        let uuid = req.params.uuid;
+        const { uuid } = req.params;
 
-        let filename = `head_${uuid}.png`;
+        const filename = `head_${uuid}.png`;
 
         try{
-            file = await fs.readFile(path.resolve(__dirname, '..', 'cache', filename));
+            file = await fs.readFile(path.resolve(cachePath, filename));
         }catch(e){
             file = await renderer.renderHead(`http://textures.minecraft.net/texture/${uuid}`, 6.4);
 
-            fs.writeFile(path.resolve(__dirname, '..', 'cache', filename), file, err => {
+            fs.writeFile(path.resolve(cachePath, filename), file, err => {
                 if(err)
                     console.error(err);
             });
@@ -403,26 +447,25 @@ async function main(){
 
     app.get('/leather/:type/:color', async (req, res) => {
         let file;
-        let types = ["boots", "leggings", "chestplate", "helmet"];
 
-        if(!types.includes(req.params.type))
+        if(!["boots", "leggings", "chestplate", "helmet"].includes(req.params.type))
             throw new Error("invalid armor type");
 
-        let type = req.params.type;
+        const { type } = req.params;
 
-        let color = req.params.color.split(",");
+        const color = req.params.color.split(",");
 
         if(color.length < 3)
             throw new Error("invalid color");
 
-        let filename = `leather_${type}_${color.join("_")}.png`;
+        const filename = `leather_${type}_${color.join("_")}.png`;
 
         try{
-            file = await fs.readFile(path.resolve(__dirname, '..', 'cache', filename));
+            file = await fs.readFile(path.resolve(cachePath, filename));
         }catch(e){
             file = await renderer.renderArmor(type, color);
 
-            fs.writeFile(path.resolve(__dirname, '..', 'cache', filename), file, err => {
+            fs.writeFile(path.resolve(cachePath, filename), file, err => {
                 if(err)
                     console.error(err);
             });
@@ -434,7 +477,7 @@ async function main(){
     });
 
     app.get('/', async (req, res, next) => {
-        res.render('index', { error: null, player: null, page: 'index' });
+        res.render('index', { error: null, player: null, extra: await getExtra(), page: 'index' });
     });
 
     app.get('*', async (req, res, next) => {
@@ -445,7 +488,7 @@ async function main(){
 }
 
 if(cluster.isMaster){
-    let cpus = require('os').cpus().length;
+    const cpus = require('os').cpus().length;
 
     for(let i = 0; i < cpus; i += 1){
         cluster.fork();

@@ -1,0 +1,11 @@
+<%
+    const patrons = [
+        "WitchOfFrost",
+        "Steini225",
+        "Nymad"
+    ];
+
+    patrons.forEach((patron, index) => { %>
+        <span class="patron piece-legendary-fg"><%= patron %></span><%= index < patrons.length - 1 ? ', ' : '' %>
+    <% });
+%>

@@ -3,6 +3,7 @@ const path = require('path');
 const nbt = require('prismarine-nbt');
 const util = require('util');
 const mcData = require("minecraft-data")("1.8.9");
+const _ = require('lodash');
 const objectPath = require("object-path");
 const constants = require('./constants');
 const helper = require('./helper');
@@ -68,18 +69,31 @@ function getLevelByXp(xp, runecrafting){
 }
 
 function getSlayerLevel(slayer){
-    let { claimed_levels } = slayer;
+    let { xp, claimed_levels } = slayer;
 
-    let level = 0;
+    let currentLevel = 0;
+    let progress = 0;
+    let xpForNext = 0;
 
-    for(let level_name in claimed_levels){
-        let _level = parseInt(level_name.split("_").pop());
+    const maxLevel = Math.max(...Object.keys(constants.slayer_xp));
 
-        if(_level > level)
-            level = _level;
+    for(const level_name in claimed_levels){
+        const level = parseInt(level_name.split("_").pop());
+
+        if(level > currentLevel)
+            currentLevel = level;
     }
 
-    return level;
+    if(currentLevel < maxLevel){
+        const nextLevel = constants.slayer_xp[currentLevel + 1];
+
+        progress = xp / nextLevel;
+        xpForNext = nextLevel;
+    }else{
+        progress = 1;
+    }
+
+    return { currentLevel, xp, maxLevel, progress, xpForNext };
 }
 
 function getPetLevel(pet){
@@ -162,9 +176,10 @@ async function getBackpackContents(arraybuf){
 
     let items = data.i;
 
-    for(let item of items){
+    for(const [index, item] of items.entries()){
         item.isInactive = true;
         item.inBackpack = true;
+        item.item_index = index;
     }
 
     return items;
@@ -187,7 +202,7 @@ async function getItems(base64){
     let items = data.i;
 
     // Check backpack contents and add them to the list of items
-    for(let [index, item] of items.entries()){
+    for(const [index, item] of items.entries()){
         if(objectPath.has(item, 'tag.display.Name') && (item.tag.display.Name.endsWith('Backpack') || item.tag.display.Name.endsWith('Itchy New Year Cake Bag'))){
 
             let keys = Object.keys(item.tag.ExtraAttributes);
@@ -510,6 +525,9 @@ module.exports = {
         if('newPackageRank'  in player)
             rankName = player.newPackageRank;
 
+        if('monthlyPackageRank' in player && player.monthlyPackageRank != 'NONE')
+            rankName = player.monthlyPackageRank;
+
         if('rank' in player)
             rankName = player.rank;
 
@@ -529,7 +547,10 @@ module.exports = {
         let plusColor = null;
         let plusText = null;
 
-        if('monthlyRankColor' in player && 'monthlyPackageRank' in player && player.monthlyPackageRank != 'NONE'){
+        if(rankName == 'SUPERSTAR'){
+            if(!('monthlyRankColor' in player))
+                player.monthlyRankColor = 'GOLD';
+
             rankColor = constants.minecraft_formatting[constants.color_names[player.monthlyRankColor]];
             rankColor = rankColor.niceColor || rankColor.color;
         }
@@ -547,7 +568,7 @@ module.exports = {
         output = `<div class="rank-tag ${plusText ? 'rank-plus' : ''}"><div class="rank-name" style="background-color: ${rankColor}">${rank.tag}</div>`;
 
         if(plusText)
-            output += `<div class="rank-plus" style="background-color: ${plusColor}">${plusText}</div>`;
+            output += `<div class="rank-plus" style="background-color: ${plusColor}"><div class="rank-plus-before" style="border-color: transparent transparent ${plusColor} transparent;"></div>${plusText}</div>`;
 
         output += `</div>`;
 
@@ -595,7 +616,7 @@ module.exports = {
     },
 
     // Get Minecraft lore without the color and formatting codes
-    getRawLore: (text) => {
+    getRawLore: text => {
         let output = "";
         let parts = text.split("§");
 
@@ -606,8 +627,67 @@ module.exports = {
         return output;
     },
 
+    getMinions: coopMembers => {
+        const minions = [];
+
+        const craftedGenerators = [];
+
+        for(const member in coopMembers){
+            if(!('crafted_generators' in coopMembers[member]))
+                continue;
+
+            craftedGenerators.push(...coopMembers[member].crafted_generators);
+        }
+
+        for(const generator of craftedGenerators){
+            const split = generator.split("_");
+
+            const minionLevel = parseInt(split.pop());
+            const minionName = split.join("_");
+
+            const minion = minions.filter(a => a.id == minionName);
+
+            if(minion.length == 0)
+                minions.push(Object.assign({ id: minionName, maxLevel: 0, levels: [minionLevel] }, constants.minions[minionName]));
+            else
+                minion[0].levels.push(minionLevel);
+        }
+
+        for(const minion in constants.minions)
+            if(minions.filter(a => a.id == minion).length == 0)
+                minions.push(Object.assign({ id: minion, levels: [], maxLevel: 0 }, constants.minions[minion]));
+
+        for(const minion of minions){
+            minion.levels = _.uniq(minion.levels.sort((a, b) => a - b));
+            minion.maxLevel = minion.levels.length > 0 ? Math.max(...minion.levels) : 0;
+
+            if(!('name' in minion))
+                minion.name = _.startCase(_.toLower(minion.id));
+        }
+
+        return minions;
+    },
+
+    getMinionSlots: minions => {
+        const uniqueMinions = minions.reduce((a, b) => { return { maxLevel: a.maxLevel + b.maxLevel }}).maxLevel;
+        const output = { currentSlots: 5, toNext: 5 };
+
+        const uniquesRequired = Object.keys(constants.minion_slots).sort((a, b) => parseInt(a) - parseInt(b) );
+
+        for(const [index, uniques] of uniquesRequired.entries()){
+            if(parseInt(uniques) < uniqueMinions)
+                continue;
+
+            output.currentSlots = constants.minion_slots[uniquesRequired[index - 1]];
+            output.toNextSlot = uniquesRequired[index] - uniqueMinions;
+            break;
+        }
+
+        return output;
+    },
+
     getItems: async (profile) => {
-        let output = {};
+        const output = {};
 
         // Process inventories returned by API
         let armor = 'inv_armor' in profile ? await getItems(profile.inv_armor.data) : [];
@@ -806,6 +886,7 @@ module.exports = {
                     output_name += " Armor";
 
                 output.armor_set = output_name;
+                output.armor_set_rarity = armor[0].rarity;
             }
         }
 
@@ -876,25 +957,49 @@ module.exports = {
             output.levels = Object.assign({}, levels);
         }
 
+        output.slayer_coins_spent = 0;
+
         // Apply slayer bonuses
         if('slayer_bosses' in profile){
             output.slayer_bonus = {};
 
             let slayers = {};
 
-            if(objectPath.has(profile, 'slayer_bosses.zombie.claimed_levels'))
-                slayers.zombie = getSlayerLevel(profile.slayer_bosses.zombie);
+            if(objectPath.has(profile, 'slayer_bosses')){
+                for(const slayerName in profile.slayer_bosses){
+                    const slayer = profile.slayer_bosses[slayerName];
 
-            if(objectPath.has(profile, 'slayer_bosses.spider.claimed_levels'))
-                slayers.spider = getSlayerLevel(profile.slayer_bosses.spider);
+                    slayers[slayerName] = {};
 
-            if(objectPath.has(profile, 'slayer_bosses.wolf.claimed_levels'))
-                slayers.wolf = getSlayerLevel(profile.slayer_bosses.wolf);
+                    if(!objectPath.has(slayer, 'claimed_levels'))
+                        continue;
 
-            for(let slayer in slayers){
-                let slayerBonus = getBonusStat(slayers[slayer], `${slayer}_slayer`, 50, 1);
+                    slayers[slayerName].level = getSlayerLevel(slayer);
+
+                    slayers[slayerName].kills = {};
+
+                    for(const property in slayer){
+                        slayers[slayerName][property] = slayer[property];
+
+                        if(property.startsWith('boss_kills_tier_')){
+                            const tier = parseInt(property.replace('boss_kills_tier_', '')) + 1;
+
+                            slayers[slayerName].kills[tier] = slayer[property];
+
+                            output.slayer_coins_spent += slayer[property] * constants.slayer_cost[tier];
+                        }
+                    }
+                }
+            }
+
+            output.slayer_xp = 0;
+
+            for(const slayer in slayers){
+                const slayerBonus = getBonusStat(slayers[slayer].level.currentLevel, `${slayer}_slayer`, 9, 1);
 
                 output.slayer_bonus[slayer] = Object.assign({}, slayerBonus);
+
+                output.slayer_xp += slayers[slayer].xp || 0;
 
                 for(let stat in slayerBonus)
                     output.stats[stat] += slayerBonus[stat];
@@ -909,15 +1014,9 @@ module.exports = {
 
         output.base_stats = Object.assign({}, output.stats);
 
-        // Apply basic armor stats
-        items.armor.forEach(item => {
-            for(let stat in item.stats)
-                output.stats[stat] += item.stats[stat];
-        });
-
         // Apply Lapis Armor full set bonus of +60 HP
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('LAPIS_ARMOR_')).length == 4)
-            output.stats['health'] += 60;
+            items.armor[0].stats.health += 60;
 
         // Apply Emerald Armor full set bonus of +1 HP and +1 Defense per 3000 emeralds in collection with a maximum of 300
         if(objectPath.has(profile, 'collection.EMERALD')
@@ -925,21 +1024,27 @@ module.exports = {
         && items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('EMERALD_ARMOR_')).length == 4){
             let emerald_bonus = Math.min(350, Math.floor(profile.collection.EMERALD / 3000));
 
-            output.stats.health += emerald_bonus;
-            output.stats.defense += emerald_bonus;
+            items.armor[0].stats.health += emerald_bonus;
+            items.armor[0].stats.defense += emerald_bonus;
         }
 
         // Apply Fairy Armor full set bonus of +10 Speed
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('FAIRY_')).length == 4)
-            output.stats.speed += 10;
+            items.armor[0].stats.speed += 10;
 
         // Apply Speedster Armor full set bonus of +20 Speed
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SPEEDSTER_')).length == 4)
-            output.stats.speed += 20;
+            items.armor[0].stats.speed += 20;
 
         // Apply Young Dragon Armor full set bonus of +70 Speed
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('YOUNG_DRAGON_')).length == 4)
-            output.stats.speed += 70;
+            items.armor[0].stats.speed += 70;
+
+        // Apply basic armor stats
+        items.armor.forEach(item => {
+            for(let stat in item.stats)
+                output.stats[stat] += item.stats[stat];
+        });
 
         // Apply stats of active talismans
         items.talismans.filter(a => Object.keys(a).length != 0 && !a.isInactive).forEach(item => {
@@ -948,8 +1053,10 @@ module.exports = {
         });
 
         // Apply Mastiff Armor full set bonus of +50 HP per 1% Crit Damage
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
+        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4){
             output.stats.health += 50 * output.stats.crit_damage;
+            items.armor[0].stats.health += 50 * output.stats.crit_damage;
+        }
 
         // Apply +5 Defense and +5 Strength of Day/Night Crystal only if both are owned as this is required for a permanent bonus
         if(items.talismans.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && !a.isInactive && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(a.tag.ExtraAttributes.id)).length == 2){
@@ -982,7 +1089,7 @@ module.exports = {
             }
 
             // Add crit damage from held weapon to Mastiff Armor full set bonus
-            if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
+            if(item.stats.crit_damage > 0 && items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
                 stats.health += 50 * item.stats.crit_damage;
 
             stats.effective_health = getEffectiveHealth(stats.health, stats.defense);
@@ -999,10 +1106,23 @@ module.exports = {
                 output.weapon_stats[item.item_index][stat] = Math.max(0, stats[stat]);
         });
 
+        const superiorBonus = Object.assign({}, constants.stat_template);
+
         // Apply Superior Dragon Armor full set bonus of 5% stat increase
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4)
-            for(let stat in output.stats)
-                output.stats[stat] = Math.floor(output.stats[stat] * 1.05);
+        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4){
+            for(const stat in output.stats){
+                superiorBonus[stat] = Math.floor(output.stats[stat] * 0.05);
+            }
+
+            for(const stat in superiorBonus){
+                output.stats[stat] += superiorBonus[stat];
+
+                if(!(stat in items.armor[0].stats))
+                    items.armor[0].stats[stat] = 0;
+
+                items.armor[0].stats[stat] += superiorBonus[stat];
+            }
+        }
 
         // Stats shouldn't go into negative
         for(let stat in output.stats)
@@ -1037,6 +1157,14 @@ module.exports = {
 
             stat.entityName = entityName;
         }
+
+        if('kills_guardian_emperor' in profile.stats || 'kills_skeleton_emperor' in profile.stats)
+            killsDeaths.push({
+                type: 'kills',
+                entityId: 'sea_emperor',
+                entityName: 'Sea Emperor',
+                amount: (profile.stats['kills_guardian_emperor'] || 0) + (profile.stats['kills_skeleton_emperor'] || 0)
+            });
 
         output.kills = killsDeaths.filter(a => a.type == 'kills').sort((a, b) => b.amount - a.amount);
         output.deaths = killsDeaths.filter(a => a.type == 'deaths').sort((a, b) => b.amount - a.amount);
@@ -1122,6 +1250,24 @@ module.exports = {
 
             return a.active? -1 : 1
         });
+
+        return output;
+    },
+
+    getCollections: async profile => {
+        const output = {};
+
+        if(!('unlocked_coll_tiers' in profile) || !('collection' in profile))
+            return output;
+
+        for(const collection of profile.unlocked_coll_tiers){
+            const split = collection.split("_");
+            const tier = Math.max(0, parseInt(split.pop()));
+            const type = split.join("_");
+
+            if(!(type in output) || tier > output[type].tier)
+                output[type] = { tier, amount: profile.collection[type] | 0 };
+        }
 
         return output;
     }
