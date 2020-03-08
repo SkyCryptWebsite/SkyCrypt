@@ -1130,10 +1130,6 @@ module.exports = {
             type: 'foraging',
             head: '/head/7ba04bfe516955fd43932dcb33bd5eac20b38a231d9fa8415b3fb301f60f7363'
         },
-        SPRUCE: {
-            type: 'foraging',
-            head: '/head/eb74109dbb88178afb7a9874afc682904cedb3df75978a51f7beeb28f924251'
-        },
         DARK_OAK: {
             type: 'foraging',
             head: '/head/5ecdc8d6b2b7e081ed9c36609052c91879b89730b9953adbc987e25bf16c5581'
