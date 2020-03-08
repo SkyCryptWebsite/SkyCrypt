@@ -1404,14 +1404,14 @@ if(calculated.bank)
                 <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Intelligence </span><span class="stat-value"><%= stats.intelligence %></span></span></div>
                 <div id="player_model_mobile" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
                 <div id="additional_stats_container">
-                    <div class="additional-stat" data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></div>
-                    <div class="additional-stat" data-tippy-content="Joined on <%= moment(calculated.first_join.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></div>
+                    <div class="additional-stat"><span data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></span></div>
+                    <div class="additional-stat"><span data-tippy-content="Joined on <%= moment(calculated.first_join.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></span></div>
                     <div class="additional-stat"><span class="stat-name">Purse: </span><span class="stat-value"><%= Math.round(calculated.purse).toLocaleString() %> Coins</span></div>
                     <% if('bank' in calculated){ %>
                         <div class="additional-stat"><span class="stat-name">Bank Account: </span><span class="stat-value"><%= Math.round(calculated.bank).toLocaleString() %> Coin<%= Math.round(calculated.bank) == 1 ? '': 's' %></span></div>
                     <% } %>
                     <% if('levels' in calculated){ %>
-                        <div class="additional-stat" data-tippy-content="Average skill level over all skills except Carpentry and Runecrafting, includes progress to next level."><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level %></span></div>
+                        <div class="additional-stat"><span data-tippy-content="Average skill level over all skills except Carpentry and Runecrafting, includes progress to next level."><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level %></span></span></div>
                     <% } %>
                 </div>
             </div>
@@ -1480,7 +1480,7 @@ if(calculated.bank)
                 <% }else{ %>
                     <% if(items.armor_set) { %>
                         <p class="stat-raw-values">
-                            <span class="stat-name">Set: </span><span class="stat-value"><%= items.armor_set %></span>
+                            <span class="stat-name">Set: </span><span class="stat-value piece-<%= items.armor_set_rarity %>-fg"><%= items.armor_set %></span>
                         </p>
                     <% } %>
                     <div class="pieces">
@@ -1949,17 +1949,19 @@ if(calculated.bank)
                         %>
                         <div class="minion-category">
                             <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon <%= skillItems[type] %>"></div></div><span><%= type %></span></div>
-                        <%
+                            <div class="collections">
+                            <%
 
-                        for(const collection of collections){ %>
-                            <div class="collection">
-                                <div class="collection-icon"><div class="item-icon icon-<%= collection.id %>_<%= collection.damage %>"></div></div>
-                                <div class="collection-stats">
-                                    <div class="collection-name <%= collection.tier == collection.maxTier ? 'max-minion' : '' %>"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
-                                    <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= collection.amount.toLocaleString() %></span></div>
+                            for(const collection of collections){ %>
+                                <div class="collection">
+                                    <div class="collection-icon"><div class="item-icon icon-<%= collection.id %>_<%= collection.damage %>"></div></div>
+                                    <div class="collection-stats">
+                                        <div class="collection-name <%= collection.tier == collection.maxTier ? 'max-minion' : '' %>"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
+                                        <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= collection.amount.toLocaleString() %></span></div>
+                                    </div>
                                 </div>
+                            <% } %>
                             </div>
-                        <% } %>
                         </div>
                     <% } %>
                 </div>
