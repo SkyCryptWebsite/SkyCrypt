@@ -53,6 +53,10 @@
             [].forEach.call(document.querySelectorAll('.item-icon'), function(element){
                 document.documentElement.classList.add('no-webp');
             });
+
+            [].forEach.call(document.querySelectorAll('.sea-creature-image'), function(element){
+                element.style.backgroundImage = element.style.backgroundImage.replace(".webp", ".png");
+            });
         }
     });
 
