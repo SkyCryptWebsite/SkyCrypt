@@ -7,7 +7,7 @@ This project allows you to share your SkyBlock profile with other players with a
 
 <h2 align="center">Screenshot</h1>
 
-<p align="center"><img src="https://i.imgur.com/BsuAldM.png"></p>
+<p align="center"><img src="https://i.imgur.com/qwtl35g.png"></p>
 
 <h2 align="center">Contributing</h1>
 
@@ -21,7 +21,7 @@ You are free to report bugs or contribute to this project. Just open <a href="..
 
 <h3>Installation</h3>
 
-Clone the project and and run `npm i` to install the dependencies. 
+Clone the project and and run `npm i` to install the dependencies.
 
 Now open `credentials.json` and enter a valid Hypixel API Key. You can obtain one by joining `mc.hypixel.net` and writing `/api` in chat.
 
