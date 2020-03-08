@@ -1122,13 +1122,13 @@ module.exports = {
             type: 'foraging',
             head: '/head/57e4a30f361204ea9cded3fbff850160731a0081cc452cfe26aed48e97f6364b'
         },
-        SPRUCE: {
+        BIRCH: {
             type: 'foraging',
-            head: '/head/7ba04bfe516955fd43932dcb33bd5eac20b38a231d9fa8415b3fb301f60f7363'
+            head: '/head/eb74109dbb88178afb7a9874afc682904cedb3df75978a51f7beeb28f924251'
         },
         SPRUCE: {
             type: 'foraging',
-            head: '/head/eb74109dbb88178afb7a9874afc682904cedb3df75978a51f7beeb28f924251'
+            head: '/head/7ba04bfe516955fd43932dcb33bd5eac20b38a231d9fa8415b3fb301f60f7363'
         },
         DARK_OAK: {
             type: 'foraging',

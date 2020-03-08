@@ -1231,7 +1231,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 }
 
 .piece-rare-fg{
-    color: #D731D7;
+    color: #7373E6;
 }
 
 .piece-uncommon-fg{
@@ -1477,6 +1477,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 .slayer-section-header{
     text-align: center;
     font-weight: 600;
+    text-transform: capitalize;
     color: rgba(255,255,255,0.8);
 }
 
@@ -1855,7 +1856,6 @@ html.no-webp #error_box_wrapper{
     left: 0;
     bottom: 0;
     right: 0;
-    background-color: rgba(10,10,10,0.7);
 }
 
 #error_box_wrapper.show-error{
@@ -2245,6 +2245,10 @@ html.no-webp #error_box_wrapper{
     .nav-item:not(.active):hover::after{
         height: 2px;
         top: 100%;
+    }
+
+    .info-container{
+        margin-left: 0;
     }
 
     .inventory-slot{

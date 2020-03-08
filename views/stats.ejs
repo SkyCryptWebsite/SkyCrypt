@@ -348,7 +348,7 @@ const collectionData = [
         type: 'combat',
         skyblockId: 'SPIDER_EYE',
         name: 'Spider Eye',
-        id: 287,
+        id: 375,
         damage: 0,
         maxTier: 9
     },
@@ -438,7 +438,7 @@ const collectionData = [
         skyblockId: 'LOG_2',
         name: 'Acacia Wood',
         id: 162,
-        damage: 1,
+        damage: 0,
         maxTier: 9
     },
     {
@@ -558,7 +558,7 @@ const slayerInfo = {
                     4: 7 / 13000
                 },
                 levelReq: 7,
-                name: 'Sycthe Blade',
+                name: 'Scythe Blade',
                 id: 264,
                 damage: 0
             }
@@ -1463,11 +1463,20 @@ if(calculated.bank)
             </div>
         </div>
         <div class="stat-containers">
-        <% if(items.no_inventory){ %>
+        <%
+            const notAvailable = [];
+
+            if(items.no_inventory)
+                notAvailable.push('Weapons', 'Accessories', 'Inventory');
+
+            if(Object.keys(calculated.collections).length == 0)
+                notAvailable.push('Collections');
+        %>
+        <% if(notAvailable.length > 0){ %>
             <div class="stat-container info-container-wrapper">
                 <div class="info-container">
                     <div class="info-header">Notice</div>
-                    Weapons, Accessories and Inventory not available for <%= calculated.display_name %> due to limited API access.<br><span><a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</span>
+                    <%= notAvailable.join(', ') %> not available for <%= calculated.display_name %> due to limited API access.<br><span><a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</span>
                 </div>
             </div>
         <% } %>
@@ -1511,7 +1520,7 @@ if(calculated.bank)
                     <% }else{ %>
                         <% if(items.highest_rarity_sword){ %>
                         <p class="stat-raw-values">
-                            <span class="stat-name">Active Weapon: </span><span class="stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%= items.highest_rarity_sword.display_name %></span>
+                            <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%= items.highest_rarity_sword.display_name %></span>
                         </p>
                         <% } %>
                         <div class="pieces">
@@ -1552,10 +1561,10 @@ if(calculated.bank)
                             <span class="stat-name">Unique Accessories: </span><span class="stat-value"><%= items.talismans.filter(a => a.isUnique).length %> / 47</span><br>
                             <span class="stat-name">Completion: </span><span class="stat-value"><%= Math.round(items.talismans.filter(a => a.isUnique).length / 47 * 100) %>%</span>
                         </p>
-                        <% if(items.talismans.filter(a => a.isUnique && !a.isInactive).length > 0){ %>
+                        <% if(items.talismans.filter(a => !a.isInactive).length > 0){ %>
                             <div class="accessory-list">
                                 <p class="stat-sub-header" style="margin-bottom: 5px">Active Accessories</p>
-                                <% items.talismans.filter(a => a.isUnique && !a.isInactive).forEach(item => { %>
+                                <% items.talismans.filter(a => !a.isInactive).forEach(item => { %>
                                     <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-index="<%= item.item_index %>"
                                     class="rich-item piece piece-<%= item.rarity %>-bg">
                                         <% if(item.rarity == 'legendary'){ %>
@@ -1958,7 +1967,7 @@ if(calculated.bank)
                                 <div class="collection">
                                     <div class="collection-icon"><div class="item-icon icon-<%= collection.id %>_<%= collection.damage %>"></div></div>
                                     <div class="collection-stats">
-                                        <div class="collection-name <%= collection.tier == collection.maxTier ? 'max-minion' : '' %>"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
+                                        <div class="collection-name <%= collection.tier >= collection.maxTier ? 'max-minion' : '' %>"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
                                         <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= collection.amount.toLocaleString() %></span></div>
                                     </div>
                                 </div>
