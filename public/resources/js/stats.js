@@ -478,8 +478,13 @@ document.addEventListener('DOMContentLoaded', function(){
             let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
             let rect = element.getBoundingClientRect();
 
+            let left = rect.x - statsContent.offsetWidth - 10;
+
+            if(left < 10)
+                left = rect.x + 90;
+
             if(rect.x)
-                statsContent.style.left = rect.x - statsContent.offsetWidth - 10 + "px";
+                statsContent.style.left = left + 'px';
 
             let top = Math.max(70, Math.min(maxTop, e.clientY - statsContent.offsetHeight / 2));
 
