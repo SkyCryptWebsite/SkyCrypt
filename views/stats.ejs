@@ -1958,7 +1958,7 @@ if(calculated.bank)
                                 <div class="collection">
                                     <div class="collection-icon"><div class="item-icon icon-<%= collection.id %>_<%= collection.damage %>"></div></div>
                                     <div class="collection-stats">
-                                        <div class="collection-name <%= collection.tier == collection.maxTier ? 'max-minion' : '' %>"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
+                                        <div class="collection-name <%= collection.tier >= collection.maxTier ? 'max-minion' : '' %>"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
                                         <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= collection.amount.toLocaleString() %></span></div>
                                     </div>
                                 </div>
