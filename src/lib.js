@@ -995,6 +995,9 @@ module.exports = {
             output.slayer_xp = 0;
 
             for(const slayer in slayers){
+                if(!objectPath.has(slayers[slayer], 'level.currentLevel'))
+                    continue;
+
                 const slayerBonus = getBonusStat(slayers[slayer].level.currentLevel, `${slayer}_slayer`, 9, 1);
 
                 output.slayer_bonus[slayer] = Object.assign({}, slayerBonus);
