@@ -321,6 +321,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     [].forEach.call(document.querySelectorAll('.stat-weapons .select-weapon'), function(element){
         let item_index = element.parentNode.getAttribute('data-item-index');
+        let item = items.weapons.filter(a => a.item_index == item_index)[0];
 
         let weaponStats = calculated.weapon_stats[item_index];
         let stats;
@@ -334,6 +335,9 @@ document.addEventListener('DOMContentLoaded', function(){
                 element.parentNode.classList.remove("piece-selected");
 
                 stats = calculated.stats;
+
+                document.querySelector('.stat-active-weapon').className = 'stat-value stat-active-weapon piece-common-fg';
+                document.querySelector('.stat-active-weapon').innerHTML = 'None';
             }else{
                 [].forEach.call(document.querySelectorAll('.stat-weapons .piece'), function(_element){
                     _element.classList.remove("piece-selected");
@@ -341,8 +345,19 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 element.parentNode.classList.add("piece-selected");
 
+                document.querySelector('.stat-active-weapon').className = 'stat-value stat-active-weapon piece-' + item.rarity + '-fg';
+                document.querySelector('.stat-active-weapon').innerHTML = item.display_name;
+
                 stats = weaponStats;
             }
+
+            anime({
+                targets: '.stat-active-weapon',
+                backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
+                duration: 500,
+                round: 1,
+                easing: 'easeOutCubic'
+            });
 
             for(let stat in stats){
                 let element = document.querySelector('.basic-stat[data-stat=' + stat + '] .stat-value');
