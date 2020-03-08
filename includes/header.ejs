@@ -7,30 +7,35 @@
     }
 </script>
 <header>
-    <a href="/" id="site_name">SkyBlock Stats</a>
-    <div id="info_button" onclick="toggleInfo()">About</div>
+    <a href="/" id="site_name">sky.lea.moe</a>
+    <div class="social-button" id="info_button" onclick="toggleInfo()">About</div>
+    <% if('donations' in extra){ %>
+        <a title="Patreon" target="_blank" rel="nofollow" href="https://patreon.com/LeaPhant" class="social-button patreon"><%= extra.donations.patreon %> Patrons<div class="social-icon"></div></a>
+        <a title="Ko-fi" target="_blank" rel="nofollow" href="https://ko-fi.com/leaphant" class="social-button ko-fi"><%= extra.donations.kofi %>x Ko-fi<div class="social-icon"></div></a>
+    <% } %>
     <% if(page == 'stats'){ %>
-        <nav id="top_navigation">
-            <li class="tab active" data-tab="general"><span>General</span></li><li class="tab soon" data-tab="combat"><span>Combat</span></li><li class="tab soon" data-tab="fishing"><span>Fishing</span></li>
-        </nav>
+        <div id="search_user"><input placeholder="Enter username" type="text" id="inp_search_user"></input><a href="#" id="btn_search_user"></a></div>
     <% } %>
 </header>
 <div id="info_box">
     <div onclick="toggleInfo()" id="info_close"></div>
-    <p>This open-source project was created by <a class="link link-twitter" href="https://twitter.com/LeaPhant" target="_blank">LeaPhant</a> and is still under development. You can report bugs or contribute to the code on <a class="link link-github" href="https://github.com/LeaPhant/skyblock-stats" target="_blank">GitHub</a>.</p>
-    <p>If you want to support my work, you can do that via <a class="link link-patreon" href="https://www.patreon.com/LeaPhant" target="_blank">Patreon</a> or <a class="link link-kofi" href="https://www.ko-fi.com/leaphant" target="_blank">Ko-fi</a>. It would mean a lot to me!</p>
-    <p>Thanks to my $5 patrons:</p>
-    <p><span class="patron">WitchOfFrost</span>, <span class="patron">Steini225</span>, <span class="patron">Nymad</span></p>
-    <h4>Used Resources</h4>
-    <ul>
-        <li>Data: <a rel="nofollow" href="https://api.hypixel.net/" target="_blank">Hypixel API</a> by <span class="name">Hypixel</span>.</li>
-        <li>Animated Custom Weapons and Armors: <a rel="nofollow" href="https://hypixel.net/threads/2138599/" target="_blank">FurfSky+</a> by <span class="name">Furf__</span>.</li>
-        <li>Additional Custom Textures: <a rel="nofollow" href="https://hypixel.net/threads/2147652/" target="_blank">Vanilla+</a> by <span class="name">TBlazeWarriorT</span>.</li>
-        <li>Default Textures: <a rel="nofollow" href="https://www.minecraft.net/" target="_blank">Minecraft</a> by <span class="name">Mojang</span>.</li>
-        <li>Player Heads: <a rel="nofollow" href="https://hypixel.net/forums/skyblock.157/" target="_blank">SkyBlock</a> by <span class="name">Hypixel</span>.</li>
-        <li>Background Resource Pack: <a rel="nofollow" href="https://www.planetminecraft.com/texture_pack/16x132-dandelion-cute-and-swirly/" target="_blank">Dandelion</a> by <span class="name">Steelfeathers</span>.</li>
-        <li>Background Shaders: <a rel="nofollow" href="https://sildurs-shaders.github.io/" target="_blank">Sildur's Vibrant Shaders</a> by <span class="name">Sildur</span>.</li>
-    </ul>
+    <div id="info_box_content">
+        <p>This open-source project was created by <a class="link link-twitter" href="https://twitter.com/LeaPhant" target="_blank">LeaPhant</a> and is still under development. You can report bugs or contribute to the code on <a class="link link-github" href="https://github.com/LeaPhant/skyblock-stats" target="_blank">GitHub</a>.</p>
+        <p>Chat: <a class="link link-discord" href="https://discord.gg/R9knhVc">discord.gg/R9knhVc</a></p>
+        <p>If you want to support my work, you can do that via <a class="link link-patreon" href="https://www.patreon.com/LeaPhant" target="_blank">Patreon</a> (monthly), <a class="link link-kofi" href="https://www.ko-fi.com/leaphant" target="_blank">Ko-fi</a> (one-time) or <a class="link link-paypal" href="https://paypal.me/leaphant" target="_blank">PayPal</a> (one-time). It would mean a lot to me!</p>
+        <p>Big thanks to my all-time $5 patrons :)</p>
+        <p><%- include('patrons') %></p>
+        <h4>Used Resources</h4>
+        <ul>
+            <li>Data: <a rel="nofollow" href="https://api.hypixel.net/" target="_blank">Hypixel API</a> by <span class="name">Hypixel</span>.</li>
+            <li>Animated Custom Weapons and Armors: <a rel="nofollow" href="https://hypixel.net/threads/2138599/" target="_blank">FurfSky+</a> by <span class="name">Furf__</span>.</li>
+            <li>Additional Custom Textures: <a rel="nofollow" href="https://hypixel.net/threads/2147652/" target="_blank">Vanilla+</a> by <span class="name">TBlazeWarriorT</span>.</li>
+            <li>Default Textures: <a rel="nofollow" href="https://www.minecraft.net/" target="_blank">Minecraft</a> by <span class="name">Mojang</span>.</li>
+            <li>Player Heads: <a rel="nofollow" href="https://hypixel.net/forums/skyblock.157/" target="_blank">SkyBlock</a> by <span class="name">Hypixel</span>.</li>
+            <li>Background Resource Pack: <a rel="nofollow" href="https://www.planetminecraft.com/texture_pack/16x132-dandelion-cute-and-swirly/" target="_blank">Dandelion</a> by <span class="name">Steelfeathers</span>.</li>
+            <li>Background Shaders: <a rel="nofollow" href="https://sildurs-shaders.github.io/" target="_blank">Sildur's Vibrant Shaders</a> by <span class="name">Sildur</span>.</li>
+        </ul>
+    </div>
 </div>
 <script src="/resources/js/modernizr.js"></script>
 <script>
@@ -47,6 +52,10 @@
         if(!Modernizr.webp.lossless){
             [].forEach.call(document.querySelectorAll('.item-icon'), function(element){
                 document.documentElement.classList.add('no-webp');
+            });
+
+            [].forEach.call(document.querySelectorAll('.sea-creature-image'), function(element){
+                element.style.backgroundImage = element.style.backgroundImage.replace(".webp", ".png");
             });
         }
     });
