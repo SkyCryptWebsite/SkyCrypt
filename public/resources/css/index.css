@@ -561,13 +561,13 @@ html.no-transform #info_box.opened{
     top: 0;
     bottom: 0;
     right: 0;
-    width: 40px;
+    width: 44px;
     background-image: url(/resources/img/icons/window-close.png);
-    background-size: 28px 28px;
+    background-size: 24px 24px;
     background-position: center center;
     background-repeat: no-repeat;
     visibility: hidden;
-    filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));
+    filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.1));
     cursor: pointer;
 }
 
@@ -2339,6 +2339,7 @@ html.no-webp #error_box_wrapper{
         font-size: 14px;
         height: 28px;
         line-height: 28px;
+        overflow: hidden;
     }
 
     .rank-tag .rank-name{
@@ -2348,6 +2349,9 @@ html.no-webp #error_box_wrapper{
     .rank-tag .rank-plus{
         padding-right: 5px;
     }
+
+    .rank-tag .rank-plus-before{
+        border-width: 0 0 34px 14px;
 
 }
 
@@ -2421,7 +2425,6 @@ html.no-webp #error_box_wrapper{
         height: 210px;
         margin-top: -105px;
         font-size: 12px;
-        background: transparent;
         backdrop-filter: blur(15px);
     }
 
