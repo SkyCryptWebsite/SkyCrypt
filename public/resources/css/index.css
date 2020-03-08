@@ -1,5 +1,5 @@
 html{
-    background-color: rgb(20,20,20);
+    background-color: black;
     background: url(../img/bg.webp) no-repeat center center fixed;
     background-size: cover;
     font-family: 'Montserrat', sans-serif;
@@ -89,7 +89,7 @@ header{
 
 #site_name{
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: top;
     text-decoration: none;
     color: white;
 }
@@ -241,17 +241,18 @@ header{
 }
 
 #bg_blur{
-    background: url(../img/bg_blur.webp) no-repeat center center fixed;
+    background: url(../img/bg_blur.webp?v2) no-repeat center center fixed;
     background-size: cover;
     position: fixed;
     left: 30vw;
     top: 35px;
     right: 0;
     bottom: 0;
+    background-color: rgb(20,20,20);
 }
 
 html.no-webp #bg_blur{
-    background-image: url(../img/bg_blur.jpg)
+    background-image: url(../img/bg_blur.jpg?v2)
 }
 
 #wrapper{
@@ -261,7 +262,6 @@ html.no-webp #bg_blur{
     right: 0;
     padding-bottom: 30px;
     min-height: 100%;
-    background-color: rgba(10,10,10,0.7);
     box-sizing: border-box;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent;
@@ -487,6 +487,10 @@ html.no-transform #info_box.opened{
 
 .link-kofi::before{
     background-image: url(/resources/img/icons/kofi.png);
+}
+
+.link-paypal::before{
+    background-image: url(/resources/img/icons/paypal.png);
 }
 
 .link-discord::before{
@@ -1231,7 +1235,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 }
 
 .piece-common-fg{
-    color: #bfbfbf;
+    color: white;
 }
 
 .stat-sub-header{
@@ -1325,13 +1329,6 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     margin-top: 50px;
     white-space: nowrap;
     overflow: hidden;
-}
-
-.inventory-view.processed{
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    visibility: hidden;
 }
 
 .inventory-view.current-inventory{
@@ -1514,6 +1511,20 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     box-sizing: border-box;
     line-height: 2.5;
     height: 40px;
+}
+
+.slayer-drop .stat-name{
+    max-width: calc(100% - 90px);
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+}
+
+.slayer-drop .stat-value{
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 5px;
 }
 
 .slayer-drop-icon{
@@ -1765,6 +1776,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     background-size: cover;
     border-radius: 10px;
     overflow: hidden;
+    background-color: rgb(10,10,10);
 }
 
 html.no-webp #enter_player_box_wrapper{
@@ -1801,7 +1813,6 @@ html.no-webp #enter_player_box_wrapper{
     left: 0;
     bottom: 0;
     right: 0;
-    background-color: rgba(10,10,10,0.7);
 }
 
 #goto_target_username{
@@ -1930,33 +1941,9 @@ html.no-webp #error_box_wrapper{
     outline: 0 !important;
 }
 
-@media (max-width: 1540px){
+@media (max-width: 1590px){
     header{
         width: 100vw;
-    }
-
-    #info_button{
-        vertical-align: top;
-        display: inline-block;
-        width: 35px;
-        height: 45px;
-        background-image: url(/resources/img/icons/information.png);
-        background-size: 20px 20px;
-        position: relative;
-        opacity: 0.8;
-        cursor: pointer;
-        background-position: center center;
-        background-repeat: no-repeat;
-        cursor: pointer;
-        padding: 0;
-        color: transparent;
-        background-color: transparent;
-        margin: 0;
-    }
-
-    #info_button:hover{
-        opacity: 1;
-        background-color: transparent;
     }
 
     #info_box{
@@ -1965,13 +1952,14 @@ html.no-webp #error_box_wrapper{
         right: 0;
     }
 
-    #additional_stats_container{
-        white-space: normal;
+    #info_box_content{
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
     }
 
-    .additional-stat:not(:first-child){
-        margin-left: 0;
-        margin-top: 4px;
+    #additional_stats_container{
+        white-space: normal;
+        width: calc(100vw - 150px);
     }
 
     #base_stats_container{
@@ -1985,10 +1973,6 @@ html.no-webp #error_box_wrapper{
 
     #skill_levels_container .skill{
         width: calc((100vw - 410px) / 2 - 60px);
-    }
-
-    #additional_stats_container{
-        width: 100vw;
     }
 
     #wrapper, #bg_blur{
@@ -2015,6 +1999,31 @@ html.no-webp #error_box_wrapper{
 }
 
 @media (max-width: 1200px){
+    #info_button{
+        vertical-align: top;
+        display: inline-block;
+        width: 35px;
+        height: 48px;
+        background-image: url(/resources/img/icons/information.png);
+        background-size: 20px 20px;
+        position: relative;
+        opacity: 0.8;
+        cursor: pointer;
+        background-position: center center;
+        background-repeat: no-repeat;
+        cursor: pointer;
+        padding: 0;
+        color: transparent;
+        background-color: transparent;
+        margin: 0;
+        margin-left: -5px;
+    }
+
+    #info_button:hover{
+        opacity: 1;
+        background-color: transparent;
+    }
+
     #player_profile{
         font-size: 25px;
         margin: 25px;
@@ -2051,10 +2060,16 @@ html.no-webp #error_box_wrapper{
 
     .stat-inventory .stat-content{
         padding-left: 0 !important;
+        padding-right: 0 !important;
     }
 
     #stats_for_player:focus #other_players, #stats_for_profile:focus #other_profiles {
         clip-path: ellipse(200% 200% at 0% 0%);
+    }
+
+    #stats_for_player .goto, #stats_for_profile .goto{
+        padding: 10px;
+        padding-left: 20px;
     }
 
     #basic_stats{
@@ -2117,6 +2132,11 @@ html.no-webp #error_box_wrapper{
         display: block;
     }
 
+    .additional-stat:not(:first-child){
+        margin-left: 0;
+        margin-top: 4px;
+    }
+
     #stats_content{
         left: 50% !important;
         width: 360px;
@@ -2141,6 +2161,7 @@ html.no-webp #error_box_wrapper{
 
     #inventory_header{
         height: 45px;
+        padding-top: 5px;
     }
 
     #inventory_header .inventory-tab{
@@ -2157,6 +2178,7 @@ html.no-webp #error_box_wrapper{
         box-sizing: border-box;
         padding: 0;
         padding-top: 10px;
+        border-radius: 0;
     }
 
     #inventory_header{
@@ -2179,7 +2201,7 @@ html.no-webp #error_box_wrapper{
 
     .slayer-containers{
         white-space: nowrap;
-        overflow-y: auto;
+        overflow-x: auto;
         margin-left: -40px;
         margin-right: -40px;
         padding-left: 40px;
@@ -2197,6 +2219,26 @@ html.no-webp #error_box_wrapper{
 }
 
 @media (max-width: 760px){
+    header > .social-button{
+        display: none;
+    }
+
+    .stat-header{
+        padding-left: 25px;
+    }
+
+    .collections{
+        white-space: nowrap;
+        overflow-x: auto;
+        margin-left: -40px;
+        margin-right: -40px;
+        padding-left: 30px;
+    }
+
+    .collection:last-child{
+        margin-right: 30px;
+    }
+
     .nav-item:not(.active):hover::after{
         height: 2px;
         top: 100%;
@@ -2254,6 +2296,55 @@ html.no-webp #error_box_wrapper{
         margin-left: 0 !important;
         margin-top: 20px;
     }
+}
+
+@media (max-width: 520px){
+    #search_user{
+        width: calc(100% - 180px);
+        margin-left: auto;
+    }
+
+    #inp_search_user{
+        width: calc(100% - 60px);
+    }
+
+    #btn_search_user{
+        left: calc(100% - 60px);
+    }
+
+    #stats_for_player, #stats_for_profile{
+        font-size: 20px;
+        height: 46px;
+        line-height: 46px;
+    }
+
+    #stats_for_profile{
+        margin-top: 10px;
+    }
+
+    .text-on::after{
+        content: "\A";
+        white-space: pre;
+    }
+
+    #error_text{
+        font-size: 15px;
+    }
+
+    .rank-tag{
+        font-size: 14px;
+        height: 28px;
+        line-height: 28px;
+    }
+
+    .rank-tag .rank-name{
+        padding: 0 10px;
+    }
+
+    .rank-tag .rank-plus{
+        padding-right: 5px;
+    }
+
 }
 
 @media (max-width: 480px){
@@ -2368,5 +2459,23 @@ html.no-webp #error_box_wrapper{
 @media (max-width: 350px){
     .piece-icon{
         transform: translate(-50%, -50%) scale(0.35);
+    }
+
+    #player_model_mobile{
+        left: 10px;
+        height: 190px;
+    }
+
+    #base_stats_container{
+        padding-left: 30px;
+    }
+
+    .basic-stat{
+        margin-left: 95px;
+        white-space: nowrap;
+    }
+
+    #wrapper{
+        background-color: rgb(20,20,20);
     }
 }

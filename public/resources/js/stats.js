@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function(){
+    tippy('*[data-tippy-content]');
+
     const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag);
 
     let dimmer = document.querySelector("#dimmer");
@@ -100,38 +102,6 @@ document.addEventListener('DOMContentLoaded', function(){
         });
 
         inventoryContainer.appendChild(inventoryView);
-
-        inventoryView.style.height = "auto";
-        inventoryView.style.width = "auto";
-
-        if(inventoryView.classList.contains('current-inventory')){
-            inventoryContainer.style.width = "auto";
-            inventoryContainer.style.height = "auto";
-        }
-
-        let width, height;
-
-        if(window.outerWidth <= 1200){
-            height = inventoryView.offsetHeight;
-            width = window.outerWidth;
-
-            height += 15;
-        }else{
-            height = inventoryView.offsetHeight;
-            width = inventoryView.offsetWidth;
-        }
-
-        inventoryView.style.width = width + "px";
-        inventoryView.style.height = height + "px";
-
-        inventoryView.classList.add('processed');
-        inventoryView.setAttribute('data-height', height + 50 + "px");
-        inventoryView.setAttribute('data-width', width + "px");
-
-        if(inventoryView.classList.contains('current-inventory')){
-            inventoryContainer.style.width = width + "px";
-            inventoryContainer.style.height = height + 50 + "px";
-        }
 
         [].forEach.call(inventoryView.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
 
@@ -329,43 +299,10 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     function resize(){
+        tippy('*[data-tippy-content]');
+
         navBarSticky = new Sticky('#nav_bar');
-        
-        [].forEach.call(document.querySelectorAll('.inventory-view'), function(element){
-            let width, height;
-
-            element.classList.remove('processed');
-
-            element.style.height = "auto";
-            element.style.width = "auto";
-
-            if(element.classList.contains('current-inventory')){
-                inventoryContainer.style.width = "auto";
-                inventoryContainer.style.height = "auto";
-            }
-
-            if(window.outerWidth <= 1200){
-                height = element.offsetHeight;
-                width = window.outerWidth;
-
-                height += 15;
-            }else{
-                height = element.offsetHeight;
-                width = element.offsetWidth;
-            }
-
-            element.style.width = width + "px";
-            element.style.height = height + "px";
-
-            element.classList.add('processed');
-            element.setAttribute('data-height', height + 50 + "px");
-            element.setAttribute('data-width', width + "px");
-
-            if(element.classList.contains('current-inventory')){
-                inventoryContainer.style.width = width + "px";
-                inventoryContainer.style.height = height + 50 + "px";
-            }
-        });
+        updateStatsPositions();
 
         let element = document.querySelector('.rich-item.sticky-stats');
 
@@ -771,6 +708,4 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     setTimeout(resize, 1000);
-
-    tippy('*[data-tippy-content]')
 });
