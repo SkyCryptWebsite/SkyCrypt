@@ -1552,10 +1552,10 @@ if(calculated.bank)
                             <span class="stat-name">Unique Accessories: </span><span class="stat-value"><%= items.talismans.filter(a => a.isUnique).length %> / 47</span><br>
                             <span class="stat-name">Completion: </span><span class="stat-value"><%= Math.round(items.talismans.filter(a => a.isUnique).length / 47 * 100) %>%</span>
                         </p>
-                        <% if(items.talismans.filter(a => a.isUnique && !a.isInactive).length > 0){ %>
+                        <% if(items.talismans.filter(a => !a.isInactive).length > 0){ %>
                             <div class="accessory-list">
                                 <p class="stat-sub-header" style="margin-bottom: 5px">Active Accessories</p>
-                                <% items.talismans.filter(a => a.isUnique && !a.isInactive).forEach(item => { %>
+                                <% items.talismans.filter(a => !a.isInactive).forEach(item => { %>
                                     <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-index="<%= item.item_index %>"
                                     class="rich-item piece piece-<%= item.rarity %>-bg">
                                         <% if(item.rarity == 'legendary'){ %>
