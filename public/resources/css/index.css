@@ -2247,6 +2247,10 @@ html.no-webp #error_box_wrapper{
         top: 100%;
     }
 
+    .info-container{
+        margin-left: 0;
+    }
+
     .inventory-slot{
         width: calc(100vw / 9 - 15px);
         height: calc(100vw / 9 - 15px);
