@@ -1855,7 +1855,6 @@ html.no-webp #error_box_wrapper{
     left: 0;
     bottom: 0;
     right: 0;
-    background-color: rgba(10,10,10,0.7);
 }
 
 #error_box_wrapper.show-error{
