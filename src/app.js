@@ -249,7 +249,7 @@ async function main(){
             const profiles = [];
 
             for(const [index, profile_response] of responses.entries()){
-                if(!profile_response.data.success){
+                if(!profile_response.data.success || profile_response.data.profile == null){
                     delete skyBlockProfiles[profileIds[index]];
                     continue;
                 }
