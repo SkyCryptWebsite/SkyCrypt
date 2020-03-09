@@ -925,6 +925,7 @@ module.exports = {
         || 'experience_skill_carpentry' in profile
         || 'experience_skill_runecrafting' in profile){
             let average_level = 0;
+            let average_level_no_progress = 0;
 
             let levels = {
                 farming: getLevelByXp(profile.experience_skill_farming),
@@ -941,18 +942,21 @@ module.exports = {
             output.skill_bonus = {};
 
             for(let skill in levels){
-                if(skill != 'runecrafting' && skill != 'carpentry')
+                if(skill != 'runecrafting' && skill != 'carpentry'){
                     average_level += levels[skill].level + levels[skill].progress;
+                    average_level_no_progress += levels[skill].level;
+                }
 
-                let skillBonus = getBonusStat(levels[skill].level, `${skill}_skill`, 50, 1);
+                const skillBonus = getBonusStat(levels[skill].level, `${skill}_skill`, 50, 1);
 
                 output.skill_bonus[skill] = Object.assign({}, skillBonus);
 
-                for(let stat in skillBonus)
+                for(const stat in skillBonus)
                     output.stats[stat] += skillBonus[stat];
             }
 
-            output.average_level = +(average_level / (Object.keys(levels).length - 2)).toFixed(1);
+            output.average_level = (average_level / (Object.keys(levels).length - 2)).toFixed(1);
+            output.average_level_no_progress = (average_level_no_progress / (Object.keys(levels).length - 2)).toFixed(1);
 
             output.levels = Object.assign({}, levels);
         }
