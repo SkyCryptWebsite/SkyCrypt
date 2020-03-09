@@ -408,7 +408,6 @@ async function getItems(base64){
 
                 if('power' in item.tag.ExtraAttributes.enchantments
                 || 'aiming' in item.tag.ExtraAttributes.enchantments
-                || 'dragon_hunter' in item.tag.ExtraAttributes.enchantments
                 || 'infinite_quiver' in item.tag.ExtraAttributes.enchantments
                 || 'power' in item.tag.ExtraAttributes.enchantments
                 || 'snipe' in item.tag.ExtraAttributes.enchantments
