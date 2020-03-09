@@ -7,6 +7,7 @@ const _ = require('lodash');
 const objectPath = require("object-path");
 const constants = require('./constants');
 const helper = require('./helper');
+const axios = require('axios');
 
 const customResources = require('./custom-resources');
 
@@ -1266,11 +1267,42 @@ module.exports = {
             const split = collection.split("_");
             const tier = Math.max(0, parseInt(split.pop()));
             const type = split.join("_");
+            const amount = profile.collection[type] | 0;
 
             if(!(type in output) || tier > output[type].tier)
-                output[type] = { tier, amount: profile.collection[type] | 0 };
+                output[type] = { tier, amount };
+
+            const collectionData =  constants.collection_data.filter(a => a.skyblockId == type)[0];
+
+            if('tiers' in collectionData){
+                for(const tier of collectionData.tiers){
+                    if(amount > tier.amountRequired){
+                        output[type].tier = Math.max(tier.tier, output[type].tier);
+                    }
+                }
+            }
         }
 
         return output;
     }
 }
+
+async function init(){
+    const response = await axios('https://api.hypixel.net/resources/skyblock/collections');
+
+    if(!objectPath.has(response, 'data.collections'))
+        return;
+
+    for(const type in response.data.collections){
+        for(const itemType in response.data.collections[type].items){
+            const item = response.data.collections[type].items[itemType];
+
+            const collectionData = constants.collection_data.filter(a => a.skyblockId == itemType)[0];
+
+            collectionData.maxTier = item.maxTiers;
+            collectionData.tiers = item.tiers;
+        }
+    }
+}
+
+init();
