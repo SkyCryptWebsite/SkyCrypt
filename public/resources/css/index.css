@@ -1455,6 +1455,10 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     padding-bottom: 30px;
 }
 
+.slayer-containers{
+    white-space: nowrap;
+}
+
 .slayer-header{
     text-align: center;
     vertical-align: middle;
@@ -2200,7 +2204,6 @@ html.no-webp #error_box_wrapper{
     }
 
     .slayer-containers{
-        white-space: nowrap;
         overflow-x: auto;
         margin-left: -40px;
         margin-right: -40px;
