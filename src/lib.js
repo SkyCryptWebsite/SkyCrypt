@@ -837,6 +837,13 @@ module.exports = {
         output.talismans = talismans;
         output.weapons = all_items.filter(a => a.type == 'sword' || a.type == 'bow' || a.type == 'fishing rod');
 
+        for(const item of all_items){
+            if(!Array.isArray(item.containsItems))
+                continue;
+
+            output.weapons.push(...item.containsItems.filter(a => a.type == 'sword' || a.type == 'bow' || a.type == 'fishing rod'));
+        }
+
         // Check if inventory access disabled by user
         if(inventory.length == 0)
             output.no_inventory = true;
