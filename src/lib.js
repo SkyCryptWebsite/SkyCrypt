@@ -15,7 +15,7 @@ const parseNbt = util.promisify(nbt.parse);
 
 const rarity_order = ['special', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 
-const max_souls = 190;
+const MAX_SOULS = 193;
 
 function replaceAll(target, search, replacement){
     return target.split(search).join(replacement);
@@ -907,7 +907,7 @@ module.exports = {
         output.fairy_bonus = {};
 
         if(profile.fairy_exchanges > 0){
-            let fairyBonus = getBonusStat(profile.fairy_exchanges * 5, 'fairy_souls', max_souls, 5);
+            let fairyBonus = getBonusStat(profile.fairy_exchanges * 5, 'fairy_souls', MAX_SOULS, 5);
             output.fairy_bonus = Object.assign({}, fairyBonus);
 
             // Apply fairy soul bonus
@@ -915,7 +915,7 @@ module.exports = {
                 output.stats[stat] += fairyBonus[stat];
         }
 
-        output.fairy_souls = { collected: profile.fairy_souls_collected, total: max_souls, progress: Math.min(profile.fairy_souls_collected / max_souls, 1) };
+        output.fairy_souls = { collected: profile.fairy_souls_collected, total: MAX_SOULS, progress: Math.min(profile.fairy_souls_collected / MAX_SOULS, 1) };
 
         // Apply skill bonuses
         if('experience_skill_farming' in profile
