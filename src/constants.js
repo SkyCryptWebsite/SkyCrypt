@@ -615,6 +615,18 @@ module.exports = {
                 defense: 1,
                 strength: 1,
                 speed: 0
+            },
+            195: {
+                health: 22,
+                defense: 1,
+                strength: 1,
+                speed: 0
+            },
+            200: {
+                health: 23,
+                defense: 2,
+                strength: 2,
+                speed: 1
             }
         },
 
