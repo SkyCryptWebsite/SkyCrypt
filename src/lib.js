@@ -565,6 +565,9 @@ module.exports = {
             plusColor = plusColor.niceColor || plusColor.color;
         }
 
+        if(rankName == 'PIG+++')
+            plusColor = constants.minecraft_formatting['b'].niceColor;
+
         output = `<div class="rank-tag ${plusText ? 'rank-plus' : ''}"><div class="rank-name" style="background-color: ${rankColor}">${rank.tag}</div>`;
 
         if(plusText)
