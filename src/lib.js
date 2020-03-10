@@ -1120,7 +1120,7 @@ module.exports = {
 
             // Stats shouldn't go into negative
             for(let stat in stats)
-                output.weapon_stats[item.item_index][stat] = Math.max(0, stats[stat]);
+                output.weapon_stats[item.item_index][stat] = Math.max(0, Math.round(stats[stat]));
         });
 
         const superiorBonus = Object.assign({}, constants.stat_template);
@@ -1143,7 +1143,7 @@ module.exports = {
 
         // Stats shouldn't go into negative
         for(let stat in output.stats)
-            output.stats[stat] = Math.max(0, output.stats[stat]);
+            output.stats[stat] = Math.max(0, Math.round(output.stats[stat]));
 
         let killsDeaths = [];
 
