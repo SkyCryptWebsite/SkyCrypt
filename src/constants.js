@@ -381,8 +381,21 @@ module.exports = {
     },
 
     mob_names: {
-        "unburried_zombie": "Crypt Ghoul",
-        "zealot_enderman": "Zealot",
+        unburried_zombie: "Crypt Ghoul",
+        zealot_enderman: "Zealot",
+    },
+
+    area_names: {
+        dynamic: "Private Island",
+        hub: "Hub",
+        mining_1: "Gold Mine",
+        mining_2: "Deep Caverns",
+        combat_1: "Spider's Den",
+        combat_2: "Blazing Fortress",
+        combat_3: "The End",
+        farming_1: "The Barn",
+        farming_2: "Mushroom Desert",
+        foraging_1: "The Park"
     },
 
     // Object with fairy soul, skill, slayer bonuses and enchantment bonuses

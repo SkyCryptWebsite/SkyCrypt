@@ -128,7 +128,7 @@ async function main(){
 
         try{
             response = await Hypixel.get('player', { params, timeout: 5000 });
-            let { data } = response;
+            const { data } = response;
 
             if(!data.success){
                 res.render('index', {
@@ -393,6 +393,24 @@ async function main(){
 
             let last_updated_text = moment(last_updated).fromNow();
             let first_join_text = moment(first_join).fromNow();
+
+            let currentArea;
+
+            if(diff < 4 * 60){
+                try{
+                    const statusResponse = await Hypixel.get('status', { params: { uuid: hypixelPlayer.uuid, key: credentials.hypixel_api_key }});
+
+                    const areaData = statusResponse.data.session;
+
+                    if(areaData.online && areaData.gameType == 'SKYBLOCK')
+                        currentArea = areaData.mode;
+                }catch(e){
+
+                }
+            }
+
+            if(currentArea)
+                calculated.current_area = constants.area_names[currentArea];
 
             if(diff < 3)
                 last_updated_text = `Right now`;
