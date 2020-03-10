@@ -335,33 +335,33 @@ async function getItems(base64){
                 if(split.length < 2)
                     return;
 
-                let stat_type = split[0];
-                let stat_value = parseInt(split[1].trim().replace(/,/g, ''));
+                const statType = split[0];
+                const statValue = parseFloat(split[1].trim().replace(/,/g, ''));
 
-                switch(stat_type){
+                switch(statType){
                     case 'Damage':
-                        item.stats.damage = stat_value;
+                        item.stats.damage = statValue;
                         break;
                     case 'Health':
-                        item.stats.health = stat_value;
+                        item.stats.health = statValue;
                         break;
                     case 'Defense':
-                        item.stats.defense = stat_value;
+                        item.stats.defense = statValue;
                         break;
                     case 'Strength':
-                        item.stats.strength = stat_value;
+                        item.stats.strength = statValue;
                         break;
                     case 'Speed':
-                        item.stats.speed = stat_value;
+                        item.stats.speed = statValue;
                         break;
                     case 'Crit Chance':
-                        item.stats.crit_chance = stat_value;
+                        item.stats.crit_chance = statValue;
                         break;
                     case 'Crit Damage':
-                        item.stats.crit_damage = stat_value;
+                        item.stats.crit_damage = statValue;
                         break;
                     case 'Intelligence':
-                        item.stats.intelligence = stat_value;
+                        item.stats.intelligence = statValue;
                         break;
                 }
             });
