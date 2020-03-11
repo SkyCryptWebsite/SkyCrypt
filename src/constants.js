@@ -395,7 +395,8 @@ module.exports = {
         combat_3: "The End",
         farming_1: "The Barn",
         farming_2: "Mushroom Desert",
-        foraging_1: "The Park"
+        foraging_1: "The Park",
+        winter: "Jerry's Workshop"
     },
 
     // Object with fairy soul, skill, slayer bonuses and enchantment bonuses
