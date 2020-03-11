@@ -51,487 +51,6 @@ const romanize = num => {
 	return Array(+digits.join("") + 1).join("M") + roman;
 };
 
-const collectionTypes = ['farming', 'mining', 'combat', 'foraging', 'fishing'];
-
-const collectionData = [
-    {
-        type: 'farming',
-        skyblockId: 'WHEAT',
-        name: 'Wheat',
-        id: 296,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'farming',
-        skyblockId: 'CARROT_ITEM',
-        name: 'Carrot',
-        id: 391,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'farming',
-        skyblockId: 'POTATO_ITEM',
-        name: 'Potato',
-        id: 392,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'farming',
-        skyblockId: 'PUMPKIN',
-        name: 'Pumpkin',
-        id: 86,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'farming',
-        skyblockId: 'MELON',
-        name: 'Melon',
-        id: 360,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'farming',
-        skyblockId: 'SEEDS',
-        name: 'Seeds',
-        id: 295,
-        damage: 0,
-        maxTier: 6
-    },
-    {
-        type: 'farming',
-        skyblockId: 'MUSHROOM_COLLECTION',
-        name: 'Mushroom',
-        id: 40,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'farming',
-        skyblockId: 'INK_SACK:3',
-        name: 'Cocoa Beans',
-        id: 351,
-        damage: 3,
-        maxTier: 9
-    },
-    {
-        type: 'farming',
-        skyblockId: 'CACTUS',
-        name: 'Cactus',
-        id: 81,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'farming',
-        skyblockId: 'SUGAR_CANE',
-        name: 'Sugar Cane',
-        id: 338,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'farming',
-        skyblockId: 'FEATHER',
-        name: 'Feather',
-        id: 288,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'farming',
-        skyblockId: 'LEATHER',
-        name: 'Leather',
-        id: 334,
-        damage: 0,
-        maxTier: 10
-    },
-    {
-        type: 'farming',
-        skyblockId: 'PORK',
-        name: 'Raw Porkchop',
-        id: 319,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'farming',
-        skyblockId: 'RAW_CHICKEN',
-        name: 'Raw Chicken',
-        id: 365,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'farming',
-        skyblockId: 'MUTTON',
-        name: 'Mutton',
-        id: 423,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'farming',
-        skyblockId: 'RABBIT',
-        name: 'Raw Rabbit',
-        id: 411,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'farming',
-        skyblockId: 'NETHER_STALK',
-        name: 'Nether Wart',
-        id: 372,
-        damage: 0,
-        maxTier: 9
-    },
-
-    {
-        type: 'mining',
-        skyblockId: 'COBBLESTONE',
-        name: 'Cobblestone',
-        id: 4,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'mining',
-        skyblockId: 'COAL',
-        name: 'Coal',
-        id: 263,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'mining',
-        skyblockId: 'IRON_INGOT',
-        name: 'Iron Ingot',
-        id: 265,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'mining',
-        skyblockId: 'GOLD_INGOT',
-        name: 'Gold Ingot',
-        id: 266,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'mining',
-        skyblockId: 'DIAMOND',
-        name: 'Diamond',
-        id: 264,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'mining',
-        skyblockId: 'INK_SACK:4',
-        name: 'Lapis Lazuli',
-        id: 351,
-        damage: 4,
-        maxTier: 9
-    },
-    {
-        type: 'mining',
-        skyblockId: 'EMERALD',
-        name: 'Emerald',
-        id: 388,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'mining',
-        skyblockId: 'REDSTONE',
-        name: 'Redstone',
-        id: 331,
-        damage: 0,
-        maxTier: 11
-    },
-    {
-        type: 'mining',
-        skyblockId: 'QUARTZ',
-        name: 'Nether Quartz',
-        id: 406,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'mining',
-        skyblockId: 'OBSIDIAN',
-        name: 'Obsidian',
-        id: 49,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'mining',
-        skyblockId: 'GLOWSTONE_DUST',
-        name: 'Glowstone',
-        id: 348,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'mining',
-        skyblockId: 'GRAVEL',
-        name: 'Gravel',
-        id: 13,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'mining',
-        skyblockId: 'ICE',
-        name: 'Ice',
-        id: 79,
-        damage: 0,
-        maxTier: 10
-    },
-    {
-        type: 'mining',
-        skyblockId: 'NETHERRACK',
-        name: 'Netherrack',
-        id: 87,
-        damage: 0,
-        maxTier: 3
-    },
-    {
-        type: 'mining',
-        skyblockId: 'SAND',
-        name: 'Sand',
-        id: 12,
-        damage: 0,
-        maxTier: 7
-    },
-    {
-        type: 'mining',
-        skyblockId: 'ENDER_STONE',
-        name: 'End Stone',
-        id: 121,
-        damage: 0,
-        maxTier: 9
-    },
-
-    {
-        type: 'combat',
-        skyblockId: 'ROTTEN_FLESH',
-        name: 'Rotten Flesh',
-        id: 367,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'combat',
-        skyblockId: 'BONE',
-        name: 'Bone',
-        id: 352,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'combat',
-        skyblockId: 'STRING',
-        name: 'String',
-        id: 287,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'combat',
-        skyblockId: 'SPIDER_EYE',
-        name: 'Spider Eye',
-        id: 375,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'combat',
-        skyblockId: 'SULPHUR',
-        name: 'Gunpowder',
-        id: 289,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'combat',
-        skyblockId: 'ENDER_PEARL',
-        name: 'Ender Pearl',
-        id: 368,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'combat',
-        skyblockId: 'GHAST_TEAR',
-        name: 'Ghast Tear',
-        id: 370,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'combat',
-        skyblockId: 'SLIME_BALL',
-        name: 'Slimeball',
-        id: 341,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'combat',
-        skyblockId: 'BLAZE_ROD',
-        name: 'Blaze Rod',
-        id: 369,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'combat',
-        skyblockId: 'MAGMA_CREAM',
-        name: 'Magma Cream',
-        id: 378,
-        damage: 0,
-        maxTier: 9
-    },
-
-    {
-        type: 'foraging',
-        skyblockId: 'LOG',
-        name: 'Oak Wood',
-        id: 17,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'foraging',
-        skyblockId: 'LOG:1',
-        name: 'Spruce Wood',
-        id: 17,
-        damage: 1,
-        maxTier: 9
-    },
-    {
-        type: 'foraging',
-        skyblockId: 'LOG:2',
-        name: 'Birch Wood',
-        id: 17,
-        damage: 2,
-        maxTier: 9
-    },
-    {
-        type: 'foraging',
-        skyblockId: 'LOG_2:1',
-        name: 'Dark Oak Wood',
-        id: 162,
-        damage: 1,
-        maxTier: 9
-    },
-    {
-        type: 'foraging',
-        skyblockId: 'LOG_2',
-        name: 'Acacia Wood',
-        id: 162,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'foraging',
-        skyblockId: 'LOG:3',
-        name: 'Jungle Wood',
-        id: 17,
-        damage: 3,
-        maxTier: 9
-    },
-
-    {
-        type: 'fishing',
-        skyblockId: 'RAW_FISH',
-        name: 'Raw Fish',
-        id: 349,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'fishing',
-        skyblockId: 'RAW_FISH:1',
-        name: 'Raw Salmon',
-        id: 349,
-        damage: 1,
-        maxTier: 9
-    },
-    {
-        type: 'fishing',
-        skyblockId: 'RAW_FISH:2',
-        name: 'Clownfish',
-        id: 349,
-        damage: 2,
-        maxTier: 3
-    },
-    {
-        type: 'fishing',
-        skyblockId: 'RAW_FISH:3',
-        name: 'Pufferfish',
-        id: 349,
-        damage: 3,
-        maxTier: 6
-    },
-    {
-        type: 'fishing',
-        skyblockId: 'PRISMARINE_SHARD',
-        name: 'Prismarine Shard',
-        id: 409,
-        damage: 0,
-        maxTier: 5
-    },
-    {
-        type: 'fishing',
-        skyblockId: 'PRISMARINE_CRYSTALS',
-        name: 'Prismarine Crystals',
-        id: 410,
-        damage: 0,
-        maxTier: 7
-    },
-    {
-        type: 'fishing',
-        skyblockId: 'CLAY_BALL',
-        name: 'Clay',
-        id: 337,
-        damage: 0,
-        maxTier: 5
-    },
-    {
-        type: 'fishing',
-        skyblockId: 'WATER_LILY',
-        name: 'Lily Pad',
-        id: 111,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'fishing',
-        skyblockId: 'INK_SACK',
-        name: 'Ink Sac',
-        id: 351,
-        damage: 0,
-        maxTier: 9
-    },
-    {
-        type: 'fishing',
-        skyblockId: 'SPONGE',
-        name: 'Sponge',
-        id: 19,
-        damage: 0,
-        maxTier: 9
-    }
-];
-
 const slayerInfo = {
     zombie: {
         boss: 'Revenant Horror',
@@ -1176,6 +695,9 @@ getStats = items => {
         }
     }
 
+    for(const stat in stats)
+        stats[stat] = Math.round(stats[stat]);
+
     return stats;
 }
 
@@ -1372,38 +894,41 @@ if(calculated.bank)
             %>
 
             <div id="base_stats_container">
-                <div data-stat="health" class="basic-stat stat-health"><span data-tippy-content="Base Health: <%= calculated.base_stats.health %> HP
+                <div data-stat="health" class="basic-stat stat-health"><span data-tippy-content="<span class='stat-name'>Base Health: </span><span class='stat-value'><%= calculated.base_stats.health %> HP</span>
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls, leveling your Farming and Fishing skills and leveling up in Zombie or Wolf Slayer.</div>
-                Bonus Health: +<%= stats.health - calculated.base_stats.health %> HP
+                <span class='stat-name'>Bonus Health: </span><span class='stat-value'>+<%= stats.health - calculated.base_stats.health %> HP</span>
                 <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Health </span><span class="stat-value"><%= stats.health %></span></span></div>
-                <div data-stat="defense" class="basic-stat stat-defense"><span data-tippy-content="Base Defense: <%= calculated.base_stats.defense %>
+                <div data-stat="defense" class="basic-stat stat-defense"><span data-tippy-content="<span class='stat-name'>Base Defense: </span><span class='stat-value'><%= calculated.base_stats.defense %></span>
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls and leveling your Mining skill.</div>
-                Bonus Defense: +<%= stats.defense - calculated.base_stats.defense %>
+                <span class='stat-name'>Bonus Defense: </span><span class='stat-value'>+<%= stats.defense - calculated.base_stats.defense %></span>
                 <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Defense </span><span class="stat-value"><%= stats.defense %></span></span></div>
                 <div data-stat="effective_health" class="basic-stat stat-effective-health"><span data-tippy-content="Effective Health based on Health + Defense.
                 <div class='tippy-explanation'>→ Formula: Health * (1 + Defense / 100)</div>"><span class="stat-name">Effective HP </span><span class="stat-value"><%= stats.effective_health %></span></span></div>
-                <div data-stat="strength" class="basic-stat stat-strength"><span data-tippy-content="Base Strength: <%= calculated.base_stats.strength %>
+                <div data-stat="strength" class="basic-stat stat-strength"><span data-tippy-content="<span class='stat-name'>Base Strength: </span><span class='stat-value'><%= calculated.base_stats.strength %></span>
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls and leveling your Foraging skill.</div>
-                Bonus Strength: +<%= stats.strength - calculated.base_stats.strength %>
+                <span class='stat-name'>Bonus Strength: </span><span class='stat-value'>+<%= stats.strength - calculated.base_stats.strength %></span>
                 <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Strength </span><span class="stat-value"><%= stats.strength %></span></span></div>
-                <div data-stat="speed" class="basic-stat stat-speed"><span data-tippy-content="Base Speed: <%= calculated.base_stats.speed %>%
+                <div data-stat="speed" class="basic-stat stat-speed"><span data-tippy-content="<span class='stat-name'>Base Speed: </span><span class='stat-value'><%= calculated.base_stats.speed %>%</span>
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls.</div>
-                Bonus Speed: +<%= stats.speed - calculated.base_stats.speed %>%
+                <span class='stat-name'>Bonus Speed: </span><span class='stat-value'>+<%= stats.speed - calculated.base_stats.speed %>%</span>
                 <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Speed </span><span class="stat-value"><%= stats.speed %></span>%</span></div>
-                <div data-stat="crit_chance" class="basic-stat stat-crit-chance"><span data-tippy-content="Base Crit Chance: <%= calculated.base_stats.crit_chance %>%
+                <div data-stat="crit_chance" class="basic-stat stat-crit-chance"><span data-tippy-content="<span class='stat-name'>Base Crit Chance: </span><span class='stat-value'><%= calculated.base_stats.crit_chance %>%</span>
                 <div class='tippy-explanation'>Increased by leveling your Combat skill.</div>
-                Bonus Crit Chance: +<%= stats.crit_chance - calculated.base_stats.crit_chance %>%
+                <span class='stat-name'>Bonus Crit Chance: </span><span class='stat-value'>+<%= stats.crit_chance - calculated.base_stats.crit_chance %>%</span>
                 <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Crit Chance </span><span class="stat-value"><%= stats.crit_chance %></span>%</span></div>
-                <div data-stat="crit_damage" class="basic-stat stat-crit-damage"><span data-tippy-content="Base Crit Damage: <%= calculated.base_stats.crit_damage %>%
+                <div data-stat="crit_damage" class="basic-stat stat-crit-damage"><span data-tippy-content="<span class='stat-name'>Base Crit Damage: </span><span class='stat-value'><%= calculated.base_stats.crit_damage %>%</span>
                 <div class='tippy-explanation'>Increased by leveling up in Spider or Wolf Slayer.</div>
-                Bonus Crit Damage: +<%= stats.crit_damage - calculated.base_stats.crit_damage %>%
+                <span class='stat-name'>Bonus Crit Damage: </span><span class='stat-value'>+<%= stats.crit_damage - calculated.base_stats.crit_damage %>%</span>
                 <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Crit Damage </span><span class="stat-value"><%= stats.crit_damage %></span>%</span></div>
-                <div data-stat="intelligence" class="basic-stat stat-intelligence"><span data-tippy-content="Base Intelligence: <%= calculated.base_stats.intelligence %>
+                <div data-stat="intelligence" class="basic-stat stat-intelligence"><span data-tippy-content="<span class='stat-name'>Base Intelligence: </span><span class='stat-value'><%= calculated.base_stats.intelligence %></span>
                 <div class='tippy-explanation'>Increased by leveling your Enchanting and Alchemy skills and completing songs on Melody's Harp.</div>
-                Bonus Intelligence: +<%= stats.intelligence - calculated.base_stats.intelligence %>
+                <span class='stat-name'>Bonus Intelligence: </span><span class='stat-value'>+<%= stats.intelligence - calculated.base_stats.intelligence %></span>
                 <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Intelligence </span><span class="stat-value"><%= stats.intelligence %></span></span></div>
                 <div id="player_model_mobile" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
                 <div id="additional_stats_container">
+                    <% if(calculated.current_area){ %>
+                    <div class="additional-stat"><span class="stat-name">Current Island: </span><span class="stat-value"><%= calculated.current_area %></span></div>
+                    <% } %>
                     <div class="additional-stat"><span data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></span></div>
                     <div class="additional-stat"><span data-tippy-content="Joined on <%= moment(calculated.first_join.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></span></div>
                     <div class="additional-stat"><span class="stat-name">Purse: </span><span class="stat-value"><%= Math.round(calculated.purse).toLocaleString() %> Coins</span></div>
@@ -1411,7 +936,8 @@ if(calculated.bank)
                         <div class="additional-stat"><span class="stat-name">Bank Account: </span><span class="stat-value"><%= Math.round(calculated.bank).toLocaleString() %> Coin<%= Math.round(calculated.bank) == 1 ? '': 's' %></span></div>
                     <% } %>
                     <% if('levels' in calculated){ %>
-                        <div class="additional-stat"><span data-tippy-content="Average skill level over all skills except Carpentry and Runecrafting, includes progress to next level."><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level %></span></span></div>
+                        <div class="additional-stat"><span data-tippy-content="Average skill level over all skills except Carpentry and Runecrafting, includes progress to next level.<br><br>
+                        <span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress %></span>"><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level %></span></span></div>
                     <% } %>
                 </div>
             </div>
@@ -1532,7 +1058,7 @@ if(calculated.bank)
 
                                 items.weapons.forEach(item => { %>
                                     <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-index="<%= item.item_index %>" class="rich-item piece
-                                        <% if(sword.length > 0 && item.item_index == sword[0].item_index){ %>piece-selected<% } %>
+                                        <% if(sword.length > 0 && item.backpackIndex === undefined && item.item_index == sword[0].item_index){ %>piece-selected<% } %>
                                         piece-<%= item.rarity %>-bg">
                                         <% if(item.rarity == 'legendary'){ %>
                                             <div class="piece-shine"></div>
@@ -1769,7 +1295,7 @@ if(calculated.bank)
                                     <% } %>
                                 </div>
                             </div>
-                            <div class="slayer-section-header"><span data-tippy-content="Average drops based on Slayer boss kills. The number ranges from no Magic Find to maximum Magic Find.">Average Drops</span></div>
+                            <div class="slayer-section-header"><span data-tippy-content="Average drops based on Slayer boss kills. The number ranges from 0% Magic Find to 89% Magic Find.">Average Drops</span></div>
                             <div class="slayer-section slayer-drops">
                                 <%
                                 for(const drop of slayerInfo[slayerName].drops){
@@ -1940,17 +1466,17 @@ if(calculated.bank)
                     <p class="stat-raw-values">
                         <%
                         let maxCollections = 0;
-                        for(const collection of collectionData)
+                        for(const collection of constants.collection_data)
                             if(collection.skyblockId in calculated.collections
                             && calculated.collections[collection.skyblockId].tier >= collection.maxTier)
                                 maxCollections++;
                         %>
-                        <span class="stat-name">Maxed Collections: </span><span class="stat-value"><%= maxCollections %> / <%= collectionData.length %></span>
+                        <span class="stat-name">Maxed Collections: </span><span class="stat-value"><%= maxCollections %> / <%= constants.collection_data.length %></span>
                     </p>
-                    <% for(const type of constants.minion_types){
+                    <% for(const type of constants.collection_types){
                         const collections = [];
 
-                        for(const collection of collectionData.filter(a => a.type == type))
+                        for(const collection of constants.collection_data.filter(a => a.type == type))
                             if(collection.skyblockId in calculated.collections)
                                 collections.push(Object.assign(collection, calculated.collections[collection.skyblockId]));
 

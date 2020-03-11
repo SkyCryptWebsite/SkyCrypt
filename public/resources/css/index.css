@@ -17,8 +17,17 @@ html.no-webp{
 
 .tippy-tooltip{
     font-weight: 500;
-    background-color: rgb(30,30,30);
+    background-color: transparent;
     border-radius: 0;
+}
+
+.tippy-content .stat-name{
+    color: rgba(255,255,255,0.85);
+}
+
+.tippy-content{
+    border-radius: 5px;
+    background-color: rgb(30,30,30);
 }
 
 .tippy-tooltip[data-placement^="top"] > .tippy-arrow{
@@ -1450,6 +1459,10 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     padding-bottom: 30px;
 }
 
+.slayer-containers{
+    white-space: nowrap;
+}
+
 .slayer-header{
     text-align: center;
     vertical-align: middle;
@@ -2195,7 +2208,6 @@ html.no-webp #error_box_wrapper{
     }
 
     .slayer-containers{
-        white-space: nowrap;
         overflow-x: auto;
         margin-left: -40px;
         margin-right: -40px;

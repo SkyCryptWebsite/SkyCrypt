@@ -7,6 +7,7 @@ const _ = require('lodash');
 const objectPath = require("object-path");
 const constants = require('./constants');
 const helper = require('./helper');
+const axios = require('axios');
 
 const customResources = require('./custom-resources');
 
@@ -14,7 +15,7 @@ const parseNbt = util.promisify(nbt.parse);
 
 const rarity_order = ['special', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 
-const max_souls = 190;
+const MAX_SOULS = 193;
 
 function replaceAll(target, search, replacement){
     return target.split(search).join(replacement);
@@ -334,33 +335,33 @@ async function getItems(base64){
                 if(split.length < 2)
                     return;
 
-                let stat_type = split[0];
-                let stat_value = parseInt(split[1].trim().replace(/,/g, ''));
+                const statType = split[0];
+                const statValue = parseFloat(split[1].trim().replace(/,/g, ''));
 
-                switch(stat_type){
+                switch(statType){
                     case 'Damage':
-                        item.stats.damage = stat_value;
+                        item.stats.damage = statValue;
                         break;
                     case 'Health':
-                        item.stats.health = stat_value;
+                        item.stats.health = statValue;
                         break;
                     case 'Defense':
-                        item.stats.defense = stat_value;
+                        item.stats.defense = statValue;
                         break;
                     case 'Strength':
-                        item.stats.strength = stat_value;
+                        item.stats.strength = statValue;
                         break;
                     case 'Speed':
-                        item.stats.speed = stat_value;
+                        item.stats.speed = statValue;
                         break;
                     case 'Crit Chance':
-                        item.stats.crit_chance = stat_value;
+                        item.stats.crit_chance = statValue;
                         break;
                     case 'Crit Damage':
-                        item.stats.crit_damage = stat_value;
+                        item.stats.crit_damage = statValue;
                         break;
                     case 'Intelligence':
-                        item.stats.intelligence = stat_value;
+                        item.stats.intelligence = statValue;
                         break;
                 }
             });
@@ -408,7 +409,6 @@ async function getItems(base64){
 
                 if('power' in item.tag.ExtraAttributes.enchantments
                 || 'aiming' in item.tag.ExtraAttributes.enchantments
-                || 'dragon_hunter' in item.tag.ExtraAttributes.enchantments
                 || 'infinite_quiver' in item.tag.ExtraAttributes.enchantments
                 || 'power' in item.tag.ExtraAttributes.enchantments
                 || 'snipe' in item.tag.ExtraAttributes.enchantments
@@ -564,6 +564,9 @@ module.exports = {
             plusColor = constants.minecraft_formatting[constants.color_names[player.rankPlusColor]];
             plusColor = plusColor.niceColor || plusColor.color;
         }
+
+        if(rankName == 'PIG+++')
+            plusColor = constants.minecraft_formatting['b'].niceColor;
 
         output = `<div class="rank-tag ${plusText ? 'rank-plus' : ''}"><div class="rank-name" style="background-color: ${rankColor}">${rank.tag}</div>`;
 
@@ -834,6 +837,13 @@ module.exports = {
         output.talismans = talismans;
         output.weapons = all_items.filter(a => a.type == 'sword' || a.type == 'bow' || a.type == 'fishing rod');
 
+        for(const item of all_items){
+            if(!Array.isArray(item.containsItems))
+                continue;
+
+            output.weapons.push(...item.containsItems.filter(a => a.type == 'sword' || a.type == 'bow' || a.type == 'fishing rod'));
+        }
+
         // Check if inventory access disabled by user
         if(inventory.length == 0)
             output.no_inventory = true;
@@ -904,7 +914,7 @@ module.exports = {
         output.fairy_bonus = {};
 
         if(profile.fairy_exchanges > 0){
-            let fairyBonus = getBonusStat(profile.fairy_exchanges * 5, 'fairy_souls', max_souls, 5);
+            let fairyBonus = getBonusStat(profile.fairy_exchanges * 5, 'fairy_souls', MAX_SOULS, 5);
             output.fairy_bonus = Object.assign({}, fairyBonus);
 
             // Apply fairy soul bonus
@@ -912,7 +922,7 @@ module.exports = {
                 output.stats[stat] += fairyBonus[stat];
         }
 
-        output.fairy_souls = { collected: profile.fairy_souls_collected, total: max_souls, progress: Math.min(profile.fairy_souls_collected / max_souls, 1) };
+        output.fairy_souls = { collected: profile.fairy_souls_collected, total: MAX_SOULS, progress: Math.min(profile.fairy_souls_collected / MAX_SOULS, 1) };
 
         // Apply skill bonuses
         if('experience_skill_farming' in profile
@@ -925,6 +935,7 @@ module.exports = {
         || 'experience_skill_carpentry' in profile
         || 'experience_skill_runecrafting' in profile){
             let average_level = 0;
+            let average_level_no_progress = 0;
 
             let levels = {
                 farming: getLevelByXp(profile.experience_skill_farming),
@@ -941,18 +952,21 @@ module.exports = {
             output.skill_bonus = {};
 
             for(let skill in levels){
-                if(skill != 'runecrafting' && skill != 'carpentry')
+                if(skill != 'runecrafting' && skill != 'carpentry'){
                     average_level += levels[skill].level + levels[skill].progress;
+                    average_level_no_progress += levels[skill].level;
+                }
 
-                let skillBonus = getBonusStat(levels[skill].level, `${skill}_skill`, 50, 1);
+                const skillBonus = getBonusStat(levels[skill].level, `${skill}_skill`, 50, 1);
 
                 output.skill_bonus[skill] = Object.assign({}, skillBonus);
 
-                for(let stat in skillBonus)
+                for(const stat in skillBonus)
                     output.stats[stat] += skillBonus[stat];
             }
 
-            output.average_level = +(average_level / (Object.keys(levels).length - 2)).toFixed(1);
+            output.average_level = (average_level / (Object.keys(levels).length - 2)).toFixed(1);
+            output.average_level_no_progress = (average_level_no_progress / (Object.keys(levels).length - 2)).toFixed(1);
 
             output.levels = Object.assign({}, levels);
         }
@@ -1106,7 +1120,7 @@ module.exports = {
 
             // Stats shouldn't go into negative
             for(let stat in stats)
-                output.weapon_stats[item.item_index][stat] = Math.max(0, stats[stat]);
+                output.weapon_stats[item.item_index][stat] = Math.max(0, Math.round(stats[stat]));
         });
 
         const superiorBonus = Object.assign({}, constants.stat_template);
@@ -1129,7 +1143,7 @@ module.exports = {
 
         // Stats shouldn't go into negative
         for(let stat in output.stats)
-            output.stats[stat] = Math.max(0, output.stats[stat]);
+            output.stats[stat] = Math.max(0, Math.round(output.stats[stat]));
 
         let killsDeaths = [];
 
@@ -1267,11 +1281,42 @@ module.exports = {
             const split = collection.split("_");
             const tier = Math.max(0, parseInt(split.pop()));
             const type = split.join("_");
+            const amount = profile.collection[type] | 0;
 
             if(!(type in output) || tier > output[type].tier)
-                output[type] = { tier, amount: profile.collection[type] | 0 };
+                output[type] = { tier, amount };
+
+            const collectionData =  constants.collection_data.filter(a => a.skyblockId == type)[0];
+
+            if('tiers' in collectionData){
+                for(const tier of collectionData.tiers){
+                    if(amount > tier.amountRequired){
+                        output[type].tier = Math.max(tier.tier, output[type].tier);
+                    }
+                }
+            }
         }
 
         return output;
     }
 }
+
+async function init(){
+    const response = await axios('https://api.hypixel.net/resources/skyblock/collections');
+
+    if(!objectPath.has(response, 'data.collections'))
+        return;
+
+    for(const type in response.data.collections){
+        for(const itemType in response.data.collections[type].items){
+            const item = response.data.collections[type].items[itemType];
+
+            const collectionData = constants.collection_data.filter(a => a.skyblockId == itemType)[0];
+
+            collectionData.maxTier = item.maxTiers;
+            collectionData.tiers = item.tiers;
+        }
+    }
+}
+
+init();
