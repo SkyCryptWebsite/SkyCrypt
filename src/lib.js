@@ -528,7 +528,7 @@ module.exports = {
         if('monthlyPackageRank' in player && player.monthlyPackageRank != 'NONE')
             rankName = player.monthlyPackageRank;
 
-        if('rank' in player)
+        if('rank' in player && player.rank != 'NORMAL')
             rankName = player.rank;
 
         if('prefix' in player)
