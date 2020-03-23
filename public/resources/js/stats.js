@@ -700,7 +700,7 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     }
 
-    [].forEach.call(document.querySelectorAll('.xp-skill .skill-bar'), function(element){
+    [].forEach.call(document.querySelectorAll('.xp-skill'), function(element){
         let skillProgressText = element.querySelector('.skill-progress-text');
         let originalText = skillProgressText.innerHTML;
 
