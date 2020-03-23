@@ -787,7 +787,7 @@ let highestRaritySword;
 if(items.highest_rarity_sword){
     highestRaritySword = items.highest_rarity_sword.display_name;
     if(items.highest_rarity_sword.tag.ExtraAttributes.id == 'MIDAS_SWORD')
-        highestRaritySword = swordName.replace("Midas", `${helper.formatNumber(items.highest_rarity_sword.tag.ExtraAttributes.winning_bid, true, 1)} Midas`);
+        highestRaritySword = highestRaritySword.replace("Midas", `${helper.formatNumber(items.highest_rarity_sword.tag.ExtraAttributes.winning_bid, true, 1)} Midas`);
 
     description += `🗡️ ${highestRaritySword}\n`;
  }
