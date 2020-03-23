@@ -700,6 +700,19 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     }
 
+    [].forEach.call(document.querySelectorAll('.xp-skill .skill-bar'), function(element){
+        let skillProgressText = element.querySelector('.skill-progress-text');
+        let originalText = skillProgressText.innerHTML;
+
+        element.addEventListener('mouseenter', function(){
+            skillProgressText.innerHTML = skillProgressText.getAttribute('data-hover-text');
+        });
+
+        element.addEventListener('mouseleave', function(){
+            skillProgressText.innerHTML = originalText;
+        });
+    });
+
     window.addEventListener('keydown', function(e){
         let selectedPiece = document.querySelector('.rich-item:focus');
 
