@@ -71,6 +71,10 @@ module.exports = {
         return split.join(' ');
    },
 
+   aOrAn: string => {
+       return ['a', 'e', 'i', 'o', 'u'].includes(string.charAt(0).toLowerCase()) ? 'an': 'a';
+   },
+
     formatNumber: (number, floor, rounding = 10) => {
         if(number < 1000)
             return Math.floor(number);

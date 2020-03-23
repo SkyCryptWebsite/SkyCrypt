@@ -782,12 +782,14 @@ description += `🧚 ${calculated.fairy_souls.collected}/${calculated.fairy_soul
 if(items.armor_set)
     description += `🛡️ ${items.armor_set}\n`;
 
-if(items.highest_rarity_sword){
-    let swordName = items.highest_rarity_sword.display_name;
-    if(items.highest_rarity_sword.tag.ExtraAttributes.id == 'MIDAS_SWORD')
-        swordName = swordName.replace("Midas", `${helper.formatNumber(items.highest_rarity_sword.tag.ExtraAttributes.winning_bid, true, 1)} Midas`);
+let highestRaritySword;
 
-    description += `🗡️ ${swordName}\n`;
+if(items.highest_rarity_sword){
+    highestRaritySword = items.highest_rarity_sword.display_name;
+    if(items.highest_rarity_sword.tag.ExtraAttributes.id == 'MIDAS_SWORD')
+        highestRaritySword = swordName.replace("Midas", `${helper.formatNumber(items.highest_rarity_sword.tag.ExtraAttributes.winning_bid, true, 1)} Midas`);
+
+    description += `🗡️ ${highestRaritySword}\n`;
  }
 
 if(items.highest_rarity_bow)
@@ -833,6 +835,24 @@ description += `💰 Purse: ${helper.formatNumber(calculated.purse, true)} Coins
 if(calculated.bank)
     description += `\n🏦 Bank Account: ${helper.formatNumber(calculated.bank, true)} Coin${Math.round(calculated.bank) == 1 ? '': 's'}`;
 
+let twitterDescription = `${calculated.display_name} has been playing SkyBlock for ${moment(calculated.first_join.unix).fromNow(true)}`;
+
+if(items.armor_set){
+    if(highestRaritySword)
+        twitterDescription += `, is wearing ${items.armor_set}`;
+    else
+        twitterDescription += ` and is wearing ${items.armor_set}`;
+}
+
+if(highestRaritySword){
+    if(items.armor_set)
+        twitterDescription += ` and fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
+    else
+        twitterDescription += ` and is fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
+}
+
+twitterDescription += '. Click to view more stats!'
+
 %>
 <!DOCTYPE html>
 <html>
@@ -840,9 +860,13 @@ if(calculated.bank)
     <%- include('../includes/resources') %>
     <title><%- calculated.display_name %> | SkyBlock Stats</title>
     <link rel="shortcut icon" href="https://visage.surgeplay.com/face/32/<%- calculated.uuid %>" type="image/png">
+    <meta property="og:type" content="website">
     <meta property="og:title" content="<%- calculated.display_name %>">
+    <meta property="og:title" content="<%- calculated.display_name %> | SkyBlock Stats">
     <meta property="og:image" content="https://visage.surgeplay.com/face/256/<%- calculated.uuid %>">
+    <meta property="twitter:image" content="https://visage.surgeplay.com/face/256/<%- calculated.uuid %>">
     <meta property="og:description" content="<%= description %>">
+    <meta property="twitter:description" content="<%= twitterDescription %>">
 </head>
 <body>
     <%- include('../includes/header') %>
