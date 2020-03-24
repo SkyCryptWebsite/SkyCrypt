@@ -1,0 +1,15 @@
+{
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "bottom": "mcpatcher/cit/blocks/super_tnt_bottom",
+        "top": "mcpatcher/cit/blocks/super_tnt_top",
+        "side": "mcpatcher/cit/blocks/super_tnt_side"
+    },
+    "display": {
+        "thirdperson": {
+            "rotation": [ 10, -45, 170 ],
+            "translation": [ 0, 1.5, -2.75 ],
+            "scale": [ 0.375, 0.375, 0.375 ]
+        }
+    }
+}
