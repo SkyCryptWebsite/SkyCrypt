@@ -44,14 +44,19 @@ function getFrame(src, frame){
 let resourcePacks = [];
 
 async function init(){
-     for(const pack of await fs.readdir(RESOURCE_PACK_FOLDER)){
-        let basePath = path.resolve(RESOURCE_PACK_FOLDER, pack);
-        let config = require(path.resolve(basePath, 'config.json'));
+    for(const pack of await fs.readdir(RESOURCE_PACK_FOLDER)){
+        const basePath = path.resolve(RESOURCE_PACK_FOLDER, pack);
 
-        resourcePacks.push({
-            basePath,
-            config
-        });
+        try{
+            const config = require(path.resolve(basePath, 'config.json'));
+
+            resourcePacks.push({
+                basePath,
+                config
+            });
+        }catch(e){
+            console.log("Couldn't find config for resource pack", pack);
+        }
     }
 
     resourcePacks = resourcePacks.sort((a, b) => a.config.priority - b.config.priority);
