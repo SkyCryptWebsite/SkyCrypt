@@ -2008,6 +2008,10 @@ html.no-webp #error_box_wrapper{
         width: 100vw;
     }
 
+    #info_box{
+        width: 440px;
+    }
+
     #info_box_content{
         max-height: calc(1120px - 100px);
         overflow-y: auto;
@@ -2079,6 +2083,12 @@ html.no-webp #error_box_wrapper{
         background-color: transparent;
         margin: 0;
         margin-left: -5px;
+    }
+
+    #info_box{
+        left: 0;
+        width: 100vw;
+        right: 0;
     }
 
     #wrapper, #bg_blur{
