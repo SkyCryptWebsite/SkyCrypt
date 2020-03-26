@@ -1194,6 +1194,15 @@ module.exports = {
                 amount: (profile.stats['kills_chicken_deep'] || 0) + (profile.stats['kills_zombie_deep'] || 0)
             });
 
+        killsDeaths = killsDeaths.filter(a => {
+            return ![
+                'guardian_emperor',
+                'skeleton_emperor',
+                'chicken_deep',
+                'zombie_deep'
+            ].includes(a.entityId);
+        });
+
         output.kills = killsDeaths.filter(a => a.type == 'kills').sort((a, b) => b.amount - a.amount);
         output.deaths = killsDeaths.filter(a => a.type == 'deaths').sort((a, b) => b.amount - a.amount);
 
