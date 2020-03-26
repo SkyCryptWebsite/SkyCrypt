@@ -713,6 +713,51 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
+    [].forEach.call(document.querySelectorAll('.kills-deaths-container .show-all.enabled'), function(element){
+        let parent = element.parentNode;
+        let kills = calculated[element.getAttribute('data-type')];
+
+        element.addEventListener('click', function(){
+            parent.style.maxHeight = parent.offsetHeight + 'px';
+            parent.classList.add('all-shown');
+            element.remove();
+
+            kills.slice(10).forEach(function(kill, index){
+                let killElement = document.createElement('div');
+                let killRank = document.createElement('div');
+                let killEntity = document.createElement('div');
+                let killAmount = document.createElement('div');
+
+                killElement.className = 'kill-stat';
+                killRank.className = 'kill-rank';
+                killEntity.className = 'kill-entity';
+                killAmount.className = 'kill-amount';
+
+                killRank.innerHTML = '#' + (index + 11);
+                killEntity.innerHTML = kill.entityName;
+                killAmount.innerHTML = kill.amount.toLocaleString();
+
+                killElement.appendChild(killRank);
+                killElement.appendChild(killEntity);
+                killElement.appendChild(killAmount);
+
+                parent.appendChild(killElement);
+            });
+        });
+    });
+
+    document.querySelector('.top-deaths .show-all').addEventListener('click', function(){
+        let parent = this.parentNode;
+
+        this.remove();
+        this.parentNode.classList.add('all-shown');
+        this.parentNode.style.maxHeight = this.parentNode.offsetHeight + 'px';
+
+        calculated.deaths.slice(10).forEach(function(kill){
+
+        });
+    });
+
     window.addEventListener('keydown', function(e){
         let selectedPiece = document.querySelector('.rich-item:focus');
 

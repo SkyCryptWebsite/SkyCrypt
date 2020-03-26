@@ -863,11 +863,14 @@ module.exports = {
         let swords = output.weapons.filter(a => a.type == 'sword');
         let bows = output.weapons.filter(a => a.type == 'bow');
 
+        let swordsInventory = swords.filter(a => a.backpackIndex === undefined);
+        let bowsInventory = swords.filter(a => a.backpackIndex === undefined);
+
         if(swords.length > 0)
-            output.highest_rarity_sword = swords.filter(a => a.rarity == swords[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
+            output.highest_rarity_sword = swordsInventory.filter(a =>  a.rarity == swordsInventory[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
 
         if(bows.length > 0)
-            output.highest_rarity_bow = bows.filter(a => a.rarity == bows[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
+            output.highest_rarity_bow = bowsInventory.filter(a => a.rarity == bowsInventory[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
 
         if(armor.filter(a => Object.keys(a).length > 1).length == 4){
 
@@ -1033,7 +1036,7 @@ module.exports = {
 
         // Apply Lapis Armor full set bonus of +60 HP
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('LAPIS_ARMOR_')).length == 4)
-            items.armor[0].stats.health += 60;
+            items.armor[0].stats.health = (items.armor[0].stats.health || 0) + 60;
 
         // Apply Emerald Armor full set bonus of +1 HP and +1 Defense per 3000 emeralds in collection with a maximum of 300
         if(objectPath.has(profile, 'collection.EMERALD')

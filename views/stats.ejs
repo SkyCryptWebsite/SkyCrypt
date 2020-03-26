@@ -1403,29 +1403,39 @@ twitterDescription += '. Click to view more stats!'
                     <div class="kills-deaths-container">
                         <div class="narrow-info-container top-kills">
                             <div class="narrow-info-header">Kills</div>
-                            <% for(let i = 0; i < rows; i++){
-                                const kill = calculated.kills[i];
+                            <div class="narrow-info-content">
+                                <% for(let i = 0; i < rows; i++){
+                                    const kill = calculated.kills[i];
 
-                                if(typeof calculated.kills[i] === 'undefined'){
-                                %>
-                                    <div class="kill-stat"><div class="kill-rank"></div></div>
-                                <% }else{ %>
-                                    <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %></div><div class="kill-entity"><%= kill.entityName %></div><div class="kill-amount"><%= kill.amount.toLocaleString() %></div></div>
-                                <% }
-                            } %>
+                                    if(typeof calculated.kills[i] === 'undefined'){
+                                    %>
+                                        <div class="kill-stat"><div class="kill-rank"></div></div>
+                                    <% }else{ %>
+                                        <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %></div><div class="kill-entity"><%= kill.entityName %></div><div class="kill-amount"><%= kill.amount.toLocaleString() %></div></div>
+                                    <% }
+                                } %>
+                                <% if(calculated.kills.length > 10 || calculated.deaths.length > 10){ %>
+                                    <div class="kill-stat show-all <%= calculated.kills.length > 10 ? 'enabled' : '' %>" data-type="kills">show all</div>
+                                <% } %>
+                            </div>
                         </div>
                         <div class="narrow-info-container top-deaths">
                             <div class="narrow-info-header">Deaths</div>
-                            <% for(let i = 0; i < rows; i++){
-                                const death = calculated.deaths[i];
+                            <div class="narrow-info-content">
+                                <% for(let i = 0; i < rows; i++){
+                                    const death = calculated.deaths[i];
 
-                                if(typeof death === 'undefined'){
-                                %>
-                                    <div class="kill-stat"><div class="kill-rank"></div></div>
-                                <% }else{ %>
-                                    <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %></div><div class="kill-entity"><%= death.entityName %></div><div class="kill-amount"><%= death.amount.toLocaleString() %></div></div>
-                                <% }
-                            } %>
+                                    if(typeof death === 'undefined'){
+                                    %>
+                                        <div class="kill-stat"><div class="kill-rank"></div></div>
+                                    <% }else{ %>
+                                        <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %></div><div class="kill-entity"><%= death.entityName %></div><div class="kill-amount"><%= death.amount.toLocaleString() %></div></div>
+                                    <% }
+                                } %>
+                                <% if(calculated.kills.length > 10 || calculated.deaths.length > 10){ %>
+                                    <div class="kill-stat show-all <%= calculated.deaths.length > 10 ? 'enabled' : '' %>" data-type="deaths">show all</div>
+                                <% } %>
+                            </div>
                         </div>
                     </div>
                 </div>
