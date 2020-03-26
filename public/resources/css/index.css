@@ -1763,6 +1763,10 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     color: rgba(255,255,255,0.7);
 }
 
+.all-shown .kill-rank{
+    width: 40px;
+}
+
 .kill-entity::after{
     content: ":";
     color: rgba(255,255,255,0.7);
@@ -1771,6 +1775,56 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 .kill-amount{
     margin-left: 5px;
     color: rgba(255,255,255,0.7);
+}
+
+.kills-deaths-container .show-all{
+    text-align: center;
+    padding: 5px 0px;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: #F03C96;
+    margin-top: 12px;
+    opacity: 0;
+}
+
+.kills-deaths-container .show-all.enabled{
+    opacity: 1;
+    cursor: pointer;
+}
+
+.narrow-info-content{
+    padding: 20px;
+    margin-top: 37px;
+    box-sizing: border-box;
+}
+
+.narrow-info-content.all-shown{
+    overflow-y: scroll;
+}
+
+.narrow-info-content.all-shown{
+    padding-bottom: 0;
+}
+
+.narrow-info-content.all-shown .kill-stat:last-child{
+    margin-bottom: 35px;
+}
+
+.narrow-info-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.narrow-info-content::-webkit-scrollbar-thumb {
+    background-color: #951354;
+    border-radius: 5px;
+}
+.narrow-info-content::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.stat-kills .narrow-info-container{
+    padding: 0;
+    padding-top: 0;
 }
 
 #enter_player_box_wrapper{
@@ -2323,7 +2377,7 @@ html.no-webp #error_box_wrapper{
     }
 
     .stat-kills .narrow-info-container{
-        width: calc(100vw - 100px);
+        width: calc(100vw - 60px);
         margin-left: 0 !important;
         margin-top: 20px;
     }
