@@ -1033,7 +1033,7 @@ module.exports = {
 
         // Apply Lapis Armor full set bonus of +60 HP
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('LAPIS_ARMOR_')).length == 4)
-            items.armor[0].stats.health += 60;
+            items.armor[0].stats.health = (items.armor[0].stats.health || 0) + 60;
 
         // Apply Emerald Armor full set bonus of +1 HP and +1 Defense per 3000 emeralds in collection with a maximum of 300
         if(objectPath.has(profile, 'collection.EMERALD')
