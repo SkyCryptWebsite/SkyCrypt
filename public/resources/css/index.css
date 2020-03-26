@@ -1954,20 +1954,14 @@ html.no-webp #error_box_wrapper{
         width: 100vw;
     }
 
-    #info_box{
-        left: 0;
-        width: 100vw;
-        right: 0;
-    }
-
     #info_box_content{
-        max-height: calc(100vh - 100px);
+        max-height: calc(1120px - 100px);
         overflow-y: auto;
     }
 
     #additional_stats_container{
         white-space: normal;
-        width: calc(100vw - 150px);
+        width: calc(1120px - 150px);
     }
 
     #base_stats_container{
@@ -1976,18 +1970,24 @@ html.no-webp #error_box_wrapper{
     }
 
     #skill_levels_container{
-        width: calc(100vw - 510px);
-    }
-
-    #skill_levels_container .skill{
-        width: calc((100vw - 410px) / 2 - 60px);
+        width: calc(1120px - 510px);
     }
 
     #wrapper, #bg_blur{
-        left: 0;
-        right: 0;
-        width: 100vw;
+        left: 50%;
+        width: 1120px;
+        margin-left: -560px;
         overflow-x: hidden;
+    }
+
+    .skill {
+        width: calc((1120px - 410px) / 2 - 60px);
+    }
+
+    #nav_bar.nav-bar-stickied{
+        left: auto;
+        right: auto;
+        width: 1120px !important;
     }
 
     #stats_display{
@@ -2025,6 +2025,18 @@ html.no-webp #error_box_wrapper{
         background-color: transparent;
         margin: 0;
         margin-left: -5px;
+    }
+
+    #wrapper, #bg_blur{
+        left: 0;
+        right: 0;
+        margin-left: 0;
+        width: 100vw;
+        overflow-x: hidden;
+    }
+
+    #skill_levels_container .skill{
+        width: calc((100vw - 410px) / 2 - 60px);
     }
 
     #info_button:hover{
