@@ -2103,6 +2103,10 @@ html.no-webp #error_box_wrapper{
         width: calc((100vw - 410px) / 2 - 60px);
     }
 
+    #nav_bar.nav-bar-stickied{
+        width: 100vw !important;
+    }
+
     #info_button:hover{
         opacity: 1;
         background-color: transparent;
