@@ -1411,7 +1411,7 @@ twitterDescription += '. Click to view more stats!'
                                     %>
                                         <div class="kill-stat"><div class="kill-rank"></div></div>
                                     <% }else{ %>
-                                        <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %></div><div class="kill-entity"><%= kill.entityName %></div><div class="kill-amount"><%= kill.amount.toLocaleString() %></div></div>
+                                        <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %>&nbsp;</div><div class="kill-entity"><%= kill.entityName %></div><div class="stat-separator">:&nbsp;</div><div class="kill-amount"><%= kill.amount.toLocaleString() %></div></div>
                                     <% }
                                 } %>
                                 <% if(calculated.kills.length > 10 || calculated.deaths.length > 10){ %>
@@ -1429,7 +1429,7 @@ twitterDescription += '. Click to view more stats!'
                                     %>
                                         <div class="kill-stat"><div class="kill-rank"></div></div>
                                     <% }else{ %>
-                                        <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %></div><div class="kill-entity"><%= death.entityName %></div><div class="kill-amount"><%= death.amount.toLocaleString() %></div></div>
+                                        <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %>&nbsp;</div><div class="kill-entity"><%= death.entityName %></div><div class="stat-separator">:&nbsp;</div><div class="kill-amount"><%= death.amount.toLocaleString() %></div></div>
                                     <% }
                                 } %>
                                 <% if(calculated.kills.length > 10 || calculated.deaths.length > 10){ %>

@@ -727,18 +727,22 @@ document.addEventListener('DOMContentLoaded', function(){
                 let killRank = document.createElement('div');
                 let killEntity = document.createElement('div');
                 let killAmount = document.createElement('div');
+                let statSeparator = document.createElement('div');
 
                 killElement.className = 'kill-stat';
                 killRank.className = 'kill-rank';
                 killEntity.className = 'kill-entity';
                 killAmount.className = 'kill-amount';
+                statSeparator.className = 'stat-separator';
 
-                killRank.innerHTML = '#' + (index + 11);
+                killRank.innerHTML = '#' + (index + 11) + '&nbsp;';
                 killEntity.innerHTML = kill.entityName;
                 killAmount.innerHTML = kill.amount.toLocaleString();
+                statSeparator.innerHTML = ':&nbsp;';
 
                 killElement.appendChild(killRank);
                 killElement.appendChild(killEntity);
+                killElement.appendChild(statSeparator);
                 killElement.appendChild(killAmount);
 
                 parent.appendChild(killElement);

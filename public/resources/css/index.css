@@ -7,7 +7,7 @@ html{
     overflow-x: hidden;
 }
 
-.stat-name, .stat-value, .skill-name, .skill-progress-text, .grey-text{
+.stat-name, .stat-value, .skill-name, .skill-progress-text, .grey-text, .kill-stat{
     user-select: text !important;
 }
 
@@ -1756,24 +1756,21 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 }
 
 .kill-rank{
-    width: 30px;
+    width: 36px;
     font-weight: 600;
     text-align: right;
-    margin-right: 7px;
     color: rgba(255,255,255,0.7);
 }
 
 .all-shown .kill-rank{
-    width: 40px;
+    width: 46px;
 }
 
-.kill-entity::after{
-    content: ":";
+.stat-separator{
     color: rgba(255,255,255,0.7);
 }
 
 .kill-amount{
-    margin-left: 5px;
     color: rgba(255,255,255,0.7);
 }
 
