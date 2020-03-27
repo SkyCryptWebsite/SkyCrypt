@@ -7,6 +7,7 @@ const dbName = 'sbstats';
 async function main(){
     const express = require('express');
     const bodyParser = require('body-parser');
+    const crypto = require('crypto');
 
     const axios = require('axios');
     require('axios-debug-log')
@@ -426,6 +427,32 @@ async function main(){
                 unix: first_join,
                 text: first_join_text
             };
+
+            const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+            const ipHash = crypto.createHash('md5').update(ipAddress).digest("hex");
+
+            const { upsertedCount } = await db
+            .collection('views')
+            .replaceOne(
+                { ip: ipHash, uuid: hypixelPlayer.uuid, profile_id: profileId },
+                { ip: ipHash, uuid: hypixelPlayer.uuid, profile_id: profileId, time: new Date() },
+                { upsert: true }
+            );
+
+            if(upsertedCount > 0 )
+                await db
+                .collection('profiles')
+                .updateOne(
+                    { uuid: hypixelPlayer.uuid, profile_id: profileId },
+                    { $inc: { views: 1 } }
+                );
+
+            const dbProfile = await db
+            .collection('profiles')
+            .find({ uuid: hypixelPlayer.uuid, profile_id: profileId })
+            .next();
+
+            calculated.views = dbProfile.views;
 
             res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
         }catch(e){
