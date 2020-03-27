@@ -440,7 +440,7 @@ async function main(){
                 .collection('profileViews')
                 .updateOne(
                     { uuid: hypixelPlayer.uuid, profile_id: profileId },
-                    { $inc: { total: 1 } },
+                    { $inc: { total: 1, weekly: 1, daily: 1 } },
                     { upsert: true }
                 );
 
