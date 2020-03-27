@@ -2008,6 +2008,10 @@ html.no-webp #error_box_wrapper{
         width: 100vw;
     }
 
+    #info_box{
+        width: 440px;
+    }
+
     #info_box_content{
         max-height: calc(1120px - 100px);
         overflow-y: auto;
@@ -2081,6 +2085,12 @@ html.no-webp #error_box_wrapper{
         margin-left: -5px;
     }
 
+    #info_box{
+        left: 0;
+        width: 100vw;
+        right: 0;
+    }
+
     #wrapper, #bg_blur{
         left: 0;
         right: 0;
@@ -2091,6 +2101,10 @@ html.no-webp #error_box_wrapper{
 
     #skill_levels_container .skill{
         width: calc((100vw - 410px) / 2 - 60px);
+    }
+
+    #nav_bar.nav-bar-stickied{
+        width: 100vw !important;
     }
 
     #info_button:hover{

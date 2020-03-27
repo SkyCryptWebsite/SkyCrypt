@@ -383,6 +383,11 @@ module.exports = {
     mob_names: {
         unburried_zombie: "Crypt Ghoul",
         zealot_enderman: "Zealot",
+        invisible_creeper: "Sneaky Creeper",
+        generator_ghast: "Minion Ghast",
+        generator_magma_cube: "Minion Magma Cube",
+        generator_slime: "Minion Slime",
+        brood_mother_spider: "Brood Mother"       
     },
 
     area_names: {
