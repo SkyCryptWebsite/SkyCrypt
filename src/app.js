@@ -444,9 +444,10 @@ async function main(){
                     { upsert: true }
                 );
 
-            calculated.views = await db
+            calculated.views = _.pick(await db
             .collection('profileViews')
-            .findOne({ uuid: hypixelPlayer.uuid, profile_id: profileId });
+            .findOne({ uuid: hypixelPlayer.uuid, profile_id: profileId }),
+            'total', 'daily', 'weekly');
 
             res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
         }catch(e){
