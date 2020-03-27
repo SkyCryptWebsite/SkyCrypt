@@ -57,8 +57,8 @@ async function main(){
     async function getExtra(){
         const output = {};
 
-        const kofiEntry = await db.collection('donations').find({type: 'kofi'}).next();
-        const patreonEntry = await db.collection('donations').find({type: 'patreon'}).next();
+        const kofiEntry = await db.collection('donations').findOne({type: 'kofi'});
+        const patreonEntry = await db.collection('donations').findOne({type: 'patreon'});
 
         if(kofiEntry == null || patreonEntry == null)
             return output;
@@ -90,8 +90,7 @@ async function main(){
         if(!isPlayerUuid){
             let playerObject = await db
             .collection('usernames')
-            .find({ username: new RegExp(`^${paramPlayer}\$`, 'i') })
-            .next();
+            .findOne({ username: new RegExp(`^${paramPlayer}\$`, 'i') });
 
             if(playerObject){
                 paramPlayer = playerObject.uuid;
@@ -100,8 +99,7 @@ async function main(){
         }else{
             let playerObject = await db
             .collection('usernames')
-            .find({ uuid: paramPlayer })
-            .next();
+            .findOne({ uuid: paramPlayer });
 
             if(playerObject)
                 playerUsername = playerObject.username;
@@ -110,13 +108,11 @@ async function main(){
         if(isPlayerUuid)
             activeProfile = await db
             .collection('profiles')
-            .find({ uuid: paramPlayer })
-            .next();
+            .findOne({ uuid: paramPlayer });
         else
             activeProfile = await db
             .collection('profiles')
-            .find({ username: paramPlayer })
-            .next();
+            .findOne({ username: paramPlayer });
 
         let params = {
             key: credentials.hypixel_api_key
@@ -439,9 +435,18 @@ async function main(){
                 { upsert: true }
             );
 
+            if(upsertedCount > 0)
+                await db
+                .collection('profileViews')
+                .updateOne(
+                    { uuid: hypixelPlayer.uuid, profile_id: profileId },
+                    { $inc: { total: 1 } },
+                    { upsert: true }
+                );
+
             calculated.views = await db
-            .collection('views')
-            .countDocuments({ uuid: hypixelPlayer.uuid, profile_id: profileId });
+            .collection('profileViews')
+            .findOne({ uuid: hypixelPlayer.uuid, profile_id: profileId });
 
             res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
         }catch(e){
