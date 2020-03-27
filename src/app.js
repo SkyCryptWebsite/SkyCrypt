@@ -439,20 +439,9 @@ async function main(){
                 { upsert: true }
             );
 
-            if(upsertedCount > 0 )
-                await db
-                .collection('profiles')
-                .updateOne(
-                    { uuid: hypixelPlayer.uuid, profile_id: profileId },
-                    { $inc: { views: 1 } }
-                );
-
-            const dbProfile = await db
+            calculated.views = await db
             .collection('profiles')
-            .find({ uuid: hypixelPlayer.uuid, profile_id: profileId })
-            .next();
-
-            calculated.views = dbProfile.views;
+            .count({ uuid: hypixelPlayer.uuid, profile_id: profileId });
 
             res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
         }catch(e){
