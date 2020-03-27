@@ -895,7 +895,7 @@ module.exports = {
 
                 output_name += base_name.join(" ");
 
-                if(!output_name.endsWith("Armor"))
+                if(!output_name.endsWith("Armor") && !output_name.startsWith("Armor"))
                     output_name += " Armor";
 
                 output.armor_set = output_name;
