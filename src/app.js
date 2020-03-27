@@ -440,8 +440,8 @@ async function main(){
             );
 
             calculated.views = await db
-            .collection('profiles')
-            .count({ uuid: hypixelPlayer.uuid, profile_id: profileId });
+            .collection('views')
+            .countDocuments({ uuid: hypixelPlayer.uuid, profile_id: profileId });
 
             res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
         }catch(e){
