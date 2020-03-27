@@ -15,7 +15,7 @@ async function main(){
     async function updateViews(){
         for(const uuid of await db.collection('views').distinct('uuid')){
             const profiles = await db.collection('views').distinct('profile_id', { uuid });
-            const username = await db.usernames.findOne({ uuid });
+            const { username } = await db.usernames.findOne({ uuid });
 
             for(const profile_id of profiles){
                 const profileViews = await db.collection('views').find({ uuid, profile_id }).toArray();
