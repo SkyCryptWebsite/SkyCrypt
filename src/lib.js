@@ -864,7 +864,7 @@ module.exports = {
         let bows = output.weapons.filter(a => a.type == 'bow');
 
         let swordsInventory = swords.filter(a => a.backpackIndex === undefined);
-        let bowsInventory = swords.filter(a => a.backpackIndex === undefined);
+        let bowsInventory = bows.filter(a => a.backpackIndex === undefined);
 
         if(swords.length > 0)
             output.highest_rarity_sword = swordsInventory.filter(a =>  a.rarity == swordsInventory[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
