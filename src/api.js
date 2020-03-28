@@ -94,20 +94,13 @@ module.exports = (app, db) => {
                     const minionLevel = parseInt(minion.split("_").pop());
 
                     if(minions.filter(a => a.minion == minionName).length == 0)
-                        minions.push({ minion: minionName, level: minionLevel, levels: [] });
+                        minions.push({ minion: minionName, level: minionLevel });
 
                     let minionObject = minions.filter(a => a.minion == minionName)[0];
-
-                    minionObject.levels.push(minionLevel);
 
                     if(minionObject.level < minionLevel)
                         minionObject.level = minionLevel;
                 }
-            }
-
-            for(const minion of minions){
-                minion.skipped = minion.level - minion.levels.length;
-                delete minion.levels;
             }
 
             if('html' in req.query)
