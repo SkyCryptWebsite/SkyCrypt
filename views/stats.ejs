@@ -904,6 +904,11 @@ twitterDescription += '. Click to view more stats!'
                     <% } %>
                 </div>
             </div>
+            <div id="additional_player_stats">
+                <div class="additional-player-stat">Views: <%= helper.formatNumber(calculated.views.total) %></div>
+                <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">Plancke</a>
+                <a href="https://skyblock.matdoes.dev/profile/<%= calculated.display_name %>/<%= calculated.profile.cute_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">matdoes.dev</a>
+            </div>
         </div>
         <div id="basic_stats">
             <%

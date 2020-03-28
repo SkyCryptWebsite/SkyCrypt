@@ -643,7 +643,7 @@ html.no-transform #info_box.opened{
     font-size: 36px;
     margin-top: 50px;
     margin-left: 50px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 #stats_for_player, #stats_for_profile{
@@ -740,6 +740,55 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 
 #other_players .goto:hover, #other_profiles .goto:hover{
     background-color: rgba(255,255,255,0.2);
+}
+
+#additional_player_stats{
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+.additional-player-stat{
+    padding: 5px 12px;
+    margin-right: 7px;
+    margin-top: 15px;
+    background-color: rgba(166, 20, 93, 0.9);
+    display: inline-block;
+    border-radius: 99999px;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    transition: background-color .1s;
+}
+
+div.additional-player-stat{
+    user-select: text !important;
+    cursor: default;
+}
+
+.additional-player-stat:hover{
+    background-color: rgba(166, 20, 93, 1);
+}
+
+a.additional-player-stat:hover{
+    color: white;
+}
+
+.additional-player-stat.external-link{
+    padding-right: 35px;
+    position: relative;
+}
+
+.additional-player-stat.external-link::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 8px;
+    width: 20px;
+    background-image: url(../img/icons/open-in-new.png);
+    background-position: 0px center;
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
 }
 
 #basic_stats{
