@@ -749,14 +749,24 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 
 .additional-player-stat{
     padding: 5px 12px;
-    margin-right: 5px;
+    margin-right: 7px;
     margin-top: 15px;
-    background-color: #A6145D;
+    background-color: rgba(166, 20, 93, 0.9);
     display: inline-block;
     border-radius: 99999px;
     text-decoration: none;
     color: white;
     font-weight: 600;
+    transition: background-color .1s;
+}
+
+div.additional-player-stat{
+    user-select: text !important;
+    cursor: default;
+}
+
+.additional-player-stat:hover{
+    background-color: rgba(166, 20, 93, 1);
 }
 
 a.additional-player-stat:hover{
