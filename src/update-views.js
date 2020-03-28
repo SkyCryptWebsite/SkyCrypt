@@ -33,12 +33,13 @@ async function main(){
                 );
             }
 
-            await new Promise(r => setTimeout(r, 50));
+            await new Promise(r => setTimeout(r, 25));
         }
+
+        updateViews();
     }
 
     updateViews();
-    setInterval(updateViews, 30 * 60 * 1000);
 }
 
 if(cluster.isMaster)
