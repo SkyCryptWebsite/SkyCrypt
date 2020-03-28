@@ -744,31 +744,27 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 
 #additional_player_stats{
     font-size: 15px;
-    margin-top: 25px;
+    margin-top: 10px;
 }
 
 .additional-player-stat{
-    padding: 5px 10px;
-    margin-right: 10px;
+    padding: 5px 12px;
+    margin-right: 5px;
+    margin-top: 15px;
     background-color: #A6145D;
     display: inline-block;
     border-radius: 99999px;
-    padding-left: 10px;
     text-decoration: none;
     color: white;
     font-weight: 600;
 }
 
-a.additional-player-stat{
-    color: rgba(255,255,255,0.9);
-}
-
 a.additional-player-stat:hover{
-    color: rgba(255,255,255,1);
+    color: white;
 }
 
 .additional-player-stat.external-link{
-    padding-right: 30px;
+    padding-right: 35px;
     position: relative;
 }
 
