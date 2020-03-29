@@ -1310,7 +1310,7 @@ module.exports = {
 
             if('tiers' in collectionData){
                 for(const tier of collectionData.tiers){
-                    if(amount > tier.amountRequired){
+                    if(amount >= tier.amountRequired){
                         output[type].tier = Math.max(tier.tier, output[type].tier);
                     }
                 }
