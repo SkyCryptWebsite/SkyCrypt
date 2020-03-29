@@ -1677,6 +1677,17 @@ a.additional-player-stat:hover{
     line-height: 32px;
 }
 
+.category-header-maxed{
+    font-size: 15px;
+    color: #FDBB3C;
+    text-transform: uppercase;
+}
+
+.category-header-detail{
+    font-size: 17px;
+    color: rgba(255,255,255,0.8);
+}
+
 .minion-category-icon{
     width: 32px;
     height: 32px;

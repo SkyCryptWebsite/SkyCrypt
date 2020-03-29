@@ -1470,12 +1470,18 @@ twitterDescription += '. Click to view more stats!'
                 for(const type of constants.minion_types){
                     const minions = calculated.minions.filter(a => a.type == type && a.maxLevel > 0).sort((a, b) => b.maxLevel - a.maxLevel);
 
+                    const totalOfType = _.size(_.pickBy(constants.minions, a => a.type == type));
+                    const maxOfType = minions.filter(a => a.maxLevel == 11).length;
+
                     if(minions.length == 0)
                         continue;
 
                     %>
                     <div class="minion-category">
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon <%= skillItems[type] %>"></div></div><span><%= type %></span></div>
+                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon <%= skillItems[type] %>"></div></div><span><%= type %></span>
+                        <% if(maxOfType >= totalOfType){ %><span class="category-header-maxed">max!</span>
+                        <% }else{ %><span class="category-header-detail">(<%= maxOfType %> / <%= totalOfType %>)</span><% } %>
+                        </div>
                     <%
 
                     for(const minion of minions){ %>
@@ -1515,16 +1521,26 @@ twitterDescription += '. Click to view more stats!'
                     <% for(const type of constants.collection_types){
                         const collections = [];
 
+                        const totalOfType = constants.collection_data.filter(a => a.type == type).length;
+                        let maxOfType = 0;
+
                         for(const collection of constants.collection_data.filter(a => a.type == type))
                             if(collection.skyblockId in calculated.collections)
                                 collections.push(Object.assign(collection, calculated.collections[collection.skyblockId]));
+
+                        for(const collection of collections)
+                            if(collection.tier >= collection.maxTier)
+                                maxOfType++;
 
                         if(collections.length == 0)
                             continue;
 
                         %>
                         <div class="minion-category">
-                            <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon <%= skillItems[type] %>"></div></div><span><%= type %></span></div>
+                            <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon <%= skillItems[type] %>"></div></div><span><%= type %></span>
+                            <% if(maxOfType >= totalOfType){ %><span class="category-header-maxed">max!</span>
+                            <% }else{ %><span class="category-header-detail">(<%= maxOfType %> / <%= totalOfType %>)</span><% } %>
+                        </div>
                             <div class="collections">
                             <%
 
