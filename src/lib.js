@@ -1278,14 +1278,20 @@ module.exports = {
             output.push(pet);
         }
 
+        // Sort pets by rarity THEN max level of type & rarity THEN level
         output = output.sort((a, b) => {
-            if(a.active === b.active)
+            if(a.active === b.active){
                 if(a.rarity == b.rarity){
                     if(a.type == b.type){
                         return a.level < b.level ? -1 : 1;
                     }else{
-                        const maxPetA = output.filter(x => x.type == a.type && x.rarity == a.rarity).sort((x, y) => x.level - y.level)[0].level.level;
-                        const maxPetB = output.filter(x => x.type == b.type && x.rarity == b.rarity).sort((x, y) => x.level - y.level)[0].level.level;
+                        const maxPetA = output
+                        .filter(x => x.type == a.type && x.rarity == a.rarity)
+                        .sort((x, y) => x.level - y.level)[0].level.level;
+
+                        const maxPetB = output
+                        .filter(x => x.type == b.type && x.rarity == b.rarity)
+                        .sort((x, y) => x.level - y.level)[0].level.level;
 
                         if(maxPetA == maxPetB)
                             return a.type < b.type ? -1 : 1;
@@ -1295,6 +1301,7 @@ module.exports = {
                 }else{
                     return rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);
                 }
+            }
 
             return a.active? -1 : 1
         });
