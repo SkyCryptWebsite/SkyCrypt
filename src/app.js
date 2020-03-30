@@ -435,7 +435,7 @@ async function main(){
             .collection('views')
             .replaceOne(
                 { ip: ipHash, uuid: hypixelPlayer.uuid, profile_id: profileId },
-                { ip: ipHash, uuid: hypixelPlayer.uuid, username: data.player.displayname, profile_id: profileId, time: new Date() },
+                { ip: ipHash, uuid: hypixelPlayer.uuid, profile_id: profileId, time: new Date() },
                 { upsert: true }
             );
 
@@ -444,7 +444,7 @@ async function main(){
                 .collection('profileViews')
                 .updateOne(
                     { uuid: hypixelPlayer.uuid, profile_id: profileId },
-                    { $inc: { total: 1, weekly: 1, daily: 1 } },
+                    { $inc: { total: 1, weekly: 1, daily: 1 }, $set: { username: data.player.displayname } },
                     { upsert: true }
                 );
 
