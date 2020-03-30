@@ -64,6 +64,58 @@
                 else
                     document.querySelector('#goto_target_username').href = '/stats/' + playerName;
             });
+
+            let scrollLock = false;
+            let currentOffset = 10;
+            let limit = 20;
+
+            let reachedEnd = false;
+
+            window.addEventListener('scroll', function(){
+                if(window.innerHeight + window.scrollY > document.documentElement.offsetHeight - 100 && !scrollLock && !reachedEnd){
+                    scrollLock = true;
+
+                    let topRequest = new XMLHttpRequest();
+
+                    topRequest.onload = function(){
+                        let json = JSON.parse(this.responseText);
+
+                        if(json.length == 0)
+                            reachedEnd = true;
+
+                        json.forEach(function(profile){
+                            let profileElement = document.createElement('a');
+                            let profileAvatar = document.createElement('img');
+                            let profileName = document.createElement('div');
+                            let profileViews = document.createElement('div');
+
+                            profileAvatar.src = 'https://visage.surgeplay.com/face/128/' + profile.uuid;
+                            profileName.innerHTML = profile.username;
+                            profileViews.innerHTML = 'Views: ' + formatNumber(profile.total);
+
+                            profileAvatar.className = 'profile-avatar';
+                            profileName.className = 'profile-name';
+                            profileViews.className = 'profile-views';
+
+                            profileElement.className = 'top-profile';
+
+                            profileElement.appendChild(profileAvatar);
+                            profileElement.appendChild(profileName);
+                            profileElement.appendChild(profileViews);
+
+                            profileElement.href = '/stats/' + profile.uuid + '/' + profile.profile_id;
+
+                            document.querySelector('#top_profiles_box_wrapper').appendChild(profileElement);
+                        });
+
+                        scrollLock = false;
+                        currentOffset += limit;
+                    }
+
+                    topRequest.open("GET", '/api/topViews?offset=' + currentOffset + '&limit=' + limit);
+                    topRequest.send();
+                }
+            });
         </script>
     </body>
 </html>

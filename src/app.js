@@ -529,6 +529,19 @@ async function main(){
         res.send(file);
     });
 
+    app.get('/api/topViews', async (req, res, next) => {
+        const limit = Math.min(100, req.query.limit || 10);
+        const offset = Math.max(0, req.query.offset || 0);
+
+        res.json(await db
+        .collection('profileViews')
+        .find()
+        .sort({ total: -1 })
+        .skip(offset)
+        .limit(limit)
+        .toArray());
+    });
+
     app.get('/', async (req, res, next) => {
         res.render('index', { error: null, player: null, extra: await getExtra(), helper, page: 'index' });
     });
