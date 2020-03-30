@@ -1998,6 +1998,7 @@ html.no-webp #enter_player_box_wrapper{
 .profile-avatar{
     width: 64px;
     height: 64px;
+    border-radius: 5px;
 }
 
 .profile-name{

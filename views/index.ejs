@@ -43,7 +43,7 @@
         <div id="top_profiles_box_wrapper">
             <% for(const profile of extra.top_profiles){ %>
                 <a href="/stats/<%= profile.uuid %>/<%= profile.profile_id %>" class="top-profile">
-                    <img src="https://visage.surgeplay.com/face/128/<%= profile.uuid %>" class="profile-avatar">
+                    <img src="https://minotar.net/helm/<%= profile.uuid %>/128" class="profile-avatar">
                     <div class="profile-name"><%= profile.username %></div><br>
                     <div class="profile-views">Views: <%= helper.formatNumber(profile.total) %></div>
                 </a>
@@ -89,7 +89,7 @@
                             let profileName = document.createElement('div');
                             let profileViews = document.createElement('div');
 
-                            profileAvatar.src = 'https://visage.surgeplay.com/face/128/' + profile.uuid;
+                            profileAvatar.src = 'https://minotar.net/helm/' + profile.uuid + '/128';
                             profileName.innerHTML = profile.username;
                             profileViews.innerHTML = 'Views: ' + formatNumber(profile.total);
 
