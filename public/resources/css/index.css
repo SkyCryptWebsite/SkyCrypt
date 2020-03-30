@@ -1885,12 +1885,10 @@ a.additional-player-stat:hover{
 }
 
 #enter_player_box_wrapper{
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-top: -130px;
-    margin-left: -300px;
-    width: 600px;
+    position: relative;
+    margin: 0 auto;
+    margin-top: calc(50vh - 130px);
+    width: 650px;
     height: 260px;
     background: url(../img/bg_blur.webp?v2) no-repeat center center fixed;
     background-size: cover;
@@ -1956,25 +1954,80 @@ html.no-webp #enter_player_box_wrapper{
 }
 
 #error_box_wrapper{
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-top: 160px;
-    margin-left: -300px;
-    width: 600px;
-    height: 70px;
+    position: relative;
+    margin: 0 auto;
+    margin-top: 20px;
+    width: 650px;
     background: url(../img/bg_blur.webp?v2) no-repeat center center fixed;
     background-size: cover;
-    visibility: hidden;
     border-radius: 10px;
     overflow: hidden;
+    display: none;
+}
+
+#top_profiles_box_wrapper{
+    position: relative;
+    margin: 0 auto;
+    margin-top: 20px;
+    width: 650px;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-content: space-between;
+    flex-wrap: wrap;
+}
+
+.top-profile{
+    position: relative;
+    display: inline-block;
+    background: url(../img/bg_blur.webp?v2) no-repeat center center fixed;
+    background-size: cover;
+    width: calc(100% / 2 - 10px);
+    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+    text-decoration: none;
+    opacity: 0.9;
+    transition: opacity .2s;
+}
+
+.top-profile:hover{
+    opacity: 1;
+}
+
+.profile-avatar{
+    width: 64px;
+    height: 64px;
+}
+
+.profile-name{
+    position: absolute;
+    left: 100px;
+    top: 32px;
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.profile-views{
+    position: absolute;
+    left: 100px;
+    top: 58px;
+    font-weight: 500;
+    font-size: 16px;
+    color: rgba(255,255,255,0.8);
+}
+
+#error_box_wrapper{
+    height: 70px;
 }
 
 html.no-webp #error_box_wrapper{
     background-image: url(../img/bg_blur.png?v2);
 }
 
-#error_box{
+#error_box, #top_profiles_box{
     position: absolute;
     top: 0;
     left: 0;
@@ -1983,7 +2036,7 @@ html.no-webp #error_box_wrapper{
 }
 
 #error_box_wrapper.show-error{
-    visibility: visible;
+    display: block;
 }
 
 #error_title{
@@ -2454,6 +2507,34 @@ html.no-webp #error_box_wrapper{
     }
 }
 
+@media (max-width: 684px){
+    #enter_player_box_wrapper, #error_box_wrapper, #top_profiles_box_wrapper{
+        width: calc(100vw - 30px);
+    }
+
+    #enter_player_box_wrapper, #error_box_wrapper{
+        backdrop-filter: blur(15px);
+    }
+
+    #enter_player_box_wrapper{
+        height: 210px;
+        font-size: 12px;
+    }
+
+    #enter_player_box p{
+        font-size: 20px;
+    }
+
+    #enter_player_box input{
+        font-size: 20px;
+    }
+
+    .top-profile{
+        width: 100%;
+        backdrop-filter: blur(15px);
+    }
+}
+
 @media (max-width: 520px){
     #search_user{
         width: calc(100% - 180px);
@@ -2568,31 +2649,6 @@ html.no-webp #error_box_wrapper{
     html{
         min-width: 100vw;
         min-height: 100vh;
-    }
-
-    #enter_player_box_wrapper{
-        width: calc(100vw - 20px);
-        left: 10px;
-        margin-left: 0;
-        height: 210px;
-        margin-top: -105px;
-        font-size: 12px;
-        backdrop-filter: blur(15px);
-    }
-
-    #enter_player_box p{
-        font-size: 20px;
-    }
-
-    #enter_player_box input{
-        font-size: 20px;
-    }
-
-    #error_box_wrapper{
-        width: calc(100vw - 20px);
-        left: 10px;
-        margin-left: 0;
-        margin-top: 115px;
     }
 }
 

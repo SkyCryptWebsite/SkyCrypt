@@ -40,6 +40,15 @@
                 <div id="error_title">Error</div><div id="error_text"><%= error %></div>
             </div>
         </div>
+        <div id="top_profiles_box_wrapper">
+            <% for(const profile of extra.top_profiles){ %>
+                <a href="/<%= profile.uuid %>/<%= profile.profile_id %>" class="top-profile">
+                    <img src="https://visage.surgeplay.com/face/128/<%= profile.uuid %>" class="profile-avatar">
+                    <div class="profile-name"><%= profile.username %></div><br>
+                    <div class="profile-views">Views: <%= helper.formatNumber(profile.total) %></div>
+                </a>
+            <% } %>
+        </div>
         <script src="/resources/js/js.cookie.min.js"></script>
         <script>
             let targetUsername = document.getElementById("inp_enter_username");

@@ -136,6 +136,7 @@ async function main(){
                     error: 'Request to Hypixel API failed. Please try again!',
                     player: playerUsername,
                     extra: await getExtra(),
+                    helper,
                     page: 'index'
                 });
 
@@ -147,6 +148,7 @@ async function main(){
                     error: 'Player not found.',
                     player: playerUsername,
                     extra: await getExtra(),
+                    helper,
                     page: 'index'
                 });
 
@@ -158,6 +160,7 @@ async function main(){
                     error: 'No data returned by Hypixel API, please try again!',
                     player: playerUsername,
                     extra: await getExtra(),
+                    helper,
                     page: 'index'
                 });
 
@@ -169,6 +172,7 @@ async function main(){
                     error: 'Player has not played SkyBlock yet.',
                     player: playerUsername,
                     extra: await getExtra(),
+                    helper,
                     page: 'index'
                 });
 
@@ -199,6 +203,7 @@ async function main(){
                         error: 'Player has no SkyBlock profiles.',
                         player: playerUsername,
                         extra: await getExtra(),
+                        helper,
                         page: 'index'
                     });
 
@@ -270,6 +275,7 @@ async function main(){
                             error: 'Uh oh, this SkyBlock profile has no players.',
                             player: playerUsername,
                             extra: await getExtra(),
+                            helper,
                             page: 'index'
                         });
 
@@ -287,6 +293,7 @@ async function main(){
                     error: 'No data returned by Hypixel API, please try again!',
                     player: playerUsername,
                     extra: await getExtra(),
+                    helper,
                     page: 'index'
                 });
 
@@ -315,6 +322,7 @@ async function main(){
                     error: 'User not found in selected profile. This is probably due to a declined co-op invite.',
                     player: playerUsername,
                     extra: await getExtra(),
+                    helper,
                     page: 'index'
                 });
 
@@ -461,6 +469,7 @@ async function main(){
                 error: 'Request to Hypixel API failed. Their API might be down right now so try again later.',
                 player: playerUsername,
                 extra: await getExtra(),
+                helper,
                 page: 'index'
             });
 
@@ -521,7 +530,7 @@ async function main(){
     });
 
     app.get('/', async (req, res, next) => {
-        res.render('index', { error: null, player: null, extra: await getExtra(), page: 'index' });
+        res.render('index', { error: null, player: null, extra: await getExtra(), helper, page: 'index' });
     });
 
     app.get('*', async (req, res, next) => {
