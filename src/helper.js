@@ -75,24 +75,29 @@ module.exports = {
        return ['a', 'e', 'i', 'o', 'u'].includes(string.charAt(0).toLowerCase()) ? 'an': 'a';
    },
 
-    formatNumber: (number, floor, rounding = 10) => {
+   formatNumber: (number, floor, rounding = 10) => {
         if(number < 1000)
             return Math.floor(number);
         else if(number < 10000)
             if(floor)
-                return Math.floor(number / 1000 * rounding) / rounding + 'K';
+                return (Math.floor(number / 1000 * rounding) / rounding).toFixed(rounding.toString().length - 1) + 'K';
             else
-                return Math.ceil(number / 1000 * rounding) / rounding + 'K';
+                return (Math.ceil(number / 1000 * rounding) / rounding).toFixed(rounding.toString().length - 1) + 'K';
         else if(number < 1000000)
             if(floor)
                 return Math.floor(number / 1000) + 'K';
             else
                 return Math.ceil(number / 1000) + 'K';
-        else
+        else if(number < 1000000000)
             if(floor)
-                return Math.floor(number / 1000 / 1000 * rounding) / rounding + 'M';
+                return (Math.floor(number / 1000 / 1000 * rounding) / rounding).toFixed(rounding.toString().length - 1) + 'M';
             else
-                return Math.ceil(number / 1000 / 1000 * rounding) / rounding + 'M';
+                return (Math.ceil(number / 1000 / 1000 * rounding) / rounding).toFixed(rounding.toString().length - 1) + 'M';
+        else
+        if(floor)
+            return (Math.floor(number / 1000 / 1000 / 1000 * rounding * 10) / (rounding * 10)).toFixed(rounding.toString().length) + 'B';
+        else
+            return (Math.ceil(number / 1000 / 1000 / 1000 * rounding * 10) / (rounding * 10)).toFixed(rounding.toString().length) + 'B';
     },
 
     getProfile: async req => {
