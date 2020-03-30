@@ -68,6 +68,10 @@ async function main(){
             patreon: patreonEntry.amount || 0
         };
 
+        const topProfiles = await db.collection('profileViews').find().sort({ total: -1 }).limit(10).toArray();
+
+        output.top_profiles = topProfiles;
+
         return output;
     }
 
@@ -431,7 +435,7 @@ async function main(){
             .collection('views')
             .replaceOne(
                 { ip: ipHash, uuid: hypixelPlayer.uuid, profile_id: profileId },
-                { ip: ipHash, uuid: hypixelPlayer.uuid, profile_id: profileId, time: new Date() },
+                { ip: ipHash, uuid: hypixelPlayer.uuid, username: data.player.displayname, profile_id: profileId, time: new Date() },
                 { upsert: true }
             );
 
