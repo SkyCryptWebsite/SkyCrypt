@@ -1351,10 +1351,16 @@ twitterDescription += '. Click to view more stats!'
                                         }
                                     }
 
+                                    if(isNaN(dropsMin))
+                                        dropsMin = 0;
+
+                                    if(isNaN(dropsMax))
+                                        dropsMax = 0;
+
                                     let dropsText = "";
 
                                     if(dropsMin == 0)
-                                        dropsText = dropsMin;
+                                        dropsText = dropsMin
                                     else
                                         dropsText = `${dropsMin.toFixed(2)} - ${dropsMax.toFixed(2)}`;
                                 %>
