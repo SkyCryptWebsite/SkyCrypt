@@ -1282,18 +1282,17 @@ module.exports = {
             if(a.active === b.active)
                 if(a.rarity == b.rarity){
                     if(a.type == b.type){
-                        return a.level < b.level ? -1 : 1;
+                        return a.level.level > b.level.level ? -1 : 1;
                     }else{
                         let maxPetA = output
                         .filter(x => x.type == a.type && x.rarity == a.rarity)
-                        .sort((x, y) => x.level - y.level);
+                        .sort((x, y) => y.level.level - x.level.level);
 
                         maxPetA = maxPetA.length > 0 ? maxPetA[0].level.level : null;
 
-
                         let maxPetB = output
                         .filter(x => x.type == b.type && x.rarity == b.rarity)
-                        .sort((x, y) => x.level - y.level);
+                        .sort((x, y) => y.level.level - x.level.level);
 
                         maxPetB = maxPetB.length > 0 ? maxPetB[0].level.level : null;
 
