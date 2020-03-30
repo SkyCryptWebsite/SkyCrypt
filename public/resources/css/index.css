@@ -2019,6 +2019,14 @@ html.no-webp #enter_player_box_wrapper{
     color: rgba(255,255,255,0.8);
 }
 
+.profile-rank{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+}
+
 #error_box_wrapper{
     height: 70px;
 }
