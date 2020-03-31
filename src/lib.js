@@ -672,7 +672,11 @@ module.exports = {
     },
 
     getMinionSlots: minions => {
-        const uniqueMinions = minions.reduce((a, b) => { return { maxLevel: a.maxLevel + b.maxLevel }}).maxLevel;
+        let uniqueMinions = 0;
+
+        for(const minion of minions)
+            uniqueMinions += minion.levels.length;
+        
         const output = { currentSlots: 5, toNext: 5 };
 
         const uniquesRequired = Object.keys(constants.minion_slots).sort((a, b) => parseInt(a) - parseInt(b) );
