@@ -27,16 +27,9 @@ Now open `credentials.json` and enter a valid Hypixel API Key. You can obtain on
 
 You can now run `npm start` to start it. You will be able to access the site on <a href="http://localhost:32464">http://localhost:32464</a> if you leave the default port.
 
-<h2 align="center">To-Do</h2>
-
-- ~~Add a proper mobile layout~~
-- Add feature to show stats in your forum signature (image link)
-- Make player stats (Health, Defense etc.) more accurate
-- Add Combat and Fishing Tab
-- Maybe add an Auctions Tab (?)
-
 <h2 align="center">Credits</h2>
 
 - **Animated Custom Weapons and Armors**: <a href="https://hypixel.net/threads/2138599/">FurfSky+</a> by Furf__
+- **Additional Custom Textures**: <a href="https://hypixel.net/threads/2147652/">Vanilla+</a> by TBlazeWarriorT
 - **Default Textures**: <a href="https://www.minecraft.net/">Minecraft</a> by Mojang
 - **Player Heads**: <a href="https://hypixel.net/forums/skyblock.157/">SkyBlock</a> by Hypixel.
