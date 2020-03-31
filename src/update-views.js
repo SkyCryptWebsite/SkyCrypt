@@ -27,11 +27,9 @@ async function main(){
                 { uuid, username, total: viewsTotal },
                 { upsert: true }
             );
-
-            await new Promise(r => setTimeout(r, 25));
         }
 
-        updateViews();
+        console.log('done updating views');
     }
 
     updateViews();
