@@ -1323,7 +1323,7 @@ a.additional-player-stat:hover{
     font-weight: 500;
 }
 
-.stat-pets .piece:not(.active-pet){
+.pieces:last-child .piece{
     margin-bottom: 25px;
 }
 
