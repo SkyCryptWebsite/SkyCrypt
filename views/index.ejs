@@ -42,7 +42,7 @@
         </div>
         <div id="top_profiles_box_wrapper">
             <% for(const [index, profile] of extra.top_profiles.entries()){ %>
-                <a href="/stats/<%= profile.uuid %>/<%= profile.profile_id %>" class="top-profile">
+                <a href="/stats/<%= profile.uuid %>" class="top-profile">
                     <img src="https://minotar.net/helm/<%= profile.uuid %>/128" class="profile-avatar">
                     <div class="profile-name"><%= profile.username %></div><br>
                     <div class="profile-views">Views: <%= helper.formatNumber(profile.total) %></div>
@@ -108,7 +108,7 @@
                             profileElement.appendChild(profileViews);
                             profileElement.appendChild(profileRank);
 
-                            profileElement.href = '/stats/' + profile.uuid + '/' + profile.profile_id;
+                            profileElement.href = '/stats/' + profile.uuid;
 
                             document.querySelector('#top_profiles_box_wrapper').appendChild(profileElement);
                         });
