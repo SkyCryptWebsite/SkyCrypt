@@ -442,8 +442,8 @@ async function main(){
             const { upsertedCount } = await db
             .collection('views')
             .replaceOne(
-                { ip: ipHash, uuid: hypixelPlayer.uuid, profile_id: profileId },
-                { ip: ipHash, uuid: hypixelPlayer.uuid, profile_id: profileId, time: new Date() },
+                { ip: ipHash, uuid: hypixelPlayer.uuid },
+                { ip: ipHash, uuid: hypixelPlayer.uuid, time: new Date() },
                 { upsert: true }
             );
 
@@ -451,7 +451,7 @@ async function main(){
                 await db
                 .collection('profileViews')
                 .updateOne(
-                    { uuid: hypixelPlayer.uuid, profile_id: profileId },
+                    { uuid: hypixelPlayer.uuid },
                     { $inc: { total: 1, weekly: 1, daily: 1 }, $set: { username: data.player.displayname } },
                     { upsert: true }
                 );
