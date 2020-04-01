@@ -13,23 +13,22 @@ async function main(){
     const db = mongo.db(dbName);
 
     async function updateViews(){
-        for(const uuid of await db.collection('views').distinct('uuid')){
-            const { username } = await db.collection('usernames').findOne({ uuid });
+        await db.collection('usernames').find().forEach(async doc => {
+            const profileViews = await db.collection('views').countDocuments({ uuid: doc.uuid });
 
-            const profileViews = await db.collection('views').find({ uuid }).toArray();
-
-            const viewsTotal = profileViews.length;
+            if(profileViews == 0)
+                return;
 
             await db
             .collection('profileViews')
             .replaceOne(
-                { uuid },
-                { uuid, username, total: viewsTotal },
+                { uuid: doc.uuid },
+                { uuid: doc.uuid, username: doc.username, total: profileViews },
                 { upsert: true }
             );
-        }
+        });
 
-        console.log('done updating views');
+        mongo.close();
     }
 
     updateViews();
