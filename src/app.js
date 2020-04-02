@@ -94,7 +94,7 @@ async function main(){
         if(!isPlayerUuid){
             let playerObject = await db
             .collection('usernames')
-            .findOne({ username: new RegExp(`^${paramPlayer}\$`, 'i') });
+            .findOne({ $text: { $search: paramPlayer } });
 
             if(playerObject){
                 paramPlayer = playerObject.uuid;
