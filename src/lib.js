@@ -893,7 +893,13 @@ module.exports = {
             && a.tag.ExtraAttributes.modifier == armor[0].tag.ExtraAttributes.modifier).length == 4)
                 output_name += armor[0].display_name.split(" ")[0] + " ";
 
-            if(armor.filter(a => a.armor_name.split(" ")[0] == armor[0].armor_name.split(" ")[0]).length == 4){
+            const isMonsterSet = armor
+            .filter(a =>
+                ['SKELETON_HELMET', 'GUARDIAN_CHESTPLATE', 'CREEPER_LEGGINGS', 'SPIDER_BOOTS', 'TARANTULA_BOOTS'].includes(getId(a))
+            ).length == 4;
+
+            if(armor.filter(a => a.armor_name.split(" ")[0] == armor[0].armor_name.split(" ")[0]).length == 4
+            || isMonsterSet){
                 let base_name = armor[0].armor_name.split(" ");
                 base_name.pop();
 
@@ -904,6 +910,16 @@ module.exports = {
 
                 output.armor_set = output_name;
                 output.armor_set_rarity = armor[0].rarity;
+
+                if(isMonsterSet){
+                    output.armor_set_rarity = 'rare';
+
+                    if(getId(armor[0]) == 'SPIDER_BOOTS')
+                        output.armor_set = 'Monter Hunter Armor';
+
+                    if(getId(armor[0]) == 'TARANTULA_BOOTS')
+                        output.armor_set = 'Monter Raider Armor';
+                }
             }
         }
 
