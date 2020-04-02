@@ -8,6 +8,7 @@ const objectPath = require("object-path");
 const constants = require('./constants');
 const helper = require('./helper');
 const axios = require('axios');
+const moment = require('moment');
 
 const customResources = require('./custom-resources');
 
@@ -291,8 +292,10 @@ async function getItems(base64){
                     item.lore += '<br>';
             });
 
+            let hasAnvilUses = false;
+
             if(objectPath.has(item, 'tag.ExtraAttributes.anvil_uses')){
-                let { anvil_uses } = item.tag.ExtraAttributes;
+                let { anvil_uses, timestamp } = item.tag.ExtraAttributes;
 
                 let hot_potato_count = 0;
 
@@ -301,8 +304,17 @@ async function getItems(base64){
 
                 anvil_uses -= hot_potato_count;
 
-                if(anvil_uses > 0 && lore_raw)
-                    item.lore += "<br>" +  module.exports.renderLore(`§7Anvil Uses: §c${anvil_uses}`);
+                if(anvil_uses > 0 && lore_raw){
+                    hasAnvilUses = true;
+                    item.lore += "<br>" + module.exports.renderLore(`§7Anvil Uses: §c${anvil_uses}`);
+                }
+            }
+
+            if(objectPath.has(item, 'tag.ExtraAttributes.timestamp')){
+                if(hasAnvilUses)
+                    item.lore += "<br>";
+
+                item.lore += "<br>" + module.exports.renderLore(`§7Obtained: §c${moment(item.tag.ExtraAttributes.timestamp, "M/D/YY h:mm A").format("D MMM YYYY")}`);
             }
         }
 
