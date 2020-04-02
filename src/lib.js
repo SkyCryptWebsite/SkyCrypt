@@ -288,7 +288,7 @@ async function getItems(base64){
             lore_raw.forEach((line, index) => {
                 item.lore += module.exports.renderLore(line);
 
-                if(index + 1 <= lore_raw.length)
+                if(index + 1 < lore_raw.length)
                     item.lore += '<br>';
             });
 
@@ -306,13 +306,12 @@ async function getItems(base64){
 
                 if(anvil_uses > 0 && lore_raw){
                     hasAnvilUses = true;
-                    item.lore += "<br>" + module.exports.renderLore(`§7Anvil Uses: §c${anvil_uses}`);
+                    item.lore += "<br><br>" + module.exports.renderLore(`§7Anvil Uses: §c${anvil_uses}`);
                 }
             }
 
             if(objectPath.has(item, 'tag.ExtraAttributes.timestamp')){
-                if(hasAnvilUses)
-                    item.lore += "<br>";
+                item.lore += "<br>";
 
                 const timestamp = item.tag.ExtraAttributes.timestamp;
                 let obtainmentDate;
