@@ -94,7 +94,7 @@
 
                             profileAvatar.src = 'https://minotar.net/helm/' + profile.uuid + '/128';
                             profileName.innerHTML = profile.username;
-                            profileViews.innerHTML = 'Views: ' + formatNumber(profile.total);
+                            profileViews.innerHTML = 'Views: ' + formatNumber(profile.total, true);
                             profileRank.innerHTML = '#' + (currentOffset + index + 1);
 
                             profileAvatar.className = 'profile-avatar';
