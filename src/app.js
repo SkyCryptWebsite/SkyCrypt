@@ -116,7 +116,7 @@ async function main(){
         else
             activeProfile = await db
             .collection('profiles')
-            .findOne({ username: paramPlayer });
+            .findOne({ $text: { $search: paramPlayer } });
 
         let params = {
             key: credentials.hypixel_api_key
