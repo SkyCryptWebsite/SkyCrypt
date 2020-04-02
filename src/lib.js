@@ -15,7 +15,7 @@ const parseNbt = util.promisify(nbt.parse);
 
 const rarity_order = ['special', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 
-const MAX_SOULS = 193;
+const MAX_SOULS = 194;
 
 function replaceAll(target, search, replacement){
     return target.split(search).join(replacement);
