@@ -314,7 +314,15 @@ async function getItems(base64){
                 if(hasAnvilUses)
                     item.lore += "<br>";
 
-                item.lore += "<br>" + module.exports.renderLore(`§7Obtained: §c${moment(item.tag.ExtraAttributes.timestamp, "M/D/YY h:mm A").format("D MMM YYYY")}`);
+                const timestamp = item.tag.ExtraAttributes.timestamp;
+                let obtainmentDate;
+
+                if(!isNaN(timestamp))
+                    obtainmentDate = moment(parseInt(timestamp))
+                else
+                    obtainmentDate = moment(timestamp, "M/D/YY h:mm A")
+
+                item.lore += "<br>" + module.exports.renderLore(`§7Obtained: §c${obtainmentDate.format("D MMM YYYY")}`);
             }
         }
 
