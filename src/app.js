@@ -94,7 +94,7 @@ async function main(){
         if(!isPlayerUuid){
             let playerObject = await db
             .collection('usernames')
-            .findOne({ $text: { $search: paramPlayer } });
+            .findOne({ $text: { $search: `"${paramPlayer}"` } });
 
             if(playerObject){
                 paramPlayer = playerObject.uuid;
@@ -116,7 +116,7 @@ async function main(){
         else
             activeProfile = await db
             .collection('profiles')
-            .findOne({ $text: { $search: paramPlayer } });
+            .findOne({ $text: { $search: `"${paramPlayer}"` } });
 
         let params = {
             key: credentials.hypixel_api_key
