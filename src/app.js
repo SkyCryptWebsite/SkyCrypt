@@ -371,7 +371,7 @@ async function main(){
             }
 
             const items = await lib.getItems(userProfile);
-            const calculated = await lib.getStats(userProfile, items);
+            const calculated = await lib.getStats(userProfile, items, data.player);
 
             if(objectPath.has(profile, 'banking.balance'))
                 calculated.bank = profile.banking.balance;

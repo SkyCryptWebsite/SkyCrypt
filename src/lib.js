@@ -676,7 +676,7 @@ module.exports = {
 
         for(const minion of minions)
             uniqueMinions += minion.levels.length;
-        
+
         const output = { currentSlots: 5, toNext: 5 };
 
         const uniquesRequired = Object.keys(constants.minion_slots).sort((a, b) => parseInt(a) - parseInt(b) );
@@ -910,7 +910,7 @@ module.exports = {
         return output;
     },
 
-    getStats: async (profile, items) => {
+    getStats: async (profile, items, hypixelProfile) => {
         let output = {};
 
         output.stats = Object.assign({}, constants.base_stats);
@@ -921,7 +921,7 @@ module.exports = {
         output.fairy_bonus = {};
 
         if(profile.fairy_exchanges > 0){
-            let fairyBonus = getBonusStat(profile.fairy_exchanges * 5, 'fairy_souls', MAX_SOULS, 5);
+            let fairyBonus = getBonusStat(profile.fairy_exchanges * 5, 'fairy_souls', Math.max(...Object.keys(constants.bonus_stats.fairy_souls)), 5);
             output.fairy_bonus = Object.assign({}, fairyBonus);
 
             // Apply fairy soul bonus
@@ -930,6 +930,8 @@ module.exports = {
         }
 
         output.fairy_souls = { collected: profile.fairy_souls_collected, total: MAX_SOULS, progress: Math.min(profile.fairy_souls_collected / MAX_SOULS, 1) };
+
+        let skillLevels;
 
         // Apply skill bonuses
         if('experience_skill_farming' in profile
@@ -944,7 +946,7 @@ module.exports = {
             let average_level = 0;
             let average_level_no_progress = 0;
 
-            let levels = {
+            skillLevels = {
                 farming: getLevelByXp(profile.experience_skill_farming),
                 mining: getLevelByXp(profile.experience_skill_mining),
                 combat: getLevelByXp(profile.experience_skill_combat),
@@ -956,26 +958,38 @@ module.exports = {
                 runecrafting: getLevelByXp(profile.experience_skill_runecrafting, true),
             };
 
-            output.skill_bonus = {};
-
-            for(let skill in levels){
+            for(let skill in skillLevels){
                 if(skill != 'runecrafting' && skill != 'carpentry'){
-                    average_level += levels[skill].level + levels[skill].progress;
-                    average_level_no_progress += levels[skill].level;
+                    average_level += skillLevels[skill].level + skillLevels[skill].progress;
+                    average_level_no_progress += skillLevels[skill].level;
                 }
-
-                const skillBonus = getBonusStat(levels[skill].level, `${skill}_skill`, 50, 1);
-
-                output.skill_bonus[skill] = Object.assign({}, skillBonus);
-
-                for(const stat in skillBonus)
-                    output.stats[stat] += skillBonus[stat];
             }
 
-            output.average_level = (average_level / (Object.keys(levels).length - 2)).toFixed(1);
-            output.average_level_no_progress = (average_level_no_progress / (Object.keys(levels).length - 2)).toFixed(1);
+            output.average_level = (average_level / (Object.keys(skillLevels).length - 2)).toFixed(1);
+            output.average_level_no_progress = (average_level_no_progress / (Object.keys(skillLevels).length - 2)).toFixed(1);
 
-            output.levels = Object.assign({}, levels);
+            output.levels = Object.assign({}, skillLevels);
+        }else{
+            skillLevels = {
+                farming: hypixelProfile.achievements.skyblock_harvester || 0,
+                mining: hypixelProfile.achievements.skyblock_excavator || 0,
+                combat: hypixelProfile.achievements.skyblock_combat || 0,
+                foraging: hypixelProfile.achievements.skyblock_gatherer || 0,
+                fishing: hypixelProfile.achievements.skyblock_angler || 0,
+                enchanting: hypixelProfile.achievements.skyblock_augmentation || 0,
+                alchemy: hypixelProfile.achievements.skyblock_concoctor || 0,
+            }
+        }
+
+        output.skill_bonus = {};
+
+        for(let skill in skillLevels){
+            const skillBonus = getBonusStat(skillLevels[skill].level || skillLevels[skill], `${skill}_skill`, 50, 1);
+
+            output.skill_bonus[skill] = Object.assign({}, skillBonus);
+
+            for(const stat in skillBonus)
+                output.stats[stat] += skillBonus[stat];
         }
 
         output.slayer_coins_spent = 0;
