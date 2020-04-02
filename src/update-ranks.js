@@ -29,11 +29,11 @@ async function main(){
 
             rank++;
         }
+
+        setTimeout(updateRanks, 1000 * 3600);
     }
 
-    await updateRanks();
-
-    mongo.close();
+    updateRanks();
 }
 
 if(cluster.isMaster)
