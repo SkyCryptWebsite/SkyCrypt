@@ -909,6 +909,16 @@ twitterDescription += '. Click to view more stats!'
                 <div class="additional-player-stat">Views: <%= helper.formatNumber(calculated.views.total) %></div>
                 <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">Plancke</a>
                 <a href="https://skyblock.matdoes.dev/profile/<%= calculated.display_name %>/<%= calculated.profile.cute_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">matdoes.dev</a>
+                <div id="additional_socials">
+                    <% if('DISCORD' in calculated.social){ %><div class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></div><% } %>
+                    <% if('TWITTER' in calculated.social){ %><a data-tippy-content="Twitter" href="<%= calculated.social.TWITTER %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-twitter"></a><% } %>
+                    <% if('YOUTUBE' in calculated.social){ %><a data-tippy-content="YouTube" href="<%= calculated.social.YOUTUBE %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-youtube"></a><% } %>
+                    <% if('INSTAGRAM' in calculated.social){ %><a data-tippy-content="Instagram" href="<%= calculated.social.INSTAGRAM %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-instagram"></a><% } %>
+                    <% if('TWITCH' in calculated.social){ %><a data-tippy-content="Twitch" href="<%= calculated.social.TWITCH %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-twitch"></a><% } %>
+                    <% if('MIXER' in calculated.social){ %><a data-tippy-content="Mixer" href="<%= calculated.social.MIXER %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-mixer"></a><% } %>
+                    <% if('HYPIXEL' in calculated.social){ %><a data-tippy-content="Hypixel Forums" href="<%= calculated.social.HYPIXEL %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-hypixel"></a><% } %>
+                    <% if(Object.keys(calculated.social).length > 0){ %><div class="additional-player-stat" id="reveal_socials"></div><% } %>
+                </div>
             </div>
         </div>
         <div id="basic_stats">

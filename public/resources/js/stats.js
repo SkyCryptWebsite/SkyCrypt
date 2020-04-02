@@ -565,6 +565,42 @@ document.addEventListener('DOMContentLoaded', function(){
         element.addEventListener('click', closeLore);
     });
 
+    [].forEach.call(document.querySelectorAll('.copy-text'), function(e){
+        let element = e;
+
+        let copyNotification = tippy(element, {
+          content: 'Copied to clipboard!',
+          trigger: 'manual'
+        });
+
+        element.addEventListener('click', function(){
+            navigator.clipboard.writeText(element.innerHTML).then(function(){
+                copyNotification.show();
+
+                setTimeout(function(){
+                    copyNotification.hide();
+                }, 1500);
+            }, function(){});
+        });
+    });
+
+    let socialsShown = false;
+    let revealSocials = document.querySelector('#reveal_socials');
+
+    if(revealSocials){
+        revealSocials.addEventListener('click', function(){
+            if(socialsShown){
+                socialsShown = false;
+                document.querySelector('#additional_socials').classList.remove('socials-shown');
+                document.querySelector('#reveal_socials').classList.remove('socials-shown');
+            }else{
+                socialsShown = true;
+                document.querySelector('#additional_socials').classList.add('socials-shown');
+                document.querySelector('#reveal_socials').classList.add('socials-shown');
+            }
+        });
+    }
+
     let searchUser = document.querySelector('#inp_search_user');
 
     searchUser.addEventListener('keyup', function(e){

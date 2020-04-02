@@ -745,12 +745,17 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 #additional_player_stats{
     font-size: 15px;
     margin-top: 10px;
+    position: relative;
 }
 
 .additional-player-stat{
-    padding: 5px 12px;
+    position: relative;
+    padding: 0px 12px;
     margin-right: 7px;
     margin-top: 15px;
+    height: 29px;
+    line-height: 29px;
+    box-sizing: border-box;
     background-color: rgba(166, 20, 93, 0.9);
     display: inline-block;
     border-radius: 99999px;
@@ -758,6 +763,46 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     color: white;
     font-weight: 600;
     transition: background-color .1s;
+    vertical-align: top;
+}
+
+#reveal_socials{
+    width: 29px;
+    padding: 0;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 18px;
+    background-image: url(/resources/img/icons/chevron-right.png);
+    background-position: center center;
+    background-size: 24px 24px;
+    background-repeat: no-repeat;
+    user-select: none;
+}
+
+#reveal_socials.socials-shown{
+    background-image: url(/resources/img/icons/chevron-left.png);
+}
+
+#reveal_socials::after{
+    content: "";
+}
+
+#additional_socials{
+    display: inline-block;
+    transition: max-width .2s;
+}
+
+#additional_socials .additional-player-stat:not(#reveal_socials){
+    display: none;
+}
+
+#additional_socials.socials-shown .additional-player-stat{
+    display: inline-block !important;
+}
+
+.addition-player-stat::after{
+    pointer-events: none;
 }
 
 div.additional-player-stat{
@@ -775,7 +820,6 @@ a.additional-player-stat:hover{
 
 .additional-player-stat.external-link{
     padding-right: 35px;
-    position: relative;
 }
 
 .additional-player-stat.external-link::after{
@@ -789,6 +833,69 @@ a.additional-player-stat:hover{
     background-position: 0px center;
     background-size: 18px 18px;
     background-repeat: no-repeat;
+}
+
+.additional-player-stat.external-icon:not(.external-discord){
+    width: 29px;
+    padding: 0;
+}
+
+.additional-player-stat.external-discord{
+    padding-right: 12px;
+    padding-left: 30px;
+}
+
+.additional-player-stat.external-icon::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    background-position: center center;
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+}
+
+.additional-player-stat.external-icon.external-discord::after{
+    left: 8px;
+    right: auto;
+    width: 20px;
+    background-position: 0px center;
+}
+
+.additional-player-stat.copy-text{
+    cursor: pointer;
+    user-select: none !important;
+}
+
+.additional-player-stat.external-twitter::after{
+    background-image: url(../img/icons/twitter.png);
+}
+
+.additional-player-stat.external-youtube::after{
+    background-image: url(../img/icons/youtube.png);
+}
+
+.additional-player-stat.external-twitch::after{
+    background-image: url(../img/icons/twitch.png);
+}
+
+.additional-player-stat.external-instagram::after{
+    background-image: url(../img/icons/instagram.png);
+}
+
+.additional-player-stat.external-mixer::after{
+    background-image: url(../img/icons/mixer.png);
+}
+
+.additional-player-stat.external-discord::after{
+    background-image: url(../img/icons/discord.png);
+}
+
+.additional-player-stat.external-hypixel::after{
+    background-image: url(../img/icons/hypixel.png);
 }
 
 #basic_stats{
