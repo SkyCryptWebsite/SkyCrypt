@@ -387,7 +387,7 @@ module.exports = {
         generator_ghast: "Minion Ghast",
         generator_magma_cube: "Minion Magma Cube",
         generator_slime: "Minion Slime",
-        brood_mother_spider: "Brood Mother"       
+        brood_mother_spider: "Brood Mother"
     },
 
     area_names: {
@@ -642,7 +642,7 @@ module.exports = {
                 speed: 0
             },
             200: {
-                health: 23,
+                health: 22,
                 defense: 2,
                 strength: 2,
                 speed: 1
