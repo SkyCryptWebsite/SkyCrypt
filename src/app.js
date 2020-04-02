@@ -460,7 +460,7 @@ async function main(){
             calculated.views = _.pick(await db
             .collection('profileViews')
             .findOne({ uuid: hypixelPlayer.uuid }),
-            'total', 'daily', 'weekly');
+            'total', 'daily', 'weekly', 'rank');
 
             res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
         }catch(e){
