@@ -768,6 +768,10 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     vertical-align: top;
 }
 
+.additional-player-stat:hover::after{
+    color: rgba(255,255,255,0.9);
+}
+
 #reveal_socials{
     width: 29px;
     padding: 0;
