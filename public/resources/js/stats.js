@@ -174,8 +174,10 @@ document.addEventListener('DOMContentLoaded', function(){
             itemIcon.className = 'stats-piece-icon item-icon icon-' + item.id + '_' + item.Damage;
         }
 
+        /* broken sometimes
         if(isEnchanted(item))
             handleEnchanted(itemIcon);
+            */
 
         itemLore.innerHTML = item.lore || '';
 
