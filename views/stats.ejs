@@ -833,7 +833,7 @@ if(calculated.average_level)
 description += `💰 Purse: ${helper.formatNumber(calculated.purse, true)} Coins`;
 
 if(calculated.bank)
-    description += `\n🏦 Bank Account: ${helper.formatNumber(calculated.bank, true)} Coin${Math.round(calculated.bank) == 1 ? '': 's'}`;
+    description += `\n🏦 Bank Account: ${helper.formatNumber(calculated.bank, true)} Coin${Math.floor(calculated.bank) == 1 ? '': 's'}`;
 
 let twitterDescription = `${calculated.display_name} has been playing SkyBlock for ${moment(calculated.first_join.unix).fromNow(true)}`;
 
