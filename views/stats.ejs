@@ -1024,7 +1024,7 @@ twitterDescription += '. Click to view more stats!'
                 <div class="nav-item active" data-target="armor">Armor</div>
                 <% if(!items.no_inventory){ %><div class="nav-item" data-target="weapons">Weapons</div><% } %>
                 <% if(!items.no_inventory){ %><div class="nav-item" data-target="accessories">Accessories</div><% } %>
-                <div class="nav-item" data-target="pets">Pets</div>
+                <% if(calculated.pets.length > 0){ %><div class="nav-item" data-target="pets">Pets</div><% } %>
                 <% if(!items.no_inventory){ %><div class="nav-item" data-target="inventory">Inventory</div><% } %>
                 <div class="nav-item" data-target="fishing">Fishing</div>
                 <div class="nav-item" data-target="slayer">Slayer</div>
