@@ -527,7 +527,9 @@ document.addEventListener('DOMContentLoaded', function(){
                         statsContent.classList.remove('sticky-stats')
                     }else{
                         showLore(element, false);
-                        fillLore(element);
+
+                        if(Number(statsContent.getAttribute('data-item-index')) != itemIndex)
+                            fillLore(element);
                     }
                 }
             }
