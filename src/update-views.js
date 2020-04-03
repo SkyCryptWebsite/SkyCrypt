@@ -13,20 +13,24 @@ async function main(){
     const db = mongo.db(dbName);
 
     async function updateViews(){
-        await db.collection('usernames').find().forEach(async doc => {
-            const profileViews = await db.collection('views').countDocuments({ uuid: doc.uuid });
+        const cursor = await db.collection('usernames').find();
+
+        while(await cursor.hasNext()){
+            const doc = await cursor.next();
+
+            const profileViews = await db.collection('views').countDocuments({ uuid: doc.uuid, invalid: { $ne: true } });
 
             if(profileViews == 0)
-                return;
+                continue;
 
             await db
             .collection('profileViews')
-            .replaceOne(
+            .updateOne(
                 { uuid: doc.uuid },
-                { uuid: doc.uuid, username: doc.username, total: profileViews },
+                { $set: { uuid: doc.uuid, username: doc.username, total: profileViews } },
                 { upsert: true }
             );
-        });
+        }
 
         mongo.close();
     }
