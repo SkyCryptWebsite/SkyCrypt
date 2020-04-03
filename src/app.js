@@ -92,9 +92,16 @@ async function main(){
         let activeProfile;
 
         if(!isPlayerUuid){
-            let playerObject = await db
+            let playerObject;
+
+            let playerObjects = await db
             .collection('usernames')
-            .findOne({ $text: { $search: `"${paramPlayer}"` } });
+            .find({ $text: { $search: `"${paramPlayer}"` } })
+            .toArray();
+
+            for(const doc of playerObjects)
+                if(doc.username.toLowerCase() == paramPlayer.toLowerCase())
+                    playerObject = doc;
 
             if(playerObject){
                 paramPlayer = playerObject.uuid;
@@ -109,14 +116,22 @@ async function main(){
                 playerUsername = playerObject.username;
         }
 
-        if(isPlayerUuid)
+        if(isPlayerUuid){
             activeProfile = await db
             .collection('profiles')
             .findOne({ uuid: paramPlayer });
-        else
-            activeProfile = await db
+        }else{
+            let activeProfile;
+
+            let activeProfiles = await db
             .collection('profiles')
-            .findOne({ $text: { $search: `"${paramPlayer}"` } });
+            .find({ $text: { $search: `"${paramPlayer}"` } })
+            .toArray();
+
+            for(const doc of activeProfiles)
+                if(doc.username.toLowerCase() == paramPlayer.toLowerCase())
+                    activeProfile = doc;
+        }
 
         let params = {
             key: credentials.hypixel_api_key
