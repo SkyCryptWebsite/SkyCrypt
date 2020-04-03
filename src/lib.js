@@ -285,12 +285,15 @@ async function getItems(base64){
 
             item.lore = '';
 
-            lore_raw.forEach((line, index) => {
+            for(const [index, line] of lore_raw.entries()){
+                if(index == 0 && line == '')
+                    continue;
+
                 item.lore += module.exports.renderLore(line);
 
                 if(index + 1 < lore_raw.length)
                     item.lore += '<br>';
-            });
+            }
 
             let hasAnvilUses = false;
 
