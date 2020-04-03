@@ -909,8 +909,8 @@ twitterDescription += '. Click to view more stats!'
                 <div class="additional-player-stat" data-tippy-content="
                 <span class='stat-name'>Views: </span><span class='stat-value'><%= calculated.views.total.toLocaleString() %></span>
                 <div class='tippy-explanation'>Amount of total unique people who have accessed this profile.</div>
-                <% if('rank' in calculated.views){ %><span class='stat-name'>Rank: </span><span class='stat-value'>#<%= calculated.views.rank.toLocaleString() %></span><% } %>
-                <div class='tippy-explanation'>Rank among the most viewed profiles. Updates once per hour.</div>
+                <% if('rank' in calculated.views){ %><span class='stat-name'>Rank: </span><span class='stat-value'>#<%= calculated.views.rank.toLocaleString() %></span>
+                <div class='tippy-explanation'>Rank among the most viewed profiles. Updates once per hour.</div><% } %>
                 ">Views: <%= helper.formatNumber(calculated.views.total, true) %></div>
                 <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">Plancke</a>
                 <a href="https://skyblock.matdoes.dev/profile/<%= calculated.display_name %>/<%= calculated.profile.cute_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">matdoes.dev</a>
