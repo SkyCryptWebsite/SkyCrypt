@@ -556,6 +556,8 @@ async function main(){
     });
 
     app.get('/api/addView', async (req, res, next) => {
+        res.end('ok');
+
         const response = await axios({
             method: 'post',
             url: `https://www.google.com/recaptcha/api/siteverify`,
