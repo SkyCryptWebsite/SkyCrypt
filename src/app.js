@@ -556,7 +556,7 @@ async function main(){
     });
 
     app.get('/api/addView', async (req, res, next) => {
-        res.end('ok');
+        res.send('ok');
 
         const response = await axios({
             method: 'post',
