@@ -26,9 +26,62 @@ async function main(){
     );
 
     await db
+    .collection('profiles')
+    .createIndex(
+        { uuid: 1 },
+        { unique: true }
+    );
+
+    await db
     .collection('usernames')
     .createIndex(
         { username: 'text' }
+    );
+
+    await db
+    .collection('usernames')
+    .createIndex(
+        { uuid: 1 },
+        { unique: true }
+    );
+
+    await db
+    .collection('members')
+    .createIndex(
+        { uuid: 1, profile_id: 1 },
+        { unique: true }
+    );
+
+    await db
+    .collection('views')
+    .createIndex(
+        { uuid: 1, ip: 1 },
+        { unique: true }
+    );
+
+    await db
+    .collection('profileViews')
+    .createIndex(
+        { uuid: 1 },
+        { unique: true }
+    );
+
+    await db
+    .collection('profileViews')
+    .createIndex(
+        { total: -1 }
+    );
+
+    await db
+    .collection('profileViews')
+    .createIndex(
+        { weekly: -1 }
+    );
+
+    await db
+    .collection('profileViews')
+    .createIndex(
+        { daily: -1 }
     );
 
     mongo.close();
