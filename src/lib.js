@@ -1367,26 +1367,40 @@ module.exports = {
         return output;
     },
 
-    getCollections: async profile => {
+    getCollections: async (uuid, profile, members) => {
         const output = {};
 
-        if(!('unlocked_coll_tiers' in profile) || !('collection' in profile))
+        const userProfile = profile.members[uuid];
+
+        if(!('unlocked_coll_tiers' in userProfile) || !('collection' in userProfile))
             return output;
 
-        for(const collection of profile.unlocked_coll_tiers){
+        for(const collection of userProfile.unlocked_coll_tiers){
             const split = collection.split("_");
             const tier = Math.max(0, parseInt(split.pop()));
             const type = split.join("_");
-            const amount = profile.collection[type] | 0;
+            const amount = userProfile.collection[type] || 0;
+            const amounts = [];
+            let totalAmount = 0;
+
+            for(member of members){
+                const memberProfile = profile.members[member.uuid];
+
+                if('collection' in memberProfile)
+                    amounts.push({ username: member.display_name, amount: memberProfile.collection[type] || 0 });
+            }
+
+            for(const memberAmount of amounts)
+                totalAmount += memberAmount.amount;
 
             if(!(type in output) || tier > output[type].tier)
-                output[type] = { tier, amount };
+                output[type] = { tier, amount, totalAmount, amounts };
 
             const collectionData =  constants.collection_data.filter(a => a.skyblockId == type)[0];
 
             if('tiers' in collectionData){
                 for(const tier of collectionData.tiers){
-                    if(amount >= tier.amountRequired){
+                    if(totalAmount >= tier.amountRequired){
                         output[type].tier = Math.max(tier.tier, output[type].tier);
                     }
                 }

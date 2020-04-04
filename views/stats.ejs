@@ -1566,8 +1566,19 @@ twitterDescription += '. Click to view more stats!'
                             <div class="collections">
                             <%
 
-                            for(const collection of collections){ %>
-                                <div class="collection">
+                            for(const collection of collections){
+                                let amountsTooltip = '';
+
+                                for(const [index, amount] of collection.amounts.entries()){
+                                    amountsTooltip += `<span class="stat-name">${amount.username}: </span><span class="stat-value">${amount.amount.toLocaleString()}</span>`;
+
+                                    if(index < collection.amounts.length)
+                                        amountsTooltip += '<br>';
+                                }
+
+                                amountsTooltip += `<br><span class="stat-name">Total: </span><span class="stat-value">${collection.totalAmount.toLocaleString()}</span>`;
+                            %>
+                                <div class="collection" data-tippy-content="<%= amountsTooltip %>">
                                     <div class="collection-icon"><div class="item-icon icon-<%= collection.id %>_<%= collection.damage %>"></div></div>
                                     <div class="collection-stats">
                                         <div class="collection-name <%= collection.tier >= collection.maxTier ? 'max-minion' : '' %>"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>

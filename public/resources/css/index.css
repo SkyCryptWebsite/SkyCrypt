@@ -23,6 +23,7 @@ html.no-webp{
 
 .tippy-content .stat-name{
     color: rgba(255,255,255,0.85);
+    text-transform: none;
 }
 
 .tippy-content{
@@ -1870,6 +1871,10 @@ a.additional-player-stat:hover{
     margin-bottom: 8px;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 5px;
+}
+
+.collection::after{
+    content: "";
 }
 
 .collection-icon{
