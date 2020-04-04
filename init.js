@@ -30,6 +30,8 @@ async function main(){
     .createIndex(
         { username: 'text' }
     );
+
+    mongo.close();
 }
 
 main();
