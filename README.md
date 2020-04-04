@@ -1,4 +1,4 @@
-<p align="center"><img width="480px" height="192px" src="public/resources/img/logo.png"></p>
+<p align="center"><img src="https://i.imgur.com/ntDCRJN.png"></p>
 <h1 align="center">A beautiful SkyBlock stats website 🌹</h1>
 
 This project allows you to share your SkyBlock profile with other players with a quick overview of your Stats, Skills, Armor, Weapons and Accessories.
