@@ -1474,16 +1474,21 @@ twitterDescription += '. Click to view more stats!'
             <div class="stat-content">
                 <%
                     let uniqueMinions = 0;
+                    let maxedMinions = 0;
                     let skippedMinions = 0;
 
                     for(const minion of calculated.minions){
                         uniqueMinions += minion.levels.length;
                         skippedMinions += minion.maxLevel - minion.levels.length;
+
+                        if(minion.maxLevel == 11)
+                            maxedMinions++;
                     }
                 %>
                 <p class="stat-raw-values">
                     <span class="stat-name">Unique Minions: </span><span class="stat-value"><%= uniqueMinions %> / 572</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 572 * 100) %>%)</span><br>
                     <span class="stat-name">Minion Slots: </span><span class="stat-value"><%= calculated.minion_slots.currentSlots %></span><span class="grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
+                    <span class="stat-name">Maxed Minions: </span><span class="stat-value"><%= maxedMinions %> / <%= _.size(constants.minions) %></span><br>
                     <% if(skippedMinions > 0){ %>
                     <span class="stat-name">Skipped Minion Tiers: </span><span class="stat-value"><%= skippedMinions %></span><br>
                     <% } %>
