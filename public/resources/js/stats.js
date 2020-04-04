@@ -790,18 +790,6 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
-    document.querySelector('.top-deaths .show-all').addEventListener('click', function(){
-        let parent = this.parentNode;
-
-        this.remove();
-        this.parentNode.classList.add('all-shown');
-        this.parentNode.style.maxHeight = this.parentNode.offsetHeight + 'px';
-
-        calculated.deaths.slice(10).forEach(function(kill){
-
-        });
-    });
-
     window.addEventListener('keydown', function(e){
         let selectedPiece = document.querySelector('.rich-item:focus');
 
