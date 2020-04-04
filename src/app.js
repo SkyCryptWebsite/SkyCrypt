@@ -577,17 +577,21 @@ async function main(){
                 const { upsertedCount } = await db
                 .collection('views')
                 .replaceOne(
-                    { ip: ipHash, uuid: hypixelPlayer.uuid },
-                    { ip: ipHash, uuid: hypixelPlayer.uuid, time: new Date() },
+                    { ip: ipHash, uuid: req.query.uuid },
+                    { ip: ipHash, uuid: req.query.uuid, time: new Date() },
                     { upsert: true }
                 );
+
+                const userObject = await db
+                .collection('usernames')
+                .findOne({ uuid: req.query.uuid });
 
                 if(upsertedCount > 0)
                     await db
                     .collection('profileViews')
                     .updateOne(
                         { uuid: hypixelPlayer.uuid },
-                        { $inc: { total: 1, weekly: 1, daily: 1 }, $set: { username: data.player.displayname } },
+                        { $inc: { total: 1, weekly: 1, daily: 1 }, $set: { username: userObject.username } },
                         { upsert: true }
                     );
             }

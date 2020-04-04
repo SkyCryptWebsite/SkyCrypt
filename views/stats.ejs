@@ -1604,7 +1604,7 @@ twitterDescription += '. Click to view more stats!'
             grecaptcha.ready(function(){
                 grecaptcha.execute('<%= extra.recaptcha_site_key %>', {action: 'homepage'}).then(function(token){
                     let addView = new XMLHttpRequest();
-                    addView.open("GET", "/api/addView?token=" + token);
+                    addView.open("GET", "/api/addView?token=" + token + "&uuid=" + calculated.uuid);
                     addView.send();
                 });
             });
