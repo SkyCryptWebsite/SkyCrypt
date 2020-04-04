@@ -72,6 +72,9 @@ async function main(){
 
         output.top_profiles = topProfiles;
 
+        if('recaptcha_site_key' in credentials)
+            output.recaptcha_site_key = credentials.recaptcha_site_key;
+
         return output;
     }
 
@@ -452,30 +455,24 @@ async function main(){
                 text: first_join_text
             };
 
-            const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-            const ipHash = crypto.createHash('md5').update(ipAddress).digest("hex");
-
-            const { upsertedCount } = await db
-            .collection('views')
-            .replaceOne(
-                { ip: ipHash, uuid: hypixelPlayer.uuid },
-                { ip: ipHash, uuid: hypixelPlayer.uuid, time: new Date() },
-                { upsert: true }
-            );
-
-            if(upsertedCount > 0)
-                await db
-                .collection('profileViews')
-                .updateOne(
-                    { uuid: hypixelPlayer.uuid },
-                    { $inc: { total: 1, weekly: 1, daily: 1 }, $set: { username: data.player.displayname } },
-                    { upsert: true }
-                );
-
             calculated.views = _.pick(await db
             .collection('profileViews')
             .findOne({ uuid: hypixelPlayer.uuid }),
             'total', 'daily', 'weekly', 'rank');
+
+            calculated.views.total = calculated.views.total || 0;
+
+            const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+            const ipHash = crypto.createHash('md5').update(ipAddress).digest("hex");
+
+            const ownViews = await db
+            .collection('views')
+            .countDocuments(
+                { ip: ipHash, uuid: hypixelPlayer.uuid }
+            );
+
+            if(ownViews == 0)
+                calculated.views.total++;
 
             res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
         }catch(e){
@@ -556,6 +553,45 @@ async function main(){
         .skip(offset)
         .limit(limit)
         .toArray());
+    });
+
+    app.get('/api/addView', async (req, res, next) => {
+        const response = await axios({
+            method: 'post',
+            url: `https://www.google.com/recaptcha/api/siteverify`,
+            params: {
+                secret: credentials.recaptcha_secret_key,
+                response: req.query.token
+            }
+        });
+
+        try{
+            const { score } = response.data;
+
+            if(score >= 0.9){
+                const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+                const ipHash = crypto.createHash('md5').update(ipAddress).digest("hex");
+
+                const { upsertedCount } = await db
+                .collection('views')
+                .replaceOne(
+                    { ip: ipHash, uuid: hypixelPlayer.uuid },
+                    { ip: ipHash, uuid: hypixelPlayer.uuid, time: new Date() },
+                    { upsert: true }
+                );
+
+                if(upsertedCount > 0)
+                    await db
+                    .collection('profileViews')
+                    .updateOne(
+                        { uuid: hypixelPlayer.uuid },
+                        { $inc: { total: 1, weekly: 1, daily: 1 }, $set: { username: data.player.displayname } },
+                        { upsert: true }
+                    );
+            }
+        }catch(e){
+
+        }
     });
 
     app.get('/', async (req, res, next) => {

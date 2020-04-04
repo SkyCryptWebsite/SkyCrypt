@@ -7,6 +7,10 @@ html{
     overflow-x: hidden;
 }
 
+.grecaptcha-badge{
+    visibility: hidden;
+}
+
 .stat-name, .stat-value, .skill-name, .skill-progress-text, .grey-text, .kill-stat{
     user-select: text !important;
 }
