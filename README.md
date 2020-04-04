@@ -7,7 +7,7 @@ This project allows you to share your SkyBlock profile with other players with a
 
 <h2 align="center">Screenshot</h1>
 
-<p align="center"><img src="https://i.imgur.com/qwtl35g.png"></p>
+<p align="center"><img src="https://i.imgur.com/JSVsbUx.png"></p>
 
 <h2 align="center">Contributing</h1>
 
