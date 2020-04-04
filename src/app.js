@@ -590,7 +590,7 @@ async function main(){
                     await db
                     .collection('profileViews')
                     .updateOne(
-                        { uuid: hypixelPlayer.uuid },
+                        { uuid: req.query.uuid },
                         { $inc: { total: 1, weekly: 1, daily: 1 }, $set: { username: userObject.username } },
                         { upsert: true }
                     );
