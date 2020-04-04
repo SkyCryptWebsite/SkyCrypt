@@ -1,7 +1,9 @@
 const fs = require('fs-extra');
 
 const credentials = {
-    hypixel_api_key: ""
+    hypixel_api_key: "",
+    recaptcha_site_key: "",
+    recaptcha_secret_key: ""
 };
 
 if(!fs.existsSync('credentials.json'))
