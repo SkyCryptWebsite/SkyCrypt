@@ -1408,6 +1408,27 @@ module.exports = {
         }
 
         return output;
+    },
+
+    getBagSizes: async (collections) => {
+        const output = {};
+
+        for(const bag in constants.bag_size){
+            const bagSize = constants.bag_size[bag];
+
+            if(!(bagSize.collection in collections))
+                continue;
+
+            let slots = 0;
+
+            for(const size of bagSize.sizes)
+                if(collections[bagSize.collection].tier >= size.tier)
+                    slots = size.slots;
+
+            output[bag] = slots;
+        }
+
+        return output;
     }
 }
 

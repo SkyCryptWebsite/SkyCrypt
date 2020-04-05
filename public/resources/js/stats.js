@@ -47,10 +47,25 @@ document.addEventListener('DOMContentLoaded', function(){
         inventoryView.className = 'inventory-view current-inventory processed';
         inventoryView.setAttribute('data-inventory-type', type);
 
-        if(type == 'inventory')
-            inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
+        let countSlotsUsed = 0;
 
-        inventory.forEach((item, index) => {
+        inventory.forEach(function(item){
+            if(Object.keys(item).length > 1)
+                countSlotsUsed++;
+        });
+
+        switch(type){
+            case 'inventory':
+                inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
+                break;
+            case 'enderchest':
+                break;
+            default:
+                if(type in calculated.bag_sizes)
+                    inventory = inventory.slice(0, Math.max(countSlotsUsed, calculated.bag_sizes[type]));
+        }
+
+        inventory.forEach(function(item, index){
             let inventorySlot = document.createElement('div');
             inventorySlot.className = 'inventory-slot';
 

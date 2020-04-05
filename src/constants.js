@@ -404,6 +404,85 @@ module.exports = {
         winter: "Jerry's Workshop"
     },
 
+    bag_size: {
+        talisman_bag: {
+            collection: 'REDSTONE',
+            sizes: [
+                {
+                    tier: 2,
+                    slots: 3
+                },
+                {
+                    tier: 7,
+                    slots: 9
+                },
+                {
+                    tier: 9,
+                    slots: 15
+                },
+                {
+                    tier: 10,
+                    slots: 21
+                },
+                {
+                    tier: 11,
+                    slots: 27
+                },
+                {
+                    tier: 12,
+                    slots: 33
+                },
+                {
+                    tier: 13,
+                    slots: 39
+                }
+            ]
+        },
+        potion_bag: {
+            collection: 'NETHER_STALK',
+            sizes: [
+                {
+                    tier: 2,
+                    slots: 9
+                },
+                {
+                    tier: 5,
+                    slots: 18
+                },
+                {
+                    tier: 8,
+                    slots: 27
+                }
+            ]
+        },
+        fishing_bag: {
+            collection: 'RAW_FISH',
+            sizes: [
+                {
+                    tier: 3,
+                    slots: 9
+                },
+                {
+                    tier: 7,
+                    slots: 18
+                },
+                {
+                    tier: 9,
+                    slots: 27
+                }
+            ]
+        },
+        quiver: {
+            collection: 'STRING',
+            sizes: [
+                {
+                    tier: 3,
+                    slots: 27
+                }
+            ]
+        }
+    },
+
     // Object with fairy soul, skill, slayer bonuses and enchantment bonuses
     bonus_stats: {
         fairy_souls: {
