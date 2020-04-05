@@ -1152,8 +1152,6 @@ module.exports = {
             output.stats.speed += Math.floor(obsidian / 20);
         }
 
-        output.stats.effective_health = getEffectiveHealth(output.stats.health, output.stats.defense);
-
         output.weapon_stats = {};
 
         items.weapons.forEach(item => {
@@ -1168,8 +1166,6 @@ module.exports = {
             if(item.stats.crit_damage > 0 && items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
                 stats.health += 50 * item.stats.crit_damage;
 
-            stats.effective_health = getEffectiveHealth(stats.health, stats.defense);
-
             // Apply Superior Dragon Armor full set bonus of 5% stat increase
             if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4)
                 for(let stat in stats)
@@ -1180,6 +1176,8 @@ module.exports = {
             // Stats shouldn't go into negative
             for(let stat in stats)
                 output.weapon_stats[item.item_index][stat] = Math.max(0, Math.round(stats[stat]));
+
+            stats.effective_health = getEffectiveHealth(stats.health, stats.defense);
         });
 
         const superiorBonus = Object.assign({}, constants.stat_template);
@@ -1203,6 +1201,8 @@ module.exports = {
         // Stats shouldn't go into negative
         for(let stat in output.stats)
             output.stats[stat] = Math.max(0, Math.round(output.stats[stat]));
+
+        output.stats.effective_health = getEffectiveHealth(output.stats.health, output.stats.defense);
 
         let killsDeaths = [];
 
