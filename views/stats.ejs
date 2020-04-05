@@ -824,9 +824,11 @@ if('levels' in calculated){
         (levels[b].level + levels[b].progress) - (levels[a].level + levels[a].progress)
     );
 
-    for(let i = 0; i < 2; i++){
-        let skill = skillsSorted[i];
-        let skillName = skill.charAt(0).toUpperCase() + skill.slice(1);
+    const skillAmount = calculated.pets.filter(a => a.active).length >= 1 ? 1 : 2;
+
+    for(let i = 0; i < skillAmount; i++){
+        const skill = skillsSorted[i];
+        const skillName = skill.charAt(0).toUpperCase() + skill.slice(1);
 
         if(levels[skill].level == 0)
             break;
@@ -835,10 +837,16 @@ if('levels' in calculated){
     }
 }
 
+if(calculated.pets.filter(a => a.active).length >= 1){
+    const activePet = calculated.pets.filter(a => a.active)[0];
+
+    description += `${activePet.emoji} [Lvl ${activePet.level.level}] ${helper.titleCase(activePet.rarity)} ${activePet.display_name}\n`;
+}
+
 description += `\n`;
 
 if(calculated.average_level)
-    description += `⚒ Average Skill Level: ${calculated.average_level} `;
+    description += `⚒ Avg Skill Level: ${calculated.average_level} `;
 
 description += `💰 Purse: ${helper.formatNumber(calculated.purse, true)} Coins`;
 
