@@ -2125,7 +2125,7 @@ html.no-webp #enter_player_box_wrapper{
 }
 
 html.no-webp .top-profile{
-    background-image: url(../img/bg_blur.webp?v2);
+    background-image: url(../img/bg_blur.png?v2);
 }
 
 .top-profile:hover{
