@@ -41,6 +41,7 @@
                 <div id="error_title">Error</div><div id="error_text"><%= error %></div>
             </div>
         </div>
+        <% if('top_profiles' in extra){ %>
         <div id="top_profiles_box_wrapper">
             <% for(const [index, profile] of extra.top_profiles.entries()){ %>
                 <a href="/stats/<%= profile.uuid %>" class="top-profile">
@@ -51,6 +52,7 @@
                 </a>
             <% } %>
         </div>
+        <% } %>
         <script src="/resources/js/js.cookie.min.js"></script>
         <script>
             let targetUsername = document.getElementById("inp_enter_username");
