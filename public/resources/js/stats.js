@@ -1,5 +1,14 @@
 document.addEventListener('DOMContentLoaded', function(){
-    tippy('*[data-tippy-content]', { touch: 'hold' });
+    let userAgent = window.navigator.userAgent;
+
+    if((/(iPad|iPhone|iPod)/gi).test(userAgent) &&
+        !(/CriOS/).test(userAgent) &&
+        !(/FxiOS/).test(userAgent) &&
+        !(/OPiOS/).test(userAgent) &&
+        !(/mercury/).test(userAgent))
+        tippy('*[data-tippy-content]', { touch: 'hold'});
+    else
+        tippy('*[data-tippy-content]');
 
     const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag);
 
