@@ -1,3 +1,8 @@
+*{
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+}
+
 html{
     background-color: black;
     background: url(../img/bg.webp?v2) no-repeat center center fixed;
@@ -2122,6 +2127,10 @@ html.no-webp #enter_player_box_wrapper{
     text-decoration: none;
     opacity: 0.9;
     transition: opacity .2s;
+}
+
+html.no-webp .top-profile{
+    background-image: url(../img/bg_blur.png?v2);
 }
 
 .top-profile:hover{
