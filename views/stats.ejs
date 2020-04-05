@@ -1184,7 +1184,7 @@ twitterDescription += '. Click to view more stats!'
                     %>
                     <p class="stat-raw-values">
                         <span class="stat-name">Unique Pets: </span><span class="stat-value"><%= uniquePets %> / <%= Object.keys(constants.pet_data).length %></span><br>
-                        <span class="stat-name">Total Pet XP: </span><span class="stat-value"><%= helper.formatNumber(totalPetXp, true) %> XP</span>
+                        <span class="stat-name">Total Pet XP: </span><span class="stat-value"><%= helper.formatNumber(totalPetXp, true) %></span>
                     </p>
                     <% for(const [index, pet] of calculated.pets.entries()){
                         if(index == 0 && pet.active){ %>
