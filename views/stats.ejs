@@ -773,7 +773,7 @@ const stat_component = stat => { %>
         <div class='tippy-explanation'><%= stat.baseExplanation %></div>
         <span class='stat-name'>Bonus <%= helper.titleCase(stat.name.replace("_", " ")) %>: </span><span class='stat-value'>+<%= (stats[stat.name] - calculated.base_stats[stat.name]).toLocaleString() %> HP</span>
         <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>
-        "><span class="stat-name"><%= helper.titleCase(stat.name.replace("_", " ")) %> </span><span class="stat-value"><%= stats[stat.name].toLocaleString() %></span></span></div>
+        "><span class="stat-name"><%= helper.titleCase(stat.name.replace("_", " ")) %> </span><span class="stat-value"><%= stats[stat.name].toLocaleString() %><%= stat.suffix || '' %></span></span></div>
 <% };
 
 let description = "";
@@ -973,16 +973,19 @@ twitterDescription += '. Click to view more stats!'
 
                 <%- stat_component({
                     name: 'speed',
+                    suffix: '%',
                     baseExplanation: "Increased by collecting Fairy Souls and leveling up in Wolf Slayer."
                 }); %>
 
                 <%- stat_component({
                     name: 'crit_chance',
+                    suffix: '%',
                     baseExplanation: "Increased by leveling your Combat skill and leveling up in Spider Slayer."
                 }); %>
 
                 <%- stat_component({
                     name: 'crit_damage',
+                    suffix: '%',
                     baseExplanation: "Increased by leveling up in Spider or Wolf Slayer."
                 }); %>
 
