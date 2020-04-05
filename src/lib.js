@@ -70,14 +70,14 @@ function getLevelByXp(xp, runecrafting){
     };
 }
 
-function getSlayerLevel(slayer){
+function getSlayerLevel(slayer, slayerName){
     let { xp, claimed_levels } = slayer;
 
     let currentLevel = 0;
     let progress = 0;
     let xpForNext = 0;
 
-    const maxLevel = Math.max(...Object.keys(constants.slayer_xp));
+    const maxLevel = Math.max(...Object.keys(constants.slayer_xp[slayerName]));
 
     for(const level_name in claimed_levels){
         const level = parseInt(level_name.split("_").pop());
@@ -87,7 +87,7 @@ function getSlayerLevel(slayer){
     }
 
     if(currentLevel < maxLevel){
-        const nextLevel = constants.slayer_xp[currentLevel + 1];
+        const nextLevel = constants.slayer_xp[slayerName][currentLevel + 1];
 
         progress = xp / nextLevel;
         xpForNext = nextLevel;
@@ -1047,7 +1047,7 @@ module.exports = {
                     if(!objectPath.has(slayer, 'claimed_levels'))
                         continue;
 
-                    slayers[slayerName].level = getSlayerLevel(slayer);
+                    slayers[slayerName].level = getSlayerLevel(slayer, slayerName);
 
                     slayers[slayerName].kills = {};
 

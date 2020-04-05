@@ -1360,7 +1360,7 @@ twitterDescription += '. Click to view more stats!'
 
                                     if(slayer.level.currentLevel >= drop.levelReq){
                                         const slayerKills = Object.assign({}, slayer.kills);
-                                        let xpToLevel = constants.slayer_xp[drop.levelReq];
+                                        let xpToLevel = constants.slayer_xp[slayerName][drop.levelReq];
 
                                         for(const tier of Object.keys(slayer.kills).sort((a, b) => a - b)){
                                             for(let i = slayer.kills[tier]; i > 0; i--){
