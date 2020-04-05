@@ -2124,6 +2124,10 @@ html.no-webp #enter_player_box_wrapper{
     transition: opacity .2s;
 }
 
+html.no-webp .top-profile{
+    background-image: url(../img/bg_blur.webp?v2);
+}
+
 .top-profile:hover{
     opacity: 1;
 }
