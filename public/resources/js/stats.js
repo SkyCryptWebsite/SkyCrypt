@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function(){
-    tippy('*[data-tippy-content]');
+    tippy('*[data-tippy-content]', { touch: 'hold' });
 
     const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag);
 
