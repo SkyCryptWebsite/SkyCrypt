@@ -840,7 +840,7 @@ if('levels' in calculated){
 if(calculated.pets.filter(a => a.active).length >= 1){
     const activePet = calculated.pets.filter(a => a.active)[0];
 
-    description += `${activePet.emoji} [Lvl ${activePet.level.level}] ${helper.titleCase(activePet.rarity)} ${activePet.display_name}\n`;
+    description += `${activePet.emoji} ${helper.titleCase(activePet.rarity)} ${activePet.display_name} (Lvl ${activePet.level.level})\n`;
 }
 
 description += `\n`;
