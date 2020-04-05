@@ -1177,9 +1177,14 @@ twitterDescription += '. Click to view more stats!'
                 <div class="stat-content">
                     <%
                         const uniquePets = _.uniq(calculated.pets.map(a => a.type)).length;
+                        let totalPetXp = 0;
+
+                        for(const pet of calculated.pets)
+                            totalPetXp += pet.exp;
                     %>
                     <p class="stat-raw-values">
-                        <span class="stat-name">Unique Pets: </span><span class="stat-value"><%= uniquePets %> / <%= Object.keys(constants.pet_data).length %></span>
+                        <span class="stat-name">Unique Pets: </span><span class="stat-value"><%= uniquePets %> / <%= Object.keys(constants.pet_data).length %></span><br>
+                        <span class="stat-name">Total Pet XP: </span><span class="stat-value"><%= helper.formatNumber(totalPetXp, true) %> XP</span>
                     </p>
                     <% for(const [index, pet] of calculated.pets.entries()){
                         if(index == 0 && pet.active){ %>
