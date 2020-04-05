@@ -1,3 +1,8 @@
+*{
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+}
+
 html{
     background-color: black;
     background: url(../img/bg.webp?v2) no-repeat center center fixed;
