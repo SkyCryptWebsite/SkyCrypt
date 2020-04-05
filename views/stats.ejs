@@ -1308,6 +1308,17 @@ twitterDescription += '. Click to view more stats!'
                     const slayerOrder = ['zombie', 'spider', 'wolf'];
 
                     let maxSlayerLevel = 0;
+                    let unclaimedRewards = false;
+
+                    for(const slayerName in calculated.slayers){
+                        const slayer = calculated.slayers[slayerName];
+
+                        if(slayer.level.progress >= 1 && slayer.level.currentLevel < slayer.level.maxLevel){
+                            slayer.level.unclaimed = true;
+
+                            unclaimedRewards = true;
+                        }
+                    }
 
                     for(const slayerName of Object.keys(calculated.slayers).sort((a, b) => slayerOrder.indexOf(a) - slayerOrder.indexOf(b))){
 
@@ -1391,6 +1402,9 @@ twitterDescription += '. Click to view more stats!'
                                 <% } %>
                             </div>
                             <div class="slayer-section-header"><%= slayerName %> Level <span class="white-text"><%= slayer.level.currentLevel %></span></div>
+                            <% if(unclaimedRewards){ %>
+                                <div class="slayer-unclaimed"><%= slayer.level.unclaimed ? 'unclaimed slayer rewards!' : '' %></div>
+                            <% } %>
                             <div class="slayer-bar">
                                 <div class="skill-progress-bar slayer-progress-bar" style="width: <%= slayer.level.currentLevel == slayer.level.maxLevel ? 100 : slayer.level.progress * 100 %>%"></div>
                                 <div class="skill-progress-text slayer-progress-text">
