@@ -769,9 +769,9 @@ const skill_component = (skill, icon, level) => { %>
 const stat_component = stat => { %>
     <div data-stat="health" class="basic-stat stat-<%= stat.name.replace("_", "-") %>">
         <span data-tippy-content="
-        <span class='stat-name'>Base <%= helper.titleCase(stat.name.replace("_", " ")) %>: </span><span class='stat-value'><%= calculated.base_stats[stat.name].toLocaleString() %></span>
+        <span class='stat-name'>Base <%= helper.titleCase(stat.name.replace("_", " ")) %>: </span><span class='stat-value'><%= calculated.base_stats[stat.name].toLocaleString() %><%= stat.suffix || '' %></span>
         <div class='tippy-explanation'><%= stat.baseExplanation %></div>
-        <span class='stat-name'>Bonus <%= helper.titleCase(stat.name.replace("_", " ")) %>: </span><span class='stat-value'>+<%= (stats[stat.name] - calculated.base_stats[stat.name]).toLocaleString() %></span>
+        <span class='stat-name'>Bonus <%= helper.titleCase(stat.name.replace("_", " ")) %>: </span><span class='stat-value'>+<%= (stats[stat.name] - calculated.base_stats[stat.name]).toLocaleString() %><%= stat.suffix || '' %></span>
         <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>
         "><span class="stat-name"><%= helper.titleCase(stat.name.replace("_", " ")) %> </span><span class="stat-value"><%= stats[stat.name].toLocaleString() %><%= stat.suffix || '' %></span></span></div>
 <% };
