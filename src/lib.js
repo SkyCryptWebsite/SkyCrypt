@@ -875,7 +875,23 @@ module.exports = {
             output.no_inventory = true;
 
         // Sort talismans and weapons by rarity
-        output.weapons = output.weapons.sort((a, b) => rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity));
+        output.weapons = output.weapons.sort((a, b) => {
+            if(a.rarity == b.rarity)
+                return a.item_index > b.item_index ? 1 : -1;
+
+            return rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity)
+        });
+
+        const countsOfId = {};
+
+        for(const weapon of output.weapons){
+            const id = getId(weapon);
+
+            countsOfId[id] = (countsOfId[id] || 0) + 1;
+
+            if(countsOfId[id] > 2)
+                weapon.hidden = true;
+        }
 
         output.talismans = output.talismans.sort((a, b) => {
             const rarityOrder = rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);

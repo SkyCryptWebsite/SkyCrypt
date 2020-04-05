@@ -1126,7 +1126,7 @@ twitterDescription += '. Click to view more stats!'
                                 if(items.highest_rarity_sword)
                                     sword = [items.highest_rarity_sword];
 
-                                items.weapons.forEach(item => { %>
+                                items.weapons.filter(a => !a.hidden).forEach(item => { %>
                                     <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-index="<%= item.item_index %>" class="rich-item piece
                                         <% if(sword.length > 0 && item.backpackIndex === undefined && item.item_index == sword[0].item_index){ %>piece-selected<% } %>
                                         piece-<%= item.rarity %>-bg">
