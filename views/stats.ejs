@@ -939,36 +939,36 @@ twitterDescription += '. Click to view more stats!'
             %>
 
             <div id="base_stats_container">
-                <div data-stat="health" class="basic-stat stat-health"><span data-tippy-content="<span class='stat-name'>Base Health: </span><span class='stat-value'><%= calculated.base_stats.health %> HP</span>
+                <div data-stat="health" class="basic-stat stat-health"><span data-tippy-content="<span class='stat-name'>Base Health: </span><span class='stat-value'><%= calculated.base_stats.health.toLocaleString() %> HP</span>
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls, leveling your Farming and Fishing skills and leveling up in Zombie or Wolf Slayer.</div>
-                <span class='stat-name'>Bonus Health: </span><span class='stat-value'>+<%= stats.health - calculated.base_stats.health %> HP</span>
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Health </span><span class="stat-value"><%= stats.health %></span></span></div>
-                <div data-stat="defense" class="basic-stat stat-defense"><span data-tippy-content="<span class='stat-name'>Base Defense: </span><span class='stat-value'><%= calculated.base_stats.defense %></span>
+                <span class='stat-name'>Bonus Health: </span><span class='stat-value'>+<%= (stats.health - calculated.base_stats.health).toLocaleString() %> HP</span>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Health </span><span class="stat-value"><%= stats.health.toLocaleString() %></span></span></div>
+                <div data-stat="defense" class="basic-stat stat-defense"><span data-tippy-content="<span class='stat-name'>Base Defense: </span><span class='stat-value'><%= calculated.base_stats.defense.toLocaleString() %></span>
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls and leveling your Mining skill.</div>
-                <span class='stat-name'>Bonus Defense: </span><span class='stat-value'>+<%= stats.defense - calculated.base_stats.defense %></span>
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Defense </span><span class="stat-value"><%= stats.defense %></span></span></div>
+                <span class='stat-name'>Bonus Defense: </span><span class='stat-value'>+<%= (stats.defense - calculated.base_stats.defense).toLocaleString() %></span>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Defense </span><span class="stat-value"><%= stats.defense.toLocaleString() %></span></span></div>
                 <div data-stat="effective_health" class="basic-stat stat-effective-health"><span data-tippy-content="Effective Health based on Health + Defense.
-                <div class='tippy-explanation'>→ Formula: Health * (1 + Defense / 100)</div>"><span class="stat-name">Effective HP </span><span class="stat-value"><%= stats.effective_health %></span></span></div>
-                <div data-stat="strength" class="basic-stat stat-strength"><span data-tippy-content="<span class='stat-name'>Base Strength: </span><span class='stat-value'><%= calculated.base_stats.strength %></span>
+                <div class='tippy-explanation'>→ Formula: Health * (1 + Defense / 100)</div>"><span class="stat-name">Effective HP </span><span class="stat-value"><%= stats.effective_health.toLocaleString() %></span></span></div>
+                <div data-stat="strength" class="basic-stat stat-strength"><span data-tippy-content="<span class='stat-name'>Base Strength: </span><span class='stat-value'><%= calculated.base_stats.strength.toLocaleString() %></span>
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls and leveling your Foraging skill.</div>
-                <span class='stat-name'>Bonus Strength: </span><span class='stat-value'>+<%= stats.strength - calculated.base_stats.strength %></span>
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Strength </span><span class="stat-value"><%= stats.strength %></span></span></div>
-                <div data-stat="speed" class="basic-stat stat-speed"><span data-tippy-content="<span class='stat-name'>Base Speed: </span><span class='stat-value'><%= calculated.base_stats.speed %>%</span>
+                <span class='stat-name'>Bonus Strength: </span><span class='stat-value'>+<%= (stats.strength - calculated.base_stats.strength).toLocaleString() %></span>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Strength </span><span class="stat-value"><%= stats.strength.toLocaleString() %></span></span></div>
+                <div data-stat="speed" class="basic-stat stat-speed"><span data-tippy-content="<span class='stat-name'>Base Speed: </span><span class='stat-value'><%= calculated.base_stats.speed.toLocaleString() %>%</span>
                 <div class='tippy-explanation'>Increased by collecting Fairy Souls.</div>
-                <span class='stat-name'>Bonus Speed: </span><span class='stat-value'>+<%= stats.speed - calculated.base_stats.speed %>%</span>
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Speed </span><span class="stat-value"><%= stats.speed %></span>%</span></div>
-                <div data-stat="crit_chance" class="basic-stat stat-crit-chance"><span data-tippy-content="<span class='stat-name'>Base Crit Chance: </span><span class='stat-value'><%= calculated.base_stats.crit_chance %>%</span>
+                <span class='stat-name'>Bonus Speed: </span><span class='stat-value'>+<%= (stats.speed - calculated.base_stats.speed).toLocaleString() %>%</span>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Speed </span><span class="stat-value"><%= stats.speed.toLocaleString() %></span>%</span></div>
+                <div data-stat="crit_chance" class="basic-stat stat-crit-chance"><span data-tippy-content="<span class='stat-name'>Base Crit Chance: </span><span class='stat-value'><%= calculated.base_stats.crit_chance.toLocaleString() %>%</span>
                 <div class='tippy-explanation'>Increased by leveling your Combat skill.</div>
-                <span class='stat-name'>Bonus Crit Chance: </span><span class='stat-value'>+<%= stats.crit_chance - calculated.base_stats.crit_chance %>%</span>
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Crit Chance </span><span class="stat-value"><%= stats.crit_chance %></span>%</span></div>
-                <div data-stat="crit_damage" class="basic-stat stat-crit-damage"><span data-tippy-content="<span class='stat-name'>Base Crit Damage: </span><span class='stat-value'><%= calculated.base_stats.crit_damage %>%</span>
+                <span class='stat-name'>Bonus Crit Chance: </span><span class='stat-value'>+<%= (stats.crit_chance - calculated.base_stats.crit_chance).toLocaleString() %>%</span>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Crit Chance </span><span class="stat-value"><%= stats.crit_chance .toLocaleString()%></span>%</span></div>
+                <div data-stat="crit_damage" class="basic-stat stat-crit-damage"><span data-tippy-content="<span class='stat-name'>Base Crit Damage: </span><span class='stat-value'><%= calculated.base_stats.crit_damage.toLocaleString() %>%</span>
                 <div class='tippy-explanation'>Increased by leveling up in Spider or Wolf Slayer.</div>
-                <span class='stat-name'>Bonus Crit Damage: </span><span class='stat-value'>+<%= stats.crit_damage - calculated.base_stats.crit_damage %>%</span>
+                <span class='stat-name'>Bonus Crit Damage: </span><span class='stat-value'>+<%= (stats.crit_damage - calculated.base_stats.crit_damage).toLocaleString() %>%</span>
                 <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Crit Damage </span><span class="stat-value"><%= stats.crit_damage %></span>%</span></div>
-                <div data-stat="intelligence" class="basic-stat stat-intelligence"><span data-tippy-content="<span class='stat-name'>Base Intelligence: </span><span class='stat-value'><%= calculated.base_stats.intelligence %></span>
+                <div data-stat="intelligence" class="basic-stat stat-intelligence"><span data-tippy-content="<span class='stat-name'>Base Intelligence: </span><span class='stat-value'><%= calculated.base_stats.intelligence.toLocaleString() %></span>
                 <div class='tippy-explanation'>Increased by leveling your Enchanting and Alchemy skills and completing songs on Melody's Harp.</div>
-                <span class='stat-name'>Bonus Intelligence: </span><span class='stat-value'>+<%= stats.intelligence - calculated.base_stats.intelligence %></span>
-                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Intelligence </span><span class="stat-value"><%= stats.intelligence %></span></span></div>
+                <span class='stat-name'>Bonus Intelligence: </span><span class='stat-value'>+<%= (stats.intelligence - calculated.base_stats.intelligence).toLocaleString() %></span>
+                <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>"><span class="stat-name">Intelligence </span><span class="stat-value"><%= stats.intelligence.toLocaleString() %></span></span></div>
                 <div id="player_model_mobile" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
                 <div id="additional_stats_container">
                     <% if(calculated.current_area){ %>
