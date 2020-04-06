@@ -922,7 +922,7 @@ module.exports = {
             armor.forEach(armorPiece => {
                 let name = armorPiece.display_name;
 
-                if(objectPath.has(armor[0], 'tag.ExtraAttributes.modifier'))
+                if(objectPath.has(armorPiece, 'tag.ExtraAttributes.modifier'))
                     name = name.split(" ").slice(1).join(" ");
 
                 armorPiece.armor_name = name;
