@@ -918,6 +918,7 @@ module.exports = {
         if(armor.filter(a => Object.keys(a).length > 1).length == 4){
 
             let output_name = "";
+            let reforgeName;
 
             armor.forEach(armorPiece => {
                 let name = armorPiece.display_name;
@@ -930,11 +931,16 @@ module.exports = {
 
             if(armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.modifier')
             && a.tag.ExtraAttributes.modifier == armor[0].tag.ExtraAttributes.modifier).length == 4)
-                output_name += armor[0].display_name.split(" ")[0] + " ";
+                reforgeName = armor[0].display_name.split(" ")[0]
 
             const isMonsterSet = armor
             .filter(a =>
                 ['SKELETON_HELMET', 'GUARDIAN_CHESTPLATE', 'CREEPER_LEGGINGS', 'SPIDER_BOOTS', 'TARANTULA_BOOTS'].includes(getId(a))
+            ).length == 4;
+
+            const isPerfectSet = armor
+            .filter(a =>
+                getId(a).startsWith('PERFECT_')
             ).length == 4;
 
             if(armor.filter(a => a.armor_name.split(" ")[0] == armor[0].armor_name.split(" ")[0]).length == 4
@@ -959,6 +965,18 @@ module.exports = {
                     if(getId(armor[0]) == 'TARANTULA_BOOTS')
                         output.armor_set = 'Monter Raider Armor';
                 }
+
+                if(isPerfectSet){
+                    const sameTier = armor.filter(a => getId(a).split("_").pop() == getId(armor[0]).split("_").pop());
+
+                    if(sameTier)
+                        output.armor_set = 'Perfect Armor - Tier ' + getId(armor[0]).split("_").pop();
+                    else
+                        output.armor_set = 'Perfect Armor';
+                }
+
+                if(reforgeName)
+                    output.armor_set = reforgeName + " " + output.armor_set;
             }
         }
 
