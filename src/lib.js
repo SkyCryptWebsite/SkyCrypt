@@ -1376,7 +1376,7 @@ module.exports = {
                             return maxPetA > maxPetB ? -1 : 1;
                     }
                 }else{
-                    return rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);
+                    return rarity_order.indexOf(a.rarity) > rarity_order.indexOf(b.rarity) ? 1 : -1;
                 }
 
             return a.active? -1 : 1
