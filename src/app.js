@@ -81,7 +81,7 @@ async function main(){
     app.get('/stats/:player/:profile?', async (req, res, next) => {
         let response;
 
-        let paramPlayer = req.params.player.toLowerCase().replace(/\-/g, '');
+        let paramPlayer = req.params.player.toLowerCase().replace(/[^a-z\d\-\_:]/g, '');
         let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
 
         let playerUsername = paramPlayer;
