@@ -877,7 +877,10 @@ module.exports = {
         // Sort talismans and weapons by rarity
         output.weapons = output.weapons.sort((a, b) => {
             if(a.rarity == b.rarity){
-                return a.item_index < b.item_index ? 1 : -1;
+                if(b.inBackpack)
+                    return -1;
+
+                return a.item_index > b.item_index ? 1 : -1;
             }
 
             return rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity)
