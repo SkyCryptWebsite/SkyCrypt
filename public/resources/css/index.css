@@ -547,6 +547,18 @@ html.no-transform #info_box.opened{
     font-size: 15px;
 }
 
+#stats_content .item-lore::-webkit-scrollbar {
+    width: 10px;
+}
+
+#stats_content .item-lore::-webkit-scrollbar-thumb{
+    border-radius: 5px;
+}
+
+#stats_content .item-lore::-webkit-scrollbar-track{
+    background-color: transparent;
+}
+
 #stats_content.show-stats{
     opacity: 1;
     transform: translateX(0px);
@@ -1383,7 +1395,15 @@ a.additional-player-stat:hover{
     background-color: #DD980E;
 }
 
+.piece-legendary-bg + .item-lore::-webkit-scrollbar-thumb{
+    background-color: #DD980E;
+}
+
 .piece-epic-bg{
+    background-color: #AA00AA;
+}
+
+.piece-epic-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #AA00AA;
 }
 
@@ -1391,11 +1411,23 @@ a.additional-player-stat:hover{
     background-color: #5555FF;
 }
 
+.piece-rare-bg + .item-lore::-webkit-scrollbar-thumb{
+    background-color: #5555FF;
+}
+
 .piece-uncommon-bg{
     background-color: #3cbd3c;
 }
 
+.piece-uncommon-bg + .item-lore::-webkit-scrollbar-thumb{
+    background-color: #3cbd3c;
+}
+
 .piece-common-bg{
+    background-color: #555555;
+}
+
+.piece-common-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #555555;
 }
 
@@ -1990,6 +2022,7 @@ a.additional-player-stat:hover{
     padding: 20px;
     margin-top: 37px;
     box-sizing: border-box;
+    scrollbar-color: #951354 transparent;
 }
 
 .narrow-info-content.all-shown{
@@ -2004,15 +2037,16 @@ a.additional-player-stat:hover{
     margin-bottom: 35px;
 }
 
-.narrow-info-content::-webkit-scrollbar {
+.narrow-info-content::-webkit-scrollbar{
     width: 10px;
 }
 
-.narrow-info-content::-webkit-scrollbar-thumb {
+.narrow-info-content::-webkit-scrollbar-thumb{
     background-color: #951354;
     border-radius: 5px;
 }
-.narrow-info-content::-webkit-scrollbar-track {
+
+.narrow-info-content::-webkit-scrollbar-track{
     background-color: transparent;
 }
 
