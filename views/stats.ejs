@@ -1,5 +1,6 @@
 <%
 const rarityOrder = ['special', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
+const slayerOrder = ['zombie', 'spider', 'wolf'];
 
 const statSuffix = {
     health: '',
@@ -802,9 +803,6 @@ if(items.highest_rarity_sword){
     description += `🗡️ ${highestRaritySword}\n`;
  }
 
-if(items.highest_rarity_bow)
-    description += `🏹 ${items.highest_rarity_bow.display_name}\n`;
-
 const skillEmojis = {
     "alchemy": "⚗️",
     "carpentry": "🪑",
@@ -815,7 +813,13 @@ const skillEmojis = {
     "foraging": "🌳",
     "mining": "⛏️",
     "runecrafting": "✨"
-}
+};
+
+const slayerEmojis = {
+    zombie: "🧟",
+    spider: "🕸️",
+    wolf: "🐺"
+};
 
 if('levels' in calculated){
     let { levels } = calculated;
@@ -843,7 +847,19 @@ if(calculated.pets.filter(a => a.active).length >= 1){
     description += `${activePet.emoji} ${helper.titleCase(activePet.rarity)} ${activePet.display_name} (Lvl ${activePet.level.level})\n`;
 }
 
-description += `\n`;
+description += '\n';
+
+if(calculated.slayer_coins_spent > 0){
+    description += '🤺 Slayer: ';
+
+    for(const slayer of slayerOrder){
+        const slayerInfo = calculated.slayers[slayer];
+
+        description += `${slayerEmojis[slayer]} ${slayerInfo.level.currentLevel}  `;
+    }
+
+    description += '\n\n';
+}
 
 if(calculated.average_level)
     description += `⚒ Avg Skill Level: ${calculated.average_level} `;
@@ -1343,8 +1359,6 @@ twitterDescription += '. Click to view more stats!'
                     </p>
                     <div class="slayer-containers">
                     <%
-                    const slayerOrder = ['zombie', 'spider', 'wolf'];
-
                     let maxSlayerLevel = 0;
                     let unclaimedRewards = false;
 
