@@ -894,6 +894,7 @@ twitterDescription += '. Click to view more stats!'
 <html>
 <head>
     <title><%- calculated.display_name %> | SkyBlock Stats</title>
+    <meta property="description" content="<%= metaDescription %>">
     <link rel="shortcut icon" href="https://visage.surgeplay.com/face/32/<%- calculated.uuid %>" type="image/png">
     <meta property="og:type" content="website">
     <meta property="og:title" content="<%- calculated.display_name %> (<%= calculated.profile.cute_name %>)">
@@ -901,7 +902,6 @@ twitterDescription += '. Click to view more stats!'
     <meta property="twitter:image" content="https://visage.surgeplay.com/face/256/<%- calculated.uuid %>">
     <meta property="og:description" content="<%= description %>">
     <meta property="twitter:description" content="<%= twitterDescription %>">
-    <meta property="description" content="<%= metaDescription %>">
 <%- include('../includes/resources') %>
 </head>
 <body>
