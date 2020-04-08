@@ -23,6 +23,8 @@ async function main(){
     const { MongoClient } = require('mongodb');
     const helper = require('./helper');
     const constants = require('./constants');
+    const { SitemapStream, streamToPromise } = require('sitemap');
+    const { createGzip } = require('zlib');
 
     const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
@@ -45,6 +47,8 @@ async function main(){
 
     const app = express();
     const port = 32464;
+
+    let sitemap;
 
     app.locals.moment = moment;
     app.use(bodyParser.urlencoded({ extended: true }));
@@ -598,6 +602,38 @@ async function main(){
             }
         }catch(e){
 
+        }
+    });
+
+    app.get('/sitemap.xml', async (req, res, next) => {
+        res.header('Content-Type', 'application/xml');
+        res.header('Content-Encoding', 'gzip');
+
+        if(sitemap){
+            res.send(sitemap);
+            return
+        }
+
+        try{
+            const smStream = new SitemapStream({ hostname: 'https://sky.lea.moe/' });
+            const pipeline = smStream.pipe(createGzip());
+
+            const cursor = await db.collection('profileViews').find().sort({ total: -1 });
+
+            while(await cursor.hasNext()){
+                const doc = await cursor.next();
+
+                smStream.write({ url: `/stats/${doc.username}` });
+            }
+
+            smStream.end();
+
+            streamToPromise(pipeline).then(sm => sitemap = sm);
+
+            pipeline.pipe(res).on('error', (e) => {throw e});
+        }catch(e){
+            console.error(e)
+            res.status(500).end()
         }
     });
 
