@@ -885,6 +885,8 @@ if(highestRaritySword){
         twitterDescription += ` and is fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
 }
 
+let metaDescription = twitterDescription + '.';
+
 twitterDescription += '. Click to view more stats!'
 
 %>
@@ -900,7 +902,7 @@ twitterDescription += '. Click to view more stats!'
     <meta property="twitter:image" content="https://visage.surgeplay.com/face/256/<%- calculated.uuid %>">
     <meta property="og:description" content="<%= description %>">
     <meta property="twitter:description" content="<%= twitterDescription %>">
-    <meta property="description" content="<%= twitterDescription %>">
+    <meta property="description" content="<%= metaDescription %>">
 </head>
 <body>
     <%- include('../includes/header') %>
