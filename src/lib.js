@@ -918,6 +918,13 @@ module.exports = {
         if(bows.length > 0)
             output.highest_rarity_bow = bowsInventory.filter(a => a.rarity == bowsInventory[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
 
+        if(armor.filter(a => Object.keys(a).length > 1).length == 1){
+            const armorPiece = armor.filter(a => Object.keys(a).length > 1)[0];
+
+            output.armor_set = armorPiece.display_name;
+            output.armor_set_rarity = armorPiece.rarity;
+        }
+
         if(armor.filter(a => Object.keys(a).length > 1).length == 4){
 
             let output_name = "";
@@ -1008,6 +1015,7 @@ module.exports = {
         output.fairy_souls = { collected: profile.fairy_souls_collected, total: MAX_SOULS, progress: Math.min(profile.fairy_souls_collected / MAX_SOULS, 1) };
 
         let skillLevels;
+        let totalSkillXp = 0;
 
         // Apply skill bonuses
         if('experience_skill_farming' in profile
@@ -1038,11 +1046,14 @@ module.exports = {
                 if(skill != 'runecrafting' && skill != 'carpentry'){
                     average_level += skillLevels[skill].level + skillLevels[skill].progress;
                     average_level_no_progress += skillLevels[skill].level;
+
+                    totalSkillXp += skillLevels[skill].xp;
                 }
             }
 
-            output.average_level = (average_level / (Object.keys(skillLevels).length - 2)).toFixed(1);
-            output.average_level_no_progress = (average_level_no_progress / (Object.keys(skillLevels).length - 2)).toFixed(1);
+            output.average_level = (average_level / (Object.keys(skillLevels).length - 2));
+            output.average_level_no_progress = (average_level_no_progress / (Object.keys(skillLevels).length - 2));
+            output.total_skill_xp = totalSkillXp;
 
             output.levels = Object.assign({}, skillLevels);
         }else{

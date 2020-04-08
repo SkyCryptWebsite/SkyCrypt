@@ -862,7 +862,7 @@ if(calculated.slayer_coins_spent > 0){
 }
 
 if(calculated.average_level)
-    description += `⚒ Avg Skill Level: ${calculated.average_level} `;
+    description += `⚒ Avg Skill Level: ${calculated.average_level.toFixed(1)} `;
 
 description += `💰 Purse: ${helper.formatNumber(calculated.purse, true)} Coins`;
 
@@ -1030,8 +1030,14 @@ twitterDescription += '. Click to view more stats!'
                         <div class="additional-stat"><span class="stat-name">Bank Account: </span><span class="stat-value"><%= helper.formatNumber(calculated.bank, true) %> Coin<%= Math.floor(calculated.bank) == 1 ? '': 's' %></span></div>
                     <% } %>
                     <% if('levels' in calculated){ %>
-                        <div class="additional-stat"><span data-tippy-content="Average skill level over all skills except Carpentry and Runecrafting, includes progress to next level.<br><br>
-                        <span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress %></span>"><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level %></span></span></div>
+                        <div class="additional-stat"><span data-tippy-content="
+                        <span class='stat-name'>Total Skill XP: </span><span class='stat-value'><%= Math.round(calculated.total_skill_xp).toLocaleString() %></span>
+                        <div class='tippy-explanation'>Total XP gained in all skills except Carpentry and Runecrafting.</div>
+                        <span class='stat-name'>Average Level: </span><span class='stat-value'><%= calculated.average_level.toFixed(2) %></span>
+                        <div class='tippy-explanation'>Average skill level over all skills except Carpentry and Runecrafting, includes progress to next level.</div>
+                        <span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
+                        <div class='tippy-explanation'>Average skill level without including partial level progress.</div>
+                        "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level.toFixed(1) %></span></span></div>
                     <% } %>
                 </div>
             </div>
