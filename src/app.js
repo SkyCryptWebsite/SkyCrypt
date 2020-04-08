@@ -618,7 +618,7 @@ async function main(){
             const smStream = new SitemapStream({ hostname: 'https://sky.lea.moe/' });
             const pipeline = smStream.pipe(createGzip());
 
-            const cursor = await db.collection('profileViews').find().sort({ total: -1 });
+            const cursor = await db.collection('profileViews').find().sort({ total: -1 }).limit(10000);
 
             while(await cursor.hasNext()){
                 const doc = await cursor.next();
