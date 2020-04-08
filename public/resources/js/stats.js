@@ -629,20 +629,6 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     }
 
-    let searchUser = document.querySelector('#inp_search_user');
-
-    searchUser.addEventListener('keyup', function(e){
-        let playerName = searchUser.value;
-
-        if(playerName.trim().length == 0)
-            return;
-
-        if(e.keyCode == 13)
-            document.location = '/stats/' + playerName;
-        else
-            document.querySelector('#btn_search_user').href = '/stats/' + playerName;
-    });
-
     let statContainers = document.querySelectorAll('.stat-container[data-stat]');
     let wrapperHeight = document.querySelector('#wrapper').offsetHeight;
 

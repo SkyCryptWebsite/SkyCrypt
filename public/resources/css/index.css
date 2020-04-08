@@ -85,6 +85,7 @@ header{
     background-color: #A6145D;
     z-index: 1000;
     line-height: 48px;
+    overflow: hidden;
 }
 
 #not_supported{
@@ -183,6 +184,15 @@ header{
     top: 6px;
     background-color: rgba(0,0,0,0.2);
     border-radius: 18px;
+}
+
+.page-index #search_user{
+    transform: translateY(150%);
+    transition: transform .15s;
+}
+
+.page-index #search_user.show-user-search{
+    transform: translateY(0%);
 }
 
 #inp_search_user{

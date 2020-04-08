@@ -11,6 +11,10 @@
     <meta property="description" content="A beautiful site for sharing your SkyBlock profile 🌹">
     <style>
     @media (max-width: 480px){
+        #search_user{
+            display: none;
+        }
+
         header{
             height: 45px;
             text-align: center;
@@ -56,8 +60,9 @@
         <script src="/resources/js/js.cookie.min.js"></script>
         <script>
             let targetUsername = document.getElementById("inp_enter_username");
+            let searchUser = document.getElementById('search_user');
 
-            targetUsername.addEventListener('keyup', function(e){
+            function updateUserTarget(e){
                 let playerName = targetUsername.value;
 
                 if(playerName.trim().length == 0)
@@ -67,7 +72,10 @@
                     document.location = '/stats/' + playerName;
                 else
                     document.querySelector('#goto_target_username').href = '/stats/' + playerName;
-            });
+            }
+
+            targetUsername.addEventListener('keyup', updateUserTarget);
+            targetUsername.addEventListener('change', updateUserTarget);
 
             let scrollLock = false;
             let currentOffset = 10;
@@ -76,6 +84,11 @@
             let reachedEnd = false;
 
             window.addEventListener('scroll', function(){
+                if(window.scrollY > window.innerHeight * 0.5)
+                    searchUser.classList.add('show-user-search');
+                else
+                    searchUser.classList.remove('show-user-search');
+
                 if(window.innerHeight + window.scrollY > document.documentElement.offsetHeight - 100 && !scrollLock && !reachedEnd){
                     scrollLock = true;
 

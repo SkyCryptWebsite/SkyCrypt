@@ -6,16 +6,14 @@
         document.getElementById('not_supported').className = 'show-not-supported';
     }
 </script>
-<header>
+<header class="page-<%= page %>">
     <a href="/" id="site_name">sky.lea.moe</a>
     <div class="social-button" id="info_button" onclick="toggleInfo()">About</div>
     <% if('donations' in extra){ %>
         <a title="Patreon" target="_blank" rel="nofollow" href="https://patreon.com/LeaPhant" class="social-button patreon"><%= extra.donations.patreon %> Patrons<div class="social-icon"></div></a>
         <a title="Ko-fi" target="_blank" rel="nofollow" href="https://ko-fi.com/leaphant" class="social-button ko-fi"><%= extra.donations.kofi %>x Ko-fi<div class="social-icon"></div></a>
     <% } %>
-    <% if(page == 'stats'){ %>
-        <div id="search_user"><input placeholder="Enter username" type="text" id="inp_search_user"></input><a href="#" id="btn_search_user"></a></div>
-    <% } %>
+    <div id="search_user"><input placeholder="Enter username" type="text" id="inp_search_user"></input><a href="#" id="btn_search_user"></a></div>
 </header>
 <div id="info_box">
     <div onclick="toggleInfo()" id="info_close"></div>
