@@ -82,7 +82,7 @@ async function main(){
         return output;
     }
 
-    app.get('/stats/:player/:profile?', async (req, res, next) => {
+    app.all('/stats/:player/:profile?', async (req, res, next) => {
         let response;
 
         let paramPlayer = req.params.player.toLowerCase().replace(/[^a-z\d\-\_:]/g, '');
@@ -495,7 +495,7 @@ async function main(){
         }
     });
 
-    app.get('/head/:uuid', async (req, res) => {
+    app.all('/head/:uuid', async (req, res) => {
         const { uuid } = req.params;
 
         const filename = `head_${uuid}.png`;
@@ -516,7 +516,7 @@ async function main(){
         res.send(file);
     });
 
-    app.get('/leather/:type/:color', async (req, res) => {
+    app.all('/leather/:type/:color', async (req, res) => {
         let file;
 
         if(!["boots", "leggings", "chestplate", "helmet"].includes(req.params.type))
@@ -547,7 +547,7 @@ async function main(){
         res.send(file);
     });
 
-    app.get('/api/topViews', async (req, res, next) => {
+    app.all('/api/topViews', async (req, res, next) => {
         const limit = Math.min(100, req.query.limit || 10);
         const offset = Math.max(0, req.query.offset || 0);
 
@@ -560,7 +560,7 @@ async function main(){
         .toArray());
     });
 
-    app.get('/api/addView', async (req, res, next) => {
+    app.all('/api/addView', async (req, res, next) => {
         res.send('ok');
 
         const response = await axios({
@@ -605,7 +605,7 @@ async function main(){
         }
     });
 
-    app.get('/sitemap.xml', async (req, res, next) => {
+    app.all('/sitemap.xml', async (req, res, next) => {
         res.header('Content-Type', 'application/xml');
         res.header('Content-Encoding', 'gzip');
 
@@ -637,11 +637,11 @@ async function main(){
         }
     });
 
-    app.get('/', async (req, res, next) => {
+    app.all('/', async (req, res, next) => {
         res.render('index', { error: null, player: null, extra: await getExtra(), helper, page: 'index' });
     });
 
-    app.get('*', async (req, res, next) => {
+    app.all('*', async (req, res, next) => {
         res.redirect('/');
     });
 

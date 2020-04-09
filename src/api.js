@@ -13,7 +13,7 @@ const Hypixel = axios.create({
 });
 
 module.exports = (app, db) => {
-    app.get('/api/:player/profiles', async (req, res) => {
+    app.all('/api/:player/profiles', async (req, res) => {
         try{
             let playerResponse = await Hypixel.get('player', {
                 params: { key: credentials.hypixel_api_key, name: req.params.player }, timeout: 5000
@@ -45,7 +45,7 @@ module.exports = (app, db) => {
         }
     });
 
-    app.get('/api/:player/:profile/pets', async (req, res) => {
+    app.all('/api/:player/:profile/pets', async (req, res) => {
         try{
             const { playerResponse, profileResponse } = await helper.getProfile(req);
 
@@ -76,7 +76,7 @@ module.exports = (app, db) => {
         }
     });
 
-    app.get('/api/:player/:profile/minions', async (req, res) => {
+    app.all('/api/:player/:profile/minions', async (req, res) => {
         try{
             const { profileResponse } = await helper.getProfile(req);
 
@@ -115,7 +115,7 @@ module.exports = (app, db) => {
         }
     });
 
-    app.get('/api/:player/:profile/accessories', async (req, res) => {
+    app.all('/api/:player/:profile/accessories', async (req, res) => {
         try{
             const { playerResponse, profileResponse } = await helper.getProfile(req);
 
@@ -146,7 +146,7 @@ module.exports = (app, db) => {
         }
     });
 
-    app.get('/api/:player/:profile/cakebag', async (req, res) => {
+    app.all('/api/:player/:profile/cakebag', async (req, res) => {
         try{
             const { playerResponse, profileResponse } = await helper.getProfile(req);
 
