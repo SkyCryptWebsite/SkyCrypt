@@ -849,7 +849,7 @@ if(calculated.pets.filter(a => a.active).length >= 1){
 
 description += '\n';
 
-if(calculated.slayer_coins_spent > 0){
+if(calculated.slayer_coins_spent.total > 0){
     description += '🤺 Slayer: ';
 
     for(const slayer of slayerOrder){
