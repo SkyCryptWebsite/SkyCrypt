@@ -1119,6 +1119,8 @@ module.exports = {
                 for(const slayerName in output.slayer_coins_spent){
                     output.slayer_coins_spent.total = (output.slayer_coins_spent.total || 0) + output.slayer_coins_spent[slayerName];
                 }
+
+                output.slayer_coins_spent.total = output.slayer_coins_spent.total || 0;
             }
 
             output.slayer_xp = 0;
