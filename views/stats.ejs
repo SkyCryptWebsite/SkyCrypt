@@ -1362,7 +1362,16 @@ twitterDescription += '. Click to view more stats!'
                     </p>
                 <% }else{ %>
                     <p class="stat-raw-values">
-                        <span data-tippy-content="Total spent: <%= calculated.slayer_coins_spent.toLocaleString() %> Coins"><span class="stat-name">Total Slayer XP: </span><span class="stat-value"><%= calculated.slayer_xp.toLocaleString() %></span></span>
+                        <span data-tippy-content="
+                        <span class='stat-name'>Total spent: </span><span class='stat-value'><%= calculated.slayer_coins_spent.total.toLocaleString() %> Coins</span><br><br>
+                        <%
+                        for(const slayerName of Object.keys(calculated.slayers).sort((a, b) => slayerOrder.indexOf(a) - slayerOrder.indexOf(b))){
+                            if(!(slayerName in calculated.slayer_coins_spent))
+                                continue;
+                        %>
+                        <span class='stat-name'><%= helper.capitalizeFirstLetter(slayerName) %>: </span><span class='stat-value'><%= calculated.slayer_coins_spent[slayerName].toLocaleString() %> Coins</span><br>
+                        <% } %>
+                        "><span class="stat-name">Total Slayer XP: </span><span class="stat-value"><%= calculated.slayer_xp.toLocaleString() %></span></span>
                     </p>
                     <div class="slayer-containers">
                     <%

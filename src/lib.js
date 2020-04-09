@@ -1073,7 +1073,7 @@ module.exports = {
         for(let skill in skillLevels){
             if(skillLevels[skill].level == 0)
                 continue;
-                
+
             const skillBonus = getBonusStat(skillLevels[skill].level || skillLevels[skill], `${skill}_skill`, 50, 1);
 
             output.skill_bonus[skill] = Object.assign({}, skillBonus);
@@ -1082,7 +1082,7 @@ module.exports = {
                 output.stats[stat] += skillBonus[stat];
         }
 
-        output.slayer_coins_spent = 0;
+        output.slayer_coins_spent = { total: 0 };
 
         // Apply slayer bonuses
         if('slayer_bosses' in profile){
@@ -1111,7 +1111,8 @@ module.exports = {
 
                             slayers[slayerName].kills[tier] = slayer[property];
 
-                            output.slayer_coins_spent += slayer[property] * constants.slayer_cost[tier];
+                            output.slayer_coins_spent[slayerName] = (output.slayer_coins_spent[slayerName] || 0) + slayer[property] * constants.slayer_cost[tier];
+                            output.slayer_coins_spent.total = (output.slayer_coins_spent.total || 0) + output.slayer_coins_spent[slayerName]
                         }
                     }
                 }
