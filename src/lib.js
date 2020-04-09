@@ -1082,7 +1082,7 @@ module.exports = {
                 output.stats[stat] += skillBonus[stat];
         }
 
-        output.slayer_coins_spent = { total: 0 };
+        output.slayer_coins_spent = {};
 
         // Apply slayer bonuses
         if('slayer_bosses' in profile){
@@ -1112,9 +1112,12 @@ module.exports = {
                             slayers[slayerName].kills[tier] = slayer[property];
 
                             output.slayer_coins_spent[slayerName] = (output.slayer_coins_spent[slayerName] || 0) + slayer[property] * constants.slayer_cost[tier];
-                            output.slayer_coins_spent.total = (output.slayer_coins_spent.total || 0) + output.slayer_coins_spent[slayerName]
                         }
                     }
+                }
+
+                for(const slayerName in output.slayer_coins_spent){
+                    output.slayer_coins_spent.total = (output.slayer_coins_spent.total || 0) + output.slayer_coins_spent[slayerName];
                 }
             }
 
