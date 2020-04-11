@@ -49,7 +49,7 @@
             <% for(const [index, profile] of extra.top_profiles.entries()){ %>
                 <a href="/stats/<%= profile.uuid %>" class="top-profile">
                     <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
-                    <div class="profile-name"><%= profile.username %></div><br>
+                    <div class="profile-name"><%= profile.userInfo.username %><% if('emoji' in profile.userInfo){ %><%- extra.twemoji.parse(profile.userInfo.emoji) %><% } %></div><br>
                     <div class="profile-views">Views: <%= helper.formatNumber(profile.total, true) %></div>
                     <div class="profile-rank">#<%= index + 1 %></div>
                 </a>
@@ -60,9 +60,14 @@
         <script>
             let targetUsername = document.getElementById("inp_enter_username");
             let searchUser = document.getElementById('search_user');
+            let inputSearchUser = document.getElementById('inp_search_user');
+            let btnSearchUser = document.getElementById('btn_search_user');
 
             function updateUserTarget(e){
                 let playerName = targetUsername.value;
+
+                if(playerName)
+                    inputSearchUser.value = playerName;
 
                 if(playerName.trim().length == 0)
                     return;
@@ -79,14 +84,37 @@
             let scrollLock = false;
             let currentOffset = 10;
             let limit = 20;
+            let smallUserSearch = false;
 
             let reachedEnd = false;
 
+            window.addEventListener('keydown', function(e){
+                console.log(String.fromCharCode(e.keyCode));
+                if(/[a-zA-Z0-9-_ ]/.test(String.fromCharCode(e.keyCode)))
+                    if(smallUserSearch)
+                        inputSearchUser.focus();
+                    else
+                        targetUsername.focus();
+            });
+
             window.addEventListener('scroll', function(){
-                if(window.scrollY > window.innerHeight * 0.5)
+                if(window.scrollY > window.innerHeight * 0.5 && smallUserSearch === false){
                     searchUser.classList.add('show-user-search');
-                else
+                    smallUserSearch = true;
+
+                    searchUser.setAttribute('tabindex', '0');
+                    btnSearchUser.setAttribute('tabindex', '0');
+
+                    targetUsername.blur();
+                }else if(window.scrollY <= window.innerHeight * 0.5 && smallUserSearch){
                     searchUser.classList.remove('show-user-search');
+                    smallUserSearch = false;
+
+                    searchUser.setAttribute('tabindex', '-1');
+                    btnSearchUser.setAttribute('tabindex', '-1');
+
+                    inputSearchUser.blur();
+                }
 
                 if(window.innerHeight + window.scrollY > document.documentElement.offsetHeight - 100 && !scrollLock && !reachedEnd){
                     scrollLock = true;
@@ -107,7 +135,7 @@
                             let profileRank = document.createElement('div');
 
                             profileAvatar.src = 'https://crafatar.com/avatars/' + profile.uuid + '?size=128&overlay';
-                            profileName.innerHTML = profile.username;
+                            profileName.innerHTML = profile.userInfo.username;
                             profileViews.innerHTML = 'Views: ' + formatNumber(profile.total, true);
                             profileRank.innerHTML = '#' + (currentOffset + index + 1);
 
