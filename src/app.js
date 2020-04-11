@@ -6,6 +6,8 @@ const dbName = 'sbstats';
 
 async function main(){
     const express = require('express');
+    const session = require('express-session');
+    const MongoStore = require('connect-mongo')(session);
     const bodyParser = require('body-parser');
     const crypto = require('crypto');
 
@@ -25,6 +27,7 @@ async function main(){
     const constants = require('./constants');
     const { SitemapStream, streamToPromise } = require('sitemap');
     const { createGzip } = require('zlib');
+    const twemoji = require('twemoji');
 
     const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
@@ -55,6 +58,15 @@ async function main(){
     app.set('view engine', 'ejs');
     app.use(express.static('public', { maxAge: CACHE_DURATION }));
 
+    app.use(session({
+        secret: credentials.session_secret,
+        resave: false,
+        saveUninitialized: false,
+        store: new MongoStore({
+            client: mongo
+        })
+    }));
+
     require('./api')(app, db);
     require('./donations/kofi')(app, db);
 
@@ -72,12 +84,14 @@ async function main(){
             patreon: patreonEntry.amount || 0
         };
 
-        const topProfiles = await db.collection('profileViews').find().sort({ total: -1 }).limit(10).toArray();
+        const topProfiles = await db.collection('viewsLeaderboard').find().limit(10).toArray();
 
         output.top_profiles = topProfiles;
 
         if('recaptcha_site_key' in credentials)
             output.recaptcha_site_key = credentials.recaptcha_site_key;
+
+        output.twemoji = twemoji;
 
         return output;
     }
@@ -205,9 +219,9 @@ async function main(){
 
             await db
             .collection('usernames')
-            .replaceOne(
+            .updateOne(
                 { uuid: hypixelPlayer.uuid },
-                { uuid: hypixelPlayer.uuid, username: hypixelPlayer.displayname, date: +new Date() },
+                { $set: { username: hypixelPlayer.displayname, date: +new Date() } },
                 { upsert: true }
             );
 
@@ -393,15 +407,29 @@ async function main(){
             }
 
             const items = await lib.getItems(userProfile);
-            const calculated = await lib.getStats(userProfile, items, data.player);
+            const calculated = await lib.getStats(userProfile, items, hypixelPlayer);
 
             if(objectPath.has(profile, 'banking.balance'))
                 calculated.bank = profile.banking.balance;
 
             calculated.rank_prefix = lib.rankPrefix(data.player);
             calculated.purse = userProfile.coin_purse || 0;
-            calculated.uuid = data.player.uuid;
-            calculated.display_name = data.player.displayname;
+            calculated.uuid = hypixelPlayer.uuid;
+            calculated.display_name = hypixelPlayer.displayname;
+
+            const userInfo = await db
+            .collection('usernames')
+            .findOne({ uuid: hypixelPlayer.uuid });
+
+            console.log(userInfo);
+
+            if(userInfo){
+                calculated.display_name = userInfo.username;
+
+                if('emoji' in userInfo)
+                    calculated.display_emoji = userInfo.emoji;
+            }
+
             calculated.profile = skyBlockProfiles[profileId];
             calculated.profiles = _.pickBy(allSkyBlockProfiles, a => a.profile_id != profileId);
             calculated.members = members.filter(a => a.uuid != hypixelPlayer.uuid);
@@ -552,9 +580,8 @@ async function main(){
         const offset = Math.max(0, req.query.offset || 0);
 
         res.json(await db
-        .collection('profileViews')
+        .collection('viewsLeaderboard')
         .find()
-        .sort({ total: -1 })
         .skip(offset)
         .limit(limit)
         .toArray());
@@ -596,7 +623,7 @@ async function main(){
                     .collection('profileViews')
                     .updateOne(
                         { uuid: req.query.uuid },
-                        { $inc: { total: 1, weekly: 1, daily: 1 }, $set: { username: userObject.username } },
+                        { $inc: { total: 1, weekly: 1, daily: 1 } },
                         { upsert: true }
                     );
             }
@@ -618,12 +645,12 @@ async function main(){
             const smStream = new SitemapStream({ hostname: 'https://sky.lea.moe/' });
             const pipeline = smStream.pipe(createGzip());
 
-            const cursor = await db.collection('profileViews').find().sort({ total: -1 }).limit(10000);
+            const cursor = await db.collection('viewsLeaderboard').find().limit(10000);
 
             while(await cursor.hasNext()){
                 const doc = await cursor.next();
 
-                smStream.write({ url: `/stats/${doc.username}` });
+                smStream.write({ url: `/stats/${doc.userInfo.username}` });
             }
 
             smStream.end();

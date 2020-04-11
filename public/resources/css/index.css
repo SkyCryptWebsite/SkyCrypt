@@ -695,6 +695,12 @@ html.no-transform #info_box.opened{
     font-size: 30px;
 }
 
+#stats_for_player .emoji{
+    vertical-align: middle;
+    height: 28px;
+    margin-top: -4px;
+}
+
 .rank-tag{
     display: inline-block;
     font-size: 18px;
@@ -2069,7 +2075,7 @@ a.additional-player-stat:hover{
     position: relative;
     margin: 0 auto;
     margin-top: calc(50vh - 130px);
-    width: 650px;
+    width: 700px;
     height: 260px;
     background: url(../img/bg_blur.webp?v2) no-repeat center center fixed;
     background-size: cover;
@@ -2138,7 +2144,7 @@ html.no-webp #enter_player_box_wrapper{
     position: relative;
     margin: 0 auto;
     margin-top: 20px;
-    width: 650px;
+    width: 700px;
     background: url(../img/bg_blur.webp?v2) no-repeat center center fixed;
     background-size: cover;
     border-radius: 10px;
@@ -2150,7 +2156,7 @@ html.no-webp #enter_player_box_wrapper{
     position: relative;
     margin: 0 auto;
     margin-top: 20px;
-    width: 650px;
+    width: 700px;
     overflow: hidden;
     display: flex;
     justify-content: space-between;
@@ -2194,6 +2200,13 @@ html.no-webp .top-profile{
     color: white;
     font-weight: 600;
     font-size: 18px;
+}
+
+.profile-name .emoji{
+    vertical-align: middle;
+    height: 22px;
+    margin-left: 5px;
+    margin-top: -4px;
 }
 
 .profile-views{
@@ -2701,7 +2714,7 @@ html.no-webp #error_box_wrapper{
     }
 }
 
-@media (max-width: 684px){
+@media (max-width: 735px){
     #enter_player_box_wrapper, #error_box_wrapper, #top_profiles_box_wrapper{
         width: calc(100vw - 30px);
     }
@@ -2747,6 +2760,12 @@ html.no-webp #error_box_wrapper{
         font-size: 20px;
         height: 46px;
         line-height: 46px;
+    }
+
+    #stats_for_player .emoji{
+        vertical-align: middle;
+        height: 22px;
+        margin-top: -3px;
     }
 
     #stats_for_profile{

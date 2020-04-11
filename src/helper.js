@@ -27,16 +27,16 @@ module.exports = {
 
                 await db
                 .collection('usernames')
-                .replaceOne(
+                .updateOne(
                     { uuid: data.id },
-                    { uuid: data.id, username: data.name, date: +new Date() },
+                    { $set: { username: data.name, date: +new Date() } },
                     { upsert: true }
                 );
             }).catch(async err => {
                 if(user)
                     await db
                     .collection('usernames')
-                    .replaceOne(
+                    .updateOne(
                         { uuid: user.uuid },
                         { $set: { date: +new Date() } }
                     );

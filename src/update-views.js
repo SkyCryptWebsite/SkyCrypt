@@ -27,7 +27,7 @@ async function main(){
             .collection('profileViews')
             .updateOne(
                 { uuid: doc.uuid },
-                { $set: { uuid: doc.uuid, username: doc.username, total: profileViews } },
+                { $set: { uuid: doc.uuid, total: profileViews } },
                 { upsert: true }
             );
         }
