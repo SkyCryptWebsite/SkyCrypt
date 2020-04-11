@@ -421,8 +421,6 @@ async function main(){
             .collection('usernames')
             .findOne({ uuid: hypixelPlayer.uuid });
 
-            console.log(userInfo);
-
             if(userInfo){
                 calculated.display_name = userInfo.username;
 
