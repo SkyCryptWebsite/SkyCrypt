@@ -645,9 +645,8 @@ module.exports = {
         let output = "";
         let parts = text.split("§");
 
-        parts.forEach(part => {
-            output += part.substr(1);
-        });
+        for(const [index, part] of parts.entries())
+            output += part.substr(Math.min(index, 1));
 
         return output;
     },
