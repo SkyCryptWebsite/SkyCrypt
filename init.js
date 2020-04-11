@@ -97,24 +97,24 @@ async function main(){
     await db.createCollection('viewsLeaderboard', {
         viewOn: 'profileViews',
         pipeline: [
-        {
-            "$lookup": {
-                "from": "usernames",
-                "localField": "uuid",
-                "foreignField": "uuid",
-                "as": "userInfo"
+            {
+                $sort: {
+                    total: -1
+                }
+            },
+            {
+                "$lookup": {
+                    "from": "usernames",
+                    "localField": "uuid",
+                    "foreignField": "uuid",
+                    "as": "userInfo"
+                }
+            },
+            {
+                "$unwind": {
+                    "path": "$userInfo"
+                }
             }
-        },
-        {
-            "$unwind": {
-                "path": "$userInfo"
-            }
-        },
-        {
-            $sort: {
-                total: -1
-            }
-        }
         ]
     });
 
