@@ -1724,8 +1724,18 @@ twitterDescription += '. Click to view more stats!'
                     <% if('dragons' in calculated.misc){ %>
                         <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/aec3ff563290b13ff3bcc36898af7eaa988b6cc18dc254147f58374afe9b21b9)"></div></div><span>dragons</span></div>
                         <p class="stat-raw-values">
-                            <% for(const key in calculated.misc.dragons){ %>
-                            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.dragons[key].toLocaleString() %></span><br>
+                            <% for(const key in calculated.misc.dragons){
+                                let tooltip = "";
+
+                                if(key == 'dragon_last_hits')
+                                    for(const kill of calculated.kills.filter(a => a.entityId.endsWith('_dragon')))
+                                        tooltip += `<span class="stat-name">${ kill.entityName }: </span><span class="stat-value">${ kill.amount }</span><br>`;
+
+                                if(key == 'dragon_deaths')
+                                    for(const death of calculated.deaths.filter(a => a.entityId.endsWith('_dragon')))
+                                        tooltip += `<span class="stat-name">${ death.entityName }: </span><span class="stat-value">${ death.amount }</span><br>`;
+                            %>
+                            <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>><span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.dragons[key].toLocaleString() %></span></span><br>
                             <% } %>
                     </p>
                     <% } %>
