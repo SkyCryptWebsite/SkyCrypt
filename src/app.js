@@ -442,7 +442,8 @@ async function main(){
                 total: userProfile.stats.items_fished || 0,
                 treasure: userProfile.stats.items_fished_treasure || 0,
                 treasure_large: userProfile.stats.items_fished_large_treasure || 0,
-                shredder_fished: userProfile.stats.shredder_fished || 0
+                shredder_fished: userProfile.stats.shredder_fished || 0,
+                shredder_bait: userProfile.stats.shredder_bait || 0,
             };
 
             const last_updated = userProfile.last_save;

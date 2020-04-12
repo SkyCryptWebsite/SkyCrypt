@@ -1088,6 +1088,7 @@ twitterDescription += '. Click to view more stats!'
                 <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){ %><div class="nav-item" data-target="kills">Kills</div><% } %>
                 <div class="nav-item" data-target="minions">Minions</div>
                 <% if(Object.keys(calculated.collections).length > 0){ %><div class="nav-item" data-target="collections">Collections</div><% } %>
+                <div class="nav-item" data-target="misc">Misc</div>
             </div>
         </div>
         <div class="stat-containers">
@@ -1320,7 +1321,11 @@ twitterDescription += '. Click to view more stats!'
                     <span class="stat-name">Treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure.toLocaleString() %></span><br>
                     <span class="stat-name">Large treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure_large.toLocaleString() %></span><br>
                     <% if(calculated.fishing.shredder_fished > 0){ %>
+                    <span data-tippy-content='
                     <span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span><br>
+                    <span class="stat-name">Bait used with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_bait.toLocaleString() %></span><br>
+                    <span class="stat-name">Bait wasted with Shredder: </span><span class="stat-value"><%= (calculated.fishing.shredder_bait - calculated.fishing.shredder_fished).toLocaleString() %></span><br>
+                    '><span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span></span><br>
                     <% } %>
                 </p>
                 <%
