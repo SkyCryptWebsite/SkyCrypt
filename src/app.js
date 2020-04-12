@@ -662,6 +662,10 @@ async function main(){
         }
     });
 
+    app.all('/:player/:profile?', async (req, res, next) => {
+        res.redirect(`/stats${req.path}`);
+    });
+
     app.all('/', async (req, res, next) => {
         res.render('index', { error: null, player: null, extra: await getExtra(), helper, page: 'index' });
     });
