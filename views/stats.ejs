@@ -1328,7 +1328,7 @@ twitterDescription += '. Click to view more stats!'
                     <span data-tippy-content='
                     <span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span><br>
                     <span class="stat-name">Bait used with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_bait.toLocaleString() %></span><br>
-                    <span class="stat-name">Bait wasted with Shredder: </span><span class="stat-value"><%= baitWasted.toLocaleString() %> <span class="grey-text">(<%= Math.round(baitWasted / calculated.fishing.shredder_bait * 100) %>%)</span></span><br>
+                    <% if(baitWasted > 0){ %><span class="stat-name">Bait wasted with Shredder: </span><span class="stat-value"><%= baitWasted.toLocaleString() %> <span class="grey-text">(<%= Math.round(baitWasted / calculated.fishing.shredder_bait * 100) %>%)</span></span><% } %>
                     '><span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span></span><br>
                     <% } %>
                 </p>
