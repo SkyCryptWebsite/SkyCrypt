@@ -1747,6 +1747,34 @@ twitterDescription += '. Click to view more stats!'
                             <% } %>
                         </p>
                     <% } %>
+                    <% if('auctions_sell' in calculated.misc){ %>
+                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-266_0"></div></div><span>auctions sold</span></div>
+                        <p class="stat-raw-values">
+                            <% for(const key in calculated.misc.auctions_sell){
+                                let tooltip = "";
+
+                                if(key == 'items_sold')
+                                    for(const key of Object.keys(calculated.auctions_sold).sort((a, b) => rarityOrder.indexOf(a) - rarityOrder.indexOf(b)))
+                                        tooltip += `<span class="stat-name piece-${ key }-fg">${ helper.capitalizeFirstLetter(key) }: </span><span class="stat-value">${ calculated.auctions_sold[key] }</span><br>`;
+                            %>
+                            <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>><span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.auctions_sell[key].toLocaleString() %></span></span><br>
+                            <% } %>
+                        </p>
+                    <% } %>
+                    <% if('auctions_buy' in calculated.misc){ %>
+                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-266_0"></div></div><span>auctions bought</span></div>
+                        <p class="stat-raw-values">
+                            <% for(const key in calculated.misc.auctions_buy){
+                                let tooltip = "";
+
+                                if(key == 'items_bought')
+                                    for(const key of Object.keys(calculated.auctions_bought).sort((a, b) => rarityOrder.indexOf(a) - rarityOrder.indexOf(b)))
+                                        tooltip += `<span class="stat-name piece-${ key }-fg">${ helper.capitalizeFirstLetter(key) }: </span><span class="stat-value">${ calculated.auctions_bought[key] }</span><br>`;
+                            %>
+                            <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>><span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.auctions_buy[key].toLocaleString() %></span></span><br>
+                            <% } %>
+                        </p>
+                    <% } %>
                 </div>
             </div>
         <% } %>

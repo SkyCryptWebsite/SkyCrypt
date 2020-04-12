@@ -1448,27 +1448,27 @@ a.additional-player-stat:hover{
 }
 
 .piece-special-fg{
-    color: #D762D7;
+    color: #D762D7 !important;
 }
 
 .piece-legendary-fg{
-    color: #F9B837;
+    color: #F9B837 !important;
 }
 
 .piece-epic-fg{
-    color: #F23EF2;
+    color: #F23EF2 !important;
 }
 
 .piece-rare-fg{
-    color: #7373E6;
+    color: #7373E6 !important;
 }
 
 .piece-uncommon-fg{
-    color: #61df61;
+    color: #61df61 !important;
 }
 
 .piece-common-fg{
-    color: white;
+    color: white !important;
 }
 
 .stat-sub-header{

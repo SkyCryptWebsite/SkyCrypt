@@ -455,12 +455,28 @@ async function main(){
             misc.winter = {};
             misc.dragons = {};
             misc.damage = {};
+            misc.auctions_sell = {};
+            misc.auctions_buy = {};
 
             if('ender_crystals_destroyed' in userProfile.stats)
                 misc.dragons['ender_crystals_destroyed'] = userProfile.stats['ender_crystals_destroyed'];
 
             misc.dragons['dragon_last_hits'] = 0;
             misc.dragons['dragon_deaths'] = 0;
+
+            const auctions_buy = ["auctions_bids", "auctions_highest_bid", "auctions_won", "auctions_gold_spent"];
+            const auctions_sell = ["auctions_fees", "auctions_gold_earned"];
+
+            const auctions_bought = {};
+            const auctions_sold = {};
+
+            for(const key of auctions_sell)
+                if(key in userProfile.stats)
+                    misc.auctions_sell[key.replace("auctions_", "")] = userProfile.stats[key];
+
+            for(const key of auctions_buy)
+                if(key in userProfile.stats)
+                    misc.auctions_buy[key.replace("auctions_", "")] = userProfile.stats[key];
 
             for(const key in userProfile.stats)
                 if(key.includes('_best_time'))
@@ -471,6 +487,10 @@ async function main(){
                     misc.winter[key] = userProfile.stats[key];
                 else if(key.includes('highest_critical_damage'))
                     misc.damage[key] = userProfile.stats[key];
+                else if(key.includes('auctions_sold_'))
+                    auctions_sold[key.replace("auctions_sold_", "")] = userProfile.stats[key];
+                else if(key.includes('auctions_bought_'))
+                    auctions_bought[key.replace("auctions_bought_", "")] = userProfile.stats[key];
                 else if(key.startsWith('kills_') && key.endsWith('_dragon'))
                     misc.dragons['dragon_last_hits'] += userProfile.stats[key];
                 else if(key.startsWith('deaths_') && key.endsWith('_dragon'))
@@ -484,7 +504,15 @@ async function main(){
                 if(Object.keys(misc[key]).length == 0)
                     delete misc[key];
 
+            for(const key in auctions_bought)
+                misc.auctions_buy['items_bought'] = (misc.auctions_buy['items_bought'] || 0) + auctions_bought[key];
+
+            for(const key in auctions_sold)
+                misc.auctions_sell['items_sold'] = (misc.auctions_sell['items_sold'] || 0) + auctions_sold[key];
+
             calculated.misc = misc;
+            calculated.auctions_bought = auctions_bought;
+            calculated.auctions_sold = auctions_sold;
 
             const last_updated = userProfile.last_save;
             const first_join = userProfile.first_join;
