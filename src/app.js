@@ -454,6 +454,7 @@ async function main(){
             misc.gifts = {};
             misc.winter = {};
             misc.dragons = {};
+            misc.damage = {};
 
             if('ender_crystals_destroyed' in userProfile.stats)
                 misc.dragons['ender_crystals_destroyed'] = userProfile.stats['ender_crystals_destroyed'];
@@ -468,6 +469,8 @@ async function main(){
                     misc.gifts[key] = userProfile.stats[key];
                 else if(key.includes('most_winter'))
                     misc.winter[key] = userProfile.stats[key];
+                else if(key.includes('highest_critical_damage'))
+                    misc.damage[key] = userProfile.stats[key];
                 else if(key.startsWith('kills_') && key.endsWith('_dragon'))
                     misc.dragons['dragon_last_hits'] += userProfile.stats[key];
                 else if(key.startsWith('deaths_') && key.endsWith('_dragon'))
