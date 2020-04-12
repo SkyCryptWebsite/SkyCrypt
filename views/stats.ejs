@@ -1088,7 +1088,7 @@ twitterDescription += '. Click to view more stats!'
                 <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){ %><div class="nav-item" data-target="kills">Kills</div><% } %>
                 <div class="nav-item" data-target="minions">Minions</div>
                 <% if(Object.keys(calculated.collections).length > 0){ %><div class="nav-item" data-target="collections">Collections</div><% } %>
-                <div class="nav-item" data-target="misc">Misc</div>
+                <% if(Object.keys(calculated.misc).length > 0){ %><div class="nav-item" data-target="misc">Misc</div><% } %>
             </div>
         </div>
         <div class="stat-containers">
@@ -1685,6 +1685,49 @@ twitterDescription += '. Click to view more stats!'
                             <% } %>
                             </div>
                         </div>
+                    <% } %>
+                </div>
+            </div>
+        <% } %>
+        <% if(Object.keys(calculated.misc).length > 0){ %>
+            <div data-stat="misc" class="stat-container stat-misc">
+                <div class="stat-anchor"></div>
+                <div class="stat-header"><span>Miscellaneous</span></div>
+                <div class="stat-content">
+                    <% if(Object.keys(calculated.misc.races).length > 0){ %>
+                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-317_0"></div></div><span>races</span></div>
+                        <p class="stat-raw-values">
+                            <% for(const key in calculated.misc.races){
+                                const raceName = helper.capitalizeFirstLetter(key.split("_").join(" "));
+                                const raceDuration = moment.duration(calculated.misc.races[key], "milliseconds").format("m:ss.SSS");
+                            %>
+                            <span class="stat-name"><%= raceName %>: </span><span class="stat-value"><%= raceDuration %></span><br>
+                            <% } %>
+                        </p>
+                    <% } %>
+                    <% if(Object.keys(calculated.misc.gifts).length > 0){ %>
+                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/b73a2114136b8ee4926caa51785414036a2b76e4f1668cb89d99716c421)"></div></div><span>gifts</span></div>
+                        <p class="stat-raw-values">
+                            <% for(const key in calculated.misc.gifts){ %>
+                            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.gifts[key].toLocaleString() %></span><br>
+                            <% } %>
+                        </p>
+                    <% } %>
+                    <% if(Object.keys(calculated.misc.winter).length > 0){ %>
+                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-332_0"></div></div><span>season of jerry</span></div>
+                        <p class="stat-raw-values">
+                            <% for(const key in calculated.misc.winter){ %>
+                            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.winter[key].toLocaleString() %></span><br>
+                            <% } %>
+                        </p>
+                    <% } %>
+                    <% if(Object.keys(calculated.misc.dragons).length > 0){ %>
+                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/aec3ff563290b13ff3bcc36898af7eaa988b6cc18dc254147f58374afe9b21b9)"></div></div><span>dragons</span></div>
+                        <p class="stat-raw-values">
+                            <% for(const key in calculated.misc.dragons){ %>
+                            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.dragons[key].toLocaleString() %></span><br>
+                            <% } %>
+                    </p>
                     <% } %>
                 </div>
             </div>

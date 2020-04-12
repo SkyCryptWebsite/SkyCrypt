@@ -21,7 +21,9 @@ async function main(){
     const renderer = require('./renderer');
     const _ = require('lodash');
     const objectPath = require('object-path');
-    const moment = require('moment');
+    const moment = require('moment-timezone');
+    require('moment-duration-format')(moment);
+
     const { MongoClient } = require('mongodb');
     const helper = require('./helper');
     const constants = require('./constants');
@@ -445,6 +447,41 @@ async function main(){
                 shredder_fished: userProfile.stats.shredder_fished || 0,
                 shredder_bait: userProfile.stats.shredder_bait || 0,
             };
+
+            const misc = {};
+
+            misc.races = {};
+            misc.gifts = {};
+            misc.winter = {};
+            misc.dragons = {};
+
+            if('ender_crystals_destroyed' in userProfile.stats)
+                misc.dragons['ender_crystals_destroyed'] = userProfile.stats['ender_crystals_destroyed'];
+
+            misc.dragons['dragon_last_hits'] = 0;
+            misc.dragons['dragon_deaths'] = 0;
+
+            for(const key in userProfile.stats)
+                if(key.includes('_best_time'))
+                    misc.races[key] = userProfile.stats[key];
+                else if(key.includes('gifts_'))
+                    misc.gifts[key] = userProfile.stats[key];
+                else if(key.includes('most_winter'))
+                    misc.winter[key] = userProfile.stats[key];
+                else if(key.startsWith('kills_') && key.endsWith('_dragon'))
+                    misc.dragons['dragon_last_hits'] += userProfile.stats[key];
+                else if(key.startsWith('deaths_') && key.endsWith('_dragon'))
+                    misc.dragons['dragon_deaths'] += userProfile.stats[key];
+
+            for(const key in misc.dragons)
+                if(misc.dragons[key] == 0)
+                    delete misc.dragons[key];
+
+            for(const key in misc)
+                if(Object.keys(misc[key]).length == 0)
+                    delete misc[key];
+
+            calculated.misc = misc;
 
             const last_updated = userProfile.last_save;
             const first_join = userProfile.first_join;
