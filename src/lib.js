@@ -969,10 +969,10 @@ module.exports = {
                     output.armor_set_rarity = 'rare';
 
                     if(getId(armor[0]) == 'SPIDER_BOOTS')
-                        output.armor_set = 'Monter Hunter Armor';
+                        output.armor_set = 'Monster Hunter Armor';
 
                     if(getId(armor[0]) == 'TARANTULA_BOOTS')
-                        output.armor_set = 'Monter Raider Armor';
+                        output.armor_set = 'Monster Raider Armor';
                 }
 
                 if(isPerfectSet){
