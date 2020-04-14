@@ -647,10 +647,33 @@ async function main(){
         const offset = Math.max(0, req.query.offset || 0);
 
         res.json(await db
-        .collection('viewsLeaderboard')
-        .find()
-        .skip(offset)
-        .limit(limit)
+        .collection('profileViews')
+        .aggregate([
+            {
+                $sort: {
+                    total: -1
+                }
+            },
+            {
+                $skip: offset
+            },
+            {
+                $lookup: {
+                    from: "usernames",
+                    localField: "uuid",
+                    foreignField: "uuid",
+                    as: "userInfo"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$userInfo"
+                }
+            },
+            {
+                $limit: limit
+            }
+        ])
         .toArray());
     });
 
