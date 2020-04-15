@@ -94,6 +94,20 @@ async function main(){
         { daily: -1 }
     );
 
+    await db
+    .collection('guilds')
+    .createIndex(
+        { gid: 1 },
+        { unique: true }
+    );
+
+    await db
+    .collection('guildMembers')
+    .createIndex(
+        { gid: 1, uuid: 1 },
+        { unique: true }
+    );
+
     await db.createCollection('viewsLeaderboard', {
         viewOn: 'profileViews',
         pipeline: [
@@ -101,6 +115,9 @@ async function main(){
                 $sort: {
                     total: -1
                 }
+            },
+            {
+                $limit: 20
             },
             {
                 "$lookup": {
