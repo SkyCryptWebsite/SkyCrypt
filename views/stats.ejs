@@ -1729,7 +1729,7 @@ twitterDescription += '. Click to view more stats!'
 
                                 if(key == 'dragon_last_hits')
                                     for(const kill of calculated.kills.filter(a => a.entityId.endsWith('_dragon')))
-                                        tooltip += `<span class="stat-name">${ kill.entityName }: </span><span class="stat-value">${ kill.amount }</span><br>`;
+                                        tooltip += `<span class="stat-name">${ kill.entityName }: </span><span class="stat-value">${ kill.amount }</span> <span class="grey-text">(${ Math.round(kill.amount / calculated.misc.dragons[key] * 100) }%)</span><br>`;
 
                                 if(key == 'dragon_deaths')
                                     for(const death of calculated.deaths.filter(a => a.entityId.endsWith('_dragon')))
