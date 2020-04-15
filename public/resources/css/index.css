@@ -24,6 +24,10 @@ html.no-webp{
     background-image: url(../img/bg.png?v2);
 }
 
+a.no-underline{
+    text-decoration: none;
+}
+
 .tippy-popper{
     pointer-events: all !important;
 }
