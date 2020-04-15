@@ -29,15 +29,7 @@ async function main(){
 
                 const { guild } = guildResponse.data;
 
-                if(guild !== null){
-                    await db
-                    .collection('guilds')
-                    .updateOne(
-                        { gid: guild._id },
-                        { $set: { name: guild.name, tag: guild.tag, exp: guild.exp, created: guild.created, gm: guild.members[0].uuid }},
-                        { upsert: true }
-                    );
-
+                if(guild && guild !== null){
                     for(const member of guild.members){
                         await db
                         .collection('guildMembers')
@@ -47,6 +39,14 @@ async function main(){
                             { upsert: true }
                         );
                     }
+
+                    await db
+                    .collection('guilds')
+                    .updateOne(
+                        { gid: guild._id },
+                        { $set: { name: guild.name, tag: guild.tag, exp: guild.exp, created: guild.created, gm: guild.members[0].uuid, members: guild.members.length }},
+                        { upsert: true }
+                    );
                 }
             }catch(e){
                 console.error(e);

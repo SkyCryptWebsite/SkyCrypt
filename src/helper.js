@@ -76,21 +76,23 @@ module.exports = {
 
                 const { guild } = guildResponse.data;
 
-                if(guild !== null){
+                if(guild && guild !== null){
+                    for(const member of guild.members){
+                        await db
+                        .collection('guildMembers')
+                        .updateOne(
+                            { uuid: member.uuid },
+                            { $set: { gid: guild._id }},
+                            { upsert: true }
+                        );
+                    }
+
                     const guildObject = await db
                     .collection('guilds')
                     .findOneAndUpdate(
                         { gid: guild._id },
-                        { $set: { name: guild.name, tag: guild.tag, exp: guild.exp, created: guild.created, gm: guild.members[0].uuid }},
+                        { $set: { name: guild.name, tag: guild.tag, exp: guild.exp, created: guild.created, gm: guild.members[0].uuid, members: guild.members.length }},
                         { returnOriginal: false, upsert: true }
-                    );
-
-                    await db
-                    .collection('guildMembers')
-                    .findOneAndUpdate(
-                        { uuid },
-                        { $set: { gid: guild._id }},
-                        { upsert: true }
                     );
 
                     return guildObject.value;
