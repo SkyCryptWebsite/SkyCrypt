@@ -52,10 +52,10 @@ async function main(){
                 console.error(e);
             }
 
-            await new Promise(r => setTimeout(r, 3000));
+            await new Promise(r => setTimeout(r, 1000));
         }
 
-        setTimeout(updateGuilds, 1000 * 60 * 20);
+        setTimeout(updateGuilds, 1000 * 60 * 60);
     }
 
     updateGuilds();
