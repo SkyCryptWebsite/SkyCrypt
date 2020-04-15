@@ -71,6 +71,7 @@ module.exports = {
 
                 guildObject.level = module.exports.getGuildLevel(guildObject.exp);
                 guildObject.gmUser = await module.exports.uuidToUsername(guildObject.gm, db);
+                guildObject.rank = guildMember.rank;
 
                 return guildObject;
             }
@@ -88,7 +89,7 @@ module.exports = {
                         .collection('guildMembers')
                         .updateOne(
                             { uuid: member.uuid },
-                            { $set: { gid: guild._id }},
+                            { $set: { gid: guild._id, rank: member.rank }},
                             { upsert: true }
                         );
                     }
@@ -103,6 +104,7 @@ module.exports = {
 
                     guildObject.value.level = module.exports.getGuildLevel(guildObject.value.exp);
                     guildObject.value.gmUser = await module.exports.uuidToUsername(guildObject.value.gm, db);
+                    guildObject.value.rank = guild.members.filter(a => a.uuid == uuid)[0].rank;
 
                     return guildObject.value;
                 }else{

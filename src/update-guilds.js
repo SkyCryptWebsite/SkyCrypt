@@ -35,7 +35,7 @@ async function main(){
                         .collection('guildMembers')
                         .updateOne(
                             { uuid: member.uuid },
-                            { $set: { gid: guild._id }},
+                            { $set: { gid: guild._id, rank: member.rank }},
                             { upsert: true }
                         );
                     }
@@ -52,7 +52,7 @@ async function main(){
                 console.error(e);
             }
 
-            await new Promise(r => setTimeout(r, 1000));
+            await new Promise(r => setTimeout(r, 2000));
         }
 
         setTimeout(updateGuilds, 1000 * 60 * 60);
