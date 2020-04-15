@@ -3,7 +3,7 @@ require('axios-debug-log')
 
 const _ = require('lodash');
 
-
+const constants = require('./constants');
 const credentials = require('../credentials.json');
 
 const Hypixel = axios.create({
@@ -64,12 +64,18 @@ module.exports = {
         .findOne({ uuid: uuid });
 
         if(guildMember !== null){
-            if(guildMember.gid !== null)
-                return await db
+            if(guildMember.gid !== null){
+                const guildObject = await db
                 .collection('guilds')
                 .findOne({ gid: guildMember.gid });
-            else
-                return null;
+
+                guildObject.level = module.exports.getGuildLevel(guildObject.exp);
+                guildObject.gmUser = await module.exports.uuidToUsername(guildObject.gm, db);
+
+                return guildObject;
+            }
+
+            return null;
         }else{
             try{
                 const guildResponse = await Hypixel.get('guild', { params: { player: uuid, key: credentials.hypixel_api_key }});
@@ -95,6 +101,9 @@ module.exports = {
                         { returnOriginal: false, upsert: true }
                     );
 
+                    guildObject.value.level = module.exports.getGuildLevel(guildObject.value.exp);
+                    guildObject.value.gmUser = await module.exports.uuidToUsername(guildObject.value.gm, db);
+
                     return guildObject.value;
                 }else{
                     await db
@@ -112,6 +121,23 @@ module.exports = {
                 return null;
             }
         }
+    },
+
+    getGuildLevel: xp => {
+        let level = 0;
+
+        for(let i = 0;; i++){
+            const xpNeeded = constants.guild_xp[Math.min(constants.guild_xp.length - 1, i)];
+
+            xp -= xpNeeded;
+
+            if(xp < 0)
+                return level;
+
+            level++;
+        }
+
+        return level;
     },
 
     capitalizeFirstLetter: word => {
