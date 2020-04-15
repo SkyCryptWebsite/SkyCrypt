@@ -58,6 +58,60 @@ module.exports = {
             return { uuid, display_name: user.username };
     },
 
+    getGuild: async (uuid, db) => {
+        const guildMember = await db
+        .collection('guildMembers')
+        .findOne({ uuid: uuid });
+
+        if(guildMember !== null){
+            if(guildMember.gid !== null)
+                return await db
+                .collection('guilds')
+                .findOne({ gid: guildMember.gid });
+            else
+                return null;
+        }else{
+            try{
+                const guildResponse = await Hypixel.get('guild', { params: { player: uuid, key: credentials.hypixel_api_key }});
+
+                const { guild } = guildResponse.data;
+
+                if(guild !== null){
+                    const guildObject = await db
+                    .collection('guilds')
+                    .findOneAndUpdate(
+                        { gid: guild._id },
+                        { $set: { name: guild.name, tag: guild.tag, exp: guild.exp, created: guild.created, gm: guild.members[0].uuid }},
+                        { returnOriginal: false, upsert: true }
+                    );
+
+                    await db
+                    .collection('guildMembers')
+                    .findOneAndUpdate(
+                        { uuid },
+                        { $set: { gid: guild._id }},
+                        { upsert: true }
+                    );
+
+                    return guildObject.value;
+                }else{
+                    await db
+                    .collection('guildMembers')
+                    .findOneAndUpdate(
+                        { uuid },
+                        { $set: { gid: null }},
+                        { upsert: true }
+                    );
+                }
+
+                return null;
+            }catch(e){
+                console.error(e);
+                return null;
+            }
+        }
+    },
+
     capitalizeFirstLetter: word => {
         return word.charAt(0).toUpperCase() + word.slice(1);
     },

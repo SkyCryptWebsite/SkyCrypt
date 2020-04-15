@@ -86,7 +86,33 @@ async function main(){
             patreon: patreonEntry.amount || 0
         };
 
-        const topProfiles = await db.collection('viewsLeaderboard').find().limit(10).toArray();
+        const topProfiles = await db
+        .collection('viewsLeaderboard')
+        .aggregate([
+            {
+                "$lookup": {
+                    "from": "profiles",
+                    "localField": "uuid",
+                    "foreignField": "uuid",
+                    "as": "profileInfo"
+                }
+            },
+            {
+                "$unwind": {
+                    "path": "$profileInfo"
+                }
+            }
+        ])
+        .limit(20)
+        .toArray();
+
+        for(const profile of topProfiles){
+            delete profile.views;
+            delete profile.total;
+            delete profile.weekly;
+            delete profile.daily;
+            delete profile.rank;
+        }
 
         output.top_profiles = topProfiles;
 
@@ -414,6 +440,8 @@ async function main(){
             if(objectPath.has(profile, 'banking.balance'))
                 calculated.bank = profile.banking.balance;
 
+            calculated.guild = await helper.getGuild(hypixelPlayer.uuid, db);
+
             calculated.rank_prefix = lib.rankPrefix(data.player);
             calculated.purse = userProfile.coin_purse || 0;
             calculated.uuid = hypixelPlayer.uuid;
@@ -555,6 +583,10 @@ async function main(){
                 text: first_join_text
             };
 
+            /*
+
+            - Hide Views for now due to abuse -
+
             calculated.views = _.pick(await db
             .collection('profileViews')
             .findOne({ uuid: hypixelPlayer.uuid }),
@@ -573,6 +605,7 @@ async function main(){
 
             if(ownViews == 0)
                 calculated.views.total++;
+            */
 
             res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
         }catch(e){
@@ -642,6 +675,10 @@ async function main(){
         res.send(file);
     });
 
+    /*
+
+    - Hide Views for now due to abuse -
+
     app.all('/api/topViews', async (req, res, next) => {
         const limit = Math.min(100, req.query.limit || 10);
         const offset = Math.max(0, req.query.offset || 0);
@@ -675,7 +712,7 @@ async function main(){
             }
         ])
         .toArray());
-    });
+    });*/
 
     app.all('/api/addView', async (req, res, next) => {
         res.send('ok');
@@ -704,6 +741,10 @@ async function main(){
                     { upsert: true }
                 );
 
+                /*
+
+                - Freeze Views for now due to abuse -
+
                 const userObject = await db
                 .collection('usernames')
                 .findOne({ uuid: req.query.uuid });
@@ -716,6 +757,7 @@ async function main(){
                         { $inc: { total: 1, weekly: 1, daily: 1 } },
                         { upsert: true }
                     );
+                */
             }
         }catch(e){
 

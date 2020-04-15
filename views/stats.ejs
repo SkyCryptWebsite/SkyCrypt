@@ -942,14 +942,23 @@ twitterDescription += '. Click to view more stats!'
                 </div>
             </div>
             <div id="additional_player_stats">
+                <% /*
+
+                - Hide Views for now due to abuse -
+
+                %>
                 <div class="additional-player-stat" data-tippy-content="
                 <span class='stat-name'>Views: </span><span class='stat-value'><%= calculated.views.total.toLocaleString() %></span>
                 <div class='tippy-explanation'>Amount of total unique people who have accessed this profile.</div>
                 <% if('rank' in calculated.views){ %><span class='stat-name'>Rank: </span><span class='stat-value'>#<%= calculated.views.rank.toLocaleString() %></span>
                 <div class='tippy-explanation'>Rank among the most viewed profiles. Updates once per hour.</div><% } %>
                 ">Views: <%= helper.formatNumber(calculated.views.total, true) %></div>
+
+                <% */ %>
+                <% if(calculated.guild){ %><div class="additional-player-stat">Guild: <%= calculated.guild.name %></div><% } %>
                 <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">Plancke</a>
                 <a href="https://skyblock.matdoes.dev/profile/<%= calculated.display_name %>/<%= calculated.profile.cute_name == 'Deleted' ? calculated.profile.profile_id : calculated.profile.cute_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">matdoes.dev</a>
+                <a href="https://auctions.craftlink.xyz/players/<%= calculated.uuid %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">HyAuctions</a>
                 <div id="additional_socials">
                     <% if('DISCORD' in calculated.social){ %><div class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></div><% } %>
                     <% if('TWITTER' in calculated.social){ %><a data-tippy-content="Twitter" href="<%= calculated.social.TWITTER %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-twitter"></a><% } %>
