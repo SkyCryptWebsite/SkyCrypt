@@ -24,6 +24,10 @@ html.no-webp{
     background-image: url(../img/bg.png?v2);
 }
 
+.tippy-popper{
+    pointer-events: all !important;
+}
+
 .tippy-tooltip{
     font-weight: 500;
     background-color: transparent;

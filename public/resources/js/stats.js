@@ -1,14 +1,25 @@
 document.addEventListener('DOMContentLoaded', function(){
     let userAgent = window.navigator.userAgent;
+    let tippyInstance;
 
     if((/(iPad|iPhone|iPod)/gi).test(userAgent) &&
         !(/CriOS/).test(userAgent) &&
         !(/FxiOS/).test(userAgent) &&
         !(/OPiOS/).test(userAgent) &&
         !(/mercury/).test(userAgent))
-        tippy('*[data-tippy-content]', { touch: 'hold'});
+        tippyInstance = tippy('*[data-tippy-content]', { touch: 'hold'});
     else
-        tippy('*[data-tippy-content]');
+        tippyInstance = tippy('*[data-tippy-content]', {
+            trigger: 'mouseenter click',
+            hideOnClick: false,
+            onTrigger(instance, event){
+                if(event.type == 'click')
+                    dimmer.classList.add('show-dimmer');
+            },
+            onClickOutside(instance, event){
+                instance.hide();
+            }
+        });
 
     const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag);
 
@@ -585,6 +596,12 @@ document.addEventListener('DOMContentLoaded', function(){
     dimmer.addEventListener('click', function(e){
         dimmer.classList.remove('show-dimmer');
         enableApiPlayer.classList.remove('show');
+        
+        tippyInstance.forEach(function(instance){
+            instance.hide();
+        });
+
+        tippyInstance.hide();
 
         closeLore();
     });
