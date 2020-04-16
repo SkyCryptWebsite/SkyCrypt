@@ -158,6 +158,9 @@ module.exports = {
 
         const parts = text.split("§");
 
+        if(parts.length == 1)
+            return text;
+
         for(const part of parts){
             const code = part.substring(0, 1);
             const content = part.substring(1);
