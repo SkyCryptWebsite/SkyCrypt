@@ -205,7 +205,7 @@ async function getItems(base64){
 
     // Check backpack contents and add them to the list of items
     for(const [index, item] of items.entries()){
-        if(objectPath.has(item, 'tag.display.Name') && (item.tag.display.Name.endsWith('Backpack') || item.tag.display.Name.endsWith('Itchy New Year Cake Bag'))){
+        if(objectPath.has(item, 'tag.display.Name') && (item.tag.display.Name.endsWith('Backpack') || item.tag.display.Name.endsWith('New Year Cake Bag'))){
 
             let keys = Object.keys(item.tag.ExtraAttributes);
 
