@@ -31,9 +31,13 @@ async function main(){
 
                 let gm;
 
-                if(guild && guild !== null && guild.publiclyListed){
+                if(guild && guild !== null){
+                    for(const member of guild.members)
+                        if(["guild master", "guildmaster"].includes(member.rank.toLowerCase()))
+                            gm = member.uuid;
+
                     for(const member of guild.members){
-                        if(guild.ranks.filter(a => a.name == member.rank).length == 0)
+                        if(!gm && guild.ranks.filter(a => a.name == member.rank).length == 0)
                             gm = member.uuid;
 
                         await db

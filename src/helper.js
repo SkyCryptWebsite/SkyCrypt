@@ -85,7 +85,7 @@ module.exports = {
 
                 let gm;
 
-                if(guild && guild !== null && guild.publiclyListed){
+                if(guild && guild !== null){
                     for(const member of guild.members)
                         if(["guild master", "guildmaster"].includes(member.rank.toLowerCase()))
                             gm = member.uuid;
