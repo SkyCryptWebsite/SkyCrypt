@@ -83,8 +83,17 @@ module.exports = {
 
                 const { guild } = guildResponse.data;
 
-                if(guild && guild !== null){
+                let gm;
+
+                if(guild && guild !== null && guild.publiclyListed){
+                    for(const member of guild.members)
+                        if(["guild master", "guildmaster"].includes(member.rank.toLowerCase()))
+                            gm = member.uuid;
+
                     for(const member of guild.members){
+                        if(!gm && guild.ranks.filter(a => a.name.toLowerCase() == member.rank.toLowerCase()).length == 0)
+                            gm = member.uuid;
+
                         await db
                         .collection('guildMembers')
                         .updateOne(
@@ -98,7 +107,7 @@ module.exports = {
                     .collection('guilds')
                     .findOneAndUpdate(
                         { gid: guild._id },
-                        { $set: { name: guild.name, tag: guild.tag, exp: guild.exp, created: guild.created, gm: guild.members[0].uuid, members: guild.members.length }},
+                        { $set: { name: guild.name, tag: guild.tag, exp: guild.exp, created: guild.created, gm, members: guild.members.length }},
                         { returnOriginal: false, upsert: true }
                     );
 
@@ -140,6 +149,57 @@ module.exports = {
         }
 
         return level;
+    },
+
+    // Convert Minecraft lore to HTML
+    renderLore: text => {
+        let output = "";
+        let spansOpened = 0;
+
+        const parts = text.split("§");
+
+        for(const part of parts){
+            const code = part.substring(0, 1);
+            const content = part.substring(1);
+
+            if(code in constants.minecraft_formatting){
+                const format = constants.minecraft_formatting[code];
+
+                if(format.type == 'color'){
+                    for(; spansOpened > 0; spansOpened--)
+                        output += "</span>";
+
+                    output += `<span style='${format.css}'>${content}`;
+
+                    spansOpened++;
+                }else if(format.type == 'format'){
+                    output += `<span style='${format.css}'>${content}`;
+
+                    spansOpened++;
+                }else if(format.type == 'reset'){
+                    for(; spansOpened > 0; spansOpened--)
+                        output += "</span>";
+
+                    output += content;
+                }
+            }
+        }
+
+        for(; spansOpened > 0; spansOpened--)
+            output += "</span>";
+
+        return output;
+    },
+
+    // Get Minecraft lore without the color and formatting codes
+    getRawLore: text => {
+        let output = "";
+        let parts = text.split("§");
+
+        for(const [index, part] of parts.entries())
+            output += part.substr(Math.min(index, 1));
+
+        return output;
     },
 
     capitalizeFirstLetter: word => {

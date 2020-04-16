@@ -249,7 +249,7 @@ async function getItems(base64){
 
         // Set raw display name without color and formatting codes
         if(objectPath.has(item, 'tag.display.Name'))
-            item.display_name = module.exports.getRawLore(item.tag.display.Name);
+            item.display_name = helper.getRawLore(item.tag.display.Name);
 
         if(objectPath.has(item, 'display_name'))
             if(item.display_name == 'Water Bottle')
@@ -289,7 +289,7 @@ async function getItems(base64){
                 if(index == 0 && line == '')
                     continue;
 
-                item.lore += module.exports.renderLore(line);
+                item.lore += helper.renderLore(line);
 
                 if(index + 1 < lore_raw.length)
                     item.lore += '<br>';
@@ -309,7 +309,7 @@ async function getItems(base64){
 
                 if(anvil_uses > 0 && lore_raw){
                     hasAnvilUses = true;
-                    item.lore += "<br><br>" + module.exports.renderLore(`§7Anvil Uses: §c${anvil_uses}`);
+                    item.lore += "<br><br>" + helper.renderLore(`§7Anvil Uses: §c${anvil_uses}`);
                 }
             }
 
@@ -324,11 +324,11 @@ async function getItems(base64){
                 else
                     obtainmentDate = moment(timestamp, "M/D/YY h:mm A")
 
-                item.lore += "<br>" + module.exports.renderLore(`§7Obtained: §c${obtainmentDate.format("D MMM YYYY")}`);
+                item.lore += "<br>" + helper.renderLore(`§7Obtained: §c${obtainmentDate.format("D MMM YYYY")}`);
             }
         }
 
-        let lore = lore_raw ? lore_raw.map(a => a = module.exports.getRawLore(a)) : [];
+        let lore = lore_raw ? lore_raw.map(a => a = helper.getRawLore(a)) : [];
 
         let rarity, item_type;
 
@@ -554,7 +554,7 @@ module.exports = {
             rankName = player.rank;
 
         if('prefix' in player)
-            rankName = module.exports.getRawLore(player.prefix).replace(/\[|\]/g, '');
+            rankName = helper.getRawLore(player.prefix).replace(/\[|\]/g, '');
 
         if(rankName in constants.ranks)
             rank = constants.ranks[rankName];
@@ -596,57 +596,6 @@ module.exports = {
             output += `<div class="rank-plus" style="background-color: ${plusColor}"><div class="rank-plus-before" style="border-color: transparent transparent ${plusColor} transparent;"></div>${plusText}</div>`;
 
         output += `</div>`;
-
-        return output;
-    },
-
-    // Convert Minecraft lore to HTML
-    renderLore: text => {
-        let output = "";
-        let spansOpened = 0;
-
-        const parts = text.split("§");
-
-        for(const part of parts){
-            const code = part.substring(0, 1);
-            const content = part.substring(1);
-
-            if(code in constants.minecraft_formatting){
-                const format = constants.minecraft_formatting[code];
-
-                if(format.type == 'color'){
-                    for(; spansOpened > 0; spansOpened--)
-                        output += "</span>";
-
-                    output += `<span style="${format.css}">${content}`;
-
-                    spansOpened++;
-                }else if(format.type == 'format'){
-                    output += `<span style="${format.css}">${content}`;
-
-                    spansOpened++;
-                }else if(format.type == 'reset'){
-                    for(; spansOpened > 0; spansOpened--)
-                        output += "</span>";
-
-                    output += content;
-                }
-            }
-        }
-
-        for(; spansOpened > 0; spansOpened--)
-            output += "</span>";
-
-        return output;
-    },
-
-    // Get Minecraft lore without the color and formatting codes
-    getRawLore: text => {
-        let output = "";
-        let parts = text.split("§");
-
-        for(const [index, part] of parts.entries())
-            output += part.substr(Math.min(index, 1));
 
         return output;
     },
@@ -1380,7 +1329,7 @@ module.exports = {
             pet.lore = '';
 
             lore.forEach((line, index) => {
-                pet.lore += module.exports.renderLore(line);
+                pet.lore += helper.renderLore(line);
 
                 if(index + 1 <= lore.length)
                     pet.lore += '<br>';

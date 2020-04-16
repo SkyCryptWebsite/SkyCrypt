@@ -29,8 +29,13 @@ async function main(){
 
                 const { guild } = guildResponse.data;
 
-                if(guild && guild !== null){
+                let gm;
+
+                if(guild && guild !== null && guild.publiclyListed){
                     for(const member of guild.members){
+                        if(guild.ranks.filter(a => a.name == member.rank).length == 0)
+                            gm = member.uuid;
+
                         await db
                         .collection('guildMembers')
                         .updateOne(
@@ -44,7 +49,7 @@ async function main(){
                     .collection('guilds')
                     .updateOne(
                         { gid: guild._id },
-                        { $set: { name: guild.name, tag: guild.tag, exp: guild.exp, created: guild.created, gm: guild.members[0].uuid, members: guild.members.length }},
+                        { $set: { name: guild.name, tag: guild.tag, exp: guild.exp, created: guild.created, gm, members: guild.members.length }},
                         { upsert: true }
                     );
                 }

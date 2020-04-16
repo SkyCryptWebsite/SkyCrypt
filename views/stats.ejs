@@ -958,7 +958,7 @@ twitterDescription += '. Click to view more stats!'
                 <% if(calculated.guild){ %><div class="additional-player-stat" data-tippy-content="
                 <% if(calculated.guild.rank){ %><span class='stat-name'>Rank: </span><span class='stat-value'><%= calculated.guild.rank %></span><br><br><% } %>
                 <span class='stat-name'>Guild Master: </span><a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %></a><br>
-                <% if(calculated.guild.tag){ %><span class='stat-name'>Tag: </span><span class='stat-value'><%= calculated.guild.tag %></span><br><% } %>
+                <% if(calculated.guild.tag){ %><span class='stat-name'>Tag: </span><%- helper.renderLore(calculated.guild.tag) %><br><% } %>
                 <% if(calculated.guild.members){ %><span class='stat-name'>Members: </span><span class='stat-value'><%= calculated.guild.members %></span><br><% } %>
                 <% if(calculated.guild.level){ %><span class='stat-name'>Level: </span><span class='stat-value'><%= calculated.guild.level %></span><br><% } %>
                 ">Guild: <%= calculated.guild.name %></div><% } %>
