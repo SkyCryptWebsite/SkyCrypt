@@ -596,12 +596,10 @@ document.addEventListener('DOMContentLoaded', function(){
     dimmer.addEventListener('click', function(e){
         dimmer.classList.remove('show-dimmer');
         enableApiPlayer.classList.remove('show');
-        
+
         tippyInstance.forEach(function(instance){
             instance.hide();
         });
-
-        tippyInstance.hide();
 
         closeLore();
     });
