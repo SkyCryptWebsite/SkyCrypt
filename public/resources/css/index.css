@@ -28,14 +28,11 @@ a.no-underline{
     text-decoration: none;
 }
 
-.tippy-popper{
-    pointer-events: all !important;
-}
-
 .tippy-tooltip{
     font-weight: 500;
     background-color: transparent;
     border-radius: 0;
+    user-select: text;
 }
 
 .tippy-content .stat-name{

@@ -1284,10 +1284,11 @@ module.exports = {
             pet.rarity = pet.tier.toLowerCase();
             pet.level = getPetLevel(pet);
 
-            const petData = constants.pet_data[pet.type];
-
-            if(!petData)
-                continue;
+            const petData = constants.pet_data[pet.type] || {
+                type: '???',
+                emoji: '❓',
+                head: '/head/bc8ea1f51f253ff5142ca11ae45193a4ad8c3ab5e9c6eec8ba7a4fcb7bac40'
+            };
 
             pet.texture_path = petData.head;
 
