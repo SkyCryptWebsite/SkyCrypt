@@ -107,7 +107,6 @@
             let reachedEnd = false;
 
             window.addEventListener('keydown', function(e){
-                console.log(String.fromCharCode(e.keyCode));
                 if(/[a-zA-Z0-9-_ ]/.test(String.fromCharCode(e.keyCode)))
                     if(smallUserSearch)
                         inputSearchUser.focus();
