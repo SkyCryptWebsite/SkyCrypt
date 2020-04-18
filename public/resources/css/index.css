@@ -1664,6 +1664,57 @@ a.additional-player-stat:hover{
     font-weight: 600;
 }
 
+.external-app{
+    display: block;
+    text-decoration: none;
+    padding: 15px;
+    padding-left: 70px;
+    position: relative;
+    max-width: 380px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    opacity: 0.9;
+    transition: opacity .1s;
+}
+
+.external-app:hover{
+    opacity: 1;
+}
+
+.external-app-name{
+    font-weight: 600;
+    color: #F94EA3;
+}
+
+.external-app-name .grey-text{
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+}
+
+.external-app-description{
+    margin-top: 5px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.9);
+}
+
+.external-app-icon{
+    width: 70px;
+    height: 100%;
+    background-size: 48px auto;
+    background-position: center center;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+.icon-google-sheets{
+    background-image: url(/resources/img/icons/google-sheets.png);
+}
+
 .narrow-info-container{
     position: relative;
     min-width: 330px;
@@ -2372,6 +2423,11 @@ html.no-webp #error_box_wrapper{
 
     .skill {
         width: calc((1120px - 410px) / 2 - 60px);
+    }
+
+    .external-app{
+        margin-left: -10px;
+        margin-right: -10px;
     }
 
     #nav_bar.nav-bar-stickied{
