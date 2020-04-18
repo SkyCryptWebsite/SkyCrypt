@@ -37,6 +37,7 @@
                 <p>Show SkyBlock stats for</p>
                 <input <% if(player){ %> value="<%= player %>" <% }%> id="inp_enter_username" type="text" placeholder="Enter username">
                 <a href="<% if(player){ %>/stats/<%= player %><% }%>" id="goto_target_username">Show me</a>
+                <p>or take me to a <a href="/random/stats">random profile</a>.</p>
             </div>
         </div>
         <div id="error_box_wrapper" <% if(error){ %>class="show-error"<% } %>>

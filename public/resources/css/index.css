@@ -2133,12 +2133,17 @@ a.additional-player-stat:hover{
     margin: 0 auto;
     margin-top: calc(50vh - 130px);
     width: 700px;
-    height: 260px;
+    height: 300px;
     background: url(../img/bg_blur.webp?v2) no-repeat center center fixed;
     background-size: cover;
     border-radius: 10px;
     overflow: hidden;
     background-color: rgb(10,10,10);
+}
+
+#enter_player_box_wrapper p:last-child{
+    font-size: 16px;
+    color: rgba(255,255,255,0.8);
 }
 
 html.no-webp #enter_player_box_wrapper{
@@ -2795,12 +2800,16 @@ html.no-webp #error_box_wrapper{
     }
 
     #enter_player_box_wrapper{
-        height: 210px;
+        height: 235px;
         font-size: 12px;
     }
 
     #enter_player_box p{
         font-size: 20px;
+    }
+
+    #enter_player_box p:last-child{
+        font-size: 14px;
     }
 
     #enter_player_box input{

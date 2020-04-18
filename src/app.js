@@ -796,6 +796,18 @@ async function main(){
         }
     });
 
+    app.all('/random/stats', async (req, res, next) => {
+        const profile = await db
+        .collection('profiles')
+        .aggregate([{
+            $sample: { size: 1 }
+        }]).next();
+
+        console.log(profile);
+
+        res.redirect(`/stats/${profile.uuid}/{profile.profile_id}`);
+    });
+
     app.all('/:player/:profile?', async (req, res, next) => {
         res.redirect(`/stats${req.path}`);
     });
