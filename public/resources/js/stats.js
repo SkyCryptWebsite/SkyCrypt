@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function(){
     tippyInstance = tippy('*[data-tippy-content]', {
         trigger: 'mouseenter click',
         interactive: true,
+        appendTo: () => document.body,
         onTrigger(instance, event){
             if(event.type == 'click')
                 dimmer.classList.add('show-dimmer');
