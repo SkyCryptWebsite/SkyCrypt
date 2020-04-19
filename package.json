@@ -28,6 +28,7 @@
     "@tillhub/tableify": "^1.1.1",
     "axios": "^0.19.1",
     "axios-debug-log": "^0.6.2",
+    "axios-retry": "^3.1.4",
     "body-parser": "^1.19.0",
     "canvas": "^2.6.0",
     "connect-mongo": "^3.2.0",
