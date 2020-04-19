@@ -223,6 +223,8 @@ module.exports = {
     },
 
     getPrice: orderSummary => {
+        orderSummary = orderSummary.slice(0, Math.ceil(orderSummary.length / 2));
+
         const orders = [];
 
         const totalVolume = orderSummary.map(a => a.amount).reduce((a, b) => a + b, 0);
