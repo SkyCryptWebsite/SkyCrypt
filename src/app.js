@@ -12,6 +12,7 @@ async function main(){
     const crypto = require('crypto');
 
     const axios = require('axios');
+    const axiosRetry = require('axios-retry');
     require('axios-debug-log')
 
     const fs = require('fs-extra');
@@ -49,6 +50,8 @@ async function main(){
     const Hypixel = axios.create({
         baseURL: 'https://api.hypixel.net/'
     });
+
+    axiosRetry(Hypixel, { retries: 3, retryDelay: retryCount => retryCount * 750 });
 
     const app = express();
     const port = 32464;
@@ -801,11 +804,10 @@ async function main(){
     app.all('/random/stats', async (req, res, next) => {
         const profile = await db
         .collection('profiles')
-        .aggregate([{
-            $sample: { size: 1 }
-        }]).next();
-
-        console.log(profile);
+        .aggregate([
+            { $match: { api: true } },
+            { $sample: { size: 1 } }
+        ]).next();
 
         res.redirect(`/stats/${profile.uuid}/{profile.profile_id}`);
     });

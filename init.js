@@ -43,6 +43,13 @@ async function main(){
     );
 
     await db
+    .collection('profiles')
+    .createIndex(
+        { api: 1 },
+        { partialFilterExpression: { api: true } }
+    );
+
+    await db
     .collection('usernames')
     .createIndex(
         { username: 'text' }
