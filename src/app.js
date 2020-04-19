@@ -395,16 +395,6 @@ async function main(){
 
             let userProfile = profile.members[data.player.uuid];
 
-            if(!activeProfile || userProfile.last_save > activeProfile.last_save){
-                await db
-                .collection('profiles')
-                .replaceOne(
-                    { uuid: hypixelPlayer.uuid },
-                    { uuid: hypixelPlayer.uuid, username: hypixelPlayer.displayname, profile_id: profileId, last_save: userProfile.last_save },
-                    { upsert: true }
-                );
-            }
-
             for(const member in profile.members)
                 if(!('last_save' in profile.members[member]))
                     delete profile.members[member];
@@ -606,6 +596,18 @@ async function main(){
             if(ownViews == 0)
                 calculated.views.total++;
             */
+
+            const apisEnabled = !('no_inventory' in items) && 'levels' in calculated && Object.keys(calculated.social).length > 0;
+
+            if(!activeProfile || userProfile.last_save >= activeProfile.last_save){
+                await db
+                .collection('profiles')
+                .updateOne(
+                    { uuid: hypixelPlayer.uuid },
+                    { $set: { username: hypixelPlayer.displayname, profile_id: profileId, last_save: userProfile.last_save, api: apisEnabled }},
+                    { upsert: true }
+                );
+            }
 
             res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
         }catch(e){
