@@ -135,6 +135,13 @@ async function main(){
         ]
     });
 
+    await db
+    .collection('bazaar')
+    .createIndex(
+        { productId: 1 },
+        { unique: true }
+    );
+
     mongo.close();
 }
 

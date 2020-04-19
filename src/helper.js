@@ -216,13 +216,47 @@ module.exports = {
             split[i] = split[i].charAt(0).toUpperCase() + split[i].substring(1);
 
         return split.join(' ');
-   },
+    },
 
-   aOrAn: string => {
+    aOrAn: string => {
        return ['a', 'e', 'i', 'o', 'u'].includes(string.charAt(0).toLowerCase()) ? 'an': 'a';
-   },
+    },
 
-   formatNumber: (number, floor, rounding = 10) => {
+    getPrice: orderSummary => {
+        const orders = [];
+
+        const totalVolume = orderSummary.map(a => a.amount).reduce((a, b) => a + b, 0);
+        const volumeTop2 = Math.ceil(totalVolume * 0.02);
+
+        let volume = 0;
+
+        for(const order of orderSummary){
+            const cappedAmount = Math.min(order.amount, volumeTop2 - volume);
+
+            orders.push([
+                order.pricePerUnit,
+                cappedAmount
+            ]);
+
+            volume += cappedAmount;
+
+            if(volume >= volumeTop2)
+                break;
+        }
+
+        const totalWeight = orders.reduce((sum, value) => sum + value[1], 0);
+
+        return orders.reduce((mean, value) => mean + value[0] * value[1] / totalWeight, 0);
+    },
+
+    getPrices: product => {
+        return {
+            buyPrice: module.exports.getPrice(product.buy_summary),
+            sellPrice: module.exports.getPrice(product.sell_summary),
+        };
+    },
+
+    formatNumber: (number, floor, rounding = 10) => {
         if(number < 1000)
             return Math.floor(number);
         else if(number < 10000)

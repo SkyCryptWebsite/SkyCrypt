@@ -6,11 +6,19 @@ const tableify = require('@tillhub/tableify');
 const _ = require('lodash');
 const helper = require('./helper');
 const lib = require('./lib');
+const constants = require('./constants');
 const objectPath = require("object-path");
 
 const Hypixel = axios.create({
     baseURL: 'https://api.hypixel.net/'
 });
+
+function handleError(e, res){
+    console.error(e);
+
+    res.set('Content-Type', 'text/plain');
+    res.status(500).send('Something went wrong');
+}
 
 module.exports = (app, db) => {
     app.all('/api/:player/profiles', async (req, res) => {
@@ -38,10 +46,7 @@ module.exports = (app, db) => {
                 res.json(profiles);
             }
         }catch(e){
-            console.error(e);
-
-            res.set('Content-Type', 'text/plain');
-            res.status(500).send('Something went wrong');
+            handleError(e, res);
         }
     });
 
@@ -69,10 +74,7 @@ module.exports = (app, db) => {
             else
                 res.json(pets);
         }catch(e){
-            console.error(e);
-
-            res.set('Content-Type', 'text/plain');
-            res.status(500).send('Something went wrong');
+            console.error(e, res);
         }
     });
 
@@ -108,10 +110,7 @@ module.exports = (app, db) => {
             else
                 res.json(minions);
         }catch(e){
-            console.error(e);
-
-            res.set('Content-Type', 'text/plain');
-            res.status(500).send('Something went wrong');
+            handleError(e, res);
         }
     });
 
@@ -139,10 +138,7 @@ module.exports = (app, db) => {
                 res.json(talismans);
             }
         }catch(e){
-            console.error(e);
-
-            res.set('Content-Type', 'text/plain');
-            res.status(500).send('Something went wrong');
+            handleError(e, res);
         }
     });
 
@@ -175,10 +171,35 @@ module.exports = (app, db) => {
                 res.send(tableify(cakes, { showHeaders: false }));
             }
         }catch(e){
-            console.error(e);
+            handleError(e, res);
+        }
+    });
 
-            res.set('Content-Type', 'text/plain');
-            res.status(500).send('Something went wrong');
+    app.all('/api/bazaar', async (req, res) => {
+        try{
+            const output = [];
+
+            const products = await db
+            .collection('bazaar')
+            .find()
+            .toArray();
+
+            for(const product of products){
+                let productName = product.productId.replace(/(_+)/g, ' ');
+                const collections = constants.collection_data.filter(a => a.skyblockId == product.productId);
+
+                if(collections.length > 0)
+                    productName = collections[0].name;
+
+                output.push([
+                    helper.titleCase(productName),
+                    +((product.buyPrice + product.sellPrice) / 2).toFixed(3)
+                ]);
+            }
+
+            res.send(tableify(output, { showHeaders: false }));
+        }catch(e){
+            handleError(e, res);
         }
     });
 }
