@@ -191,13 +191,17 @@ module.exports = (app, db) => {
                 if(collections.length > 0)
                     productName = collections[0].name;
 
-                output.push([
-                    helper.titleCase(productName),
-                    +((product.buyPrice + product.sellPrice) / 2).toFixed(3)
-                ]);
+                output.push({
+                    name: helper.titleCase(productName),
+                    price: (product.buyPrice + product.sellPrice) / 2
+                });
             }
 
-            res.send(tableify(output, { showHeaders: false }));
+            if('html' in req.query){
+                res.send(tableify(output.map(a => [ a.name, +a.price.toFixed(3) ]), { showHeaders: false }));
+            }else{
+                res.json(output);
+            }
         }catch(e){
             handleError(e, res);
         }
