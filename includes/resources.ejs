@@ -49,7 +49,7 @@
                     targetUsername.value = playerName;
 
                 if(playerName.trim().length == 0)
-                    return;
+                    document.querySelector('#btn_search_user').href = '/random/stats';
 
                 if(e.keyCode == 13)
                     document.location = '/stats/' + playerName;
