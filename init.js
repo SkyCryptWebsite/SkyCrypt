@@ -104,7 +104,7 @@ async function main(){
     await db
     .collection('guildMembers')
     .createIndex(
-        { gid: 1, uuid: 1 },
+        { uuid: 1 },
         { unique: true }
     );
 
