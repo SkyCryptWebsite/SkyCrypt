@@ -321,7 +321,7 @@ async function getItems(base64){
 
                 if(!isNaN(timestamp))
                     obtainmentDate = moment(parseInt(timestamp));
-                else if(obtainmentDate.includes("AM") || obtainmentDate.includeS("PM"))
+                else if(timestamp.includes("AM") || timestamp.includeS("PM"))
                     obtainmentDate = moment(timestamp, "M/D/YY h:mm A");
                 else
                     obtainmentDate = moment(timestamp, "M/D/YY HH:mm");
