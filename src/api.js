@@ -214,7 +214,10 @@ module.exports = (app, db) => {
                     productName = collections[0].name;
 
                 output.push({
+                    id: product.productId,
                     name: helper.titleCase(productName),
+                    buyPrice: product.buyPrice,
+                    sellPrice: product.sellPrice,
                     price: (product.buyPrice + product.sellPrice) / 2
                 });
             }
