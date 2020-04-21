@@ -319,7 +319,7 @@ module.exports = {
         };
     },
 
-    fetchMembers: async (profileId, db) => {
+    fetchMembers: async (profileId, db, returnUuid = false) => {
         let output = [];
 
         const members = await db
@@ -347,9 +347,15 @@ module.exports = {
                 );
             }
 
-            output = profileMembers.map(a => a.display_name);
+            if(returnUuid)
+                output = profileMembers;
+            else
+                output = profileMembers.map(a => a.display_name);
         }else{
-            output = members.map(a => a.username);
+            if(returnUuid)
+                output = members.map(a => { return { uuid: a.uuid, display_name: a.username } });
+            else
+                output = members.map(a => a.username);
         }
 
         return output;

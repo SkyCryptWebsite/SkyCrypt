@@ -142,6 +142,28 @@ module.exports = (app, db) => {
         }
     });
 
+    app.all('/api/:player/:profile/collections', async (req, res) => {
+        try{
+            const { playerResponse, profileResponse } = await helper.getProfile(req);
+
+            const profile = profileResponse.data.profile;
+            const userProfile = profile.members[playerResponse.data.player.uuid];
+            const members = await helper.fetchMembers(profile.profile_id, db, true);
+            const collections = await lib.getCollections(playerResponse.data.player.uuid, profile, members);
+
+            for(const collection in collections)
+                collections[collection].name = constants.collection_data.filter(a => a.skyblockId == collection)[0].name;
+
+            if('html' in req.query){
+                res.send(tableify(Object.keys(collections).map(a => [ a, collections[a].name, collections[a].tier, collections[a].amount, collections[a].totalAmount ]), { showHeaders: false }));
+            }else{
+                res.json(collections);
+            }
+        }catch(e){
+            handleError(e, res);
+        }
+    });
+
     app.all('/api/:player/:profile/cakebag', async (req, res) => {
         try{
             const { playerResponse, profileResponse } = await helper.getProfile(req);
