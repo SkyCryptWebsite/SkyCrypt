@@ -199,6 +199,7 @@ async function main(){
             const { data } = response;
 
             if(!data.success){
+                res.status(500);
                 res.render('index', {
                     error: 'Request to Hypixel API failed. Please try again!',
                     player: playerUsername,
@@ -211,6 +212,7 @@ async function main(){
             }
 
             if(data.player == null){
+                res.status(404);
                 res.render('index', {
                     error: 'Player not found.',
                     player: playerUsername,
@@ -223,6 +225,7 @@ async function main(){
             }
 
             if(!objectPath.has(data, 'player.stats')){
+                res.status(500);
                 res.render('index', {
                     error: 'No data returned by Hypixel API, please try again!',
                     player: playerUsername,
@@ -235,6 +238,7 @@ async function main(){
             }
 
             if(!('SkyBlock' in data.player.stats)){
+                res.status(404);
                 res.render('index', {
                     error: 'Player has not played SkyBlock yet.',
                     player: playerUsername,
@@ -266,6 +270,7 @@ async function main(){
                 }});
 
                 if(default_profile.data.profile == null){
+                    res.status(404);
                     res.render('index', {
                         error: 'Player has no SkyBlock profiles.',
                         player: playerUsername,
@@ -338,6 +343,7 @@ async function main(){
                     delete skyBlockProfiles[profileIds[index]];
 
                     if(req.params.profile){
+                        res.status(404);
                         res.render('index', {
                             error: 'Uh oh, this SkyBlock profile has no players.',
                             player: playerUsername,
@@ -356,6 +362,7 @@ async function main(){
             }
 
             if(profiles.length == 0){
+                res.status(500);
                 res.render('index', {
                     error: 'No data returned by Hypixel API, please try again!',
                     player: playerUsername,
@@ -385,6 +392,7 @@ async function main(){
             });
 
             if(!profile){
+                res.status(404);
                 res.render('index', {
                     error: 'User not found in selected profile. This is probably due to a declined co-op invite.',
                     player: playerUsername,
