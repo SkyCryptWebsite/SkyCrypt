@@ -320,9 +320,11 @@ async function getItems(base64){
                 let obtainmentDate;
 
                 if(!isNaN(timestamp))
-                    obtainmentDate = moment(parseInt(timestamp))
+                    obtainmentDate = moment(parseInt(timestamp));
+                else if(obtainmentDate.includes("AM") || obtainmentDate.includeS("PM"))
+                    obtainmentDate = moment(timestamp, "M/D/YY h:mm A");
                 else
-                    obtainmentDate = moment(timestamp, "M/D/YY h:mm A")
+                    obtainmentDate = moment(timestamp, "M/D/YY HH:mm");
 
                 item.lore += "<br>" + helper.renderLore(`§7Obtained: §c${obtainmentDate.format("D MMM YYYY")}`);
             }
