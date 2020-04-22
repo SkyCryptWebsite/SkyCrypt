@@ -2,12 +2,17 @@ const fs = require('fs-extra');
 const path = require('path');
 const mm = require('micromatch');
 const objectPath = require('object-path');
+const util = require('util');
+const apng2gif = require("apng2gif-bin");
 const escapeRegExp = require('lodash.escaperegexp');
 const sharp = require('sharp');
 const { createCanvas, loadImage } = require('canvas');
 const mcData = require("minecraft-data")("1.8.9");
 const UPNG = require('upng-js');
 const RJSON = require('relaxed-json');
+
+const child_process = require("child_process");
+const execFile = util.promisify(child_process.execFile);
 
 const NORMALIZED_SIZE = 128;
 
@@ -347,6 +352,7 @@ async function init(){
                     const apng = UPNG.encode(pngFrames, NORMALIZED_SIZE, NORMALIZED_SIZE, 0, pngDelays);
 
                     await fs.writeFile(textureFile, Buffer.from(apng));
+                    await execFile(apng2gif, [textureFile, textureFile.replace('.png', '.gif')]);
                 }
             }
 
