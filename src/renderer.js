@@ -289,7 +289,7 @@ module.exports = {
             objectPath.set(item, "tag.display.Name", item.name);
 
         if('texture' in item)
-            return await renderHead(`http://textures.minecraft.net/texture/${item.texture}`, 6.4);
+            return { mime: 'image/png', image: await module.exports.renderHead(`http://textures.minecraft.net/texture/${item.texture}`, 6.4) };
 
         const outputTexture = { mime: 'image/png' };
 
