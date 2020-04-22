@@ -4,7 +4,11 @@ Hat layers, transparency and shading added by me
 */
 
 const { createCanvas, loadImage } = require('canvas');
+const css = require('css');
 const path = require('path');
+const customResources = require('./custom-resources');
+const objectPath = require('object-path');
+const fs = require('fs-extra');
 
 const skew_a = 26 / 45;
 const skew_b = skew_a * 2;
@@ -73,6 +77,8 @@ const TALISMANS = [
     "http://textures.minecraft.net/texture/651eb16f22dd7505be5dae06671803633a5abf8b2beeb5c60548670df0e59214",
     "http://textures.minecraft.net/texture/317b51e086f201448a4b45b0b91e97faf4d1739071480be6d5cab0a054512164"
 ];
+
+let itemsSheet, itemsCss;
 
 module.exports = {
     renderHead: async (url, scale) => {
@@ -230,8 +236,8 @@ module.exports = {
 
         ctx.imageSmoothingEnabled = false;
 
-        let armorBase = await loadImage(path.resolve(__dirname, '..', 'public', 'resources', 'img', 'textures', 'item', `leather_${type}.png`));
-        let armorOverlay = await loadImage(path.resolve(__dirname, '..', 'public', 'resources', 'img', 'textures', 'item', `leather_${type}_overlay.png`));
+        const armorBase = await loadImage(path.resolve(__dirname, '..', 'public', 'resources', 'img', 'textures', 'item', `leather_${type}.png`));
+        const armorOverlay = await loadImage(path.resolve(__dirname, '..', 'public', 'resources', 'img', 'textures', 'item', `leather_${type}_overlay.png`));
 
         ctx.drawImage(armorBase, 0, 0, 16, 16, 0, 0, canvas.width, canvas.height);
 
@@ -252,5 +258,63 @@ module.exports = {
         ctx.drawImage(armorOverlay, 0, 0, 16, 16, 0, 0, canvas.width, canvas.height);
 
         return await canvas.toBuffer('image/png');
+    },
+
+    renderItem: async (skyblockId, query, db) => {
+        let item = { Damage: 0, id: -1 };
+
+        if(skyblockId)
+            item = Object.assign(item, await db
+            .collection('items')
+            .findOne({ id: skyblockId }));
+
+        if(query.id)
+            item.id = query.id;
+
+        if(query.damage)
+            item.damage = query.damage;
+
+        if('damage' in item){
+            item.Damage = item.damage;
+            delete item.damage;
+        }
+
+        if('item_id' in item)
+            item.id = item.item_id;
+
+        if('name' in item)
+            objectPath.set(item, "tag.display.Name", item.name);
+
+        if('texture' in item)
+            return await renderHead(`http://textures.minecraft.net/texture/${item.texture}`, 6.4);
+
+        const outputTexture = { mime: 'image/png' };
+
+        for(const rule of itemsCss.stylesheet.rules){
+            if(!rule.selectors.includes(`.icon-${item.id}_${item.Damage}`))
+                continue;
+
+            const coords = rule.declarations[0].value.split(" ").map(a => Math.abs(parseInt(a)));
+
+            outputTexture.image = await getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer('image/png');
+        }
+
+        const customTexture = await customResources.getTexture(item);
+
+        if(customTexture){
+            if(customTexture.animated){
+                customTexture.path = customTexture.path.replace('.png', '.gif');
+                outputTexture.mime = 'image/gif';
+            }
+
+            outputTexture.image = await fs.readFile(path.resolve(__dirname, '..', 'public', customTexture.path));
+        }
+
+        return outputTexture;
+    },
+
+    init: async () => {
+        itemsSheet = await loadImage(path.resolve(__dirname, '..', 'public', 'resources', 'img', 'inventory', `items.png`));
+        itemsCss = css.parse(await fs.readFile(path.resolve(__dirname, '..', 'public', 'resources', 'css', `inventory.css`), 'utf8'));
     }
 }

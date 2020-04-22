@@ -20,6 +20,9 @@ async function main(){
     const path = require('path');
     const util = require('util');
     const renderer = require('./renderer');
+
+    await renderer.init();
+
     const _ = require('lodash');
     const objectPath = require('object-path');
     const moment = require('moment-timezone');
@@ -657,6 +660,21 @@ async function main(){
         res.send(file);
     });
 
+    app.all('/item/:skyblockId?', async (req, res) => {
+        const skyblockId = req.params.skyblockId || null;
+        const item = await renderer.renderItem(skyblockId, req.query, db);
+
+        if(item.error){
+            res.status(500);
+            res.send(item.error);
+            return;
+        }
+
+        res.setHeader('Cache-Control', `public, max-age=${CACHE_DURATION}`);
+        res.contentType(item.mime);
+        res.send(item.image);
+    });
+
     app.all('/leather/:type/:color', async (req, res) => {
         let file;
 
@@ -836,7 +854,7 @@ async function main(){
 }
 
 if(cluster.isMaster){
-    const cpus = require('os').cpus().length;
+    const cpus = Math.min(4, require('os').cpus().length);
 
     for(let i = 0; i < cpus; i += 1){
         cluster.fork();
