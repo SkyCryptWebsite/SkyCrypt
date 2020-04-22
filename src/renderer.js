@@ -264,6 +264,9 @@ module.exports = {
         let item = { Damage: 0, id: -1 };
 
         if(skyblockId)
+            skyblockId = skyblockId.replace(".gif", "");
+
+        if(skyblockId)
             item = Object.assign(item, await db
             .collection('items')
             .findOne({ id: skyblockId }));
