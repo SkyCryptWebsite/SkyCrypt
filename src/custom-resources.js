@@ -369,7 +369,7 @@ readyPromise.then(() => {
 
 module.exports = {
     ready: false,
-    getTexture: async item => {
+    getTexture: async (item, ignoreId = false) => {
         if(!module.exports.ready)
             await readyPromise;
 
@@ -380,10 +380,10 @@ module.exports = {
                 outputTexture.weight = -9999;
 
             for(const texture of pack.textures){
-                if(texture.id != item.id)
+                if(ignoreId === false && texture.id != item.id)
                     continue;
 
-                if('damage' in texture && texture.damage != item.Damage)
+                if(ignoreId === false && 'damage' in texture && texture.damage != item.Damage)
                     continue;
 
                 let matches = 0;

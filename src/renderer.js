@@ -274,6 +274,9 @@ module.exports = {
         if(query.damage)
             item.damage = query.damage;
 
+        if(query.name)
+            item.name = query.name;
+
         if('damage' in item){
             item.Damage = item.damage;
             delete item.damage;
@@ -299,9 +302,9 @@ module.exports = {
             outputTexture.image = await getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer('image/png');
         }
 
-        const customTexture = await customResources.getTexture(item);
+        const customTexture = await customResources.getTexture(item, true);
 
-        if(customTexture){
+        if(customTexture && 'name' in item){
             if(customTexture.animated){
                 customTexture.path = customTexture.path.replace('.png', '.gif');
                 outputTexture.mime = 'image/gif';
@@ -309,6 +312,9 @@ module.exports = {
 
             outputTexture.image = await fs.readFile(path.resolve(__dirname, '..', 'public', customTexture.path));
         }
+
+        if(!('image' in outputTexture))
+            outputTexture.error = 'item not found';
 
         return outputTexture;
     },
