@@ -115,6 +115,19 @@ async function main(){
         { unique: true }
     );
 
+    await db
+    .collection('items')
+    .createIndex(
+        { id: 1 },
+        { unique: true }
+    );
+
+    await db
+    .collection('items')
+    .createIndex(
+        { name: "text" }
+    );
+
     await db.createCollection('viewsLeaderboard', {
         viewOn: 'profileViews',
         pipeline: [
