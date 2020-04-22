@@ -302,9 +302,9 @@ module.exports = {
             outputTexture.image = await getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer('image/png');
         }
 
-        const customTexture = await customResources.getTexture(item, true);
+        const customTexture = await customResources.getTexture(item, 'name' in query);
 
-        if(customTexture && (skyblockId || query.name)){
+        if(customTexture){
             if(customTexture.animated){
                 customTexture.path = customTexture.path.replace('.png', '.gif');
                 outputTexture.mime = 'image/gif';
