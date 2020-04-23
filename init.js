@@ -23,6 +23,8 @@ async function main(){
     const dbUrl = 'mongodb://localhost:27017';
     const dbName = 'sbstats';
 
+    const constants = require('./src/constants');
+
     const { MongoClient } = require('mongodb');
     const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
@@ -128,12 +130,14 @@ async function main(){
         { name: "text", tag: "text" }
     );
 
-    await db
-    .collection('items')
-    .updateOne(
-        { id: 'SUPER_COMPACTOR_3000' },
-        { $set: { tag: "sc3k sc3000" }}
-    );
+    for(const id in constants.item_tags){
+        await db
+        .collection('items')
+        .updateOne(
+            { id },
+            { $set: { tag: constants.item_tags[id] }}
+        );
+    }
 
     await db.createCollection('viewsLeaderboard', {
         viewOn: 'profileViews',

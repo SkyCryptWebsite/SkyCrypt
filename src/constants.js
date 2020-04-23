@@ -474,6 +474,17 @@ module.exports = {
         winter: "Jerry's Workshop"
     },
 
+    item_tags: {
+        SUPER_COMPACTOR_3000: "sc3000 sc3k",
+        ENCHANTED_LAPIS_LAZULI: "elapis",
+        ENCHANTED_IRON_INGOT: "eiron",
+        ENCHANTED_STRING: "estring",
+        ENCHANTED_ROTTEN_FLESH: "eflesh",
+        ENCHANTED_WET_SPONGE: "ewet",
+        ENCHANTED_DIAMOND: "edia",
+        ENCHANTED_DIAMOND_BLOCK: "edb"
+    },
+
     bag_size: {
         talisman_bag: {
             collection: 'REDSTONE',
