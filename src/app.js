@@ -660,7 +660,7 @@ async function main(){
         res.send(file);
     });
 
-    app.all('/item*/:skyblockId?', async (req, res) => {
+    app.all('/item(.gif)?/:skyblockId?', async (req, res) => {
         const skyblockId = req.params.skyblockId || null;
         const item = await renderer.renderItem(skyblockId, req.query, db);
 
