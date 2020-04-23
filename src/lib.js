@@ -194,7 +194,7 @@ function getId(item){
 }
 
 // Process items returned by API
-async function getItems(base64){
+async function getItems(base64, packs){
     // API stores data as base64 encoded gzipped Minecraft NBT data
     let buf = Buffer.from(base64, 'base64');
 
@@ -268,7 +268,7 @@ async function getItems(base64){
             }
         }
 
-        const customTexture = await customResources.getTexture(item);
+        const customTexture = await customResources.getTexture(item, false, packs);
 
         if(customTexture){
             item.animated = customTexture.animated;
@@ -665,18 +665,18 @@ module.exports = {
         return output;
     },
 
-    getItems: async (profile) => {
+    getItems: async (profile, packs) => {
         const output = {};
 
         // Process inventories returned by API
-        let armor = 'inv_armor' in profile ? await getItems(profile.inv_armor.data) : [];
-        let inventory = 'inv_contents' in profile ? await getItems(profile.inv_contents.data) : [];
-        let enderchest = 'ender_chest_contents' in profile ? await getItems(profile.ender_chest_contents.data) : [];
-        let talisman_bag = 'talisman_bag' in profile ? await getItems(profile.talisman_bag.data) : [];
-        let fishing_bag = 'fishing_bag' in profile ? await getItems(profile.fishing_bag.data) : [];
-        let quiver = 'quiver' in profile ? await getItems(profile.quiver.data) : [];
-        let potion_bag = 'potion_bag' in profile ? await getItems(profile.potion_bag.data) : [];
-        let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data) : [];
+        let armor = 'inv_armor' in profile ? await getItems(profile.inv_armor.data, packs) : [];
+        let inventory = 'inv_contents' in profile ? await getItems(profile.inv_contents.data, packs) : [];
+        let enderchest = 'ender_chest_contents' in profile ? await getItems(profile.ender_chest_contents.data, packs) : [];
+        let talisman_bag = 'talisman_bag' in profile ? await getItems(profile.talisman_bag.data, packs) : [];
+        let fishing_bag = 'fishing_bag' in profile ? await getItems(profile.fishing_bag.data, packs) : [];
+        let quiver = 'quiver' in profile ? await getItems(profile.quiver.data, packs) : [];
+        let potion_bag = 'potion_bag' in profile ? await getItems(profile.potion_bag.data, packs) : [];
+        let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data, packs) : [];
 
         output.armor = armor.filter(a => Object.keys(a).length != 0);
         output.inventory = inventory

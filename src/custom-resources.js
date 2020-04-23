@@ -369,7 +369,7 @@ readyPromise.then(() => {
 
 module.exports = {
     ready: false,
-    getTexture: async (item, ignoreId = false, packId) => {
+    getTexture: async (item, ignoreId = false, packIds) => {
         if(!module.exports.ready)
             await readyPromise;
 
@@ -377,8 +377,12 @@ module.exports = {
 
         let _resourcePacks = resourcePacks;
 
-        if(packId)
-            _resourcePacks = _resourcePacks.filter(a => a.config.id == packId);
+        packIds = packIds !== undefined ? packIds.split(",") : [];
+
+        if(packIds.length > 0)
+            _resourcePacks = _resourcePacks.filter(a => packIds.includes(a.config.id));
+
+        _resourcePacks = _resourcePacks.sort((a, b) => packIds.indexOf(a) - packIds.indexOf(b));
 
         for(const pack of _resourcePacks){
             if('weight' in outputTexture)

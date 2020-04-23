@@ -438,7 +438,7 @@ async function main(){
                 );
             }
 
-            const items = await lib.getItems(userProfile);
+            const items = await lib.getItems(userProfile, req.query.pack);
             const calculated = await lib.getStats(userProfile, items, hypixelPlayer);
 
             if(objectPath.has(profile, 'banking.balance'))

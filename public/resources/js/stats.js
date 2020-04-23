@@ -22,9 +22,9 @@ document.addEventListener('DOMContentLoaded', function(){
     let inventoryContainer = document.querySelector('#inventory_container');
 
     if(calculated.profile.cute_name == 'Deleted')
-        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.profile_id);
+        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.profile_id + window.location.search);
     else
-        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name);
+        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name + window.location.search);
 
     function isEnchanted(item){
         if(item.animated)
