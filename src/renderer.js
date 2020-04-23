@@ -271,6 +271,18 @@ module.exports = {
             .collection('items')
             .findOne({ id: skyblockId }));
 
+        if(query.name){
+            const results =  await db
+            .collection('items')
+            .find({ $text: { $search: query.name }})
+            .toArray();
+
+            const filteredResults = results.filter(a => a.name.toLowerCase() == query.name.toLowerCase());
+
+            if(filteredResults.length > 0)
+                item = Object.assign(item, filteredResults[0]);
+        }
+
         if(query.id)
             item.id = query.id;
 
