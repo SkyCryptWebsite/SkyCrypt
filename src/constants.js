@@ -482,7 +482,8 @@ module.exports = {
         ENCHANTED_ROTTEN_FLESH: "eflesh",
         ENCHANTED_WET_SPONGE: "ewet",
         ENCHANTED_DIAMOND: "edia",
-        ENCHANTED_DIAMOND_BLOCK: "edb"
+        ENCHANTED_DIAMOND_BLOCK: "edb",
+        ENCHANTED_LAVA_BUCKET: "elava"
     },
 
     bag_size: {
