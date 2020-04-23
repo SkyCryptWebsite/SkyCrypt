@@ -125,20 +125,14 @@ async function main(){
     await db
     .collection('items')
     .createIndex(
-        { name: "text" }
-    );
-
-    await db
-    .collection('items')
-    .createIndex(
-        { tags: "text" }
+        { name: "text", tag: "text" }
     );
 
     await db
     .collection('items')
     .updateOne(
         { id: 'SUPER_COMPACTOR_3000' },
-        { $set: { tags: "sc3k sc3000" }}
+        { $set: { tag: "sc3k sc3000" }}
     );
 
     await db.createCollection('viewsLeaderboard', {
