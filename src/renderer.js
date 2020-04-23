@@ -300,8 +300,11 @@ module.exports = {
         if('item_id' in item)
             item.id = item.item_id;
 
-        if('name' in item)
+        if('name' in item){
+            item.tag = {};
+
             objectPath.set(item, "tag.display.Name", item.name);
+        }
 
         if('texture' in item)
             return { mime: 'image/png', image: await module.exports.renderHead(`http://textures.minecraft.net/texture/${item.texture}`, 6.4) };
