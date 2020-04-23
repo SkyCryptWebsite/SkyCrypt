@@ -305,7 +305,7 @@ module.exports = {
             outputTexture.image = await getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer('image/png');
         }
 
-        const customTexture = await customResources.getTexture(item, 'name' in query);
+        const customTexture = await customResources.getTexture(item, 'name' in query, query.pack);
 
         if(customTexture){
             if(customTexture.animated){

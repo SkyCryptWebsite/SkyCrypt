@@ -369,13 +369,18 @@ readyPromise.then(() => {
 
 module.exports = {
     ready: false,
-    getTexture: async (item, ignoreId = false) => {
+    getTexture: async (item, ignoreId = false, packId) => {
         if(!module.exports.ready)
             await readyPromise;
 
         let outputTexture = { weight: -9999 };
 
-        for(const pack of resourcePacks){
+        let _resourcePacks = resourcePacks;
+
+        if(packId)
+            _resourcePacks = _resourcePacks.filter(a => a.config.id == packId);
+
+        for(const pack of _resourcePacks){
             if('weight' in outputTexture)
                 outputTexture.weight = -9999;
 
