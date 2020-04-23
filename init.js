@@ -128,6 +128,19 @@ async function main(){
         { name: "text" }
     );
 
+    await db
+    .collection('items')
+    .createIndex(
+        { tags: "text" }
+    );
+
+    await db
+    .collection('items')
+    .updateOne(
+        { id: 'SUPER_COMPACTOR_3000' },
+        { $set: { tags: "sc3k sc3000" }}
+    );
+
     await db.createCollection('viewsLeaderboard', {
         viewOn: 'profileViews',
         pipeline: [
