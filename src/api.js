@@ -207,15 +207,15 @@ module.exports = (app, db) => {
             .toArray();
 
             for(const product of products){
-                let productName = product.productId.replace(/(_+)/g, ' ');
-                const collections = constants.collection_data.filter(a => a.skyblockId == product.productId);
+                const itemInfo = await db
+                .collection('items')
+                .findOne({ id: product.productId });
 
-                if(collections.length > 0)
-                    productName = collections[0].name;
+                const productName = itemInfo ? itemInfo.name : helper.titleCase(product.productId.replace(/(_+)/g, ' '));
 
                 output.push({
                     id: product.productId,
-                    name: helper.titleCase(productName),
+                    name: productName,
                     buyPrice: product.buyPrice,
                     sellPrice: product.sellPrice,
                     price: (product.buyPrice + product.sellPrice) / 2
