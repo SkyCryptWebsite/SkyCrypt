@@ -1160,6 +1160,15 @@ module.exports = {
             output.stats.speed += Math.floor(obsidian / 20);
         }
 
+        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('CHEAP_TUXEDO_')).length == 3)
+            output.stats['health'] = 75;
+
+        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('FANCY_TUXEDO_')).length == 3)
+            output.stats['health'] = 150;
+
+        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('ELEGANT_TUXEDO_')).length == 3)
+            output.stats['health'] = 250;
+
         output.weapon_stats = {};
 
         items.weapons.forEach(item => {
@@ -1178,6 +1187,15 @@ module.exports = {
             if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4)
                 for(let stat in stats)
                     stats[stat] = Math.floor(stats[stat] * 1.05);
+
+            if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('CHEAP_TUXEDO_')).length == 3)
+                stats['health'] = 75;
+
+            if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('FANCY_TUXEDO_')).length == 3)
+                stats['health'] = 150;
+
+            if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('ELEGANT_TUXEDO_')).length == 3)
+                stats['health'] = 250;
 
             output.weapon_stats[item.item_index] = stats;
 
