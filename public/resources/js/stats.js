@@ -2,7 +2,11 @@ document.addEventListener('DOMContentLoaded', function(){
     let userAgent = window.navigator.userAgent;
     let tippyInstance;
 
-    tippyInstance = tippy('*[data-tippy-content]', {
+    tippy('*[data-tippy-content]:not(.interactive-tooltip)', {
+        trigger: 'mouseenter click'
+    });
+
+    tippyInstance = tippy('.interactive-tooltip', {
         trigger: 'mouseenter click',
         interactive: true,
         appendTo: () => document.body,
