@@ -11,9 +11,18 @@ async function main(){
     const bodyParser = require('body-parser');
     const crypto = require('crypto');
 
+    const axiosCacheAdapter = require('axios-cache-adapter');
+
+    const { RedisStore } = axiosCacheAdapter;
+    const redis = require('redis');
+
+    const redisClient = redis.createClient();
+    const redisStore = new RedisStore(redisClient);
+
     const axios = require('axios');
-    const axiosRetry = require('axios-retry');
     require('axios-debug-log')
+
+    const retry = require('async-retry');
 
     const fs = require('fs-extra');
 
@@ -50,11 +59,17 @@ async function main(){
     if(credentials.hypixel_api_key.length == 0)
         throw "Please enter a valid Hypixel API Key. Join mc.hypixel.net and enter /api to obtain one.";
 
-    const Hypixel = axios.create({
-        baseURL: 'https://api.hypixel.net/'
+    const Hypixel = axiosCacheAdapter.setup({
+        baseURL: 'https://api.hypixel.net/',
+        cache: {
+            maxAge: 2 * 60 * 1000,
+            store: redisStore,
+            exclude: {
+                query: false
+            }
+        },
+        timeout: 5000,
     });
-
-    axiosRetry(Hypixel, { retries: 3, retryDelay: retryCount => retryCount * 750 });
 
     const app = express();
     const port = 32464;
@@ -198,7 +213,14 @@ async function main(){
             params.name = paramPlayer;
 
         try{
-            response = await Hypixel.get('player', { params, timeout: 5000 });
+            const response = await retry(async () => {
+                return await Hypixel.get('player', {
+                    params, cache: {
+                        maxAge: 10 * 60 * 1000
+                    }
+                });
+            });
+
             const { data } = response;
 
             if(!data.success){
@@ -268,9 +290,18 @@ async function main(){
             let skyBlockProfiles = {};
 
             if(Object.keys(allSkyBlockProfiles).length == 0){
-                let default_profile = await Hypixel.get('skyblock/profile', {
-                    params: { key: credentials.hypixel_api_key, profile: data.player.uuid
-                }});
+                let default_promise;
+
+                const default_profile = await retry(async () => {
+                    const response = await Hypixel.get('skyblock/profile', {
+                        params: { key: credentials.hypixel_api_key, profile: data.player.uuid }
+                    });
+
+                    if(!default_profile.data.success)
+                        throw "api request failed";
+
+                    return response;
+                });
 
                 if(default_profile.data.profile == null){
                     res.status(404);
@@ -320,9 +351,16 @@ async function main(){
             for(const profile in skyBlockProfiles){
                 profileIds.push(profile);
 
-                promises.push(
-                    Hypixel.get('skyblock/profile', { params: { key: credentials.hypixel_api_key, profile: profile } })
-                );
+                const profilePromise = retry(async () => {
+                    const response = await Hypixel.get('skyblock/profile', { params: { key: credentials.hypixel_api_key, profile: profile } });
+
+                    if(!response.data.success)
+                        throw "api request failed";
+
+                    return response;
+                });
+
+                promises.push(profilePromise);
             }
 
             const responses = await Promise.all(promises);

@@ -1,13 +1,30 @@
 const axios = require('axios');
-require('axios-debug-log')
+require('axios-debug-log');
+
+const retry = require('async-retry');
 
 const _ = require('lodash');
 
 const constants = require('./constants');
 const credentials = require('../credentials.json');
 
-const Hypixel = axios.create({
-    baseURL: 'https://api.hypixel.net/'
+const axiosCacheAdapter = require('axios-cache-adapter');
+
+const { RedisStore } = axiosCacheAdapter;
+const redis = require('redis');
+
+const redisClient = redis.createClient();
+const redisStore = new RedisStore(redisClient);
+
+const Hypixel = axiosCacheAdapter.setup({
+    baseURL: 'https://api.hypixel.net/',
+    cache: {
+        maxAge: 2 * 60 * 1000,
+        store: redisStore,
+        exclude: {
+            query: false
+        }
+    }
 });
 
 module.exports = {
@@ -298,8 +315,10 @@ module.exports = {
         else
             params.name = player;
 
-        let playerResponse = await Hypixel.get('player', {
-            params, timeout: 5000
+        const playerResponse = await retry(async () => {
+            return await Hypixel.get('player', {
+                params, cache: { maxAge: 10 * 60 * 1000 }
+            });
         });
 
         let profiles = playerResponse.data.player.stats.SkyBlock.profiles;
@@ -313,9 +332,20 @@ module.exports = {
 
         profileId = Object.keys(selectedProfile)[0];
 
+        const profileResponse = await retry(async () => {
+            const response = await Hypixel.get('skyblock/profile', {
+                params: { key: credentials.hypixel_api_key, profile: profileId }
+            });
+
+            if(!response.data.success)
+                return "api request failed";
+
+            return response;
+        });
+
         return {
-            playerResponse: playerResponse,
-            profileResponse: await Hypixel.get('skyblock/profile', { params: { key: credentials.hypixel_api_key, profile: profileId } })
+            playerResponse,
+            profileResponse
         };
     },
 

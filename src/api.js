@@ -9,8 +9,23 @@ const lib = require('./lib');
 const constants = require('./constants');
 const objectPath = require("object-path");
 
-const Hypixel = axios.create({
-    baseURL: 'https://api.hypixel.net/'
+const axiosCacheAdapter = require('axios-cache-adapter');
+
+const { RedisStore } = axiosCacheAdapter;
+const redis = require('redis');
+
+const redisClient = redis.createClient();
+const redisStore = new RedisStore(redisClient);
+
+const Hypixel = axiosCacheAdapter.setup({
+    baseURL: 'https://api.hypixel.net/',
+    cache: {
+        maxAge: 2 * 60 * 1000,
+        store: redisStore,
+        exclude: {
+            query: false
+        }
+    }
 });
 
 function handleError(e, res){
@@ -24,7 +39,7 @@ module.exports = (app, db) => {
     app.all('/api/:player/profiles', async (req, res) => {
         try{
             let playerResponse = await Hypixel.get('player', {
-                params: { key: credentials.hypixel_api_key, name: req.params.player }, timeout: 5000
+                params: { key: credentials.hypixel_api_key, name: req.params.player }, cache: { maxAge: 10 * 60 * 1000 }
             });
 
             const skyBlockProfiles = playerResponse.data.player.stats.SkyBlock.profiles;
