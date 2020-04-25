@@ -164,6 +164,45 @@ module.exports = (app, db) => {
         }
     });
 
+    app.all('/api/:player/:profile/skills', async (req, res) => {
+        try{
+            const { playerResponse, profileResponse } = await helper.getProfile(req);
+
+            const profile = profileResponse.data.profile;
+            const userProfile = profile.members[playerResponse.data.player.uuid];
+
+            const items = await lib.getItems(userProfile);
+            const calculated = await lib.getStats(userProfile, items, playerResponse.data);
+
+            if('html' in req.query){
+                const response = [];
+
+                for(const skill in calculated.levels)
+                    response.push([
+                        helper.titleCase(skill),
+                        calculated.levels[skill].level.toString()
+                    ]);
+
+                for(const slayer in calculated.slayers)
+                    response.push([
+                        helper.titleCase(slayer),
+                        calculated.slayers[slayer].level.currentLevel.toString()
+                    ]);
+
+                response.push([
+                    'Fairy Souls',
+                    calculated.fairy_souls.collected.toString()
+                ]);
+
+                res.send(tableify(response, { showHeaders: false }));
+            }else{
+                res.json({ skills: calculated.levels, slayers: calculated.slayers, fairy_souls: calculated.fairy_souls.collected });
+            }
+        }catch(e){
+            handleError(e, res);
+        }
+    });
+
     app.all('/api/:player/:profile/cakebag', async (req, res) => {
         try{
             const { playerResponse, profileResponse } = await helper.getProfile(req);
