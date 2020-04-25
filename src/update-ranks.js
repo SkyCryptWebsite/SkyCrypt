@@ -5,7 +5,6 @@ async function main(){
     const dbName = 'sbstats';
 
     const { MongoClient } = require('mongodb');
-    const axios = require('axios');
     const credentials = require('../credentials.json');
     const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
     await mongo.connect();

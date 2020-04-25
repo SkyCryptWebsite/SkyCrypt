@@ -20,7 +20,7 @@ async function main(){
     const redisStore = new RedisStore(redisClient);
 
     const axios = require('axios');
-    require('axios-debug-log')
+    require('axios-debug-log');
 
     const retry = require('async-retry');
 

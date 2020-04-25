@@ -6,6 +6,7 @@ async function main(){
 
     const { MongoClient } = require('mongodb');
     const axios = require('axios');
+    require('axios-debug-log');
 
     const helper = require('./helper');
 

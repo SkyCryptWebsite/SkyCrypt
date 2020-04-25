@@ -1,5 +1,5 @@
 const axios = require('axios');
-require('axios-debug-log')
+require('axios-debug-log');
 
 const credentials = require('../credentials.json');
 const tableify = require('@tillhub/tableify');
