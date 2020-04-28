@@ -272,6 +272,8 @@ module.exports = (app, db) => {
                     name: productName,
                     buyPrice: product.buyPrice,
                     sellPrice: product.sellPrice,
+                    buyVolume: product.buyVolume,
+                    sellVolume: product.sellVolume,
                     price: (product.buyPrice + product.sellPrice) / 2
                 });
             }

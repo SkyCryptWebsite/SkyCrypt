@@ -31,11 +31,13 @@ async function main(){
 
                 const { buyPrice, sellPrice } = helper.getPrices(product);
 
+                const { buyVolume, sellVolume } = product.quick_status;
+
                 await db
                 .collection('bazaar')
                 .updateOne(
                     { productId },
-                    { $set: { buyPrice, sellPrice }},
+                    { $set: { buyPrice, sellPrice, buyVolume, sellVolume }},
                     { upsert: true }
                 );
             }
