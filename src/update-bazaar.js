@@ -40,6 +40,12 @@ async function main(){
                     { $set: { buyPrice, sellPrice, buyVolume, sellVolume }},
                     { upsert: true }
                 );
+
+                await db
+                .collection('bazaarTracker')
+                .insertOne(
+                    { productId, time: new Date(), buyPrice, sellPrice }
+                );
             }
         }catch(e){
             console.error(e);

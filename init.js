@@ -173,6 +173,13 @@ async function main(){
         { unique: true }
     );
 
+    await db
+    .collection('bazaarTracker')
+    .createIndex(
+        { productId: 1, time: 1 },
+        { unique: true }
+    );
+
     mongo.close();
 }
 
