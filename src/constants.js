@@ -501,6 +501,7 @@ module.exports = {
         ENCHANTED_GOLD_BLOCK: "egold",
         ENCHANTED_COAL: "ecoal",
         ENCHANTED_COAL_BLOCK: "ecoal",
+        ENCHANTED_COBBLESTONE: "cobble ecobble"
     },
 
     bag_size: {
