@@ -895,11 +895,11 @@ twitterDescription += '. Click to view more stats!'
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title><%- calculated.display_name %> | SkyBlock Stats</title>
+    <title><%- calculated.display_name %><% if(calculated.display_emoji){ %> <%- calculated.display_emoji %><% } %> | SkyBlock Stats</title>
     <meta name="description" content="<%= metaDescription %>">
     <link rel="shortcut icon" href="https://visage.surgeplay.com/face/32/<%- calculated.uuid %>" type="image/png">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="<%- calculated.display_name %> (<%= calculated.profile.cute_name %>)">
+    <meta property="og:title" content="<%- calculated.display_name %><% if(calculated.display_emoji){ %> <%- calculated.display_emoji %><% } %> (<%= calculated.profile.cute_name %>)">
     <meta property="og:image" content="https://visage.surgeplay.com/face/256/<%- calculated.uuid %>">
     <meta property="twitter:image" content="https://visage.surgeplay.com/face/256/<%- calculated.uuid %>">
     <meta property="og:description" content="<%= description %>">
@@ -931,7 +931,7 @@ twitterDescription += '. Click to view more stats!'
                 <% if(calculated.display_emoji){ %><%- extra.twemoji.parse(calculated.display_emoji) %><% } %>
                 <div id="other_players">
                     <% calculated.members.forEach(member => { %>
-                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %>"><%= member.display_name %></a>
+                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %>"><%= member.display_name %><% if(member.emoji){ %> <%- extra.twemoji.parse(member.emoji) %><% } %></a>
                     <% }); %>
                 </div>
             </div><span class="text-on"> on </span><div tabindex="2" id="stats_for_profile">

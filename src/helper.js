@@ -72,7 +72,7 @@ module.exports = {
         }
 
         if(user)
-            return { uuid, display_name: user.username };
+            return { uuid, display_name: user.username, emoji: user.emoji };
     },
 
     getGuild: async (uuid, db) => {
