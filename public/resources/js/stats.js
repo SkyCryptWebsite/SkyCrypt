@@ -356,7 +356,20 @@ document.addEventListener('DOMContentLoaded', function(){
 
     [].forEach.call(document.querySelectorAll('.stat-weapons .select-weapon'), function(element){
         let item_index = element.parentNode.getAttribute('data-item-index');
-        let item = items.weapons.filter(a => a.item_index == item_index)[0];
+        let filterItems;
+
+        if(element.parentNode.hasAttribute('data-backpack-index')){
+            let backpack = all_items.filter(a => a.item_index == Number(element.parentNode.getAttribute('data-backpack-index')));
+
+            if(backpack.length == 0)
+                return;
+
+            filterItems = backpack[0].containsItems;
+        }else{
+             filterItems = items.weapons.filter(a => !('backpackIndex' in a));
+        }
+
+        let item = filterItems.filter(a => a.item_index == item_index)[0];
 
         let weaponStats = calculated.weapon_stats[item_index];
         let stats;
