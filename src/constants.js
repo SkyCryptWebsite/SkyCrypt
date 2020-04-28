@@ -485,10 +485,10 @@ module.exports = {
         ENCHANTED_DIAMOND_BLOCK: "edb",
         ENCHANTED_LAVA_BUCKET: "elava",
         ENCHANTED_GLOWSTONE_DUST: "edust",
-        ENCHANTED_GLOWSTONE: "ench block eblock glow",
+        ENCHANTED_GLOWSTONE: "eblock glow",
         ENCHANTED_REDSTONE_LAMP: "elamp",
         ENCHANTED_REDSTONE_DUST: "edust",
-        ENCHANTED_REDSTONE_BLOCK: "ench block eblock red",
+        ENCHANTED_REDSTONE_BLOCK: "eblock red",
         CATALYST: "cata",
         SUPERIOR_FRAGMENT: "sup frag",
         STRONG_FRAGMENT: "frag",
@@ -496,7 +496,11 @@ module.exports = {
         WISE_FRAGMENT: "frag",
         YOUNG_FRAGMENT: "frag",
         OLD_FRAGMENT: "old frag",
-        UNSTABLE_FRAGMENT: "frag"
+        UNSTABLE_FRAGMENT: "frag",
+        ENCHANTED_GOLD: "egold ingot",
+        ENCHANTED_GOLD_BLOCK: "egold",
+        ENCHANTED_COAL: "ecoal",
+        ENCHANTED_COAL_BLOCK: "ecoal",
     },
 
     bag_size: {
