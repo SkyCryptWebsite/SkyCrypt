@@ -522,6 +522,8 @@ module.exports = {
         ENCHANTED_SPONGE: "esponge",
         ENCHANTED_GRILLED_PORK: "epork",
         ENCHANTED_DARK_OAK_LOG: "edoak",
+        ENCHANTED_ACACIA_LOG: "eacacia",
+        ENCHANTED_SPRUCE_LOG: "espruce",
         ENCHANTED_RAW_CHICKEN: "echicken",
         ENCHANTED_WATER_LILY: "elily",
         ENCHANTED_SUGAR_CANE: "ecane",
