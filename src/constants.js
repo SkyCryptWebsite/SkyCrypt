@@ -1072,6 +1072,9 @@ module.exports = {
     },
 
     talisman_upgrades: {
+        WOLF_TALISMAN: [
+            'WOLF_RING'
+        ],
         RING_POTION_AFFINITY: [
             'ARTIFACT_POTION_AFFINITY'
         ],
