@@ -324,6 +324,9 @@ async function getItems(base64, packs){
                 else if(timestamp.includes("AM") || timestamp.includes("PM"))
                     obtainmentDate = moment(timestamp, "M/D/YY h:mm A");
                 else
+                    obtainmentDate = moment(timestamp, "D/M/YY HH:mm");
+
+                if(!obtainmentDate.isValid())
                     obtainmentDate = moment(timestamp, "M/D/YY HH:mm");
 
                 item.lore += "<br>" + helper.renderLore(`§7Obtained: §c${obtainmentDate.format("D MMM YYYY")}`);
