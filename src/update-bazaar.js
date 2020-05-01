@@ -46,6 +46,13 @@ async function main(){
                 .insertOne(
                     { productId, time: new Date(), buyPrice, sellPrice }
                 );
+
+                await db
+                .collection('items')
+                .updateOne(
+                    { id: productId },
+                    { $set: { bazaar: true }}
+                );
             }
         }catch(e){
             console.error(e);
