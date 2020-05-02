@@ -2404,7 +2404,7 @@ html.no-webp #error_box_wrapper{
 
     #additional_stats_container{
         white-space: normal;
-        width: calc(1120px - 150px - 30px);
+        width: calc(1120px -  60px - 150px);
     }
 
     #base_stats_container{
