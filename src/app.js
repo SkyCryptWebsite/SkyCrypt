@@ -297,7 +297,7 @@ async function main(){
                         params: { key: credentials.hypixel_api_key, profile: data.player.uuid }
                     });
 
-                    if(!default_profile.data.success)
+                    if(!response.data.success)
                         throw "api request failed";
 
                     return response;
