@@ -966,10 +966,7 @@ a.additional-player-stat:hover{
 
 .additional-stat{
     display: inline-block;
-}
-
-.additional-stat:not(:first-child){
-    margin-left: 6px;
+    margin-right: 6px;
 }
 
 .additional-stat .statname{
@@ -2407,7 +2404,7 @@ html.no-webp #error_box_wrapper{
 
     #additional_stats_container{
         white-space: normal;
-        width: calc(1120px - 150px);
+        width: calc(1120px - 150px - 30px);
     }
 
     #base_stats_container{
