@@ -334,8 +334,9 @@ html.no-webp #bg_blur{
 }
 
 #skill_levels_container .no-access{
-    width: calc((70vw - 260px) / 2 - 60px);
+    width: calc(70vw - 400px);
     margin-top: 20px;
+    font-weight: 500;
 }
 
 .skill{
@@ -2417,6 +2418,11 @@ html.no-webp #error_box_wrapper{
 
     #skill_levels_container{
         width: calc(1120px - 510px);
+    }
+
+    #skill_levels_container .no-access{
+        width: calc(1120px - 510px);
+        font-size: 14px;
     }
 
     #wrapper, #bg_blur{

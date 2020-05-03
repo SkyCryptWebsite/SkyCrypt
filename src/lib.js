@@ -22,6 +22,22 @@ function replaceAll(target, search, replacement){
     return target.split(search).join(replacement);
 }
 
+function getXpByLevel(level, runecrafting){
+    let xp_table = runecrafting ? constants.runecrafting_xp : constants.leveling_xp;
+
+    if(isNaN(level))
+        return 0;
+
+    let xpTotal = 0;
+
+    let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
+
+    for(let x = 1; x <= level; x++)
+        xpTotal += xp_table[x];
+
+    return xpTotal;
+}
+
 function getLevelByXp(xp, runecrafting){
     let xp_table = runecrafting ? constants.runecrafting_xp : constants.leveling_xp;
 
@@ -969,6 +985,7 @@ module.exports = {
 
         let skillLevels;
         let totalSkillXp = 0;
+        let average_level = 0;
 
         // Apply skill bonuses
         if('experience_skill_farming' in profile
@@ -980,7 +997,6 @@ module.exports = {
         || 'experience_skill_alchemy' in profile
         || 'experience_skill_carpentry' in profile
         || 'experience_skill_runecrafting' in profile){
-            let average_level = 0;
             let average_level_no_progress = 0;
 
             skillLevels = {
@@ -1018,7 +1034,21 @@ module.exports = {
                 fishing: hypixelProfile.achievements.skyblock_angler || 0,
                 enchanting: hypixelProfile.achievements.skyblock_augmentation || 0,
                 alchemy: hypixelProfile.achievements.skyblock_concoctor || 0,
+            };
+
+            output.levels = {};
+
+            for(const skill in skillLevels){
+                output.levels[skill] = { level: skillLevels[skill], xp: getXpByLevel(skillLevels[skill]), progress: 0.05, maxLevel: 50, xpCurrent: 0, xpForNext: 0 };
+
+                average_level += skillLevels[skill];
+
+                totalSkillXp += getXpByLevel(skillLevels[skill]);
             }
+
+            output.average_level = (average_level / (Object.keys(skillLevels).length));
+            output.average_level_no_progress = output.average_level;
+            output.total_skill_xp = totalSkillXp;
         }
 
         output.skill_bonus = {};

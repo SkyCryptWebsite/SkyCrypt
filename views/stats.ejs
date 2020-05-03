@@ -760,9 +760,11 @@ const skill_component = (skill, icon, level) => { %>
         <div class="skill-name"><%= skill %> <span class="skill-level"><%= level.level %></span></div>
         <div class="skill-bar" data-skill="<%= skill %>">
             <div class="skill-progress-bar" style="width: <%= level.level == level.maxLevel ? 100 : level.progress * 100 %>%"></div>
-            <div class="skill-progress-text" data-hover-text="<%= level.xpCurrent.toLocaleString() %><% if(level.xpForNext != Infinity){ %> / <%= level.xpForNext.toLocaleString() %><% } %> XP">
-                <%= helper.formatNumber(level.xpCurrent, true) %><% if(level.xpForNext != Infinity){ %> / <%= helper.formatNumber(level.xpForNext) %><% } %> XP
-            </div>
+            <% if('runecrafting' in calculated.levels){ %>
+                <div class="skill-progress-text" data-hover-text="<%= level.xpCurrent.toLocaleString() %><% if(level.xpForNext != Infinity){ %> / <%= level.xpForNext.toLocaleString() %><% } %> XP">
+                    <%= helper.formatNumber(level.xpCurrent, true) %><% if(level.xpForNext != Infinity){ %> / <%= helper.formatNumber(level.xpForNext) %><% } %> XP
+                </div>
+            <% } %>
         </div>
     </div>
 <% };
@@ -1053,9 +1055,9 @@ twitterDescription += '. Click to view more stats!'
                         <span class='stat-name'>Total Skill XP: </span><span class='stat-value'><%= Math.round(calculated.total_skill_xp).toLocaleString() %></span>
                         <div class='tippy-explanation'>Total XP gained in all skills except Carpentry and Runecrafting.</div>
                         <span class='stat-name'>Average Level: </span><span class='stat-value'><%= calculated.average_level.toFixed(2) %></span>
-                        <div class='tippy-explanation'>Average skill level over all skills except Carpentry and Runecrafting, includes progress to next level.</div>
-                        <span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
-                        <div class='tippy-explanation'>Average skill level without including partial level progress.</div>
+                        <div class='tippy-explanation'>Average skill level over all skills except Carpentry and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div>
+                        <% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
+                        <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
                         "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level.toFixed(1) %></span></span></div>
                     <% } %>
                 </div>
@@ -1082,8 +1084,12 @@ twitterDescription += '. Click to view more stats!'
                         <%= skill_component('Fishing', 'icon-346_0', calculated.levels.fishing) %>
                         <%= skill_component('Enchanting', 'icon-116_0', calculated.levels.enchanting) %>
                         <%= skill_component('Alchemy', 'icon-379_0', calculated.levels.alchemy) %>
-                        <%= skill_component('Carpentry', 'icon-58_0', calculated.levels.carpentry) %>
-                        <%= skill_component('Runecrafting', 'icon-378_0', calculated.levels.runecrafting) %>
+                        <% if('runecrafting' in calculated.levels){ %>
+                            <%= skill_component('Carpentry', 'icon-58_0', calculated.levels.carpentry) %>
+                            <%= skill_component('Runecrafting', 'icon-378_0', calculated.levels.runecrafting) %>
+                        <% }else{ %>
+                            <div class="no-access"><a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable Skills API to view progress and Runecrafting/Carpentry Level.</div>
+                        <% } %>
                     </div>
                     <div id="show_skills">Show skills</div>
                 <% }else{ %>
