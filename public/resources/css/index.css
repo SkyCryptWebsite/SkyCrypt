@@ -337,6 +337,9 @@ html.no-webp #bg_blur{
     width: calc(70vw - 400px);
     margin-top: 20px;
     font-weight: 500;
+    font-size: 15px;
+    color: rgba(255,255,255,0.85);
+    white-space: nowrap;
 }
 
 .skill{
@@ -2601,6 +2604,7 @@ html.no-webp #error_box_wrapper{
     #skill_levels_container .no-access{
         width: 100%;
         text-align: left;
+        white-space: normal;
     }
 
     .info-container-wrapper{
