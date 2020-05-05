@@ -192,17 +192,39 @@ module.exports = (app, db) => {
             if('html' in req.query){
                 const response = [];
 
-                for(const skill in calculated.levels)
-                    response.push([
+                for(const skill in calculated.levels){
+                    let pushArr = [
                         helper.titleCase(skill),
                         calculated.levels[skill].level.toString()
-                    ]);
+                    ];
 
-                for(const slayer in calculated.slayers)
-                    response.push([
+                    if('progress' in req.query)
+                        pushArr.push(
+                            calculated.levels[skill].maxLevel,
+                            calculated.levels[skill].xp,
+                            calculated.levels[skill].xpCurrent,
+                            calculated.levels[skill].xpForNext
+                        );
+
+                    response.push(pushArr);
+                }
+
+                for(const slayer in calculated.slayers){
+                    let pushArr = [
                         helper.titleCase(slayer),
                         calculated.slayers[slayer].level.currentLevel.toString()
-                    ]);
+                    ];
+
+                    if('progress' in req.query)
+                        pushArr.push(
+                            calculated.slayers[slayer].level.maxLevel,
+                            calculated.slayers[slayer].xp,
+                            calculated.slayers[slayer].xp,
+                            calculated.slayers[slayer].level.xpForNext
+                        );
+
+                    response.push(pushArr);
+                }
 
                 response.push([
                     'Fairy Souls',
