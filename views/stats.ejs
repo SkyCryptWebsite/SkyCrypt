@@ -1038,7 +1038,11 @@ twitterDescription += '. Click to view more stats!'
                     name: 'intelligence',
                     baseExplanation: "Increased by leveling your Enchanting and Alchemy skills and completing songs on Melody's Harp."
                 }); %>
-
+                <div data-stat="fairy_souls" class="basic-stat stat-fairy-souls">
+                    <span data-tippy-content="
+                        Collect Fairy Souls to gain Health, Defense, Strength and Speed.</div>
+                    "><span class="stat-name">Fairy Souls </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span></span>
+                </div>
                 <div id="player_model_mobile" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
                 <div id="additional_stats_container">
                     <% if(calculated.current_area){ %>
