@@ -708,6 +708,10 @@ const getBonus = stats => {
     if(statsNotZero.length == 0)
         return;
 
+    %>
+    <span class="stat-name">Bonus: </span>
+    <%
+
     for(const [index, stat] of statsNotZero.entries()){
         if(stats[stat] == 0)
             continue;
@@ -1160,7 +1164,6 @@ twitterDescription += '. Click to view more stats!'
                         <% }) %>
                     </div>
                     <p>
-                        <span class="stat-name">Bonus: </span>
                         <%- getBonus(getStats(items.armor)) %>
                     </p>
                 <% } %>
@@ -1231,7 +1234,6 @@ twitterDescription += '. Click to view more stats!'
                                     </div>
                                 <% }) %>
                                 <p>
-                                <span class="stat-name">Bonus: </span>
                                 <%- getBonus(getStats(items.talismans.filter(a => a.isUnique))) %>
                                 </p>
                             </div>
@@ -1526,7 +1528,6 @@ twitterDescription += '. Click to view more stats!'
                     </div>
                     <% if(maxSlayerLevel > 0){ %>
                     <p>
-                        <span class="stat-name">Bonus: </span>
                         <%
                         const slayerBonus = Object.assign({}, constants.stat_template);
 
