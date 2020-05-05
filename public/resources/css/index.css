@@ -964,8 +964,9 @@ a.additional-player-stat:hover{
     margin-top: 25px;
     font-size: 12px;
     font-weight: 600;
-    white-space: nowrap;
     overflow: visible;
+    margin-left: 268px;
+    width: calc(70vw - 410px);
 }
 
 .additional-stat{
@@ -1105,6 +1106,16 @@ a.additional-player-stat:hover{
 
 .basic-stat [data-tippy-content]::after{
     content: "";
+}
+
+.stat-fairy-souls{
+    background-image: url(/head/b96923ad247310007f6ae5d326d847ad53864cf16c3565a181dc8e6b20be2387);
+    position: absolute;
+    margin-top: 25px;
+}
+
+.stat-fairy-souls .stat-name{
+    color: #e35c95;
 }
 
 .stat-health{
@@ -2408,7 +2419,7 @@ html.no-webp #error_box_wrapper{
 
     #additional_stats_container{
         white-space: normal;
-        width: calc(1120px -  60px - 150px);
+        width: calc(1120px -  60px - 268px - 150px);
     }
 
     #base_stats_container{
@@ -2504,6 +2515,15 @@ html.no-webp #error_box_wrapper{
 
     #nav_bar.nav-bar-stickied{
         width: 100vw !important;
+    }
+
+    .stat-fairy-souls{
+        position: relative;
+        margin-top: 1px;
+    }
+
+    #additional_stats_container{
+        margin-left: 0;
     }
 
     #info_button:hover{
