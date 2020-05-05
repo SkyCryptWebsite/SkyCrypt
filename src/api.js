@@ -251,6 +251,112 @@ module.exports = (app, db) => {
         }
     });
 
+    app.all('/api/:player/:profile/weapons', async (req, res) => {
+        try{
+            const { playerResponse, profileResponse } = await helper.getProfile(req);
+
+            const userProfile = profileResponse.data.profile.members[playerResponse.data.player.uuid];
+
+            const items = await lib.getItems(userProfile);
+
+            let output = [];
+
+            for(const weapon of items.weapons){
+                const enchantments = weapon.tag.ExtraAttributes.enchantments;
+                let enchantmentsOutput = enchantments;
+
+                const stats = weapon.stats;
+                let statsOutput = stats;
+
+                if('html' in req.query && enchantments !== undefined){
+                    enchantmentsOutput = [];
+
+                    for(const enchantment in enchantments)
+                        enchantmentsOutput.push(enchantment + '=' + enchantments[enchantment]);
+
+                    enchantmentsOutput = enchantmentsOutput.join(",");
+                }
+
+                if('html' in req.query && stats !== undefined){
+                    statsOutput = [];
+
+                    for(const stat in stats)
+                        statsOutput.push(stat + '=' + stats[stat]);
+
+                    statsOutput = statsOutput.join(",");
+                }
+
+                output.push({
+                    id: weapon.tag.ExtraAttributes.id,
+                    name: weapon.display_name,
+                    rarity: weapon.rarity,
+                    enchantments: enchantmentsOutput,
+                    stats: statsOutput,
+                });
+            }
+
+            if('html' in req.query)
+                res.send(tableify(output, { showHeaders: false }));
+            else
+                res.json(output);
+        }catch(e){
+            handleError(e, res);
+        }
+    });
+
+    app.all('/api/:player/:profile/armor', async (req, res) => {
+        try{
+            const { playerResponse, profileResponse } = await helper.getProfile(req);
+
+            const userProfile = profileResponse.data.profile.members[playerResponse.data.player.uuid];
+
+            const items = await lib.getItems(userProfile);
+
+            let output = [];
+
+            for(const armor of items.armor){
+                const enchantments = armor.tag.ExtraAttributes.enchantments;
+                let enchantmentsOutput = enchantments;
+
+                const stats = armor.stats;
+                let statsOutput = stats;
+
+                if('html' in req.query && enchantments !== undefined){
+                    enchantmentsOutput = [];
+
+                    for(const enchantment in enchantments)
+                        enchantmentsOutput.push(enchantment + '=' + enchantments[enchantment]);
+
+                    enchantmentsOutput = enchantmentsOutput.join(",");
+                }
+
+                if('html' in req.query && stats !== undefined){
+                    statsOutput = [];
+
+                    for(const stat in stats)
+                        statsOutput.push(stat + '=' + stats[stat]);
+
+                    statsOutput = statsOutput.join(",");
+                }
+
+                output.push({
+                    id: armor.tag.ExtraAttributes.id,
+                    name: armor.display_name,
+                    rarity: armor.rarity,
+                    enchantments: enchantmentsOutput,
+                    stats: statsOutput,
+                });
+            }
+
+            if('html' in req.query)
+                res.send(tableify(output, { showHeaders: false }));
+            else
+                res.json(output);
+        }catch(e){
+            handleError(e, res);
+        }
+    });
+
     app.all('/api/bazaar', async (req, res) => {
         try{
             const output = [];
