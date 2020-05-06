@@ -1205,6 +1205,13 @@ module.exports = {
         ],
         CRACKED_PIGGY_BANK: [
             'PIGGY_BANK'
+        ],
+        SPEED_TALISMAN: [
+            'SPEED_RING',
+            'SPEED_ARTIFACT'
+        ],
+        SPEED_RING: [
+            'SPEED_ARTIFACT'
         ]
     },
 
