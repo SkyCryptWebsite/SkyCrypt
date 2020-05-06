@@ -413,6 +413,16 @@ module.exports = {
             head: "/head/176b4e390f2ecdb8a78dc611789ca0af1e7e09229319c3a7aa8209b63b9",
             type: "foraging",
             emoji: "🦒"
+        },
+        "ELEPHANT": {
+            head: "/head/7071a76f669db5ed6d32b48bb2dba55d5317d7f45225cb3267ec435cfa514",
+            type: "farming",
+            emoji: "🐘"
+        },
+        "MONKEY": {
+            head: "/head/13cf8db84807c471d7c6922302261ac1b5a179f96d1191156ecf3e1b1d3ca",
+            type: "foraging",
+            emoji: "🐒"
         }
     },
 
