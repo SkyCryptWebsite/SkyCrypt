@@ -423,6 +423,46 @@ module.exports = {
             head: "/head/13cf8db84807c471d7c6922302261ac1b5a179f96d1191156ecf3e1b1d3ca",
             type: "foraging",
             emoji: "🐒"
+        },
+        "SPIDER": {
+            head: "/head/cd541541daaff50896cd258bdbdd4cf80c3ba816735726078bfe393927e57f1",
+            type: "combat",
+            emoji: "🕷️"
+        },
+        "ENDERMITE": {
+            head: "/head/5a1a0831aa03afb4212adcbb24e5dfaa7f476a1173fce259ef75a85855",
+            type: "mining",
+            emoji: "🐛"
+        },
+        "GHOUL": {
+            head: "/head/87934565bf522f6f4726cdfe127137be11d37c310db34d8c70253392b5ff5b",
+            type: "combat",
+            emoji: "🧟"
+        },
+        "JELLYFISH": {
+            head: "/head/913f086ccb56323f238ba3489ff2a1a34c0fdceeafc483acff0e5488cfd6c2f1",
+            type: "alchemy",
+            emoji: "🎐"
+        },
+        "PIG": {
+            head: "/head/621668ef7cb79dd9c22ce3d1f3f4cb6e2559893b6df4a469514e667c16aa4",
+            type: "farming",
+            emoji: "🐷"
+        },
+        "ROCK": {
+            head: "/head/cb2b5d48e57577563aca31735519cb622219bc058b1f34648b67b8e71bc0fa",
+            type: "mining",
+            emoji: "🗿"
+        },
+        "SKELETON": {
+            head: "/head/fca445749251bdd898fb83f667844e38a1dff79a1529f79a42447a0599310ea4",
+            type: "combat",
+            emoji: "💀"
+        },
+        "ZOMBIE": {
+            head: "/head/56fc854bb84cf4b7697297973e02b79bc10698460b51a639c60e5e417734e11",
+            type: "combat",
+            emoji: "🧟"
         }
     },
 
