@@ -10,6 +10,18 @@ const helper = require('./helper');
 const axios = require('axios');
 const moment = require('moment');
 
+const dbUrl = 'mongodb://localhost:27017';
+const dbName = 'sbstats';
+
+const { MongoClient } = require('mongodb');
+let db;
+
+const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
+
+mongo.connect().then(() => {
+    db = mongo.db(dbName);
+});
+
 const customResources = require('./custom-resources');
 
 const parseNbt = util.promisify(nbt.parse);
@@ -346,6 +358,16 @@ async function getItems(base64, packs){
                     obtainmentDate = moment(timestamp, "M/D/YY HH:mm");
 
                 item.lore += "<br>" + helper.renderLore(`§7Obtained: §c${obtainmentDate.format("D MMM YYYY")}`);
+            }
+
+            if(objectPath.has(item, 'tag.ExtraAttributes.spawnedFor')){
+                if(!objectPath.has(item, 'tag.ExtraAttributes.timestamp'))
+                    item.lore += "<br>";
+
+                const spawnedFor = item.tag.ExtraAttributes.spawnedFor.replace(/\-/g, '');
+                const spawnedForUser = await helper.uuidToUsername(spawnedFor, db);
+
+                item.lore += "<br>" + helper.renderLore(`§7By: §c<a href="/stats/${spawnedFor}">${spawnedForUser.display_name}</a>`);
             }
         }
 

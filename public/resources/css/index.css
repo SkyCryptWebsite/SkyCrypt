@@ -567,6 +567,10 @@ html.no-transform #info_box.opened{
     font-size: 15px;
 }
 
+#stats_content .item-lore a{
+    text-decoration: none;
+}
+
 #stats_content .item-lore::-webkit-scrollbar {
     width: 10px;
 }
