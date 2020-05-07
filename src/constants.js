@@ -463,6 +463,16 @@ module.exports = {
             head: "/head/56fc854bb84cf4b7697297973e02b79bc10698460b51a639c60e5e417734e11",
             type: "combat",
             emoji: "🧟"
+        },
+        "DOLPHIN": {
+            head: "/head/cefe7d803a45aa2af1993df2544a28df849a762663719bfefc58bf389ab7f5",
+            type: "fishing",
+            emoji: "🐬"
+        },
+        "BABY_YETI": {
+            head: "/head/ab126814fc3fa846dad934c349628a7a1de5b415021a03ef4211d62514d5",
+            type: "fishing",
+            emoji: "❄️"
         }
     },
 
