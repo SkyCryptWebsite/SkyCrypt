@@ -482,7 +482,7 @@ module.exports = {
         "HOUND": {
             head: "/head/b7c8bef6beb77e29af8627ecdc38d86aa2fea7ccd163dc73c00f9f258f9a1457",
             type: "combat",
-            emoji: "👺"
+            emoji: "👹"
         },
         "TARANTULA": {
             head: "/head/8300986ed0a04ea79904f6ae53f49ed3a0ff5b1df62bba622ecbd3777f156df8",
