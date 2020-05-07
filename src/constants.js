@@ -484,6 +484,11 @@ module.exports = {
             type: "combat",
             emoji: "👺"
         },
+        "TARANTULA": {
+            head: "/head/8300986ed0a04ea79904f6ae53f49ed3a0ff5b1df62bba622ecbd3777f156df8",
+            type: "combat",
+            emoji: "🕸️"
+        },
         
     },
 
