@@ -478,7 +478,13 @@ module.exports = {
             head: "/head/89091d79ea0f59ef7ef94d7bba6e5f17f2f7d4572c44f90f76c4819a714",
             type: "combat",
             emoji: "🗿"
-        }
+        },
+        "HOUND": {
+            head: "/head/b7c8bef6beb77e29af8627ecdc38d86aa2fea7ccd163dc73c00f9f258f9a1457",
+            type: "combat",
+            emoji: "👺"
+        },
+        
     },
 
     // Player stats on a completely new profile
