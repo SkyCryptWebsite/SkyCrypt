@@ -125,6 +125,12 @@ async function main(){
     );
 
     await db
+    .collection('guildMembers')
+    .createIndex(
+        { gid: 1 }
+    );
+
+    await db
     .collection('items')
     .createIndex(
         { id: 1 },
