@@ -508,6 +508,9 @@ module.exports = {
     },
 
     pet_rewards: {
+        0: {
+            magic_find: 0
+        },
         10: {
             magic_find: 1
         },
