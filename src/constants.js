@@ -489,7 +489,14 @@ module.exports = {
             type: "combat",
             emoji: "🕸️"
         },
+    },
 
+    tier_colors: {
+        "common": "§f",
+        "uncommon": "§a",
+        "rare": "§9",
+        "epic": "§5",
+        "legendary": "§6"
     },
 
     pet_value: {
@@ -2041,8 +2048,8 @@ module.exports = {
 
         5: {
             type: 'color',
-            color: '#AA00AA',
-            css: 'color: #AA00AA'
+            color: '#eb17eb',
+            css: 'color: #eb17eb'
         },
 
         6: {
