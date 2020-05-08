@@ -505,7 +505,6 @@ async function main(){
             calculated.members = members.filter(a => a.uuid != hypixelPlayer.uuid);
             calculated.minions = lib.getMinions(profile.members);
             calculated.minion_slots = lib.getMinionSlots(calculated.minions);
-            calculated.pets = await lib.getPets(userProfile);
             calculated.collections = await lib.getCollections(data.player.uuid, profile, members);
             calculated.bag_sizes = await lib.getBagSizes(calculated.collections);
             calculated.social = 'socialMedia' in data.player && 'links' in data.player.socialMedia ? data.player.socialMedia.links : {};

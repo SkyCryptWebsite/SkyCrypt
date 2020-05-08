@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function(){
         let countSlotsUsed = 0;
 
         inventory.forEach(function(item){
-            if(Object.keys(item).length > 1)
+            if(Object.keys(item).length > 2)
                 countSlotsUsed++;
         });
 
@@ -355,7 +355,7 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     [].forEach.call(document.querySelectorAll('.stat-weapons .select-weapon'), function(element){
-        let item_index = element.parentNode.getAttribute('data-item-index');
+        let itemId = element.parentNode.getAttribute('data-item-id');
         let filterItems;
 
         if(element.parentNode.hasAttribute('data-backpack-index')){
@@ -369,9 +369,9 @@ document.addEventListener('DOMContentLoaded', function(){
              filterItems = items.weapons.filter(a => !('backpackIndex' in a));
         }
 
-        let item = filterItems.filter(a => a.item_index == item_index)[0];
+        let item = filterItems.filter(a => a.itemId == itemId)[0];
 
-        let weaponStats = calculated.weapon_stats[item_index];
+        let weaponStats = calculated.weapon_stats[itemId];
         let stats;
 
         element.addEventListener('mousedown', function(e){

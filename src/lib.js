@@ -9,6 +9,7 @@ const constants = require('./constants');
 const helper = require('./helper');
 const axios = require('axios');
 const moment = require('moment');
+const { v4 } = require('uuid');
 
 const dbUrl = 'mongodb://localhost:27017';
 const dbName = 'sbstats';
@@ -218,7 +219,7 @@ async function getBackpackContents(arraybuf){
 function getId(item){
     if(objectPath.has(item, 'tag.ExtraAttributes.id'))
         return item.tag.ExtraAttributes.id;
-    return null;
+    return "";
 }
 
 // Process items returned by API
@@ -427,6 +428,15 @@ async function getItems(base64, packs){
                         break;
                     case 'Intelligence':
                         item.stats.intelligence = statValue;
+                        break;
+                    case 'Sea Creature Chance':
+                        item.stats.sea_creature_chance = statValue;
+                        break;
+                    case 'Magic Find':
+                        item.stats.magic_find = statValue;
+                        break;
+                    case 'Pet Luck':
+                        item.stats.pet_luck = statValue;
                         break;
                 }
             });
@@ -731,6 +741,7 @@ module.exports = {
 
         for(const [index, item] of all_items.entries()){
             item.item_index = index;
+            item.itemId = v4('itemId');
 
             if('containsItems' in item && Array.isArray(item.containsItems))
                 item.containsItems.forEach(a => a.backpackIndex = item.item_index);
@@ -751,7 +762,7 @@ module.exports = {
         for(const talisman of inventory.filter(a => a.type == 'accessory')){
             const id = getId(talisman);
 
-            if(id === null)
+            if(id === "")
                 continue;
 
             const insertTalisman = Object.assign({ isUnique: true, isInactive: false }, talisman);
@@ -769,7 +780,7 @@ module.exports = {
         for(const talisman of talisman_bag){
             const id = getId(talisman);
 
-            if(id === null)
+            if(id === "")
                 continue;
 
             const insertTalisman = Object.assign({ isUnique: true, isInactive: false }, talisman);
@@ -909,14 +920,14 @@ module.exports = {
         if(bows.length > 0)
             output.highest_rarity_bow = bowsInventory.filter(a => a.rarity == bowsInventory[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
 
-        if(armor.filter(a => Object.keys(a).length > 1).length == 1){
+        if(armor.filter(a => Object.keys(a).length > 2).length == 1){
             const armorPiece = armor.filter(a => Object.keys(a).length > 1)[0];
 
             output.armor_set = armorPiece.display_name;
             output.armor_set_rarity = armorPiece.rarity;
         }
 
-        if(armor.filter(a => Object.keys(a).length > 1).length == 4){
+        if(armor.filter(a => Object.keys(a).length > 2).length == 4){
 
             let output_name = "";
             let reforgeName;
@@ -1010,7 +1021,8 @@ module.exports = {
         let average_level = 0;
 
         // Apply skill bonuses
-        if('experience_skill_farming' in profile
+        if('experience_skill_taming' in profile
+        || 'experience_skill_farming' in profile
         || 'experience_skill_mining' in profile
         || 'experience_skill_combat' in profile
         || 'experience_skill_foraging' in profile
@@ -1022,6 +1034,7 @@ module.exports = {
             let average_level_no_progress = 0;
 
             skillLevels = {
+                taming: getLevelByXp(profile.experience_skill_taming),
                 farming: getLevelByXp(profile.experience_skill_farming),
                 mining: getLevelByXp(profile.experience_skill_mining),
                 combat: getLevelByXp(profile.experience_skill_combat),
@@ -1049,6 +1062,7 @@ module.exports = {
             output.levels = Object.assign({}, skillLevels);
         }else{
             skillLevels = {
+                taming: -1,
                 farming: hypixelProfile.achievements.skyblock_harvester || 0,
                 mining: hypixelProfile.achievements.skyblock_excavator || 0,
                 combat: hypixelProfile.achievements.skyblock_combat || 0,
@@ -1060,15 +1074,21 @@ module.exports = {
 
             output.levels = {};
 
+            let skillsAmount = 0;
+
             for(const skill in skillLevels){
                 output.levels[skill] = { level: skillLevels[skill], xp: getXpByLevel(skillLevels[skill]), progress: 0.05, maxLevel: 50, xpCurrent: 0, xpForNext: 0 };
 
+                if(skillLevels[skill] < 0)
+                    continue;
+
+                skillsAmount++;
                 average_level += skillLevels[skill];
 
                 totalSkillXp += getXpByLevel(skillLevels[skill]);
             }
 
-            output.average_level = (average_level / (Object.keys(skillLevels).length));
+            output.average_level = (average_level / skillsAmount);
             output.average_level_no_progress = output.average_level;
             output.total_skill_xp = totalSkillXp;
         }
@@ -1145,6 +1165,23 @@ module.exports = {
             }
 
             output.slayers = Object.assign({}, slayers);
+        }
+
+        output.pets = await module.exports.getPets(profile);
+        output.petScore = await module.exports.getPetScore(output.pets);
+
+        const petScoreRequired = Object.keys(constants.pet_rewards).sort((a, b) => parseInt(b) - parseInt(a) );
+
+        for(const [index, score] of petScoreRequired.entries()){
+            if(parseInt(score) > output.petScore)
+                continue;
+
+            output.pet_bonus = constants.pet_rewards[score];
+
+            for(const stat in output.pet_bonus)
+                output.stats[stat] += output.pet_bonus[stat];
+
+            break;
         }
 
         // Apply all harp bonuses when Melody's Hair has been acquired
@@ -1224,10 +1261,25 @@ module.exports = {
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('ELEGANT_TUXEDO_')).length == 3)
             output.stats['health'] = 250;
 
+        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('ANGLER_')).length == 4)
+            output.stats['sea_creature_chance'] += 4;
+
         output.weapon_stats = {};
 
-        items.weapons.forEach(item => {
+        for(const item of items.weapons){
             let stats = Object.assign({}, output.stats);
+
+            if(getId(item) == 'CHALLENGE_ROD')
+                item.stats['sea_creature_chance'] = (item.stats['sea_creature_chance'] || 0) + 2;
+
+            if(getId(item) == 'CHAMP_ROD')
+                item.stats['sea_creature_chance'] = (item.stats['sea_creature_chance'] || 0) + 4;
+
+            if(getId(item) == 'LEGEND_ROD')
+                item.stats['sea_creature_chance'] = (item.stats['sea_creature_chance'] || 0) + 6;
+
+            if(objectPath.has(item, 'tag.ExtraAttributes.enchantments.angler'))
+                item.stats['sea_creature_chance'] = (item.stats['sea_creature_chance'] || 0) + item.tag.ExtraAttributes.enchantments.angler;
 
             // Apply held weapon stats
             for(let stat in item.stats){
@@ -1252,14 +1304,14 @@ module.exports = {
             if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('ELEGANT_TUXEDO_')).length == 3)
                 stats['health'] = 250;
 
-            output.weapon_stats[item.item_index] = stats;
+            output.weapon_stats[item.itemId] = stats;
 
             // Stats shouldn't go into negative
             for(let stat in stats)
-                output.weapon_stats[item.item_index][stat] = Math.max(0, Math.round(stats[stat]));
+                output.weapon_stats[item.itemId][stat] = Math.max(0, Math.round(stats[stat]));
 
             stats.effective_health = getEffectiveHealth(stats.health, stats.defense);
-        });
+        }
 
         const superiorBonus = Object.assign({}, constants.stat_template);
 
@@ -1448,6 +1500,17 @@ module.exports = {
         });
 
         return output;
+    },
+
+    getPetScore: async pets => {
+        const highestRarity = {};
+
+        for(const pet of pets)
+            if(!(pet.type in highestRarity)
+            || constants.pet_value[pet.rarity] > highestRarity[pet.type])
+                highestRarity[pet.type] = constants.pet_value[pet.rarity];
+
+        return Object.values(highestRarity).reduce((a, b) => a + b, 0);
     },
 
     getCollections: async (uuid, profile, members) => {

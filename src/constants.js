@@ -426,6 +426,32 @@ module.exports = {
         }
     },
 
+    pet_value: {
+        "common": 1,
+        "uncommon": 2,
+        "rare": 3,
+        "epic": 4,
+        "legendary": 5
+    },
+
+    pet_rewards: {
+        10: {
+            magic_find: 1
+        },
+        25: {
+            magic_find: 2
+        },
+        50: {
+            magic_find: 3
+        },
+        85: {
+            magic_find: 4
+        },
+        125: {
+            magic_find: 5
+        },
+    },
+
     // Player stats on a completely new profile
     base_stats: {
         damage: 0,
@@ -437,7 +463,10 @@ module.exports = {
         speed: 100,
         crit_chance: 20,
         crit_damage: 50,
-        intelligence: 0
+        intelligence: 0,
+        sea_creature_chance: 20,
+        magic_find: 10,
+        pet_luck: 0
     },
 
     stat_template: {
@@ -450,7 +479,10 @@ module.exports = {
         speed: 0,
         crit_chance: 0,
         crit_damage: 0,
-        intelligence: 0
+        intelligence: 0,
+        sea_creature_chance: 0,
+        magic_find: 0,
+        pet_luck: 0
     },
 
     slayer_cost: {
@@ -882,6 +914,12 @@ module.exports = {
                 defense: 2,
                 strength: 2,
                 speed: 1
+            }
+        },
+
+        taming_skill: {
+            1: {
+                pet_luck: 1
             }
         },
 

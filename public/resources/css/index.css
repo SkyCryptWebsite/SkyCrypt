@@ -965,7 +965,7 @@ a.additional-player-stat:hover{
 }
 
 #additional_stats_container{
-    margin-top: 25px;
+    margin-top: -25px;
     font-size: 12px;
     font-weight: 600;
     overflow: visible;
@@ -1172,6 +1172,38 @@ a.additional-player-stat:hover{
 
 .stat-intelligence .stat-name, .color-intelligence{
     color: #4FC3F7;
+}
+
+.stat-sea-creature-chance{
+    background-image: url(../img/icons/sea-creature-chance.png);
+}
+
+.stat-sea-creature-chance .stat-name, .color-sea-creature-chance{
+    color: #00AAAA;
+}
+
+.stat-sea-creature-chance{
+    background-image: url(../img/icons/sea-creature-chance.png);
+}
+
+.stat-sea-creature-chance .stat-name, .color-sea-creature-chance{
+    color: #1CD2D2;
+}
+
+.stat-magic-find{
+    background-image: url(../img/icons/magic-find.png);
+}
+
+.stat-magic-find .stat-name, .color-magic-find{
+    color: #3BDDDD;
+}
+
+.stat-pet-luck{
+    background-image: url(../img/icons/pet-luck.png);
+}
+
+.stat-pet-luck .stat-name, .color-pet-luck{
+    color: #FD64DE;
 }
 
 .stat-container{
