@@ -720,7 +720,7 @@ const getBonus = (stats, prefix) => {
         if(stats[stat] == 0)
             continue;
         %>
-        <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replace("_", "-") %>"><%= stats[stat].toLocaleString() %><%= statSuffix[stat] %> <%= statShort[stat] %></span>
+        <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replace(/\_/g, "-") %>"><%= stats[stat].toLocaleString() %><%= statSuffix[stat] %> <%= statShort[stat] %></span>
         <% if(index < statsNotZero.length - 1){ %><strong style="opacity: 0.6">//</strong><% } %>
     <% }
 }
