@@ -1288,7 +1288,16 @@ twitterDescription += '. Click to view more stats!'
                     %>
                     <p class="stat-raw-values">
                         <span class="stat-name">Unique Pets: </span><span class="stat-value"><%= uniquePets %> / <%= Object.keys(constants.pet_data).length %></span><br>
-                        <span class="stat-name">Pet Score: </span><span class="stat-value"><%= calculated.petScore %> <span class="color-magic-find">(+<%= calculated.pet_bonus.magic_find %> MF)</span></span><br>
+                        <span data-tippy-content="
+                        Increase your pet score by collecting unique pets with a high rarity.<br><br>
+                        <table>
+                        <tr><td>10 Score: </td><td><span class='color-magic-find grey-text'>+1 Magic Find</span></td>
+                        <tr><td>25 Score: </td><td><span class='color-magic-find grey-text'>+2 Magic Find</span></td>
+                        <tr><td>50 Score: </td><td><span class='color-magic-find grey-text'>+3 Magic Find</span></td>
+                        <tr><td>85 Score: </td><td><span class='color-magic-find grey-text'>+4 Magic Find</span></td>
+                        <tr><td>125 Score: </td><td><span class='color-magic-find grey-text'>+5 Magic Find</span></td>
+                        </table>
+                        "><span class="stat-name">Pet Score: </span><span class="stat-value"><%= calculated.petScore %></span></span><span class="grey-text color-magic-find"> (+<%= calculated.pet_bonus.magic_find %> MF)</span><br>
                         <span class="stat-name">Total Pet XP: </span><span class="stat-value"><%= helper.formatNumber(totalPetXp, true) %></span>
                     </p>
                     <% for(const [index, pet] of calculated.pets.entries()){
