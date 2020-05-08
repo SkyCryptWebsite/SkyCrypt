@@ -1375,10 +1375,21 @@ twitterDescription += '. Click to view more stats!'
             <div class="stat-anchor"></div>
             <div class="stat-header"><span>Fishing</span></div>
             <div class="stat-content">
+                <%
+                let totalSeaCreatureKills = 0;
+
+                for(const creature of seaCreatures){
+                    let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
+
+                    totalSeaCreatureKills += mobKills.length > 0 ? mobKills[0].amount : 0;
+                }
+                %>
+
                 <p class="stat-raw-values">
                     <span class="stat-name">Items fished: </span><span class="stat-value"><%= calculated.fishing.total.toLocaleString() %></span><br>
                     <span class="stat-name">Treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure.toLocaleString() %></span><br>
                     <span class="stat-name">Large treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure_large.toLocaleString() %></span><br>
+                    <span class="stat-name">Sea Creatures killed: </span><span class="stat-value"><%= totalSeaCreatureKills.toLocaleString() %></span><br>
                     <%
                     if(calculated.fishing.shredder_fished > 0 && calculated.fishing.shredder_bait > 0){
                     const baitWasted = calculated.fishing.shredder_bait - calculated.fishing.shredder_fished;
@@ -1391,16 +1402,8 @@ twitterDescription += '. Click to view more stats!'
                     '><span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span></span><br>
                     <% } %>
                 </p>
-                <%
-                let totalSeaCreatureKills = 0;
 
-                for(const creature of seaCreatures){
-                    let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
-
-                    totalSeaCreatureKills += mobKills.length > 0 ? mobKills[0].amount : 0;
-                }
-
-                if(totalSeaCreatureKills > 0){ %>
+                <% if(totalSeaCreatureKills > 0){ %>
                     <p class="stat-sub-header">Sea Creatures</p>
                     <div class="sea-creatures">
                         <% for(const creature of seaCreatures) {
