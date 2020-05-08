@@ -118,6 +118,13 @@ async function main(){
     );
 
     await db
+    .collection('guildMembers')
+    .createIndex(
+        { uuid: 1, gid: 1 },
+        { unique: true }
+    );
+
+    await db
     .collection('items')
     .createIndex(
         { id: 1 },
