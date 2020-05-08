@@ -744,7 +744,7 @@ module.exports = {
             item.itemId = v4('itemId');
 
             if('containsItems' in item && Array.isArray(item.containsItems))
-                item.containsItems.forEach(a => a.backpackIndex = item.item_index);
+                item.containsItems.forEach(a => { a.backpackIndex = item.item_index; a.itemId = v4('itemId'); });
         }
 
         // All items not in the inventory or accessory bag should be inactive so they don't contribute to the total stats
@@ -1269,15 +1269,6 @@ module.exports = {
         for(const item of items.weapons){
             let stats = Object.assign({}, output.stats);
 
-            if(getId(item) == 'CHALLENGE_ROD')
-                item.stats['sea_creature_chance'] = (item.stats['sea_creature_chance'] || 0) + 2;
-
-            if(getId(item) == 'CHAMP_ROD')
-                item.stats['sea_creature_chance'] = (item.stats['sea_creature_chance'] || 0) + 4;
-
-            if(getId(item) == 'LEGEND_ROD')
-                item.stats['sea_creature_chance'] = (item.stats['sea_creature_chance'] || 0) + 6;
-
             if(objectPath.has(item, 'tag.ExtraAttributes.enchantments.angler'))
                 item.stats['sea_creature_chance'] = (item.stats['sea_creature_chance'] || 0) + item.tag.ExtraAttributes.enchantments.angler;
 
@@ -1451,8 +1442,20 @@ module.exports = {
 
             lore.push(
                 '',
-                `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)} §6/ §e${helper.formatNumber(pet.level.xpMaxLevel, true, 10)}`
+                `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)} §6/ §e${helper.formatNumber(pet.level.xpMaxLevel, true, 10)}`,
+                `§7Candy Used: §e${pet.candyUsed} §6/ §e10`
             );
+
+            if(pet.heldItem){
+                const { heldItem } = pet;
+
+                const heldItemObj = await db
+                .collection('items')
+                .findOne({ id: heldItem });
+
+                if(heldItemObj)
+                    lore.push('', `§7Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
+            }
 
             pet.lore = '';
 
