@@ -36,7 +36,7 @@ module.exports = {
         .find({ uuid: uuid })
         .next();
 
-        if(user === null || +new Date() - user.date > 4000 * 1000){
+        if(user === null || (+new Date() - user.date) > 4000 * 1000){
             let profileRequest = axios(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`, { timeout: 2000 });
 
             profileRequest.then(async response => {
@@ -80,7 +80,16 @@ module.exports = {
         .collection('guildMembers')
         .findOne({ uuid: uuid });
 
-        if(guildMember !== null){
+        let guildObject = null;
+
+        if(guildMember !== null)
+            guildObject = await db
+            .collection('guilds')
+            .findOne({ gid: guildMember.gid });
+
+        console.log((+new Date() - guildObject.last_updated), 3600 * 1000);
+
+        if(guildMember !== null && (guildObject === null || (+new Date() - guildObject.last_updated) < 3600 * 1000)){
             if(guildMember.gid !== null){
                 const guildObject = await db
                 .collection('guilds')
@@ -120,11 +129,24 @@ module.exports = {
                         );
                     }
 
+                    const guildMembers = await db
+                    .collection('guildMembers')
+                    .find({ gid: guild._id })
+                    .toArray();
+
+                    for(const member of guildMembers){
+                        if(guild.members.filter(a => a.uuid == member.uuid).length == 0){
+                            await db
+                            .collection('guildMembers')
+                            .deleteOne({ uuid: member.uuid });
+                        }
+                    }
+
                     const guildObject = await db
                     .collection('guilds')
                     .findOneAndUpdate(
                         { gid: guild._id },
-                        { $set: { name: guild.name, tag: guild.tag, exp: guild.exp, created: guild.created, gm, members: guild.members.length }},
+                        { $set: { name: guild.name, tag: guild.tag, exp: guild.exp, created: guild.created, gm, members: guild.members.length, last_updated: new Date() }},
                         { returnOriginal: false, upsert: true }
                     );
 
