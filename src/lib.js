@@ -1176,7 +1176,9 @@ module.exports = {
             if(parseInt(score) > output.petScore)
                 continue;
 
-            output.pet_bonus = constants.pet_rewards[score];
+            output.pet_score_bonus = Object.assign({}, constants.pet_rewards[score]);
+
+            output.pet_bonus = Object.assign({}, output.pet_score_bonus);
 
             break;
         }
