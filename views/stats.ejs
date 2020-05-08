@@ -21,7 +21,10 @@ const statShort = {
     speed: 'Spd',
     crit_chance: 'CC',
     crit_damage: 'CD',
-    intelligence: 'Int'
+    intelligence: 'Int',
+    sea_creature_chance: 'SCC',
+    magic_find: 'MF',
+    pet_luck: 'PL'
 };
 
 const skillItems = {
@@ -702,13 +705,14 @@ getStats = items => {
     return stats;
 }
 
-const getBonus = stats => {
+const getBonus = (stats, prefix) => {
     const statsNotZero = Object.keys(stats).filter(a => stats[a] > 0 && a != 'effective_health');
 
     if(statsNotZero.length == 0)
         return;
 
     %>
+    <%- prefix %>
     <span class="stat-name">Bonus: </span>
     <%
 
@@ -1327,6 +1331,7 @@ twitterDescription += '. Click to view more stats!'
                                 <div class="pet-level">Level <%= pet.level.level %></div>
                             </div>
                             </div>
+                            <%- getBonus(pet.stats, '<br>') %>
                             <% if(calculated.pets.length > 1){ %>
                                 <p class="stat-sub-header">Other Pets</p>
                             <% } %>

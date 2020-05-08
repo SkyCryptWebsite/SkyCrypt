@@ -528,6 +528,96 @@ module.exports = {
         },
     },
 
+    pet_items: {
+        PET_ITEM_ALL_SKILLS_BOOST_COMMON: {
+            description: "§7Gives +§a10% §7pet exp for all skills"
+        },
+        PET_ITEM_BIG_TEETH_COMMON: {
+            description: "§7Increases §9Crit Chance §7by §a5%",
+            stats: {
+                crit_chance: 5
+            }
+        },
+        PET_ITEM_IRON_CLAWS_COMMON: {
+            description: "§7Increases the pet's §9Crit Damage §7by §a40% §7and §9Crit Chance §7by §a40%"
+        },
+        PET_ITEM_SHARPENED_CLAWS_UNCOMMON: {
+            description: "§7Increases §9Crit Chance §7by §a15%",
+            stats: {
+                crit_damage: 15
+            }
+        },
+        PET_ITEM_HARDENED_SCALES_UNCOMMON: {
+            description: "§7Increases §aDefense §7by §a25",
+            stats: {
+                defense: 25
+            }
+        },
+        PET_ITEM_BUBBLEGUM: {
+            description: "§7Your pet fuses its power with placed §aOrbs §7to give them §a2x §7duration"
+        },
+        PET_ITEM_LUCKY_CLOVER: {
+            description: "§7Increases §bMagic Find §7by §a7",
+            stats: {
+                magic_find: 7
+            }
+        },
+        PET_ITEM_TEXTBOOK: {
+            description: "§7Increases the pet's §bIntelligence §7by §a100%"
+        },
+        PET_ITEM_SADDLE: {
+            description: "§7Increase horse speed by §a50% §7 and jump boost by §a100%"
+        },
+        PET_ITEM_EXP_SHARE: {
+            description: "§7While unequipped this pet gains §a25% §7of the equipped pet's xp, this is §7split between all pets holding the item."
+        },
+        PET_ITEM_TIER_BOOST: {
+            description: "§7Boosts the §ararity §7of your pet by 1 tier!"
+        },
+        PET_ITEM_COMBAT_SKILL_BOOST_COMMON: {
+            description: "§7Gives +§a20% §7pet exp for Combat"
+        },
+        PET_ITEM_COMBAT_SKILL_BOOST_UNCOMMON: {
+            description: "§7Gives +§a30% §7pet exp for Combat"
+        },
+        PET_ITEM_COMBAT_SKILL_BOOST_RARE: {
+            description: "§7Gives +§a40% §7pet exp for Combat"
+        },
+        PET_ITEM_COMBAT_SKILL_BOOST_EPIC: {
+            description: "§7Gives +§a50% §7pet exp for Combat"
+        },
+        PET_ITEM_FISHING_SKILL_BOOST_COMMON: {
+            description: "§7Gives +§a20% §7pet exp for Fishing"
+        },
+        PET_ITEM_FISHING_SKILL_BOOST_UNCOMMON: {
+            description: "§7Gives +§a30% §7pet exp for Fishing"
+        },
+        PET_ITEM_FISHING_SKILL_BOOST_RARE: {
+            description: "§7Gives +§a40% §7pet exp for Fishing"
+        },
+        PET_ITEM_FISHING_SKILL_BOOST_EPIC: {
+            description: "§7Gives +§a50% §7pet exp for Fishing"
+        },
+        PET_ITEM_FORAGING_SKILL_BOOST_COMMON: {
+            description: "§7Gives +§a20% §7pet exp for Foraging"
+        },
+        PET_ITEM_FORAGING_SKILL_BOOST_EPIC: {
+            description: "§7Gives +§a50% §7pet exp for Foraging"
+        },
+        PET_ITEM_MINING_SKILL_BOOST_COMMON: {
+            description: "§7Gives +§a20% §7pet exp for Mining"
+        },
+        PET_ITEM_MINING_SKILL_BOOST_RARE: {
+            description: "§7Gives +§a40% §7pet exp for Mining"
+        },
+        PET_ITEM_FARMING_SKILL_BOOST_COMMON: {
+            description: "§7Gives +§a20% §7pet exp for Farming"
+        },
+        PET_ITEM_FARMING_SKILL_BOOST_RARE: {
+            description: "§7Gives +§a40% §7pet exp for Farming"
+        },
+    },
+
     special_enchants: [
         'Sharpness 6',
         'Sharpness VI',

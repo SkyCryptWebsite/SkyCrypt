@@ -1178,10 +1178,15 @@ module.exports = {
 
             output.pet_bonus = constants.pet_rewards[score];
 
-            for(const stat in output.pet_bonus)
-                output.stats[stat] += output.pet_bonus[stat];
-
             break;
+        }
+
+        for(const pet of output.pets){
+            if(!pet.active)
+                continue;
+
+            for(const stat in pet.stats)
+                output.pet_bonus[stat] = (output.pet_bonus[stat] || 0) + pet.stats[stat];
         }
 
         // Apply all harp bonuses when Melody's Hair has been acquired
@@ -1189,6 +1194,9 @@ module.exports = {
             output.stats.intelligence += 26;
 
         output.base_stats = Object.assign({}, output.stats);
+
+        for(const stat in output.pet_bonus)
+            output.stats[stat] += output.pet_bonus[stat];
 
         // Apply Lapis Armor full set bonus of +60 HP
         if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('LAPIS_ARMOR_')).length == 4)
@@ -1401,6 +1409,7 @@ module.exports = {
 
             pet.rarity = pet.tier.toLowerCase();
             pet.level = getPetLevel(pet);
+            pet.stats = {};
 
             const petData = constants.pet_data[pet.type] || {
                 type: '???',
@@ -1454,7 +1463,15 @@ module.exports = {
                 .findOne({ id: heldItem });
 
                 if(heldItemObj)
-                    lore.push('', `§7Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
+                    lore.push('', `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
+
+                if(heldItem in constants.pet_items){
+                    lore.push(constants.pet_items[heldItem].description);
+
+                    if('stats' in constants.pet_items[heldItem])
+                        for(const stat in constants.pet_items[heldItem].stats)
+                            pet.stats[stat] = (pet.stats[stat] || 0) + constants.pet_items[heldItem].stats[stat];
+                }
             }
 
             pet.lore = '';
