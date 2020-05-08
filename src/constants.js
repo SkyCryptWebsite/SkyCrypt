@@ -668,7 +668,9 @@ module.exports = {
         'Magnet 6',
         'Magnet VI',
         'Spiked Hook 6',
-        'Spiked Hook VI'
+        'Spiked Hook VI',
+        'Dragon Hunter 5',
+        'Dragon Hunter V'
     ],
 
     // Player stats on a completely new profile
