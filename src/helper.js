@@ -87,8 +87,6 @@ module.exports = {
             .collection('guilds')
             .findOne({ gid: guildMember.gid });
 
-        console.log((+new Date() - guildObject.last_updated), 3600 * 1000);
-
         if(guildMember !== null && (guildObject === null || (+new Date() - guildObject.last_updated) < 3600 * 1000)){
             if(guildMember.gid !== null){
                 const guildObject = await db
