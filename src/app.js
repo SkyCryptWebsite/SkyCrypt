@@ -519,6 +519,7 @@ async function main(){
 
             const misc = {};
 
+            misc.milestones = {};
             misc.races = {};
             misc.gifts = {};
             misc.winter = {};
@@ -564,6 +565,9 @@ async function main(){
                     misc.dragons['dragon_last_hits'] += userProfile.stats[key];
                 else if(key.startsWith('deaths_') && key.endsWith('_dragon'))
                     misc.dragons['dragon_deaths'] += userProfile.stats[key];
+                else if(key.startsWith('pet_milestone_')){
+                    misc.milestones[key.replace('pet_milestone_', '')] = userProfile.stats[key];
+                }
 
             for(const key in misc.dragons)
                 if(misc.dragons[key] == 0)

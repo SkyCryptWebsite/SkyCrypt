@@ -423,7 +423,73 @@ module.exports = {
             head: "/head/13cf8db84807c471d7c6922302261ac1b5a179f96d1191156ecf3e1b1d3ca",
             type: "foraging",
             emoji: "🐒"
-        }
+        },
+        "SPIDER": {
+            head: "/head/cd541541daaff50896cd258bdbdd4cf80c3ba816735726078bfe393927e57f1",
+            type: "combat",
+            emoji: "🕷️"
+        },
+        "ENDERMITE": {
+            head: "/head/5a1a0831aa03afb4212adcbb24e5dfaa7f476a1173fce259ef75a85855",
+            type: "mining",
+            emoji: "🐛"
+        },
+        "GHOUL": {
+            head: "/head/87934565bf522f6f4726cdfe127137be11d37c310db34d8c70253392b5ff5b",
+            type: "combat",
+            emoji: "🧟"
+        },
+        "JELLYFISH": {
+            head: "/head/913f086ccb56323f238ba3489ff2a1a34c0fdceeafc483acff0e5488cfd6c2f1",
+            type: "alchemy",
+            emoji: "🎐"
+        },
+        "PIG": {
+            head: "/head/621668ef7cb79dd9c22ce3d1f3f4cb6e2559893b6df4a469514e667c16aa4",
+            type: "farming",
+            emoji: "🐷"
+        },
+        "ROCK": {
+            head: "/head/cb2b5d48e57577563aca31735519cb622219bc058b1f34648b67b8e71bc0fa",
+            type: "mining",
+            emoji: "🗿"
+        },
+        "SKELETON": {
+            head: "/head/fca445749251bdd898fb83f667844e38a1dff79a1529f79a42447a0599310ea4",
+            type: "combat",
+            emoji: "💀"
+        },
+        "ZOMBIE": {
+            head: "/head/56fc854bb84cf4b7697297973e02b79bc10698460b51a639c60e5e417734e11",
+            type: "combat",
+            emoji: "🧟"
+        },
+        "DOLPHIN": {
+            head: "/head/cefe7d803a45aa2af1993df2544a28df849a762663719bfefc58bf389ab7f5",
+            type: "fishing",
+            emoji: "🐬"
+        },
+        "BABY_YETI": {
+            head: "/head/ab126814fc3fa846dad934c349628a7a1de5b415021a03ef4211d62514d5",
+            type: "fishing",
+            emoji: "❄️"
+        },
+        "GOLEM": {
+            head: "/head/89091d79ea0f59ef7ef94d7bba6e5f17f2f7d4572c44f90f76c4819a714",
+            type: "combat",
+            emoji: "🗿"
+        },
+        "HOUND": {
+            head: "/head/b7c8bef6beb77e29af8627ecdc38d86aa2fea7ccd163dc73c00f9f258f9a1457",
+            type: "combat",
+            emoji: "👹"
+        },
+        "TARANTULA": {
+            head: "/head/8300986ed0a04ea79904f6ae53f49ed3a0ff5b1df62bba622ecbd3777f156df8",
+            type: "combat",
+            emoji: "🕸️"
+        },
+
     },
 
     pet_value: {
@@ -1203,6 +1269,13 @@ module.exports = {
         ],
         CRACKED_PIGGY_BANK: [
             'PIGGY_BANK'
+        ],
+        SPEED_TALISMAN: [
+            'SPEED_RING',
+            'SPEED_ARTIFACT'
+        ],
+        SPEED_RING: [
+            'SPEED_ARTIFACT'
         ]
     },
 
