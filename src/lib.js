@@ -29,6 +29,8 @@ const parseNbt = util.promisify(nbt.parse);
 
 const rarity_order = ['special', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 
+const petTiers = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
+
 const MAX_SOULS = 194;
 
 function replaceAll(target, search, replacement){
@@ -857,21 +859,34 @@ module.exports = {
         }
 
         output.talismans = talismans;
-        output.weapons = all_items.filter(a => a.type == 'sword' || a.type == 'bow' || a.type == 'fishing rod');
+        output.weapons = all_items.filter(a => a.type == 'sword' || a.type == 'bow');
+        output.rods =  all_items.filter(a => a.type == 'fishing rod');
 
         for(const item of all_items){
             if(!Array.isArray(item.containsItems))
                 continue;
 
-            output.weapons.push(...item.containsItems.filter(a => a.type == 'sword' || a.type == 'bow' || a.type == 'fishing rod'));
+            output.weapons.push(...item.containsItems.filter(a => a.type == 'sword' || a.type == 'bow'));
+            output.rods.push(...item.containsItems.filter(a => a.type == 'fishing rod'));
         }
 
         // Check if inventory access disabled by user
         if(inventory.length == 0)
             output.no_inventory = true;
 
-        // Sort talismans and weapons by rarity
+        // Sort talismans, weapons and rods by rarity
         output.weapons = output.weapons.sort((a, b) => {
+            if(a.rarity == b.rarity){
+                if(b.inBackpack)
+                    return -1;
+
+                return a.item_index > b.item_index ? 1 : -1;
+            }
+
+            return rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity)
+        });
+
+        output.rods = output.rods.sort((a, b) => {
             if(a.rarity == b.rarity){
                 if(b.inBackpack)
                     return -1;
@@ -907,12 +922,16 @@ module.exports = {
 
         let swordsInventory = swords.filter(a => a.backpackIndex === undefined);
         let bowsInventory = bows.filter(a => a.backpackIndex === undefined);
+        let rodsInventory = output.rods.filter(a => a.backpackIndex === undefined);
 
         if(swords.length > 0)
             output.highest_rarity_sword = swordsInventory.filter(a =>  a.rarity == swordsInventory[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
 
         if(bows.length > 0)
             output.highest_rarity_bow = bowsInventory.filter(a => a.rarity == bowsInventory[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
+
+        if(output.rods.length > 0)
+            output.highest_rarity_rod = rodsInventory.filter(a => a.rarity == rodsInventory[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
 
         if(armor.filter(a => Object.keys(a).length > 2).length == 1){
             const armorPiece = armor.filter(a => Object.keys(a).length > 1)[0];
@@ -1409,6 +1428,10 @@ module.exports = {
                 continue;
 
             pet.rarity = pet.tier.toLowerCase();
+
+            if(pet.heldItem == 'PET_ITEM_TIER_BOOST')
+                pet.rarity = petTiers[Math.min(petTiers.length - 1, petTiers.indexOf(pet.rarity) + 1)];
+
             pet.level = getPetLevel(pet);
             pet.stats = {};
 
@@ -1453,7 +1476,7 @@ module.exports = {
             lore.push(
                 '',
                 `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)} §6/ §e${helper.formatNumber(pet.level.xpMaxLevel, true, 10)}`,
-                `§7Candy Used: §e${pet.candyUsed} §6/ §e10`
+                `§7Candy Used: §e${pet.candyUsed || 0} §6/ §e10`
             );
 
             if(pet.heldItem){
