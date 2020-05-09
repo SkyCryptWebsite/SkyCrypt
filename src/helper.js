@@ -82,12 +82,12 @@ module.exports = {
 
         let guildObject = null;
 
-        if(guildMember !== null)
+        if(guildMember !== null && guildMember.gid !== null)
             guildObject = await db
             .collection('guilds')
             .findOne({ gid: guildMember.gid });
 
-        if(guildMember !== null && (guildObject === null || (+new Date() - guildObject.last_updated) < 3600 * 1000)){
+        if(guildMember !== null && guildMember.gid !== null && (guildObject === null || (+new Date() - guildObject.last_updated) < 3600 * 1000)){
             if(guildMember.gid !== null){
                 const guildObject = await db
                 .collection('guilds')
