@@ -25,10 +25,14 @@ document.addEventListener('DOMContentLoaded', function(){
 
     let inventoryContainer = document.querySelector('#inventory_container');
 
+    const urlParams = new URLSearchParams(window.location.search);
+
+    urlParams.delete('__cf_chl_jschl_tk__');
+
     if(calculated.profile.cute_name == 'Deleted')
-        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.profile_id + window.location.search);
+        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.profile_id + urlParams.toString());
     else
-        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name + window.location.search);
+        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name + urlParams.toString());
 
     function isEnchanted(item){
         if(item.animated)
