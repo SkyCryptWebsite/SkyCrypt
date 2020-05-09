@@ -1062,7 +1062,7 @@ twitterDescription += '. Click to view more stats!'
 
                 <%- stat_component({
                     name: 'magic_find',
-                    baseExplanation: "Increased by collecting unique pets."
+                    baseExplanation: null
                 }); %>
 
                 <%- stat_component({
@@ -1106,7 +1106,7 @@ twitterDescription += '. Click to view more stats!'
                     if('levels' in calculated){
                 %>
                     <div id="other_skills">
-                        <%= skill_component('Taming', 'icon-383_0_4', calculated.levels.taming) %>
+                        <%= skill_component('Taming', 'icon-383_0_12', calculated.levels.taming) %>
                         <%= skill_component('Farming', 'icon-294_0', calculated.levels.farming) %>
                         <%= skill_component('Mining', 'icon-274_0', calculated.levels.mining) %>
                         <%= skill_component('Combat', 'icon-272_0', calculated.levels.combat) %>
