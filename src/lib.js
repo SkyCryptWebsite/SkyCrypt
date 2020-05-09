@@ -1166,13 +1166,13 @@ module.exports = {
 
         const petScoreRequired = Object.keys(constants.pet_rewards).sort((a, b) => parseInt(b) - parseInt(a) );
 
+        output.pet_bonus = {};
+
         for(const [index, score] of petScoreRequired.entries()){
             if(parseInt(score) > output.petScore)
                 continue;
 
             output.pet_score_bonus = Object.assign({}, constants.pet_rewards[score]);
-
-            output.pet_bonus = Object.assign({}, output.pet_score_bonus);
 
             break;
         }
@@ -1188,6 +1188,9 @@ module.exports = {
         // Apply all harp bonuses when Melody's Hair has been acquired
         if(items.talismans.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id == 'MELODY_HAIR').length == 1)
             output.stats.intelligence += 26;
+
+        for(const stat in output.pet_score_bonus)
+            output.stats[stat] += output.pet_score_bonus[stat];
 
         output.base_stats = Object.assign({}, output.stats);
 
