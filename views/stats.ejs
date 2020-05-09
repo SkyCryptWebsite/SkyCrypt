@@ -788,7 +788,7 @@ const stat_component = stat => {
         <span class='stat-name'>Base <%= helper.titleCase(stat.name.replace(/\_/g, " ")) %>: </span><span class='stat-value'><%= calculated.base_stats[stat.name].toLocaleString() %><%= stat.suffix || '' %></span>
         <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= stat.baseExplanation %><% } %></div><br>
         <span class='stat-name'>Bonus <%= helper.titleCase(stat.name.replace(/\_/g, " ")) %>: </span><span class='stat-value'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %><%= stat.suffix || '' %></span>
-        <div class='tippy-explanation'>Additional bonuses from Armor, held items and Accessories.</div>
+        <div class='tippy-explanation'>Additional bonuses from Armor, held items, Accessories and active Pets.</div>
         <% if(Array.isArray(stat.extraStats)){
             for(const extraStat of stat.extraStats){ %>
         <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value'><%= extraStat.value.toLocaleString() %><%= stat.suffix || '' %></span>
@@ -1062,7 +1062,7 @@ twitterDescription += '. Click to view more stats!'
 
                 <%- stat_component({
                     name: 'magic_find',
-                    baseExplanation: null
+                    baseExplanation: "Increased by collecting unique pets with high rarities."
                 }); %>
 
                 <%- stat_component({
