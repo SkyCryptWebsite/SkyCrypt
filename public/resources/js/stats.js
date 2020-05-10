@@ -77,6 +77,8 @@ document.addEventListener('DOMContentLoaded', function(){
                 countSlotsUsed++;
         });
 
+        countSlotsUsed = Math.max(countSlotsUsed, 9);
+
         switch(type){
             case 'inventory':
                 inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
@@ -419,7 +421,7 @@ document.addEventListener('DOMContentLoaded', function(){
             for(let stat in stats){
                 if(stat == 'sea_creature_chance')
                     continue;
-                    
+
                 let element = document.querySelector('.basic-stat[data-stat=' + stat + '] .stat-value');
 
                 if(!element)
