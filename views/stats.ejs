@@ -1211,6 +1211,10 @@ twitterDescription += '. Click to view more stats!'
                         <p class="stat-raw-values">
                             <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%= items.highest_rarity_sword.display_name %></span>
                         </p>
+                        <% }else if(items.weapons.length > 0){ %>
+                        <p class="stat-raw-values">
+                            <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-common-fg">None</span>
+                        </p>
                         <% } %>
                         <div class="pieces">
                             <%
@@ -1431,6 +1435,10 @@ twitterDescription += '. Click to view more stats!'
                     <% if(items.highest_rarity_rod){ %>
                     <p class="stat-raw-values">
                         <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_rod.rarity %>-fg"><%= items.highest_rarity_rod.display_name %></span>
+                    </p>
+                    <% }else if(items.rods.length > 0){ %>
+                    <p class="stat-raw-values">
+                        <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-common-fg">None</span>
                     </p>
                     <% } %>
                     <div class="pieces">
