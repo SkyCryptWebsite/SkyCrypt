@@ -111,7 +111,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 let inventoryItem = document.createElement('div');
 
-                bindLoreEvents(inventoryItem);
+                let pieceHoverArea = document.createElement('div');
+                pieceHoverArea.className = 'piece-hover-area';
 
                 inventoryItem.className = 'rich-item inventory-item';
 
@@ -121,11 +122,14 @@ document.addEventListener('DOMContentLoaded', function(){
                     inventoryItem.setAttribute('data-item-index', item.item_index);
 
                 inventoryItem.appendChild(inventoryItemIcon);
+                inventoryItem.appendChild(pieceHoverArea);
 
                 if(item.Count != 1)
                     inventoryItem.appendChild(inventoryItemCount);
 
                 inventorySlot.appendChild(inventoryItem);
+
+                bindLoreEvents(pieceHoverArea);
             }
 
             inventoryView.appendChild(inventorySlot);
@@ -413,12 +417,15 @@ document.addEventListener('DOMContentLoaded', function(){
             });
 
             for(let stat in stats){
+                if(stat == 'sea_creature_chance')
+                    continue;
+                    
                 let element = document.querySelector('.basic-stat[data-stat=' + stat + '] .stat-value');
 
                 if(!element)
                     continue;
 
-                let currentValue = Number(element.innerHTML);
+                let currentValue = parseInt(element.innerHTML);
                 let newValue = stats[stat];
 
                 if(newValue != currentValue){
@@ -431,6 +438,80 @@ document.addEventListener('DOMContentLoaded', function(){
                         easing: 'easeOutCubic'
                     });
                 }
+            }
+        });
+    });
+
+    [].forEach.call(document.querySelectorAll('.stat-fishing .select-rod'), function(element){
+        let itemId = element.parentNode.getAttribute('data-item-id');
+        let filterItems;
+
+        if(element.parentNode.hasAttribute('data-backpack-index')){
+            let backpack = all_items.filter(a => a.item_index == Number(element.parentNode.getAttribute('data-backpack-index')));
+
+            if(backpack.length == 0)
+                return;
+
+            filterItems = backpack[0].containsItems;
+        }else{
+             filterItems = items.rods.filter(a => !('backpackIndex' in a));
+        }
+
+        let item = filterItems.filter(a => a.itemId == itemId)[0];
+
+        let weaponStats = calculated.weapon_stats[itemId];
+        let stats;
+
+        element.addEventListener('mousedown', function(e){
+            e.preventDefault();
+        });
+
+        element.addEventListener('click', function(e){
+            if(element.parentNode.classList.contains('piece-selected')){
+                element.parentNode.classList.remove("piece-selected");
+
+                stats = calculated.stats;
+
+                document.querySelector('.stat-active-rod').className = 'stat-value stat-active-rod piece-common-fg';
+                document.querySelector('.stat-active-rod').innerHTML = 'None';
+            }else{
+                [].forEach.call(document.querySelectorAll('.stat-fishing .piece'), function(_element){
+                    _element.classList.remove("piece-selected");
+                });
+
+                element.parentNode.classList.add("piece-selected");
+
+                document.querySelector('.stat-active-rod').className = 'stat-value stat-active-rod piece-' + item.rarity + '-fg';
+                document.querySelector('.stat-active-rod').innerHTML = item.display_name;
+
+                stats = weaponStats;
+            }
+
+            anime({
+                targets: '.stat-active-rod',
+                backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
+                duration: 500,
+                round: 1,
+                easing: 'easeOutCubic'
+            });
+
+            let _element = document.querySelector('.basic-stat[data-stat=sea_creature_chance] .stat-value');
+
+            if(!_element)
+                return;
+
+            let currentValue = parseInt(_element.innerHTML);
+            let newValue = stats['sea_creature_chance'];
+
+            if(newValue != currentValue){
+                anime({
+                    targets: '.basic-stat[data-stat=sea_creature_chance] .stat-value',
+                    innerHTML: newValue,
+                    backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
+                    duration: 500,
+                    round: 1,
+                    easing: 'easeOutCubic'
+                });
             }
         });
     });
@@ -525,17 +606,11 @@ document.addEventListener('DOMContentLoaded', function(){
 
     function bindLoreEvents(element){
         element.addEventListener('mouseenter', function(e){
-            if(e.target.classList.contains('select-weapon'))
-                return;
-
-            fillLore(element, false);
+            fillLore(element.parentNode, false);
             statsContent.classList.add('show-stats');
         });
 
         element.addEventListener('mouseleave', function(e){
-            if(e.target.classList.contains('select-weapon'))
-                return;
-
             statsContent.classList.remove('show-stats');
         });
 
@@ -560,34 +635,32 @@ document.addEventListener('DOMContentLoaded', function(){
         });
 
         element.addEventListener('click', function(e){
-            if(!e.target.classList.contains('select-weapon')){
-                let itemIndex = Number(element.getAttribute('data-item-index'));
-                let item = all_items.filter(a => a.item_index == itemIndex);
+            let itemIndex = Number(element.parentNode.getAttribute('data-item-index'));
+            let item = all_items.filter(a => a.item_index == itemIndex);
 
-                if(item.length > 0)
-                    item = item[0];
+            if(item.length > 0)
+                item = item[0];
 
-                if(e.ctrlKey && item && Array.isArray(item.containsItems)){
-                    showBackpack(item);
-                    closeLore();
+            if(e.ctrlKey && item && Array.isArray(item.containsItems)){
+                showBackpack(item);
+                closeLore();
+            }else{
+                if(statsContent.classList.contains('sticky-stats')){
+                    dimmer.classList.remove('show-dimmer');
+                    element.parentNode.blur();
+                    element.parentNode.classList.remove('sticky-stats');
+                    statsContent.classList.remove('sticky-stats')
                 }else{
-                    if(statsContent.classList.contains('sticky-stats')){
-                        dimmer.classList.remove('show-dimmer');
-                        element.blur();
-                        element.classList.remove('sticky-stats');
-                        statsContent.classList.remove('sticky-stats')
-                    }else{
-                        showLore(element, false);
+                    showLore(element.parentNode, false);
 
-                        if(Number(statsContent.getAttribute('data-item-index')) != itemIndex)
-                            fillLore(element);
-                    }
+                    if(Number(statsContent.getAttribute('data-item-index')) != itemIndex)
+                        fillLore(element.parentNode);
                 }
             }
         });
     }
 
-    [].forEach.call(document.querySelectorAll('.rich-item'), bindLoreEvents);
+    [].forEach.call(document.querySelectorAll('.rich-item .piece-hover-area'), bindLoreEvents);
 
     let enableApiPlayer = document.querySelector('#enable_api');
 

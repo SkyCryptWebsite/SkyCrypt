@@ -1344,12 +1344,14 @@ a.additional-player-stat:hover{
     position: absolute;
     left: 0;
     right: 0;
+    top: 0;
+    bottom: 0;
     z-index: 10;
     transition: background-color .2s;
     border-radius: 5px;
 }
 
-.piece-hover-area:hover{
+.piece-hover-area:hover, .sticky-stats .piece-hover-area{
     background-color: rgba(255,255,255,0.2);
 }
 
@@ -1365,7 +1367,11 @@ a.additional-player-stat:hover{
     margin-bottom: 50px;
 }
 
-.piece .select-weapon{
+.stat-fishing .piece{
+    margin-bottom: 50px;
+}
+
+.piece .select-weapon, .piece .select-rod{
     top: calc(100% + 15px);
     position: absolute;
     left: 50%;
@@ -1379,8 +1385,12 @@ a.additional-player-stat:hover{
     transition: background-color .2s;
 }
 
-.piece-selected .select-weapon{
-    background-color: white;
+.piece .select-weapon:hover, .piece .select-rod:hover{
+    background-color: rgba(255,255,255,0.1);
+}
+
+.piece-selected .select-weapon, .piece-selected .select-rod{
+    background-color: white !important;
 }
 
 .piece-shine{
@@ -1695,11 +1705,6 @@ a.additional-player-stat:hover{
     height: 100%;
     position: absolute;
     cursor: pointer;
-    transition: background-color .2s;
-}
-
-.inventory-item:hover, .inventory-item.sticky-stats{
-    background-color: rgba(255,255,255,0.1);
 }
 
 .inventory-item .item-count{

@@ -1294,7 +1294,7 @@ module.exports = {
 
         output.weapon_stats = {};
 
-        for(const item of items.weapons){
+        for(const item of items.weapons.concat(items.rods)){
             let stats = Object.assign({}, output.stats);
 
             if(objectPath.has(item, 'tag.ExtraAttributes.enchantments.angler'))

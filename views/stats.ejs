@@ -758,6 +758,7 @@ const inventorySlot = item => { %>
     <div class="inventory-slot">
         <% if(Object.keys(item).length > 2){ %>
         <div class="rich-item inventory-item" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>">
+            <div class="piece-hover-area"></div>
             <% itemIcon(item, ['piece-icon']); %>
             <% if(item.Count != 1){ %><div class="item-count"><%= item.Count %></div><% } %>
         </div>
@@ -1001,12 +1002,19 @@ twitterDescription += '. Click to view more stats!'
             <%
                 let stats = Object.assign({}, calculated.stats);
                 let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
+                let rod = items.rods.slice().sort((a, b) => a.item_index - b.item_index);
 
                 if(items.highest_rarity_sword)
                     sword = [items.highest_rarity_sword];
 
+                if(items.highest_rarity_rod)
+                    rod = [items.highest_rarity_rod];
+
                 if(sword.length > 0)
                     stats = calculated.weapon_stats[sword[0].itemId];
+
+                if(rod.length > 0)
+                    stats['sea_creature_chance'] = calculated.weapon_stats[rod[0].itemId]['sea_creature_chance'];
             %>
 
             <div id="base_stats_container">
@@ -1410,6 +1418,44 @@ twitterDescription += '. Click to view more stats!'
                     '><span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span></span><br>
                     <% } %>
                 </p>
+
+                <% if(items.rods.length > 0){ %>
+                    <%- stat_component({
+                        name: 'sea_creature_chance',
+                        prettyName: 'SC Chance',
+                        suffix: '%',
+                        baseExplanation: null
+                    }); %>
+
+                    <p class="stat-sub-header">Fishing Rods</p>
+                    <% if(items.highest_rarity_rod){ %>
+                    <p class="stat-raw-values">
+                        <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_rod.rarity %>-fg"><%= items.highest_rarity_rod.display_name %></span>
+                    </p>
+                    <% } %>
+                    <div class="pieces">
+                        <%
+                            let rod = items.rods.slice().sort((a, b) => a.item_index - b.item_index);
+
+                            if(items.highest_rarity_rod)
+                                rod = [items.highest_rarity_rod];
+
+                            items.rods.filter(a => !a.hidden).forEach(item => { %>
+                                <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece
+                                    <% if(rod.length > 0 && item.backpackIndex === undefined && item.item_index == rod[0].item_index){ %>piece-selected<% } %>
+                                    piece-<%= item.rarity %>-bg">
+                                    <% if(item.rarity == 'legendary'){ %>
+                                        <div class="piece-shine"></div>
+                                    <% } %>
+                                    <div class="piece-hover-area"></div>
+                                    <div class="select-rod"></div>
+                                    <% itemIcon(item, ['piece-icon']); %>
+                                </div>
+                        <%
+                            });
+                        %>
+                    </div>
+                <% } %>
 
                 <% if(totalSeaCreatureKills > 0){ %>
                     <p class="stat-sub-header">Sea Creatures</p>
