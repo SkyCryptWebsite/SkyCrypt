@@ -505,6 +505,11 @@ module.exports = {
             type: "combat",
             emoji: "🕸️"
         },
+        "BLACK_CAT": {
+            head: "/head/e4b45cbaa19fe3d68c856cd3846c03b5f59de81a480eec921ab4fa3cd81317",
+            type: "combat",
+            emoji: "🐱"
+        }
     },
 
     tier_colors: {
