@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const urlParams = new URLSearchParams(window.location.search);
 
     urlParams.delete('__cf_chl_jschl_tk__');
+    urlParams.delete('__cf_chl_captcha_tk__');
 
     if(calculated.profile.cute_name == 'Deleted')
         history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.profile_id + urlParams.toString());
@@ -727,6 +728,8 @@ document.addEventListener('DOMContentLoaded', function(){
         if(!updateTabLock)
             updateTab = true;
     });
+
+    updateTab = true;
 
     [].forEach.call(document.querySelectorAll('.nav-item'), function(element){
         element.addEventListener('click', function(){
