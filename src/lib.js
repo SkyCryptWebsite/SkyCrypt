@@ -460,7 +460,8 @@ async function getItems(base64, packs){
             item.type = 'bow';
 
         // Workaround for detecting item types if another language is set by the player on Hypixel
-        if(objectPath.has(item, 'tag.ExtraAttributes.id') && item.tag.ExtraAttributes.id != 'ENCHANTED_BOOK'){
+        if(objectPath.has(item, 'tag.ExtraAttributes.id') && item.tag.ExtraAttributes.id != 'ENCHANTED_BOOK'
+        && !constants.item_types.includes(item.type)){
             if(objectPath.has(item, 'tag.ExtraAttributes.enchantments')){
                 if('sharpness' in item.tag.ExtraAttributes.enchantments
                 || 'crticial' in item.tag.ExtraAttributes.enchantments

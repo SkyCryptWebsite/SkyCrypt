@@ -143,6 +143,22 @@ module.exports = {
         4: 500
     },
 
+    item_types: [
+        'sword',
+        'bow',
+        'fishing rod',
+        'wand',
+        'axe',
+        'hoe',
+        'shovel',
+        'pickaxe',
+        'accessory',
+        'helmet',
+        'chestplate',
+        'leggings',
+        'boots'
+    ],
+
     pet_rarity_offset: {
         common: 0,
         uncommon: 6,
