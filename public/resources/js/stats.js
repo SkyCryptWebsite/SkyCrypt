@@ -190,6 +190,8 @@ document.addEventListener('DOMContentLoaded', function(){
             item = [currentBackpack.containsItems[Number(element.getAttribute('data-backpack-item-index'))]];
         else if(element.hasAttribute('data-pet-index'))
             item = [calculated.pets[parseInt(element.getAttribute('data-pet-index'))]];
+        else if(element.hasAttribute('data-missing-pet-index'))
+            item = [calculated.missingPets[parseInt(element.getAttribute('data-missing-pet-index'))]];
 
         if(item.length == 0)
             return;
@@ -364,6 +366,15 @@ document.addEventListener('DOMContentLoaded', function(){
         if(rect.y)
             statsContent.style.top = Math.max(70, Math.min(maxTop, (rect.y + element.offsetHeight / 2) - statsContent.offsetHeight / 2)) + 'px';
     }
+
+    [].forEach.call(document.querySelectorAll('.sub-extendable .stat-sub-header'), function(element){
+        element.addEventListener('click', function(e){
+            if(element.parentNode.classList.contains('sub-extended'))
+                element.parentNode.classList.remove('sub-extended')
+            else
+                element.parentNode.classList.add('sub-extended');
+        });
+    });
 
     [].forEach.call(document.querySelectorAll('.stat-weapons .select-weapon'), function(element){
         let itemId = element.parentNode.getAttribute('data-item-id');

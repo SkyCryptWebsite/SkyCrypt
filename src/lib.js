@@ -1188,6 +1188,7 @@ module.exports = {
         }
 
         output.pets = await module.exports.getPets(profile);
+        output.missingPets = await module.exports.getMissingPets(output.pets);
         output.petScore = await module.exports.getPetScore(output.pets);
 
         const petScoreRequired = Object.keys(constants.pet_rewards).sort((a, b) => parseInt(b) - parseInt(a) );
@@ -1549,6 +1550,38 @@ module.exports = {
 
             return a.active? -1 : 1
         });
+
+        return output;
+    },
+
+    getMissingPets: async pets => {
+        const output = [];
+
+        for(const petType in constants.pet_data){
+            if(pets.map(a => a.type).includes(petType))
+                continue;
+
+            const pet = Object.assign({}, constants.pet_data[petType]);
+
+            pet.texture_path = pet.head;
+            pet.display_name = helper.titleCase(petType.replace(/\_/g, ' '));
+            pet.rarity = 'legendary';
+
+            let lore = [
+                `§8${helper.capitalizeFirstLetter(pet.type)} Pet`,
+            ];
+
+            pet.lore = '';
+
+            lore.forEach((line, index) => {
+                pet.lore += helper.renderLore(line);
+
+                if(index + 1 <= lore.length)
+                    pet.lore += '<br>';
+            });
+
+            output.push(pet);
+        }
 
         return output;
     },

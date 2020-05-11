@@ -1302,14 +1302,14 @@ twitterDescription += '. Click to view more stats!'
                 <div class="stat-header"><span>Pets</span></div>
                 <div class="stat-content">
                     <%
-                        const uniquePets = _.uniq(calculated.pets.map(a => a.type)).length;
+                        const uniquePets = _.uniq(calculated.pets.map(a => a.type));
                         let totalPetXp = 0;
 
                         for(const pet of calculated.pets)
                             totalPetXp += pet.exp;
                     %>
                     <p class="stat-raw-values">
-                        <span class="stat-name">Unique Pets: </span><span class="stat-value"><%= uniquePets %> / <%= Object.keys(constants.pet_data).length %></span><br>
+                        <span class="stat-name">Unique Pets: </span><span class="stat-value"><%= uniquePets.length %> / <%= Object.keys(constants.pet_data).length %></span><br>
                         <span data-tippy-content="
                         Increase your pet score by collecting unique pets with a high rarity.<br><br>
                         <table>
@@ -1330,7 +1330,7 @@ twitterDescription += '. Click to view more stats!'
                             <p></p>
                             <div class="pieces">
                         <% } %>
-                            <div data-pet-index="<%= index %>" class="<%= pet.active ? 'active-pet' : '' %> rich-item piece piece-<%= pet.rarity %>-bg">
+                            <div data-pet-index="<%= index %>" class="<%= pet.active ? 'active-pet' : '' %> <%= index > 0 || index == 0 && !pet.active ? 'other-pet' : '' %> rich-item piece piece-<%= pet.rarity %>-bg">
                                 <% if(pet.rarity == 'legendary'){ %>
                                     <div class="piece-shine"></div>
                                 <% } %>
@@ -1348,12 +1348,33 @@ twitterDescription += '. Click to view more stats!'
                             </div>
                             <%- getBonus(pet.stats, '<br>') %>
                             <% if(calculated.pets.length > 1){ %>
+                                <div class="stat-sub-container sub-other-pets">
                                 <p class="stat-sub-header">Other Pets</p>
                             <% } %>
                             <div class="pieces">
                         <% }
                     } %>
+                    <% if(calculated.pets.length > 1){ %>
+                        </div>
+                    <% } %>
                     </div>
+                    <% if(calculated.missingPets.length > 0){ %>
+                        <div class="stat-sub-container sub-extendable sub-missing-pets">
+                            <p class="stat-sub-header">Missing Pets</p>
+                            <div class="pieces">
+                            <%
+                                for(const [index, pet] of calculated.missingPets.entries()){
+                                    %>
+                                    <div data-missing-pet-index="<%= index %>" class="rich-item piece piece-<%= pet.rarity %>-bg missing-pet">
+                                        <div class="piece-hover-area"></div>
+                                        <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                                    </div>
+                                    <%
+                                }
+                            %>
+                            </div>
+                        </div>
+                    <% } %>
                 </div>
             </div>
         <% } %>

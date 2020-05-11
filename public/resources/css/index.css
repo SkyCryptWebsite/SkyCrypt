@@ -1539,13 +1539,47 @@ a.additional-player-stat:hover{
 
 .stat-sub-header{
     font-weight: 500;
-    font-size: 19px;
+    font-size: 20px;
     color: rgba(255,255,255,0.9);
     font-weight: 600;
 }
 
 .stat-sub-header::after{
-    content: ":";
+    content: "";
+}
+
+.sub-extendable{
+    max-height: 50px;
+    overflow: hidden;
+}
+
+.sub-extendable .stat-sub-header{
+    cursor: pointer;
+    transition: color .2s;
+}
+
+.sub-extendable .stat-sub-header:hover, .sub-extended .stat-sub-header{
+    color: rgba(255,255,255,1);
+}
+
+.sub-extendable .stat-sub-header::before{
+    content: "";
+    width: 24px;
+    height: 24px;
+    background-image: url(/resources/img/icons/chevron-down.png);
+    background-size: 24px 24px;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.sub-extendable.sub-extended .stat-sub-header::before{
+    background-image: url(/resources/img/icons/chevron-up.png);
+}
+
+.sub-extendable.sub-extended{
+    max-height: none;
 }
 
 .stat-raw-values{
@@ -1560,7 +1594,7 @@ a.additional-player-stat:hover{
     font-weight: 500;
 }
 
-.stat-pets .pieces:last-child .piece{
+.piece.other-pet{
     margin-bottom: 25px;
 }
 
@@ -1581,6 +1615,24 @@ a.additional-player-stat:hover{
     font-weight: 600;
     text-transform: uppercase;
     font-size: 15px;
+}
+
+.missing-pet{
+    background-color: #555555;
+    transition: background-color .2s;
+}
+
+.missing-pet .piece-icon{
+    filter: saturate(0%);
+    transition: filter .2s;
+}
+
+.missing-pet:hover, .missing-pet.sticky-stats{
+    background-color: #DD980E;
+}
+
+.missing-pet:hover .piece-icon, .missing-pet.sticky-stats .piece-icon{
+    filter: saturate(100%);
 }
 
 #inventory_container{
