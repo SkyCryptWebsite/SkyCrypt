@@ -446,7 +446,7 @@ html.no-webp #bg_blur{
     position: fixed;
     left: 20px;
     width: calc(30vw - 40px);
-    top: 45px;
+    top: 48px;
     z-index: 1;
     background-color: rgba(30, 30, 30, 0.95);
     padding: 30px;
@@ -455,6 +455,8 @@ html.no-webp #bg_blur{
     transform: translateY(-100%);
     transition: transform .3s;
     z-index: 100;
+    max-height: calc(100vh - 48px - 30px);
+    overflow-y: auto;
 }
 
 html.no-transform #info_box{
@@ -2540,6 +2542,7 @@ html.no-webp #error_box_wrapper{
         left: 0;
         width: 100vw;
         right: 0;
+        max-height: calc(100vh - 45px);
     }
 
     #wrapper, #bg_blur{
