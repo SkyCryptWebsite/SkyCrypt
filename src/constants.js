@@ -834,8 +834,8 @@ module.exports = {
         ENCHANTED_BLAZE_POWDER: "eblaze",
         ENCHANTED_BAKED_POTATO: "ebaked",
         SUMMONING_EYE: "sum",
-        ENDSTONE: "end stone",
-        ENCHANTED_ENDSTONE: "end stone",
+        ENDSTONE: "endstone",
+        ENCHANTED_ENDSTONE: "endstone",
         HOT_POTATO_BOOK: "hpb"
     },
 
