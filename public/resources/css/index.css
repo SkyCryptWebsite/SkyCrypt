@@ -1783,7 +1783,7 @@ a.additional-player-stat:hover{
 
 .inventory-item .item-count{
     position: absolute;
-    z-index: 25;
+    z-index: 15;
     bottom: 2px;
     right: 2px;
     font-size: 24px;
