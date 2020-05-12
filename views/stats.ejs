@@ -767,7 +767,7 @@ const inventorySlot = item => { %>
 <% };
 
 const skill_component = (skill, icon, level) => { %>
-    <div class="skill xp-skill">
+    <div class="skill xp-skill <%= level.level == level.maxLevel ? 'maxed-skill' : ''%>">
         <div class="skill-icon"><div class="item-icon <%= icon %>"></div></div>
         <div class="skill-name"><%= skill %> <span class="skill-level"><%= level.level >= 0 ? level.level : '?' %></span></div>
         <div class="skill-bar" data-skill="<%= skill %>">
@@ -1251,8 +1251,8 @@ twitterDescription += '. Click to view more stats!'
                         <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
                     <% }else{ %>
                         <p class="stat-raw-values">
-                            <span class="stat-name">Unique Accessories: </span><span class="stat-value"><%= items.talismans.filter(a => a.isUnique).length %> / 47</span><br>
-                            <span class="stat-name">Completion: </span><span class="stat-value"><%= Math.round(items.talismans.filter(a => a.isUnique).length / 47 * 100) %>%</span>
+                            <% max = items.talismans.filter(a => a.isUnique).length >= 47 ? 'golden-text': '' %><span class="stat-name <%= max %>">Unique Accessories: </span><span class="stat-value <%= max %>"><%= items.talismans.filter(a => a.isUnique).length %> / 47</span><br>
+                            <span class="stat-name <%= max %>">Completion: </span><span class="stat-value <%= max %>"><%= Math.round(items.talismans.filter(a => a.isUnique).length / 47 * 100) %>%</span>
                         </p>
                         <% if(items.talismans.filter(a => !a.isInactive).length > 0){ %>
                             <div class="accessory-list">
@@ -1309,8 +1309,8 @@ twitterDescription += '. Click to view more stats!'
                             totalPetXp += pet.exp;
                     %>
                     <p class="stat-raw-values">
-                        <span class="stat-name">Unique Pets: </span><span class="stat-value"><%= uniquePets.length %> / <%= Object.keys(constants.pet_data).length %></span><br>
-                        <span data-tippy-content="
+                        <% max = uniquePets.length >= Object.keys(constants.pet_data).length ? 'golden-text': '' %><span class="stat-name <%= max %>">Unique Pets: </span><span class="stat-value <%= max %>"><%= uniquePets.length %> / <%= Object.keys(constants.pet_data).length %></span><br>
+                        <% max = calculated.petScore >= 125 ? 'golden-text' : '' %><span data-tippy-content="
                         Increase your pet score by collecting unique pets with a high rarity.<br><br>
                         <table>
                         <tr><td>10 Score: </td><td><span class='color-magic-find grey-text'>+1 Magic Find</span></td>
@@ -1319,7 +1319,7 @@ twitterDescription += '. Click to view more stats!'
                         <tr><td>85 Score: </td><td><span class='color-magic-find grey-text'>+4 Magic Find</span></td>
                         <tr><td>125 Score: </td><td><span class='color-magic-find grey-text'>+5 Magic Find</span></td>
                         </table>
-                        "><span class="stat-name">Pet Score: </span><span class="stat-value"><%= calculated.petScore %></span></span><% if(calculated.pet_score_bonus.magic_find > 0){ %><span class="grey-text color-magic-find"> (+<%= calculated.pet_score_bonus.magic_find %> MF)</span><% } %><br>
+                        "><span class="stat-name <%= max %>">Pet Score: </span><span class="stat-value <%= max %>"><%= calculated.petScore %></span></span><% if(calculated.pet_score_bonus.magic_find > 0){ %><span class="grey-text color-magic-find"> (+<%= calculated.pet_score_bonus.magic_find %> MF)</span><% } %><br>
                         <span class="stat-name">Total Pet XP: </span><span class="stat-value"><%= helper.formatNumber(totalPetXp, true) %></span>
                     </p>
                     <% for(const [index, pet] of calculated.pets.entries()){
@@ -1624,11 +1624,11 @@ twitterDescription += '. Click to view more stats!'
                                     </div>
                                 <% } %>
                             </div>
-                            <div class="slayer-section-header"><%= slayerName %> Level <span class="white-text"><%= slayer.level.currentLevel %></span></div>
+                            <% max = slayer.level.currentLevel == slayer.level.maxLevel ? 'golden-text' : '' %><div class="slayer-section-header <%= max %>"><%= slayerName %> Level <span class="white-text <%= max %>"><%= slayer.level.currentLevel %></span></div>
                             <% if(unclaimedRewards){ %>
                                 <div class="slayer-unclaimed"><%= slayer.level.unclaimed ? 'unclaimed slayer rewards!' : '' %></div>
                             <% } %>
-                            <div class="slayer-bar">
+                            <div class="slayer-bar <%= slayer.level.currentLevel == slayer.level.maxLevel ? 'maxed-slayer' : ''%>">
                                 <div class="skill-progress-bar slayer-progress-bar" style="width: <%= slayer.level.currentLevel == slayer.level.maxLevel ? 100 : slayer.level.progress * 100 %>%"></div>
                                 <div class="skill-progress-text slayer-progress-text">
                                     <%= slayer.level.xp.toLocaleString() %><% if(slayer.level.xpForNext != 0){ %> / <%= slayer.level.xpForNext.toLocaleString() %><% } %> XP
@@ -1727,9 +1727,9 @@ twitterDescription += '. Click to view more stats!'
                     <div class="external-app-description">Check the next cheapest or fastest Minion upgrades and find out which Minions will earn you the most from Bazaar, for free.</div>
                 </a>
                 <p class="stat-raw-values">
-                    <span class="stat-name">Unique Minions: </span><span class="stat-value"><%= uniqueMinions %> / 572</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 572 * 100) %>%)</span><br>
-                    <span class="stat-name">Minion Slots: </span><span class="stat-value"><%= calculated.minion_slots.currentSlots %></span><span class="grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
-                    <span class="stat-name">Maxed Minions: </span><span class="stat-value"><%= maxedMinions %> / <%= _.size(constants.minions) %></span><br>
+                    <% max = uniqueMinions == 572 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Minions: </span><span class="stat-value <%= max %>"><%= uniqueMinions %> / 572</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 572 * 100) %>%)</span><br>
+                    <% max = calculated.minion_slots.currentSlots == 24 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.minion_slots.currentSlots %></span><span class="grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
+                    <% max = maxedMinions == _.size(constants.minions) ? 'golden-text' : '' %><span class="stat-name <%= max %>">Maxed Minions: </span><span class="stat-value <%= max %>"><%= maxedMinions %> / <%= _.size(constants.minions) %></span><br>
                     <% if(skippedMinions > 0){ %>
                     <span class="stat-name">Skipped Minion Tiers: </span><span class="stat-value"><%= skippedMinions %></span><br>
                     <% } %>
@@ -1784,7 +1784,7 @@ twitterDescription += '. Click to view more stats!'
                             && calculated.collections[collection.skyblockId].tier >= collection.maxTier)
                                 maxCollections++;
                         %>
-                        <span class="stat-name">Maxed Collections: </span><span class="stat-value"><%= maxCollections %> / <%= constants.collection_data.length %></span>
+                        <% max = maxCollections == constants.collection_data.length ? 'golden-text' : '' %><span class="stat-name <%= max %>">Maxed Collections: </span><span class="stat-value <%= max %>"><%= maxCollections %> / <%= constants.collection_data.length %></span>
                     </p>
                     <% for(const type of constants.collection_types){
                         const collections = [];

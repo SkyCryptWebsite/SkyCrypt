@@ -367,6 +367,10 @@ html.no-webp #bg_blur{
     filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
 }
 
+.skill.maxed-skill .skill-icon{
+    background-color: #DD980E;
+}
+
 .skill-icon > .item-icon{
     position: absolute;
     top: 5px;
@@ -400,6 +404,10 @@ html.no-webp #bg_blur{
     background-color: #850f4a;
 }
 
+.skill.maxed-skill .skill-bar::before{
+    background-color: #CE8F12;
+}
+
 .skill-bar{
     position: absolute;
     bottom: 0;
@@ -419,6 +427,10 @@ html.no-webp #bg_blur{
     background-color: #850f4a;
     border-top-right-radius: 7px;
     border-bottom-right-radius: 7px;
+}
+
+.skill.maxed-skill .skill-progress-bar, .slayer-bar.maxed-slayer .skill-progress-bar{
+    background-color: #CE8F12;
 }
 
 .skill-progress-text{
@@ -1081,6 +1093,14 @@ a.additional-player-stat:hover{
 .grey-text{
     font-weight: bold;
     color: rgba(255,255,255,0.6);
+}
+
+.golden-text{
+    color: #FDBB3C !important;
+}
+
+.stat-name.golden-text, .slayer-section-header.golden-text{
+    color: #DD980E !important;
 }
 
 .white-text{
