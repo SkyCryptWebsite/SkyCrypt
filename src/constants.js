@@ -835,7 +835,8 @@ module.exports = {
         ENCHANTED_BAKED_POTATO: "ebaked",
         SUMMONING_EYE: "sum",
         END_STONE: "endstone",
-        ENCHANTED_END_STONE: "endstone"
+        ENCHANTED_END_STONE: "endstone",
+        HOT_POTATO_BOOK: "hpb"
     },
 
     bag_size: {
