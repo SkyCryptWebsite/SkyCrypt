@@ -563,7 +563,7 @@ module.exports = {
             description: "§7Increases the pet's §9Crit Damage §7by §a40% §7and §9Crit Chance §7by §a40%"
         },
         PET_ITEM_SHARPENED_CLAWS_UNCOMMON: {
-            description: "§7Increases §9Crit Chance §7by §a15%",
+            description: "§7Increases §9Crit Damage §7by §a15%",
             stats: {
                 crit_damage: 15
             }
