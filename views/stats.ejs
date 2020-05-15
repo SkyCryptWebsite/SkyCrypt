@@ -1340,7 +1340,7 @@ twitterDescription += '. Click to view more stats!'
                                     <div class="other-pet-level">Lvl <%= pet.level.level %></div>
                                 <% } %>
                             </div>
-                        <% if(index == 0 && pet.active) { %>
+                        <% if(index == 0 && pet.active){ %>
                             <div class="active-pet-info">
                                 <div class="pet-name piece-<%= pet.rarity %>-fg"><%= pet.rarity %> <%= pet.display_name %></div>
                                 <div class="pet-level">Level <%= pet.level.level %></div>
@@ -1354,11 +1354,14 @@ twitterDescription += '. Click to view more stats!'
                             <div class="pieces">
                         <% }
                     } %>
-                    <% if(calculated.pets.length > 1){ %>
+                    <% if(calculated.pets.length > 1 && calculated.pets[0].active){ %>
                         </div>
                     <% } %>
                     </div>
                     <% if(calculated.missingPets.length > 0){ %>
+                        <% if(calculated.pets.length == 1){ %>
+                            <br>
+                        <% } %>
                         <div class="stat-sub-container sub-extendable sub-missing-pets">
                             <p class="stat-sub-header">Missing Pets</p>
                             <div class="pieces">
