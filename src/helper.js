@@ -7,6 +7,7 @@ const _ = require('lodash');
 
 const constants = require('./constants');
 const credentials = require('../credentials.json');
+const objectPath = require('object-path');
 
 const axiosCacheAdapter = require('axios-cache-adapter');
 
@@ -75,6 +76,33 @@ module.exports = {
             return { uuid, display_name: user.username, emoji: user.emoji };
     },
 
+    usernameToUuid: async (username, db) => {
+        let playerObject = null;
+
+        const playerObjects = await db
+        .collection('usernames')
+        .find({ $text: { $search: `"${username}"` } })
+        .toArray();
+
+        for(const doc of playerObjects)
+            if(doc.username.toLowerCase() == username.toLowerCase())
+                playerObject = doc;
+
+        if(playerObject === null){
+            const { data } = axios(`https://api.mojang.com/users/profiles/minecraft/${username}`, { timeout: 2000 });
+
+            playerObject = {
+                uuid: data.id,
+                username: data.name,
+                date: +new Date()
+            };
+
+            helper.uuidToUsername(data.id, db).catch(console.error);
+        }
+
+        return playerObject;
+    },
+
     getGuild: async (uuid, db) => {
         const guildMember = await db
         .collection('guildMembers')
@@ -87,7 +115,7 @@ module.exports = {
             .collection('guilds')
             .findOne({ gid: guildMember.gid });
 
-        if(guildMember !== null && guildMember.gid !== null && (guildObject === null || (+new Date() - guildObject.last_updated) < 3600 * 1000)){
+        if(guildMember !== null && guildMember.gid !== null && (guildObject === null || (+new Date() - guildMember.last_updated) < 3600 * 1000)){
             if(guildMember.gid !== null){
                 const guildObject = await db
                 .collection('guilds')
@@ -122,7 +150,7 @@ module.exports = {
                         .collection('guildMembers')
                         .updateOne(
                             { uuid: member.uuid },
-                            { $set: { gid: guild._id, rank: member.rank }},
+                            { $set: { gid: guild._id, rank: member.rank, last_updated: new Date() }},
                             { upsert: true }
                         );
                     }
@@ -136,7 +164,10 @@ module.exports = {
                         if(guild.members.filter(a => a.uuid == member.uuid).length == 0){
                             await db
                             .collection('guildMembers')
-                            .deleteOne({ uuid: member.uuid });
+                            .updateOne(
+                                { uuid: member.uuid },
+                                { $set: { gid: null, last_updated: new Date() } }
+                            );
                         }
                     }
 
@@ -158,7 +189,7 @@ module.exports = {
                     .collection('guildMembers')
                     .findOneAndUpdate(
                         { uuid },
-                        { $set: { gid: null }},
+                        { $set: { gid: null, last_updated: new Date() }},
                         { upsert: true }
                     );
                 }
@@ -323,6 +354,140 @@ module.exports = {
             return (Math.floor(number / 1000 / 1000 / 1000 * rounding * 10) / (rounding * 10)).toFixed(rounding.toString().length) + 'B';
         else
             return (Math.ceil(number / 1000 / 1000 / 1000 * rounding * 10) / (rounding * 10)).toFixed(rounding.toString().length) + 'B';
+    },
+
+    parseRank: player => {
+        let rankName = 'NONE';
+        let rank = null;
+
+        let output = {
+            rankText: null,
+            rankColor: null,
+            plusText: null,
+            plusColor: null
+        };
+
+        if('packageRank' in player)
+            rankName = player.packageRank;
+
+        if('newPackageRank'  in player)
+            rankName = player.newPackageRank;
+
+        if('monthlyPackageRank' in player && player.monthlyPackageRank != 'NONE')
+            rankName = player.monthlyPackageRank;
+
+        if('rank' in player && player.rank != 'NORMAL')
+            rankName = player.rank;
+
+        if('prefix' in player)
+            rankName = helper.getRawLore(player.prefix).replace(/\[|\]/g, '');
+
+        if(rankName in constants.ranks)
+            rank = constants.ranks[rankName];
+
+        if(!rank)
+            return output;
+
+        output.rankText = rank.tag;
+        output.rankColor = rank.color;
+
+        if(rankName == 'SUPERSTAR'){
+            if(!('monthlyRankColor' in player))
+                player.monthlyRankColor = 'GOLD';
+
+            output.rankColor = constants.color_names[player.monthlyRankColor];
+        }
+
+        if('plus' in rank){
+            output.plusText = rank.plus;
+            output.plusColor = output.rankColor;
+        }
+
+        if(output.plusText && 'rankPlusColor' in player)
+            output.plusColor = constants.color_names[player.rankPlusColor];
+
+        if(rankName == 'PIG+++')
+            output.plusColor = 'b';
+
+        return output;
+    },
+
+    renderRank: rank => {
+        let { rankText, rankColor, plusText, plusColor } = rank;
+        let output = "";
+
+        if(rankText === null)
+            return output;
+
+        rankColor = constants.minecraft_formatting[rankColor].niceColor
+        || constants.minecraft_formatting[rankColor].color;
+
+        output = `<div class="rank-tag ${plusText ? 'rank-plus' : ''}"><div class="rank-name" style="background-color: ${rankColor}">${rankText}</div>`;
+
+        if(plusText){
+            plusColor = constants.minecraft_formatting[plusColor].niceColor
+            || constants.minecraft_formatting[plusColor].color
+
+            output += `<div class="rank-plus" style="background-color: ${plusColor}"><div class="rank-plus-before" style="border-color: transparent transparent ${plusColor} transparent;"></div>${plusText}</div>`;
+        }
+
+        output += `</div>`;
+
+        return output;
+    },
+
+    updateRank: async (uuid, db) => {
+        let rank = { rankText: null, rankColor: null, plusText: null, plusColor: null, socials: {}, achievements: {} };
+
+        try{
+            const response = await retry(async () => {
+                return await Hypixel.get('player', {
+                    params: {
+                        key: credentials.hypixel_api_key, uuid
+                    }
+                });
+            });
+
+            const player = response.data.player;
+
+            rank = Object.assign(rank, module.exports.parseRank(player));
+
+            if(objectPath.has(player, 'socialMedia.links'))
+                rank.socials = player.socialMedia.links;
+
+            if(objectPath.has(player, 'achievements'))
+                rank.achievements = player.achievements;
+        }catch(e){
+            console.error(e);
+        }
+
+        rank.last_updated = new Date();
+
+        await db
+        .collection('hypixelPlayers')
+        .updateOne(
+            { uuid },
+            { $set: rank },
+            { upsert: true }
+        );
+
+        return rank;
+    },
+
+    getRank: async (uuid, db) => {
+        let hypixelPlayer = await db
+        .collection('hypixelPlayers')
+        .findOne({ uuid });
+
+        let updateRank;
+
+        if(hypixelPlayer === null || (+new Date() - hypixelPlayer.last_updated) > 3600 * 1000)
+            updateRank = module.exports.updateRank(uuid, db);
+
+        if(hypixelPlayer === null)
+            hypixelPlayer = await updateRank;
+
+        return hypixelPlayer;
     },
 
     getProfile: async req => {

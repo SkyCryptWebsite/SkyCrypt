@@ -193,6 +193,13 @@ async function main(){
         { unique: true }
     );
 
+    await db
+    .collection('hypixelPlayers')
+    .createIndex(
+        { uuid: 1 },
+        { unique: true }
+    );
+
     mongo.close();
 }
 

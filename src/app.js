@@ -159,65 +159,24 @@ async function main(){
         if(paramProfile)
             isProfileUuid = paramProfile.length == 32;
 
-        let activeProfile;
-
         if(!isPlayerUuid){
-            let playerObject;
+            const { uuid } = await helper.usernameToUuid(paramPlayer, db);
 
-            let playerObjects = await db
-            .collection('usernames')
-            .find({ $text: { $search: `"${paramPlayer}"` } })
-            .toArray();
-
-            for(const doc of playerObjects)
-                if(doc.username.toLowerCase() == paramPlayer.toLowerCase())
-                    playerObject = doc;
-
-            if(playerObject){
-                paramPlayer = playerObject.uuid;
-                isPlayerUuid = true;
-            }
+            paramPlayer = uuid;
+            isPlayerUuid = true;
         }else{
-            let playerObject = await db
-            .collection('usernames')
-            .findOne({ uuid: paramPlayer });
-
-            if(playerObject)
-                playerUsername = playerObject.username;
-        }
-
-        if(isPlayerUuid){
-            activeProfile = await db
-            .collection('profiles')
-            .findOne({ uuid: paramPlayer });
-        }else{
-            let activeProfile;
-
-            let activeProfiles = await db
-            .collection('profiles')
-            .find({ $text: { $search: `"${paramPlayer}"` } })
-            .toArray();
-
-            for(const doc of activeProfiles)
-                if(doc.username.toLowerCase() == paramPlayer.toLowerCase())
-                    activeProfile = doc;
+            playerUsername = (await helper.uuidToUsername(paramPlayer, db)).display_name;
         }
 
         let params = {
-            key: credentials.hypixel_api_key
+            key: credentials.hypixel_api_key,
+            uuid: paramPlayer
         };
-
-        if(isPlayerUuid)
-            params.uuid = paramPlayer;
-        else
-            params.name = paramPlayer;
 
         try{
             const response = await retry(async () => {
-                return await Hypixel.get('player', {
-                    params, cache: {
-                        maxAge: 10 * 60 * 1000
-                    }
+                return await Hypixel.get('skyblock/profiles', {
+                    params
                 });
             });
 
@@ -236,36 +195,10 @@ async function main(){
                 return false;
             }
 
-            if(data.player == null){
+            if(data.profiles == null){
                 res.status(404);
                 res.render('index', {
-                    error: 'Player not found.',
-                    player: playerUsername,
-                    extra: await getExtra(),
-                    helper,
-                    page: 'index'
-                });
-
-                return false;
-            }
-
-            if(!objectPath.has(data, 'player.stats')){
-                res.status(500);
-                res.render('index', {
-                    error: 'No data returned by Hypixel API, please try again!',
-                    player: playerUsername,
-                    extra: await getExtra(),
-                    helper,
-                    page: 'index'
-                });
-
-                return false;
-            }
-
-            if(!('SkyBlock' in data.player.stats)){
-                res.status(404);
-                res.render('index', {
-                    error: 'Player has not played SkyBlock yet.',
+                    error: 'Player has no SkyBlock profiles.',
                     player: playerUsername,
                     extra: await getExtra(),
                     helper,
@@ -277,111 +210,52 @@ async function main(){
 
             const hypixelPlayer = data.player;
 
-            await db
-            .collection('usernames')
-            .updateOne(
-                { uuid: hypixelPlayer.uuid },
-                { $set: { username: hypixelPlayer.displayname, date: +new Date() } },
-                { upsert: true }
-            );
+            let allSkyBlockProfiles = data.profiles;
 
-            let allSkyBlockProfiles = hypixelPlayer.stats.SkyBlock.profiles;
-
-            let skyBlockProfiles = {};
-
-            if(Object.keys(allSkyBlockProfiles).length == 0){
-                let default_promise;
-
-                const default_profile = await retry(async () => {
-                    const response = await Hypixel.get('skyblock/profile', {
-                        params: { key: credentials.hypixel_api_key, profile: data.player.uuid }
-                    });
-
-                    if(!response.data.success)
-                        throw "api request failed";
-
-                    return response;
-                });
-
-                if(default_profile.data.profile == null){
-                    res.status(404);
-                    res.render('index', {
-                        error: 'Player has no SkyBlock profiles.',
-                        player: playerUsername,
-                        extra: await getExtra(),
-                        helper,
-                        page: 'index'
-                    });
-
-                    return false;
-                }else{
-                    skyBlockProfiles[data.player.uuid] = {
-                        profile_id: data.player.uuid,
-                        cute_name: 'Avocado',
-                    };
-
-                    allSkyBlockProfiles = skyBlockProfiles;
-                }
-            }
+            let skyBlockProfiles = [];
 
             if(paramProfile){
                 if(isProfileUuid){
-                    if(Object.keys(allSkyBlockProfiles).includes(paramProfile)){
-                        skyBlockProfiles = _.pickBy(allSkyBlockProfiles, a => a.profile_id.toLowerCase() == paramProfile);
+                    const filteredProfiles = allSkyBlockProfiles.filter(a => a.profile_id.toLowerCase() == paramProfile);
+
+                    if(filteredProfiles.length > 0){
+                        skyBlockProfiles = filteredProfiles;
                     }else{
-                        skyBlockProfiles[paramProfile] = {
-                            profile_id: paramProfile,
-                            cute_name: 'Deleted'
-                        };
+                        const profileResponse = await retry(async () => {
+                            const response = await Hypixel.get('skyblock/profile', {
+                                params: { key: credentials.hypixel_api_key, profile: paramProfile }
+                            });
+
+                            if(!response.data.success)
+                                throw "api request failed";
+
+                            return response.data.profile;
+                        });
+
+                        profileResponse.cute_name = 'Deleted';
+
+                        skyBlockProfiles = profileResponse;
                     }
                 }else{
-                    skyBlockProfiles = _.pickBy(allSkyBlockProfiles, a => a.cute_name.toLowerCase() == paramProfile);
+                    skyBlockProfiles = allSkyBlockProfiles.filter(a => a.cute_name.toLowerCase() == paramProfile);
                 }
-            }else if(activeProfile)
-                skyBlockProfiles = _.pickBy(allSkyBlockProfiles, a => a.profile_id.toLowerCase() == activeProfile.profile_id);
-
-            if(Object.keys(skyBlockProfiles).length == 0)
-                skyBlockProfiles = allSkyBlockProfiles;
-
-            const profileNames = Object.keys(skyBlockProfiles);
-
-            const promises = [];
-            const profileIds = [];
-
-            for(const profile in skyBlockProfiles){
-                profileIds.push(profile);
-
-                const profilePromise = retry(async () => {
-                    const response = await Hypixel.get('skyblock/profile', { params: { key: credentials.hypixel_api_key, profile: profile } });
-
-                    if(!response.data.success)
-                        throw "api request failed";
-
-                    return response;
-                });
-
-                promises.push(profilePromise);
             }
 
-            const responses = await Promise.all(promises);
+            if(skyBlockProfiles.length == 0)
+                skyBlockProfiles = allSkyBlockProfiles;
 
             const profiles = [];
 
-            for(const [index, profile_response] of responses.entries()){
-                if(!profile_response.data.success || profile_response.data.profile == null){
-                    delete skyBlockProfiles[profileIds[index]];
-                    continue;
-                }
-
+            for(const [index, profile] of skyBlockProfiles.entries()){
                 let memberCount = 0;
 
-                for(const member in profile_response.data.profile.members){
-                    if('last_save' in profile_response.data.profile.members[member])
+                for(const member in profile.members){
+                    if('last_save' in profile.members[member])
                         memberCount++;
                 }
 
                 if(memberCount == 0){
-                    delete skyBlockProfiles[profileIds[index]];
+                    skyBlockProfiles.splice(index, 1);
 
                     if(req.params.profile){
                         res.status(404);
@@ -399,7 +273,7 @@ async function main(){
                     continue;
                 }
 
-                profiles.push(profile_response.data.profile);
+                profiles.push(profile);
             }
 
             if(profiles.length == 0){
@@ -423,12 +297,12 @@ async function main(){
                 if(_profile === undefined || _profile === null)
                     return;
 
-                let userProfile = _profile.members[data.player.uuid];
+                let userProfile = _profile.members[paramPlayer];
 
                 if('last_save' in userProfile && userProfile.last_save > highest){
                     profile = _profile;
                     highest = userProfile.last_save;
-                    profileId = profileNames[index];
+                    profileId = _profile.profile_id;
                 }
             });
 
@@ -445,7 +319,7 @@ async function main(){
                 return false;
             }
 
-            let userProfile = profile.members[data.player.uuid];
+            let userProfile = profile.members[paramPlayer];
 
             for(const member in profile.members)
                 if(!('last_save' in profile.members[member]))
@@ -456,14 +330,14 @@ async function main(){
             const memberPromises = [];
 
             for(let member of memberUuids)
-                if(member != data.player.uuid)
+                if(member != paramPlayer)
                     memberPromises.push(helper.uuidToUsername(member, db));
 
             const members = await Promise.all(memberPromises);
 
             members.push({
-                uuid: hypixelPlayer.uuid,
-                display_name: hypixelPlayer.displayname
+                uuid: paramPlayer,
+                display_name: playerUsername
             });
 
             for(const member of members){
@@ -476,22 +350,24 @@ async function main(){
                 );
             }
 
+            const hypixelRank = await helper.getRank(paramPlayer, db);
+
             const items = await lib.getItems(userProfile, req.query.pack);
-            const calculated = await lib.getStats(userProfile, items, hypixelPlayer);
+            const calculated = await lib.getStats(userProfile, items, hypixelRank);
 
             if(objectPath.has(profile, 'banking.balance'))
                 calculated.bank = profile.banking.balance;
 
-            calculated.guild = await helper.getGuild(hypixelPlayer.uuid, db);
+            calculated.guild = await helper.getGuild(paramPlayer, db);
 
-            calculated.rank_prefix = lib.rankPrefix(data.player);
+            calculated.rank_prefix = helper.renderRank(hypixelRank);
             calculated.purse = userProfile.coin_purse || 0;
-            calculated.uuid = hypixelPlayer.uuid;
-            calculated.display_name = hypixelPlayer.displayname;
+            calculated.uuid = paramPlayer;
+            calculated.display_name = playerUsername;
 
             const userInfo = await db
             .collection('usernames')
-            .findOne({ uuid: hypixelPlayer.uuid });
+            .findOne({ uuid: paramPlayer });
 
             if(userInfo){
                 calculated.display_name = userInfo.username;
@@ -500,14 +376,21 @@ async function main(){
                     calculated.display_emoji = userInfo.emoji;
             }
 
-            calculated.profile = skyBlockProfiles[profileId];
-            calculated.profiles = _.pickBy(allSkyBlockProfiles, a => a.profile_id != profileId);
-            calculated.members = members.filter(a => a.uuid != hypixelPlayer.uuid);
+            calculated.profile = { profile_id: profile.profile_id, cute_name: profile.cute_name };
+            calculated.profiles = {};
+
+            for(const sbProfile of allSkyBlockProfiles.filter(a => a.profile_id != profileId))
+                calculated.profiles[sbProfile.profile_id] = {
+                    profile_id: sbProfile.profile_id,
+                    cute_name: sbProfile.cute_name
+                };
+
+            calculated.members = members.filter(a => a.uuid != paramPlayer);
             calculated.minions = lib.getMinions(profile.members);
             calculated.minion_slots = lib.getMinionSlots(calculated.minions);
-            calculated.collections = await lib.getCollections(data.player.uuid, profile, members);
+            calculated.collections = await lib.getCollections(paramPlayer, profile, members);
             calculated.bag_sizes = await lib.getBagSizes(calculated.collections);
-            calculated.social = 'socialMedia' in data.player && 'links' in data.player.socialMedia ? data.player.socialMedia.links : {};
+            calculated.social = hypixelRank.socials;
 
             calculated.fishing = {
                 total: userProfile.stats.items_fished || 0,
@@ -597,9 +480,9 @@ async function main(){
 
             let currentArea;
 
-            if(diff < 4 * 60){
+            if(diff < 5 * 60){
                 try{
-                    const statusResponse = await Hypixel.get('status', { params: { uuid: hypixelPlayer.uuid, key: credentials.hypixel_api_key }});
+                    const statusResponse = await Hypixel.get('status', { params: { uuid: paramPlayer, key: credentials.hypixel_api_key }});
 
                     const areaData = statusResponse.data.session;
 
@@ -654,12 +537,12 @@ async function main(){
 
             const apisEnabled = !('no_inventory' in items) && 'levels' in calculated && Object.keys(calculated.social).length > 0;
 
-            if(!activeProfile || userProfile.last_save >= activeProfile.last_save){
+            if(profile.cute_name != 'Deleted'){
                 await db
                 .collection('profiles')
                 .updateOne(
-                    { uuid: hypixelPlayer.uuid },
-                    { $set: { username: hypixelPlayer.displayname, profile_id: profileId, last_save: userProfile.last_save, api: apisEnabled }},
+                    { uuid: paramPlayer },
+                    { $set: { username: playerUsername, profile_id: profileId, last_save: userProfile.last_save, api: apisEnabled }},
                     { upsert: true }
                 );
             }
