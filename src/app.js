@@ -255,8 +255,6 @@ async function main(){
                 }
 
                 if(memberCount == 0){
-                    skyBlockProfiles.splice(index, 1);
-
                     if(req.params.profile){
                         res.status(404);
                         res.render('index', {
@@ -271,9 +269,9 @@ async function main(){
                     }
 
                     continue;
+                }else{
+                    profiles.push(profile);
                 }
-
-                profiles.push(profile);
             }
 
             if(profiles.length == 0){
