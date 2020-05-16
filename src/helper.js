@@ -89,7 +89,7 @@ module.exports = {
                 playerObject = doc;
 
         if(playerObject === null){
-            const { data } = axios(`https://api.mojang.com/users/profiles/minecraft/${username}`, { timeout: 2000 });
+            const { data } = await axios(`https://api.mojang.com/users/profiles/minecraft/${username}`, { timeout: 2000 });
 
             playerObject = {
                 uuid: data.id,
@@ -97,7 +97,7 @@ module.exports = {
                 date: +new Date()
             };
 
-            helper.uuidToUsername(data.id, db).catch(console.error);
+            module.exports.uuidToUsername(data.id, db).catch(console.error);
         }
 
         return playerObject;
