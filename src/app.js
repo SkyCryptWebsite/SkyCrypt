@@ -245,7 +245,7 @@ async function main(){
 
                         profileResponse.cute_name = 'Deleted';
 
-                        skyBlockProfiles = profileResponse;
+                        skyBlockProfiles.push(profileResponse);
                     }
                 }else{
                     skyBlockProfiles = allSkyBlockProfiles.filter(a => a.cute_name.toLowerCase() == paramProfile);
