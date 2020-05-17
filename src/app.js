@@ -160,10 +160,21 @@ async function main(){
             isProfileUuid = paramProfile.length == 32;
 
         if(!isPlayerUuid){
-            const { uuid } = await helper.usernameToUuid(paramPlayer, db);
+            try{
+                const { uuid } = await helper.usernameToUuid(paramPlayer, db);
 
-            paramPlayer = uuid;
-            isPlayerUuid = true;
+                paramPlayer = uuid;
+                isPlayerUuid = true;
+            }catch(e){
+                res.status(500);
+                res.render('index', {
+                    error: e,
+                    player: playerUsername,
+                    extra: await getExtra(),
+                    helper,
+                    page: 'index'
+                });
+            }
         }else{
             playerUsername = (await helper.uuidToUsername(paramPlayer, db)).display_name;
         }

@@ -89,7 +89,18 @@ module.exports = {
                 playerObject = doc;
 
         if(playerObject === null){
-            const { data } = await axios(`https://api.mojang.com/users/profiles/minecraft/${username}`, { timeout: 2000 });
+            let mojangResponse;
+
+            try{
+                mojangResponse = await axios(`https://api.mojang.com/users/profiles/minecraft/${username}`, { timeout: 2000 });
+            }catch(e){
+                throw "Failed resolving username. (Mojang API down?)";
+            }
+
+            if(mojangResponse.status == 204)
+                throw "User not found.";
+
+            const { data } = mojangResponse;
 
             playerObject = {
                 uuid: data.id,
