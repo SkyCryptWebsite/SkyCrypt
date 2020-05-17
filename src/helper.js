@@ -391,7 +391,7 @@ module.exports = {
             rankName = player.rank;
 
         if('prefix' in player)
-            rankName = helper.getRawLore(player.prefix).replace(/\[|\]/g, '');
+            rankName = module.exports.getRawLore(player.prefix).replace(/\[|\]/g, '');
 
         if(rankName in constants.ranks)
             rank = constants.ranks[rankName];
