@@ -41,15 +41,51 @@ module.exports = {
             let profileRequest = axios(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`, { timeout: 2000 });
 
             profileRequest.then(async response => {
-                let { data } = response;
+                try{
+                    const { data } = response;
 
-                await db
-                .collection('usernames')
-                .updateOne(
-                    { uuid: data.id },
-                    { $set: { username: data.name, date: +new Date() } },
-                    { upsert: true }
-                );
+                    const profileData = JSON.parse(Buffer.from(data.properties[0].value, 'base64'));
+
+                    const updateDoc = {
+                        username: data.name,
+                        date: +new Date()
+                    }
+
+                    if('SKIN' in profileData.textures){
+                        const skin = profileData.textures.SKIN;
+
+                        updateDoc.skinurl = skin.url;
+                        updateDoc.model = objectPath.has(skin, 'metadata.model') ? skin.metadata.model : 'regular';
+                    }
+
+                    await db
+                    .collection('usernames')
+                    .updateOne(
+                        { uuid: data.id },
+                        { $set: updateDoc },
+                        { upsert: true }
+                    );
+
+                    const playerObjects = await db
+                    .collection('usernames')
+                    .find({ $text: { $search: `"${data.name}"` } });
+
+                    for await(const doc of playerObjects){
+                        if(doc.uuid == data.id)
+                            continue;
+
+                        if(doc.username.toLowerCase() == data.name.toLowerCase()){
+                            await db
+                            .deleteOne(
+                                { _id: doc._id }
+                            );
+
+                            module.exports.uuidToUsername(doc.uuid, db).catch(console.error);
+                        }
+                    }
+                }catch(e){
+                    console.error(e);
+                }
             }).catch(async err => {
                 if(user)
                     await db
@@ -107,9 +143,9 @@ module.exports = {
                 username: data.name,
                 date: +new Date()
             };
-
-            module.exports.uuidToUsername(data.id, db).catch(console.error);
         }
+
+        module.exports.uuidToUsername(playerObject.uuid, db).catch(console.error);
 
         return playerObject;
     },

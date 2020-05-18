@@ -166,6 +166,8 @@ async function main(){
                 paramPlayer = uuid;
                 isPlayerUuid = true;
             }catch(e){
+                console.error(e);
+                
                 res.status(500);
                 res.render('index', {
                     error: e,
