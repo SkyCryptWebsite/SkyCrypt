@@ -761,7 +761,7 @@ document.addEventListener('DOMContentLoaded', function(){
         });
 
         element.addEventListener('click', function(){
-            navigator.clipboard.writeText(element.innerHTML).then(function(){
+            navigator.clipboard.writeText(element.getAttribute("data-copy-text")).then(function(){
                 copyNotification.show();
 
                 setTimeout(function(){
