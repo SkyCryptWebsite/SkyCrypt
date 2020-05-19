@@ -42,6 +42,9 @@ module.exports = {
         if(user && 'skinurl' in user){
             skin_data.skinurl = user.skinurl;
             skin_data.model = user.model;
+
+            if('capeurl' in user)
+                skin_data.capeurl = user.capeurl;
         }
 
         if(user === null || (+new Date() - user.date) > 4000 * 1000){
@@ -64,6 +67,9 @@ module.exports = {
                         skin_data.skinurl = skin.url;
                         skin_data.model = objectPath.has(skin, 'metadata.model') ? skin.metadata.model : 'regular';
                     }
+
+                    if('CAPE' in profileData.textures)
+                        skin_data.capeurl = profileData.textures.CAPE.url;
 
                     updateDoc = Object.assign(updateDoc, skin_data);
 
@@ -117,6 +123,9 @@ module.exports = {
                         skin_data.skinurl = skin.url;
                         skin_data.model = objectPath.has(skin, 'metadata.model') ? skin.metadata.model : 'regular';
                     }
+
+                    if('CAPE' in data.textures)
+                        skin_data.capeurl = data.textures.CAPE.url;
 
                     return { uuid, display_name: data.name, skin_data };
                 }catch(e){
