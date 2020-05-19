@@ -446,12 +446,31 @@ html.no-webp #bg_blur{
     text-shadow: 0px 0px 3px rgba(0,0,0,0.3);
 }
 
-#stats_display{
+#skin_display{
     position: fixed;
+    top: 20vh;
+    left: 0;
+    width: 30vw;
+    bottom: 5vh;
+}
+
+#player_model{
+    position: absolute;
     top: 0;
     left: 0;
+    right: 0;
     bottom: 0;
-    width: 30vw;
+}
+
+#player_model canvas{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#player_model canvas:focus{
+    outline: 0 !important;
 }
 
 #info_box{
@@ -688,17 +707,6 @@ html.no-transform #info_box.opened{
 
 #stats_content .pack-author span{
     color: rgba(255, 255, 255, 0.8);
-}
-
-#player_model{
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background-position: 50% 70%;
-    background-repeat: no-repeat;
-    background-size: auto 60%;
 }
 
 #player_profile{
@@ -2574,11 +2582,11 @@ html.no-webp #error_box_wrapper{
         width: 1120px !important;
     }
 
-    #stats_display{
+    #skin_display{
         visibility: hidden;
     }
 
-    #player_model_mobile{
+    #skin_display_mobile{
         position: absolute;
         top: 30px;
         left: 0;
@@ -2654,7 +2662,7 @@ html.no-webp #error_box_wrapper{
         margin: 25px;
     }
 
-    #player_model_mobile{
+    #skin_display_mobile{
         left: 20px;
     }
 
@@ -3114,7 +3122,7 @@ html.no-webp #error_box_wrapper{
         transform: translate(-50%, -50%) scale(0.35);
     }
 
-    #player_model_mobile{
+    #skin_display_mobile{
         left: 10px;
         height: 190px;
     }

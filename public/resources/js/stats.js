@@ -6,6 +6,33 @@ document.addEventListener('DOMContentLoaded', function(){
         trigger: 'mouseenter click'
     });
 
+    const playerModel = document.getElementById("player_model");
+
+    let skinViewer;
+
+    if(calculated.skin_data){
+        skinViewer = new skinview3d.SkinViewer({
+    		domElement: playerModel,
+    		width: playerModel.offsetWidth,
+    		height: playerModel.offsetHeight,
+    		skinUrl: "/texture/" + calculated.skin_data.skinurl.split("/").pop(),
+    		capeUrl: "/cape/" + calculated.display_name
+    	});
+
+    	skinViewer.camera.position.set(-18, -3, 58);
+    	skinViewer.detectModel = false;
+
+        if(calculated.skin_data.model == 'slim')
+    	   skinViewer.playerObject.skin.slim = true;
+
+    	let controls = new skinview3d.createOrbitControls(skinViewer);
+
+        controls.enableZoom = false;
+        controls.enablePan = false;
+
+    	skinViewer.animations.add(skinview3d.IdleAnimation);
+    }
+
     tippyInstance = tippy('.interactive-tooltip', {
         trigger: 'mouseenter click',
         interactive: true,
@@ -346,8 +373,24 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     }
 
+    let oldWidth = null;
+    let oldheight = null;
+
     function resize(){
+        if(window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570))
+            document.getElementById("skin_display_mobile").appendChild(skinViewer.domElement);
+
+        if(window.innerWidth > 1570 && oldWidth <= 1570)
+            document.getElementById("skin_display").appendChild(skinViewer.domElement);
+
         tippy('*[data-tippy-content]');
+
+        if(skinViewer){
+            if(playerModel.offsetWidth / playerModel.offsetHeight < 0.6)
+                skinViewer.setSize(playerModel.offsetWidth, playerModel.offsetWidth * 2);
+            else
+                skinViewer.setSize(playerModel.offsetHeight / 2, playerModel.offsetHeight);
+        }
 
         navBarSticky = new Sticky('#nav_bar');
         updateStatsPositions();
@@ -365,6 +408,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
         if(rect.y)
             statsContent.style.top = Math.max(70, Math.min(maxTop, (rect.y + element.offsetHeight / 2) - statsContent.offsetHeight / 2)) + 'px';
+
+        oldWidth = window.innerWidth;
+        oldHeight = window.innerHeight;
     }
 
     [].forEach.call(document.querySelectorAll('.sub-extendable .stat-sub-header'), function(element){
@@ -867,6 +913,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
     [].forEach.call(document.querySelectorAll('.xp-skill'), function(element){
         let skillProgressText = element.querySelector('.skill-progress-text');
+
+        if(skillProgressText === null)
+            return;
+
         let originalText = skillProgressText.innerHTML;
 
         element.addEventListener('mouseenter', function(){
@@ -936,6 +986,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     resize();
+
     window.addEventListener('resize', resize);
 
     window.addEventListener('scroll', function(){

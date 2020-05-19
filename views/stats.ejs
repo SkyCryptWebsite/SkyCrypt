@@ -940,8 +940,8 @@ twitterDescription += '. Click to view more stats!'
         <div class="item-lore"></div>
         <div class="backpack-contents"></div>
     </div>
-    <div id="stats_display">
-        <div id="player_model" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
+    <div id="skin_display">
+        <div id="player_model"></div>
     </div>
     <div id="wrapper" data-sticky-container>
         <div id="player_profile"><span class="text-stats-for">Stats for</span>
@@ -1083,7 +1083,7 @@ twitterDescription += '. Click to view more stats!'
                         Collect Fairy Souls to gain Health, Defense, Strength and Speed.</div>
                     "><span class="stat-name">Fairy Souls </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span></span>
                 </div>-->
-                <div id="player_model_mobile" style="background-image: url(https://visage.surgeplay.com/full/832/<%= calculated.uuid %>)"></div>
+                <div id="skin_display_mobile"></div>
                 <div id="additional_stats_container">
                     <% if(calculated.current_area){ %>
                     <div class="additional-stat"><span class="stat-name">Current Island: </span><span class="stat-value"><%= calculated.current_area %></span></div>
