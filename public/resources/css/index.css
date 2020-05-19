@@ -460,6 +460,7 @@ html.no-webp #bg_blur{
     left: 0;
     right: 0;
     bottom: 0;
+    cursor: pointer;
 }
 
 #player_model canvas{
@@ -467,6 +468,7 @@ html.no-webp #bg_blur{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    cursor: pointer;
 }
 
 #player_model canvas:focus{
