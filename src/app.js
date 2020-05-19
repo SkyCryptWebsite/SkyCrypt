@@ -167,7 +167,7 @@ async function main(){
                 isPlayerUuid = true;
             }catch(e){
                 console.error(e);
-                
+
                 res.status(500);
                 res.render('index', {
                     error: e,
@@ -180,6 +180,8 @@ async function main(){
         }else{
             playerUsername = (await helper.uuidToUsername(paramPlayer, db)).display_name;
         }
+
+        let playerObject = await helper.uuidToUsername(paramPlayer, db);
 
         let params = {
             key: credentials.hypixel_api_key,
@@ -375,6 +377,7 @@ async function main(){
             calculated.purse = userProfile.coin_purse || 0;
             calculated.uuid = paramPlayer;
             calculated.display_name = playerUsername;
+            calculated.skin_data = playerObject.skin_data;
 
             const userInfo = await db
             .collection('usernames')
@@ -572,6 +575,72 @@ async function main(){
 
             return false;
         }
+    });
+
+    app.all('/texture/:uuid', async (req, res) => {
+        const { uuid } = req.params;
+
+        const filename = `texture_${uuid}.png`;
+
+        try{
+            file = await fs.readFile(path.resolve(cachePath, filename));
+        }catch(e){
+            try{
+                file = (await axios.get(`https://textures.minecraft.net/texture/${uuid}`, { responseType: 'arraybuffer' })).data;
+
+                fs.writeFile(path.resolve(cachePath, filename), file, err => {
+                    if(err)
+                        console.error(err);
+                });
+            }catch(e){
+                res.status(404);
+                res.send('texture not found');
+
+                return;
+            }
+        }
+
+        res.setHeader('Cache-Control', `public, max-age=${CACHE_DURATION}`);
+        res.contentType('image/png');
+        res.send(file);
+    });
+
+    app.all('/cape/:username', async (req, res) => {
+        const { username } = req.params;
+
+        const filename = `cape_${username}.png`;
+
+        try{
+            file = await fs.readFile(path.resolve(cachePath, filename));
+
+            const fileStats = await fs.stat(path.resolve(cachePath, filename));
+
+            if(Date.now() - stats.mtime > 10 * 1000){
+                const optifineCape = await axios.head(`https://optifine.net/capes/${username}.png`);
+                const lastUpdated = moment(optifineCape.headers['last-modified']);
+
+                if(lastUpdated.unix() > stats.mtime)
+                    throw "optifine cape changed";
+            }
+        }catch(e){
+            try{
+                file = (await axios.get(`https://optifine.net/capes/${username}.png`, { responseType: 'arraybuffer' })).data;
+
+                fs.writeFile(path.resolve(cachePath, filename), file, err => {
+                    if(err)
+                        console.error(err);
+                });
+            }catch(e){
+                res.status(404);
+                res.send('no cape for user');
+
+                return;
+            }
+        }
+
+        res.setHeader('Cache-Control', `public, max-age=${CACHE_DURATION}`);
+        res.contentType('image/png');
+        res.send(file);
     });
 
     app.all('/head/:uuid', async (req, res) => {
