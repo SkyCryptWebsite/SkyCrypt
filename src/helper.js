@@ -37,6 +37,13 @@ module.exports = {
         .find({ uuid: uuid })
         .next();
 
+        let skin_data = { skinurl: 'https://textures.minecraft.net/texture/3b60a1f6d562f52aaebbf1434f1de147933a3affe0e764fa49ea057536623cd3', model: 'slim' };
+
+        if(user && 'skinurl' in user){
+            skin_data.skinurl = user.skinurl;
+            skin_data.model = user.model;
+        }
+
         if(user === null || (+new Date() - user.date) > 4000 * 1000){
             let profileRequest = axios(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`, { timeout: 2000 });
 
@@ -46,7 +53,7 @@ module.exports = {
 
                     const profileData = JSON.parse(Buffer.from(data.properties[0].value, 'base64'));
 
-                    const updateDoc = {
+                    let updateDoc = {
                         username: data.name,
                         date: +new Date()
                     }
@@ -54,9 +61,11 @@ module.exports = {
                     if('SKIN' in profileData.textures){
                         const skin = profileData.textures.SKIN;
 
-                        updateDoc.skinurl = skin.url;
-                        updateDoc.model = objectPath.has(skin, 'metadata.model') ? skin.metadata.model : 'regular';
+                        skin_data.skinurl = skin.url;
+                        skin_data.model = objectPath.has(skin, 'metadata.model') ? skin.metadata.model : 'regular';
                     }
+
+                    updateDoc = Object.assign(updateDoc, skin_data);
 
                     await db
                     .collection('usernames')
@@ -101,15 +110,23 @@ module.exports = {
             if(!user){
                 try{
                     let { data } = await profileRequest;
-                    return { uuid, display_name: data.name };
+
+                    if('SKIN' in data.textures){
+                        const skin = data.textures.SKIN;
+
+                        skin_data.skinurl = skin.url;
+                        skin_data.model = objectPath.has(skin, 'metadata.model') ? skin.metadata.model : 'regular';
+                    }
+
+                    return { uuid, display_name: data.name, skin_data };
                 }catch(e){
-                    return { uuid, display_name: uuid };
+                    return { uuid, display_name: uuid, skin_data };
                 }
             }
         }
 
         if(user)
-            return { uuid, display_name: user.username, emoji: user.emoji };
+            return { uuid, display_name: user.username, emoji: user.emoji, skin_data };
     },
 
     usernameToUuid: async (username, db) => {
