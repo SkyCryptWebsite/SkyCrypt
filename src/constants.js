@@ -772,7 +772,7 @@ module.exports = {
         ENCHANTED_GLOWSTONE_DUST: "edust",
         ENCHANTED_GLOWSTONE: "eblock glow block",
         ENCHANTED_REDSTONE_LAMP: "elamp",
-        ENCHANTED_REDSTONE_DUST: "edust",
+        ENCHANTED_REDSTONE_DUST: "edust dust",
         ENCHANTED_REDSTONE_BLOCK: "eblock red",
         CATALYST: "cata",
         SUPERIOR_FRAGMENT: "sup frag drag",
