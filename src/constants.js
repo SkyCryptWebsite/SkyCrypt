@@ -769,7 +769,7 @@ module.exports = {
         ENCHANTED_DIAMOND: "edia dia",
         ENCHANTED_DIAMOND_BLOCK: "edb dia",
         ENCHANTED_LAVA_BUCKET: "elava",
-        ENCHANTED_GLOWSTONE_DUST: "edust",
+        ENCHANTED_GLOWSTONE_DUST: "edust glow",
         ENCHANTED_GLOWSTONE: "eblock glow block",
         ENCHANTED_REDSTONE_LAMP: "elamp",
         ENCHANTED_REDSTONE_DUST: "edust dust",
