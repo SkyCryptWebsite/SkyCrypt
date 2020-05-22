@@ -541,12 +541,18 @@ module.exports = {
         50: {
             magic_find: 3
         },
-        85: {
+        75: {
             magic_find: 4
         },
-        125: {
+        100: {
             magic_find: 5
         },
+        130: {
+            magic_find: 6
+        },
+        175: {
+            magic_find: 7
+        }
     },
 
     pet_items: {
