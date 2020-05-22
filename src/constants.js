@@ -1439,10 +1439,7 @@ module.exports = {
         BAT_TALISMAN: [
             'BAT_RING',
             'BAT_ARTIFACT'
-        ]
-    },
-
-    talisman_duplicates: {
+        ],
         BROKEN_PIGGY_BANK: [
             'CRACKED_PIGGY_BANK',
             'PIGGY_BANK'
@@ -1457,6 +1454,10 @@ module.exports = {
         SPEED_RING: [
             'SPEED_ARTIFACT'
         ]
+    },
+
+    talisman_duplicates: {
+
     },
 
     collection_types: ['farming', 'mining', 'combat', 'foraging', 'fishing'],
