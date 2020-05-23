@@ -1883,15 +1883,23 @@ twitterDescription += '. Click to view more stats!'
                             <% for(const key in calculated.misc.dragons){
                                 let tooltip = "";
 
-                                if(key == 'dragon_last_hits')
+                                if(key == 'last_hits')
                                     for(const kill of calculated.kills.filter(a => a.entityId.endsWith('_dragon')))
                                         tooltip += `<span class="stat-name">${ kill.entityName }: </span><span class="stat-value">${ kill.amount }</span> <span class="grey-text">(${ Math.round(kill.amount / calculated.misc.dragons[key] * 100) }%)</span><br>`;
 
-                                if(key == 'dragon_deaths')
+                                if(key == 'deaths')
                                     for(const death of calculated.deaths.filter(a => a.entityId.endsWith('_dragon')))
                                         tooltip += `<span class="stat-name">${ death.entityName }: </span><span class="stat-value">${ death.amount }</span><br>`;
                             %>
                             <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>><span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.dragons[key].toLocaleString() %></span></span><br>
+                            <% } %>
+                    </p>
+                    <% } %>
+                    <% if('protector' in calculated.misc){ %>
+                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/89091d79ea0f59ef7ef94d7bba6e5f17f2f7d4572c44f90f76c4819a714)"></div></div><span>Endstone Protectors</span></div>
+                        <p class="stat-raw-values">
+                            <% for(const key in calculated.misc.protector){ %>
+                            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.protector[key].toLocaleString() %></span><br>
                             <% } %>
                     </p>
                     <% } %>

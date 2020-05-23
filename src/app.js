@@ -421,6 +421,7 @@ async function main(){
             misc.gifts = {};
             misc.winter = {};
             misc.dragons = {};
+            misc.protector = {};
             misc.damage = {};
             misc.auctions_sell = {};
             misc.auctions_buy = {};
@@ -428,8 +429,8 @@ async function main(){
             if('ender_crystals_destroyed' in userProfile.stats)
                 misc.dragons['ender_crystals_destroyed'] = userProfile.stats['ender_crystals_destroyed'];
 
-            misc.dragons['dragon_last_hits'] = 0;
-            misc.dragons['dragon_deaths'] = 0;
+            misc.dragons['last_hits'] = 0;
+            misc.dragons['deaths'] = 0;
 
             const auctions_buy = ["auctions_bids", "auctions_highest_bid", "auctions_won", "auctions_gold_spent"];
             const auctions_sell = ["auctions_fees", "auctions_gold_earned"];
@@ -459,9 +460,13 @@ async function main(){
                 else if(key.includes('auctions_bought_'))
                     auctions_bought[key.replace("auctions_bought_", "")] = userProfile.stats[key];
                 else if(key.startsWith('kills_') && key.endsWith('_dragon'))
-                    misc.dragons['dragon_last_hits'] += userProfile.stats[key];
+                    misc.dragons['last_hits'] += userProfile.stats[key];
                 else if(key.startsWith('deaths_') && key.endsWith('_dragon'))
-                    misc.dragons['dragon_deaths'] += userProfile.stats[key];
+                    misc.dragons['deaths'] += userProfile.stats[key];
+                else if(key.includes('kills_corrupted_protector'))
+                    misc.protector['last_hits'] = userProfile.stats[key];
+                else if(key.includes('deaths_corrupted_protector'))
+                    misc.protector['deaths'] = userProfile.stats[key];
                 else if(key.startsWith('pet_milestone_')){
                     misc.milestones[key.replace('pet_milestone_', '')] = userProfile.stats[key];
                 }
