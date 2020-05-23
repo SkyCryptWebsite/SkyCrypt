@@ -8,6 +8,7 @@ const helper = require('./helper');
 const lib = require('./lib');
 const constants = require('./constants');
 const objectPath = require("object-path");
+const cors = require('cors');
 
 const axiosCacheAdapter = require('axios-cache-adapter');
 
@@ -36,7 +37,7 @@ function handleError(e, res){
 }
 
 module.exports = (app, db) => {
-    app.all('/api/:player/profiles', async (req, res) => {
+    app.all('/api/:player/profiles', cors(), async (req, res) => {
         try{
             let playerResponse = await Hypixel.get('player', {
                 params: { key: credentials.hypixel_api_key, name: req.params.player }, cache: { maxAge: 10 * 60 * 1000 }
@@ -65,7 +66,7 @@ module.exports = (app, db) => {
         }
     });
 
-    app.all('/api/:player/:profile/pets', async (req, res) => {
+    app.all('/api/:player/:profile/pets', cors(), async (req, res) => {
         try{
             const { playerResponse, profileResponse } = await helper.getProfile(req);
 
@@ -93,7 +94,7 @@ module.exports = (app, db) => {
         }
     });
 
-    app.all('/api/:player/:profile/minions', async (req, res) => {
+    app.all('/api/:player/:profile/minions', cors(), async (req, res) => {
         try{
             const { profileResponse } = await helper.getProfile(req);
 
@@ -129,7 +130,7 @@ module.exports = (app, db) => {
         }
     });
 
-    app.all('/api/:player/:profile/accessories', async (req, res) => {
+    app.all('/api/:player/:profile/accessories', cors(), async (req, res) => {
         try{
             const { playerResponse, profileResponse } = await helper.getProfile(req);
 
@@ -157,7 +158,7 @@ module.exports = (app, db) => {
         }
     });
 
-    app.all('/api/:player/:profile/collections', async (req, res) => {
+    app.all('/api/:player/:profile/collections', cors(), async (req, res) => {
         try{
             const { playerResponse, profileResponse } = await helper.getProfile(req);
 
@@ -179,7 +180,7 @@ module.exports = (app, db) => {
         }
     });
 
-    app.all('/api/:player/:profile/skills', async (req, res) => {
+    app.all('/api/:player/:profile/skills', cors(), async (req, res) => {
         try{
             const { playerResponse, profileResponse } = await helper.getProfile(req);
 
@@ -240,7 +241,7 @@ module.exports = (app, db) => {
         }
     });
 
-    app.all('/api/:player/:profile/cakebag', async (req, res) => {
+    app.all('/api/:player/:profile/cakebag', cors(), async (req, res) => {
         try{
             const { playerResponse, profileResponse } = await helper.getProfile(req);
 
@@ -273,7 +274,7 @@ module.exports = (app, db) => {
         }
     });
 
-    app.all('/api/:player/:profile/weapons', async (req, res) => {
+    app.all('/api/:player/:profile/weapons', cors(), async (req, res) => {
         try{
             const { playerResponse, profileResponse } = await helper.getProfile(req);
 
@@ -326,7 +327,7 @@ module.exports = (app, db) => {
         }
     });
 
-    app.all('/api/:player/:profile/armor', async (req, res) => {
+    app.all('/api/:player/:profile/armor', cors(), async (req, res) => {
         try{
             const { playerResponse, profileResponse } = await helper.getProfile(req);
 
@@ -379,7 +380,7 @@ module.exports = (app, db) => {
         }
     });
 
-    app.all('/api/bazaar', async (req, res) => {
+    app.all('/api/bazaar', cors(), async (req, res) => {
         try{
             const output = [];
 

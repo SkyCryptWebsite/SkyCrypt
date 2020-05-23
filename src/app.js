@@ -10,6 +10,7 @@ async function main(){
     const MongoStore = require('connect-mongo')(session);
     const bodyParser = require('body-parser');
     const crypto = require('crypto');
+    const cors = require('cors');
 
     const axiosCacheAdapter = require('axios-cache-adapter');
 
@@ -582,7 +583,7 @@ async function main(){
         }
     });
 
-    app.all('/texture/:uuid', async (req, res) => {
+    app.all('/texture/:uuid', cors(), async (req, res) => {
         const { uuid } = req.params;
 
         const filename = `texture_${uuid}.png`;
@@ -610,7 +611,7 @@ async function main(){
         res.send(file);
     });
 
-    app.all('/cape/:username', async (req, res) => {
+    app.all('/cape/:username', cors(), async (req, res) => {
         const { username } = req.params;
 
         const filename = `cape_${username}.png`;
@@ -648,7 +649,7 @@ async function main(){
         res.send(file);
     });
 
-    app.all('/head/:uuid', async (req, res) => {
+    app.all('/head/:uuid', cors(), async (req, res) => {
         const { uuid } = req.params;
 
         const filename = `head_${uuid}.png`;
@@ -669,7 +670,7 @@ async function main(){
         res.send(file);
     });
 
-    app.all('/item(.gif)?/:skyblockId?', async (req, res) => {
+    app.all('/item(.gif)?/:skyblockId?', cors(), async (req, res) => {
         const skyblockId = req.params.skyblockId || null;
         const item = await renderer.renderItem(skyblockId, req.query, db);
 
@@ -684,7 +685,7 @@ async function main(){
         res.send(item.image);
     });
 
-    app.all('/leather/:type/:color', async (req, res) => {
+    app.all('/leather/:type/:color', cors(), async (req, res) => {
         let file;
 
         if(!["boots", "leggings", "chestplate", "helmet"].includes(req.params.type))
