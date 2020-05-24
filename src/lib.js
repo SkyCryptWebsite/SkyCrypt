@@ -755,6 +755,28 @@ module.exports = {
         for(const talisman of talismans){
             const id = getId(talisman);
 
+            if(id.startsWith("CAMPFIRE_TALISMAN_")){
+                const tier = parseInt(id.split("_").pop());
+
+                const maxTier = Math.max(...talismans.filter(a => getId(a).startsWith("CAMPFIRE_TALISMAN_")).map(a => getId(a).split("_").pop()));
+
+                if(tier < maxTier){
+                    talisman.isUnique = false;
+                    talisman.isInactive = true;
+                }
+            }
+
+            if(id.startsWith("WEDDING_RING_")){
+                const tier = parseInt(id.split("_").pop());
+
+                const maxTier = Math.max(...talismans.filter(a => getId(a).startsWith("WEDDING_RING_")).map(a => getId(a).split("_").pop()));
+
+                if(tier < maxTier){
+                    talisman.isUnique = false;
+                    talisman.isInactive = true;
+                }
+            }
+
             if(id in constants.talisman_upgrades){
                 const talismanUpgrades = constants.talisman_upgrades[id];
 
