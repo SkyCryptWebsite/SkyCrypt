@@ -1203,11 +1203,6 @@ module.exports = {
             items.armor[0].stats.health += 50 * output.stats.crit_damage;
         }
 
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('ANGLER_')).length == 4){
-            output.stats['sea_creature_chance'] += 4;
-            items.armor[0].stats.sea_creature_chance = 4;
-        }
-
         // Apply +5 Defense and +5 Strength of Day/Night Crystal only if both are owned as this is required for a permanent bonus
         if(items.talismans.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && !a.isInactive && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(a.tag.ExtraAttributes.id)).length == 2){
             output.stats.defense += 5;
