@@ -973,7 +973,7 @@ module.exports = {
                 }
 
                 if(isPerfectSet){
-                    const sameTier = armor.filter(a => getId(a).split("_").slice(-2).join("_") == getId(armor[0]).split("_").slice(-2).join("_"));
+                    const sameTier = armor.filter(a => getId(a).split("_").pop() == getId(armor[0]).split("_").pop()).length == 4;
 
                     if(sameTier)
                         output.armor_set = 'Perfect Armor - Tier ' + getId(armor[0]).split("_").pop();
