@@ -1312,7 +1312,7 @@ twitterDescription += '. Click to view more stats!'
                     %>
                     <p class="stat-raw-values">
                         <% max = uniquePets.length >= Object.keys(constants.pet_data).length ? 'golden-text': '' %><span class="stat-name <%= max %>">Unique Pets: </span><span class="stat-value <%= max %>"><%= uniquePets.length %> / <%= Object.keys(constants.pet_data).length %></span><br>
-                        <% max = calculated.petScore >= Math.max(Object.keys(constants.pet_rewards)) ? 'golden-text' : '' %><span data-tippy-content="
+                        <% max = calculated.petScore >= Math.max(...Object.keys(constants.pet_rewards)) ? 'golden-text' : '' %><span data-tippy-content="
                         Increase your pet score by collecting unique pets with a high rarity.<br><br>
                         <table>
                         <tr><td>10 Score: </td><td><span class='color-magic-find grey-text'>+1 Magic Find</span></td>
