@@ -696,6 +696,23 @@ module.exports = {
 
         const talismans = [];
 
+        // Modify talismans on armor
+        for(const talisman of armor.filter(a => a.type == 'accessory')){
+            const id = getId(talisman);
+
+            if(id === "")
+                continue;
+
+            talisman.isUnique = true;
+            talisman.isInactive = false;
+
+            if(talismans.filter(a => !a.isInactive && getId(a) == id).length > 0)
+                talisman.isInactive = true;
+
+            if(talismans.filter(a =>a.tag.ExtraAttributes.id == id).length > 0)
+                talisman.isUnique = false;
+        }
+
         // Add talismans from inventory
         for(const talisman of inventory.filter(a => a.type == 'accessory')){
             const id = getId(talisman);
@@ -752,7 +769,7 @@ module.exports = {
         }
 
         // Don't account for lower tier versions of the same talisman
-        for(const talisman of talismans){
+        for(const talisman of talismans.concat(armor)){
             const id = getId(talisman);
 
             if(id.startsWith("CAMPFIRE_TALISMAN_")){
@@ -1208,10 +1225,15 @@ module.exports = {
             items.armor[0].stats.speed += 70;
 
         // Apply basic armor stats
-        items.armor.forEach(item => {
+        for(const item of items.armor){
+            if(item.isInactive){
+                item.stats = {};
+                continue;
+            }
+
             for(let stat in item.stats)
                 output.stats[stat] += item.stats[stat];
-        });
+        }
 
         // Apply stats of active talismans
         items.talismans.filter(a => Object.keys(a).length != 0 && !a.isInactive).forEach(item => {
