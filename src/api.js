@@ -79,17 +79,18 @@ module.exports = (app, db) => {
 
                 const petLevel = Object.assign({}, pet.level);
                 delete pet.level;
+                delete pet.tier;
 
                 for(const key in petLevel)
                     pet[key] = petLevel[key];
-
-                delete pet.emoji;
-                delete pet.tier;
-                delete pet.stats;
             }
 
             if('html' in req.query)
-                res.send(tableify(pets, { showHeaders: false }));
+                res.send(tableify(pets.map(a => [
+                    a.type, a.exp, a.active, a.rarity,
+                    a.texture_path, a.display_name, a.level.level,
+                    a.level.xpCurrent, a.level.xpForNext, a.level.progress,
+                    a.level.maxLevel]), { showHeaders: false }));
             else
                 res.json(pets);
         }catch(e){
