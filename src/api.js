@@ -78,11 +78,14 @@ module.exports = (app, db) => {
                 delete pet.lore;
 
                 const petLevel = Object.assign({}, pet.level);
-                delete pet.level;
-                delete pet.tier;
 
                 for(const key in petLevel)
                     pet[key] = petLevel[key];
+
+                delete pet.emoji;
+                delete pet.level;
+                delete pet.tier;
+                delete pet.stats;
             }
 
             if('html' in req.query)
