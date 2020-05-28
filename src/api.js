@@ -78,12 +78,12 @@ module.exports = (app, db) => {
                 delete pet.lore;
 
                 const petLevel = Object.assign({}, pet.level);
+                delete pet.level;
 
                 for(const key in petLevel)
                     pet[key] = petLevel[key];
 
                 delete pet.emoji;
-                delete pet.level;
                 delete pet.tier;
                 delete pet.stats;
             }
