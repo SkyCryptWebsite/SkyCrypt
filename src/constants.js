@@ -842,7 +842,8 @@ module.exports = {
         SUMMONING_EYE: "sum",
         ENDER_STONE: "endstone",
         ENCHANTED_ENDSTONE: "endstone",
-        HOT_POTATO_BOOK: "hpb"
+        HOT_POTATO_BOOK: "hpb",
+        RABBIT_FOOT: 'rabbit'
     },
 
     bag_size: {
