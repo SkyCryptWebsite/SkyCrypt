@@ -1270,7 +1270,7 @@ twitterDescription += '. Click to view more stats!'
                                     </div>
                                 <% }) %>
                                 <p>
-                                <%- getBonus(getStats(items.talismans.filter(a => a.isUnique))) %>
+                                <%- getBonus(getStats(items.talismans.filter(a => a.isUnique && !a.isInactive))) %>
                                 </p>
                             </div>
                         <% } %>
