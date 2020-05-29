@@ -1251,6 +1251,11 @@ module.exports = {
         if(items.talismans.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && !a.isInactive && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(a.tag.ExtraAttributes.id)).length == 2){
             output.stats.defense += 5;
             output.stats.strength += 5;
+
+            const dayCrystal = items.talismans.filter(a => getId(a) == 'DAY_CRYSTAL')[0];
+
+            dayCrystal.stats.defense = (dayCrystal.stats.defense || 0) + 5;
+            dayCrystal.stats.strength = (dayCrystal.stats.strength || 0) + 5;
         }
 
         // Apply Obsidian Chestplate bonus of +1 Speed per 20 Obsidian in inventory
