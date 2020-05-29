@@ -200,6 +200,19 @@ async function main(){
         { unique: true }
     );
 
+    await db
+    .collection('profileData')
+    .createIndex(
+        { uuid: 1 }
+    );
+
+    await db
+    .collection('profileData')
+    .createIndex(
+        { uuid: 1, pid: 1 },
+        { unique: true }
+    );
+
     mongo.close();
 }
 
