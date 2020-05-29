@@ -317,7 +317,7 @@ async function main(){
                     await db
                     .collection('profileData')
                     .updateOne(
-                        { uuid: paramPlayer, pid: profileId },
+                        { uuid: paramPlayer, pid: _profile.profile_id },
                         { $set: { last_save: new Date(userProfile.last_save), cname: _profile.cute_name || '', data: userProfile } },
                         { upsert: true }
                     );
