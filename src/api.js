@@ -36,6 +36,12 @@ function handleError(e, res){
     res.status(500).send('Something went wrong');
 }
 
+function getId(item){
+    if(objectPath.has(item, 'tag.ExtraAttributes.id'))
+        return item.tag.ExtraAttributes.id;
+    return "";
+}
+
 module.exports = (app, db) => {
     app.all('/api/:player/profiles', cors(), async (req, res) => {
         try{
@@ -88,9 +94,9 @@ module.exports = (app, db) => {
             if('html' in req.query)
                 res.send(tableify(pets.map(a => [
                     a.type, a.exp, a.active, a.rarity,
-                    a.texture_path, a.display_name, a.level.level,
-                    a.level.xpCurrent, a.level.xpForNext, a.level.progress,
-                    a.level.maxLevel]), { showHeaders: false }));
+                    a.texture_path, a.display_name, a.level,
+                    a.xpCurrent, a.xpForNext, a.progress,
+                    a.maxLevel]), { showHeaders: false }));
             else
                 res.json(pets);
         }catch(e){
@@ -273,6 +279,29 @@ module.exports = (app, db) => {
 
                 res.send(tableify(cakes, { showHeaders: false }));
             }
+        }catch(e){
+            handleError(e, res);
+        }
+    });
+
+    app.all('/api/:player/:profile/items', cors(), async (req, res) => {
+        try{
+            const { playerResponse, profileResponse } = await helper.getProfile(req);
+
+            const userProfile = profileResponse.data.profile.members[playerResponse.data.player.uuid];
+
+            const items = await lib.getItems(userProfile);
+
+            const allItems = items.inventory.concat(items.enderchest)
+
+            for(const item of allItems)
+                if(Array.isArray(item.containsItems))
+                    allItems.push(...item.containsItems);
+
+            if('html' in req.query)
+                res.send(tableify(allItems.filter(a => getId(a).length > 0).map(a => [getId(a), a.Count, a.display_name, a.rarity, a.type]), { showHeaders: false }));
+            else
+                res.json(output);
         }catch(e){
             handleError(e, res);
         }
