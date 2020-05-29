@@ -96,7 +96,7 @@ module.exports = (app, db) => {
                     a.type, a.exp, a.active, a.rarity,
                     a.texture_path, a.display_name, a.level,
                     a.xpCurrent, a.xpForNext, a.progress,
-                    a.maxLevel]), { showHeaders: false }));
+                    a.xpMaxLevel]), { showHeaders: false }));
             else
                 res.json(pets);
         }catch(e){
