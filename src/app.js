@@ -307,18 +307,27 @@ async function main(){
             let profileId;
             let profile;
 
-            profiles.forEach((_profile, index) => {
+            for(const [index, _profile] of profiles.entries()){
                 if(_profile === undefined || _profile === null)
                     return;
 
                 let userProfile = _profile.members[paramPlayer];
+
+                if('last_save' in userProfile && response.request.fromCache !== true)
+                    await db
+                    .collection('profileData')
+                    .updateOne(
+                        { uuid: paramPlayer, pid: profileId },
+                        { $set: { last_save: new Date(userProfile.last_save), cname: _profile.cute_name || '', data: userProfile } },
+                        { upsert: true }
+                    );
 
                 if('last_save' in userProfile && userProfile.last_save > highest){
                     profile = _profile;
                     highest = userProfile.last_save;
                     profileId = _profile.profile_id;
                 }
-            });
+            }
 
             if(!profile){
                 res.status(404);
