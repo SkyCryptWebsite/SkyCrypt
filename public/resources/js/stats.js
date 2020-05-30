@@ -57,10 +57,12 @@ document.addEventListener('DOMContentLoaded', function(){
     urlParams.delete('__cf_chl_jschl_tk__');
     urlParams.delete('__cf_chl_captcha_tk__');
 
+    const urlParamsString = urlParams.toString().length > 0 ? '?' + urlParams.toString() : '';
+
     if(calculated.profile.cute_name == 'Deleted')
-        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.profile_id + urlParams.toString());
+        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.profile_id + urlParamsString);
     else
-        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name + urlParams.toString());
+        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name + urlParamsString);
 
     function isEnchanted(item){
         if(item.animated)
