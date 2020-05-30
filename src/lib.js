@@ -1284,9 +1284,6 @@ module.exports = {
         for(const item of items.weapons.concat(items.rods)){
             let stats = Object.assign({}, output.stats);
 
-            if(objectPath.has(item, 'tag.ExtraAttributes.enchantments.angler'))
-                item.stats['sea_creature_chance'] = (item.stats['sea_creature_chance'] || 0) + item.tag.ExtraAttributes.enchantments.angler;
-
             // Apply held weapon stats
             for(let stat in item.stats){
                 stats[stat] += item.stats[stat];
