@@ -7,6 +7,7 @@
     }
 </script>
 <header class="page-<%= page %>">
+    <div data-tippy-content="Happy Pride Month! ❤️" class="pride-flag rainbow"></div>
     <a href="/" id="site_name">sky.lea.moe</a>
     <div class="social-button" id="info_button" onclick="toggleInfo()">About</div>
     <% if('donations' in extra){ %>
@@ -65,4 +66,25 @@
 
     if(!Modernizr.testAllProps('transform', 'translateY(10px)'))
         document.documentElement.classList.add('no-transform');
+
+    tippy('*[data-tippy-content]');
+
+    const prideFlag = document.querySelector('.pride-flag');
+    const prideFlags = ["rainbow", "trans", "lesbian", "bi", "pan", "nb", "ace", "genderfluid"];
+    let currentFlag = 0;
+
+    if(localStorage.getItem('currentFlag')){
+        currentFlag = parseInt(localStorage.getItem('currentFlag'));
+        prideFlag.className = 'pride-flag ' + prideFlags[currentFlag];
+    }
+
+    prideFlag.addEventListener('click', function(){
+        currentFlag++;
+
+        if(currentFlag > prideFlags.length - 1)
+            currentFlag = 0;
+
+        localStorage.setItem('currentFlag', currentFlag);
+        prideFlag.className = 'pride-flag ' + prideFlags[currentFlag];
+    });
 </script>
