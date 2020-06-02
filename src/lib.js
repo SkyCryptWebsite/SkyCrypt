@@ -675,9 +675,11 @@ module.exports = {
 
                 if(getId(wardrobe_inventory[index]).length > 0)
                     wardrobeSlot.push(wardrobe_inventory[index]);
+                else
+                    wardrobeSlot.push(null);
             }
 
-            if(wardrobeSlot.length > 0)
+            if(wardrobeSlot.filter(a => a !== null).length > 0)
                 wardrobe.push(wardrobeSlot);
         }
 

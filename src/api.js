@@ -343,7 +343,7 @@ module.exports = (app, db) => {
                 }
 
                 output.push({
-                    id: weapon.tag.ExtraAttributes.id,
+                    id: getId(weapon),
                     name: weapon.display_name,
                     rarity: weapon.rarity,
                     enchantments: enchantmentsOutput,
@@ -396,12 +396,74 @@ module.exports = (app, db) => {
                 }
 
                 output.push({
-                    id: armor.tag.ExtraAttributes.id,
+                    id: getId(armor),
                     name: armor.display_name,
                     rarity: armor.rarity,
                     enchantments: enchantmentsOutput,
                     stats: statsOutput,
                 });
+            }
+
+            if('html' in req.query)
+                res.send(tableify(output, { showHeaders: false }));
+            else
+                res.json(output);
+        }catch(e){
+            handleError(e, res);
+        }
+    });
+
+    app.all('/api/:player/:profile/wardrobe', cors(), async (req, res) => {
+        try{
+            const { playerResponse, profileResponse } = await helper.getProfile(req);
+
+            const userProfile = profileResponse.data.profile.members[playerResponse.data.player.uuid];
+
+            const items = await lib.getItems(userProfile);
+
+            let output = [];
+
+            console.log(items.wardrobe);
+
+            for(const wardrobe of items.wardrobe){
+                for(const armor of wardrobe){
+                    if(armor === null){
+                        output.push({});
+                        continue;
+                    }
+
+                    const enchantments = armor.tag.ExtraAttributes.enchantments;
+                    let enchantmentsOutput = enchantments;
+
+                    const stats = armor.stats;
+                    let statsOutput = stats;
+
+                    if('html' in req.query && enchantments !== undefined){
+                        enchantmentsOutput = [];
+
+                        for(const enchantment in enchantments)
+                            enchantmentsOutput.push(enchantment + '=' + enchantments[enchantment]);
+
+                        enchantmentsOutput = enchantmentsOutput.join(",");
+                    }
+
+                    if('html' in req.query && stats !== undefined){
+                        statsOutput = [];
+
+                        for(const stat in stats)
+                            statsOutput.push(stat + '=' + stats[stat]);
+
+                        statsOutput = statsOutput.join(",");
+                    }
+
+                    output.push({
+                        id: getId(armor),
+                        name: armor.display_name,
+                        rarity: armor.rarity,
+                        enchantments: enchantmentsOutput,
+                        stats: statsOutput,
+                    });
+                }
             }
 
             if('html' in req.query)
