@@ -205,6 +205,22 @@ header{
     content: "";
 }
 
+.blm-logo{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 48px;
+    height: 48px;
+    background-image: url(/resources/img/icons/blm.png);
+    background-size: auto 24px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.blm-logo::after{
+    content: "";
+}
+
 .social-button{
     display: block;
     margin-left: 5px;
@@ -2765,7 +2781,7 @@ html.no-webp #error_box_wrapper{
     }
 
     #search_user{
-        right: 10px;
+        right: 50px;
         left: auto;
     }
 
@@ -2949,7 +2965,7 @@ html.no-webp #error_box_wrapper{
     }
 }
 
-@media (max-width: 760px){
+@media (max-width: 800px){
     header > .social-button{
         display: none;
     }
@@ -3074,9 +3090,14 @@ html.no-webp #error_box_wrapper{
 }
 
 @media (max-width: 580px){
+    .blm-logo{
+        display: none;
+    }
+
     #search_user{
         width: calc(100% - 210px);
         margin-left: auto;
+        right: 10px;
     }
 
     #inp_search_user{
