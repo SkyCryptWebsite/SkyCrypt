@@ -744,10 +744,10 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     }
 
-    [].forEach.call(document.querySelectorAll('.wardrobe-set'), bindWardrobeEvents);
-
     if(touchDevice)
-        [].forEach.call(document.querySelectorAll('.rich-item .piece-hover-area'), bindLoreEvents);
+        [].forEach.call(document.querySelectorAll('.wardrobe-set'), bindWardrobeEvents);
+
+    [].forEach.call(document.querySelectorAll('.rich-item .piece-hover-area'), bindLoreEvents);
 
     let enableApiPlayer = document.querySelector('#enable_api');
 
