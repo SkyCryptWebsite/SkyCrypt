@@ -443,22 +443,15 @@ async function getItems(base64, packs){
                 }
             });
 
-            // Apply Speed Talisman speed bonus
-            if(objectPath.has(item, 'tag.ExtraAttributes.id') && item.tag.ExtraAttributes.id == 'SPEED_TALISMAN'){
-                lore.forEach(line => {
-                    if(line.startsWith('Gives')){
-                        let split = line.split("Gives +");
+            // Apply Speed Talisman speed bonuses
+            if(getId(item) == 'SPEED_TALISMAN')
+                item.stats.speed = 1;
 
-                        if(split.length < 2)
-                            return;
+            if(getId(item) == 'SPEED_RING')
+                item.stats.speed = 3;
 
-                        let speed = parseInt(split[1]);
-
-                        if(!isNaN(speed))
-                            item.stats.speed = speed;
-                    }
-                })
-            }
+            if(getId(item) == 'SPEED_ARTIFACT')
+                item.stats.speed = 5;
         }
 
         // Add snow canon and blaster to weapons
