@@ -423,8 +423,6 @@ module.exports = (app, db) => {
 
             let output = [];
 
-            console.log(items.wardrobe);
-
             for(const wardrobe of items.wardrobe){
                 for(const armor of wardrobe){
                     if(armor === null){
