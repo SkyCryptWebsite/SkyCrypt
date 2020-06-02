@@ -681,8 +681,6 @@ module.exports = {
                 wardrobe.push(wardrobeSlot);
         }
 
-        console.log(wardrobe);
-
         output.armor = armor.filter(a => Object.keys(a).length != 0);
         output.wardrobe = wardrobe;
         output.wardrobe_inventory = wardrobe_inventory;
