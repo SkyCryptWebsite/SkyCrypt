@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
-    const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag);
+    const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory);
 
     let dimmer = document.querySelector("#dimmer");
 
@@ -665,14 +665,32 @@ document.addEventListener('DOMContentLoaded', function(){
     const itemLore = statsContent.querySelector('.item-lore');
     const backpackContents = statsContent.querySelector('.backpack-contents');
 
+    const touchDevice = window.matchMedia("(pointer: coarse)").matches;
+
+    function bindWardrobeEvents(element){
+        element.addEventListener('click', function(e){
+            const currentWardrobe = document.querySelector('.wardrobe-opened');
+
+            if(currentWardrobe)
+                currentWardrobe.classList.remove('wardrobe-opened');
+
+            element.classList.add('wardrobe-opened');
+        });
+    }
+
     function bindLoreEvents(element){
         element.addEventListener('mouseenter', function(e){
             fillLore(element.parentNode, false);
+
+            if(touchDevice && !element.parentNode.parentNode.classList.contains('wardrobe-opened'))
+                return;
+
             statsContent.classList.add('show-stats');
         });
 
         element.addEventListener('mouseleave', function(e){
             statsContent.classList.remove('show-stats');
+            element.classList.remove('piece-hovered');
         });
 
         element.addEventListener('mousemove', function(e){
@@ -696,6 +714,11 @@ document.addEventListener('DOMContentLoaded', function(){
         });
 
         element.addEventListener('click', function(e){
+            if(touchDevice && !element.parentNode.parentNode.classList.contains('wardrobe-opened')){
+                element.parentNode.blur();
+                return;
+            }
+
             let itemIndex = Number(element.parentNode.getAttribute('data-item-index'));
             let item = all_items.filter(a => a.item_index == itemIndex);
 
@@ -721,6 +744,7 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     }
 
+    [].forEach.call(document.querySelectorAll('.wardrobe-set'), bindWardrobeEvents);
     [].forEach.call(document.querySelectorAll('.rich-item .piece-hover-area'), bindLoreEvents);
 
     let enableApiPlayer = document.querySelector('#enable_api');

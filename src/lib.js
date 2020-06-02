@@ -653,6 +653,7 @@ module.exports = {
         // Process inventories returned by API
         let armor = 'inv_armor' in profile ? await getItems(profile.inv_armor.data, packs) : [];
         let inventory = 'inv_contents' in profile ? await getItems(profile.inv_contents.data, packs) : [];
+        let wardrobe_inventory = 'wardrobe_contents' in profile ? await getItems(profile.wardrobe_contents.data, packs) : [];
         let enderchest = 'ender_chest_contents' in profile ? await getItems(profile.ender_chest_contents.data, packs) : [];
         let talisman_bag = 'talisman_bag' in profile ? await getItems(profile.talisman_bag.data, packs) : [];
         let fishing_bag = 'fishing_bag' in profile ? await getItems(profile.fishing_bag.data, packs) : [];
@@ -660,7 +661,31 @@ module.exports = {
         let potion_bag = 'potion_bag' in profile ? await getItems(profile.potion_bag.data, packs) : [];
         let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data, packs) : [];
 
+        const wardrobeColumns = wardrobe_inventory.length / 4;
+
+        let wardrobe = [];
+
+        for(let i = 0; i < wardrobeColumns; i++){
+            let page = Math.floor(i / 9);
+
+            let wardrobeSlot = [];
+
+            for(let j = 0; j < 4; j++){
+                let index = (36 * page) + (i % 9) + (j * 9);
+
+                if(getId(wardrobe_inventory[index]).length > 0)
+                    wardrobeSlot.push(wardrobe_inventory[index]);
+            }
+
+            if(wardrobeSlot.length > 0)
+                wardrobe.push(wardrobeSlot);
+        }
+
+        console.log(wardrobe);
+
         output.armor = armor.filter(a => Object.keys(a).length != 0);
+        output.wardrobe = wardrobe;
+        output.wardrobe_inventory = wardrobe_inventory;
         output.inventory = inventory
         output.enderchest = enderchest;
         output.talisman_bag = talisman_bag;
@@ -668,7 +693,7 @@ module.exports = {
         output.quiver = quiver;
         output.potion_bag = potion_bag;
 
-        const all_items = armor.concat(inventory, enderchest, talisman_bag, fishing_bag, quiver, potion_bag);
+        const all_items = armor.concat(inventory, enderchest, talisman_bag, fishing_bag, quiver, potion_bag, wardrobe_inventory);
 
         for(const [index, item] of all_items.entries()){
             item.item_index = index;

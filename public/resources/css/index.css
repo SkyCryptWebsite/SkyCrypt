@@ -1421,6 +1421,22 @@ a.additional-player-stat:hover{
     font-size: 19px;
 }
 
+.wardrobe-set{
+    vertical-align: top;
+    display: inline-block;
+    max-height: 90px;
+    overflow: hidden;
+    transition: max-height .2s;
+}
+
+.wardrobe-set:hover, .wardrobe-set.wardrobe-opened{
+    max-height: 360px;
+}
+
+.wardrobe-set .piece{
+    display: block;
+}
+
 .piece{
     display: inline-block;
     position: relative;
@@ -3138,6 +3154,14 @@ html.no-webp #error_box_wrapper{
 
     #skill_levels_container .skill-bar{
         right: 0;
+    }
+
+    .wardrobe-set{
+        max-height: calc((100vw - 50px) / 4);
+    }
+
+    .wardrobe-set:hover, .wardrobe-set.wardrobe-opened{
+        max-height: calc(100vw - 50px);
     }
 
     .piece{
