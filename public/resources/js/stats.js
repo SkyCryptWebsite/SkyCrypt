@@ -682,7 +682,7 @@ document.addEventListener('DOMContentLoaded', function(){
         element.addEventListener('mouseenter', function(e){
             fillLore(element.parentNode, false);
 
-            if(touchDevice && !element.parentNode.parentNode.classList.contains('wardrobe-opened'))
+            if(touchDevice && element.parentNode.classList.contains('wardrobe-piece') && !element.parentNode.parentNode.classList.contains('wardrobe-opened'))
                 return;
 
             statsContent.classList.add('show-stats');
@@ -714,7 +714,7 @@ document.addEventListener('DOMContentLoaded', function(){
         });
 
         element.addEventListener('click', function(e){
-            if(touchDevice && !element.parentNode.parentNode.classList.contains('wardrobe-opened')){
+            if(touchDevice && element.parentNode.classList.contains('wardrobe-piece') && !element.parentNode.parentNode.classList.contains('wardrobe-opened')){
                 element.parentNode.blur();
                 return;
             }
