@@ -894,6 +894,14 @@ module.exports = {
                 {
                     tier: 8,
                     slots: 27
+                },
+                {
+                    tier: 10,
+                    slots: 36
+                },
+                {
+                    tier: 11,
+                    slots: 45
                 }
             ]
         },
@@ -911,6 +919,14 @@ module.exports = {
                 {
                     tier: 9,
                     slots: 27
+                },
+                {
+                    tier: 10,
+                    slots: 36
+                },
+                {
+                    tier: 11,
+                    slots: 45
                 }
             ]
         },
@@ -920,6 +936,14 @@ module.exports = {
                 {
                     tier: 3,
                     slots: 27
+                },
+                {
+                    tier: 6,
+                    slots: 36
+                },
+                {
+                    tier: 9,
+                    slots: 45
                 }
             ]
         }
