@@ -2643,7 +2643,7 @@ html.no-webp #error_box_wrapper{
 
 @media (max-width: 1590px){
     header{
-        width: 100vw;
+        width: 100%;
     }
 
     #info_box{
