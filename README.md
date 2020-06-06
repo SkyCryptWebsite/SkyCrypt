@@ -1,4 +1,4 @@
-<p align="center"><img src="https://i.imgur.com/IrWUupH.png"></p>
+<p align="center"><img src="https://i.imgur.com/h74ZXmI.png"></p>
 <h1 align="center">A beautiful SkyBlock stats website 🌹</h1>
 
 This project allows you to share your <a href="https://hypixel.net//">Hypixel</a> SkyBlock profile with other players with a quick overview of your Stats, Skills, Armor, Weapons and Accessories.
