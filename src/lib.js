@@ -967,6 +967,11 @@ module.exports = {
                 getId(a).startsWith('PERFECT_')
             ).length == 4;
 
+            const isSpongeSet = armor
+            .filter(a =>
+                getId(a).startsWith('SPONGE_')
+            ).length == 4;
+
             if(armor.filter(a => a.armor_name.split(" ")[0] == armor[0].armor_name.split(" ")[0]).length == 4
             || isMonsterSet){
                 let base_name = armor[0].armor_name.split(" ");
@@ -998,6 +1003,9 @@ module.exports = {
                     else
                         output.armor_set = 'Perfect Armor';
                 }
+
+                if(isSpongeSet)
+                    output.armor_set = 'Sponge Armor';
 
                 if(reforgeName)
                     output.armor_set = reforgeName + " " + output.armor_set;
