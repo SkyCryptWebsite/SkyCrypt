@@ -358,10 +358,26 @@ async function main(){
 
             const members = await Promise.all(memberPromises);
 
-            members.push({
-                uuid: paramPlayer,
-                display_name: playerUsername
-            });
+            const userInfo = await db
+            .collection('usernames')
+            .findOne({ uuid: paramPlayer });
+
+            const hypixelRank = await helper.getRank(paramPlayer, db);
+
+            const items = await lib.getItems(userProfile, req.query.pack);
+            const calculated = await lib.getStats(userProfile, items, hypixelRank);
+
+            if(userInfo){
+                calculated.display_name = userInfo.username;
+
+                members.push({
+                    uuid: paramPlayer,
+                    display_name: userInfo.username
+                });
+
+                if('emoji' in userInfo)
+                    calculated.display_emoji = userInfo.emoji;
+            }
 
             for(const member of members){
                 await db
@@ -373,10 +389,6 @@ async function main(){
                 );
             }
 
-            const hypixelRank = await helper.getRank(paramPlayer, db);
-
-            const items = await lib.getItems(userProfile, req.query.pack);
-            const calculated = await lib.getStats(userProfile, items, hypixelRank);
 
             if(objectPath.has(profile, 'banking.balance'))
                 calculated.bank = profile.banking.balance;
@@ -388,17 +400,6 @@ async function main(){
             calculated.uuid = paramPlayer;
             calculated.display_name = playerUsername;
             calculated.skin_data = playerObject.skin_data;
-
-            const userInfo = await db
-            .collection('usernames')
-            .findOne({ uuid: paramPlayer });
-
-            if(userInfo){
-                calculated.display_name = userInfo.username;
-
-                if('emoji' in userInfo)
-                    calculated.display_emoji = userInfo.emoji;
-            }
 
             calculated.profile = { profile_id: profile.profile_id, cute_name: profile.cute_name };
             calculated.profiles = {};
