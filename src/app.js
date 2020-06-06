@@ -859,6 +859,8 @@ async function main(){
         res.redirect(`/stats/${profile.uuid}/{profile.profile_id}`);
     });
 
+    app.all('/favicon.ico', express.static(path.join(__dirname, 'public')));
+
     app.all('/:player/:profile?', async (req, res, next) => {
         res.redirect(`/stats${req.path}`);
     });
