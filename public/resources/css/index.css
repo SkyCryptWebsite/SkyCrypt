@@ -2952,6 +2952,7 @@ html.no-webp #error_box_wrapper{
         margin-left: -40px;
         margin-right: -40px;
         padding-left: 40px;
+        padding-bottom: 20px;
     }
 
     .slayer-containers .narrow-info-container:last-child{
