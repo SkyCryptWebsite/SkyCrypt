@@ -373,6 +373,11 @@ document.addEventListener('DOMContentLoaded', function(){
 
             statsContent.classList.remove('sticky-stats', 'show-stats');
         }
+
+        const openedWardrobe = document.querySelector('.wardrobe-opened');
+
+        if(openedWardrobe)
+            openedWardrobe.classList.remove('wardrobe-opened');
     }
 
     let oldWidth = null;
@@ -718,6 +723,9 @@ document.addEventListener('DOMContentLoaded', function(){
                 element.parentNode.blur();
                 return;
             }
+
+            if(element.parentNode.parentNode.classList.contains('wardrobe-set'))
+                element.parentNode.parentNode.classList.add('wardrobe-opened');
 
             let itemIndex = Number(element.parentNode.getAttribute('data-item-index'));
             let item = all_items.filter(a => a.item_index == itemIndex);
