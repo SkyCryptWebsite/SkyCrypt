@@ -501,7 +501,7 @@ module.exports = {
             plusColor = constants.minecraft_formatting[plusColor].niceColor
             || constants.minecraft_formatting[plusColor].color
 
-            output += `<div class="rank-plus" style="background-color: ${plusColor}"><div class="rank-plus-before" style="border-color: transparent transparent ${plusColor} transparent;"></div>${plusText}</div>`;
+            output += `<div class="rank-plus" style="background-color: ${plusColor}"><div class="rank-plus-before" style="background-color: ${plusColor};"></div><span class="rank-plus-text">${plusText}</span></div>`;
         }
 
         output += `</div>`;
