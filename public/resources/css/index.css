@@ -866,12 +866,16 @@ html.no-transform #info_box.opened{
 .rank-tag .rank-plus-before{
     position: absolute;
     top: 0;
-    left: -13.5px;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 0 34px 14px;
-    border-color: transparent transparent #D985BC transparent;
+    left: -7px;
+    width: 999px;
+    background-color: #D985BC;
+    height: 100%;
+    transform: skew(-20deg);
+}
+
+.rank-tag .rank-plus-text{
+    position: relative;
+    z-index: 2;
 }
 
 .rank-tag div{
@@ -3149,9 +3153,6 @@ html.no-webp #error_box_wrapper{
     .rank-tag .rank-plus{
         padding-right: 5px;
     }
-
-    .rank-tag .rank-plus-before{
-        border-width: 0 0 34px 14px;
 }
 
 @media (max-width: 480px){

@@ -367,6 +367,8 @@ async function main(){
             const items = await lib.getItems(userProfile, req.query.pack);
             const calculated = await lib.getStats(userProfile, items, hypixelRank);
 
+            calculated.display_name = playerUsername;
+
             if(userInfo){
                 calculated.display_name = userInfo.username;
 
@@ -398,7 +400,6 @@ async function main(){
             calculated.rank_prefix = helper.renderRank(hypixelRank);
             calculated.purse = userProfile.coin_purse || 0;
             calculated.uuid = paramPlayer;
-            calculated.display_name = playerUsername;
             calculated.skin_data = playerObject.skin_data;
 
             calculated.profile = { profile_id: profile.profile_id, cute_name: profile.cute_name };
