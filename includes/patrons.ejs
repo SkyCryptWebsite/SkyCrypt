@@ -6,10 +6,11 @@
         "Reyzor",
         "Tauerr",
         "Scott",
-        "Alea1337"
+        "Alea1337",
+        "motion_blue"
     ];
 
     patrons.forEach((patron, index) => { %>
-        <span class="patron piece-legendary-fg"><%= patron %></span><%= index < patrons.length - 1 ? ', ' : '' %>
+        <a href="/stats/<%= patron %>"><span class="patron piece-legendary-fg"><%= patron %></span></a><%= index < patrons.length - 1 ? ', ' : '' %>
     <% });
 %>
