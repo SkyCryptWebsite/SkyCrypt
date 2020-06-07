@@ -1274,8 +1274,8 @@ twitterDescription += '. Click to view more stats!'
                         <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
                     <% }else{ %>
                         <p class="stat-raw-values">
-                            <% max = items.talismans.filter(a => a.isUnique).length >= 47 ? 'golden-text': '' %><span class="stat-name <%= max %>">Unique Accessories: </span><span class="stat-value <%= max %>"><%= items.talismans.filter(a => a.isUnique).length %> / 47</span><br>
-                            <span class="stat-name <%= max %>">Completion: </span><span class="stat-value <%= max %>"><%= Math.round(items.talismans.filter(a => a.isUnique).length / 47 * 100) %>%</span>
+                            <% max = items.talismans.filter(a => a.isUnique).length >= 48 ? 'golden-text': '' %><span class="stat-name <%= max %>">Unique Accessories: </span><span class="stat-value <%= max %>"><%= items.talismans.filter(a => a.isUnique).length %> / 48</span><br>
+                            <span class="stat-name <%= max %>">Completion: </span><span class="stat-value <%= max %>"><%= Math.round(items.talismans.filter(a => a.isUnique).length / 48 * 100) %>%</span>
                         </p>
                         <% if(items.talismans.filter(a => !a.isInactive).length > 0){ %>
                             <div class="accessory-list">
