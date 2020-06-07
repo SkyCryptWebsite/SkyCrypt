@@ -792,7 +792,7 @@ const stat_component = stat => {
         <div class='tippy-explanation'>Additional bonuses from Armor, held items, Accessories and active Pets.</div>
         <% if(Array.isArray(stat.extraStats)){
             for(const extraStat of stat.extraStats){ %>
-        <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value'><%= extraStat.value.toLocaleString() %><%= stat.suffix || '' %></span>
+        <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value'><%= extraStat.value.toLocaleString() %><%= extraStat.suffix || '' %></span>
         <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= extraStat.explanation %><% } %></div>
         <% }} %>
         "><span class="stat-name"><%= stat.prettyName || helper.titleCase(stat.name.replace(/\_/g, " ")) %> </span><span class="stat-value"><%= stats[stat.name].toLocaleString() %><%= stat.suffix || '' %></span></span></div>
@@ -1023,16 +1023,23 @@ twitterDescription += '. Click to view more stats!'
                 <%- stat_component({
                     name: 'health',
                     baseExplanation: "Increased by collecting Fairy Souls, leveling your Farming and Fishing skills and leveling up in Zombie or Wolf Slayer.",
-                    extraStats: [{
-                        stat: 'Effective HP',
-                        value: stats.effective_health,
-                        explanation: 'Effective Health based on Health + Defense.<br>→ Formula: Health * (1 + Defense / 100)'
-                    }]
                 }); %>
 
                 <%- stat_component({
                     name: 'defense',
-                    baseExplanation: "Increased by collecting Fairy Souls and leveling your Mining skill."
+                    baseExplanation: "Increased by collecting Fairy Souls and leveling your Mining skill.",
+                    extraStats: [
+                        {
+                            stat: 'Damage Reduction',
+                            value: (stats.defense / (stats.defense + 100) * 100).toFixed(1),
+                            suffix: '%'
+                        },
+                        {
+                            stat: 'Effective Health',
+                            value: stats.effective_health,
+                            explanation: 'Effective Health based on Health + Defense.<br>→ Formula: Health * (1 + Defense / 100)'
+                        }
+                    ]
                 }); %>
 
                 <%- stat_component({
