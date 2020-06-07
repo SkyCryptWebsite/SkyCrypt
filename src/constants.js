@@ -1485,6 +1485,13 @@ module.exports = {
         ],
         SPEED_RING: [
             'SPEED_ARTIFACT'
+        ],
+        PERSONAL_COMPACTOR_4000: [
+            'PERSONAL_COMPACTOR_5000',
+            'PERSONAL_COMPACTOR_6000'
+        ],
+        PERSONAL_COMPACTOR_5000: [
+            'PERSONAL_COMPACTOR_6000'
         ]
     },
 
