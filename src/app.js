@@ -586,7 +586,7 @@ async function main(){
 
             if(objectPath.has(e, 'response.data.cause')){
                 res.render('index', {
-                    error: 'Hypixel API Error: ' + e.response.data.cause + '.',
+                    error: `Hypixel API Error: ${e.response.data.cause}.',
                     player: playerUsername,
                     extra: await getExtra(),
                     helper,
