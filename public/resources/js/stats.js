@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function(){
             viewBackpack.classList = 'view-backpack';
 
             let viewBackpackText = document.createElement('div');
-            viewBackpackText.innerHTML = '<span>View Backpack</span><br><span>(Hold CTRL while clicking backpack to immediately open)</span>';
+            viewBackpackText.innerHTML = '<span>View Backpack</span><br><span>(Right click backpack to immediately open)</span>';
 
             viewBackpack.appendChild(viewBackpackText);
 
@@ -718,6 +718,21 @@ document.addEventListener('DOMContentLoaded', function(){
             statsContent.style.top = top + "px";
         });
 
+        const itemIndex = Number(element.parentNode.getAttribute('data-item-index'));
+        let item = all_items.filter(a => a.item_index == itemIndex);
+
+        if(item.length > 0)
+            item = item[0];
+
+        if(item && Array.isArray(item.containsItems)){
+            element.parentNode.addEventListener('contextmenu', function(e){
+                e.preventDefault();
+
+                showBackpack(item);
+                closeLore();
+            });
+        }
+
         element.addEventListener('click', function(e){
             if(touchDevice && element.parentNode.classList.contains('wardrobe-piece') && !element.parentNode.parentNode.classList.contains('wardrobe-opened')){
                 element.parentNode.blur();
@@ -727,21 +742,14 @@ document.addEventListener('DOMContentLoaded', function(){
             if(element.parentNode.parentNode.classList.contains('wardrobe-set'))
                 element.parentNode.parentNode.classList.add('wardrobe-opened');
 
-            let itemIndex = Number(element.parentNode.getAttribute('data-item-index'));
-            let item = all_items.filter(a => a.item_index == itemIndex);
-
-            if(item.length > 0)
-                item = item[0];
+            console.log(e);
 
             if(e.ctrlKey && item && Array.isArray(item.containsItems)){
                 showBackpack(item);
                 closeLore();
             }else{
                 if(statsContent.classList.contains('sticky-stats')){
-                    dimmer.classList.remove('show-dimmer');
-                    element.parentNode.blur();
-                    element.parentNode.classList.remove('sticky-stats');
-                    statsContent.classList.remove('sticky-stats')
+                    closeLore();
                 }else{
                     showLore(element.parentNode, false);
 
