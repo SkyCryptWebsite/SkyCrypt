@@ -194,9 +194,11 @@ async function main(){
                 return await Hypixel.get('skyblock/profiles', {
                     params
                 });
-            });
+            }, { retries: 3 });
 
             const { data } = response;
+
+            console.log(data);
 
             if(!data.success){
                 res.status(500);
@@ -240,7 +242,7 @@ async function main(){
                         const profileResponse = await retry(async () => {
                             const response = await Hypixel.get('skyblock/profile', {
                                 params: { key: credentials.hypixel_api_key, profile: paramProfile }
-                            });
+                            }, { retries: 3 });
 
                             if(!response.data.success)
                                 throw "api request failed";
@@ -582,13 +584,23 @@ async function main(){
         }catch(e){
             console.error(e);
 
-            res.render('index', {
-                error: 'Request to Hypixel API failed. Their API might be down right now so try again later.',
-                player: playerUsername,
-                extra: await getExtra(),
-                helper,
-                page: 'index'
-            });
+            if(objectPath.has(e, 'response.data.cause')){
+                res.render('index', {
+                    error: 'Hypixel API Error: ' + e.response.data.cause,
+                    player: playerUsername,
+                    extra: await getExtra(),
+                    helper,
+                    page: 'index'
+                });
+            }else{
+                res.render('index', {
+                    error: 'Unknown Hypixel API error.',
+                    player: playerUsername,
+                    extra: await getExtra(),
+                    helper,
+                    page: 'index'
+                });
+            }
 
             return false;
         }
