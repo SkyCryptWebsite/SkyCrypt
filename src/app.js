@@ -198,8 +198,6 @@ async function main(){
 
             const { data } = response;
 
-            console.log(data);
-
             if(!data.success){
                 res.status(500);
                 res.render('index', {
@@ -571,13 +569,21 @@ async function main(){
             const apisEnabled = !('no_inventory' in items) && 'levels' in calculated && Object.keys(calculated.social).length > 0;
 
             if(profile.cute_name != 'Deleted'){
-                await db
+                const currentProfile = await db
                 .collection('profiles')
-                .updateOne(
-                    { uuid: paramPlayer },
-                    { $set: { username: playerUsername, profile_id: profileId, last_save: userProfile.last_save, api: apisEnabled }},
-                    { upsert: true }
+                .findOne(
+                    { uuid: paramPlayer }
                 );
+
+                if(currentProfile === null || userProfile.last_save > currentProfile.last_save){
+                    await db
+                    .collection('profiles')
+                    .updateOne(
+                        { uuid: paramPlayer },
+                        { $set: { username: playerUsername, profile_id: profileId, last_save: userProfile.last_save, api: apisEnabled }},
+                        { upsert: true }
+                    );
+                }
             }
 
             res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
@@ -586,7 +592,7 @@ async function main(){
 
             if(objectPath.has(e, 'response.data.cause')){
                 res.render('index', {
-                    error: `Hypixel API Error: ${e.response.data.cause}.',
+                    error: `Hypixel API Error: ${e.response.data.cause}.`,
                     player: playerUsername,
                     extra: await getExtra(),
                     helper,
