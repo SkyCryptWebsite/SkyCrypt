@@ -9,7 +9,7 @@ Name-based Custom Mob Textures Tutorial/Example:
 -> https://www.curseforge.com/minecraft/texture-packs/transmobifier-16x
 
 All Textures made by TBlazeWarriorT*
-*Magma Armor textures made by Rainbowcraft2
+*Magma Armor and Yeti Sword textures made by Rainbowcraft2
 
 Vanilla+'s Original Forum Post:
 -> https://hypixel.net/threads/2147652/
