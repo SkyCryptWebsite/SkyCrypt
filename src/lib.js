@@ -394,6 +394,9 @@ async function getItems(base64, packs){
             if(item_type)
                 item.type = item_type.toLowerCase();
 
+            if(item.type == 'hatccessory')
+                item.type = 'accessory';
+
             item.stats = {};
 
             // Get item stats from lore
@@ -1510,12 +1513,12 @@ module.exports = {
 
             pet.lore = '';
 
-            lore.forEach((line, index) => {
+            for(const [index, line] of lore.entries()){
                 pet.lore += helper.renderLore(line);
 
-                if(index + 1 <= lore.length)
+                if(index < lore.length)
                     pet.lore += '<br>';
-            });
+            }
 
             pet.display_name = helper.titleCase(pet.type.replace(/\_/g, ' '));
             pet.emoji = petData.emoji;
