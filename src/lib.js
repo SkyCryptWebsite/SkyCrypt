@@ -717,21 +717,22 @@ module.exports = {
 
         const talismans = [];
 
-        // Modify talismans on armor
+        // Modify talismans on armor and add
         for(const talisman of armor.filter(a => a.type == 'accessory')){
             const id = getId(talisman);
 
             if(id === "")
                 continue;
 
-            talisman.isUnique = true;
-            talisman.isInactive = false;
+            const insertTalisman = Object.assign({ isUnique: true, isInactive: false }, talisman);
 
             if(talismans.filter(a => !a.isInactive && getId(a) == id).length > 0)
-                talisman.isInactive = true;
+                insertTalisman.isInactive = true;
 
             if(talismans.filter(a =>a.tag.ExtraAttributes.id == id).length > 0)
-                talisman.isUnique = false;
+                insertTalisman.isUnique = false;
+
+            talismans.push(insertTalisman);
         }
 
         // Add talismans from inventory
@@ -1255,7 +1256,7 @@ module.exports = {
 
         // Apply basic armor stats
         for(const item of items.armor){
-            if(item.isInactive){
+            if(item.isInactive || item.type == 'accessory'){
                 item.stats = {};
                 continue;
             }
