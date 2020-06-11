@@ -32,20 +32,14 @@ async function main(){
     const db = mongo.db(dbName);
 
     await db
-    .collection('profiles')
-    .createIndex(
-        { username: 'text' }
-    );
-
-    await db
-    .collection('profiles')
+    .collection('profileStore')
     .createIndex(
         { uuid: 1 },
         { unique: true }
     );
 
     await db
-    .collection('profiles')
+    .collection('profileStore')
     .createIndex(
         { api: 1 },
         { partialFilterExpression: { api: true } }
@@ -201,18 +195,12 @@ async function main(){
     );
 
     await db
-    .collection('profileData')
+    .collection('profileCache')
     .createIndex(
-        { uuid: 1 }
-    );
-
-    await db
-    .collection('profileData')
-    .createIndex(
-        { uuid: 1, pid: 1 },
+        { profile_id: 1 },
         { unique: true }
     );
-
+    
     mongo.close();
 }
 

@@ -9,23 +9,11 @@ const constants = require('./constants');
 const credentials = require('../credentials.json');
 const objectPath = require('object-path');
 
-const axiosCacheAdapter = require('axios-cache-adapter');
-
-const { RedisStore } = axiosCacheAdapter;
 const redis = require('redis');
-
 const redisClient = redis.createClient();
-const redisStore = new RedisStore(redisClient);
 
-const Hypixel = axiosCacheAdapter.setup({
-    baseURL: 'https://api.hypixel.net/',
-    cache: {
-        maxAge: 2 * 60 * 1000,
-        store: redisStore,
-        exclude: {
-            query: false
-        }
-    }
+const Hypixel = axios.create({
+    baseURL: 'https://api.hypixel.net/'
 });
 
 module.exports = {
@@ -188,7 +176,7 @@ module.exports = {
             .collection('guilds')
             .findOne({ gid: guildMember.gid });
 
-        if(guildMember !== null && guildMember.gid !== null && (guildObject === null || (+new Date() - guildMember.last_updated) < 3600 * 1000)){
+        if(guildMember !== null && guildMember.gid !== null && (guildObject === null || (Date.now() - guildMember.last_updated) < 3600 * 1000)){
             if(guildMember.gid !== null){
                 const guildObject = await db
                 .collection('guilds')
@@ -203,73 +191,77 @@ module.exports = {
 
             return null;
         }else{
-            try{
-                const guildResponse = await Hypixel.get('guild', { params: { player: uuid, key: credentials.hypixel_api_key }});
+            if((Date.now() - guildMember.last_updated) > 3600 * 1000){
+                try{
+                    const guildResponse = await Hypixel.get('guild', { params: { player: uuid, key: credentials.hypixel_api_key }});
 
-                const { guild } = guildResponse.data;
+                    const { guild } = guildResponse.data;
 
-                let gm;
+                    let gm;
 
-                if(guild && guild !== null){
-                    for(const member of guild.members)
-                        if(["guild master", "guildmaster"].includes(member.rank.toLowerCase()))
-                            gm = member.uuid;
+                    if(guild && guild !== null){
+                        for(const member of guild.members)
+                            if(["guild master", "guildmaster"].includes(member.rank.toLowerCase()))
+                                gm = member.uuid;
 
-                    for(const member of guild.members){
-                        if(!gm && guild.ranks.filter(a => a.name.toLowerCase() == member.rank.toLowerCase()).length == 0)
-                            gm = member.uuid;
+                        for(const member of guild.members){
+                            if(!gm && guild.ranks.filter(a => a.name.toLowerCase() == member.rank.toLowerCase()).length == 0)
+                                gm = member.uuid;
 
-                        await db
-                        .collection('guildMembers')
-                        .updateOne(
-                            { uuid: member.uuid },
-                            { $set: { gid: guild._id, rank: member.rank, last_updated: new Date() }},
-                            { upsert: true }
-                        );
-                    }
-
-                    const guildMembers = await db
-                    .collection('guildMembers')
-                    .find({ gid: guild._id })
-                    .toArray();
-
-                    for(const member of guildMembers){
-                        if(guild.members.filter(a => a.uuid == member.uuid).length == 0){
                             await db
                             .collection('guildMembers')
                             .updateOne(
                                 { uuid: member.uuid },
-                                { $set: { gid: null, last_updated: new Date() } }
+                                { $set: { gid: guild._id, rank: member.rank, last_updated: new Date() }},
+                                { upsert: true }
                             );
                         }
+
+                        const guildMembers = await db
+                        .collection('guildMembers')
+                        .find({ gid: guild._id })
+                        .toArray();
+
+                        for(const member of guildMembers){
+                            if(guild.members.filter(a => a.uuid == member.uuid).length == 0){
+                                await db
+                                .collection('guildMembers')
+                                .updateOne(
+                                    { uuid: member.uuid },
+                                    { $set: { gid: null, last_updated: new Date() } }
+                                );
+                            }
+                        }
+
+                        const guildObject = await db
+                        .collection('guilds')
+                        .findOneAndUpdate(
+                            { gid: guild._id },
+                            { $set: { name: guild.name, tag: guild.tag, exp: guild.exp, created: guild.created, gm, members: guild.members.length, last_updated: new Date() }},
+                            { returnOriginal: false, upsert: true }
+                        );
+
+                        guildObject.value.level = module.exports.getGuildLevel(guildObject.value.exp);
+                        guildObject.value.gmUser = await module.exports.uuidToUsername(guildObject.value.gm, db);
+                        guildObject.value.rank = guild.members.filter(a => a.uuid == uuid)[0].rank;
+
+                        return guildObject.value;
+                    }else{
+                        await db
+                        .collection('guildMembers')
+                        .findOneAndUpdate(
+                            { uuid },
+                            { $set: { gid: null, last_updated: new Date() }},
+                            { upsert: true }
+                        );
                     }
 
-                    const guildObject = await db
-                    .collection('guilds')
-                    .findOneAndUpdate(
-                        { gid: guild._id },
-                        { $set: { name: guild.name, tag: guild.tag, exp: guild.exp, created: guild.created, gm, members: guild.members.length, last_updated: new Date() }},
-                        { returnOriginal: false, upsert: true }
-                    );
-
-                    guildObject.value.level = module.exports.getGuildLevel(guildObject.value.exp);
-                    guildObject.value.gmUser = await module.exports.uuidToUsername(guildObject.value.gm, db);
-                    guildObject.value.rank = guild.members.filter(a => a.uuid == uuid)[0].rank;
-
-                    return guildObject.value;
-                }else{
-                    await db
-                    .collection('guildMembers')
-                    .findOneAndUpdate(
-                        { uuid },
-                        { $set: { gid: null, last_updated: new Date() }},
-                        { upsert: true }
-                    );
+                    return null;
+                }catch(e){
+                    console.error(e);
+                    return null;
                 }
-
-                return null;
-            }catch(e){
-                console.error(e);
+            }else{
                 return null;
             }
         }
@@ -563,53 +555,170 @@ module.exports = {
         return hypixelPlayer;
     },
 
-    getProfile: async req => {
-        let player = req.params.player;
+    getProfile: async (db, paramPlayer, paramProfile) => {
+        const params = {
+            key: credentials.hypixel_api_key,
+            uuid: paramPlayer
+        };
 
-        let profile = req.params.profile;
+        let allSkyBlockProfiles = [];
+
+        const profileObject = await db
+        .collection('profileStore')
+        .findOne({ uuid: paramPlayer });
+
+        let lastCachedSave = 0;
+
+        if(profileObject){
+            const profileData = db
+            .collection('profileCache')
+            .find({ profile_id: { $in: Object.keys(profileObject.profiles) } });
+
+            for await(const doc of profileData){
+                Object.assign(doc, profileObject.profiles[doc.profile_id]);
+
+                allSkyBlockProfiles.push(doc);
+
+                lastCachedSave = Math.max(lastCachedSave, doc.last_update);
+            }
+        }
+
+        let response = null;
+
+        if(Date.now() - lastCachedSave > 200 * 1000){
+            response = await retry(async () => {
+                return await Hypixel.get('skyblock/profiles', {
+                    params
+                });
+            }, { retries: 3 });
+
+            const { data } = response;
+
+            if(!data.success)
+                throw "Request to Hypixel API failed. Please try again!";
+
+            if(data.profiles == null)
+                throw "Player has no SkyBlock profiles.";
+
+            allSkyBlockProfiles = data.profiles;
+
+            console.log('getting data from api');
+        }
+
+        let skyBlockProfiles = [];
+
+        if(paramProfile){
+            if(paramProfile.length == 32){
+                const filteredProfiles = allSkyBlockProfiles.filter(a => a.profile_id.toLowerCase() == paramProfile);
+
+                if(filteredProfiles.length > 0){
+                    skyBlockProfiles = filteredProfiles;
+                }else{
+                    const profileResponse = await retry(async () => {
+                        const response = await Hypixel.get('skyblock/profile', {
+                            params: { key: credentials.hypixel_api_key, profile: paramProfile }
+                        }, { retries: 3 });
+
+                        if(!response.data.success)
+                            throw "api request failed";
+
+                        return response.data.profile;
+                    });
+
+                    profileResponse.cute_name = 'Deleted';
+
+                    skyBlockProfiles.push(profileResponse);
+                }
+            }else{
+                skyBlockProfiles = allSkyBlockProfiles.filter(a => a.cute_name.toLowerCase() == paramProfile);
+            }
+        }
+
+        if(skyBlockProfiles.length == 0)
+            skyBlockProfiles = allSkyBlockProfiles;
+
+        const profiles = [];
+
+        for(const [index, profile] of skyBlockProfiles.entries()){
+            let memberCount = 0;
+
+            for(const member in profile.members){
+                if('last_save' in profile.members[member])
+                    memberCount++;
+            }
+
+            if(memberCount == 0){
+                if(paramProfile)
+                    throw "Uh oh, this SkyBlock profile has no players.";
+
+                continue;
+            }
+
+            profiles.push(profile);
+        }
+
+        if(profiles.length == 0)
+            throw "No data returned by Hypixel API, please try again!";
+
+        let highest = 0;
         let profileId;
+        let profile;
 
-        let params = {
-            key: credentials.hypixel_api_key
-        };
+        const storeProfiles = {};
 
-        if(player.length == 32)
-            params.uuid = player;
-        else
-            params.name = player;
+        for(const _profile of allSkyBlockProfiles){
+            let userProfile = _profile.members[paramPlayer];
 
-        const playerResponse = await retry(async () => {
-            return await Hypixel.get('player', {
-                params, cache: { maxAge: 10 * 60 * 1000 }
-            });
-        });
+            if(response && response.request.fromCache !== true)
+                await db
+                .collection('profileCache')
+                .updateOne(
+                    { profile_id: _profile.profile_id },
+                    { $set: { last_update: new Date(), members: _profile.members } },
+                    { upsert: true }
+                );
 
-        let profiles = playerResponse.data.player.stats.SkyBlock.profiles;
+            if('last_save' in userProfile)
+                storeProfiles[_profile.profile_id] = {
+                    profile_id: _profile.profile_id,
+                    cute_name: _profile.cute_name,
+                    last_save: userProfile.last_save
+                };
+        }
 
-        let selectedProfile;
+        for(const [index, _profile] of profiles.entries()){
+            if(_profile === undefined || _profile === null)
+                return;
 
-        if(profile.length == 32)
-            selectedProfile = _.pickBy(profiles, a => a.profile_id.toLowerCase() == profile.toLowerCase());
-        else
-            selectedProfile = _.pickBy(profiles, a => a.cute_name.toLowerCase() == profile.toLowerCase());
+            let userProfile = _profile.members[paramPlayer];
 
-        profileId = Object.keys(selectedProfile)[0];
+            if('last_save' in userProfile && userProfile.last_save > highest){
+                profile = _profile;
+                highest = userProfile.last_save;
+                profileId = _profile.profile_id;
+            }
+        }
 
-        const profileResponse = await retry(async () => {
-            const response = await Hypixel.get('skyblock/profile', {
-                params: { key: credentials.hypixel_api_key, profile: profileId }
-            });
+        if(!profile)
+            throw "User not found in selected profile. This is probably due to a declined co-op invite.";
 
-            if(!response.data.success)
-                return "api request failed";
+        const userProfile = profile.members[paramPlayer];
 
-            return response;
-        });
+        if(response && response.request.fromCache !== true){
+            const apisEnabled = 'inv_contents' in profile
+            && _.keys(_.pick(userProfile, (value, key) => key.startsWith('skill_experience_'))).length
+            && 'collection' in userProfile;
 
-        return {
-            playerResponse,
-            profileResponse
-        };
+            await db
+            .collection('profileStore')
+            .updateOne(
+                { uuid: paramPlayer },
+                { $set: { last_update: new Date(), last_save: profile.last_save, apis: apisEnabled, profiles: storeProfiles } },
+                { upsert: true }
+            );
+        }
+
+        return { profile: profile, allProfiles: allSkyBlockProfiles };
     },
 
     fetchMembers: async (profileId, db, returnUuid = false) => {

@@ -184,163 +184,8 @@ async function main(){
 
         let playerObject = await helper.uuidToUsername(paramPlayer, db);
 
-        let params = {
-            key: credentials.hypixel_api_key,
-            uuid: paramPlayer
-        };
-
         try{
-            const response = await retry(async () => {
-                return await Hypixel.get('skyblock/profiles', {
-                    params
-                });
-            }, { retries: 3 });
-
-            const { data } = response;
-
-            if(!data.success){
-                res.status(500);
-                res.render('index', {
-                    error: 'Request to Hypixel API failed. Please try again!',
-                    player: playerUsername,
-                    extra: await getExtra(),
-                    helper,
-                    page: 'index'
-                });
-
-                return false;
-            }
-
-            if(data.profiles == null){
-                res.status(404);
-                res.render('index', {
-                    error: 'Player has no SkyBlock profiles.',
-                    player: playerUsername,
-                    extra: await getExtra(),
-                    helper,
-                    page: 'index'
-                });
-
-                return false;
-            }
-
-            const hypixelPlayer = data.player;
-
-            let allSkyBlockProfiles = data.profiles;
-
-            let skyBlockProfiles = [];
-
-            if(paramProfile){
-                if(isProfileUuid){
-                    const filteredProfiles = allSkyBlockProfiles.filter(a => a.profile_id.toLowerCase() == paramProfile);
-
-                    if(filteredProfiles.length > 0){
-                        skyBlockProfiles = filteredProfiles;
-                    }else{
-                        const profileResponse = await retry(async () => {
-                            const response = await Hypixel.get('skyblock/profile', {
-                                params: { key: credentials.hypixel_api_key, profile: paramProfile }
-                            }, { retries: 3 });
-
-                            if(!response.data.success)
-                                throw "api request failed";
-
-                            return response.data.profile;
-                        });
-
-                        profileResponse.cute_name = 'Deleted';
-
-                        skyBlockProfiles.push(profileResponse);
-                    }
-                }else{
-                    skyBlockProfiles = allSkyBlockProfiles.filter(a => a.cute_name.toLowerCase() == paramProfile);
-                }
-            }
-
-            if(skyBlockProfiles.length == 0)
-                skyBlockProfiles = allSkyBlockProfiles;
-
-            const profiles = [];
-
-            for(const [index, profile] of skyBlockProfiles.entries()){
-                let memberCount = 0;
-
-                for(const member in profile.members){
-                    if('last_save' in profile.members[member])
-                        memberCount++;
-                }
-
-                if(memberCount == 0){
-                    if(req.params.profile){
-                        res.status(404);
-                        res.render('index', {
-                            error: 'Uh oh, this SkyBlock profile has no players.',
-                            player: playerUsername,
-                            extra: await getExtra(),
-                            helper,
-                            page: 'index'
-                        });
-
-                        return false;
-                    }
-
-                    continue;
-                }else{
-                    profiles.push(profile);
-                }
-            }
-
-            if(profiles.length == 0){
-                res.status(500);
-                res.render('index', {
-                    error: 'No data returned by Hypixel API, please try again!',
-                    player: playerUsername,
-                    extra: await getExtra(),
-                    helper,
-                    page: 'index'
-                });
-
-                return false;
-            }
-
-            let highest = 0;
-            let profileId;
-            let profile;
-
-            for(const [index, _profile] of profiles.entries()){
-                if(_profile === undefined || _profile === null)
-                    return;
-
-                let userProfile = _profile.members[paramPlayer];
-
-                if('last_save' in userProfile && response.request.fromCache !== true)
-                    await db
-                    .collection('profileData')
-                    .updateOne(
-                        { uuid: paramPlayer, pid: _profile.profile_id },
-                        { $set: { last_save: new Date(userProfile.last_save), cname: _profile.cute_name || '', data: userProfile } },
-                        { upsert: true }
-                    );
-
-                if('last_save' in userProfile && userProfile.last_save > highest){
-                    profile = _profile;
-                    highest = userProfile.last_save;
-                    profileId = _profile.profile_id;
-                }
-            }
-
-            if(!profile){
-                res.status(404);
-                res.render('index', {
-                    error: 'User not found in selected profile. This is probably due to a declined co-op invite.',
-                    player: playerUsername,
-                    extra: await getExtra(),
-                    helper,
-                    page: 'index'
-                });
-
-                return false;
-            }
+            const { profile, allProfiles } = await helper.getProfile(db, paramPlayer, paramProfile);
 
             let userProfile = profile.members[paramPlayer];
 
@@ -369,6 +214,9 @@ async function main(){
 
             calculated.display_name = playerUsername;
 
+            if('wardrobe_equipped_slot' in userProfile)
+                calculated.wardrobe_equipped_slot = userProfile.wardrobe_equipped_slot;
+
             if(userInfo){
                 calculated.display_name = userInfo.username;
 
@@ -385,8 +233,8 @@ async function main(){
                 await db
                 .collection('members')
                 .replaceOne(
-                    { profile_id: profileId, uuid: member.uuid },
-                    { profile_id: profileId, uuid: member.uuid, username: member.display_name },
+                    { profile_id: profile.profile_id, uuid: member.uuid },
+                    { profile_id: profile.profile_id, uuid: member.uuid, username: member.display_name },
                     { upsert: true}
                 );
             }
@@ -405,7 +253,7 @@ async function main(){
             calculated.profile = { profile_id: profile.profile_id, cute_name: profile.cute_name };
             calculated.profiles = {};
 
-            for(const sbProfile of allSkyBlockProfiles.filter(a => a.profile_id != profileId))
+            for(const sbProfile of allProfiles.filter(a => a.profile_id != profile.profile_id))
                 calculated.profiles[sbProfile.profile_id] = {
                     profile_id: sbProfile.profile_id,
                     cute_name: sbProfile.cute_name
@@ -542,30 +390,6 @@ async function main(){
                 text: first_join_text
             };
 
-            /*
-
-            - Hide Views for now due to abuse -
-
-            calculated.views = _.pick(await db
-            .collection('profileViews')
-            .findOne({ uuid: hypixelPlayer.uuid }),
-            'total', 'daily', 'weekly', 'rank');
-
-            calculated.views.total = calculated.views.total || 0;
-
-            const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-            const ipHash = crypto.createHash('md5').update(ipAddress).digest("hex");
-
-            const ownViews = await db
-            .collection('views')
-            .countDocuments(
-                { ip: ipHash, uuid: hypixelPlayer.uuid }
-            );
-
-            if(ownViews == 0)
-                calculated.views.total++;
-            */
-
             const apisEnabled = !('no_inventory' in items) && 'levels' in calculated && Object.keys(calculated.social).length > 0;
 
             if(profile.cute_name != 'Deleted'){
@@ -580,7 +404,7 @@ async function main(){
                     .collection('profiles')
                     .updateOne(
                         { uuid: paramPlayer },
-                        { $set: { username: playerUsername, profile_id: profileId, last_save: userProfile.last_save, api: apisEnabled }},
+                        { $set: { username: playerUsername, profile_id: profile.profile_id, last_save: userProfile.last_save, api: apisEnabled }},
                         { upsert: true }
                     );
                 }
@@ -743,95 +567,6 @@ async function main(){
         res.setHeader('Cache-Control', `public, max-age=${CACHE_DURATION}`);
         res.contentType('image/png');
         res.send(file);
-    });
-
-    /*
-
-    - Hide Views for now due to abuse -
-
-    app.all('/api/topViews', async (req, res, next) => {
-        const limit = Math.min(100, req.query.limit || 10);
-        const offset = Math.max(0, req.query.offset || 0);
-
-        res.json(await db
-        .collection('profileViews')
-        .aggregate([
-            {
-                $sort: {
-                    total: -1
-                }
-            },
-            {
-                $skip: offset
-            },
-            {
-                $lookup: {
-                    from: "usernames",
-                    localField: "uuid",
-                    foreignField: "uuid",
-                    as: "userInfo"
-                }
-            },
-            {
-                $unwind: {
-                    path: "$userInfo"
-                }
-            },
-            {
-                $limit: limit
-            }
-        ])
-        .toArray());
-    });*/
-
-    app.all('/api/addView', async (req, res, next) => {
-        res.send('ok');
-
-        const response = await axios({
-            method: 'post',
-            url: `https://www.google.com/recaptcha/api/siteverify`,
-            params: {
-                secret: credentials.recaptcha_secret_key,
-                response: req.query.token
-            }
-        });
-
-        try{
-            const { score } = response.data;
-
-            if(score >= 0.9){
-                const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-                const ipHash = crypto.createHash('md5').update(ipAddress).digest("hex");
-
-                const { upsertedCount } = await db
-                .collection('views')
-                .replaceOne(
-                    { ip: ipHash, uuid: req.query.uuid },
-                    { ip: ipHash, uuid: req.query.uuid, time: new Date() },
-                    { upsert: true }
-                );
-
-                /*
-
-                - Freeze Views for now due to abuse -
-
-                const userObject = await db
-                .collection('usernames')
-                .findOne({ uuid: req.query.uuid });
-
-                if(upsertedCount > 0)
-                    await db
-                    .collection('profileViews')
-                    .updateOne(
-                        { uuid: req.query.uuid },
-                        { $inc: { total: 1, weekly: 1, daily: 1 } },
-                        { upsert: true }
-                    );
-                */
-            }
-        }catch(e){
-
-        }
     });
 
     app.all('/sitemap.xml', async (req, res, next) => {
