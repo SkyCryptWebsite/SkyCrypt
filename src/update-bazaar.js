@@ -42,12 +42,6 @@ async function main(){
                 );
 
                 await db
-                .collection('bazaarTracker')
-                .insertOne(
-                    { productId, time: new Date(), buyPrice, sellPrice }
-                );
-
-                await db
                 .collection('items')
                 .updateOne(
                     { id: productId },
