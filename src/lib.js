@@ -937,7 +937,7 @@ module.exports = {
             output.highest_rarity_rod = rodsInventory.filter(a => a.rarity == rodsInventory[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
 
         if(armor.filter(a => Object.keys(a).length > 2).length == 1){
-            const armorPiece = armor.filter(a => Object.keys(a).length > 1)[0];
+            const armorPiece = armor.filter(a => Object.keys(a).length > 2)[0];
 
             output.armor_set = armorPiece.display_name;
             output.armor_set_rarity = armorPiece.rarity;
@@ -1258,7 +1258,19 @@ module.exports = {
         for(const item of items.armor){
             if(item.isInactive || item.type == 'accessory'){
                 item.stats = {};
-                continue;
+
+                if(getId(item) != 'PARTY_HAT_CRAB')
+                    continue;
+
+                for(const lore of item.tag.display.Lore){
+                    const line = helper.getRawLore(lore);
+
+                    if(line.startsWith('Your bonus: ')){
+                        item.stats.intelligence = parseInt(line.split(' ')[2].substring(1));
+
+                        break;
+                    }
+                }
             }
 
             for(let stat in item.stats)
