@@ -1615,13 +1615,21 @@ module.exports = {
         return Object.values(highestRarity).reduce((a, b) => a + b, 0);
     },
 
-    getCollections: async (uuid, profile, members) => {
+    getCollections: async (uuid, profile) => {
         const output = {};
 
         const userProfile = profile.members[uuid];
 
         if(!('unlocked_coll_tiers' in userProfile) || !('collection' in userProfile))
             return output;
+
+        const members = {};
+
+        (
+            await Promise.all(
+                Object.keys(profile.members).map(a => helper.uuidToUsername(a, db))
+            )
+        ).forEach(a => members[a.uuid] = a.display_name);
 
         for(const collection of userProfile.unlocked_coll_tiers){
             const split = collection.split("_");
@@ -1631,11 +1639,11 @@ module.exports = {
             const amounts = [];
             let totalAmount = 0;
 
-            for(member of members){
-                const memberProfile = profile.members[member.uuid];
+            for(member in profile.members){
+                const memberProfile = profile.members[member];
 
                 if('collection' in memberProfile)
-                    amounts.push({ username: member.display_name, amount: memberProfile.collection[type] || 0 });
+                    amounts.push({ username: members[member], amount: memberProfile.collection[type] || 0 });
             }
 
             for(const memberAmount of amounts)
