@@ -556,6 +556,17 @@ module.exports = {
     },
 
     getProfile: async (db, paramPlayer, paramProfile) => {
+        if(paramPlayer.length != 32){
+            try{
+                const { uuid } = await module.exports.usernameToUuid(paramPlayer, db);
+
+                paramPlayer = uuid;
+            }catch(e){
+                console.error(e);
+                throw "failed resolving username to uuid";
+            }
+        }
+
         const params = {
             key: credentials.hypixel_api_key,
             uuid: paramPlayer
@@ -563,7 +574,7 @@ module.exports = {
 
         let allSkyBlockProfiles = [];
 
-        const profileObject = await db
+        let profileObject = await db
         .collection('profileStore')
         .findOne({ uuid: paramPlayer });
 
@@ -579,13 +590,16 @@ module.exports = {
 
                 allSkyBlockProfiles.push(doc);
 
-                lastCachedSave = Math.max(lastCachedSave, doc.last_update);
+                lastCachedSave = Math.max(lastCachedSave, doc.members[paramPlayer].last_save || 0);
             }
+        }else{
+            profileObject = { last_update: 0 };
         }
 
         let response = null;
 
-        if(Date.now() - lastCachedSave > 200 * 1000){
+        if(Date.now() - lastCachedSave > 190 * 1000 && Date.now() - lastCachedSave < 300 * 1000
+        || Date.now() - profileObject.last_update >= 300 * 1000){
             response = await retry(async () => {
                 return await Hypixel.get('skyblock/profiles', {
                     params
@@ -669,14 +683,23 @@ module.exports = {
         for(const _profile of allSkyBlockProfiles){
             let userProfile = _profile.members[paramPlayer];
 
-            if(response && response.request.fromCache !== true)
+            if(response && response.request.fromCache !== true){
+                const insertCache = {
+                    last_update: new Date(),
+                    members: _profile.members
+                };
+
+                if('banking' in _profile)
+                    insertCache.banking = _profile.banking;
+
                 await db
                 .collection('profileCache')
                 .updateOne(
                     { profile_id: _profile.profile_id },
-                    { $set: { last_update: new Date(), members: _profile.members } },
+                    { $set: insertCache },
                     { upsert: true }
                 );
+            }
 
             if('last_save' in userProfile)
                 storeProfiles[_profile.profile_id] = {
@@ -704,21 +727,48 @@ module.exports = {
 
         const userProfile = profile.members[paramPlayer];
 
+        if(profileObject && 'current_area' in profileObject)
+            userProfile.current_area = profileObject.current_area;
+
         if(response && response.request.fromCache !== true){
             const apisEnabled = 'inv_contents' in profile
             && _.keys(_.pick(userProfile, (value, key) => key.startsWith('skill_experience_'))).length
             && 'collection' in userProfile;
 
+            const insertProfileStore = {
+                last_update: new Date(),
+                last_save: userProfile.last_save,
+                apis: apisEnabled,
+                profiles: storeProfiles
+            };
+
+            if(Date.now() - userProfile.last_save < 5 * 60 * 1000){
+                try{
+                    const statusResponse = await Hypixel.get('status', { params: { uuid: paramPlayer, key: credentials.hypixel_api_key }});
+
+                    const areaData = statusResponse.data.session;
+
+                    if(areaData.online && areaData.gameType == 'SKYBLOCK'){
+                        const areaName = constants.area_names[areaData.mode] || 'Unknown';
+
+                        userProfile.current_area = areaName;
+                        insertProfileStore.current_area = areaName;
+                    }
+                }catch(e){
+                    console.error(e);
+                }
+            }
+
             await db
             .collection('profileStore')
             .updateOne(
                 { uuid: paramPlayer },
-                { $set: { last_update: new Date(), last_save: profile.last_save, apis: apisEnabled, profiles: storeProfiles } },
+                { $set: insertProfileStore },
                 { upsert: true }
             );
         }
 
-        return { profile: profile, allProfiles: allSkyBlockProfiles };
+        return { profile: profile, allProfiles: allSkyBlockProfiles, uuid: paramPlayer };
     },
 
     fetchMembers: async (profileId, db, returnUuid = false) => {
