@@ -615,8 +615,6 @@ module.exports = {
                 throw "Player has no SkyBlock profiles.";
 
             allSkyBlockProfiles = data.profiles;
-
-            console.log('getting data from api');
         }
 
         let skyBlockProfiles = [];
