@@ -358,26 +358,6 @@ async function main(){
                 text: first_join_text
             };
 
-            const apisEnabled = !('no_inventory' in items) && 'levels' in calculated && Object.keys(calculated.social).length > 0;
-
-            if(profile.cute_name != 'Deleted'){
-                const currentProfile = await db
-                .collection('profiles')
-                .findOne(
-                    { uuid: paramPlayer }
-                );
-
-                if(currentProfile === null || userProfile.last_save > currentProfile.last_save){
-                    await db
-                    .collection('profiles')
-                    .updateOne(
-                        { uuid: paramPlayer },
-                        { $set: { username: playerUsername, profile_id: profile.profile_id, last_save: userProfile.last_save, api: apisEnabled }},
-                        { upsert: true }
-                    );
-                }
-            }
-
             res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
         }catch(e){
             console.error(e);
