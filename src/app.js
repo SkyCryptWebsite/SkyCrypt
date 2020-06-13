@@ -12,13 +12,8 @@ async function main(){
     const crypto = require('crypto');
     const cors = require('cors');
 
-    const axiosCacheAdapter = require('axios-cache-adapter');
-
-    const { RedisStore } = axiosCacheAdapter;
     const redis = require('redis');
-
     const redisClient = redis.createClient();
-    const redisStore = new RedisStore(redisClient);
 
     const axios = require('axios');
     require('axios-debug-log');
@@ -59,18 +54,6 @@ async function main(){
 
     if(credentials.hypixel_api_key.length == 0)
         throw "Please enter a valid Hypixel API Key. Join mc.hypixel.net and enter /api to obtain one.";
-
-    const Hypixel = axiosCacheAdapter.setup({
-        baseURL: 'https://api.hypixel.net/',
-        cache: {
-            maxAge: 2 * 60 * 1000,
-            store: redisStore,
-            exclude: {
-                query: false
-            }
-        },
-        timeout: 5000,
-    });
 
     const app = express();
     const port = 32464;
@@ -113,7 +96,7 @@ async function main(){
         .aggregate([
             {
                 "$lookup": {
-                    "from": "profiles",
+                    "from": "profileStore",
                     "localField": "uuid",
                     "foreignField": "uuid",
                     "as": "profileInfo"
@@ -262,7 +245,7 @@ async function main(){
             calculated.members = members.filter(a => a.uuid != paramPlayer);
             calculated.minions = lib.getMinions(profile.members);
             calculated.minion_slots = lib.getMinionSlots(calculated.minions);
-            calculated.collections = await lib.getCollections(paramPlayer, profile, members);
+            calculated.collections = await lib.getCollections(paramPlayer, profile);
             calculated.bag_sizes = await lib.getBagSizes(calculated.collections);
             calculated.social = hypixelRank.socials;
 
@@ -357,23 +340,8 @@ async function main(){
             let last_updated_text = moment(last_updated).fromNow();
             let first_join_text = moment(first_join).fromNow();
 
-            let currentArea;
-
-            if(diff < 5 * 60){
-                try{
-                    const statusResponse = await Hypixel.get('status', { params: { uuid: paramPlayer, key: credentials.hypixel_api_key }});
-
-                    const areaData = statusResponse.data.session;
-
-                    if(areaData.online && areaData.gameType == 'SKYBLOCK')
-                        currentArea = areaData.mode;
-                }catch(e){
-
-                }
-            }
-
-            if(currentArea)
-                calculated.current_area = constants.area_names[currentArea];
+            if('current_area' in userProfile)
+                calculated.current_area = userProfile.current_area;
 
             if(diff < 3)
                 last_updated_text = `Right now`;
