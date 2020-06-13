@@ -45,27 +45,28 @@ function getId(item){
 module.exports = (app, db) => {
     app.all('/api/:player/profiles', cors(), async (req, res) => {
         try{
-            let playerResponse = await Hypixel.get('player', {
-                params: { key: credentials.hypixel_api_key, name: req.params.player }, cache: { maxAge: 10 * 60 * 1000 }
-            });
+            const { allProfiles } = await helper.getProfile(db, req.params.player);
 
-            const skyBlockProfiles = playerResponse.data.player.stats.SkyBlock.profiles;
+            const profiles = [];
 
-            let profiles = [];
+            for(const profile of allProfiles){
+                const members = (
+                    await Promise.all(
+                        Object.keys(profile.members).map(a => helper.uuidToUsername(a, db))
+                    )
+                ).map(a => a.display_name);
 
-            for(let profile in skyBlockProfiles){
-                skyBlockProfiles[profile].members = await helper.fetchMembers(profile, db);
-
-                if('html' in req.query)
-                    skyBlockProfiles[profile].members = skyBlockProfiles[profile].members.join(", ");
-
-                profiles.push(skyBlockProfiles[profile]);
+                profiles.push({
+                    profile_id: profile.profile_id,
+                    cute_name: profile.cute_name,
+                    members: 'html' in req.query ? members.join(', ') : members
+                });
             }
 
             if('html' in req.query){
                 res.send(tableify(profiles, { showHeaders: false }));
             }else{
-                res.json(profiles);
+                res.status(403).send("Old JSON API has been disabled.");
             }
         }catch(e){
             handleError(e, res);
@@ -74,9 +75,8 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/pets', cors(), async (req, res) => {
         try{
-            const { playerResponse, profileResponse } = await helper.getProfile(req);
-
-            const userProfile = profileResponse.data.profile.members[playerResponse.data.player.uuid];
+            const { profile, uuid } = await helper.getProfile(db, req.params.player, req.params.profile);
+            const userProfile = profile.members[uuid];
 
             const pets = await lib.getPets(userProfile);
 
@@ -98,7 +98,7 @@ module.exports = (app, db) => {
                     a.xpCurrent, a.xpForNext, a.progress,
                     a.xpMaxLevel]), { showHeaders: false }));
             else
-                res.json(pets);
+                res.status(403).send("Old JSON API has been disabled.");
         }catch(e){
             console.error(e, res);
         }
@@ -106,11 +106,11 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/minions', cors(), async (req, res) => {
         try{
-            const { profileResponse } = await helper.getProfile(req);
+            const { profile } = await helper.getProfile(db, req.params.player, req.params.profile);
 
             const minions = [];
 
-            const coopMembers = profileResponse.data.profile.members;
+            const coopMembers = profile.members;
 
             for(const member in coopMembers){
                 if(!('crafted_generators' in coopMembers[member]))
@@ -134,7 +134,7 @@ module.exports = (app, db) => {
             if('html' in req.query)
                 res.send(tableify(minions, { showHeaders: false }));
             else
-                res.json(minions);
+                res.status(403).send("Old JSON API has been disabled.");
         }catch(e){
             handleError(e, res);
         }
@@ -142,9 +142,8 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/accessories', cors(), async (req, res) => {
         try{
-            const { playerResponse, profileResponse } = await helper.getProfile(req);
-
-            const userProfile = profileResponse.data.profile.members[playerResponse.data.player.uuid];
+            const { profile, uuid } = await helper.getProfile(db, req.params.player, req.params.profile);
+            const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
 
@@ -161,7 +160,7 @@ module.exports = (app, db) => {
             if('html' in req.query){
                 res.send(tableify(talismans, { showHeaders: false }));
             }else{
-                res.json(talismans);
+                res.status(403);
             }
         }catch(e){
             handleError(e, res);
@@ -170,12 +169,10 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/collections', cors(), async (req, res) => {
         try{
-            const { playerResponse, profileResponse } = await helper.getProfile(req);
+            const { profile, uuid } = await helper.getProfile(db, req.params.player, req.params.profile);
+            const userProfile = profile.members[uuid];
 
-            const profile = profileResponse.data.profile;
-            const userProfile = profile.members[playerResponse.data.player.uuid];
-            const members = await helper.fetchMembers(profile.profile_id, db, true);
-            const collections = await lib.getCollections(playerResponse.data.player.uuid, profile, members);
+            const collections = await lib.getCollections(uuid, profile);
 
             for(const collection in collections)
                 collections[collection].name = constants.collection_data.filter(a => a.skyblockId == collection)[0].name;
@@ -183,7 +180,7 @@ module.exports = (app, db) => {
             if('html' in req.query){
                 res.send(tableify(Object.keys(collections).map(a => [ a, collections[a].name, collections[a].tier, collections[a].amount, collections[a].totalAmount ]), { showHeaders: false }));
             }else{
-                res.json(collections);
+                res.status(403).send("Old JSON API has been disabled.");
             }
         }catch(e){
             handleError(e, res);
@@ -192,19 +189,17 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/skills', cors(), async (req, res) => {
         try{
-            const { playerResponse, profileResponse } = await helper.getProfile(req);
-
-            const profile = profileResponse.data.profile;
-            const userProfile = profile.members[playerResponse.data.player.uuid];
+            const { profile, uuid } = await helper.getProfile(db, req.params.player, req.params.profile);
+            const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
-            const calculated = await lib.getStats(userProfile, items, playerResponse.data);
+            const calculated = await lib.getStats(userProfile, items, await helper.getRank(uuid, db));
 
             if('html' in req.query){
                 const response = [];
 
                 for(const skill in calculated.levels){
-                    let pushArr = [
+                    const pushArr = [
                         helper.titleCase(skill),
                         calculated.levels[skill].level.toString()
                     ];
@@ -221,7 +216,7 @@ module.exports = (app, db) => {
                 }
 
                 for(const slayer in calculated.slayers){
-                    let pushArr = [
+                    const pushArr = [
                         helper.titleCase(slayer),
                         calculated.slayers[slayer].level.currentLevel.toString()
                     ];
@@ -244,7 +239,7 @@ module.exports = (app, db) => {
 
                 res.send(tableify(response, { showHeaders: false }));
             }else{
-                res.json({ skills: calculated.levels, slayers: calculated.slayers, fairy_souls: calculated.fairy_souls.collected });
+                res.status(403).send("Old JSON API has been disabled.");
             }
         }catch(e){
             handleError(e, res);
@@ -253,9 +248,8 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/cakebag', cors(), async (req, res) => {
         try{
-            const { playerResponse, profileResponse } = await helper.getProfile(req);
-
-            const userProfile = profileResponse.data.profile.members[playerResponse.data.player.uuid];
+            const { profile, uuid } = await helper.getProfile(db, req.params.player, req.params.profile);
+            const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
 
@@ -286,9 +280,8 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/items', cors(), async (req, res) => {
         try{
-            const { playerResponse, profileResponse } = await helper.getProfile(req);
-
-            const userProfile = profileResponse.data.profile.members[playerResponse.data.player.uuid];
+            const { profile, uuid } = await helper.getProfile(db, req.params.player, req.params.profile);
+            const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
 
@@ -301,7 +294,7 @@ module.exports = (app, db) => {
             if('html' in req.query)
                 res.send(tableify(allItems.filter(a => getId(a).length > 0).map(a => [getId(a), a.Count, a.display_name, a.rarity, a.type]), { showHeaders: false }));
             else
-                res.json(output);
+                res.status(403).send("Old JSON API has been disabled.");
         }catch(e){
             handleError(e, res);
         }
@@ -309,9 +302,8 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/weapons', cors(), async (req, res) => {
         try{
-            const { playerResponse, profileResponse } = await helper.getProfile(req);
-
-            const userProfile = profileResponse.data.profile.members[playerResponse.data.player.uuid];
+            const { profile, uuid } = await helper.getProfile(db, req.params.player, req.params.profile);
+            const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
 
@@ -354,7 +346,7 @@ module.exports = (app, db) => {
             if('html' in req.query)
                 res.send(tableify(output, { showHeaders: false }));
             else
-                res.json(output);
+                res.status(403).send("Old JSON API has been disabled.");
         }catch(e){
             handleError(e, res);
         }
@@ -362,9 +354,8 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/armor', cors(), async (req, res) => {
         try{
-            const { playerResponse, profileResponse } = await helper.getProfile(req);
-
-            const userProfile = profileResponse.data.profile.members[playerResponse.data.player.uuid];
+            const { profile, uuid } = await helper.getProfile(db, req.params.player, req.params.profile);
+            const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
 
@@ -407,7 +398,7 @@ module.exports = (app, db) => {
             if('html' in req.query)
                 res.send(tableify(output, { showHeaders: false }));
             else
-                res.json(output);
+                res.status(403).send("Old JSON API has been disabled.");
         }catch(e){
             handleError(e, res);
         }
@@ -415,9 +406,8 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/wardrobe', cors(), async (req, res) => {
         try{
-            const { playerResponse, profileResponse } = await helper.getProfile(req);
-
-            const userProfile = profileResponse.data.profile.members[playerResponse.data.player.uuid];
+            const { profile, uuid } = await helper.getProfile(db, req.params.player, req.params.profile);
+            const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
 
@@ -467,7 +457,7 @@ module.exports = (app, db) => {
             if('html' in req.query)
                 res.send(tableify(output, { showHeaders: false }));
             else
-                res.json(output);
+                res.status(403).send("Old JSON API has been disabled.");
         }catch(e){
             handleError(e, res);
         }
