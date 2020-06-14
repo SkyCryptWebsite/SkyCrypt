@@ -43,6 +43,29 @@ function getId(item){
 }
 
 module.exports = (app, db) => {
+    const productInfo = {};
+
+    async function init(){
+        const bazaarProducts = await db
+        .collection('bazaar')
+        .find()
+        .toArray();
+
+        const itemInfo = await db
+        .collection('items')
+        .find({ id: { $in: bazaarProducts.map(a => a.productId) } })
+        .toArray();
+
+        for(const product of bazaarProducts){
+            const info = itemInfo.filter(a => a.id == product.productId);
+
+            if(info.length > 0)
+                productInfo[product.productId] = info[0];
+        }
+    }
+
+    const initPromise = init();
+
     app.all('/api/:player/profiles', cors(), async (req, res) => {
         try{
             const { allProfiles } = await helper.getProfile(db, req.params.player);
@@ -464,18 +487,13 @@ module.exports = (app, db) => {
     });
 
     app.all('/api/bazaar', cors(), async (req, res) => {
+        await initPromise;
+
         try{
             const output = [];
 
-            const products = await db
-            .collection('bazaar')
-            .find()
-            .toArray();
-
-            for(const product of products){
-                const itemInfo = await db
-                .collection('items')
-                .findOne({ id: product.productId });
+            for await(const product of db.collection('bazaar').find()){
+                const itemInfo = productInfo[product.productId];
 
                 const productName = itemInfo ? itemInfo.name : helper.titleCase(product.productId.replace(/(_+)/g, ' '));
 
