@@ -729,8 +729,8 @@ module.exports = {
             userProfile.current_area = profileObject.current_area;
 
         if(response && response.request.fromCache !== true){
-            const apisEnabled = 'inv_contents' in profile
-            && _.keys(_.pick(userProfile, (value, key) => key.startsWith('skill_experience_'))).length
+            const apisEnabled = 'inv_contents' in userProfile
+            && Object.keys(userProfile).filter(a => a.startsWith('experience_skill_')).length > 0
             && 'collection' in userProfile;
 
             const insertProfileStore = {
