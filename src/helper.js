@@ -191,7 +191,7 @@ module.exports = {
 
             return null;
         }else{
-            if((Date.now() - guildMember.last_updated) > 3600 * 1000){
+            if(guildMember === null || (Date.now() - guildMember.last_updated) > 3600 * 1000){
                 try{
                     const guildResponse = await Hypixel.get('guild', { params: { player: uuid, key: credentials.hypixel_api_key }});
 
@@ -555,7 +555,7 @@ module.exports = {
         return hypixelPlayer;
     },
 
-    getProfile: async (db, paramPlayer, paramProfile) => {
+    getProfile: async (db, paramPlayer, paramProfile, options = {}) => {
         if(paramPlayer.length != 32){
             try{
                 const { uuid } = await module.exports.usernameToUuid(paramPlayer, db);
@@ -598,8 +598,9 @@ module.exports = {
 
         let response = null;
 
-        if(Date.now() - lastCachedSave > 190 * 1000 && Date.now() - lastCachedSave < 300 * 1000
-        || Date.now() - profileObject.last_update >= 300 * 1000){
+        if(!options.cacheOnly &&
+        (Date.now() - lastCachedSave > 190 * 1000 && Date.now() - lastCachedSave < 300 * 1000
+        || Date.now() - profileObject.last_update >= 300 * 1000)){
             response = await retry(async () => {
                 return await Hypixel.get('skyblock/profiles', {
                     params
@@ -616,6 +617,9 @@ module.exports = {
 
             allSkyBlockProfiles = data.profiles;
         }
+
+        if(allSkyBlockProfiles.length == 0)
+            throw "Player has no SkyBlock profiles.";
 
         let skyBlockProfiles = [];
 
