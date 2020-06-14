@@ -1,7 +1,3 @@
-const axios = require('axios');
-require('axios-debug-log');
-
-const credentials = require('../credentials.json');
 const tableify = require('@tillhub/tableify');
 const _ = require('lodash');
 const helper = require('./helper');
@@ -9,25 +5,6 @@ const lib = require('./lib');
 const constants = require('./constants');
 const objectPath = require("object-path");
 const cors = require('cors');
-
-const axiosCacheAdapter = require('axios-cache-adapter');
-
-const { RedisStore } = axiosCacheAdapter;
-const redis = require('redis');
-
-const redisClient = redis.createClient();
-const redisStore = new RedisStore(redisClient);
-
-const Hypixel = axiosCacheAdapter.setup({
-    baseURL: 'https://api.hypixel.net/',
-    cache: {
-        maxAge: 2 * 60 * 1000,
-        store: redisStore,
-        exclude: {
-            query: false
-        }
-    }
-});
 
 function handleError(e, res){
     console.error(e);
@@ -504,6 +481,7 @@ module.exports = (app, db) => {
                     sellPrice: product.sellPrice,
                     buyVolume: product.buyVolume,
                     sellVolume: product.sellVolume,
+                    tag: 'tag' in itemInfo ? itemInfo.tag : null,
                     price: (product.buyPrice + product.sellPrice) / 2
                 });
             }
