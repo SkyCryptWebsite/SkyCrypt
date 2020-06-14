@@ -1019,11 +1019,11 @@ module.exports = {
         return output;
     },
 
-    getStats: async (db, player, profile, allProfiles, items) => {
+    getStats: async (db, profile, allProfiles, items) => {
         let output = {};
 
-        const userProfile = profile.members[player];
-        const hypixelProfile = await helper.getRank(player, db);
+        const userProfile = profile.members[profile.uuid];
+        const hypixelProfile = await helper.getRank(profile.uuid, db);
 
         output.stats = Object.assign({}, constants.base_stats);
 
@@ -1443,7 +1443,7 @@ module.exports = {
         output.kills = killsDeaths.filter(a => a.type == 'kills').sort((a, b) => b.amount - a.amount);
         output.deaths = killsDeaths.filter(a => a.type == 'deaths').sort((a, b) => b.amount - a.amount);
 
-        const playerObject = await helper.uuidToUsername(player, db);
+        const playerObject = await helper.uuidToUsername(profile.uuid, db);
 
         output.display_name = playerObject.display_name;
 
@@ -1452,7 +1452,7 @@ module.exports = {
 
         const userInfo = await db
         .collection('usernames')
-        .findOne({ uuid: player });
+        .findOne({ uuid: profile.uuid });
 
         const members = await Promise
         .all(
@@ -1463,7 +1463,7 @@ module.exports = {
             output.display_name = userInfo.username;
 
             members.push({
-                uuid: player,
+                uuid: profile.uuid,
                 display_name: userInfo.username
             });
 
@@ -1474,11 +1474,11 @@ module.exports = {
         if(objectPath.has(profile, 'banking.balance'))
             output.bank = profile.banking.balance;
 
-        output.guild = await helper.getGuild(player, db);
+        output.guild = await helper.getGuild(profile.uuid, db);
 
         output.rank_prefix = helper.renderRank(hypixelProfile);
         output.purse = userProfile.coin_purse || 0;
-        output.uuid = player;
+        output.uuid = profile.uuid;
         output.skin_data = playerObject.skin_data;
 
         output.profile = { profile_id: profile.profile_id, cute_name: profile.cute_name };
@@ -1490,10 +1490,10 @@ module.exports = {
                 cute_name: sbProfile.cute_name
             };
 
-        output.members = members.filter(a => a.uuid != player);
+        output.members = members.filter(a => a.uuid != profile.uuid);
         output.minions = module.exports.getMinions(profile.members);
         output.minion_slots = module.exports.getMinionSlots(output.minions);
-        output.collections = await module.exports.getCollections(player, profile);
+        output.collections = await module.exports.getCollections(profile.uuid, profile);
         output.bag_sizes = await module.exports.getBagSizes(output.collections);
         output.social = hypixelProfile.socials;
 
