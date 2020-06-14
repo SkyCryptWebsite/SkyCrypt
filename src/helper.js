@@ -563,7 +563,7 @@ module.exports = {
                 paramPlayer = uuid;
             }catch(e){
                 console.error(e);
-                throw "failed resolving username to uuid";
+                throw "Failed resolving username to UUID.";
             }
         }
 
@@ -620,6 +620,11 @@ module.exports = {
 
         if(allSkyBlockProfiles.length == 0)
             throw "Player has no SkyBlock profiles.";
+
+        for(const profile of allSkyBlockProfiles)
+            for(const member in profile.members)
+                if(!('last_save' in profile.members[member]))
+                    delete profile.members[member];
 
         let skyBlockProfiles = [];
 
@@ -769,6 +774,8 @@ module.exports = {
                 { upsert: true }
             );
         }
+
+        profile.uuid = paramPlayer;
 
         return { profile: profile, allProfiles: allSkyBlockProfiles, uuid: paramPlayer };
     },
