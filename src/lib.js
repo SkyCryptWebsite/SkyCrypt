@@ -1019,18 +1019,21 @@ module.exports = {
         return output;
     },
 
-    getStats: async (profile, items, hypixelProfile) => {
+    getStats: async (db, player, profile, allProfiles, items) => {
         let output = {};
+
+        const userProfile = profile.members[player];
+        const hypixelProfile = await helper.getRank(player, db);
 
         output.stats = Object.assign({}, constants.base_stats);
 
-        if(isNaN(profile.fairy_souls_collected))
-            profile.fairy_souls_collected = 0;
+        if(isNaN(userProfile.fairy_souls_collected))
+            userProfile.fairy_souls_collected = 0;
 
         output.fairy_bonus = {};
 
-        if(profile.fairy_exchanges > 0){
-            let fairyBonus = getBonusStat(profile.fairy_exchanges * 5, 'fairy_souls', Math.max(...Object.keys(constants.bonus_stats.fairy_souls)), 5);
+        if(userProfile.fairy_exchanges > 0){
+            let fairyBonus = getBonusStat(userProfile.fairy_exchanges * 5, 'fairy_souls', Math.max(...Object.keys(constants.bonus_stats.fairy_souls)), 5);
             output.fairy_bonus = Object.assign({}, fairyBonus);
 
             // Apply fairy soul bonus
@@ -1038,36 +1041,36 @@ module.exports = {
                 output.stats[stat] += fairyBonus[stat];
         }
 
-        output.fairy_souls = { collected: profile.fairy_souls_collected, total: MAX_SOULS, progress: Math.min(profile.fairy_souls_collected / MAX_SOULS, 1) };
+        output.fairy_souls = { collected: userProfile.fairy_souls_collected, total: MAX_SOULS, progress: Math.min(userProfile.fairy_souls_collected / MAX_SOULS, 1) };
 
         let skillLevels;
         let totalSkillXp = 0;
         let average_level = 0;
 
         // Apply skill bonuses
-        if('experience_skill_taming' in profile
-        || 'experience_skill_farming' in profile
-        || 'experience_skill_mining' in profile
-        || 'experience_skill_combat' in profile
-        || 'experience_skill_foraging' in profile
-        || 'experience_skill_fishing' in profile
-        || 'experience_skill_enchanting' in profile
-        || 'experience_skill_alchemy' in profile
-        || 'experience_skill_carpentry' in profile
-        || 'experience_skill_runecrafting' in profile){
+        if('experience_skill_taming' in userProfile
+        || 'experience_skill_farming' in userProfile
+        || 'experience_skill_mining' in userProfile
+        || 'experience_skill_combat' in userProfile
+        || 'experience_skill_foraging' in userProfile
+        || 'experience_skill_fishing' in userProfile
+        || 'experience_skill_enchanting' in userProfile
+        || 'experience_skill_alchemy' in userProfile
+        || 'experience_skill_carpentry' in userProfile
+        || 'experience_skill_runecrafting' in userProfile){
             let average_level_no_progress = 0;
 
             skillLevels = {
-                taming: getLevelByXp(profile.experience_skill_taming),
-                farming: getLevelByXp(profile.experience_skill_farming),
-                mining: getLevelByXp(profile.experience_skill_mining),
-                combat: getLevelByXp(profile.experience_skill_combat),
-                foraging: getLevelByXp(profile.experience_skill_foraging),
-                fishing: getLevelByXp(profile.experience_skill_fishing),
-                enchanting: getLevelByXp(profile.experience_skill_enchanting),
-                alchemy: getLevelByXp(profile.experience_skill_alchemy),
-                carpentry: getLevelByXp(profile.experience_skill_carpentry),
-                runecrafting: getLevelByXp(profile.experience_skill_runecrafting, true),
+                taming: getLevelByXp(userProfile.experience_skill_taming),
+                farming: getLevelByXp(userProfile.experience_skill_farming),
+                mining: getLevelByXp(userProfile.experience_skill_mining),
+                combat: getLevelByXp(userProfile.experience_skill_combat),
+                foraging: getLevelByXp(userProfile.experience_skill_foraging),
+                fishing: getLevelByXp(userProfile.experience_skill_fishing),
+                enchanting: getLevelByXp(userProfile.experience_skill_enchanting),
+                alchemy: getLevelByXp(userProfile.experience_skill_alchemy),
+                carpentry: getLevelByXp(userProfile.experience_skill_carpentry),
+                runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting, true),
             };
 
             for(let skill in skillLevels){
@@ -1134,14 +1137,14 @@ module.exports = {
         output.slayer_coins_spent = {};
 
         // Apply slayer bonuses
-        if('slayer_bosses' in profile){
+        if('slayer_bosses' in userProfile){
             output.slayer_bonus = {};
 
             let slayers = {};
 
-            if(objectPath.has(profile, 'slayer_bosses')){
-                for(const slayerName in profile.slayer_bosses){
-                    const slayer = profile.slayer_bosses[slayerName];
+            if(objectPath.has(userProfile, 'slayer_bosses')){
+                for(const slayerName in userProfile.slayer_bosses){
+                    const slayer = userProfile.slayer_bosses[slayerName];
 
                     slayers[slayerName] = {};
 
@@ -1191,7 +1194,7 @@ module.exports = {
             output.slayers = Object.assign({}, slayers);
         }
 
-        output.pets = await module.exports.getPets(profile);
+        output.pets = await module.exports.getPets(userProfile);
         output.missingPets = await module.exports.getMissingPets(output.pets);
         output.petScore = await module.exports.getPetScore(output.pets);
 
@@ -1233,10 +1236,10 @@ module.exports = {
             items.armor[0].stats.health = (items.armor[0].stats.health || 0) + 60;
 
         // Apply Emerald Armor full set bonus of +1 HP and +1 Defense per 3000 emeralds in collection with a maximum of 300
-        if(objectPath.has(profile, 'collection.EMERALD')
-        && !isNaN(profile.collection.EMERALD)
+        if(objectPath.has(userProfile, 'collection.EMERALD')
+        && !isNaN(userProfile.collection.EMERALD)
         && items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('EMERALD_ARMOR_')).length == 4){
-            let emerald_bonus = Math.min(350, Math.floor(profile.collection.EMERALD / 3000));
+            let emerald_bonus = Math.min(350, Math.floor(userProfile.collection.EMERALD / 3000));
 
             items.armor[0].stats.health += emerald_bonus;
             items.armor[0].stats.defense += emerald_bonus;
@@ -1384,12 +1387,12 @@ module.exports = {
 
         let killsDeaths = [];
 
-        for(let stat in profile.stats){
+        for(let stat in userProfile.stats){
             if(stat.startsWith("kills_"))
-                killsDeaths.push({ type: 'kills', entityId: stat.replace("kills_", ""), amount: profile.stats[stat] });
+                killsDeaths.push({ type: 'kills', entityId: stat.replace("kills_", ""), amount: userProfile.stats[stat] });
 
             if(stat.startsWith("deaths_"))
-                killsDeaths.push({ type: 'deaths', entityId: stat.replace("deaths_", ""), amount: profile.stats[stat] });
+                killsDeaths.push({ type: 'deaths', entityId: stat.replace("deaths_", ""), amount: userProfile.stats[stat] });
         }
 
         for(const stat of killsDeaths){
@@ -1412,20 +1415,20 @@ module.exports = {
             stat.entityName = entityName;
         }
 
-        if('kills_guardian_emperor' in profile.stats || 'kills_skeleton_emperor' in profile.stats)
+        if('kills_guardian_emperor' in userProfile.stats || 'kills_skeleton_emperor' in userProfile.stats)
             killsDeaths.push({
                 type: 'kills',
                 entityId: 'sea_emperor',
                 entityName: 'Sea Emperor',
-                amount: (profile.stats['kills_guardian_emperor'] || 0) + (profile.stats['kills_skeleton_emperor'] || 0)
+                amount: (userProfile.stats['kills_guardian_emperor'] || 0) + (userProfile.stats['kills_skeleton_emperor'] || 0)
             });
 
-        if('kills_chicken_deep' in profile.stats || 'kills_zombie_deep' in profile.stats)
+        if('kills_chicken_deep' in userProfile.stats || 'kills_zombie_deep' in userProfile.stats)
             killsDeaths.push({
                 type: 'kills',
                 entityId: 'monster_of_the_deep',
                 entityName: 'Monster of the Deep',
-                amount: (profile.stats['kills_chicken_deep'] || 0) + (profile.stats['kills_zombie_deep'] || 0)
+                amount: (userProfile.stats['kills_chicken_deep'] || 0) + (userProfile.stats['kills_zombie_deep'] || 0)
             });
 
         killsDeaths = killsDeaths.filter(a => {
@@ -1439,6 +1442,169 @@ module.exports = {
 
         output.kills = killsDeaths.filter(a => a.type == 'kills').sort((a, b) => b.amount - a.amount);
         output.deaths = killsDeaths.filter(a => a.type == 'deaths').sort((a, b) => b.amount - a.amount);
+
+        const playerObject = await helper.uuidToUsername(player, db);
+
+        output.display_name = playerObject.display_name;
+
+        if('wardrobe_equipped_slot' in userProfile)
+            output.wardrobe_equipped_slot = userProfile.wardrobe_equipped_slot;
+
+        const userInfo = await db
+        .collection('usernames')
+        .findOne({ uuid: player });
+
+        const members = await Promise
+        .all(
+            Object.keys(profile.members).map(a => helper.uuidToUsername(a, db))
+        );
+
+        if(userInfo){
+            output.display_name = userInfo.username;
+
+            members.push({
+                uuid: player,
+                display_name: userInfo.username
+            });
+
+            if('emoji' in userInfo)
+                output.display_emoji = userInfo.emoji;
+        }
+
+        if(objectPath.has(profile, 'banking.balance'))
+            output.bank = profile.banking.balance;
+
+        output.guild = await helper.getGuild(player, db);
+
+        output.rank_prefix = helper.renderRank(hypixelProfile);
+        output.purse = userProfile.coin_purse || 0;
+        output.uuid = player;
+        output.skin_data = playerObject.skin_data;
+
+        output.profile = { profile_id: profile.profile_id, cute_name: profile.cute_name };
+        output.profiles = {};
+
+        for(const sbProfile of allProfiles.filter(a => a.profile_id != profile.profile_id))
+            output.profiles[sbProfile.profile_id] = {
+                profile_id: sbProfile.profile_id,
+                cute_name: sbProfile.cute_name
+            };
+
+        output.members = members.filter(a => a.uuid != player);
+        output.minions = module.exports.getMinions(profile.members);
+        output.minion_slots = module.exports.getMinionSlots(output.minions);
+        output.collections = await module.exports.getCollections(player, profile);
+        output.bag_sizes = await module.exports.getBagSizes(output.collections);
+        output.social = hypixelProfile.socials;
+
+        output.fishing = {
+            total: userProfile.stats.items_fished || 0,
+            treasure: userProfile.stats.items_fished_treasure || 0,
+            treasure_large: userProfile.stats.items_fished_large_treasure || 0,
+            shredder_fished: userProfile.stats.shredder_fished || 0,
+            shredder_bait: userProfile.stats.shredder_bait || 0,
+        };
+
+        const misc = {};
+
+        misc.milestones = {};
+        misc.races = {};
+        misc.gifts = {};
+        misc.winter = {};
+        misc.dragons = {};
+        misc.protector = {};
+        misc.damage = {};
+        misc.auctions_sell = {};
+        misc.auctions_buy = {};
+
+        if('ender_crystals_destroyed' in userProfile.stats)
+            misc.dragons['ender_crystals_destroyed'] = userProfile.stats['ender_crystals_destroyed'];
+
+        misc.dragons['last_hits'] = 0;
+        misc.dragons['deaths'] = 0;
+
+        const auctions_buy = ["auctions_bids", "auctions_highest_bid", "auctions_won", "auctions_gold_spent"];
+        const auctions_sell = ["auctions_fees", "auctions_gold_earned"];
+
+        const auctions_bought = {};
+        const auctions_sold = {};
+
+        for(const key of auctions_sell)
+            if(key in userProfile.stats)
+                misc.auctions_sell[key.replace("auctions_", "")] = userProfile.stats[key];
+
+        for(const key of auctions_buy)
+            if(key in userProfile.stats)
+                misc.auctions_buy[key.replace("auctions_", "")] = userProfile.stats[key];
+
+        for(const key in userProfile.stats)
+            if(key.includes('_best_time'))
+                misc.races[key] = userProfile.stats[key];
+            else if(key.includes('gifts_'))
+                misc.gifts[key] = userProfile.stats[key];
+            else if(key.includes('most_winter'))
+                misc.winter[key] = userProfile.stats[key];
+            else if(key.includes('highest_critical_damage'))
+                misc.damage[key] = userProfile.stats[key];
+            else if(key.includes('auctions_sold_'))
+                auctions_sold[key.replace("auctions_sold_", "")] = userProfile.stats[key];
+            else if(key.includes('auctions_bought_'))
+                auctions_bought[key.replace("auctions_bought_", "")] = userProfile.stats[key];
+            else if(key.startsWith('kills_') && key.endsWith('_dragon'))
+                misc.dragons['last_hits'] += userProfile.stats[key];
+            else if(key.startsWith('deaths_') && key.endsWith('_dragon'))
+                misc.dragons['deaths'] += userProfile.stats[key];
+            else if(key.includes('kills_corrupted_protector'))
+                misc.protector['last_hits'] = userProfile.stats[key];
+            else if(key.includes('deaths_corrupted_protector'))
+                misc.protector['deaths'] = userProfile.stats[key];
+            else if(key.startsWith('pet_milestone_')){
+                misc.milestones[key.replace('pet_milestone_', '')] = userProfile.stats[key];
+            }
+
+        for(const key in misc.dragons)
+            if(misc.dragons[key] == 0)
+                delete misc.dragons[key];
+
+        for(const key in misc)
+            if(Object.keys(misc[key]).length == 0)
+                delete misc[key];
+
+        for(const key in auctions_bought)
+            misc.auctions_buy['items_bought'] = (misc.auctions_buy['items_bought'] || 0) + auctions_bought[key];
+
+        for(const key in auctions_sold)
+            misc.auctions_sell['items_sold'] = (misc.auctions_sell['items_sold'] || 0) + auctions_sold[key];
+
+        output.misc = misc;
+        output.auctions_bought = auctions_bought;
+        output.auctions_sold = auctions_sold;
+
+        const last_updated = userProfile.last_save;
+        const first_join = userProfile.first_join;
+
+        const diff = (+new Date() - last_updated) / 1000;
+
+        let last_updated_text = moment(last_updated).fromNow();
+        let first_join_text = moment(first_join).fromNow();
+
+        if('current_area' in userProfile)
+            output.current_area = userProfile.current_area;
+
+        if(diff < 3)
+            last_updated_text = `Right now`;
+        else if(diff < 60)
+            last_updated_text = `${Math.floor(diff)} seconds ago`;
+
+        output.last_updated = {
+            unix: last_updated,
+            text: last_updated_text
+        };
+
+        output.first_join = {
+            unix: first_join,
+            text: first_join_text
+        };
 
         return output;
     },
