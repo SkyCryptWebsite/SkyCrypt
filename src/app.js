@@ -130,86 +130,28 @@ async function main(){
     }
 
     app.all('/stats/:player/:profile?', async (req, res, next) => {
-        let response;
-
         let paramPlayer = req.params.player.toLowerCase().replace(/[^a-z\d\-\_:]/g, '');
         let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
 
-        let playerUsername = paramPlayer;
-
-        let isPlayerUuid = paramPlayer.length == 32;
-        let isProfileUuid = false;
-
-        if(paramProfile)
-            isProfileUuid = paramProfile.length == 32;
-
-        if(!isPlayerUuid){
-            try{
-                const { uuid } = await helper.usernameToUuid(paramPlayer, db);
-
-                paramPlayer = uuid;
-                isPlayerUuid = true;
-            }catch(e){
-                console.error(e);
-
-                res.status(500);
-                res.render('index', {
-                    error: e,
-                    player: playerUsername,
-                    extra: await getExtra(),
-                    helper,
-                    page: 'index'
-                });
-            }
-        }else{
-            playerUsername = (await helper.uuidToUsername(paramPlayer, db)).display_name;
-        }
-
-        let playerObject = await helper.uuidToUsername(paramPlayer, db);
+        const playerUsername = paramPlayer.length == 32 ? await helper.uuidToUsername(paramPlayer, db).display_name : paramPlayer;
 
         try{
             const { profile, allProfiles } = await helper.getProfile(db, paramPlayer, paramProfile);
 
-            let userProfile = profile.members[paramPlayer];
-
-            for(const member in profile.members)
-                if(!('last_save' in profile.members[member]))
-                    delete profile.members[member];
-
-            const memberUuids = Object.keys(profile.members);
-
-            const memberPromises = [];
-
-            for(let member of memberUuids)
-                if(member != paramPlayer)
-                    memberPromises.push(helper.uuidToUsername(member, db));
-
-            const members = await Promise.all(memberPromises);
-
-            const items = await lib.getItems(userProfile, req.query.pack);
-            const calculated = await lib.getStats(db, paramPlayer, profile, allProfiles, items);
+            const items = await lib.getItems(profile.members[profile.uuid], req.query.pack);
+            const calculated = await lib.getStats(db, profile, allProfiles, items);
 
             res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
         }catch(e){
             console.error(e);
 
-            if(objectPath.has(e, 'response.data.cause')){
-                res.render('index', {
-                    error: `Hypixel API Error: ${e.response.data.cause}.`,
-                    player: playerUsername,
-                    extra: await getExtra(),
-                    helper,
-                    page: 'index'
-                });
-            }else{
-                res.render('index', {
-                    error: 'Unknown Hypixel API error.',
-                    player: playerUsername,
-                    extra: await getExtra(),
-                    helper,
-                    page: 'index'
-                });
-            }
+            res.render('index', {
+                error: `Error: ${e}`,
+                player: playerUsername,
+                extra: await getExtra(),
+                helper,
+                page: 'index'
+            });
 
             return false;
         }
