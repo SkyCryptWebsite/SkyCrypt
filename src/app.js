@@ -551,9 +551,9 @@ async function main(){
 
     app.all('/random/stats', async (req, res, next) => {
         const profile = await db
-        .collection('profiles')
+        .collection('profileStore')
         .aggregate([
-            { $match: { api: true } },
+            { $match: { apis: true } },
             { $sample: { size: 1 } }
         ]).next();
 
