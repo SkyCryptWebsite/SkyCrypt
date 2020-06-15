@@ -27,11 +27,11 @@ module.exports = {
 
         let skin_data = { skinurl: 'https://textures.minecraft.net/texture/3b60a1f6d562f52aaebbf1434f1de147933a3affe0e764fa49ea057536623cd3', model: 'slim' };
 
-        if(user && 'skinurl' in user){
+        if(user && objectPath.has(user, 'skinurl')){
             skin_data.skinurl = user.skinurl;
             skin_data.model = user.model;
 
-            if('capeurl' in user)
+            if(objectPath.has(user, 'capeurl'))
                 skin_data.capeurl = user.capeurl;
         }
 
@@ -49,14 +49,14 @@ module.exports = {
                         date: +new Date()
                     }
 
-                    if('SKIN' in profileData.textures){
+                    if(objectPath.has(profileData.textures, 'SKIN')){
                         const skin = profileData.textures.SKIN;
 
                         skin_data.skinurl = skin.url;
                         skin_data.model = objectPath.has(skin, 'metadata.model') ? skin.metadata.model : 'regular';
                     }
 
-                    if('CAPE' in profileData.textures)
+                    if(objectPath.has(profileData.textures, 'CAPE'))
                         skin_data.capeurl = profileData.textures.CAPE.url;
 
                     updateDoc = Object.assign(updateDoc, skin_data);
@@ -105,14 +105,14 @@ module.exports = {
                 try{
                     let { data } = await profileRequest;
 
-                    if('SKIN' in data.textures){
+                    if(objectPath.has(data.textures, 'SKIN')){
                         const skin = data.textures.SKIN;
 
                         skin_data.skinurl = skin.url;
                         skin_data.model = objectPath.has(skin, 'metadata.model') ? skin.metadata.model : 'regular';
                     }
 
-                    if('CAPE' in data.textures)
+                    if(objectPath.has(data.textures, 'CAPE'))
                         skin_data.capeurl = data.textures.CAPE.url;
 
                     return { uuid, display_name: data.name, skin_data };
@@ -298,7 +298,7 @@ module.exports = {
             const code = part.substring(0, 1);
             const content = part.substring(1);
 
-            if(code in constants.minecraft_formatting){
+            if(objectPath.has(constants.minecraft_formatting, code)){
                 const format = constants.minecraft_formatting[code];
 
                 if(format.type == 'color'){
@@ -432,22 +432,22 @@ module.exports = {
             plusColor: null
         };
 
-        if('packageRank' in player)
+        if(objectPath.has(player, 'packageRank'))
             rankName = player.packageRank;
 
-        if('newPackageRank'  in player)
+        if(objectPath.has(player, 'newPackageRank'))
             rankName = player.newPackageRank;
 
-        if('monthlyPackageRank' in player && player.monthlyPackageRank != 'NONE')
+        if(objectPath.has(player, 'monthlyPackageRank') && player.monthlyPackageRank != 'NONE')
             rankName = player.monthlyPackageRank;
 
-        if('rank' in player && player.rank != 'NORMAL')
+        if(objectPath.has(player, 'rank') && player.rank != 'NORMAL')
             rankName = player.rank;
 
-        if('prefix' in player)
+        if(objectPath.has(player, 'prefix'))
             rankName = module.exports.getRawLore(player.prefix).replace(/\[|\]/g, '');
 
-        if(rankName in constants.ranks)
+        if(objectPath.has(constants.ranks, rankName))
             rank = constants.ranks[rankName];
 
         if(!rank)
@@ -457,18 +457,18 @@ module.exports = {
         output.rankColor = rank.color;
 
         if(rankName == 'SUPERSTAR'){
-            if(!('monthlyRankColor' in player))
+            if(!objectPath.has(player, 'monthlyRankColor'))
                 player.monthlyRankColor = 'GOLD';
 
             output.rankColor = constants.color_names[player.monthlyRankColor];
         }
 
-        if('plus' in rank){
+        if(objectPath.has(rank, 'plus')){
             output.plusText = rank.plus;
             output.plusColor = output.rankColor;
         }
 
-        if(output.plusText && 'rankPlusColor' in player)
+        if(output.plusText && objectPath.has(player, 'rankPlusColor'))
             output.plusColor = constants.color_names[player.rankPlusColor];
 
         if(rankName == 'PIG+++')
@@ -623,7 +623,7 @@ module.exports = {
 
         for(const profile of allSkyBlockProfiles){
             for(const member in profile.members)
-                if(!('last_save' in profile.members[member]))
+                if(!objectPath.has(profile.members[member], 'last_save'))
                     delete profile.members[member];
 
             profile.uuid = paramPlayer;
@@ -667,7 +667,7 @@ module.exports = {
             let memberCount = 0;
 
             for(const member in profile.members){
-                if('last_save' in profile.members[member])
+                if(objectPath.has(profile.members[member], 'last_save'))
                     memberCount++;
             }
 
@@ -702,7 +702,7 @@ module.exports = {
                     members: _profile.members
                 };
 
-                if('banking' in _profile)
+                if(objectPath.has(_profile, 'banking'))
                     insertCache.banking = _profile.banking;
 
                 await db
@@ -714,7 +714,7 @@ module.exports = {
                 );
             }
 
-            if('last_save' in userProfile)
+            if(objectPath.has(userProfile, 'last_save'))
                 storeProfiles[_profile.profile_id] = {
                     profile_id: _profile.profile_id,
                     cute_name: _profile.cute_name,
@@ -728,7 +728,7 @@ module.exports = {
 
             let userProfile = _profile.members[paramPlayer];
 
-            if('last_save' in userProfile && userProfile.last_save > highest){
+            if(objectPath.has(userProfile, 'last_save') && userProfile.last_save > highest){
                 profile = _profile;
                 highest = userProfile.last_save;
                 profileId = _profile.profile_id;
@@ -740,13 +740,13 @@ module.exports = {
 
         const userProfile = profile.members[paramPlayer];
 
-        if(profileObject && 'current_area' in profileObject)
+        if(profileObject && objectPath.has(profileObject, 'current_area'))
             userProfile.current_area = profileObject.current_area;
 
         if(response && response.request.fromCache !== true){
-            const apisEnabled = 'inv_contents' in userProfile
+            const apisEnabled = objectPath.has(userProfile, 'inv_contents')
             && Object.keys(userProfile).filter(a => a.startsWith('experience_skill_')).length > 0
-            && 'collection' in userProfile;
+            && objectPath.has(userProfile, 'collection')
 
             const insertProfileStore = {
                 last_update: new Date(),
