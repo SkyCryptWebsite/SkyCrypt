@@ -189,11 +189,11 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/skills', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await helper.getProfile(db, req.params.player, req.params.profile);
+            const { profile, allProfiles, uuid } = await helper.getProfile(db, req.params.player, req.params.profile);
             const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
-            const calculated = await lib.getStats(userProfile, items, await helper.getRank(uuid, db));
+            const calculated = await lib.getStats(db, profile, allProfiles, items);
 
             if('html' in req.query){
                 const response = [];
