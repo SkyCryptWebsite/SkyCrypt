@@ -25,6 +25,8 @@ module.exports = (app, db) => {
 
                 output.profiles[singleProfile.profile_id] = {
                     current: Math.max(...allProfiles.map(a => a.members[profile.uuid].last_save)) == userProfile.last_save,
+                    last_save: userProfile.last_save,
+                    cute_name: singleProfile.cute_name,
                     raw: userProfile,
                     items,
                     data
