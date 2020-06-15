@@ -298,26 +298,27 @@ module.exports = {
             const code = part.substring(0, 1);
             const content = part.substring(1);
 
-            if(objectPath.has(constants.minecraft_formatting, code)){
-                const format = constants.minecraft_formatting[code];
+            const format = constants.minecraft_formatting[code];
 
-                if(format.type == 'color'){
-                    for(; spansOpened > 0; spansOpened--)
-                        output += "</span>";
+            if(format === undefined)
+                continue;
 
-                    output += `<span style='${format.css}'>${content}`;
+            if(format.type == 'color'){
+                for(; spansOpened > 0; spansOpened--)
+                    output += "</span>";
 
-                    spansOpened++;
-                }else if(format.type == 'format'){
-                    output += `<span style='${format.css}'>${content}`;
+                output += `<span style='${format.css}'>${content}`;
 
-                    spansOpened++;
-                }else if(format.type == 'reset'){
-                    for(; spansOpened > 0; spansOpened--)
-                        output += "</span>";
+                spansOpened++;
+            }else if(format.type == 'format'){
+                output += `<span style='${format.css}'>${content}`;
 
-                    output += content;
-                }
+                spansOpened++;
+            }else if(format.type == 'reset'){
+                for(; spansOpened > 0; spansOpened--)
+                    output += "</span>";
+
+                output += content;
             }
         }
 

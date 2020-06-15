@@ -219,13 +219,15 @@ async function getBackpackContents(arraybuf){
 }
 
 function getId(item){
-    if(objectPath.has(item, 'tag.ExtraAttributes.id'))
+    try{
         return item.tag.ExtraAttributes.id;
-    return "";
+    }catch(e){
+        return "";
+    }
 }
 
 // Process items returned by API
-async function getItems(base64, packs){
+async function getItems(base64, customTextures = false, packs){
     // API stores data as base64 encoded gzipped Minecraft NBT data
     let buf = Buffer.from(base64, 'base64');
 
@@ -299,13 +301,15 @@ async function getItems(base64, packs){
             }
         }
 
-        const customTexture = await customResources.getTexture(item, false, packs);
+        if(customTextures){
+            const customTexture = await customResources.getTexture(item, false, packs);
 
-        if(customTexture){
-            item.animated = customTexture.animated;
-            item.texture_path = '/' + customTexture.path;
-            item.texture_pack = customTexture.pack.config;
-            item.texture_pack.base_path = '/' + path.relative(path.resolve(__dirname, '..', 'public'), customTexture.pack.basePath);
+            if(customTexture){
+                item.animated = customTexture.animated;
+                item.texture_path = '/' + customTexture.path;
+                item.texture_pack = customTexture.pack.config;
+                item.texture_pack.base_path = '/' + path.relative(path.resolve(__dirname, '..', 'public'), customTexture.pack.basePath);
+            }
         }
 
         let lore_raw;
@@ -457,12 +461,8 @@ async function getItems(base64, packs){
                 item.stats.speed = 5;
         }
 
-        // Add snow canon and blaster to weapons
-        if(objectPath.has(item, 'tag.ExtraAttributes.id') && ['SNOW_CANNON', 'SNOW_BLASTER'].includes(item.tag.ExtraAttributes.id))
-            item.type = 'bow';
-
         // Workaround for detecting item types if another language is set by the player on Hypixel
-        if(objectPath.has(item, 'tag.ExtraAttributes.id') && item.tag.ExtraAttributes.id != 'ENCHANTED_BOOK'
+        if(getId(item) != 'ENCHANTED_BOOK'
         && !constants.item_types.includes(item.type)){
             if(objectPath.has(item, 'tag.ExtraAttributes.enchantments')){
                 if('sharpness' in item.tag.ExtraAttributes.enchantments
@@ -650,19 +650,19 @@ module.exports = {
         return output;
     },
 
-    getItems: async (profile, packs) => {
+    getItems: async (profile, customTextures = false, packs) => {
         const output = {};
 
         // Process inventories returned by API
-        let armor = 'inv_armor' in profile ? await getItems(profile.inv_armor.data, packs) : [];
-        let inventory = 'inv_contents' in profile ? await getItems(profile.inv_contents.data, packs) : [];
-        let wardrobe_inventory = 'wardrobe_contents' in profile ? await getItems(profile.wardrobe_contents.data, packs) : [];
-        let enderchest = 'ender_chest_contents' in profile ? await getItems(profile.ender_chest_contents.data, packs) : [];
-        let talisman_bag = 'talisman_bag' in profile ? await getItems(profile.talisman_bag.data, packs) : [];
-        let fishing_bag = 'fishing_bag' in profile ? await getItems(profile.fishing_bag.data, packs) : [];
-        let quiver = 'quiver' in profile ? await getItems(profile.quiver.data, packs) : [];
-        let potion_bag = 'potion_bag' in profile ? await getItems(profile.potion_bag.data, packs) : [];
-        let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data, packs) : [];
+        let armor = 'inv_armor' in profile ? await getItems(profile.inv_armor.data, customTextures, packs) : [];
+        let inventory = 'inv_contents' in profile ? await getItems(profile.inv_contents.data, customTextures, packs) : [];
+        let wardrobe_inventory = 'wardrobe_contents' in profile ? await getItems(profile.wardrobe_contents.data, customTextures, packs) : [];
+        let enderchest = 'ender_chest_contents' in profile ? await getItems(profile.ender_chest_contents.data, customTextures, packs) : [];
+        let talisman_bag = 'talisman_bag' in profile ? await getItems(profile.talisman_bag.data, customTextures, packs) : [];
+        let fishing_bag = 'fishing_bag' in profile ? await getItems(profile.fishing_bag.data, customTextures, packs) : [];
+        let quiver = 'quiver' in profile ? await getItems(profile.quiver.data, customTextures, packs) : [];
+        let potion_bag = 'potion_bag' in profile ? await getItems(profile.potion_bag.data, customTextures, packs) : [];
+        let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data, customTextures, packs) : [];
 
         const wardrobeColumns = wardrobe_inventory.length / 4;
 
@@ -729,7 +729,7 @@ module.exports = {
             if(talismans.filter(a => !a.isInactive && getId(a) == id).length > 0)
                 insertTalisman.isInactive = true;
 
-            if(talismans.filter(a =>a.tag.ExtraAttributes.id == id).length > 0)
+            if(talismans.filter(a => getId(a) == id).length > 0)
                 insertTalisman.isUnique = false;
 
             talismans.push(insertTalisman);
@@ -747,7 +747,7 @@ module.exports = {
             if(talismans.filter(a => !a.isInactive && getId(a) == id).length > 0)
                 insertTalisman.isInactive = true;
 
-            if(talismans.filter(a =>a.tag.ExtraAttributes.id == id).length > 0)
+            if(talismans.filter(a => getId(a) == id).length > 0)
                 insertTalisman.isUnique = false;
 
             talismans.push(insertTalisman);
@@ -765,7 +765,7 @@ module.exports = {
             if(talismans.filter(a => !a.isInactive && getId(a) == id).length > 0)
                 insertTalisman.isInactive = true;
 
-            if(talismans.filter(a => a.tag.ExtraAttributes.id == id).length > 0)
+            if(talismans.filter(a => getId(a) == id).length > 0)
                 insertTalisman.isUnique = false;
 
             talismans.push(insertTalisman);
@@ -779,7 +779,7 @@ module.exports = {
                 items = item.containsItems.slice(0);
 
             for(const talisman of items.filter(a => a.type == 'accessory')){
-                const id = talisman.tag.ExtraAttributes.id;
+                const id = getId(talisman);
 
                 const insertTalisman = Object.assign({ isUnique: true, isInactive: true }, talisman);
 
@@ -836,7 +836,7 @@ module.exports = {
 
         // Add New Year Cake Bag health bonus (1 per unique cake)
         for(let talisman of talismans){
-            let id = talisman.tag.ExtraAttributes.id;
+            let id = getId(talisman);
             let cakes = [];
 
             if(id == 'NEW_YEAR_CAKE_BAG' && objectPath.has(talisman, 'containsItems') && Array.isArray(talisman.containsItems)){
@@ -1220,7 +1220,7 @@ module.exports = {
         }
 
         // Apply all harp bonuses when Melody's Hair has been acquired
-        if(items.talismans.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id == 'MELODY_HAIR').length == 1)
+        if(items.talismans.filter(a => getId(a) == 'MELODY_HAIR').length == 1)
             output.stats.intelligence += 26;
 
         for(const stat in output.pet_score_bonus)
@@ -1232,13 +1232,13 @@ module.exports = {
             output.stats[stat] += output.pet_bonus[stat];
 
         // Apply Lapis Armor full set bonus of +60 HP
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('LAPIS_ARMOR_')).length == 4)
+        if(items.armor.filter(a => getId(a).startsWith('LAPIS_ARMOR_')).length == 4)
             items.armor[0].stats.health = (items.armor[0].stats.health || 0) + 60;
 
         // Apply Emerald Armor full set bonus of +1 HP and +1 Defense per 3000 emeralds in collection with a maximum of 300
         if(objectPath.has(userProfile, 'collection.EMERALD')
         && !isNaN(userProfile.collection.EMERALD)
-        && items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('EMERALD_ARMOR_')).length == 4){
+        && items.armor.filter(a => getId(a).startsWith('EMERALD_ARMOR_')).length == 4){
             let emerald_bonus = Math.min(350, Math.floor(userProfile.collection.EMERALD / 3000));
 
             items.armor[0].stats.health += emerald_bonus;
@@ -1246,15 +1246,15 @@ module.exports = {
         }
 
         // Apply Fairy Armor full set bonus of +10 Speed
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('FAIRY_')).length == 4)
+        if(items.armor.filter(a => getId(a).startsWith('FAIRY_')).length == 4)
             items.armor[0].stats.speed += 10;
 
         // Apply Speedster Armor full set bonus of +20 Speed
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SPEEDSTER_')).length == 4)
+        if(items.armor.filter(a => getId(a).startsWith('SPEEDSTER_')).length == 4)
             items.armor[0].stats.speed += 20;
 
         // Apply Young Dragon Armor full set bonus of +70 Speed
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('YOUNG_DRAGON_')).length == 4)
+        if(items.armor.filter(a => getId(a).startsWith('YOUNG_DRAGON_')).length == 4)
             items.armor[0].stats.speed += 70;
 
         // Apply basic armor stats
@@ -1287,13 +1287,13 @@ module.exports = {
         });
 
         // Apply Mastiff Armor full set bonus of +50 HP per 1% Crit Damage
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4){
+        if(items.armor.filter(a => getId(a).startsWith('MASTIFF_')).length == 4){
             output.stats.health += 50 * output.stats.crit_damage;
             items.armor[0].stats.health += 50 * output.stats.crit_damage;
         }
 
         // Apply +5 Defense and +5 Strength of Day/Night Crystal only if both are owned as this is required for a permanent bonus
-        if(items.talismans.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && !a.isInactive && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(a.tag.ExtraAttributes.id)).length == 2){
+        if(items.talismans.filter(a => !a.isInactive && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(getId(a))).length == 2){
             output.stats.defense += 5;
             output.stats.strength += 5;
 
@@ -1304,7 +1304,7 @@ module.exports = {
         }
 
         // Apply Obsidian Chestplate bonus of +1 Speed per 20 Obsidian in inventory
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id == ('OBSIDIAN_CHESTPLATE')).length == 1){
+        if(items.armor.filter(a => getId(a) == 'OBSIDIAN_CHESTPLATE').length == 1){
             let obsidian = 0;
 
             for(let item of items.inventory){
@@ -1315,13 +1315,13 @@ module.exports = {
             output.stats.speed += Math.floor(obsidian / 20);
         }
 
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('CHEAP_TUXEDO_')).length == 3)
+        if(items.armor.filter(a => getId(a).startsWith('CHEAP_TUXEDO_')).length == 3)
             output.stats['health'] = 75;
 
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('FANCY_TUXEDO_')).length == 3)
+        if(items.armor.filter(a => getId(a).startsWith('FANCY_TUXEDO_')).length == 3)
             output.stats['health'] = 150;
 
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('ELEGANT_TUXEDO_')).length == 3)
+        if(items.armor.filter(a => getId(a).startsWith('ELEGANT_TUXEDO_')).length == 3)
             output.stats['health'] = 250;
 
         output.weapon_stats = {};
@@ -1335,21 +1335,21 @@ module.exports = {
             }
 
             // Add crit damage from held weapon to Mastiff Armor full set bonus
-            if(item.stats.crit_damage > 0 && items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
+            if(item.stats.crit_damage > 0 && items.armor.filter(a => getId(a).startsWith('MASTIFF_')).length == 4)
                 stats.health += 50 * item.stats.crit_damage;
 
             // Apply Superior Dragon Armor full set bonus of 5% stat increase
-            if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4)
+            if(items.armor.filter(a => getId(a).startsWith('SUPERIOR_DRAGON_')).length == 4)
                 for(let stat in stats)
                     stats[stat] = Math.floor(stats[stat] * 1.05);
 
-            if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('CHEAP_TUXEDO_')).length == 3)
+            if(items.armor.filter(a => getId(a).startsWith('CHEAP_TUXEDO_')).length == 3)
                 stats['health'] = 75;
 
-            if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('FANCY_TUXEDO_')).length == 3)
+            if(items.armor.filter(a => getId(a).startsWith('FANCY_TUXEDO_')).length == 3)
                 stats['health'] = 150;
 
-            if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('ELEGANT_TUXEDO_')).length == 3)
+            if(items.armor.filter(a => getId(a).startsWith('ELEGANT_TUXEDO_')).length == 3)
                 stats['health'] = 250;
 
             output.weapon_stats[item.itemId] = stats;
@@ -1364,7 +1364,7 @@ module.exports = {
         const superiorBonus = Object.assign({}, constants.stat_template);
 
         // Apply Superior Dragon Armor full set bonus of 5% stat increase
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4){
+        if(items.armor.filter(a => getId(a).startsWith('SUPERIOR_DRAGON_')).length == 4){
             for(const stat in output.stats){
                 superiorBonus[stat] = Math.floor(output.stats[stat] * 0.05);
             }

@@ -139,7 +139,7 @@ async function main(){
         try{
             const { profile, allProfiles } = await helper.getProfile(db, paramPlayer, paramProfile);
 
-            const items = await lib.getItems(profile.members[profile.uuid], req.query.pack);
+            const items = await lib.getItems(profile.members[profile.uuid], true, req.query.pack);
             const calculated = await lib.getStats(db, profile, allProfiles, items);
 
             res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
