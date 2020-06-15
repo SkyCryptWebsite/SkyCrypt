@@ -693,6 +693,9 @@ module.exports = {
         for(const _profile of allSkyBlockProfiles){
             let userProfile = _profile.members[paramPlayer];
 
+            if(!userProfile)
+                continue;
+
             if(response && response.request.fromCache !== true){
                 const insertCache = {
                     last_update: new Date(),
