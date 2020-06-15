@@ -75,6 +75,7 @@ async function main(){
     }));
 
     require('./api')(app, db);
+    require('./apiv2')(app, db);
     require('./donations/kofi')(app, db);
 
     async function getExtra(){
