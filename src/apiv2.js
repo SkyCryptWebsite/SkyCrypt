@@ -24,9 +24,10 @@ module.exports = (app, db) => {
                 const data = await lib.getStats(db, profile, allProfiles, items);
 
                 output.profiles[singleProfile.profile_id] = {
+                    profile_id: singleProfile.profile_id,
+                    cute_name: singleProfile.cute_name,
                     current: Math.max(...allProfiles.map(a => a.members[profile.uuid].last_save)) == userProfile.last_save,
                     last_save: userProfile.last_save,
-                    cute_name: singleProfile.cute_name,
                     raw: userProfile,
                     items,
                     data
