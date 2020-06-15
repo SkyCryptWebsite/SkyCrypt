@@ -650,6 +650,7 @@ module.exports = {
                     });
 
                     profileResponse.cute_name = 'Deleted';
+                    profileResponse.uuid = paramPlayer;
 
                     skyBlockProfiles.push(profileResponse);
                 }
