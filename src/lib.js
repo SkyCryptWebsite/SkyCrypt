@@ -1097,6 +1097,7 @@ module.exports = {
                 fishing: hypixelProfile.achievements.skyblock_angler || 0,
                 enchanting: hypixelProfile.achievements.skyblock_augmentation || 0,
                 alchemy: hypixelProfile.achievements.skyblock_concoctor || 0,
+                taming: hypixelProfile.achievements.skyblock_domesticator || 0,
             };
 
             output.levels = {};
