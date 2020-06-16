@@ -409,8 +409,6 @@ module.exports = {
 
                     let matchValues = helper.getPath(item, 'tag', ...value.split('.'));
 
-                    console.log(matchValues);
-
                     if(!Array.isArray(matchValues))
                         matchValues = [matchValues];
 
