@@ -49,7 +49,6 @@
     "moment-duration-format": "^2.3.2",
     "moment-timezone": "^0.5.31",
     "mongodb": "^3.5.9",
-    "object-path": "^0.11.4",
     "prismarine-nbt": "^1.3.0",
     "redis": "^3.0.2",
     "relaxed-json": "^1.0.3",

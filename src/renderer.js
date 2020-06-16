@@ -7,7 +7,6 @@ const { createCanvas, loadImage } = require('canvas');
 const css = require('css');
 const path = require('path');
 const customResources = require('./custom-resources');
-const objectPath = require('object-path');
 const fs = require('fs-extra');
 
 const skew_a = 26 / 45;
@@ -303,7 +302,7 @@ module.exports = {
         if('name' in item){
             item.tag = {};
 
-            objectPath.set(item, "tag.display.Name", item.name);
+            helper.setPath(item, item.name, 'tag', 'display', 'Name');
         }
 
         if('texture' in item)

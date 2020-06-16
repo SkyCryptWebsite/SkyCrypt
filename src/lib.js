@@ -4,9 +4,9 @@ const nbt = require('prismarine-nbt');
 const util = require('util');
 const mcData = require("minecraft-data")("1.8.9");
 const _ = require('lodash');
-const objectPath = require("object-path");
 const constants = require('./constants');
 const helper = require('./helper');
+const { getId } = helper;
 const axios = require('axios');
 const moment = require('moment');
 const { v4 } = require('uuid');
@@ -218,13 +218,7 @@ async function getBackpackContents(arraybuf){
     return items;
 }
 
-function getId(item){
-    try{
-        return item.tag.ExtraAttributes.id;
-    }catch(e){
-        return "";
-    }
-}
+
 
 // Process items returned by API
 async function getItems(base64, customTextures = false, packs){
@@ -238,25 +232,20 @@ async function getItems(base64, customTextures = false, packs){
 
     // Check backpack contents and add them to the list of items
     for(const [index, item] of items.entries()){
-        if(objectPath.has(item, 'tag.display.Name') && (item.tag.display.Name.endsWith('Backpack') || item.tag.display.Name.endsWith('New Year Cake Bag'))){
-
-            let keys = Object.keys(item.tag.ExtraAttributes);
-
+        if(helper.hasPath(item, 'tag', 'display', 'Name') && (item.tag.display.Name.endsWith('Backpack') || item.tag.display.Name.endsWith('New Year Cake Bag'))){
             let backpackData;
 
-            keys.forEach(key => {
+            for(const key of Object.keys(item.tag.ExtraAttributes))
                 if(key.endsWith('backpack_data') || key == 'new_year_cake_bag_data')
                     backpackData = item.tag.ExtraAttributes[key];
-            });
 
             if(!Array.isArray(backpackData))
                 continue;
 
             let backpackContents = await getBackpackContents(backpackData);
 
-            backpackContents.forEach(backpackItem => {
+            for(const backpackItem of backpackContents)
                 backpackItem.backpackIndex = index;
-            });
 
             item.containsItems = [];
 
@@ -266,34 +255,35 @@ async function getItems(base64, customTextures = false, packs){
 
     let index = 0;
 
-    for(let item of items){
+    for(const item of items){
         // Set custom texture for colored leather armor
-        if(objectPath.has(item, 'id') && item.id >= 298 && item.id <= 301){
-            let types
+        if(helper.hasPath(item, 'id') && item.id >= 298 && item.id <= 301){
             let color = [149, 94, 59];
 
-            if(objectPath.has(item, 'tag.ExtraAttributes.color'))
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'color'))
                 color = item.tag.ExtraAttributes.color.split(":");
 
-            let type = ["leather_helmet", "leather_chestplate", "leather_leggings", "leather_boots"][item.id - 298].replace('_', '/');
+            const type = ["leather_helmet", "leather_chestplate", "leather_leggings", "leather_boots"][item.id - 298].replace('_', '/');
 
             item.texture_path = `/${type}/${color.join(',')}`;
         }
 
         // Set raw display name without color and formatting codes
-        if(objectPath.has(item, 'tag.display.Name'))
+        if(helper.hasPath(item, 'tag', 'display', 'Name'))
             item.display_name = helper.getRawLore(item.tag.display.Name);
 
-        if(objectPath.has(item, 'display_name'))
+        if(helper.hasPath(item, 'display_name'))
             if(item.display_name == 'Water Bottle')
                 item.Damage = 17;
 
         // Resolve skull textures to their image path
-        if(objectPath.has(item, 'tag.SkullOwner.Properties.textures') && Array.isArray(item.tag.SkullOwner.Properties.textures) && item.tag.SkullOwner.Properties.textures.length > 0){
+        if(helper.hasPath(item, 'tag', 'SkullOwner', 'Properties', 'textures')
+        && Array.isArray(item.tag.SkullOwner.Properties.textures)
+        && item.tag.SkullOwner.Properties.textures.length > 0){
             try{
-                let json = JSON.parse(Buffer.from(item.tag.SkullOwner.Properties.textures[0].Value, 'base64').toString());
-                let url = json.textures.SKIN.url;
-                let uuid = url.split("/").pop();
+                const json = JSON.parse(Buffer.from(item.tag.SkullOwner.Properties.textures[0].Value, 'base64').toString());
+                const url = json.textures.SKIN.url;
+                const uuid = url.split("/").pop();
 
                 item.texture_path = `/head/${uuid}?v6`;
             }catch(e){
@@ -315,7 +305,7 @@ async function getItems(base64, customTextures = false, packs){
         let lore_raw;
 
         // Set HTML lore to be displayed on the website
-        if(objectPath.has(item, 'tag.display.Lore')){
+        if(helper.hasPath(item, 'tag', 'display', 'Lore')){
             lore_raw = item.tag.display.Lore;
 
             item.lore = '';
@@ -332,7 +322,7 @@ async function getItems(base64, customTextures = false, packs){
 
             let hasAnvilUses = false;
 
-            if(objectPath.has(item, 'tag.ExtraAttributes.anvil_uses')){
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'anvil_uses')){
                 let { anvil_uses, timestamp } = item.tag.ExtraAttributes;
 
                 let hot_potato_count = 0;
@@ -348,10 +338,11 @@ async function getItems(base64, customTextures = false, packs){
                 }
             }
 
-            if(objectPath.has(item, 'tag.ExtraAttributes.timestamp')){
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp')){
                 item.lore += "<br>";
 
                 const timestamp = item.tag.ExtraAttributes.timestamp;
+
                 let obtainmentDate;
 
                 if(!isNaN(timestamp))
@@ -367,8 +358,8 @@ async function getItems(base64, customTextures = false, packs){
                 item.lore += "<br>" + helper.renderLore(`§7Obtained: §c${obtainmentDate.format("D MMM YYYY")}`);
             }
 
-            if(objectPath.has(item, 'tag.ExtraAttributes.spawnedFor')){
-                if(!objectPath.has(item, 'tag.ExtraAttributes.timestamp'))
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'spawnedFor')){
+                if(!helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp'))
                     item.lore += "<br>";
 
                 const spawnedFor = item.tag.ExtraAttributes.spawnedFor.replace(/\-/g, '');
@@ -464,7 +455,7 @@ async function getItems(base64, customTextures = false, packs){
         // Workaround for detecting item types if another language is set by the player on Hypixel
         if(getId(item) != 'ENCHANTED_BOOK'
         && !constants.item_types.includes(item.type)){
-            if(objectPath.has(item, 'tag.ExtraAttributes.enchantments')){
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'enchantments')){
                 if('sharpness' in item.tag.ExtraAttributes.enchantments
                 || 'crticial' in item.tag.ExtraAttributes.enchantments
                 || 'ender_slayer' in item.tag.ExtraAttributes.enchantments
@@ -502,10 +493,10 @@ async function getItems(base64, customTextures = false, packs){
             }
         }
 
-        if(!objectPath.has(item, 'display_name') && objectPath.has(item, 'id')){
-            let vanillaItem = mcData.items[item.id];
+        if(!helper.hasPath(item, 'display_name') && helper.hasPath(item, 'id')){
+            const vanillaItem = mcData.items[item.id];
 
-            if(vanillaItem && objectPath.has(vanillaItem, 'displayName'))
+            if(helper.hasPath(vanillaItem, 'displayName'))
                 item.display_name = vanillaItem.displayName;
         }
     }
@@ -839,11 +830,11 @@ module.exports = {
             let id = getId(talisman);
             let cakes = [];
 
-            if(id == 'NEW_YEAR_CAKE_BAG' && objectPath.has(talisman, 'containsItems') && Array.isArray(talisman.containsItems)){
+            if(id == 'NEW_YEAR_CAKE_BAG' && helper.hasPath(talisman, 'containsItems') && Array.isArray(talisman.containsItems)){
                 talisman.stats.health = 0;
 
-                for(let item of talisman.containsItems){
-                    if(objectPath.has(item, 'tag.ExtraAttributes.new_years_cake') && !cakes.includes(item.tag.ExtraAttributes.new_years_cake)){
+                for(const item of talisman.containsItems){
+                    if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'new_years_cake') && !cakes.includes(item.tag.ExtraAttributes.new_years_cake)){
                         talisman.stats.health++;
                         cakes.push(item.tag.ExtraAttributes.new_years_cake);
                     }
@@ -855,7 +846,7 @@ module.exports = {
         for(const talisman of talismans){
             talisman.base_name = talisman.display_name;
 
-            if(objectPath.has(talisman, 'tag.ExtraAttributes.modifier')){
+            if(helper.hasPath(talisman, 'tag', 'ExtraAttributes', 'modifier')){
                 talisman.base_name = talisman.display_name.split(" ").slice(1).join(" ");
                 talisman.reforge = talisman.tag.ExtraAttributes.modifier
             }
@@ -951,13 +942,13 @@ module.exports = {
             armor.forEach(armorPiece => {
                 let name = armorPiece.display_name;
 
-                if(objectPath.has(armorPiece, 'tag.ExtraAttributes.modifier'))
+                if(helper.hasPath(armorPiece, 'tag', 'ExtraAttributes', 'modifier'))
                     name = name.split(" ").slice(1).join(" ");
 
                 armorPiece.armor_name = name;
             });
 
-            if(armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.modifier')
+            if(armor.filter(a => helper.hasPath(a, 'tag', 'ExtraAttributes', 'modifier')
             && a.tag.ExtraAttributes.modifier == armor[0].tag.ExtraAttributes.modifier).length == 4)
                 reforgeName = armor[0].display_name.split(" ")[0]
 
@@ -1143,13 +1134,13 @@ module.exports = {
 
             let slayers = {};
 
-            if(objectPath.has(userProfile, 'slayer_bosses')){
+            if(helper.hasPath(userProfile, 'slayer_bosses')){
                 for(const slayerName in userProfile.slayer_bosses){
                     const slayer = userProfile.slayer_bosses[slayerName];
 
                     slayers[slayerName] = {};
 
-                    if(!objectPath.has(slayer, 'claimed_levels'))
+                    if(!helper.hasPath(slayer, 'claimed_levels'))
                         continue;
 
                     slayers[slayerName].level = getSlayerLevel(slayer, slayerName);
@@ -1179,7 +1170,7 @@ module.exports = {
             output.slayer_xp = 0;
 
             for(const slayer in slayers){
-                if(!objectPath.has(slayers[slayer], 'level.currentLevel'))
+                if(!helper.hasPath(slayers[slayer], 'level', 'currentLevel'))
                     continue;
 
                 const slayerBonus = getBonusStat(slayers[slayer].level.currentLevel, `${slayer}_slayer`, 9, 1);
@@ -1237,7 +1228,7 @@ module.exports = {
             items.armor[0].stats.health = (items.armor[0].stats.health || 0) + 60;
 
         // Apply Emerald Armor full set bonus of +1 HP and +1 Defense per 3000 emeralds in collection with a maximum of 300
-        if(objectPath.has(userProfile, 'collection.EMERALD')
+        if(helper.hasPath(userProfile, 'collection', 'EMERALD')
         && !isNaN(userProfile.collection.EMERALD)
         && items.armor.filter(a => getId(a).startsWith('EMERALD_ARMOR_')).length == 4){
             let emerald_bonus = Math.min(350, Math.floor(userProfile.collection.EMERALD / 3000));
@@ -1472,7 +1463,7 @@ module.exports = {
                 output.display_emoji = userInfo.emoji;
         }
 
-        if(objectPath.has(profile, 'banking.balance'))
+        if(helper.hasPath(profile, 'banking', 'balance'))
             output.bank = profile.banking.balance;
 
         output.guild = await helper.getGuild(profile.uuid, db);
@@ -1613,7 +1604,7 @@ module.exports = {
     getPets: async profile => {
         let output = [];
 
-        if(!objectPath.has(profile, 'pets'))
+        if(!helper.hasPath(profile, 'pets'))
             return output;
 
         for(const pet of profile.pets){
@@ -1858,7 +1849,7 @@ module.exports = {
 async function init(){
     const response = await axios('https://api.hypixel.net/resources/skyblock/collections');
 
-    if(!objectPath.has(response, 'data.collections'))
+    if(!helper.hasPath(response, 'data', 'collections'))
         return;
 
     for(const type in response.data.collections){

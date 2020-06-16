@@ -1,9 +1,9 @@
 const tableify = require('@tillhub/tableify');
 const _ = require('lodash');
 const helper = require('./helper');
+const { getId } = helper;
 const lib = require('./lib');
 const constants = require('./constants');
-const objectPath = require("object-path");
 const cors = require('cors');
 
 function handleError(e, res){
@@ -11,12 +11,6 @@ function handleError(e, res){
 
     res.set('Content-Type', 'text/plain');
     res.status(500).send('Something went wrong');
-}
-
-function getId(item){
-    if(objectPath.has(item, 'tag.ExtraAttributes.id'))
-        return item.tag.ExtraAttributes.id;
-    return "";
 }
 
 module.exports = (app, db) => {
@@ -255,7 +249,7 @@ module.exports = (app, db) => {
 
             const allItems = items.armor.concat(items.inventory, items.talisman_bag, items.enderchest);
 
-            const cakeBags = allItems.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id == 'NEW_YEAR_CAKE_BAG');
+            const cakeBags = allItems.filter(a => helper.getPath(a, 'tag', 'ExtraAttributes', 'id') == 'NEW_YEAR_CAKE_BAG');
 
             if(cakeBags.length == 0){
                 res.set('Content-Type', 'text/plain');
@@ -266,7 +260,7 @@ module.exports = (app, db) => {
                 let cakes = [];
 
                 for(const item of cakeBag.containsItems)
-                    if(objectPath.has(item, 'tag.ExtraAttributes.new_years_cake'))
+                    if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'new_years_cake'))
                         cakes.push({cake: item.tag.ExtraAttributes.new_years_cake});
 
                 cakes = cakes.sort((a, b) => a.cake - b.cake);

@@ -29,7 +29,6 @@ async function main(){
     await renderer.init();
 
     const _ = require('lodash');
-    const objectPath = require('object-path');
     const moment = require('moment-timezone');
     require('moment-duration-format')(moment);
 
