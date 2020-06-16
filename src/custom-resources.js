@@ -1,7 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
 const helper = require('./helper');
-const objectPath = require('object-path');
 const mm = require('micromatch');
 const util = require('util');
 const apng2gif = require("apng2gif-bin");
