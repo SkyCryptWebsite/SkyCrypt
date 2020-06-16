@@ -15,6 +15,15 @@ const Hypixel = axios.create({
     baseURL: 'https://api.hypixel.net/'
 });
 
+function getKey(key){
+    const intKey = new Number(key);
+
+    if(!isNaN(intKey))
+        return intKey;
+
+    return key;
+}
+
 module.exports = {
     hasPath: (obj, ...keys) => {
         if(obj == null)
@@ -23,7 +32,7 @@ module.exports = {
         let loc = obj;
 
         for(let i = 0; i < keys.length; i++){
-            loc = loc[keys[i]];
+            loc = loc[getKey(keys[i])];
 
             if(loc === undefined)
                 return false;
@@ -39,7 +48,7 @@ module.exports = {
         let loc = obj;
 
         for(let i = 0; i < keys.length; i++){
-            loc = loc[keys[i]];
+            loc = loc[getKey(keys[i])];
 
             if(loc === undefined)
                 return undefined;
@@ -49,10 +58,17 @@ module.exports = {
     },
 
     setPath: (obj, value, ...keys) => {
-        for(let i = 0; i < keys.length - 1; i++)
-            obj = obj[path[i]];
+        let i;
+        let loc = obj || {};
 
-        obj[path[i]] = value;
+        for(i = 0; i < keys.length - 1; i++){
+            if(!loc.hasOwnProperty(keys[i]))
+                loc[keys[i]] = {};
+
+            loc = loc[keys[i]];
+        }
+
+        loc[keys[i]] = value;
     },
 
     getId: item => {
