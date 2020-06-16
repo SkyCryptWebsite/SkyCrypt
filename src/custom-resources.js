@@ -1,6 +1,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const helper = require('./helper');
+const objectPath = require('object-path');
 const mm = require('micromatch');
 const util = require('util');
 const apng2gif = require("apng2gif-bin");
@@ -403,10 +404,12 @@ module.exports = {
                     if(value.endsWith('.*'))
                         value = value.substring(0, value.length - 2);
 
-                    if(!helper.hasPath(item, 'tag', value))
+                    if(!helper.hasPath(item, 'tag', ...value.split('.')))
                         continue;
 
-                    let matchValues = helper.getPath(item, 'tag', value);
+                    let matchValues = helper.getPath(item, 'tag', ...value.split('.'));
+
+                    console.log(matchValues);
 
                     if(!Array.isArray(matchValues))
                         matchValues = [matchValues];

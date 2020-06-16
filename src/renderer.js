@@ -5,6 +5,7 @@ Hat layers, transparency and shading added by me
 
 const { createCanvas, loadImage } = require('canvas');
 const css = require('css');
+const helper = require('./helper');
 const path = require('path');
 const customResources = require('./custom-resources');
 const fs = require('fs-extra');
