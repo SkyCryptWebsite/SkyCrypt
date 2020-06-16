@@ -41,8 +41,8 @@ async function main(){
     await db
     .collection('profileStore')
     .createIndex(
-        { api: 1 },
-        { partialFilterExpression: { api: true } }
+        { apis: 1 },
+        { partialFilterExpression: { apis: true } }
     );
 
     await db
@@ -200,7 +200,7 @@ async function main(){
         { profile_id: 1 },
         { unique: true }
     );
-    
+
     mongo.close();
 }
 
