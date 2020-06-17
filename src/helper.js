@@ -818,7 +818,7 @@ module.exports = {
                 profiles: storeProfiles
             };
 
-            if(Date.now() - userProfile.last_save < 5 * 60 * 1000){
+            if(options.updateArea && Date.now() - userProfile.last_save < 5 * 60 * 1000){
                 try{
                     const statusResponse = await Hypixel.get('status', { params: { uuid: paramPlayer, key: credentials.hypixel_api_key }});
 
