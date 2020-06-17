@@ -668,7 +668,7 @@ module.exports = {
                     return await Hypixel.get('skyblock/profiles', {
                         params
                     });
-                }, { retries: 3 });
+                }, { retries: 2 });
 
                 const { data } = response;
 
@@ -680,7 +680,7 @@ module.exports = {
 
                 allSkyBlockProfiles = data.profiles;
             }catch(e){
-                if(helper.hasPath(e, 'response', 'data', 'cause'))
+                if(module.exports.hasPath(e, 'response', 'data', 'cause'))
                     throw `Hypixel API Error: ${e.response.data.cause}.`;
 
                 throw e;
