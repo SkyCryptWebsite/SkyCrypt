@@ -625,7 +625,7 @@ module.exports = {
                 paramPlayer = uuid;
             }catch(e){
                 console.error(e);
-                throw "Failed resolving username to UUID.";
+                throw e;
             }
         }
 
@@ -663,21 +663,28 @@ module.exports = {
         if(!options.cacheOnly &&
         (Date.now() - lastCachedSave > 190 * 1000 && Date.now() - lastCachedSave < 300 * 1000
         || Date.now() - profileObject.last_update >= 300 * 1000)){
-            response = await retry(async () => {
-                return await Hypixel.get('skyblock/profiles', {
-                    params
-                });
-            }, { retries: 3 });
+            try{
+                response = await retry(async () => {
+                    return await Hypixel.get('skyblock/profiles', {
+                        params
+                    });
+                }, { retries: 3 });
 
-            const { data } = response;
+                const { data } = response;
 
-            if(!data.success)
-                throw "Request to Hypixel API failed. Please try again!";
+                if(!data.success)
+                    throw "Request to Hypixel API failed. Please try again!";
 
-            if(data.profiles == null)
-                throw "Player has no SkyBlock profiles.";
+                if(data.profiles == null)
+                    throw "Player has no SkyBlock profiles.";
 
-            allSkyBlockProfiles = data.profiles;
+                allSkyBlockProfiles = data.profiles;
+            }catch(e){
+                if(helper.hasPath(e, 'response', 'data', 'cause'))
+                    throw `Hypixel API Error: ${e.response.data.cause}.`;
+
+                throw e;
+            }
         }
 
         if(allSkyBlockProfiles.length == 0)
