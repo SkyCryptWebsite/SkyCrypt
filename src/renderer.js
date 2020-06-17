@@ -263,8 +263,16 @@ module.exports = {
     renderItem: async (skyblockId, query, db) => {
         let item = { Damage: 0, id: -1 };
 
-        if(skyblockId)
+        if(skyblockId){
             skyblockId = skyblockId.replace(".gif", "");
+
+            if(skyblockId.includes(':')){
+                const split = skyblockId.split(":");
+
+                skyblockId = split[0];
+                query.damage = new Number(split[1]);
+            }
+        }
 
         if(skyblockId)
             item = Object.assign(item, await db
