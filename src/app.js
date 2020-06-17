@@ -146,7 +146,7 @@ async function main(){
             console.error(e);
 
             res.render('index', {
-                error: `Error: ${e}`,
+                error: e,
                 player: playerUsername,
                 extra: await getExtra(),
                 helper,
