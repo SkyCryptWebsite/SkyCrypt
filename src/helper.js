@@ -227,19 +227,22 @@ module.exports = {
         return playerObject;
     },
 
-    getGuild: async (uuid, db) => {
+    getGuild: async (uuid, db, cacheOnly = false) => {
         const guildMember = await db
         .collection('guildMembers')
         .findOne({ uuid: uuid });
 
         let guildObject = null;
 
+        if(cacheOnly && guildMember === null)
+            return null;
+
         if(guildMember !== null && guildMember.gid !== null)
             guildObject = await db
             .collection('guilds')
             .findOne({ gid: guildMember.gid });
 
-        if(guildMember !== null && guildMember.gid !== null && (guildObject === null || (Date.now() - guildMember.last_updated) < 3600 * 1000)){
+        if(cacheOnly || (guildMember !== null && guildMember.gid !== null && (guildObject === null || (Date.now() - guildMember.last_updated) < 3600 * 1000))){
             if(guildMember.gid !== null){
                 const guildObject = await db
                 .collection('guilds')
@@ -603,17 +606,17 @@ module.exports = {
         return rank;
     },
 
-    getRank: async (uuid, db) => {
+    getRank: async (uuid, db, cacheOnly = false) => {
         let hypixelPlayer = await db
         .collection('hypixelPlayers')
         .findOne({ uuid });
 
         let updateRank;
 
-        if(hypixelPlayer === null || (+new Date() - hypixelPlayer.last_updated) > 3600 * 1000)
+        if(cacheOnly === false && (hypixelPlayer === null || (+new Date() - hypixelPlayer.last_updated) > 3600 * 1000))
             updateRank = module.exports.updateRank(uuid, db);
 
-        if(hypixelPlayer === null)
+        if(cacheOnly === false && hypixelPlayer === null)
             hypixelPlayer = await updateRank;
 
         return hypixelPlayer;

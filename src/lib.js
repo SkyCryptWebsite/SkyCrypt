@@ -1014,7 +1014,7 @@ module.exports = {
         let output = {};
 
         const userProfile = profile.members[profile.uuid];
-        const hypixelProfile = await helper.getRank(profile.uuid, db);
+        const hypixelProfile = await helper.getRank(profile.uuid, db, cacheOnly);
 
         output.stats = Object.assign({}, constants.base_stats);
 
@@ -1466,7 +1466,7 @@ module.exports = {
         if(helper.hasPath(profile, 'banking', 'balance'))
             output.bank = profile.banking.balance;
 
-        output.guild = await helper.getGuild(profile.uuid, db);
+        output.guild = await helper.getGuild(profile.uuid, db, cacheOnly);
 
         output.rank_prefix = helper.renderRank(hypixelProfile);
         output.purse = userProfile.coin_purse || 0;
