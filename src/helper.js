@@ -249,7 +249,7 @@ module.exports = {
                 .findOne({ gid: guildMember.gid });
 
                 guildObject.level = module.exports.getGuildLevel(guildObject.exp);
-                guildObject.gmUser = await module.exports.uuidToUsername(guildObject.gm, db);
+                guildObject.gmUser = await module.exports.uuidToUsername(guildObject.gm, db, cacheOnly);
                 guildObject.rank = guildMember.rank;
 
                 return guildObject;
