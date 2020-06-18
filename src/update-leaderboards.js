@@ -55,8 +55,8 @@ async function main(){
 
             console.log('trying to update', uuid);
 
-            helper.getProfile(db, uuid, null, { cacheOnly: true }).then(async response => {
-                const { profile, allProfiles } = response;
+            try{
+                const { profile, allProfiles } = await helper.getProfile(db, uuid, null, { cacheOnly: true });
 
                 const memberProfiles = [];
 
@@ -95,7 +95,9 @@ async function main(){
                     await redisClient.zadd([key, values[key], uuid]);
 
                 console.log('updated leaderboard for', uuid);
-            }).catch(console.error);
+            }catch(e){
+                console.error(e);
+            }
         }
 
         console.log('done updating leaderboards');

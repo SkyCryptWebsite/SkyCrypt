@@ -185,6 +185,8 @@ module.exports = {
 
         if(user)
             return { uuid, display_name: user.username, emoji: user.emoji, skin_data };
+        else
+            return { uuid, display_name: uuid, skin_data };
     },
 
     usernameToUuid: async (username, db) => {
