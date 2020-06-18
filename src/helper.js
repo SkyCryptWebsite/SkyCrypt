@@ -78,7 +78,7 @@ module.exports = {
         return "";
     },
 
-    uuidToUsername: async (uuid, db) => {
+    uuidToUsername: async (uuid, db, cacheOnly = false) => {
         let output;
 
         let user = await db
@@ -96,7 +96,7 @@ module.exports = {
                 skin_data.capeurl = user.capeurl;
         }
 
-        if(user === null || (+new Date() - user.date) > 4000 * 1000){
+        if(cacheOnly === false && (user === null || (+new Date() - user.date) > 4000 * 1000)){
             let profileRequest = axios(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`, { timeout: 2000 });
 
             profileRequest.then(async response => {

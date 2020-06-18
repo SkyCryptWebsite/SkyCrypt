@@ -221,7 +221,7 @@ async function getBackpackContents(arraybuf){
 
 
 // Process items returned by API
-async function getItems(base64, customTextures = false, packs){
+async function getItems(base64, customTextures = false, packs, cacheOnly = false){
     // API stores data as base64 encoded gzipped Minecraft NBT data
     let buf = Buffer.from(base64, 'base64');
 
@@ -363,7 +363,7 @@ async function getItems(base64, customTextures = false, packs){
                     item.lore += "<br>";
 
                 const spawnedFor = item.tag.ExtraAttributes.spawnedFor.replace(/\-/g, '');
-                const spawnedForUser = await helper.uuidToUsername(spawnedFor, db);
+                const spawnedForUser = await helper.uuidToUsername(spawnedFor, db, cacheOnly);
 
                 item.lore += "<br>" + helper.renderLore(`§7By: §c<a href="/stats/${spawnedFor}">${spawnedForUser.display_name}</a>`);
             }
@@ -641,7 +641,7 @@ module.exports = {
         return output;
     },
 
-    getItems: async (profile, customTextures = false, packs) => {
+    getItems: async (profile, customTextures = false, packs, cacheOnly = false) => {
         const output = {};
 
         // Process inventories returned by API
@@ -1010,7 +1010,7 @@ module.exports = {
         return output;
     },
 
-    getStats: async (db, profile, allProfiles, items) => {
+    getStats: async (db, profile, allProfiles, items, cacheOnly = false) => {
         let output = {};
 
         const userProfile = profile.members[profile.uuid];
@@ -1435,7 +1435,7 @@ module.exports = {
         output.kills = killsDeaths.filter(a => a.type == 'kills').sort((a, b) => b.amount - a.amount);
         output.deaths = killsDeaths.filter(a => a.type == 'deaths').sort((a, b) => b.amount - a.amount);
 
-        const playerObject = await helper.uuidToUsername(profile.uuid, db);
+        const playerObject = await helper.uuidToUsername(profile.uuid, db, cacheOnly);
 
         output.display_name = playerObject.display_name;
 
@@ -1448,7 +1448,7 @@ module.exports = {
 
         const members = await Promise
         .all(
-            Object.keys(profile.members).map(a => helper.uuidToUsername(a, db))
+            Object.keys(profile.members).map(a => helper.uuidToUsername(a, db, cacheOnly))
         );
 
         if(userInfo){
@@ -1773,7 +1773,7 @@ module.exports = {
         return Object.values(highestRarity).reduce((a, b) => a + b, 0);
     },
 
-    getCollections: async (uuid, profile) => {
+    getCollections: async (uuid, profile, cacheOnly = false) => {
         const output = {};
 
         const userProfile = profile.members[uuid];
@@ -1785,7 +1785,7 @@ module.exports = {
 
         (
             await Promise.all(
-                Object.keys(profile.members).map(a => helper.uuidToUsername(a, db))
+                Object.keys(profile.members).map(a => helper.uuidToUsername(a, db, cacheOnly))
             )
         ).forEach(a => members[a.uuid] = a.display_name);
 
