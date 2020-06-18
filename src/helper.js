@@ -622,7 +622,7 @@ module.exports = {
         return hypixelPlayer;
     },
 
-    getProfile: async (db, paramPlayer, paramProfile, options = {}) => {
+    getProfile: async (db, paramPlayer, paramProfile, options = { cacheOnly: false }) => {
         if(paramPlayer.length != 32){
             try{
                 const { uuid } = await module.exports.usernameToUuid(paramPlayer, db);
