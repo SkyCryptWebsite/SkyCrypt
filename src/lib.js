@@ -1485,7 +1485,7 @@ module.exports = {
         output.members = members.filter(a => a.uuid != profile.uuid);
         output.minions = module.exports.getMinions(profile.members);
         output.minion_slots = module.exports.getMinionSlots(output.minions);
-        output.collections = await module.exports.getCollections(profile.uuid, profile);
+        output.collections = await module.exports.getCollections(profile.uuid, profile, cacheOnly);
         output.bag_sizes = await module.exports.getBagSizes(output.collections);
         output.social = hypixelProfile.socials;
 
