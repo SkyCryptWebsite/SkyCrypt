@@ -1797,29 +1797,83 @@ a.additional-player-stat:hover{
     left: 0;
     right: 0;
     height: 50px;
+}
+
+.inventory-header-line{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 2px;
     background-color: #A6145D;
+    z-index: 2;
+}
+
+#inventory_header .inventory-tabs-container{
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 #inventory_header .inventory-tab{
+    position: relative;
     display: inline-block;
-    line-height: 50px;
-    padding-right: 14px;
+    height: 100%;
+    padding-right: 10px;
+    margin-left: 5px;
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
     cursor: pointer;
-    padding-left: 14px;
-    transition: background-color .2s;
+    transition: color .1s;
     cursor: pointer;
+    vertical-align: top;
+    color: rgba(255,255,255,0.8);
 }
 
-#inventory_header .inventory-tab:hover{
-    background-color: rgba(255, 255, 255, 0.15);
+#inventory_header .inventory-tab:first-child{
+    margin-left: 10px;
+}
+
+#inventory_header .inventory-tab::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    top: 100%;
+    background-color: #A6145D;
+    border-radius: 4px;
+    transition: height .1s, top .1s;
 }
 
 #inventory_header .inventory-tab.active-inventory{
-    background-color: rgba(0, 0, 0, 0.1);
     cursor: default;
+    color: rgba(255,255,255,1);
+}
+
+#inventory_header .inventory-tab.active-inventory::after, #inventory_header .inventory-tab:hover::after{
+    height: 8px;
+    top: calc(100% - 3px);
+}
+
+#inventory_header .inventory-tab-icon{
+    position: absolute;
+    left: 3px;
+    top: 50%;
+    display: inline-block;
+    transform: scale(0.25) translateY(-50%);
+    transform-origin: top left;
+}
+
+#inventory_header .inventory-tab .inventory-tab-name{
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 38px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-top: -2px;
 }
 
 .inventory-view{
@@ -2912,13 +2966,13 @@ html.no-webp #error_box_wrapper{
     }
 
     #inventory_header{
-        height: 45px;
+        height: 50px;
         padding-top: 5px;
     }
 
     #inventory_header .inventory-tab{
         border-radius: 1000px;
-        line-height: 40px;
+        height: 38px;
         margin-left: 10px;
     }
 
@@ -2935,6 +2989,10 @@ html.no-webp #error_box_wrapper{
 
     #inventory_header{
         text-align: center;
+    }
+
+    #inventory_header .inventory-header-line{
+        bottom: 10px;
     }
 
     .inventory-view{
@@ -3031,7 +3089,14 @@ html.no-webp #error_box_wrapper{
 
     #inventory_header{
         white-space: nowrap;
+    }
+
+    #inventory_header .inventory-tabs-container{
         overflow-x: scroll;
+    }
+
+    #inventory_header .inventory-tab:last-child{
+        margin-right: 20px;
     }
 
     .sea-creatures{
