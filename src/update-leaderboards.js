@@ -10,6 +10,7 @@ async function main(){
 
     const helper = require('./helper');
     const lib = require('./lib');
+    const constants = require('./constants');
 
     const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
@@ -57,42 +58,95 @@ async function main(){
 
             try{
                 const { profile, allProfiles } = await helper.getProfile(db, uuid, null, { cacheOnly: true });
+                const hypixelProfile = await helper.getRank(uuid, db, true);
 
                 const memberProfiles = [];
 
                 for(const singleProfile of allProfiles){
                     const userProfile = singleProfile.members[uuid];
 
-                    const items = await lib.getItems(userProfile, false, null, true);
-                    const data = await lib.getStats(db, singleProfile, allProfiles, items, true);
+                    userProfile.levels = await lib.getLevels(userProfile, hypixelProfile);
+
+                    let totalSlayerXp = 0;
+
+                    for(const slayer in userProfile.slayer_bosses)
+                        totalSlayerXp += userProfile.slayer_bosses[slayer].xp;
+
+                    userProfile.slayer_xp = totalSlayerXp;
+
+                    for(const mountMob in constants.mob_mounts){
+                        const mounts = constants.mob_mounts[mountMob];
+
+                        userProfile.stats[`kills_${mountMob}`] = 0;
+                        userProfile.stats[`deaths_${mountMob}`] = 0;
+
+                        for(const mount of mounts){
+                            userProfile.stats[`kills_${mountMob}`] += userProfile.stats[`kills_${mount}`] || 0;
+                            userProfile.stats[`deaths_${mountMob}`] += userProfile.stats[`deaths_${mount}`] || 0;
+
+                            delete userProfile.stats[`kills_${mount}`];
+                            delete userProfile.stats[`deaths_${mount}`]
+                        }
+                    }
 
                     memberProfiles.push({
-                        raw: userProfile,
-                        items,
-                        data
+                        profile_id: singleProfile.profile_id,
+                        data: userProfile
                     });
                 }
 
                 const values = {};
 
-                values['fairy_souls'] = getMax(memberProfiles, 'data', 'fairy_souls', 'collected');
-                values['average_level'] = getMax(memberProfiles, 'data', 'average_level');
-                values['total_skill_xp'] = getMax(memberProfiles, 'data', 'total_skill_xp');
+                values['fairy_souls'] = getMax(memberProfiles, 'data', 'fairy_souls_collected');
+                values['average_level'] = getMax(memberProfiles, 'data', 'levels', 'average_level');
+                values['total_skill_xp'] = getMax(memberProfiles, 'data', 'levels', 'total_skill_xp');
 
-                for(const skill of getAllKeys(allProfiles, 'data.levels'))
-                    values[`skill_${skill}_xp`] = getMax(memberProfiles, 'data', 'levels', skill, 'xp');
+                for(const skill of getAllKeys(allProfiles, 'data', 'levels', 'levels'))
+                    values[`skill_${skill}_xp`] = getMax(memberProfiles, 'data', 'levels', 'levels', skill, 'xp');
 
                 values['slayer_xp'] = getMax(memberProfiles, 'data', 'slayer_xp');
 
-                for(const slayer of getAllKeys(allProfiles, 'data', 'slayers')){
-                    for(const tier of getAllKeys(allProfiles, 'data', 'slayers', slayer, 'kills'))
-                        values[`${slayer}_slayer_boss_kills_tier_${tier}`] = getMax(memberProfiles, 'data', 'slayers', slayer, 'kills', tier);
+                for(const slayer of getAllKeys(memberProfiles, 'data', 'slayer_bosses')){
+                    for(const key of getAllKeys(memberProfiles, 'data', 'slayer_bosses', slayer)){
+                        if(!key.startsWith('boss_kills_tier'))
+                            continue;
 
-                    values[`${slayer}_slayer_xp`]
+                        const tier = key.split("_").pop();
+
+                        values[`${slayer}_slayer_boss_kills_tier_${tier}`] = getMax(memberProfiles, 'data', 'slayer_bosses', slayer, key);
+                    }
+
+                    values[`${slayer}_slayer_xp`] = getMax(memberProfiles, 'data', 'slayer_bosses', slayer, 'xp');
                 }
 
-                for(const key in values)
-                    await redisClient.zadd([key, values[key], uuid]);
+                for(const item of getAllKeys(memberProfiles, 'data', 'collection'))
+                    values[`collection_${item.toLowerCase()}`] = getMax(memberProfiles, 'data', 'collection', item);
+
+                for(const stat of getAllKeys(memberProfiles, 'data', 'stats'))
+                    values[stat] = getMax(memberProfiles, 'data', 'stats', stat);
+
+                for(const key in values){
+                    if(values[key] == null)
+                        continue;
+
+                    await redisClient.zadd([`lb_${key}`, values[key], uuid]);
+                }
+
+                for(const singleProfile of allProfiles){
+                    if(helper.hasPath(singleProfile, 'banking', 'balance'))
+                        await redisClient.zadd([`lb_bank`, singleProfile.banking.balance, singleProfile.profile_id]);
+
+                    const minionCrafts = [];
+
+                    for(const member of singleProfile.members)
+                        minionCrafts.push(member.crafted_generators);
+
+                    await redisClient.zadd([
+                        `lb_unique_minions`,
+                        _.uniq(minionCrafts).length,
+                        singleProfile.profile_id
+                    ]);
+                }
 
                 console.log('updated leaderboard for', uuid);
             }catch(e){
