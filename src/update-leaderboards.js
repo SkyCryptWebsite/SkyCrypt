@@ -89,6 +89,16 @@ async function main(){
                         }
                     }
 
+                    userProfile.pet_score = 0;
+
+                    const maxPetRarity = {};
+
+                    for(const pet of userProfile.pets)
+                        maxPetRarity[pet.type] = Math.max(maxPetRarity[pet.type] || 0, constants.pet_value[pet.tier.toLowerCase()]);
+
+                    for(const key in maxPetRarity)
+                        userProfile.pet_score += maxPetRarity[key];
+
                     memberProfiles.push({
                         profile_id: singleProfile.profile_id,
                         data: userProfile
@@ -96,6 +106,8 @@ async function main(){
                 }
 
                 const values = {};
+
+                values['pet_score'] = getMax(memberProfiles, 'data', 'pet_score');
 
                 values['fairy_souls'] = getMax(memberProfiles, 'data', 'fairy_souls_collected');
                 values['average_level'] = getMax(memberProfiles, 'data', 'levels', 'average_level');
