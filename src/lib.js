@@ -1010,29 +1010,8 @@ module.exports = {
         return output;
     },
 
-    getStats: async (db, profile, allProfiles, items, cacheOnly = false) => {
+    getLevels: async (userProfile, hypixelProfile) => {
         let output = {};
-
-        const userProfile = profile.members[profile.uuid];
-        const hypixelProfile = await helper.getRank(profile.uuid, db, cacheOnly);
-
-        output.stats = Object.assign({}, constants.base_stats);
-
-        if(isNaN(userProfile.fairy_souls_collected))
-            userProfile.fairy_souls_collected = 0;
-
-        output.fairy_bonus = {};
-
-        if(userProfile.fairy_exchanges > 0){
-            let fairyBonus = getBonusStat(userProfile.fairy_exchanges * 5, 'fairy_souls', Math.max(...Object.keys(constants.bonus_stats.fairy_souls)), 5);
-            output.fairy_bonus = Object.assign({}, fairyBonus);
-
-            // Apply fairy soul bonus
-            for(let stat in fairyBonus)
-                output.stats[stat] += fairyBonus[stat];
-        }
-
-        output.fairy_souls = { collected: userProfile.fairy_souls_collected, total: MAX_SOULS, progress: Math.min(userProfile.fairy_souls_collected / MAX_SOULS, 1) };
 
         let skillLevels;
         let totalSkillXp = 0;
@@ -1112,13 +1091,47 @@ module.exports = {
             output.total_skill_xp = totalSkillXp;
         }
 
+        return output;
+    },
+
+    getStats: async (db, profile, allProfiles, items, cacheOnly = false) => {
+        let output = {};
+
+        const userProfile = profile.members[profile.uuid];
+        const hypixelProfile = await helper.getRank(profile.uuid, db, cacheOnly);
+
+        output.stats = Object.assign({}, constants.base_stats);
+
+        if(isNaN(userProfile.fairy_souls_collected))
+            userProfile.fairy_souls_collected = 0;
+
+        output.fairy_bonus = {};
+
+        if(userProfile.fairy_exchanges > 0){
+            let fairyBonus = getBonusStat(userProfile.fairy_exchanges * 5, 'fairy_souls', Math.max(...Object.keys(constants.bonus_stats.fairy_souls)), 5);
+            output.fairy_bonus = Object.assign({}, fairyBonus);
+
+            // Apply fairy soul bonus
+            for(let stat in fairyBonus)
+                output.stats[stat] += fairyBonus[stat];
+        }
+
+        output.fairy_souls = { collected: userProfile.fairy_souls_collected, total: MAX_SOULS, progress: Math.min(userProfile.fairy_souls_collected / MAX_SOULS, 1) };
+
+        const { levels, average_level, average_level_no_progress, total_skill_xp } = await module.exports.getLevels(userProfile, hypixelProfile);
+
+        output.levels = levels;
+        output.average_level = average_level;
+        output.average_level_no_progress = average_level_no_progress;
+        output.total_skill_xp = total_skill_xp;
+
         output.skill_bonus = {};
 
-        for(let skill in skillLevels){
-            if(skillLevels[skill].level == 0)
+        for(let skill in levels){
+            if(levels[skill].level == 0)
                 continue;
 
-            const skillBonus = getBonusStat(skillLevels[skill].level || skillLevels[skill], `${skill}_skill`, 50, 1);
+            const skillBonus = getBonusStat(levels[skill].level || levels[skill], `${skill}_skill`, 50, 1);
 
             output.skill_bonus[skill] = Object.assign({}, skillBonus);
 
