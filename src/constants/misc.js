@@ -118,6 +118,17 @@ module.exports = {
         4: 50000
     },
 
+    mob_mounts: {
+        sea_emperor: [
+            "guardian_emperor",
+            "skeleton_emperor"
+        ],
+        monster_of_the_deep: [
+            "zombie_deep",
+            "chicken_deep"
+        ]
+    },
+
     mob_names: {
         unburried_zombie: "Crypt Ghoul",
         zealot_enderman: "Zealot",
