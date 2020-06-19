@@ -69,23 +69,27 @@ async function main(){
 
                     let totalSlayerXp = 0;
 
-                    for(const slayer in userProfile.slayer_bosses)
-                        totalSlayerXp += userProfile.slayer_bosses[slayer].xp;
+                    userProfile.slayer_xp = 0;
 
-                    userProfile.slayer_xp = totalSlayerXp;
+                    if(userProfile.hasOwnProperty('slayer_bosses')){
+                        for(const slayer in userProfile.slayer_bosses)
+                            totalSlayerXp += userProfile.slayer_bosses[slayer].xp;
 
-                    for(const mountMob in constants.mob_mounts){
-                        const mounts = constants.mob_mounts[mountMob];
+                        userProfile.slayer_xp = totalSlayerXp;
 
-                        userProfile.stats[`kills_${mountMob}`] = 0;
-                        userProfile.stats[`deaths_${mountMob}`] = 0;
+                        for(const mountMob in constants.mob_mounts){
+                            const mounts = constants.mob_mounts[mountMob];
 
-                        for(const mount of mounts){
-                            userProfile.stats[`kills_${mountMob}`] += userProfile.stats[`kills_${mount}`] || 0;
-                            userProfile.stats[`deaths_${mountMob}`] += userProfile.stats[`deaths_${mount}`] || 0;
+                            userProfile.stats[`kills_${mountMob}`] = 0;
+                            userProfile.stats[`deaths_${mountMob}`] = 0;
 
-                            delete userProfile.stats[`kills_${mount}`];
-                            delete userProfile.stats[`deaths_${mount}`]
+                            for(const mount of mounts){
+                                userProfile.stats[`kills_${mountMob}`] += userProfile.stats[`kills_${mount}`] || 0;
+                                userProfile.stats[`deaths_${mountMob}`] += userProfile.stats[`deaths_${mount}`] || 0;
+
+                                delete userProfile.stats[`kills_${mount}`];
+                                delete userProfile.stats[`deaths_${mount}`]
+                            }
                         }
                     }
 
@@ -93,11 +97,13 @@ async function main(){
 
                     const maxPetRarity = {};
 
-                    for(const pet of userProfile.pets)
-                        maxPetRarity[pet.type] = Math.max(maxPetRarity[pet.type] || 0, constants.pet_value[pet.tier.toLowerCase()]);
+                    if(Array.isArray(userProfile.pets)){
+                        for(const pet of userProfile.pets)
+                            maxPetRarity[pet.type] = Math.max(maxPetRarity[pet.type] || 0, constants.pet_value[pet.tier.toLowerCase()]);
 
-                    for(const key in maxPetRarity)
-                        userProfile.pet_score += maxPetRarity[key];
+                        for(const key in maxPetRarity)
+                            userProfile.pet_score += maxPetRarity[key];
+                    }
 
                     memberProfiles.push({
                         profile_id: singleProfile.profile_id,
