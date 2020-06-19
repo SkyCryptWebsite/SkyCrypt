@@ -619,6 +619,10 @@ module.exports = {
         if(cacheOnly === false && hypixelPlayer === null)
             hypixelPlayer = await updateRank;
 
+        if(hypixelPlayer === null){
+            hypixelPlayer = { achievements: {} };
+        }
+
         return hypixelPlayer;
     },
 
