@@ -119,7 +119,7 @@ async function main(){
                 values['average_level'] = getMax(memberProfiles, 'data', 'levels', 'average_level');
                 values['total_skill_xp'] = getMax(memberProfiles, 'data', 'levels', 'total_skill_xp');
 
-                for(const skill of getAllKeys(allProfiles, 'data', 'levels', 'levels'))
+                for(const skill of getAllKeys(memberProfiles, 'data', 'levels', 'levels'))
                     values[`skill_${skill}_xp`] = getMax(memberProfiles, 'data', 'levels', 'levels', skill, 'xp');
 
                 values['slayer_xp'] = getMax(memberProfiles, 'data', 'slayer_xp');
