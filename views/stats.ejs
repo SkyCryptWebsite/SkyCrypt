@@ -1735,6 +1735,10 @@ twitterDescription += '. Click to view more stats!'
                 <div class="stat-anchor"></div>
                 <div class="stat-header"><span>Top Kills & Deaths</span></div>
                 <div class="stat-content">
+                    <p class="stat-raw-values">
+                        <span class="stat-name">Total Kills: </span><span class="stat-value"><%= calculated.kills.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span><br>
+                        <span class="stat-name">Total Deaths: </span><span class="stat-value"><%= calculated.deaths.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span>
+                    </p>
                     <div class="kills-deaths-container">
                         <div class="narrow-info-container top-kills">
                             <div class="narrow-info-header">Kills</div>
