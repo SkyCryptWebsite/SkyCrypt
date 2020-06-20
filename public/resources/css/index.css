@@ -914,10 +914,17 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     background-color: rgba(255,255,255,0);
     transition: background-color .2s;
     box-sizing: border-box;
+    min-width: 200px;
 }
 
 #other_players .goto:hover, #other_profiles .goto:hover{
     background-color: rgba(255,255,255,0.2);
+}
+
+#other_players .goto-last-played, #other_profiles .goto-last-played{
+    font-size: 15px;
+    color: rgba(255,255,255,0.8);
+    line-height: normal;
 }
 
 #additional_player_stats{
@@ -2849,6 +2856,10 @@ html.no-webp #error_box_wrapper{
 
     #other_players, #other_profiles{
         font-size: 17px;
+    }
+
+    #other_players .goto-last-played, #other_profiles .goto-last-played{
+        font-size: 12px;
     }
 
     #other_players{

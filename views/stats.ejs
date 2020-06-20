@@ -951,7 +951,7 @@ twitterDescription += '. Click to view more stats!'
                 <% if(calculated.display_emoji){ %><%- extra.twemoji.parse(calculated.display_emoji) %><% } %>
                 <div id="other_players">
                     <% calculated.members.forEach(member => { %>
-                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %>"><%= member.display_name %><% if(member.emoji){ %> <%- extra.twemoji.parse(member.emoji) %><% } %></a>
+                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %>"><%= member.display_name %><% if(member.emoji){ %> <%- extra.twemoji.parse(member.emoji) %><% } %><div class="goto-last-played"><%= member.last_updated.text %></div></a>
                     <% }); %>
                 </div>
             </div><span class="text-on"> on </span><div tabindex="2" id="stats_for_profile">
@@ -959,7 +959,7 @@ twitterDescription += '. Click to view more stats!'
                 <div id="other_profiles">
                     <% for(let profile_id in calculated.profiles){ %>
                         <% let _profile = calculated.profiles[profile_id]; %>
-                        <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %>"><%= _profile.cute_name %></a>
+                        <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %>"><%= _profile.cute_name %><div class="goto-last-played"><%= _profile.last_updated.text %></div></a>
                     <% } %>
                 </div>
             </div>
