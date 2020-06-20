@@ -1476,6 +1476,15 @@ module.exports = {
                 output.display_emoji = userInfo.emoji;
         }
 
+        for(const member of members){
+            const last_updated = profile.members[member.uuid].last_save;
+
+            member.last_updated = {
+                unix: last_updated,
+                text: (Date.now() - last_updated) < 7 * 60 * 1000 ? 'currently online' : `last played ${moment(last_updated).fromNow()}`
+            };
+        }
+
         if(helper.hasPath(profile, 'banking', 'balance'))
             output.bank = profile.banking.balance;
 
@@ -1492,7 +1501,11 @@ module.exports = {
         for(const sbProfile of allProfiles.filter(a => a.profile_id != profile.profile_id))
             output.profiles[sbProfile.profile_id] = {
                 profile_id: sbProfile.profile_id,
-                cute_name: sbProfile.cute_name
+                cute_name: sbProfile.cute_name,
+                last_updated: {
+                    unix: sbProfile.members[profile.uuid].last_save,
+                    text: `last played ${moment(sbProfile.members[profile.uuid].last_save).fromNow()}`
+                }
             };
 
         output.members = members.filter(a => a.uuid != profile.uuid);
