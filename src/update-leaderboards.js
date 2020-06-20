@@ -156,8 +156,9 @@ async function main(){
 
                     const minionCrafts = [];
 
-                    for(const member in singleProfile.members && Array.isArray(singleProfile.members[member].crafted_generators))
-                        minionCrafts.push(...singleProfile.members[member].crafted_generators);
+                    for(const member in singleProfile.members)
+                        if(Array.isArray(singleProfile.members[member].crafted_generators))
+                            minionCrafts.push(...singleProfile.members[member].crafted_generators);
 
                     await redisClient.zadd([
                         `lb_unique_minions`,
