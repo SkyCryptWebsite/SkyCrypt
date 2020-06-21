@@ -19,43 +19,15 @@ async function main(){
 
     const redisClient = redis.createClient();
 
-    function getMinMax(profiles, min, ...path){
-        let output = null;
-
-        const compareValues = profiles.map(a => helper.getPath(a, ...path)).filter(a => a !== undefined);
-
-        if(compareValues.length == 0)
-            return output;
-
-        if(min)
-            output = Math.min(...compareValues);
-        else
-            output = Math.max(...compareValues);
-
-        if(isNaN(output))
-            return null;
-
-        return output;
-    }
-
-    function getMax(profiles, ...path){
-        return getMinMax(profiles, false, ...path);
-    }
-
-    function getMin(profiles, ...path){
-        return getMinMax(profiles, true, ...path);
-    }
-
-    function getAllKeys(profiles, ...path){
-        return _.uniq([].concat(...profiles.map(a => _.keys(helper.getPath(a, ...path)))));
+    function getAverage(scores){
+        return scores.reduce((a, b) => a + b, 0) / scores.length;
     }
 
     async function updateGuildLeaderboards(){
         const keys = await redisClient.keys('lb_*');
+        const guilds = (await db.collection('guilds').find({ members: { $gte: 75 } }).toArray()).map(a => a.gid);
 
-        for await(const doc of db.collection('guilds').find({ members: { $gte: 75 } })){
-            const { gid } = doc;
-
+        for(const gid of guilds){
             console.log('trying to update', gid);
 
             const guildMembers = (await db
@@ -67,10 +39,14 @@ async function main(){
             for(const key of keys){
                 const scores = [];
 
-                for(const member of guildMembers){
-                    const score = await redisClient.zscore([key, member]);
+                const memberScores = await Promise.all(
+                    guildMembers.map(a => redisClient.zscore([key, a]))
+                );
 
-                    if(score == null){
+                for(const memberScore of memberScores){
+                    const score = new Number(memberScore);
+
+                    if(isNaN(score)){
                         if(!key.includes('best_time'))
                             scores.push(0);
 
@@ -83,11 +59,20 @@ async function main(){
                 if(scores.length < 75)
                     continue;
 
-                await redisClient.zadd([
-                    `g${key}`,
-                    scores.reduce((a, v, i) =>(a * i + v) / (i + 1)),
-                    gid
-                ]);
+                const avgScore = getAverage(scores);
+
+                try{
+                    await redisClient.zadd([
+                        `g${key}`,
+                        avgScore,
+                        gid
+                    ]);
+                }catch(e){
+                    console.error(e);
+                    console.log(key);
+                    console.log(scores.join(', '));
+                    console.log('avg:', avgScore);
+                }
             }
 
             console.log('updated guild leaderboard for', gid);
