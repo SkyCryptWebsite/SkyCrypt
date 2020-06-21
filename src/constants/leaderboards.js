@@ -1,4 +1,4 @@
-const default = {
+const defaultOptions = {
     mappedBy: 'uuid',
     sortedBy: -1
 };
@@ -36,7 +36,7 @@ module.exports = {
     leaderboard: name => {
         const lbName = name.split("_").slice(1).join("_");
 
-        const options = Object.assign({}, default);
+        const options = Object.assign({}, defaultOptions);
 
         options['name'] = helper.titleCase(lbName);
 
