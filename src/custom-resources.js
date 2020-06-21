@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const path = require('path');
+const helper = require('./helper');
 const mm = require('micromatch');
-const objectPath = require('object-path');
 const util = require('util');
 const apng2gif = require("apng2gif-bin");
 const escapeRegExp = require('lodash.escaperegexp');
@@ -403,10 +403,10 @@ module.exports = {
                     if(value.endsWith('.*'))
                         value = value.substring(0, value.length - 2);
 
-                    if(!objectPath.has(item, 'tag.' + value))
+                    if(!helper.hasPath(item, 'tag', ...value.split('.')))
                         continue;
 
-                    let matchValues = objectPath.get(item, 'tag.' + value);
+                    let matchValues = helper.getPath(item, 'tag', ...value.split('.'));
 
                     if(!Array.isArray(matchValues))
                         matchValues = [matchValues];
@@ -434,7 +434,7 @@ module.exports = {
         if(!('path' in outputTexture))
             return null;
 
-        if('leather' in outputTexture && objectPath.has(item, 'tag.ExtraAttributes.color')){
+        if('leather' in outputTexture && helper.hasPath(item, 'tag', 'ExtraAttributes', 'color')){
             const color = item.tag.ExtraAttributes.color.split(":");
 
             const leatherBasePath = path.resolve(path.dirname(outputTexture.path), 'leatherCache');

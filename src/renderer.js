@@ -5,9 +5,9 @@ Hat layers, transparency and shading added by me
 
 const { createCanvas, loadImage } = require('canvas');
 const css = require('css');
+const helper = require('./helper');
 const path = require('path');
 const customResources = require('./custom-resources');
-const objectPath = require('object-path');
 const fs = require('fs-extra');
 
 const skew_a = 26 / 45;
@@ -263,8 +263,16 @@ module.exports = {
     renderItem: async (skyblockId, query, db) => {
         let item = { Damage: 0, id: -1 };
 
-        if(skyblockId)
+        if(skyblockId){
             skyblockId = skyblockId.replace(".gif", "");
+
+            if(skyblockId.includes(':')){
+                const split = skyblockId.split(":");
+
+                skyblockId = split[0];
+                query.damage = new Number(split[1]);
+            }
+        }
 
         if(skyblockId)
             item = Object.assign(item, await db
@@ -303,7 +311,7 @@ module.exports = {
         if('name' in item){
             item.tag = {};
 
-            objectPath.set(item, "tag.display.Name", item.name);
+            helper.setPath(item, item.name, 'tag', 'display', 'Name');
         }
 
         if('texture' in item)

@@ -951,7 +951,7 @@ twitterDescription += '. Click to view more stats!'
                 <% if(calculated.display_emoji){ %><%- extra.twemoji.parse(calculated.display_emoji) %><% } %>
                 <div id="other_players">
                     <% calculated.members.forEach(member => { %>
-                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %>"><%= member.display_name %><% if(member.emoji){ %> <%- extra.twemoji.parse(member.emoji) %><% } %></a>
+                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %>"><%= member.display_name %><% if(member.emoji){ %> <%- extra.twemoji.parse(member.emoji) %><% } %><div class="goto-last-played"><%= member.last_updated.text %></div></a>
                     <% }); %>
                 </div>
             </div><span class="text-on"> on </span><div tabindex="2" id="stats_for_profile">
@@ -959,7 +959,7 @@ twitterDescription += '. Click to view more stats!'
                 <div id="other_profiles">
                     <% for(let profile_id in calculated.profiles){ %>
                         <% let _profile = calculated.profiles[profile_id]; %>
-                        <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %>"><%= _profile.cute_name %></a>
+                        <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %>"><%= _profile.cute_name %><div class="goto-last-played"><%= _profile.last_updated.text %></div></a>
                     <% } %>
                 </div>
             </div>
@@ -1423,12 +1423,49 @@ twitterDescription += '. Click to view more stats!'
                     <% }else{ %>
                         <div id="inventory_container">
                             <div id="inventory_header">
-                                <div class="inventory-tab active-inventory" data-inventory-type="inventory">Inventory</div><%
-                                if(items.enderchest.length > 0){ %><div class="inventory-tab" data-inventory-type="enderchest">Ender Chest</div><% }
-                                if(items.talisman_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="talisman_bag">Accessory Bag</div><% }
-                                if(items.potion_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="potion_bag">Potion Bag</div><% }
-                                if(items.fishing_bag.length > 0){ %><div class="inventory-tab" data-inventory-type="fishing_bag">Fishing Bag</div><% }
-                                if(items.quiver.length > 0){ %><div class="inventory-tab" data-inventory-type="quiver">Quiver</div><% } %>
+                                <div class="inventory-header-line"></div>
+                                <div class="inventory-tabs-container">
+                                    <div class="inventory-tab active-inventory" data-inventory-type="inventory">
+                                        <div class="inventory-tab-icon item-icon icon-54_0"></div>
+                                        <div class="inventory-tab-name">Inventory</div>
+                                    </div>
+                                    <%
+
+                                    if(items.enderchest.length > 0){ %>
+                                        <div class="inventory-tab" data-inventory-type="enderchest">
+                                            <div class="inventory-tab-icon item-icon icon-130_0"></div>
+                                            <div class="inventory-tab-name">Ender</div>
+                                        </div>
+                                    <% }
+
+                                    if(items.talisman_bag.length > 0){ %>
+                                        <div class="inventory-tab" data-inventory-type="talisman_bag">
+                                            <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/961a918c0c49ba8d053e522cb91abc74689367b4d8aa06bfc1ba9154730985ff)"></div>
+                                            <div class="inventory-tab-name">Accs</div>
+                                        </div>
+                                    <% }
+
+                                    if(items.potion_bag.length > 0){ %>
+                                        <div class="inventory-tab" data-inventory-type="potion_bag">
+                                            <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/9f8b82427b260d0a61e6483fc3b2c35a585851e08a9a9df372548b4168cc817c)"></div>
+                                            <div class="inventory-tab-name">Potions</div>
+                                        </div>
+                                    <% }
+
+                                    if(items.fishing_bag.length > 0){ %>
+                                        <div class="inventory-tab" data-inventory-type="fishing_bag">
+                                            <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/eb8e297df6b8dffcf135dba84ec792d420ad8ecb458d144288572a84603b1631)"></div>
+                                            <div class="inventory-tab-name">Fishes</div>
+                                        </div>
+                                    <% }
+
+                                    if(items.quiver.length > 0){ %>
+                                        <div class="inventory-tab" data-inventory-type="quiver">
+                                            <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/4cb3acdc11ca747bf710e59f4c8e9b3d949fdd364c6869831ca878f0763d1787)"></div>
+                                            <div class="inventory-tab-name">Quiver</div>
+                                        </div>
+                                    <% } %>
+                                </div>
                             </div>
                             <div class="inventory-view current-inventory" data-inventory-type="inventory">
                                 <% for(let i = 9; i < items.inventory.length; i++){ %>
@@ -1698,6 +1735,10 @@ twitterDescription += '. Click to view more stats!'
                 <div class="stat-anchor"></div>
                 <div class="stat-header"><span>Top Kills & Deaths</span></div>
                 <div class="stat-content">
+                    <p class="stat-raw-values">
+                        <span class="stat-name">Total Kills: </span><span class="stat-value"><%= calculated.kills.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span><br>
+                        <span class="stat-name">Total Deaths: </span><span class="stat-value"><%= calculated.deaths.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span>
+                    </p>
                     <div class="kills-deaths-container">
                         <div class="narrow-info-container top-kills">
                             <div class="narrow-info-header">Kills</div>

@@ -29,7 +29,6 @@ async function main(){
     await renderer.init();
 
     const _ = require('lodash');
-    const objectPath = require('object-path');
     const moment = require('moment-timezone');
     require('moment-duration-format')(moment);
 
@@ -137,9 +136,9 @@ async function main(){
         const playerUsername = paramPlayer.length == 32 ? await helper.uuidToUsername(paramPlayer, db).display_name : paramPlayer;
 
         try{
-            const { profile, allProfiles } = await helper.getProfile(db, paramPlayer, paramProfile);
+            const { profile, allProfiles } = await helper.getProfile(db, paramPlayer, paramProfile, { updateArea: true });
 
-            const items = await lib.getItems(profile.members[profile.uuid], req.query.pack);
+            const items = await lib.getItems(profile.members[profile.uuid], true, req.query.pack);
             const calculated = await lib.getStats(db, profile, allProfiles, items);
 
             res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
@@ -147,7 +146,7 @@ async function main(){
             console.error(e);
 
             res.render('index', {
-                error: `Error: ${e}`,
+                error: e,
                 player: playerUsername,
                 extra: await getExtra(),
                 helper,

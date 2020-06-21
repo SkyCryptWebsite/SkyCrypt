@@ -7,7 +7,6 @@ const _ = require('lodash');
 
 const constants = require('./constants');
 const credentials = require('../credentials.json');
-const objectPath = require('object-path');
 
 const redis = require('redis');
 const redisClient = redis.createClient();
@@ -16,7 +15,69 @@ const Hypixel = axios.create({
     baseURL: 'https://api.hypixel.net/'
 });
 
+function getKey(key){
+    const intKey = new Number(key);
+
+    if(!isNaN(intKey))
+        return intKey;
+
+    return key;
+}
+
 module.exports = {
+    hasPath: (obj, ...keys) => {
+        if(obj == null)
+            return false;
+
+        let loc = obj;
+
+        for(let i = 0; i < keys.length; i++){
+            loc = loc[getKey(keys[i])];
+
+            if(loc === undefined)
+                return false;
+        }
+
+        return true;
+    },
+
+    getPath: (obj, ...keys) => {
+        if(obj == null)
+            return undefined;
+
+        let loc = obj;
+
+        for(let i = 0; i < keys.length; i++){
+            loc = loc[getKey(keys[i])];
+
+            if(loc === undefined)
+                return undefined;
+        }
+
+        return loc;
+    },
+
+    setPath: (obj, value, ...keys) => {
+        let i;
+        let loc = obj || {};
+
+        for(i = 0; i < keys.length - 1; i++){
+            if(!loc.hasOwnProperty(keys[i]))
+                loc[keys[i]] = {};
+
+            loc = loc[keys[i]];
+        }
+
+        loc[keys[i]] = value;
+    },
+
+    getId: item => {
+        if(module.exports.hasPath(item, 'tag', 'ExtraAttributes', 'id'))
+            return item.tag.ExtraAttributes.id;
+
+        return "";
+    },
+
     uuidToUsername: async (uuid, db) => {
         let output;
 
@@ -27,11 +88,11 @@ module.exports = {
 
         let skin_data = { skinurl: 'https://textures.minecraft.net/texture/3b60a1f6d562f52aaebbf1434f1de147933a3affe0e764fa49ea057536623cd3', model: 'slim' };
 
-        if(user && objectPath.has(user, 'skinurl')){
+        if(user && module.exports.hasPath(user, 'skinurl')){
             skin_data.skinurl = user.skinurl;
             skin_data.model = user.model;
 
-            if(objectPath.has(user, 'capeurl'))
+            if(module.exports.hasPath(user, 'capeurl'))
                 skin_data.capeurl = user.capeurl;
         }
 
@@ -49,14 +110,14 @@ module.exports = {
                         date: +new Date()
                     }
 
-                    if(objectPath.has(profileData.textures, 'SKIN')){
+                    if(module.exports.hasPath(profileData.textures, 'SKIN')){
                         const skin = profileData.textures.SKIN;
 
                         skin_data.skinurl = skin.url;
-                        skin_data.model = objectPath.has(skin, 'metadata.model') ? skin.metadata.model : 'regular';
+                        skin_data.model = module.exports.hasPath(skin, 'metadata', 'model') ? skin.metadata.model : 'regular';
                     }
 
-                    if(objectPath.has(profileData.textures, 'CAPE'))
+                    if(module.exports.hasPath(profileData.textures, 'CAPE'))
                         skin_data.capeurl = profileData.textures.CAPE.url;
 
                     updateDoc = Object.assign(updateDoc, skin_data);
@@ -105,14 +166,14 @@ module.exports = {
                 try{
                     let { data } = await profileRequest;
 
-                    if(objectPath.has(data.textures, 'SKIN')){
+                    if(module.exports.hasPath(data.textures, 'SKIN')){
                         const skin = data.textures.SKIN;
 
                         skin_data.skinurl = skin.url;
-                        skin_data.model = objectPath.has(skin, 'metadata.model') ? skin.metadata.model : 'regular';
+                        skin_data.model = module.exports.hasPath(skin, 'metadata', 'model') ? skin.metadata.model : 'regular';
                     }
 
-                    if(objectPath.has(data.textures, 'CAPE'))
+                    if(module.exports.hasPath(data.textures, 'CAPE'))
                         skin_data.capeurl = data.textures.CAPE.url;
 
                     return { uuid, display_name: data.name, skin_data };
@@ -298,26 +359,27 @@ module.exports = {
             const code = part.substring(0, 1);
             const content = part.substring(1);
 
-            if(objectPath.has(constants.minecraft_formatting, code)){
-                const format = constants.minecraft_formatting[code];
+            const format = constants.minecraft_formatting[code];
 
-                if(format.type == 'color'){
-                    for(; spansOpened > 0; spansOpened--)
-                        output += "</span>";
+            if(format === undefined)
+                continue;
 
-                    output += `<span style='${format.css}'>${content}`;
+            if(format.type == 'color'){
+                for(; spansOpened > 0; spansOpened--)
+                    output += "</span>";
 
-                    spansOpened++;
-                }else if(format.type == 'format'){
-                    output += `<span style='${format.css}'>${content}`;
+                output += `<span style='${format.css}'>${content}`;
 
-                    spansOpened++;
-                }else if(format.type == 'reset'){
-                    for(; spansOpened > 0; spansOpened--)
-                        output += "</span>";
+                spansOpened++;
+            }else if(format.type == 'format'){
+                output += `<span style='${format.css}'>${content}`;
 
-                    output += content;
-                }
+                spansOpened++;
+            }else if(format.type == 'reset'){
+                for(; spansOpened > 0; spansOpened--)
+                    output += "</span>";
+
+                output += content;
             }
         }
 
@@ -432,22 +494,22 @@ module.exports = {
             plusColor: null
         };
 
-        if(objectPath.has(player, 'packageRank'))
+        if(module.exports.hasPath(player, 'packageRank'))
             rankName = player.packageRank;
 
-        if(objectPath.has(player, 'newPackageRank'))
+        if(module.exports.hasPath(player, 'newPackageRank'))
             rankName = player.newPackageRank;
 
-        if(objectPath.has(player, 'monthlyPackageRank') && player.monthlyPackageRank != 'NONE')
+        if(module.exports.hasPath(player, 'monthlyPackageRank') && player.monthlyPackageRank != 'NONE')
             rankName = player.monthlyPackageRank;
 
-        if(objectPath.has(player, 'rank') && player.rank != 'NORMAL')
+        if(module.exports.hasPath(player, 'rank') && player.rank != 'NORMAL')
             rankName = player.rank;
 
-        if(objectPath.has(player, 'prefix'))
+        if(module.exports.hasPath(player, 'prefix'))
             rankName = module.exports.getRawLore(player.prefix).replace(/\[|\]/g, '');
 
-        if(objectPath.has(constants.ranks, rankName))
+        if(module.exports.hasPath(constants.ranks, rankName))
             rank = constants.ranks[rankName];
 
         if(!rank)
@@ -457,18 +519,18 @@ module.exports = {
         output.rankColor = rank.color;
 
         if(rankName == 'SUPERSTAR'){
-            if(!objectPath.has(player, 'monthlyRankColor'))
+            if(!module.exports.hasPath(player, 'monthlyRankColor'))
                 player.monthlyRankColor = 'GOLD';
 
             output.rankColor = constants.color_names[player.monthlyRankColor];
         }
 
-        if(objectPath.has(rank, 'plus')){
+        if(module.exports.hasPath(rank, 'plus')){
             output.plusText = rank.plus;
             output.plusColor = output.rankColor;
         }
 
-        if(output.plusText && objectPath.has(player, 'rankPlusColor'))
+        if(output.plusText && module.exports.hasPath(player, 'rankPlusColor'))
             output.plusColor = constants.color_names[player.rankPlusColor];
 
         if(rankName == 'PIG+++')
@@ -517,10 +579,10 @@ module.exports = {
 
             rank = Object.assign(rank, module.exports.parseRank(player));
 
-            if(objectPath.has(player, 'socialMedia.links'))
+            if(module.exports.hasPath(player, 'socialMedia', 'links'))
                 rank.socials = player.socialMedia.links;
 
-            if(objectPath.has(player, 'achievements'))
+            if(module.exports.hasPath(player, 'achievements'))
                 rank.achievements = player.achievements;
         }catch(e){
             console.error(e);
@@ -563,7 +625,7 @@ module.exports = {
                 paramPlayer = uuid;
             }catch(e){
                 console.error(e);
-                throw "Failed resolving username to UUID.";
+                throw e;
             }
         }
 
@@ -604,21 +666,28 @@ module.exports = {
         if(!options.cacheOnly &&
         (Date.now() - lastCachedSave > 190 * 1000 && Date.now() - lastCachedSave < 300 * 1000
         || Date.now() - profileObject.last_update >= 300 * 1000)){
-            response = await retry(async () => {
-                return await Hypixel.get('skyblock/profiles', {
-                    params
-                });
-            }, { retries: 3 });
+            try{
+                response = await retry(async () => {
+                    return await Hypixel.get('skyblock/profiles', {
+                        params
+                    });
+                }, { retries: 2 });
 
-            const { data } = response;
+                const { data } = response;
 
-            if(!data.success)
-                throw "Request to Hypixel API failed. Please try again!";
+                if(!data.success)
+                    throw "Request to Hypixel API failed. Please try again!";
 
-            if(data.profiles == null)
-                throw "Player has no SkyBlock profiles.";
+                if(data.profiles == null)
+                    throw "Player has no SkyBlock profiles.";
 
-            allSkyBlockProfiles = data.profiles;
+                allSkyBlockProfiles = data.profiles;
+            }catch(e){
+                if(module.exports.hasPath(e, 'response', 'data', 'cause'))
+                    throw `Hypixel API Error: ${e.response.data.cause}.`;
+
+                throw e;
+            }
         }
 
         if(allSkyBlockProfiles.length == 0)
@@ -626,7 +695,7 @@ module.exports = {
 
         for(const profile of allSkyBlockProfiles){
             for(const member in profile.members)
-                if(!objectPath.has(profile.members[member], 'last_save'))
+                if(!module.exports.hasPath(profile.members[member], 'last_save'))
                     delete profile.members[member];
 
             profile.uuid = paramPlayer;
@@ -671,7 +740,7 @@ module.exports = {
             let memberCount = 0;
 
             for(const member in profile.members){
-                if(objectPath.has(profile.members[member], 'last_save'))
+                if(module.exports.hasPath(profile.members[member], 'last_save'))
                     memberCount++;
             }
 
@@ -706,7 +775,7 @@ module.exports = {
                     members: _profile.members
                 };
 
-                if(objectPath.has(_profile, 'banking'))
+                if(module.exports.hasPath(_profile, 'banking'))
                     insertCache.banking = _profile.banking;
 
                 await db
@@ -718,7 +787,7 @@ module.exports = {
                 );
             }
 
-            if(objectPath.has(userProfile, 'last_save'))
+            if(module.exports.hasPath(userProfile, 'last_save'))
                 storeProfiles[_profile.profile_id] = {
                     profile_id: _profile.profile_id,
                     cute_name: _profile.cute_name,
@@ -732,7 +801,7 @@ module.exports = {
 
             let userProfile = _profile.members[paramPlayer];
 
-            if(objectPath.has(userProfile, 'last_save') && userProfile.last_save > highest){
+            if(module.exports.hasPath(userProfile, 'last_save') && userProfile.last_save > highest){
                 profile = _profile;
                 highest = userProfile.last_save;
                 profileId = _profile.profile_id;
@@ -744,13 +813,13 @@ module.exports = {
 
         const userProfile = profile.members[paramPlayer];
 
-        if(profileObject && objectPath.has(profileObject, 'current_area'))
+        if(profileObject && module.exports.hasPath(profileObject, 'current_area'))
             userProfile.current_area = profileObject.current_area;
 
         if(response && response.request.fromCache !== true){
-            const apisEnabled = objectPath.has(userProfile, 'inv_contents')
+            const apisEnabled = module.exports.hasPath(userProfile, 'inv_contents')
             && Object.keys(userProfile).filter(a => a.startsWith('experience_skill_')).length > 0
-            && objectPath.has(userProfile, 'collection')
+            && module.exports.hasPath(userProfile, 'collection')
 
             const insertProfileStore = {
                 last_update: new Date(),
@@ -759,7 +828,7 @@ module.exports = {
                 profiles: storeProfiles
             };
 
-            if(Date.now() - userProfile.last_save < 5 * 60 * 1000){
+            if(options.updateArea && Date.now() - userProfile.last_save < 5 * 60 * 1000){
                 try{
                     const statusResponse = await Hypixel.get('status', { params: { uuid: paramPlayer, key: credentials.hypixel_api_key }});
 

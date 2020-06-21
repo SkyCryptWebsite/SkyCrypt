@@ -4,9 +4,9 @@ const nbt = require('prismarine-nbt');
 const util = require('util');
 const mcData = require("minecraft-data")("1.8.9");
 const _ = require('lodash');
-const objectPath = require("object-path");
 const constants = require('./constants');
 const helper = require('./helper');
+const { getId } = helper;
 const axios = require('axios');
 const moment = require('moment');
 const { v4 } = require('uuid');
@@ -218,14 +218,10 @@ async function getBackpackContents(arraybuf){
     return items;
 }
 
-function getId(item){
-    if(objectPath.has(item, 'tag.ExtraAttributes.id'))
-        return item.tag.ExtraAttributes.id;
-    return "";
-}
+
 
 // Process items returned by API
-async function getItems(base64, packs){
+async function getItems(base64, customTextures = false, packs){
     // API stores data as base64 encoded gzipped Minecraft NBT data
     let buf = Buffer.from(base64, 'base64');
 
@@ -236,25 +232,20 @@ async function getItems(base64, packs){
 
     // Check backpack contents and add them to the list of items
     for(const [index, item] of items.entries()){
-        if(objectPath.has(item, 'tag.display.Name') && (item.tag.display.Name.endsWith('Backpack') || item.tag.display.Name.endsWith('New Year Cake Bag'))){
-
-            let keys = Object.keys(item.tag.ExtraAttributes);
-
+        if(helper.hasPath(item, 'tag', 'display', 'Name') && (item.tag.display.Name.endsWith('Backpack') || item.tag.display.Name.endsWith('New Year Cake Bag'))){
             let backpackData;
 
-            keys.forEach(key => {
+            for(const key of Object.keys(item.tag.ExtraAttributes))
                 if(key.endsWith('backpack_data') || key == 'new_year_cake_bag_data')
                     backpackData = item.tag.ExtraAttributes[key];
-            });
 
             if(!Array.isArray(backpackData))
                 continue;
 
             let backpackContents = await getBackpackContents(backpackData);
 
-            backpackContents.forEach(backpackItem => {
+            for(const backpackItem of backpackContents)
                 backpackItem.backpackIndex = index;
-            });
 
             item.containsItems = [];
 
@@ -264,34 +255,35 @@ async function getItems(base64, packs){
 
     let index = 0;
 
-    for(let item of items){
+    for(const item of items){
         // Set custom texture for colored leather armor
-        if(objectPath.has(item, 'id') && item.id >= 298 && item.id <= 301){
-            let types
+        if(helper.hasPath(item, 'id') && item.id >= 298 && item.id <= 301){
             let color = [149, 94, 59];
 
-            if(objectPath.has(item, 'tag.ExtraAttributes.color'))
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'color'))
                 color = item.tag.ExtraAttributes.color.split(":");
 
-            let type = ["leather_helmet", "leather_chestplate", "leather_leggings", "leather_boots"][item.id - 298].replace('_', '/');
+            const type = ["leather_helmet", "leather_chestplate", "leather_leggings", "leather_boots"][item.id - 298].replace('_', '/');
 
             item.texture_path = `/${type}/${color.join(',')}`;
         }
 
         // Set raw display name without color and formatting codes
-        if(objectPath.has(item, 'tag.display.Name'))
+        if(helper.hasPath(item, 'tag', 'display', 'Name'))
             item.display_name = helper.getRawLore(item.tag.display.Name);
 
-        if(objectPath.has(item, 'display_name'))
+        if(helper.hasPath(item, 'display_name'))
             if(item.display_name == 'Water Bottle')
                 item.Damage = 17;
 
         // Resolve skull textures to their image path
-        if(objectPath.has(item, 'tag.SkullOwner.Properties.textures') && Array.isArray(item.tag.SkullOwner.Properties.textures) && item.tag.SkullOwner.Properties.textures.length > 0){
+        if(helper.hasPath(item, 'tag', 'SkullOwner', 'Properties', 'textures')
+        && Array.isArray(item.tag.SkullOwner.Properties.textures)
+        && item.tag.SkullOwner.Properties.textures.length > 0){
             try{
-                let json = JSON.parse(Buffer.from(item.tag.SkullOwner.Properties.textures[0].Value, 'base64').toString());
-                let url = json.textures.SKIN.url;
-                let uuid = url.split("/").pop();
+                const json = JSON.parse(Buffer.from(item.tag.SkullOwner.Properties.textures[0].Value, 'base64').toString());
+                const url = json.textures.SKIN.url;
+                const uuid = url.split("/").pop();
 
                 item.texture_path = `/head/${uuid}?v6`;
             }catch(e){
@@ -299,19 +291,21 @@ async function getItems(base64, packs){
             }
         }
 
-        const customTexture = await customResources.getTexture(item, false, packs);
+        if(customTextures){
+            const customTexture = await customResources.getTexture(item, false, packs);
 
-        if(customTexture){
-            item.animated = customTexture.animated;
-            item.texture_path = '/' + customTexture.path;
-            item.texture_pack = customTexture.pack.config;
-            item.texture_pack.base_path = '/' + path.relative(path.resolve(__dirname, '..', 'public'), customTexture.pack.basePath);
+            if(customTexture){
+                item.animated = customTexture.animated;
+                item.texture_path = '/' + customTexture.path;
+                item.texture_pack = customTexture.pack.config;
+                item.texture_pack.base_path = '/' + path.relative(path.resolve(__dirname, '..', 'public'), customTexture.pack.basePath);
+            }
         }
 
         let lore_raw;
 
         // Set HTML lore to be displayed on the website
-        if(objectPath.has(item, 'tag.display.Lore')){
+        if(helper.hasPath(item, 'tag', 'display', 'Lore')){
             lore_raw = item.tag.display.Lore;
 
             item.lore = '';
@@ -328,7 +322,7 @@ async function getItems(base64, packs){
 
             let hasAnvilUses = false;
 
-            if(objectPath.has(item, 'tag.ExtraAttributes.anvil_uses')){
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'anvil_uses')){
                 let { anvil_uses, timestamp } = item.tag.ExtraAttributes;
 
                 let hot_potato_count = 0;
@@ -344,10 +338,11 @@ async function getItems(base64, packs){
                 }
             }
 
-            if(objectPath.has(item, 'tag.ExtraAttributes.timestamp')){
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp')){
                 item.lore += "<br>";
 
                 const timestamp = item.tag.ExtraAttributes.timestamp;
+
                 let obtainmentDate;
 
                 if(!isNaN(timestamp))
@@ -363,8 +358,8 @@ async function getItems(base64, packs){
                 item.lore += "<br>" + helper.renderLore(`§7Obtained: §c${obtainmentDate.format("D MMM YYYY")}`);
             }
 
-            if(objectPath.has(item, 'tag.ExtraAttributes.spawnedFor')){
-                if(!objectPath.has(item, 'tag.ExtraAttributes.timestamp'))
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'spawnedFor')){
+                if(!helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp'))
                     item.lore += "<br>";
 
                 const spawnedFor = item.tag.ExtraAttributes.spawnedFor.replace(/\-/g, '');
@@ -457,14 +452,10 @@ async function getItems(base64, packs){
                 item.stats.speed = 5;
         }
 
-        // Add snow canon and blaster to weapons
-        if(objectPath.has(item, 'tag.ExtraAttributes.id') && ['SNOW_CANNON', 'SNOW_BLASTER'].includes(item.tag.ExtraAttributes.id))
-            item.type = 'bow';
-
         // Workaround for detecting item types if another language is set by the player on Hypixel
-        if(objectPath.has(item, 'tag.ExtraAttributes.id') && item.tag.ExtraAttributes.id != 'ENCHANTED_BOOK'
+        if(getId(item) != 'ENCHANTED_BOOK'
         && !constants.item_types.includes(item.type)){
-            if(objectPath.has(item, 'tag.ExtraAttributes.enchantments')){
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'enchantments')){
                 if('sharpness' in item.tag.ExtraAttributes.enchantments
                 || 'crticial' in item.tag.ExtraAttributes.enchantments
                 || 'ender_slayer' in item.tag.ExtraAttributes.enchantments
@@ -502,10 +493,10 @@ async function getItems(base64, packs){
             }
         }
 
-        if(!objectPath.has(item, 'display_name') && objectPath.has(item, 'id')){
-            let vanillaItem = mcData.items[item.id];
+        if(!helper.hasPath(item, 'display_name') && helper.hasPath(item, 'id')){
+            const vanillaItem = mcData.items[item.id];
 
-            if(vanillaItem && objectPath.has(vanillaItem, 'displayName'))
+            if(helper.hasPath(vanillaItem, 'displayName'))
                 item.display_name = vanillaItem.displayName;
         }
     }
@@ -650,19 +641,19 @@ module.exports = {
         return output;
     },
 
-    getItems: async (profile, packs) => {
+    getItems: async (profile, customTextures = false, packs) => {
         const output = {};
 
         // Process inventories returned by API
-        let armor = 'inv_armor' in profile ? await getItems(profile.inv_armor.data, packs) : [];
-        let inventory = 'inv_contents' in profile ? await getItems(profile.inv_contents.data, packs) : [];
-        let wardrobe_inventory = 'wardrobe_contents' in profile ? await getItems(profile.wardrobe_contents.data, packs) : [];
-        let enderchest = 'ender_chest_contents' in profile ? await getItems(profile.ender_chest_contents.data, packs) : [];
-        let talisman_bag = 'talisman_bag' in profile ? await getItems(profile.talisman_bag.data, packs) : [];
-        let fishing_bag = 'fishing_bag' in profile ? await getItems(profile.fishing_bag.data, packs) : [];
-        let quiver = 'quiver' in profile ? await getItems(profile.quiver.data, packs) : [];
-        let potion_bag = 'potion_bag' in profile ? await getItems(profile.potion_bag.data, packs) : [];
-        let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data, packs) : [];
+        let armor = 'inv_armor' in profile ? await getItems(profile.inv_armor.data, customTextures, packs) : [];
+        let inventory = 'inv_contents' in profile ? await getItems(profile.inv_contents.data, customTextures, packs) : [];
+        let wardrobe_inventory = 'wardrobe_contents' in profile ? await getItems(profile.wardrobe_contents.data, customTextures, packs) : [];
+        let enderchest = 'ender_chest_contents' in profile ? await getItems(profile.ender_chest_contents.data, customTextures, packs) : [];
+        let talisman_bag = 'talisman_bag' in profile ? await getItems(profile.talisman_bag.data, customTextures, packs) : [];
+        let fishing_bag = 'fishing_bag' in profile ? await getItems(profile.fishing_bag.data, customTextures, packs) : [];
+        let quiver = 'quiver' in profile ? await getItems(profile.quiver.data, customTextures, packs) : [];
+        let potion_bag = 'potion_bag' in profile ? await getItems(profile.potion_bag.data, customTextures, packs) : [];
+        let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data, customTextures, packs) : [];
 
         const wardrobeColumns = wardrobe_inventory.length / 4;
 
@@ -729,7 +720,7 @@ module.exports = {
             if(talismans.filter(a => !a.isInactive && getId(a) == id).length > 0)
                 insertTalisman.isInactive = true;
 
-            if(talismans.filter(a =>a.tag.ExtraAttributes.id == id).length > 0)
+            if(talismans.filter(a => getId(a) == id).length > 0)
                 insertTalisman.isUnique = false;
 
             talismans.push(insertTalisman);
@@ -747,7 +738,7 @@ module.exports = {
             if(talismans.filter(a => !a.isInactive && getId(a) == id).length > 0)
                 insertTalisman.isInactive = true;
 
-            if(talismans.filter(a =>a.tag.ExtraAttributes.id == id).length > 0)
+            if(talismans.filter(a => getId(a) == id).length > 0)
                 insertTalisman.isUnique = false;
 
             talismans.push(insertTalisman);
@@ -765,7 +756,7 @@ module.exports = {
             if(talismans.filter(a => !a.isInactive && getId(a) == id).length > 0)
                 insertTalisman.isInactive = true;
 
-            if(talismans.filter(a => a.tag.ExtraAttributes.id == id).length > 0)
+            if(talismans.filter(a => getId(a) == id).length > 0)
                 insertTalisman.isUnique = false;
 
             talismans.push(insertTalisman);
@@ -779,7 +770,7 @@ module.exports = {
                 items = item.containsItems.slice(0);
 
             for(const talisman of items.filter(a => a.type == 'accessory')){
-                const id = talisman.tag.ExtraAttributes.id;
+                const id = getId(talisman);
 
                 const insertTalisman = Object.assign({ isUnique: true, isInactive: true }, talisman);
 
@@ -836,14 +827,14 @@ module.exports = {
 
         // Add New Year Cake Bag health bonus (1 per unique cake)
         for(let talisman of talismans){
-            let id = talisman.tag.ExtraAttributes.id;
+            let id = getId(talisman);
             let cakes = [];
 
-            if(id == 'NEW_YEAR_CAKE_BAG' && objectPath.has(talisman, 'containsItems') && Array.isArray(talisman.containsItems)){
+            if(id == 'NEW_YEAR_CAKE_BAG' && helper.hasPath(talisman, 'containsItems') && Array.isArray(talisman.containsItems)){
                 talisman.stats.health = 0;
 
-                for(let item of talisman.containsItems){
-                    if(objectPath.has(item, 'tag.ExtraAttributes.new_years_cake') && !cakes.includes(item.tag.ExtraAttributes.new_years_cake)){
+                for(const item of talisman.containsItems){
+                    if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'new_years_cake') && !cakes.includes(item.tag.ExtraAttributes.new_years_cake)){
                         talisman.stats.health++;
                         cakes.push(item.tag.ExtraAttributes.new_years_cake);
                     }
@@ -855,7 +846,7 @@ module.exports = {
         for(const talisman of talismans){
             talisman.base_name = talisman.display_name;
 
-            if(objectPath.has(talisman, 'tag.ExtraAttributes.modifier')){
+            if(helper.hasPath(talisman, 'tag', 'ExtraAttributes', 'modifier')){
                 talisman.base_name = talisman.display_name.split(" ").slice(1).join(" ");
                 talisman.reforge = talisman.tag.ExtraAttributes.modifier
             }
@@ -951,13 +942,13 @@ module.exports = {
             armor.forEach(armorPiece => {
                 let name = armorPiece.display_name;
 
-                if(objectPath.has(armorPiece, 'tag.ExtraAttributes.modifier'))
+                if(helper.hasPath(armorPiece, 'tag', 'ExtraAttributes', 'modifier'))
                     name = name.split(" ").slice(1).join(" ");
 
                 armorPiece.armor_name = name;
             });
 
-            if(armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.modifier')
+            if(armor.filter(a => helper.hasPath(a, 'tag', 'ExtraAttributes', 'modifier')
             && a.tag.ExtraAttributes.modifier == armor[0].tag.ExtraAttributes.modifier).length == 4)
                 reforgeName = armor[0].display_name.split(" ")[0]
 
@@ -1097,6 +1088,7 @@ module.exports = {
                 fishing: hypixelProfile.achievements.skyblock_angler || 0,
                 enchanting: hypixelProfile.achievements.skyblock_augmentation || 0,
                 alchemy: hypixelProfile.achievements.skyblock_concoctor || 0,
+                taming: hypixelProfile.achievements.skyblock_domesticator || 0,
             };
 
             output.levels = {};
@@ -1142,13 +1134,13 @@ module.exports = {
 
             let slayers = {};
 
-            if(objectPath.has(userProfile, 'slayer_bosses')){
+            if(helper.hasPath(userProfile, 'slayer_bosses')){
                 for(const slayerName in userProfile.slayer_bosses){
                     const slayer = userProfile.slayer_bosses[slayerName];
 
                     slayers[slayerName] = {};
 
-                    if(!objectPath.has(slayer, 'claimed_levels'))
+                    if(!helper.hasPath(slayer, 'claimed_levels'))
                         continue;
 
                     slayers[slayerName].level = getSlayerLevel(slayer, slayerName);
@@ -1178,7 +1170,7 @@ module.exports = {
             output.slayer_xp = 0;
 
             for(const slayer in slayers){
-                if(!objectPath.has(slayers[slayer], 'level.currentLevel'))
+                if(!helper.hasPath(slayers[slayer], 'level', 'currentLevel'))
                     continue;
 
                 const slayerBonus = getBonusStat(slayers[slayer].level.currentLevel, `${slayer}_slayer`, 9, 1);
@@ -1220,7 +1212,7 @@ module.exports = {
         }
 
         // Apply all harp bonuses when Melody's Hair has been acquired
-        if(items.talismans.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id == 'MELODY_HAIR').length == 1)
+        if(items.talismans.filter(a => getId(a) == 'MELODY_HAIR').length == 1)
             output.stats.intelligence += 26;
 
         for(const stat in output.pet_score_bonus)
@@ -1232,13 +1224,13 @@ module.exports = {
             output.stats[stat] += output.pet_bonus[stat];
 
         // Apply Lapis Armor full set bonus of +60 HP
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('LAPIS_ARMOR_')).length == 4)
+        if(items.armor.filter(a => getId(a).startsWith('LAPIS_ARMOR_')).length == 4)
             items.armor[0].stats.health = (items.armor[0].stats.health || 0) + 60;
 
         // Apply Emerald Armor full set bonus of +1 HP and +1 Defense per 3000 emeralds in collection with a maximum of 300
-        if(objectPath.has(userProfile, 'collection.EMERALD')
+        if(helper.hasPath(userProfile, 'collection', 'EMERALD')
         && !isNaN(userProfile.collection.EMERALD)
-        && items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('EMERALD_ARMOR_')).length == 4){
+        && items.armor.filter(a => getId(a).startsWith('EMERALD_ARMOR_')).length == 4){
             let emerald_bonus = Math.min(350, Math.floor(userProfile.collection.EMERALD / 3000));
 
             items.armor[0].stats.health += emerald_bonus;
@@ -1246,15 +1238,15 @@ module.exports = {
         }
 
         // Apply Fairy Armor full set bonus of +10 Speed
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('FAIRY_')).length == 4)
+        if(items.armor.filter(a => getId(a).startsWith('FAIRY_')).length == 4)
             items.armor[0].stats.speed += 10;
 
         // Apply Speedster Armor full set bonus of +20 Speed
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SPEEDSTER_')).length == 4)
+        if(items.armor.filter(a => getId(a).startsWith('SPEEDSTER_')).length == 4)
             items.armor[0].stats.speed += 20;
 
         // Apply Young Dragon Armor full set bonus of +70 Speed
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('YOUNG_DRAGON_')).length == 4)
+        if(items.armor.filter(a => getId(a).startsWith('YOUNG_DRAGON_')).length == 4)
             items.armor[0].stats.speed += 70;
 
         // Apply basic armor stats
@@ -1287,13 +1279,13 @@ module.exports = {
         });
 
         // Apply Mastiff Armor full set bonus of +50 HP per 1% Crit Damage
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4){
+        if(items.armor.filter(a => getId(a).startsWith('MASTIFF_')).length == 4){
             output.stats.health += 50 * output.stats.crit_damage;
             items.armor[0].stats.health += 50 * output.stats.crit_damage;
         }
 
         // Apply +5 Defense and +5 Strength of Day/Night Crystal only if both are owned as this is required for a permanent bonus
-        if(items.talismans.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && !a.isInactive && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(a.tag.ExtraAttributes.id)).length == 2){
+        if(items.talismans.filter(a => !a.isInactive && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(getId(a))).length == 2){
             output.stats.defense += 5;
             output.stats.strength += 5;
 
@@ -1304,7 +1296,7 @@ module.exports = {
         }
 
         // Apply Obsidian Chestplate bonus of +1 Speed per 20 Obsidian in inventory
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id == ('OBSIDIAN_CHESTPLATE')).length == 1){
+        if(items.armor.filter(a => getId(a) == 'OBSIDIAN_CHESTPLATE').length == 1){
             let obsidian = 0;
 
             for(let item of items.inventory){
@@ -1315,13 +1307,13 @@ module.exports = {
             output.stats.speed += Math.floor(obsidian / 20);
         }
 
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('CHEAP_TUXEDO_')).length == 3)
+        if(items.armor.filter(a => getId(a).startsWith('CHEAP_TUXEDO_')).length == 3)
             output.stats['health'] = 75;
 
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('FANCY_TUXEDO_')).length == 3)
+        if(items.armor.filter(a => getId(a).startsWith('FANCY_TUXEDO_')).length == 3)
             output.stats['health'] = 150;
 
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('ELEGANT_TUXEDO_')).length == 3)
+        if(items.armor.filter(a => getId(a).startsWith('ELEGANT_TUXEDO_')).length == 3)
             output.stats['health'] = 250;
 
         output.weapon_stats = {};
@@ -1335,21 +1327,21 @@ module.exports = {
             }
 
             // Add crit damage from held weapon to Mastiff Armor full set bonus
-            if(item.stats.crit_damage > 0 && items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('MASTIFF_')).length == 4)
+            if(item.stats.crit_damage > 0 && items.armor.filter(a => getId(a).startsWith('MASTIFF_')).length == 4)
                 stats.health += 50 * item.stats.crit_damage;
 
             // Apply Superior Dragon Armor full set bonus of 5% stat increase
-            if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4)
+            if(items.armor.filter(a => getId(a).startsWith('SUPERIOR_DRAGON_')).length == 4)
                 for(let stat in stats)
                     stats[stat] = Math.floor(stats[stat] * 1.05);
 
-            if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('CHEAP_TUXEDO_')).length == 3)
+            if(items.armor.filter(a => getId(a).startsWith('CHEAP_TUXEDO_')).length == 3)
                 stats['health'] = 75;
 
-            if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('FANCY_TUXEDO_')).length == 3)
+            if(items.armor.filter(a => getId(a).startsWith('FANCY_TUXEDO_')).length == 3)
                 stats['health'] = 150;
 
-            if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('ELEGANT_TUXEDO_')).length == 3)
+            if(items.armor.filter(a => getId(a).startsWith('ELEGANT_TUXEDO_')).length == 3)
                 stats['health'] = 250;
 
             output.weapon_stats[item.itemId] = stats;
@@ -1364,7 +1356,7 @@ module.exports = {
         const superiorBonus = Object.assign({}, constants.stat_template);
 
         // Apply Superior Dragon Armor full set bonus of 5% stat increase
-        if(items.armor.filter(a => objectPath.has(a, 'tag.ExtraAttributes.id') && a.tag.ExtraAttributes.id.startsWith('SUPERIOR_DRAGON_')).length == 4){
+        if(items.armor.filter(a => getId(a).startsWith('SUPERIOR_DRAGON_')).length == 4){
             for(const stat in output.stats){
                 superiorBonus[stat] = Math.floor(output.stats[stat] * 0.05);
             }
@@ -1471,7 +1463,16 @@ module.exports = {
                 output.display_emoji = userInfo.emoji;
         }
 
-        if(objectPath.has(profile, 'banking.balance'))
+        for(const member of members){
+            const last_updated = profile.members[member.uuid].last_save;
+
+            member.last_updated = {
+                unix: last_updated,
+                text: (Date.now() - last_updated) < 7 * 60 * 1000 ? 'currently online' : `last played ${moment(last_updated).fromNow()}`
+            };
+        }
+
+        if(helper.hasPath(profile, 'banking', 'balance'))
             output.bank = profile.banking.balance;
 
         output.guild = await helper.getGuild(profile.uuid, db);
@@ -1487,7 +1488,11 @@ module.exports = {
         for(const sbProfile of allProfiles.filter(a => a.profile_id != profile.profile_id))
             output.profiles[sbProfile.profile_id] = {
                 profile_id: sbProfile.profile_id,
-                cute_name: sbProfile.cute_name
+                cute_name: sbProfile.cute_name,
+                last_updated: {
+                    unix: sbProfile.members[profile.uuid].last_save,
+                    text: `last played ${moment(sbProfile.members[profile.uuid].last_save).fromNow()}`
+                }
             };
 
         output.members = members.filter(a => a.uuid != profile.uuid);
@@ -1612,7 +1617,7 @@ module.exports = {
     getPets: async profile => {
         let output = [];
 
-        if(!objectPath.has(profile, 'pets'))
+        if(!helper.hasPath(profile, 'pets'))
             return output;
 
         for(const pet of profile.pets){
@@ -1857,7 +1862,7 @@ module.exports = {
 async function init(){
     const response = await axios('https://api.hypixel.net/resources/skyblock/collections');
 
-    if(!objectPath.has(response, 'data.collections'))
+    if(!helper.hasPath(response, 'data', 'collections'))
         return;
 
     for(const type in response.data.collections){
