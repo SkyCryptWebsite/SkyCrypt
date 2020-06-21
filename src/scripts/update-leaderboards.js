@@ -8,9 +8,9 @@ async function main(){
     const _ = require('lodash');
     const redis = require('async-redis');
 
-    const helper = require('./helper');
-    const lib = require('./lib');
-    const constants = require('./constants');
+    const helper = require('./../helper');
+    const lib = require('./../lib');
+    const constants = require('./../constants');
 
     const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
