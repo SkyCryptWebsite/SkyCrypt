@@ -38,7 +38,7 @@ module.exports = {
 
         const options = Object.assign({}, defaultOptions);
 
-        options['name'] = helper.titleCase(lbName);
+        options['name'] = helper.titleCase(lbName.split("_").join(" "));
 
         if(overrides.hasOwnProperty(lbName))
             for(const key in overrides[lbName])
