@@ -567,6 +567,9 @@ module.exports = {
             }
         }
 
+        if(paramProfile)
+            paramProfile = paramProfile.toLowerCase();
+
         const params = {
             key: credentials.hypixel_api_key,
             uuid: paramPlayer
