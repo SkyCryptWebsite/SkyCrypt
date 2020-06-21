@@ -42,7 +42,7 @@ module.exports = {
 
         if(overrides.hasOwnProperty(lbName))
             for(const key in overrides[lbName])
-                options[key] = overrides[key];
+                options[key] = overrides[lbName][key];
 
         if(lbName.startsWith('collection_')){
             const collectionName = lbName.split("_").slice(1).join("_").toUpperCase();
