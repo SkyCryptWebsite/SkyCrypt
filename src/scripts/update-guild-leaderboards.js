@@ -37,6 +37,11 @@ async function main(){
             .map(a => a.uuid);
 
             for(const key of keys){
+                const options = constants.leaderboard(key);
+
+                if(options.mappedBy != 'uuid')
+                    continue;
+
                 const scores = [];
 
                 const memberScores = await Promise.all(
@@ -55,6 +60,9 @@ async function main(){
 
                     scores.push(score);
                 }
+
+                if(key == 'lb_bank')
+                    console.log(scores.join(", "));
 
                 if(scores.length < 75)
                     continue;
