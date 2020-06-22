@@ -214,22 +214,29 @@ async function init(){
                     continue;
 
                 let regex = properties[property];
+                let pattern = false;
+                let nocase = false;
 
                 if(regex.startsWith('ipattern:')){
-                    regex = new RE2(mm.makeRe(regex.substring(9), { nocase: true }));
+                    regex = regex.substring(9);
+                    pattern = true;
+                    nocase = true;
                 }else if(regex.startsWith('pattern:')){
-                    regex = new RE2(mm.makeRe(regex.substring(9)));
+                    regex = regex.substring(9);
+                    pattern = true;
                 }else if(regex.startsWith('iregex:')){
-                    regex = new RE2(regex.substring(7), 'i');
+                    regex = new RegExp(regex.substring(7), 'i');
                 }else if(regex.startsWith('regex:')){
-                    regex = new RE2(regex.substring(6));
+                    regex = new RegExp(regex.substring(6));
                 }else{
-                    regex = new RE2(escapeRegExp(regex));
+                    regex = new RegExp(escapeRegExp(regex));
                 }
 
                 texture.match.push({
                     value: property.substring(4),
-                    regex
+                    regex,
+                    pattern,
+                    nocase
                 });
             }
 
@@ -399,7 +406,7 @@ module.exports = {
                 let matches = 0;
 
                 for(const match of texture.match){
-                    let {value, regex} = match;
+                    let {value, regex, pattern, nocase} = match;
 
                     if(value.endsWith('.*'))
                         value = value.substring(0, value.length - 2);
@@ -413,8 +420,13 @@ module.exports = {
                         matchValues = [matchValues];
 
                     for(const matchValue of matchValues){
-                        if(!regex.test(matchValue.toString().replace(removeFormatting, '')))
-                            continue;
+                        if(pattern){
+                            if(!mm.isMatch(matchValue.toString().replace(removeFormatting, ''), regex, { nocase }))
+                                continue;
+                        }else{
+                            if(!regex.test(matchValue.toString().replace(removeFormatting, '')))
+                                continue;
+                        }
 
                         matches++;
                     }
