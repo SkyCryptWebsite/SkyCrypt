@@ -6,7 +6,7 @@ const retry = require('async-retry');
 const _ = require('lodash');
 
 const constants = require('./constants');
-const credentials = require('../credentials.json');
+const credentials = require('./../credentials.json');
 
 const redis = require('redis');
 const redisClient = redis.createClient();
