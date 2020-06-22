@@ -184,6 +184,10 @@ module.exports = {
                 {
                     tier: 13,
                     slots: 39
+                },
+                {
+                    tier: 14,
+                    slots: 45
                 }
             ]
         },
