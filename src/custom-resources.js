@@ -214,29 +214,22 @@ async function init(){
                     continue;
 
                 let regex = properties[property];
-                let pattern = false;
-                let nocase = false;
 
                 if(regex.startsWith('ipattern:')){
-                    regex = regex.substring(9);
-                    pattern = true;
-                    nocase = true;
+                    regex = new RE2(mm.makeRe(regex.substring(9), { nocase: true }));
                 }else if(regex.startsWith('pattern:')){
-                    regex = regex.substring(9);
-                    pattern = true;
+                    regex = new RE2(mm.makeRe(regex.substring(9)));
                 }else if(regex.startsWith('iregex:')){
-                    regex = new RegExp(regex.substring(7), 'i');
+                    regex = new RE2(regex.substring(7), 'i');
                 }else if(regex.startsWith('regex:')){
-                    regex = new RegExp(regex.substring(6));
+                    regex = new RE2(regex.substring(6));
                 }else{
-                    regex = new RegExp(escapeRegExp(regex));
+                    regex = new RE2(escapeRegExp(regex));
                 }
 
                 texture.match.push({
                     value: property.substring(4),
-                    regex,
-                    pattern,
-                    nocase
+                    regex
                 });
             }
 
@@ -406,7 +399,7 @@ module.exports = {
                 let matches = 0;
 
                 for(const match of texture.match){
-                    let {value, regex, pattern, nocase} = match;
+                    let {value, regex} = match;
 
                     if(value.endsWith('.*'))
                         value = value.substring(0, value.length - 2);
@@ -420,13 +413,8 @@ module.exports = {
                         matchValues = [matchValues];
 
                     for(const matchValue of matchValues){
-                        if(pattern){
-                            if(!mm.isMatch(matchValue.toString().replace(removeFormatting, ''), regex, { nocase }))
-                                continue;
-                        }else{
-                            if(!regex.test(matchValue.toString().replace(removeFormatting, '')))
-                                continue;
-                        }
+                        if(!regex.test(matchValue.toString().replace(removeFormatting, '')))
+                            continue;
 
                         matches++;
                     }
