@@ -8,9 +8,8 @@ for(const file of fs.readdirSync(path.resolve(__dirname, 'constants'))){
         continue;
 
     const module = require(path.resolve(__dirname, 'constants', file));
-    
-    for(const key in module)
-        constants[key] = module[key];
+
+    Object.assign(constants, module);
 }
 
 module.exports = constants;
