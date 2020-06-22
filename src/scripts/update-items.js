@@ -10,7 +10,7 @@ async function main(){
 
     const helper = require('./../helper');
 
-    const credentials = require('../credentials.json');
+    const credentials = require('./../../credentials.json');
     const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
 
