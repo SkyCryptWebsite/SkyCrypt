@@ -66,32 +66,6 @@ async function main(){
     );
 
     await db
-    .collection('views')
-    .createIndex(
-        { uuid: 1, ip: 1 },
-        { unique: true }
-    );
-
-    await db
-    .collection('profileViews')
-    .createIndex(
-        { uuid: 1 },
-        { unique: true }
-    );
-
-    await db
-    .collection('profileViews')
-    .createIndex(
-        { total: -1 }
-    );
-
-    await db
-    .collection('profileViews')
-    .createIndex(
-        { weekly: -1 }
-    );
-
-    await db
     .collection('profileViews')
     .createIndex(
         { daily: -1 }
@@ -146,44 +120,10 @@ async function main(){
         );
     }
 
-    await db.createCollection('viewsLeaderboard', {
-        viewOn: 'profileViews',
-        pipeline: [
-            {
-                $sort: {
-                    total: -1
-                }
-            },
-            {
-                $limit: 20
-            },
-            {
-                "$lookup": {
-                    "from": "usernames",
-                    "localField": "uuid",
-                    "foreignField": "uuid",
-                    "as": "userInfo"
-                }
-            },
-            {
-                "$unwind": {
-                    "path": "$userInfo"
-                }
-            }
-        ]
-    });
-
     await db
     .collection('bazaar')
     .createIndex(
         { productId: 1 },
-        { unique: true }
-    );
-
-    await db
-    .collection('bazaarTracker')
-    .createIndex(
-        { productId: 1, time: 1 },
         { unique: true }
     );
 
@@ -202,6 +142,7 @@ async function main(){
     );
 
     mongo.close();
+    process.exit(0);
 }
 
 main();
