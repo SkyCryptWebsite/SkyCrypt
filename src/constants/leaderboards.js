@@ -29,7 +29,15 @@ const overrides = {
     }
 };
 
-const helper = require('./../helper');
+const titleCase = string => {
+   let split = string.toLowerCase().split(' ');
+
+   for(let i = 0; i < split.length; i++)
+        split[i] = split[i].charAt(0).toUpperCase() + split[i].substring(1);
+
+    return split.join(' ');
+};
+
 const collections = require('./collections');
 
 module.exports = {
@@ -38,7 +46,7 @@ module.exports = {
 
         const options = Object.assign({}, defaultOptions);
 
-        options['name'] = helper.titleCase(lbName.split("_").join(" "));
+        options['name'] = titleCase(lbName.split("_").join(" "));
 
         if(overrides.hasOwnProperty(lbName))
             for(const key in overrides[lbName])
