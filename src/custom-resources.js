@@ -10,6 +10,7 @@ const { createCanvas, loadImage } = require('canvas');
 const mcData = require("minecraft-data")("1.8.9");
 const UPNG = require('upng-js');
 const RJSON = require('relaxed-json');
+const RE2 = require('re2');
 
 const child_process = require("child_process");
 const execFile = util.promisify(child_process.execFile);
@@ -18,7 +19,7 @@ const NORMALIZED_SIZE = 128;
 
 const RESOURCE_PACK_FOLDER = path.resolve(__dirname, '..', 'public', 'resourcepacks');
 
-let removeFormatting = new RegExp('§[0-9a-z]{1}', 'g');
+let removeFormatting = new RE2('§[0-9a-z]{1}', 'g');
 
 async function getFiles(dir, fileList){
     const files = await fs.readdir(dir);
@@ -215,15 +216,15 @@ async function init(){
                 let regex = properties[property];
 
                 if(regex.startsWith('ipattern:')){
-                    regex = mm.makeRe(regex.substring(9), { nocase: true });
+                    regex = new RE2(mm.makeRe(regex.substring(9), { nocase: true }));
                 }else if(regex.startsWith('pattern:')){
-                    regex = mm.makeRe(regex.substring(9));
+                    regex = new RE2(mm.makeRe(regex.substring(9)));
                 }else if(regex.startsWith('iregex:')){
-                    regex = new RegExp(regex.substring(7), 'i');
+                    regex = new RE2(regex.substring(7), 'i');
                 }else if(regex.startsWith('regex:')){
-                    regex = new RegExp(regex.substring(6));
+                    regex = new RE2(regex.substring(6));
                 }else{
-                    regex = new RegExp(escapeRegExp(regex));
+                    regex = new RE2(escapeRegExp(regex));
                 }
 
                 texture.match.push({
