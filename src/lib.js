@@ -1031,16 +1031,16 @@ module.exports = {
             let average_level_no_progress = 0;
 
             skillLevels = {
-                taming: getLevelByXp(userProfile.experience_skill_taming),
-                farming: getLevelByXp(userProfile.experience_skill_farming),
-                mining: getLevelByXp(userProfile.experience_skill_mining),
-                combat: getLevelByXp(userProfile.experience_skill_combat),
-                foraging: getLevelByXp(userProfile.experience_skill_foraging),
-                fishing: getLevelByXp(userProfile.experience_skill_fishing),
-                enchanting: getLevelByXp(userProfile.experience_skill_enchanting),
-                alchemy: getLevelByXp(userProfile.experience_skill_alchemy),
-                carpentry: getLevelByXp(userProfile.experience_skill_carpentry),
-                runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting, true),
+                taming: getLevelByXp(userProfile.experience_skill_taming || 0),
+                farming: getLevelByXp(userProfile.experience_skill_farming || 0),
+                mining: getLevelByXp(userProfile.experience_skill_mining || 0),
+                combat: getLevelByXp(userProfile.experience_skill_combat || 0),
+                foraging: getLevelByXp(userProfile.experience_skill_foraging || 0),
+                fishing: getLevelByXp(userProfile.experience_skill_fishing || 0),
+                enchanting: getLevelByXp(userProfile.experience_skill_enchanting || 0),
+                alchemy: getLevelByXp(userProfile.experience_skill_alchemy || 0),
+                carpentry: getLevelByXp(userProfile.experience_skill_carpentry || 0),
+                runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting || 0, true),
             };
 
             for(let skill in skillLevels){
@@ -1059,7 +1059,6 @@ module.exports = {
             output.levels = Object.assign({}, skillLevels);
         }else{
             skillLevels = {
-                taming: -1,
                 farming: hypixelProfile.achievements.skyblock_harvester || 0,
                 mining: hypixelProfile.achievements.skyblock_excavator || 0,
                 combat: hypixelProfile.achievements.skyblock_combat || 0,
