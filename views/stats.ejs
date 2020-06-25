@@ -768,7 +768,7 @@ const inventorySlot = item => { %>
 
 const skill_component = (skill, icon, level) => { %>
     <div class="skill xp-skill <%= level.level == level.maxLevel ? 'maxed-skill' : ''%>">
-        <div class="skill-icon"><div class="item-icon <%= icon %>"></div></div>
+        <div class="skill-icon"><div class="item-icon <%= icon %>"></div><% if(level.level == level.maxLevel){ %><div class="piece-shine"></div><% } %></div>
         <div class="skill-name"><%= skill %> <span class="skill-level"><%= level.level >= 0 ? level.level : '?' %></span></div>
         <div class="skill-bar" data-skill="<%= skill %>">
             <div class="skill-progress-bar" style="width: <%= level.level == level.maxLevel ? 100 : level.progress * 100 %>%"></div>
