@@ -884,7 +884,7 @@ if(calculated.slayer_coins_spent.total > 0){
 }
 
 if(calculated.average_level)
-    description += `⚒ Avg Skill Level: ${calculated.average_level.toFixed(1)} `;
+    description += `⚒ Avg Skill Level: ${Math.floor(calculated.average_level * 10) / 10} `;
 
 description += `💰 Purse: ${helper.formatNumber(calculated.purse, true)} Coins`;
 
