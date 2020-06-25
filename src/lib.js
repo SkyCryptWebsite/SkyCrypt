@@ -1476,6 +1476,9 @@ module.exports = {
         }
 
         for(const member of members){
+            if(!helper.hasPath(profile, 'members', member.uuid, 'last_save'))
+                continue;
+
             const last_updated = profile.members[member.uuid].last_save;
 
             member.last_updated = {
@@ -1497,7 +1500,10 @@ module.exports = {
         output.profile = { profile_id: profile.profile_id, cute_name: profile.cute_name };
         output.profiles = {};
 
-        for(const sbProfile of allProfiles.filter(a => a.profile_id != profile.profile_id))
+        for(const sbProfile of allProfiles.filter(a => a.profile_id != profile.profile_id)){
+            if(!helper.hasPath(profile, 'members', profile.uuid, 'last_save'))
+                continue;
+
             output.profiles[sbProfile.profile_id] = {
                 profile_id: sbProfile.profile_id,
                 cute_name: sbProfile.cute_name,
@@ -1506,6 +1512,7 @@ module.exports = {
                     text: `last played ${moment(sbProfile.members[profile.uuid].last_save).fromNow()}`
                 }
             };
+        }
 
         output.members = members.filter(a => a.uuid != profile.uuid);
         output.minions = module.exports.getMinions(profile.members);
