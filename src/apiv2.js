@@ -30,8 +30,6 @@ module.exports = (app, db) => {
         try{
             const { profile, allProfiles } = await helper.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
 
-            console.log('serving from cache', req.cacheOnly);
-
             const output = { profiles: {} };
 
             for(const singleProfile of allProfiles){

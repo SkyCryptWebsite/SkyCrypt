@@ -38,6 +38,13 @@ function replaceAll(target, search, replacement){
 }
 
 function getXpByLevel(level, runecrafting){
+    const output = {
+        level,
+        xpCurrent: 0,
+        xpForNext: null,
+        progress: 0.05
+    }
+
     let xp_table = runecrafting ? constants.runecrafting_xp : constants.leveling_xp;
 
     if(isNaN(level))
@@ -50,7 +57,14 @@ function getXpByLevel(level, runecrafting){
     for(let x = 1; x <= level; x++)
         xpTotal += xp_table[x];
 
-    return xpTotal;
+    output.xp = xpTotal;
+
+    if(level >= maxLevel)
+        output.progress = 1;
+    else
+        output.xpForNext = xp_table[level + 1];
+
+    return output;
 }
 
 function getLevelByXp(xp, runecrafting){
@@ -1074,7 +1088,7 @@ module.exports = {
             let skillsAmount = 0;
 
             for(const skill in skillLevels){
-                output.levels[skill] = { level: skillLevels[skill], xp: getXpByLevel(skillLevels[skill]), progress: 0.05, maxLevel: 50, xpCurrent: 0, xpForNext: 0 };
+                output.levels[skill] = getXpByLevel(skillLevels[skill]);
 
                 if(skillLevels[skill] < 0)
                     continue;
@@ -1082,7 +1096,7 @@ module.exports = {
                 skillsAmount++;
                 average_level += skillLevels[skill];
 
-                totalSkillXp += getXpByLevel(skillLevels[skill]);
+                totalSkillXp += output.levels[skill].xp;
             }
 
             output.average_level = (average_level / skillsAmount);
