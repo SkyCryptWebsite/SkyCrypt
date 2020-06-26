@@ -32,6 +32,13 @@ async function main(){
     const db = mongo.db(dbName);
 
     await db
+    .collection('apiKeys')
+    .createIndex(
+        { key: 1 },
+        { unique: true }
+    );
+
+    await db
     .collection('profileStore')
     .createIndex(
         { uuid: 1 },

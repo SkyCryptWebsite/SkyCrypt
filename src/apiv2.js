@@ -11,9 +11,26 @@ function handleError(e, res){
 }
 
 module.exports = (app, db) => {
+    app.use('/api/v2/*', async (req, res, next) => {
+        req.cacheOnly = true;
+
+        if(req.query.key){
+            const doc = await db
+            .collection('apiKeys')
+            .findOne({ key: req.query.key });
+
+            if(doc != null)
+                req.cacheOnly = false;
+        }
+
+        next();
+    });
+
     app.all('/api/v2/profile/:player', cors(), async (req, res) => {
         try{
-            const { profile, allProfiles } = await helper.getProfile(db, req.params.player, null, { cacheOnly: true });
+            const { profile, allProfiles } = await helper.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
+
+            console.log('serving from cache', req.cacheOnly);
 
             const output = { profiles: {} };
 
