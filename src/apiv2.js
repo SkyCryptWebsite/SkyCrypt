@@ -11,6 +11,29 @@ function handleError(e, res){
 }
 
 module.exports = (app, db) => {
+    const productInfo = {};
+
+    const init = new Promise(async (resolve, reject) => {
+        const bazaarProducts = await db
+        .collection('bazaar')
+        .find()
+        .toArray();
+
+        const itemInfo = await db
+        .collection('items')
+        .find({ id: { $in: bazaarProducts.map(a => a.productId) } })
+        .toArray();
+
+        for(const product of bazaarProducts){
+            const info = itemInfo.filter(a => a.id == product.productId);
+
+            if(info.length > 0)
+                productInfo[product.productId] = info[0];
+        }
+
+        resolve();
+    });
+
     app.use('/api/v2/*', async (req, res, next) => {
         req.cacheOnly = true;
 
@@ -24,6 +47,35 @@ module.exports = (app, db) => {
         }
 
         next();
+    });
+
+    app.all('/api/v2/bazaar', cors(), async (req, res) => {
+        await init;
+
+        try{
+            const output = {};
+
+            for await(const product of db.collection('bazaar').find()){
+                const itemInfo = productInfo[product.productId];
+
+                const productName = itemInfo ? itemInfo.name : helper.titleCase(product.productId.replace(/(_+)/g, ' '));
+
+                output[product.productId] = {
+                    id: product.productId,
+                    name: productName,
+                    buyPrice: product.buyPrice,
+                    sellPrice: product.sellPrice,
+                    buyVolume: product.buyVolume,
+                    sellVolume: product.sellVolume,
+                    tag: 'tag' in itemInfo ? itemInfo.tag : null,
+                    price: (product.buyPrice + product.sellPrice) / 2
+                };
+            }
+
+            res.json(output);
+        }catch(e){
+            handleError(e, res);
+        }
     });
 
     app.all('/api/v2/profile/:player', cors(), async (req, res) => {
