@@ -54,6 +54,8 @@ function getXpByLevel(level, runecrafting){
 
     let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
 
+    output.maxLevel = maxLevel;
+
     for(let x = 1; x <= level; x++)
         xpTotal += xp_table[x];
 
