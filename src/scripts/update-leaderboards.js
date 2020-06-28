@@ -43,12 +43,10 @@ async function main(){
             complete: '=',
             incomplete: ' ',
             width: 20,
-            total: await db.collection('profileStore').estimatedDocumentCount()
+            total: updateUsers.length
         });
 
-        for await(const doc of db.collection('profileStore').find()){
-            const { uuid } = doc;
-
+        for(const uuid of updateUsers){
             lib.getProfile(db, uuid)
             .then(() => { bar.tick() })
             .catch(console.error);
