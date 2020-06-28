@@ -23,6 +23,9 @@ mongo.connect().then(() => {
     db = mongo.db(dbName);
 });
 
+const redis = require('async-redis');
+const redisClient = redis.createClient();
+
 const customResources = require('./custom-resources');
 
 const parseNbt = util.promisify(nbt.parse);
@@ -1104,6 +1107,10 @@ module.exports = {
             output.average_level = (average_level / skillsAmount);
             output.average_level_no_progress = output.average_level;
             output.total_skill_xp = totalSkillXp;
+        }
+
+        for(const skill in skillLevels){
+            skillLevels[skill].rank = await redisClient.zcount([`lb_skill_${skill}_xp`, skillLevels[skill].xp, '+inf']);
         }
 
         return output;
