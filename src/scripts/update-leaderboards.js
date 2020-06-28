@@ -30,16 +30,16 @@ async function main(){
             const lb = constants.leaderboard(key);
 
             if(lb.sortedBy < 0)
-                updateUsers.push(...await redisClient.zrevrange([key, 0, 99]))
+                updateUsers.push(...await redisClient.zrevrange([key, 0, 49]))
             else
-                updateUsers.push(...await redisClient.zrange([key, 0, 99]))
+                updateUsers.push(...await redisClient.zrange([key, 0, 49]))
         }
 
         updateUsers = _.uniq(updateUsers);
 
         console.log('updating', updateUsers.length, 'profiles');
 
-        const bar = new ProgressBar('  generating leaderboards [:bar] :rate users/s :percent :etas', {
+        const bar = new ProgressBar('  generating leaderboards [:bar] :current/:total :rate users/s :percent :etas', {
             complete: '=',
             incomplete: ' ',
             width: 20,
@@ -49,13 +49,9 @@ async function main(){
         for await(const doc of db.collection('profileStore').find()){
             const { uuid } = doc;
 
-            bar.tick();
-
-            try{
-                await lib.getProfile(db, uuid);
-            }catch(e){
-                console.error(e);
-            }
+            lib.getProfile(db, uuid)
+            .then(() => { bar.tick() })
+            .catch(console.error);
 
             await new Promise(r => setTimeout(r, 500));
         }
