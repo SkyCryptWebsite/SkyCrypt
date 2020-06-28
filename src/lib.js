@@ -10,6 +10,9 @@ const { getId } = helper;
 const axios = require('axios');
 const moment = require('moment');
 const { v4 } = require('uuid');
+const retry = require('async-retry');
+
+const credentials = require('./../credentials.json');
 
 const dbUrl = 'mongodb://localhost:27017';
 const dbName = 'sbstats';
@@ -21,6 +24,10 @@ const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
 
 mongo.connect().then(() => {
     db = mongo.db(dbName);
+});
+
+const Hypixel = axios.create({
+    baseURL: 'https://api.hypixel.net/'
 });
 
 const redis = require('async-redis');
@@ -38,6 +45,37 @@ const MAX_SOULS = 194;
 
 function replaceAll(target, search, replacement){
     return target.split(search).join(replacement);
+}
+
+function getMinMax(profiles, min, ...path){
+    let output = null;
+
+    const compareValues = profiles.map(a => helper.getPath(a, ...path)).filter(a => a !== undefined);
+
+    if(compareValues.length == 0)
+        return output;
+
+    if(min)
+        output = Math.min(...compareValues);
+    else
+        output = Math.max(...compareValues);
+
+    if(isNaN(output))
+        return null;
+
+    return output;
+}
+
+function getMax(profiles, ...path){
+    return getMinMax(profiles, false, ...path);
+}
+
+function getMin(profiles, ...path){
+    return getMinMax(profiles, true, ...path);
+}
+
+function getAllKeys(profiles, ...path){
+    return _.uniq([].concat(...profiles.map(a => _.keys(helper.getPath(a, ...path)))));
 }
 
 function getXpByLevel(level, runecrafting){
@@ -236,8 +274,6 @@ async function getBackpackContents(arraybuf){
 
     return items;
 }
-
-
 
 // Process items returned by API
 async function getItems(base64, customTextures = false, packs, cacheOnly = false){
@@ -1037,16 +1073,16 @@ module.exports = {
         let average_level = 0;
 
         // Apply skill bonuses
-        if('experience_skill_taming' in userProfile
-        || 'experience_skill_farming' in userProfile
-        || 'experience_skill_mining' in userProfile
-        || 'experience_skill_combat' in userProfile
-        || 'experience_skill_foraging' in userProfile
-        || 'experience_skill_fishing' in userProfile
-        || 'experience_skill_enchanting' in userProfile
-        || 'experience_skill_alchemy' in userProfile
-        || 'experience_skill_carpentry' in userProfile
-        || 'experience_skill_runecrafting' in userProfile){
+        if(helper.hasPath(userProfile, 'experience_skill_taming')
+        || helper.hasPath(userProfile, 'experience_skill_farming')
+        || helper.hasPath(userProfile, 'experience_skill_mining')
+        || helper.hasPath(userProfile, 'experience_skill_combat')
+        || helper.hasPath(userProfile, 'experience_skill_foraging')
+        || helper.hasPath(userProfile, 'experience_skill_fishing')
+        || helper.hasPath(userProfile, 'experience_skill_enchanting')
+        || helper.hasPath(userProfile, 'experience_skill_alchemy')
+        || helper.hasPath(userProfile, 'experience_skill_carpentry')
+        || helper.hasPath(userProfile, 'experience_skill_runecrafting')){
             let average_level_no_progress = 0;
 
             skillLevels = {
@@ -1898,7 +1934,363 @@ module.exports = {
         }
 
         return output;
-    }
+    },
+
+    getProfile: async (db, paramPlayer, paramProfile, options = { cacheOnly: false }) => {
+        if(paramPlayer.length != 32){
+            try{
+                const { uuid } = await helper.usernameToUuid(paramPlayer, db);
+
+                paramPlayer = uuid;
+            }catch(e){
+                console.error(e);
+                throw e;
+            }
+        }
+
+        if(paramProfile)
+            paramProfile = paramProfile.toLowerCase();
+
+        const params = {
+            key: credentials.hypixel_api_key,
+            uuid: paramPlayer
+        };
+
+        let allSkyBlockProfiles = [];
+
+        let profileObject = await db
+        .collection('profileStore')
+        .findOne({ uuid: paramPlayer });
+
+        let lastCachedSave = 0;
+
+        if(profileObject){
+            const profileData = db
+            .collection('profileCache')
+            .find({ profile_id: { $in: Object.keys(profileObject.profiles) } });
+
+            for await(const doc of profileData){
+                Object.assign(doc, profileObject.profiles[doc.profile_id]);
+
+                allSkyBlockProfiles.push(doc);
+
+                lastCachedSave = Math.max(lastCachedSave, doc.members[paramPlayer].last_save || 0);
+            }
+        }else{
+            profileObject = { last_update: 0 };
+        }
+
+        let response = null;
+
+        if(!options.cacheOnly &&
+        (Date.now() - lastCachedSave > 190 * 1000 && Date.now() - lastCachedSave < 300 * 1000
+        || Date.now() - profileObject.last_update >= 300 * 1000)){
+            try{
+                response = await retry(async () => {
+                    return await Hypixel.get('skyblock/profiles', {
+                        params
+                    });
+                }, { retries: 2 });
+
+                const { data } = response;
+
+                if(!data.success)
+                    throw "Request to Hypixel API failed. Please try again!";
+
+                if(data.profiles == null)
+                    throw "Player has no SkyBlock profiles.";
+
+                allSkyBlockProfiles = data.profiles;
+            }catch(e){
+                if(helper.hasPath(e, 'response', 'data', 'cause'))
+                    throw `Hypixel API Error: ${e.response.data.cause}.`;
+
+                throw e;
+            }
+        }
+
+        if(allSkyBlockProfiles.length == 0)
+            throw "Player has no SkyBlock profiles.";
+
+        for(const profile of allSkyBlockProfiles){
+            for(const member in profile.members)
+                if(!helper.hasPath(profile.members[member], 'last_save'))
+                    delete profile.members[member];
+
+            profile.uuid = paramPlayer;
+        }
+
+        let skyBlockProfiles = [];
+
+        if(paramProfile){
+            if(paramProfile.length == 32){
+                const filteredProfiles = allSkyBlockProfiles.filter(a => a.profile_id.toLowerCase() == paramProfile);
+
+                if(filteredProfiles.length > 0){
+                    skyBlockProfiles = filteredProfiles;
+                }else{
+                    const profileResponse = await retry(async () => {
+                        const response = await Hypixel.get('skyblock/profile', {
+                            params: { key: credentials.hypixel_api_key, profile: paramProfile }
+                        }, { retries: 3 });
+
+                        if(!response.data.success)
+                            throw "api request failed";
+
+                        return response.data.profile;
+                    });
+
+                    profileResponse.cute_name = 'Deleted';
+                    profileResponse.uuid = paramPlayer;
+
+                    skyBlockProfiles.push(profileResponse);
+                }
+            }else{
+                skyBlockProfiles = allSkyBlockProfiles.filter(a => a.cute_name.toLowerCase() == paramProfile);
+            }
+        }
+
+        if(skyBlockProfiles.length == 0)
+            skyBlockProfiles = allSkyBlockProfiles;
+
+        const profiles = [];
+
+        for(const [index, profile] of skyBlockProfiles.entries()){
+            let memberCount = 0;
+
+            for(const member in profile.members){
+                if(helper.hasPath(profile.members[member], 'last_save'))
+                    memberCount++;
+            }
+
+            if(memberCount == 0){
+                if(paramProfile)
+                    throw "Uh oh, this SkyBlock profile has no players.";
+
+                continue;
+            }
+
+            profiles.push(profile);
+        }
+
+        if(profiles.length == 0)
+            throw "No data returned by Hypixel API, please try again!";
+
+        let highest = 0;
+        let profileId;
+        let profile;
+
+        const storeProfiles = {};
+
+        for(const _profile of allSkyBlockProfiles){
+            let userProfile = _profile.members[paramPlayer];
+
+            if(!userProfile)
+                continue;
+
+            if(response && response.request.fromCache !== true){
+                const insertCache = {
+                    last_update: new Date(),
+                    members: _profile.members
+                };
+
+                if(helper.hasPath(_profile, 'banking'))
+                    insertCache.banking = _profile.banking;
+
+                await db
+                .collection('profileCache')
+                .updateOne(
+                    { profile_id: _profile.profile_id },
+                    { $set: insertCache },
+                    { upsert: true }
+                );
+            }
+
+            if(helper.hasPath(userProfile, 'last_save'))
+                storeProfiles[_profile.profile_id] = {
+                    profile_id: _profile.profile_id,
+                    cute_name: _profile.cute_name,
+                    last_save: userProfile.last_save
+                };
+        }
+
+        for(const [index, _profile] of profiles.entries()){
+            if(_profile === undefined || _profile === null)
+                return;
+
+            let userProfile = _profile.members[paramPlayer];
+
+            if(helper.hasPath(userProfile, 'last_save') && userProfile.last_save > highest){
+                profile = _profile;
+                highest = userProfile.last_save;
+                profileId = _profile.profile_id;
+            }
+        }
+
+        if(!profile)
+            throw "User not found in selected profile. This is probably due to a declined co-op invite.";
+
+        const userProfile = profile.members[paramPlayer];
+
+        if(profileObject && helper.hasPath(profileObject, 'current_area'))
+            userProfile.current_area = profileObject.current_area;
+
+        if(response && response.request.fromCache !== true){
+            const apisEnabled = helper.hasPath(userProfile, 'inv_contents')
+            && Object.keys(userProfile).filter(a => a.startsWith('experience_skill_')).length > 0
+            && helper.hasPath(userProfile, 'collection')
+
+            const insertProfileStore = {
+                last_update: new Date(),
+                last_save: userProfile.last_save,
+                apis: apisEnabled,
+                profiles: storeProfiles
+            };
+
+            if(options.updateArea && Date.now() - userProfile.last_save < 5 * 60 * 1000){
+                try{
+                    const statusResponse = await Hypixel.get('status', { params: { uuid: paramPlayer, key: credentials.hypixel_api_key }});
+
+                    const areaData = statusResponse.data.session;
+
+                    if(areaData.online && areaData.gameType == 'SKYBLOCK'){
+                        const areaName = constants.area_names[areaData.mode] || 'Unknown';
+
+                        userProfile.current_area = areaName;
+                        insertProfileStore.current_area = areaName;
+                    }
+                }catch(e){
+                    console.error(e);
+                }
+            }
+
+            await module.exports.updateLeaderboardPositions(db, paramPlayer, allSkyBlockProfiles);
+
+            await db
+            .collection('profileStore')
+            .updateOne(
+                { uuid: paramPlayer },
+                { $set: insertProfileStore },
+                { upsert: true }
+            );
+        }
+
+        return { profile: profile, allProfiles: allSkyBlockProfiles, uuid: paramPlayer };
+    },
+
+    updateLeaderboardPositions: async (db, uuid, allProfiles) => {
+        const hypixelProfile = await helper.getRank(uuid, db, true);
+
+        const memberProfiles = [];
+
+        for(const singleProfile of allProfiles){
+            const userProfile = singleProfile.members[uuid];
+
+            if(userProfile == null)
+                continue;
+
+            userProfile.levels = await module.exports.getLevels(userProfile, hypixelProfile);
+
+            let totalSlayerXp = 0;
+
+            userProfile.slayer_xp = 0;
+
+            if(userProfile.hasOwnProperty('slayer_bosses')){
+                for(const slayer in userProfile.slayer_bosses)
+                    totalSlayerXp += userProfile.slayer_bosses[slayer].xp;
+
+                userProfile.slayer_xp = totalSlayerXp;
+
+                for(const mountMob in constants.mob_mounts){
+                    const mounts = constants.mob_mounts[mountMob];
+
+                    userProfile.stats[`kills_${mountMob}`] = 0;
+                    userProfile.stats[`deaths_${mountMob}`] = 0;
+
+                    for(const mount of mounts){
+                        userProfile.stats[`kills_${mountMob}`] += userProfile.stats[`kills_${mount}`] || 0;
+                        userProfile.stats[`deaths_${mountMob}`] += userProfile.stats[`deaths_${mount}`] || 0;
+
+                        delete userProfile.stats[`kills_${mount}`];
+                        delete userProfile.stats[`deaths_${mount}`]
+                    }
+                }
+            }
+
+            userProfile.pet_score = 0;
+
+            const maxPetRarity = {};
+
+            if(Array.isArray(userProfile.pets)){
+                for(const pet of userProfile.pets)
+                    maxPetRarity[pet.type] = Math.max(maxPetRarity[pet.type] || 0, constants.pet_value[pet.tier.toLowerCase()]);
+
+                for(const key in maxPetRarity)
+                    userProfile.pet_score += maxPetRarity[key];
+            }
+
+            memberProfiles.push({
+                profile_id: singleProfile.profile_id,
+                data: userProfile
+            });
+        }
+
+        const values = {};
+
+        values['pet_score'] = getMax(memberProfiles, 'data', 'pet_score');
+
+        values['fairy_souls'] = getMax(memberProfiles, 'data', 'fairy_souls_collected');
+        values['average_level'] = getMax(memberProfiles, 'data', 'levels', 'average_level');
+        values['total_skill_xp'] = getMax(memberProfiles, 'data', 'levels', 'total_skill_xp');
+
+        for(const skill of getAllKeys(memberProfiles, 'data', 'levels', 'levels'))
+            values[`skill_${skill}_xp`] = getMax(memberProfiles, 'data', 'levels', 'levels', skill, 'xp');
+
+        values['slayer_xp'] = getMax(memberProfiles, 'data', 'slayer_xp');
+
+        for(const slayer of getAllKeys(memberProfiles, 'data', 'slayer_bosses')){
+            for(const key of getAllKeys(memberProfiles, 'data', 'slayer_bosses', slayer)){
+                if(!key.startsWith('boss_kills_tier'))
+                    continue;
+
+                const tier = key.split("_").pop();
+
+                values[`${slayer}_slayer_boss_kills_tier_${tier}`] = getMax(memberProfiles, 'data', 'slayer_bosses', slayer, key);
+            }
+
+            values[`${slayer}_slayer_xp`] = getMax(memberProfiles, 'data', 'slayer_bosses', slayer, 'xp');
+        }
+
+        for(const item of getAllKeys(memberProfiles, 'data', 'collection'))
+            values[`collection_${item.toLowerCase()}`] = getMax(memberProfiles, 'data', 'collection', item);
+
+        for(const stat of getAllKeys(memberProfiles, 'data', 'stats'))
+            values[stat] = getMax(memberProfiles, 'data', 'stats', stat);
+
+        for(const key in values){
+            if(values[key] == null)
+                continue;
+
+            await redisClient.zadd([`lb_${key}`, values[key], uuid]);
+        }
+
+        for(const singleProfile of allProfiles){
+            if(helper.hasPath(singleProfile, 'banking', 'balance'))
+                await redisClient.zadd([`lb_bank`, singleProfile.banking.balance, singleProfile.profile_id]);
+
+            const minionCrafts = [];
+
+            for(const member in singleProfile.members)
+                if(Array.isArray(singleProfile.members[member].crafted_generators))
+                    minionCrafts.push(...singleProfile.members[member].crafted_generators);
+
+            await redisClient.zadd([
+                `lb_unique_minions`,
+                _.uniq(minionCrafts).length,
+                singleProfile.profile_id
+            ]);
+        }
+    },
 }
 
 async function init(){

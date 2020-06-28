@@ -80,7 +80,7 @@ module.exports = (app, db) => {
 
     app.all('/api/v2/profile/:player', cors(), async (req, res) => {
         try{
-            const { profile, allProfiles } = await helper.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
+            const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
 
             const output = { profiles: {} };
 

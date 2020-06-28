@@ -136,7 +136,7 @@ async function main(){
         const playerUsername = paramPlayer.length == 32 ? await helper.uuidToUsername(paramPlayer, db).display_name : paramPlayer;
 
         try{
-            const { profile, allProfiles } = await helper.getProfile(db, paramPlayer, paramProfile, { updateArea: true });
+            const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, { updateArea: true });
 
             const items = await lib.getItems(profile.members[profile.uuid], true, req.query.pack);
             const calculated = await lib.getStats(db, profile, allProfiles, items);
