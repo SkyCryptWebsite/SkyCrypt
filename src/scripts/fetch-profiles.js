@@ -20,7 +20,7 @@ async function main(){
             uuids.push(doc.uuid);
 
         for(const uuid of uuids){
-            helper.getProfile(db, uuid).then(() => console.log('fetched', uuid)).catch(console.error);
+            lib.getProfile(db, uuid).then(() => console.log('fetched', uuid)).catch(console.error);
 
             await new Promise(r => setTimeout(r, 1000));
         }
