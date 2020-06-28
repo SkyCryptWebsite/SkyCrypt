@@ -1110,7 +1110,7 @@ module.exports = {
         }
 
         for(const skill in skillLevels){
-            skillLevels[skill].rank = await redisClient.zcount([`lb_skill_${skill}_xp`, skillLevels[skill].xp, '+inf']);
+            skillLevels[skill].rank = await redisClient.zcount([`lb_skill_${skill}_xp`, skillLevels[skill].xp, '+inf']) + 1;
         }
 
         return output;
