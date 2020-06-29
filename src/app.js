@@ -323,14 +323,14 @@ async function main(){
     });
 
     app.all('/random/stats', async (req, res, next) => {
-        const profile = await db
+        /*const profile = await db
         .collection('profileStore')
         .aggregate([
             { $match: { apis: true } },
             { $sample: { size: 1 } }
-        ]).next();
+        ]).next();*/
 
-        res.redirect(`/stats/${profile.uuid}/{profile.profile_id}`);
+        res.redirect(`/stats/20934ef9488c465180a78f861586b4cf/bf7c14fb018946899d944d56e65222d2`);
     });
 
     app.all('/favicon.ico', express.static(path.join(__dirname, 'public')));
