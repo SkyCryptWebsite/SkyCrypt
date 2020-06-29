@@ -2450,7 +2450,7 @@ a.additional-player-stat:hover{
     margin: 0 auto;
     margin-top: calc(50vh - 130px);
     width: 700px;
-    height: 300px;
+    height: 260px;
     background: url(../img/bg_blur.webp?v2) no-repeat center center fixed;
     background-size: cover;
     border-radius: 10px;
@@ -3150,7 +3150,7 @@ html.no-webp #error_box_wrapper{
     }
 
     #enter_player_box_wrapper{
-        height: 235px;
+        height: 205px;
         font-size: 12px;
     }
 
