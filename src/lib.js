@@ -1146,8 +1146,15 @@ module.exports = {
         }
 
         for(const skill in output.levels){
+            if(output.levels[skill].xp == null){
+                output.levels[skill].rank = 100000;
+                continue;
+            }
+
             output.levels[skill].rank = await redisClient.zcount([`lb_skill_${skill}_xp`, output.levels[skill].xp, '+inf']);
         }
+
+        output.average_level_rank = await redisClient.zcount([`lb_average_level`, output.average_level, '+inf']);
 
         return output;
     },
@@ -1176,12 +1183,13 @@ module.exports = {
 
         output.fairy_souls = { collected: userProfile.fairy_souls_collected, total: MAX_SOULS, progress: Math.min(userProfile.fairy_souls_collected / MAX_SOULS, 1) };
 
-        const { levels, average_level, average_level_no_progress, total_skill_xp } = await module.exports.getLevels(userProfile, hypixelProfile);
+        const { levels, average_level, average_level_no_progress, total_skill_xp, average_level_rank } = await module.exports.getLevels(userProfile, hypixelProfile);
 
         output.levels = levels;
         output.average_level = average_level;
         output.average_level_no_progress = average_level_no_progress;
         output.total_skill_xp = total_skill_xp;
+        output.average_level_rank = average_level_rank;
 
         output.skill_bonus = {};
 
