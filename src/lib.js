@@ -50,7 +50,7 @@ function replaceAll(target, search, replacement){
 function getMinMax(profiles, min, ...path){
     let output = null;
 
-    const compareValues = profiles.map(a => helper.getPath(a, ...path)).filter(a => a !== undefined);
+    const compareValues = profiles.map(a => helper.getPath(a, ...path)).filter(a => !isNaN(a));
 
     if(compareValues.length == 0)
         return output;
@@ -2205,7 +2205,7 @@ module.exports = {
 
             if(userProfile.hasOwnProperty('slayer_bosses')){
                 for(const slayer in userProfile.slayer_bosses)
-                    totalSlayerXp += userProfile.slayer_bosses[slayer].xp;
+                    totalSlayerXp += userProfile.slayer_bosses[slayer].xp || 0;
 
                 userProfile.slayer_xp = totalSlayerXp;
 
