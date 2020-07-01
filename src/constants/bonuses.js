@@ -267,7 +267,7 @@ module.exports = {
 
         combat_skill: {
             1: {
-                crit_chance: 1,
+                crit_chance: 0.5,
                 damage_increase: 0.04
             }
         },

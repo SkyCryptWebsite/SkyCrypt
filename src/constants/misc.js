@@ -87,7 +87,7 @@ module.exports = {
         strength: 0,
         damage_increase: 0,
         speed: 100,
-        crit_chance: 20,
+        crit_chance: 30,
         crit_damage: 50,
         intelligence: 0,
         sea_creature_chance: 20,
