@@ -1568,7 +1568,7 @@ module.exports = {
         output.profiles = {};
 
         for(const sbProfile of allProfiles.filter(a => a.profile_id != profile.profile_id)){
-            if(!helper.hasPath(profile, 'members', profile.uuid, 'last_save'))
+            if(!helper.hasPath(sbProfile, 'members', profile.uuid, 'last_save'))
                 continue;
 
             output.profiles[sbProfile.profile_id] = {
