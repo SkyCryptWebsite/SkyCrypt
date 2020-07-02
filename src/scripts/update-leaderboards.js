@@ -18,24 +18,24 @@ async function main(){
 
     const db = mongo.db(dbName);
 
-    const redis = require('async-redis');
-    const redisClient = redis.createClient();
+    const Redis = require("ioredis");
+    const redisClient = new Redis();
 
     async function updateLeaderboards(){
         const keys = await redisClient.keys('lb_*');
 
-        let updateUsers = [];
+        const multi = redisClient.pipeline();
 
         for(const key of keys){
             const lb = constants.leaderboard(key);
 
             if(lb.sortedBy < 0)
-                updateUsers.push(...await redisClient.zrevrange([key, 0, 49]))
+                multi.zrevrange(key, 0, 49);
             else
-                updateUsers.push(...await redisClient.zrange([key, 0, 49]))
+                multi.zrange(key, 0, 49);
         }
 
-        updateUsers = _.uniq(updateUsers);
+        const updateUsers = _.uniq((await multi.exec()).map(a => a[1]).flat());
 
         console.log('updating', updateUsers.length, 'profiles');
 
@@ -49,7 +49,7 @@ async function main(){
         for(const uuid of updateUsers){
             lib.getProfile(db, uuid)
             .then(() => { bar.tick() })
-            .catch(console.error);
+            .catch(() => {});
 
             await new Promise(r => setTimeout(r, 500));
         }

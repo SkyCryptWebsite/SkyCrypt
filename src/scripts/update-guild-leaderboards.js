@@ -6,7 +6,9 @@ async function main(){
 
     const { MongoClient } = require('mongodb');
     const _ = require('lodash');
-    const redis = require('async-redis');
+
+    const Redis = require("ioredis");
+    const redisClient = new Redis();
 
     const helper = require('./../helper');
     const lib = require('./../lib');
@@ -17,8 +19,6 @@ async function main(){
 
     const db = mongo.db(dbName);
 
-    const redisClient = redis.createClient();
-
     function getAverage(scores){
         return scores.reduce((a, b) => a + b, 0) / scores.length;
     }
@@ -27,14 +27,21 @@ async function main(){
         const keys = await redisClient.keys('lb_*');
         const guilds = (await db.collection('guilds').find({ members: { $gte: 75 } }).toArray()).map(a => a.gid);
 
-        for(const gid of guilds){
-            console.log('trying to update', gid);
+        const bar = new ProgressBar('  generating guild leaderboards [:bar] :current/:total :rate guilds/s :percent :etas', {
+            complete: '=',
+            incomplete: ' ',
+            width: 20,
+            total: guilds.length
+        });
 
+        for(const gid of guilds){
             const guildMembers = (await db
             .collection('guildMembers')
             .find({ gid })
             .toArray())
             .map(a => a.uuid);
+
+            const multi = redisClient.pipeline();
 
             for(const key of keys){
                 const options = constants.leaderboard(key);
@@ -44,9 +51,10 @@ async function main(){
 
                 const scores = [];
 
-                const memberScores = await Promise.all(
-                    guildMembers.map(a => redisClient.zscore([key, a]))
-                );
+                for(const member of guildMembers)
+                    multi.zscore(key, member);
+
+                const memberScores = (await multi.exec()).map(a => a[1]);
 
                 for(const memberScore of memberScores){
                     const score = new Number(memberScore);
@@ -62,28 +70,27 @@ async function main(){
                 }
 
                 if(key == 'lb_bank')
-                    console.log(scores.join(", "));
+                    continue;
 
                 if(scores.length < 75)
                     continue;
 
                 const avgScore = getAverage(scores);
 
-                try{
-                    await redisClient.zadd([
-                        `g${key}`,
-                        avgScore,
-                        gid
-                    ]);
-                }catch(e){
-                    console.error(e);
-                    console.log(key);
-                    console.log(scores.join(', '));
-                    console.log('avg:', avgScore);
-                }
+                multi.zadd([
+                    `g${key}`,
+                    avgScore,
+                    gid
+                ]);
             }
 
-            console.log('updated guild leaderboard for', gid);
+            try{
+                await multi.exec();
+            }catch(e){
+                console.error(e);
+            }
+
+            bar.tick();
         }
 
         console.log('done updating guild leaderboards');

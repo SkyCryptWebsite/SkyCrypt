@@ -30,8 +30,8 @@ const Hypixel = axios.create({
     baseURL: 'https://api.hypixel.net/'
 });
 
-const redis = require('async-redis');
-const redisClient = redis.createClient();
+const Redis = require("ioredis");
+const redisClient = new Redis();
 
 const customResources = require('./custom-resources');
 
@@ -2275,16 +2275,18 @@ module.exports = {
         for(const stat of getAllKeys(memberProfiles, 'data', 'stats'))
             values[stat] = getMax(memberProfiles, 'data', 'stats', stat);
 
+        const multi = redisClient.pipeline();
+
         for(const key in values){
             if(values[key] == null)
                 continue;
 
-            await redisClient.zadd([`lb_${key}`, values[key], uuid]);
+            multi.zadd(`lb_${key}`, values[key], uuid);
         }
 
         for(const singleProfile of allProfiles){
             if(helper.hasPath(singleProfile, 'banking', 'balance'))
-                await redisClient.zadd([`lb_bank`, singleProfile.banking.balance, singleProfile.profile_id]);
+                multi.zadd(`lb_bank`, singleProfile.banking.balance, singleProfile.profile_id);
 
             const minionCrafts = [];
 
@@ -2292,11 +2294,17 @@ module.exports = {
                 if(Array.isArray(singleProfile.members[member].crafted_generators))
                     minionCrafts.push(...singleProfile.members[member].crafted_generators);
 
-            await redisClient.zadd([
+            multi.zadd(
                 `lb_unique_minions`,
                 _.uniq(minionCrafts).length,
                 singleProfile.profile_id
-            ]);
+            );
+        }
+
+        try{
+            await multi.exec();
+        }catch(e){
+            console.error(e);
         }
     },
 }

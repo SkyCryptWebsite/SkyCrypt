@@ -8,8 +8,8 @@ const _ = require('lodash');
 const constants = require('./constants');
 const credentials = require('./../credentials.json');
 
-const redis = require('redis');
-const redisClient = redis.createClient();
+const Redis = require("ioredis");
+const redisClient = new Redis();
 
 const Hypixel = axios.create({
     baseURL: 'https://api.hypixel.net/'

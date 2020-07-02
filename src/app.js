@@ -12,8 +12,8 @@ async function main(){
     const crypto = require('crypto');
     const cors = require('cors');
 
-    const redis = require('redis');
-    const redisClient = redis.createClient();
+    const Redis = require("ioredis");
+    const redisClient = new Redis();
 
     const axios = require('axios');
     require('axios-debug-log');
