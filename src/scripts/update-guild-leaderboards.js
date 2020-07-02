@@ -99,7 +99,7 @@ async function main(){
             bar.tick();
         }
 
-        console.log('done updating guild leaderboards');
+        updateGuildLeaderboards();
     }
 
     updateGuildLeaderboards();
