@@ -14,6 +14,8 @@ async function main(){
     const lib = require('./../lib');
     const constants = require('./../constants');
 
+    const ProgressBar = require('progress');
+
     const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
 
