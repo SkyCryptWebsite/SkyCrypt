@@ -29,6 +29,8 @@ async function main(){
         const keys = await redisClient.keys('lb_*');
         const guilds = (await db.collection('guilds').find({ members: { $gte: 75 } }).toArray()).map(a => a.gid);
 
+        console.log('updating', guilds.length, 'guilds');
+
         const bar = new ProgressBar('  generating guild leaderboards [:bar] :current/:total :rate guilds/s :percent :etas', {
             complete: '=',
             incomplete: ' ',
@@ -53,10 +55,12 @@ async function main(){
 
                 const scores = [];
 
-                for(const member of guildMembers)
-                    multi.zscore(key, member);
+                const getScores = redisClient.pipeline();
 
-                const memberScores = (await multi.exec()).map(a => a[1]);
+                for(const member of guildMembers)
+                    getScores.zscore(key, member);
+
+                const memberScores = (await getScores.exec()).map(a => a[1]);
 
                 for(const memberScore of memberScores){
                     const score = new Number(memberScore);
