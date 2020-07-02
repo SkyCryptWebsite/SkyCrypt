@@ -54,7 +54,7 @@ async function main(){
             await new Promise(r => setTimeout(r, 500));
         }
 
-        console.log('done updating leaderboards');
+        updateLeaderboards();
     }
 
     updateLeaderboards();
