@@ -1145,13 +1145,25 @@ module.exports = {
             output.total_skill_xp = totalSkillXp;
         }
 
-        for(const skill in output.levels){
+        const multi = redisClient.pipeline();
+
+        const skillNames = Object.keys(output.levels);
+
+        for(const skill of skillNames){
             if(output.levels[skill].xp == null){
                 output.levels[skill].rank = 100000;
                 continue;
             }
 
-            output.levels[skill].rank = await redisClient.zcount([`lb_skill_${skill}_xp`, output.levels[skill].xp, '+inf']);
+            multi.zcount(`lb_skill_${skill}_xp`, output.levels[skill].xp, '+inf');
+        }
+
+        const results = await multi.exec();
+
+        console.log(results);
+
+        for(const [index, skill] of skillNames.entries()){
+            output.levels[skill].rank = results[index][1];
         }
 
         output.average_level_rank = await redisClient.zcount([`lb_average_level`, output.average_level, '+inf']);
@@ -2105,13 +2117,13 @@ module.exports = {
                 if(helper.hasPath(_profile, 'banking'))
                     insertCache.banking = _profile.banking;
 
-                await db
+                db
                 .collection('profileCache')
                 .updateOne(
                     { profile_id: _profile.profile_id },
                     { $set: insertCache },
                     { upsert: true }
-                );
+                ).catch(console.error);
             }
 
             if(helper.hasPath(userProfile, 'last_save'))
@@ -2172,15 +2184,15 @@ module.exports = {
                 }
             }
 
-            await module.exports.updateLeaderboardPositions(db, paramPlayer, allSkyBlockProfiles);
+            module.exports.updateLeaderboardPositions(db, paramPlayer, allSkyBlockProfiles).catch(console.error);
 
-            await db
+            db
             .collection('profileStore')
             .updateOne(
                 { uuid: paramPlayer },
                 { $set: insertProfileStore },
                 { upsert: true }
-            );
+            ).catch(console.error);
         }
 
         return { profile: profile, allProfiles: allSkyBlockProfiles, uuid: paramPlayer };
@@ -2275,7 +2287,7 @@ module.exports = {
         for(const stat of getAllKeys(memberProfiles, 'data', 'stats'))
             values[stat] = getMax(memberProfiles, 'data', 'stats', stat);
 
-        const multi = redisClient.pipeline();
+        const multi = redisClient.multi({ pipeline: false });
 
         for(const key in values){
             if(values[key] == null)
