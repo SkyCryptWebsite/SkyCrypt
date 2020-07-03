@@ -1988,6 +1988,9 @@ module.exports = {
             .find({ profile_id: { $in: Object.keys(profileObject.profiles) } });
 
             for await(const doc of profileData){
+                if(!helper.hasPath(doc, 'members', paramPlayer))
+                    continue;
+
                 Object.assign(doc, profileObject.profiles[doc.profile_id]);
 
                 allSkyBlockProfiles.push(doc);
