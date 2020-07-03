@@ -2285,7 +2285,7 @@ module.exports = {
         for(const stat of getAllKeys(memberProfiles, 'data', 'stats'))
             values[stat] = getMax(memberProfiles, 'data', 'stats', stat);
 
-        const multi = redisClient.multi({ pipeline: false });
+        const multi = redisClient.pipeline();
 
         for(const key in values){
             if(values[key] == null)
