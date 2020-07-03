@@ -1160,8 +1160,6 @@ module.exports = {
 
         const results = await multi.exec();
 
-        console.log(results);
-
         for(const [index, skill] of skillNames.entries()){
             output.levels[skill].rank = results[index][1];
         }
