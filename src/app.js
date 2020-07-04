@@ -133,19 +133,22 @@ async function main(){
         let paramPlayer = req.params.player.toLowerCase().replace(/[^a-z\d\-\_:]/g, '');
         let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
 
+        const cacheOnly = req.query.cache === 'true';
+
         const playerUsername = paramPlayer.length == 32 ? await helper.uuidToUsername(paramPlayer, db).display_name : paramPlayer;
 
         try{
-            const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, { updateArea: true });
+            const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, { updateArea: true, cacheOnly });
 
             const items = await lib.getItems(profile.members[profile.uuid], true, req.query.pack);
             const calculated = await lib.getStats(db, profile, allProfiles, items);
 
-            res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
+            res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
         }catch(e){
             console.error(e);
 
             res.render('index', {
+                req,
                 error: e,
                 player: playerUsername,
                 extra: await getExtra(),
