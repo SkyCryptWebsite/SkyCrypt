@@ -2163,7 +2163,7 @@ module.exports = {
 
             const insertProfileStore = {
                 last_update: new Date(),
-                last_save: userProfile.last_save,
+                last_save: Math.max(...allSkyBlockProfiles.map(a => helper.getPath(a, 'members', paramPlayer, 'last_save') || 0)),
                 apis: apisEnabled,
                 profiles: storeProfiles
             };
