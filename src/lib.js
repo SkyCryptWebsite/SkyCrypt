@@ -1424,8 +1424,13 @@ module.exports = {
 
             // Apply Superior Dragon Armor full set bonus of 5% stat increase
             if(items.armor.filter(a => getId(a).startsWith('SUPERIOR_DRAGON_')).length == 4)
-                for(let stat in stats)
-                    stats[stat] = Math.floor(stats[stat] * 1.05);
+                for(const stat in stats)
+                    stats[stat] *= 1.05;
+
+            for(let i = 0; i < items.armor.filter(a => helper.getPath(a, 'tag', 'ExtraAttributes', 'modifier') == 'renowned').length; i++){
+                for(const stat in stats)
+                    stats[stat] *= 1.01;
+            }
 
             if(items.armor.filter(a => getId(a).startsWith('CHEAP_TUXEDO_')).length == 3)
                 stats['health'] = 75;
@@ -1449,9 +1454,8 @@ module.exports = {
 
         // Apply Superior Dragon Armor full set bonus of 5% stat increase
         if(items.armor.filter(a => getId(a).startsWith('SUPERIOR_DRAGON_')).length == 4){
-            for(const stat in output.stats){
-                superiorBonus[stat] = Math.floor(output.stats[stat] * 0.05);
-            }
+            for(const stat in output.stats)
+                superiorBonus[stat] = output.stats[stat] * 0.05;
 
             for(const stat in superiorBonus){
                 output.stats[stat] += superiorBonus[stat];
@@ -1461,6 +1465,25 @@ module.exports = {
 
                 items.armor[0].stats[stat] += superiorBonus[stat];
             }
+        }
+
+        const renownedBonus = Object.assign({}, constants.stat_template);
+
+        for(const item of items.armor){
+            if(helper.getPath(item, 'tag', 'ExtraAttributes', 'modifier') == 'renowned'){
+                for(const stat in output.stats){
+                    renownedBonus[stat] += output.stats[stat] * 0.01;
+
+                    output.stats[stat] *= 1.01;
+                }
+            }
+        }
+
+        for(const stat in renownedBonus){
+            if(!(stat in items.armor[0].stats))
+                items.armor[0].stats[stat] = 0;
+
+            items.armor[0].stats[stat] += renownedBonus[stat];
         }
 
         // Stats shouldn't go into negative
