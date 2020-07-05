@@ -481,6 +481,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                     case 'Crit Damage':
                         item.stats.crit_damage = statValue;
                         break;
+                    case 'Bonus Attack Speed':
+                        item.stats.bonus_attack_speed = statValue;
+                        break;
                     case 'Intelligence':
                         item.stats.intelligence = statValue;
                         break;
