@@ -1284,7 +1284,7 @@ a.additional-player-stat:hover{
 }
 
 .stat-strength{
-    background-image: url(../img/icons/strength.png);
+    background-image: url(../img/icons/strength-new.png);
 }
 
 .stat-speed{
@@ -1305,6 +1305,14 @@ a.additional-player-stat:hover{
 
 .stat-crit-chance .stat-name, .stat-crit-damage .stat-name, .color-crit-chance, .color-crit-damage{
     color: #9FA8DA;
+}
+
+.stat-bonus-attack-speed{
+    background-image: url(../img/icons/bonus-attack-speed.png);
+}
+
+.stat-bonus-attack-speed .stat-name, .color-bonus-attack-speed{
+    color: #F7F778;
 }
 
 .stat-intelligence{
@@ -2048,12 +2056,16 @@ a.additional-player-stat:hover{
     margin-left: 20px;
 }
 
+.race-containers .narrow-info-container{
+    min-width: 230px;
+}
+
 .stat-slayer .narrow-info-container{
     min-width: 270px;
     padding-bottom: 30px;
 }
 
-.slayer-containers{
+.slayer-containers, .race-containers{
     white-space: nowrap;
 }
 
@@ -2086,6 +2098,14 @@ a.additional-player-stat:hover{
     font-weight: 600;
     text-transform: capitalize;
     color: rgba(255,255,255,0.8);
+}
+
+.narrow-info-section-header{
+    font-weight: 700;
+    text-transform: capitalize;
+    color: rgba(255,255,255,0.8);
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .slayer-kills{
@@ -2408,7 +2428,7 @@ a.additional-player-stat:hover{
     cursor: pointer;
 }
 
-.narrow-info-content{
+.kills-deaths-container .narrow-info-content{
     padding: 20px;
     margin-top: 37px;
     box-sizing: border-box;
@@ -3022,7 +3042,7 @@ html.no-webp #error_box_wrapper{
         width: calc(100vw / 3 - 85px);
     }
 
-    .slayer-containers{
+    .slayer-containers, .race-containers{
         overflow-x: auto;
         margin-left: -40px;
         margin-right: -40px;
@@ -3030,7 +3050,7 @@ html.no-webp #error_box_wrapper{
         padding-bottom: 20px;
     }
 
-    .slayer-containers .narrow-info-container:last-child{
+    .race-containers .narrow-info-container:last-child, .slayer-containers .narrow-info-container:last-child{
         margin-right: 40px;
     }
 }

@@ -15,7 +15,8 @@ const statSuffix = {
     intelligence: '',
     sea_creature_chance: '%',
     magic_find: '',
-    pet_luck: ''
+    pet_luck: '',
+    bonus_attack_speed: '%'
 };
 
 const statShort = {
@@ -29,7 +30,8 @@ const statShort = {
     intelligence: 'Int',
     sea_creature_chance: 'ScC',
     magic_find: 'MF',
-    pet_luck: 'PL'
+    pet_luck: 'PL',
+    bonus_attack_speed: 'Atk'
 };
 
 const skillItems = {
@@ -1068,6 +1070,13 @@ twitterDescription += '. Click to view more stats!'
                 }); %>
 
                 <%- stat_component({
+                    name: 'bonus_attack_speed',
+                    prettyName: 'Attack Speed',
+                    suffix: '%',
+                    baseExplanation: null
+                }); %>
+
+                <%- stat_component({
                     name: 'intelligence',
                     baseExplanation: "Increased by leveling your Enchanting and Alchemy skills and completing songs on Melody's Harp."
                 }); %>
@@ -1925,12 +1934,82 @@ twitterDescription += '. Click to view more stats!'
                         <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-317_0"></div></div><span>races</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.races){
+                                if(key.startsWith('dungeon_hub'))
+                                    continue;
+
                                 const raceName = helper.capitalizeFirstLetter(key.split("_").join(" "));
-                                const raceDuration = moment.duration(calculated.misc.races[key], "milliseconds").format("m:ss.SSS");
+                                let raceDuration = moment.duration(calculated.misc.races[key], "milliseconds").format("m:ss.SSS");
+
+                                if(calculated.misc.races[key] < 1000)
+                                    raceDuration = '0.' + raceDuration;
                             %>
                             <span class="stat-name"><%= raceName %>: </span><span class="stat-value"><%= raceDuration %></span><br>
                             <% } %>
                         </p>
+                        <div class="race-containers">
+                            <%
+                            const races = [
+                                { id: "dungeon_hub_crystal_core", name: "Crystal Core", icon: '399_0' },
+                                { id: "dungeon_hub_giant_mushroom", name: "Giant Mushroom", icon: '100_0' },
+                                { id: "dungeon_hub_precursor_ruins", name: "Precursor Ruins", icon: '98_1' }
+                            ];
+
+                            const types = ["anything", "no_pearls", "no_abilities", "nothing"];
+
+                            for(const race of races){
+                                const times = Object.keys(calculated.misc.races).filter(a => a.startsWith(race.id));
+
+                                if(times.length > 0){
+                                %>
+                                <div class="narrow-info-container">
+                                    <div class="narrow-info-header"><%= race.name %></div>
+                                    <div class="narrow-info-content">
+                                        <%
+                                        const races_no_return = times.filter(a => a.includes("no_return"));
+                                        const races_with_return = times.filter(a => a.includes("with_return"));
+
+                                        if(races_no_return.length > 0){ %>
+                                            <div class="narrow-info-section-header">No Return:</div>
+                                        <% }
+
+                                        for(const type of types){
+                                            const duration = calculated.misc.races[`${race.id}_${type}_no_return_best_time`] || 0;
+
+                                            if(duration == 0)
+                                                continue;
+
+                                            let raceDuration = moment.duration(duration, "milliseconds").format("m:ss.SSS");
+
+                                            if(duration < 1000)
+                                                raceDuration = '0.' + raceDuration;
+                                            %>
+                                            <div><span class="stat-name"><%= helper.titleCase(type.replace("_", " ")) %>: </span><span class="stat-value"><%= raceDuration %></span></div>
+                                        <% }
+
+                                        if(races_with_return.length > 0){ %>
+                                            <div class="narrow-info-section-header">With Return:</div>
+                                        <% }
+
+                                        for(const type of types){
+                                            const duration = calculated.misc.races[`${race.id}_${type}_with_return_best_time`] || 0;
+
+                                            if(duration == 0)
+                                                continue;
+
+                                            let raceDuration = moment.duration(duration, "milliseconds").format("m:ss.SSS");
+
+                                            if(duration < 1000)
+                                                raceDuration = '0.' + raceDuration;
+                                            %>
+                                            <div><span class="stat-name"><%= helper.titleCase(type.replace("_", " ")) %>: </span><span class="stat-value"><%= raceDuration %></span></div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                                <%
+                                }
+                            }
+                            %>
+                        </div>
                     <% } %>
                     <% if('gifts' in calculated.misc){ %>
                         <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/b73a2114136b8ee4926caa51785414036a2b76e4f1668cb89d99716c421)"></div></div><span>gifts</span></div>
