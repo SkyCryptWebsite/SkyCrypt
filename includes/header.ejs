@@ -7,7 +7,7 @@
     }
 </script>
 <header class="page-<%= page %>">
-    <div data-tippy-content="Happy Pride Month! ❤️" class="pride-flag rainbow"></div>
+    <div data-tippy-content="Supporting LGBTQ+ rights all around the year! ❤️<br><br>Click for a surprise. :)" class="pride-flag logo"></div>
     <a href="/" id="site_name">sky.lea.moe</a>
     <div class="social-button" id="info_button" onclick="toggleInfo()">About</div>
     <% if('donations' in extra){ %>
@@ -71,8 +71,9 @@
     tippy('*[data-tippy-content]');
 
     const prideFlag = document.querySelector('.pride-flag');
-    const prideFlags = ["rainbow", "trans", "lesbian", "bi", "pan", "nb", "ace", "genderfluid"];
-    let currentFlag = 0;
+    const prideFlags = ["rainbow", "trans", "lesbian", "bi", "pan", "nb", "ace", "genderfluid", "logo"];
+
+    let currentFlag = prideFlags.length - 1;
 
     if(localStorage.getItem('currentFlag')){
         currentFlag = parseInt(localStorage.getItem('currentFlag'));

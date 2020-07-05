@@ -201,6 +201,16 @@ header{
         #303cbe 80%, #303cbe 100%);
 }
 
+.pride-flag.logo{
+    background: url(../img/logo_square.png);
+    background-size: auto 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 25px;
+    height: 25px;
+    margin-top: 12px;
+}
+
 .pride-flag::after{
     content: "";
 }
@@ -3342,7 +3352,7 @@ html.no-webp #error_box_wrapper{
         margin-left: auto;
     }
 
-    .pride-flag{
+    .pride-flag:not(.logo){
         width: 20px;
         border-radius: 50%;
         margin-left: 10px;
