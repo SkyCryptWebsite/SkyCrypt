@@ -1479,11 +1479,13 @@ module.exports = {
             }
         }
 
-        for(const stat in renownedBonus){
-            if(!(stat in items.armor[0].stats))
-                items.armor[0].stats[stat] = 0;
+        if(items.armor[0] != null && helper.hasPath(items.armor[0], 'stats')){
+            for(const stat in renownedBonus){
+                if(!(stat in items.armor[0].stats))
+                    items.armor[0].stats[stat] = 0;
 
-            items.armor[0].stats[stat] += renownedBonus[stat];
+                items.armor[0].stats[stat] += renownedBonus[stat];
+            }
         }
 
         // Stats shouldn't go into negative
