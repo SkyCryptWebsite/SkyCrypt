@@ -1643,6 +1643,10 @@ a.additional-player-stat:hover{
 }
 
 .piece-special-bg{
+    background-color: #FF5555;
+}
+
+.piece-mythic-bg{
     background-color: #D762D7;
 }
 
@@ -1687,6 +1691,10 @@ a.additional-player-stat:hover{
 }
 
 .piece-special-fg{
+    color: #FF5555 !important;
+}
+
+.piece-mythic-fg{
     color: #D762D7 !important;
 }
 
