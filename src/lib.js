@@ -2292,8 +2292,12 @@ module.exports = {
             const maxPetRarity = {};
 
             if(Array.isArray(userProfile.pets)){
-                for(const pet of userProfile.pets)
+                for(const pet of userProfile.pets){
+                    if(!helper.hasPath(pet, 'tier'))
+                        continue;
+
                     maxPetRarity[pet.type] = Math.max(maxPetRarity[pet.type] || 0, constants.pet_value[pet.tier.toLowerCase()]);
+                }
 
                 for(const key in maxPetRarity)
                     userProfile.pet_score += maxPetRarity[key];
