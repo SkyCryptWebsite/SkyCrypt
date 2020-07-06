@@ -92,23 +92,9 @@ async function main(){
         };
 
         const topProfiles = await db
-        .collection('viewsLeaderboard')
-        .aggregate([
-           {
-               "$lookup": {
-                   "from": "profileStore",
-                   "localField": "uuid",
-                   "foreignField": "uuid",
-                   "as": "profileInfo"
-               }
-           },
-           {
-               "$unwind": {
-                   "path": "$profileInfo"
-               }
-           }
-        ])
-        .limit(20)
+        .collection('topViews')
+        .find()
+        .sort({ total: -1 })
         .toArray();
 
         for(const profile of topProfiles){
