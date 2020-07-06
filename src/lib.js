@@ -1735,6 +1735,9 @@ module.exports = {
         if('current_area' in userProfile)
             output.current_area = userProfile.current_area;
 
+        if('current_area_updated' in userProfile)
+            output.current_area_updated = userProfile.current_area_updated;
+
         if(diff < 3)
             last_updated_text = `Right now`;
         else if(diff < 60)
@@ -2198,6 +2201,9 @@ module.exports = {
 
         if(profileObject && helper.hasPath(profileObject, 'current_area'))
             userProfile.current_area = profileObject.current_area;
+
+        if(Date.now() - userProfile.last_save < 5 * 60 * 1000)
+            userProfile.current_area_updated = true;
 
         if(response && response.request.fromCache !== true){
             const apisEnabled = helper.hasPath(userProfile, 'inv_contents')
