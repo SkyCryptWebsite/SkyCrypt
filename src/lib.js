@@ -229,6 +229,20 @@ function getPetLevel(pet){
     };
 }
 
+function getFairyBonus(fairyExchanges){
+    const bonus = Object.assign({}, constants.stat_template);
+
+    bonus.speed = Math.floor(fairyExchanges / 10);
+
+    for(let i = 0; i < fairyExchanges; i++){
+        bonus.strength += (i + 1) % 5 == 0 ? 2 : 1;
+        bonus.defense += (i + 1) % 5 == 0 ? 2 : 1;
+        bonus.health += 3 + Math.floor(i / 2);
+    }
+
+    return bonus;
+}
+
 function getBonusStat(level, skill, max, incremention){
     let skill_stats = constants.bonus_stats[skill];
     let steps = Object.keys(skill_stats).sort((a, b) => Number(a) - Number(b)).map(a => Number(a));
@@ -1186,7 +1200,8 @@ module.exports = {
         output.fairy_bonus = {};
 
         if(userProfile.fairy_exchanges > 0){
-            let fairyBonus = getBonusStat(userProfile.fairy_exchanges * 5, 'fairy_souls', Math.max(...Object.keys(constants.bonus_stats.fairy_souls)), 5);
+            const fairyBonus = getFairyBonus(userProfile.fairy_exchanges);
+
             output.fairy_bonus = Object.assign({}, fairyBonus);
 
             // Apply fairy soul bonus
