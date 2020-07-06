@@ -80,7 +80,7 @@ function getAllKeys(profiles, ...path){
 
 function getXpByLevel(level, runecrafting){
     const output = {
-        level,
+        level: Math.min(level, 50),
         xpCurrent: 0,
         xpForNext: null,
         progress: 0.05
