@@ -194,7 +194,7 @@ module.exports = {
 
         const playerObjects = await db
         .collection('usernames')
-        .find({ $text: { $search: `"${username}"` } })
+        .find({ $text: { $search: username } })
         .toArray();
 
         for(const doc of playerObjects)
