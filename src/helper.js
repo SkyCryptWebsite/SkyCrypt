@@ -351,7 +351,7 @@ module.exports = {
     },
 
     // Convert Minecraft lore to HTML
-    renderLore: text => {
+    renderLore: (text, enchants = false) => {
         let output = "";
         let spansOpened = 0;
 
@@ -391,10 +391,14 @@ module.exports = {
         for(; spansOpened > 0; spansOpened--)
             output += "</span>";
 
-        const specialColor = constants.minecraft_formatting['6'];
+        if(enchants){
+            const specialColor = constants.minecraft_formatting['6'];
 
-        for(const enchantment of constants.special_enchants)
-            output = output.replace(enchantment, `<span style='${specialColor.css}'>${enchantment}</span>`);
+            const matchingEnchants = constants.special_enchants.filter(a => output.includes(a));
+
+            for(const enchantment of matchingEnchants)
+                output = output.replace(enchantment, `<span style='${specialColor.css}'>${enchantment}</span>`);
+        }
 
         return output;
     },
@@ -405,7 +409,7 @@ module.exports = {
         let parts = text.split("§");
 
         for(const [index, part] of parts.entries())
-            output += part.substr(Math.min(index, 1));
+            output += part.substring(Math.min(index, 1));
 
         return output;
     },

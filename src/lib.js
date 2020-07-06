@@ -373,6 +373,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
         let lore_raw;
 
+        const enchantments = helper.getPath(item, 'tag', 'ExtraAttributes', 'enchantments') || {};
+        const hasEnchantments = Object.keys(enchantments).length > 0;
+
         // Set HTML lore to be displayed on the website
         if(helper.hasPath(item, 'tag', 'display', 'Lore')){
             lore_raw = item.tag.display.Lore;
@@ -383,7 +386,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                 if(index == 0 && line == '')
                     continue;
 
-                item.lore += helper.renderLore(line);
+                item.lore += helper.renderLore(line, hasEnchantments);
 
                 if(index + 1 < lore_raw.length)
                     item.lore += '<br>';
@@ -527,42 +530,40 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
         // Workaround for detecting item types if another language is set by the player on Hypixel
         if(getId(item) != 'ENCHANTED_BOOK'
         && !constants.item_types.includes(item.type)){
-            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'enchantments')){
-                if('sharpness' in item.tag.ExtraAttributes.enchantments
-                || 'crticial' in item.tag.ExtraAttributes.enchantments
-                || 'ender_slayer' in item.tag.ExtraAttributes.enchantments
-                || 'execute' in item.tag.ExtraAttributes.enchantments
-                || 'first_strike' in item.tag.ExtraAttributes.enchantments
-                || 'giant_killer' in item.tag.ExtraAttributes.enchantments
-                || 'lethality' in item.tag.ExtraAttributes.enchantments
-                || 'life_steal' in item.tag.ExtraAttributes.enchantments
-                || 'looting' in item.tag.ExtraAttributes.enchantments
-                || 'luck' in item.tag.ExtraAttributes.enchantments
-                || 'scavenger' in item.tag.ExtraAttributes.enchantments
-                || 'vampirism' in item.tag.ExtraAttributes.enchantments
-                || 'bane_of_arthropods' in item.tag.ExtraAttributes.enchantments
-                || 'smite' in item.tag.ExtraAttributes.enchantments)
-                    item.type = 'sword';
+            if('sharpness' in enchantments
+            || 'crticial' in enchantments
+            || 'ender_slayer' in enchantments
+            || 'execute' in enchantments
+            || 'first_strike' in enchantments
+            || 'giant_killer' in enchantments
+            || 'lethality' in enchantments
+            || 'life_steal' in enchantments
+            || 'looting' in enchantments
+            || 'luck' in enchantments
+            || 'scavenger' in enchantments
+            || 'vampirism' in enchantments
+            || 'bane_of_arthropods' in enchantments
+            || 'smite' in enchantments)
+                item.type = 'sword';
 
-                if('power' in item.tag.ExtraAttributes.enchantments
-                || 'aiming' in item.tag.ExtraAttributes.enchantments
-                || 'infinite_quiver' in item.tag.ExtraAttributes.enchantments
-                || 'power' in item.tag.ExtraAttributes.enchantments
-                || 'snipe' in item.tag.ExtraAttributes.enchantments
-                || 'punch' in item.tag.ExtraAttributes.enchantments
-                || 'flame' in item.tag.ExtraAttributes.enchantments
-                || 'piercing' in item.tag.ExtraAttributes.enchantments)
-                    item.type = 'bow';
+            if('power' in enchantments
+            || 'aiming' in enchantments
+            || 'infinite_quiver' in enchantments
+            || 'power' in enchantments
+            || 'snipe' in enchantments
+            || 'punch' in enchantments
+            || 'flame' in enchantments
+            || 'piercing' in enchantments)
+                item.type = 'bow';
 
-                if('angler' in item.tag.ExtraAttributes.enchantments
-                || 'blessing' in item.tag.ExtraAttributes.enchantments
-                || 'caster' in item.tag.ExtraAttributes.enchantments
-                || 'frail' in item.tag.ExtraAttributes.enchantments
-                || 'luck_of_the_sea' in item.tag.ExtraAttributes.enchantments
-                || 'lure' in item.tag.ExtraAttributes.enchantments
-                || 'magnet' in item.tag.ExtraAttributes.enchantments)
-                    item.type = 'fishing rod';
-            }
+            if('angler' in enchantments
+            || 'blessing' in enchantments
+            || 'caster' in enchantments
+            || 'frail' in enchantments
+            || 'luck_of_the_sea' in enchantments
+            || 'lure' in enchantments
+            || 'magnet' in enchantments)
+                item.type = 'fishing rod';
         }
 
         if(!helper.hasPath(item, 'display_name') && helper.hasPath(item, 'id')){
