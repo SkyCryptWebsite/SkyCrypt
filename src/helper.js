@@ -140,6 +140,7 @@ module.exports = {
 
                         if(doc.username.toLowerCase() == data.name.toLowerCase()){
                             await db
+                            .collection('usernames')
                             .deleteOne(
                                 { _id: doc._id }
                             );
