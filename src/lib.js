@@ -2225,7 +2225,7 @@ module.exports = {
                     const areaData = statusResponse.data.session;
 
                     if(areaData.online && areaData.gameType == 'SKYBLOCK'){
-                        const areaName = constants.area_names[areaData.mode] || 'Unknown';
+                        const areaName = constants.area_names[areaData.mode] || helper.titleCase(areaData.mode.replace(/\_/g, ' '));
 
                         userProfile.current_area = areaName;
                         insertProfileStore.current_area = areaName;
