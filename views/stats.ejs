@@ -2,6 +2,8 @@
 const rarityOrder = ['special', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 const slayerOrder = ['zombie', 'spider', 'wolf'];
 
+const UNIQUE_ACCESSORIES = 51;
+
 const statSuffix = {
     health: '',
     defense: '',
@@ -13,7 +15,8 @@ const statSuffix = {
     intelligence: '',
     sea_creature_chance: '%',
     magic_find: '',
-    pet_luck: ''
+    pet_luck: '',
+    bonus_attack_speed: '%'
 };
 
 const statShort = {
@@ -27,7 +30,8 @@ const statShort = {
     intelligence: 'Int',
     sea_creature_chance: 'ScC',
     magic_find: 'MF',
-    pet_luck: 'PL'
+    pet_luck: 'PL',
+    bonus_attack_speed: 'Atk'
 };
 
 const skillItems = {
@@ -768,7 +772,7 @@ const inventorySlot = item => { %>
 
 const skill_component = (skill, icon, level) => { %>
     <div class="skill xp-skill <%= level.level == level.maxLevel ? 'maxed-skill' : ''%>">
-        <div class="skill-icon"><div class="item-icon <%= icon %>"></div></div>
+        <div class="skill-icon"><div class="item-icon <%= icon %>"></div><% if(level.level == level.maxLevel){ %><div class="piece-shine"></div><% } %></div>
         <div class="skill-name"><%= skill %> <span class="skill-level"><%= level.level >= 0 ? level.level : '?' %></span></div>
         <div class="skill-bar" data-skill="<%= skill %>">
             <div class="skill-progress-bar" style="width: <%= level.level == level.maxLevel ? 100 : level.progress * 100 %>%"></div>
@@ -884,7 +888,7 @@ if(calculated.slayer_coins_spent.total > 0){
 }
 
 if(calculated.average_level)
-    description += `⚒ Avg Skill Level: ${calculated.average_level.toFixed(1)} `;
+    description += `⚒ Avg Skill Level: ${Math.floor(calculated.average_level * 10) / 10} `;
 
 description += `💰 Purse: ${helper.formatNumber(calculated.purse, true)} Coins`;
 
@@ -951,7 +955,7 @@ twitterDescription += '. Click to view more stats!'
                 <% if(calculated.display_emoji){ %><%- extra.twemoji.parse(calculated.display_emoji) %><% } %>
                 <div id="other_players">
                     <% calculated.members.forEach(member => { %>
-                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %>"><%= member.display_name %><% if(member.emoji){ %> <%- extra.twemoji.parse(member.emoji) %><% } %><div class="goto-last-played"><%= member.last_updated.text %></div></a>
+                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"><%= member.display_name %><% if(member.emoji){ %> <%- extra.twemoji.parse(member.emoji) %><% } %><div class="goto-last-played"><%= 'last_updated' in member ? member.last_updated.text : '' %></div></a>
                     <% }); %>
                 </div>
             </div><span class="text-on"> on </span><div tabindex="2" id="stats_for_profile">
@@ -959,7 +963,7 @@ twitterDescription += '. Click to view more stats!'
                 <div id="other_profiles">
                     <% for(let profile_id in calculated.profiles){ %>
                         <% let _profile = calculated.profiles[profile_id]; %>
-                        <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %>"><%= _profile.cute_name %><div class="goto-last-played"><%= _profile.last_updated.text %></div></a>
+                        <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"><%= _profile.cute_name %><div class="goto-last-played"><%= 'last_updated' in _profile ? _profile.last_updated.text : '' %></div></a>
                     <% } %>
                 </div>
             </div>
@@ -1066,6 +1070,13 @@ twitterDescription += '. Click to view more stats!'
                 }); %>
 
                 <%- stat_component({
+                    name: 'bonus_attack_speed',
+                    prettyName: 'Attack Speed',
+                    suffix: '%',
+                    baseExplanation: null
+                }); %>
+
+                <%- stat_component({
                     name: 'intelligence',
                     baseExplanation: "Increased by leveling your Enchanting and Alchemy skills and completing songs on Melody's Harp."
                 }); %>
@@ -1094,7 +1105,7 @@ twitterDescription += '. Click to view more stats!'
                 <div id="skin_display_mobile"></div>
                 <div id="additional_stats_container">
                     <% if(calculated.current_area){ %>
-                    <div class="additional-stat"><span class="stat-name">Current Island: </span><span class="stat-value"><%= calculated.current_area %></span></div>
+                    <div class="additional-stat"><span class="stat-name"><%= calculated.current_area_updated ? 'Current' : 'Last' %> Island: </span><span class="stat-value"><%= calculated.current_area %></span></div>
                     <% } %>
                     <div class="additional-stat"><span data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></span></div>
                     <div class="additional-stat"><span data-tippy-content="Joined on <%= moment(calculated.first_join.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></span></div>
@@ -1110,7 +1121,7 @@ twitterDescription += '. Click to view more stats!'
                         <div class='tippy-explanation'>Average skill level over all skills except Carpentry and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div>
                         <% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
                         <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
-                        "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level.toFixed(1) %></span></span></div>
+                        "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= Math.floor(calculated.average_level * 10) / 10 %></span></span></div>
                         <div class="additional-stat">
                             <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
                         </div>
@@ -1281,8 +1292,8 @@ twitterDescription += '. Click to view more stats!'
                         <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
                     <% }else{ %>
                         <p class="stat-raw-values">
-                            <% max = items.talismans.filter(a => a.isUnique).length >= 50 ? 'golden-text': '' %><span class="stat-name <%= max %>">Unique Accessories: </span><span class="stat-value <%= max %>"><%= items.talismans.filter(a => a.isUnique).length %> / 50</span><br>
-                            <span class="stat-name <%= max %>">Completion: </span><span class="stat-value <%= max %>"><%= Math.round(items.talismans.filter(a => a.isUnique).length / 50 * 100) %>%</span>
+                            <% max = items.talismans.filter(a => a.isUnique).length >= UNIQUE_ACCESSORIES ? 'golden-text': '' %><span class="stat-name <%= max %>">Unique Accessories: </span><span class="stat-value <%= max %>"><%= items.talismans.filter(a => a.isUnique).length %> / <%= UNIQUE_ACCESSORIES %></span><br>
+                            <span class="stat-name <%= max %>">Completion: </span><span class="stat-value <%= max %>"><%= Math.round(items.talismans.filter(a => a.isUnique).length / UNIQUE_ACCESSORIES * 100) %>%</span>
                         </p>
                         <% if(items.talismans.filter(a => !a.isInactive).length > 0){ %>
                             <div class="accessory-list">
@@ -1455,7 +1466,7 @@ twitterDescription += '. Click to view more stats!'
                                     if(items.fishing_bag.length > 0){ %>
                                         <div class="inventory-tab" data-inventory-type="fishing_bag">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/eb8e297df6b8dffcf135dba84ec792d420ad8ecb458d144288572a84603b1631)"></div>
-                                            <div class="inventory-tab-name">Fishes</div>
+                                            <div class="inventory-tab-name">Fishies</div>
                                         </div>
                                     <% }
 
@@ -1505,13 +1516,11 @@ twitterDescription += '. Click to view more stats!'
                     <span class="stat-name">Sea Creatures killed: </span><span class="stat-value"><%= totalSeaCreatureKills.toLocaleString() %></span><br>
                     <%
                     if(calculated.fishing.shredder_fished > 0 && calculated.fishing.shredder_bait > 0){
-                    const baitWasted = calculated.fishing.shredder_bait - calculated.fishing.shredder_fished;
 
                         %>
                     <span data-tippy-content='
                     <span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span><br>
                     <span class="stat-name">Bait used with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_bait.toLocaleString() %></span><br>
-                    <% if(baitWasted > 0){ %><span class="stat-name">Bait wasted with Shredder: </span><span class="stat-value"><%= baitWasted.toLocaleString() %> <span class="grey-text">(<%= Math.round(baitWasted / calculated.fishing.shredder_bait * 100) %>%)</span></span><% } %>
                     '><span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span></span><br>
                     <% } %>
                 </p>
@@ -1923,12 +1932,82 @@ twitterDescription += '. Click to view more stats!'
                         <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-317_0"></div></div><span>races</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.races){
+                                if(key.startsWith('dungeon_hub'))
+                                    continue;
+
                                 const raceName = helper.capitalizeFirstLetter(key.split("_").join(" "));
-                                const raceDuration = moment.duration(calculated.misc.races[key], "milliseconds").format("m:ss.SSS");
+                                let raceDuration = moment.duration(calculated.misc.races[key], "milliseconds").format("m:ss.SSS");
+
+                                if(calculated.misc.races[key] < 1000)
+                                    raceDuration = '0.' + raceDuration;
                             %>
                             <span class="stat-name"><%= raceName %>: </span><span class="stat-value"><%= raceDuration %></span><br>
                             <% } %>
                         </p>
+                        <div class="race-containers">
+                            <%
+                            const races = [
+                                { id: "dungeon_hub_crystal_core", name: "Crystal Core", icon: '399_0' },
+                                { id: "dungeon_hub_giant_mushroom", name: "Giant Mushroom", icon: '100_0' },
+                                { id: "dungeon_hub_precursor_ruins", name: "Precursor Ruins", icon: '98_1' }
+                            ];
+
+                            const types = ["anything", "no_pearls", "no_abilities", "nothing"];
+
+                            for(const race of races){
+                                const times = Object.keys(calculated.misc.races).filter(a => a.startsWith(race.id));
+
+                                if(times.length > 0){
+                                %>
+                                <div class="narrow-info-container">
+                                    <div class="narrow-info-header"><%= race.name %></div>
+                                    <div class="narrow-info-content">
+                                        <%
+                                        const races_no_return = times.filter(a => a.includes("no_return"));
+                                        const races_with_return = times.filter(a => a.includes("with_return"));
+
+                                        if(races_no_return.length > 0){ %>
+                                            <div class="narrow-info-section-header">No Return:</div>
+                                        <% }
+
+                                        for(const type of types){
+                                            const duration = calculated.misc.races[`${race.id}_${type}_no_return_best_time`] || 0;
+
+                                            if(duration == 0)
+                                                continue;
+
+                                            let raceDuration = moment.duration(duration, "milliseconds").format("m:ss.SSS");
+
+                                            if(duration < 1000)
+                                                raceDuration = '0.' + raceDuration;
+                                            %>
+                                            <div><span class="stat-name"><%= helper.titleCase(type.replace("_", " ")) %>: </span><span class="stat-value"><%= raceDuration %></span></div>
+                                        <% }
+
+                                        if(races_with_return.length > 0){ %>
+                                            <div class="narrow-info-section-header">With Return:</div>
+                                        <% }
+
+                                        for(const type of types){
+                                            const duration = calculated.misc.races[`${race.id}_${type}_with_return_best_time`] || 0;
+
+                                            if(duration == 0)
+                                                continue;
+
+                                            let raceDuration = moment.duration(duration, "milliseconds").format("m:ss.SSS");
+
+                                            if(duration < 1000)
+                                                raceDuration = '0.' + raceDuration;
+                                            %>
+                                            <div><span class="stat-name"><%= helper.titleCase(type.replace("_", " ")) %>: </span><span class="stat-value"><%= raceDuration %></span></div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                                <%
+                                }
+                            }
+                            %>
+                        </div>
                     <% } %>
                     <% if('gifts' in calculated.misc){ %>
                         <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/b73a2114136b8ee4926caa51785414036a2b76e4f1668cb89d99716c421)"></div></div><span>gifts</span></div>

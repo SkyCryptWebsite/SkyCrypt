@@ -201,6 +201,16 @@ header{
         #303cbe 80%, #303cbe 100%);
 }
 
+.pride-flag.logo{
+    background: url(../img/logo_square.png);
+    background-size: auto 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 25px;
+    height: 25px;
+    margin-top: 12px;
+}
+
 .pride-flag::after{
     content: "";
 }
@@ -461,6 +471,7 @@ html.no-webp #bg_blur{
     position: relative;
     z-index: 10;
     filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
+    overflow: hidden;
 }
 
 .skill.maxed-skill .skill-icon{
@@ -471,6 +482,7 @@ html.no-webp #bg_blur{
     position: absolute;
     top: 5px;
     left: 5px;
+    z-index: 10;
     transform: scale(0.2);
     transform-origin: top left;
     filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
@@ -771,7 +783,7 @@ html.no-transform #info_box.opened{
 
 #stats_content .item-lore{
     padding: 25px;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 #stats_content .pack-credit{
@@ -1096,7 +1108,7 @@ a.additional-player-stat:hover{
 }
 
 #additional_stats_container{
-    margin-top: -25px;
+    margin-top: -50px;
     font-size: 12px;
     font-weight: 600;
     overflow: visible;
@@ -1232,7 +1244,7 @@ a.additional-player-stat:hover{
 }
 
 .stat-value{
-    font-weight: 600;
+    font-weight: 700;
     margin-left: 2px;
 }
 
@@ -1282,7 +1294,7 @@ a.additional-player-stat:hover{
 }
 
 .stat-strength{
-    background-image: url(../img/icons/strength.png);
+    background-image: url(../img/icons/strength-new.png);
 }
 
 .stat-speed{
@@ -1303,6 +1315,14 @@ a.additional-player-stat:hover{
 
 .stat-crit-chance .stat-name, .stat-crit-damage .stat-name, .color-crit-chance, .color-crit-damage{
     color: #9FA8DA;
+}
+
+.stat-bonus-attack-speed{
+    background-image: url(../img/icons/bonus-attack-speed.png);
+}
+
+.stat-bonus-attack-speed .stat-name, .color-bonus-attack-speed{
+    color: #F7F778;
 }
 
 .stat-intelligence{
@@ -1571,20 +1591,20 @@ a.additional-player-stat:hover{
     background: linear-gradient(to top, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(128,186,232,0) 99%, rgba(125,185,232,0) 100%);
     background: -moz-linear-gradient(to top, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(128,186,232,0) 99%, rgba(125,185,232,0) 100%);
     z-index: 10;
-    animation: shine 3s infinite;
+    animation: shine 4s infinite;
 }
 
 @keyframes shine {
 	0% {
-        transform: translateY(100%);
+        transform: translateY(120%);
     }
 
     33% {
-        transform: translateY(-100%);
+        transform: translateY(-120%);
     }
 
     100% {
-        transform: translateY(-100%);
+        transform: translateY(-120%);
     }
 }
 
@@ -1623,6 +1643,10 @@ a.additional-player-stat:hover{
 }
 
 .piece-special-bg{
+    background-color: #FF5555;
+}
+
+.piece-mythic-bg{
     background-color: #D762D7;
 }
 
@@ -1667,6 +1691,10 @@ a.additional-player-stat:hover{
 }
 
 .piece-special-fg{
+    color: #FF5555 !important;
+}
+
+.piece-mythic-fg{
     color: #D762D7 !important;
 }
 
@@ -2046,12 +2074,16 @@ a.additional-player-stat:hover{
     margin-left: 20px;
 }
 
+.race-containers .narrow-info-container{
+    min-width: 230px;
+}
+
 .stat-slayer .narrow-info-container{
     min-width: 270px;
     padding-bottom: 30px;
 }
 
-.slayer-containers{
+.slayer-containers, .race-containers{
     white-space: nowrap;
 }
 
@@ -2084,6 +2116,14 @@ a.additional-player-stat:hover{
     font-weight: 600;
     text-transform: capitalize;
     color: rgba(255,255,255,0.8);
+}
+
+.narrow-info-section-header{
+    font-weight: 700;
+    text-transform: capitalize;
+    color: rgba(255,255,255,0.8);
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .slayer-kills{
@@ -2406,7 +2446,7 @@ a.additional-player-stat:hover{
     cursor: pointer;
 }
 
-.narrow-info-content{
+.kills-deaths-container .narrow-info-content{
     padding: 20px;
     margin-top: 37px;
     box-sizing: border-box;
@@ -2448,7 +2488,7 @@ a.additional-player-stat:hover{
     margin: 0 auto;
     margin-top: calc(50vh - 130px);
     width: 700px;
-    height: 300px;
+    height: 260px;
     background: url(../img/bg_blur.webp?v2) no-repeat center center fixed;
     background-size: cover;
     border-radius: 10px;
@@ -3020,7 +3060,7 @@ html.no-webp #error_box_wrapper{
         width: calc(100vw / 3 - 85px);
     }
 
-    .slayer-containers{
+    .slayer-containers, .race-containers{
         overflow-x: auto;
         margin-left: -40px;
         margin-right: -40px;
@@ -3028,7 +3068,7 @@ html.no-webp #error_box_wrapper{
         padding-bottom: 20px;
     }
 
-    .slayer-containers .narrow-info-container:last-child{
+    .race-containers .narrow-info-container:last-child, .slayer-containers .narrow-info-container:last-child{
         margin-right: 40px;
     }
 }
@@ -3148,7 +3188,7 @@ html.no-webp #error_box_wrapper{
     }
 
     #enter_player_box_wrapper{
-        height: 235px;
+        height: 205px;
         font-size: 12px;
     }
 
@@ -3320,7 +3360,7 @@ html.no-webp #error_box_wrapper{
         margin-left: auto;
     }
 
-    .pride-flag{
+    .pride-flag:not(.logo){
         width: 20px;
         border-radius: 50%;
         margin-left: 10px;

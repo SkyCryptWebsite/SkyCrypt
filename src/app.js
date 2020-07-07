@@ -12,8 +12,8 @@ async function main(){
     const crypto = require('crypto');
     const cors = require('cors');
 
-    const redis = require('redis');
-    const redisClient = redis.createClient();
+    const Redis = require("ioredis");
+    const redisClient = new Redis();
 
     const axios = require('axios');
     require('axios-debug-log');
@@ -92,23 +92,9 @@ async function main(){
         };
 
         const topProfiles = await db
-        .collection('viewsLeaderboard')
-        .aggregate([
-            {
-                "$lookup": {
-                    "from": "profileStore",
-                    "localField": "uuid",
-                    "foreignField": "uuid",
-                    "as": "profileInfo"
-                }
-            },
-            {
-                "$unwind": {
-                    "path": "$profileInfo"
-                }
-            }
-        ])
-        .limit(20)
+        .collection('topViews')
+        .find()
+        .sort({ total: -1 })
         .toArray();
 
         for(const profile of topProfiles){
@@ -133,19 +119,22 @@ async function main(){
         let paramPlayer = req.params.player.toLowerCase().replace(/[^a-z\d\-\_:]/g, '');
         let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
 
+        const cacheOnly = req.query.cache === 'true';
+
         const playerUsername = paramPlayer.length == 32 ? await helper.uuidToUsername(paramPlayer, db).display_name : paramPlayer;
 
         try{
-            const { profile, allProfiles } = await helper.getProfile(db, paramPlayer, paramProfile, { updateArea: true });
+            const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, { updateArea: true, cacheOnly });
 
             const items = await lib.getItems(profile.members[profile.uuid], true, req.query.pack);
             const calculated = await lib.getStats(db, profile, allProfiles, items);
 
-            res.render('stats', { items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
+            res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });
         }catch(e){
             console.error(e);
 
             res.render('index', {
+                req,
                 error: e,
                 player: playerUsername,
                 extra: await getExtra(),
@@ -323,14 +312,14 @@ async function main(){
     });
 
     app.all('/random/stats', async (req, res, next) => {
-        const profile = await db
+        /*const profile = await db
         .collection('profileStore')
         .aggregate([
             { $match: { apis: true } },
             { $sample: { size: 1 } }
-        ]).next();
+        ]).next();*/
 
-        res.redirect(`/stats/${profile.uuid}/{profile.profile_id}`);
+        res.redirect(`/stats/20934ef9488c465180a78f861586b4cf/bf7c14fb018946899d944d56e65222d2`);
     });
 
     app.all('/favicon.ico', express.static(path.join(__dirname, 'public')));

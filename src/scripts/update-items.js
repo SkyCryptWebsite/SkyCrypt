@@ -8,9 +8,9 @@ async function main(){
     const axios = require('axios');
     require('axios-debug-log');
 
-    const helper = require('./helper');
+    const helper = require('./../helper');
 
-    const credentials = require('../credentials.json');
+    const credentials = require('./../../credentials.json');
     const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
 

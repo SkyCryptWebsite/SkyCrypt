@@ -87,8 +87,9 @@ module.exports = {
         strength: 0,
         damage_increase: 0,
         speed: 100,
-        crit_chance: 20,
+        crit_chance: 30,
         crit_damage: 50,
+        bonus_attack_speed: 0,
         intelligence: 0,
         sea_creature_chance: 20,
         magic_find: 10,
@@ -105,6 +106,7 @@ module.exports = {
         speed: 0,
         crit_chance: 0,
         crit_damage: 0,
+        bonus_attack_speed: 0,
         intelligence: 0,
         sea_creature_chance: 0,
         magic_find: 0,
@@ -116,6 +118,17 @@ module.exports = {
         2: 2000,
         3: 10000,
         4: 50000
+    },
+
+    mob_mounts: {
+        sea_emperor: [
+            "guardian_emperor",
+            "skeleton_emperor"
+        ],
+        monster_of_the_deep: [
+            "zombie_deep",
+            "chicken_deep"
+        ]
     },
 
     mob_names: {
@@ -173,6 +186,10 @@ module.exports = {
                 {
                     tier: 13,
                     slots: 39
+                },
+                {
+                    tier: 14,
+                    slots: 45
                 }
             ]
         },
