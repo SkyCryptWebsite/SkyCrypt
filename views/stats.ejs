@@ -1205,7 +1205,7 @@ twitterDescription += '. Click to view more stats!'
                     <div class="pieces">
                         <% for(const item of items.armor.slice().reverse()){ %>
                             <div tabindex="3" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
-                                <% if(item.rarity == 'legendary'){ %>
+                                <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                     <div class="piece-shine"></div>
                                 <% } %>
                                 <div class="piece-hover-area"></div>
@@ -1227,7 +1227,7 @@ twitterDescription += '. Click to view more stats!'
                                     continue;
                                  %>
                                 <div tabindex="3" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item <%= index == 0 ? 'wardrobe-piece' : '' %> piece piece-<%= item.rarity %>-bg">
-                                    <% if(item.rarity == 'legendary'){ %>
+                                    <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                         <div class="piece-shine"></div>
                                     <% } %>
                                     <div class="piece-hover-area"></div>
