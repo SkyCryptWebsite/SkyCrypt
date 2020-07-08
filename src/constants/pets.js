@@ -460,20 +460,38 @@ module.exports = {
         PET_ITEM_FORAGING_SKILL_BOOST_COMMON: {
             description: "§7Gives +§a20% §7pet exp for Foraging"
         },
+        PET_ITEM_FORAGING_SKILL_BOOST_UNCOMMON: {
+            description: "§7Gives +§a30% §7pet exp for Foraging"
+        },
+        PET_ITEM_FORAGING_SKILL_BOOST_RARE: {
+            description: "§7Gives +§a40% §7pet exp for Foraging"
+        },
         PET_ITEM_FORAGING_SKILL_BOOST_EPIC: {
             description: "§7Gives +§a50% §7pet exp for Foraging"
         },
         PET_ITEM_MINING_SKILL_BOOST_COMMON: {
             description: "§7Gives +§a20% §7pet exp for Mining"
         },
+        PET_ITEM_MINING_SKILL_BOOST_UNCOMMON: {
+            description: "§7Gives +§a30% §7pet exp for Mining"
+        },
         PET_ITEM_MINING_SKILL_BOOST_RARE: {
             description: "§7Gives +§a40% §7pet exp for Mining"
+        },
+        PET_ITEM_MINING_SKILL_BOOST_EPIC: {
+            description: "§7Gives +§a50% §7pet exp for Mining"
         },
         PET_ITEM_FARMING_SKILL_BOOST_COMMON: {
             description: "§7Gives +§a20% §7pet exp for Farming"
         },
+        PET_ITEM_FARMING_SKILL_BOOST_UNCOMMON: {
+            description: "§7Gives +§a30% §7pet exp for Farming"
+        },
         PET_ITEM_FARMING_SKILL_BOOST_RARE: {
             description: "§7Gives +§a40% §7pet exp for Farming"
         },
+        PET_ITEM_FARMING_SKILL_BOOST_EPIC: {
+            description: "§7Gives +§a50% §7pet exp for Farming"
+        }
     }
 }
