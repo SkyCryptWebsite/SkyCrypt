@@ -333,7 +333,10 @@ async function main(){
     });
 
     app.all('*', async (req, res, next) => {
-        res.redirect('/');
+        res
+        .status(404)
+        .type('txt')
+        .send('Not found')
     });
 
     app.listen(port, () => console.log(`SkyBlock Stats running on http://localhost:${port}`));
