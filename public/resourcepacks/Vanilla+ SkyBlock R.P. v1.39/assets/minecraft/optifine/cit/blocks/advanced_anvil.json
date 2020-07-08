@@ -1,0 +1,8 @@
+{
+    "parent": "block/anvil",
+    "textures": {
+        "particle": "mcpatcher/cit/blocks/anvil_base",
+        "body": "mcpatcher/cit/blocks/anvil_base",
+        "top": "mcpatcher/cit/blocks/anvil_top_damaged_0"
+    }
+}

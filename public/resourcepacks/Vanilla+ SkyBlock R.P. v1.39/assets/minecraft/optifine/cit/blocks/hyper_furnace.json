@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "mcpatcher/cit/blocks/hyper_furnace_top",
+        "front": "mcpatcher/cit/blocks/hyper_furnace_front",
+        "side": "mcpatcher/cit/blocks/hyper_furnace_side"
+    }
+}
