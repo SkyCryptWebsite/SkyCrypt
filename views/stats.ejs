@@ -1374,7 +1374,7 @@ twitterDescription += '. Click to view more stats!'
                             <div class="pieces">
                         <% } %>
                             <div data-pet-index="<%= index %>" class="<%= pet.active ? 'active-pet' : '' %> <%= index > 0 || index == 0 && !pet.active ? 'other-pet' : '' %> rich-item piece piece-<%= pet.rarity %>-bg">
-                                <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
+                                <% if(rarityOrder.indexOf(pet.rarity) < 3){ %>
                                     <div class="piece-shine"></div>
                                 <% } %>
                                 <div class="piece-hover-area"></div>
