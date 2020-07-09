@@ -395,7 +395,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             let hasAnvilUses = false;
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'anvil_uses')){
-                let { anvil_uses, timestamp } = item.tag.ExtraAttributes;
+                let { anvil_uses } = item.tag.ExtraAttributes;
 
                 let hot_potato_count = 0;
 
@@ -406,14 +406,22 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
                 if(anvil_uses > 0 && lore_raw){
                     hasAnvilUses = true;
+
                     item.lore += "<br><br>" + helper.renderLore(`§7Anvil Uses: §c${anvil_uses}`);
                 }
+            }
+
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'rarity_upgrades')){
+                const { rarity_upgrades } = item.tag.ExtraAttributes;
+
+                if(rarity_upgrades > 0)
+                    item.lore += "<br>" + helper.renderLore(`§6Recombobulated`);
             }
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp')){
                 item.lore += "<br>";
 
-                const timestamp = item.tag.ExtraAttributes.timestamp;
+                const { timestamp } = item.tag.ExtraAttributes;
 
                 let obtainmentDate;
 
