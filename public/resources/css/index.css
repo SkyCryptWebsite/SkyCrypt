@@ -179,9 +179,9 @@ header{
 .pride-flag.nb{
     background: linear-gradient(180deg,
         #fcf431 0%, #fcf431 25%,
-        white 25%, white 50%,
+        #fcfcfc 25%, #fcfcfc 50%,
         #9d5cd5 50%, #9d5cd5 75%,
-        black 75%, black 100%);
+        #282828 75%, #282828 100%);
 }
 
 .pride-flag.ace{
