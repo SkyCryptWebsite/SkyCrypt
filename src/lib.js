@@ -1021,7 +1021,7 @@ module.exports = {
             let reforgeName;
 
             armor.forEach(armorPiece => {
-                let name = armorPiece.display_name;
+                let name = armorPiece.display_name.replace(/\✪/g, '').trim();
 
                 if(helper.hasPath(armorPiece, 'tag', 'ExtraAttributes', 'modifier'))
                     name = name.split(" ").slice(1).join(" ");
