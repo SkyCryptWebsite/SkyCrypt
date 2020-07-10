@@ -41,7 +41,7 @@ const rarity_order = ['special', 'mythic', 'legendary', 'epic', 'rare', 'uncommo
 
 const petTiers = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
 
-const MAX_SOULS = 201;
+const MAX_SOULS = 209;
 
 function replaceAll(target, search, replacement){
     return target.split(search).join(replacement);
