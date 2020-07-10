@@ -470,7 +470,7 @@ module.exports = {
 
         k: {
             type: 'format',
-            css: ''
+            css: 'display: none'
         },
 
         l: {
