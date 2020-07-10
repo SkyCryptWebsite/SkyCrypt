@@ -392,6 +392,13 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                     item.lore += '<br>';
             }
 
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'rarity_upgrades')){
+                const { rarity_upgrades } = item.tag.ExtraAttributes;
+
+                if(rarity_upgrades > 0)
+                    item.lore += "<br>" + helper.renderLore(`§8(Recombobulated)`);
+            }
+
             let hasAnvilUses = false;
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'anvil_uses')){
@@ -409,13 +416,6 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
                     item.lore += "<br><br>" + helper.renderLore(`§7Anvil Uses: §c${anvil_uses}`);
                 }
-            }
-
-            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'rarity_upgrades')){
-                const { rarity_upgrades } = item.tag.ExtraAttributes;
-
-                if(rarity_upgrades > 0)
-                    item.lore += "<br>" + helper.renderLore(`§6Recombobulated`);
             }
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp')){
