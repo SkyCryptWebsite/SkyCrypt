@@ -78,13 +78,28 @@ module.exports = {
         return "";
     },
 
-    uuidToUsername: async (uuid, db, cacheOnly = false) => {
+    resolveUsernameOrUuid: async (uuid, db, cacheOnly = false) => {
         let output;
+        let user = null;
 
-        let user = await db
-        .collection('usernames')
-        .find({ uuid: uuid })
-        .next();
+        uuid = uuid.replace(/\-/g, '');
+
+        const isUuid = uuid.length == 32;
+
+        if(isUuid){
+            user = await db
+            .collection('usernames')
+            .findOne({ uuid });
+        }else{
+            const playerObjects = await db
+            .collection('usernames')
+            .find({ $text: { $search: uuid } })
+            .toArray();
+
+            for(const doc of playerObjects)
+                if(doc.username.toLowerCase() == uuid.toLowerCase())
+                    user = doc;
+        }
 
         let skin_data = { skinurl: 'https://textures.minecraft.net/texture/3b60a1f6d562f52aaebbf1434f1de147933a3affe0e764fa49ea057536623cd3', model: 'slim' };
 
@@ -97,28 +112,28 @@ module.exports = {
         }
 
         if(cacheOnly === false && (user === null || (+new Date() - user.date) > 4000 * 1000)){
-            let profileRequest = axios(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`, { timeout: 2000 });
+            let profileRequest = axios(`https://api.ashcon.app/mojang/v2/user/${uuid}`, { timeout: 2000 });
 
             profileRequest.then(async response => {
                 try{
                     const { data } = response;
 
-                    const profileData = JSON.parse(Buffer.from(data.properties[0].value, 'base64'));
+                    data.id = data.uuid.replace(/\-/g, '');
 
                     let updateDoc = {
-                        username: data.name,
+                        username: data.username,
                         date: +new Date()
                     }
 
-                    if(module.exports.hasPath(profileData.textures, 'SKIN')){
-                        const skin = profileData.textures.SKIN;
+                    if(module.exports.hasPath(data.textures, 'skin')){
+                        const skin = data.textures.skin;
 
-                        skin_data.skinurl = skin.url;
-                        skin_data.model = module.exports.hasPath(skin, 'metadata', 'model') ? skin.metadata.model : 'regular';
+                        skin_data.skinurl = data.textures.skin.url;
+                        skin_data.model = data.textures.slim ? 'slim' : 'regular';
                     }
 
-                    if(module.exports.hasPath(profileData.textures, 'CAPE'))
-                        skin_data.capeurl = profileData.textures.CAPE.url;
+                    if(module.exports.hasPath(data.textures, 'cape'))
+                        skin_data.capeurl = data.textures.cape.url;
 
                     updateDoc = Object.assign(updateDoc, skin_data);
 
@@ -132,20 +147,20 @@ module.exports = {
 
                     const playerObjects = await db
                     .collection('usernames')
-                    .find({ $text: { $search: `"${data.name}"` } });
+                    .find({ $text: { $search: data.username } });
 
                     for await(const doc of playerObjects){
                         if(doc.uuid == data.id)
                             continue;
 
-                        if(doc.username.toLowerCase() == data.name.toLowerCase()){
+                        if(doc.username.toLowerCase() == data.username.toLowerCase()){
                             await db
                             .collection('usernames')
                             .deleteOne(
                                 { _id: doc._id }
                             );
 
-                            module.exports.uuidToUsername(doc.uuid, db).catch(console.error);
+                            module.exports.resolveUsernameOrUuid(doc.uuid, db).catch(console.error);
                         }
                     }
                 }catch(e){
@@ -167,65 +182,30 @@ module.exports = {
                 try{
                     let { data } = await profileRequest;
 
-                    if(module.exports.hasPath(data.textures, 'SKIN')){
-                        const skin = data.textures.SKIN;
+                    data.id = data.uuid.replace(/\-/g, '');
 
-                        skin_data.skinurl = skin.url;
-                        skin_data.model = module.exports.hasPath(skin, 'metadata', 'model') ? skin.metadata.model : 'regular';
+                    if(module.exports.hasPath(data.textures, 'skin')){
+                        skin_data.skinurl = data.textures.skin.url;
+                        skin_data.model = data.textures.slim ? 'slim' : 'regular';
                     }
 
-                    if(module.exports.hasPath(data.textures, 'CAPE'))
-                        skin_data.capeurl = data.textures.CAPE.url;
+                    if(module.exports.hasPath(data.textures, 'cape'))
+                        skin_data.capeurl = data.textures.cape.url;
 
-                    return { uuid, display_name: data.name, skin_data };
+                    return { uuid: data.id, display_name: data.username, skin_data };
                 }catch(e){
-                    return { uuid, display_name: uuid, skin_data };
+                    if(module.exports.hasPath(e, 'response', 'data', 'reason'))
+                        throw e.response.data.reason;
+                    else
+                        throw "Failed resolving username.";
                 }
             }
         }
 
         if(user)
-            return { uuid, display_name: user.username, emoji: user.emoji, skin_data };
+            return { uuid: user.uuid, display_name: user.username, emoji: user.emoji, skin_data };
         else
             return { uuid, display_name: uuid, skin_data };
-    },
-
-    usernameToUuid: async (username, db) => {
-        let playerObject = null;
-
-        const playerObjects = await db
-        .collection('usernames')
-        .find({ $text: { $search: username } })
-        .toArray();
-
-        for(const doc of playerObjects)
-            if(doc.username.toLowerCase() == username.toLowerCase())
-                playerObject = doc;
-
-        if(playerObject === null){
-            let mojangResponse;
-
-            try{
-                mojangResponse = await axios(`https://api.mojang.com/users/profiles/minecraft/${username}`, { timeout: 2000 });
-            }catch(e){
-                throw "Failed resolving username. (Mojang API down?)";
-            }
-
-            if(mojangResponse.status == 204)
-                throw "User not found.";
-
-            const { data } = mojangResponse;
-
-            playerObject = {
-                uuid: data.id,
-                username: data.name,
-                date: +new Date()
-            };
-        }
-
-        module.exports.uuidToUsername(playerObject.uuid, db).catch(console.error);
-
-        return playerObject;
     },
 
     getGuild: async (uuid, db, cacheOnly = false) => {
@@ -253,7 +233,7 @@ module.exports = {
                     return null;
 
                 guildObject.level = module.exports.getGuildLevel(guildObject.exp);
-                guildObject.gmUser = await module.exports.uuidToUsername(guildObject.gm, db, cacheOnly);
+                guildObject.gmUser = await module.exports.resolveUsernameOrUuid(guildObject.gm, db, cacheOnly);
                 guildObject.rank = guildMember.rank;
 
                 return guildObject;
@@ -312,7 +292,7 @@ module.exports = {
                         );
 
                         guildObject.value.level = module.exports.getGuildLevel(guildObject.value.exp);
-                        guildObject.value.gmUser = await module.exports.uuidToUsername(guildObject.value.gm, db);
+                        guildObject.value.gmUser = await module.exports.resolveUsernameOrUuid(guildObject.value.gm, db);
                         guildObject.value.rank = guild.members.filter(a => a.uuid == uuid)[0].rank;
 
                         return guildObject.value;
@@ -648,7 +628,7 @@ module.exports = {
             let memberPromises = [];
 
             for(const member in profileResponse.data.profile.members)
-                memberPromises.push(module.exports.uuidToUsername(member, db));
+                memberPromises.push(module.exports.resolveUsernameOrUuid(member, db));
 
             let profileMembers = await Promise.all(memberPromises);
 

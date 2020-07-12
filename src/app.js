@@ -121,7 +121,7 @@ async function main(){
 
         const cacheOnly = req.query.cache === 'true';
 
-        const playerUsername = paramPlayer.length == 32 ? await helper.uuidToUsername(paramPlayer, db).display_name : paramPlayer;
+        const playerUsername = paramPlayer.length == 32 ? await helper.resolveUsernameOrUuid(paramPlayer, db).display_name : paramPlayer;
 
         try{
             const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, { updateArea: true, cacheOnly });

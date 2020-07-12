@@ -46,7 +46,7 @@ module.exports = (app, db) => {
             for(const profile of allProfiles){
                 const members = (
                     await Promise.all(
-                        Object.keys(profile.members).map(a => helper.uuidToUsername(a, db))
+                        Object.keys(profile.members).map(a => helper.resolveUsernameOrUuid(a, db))
                     )
                 ).map(a => a.display_name);
 
