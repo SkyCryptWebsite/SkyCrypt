@@ -937,15 +937,15 @@ module.exports = {
         }
 
         output.talismans = talismans;
-        output.weapons = all_items.filter(a => a.type == 'sword' || a.type == 'bow');
-        output.rods =  all_items.filter(a => a.type == 'fishing rod');
+        output.weapons = all_items.filter(a => a.type != null && (a.type.endsWith('sword') || a.type.endsWith('bow')));
+        output.rods =  all_items.filter(a => a.type != null && a.type.endsWith('fishing rod'));
 
         for(const item of all_items){
             if(!Array.isArray(item.containsItems))
                 continue;
 
-            output.weapons.push(...item.containsItems.filter(a => a.type == 'sword' || a.type == 'bow'));
-            output.rods.push(...item.containsItems.filter(a => a.type == 'fishing rod'));
+            output.weapons.push(...item.containsItems.filter(a => a.type != null && (a.type.endsWith('sword') || a.type.endsWith('bow'))));
+            output.rods.push(...item.containsItems.filter(a => a.type != null && a.type.endsWith('fishing rod')));
         }
 
         // Check if inventory access disabled by user
