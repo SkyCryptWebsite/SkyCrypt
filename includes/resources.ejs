@@ -49,13 +49,13 @@
                 if(window.hasOwnProperty("targetUsername") && playerName)
                     targetUsername.value = playerName;
 
-                if(playerName.trim().length == 0)
-                    document.querySelector('#btn_search_user').href = '/random/stats';
-
-                if(e.keyCode == 13)
+                if(e.keyCode == 13 && playerName.trim().length > 0)
                     document.location = '/stats/' + playerName;
                 else
                     document.querySelector('#btn_search_user').href = '/stats/' + playerName;
+
+                if(playerName.trim().length == 0)
+                    document.querySelector('#btn_search_user').href = '#';
             }
 
             searchUser.addEventListener('keyup', updateUserTarget);

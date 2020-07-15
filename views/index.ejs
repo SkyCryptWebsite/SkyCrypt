@@ -37,7 +37,7 @@
             <div id="enter_player_box">
                 <p>Show SkyBlock stats for</p>
                 <input <% if(player){ %> value="<%= player %>" <% }%> id="inp_enter_username" type="text" placeholder="Enter username">
-                <a href="<% if(player){ %>/stats/<%= player %><% }else{ %>/random/stats<% } %>" id="goto_target_username">Show me</a>
+                <a href="<% if(player){ %>/stats/<%= player %><% }else{ %>#<% } %>" id="goto_target_username">Show me</a>
                 <!--<p>or take me to a <a href="/random/stats">random profile</a>.</p>-->
             </div>
         </div>
@@ -89,13 +89,13 @@
                 if(playerName)
                     inputSearchUser.value = playerName;
 
-                if(playerName.trim().length == 0)
-                    document.querySelector('#goto_target_username').href = '/random/stats';
-
-                if(e.keyCode == 13)
+                if(e.keyCode == 13 && playerName.trim().length > 0)
                     document.location = '/stats/' + playerName;
                 else
                     document.querySelector('#goto_target_username').href = '/stats/' + playerName;
+
+                if(playerName.trim().length == 0)
+                    document.querySelector('#goto_target_username').href = '#';
             }
 
             targetUsername.addEventListener('keyup', updateUserTarget);
