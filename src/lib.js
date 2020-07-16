@@ -452,14 +452,18 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
                 const boost = item.tag.ExtraAttributes.baseStatBoostPercentage;
 
-                item.lore += "<br><br>" + helper.renderLore(`§7Dungeon Item Base Stat Boost: §c${boost}%`);
+                item.lore += "<br><br>";
+
+                item.lore += boost == 50 ? helper.renderLore(`§7Dungeon Item Quality: §6${boost}/50%`) : helper.renderLore(`§7Dungeon Item Quality: §c${boost}/50%`);
             }
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'item_tier')){
 
                 const floor = item.tag.ExtraAttributes.item_tier;
 
-                item.lore += "<br>" + helper.renderLore(`§7Dungeon Floor: §c${floor}`);
+                item.lore += "<br>"
+
+                item.lore += helper.renderLore(`§7Obtained From: §bFloor ${floor}`);
             }
         }
 
