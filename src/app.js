@@ -1,9 +1,6 @@
 const cluster = require('cluster');
 const lib = require('./lib');
 
-const dbUrl = 'mongodb://localhost:27017';
-const dbName = 'sbstats';
-
 async function main(){
     const express = require('express');
     const session = require('express-session');
@@ -28,6 +25,8 @@ async function main(){
 
     await renderer.init();
 
+    const credentials = require(path.resolve(__dirname, '../credentials.json'));
+
     const _ = require('lodash');
     const moment = require('moment-timezone');
     require('moment-duration-format')(moment);
@@ -39,17 +38,15 @@ async function main(){
     const { createGzip } = require('zlib');
     const twemoji = require('twemoji');
 
-    const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
+    const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
-    const db = mongo.db(dbName);
+    const db = mongo.db(credentials.dbName);
 
     const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
 
     const cachePath = path.resolve(__dirname, '../cache');
 
     await fs.ensureDir(cachePath);
-
-    const credentials = require(path.resolve(__dirname, '../credentials.json'));
 
     if(credentials.hypixel_api_key.length == 0)
         throw "Please enter a valid Hypixel API Key. Join mc.hypixel.net and enter /api to obtain one.";

@@ -4,7 +4,9 @@ const { randomBytes } = require('crypto');
 const credentialsDefault = {
     hypixel_api_key: "",
     recaptcha_site_key: "",
-    recaptcha_secret_key: ""
+    recaptcha_secret_key: "",
+    dbUrl: "mongodb://localhost:27017",
+    dbName: "sbstats"
 };
 
 if(!fs.existsSync('./credentials.json'))
@@ -20,16 +22,13 @@ fs.writeFileSync('./credentials.json', JSON.stringify(credentials, null, 4));
 fs.ensureDirSync('cache');
 
 async function main(){
-    const dbUrl = 'mongodb://localhost:27017';
-    const dbName = 'sbstats';
-
     const constants = require('./src/constants');
 
     const { MongoClient } = require('mongodb');
-    const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
+    const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
 
-    const db = mongo.db(dbName);
+    const db = mongo.db(credentials.dbName);
 
     await db
     .collection('apiKeys')
