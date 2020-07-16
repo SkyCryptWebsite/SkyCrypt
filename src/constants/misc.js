@@ -75,7 +75,11 @@ module.exports = {
         'Spiked Hook 6',
         'Spiked Hook VI',
         'Dragon Hunter 5',
-        'Dragon Hunter V'
+        'Dragon Hunter V',
+        'Feather Falling 10',
+        'Feather Falling X',
+        'Infinite Quiver 10',
+        'Infinite Quiver X'
     ],
 
     // Player stats on a completely new profile
