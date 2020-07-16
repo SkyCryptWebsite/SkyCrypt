@@ -452,9 +452,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
                 const boost = item.tag.ExtraAttributes.baseStatBoostPercentage;
 
-                item.lore += "<br><br>";
-
-                item.lore += boost == 50 ? helper.renderLore(`§7Dungeon Item Quality: §6${boost}/50%`) : helper.renderLore(`§7Dungeon Item Quality: §c${boost}/50%`);
+                item.lore += "<br><br>" + helper.renderLore(`§7Dungeon Item Quality: ${boost == 50 ? '§6' : '§c'}${boost}/50%`);
             }
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'item_tier')){
