@@ -444,6 +444,22 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
                 item.lore += "<br>" + helper.renderLore(`§7By: §c<a href="/stats/${spawnedFor}">${spawnedForUser.display_name}</a>`);
             }
+ 
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'baseStatBoostPercentage')){
+
+                const boost = item.tag.ExtraAttributes.baseStatBoostPercentage;
+
+                item.lore += "<br><br>" + helper.renderLore(`§7Dungeon Item Quality: ${boost == 50 ? '§6' : '§c'}${boost}/50%`);
+            }
+
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'item_tier')){
+
+                const floor = item.tag.ExtraAttributes.item_tier;
+
+                item.lore += "<br>"
+
+                item.lore += helper.renderLore(`§7Obtained From: §bFloor ${floor}`);
+            }
         }
 
         let lore = lore_raw ? lore_raw.map(a => a = helper.getRawLore(a)) : [];
