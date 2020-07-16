@@ -25,6 +25,8 @@ async function main(){
 
     await renderer.init();
 
+    const credentials = require(path.resolve(__dirname, '../credentials.json'));
+
     const _ = require('lodash');
     const moment = require('moment-timezone');
     require('moment-duration-format')(moment);
@@ -45,8 +47,6 @@ async function main(){
     const cachePath = path.resolve(__dirname, '../cache');
 
     await fs.ensureDir(cachePath);
-
-    const credentials = require(path.resolve(__dirname, '../credentials.json'));
 
     if(credentials.hypixel_api_key.length == 0)
         throw "Please enter a valid Hypixel API Key. Join mc.hypixel.net and enter /api to obtain one.";
