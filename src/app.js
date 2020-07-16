@@ -1,9 +1,6 @@
 const cluster = require('cluster');
 const lib = require('./lib');
 
-const dbUrl = 'mongodb://localhost:27017';
-const dbName = 'sbstats';
-
 async function main(){
     const express = require('express');
     const session = require('express-session');
@@ -39,9 +36,9 @@ async function main(){
     const { createGzip } = require('zlib');
     const twemoji = require('twemoji');
 
-    const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
+    const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
-    const db = mongo.db(dbName);
+    const db = mongo.db(credentials.dbName);
 
     const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
 

@@ -1,16 +1,13 @@
 const cluster = require('cluster');
 
 async function main(){
-    const dbUrl = 'mongodb://localhost:27017';
-    const dbName = 'sbstats';
-
     const { MongoClient } = require('mongodb');
     const axios = require('axios');
     const credentials = require('../../credentials.json');
-    const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
+    const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
 
-    const db = mongo.db(dbName);
+    const db = mongo.db(credentials.dbName);
 
     async function updatePatreon(){
         const patreonEntry = await db.collection('donations').find({type: 'patreon'}).next();

@@ -1,9 +1,6 @@
 const cluster = require('cluster');
 
 async function main(){
-    const dbUrl = 'mongodb://localhost:27017';
-    const dbName = 'sbstats';
-
     const { MongoClient } = require('mongodb');
     const _ = require('lodash');
 
@@ -13,13 +10,14 @@ async function main(){
     const helper = require('./../helper');
     const lib = require('./../lib');
     const constants = require('./../constants');
+    const credentials = require('./../../credentials.json');
 
     const ProgressBar = require('progress');
 
-    const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
+    const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
 
-    const db = mongo.db(dbName);
+    const db = mongo.db(credentials.dbName);
 
     function getAverage(scores){
         return scores.reduce((a, b) => a + b, 0) / scores.length;

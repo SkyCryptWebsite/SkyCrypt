@@ -1,20 +1,17 @@
 const cluster = require('cluster');
 
 async function main(){
-    const dbUrl = 'mongodb://localhost:27017';
-    const dbName = 'sbstats';
-
     const { MongoClient } = require('mongodb');
     const axios = require('axios');
     require('axios-debug-log');
 
     const helper = require('./../helper');
-
     const credentials = require('./../../credentials.json');
-    const mongo = new MongoClient(dbUrl, { useUnifiedTopology: true });
+
+    const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
 
-    const db = mongo.db(dbName);
+    const db = mongo.db(credentials.dbName);
 
     async function updateItems(){
         try{
