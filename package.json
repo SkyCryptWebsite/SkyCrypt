@@ -42,7 +42,7 @@
     "fs-extra": "^9.0.1",
     "ioredis": "^4.17.3",
     "just-safe-get": "^2.0.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "lodash.escaperegexp": "^4.1.2",
     "micromatch": "^4.0.2",
     "minecraft-data": "^2.54.0",
