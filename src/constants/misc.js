@@ -359,6 +359,20 @@ module.exports = {
         ],
         PERSONAL_COMPACTOR_5000: [
             'PERSONAL_COMPACTOR_6000'
+        ],
+        SCARF_STUDIES: [
+            'SCARF_THESIS',
+            'SCARF_GRIMOIRE'
+        ],
+        SCARF_THESIS: [
+            'SCARF_GRIMOIRE'
+        ],
+        CAT_TALISMAN: [
+            'LYNX_TALISMAN',
+            'CHEETAH_TALISMAN'
+        ],
+        LYNX_TALISMAN: [
+            'CHEETAH_TALISMAN'
         ]
     },
 
