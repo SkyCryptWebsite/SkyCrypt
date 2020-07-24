@@ -1816,6 +1816,46 @@ module.exports = {
 
             lore.push('');
 
+            const pet_name = helper.titleCase(pet.type.replace(/\_/g, ' '));
+            
+            if(pet_name in constants.petStats){
+                let rarity;
+                switch(pet.rarity){
+                    case "common":
+                        rarity = 0;
+                        break;
+                    case "uncommon":
+                        rarity = 1;
+                        break;
+                    case "rare":
+                        rarity = 2;
+                        break;
+                    case "epic":
+                        rarity = 3;
+                        break;
+                    case "legendary":
+                        rarity = 4;
+                        break;
+                }
+
+                const pet_stats = new constants.petStats[pet_name](rarity, pet.level.level)
+                const stats = pet_stats.lore;
+                stats.forEach(line => {
+                    lore.push(line);
+                });
+
+                const abilities = pet_stats.abilities;
+                abilities.forEach(ability => {
+                    lore.push(' ', ability.name);
+                    ability.desc.forEach(line => {
+                        lore.push(line);
+                    });
+                });
+
+                lore.push(' ');
+            }
+            
+
             if(pet.level.level < 100){
                 lore.push(
                     `§7Progress to Level ${pet.level.level + 1}: §e${(pet.level.progress * 100).toFixed(1)}%`
@@ -1874,7 +1914,7 @@ module.exports = {
                     pet.lore += '<br>';
             }
 
-            pet.display_name = helper.titleCase(pet.type.replace(/\_/g, ' '));
+            pet.display_name = pet_name;
             pet.emoji = petData.emoji;
 
             output.push(pet);
