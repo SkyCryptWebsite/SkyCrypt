@@ -1,5 +1,5 @@
 {
-  "name": "skyblock-stats",
+  "name": "SkyCrypt",
   "version": "1.0.0",
   "description": "Player stats for Hypixel SkyBlock",
   "main": "index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LeaPhant/skyblock-stats.git"
+    "url": "git+https://github.com/SkyCryptWebsite/skyblock-stats.git"
   },
   "keywords": [
     "hypixel",
@@ -18,12 +18,12 @@
     "minecraft",
     "statistics"
   ],
-  "author": "LeaPhant",
+  "author": "WarpWing + Metalcupcake5 + MartinNemi03 + Boblovespi + ThisIsShu",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/LeaPhant/skyblock-stats/issues"
+    "url": "https://github.com/SkyCryptWebsite/skyblock-stats/issues"
   },
-  "homepage": "https://github.com/LeaPhant/skyblock-stats#readme",
+  "homepage": "https://github.com/SkyCryptWebsite/skyblock-stats#readme",
   "dependencies": {
     "@tillhub/tableify": "^1.1.1",
     "apng2gif-bin": "^1.7.1",
