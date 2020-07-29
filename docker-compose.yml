@@ -54,7 +54,7 @@ services:
       - '/etc/localtime:/etc/localtime:ro'
       - '/etc/timezone:/etc/timezone:ro'
     environment:
-      API_KEY: <create this on hypixel.net using /api ingame and paste here>
+      API_KEY: <Use your own API key - WarpWing>
       VIRTUAL_HOST: skyblock.domain.tld
       LETSENCRYPT_HOST: skyblock.domain.tld
       LETSENCRYPT_EMAIL: <your email>
