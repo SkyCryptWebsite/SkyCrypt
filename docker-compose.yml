@@ -1,3 +1,6 @@
+# Original Code by Physanus
+# Modified by WarpWing
+
 version: '3'
 services:
   nginx:
