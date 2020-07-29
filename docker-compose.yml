@@ -57,7 +57,10 @@ services:
       API_KEY: <Use your own API key - WarpWing>
       VIRTUAL_HOST: skyblock.domain.tld
       LETSENCRYPT_HOST: skyblock.domain.tld
-      LETSENCRYPT_EMAIL: <your email>
+      LETSENCRYPT_EMAIL: <your email> 
+  
+  redis:
+    image: "redis:alpine"
 
 volumes:
   nginx-certs:
