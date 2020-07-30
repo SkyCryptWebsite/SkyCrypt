@@ -60,7 +60,7 @@ services:
       LETSENCRYPT_EMAIL: <your email> 
   
   redis:
-    image: "redis:alpine"
+    image: "redis:latest"
 
 volumes:
   nginx-certs:
