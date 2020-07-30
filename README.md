@@ -47,3 +47,7 @@ I recommend that you choose the npm way until this README.md is updated
 - **Default Textures**: <a href="https://www.minecraft.net/">Minecraft</a> by Mojang
 - **Player Heads**: <a href="https://hypixel.net/forums/skyblock.157/">SkyBlock</a> by Hypixel. 
 - **Unmodified Docker-Compose Script**: <a href="https://github.com/physanus/SkyBlock-Stats-Docker">SB Stats Docker</a> by Physanus
+
+<h2 align="center"> A note from the SkyCrypt Development Team</h2>
+
+Hello!
