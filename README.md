@@ -41,7 +41,7 @@ This is a unstable method of installation as I(WarpWing) have not finished writi
 I recommend that you choose the npm way until this README.md is updated
 
 <h2 align="center">Credits</h2>
-
+- ** Unmodified Docker-Compose Script**: <a href="https://github.com/physanus/SkyBlock-Stats-Docker">SB Stats Docker</a> by Physanus
 - **Animated Custom Weapons and Armors**: <a href="https://hypixel.net/threads/2138599/">FurfSky+</a> by Furf__
 - **Additional Custom Textures**: <a href="https://hypixel.net/threads/2147652/">Vanilla+</a> by TBlazeWarriorT
 - **Default Textures**: <a href="https://www.minecraft.net/">Minecraft</a> by Mojang
