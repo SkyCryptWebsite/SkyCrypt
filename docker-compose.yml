@@ -60,7 +60,7 @@ services:
       LETSENCRYPT_EMAIL: professornitro@gmail.com
   
   redis:
-    image: "redis:latest"
+    image: "redis:alpine"
     restart: always 
     container_name: redis 
     ports:
