@@ -34,7 +34,7 @@ You can now run `npm start` to start it. You will be able to access the site on 
 
 If you don't want to install it by NPM, you can install it via Docker by just doing 
 
-`docker-compose up`
+`docker-compose --build`
 
 This is a unstable method of installation as I(WarpWing) have not finished writing the finished compose file. 
 
