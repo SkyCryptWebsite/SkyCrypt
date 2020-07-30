@@ -30,6 +30,16 @@ Now open `credentials.json` and enter a valid Hypixel API Key. You can obtain on
 
 You can now run `npm start` to start it. You will be able to access the site on <a href="http://localhost:32464">http://localhost:32464</a> if you leave the default port.
 
+<h3> Alternative Installation </h3>
+
+If you don't want to install it by NPM, you can install it via Docker by just doing 
+
+`docker-compose up`
+
+This is a unstable method of installation as I(WarpWing) have not finished writing the finished compose file. 
+
+I recommend that you choose the npm way until this README.md is updated
+
 <h2 align="center">Credits</h2>
 
 - **Animated Custom Weapons and Armors**: <a href="https://hypixel.net/threads/2138599/">FurfSky+</a> by Furf__
