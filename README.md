@@ -1,9 +1,9 @@
 <p align="center"><img src="https://i.imgur.com/h74ZXmI.png"></p>
-<h1 align="center">A beautiful SkyBlock profile viewer 🌹</h1>
+<h1 align="center">A fork of the infamous Sky.Lea Profile Viewer</h1>
 
 This project allows you to share your <a href="https://hypixel.net//">Hypixel</a> SkyBlock profile with other players with a quick overview of your Stats, Skills, Armor, Weapons and Accessories.
 
-**Website**: https://sky.lea.moe/
+**Website**: In Progress
 
 <h2 align="center">Screenshot</h1>
 
@@ -11,7 +11,7 @@ This project allows you to share your <a href="https://hypixel.net//">Hypixel</a
 
 <h2 align="center">Contributing</h1>
 
-You are free to report bugs or contribute to this project. Just open <a href="../../issues">Issues</a> or <a href="../../pulls">Pull Requests</a> and I will look into them, although changes to the design are pretty unlikely to be accepted.
+You are free to report bugs or contribute to this project. Just open <a href="../../issues">Issues</a> or <a href="../../pulls">Pull Requests</a> and the Developer team will look into them.
 
 <h3>Prerequisites</h3>
 
@@ -19,6 +19,8 @@ You are free to report bugs or contribute to this project. Just open <a href="..
 - <a href="https://docs.mongodb.com/manual/administration/install-community/">MongoDB</a>
 - <a href="https://redis.io/">Redis</a>
 - <a href="https://api.hypixel.net/">Hypixel API Key</a>
+- <a href="https://www.docker.com/">Docker</a> <p> This is optional if you want to deploy it via Compose </p>
+
 
 <h3>Installation</h3>
 
