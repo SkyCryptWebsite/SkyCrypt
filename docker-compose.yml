@@ -57,29 +57,13 @@ services:
       API_KEY: <Use your own API key - WarpWing>
       VIRTUAL_HOST: skyblock.domain.tld
       LETSENCRYPT_HOST: skyblock.domain.tld
-      LETSENCRYPT_EMAIL: professornitro@gmail.com
-  
-  redis:
-    image: "redis:alpine"
-    restart: always 
-    container_name: redis 
-    ports:
-      - "6379:6379" 
-      volumes:
-        - $PWD/redis-data:/var/lib/redis
-         - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
-   
-       environment:
-        - REDIS_REPLICATION_MODE=master
-   
-    
-   
+      LETSENCRYPT_EMAIL: professornitro@gmail.com 
 
-volumes:
-  nginx-certs:
-  nginx-config:
-  nginx-main-config:
-  nginx-vhosts:
-  nginx-webroot:
-  nginx-well-known:
-    driver: local
+    volumes:
+      nginx-certs:
+      nginx-config:
+      nginx-main-config:
+      nginx-vhosts:
+      nginx-webroot:
+      nginx-well-known:
+        driver: local
