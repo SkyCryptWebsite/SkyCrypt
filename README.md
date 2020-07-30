@@ -1,9 +1,9 @@
 <p align="center"><img src="https://i.imgur.com/h74ZXmI.png"></p>
-<h1 align="center">A fork of the infamous sky.lea.moe Profile Viewer</h1>
+<h1 align="center">A fork of the infamous sky.lea.moe profile viewer</h1>
 
 This project allows you to share your <a href="https://hypixel.net//">Hypixel</a> SkyBlock profile with other players with a quick overview of your Stats, Skills, Armor, Weapons and Accessories.
 
-**Website**: In Progress
+**Website**: In progress
 
 <h2 align="center">Screenshot</h1>
 
