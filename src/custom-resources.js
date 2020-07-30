@@ -476,7 +476,7 @@ module.exports = {
             outputTexture.path = leatherPath;
         }
 
-        outputTexture.path = path.relative(path.resolve(__dirname, '..', 'public'), outputTexture.path);
+        outputTexture.path = path.relative(path.resolve(__dirname, '..', 'public'), outputTexture.path).replace(/[\\]/g, '/');
 
         return outputTexture;
     }
