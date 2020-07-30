@@ -25,4 +25,4 @@ RUN chmod +x start.sh
 
 EXPOSE 80
 
-CMD ["/bin/bash", "-c", "$HOME/skyblock-stats/start.sh"] 
+CMD ["/bin/bash", "-c", "npm start"] 
