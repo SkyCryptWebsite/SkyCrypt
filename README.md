@@ -50,4 +50,5 @@ I recommend that you choose the npm way until this README.md is updated
 
 <h2 align="center"> A note from the SkyCrypt Development Team</h2>
 
-Hello!
+Hello! I am WarpWing, the System Administrator in charge of the SkyCrypt Application. I would like to take a few moments just to say that the SkyCrypt application is not intended to be a Sky.Lea replica, but aims to reshape Sky.Lea into a more updated and informational site. We plan to include Pet Stats (Credit to boblovespi and metalcupcake5 for their amazing work) and a couple of other redesigns to the site. If you have any questions or any sort of problems/issues, please don't hesistate to message me on Discord: WarpWing #3866
+Thank you for reading my note :)
