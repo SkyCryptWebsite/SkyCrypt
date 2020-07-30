@@ -61,6 +61,9 @@ services:
   
   redis:
     image: "redis:latest"
+    restart: always 
+    container_name: redis 
+  environment: 
 
 volumes:
   nginx-certs:
