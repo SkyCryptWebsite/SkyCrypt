@@ -238,7 +238,7 @@ module.exports = (app, db) => {
                     continue;
 
 
-                const items = await lib.getItems(userProfile, req.query.pack);
+                const items = await lib.getItems(singleProfile.members[profile.uuid], req.query.pack);
                 const data = await lib.getStats(db, singleProfile, allProfiles, items);
 
                 output = {
