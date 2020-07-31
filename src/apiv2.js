@@ -106,4 +106,67 @@ module.exports = (app, db) => {
             handleError(e, res);
         }
     });
+
+    app.all('/api/v2/coins/:player/:profile', cors(), async (req, res) => {
+        try{
+            const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
+
+            let output = {
+                error: "Invalid Profile Name!"
+            };
+
+            for(const singleProfile of allProfiles){
+
+                const cute_name = singleProfile.cute_name;
+
+                if(cute_name.toLowerCase() != req.params.profile.toLowerCase())
+                    continue;
+
+                const items = await lib.getItems(singleProfile.members[profile.uuid], req.query.pack);
+                const data = await lib.getStats(db, singleProfile, allProfiles, items);
+
+                output = {
+                    profile_id: singleProfile.profile_id,
+                    cute_name: singleProfile.cute_name,
+                    purse: data.purse,
+                    bank: data.bank
+                };
+            }
+
+            res.json(output);
+        }catch(e){
+            handleError(e, res);
+        }
+    });
+
+    app.all('/api/v2/talismans/:player/:profile', cors(), async (req, res) => {
+        try{
+            const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
+
+            let output = {
+                error: "Invalid Profile Name!"
+            };
+
+            for(const singleProfile of allProfiles){
+
+                const cute_name = singleProfile.cute_name;
+
+                if(cute_name.toLowerCase() != req.params.profile.toLowerCase())
+                    continue;
+
+                const items = await lib.getItems(singleProfile.members[profile.uuid], req.query.pack);
+                const talismans = items.talismans;
+
+                output = {
+                    profile_id: singleProfile.profile_id,
+                    cute_name: singleProfile.cute_name,
+                    talismans
+                };
+            }
+
+            res.json(output);
+        }catch(e){
+            handleError(e, res);
+        }
+    });
 };
