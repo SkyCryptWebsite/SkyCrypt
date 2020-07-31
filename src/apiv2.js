@@ -127,7 +127,34 @@ module.exports = (app, db) => {
 
                 output = {
                     profile_id: singleProfile.profile_id,
-                    cute_name: singleProfile.cute_name,
+                    cute_name: cute_name,
+                    purse: data.purse,
+                    bank: data.bank
+                };
+            }
+
+            res.json(output);
+        }catch(e){
+            handleError(e, res);
+        }
+    });
+
+    app.all('/api/v2/coins/:player', cors(), async (req, res) => {
+        try{
+            const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
+
+            const output = { profiles: {} };
+
+            for(const singleProfile of allProfiles){
+
+                const cute_name = singleProfile.cute_name;
+
+                const items = await lib.getItems(singleProfile.members[profile.uuid], req.query.pack);
+                const data = await lib.getStats(db, singleProfile, allProfiles, items);
+
+                output.profiles[singleProfile.profile_id] = {
+                    profile_id: singleProfile.profile_id,
+                    cute_name: cute_name,
                     purse: data.purse,
                     bank: data.bank
                 };
@@ -169,4 +196,93 @@ module.exports = (app, db) => {
             handleError(e, res);
         }
     });
+
+    app.all('/api/v2/talismans/:player', cors(), async (req, res) => {
+        try{
+            const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
+
+            const output = { profiles: {} };
+
+            for(const singleProfile of allProfiles){
+                const userProfile = singleProfile.members[profile.uuid];
+
+                const items = await lib.getItems(userProfile, req.query.pack);
+                const talismans = items.talismans;
+
+                output.profiles[singleProfile.profile_id] = {
+                    profile_id: singleProfile.profile_id,
+                    cute_name: singleProfile.cute_name,
+                    talismans
+                };
+            }
+
+            res.json(output);
+        }catch(e){
+            handleError(e, res);
+        }
+    });
+
+    app.all('/api/v2/slayers/:player/:profile', cors(), async (req, res) => {
+        try{
+            const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
+
+            let output = {
+                error: "Invalid Profile Name!"
+            };
+
+            for(const singleProfile of allProfiles){
+
+                const cute_name = singleProfile.cute_name;
+
+                if(cute_name.toLowerCase() != req.params.profile.toLowerCase())
+                    continue;
+
+
+                const items = await lib.getItems(userProfile, req.query.pack);
+                const data = await lib.getStats(db, singleProfile, allProfiles, items);
+
+                output = {
+                    profile_id: singleProfile.profile_id,
+                    cute_name: singleProfile.cute_name,
+                    slayer_xp: data.slayer_xp,
+                    slayers: data.slayers,
+                    slayer_bonus: data.slayer_bonus,
+                    slayer_coins_spent: data.slayer_coins_spent
+                };
+            }
+
+            res.json(output);
+        }catch(e){
+            handleError(e, res);
+        }
+    });
+
+    app.all('/api/v2/slayers/:player', cors(), async (req, res) => {
+        try{
+            const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
+
+            const output = { profiles: {} };
+
+            for(const singleProfile of allProfiles){
+                const userProfile = singleProfile.members[profile.uuid];
+
+                const items = await lib.getItems(userProfile, req.query.pack);
+                const data = await lib.getStats(db, singleProfile, allProfiles, items);
+
+                output.profiles[singleProfile.profile_id] = {
+                    profile_id: singleProfile.profile_id,
+                    cute_name: singleProfile.cute_name,
+                    slayer_xp: data.slayer_xp,
+                    slayers: data.slayers,
+                    slayer_bonus: data.slayer_bonus,
+                    slayer_coins_spent: data.slayer_coins_spent
+                };
+            }
+
+            res.json(output);
+        }catch(e){
+            handleError(e, res);
+        }
+    });
+
 };
