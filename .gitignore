@@ -44,7 +44,6 @@ credentials.json
 # db
 db.json
 
-.DS_Store
 
 # custom dyed leather armor cache
 public/resourcepacks/**/leatherCache
