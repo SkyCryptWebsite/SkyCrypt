@@ -322,7 +322,7 @@ async function main(){
     app.all('/favicon.ico', express.static(path.join(__dirname, 'public')));
 
     app.all('/api', async (req, res, next) => {
-        res.render('index', { error: null, player: null, extra: await getExtra(), helper, page: 'index' });
+        res.render('api', { error: null, player: null, extra: await getExtra(), helper, page: 'api' });
     });
 
     app.all('/:player/:profile?', async (req, res, next) => {
