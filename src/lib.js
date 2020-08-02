@@ -1853,6 +1853,18 @@ module.exports = {
                 });
 
                 lore.push(' ');
+            }else{
+                const pet_stats = new constants.petStats['???'](4, 0)
+
+                const abilities = pet_stats.abilities;
+                abilities.forEach(ability => {
+                    lore.push(' ', ability.name);
+                    ability.desc.forEach(line => {
+                        lore.push(line);
+                    });
+                });
+
+                lore.push(' ');
             }
             
 
