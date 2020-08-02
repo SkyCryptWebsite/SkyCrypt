@@ -1350,11 +1350,13 @@ module.exports = {
         if(items.talismans.filter(a => getId(a) == 'MELODY_HAIR').length == 1)
             output.stats.intelligence += 26;
 
+        // Apply pet score bonus
         for(const stat in output.pet_score_bonus)
             output.stats[stat] += output.pet_score_bonus[stat];
 
         output.base_stats = Object.assign({}, output.stats);
 
+        // Apply stats from pets
         for(const stat in output.pet_bonus)
             output.stats[stat] += output.pet_bonus[stat];
 
