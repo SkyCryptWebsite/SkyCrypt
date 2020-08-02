@@ -10,7 +10,9 @@
     <div data-tippy-content="Supporting LGBTQ+ rights all around the year! ❤️<br><br>Click for a surprise. :)" class="pride-flag logo"></div>
     <a href="/" id="site_name">SkyCrypt</a>
     <div class="social-button" id="info_button" onclick="toggleInfo()">About</div>
-    <div class="social-button" id="api_button" onclick="toggleAPI()">API</div>
+    <a href="/api">
+        <div class="social-button" id="api_button">API</div>
+    </a>
     <div id="search_user"><input placeholder="Enter username" <% if(page == 'index'){ %>tabindex="-1"<% } %> type="text" id="inp_search_user"></input><a href="#" <% if(page == 'index'){ %>tabindex="-1"<% } %> id="btn_search_user"></a></div>
     <a href="https://blacklivesmatters.carrd.co/" target="_blank" rel="nofollow" data-tippy-content="<strong>Black Lives Matter!</strong><br><br>Click for a collection of links on how to support the fight against racial inequality." class="blm-logo"></a>
 </header>
@@ -34,12 +36,6 @@
         </ul>
     </div>
 </div>
-<div id="api_box">
-    <div onclick="toggleAPI()" id="api_close"></div>
-    <div id="api_box_content">
-        <p>hello</p>
-    </div>
-</div>
 <script src="/resources/js/modernizr.js"></script>
 <script>
     function toggleInfo(){
@@ -49,15 +45,6 @@
             infoBox.classList.remove('info-opened')
         else
             infoBox.classList.add('info-opened');
-    }
-
-    function toggleAPI(){
-        let apiBox = document.querySelector('#api_box');
-
-        if(apiBox.classList.contains('api-opened'))
-            apiBox.classList.remove('api-opened')
-        else
-            apiBox.classList.add('api-opened');
     }
 
     Modernizr.on('webp', function(result){
