@@ -10,13 +10,13 @@ services:
       - '80:80'
       - '443:443'
       - '3012:3012'
-    volumes:
-      - 'nginx-config:/etc/nginx/conf.d'
-      - 'nginx-main-config:/etc/nginx'
-      - 'nginx-certs:/etc/nginx/certs'
-      - 'nginx-vhosts:/etc/nginx/vhost.d'
-      - 'nginx-webroot:/usr/share/nginx/html'
-      - 'nginx-well-known:/usr/share/nginx/html/.well-known'
+      volumes:
+        - 'nginx-config:/etc/nginx/conf.d'
+        - 'nginx-main-config:/etc/nginx'
+       - 'nginx-certs:/etc/nginx/certs'
+        - 'nginx-vhosts:/etc/nginx/vhost.d'
+        - 'nginx-webroot:/usr/share/nginx/html'
+        - 'nginx-well-known:/usr/share/nginx/html/.well-known'
 
   dockergen:
     image: jwilder/docker-gen
