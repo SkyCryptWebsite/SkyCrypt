@@ -1,0 +1,73 @@
+*{
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+}
+
+html{
+    background-color: black;
+    background: url(../img/bg.webp?v2) no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    overflow-x: hidden;
+}
+
+#api_blur{
+    background: url(../img/bg_blur.webp?v2) no-repeat center center fixed;
+    background-size: cover;
+    position: fixed;
+    left: 10vw;
+    top: 20px;
+    right: 10vw;
+    bottom: 0;
+    background-color: rgb(20,20,20);
+}
+
+html.no-webp #api_blur{
+    background-image: url(../img/bg_blur.png?v2)
+}
+
+#api_wrapper{
+    position: absolute;
+    left: 15vw;
+    top: 45px;
+    right: 15vw;
+    padding-bottom: 30px;
+    min-height: 100%;
+    box-sizing: border-box;
+    
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+     user-select: none;
+}
+
+#title{
+    font-size: 36px;
+    margin-top: 50px;
+    margin-left: 50px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#nav_bar{
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 6px;
+    white-space: nowrap;
+}
+
+#nav_bar_line{
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    height: 2px;
+    background-color: #A6145D;
+    z-index: 2;
+}

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>SkyCrypt</title>
+    <title>API Documentation | SkyCrypt</title>
     <meta name="description" content="A beautiful site for sharing your SkyBlock profile 🌹">
     <link rel="shortcut icon" href="/resources/img/logo_square.png" type="image/png">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -33,10 +33,84 @@
 </head>
     <body>
         <%- include('../includes/header') %>
-        <div id="api_bg_blur"></div>
-        <div id="enter_player_box_wrapper">
-            <div id="enter_player_box">
-                <p>API Documentation</p>
+        <div id="api_blur"></div>
+        <div id="api_wrapper" data-sticky-container>
+            <div id="title">API Documentation</div>
+
+            <br>
+            
+            <p>
+                Welcome to the SkyCrypt API Documentation page!<br>
+                Here you can find information on all the enpoints we have, and how to use them.<br><br>
+                The main URL is  <code>https://website.is.here/api/v2/</code>
+            </p>
+
+            <br>
+        
+            <div id="nav_bar" data-margin-top="48" data-sticky-class="nav-bar-stickied">
+                <div id="nav_bar_line"></div>
+                <div id="nav_bar_background"></div>
+                <div id="nav_items_container">
+                    <div class="nav-item active" data-target="profile">profile</div>
+                    <div class="nav-item" data-target="talismans">talismans</div>
+                    <div class="nav-item" data-target="slayer">slayer</div>
+                    <div class="nav-item" data-target="coins">coins</div>
+                    <div class="nav-item" data-target="bazaar">bazaar</div>
+                </div>
+            </div>
+
+            <div class="stat-containers">
+
+                <div data-stat="profile" class="stat-container stat-profile">
+                    <div class="stat-anchor"></div>
+                    <div class="stat-header"><span>profile</span></div>
+                    <div class="stat-content">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis eros enim. Aenean tempus placerat vestibulum. Aliquam a orci in orci molestie tincidunt ut at velit. Curabitur non mauris maximus, pretium ante eu, pellentesque purus. Nunc venenatis semper odio, quis egestas libero pretium eget. Mauris vel enim non leo tristique rhoncus id non elit. In eu tempor lacus. Duis lacinia, metus non vulputate efficitur, sem leo pellentesque sem, at porttitor leo augue ut felis. Nunc egestas, eros vitae feugiat tristique, nunc augue ornare nibh, vel vehicula justo neque ut nunc. Donec tempus justo condimentum iaculis fermentum. Nam fringilla nulla a ullamcorper rutrum. Nunc efficitur volutpat urna ut suscipit. Maecenas diam leo, hendrerit in convallis et, fermentum egestas erat. Nunc mi elit, dignissim nec ex sed, rutrum euismod ex. Aliquam erat volutpat.
+
+                            Donec et mi diam. Phasellus cursus sapien massa, et placerat ante pulvinar eget. Etiam sit amet fermentum neque. Duis ultricies laoreet felis, eu rhoncus ante interdum ac. Sed nunc ipsum, tristique a magna vel, luctus pharetra lectus. Praesent tristique sagittis tristique. Ut a quam auctor, interdum risus ut, congue nibh. Sed eget iaculis nisi. Vestibulum efficitur dapibus nibh. Curabitur vel libero eget orci tristique facilisis. Vestibulum ornare leo porta, elementum arcu lobortis, luctus justo. Suspendisse elementum felis vitae imperdiet pellentesque. Proin egestas vulputate metus, a varius mi tristique id.</p>
+                    </div>
+                </div>
+
+
+                <div data-stat="talismans" class="stat-container stat-talismans">
+                    <div class="stat-anchor"></div>
+                    <div class="stat-header"><span>talismans</span></div>
+                    <div class="stat-content">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis eros enim. Aenean tempus placerat vestibulum. Aliquam a orci in orci molestie tincidunt ut at velit. Curabitur non mauris maximus, pretium ante eu, pellentesque purus. Nunc venenatis semper odio, quis egestas libero pretium eget. Mauris vel enim non leo tristique rhoncus id non elit. In eu tempor lacus. Duis lacinia, metus non vulputate efficitur, sem leo pellentesque sem, at porttitor leo augue ut felis. Nunc egestas, eros vitae feugiat tristique, nunc augue ornare nibh, vel vehicula justo neque ut nunc. Donec tempus justo condimentum iaculis fermentum. Nam fringilla nulla a ullamcorper rutrum. Nunc efficitur volutpat urna ut suscipit. Maecenas diam leo, hendrerit in convallis et, fermentum egestas erat. Nunc mi elit, dignissim nec ex sed, rutrum euismod ex. Aliquam erat volutpat.
+
+                            Donec et mi diam. Phasellus cursus sapien massa, et placerat ante pulvinar eget. Etiam sit amet fermentum neque. Duis ultricies laoreet felis, eu rhoncus ante interdum ac. Sed nunc ipsum, tristique a magna vel, luctus pharetra lectus. Praesent tristique sagittis tristique. Ut a quam auctor, interdum risus ut, congue nibh. Sed eget iaculis nisi. Vestibulum efficitur dapibus nibh. Curabitur vel libero eget orci tristique facilisis. Vestibulum ornare leo porta, elementum arcu lobortis, luctus justo. Suspendisse elementum felis vitae imperdiet pellentesque. Proin egestas vulputate metus, a varius mi tristique id.</p>
+                    </div>
+                </div>
+
+                <div data-stat="slayer" class="stat-container stat-slayer">
+                    <div class="stat-anchor"></div>
+                    <div class="stat-header"><span>slayer</span></div>
+                    <div class="stat-content">
+                        <p class="stat-raw-values">
+                            hmmm
+                        </p>
+                    </div>
+                </div>
+
+                <div data-stat="coins" class="stat-container stat-coins">
+                    <div class="stat-anchor"></div>
+                    <div class="stat-header"><span>coins</span></div>
+                    <div class="stat-content">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis eros enim. Aenean tempus placerat vestibulum. Aliquam a orci in orci molestie tincidunt ut at velit. Curabitur non mauris maximus, pretium ante eu, pellentesque purus. Nunc venenatis semper odio, quis egestas libero pretium eget. Mauris vel enim non leo tristique rhoncus id non elit. In eu tempor lacus. Duis lacinia, metus non vulputate efficitur, sem leo pellentesque sem, at porttitor leo augue ut felis. Nunc egestas, eros vitae feugiat tristique, nunc augue ornare nibh, vel vehicula justo neque ut nunc. Donec tempus justo condimentum iaculis fermentum. Nam fringilla nulla a ullamcorper rutrum. Nunc efficitur volutpat urna ut suscipit. Maecenas diam leo, hendrerit in convallis et, fermentum egestas erat. Nunc mi elit, dignissim nec ex sed, rutrum euismod ex. Aliquam erat volutpat.
+
+                            Donec et mi diam. Phasellus cursus sapien massa, et placerat ante pulvinar eget. Etiam sit amet fermentum neque. Duis ultricies laoreet felis, eu rhoncus ante interdum ac. Sed nunc ipsum, tristique a magna vel, luctus pharetra lectus. Praesent tristique sagittis tristique. Ut a quam auctor, interdum risus ut, congue nibh. Sed eget iaculis nisi. Vestibulum efficitur dapibus nibh. Curabitur vel libero eget orci tristique facilisis. Vestibulum ornare leo porta, elementum arcu lobortis, luctus justo. Suspendisse elementum felis vitae imperdiet pellentesque. Proin egestas vulputate metus, a varius mi tristique id.</p>
+                    </div>
+                </div>
+
+                <div data-stat="bazaar" class="stat-container stat-bazaar">
+                    <div class="stat-anchor"></div>
+                    <div class="stat-header"><span>bazaar</span></div>
+                    <div class="stat-content">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis eros enim. Aenean tempus placerat vestibulum. Aliquam a orci in orci molestie tincidunt ut at velit. Curabitur non mauris maximus, pretium ante eu, pellentesque purus. Nunc venenatis semper odio, quis egestas libero pretium eget. Mauris vel enim non leo tristique rhoncus id non elit. In eu tempor lacus. Duis lacinia, metus non vulputate efficitur, sem leo pellentesque sem, at porttitor leo augue ut felis. Nunc egestas, eros vitae feugiat tristique, nunc augue ornare nibh, vel vehicula justo neque ut nunc. Donec tempus justo condimentum iaculis fermentum. Nam fringilla nulla a ullamcorper rutrum. Nunc efficitur volutpat urna ut suscipit. Maecenas diam leo, hendrerit in convallis et, fermentum egestas erat. Nunc mi elit, dignissim nec ex sed, rutrum euismod ex. Aliquam erat volutpat.
+
+                            Donec et mi diam. Phasellus cursus sapien massa, et placerat ante pulvinar eget. Etiam sit amet fermentum neque. Duis ultricies laoreet felis, eu rhoncus ante interdum ac. Sed nunc ipsum, tristique a magna vel, luctus pharetra lectus. Praesent tristique sagittis tristique. Ut a quam auctor, interdum risus ut, congue nibh. Sed eget iaculis nisi. Vestibulum efficitur dapibus nibh. Curabitur vel libero eget orci tristique facilisis. Vestibulum ornare leo porta, elementum arcu lobortis, luctus justo. Suspendisse elementum felis vitae imperdiet pellentesque. Proin egestas vulputate metus, a varius mi tristique id.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
