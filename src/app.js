@@ -275,6 +275,13 @@ async function main(){
         res.contentType('image/png');
         res.send(file);
     });
+    
+    app.all('/robots.txt', async (req, res, next) => {
+        res.type('text').send(
+`User-agent: *
+Disallow: /item /head /leather /resources
+`);
+    }); 
 
     app.all('/sitemap.xml', async (req, res, next) => {
         res.header('Content-Type', 'application/xml');
