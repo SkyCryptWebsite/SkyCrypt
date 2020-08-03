@@ -21,6 +21,16 @@ module.exports = {
         "rare": "§9",
         "epic": "§5",
         "legendary": "§6"
+    }, 
+    
+    rarity_colors: {
+        "f": "common",
+        "a": "uncommon",
+        "9": "rare",
+        "5": "epic",
+        "6": "legendary",
+        "d": "mythic",
+        "c": "special"
     },
 
     special_enchants: [
