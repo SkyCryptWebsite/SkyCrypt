@@ -1165,7 +1165,7 @@ twitterDescription += '. Click to view more stats!'
                 <% if(calculated.pets.length > 0){ %><div class="nav-item" data-target="pets">Pets</div><% } %>
                 <% if(!items.no_inventory){ %><div class="nav-item" data-target="inventory">Inventory</div><% } %>
                 <div class="nav-item" data-target="fishing">Fishing</div>
-                <% if(calculated.dungeons.entered){ %><div class="nav-item" data-target="dungeons">Dungeons</div><% } %>
+                <div class="nav-item" data-target="dungeons">Dungeons</div>
                 <div class="nav-item" data-target="slayer">Slayer</div>
                 <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){ %><div class="nav-item" data-target="kills">Kills</div><% } %>
                 <div class="nav-item" data-target="minions">Minions</div>
@@ -1593,7 +1593,16 @@ twitterDescription += '. Click to view more stats!'
             <div class="stat-anchor"></div>
             <div class="stat-header"><span>Dungeons</span></div>
             <div class="stat-content">
-                <p>dungeons lol</p>
+                <% if (!calculated.dungeons.entered) { %>
+                    <p class="stat-raw-values">
+                        <%= calculated.display_name %> hasn't played Dungeons yet.
+                    </p>
+                <% } else { %>
+                    <p class="stat-raw-values">
+                        Imagine playing Dungeons. 
+                        <img src="https://cdn.frankerfacez.com/5dda50e831b8608201aa2bc7b6c670d6.PNG" alt="OMEGALUL">
+                    </p>
+                <% } %>
             </div>
         </div>
         <div data-stat="slayer" class="stat-container stat-slayer">
