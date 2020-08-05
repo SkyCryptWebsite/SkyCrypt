@@ -2088,10 +2088,11 @@ module.exports = {
         const output = {};
 
         let tasks = userProfile.tutorial;
-        if (!tasks.includes('zone_catacombs_entrance')) 
-            return output;
 
-        output.entered = true;
+        output.entrance = tasks.includes('zone_catacombs_entrance');
+        if (!output.entrance) return output;
+
+        output.collected_essence = tasks.includes('essence_collected_message');
 
         return output;
     },

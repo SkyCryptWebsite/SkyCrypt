@@ -1593,14 +1593,13 @@ twitterDescription += '. Click to view more stats!'
             <div class="stat-anchor"></div>
             <div class="stat-header"><span>Dungeons</span></div>
             <div class="stat-content">
-                <% if (!calculated.dungeons.entered) { %>
+                <% if (!calculated.dungeons.entrance) { %>
                     <p class="stat-raw-values">
-                        <%= calculated.display_name %> hasn't played Dungeons yet.
+                        <%= calculated.display_name %> didn't enter Catacombs yet.
                     </p>
                 <% } else { %>
                     <p class="stat-raw-values">
-                        Imagine playing Dungeons. 
-                        <img src="https://cdn.frankerfacez.com/5dda50e831b8608201aa2bc7b6c670d6.PNG" alt="OMEGALUL">
+                        <%= calculated.display_name %> has entered Catacombs<% if (calculated.dungeons.collected_essence) { %> and collected essence<% } %>.
                     </p>
                 <% } %>
             </div>
