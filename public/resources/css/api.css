@@ -53,21 +53,41 @@ html.no-webp #api_blur{
     text-align: center;
 }
 
-#nav_bar{
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    padding-bottom: 6px;
-    white-space: nowrap;
+.response {
+    position: relative;
+    min-width: 330px;
+    padding: 10px;
+    display: block;
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    overflow: hidden;
 }
 
-#nav_bar_line{
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 10px;
-    height: 2px;
-    background-color: #A6145D;
-    z-index: 2;
+.response-container{
+    position: relative;
+    left: 50px;
+    min-width: 500px;
+    padding: 10px;
+    padding-top: 50px;
+    display: inline-block;
+    background-color: rgba(0,0,0,0.3);
+    vertical-align: top;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.parameter-container{
+    position: relative;
+    min-width: 400px;
+    padding: 20px;
+    padding-top: 50px;
+    display: inline-block;
+    background-color: rgba(0,0,0,0.3);
+    vertical-align: top;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.big{
+    font-size: x-small;
 }

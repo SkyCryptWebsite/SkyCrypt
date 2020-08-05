@@ -1,0 +1,32 @@
+{
+    "profile_id": "string",
+    "cute_name": "string",
+    "slayers": {
+        "zombie": {
+
+        },
+        "spider": {
+
+        },
+        "wolf": {
+
+        }
+    },
+    "slayer_bonus": {
+        "zombie": {
+
+        },
+        "spider": {
+
+        },
+        "wolf": {
+
+        }
+    },
+    "slayer_coins_spent": {
+        "zombie": 0,
+        "spider": 0,
+        "wolf": 0,
+        "total": 0
+    }
+}

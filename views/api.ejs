@@ -6,8 +6,12 @@
     <link rel="shortcut icon" href="/resources/img/logo_square.png" type="image/png">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <meta property="og:image" content="/resources/img/logo_square.png">
-    <meta property="og:title" content="SkyBlock Stats">
+    <meta property="og:title" content="SkyCrypt">
     <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🌹">
+
+    <!-- Json View Library-->
+    <link rel="stylesheet" type="text/css" href="resources/css/jsonview.bundle.css">
+
     <%- include('../includes/resources') %>
     <style>
     @media (max-width: 480px){
@@ -42,11 +46,11 @@
             <p>
                 Welcome to the SkyCrypt API Documentation page!<br>
                 Here you can find information on all the enpoints we have, and how to use them.<br><br>
-                The main URL is  <code>https://website.is.here/api/v2/</code>
+                The main URL is <code>https://website.is.here/api/v2/</code>
             </p>
-
-            <br>
         
+            <!--
+            navbar that doesn't work
             <div id="nav_bar" data-margin-top="48" data-sticky-class="nav-bar-stickied">
                 <div id="nav_bar_line"></div>
                 <div id="nav_bar_background"></div>
@@ -58,6 +62,7 @@
                     <div class="nav-item" data-target="bazaar">bazaar</div>
                 </div>
             </div>
+            -->
 
             <div class="stat-containers">
 
@@ -65,9 +70,32 @@
                     <div class="stat-anchor"></div>
                     <div class="stat-header"><span>profile</span></div>
                     <div class="stat-content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis eros enim. Aenean tempus placerat vestibulum. Aliquam a orci in orci molestie tincidunt ut at velit. Curabitur non mauris maximus, pretium ante eu, pellentesque purus. Nunc venenatis semper odio, quis egestas libero pretium eget. Mauris vel enim non leo tristique rhoncus id non elit. In eu tempor lacus. Duis lacinia, metus non vulputate efficitur, sem leo pellentesque sem, at porttitor leo augue ut felis. Nunc egestas, eros vitae feugiat tristique, nunc augue ornare nibh, vel vehicula justo neque ut nunc. Donec tempus justo condimentum iaculis fermentum. Nam fringilla nulla a ullamcorper rutrum. Nunc efficitur volutpat urna ut suscipit. Maecenas diam leo, hendrerit in convallis et, fermentum egestas erat. Nunc mi elit, dignissim nec ex sed, rutrum euismod ex. Aliquam erat volutpat.
+                        <p class="description">Returns an object of the player's profiles.</p>
+                        <br>
+                        <p>The profiles include an object of the raw Hypixel API data, an object of items, such as inventory, wardrobe, weapons, and bags, and an object of various stats and data.</p>
 
-                            Donec et mi diam. Phasellus cursus sapien massa, et placerat ante pulvinar eget. Etiam sit amet fermentum neque. Duis ultricies laoreet felis, eu rhoncus ante interdum ac. Sed nunc ipsum, tristique a magna vel, luctus pharetra lectus. Praesent tristique sagittis tristique. Ut a quam auctor, interdum risus ut, congue nibh. Sed eget iaculis nisi. Vestibulum efficitur dapibus nibh. Curabitur vel libero eget orci tristique facilisis. Vestibulum ornare leo porta, elementum arcu lobortis, luctus justo. Suspendisse elementum felis vitae imperdiet pellentesque. Proin egestas vulputate metus, a varius mi tristique id.</p>
+                        <br><br>
+
+                        <div class="race-containers">
+
+                            <div class="parameter-container">
+                                <div class="info-header">Parameters</div>
+                                <div class="info-content">
+                                    <p>hello</p>
+                                </div>
+                            </div>
+
+                            <div class="response-container">
+                                <div class="info-header">API Response Sample</div>
+                                <div class="info-content">
+                                    <div id="response-profile"></div>
+
+                                    <p class="big">The entire response is too big to fit, many items have been omitted.</p>
+
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -76,9 +104,36 @@
                     <div class="stat-anchor"></div>
                     <div class="stat-header"><span>talismans</span></div>
                     <div class="stat-content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis eros enim. Aenean tempus placerat vestibulum. Aliquam a orci in orci molestie tincidunt ut at velit. Curabitur non mauris maximus, pretium ante eu, pellentesque purus. Nunc venenatis semper odio, quis egestas libero pretium eget. Mauris vel enim non leo tristique rhoncus id non elit. In eu tempor lacus. Duis lacinia, metus non vulputate efficitur, sem leo pellentesque sem, at porttitor leo augue ut felis. Nunc egestas, eros vitae feugiat tristique, nunc augue ornare nibh, vel vehicula justo neque ut nunc. Donec tempus justo condimentum iaculis fermentum. Nam fringilla nulla a ullamcorper rutrum. Nunc efficitur volutpat urna ut suscipit. Maecenas diam leo, hendrerit in convallis et, fermentum egestas erat. Nunc mi elit, dignissim nec ex sed, rutrum euismod ex. Aliquam erat volutpat.
+                        <p>Returns an array of the player's talismans, or an object of a player's profiles, depending on whether or not you provide a profile name.</p>
+                        <br>
+                        <p>A talisman object includes if the talisman is active, the NBT tags of the item, the extra stats, the rarity, lore and name, and reforge.</p>
+                        <br>
+                        <p>This endpoint may be used with or without a profile name. Using it without a profile name gives you data for all of a player's profiles.</p>
 
-                            Donec et mi diam. Phasellus cursus sapien massa, et placerat ante pulvinar eget. Etiam sit amet fermentum neque. Duis ultricies laoreet felis, eu rhoncus ante interdum ac. Sed nunc ipsum, tristique a magna vel, luctus pharetra lectus. Praesent tristique sagittis tristique. Ut a quam auctor, interdum risus ut, congue nibh. Sed eget iaculis nisi. Vestibulum efficitur dapibus nibh. Curabitur vel libero eget orci tristique facilisis. Vestibulum ornare leo porta, elementum arcu lobortis, luctus justo. Suspendisse elementum felis vitae imperdiet pellentesque. Proin egestas vulputate metus, a varius mi tristique id.</p>
+                        <div class="race-containers">
+
+                            <div class="parameter-container">
+                                <div class="info-header">Parameters</div>
+                                <div class="info-content">
+                                    <p>hello</p>
+                                </div>
+                            </div>
+
+                            <div class="response-container">
+                                <div class="info-header">API Response Sample</div>
+                                <div class="info-content">
+                                    <div class="narrow-info-section-header">With Profile Name</div>
+                                    <div id="response-talismans-profile"></div>
+
+                                    <div class="narrow-info-section-header">Without Profile Name</div>
+                                    <div id="response-talismans"></div>
+
+                                    <p class="big">The entire response is too big to fit, some items have been omitted.</p>
+
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -86,9 +141,38 @@
                     <div class="stat-anchor"></div>
                     <div class="stat-header"><span>slayer</span></div>
                     <div class="stat-content">
-                        <p class="stat-raw-values">
-                            hmmm
+                        <p>Returns an object of the player's slayer statistics, slayer bonuses, and coins spent, or an object of a player's profiles, depending on whether or not you provide a profile name.</p>
+                        <br>
+                        <p>The slayers and slayers bonus object are split into 3 objects, one for each slayer. Each one includes total xp, claimed levels, progress until the next level, and amount of kills for each boss tier.
+                            The coins spent object has the amount of coins spent for each slayer, and a total amount of coins spent.
                         </p>
+                        <br>
+                        <p>This endpoint may be used with or without a profile name. Using it without a profile name gives you data for all of a player's profiles.</p>
+
+                        <div class="race-containers">
+
+                            <div class="parameter-container">
+                                <div class="info-header">Parameters</div>
+                                <div class="info-content">
+                                    <p>hello</p>
+                                </div>
+                            </div>
+
+                            <div class="response-container">
+                                <div class="info-header">API Response Sample</div>
+                                <div class="info-content">
+                                    <div class="narrow-info-section-header">With Profile Name</div>
+                                    <div id="response-slayer-profile"></div>
+
+                                    <div class="narrow-info-section-header">Without Profile Name</div>
+                                    <div id="response-slayer"></div>
+
+                                    <p class="big">The entire response is too big to fit, some items have been omitted.</p>
+
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -113,5 +197,46 @@
                 </div>
             </div>
         </div>
+
+
+    
+        <script src="resources/js/jsonview.bundle.js"></script>
+        <script type="text/javascript">
+            fetch('resources/api/profile.json')
+            .then((res)=> {
+                return res.text();
+            })
+            .then((data) => {
+                const tree = JsonView.createTree(data);
+                JsonView.render(tree, document.querySelector('#response-profile'));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+            fetch('resources/api/talismans_profile.json')
+            .then((res)=> {
+                return res.text();
+            })
+            .then((data) => {
+                const tree = JsonView.createTree(data);
+                JsonView.render(tree, document.querySelector('#response-talismans-profile'));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+            fetch('resources/api/talismans.json')
+            .then((res)=> {
+                return res.text();
+            })
+            .then((data) => {
+                const tree = JsonView.createTree(data);
+                JsonView.render(tree, document.querySelector('#response-talismans'));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        </script>
     </body>
 </html>
