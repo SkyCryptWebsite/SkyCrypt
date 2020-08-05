@@ -1165,6 +1165,7 @@ twitterDescription += '. Click to view more stats!'
                 <% if(calculated.pets.length > 0){ %><div class="nav-item" data-target="pets">Pets</div><% } %>
                 <% if(!items.no_inventory){ %><div class="nav-item" data-target="inventory">Inventory</div><% } %>
                 <div class="nav-item" data-target="fishing">Fishing</div>
+                <% if(calculated.dungeons.entered){ %><div class="nav-item" data-target="dungeons">Dungeons</div><% } %>
                 <div class="nav-item" data-target="slayer">Slayer</div>
                 <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){ %><div class="nav-item" data-target="kills">Kills</div><% } %>
                 <div class="nav-item" data-target="minions">Minions</div>
@@ -1586,6 +1587,13 @@ twitterDescription += '. Click to view more stats!'
                         <% } %>
                     </div>
                 <% } %>
+            </div>
+        </div>
+        <div data-stat="dungeons" class="stat-container stat-dungeons">
+            <div class="stat-anchor"></div>
+            <div class="stat-header"><span>Dungeons</span></div>
+            <div class="stat-content">
+                <p>dungeons lol</p>
             </div>
         </div>
         <div data-stat="slayer" class="stat-container stat-slayer">
@@ -2103,18 +2111,13 @@ twitterDescription += '. Click to view more stats!'
     <script>
         let items = <%- JSON.stringify(items) %>;
         let calculated = <%- JSON.stringify(calculated) %>;
-    </script>
-    <script>
-        
-        
+
         window.onload = function() {
             new Elevator({
     //            mainAudio: '/src/to/audio.mp3',
     //            endAudio: '/src/to/end-audio.mp3' Will get audio for it soon
             });
         }
-        
-        
-        </script>
+    </script>
 </body>
 </html>

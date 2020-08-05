@@ -1671,6 +1671,8 @@ module.exports = {
         output.bag_sizes = await module.exports.getBagSizes(output.collections);
         output.social = hypixelProfile.socials;
 
+        output.dungeons = await module.exports.getDungeons(userProfile);
+
         output.fishing = {
             total: userProfile.stats.items_fished || 0,
             treasure: userProfile.stats.items_fished_treasure || 0,
@@ -2078,6 +2080,18 @@ module.exports = {
 
             output[bag] = slots;
         }
+
+        return output;
+    },
+
+    getDungeons: async (userProfile) => {
+        const output = {};
+
+        let tasks = userProfile.tutorial;
+        if (!tasks.includes('zone_catacombs_entrance')) 
+            return output;
+
+        output.entered = true;
 
         return output;
     },
