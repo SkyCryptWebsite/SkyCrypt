@@ -293,7 +293,7 @@ Disallow: /item /head /leather /resources
         }
 
         try{
-            const smStream = new SitemapStream({ hostname: 'https://sky.lea.moe/' });
+            const smStream = new SitemapStream({ hostname: 'https://sky.shiiyu.moe/' });
             const pipeline = smStream.pipe(createGzip());
 
             const cursor = await db.collection('viewsLeaderboard').find().limit(10000);
