@@ -2094,6 +2094,38 @@ module.exports = {
 
         output.collected_essence = tasks.includes('essence_collected_message');
 
+        const collection_data = constants.boss_collections;
+        let collections = {};
+        for (i in tasks) {
+            if (!tasks[i].startsWith("boss_collection_claimed")) continue;
+            let task = tasks[i].split("_").splice(3);
+
+            if (!Object.keys(collection_data).includes(task[0])) continue;
+            let boss = collection_data[task[0]];
+            let item = boss.rewards[task.splice(1).join('_')];
+
+            if (item == null || boss == null) continue;
+            if (!collections[task[0]]) collections[task[0]] = {
+                name: boss.name,
+                texture: boss.texture,
+                tier: 0,
+                killed: 0,
+                claimed: []
+            };
+
+            collections[task[0]].claimed.push(item.name);
+            if (collections[task[0]].tier < item.tier) {
+                collections[task[0]].tier = item.tier;
+                collections[task[0]].killed = item.required;
+            } 
+        }
+
+        if (Object.keys(collections).length === 0) 
+            output.unlocked_collections = false;
+        else output.unlocked_collections = true;
+
+        output.boss_collections = collections;
+
         return output;
     },
 

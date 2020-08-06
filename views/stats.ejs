@@ -1593,15 +1593,39 @@ twitterDescription += '. Click to view more stats!'
             <div class="stat-anchor"></div>
             <div class="stat-header"><span>Dungeons</span></div>
             <div class="stat-content">
-                <% if (!calculated.dungeons.entrance) { %>
-                    <p class="stat-raw-values">
-                        <%= calculated.display_name %> didn't enter Catacombs yet.
-                    </p>
-                <% } else { %>
-                    <p class="stat-raw-values">
-                        <%= calculated.display_name %> has entered Catacombs<% if (calculated.dungeons.collected_essence) { %> and collected essence<% } %>.
-                    </p>
+            <% if (!calculated.dungeons.entrance) { %>
+                <p class="stat-raw-values">
+                    <%= calculated.display_name %> didn't enter Catacombs yet.
+                </p>
+            <% } else { %>
+                <p class="stat-raw-values">
+                    <%= calculated.display_name %> has entered Catacombs<% if (calculated.dungeons.collected_essence) { %> and collected essence<% } %>.
+                </p>
+
+                <% if (calculated.dungeons.unlocked_collections) { %>
+                    <p class="stat-sub-header">Boss Collections</p>
+
+                    <div class="boss-collections">
+                    <%
+                    for(let boss in calculated.dungeons.boss_collections){
+                        let collection = calculated.dungeons.boss_collections[boss];
+                        let claimedTooltip = '<span class="stat-name">You claimed:</span>';
+
+                        for(let item in collection.claimed)
+                            claimedTooltip += `<br><span class="stat-value">${collection.claimed[item]}</span>`;
+                    %>
+                    <div class="boss-collection" data-tippy-content="<%= claimedTooltip %>">
+                        <div class="boss-collection-icon" style="background-image:url(/head/<%= collection.texture %>)"></div>
+                        <div class="collection-stats">
+                            <div class="collection-name"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
+                            <div class="collection-amount"><span class="stat-name">Bosses killed: </span><span class="stat-value">~<%= collection.killed %></span></div>
+                        </div>
+                    </div>
+                    <% } %>
+                    </div>
                 <% } %>
+            <% } %>
+            <p class='stat-raw-values'><small><i>This section is still in works, since Hypixel doesn't support Dungeons in their API.</i></small></p>
             </div>
         </div>
         <div data-stat="slayer" class="stat-container stat-slayer">
