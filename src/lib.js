@@ -2104,11 +2104,7 @@ module.exports = {
             let boss = collection_data[task[0]];
             let item = boss.rewards[task.splice(1).join('_')];
 
-            if (boss == null) continue;
-            if (item == null) {
-                console.log(`Item ${item} wasn't found in boss_collection constants.`);
-                continue;
-            }
+            if (item == null || boss == null) continue;
             if (!collections[task[0]]) collections[task[0]] = {
                 name: boss.name,
                 texture: boss.texture,

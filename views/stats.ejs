@@ -1609,7 +1609,7 @@ twitterDescription += '. Click to view more stats!'
                     <%
                     for(let boss in calculated.dungeons.boss_collections){
                         let collection = calculated.dungeons.boss_collections[boss];
-                        let claimedTooltip = '<span class="stat-name">You claimed:</span>';
+                        let claimedTooltip = '<span class="stat-name">Claimed items:</span>';
 
                         for(let item in collection.claimed)
                             claimedTooltip += `<br><span class="stat-value">${collection.claimed[item]}</span>`;
