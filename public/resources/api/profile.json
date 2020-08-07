@@ -1,0 +1,58 @@
+{
+    "profiles": {
+        "first_profile_id": {
+            "profile_id": "string",
+            "cute_name": "string",
+            "current": true,
+            "raw": {
+
+            },
+            "items": {
+                "armor": [
+                    {
+                        "id": 0,
+                        "Count": 0,
+                        "tag": {
+                            
+                        },
+                        "texture_path": "string",
+                        "display_name": "string",
+                        "lore": "string",
+                        "rarity": "string",
+                        "type": "string",
+                        "stats": {
+
+                        },
+                        "item_index": 0,
+                        "itemId": "string",
+                        "armor_name": "string"
+                    },
+                    {}
+                ],
+                "wardrobe": [
+                    {}
+                ],
+                "inventory": [
+                    {}
+                ],
+                "enderchest": [
+                    {}
+                ]
+            },
+            "data": {
+                "stats": {
+                    "health": 0
+                },
+                "slayers": {
+
+                },
+                "levels": {
+                    
+                }
+            }
+        },
+        "second_profile_id": {
+            
+        }
+    }
+}

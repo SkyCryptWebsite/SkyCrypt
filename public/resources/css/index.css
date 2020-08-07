@@ -2383,6 +2383,33 @@ a.additional-player-stat:hover{
     transform-origin: center center;
 }
 
+.boss-collection{
+    position: relative;
+    display: inline-block;
+    padding: 7px;
+    padding-right: 15px;
+    margin-left: 5px;
+    margin-bottom: 8px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+}
+
+.boss-collection::after{
+    content: "";
+}
+
+.boss-collection-icon{
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    width: 40px;
+    height: 40px;
+    margin-left: 5px;
+    background-size: auto 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
 .narrow-info-header{
     position: absolute;
     top: 0;

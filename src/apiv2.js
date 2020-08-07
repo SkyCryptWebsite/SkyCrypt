@@ -67,7 +67,7 @@ module.exports = (app, db) => {
                     sellPrice: product.sellPrice,
                     buyVolume: product.buyVolume,
                     sellVolume: product.sellVolume,
-                    tag: 'tag' in itemInfo ? itemInfo.tag : null,
+                    tag: helper.hasPath(itemInfo, 'tag') ? itemInfo.tag : null,
                     price: (product.buyPrice + product.sellPrice) / 2
                 };
             }
