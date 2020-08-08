@@ -3231,6 +3231,10 @@ html.no-webp #error_box_wrapper{
         width: 100%;
         backdrop-filter: blur(15px);
     }
+
+    #api_button{
+        display: none;
+    }
 }
 
 @media (max-width: 580px){
