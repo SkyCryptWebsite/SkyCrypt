@@ -1227,6 +1227,48 @@ class Spider extends Pet {
 	}
 }
 
+class Spirit extends Pet {
+	get stats(){
+		return {
+			strength: this.level * 0.1,
+			intelligence: this.level * 1
+		};
+	}
+
+	get abilities(){
+		let list = [this.first];
+		if (this.rarity > 1)
+			list.push(this.second);
+		if (this.rarity > 3)
+			list.push(this.third);
+		return list;
+	}
+
+	get first() {
+		let mult = 0;
+		return {
+			name: "§6Spirit Assistance", 
+			desc: [`§7Spawns and assists you when you are ghost in dungeons.`]
+		};
+	}
+
+	get second() {
+		let mult = 0.4;
+		return {
+			name: "§6Spirit Leap", 
+			desc: [`§7Grants a §a${round(this.level*mult, 1)}% §7chance for mini-bosses in dungeons to drop §b5 §7Spirit Leap Pearls.`]
+		};
+	}
+
+	get third() {
+		let mult = 0.648;
+		return {
+			name: "§6Spirit Cooldowns", 
+			desc: [`§7Reduces the cooldown of your ghost abilities in dungeons by §a${round(this.level*mult, 1)}%§7.`]
+		};
+	}
+}
+
 class Tarantula extends Pet {
 	get stats() {
 		return {
@@ -2077,6 +2119,7 @@ module.exports = {
 		'Skeleton': Skeleton,
 		'Snowman': Snowman,
 		'Spider': Spider,
+		'Spirit': Spirit,
 		'Tarantula': Tarantula,
 		'Tiger': Tiger,
 		'Turtle': Turtle,

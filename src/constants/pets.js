@@ -349,6 +349,11 @@ module.exports = {
             head: "/head/e4b45cbaa19fe3d68c856cd3846c03b5f59de81a480eec921ab4fa3cd81317",
             type: "combat",
             emoji: "🐱"
+        },
+        "SPIRIT": {
+            head: "/head/8d9ccc670677d0cebaad4058d6aaf9acfab09abea5d86379a059902f2fe22655",
+            type: "combat",
+            emoji: "👻"
         }
     },
 
