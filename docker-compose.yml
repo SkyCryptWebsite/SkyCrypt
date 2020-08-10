@@ -70,7 +70,7 @@ version: "3"
         LETSENCRYPT_EMAIL: professornitro@gmail.com
         LETSENCRYPT_HOST: skyblock.domain.tld
         VIRTUAL_HOST: skyblock.domain.tld
-      image: "physanus/skyblock-stats:latest"
+      image: warpwing/skycrypt:latest
       restart: always
       volumes: 
         nginx-certs: ~
