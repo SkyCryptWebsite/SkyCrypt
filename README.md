@@ -30,7 +30,9 @@ Now open `credentials.json` and enter a valid Hypixel API Key. You can obtain on
 
 You can now run `npm start` to start it. You will be able to access the site on <a href="http://localhost:32464">http://localhost:32464</a> if you leave the default port.
 
-<h3> Alternative Installation </h3>
+<h3> Alternative Installation </h3> 
+
+![Docker Image CI](https://github.com/SkyCryptWebsite/SkyCrypt/workflows/Docker%20Image%20CI/badge.svg)
 
 If you don't want to install it by NPM, you can install it via Docker by just doing 
 
