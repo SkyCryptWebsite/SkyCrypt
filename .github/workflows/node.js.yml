@@ -11,17 +11,16 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [14.x]
-        redis-version: [ 6 ] [value1, ...valueN]
-   steps:
+        redis-version: [6]
+    steps:
         uses: actions/checkout@v1
 
-      - name: Use Node.js ${{ matrix.node-version }}
+       - name: Node.js
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
