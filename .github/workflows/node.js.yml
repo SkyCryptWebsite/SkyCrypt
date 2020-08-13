@@ -18,20 +18,22 @@ jobs:
       matrix:
         node-version: [14.x]
         redis-version: [ 6 ] [value1, ...valueN]
+   steps:
+        uses: actions/checkout@v1
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Start Redis
-      uses: supercharge/redis-github-action@1.1.0
-      with:
-        redis-version: ${{ matrix.redis-version }}
-      
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm start
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.1.0
+        with:
+          redis-version: ${{ matrix.redis-version }}
+
+
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm start
 
 
