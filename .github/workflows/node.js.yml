@@ -34,8 +34,11 @@ jobs:
       with:
         mongodb-version: ${{ matrix.mongodb-version }}
     
-
     - run: npm ci
     - run: npm run build --if-present
     - run: npm start
-    
+    env:
+      CI: true
+      API_KEY: true 
+
+     
