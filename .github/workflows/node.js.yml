@@ -36,5 +36,7 @@ jobs:
     
     - run: npm ci
     - run: npm run build --if-present
+    - run: cat ${{ secrets.CRED}} > credentials.json
+    - run: npm start
 
      
