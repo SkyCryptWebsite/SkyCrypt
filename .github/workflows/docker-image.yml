@@ -15,4 +15,14 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag skycrypt:latest 
+     
+    - name: Publish to Github Packages Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: SkyCryptWebsite/SkyCrypt/skycrypt
+        registry: docker.pkg.github.com
+        username: ${{ secrets.GITHUB_USERNAME }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        dockerfile: Dockerfile
+        tags: latest
       
