@@ -87,9 +87,9 @@ class Pet {
 }
 
 /*
-
+ 
 Farming Pets
-
+ 
 */
 
 class Bee extends Pet { // todo: finish hive
@@ -302,9 +302,9 @@ class Rabbit extends Pet {
 }
 
 /*
-
+ 
 Mining Pets
-
+ 
 */
 
 class Bat extends Pet {
@@ -529,9 +529,9 @@ class WitherSkeleton extends Pet {
 }
 
 /*
-
+ 
 Combat Pets
-
+ 
 */
 
 class BlackCat extends Pet {
@@ -804,19 +804,11 @@ class Guardian extends Pet {
 	}
 
 	get first() {
-		if (this.rarity > 0) {
-			let mult = this.rarity > 3 ? 0.2 : this.rariy > 2 ? 0.15 : this.rariy > 1 ? 0.1 : this.rariy > 0 ? 0.06 : 0.02;
-			return {
-				name: "§6Lazerbeam",
-				desc: [`§7Zap your enemies for §b${round(this.level * mult, 1)}x §7your §b${symbols.intelligence} Intelligence §7every §a3s`]
-			};
-		} else {
-			let val = this.level > 68 ? 1.5 : this.level > 56 ? 1.2 : this.level > 43 ? 1.0 : this.level > 31 ? 0.8 : this.level > 18 ? 0.5 : 0.2;
-			return {
-				name: "§6Lazerbeam",
-				desc: [`§7Zap your enemies for §b${val}x §7your §b${symbols.intelligence} Intelligence §7every §a3s`, `§8Please yell at boblovespi if this is wrong`]
-			};
-		}
+		let mult = this.rarity > 3 ? 0.2 : this.rariy > 2 ? 0.15 : this.rariy > 1 ? 0.1 : this.rariy > 0 ? 0.06 : 0.02;
+		return {
+			name: "§6Lazerbeam",
+			desc: [`§7Zap your enemies for §b${round(this.level * mult, 1)}x §7your §b${symbols.intelligence} Intelligence §7every §a3s`]
+		};
 	}
 
 	get second() {
@@ -1228,14 +1220,14 @@ class Spider extends Pet {
 }
 
 class Spirit extends Pet {
-	get stats(){
+	get stats() {
 		return {
 			strength: this.level * 0.1,
 			intelligence: this.level * 1
 		};
 	}
 
-	get abilities(){
+	get abilities() {
 		let list = [this.first];
 		if (this.rarity > 1)
 			list.push(this.second);
@@ -1247,7 +1239,7 @@ class Spirit extends Pet {
 	get first() {
 		let mult = 0;
 		return {
-			name: "§6Spirit Assistance", 
+			name: "§6Spirit Assistance",
 			desc: [`§7Spawns and assists you when you are ghost in dungeons.`]
 		};
 	}
@@ -1255,16 +1247,16 @@ class Spirit extends Pet {
 	get second() {
 		let mult = 0.4;
 		return {
-			name: "§6Spirit Leap", 
-			desc: [`§7Grants a §a${round(this.level*mult, 1)}% §7chance for mini-bosses in dungeons to drop §b5 §7Spirit Leap Pearls.`]
+			name: "§6Spirit Leap",
+			desc: [`§7Grants a §a${round(this.level * mult, 1)}% §7chance for mini-bosses in dungeons to drop §b5 §7Spirit Leap Pearls.`]
 		};
 	}
 
 	get third() {
 		let mult = 0.648;
 		return {
-			name: "§6Spirit Cooldowns", 
-			desc: [`§7Reduces the cooldown of your ghost abilities in dungeons by §a${round(this.level*mult, 1)}%§7.`]
+			name: "§6Spirit Cooldowns",
+			desc: [`§7Reduces the cooldown of your ghost abilities in dungeons by §a${round(this.level * mult, 1)}%§7.`]
 		};
 	}
 }
@@ -1307,7 +1299,7 @@ class Tarantula extends Pet {
 		let mult = 0.4;
 		return {
 			name: "§6Arachnid Slayerr",
-			desc: [`§7Gain +§a${round(this.level * mult, 1)} §7more combat xp from spiders`]
+			desc: [`§7Gain +§a${round(this.level * mult, 1)}% §7more combat xp from spiders`]
 		};
 	}
 }
@@ -1485,9 +1477,9 @@ class Zombie extends Pet {
 }
 
 /*
-
+ 
 Foraging Pets
-
+ 
 */
 
 class Giraffe extends Pet {
@@ -1659,9 +1651,9 @@ class Ocelot extends Pet {
 }
 
 /*
-
+ 
 Fishing Pets
-
+ 
 */
 
 class BabyYeti extends Pet {
@@ -1876,9 +1868,9 @@ class Squid extends Pet {
 }
 
 /*
-
+ 
 Alchemy Pets
-
+ 
 */
 
 class Jellyfish extends Pet {
