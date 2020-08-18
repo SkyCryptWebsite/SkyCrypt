@@ -5,7 +5,7 @@
 
 html{
     background-color: black;
-    background: url(../img/bg.webp?v2) no-repeat center center fixed;
+    background: url(../img/bg.webp?v3) no-repeat center center fixed;
     background-size: cover;
     font-family: 'Montserrat', sans-serif;
     color: white;
@@ -21,7 +21,7 @@ html{
 }
 
 html.no-webp{
-    background-image: url(../img/bg.png?v2);
+    background-image: url(../img/bg.png?v3);
 }
 
 a.no-underline{
@@ -382,7 +382,7 @@ header{
 }
 
 #bg_blur{
-    background: url(../img/bg_blur.webp?v2) no-repeat center center fixed;
+    background: url(../img/bg_blur.webp?v3) no-repeat center center fixed;
     background-size: cover;
     position: fixed;
     left: 30vw;
@@ -393,7 +393,7 @@ header{
 }
 
 html.no-webp #bg_blur{
-    background-image: url(../img/bg_blur.png?v2)
+    background-image: url(../img/bg_blur.png?v3)
 }
 
 #wrapper{
@@ -2512,7 +2512,7 @@ a.additional-player-stat:hover{
     margin-top: calc(50vh - 130px);
     width: 700px;
     height: 260px;
-    background: url(../img/bg_blur.webp?v2) no-repeat center center fixed;
+    background: url(../img/bg_blur.webp?v3) no-repeat center center fixed;
     background-size: cover;
     border-radius: 10px;
     overflow: hidden;
@@ -2525,7 +2525,7 @@ a.additional-player-stat:hover{
 }
 
 html.no-webp #enter_player_box_wrapper{
-    background-image: url(../img/bg_blur.png?v2);
+    background-image: url(../img/bg_blur.png?v3);
 }
 
 #enter_player_box{
@@ -2585,7 +2585,7 @@ html.no-webp #enter_player_box_wrapper{
     margin: 0 auto;
     margin-top: 20px;
     width: 700px;
-    background: url(../img/bg_blur.webp?v2) no-repeat center center fixed;
+    background: url(../img/bg_blur.webp?v3) no-repeat center center fixed;
     background-size: cover;
     border-radius: 10px;
     overflow: hidden;
@@ -2607,7 +2607,7 @@ html.no-webp #enter_player_box_wrapper{
 .top-profile{
     position: relative;
     display: inline-block;
-    background: url(../img/bg_blur.webp?v2) no-repeat center center fixed;
+    background: url(../img/bg_blur.webp?v3) no-repeat center center fixed;
     background-size: cover;
     width: calc(100% / 2 - 10px);
     margin-bottom: 20px;
@@ -2620,7 +2620,7 @@ html.no-webp #enter_player_box_wrapper{
 }
 
 html.no-webp .top-profile{
-    background-image: url(../img/bg_blur.png?v2);
+    background-image: url(../img/bg_blur.png?v3);
 }
 
 .top-profile:hover{
@@ -2680,7 +2680,7 @@ html.no-webp .top-profile{
 }
 
 html.no-webp #error_box_wrapper{
-    background-image: url(../img/bg_blur.png?v2);
+    background-image: url(../img/bg_blur.png?v3);
 }
 
 #error_box, #top_profiles_box{
