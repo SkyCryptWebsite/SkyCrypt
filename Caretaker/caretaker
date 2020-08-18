@@ -1,13 +1,5 @@
-<<<<<<< Updated upstream
 #!/bin/bash
 while true; do
   echo Watching for ever-persisting threats throughout the lands
   sleep 3600s 
 done
-=======
-#!/bin/bash
-while true; do
-  echo Watching for ever-persisting threats throughout the lands
-  sleep 3600s 
-done
->>>>>>> Stashed changes
