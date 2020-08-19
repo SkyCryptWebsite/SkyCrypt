@@ -471,6 +471,8 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             // Get item type (like "bow") and rarity (like "legendary") from last line of lore
             let rarity_type = lore[lore.length - 1];
 
+            let rarity_type_color = lore_raw[lore_raw.length - 1].charAt(1);
+
             if(rarity_type.startsWith('a '))
                 rarity_type = rarity_type.substring(2).substring(0, rarity_type.length - 4);
 
