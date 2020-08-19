@@ -383,6 +383,13 @@ module.exports = {
         ],
         LYNX_TALISMAN: [
             'CHEETAH_TALISMAN'
+        ],
+        TREASURE_TALISMAN: [
+            'TREASURE_RING',
+            'TREASURE_ARTIFACT'
+        ],
+        TREASURE_RING: [
+            'TREASURE_ARTIFACT'
         ]
     },
 
