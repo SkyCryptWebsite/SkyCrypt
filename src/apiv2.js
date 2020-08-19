@@ -41,7 +41,7 @@ module.exports = (app, db) => {
         for (const key of keys) {
             const lb = constants.leaderboard(key);
 
-            if (lb.mappedBy == 'uuid')
+            if(lb.mappedBy == 'uuid' && !lb.key.startsWith('collection_enchanted'))
                 leaderboards.push(lb);
         }
 
