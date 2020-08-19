@@ -1,8 +1,12 @@
 const helper = require('./helper');
 const lib = require('./lib');
 const cors = require('cors');
+const constants = require('./constants');
 
-function handleError(e, res){
+const Redis = require("ioredis");
+const redisClient = new Redis();
+
+function handleError(e, res) {
     console.error(e);
 
     res.status(500).json({
@@ -12,23 +16,33 @@ function handleError(e, res){
 
 module.exports = (app, db) => {
     const productInfo = {};
+    const leaderboards = [];
 
     const init = new Promise(async (resolve, reject) => {
         const bazaarProducts = await db
-        .collection('bazaar')
-        .find()
-        .toArray();
+            .collection('bazaar')
+            .find()
+            .toArray();
 
         const itemInfo = await db
-        .collection('items')
-        .find({ id: { $in: bazaarProducts.map(a => a.productId) } })
-        .toArray();
+            .collection('items')
+            .find({ id: { $in: bazaarProducts.map(a => a.productId) } })
+            .toArray();
 
-        for(const product of bazaarProducts){
+        for (const product of bazaarProducts) {
             const info = itemInfo.filter(a => a.id == product.productId);
 
-            if(info.length > 0)
+            if (info.length > 0)
                 productInfo[product.productId] = info[0];
+        }
+
+        const keys = await redisClient.keys('lb_*');
+
+        for (const key of keys) {
+            const lb = constants.leaderboard(key);
+
+            if (lb.mappedBy == 'uuid')
+                leaderboards.push(lb);
         }
 
         resolve();
@@ -37,25 +51,87 @@ module.exports = (app, db) => {
     app.use('/api/v2/*', async (req, res, next) => {
         req.cacheOnly = true;
 
-        if(req.query.key){
+        if (req.query.key) {
             const doc = await db
-            .collection('apiKeys')
-            .findOne({ key: req.query.key });
+                .collection('apiKeys')
+                .findOne({ key: req.query.key });
 
-            if(doc != null)
+            if (doc != null)
                 req.cacheOnly = false;
         }
 
         next();
     });
 
+    app.all('/api/v2/leaderboards', cors(), async (req, res) => {
+        res.json(leaderboards);
+    });
+
+    app.all('/api/v2/leaderboard/:lbName', cors(), async (req, res) => {
+        const count = Math.min(100, req.query.count || 20)
+
+        let page, startIndex, endIndex;
+
+        const lb = constants.leaderboard(`lb_${req.params.lbName}`);
+
+        const output = {
+            positions: []
+        };
+
+        if (req.query.find) {
+            const uuid = (await helper.resolveUsernameOrUuid(req.query.find, db, true)).uuid;
+
+            const rank = lb.sortedBy > 0 ?
+                await redisClient.zrank(`lb_${lb.key}`, uuid) :
+                await redisClient.zrevrank(`lb_${lb.key}`, uuid);
+
+            output.self = { rank: rank + 1 };
+
+            page = Math.floor(rank / count) + 1;
+            startIndex = (page - 1) * count;
+            endIndex = startIndex - 1 + count;
+        } else {
+            page = Math.max(1, req.query.page || 1);
+            startIndex = (page - 1) * count;
+            endIndex = startIndex - 1 + count;
+        }
+
+        output.page = page;
+
+        let results = lb.sortedBy > 0 ?
+            await redisClient.zrange(`lb_${lb.key}`, startIndex, endIndex, 'WITHSCORES') :
+            await redisClient.zrevrange(`lb_${lb.key}`, startIndex, endIndex, 'WITHSCORES');
+
+        if (results.length == 0) {
+            res.status(404).json({ error: "leaderboard not found" });
+            return;
+        }
+
+        for (let i = 0; i < results.length; i += 2) {
+            const lbPosition = {
+                rank: i / 2 + startIndex + 1,
+                amount: lb.format(results[i + 1]),
+                raw: results[i + 1],
+                uuid: results[i],
+                username: (await helper.resolveUsernameOrUuid(results[i], db, true)).display_name
+            };
+
+            if ('self' in output && output.self.rank == lbPosition.rank)
+                output.self = lbPosition;
+
+            output.positions.push(lbPosition);
+        }
+
+        res.json(output);
+    });
+
     app.all('/api/v2/bazaar', cors(), async (req, res) => {
         await init;
 
-        try{
+        try {
             const output = {};
 
-            for await(const product of db.collection('bazaar').find()){
+            for await (const product of db.collection('bazaar').find()) {
                 const itemInfo = productInfo[product.productId];
 
                 const productName = itemInfo ? itemInfo.name : helper.titleCase(product.productId.replace(/(_+)/g, ' '));
@@ -73,18 +149,18 @@ module.exports = (app, db) => {
             }
 
             res.json(output);
-        }catch(e){
+        } catch (e) {
             handleError(e, res);
         }
     });
 
     app.all('/api/v2/profile/:player', cors(), async (req, res) => {
-        try{
+        try {
             const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
 
             const output = { profiles: {} };
 
-            for(const singleProfile of allProfiles){
+            for (const singleProfile of allProfiles) {
                 const userProfile = singleProfile.members[profile.uuid];
 
                 const items = await lib.getItems(userProfile, req.query.pack);
@@ -102,24 +178,24 @@ module.exports = (app, db) => {
             }
 
             res.json(output);
-        }catch(e){
+        } catch (e) {
             handleError(e, res);
         }
     });
 
     app.all('/api/v2/coins/:player/:profile', cors(), async (req, res) => {
-        try{
+        try {
             const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
 
             let output = {
                 error: "Invalid Profile Name!"
             };
 
-            for(const singleProfile of allProfiles){
+            for (const singleProfile of allProfiles) {
 
                 const cute_name = singleProfile.cute_name;
 
-                if(cute_name.toLowerCase() != req.params.profile.toLowerCase())
+                if (cute_name.toLowerCase() != req.params.profile.toLowerCase())
                     continue;
 
                 const items = await lib.getItems(singleProfile.members[profile.uuid], req.query.pack);
@@ -134,18 +210,18 @@ module.exports = (app, db) => {
             }
 
             res.json(output);
-        }catch(e){
+        } catch (e) {
             handleError(e, res);
         }
     });
 
     app.all('/api/v2/coins/:player', cors(), async (req, res) => {
-        try{
+        try {
             const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
 
             const output = { profiles: {} };
 
-            for(const singleProfile of allProfiles){
+            for (const singleProfile of allProfiles) {
 
                 const cute_name = singleProfile.cute_name;
 
@@ -161,24 +237,24 @@ module.exports = (app, db) => {
             }
 
             res.json(output);
-        }catch(e){
+        } catch (e) {
             handleError(e, res);
         }
     });
 
     app.all('/api/v2/talismans/:player/:profile', cors(), async (req, res) => {
-        try{
+        try {
             const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
 
             let output = {
                 error: "Invalid Profile Name!"
             };
 
-            for(const singleProfile of allProfiles){
+            for (const singleProfile of allProfiles) {
 
                 const cute_name = singleProfile.cute_name;
 
-                if(cute_name.toLowerCase() != req.params.profile.toLowerCase())
+                if (cute_name.toLowerCase() != req.params.profile.toLowerCase())
                     continue;
 
                 const items = await lib.getItems(singleProfile.members[profile.uuid], req.query.pack);
@@ -192,18 +268,18 @@ module.exports = (app, db) => {
             }
 
             res.json(output);
-        }catch(e){
+        } catch (e) {
             handleError(e, res);
         }
     });
 
     app.all('/api/v2/talismans/:player', cors(), async (req, res) => {
-        try{
+        try {
             const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
 
             const output = { profiles: {} };
 
-            for(const singleProfile of allProfiles){
+            for (const singleProfile of allProfiles) {
                 const userProfile = singleProfile.members[profile.uuid];
 
                 const items = await lib.getItems(userProfile, req.query.pack);
@@ -217,24 +293,24 @@ module.exports = (app, db) => {
             }
 
             res.json(output);
-        }catch(e){
+        } catch (e) {
             handleError(e, res);
         }
     });
 
     app.all('/api/v2/slayers/:player/:profile', cors(), async (req, res) => {
-        try{
+        try {
             const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
 
             let output = {
                 error: "Invalid Profile Name!"
             };
 
-            for(const singleProfile of allProfiles){
+            for (const singleProfile of allProfiles) {
 
                 const cute_name = singleProfile.cute_name;
 
-                if(cute_name.toLowerCase() != req.params.profile.toLowerCase())
+                if (cute_name.toLowerCase() != req.params.profile.toLowerCase())
                     continue;
 
 
@@ -252,18 +328,18 @@ module.exports = (app, db) => {
             }
 
             res.json(output);
-        }catch(e){
+        } catch (e) {
             handleError(e, res);
         }
     });
 
     app.all('/api/v2/slayers/:player', cors(), async (req, res) => {
-        try{
+        try {
             const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, { cacheOnly: req.cacheOnly });
 
             const output = { profiles: {} };
 
-            for(const singleProfile of allProfiles){
+            for (const singleProfile of allProfiles) {
                 const userProfile = singleProfile.members[profile.uuid];
 
                 const items = await lib.getItems(userProfile, req.query.pack);
@@ -280,7 +356,7 @@ module.exports = (app, db) => {
             }
 
             res.json(output);
-        }catch(e){
+        } catch (e) {
             handleError(e, res);
         }
     });
