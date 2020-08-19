@@ -1184,7 +1184,7 @@ twitterDescription += '. Click to view more stats!'
 
             if(Object.keys(calculated.collections).length == 0)
                 notAvailable.push('Collections');
-            
+
             const localizedItems = allItems.some(a => a.localized === true);
         %>
         <% if(notAvailable.length > 0 || localizedItems){ %>
@@ -1235,7 +1235,7 @@ twitterDescription += '. Click to view more stats!'
                     <div class="pieces">
                     <% for(const set of items.wardrobe){ %>
                         <div class="wardrobe-set">
-                            <% <% for(const [index, item] of set.filter(a => a !== null).entries()){
+                            <% for(const [index, item] of set.filter(a => a !== null).entries()){
                                  %>
                                 <div tabindex="3" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item <%= index == 0 ? 'wardrobe-piece' : '' %> piece piece-<%= item.rarity %>-bg">
                                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
