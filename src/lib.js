@@ -31,6 +31,7 @@ const Redis = require("ioredis");
 const redisClient = new Redis();
 
 const customResources = require('./custom-resources');
+const { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } = require('constants');
 
 const parseNbt = util.promisify(nbt.parse);
 
@@ -490,6 +491,12 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
             if(item.type != null && item.type.startsWith('dungeon'))
                 item.Damage = 0;
+            
+            // fix custom maps texture
+            if(item.id == 358){
+                item.id = 395;
+                item.Damage = 0;
+            }
 
             item.stats = {};
 
