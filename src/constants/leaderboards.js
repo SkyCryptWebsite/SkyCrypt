@@ -1,6 +1,120 @@
+const collections = require('./collections');
+const leveling = require('./leveling');
+const moment = require('moment');
+const { getLevelByXp } = require('../lib');
+require('moment-duration-format')(moment);
+
 const defaultOptions = {
     mappedBy: 'uuid',
-    sortedBy: -1
+    sortedBy: -1,
+    format: x => Number(x)
+};
+
+const raceFormat = x => {
+    x = Number(x);
+
+    let raceDuration = moment.duration(x, "milliseconds").format("m:ss.SSS");
+
+    if(x < 1000)
+        raceDuration = '0.' + raceDuration;
+
+    return raceDuration;
+};
+
+const skillFormat = xp => {
+    const xp_table = leveling.leveling_xp;
+
+    let levelObj = {
+        xp: 0,
+        level: 0,
+        xpCurrent: 0,
+        xpForNext: xp_table[1],
+        progress: 0
+    };
+
+    let xpTotal = 0;
+    let level = 0;
+
+    let xpForNext = Infinity;
+
+    let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
+
+    for(let x = 1; x <= maxLevel; x++){
+        xpTotal += xp_table[x];
+
+        if(xpTotal > xp){
+            xpTotal -= xp_table[x];
+            break;
+        }else{
+            level = x;
+        }
+    }
+
+    let xpCurrent = Math.floor(xp - xpTotal);
+
+    if(level < maxLevel)
+        xpForNext = Math.ceil(xp_table[level + 1]);
+
+    let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+
+    levelObj = {
+        xp,
+        level,
+        maxLevel,
+        xpCurrent,
+        xpForNext,
+        progress
+    };
+
+    return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
+};
+
+const skillFormatRunecrafting = xp => {
+    const xp_table = leveling.runecrafting_xp;
+
+    let levelObj = {
+        xp: 0,
+        level: 0,
+        xpCurrent: 0,
+        xpForNext: xp_table[1],
+        progress: 0
+    };
+
+    let xpTotal = 0;
+    let level = 0;
+
+    let xpForNext = Infinity;
+
+    let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
+
+    for(let x = 1; x <= maxLevel; x++){
+        xpTotal += xp_table[x];
+
+        if(xpTotal > xp){
+            xpTotal -= xp_table[x];
+            break;
+        }else{
+            level = x;
+        }
+    }
+
+    let xpCurrent = Math.floor(xp - xpTotal);
+
+    if(level < maxLevel)
+        xpForNext = Math.ceil(xp_table[level + 1]);
+
+    let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+
+    levelObj = {
+        xp,
+        level,
+        maxLevel,
+        xpCurrent,
+        xpForNext,
+        progress
+    };
+
+    return `Level ${levelObj.level} + ${levelObj.current.toLocaleString()} XP`;
 };
 
 const overrides = {
@@ -10,22 +124,6 @@ const overrides = {
 
     unique_minions: {
         mappedBy: 'profile_id'
-    },
-
-    end_race_best_time: {
-        sortedBy: 1
-    },
-
-    foraging_race_best_time: {
-        sortedBy: 1,
-    },
-
-    chicken_race_best_time: {
-        sortedBy: 1
-    },
-
-    chicken_race_best_time_2: {
-        sortedBy: 1
     }
 };
 
@@ -38,14 +136,13 @@ const titleCase = string => {
     return split.join(' ');
 };
 
-const collections = require('./collections');
-
 module.exports = {
     leaderboard: name => {
         const lbName = name.split("_").slice(1).join("_");
 
         const options = Object.assign({}, defaultOptions);
 
+        options['key'] = lbName;
         options['name'] = titleCase(lbName.split("_").join(" "));
 
         if(overrides.hasOwnProperty(lbName))
@@ -57,7 +154,18 @@ module.exports = {
             const collectionData = collections.collection_data.filter(a => a.skyblockId == collectionName);
 
             if(collectionData.length > 0)
-                options['name'] = collectionData[0].name;
+                options['name'] = collectionData[0].name + ' Collection';
+        }
+
+        if(lbName.includes('_best_time')){
+            options['sortedBy'] = 1;
+            options['format'] = raceFormat;
+        }
+
+        if(lbName.startsWith('skill_')){
+            const skill = lbName.split("_")[1];
+
+            options['format'] = skill == 'runecrafting' ? skillFormatRunecrafting : skillFormat;
         }
 
         return options;
