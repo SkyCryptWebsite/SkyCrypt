@@ -434,6 +434,7 @@ module.exports = {
         if(!('path' in outputTexture))
             return null;
 
+        /* TODO: fix
         if('leather' in outputTexture && helper.hasPath(item, 'tag', 'ExtraAttributes', 'color')){
             const color = item.tag.ExtraAttributes.color.split(":");
 
@@ -474,7 +475,7 @@ module.exports = {
             }
 
             outputTexture.path = leatherPath;
-        }
+        }*/
 
         outputTexture.path = path.relative(path.resolve(__dirname, '..', 'public'), outputTexture.path).replace(/[\\]/g, '/');
 
