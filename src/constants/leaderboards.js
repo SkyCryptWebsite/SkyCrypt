@@ -168,6 +168,17 @@ module.exports = {
             options['format'] = skill == 'runecrafting' ? skillFormatRunecrafting : skillFormat;
         }
 
+        if(lbName.includes('_slayer_boss_kills_')){
+            const tier = Number(lbName.split("_").pop()) + 1;
+
+            if(lbName.startsWith('zombie_slayer'))
+                options['name'] = `Revenant Horror Tier ${tier} Kills`;
+            else if(lbName.startsWith('spider_slayer'))
+                options['name'] = `Tarantula Broodfather Tier ${tier} Kills`;
+            else if(lbName.startsWith('wolf_slayer'))
+                options['name'] = `Sven Packmaster Tier ${tier} Kills`;
+        }
+
         return options;
     }
 }
