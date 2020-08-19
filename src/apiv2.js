@@ -41,7 +41,7 @@ module.exports = (app, db) => {
         for (const key of keys) {
             const lb = constants.leaderboard(key);
 
-            if(lb.mappedBy == 'uuid' && !lb.key.startsWith('collection_enchanted'))
+            if (lb.mappedBy == 'uuid' && !lb.key.startsWith('collection_enchanted'))
                 leaderboards.push(lb);
         }
 
@@ -74,6 +74,13 @@ module.exports = (app, db) => {
 
         const lb = constants.leaderboard(`lb_${req.params.lbName}`);
 
+        const lbCount = await redisClient.zcount(`lb_${lb.key}`, "-Infinity", "+Infinity");
+
+        if (lbCount == 0) {
+            res.status(404).json({ error: "Leaderboard not found." });
+            return;
+        }
+
         const output = {
             positions: []
         };
@@ -84,6 +91,11 @@ module.exports = (app, db) => {
             const rank = lb.sortedBy > 0 ?
                 await redisClient.zrank(`lb_${lb.key}`, uuid) :
                 await redisClient.zrevrank(`lb_${lb.key}`, uuid);
+
+            if (rank == null) {
+                res.status(404).json({ error: "Specified user not found on leaderboard." });
+                return;
+            }
 
             output.self = { rank: rank + 1 };
 
@@ -96,16 +108,17 @@ module.exports = (app, db) => {
             endIndex = startIndex - 1 + count;
         }
 
+        page = Math.min(page, Math.floor(lbCount / count) + 1);
+
         output.page = page;
+
+        startIndex = (page - 1) * count;
+         endIndex = startIndex - 1 + count;
+
 
         let results = lb.sortedBy > 0 ?
             await redisClient.zrange(`lb_${lb.key}`, startIndex, endIndex, 'WITHSCORES') :
             await redisClient.zrevrange(`lb_${lb.key}`, startIndex, endIndex, 'WITHSCORES');
-
-        if (results.length == 0) {
-            res.status(404).json({ error: "leaderboard not found" });
-            return;
-        }
 
         for (let i = 0; i < results.length; i += 2) {
             const lbPosition = {
