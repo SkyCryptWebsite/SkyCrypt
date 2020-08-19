@@ -202,7 +202,7 @@ header{
 }
 
 .pride-flag.logo{
-    background: url(../img/logo_square.png);
+    background: url(../img/logo_square.png?v2);
     background-size: auto 100%;
     background-position: center;
     background-repeat: no-repeat;

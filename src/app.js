@@ -275,13 +275,13 @@ async function main(){
         res.contentType('image/png');
         res.send(file);
     });
-    
+
     app.all('/robots.txt', async (req, res, next) => {
         res.type('text').send(
 `User-agent: *
 Disallow: /item /head /leather /resources
 `);
-    }); 
+    });
 
     app.all('/sitemap.xml', async (req, res, next) => {
         res.header('Content-Type', 'application/xml');
@@ -326,7 +326,7 @@ Disallow: /item /head /leather /resources
         res.redirect(`/stats/20934ef9488c465180a78f861586b4cf/bf7c14fb018946899d944d56e65222d2`);
     });
 
-    app.all('/favicon.ico', express.static(path.join(__dirname, 'public')));
+    app.all('/favicon.ico?v2', express.static(path.join(__dirname, 'public')));
 
     app.all('/api', async (req, res, next) => {
         res.render('api', { error: null, player: null, extra: await getExtra(), helper, page: 'api' });
