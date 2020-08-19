@@ -1447,12 +1447,15 @@ a.additional-player-stat:hover{
     max-width: 500px;
     border-radius: 10px;
     overflow: hidden;
+    font-weight: 500;
 }
 
 .info-container span{
     display: inline-block;
+    text-align: center;
     margin-top: 10px;
     font-weight: 500;
+    width: 100%;
 }
 
 .info-header{

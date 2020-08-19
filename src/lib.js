@@ -474,6 +474,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             if(rarity_type.startsWith('a '))
                 rarity_type = rarity_type.substring(2).substring(0, rarity_type.length - 4);
 
+            if(rarity_type.startsWith('VERY'))
+                rarity_type = rarity_type.substring(5);
+
             rarity_type = module.exports.splitWithTail(rarity_type, " ", 1);
 
             rarity = rarity_type[0];
@@ -481,8 +484,17 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             if(rarity_type.length > 1)
                 item_type = rarity_type[1].trim();
 
-            item.rarity = rarity.toLowerCase();
+            let loreRarity = rarity.toLowerCase(); 
+            let colorRarity = loreRarity;
 
+            if(rarity_type_color in constants.rarity_colors)
+                colorRarity = constants.rarity_colors[rarity_type_color];
+
+            item.rarity = colorRarity;
+
+            if(loreRarity != colorRarity)
+                item.localized = true;
+            
             if(item_type)
                 item.type = item_type.toLowerCase();
 
