@@ -3,17 +3,22 @@
     <meta property="og:site_name" content="SkyCrypt">
     <meta property="og:type" content="object">
     <link rel="sitemap" href="/sitemap.xml">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap"></noscript>
     <link rel="stylesheet" href="/resources/css/index.css?v121">
-    <link rel="stylesheet" href="/resources/css/inventory.css?v13">
+    <noscript><link rel="stylesheet" href="/resources/css/inventory.css?v13"></noscript>
 
-    <script src="https://unpkg.com/popper.js@1"></script>
-    <script src="https://unpkg.com/tippy.js@5"></script>
-    <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
-    <script src="/resources/js/elevator.min.js"></script>
-    <script src="/resources/js/sticky.min.js"></script>
-    <script src="/resources/js/anime.min.js"></script>
-    <script src="/resources/js/skinview3d.bundle.js"></script>
+    <script>
+        const stylesheets = [
+            "/resources/css/inventory.css?v13",
+            "https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap"
+        ];
+        stylesheets.forEach(function(sheet){
+            const link = document.createElement('link')
+            link.href = sheet;
+            link.rel = 'stylesheet'
+            document.head.appendChild(link);
+        });
+    </script>
     <script>
         let extra = <%- JSON.stringify(extra) %>;
 
@@ -64,10 +69,3 @@
             searchUser.addEventListener('change', updateUserTarget);
         });
     </script>
-    <% if(page == 'stats'){ %>
-        <script src="/resources/js/stats.js?v57"></script>
-    <% } %>
-
-    <% if(page == 'api'){ %>
-        <link rel="stylesheet" href="/resources/css/api.css?v0">
-    <% } %>
