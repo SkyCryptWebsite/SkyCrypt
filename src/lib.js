@@ -2397,6 +2397,9 @@ module.exports = {
     },
 
     updateLeaderboardPositions: async (db, uuid, allProfiles) => {
+        if(constants.blocked_players.includes(uuid))
+            return;
+
         const hypixelProfile = await helper.getRank(uuid, db, true);
 
         const memberProfiles = [];

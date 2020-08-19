@@ -1,4 +1,9 @@
 module.exports = {
+    // prevent specific players from appearing in leaderboards
+    blocked_players: [
+        "20934ef9488c465180a78f861586b4cf" // Minikloon (Admin)
+    ],
+    
     item_types: [
         'sword',
         'bow',
