@@ -112,7 +112,7 @@ module.exports = {
         }
 
         if(cacheOnly === false && (user === null || (+new Date() - user.date) > 4000 * 1000)){
-            let profileRequest = axios(`https://api.ashcon.app/mojang/v2/user/${uuid}`, { timeout: 5000 });
+            let profileRequest = axios(`https://api.ashcon.app/mojang/v1/user/${uuid}`, { timeout: 5000 });
 
             profileRequest.then(async response => {
                 try{
