@@ -1257,6 +1257,8 @@ a.additional-player-stat:hover{
     height: 24px;
     font-weight: 600;
     display: block;
+    z-index: 5;
+    position: relative;
 }
 
 .basic-stat [data-tippy-content]::after{
