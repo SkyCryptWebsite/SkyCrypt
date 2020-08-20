@@ -1,5 +1,7 @@
 #Warp's Git Script (Only going to be used on ma branch - WW)
 git.sh
+# Adding Caretaker
+Caretaker/*
 # Logs
 logs
 *.log
