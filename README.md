@@ -9,7 +9,7 @@ This project allows you to share your <a href="https://hypixel.net/">Hypixel</a>
 ![Docker Image CI](https://github.com/SkyCryptWebsite/SkyCrypt/workflows/Docker%20Image%20CI/badge.svg) 
 <h2 align="center">Screenshot</h1>
 
-<p align="center"><img src="https://i.imgur.com/JSVsbUx.png"></p>
+<p align="center"><img src="https://imgur.com/a/Emr8dS8"></p>
 
 <h2 align="center">Contributing</h1>
 
