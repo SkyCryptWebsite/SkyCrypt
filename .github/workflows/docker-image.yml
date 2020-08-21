@@ -4,9 +4,6 @@ name: SkyCrypt Image CI
 on:
   push:
     branches: [ master, WarpWing ]
-  pull_request:
-    branches: [ master ]
-
 jobs:
 
   build:

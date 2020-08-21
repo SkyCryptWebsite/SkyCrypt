@@ -31,6 +31,7 @@ const Redis = require("ioredis");
 const redisClient = new Redis();
 
 const customResources = require('./custom-resources');
+const { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } = require('constants');
 
 const parseNbt = util.promisify(nbt.parse);
 
@@ -470,8 +471,13 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             // Get item type (like "bow") and rarity (like "legendary") from last line of lore
             let rarity_type = lore[lore.length - 1];
 
+            let rarity_type_color = lore_raw[lore_raw.length - 1].charAt(1);
+
             if(rarity_type.startsWith('a '))
                 rarity_type = rarity_type.substring(2).substring(0, rarity_type.length - 4);
+
+            if(rarity_type.startsWith('VERY'))
+                rarity_type = rarity_type.substring(5);
 
             rarity_type = module.exports.splitWithTail(rarity_type, " ", 1);
 
@@ -480,8 +486,17 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             if(rarity_type.length > 1)
                 item_type = rarity_type[1].trim();
 
-            item.rarity = rarity.toLowerCase();
+            let loreRarity = rarity.toLowerCase(); 
+            let colorRarity = loreRarity;
 
+            if(rarity_type_color in constants.rarity_colors)
+                colorRarity = constants.rarity_colors[rarity_type_color];
+
+            item.rarity = colorRarity;
+
+            if(loreRarity != colorRarity)
+                item.localized = true;
+            
             if(item_type)
                 item.type = item_type.toLowerCase();
 
@@ -490,6 +505,12 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
             if(item.type != null && item.type.startsWith('dungeon'))
                 item.Damage = 0;
+            
+            // fix custom maps texture
+            if(item.id == 358){
+                item.id = 395;
+                item.Damage = 0;
+            }
 
             item.stats = {};
 
@@ -807,6 +828,7 @@ module.exports = {
         }
 
         const talismans = [];
+        const talisman_ids = [];
 
         // Modify talismans on armor and add
         for(const talisman of armor.filter(a => a.type == 'accessory')){
@@ -824,6 +846,7 @@ module.exports = {
                 insertTalisman.isUnique = false;
 
             talismans.push(insertTalisman);
+            talisman_ids.push(id);
         }
 
         // Add talismans from inventory
@@ -842,6 +865,7 @@ module.exports = {
                 insertTalisman.isUnique = false;
 
             talismans.push(insertTalisman);
+            talisman_ids.push(id);
         }
 
         // Add talismans from accessory bag if not already in inventory
@@ -860,6 +884,7 @@ module.exports = {
                 insertTalisman.isUnique = false;
 
             talismans.push(insertTalisman);
+            talisman_ids.push(id);
         }
 
         // Add inactive talismans from enderchest and backpacks
@@ -878,6 +903,7 @@ module.exports = {
                     insertTalisman.isUnique = false;
 
                 talismans.push(insertTalisman);
+                talisman_ids.push(id);
             }
         }
 
@@ -894,6 +920,7 @@ module.exports = {
                     talisman.isUnique = false;
                     talisman.isInactive = true;
                 }
+                talisman_ids.splice(talisman_ids.indexOf(id), 1, "CAMPFIRE_TALISMAN_");
             }
 
             if(id.startsWith("WEDDING_RING_")){
@@ -905,6 +932,7 @@ module.exports = {
                     talisman.isUnique = false;
                     talisman.isInactive = true;
                 }
+                talisman_ids.splice(talisman_ids.indexOf(id), 1, "WEDDING_RING_");
             }
 
             if(id in constants.talisman_upgrades){
@@ -942,6 +970,8 @@ module.exports = {
             }
         }
 
+        
+
         // Add base name without reforge
         for(const talisman of talismans){
             talisman.base_name = talisman.display_name;
@@ -952,7 +982,12 @@ module.exports = {
             }
         }
 
+        let unique = constants.talismans;
+
+        let missing = unique.filter(talisman => !talisman_ids.includes(talisman));
+
         output.talismans = talismans;
+        output.missingTalismans = missing;
         output.weapons = all_items.filter(a => a.type != null && (a.type.endsWith('sword') || a.type.endsWith('bow')));
         output.rods =  all_items.filter(a => a.type != null && a.type.endsWith('fishing rod'));
 
@@ -2385,6 +2420,9 @@ module.exports = {
     },
 
     updateLeaderboardPositions: async (db, uuid, allProfiles) => {
+        if(constants.blocked_players.includes(uuid))
+            return;
+
         const hypixelProfile = await helper.getRank(uuid, db, true);
 
         const memberProfiles = [];

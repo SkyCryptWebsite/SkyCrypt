@@ -112,7 +112,7 @@ module.exports = {
         }
 
         if(cacheOnly === false && (user === null || (+new Date() - user.date) > 4000 * 1000)){
-            let profileRequest = axios(`https://api.ashcon.app/mojang/v2/user/${uuid}`, { timeout: 5000 });
+            let profileRequest = axios(`https://api.ashcon.app/mojang/v1/user/${uuid}`, { timeout: 5000 });
 
             profileRequest.then(async response => {
                 try{
@@ -194,10 +194,14 @@ module.exports = {
 
                     return { uuid: data.id, display_name: data.username, skin_data };
                 }catch(e){
-                    if(module.exports.hasPath(e, 'response', 'data', 'reason'))
-                        throw e.response.data.reason;
-                    else
-                        throw "Failed resolving username.";
+                    if(isUuid){
+                        return { uuid, display_name: uuid, skin_data };
+                    }else{
+                        if(module.exports.hasPath(e, 'response', 'data', 'reason'))
+                            throw e.response.data.reason;
+                        else
+                            throw "Failed resolving username.";
+                    }
                 }
             }
         }
