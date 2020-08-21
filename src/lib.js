@@ -1338,10 +1338,12 @@ module.exports = {
             break;
         }
 
+        let activePet;
         for(const pet of output.pets){
             if(!pet.active)
                 continue;
-
+            
+            activePet = pet;
             for(const stat in pet.stats)
                 output.pet_bonus[stat] = (output.pet_bonus[stat] || 0) + pet.stats[stat];
         }
@@ -1532,6 +1534,9 @@ module.exports = {
                 items.armor[0].stats[stat] += renownedBonus[stat];
             }
         }
+
+        // Modify stats based off of pet ability
+        activePet.ref.modifyStats(output.stats);
 
         // Stats shouldn't go into negative
         for(let stat in output.stats)
@@ -1847,6 +1852,8 @@ module.exports = {
                 stats.forEach(line => {
                     lore.push(line);
                 });
+
+                pet.ref = pet_stats;
 
                 const abilities = pet_stats.abilities;
                 abilities.forEach(ability => {
