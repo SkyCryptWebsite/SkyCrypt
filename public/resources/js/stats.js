@@ -742,8 +742,6 @@ document.addEventListener('DOMContentLoaded', function(){
             if(element.parentNode.parentNode.classList.contains('wardrobe-set'))
                 element.parentNode.parentNode.classList.add('wardrobe-opened');
 
-            console.log(e);
-
             if(e.ctrlKey && item && Array.isArray(item.containsItems)){
                 showBackpack(item);
                 closeLore();

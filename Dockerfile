@@ -4,5 +4,3 @@ WORKDIR '/usr/src/app'
 COPY . /usr/src/app
 RUN npm install
 EXPOSE 32464
-CMD ['npm', 'start']
-

@@ -2,7 +2,9 @@
 const rarityOrder = ['special', 'mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 const slayerOrder = ['zombie', 'spider', 'wolf'];
 
-const UNIQUE_ACCESSORIES = 52;
+const allItems = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory);
+
+const UNIQUE_ACCESSORIES = 53;
 
 const statSuffix = {
     health: '',
@@ -1182,12 +1184,22 @@ twitterDescription += '. Click to view more stats!'
 
             if(Object.keys(calculated.collections).length == 0)
                 notAvailable.push('Collections');
+
+            const localizedItems = allItems.some(a => a.localized === true);
         %>
-        <% if(notAvailable.length > 0){ %>
+        <% if(notAvailable.length > 0 || localizedItems){ %>
             <div class="stat-container info-container-wrapper">
                 <div class="info-container">
                     <div class="info-header">Notice</div>
-                    <%= notAvailable.join(', ') %> not available for <%= calculated.display_name %> due to limited API access.<br><span><a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</span>
+                    <% if(notAvailable.length > 0){ %>
+                        <%= notAvailable.join(', ') %> not available for <%= calculated.display_name %> due to limited API access.<br><span><a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</span>
+                    <% } %>
+                    <% if(localizedItems){ %>
+                        <% if(notAvailable.length > 0){ %><br><br><% } %>
+                        This profile has non-english item data caused by the player's Hypixel language settings. Localization is not supported and some features of the site might not be working correctly.<br><br>
+                        This can be fixed by changing the language back to English in your ingame player settings, alternatively wait for Hypixel to change API behavior (<a target="_blank" href="https://github.com/HypixelDev/PublicAPI/issues/290">Related GitHub Issue</a>).<br><br>
+                        Please don't report bugs until this is resolved.
+                    <% } %>
                 </div>
             </div>
         <% } %>
@@ -1223,9 +1235,7 @@ twitterDescription += '. Click to view more stats!'
                     <div class="pieces">
                     <% for(const set of items.wardrobe){ %>
                         <div class="wardrobe-set">
-                            <% for(const [index, item] of set.slice().entries()){
-                                if(!item)
-                                    continue;
+                            <% for(const [index, item] of set.filter(a => a !== null).entries()){
                                  %>
                                 <div tabindex="3" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item <%= index == 0 ? 'wardrobe-piece' : '' %> piece piece-<%= item.rarity %>-bg">
                                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
@@ -1327,6 +1337,26 @@ twitterDescription += '. Click to view more stats!'
                                         <% itemIcon(item, ['piece-icon']); %>
                                     </div>
                                 <% }) %>
+                            </div>
+                        <% } %>
+                        <% if(items.missingTalismans.length > 0){ %>
+                            <% if(items.talismans.length == 1){ %>
+                                <br>
+                            <% } %>
+                            <div class="stat-sub-container sub-extendable sub-missing-pets">
+                                <p class="stat-sub-header">Missing Talismans</p>
+                                <div class="pieces">
+                                <%
+                                    for(const [index, pet] of calculated.missingPets.entries()){
+                                        %>
+                                        <div data-missing-pet-index="<%= index %>" class="rich-item piece piece-<%= pet.rarity %>-bg missing-pet">
+                                            <div class="piece-hover-area"></div>
+                                            <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                                        </div>
+                                        <%
+                                    }
+                                %>
+                                </div>
                             </div>
                         <% } %>
                         <a href="https://hypixel.net/threads/2461091/" style="margin-top: 35px" target="_blank" rel="nofollow" class="external-app">
@@ -2140,6 +2170,7 @@ twitterDescription += '. Click to view more stats!'
         <% } %>
         </div>
     </div>
+    <%- include('../includes/footer'); %>
     <script>
         let items = <%- JSON.stringify(items) %>;
         let calculated = <%- JSON.stringify(calculated) %>;

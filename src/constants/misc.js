@@ -1,4 +1,10 @@
 module.exports = {
+    // prevent specific players from appearing in leaderboards
+    blocked_players: [
+        "20934ef9488c465180a78f861586b4cf", // Minikloon (Admin)
+        "f025c1c7f55a4ea0b8d93f47d17dfe0f", // Plancke (Admin)
+    ],
+
     item_types: [
         'sword',
         'bow',
@@ -52,8 +58,12 @@ module.exports = {
         'Looting IV',
         'Luck 6',
         'Luck VI',
+        'Scavenger 5',
+        'Scavenger V',
         'Scavenger 4',
         'Scavenger IV',
+        'Smite 7',
+        'Smite VII',
         'Smite 6',
         'Smite VI',
         'Vampirism 6',
@@ -383,6 +393,20 @@ module.exports = {
         ],
         LYNX_TALISMAN: [
             'CHEETAH_TALISMAN'
+        ],
+        SHADY_RING: [
+            'CROOKED_ARTIFACT',
+            'SEAL_OF_THE_FAMILY'
+        ],
+        CROOKED_ARTIFACT: [
+            'SEAL_OF_THE_FAMILY'
+        ],
+        TREASURE_TALISMAN: [
+            'TREASURE_RING',
+            'TREASURE_ARTIFACT'
+        ],
+        TREASURE_RING: [
+            'TREASURE_ARTIFACT'
         ]
     },
 
@@ -616,5 +640,92 @@ module.exports = {
         },
 
         'NONE': null
-    }
+    },
+    talismans: [
+        'FARMING_TALISMAN',
+        'VACCINE_TALISMAN',
+        'WOOD_TALISMAN',
+        'SKELETON_TALISMAN',
+        'COIN_TALISMAN',
+        'MAGNETIC_TALISMAN',
+        'GRAVITY_TALISMAN',
+        'VILLAGE_TALISMAN',
+        'MINE_TALISMAN',
+        'NIGHT_VISION_CHARM',
+        'LAVA_TALISMAN',
+        'SCAVENGER_TALISMAN',
+        'WOLF_PAW',
+        'FIRE_TALISMAN',
+        'PIGGY_BANK',
+        'CRACKED_PIGGY_BANK',
+        'BROKEN_PIGGY_BANK',
+        'PIGS_FOOT',
+        'FROZEN_CHICKEN',
+        'FISH_AFFINITY_TALISMAN',
+        'FARMER_ORB',
+        'HASTE_RING',
+        'NEW_YEAR_CAKE_BAG',
+        'NIGHT_CRYSTAL',
+        'DAY_CRYSTAL',
+        'FEATHER_TALISMAN',
+        'FEATHER_RING',
+        'FEATHER_ARTIFACT',
+        'POTION_AFFINITY_TALISMAN',
+        'RING_POTION_AFFINITY',
+        'ARTIFACT_POTION_AFFINITY',
+        'HEALING_TALISMAN',
+        'HEALING_RING',
+        'CANDY_TALISMAN',
+        'CANDY_RING',
+        'CANDY_ARTIFACT',
+        'EXPERIENCE_ARTIFACT',
+        'MELODY_HAIR',
+        'SEA_CREATURE_TALISMAN',
+        'SEA_CREATURE_RING',
+        'SEA_CREATURE_ARTIFACT',
+        'INTIMIDATION_TALISMAN',
+        'INTIMIDATION_RING',
+        'INTIMIDATION_ARTIFACT',
+        'WOLF_TALISMAN',
+        'WOLF_RING',
+        'BAT_TALISMAN',
+        'BAT_RING',
+        'BAT_ARTIFACT',
+        'DEVOUR_RING',
+        'ZOMBIE_TALISMAN',
+        'ZOMBIE_RING',
+        'ZOMBIE_ARTIFACT',
+        'SPIDER_TALISMAN',
+        'SPIDER_RING',
+        'SPIDER_ARTIFACT',
+        'ENDER_ARTIFACT',
+        'TARANTULA_TALISMAN',
+        'SURVIVOR_CUBE',
+        'WITHER_ARTIFACT',
+        'WEDDING_RING_',
+        'RED_CLAW_TALISMAN',
+        'RED_CLAW_RING',
+        'RED_CLAW_ARTIFACT',
+        'BAIT_RING',
+        'SHADY_RING',
+        'CROOKED_ARTIFACT',
+        'SEAL_OF_THE_FAMILY',
+        'HUNTER_TALISMAN',
+        'HUNTER_RING',
+        'CAMPFIRE_TALISMAN_',
+        'SCARF_STUDIES',
+        'SCARF_THESIS',
+        'SCARF_GRIMOIRE',
+        'PARTY_HAT_CRAB',
+        'POTATO_TALISMAN',
+        'PERSONAL_COMPACTOR_4000',
+        'PERSONAL_COMPACTOR_5000',
+        'PERSONAL_COMPACTOR_6000',
+        'SPEED_TALISMAN',
+        'SPEED_RING',
+        'SPEED_ARTIFACT',
+        'CAT_TALISMAN',
+        'LYNX_TALISMAN',
+        'CHEETAH_TALISMAN'
+    ]
 };
