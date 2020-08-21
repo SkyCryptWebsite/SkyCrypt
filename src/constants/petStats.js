@@ -642,7 +642,7 @@ class EnderDragon extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 3 ? 0.25 : this.rariy > 1 ? 0.1 : 0.05;
+		let mult = 0.25;
 		return {
 			name: "§6End Strike",
 			desc: [`§7Deal §a${round(this.level * mult, 1)}% §7more damage to end mobs`]
