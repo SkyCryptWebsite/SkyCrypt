@@ -1373,7 +1373,7 @@ module.exports = {
             break;
         }
 
-        let activePet;
+        let activePet = false;
         for(const pet of output.pets){
             if(!pet.active)
                 continue;
@@ -1571,7 +1571,8 @@ module.exports = {
         }
 
         // Modify stats based off of pet ability
-        activePet.ref.modifyStats(output.stats);
+        if (activePet) // hacky, ik; someone who is smarter than me fix this in the js correct way
+            activePet.ref.modifyStats(output.stats);
 
         // Stats shouldn't go into negative
         for(let stat in output.stats)
