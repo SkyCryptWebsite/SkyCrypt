@@ -1339,6 +1339,26 @@ twitterDescription += '. Click to view more stats!'
                                 <% }) %>
                             </div>
                         <% } %>
+                        <% if(items.missingTalismans.length > 0){ %>
+                            <% if(items.talismans.length == 1){ %>
+                                <br>
+                            <% } %>
+                            <div class="stat-sub-container sub-extendable sub-missing-pets">
+                                <p class="stat-sub-header">Missing Talismans</p>
+                                <div class="pieces">
+                                <%
+                                    for(const [index, pet] of calculated.missingPets.entries()){
+                                        %>
+                                        <div data-missing-pet-index="<%= index %>" class="rich-item piece piece-<%= pet.rarity %>-bg missing-pet">
+                                            <div class="piece-hover-area"></div>
+                                            <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                                        </div>
+                                        <%
+                                    }
+                                %>
+                                </div>
+                            </div>
+                        <% } %>
                         <a href="https://hypixel.net/threads/2461091/" style="margin-top: 35px" target="_blank" rel="nofollow" class="external-app">
                             <div class="external-app-icon icon-google-sheets"></div>
                             <div class="external-app-name">QOL Sheet <span class="grey-text">by Clowns</span></div>

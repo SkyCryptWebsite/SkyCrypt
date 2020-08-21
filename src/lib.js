@@ -828,6 +828,7 @@ module.exports = {
         }
 
         const talismans = [];
+        const talisman_ids = [];
 
         // Modify talismans on armor and add
         for(const talisman of armor.filter(a => a.type == 'accessory')){
@@ -845,6 +846,7 @@ module.exports = {
                 insertTalisman.isUnique = false;
 
             talismans.push(insertTalisman);
+            talisman_ids.push(id);
         }
 
         // Add talismans from inventory
@@ -863,6 +865,7 @@ module.exports = {
                 insertTalisman.isUnique = false;
 
             talismans.push(insertTalisman);
+            talisman_ids.push(id);
         }
 
         // Add talismans from accessory bag if not already in inventory
@@ -881,6 +884,7 @@ module.exports = {
                 insertTalisman.isUnique = false;
 
             talismans.push(insertTalisman);
+            talisman_ids.push(id);
         }
 
         // Add inactive talismans from enderchest and backpacks
@@ -899,6 +903,7 @@ module.exports = {
                     insertTalisman.isUnique = false;
 
                 talismans.push(insertTalisman);
+                talisman_ids.push(id);
             }
         }
 
@@ -915,6 +920,7 @@ module.exports = {
                     talisman.isUnique = false;
                     talisman.isInactive = true;
                 }
+                talisman_ids.splice(talisman_ids.indexOf(id), 1, "CAMPFIRE_TALISMAN_");
             }
 
             if(id.startsWith("WEDDING_RING_")){
@@ -926,6 +932,7 @@ module.exports = {
                     talisman.isUnique = false;
                     talisman.isInactive = true;
                 }
+                talisman_ids.splice(talisman_ids.indexOf(id), 1, "WEDDING_RING_");
             }
 
             if(id in constants.talisman_upgrades){
@@ -963,6 +970,8 @@ module.exports = {
             }
         }
 
+        
+
         // Add base name without reforge
         for(const talisman of talismans){
             talisman.base_name = talisman.display_name;
@@ -973,7 +982,12 @@ module.exports = {
             }
         }
 
+        let unique = constants.talismans;
+
+        let missing = unique.filter(talisman => !talisman_ids.includes(talisman));
+
         output.talismans = talismans;
+        output.missingTalismans = missing;
         output.weapons = all_items.filter(a => a.type != null && (a.type.endsWith('sword') || a.type.endsWith('bow')));
         output.rods =  all_items.filter(a => a.type != null && a.type.endsWith('fishing rod'));
 
