@@ -668,8 +668,8 @@ class EnderDragon extends Pet {
 	modifyStats(stats) {
 		if (this.level > 3) {
 			let mult = 0.1;
-			for (stat in stats) {
-				stat *= 1 + round(this.level * mult, 1) / 100;
+			for (const stat in stats) {
+				stats[stat] *= 1 + round(this.level * mult, 1) / 100;
 			}
 		}
 	}
