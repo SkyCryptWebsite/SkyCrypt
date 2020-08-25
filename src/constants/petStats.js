@@ -84,6 +84,11 @@ class Pet {
 		}
 		return list;
 	}
+
+	modifyStats(stats)
+	{
+		// no-op
+	}
 }
 
 /*
@@ -637,7 +642,7 @@ class EnderDragon extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 3 ? 0.25 : this.rariy > 1 ? 0.1 : 0.05;
+		let mult = 0.25;
 		return {
 			name: "§6End Strike",
 			desc: [`§7Deal §a${round(this.level * mult, 1)}% §7more damage to end mobs`]
@@ -658,6 +663,15 @@ class EnderDragon extends Pet {
 			name: "§6Superior",
 			desc: [`§7Increases all stats by §a${round(this.level * mult, 1)}%`]
 		};
+	}
+
+	modifyStats(stats) {
+		if (this.level > 3) {
+			let mult = 0.1;
+			for (const stat in stats) {
+				stats[stat] *= 1 + round(this.level * mult, 1) / 100;
+			}
+		}
 	}
 }
 
@@ -1683,7 +1697,7 @@ class BabyYeti extends Pet {
 		let mult = 1;
 		return {
 			name: "§6Ice Shields",
-			desc: [`§7Gain §a${round(this.level * mult, 1)}% §7of your strenth as §a${symbols.defense} Defense`]
+			desc: [`§7Gain §a${round(this.level * mult, 1)}% §7of your strength as §a${symbols.defense} Defense`]
 		};
 	}
 
@@ -1693,6 +1707,13 @@ class BabyYeti extends Pet {
 			name: "§6Yeti Fury",
 			desc: [`§7Buff the Yeti sword by §a${round(this.level * mult, 1)} §c${symbols.strength} Damage §7and §9${symbols.intelligence} Intelligence`]
 		};
+	}
+
+	modifyStats(stats) {
+		if (this.rarity > 2) {
+			let mult = 1;
+			stats['defense'] += (round(this.level * mult, 1) / 100) * stats['strength'];
+		}
 	}
 }
 
