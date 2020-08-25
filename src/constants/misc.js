@@ -641,91 +641,261 @@ module.exports = {
 
         'NONE': null
     },
-    talismans: [
-        'FARMING_TALISMAN',
-        'VACCINE_TALISMAN',
-        'WOOD_TALISMAN',
-        'SKELETON_TALISMAN',
-        'COIN_TALISMAN',
-        'MAGNETIC_TALISMAN',
-        'GRAVITY_TALISMAN',
-        'VILLAGE_TALISMAN',
-        'MINE_TALISMAN',
-        'NIGHT_VISION_CHARM',
-        'LAVA_TALISMAN',
-        'SCAVENGER_TALISMAN',
-        'WOLF_PAW',
-        'FIRE_TALISMAN',
-        'PIGGY_BANK',
-        'CRACKED_PIGGY_BANK',
-        'BROKEN_PIGGY_BANK',
-        'PIGS_FOOT',
-        'FROZEN_CHICKEN',
-        'FISH_AFFINITY_TALISMAN',
-        'FARMER_ORB',
-        'HASTE_RING',
-        'NEW_YEAR_CAKE_BAG',
-        'NIGHT_CRYSTAL',
-        'DAY_CRYSTAL',
-        'FEATHER_TALISMAN',
-        'FEATHER_RING',
-        'FEATHER_ARTIFACT',
-        'POTION_AFFINITY_TALISMAN',
-        'RING_POTION_AFFINITY',
-        'ARTIFACT_POTION_AFFINITY',
-        'HEALING_TALISMAN',
-        'HEALING_RING',
-        'CANDY_TALISMAN',
-        'CANDY_RING',
-        'CANDY_ARTIFACT',
-        'EXPERIENCE_ARTIFACT',
-        'MELODY_HAIR',
-        'SEA_CREATURE_TALISMAN',
-        'SEA_CREATURE_RING',
-        'SEA_CREATURE_ARTIFACT',
-        'INTIMIDATION_TALISMAN',
-        'INTIMIDATION_RING',
-        'INTIMIDATION_ARTIFACT',
-        'WOLF_TALISMAN',
-        'WOLF_RING',
-        'BAT_TALISMAN',
-        'BAT_RING',
-        'BAT_ARTIFACT',
-        'DEVOUR_RING',
-        'ZOMBIE_TALISMAN',
-        'ZOMBIE_RING',
-        'ZOMBIE_ARTIFACT',
-        'SPIDER_TALISMAN',
-        'SPIDER_RING',
-        'SPIDER_ARTIFACT',
-        'ENDER_ARTIFACT',
-        'TARANTULA_TALISMAN',
-        'SURVIVOR_CUBE',
-        'WITHER_ARTIFACT',
-        'WEDDING_RING_',
-        'RED_CLAW_TALISMAN',
-        'RED_CLAW_RING',
-        'RED_CLAW_ARTIFACT',
-        'BAIT_RING',
-        'SHADY_RING',
-        'CROOKED_ARTIFACT',
-        'SEAL_OF_THE_FAMILY',
-        'HUNTER_TALISMAN',
-        'HUNTER_RING',
-        'CAMPFIRE_TALISMAN_',
-        'SCARF_STUDIES',
-        'SCARF_THESIS',
-        'SCARF_GRIMOIRE',
-        'PARTY_HAT_CRAB',
-        'POTATO_TALISMAN',
-        'PERSONAL_COMPACTOR_4000',
-        'PERSONAL_COMPACTOR_5000',
-        'PERSONAL_COMPACTOR_6000',
-        'SPEED_TALISMAN',
-        'SPEED_RING',
-        'SPEED_ARTIFACT',
-        'CAT_TALISMAN',
-        'LYNX_TALISMAN',
-        'CHEETAH_TALISMAN'
-    ]
+    talismans: {
+        'FARMING_TALISMAN': {
+            head: "hi"
+        },
+        'VACCINE_TALISMAN': {
+            head: "hi"
+        },
+        'WOOD_TALISMAN': {
+            head: "hi"
+        },
+        'SKELETON_TALISMAN': {
+            head: "hi"
+        },
+        'COIN_TALISMAN': {
+            head: "hi"
+        },
+        'MAGNETIC_TALISMAN': {
+            head: "hi"
+        },
+        'GRAVITY_TALISMAN': {
+            head: "hi"
+        },
+        'VILLAGE_TALISMAN': {
+            head: "hi"
+        },
+        'MINE_TALISMAN': {
+            head: "hi"
+        },
+        'NIGHT_VISION_CHARM': {
+            head: "hi"
+        },
+        'LAVA_TALISMAN': {
+            head: "hi"
+        },
+        'SCAVENGER_TALISMAN': {
+            head: "hi"
+        },
+        'WOLF_PAW': {
+            head: "hi"
+        },
+        'FIRE_TALISMAN': {
+            head: "hi"
+        },
+        'PIGGY_BANK': {
+            head: "hi"
+        },
+        'CRACKED_PIGGY_BANK': {
+            head: "hi"
+        },
+        'BROKEN_PIGGY_BANK': {
+            head: "hi"
+        },
+        'PIGS_FOOT': {
+            head: "hi"
+        },
+        'FROZEN_CHICKEN': {
+            head: "/head/d61c33024246ed219a1317e2459130f2aed227655e85cf01fc513481236d8dd1"
+        },
+        'FISH_AFFINITY_TALISMAN': {
+            head: "hi"
+        },
+        'FARMER_ORB': {
+            head: "hi"
+        },
+        'HASTE_RING': {
+            head: "/head/3c26a1ec929d4b144266c56af11d9abaf93f6b274872c96d3e34cb7c7965"
+        },
+        'NEW_YEAR_CAKE_BAG': {
+            head: "hi"
+        },
+        'NIGHT_CRYSTAL': {
+            head: "hi"
+        },
+        'DAY_CRYSTAL': {
+            head: "hi"
+        },
+        'FEATHER_TALISMAN': {
+            head: "hi"
+        },
+        'FEATHER_RING': {
+            head: "/head/ed7ad1b1db2b323f013b775a8f9481f1cd292bf9a58dd2905e3e1929d13bac"
+        },
+        'FEATHER_ARTIFACT': {
+            head: "/head/6164cc76081599a20a6896a3818322a0cdc08069ff960bbd79ff54fc45e35ee6"
+        },
+        'POTION_AFFINITY_TALISMAN': {
+            head: "/head/3a943baf71458596aff4eba879f8ac5d2ba267c98385e67673f48ebea5fa"
+        },
+        'RING_POTION_AFFINITY': {
+            head: "hi"
+        },
+        'ARTIFACT_POTION_AFFINITY': {
+            head: "hi"
+        },
+        'HEALING_TALISMAN': {
+            head: "/head/651eb16f22dd7505be5dae06671803633a5abf8b2beeb5c60548670df0e59214"
+        },
+        'HEALING_RING': {
+            head: "hi"
+        },
+        'CANDY_TALISMAN': {
+            head: "hi"
+        },
+        'CANDY_RING': {
+            head: "hi"
+        },
+        'CANDY_ARTIFACT': {
+            head: "/head/4eb46bbca3812363b59676ff629dc3698257fd178d394fadffda7143422e2f10"
+        },
+        'EXPERIENCE_ARTIFACT': {
+            head: "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/experience_artifact.png"
+        },
+        'MELODY_HAIR': {
+            head: "hi"
+        },
+        'SEA_CREATURE_TALISMAN': {
+            head: "hi"
+        },
+        'SEA_CREATURE_RING': {
+            head: "hi"
+        },
+        'SEA_CREATURE_ARTIFACT': {
+            head: "hi"
+        },
+        'INTIMIDATION_TALISMAN': {
+            head: "hi"
+        },
+        'INTIMIDATION_RING': {
+            head: "hi"
+        },
+        'INTIMIDATION_ARTIFACT': {
+            head: "/head/f931ca9e46fcf351354fa022992fa07cc59be50ffb80e9dd8af4973378cf89d5"
+        },
+        'WOLF_TALISMAN': {
+            head: "hi"
+        },
+        'WOLF_RING': {
+            head: "hi"
+        },
+        'BAT_TALISMAN': {
+            head: "hi"
+        },
+        'BAT_RING': {
+            head: "hi"
+        },
+        'BAT_ARTIFACT': {
+            head: "/head/382fc3f71b41769376a9e92fe3adbaac3772b999b219c9d6b4680ba9983e527"
+        },
+        'DEVOUR_RING': {
+            head: "hi"
+        },
+        'ZOMBIE_TALISMAN': {
+            head: "hi"
+        },
+        'ZOMBIE_RING': {
+            head: "hi"
+        },
+        'ZOMBIE_ARTIFACT': {
+            head: "hi"
+        },
+        'SPIDER_TALISMAN': {
+            head: "hi"
+        },
+        'SPIDER_RING': {
+            head: "hi"
+        },
+        'SPIDER_ARTIFACT': {
+            head: "hi"
+        },
+        'ENDER_ARTIFACT': {
+            head: "hi"
+        },
+        'TARANTULA_TALISMAN': {
+            head: "hi"
+        },
+        'SURVIVOR_CUBE': {
+            head: "hi"
+        },
+        'WITHER_ARTIFACT': {
+            head: "hi"
+        },
+        'WEDDING_RING_': {
+            head: "hi"
+        },
+        'RED_CLAW_TALISMAN': {
+            head: "hi"
+        },
+        'RED_CLAW_RING': {
+            head: "hi"
+        },
+        'RED_CLAW_ARTIFACT': {
+            head: "hi"
+        },
+        'BAIT_RING': {
+            head: "hi"
+        },
+        'SHADY_RING': {
+            head: "hi"
+        },
+        'CROOKED_ARTIFACT': {
+            head: "hi"
+        },
+        'SEAL_OF_THE_FAMILY': {
+            head: "hi"
+        },
+        'HUNTER_TALISMAN': {
+            head: "hi"
+        },
+        'HUNTER_RING': {
+            head: "hi"
+        },
+        'CAMPFIRE_TALISMAN_': {
+            head: "/head/4080bbefca87dc0f36536b6508425cfc4b95ba6e8f5e6a46ff9e9cb488a9ed"
+        },
+        'SCARF_STUDIES': {
+            head: "/head/6de4ab129e137f9f4cbf7060318ee1748dc39da9b5d129a8da0e614e2337693"
+        },
+        'SCARF_THESIS': {
+            head: "hi"
+        },
+        'SCARF_GRIMOIRE': {
+            head: "hi"
+        },
+        'PARTY_HAT_CRAB': {
+            head: "hi"
+        },
+        'POTATO_TALISMAN': {
+            head: "hi"
+        },
+        'PERSONAL_COMPACTOR_4000': {
+            head: "hi"
+        },
+        'PERSONAL_COMPACTOR_5000': {
+            head: "hi"
+        },
+        'PERSONAL_COMPACTOR_6000': {
+            head: "hi"
+        },
+        'SPEED_TALISMAN': {
+            head: "/head/8624bacb5f1986e6477abce4ae7dca1820a5260b6233b55ba1d9ba936c84b"
+        },
+        'SPEED_RING': {
+            head: "hi"
+        },
+        'SPEED_ARTIFACT': {
+            head: "hi"
+        },
+        'CAT_TALISMAN': {
+            head: "hi"
+        },
+        'LYNX_TALISMAN': {
+            head: "hi"
+        },
+        'CHEETAH_TALISMAN': {
+            head: "/head/1553f8856dd46de7e05d46f5fc2fb58eafba6829b11b160a1545622e89caaa33"
+        },
+    }
 };

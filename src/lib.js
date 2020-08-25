@@ -971,16 +971,23 @@ module.exports = {
         }
 
         
-
+        let object = {}
         // Add base name without reforge
         for(const talisman of talismans){
             talisman.base_name = talisman.display_name;
+            
+            object[talisman.tag.ExtraAttributes.id] = {
+                head: talisman.texture_path
+            }
 
             if(helper.hasPath(talisman, 'tag', 'ExtraAttributes', 'modifier')){
                 talisman.base_name = talisman.display_name.split(" ").slice(1).join(" ");
                 talisman.reforge = talisman.tag.ExtraAttributes.modifier
             }
         }
+
+        let data = JSON.stringify(object);
+        fs.writeFileSync('talisman-heads.json', data);
 
         let unique = constants.talismans;
 
