@@ -2,8 +2,8 @@
 name: SkyCrypt Image CI
 
 on:
-  push:
-    branches: [ master, WarpWing ]
+  schedule: 
+    - cron:  '0 */12 * * *'
 jobs:
 
   build:
