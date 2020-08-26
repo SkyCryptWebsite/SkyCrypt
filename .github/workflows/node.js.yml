@@ -2,8 +2,8 @@
 name: SkyCrypt CI Workflow
 
 on:
-  schedule: 
-    - cron:  '0 0 * * *'
+ push:
+    branches: [ master ]
 jobs:
   build:
     runs-on: ubuntu-latest
