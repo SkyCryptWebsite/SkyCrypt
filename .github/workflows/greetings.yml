@@ -10,4 +10,4 @@ jobs:
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         issue-message: 'Thank you for bringing this issue to our attention. Expect a developer to comment within the first 2-3 hours of issue submission '' first issue'
-        pr-message: 'Hey **#** welcome to the SkyCrypt PR Section :D '' first pr'
+        pr-message: 'Welcome to the SkyCrypt PR Section :D '' first pr'
