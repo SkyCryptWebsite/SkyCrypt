@@ -32,6 +32,7 @@ const redisClient = new Redis();
 
 const customResources = require('./custom-resources');
 const { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } = require('constants');
+const loreGenerator = require('./loreGenerator');
 
 const parseNbt = util.promisify(nbt.parse);
 
@@ -1397,6 +1398,19 @@ module.exports = {
         for(const stat in output.pet_bonus)
             output.stats[stat] += output.pet_bonus[stat];
 
+        // Apply pet bonus to armor
+        if(activePet && Date.now() - userProfile.last_save >= 7 * 60 * 1 /* change to 1000 - its one for testing; 7 minutes*/) {
+            // We know they are not online so apply pets to armor
+            activePet.ref.modifyArmor(items.armor[3], getId(items.armor[3]), 
+                                      items.armor[2], getId(items.armor[2]), 
+                                      items.armor[1], getId(items.armor[1]), 
+                                      items.armor[0], getId(items.armor[0]));
+            loreGenerator.makeLore(items.armor[0]);
+            loreGenerator.makeLore(items.armor[1]);
+            loreGenerator.makeLore(items.armor[2]);
+            loreGenerator.makeLore(items.armor[3]);
+        }
+
         // Apply Lapis Armor full set bonus of +60 HP
         if(items.armor.filter(a => getId(a).startsWith('LAPIS_ARMOR_')).length == 4)
             items.armor[0].stats.health = (items.armor[0].stats.health || 0) + 60;
@@ -1492,8 +1506,13 @@ module.exports = {
 
         output.weapon_stats = {};
 
-        for(const item of items.weapons.concat(items.rods)){
+        for(const item of [/*{itemId:"NONE",stats:{}}*/].concat(items.weapons).concat(items.rods)){
             let stats = Object.assign({}, output.stats);
+
+            // Modify weapon based on pet
+            // if (activePet)
+            //     activePet.ref.modifyWeapon(item, getId(item));
+            // apparently we don't actually need this
 
             // Apply held weapon stats
             for(let stat in item.stats){
@@ -1509,10 +1528,15 @@ module.exports = {
                 for(const stat in stats)
                     stats[stat] *= 1.05;
 
+            // Apply Renowened bonus (whoever made this please comment)
             for(let i = 0; i < items.armor.filter(a => helper.getPath(a, 'tag', 'ExtraAttributes', 'modifier') == 'renowned').length; i++){
                 for(const stat in stats)
                     stats[stat] *= 1.01;
             }
+
+            // Modify stats based off of pet ability
+            if (activePet)
+                activePet.ref.modifyStats(stats);
 
             if(items.armor.filter(a => getId(a).startsWith('CHEAP_TUXEDO_')).length == 3)
                 stats['health'] = 75;
@@ -1549,6 +1573,7 @@ module.exports = {
             }
         }
 
+        // Same thing as Superior armor but for Renowned armor
         const renownedBonus = Object.assign({}, constants.stat_template);
 
         for(const item of items.armor){
@@ -1570,8 +1595,9 @@ module.exports = {
             }
         }
 
-        // Modify stats based off of pet ability
-        activePet.ref.modifyStats(output.stats);
+         // Modify stats based off of pet ability (because this one is for when you don't have armor)
+         if (activePet)
+            activePet.ref.modifyStats(output.stats);
 
         // Stats shouldn't go into negative
         for(let stat in output.stats)

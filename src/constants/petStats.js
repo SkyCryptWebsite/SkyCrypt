@@ -1,3 +1,6 @@
+// const helper = require('./../helper');
+// const loreGenerator = require('./../loreGenerator.js');
+
 function round(num, decimals) {
 	return Math.round(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
 }
@@ -85,8 +88,15 @@ class Pet {
 		return list;
 	}
 
-	modifyStats(stats)
-	{
+	modifyStats(stats) {
+		// no-op
+	}
+
+	modifyWeapon(weapon, name) {
+		// no-op
+	}
+
+	modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
 		// no-op
 	}
 }
@@ -621,6 +631,26 @@ class Blaze extends Pet {
 			desc: [`§7Doubles effects of hot potato books`]
 		};
 	}
+
+	modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
+		let mult = (1 + round(this.level * 0.5, 1) / 100);
+		if (hName.includes("BLAZE_HELMET")) {
+			for (const stat in helmet.stats)
+				helmet.stats[stat] = round(helmet.stats[stat] * mult, 1);
+		}
+		if (cName.includes("BLAZE")) {
+			for (const stat in chest.stats)
+				chest.stats[stat] = round(chest.stats[stat] * mult, 1);
+		}
+		if (lName.includes("BLAZE")) {
+			for (const stat in legs.stats)
+				legs.stats[stat] = round(legs.stats[stat] * mult, 1);
+		}
+		if (bName.includes("BLAZE")) {
+			for (const stat in boots.stats)
+				boots.stats[stat] = round(boots.stats[stat] * mult, 1);
+		}
+	}
 }
 
 class EnderDragon extends Pet {
@@ -666,11 +696,18 @@ class EnderDragon extends Pet {
 	}
 
 	modifyStats(stats) {
-		if (this.level > 3) {
+		if (this.rarity > 3) {
 			let mult = 0.1;
-			for (stat in stats) {
-				stat *= 1 + round(this.level * mult, 1) / 100;
+			for (const stat in stats) {
+				stats[stat] *= 1 + round(this.level * mult, 1) / 100;
 			}
+		}
+	}
+
+	modifyWeapon(weapon, name) {
+		if (name == "ASPECT_OF_THE_DRAGON") {
+			weapon.stats['damage'] += round(this.level * 0.5, 1);
+			weapon.stats['strength'] += round(this.level * 0.3, 1);
 		}
 	}
 }
@@ -1379,7 +1416,7 @@ class Turtle extends Pet {
 	}
 
 	get first() {
-		let mult = 0.17;
+		let mult = 0.2;
 		return {
 			name: "§6Turtle Tactics",
 			desc: [`§7Gain §a+${round(this.level * mult, 1)}% ${symbols.defense} Defense`]
@@ -1401,6 +1438,11 @@ class Turtle extends Pet {
 			name: "§6Unflippable",
 			desc: [`§7Gain §aimmunity §7to knockback`]
 		};
+	}
+
+	modifyStats(stats) {
+		let mult = 0.2;
+		stats['defense'] *= round(this.level * mult, 1) / 100;
 	}
 }
 
