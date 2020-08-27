@@ -5,13 +5,10 @@
 # Date: 08/26/2020
 ##
 
-##
+
 # Discord webhook
 url="https://discordapp.com/api/webhooks/748009536261980176/1UHbLf7oegufvf9Q7NekZnCqEfGEgxkk5gAPuouPTjTjcpk7FJdkpBDbZYMj04K2nwLe"
 
-##
-# List of websites to check
-##
 websites_list="sky.shiiyu.moe"
 
 for website in ${websites_list} ; do

@@ -836,7 +836,7 @@ class Guardian extends Pet {
 	get third() {
 		let mult = 0.3;
 		return {
-			name: "§7Mana Pool",
+			name: "§6Mana Pool",
 			desc: [`§7Regenerate §b${round(this.level * mult, 1)}% §7extra mana, doubled when near or in water`]
 		};
 	}
@@ -1337,7 +1337,7 @@ class Tiger extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 3 ? 0.2 : this.rariy > 1 ? 0.1 : 0.05;
+		let mult = this.rarity > 2 ? 0.2 : this.rariy > 0 ? 0.1 : 0.05;
 		return {
 			name: "§6Merciless Swipe",
 			desc: [`§7Attacks have a §a${round(this.level * mult, 1)}% §7chance to strike twice`]
