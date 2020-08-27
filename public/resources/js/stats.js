@@ -221,6 +221,8 @@ document.addEventListener('DOMContentLoaded', function(){
             item = [calculated.pets[parseInt(element.getAttribute('data-pet-index'))]];
         else if(element.hasAttribute('data-missing-pet-index'))
             item = [calculated.missingPets[parseInt(element.getAttribute('data-missing-pet-index'))]];
+        else if(element.hasAttribute('data-missing-talisman-index'))
+            item = [calculated.missingTalismans[parseInt(element.getAttribute('data-missing-talisman-index'))]];
 
         if(item.length == 0)
             return;

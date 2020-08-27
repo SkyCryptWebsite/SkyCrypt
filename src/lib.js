@@ -971,8 +971,6 @@ module.exports = {
         }
 
         
-
-        // Add base name without reforge
         for(const talisman of talismans){
             talisman.base_name = talisman.display_name;
 
@@ -982,12 +980,8 @@ module.exports = {
             }
         }
 
-        let unique = constants.talismans;
-
-        let missing = unique.filter(talisman => !talisman_ids.includes(talisman));
-
         output.talismans = talismans;
-        output.missingTalismans = missing;
+        output.talisman_ids = talisman_ids;
         output.weapons = all_items.filter(a => a.type != null && (a.type.endsWith('sword') || a.type.endsWith('bow')));
         output.rods =  all_items.filter(a => a.type != null && a.type.endsWith('fishing rod'));
 
@@ -1356,6 +1350,7 @@ module.exports = {
             output.slayers = Object.assign({}, slayers);
         }
 
+        output.missingTalismans = await module.exports.getMissingTalismans(items.talisman_ids);
         output.pets = await module.exports.getPets(userProfile);
         output.missingPets = await module.exports.getMissingPets(output.pets);
         output.petScore = await module.exports.getPetScore(output.pets);
@@ -2053,6 +2048,105 @@ module.exports = {
                 highestRarity[pet.type] = constants.pet_value[pet.rarity];
 
         return Object.values(highestRarity).reduce((a, b) => a + b, 0);
+    },
+
+    getMissingTalismans: async talismans => {
+        let unique = Object.keys(constants.talismans);
+
+        let missing = unique.filter(talisman => !talismans.includes(talisman));
+        /*missing.forEach(name => {
+            if(name in constants.talisman_upgrades){
+                console.log(name) //talisman checking for
+                constants.talisman_upgrades[name].forEach(upgrade => {
+                    console.log("Upgrade: " + upgrade) //talisman that is higher tier than checking
+                    if(talismans.includes(upgrade)){ //if talisman list includes the upgrade
+                        missing.splice(missing.indexOf(name), 1); //remove original talisman that checking for
+                        return;
+                    }
+                    
+                })
+            }
+        });*/
+        const output = [];
+        missing.forEach(async talisman => {
+            const data = await db
+                .collection('items')
+                .findOne({ id: talisman });
+            let object = {
+                texture_path: null,
+                display_name: null,
+                rarity: null
+            }
+            if(data){
+                object.texture_path = "/head/" + data.texture
+                object.display_name = data.name
+                object.rarity = data.tier.toLowerCase()
+            }
+            if(talisman.startsWith("WEDDING_RING_")){
+                object.texture_path = "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c"
+                object.display_name = "Ring of Love"
+                object.rarity = "legendary"
+            }
+            
+            if(talisman.startsWith("CAMPFIRE_TALISMAN_")){
+                object.texture_path = "/head/4080bbefca87dc0f36536b6508425cfc4b95ba6e8f5e6a46ff9e9cb488a9ed"
+                object.display_name = "Campfire God Badge"
+                object.rarity = "legendary"
+            }
+            
+            if(talisman.startsWith("DAY_CRYSTAL")){
+                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/day_crystal.png"
+                object.display_name = "Day Crystal"
+                object.rarity = "rare"
+            }
+            
+            if(talisman.startsWith("DAY_CRYSTAL")){
+                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/night_crystal.png"
+                object.display_name = "Night Crystal"
+                object.rarity = "rare"
+            }
+
+            if(talisman.startsWith("MELODY_HAIR")){
+                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/melodyshair.png"
+                object.display_name = "Melody's Hair"
+                object.rarity = "epic"
+            }
+            if(talisman.startsWith("PERSONAL_COMPACTOR")){
+                object.texture_path = `/item/${talisman}`
+            }
+            if(talisman.startsWith("ZOMBIE_TALISMAN")){
+                object.texture_path = "/item/item?id=397&damage=2"
+            }
+            if(talisman.startsWith("SKELETON_TALISMAN")){
+                object.texture_path = "/item/item?id=397"
+            }
+            if(talisman.startsWith("CAT_TALISMAN")){
+                object.texture_path = "/head/3a12188258601bcb7f76e3e2489555a26c0d76e6efec2fd966ca372b6dde00"
+                object.display_name = "Cat Talisman"
+                object.rarity = "uncommon"
+            }
+            if(talisman.startsWith("LYNX_TALISMAN")){
+                object.texture_path = "/head/12b84e9c79815a39b7be8ce6e91248d71f760f42b5a4de5e266b44b87a952229"
+                object.display_name = "Lynx Talisman"
+                object.rarity = "rare"
+            }
+            if(talisman.startsWith("CHEETAH_TALISMAN")){
+                object.texture_path = "/head/1553f8856dd46de7e05d46f5fc2fb58eafba6829b11b160a1545622e89caaa33"
+                object.display_name = "Cheetah Talisman"
+                object.rarity = "epic"
+            }
+            if(talisman.startsWith("CROOKED_ARTIFACT")){
+                object.texture_path = "/head/5b7ff88d154d04a8a26995c99f64e53b574c7b82ec21a12a9e448bca1e70f461"
+                object.display_name = "Crooked Artifact"
+                object.rarity = "rare"
+            }
+            if(object.name == null){
+                object.name = talisman;
+            }
+            output.push(object);
+        });
+
+        return output;
     },
 
     getCollections: async (uuid, profile, cacheOnly = false) => {
