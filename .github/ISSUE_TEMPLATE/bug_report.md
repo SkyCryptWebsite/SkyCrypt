@@ -8,9 +8,10 @@ assignees: ''
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+A clear and concise description of what the bug is (e.g. My ender dragon's 2nd ability says 3.8% instead of 19%).
 
 **Profile/Location**
+A link to the profile which the bug occurred with, if applicable (e.g. https://sky.shiiyu.moe/stats/Minikloon/Banana)
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.

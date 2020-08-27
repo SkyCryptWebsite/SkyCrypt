@@ -1337,7 +1337,7 @@ class Tiger extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 3 ? 0.2 : this.rariy > 1 ? 0.1 : 0.05;
+		let mult = this.rarity > 2 ? 0.2 : this.rariy > 0 ? 0.1 : 0.05;
 		return {
 			name: "§6Merciless Swipe",
 			desc: [`§7Attacks have a §a${round(this.level * mult, 1)}% §7chance to strike twice`]
