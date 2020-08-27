@@ -643,94 +643,94 @@ module.exports = {
     },
     talismans: {
         'FARMING_TALISMAN': {
-            head: "hi"
+            name: "Farming Talisman"
         },
         'VACCINE_TALISMAN': {
-            head: "hi"
+            name: "Vaccine Talisman"
         },
         'WOOD_TALISMAN': {
-            head: "hi"
+            name: "Wood Affinity Talisman"
         },
         'SKELETON_TALISMAN': {
-            head: "hi"
+            name: "Skeleton Talisman"
         },
         'COIN_TALISMAN': {
-            head: "hi"
+            name: "Talisman of Coins"
         },
         'MAGNETIC_TALISMAN': {
-            head: "hi"
+            name: "Magnetic Talisman"
         },
         'GRAVITY_TALISMAN': {
-            head: "hi"
+            name: "Gravity Talisman"
         },
         'VILLAGE_TALISMAN': {
-            head: "hi"
+            name: "Village Affinity Talisman"
         },
         'MINE_TALISMAN': {
-            head: "hi"
+            name: "Mine Affinity Talisman"
         },
         'NIGHT_VISION_CHARM': {
-            head: "hi"
+            name: "Night Vision Charm"
         },
         'LAVA_TALISMAN': {
-            head: "hi"
+            name: "Lava Talisman"
         },
         'SCAVENGER_TALISMAN': {
-            head: "hi"
+            name: "Scavenger Talisman"
         },
         'WOLF_PAW': {
-            head: "hi"
+            name: "Wolf Paw"
         },
         'FIRE_TALISMAN': {
-            head: "hi"
+            name: "Fire Talisman"
         },
         'PIGGY_BANK': {
-            head: "hi"
+            name: "Piggy Bank"
         },
         'CRACKED_PIGGY_BANK': {
-            head: "hi"
+            name: "Cracked Piggy Bank"
         },
         'BROKEN_PIGGY_BANK': {
-            head: "hi"
+            name: "Broken Piggy Bank"
         },
         'PIGS_FOOT': {
-            head: "hi"
+            name: "Pig's Foot"
         },
         'FROZEN_CHICKEN': {
-            head: "/head/d61c33024246ed219a1317e2459130f2aed227655e85cf01fc513481236d8dd1"
+            name: "Frozen Chicken"
         },
         'FISH_AFFINITY_TALISMAN': {
-            head: "hi"
+            name: "Fish Affinity Talisman"
         },
         'FARMER_ORB': {
-            head: "hi"
+            name: "Farmer Orb"
         },
         'HASTE_RING': {
-            head: "/head/3c26a1ec929d4b144266c56af11d9abaf93f6b274872c96d3e34cb7c7965"
+            name: "Hast Ring"
         },
         'NEW_YEAR_CAKE_BAG': {
-            head: "hi"
+            name: "New Year Cake Bag"
         },
         'NIGHT_CRYSTAL': {
-            head: "hi"
+            name: "Night Crystal"
         },
         'DAY_CRYSTAL': {
-            head: "hi"
+            name: "Day Crystal"
         },
         'FEATHER_TALISMAN': {
-            head: "hi"
+            name: "Feather Talisman"
         },
         'FEATHER_RING': {
-            head: "/head/ed7ad1b1db2b323f013b775a8f9481f1cd292bf9a58dd2905e3e1929d13bac"
+            name: "Feather Ring"
         },
         'FEATHER_ARTIFACT': {
-            head: "/head/6164cc76081599a20a6896a3818322a0cdc08069ff960bbd79ff54fc45e35ee6"
+            name: "Feather Artifact"
         },
         'POTION_AFFINITY_TALISMAN': {
-            head: "/head/3a943baf71458596aff4eba879f8ac5d2ba267c98385e67673f48ebea5fa"
+            name: "Potion Affinity Talisman"
         },
         'RING_POTION_AFFINITY': {
-            head: "hi"
+            name: "Potion Affinity Ring"
         },
         'ARTIFACT_POTION_AFFINITY': {
             head: "hi"
