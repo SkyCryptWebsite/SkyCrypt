@@ -1632,6 +1632,12 @@ twitterDescription += '. Click to view more stats!'
                     <%= calculated.display_name %> has entered Catacombs<% if (calculated.dungeons.collected_essence) { %> and collected essence<% } %>.
                 </p>
 
+                <% if (calculated.dungeons.secrets_found > 0) { %>
+                    <p class="stat-raw-values">
+                        <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span></span>
+                    </p>
+                <% } %>
+
                 <% if (calculated.dungeons.unlocked_collections) { %>
                     <p class="stat-sub-header">Boss Collections</p>
 

@@ -1712,7 +1712,7 @@ module.exports = {
         output.bag_sizes = await module.exports.getBagSizes(output.collections);
         output.social = hypixelProfile.socials;
 
-        output.dungeons = await module.exports.getDungeons(userProfile);
+        output.dungeons = await module.exports.getDungeons(userProfile, hypixelProfile);
 
         output.fishing = {
             total: userProfile.stats.items_fished || 0,
@@ -2127,7 +2127,7 @@ module.exports = {
         return output;
     },
 
-    getDungeons: async (userProfile) => {
+    getDungeons: async (userProfile, hypixelProfile) => {
         const output = {};
 
         let tasks = userProfile.tutorial;
@@ -2168,6 +2168,8 @@ module.exports = {
         else output.unlocked_collections = true;
 
         output.boss_collections = collections;
+
+        output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
 
         return output;
     },
