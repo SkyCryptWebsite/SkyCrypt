@@ -836,7 +836,7 @@ class Guardian extends Pet {
 	get third() {
 		let mult = 0.3;
 		return {
-			name: "§7Mana Pool",
+			name: "§6Mana Pool",
 			desc: [`§7Regenerate §b${round(this.level * mult, 1)}% §7extra mana, doubled when near or in water`]
 		};
 	}

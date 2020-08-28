@@ -1707,7 +1707,7 @@ module.exports = {
         output.bag_sizes = await module.exports.getBagSizes(output.collections);
         output.social = hypixelProfile.socials;
 
-        output.dungeons = await module.exports.getDungeons(userProfile);
+        output.dungeons = await module.exports.getDungeons(userProfile, hypixelProfile);
 
         output.fishing = {
             total: userProfile.stats.items_fished || 0,
@@ -2221,12 +2221,12 @@ module.exports = {
         return output;
     },
 
-    getDungeons: async (userProfile) => {
+    getDungeons: async (userProfile, hypixelProfile) => {
         const output = {};
 
         let tasks = userProfile.tutorial;
 
-        output.entrance = tasks.includes('zone_catacombs_entrance');
+        output.entrance = userProfile.visited_zones.includes('dungeon');
         if (!output.entrance) return output;
 
         output.collected_essence = tasks.includes('essence_collected_message');
@@ -2262,6 +2262,8 @@ module.exports = {
         else output.unlocked_collections = true;
 
         output.boss_collections = collections;
+
+        output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
 
         return output;
     },

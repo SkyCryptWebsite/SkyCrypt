@@ -1633,6 +1633,12 @@ twitterDescription += '. Click to view more stats!'
                     <%= calculated.display_name %> has entered Catacombs<% if (calculated.dungeons.collected_essence) { %> and collected essence<% } %>.
                 </p>
 
+                <% if (calculated.dungeons.secrets_found > 0) { %>
+                    <p class="stat-raw-values">
+                        <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span></span>
+                    </p>
+                <% } %>
+
                 <% if (calculated.dungeons.unlocked_collections) { %>
                     <p class="stat-sub-header">Boss Collections</p>
 
@@ -1649,14 +1655,17 @@ twitterDescription += '. Click to view more stats!'
                         <div class="boss-collection-icon" style="background-image:url(/head/<%= collection.texture %>)"></div>
                         <div class="collection-stats">
                             <div class="collection-name"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
-                            <div class="collection-amount"><span class="stat-name">Bosses killed: </span><span class="stat-value">~<%= collection.killed %></span></div>
+                            <div class="collection-amount"><span class="stat-name">Bosses killed: </span><span class="stat-value"><%= collection.killed %>+</span></div>
                         </div>
                     </div>
                     <% } %>
                     </div>
                 <% } %>
             <% } %>
-            <p class='stat-raw-values'><small><i>This section is still in works, since Hypixel doesn't support Dungeons in their API.</i></small></p>
+            <p class='stat-raw-values'><small><i>
+                Please note, that this section is still in works, since Hypixel doesn't support Dungeons in their public API.<br>
+                If any of displayed values are incorrect or you have ideas for other things, please visit us and chat on our <a class="link link-discord" href="https://discord.gg/Dk25bnB">Discord</a>.
+            </i></small></p>
             </div>
         </div>
         <div data-stat="slayer" class="stat-container stat-slayer">
