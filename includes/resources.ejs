@@ -22,17 +22,18 @@
     <script>
         let extra = <%- JSON.stringify(extra) %>;
 
-         function formatNumber(number, floor, rounding = 10){
-            if(number < 1000)
+        function formatNumber(number, floor, rounding = 10) {
+            let roundFunc = floor ? Math.floor : Math.ceil;
+            if (number < 1000)
                 return Math.floor(number);
-            else if(number < 10000)
-                return (floor ? (Math.floor(number / 1000 * rounding) / rounding).toFixed(rounding.toString().length - 1) + 'K' : (Math.ceil(number / 1000 * rounding) / rounding).toFixed(rounding.toString().length - 1) + 'K');
-            else if(number < 1000000)
-                return (floor ? Math.floor(number / 1000) + 'K' : Math.ceil(number / 1000) + 'K');
-            else if(number < 1000000000)
-                 return (floor ? (Math.floor(number / 1000 / 1000 * rounding) / rounding).toFixed(rounding.toString().length - 1) + 'M' : (Math.ceil(number / 1000 / 1000 * rounding) / rounding).toFixed(rounding.toString().length - 1) + 'M');
+            else if (number < 10000)
+                return (roundFunc(number / 1000 * rounding) / rounding).toFixed(rounding.toString().length - 1) + 'K';
+            else if (number < 1000000)
+                return roundFunc(number / 1000) + 'K';
+            else if (number < 1000000000)
+                return (roundFunc(number / 1000 / 1000 * rounding) / rounding).toFixed(rounding.toString().length - 1) + 'M';
             else
-                return (floor ? (Math.floor(number / 1000 / 1000 / 1000 * rounding * 10) / (rounding * 10)).toFixed(rounding.toString().length) + 'B' : (Math.ceil(number / 1000 / 1000 / 1000 * rounding * 10) / (rounding * 10)).toFixed(rounding.toString().length) + 'B');
+                return (roundFunc(number / 1000 / 1000 / 1000 * rounding * 10) / (rounding * 10)).toFixed(rounding.toString().length) + 'B';
         }
 
 
