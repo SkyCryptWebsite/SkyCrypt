@@ -2100,7 +2100,7 @@ module.exports = {
                 object.rarity = "rare"
             }
             
-            if(talisman.startsWith("DAY_CRYSTAL")){
+            if(talisman.startsWith("NIGHT_CRYSTAL")){
                 object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/night_crystal.png"
                 object.display_name = "Night Crystal"
                 object.rarity = "rare"
@@ -2139,6 +2139,9 @@ module.exports = {
                 object.texture_path = "/head/5b7ff88d154d04a8a26995c99f64e53b574c7b82ec21a12a9e448bca1e70f461"
                 object.display_name = "Crooked Artifact"
                 object.rarity = "rare"
+            }
+            if(talisman.startsWith("EXPERIENCE_ARTIFACT")){
+                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/experience_artifact.png"
             }
             if(object.name == null){
                 object.name = talisman;
