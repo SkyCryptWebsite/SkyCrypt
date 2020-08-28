@@ -1885,6 +1885,28 @@ class FlyingFish extends Pet {
 			desc: [`§7Increases the stats of Diver Armor by §a${round(this.level * mult, 1)}%`]
 		};
 	}
+
+	modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
+		if (this.rarity > 3) {
+			let mult = (1 + round(this.level * 0.3, 1) / 100);
+			if (hName.includes("DIVERS")) {
+				for (const stat in helmet.stats)
+					helmet.stats[stat] = round(helmet.stats[stat] * mult, 1);
+			}
+			if (cName.includes("DIVERS")) {
+				for (const stat in chest.stats)
+					chest.stats[stat] = round(chest.stats[stat] * mult, 1);
+			}
+			if (lName.includes("DIVERS")) {
+				for (const stat in legs.stats)
+					legs.stats[stat] = round(legs.stats[stat] * mult, 1);
+			}
+			if (bName.includes("DIVERS")) {
+				for (const stat in boots.stats)
+					boots.stats[stat] = round(boots.stats[stat] * mult, 1);
+			}
+		}
+	}
 }
 
 class Squid extends Pet {
