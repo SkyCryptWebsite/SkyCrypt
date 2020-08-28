@@ -2100,7 +2100,7 @@ module.exports = {
                 object.rarity = "rare"
             }
             
-            if(talisman.startsWith("DAY_CRYSTAL")){
+            if(talisman.startsWith("NIGHT_CRYSTAL")){
                 object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/night_crystal.png"
                 object.display_name = "Night Crystal"
                 object.rarity = "rare"
