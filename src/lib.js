@@ -2140,6 +2140,9 @@ module.exports = {
                 object.display_name = "Crooked Artifact"
                 object.rarity = "rare"
             }
+            if(talisman.startsWith("EXPERIENCE_ARTIFACT")){
+                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/experience_artifact.png"
+            }
             if(object.name == null){
                 object.name = talisman;
             }
