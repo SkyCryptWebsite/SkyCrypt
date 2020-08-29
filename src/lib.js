@@ -2054,19 +2054,16 @@ module.exports = {
         let unique = Object.keys(constants.talismans);
 
         let missing = unique.filter(talisman => !talismans.includes(talisman));
-        /*missing.forEach(name => {
-            if(name in constants.talisman_upgrades){
-                console.log(name) //talisman checking for
-                constants.talisman_upgrades[name].forEach(upgrade => {
-                    console.log("Upgrade: " + upgrade) //talisman that is higher tier than checking
+        missing.forEach(name => {
+            if(name in constants.talisman_upgrades){ //if the name is in the upgrades list
+                for(let upgrade of constants.talisman_upgrades[name]){
                     if(talismans.includes(upgrade)){ //if talisman list includes the upgrade
-                        missing.splice(missing.indexOf(name), 1); //remove original talisman that checking for
-                        return;
+                        missing = missing.filter(item => item !== name)
+                        break;
                     }
-                    
-                })
+                }
             }
-        });*/
+        });
         const output = [];
         missing.forEach(async talisman => {
             const data = await db
