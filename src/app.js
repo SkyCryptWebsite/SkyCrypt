@@ -77,6 +77,8 @@ async function main(){
     async function getExtra(){
         const output = {};
 
+        output.twemoji = twemoji;
+
         const kofiEntry = await db.collection('donations').findOne({type: 'kofi'});
         const patreonEntry = await db.collection('donations').findOne({type: 'patreon'});
 
@@ -106,8 +108,6 @@ async function main(){
 
         if('recaptcha_site_key' in credentials)
             output.recaptcha_site_key = credentials.recaptcha_site_key;
-
-        output.twemoji = twemoji;
 
         return output;
     }
