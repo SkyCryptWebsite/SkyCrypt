@@ -32,6 +32,7 @@ const redisClient = new Redis();
 
 const customResources = require('./custom-resources');
 const { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } = require('constants');
+const randomEmoji = require('./constants/randomEmoji');
 
 const parseNbt = util.promisify(nbt.parse);
 
@@ -1659,6 +1660,9 @@ module.exports = {
 
             if('emoji' in userInfo)
                 output.display_emoji = userInfo.emoji;
+            if (userInfo.username == "jjww2") {
+                output.display_emoji = randomEmoji();
+            }
         }
 
         for(const member of members){
