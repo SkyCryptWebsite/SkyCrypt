@@ -2246,7 +2246,7 @@ module.exports = {
             let item = boss.rewards[task.splice(1).join('_')];
 
             if (item == null || boss == null) continue;
-            if (!collections[task[0]]) collections[task[0]] = {
+            if (!collections[boss.floor]) collections[boss.floor] = {
                 name: boss.name,
                 texture: boss.texture,
                 tier: 0,
@@ -2254,10 +2254,10 @@ module.exports = {
                 claimed: []
             };
 
-            collections[task[0]].claimed.push(item.name);
-            if (collections[task[0]].tier < item.tier) {
-                collections[task[0]].tier = item.tier;
-                collections[task[0]].killed = item.required;
+            collections[boss.floor].claimed.push(item.name);
+            if (collections[boss.floor].tier < item.tier) {
+                collections[boss.floor].tier = item.tier;
+                collections[boss.floor].killed = item.required;
             } 
         }
 

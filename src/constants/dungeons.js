@@ -4,6 +4,7 @@ module.exports = {
             name: "Bonzo",
             texture: "12716ecbf5b8da00b05f316ec6af61e8bd02805b21eb8e440151468dc656549c",
             max_tiers: 6,
+            floor: 1,
             rewards: {
                 "red_nose": {
                     name: "Red Nose",
@@ -41,6 +42,7 @@ module.exports = {
             name: "Scarf",
             texture: "7de7bbbdf22bfe17980d4e20687e386f11d59ee1db6f8b4762391b79a5ac532d",
             max_tiers: 6,
+            floor: 2,
             rewards: {
                 "red_scarf": {
                     name: "Red Scarf",
@@ -78,6 +80,7 @@ module.exports = {
             name: "The Professor",
             texture: "9971cee8b833a62fc2a612f3503437fdf93cad692d216b8cf90bbb0538c47dd8",
             max_tiers: 6,
+            floor: 3,
             rewards: {
                 "suspicious_vial": {
                     name: "Suspicious Vial",
@@ -115,6 +118,7 @@ module.exports = {
             name: "Thorn",
             texture: "8b6a72138d69fbbd2fea3fa251cabd87152e4f1c97e5f986bf685571db3cc0",
             max_tiers: 6,
+            floor: 4,
             rewards: {
                 "spirit_decoy": {
                     name: "Spirit Stone",
