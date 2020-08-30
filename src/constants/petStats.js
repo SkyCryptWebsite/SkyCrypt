@@ -100,7 +100,7 @@ Farming Pets
 class Bee extends Pet { // todo: finish hive
 	get stats() {
 		return {
-			strength: this.level * 0.25,
+			strength: 5 + this.level * 0.25,
 			intelligence: this.level * 0.5,
 			speed: this.level * 0.1
 		};
@@ -158,7 +158,7 @@ class Chicken extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 3 ? 0.5 : this.rariy > 0 ? 0.3 : 0.4;
+		let mult = this.rarity > 2 ? 0.5 : this.rarity > 0 ? 0.4 : 0.3;
 		return {
 			name: "§6Light Feet",
 			desc: [`§7Reduces fall damage by §a${round(this.level * mult, 1)}%`]
@@ -227,15 +227,16 @@ class Elephant extends Pet {
 class Pig extends Pet {
 	get stats() {
 		return {
-			intelligence: this.level * 0.75,
-			health: this.level * 1
+			speed: this.level * 0.25
 		};
 	}
 
 	get abilities() {
 		let list = [this.first, this.second];
 		if (this.rarity > 1)
-			list.push(this.third);
+      list.push(this.third);
+    if (this.rarity > 3)
+      list.push(this.fourth);
 		return list;
 	}
 
@@ -261,7 +262,15 @@ class Pig extends Pet {
 			name: "§6Sprint",
 			desc: [`§7While holding an Enchanted Carrot on a Stick, increase the speed of your mount by §a${round(this.level * mult, 1)}%`]
 		};
-	}
+  }
+  
+  get fourth() {
+    let mult = 0;
+		return {
+			name: "§6Trample",
+			desc: [`§7While on your private island, break all crops your pig rides over`]
+		};
+  }
 }
 
 class Rabbit extends Pet {
@@ -282,7 +291,7 @@ class Rabbit extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 3 ? 0.5 : this.rariy > 1 ? 0.4 : 0.3;
+		let mult = this.rarity > 2 ? 0.5 : this.rarity > 1 ? 0.4 : 0.3;
 		return {
 			name: "§6Happy Feet ",
 			desc: [`§7Jump Potions also give §a+${round(this.level * mult, 0)} §7speed`]
@@ -330,7 +339,7 @@ class Bat extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 3 ? 0.2 : this.rariy > 1 ? 0.15 : 0.1;
+		let mult = this.rarity > 2 ? 0.2 : this.rarity > 1 ? 0.15 : 0.1;
 		return {
 			name: "§6Candy Lover",
 			desc: [`§7Increases the chance for mobs to drop Candy by §a${round(this.level * mult, 1)}%`]
@@ -391,7 +400,7 @@ class Endermite extends Pet {
 		let mult = 0.4;
 		return {
 			name: "§6Pearl Powered",
-			desc: [`§7Upon consuming an ender pearl, gain +§a${round(this.level * mult, 1)} §7speed for 10 seconds`]
+			desc: [`§7Upon consuming an ender pearl, gain +§a${10 + round(this.level * mult, 1)} §7speed for 10 seconds`]
 		};
 	}
 }
@@ -495,7 +504,7 @@ class WitherSkeleton extends Pet {
 			intelligence: this.level * 0.25,
 			crit_damage: this.level * 0.25,
 			defense: this.level * 0.25,
-			strength: 5 + this.level * 0.25
+			strength: this.level * 0.25
 		};
 	}
 
@@ -509,7 +518,7 @@ class WitherSkeleton extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 3 ? 0.3 : this.rariy > 1 ? 0.1 : 0.05;
+		let mult = this.rarity > 2 ? 0.3 : this.rarity > 1 ? 0.1 : 0.05;
 		return {
 			name: "§6Stronger Bones",
 			desc: [`§7Take §a${round(this.level * mult, 1)}% §7less damage from skeletons`]
@@ -599,7 +608,7 @@ class Blaze extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.2 : this.rariy > 1 ? 0.1 : 0.05;
+		let mult = this.rarity > 2 ? 0.2 : this.rarity > 1 ? 0.1 : 0.05;
 		return {
 			name: "§6Nether Embodiment",
 			desc: [`§7Increases all stats by §a${round(this.level * mult, 1)}% §7while on the Blazing Fortress`]
@@ -692,7 +701,7 @@ class Enderman extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 3 ? 0.3 : this.rariy > 1 ? 0.2 : 0.1;
+		let mult = this.rarity > 2 ? 0.3 : this.rarity > 0 ? 0.2 : 0.1;
 		return {
 			name: "§6Enderian",
 			desc: [`§7Take §a${round(this.level * mult, 1)}% §7less damage from end monsters`]
@@ -734,7 +743,7 @@ class Ghoul extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 3 ? 0.25 : this.rariy > 1 ? 0.25 : 0.1;
+		let mult = this.rarity > 2 ? 0.25 : this.rarity > 1 ? 0.25 : 0.1;
 		return {
 			name: "§6Amplified Healing",
 			desc: [`§7Increase all healing by §a${round(this.level * mult, 1)}%`]
@@ -818,7 +827,8 @@ class Guardian extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 3 ? 0.2 : this.rariy > 2 ? 0.15 : this.rariy > 1 ? 0.1 : this.rariy > 0 ? 0.06 : 0.02;
+		// let mult = this.rarity > 2 ? 0.2 : this.rarity > 2 ? 0.15 : this.rarity > 1 ? 0.1 : this.rarity > 0 ? 0.06 : 0.02;
+		let mult = this.rarity > 3 ? 0.2 : this.rarity > 2 ? 0.15 : this.rarity > 1 ? 0.1 : this.rarity > 0 ? 0.04 : 0.02;
 		return {
 			name: "§6Lazerbeam",
 			desc: [`§7Zap your enemies for §b${round(this.level * mult, 1)}x §7your §b${symbols.intelligence} Intelligence §7every §a3s`]
@@ -945,7 +955,7 @@ class MagmaCube extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.3 : this.rariy > 0 ? 0.25 : 0.2;
+		let mult = this.rarity > 2 ? 0.3 : this.rarity > 0 ? 0.25 : 0.2;
 		return {
 			name: "§6Slimy Minions",
 			desc: [`§7Slime minions work §a${round(this.level * mult, 1)}% §7faster while on your island`]
@@ -956,7 +966,7 @@ class MagmaCube extends Pet {
 		let mult = 0.2;
 		return {
 			name: "§6Salt Blade",
-			desc: [`§7Deal §a${round(this.level * mult, 1)} §7more damage to slimes`]
+			desc: [`§7Deal §a${round(this.level * mult, 1)}% §7more damage to slimes`]
 		};
 	}
 
@@ -1124,7 +1134,7 @@ class Skeleton extends Pet {
 	}
 
 	get first() {
-		let mult = this.raity > 2 ? 0.2 : 0.1;
+		let mult = this.rarity > 2 ? 0.2 : 0.1;
 		return {
 			name: "§6Bone Arrows",
 			desc: [`§7Increase arrow damage by §a${round(this.level * mult, 1)}% §7which is tripled while in dungeons`]
@@ -1236,8 +1246,8 @@ class Spider extends Pet {
 class Spirit extends Pet {
 	get stats() {
 		return {
-			strength: this.level * 0.1,
-			intelligence: this.level * 1
+      intelligence: this.level * 1,
+      speed: this.level * 0.29
 		};
 	}
 
@@ -1259,18 +1269,18 @@ class Spirit extends Pet {
 	}
 
 	get second() {
-		let mult = 0.4;
+		let mult = 0;
 		return {
 			name: "§6Spirit Leap",
-			desc: [`§7Grants a §a${round(this.level * mult, 1)}% §7chance for mini-bosses in dungeons to drop §b5 §7Spirit Leap Pearls.`]
+			desc: [`§7Grants a §a10% §7chance for mini-bosses in dungeons to drop §b5 §7Spirit Leap Pearls.`]
 		};
 	}
 
 	get third() {
-		let mult = 0.648;
+		let mult = 0.45;
 		return {
 			name: "§6Spirit Cooldowns",
-			desc: [`§7Reduces the cooldown of your ghost abilities in dungeons by §a${round(this.level * mult, 1)}%§7.`]
+			desc: [`§7Reduces the cooldown of your ghost abilities in dungeons by §a${round(5 + this.level * mult, 1)}%§7.`]
 		};
 	}
 }
@@ -1337,7 +1347,7 @@ class Tiger extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.2 : this.rariy > 0 ? 0.1 : 0.05;
+		let mult = this.rarity > 2 ? 0.2 : this.rarity > 0 ? 0.1 : 0.05;
 		return {
 			name: "§6Merciless Swipe",
 			desc: [`§7Attacks have a §a${round(this.level * mult, 1)}% §7chance to strike twice`]
@@ -1379,7 +1389,7 @@ class Turtle extends Pet {
 	}
 
 	get first() {
-		let mult = 0.17;
+		let mult = 0.20;
 		return {
 			name: "§6Turtle Tactics",
 			desc: [`§7Gain §a+${round(this.level * mult, 1)}% ${symbols.defense} Defense`]
@@ -1424,7 +1434,7 @@ class Wolf extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 3 ? 0.3 : this.rariy > 1 ? 0.2 : 0.1;
+		let mult = this.rarity > 2 ? 0.3 : this.rarity > 1 ? 0.2 : 0.1;
 		return {
 			name: "§6Alpha Dog",
 			desc: [`§7Take §a${round(this.level * mult, 1)}% §7less damage from wolves`]
@@ -1466,7 +1476,7 @@ class Zombie extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 3 ? 0.3 : this.rariy > 1 ? 0.2 : 0.1;
+		let mult = this.rarity > 2 ? 0.3 : this.rarity > 1 ? 0.2 : 0.1;
 		return {
 			name: "§6Chomp",
 			desc: [`§7Gain +§a${round(this.level * mult, 1)} §7hp per zombie kill`]
@@ -1514,7 +1524,7 @@ class Giraffe extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 3 ? 0.25 : this.rariy > 2 ? 0.2 : this.rariy > 1 ? 0.15 : 0.1;
+		let mult = this.rarity > 3 ? 0.25 : this.rarity > 2 ? 0.2 : this.rarity > 1 ? 0.15 : 0.1;
 		return {
 			name: "§6Good Heart",
 			desc: [`§7Regen §c${round(this.level * mult, 1)} ${symbols.health} §7per second`]
@@ -1557,7 +1567,7 @@ class Lion extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 3 ? 0.2 : this.rariy > 2 ? 0.15 : this.rariy > 2 ? 0.1 : 0.5;
+		let mult = this.rarity > 3 ? 0.2 : this.rarity > 2 ? 0.15 : this.rarity > 1 ? 0.1 : this.rarity > 0 ? 0.05 : 0.025;
 		return {
 			name: "§6Primal Force",
 			desc: [`§7Adds §c+${round(this.level * mult, 1)}❁ Damage §7to your weapons`]
@@ -1599,7 +1609,7 @@ class Monkey extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.3 : this.rariy > 0 ? 0.25 : 0.2;
+		let mult = this.rarity > 2 ? 0.3 : this.rarity > 0 ? 0.25 : 0.2;
 		return {
 			name: "§6Treeborn",
 			desc: [`§7Increase double drop rates for logs by §a${round(this.level * mult, 1)}%`]
@@ -1821,7 +1831,7 @@ class FlyingFish extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.15 : this.rariy > 1 ? 0.125 : 0.05;
+		let mult = this.rarity > 2 ? 0.15 : this.rarity > 1 ? 0.125 : 0.05;
 		return {
 			name: "§6Quick Reel",
 			desc: [`§7Increases fishing speed by §a${round(this.level * mult, 1)}%`]
@@ -1863,7 +1873,7 @@ class Squid extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.1 : this.rariy > 0 ? 0.8 : 0.5;
+		let mult = this.rarity > 2 ? 1 : this.rarity > 0 ? 0.75 : 0.5;
 		return {
 			name: "§6More Ink",
 			desc: [`§7Gain a §a${round(this.level * mult, 1)}% §7chance to get double drops from squids`]
@@ -1995,7 +2005,7 @@ class Sheep extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.2 : this.rariy > 1 ? 0.125 : 0.05;
+		let mult = this.rarity > 2 ? 0.2 : this.rarity > 1 ? 0.125 : 0.05;
 		return {
 			name: "§6Mana Saver",
 			desc: [`§7Reduces the mana cost of abilites by §a${round(this.level * mult, 1)}%`]
