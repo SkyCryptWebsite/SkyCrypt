@@ -1822,6 +1822,24 @@ a.additional-player-stat:hover{
     filter: saturate(100%);
 }
 
+.missing-talisman{
+    background-color: #555555;
+    transition: background-color .2s;
+}
+
+.missing-talisman .piece-icon{
+    filter: saturate(0%);
+    transition: filter .2s;
+}
+
+.missing-talisman:hover, .missing-talisman.sticky-stats{
+    background-color: #555555;
+}
+
+.missing-talisman:hover .piece-icon, .missing-talisman.sticky-stats .piece-icon{
+    filter: saturate(100%);
+}
+
 #inventory_container{
     display: inline-block;
     background-color: rgba(0,0,0,0.3);
