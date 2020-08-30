@@ -234,9 +234,9 @@ class Pig extends Pet {
 	get abilities() {
 		let list = [this.first, this.second];
 		if (this.rarity > 1)
-      list.push(this.third);
-    if (this.rarity > 3)
-      list.push(this.fourth);
+			  list.push(this.third);
+    	if (this.rarity > 3)
+      		list.push(this.fourth);
 		return list;
 	}
 
