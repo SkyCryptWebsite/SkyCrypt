@@ -14,7 +14,7 @@ function handleError(e, res) {
     });
 }
 
-/*module.exports = (app, db) => {
+module.exports = (app, db) => {
     const productInfo = {};
     const leaderboards = [];
 
@@ -375,4 +375,3 @@ function handleError(e, res) {
     });
 
 };
-*/
