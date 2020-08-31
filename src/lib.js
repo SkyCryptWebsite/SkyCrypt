@@ -851,7 +851,7 @@ module.exports = {
         }
 
         // Add talismans from inventory
-        for(const talisman of inventory.filter(a => a.type == 'accessory')){
+        for(const talisman of inventory.filter(a => a.type == 'accessory' || a.type == 'dungeon accessory')){
             const id = getId(talisman);
 
             if(id === "")
