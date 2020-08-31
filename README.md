@@ -21,6 +21,7 @@ You are free to report bugs or contribute to this project. Just open <a href="..
 - <a href="https://docs.mongodb.com/manual/administration/install-community/">MongoDB</a>
 - <a href="https://redis.io/">Redis</a>
 - <a href="https://api.hypixel.net/">Hypixel API Key</a>
+- <a href="https://www.nginx.com/">Nginx</a> 
 - <a href="https://www.docker.com/">Docker</a> 
 - <a> Please note that Docker is optional. This is to present a alternative way of deploying SkyCrypt </a>
 
