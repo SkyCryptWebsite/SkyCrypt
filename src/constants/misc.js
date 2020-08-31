@@ -72,6 +72,12 @@ module.exports = {
         'Power VI',
         'Growth 6',
         'Growth VI',
+        'Blast Protection 6',
+        'Blast Protection VI',
+        'Fire Protection 6',
+        'Fire Protection VI',
+        'Projectile Protection 6',
+        'Projectile Protection VI',
         'Protection 6',
         'Protection VI',
         'True Protection 1',
@@ -99,7 +105,9 @@ module.exports = {
         'Feather Falling 10',
         'Feather Falling X',
         'Infinite Quiver 10',
-        'Infinite Quiver X'
+        'Infinite Quiver X',
+        'Thorns 6',
+        'Thorns VI'
     ],
 
     // Player stats on a completely new profile
