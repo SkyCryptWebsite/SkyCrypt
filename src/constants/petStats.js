@@ -537,7 +537,7 @@ class WitherSkeleton extends Pet {
 		let mult = 2;
 		return {
 			name: "§6Death's Touch",
-			desc: [`§7Upon hitting an enemy inflict the wither effect for §a${round(this.level * mult, 1)}% damage over 3 seconds`, `§8Does not stack`]
+			desc: [`§7Upon hitting an enemy inflict the wither effect for §a${round(this.level * mult, 1)}% §7damage over 3 seconds`, `§8Does not stack`]
 		};
 	}
 }
