@@ -99,7 +99,15 @@ module.exports = {
         'Feather Falling 10',
         'Feather Falling X',
         'Infinite Quiver 10',
-        'Infinite Quiver X'
+        'Infinite Quiver X',
+        "Blast Protection 6",
+        "Blast Protection VI",
+        "Fire Protection 6",
+        "Fire Protection VI",
+        "Projectile Protection 6",
+        "Projectile Protection VI",
+        "Thorns 6",
+        "Thorns VI"
     ],
 
     // Player stats on a completely new profile
