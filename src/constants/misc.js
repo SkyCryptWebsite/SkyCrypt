@@ -897,5 +897,14 @@ module.exports = {
         'CHEETAH_TALISMAN': {
             head: "/head/1553f8856dd46de7e05d46f5fc2fb58eafba6829b11b160a1545622e89caaa33"
         },
+        'TREASURE_TALISMAN': {
+            head: "hmmmm"
+        },
+        'TREASURE_RING': {
+            head: "hmmm"
+        },
+        'TREASURE_ARTIFACT': {
+            head: "hmmm"
+        }
     }
 };

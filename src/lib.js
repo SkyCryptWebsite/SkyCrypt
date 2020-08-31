@@ -2144,6 +2144,21 @@ module.exports = {
             if(talisman.startsWith("EXPERIENCE_ARTIFACT")){
                 object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/experience_artifact.png"
             }
+            if(talisman.startsWith("TREASURE_TALISMAN")){
+                object.texture_path = "/head/31f320025142596396032cc0088e2ac36489f24cfa5e9dda13e081cf69f77f4d"
+                object.display_name = "Treasure Talisman"
+                object.rarity = "rare"
+            }
+            if(talisman.startsWith("TREASURE_RING")){
+                object.texture_path = "/head/6a1cc5525a217a399b5b86c32f0f22dd91378874b5f44d5a383e18bc0f3bc301"
+                object.display_name = "Treasure Ring"
+                object.rarity = "epic"
+            }
+            if(talisman.startsWith("TREASURE_ARTIFACT")){
+                object.texture_path = "/head/e10f20a55b6e188ebe7578459b64a6fbd825067bc497b925ca43c2643d059025"
+                object.display_name = "Treasure Artifact"
+                object.rarity = "legendary"
+            }
             if(object.name == null){
                 object.name = talisman;
             }
