@@ -265,18 +265,18 @@ document.addEventListener('DOMContentLoaded', function(){
             packContent.classList.add('pack-credit');
 
             let packIcon = document.createElement('img');
-            packIcon.setAttribute('src', texturePack.basePath + '/pack.png');
+            packIcon.setAttribute('src', item.texture_pack.base_path + '/pack.png');
             packIcon.classList.add('pack-icon');
 
             let packName = document.createElement('a');
-            packName.setAttribute('href', texturePack.url);
+            packName.setAttribute('href', item.texture_pack.url);
             packName.setAttribute('target', '_blank');
             packName.classList.add('pack-name');
-            packName.innerHTML = texturePack.name;
+            packName.innerHTML = item.texture_pack.name;
 
             let packAuthor = document.createElement('div');
             packAuthor.classList.add('pack-author');
-            packAuthor.innerHTML = 'by <span>' + texturePack.author + '</span>';
+            packAuthor.innerHTML = 'by <span>' + item.texture_pack.author + '</span>';
 
             packContent.appendChild(packIcon);
             packContent.appendChild(packName);
