@@ -218,7 +218,7 @@ header{
 .blm-logo{
     position: absolute;
     top: 0;
-    right: 0;
+    right: 100px;
     width: 48px;
     height: 48px;
     background-image: url(/resources/img/icons/blm-logo.png);
@@ -379,6 +379,57 @@ header{
 #top_navigation .tab.active{
     background-color: rgba(0,0,0,0.1);
     cursor: default;
+}
+
+#packs_button{
+    display: inline-block;
+    position: absolute;
+    height: 36px;
+    line-height: 36px;
+    box-sizing: border-box;
+    margin-left: 5px;
+    vertical-align: middle;
+    cursor: pointer;
+    text-transform: capitalize;
+    font-weight: 600;
+    font-size: 14px;
+    color: white;
+    padding-right: 5px;
+    padding-left: 32px;
+    padding-right: 10px;
+    border-radius: 9999px;
+    top: 6px;
+    right: 20px;
+    background-color: rgba(0,0,0,0.2);
+    background-image: url(../img/icons/format-color-fill.png);
+    background-size: 24px auto;
+    background-position: 6px 8px;
+    background-repeat: no-repeat;
+}
+
+.switch_packs_button{
+    display: inline-block;
+    position: absolute;
+    height: 36px;
+    line-height: 36px;
+    box-sizing: border-box;
+    margin-left: 5px;
+    vertical-align: center;
+    cursor: pointer;
+    text-transform: capitalize;
+    font-weight: 600;
+    font-size: 14px;
+    color: white;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 9999px;
+    top: 6px;
+    right: 20px;
+    background-color: rgba(0,0,0,0.2);
+    background-size: 24px auto;
+    background-position: 6px 8px;
+    background-repeat: no-repeat;
 }
 
 #bg_blur{
@@ -600,6 +651,51 @@ html.no-webp #bg_blur{
     overflow-y: auto;
 }
 
+#packs_box{
+    position: fixed;
+    right: 20px;
+    width: 440px;
+    top: 45px;
+    z-index: 1;
+    background-color: rgba(50, 0, 30, 0.95);
+    padding: 20px;
+    box-sizing: border-box;
+    transform: translateY(-100%);
+    transition: transform .3s;
+    z-index: 100;
+    border-radius: 5px;
+}
+
+#packs_box.packs-opened{
+    transform: translateY(0%);
+}
+
+.resource-pack{
+    position: relative;
+    padding: 6px;
+    border-radius: 5px;
+    background-color: rgba(255,255,255,0.05);
+    margin-top: 15px;
+    padding-left: 48px;
+    font-size: 14px;
+}
+
+.resource-pack .pack-author{
+    font-weight: 500;
+}
+
+.resource-pack .pack-name{
+    display: inline-block;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+}
+
+.resource-pack .pack-icon{
+    top: 8px;
+    left: 8px;
+    border-radius: 5px;
+}
+
 html.no-transform #info_box{
     top: -100%;
 }
@@ -796,7 +892,7 @@ html.no-transform #info_box.opened{
     margin-bottom: 10px;
 }
 
-#stats_content .pack-icon{
+.pack-icon{
     width: 32px;
     height: 32px;
     image-rendering: crisp-edges;
@@ -806,16 +902,16 @@ html.no-transform #info_box.opened{
     left: 0;
 }
 
-#stats_content .pack-name{
+.pack-name{
     display: block;
     text-decoration: none;
 }
 
-#stats_content .pack-author{
+.pack-author{
     color: rgba(255, 255, 255, 0.6);
 }
 
-#stats_content .pack-author span{
+.pack-author span{
     color: rgba(255, 255, 255, 0.8);
 }
 
