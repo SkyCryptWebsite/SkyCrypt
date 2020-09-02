@@ -1,7 +1,0 @@
-#This is a script that deploys and starts the daemon
-cp caretaker /usr/bin
-cp caretaker.service /etc/systemd/system/ 
-sleep 1s
-sudo systemctl start caretaker.service
-echo Deployment successful!
-
