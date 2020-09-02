@@ -34,7 +34,7 @@ class Pet {
 		this.level = level;
 	}
 
-	get lore() {
+	lore(textbook = false) {
 		let list = [];
 		for (const stat in this.stats) {
 			switch (stat) {
@@ -54,7 +54,8 @@ class Pet {
 					list.push(`§7Crit Damage: ${formatStat(this.stats[stat])}`);
 					break;
 				case "intelligence":
-					list.push(`§7Intelligence: ${formatStat(this.stats[stat])}`);
+					let intel = textbook ? formatStat(this.stats[stat] * 2) : formatStat(this.stats[stat])
+					list.push(`§7Intelligence: ${intel}`);
 					break;
 				case "speed":
 					list.push(`§7Speed: ${formatStat(this.stats[stat])}`);
