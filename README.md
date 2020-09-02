@@ -1,9 +1,9 @@
 <p align="center"><img src="https://i.imgur.com/h74ZXmI.png"></p>
-<h1 align="center">A fork of the legendary sky.lea.moe profile viewer</h1>
+<h1 align="center">SkyCrypt: A Hypixel Skyblock Profile Viewer</h1>
 
-This project allows you to share your <a href="https://hypixel.net/">Hypixel</a> SkyBlock profile with other players with a quick overview of your Stats, Skills, Armor, Weapons and Accessories.
+This project, based on LeaPhant's [sky.lea.moe](https://sky.lea.moe), allows you to share your <a href="https://hypixel.net/">Hypixel</a> SkyBlock profile with other players with a quick overview of your Stats, Skills, Armor, Weapons and Accessories.
 
-**Website**: In progress
+**Website**: https://sky.shiiyu.moe
 
 ![Node.js CI](https://github.com/SkyCryptWebsite/SkyCrypt/workflows/Node.js%20CI/badge.svg) 
 ![Docker Image CI](https://github.com/SkyCryptWebsite/SkyCrypt/workflows/Docker%20Image%20CI/badge.svg) 
@@ -21,6 +21,7 @@ You are free to report bugs or contribute to this project. Just open <a href="..
 - <a href="https://docs.mongodb.com/manual/administration/install-community/">MongoDB</a>
 - <a href="https://redis.io/">Redis</a>
 - <a href="https://api.hypixel.net/">Hypixel API Key</a>
+- <a href="https://www.nginx.com/">Nginx</a> 
 - <a href="https://www.docker.com/">Docker</a> 
 - <a> Please note that Docker is optional. This is to present a alternative way of deploying SkyCrypt </a>
 

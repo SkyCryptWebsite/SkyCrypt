@@ -1309,7 +1309,8 @@ twitterDescription += '. Click to view more stats!'
                         <% if(items.talismans.filter(a => !a.isInactive).length > 0){ %>
                             <div class="accessory-list">
                                 <p class="stat-sub-header" style="margin-bottom: 5px">Active Accessories</p>
-                                <% items.talismans.filter(a => !a.isInactive).forEach(item => { %>
+                                <% items.talismans.filter(a => !a.isInactive).forEach(item => { 
+                                    %>
                                     <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>"
                                     class="rich-item piece piece-<%= item.rarity %>-bg">
                                         <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
@@ -1339,19 +1340,19 @@ twitterDescription += '. Click to view more stats!'
                                 <% }) %>
                             </div>
                         <% } %>
-                        <% if(items.missingTalismans.length > 0){ %>
+                        <% if(calculated.missingTalismans.length > 0){ %>
                             <% if(items.talismans.length == 1){ %>
                                 <br>
                             <% } %>
-                            <div class="stat-sub-container sub-extendable sub-missing-pets">
+                            <div class="stat-sub-container sub-extendable sub-missing-talismans">
                                 <p class="stat-sub-header">Missing Talismans</p>
                                 <div class="pieces">
                                 <%
-                                    for(const [index, pet] of calculated.missingPets.entries()){
+                                    for(const [index, talisman] of calculated.missingTalismans.entries()){
                                         %>
-                                        <div data-missing-pet-index="<%= index %>" class="rich-item piece piece-<%= pet.rarity %>-bg missing-pet">
+                                        <div data-missing-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
                                             <div class="piece-hover-area"></div>
-                                            <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                                            <div style='background-image: url("<%= talisman.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                                         </div>
                                         <%
                                     }
@@ -1625,12 +1626,18 @@ twitterDescription += '. Click to view more stats!'
             <div class="stat-content">
             <% if (!calculated.dungeons.entrance) { %>
                 <p class="stat-raw-values">
-                    <%= calculated.display_name %> didn't enter Catacombs yet.
+                    <%= calculated.display_name %> hasn't entered Catacombs yet.
                 </p>
             <% } else { %>
                 <p class="stat-raw-values">
                     <%= calculated.display_name %> has entered Catacombs<% if (calculated.dungeons.collected_essence) { %> and collected essence<% } %>.
                 </p>
+
+                <% if (calculated.dungeons.secrets_found > 0) { %>
+                    <p class="stat-raw-values">
+                        <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span></span>
+                    </p>
+                <% } %>
 
                 <% if (calculated.dungeons.unlocked_collections) { %>
                     <p class="stat-sub-header">Boss Collections</p>
@@ -1648,14 +1655,17 @@ twitterDescription += '. Click to view more stats!'
                         <div class="boss-collection-icon" style="background-image:url(/head/<%= collection.texture %>)"></div>
                         <div class="collection-stats">
                             <div class="collection-name"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
-                            <div class="collection-amount"><span class="stat-name">Bosses killed: </span><span class="stat-value">~<%= collection.killed %></span></div>
+                            <div class="collection-amount"><span class="stat-name">Bosses killed: </span><span class="stat-value"><%= collection.killed %>+</span></div>
                         </div>
                     </div>
                     <% } %>
                     </div>
                 <% } %>
             <% } %>
-            <p class='stat-raw-values'><small><i>This section is still in works, since Hypixel doesn't support Dungeons in their API.</i></small></p>
+            <p class='stat-raw-values'><small><i>
+                Please note, that this section is still in works, since Hypixel doesn't support Dungeons in their public API.<br>
+                If any of displayed values are incorrect or you have ideas for other things, please visit us and chat on our <a class="link link-discord" href="https://discord.gg/Dk25bnB">Discord</a>.
+            </i></small></p>
             </div>
         </div>
         <div data-stat="slayer" class="stat-container stat-slayer">
@@ -2080,7 +2090,7 @@ twitterDescription += '. Click to view more stats!'
                         </div>
                     <% } %>
                     <% if('gifts' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/b73a2114136b8ee4926caa51785414036a2b76e4f1668cb89d99716c421)"></div></div><span>gifts</span></div>
+                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/b73a2114136b8ee4926caa51785414036a2b76e4f1668cb89d99716c421)"></div></div><span>gifts</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.gifts){ %>
                             <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.gifts[key].toLocaleString() %></span><br>
@@ -2096,7 +2106,7 @@ twitterDescription += '. Click to view more stats!'
                         </p>
                     <% } %>
                     <% if('dragons' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/aec3ff563290b13ff3bcc36898af7eaa988b6cc18dc254147f58374afe9b21b9)"></div></div><span>dragons</span></div>
+                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/aec3ff563290b13ff3bcc36898af7eaa988b6cc18dc254147f58374afe9b21b9)"></div></div><span>dragons</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.dragons){
                                 let tooltip = "";

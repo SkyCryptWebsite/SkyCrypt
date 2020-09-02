@@ -1,0 +1,45 @@
+limit_req_zone $binary_remote_addr zone=limit_api:150m rate=150r/m;
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    server_name sky.shiiyu.moe;
+
+    ssl_certificate /etc/ssl/certs/cert.pem;
+    ssl_certificate_key /etc/ssl/private/key.pem;
+
+    location /api {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_pass http://127.0.0.1:32464;
+        limit_req zone=limit_api burst=30 nodelay;
+    }
+
+    gzip on;
+    gzip_vary on;
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_pass http://127.0.0.1:32464/;
+    }
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name sky.shiiyu.moe;
+
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name shiiyu.moe;
+
+    return 301 https://shiiyu.moe/$request_uri;
+}

@@ -2,7 +2,7 @@
 name: SkyCrypt CI Workflow
 
 on:
-  push:
+ push:
     branches: [ master ]
 jobs:
   build:

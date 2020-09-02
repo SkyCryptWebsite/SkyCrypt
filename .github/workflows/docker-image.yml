@@ -2,8 +2,8 @@
 name: SkyCrypt Image CI
 
 on:
-  push:
-    branches: [ master, WarpWing ]
+ push:
+    branches: [ master ]
 jobs:
 
   build:

@@ -47,9 +47,11 @@ credentials.json
 
 # db
 db.json
-
+Caretaker/
+Caretaker/checkstat.sh
 
 # custom dyed leather armor cache
 public/resourcepacks/**/leatherCache
 
 .vscode/
+Caretaker/checkstat.sh
