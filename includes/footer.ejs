@@ -26,10 +26,14 @@
             infoBox.classList.add('packs-opened');
     }
 
-    function switchPack(pack){
+    function switchPack(pack = false){
         console.log(pack)
         let baseURL = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1] + "/" + window.location.pathname.split('/')[2] + "/" + window.location.pathname.split('/')[3]
-        window.location.replace(`${baseURL}?pack=${pack}`);
+        if(pack != false){
+            window.location.replace(`${baseURL}?pack=${pack}`);
+        }else{
+            window.location.replace(baseURL);
+        }
     }
 
     Modernizr.on('webp', function(result){
