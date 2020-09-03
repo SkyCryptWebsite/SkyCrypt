@@ -261,9 +261,9 @@ class Pig extends Pet {
 	get abilities() {
 		let list = [this.first, this.second];
 		if (this.rarity > 1)
-			  list.push(this.third);
-    	if (this.rarity > 3)
-      		list.push(this.fourth);
+			list.push(this.third);
+		if (this.rarity > 3)
+			list.push(this.fourth);
 		return list;
 	}
 
@@ -521,6 +521,11 @@ class Silverfish extends Pet {
 			name: "§6Dexterity",
 			desc: [`§7Gives permanent haste III`]
 		};
+	}
+
+	modifyStats(stats) {
+		let mult = this.rarity > 2 ? 0.15 : this.rarity > 0 ? 0.1 : 0.05;
+		stats['true defense'] += floor(this.level * mult, 1);
 	}
 }
 
