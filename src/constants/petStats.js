@@ -1900,6 +1900,13 @@ class Dolphin extends Pet {
 			desc: [`§7Stun sea creatures for §a5s §7after fishing them up`]
 		};
 	}
+
+	modifyStats(stats) {
+		if (rarity > 1) {
+			let mult = this.rarity > 2 ? 0.1 : 0.07;
+			stats['sea creature chance'] *= 1 + round(this.level * mult / 100, 1)k
+		}
+	}
 }
 
 class FlyingFish extends Pet {
