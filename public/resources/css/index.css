@@ -46,11 +46,11 @@ a.no-underline{
 }
 
 .tippy-tooltip[data-placement^="top"] > .tippy-arrow{
-    /* border-top-color: #0BDA51; */
+    /* border-top-color: #0BCA51; */
 }
 
 .tippy-tooltip[data-placement^="bottom"] > .tippy-arrow{
-    /* border-bottom-color: #0BDA51; */
+    /* border-bottom-color: #0BCA51; */
 }
 
 *[data-tippy-content]::after{
@@ -74,12 +74,12 @@ a.no-underline{
 }
 
 a{
-    color: #0BFA51;
+    color: #0BEA51;
     transition: color .2s;
 }
 
 a:hover{
-    color: #09FF70;
+    color: #09EF70;
 }
 
 header{
@@ -466,7 +466,7 @@ html.no-webp #bg_blur{
 .skill-icon{
     width: 36px;
     height: 36px;
-    /* background-color: #0BDA51; */
+    /* background-color: #0BCA51; */
     border-radius: 50%;
     position: relative;
     z-index: 10;
@@ -509,7 +509,7 @@ html.no-webp #bg_blur{
     left: -18px;
     width: 18px;
     bottom: 0;
-    /* background-color: #0BBA51; */
+    /* background-color: #0BAA51; */
 }
 
 .skill.maxed-skill .skill-bar::before{
@@ -532,7 +532,7 @@ html.no-webp #bg_blur{
     top: 0;
     left: 0;
     bottom: 0;
-    /* background-color: #0BBA51; */
+    /* background-color: #0BAA51; */
     border-top-right-radius: 7px;
     border-bottom-right-radius: 7px;
 }
@@ -551,7 +551,7 @@ html.no-webp #bg_blur{
     font-weight: 600;
     font-size: 12px;
     line-height: 14px;
-    text-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+    text-shadow: 0px 0px 3px rgba(0,0,0,0.5);
 }
 
 #skin_display{
@@ -953,7 +953,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     height: 29px;
     line-height: 29px;
     box-sizing: border-box;
-    /* background-color: rgba(11, 218, 81, 0.9); */
+    /* background-color: rgba(11, 202, 81, 0.9); */
     display: inline-block;
     border-radius: 99999px;
     text-decoration: none;
@@ -961,6 +961,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     font-weight: 600;
     transition: background-color .1s;
     vertical-align: top;
+    text-shadow: 0px 0px 3px rgba(0,0,0,.5);
 }
 
 .additional-player-stat:hover::after{
@@ -1012,7 +1013,7 @@ div.additional-player-stat{
 }
 
 .additional-player-stat:hover{
-    /* background-color: #0BDA51; */
+    /* background-color: #0BCA51; */
 }
 
 a.additional-player-stat:hover{
@@ -1204,7 +1205,7 @@ a.additional-player-stat:hover{
     right: 0;
     height: 2px;
     top: 100%;
-    /* background-color: #0BDA51; */
+    /* background-color: #0BCA51; */
     border-radius: 4px;
     transition: height .1s, top .1s;
 }
@@ -1432,7 +1433,7 @@ a.additional-player-stat:hover{
 }
 
 .stat-header span{
-    /* border-bottom: 4px solid #0BDA51; */
+    /* border-bottom: 4px solid #0BCA51; */
 }
 
 .info-container{
@@ -1466,7 +1467,7 @@ a.additional-player-stat:hover{
     height: 35px;
     line-height: 35px;
     text-align: center;
-    /* background-color: #0BDA51; */
+    /* background-color: #0BCA51; */
     text-transform: uppercase;
     font-weight: 600;
     text-align: center;
@@ -1821,6 +1822,24 @@ a.additional-player-stat:hover{
     filter: saturate(100%);
 }
 
+.missing-talisman{
+    background-color: #555555;
+    transition: background-color .2s;
+}
+
+.missing-talisman .piece-icon{
+    filter: saturate(0%);
+    transition: filter .2s;
+}
+
+.missing-talisman:hover, .missing-talisman.sticky-stats{
+    background-color: #555555;
+}
+
+.missing-talisman:hover .piece-icon, .missing-talisman.sticky-stats .piece-icon{
+    filter: saturate(100%);
+}
+
 #inventory_container{
     display: inline-block;
     background-color: rgba(0,0,0,0.3);
@@ -1845,7 +1864,7 @@ a.additional-player-stat:hover{
     right: 0;
     bottom: -2px;
     height: 2px;
-    /* background-color: #0BDA51; */
+    /* background-color: #0BCA51; */
     z-index: 2;
 }
 
@@ -1882,7 +1901,7 @@ a.additional-player-stat:hover{
     right: 0;
     height: 2px;
     top: 100%;
-    /* background-color: #0BDA51; */
+    /* background-color: #0BCA51; */
     border-radius: 4px;
     transition: height .1s, top .1s;
 }
@@ -2033,7 +2052,7 @@ a.additional-player-stat:hover{
 
 .external-app-name{
     font-weight: 600;
-    color: #0BFA51;
+    color: #0BEA51;
 }
 
 .external-app-name .grey-text{
@@ -2142,7 +2161,7 @@ a.additional-player-stat:hover{
 }
 
 .slayer-unclaimed{
-    color: #0BFA51;
+    color: #0BEA51;
     text-align: center;
     font-size: 13px;
     text-transform: uppercase;
@@ -2233,7 +2252,7 @@ a.additional-player-stat:hover{
     justify-content: center;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
-    /* border-bottom: 2px solid #0BDA51; */
+    /* border-bottom: 2px solid #0BCA51; */
     background-color: rgba(0,0,0,0.2);
 }
 
@@ -2341,7 +2360,7 @@ a.additional-player-stat:hover{
 }
 
 .minion-variant.minion-crafted{
-    color: #f5429b;
+    color: #0BEA51;
 }
 
 .collection{
@@ -2426,7 +2445,7 @@ a.additional-player-stat:hover{
     text-transform: uppercase;
     font-weight: 600;
     text-shadow: 0px 0px 7px rgba(0,0,0,0.3);
-    /* border-bottom: 2px solid #0BDA51; */
+    /* border-bottom: 2px solid #0BCA51; */
     background-color: rgba(0,0,0,0.2);
 }
 
@@ -2464,7 +2483,7 @@ a.additional-player-stat:hover{
     padding: 5px 0px;
     font-weight: 600;
     text-transform: capitalize;
-    color: #0BFA51;
+    color: #0BEA51;
     margin-top: 12px;
     opacity: 0;
 }
@@ -2478,7 +2497,7 @@ a.additional-player-stat:hover{
     padding: 20px;
     margin-top: 37px;
     box-sizing: border-box;
-    scrollbar-color: #0BDA51 transparent;
+    scrollbar-color: #0BCA51 transparent;
 }
 
 .narrow-info-content.all-shown{
@@ -2498,7 +2517,7 @@ a.additional-player-stat:hover{
 }
 
 .narrow-info-content::-webkit-scrollbar-thumb{
-    background-color: #0BDA51;
+    background-color: #0BCA51;
     border-radius: 5px;
 }
 
@@ -2571,7 +2590,7 @@ html.no-webp #enter_player_box_wrapper{
     padding: 15px;
     padding-left: 25px;
     padding-right: 25px;
-    background-color: #0BDA51;
+    background-color: #0BCA51;
     color: white;
     text-transform: uppercase;
     font-weight: bold;
@@ -2579,10 +2598,11 @@ html.no-webp #enter_player_box_wrapper{
     margin-top: 20px;
     transition: background-color .2s;
     border-radius: 999px;
+    text-shadow: 0px 0px 3px rgba(0,0,0,.5);
 }
 
 #goto_target_username:hover{
-    background-color: #0BFA51;
+    background-color: #0BEA51;
 }
 
 #error_box_wrapper{
@@ -2702,7 +2722,7 @@ html.no-webp #error_box_wrapper{
 
 #error_title{
     font-weight: 600;
-    background-color: #0BDA51;
+    background-color: #0BCA51;
     color: white;
     text-transform: uppercase;
     height: 100%;

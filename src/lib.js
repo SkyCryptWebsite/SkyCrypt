@@ -33,6 +33,7 @@ const redisClient = new Redis();
 const customResources = require('./custom-resources');
 const { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } = require('constants');
 const loreGenerator = require('./loreGenerator');
+const randomEmoji = require('./constants/randomEmoji');
 
 const parseNbt = util.promisify(nbt.parse);
 
@@ -851,7 +852,7 @@ module.exports = {
         }
 
         // Add talismans from inventory
-        for(const talisman of inventory.filter(a => a.type == 'accessory')){
+        for(const talisman of inventory.filter(a => a.type == 'accessory' || a.type == 'dungeon accessory')){
             const id = getId(talisman);
 
             if(id === "")
@@ -972,8 +973,6 @@ module.exports = {
         }
 
         
-
-        // Add base name without reforge
         for(const talisman of talismans){
             talisman.base_name = talisman.display_name;
 
@@ -983,12 +982,8 @@ module.exports = {
             }
         }
 
-        let unique = constants.talismans;
-
-        let missing = unique.filter(talisman => !talisman_ids.includes(talisman));
-
         output.talismans = talismans;
-        output.missingTalismans = missing;
+        output.talisman_ids = talisman_ids;
         output.weapons = all_items.filter(a => a.type != null && (a.type.endsWith('sword') || a.type.endsWith('bow')));
         output.rods =  all_items.filter(a => a.type != null && a.type.endsWith('fishing rod'));
 
@@ -1357,6 +1352,7 @@ module.exports = {
             output.slayers = Object.assign({}, slayers);
         }
 
+        output.missingTalismans = await module.exports.getMissingTalismans(items.talisman_ids);
         output.pets = await module.exports.getPets(userProfile);
         output.missingPets = await module.exports.getMissingPets(output.pets);
         output.petScore = await module.exports.getPetScore(output.pets);
@@ -1374,7 +1370,7 @@ module.exports = {
             break;
         }
 
-        let activePet;
+        let activePet = false;
         for(const pet of output.pets){
             if(!pet.active)
                 continue;
@@ -1689,6 +1685,9 @@ module.exports = {
 
             if('emoji' in userInfo)
                 output.display_emoji = userInfo.emoji;
+            if (userInfo.username == "jjww2") {
+                output.display_emoji = randomEmoji();
+            }
         }
 
         for(const member of members){
@@ -1737,7 +1736,7 @@ module.exports = {
         output.bag_sizes = await module.exports.getBagSizes(output.collections);
         output.social = hypixelProfile.socials;
 
-        output.dungeons = await module.exports.getDungeons(userProfile);
+        output.dungeons = await module.exports.getDungeons(userProfile, hypixelProfile);
 
         output.fishing = {
             total: userProfile.stats.items_fished || 0,
@@ -1909,7 +1908,13 @@ module.exports = {
                 }
 
                 const pet_stats = new constants.petStats[pet_name](rarity, pet.level.level)
-                const stats = pet_stats.lore;
+                let textbook = false;
+                if(pet.heldItem){
+                    const { heldItem } = pet;
+                    if(heldItem == "PET_ITEM_TEXTBOOK")
+                        textbook = true;
+                }
+                const stats = pet_stats.lore(textbook);
                 stats.forEach(line => {
                     lore.push(line);
                 });
@@ -2080,6 +2085,120 @@ module.exports = {
         return Object.values(highestRarity).reduce((a, b) => a + b, 0);
     },
 
+    getMissingTalismans: async talismans => {
+        let unique = Object.keys(constants.talismans);
+
+        let missing = unique.filter(talisman => !talismans.includes(talisman));
+        missing.forEach(name => {
+            if(name in constants.talisman_upgrades){ //if the name is in the upgrades list
+                for(let upgrade of constants.talisman_upgrades[name]){
+                    if(talismans.includes(upgrade)){ //if talisman list includes the upgrade
+                        missing = missing.filter(item => item !== name)
+                        break;
+                    }
+                }
+            }
+        });
+        const output = [];
+        missing.forEach(async talisman => {
+            const data = await db
+                .collection('items')
+                .findOne({ id: talisman });
+            let object = {
+                texture_path: null,
+                display_name: null,
+                rarity: null
+            }
+            if(data){
+                object.texture_path = "/head/" + data.texture
+                object.display_name = data.name
+                object.rarity = data.tier.toLowerCase()
+            }
+            if(talisman.startsWith("WEDDING_RING_")){
+                object.texture_path = "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c"
+                object.display_name = "Ring of Love"
+                object.rarity = "legendary"
+            }
+            
+            if(talisman.startsWith("CAMPFIRE_TALISMAN_")){
+                object.texture_path = "/head/4080bbefca87dc0f36536b6508425cfc4b95ba6e8f5e6a46ff9e9cb488a9ed"
+                object.display_name = "Campfire God Badge"
+                object.rarity = "legendary"
+            }
+            
+            if(talisman.startsWith("DAY_CRYSTAL")){
+                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/day_crystal.png"
+                object.display_name = "Day Crystal"
+                object.rarity = "rare"
+            }
+            
+            if(talisman.startsWith("NIGHT_CRYSTAL")){
+                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/night_crystal.png"
+                object.display_name = "Night Crystal"
+                object.rarity = "rare"
+            }
+
+            if(talisman.startsWith("MELODY_HAIR")){
+                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/melodyshair.png"
+                object.display_name = "Melody's Hair"
+                object.rarity = "epic"
+            }
+            if(talisman.startsWith("PERSONAL_COMPACTOR")){
+                object.texture_path = `/item/${talisman}`
+            }
+            if(talisman.startsWith("ZOMBIE_TALISMAN")){
+                object.texture_path = "/item/item?id=397&damage=2"
+            }
+            if(talisman.startsWith("SKELETON_TALISMAN")){
+                object.texture_path = "/item/item?id=397"
+            }
+            if(talisman.startsWith("CAT_TALISMAN")){
+                object.texture_path = "/head/3a12188258601bcb7f76e3e2489555a26c0d76e6efec2fd966ca372b6dde00"
+                object.display_name = "Cat Talisman"
+                object.rarity = "uncommon"
+            }
+            if(talisman.startsWith("LYNX_TALISMAN")){
+                object.texture_path = "/head/12b84e9c79815a39b7be8ce6e91248d71f760f42b5a4de5e266b44b87a952229"
+                object.display_name = "Lynx Talisman"
+                object.rarity = "rare"
+            }
+            if(talisman.startsWith("CHEETAH_TALISMAN")){
+                object.texture_path = "/head/1553f8856dd46de7e05d46f5fc2fb58eafba6829b11b160a1545622e89caaa33"
+                object.display_name = "Cheetah Talisman"
+                object.rarity = "epic"
+            }
+            if(talisman.startsWith("CROOKED_ARTIFACT")){
+                object.texture_path = "/head/5b7ff88d154d04a8a26995c99f64e53b574c7b82ec21a12a9e448bca1e70f461"
+                object.display_name = "Crooked Artifact"
+                object.rarity = "rare"
+            }
+            if(talisman.startsWith("EXPERIENCE_ARTIFACT")){
+                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/experience_artifact.png"
+            }
+            if(talisman.startsWith("TREASURE_TALISMAN")){
+                object.texture_path = "/head/31f320025142596396032cc0088e2ac36489f24cfa5e9dda13e081cf69f77f4d"
+                object.display_name = "Treasure Talisman"
+                object.rarity = "rare"
+            }
+            if(talisman.startsWith("TREASURE_RING")){
+                object.texture_path = "/head/6a1cc5525a217a399b5b86c32f0f22dd91378874b5f44d5a383e18bc0f3bc301"
+                object.display_name = "Treasure Ring"
+                object.rarity = "epic"
+            }
+            if(talisman.startsWith("TREASURE_ARTIFACT")){
+                object.texture_path = "/head/e10f20a55b6e188ebe7578459b64a6fbd825067bc497b925ca43c2643d059025"
+                object.display_name = "Treasure Artifact"
+                object.rarity = "legendary"
+            }
+            if(object.name == null){
+                object.name = talisman;
+            }
+            output.push(object);
+        });
+
+        return output;
+    },
+
     getCollections: async (uuid, profile, cacheOnly = false) => {
         const output = {};
 
@@ -2152,12 +2271,12 @@ module.exports = {
         return output;
     },
 
-    getDungeons: async (userProfile) => {
+    getDungeons: async (userProfile, hypixelProfile) => {
         const output = {};
 
         let tasks = userProfile.tutorial;
 
-        output.entrance = tasks.includes('zone_catacombs_entrance');
+        output.entrance = userProfile.visited_zones.includes('dungeon');
         if (!output.entrance) return output;
 
         output.collected_essence = tasks.includes('essence_collected_message');
@@ -2173,7 +2292,7 @@ module.exports = {
             let item = boss.rewards[task.splice(1).join('_')];
 
             if (item == null || boss == null) continue;
-            if (!collections[task[0]]) collections[task[0]] = {
+            if (!collections[boss.floor]) collections[boss.floor] = {
                 name: boss.name,
                 texture: boss.texture,
                 tier: 0,
@@ -2181,10 +2300,10 @@ module.exports = {
                 claimed: []
             };
 
-            collections[task[0]].claimed.push(item.name);
-            if (collections[task[0]].tier < item.tier) {
-                collections[task[0]].tier = item.tier;
-                collections[task[0]].killed = item.required;
+            collections[boss.floor].claimed.push(item.name);
+            if (collections[boss.floor].tier < item.tier) {
+                collections[boss.floor].tier = item.tier;
+                collections[boss.floor].killed = item.required;
             } 
         }
 
@@ -2193,6 +2312,8 @@ module.exports = {
         else output.unlocked_collections = true;
 
         output.boss_collections = collections;
+
+        output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
 
         return output;
     },
