@@ -13,6 +13,9 @@ A clear and concise description of what the bug is (e.g. My ender dragon's 2nd a
 **Profile/Location**
 A link to the profile which the bug occurred with, if applicable (e.g. https://sky.shiiyu.moe/stats/Minikloon/Banana)
 
+**Additional Info**
+If applicable, what pet/weapon/armor you are using and where you are in Skyblock.
+
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
