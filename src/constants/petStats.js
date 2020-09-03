@@ -149,6 +149,13 @@ class Bee extends Pet { // todo: finish hive
 			desc: [`§7Gain §a${round(5 + this.level * mult, 1)}% §7of recieved damage as §6${symbols.health} Absorption`]
 		};
 	}
+
+	modifyStats(stats) {
+		let intMult = this.rarity > 3 ? 0.19 : this.rarity > 2 ? 0.14 : this.rarity > 1 ? 0.09 : this.rarity > 0 ? 0.4 : 0.02;
+		let strMult = this.rarity > 3 ? 0.14 : this.rarity > 2 ? 0.11 : this.rarity > 1 ? 0.07 : this.rarity > 0 ? 0.4 : 0.02;
+		stats['strength'] += round(this.level * strMult + 1, 1);
+		stats['intelligence'] += round(this.level * intMult + 1, 1);
+	}
 }
 
 class Chicken extends Pet {
