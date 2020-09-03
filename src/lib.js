@@ -1883,7 +1883,13 @@ module.exports = {
                 }
 
                 const pet_stats = new constants.petStats[pet_name](rarity, pet.level.level)
-                const stats = pet_stats.lore;
+                let textbook = false;
+                if(pet.heldItem){
+                    const { heldItem } = pet;
+                    if(heldItem == "PET_ITEM_TEXTBOOK")
+                        textbook = true;
+                }
+                const stats = pet_stats.lore(textbook);
                 stats.forEach(line => {
                     lore.push(line);
                 });

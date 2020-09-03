@@ -34,7 +34,7 @@ class Pet {
 		this.level = level;
 	}
 
-	get lore() {
+	lore(textbook = false) {
 		let list = [];
 		for (const stat in this.stats) {
 			switch (stat) {
@@ -54,7 +54,8 @@ class Pet {
 					list.push(`§7Crit Damage: ${formatStat(this.stats[stat])}`);
 					break;
 				case "intelligence":
-					list.push(`§7Intelligence: ${formatStat(this.stats[stat])}`);
+					let intel = textbook ? formatStat(this.stats[stat] * 2) : formatStat(this.stats[stat])
+					list.push(`§7Intelligence: ${intel}`);
 					break;
 				case "speed":
 					list.push(`§7Speed: ${formatStat(this.stats[stat])}`);
@@ -92,9 +93,9 @@ class Pet {
 }
 
 /*
- 
+
 Farming Pets
- 
+
 */
 
 class Bee extends Pet { // todo: finish hive
@@ -263,7 +264,7 @@ class Pig extends Pet {
 			desc: [`§7While holding an Enchanted Carrot on a Stick, increase the speed of your mount by §a${round(this.level * mult, 1)}%`]
 		};
   }
-  
+
   get fourth() {
     let mult = 0;
 		return {
@@ -316,9 +317,9 @@ class Rabbit extends Pet {
 }
 
 /*
- 
+
 Mining Pets
- 
+
 */
 
 class Bat extends Pet {
@@ -543,9 +544,9 @@ class WitherSkeleton extends Pet {
 }
 
 /*
- 
+
 Combat Pets
- 
+
 */
 
 class BlackCat extends Pet {
@@ -616,7 +617,7 @@ class Blaze extends Pet {
 	}
 
 	get second() {
-		let mult = this.rarity > 2 ? 0.5 : 0.3;
+		let mult = this.rarity > 2 ? 0.4 : 0.3;
 		return {
 			name: "§6Bling Armor",
 			desc: [`§7Upgrades §cBlaze Armor §7stats and ability by §a${round(this.level * mult, 1)}%`]
@@ -1501,9 +1502,9 @@ class Zombie extends Pet {
 }
 
 /*
- 
+
 Foraging Pets
- 
+
 */
 
 class Giraffe extends Pet {
@@ -1675,9 +1676,9 @@ class Ocelot extends Pet {
 }
 
 /*
- 
+
 Fishing Pets
- 
+
 */
 
 class BabyYeti extends Pet {
@@ -1899,9 +1900,9 @@ class Squid extends Pet {
 }
 
 /*
- 
+
 Alchemy Pets
- 
+
 */
 
 class Jellyfish extends Pet {
