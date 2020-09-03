@@ -1845,6 +1845,18 @@ class BlueWhale extends Pet {
 			desc: [`§7Gain §c+${round(this.level * mult, 1)}% Max ${symbols.health} Health`]
 		};
 	}
+
+	modifyStats(stats) {
+		if (this.rarity > 1) {
+			let mult = 0.03;
+			let health = this.rarity > 3 ? 20 : this.rarity > 2 ? 25 : 30;
+			stats['defense'] += round(this.level * mult * stats['health'] / health, 1);
+		}
+		if (this.rarity > 3) {
+			let mult = 0.2;
+			stats['health'] *= 1 + round(this.level * mult / 100, 1);
+		}
+	}
 }
 
 class Dolphin extends Pet {
