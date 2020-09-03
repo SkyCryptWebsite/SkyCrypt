@@ -218,7 +218,7 @@ class Elephant extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.2 : 0.1;
+		let mult = this.rarity > 2 ? 0.2 : this.rarity > 0 ? 0.15 : 0.1;
 		return {
 			name: "§6Stomp",
 			desc: [`§7Gain §a${round(this.level * mult, 1)} ${symbols.defense} Defense §7for every §f100 ${symbols.speed} Speed`]
@@ -242,7 +242,12 @@ class Elephant extends Pet {
 	}
 
 	modifyStats(stats) {
-		
+		let fmult = this.rarity > 2 ? 0.2 : this.rarity > 0 ? 0.15 : 0.1;
+		stats['defense'] += round(this.level * fmult * stats['speed'] / 100, 1);
+		if (this.rarity > 1) {
+			let mult = 0.01;
+			stats['health'] += round(this.level * mult * stats['defense'] / 10, 1);
+		}
 	}
 }
 
