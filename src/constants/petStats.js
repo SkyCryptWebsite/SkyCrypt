@@ -999,6 +999,13 @@ class Hound extends Pet {
 			desc: [`§7Grants ${round(this.level * mult, 1)}	§e${symbols.attack_speed} Bonus Attack Speed`]
 		};
 	}
+
+	modifyStats(stats) {
+		if (this.rarity > 3) {
+			let mult = 0.1;
+			stats['attack speed'] += round(this.level * mult, 1);
+		}
+	}
 }
 
 class MagmaCube extends Pet {
