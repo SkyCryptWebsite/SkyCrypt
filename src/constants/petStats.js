@@ -620,6 +620,12 @@ class BlackCat extends Pet {
 			desc: [`§7Grants §b${floor(this.level * mult, 1)} ${symbols.magic_find} Magic Find`]
 		};
 	}
+
+	modifyStats(stats) {
+		let mult = 0.15;
+		stats['pet luck'] += floor(this.level * mult, 1);
+		stats['magic find'] += floor(this.level * mult, 1);
+	}
 }
 
 class Blaze extends Pet {
