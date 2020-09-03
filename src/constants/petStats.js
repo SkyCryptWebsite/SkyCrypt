@@ -239,6 +239,10 @@ class Elephant extends Pet {
 			desc: [`§7Grants a §a${round(this.level * mult, 1)}% §7chance to get double crops while farming`]
 		};
 	}
+
+	modifyStats(stats) {
+		
+	}
 }
 
 class Pig extends Pet {
