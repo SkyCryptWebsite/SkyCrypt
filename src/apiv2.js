@@ -63,6 +63,49 @@ module.exports = (app, db) => {
         next();
     });
 
+    app.all('/api/v2/leaderboards/:playerName', cors(), async (req, res) => {
+        let userObject;
+
+        try{
+            userObject = await helper.resolveUsernameOrUuid(req.params.playerName, db, true);
+        }catch(e){
+            res.status(404).json({ error: e.toString() });
+            return;
+        }
+
+        const { uuid } = userObject;
+
+        
+        const pipeline = redisClient.pipeline();
+
+        for(const lb of leaderboards){
+            lb.sortedBy > 0 ?
+                pipeline.zrank(`lb_${lb.key}`, uuid)
+              : pipeline.zrevrank(`lb_${lb.key}`, uuid);
+        }
+
+        const output = { 
+            self: {
+                uuid,
+                username: userObject.display_name
+            },
+            positions: []
+        };
+
+        const positions = [];
+
+        for(const [index, result] of (await pipeline.exec()).entries()){
+            if(result[0] != null || result[1] == null)
+                continue;
+
+            positions.push({ leaderboard: leaderboards[index], rank: result[1] + 1 });
+        }
+
+        output.positions = positions.sort((a, b) => a.rank - b.rank);
+
+        res.json(output);
+    });
+
     app.all('/api/v2/leaderboards', cors(), async (req, res) => {
         res.json(leaderboards);
     });
@@ -113,10 +156,10 @@ module.exports = (app, db) => {
         output.page = page;
 
         startIndex = (page - 1) * count;
-         endIndex = startIndex - 1 + count;
+        endIndex = startIndex - 1 + count;
 
 
-        let results = lb.sortedBy > 0 ?
+        const results = lb.sortedBy > 0 ?
             await redisClient.zrange(`lb_${lb.key}`, startIndex, endIndex, 'WITHSCORES') :
             await redisClient.zrevrange(`lb_${lb.key}`, startIndex, endIndex, 'WITHSCORES');
 
