@@ -657,7 +657,7 @@ html.no-webp #bg_blur{
     width: 440px;
     top: 45px;
     z-index: 1;
-    background-color: rgba(50, 0, 30, 0.95);
+    background-color: rgba(0, 53, 15, 0.95);
     padding: 20px;
     box-sizing: border-box;
     transform: translateY(-100%);
