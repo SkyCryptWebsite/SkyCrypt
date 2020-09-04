@@ -2621,6 +2621,8 @@ module.exports = {
 
         values['slayer_xp'] = getMax(memberProfiles, 'data', 'slayer_xp');
 
+        let totalSlayerBossKills = 0;
+
         for(const slayer of getAllKeys(memberProfiles, 'data', 'slayer_bosses')){
             for(const key of getAllKeys(memberProfiles, 'data', 'slayer_bosses', slayer)){
                 if(!key.startsWith('boss_kills_tier'))
@@ -2629,16 +2631,54 @@ module.exports = {
                 const tier = key.split("_").pop();
 
                 values[`${slayer}_slayer_boss_kills_tier_${tier}`] = getMax(memberProfiles, 'data', 'slayer_bosses', slayer, key);
+
+                totalSlayerBossKills += values[`${slayer}_slayer_boss_kills_tier_${tier}`];
             }
 
             values[`${slayer}_slayer_xp`] = getMax(memberProfiles, 'data', 'slayer_bosses', slayer, 'xp');
         }
 
-        for(const item of getAllKeys(memberProfiles, 'data', 'collection'))
+        if(totalSlayerBossKills > 0)
+        values['total_slayer_boss_kills'] = totalSlayerBossKills;
+
+        let totalCollectedItems = 0;
+
+        for(const item of getAllKeys(memberProfiles, 'data', 'collection')){
             values[`collection_${item.toLowerCase()}`] = getMax(memberProfiles, 'data', 'collection', item);
 
-        for(const stat of getAllKeys(memberProfiles, 'data', 'stats'))
+            totalCollectedItems += values[`collection_${item.toLowerCase()}`];
+        }
+
+        if(totalCollectedItems > 0)
+            values[`total_collected_items`] = totalCollectedItems;
+
+        let totalDragonKills = 0;
+        let totalDragonDeaths = 0;
+
+        let playerKills = 0, playerDeaths = 0;
+
+        for(const stat of getAllKeys(memberProfiles, 'data', 'stats')){
             values[stat] = getMax(memberProfiles, 'data', 'stats', stat);
+
+            if(stat.endsWith('dragon')){
+                if(stat.startsWith('kills_'))
+                    totalDragonKills += values[stat];
+                else if(stat.startsWith('deaths_'))
+                    totalDragonDeaths += values[stat];
+                continue;
+            }
+
+            if(stat == 'kills_player')
+                playerKills = values[stat];
+            else if(stat == 'deaths_player')
+                playerDeaths = values[stat];
+        }
+
+        values['total_dragon_kills'] = totalDragonKills;
+        values['total_dragon_deaths'] = totalDragonDeaths;
+
+        if(playerKills >= 100)
+            values['player_kills_k/d'] = playerKills / playerDeaths;
 
         const multi = redisClient.pipeline();
 
