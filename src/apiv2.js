@@ -79,12 +79,12 @@ module.exports = (app, db) => {
         const { uuid } = userObject;
 
         
-        const pipeline = redisClient.pipeline();
+        const getRanks = redisClient.pipeline();
 
         for(const lb of leaderboards){
             lb.sortedBy > 0 ?
-                pipeline.zrank(`lb_${lb.key}`, uuid)
-              : pipeline.zrevrank(`lb_${lb.key}`, uuid);
+                getRanks.zrank(`lb_${lb.key}`, uuid)
+              : getRanks.zrevrank(`lb_${lb.key}`, uuid);
         }
 
         const output = { 
@@ -97,11 +97,23 @@ module.exports = (app, db) => {
 
         const positions = [];
 
-        for(const [index, result] of (await pipeline.exec()).entries()){
+        for(const [index, result] of (await getRanks.exec()).entries()){
             if(result[0] != null || result[1] == null)
                 continue;
 
             positions.push({ leaderboard: leaderboards[index], rank: result[1] + 1 });
+        }
+
+        const getAmounts = redisClient.pipeline();
+
+        for(const position of positions)
+            getAmounts.zscore(`lb_${position.leaderboard.key}`, uuid);
+
+        for(const [index, result] of (await getAmounts.exec()).entries()){
+            const lb = constants.leaderboard(`lb_${positions[index].leaderboard.key}`);
+
+            positions[index]['raw'] = result[1];
+            positions[index]['amount'] = lb.format(result[1]);
         }
 
         output.positions = positions.sort((a, b) => a.rank - b.rank);
@@ -160,7 +172,6 @@ module.exports = (app, db) => {
 
         startIndex = (page - 1) * count;
         endIndex = startIndex - 1 + count;
-
 
         const results = lb.sortedBy > 0 ?
             await redisClient.zrange(`lb_${lb.key}`, startIndex, endIndex, 'WITHSCORES') :
