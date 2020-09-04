@@ -1,7 +1,9 @@
 const collections = require('./collections');
+const misc = require('./misc');
 const leveling = require('./leveling');
 const moment = require('moment');
 const { getLevelByXp } = require('../lib');
+const constants = require('../constants');
 require('moment-duration-format')(moment);
 
 const defaultOptions = {
@@ -178,6 +180,17 @@ module.exports = {
             else if(lbName.startsWith('wolf_slayer'))
                 options['name'] = `Kills Sven Packmaster Tier ${tier}`;;
         }
+
+        if(lbName.startsWith('kills_') || lbName.startsWith('deaths_')){
+            const mobName = lbName.split('_').slice(1).join('_');
+
+            if(misc.sea_creatures.map(a => a.id).includes(mobName))
+                options['thumbnail'] = `https://sky.lea.moe/resources/img/sea_creatures/${mobName}.png`;
+
+            if(Object.keys(misc.mob_names).includes(mobName))
+                options['name'] = misc.mob_names[mobName];
+        }
+        
 
         return options;
     }
