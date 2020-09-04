@@ -1882,21 +1882,24 @@ module.exports = {
                         break;
                 }
 
-                const pet_stats = new constants.petStats[pet_name](rarity, pet.level.level)
+                const petInstance = new constants.petStats[pet_name](rarity, pet.level.level)
                 let textbook = false;
                 if(pet.heldItem){
                     const { heldItem } = pet;
                     if(heldItem == "PET_ITEM_TEXTBOOK")
                         textbook = true;
                 }
-                const stats = pet_stats.lore(textbook);
+                const stats = petInstance.lore(textbook);
                 stats.forEach(line => {
                     lore.push(line);
                 });
 
-                pet.ref = pet_stats;
+                // make pet.stats actually hold pet stats
+                pet.stats = Object.assign({}, petInstance.stats);
 
-                const abilities = pet_stats.abilities;
+                pet.ref = petInstance;
+
+                const abilities = petInstance.abilities;
                 abilities.forEach(ability => {
                     lore.push(' ', ability.name);
                     ability.desc.forEach(line => {
@@ -2669,6 +2672,9 @@ module.exports = {
             console.error(e);
         }
     },
+    getPacks: () => {
+        return customResources.packs;
+    }
 }
 
 async function init(){

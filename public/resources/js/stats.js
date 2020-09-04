@@ -259,6 +259,8 @@ document.addEventListener('DOMContentLoaded', function(){
         itemLore.innerHTML = item.lore || '';
 
         if(item.texture_pack){
+            const texturePack = extra.packs.filter(a => a.id == item.texture_pack)[0];
+
             let packContent = document.createElement('div');
             packContent.classList.add('pack-credit');
 

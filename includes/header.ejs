@@ -15,6 +15,7 @@
     </a>
     <div id="search_user"><input placeholder="Enter username" <% if(page == 'index'){ %>tabindex="-1"<% } %> type="text" id="inp_search_user"></input><a href="#" <% if(page == 'index'){ %>tabindex="-1"<% } %> id="btn_search_user"></a></div>
     <a href="https://blacklivesmatters.carrd.co/" target="_blank" rel="nofollow" data-tippy-content="<strong>Black Lives Matter!</strong><br><br>Click for a collection of links on how to support the fight against racial inequality." class="blm-logo"></a>
+    <div id="packs_button" onclick="togglePacks()">Packs</div>
 </header>
 <div id="info_box">
     <div onclick="toggleInfo()" id="info_close"></div>
@@ -36,4 +37,25 @@
             <li>Skin Renderer: <a rel="nofollow" href="https://github.com/LeaPhant/skinview3d/" target="_blank">skinview3d</a> by <span class="name">Blessing Skin</span>.</li>
         </ul>
     </div>
+</div>
+<div id="packs_box" class="packs-closed">
+    <div onclick="togglePacks()" id="packs_close"></div>
+    <div class="resource-pack">
+        <img class="pack-icon" src="/resources/img/pack.png">
+        <a class="pack-name" href="/" target="_blank">Default</a><br>
+        <div class="pack-author">by <span>LeaPhant, various</span></div>
+        <% if(page == 'stats'){ %>
+            <div class="switch_packs_button" onclick="switchPack()">Switch</div>
+        <% } %>
+    </div>
+    <% for(const pack of extra.packs.filter(a => !a.hidden).sort((a, b) => b.priority - a.priority)){ %>
+        <div class="resource-pack">
+            <img class="pack-icon" src="<%= pack.basePath + '/pack.png' %>">
+            <a class="pack-name" href="<%= pack.url %>" target="_blank"><%= pack.name %></a><br>
+            <div class="pack-author">by <span><%= pack.author %></span></div>
+            <% if(page == 'stats'){ %>
+                <div class="switch_packs_button" onclick="switchPack('<%= pack.id %>')">Switch</div>
+            <% } %>
+        </div>
+    <% } %>
 </div>

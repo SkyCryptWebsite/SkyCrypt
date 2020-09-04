@@ -79,6 +79,8 @@ async function main(){
 
         output.twemoji = twemoji;
 
+        output.packs = lib.getPacks();
+
         const kofiEntry = await db.collection('donations').findOne({type: 'kofi'});
         const patreonEntry = await db.collection('donations').findOne({type: 'patreon'});
 
