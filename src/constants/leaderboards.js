@@ -3,7 +3,7 @@ const misc = require('./misc');
 const leveling = require('./leveling');
 const moment = require('moment');
 const { getLevelByXp } = require('../lib');
-const constants = require('../constants');
+const _ = require('lodash');
 require('moment-duration-format')(moment);
 
 const defaultOptions = {
@@ -182,13 +182,14 @@ module.exports = {
         }
 
         if(lbName.startsWith('kills_') || lbName.startsWith('deaths_')){
+            const type = _.capitalize(lbName.split('_')[0]);
             const mobName = lbName.split('_').slice(1).join('_');
 
             if(misc.sea_creatures.map(a => a.id).includes(mobName))
                 options['thumbnail'] = `https://sky.lea.moe/resources/img/sea_creatures/${mobName}.png`;
 
             if(Object.keys(misc.mob_names).includes(mobName))
-                options['name'] = misc.mob_names[mobName];
+                options['name'] = `${misc.mob_names[mobName]} ${type}`;
         }
         
 
