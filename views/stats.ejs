@@ -1015,7 +1015,7 @@ twitterDescription += '. Click to view more stats!'
                 <%
                 let totalSeaCreatureKills = 0;
 
-                for(const creature of constants.seaCreatures){
+                for(const creature of constants.sea_creatures){
                     let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
 
                     totalSeaCreatureKills += mobKills.length > 0 ? mobKills[0].amount : 0;
@@ -1083,7 +1083,7 @@ twitterDescription += '. Click to view more stats!'
                 <% if(totalSeaCreatureKills > 0){ %>
                     <p class="stat-sub-header">Sea Creatures</p>
                     <div class="sea-creatures">
-                        <% for(const creature of constants.seaCreatures) {
+                        <% for(const creature of constants.sea_creatures) {
                             let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
 
                             mobKills = mobKills.length > 0 ? mobKills[0].amount : 0;
@@ -1665,6 +1665,11 @@ twitterDescription += '. Click to view more stats!'
     <script>
         let items = <%- JSON.stringify(items) %>;
         let calculated = <%- JSON.stringify(calculated) %>;
+
+        const constants = { 
+            minecraft_formatting: <%- JSON.stringify(constants.minecraft_formatting) %>, 
+            special_enchants: <%- JSON.stringify(constants.special_enchants) %> 
+        };
 
         window.onload = function() {
             new Elevator({
