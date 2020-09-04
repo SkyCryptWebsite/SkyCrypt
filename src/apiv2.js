@@ -68,6 +68,9 @@ module.exports = (app, db) => {
 
         try{
             userObject = await helper.resolveUsernameOrUuid(req.params.playerName, db, true);
+
+            if(userObject.uuid == userObject.display_name)
+                throw "User not found.";
         }catch(e){
             res.status(404).json({ error: e.toString() });
             return;
