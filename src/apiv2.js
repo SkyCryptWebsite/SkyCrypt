@@ -147,6 +147,9 @@ module.exports = (app, db) => {
         if(req.query.find){
             const uuid = (await helper.resolveUsernameOrUuid(req.query.find, db, true)).uuid;
 
+            if(!req.cacheOnly)
+                await lib.getProfile(db, uuid, null, { cacheOnly: false });
+
             const rank = lb.sortedBy > 0 ?
             await redisClient.zrank(`lb_${lb.key}`, uuid) :
             await redisClient.zrevrank(`lb_${lb.key}`, uuid);
