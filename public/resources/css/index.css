@@ -424,10 +424,15 @@ header{
     border-radius: 9999px;
     top: 8px;
     right: 20px;
-    background-color: rgba(0,0,0,0.2);
+    background-color: rgba(11, 202, 81, 0.9);
     background-size: 24px auto;
     background-position: 6px 8px;
     background-repeat: no-repeat;
+    text-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+}
+
+.switch_packs_button:hover{
+    background-color: rgba(11, 218, 81, 0.9);
 }
 
 #bg_blur{
