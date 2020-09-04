@@ -126,6 +126,9 @@ const overrides = {
 
     unique_minions: {
         mappedBy: 'profile_id'
+    },
+    'player_kills_k/d': {
+        name: 'Player K/D'
     }
 };
 
