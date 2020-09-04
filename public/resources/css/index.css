@@ -3030,8 +3030,7 @@ html.no-webp #error_box_wrapper{
     }
 
     #search_user{
-        right: 50px;
-        left: auto;
+        width: 360px;
     }
 
     #player_profile .text-stats-for{
@@ -3375,6 +3374,9 @@ html.no-webp #error_box_wrapper{
 
     #btn_search_user{
         left: calc(100% - 60px);
+    }
+    #packs_button{
+        display: none;
     }
 }
 @media (max-width: 520px){
