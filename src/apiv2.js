@@ -135,17 +135,111 @@ module.exports = (app, db) => {
 
         const lbCount = await redisClient.zcount(`lb_${lb.key}`, "-Infinity", "+Infinity");
 
-        if (lbCount == 0) {
+        if(lbCount == 0){
             res.status(404).json({ error: "Leaderboard not found." });
             return;
         }
 
-        const output = {
+        const output = { 
             positions: []
         };
 
+        let uuid;
+
+        if(req.query.find || req.query.guild)
+            uuid = (await helper.resolveUsernameOrUuid(req.query.guild || req.query.find, db, true)).uuid;
+
+        if(req.query.guild){
+            page = Math.max(1, req.query.page || 1);
+            
+            const guildMemberObj = await db
+            .collection('guildMembers')
+            .findOne({ uuid });
+
+            if(guildMemberObj == null){
+                res.status(404).json({ error: `User not in a guild` });
+                return;
+            }
+
+            const guildObj = await db
+            .collection('guilds')
+            .findOne({ gid: guildMemberObj.gid });
+
+            const guildMembers = await db
+            .collection('guildMembers')
+            .find({ gid: guildMemberObj.gid })
+            .toArray();
+
+            const getGuildScores = redisClient.pipeline();
+
+            for(const member of guildMembers)
+                getGuildScores.zscore(`lb_${lb.key}`, member.uuid);
+
+            let guildScores = [];
+
+            for(const [index, result] of (await getGuildScores.exec()).entries()){
+                if(result[1] == null)
+                    continue;
+
+                guildScores.push({ uuid: guildMembers[index].uuid, score: Number(result[1]) });
+            }
+
+            if(lb.sortedBy > 0)
+                guildScores = guildScores.sort((a, b) => a.score - b.score);
+            else
+                guildScores = guildScores.sort((a, b) => b.score - a.score);
+
+            const maxPage = Math.floor(guildScores.length / count) + (guildScores.length % count == 0 ? 0 : 1);
+
+            page = Math.min(page, maxPage);
+
+            const selfRank = guildScores.map(a => { return a.uuid; }).indexOf(uuid);
+
+            page = Math.floor(selfRank / count) + 1;
+
+            if(req.query.page)
+                page = Math.max(1, req.query.page || 1);
+
+            output.page = page;
+
+            startIndex = (page - 1) * count;
+            endIndex = startIndex + count;
+
+            const selfPosition = guildScores[selfRank];
+
+            output.self = {
+                rank: selfRank + 1,
+                amount: lb.format(selfPosition.score),
+                raw: selfPosition.score,
+                uuid: selfPosition.uuid,
+                username: (await helper.resolveUsernameOrUuid(selfPosition.uuid, db, true)).display_name,
+                guild: guildObj.name
+            };
+
+            for(let i = startIndex; i < endIndex; i++){
+                if(i > guildScores.length - 1)
+                    break;
+
+                const position = guildScores[i];
+
+                const lbPosition = {
+                    rank: i + 1,
+                    amount: lb.format(position.score),
+                    raw: position.score,
+                    uuid: position.uuid,
+                    username: (await helper.resolveUsernameOrUuid(position.uuid, db, true)).display_name
+                };
+
+                output.positions.push(lbPosition);
+            }
+
+            res.json(output);
+            return;
+        }
+
         if(req.query.find){
-            const uuid = (await helper.resolveUsernameOrUuid(req.query.find, db, true)).uuid;
+            if(!req.cacheOnly)
+                await lib.getProfile(db, uuid, null, { cacheOnly: false });
 
             const rank = lb.sortedBy > 0 ?
             await redisClient.zrank(`lb_${lb.key}`, uuid) :
@@ -176,7 +270,7 @@ module.exports = (app, db) => {
             await redisClient.zrange(`lb_${lb.key}`, startIndex, endIndex, 'WITHSCORES') :
             await redisClient.zrevrange(`lb_${lb.key}`, startIndex, endIndex, 'WITHSCORES');
 
-        for (let i = 0; i < results.length; i += 2) {
+        for(let i = 0; i < results.length; i += 2){
             const lbPosition = {
                 rank: i / 2 + startIndex + 1,
                 amount: lb.format(results[i + 1]),
@@ -185,7 +279,7 @@ module.exports = (app, db) => {
                 username: (await helper.resolveUsernameOrUuid(results[i], db, true)).display_name
             };
 
-            if ('self' in output && output.self.rank == lbPosition.rank)
+            if('self' in output && output.self.rank == lbPosition.rank)
                 output.self = lbPosition;
 
             output.positions.push(lbPosition);
