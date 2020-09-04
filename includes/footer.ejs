@@ -17,6 +17,25 @@
             infoBox.classList.add('info-opened');
     }
 
+    function togglePacks(){
+        let infoBox = document.querySelector('#packs_box');
+
+        if(infoBox.classList.contains('packs-opened'))
+            infoBox.classList.remove('packs-opened')
+        else
+            infoBox.classList.add('packs-opened');
+    }
+
+    function switchPack(pack = false){
+        console.log(pack)
+        let baseURL = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1] + "/" + window.location.pathname.split('/')[2] + "/" + window.location.pathname.split('/')[3]
+        if(pack){
+            window.location.replace(`${baseURL}?pack=${pack}`);
+        }else{
+            window.location.replace(baseURL);
+        }
+    }
+
     Modernizr.on('webp', function(result){
         if(!Modernizr.webp.lossless){
             [].forEach.call(document.querySelectorAll('.item-icon'), function(element){
@@ -58,7 +77,7 @@
     });
 </script>
 <% if(page == 'stats'){ %>
-    <script src="/resources/js/stats.js?v58"></script>
+    <script src="/resources/js/stats.js?v59"></script>
 <% } %>
 
 <% if(page == 'api'){ %>

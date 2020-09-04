@@ -361,14 +361,21 @@ async function init(){
     }
 }
 
+const outputPacks = [];
 const readyPromise = init();
 
 readyPromise.then(() => {
     module.exports.ready = true;
+
+    for(const pack of resourcePacks)
+        outputPacks.push(Object.assign({
+            basePath: '/' + path.relative(path.resolve(__dirname, '..', 'public'), pack.basePath)
+        }, pack.config));
 });
 
 module.exports = {
     ready: false,
+    packs: outputPacks,
     getTexture: async (item, ignoreId = false, packIds) => {
         if(!module.exports.ready)
             await readyPromise;
