@@ -4,7 +4,7 @@
     <meta property="og:type" content="object">
     <link rel="sitemap" href="/sitemap.xml">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap"></noscript>
-    <link rel="stylesheet" href="/resources/css/index.css?v125">
+    <link rel="stylesheet" href="/resources/css/index.css?v126">
     <noscript><link rel="stylesheet" href="/resources/css/inventory.css?v13"></noscript>
 
     <script>
@@ -36,6 +36,10 @@
                 return (roundFunc(number / 1000 / 1000 / 1000 * rounding * 10) / (rounding * 10)).toFixed(rounding.toString().length) + 'B';
         }
 
+        function convertHex(code) {
+            let hex = code.substring(1, 7);
+            return `${parseInt(hex.substring(0, 2), 16)}, ${parseInt(hex.substring(2, 4), 16)}, ${parseInt(hex.substring(4, 6), 16)}`;
+        }
 
         document.addEventListener('DOMContentLoaded', function(){
             let searchUser = document.querySelector('#inp_search_user');
