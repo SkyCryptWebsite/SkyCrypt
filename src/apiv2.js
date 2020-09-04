@@ -152,7 +152,7 @@ module.exports = (app, db) => {
             await redisClient.zrevrank(`lb_${lb.key}`, uuid);
 
             if(rank == null){
-                res.status(404).json({ error: "Specified user not found on leaderboard." });
+                res.status(404).json({ error: `Specified user not in Top ${credentials.lbCap.toLocaleString()} on ${lb.name} Leaderboard.` });
                 return;
             }
 
