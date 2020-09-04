@@ -143,14 +143,14 @@ module.exports = (app, db) => {
             positions: []
         };
 
-        if (req.query.find) {
+        if(req.query.find){
             const uuid = (await helper.resolveUsernameOrUuid(req.query.find, db, true)).uuid;
 
             const rank = lb.sortedBy > 0 ?
-                await redisClient.zrank(`lb_${lb.key}`, uuid) :
-                await redisClient.zrevrank(`lb_${lb.key}`, uuid);
+            await redisClient.zrank(`lb_${lb.key}`, uuid) :
+            await redisClient.zrevrank(`lb_${lb.key}`, uuid);
 
-            if (rank == null) {
+            if(rank == null){
                 res.status(404).json({ error: "Specified user not found on leaderboard." });
                 return;
             }
@@ -158,15 +158,13 @@ module.exports = (app, db) => {
             output.self = { rank: rank + 1 };
 
             page = Math.floor(rank / count) + 1;
-            startIndex = (page - 1) * count;
-            endIndex = startIndex - 1 + count;
-        } else {
+        }else{
             page = Math.max(1, req.query.page || 1);
-            startIndex = (page - 1) * count;
-            endIndex = startIndex - 1 + count;
         }
 
-        page = Math.min(page, Math.floor(lbCount / count) + 1);
+        const maxPage = Math.floor(lbCount / count) + (lbCount % count == 0 ? 0 : 1);
+
+        page = Math.min(page, maxPage);
 
         output.page = page;
 
