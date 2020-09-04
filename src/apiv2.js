@@ -194,12 +194,29 @@ module.exports = (app, db) => {
 
             page = Math.min(page, maxPage);
 
-            startIndex = (page - 1) * count;
-            endIndex = startIndex + count;
+            const selfRank = guildScores.map(a => { return a.uuid; }).indexOf(uuid);
+
+            page = Math.floor(selfRank / count) + 1;
+
+            if(req.query.page)
+                page = Math.max(1, req.query.page || 1);
 
             output.page = page;
 
+            startIndex = (page - 1) * count;
+            endIndex = startIndex + count;
+
+            const selfPosition = guildScores[selfRank];
+
             const selfRank = guildScores.map(a => { return a.uuid; }).indexOf(uuid);
+            output.self = {
+                rank: selfRank + 1,
+                amount: lb.format(selfPosition.score),
+                raw: selfPosition.score,
+                uuid: selfPosition.uuid,
+                username: (await helper.resolveUsernameOrUuid(selfPosition.uuid, db, true)).display_name,
+                guild: guildObj.name
+            };
 
             for (let i = startIndex; i < endIndex; i++) {
                 if (i > guildScores.length - 1)
@@ -216,13 +233,7 @@ module.exports = (app, db) => {
                 };
 
                 output.positions.push(lbPosition);
-
-                if (i == selfRank)
-                    output.self = lbPosition;
             }
-
-            if (output.self)
-                output.self.guild = guildObj.name;
 
             res.json(output);
             return;
