@@ -114,7 +114,7 @@ const skillFormatRunecrafting = xp => {
         progress
     };
 
-    return `Level ${levelObj.level} + ${levelObj.current.toLocaleString()} XP`;
+    return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
 };
 
 const overrides = {
