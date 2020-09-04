@@ -83,6 +83,56 @@ document.addEventListener('DOMContentLoaded', function(){
         return false;
     };
 
+    function renderLore(text){
+        let output = "";
+        let spansOpened = 0;
+
+        const parts = text.split("§");
+
+        if(parts.length == 1)
+            return text;
+
+        for(const part of parts){
+            const code = part.substring(0, 1);
+            const content = part.substring(1);
+
+            const format = constants.minecraft_formatting[code];
+
+            if(format === undefined)
+                continue;
+
+            if(format.type == 'color'){
+                for(; spansOpened > 0; spansOpened--)
+                    output += "</span>";
+
+                output += `<span style='${format.css}'>${content}`;
+
+                spansOpened++;
+            }else if(format.type == 'format'){
+                output += `<span style='${format.css}'>${content}`;
+
+                spansOpened++;
+            }else if(format.type == 'reset'){
+                for(; spansOpened > 0; spansOpened--)
+                    output += "</span>";
+
+                output += content;
+            }
+        }
+
+        for(; spansOpened > 0; spansOpened--)
+            output += "</span>";
+
+        const specialColor = constants.minecraft_formatting['6'];
+
+        const matchingEnchants = constants.special_enchants.filter(a => output.includes(a));
+
+        for(const enchantment of matchingEnchants)
+            output = output.replace(enchantment, `<span style='${specialColor.css}'>${enchantment}</span>`);
+
+        return output;
+    }
+
     let currentBackpack;
 
     function renderInventory(inventory, type){
@@ -256,7 +306,21 @@ document.addEventListener('DOMContentLoaded', function(){
             handleEnchanted(itemIcon);
             */
 
-        itemLore.innerHTML = item.lore || '';
+        itemLore.innerHTML = item.lore;
+
+        try{
+            if(item.lore != null)
+                throw null;
+
+            item.tag.display.Lore.forEach(function(line, index){
+                itemLore.innerHTML += renderLore(line);
+
+                if(index + 1 < item.tag.display.Lore.length)
+                    itemLore.innerHTML += '<br>';
+            });
+        }catch(e){
+
+        }
 
         if(item.texture_pack){
             let packContent = document.createElement('div');
