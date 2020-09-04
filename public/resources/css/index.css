@@ -671,7 +671,7 @@ html.no-webp #bg_blur{
     position: relative;
     padding: 6px;
     border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.05);
     margin-top: 15px;
     padding-left: 48px;
     font-size: 14px;
