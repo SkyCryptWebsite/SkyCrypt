@@ -2,6 +2,7 @@ const helper = require('./helper');
 const lib = require('./lib');
 const cors = require('cors');
 const constants = require('./constants');
+const credentials = require('../credentials.json');
 
 const Redis = require("ioredis");
 const redisClient = new Redis();
@@ -98,7 +99,7 @@ module.exports = (app, db) => {
         const positions = [];
 
         for(const [index, result] of (await getRanks.exec()).entries()){
-            if(result[0] != null || result[1] == null)
+            if(result[0] != null || result[1] == null || result[1] > credentials.lbCap)
                 continue;
 
             positions.push({ leaderboard: leaderboards[index], rank: result[1] + 1 });
