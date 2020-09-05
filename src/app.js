@@ -81,17 +81,6 @@ async function main(){
 
         output.packs = lib.getPacks();
 
-        const kofiEntry = await db.collection('donations').findOne({type: 'kofi'});
-        const patreonEntry = await db.collection('donations').findOne({type: 'patreon'});
-
-        if(kofiEntry == null || patreonEntry == null)
-            return output;
-
-        output.donations = {
-            kofi: kofiEntry.amount || 0,
-            patreon: patreonEntry.amount || 0
-        };
-
         const topProfiles = await db
         .collection('topViews')
         .find()
@@ -110,6 +99,17 @@ async function main(){
 
         if('recaptcha_site_key' in credentials)
             output.recaptcha_site_key = credentials.recaptcha_site_key;
+
+        const kofiEntry = await db.collection('donations').findOne({type: 'kofi'});
+        const patreonEntry = await db.collection('donations').findOne({type: 'patreon'});
+
+        if(kofiEntry == null || patreonEntry == null)
+            return output;
+
+        output.donations = {
+            kofi: kofiEntry.amount || 0,
+            patreon: patreonEntry.amount || 0
+        };
 
         return output;
     }
