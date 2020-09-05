@@ -60,7 +60,7 @@ a.no-underline{
 }
 
 *[data-tippy-content]:hover::after{
-    color: #db2580;
+    color: #0BEA51;
 }
 
 .tippy-content{
