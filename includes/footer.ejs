@@ -75,65 +75,6 @@
         localStorage.setItem('currentFlag', currentFlag);
         prideFlag.className = 'pride-flag ' + prideFlags[currentFlag];
     });
-
-    const themes = {
-        "default": {
-            name: "Default Theme",
-            author: "SkyCrypt Team",
-            colors: {
-                icon: "#0BCA51",
-                line: "#0BDA51",
-                link: "#0BEA51",
-                hover: "#09EF70",
-                maxed: "#DD980E",
-                gold: "#FDBB3C",
-                skillbar: "#0BAA51",
-                maxedbar: "#CE8F12"
-            }
-        },
-        "skylea": {
-            name: "Lea's Theme",
-            author: "LeaPhant",
-            colors: {
-                icon: "#A6145D",
-                line: "#A6145D",
-                link: "#F94EA3",
-                hover: "#F78DC2",
-                maxed: "#DD980E",
-                gold: "#FDBB3C",
-                skillbar: "#850F4A",
-                maxedbar: "#CE8F12"
-            }
-        }
-    }
-
-    if (!localStorage.getItem('currentTheme') || !themes[localStorage.getItem('currentTheme')])
-        localStorage.setItem('currentTheme', 'default');
-
-    if (localStorage.getItem('currentTheme') != 'default')
-        loadTheme(localStorage.getItem('currentTheme'));
-
-    function loadTheme(currentTheme) {
-        if (!themes[currentTheme])
-            return console.error(`${currentTheme} isn't a valid theme.`);
-
-        let element = document.documentElement;
-        let colors = themes[currentTheme].colors;
-
-        for (color in colors) {
-            let value = colors[color];
-
-            switch (color) {
-                case 'icon':
-                case 'link': 
-                    element.style.setProperty(`--${color}-rgb`, convertHex(value));
-                default: 
-                    element.style.setProperty(`--${color}-hex`, value);
-            }
-        }
-
-        console.log(`Loaded theme: ${currentTheme}`);
-    }
 </script>
 <% if(page == 'stats'){ %>
     <script src="/resources/js/stats.js?v60"></script>

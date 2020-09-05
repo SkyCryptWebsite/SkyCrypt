@@ -2672,6 +2672,7 @@ module.exports = {
             console.error(e);
         }
     },
+
     getPacks: () => {
         return customResources.packs;
     }
