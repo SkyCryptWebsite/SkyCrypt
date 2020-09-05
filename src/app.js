@@ -71,7 +71,7 @@ async function main(){
     }));
 
     require('./api')(app, db);
-    //require('./apiv2')(app, db);
+    require('./apiv2')(app, db);
     require('./donations/kofi')(app, db);
 
     async function getExtra(){
@@ -80,17 +80,6 @@ async function main(){
         output.twemoji = twemoji;
 
         output.packs = lib.getPacks();
-
-        const kofiEntry = await db.collection('donations').findOne({type: 'kofi'});
-        const patreonEntry = await db.collection('donations').findOne({type: 'patreon'});
-
-        if(kofiEntry == null || patreonEntry == null)
-            return output;
-
-        output.donations = {
-            kofi: kofiEntry.amount || 0,
-            patreon: patreonEntry.amount || 0
-        };
 
         const topProfiles = await db
         .collection('topViews')
@@ -110,6 +99,17 @@ async function main(){
 
         if('recaptcha_site_key' in credentials)
             output.recaptcha_site_key = credentials.recaptcha_site_key;
+
+        const kofiEntry = await db.collection('donations').findOne({type: 'kofi'});
+        const patreonEntry = await db.collection('donations').findOne({type: 'patreon'});
+
+        if(kofiEntry == null || patreonEntry == null)
+            return output;
+
+        output.donations = {
+            kofi: kofiEntry.amount || 0,
+            patreon: patreonEntry.amount || 0
+        };
 
         return output;
     }
