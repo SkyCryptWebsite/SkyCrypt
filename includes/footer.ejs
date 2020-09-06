@@ -41,15 +41,8 @@
     }
 
     function switchPack(pack = false){
-        /*console.log(pack)
-        let baseURL = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1] + "/" + window.location.pathname.split('/')[2] + "/" + window.location.pathname.split('/')[3]
         if(pack){
-            window.location.replace(`${baseURL}?pack=${pack}`);
-        }else{
-            window.location.replace(baseURL);
-        }*/
-        if(pack){
-            setCookie("pack", pack);
+            setCookie("pack", pack, 10);
         }else{
             eraseCookie("pack");
         }
