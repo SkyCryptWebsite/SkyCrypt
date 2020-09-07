@@ -42,7 +42,7 @@
 
     function switchPack(pack = false){
         if(pack){
-            setCookie("pack", pack, 10);
+            setCookie("pack", pack, 1000000000);
         }else{
             eraseCookie("pack");
         }
