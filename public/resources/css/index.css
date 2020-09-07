@@ -435,6 +435,30 @@ header{
     background-color: rgba(11, 218, 81, 0.9);
 }
 
+.selected_button{
+    display: inline-block;
+    position: absolute;
+    height: 30px;
+    line-height: 30px;
+    box-sizing: border-box;
+    margin-left: 5px;
+    cursor: pointer;
+    text-transform: capitalize;
+    font-weight: 600;
+    font-size: 12px;
+    color: white;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 9999px;
+    top: 8px;
+    right: 20px;
+    background-color: rgba(0,0,0,0.5);
+    background-size: 24px auto;
+    background-position: 6px 8px;
+    background-repeat: no-repeat;
+    text-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+}
+
 #bg_blur{
     background: url(../img/bg_blur.webp?v3) no-repeat center center fixed;
     background-size: cover;
