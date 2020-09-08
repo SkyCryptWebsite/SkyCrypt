@@ -2673,6 +2673,10 @@ module.exports = {
         }
     },
 
+    getThemes: () => {
+        return constants.themes;
+    },
+
     getPacks: () => {
         return customResources.packs;
     }

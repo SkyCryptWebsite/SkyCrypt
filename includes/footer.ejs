@@ -17,6 +17,23 @@
             infoBox.classList.add('info-opened');
     }
 
+    function toggleThemes(){
+        let box = document.querySelector('#themes_box');
+
+        if(box.classList.contains('themes-opened'))
+            box.classList.remove('themes-opened')
+        else
+            box.classList.add('themes-opened');
+    }
+
+    function switchTheme(theme){
+        if(localStorage.getItem("currentTheme") == theme) return;
+        if(!extra.themes[theme]) return console.error(`Theme ${theme} doesn't exist`);
+
+        localStorage.setItem("currentTheme", theme);
+        loadTheme(theme);
+    }
+
     function togglePacks(){
         let infoBox = document.querySelector('#packs_box');
 
