@@ -323,6 +323,8 @@ document.addEventListener('DOMContentLoaded', function(){
         }
 
         if(item.texture_pack){
+            const texturePack = extra.packs.filter(a => a.id == item.texture_pack)[0];
+
             let packContent = document.createElement('div');
             packContent.classList.add('pack-credit');
 

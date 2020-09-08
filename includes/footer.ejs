@@ -8,6 +8,20 @@
 <script src="/resources/js/elevator.min.js"></script>
 
 <script>
+    function setCookie(name,value,days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
+
+    function eraseCookie(name) {   
+        document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
+
     function toggleInfo(){
         let infoBox = document.querySelector('#info_box');
 
@@ -15,6 +29,24 @@
             infoBox.classList.remove('info-opened')
         else
             infoBox.classList.add('info-opened');
+    }
+
+    function togglePacks(){
+        let infoBox = document.querySelector('#packs_box');
+
+        if(infoBox.classList.contains('packs-opened'))
+            infoBox.classList.remove('packs-opened')
+        else
+            infoBox.classList.add('packs-opened');
+    }
+
+    function switchPack(pack = false){
+        if(pack){
+            setCookie("pack", pack, 365);
+        }else{
+            eraseCookie("pack");
+        }
+        window.location.reload()
     }
 
     Modernizr.on('webp', function(result){
@@ -58,7 +90,7 @@
     });
 </script>
 <% if(page == 'stats'){ %>
-    <script src="/resources/js/stats.js?v58"></script>
+    <script src="/resources/js/stats.js?v60"></script>
 <% } %>
 
 <% if(page == 'api'){ %>
