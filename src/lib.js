@@ -1861,8 +1861,9 @@ module.exports = {
             lore.push('');
 
             const pet_name = helper.titleCase(pet.type.replace(/\_/g, ' '));
+            const searchName = helper.titleCase(petData.type.replace(/\_/g, ' '));
             
-            if(pet_name in constants.petStats){
+            if(searchName in constants.petStats){
                 let rarity;
                 switch(pet.rarity){
                     case "common":
@@ -1882,7 +1883,7 @@ module.exports = {
                         break;
                 }
 
-                const petInstance = new constants.petStats[pet_name](rarity, pet.level.level)
+                const petInstance = new constants.petStats[searchName](rarity, pet.level.level)
                 let textbook = false;
                 if(pet.heldItem){
                     const { heldItem } = pet;
