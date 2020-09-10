@@ -1730,6 +1730,7 @@ module.exports = {
         misc.dragons = {};
         misc.protector = {};
         misc.damage = {};
+        misc.burrows = {};
         misc.auctions_sell = {};
         misc.auctions_buy = {};
 
@@ -1738,6 +1739,22 @@ module.exports = {
 
         misc.dragons['last_hits'] = 0;
         misc.dragons['deaths'] = 0;
+
+        const burrows = [
+            "mythos_burrows_dug_next", 
+            "mythos_burrows_dug_combat", 
+            "mythos_burrows_dug_treasure", 
+            "mythos_burrows_chains_complete"
+        ];
+
+        const dug_next = {};
+        const dug_combat = {};
+        const dug_treasure = {};
+        const chains_complete = {};
+
+        for(const key of burrows)
+            if(key in userProfile.stats) 
+                misc.burrows[key.replace("mythos_burrows_", "")] = { total: userProfile.stats[key] };
 
         const auctions_buy = ["auctions_bids", "auctions_highest_bid", "auctions_won", "auctions_gold_spent"];
         const auctions_sell = ["auctions_fees", "auctions_gold_earned"];
@@ -1774,8 +1791,16 @@ module.exports = {
                 misc.protector['last_hits'] = userProfile.stats[key];
             else if(key.includes('deaths_corrupted_protector'))
                 misc.protector['deaths'] = userProfile.stats[key];
-            else if(key.startsWith('pet_milestone_')){
+            else if(key.startsWith('pet_milestone_'))
                 misc.milestones[key.replace('pet_milestone_', '')] = userProfile.stats[key];
+            else if(key.startsWith('mythos_burrows_dug_next_'))
+                dug_next[key.replace('mythos_burrows_dug_next_', '').toLowerCase()] = userProfile.stats[key];
+            else if(key.startsWith('mythos_burrows_dug_combat_'))
+                dug_combat[key.replace('mythos_burrows_dug_combat_', '').toLowerCase()] = userProfile.stats[key];
+            else if(key.startsWith('mythos_burrows_dug_treasure_'))
+                dug_treasure[key.replace('mythos_burrows_dug_treasure_', '').toLowerCase()] = userProfile.stats[key];
+            else if(key.startsWith('mythos_burrows_chains_complete_')) {
+                chains_complete[key.replace('mythos_burrows_chains_complete_', '').toLowerCase()] = userProfile.stats[key];
             }
 
         for(const key in misc.dragons)
@@ -1785,6 +1810,18 @@ module.exports = {
         for(const key in misc)
             if(Object.keys(misc[key]).length == 0)
                 delete misc[key];
+
+        for(const key in dug_next)
+            misc.burrows.dug_next[key] = dug_next[key];
+
+        for(const key in dug_combat)
+            misc.burrows.dug_combat[key] = dug_combat[key];
+
+        for(const key in dug_treasure)
+            misc.burrows.dug_treasure[key] = dug_treasure[key];
+
+        for(const key in chains_complete)
+            misc.burrows.chains_complete[key] = chains_complete[key];
 
         for(const key in auctions_bought)
             misc.auctions_buy['items_bought'] = (misc.auctions_buy['items_bought'] || 0) + auctions_bought[key];
