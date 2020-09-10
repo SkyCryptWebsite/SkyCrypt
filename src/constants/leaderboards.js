@@ -1,7 +1,9 @@
 const collections = require('./collections');
+const misc = require('./misc');
 const leveling = require('./leveling');
 const moment = require('moment');
 const { getLevelByXp } = require('../lib');
+const _ = require('lodash');
 require('moment-duration-format')(moment);
 
 const defaultOptions = {
@@ -114,7 +116,7 @@ const skillFormatRunecrafting = xp => {
         progress
     };
 
-    return `Level ${levelObj.level} + ${levelObj.current.toLocaleString()} XP`;
+    return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
 };
 
 const overrides = {
@@ -124,6 +126,9 @@ const overrides = {
 
     unique_minions: {
         mappedBy: 'profile_id'
+    },
+    'player_kills_k/d': {
+        name: 'Player K/D'
     }
 };
 
@@ -178,6 +183,18 @@ module.exports = {
             else if(lbName.startsWith('wolf_slayer'))
                 options['name'] = `Kills Sven Packmaster Tier ${tier}`;;
         }
+
+        if(lbName.startsWith('kills_') || lbName.startsWith('deaths_')){
+            const type = _.capitalize(lbName.split('_')[0]);
+            const mobName = lbName.split('_').slice(1).join('_');
+
+            if(misc.sea_creatures.map(a => a.id).includes(mobName))
+                options['thumbnail'] = `https://sky.lea.moe/resources/img/sea_creatures/${mobName}.png`;
+
+            if(Object.keys(misc.mob_names).includes(mobName))
+                options['name'] = `${misc.mob_names[mobName]} ${type}`;
+        }
+        
 
         return options;
     }
