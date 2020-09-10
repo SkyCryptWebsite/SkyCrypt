@@ -370,18 +370,32 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             }
         }
 
+        let lore_raw;
+
         const enchantments = helper.getPath(item, 'tag', 'ExtraAttributes', 'enchantments') || {};
-        let itemLore = helper.getPath(item, 'tag', 'display', 'Lore') || [];
-        let lore_raw = [...itemLore];
+        const hasEnchantments = Object.keys(enchantments).length > 0;
 
-        let lore = lore_raw != null ? lore_raw.map(a => a = helper.getRawLore(a)) : [];
+        // Set HTML lore to be displayed on the website
+        if(helper.hasPath(item, 'tag', 'display', 'Lore')){
+            lore_raw = item.tag.display.Lore;
 
-        if(itemLore.length > 0){
+            item.lore = '';
+
+            for(const [index, line] of lore_raw.entries()){
+                if(index == 0 && line == '')
+                    continue;
+
+                item.lore += helper.renderLore(line, hasEnchantments);
+
+                if(index + 1 < lore_raw.length)
+                    item.lore += '<br>';
+            }
+
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'rarity_upgrades')){
                 const { rarity_upgrades } = item.tag.ExtraAttributes;
 
                 if(rarity_upgrades > 0)
-                    itemLore.push('§8(Recombobulated)');
+                    item.lore += "<br>" + helper.renderLore(`§8(Recombobulated)`);
             }
 
             let hasAnvilUses = false;
@@ -396,14 +410,16 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
                 anvil_uses -= hot_potato_count;
 
-                if(anvil_uses > 0){
+                if(anvil_uses > 0 && lore_raw){
                     hasAnvilUses = true;
 
-                    itemLore.push('', `§7Anvil Uses: §c${anvil_uses}`);
+                    item.lore += "<br><br>" + helper.renderLore(`§7Anvil Uses: §c${anvil_uses}`);
                 }
             }
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp')){
+                item.lore += "<br>";
+
                 const { timestamp } = item.tag.ExtraAttributes;
 
                 let obtainmentDate;
@@ -418,31 +434,37 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                 if(!obtainmentDate.isValid())
                     obtainmentDate = moment(timestamp, "M/D/YY HH:mm");
 
-                    itemLore.push('', `§7Obtained: §c${obtainmentDate.format("D MMM YYYY")}`);
+                item.lore += "<br>" + helper.renderLore(`§7Obtained: §c${obtainmentDate.format("D MMM YYYY")}`);
             }
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'spawnedFor')){
                 if(!helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp'))
-                    itemLore.push('');
+                    item.lore += "<br>";
 
                 const spawnedFor = item.tag.ExtraAttributes.spawnedFor.replace(/\-/g, '');
                 const spawnedForUser = await helper.resolveUsernameOrUuid(spawnedFor, db, cacheOnly);
 
-                itemLore.push(`§7By: §c<a href="/stats/${spawnedFor}">${spawnedForUser.display_name}</a>`);
+                item.lore += "<br>" + helper.renderLore(`§7By: §c<a href="/stats/${spawnedFor}">${spawnedForUser.display_name}</a>`);
             }
  
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'baseStatBoostPercentage')){
+
                 const boost = item.tag.ExtraAttributes.baseStatBoostPercentage;
 
-                itemLore.push('', `§7Dungeon Item Quality: ${boost == 50 ? '§6' : '§c'}${boost}/50%`);
+                item.lore += "<br><br>" + helper.renderLore(`§7Dungeon Item Quality: ${boost == 50 ? '§6' : '§c'}${boost}/50%`);
             }
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'item_tier')){
+
                 const floor = item.tag.ExtraAttributes.item_tier;
 
-                itemLore.push(`§7Obtained From: §bFloor ${floor}`);
+                item.lore += "<br>"
+
+                item.lore += helper.renderLore(`§7Obtained From: §bFloor ${floor}`);
             }
         }
+
+        let lore = lore_raw ? lore_raw.map(a => a = helper.getRawLore(a)) : [];
 
         let rarity, item_type;
 
@@ -2624,8 +2646,6 @@ module.exports = {
 
         values['slayer_xp'] = getMax(memberProfiles, 'data', 'slayer_xp');
 
-        let totalSlayerBossKills = 0;
-
         for(const slayer of getAllKeys(memberProfiles, 'data', 'slayer_bosses')){
             for(const key of getAllKeys(memberProfiles, 'data', 'slayer_bosses', slayer)){
                 if(!key.startsWith('boss_kills_tier'))
@@ -2634,54 +2654,16 @@ module.exports = {
                 const tier = key.split("_").pop();
 
                 values[`${slayer}_slayer_boss_kills_tier_${tier}`] = getMax(memberProfiles, 'data', 'slayer_bosses', slayer, key);
-
-                totalSlayerBossKills += values[`${slayer}_slayer_boss_kills_tier_${tier}`];
             }
 
             values[`${slayer}_slayer_xp`] = getMax(memberProfiles, 'data', 'slayer_bosses', slayer, 'xp');
         }
 
-        if(totalSlayerBossKills > 0)
-        values['total_slayer_boss_kills'] = totalSlayerBossKills;
-
-        let totalCollectedItems = 0;
-
-        for(const item of getAllKeys(memberProfiles, 'data', 'collection')){
+        for(const item of getAllKeys(memberProfiles, 'data', 'collection'))
             values[`collection_${item.toLowerCase()}`] = getMax(memberProfiles, 'data', 'collection', item);
 
-            totalCollectedItems += values[`collection_${item.toLowerCase()}`];
-        }
-
-        if(totalCollectedItems > 0)
-            values[`total_collected_items`] = totalCollectedItems;
-
-        let totalDragonKills = 0;
-        let totalDragonDeaths = 0;
-
-        let playerKills = 0, playerDeaths = 0;
-
-        for(const stat of getAllKeys(memberProfiles, 'data', 'stats')){
+        for(const stat of getAllKeys(memberProfiles, 'data', 'stats'))
             values[stat] = getMax(memberProfiles, 'data', 'stats', stat);
-
-            if(stat.endsWith('dragon')){
-                if(stat.startsWith('kills_'))
-                    totalDragonKills += values[stat];
-                else if(stat.startsWith('deaths_'))
-                    totalDragonDeaths += values[stat];
-                continue;
-            }
-
-            if(stat == 'kills_player')
-                playerKills = values[stat];
-            else if(stat == 'deaths_player')
-                playerDeaths = values[stat];
-        }
-
-        values['total_dragon_kills'] = totalDragonKills;
-        values['total_dragon_deaths'] = totalDragonDeaths;
-
-        if(playerKills >= 100)
-            values['player_kills_k/d'] = playerKills / playerDeaths;
 
         const multi = redisClient.pipeline();
 
