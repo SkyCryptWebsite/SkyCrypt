@@ -4,11 +4,12 @@ async function main(){
     const _ = require('lodash');
 
     const constants = require('./../constants');
+    const credentials = require('./../../credentials.json');
 
     const Redis = require("ioredis");
     const redisClient = new Redis();
 
-    const lbLimit = 50000;
+    const { lbCap } = credentials;
 
     async function capLeaderboards(){
         const keys = await redisClient.keys('lb_*');
@@ -19,17 +20,17 @@ async function main(){
             const lb = constants.leaderboard(key);
 
             if(lb.sortedBy < 0)
-                redisClient.zremrangebyrank(key, 0, -lbLimit);
+                redisClient.zremrangebyrank(key, 0, -lbCap);
             else
-                redisClient.zremrangebyrank(key, lbLimit, -1);
+                redisClient.zremrangebyrank(key, lbCap, -1);
         }
 
         await multi.exec();
+
+        setTimeout(capLeaderboards, 1000 * 60);
     }
 
-    await capLeaderboards();
-
-    await redisClient.quit();
+    capLeaderboards();
 }
 
 if(cluster.isMaster)
