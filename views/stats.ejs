@@ -4,7 +4,7 @@ const slayerOrder = ['zombie', 'spider', 'wolf'];
 
 const allItems = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory);
 
-const UNIQUE_ACCESSORIES = 53;
+const UNIQUE_ACCESSORIES = 54;
 
 const statSuffix = {
     health: '',
@@ -1309,7 +1309,7 @@ twitterDescription += '. Click to view more stats!'
                         <% if(items.talismans.filter(a => !a.isInactive).length > 0){ %>
                             <div class="accessory-list">
                                 <p class="stat-sub-header" style="margin-bottom: 5px">Active Accessories</p>
-                                <% items.talismans.filter(a => !a.isInactive).forEach(item => { 
+                                <% items.talismans.filter(a => !a.isInactive).forEach(item => {
                                     %>
                                     <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>"
                                     class="rich-item piece piece-<%= item.rarity %>-bg">
@@ -2150,11 +2150,11 @@ twitterDescription += '. Click to view more stats!'
                     <% if('burrows' in calculated.misc){ %>
                         <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8)"></div></div><span>griffin burrows</span></div>
                         <p class="stat-raw-values">
-                            <% for(const key in calculated.misc.burrows){ 
+                            <% for(const key in calculated.misc.burrows){
                                 let tooltip = "";
 
                                 for(const rarity in calculated.misc.burrows[key])
-                                    if(rarity != "total" && rarity != "null") 
+                                    if(rarity != "total" && rarity != "null")
                                         tooltip += `<span class="stat-name piece-${ rarity }-fg">${ helper.capitalizeFirstLetter(rarity) }: </span><span class="stat-value">${ calculated.misc.burrows[key][rarity] }</span><br>`;
                             %>
                                 <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>><span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.burrows[key].total.toLocaleString() %></span></span><br>
