@@ -354,6 +354,11 @@ module.exports = {
             head: "/head/8d9ccc670677d0cebaad4058d6aaf9acfab09abea5d86379a059902f2fe22655",
             type: "combat",
             emoji: "👻"
+        },
+        "GRIFFIN": {
+            head: "/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8",
+            type: "combat",
+            emoji: "🦅"
         }
     },
 
