@@ -8,6 +8,20 @@
 <script src="/resources/js/elevator.min.js"></script>
 
 <script>
+    function setCookie(name,value,days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
+
+    function eraseCookie(name) {   
+        document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
+
     function toggleInfo(){
         let infoBox = document.querySelector('#info_box');
 
@@ -44,13 +58,12 @@
     }
 
     function switchPack(pack = false){
-        console.log(pack)
-        let baseURL = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1] + "/" + window.location.pathname.split('/')[2] + "/" + window.location.pathname.split('/')[3]
         if(pack){
-            window.location.replace(`${baseURL}?pack=${pack}`);
+            setCookie("pack", pack, 365);
         }else{
-            window.location.replace(baseURL);
+            eraseCookie("pack");
         }
+        window.location.reload()
     }
 
     Modernizr.on('webp', function(result){

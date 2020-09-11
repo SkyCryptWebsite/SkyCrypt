@@ -810,6 +810,60 @@ class Golem extends Pet {
 	}
 }
 
+class Griffin extends Pet {
+	get stats() {
+		return {
+			strength: this.level * 0.25,
+			crit_chance: this.level * 0.1,
+			crit_damage: this.level * 0.5,
+			intelligence: this.level * 0.1,
+			magic_find: this.level * 0.1
+		};
+	}
+
+	get abilities() {
+		let list = [this.first];
+		if (this.rarity > 0)
+			list.push(this.second);
+		if (this.rarity > 2)
+			list.push(this.third);
+		if (this.rarity > 3)
+			list.push(this.fourth);
+		return list;
+	}
+
+	get first() {
+		return {
+			name: "§6Odyssey",
+			desc: [`§2Mythological creatures §7you find and burrows you dig scale in §cdifficulty §7and §6rewards §7based on your equipped Griffin's rarity.`]
+		}
+	}
+
+	get second() {
+		let regen = this.rarity > 3 ? "VII" : this.rarity > 1 ? "VI" : "V";
+		let stren = this.rarity > 2 ? "VIII" : "VII"
+		return {
+			name: "§6Legendary Constitution",
+			desc: [`§7Permanent §cRegeneration ${regen} §7and §4Strength ${stren}§7.`]
+		}
+	}
+
+	get third() {
+		let mult = this.rarity > 3 ? 0.2 : 0.1625;
+		return {
+			name: "§6Perpetual Empathy",
+			desc: [`§7Heal nearby players for §a${round(this.level * mult, 0)}% §7of the final damage you receive.`, `§8Excludes other griffins.`]
+		}
+	}
+
+	get fourth() {
+		return  {
+			name: "§6King of Kings",
+			desc: [`§7Gain §c+${round(1 + (this.level * 0.14), 1)}% §c❁ Strength §7when above §c85% §7health.`]
+		}
+	}
+}
+
 class Guardian extends Pet {
 	get stats() {
 		return {
@@ -2133,6 +2187,7 @@ module.exports = {
 		'Enderman': Enderman,
 		'Ghoul': Ghoul,
 		'Golem': Golem,
+		'Griffin': Griffin,
 		'Guardian': Guardian,
 		'Horse': Horse,
 		'Hound': Hound,
