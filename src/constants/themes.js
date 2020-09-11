@@ -1,5 +1,8 @@
 module.exports = {
     themes: {
+
+        /* Official Themes */
+
         "default": {
             name: "Default Theme",
             author: "SkyCrypt Team",
@@ -27,7 +30,7 @@ module.exports = {
             }
         },
         "skylea": {
-            name: "Lea's Theme",
+            name: "SkyLeaMoe's Theme",
             author: "LeaPhant",
             official: true,
             logo: "https://sky.lea.moe/resources/img/logo_square.png",
@@ -52,6 +55,9 @@ module.exports = {
                 maxedbar: "#CE8F12"
             }
         },
+
+        /* Hidden Themes */
+
         "nightblue": {
             name: "Night Blue Theme",
             author: "8KCoffeeWizard",

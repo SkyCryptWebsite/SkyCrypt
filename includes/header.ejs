@@ -47,7 +47,7 @@
         <img class="theme-icon" src="<%= extra.themes[theme].logo %>">
         <span class="theme-name"><%= extra.themes[theme].name %></span>
         <div class="theme-author">by <span><%= extra.themes[theme].author %></span></div>
-        <div class="switch_themes_button" onclick="switchTheme('<%= theme %>')">Switch</div>
+        <div class="switch_themes_button" id="<%= theme %>-theme" onclick="switchTheme('<%= theme %>')">Switch</div>
     </div>
     <% } %> 
 </div>
