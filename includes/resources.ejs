@@ -45,9 +45,6 @@
 
                 if(window.hasOwnProperty("targetUsername") && playerName)
                     targetUsername.value = playerName;
-                
-                if(playerName)
-                    playerName = playerName.replace(/[^a-zA-Z\d\-\_:]/g, '');
 
                 if(e.keyCode == 13 && playerName.trim().length > 0)
                     document.location = '/stats/' + playerName;

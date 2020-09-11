@@ -87,10 +87,8 @@
             function updateUserTarget(e){
                 let playerName = targetUsername.value;
 
-                if(playerName){
-                    playerName = playerName.replace(/[^a-zA-Z\d\-\_:]/g, '');
+                if(playerName)
                     inputSearchUser.value = playerName;
-                }
 
                 if(e.keyCode == 13 && playerName.trim().length > 0)
                     document.location = '/stats/' + playerName;

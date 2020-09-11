@@ -1,4 +1,4 @@
-# This CI Workflow was deployed and configured by WarpWing
+# This CI Workflow was deployed and configured by WarpWing ;)
 name: SkyCrypt Image CI
 
 on:
