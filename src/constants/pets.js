@@ -1,3 +1,18 @@
+const symbols = {
+	health: "❤",
+	defense: "❈",
+	strength: "❁",
+	crit_chance: "☣",
+	crit_damage: "☠",
+	intelligence: "✎",
+	speed: "✦",
+	sea_creature_chance: "α",
+	magic_find: "✯",
+	pet_luck: "♣",
+	attack_speed: "⚔️",
+	true_defense: "❂"
+}
+
 module.exports = {
     pet_rarity_offset: {
         common: 0,
@@ -502,6 +517,49 @@ module.exports = {
         },
         PET_ITEM_FARMING_SKILL_BOOST_EPIC: {
             description: "§7Gives +§a50% §7pet exp for Farming"
+        },
+        // new pet items from 0.9 update yay
+        REINFORCED_SCALES: {
+            description: `§7Increases §a${symbols.defense} Defense §7by §a40`,
+            stats: {
+                defense: 40
+            }
+        },
+        GOLD_CLAWS: {
+            description: `§7Increases the pet's §9${symbols.crit_damage} Crit Damage §7by §a50% §7and §9${symbols.crit_chance} Crit Chance §7by §a50%`
+        },
+        ALL_SKILLS_SUPER_BOOST: {
+            description: "§7Gives +§a20% §7pet exp for all skills"
+        },
+        BIGGER_TEETH: {
+            description: `§7Increases §9${symbols.crit_chance} Crit Chance §7by §a10`,
+            stats: {
+                crit_chance: 10
+            }
+        },
+        SERRATED_CLAWS: {
+            description: `§7Increases §9${symbols.crit_damage} Crit Damage §7by §a25`,
+            stats: {
+                crit_damage: 25
+            }
+        },
+        WASHED_UP_SOUVENIR: {
+            description: `§7Increases §3${symbols.sea_creature_chance} Sea Creature Chance §7by §a5`,
+            stats: {
+                sea_creature_chance: 5
+            }
+        },
+        ANTIQUE_REMEDIES: {
+            description: `§7Increases the pet's §c${symbols.strength} Strength §7by §a80%`
+        },
+        CROCHET_TIGER_PLUSHIE: {
+            description: `§7Increases §e${symbols.attack_speed} Bonus Attack Speed §7by §a40`,
+            stats: {
+                attack_speed: 40
+            }
+        },
+        DWARF_TURTLE_SHELMET: {
+            description: `§7Makes the pet's owner immune to knockback.`
         }
     }
 }
