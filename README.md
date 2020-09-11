@@ -51,3 +51,4 @@ I recommend that you choose the npm way until this README.md is updated
 - **Player Heads**: <a href="https://hypixel.net/forums/skyblock.157/">SkyBlock</a> by Hypixel. 
 - **Unmodified Docker-Compose Script**: <a href="https://github.com/physanus/SkyBlock-Stats-Docker">SB Stats Docker</a> by Physanus
 
+
