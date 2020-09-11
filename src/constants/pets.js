@@ -417,22 +417,22 @@ module.exports = {
             description: "§7Gives +§a10% §7pet exp for all skills"
         },
         PET_ITEM_BIG_TEETH_COMMON: {
-            description: "§7Increases §9Crit Chance §7by §a5%",
+            description: `§7Increases §9${symbols.crit_chance} Crit Chance §7by §a5`,
             stats: {
                 crit_chance: 5
             }
         },
         PET_ITEM_IRON_CLAWS_COMMON: {
-            description: "§7Increases the pet's §9Crit Damage §7by §a40% §7and §9Crit Chance §7by §a40%"
+            description: `§7Increases the pet's §9${symbols.crit_damage} Crit Damage §7by §a40% §7and §9${symbols.crit_chance} Crit Chance §7by §a40%`
         },
         PET_ITEM_SHARPENED_CLAWS_UNCOMMON: {
-            description: "§7Increases §9Crit Damage §7by §a15%",
+            description: `§7Increases §9${symbols.crit_damage} Crit Damage §7by §a15`,
             stats: {
                 crit_damage: 15
             }
         },
         PET_ITEM_HARDENED_SCALES_UNCOMMON: {
-            description: "§7Increases §aDefense §7by §a25",
+            description: `§7Increases §a${symbols.defense} Defense §7by §a25`,
             stats: {
                 defense: 25
             }
@@ -441,13 +441,13 @@ module.exports = {
             description: "§7Your pet fuses its power with placed §aOrbs §7to give them §a2x §7duration"
         },
         PET_ITEM_LUCKY_CLOVER: {
-            description: "§7Increases §bMagic Find §7by §a7",
+            description: `§7Increases §b${symbols.magic_find} Magic Find §7by §a7`,
             stats: {
                 magic_find: 7
             }
         },
         PET_ITEM_TEXTBOOK: {
-            description: "§7Increases the pet's §bIntelligence §7by §a100%"
+            description: `§7Increases the pet's §b${symbols.intelligence} Intelligence §7by §a100%`
         },
         PET_ITEM_SADDLE: {
             description: "§7Increase horse speed by §a50% §7 and jump boost by §a100%"
