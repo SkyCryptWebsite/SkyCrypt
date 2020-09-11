@@ -58,11 +58,7 @@
         <a class="pack-name" href="/" target="_blank">Default</a><br>
         <div class="pack-author">by <span>LeaPhant, various</span></div>
         <% if(page == 'stats'){ %>
-            <% if(!req.cookies.pack){ %>
-                <div class="selected_button">In Use</div>
-            <% } else { %>
-                <div class="switch_packs_button" onclick="switchPack()">Switch</div>
-            <% } %>
+            <div class="switch_packs_button" onclick="switchPack()">Switch</div>
         <% } %>
     </div>
     <% for(const pack of extra.packs.filter(a => !a.hidden).sort((a, b) => b.priority - a.priority)){ %>
@@ -71,11 +67,7 @@
             <a class="pack-name" href="<%= pack.url %>" target="_blank"><%= pack.name %></a><br>
             <div class="pack-author">by <span><%= pack.author %></span></div>
             <% if(page == 'stats'){ %>
-                <% if(req.cookies.pack == pack.id){ %>
-                    <div class="selected_button">In Use</div>
-                <% } else { %>
-                    <div class="switch_packs_button" onclick="switchPack('<%= pack.id %>')">Switch</div>
-                <% } %>
+                <div class="switch_packs_button" onclick="switchPack('<%= pack.id %>')">Switch</div>
             <% } %>
         </div>
     <% } %>
