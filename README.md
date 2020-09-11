@@ -37,6 +37,7 @@ You can now run `npm start` to start it. You will be able to access the site on 
 - **Additional Custom Textures**: <a href="https://hypixel.net/threads/2147652/">Vanilla+</a> by TBlazeWarriorT
 - **Default Textures**: <a href="https://www.minecraft.net/">Minecraft</a> by Mojang
 - **Player Heads**: <a href="https://hypixel.net/forums/skyblock.157/">SkyBlock</a> by Hypixel. 
+- **Original Site**: <a href="https://sky.lea.moe/">sky.lea.moe</a> by LeaPhant
 
 
 
