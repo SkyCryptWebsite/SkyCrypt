@@ -3501,6 +3501,27 @@ html.no-webp #error_box_wrapper{
         margin-left: 0 !important;
         margin-top: 20px;
     }
+
+    #themes_button{
+        padding-right: 3px;
+        right: 60px;
+    }
+
+    #packs_button{
+        padding-right: 3px;
+    }
+
+    #themes_button span{
+        display: none;
+    }
+
+    #packs_button span{
+        display: none;
+    }
+
+    .blm-logo{
+        right: 90px;
+    }
 }
 
 @media (max-width: 735px){
