@@ -779,6 +779,7 @@ html.no-webp #bg_blur{
     transform: translateY(-100%);
     transition: transform .3s;
     z-index: 100;
+    overflow-y: auto;
 }
 
 #packs_box.packs-opened{
@@ -823,6 +824,7 @@ html.no-webp #bg_blur{
     transform: translateY(-100%);
     transition: transform .3s;
     z-index: 100;
+    overflow-y: auto;
 }
 
 #themes_box.themes-opened{
@@ -3553,6 +3555,20 @@ html.no-webp #error_box_wrapper{
     .top-profile{
         width: 100%;
         backdrop-filter: blur(15px);
+    }
+
+    #themes_box{
+        left: 0;
+        width: 100vw;
+        right: 0;
+        max-height: calc(100vh - 45px);
+    }
+
+    #packs_box{
+        left: 0;
+        width: 100vw;
+        right: 0;
+        max-height: calc(100vh - 45px);
     }
 
     #api_button{
