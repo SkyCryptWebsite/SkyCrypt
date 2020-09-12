@@ -2279,7 +2279,7 @@ module.exports = {
 
         let tasks = userProfile.tutorial;
 
-        output.entrance = userProfile.visited_zones.includes('dungeon');
+        output.entrance = Array.isArray(userProfile.visited_zones) && userProfile.visited_zones.includes('dungeon');
         if (!output.entrance) return output;
 
         output.collected_essence = tasks.includes('essence_collected_message');
