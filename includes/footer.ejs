@@ -33,6 +33,7 @@
 
     function togglePacks(){
         let infoBox = document.querySelector('#packs_box');
+        if(document.querySelector('.themes-opened')) toggleThemes();
 
         if(infoBox.classList.contains('packs-opened'))
             infoBox.classList.remove('packs-opened')
@@ -51,6 +52,7 @@
 
     function toggleThemes(){
         let box = document.querySelector('#themes_box');
+        if(document.querySelector('.packs-opened')) togglePacks();
 
         if(box.classList.contains('themes-opened'))
             box.classList.remove('themes-opened')
