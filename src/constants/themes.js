@@ -30,7 +30,7 @@ module.exports = {
             }
         },
         "skylea": {
-            name: "SkyLeaMoe's Theme",
+            name: "sky.lea.moe's Theme",
             author: "LeaPhant",
             official: true,
             logo: "https://sky.lea.moe/resources/img/logo_square.png",
