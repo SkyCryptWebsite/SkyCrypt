@@ -57,6 +57,31 @@ module.exports = {
         },
 
         /* Hidden Themes */
+        /* I have no idea if this theme is mentally sane so lmao */
+        
+         "warpwing": {
+            name: "WarpWing's theme",
+            author: "WarpWing",
+            hidden: true,
+            logo: "https://i.imgur.com/4SFZGdj.png",
+            backgrounds: {
+                "bg": {
+                    "png": "https://cdn.discordapp.com/attachments/739316781096763485/749397628420358154/IMG_20200829_131600.jpg",
+                    "webp": "https://cdn.discordapp.com/attachments/739316781096763485/749397628420358154/IMG_20200829_131600.jpg"
+                },
+                "bg_blur": {
+                    "png": "https://cdn.discordapp.com/attachments/739316781096763485/749397628420358154/IMG_20200829_131600.jpg",
+                    "webp": "https://cdn.discordapp.com/attachments/739316781096763485/749397628420358154/IMG_20200829_131600.jpg"
+                }
+            },
+            colors: {
+                icon: "#FFD700",
+                line: "#FFD700",
+                link: "#FFD700",
+                hover: "#FFD700",
+                skillbar: "#FFD700"
+            }
+        },
 
         "nightblue": {
             name: "Night Blue Theme",
