@@ -104,14 +104,12 @@ async function main(){
         if('recaptcha_site_key' in credentials)
             output.recaptcha_site_key = credentials.recaptcha_site_key;
 
-        const kofiEntry = await db.collection('donations').findOne({type: 'kofi'});
         const patreonEntry = await db.collection('donations').findOne({type: 'patreon'});
 
-        if(kofiEntry == null || patreonEntry == null)
+        if(patreonEntry == null)
             return output;
 
         output.donations = {
-            kofi: kofiEntry.amount || 0,
             patreon: patreonEntry.amount || 0
         };
 
