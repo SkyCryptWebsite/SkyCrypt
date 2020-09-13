@@ -56,12 +56,12 @@ module.exports = {
             }
         },
 
-        /* Hidden Themes */
+        /* Community Themes */
 
         "nightblue": {
             name: "Night Blue Theme",
             author: "8KCoffeeWizard",
-            hidden: true,
+            community: true,
             logo: "https://i.imgur.com/4SFZGdj.png",
             backgrounds: {
                 "bg": {
@@ -69,8 +69,8 @@ module.exports = {
                     "webp": "https://i.imgur.com/qjsmQ4B.png"
                 },
                 "bg_blur": {
-                    "png": "https://i.imgur.com/yVqoyvZ.png",
-                    "webp": "https://i.imgur.com/yVqoyvZ.png"
+                    "png": "https://i.imgur.com/SXTy4k5.png",
+                    "webp": "https://i.imgur.com/SXTy4k5.png"
                 }
             },
             colors: {
