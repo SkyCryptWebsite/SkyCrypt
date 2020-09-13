@@ -417,6 +417,26 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                 }
             }
 
+            let hasExpertiseKills = false;
+            let toNextLevel = 0;
+
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'expertise_kills')){
+                let { expertise_kills } = item.tag.ExtraAttributes;
+
+                if(expertise_kills > 0 && lore_raw){
+                    hasExpertiseKills = true;
+                    killsLadder = [50,100,250,500,1000,2500,5500,10000,15000];
+                    for (var e of killsLadder){
+                        if(expertise_kills < e){
+                            toNextLevel = e - expertise_kills;
+                            break;
+                        }
+                    }
+                    item.lore += "<br><br>" + helper.renderLore(`§7Expertise Kills: §c${expertise_kills}`);
+                    item.lore += "<br>" + helper.renderLore(`§8${toNextLevel} kills to tier up!`);
+                }
+            }
+
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp')){
                 item.lore += "<br>";
 
