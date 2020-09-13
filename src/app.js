@@ -81,6 +81,8 @@ async function main(){
 
         output.twemoji = twemoji;
 
+        output.themes = lib.getThemes();
+
         output.packs = lib.getPacks();
 
         const topProfiles = await db

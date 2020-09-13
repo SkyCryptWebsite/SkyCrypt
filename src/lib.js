@@ -2697,6 +2697,11 @@ module.exports = {
             console.error(e);
         }
     },
+
+    getThemes: () => {
+        return constants.themes;
+    },
+
     getPacks: () => {
         return customResources.packs;
     }

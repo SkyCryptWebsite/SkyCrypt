@@ -1,3 +1,38 @@
+:root{
+    /* Icon Green (used for Skill Icons, Underlines etc.) */
+    --icon-hex: #0BCA51; --icon-rgb: 11, 202, 81; 
+
+    /* Line Green (used for Navigation Bar) */
+    --line-hex: #0BDA51; --line-rgb: 11, 218, 81;
+
+    /* Link Green (used for Links, Unclaimed Slayers, Crafted Minions etc.) */
+    --link-hex: #0BEA51; --link-rgb: 11, 234, 81; 
+
+    /* Hover Green (used only for link hovers) */
+    --hover-hex: #09EF70;
+
+    /* Skill Bar Green (used for Skill Progress Bars) */
+    --skillbar-hex: #0BAA51;
+
+    /* Maxed Bar Gold (used for Maxed Progress Bars) */
+    --maxedbar-hex: #CE8F12;
+
+    /* Maxed Gold (used for Maxed things etc.) */
+    --maxed-hex: #DD980E; 
+
+    /* Golden Text (used for Golden Text) */
+    --gold-hex: #FDBB3C;
+
+    /* Header Logo */
+    --logo-square: url(../img/logo_square.png?v2);
+
+    /* Normal Backgrounds */
+    --bg-png: url(../img/bg.png?v3); --bg-webp: url(../img/bg.webp?v3);
+
+    /* Blurred Backgrounds */
+    --bg_blur-png: url(../img/bg_blur.png?v3); --bg_blur-webp: url(../img/bg_blur.webp?v3);
+}
+
 *{
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
@@ -5,7 +40,7 @@
 
 html{
     background-color: black;
-    background: url(../img/bg.webp?v3) no-repeat center center fixed;
+    background: var(--bg-webp) no-repeat center center fixed;
     background-size: cover;
     font-family: 'Montserrat', sans-serif;
     color: white;
@@ -21,7 +56,7 @@ html{
 }
 
 html.no-webp{
-    background-image: url(../img/bg.png?v3);
+    background-image: var(--bg-png);
 }
 
 a.no-underline{
@@ -46,11 +81,11 @@ a.no-underline{
 }
 
 .tippy-tooltip[data-placement^="top"] > .tippy-arrow{
-    border-top-color: #0BCA51;
+    border-top-color: var(--icon-hex);
 }
 
 .tippy-tooltip[data-placement^="bottom"] > .tippy-arrow{
-    border-bottom-color: #0BCA51;
+    border-bottom-color: var(--icon-hex);
 }
 
 *[data-tippy-content]::after{
@@ -60,7 +95,7 @@ a.no-underline{
 }
 
 *[data-tippy-content]:hover::after{
-    color: #0BEA51;
+    color: var(--link-hex);
 }
 
 .tippy-content{
@@ -74,12 +109,12 @@ a.no-underline{
 }
 
 a{
-    color: #0BEA51;
+    color: var(--link-hex);
     transition: color .2s;
 }
 
 a:hover{
-    color: #09EF70;
+    color: var(--hover-hex);
 }
 
 header{
@@ -202,7 +237,7 @@ header{
 }
 
 .pride-flag.logo{
-    background: url(../img/logo_square.png?v2);
+    background: var(--logo-square);
     background-size: auto 100%;
     background-position: center;
     background-repeat: no-repeat;
@@ -218,7 +253,7 @@ header{
 .blm-logo{
     position: absolute;
     top: 0;
-    right: 100px;
+    right: 205px;
     width: 48px;
     height: 48px;
     background-image: url(/resources/img/icons/blm-logo.png);
@@ -401,9 +436,9 @@ header{
     top: 6px;
     right: 20px;
     background-color: rgba(0,0,0,0.2);
-    background-image: url(../img/icons/format-color-fill.png);
-    background-size: 24px auto;
-    background-position: 6px 8px;
+    background-image: url(../img/icons/package-variant.png);
+    background-size: 22px auto;
+    background-position: 6px 7px;
     background-repeat: no-repeat;
 }
 
@@ -424,7 +459,7 @@ header{
     border-radius: 9999px;
     top: 8px;
     right: 20px;
-    background-color: rgba(11, 202, 81, 0.9);
+    background-color: rgba(var(--icon-rgb), 0.9);
     background-size: 24px auto;
     background-position: 6px 8px;
     background-repeat: no-repeat;
@@ -432,7 +467,61 @@ header{
 }
 
 .switch_packs_button:hover{
-    background-color: rgba(11, 218, 81, 0.9);
+    background-color: rgba(var(--line-rgb), 0.9);
+}
+
+#themes_button{
+    display: inline-block;
+    position: absolute;
+    height: 36px;
+    line-height: 36px;
+    box-sizing: border-box;
+    margin-left: 5px;
+    vertical-align: middle;
+    cursor: pointer;
+    text-transform: capitalize;
+    font-weight: 600;
+    font-size: 14px;
+    color: white;
+    padding-right: 5px;
+    padding-left: 32px;
+    padding-right: 10px;
+    border-radius: 9999px;
+    top: 6px;
+    right: 110px;
+    background-color: rgba(0,0,0,0.2);
+    background-image: url(../img/icons/format-color-fill.png);
+    background-size: 24px auto;
+    background-position: 6px 8px;
+    background-repeat: no-repeat;
+}
+
+.switch_themes_button{
+    display: inline-block;
+    position: absolute;
+    height: 30px;
+    line-height: 30px;
+    box-sizing: border-box;
+    margin-left: 5px;
+    cursor: pointer;
+    text-transform: capitalize;
+    font-weight: 600;
+    font-size: 12px;
+    color: white;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 9999px;
+    top: 8px;
+    right: 20px;
+    background-color: rgba(var(--icon-rgb), 0.9);
+    background-size: 24px auto;
+    background-position: 6px 8px;
+    background-repeat: no-repeat;
+    text-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+}
+
+.switch_themes_button:hover{
+    background-color: rgba(var(--line-rgb), 0.9);
 }
 
 .selected_button{
@@ -460,7 +549,7 @@ header{
 }
 
 #bg_blur{
-    background: url(../img/bg_blur.webp?v3) no-repeat center center fixed;
+    background: var(--bg_blur-webp) no-repeat center center fixed;
     background-size: cover;
     position: fixed;
     left: 30vw;
@@ -471,7 +560,7 @@ header{
 }
 
 html.no-webp #bg_blur{
-    background-image: url(../img/bg_blur.png?v3)
+    background-image: var(--bg_blur-png)
 }
 
 #wrapper{
@@ -544,7 +633,7 @@ html.no-webp #bg_blur{
 .skill-icon{
     width: 36px;
     height: 36px;
-    background-color: #0BCA51;
+    background-color: var(--icon-hex);
     border-radius: 50%;
     position: relative;
     z-index: 10;
@@ -553,7 +642,7 @@ html.no-webp #bg_blur{
 }
 
 .skill.maxed-skill .skill-icon{
-    background-color: #DD980E;
+    background-color: var(--maxed-hex);
 }
 
 .skill-icon > .item-icon{
@@ -587,11 +676,11 @@ html.no-webp #bg_blur{
     left: -18px;
     width: 18px;
     bottom: 0;
-    background-color: #0BAA51;
+    background-color: var(--skillbar-hex);
 }
 
 .skill.maxed-skill .skill-bar::before{
-    background-color: #CE8F12;
+    background-color: var(--maxedbar-hex);
 }
 
 .skill-bar{
@@ -610,13 +699,13 @@ html.no-webp #bg_blur{
     top: 0;
     left: 0;
     bottom: 0;
-    background-color: #0BAA51;
+    background-color: var(--skillbar-hex);
     border-top-right-radius: 7px;
     border-bottom-right-radius: 7px;
 }
 
 .skill.maxed-skill .skill-progress-bar, .slayer-bar.maxed-slayer .skill-progress-bar{
-    background-color: #CE8F12;
+    background-color: var(--maxedbar-hex);
 }
 
 .skill-progress-text{
@@ -690,6 +779,7 @@ html.no-webp #bg_blur{
     transform: translateY(-100%);
     transition: transform .3s;
     z-index: 100;
+    overflow-y: auto;
 }
 
 #packs_box.packs-opened{
@@ -720,6 +810,74 @@ html.no-webp #bg_blur{
     top: 8px;
     left: 8px;
     border-radius: 5px;
+}
+
+#themes_box{
+    position: fixed;
+    right: 20px;
+    width: 440px;
+    top: 45px;
+    z-index: 1;
+    background-color: rgba(30, 30, 30, 0.95);
+    padding: 20px;
+    box-sizing: border-box;
+    transform: translateY(-100%);
+    transition: transform .3s;
+    z-index: 100;
+    overflow-y: auto;
+}
+
+#themes_box.themes-opened{
+    transform: translateY(0%);
+}
+
+.theme{
+    position: relative;
+    padding: 6px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.05);
+    margin-top: 15px;
+    padding-left: 48px;
+    font-size: 14px;
+}
+
+.theme .theme-author{
+    font-weight: 500;
+}
+
+.theme .theme-name{
+    display: inline-block;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+}
+
+.theme .theme-icon{
+    top: 8px;
+    left: 8px;
+    border-radius: 5px;
+}
+
+.theme-icon{
+    width: 32px;
+    height: 32px;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    position: absolute;
+    top: 4px;
+    left: 0;
+}
+
+.theme-name{
+    display: block;
+    text-decoration: none;
+}
+
+.theme-author{
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.theme-author span{
+    color: rgba(255, 255, 255, 0.8);
 }
 
 html.no-transform #info_box{
@@ -1075,7 +1233,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
     height: 29px;
     line-height: 29px;
     box-sizing: border-box;
-    background-color: rgba(11, 202, 81, 0.9);
+    background-color: rgba(var(--icon-rgb), 0.9);
     display: inline-block;
     border-radius: 99999px;
     text-decoration: none;
@@ -1135,7 +1293,7 @@ div.additional-player-stat{
 }
 
 .additional-player-stat:hover{
-    background-color: #0BCA51;
+    background-color: var(--icon-hex);
 }
 
 a.additional-player-stat:hover{
@@ -1277,7 +1435,7 @@ a.additional-player-stat:hover{
     right: 0;
     bottom: 10px;
     height: 2px;
-    background-color: #0BDA51;
+    background-color: var(--line-hex);
     z-index: 2;
 }
 
@@ -1327,7 +1485,7 @@ a.additional-player-stat:hover{
     right: 0;
     height: 2px;
     top: 100%;
-    background-color: #0BCA51;
+    background-color: var(--icon-hex);
     border-radius: 4px;
     transition: height .1s, top .1s;
 }
@@ -1348,11 +1506,11 @@ a.additional-player-stat:hover{
 }
 
 .golden-text{
-    color: #FDBB3C !important;
+    color: var(--gold-hex) !important;
 }
 
 .stat-name.golden-text, .slayer-section-header.golden-text{
-    color: #DD980E !important;
+    color: var(--maxed-hex) !important;
 }
 
 .white-text{
@@ -1555,7 +1713,7 @@ a.additional-player-stat:hover{
 }
 
 .stat-header span{
-    border-bottom: 4px solid #0BCA51;
+    border-bottom: 4px solid var(--icon-hex);
 }
 
 .info-container{
@@ -1589,7 +1747,7 @@ a.additional-player-stat:hover{
     height: 35px;
     line-height: 35px;
     text-align: center;
-    background-color: #0BCA51;
+    background-color: var(--icon-hex);
     text-transform: uppercase;
     font-weight: 600;
     text-align: center;
@@ -1779,11 +1937,11 @@ a.additional-player-stat:hover{
 }
 
 .piece-legendary-bg{
-    background-color: #DD980E;
+    background-color: var(--maxed-hex);
 }
 
 .piece-legendary-bg + .item-lore::-webkit-scrollbar-thumb{
-    background-color: #DD980E;
+    background-color: var(--maxed-hex);
 }
 
 .piece-epic-bg{
@@ -1937,7 +2095,7 @@ a.additional-player-stat:hover{
 }
 
 .missing-pet:hover, .missing-pet.sticky-stats{
-    background-color: #DD980E;
+    background-color: var(--maxed-hex);
 }
 
 .missing-pet:hover .piece-icon, .missing-pet.sticky-stats .piece-icon{
@@ -1986,7 +2144,7 @@ a.additional-player-stat:hover{
     right: 0;
     bottom: -2px;
     height: 2px;
-    background-color: #0BCA51;
+    background-color: var(--icon-hex);
     z-index: 2;
 }
 
@@ -2023,7 +2181,7 @@ a.additional-player-stat:hover{
     right: 0;
     height: 2px;
     top: 100%;
-    background-color: #0BCA51;
+    background-color: var(--icon-hex);
     border-radius: 4px;
     transition: height .1s, top .1s;
 }
@@ -2174,7 +2332,7 @@ a.additional-player-stat:hover{
 
 .external-app-name{
     font-weight: 600;
-    color: #0BEA51;
+    color: var(--link-hex);
 }
 
 .external-app-name .grey-text{
@@ -2283,7 +2441,7 @@ a.additional-player-stat:hover{
 }
 
 .slayer-unclaimed{
-    color: #0BEA51;
+    color: var(--link-hex);
     text-align: center;
     font-size: 13px;
     text-transform: uppercase;
@@ -2374,7 +2532,7 @@ a.additional-player-stat:hover{
     justify-content: center;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
-    border-bottom: 2px solid #0BCA51;
+    border-bottom: 2px solid var(--icon-hex);
     background-color: rgba(0,0,0,0.2);
 }
 
@@ -2415,7 +2573,7 @@ a.additional-player-stat:hover{
 
 .category-header-maxed{
     font-size: 15px;
-    color: #FDBB3C;
+    color: var(--gold-hex);
 }
 
 .category-header-detail{
@@ -2465,11 +2623,11 @@ a.additional-player-stat:hover{
 }
 
 .max-minion .stat-name{
-    color: #DD980E;
+    color: var(--maxed-hex);
 }
 
 .max-minion .stat-value{
-    color: #FDBB3C;
+    color: var(--gold-hex);
 }
 
 .minion-variant{
@@ -2482,7 +2640,7 @@ a.additional-player-stat:hover{
 }
 
 .minion-variant.minion-crafted{
-    color: #0BEA51;
+    color: var(--link-hex);
 }
 
 .collection{
@@ -2567,7 +2725,7 @@ a.additional-player-stat:hover{
     text-transform: uppercase;
     font-weight: 600;
     text-shadow: 0px 0px 7px rgba(0,0,0,0.3);
-    border-bottom: 2px solid #0BCA51;
+    border-bottom: 2px solid var(--icon-hex);
     background-color: rgba(0,0,0,0.2);
 }
 
@@ -2605,7 +2763,7 @@ a.additional-player-stat:hover{
     padding: 5px 0px;
     font-weight: 600;
     text-transform: capitalize;
-    color: #0BEA51;
+    color: var(--link-hex);
     margin-top: 12px;
     opacity: 0;
 }
@@ -2619,7 +2777,7 @@ a.additional-player-stat:hover{
     padding: 20px;
     margin-top: 37px;
     box-sizing: border-box;
-    scrollbar-color: #0BCA51 transparent;
+    scrollbar-color: var(--icon-hex) transparent;
 }
 
 .narrow-info-content.all-shown{
@@ -2639,7 +2797,7 @@ a.additional-player-stat:hover{
 }
 
 .narrow-info-content::-webkit-scrollbar-thumb{
-    background-color: #0BCA51;
+    background-color: var(--icon-hex);
     border-radius: 5px;
 }
 
@@ -2658,7 +2816,7 @@ a.additional-player-stat:hover{
     margin-top: calc(50vh - 130px);
     width: 700px;
     height: 260px;
-    background: url(../img/bg_blur.webp?v3) no-repeat center center fixed;
+    background: var(--bg_blur-webp) no-repeat center center fixed;
     background-size: cover;
     border-radius: 10px;
     overflow: hidden;
@@ -2671,7 +2829,7 @@ a.additional-player-stat:hover{
 }
 
 html.no-webp #enter_player_box_wrapper{
-    background-image: url(../img/bg_blur.png?v3);
+    background-image: var(--bg_blur-png);
 }
 
 #enter_player_box{
@@ -2712,7 +2870,7 @@ html.no-webp #enter_player_box_wrapper{
     padding: 15px;
     padding-left: 25px;
     padding-right: 25px;
-    background-color: #0BCA51;
+    background-color: var(--icon-hex);
     color: white;
     text-transform: uppercase;
     font-weight: bold;
@@ -2724,7 +2882,7 @@ html.no-webp #enter_player_box_wrapper{
 }
 
 #goto_target_username:hover{
-    background-color: #0BEA51;
+    background-color: var(--link-hex);
 }
 
 #error_box_wrapper{
@@ -2732,7 +2890,7 @@ html.no-webp #enter_player_box_wrapper{
     margin: 0 auto;
     margin-top: 20px;
     width: 700px;
-    background: url(../img/bg_blur.webp?v3) no-repeat center center fixed;
+    background: var(--bg_blur-webp) no-repeat center center fixed;
     background-size: cover;
     border-radius: 10px;
     overflow: hidden;
@@ -2754,7 +2912,7 @@ html.no-webp #enter_player_box_wrapper{
 .top-profile{
     position: relative;
     display: inline-block;
-    background: url(../img/bg_blur.webp?v3) no-repeat center center fixed;
+    background: var(--bg_blur-webp) no-repeat center center fixed;
     background-size: cover;
     width: calc(100% / 2 - 10px);
     margin-bottom: 20px;
@@ -2767,7 +2925,7 @@ html.no-webp #enter_player_box_wrapper{
 }
 
 html.no-webp .top-profile{
-    background-image: url(../img/bg_blur.png?v3);
+    background-image: var(--bg_blur-png);
 }
 
 .top-profile:hover{
@@ -2827,7 +2985,7 @@ html.no-webp .top-profile{
 }
 
 html.no-webp #error_box_wrapper{
-    background-image: url(../img/bg_blur.png?v3);
+    background-image: var(--bg_blur-png);
 }
 
 #error_box, #top_profiles_box{
@@ -2844,7 +3002,7 @@ html.no-webp #error_box_wrapper{
 
 #error_title{
     font-weight: 600;
-    background-color: #0BCA51;
+    background-color: var(--icon-hex);
     color: white;
     text-transform: uppercase;
     height: 100%;
@@ -3345,6 +3503,27 @@ html.no-webp #error_box_wrapper{
         margin-left: 0 !important;
         margin-top: 20px;
     }
+
+    #themes_button{
+        padding-right: 3px;
+        right: 60px;
+    }
+
+    #packs_button{
+        padding-right: 3px;
+    }
+
+    #themes_button span{
+        display: none;
+    }
+
+    #packs_button span{
+        display: none;
+    }
+
+    .blm-logo{
+        right: 90px;
+    }
 }
 
 @media (max-width: 735px){
@@ -3378,6 +3557,20 @@ html.no-webp #error_box_wrapper{
         backdrop-filter: blur(15px);
     }
 
+    #themes_box{
+        left: 0;
+        width: 100vw;
+        right: 0;
+        max-height: calc(100vh - 45px);
+    }
+
+    #packs_box{
+        left: 0;
+        width: 100vw;
+        right: 0;
+        max-height: calc(100vh - 45px);
+    }
+
     #api_button{
         display: none;
     }
@@ -3401,6 +3594,11 @@ html.no-webp #error_box_wrapper{
     #btn_search_user{
         left: calc(100% - 60px);
     }
+
+    #themes_button{
+        display: none;
+    }
+
     #packs_button{
         display: none;
     }
