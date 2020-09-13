@@ -418,7 +418,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             }
 
             let hasExpertiseKills = false;
-            let toNextLevel = 0;
+            let toNextLevel = 15000;
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'expertise_kills')){
                 let { expertise_kills } = item.tag.ExtraAttributes;
