@@ -63,23 +63,23 @@ module.exports = {
             name: "WarpWing's theme",
             author: "WarpWing",
             hidden: true,
-            logo: "https://i.imgur.com/4SFZGdj.png",
+            logo: "https://cdn.discordapp.com/attachments/713278398830477353/744929715512410202/combat_3.png",
             backgrounds: {
                 "bg": {
-                    "png": "https://cdn.discordapp.com/attachments/739316781096763485/749397628420358154/IMG_20200829_131600.jpg",
-                    "webp": "https://cdn.discordapp.com/attachments/739316781096763485/749397628420358154/IMG_20200829_131600.jpg"
+                    "png": "https://cdn.discordapp.com/attachments/713278398830477353/744929715512410202/combat_3.png",
+                    "webp": "https://cdn.discordapp.com/attachments/713278398830477353/744929715512410202/combat_3.png"
                 },
                 "bg_blur": {
-                    "png": "https://cdn.discordapp.com/attachments/739316781096763485/749397628420358154/IMG_20200829_131600.jpg",
-                    "webp": "https://cdn.discordapp.com/attachments/739316781096763485/749397628420358154/IMG_20200829_131600.jpg"
+                    "png": "https://cdn.discordapp.com/attachments/713278398830477353/744929715512410202/combat_3.png",
+                    "webp": "https://cdn.discordapp.com/attachments/713278398830477353/744929715512410202/combat_3.png"
                 }
             },
             colors: {
-                icon: "#FFD700",
-                line: "#FFD700",
-                link: "#FFD700",
-                hover: "#FFD700",
-                skillbar: "#FFD700"
+                icon: "#000000",
+                line: "#000000",
+                link: "#000000",
+                hover: "#000000",
+                skillbar: "#000000"
             }
         },
 
