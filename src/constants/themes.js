@@ -60,10 +60,10 @@ module.exports = {
         /* I have no idea if this theme is mentally sane so lmao */
         
          "warpwing": {
-            name: "WarpWing's theme",
+            name: "BlackOps",
             author: "WarpWing",
             hidden: true,
-            logo: "https://cdn.discordapp.com/attachments/713278398830477353/744929715512410202/combat_3.png",
+            logo: "https://sky.shiiyu.moe/resources/img/logo_square.png",
             backgrounds: {
                 "bg": {
                     "png": "https://cdn.discordapp.com/attachments/713278398830477353/744929715512410202/combat_3.png",
