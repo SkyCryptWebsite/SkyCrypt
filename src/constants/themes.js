@@ -60,26 +60,26 @@ module.exports = {
         /* I have no idea if this theme is mentally sane so lmao */
         
          "warpwing": {
-            name: "BlackOps",
+            name: "Forest Walk",
             author: "WarpWing",
             hidden: true,
             logo: "https://sky.shiiyu.moe/resources/img/logo_square.png",
             backgrounds: {
                 "bg": {
-                    "png": "https://cdn.discordapp.com/attachments/713278398830477353/744929715512410202/combat_3.png",
-                    "webp": "https://cdn.discordapp.com/attachments/713278398830477353/744929715512410202/combat_3.png"
+                    "png": "https://cdn.discordapp.com/attachments/713278398830477353/744929704611676221/farming_2.png",
+                    "webp": "https://cdn.discordapp.com/attachments/713278398830477353/744929704611676221/farming_2.png"
                 },
                 "bg_blur": {
-                    "png": "https://cdn.discordapp.com/attachments/713278398830477353/744929715512410202/combat_3.png",
-                    "webp": "https://cdn.discordapp.com/attachments/713278398830477353/744929715512410202/combat_3.png"
+                    "png": "https://cdn.discordapp.com/attachments/713278398830477353/744929704611676221/farming_2.png",
+                    "webp": "https://cdn.discordapp.com/attachments/713278398830477353/744929704611676221/farming_2.png"
                 }
             },
             colors: {
-                icon: "#6a0dad",
-                line: "#6a0dad",
-                link: "#6a0dad",
-                hover: "#6a0dad",
-                skillbar: "#6a0dad"
+                icon: "#66FFFF",
+                line: "#66FFFF",
+                link: "#66FFFF",
+                hover: "#66FFFF",
+                skillbar: "#66FFFF"
             }
         },
 
