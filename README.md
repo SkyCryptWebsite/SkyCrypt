@@ -21,12 +21,16 @@ You are free to report bugs or contribute to this project. Just open <a href="..
 - <a href="https://docs.mongodb.com/manual/administration/install-community/">MongoDB</a>
 - <a href="https://redis.io/">Redis</a>
 - <a href="https://api.hypixel.net/">Hypixel API Key</a>
+- <a href="https://www.nginx.com/">Nginx</a> (Optional but a ideal choice for full deployment)
+
 
 <h3>Installation</h3>
 
 Clone the project and and run `npm i` to install the dependencies.
 
 Now open `credentials.json` and enter a valid Hypixel API Key. You can obtain one by joining `mc.hypixel.net` and writing `/api` in chat.
+
+`mongod` needs to be running as a service in the background and the `redis-server` needs to be started.
 
 You can now run `npm start` to start it. You will be able to access the site on <a href="http://localhost:32464">http://localhost:32464</a> if you leave the default port.
 
