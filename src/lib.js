@@ -426,7 +426,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                     hasExpertiseKills = true;
                     item.lore += "<br><br>" + helper.renderLore(`§7Expertise Kills: §c${expertise_kills}`);
                     if (expertise_kills >= 15000)
-                        item.lore += "<br>" + helper.renderLore(`§8Maxed!`);
+                        item.lore += "<br>" + helper.renderLore(`§8MAXED OUT!`);
                     else{
                         let toNextLevel = 0;
                         killsLadder = [50,100,250,500,1000,2500,5500,10000,15000];
