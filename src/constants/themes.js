@@ -75,11 +75,11 @@ module.exports = {
                 }
             },
             colors: {
-                icon: "#66FFFF",
-                line: "#66FFFF",
-                link: "#66FFFF",
-                hover: "#66FFFF",
-                skillbar: "#66FFFF"
+                icon: "#00aabb",
+                line: "#00aabb",
+                link: "#00aabb",
+                hover: "#00aabb,
+                skillbar: "#00aabb"
             }
         },
 
