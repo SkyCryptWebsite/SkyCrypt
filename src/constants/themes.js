@@ -78,7 +78,7 @@ module.exports = {
                 icon: "#00aabb",
                 line: "#00aabb",
                 link: "#00aabb",
-                hover: "#00aabb,
+                hover: "#00aabb",
                 skillbar: "#00aabb"
             }
         },
