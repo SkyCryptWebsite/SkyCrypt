@@ -24,6 +24,8 @@
 
     function toggleInfo(){
         let infoBox = document.querySelector('#info_box');
+        if(document.querySelector('.packs-opened')) togglePacks();
+        if(document.querySelector('.themes-opened')) toggleThemes();
 
         if(infoBox.classList.contains('info-opened'))
             infoBox.classList.remove('info-opened')
@@ -33,6 +35,8 @@
 
     function togglePacks(){
         let infoBox = document.querySelector('#packs_box');
+        if(document.querySelector('.info-opened')) toggleInfo();
+        if(document.querySelector('.themes-opened')) toggleThemes();
 
         if(infoBox.classList.contains('packs-opened'))
             infoBox.classList.remove('packs-opened')
@@ -47,6 +51,47 @@
             eraseCookie("pack");
         }
         window.location.reload()
+    }
+
+    function toggleThemes(){
+        let box = document.querySelector('#themes_box');
+        if(document.querySelector('.info-opened')) toggleInfo();
+        if(document.querySelector('.packs-opened')) togglePacks();
+
+        if(box.classList.contains('themes-opened'))
+            box.classList.remove('themes-opened')
+        else
+            box.classList.add('themes-opened');
+    }
+
+    function switchTheme(theme){
+        if(localStorage.getItem("currentTheme") == theme) return;
+        if(!extra.themes[theme]) return console.error(`Theme ${theme} doesn't exist`);
+
+        localStorage.setItem("currentTheme", theme);
+        setInUseThemeButton(theme);
+        loadTheme(theme);
+    }
+
+    setInUseThemeButton(localStorage.getItem("currentTheme"));
+    function setInUseThemeButton(theme) {
+        if(!extra.themes[theme]) return console.error(`Theme ${theme} doesn't exist.`);
+        if(extra.themes[theme].hidden) return;
+
+        let currentlySelected = document.querySelector('.theme > .selected_button');
+        if (currentlySelected) {
+            if (currentlySelected.id == `${theme}-theme`) return;
+            currentlySelected.disabled = false;
+            currentlySelected.textContent = "Switch";
+            currentlySelected.classList.add('switch_themes_button');
+            currentlySelected.classList.remove('selected_button');
+        } 
+
+        let toBeSelected = document.querySelector(`#${theme}-theme`);
+        toBeSelected.disabled = true;
+        toBeSelected.textContent = "In Use";
+        toBeSelected.classList.add('selected_button');
+        toBeSelected.classList.remove('switch_themes_button');
     }
 
     Modernizr.on('webp', function(result){

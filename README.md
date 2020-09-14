@@ -9,7 +9,7 @@ The SkyCrypt Project,which is based on LeaPhant's [sky.lea.moe](https://sky.lea.
 ![Docker Image CI](https://github.com/SkyCryptWebsite/SkyCrypt/workflows/Docker%20Image%20CI/badge.svg) 
 <h2 align="center">Screenshot</h1>
 
-<p align="center"><img src="https://i.imgur.com/DB1mHZC.png"></p>
+<p align="center"><img src="https://i.imgur.com/aa7HCev.png"></p>
 
 <h2 align="center">Contributing</h1>
 
@@ -21,7 +21,8 @@ You are free to report bugs or contribute to this project. Just open <a href="..
 - <a href="https://docs.mongodb.com/manual/administration/install-community/">MongoDB</a>
 - <a href="https://redis.io/">Redis</a>
 - <a href="https://api.hypixel.net/">Hypixel API Key</a>
-- <a href="https://www.nginx.com/">Nginx</a> (not required for testing in development)
+- <a href="https://www.nginx.com/">Nginx</a> (Optional but a ideal choice for full deployment)
+
 
 <h3>Installation</h3>
 
