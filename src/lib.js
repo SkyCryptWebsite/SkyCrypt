@@ -419,7 +419,6 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'expertise_kills')){
                 let { expertise_kills } = item.tag.ExtraAttributes;
-                const expertiseKillsLadder = [50,100,250,500,1000,2500,5500,10000,15000];
 
                 if(expertise_kills > 0 && lore_raw){
                     item.lore += "<br><br>" + helper.renderLore(`§7Expertise Kills: §c${expertise_kills}`);
@@ -427,7 +426,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                         item.lore += "<br>" + helper.renderLore(`§8MAXED OUT!`);
                     else{
                         let toNextLevel = 0;
-                        for (var e of expertiseKillsLadder){
+                        for (const e of constants.expertise_kills_ladder){
                             if(expertise_kills < e){
                                 toNextLevel = e - expertise_kills;
                                 break;

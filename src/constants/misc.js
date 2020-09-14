@@ -110,6 +110,9 @@ module.exports = {
         'Thorns VI'
     ],
 
+    
+    expertise_kills_ladder : [50,100,250,500,1000,2500,5500,10000,15000],
+
     // Player stats on a completely new profile
     base_stats: {
         damage: 0,
