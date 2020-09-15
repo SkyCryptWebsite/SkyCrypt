@@ -1871,8 +1871,8 @@ class Dolphin extends Pet {
 class FlyingFish extends Pet {
 	get stats() {
 		return {
-			intelligence: this.level * 0.75,
-			strength: this.level * 0.4
+			defense: this.level * 0.5,
+			strength: this.level * 0.5
 		};
 	}
 
@@ -1886,7 +1886,7 @@ class FlyingFish extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.15 : this.rarity > 1 ? 0.125 : 0.05;
+		let mult = this.rarity > 2 ? 0.4 : 0.3;
 		return {
 			name: "§6Quick Reel",
 			desc: [`§7Increases fishing speed by §a${round(this.level * mult, 1)}%`]
