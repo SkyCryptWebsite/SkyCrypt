@@ -693,6 +693,28 @@ const seaCreatures = [
     }
 ];
 
+const pet_milestones = [
+    {
+        id: 'sea_creatures_killed',
+        milestones: [
+        250,
+        1000,
+        2500,
+        5000,
+        1000
+        ]
+    }, {
+        id: "ores_mined",
+        milestones: [
+        2500,
+        7500,
+        20000,
+        100000,
+        250000
+        ]
+    }
+];
+
 getStats = items => {
     const stats = Object.assign({}, constants.stat_template);
 
@@ -2138,7 +2160,19 @@ twitterDescription += '. Click to view more stats!'
                         <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/93c8aa3fde295fa9f9c27f734bdbab11d33a2e43e855accd7465352377413b)"></div></div><span>pet milestones</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.milestones){ %>
-                            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.milestones[key].toLocaleString() %></span><br>
+                            
+                                <%var percentage = {};%>
+                                <%for(const pet of pet_milestones){%>
+                                    <%if(pet.id == key){ %>
+                                        <%for(var i = 0; i < pet.milestones.length; i++){%>
+                                            <%if(calculated.misc.milestones[key] < pet.milestones[i]){%>
+                                                <%percentage[key] = (calculated.misc.milestones[key]/pet.milestones[i]*100).toLocaleString().substring(0,5);%>
+                                                <% break; %>
+                                            <% } %>
+                                        <% } %>
+                                    <% } %>
+                                <% } %> 
+                            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.milestones[key].toLocaleString();%> <% if(percentage[key]){%>(<%=percentage[key];%>% to next tier)<% } else { %>(Max tier) <%}%></span><br>
                             <% } %>
                         </p>
                     <% } %>
