@@ -2161,10 +2161,10 @@ twitterDescription += '. Click to view more stats!'
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.milestones){ %>
                             
-                                <%var percentage = {};%>
+                                <%let percentage = {};%>
                                 <%for(const pet of pet_milestones){%>
                                     <%if(pet.id == key){ %>
-                                        <%for(var i = 0; i < pet.milestones.length; i++){%>
+                                        <%for(let i = 0; i < pet.milestones.length; i++){%>
                                             <%if(calculated.misc.milestones[key] < pet.milestones[i]){%>
                                                 <%percentage[key] = (calculated.misc.milestones[key]/pet.milestones[i]*100).toLocaleString().substring(0,5);%>
                                                 <% break; %>
