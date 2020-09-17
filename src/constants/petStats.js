@@ -1971,23 +1971,26 @@ class Megalodon extends Pet{
 	}
 
 	get first() {
+		let mult = 0.25
 		return {
 			name: "§6Blood Scent",
-			desc: [`§7Deal up to §c+${round(0.25*this.level,1)}% ${symbols.strength} §7Damage based on the enemy's missing health`]
+			desc: [`§7Deal up to §c+${round(mult*this.level,1)}% ${symbols.strength} §7Damage based on the enemy's missing health`]
 		};
 	}
 
 	get second() {
+		let mult = 0.2;
 		return {
 			name: "§6Enhanced scales",
-			desc: [`§7Increases the stats of Shark Armor by §a${0.2*this.level}%`]
+			desc: [`§7Increases the stats of Shark Armor by §a${mult*this.level}%`]
 		};
 	}
 
 	get third() {
+		let mult = 0.5;
 		return {
 			name: "§6Feeding frenzy",
-			desc: [`On kill gain §c${0.5 * this.level}${symbols.strength} Damage §7and §f${symbols.speed} speed for 5 seconds`]
+			desc: [`§7On kill gain §c${mult * this.level}${symbols.strength} Damage §7and §f${symbols.speed} speed §7for 5 seconds`]
 		};
 	}
 }
