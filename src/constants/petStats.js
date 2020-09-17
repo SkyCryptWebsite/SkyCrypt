@@ -1953,6 +1953,45 @@ class Squid extends Pet {
 	}
 }
 
+class Megalodon extends Pet{
+	get stats() {
+		return {
+			magic_find: Math.floor(this.level * 0.1),
+			strength: Math.floor(this.level * 0.5)
+		};
+	}
+
+	get abilities() {
+		let list = [this.first];
+		if (this.rarity > 1)
+			list.push(this.second);
+		if (this.rarity > 3)
+			list.push(this.third);
+		return list;
+	}
+
+	get first() {
+		return {
+			name: "§6Blood Scent",
+			desc: [`§7Deal up to §c+${round(0.25*this.level,1)}% ${symbols.strength} §7Damage based on the enemy's missing health`]
+		};
+	}
+
+	get second() {
+		return {
+			name: "§6Enhanced scales",
+			desc: [`§7Increases the stats of Shark Armor by §a${0.2*this.level}%`]
+		};
+	}
+
+	get third() {
+		return {
+			name: "§6Feeding frenzy",
+			desc: [`On kill gain §c${0.5 * this.level}${symbols.strength} Damage §7and §f${symbols.speed} speed for 5 seconds`]
+		};
+	}
+}
+
 /*
 
 Alchemy Pets
@@ -2215,6 +2254,7 @@ module.exports = {
 		'Dolphin': Dolphin,
 		'Flying Fish': FlyingFish,
 		'Squid': Squid,
+		'Megalodon': Megalodon,
 		//Alchemy
 		'Jellyfish': Jellyfish,
 		'Parrot': Parrot,

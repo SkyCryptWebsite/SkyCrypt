@@ -345,6 +345,11 @@ module.exports = {
             type: "fishing",
             emoji: "❄️"
         },
+        "MEGALODON": {
+            head: "",
+            type: "fishing",
+            emoji: "🦈"
+        },
         "GOLEM": {
             head: "/head/89091d79ea0f59ef7ef94d7bba6e5f17f2f7d4572c44f90f76c4819a714",
             type: "combat",
