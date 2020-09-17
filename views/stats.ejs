@@ -1694,11 +1694,15 @@ twitterDescription += '. Click to view more stats!'
                     <%= calculated.display_name %> has entered Catacombs.
                 </p>
 
-                <% if (calculated.dungeons.secrets_found > 0) { %>
-                    <p class="stat-raw-values">
-                        <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span></span>
-                    </p>
-                <% } %>
+                <p class="stat-raw-values">
+                    <span class="stat-name">Selected Class: </span><span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span><br>
+                    <% if (calculated.dungeons.highest_floor != null) { %>
+                        <br><span class="stat-name">Highest Floor Beaten: </span><span class="stat-value">Floor <%= calculated.dungeons.highest_floor %></span><br>
+                    <% } %>
+                    <% if (calculated.dungeons.secrets_found > 0) { %>
+                        <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span><br>
+                    <% } %>
+                </p>
 
                 <% if (calculated.dungeons.unlocked_collections) { %>
                     <p class="stat-sub-header">Boss Collections</p>
