@@ -2150,7 +2150,7 @@ twitterDescription += '. Click to view more stats!'
                                          <% break; %>
                                     <% } %>
                                 <% } %>
-                            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.milestones[key].toLocaleString();%> <% if(percentage[key]){%>(<%=percentage[key];%>% to next tier)<% } else { %>(Max tier) <%}%></span><br>
+                            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.milestones[key].toLocaleString();%> <% if(percentage[key]){%>(<%=percentage[key];%>% to next tier)<% } else { %><span class="golden-text">(Max tier)</span> <%}%></span><br>
                             <% } %>
                         </p>
                     <% } %>
