@@ -1293,7 +1293,7 @@ class Spider extends Pet {
 		let mult = 0.3;
 		return {
 			name: "§6Spider Whisperer",
-			desc: [`§7Spider and tarantula minions work §a${round(this.level * mult, 1)} §7faster while on your island`]
+			desc: [`§7Spider and tarantula minions work §a${round(this.level * mult, 1)}% §7faster while on your island`]
 		};
 	}
 }
