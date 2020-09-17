@@ -2294,14 +2294,13 @@ module.exports = {
     },
 
     getDungeons: async (userProfile, hypixelProfile) => {
+        const dungeons = userProfile.dungeons;
+        const catacombs = dungeons.dungeon_types.catacombs;
+
         const output = {};
 
-        let tasks = userProfile.tutorial;
-
-        output.entrance = Array.isArray(userProfile.visited_zones) && userProfile.visited_zones.includes('dungeon');
-        if (!output.entrance) return output;
-
-        output.collected_essence = tasks.includes('essence_collected_message');
+        if (Object.keys(catacombs).length === 0) return output;
+        const tasks = userProfile.tutorial;
 
         const collection_data = constants.boss_collections;
         let collections = {};
@@ -2335,6 +2334,7 @@ module.exports = {
 
         output.boss_collections = collections;
 
+        output.selected_class = 
         output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
 
         return output;
