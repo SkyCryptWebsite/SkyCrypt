@@ -1243,7 +1243,7 @@ class Snowman extends Pet {
 		let mult = 0.15;
 		return {
 			name: "§6Frostbite",
-			desc: [`§7Your freezing aura slows enemy attacks causing you to take§a${floor(this.level * mult, 1)}% §7reduced damage`]
+			desc: [`§7Your freezing aura slows enemy attacks causing you to take §a${floor(this.level * mult, 1)}% §7reduced damage`]
 		};
 	}
 
@@ -1599,7 +1599,7 @@ class Giraffe extends Pet {
 		let mult = 0.25;
 		return {
 			name: "§6Long Neck",
-			desc: [`See enemies from afar and gain ${round(this.level * mult, 1)}% §7dodge chance`]
+			desc: [`§7See enemies from afar and gain §a${round(this.level * mult, 1)}% §7dodge chance`]
 		};
 	}
 }
