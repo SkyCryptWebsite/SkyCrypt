@@ -27,8 +27,8 @@ module.exports = {
         "rare": "§9",
         "epic": "§5",
         "legendary": "§6"
-    }, 
-    
+    },
+
     rarity_colors: {
         "f": "common",
         "a": "uncommon",
@@ -107,7 +107,9 @@ module.exports = {
         'Infinite Quiver 10',
         'Infinite Quiver X',
         'Thorns 6',
-        'Thorns VI'
+        'Thorns VI',
+        'Expertise 10',
+        'Expertise X'
     ],
 
     // Number of kills required for each level of expertise
