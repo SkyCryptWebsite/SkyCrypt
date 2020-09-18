@@ -1971,7 +1971,7 @@ class Megalodon extends Pet{
 	}
 
 	get first() {
-		let mult = 0.25
+		let mult = 0.25;
 		return {
 			name: "§6Blood Scent",
 			desc: [`§7Deal up to §c+${round(mult*this.level,1)}% ${symbols.strength} §7Damage based on the enemy's missing health`]
@@ -1990,7 +1990,7 @@ class Megalodon extends Pet{
 		let mult = 0.5;
 		return {
 			name: "§6Feeding frenzy",
-			desc: [`§7On kill gain §c${mult * this.level}${symbols.strength} Damage §7and §f${symbols.speed} speed §7for 5 seconds`]
+			desc: [`§7On kill gain §c${mult * this.level}${symbols.strength} Damage §7and §f${symbols.speed} Speed §7for 5 seconds`]
 		};
 	}
 }
