@@ -1685,20 +1685,24 @@ twitterDescription += '. Click to view more stats!'
             <div class="stat-anchor"></div>
             <div class="stat-header"><span>Dungeons</span></div>
             <div class="stat-content">
-            <% if (!calculated.dungeons.entrance) { %>
+            <% if (Object.keys(calculated.dungeons).length === 0) { %>
                 <p class="stat-raw-values">
-                    <%= calculated.display_name %> hasn't entered Catacombs yet.
+                    <%= calculated.display_name %> didn't enter Catacombs yet.
                 </p>
             <% } else { %>
                 <p class="stat-raw-values">
-                    <%= calculated.display_name %> has entered Catacombs<% if (calculated.dungeons.collected_essence) { %> and collected essence<% } %>.
+                    <%= calculated.display_name %> has entered Catacombs.
                 </p>
 
-                <% if (calculated.dungeons.secrets_found > 0) { %>
-                    <p class="stat-raw-values">
-                        <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span></span>
-                    </p>
-                <% } %>
+                <p class="stat-raw-values">
+                    <span class="stat-name">Selected Class: </span><span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span><br>
+                    <% if (calculated.dungeons.highest_floor != null) { %>
+                        <br><span class="stat-name">Highest Floor Beaten: </span><span class="stat-value">Floor <%= calculated.dungeons.highest_floor %></span><br>
+                    <% } %>
+                    <% if (calculated.dungeons.secrets_found > 0) { %>
+                        <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span><br>
+                    <% } %>
+                </p>
 
                 <% if (calculated.dungeons.unlocked_collections) { %>
                     <p class="stat-sub-header">Boss Collections</p>
@@ -1724,8 +1728,7 @@ twitterDescription += '. Click to view more stats!'
                 <% } %>
             <% } %>
             <p class='stat-raw-values'><small><i>
-                Please note that this section is still in the works, since Hypixel doesn't support Dungeons in their public API yet.<br>
-                If any of displayed values are incorrect or you have ideas for other things, please visit us and chat on our <a class="link link-discord" href="https://discord.gg/Dk25bnB">Discord</a>.
+                Please note that this section is still in the works and many things are now in development. Thanks for your support!
             </i></small></p>
             </div>
         </div>
