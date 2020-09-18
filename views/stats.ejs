@@ -979,6 +979,7 @@ if(highestRaritySword){
         twitterDescription += ` and is fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
 }
 
+
 let metaDescription = twitterDescription + '.';
 
 twitterDescription += '. Click to view more stats!'
@@ -1727,6 +1728,46 @@ twitterDescription += '. Click to view more stats!'
                     </div>
                 <% } %>
             <% } %>
+            <div id="skill_levels_container">
+                <div id="other_skills">
+                    <p class="stat-sub-header">Dungeons</p>
+                    <%= skill_component('Catacombs', 'icon-369_0', calculated.dungeons.class_levels['Catacombs']) %>
+                </div>
+
+                <div id="other_skills">
+                <p class="stat-sub-header">Classes</p>
+                    <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.class_levels['Berserk']) %>
+                    <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.class_levels['Archer']) %>
+                    <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.class_levels['Tank']) %>
+                    <%= skill_component('Healer', 'icon-373_16389', calculated.dungeons.class_levels['Healer']) %>
+                    <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.class_levels['Mage']) %>
+                </div>
+            </div><br><br>
+
+            <%const floors = ["Entrance", "Floor 1", "Floor 2", "Floor 3", "Floor 4", "Floor 5"];%>
+            <%for(let i = 0; i < calculated.dungeons.times_played.length; i++){%>
+                <%if(i%3==0){%><br><br><%}%>
+                <div class="narrow-info-container">
+                <div class="narrow-info-header"><%=floors[i]%></div>
+                <div class="Floor-stats">
+                    <span class="stat-name">Times played: </span><span class="stat-value"><%=calculated.dungeons.times_played[i]%></span><br><br>  
+                    <span class="stat-name">Best Score: </span><span class="stat-value<%if(calculated.dungeons.best_score[i] >=300){%> golden-text<%}%>"><%=calculated.dungeons.best_score[i]%></span><br><br>
+                    <span class="stat-name">Mobs killed: </span><span class="stat-value"><%=calculated.dungeons.mobs_killed[i]%></span><br><br>
+                    <span class="stat-name">Most Mobs Killed: </span><span class="stat-value"><%=calculated.dungeons.most_mob_killed[i]%></span><br><br>    
+                    <span class="stat-name">Watcher kills: </span><span class="stat-value"><%=calculated.dungeons.watcher_kills[i]%></span><br><br> 
+                    <span class="stat-name">Fastest Time: </span><span class="stat-value"><%=calculated.dungeons.fastest_times[i]%></span><br><br>    
+                    <span class="stat-name">Fastest Time S: </span><span class="stat-value"><%=calculated.dungeons.fastest_time_s[i]%></span><br><br>     
+                    <span class="stat-name">Most Healing: </span><span class="stat-value"><%=helper.formatNumber(calculated.dungeons.most_healing[i])%></span><br><br>    
+                    <span class="stat-name">Most Damage Berserk: </span><span class="stat-value"><%=helper.formatNumber(calculated.dungeons.most_damage["Berserk"][i])%></span><br><br>    
+                    <span class="stat-name">Most Damage Tank: </span><span class="stat-value"><%=helper.formatNumber(calculated.dungeons.most_damage["Tank"][i])%></span><br><br>    
+                    <span class="stat-name">Most Damage Archer: </span><span class="stat-value"><%=helper.formatNumber(calculated.dungeons.most_damage["Archer"][i])%></span><br><br>    
+                    <span class="stat-name">Most Damage Mage: </span><span class="stat-value"><%=helper.formatNumber(calculated.dungeons.most_damage["Mage"][i])%></span><br><br>    
+                    <span class="stat-name">Most Damage Healer: </span><span class="stat-value"><%=helper.formatNumber(calculated.dungeons.most_damage["Healer"][i])%></span><br><br>    
+                </div>
+            </div>
+            <% } %>
+
+
             <p class='stat-raw-values'><small><i>
                 Please note that this section is still in the works and many things are now in development. Thanks for your support!
             </i></small></p>

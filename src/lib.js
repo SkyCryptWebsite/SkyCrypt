@@ -109,8 +109,9 @@ function getXpByLevel(level, runecrafting){
     return output;
 }
 
-function getLevelByXp(xp, runecrafting){
-    let xp_table = runecrafting ? constants.runecrafting_xp : constants.leveling_xp;
+//skill {runecrafting : 1, dungeon: 2}
+function getLevelByXp(xp, skill){
+    let xp_table = skill == 1 ? constants.runecrafting_xp : skill == 2 ? constants.dungeon_xp : constants.leveling_xp;
 
     if(isNaN(xp)){
         return {
@@ -1189,8 +1190,9 @@ module.exports = {
                 enchanting: getLevelByXp(userProfile.experience_skill_enchanting || 0),
                 alchemy: getLevelByXp(userProfile.experience_skill_alchemy || 0),
                 carpentry: getLevelByXp(userProfile.experience_skill_carpentry || 0),
-                runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting || 0, true),
+                runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting || 0, 1),
             };
+
 
             for(let skill in skillLevels){
                 if(skill != 'runecrafting' && skill != 'carpentry'){
@@ -2337,6 +2339,41 @@ module.exports = {
         output.selected_class = dungeons.selected_dungeon_class || "none";
         output.highest_floor = catacombs.highest_tier_completed || null;
         output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
+
+        output.class_levels = {
+            Berserk: getLevelByXp(dungeons.player_classes.berserk.experience || 0, 2),
+            Archer: getLevelByXp(dungeons.player_classes.archer.experience || 0, 2),
+            Mage: getLevelByXp(dungeons.player_classes.mage.experience || 0, 2),
+            Tank: getLevelByXp(dungeons.player_classes.tank.experience || 0, 2),
+            Healer: getLevelByXp(dungeons.player_classes.healer.experience || 0, 2),
+            Catacombs: getLevelByXp(catacombs.experience || 0, 2)
+        };
+
+        output.best_score = [];
+        output.times_played = [];
+        output.mobs_killed = [];
+        output.most_mob_killed = [];
+        output.most_damage = { 'Berserk': [], "Healer": [], "Mage": [], "Archer": [], "Tank": []};
+        output.most_healing = [];
+        output.fastest_times = [];
+        output.watcher_kills = [];
+        output.fastest_time_s = [];
+
+        for (let i = 0; i < Object.keys(catacombs.times_played).length; i++){
+            output.best_score[i] = catacombs.best_score != null ? catacombs.best_score[i] || 0 : 0;
+            output.times_played[i] = catacombs.times_played != null ? catacombs.times_played[i] || 0 : 0;
+            output.mobs_killed[i] = catacombs.mobs_killed != null ? catacombs.mobs_killed[i] || 0 : 0;
+            output.most_mob_killed[i] = catacombs.most_mobs_killed != null ? catacombs.most_mobs_killed[i] || 0 : 0;
+            output.most_damage['Berserk'][i] = catacombs.most_damage_berserk != null ? Math.round(catacombs.most_damage_berserk[i],0) || 0: 0;
+            output.most_damage['Healer'][i] = catacombs.most_damage_healer != null ? Math.round(catacombs.most_damage_healer[i],0) ||0 : 0;
+            output.most_damage['Archer'][i] = catacombs.most_damage_archer != null ? Math.round(catacombs.most_damage_archer[i],0) || 0 : 0;
+            output.most_damage['Tank'][i] = catacombs.most_damage_tank != null ? Math.round(catacombs.most_damage_tank[i],0) || 0 : 0;
+            output.most_damage['Mage'][i] = catacombs.most_damage_mage != null ? Math.round(catacombs.most_damage_mage[i],0) || 0 : 0;
+            output.most_healing[i] = catacombs.most_healing != null ? Math.round(catacombs.most_healing[i],1) || 0 : 0;
+            output.fastest_times[i] = catacombs.fastest_time != null && catacombs.fastest_time[i] != null ? Math.floor((catacombs.fastest_time[i] / (1000 * 60)) % 60)+" minutes "+Math.floor((catacombs.fastest_time[i] / 1000) % 60) + " seconds" || 0: 0;
+            output.watcher_kills[i] = catacombs.watcher_kills != null ? catacombs.watcher_kills[i] : 0;
+            output.fastest_time_s[i] = catacombs.fastest_time_s != null && catacombs.fastest_time_s[i] != null ? Math.floor((catacombs.fastest_time_s[i] / (1000 * 60)) % 60)+" minutes "+Math.floor((catacombs.fastest_time_s[i] / 1000) % 60) + " seconds" || 0 : 0;
+        }
 
         return output;
     },
