@@ -151,6 +151,44 @@ module.exports = {
                     tier: 6
                 }
             }
+        },
+        "livid": {
+            name: "Livid",
+            texture: "c1007c5b7114abec734206d4fc613da4f3a0e99f71ff949cedadc99079135a0b",
+            max_tiers: 6,
+            floor: 5, 
+            rewards: {
+                "dark_orb": {
+                    name: "Dark Orb",
+                    required: 50,
+                    tier: 1
+                },
+                "gold_livid_head": {
+                    name: "Golden Livid Head",
+                    required: 100,
+                    tier: 2
+                },
+                "livid_dagger": {
+                    name: "Livid Dagger",
+                    required: 150,
+                    tier: 3
+                },
+                "recombobulator": {
+                    name: "Recombobulator 3000",
+                    required: 250,
+                    tier: 4
+                },
+                "last_breath": {
+                    name: "Last Breath",
+                    required: 400,
+                    tier: 5
+                },
+                "diamond_livid_head": {
+                    name: "Diamond Livid Head",
+                    required: 1000,
+                    tier: 6
+                }
+            }
         }
     }
 };
