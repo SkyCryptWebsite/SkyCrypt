@@ -346,7 +346,7 @@ module.exports = {
             emoji: "❄️"
         },
         "MEGALODON": {
-            head: "",
+            head: "/head/a94ae433b301c7fb7c68cba625b0bd36b0b14190f20e34a7c8ee0d9de06d53b9",
             type: "fishing",
             emoji: "🦈"
         },
