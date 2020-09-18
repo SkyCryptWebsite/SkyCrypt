@@ -109,8 +109,8 @@ function getXpByLevel(level, runecrafting){
     return output;
 }
 
-function getLevelByXp(xp, runecrafting){
-    let xp_table = runecrafting ? constants.runecrafting_xp : constants.leveling_xp;
+function getLevelByXp(xp, type){
+    let xp_table = type == 1 ? constants.runecrafting_xp : type == 2 ? constants.dungeoneering_xp : constants.leveling_xp;
 
     if(isNaN(xp)){
         return {
@@ -2302,6 +2302,29 @@ module.exports = {
         const catacombs = dungeons.dungeon_types.catacombs;
         if (catacombs == null || Object.keys(catacombs).length === 0) return output;
 
+        for(const type of Object.keys(dungeons.dungeon_types)){
+            let dungeon = dungeons.dungeon_types[type];
+
+            let floors = {};
+
+            for(const key of Object.keys(dungeon)){
+                if(typeof dungeon[key] == "object"){
+                    for(const floor of Object.keys(dungeon[key])){
+                        if(!floors[floor]){
+                            floors[floor] = {}
+                        }
+                        floors[floor][key] = dungeon[key][floor];
+                    }
+                }
+            }
+
+            output[type] = {
+                level: getLevelByXp(dungeon.experience, 2),
+                highest_floor: dungeon.highest_tier_completed,
+                floors: floors
+            }
+        }
+
         const tasks = userProfile.tutorial;
 
         const collection_data = constants.boss_collections;
@@ -2340,6 +2363,7 @@ module.exports = {
         output.highest_floor = catacombs.highest_tier_completed || null;
         output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
 
+        //console.log(output)
         return output;
     },
 
