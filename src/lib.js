@@ -2296,10 +2296,12 @@ module.exports = {
     },
 
     getDungeons: async (userProfile, hypixelProfile) => {
-        const dungeons = userProfile.dungeons;
-        const catacombs = dungeons.dungeon_types.catacombs;
-
         const output = {};
+       
+        const dungeons = userProfile.dungeons;
+        if (dungeons == null) return output;
+        const catacombs = dungeons.dungeon_types.catacombs;
+        if(catacombs == null) return output;
 
         if (Object.keys(catacombs).length === 0) return output;
         const tasks = userProfile.tutorial;
