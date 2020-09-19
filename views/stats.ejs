@@ -1690,19 +1690,74 @@ twitterDescription += '. Click to view more stats!'
                     <%= calculated.display_name %> didn't enter Catacombs yet.
                 </p>
             <% } else { %>
+                <p class="stat-sub-header">Classes</p>
+
                 <p class="stat-raw-values">
-                    <%= calculated.display_name %> has entered Catacombs.
+                    <%= skill_component('Healer', 'icon-373_0', calculated.levels.taming) %>
+                    <%= skill_component('Mage', 'icon-369_0', calculated.levels.taming) %>
+                    <%= skill_component('Berserk', 'icon-267_0', calculated.levels.taming) %>
+                    <%= skill_component('Archer', 'icon-261_0', calculated.levels.taming) %>
+                    <%= skill_component('Tank', 'icon-299_0', calculated.levels.taming) %>
+                </p>
+
+                <p class="stat-sub-header">Catacombs</p>
+
+                <p class="stat-raw-values">
+                    <%= skill_component('Catacombs', 'icon-397_0', calculated.levels.taming) %><br>
                 </p>
 
                 <p class="stat-raw-values">
-                    <span class="stat-name">Selected Class: </span><span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span><br>
-                    <% if (calculated.dungeons.highest_floor != null) { %>
-                        <br><span class="stat-name">Highest Floor Beaten: </span><span class="stat-value">Floor <%= calculated.dungeons.highest_floor %></span><br>
-                    <% } %>
-                    <% if (calculated.dungeons.secrets_found > 0) { %>
-                        <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span><br>
-                    <% } %>
+                    <span class="stat-name">Highest Floor Beaten: </span><span class="stat-value">Floor 5</span><br>
+                    <span class="stat-name">Secrets Found: </span><span class="stat-value">1568</span>
                 </p>
+
+                <div class="floor-containers">
+                    <div class="narrow-info-container">
+                        <div class="narrow-info-header">
+                            <div class="floor-icon" style="background-image: url(/head/35c3024f4d9d12ddf5959b6aea3c810f5ee85176aab1b2e7f462aa1c194c342b)"></div>
+                            <span>Entrance</span>
+                        </div>
+                        <span>
+                            <div class="stat-sub-container sub-floor-extendable">
+                                <p class="stat-sub-header">Floor Stats</p>
+                                <div class="pieces">owow</div>
+                            </div>
+                            <div class="stat-sub-container sub-floor-extendable">
+                                <p class="stat-sub-header">Best Floor Run</p>
+                                <div class="pieces">owow</div>
+                            </div>
+                        </span>
+                    </div>
+                    <div class="narrow-info-container">
+                        <div class="narrow-info-header">
+                            <div class="floor-icon" style="background-image: url(/head/726f384acdfbb7218e96efac630e9ae1a14fd2f820ab660cc68322a59b165a12)"></div>
+                            <span>Floor 1</span>
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="narrow-info-container">
+                        <div class="narrow-info-header">
+                            <div class="floor-icon" style="background-image: url(/head/ebaf2ae74553a64587840d6e70fb27d2c0ae2f8bdfacbe56654c8db4001cdc98)"></div>
+                            <span>Floor 2</span>
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="narrow-info-container">
+                        <div class="narrow-info-header">
+                            <div class="floor-icon" style="background-image: url(/head/5a2f67500a65f3ce79d34ec150de93df8f60ebe52e248f5e1cdb69b0726256f7)"></div>
+                            <span>Floor 3</span>
+                        </div>
+                        <span></span>
+                    </div>
+                    <div class="narrow-info-container">
+                        <div class="narrow-info-header">
+                            <div class="floor-icon" style="background-image: url(/head/5720917cda0567442617f2721e88be9d2ffbb0b26a3f4c2fe21655814d4f4476)"></div>
+                            <span>Floor 4</span>
+                        </div>
+                        <span></span>
+                    </div>
+                </div>
+                <br>
 
                 <% if (calculated.dungeons.unlocked_collections) { %>
                     <p class="stat-sub-header">Boss Collections</p>
@@ -1727,6 +1782,7 @@ twitterDescription += '. Click to view more stats!'
                     </div>
                 <% } %>
             <% } %>
+
             <p class='stat-raw-values'><small><i>
                 Please note that this section is still in the works and many things are now in development. Thanks for your support!
             </i></small></p>
