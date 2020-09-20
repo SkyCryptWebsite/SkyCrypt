@@ -193,7 +193,11 @@ module.exports = {
     },
     floors: {
         "catacombs_0": {
-            name: "Entrance"
+            name: "entrance",
+            texture: "35c3024f4d9d12ddf5959b6aea3c810f5ee85176aab1b2e7f462aa1c194c342b"
+        },
+        "catacombs_1": {
+            texture: "726f384acdfbb7218e96efac630e9ae1a14fd2f820ab660cc68322a59b165a12"
         }
     }
 };
