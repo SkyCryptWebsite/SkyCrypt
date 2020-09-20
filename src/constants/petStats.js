@@ -6,9 +6,9 @@ function floor(num, decimals) {
 	return Math.floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
 }
 
-function formatStat(stat) {
+function formatStat(stat, ability_damage = false) {
 	let statFloored = Math.floor(stat);
-	if (statFloored > 0)
+	if (statFloored > 0 && !ability_damage)
 		return `§a+${statFloored}`;
 	else return `§a${statFloored}`;
 }
@@ -76,7 +76,7 @@ class Pet {
 					list.push(`§7True Defense: ${formatStat(this.stats[stat])}`);
 					break;
 				case "ability_damage":
-					list.push(`§7Ability Damage: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Ability Damage: ${formatStat(this.stats[stat], true)}`);
 					break;
 				case "damage":
 					list.push(`§7Damage: ${formatStat(this.stats[stat])}`);
