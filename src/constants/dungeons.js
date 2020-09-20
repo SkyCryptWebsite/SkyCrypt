@@ -190,5 +190,10 @@ module.exports = {
                 }
             }
         }
+    },
+    floors: {
+        "catacombs_0": {
+            name: "Entrance"
+        }
     }
 };

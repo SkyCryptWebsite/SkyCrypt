@@ -2299,28 +2299,23 @@ module.exports = {
         const dungeons = userProfile.dungeons;
         if (dungeons == null || Object.keys(dungeons).length === 0) return output;
 
-        const catacombs = dungeons.dungeon_types.catacombs;
-        if (catacombs == null || Object.keys(catacombs).length === 0) return output;
-
         for(const type of Object.keys(dungeons.dungeon_types)){
-            let dungeon = dungeons.dungeon_types[type];
+            const dungeon = dungeons.dungeon_types[type];
+            if (dungeon == null || Object.keys(dungeon).length === 0) continue;
 
             let floors = {};
 
             for(const key of Object.keys(dungeon)){
-                if(typeof dungeon[key] == "object"){
-                    for(const floor of Object.keys(dungeon[key])){
-                        if(!floors[floor]){
-                            floors[floor] = {}
-                        }
-                        floors[floor][key] = dungeon[key][floor];
-                    }
+                if(typeof dungeon[key] != "object") continue;
+                for(const floor of Object.keys(dungeon[key])){
+                    if(!floors[floor]) floors[floor] = {};
+                    floors[floor][key] = dungeon[key][floor];
                 }
             }
 
             output[type] = {
                 level: getLevelByXp(dungeon.experience, 2),
-                highest_floor: dungeon.highest_tier_completed,
+                highest_floor: constants.floors[`${type}_${dungeon.highest_tier_completed}`] || `floor_${dungeon.highest_tier_completed}`,
                 floors: floors
             }
         }
@@ -2330,17 +2325,13 @@ module.exports = {
         let current_class = dungeons.selected_dungeon_class || "none";
         for(const className of Object.keys(dungeons.player_classes)){
             let data = dungeons.player_classes[className];
-            if(className != current_class){
-                output.classes[className] = {
-                    experience: getLevelByXp(data.experience, 2),
-                    current: false
-                }
-            }else{
-                output.classes[className] = {
-                    experience: getLevelByXp(data.experience, 2),
-                    current: true
-                }
+            output.classes[className] = {
+                experience: getLevelByXp(data.experience, 2),
+                current: false
             }
+
+            if(className == current_class) 
+                output.classes[className].current = true;
         }
 
         const tasks = userProfile.tutorial;
@@ -2378,7 +2369,6 @@ module.exports = {
         output.boss_collections = collections;
 
         output.selected_class = current_class;
-        output.highest_floor = catacombs.highest_tier_completed || null;
         output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
 
         return output;
