@@ -1956,8 +1956,8 @@ class Squid extends Pet {
 class Megalodon extends Pet{
 	get stats() {
 		return {
-			magic_find: Math.floor(this.level * 0.1),
-			strength: Math.floor(this.level * 0.5)
+			strength: this.level * 0.5,
+			magic_find: this.level * 0.1
 		};
 	}
 
