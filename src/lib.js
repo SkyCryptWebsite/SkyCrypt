@@ -2325,6 +2325,24 @@ module.exports = {
             }
         }
 
+        output.classes = {}
+
+        let current_class = dungeons.selected_dungeon_class || "none";
+        for(const className of Object.keys(dungeons.player_classes)){
+            let data = dungeons.player_classes[className];
+            if(className != current_class){
+                output.classes[className] = {
+                    experience: getLevelByXp(data.experience, 2),
+                    current: false
+                }
+            }else{
+                output.classes[className] = {
+                    experience: getLevelByXp(data.experience, 2),
+                    current: true
+                }
+            }
+        }
+
         const tasks = userProfile.tutorial;
 
         const collection_data = constants.boss_collections;
@@ -2359,7 +2377,7 @@ module.exports = {
 
         output.boss_collections = collections;
 
-        output.selected_class = dungeons.selected_dungeon_class || "none";
+        output.selected_class = current_class;
         output.highest_floor = catacombs.highest_tier_completed || null;
         output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
 
