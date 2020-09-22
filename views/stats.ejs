@@ -1693,13 +1693,13 @@ twitterDescription += '. Click to view more stats!'
                 <% if (calculated.dungeons.used_classes) { %>
                 <p class="stat-sub-header">Classes</p>
 
-                <p class="stat-raw-values">
-                    <%= skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) %>
-                    <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) %>
-                    <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) %>
-                    <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) %>
-                    <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) %>
-                </p>
+                <span class="stat-name">Selected Class: </span>
+                <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span><br>
+                <%= skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) %>
+                <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) %>
+                <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) %>
+                <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) %>
+                <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) %>
                 <% } %>
 
                 <% if (calculated.dungeons.catacombs.visited) { %>
@@ -1742,6 +1742,26 @@ twitterDescription += '. Click to view more stats!'
                                     <% } %>
                                     </div>
                                 </div>
+                                <% if(floor.best_runs) { %>
+                                <div class="stat-sub-container sub-floor-extendable">
+                                    <p class="stat-sub-header">Best Run</p>
+                                    <div class="pieces">
+                                    <% for (let [stat, value] of Object.entries(floor.best_runs[0])) { 
+                                        if(stat == "teammates") continue; %>
+                                        <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
+                                        <span class="stat-value">
+                                        <% switch (stat) { case "timestamp": %>
+                                            <%= moment(value).fromNow() %>
+                                        <% break; case "dungeon_class": %>
+                                            <%= helper.titleCase(value) %>
+                                        <% break; default: %>
+                                            <%= helper.formatNumber(value) %>
+                                        <% } %>
+                                        </span><br>
+                                    <% } %>
+                                    </div>
+                                </div>
+                                <% } %>
                             </span>
                         </div>
                         <% } %>
