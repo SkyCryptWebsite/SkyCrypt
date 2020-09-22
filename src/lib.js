@@ -2340,7 +2340,7 @@ module.exports = {
             output[type] = {
                 visited: true,
                 level: getLevelByXp(dungeon.experience, 2),
-                highest_floor: constants.floors[`${type}_${highest_floor}`] ? constants.floors[`${type}_${highest_floor}`].name : `floor_${highest_floor}`,
+                highest_floor: constants.floors[`${type}_${highest_floor}`] && constants.floors[`${type}_${highest_floor}`].name ? constants.floors[`${type}_${highest_floor}`].name : `floor_${highest_floor}`,
                 floors: floors
             }
         }
