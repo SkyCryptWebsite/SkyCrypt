@@ -369,7 +369,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Dungeons"
+                  "type": "object",
+                  "properties": {
+                    "profiles": {
+                      "type": "object",
+                      "properties": {
+                        "PROFILE_ID": {
+                          "$ref": "#/components/schemas/Dungeons"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -409,17 +419,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "profiles": {
-                      "type": "object",
-                      "properties": {
-                        "PROFILE_ID": {
-                          "$ref": "#/components/schemas/Dungeons"
-                        }
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/Dungeons"
                 }
               }
             }
