@@ -1298,9 +1298,6 @@
             "items": {
               "type": "string"
             }
-          },
-          "current": {
-            "type": "boolean"
           }
         },
         "xml": {
