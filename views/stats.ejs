@@ -1752,6 +1752,8 @@ twitterDescription += '. Click to view more stats!'
                                         <span class="stat-value">
                                         <% switch (stat) { case "timestamp": %>
                                             <%= moment(value).fromNow() %>
+                                        <% break; case "elapsed_time": %>
+                                            <%= moment.duration(value, "milliseconds").format("m:ss.SSS") %>
                                         <% break; case "dungeon_class": %>
                                             <%= helper.titleCase(value) %>
                                         <% break; default: %>
