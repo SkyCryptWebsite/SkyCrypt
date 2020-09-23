@@ -1690,19 +1690,88 @@ twitterDescription += '. Click to view more stats!'
                     <%= calculated.display_name %> didn't enter Catacombs yet.
                 </p>
             <% } else { %>
-                <p class="stat-raw-values">
-                    <%= calculated.display_name %> has entered Catacombs.
-                </p>
+                <% if (calculated.dungeons.used_classes) { %>
+                <p class="stat-sub-header">Classes</p>
 
-                <p class="stat-raw-values">
-                    <span class="stat-name">Selected Class: </span><span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span><br>
-                    <% if (calculated.dungeons.highest_floor != null) { %>
-                        <br><span class="stat-name">Highest Floor Beaten: </span><span class="stat-value">Floor <%= calculated.dungeons.highest_floor %></span><br>
-                    <% } %>
-                    <% if (calculated.dungeons.secrets_found > 0) { %>
-                        <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span><br>
-                    <% } %>
-                </p>
+                <span class="stat-name">Selected Class: </span>
+                <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span><br>
+                <%= skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) %>
+                <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) %>
+                <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) %>
+                <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) %>
+                <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) %>
+                <% } %>
+
+                <% if (calculated.dungeons.catacombs.visited) { %>
+                    <p class="stat-sub-header">Catacombs</p>
+
+                    <p class="stat-raw-values">
+                        <%= skill_component('Catacombs', 'icon-397_0', calculated.dungeons.catacombs.level) %><br>
+                    </p>
+
+                    <p class="stat-raw-values">
+                        <span class="stat-name">Highest Floor Beaten: </span><span class="stat-value"><%= helper.titleCase(calculated.dungeons.catacombs.highest_floor.replace("_", " ")) %></span><br>
+                        <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span>
+                    </p>
+
+                    <div class="floor-containers">
+                        <% for (let [id, floor] of Object.entries(calculated.dungeons.catacombs.floors)) { %>
+                        <div class="narrow-info-container">
+                            <div class="narrow-info-header">
+                                <div class="floor-icon" style="background-image: url(/head/<%= floor.icon_texture %>)"></div>
+                                <span><%= floor.name.replace("_", " ") %></span>
+                            </div>
+                            <span>
+                                <div class="stat-sub-container sub-floor-extendable">
+                                    <p class="stat-sub-header">Floor Stats</p>
+                                    <div class="pieces">
+                                    <% for (let [stat, value] of Object.entries(floor.stats)) { %>
+                                        <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
+                                        <span class="stat-value">
+                                        <% if(stat.startsWith("fastest_time")) { %>
+                                            <%= moment.duration(value, "milliseconds").format("m:ss.SSS") %>
+                                        <% } else { %>
+                                            <%= helper.formatNumber(value) %>
+                                        <% } %>
+                                        </span><br>
+                                    <% } %>
+                                    <% if(floor.most_damage) { %>
+                                        <span class="stat-name">Most Damage: </span>
+                                        <span class="stat-value"><%= helper.formatNumber(floor.most_damage.value) %></span>
+                                        <span class="stat-name">(<%= helper.titleCase(floor.most_damage.class) %>)</span>
+                                    <% } %>
+                                    </div>
+                                </div>
+                                <% if(floor.best_runs) { %>
+                                <div class="stat-sub-container sub-floor-extendable">
+                                    <p class="stat-sub-header">Best Run</p>
+                                    <div class="pieces">
+                                    <% for (let [stat, value] of Object.entries(floor.best_runs[0])) { 
+                                        if(stat == "teammates") continue; %>
+                                        <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
+                                        <span class="stat-value">
+                                        <% switch (stat) { case "timestamp": %>
+                                            <%= moment(value).fromNow() %>
+                                        <% break; case "dungeon_class": %>
+                                            <%= helper.titleCase(value) %>
+                                        <% break; default: %>
+                                            <%= helper.formatNumber(value) %>
+                                        <% } %>
+                                        </span><br>
+                                    <% } %>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </span>
+                        </div>
+                        <% } %>
+                    </div>
+                    <br>
+                <% } else { %>
+                    <p class="stat-raw-values">
+                        <%= calculated.display_name %> didn't enter Catacombs yet.
+                    </p>
+                <% } %>
 
                 <% if (calculated.dungeons.unlocked_collections) { %>
                     <p class="stat-sub-header">Boss Collections</p>
@@ -1727,6 +1796,7 @@ twitterDescription += '. Click to view more stats!'
                     </div>
                 <% } %>
             <% } %>
+
             <p class='stat-raw-values'><small><i>
                 Please note that this section is still in the works and many things are now in development. Thanks for your support!
             </i></small></p>

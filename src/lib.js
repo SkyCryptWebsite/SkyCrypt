@@ -109,8 +109,8 @@ function getXpByLevel(level, runecrafting){
     return output;
 }
 
-function getLevelByXp(xp, runecrafting){
-    let xp_table = runecrafting ? constants.runecrafting_xp : constants.leveling_xp;
+function getLevelByXp(xp, type){
+    let xp_table = type == 1 ? constants.runecrafting_xp : type == 2 ? constants.dungeoneering_xp : constants.leveling_xp;
 
     if(isNaN(xp)){
         return {
@@ -2299,11 +2299,72 @@ module.exports = {
         const dungeons = userProfile.dungeons;
         if (dungeons == null || Object.keys(dungeons).length === 0) return output;
 
-        const catacombs = dungeons.dungeon_types.catacombs;
-        if (catacombs == null || Object.keys(catacombs).length === 0) return output;
+        for(const type of Object.keys(dungeons.dungeon_types)){
+            const dungeon = dungeons.dungeon_types[type];
+            if (dungeon == null || Object.keys(dungeon).length === 0) {
+                output[type] = { visited: false };
+                continue;   
+            };
+
+            let floors = {};
+
+            for(const key of Object.keys(dungeon)){
+                if(typeof dungeon[key] != "object") continue;
+                for(const floor of Object.keys(dungeon[key])){
+                    if(!floors[floor]) floors[floor] = {
+                        name: `floor_${floor}`,
+                        icon_texture: "908fc34531f652f5be7f27e4b27429986256ac422a8fb59f6d405b5c85c76f7",
+                        stats: {}
+                    };
+
+                    let id = `${type}_${floor}`;
+                    if(constants.floors[id]){
+                        if(constants.floors[id].name) 
+                            floors[floor].name = constants.floors[id].name;
+                        if(constants.floors[id].texture) 
+                            floors[floor].icon_texture = constants.floors[id].texture;
+                    }
+                    
+                    if(key.startsWith("most_damage")){
+                        if(!floors[floor].most_damage || dungeon[key][floor] > floors[floor].most_damage.value) 
+                            floors[floor].most_damage = {
+                                class: key.replace("most_damage_", ""),
+                                value: dungeon[key][floor]
+                            };
+                    }else if(key === "best_runs") floors[floor][key] = dungeon[key][floor];
+                    else floors[floor].stats[key] = dungeon[key][floor];
+                }
+            }
+
+            let highest_floor = dungeon.highest_tier_completed || 0;
+            output[type] = {
+                visited: true,
+                level: getLevelByXp(dungeon.experience, 2),
+                highest_floor: constants.floors[`${type}_${highest_floor}`] && constants.floors[`${type}_${highest_floor}`].name ? constants.floors[`${type}_${highest_floor}`].name : `floor_${highest_floor}`,
+                floors: floors
+            }
+        }
+
+        output.classes = {}
+
+        let used_classes = false;
+        let current_class = dungeons.selected_dungeon_class || "none";
+        for(const className of Object.keys(dungeons.player_classes)){
+            let data = dungeons.player_classes[className];
+            output.classes[className] = {
+                experience: getLevelByXp(data.experience, 2),
+                current: false
+            }
+
+            if (data.experience > 0)
+                used_classes = true;
+            if(className == current_class) 
+                output.classes[className].current = true;
+        }
+
+        output.used_classes = used_classes;
 
         const tasks = userProfile.tutorial;
-
         const collection_data = constants.boss_collections;
         let collections = {};
         for (i in tasks) {
@@ -2336,8 +2397,7 @@ module.exports = {
 
         output.boss_collections = collections;
 
-        output.selected_class = dungeons.selected_dungeon_class || "none";
-        output.highest_floor = catacombs.highest_tier_completed || null;
+        output.selected_class = current_class;
         output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
 
         return output;
