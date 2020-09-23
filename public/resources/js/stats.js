@@ -433,6 +433,15 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
+    [].forEach.call(document.querySelectorAll('.sub-floor-extendable .stat-sub-header'), function(element){
+        element.addEventListener('click', function(e){
+            if(element.parentNode.classList.contains('sub-extended'))
+                element.parentNode.classList.remove('sub-extended')
+            else
+                element.parentNode.classList.add('sub-extended');
+        });
+    });
+
     [].forEach.call(document.querySelectorAll('.stat-weapons .select-weapon'), function(element){
         let itemId = element.parentNode.getAttribute('data-item-id');
         let filterItems;

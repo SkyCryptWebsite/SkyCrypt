@@ -346,6 +346,87 @@
         }
       }
     },
+    "/dungeons/{playerName}": {
+      "get": {
+        "tags": [
+          "dungeons"
+        ],
+        "summary": "Get a list of a player's profiles with dungeon and class data.",
+        "parameters": [
+          {
+            "name": "playerName",
+            "in": "path",
+            "description": "Username of the player.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "profiles": {
+                      "type": "object",
+                      "properties": {
+                        "PROFILE_ID": {
+                          "$ref": "#/components/schemas/Dungeons"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dungeons/{playerName}/{profileName}": {
+      "get": {
+        "tags": [
+          "dungeons"
+        ],
+        "summary": "Get a player's profile with dungeon and class data.",
+        "parameters": [
+          {
+            "name": "playerName",
+            "in": "path",
+            "description": "Username of the player.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "profileName",
+            "in": "path",
+            "description": "Profile cute name.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Dungeons"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/bazaar": {
       "get": {
         "tags": [
@@ -1057,6 +1138,287 @@
         },
         "xml": {
           "name": "Coins"
+        }
+      },
+      "Dungeons": {
+        "type": "object",
+        "properties": {
+          "profile_id": {
+            "type": "string",
+            "description": "The profile's unique ID."
+          },
+          "cute_name": {
+            "type": "string",
+            "description": "Profile's cute name, e.g. Lime, Strawberry"
+          },
+          "dungeons": {
+            "type": "object",
+            "properties": {
+              "catacombs": {
+                "type": "object",
+                "properties": {
+                  "visited": {
+                    "type": "boolean"
+                  },
+                  "level": {
+                    "type": "object",
+                    "properties": {
+                      "xp": {
+                        "type": "integer"
+                      },
+                      "level": {
+                        "type": "integer"
+                      },
+                      "maxLevel": {
+                        "type": "integer"
+                      },
+                      "xpCurrent": {
+                        "type": "integer"
+                      },
+                      "xpForNext": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "highest_floor": {
+                    "type": "string"
+                  },
+                  "floors": {
+                    "type": "object",
+                    "properties": {
+                      "1": {
+                        "$ref": "#/components/schemas/dungeon_floor"
+                      }
+                    }
+                  }
+                }
+              },
+              "classes": {
+                "type": "object",
+                "properties": {
+                  "healer": {
+                    "$ref": "#/components/schemas/dungeon_class"
+                  },
+                  "mage": {
+                    "$ref": "#/components/schemas/dungeon_class"
+                  },
+                  "beserk": {
+                    "$ref": "#/components/schemas/dungeon_class"
+                  },
+                  "archer": {
+                    "$ref": "#/components/schemas/dungeon_class"
+                  },
+                  "tank": {
+                    "$ref": "#/components/schemas/dungeon_class"
+                  }
+                }
+              },
+              "used_classes": {
+                "type": "boolean"
+              },
+              "unlocked_collections": {
+                "type": "boolean"
+              },
+              "boss_collections": {
+                "type": "object",
+                "properties": {
+                  "1": {
+                    "$ref": "#/components/schemas/dungeon_collection"
+                  }
+                }
+              },
+              "selected_class": {
+                "type": "string"
+              },
+              "secrets_found": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "Dungeons"
+        }
+      },
+      "dungeon_class": {
+        "type": "object",
+        "properties": {
+          "experience": {
+            "type": "object",
+            "properties": {
+              "xp": {
+                "type": "integer"
+              },
+              "level": {
+                "type": "integer"
+              },
+              "maxLevel": {
+                "type": "integer"
+              },
+              "xpCurrent": {
+                "type": "integer"
+              },
+              "xpForNext": {
+                "type": "integer"
+              },
+              "progress": {
+                "type": "integer"
+              }
+            }
+          },
+          "current": {
+            "type": "boolean"
+          }
+        },
+        "xml": {
+          "name": "Dungeon_class"
+        }
+      },
+      "dungeon_collection": {
+        "description": "Each collection will have its own object",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "texture": {
+            "type": "string"
+          },
+          "tier": {
+            "type": "integer"
+          },
+          "killed": {
+            "type": "integer"
+          },
+          "claimed": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "xml": {
+          "name": "dungeon_collection"
+        }
+      },
+      "dungeon_floor": {
+        "description": "Each floor will have its own object",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "icon_texture": {
+            "type": "string"
+          },
+          "stats": {
+            "type": "object",
+            "properties": {
+              "times_played": {
+                "type": "integer"
+              },
+              "tier_completions": {
+                "type": "integer"
+              },
+              "fastest_time": {
+                "type": "integer"
+              },
+              "best_score": {
+                "type": "integer"
+              },
+              "mobs_killed": {
+                "type": "integer"
+              },
+              "most_mobs_killed": {
+                "type": "integer"
+              },
+              "most_healing": {
+                "type": "integer"
+              },
+              "watcher_kills": {
+                "type": "integer"
+              },
+              "fastest_time_s": {
+                "type": "integer"
+              },
+              "fastest_time_s_plus": {
+                "type": "integer"
+              }
+            }
+          },
+          "best_runs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "timestamp": {
+                  "type": "integer"
+                },
+                "score_exploration": {
+                  "type": "integer"
+                },
+                "score_speed": {
+                  "type": "integer"
+                },
+                "score_skill": {
+                  "type": "integer"
+                },
+                "score_bonus": {
+                  "type": "integer"
+                },
+                "dungeon_class": {
+                  "type": "string"
+                },
+                "teammates": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "elapsed_time": {
+                  "type": "integer"
+                },
+                "damage_dealt": {
+                  "type": "integer"
+                },
+                "deaths": {
+                  "type": "integer"
+                },
+                "mobs_kills": {
+                  "type": "integer"
+                },
+                "secrets_found": {
+                  "type": "integer"
+                },
+                "damage_mitigated": {
+                  "type": "integer"
+                },
+                "ally_healing": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "most_damage": {
+            "type": "object",
+            "properties": {
+              "class": {
+                "type": "string"
+              },
+              "value": {
+                "type": "integer"
+              }
+            }
+          },
+          "current": {
+            "type": "boolean"
+          }
+        },
+        "xml": {
+          "name": "dungeon_floor"
         }
       }
     }
