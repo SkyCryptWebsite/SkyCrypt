@@ -1,8 +1,0 @@
-{
-    "parent": "block/orientable",
-    "textures": {
-        "top": "mcpatcher/cit/blocks/comp_top",
-        "front": "mcpatcher/cit/blocks/comp_front",
-        "side": "mcpatcher/cit/blocks/comp_side"
-    }
-}
