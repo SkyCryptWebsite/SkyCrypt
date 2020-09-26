@@ -7,15 +7,15 @@ module.exports = {
             name: "Default Theme",
             author: "SkyCrypt Team",
             official: true,
-            logo: "https://sky.shiiyu.moe/resources/img/logo_square.png",
+            logo: "../img/logo_square.png",
             backgrounds: {
                 "bg": {
-                    "png": "https://sky.shiiyu.moe/resources/img/bg.png?v3",
-                    "webp": "https://sky.shiiyu.moe/resources/img/bg.webp?v3"
+                    "png": "../img/bg.png?v3",
+                    "webp": "../img/bg.webp?v3"
                 },
                 "bg_blur": {
-                    "png": "https://sky.shiiyu.moe/resources/img/bg_blur.png?v3",
-                    "webp": "https://sky.shiiyu.moe/resources/img/bg_blur.webp?v3"
+                    "png": "../img/bg_blur.png?v3",
+                    "webp": "../img/bg_blur.webp?v3"
                 }
             },
             colors: {
@@ -33,15 +33,15 @@ module.exports = {
             name: "sky.lea.moe",
             author: "LeaPhant",
             official: true,
-            logo: "https://sky.lea.moe/resources/img/logo_square.png",
+            logo: "../img/themes/skylea/logo_square.png",
             backgrounds: {
                 "bg": {
-                    "png": "https://sky.lea.moe/resources/img/bg.png",
-                    "webp": "https://sky.lea.moe/resources/img/bg.webp"
+                    "png": "../img/themes/skylea/bg.png",
+                    "webp": "../img/themes/skylea/bg.webp"
                 },
                 "bg_blur": {
-                    "png": "https://sky.lea.moe/resources/img/bg_blur.png",
-                    "webp": "https://sky.lea.moe/resources/img/bg_blur.webp"
+                    "png": "../img/themes/skylea/bg_blur.png",
+                    "webp": "../img/themes/skylea/bg_blur.webp"
                 }
             },
             colors: {
@@ -62,15 +62,15 @@ module.exports = {
             name: "Night Blue Theme",
             author: "8KCoffeeWizard",
             community: true,
-            logo: "https://i.imgur.com/4SFZGdj.png",
+            logo: "../img/themes/nightblue/logo_square.png",
             backgrounds: {
                 "bg": {
-                    "png": "https://i.imgur.com/qjsmQ4B.png",
-                    "webp": "https://i.imgur.com/qjsmQ4B.png"
+                    "png": "../img/themes/nightblue/bg.png",
+                    "webp": "../img/themes/nightblue/bg.webp"
                 },
                 "bg_blur": {
-                    "png": "https://i.imgur.com/SXTy4k5.png",
-                    "webp": "https://i.imgur.com/SXTy4k5.png"
+                    "png": "../img/themes/nightblue/bg_blur.png",
+                    "webp": "../img/themes/nightblue/bg_blur.webp"
                 }
             },
             colors: {
