@@ -34,52 +34,53 @@ class Pet {
 		this.level = level;
 	}
 
-	lore(textbook = false) {
+	lore(newStats = false) {
+		if (!newStats)
+			newStats = this.stats;
 		let list = [];
-		for (const stat in this.stats) {
+		for (const stat in newStats) {
 			switch (stat) {
 				case "health":
-					list.push(`§7Health: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Health: ${formatStat(newStats[stat])}`);
 					break;
 				case "defense":
-					list.push(`§7Defense: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Defense: ${formatStat(newStats[stat])}`);
 					break;
 				case "strength":
-					list.push(`§7Strength: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Strength: ${formatStat(newStats[stat])}`);
 					break;
 				case "crit_chance":
-					list.push(`§7Crit Chance: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Crit Chance: ${formatStat(newStats[stat])}`);
 					break;
 				case "crit_damage":
-					list.push(`§7Crit Damage: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Crit Damage: ${formatStat(newStats[stat])}`);
 					break;
 				case "intelligence":
-					let intel = textbook ? formatStat(this.stats[stat] * 2) : formatStat(this.stats[stat])
-					list.push(`§7Intelligence: ${intel}`);
+					list.push(`§7Intelligence: ${formatStat(newStats[stat])}`);
 					break;
 				case "speed":
-					list.push(`§7Speed: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Speed: ${formatStat(newStats[stat])}`);
 					break;
 				case "bonus_attack_speed":
-					list.push(`§7Bonus Attack Speed: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Bonus Attack Speed: ${formatStat(newStats[stat])}`);
 					break;
 				case "sea_creature_chance":
-					list.push(`§7Sea Creature Chance: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Sea Creature Chance: ${formatStat(newStats[stat])}`);
 					break;
 				case "magic_find":
-					list.push(`§7Magic Find: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Magic Find: ${formatStat(newStats[stat])}`);
 					break;
 				case "pet_luck":
-					list.push(`§7Pet Luck: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Pet Luck: ${formatStat(newStats[stat])}`);
 					break;
 				case "true_defense":
-					list.push(`§7True Defense: ${formatStat(this.stats[stat])}`);
+					list.push(`§7True Defense: ${formatStat(newStats[stat])}`);
 					break;
 				case "ability_damage":
-					list.push(`§7Ability Damage: ${formatStat(this.stats[stat], true)}`);
+					list.push(`§7Ability Damage: ${formatStat(newStats[stat], true)}`);
 					break;
 				case "damage":
-					list.push(`§7Damage: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Damage: ${formatStat(newStats[stat])}`);
 					break;
 			}
 		}

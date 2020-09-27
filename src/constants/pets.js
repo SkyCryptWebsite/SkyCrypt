@@ -428,7 +428,11 @@ module.exports = {
             }
         },
         PET_ITEM_IRON_CLAWS_COMMON: {
-            description: `§7Increases the pet's §9${symbols.crit_damage} Crit Damage §7by §a40% §7and §9${symbols.crit_chance} Crit Chance §7by §a40%`
+            description: `§7Increases the pet's §9${symbols.crit_damage} Crit Damage §7by §a40% §7and §9${symbols.crit_chance} Crit Chance §7by §a40%`,
+            multStats: {
+                crit_chance: 1.4,
+                crit_damage: 1.4
+            }
         },
         PET_ITEM_SHARPENED_CLAWS_UNCOMMON: {
             description: `§7Increases §9${symbols.crit_damage} Crit Damage §7by §a15`,
@@ -452,7 +456,10 @@ module.exports = {
             }
         },
         PET_ITEM_TEXTBOOK: {
-            description: `§7Increases the pet's §b${symbols.intelligence} Intelligence §7by §a100%`
+            description: `§7Increases the pet's §b${symbols.intelligence} Intelligence §7by §a100%`,
+            multStats: {
+                intelligence: 2
+            }
         },
         PET_ITEM_SADDLE: {
             description: "§7Increase horse speed by §a50% §7 and jump boost by §a100%"
@@ -531,7 +538,11 @@ module.exports = {
             }
         },
         GOLD_CLAWS: {
-            description: `§7Increases the pet's §9${symbols.crit_damage} Crit Damage §7by §a50% §7and §9${symbols.crit_chance} Crit Chance §7by §a50%`
+            description: `§7Increases the pet's §9${symbols.crit_damage} Crit Damage §7by §a50% §7and §9${symbols.crit_chance} Crit Chance §7by §a50%`,
+            multStats: {
+                crit_chance: 1.5,
+                crit_damage: 1.5
+            }
         },
         ALL_SKILLS_SUPER_BOOST: {
             description: "§7Gives +§a20% §7pet exp for all skills"
@@ -555,7 +566,10 @@ module.exports = {
             }
         },
         ANTIQUE_REMEDIES: {
-            description: `§7Increases the pet's §c${symbols.strength} Strength §7by §a80%`
+            description: `§7Increases the pet's §c${symbols.strength} Strength §7by §a80%`,
+            multStats: {
+                strength: 1.4
+            }
         },
         CROCHET_TIGER_PLUSHIE: {
             description: `§7Increases §e${symbols.attack_speed} Bonus Attack Speed §7by §a40`,
