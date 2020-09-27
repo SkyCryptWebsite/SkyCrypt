@@ -1940,30 +1940,69 @@ module.exports = {
                 }
 
                 const petInstance = new constants.petStats[searchName](rarity, pet.level.level)
-                let textbook = false;
-                if(pet.heldItem){
-                    const { heldItem } = pet;
-                    if(heldItem == "PET_ITEM_TEXTBOOK")
-                        textbook = true;
-                }
-                const stats = petInstance.lore(textbook);
-                stats.forEach(line => {
-                    lore.push(line);
-                });
+                // we need to push stats later :o
 
                 // make pet.stats actually hold pet stats
                 pet.stats = Object.assign({}, petInstance.stats);
 
                 pet.ref = petInstance;
 
-                const abilities = petInstance.abilities;
+                // we also need to push abilites after stats :O
+            }
+
+            if(pet.heldItem) {
+                const { heldItem } = pet;
+
+                const heldItemObj = await db
+                .collection('items')
+                .findOne({ id: heldItem });
+
+                if(heldItem in constants.pet_items){
+                    if('stats' in constants.pet_items[heldItem])
+                        for(const stat in constants.pet_items[heldItem].stats)
+                            pet.stats[stat] = (pet.stats[stat] || 0) + constants.pet_items[heldItem].stats[stat];
+                    if('multStats' in constants.pet_items[heldItem])
+                        for(const stat in constants.pet_items[heldItem].multStats)
+                            pet.stats[stat] = (pet.stats[stat] || 0) * constants.pet_items[heldItem].multStats[stat];
+                }
+
+                // push pet lore after held item stats added
+                const stats = pet.ref.lore(pet.stats);
+                stats.forEach(line => {
+                    lore.push(line);
+                });
+
+                // then the ability lore
+                const abilities = pet.ref.abilities;
                 abilities.forEach(ability => {
                     lore.push(' ', ability.name);
                     ability.desc.forEach(line => {
                         lore.push(line);
                     });
                 });
+                // now we push the lore of the held items
+                if(heldItemObj)
+                    lore.push('', `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
 
+                if(heldItem in constants.pet_items){
+                    lore.push(constants.pet_items[heldItem].description);
+                }
+                // extra line
+                lore.push(' ');
+            } else { // no held items so push the new stats
+                const stats = pet.ref.lore();
+                stats.forEach(line => {
+                    lore.push(line);
+                });
+                
+                const abilities = pet.ref.abilities;
+                abilities.forEach(ability => {
+                    lore.push(' ', ability.name);
+                    ability.desc.forEach(line => {
+                        lore.push(line);
+                    });
+                });
+                // extra line
                 lore.push(' ');
             }
 
@@ -1996,25 +2035,6 @@ module.exports = {
                 `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)} §6/ §e${helper.formatNumber(pet.level.xpMaxLevel, true, 10)}`,
                 `§7Candy Used: §e${pet.candyUsed || 0} §6/ §e10`
             );
-
-            if(pet.heldItem){
-                const { heldItem } = pet;
-
-                const heldItemObj = await db
-                .collection('items')
-                .findOne({ id: heldItem });
-
-                if(heldItemObj)
-                    lore.push('', `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
-
-                if(heldItem in constants.pet_items){
-                    lore.push(constants.pet_items[heldItem].description);
-
-                    if('stats' in constants.pet_items[heldItem])
-                        for(const stat in constants.pet_items[heldItem].stats)
-                            pet.stats[stat] = (pet.stats[stat] || 0) + constants.pet_items[heldItem].stats[stat];
-                }
-            }
 
             pet.lore = '';
 
