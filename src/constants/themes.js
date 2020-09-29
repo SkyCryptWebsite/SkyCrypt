@@ -80,6 +80,54 @@ module.exports = {
                 hover: "#0BAFCA",
                 skillbar: "#3BB9FF"
             }
+        },
+        "sunrise": {
+            name: "Sunrise Orange Theme",
+            author: "rainbowcraft2",
+            community: true,
+            hidden: true,
+            logo: "../img/themes/sunrise/logo_square.png",
+            backgrounds: {
+                "bg": {
+                    "png": "../img/themes/sunrise/bg.png",
+                    "webp": "../img/themes/sunrise/bg.webp"
+                },
+                "bg_blur": {
+                    "png": "../img/themes/sunrise/bg_blur.png",
+                    "webp": "../img/themes/sunrise/bg_blur.webp"
+                }
+            },
+            colors: {
+                line: "#f2694e",
+                link: "#F2694E",
+                icon: "#F2694E",
+                hover: "#ff9d57",
+                skillbar: "#f2694e"
+            }
+        },
+        "draconic": {
+            name: "Draconic Purple Theme",
+            author: "rainbowcraft2",
+            community: true,
+            hidden: true,
+            logo: "../img/themes/draconic/logo_square.png",
+            backgrounds: {
+                "bg": {
+                    "png": "../img/themes/draconic/bg.png",
+                    "webp": "../img/themes/draconic/bg.webp"
+                },
+                "bg_blur": {
+                    "png": "../img/themes/draconic/bg_blur.png",
+                    "webp": "../img/themes/draconic/bg_blur.webp"
+                }
+            },
+            colors: {
+                line: "#7652b1",
+                link: "#7652b1",
+                icon: "#ba5fde",
+                hover: "#ba5fde",
+                skillbar: "#ba5fde"
+            }
         }
     }
 }
