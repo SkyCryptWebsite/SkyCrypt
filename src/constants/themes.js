@@ -85,7 +85,6 @@ module.exports = {
             name: "Sunrise Orange Theme",
             author: "rainbowcraft2",
             community: true,
-            hidden: true,
             logo: "../img/themes/sunrise/logo_square.png",
             backgrounds: {
                 "bg": {
@@ -109,7 +108,6 @@ module.exports = {
             name: "Draconic Purple Theme",
             author: "rainbowcraft2",
             community: true,
-            hidden: true,
             logo: "../img/themes/draconic/logo_square.png",
             backgrounds: {
                 "bg": {
