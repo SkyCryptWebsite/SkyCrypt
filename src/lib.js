@@ -2430,8 +2430,11 @@ module.exports = {
         let upgrade_stages = new Array(constants.profile_upgrades.length).fill(0);
         output.profile_upgrades = {};
         if(helper.hasPath(profile, 'community_upgrades', 'upgrade_states'))
-            for (const u of profile.community_upgrades.upgrade_states)
-                upgrade_stages[constants.profile_upgrades.indexOf(u.upgrade)]++;
+            for (const u of profile.community_upgrades.upgrade_states){
+                let i = constants.profile_upgrades.indexOf(u.upgrade);
+                if (i >= 0)
+                    upgrade_stages[i]++;
+            }
         output.island_size = upgrade_stages[0];
         output.minion_slots = upgrade_stages[1];
         output.guests_count = upgrade_stages[2];
