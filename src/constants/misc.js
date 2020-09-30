@@ -129,6 +129,15 @@ module.exports = {
         15000
     ],
 
+    // api name of the profile upgrades
+    profile_upgrades: [
+        'island_size',
+        'minion_slots',
+        'guests_count',
+        '',
+        'coins_allowance',
+    ],
+
     // Player stats on a completely new profile
     base_stats: {
         damage: 0,

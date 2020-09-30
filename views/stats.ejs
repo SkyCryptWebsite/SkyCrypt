@@ -2030,6 +2030,7 @@ twitterDescription += '. Click to view more stats!'
                 <p class="stat-raw-values">
                     <% max = uniqueMinions == 572 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Minions: </span><span class="stat-value <%= max %>"><%= uniqueMinions %> / 572</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 572 * 100) %>%)</span><br>
                     <% max = calculated.minion_slots.currentSlots == 24 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.minion_slots.currentSlots %></span><span class="grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
+                    <span class="grey-text">obtained <%= calculated.profile_upgrades.minion_slots %> more through profile upgrades!</span><br>
                     <% max = maxedMinions == _.size(constants.minions) ? 'golden-text' : '' %><span class="stat-name <%= max %>">Maxed Minions: </span><span class="stat-value <%= max %>"><%= maxedMinions %> / <%= _.size(constants.minions) %></span><br>
                     <% if(skippedMinions > 0){ %>
                     <span class="stat-name">Skipped Minion Tiers: </span><span class="stat-value"><%= skippedMinions %></span><br>

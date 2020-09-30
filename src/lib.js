@@ -1732,6 +1732,8 @@ module.exports = {
 
         output.dungeons = await module.exports.getDungeons(userProfile, hypixelProfile);
 
+        output.profile_upgrades = await module.exports.getProfileUpgrades(profile);
+
         output.fishing = {
             total: userProfile.stats.items_fished || 0,
             treasure: userProfile.stats.items_fished_treasure || 0,
@@ -2423,6 +2425,21 @@ module.exports = {
         return output;
     },
 
+    getProfileUpgrades: async (profile) => {
+        let output = {};
+        let upgrade_stages = new Array(constants.profile_upgrades.length).fill(0);
+        output.profile_upgrades = {};
+        if(helper.hasPath(profile, 'community_upgrades', 'upgrade_states'))
+            for (const u of profile.community_upgrades.upgrade_states)
+                upgrade_stages[constants.profile_upgrades.indexOf(u.upgrade)]++;
+        output.island_size = upgrade_stages[0];
+        output.minion_slots = upgrade_stages[1];
+        output.guests_count = upgrade_stages[2];
+        // output. = upgrade_stages[3];
+        output.coins_allowance = upgrade_stages[4];
+        return output;
+    },
+
     getProfile: async (db, paramPlayer, paramProfile, options = { cacheOnly: false }) => {
         if(paramPlayer.length != 32){
             try{
@@ -2586,6 +2603,9 @@ module.exports = {
 
                 if(helper.hasPath(_profile, 'banking'))
                     insertCache.banking = _profile.banking;
+                
+                if(helper.hasPath(_profile, 'community_upgrades'))
+                    insertCache.community_upgrades = _profile.community_upgrades;
 
                 db
                 .collection('profileCache')
