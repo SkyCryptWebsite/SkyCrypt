@@ -129,7 +129,7 @@ module.exports = {
         15000
     ],
 
-    // api name of the profile upgrades
+    // api names and their max value from the profile upgrades
     profile_upgrades: {
         'island_size' : 10,
         'minion_slots' : 5,
