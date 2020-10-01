@@ -568,7 +568,7 @@ module.exports = {
         ANTIQUE_REMEDIES: {
             description: `§7Increases the pet's §c${symbols.strength} Strength §7by §a80%`,
             multStats: {
-                strength: 1.4
+                strength: 1.8
             }
         },
         CROCHET_TIGER_PLUSHIE: {
