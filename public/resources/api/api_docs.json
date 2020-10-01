@@ -3,7 +3,7 @@
   "info": {
     "title": "SkyCrypt API Documentation",
     "version": "hmmm",
-    "description": "Welcome to the SkyCrypt API Documentation page!<br> Here you can find information on all the enpoints we have, and how to use them.<br><br> The main API URL is `http://sky.shiiyu.moe/api/v2/`",
+    "description": "Welcome to the SkyCrypt API Documentation page!<br> Here you can find information on all the endpoints we have, and how to use them.<br><br> The main API URL is `http://sky.shiiyu.moe/api/v2/`",
     "license": {
       "name": "MIT",
       "url": "https://opensource.org/licenses/MIT"
