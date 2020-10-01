@@ -2426,7 +2426,7 @@ module.exports = {
     },
 
     getProfileUpgrades: async (profile) => {
-        let output = {};
+        const output = {};
         for (const upgrade of constants.profile_upgrades)
             output[upgrade] = 0;
         if (helper.hasPath(profile, 'community_upgrades', 'upgrade_states'))
