@@ -134,7 +134,7 @@ module.exports = {
         'island_size',
         'minion_slots',
         'guests_count',
-        '',
+        'coop_slots',
         'coins_allowance',
     ],
 

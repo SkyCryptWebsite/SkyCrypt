@@ -2438,7 +2438,7 @@ module.exports = {
         output.island_size = upgrade_stages[0];
         output.minion_slots = upgrade_stages[1];
         output.guests_count = upgrade_stages[2];
-        // output. = upgrade_stages[3];
+        output.coop_slots = upgrade_stages[3];
         output.coins_allowance = upgrade_stages[4];
         return output;
     },
