@@ -2431,13 +2431,9 @@ module.exports = {
         const output = {};
         for (const upgrade in constants.profile_upgrades)
             output[upgrade] = 0;
-        output['fasttracked'] = 0;
         if (helper.hasPath(profile, 'community_upgrades', 'upgrade_states'))
-            for (const u of profile.community_upgrades.upgrade_states){
+            for (const u of profile.community_upgrades.upgrade_states)
                 output[u.upgrade] = Math.max(output[u.upgrade] || 0, u.tier);
-                if (u.fasttracked)
-                    output['fasttracked'] += 1;
-            }
         return output;
     },
 

@@ -2306,7 +2306,6 @@ twitterDescription += '. Click to view more stats!'
                             <% for(const upgrade in constants.profile_upgrades){ %>
                             <% max = calculated.misc.profile_upgrades[upgrade] == constants.profile_upgrades[upgrade] ? 'golden-text' : '' %><span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(upgrade.split("_").join(" ")); %>: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades[upgrade] %> / <%= constants.profile_upgrades[upgrade] %></span><br>
                             <% } %>
-                            <span class="stat-name"><%= helper.capitalizeFirstLetter('fast-tracked'.split("_").join(" ")); %>: </span><span class="stat-value""><%= calculated.misc.profile_upgrades['fasttracked'] %></span><br>
                         </p>
                     <% } %>
                     <% if('auctions_sell' in calculated.misc){ %>
