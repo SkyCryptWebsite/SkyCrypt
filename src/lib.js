@@ -2427,19 +2427,11 @@ module.exports = {
 
     getProfileUpgrades: async (profile) => {
         let output = {};
-        let upgrade_stages = new Array(constants.profile_upgrades.length).fill(0);
-        output.profile_upgrades = {};
-        if(helper.hasPath(profile, 'community_upgrades', 'upgrade_states'))
-            for (const u of profile.community_upgrades.upgrade_states){
-                let i = constants.profile_upgrades.indexOf(u.upgrade);
-                if (i >= 0)
-                    upgrade_stages[i]++;
-            }
-        output.island_size = upgrade_stages[0];
-        output.minion_slots = upgrade_stages[1];
-        output.guests_count = upgrade_stages[2];
-        output.coop_slots = upgrade_stages[3];
-        output.coins_allowance = upgrade_stages[4];
+        for (const upgrade of constants.profile_upgrades)
+            output[upgrade] = 0;
+        if (helper.hasPath(profile, 'community_upgrades', 'upgrade_states'))
+            for (const u of profile.community_upgrades.upgrade_states)
+                output[u.upgrade] = Math.max(output[u.upgrade] || 0, u.tier);
         return output;
     },
 
