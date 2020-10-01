@@ -130,13 +130,13 @@ module.exports = {
     ],
 
     // api name of the profile upgrades
-    profile_upgrades: [
-        'island_size',
-        'minion_slots',
-        'guests_count',
-        'coop_slots',
-        'coins_allowance',
-    ],
+    profile_upgrades: {
+        'island_size' : 10,
+        'minion_slots' : 5,
+        'guests_count' : 5,
+        'coop_slots' : 3,
+        'coins_allowance' : 5,
+    },
 
     // Player stats on a completely new profile
     base_stats: {

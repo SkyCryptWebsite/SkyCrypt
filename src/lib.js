@@ -1732,7 +1732,6 @@ module.exports = {
 
         output.dungeons = await module.exports.getDungeons(userProfile, hypixelProfile);
 
-        output.profile_upgrades = await module.exports.getProfileUpgrades(profile);
 
         output.fishing = {
             total: userProfile.stats.items_fished || 0,
@@ -1752,6 +1751,7 @@ module.exports = {
         misc.protector = {};
         misc.damage = {};
         misc.burrows = {};
+        misc.profile_upgrades = {};
         misc.auctions_sell = {};
         misc.auctions_buy = {};
 
@@ -1777,6 +1777,8 @@ module.exports = {
             if(key in userProfile.stats) 
                 misc.burrows[key.replace("mythos_burrows_", "")] = { total: userProfile.stats[key] };
 
+        misc.profile_upgrades = await module.exports.getProfileUpgrades(profile);
+        
         const auctions_buy = ["auctions_bids", "auctions_highest_bid", "auctions_won", "auctions_gold_spent"];
         const auctions_sell = ["auctions_fees", "auctions_gold_earned"];
 
@@ -2427,7 +2429,7 @@ module.exports = {
 
     getProfileUpgrades: async (profile) => {
         const output = {};
-        for (const upgrade of constants.profile_upgrades)
+        for (const upgrade in constants.profile_upgrades)
             output[upgrade] = 0;
         if (helper.hasPath(profile, 'community_upgrades', 'upgrade_states'))
             for (const u of profile.community_upgrades.upgrade_states)
