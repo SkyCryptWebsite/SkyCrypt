@@ -1732,7 +1732,6 @@ module.exports = {
 
         output.dungeons = await module.exports.getDungeons(userProfile, hypixelProfile);
 
-
         output.fishing = {
             total: userProfile.stats.items_fished || 0,
             treasure: userProfile.stats.items_fished_treasure || 0,
