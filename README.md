@@ -4,6 +4,8 @@
 The SkyCrypt Project, which is based on LeaPhant's [sky.lea.moe](https://sky.lea.moe), allows you to share your <a href="https://hypixel.net/">Hypixel</a> SkyBlock profile with other players with a quick overview of your Stats, Skills, Armor, Weapons and Accessories.
 
 **Website**: https://sky.shiiyu.moe
+** Code starts here**
+
 
 ![Node.JS CI](https://github.com/SkyCryptWebsite/SkyCrypt/workflows/Node.js%20CI/badge.svg) 
 ![Docker Image CI](https://github.com/SkyCryptWebsite/SkyCrypt/workflows/Docker%20Image%20CI/badge.svg) 
