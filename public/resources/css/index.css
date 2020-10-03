@@ -3129,6 +3129,52 @@ html.no-webp #error_box_wrapper{
     outline: 0 !important;
 }
 
+.style-scrollbar {
+    scrollbar-color: var(--icon-hex) #323232;
+}
+
+.style-scrollbar *::-webkit-scrollbar-track
+{
+    border-radius: 12px;
+    background-color: rgba(60,60,60,0.5);
+}
+
+.style-scrollbar *::-webkit-scrollbar
+{
+    width: 12px;
+    height: 12px;
+}
+
+.style-scrollbar *::-webkit-scrollbar-thumb
+{
+    border-radius: 12px;
+    background-color: var(--icon-hex);
+}
+
+.style-scrollbar body::-webkit-scrollbar
+{
+    background-color: #282828;
+}
+
+@media (max-width: 900px){
+    .style-scrollbar #nav_bar_line {
+        bottom: 9px;
+    }
+    .style-scrollbar #nav_items_container {
+        padding-bottom: 10px;
+    }
+}
+
+.style-scrollbar #nav_items_container::-webkit-scrollbar-track
+{
+    background-color: transparent;
+}
+
+.style-scrollbar #nav_items_container::-webkit-scrollbar
+{
+    height: 8px;
+}
+
 @media (max-width: 1590px){
     header{
         width: 100%;

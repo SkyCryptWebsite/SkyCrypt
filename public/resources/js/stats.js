@@ -1049,4 +1049,11 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     setTimeout(resize, 1000);
+    
+    // checks if the scrollbar has a width should be true with desktop style scrollbars
+    if (window.innerWidth > document.documentElement.clientWidth) {
+        document.documentElement.classList.add('style-scrollbar');
+    } else {
+        document.documentElement.classList.remove('style-scrollbar');
+    }
 });
