@@ -9,9 +9,9 @@ function floor(num, decimals) {
 	return Math.floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
 }
 
-function formatStat(stat) {
+function formatStat(stat, ability_damage = false) {
 	let statFloored = Math.floor(stat);
-	if (statFloored > 0)
+	if (statFloored > 0 && !ability_damage)
 		return `§a+${statFloored}`;
 	else return `§a${statFloored}`;
 }
@@ -37,52 +37,53 @@ class Pet {
 		this.level = level;
 	}
 
-	lore(textbook = false) {
+	lore(newStats = false) {
+		if (!newStats)
+			newStats = this.stats;
 		let list = [];
-		for (const stat in this.stats) {
+		for (const stat in newStats) {
 			switch (stat) {
 				case "health":
-					list.push(`§7Health: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Health: ${formatStat(newStats[stat])}`);
 					break;
 				case "defense":
-					list.push(`§7Defense: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Defense: ${formatStat(newStats[stat])}`);
 					break;
 				case "strength":
-					list.push(`§7Strength: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Strength: ${formatStat(newStats[stat])}`);
 					break;
 				case "crit_chance":
-					list.push(`§7Crit Chance: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Crit Chance: ${formatStat(newStats[stat])}`);
 					break;
 				case "crit_damage":
-					list.push(`§7Crit Damage: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Crit Damage: ${formatStat(newStats[stat])}`);
 					break;
 				case "intelligence":
-					let intel = textbook ? formatStat(this.stats[stat] * 2) : formatStat(this.stats[stat])
-					list.push(`§7Intelligence: ${intel}`);
+					list.push(`§7Intelligence: ${formatStat(newStats[stat])}`);
 					break;
 				case "speed":
-					list.push(`§7Speed: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Speed: ${formatStat(newStats[stat])}`);
 					break;
 				case "bonus_attack_speed":
-					list.push(`§7Bonus Attack Speed: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Bonus Attack Speed: ${formatStat(newStats[stat])}`);
 					break;
 				case "sea_creature_chance":
-					list.push(`§7Sea Creature Chance: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Sea Creature Chance: ${formatStat(newStats[stat])}`);
 					break;
 				case "magic_find":
-					list.push(`§7Magic Find: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Magic Find: ${formatStat(newStats[stat])}`);
 					break;
 				case "pet_luck":
-					list.push(`§7Pet Luck: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Pet Luck: ${formatStat(newStats[stat])}`);
 					break;
 				case "true_defense":
-					list.push(`§7True Defense: ${formatStat(this.stats[stat])}`);
+					list.push(`§7True Defense: ${formatStat(newStats[stat])}`);
 					break;
 				case "ability_damage":
-					list.push(`§7Ability Damage: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Ability Damage: ${formatStat(newStats[stat], true)}`);
 					break;
 				case "damage":
-					list.push(`§7Damage: ${formatStat(this.stats[stat])}`);
+					list.push(`§7Damage: ${formatStat(newStats[stat])}`);
 					break;
 			}
 		}
@@ -874,6 +875,60 @@ class Golem extends Pet {
 	}
 }
 
+class Griffin extends Pet {
+	get stats() {
+		return {
+			strength: this.level * 0.25,
+			crit_chance: this.level * 0.1,
+			crit_damage: this.level * 0.5,
+			intelligence: this.level * 0.1,
+			magic_find: this.level * 0.1
+		};
+	}
+
+	get abilities() {
+		let list = [this.first];
+		if (this.rarity > 0)
+			list.push(this.second);
+		if (this.rarity > 2)
+			list.push(this.third);
+		if (this.rarity > 3)
+			list.push(this.fourth);
+		return list;
+	}
+
+	get first() {
+		return {
+			name: "§6Odyssey",
+			desc: [`§2Mythological creatures §7you find and burrows you dig scale in §cdifficulty §7and §6rewards §7based on your equipped Griffin's rarity.`]
+		}
+	}
+
+	get second() {
+		let regen = this.rarity > 3 ? "VII" : this.rarity > 1 ? "VI" : "V";
+		let stren = this.rarity > 2 ? "VIII" : "VII"
+		return {
+			name: "§6Legendary Constitution",
+			desc: [`§7Permanent §cRegeneration ${regen} §7and §4Strength ${stren}§7.`]
+		}
+	}
+
+	get third() {
+		let mult = this.rarity > 3 ? 0.2 : 0.1625;
+		return {
+			name: "§6Perpetual Empathy",
+			desc: [`§7Heal nearby players for §a${round(this.level * mult, 0)}% §7of the final damage you receive.`, `§8Excludes other griffins.`]
+		}
+	}
+
+	get fourth() {
+		return  {
+			name: "§6King of Kings",
+			desc: [`§7Gain §c+${round(1 + (this.level * 0.14), 1)}% §c❁ Strength §7when above §c85% §7health.`]
+		}
+	}
+}
+
 class Guardian extends Pet {
 	get stats() {
 		return {
@@ -1260,7 +1315,7 @@ class Snowman extends Pet {
 		let mult = 0.15;
 		return {
 			name: "§6Frostbite",
-			desc: [`§7Your freezing aura slows enemy attacks causing you to take§a${floor(this.level * mult, 1)}% §7reduced damage`]
+			desc: [`§7Your freezing aura slows enemy attacks causing you to take §a${floor(this.level * mult, 1)}% §7reduced damage`]
 		};
 	}
 
@@ -1310,7 +1365,7 @@ class Spider extends Pet {
 		let mult = 0.3;
 		return {
 			name: "§6Spider Whisperer",
-			desc: [`§7Spider and tarantula minions work §a${round(this.level * mult, 1)} §7faster while on your island`]
+			desc: [`§7Spider and tarantula minions work §a${round(this.level * mult, 1)}% §7faster while on your island`]
 		};
 	}
 }
@@ -1621,7 +1676,7 @@ class Giraffe extends Pet {
 		let mult = 0.25;
 		return {
 			name: "§6Long Neck",
-			desc: [`See enemies from afar and gain ${round(this.level * mult, 1)}% §7dodge chance`]
+			desc: [`§7See enemies from afar and gain §a${round(this.level * mult, 1)}% §7dodge chance`]
 		};
 	}
 }
@@ -1912,8 +1967,8 @@ class Dolphin extends Pet {
 class FlyingFish extends Pet {
 	get stats() {
 		return {
-			intelligence: this.level * 0.75,
-			strength: this.level * 0.4
+			defense: this.level * 0.5,
+			strength: this.level * 0.5
 		};
 	}
 
@@ -1927,7 +1982,7 @@ class FlyingFish extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.15 : this.rarity > 1 ? 0.125 : 0.05;
+		let mult = this.rarity > 2 ? 0.4 : 0.3;
 		return {
 			name: "§6Quick Reel",
 			desc: [`§7Increases fishing speed by §a${round(this.level * mult, 1)}%`]
@@ -2012,6 +2067,48 @@ class Squid extends Pet {
 		return {
 			name: "§6Fishing Exp Boost",
 			desc: [`§7Boosts your Fishing exp by §a${round(this.level * mult, 1)}%`]
+		};
+	}
+}
+
+class Megalodon extends Pet{
+	get stats() {
+		return {
+			strength: this.level * 0.5,
+			magic_find: this.level * 0.1
+		};
+	}
+
+	get abilities() {
+		let list = [this.first];
+		if (this.rarity > 1)
+			list.push(this.second);
+		if (this.rarity > 3)
+			list.push(this.third);
+		return list;
+	}
+
+	get first() {
+		let mult = 0.25;
+		return {
+			name: "§6Blood Scent",
+			desc: [`§7Deal up to §c+${round(mult*this.level,1)}% ${symbols.strength} §7Damage based on the enemy's missing health`]
+		};
+	}
+
+	get second() {
+		let mult = 0.2;
+		return {
+			name: "§6Enhanced scales",
+			desc: [`§7Increases the stats of Shark Armor by §a${mult*this.level}%`]
+		};
+	}
+
+	get third() {
+		let mult = 0.5;
+		return {
+			name: "§6Feeding frenzy",
+			desc: [`§7On kill gain §c${mult * this.level}${symbols.strength} Damage §7and §f${symbols.speed} Speed §7for 5 seconds`]
 		};
 	}
 }
@@ -2250,6 +2347,7 @@ module.exports = {
 		'Enderman': Enderman,
 		'Ghoul': Ghoul,
 		'Golem': Golem,
+		'Griffin': Griffin,
 		'Guardian': Guardian,
 		'Horse': Horse,
 		'Hound': Hound,
@@ -2277,6 +2375,7 @@ module.exports = {
 		'Dolphin': Dolphin,
 		'Flying Fish': FlyingFish,
 		'Squid': Squid,
+		'Megalodon': Megalodon,
 		//Alchemy
 		'Jellyfish': Jellyfish,
 		'Parrot': Parrot,

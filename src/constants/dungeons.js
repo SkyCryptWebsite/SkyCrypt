@@ -151,6 +151,68 @@ module.exports = {
                     tier: 6
                 }
             }
+        },
+        "livid": {
+            name: "Livid",
+            texture: "c1007c5b7114abec734206d4fc613da4f3a0e99f71ff949cedadc99079135a0b",
+            max_tiers: 6,
+            floor: 5, 
+            rewards: {
+                "dark_orb": {
+                    name: "Dark Orb",
+                    required: 50,
+                    tier: 1
+                },
+                "gold_livid_head": {
+                    name: "Golden Livid Head",
+                    required: 100,
+                    tier: 2
+                },
+                "livid_dagger": {
+                    name: "Livid Dagger",
+                    required: 150,
+                    tier: 3
+                },
+                "recombobulator": {
+                    name: "Recombobulator 3000",
+                    required: 250,
+                    tier: 4
+                },
+                "last_breath": {
+                    name: "Last Breath",
+                    required: 400,
+                    tier: 5
+                },
+                "diamond_livid_head": {
+                    name: "Diamond Livid Head",
+                    required: 1000,
+                    tier: 6
+                }
+            }
+        }
+    },
+    floors: {
+        "catacombs_0": {
+            name: "entrance",
+            texture: "35c3024f4d9d12ddf5959b6aea3c810f5ee85176aab1b2e7f462aa1c194c342b"
+        },
+        "catacombs_1": {
+            texture: "726f384acdfbb7218e96efac630e9ae1a14fd2f820ab660cc68322a59b165a12"
+        },
+        "catacombs_2": {
+            texture: "ebaf2ae74553a64587840d6e70fb27d2c0ae2f8bdfacbe56654c8db4001cdc98"
+        },
+        "catacombs_3": {
+            texture: "5a2f67500a65f3ce79d34ec150de93df8f60ebe52e248f5e1cdb69b0726256f7"
+        },
+        "catacombs_4": {
+            texture: "5720917cda0567442617f2721e88be9d2ffbb0b26a3f4c2fe21655814d4f4476"
+        },
+        "catacombs_5": {
+            texture: "5720917cda0567442617f2721e88be9d2ffbb0b26a3f4c2fe21655814d4f4476"
+        },
+        "catacombs_6": {
+            texture: "3ce69d2ddcc81c9fc2e9948c92003eb0f7ebf0e7e952e801b7f2069dcee76d85"
         }
     }
 };

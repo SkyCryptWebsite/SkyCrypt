@@ -259,6 +259,8 @@ document.addEventListener('DOMContentLoaded', function(){
         itemLore.innerHTML = item.lore || '';
 
         if(item.texture_pack){
+            const texturePack = extra.packs.filter(a => a.id == item.texture_pack)[0];
+
             let packContent = document.createElement('div');
             packContent.classList.add('pack-credit');
 
@@ -423,6 +425,15 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     [].forEach.call(document.querySelectorAll('.sub-extendable .stat-sub-header'), function(element){
+        element.addEventListener('click', function(e){
+            if(element.parentNode.classList.contains('sub-extended'))
+                element.parentNode.classList.remove('sub-extended')
+            else
+                element.parentNode.classList.add('sub-extended');
+        });
+    });
+
+    [].forEach.call(document.querySelectorAll('.sub-floor-extendable .stat-sub-header'), function(element){
         element.addEventListener('click', function(e){
             if(element.parentNode.classList.contains('sub-extended'))
                 element.parentNode.classList.remove('sub-extended')

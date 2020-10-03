@@ -1,3 +1,18 @@
+const symbols = {
+	health: "❤",
+	defense: "❈",
+	strength: "❁",
+	crit_chance: "☣",
+	crit_damage: "☠",
+	intelligence: "✎",
+	speed: "✦",
+	sea_creature_chance: "α",
+	magic_find: "✯",
+	pet_luck: "♣",
+	attack_speed: "⚔️",
+	true_defense: "❂"
+}
+
 module.exports = {
     pet_rarity_offset: {
         common: 0,
@@ -330,6 +345,11 @@ module.exports = {
             type: "fishing",
             emoji: "❄️"
         },
+        "MEGALODON": {
+            head: "/head/a94ae433b301c7fb7c68cba625b0bd36b0b14190f20e34a7c8ee0d9de06d53b9",
+            type: "fishing",
+            emoji: "🦈"
+        },
         "GOLEM": {
             head: "/head/89091d79ea0f59ef7ef94d7bba6e5f17f2f7d4572c44f90f76c4819a714",
             type: "combat",
@@ -354,6 +374,11 @@ module.exports = {
             head: "/head/8d9ccc670677d0cebaad4058d6aaf9acfab09abea5d86379a059902f2fe22655",
             type: "combat",
             emoji: "👻"
+        },
+        "GRIFFIN": {
+            head: "/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8",
+            type: "combat",
+            emoji: "🦅"
         }
     },
 
@@ -397,22 +422,26 @@ module.exports = {
             description: "§7Gives +§a10% §7pet exp for all skills"
         },
         PET_ITEM_BIG_TEETH_COMMON: {
-            description: "§7Increases §9Crit Chance §7by §a5%",
+            description: `§7Increases §9${symbols.crit_chance} Crit Chance §7by §a5`,
             stats: {
                 crit_chance: 5
             }
         },
         PET_ITEM_IRON_CLAWS_COMMON: {
-            description: "§7Increases the pet's §9Crit Damage §7by §a40% §7and §9Crit Chance §7by §a40%"
+            description: `§7Increases the pet's §9${symbols.crit_damage} Crit Damage §7by §a40% §7and §9${symbols.crit_chance} Crit Chance §7by §a40%`,
+            multStats: {
+                crit_chance: 1.4,
+                crit_damage: 1.4
+            }
         },
         PET_ITEM_SHARPENED_CLAWS_UNCOMMON: {
-            description: "§7Increases §9Crit Damage §7by §a15%",
+            description: `§7Increases §9${symbols.crit_damage} Crit Damage §7by §a15`,
             stats: {
                 crit_damage: 15
             }
         },
         PET_ITEM_HARDENED_SCALES_UNCOMMON: {
-            description: "§7Increases §aDefense §7by §a25",
+            description: `§7Increases §a${symbols.defense} Defense §7by §a25`,
             stats: {
                 defense: 25
             }
@@ -421,13 +450,16 @@ module.exports = {
             description: "§7Your pet fuses its power with placed §aOrbs §7to give them §a2x §7duration"
         },
         PET_ITEM_LUCKY_CLOVER: {
-            description: "§7Increases §bMagic Find §7by §a7",
+            description: `§7Increases §b${symbols.magic_find} Magic Find §7by §a7`,
             stats: {
                 magic_find: 7
             }
         },
         PET_ITEM_TEXTBOOK: {
-            description: "§7Increases the pet's §bIntelligence §7by §a100%"
+            description: `§7Increases the pet's §b${symbols.intelligence} Intelligence §7by §a100%`,
+            multStats: {
+                intelligence: 2
+            }
         },
         PET_ITEM_SADDLE: {
             description: "§7Increase horse speed by §a50% §7 and jump boost by §a100%"
@@ -497,6 +529,56 @@ module.exports = {
         },
         PET_ITEM_FARMING_SKILL_BOOST_EPIC: {
             description: "§7Gives +§a50% §7pet exp for Farming"
+        },
+        // new pet items from 0.9 update yay
+        REINFORCED_SCALES: {
+            description: `§7Increases §a${symbols.defense} Defense §7by §a40`,
+            stats: {
+                defense: 40
+            }
+        },
+        GOLD_CLAWS: {
+            description: `§7Increases the pet's §9${symbols.crit_damage} Crit Damage §7by §a50% §7and §9${symbols.crit_chance} Crit Chance §7by §a50%`,
+            multStats: {
+                crit_chance: 1.5,
+                crit_damage: 1.5
+            }
+        },
+        ALL_SKILLS_SUPER_BOOST: {
+            description: "§7Gives +§a20% §7pet exp for all skills"
+        },
+        BIGGER_TEETH: {
+            description: `§7Increases §9${symbols.crit_chance} Crit Chance §7by §a10`,
+            stats: {
+                crit_chance: 10
+            }
+        },
+        SERRATED_CLAWS: {
+            description: `§7Increases §9${symbols.crit_damage} Crit Damage §7by §a25`,
+            stats: {
+                crit_damage: 25
+            }
+        },
+        WASHED_UP_SOUVENIR: {
+            description: `§7Increases §3${symbols.sea_creature_chance} Sea Creature Chance §7by §a5`,
+            stats: {
+                sea_creature_chance: 5
+            }
+        },
+        ANTIQUE_REMEDIES: {
+            description: `§7Increases the pet's §c${symbols.strength} Strength §7by §a80%`,
+            multStats: {
+                strength: 1.8
+            }
+        },
+        CROCHET_TIGER_PLUSHIE: {
+            description: `§7Increases §e${symbols.attack_speed} Bonus Attack Speed §7by §a40`,
+            stats: {
+                attack_speed: 40
+            }
+        },
+        DWARF_TURTLE_SHELMET: {
+            description: `§7Makes the pet's owner immune to knockback.`
         }
     }
 }

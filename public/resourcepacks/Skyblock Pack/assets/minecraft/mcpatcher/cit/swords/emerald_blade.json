@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "item/emerald"
+        "layer0": "./emerald_blade"
     },
     "display": {
         "thirdperson": {

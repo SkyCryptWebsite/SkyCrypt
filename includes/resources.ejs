@@ -4,7 +4,7 @@
     <meta property="og:type" content="object">
     <link rel="sitemap" href="/sitemap.xml">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap"></noscript>
-    <link rel="stylesheet" href="/resources/css/index.css?v125">
+    <link rel="stylesheet" href="/resources/css/index.css?v129">
     <noscript><link rel="stylesheet" href="/resources/css/inventory.css?v13"></noscript>
 
     <script>
@@ -12,6 +12,7 @@
             "/resources/css/inventory.css?v13",
             "https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap"
         ];
+
         stylesheets.forEach(function(sheet){
             const link = document.createElement('link')
             link.href = sheet;
@@ -19,6 +20,7 @@
             document.head.appendChild(link);
         });
     </script>
+
     <script>
         let extra = <%- JSON.stringify(extra) %>;
 
@@ -35,7 +37,6 @@
             else
                 return (roundFunc(number / 1000 / 1000 / 1000 * rounding * 10) / (rounding * 10)).toFixed(rounding.toString().length) + 'B';
         }
-
 
         document.addEventListener('DOMContentLoaded', function(){
             let searchUser = document.querySelector('#inp_search_user');
@@ -58,4 +59,52 @@
             searchUser.addEventListener('keyup', updateUserTarget);
             searchUser.addEventListener('change', updateUserTarget);
         });
+    </script>
+
+    <script>
+        if (!localStorage.getItem('currentTheme') || !extra.themes[localStorage.getItem('currentTheme')])
+            localStorage.setItem('currentTheme', 'default');
+
+        if (localStorage.getItem('currentTheme') != 'default')
+            loadTheme(localStorage.getItem('currentTheme'));
+
+        function convertHex(code) {
+            let hex = code.substring(1, 7);
+            return `${parseInt(hex.substring(0, 2), 16)}, ${parseInt(hex.substring(2, 4), 16)}, ${parseInt(hex.substring(4, 6), 16)}`;
+        }
+
+        function loadTheme(currentTheme) {
+            if (!extra.themes[currentTheme])
+                return console.error(`${currentTheme} isn't a valid theme.`);
+
+            let theme = extra.themes[currentTheme];
+
+            let element = document.documentElement;
+            let colors = theme.colors;
+
+            for (color in colors) {
+                let value = colors[color];
+
+                switch (color) {
+                    case 'icon':
+                    case 'line':
+                    case 'link': 
+                        element.style.setProperty(`--${color}-rgb`, convertHex(value));
+                    default: 
+                        element.style.setProperty(`--${color}-hex`, value);
+                }
+            }
+
+            let bgs = theme.backgrounds;
+            for (bg in bgs) {
+                for (img in bgs[bg]) {
+                    element.style.setProperty(`--${bg}-${img}`, `url(${bgs[bg][img]})`);
+                }
+            }
+
+            if (theme.logo)
+                element.style.setProperty('--logo-square', `url(${theme.logo})`);
+
+            console.log(`Loaded theme: ${currentTheme}`);
+        }
     </script>

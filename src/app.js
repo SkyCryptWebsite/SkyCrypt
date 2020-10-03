@@ -37,6 +37,7 @@ async function main(){
     const { SitemapStream, streamToPromise } = require('sitemap');
     const { createGzip } = require('zlib');
     const twemoji = require('twemoji');
+    const cookieParser = require('cookie-parser');
 
     const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
@@ -60,6 +61,7 @@ async function main(){
     app.use(bodyParser.urlencoded({ extended: true }));
     app.set('view engine', 'ejs');
     app.use(express.static('public', { maxAge: CACHE_DURATION }));
+    app.use(cookieParser())
 
     app.use(session({
         secret: credentials.session_secret,
@@ -71,7 +73,7 @@ async function main(){
     }));
 
     require('./api')(app, db);
-    //require('./apiv2')(app, db);
+    require('./apiv2')(app, db);
     require('./donations/kofi')(app, db);
 
     async function getExtra(){
@@ -79,16 +81,9 @@ async function main(){
 
         output.twemoji = twemoji;
 
-        const kofiEntry = await db.collection('donations').findOne({type: 'kofi'});
-        const patreonEntry = await db.collection('donations').findOne({type: 'patreon'});
+        output.themes = lib.getThemes();
 
-        if(kofiEntry == null || patreonEntry == null)
-            return output;
-
-        output.donations = {
-            kofi: kofiEntry.amount || 0,
-            patreon: patreonEntry.amount || 0
-        };
+        output.packs = lib.getPacks();
 
         const topProfiles = await db
         .collection('topViews')
@@ -109,6 +104,15 @@ async function main(){
         if('recaptcha_site_key' in credentials)
             output.recaptcha_site_key = credentials.recaptcha_site_key;
 
+        const patreonEntry = await db.collection('donations').findOne({type: 'patreon'});
+
+        if(patreonEntry == null)
+            return output;
+
+        output.donations = {
+            patreon: patreonEntry.amount || 0
+        };
+
         return output;
     }
 
@@ -123,7 +127,7 @@ async function main(){
         try{
             const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, { updateArea: true, cacheOnly });
 
-            const items = await lib.getItems(profile.members[profile.uuid], true, req.query.pack);
+            const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack);
             const calculated = await lib.getStats(db, profile, allProfiles, items);
 
             res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra(), page: 'stats' });

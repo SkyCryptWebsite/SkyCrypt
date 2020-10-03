@@ -110,8 +110,8 @@ function getXpByLevel(level, runecrafting){
     return output;
 }
 
-function getLevelByXp(xp, runecrafting){
-    let xp_table = runecrafting ? constants.runecrafting_xp : constants.leveling_xp;
+function getLevelByXp(xp, type){
+    let xp_table = type == 1 ? constants.runecrafting_xp : type == 2 ? constants.dungeoneering_xp : constants.leveling_xp;
 
     if(isNaN(xp)){
         return {
@@ -415,6 +415,25 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                     hasAnvilUses = true;
 
                     item.lore += "<br><br>" + helper.renderLore(`§7Anvil Uses: §c${anvil_uses}`);
+                }
+            }
+
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'expertise_kills')){
+                let { expertise_kills } = item.tag.ExtraAttributes;
+
+                if(expertise_kills > 0 && lore_raw){
+                    item.lore += "<br><br>" + helper.renderLore(`§7Expertise Kills: §c${expertise_kills}`);
+                    if (expertise_kills >= 15000)
+                        item.lore += "<br>" + helper.renderLore(`§8MAXED OUT!`);
+                    else{
+                        let toNextLevel = 0;
+                        for (const e of constants.expertise_kills_ladder){
+                            if(expertise_kills < e){
+                                toNextLevel = e - expertise_kills;
+                                break;
+                            }
+                        }
+                        item.lore += "<br>" + helper.renderLore(`§8${toNextLevel} kills to tier up!`);}
                 }
             }
 
@@ -1755,6 +1774,7 @@ module.exports = {
         misc.dragons = {};
         misc.protector = {};
         misc.damage = {};
+        misc.burrows = {};
         misc.auctions_sell = {};
         misc.auctions_buy = {};
 
@@ -1763,6 +1783,22 @@ module.exports = {
 
         misc.dragons['last_hits'] = 0;
         misc.dragons['deaths'] = 0;
+
+        const burrows = [
+            "mythos_burrows_dug_next", 
+            "mythos_burrows_dug_combat", 
+            "mythos_burrows_dug_treasure", 
+            "mythos_burrows_chains_complete"
+        ];
+
+        const dug_next = {};
+        const dug_combat = {};
+        const dug_treasure = {};
+        const chains_complete = {};
+
+        for(const key of burrows)
+            if(key in userProfile.stats) 
+                misc.burrows[key.replace("mythos_burrows_", "")] = { total: userProfile.stats[key] };
 
         const auctions_buy = ["auctions_bids", "auctions_highest_bid", "auctions_won", "auctions_gold_spent"];
         const auctions_sell = ["auctions_fees", "auctions_gold_earned"];
@@ -1799,8 +1835,16 @@ module.exports = {
                 misc.protector['last_hits'] = userProfile.stats[key];
             else if(key.includes('deaths_corrupted_protector'))
                 misc.protector['deaths'] = userProfile.stats[key];
-            else if(key.startsWith('pet_milestone_')){
+            else if(key.startsWith('pet_milestone_'))
                 misc.milestones[key.replace('pet_milestone_', '')] = userProfile.stats[key];
+            else if(key.startsWith('mythos_burrows_dug_next_'))
+                dug_next[key.replace('mythos_burrows_dug_next_', '').toLowerCase()] = userProfile.stats[key];
+            else if(key.startsWith('mythos_burrows_dug_combat_'))
+                dug_combat[key.replace('mythos_burrows_dug_combat_', '').toLowerCase()] = userProfile.stats[key];
+            else if(key.startsWith('mythos_burrows_dug_treasure_'))
+                dug_treasure[key.replace('mythos_burrows_dug_treasure_', '').toLowerCase()] = userProfile.stats[key];
+            else if(key.startsWith('mythos_burrows_chains_complete_')) {
+                chains_complete[key.replace('mythos_burrows_chains_complete_', '').toLowerCase()] = userProfile.stats[key];
             }
 
         for(const key in misc.dragons)
@@ -1810,6 +1854,18 @@ module.exports = {
         for(const key in misc)
             if(Object.keys(misc[key]).length == 0)
                 delete misc[key];
+
+        for(const key in dug_next)
+            misc.burrows.dug_next[key] = dug_next[key];
+
+        for(const key in dug_combat)
+            misc.burrows.dug_combat[key] = dug_combat[key];
+
+        for(const key in dug_treasure)
+            misc.burrows.dug_treasure[key] = dug_treasure[key];
+
+        for(const key in chains_complete)
+            misc.burrows.chains_complete[key] = chains_complete[key];
 
         for(const key in auctions_bought)
             misc.auctions_buy['items_bought'] = (misc.auctions_buy['items_bought'] || 0) + auctions_bought[key];
@@ -1885,9 +1941,10 @@ module.exports = {
 
             lore.push('');
 
-            const pet_name = helper.titleCase(pet.type.replace(/\_/g, ' '));
-            
-            if(pet_name in constants.petStats){
+            const petName = helper.titleCase(pet.type.replace(/\_/g, ' '));
+            const searchName = petName in constants.petStats ? petName : '???';
+
+            if(searchName in constants.petStats){
                 let rarity;
                 switch(pet.rarity){
                     case "common":
@@ -1907,43 +1964,72 @@ module.exports = {
                         break;
                 }
 
-                const pet_stats = new constants.petStats[pet_name](rarity, pet.level.level)
-                let textbook = false;
-                if(pet.heldItem){
-                    const { heldItem } = pet;
-                    if(heldItem == "PET_ITEM_TEXTBOOK")
-                        textbook = true;
+                const petInstance = new constants.petStats[searchName](rarity, pet.level.level)
+                // we need to push stats later :o
+
+                // make pet.stats actually hold pet stats
+                pet.stats = Object.assign({}, petInstance.stats);
+
+                pet.ref = petInstance;
+
+                // we also need to push abilites after stats :O
+            }
+
+            if(pet.heldItem) {
+                const { heldItem } = pet;
+
+                const heldItemObj = await db
+                .collection('items')
+                .findOne({ id: heldItem });
+
+                if(heldItem in constants.pet_items){
+                    if('stats' in constants.pet_items[heldItem])
+                        for(const stat in constants.pet_items[heldItem].stats)
+                            pet.stats[stat] = (pet.stats[stat] || 0) + constants.pet_items[heldItem].stats[stat];
+                    if('multStats' in constants.pet_items[heldItem])
+                        for(const stat in constants.pet_items[heldItem].multStats)
+                            pet.stats[stat] = (pet.stats[stat] || 0) * constants.pet_items[heldItem].multStats[stat];
                 }
-                const stats = pet_stats.lore(textbook);
+
+                // push pet lore after held item stats added
+                const stats = pet.ref.lore(pet.stats);
                 stats.forEach(line => {
                     lore.push(line);
                 });
 
-                pet.ref = pet_stats;
-
-                const abilities = pet_stats.abilities;
+                // then the ability lore
+                const abilities = pet.ref.abilities;
                 abilities.forEach(ability => {
                     lore.push(' ', ability.name);
                     ability.desc.forEach(line => {
                         lore.push(line);
                     });
                 });
+                // now we push the lore of the held items
+                if(heldItemObj)
+                    lore.push('', `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
 
+                if(heldItem in constants.pet_items){
+                    lore.push(constants.pet_items[heldItem].description);
+                }
+                // extra line
                 lore.push(' ');
-            }else{
-                const pet_stats = new constants.petStats['???'](4, 0)
-
-                const abilities = pet_stats.abilities;
+            } else { // no held items so push the new stats
+                const stats = pet.ref.lore();
+                stats.forEach(line => {
+                    lore.push(line);
+                });
+                
+                const abilities = pet.ref.abilities;
                 abilities.forEach(ability => {
                     lore.push(' ', ability.name);
                     ability.desc.forEach(line => {
                         lore.push(line);
                     });
                 });
-
+                // extra line
                 lore.push(' ');
             }
-            
 
             if(pet.level.level < 100){
                 lore.push(
@@ -1975,25 +2061,6 @@ module.exports = {
                 `§7Candy Used: §e${pet.candyUsed || 0} §6/ §e10`
             );
 
-            if(pet.heldItem){
-                const { heldItem } = pet;
-
-                const heldItemObj = await db
-                .collection('items')
-                .findOne({ id: heldItem });
-
-                if(heldItemObj)
-                    lore.push('', `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
-
-                if(heldItem in constants.pet_items){
-                    lore.push(constants.pet_items[heldItem].description);
-
-                    if('stats' in constants.pet_items[heldItem])
-                        for(const stat in constants.pet_items[heldItem].stats)
-                            pet.stats[stat] = (pet.stats[stat] || 0) + constants.pet_items[heldItem].stats[stat];
-                }
-            }
-
             pet.lore = '';
 
             for(const [index, line] of lore.entries()){
@@ -2003,7 +2070,7 @@ module.exports = {
                     pet.lore += '<br>';
             }
 
-            pet.display_name = pet_name;
+            pet.display_name = petName;
             pet.emoji = petData.emoji;
 
             output.push(pet);
@@ -2272,15 +2339,77 @@ module.exports = {
     },
 
     getDungeons: async (userProfile, hypixelProfile) => {
-        const output = {};
+        let output = {};
 
-        let tasks = userProfile.tutorial;
+        const dungeons = userProfile.dungeons;
+        if (dungeons == null || Object.keys(dungeons).length === 0) return output;
 
-        output.entrance = userProfile.visited_zones.includes('dungeon');
-        if (!output.entrance) return output;
+        for(const type of Object.keys(dungeons.dungeon_types)){
+            const dungeon = dungeons.dungeon_types[type];
+            if (dungeon == null || Object.keys(dungeon).length === 0) {
+                output[type] = { visited: false };
+                continue;   
+            };
 
-        output.collected_essence = tasks.includes('essence_collected_message');
+            let floors = {};
 
+            for(const key of Object.keys(dungeon)){
+                if(typeof dungeon[key] != "object") continue;
+                for(const floor of Object.keys(dungeon[key])){
+                    if(!floors[floor]) floors[floor] = {
+                        name: `floor_${floor}`,
+                        icon_texture: "908fc34531f652f5be7f27e4b27429986256ac422a8fb59f6d405b5c85c76f7",
+                        stats: {}
+                    };
+
+                    let id = `${type}_${floor}`;
+                    if(constants.floors[id]){
+                        if(constants.floors[id].name) 
+                            floors[floor].name = constants.floors[id].name;
+                        if(constants.floors[id].texture) 
+                            floors[floor].icon_texture = constants.floors[id].texture;
+                    }
+                    
+                    if(key.startsWith("most_damage")){
+                        if(!floors[floor].most_damage || dungeon[key][floor] > floors[floor].most_damage.value) 
+                            floors[floor].most_damage = {
+                                class: key.replace("most_damage_", ""),
+                                value: dungeon[key][floor]
+                            };
+                    }else if(key === "best_runs") floors[floor][key] = dungeon[key][floor];
+                    else floors[floor].stats[key] = dungeon[key][floor];
+                }
+            }
+
+            let highest_floor = dungeon.highest_tier_completed || 0;
+            output[type] = {
+                visited: true,
+                level: getLevelByXp(dungeon.experience, 2),
+                highest_floor: constants.floors[`${type}_${highest_floor}`] && constants.floors[`${type}_${highest_floor}`].name ? constants.floors[`${type}_${highest_floor}`].name : `floor_${highest_floor}`,
+                floors: floors
+            }
+        }
+
+        output.classes = {}
+
+        let used_classes = false;
+        let current_class = dungeons.selected_dungeon_class || "none";
+        for(const className of Object.keys(dungeons.player_classes)){
+            let data = dungeons.player_classes[className];
+            output.classes[className] = {
+                experience: getLevelByXp(data.experience, 2),
+                current: false
+            }
+
+            if (data.experience > 0)
+                used_classes = true;
+            if(className == current_class) 
+                output.classes[className].current = true;
+        }
+
+        output.used_classes = used_classes;
+
+        const tasks = userProfile.tutorial;
         const collection_data = constants.boss_collections;
         let collections = {};
         for (i in tasks) {
@@ -2313,6 +2442,7 @@ module.exports = {
 
         output.boss_collections = collections;
 
+        output.selected_class = current_class;
         output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
 
         return output;
@@ -2694,6 +2824,14 @@ module.exports = {
             console.error(e);
         }
     },
+
+    getThemes: () => {
+        return constants.themes;
+    },
+
+    getPacks: () => {
+        return customResources.packs;
+    }
 }
 
 async function init(){

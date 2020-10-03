@@ -4,7 +4,7 @@ const slayerOrder = ['zombie', 'spider', 'wolf'];
 
 const allItems = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory);
 
-const UNIQUE_ACCESSORIES = 53;
+const UNIQUE_ACCESSORIES = 56;
 
 const statSuffix = {
     health: '',
@@ -275,6 +275,21 @@ const seaCreatures = [
             }
         ]
     }, {
+        name: 'Nurse Shark',
+        id: 'nurse_shark',
+        rarity: 'special',
+        fishingLevel: 5,
+        level: 6,
+        drops: [
+            {
+                rarity: 'uncommon',
+                name: 'Nurse Shark Tooth'
+            }, {
+                rarity: 'rare',
+                name: 'Shark Fin'
+            }
+        ]
+    }, {
         name: 'Sea Guardian',
         id: 'sea_guardian',
         rarity: 'common',
@@ -383,6 +398,21 @@ const seaCreatures = [
             }, {
                 rarity: 'uncommon',
                 name: 'Enchanted Bone'
+            }
+        ]
+    }, {
+        name: 'Blue Shark',
+        id: 'blue_shark',
+        rarity: 'special',
+        fishingLevel: 10,
+        level: 20,
+        drops: [
+            {
+                rarity: 'rare',
+                name: 'Blue Shark Tooth'
+            }, {
+                rarity: 'rare',
+                name: 'Shark Fin'
             }
         ]
     }, {
@@ -577,6 +607,24 @@ const seaCreatures = [
             }
         ]
     }, {
+        name: 'Tiger Shark',
+        id: 'tiger_shark',
+        rarity: 'special',
+        fishingLevel: 18,
+        level: 50,
+        drops: [
+            {
+                rarity: 'epic',
+                name: 'Tiger Shark Tooth'
+            }, {
+                rarity: 'epic',
+                name: 'Megalodon Pet'
+            }, {
+                rarity: 'rare',
+                name: 'Shark Fin'
+            }
+        ]
+    }, {
         name: 'Water Hydra',
         id: 'water_hydra',
         rarity: 'legendary',
@@ -650,6 +698,24 @@ const seaCreatures = [
             }, {
                 rarity: 'special',
                 name: 'Flying Fish'
+            }
+        ]
+    }, {
+        name: 'Great White Shark',
+        id: 'great_white_shark',
+        rarity: 'special',
+        fishingLevel: 24,
+        level: 180,
+        drops: [
+            {
+                rarity: 'legendary',
+                name: 'Great White Shark Tooth'
+            }, {
+                rarity: 'legendary',
+                name: 'Megalodon Pet'
+            }, {
+                rarity: 'rare',
+                name: 'Shark Fin'
             }
         ]
     }, {
@@ -1309,7 +1375,7 @@ twitterDescription += '. Click to view more stats!'
                         <% if(items.talismans.filter(a => !a.isInactive).length > 0){ %>
                             <div class="accessory-list">
                                 <p class="stat-sub-header" style="margin-bottom: 5px">Active Accessories</p>
-                                <% items.talismans.filter(a => !a.isInactive).forEach(item => { 
+                                <% items.talismans.filter(a => !a.isInactive).forEach(item => {
                                     %>
                                     <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>"
                                     class="rich-item piece piece-<%= item.rarity %>-bg">
@@ -1360,11 +1426,6 @@ twitterDescription += '. Click to view more stats!'
                                 </div>
                             </div>
                         <% } %>
-                        <a href="https://hypixel.net/threads/2461091/" style="margin-top: 35px" target="_blank" rel="nofollow" class="external-app">
-                            <div class="external-app-icon icon-google-sheets"></div>
-                            <div class="external-app-name">QOL Sheet <span class="grey-text">by Clowns</span></div>
-                            <div class="external-app-description">Check what accessories you're missing and which the next one you should go for is.</div>
-                        </a>
                     <% } %>
                 </div>
             </div>
@@ -1624,18 +1685,93 @@ twitterDescription += '. Click to view more stats!'
             <div class="stat-anchor"></div>
             <div class="stat-header"><span>Dungeons</span></div>
             <div class="stat-content">
-            <% if (!calculated.dungeons.entrance) { %>
+            <% if (Object.keys(calculated.dungeons).length === 0) { %>
                 <p class="stat-raw-values">
-                    <%= calculated.display_name %> hasn't entered Catacombs yet.
+                    <%= calculated.display_name %> didn't enter Catacombs yet.
                 </p>
             <% } else { %>
-                <p class="stat-raw-values">
-                    <%= calculated.display_name %> has entered Catacombs<% if (calculated.dungeons.collected_essence) { %> and collected essence<% } %>.
-                </p>
+                <% if (calculated.dungeons.used_classes) { %>
+                <p class="stat-sub-header">Classes</p>
 
-                <% if (calculated.dungeons.secrets_found > 0) { %>
+                <span class="stat-name">Selected Class: </span>
+                <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span><br>
+                <%= skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) %>
+                <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) %>
+                <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) %>
+                <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) %>
+                <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) %>
+                <% } %>
+
+                <% if (calculated.dungeons.catacombs.visited) { %>
+                    <p class="stat-sub-header">Catacombs</p>
+
                     <p class="stat-raw-values">
-                        <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span></span>
+                        <%= skill_component('Catacombs', 'icon-397_0', calculated.dungeons.catacombs.level) %><br>
+                    </p>
+
+                    <p class="stat-raw-values">
+                        <span class="stat-name">Highest Floor Beaten: </span><span class="stat-value"><%= helper.titleCase(calculated.dungeons.catacombs.highest_floor.replace("_", " ")) %></span><br>
+                        <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span>
+                    </p>
+
+                    <div class="floor-containers">
+                        <% for (let [id, floor] of Object.entries(calculated.dungeons.catacombs.floors)) { %>
+                        <div class="narrow-info-container">
+                            <div class="narrow-info-header">
+                                <div class="floor-icon" style="background-image: url(/head/<%= floor.icon_texture %>)"></div>
+                                <span><%= floor.name.replace("_", " ") %></span>
+                            </div>
+                            <span>
+                                <div class="stat-sub-container sub-floor-extendable">
+                                    <p class="stat-sub-header">Floor Stats</p>
+                                    <div class="pieces">
+                                    <% for (let [stat, value] of Object.entries(floor.stats)) { %>
+                                        <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
+                                        <span class="stat-value">
+                                        <% if(stat.startsWith("fastest_time")) { %>
+                                            <%= moment.duration(value, "milliseconds").format("m:ss.SSS") %>
+                                        <% } else { %>
+                                            <%= helper.formatNumber(value) %>
+                                        <% } %>
+                                        </span><br>
+                                    <% } %>
+                                    <% if(floor.most_damage) { %>
+                                        <span class="stat-name">Most Damage: </span>
+                                        <span class="stat-value"><%= helper.formatNumber(floor.most_damage.value) %></span>
+                                        <span class="stat-name">(<%= helper.titleCase(floor.most_damage.class) %>)</span>
+                                    <% } %>
+                                    </div>
+                                </div>
+                                <% if(floor.best_runs) { %>
+                                <div class="stat-sub-container sub-floor-extendable">
+                                    <p class="stat-sub-header">Best Run</p>
+                                    <div class="pieces">
+                                    <% for (let [stat, value] of Object.entries(floor.best_runs[0])) { 
+                                        if(stat == "teammates") continue; %>
+                                        <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
+                                        <span class="stat-value">
+                                        <% switch (stat) { case "timestamp": %>
+                                            <%= moment(value).fromNow() %>
+                                        <% break; case "elapsed_time": %>
+                                            <%= moment.duration(value, "milliseconds").format("m:ss.SSS") %>
+                                        <% break; case "dungeon_class": %>
+                                            <%= helper.titleCase(value) %>
+                                        <% break; default: %>
+                                            <%= helper.formatNumber(value) %>
+                                        <% } %>
+                                        </span><br>
+                                    <% } %>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </span>
+                        </div>
+                        <% } %>
+                    </div>
+                    <br>
+                <% } else { %>
+                    <p class="stat-raw-values">
+                        <%= calculated.display_name %> didn't enter Catacombs yet.
                     </p>
                 <% } %>
 
@@ -1662,9 +1798,9 @@ twitterDescription += '. Click to view more stats!'
                     </div>
                 <% } %>
             <% } %>
+
             <p class='stat-raw-values'><small><i>
-                Please note, that this section is still in works, since Hypixel doesn't support Dungeons in their public API.<br>
-                If any of displayed values are incorrect or you have ideas for other things, please visit us and chat on our <a class="link link-discord" href="https://discord.gg/Dk25bnB">Discord</a>.
+                Please note that this section is still in the works and many things are now in development. Thanks for your support!
             </i></small></p>
             </div>
         </div>
@@ -2147,6 +2283,22 @@ twitterDescription += '. Click to view more stats!'
                             <% } %>
                         </p>
                     <% } %>
+                    <% if('burrows' in calculated.misc){ %>
+                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8)"></div></div><span>griffin burrows</span></div>
+                        <p class="stat-raw-values">
+                            <%  let burrow_naming = {"dug_next": "dug_arrows", "dug_combat": "dug_monsters"}
+                            for(const key in calculated.misc.burrows){
+                                let name = burrow_naming[key] || key;
+                                let tooltip = "";
+
+                                for(const rarity in calculated.misc.burrows[key])
+                                    if(rarity != "total" && rarity != "null")
+                                        tooltip += `<span class="stat-name piece-${ rarity }-fg">${ helper.capitalizeFirstLetter(rarity) }: </span><span class="stat-value">${ calculated.misc.burrows[key][rarity] }</span><br>`;
+                            %>
+                                <span <%- tooltip ? `data-tippy-content='<span class="stat-name">Rarities used:</span><br>${tooltip}'` : "" %>><span class="stat-name"><%= helper.capitalizeFirstLetter(name.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.burrows[key].total.toLocaleString() %></span></span><br>
+                            <% } %>
+                        </p>
+                    <% } %>
                     <% if('auctions_sell' in calculated.misc){ %>
                         <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-266_0"></div></div><span>auctions sold</span></div>
                         <p class="stat-raw-values">
@@ -2187,8 +2339,8 @@ twitterDescription += '. Click to view more stats!'
 
         window.onload = function() {
             new Elevator({
-    //            mainAudio: '/src/to/audio.mp3',
-    //            endAudio: '/src/to/end-audio.mp3' Will get audio for it soon
+               mainAudio: '/misc/music/elevator.mp3',
+               endAudio: '/misc/music/ding.mp3'
             });
         }
     </script>

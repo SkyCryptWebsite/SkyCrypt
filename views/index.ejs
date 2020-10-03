@@ -43,7 +43,14 @@
         </div>
         <div id="error_box_wrapper" <% if(error){ %>class="show-error"<% } %>>
             <div id="error_box">
-                <div id="error_title">Error</div><div id="error_text"><%= error %></div>
+                <div id="error_title">Error</div>
+                <div id="error_text">
+                    <%= error %><br>
+                    <% if(error && error.includes("Key throttle.")){ %>
+                        <small>This happens when the site reaches API limit.</small>
+                        <small>Please try again in a minute.</small>
+                    <% } %>
+                </div>  
             </div>
         </div>
         <% if('top_profiles' in extra){ %>
@@ -79,6 +86,10 @@
         <%- include('../includes/footer'); %>
         <script src="/resources/js/js.cookie.min.js"></script>
         <script>
+            <% if(error){ %>
+                console.log("An error occured with message: \"<%= error %>\"");
+            <% } %>
+
             let targetUsername = document.getElementById("inp_enter_username");
             let searchUser = document.getElementById('search_user');
             let inputSearchUser = document.getElementById('inp_search_user');

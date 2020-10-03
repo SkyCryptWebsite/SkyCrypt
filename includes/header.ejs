@@ -38,17 +38,21 @@
     <div data-tippy-content="Supporting LGBTQ+ rights all around the year! ❤️<br><br>Click for a surprise. :)" class="pride-flag logo"></div>
     <a href="/" id="site_name">SkyCrypt</a>
     <div class="social-button" id="info_button" onclick="toggleInfo()">About</div>
-    <a href="/api">
+    <a href="/api" style="text-decoration: none;">
         <div class="social-button" id="api_button">API</div>
     </a>
-    <div class="social-button" id="colors_lol" onclick="doCookieStuff()">Click me :P</div>
+    <% if('donations' in extra){ %>
+        <a title="Patreon" target="_blank" rel="nofollow" href="https://patreon.com/shiiyu" class="social-button patreon"><%= extra.donations.patreon %> Patrons<div class="social-icon"></div></a>
+    <% } %>
     <div id="search_user"><input placeholder="Enter username" <% if(page == 'index'){ %>tabindex="-1"<% } %> type="text" id="inp_search_user"></input><a href="#" <% if(page == 'index'){ %>tabindex="-1"<% } %> id="btn_search_user"></a></div>
     <a href="https://blacklivesmatters.carrd.co/" target="_blank" rel="nofollow" data-tippy-content="<strong>Black Lives Matter!</strong><br><br>Click for a collection of links on how to support the fight against racial inequality." class="blm-logo"></a>
+    <div id="themes_button" onclick="toggleThemes()"><span>Themes</span></div>
+    <div id="packs_button" onclick="togglePacks()"><span>Packs</span></div>
 </header>
 <div id="info_box">
     <div onclick="toggleInfo()" id="info_close"></div>
     <div id="info_box_content">
-        <p>The SkyCrypt project is maintained by boblovespi, FantasmicGalaxy, MartinNemi03, metalcupcake5, Shiiyu and WarpWing. It is an open-source project. </p>
+        <p>The SkyCrypt project is maintained by boblovespi, FantasmicGalaxy, MartinNemi03, metalcupcake5 and Shiiyu. It is an open-source project. </p>
         <p>You can report bugs, suggest features, or contribute to the code on <a class="link link-github" href="https://github.com/SkyCryptWebsite/SkyCrypt" target="_blank">GitHub</a>. It would be much appreciated!</p>
         <p>Chat: <a class="link link-discord" href="https://discord.gg/Dk25bnB">discord.gg/Dk25bnB</a></p>
         <p>The original project, <a href="https://sky.lea.moe">sky.lea.moe</a>, was orginally created by <a class="link link-twitter" href="https://twitter.com/LeaPhant" target="_blank">LeaPhant</a>. Thanks for all of what you've done Lea!</p>
@@ -65,4 +69,46 @@
             <li>Skin Renderer: <a rel="nofollow" href="https://github.com/LeaPhant/skinview3d/" target="_blank">skinview3d</a> by <span class="name">Blessing Skin</span>.</li>
         </ul>
     </div>
+</div>
+<div id="themes_box" class="themes-closed">
+    <div onclick="toggleThemes()" id="themes_close"></div>
+    <% for(const theme in extra.themes){ 
+        if(extra.themes[theme].hidden) continue; %> 
+    <div class="theme">
+        <% let icon = extra.themes[theme].logo.replace("../", "https://sky.shiiyu.moe/resources/"); %>
+        <img class="theme-icon" src="<%= icon %>">
+        <span class="theme-name"><%= extra.themes[theme].name %></span>
+        <div class="theme-author">by <span><%= extra.themes[theme].author %></span></div>
+        <div class="switch_themes_button" id="<%= theme %>-theme" onclick="switchTheme('<%= theme %>')">Switch</div>
+    </div>
+    <% } %> 
+</div>
+<div id="packs_box" class="packs-closed">
+    <div onclick="togglePacks()" id="packs_close"></div>
+    <div class="resource-pack">
+        <img class="pack-icon" src="/resources/img/pack.png">
+        <a class="pack-name" href="/" target="_blank">Default</a><br>
+        <div class="pack-author">by <span>LeaPhant, various</span></div>
+        <% if(page == 'stats'){ %>
+            <% if(!req.cookies.pack){ %>
+                <div class="selected_button">In Use</div>
+            <% } else { %>
+                <div class="switch_packs_button" onclick="switchPack()">Switch</div>
+            <% } %>
+        <% } %>
+    </div>
+    <% for(const pack of extra.packs.filter(a => !a.hidden).sort((a, b) => b.priority - a.priority)){ %>
+        <div class="resource-pack">
+            <img class="pack-icon" src="<%= pack.basePath + '/pack.png' %>">
+            <a class="pack-name" href="<%= pack.url %>" target="_blank"><%= pack.name %></a><br>
+            <div class="pack-author">by <span><%= pack.author %></span></div>
+            <% if(page == 'stats'){ %>
+                <% if(req.cookies.pack == pack.id){ %>
+                    <div class="selected_button">In Use</div>
+                <% } else { %>
+                    <div class="switch_packs_button" onclick="switchPack('<%= pack.id %>')">Switch</div>
+                <% } %>
+            <% } %>
+        </div>
+    <% } %>
 </div>
