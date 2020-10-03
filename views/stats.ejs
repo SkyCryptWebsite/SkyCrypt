@@ -2030,6 +2030,7 @@ twitterDescription += '. Click to view more stats!'
                 <p class="stat-raw-values">
                     <% max = uniqueMinions == 572 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Minions: </span><span class="stat-value <%= max %>"><%= uniqueMinions %> / 572</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 572 * 100) %>%)</span><br>
                     <% max = calculated.minion_slots.currentSlots == 24 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.minion_slots.currentSlots %></span><span class="grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
+                    <% max = calculated.misc.profile_upgrades.minion_slots == 5 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Bonus Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades.minion_slots %> / <%= constants.profile_upgrades['minion_slots'] %></span><br>
                     <% max = maxedMinions == _.size(constants.minions) ? 'golden-text' : '' %><span class="stat-name <%= max %>">Maxed Minions: </span><span class="stat-value <%= max %>"><%= maxedMinions %> / <%= _.size(constants.minions) %></span><br>
                     <% if(skippedMinions > 0){ %>
                     <span class="stat-name">Skipped Minion Tiers: </span><span class="stat-value"><%= skippedMinions %></span><br>
@@ -2296,6 +2297,14 @@ twitterDescription += '. Click to view more stats!'
                                         tooltip += `<span class="stat-name piece-${ rarity }-fg">${ helper.capitalizeFirstLetter(rarity) }: </span><span class="stat-value">${ calculated.misc.burrows[key][rarity] }</span><br>`;
                             %>
                                 <span <%- tooltip ? `data-tippy-content='<span class="stat-name">Rarities used:</span><br>${tooltip}'` : "" %>><span class="stat-name"><%= helper.capitalizeFirstLetter(name.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.burrows[key].total.toLocaleString() %></span></span><br>
+                            <% } %>
+                        </p>
+                    <% } %>
+                    <% if('profile_upgrades' in calculated.misc){ %>
+                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-154_0"></div></div><span>profile upgrades</span></div>
+                        <p class="stat-raw-values">
+                            <% for(const upgrade in constants.profile_upgrades){ %>
+                            <% max = calculated.misc.profile_upgrades[upgrade] == constants.profile_upgrades[upgrade] ? 'golden-text' : '' %><span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(upgrade.split("_").join(" ")); %>: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades[upgrade] %> / <%= constants.profile_upgrades[upgrade] %></span><br>
                             <% } %>
                         </p>
                     <% } %>

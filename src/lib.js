@@ -1750,6 +1750,7 @@ module.exports = {
         misc.protector = {};
         misc.damage = {};
         misc.burrows = {};
+        misc.profile_upgrades = {};
         misc.auctions_sell = {};
         misc.auctions_buy = {};
 
@@ -1775,6 +1776,8 @@ module.exports = {
             if(key in userProfile.stats) 
                 misc.burrows[key.replace("mythos_burrows_", "")] = { total: userProfile.stats[key] };
 
+        misc.profile_upgrades = await module.exports.getProfileUpgrades(profile);
+        
         const auctions_buy = ["auctions_bids", "auctions_highest_bid", "auctions_won", "auctions_gold_spent"];
         const auctions_sell = ["auctions_fees", "auctions_gold_earned"];
 
@@ -2423,6 +2426,16 @@ module.exports = {
         return output;
     },
 
+    getProfileUpgrades: async (profile) => {
+        const output = {};
+        for (const upgrade in constants.profile_upgrades)
+            output[upgrade] = 0;
+        if (helper.hasPath(profile, 'community_upgrades', 'upgrade_states'))
+            for (const u of profile.community_upgrades.upgrade_states)
+                output[u.upgrade] = Math.max(output[u.upgrade] || 0, u.tier);
+        return output;
+    },
+
     getProfile: async (db, paramPlayer, paramProfile, options = { cacheOnly: false }) => {
         if(paramPlayer.length != 32){
             try{
@@ -2586,6 +2599,9 @@ module.exports = {
 
                 if(helper.hasPath(_profile, 'banking'))
                     insertCache.banking = _profile.banking;
+                
+                if(helper.hasPath(_profile, 'community_upgrades'))
+                    insertCache.community_upgrades = _profile.community_upgrades;
 
                 db
                 .collection('profileCache')
