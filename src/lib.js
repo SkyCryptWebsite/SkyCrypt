@@ -2236,7 +2236,7 @@ module.exports = {
                 object.rarity = "legendary"
             }
             if(object.name == null){
-                object.display_name = talisman;
+                object.name = talisman;
             }
             output.push(object);
         });
