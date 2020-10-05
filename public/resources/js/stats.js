@@ -1054,7 +1054,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 //this is run after flow
-document.addEventListener('load', function () {
+window.addEventListener('load', function() {
     // checks if the scrollbar has a width should be true with desktop style scrollbars
     if (window.innerWidth > document.documentElement.clientWidth) {
         document.documentElement.classList.add('style-scrollbar');
