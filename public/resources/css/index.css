@@ -996,15 +996,15 @@ html.no-transform #info_box.opened{
     text-decoration: none;
 }
 
-#stats_content .item-lore::-webkit-scrollbar {
+.style-scrollbar #stats_content .item-lore::-webkit-scrollbar {
     width: 10px;
 }
 
-#stats_content .item-lore::-webkit-scrollbar-thumb{
+.style-scrollbar #stats_content .item-lore::-webkit-scrollbar-thumb{
     border-radius: 5px;
 }
 
-#stats_content .item-lore::-webkit-scrollbar-track{
+.style-scrollbar #stats_content .item-lore::-webkit-scrollbar-track{
     background-color: transparent;
 }
 
@@ -1930,52 +1930,60 @@ a.additional-player-stat:hover{
     background-position: center center !important;
 }
 
-.piece-special-bg{
+.piece-special-bg,
+.style-scrollbar .piece-special-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #FF5555;
 }
-
-.piece-mythic-bg{
-    background-color: #D762D7;
+.piece-special-bg + .item-lore{
+    scrollbar-color: #FF5555 transparent;
 }
 
-.piece-legendary-bg{
+.piece-mythic-bg,
+.style-scrollbar .piece-mythic-bg + .item-lore::-webkit-scrollbar-thumb{
+    background-color: #D762d7;
+}
+.piece-mythic-bg + .item-lore{
+    scrollbar-color: #D762d7 transparent;
+}
+
+.piece-legendary-bg,
+.style-scrollbar .piece-legendary-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: var(--maxed-hex);
 }
-
-.piece-legendary-bg + .item-lore::-webkit-scrollbar-thumb{
-    background-color: var(--maxed-hex);
+.piece-legendary-bg + .item-lore{
+    scrollbar-color: var(--maxed-hex) transparent;
 }
 
-.piece-epic-bg{
+.piece-epic-bg,
+.style-scrollbar .piece-epic-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #AA00AA;
 }
-
-.piece-epic-bg + .item-lore::-webkit-scrollbar-thumb{
-    background-color: #AA00AA;
+.piece-epic-bg + .item-lore{
+    scrollbar-color: #AA00AA transparent;
 }
 
-.piece-rare-bg{
+.piece-rare-bg,
+.style-scrollbar .piece-rare-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #5555FF;
 }
-
-.piece-rare-bg + .item-lore::-webkit-scrollbar-thumb{
-    background-color: #5555FF;
+.piece-rare-bg+.item-lore{
+    scrollbar-color: #5555FF transparent;
 }
 
-.piece-uncommon-bg{
+.piece-uncommon-bg,
+.style-scrollbar .piece-uncommon-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #3cbd3c;
 }
-
-.piece-uncommon-bg + .item-lore::-webkit-scrollbar-thumb{
-    background-color: #3cbd3c;
+.piece-uncommon-bg + .item-lore{
+    scrollbar-color: #3cbd3c transparent;
 }
 
-.piece-common-bg{
+.piece-common-bg,
+.style-scrollbar .piece-common-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #555555;
 }
-
-.piece-common-bg + .item-lore::-webkit-scrollbar-thumb{
-    background-color: #555555;
+.piece-common-bg + .item-lore{
+    scrollbar-color: #555555 transparent;
 }
 
 .piece-special-fg{
@@ -2849,16 +2857,16 @@ a.additional-player-stat:hover{
     margin-bottom: 35px;
 }
 
-.narrow-info-content::-webkit-scrollbar{
+.style-scrollbar .narrow-info-content::-webkit-scrollbar{
     width: 10px;
 }
 
-.narrow-info-content::-webkit-scrollbar-thumb{
+.style-scrollbar .narrow-info-content::-webkit-scrollbar-thumb{
     background-color: var(--icon-hex);
     border-radius: 5px;
 }
 
-.narrow-info-content::-webkit-scrollbar-track{
+.style-scrollbar .narrow-info-content::-webkit-scrollbar-track{
     background-color: transparent;
 }
 
@@ -3129,6 +3137,59 @@ html.no-webp #error_box_wrapper{
 
 #enable_api:focus{
     outline: 0 !important;
+}
+
+html {
+    scrollbar-color: var(--icon-hex) #323232;
+}
+
+body {
+    scrollbar-color: var(--icon-hex) rgba(60, 60, 60, 0.5);
+}
+
+.style-scrollbar *::-webkit-scrollbar-track {
+    border-radius: 12px;
+    background-color: rgba(60, 60, 60, 0.5);
+}
+
+.style-scrollbar *::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+.style-scrollbar *::-webkit-scrollbar-thumb {
+    border-radius: 12px;
+    background-color: var(--icon-hex);
+}
+
+.style-scrollbar body::-webkit-scrollbar {
+    background-color: #282828;
+}
+
+@media (max-width: 900px) {
+    .style-scrollbar #nav_bar_line {
+        bottom: 9px;
+    }
+    .style-scrollbar #nav_items_container {
+        padding-bottom: 10px;
+    }
+    @supports (scrollbar-color: red blue) {
+        .style-scrollbar #nav_bar_line {
+            bottom: 13px;
+        }
+    }
+}
+
+#nav_items_container {
+    scrollbar-color: var(--icon-hex) transparent;
+}
+
+.style-scrollbar #nav_items_container::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.style-scrollbar #nav_items_container::-webkit-scrollbar {
+    height: 8px;
 }
 
 @media (max-width: 1590px){
