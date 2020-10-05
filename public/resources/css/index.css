@@ -3133,30 +3133,26 @@ html.no-webp #error_box_wrapper{
     scrollbar-color: var(--icon-hex) #323232;
 }
 
-.style-scrollbar *::-webkit-scrollbar-track
-{
+.style-scrollbar *::-webkit-scrollbar-track {
     border-radius: 12px;
-    background-color: rgba(60,60,60,0.5);
+    background-color: rgba(60, 60, 60, 0.5);
 }
 
-.style-scrollbar *::-webkit-scrollbar
-{
+.style-scrollbar *::-webkit-scrollbar {
     width: 12px;
     height: 12px;
 }
 
-.style-scrollbar *::-webkit-scrollbar-thumb
-{
+.style-scrollbar *::-webkit-scrollbar-thumb {
     border-radius: 12px;
     background-color: var(--icon-hex);
 }
 
-.style-scrollbar body::-webkit-scrollbar
-{
+.style-scrollbar body::-webkit-scrollbar {
     background-color: #282828;
 }
 
-@media (max-width: 900px){
+@media (max-width: 900px) {
     .style-scrollbar #nav_bar_line {
         bottom: 9px;
     }
@@ -3165,13 +3161,11 @@ html.no-webp #error_box_wrapper{
     }
 }
 
-.style-scrollbar #nav_items_container::-webkit-scrollbar-track
-{
+.style-scrollbar #nav_items_container::-webkit-scrollbar-track {
     background-color: transparent;
 }
 
-.style-scrollbar #nav_items_container::-webkit-scrollbar
-{
+.style-scrollbar #nav_items_container::-webkit-scrollbar {
     height: 8px;
 }
 
