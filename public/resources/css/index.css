@@ -1928,52 +1928,60 @@ a.additional-player-stat:hover{
     background-position: center center !important;
 }
 
-.piece-special-bg{
+.piece-special-bg,
+.piece-special-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #FF5555;
 }
-
-.piece-mythic-bg{
-    background-color: #D762D7;
+.piece-special-bg + .item-lore{
+    scrollbar-color: #FF5555 transparent;
 }
 
-.piece-legendary-bg{
-    background-color: var(--maxed-hex);
+.piece-mythic-bg,
+.piece-mythic-bg + .item-lore::-webkit-scrollbar-thumb{
+    background-color: #D762d7;
+}
+.piece-mythic-bg + .item-lore{
+    scrollbar-color: #D762d7 transparent;
 }
 
+.piece-legendary-bg,
 .piece-legendary-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: var(--maxed-hex);
 }
-
-.piece-epic-bg{
-    background-color: #AA00AA;
+.piece-legendary-bg + .item-lore{
+    scrollbar-color: var(--maxed-hex) transparent;
 }
 
+.piece-epic-bg,
 .piece-epic-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #AA00AA;
 }
-
-.piece-rare-bg{
-    background-color: #5555FF;
+.piece-epic-bg + .item-lore{
+    scrollbar-color: #AA00AA transparent;
 }
 
+.piece-rare-bg,
 .piece-rare-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #5555FF;
 }
-
-.piece-uncommon-bg{
-    background-color: #3cbd3c;
+.piece-rare-bg+.item-lore{
+    scrollbar-color: #5555FF transparent;
 }
 
+.piece-uncommon-bg,
 .piece-uncommon-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #3cbd3c;
 }
-
-.piece-common-bg{
-    background-color: #555555;
+.piece-uncommon-bg + .item-lore{
+    scrollbar-color: #3cbd3c transparent;
 }
 
+.piece-common-bg,
 .piece-common-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #555555;
+}
+.piece-common-bg + .item-lore{
+    scrollbar-color: #555555 transparent;
 }
 
 .piece-special-fg{
