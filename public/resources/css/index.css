@@ -3129,8 +3129,12 @@ html.no-webp #error_box_wrapper{
     outline: 0 !important;
 }
 
-.style-scrollbar {
+html {
     scrollbar-color: var(--icon-hex) #323232;
+}
+
+body {
+    scrollbar-color: var(--icon-hex) rgba(60, 60, 60, 0.5);
 }
 
 .style-scrollbar *::-webkit-scrollbar-track {
@@ -3159,6 +3163,15 @@ html.no-webp #error_box_wrapper{
     .style-scrollbar #nav_items_container {
         padding-bottom: 10px;
     }
+    @supports (scrollbar-color: red blue) {
+        .style-scrollbar #nav_bar_line {
+            bottom: 13px;
+        }
+    }
+}
+
+#nav_items_container {
+    scrollbar-color: var(--icon-hex) transparent;
 }
 
 .style-scrollbar #nav_items_container::-webkit-scrollbar-track {
