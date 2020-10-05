@@ -1378,7 +1378,7 @@ class Tarantula extends Pet {
 	get third() {
 		let mult = 0.4;
 		return {
-			name: "§6Arachnid Slayerr",
+			name: "§6Arachnid Slayer",
 			desc: [`§7Gain +§a${round(this.level * mult, 1)}% §7more combat xp from spiders`]
 		};
 	}
