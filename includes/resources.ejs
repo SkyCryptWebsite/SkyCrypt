@@ -95,15 +95,15 @@
                 }
             }
 
-            let bgs = theme.backgrounds;
-            for (bg in bgs) {
-                for (img in bgs[bg]) {
-                    element.style.setProperty(`--${bg}-${img}`, `url(${bgs[bg][img]})`);
-                }
-            }
+            const resource_link = "https://sky.shiiyu.moe/resources/";
 
+            let bgs = theme.backgrounds;
+            for (bg in bgs) 
+                for (img in bgs[bg]) 
+                    element.style.setProperty(`--${bg}-${img}`, `url(${bgs[bg][img].replace("../", resource_link)})`);
+            
             if (theme.logo)
-                element.style.setProperty('--logo-square', `url(${theme.logo})`);
+                element.style.setProperty('--logo-square', `url(${theme.logo.replace("../", resource_link)})`);
 
             console.log(`Loaded theme: ${currentTheme}`);
         }
