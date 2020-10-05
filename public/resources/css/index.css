@@ -994,15 +994,15 @@ html.no-transform #info_box.opened{
     text-decoration: none;
 }
 
-#stats_content .item-lore::-webkit-scrollbar {
+.style-scrollbar #stats_content .item-lore::-webkit-scrollbar {
     width: 10px;
 }
 
-#stats_content .item-lore::-webkit-scrollbar-thumb{
+.style-scrollbar #stats_content .item-lore::-webkit-scrollbar-thumb{
     border-radius: 5px;
 }
 
-#stats_content .item-lore::-webkit-scrollbar-track{
+.style-scrollbar #stats_content .item-lore::-webkit-scrollbar-track{
     background-color: transparent;
 }
 
@@ -1929,7 +1929,7 @@ a.additional-player-stat:hover{
 }
 
 .piece-special-bg,
-.piece-special-bg + .item-lore::-webkit-scrollbar-thumb{
+.style-scrollbar .piece-special-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #FF5555;
 }
 .piece-special-bg + .item-lore{
@@ -1937,7 +1937,7 @@ a.additional-player-stat:hover{
 }
 
 .piece-mythic-bg,
-.piece-mythic-bg + .item-lore::-webkit-scrollbar-thumb{
+.style-scrollbar .piece-mythic-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #D762d7;
 }
 .piece-mythic-bg + .item-lore{
@@ -1945,7 +1945,7 @@ a.additional-player-stat:hover{
 }
 
 .piece-legendary-bg,
-.piece-legendary-bg + .item-lore::-webkit-scrollbar-thumb{
+.style-scrollbar .piece-legendary-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: var(--maxed-hex);
 }
 .piece-legendary-bg + .item-lore{
@@ -1953,7 +1953,7 @@ a.additional-player-stat:hover{
 }
 
 .piece-epic-bg,
-.piece-epic-bg + .item-lore::-webkit-scrollbar-thumb{
+.style-scrollbar .piece-epic-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #AA00AA;
 }
 .piece-epic-bg + .item-lore{
@@ -1961,7 +1961,7 @@ a.additional-player-stat:hover{
 }
 
 .piece-rare-bg,
-.piece-rare-bg + .item-lore::-webkit-scrollbar-thumb{
+.style-scrollbar .piece-rare-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #5555FF;
 }
 .piece-rare-bg+.item-lore{
@@ -1969,7 +1969,7 @@ a.additional-player-stat:hover{
 }
 
 .piece-uncommon-bg,
-.piece-uncommon-bg + .item-lore::-webkit-scrollbar-thumb{
+.style-scrollbar .piece-uncommon-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #3cbd3c;
 }
 .piece-uncommon-bg + .item-lore{
@@ -1977,7 +1977,7 @@ a.additional-player-stat:hover{
 }
 
 .piece-common-bg,
-.piece-common-bg + .item-lore::-webkit-scrollbar-thumb{
+.style-scrollbar .piece-common-bg + .item-lore::-webkit-scrollbar-thumb{
     background-color: #555555;
 }
 .piece-common-bg + .item-lore{
@@ -2855,16 +2855,16 @@ a.additional-player-stat:hover{
     margin-bottom: 35px;
 }
 
-.narrow-info-content::-webkit-scrollbar{
+.style-scrollbar .narrow-info-content::-webkit-scrollbar{
     width: 10px;
 }
 
-.narrow-info-content::-webkit-scrollbar-thumb{
+.style-scrollbar .narrow-info-content::-webkit-scrollbar-thumb{
     background-color: var(--icon-hex);
     border-radius: 5px;
 }
 
-.narrow-info-content::-webkit-scrollbar-track{
+.style-scrollbar .narrow-info-content::-webkit-scrollbar-track{
     background-color: transparent;
 }
 
