@@ -126,6 +126,32 @@ module.exports = {
                 hover: "#ba5fde",
                 skillbar: "#ba5fde"
             }
+        },
+        "skycryptos": {
+            name: "SkyCrypt OS",
+            author: "doej",
+            community: true,
+            logo: "../img/themes/skycryptos/logo_square.png",
+            backgrounds: {
+                "bg": {
+                    "png": "../img/themes/skycryptos/bg.png",
+                    "webp": "../img/themes/skycryptos/bg.webp"
+                },
+                "bg_blur": {
+                    "png": "../img/themes/skycryptos/bg_blur.png",
+                    "webp": "../img/themes/skycryptos/bg_blur.webp"
+                }
+            },
+            colors: {
+                line: "#de5232",
+                link: "#de5232",
+                icon: "#de5232",
+                skillbar: "#de5232",
+                hover: "#fc6a49",
+                maxed: "#f0a000",
+                gold: "#f0a000",
+                maxedbar: "#f0a000"
+            }
         }
     }
 }
