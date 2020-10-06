@@ -2428,8 +2428,6 @@ module.exports = {
                 if (collections[floor_id].tier == coll.max_tiers)
                     collections[floor_id].maxed = true;
             }
-
-            console.log(collections[floor_id]);
         }
 
         const tasks = userProfile.tutorial;
