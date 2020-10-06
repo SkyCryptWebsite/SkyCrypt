@@ -1794,7 +1794,7 @@ twitterDescription += '. Click to view more stats!'
                         <div class="boss-collection-icon" style="background-image:url(/head/<%= collection.texture %>)"></div>
                         <div class="collection-stats">
                             <div class="collection-name <%= collection.maxed ? 'max-minion' : '' %>"><span class="stat-name"><%= collection.name %> </span><% if (collection.tier > 0) { %><span class="stat-value"><%= collection.tier %></span><% } %></div>
-                            <div class="collection-amount"><span class="stat-name">Bosses killed: </span><span class="stat-value"><%= collection.killed %></span></div>
+                            <div class="collection-amount"><span class="stat-name">Bosses killed: </span><span class="stat-value"><%= collection.killed.toLocaleString() %></span></div>
                         </div>
                     </div>
                     <% } %>
