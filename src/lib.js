@@ -2322,6 +2322,8 @@ module.exports = {
         const dungeons = userProfile.dungeons;
         if (dungeons == null || Object.keys(dungeons).length === 0) return output;
 
+        const dungeons_data = constants.dungeons;
+
         for(const type of Object.keys(dungeons.dungeon_types)){
             const dungeon = dungeons.dungeon_types[type];
             if (dungeon == null || Object.keys(dungeon).length === 0) {
@@ -2341,11 +2343,11 @@ module.exports = {
                     };
 
                     let id = `${type}_${floor}`;
-                    if(constants.floors[id]){
-                        if(constants.floors[id].name) 
-                            floors[floor].name = constants.floors[id].name;
-                        if(constants.floors[id].texture) 
-                            floors[floor].icon_texture = constants.floors[id].texture;
+                    if(dungeons_data.floors[id]){
+                        if(dungeons_data.floors[id].name) 
+                            floors[floor].name = dungeons_data.floors[id].name;
+                        if(dungeons_data.floors[id].texture) 
+                            floors[floor].icon_texture = dungeons_data.floors[id].texture;
                     }
                     
                     if(key.startsWith("most_damage")){
@@ -2363,7 +2365,9 @@ module.exports = {
             output[type] = {
                 visited: true,
                 level: getLevelByXp(dungeon.experience, 2),
-                highest_floor: constants.floors[`${type}_${highest_floor}`] && constants.floors[`${type}_${highest_floor}`].name ? constants.floors[`${type}_${highest_floor}`].name : `floor_${highest_floor}`,
+                highest_floor: 
+                    dungeons_data.floors[`${type}_${highest_floor}`] && dungeons_data.floors[`${type}_${highest_floor}`].name 
+                    ? dungeons_data.floors[`${type}_${highest_floor}`].name : `floor_${highest_floor}`,
                 floors: floors
             }
         }
@@ -2387,31 +2391,62 @@ module.exports = {
 
         output.used_classes = used_classes;
 
-        const tasks = userProfile.tutorial;
-        const collection_data = constants.boss_collections;
+        output.selected_class = current_class;
+        output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
+
+        if (!output.catacombs.visited) return output;
+
+        const collection_data = dungeons_data.boss_collections;
+        const boss_data = dungeons_data.bosses;
         let collections = {};
+
+        for (i in output.catacombs.floors) {
+            let floor_id = `catacombs_${i}`;
+            if (!Object.keys(collection_data).includes(floor_id)) continue;
+
+            let data = output.catacombs.floors[i];
+            if (data.stats.tier_completions == null || data.stats.tier_completions <= 0) continue; 
+
+            let coll = collection_data[floor_id];
+            let boss = boss_data[coll.boss];
+
+            if (!collections[floor_id]) collections[floor_id] = {
+                name: boss.name,
+                texture: boss.texture,
+                tier: 0,
+                maxed: false,
+                killed: data.stats.tier_completions || 0,
+                claimed: []
+            };
+
+            for (reward_id in coll.rewards) {
+                let reward = coll.rewards[reward_id];
+                if (collections[floor_id].killed >= reward.required) 
+                    collections[floor_id].tier = reward.tier;
+                else break;
+
+                if (collections[floor_id].tier == coll.max_tiers)
+                    collections[floor_id].maxed = true;
+            }
+
+            console.log(collections[floor_id]);
+        }
+
+        const tasks = userProfile.tutorial;
         for (i in tasks) {
             if (!tasks[i].startsWith("boss_collection_claimed")) continue;
             let task = tasks[i].split("_").splice(3);
 
-            if (!Object.keys(collection_data).includes(task[0])) continue;
-            let boss = collection_data[task[0]];
-            let item = boss.rewards[task.splice(1).join('_')];
+            if (!Object.keys(boss_data).includes(task[0])) continue;
+            let boss = boss_data[task[0]];
+
+            if (!Object.keys(collection_data).includes(boss.floor)) continue;
+            let coll = collection_data[boss.floor];
+
+            let item = coll.rewards[task.splice(1).join('_')];
 
             if (item == null || boss == null) continue;
-            if (!collections[boss.floor]) collections[boss.floor] = {
-                name: boss.name,
-                texture: boss.texture,
-                tier: 0,
-                killed: 0,
-                claimed: []
-            };
-
             collections[boss.floor].claimed.push(item.name);
-            if (collections[boss.floor].tier < item.tier) {
-                collections[boss.floor].tier = item.tier;
-                collections[boss.floor].killed = item.required;
-            } 
         }
 
         if (Object.keys(collections).length === 0) 
@@ -2419,9 +2454,6 @@ module.exports = {
         else output.unlocked_collections = true;
 
         output.boss_collections = collections;
-
-        output.selected_class = current_class;
-        output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
 
         return output;
     },
