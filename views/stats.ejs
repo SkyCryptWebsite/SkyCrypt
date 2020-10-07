@@ -2351,27 +2351,20 @@ twitterDescription += '. Click to view more stats!'
         setInterval(updateDataAge, 60 * 1000);
         function updateDataAge() {
             seconds = (Date.now() - calculated.last_updated.unix) / 1000;
-            if (seconds > 60 * 60) { // the data is old. who cares how old at that point?
+            if (seconds > 60 * 60 + 60) { // the data is old. who cares how old at that point?
                 clearInterval(updateDataAge);
                 return;
             }
             document.getElementById('data_age').innerHTML = `${formatSeconds(seconds)}`;
         }
-         // this is basically a rudimentary version of moment().fromNow()
-        function formatSeconds(seconds){
+        function formatSeconds(seconds){ // this is basically a rudimentary version of moment().fromNow()
             if (seconds < 0) // you never know when dr strange comes by...
                 return 'in the future?'
             if (seconds < 60)
                 return `${seconds} seconds ago`;
             if (seconds < 60 * 60)
                 return `${Math.floor(seconds / 60)} minute${(seconds / 60) < 2 ? '' : 's'} ago`;
-            if (seconds < 60 * 60 * 24) // from here down the code is never used, but just in case someone reuses it...
-                return `${Math.floor(seconds / (60 * 60))} hour${(seconds / (60 * 60)) < 2 ? '' : 's'} ago`;
-            if (seconds < 60 * 60 * 24 * 30)
-                return `${Math.floor(seconds / (60 * 60 * 24))} day${(seconds / (60 * 60 * 24)) < 2 ? '' : 's'} ago`;
-            if (seconds < 60 * 60 * 24 * 30 * 256)
-                return `${Math.floor(seconds / 60 * 60 * 24 * 30)} month${(seconds / (60 * 60 * 24 * 30)) < 2 ? '' : 's'} ago`;
-            return `${seconds} year${(seconds / (60 * 60 * 24 * 30 * 256)) < 2 ? '' : 's'} ago`;
+            return '1 hour ago';
         }
     </script>
 </body>
