@@ -1175,7 +1175,8 @@ twitterDescription += '. Click to view more stats!'
                     <% if(calculated.current_area){ %>
                     <div class="additional-stat"><span class="stat-name"><%= calculated.current_area_updated ? 'Current' : 'Last' %> Area: </span><span class="stat-value"><%= calculated.current_area %></span></div>
                     <% } %>
-                    <div class="additional-stat"><span data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></span></div>
+                    <div class="additional-stat"><span data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>">
+                    <span class="stat-name">Last Updated: </span><span id="data_age" class="stat-value"><%= calculated.last_updated.text %></span></span></div>
                     <div class="additional-stat"><span data-tippy-content="Joined on <%= moment(calculated.first_join.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></span></div>
                     <div class="additional-stat"><span class="stat-name">Purse: </span><span class="stat-value"><%= helper.formatNumber(calculated.purse, true) %> Coin<%= Math.floor(calculated.purse) == 1 ? '': 's' %></span></div>
                     <% if('bank' in calculated){ %>
@@ -2345,12 +2346,32 @@ twitterDescription += '. Click to view more stats!'
     <script>
         let items = <%- JSON.stringify(items) %>;
         let calculated = <%- JSON.stringify(calculated) %>;
+        let seconds = 0;
 
-        window.onload = function() {
-            new Elevator({
-               mainAudio: '/misc/music/elevator.mp3',
-               endAudio: '/misc/music/ding.mp3'
-            });
+        setInterval(updateDataAge, 60 * 1000);
+        function updateDataAge() {
+            seconds = (Date.now() - calculated.last_updated.unix) / 1000;
+            if (seconds > 60 * 60) { // the data is old. who cares how old at that point?
+                clearInterval(updateDataAge);
+                return;
+            }
+            document.getElementById('data_age').innerHTML = `${formatSeconds(seconds)}`;
+        }
+         // this is basically a rudimentary version of moment().fromNow()
+        function formatSeconds(seconds){
+            if (seconds < 0) // you never know when dr strange comes by...
+                return 'in the future?'
+            if (seconds < 60)
+                return `${seconds} seconds ago`;
+            if (seconds < 60 * 60)
+                return `${Math.floor(seconds / 60)} minute${(seconds / 60) < 2 ? '' : 's'} ago`;
+            if (seconds < 60 * 60 * 24) // from here down the code is never used, but just in case someone reuses it...
+                return `${Math.floor(seconds / (60 * 60))} hour${(seconds / (60 * 60)) < 2 ? '' : 's'} ago`;
+            if (seconds < 60 * 60 * 24 * 30)
+                return `${Math.floor(seconds / (60 * 60 * 24))} day${(seconds / (60 * 60 * 24)) < 2 ? '' : 's'} ago`;
+            if (seconds < 60 * 60 * 24 * 30 * 256)
+                return `${Math.floor(seconds / 60 * 60 * 24 * 30)} month${(seconds / (60 * 60 * 24 * 30)) < 2 ? '' : 's'} ago`;
+            return `${seconds} year${(seconds / (60 * 60 * 24 * 30 * 256)) < 2 ? '' : 's'} ago`;
         }
     </script>
 </body>
