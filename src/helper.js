@@ -5,7 +5,7 @@ const retry = require('async-retry');
 
 const _ = require('lodash');
 
-const constants = require('./constants');
+const constants = require('./constants').default;
 const credentials = require('./../credentials.json');
 
 const Redis = require("ioredis");

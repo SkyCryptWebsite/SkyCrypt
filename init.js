@@ -22,7 +22,7 @@ fs.writeFileSync('./credentials.json', JSON.stringify(credentials, null, 4));
 fs.ensureDirSync('cache');
 
 async function main(){
-    const constants = require('./src/constants');
+    const constants = require('./lib/constants');
 
     const { MongoClient } = require('mongodb');
     const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });

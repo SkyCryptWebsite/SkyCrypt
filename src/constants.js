@@ -1,15 +1,15 @@
-const fs = require('fs');
-const path = require('path');
+import { readdirSync } from 'fs';
+import { resolve, extname } from 'path';
 
 const constants = {};
 
-for(const file of fs.readdirSync(path.resolve(__dirname, 'constants'))){
-    if(path.extname(file) != '.js')
+for(const file of readdirSync(resolve(__dirname, 'constants'))){
+    if(extname(file) != '.js')
         continue;
 
-    const module = require(path.resolve(__dirname, 'constants', file));
+    const module = require(resolve(__dirname, 'constants', file));
 
     Object.assign(constants, module);
 }
 
-module.exports = constants;
+export default constants;

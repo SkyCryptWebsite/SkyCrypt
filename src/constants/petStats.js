@@ -2209,62 +2209,60 @@ class QuestionMark extends Pet {
 	}
 }
 
-module.exports = {
-	petStats: {
-		//Farming
-		'Bee': Bee,
-		'Chicken': Chicken,
-		'Elephant': Elephant,
-		'Pig': Pig,
-		'Rabbit': Rabbit,
-		//Mining
-		'Bat': Bat,
-		'Endermite': Endermite,
-		'Rock': Rock,
-		'Silverfish': Silverfish,
-		'Wither Skeleton': WitherSkeleton,
-		//Combat
-		'Black Cat': BlackCat,
-		'Blaze': Blaze,
-		'Ender Dragon': EnderDragon,
-		'Enderman': Enderman,
-		'Ghoul': Ghoul,
-		'Golem': Golem,
-		'Griffin': Griffin,
-		'Guardian': Guardian,
-		'Horse': Horse,
-		'Hound': Hound,
-		'Magma Cube': MagmaCube,
-		'Phoenix': Phoenix,
-		'Pigman': Pigman,
-		'Skeleton Horse': SkeletonHorse,
-		'Skeleton': Skeleton,
-		'Snowman': Snowman,
-		'Spider': Spider,
-		'Spirit': Spirit,
-		'Tarantula': Tarantula,
-		'Tiger': Tiger,
-		'Turtle': Turtle,
-		'Wolf': Wolf,
-		'Zombie': Zombie,
-		//Foraging
-		'Giraffe': Giraffe,
-		'Lion': Lion,
-		'Monkey': Monkey,
-		'Ocelot': Ocelot,
-		//Fishing
-		'Baby Yeti': BabyYeti,
-		'Blue Whale': BlueWhale,
-		'Dolphin': Dolphin,
-		'Flying Fish': FlyingFish,
-		'Squid': Squid,
-		'Megalodon': Megalodon,
-		//Alchemy
-		'Jellyfish': Jellyfish,
-		'Parrot': Parrot,
-		'Sheep': Sheep,
-		//Other
-		'Jerry': Jerry,
-		'???': QuestionMark
-	}
-}
+export const petStats = {
+    //Farming
+    'Bee': Bee,
+    'Chicken': Chicken,
+    'Elephant': Elephant,
+    'Pig': Pig,
+    'Rabbit': Rabbit,
+    //Mining
+    'Bat': Bat,
+    'Endermite': Endermite,
+    'Rock': Rock,
+    'Silverfish': Silverfish,
+    'Wither Skeleton': WitherSkeleton,
+    //Combat
+    'Black Cat': BlackCat,
+    'Blaze': Blaze,
+    'Ender Dragon': EnderDragon,
+    'Enderman': Enderman,
+    'Ghoul': Ghoul,
+    'Golem': Golem,
+    'Griffin': Griffin,
+    'Guardian': Guardian,
+    'Horse': Horse,
+    'Hound': Hound,
+    'Magma Cube': MagmaCube,
+    'Phoenix': Phoenix,
+    'Pigman': Pigman,
+    'Skeleton Horse': SkeletonHorse,
+    'Skeleton': Skeleton,
+    'Snowman': Snowman,
+    'Spider': Spider,
+    'Spirit': Spirit,
+    'Tarantula': Tarantula,
+    'Tiger': Tiger,
+    'Turtle': Turtle,
+    'Wolf': Wolf,
+    'Zombie': Zombie,
+    //Foraging
+    'Giraffe': Giraffe,
+    'Lion': Lion,
+    'Monkey': Monkey,
+    'Ocelot': Ocelot,
+    //Fishing
+    'Baby Yeti': BabyYeti,
+    'Blue Whale': BlueWhale,
+    'Dolphin': Dolphin,
+    'Flying Fish': FlyingFish,
+    'Squid': Squid,
+    'Megalodon': Megalodon,
+    //Alchemy
+    'Jellyfish': Jellyfish,
+    'Parrot': Parrot,
+    'Sheep': Sheep,
+    //Other
+    'Jerry': Jerry,
+    '???': QuestionMark
+};

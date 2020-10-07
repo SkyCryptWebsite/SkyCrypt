@@ -1,8 +1,7 @@
-const collections = require('./collections');
-const leveling = require('./leveling');
-const moment = require('moment');
-const { getLevelByXp } = require('../lib');
-require('moment-duration-format')(moment);
+import collections from './collections';
+import leveling from './leveling';
+import moment from 'moment';
+import('moment-duration-format')(moment);
 
 const defaultOptions = {
     mappedBy: 'uuid',

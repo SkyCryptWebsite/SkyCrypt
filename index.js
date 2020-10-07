@@ -1,8 +1,8 @@
-require('./src/app');
-require('./src/donations/patreon');
-require('./src/scripts/update-bazaar');
-require('./src/scripts/update-items');
-require('./src/scripts/update-top-profiles');
+require('./lib/app');
+require('./lib/donations/patreon');
+require('./lib/scripts/update-bazaar');
+require('./lib/scripts/update-items');
+require('./lib/scripts/update-top-profiles');
 
 const cluster = require('cluster');
 

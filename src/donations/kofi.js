@@ -1,4 +1,3 @@
-const axios = require('axios');
 const credentials = require('../../credentials.json');
 
 module.exports = async (app, db) => {

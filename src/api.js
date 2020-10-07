@@ -1,10 +1,10 @@
-const tableify = require('@tillhub/tableify');
-const _ = require('lodash');
-const helper = require('./helper');
+import tableify from '@tillhub/tableify';
+import _ from 'lodash';
+import helper, { resolveUsernameOrUuid, titleCase, getPath, hasPath } from './helper';
 const { getId } = helper;
-const lib = require('./lib');
-const constants = require('./constants');
-const cors = require('cors');
+import { getProfile, getPets, getItems, getCollections, getStats } from './lib';
+import { collection_data } from './constants';
+import cors from 'cors';
 
 function handleError(e, res){
     console.error(e);
@@ -13,7 +13,7 @@ function handleError(e, res){
     res.status(500).send('Something went wrong');
 }
 
-module.exports = (app, db) => {
+export default (app, db) => {
     const productInfo = {};
 
     async function init(){
@@ -39,14 +39,14 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/profiles', cors(), async (req, res) => {
         try{
-            const { allProfiles } = await lib.getProfile(db, req.params.player);
+            const { allProfiles } = await getProfile(db, req.params.player);
 
             const profiles = [];
 
             for(const profile of allProfiles){
                 const members = (
                     await Promise.all(
-                        Object.keys(profile.members).map(a => helper.resolveUsernameOrUuid(a, db))
+                        Object.keys(profile.members).map(a => resolveUsernameOrUuid(a, db))
                     )
                 ).map(a => a.display_name);
 
@@ -69,10 +69,10 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/pets', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await getProfile(db, req.params.player, req.params.profile);
             const userProfile = profile.members[uuid];
 
-            const pets = await lib.getPets(userProfile);
+            const pets = await getPets(userProfile);
 
             for(const pet of pets){
                 delete pet.lore;
@@ -100,7 +100,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/minions', cors(), async (req, res) => {
         try{
-            const { profile } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile } = await getProfile(db, req.params.player, req.params.profile);
 
             const minions = [];
 
@@ -136,10 +136,10 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/accessories', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await getProfile(db, req.params.player, req.params.profile);
             const userProfile = profile.members[uuid];
 
-            const items = await lib.getItems(userProfile);
+            const items = await getItems(userProfile);
 
             const talismans = items.talismans
             .filter(a => a.isUnique)
@@ -163,13 +163,13 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/collections', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await getProfile(db, req.params.player, req.params.profile);
             const userProfile = profile.members[uuid];
 
-            const collections = await lib.getCollections(uuid, profile);
+            const collections = await getCollections(uuid, profile);
 
             for(const collection in collections)
-                collections[collection].name = constants.collection_data.filter(a => a.skyblockId == collection)[0].name;
+                collections[collection].name = collection_data.filter(a => a.skyblockId == collection)[0].name;
 
             if('html' in req.query){
                 res.send(tableify(Object.keys(collections).map(a => [ a, collections[a].name, collections[a].tier, collections[a].amount, collections[a].totalAmount ]), { showHeaders: false }));
@@ -183,18 +183,18 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/skills', cors(), async (req, res) => {
         try{
-            const { profile, allProfiles, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, allProfiles, uuid } = await getProfile(db, req.params.player, req.params.profile);
             const userProfile = profile.members[uuid];
 
-            const items = await lib.getItems(userProfile);
-            const calculated = await lib.getStats(db, profile, allProfiles, items);
+            const items = await getItems(userProfile);
+            const calculated = await getStats(db, profile, allProfiles, items);
 
             if('html' in req.query){
                 const response = [];
 
                 for(const skill in calculated.levels){
                     const pushArr = [
-                        helper.titleCase(skill),
+                        titleCase(skill),
                         calculated.levels[skill].level.toString()
                     ];
 
@@ -211,7 +211,7 @@ module.exports = (app, db) => {
 
                 for(const slayer in calculated.slayers){
                     const pushArr = [
-                        helper.titleCase(slayer),
+                        titleCase(slayer),
                         calculated.slayers[slayer].level.currentLevel.toString()
                     ];
 
@@ -242,14 +242,14 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/cakebag', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await getProfile(db, req.params.player, req.params.profile);
             const userProfile = profile.members[uuid];
 
-            const items = await lib.getItems(userProfile);
+            const items = await getItems(userProfile);
 
             const allItems = items.armor.concat(items.inventory, items.talisman_bag, items.enderchest);
 
-            const cakeBags = allItems.filter(a => helper.getPath(a, 'tag', 'ExtraAttributes', 'id') == 'NEW_YEAR_CAKE_BAG');
+            const cakeBags = allItems.filter(a => getPath(a, 'tag', 'ExtraAttributes', 'id') == 'NEW_YEAR_CAKE_BAG');
 
             if(cakeBags.length == 0){
                 res.set('Content-Type', 'text/plain');
@@ -260,7 +260,7 @@ module.exports = (app, db) => {
                 let cakes = [];
 
                 for(const item of cakeBag.containsItems)
-                    if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'new_years_cake'))
+                    if(hasPath(item, 'tag', 'ExtraAttributes', 'new_years_cake'))
                         cakes.push({cake: item.tag.ExtraAttributes.new_years_cake});
 
                 cakes = cakes.sort((a, b) => a.cake - b.cake);
@@ -274,10 +274,10 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/items', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await getProfile(db, req.params.player, req.params.profile);
             const userProfile = profile.members[uuid];
 
-            const items = await lib.getItems(userProfile);
+            const items = await getItems(userProfile);
 
             const allItems = items.inventory.concat(items.enderchest)
 
@@ -296,10 +296,10 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/weapons', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await getProfile(db, req.params.player, req.params.profile);
             const userProfile = profile.members[uuid];
 
-            const items = await lib.getItems(userProfile);
+            const items = await getItems(userProfile);
 
             let output = [];
 
@@ -348,10 +348,10 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/armor', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await getProfile(db, req.params.player, req.params.profile);
             const userProfile = profile.members[uuid];
 
-            const items = await lib.getItems(userProfile);
+            const items = await getItems(userProfile);
 
             let output = [];
 
@@ -400,10 +400,10 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/wardrobe', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await getProfile(db, req.params.player, req.params.profile);
             const userProfile = profile.members[uuid];
 
-            const items = await lib.getItems(userProfile);
+            const items = await getItems(userProfile);
 
             let output = [];
 
@@ -466,7 +466,7 @@ module.exports = (app, db) => {
             for await(const product of db.collection('bazaar').find()){
                 const itemInfo = productInfo[product.productId];
 
-                const productName = itemInfo ? itemInfo.name : helper.titleCase(product.productId.replace(/(_+)/g, ' '));
+                const productName = itemInfo ? itemInfo.name : titleCase(product.productId.replace(/(_+)/g, ' '));
 
                 output.push({
                     id: product.productId,
@@ -475,7 +475,7 @@ module.exports = (app, db) => {
                     sellPrice: product.sellPrice,
                     buyVolume: product.buyVolume,
                     sellVolume: product.sellVolume,
-                    tag: helper.hasPath(itemInfo, 'tag') ? itemInfo.tag : null,
+                    tag: hasPath(itemInfo, 'tag') ? itemInfo.tag : null,
                     price: (product.buyPrice + product.sellPrice) / 2
                 });
             }
