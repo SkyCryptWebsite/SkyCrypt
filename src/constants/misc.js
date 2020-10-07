@@ -443,6 +443,42 @@ module.exports = {
         ],
         TREASURE_RING: [
             'TREASURE_ARTIFACT'
+        ],
+        BEASTMASTER_CREST_COMMON: [
+            'BEASTMASTER_CREST_UNCOMMON',
+            'BEASTMASTER_CREST_RARE',
+            'BEASTMASTER_CREST_EPIC',
+            'BEASTMASTER_CREST_LEGENDARY'
+        ],
+        BEASTMASTER_CREST_UNCOMMON: [
+            'BEASTMASTER_CREST_RARE',
+            'BEASTMASTER_CREST_EPIC',
+            'BEASTMASTER_CREST_LEGENDARY'
+        ],
+        BEASTMASTER_CREST_RARE: [
+            'BEASTMASTER_CREST_EPIC',
+            'BEASTMASTER_CREST_LEGENDARY'
+        ],
+        BEASTMASTER_CREST_EPIC: [
+            'BEASTMASTER_CREST_LEGENDARY'
+        ],
+        RAGGEDY_SHARK_TOOTH_NECKLACE: [
+            'DULL_SHARK_TOOTH_NECKLACE',
+            'HONED_SHARK_TOOTH_NECKLACE',
+            'SHARP_SHARK_TOOTH_NECKLACE',
+            'RAZOR_SHARP_SHARK_TOOTH_NECKLACE'
+        ],
+        DULL_SHARK_TOOTH_NECKLACE: [
+            'HONED_SHARK_TOOTH_NECKLACE',
+            'SHARP_SHARK_TOOTH_NECKLACE',
+            'RAZOR_SHARP_SHARK_TOOTH_NECKLACE'
+        ],
+        HONED_SHARK_TOOTH_NECKLACE: [
+            'SHARP_SHARK_TOOTH_NECKLACE',
+            'RAZOR_SHARP_SHARK_TOOTH_NECKLACE'
+        ],
+        SHARP_SHARK_TOOTH_NECKLACE: [
+            'RAZOR_SHARP_SHARK_TOOTH_NECKLACE'
         ]
     },
 
@@ -941,6 +977,39 @@ module.exports = {
         },
         'TREASURE_ARTIFACT': {
             head: "hmmm"
+        },
+        'MINERAL_TALISMAN': {
+            head: "yes"
+        },
+        'BEASTMASTER_CREST_COMMON': {
+            head: "yes"
+        },
+        'BEASTMASTER_CREST_UNCOMMON': {
+            head: "yes"
+        },
+        'BEASTMASTER_CREST_RARE': {
+            head: "yes"
+        },
+        'BEASTMASTER_CREST_EPIC': {
+            head: "yes"
+        },
+        'BEASTMASTER_CREST_LEGENDARY': {
+            head: "yes"
+        },
+        'RAGGEDY_SHARK_TOOTH_NECKLACE': {
+            head: "yes"
+        },
+        'DULL_SHARK_TOOTH_NECKLACE': {
+            head: "yes"
+        },
+        'HONED_SHARK_TOOTH_NECKLACE': {
+            head: "yes"
+        },
+        'SHARP_SHARK_TOOTH_NECKLACE': {
+            head: "yes"
+        },
+        'RAZOR_SHARP_SHARK_TOOTH_NECKLACE': {
+            head: false
         }
     }
 };

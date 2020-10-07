@@ -2235,6 +2235,31 @@ module.exports = {
                 object.display_name = "Treasure Artifact"
                 object.rarity = "legendary"
             }
+            if(talisman.startsWith("RAGGEDY_SHARK_TOOTH_NECKLACE")){
+                object.texture_path = "/head/d77309ddebbdc278ee2772d92fa4905dd850c5f213a77ffaed5a67eecb23984a"
+                object.display_name = "Raggedy Shark Tooth Necklace"
+                object.rarity = "common"
+            }
+            if(talisman.startsWith("DULL_SHARK_TOOTH_NECKLACE")){
+                object.texture_path = "/head/f3ab3aa1ade74915dacd298613904361c18877eebfa81d9f936309f271e1389a"
+                object.display_name = "Dull Shark Tooth Necklace"
+                object.rarity = "uncommon"
+            }
+            if(talisman.startsWith("HONED_SHARK_TOOTH_NECKLACE")){
+                object.texture_path = "/head/e6b120938d83bf49ddab3a78666a0bf37a3de7b46b9d97b984da3be62ce3e5e3"
+                object.display_name = "Honed Shark Tooth Necklace"
+                object.rarity = "rare"
+            }
+            if(talisman.startsWith("SHARP_SHARK_TOOTH_NECKLACE")){
+                object.texture_path = "/head/228e3fb6bd9887d60434ccd279ec3e59227826c9a2f8dd9ce9899ea6683d4ee8"
+                object.display_name = "Sharp Shark Tooth Necklace"
+                object.rarity = "epic"
+            }
+            if(talisman.startsWith("RAZOR_SHARP_SHARK_TOOTH_NECKLACE")){
+                object.texture_path = "/head/7792676664ac711488641f72b25961835613da9ffd43ea3bdd163cb365343a6"
+                object.display_name = "Razor Sharp Shark Tooth Necklace"
+                object.rarity = "legendary"
+            }
             if(object.name == null){
                 object.name = talisman;
             }
