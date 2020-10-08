@@ -1129,6 +1129,13 @@ html.no-transform #info_box.opened{
     margin-top: -4px;
 }
 
+#stats_for_profile .emoji{
+    vertical-align: middle;
+    height: 32px;
+    margin-top: -5px;
+    margin-left: -5px;
+}
+
 .rank-tag{
     display: inline-block;
     font-size: 18px;
@@ -3732,6 +3739,13 @@ body {
         vertical-align: middle;
         height: 22px;
         margin-top: -3px;
+    }
+
+    #stats_for_profile .emoji{
+        vertical-align: middle;
+        height: 24px;
+        margin-top: -3px;
+        margin-left: -3px;
     }
 
     #stats_for_profile{

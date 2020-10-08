@@ -1028,10 +1028,11 @@ twitterDescription += '. Click to view more stats!'
                 </div>
             </div><span class="text-on"> on </span><div tabindex="2" id="stats_for_profile">
                 <%= calculated.profile.cute_name %>
+                <% if(calculated.profile.game_mode == 'ironman'){ %><img src="/resources/img/icons/ironman.png" class="emoji"><% } %>
                 <div id="other_profiles">
                     <% for(let profile_id in calculated.profiles){ %>
                         <% let _profile = calculated.profiles[profile_id]; %>
-                        <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"><%= _profile.cute_name %><div class="goto-last-played"><%= 'last_updated' in _profile ? _profile.last_updated.text : '' %></div></a>
+                        <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"><%= _profile.cute_name %><% if(_profile.game_mode == 'ironman'){ %> <img src="/resources/img/icons/ironman.png" class="emoji"><% } %><div class="goto-last-played"><%= 'last_updated' in _profile ? _profile.last_updated.text : '' %></div></a>
                     <% } %>
                 </div>
             </div>
@@ -1253,7 +1254,7 @@ twitterDescription += '. Click to view more stats!'
 
             const localizedItems = allItems.some(a => a.localized === true);
         %>
-        <% if(notAvailable.length > 0 || localizedItems){ %>
+        <% if(notAvailable.length > 0 || localizedItems || calculated.profile.game_mode == 'ironman'){ %>
             <div class="stat-container info-container-wrapper">
                 <div class="info-container">
                     <div class="info-header">Notice</div>
@@ -1265,6 +1266,10 @@ twitterDescription += '. Click to view more stats!'
                         This profile has non-english item data caused by the player's Hypixel language settings. Localization is not supported and some features of the site might not be working correctly.<br><br>
                         This can be fixed by changing the language back to English in your ingame player settings, alternatively wait for Hypixel to change API behavior (<a target="_blank" href="https://github.com/HypixelDev/PublicAPI/issues/290">Related GitHub Issue</a>).<br><br>
                         Please don't report bugs until this is resolved.
+                    <% } %>
+                    <% if(calculated.profile.game_mode == 'ironman'){ %>
+                        <% if(notAvailable.length > 0){ %><br><br><% } %>
+                        This is an <strong>Ironman</strong> profile. The player cannot use the Auction House, Bazaar, Trades, or pick up drops from other players.
                     <% } %>
                 </div>
             </div>
