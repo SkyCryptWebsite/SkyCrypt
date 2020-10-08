@@ -1911,6 +1911,48 @@ class FlyingFish extends Pet {
 	}
 }
 
+class Megalodon extends Pet{
+	get stats() {
+		return {
+			strength: this.level * 0.5,
+			magic_find: this.level * 0.1
+		};
+	}
+
+	get abilities() {
+		let list = [this.first];
+		if (this.rarity > 1)
+			list.push(this.second);
+		if (this.rarity > 3)
+			list.push(this.third);
+		return list;
+	}
+
+	get first() {
+		let mult = 0.25;
+		return {
+			name: "§6Blood Scent",
+			desc: [`§7Deal up to §c+${round(mult*this.level,1)}% ${symbols.strength} §7Damage based on the enemy's missing health`]
+		};
+	}
+
+	get second() {
+		let mult = 0.2;
+		return {
+			name: "§6Enhanced scales",
+			desc: [`§7Increases the stats of Shark Armor by §a${mult*this.level}%`]
+		};
+	}
+
+	get third() {
+		let mult = 0.5;
+		return {
+			name: "§6Feeding frenzy",
+			desc: [`§7On kill gain §c${mult * this.level}${symbols.strength} Damage §7and §f${symbols.speed} Speed §7for 5 seconds`]
+		};
+	}
+}
+
 class Squid extends Pet {
 	get stats() {
 		return {
@@ -1950,48 +1992,6 @@ class Squid extends Pet {
 		return {
 			name: "§6Fishing Exp Boost",
 			desc: [`§7Boosts your Fishing exp by §a${round(this.level * mult, 1)}%`]
-		};
-	}
-}
-
-class Megalodon extends Pet{
-	get stats() {
-		return {
-			strength: this.level * 0.5,
-			magic_find: this.level * 0.1
-		};
-	}
-
-	get abilities() {
-		let list = [this.first];
-		if (this.rarity > 1)
-			list.push(this.second);
-		if (this.rarity > 3)
-			list.push(this.third);
-		return list;
-	}
-
-	get first() {
-		let mult = 0.25;
-		return {
-			name: "§6Blood Scent",
-			desc: [`§7Deal up to §c+${round(mult*this.level,1)}% ${symbols.strength} §7Damage based on the enemy's missing health`]
-		};
-	}
-
-	get second() {
-		let mult = 0.2;
-		return {
-			name: "§6Enhanced scales",
-			desc: [`§7Increases the stats of Shark Armor by §a${mult*this.level}%`]
-		};
-	}
-
-	get third() {
-		let mult = 0.5;
-		return {
-			name: "§6Feeding frenzy",
-			desc: [`§7On kill gain §c${mult * this.level}${symbols.strength} Damage §7and §f${symbols.speed} Speed §7for 5 seconds`]
 		};
 	}
 }
@@ -2257,8 +2257,8 @@ module.exports = {
 		'Blue Whale': BlueWhale,
 		'Dolphin': Dolphin,
 		'Flying Fish': FlyingFish,
-		'Squid': Squid,
 		'Megalodon': Megalodon,
+		'Squid': Squid,
 		//Alchemy
 		'Jellyfish': Jellyfish,
 		'Parrot': Parrot,
