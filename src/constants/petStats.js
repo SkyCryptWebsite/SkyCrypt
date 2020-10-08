@@ -1940,7 +1940,7 @@ class Megalodon extends Pet{
 		let mult = 0.2;
 		return {
 			name: "§6Enhanced scales",
-			desc: [`§7Increases the stats of Shark Armor by §a${mult*this.level}%`]
+			desc: [`§7Increases the stats of Shark Armor by §a${round(mult*this.level,1)}%`]
 		};
 	}
 
@@ -1948,7 +1948,7 @@ class Megalodon extends Pet{
 		let mult = 0.5;
 		return {
 			name: "§6Feeding frenzy",
-			desc: [`§7On kill gain §c${mult * this.level}${symbols.strength} Damage §7and §f${symbols.speed} Speed §7for 5 seconds`]
+			desc: [`§7On kill gain §c${round(mult*this.level,1)}${symbols.strength} Damage §7and §f${symbols.speed} Speed §7for 5 seconds`]
 		};
 	}
 }
