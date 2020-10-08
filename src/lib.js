@@ -2430,6 +2430,12 @@ module.exports = {
         const output = {};
         for (const upgrade in constants.profile_upgrades)
             output[upgrade] = 0;
+        // TODO try adding a 'seconds left' for a running upgrade
+        const upgrading = profile.community_upgrades.currently_upgrading;
+        output['currently_upgrading'] = {upgrade : '', new_tier: 0, end_ms: 0};
+        if (helper.hasPath(profile, 'community_upgrades', 'currently_upgrading'))
+            output['currently_upgrading'] = {upgrade : upgrading.upgrade, new_tier: upgrading.new_tier, 
+                end_ms: upgrading.start_ms + constants.profile_upgrades[upgrading.upgrade].upgrade_times[upgrading.new_tier - 1] * 60 * 60 * 24 * 1000};
         if (helper.hasPath(profile, 'community_upgrades', 'upgrade_states'))
             for (const u of profile.community_upgrades.upgrade_states)
                 output[u.upgrade] = Math.max(output[u.upgrade] || 0, u.tier);

@@ -129,13 +129,13 @@ module.exports = {
         15000
     ],
 
-    // api names and their max value from the profile upgrades
+    // api names and their max value from the profile upgrades and their upgrade time in days
     profile_upgrades: {
-        'island_size' : 10,
-        'minion_slots' : 5,
-        'guests_count' : 5,
-        'coop_slots' : 3,
-        'coins_allowance' : 5,
+        'island_size': { max: 10, upgrade_times: [2, 4, 6, 8, 10, 10, 10, 10, 10, 10] },
+        'minion_slots': { max: 5, upgrade_times: [1, 4, 8, 16, 24] },
+        'guests_count': { max: 5, upgrade_times: [2, 4, 6, 8, 10] }, // unconfirmed
+        'coop_slots': { max: 3, upgrade_times: [0, 0, 0] },
+        'coins_allowance': { max: 5, upgrade_times: [5, 10, 15, 20, 25] }
     },
 
     // Player stats on a completely new profile
