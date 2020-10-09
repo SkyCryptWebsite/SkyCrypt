@@ -550,6 +550,12 @@ header{
     text-shadow: 0px 0px 3px rgba(0,0,0,0.5);
 }
 
+@supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+    #bg_blur{
+        display: none;
+    }
+}
+
 #bg_blur{
     background: var(--bg_blur-webp) no-repeat center center fixed;
     background-size: cover;
@@ -580,6 +586,8 @@ html.no-webp #bg_blur{
     -moz-user-select: none;
     -ms-user-select: none;
      user-select: none;
+    -webkit-backdrop-filter: blur(16px) brightness(0.5);
+    backdrop-filter: blur(16px) brightness(0.5);
 }
 
 #base_stats_container{
