@@ -2310,7 +2310,7 @@ twitterDescription += '. Click to view more stats!'
                             <% if (upgrade_time_left <= 0) { %>
                                 <span id="upgrade_time_left" class="grey-text"> (DONE!)</span>
                             <% } else { %>
-                                <span id="upgrade_time_left" class="grey-text"> (<%= `${Math.floor(upgrade_time_left/(60*60*24))}d ${Math.floor((upgrade_time_left%(60*60*24))/(60*60))}h ${Math.floor((upgrade_time_left%(60*60*24)%(60*60))/60)}m` %> left)</span>
+                                <span id="upgrade_time_left" class="grey-text"> (<%= `${upgrade_time_left>(60*60*24)?Math.floor(upgrade_time_left/(60*60*24))+'d ':''}${upgrade_time_left>(60*60)?Math.floor((upgrade_time_left%(60*60*24))/(60*60))+'h ':''}${Math.floor((upgrade_time_left%(60*60*24)%(60*60))/60)}m` %> left)</span>
                             <% } %>
                         <% } %>
                         <p class="stat-raw-values">
@@ -2386,7 +2386,7 @@ twitterDescription += '. Click to view more stats!'
                     document.getElementById('upgrade_time_left').innerHTML = `(DONE!)`;
                     clearInterval(updateTimeLeft);
                 } else {
-                    document.getElementById('upgrade_time_left').innerHTML = `(${Math.floor(upgrade_time_left/(60*60*24))}d ${Math.floor((upgrade_time_left%(60*60*24))/(60*60))}h ${Math.floor((upgrade_time_left%(60*60*24)%(60*60))/60)}m left)`;
+                    document.getElementById('upgrade_time_left').innerHTML = `(${upgrade_time_left>(60*60*24)?Math.floor(upgrade_time_left/(60*60*24))+'d ':''}${upgrade_time_left>(60*60)?Math.floor((upgrade_time_left%(60*60*24))/(60*60))+'h ':''}${Math.floor((upgrade_time_left%(60*60*24)%(60*60))/60)}m left)`;
                 }
             }
     </script>
