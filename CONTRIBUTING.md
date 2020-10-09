@@ -19,7 +19,7 @@ Before contributing to SkyCrypt, make sure you install the development environme
 
 ### Getting Started
 
-1. clone the repository. You can do this on the command line by running 
+1. Clone the repository. You can do this on the command line by running 
     ```
     git clone https://github.com/SkyCryptWebsite/SkyCrypt.git
      ```
