@@ -5,8 +5,8 @@ Before contributing to SkyCrypt, make sure you install the development environme
 
 ### Prerequisites
 - [Node.js](https://nodejs.org)
-- [MongoDB](https://docs.mongodb.com/manual/administration/install-community/), alternatively you can use the free online version(more instructions below)
-- Redis, use [this link](https://github.com/MicrosoftArchive/redis/releases/tag/win-3.2.100) for Windows, and [this link](https://redis.io/) for other OS's(more instructions below)
+- [MongoDB](https://docs.mongodb.com/manual/administration/install-community/), alternatively you can use the free online version (more instructions below)
+- Redis, use [this link](https://github.com/MicrosoftArchive/redis/releases/tag/win-3.2.100) for Windows, and [this link](https://redis.io/) for other OS's (more instructions below)
 - A [Hypixel API key](https://api.hypixel.net/)
 - [Nginx](https://www.nginx.com/) (Optional but an ideal choice for full deployment)
 
