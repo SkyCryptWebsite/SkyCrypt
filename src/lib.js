@@ -1706,7 +1706,7 @@ module.exports = {
         output.uuid = profile.uuid;
         output.skin_data = playerObject.skin_data;
 
-        output.profile = { profile_id: profile.profile_id, cute_name: profile.cute_name };
+        output.profile = { profile_id: profile.profile_id, cute_name: profile.cute_name, game_mode: profile.game_mode };
         output.profiles = {};
 
         for(const sbProfile of allProfiles.filter(a => a.profile_id != profile.profile_id)){
@@ -1716,6 +1716,7 @@ module.exports = {
             output.profiles[sbProfile.profile_id] = {
                 profile_id: sbProfile.profile_id,
                 cute_name: sbProfile.cute_name,
+                game_mode: sbProfile.game_mode,
                 last_updated: {
                     unix: sbProfile.members[profile.uuid].last_save,
                     text: `last played ${moment(sbProfile.members[profile.uuid].last_save).fromNow()}`
@@ -2671,6 +2672,7 @@ module.exports = {
                 storeProfiles[_profile.profile_id] = {
                     profile_id: _profile.profile_id,
                     cute_name: _profile.cute_name,
+                    game_mode: _profile.game_mode,
                     last_save: userProfile.last_save
                 };
         }
