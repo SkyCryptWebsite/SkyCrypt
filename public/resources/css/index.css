@@ -990,6 +990,7 @@ html.no-transform #info_box.opened{
     max-height: calc(100vh - 200px);
     overflow-y: auto;
     font-size: 15px;
+    overscroll-behavior-y: contain;
 }
 
 #stats_content .item-lore a{
