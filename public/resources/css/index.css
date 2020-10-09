@@ -3062,14 +3062,15 @@ html.no-webp .top-profile{
 }
 
 #error_box_wrapper{
-    height: 70px;
+    min-height: 70px;
+    max-height: 500px;
 }
 
 html.no-webp #error_box_wrapper{
     background-image: var(--bg_blur-png);
 }
 
-#error_box, #top_profiles_box{
+#top_profiles_box{
     position: absolute;
     top: 0;
     left: 0;
@@ -3086,7 +3087,7 @@ html.no-webp #error_box_wrapper{
     background-color: var(--icon-hex);
     color: white;
     text-transform: uppercase;
-    height: 100%;
+    height: 70px;
     line-height: 70px;
     width: 100px;
     position: absolute;
@@ -3100,7 +3101,7 @@ html.no-webp #error_box_wrapper{
     top: 0;
     right: 0;
     width: calc(100% - 100px);
-    height: 100%;
+    height: 70px;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -3109,6 +3110,27 @@ html.no-webp #error_box_wrapper{
     padding-left: 20px;
     padding-right: 20px;
     box-sizing: border-box;
+}
+
+#error_subtext{
+    display: block;
+    top: 70px;
+    right: 0;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 16px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#error_top{
+    height: 70px;
+}
+
+#error_bottom{
+    background-color: rgba(255,255,255,0.1);
 }
 
 #dimmer{
@@ -3768,6 +3790,10 @@ body {
 
     #error_text{
         font-size: 15px;
+    }
+
+    #error_subtext{
+        font-size: 13px;
     }
 
     .rank-tag{
