@@ -7,7 +7,7 @@ module.exports = {
             name: "Default Theme",
             author: "SkyCrypt Team",
             official: true,
-            logo: "../img/logo_square.png",
+            logo: "../img/logo_square.svg",
             backgrounds: {
                 "bg": {
                     "png": "../img/bg.png?v3",
