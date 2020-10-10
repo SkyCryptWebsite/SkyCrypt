@@ -770,7 +770,7 @@ html.no-webp #bg_blur{
     padding: 30px;
     padding-top: 45px;
     box-sizing: border-box;
-    transform: translateY(-100%);
+    transform: translateY(calc(-100% - 48px));
     transition: transform .3s;
     z-index: 100;
     max-height: calc(100vh - 48px - 30px);
