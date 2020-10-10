@@ -33,7 +33,7 @@ module.exports = {
             name: "sky.lea.moe",
             author: "LeaPhant",
             official: true,
-            logo: "../img/themes/skylea/logo_square.png",
+            logo: "../img/themes/skylea/logo_square.svg",
             backgrounds: {
                 "bg": {
                     "png": "../img/themes/skylea/bg.png",
@@ -62,7 +62,7 @@ module.exports = {
             name: "Night Blue Theme",
             author: "8KCoffeeWizard",
             community: true,
-            logo: "../img/themes/nightblue/logo_square.png",
+            logo: "../img/themes/nightblue/logo_square.svg",
             backgrounds: {
                 "bg": {
                     "png": "../img/themes/nightblue/bg.png",
@@ -85,7 +85,7 @@ module.exports = {
             name: "Sunrise Orange Theme",
             author: "rainbowcraft2",
             community: true,
-            logo: "../img/themes/sunrise/logo_square.png",
+            logo: "../img/themes/sunrise/logo_square.svg",
             backgrounds: {
                 "bg": {
                     "png": "../img/themes/sunrise/bg.png",
@@ -108,7 +108,7 @@ module.exports = {
             name: "Draconic Purple Theme",
             author: "rainbowcraft2",
             community: true,
-            logo: "../img/themes/draconic/logo_square.png",
+            logo: "../img/themes/draconic/logo_square.svg",
             backgrounds: {
                 "bg": {
                     "png": "../img/themes/draconic/bg.png",
