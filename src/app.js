@@ -76,7 +76,7 @@ async function main(){
     require('./apiv2')(app, db);
     require('./donations/kofi')(app, db);
 
-    async function getExtra(){
+    async function getExtra(favorite = false){
         const output = {};
 
         output.twemoji = twemoji;
@@ -85,7 +85,7 @@ async function main(){
 
         output.packs = lib.getPacks();
 
-        const topProfiles = await db
+        /*const topProfiles = await db
         .collection('topViews')
         .find()
         .sort({ total: -1 })
@@ -97,9 +97,18 @@ async function main(){
             delete profile.weekly;
             delete profile.daily;
             delete profile.rank;
-        }
+        }*/
 
-        output.top_profiles = topProfiles;
+        if(favorite){
+            const profile = await db
+            .collection('usernames')
+            .find( { username: favorite })
+            .toArray();
+
+            const favorites = profile[0]
+
+            output.favorites = favorites;
+        }
 
         if('recaptcha_site_key' in credentials)
             output.recaptcha_site_key = credentials.recaptcha_site_key;
@@ -341,7 +350,8 @@ Disallow: /item /head /leather /resources
     });
 
     app.all('/', async (req, res, next) => {
-        res.render('index', { error: null, player: null, extra: await getExtra(), helper, page: 'index' });
+        const favorite = req.cookies.favorite;
+        res.render('index', { error: null, player: null, extra: await getExtra("jjww2"), helper, page: 'index' });
     });
 
     app.all('*', async (req, res, next) => {
