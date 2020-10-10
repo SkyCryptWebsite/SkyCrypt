@@ -1598,10 +1598,10 @@ module.exports = {
         let killsDeaths = [];
 
         for(let stat in userProfile.stats){
-            if(stat.startsWith("kills_"))
+            if(stat.startsWith("kills_") && userProfile.stats[stat] > 0)
                 killsDeaths.push({ type: 'kills', entityId: stat.replace("kills_", ""), amount: userProfile.stats[stat] });
 
-            if(stat.startsWith("deaths_"))
+            if(stat.startsWith("deaths_") && userProfile.stats[stat] > 0)
                 killsDeaths.push({ type: 'deaths', entityId: stat.replace("deaths_", ""), amount: userProfile.stats[stat] });
         }
 
