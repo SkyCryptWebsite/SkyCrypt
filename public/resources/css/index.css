@@ -329,6 +329,10 @@ header{
 }
 
 #search_user{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     flex-grow: 4;
     width: 360px;
     max-width: 500px;
@@ -348,6 +352,7 @@ header{
 }
 
 #inp_search_user{
+    flex-grow: 1;
     border: 0 !important;
     background-color: transparent;
     color: white;
