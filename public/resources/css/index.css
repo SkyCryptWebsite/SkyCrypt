@@ -125,6 +125,10 @@ header{
     left: 0;
     right: 0;
     height: 48px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     background-color: #282828;
     z-index: 1000;
     line-height: 48px;
@@ -162,7 +166,6 @@ header{
 .pride-flag{
     display: inline-block;
     vertical-align: top;
-    margin-top: 15px;
     margin-left: 20px;
     border-radius: 3px;
     height: 20px;
@@ -245,7 +248,6 @@ header{
     background-repeat: no-repeat;
     width: 25px;
     height: 25px;
-    margin-top: 12px;
 }
 
 .pride-flag::after{
@@ -253,9 +255,7 @@ header{
 }
 
 .blm-logo{
-    position: absolute;
-    top: 0;
-    right: 205px;
+    display: inline-block;
     width: 48px;
     height: 48px;
     background-image: url(/resources/img/icons/blm-logo.png);
@@ -269,10 +269,9 @@ header{
 }
 
 .social-button{
-    display: block;
+    display: inline-block;
     margin-left: 5px;
     vertical-align: middle;
-    display: inline-block;
     position: relative;
     cursor: pointer;
     cursor: pointer;
@@ -330,12 +329,11 @@ header{
 }
 
 #search_user{
-    position: absolute;
+    flex-grow: 4;
     width: 360px;
+    max-width: 500px;
     height: 36px;
-    left: 50%;
-    margin-left: -180px;
-    top: 6px;
+    margin: 0 auto;
     background-color: rgba(0,0,0,0.2);
     border-radius: 18px;
 }
@@ -350,9 +348,6 @@ header{
 }
 
 #inp_search_user{
-    position: absolute;
-    top: 0;
-    left: 0;
     border: 0 !important;
     background-color: transparent;
     color: white;
@@ -381,9 +376,6 @@ header{
 
 #btn_search_user{
     display: block;
-    position: absolute;
-    top: 0;
-    left: 300px;
     height: 36px;
     width: 60px;
     border-radius: 18px;
@@ -420,11 +412,10 @@ header{
 
 #packs_button{
     display: inline-block;
-    position: absolute;
     height: 36px;
     line-height: 36px;
     box-sizing: border-box;
-    margin-left: 5px;
+    margin-right: 5px;
     vertical-align: middle;
     cursor: pointer;
     text-transform: capitalize;
@@ -474,11 +465,10 @@ header{
 
 #themes_button{
     display: inline-block;
-    position: absolute;
     height: 36px;
     line-height: 36px;
     box-sizing: border-box;
-    margin-left: 5px;
+    margin-right: 5px;
     vertical-align: middle;
     cursor: pointer;
     text-transform: capitalize;
