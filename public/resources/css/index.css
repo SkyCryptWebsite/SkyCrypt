@@ -361,7 +361,9 @@ header > *{
     position: absolute;
     top: 0;
     left: 0;
-    border: 0 !important;
+    outline: 0;
+    border: 0;
+    border-radius: inherit;
     background-color: transparent;
     color: white;
     height: 100%;
@@ -371,6 +373,13 @@ header > *{
     box-sizing: border-box;
     font-family: Montserrat, sans-serif;
     font-weight: 600;
+    transition: background-color .1s;
+}
+
+#inp_search_user:focus,
+#inp_search_user:hover {
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 ::-webkit-input-placeholder { /* Edge */
@@ -392,8 +401,9 @@ header > *{
     height: 36px;
     width: 60px;
     border-radius: 18px;
-    background-color: rgba(0,0,0,0.15);
+    background-color: rgba(0,0,0,0.2);
     cursor: pointer;
+    box-sizing: border-box;
     background-image: url(/resources/img/icons/magnify.png);
     background-size: 24px 24px;
     background-position: center center;
@@ -401,8 +411,9 @@ header > *{
     transition: background-color .1s;
 }
 
+#btn_search_user:focus,
 #btn_search_user:hover{
-    background-color: rgba(0,0,0,0.07);
+    background-color: rgba(0,0,0,0.4);
 }
 
 #top_navigation .tab.soon span::after{
