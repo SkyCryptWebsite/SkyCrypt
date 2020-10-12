@@ -3796,11 +3796,6 @@ body {
 @media (max-width: 480px){
     #themes_button,
     #packs_button {
-        padding-right: 3px;
-    }
-
-    #themes_button span,
-    #packs_button span {
         display: none;
     }
 
