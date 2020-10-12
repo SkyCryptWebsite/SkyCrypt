@@ -461,6 +461,14 @@ header > *{
     background-size: 22px auto;
     background-position: 6px 7px;
     background-repeat: no-repeat;
+    transition: padding-right .2s;
+}
+
+#packs_button span,
+#themes_button span {
+    display: block;
+    transform: scaleX(1);
+    transition: transform .2s, font-size, .2s, opacity .2s;
 }
 
 #packs_button {
@@ -3636,7 +3644,9 @@ body {
     :not(.page-index) > #packs_button span,
     #search_user.show-user-search ~ #themes_button span,
     #search_user.show-user-search ~ #packs_button span {
-        display: none;
+        transform: scaleX(0);
+        font-size: 0;
+        opacity: 0;
     }
 }
 
