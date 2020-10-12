@@ -347,6 +347,11 @@ header > *{
         margin: 0 auto;
     }
 }
+@media (min-width: 960px){
+    .social-button.patreon ~ #search_user{
+        margin: 0 auto;
+    }
+}
 
 .page-index #search_user{
     transform: translateY(150%);
