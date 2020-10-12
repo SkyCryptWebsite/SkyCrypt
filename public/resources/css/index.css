@@ -3670,11 +3670,11 @@ body {
         padding-right: 3px;
     }
 
-    #themes_button span{
+    :not(.page-index) > #themes_button span{
         display: none;
     }
 
-    #packs_button span{
+    :not(.page-index) > #packs_button span{
         display: none;
     }
 }
@@ -3798,6 +3798,10 @@ body {
 
     #packs_button{
         display: none;
+    }
+
+    .page-index {
+        justify-content: center;
     }
 
     #show_skills{
