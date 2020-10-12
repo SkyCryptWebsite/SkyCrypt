@@ -348,7 +348,7 @@ header > *{
     }
 }
 @media (min-width: 960px){
-    .social-button.patreon ~ #search_user{
+    :not(.patreon) + #search_user{
         margin: 0 auto;
     }
 }
