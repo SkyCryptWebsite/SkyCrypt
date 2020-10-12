@@ -60,12 +60,39 @@
             </div>
         </div>
         <div id="top_profiles_box_wrapper">
-            <% let profile = extra.favorites %>
+            <% if(extra.favorites){ %>
+            <% let profile = extra.favorites
+            const lastUpdated = profile.date;
+            let lastUpdatedText = "";
+            const diff = (+new Date() - lastUpdated) / 1000;
+            if(diff < 10 * 60)
+                lastUpdatedText = `<span class="stat-value">Currently online</span>`;
+            else
+                lastUpdatedText = `<span class="stat-name">Last online: </span><span class="stat-value">${moment(lastUpdated).fromNow()}</span>`;
+            %>
             <a href="/stats/<%= profile.uuid %>" class="top-profile">
                 <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
                 <div class="profile-name"><%= profile.username %><% if(profile.emoji){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
-                <div class="profile-last-online"><%- extra.twemoji.parse("hmmm") %></div>
+                <div class="profile-last-online"><%- lastUpdatedText %></div>
+                <div class="profile-rank"><%- extra.twemoji.parse("★") %></div>
             </a>
+            <% }else{ %>
+            <a class="top-profile">
+                <img src="/resources/img/icons/q.png" class="profile-avatar">
+                <div class="profile-name">No favorite set!</div><br>
+                <div class="profile-last-online">Why don't you set a favorite?</div>
+            </a>
+            <% } %>
+
+            <% for(const profile of extra.devs){ %>
+                <% let message = profile.username == "Shiiyu" ?  `<span class="stat-name">Last online: </span><span class="stat-value">January 1st, 1970</span>` : extra.twemoji.parse(profile.message)%>
+                <a href="/stats/<%= profile.uuid %>" class="top-profile">
+                    <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
+                    <div class="profile-name"><%= profile.username %><% if(profile.emoji){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
+                    <div class="profile-last-online"><%- message %></div>
+                </a>
+
+            <% } %>
         </div>
         <%- include('../includes/footer'); %>
         <script src="/resources/js/js.cookie.min.js"></script>

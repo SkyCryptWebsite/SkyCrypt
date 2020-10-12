@@ -85,29 +85,34 @@ async function main(){
 
         output.packs = lib.getPacks();
 
-        /*const topProfiles = await db
-        .collection('topViews')
-        .find()
-        .sort({ total: -1 })
-        .toArray();
-
-        for(const profile of topProfiles){
-            delete profile.views;
-            delete profile.total;
-            delete profile.weekly;
-            delete profile.daily;
-            delete profile.rank;
-        }*/
-
         if(favorite){
             const profile = await db
             .collection('usernames')
-            .find( { username: favorite })
+            .find( { uuid: favorite })
             .toArray();
 
             const favorites = profile[0]
 
             output.favorites = favorites;
+        }
+
+        const devs = {
+            metalcupcake5: "a dev or something idk",
+            jjww2: "",
+            Shiiyu: "",
+            MartinNemi03: "Lazy Developer",
+            FantasmicGalaxy: ""
+        }
+        output.devs = []
+        for(const dev in devs){
+            const profile = await db
+            .collection('usernames')
+            .find( { username: dev })
+            .toArray();
+
+            profile[0].message = devs[dev];
+
+            output.devs.push(profile[0]);
         }
 
         if('recaptcha_site_key' in credentials)
@@ -350,8 +355,8 @@ Disallow: /item /head /leather /resources
     });
 
     app.all('/', async (req, res, next) => {
-        const favorite = req.cookies.favorite;
-        res.render('index', { error: null, player: null, extra: await getExtra("jjww2"), helper, page: 'index' });
+        const favorite = req.cookies.favorite || false;
+        res.render('index', { error: null, player: null, extra: await getExtra(favorite), helper, page: 'index' });
     });
 
     app.all('*', async (req, res, next) => {
