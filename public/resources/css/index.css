@@ -3715,7 +3715,9 @@ body {
         right: 0;
         max-height: calc(100vh - 45px);
     }
+}
 
+@media (max-width: 560px){    
     #api_button{
         display: none;
     }
