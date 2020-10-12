@@ -3661,20 +3661,17 @@ body {
         margin-top: 20px;
     }
 
-    #themes_button{
-        padding-right: 3px;
-        right: 60px;
-    }
-
-    #packs_button{
+    :not(.page-index) > #themes_button,
+    :not(.page-index) > #packs_button,
+    #search_user.show-user-search ~ #themes_button,
+    #search_user.show-user-search ~ #packs_button {
         padding-right: 3px;
     }
 
-    :not(.page-index) > #themes_button span{
-        display: none;
-    }
-
-    :not(.page-index) > #packs_button span{
+    :not(.page-index) > #themes_button span,
+    :not(.page-index) > #packs_button span,
+    #search_user.show-user-search ~ #themes_button span,
+    #search_user.show-user-search ~ #packs_button span {
         display: none;
     }
 }
@@ -3792,11 +3789,13 @@ body {
 }
 
 @media (max-width: 480px){
-    #themes_button{
-        display: none;
+    #themes_button,
+    #packs_button {
+        padding-right: 3px;
     }
 
-    #packs_button{
+    #themes_button span,
+    #packs_button span {
         display: none;
     }
 
