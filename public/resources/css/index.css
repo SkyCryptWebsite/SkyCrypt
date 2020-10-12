@@ -263,7 +263,6 @@ header > *{
     width: 24px;
     height: 100%;
     flex-shrink: 0;
-    margin-left: 12px;
     background-image: url(/resources/img/icons/blm-logo.png);
     background-size: auto 24px;
     background-position: center;
@@ -294,6 +293,7 @@ header > *{
 }
 
 .social-button:hover{
+    flex-shrink: 0;
     background-color: rgba(255,255,255,0.8);
 }
 
@@ -333,17 +333,19 @@ header > *{
 }
 
 #search_user{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    position: relative;
     flex-grow: 1;
     flex-shrink: 1;
     max-width: 500px;
     height: 36px;
-    margin: 0 auto;
     background-color: rgba(0,0,0,0.2);
     border-radius: 18px;
+}
+
+@media (min-width: 1100px){
+    #search_user{
+        margin: 0 auto;
+    }
 }
 
 .page-index #search_user{
@@ -356,14 +358,15 @@ header > *{
 }
 
 #inp_search_user{
-    flex-grow: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
     border: 0 !important;
     background-color: transparent;
     color: white;
-    height: 36px;
-    padding: 4px;
-    padding-left: 15px;
-    padding-right: 15px;
+    height: 100%;
+    width: 100%;
+    padding: 4px 15px;
     font-size: 16px;
     box-sizing: border-box;
     font-family: Montserrat, sans-serif;
@@ -383,7 +386,9 @@ header > *{
 }
 
 #btn_search_user{
-    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
     height: 36px;
     width: 60px;
     border-radius: 18px;
@@ -3361,10 +3366,6 @@ body {
         left: 20px;
     }
 
-    #search_user{
-        width: 360px;
-    }
-
     #player_profile .text-stats-for{
         display: none;
     }
@@ -3555,9 +3556,6 @@ body {
 }
 
 @media (max-width: 800px){
-    header > .social-button{
-        display: none;
-    }
 
     .slayer-drop .stat-name{
         max-width: calc(100% - 95px);
@@ -3671,6 +3669,9 @@ body {
 }
 
 @media (max-width: 735px){
+    header > .social-button{
+        display: none;
+    }
     #enter_player_box_wrapper, #error_box_wrapper, #top_profiles_box_wrapper{
         width: calc(100vw - 30px);
     }
@@ -3720,20 +3721,11 @@ body {
     }
 }
 
-@media (max-width: 580px){
+@media (max-width: 520px){
     .blm-logo{
         display: none;
     }
 
-    #themes_button{
-        display: none;
-    }
-
-    #packs_button{
-        display: none;
-    }
-}
-@media (max-width: 520px){
     #stats_for_player, #stats_for_profile{
         font-size: 20px;
         height: 46px;
@@ -3787,6 +3779,14 @@ body {
 }
 
 @media (max-width: 480px){
+    #themes_button{
+        display: none;
+    }
+
+    #packs_button{
+        display: none;
+    }
+
     #show_skills{
         display: block;
     }
