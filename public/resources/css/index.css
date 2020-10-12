@@ -129,10 +129,15 @@ header{
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    padding: 0 8px;
     background-color: #282828;
     z-index: 1000;
     line-height: 48px;
     overflow: hidden;
+}
+
+header > *{
+    margin: 0 4px;
 }
 
 #not_supported{
@@ -159,17 +164,16 @@ header{
     vertical-align: top;
     text-decoration: none;
     color: white;
-    margin-left: 5px;
     font-weight: 600;
 }
 
 .pride-flag{
     display: inline-block;
     vertical-align: top;
-    margin-left: 20px;
     border-radius: 3px;
     height: 20px;
-    width: 32px;
+    width: 32px;    
+    flex-shrink: 0;
     cursor: pointer;
     user-select: none;
 }
@@ -256,8 +260,10 @@ header{
 
 .blm-logo{
     display: inline-block;
-    width: 48px;
-    height: 48px;
+    width: 24px;
+    height: 100%;
+    flex-shrink: 0;
+    margin-left: 12px;
     background-image: url(/resources/img/icons/blm-logo.png);
     background-size: auto 24px;
     background-position: center;
@@ -270,10 +276,8 @@ header{
 
 .social-button{
     display: inline-block;
-    margin-left: 5px;
     vertical-align: middle;
     position: relative;
-    cursor: pointer;
     cursor: pointer;
     text-transform: uppercase;
     height: 16px;
@@ -333,8 +337,8 @@ header{
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    flex-grow: 4;
-    width: 360px;
+    flex-grow: 1;
+    flex-shrink: 1;
     max-width: 500px;
     height: 36px;
     margin: 0 auto;
@@ -357,7 +361,6 @@ header{
     background-color: transparent;
     color: white;
     height: 36px;
-    width: 360px;
     padding: 4px;
     padding-left: 15px;
     padding-right: 15px;
@@ -420,7 +423,6 @@ header{
     height: 36px;
     line-height: 36px;
     box-sizing: border-box;
-    margin-right: 5px;
     vertical-align: middle;
     cursor: pointer;
     text-transform: capitalize;
@@ -473,7 +475,6 @@ header{
     height: 36px;
     line-height: 36px;
     box-sizing: border-box;
-    margin-right: 5px;
     vertical-align: middle;
     cursor: pointer;
     text-transform: capitalize;
@@ -3226,10 +3227,6 @@ body {
 }
 
 @media (max-width: 1590px){
-    header{
-        width: 100%;
-    }
-
     #info_box{
         width: 440px;
     }
@@ -3671,10 +3668,6 @@ body {
     #packs_button span{
         display: none;
     }
-
-    .blm-logo{
-        right: 90px;
-    }
 }
 
 @media (max-width: 735px){
@@ -3730,20 +3723,6 @@ body {
 @media (max-width: 580px){
     .blm-logo{
         display: none;
-    }
-
-    #search_user{
-        width: calc(100% - 210px);
-        margin-left: auto;
-        right: 10px;
-    }
-
-    #inp_search_user{
-        width: calc(100% - 60px);
-    }
-
-    #btn_search_user{
-        left: calc(100% - 60px);
     }
 
     #themes_button{
@@ -3891,10 +3870,6 @@ body {
 }
 
 @media (max-width: 380px){
-    #search_user{
-        width: calc(100% - 180px);
-        margin-left: auto;
-    }
 
     .pride-flag:not(.logo){
         width: 20px;
