@@ -98,7 +98,7 @@ async function main(){
 
         const devs = {
             metalcupcake5: "a dev or something idk",
-            jjww2: "",
+            jjww2: "bob",
             Shiiyu: "",
             MartinNemi03: "Lazy Developer",
             FantasmicGalaxy: ""
