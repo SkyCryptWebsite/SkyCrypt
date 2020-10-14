@@ -3633,6 +3633,18 @@ body {
         margin-top: 20px;
     }
 
+    .social-button.patreon {
+        padding-left: 26px;
+        padding-right: 0;
+    }
+    
+    .social-button.patreon span {
+        display: none;
+    }
+}
+
+@media (max-width: 745px){
+
     :not(.page-index) > #themes_button,
     :not(.page-index) > #packs_button,
     #search_user.show-user-search ~ #themes_button,
@@ -3651,9 +3663,6 @@ body {
 }
 
 @media (max-width: 735px){
-    header > .social-button{
-        display: none;
-    }
     #enter_player_box_wrapper, #error_box_wrapper, #top_profiles_box_wrapper{
         width: calc(100vw - 30px);
     }
@@ -3699,7 +3708,13 @@ body {
     }
 }
 
-@media (max-width: 560px){    
+@media (max-width: 600px){
+    header > .social-button{
+        display: none;
+    }
+}
+
+@media (max-width: 560px){
     #api_button{
         display: none;
     }
