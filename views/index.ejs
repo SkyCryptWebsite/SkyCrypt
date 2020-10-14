@@ -135,9 +135,10 @@
                         targetUsername.focus();
             });
 
-            window.addEventListener('scroll', function(){
-                const top = targetUsername.getBoundingClientRect().top;
-                if(top < 0 && smallUserSearch === false){
+            window.addEventListener('scroll', checkSearchboxOverlap);
+            window.addEventListener('resize', checkSearchboxOverlap);
+            function checkSearchboxOverlap() {
+                if(targetUsername.getBoundingClientRect().bottom < 48 && smallUserSearch === false){
                     searchUser.classList.add('show-user-search');
                     smallUserSearch = true;
 
@@ -147,7 +148,7 @@
                     if(targetUsername === document.activeElement) {
                         inputSearchUser.focus();
                     }
-                } else if(top >= 0 && smallUserSearch){
+                } else if(targetUsername.getBoundingClientRect().top >= 48 && smallUserSearch){
                     searchUser.classList.remove('show-user-search');
                     smallUserSearch = false;
 
@@ -214,7 +215,7 @@
                 }
 
                 */
-            });
+            }
         </script>
     </body>
 </html>
