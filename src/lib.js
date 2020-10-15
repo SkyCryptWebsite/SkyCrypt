@@ -2009,6 +2009,12 @@ module.exports = {
                 lore.push(' ');
             }
 
+            if (pet.candyUsed || 0 > 0)
+                lore.push(
+                    `§a(${pet.candyUsed || 0}/10) Pet Candy Used`,
+                    ''
+                );
+
             if(pet.level.level < 100){
                 lore.push(
                     `§7Progress to Level ${pet.level.level + 1}: §e${(pet.level.progress * 100).toFixed(1)}%`
@@ -2035,8 +2041,7 @@ module.exports = {
 
             lore.push(
                 '',
-                `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)} §6/ §e${helper.formatNumber(pet.level.xpMaxLevel, true, 10)}`,
-                `§7Candy Used: §e${pet.candyUsed || 0} §6/ §e10`
+                `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)} §6/ §e${helper.formatNumber(pet.level.xpMaxLevel, true, 10)}`
             );
 
             pet.lore = '';
