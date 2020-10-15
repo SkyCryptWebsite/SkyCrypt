@@ -954,7 +954,7 @@ class Hound extends Pet {
 	get stats() {
 		return {
 			strength: this.level * 0.4,
-			attack_speed: this.level * 0.15
+			bonus_attack_speed: this.level * 0.15
 		};
 	}
 

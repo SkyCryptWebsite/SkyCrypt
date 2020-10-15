@@ -1967,7 +1967,7 @@ module.exports = {
                             pet.stats[stat] = (pet.stats[stat] || 0) + constants.pet_items[heldItem].stats[stat];
                     if('multStats' in constants.pet_items[heldItem])
                         for(const stat in constants.pet_items[heldItem].multStats)
-                            pet.stats[stat] = (pet.stats[stat] || 0) * constants.pet_items[heldItem].multStats[stat];
+                            if (pet.stats[stat]) { pet.stats[stat] = (pet.stats[stat] || 0) * constants.pet_items[heldItem].multStats[stat] };
                 }
 
                 // push pet lore after held item stats added

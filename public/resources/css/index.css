@@ -1370,12 +1370,6 @@ a.additional-player-stat:hover{
     user-select: none !important;
 }
 
-.additional-player-stat.add-favorite::after{
-    background-image: url(../img/icons/star.png);
-    cursor: pointer;
-    user-select: none !important;
-}
-
 .additional-player-stat.external-twitter::after{
     background-image: url(../img/icons/twitter.png);
 }
