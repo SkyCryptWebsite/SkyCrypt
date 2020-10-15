@@ -9,28 +9,26 @@ document.addEventListener('DOMContentLoaded', function(){
     const playerModel = document.getElementById("player_model");
 
     let skinViewer;
+    let controls;
 
     if(calculated.skin_data){
         skinViewer = new skinview3d.SkinViewer({
-    		domElement: playerModel,
     		width: playerModel.offsetWidth,
     		height: playerModel.offsetHeight,
-    		skinUrl: "/texture/" + calculated.skin_data.skinurl.split("/").pop(),
-    		capeUrl: 'capeurl' in calculated.skin_data ? "/texture/" + calculated.skin_data.capeurl.split("/").pop() : "/cape/" + calculated.display_name
-    	});
+    		skin: "/texture/" + calculated.skin_data.skinurl.split("/").pop(),
+    		// cape: 'capeurl' in calculated.skin_data ? "/texture/" + calculated.skin_data.capeurl.split("/").pop() : "/cape/" + calculated.display_name
+        });
+        
+        playerModel.appendChild(skinViewer.canvas);
 
     	skinViewer.camera.position.set(-18, -3, 58);
-    	skinViewer.detectModel = false;
 
-        if(calculated.skin_data.model == 'slim')
-    	   skinViewer.playerObject.skin.slim = true;
-
-    	let controls = new skinview3d.createOrbitControls(skinViewer);
+    	controls = new skinview3d.createOrbitControls(skinViewer);
 
         controls.enableZoom = false;
         controls.enablePan = false;
 
-    	skinViewer.animations.add(skinview3d.IdleAnimation);
+    	skinViewer.animations.add(skinview3d.WalkingAnimation);
     }
 
     tippyInstance = tippy('.interactive-tooltip', {
@@ -389,10 +387,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
     function resize(){
         if(window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570))
-            document.getElementById("skin_display_mobile").appendChild(skinViewer.domElement);
+            document.getElementById("skin_display_mobile").appendChild(playerModel);
 
         if(window.innerWidth > 1570 && oldWidth <= 1570)
-            document.getElementById("skin_display").appendChild(skinViewer.domElement);
+            document.getElementById("skin_display").appendChild(playerModel);
 
         tippy('*[data-tippy-content]');
 
