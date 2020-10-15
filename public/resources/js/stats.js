@@ -1049,6 +1049,43 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     setTimeout(resize, 1000);
+    
+    let seconds = 0;
+    let upgrade_time_left = 0;
+
+    setInterval(updateDataAge, 60 * 1000);
+    setInterval(updateTimeLeft, 60 * 1000);
+
+    function updateDataAge() {
+        seconds = Math.floor((Date.now() - calculated.last_updated.unix) / 1000);
+        if (seconds > 60 * 60 + 60) { // stop updating after about an hour
+            clearInterval(updateDataAge);
+            return;
+        }
+        document.getElementById('data_age').innerHTML = `${formatSeconds(seconds)}`;
+    }
+
+    function formatSeconds(seconds){ // this is basically a rudimentary version of moment().fromNow()
+        if (seconds < 0) // you never know when dr strange comes by...
+            return 'in the future?!';
+        if (seconds < 60)
+            return `${seconds} second${seconds == 1 ? '' : 's'} ago`;
+        if (seconds < 60 * 60)
+            return `${Math.floor(seconds / 60)} minute${Math.floor(seconds / 60) == 1 ? '' : 's'} ago`;
+        return 'an hour ago';
+    }
+    
+    function updateTimeLeft() {
+        upgrade_time_left = Math.floor((calculated.misc.profile_upgrades.currently_upgrading.end_ms - Date.now()) / 1000);
+        if(document.getElementById('upgrade_time_left') != null) {
+            if (upgrade_time_left <= 0) {
+                document.getElementById('upgrade_time_left').innerHTML = `(DONE!)`;
+                clearInterval(updateTimeLeft);
+            } else {
+                document.getElementById('upgrade_time_left').innerHTML = `(${upgrade_time_left>(60*60*24)?Math.floor(upgrade_time_left/(60*60*24))+'d ':''}${upgrade_time_left>(60*60)?Math.floor((upgrade_time_left%(60*60*24))/(60*60))+'h ':''}${Math.floor((upgrade_time_left%(60*60*24)%(60*60))/60)}m left)`;
+            }
+        }
+    }
 });
 
 
