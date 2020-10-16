@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function(){
     const playerModel = document.getElementById("player_model");
 
     let skinViewer;
-    let controls;
 
     if(calculated.skin_data){
         skinViewer = new skinview3d.SkinViewer({
@@ -23,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     	skinViewer.camera.position.set(-18, -3, 58);
 
-    	controls = new skinview3d.createOrbitControls(skinViewer);
+    	const controls = new skinview3d.createOrbitControls(skinViewer);
 
         controls.enableZoom = false;
         controls.enablePan = false;
