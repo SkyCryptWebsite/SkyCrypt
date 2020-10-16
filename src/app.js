@@ -76,7 +76,7 @@ async function main(){
     require('./apiv2')(app, db);
     require('./donations/kofi')(app, db);
 
-    async function getExtra(favorite = false){
+    async function getExtra(){
         const output = {};
 
         output.twemoji = twemoji;
@@ -85,35 +85,21 @@ async function main(){
 
         output.packs = lib.getPacks();
 
-        if(favorite){
-            const profile = await db
-            .collection('usernames')
-            .find( { uuid: favorite })
-            .toArray();
+        const topProfiles = await db
+        .collection('topViews')
+        .find()
+        .sort({ total: -1 })
+        .toArray();
 
-            const favorites = profile[0]
-
-            output.favorites = favorites;
+        for(const profile of topProfiles){
+            delete profile.views;
+            delete profile.total;
+            delete profile.weekly;
+            delete profile.daily;
+            delete profile.rank;
         }
 
-        const devs = {
-            metalcupcake5: "a dev or something idk",
-            jjww2: "bob",
-            Shiiyu: "",
-            MartinNemi03: "Lazy Developer",
-            FantasmicGalaxy: ""
-        }
-        output.devs = []
-        for(const dev in devs){
-            const profile = await db
-            .collection('usernames')
-            .find( { username: dev })
-            .toArray();
-
-            profile[0].message = devs[dev];
-
-            output.devs.push(profile[0]);
-        }
+        output.top_profiles = topProfiles;
 
         if('recaptcha_site_key' in credentials)
             output.recaptcha_site_key = credentials.recaptcha_site_key;
@@ -355,8 +341,7 @@ Disallow: /item /head /leather /resources
     });
 
     app.all('/', async (req, res, next) => {
-        const favorite = req.cookies.favorite || false;
-        res.render('index', { error: null, player: null, extra: await getExtra(favorite), helper, page: 'index' });
+        res.render('index', { error: null, player: null, extra: await getExtra(), helper, page: 'index' });
     });
 
     app.all('*', async (req, res, next) => {
