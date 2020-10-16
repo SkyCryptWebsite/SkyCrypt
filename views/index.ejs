@@ -47,7 +47,7 @@
                     <div id="error_title">Error</div>
                     <div id="error_text">
                         <%= error %><br>
-                    </div>  
+                    </div>
                 </div>
                 <div id="error_bottom">
                     <% if(error && error.includes("Key throttle.")){ %>
@@ -72,7 +72,7 @@
             %>
             <a href="/stats/<%= profile.uuid %>" class="top-profile">
                 <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
-                <div class="profile-name"><%= profile.username %><% if(profile.emoji){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
+                <div class="profile-name"><%= profile.username %><% if(profile.emoji){ %><%- " "+extra.twemoji.parse(profile.emoji) %><% } %></div><br>
                 <div class="profile-last-online"><%- lastUpdatedText %></div>
                 <div class="profile-rank"><%- extra.twemoji.parse("★") %></div>
             </a>
@@ -88,7 +88,7 @@
                 <% let message = profile.username == "Shiiyu" ?  `<span class="stat-name">Last online: </span><span class="stat-value">January 1st, 1970</span>` : extra.twemoji.parse(profile.message)%>
                 <a href="/stats/<%= profile.uuid %>" class="top-profile">
                     <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
-                    <div class="profile-name"><%= profile.username %><% if(profile.emoji){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
+                    <div class="profile-name"><%= profile.username %><% if(profile.emoji){ %><%- " "+extra.twemoji.parse(profile.emoji) %><% } %></div><br>
                     <div class="profile-last-online"><%- message %></div>
                 </a>
 
