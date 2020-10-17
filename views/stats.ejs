@@ -1792,8 +1792,13 @@ twitterDescription += '. Click to view more stats!'
                             claimedTooltip += '<span class="stat-name">Claimed items:</span>';
 
                             for(let item in collection.claimed)
-                                claimedTooltip += `<br><span class="stat-value">${collection.claimed[item]}</span>`;
+                                claimedTooltip += `<br><span class="stat-value">- ${collection.claimed[item]}</span>`;
+
+                            claimedTooltip += '<br>';
                         }
+
+                        if (collection.unclaimed > 0) 
+                            claimedTooltip += `<span class="stat-name">Unclaimed items: </span><span class="stat-value">${collection.unclaimed}</span>`;
                     %>
                     <div class="boss-collection" <% if (claimedTooltip != "") { %>data-tippy-content="<%= claimedTooltip %>"<% } %>>
                         <div class="boss-collection-icon" style="background-image:url(/head/<%= collection.texture %>)"></div>
