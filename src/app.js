@@ -110,6 +110,8 @@ async function main(){
             .find( { username: dev })
             .toArray();
 
+            if(!profile[0]) continue;
+
             profile[0].message = devs[dev];
 
             output.devs.push(profile[0]);
