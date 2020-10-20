@@ -95,26 +95,11 @@ async function main(){
 
         if (page != 'index') return output;
 
-        const devs = {
-            metalcupcake5: "a dev or something idk",
-            jjww2: "bob",
-            Shiiyu: "",
-            MartinNemi03: "Lazy Developer",
-            FantasmicGalaxy: ""
-        }
-
-        output.devs = []
-        for(const dev in devs){
-            const profile = await db
-            .collection('usernames')
-            .find( { username: dev } )
+        output.devs = await db
+            .collection('topViews')
+            .find()
+            .sort({ position: 1 })
             .toArray();
-
-            if(!profile[0]) continue;
-            profile[0].message = devs[dev];
-
-            output.devs.push(profile[0]);
-        }
 
         if(favorite && favorite.length == 32){
             const profile = await db
