@@ -83,16 +83,6 @@
                 <div class="profile-last-online">Why don't you set a favorite?</div>
             </a>
             <% } %>
-
-            <% for(const profile of extra.devs){ %>
-                <% let message = profile.username == "Shiiyu" ?  `<span class="stat-name">Last online: </span><span class="stat-value">January 1st, 1970</span>` : extra.twemoji.parse(profile.message)%>
-                <a href="/stats/<%= profile.uuid %>" class="top-profile">
-                    <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
-                    <div class="profile-name"><%= profile.username %><% if(profile.emoji){ %><%- " "+extra.twemoji.parse(profile.emoji) %><% } %></div><br>
-                    <div class="profile-last-online"><%- message %></div>
-                </a>
-
-            <% } %>
         </div>
         <%- include('../includes/footer'); %>
         <script src="/resources/js/js.cookie.min.js"></script>

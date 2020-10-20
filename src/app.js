@@ -96,7 +96,7 @@ async function main(){
             output.favorites = favorites;
         }
 
-        const devs = {
+        /*const devs = {
             metalcupcake5: "a dev or something idk",
             jjww2: "bob",
             Shiiyu: "",
@@ -113,7 +113,7 @@ async function main(){
             profile[0].message = devs[dev];
 
             output.devs.push(profile[0]);
-        }
+        }*/
 
         if('recaptcha_site_key' in credentials)
             output.recaptcha_site_key = credentials.recaptcha_site_key;
