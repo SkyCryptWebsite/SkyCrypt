@@ -2442,14 +2442,16 @@ module.exports = {
                 tier: 0,
                 maxed: false,
                 killed: data.stats.tier_completions || 0,
+                unclaimed: 0,
                 claimed: []
             };
 
             for (reward_id in coll.rewards) {
                 let reward = coll.rewards[reward_id];
-                if (collections[floor_id].killed >= reward.required) 
+                if (collections[floor_id].killed >= reward.required) {
                     collections[floor_id].tier = reward.tier;
-                else break;
+                    if(reward_id != "coming_soon") collections[floor_id].unclaimed++;
+                } else break;
 
                 if (collections[floor_id].tier == coll.max_tiers)
                     collections[floor_id].maxed = true;
@@ -2471,6 +2473,7 @@ module.exports = {
 
             if (item == null || boss == null) continue;
             collections[boss.floor].claimed.push(item.name);
+            collections[boss.floor].unclaimed--;
         }
 
         if (Object.keys(collections).length === 0) 
