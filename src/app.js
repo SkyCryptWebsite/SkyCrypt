@@ -38,6 +38,7 @@ async function main(){
     const { createGzip } = require('zlib');
     const twemoji = require('twemoji');
     const cookieParser = require('cookie-parser');
+    const compression = require('compression');
 
     const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
     await mongo.connect();
@@ -62,6 +63,7 @@ async function main(){
     app.set('view engine', 'ejs');
     app.use(express.static('public', { maxAge: CACHE_DURATION }));
     app.use(cookieParser())
+    app.use(compression())
 
     app.use(session({
         secret: credentials.session_secret,
