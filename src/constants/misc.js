@@ -153,7 +153,8 @@ module.exports = {
         intelligence: 0,
         sea_creature_chance: 20,
         magic_find: 10,
-        pet_luck: 0
+        pet_luck: 0,
+        ferocity: 0
     },
 
     stat_template: {
@@ -170,7 +171,8 @@ module.exports = {
         intelligence: 0,
         sea_creature_chance: 0,
         magic_find: 0,
-        pet_luck: 0
+        pet_luck: 0,
+        ferocity: 0
     },
 
     slayer_cost: {

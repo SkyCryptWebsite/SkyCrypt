@@ -33,7 +33,8 @@ const statShort = {
     sea_creature_chance: 'ScC',
     magic_find: 'MF',
     pet_luck: 'PL',
-    bonus_attack_speed: 'Atk'
+    bonus_attack_speed: 'Atk',
+    ferocity: 'Frc'
 };
 
 const skillItems = {
@@ -1166,6 +1167,23 @@ twitterDescription += '. Click to view more stats!'
                 <%- stat_component({
                     name: 'pet_luck',
                     baseExplanation: "Increased by leveling your Taming Skill."
+                }); %>
+
+                <%- stat_component({
+                    name: 'ferocity',
+                    prettyName: 'Ferocity',
+                    baseExplanation: null,
+                    extraStats: [
+                        {
+                            stat: 'Base Extra Strikes',
+                            value: (stats.ferocity / 100).toFixed(0),
+                        },
+                        {
+                            stat: 'Chance for 1 more',
+                            value: stats.ferocity % 100,
+                            suffix: '%'
+                        }
+                    ]
                 }); %>
                 <!--<div data-stat="fairy_souls" class="basic-stat stat-fairy-souls">
                     <span data-tippy-content="

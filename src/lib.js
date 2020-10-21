@@ -581,6 +581,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                     case 'Pet Luck':
                         item.stats.pet_luck = statValue;
                         break;
+                    case 'Ferocity':
+                        item.stats.ferocity = statValue;
+                        break;
                 }
             });
 
