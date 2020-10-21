@@ -60,9 +60,9 @@
             </div>
         </div>
         <div id="top_profiles_box_wrapper">
-            <% if(extra.favorites){ %>
+            <% if(extra.favorites && !extra.favorites.error){ %>
             <% let profile = extra.favorites
-            const lastUpdated = profile.date;
+            const lastUpdated = profile.last_updated;
             let lastUpdatedText = "";
             const diff = (+new Date() - lastUpdated) / 1000;
             if(diff < 10 * 60)

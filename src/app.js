@@ -102,15 +102,41 @@ async function main(){
             .toArray();
 
         if(favorite && favorite.length == 32){
-            const profile = await db
+            const cache = await db
+            .collection('favoriteCache')
+            .find( { uuid: favorite } )
+            .toArray();
+
+            if(cache[0]) {
+                output.favorites = cache[0];
+                return output;
+            }
+
+            let output_cache = {
+                uuid: favorite
+            };
+            
+            const user = await db
             .collection('usernames')
             .find( { uuid: favorite } )
             .toArray();
 
-            if(!profile[0]) return output;
-            const favorites = profile[0];
+            if(user[0]) {
+                output_cache = user[0];
 
-            output.favorites = favorites;
+                let profiles = await db
+                .collection('profileStore')
+                .find( { uuid: favorite } )
+                .toArray();
+
+                if(profiles[0]) {
+                    const profile = profiles[0];
+                    output_cache.last_updated = profile.last_save;
+                }else output_cache.error = "Profile doesn't exist.";
+            }else output_cache.error = "User doesn't exist.";
+            
+            await db.collection('favoriteCache').insertOne(output_cache);
+            output.favorites = output_cache;
         }
 
         return output;
