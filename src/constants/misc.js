@@ -70,6 +70,8 @@ module.exports = {
         'Vampirism VI',
         'Power 6',
         'Power VI',
+        'Growth 7',
+        'Growth VII',
         'Growth 6',
         'Growth VI',
         'Blast Protection 6',
@@ -78,6 +80,8 @@ module.exports = {
         'Fire Protection VI',
         'Projectile Protection 6',
         'Projectile Protection VI',
+        'Protection 7',
+        'Protection VII',
         'Protection 6',
         'Protection VI',
         'True Protection 1',
@@ -113,11 +117,7 @@ module.exports = {
         'Thunderlord 6',
         'Thunderlord VI',
         'Lethality 6',
-        'Lethality VI',
-        'Growth 7',
-        'Growth VII',
-        'Protection 7',
-        'Protection VII'
+        'Lethality VI'
     ],
 
     // Number of kills required for each level of expertise
