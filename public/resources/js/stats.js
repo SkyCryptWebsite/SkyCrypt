@@ -845,13 +845,21 @@ document.addEventListener('DOMContentLoaded', function(){
         });
 
         element.addEventListener('click', function(){
-            setCookie("favorite", element.getAttribute("data-username"), 365);
-            
-            setNotification.show();
+            if(element.getAttribute("data-username") == "0c0b857f415943248f772164bf76795c"){
+                setNotification.show();
 
-            setTimeout(function(){
-                setNotification.hide();
-            }, 1500);
+                setTimeout(function(){
+                    setNotification.hide();
+                }, 1500);
+            }else{
+                setCookie("favorite", element.getAttribute("data-username"), 365);
+                
+                setNotification.show();
+
+                setTimeout(function(){
+                    setNotification.hide();
+                }, 1500);
+            }
         });
     });
 
