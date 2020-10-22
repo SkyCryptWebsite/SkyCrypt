@@ -40,8 +40,12 @@ module.exports = {
     },
 
     special_enchants: [
+        'Sharpness 7',
+        'Sharpness VII',
         'Sharpness 6',
         'Sharpness VI',
+        'Giant Killer 7',
+        'Giant Killer VII',
         'Giant Killer 6',
         'Giant Killer VI',
         'Bane of Arthropods 6',
@@ -68,6 +72,8 @@ module.exports = {
         'Smite VI',
         'Vampirism 6',
         'Vampirism VI',
+        'Power 7',
+        'Power VII',
         'Power 6',
         'Power VI',
         'Growth 7',
