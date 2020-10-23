@@ -40,8 +40,12 @@ module.exports = {
     },
 
     special_enchants: [
+        'Sharpness 7',
+        'Sharpness VII',
         'Sharpness 6',
         'Sharpness VI',
+        'Giant Killer 7',
+        'Giant Killer VII',
         'Giant Killer 6',
         'Giant Killer VI',
         'Bane of Arthropods 6',
@@ -68,8 +72,12 @@ module.exports = {
         'Smite VI',
         'Vampirism 6',
         'Vampirism VI',
+        'Power 7',
+        'Power VII',
         'Power 6',
         'Power VI',
+        'Growth 7',
+        'Growth VII',
         'Growth 6',
         'Growth VI',
         'Blast Protection 6',
@@ -78,6 +86,8 @@ module.exports = {
         'Fire Protection VI',
         'Projectile Protection 6',
         'Projectile Protection VI',
+        'Protection 7',
+        'Protection VII',
         'Protection 6',
         'Protection VI',
         'True Protection 1',
@@ -113,11 +123,7 @@ module.exports = {
         'Thunderlord 6',
         'Thunderlord VI',
         'Lethality 6',
-        'Lethality VI',
-        'Growth 7',
-        'Growth VII',
-        'Protection 7',
-        'Protection VII'
+        'Lethality VI'
     ],
 
     // Number of kills required for each level of expertise
@@ -1015,6 +1021,12 @@ module.exports = {
             head: "yes"
         },
         'RAZOR_SHARP_SHARK_TOOTH_NECKLACE': {
+            head: false
+        },
+        'HEGEMONY_ARTIFACT': {
+            head: false
+        },
+        'BITS_TALISMAN': {
             head: false
         }
     }

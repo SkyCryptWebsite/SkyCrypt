@@ -2273,6 +2273,16 @@ module.exports = {
                 object.display_name = "Razor Sharp Shark Tooth Necklace"
                 object.rarity = "legendary"
             }
+            if(talisman.startsWith("BITS_TALISMAN")){
+                object.texture_path = "/head/2ebadb1725aa85bb2810d0b73bf7cd74db3d9d8fc61c4cf9e543dbcc199187cc"
+                object.display_name = "Bits Talisman"
+                object.rarity = "rare"
+            }
+            if(talisman.startsWith('HEGEMONY_ARTIFACT')){
+                object.texture_path = "/head/313384a293cfbba3489b483ebc1de7584ca2726d7f5c3a620513474925e87b97"
+                object.display_name = "Hegemony Artifact"
+                object.rarity = "legendary"
+            }
             if(object.name == null){
                 object.name = talisman;
             }
