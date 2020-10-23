@@ -481,6 +481,15 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
                 item.lore += helper.renderLore(`§7Obtained From: §bFloor ${floor}`);
             }
+
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'winning_bid')){
+
+                const price = item.tag.ExtraAttributes.winning_bid;
+
+                item.lore += "<br>"
+
+                item.lore += helper.renderLore(`§7Price Paid at Dark Auction: §b${price.toLocaleString()} coins`);
+            }
         }
 
         let lore = lore_raw ? lore_raw.map(a => a = helper.getRawLore(a)) : [];
