@@ -1022,6 +1022,12 @@ module.exports = {
         },
         'RAZOR_SHARP_SHARK_TOOTH_NECKLACE': {
             head: false
+        },
+        'HEGEMONY_ARTIFACT': {
+            head: false
+        },
+        'BITS_TALISMAN': {
+            head: false
         }
     }
 };
