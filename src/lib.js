@@ -1766,12 +1766,16 @@ module.exports = {
         misc.profile_upgrades = {};
         misc.auctions_sell = {};
         misc.auctions_buy = {};
+        misc.claimed_items = {};
 
         if('ender_crystals_destroyed' in userProfile.stats)
             misc.dragons['ender_crystals_destroyed'] = userProfile.stats['ender_crystals_destroyed'];
 
         misc.dragons['last_hits'] = 0;
         misc.dragons['deaths'] = 0;
+
+        if(hypixelProfile.claimed_items)
+            misc.claimed_items = hypixelProfile.claimed_items;
 
         const burrows = [
             "mythos_burrows_dug_next", 
