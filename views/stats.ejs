@@ -841,7 +841,11 @@ const inventorySlot = item => { %>
 
 const skill_component = (skill, icon, level) => { %>
     <div class="skill xp-skill <%= level.level == level.maxLevel ? 'maxed-skill' : ''%>">
-        <div class="skill-icon"><div class="item-icon <%= icon %>"></div><% if(level.level == level.maxLevel){ %><div class="piece-shine"></div><% } %></div>
+        <% if(icon.startsWith('head-')){ %>
+            <div class="skill-icon"><div class="head-icon" style="background-image:url(/head/<%= icon.substring(5) %>)"></div><% if(level.level == level.maxLevel){ %><div class="piece-shine"></div><% } %></div>
+        <% }else{ %>
+            <div class="skill-icon"><div class="item-icon <%= icon %>"></div><% if(level.level == level.maxLevel){ %><div class="piece-shine"></div><% } %></div>
+        <% } %>
         <div class="skill-name"><%= skill %> <span class="skill-level"><%= level.level >= 0 ? level.level : '?' %></span></div>
         <div class="skill-bar" data-skill="<%= skill %>">
             <div class="skill-progress-bar" style="width: <%= level.level == level.maxLevel ? 100 : level.progress * 100 %>%"></div>
@@ -1730,7 +1734,7 @@ twitterDescription += '. Click to view more stats!'
                     <p class="stat-sub-header">Catacombs</p>
 
                     <p class="stat-raw-values">
-                        <%= skill_component('Catacombs', 'icon-397_0', calculated.dungeons.catacombs.level) %><br>
+                        <%= skill_component('Catacombs', 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793', calculated.dungeons.catacombs.level) %><br>
                     </p>
 
                     <p class="stat-raw-values">
