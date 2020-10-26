@@ -660,8 +660,25 @@ html.no-webp #bg_blur{
     top: 5px;
     left: 5px;
     z-index: 10;
+    width: 127px;
     transform: scale(0.2);
     transform-origin: top left;
+    filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
+}
+
+.head-icon{
+    width: 128px;
+    height: 128px;
+}
+
+.skill-icon > .head-icon{
+    position: absolute;
+    top: 6px;
+    left: 5px;
+    z-index: 10;
+    transform: scale(0.2);
+    transform-origin: top left;
+    background-repeat: no-repeat;
     filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
 }
 
@@ -1407,7 +1424,6 @@ a.additional-player-stat:hover{
 #basic_stats{
     width: 100%;
     padding: 30px;
-    padding-bottom: 20px;
     box-sizing: border-box;
     background-color: rgba(0,0,0,0.3);
 }
@@ -1584,7 +1600,7 @@ a.additional-player-stat:hover{
     background-image: url(../img/icons/health.png);
 }
 
-.stat-health .stat-name, .stat-effective-health .stat-name, .stat-strength .stat-name, .color-health, .color-effective-health, .color-strength{
+.stat-health .stat-name, .stat-effective-health .stat-name, .stat-strength .stat-name, .stat-ferocity .stat-name, .color-health, .color-effective-health, .color-strength, .color-ferocity{
     color: #EF5350;
 }
 
@@ -1670,6 +1686,10 @@ a.additional-player-stat:hover{
 
 .stat-pet-luck .stat-name, .color-pet-luck{
     color: #FD64DE;
+}
+
+.stat-ferocity{
+    background-image: url(../img/icons/ferocity.png);
 }
 
 .stat-container{

@@ -42,6 +42,9 @@ async function main(){
     async function updateTopProfiles(){
         await db.collection('topViews').deleteMany({});
 
+        // Clear the favorite cache
+        await db.collection('favoriteCache').deleteMany({});
+
         /* for await(const doc of db.collection('viewsLeaderboard').aggregate([
             {
                 "$lookup": {
@@ -93,7 +96,7 @@ async function main(){
             );
         }
 
-        setTimeout(updateTopProfiles, 300 * 1000);
+        setTimeout(updateTopProfiles, 900 * 1000);
     }
 
     updateTopProfiles();
