@@ -25,7 +25,8 @@ const symbols = {
 	magic_find: "✯",
 	pet_luck: "♣",
 	attack_speed: "⚔️",
-	true_defense: "❂"
+	true_defense: "❂",
+	ferocity: "⫽"
 }
 
 class Pet {
@@ -81,6 +82,9 @@ class Pet {
 					break;
 				case "damage":
 					list.push(`§7Damage: ${formatStat(newStats[stat])}`);
+					break;
+				case "ferocity":
+					list.push(`§7Ferocity: ${formatStat(newStats[stat])}`);
 					break;
 			}
 		}
@@ -1389,7 +1393,8 @@ class Tiger extends Pet {
 		return {
 			strength: 5 + this.level * 0.1,
 			crit_chance: this.level * 0.05,
-			crit_damage: this.level * 0.5
+			crit_damage: this.level * 0.5,
+			ferocity: this.level * 0.1
 		};
 	}
 
@@ -1403,10 +1408,10 @@ class Tiger extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.2 : this.rarity > 0 ? 0.1 : 0.05;
+		let mult = this.rarity > 2 ? 1 : this.rarity > 0 ? 0.5 : 0.2;
 		return {
 			name: "§6Merciless Swipe",
-			desc: [`§7Attacks have a §a${round(this.level * mult, 1)}% §7chance to strike twice`]
+			desc: [`§7Gain 	§c+${round(this.level * mult, 1)}% ${symbols.ferocity} Ferocity.`]
 		};
 	}
 
