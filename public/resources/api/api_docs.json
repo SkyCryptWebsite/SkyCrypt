@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "http://sky.shiiyu.moe/api/v2"
+      "url": "https://sky.shiiyu.moe/api/v2"
     }
   ],
   "tags": [
