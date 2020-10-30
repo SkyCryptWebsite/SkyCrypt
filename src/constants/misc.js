@@ -40,8 +40,12 @@ module.exports = {
     },
 
     special_enchants: [
+        'Sharpness 7',
+        'Sharpness VII',
         'Sharpness 6',
         'Sharpness VI',
+        'Giant Killer 7',
+        'Giant Killer VII',
         'Giant Killer 6',
         'Giant Killer VI',
         'Bane of Arthropods 6',
@@ -68,8 +72,12 @@ module.exports = {
         'Smite VI',
         'Vampirism 6',
         'Vampirism VI',
+        'Power 7',
+        'Power VII',
         'Power 6',
         'Power VI',
+        'Growth 7',
+        'Growth VII',
         'Growth 6',
         'Growth VI',
         'Blast Protection 6',
@@ -78,6 +86,8 @@ module.exports = {
         'Fire Protection VI',
         'Projectile Protection 6',
         'Projectile Protection VI',
+        'Protection 7',
+        'Protection VII',
         'Protection 6',
         'Protection VI',
         'True Protection 1',
@@ -153,7 +163,8 @@ module.exports = {
         intelligence: 0,
         sea_creature_chance: 20,
         magic_find: 10,
-        pet_luck: 0
+        pet_luck: 0,
+        ferocity: 0
     },
 
     stat_template: {
@@ -170,7 +181,8 @@ module.exports = {
         intelligence: 0,
         sea_creature_chance: 0,
         magic_find: 0,
-        pet_luck: 0
+        pet_luck: 0,
+        ferocity: 0
     },
 
     slayer_cost: {
@@ -1009,6 +1021,12 @@ module.exports = {
             head: "yes"
         },
         'RAZOR_SHARP_SHARK_TOOTH_NECKLACE': {
+            head: false
+        },
+        'HEGEMONY_ARTIFACT': {
+            head: false
+        },
+        'BITS_TALISMAN': {
             head: false
         }
     }
