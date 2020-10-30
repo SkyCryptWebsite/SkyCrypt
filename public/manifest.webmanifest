@@ -9,6 +9,7 @@
   "icons": [
     {
       "src": "/resources/img/app-icons/svg.svg",
+      "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
     },
@@ -26,6 +27,7 @@
     },
     {
       "src": "/resources/img/app-icons/maskable-svg.svg",
+      "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "maskable"
     },
@@ -43,6 +45,7 @@
     },
     {
       "src": "/resources/img/app-icons/monochrome-svg.svg",
+      "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "monochrome"
     },
