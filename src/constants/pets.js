@@ -574,7 +574,7 @@ module.exports = {
         CROCHET_TIGER_PLUSHIE: {
             description: `§7Increases §e${symbols.attack_speed} Bonus Attack Speed §7by §a40`,
             stats: {
-                attack_speed: 40
+                bonus_attack_speed: 40
             }
         },
         DWARF_TURTLE_SHELMET: {

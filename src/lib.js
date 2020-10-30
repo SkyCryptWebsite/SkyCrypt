@@ -481,6 +481,15 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
                 item.lore += helper.renderLore(`§7Obtained From: §bFloor ${floor}`);
             }
+
+            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'winning_bid')){
+
+                const price = item.tag.ExtraAttributes.winning_bid;
+
+                item.lore += "<br>"
+
+                item.lore += helper.renderLore(`§7Price Paid at Dark Auction: §b${price.toLocaleString()} coins`);
+            }
         }
 
         let lore = lore_raw ? lore_raw.map(a => a = helper.getRawLore(a)) : [];
@@ -580,6 +589,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                         break;
                     case 'Pet Luck':
                         item.stats.pet_luck = statValue;
+                        break;
+                    case 'Ferocity':
+                        item.stats.ferocity = statValue;
                         break;
                 }
             });
@@ -1598,10 +1610,10 @@ module.exports = {
         let killsDeaths = [];
 
         for(let stat in userProfile.stats){
-            if(stat.startsWith("kills_"))
+            if(stat.startsWith("kills_") && userProfile.stats[stat] > 0)
                 killsDeaths.push({ type: 'kills', entityId: stat.replace("kills_", ""), amount: userProfile.stats[stat] });
 
-            if(stat.startsWith("deaths_"))
+            if(stat.startsWith("deaths_") && userProfile.stats[stat] > 0)
                 killsDeaths.push({ type: 'deaths', entityId: stat.replace("deaths_", ""), amount: userProfile.stats[stat] });
         }
 
@@ -1754,12 +1766,16 @@ module.exports = {
         misc.profile_upgrades = {};
         misc.auctions_sell = {};
         misc.auctions_buy = {};
+        misc.claimed_items = {};
 
         if('ender_crystals_destroyed' in userProfile.stats)
             misc.dragons['ender_crystals_destroyed'] = userProfile.stats['ender_crystals_destroyed'];
 
         misc.dragons['last_hits'] = 0;
         misc.dragons['deaths'] = 0;
+
+        if(hypixelProfile.claimed_items)
+            misc.claimed_items = hypixelProfile.claimed_items;
 
         const burrows = [
             "mythos_burrows_dug_next", 
@@ -1967,7 +1983,7 @@ module.exports = {
                             pet.stats[stat] = (pet.stats[stat] || 0) + constants.pet_items[heldItem].stats[stat];
                     if('multStats' in constants.pet_items[heldItem])
                         for(const stat in constants.pet_items[heldItem].multStats)
-                            pet.stats[stat] = (pet.stats[stat] || 0) * constants.pet_items[heldItem].multStats[stat];
+                            if (pet.stats[stat]) { pet.stats[stat] = (pet.stats[stat] || 0) * constants.pet_items[heldItem].multStats[stat] };
                 }
 
                 // push pet lore after held item stats added
@@ -2261,6 +2277,16 @@ module.exports = {
                 object.display_name = "Razor Sharp Shark Tooth Necklace"
                 object.rarity = "legendary"
             }
+            if(talisman.startsWith("BITS_TALISMAN")){
+                object.texture_path = "/head/2ebadb1725aa85bb2810d0b73bf7cd74db3d9d8fc61c4cf9e543dbcc199187cc"
+                object.display_name = "Bits Talisman"
+                object.rarity = "rare"
+            }
+            if(talisman.startsWith('HEGEMONY_ARTIFACT')){
+                object.texture_path = "/head/313384a293cfbba3489b483ebc1de7584ca2726d7f5c3a620513474925e87b97"
+                object.display_name = "Hegemony Artifact"
+                object.rarity = "legendary"
+            }
             if(object.name == null){
                 object.name = talisman;
             }
@@ -2442,14 +2468,16 @@ module.exports = {
                 tier: 0,
                 maxed: false,
                 killed: data.stats.tier_completions || 0,
+                unclaimed: 0,
                 claimed: []
             };
 
             for (reward_id in coll.rewards) {
                 let reward = coll.rewards[reward_id];
-                if (collections[floor_id].killed >= reward.required) 
+                if (collections[floor_id].killed >= reward.required) {
                     collections[floor_id].tier = reward.tier;
-                else break;
+                    if(reward_id != "coming_soon") collections[floor_id].unclaimed++;
+                } else break;
 
                 if (collections[floor_id].tier == coll.max_tiers)
                     collections[floor_id].maxed = true;
@@ -2471,6 +2499,7 @@ module.exports = {
 
             if (item == null || boss == null) continue;
             collections[boss.floor].claimed.push(item.name);
+            collections[boss.floor].unclaimed--;
         }
 
         if (Object.keys(collections).length === 0) 
