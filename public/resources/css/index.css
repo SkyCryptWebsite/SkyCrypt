@@ -2930,6 +2930,14 @@ a.additional-player-stat:hover{
     background-color: rgb(10,10,10);
 }
 
+@supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+    #enter_player_box_wrapper{
+        background: none;
+        -webkit-backdrop-filter: blur(16px) brightness(0.5);
+        backdrop-filter: blur(16px) brightness(0.5);
+    }
+}
+
 #enter_player_box_wrapper p:last-child{
     font-size: 16px;
     color: rgba(255,255,255,0.8);
@@ -3004,6 +3012,14 @@ html.no-webp #enter_player_box_wrapper{
     display: none;
 }
 
+@supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+    #error_box_wrapper{
+        background: none;
+        -webkit-backdrop-filter: blur(16px) brightness(0.5);
+        backdrop-filter: blur(16px) brightness(0.5);
+    }
+}
+
 #top_profiles_box_wrapper{
     position: relative;
     margin: 0 auto;
@@ -3029,6 +3045,14 @@ html.no-webp #enter_player_box_wrapper{
     text-decoration: none;
     opacity: 0.9;
     transition: opacity .2s;
+}
+
+@supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+    .top-profile {
+        background: none;
+        -webkit-backdrop-filter: blur(16px) brightness(0.5);
+        backdrop-filter: blur(16px) brightness(0.5);
+    }
 }
 
 html.no-webp .top-profile{
