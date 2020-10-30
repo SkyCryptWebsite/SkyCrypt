@@ -362,12 +362,17 @@ module.exports = {
         HEALING_TALISMAN: [
             'HEALING_RING'
         ],
+        CANDY_ARTIFACT: [
+            'CANDY_RELIC'
+        ],
         CANDY_RING: [
-            'CANDY_ARTIFACT'
+            'CANDY_ARTIFACT',
+            'CANDY_RELIC'
         ],
         CANDY_TALISMAN: [
             'CANDY_RING',
-            'CANDY_ARTIFACT'
+            'CANDY_ARTIFACT',
+            'CANDY_RELIC'
         ],
         INTIMIDATION_RING: [
             'INTIMIDATION_ARTIFACT'
@@ -491,6 +496,13 @@ module.exports = {
         ],
         SHARP_SHARK_TOOTH_NECKLACE: [
             'RAZOR_SHARP_SHARK_TOOTH_NECKLACE'
+        ],
+        BAT_PERSON_TALISMAN: [
+            'BAT_PERSON_RING',
+            'BAT_PERSON_ARTIFACT'
+        ],
+        BAT_PERSON_RING: [
+            'BAT_PERSON_ARTIFACT'
         ]
     },
 
