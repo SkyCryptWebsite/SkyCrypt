@@ -2287,6 +2287,26 @@ module.exports = {
                 object.display_name = "Hegemony Artifact"
                 object.rarity = "legendary"
             }
+            if(talisman.startsWith('BAT_PERSON_TALISMAN')){
+                object.texture_path = "/head/b841a49b199a59c431bf3fc3783f6b6545ce78c38042617f66ebd87cdd548e8c"
+                object.display_name = "Bat Person Talisman"
+                object.rarity = "common"
+            }
+            if(talisman.startsWith("BAT_PERSON_RING")){
+                object.texture_path = "/head/b4451ecf2584a36de4297031c6d852977d3e249e85a3f0add967fcd7d6bde953"
+                object.display_name = "Bat Person Ring"
+                object.rarity = "uncommon"
+            }
+            if(talisman.startsWith("BAT_PERSON_ARTIFACT")){
+                object.texture_path = "/head/c4444c3982720b30938f504c4374232b11a4f6f56cd57c973d8abb07fd0dcff7"
+                object.display_name = "Bat Person Artifact"
+                object.rarity = "rare"
+            }
+            if(talisman.startsWith('CANDY_RELIC')){
+                object.texture_path = "/head/39668767f1141835e2c49ad2b415598f1b166be9173902a0257e77704f913e1f"
+                object.display_name = "Candy Relic"
+                object.rarity = "legendary"
+            }
             if(object.name == null){
                 object.name = talisman;
             }

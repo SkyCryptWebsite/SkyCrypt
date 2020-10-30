@@ -1028,6 +1028,18 @@ module.exports = {
         },
         'BITS_TALISMAN': {
             head: false
+        },
+        'BAT_PERSON_TALISMAN': {
+            head: false
+        },
+        'BAT_PERSON_RING': {
+            head: false
+        },
+        'BAT_PERSON_ARTIFACT': {
+            head: false
+        },
+        'CANDY_RELIC': {
+            head: false
         }
     }
 };
