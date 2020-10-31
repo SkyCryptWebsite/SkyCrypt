@@ -8,6 +8,21 @@ document.addEventListener('DOMContentLoaded', function(){
         }
         document.cookie = name + "=" + (value || "")  + expires + "; SameSite=Lax; path=/";
     }
+
+    function getCookie(c_name) {
+        if (document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1) {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) {
+                    c_end = document.cookie.length;
+                }
+                return unescape(document.cookie.substring(c_start, c_end));
+            }
+        }
+        return "";
+    }
     
     let userAgent = window.navigator.userAgent;
     let tippyInstance;
@@ -839,26 +854,54 @@ document.addEventListener('DOMContentLoaded', function(){
     [].forEach.call(document.querySelectorAll('.add-favorite'), function(e){
         let element = e;
 
-        let setNotification = tippy(element, {
-            content: 'Set favorite!',
+        let notification = tippy(element, {
             trigger: 'manual'
         });
 
-        element.addEventListener('click', function(){
+        element.addEventListener('click', async function(){
+            let uuid = element.getAttribute("data-username");
             if(element.getAttribute("data-username") == "0c0b857f415943248f772164bf76795c"){
-                setNotification.show();
+                notification.setContent("No");
+                notification.show();
 
                 setTimeout(function(){
-                    setNotification.hide();
+                    notification.hide();
                 }, 1500);
             }else{
-                setCookie("favorite", element.getAttribute("data-username"), 365);
-                
-                setNotification.show();
+                try {
+                    let cookieArray = JSON.parse(getCookie("favorite"));
+                    if(cookieArray.includes(uuid)){
+                        notification.setContent("That person has already been favorited!");
 
-                setTimeout(function(){
-                    setNotification.hide();
-                }, 1500);
+                        notification.show();
+
+                        setTimeout(function(){
+                            notification.hide();
+                        }, 1500);
+                    }else{
+                        cookieArray.push(uuid);
+
+                        setCookie("favorite", JSON.stringify(cookieArray), 365);
+
+                        notification.setContent("Set favorite!");
+                        notification.show();
+
+                        setTimeout(function(){
+                            notification.hide();
+                        }, 1500);
+                    }
+                } catch {
+                    let cookieArray = uuid ? [uuid] : [];
+                    setCookie("favorite", JSON.stringify(cookieArray), 365);
+
+                    notification.setContent("Set favorite using new system!");
+                    
+                    notification.show();
+
+                    setTimeout(function(){
+                        notification.hide();
+                    }, 1500);
+                }
             }
         });
     });
