@@ -41,7 +41,7 @@
 }
 
 html{
-    background-color: black;
+    background-color: #121212;
     background: var(--bg-webp) no-repeat center center fixed;
     background-size: cover;
     font-family: 'Montserrat', sans-serif;
