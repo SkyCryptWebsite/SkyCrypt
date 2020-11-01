@@ -1,0 +1,9 @@
+<svg width="144" height="144" xmlns="http://www.w3.org/2000/svg">
+    <title>SkyCrypt Logo</title>
+    <rect height="180" width="180" y="0" x="0" fill="#0bda51"/>
+    <g fill="#ffffff">
+        <rect rx="4" height="28" width="19" y="81" x="34"/>
+        <rect rx="4" height="75" width="19" y="34" x="62"/>
+        <rect rx="4" height="47" width="19" y="62" x="90"/>
+    </g>
+</svg>

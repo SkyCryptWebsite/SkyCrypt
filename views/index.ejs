@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <title>SkyCrypt</title>
-    <meta name="description" content="A beautiful site for sharing your SkyBlock profile 🌹">
+    <meta name="description" content="A beautiful site for sharing your SkyBlock profile 🍣">
     <link rel="shortcut icon" href="/resources/img/logo_square.png?v2" type="image/png">
     <link rel="icon" href="/favicon.ico?v2" type="image/x-icon">
     <meta property="og:image" content="/resources/img/logo_square.png?v2">
     <meta property="og:title" content="SkyBlock Stats">
-    <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🌹">
+    <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🍣">
 <%- include('../includes/resources') %>
     <style>
     @media (max-width: 480px){
@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <div id="error_bottom">
-                    <% if(error && error.includes("Key throttle.")){ %>
+                    <% if(typeof error === 'string' && error.includes("Key throttle.")){ %>
                     <div id="error_subtext">
                         This happens when the site reaches the Hypixel API limit.<br>
                         Please try again in a minute.
@@ -60,9 +60,9 @@
             </div>
         </div>
         <div id="top_profiles_box_wrapper">
-            <% if(extra.favorites){ %>
+            <% if(extra.favorites && !extra.favorites.error){ %>
             <% let profile = extra.favorites
-            const lastUpdated = profile.date;
+            const lastUpdated = profile.last_updated;
             let lastUpdatedText = "";
             const diff = (+new Date() - lastUpdated) / 1000;
             if(diff < 10 * 60)

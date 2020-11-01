@@ -561,7 +561,7 @@ module.exports = {
     },
 
     updateRank: async (uuid, db) => {
-        let rank = { rankText: null, rankColor: null, plusText: null, plusColor: null, socials: {}, achievements: {} };
+        let rank = { rankText: null, rankColor: null, plusText: null, plusColor: null, socials: {}, achievements: {}, claimed_items: {} };
 
         try{
             const response = await retry(async () => {
@@ -581,6 +581,16 @@ module.exports = {
 
             if(module.exports.hasPath(player, 'achievements'))
                 rank.achievements = player.achievements;
+
+            let claimable = {
+                "claimed_potato_talisman": "Potato Talisman",
+                "skyblock_free_cookie": "Free Booster Cookie",
+                "scorpius_bribe_96": "Scorpius Bribe (Year 96)"
+            };
+
+            for(item in claimable)
+                if(module.exports.hasPath(player, item)) 
+                    rank.claimed_items[claimable[item]] = player[item];
         }catch(e){
             console.error(e);
         }

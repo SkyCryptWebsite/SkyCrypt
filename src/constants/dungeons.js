@@ -278,6 +278,82 @@ module.exports = {
             "catacombs_6": {
                 texture: "3ce69d2ddcc81c9fc2e9948c92003eb0f7ebf0e7e952e801b7f2069dcee76d85"
             }
+        },
+        level_bonuses: {
+            "dungeon_catacombs": {
+                1: { item_boost: 4 },
+                6: { item_boost: 5 },
+                11: { item_boost: 6 },
+                16: { item_boost: 7 },
+                21: { item_boost: 8 },
+                26: { item_boost: 9 },
+                31: { item_boost: 10 },
+                36: { item_boost: 12 },
+                41: { item_boost: 14 },
+                46: { item_boost: 16 },
+                47: { item_boost: 17 },
+                48: { item_boost: 18 },
+                49: { item_boost: 19 },
+                50: { item_boost: 20 }
+            }
+        },
+        journals: {
+            "karylles_diary": {
+                name: "Karyelle's Diary",
+                pages: 10
+            },
+            "the_study": {
+                name: "The Study",
+                pages: 8
+            },
+            "expedition_volume_1": {
+                name: "The Expedition Volume 1",
+                pages: 4
+            },
+            "uncanny_remains": {
+                name: "Uncanny Remains",
+                pages: 7
+            },
+            "expedition_volume_2": {
+                name: "The Expedition Volume 2",
+                pages: 5
+            },
+            "grim_adversity": {
+                name: "Grim Adversity",
+                pages: 9
+            },
+            "expedition_volume_3": {
+                name: "The Expedition Volume 3",
+                pages: 10
+            },
+            "expedition_volume_4": {
+                name: "The Expedition Volume 4",
+                pages: 11
+            },
+            "the_walls": {
+                name: "The Walls",
+                pages: 24
+            },
+            "the_eye": {
+                name: "The Eye",
+                pages: 8
+            },
+            "aftermath": {
+                name: "Aftermath",
+                pages: 5
+            },
+            "the_apprentice": {
+                name: "The Apprentice",
+                pages: 6
+            },
+            "the_follower": {
+                name: "The Follower",
+                pages: 14
+            },
+            "the_apprentice_2": {
+                name: "The Apprentice 2",
+                pages: 14
+            }
         }
     }
 };
