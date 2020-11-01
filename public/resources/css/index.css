@@ -3737,10 +3737,6 @@ body {
         width: calc(100vw - 30px);
     }
 
-    #enter_player_box_wrapper, #error_box_wrapper{
-        backdrop-filter: blur(15px);
-    }
-
     #enter_player_box_wrapper{
         height: 205px;
         font-size: 12px;
@@ -3760,7 +3756,6 @@ body {
 
     .top-profile{
         width: 100%;
-        backdrop-filter: blur(15px);
     }
 
     #themes_box{
