@@ -1691,6 +1691,9 @@ module.exports = {
 
             if('emoji' in userInfo)
                 output.display_emoji = userInfo.emoji;
+            
+            if('emojiImg' in userInfo)
+                output.display_emoji_img = userInfo.emojiImg;
             if (userInfo.username == "jjww2") {
                 output.display_emoji = randomEmoji();
             }
