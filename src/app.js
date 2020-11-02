@@ -76,7 +76,7 @@ async function main(){
     require('./apiv2')(app, db);
     require('./donations/kofi')(app, db);
 
-    async function getExtra(page = null, favorite = false){
+    async function getExtra(page = null, favorites = []){
         const output = {};
 
         output.twemoji = twemoji;
@@ -101,42 +101,49 @@ async function main(){
             .sort({ position: 1 })
             .toArray();
 
-        if(favorite && favorite.length == 32){
-            const cache = await db
-            .collection('favoriteCache')
-            .find( { uuid: favorite } )
-            .toArray();
+        if(typeof favorites === 'string') favorites = [favorites];
+        if(favorites.length > 5) return output;
+        output.favorites = [];
 
-            if(cache[0]) {
-                output.favorites = cache[0];
-                return output;
-            }
-
-            let output_cache = {
-                uuid: favorite
-            };
-            
-            const user = await db
-            .collection('usernames')
-            .find( { uuid: favorite } )
-            .toArray();
-
-            if(user[0]) {
-                output_cache = user[0];
-
-                let profiles = await db
-                .collection('profileStore')
+        for(let i = 0; i < favorites.length; i++){
+            let favorite = favorites[i];
+            if(favorite && favorite.length == 32){
+                const cache = await db
+                .collection('favoriteCache')
                 .find( { uuid: favorite } )
                 .toArray();
 
-                if(profiles[0]) {
-                    const profile = profiles[0];
-                    output_cache.last_updated = profile.last_save;
-                }else output_cache.error = "Profile doesn't exist.";
-            }else output_cache.error = "User doesn't exist.";
-            
-            await db.collection('favoriteCache').insertOne(output_cache);
-            output.favorites = output_cache;
+                if(cache[0]) {
+                    output.favorites[i] = cache[0];
+                    return output;
+                }
+
+                let output_cache = {
+                    uuid: favorite
+                };
+                
+                const user = await db
+                .collection('usernames')
+                .find( { uuid: favorite } )
+                .toArray();
+
+                if(user[0]) {
+                    output_cache = user[0];
+
+                    let profiles = await db
+                    .collection('profileStore')
+                    .find( { uuid: favorite } )
+                    .toArray();
+
+                    if(profiles[0]) {
+                        const profile = profiles[0];
+                        output_cache.last_updated = profile.last_save;
+                    }else output_cache.error = "Profile doesn't exist.";
+                }else output_cache.error = "User doesn't exist.";
+                
+                await db.collection('favoriteCache').insertOne(output_cache);
+                output.favorites[i] = output_cache;
+            }
         }
 
         return output;

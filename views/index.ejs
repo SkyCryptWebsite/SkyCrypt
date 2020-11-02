@@ -60,8 +60,9 @@
             </div>
         </div>
         <div id="top_profiles_box_wrapper">
-            <% if(extra.favorites && !extra.favorites.error){ %>
-            <% let profile = extra.favorites
+            <% if(extra.favorites.length > 0){ 
+            for(let profile of extra.favorites){
+            if(profile.error) continue;
             const lastUpdated = profile.last_updated;
             let lastUpdatedText = "";
             const diff = (+new Date() - lastUpdated) / 1000;
@@ -74,9 +75,9 @@
                 <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
                 <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
                 <div class="profile-last-online"><%- lastUpdatedText %></div>
-                <div class="profile-rank"><%- extra.twemoji.parse("★") %></div>
+                <div class="profile-rank" title="Favorited profile"><%- extra.twemoji.parse("★") %></div>
             </a>
-            <% }else{ %>
+            <% }}else{ %>
             <a class="top-profile">
                 <img src="/resources/img/icons/q.png" class="profile-avatar">
                 <div class="profile-name">No favorite set!</div><br>
@@ -90,6 +91,10 @@
                     <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
                     <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
                     <div class="profile-last-online"><%- message %></div>
+                    <% switch(profile.type){
+                        case "DEV": %>
+                        <div class="profile-rank" title="Member of SkyCrypt's Team">💻</div>
+                    <% } %>
                 </a>
 
             <% } %>
