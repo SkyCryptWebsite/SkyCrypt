@@ -3498,10 +3498,6 @@ body {
         text-align: center;
     }
 
-    .stat-header{
-        width: 100vw;
-    }
-
     .stat-header::before, .stat-header::after{
         display: none;
     }
