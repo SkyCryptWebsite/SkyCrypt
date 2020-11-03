@@ -590,6 +590,11 @@ html.no-webp #bg_blur{
     backdrop-filter: blur(16px) brightness(0.5);
 }
 
+#wrapper > * {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 #base_stats_container{
     width: 260px;
 }
@@ -3312,7 +3317,6 @@ body {
         left: 50%;
         width: 1120px;
         margin-left: -560px;
-        overflow-x: hidden;
     }
 
     .skill {
@@ -3373,7 +3377,6 @@ body {
         right: 0;
         margin-left: 0;
         width: 100vw;
-        overflow-x: hidden;
     }
 
     #skill_levels_container .skill{
