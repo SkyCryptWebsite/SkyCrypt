@@ -115,34 +115,33 @@ async function main(){
 
                 if(cache[0]) {
                     output.favorites[i] = cache[0];
-                    return output;
-                }
-
-                let output_cache = {
-                    uuid: favorite
-                };
-                
-                const user = await db
-                .collection('usernames')
-                .find( { uuid: favorite } )
-                .toArray();
-
-                if(user[0]) {
-                    output_cache = user[0];
-
-                    let profiles = await db
-                    .collection('profileStore')
+                } else {
+                    let output_cache = {
+                        uuid: favorite
+                    };
+                    
+                    const user = await db
+                    .collection('usernames')
                     .find( { uuid: favorite } )
                     .toArray();
-
-                    if(profiles[0]) {
-                        const profile = profiles[0];
-                        output_cache.last_updated = profile.last_save;
-                    }else output_cache.error = "Profile doesn't exist.";
-                }else output_cache.error = "User doesn't exist.";
-                
-                await db.collection('favoriteCache').insertOne(output_cache);
-                output.favorites[i] = output_cache;
+    
+                    if(user[0]) {
+                        output_cache = user[0];
+    
+                        let profiles = await db
+                        .collection('profileStore')
+                        .find( { uuid: favorite } )
+                        .toArray();
+    
+                        if(profiles[0]) {
+                            const profile = profiles[0];
+                            output_cache.last_updated = profile.last_save;
+                        }else output_cache.error = "Profile doesn't exist.";
+                    }else output_cache.error = "User doesn't exist.";
+                    
+                    await db.collection('favoriteCache').insertOne(output_cache);
+                    output.favorites[i] = output_cache;
+                }
             }
         }
 
@@ -375,8 +374,13 @@ Disallow: /item /head /leather /resources
     });
 
     app.all('/', async (req, res, next) => {
-        const favorite = req.cookies.favorite || false;
-        res.render('index', { error: null, player: null, extra: await getExtra('index', favorite), helper, page: 'index' });
+        try {
+            const favorite = JSON.parse(req.cookies.favorite);
+            res.render('index', { error: null, player: null, extra: await getExtra('index', favorite), helper, page: 'index' });
+        } catch {
+            res.render('index', { error: null, player: null, extra: await getExtra('index'), helper, page: 'index' });
+        }
+        
     });
 
     app.all('*', async (req, res, next) => {

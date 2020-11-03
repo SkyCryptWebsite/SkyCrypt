@@ -60,7 +60,7 @@
             </div>
         </div>
         <div id="top_profiles_box_wrapper">
-            <% if(extra.favorites.length > 0){ 
+            <% if(extra.favorites){ 
             for(let profile of extra.favorites){
             if(profile.error) continue;
             const lastUpdated = profile.last_updated;
