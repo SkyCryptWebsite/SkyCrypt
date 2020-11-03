@@ -1451,11 +1451,13 @@ a.additional-player-stat:hover{
 }
 
 #nav_bar{
-    position: absolute;
+    position: sticky;
+    top: 48px;
     width: 100%;
     text-align: center;
     padding-bottom: 6px;
     white-space: nowrap;
+    z-index: 25;
 }
 
 #nav_bar_background{
@@ -1486,14 +1488,7 @@ a.additional-player-stat:hover{
     z-index: 3;
 }
 
-#nav_bar.nav-bar-stickied{
-    z-index: 25;
-    width: auto !important;
-    left: 0;
-    right: 0;
-}
-
-#nav_bar.nav-bar-stickied #nav_bar_background{
+#nav_bar.stuck #nav_bar_background{
     background-color: rgba(20,20,20,0.9);
 }
 
@@ -3329,12 +3324,6 @@ body {
         margin-right: -10px;
     }
 
-    #nav_bar.nav-bar-stickied{
-        left: auto;
-        right: auto;
-        width: 1120px !important;
-    }
-
     #skin_display{
         visibility: hidden;
     }
@@ -3389,10 +3378,6 @@ body {
 
     #skill_levels_container .skill{
         width: calc((100vw - 410px) / 2 - 60px);
-    }
-
-    #nav_bar.nav-bar-stickied{
-        width: 100vw !important;
     }
 
     .stat-fairy-souls{

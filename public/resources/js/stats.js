@@ -413,7 +413,6 @@ document.addEventListener('DOMContentLoaded', function(){
                 skinViewer.setSize(playerModel.offsetHeight / 2, playerModel.offsetHeight);
         }
 
-        navBarSticky = new Sticky('#nav_bar');
         updateStatsPositions();
 
         let element = document.querySelector('.rich-item.sticky-stats');
@@ -885,14 +884,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
     let positionY = {};
 
-    let navBarSticky = new Sticky('#nav_bar');
-
     function updateStatsPositions(){
         [].forEach.call(statContainers, function(statContainer){
             positionY[statContainer.getAttribute('data-stat')] = statContainer.offsetTop;
         });
-
-        navBarSticky = new Sticky('#nav_bar');
     }
 
     updateStatsPositions();
@@ -1081,9 +1076,17 @@ document.addEventListener('DOMContentLoaded', function(){
 
     window.addEventListener('resize', resize);
 
-    window.addEventListener('scroll', function(){
+    const navBar = document.querySelector('#nav_bar')
+    function onScroll() {
+        if(navBar.getBoundingClientRect().top == 48) {
+            navBar.classList.add('stuck')
+        } else {
+            navBar.classList.remove('stuck')
+        }
 
-    });
+    }
+    onScroll();
+    window.addEventListener('scroll', onScroll);
 
     setTimeout(resize, 1000);
 });
