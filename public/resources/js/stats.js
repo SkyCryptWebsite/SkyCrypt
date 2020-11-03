@@ -1078,12 +1078,11 @@ document.addEventListener('DOMContentLoaded', function(){
 
     const navBar = document.querySelector('#nav_bar')
     function onScroll() {
-        if(navBar.getBoundingClientRect().top == 48) {
+        if(navBar.getBoundingClientRect().top <= 48) {
             navBar.classList.add('stuck')
         } else {
             navBar.classList.remove('stuck')
         }
-
     }
     onScroll();
     window.addEventListener('scroll', onScroll);
