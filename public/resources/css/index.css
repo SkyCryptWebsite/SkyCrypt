@@ -2433,7 +2433,7 @@ a.additional-player-stat:hover{
 }
 
 .icon-google-sheets{
-    background-image: url(/resources/img/icons/google-sheets.png);
+    background-image: url(/resources/img/icons/google-sheets.svg);
 }
 
 .narrow-info-container{
@@ -3717,10 +3717,6 @@ body {
         width: calc(100vw - 30px);
     }
 
-    #enter_player_box_wrapper, #error_box_wrapper{
-        backdrop-filter: blur(15px);
-    }
-
     #enter_player_box_wrapper{
         height: 205px;
         font-size: 12px;
@@ -3740,7 +3736,6 @@ body {
 
     .top-profile{
         width: 100%;
-        backdrop-filter: blur(15px);
     }
 
     #themes_box{

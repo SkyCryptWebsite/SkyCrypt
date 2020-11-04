@@ -4,7 +4,7 @@ const slayerOrder = ['zombie', 'spider', 'wolf'];
 
 const allItems = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory);
 
-const UNIQUE_ACCESSORIES = 58;
+const UNIQUE_ACCESSORIES = 59;
 
 const statSuffix = {
     health: '',
@@ -839,13 +839,16 @@ const inventorySlot = item => { %>
     </div>
 <% };
 
-const skill_component = (skill, icon, level) => { %>
+const skill_component = (skill, icon, level, boosts = null) => { %>
     <div class="skill xp-skill <%= level.level == level.maxLevel ? 'maxed-skill' : ''%>">
-        <% if(icon.startsWith('head-')){ %>
-            <div class="skill-icon"><div class="head-icon" style="background-image:url(/head/<%= icon.substring(5) %>)"></div><% if(level.level == level.maxLevel){ %><div class="piece-shine"></div><% } %></div>
-        <% }else{ %>
-            <div class="skill-icon"><div class="item-icon <%= icon %>"></div><% if(level.level == level.maxLevel){ %><div class="piece-shine"></div><% } %></div>
-        <% } %>
+        <div class="skill-icon">
+            <% if(icon.startsWith('head-')){ %>
+                <div class="head-icon" style="background-image:url(/head/<%= icon.substring(5) %>)"></div>
+            <% }else{ %>
+                <div class="item-icon <%= icon %>"></div>
+            <% } %>
+            <% if(level.level == level.maxLevel){ %><div class="piece-shine"></div><% } %>
+        </div>
         <div class="skill-name"><%= skill %> <span class="skill-level"><%= level.level >= 0 ? level.level : '?' %></span></div>
         <div class="skill-bar" data-skill="<%= skill %>">
             <div class="skill-progress-bar" style="width: <%= level.level == level.maxLevel ? 100 : level.progress * 100 %>%"></div>
@@ -1025,10 +1028,11 @@ twitterDescription += '. Click to view more stats!'
             <div tabindex="1" id="stats_for_player">
                 <%- calculated.rank_prefix %>
                 <%= calculated.display_name %>
-                <% if(calculated.display_emoji){ %><%- extra.twemoji.parse(calculated.display_emoji) %><% } %>
+                <% if(calculated.display_emoji_img){ %><img class="emoji" draggable="false" src="<%= calculated.display_emoji_img %>">
+                <% }else if(calculated.display_emoji){ %><%- extra.twemoji.parse(calculated.display_emoji) %><% } %>
                 <div id="other_players">
                     <% calculated.members.forEach(member => { %>
-                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"><%= member.display_name %><% if(member.emoji){ %> <%- extra.twemoji.parse(member.emoji) %><% } %><div class="goto-last-played"><%= 'last_updated' in member ? member.last_updated.text : '' %></div></a>
+                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"><%= member.display_name %><% if(member.emojiImg){ %><img class="emoji" draggable="false" src="<%= member.emojiImg %>"><% }else if(member.emoji){ %> <%- extra.twemoji.parse(member.emoji) %><% } %><div class="goto-last-played"><%= 'last_updated' in member ? member.last_updated.text : '' %></div></a>
                     <% }); %>
                 </div>
             </div><span class="text-on"> on </span><div tabindex="2" id="stats_for_profile">
@@ -1735,11 +1739,18 @@ twitterDescription += '. Click to view more stats!'
 
                     <p class="stat-raw-values">
                         <%= skill_component('Catacombs', 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793', calculated.dungeons.catacombs.level) %><br>
+                        <span class="stat-name">Dungeon Item Boost: </span><span class="stat-value"><%= calculated.dungeons.catacombs.bonuses.item_boost %>%</span><br>
                     </p>
 
                     <p class="stat-raw-values">
                         <span class="stat-name">Highest Floor Beaten: </span><span class="stat-value"><%= helper.titleCase(calculated.dungeons.catacombs.highest_floor.replace("_", " ")) %></span><br>
-                        <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span>
+                        <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span><br>
+                        <span>
+                            <% max = calculated.dungeons.journals.maxed ? "golden-text" : "" %>
+                            <span class="stat-name <%= max %>">Journals Completed: </span>
+                            <span class="stat-value <%= max %>"><%= calculated.dungeons.journals.journals_completed %></span>
+                            <span class="grey-text"> (<%= calculated.dungeons.journals.pages_collected %>/<%= calculated.dungeons.journals.total_pages %>)</span>
+                        </span>
                     </p>
 
                     <div class="floor-containers">
@@ -2393,13 +2404,6 @@ twitterDescription += '. Click to view more stats!'
     <script>
         let items = <%- JSON.stringify(items) %>;
         let calculated = <%- JSON.stringify(calculated) %>;
-
-        /* window.onload = function() {
-            new Elevator({
-               mainAudio: '/misc/music/elevator.mp3',
-               endAudio: '/misc/music/ding.mp3'
-            });
-        } */
     </script>
 </body>
 </html>
