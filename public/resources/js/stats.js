@@ -863,8 +863,9 @@ document.addEventListener('DOMContentLoaded', function(){
             if(uuid == "0c0b857f415943248f772164bf76795c"){
                 notification.setContent("No");
             }else{
+                let cookieArray
                 try {
-                    let cookieArray = JSON.parse(getCookie("favorite"));
+                    cookieArray = JSON.parse(getCookie("favorite"));
                     if(cookieArray.includes(uuid)){
                         cookieArray.splice(cookieArray.indexOf(uuid), 1);
 
@@ -875,7 +876,7 @@ document.addEventListener('DOMContentLoaded', function(){
                         notification.setContent("Added favorite!");
                     }
                 } catch {
-                    let cookieArray = uuid ? [uuid] : [];
+                    cookieArray = uuid ? [uuid] : [];
                     let oldCookie = getCookie("favorite");
                     if (oldCookie.match(/^[1-9a-e]*$/) && !cookieArray.includes(oldCookie)) {
                         cookieArray.unshift(oldCookie);
