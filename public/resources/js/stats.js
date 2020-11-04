@@ -897,7 +897,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     let cookieArray = uuid ? [uuid] : [];
                     let oldCookie = getCookie("favorite");
                     if (oldCookie.match(/^[1-9a-e]*$/) && !cookieArray.includes(oldCookie)) {
-                        cookieArray.push(oldCookie);
+                        cookieArray.unshift(oldCookie);
                     }
                     setCookie("favorite", JSON.stringify(cookieArray), 365);
 
