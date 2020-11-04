@@ -871,7 +871,9 @@ document.addEventListener('DOMContentLoaded', function(){
                 try {
                     let cookieArray = JSON.parse(getCookie("favorite"));
                     if(cookieArray.includes(uuid)){
-                        // TODO actually remove the favorite
+                        cookieArray.splice(cookieArray.indexOf(uuid), 1);
+
+                        setCookie("favorite", JSON.stringify(cookieArray), 365);
 
                         notification.setContent("Removed favorite!");
                         notification.show();
