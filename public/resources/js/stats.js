@@ -871,8 +871,9 @@ document.addEventListener('DOMContentLoaded', function(){
                 try {
                     let cookieArray = JSON.parse(getCookie("favorite"));
                     if(cookieArray.includes(uuid)){
-                        notification.setContent("That person has already been favorited!");
+                        // TODO actually remove the favorite
 
+                        notification.setContent("Removed favorite!");
                         notification.show();
 
                         setTimeout(function(){
@@ -883,7 +884,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
                         setCookie("favorite", JSON.stringify(cookieArray), 365);
 
-                        notification.setContent("Set favorite!");
+                        notification.setContent("Added favorite!");
                         notification.show();
 
                         setTimeout(function(){
@@ -898,7 +899,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     }
                     setCookie("favorite", JSON.stringify(cookieArray), 365);
 
-                    notification.setContent("Set favorite using new system!");
+                    notification.setContent("Added favorite to new system!");
                     
                     notification.show();
 
