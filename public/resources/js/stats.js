@@ -892,6 +892,10 @@ document.addEventListener('DOMContentLoaded', function(){
                     }
                 } catch {
                     let cookieArray = uuid ? [uuid] : [];
+                    let oldCookie = getCookie("favorite");
+                    if (oldCookie.match(/^[1-9a-e]*$/) && !cookieArray.includes(oldCookie)) {
+                        cookieArray.push(oldCookie);
+                    }
                     setCookie("favorite", JSON.stringify(cookieArray), 365);
 
                     notification.setContent("Set favorite using new system!");
