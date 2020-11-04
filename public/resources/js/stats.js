@@ -862,36 +862,17 @@ document.addEventListener('DOMContentLoaded', function(){
             let uuid = element.getAttribute("data-username");
             if(uuid == "0c0b857f415943248f772164bf76795c"){
                 notification.setContent("No");
-                notification.show();
-
-                setTimeout(function(){
-                    notification.hide();
-                }, 1500);
             }else{
                 try {
                     let cookieArray = JSON.parse(getCookie("favorite"));
                     if(cookieArray.includes(uuid)){
                         cookieArray.splice(cookieArray.indexOf(uuid), 1);
 
-                        setCookie("favorite", JSON.stringify(cookieArray), 365);
-
                         notification.setContent("Removed favorite!");
-                        notification.show();
-
-                        setTimeout(function(){
-                            notification.hide();
-                        }, 1500);
                     }else{
                         cookieArray.push(uuid);
 
-                        setCookie("favorite", JSON.stringify(cookieArray), 365);
-
                         notification.setContent("Added favorite!");
-                        notification.show();
-
-                        setTimeout(function(){
-                            notification.hide();
-                        }, 1500);
                     }
                 } catch {
                     let cookieArray = uuid ? [uuid] : [];
@@ -899,17 +880,16 @@ document.addEventListener('DOMContentLoaded', function(){
                     if (oldCookie.match(/^[1-9a-e]*$/) && !cookieArray.includes(oldCookie)) {
                         cookieArray.unshift(oldCookie);
                     }
-                    setCookie("favorite", JSON.stringify(cookieArray), 365);
 
                     notification.setContent("Added favorite to new system!");
-                    
-                    notification.show();
-
-                    setTimeout(function(){
-                        notification.hide();
-                    }, 1500);
                 }
+                setCookie("favorite", JSON.stringify(cookieArray), 365);
             }
+            notification.show();
+
+            setTimeout(function(){
+                notification.hide();
+            }, 1500);
         });
     });
 
