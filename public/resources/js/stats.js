@@ -851,6 +851,18 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
+    function checkFavorite() {
+        const element = document.querySelector('.add-favorite');
+        let favorited;
+        try {
+            favorited = JSON.parse(getCookie("favorite")).includes(element.getAttribute("data-username"));
+        } catch {
+            favorited = false
+        }
+        element.setAttribute('aria-checked', favorited);
+    }
+    checkFavorite();
+
     [].forEach.call(document.querySelectorAll('.add-favorite'), function(e){
         let element = e;
 
@@ -885,6 +897,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     notification.setContent("Added favorite to new system!");
                 }
                 setCookie("favorite", JSON.stringify(cookieArray), 365);
+                checkFavorite();
             }
             notification.show();
 
