@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 36">
+    <defs>
+        <clipPath id="corner" x="0" y="0" width="26" height="36">
+            <polygon points="0,0 0,36 26,36 26,9 17,0" />
+        </clipPath>
+    </defs>
+    <g>
+        <rect width="26" height="36" rx="2.5" fill="#34a853" clip-path="url(#corner)" />
+        <polygon points="17,9 26,9 17,0" fill="#197f38" />
+        <path fill="white" d="M 5 14 v 12 h 16 v -12 z
+                                m 2 2 v 3 h 5 v -3 z
+                                m 7 0 v 3 h 5 v -3 z
+                                m 0 5 v 3 h 5 v -3 z
+                                m -7 0 v 3 h 5 v -3 z" fill-rule="evenodd"/>
+    </g>
+</svg>
