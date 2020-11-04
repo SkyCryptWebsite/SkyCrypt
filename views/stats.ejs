@@ -4,7 +4,7 @@ const slayerOrder = ['zombie', 'spider', 'wolf'];
 
 const allItems = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory);
 
-const UNIQUE_ACCESSORIES = 56;
+const UNIQUE_ACCESSORIES = 59;
 
 const statSuffix = {
     health: '',
@@ -33,7 +33,8 @@ const statShort = {
     sea_creature_chance: 'ScC',
     magic_find: 'MF',
     pet_luck: 'PL',
-    bonus_attack_speed: 'Atk'
+    bonus_attack_speed: 'Atk',
+    ferocity: 'Frc'
 };
 
 const skillItems = {
@@ -838,9 +839,16 @@ const inventorySlot = item => { %>
     </div>
 <% };
 
-const skill_component = (skill, icon, level) => { %>
+const skill_component = (skill, icon, level, boosts = null) => { %>
     <div class="skill xp-skill <%= level.level == level.maxLevel ? 'maxed-skill' : ''%>">
-        <div class="skill-icon"><div class="item-icon <%= icon %>"></div><% if(level.level == level.maxLevel){ %><div class="piece-shine"></div><% } %></div>
+        <div class="skill-icon">
+            <% if(icon.startsWith('head-')){ %>
+                <div class="head-icon" style="background-image:url(/head/<%= icon.substring(5) %>)"></div>
+            <% }else{ %>
+                <div class="item-icon <%= icon %>"></div>
+            <% } %>
+            <% if(level.level == level.maxLevel){ %><div class="piece-shine"></div><% } %>
+        </div>
         <div class="skill-name"><%= skill %> <span class="skill-level"><%= level.level >= 0 ? level.level : '?' %></span></div>
         <div class="skill-bar" data-skill="<%= skill %>">
             <div class="skill-progress-bar" style="width: <%= level.level == level.maxLevel ? 100 : level.progress * 100 %>%"></div>
@@ -1020,18 +1028,20 @@ twitterDescription += '. Click to view more stats!'
             <div tabindex="1" id="stats_for_player">
                 <%- calculated.rank_prefix %>
                 <%= calculated.display_name %>
-                <% if(calculated.display_emoji){ %><%- extra.twemoji.parse(calculated.display_emoji) %><% } %>
+                <% if(calculated.display_emoji_img){ %><img class="emoji" draggable="false" src="<%= calculated.display_emoji_img %>">
+                <% }else if(calculated.display_emoji){ %><%- extra.twemoji.parse(calculated.display_emoji) %><% } %>
                 <div id="other_players">
                     <% calculated.members.forEach(member => { %>
-                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"><%= member.display_name %><% if(member.emoji){ %> <%- extra.twemoji.parse(member.emoji) %><% } %><div class="goto-last-played"><%= 'last_updated' in member ? member.last_updated.text : '' %></div></a>
+                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"><%= member.display_name %><% if(member.emojiImg){ %><img class="emoji" draggable="false" src="<%= member.emojiImg %>"><% }else if(member.emoji){ %> <%- extra.twemoji.parse(member.emoji) %><% } %><div class="goto-last-played"><%= 'last_updated' in member ? member.last_updated.text : '' %></div></a>
                     <% }); %>
                 </div>
             </div><span class="text-on"> on </span><div tabindex="2" id="stats_for_profile">
                 <%= calculated.profile.cute_name %>
+                <% if(calculated.profile.game_mode == 'ironman'){ %><img src="/resources/img/icons/ironman.png" class="emoji"><% } %>
                 <div id="other_profiles">
                     <% for(let profile_id in calculated.profiles){ %>
                         <% let _profile = calculated.profiles[profile_id]; %>
-                        <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"><%= _profile.cute_name %><div class="goto-last-played"><%= 'last_updated' in _profile ? _profile.last_updated.text : '' %></div></a>
+                        <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"><%= _profile.cute_name %><% if(_profile.game_mode == 'ironman'){ %> <img src="/resources/img/icons/ironman.png" class="emoji"><% } %><div class="goto-last-played"><%= 'last_updated' in _profile ? _profile.last_updated.text : '' %></div></a>
                     <% } %>
                 </div>
             </div>
@@ -1049,6 +1059,7 @@ twitterDescription += '. Click to view more stats!'
                 ">Views: <%= helper.formatNumber(calculated.views.total, true) %></div>
 
                 <% */ %>
+                <div class="additional-player-stat external-icon add-favorite" data-username="<%= calculated.uuid %>"></div>
                 <% if(calculated.guild){ %><div class="additional-player-stat interactive-tooltip" data-tippy-content="
                 <% if(calculated.guild.rank){ %><span class='stat-name'>Rank: </span><span class='stat-value'><%= calculated.guild.rank %></span><br><br><% } %>
                 <span class='stat-name'>Guild Master: </span><a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %></a><br>
@@ -1165,6 +1176,23 @@ twitterDescription += '. Click to view more stats!'
                     name: 'pet_luck',
                     baseExplanation: "Increased by leveling your Taming Skill."
                 }); %>
+
+                <%- stat_component({
+                    name: 'ferocity',
+                    prettyName: 'Ferocity',
+                    baseExplanation: null,
+                    extraStats: [
+                        {
+                            stat: 'Base Extra Strikes',
+                            value: (stats.ferocity / 100).toFixed(0),
+                        },
+                        {
+                            stat: 'Chance for 1 more',
+                            value: stats.ferocity % 100,
+                            suffix: '%'
+                        }
+                    ]
+                }); %>
                 <!--<div data-stat="fairy_souls" class="basic-stat stat-fairy-souls">
                     <span data-tippy-content="
                         Collect Fairy Souls to gain Health, Defense, Strength and Speed.</div>
@@ -1253,7 +1281,7 @@ twitterDescription += '. Click to view more stats!'
 
             const localizedItems = allItems.some(a => a.localized === true);
         %>
-        <% if(notAvailable.length > 0 || localizedItems){ %>
+        <% if(notAvailable.length > 0 || localizedItems || calculated.profile.game_mode == 'ironman'){ %>
             <div class="stat-container info-container-wrapper">
                 <div class="info-container">
                     <div class="info-header">Notice</div>
@@ -1265,6 +1293,10 @@ twitterDescription += '. Click to view more stats!'
                         This profile has non-english item data caused by the player's Hypixel language settings. Localization is not supported and some features of the site might not be working correctly.<br><br>
                         This can be fixed by changing the language back to English in your ingame player settings, alternatively wait for Hypixel to change API behavior (<a target="_blank" href="https://github.com/HypixelDev/PublicAPI/issues/290">Related GitHub Issue</a>).<br><br>
                         Please don't report bugs until this is resolved.
+                    <% } %>
+                    <% if(calculated.profile.game_mode == 'ironman'){ %>
+                        <% if(notAvailable.length > 0){ %><br><br><% } %>
+                        This is an <strong>Ironman</strong> profile. The player cannot use the Auction House, Bazaar, Trades, or pick up drops from other players.
                     <% } %>
                 </div>
             </div>
@@ -1687,7 +1719,7 @@ twitterDescription += '. Click to view more stats!'
             <div class="stat-content">
             <% if (Object.keys(calculated.dungeons).length === 0) { %>
                 <p class="stat-raw-values">
-                    <%= calculated.display_name %> didn't enter Catacombs yet.
+                    <%= calculated.display_name %> hasn't entered the Catacombs yet.
                 </p>
             <% } else { %>
                 <% if (calculated.dungeons.used_classes) { %>
@@ -1706,12 +1738,19 @@ twitterDescription += '. Click to view more stats!'
                     <p class="stat-sub-header">Catacombs</p>
 
                     <p class="stat-raw-values">
-                        <%= skill_component('Catacombs', 'icon-397_0', calculated.dungeons.catacombs.level) %><br>
+                        <%= skill_component('Catacombs', 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793', calculated.dungeons.catacombs.level) %><br>
+                        <span class="stat-name">Dungeon Item Boost: </span><span class="stat-value"><%= calculated.dungeons.catacombs.bonuses.item_boost %>%</span><br>
                     </p>
 
                     <p class="stat-raw-values">
                         <span class="stat-name">Highest Floor Beaten: </span><span class="stat-value"><%= helper.titleCase(calculated.dungeons.catacombs.highest_floor.replace("_", " ")) %></span><br>
-                        <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span>
+                        <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span><br>
+                        <span>
+                            <% max = calculated.dungeons.journals.maxed ? "golden-text" : "" %>
+                            <span class="stat-name <%= max %>">Journals Completed: </span>
+                            <span class="stat-value <%= max %>"><%= calculated.dungeons.journals.journals_completed %></span>
+                            <span class="grey-text"> (<%= calculated.dungeons.journals.pages_collected %>/<%= calculated.dungeons.journals.total_pages %>)</span>
+                        </span>
                     </p>
 
                     <div class="floor-containers">
@@ -1771,7 +1810,7 @@ twitterDescription += '. Click to view more stats!'
                     <br>
                 <% } else { %>
                     <p class="stat-raw-values">
-                        <%= calculated.display_name %> didn't enter Catacombs yet.
+                        <%= calculated.display_name %> hasn't entered the Catacombs yet.
                     </p>
                 <% } %>
 
@@ -1787,8 +1826,13 @@ twitterDescription += '. Click to view more stats!'
                             claimedTooltip += '<span class="stat-name">Claimed items:</span>';
 
                             for(let item in collection.claimed)
-                                claimedTooltip += `<br><span class="stat-value">${collection.claimed[item]}</span>`;
+                                claimedTooltip += `<br><span class="stat-value">- ${collection.claimed[item]}</span>`;
+
+                            claimedTooltip += '<br>';
                         }
+
+                        if (collection.unclaimed > 0) 
+                            claimedTooltip += `<span class="stat-name">Unclaimed items: </span><span class="stat-value">${collection.unclaimed}</span>`;
                     %>
                     <div class="boss-collection" <% if (claimedTooltip != "") { %>data-tippy-content="<%= claimedTooltip %>"<% } %>>
                         <div class="boss-collection-icon" style="background-image:url(/head/<%= collection.texture %>)"></div>
@@ -2339,6 +2383,18 @@ twitterDescription += '. Click to view more stats!'
                             <% } %>
                         </p>
                     <% } %>
+
+                    <% if('claimed_items' in calculated.misc){ %>
+                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-339_0"></div></div><span>claimed items</span></div>
+                        <p class="stat-raw-values">
+                            <% for(const key in calculated.misc.claimed_items){ 
+                                let timestamp = calculated.misc.claimed_items[key];
+                            %>
+                            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
+                            <span class="stat-value" data-tippy-content='Claimed on <%= moment(timestamp).format('D MMMM YYYY HH:mm') %>'><%= moment(timestamp).fromNow() %></span><br>
+                            <% } %>
+                        </p>
+                    <% } %>
                 </div>
             </div>
         <% } %>
@@ -2348,13 +2404,6 @@ twitterDescription += '. Click to view more stats!'
     <script>
         let items = <%- JSON.stringify(items) %>;
         let calculated = <%- JSON.stringify(calculated) %>;
-
-        window.onload = function() {
-            new Elevator({
-               mainAudio: '/misc/music/elevator.mp3',
-               endAudio: '/misc/music/ding.mp3'
-            });
-        }
     </script>
 </body>
 </html>

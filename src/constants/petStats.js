@@ -25,7 +25,8 @@ const symbols = {
 	magic_find: "✯",
 	pet_luck: "♣",
 	attack_speed: "⚔️",
-	true_defense: "❂"
+	true_defense: "❂",
+	ferocity: "⫽"
 }
 
 class Pet {
@@ -81,6 +82,9 @@ class Pet {
 					break;
 				case "damage":
 					list.push(`§7Damage: ${formatStat(newStats[stat])}`);
+					break;
+				case "ferocity":
+					list.push(`§7Ferocity: ${formatStat(newStats[stat])}`);
 					break;
 			}
 		}
@@ -954,7 +958,7 @@ class Hound extends Pet {
 	get stats() {
 		return {
 			strength: this.level * 0.4,
-			attack_speed: this.level * 0.15
+			bonus_attack_speed: this.level * 0.15
 		};
 	}
 
@@ -1389,7 +1393,8 @@ class Tiger extends Pet {
 		return {
 			strength: 5 + this.level * 0.1,
 			crit_chance: this.level * 0.05,
-			crit_damage: this.level * 0.5
+			crit_damage: this.level * 0.5,
+			ferocity: this.level * 0.1
 		};
 	}
 
@@ -1403,10 +1408,10 @@ class Tiger extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.2 : this.rarity > 0 ? 0.1 : 0.05;
+		let mult = this.rarity > 2 ? 1 : this.rarity > 0 ? 0.5 : 0.2;
 		return {
 			name: "§6Merciless Swipe",
-			desc: [`§7Attacks have a §a${round(this.level * mult, 1)}% §7chance to strike twice`]
+			desc: [`§7Gain 	§c+${round(this.level * mult, 1)}% ${symbols.ferocity} Ferocity.`]
 		};
 	}
 
@@ -1911,6 +1916,48 @@ class FlyingFish extends Pet {
 	}
 }
 
+class Megalodon extends Pet{
+	get stats() {
+		return {
+			strength: this.level * 0.5,
+			magic_find: this.level * 0.1
+		};
+	}
+
+	get abilities() {
+		let list = [this.first];
+		if (this.rarity > 1)
+			list.push(this.second);
+		if (this.rarity > 3)
+			list.push(this.third);
+		return list;
+	}
+
+	get first() {
+		let mult = 0.25;
+		return {
+			name: "§6Blood Scent",
+			desc: [`§7Deal up to §c+${round(mult*this.level,1)}% ${symbols.strength} §7Damage based on the enemy's missing health`]
+		};
+	}
+
+	get second() {
+		let mult = 0.2;
+		return {
+			name: "§6Enhanced scales",
+			desc: [`§7Increases the stats of Shark Armor by §a${round(mult*this.level,1)}%`]
+		};
+	}
+
+	get third() {
+		let mult = 0.5;
+		return {
+			name: "§6Feeding frenzy",
+			desc: [`§7On kill gain §c${round(mult*this.level,1)}${symbols.strength} Damage §7and §f${symbols.speed} Speed §7for 5 seconds`]
+		};
+	}
+}
+
 class Squid extends Pet {
 	get stats() {
 		return {
@@ -1950,48 +1997,6 @@ class Squid extends Pet {
 		return {
 			name: "§6Fishing Exp Boost",
 			desc: [`§7Boosts your Fishing exp by §a${round(this.level * mult, 1)}%`]
-		};
-	}
-}
-
-class Megalodon extends Pet{
-	get stats() {
-		return {
-			strength: this.level * 0.5,
-			magic_find: this.level * 0.1
-		};
-	}
-
-	get abilities() {
-		let list = [this.first];
-		if (this.rarity > 1)
-			list.push(this.second);
-		if (this.rarity > 3)
-			list.push(this.third);
-		return list;
-	}
-
-	get first() {
-		let mult = 0.25;
-		return {
-			name: "§6Blood Scent",
-			desc: [`§7Deal up to §c+${round(mult*this.level,1)}% ${symbols.strength} §7Damage based on the enemy's missing health`]
-		};
-	}
-
-	get second() {
-		let mult = 0.2;
-		return {
-			name: "§6Enhanced scales",
-			desc: [`§7Increases the stats of Shark Armor by §a${mult*this.level}%`]
-		};
-	}
-
-	get third() {
-		let mult = 0.5;
-		return {
-			name: "§6Feeding frenzy",
-			desc: [`§7On kill gain §c${mult * this.level}${symbols.strength} Damage §7and §f${symbols.speed} Speed §7for 5 seconds`]
 		};
 	}
 }
@@ -2257,8 +2262,8 @@ module.exports = {
 		'Blue Whale': BlueWhale,
 		'Dolphin': Dolphin,
 		'Flying Fish': FlyingFish,
-		'Squid': Squid,
 		'Megalodon': Megalodon,
+		'Squid': Squid,
 		//Alchemy
 		'Jellyfish': Jellyfish,
 		'Parrot': Parrot,
