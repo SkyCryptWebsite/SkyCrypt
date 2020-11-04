@@ -26,7 +26,7 @@
     <div id="info_box_content">
         <p>The SkyCrypt project is maintained by boblovespi, FantasmicGalaxy, MartinNemi03, metalcupcake5 and Shiiyu. It is an open-source project. </p>
         <p>You can report bugs, suggest features, or contribute to the code on <a class="link link-github" href="https://github.com/SkyCryptWebsite/SkyCrypt" target="_blank">GitHub</a>. It would be much appreciated!</p>
-        <p>Chat: <a class="link link-discord" href="https://discord.gg/Dk25bnB">discord.gg/Dk25bnB</a></p>
+        <p>Chat: <a class="link link-discord" href="https://discord.gg/qZacyG6">discord.gg/qZacyG6</a></p>
         <p>The original project, <a href="https://sky.lea.moe">sky.lea.moe</a>, was orginally created by <a class="link link-twitter" href="https://twitter.com/LeaPhant" target="_blank">LeaPhant</a>. Thanks for all of what you've done Lea!</p>
         <h4>Used Resources</h4>
         <ul>
@@ -44,8 +44,8 @@
 </div>
 <div id="themes_box" class="themes-closed">
     <div onclick="toggleThemes()" id="themes_close"></div>
-    <% for(const theme in extra.themes){ 
-        if(extra.themes[theme].hidden) continue; %> 
+    <% for(const theme in extra.themes){
+        if(extra.themes[theme].hidden) continue; %>
     <div class="theme">
         <% let icon = extra.themes[theme].logo.replace("../", "https://sky.shiiyu.moe/resources/"); %>
         <img class="theme-icon" src="<%= icon %>">
@@ -53,7 +53,7 @@
         <div class="theme-author">by <span><%= extra.themes[theme].author %></span></div>
         <div class="switch_themes_button" id="<%= theme %>-theme" onclick="switchTheme('<%= theme %>')">Switch</div>
     </div>
-    <% } %> 
+    <% } %>
 </div>
 <div id="packs_box" class="packs-closed">
     <div onclick="togglePacks()" id="packs_close"></div>

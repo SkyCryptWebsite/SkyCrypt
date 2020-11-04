@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', function(){
+    function setCookie(name,value,days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; SameSite=Lax; path=/";
+    }
+    
     let userAgent = window.navigator.userAgent;
     let tippyInstance;
 
@@ -834,6 +844,33 @@ document.addEventListener('DOMContentLoaded', function(){
                     copyNotification.hide();
                 }, 1500);
             }, function(){});
+        });
+    });
+
+    [].forEach.call(document.querySelectorAll('.add-favorite'), function(e){
+        let element = e;
+
+        let setNotification = tippy(element, {
+            content: 'Set favorite!',
+            trigger: 'manual'
+        });
+
+        element.addEventListener('click', function(){
+            if(element.getAttribute("data-username") == "0c0b857f415943248f772164bf76795c"){
+                setNotification.show();
+
+                setTimeout(function(){
+                    setNotification.hide();
+                }, 1500);
+            }else{
+                setCookie("favorite", element.getAttribute("data-username"), 365);
+                
+                setNotification.show();
+
+                setTimeout(function(){
+                    setNotification.hide();
+                }, 1500);
+            }
         });
     });
 
