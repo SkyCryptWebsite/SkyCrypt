@@ -860,7 +860,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         element.addEventListener('click', async function(){
             let uuid = element.getAttribute("data-username");
-            if(element.getAttribute("data-username") == "0c0b857f415943248f772164bf76795c"){
+            if(uuid == "0c0b857f415943248f772164bf76795c"){
                 notification.setContent("No");
                 notification.show();
 
