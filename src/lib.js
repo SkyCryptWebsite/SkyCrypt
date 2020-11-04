@@ -1691,6 +1691,9 @@ module.exports = {
 
             if('emoji' in userInfo)
                 output.display_emoji = userInfo.emoji;
+            
+            if('emojiImg' in userInfo)
+                output.display_emoji_img = userInfo.emojiImg;
             if (userInfo.username == "jjww2") {
                 output.display_emoji = randomEmoji();
             }
@@ -2287,6 +2290,26 @@ module.exports = {
                 object.display_name = "Hegemony Artifact"
                 object.rarity = "legendary"
             }
+            if(talisman.startsWith('BAT_PERSON_TALISMAN')){
+                object.texture_path = "/head/b841a49b199a59c431bf3fc3783f6b6545ce78c38042617f66ebd87cdd548e8c"
+                object.display_name = "Bat Person Talisman"
+                object.rarity = "common"
+            }
+            if(talisman.startsWith("BAT_PERSON_RING")){
+                object.texture_path = "/head/b4451ecf2584a36de4297031c6d852977d3e249e85a3f0add967fcd7d6bde953"
+                object.display_name = "Bat Person Ring"
+                object.rarity = "uncommon"
+            }
+            if(talisman.startsWith("BAT_PERSON_ARTIFACT")){
+                object.texture_path = "/head/c4444c3982720b30938f504c4374232b11a4f6f56cd57c973d8abb07fd0dcff7"
+                object.display_name = "Bat Person Artifact"
+                object.rarity = "rare"
+            }
+            if(talisman.startsWith('CANDY_RELIC')){
+                object.texture_path = "/head/39668767f1141835e2c49ad2b415598f1b166be9173902a0257e77704f913e1f"
+                object.display_name = "Candy Relic"
+                object.rarity = "legendary"
+            }
             if(object.name == null){
                 object.name = talisman;
             }
@@ -2376,6 +2399,7 @@ module.exports = {
 
         const dungeons_data = constants.dungeons;
 
+        // Main Dungeons Data
         for(const type of Object.keys(dungeons.dungeon_types)){
             const dungeon = dungeons.dungeon_types[type];
             if (dungeon == null || Object.keys(dungeon).length === 0) {
@@ -2394,7 +2418,7 @@ module.exports = {
                         stats: {}
                     };
 
-                    let id = `${type}_${floor}`;
+                    let id = `${type}_${floor}`; // Floor ID
                     if(dungeons_data.floors[id]){
                         if(dungeons_data.floors[id].name) 
                             floors[floor].name = dungeons_data.floors[id].name;
@@ -2413,8 +2437,10 @@ module.exports = {
                 }
             }
 
+            let dungeon_id = `dungeon_${type}`; // Dungeon ID
             let highest_floor = dungeon.highest_tier_completed || 0;
             output[type] = {
+                id: dungeon_id,
                 visited: true,
                 level: getLevelByXp(dungeon.experience, 2),
                 highest_floor: 
@@ -2424,6 +2450,7 @@ module.exports = {
             }
         }
 
+        // Classes
         output.classes = {}
 
         let used_classes = false;
@@ -2448,6 +2475,7 @@ module.exports = {
 
         if (!output.catacombs.visited) return output;
 
+        // Boss Collections
         const collection_data = dungeons_data.boss_collections;
         const boss_data = dungeons_data.bosses;
         let collections = {};
@@ -2507,6 +2535,73 @@ module.exports = {
         else output.unlocked_collections = true;
 
         output.boss_collections = collections;
+
+        // Journal Entries
+        const journal_constants = constants.dungeons.journals;
+        const journal_entries = dungeons.dungeon_journal.journal_entries;
+        let journals = {
+            pages_collected: 0,
+            journals_completed: 0,
+            total_pages: 0,
+            maxed: false,
+            journal_entries: []
+        };
+
+        for(entry_id in journal_entries){
+            let entry = {
+                name: journal_constants[entry_id] ? journal_constants[entry_id].name : entry_id,
+                pages_collected: journal_entries[entry_id].length || 0,
+                total_pages: journal_constants[entry_id] ? journal_constants[entry_id].pages : null,
+            }
+
+            journals.pages_collected += entry.pages_collected;
+            if(entry.total_pages != null)
+                if(entry.pages_collected >= entry.total_pages) 
+                    journals.journals_completed++;
+
+            journals.journal_entries.push(entry);
+        }
+
+        for(entry_id in journal_constants)
+            journals.total_pages += journal_constants[entry_id].pages || 0;
+
+        if(journals.pages_collected >= journals.total_pages) 
+            journals.maxed = true;
+
+        output.journals = journals;
+
+        // Level Bonuses (Only Catacombs Item Boost right now)
+        for(let name in constants.dungeons.level_bonuses){
+            let level_stats = constants.dungeons.level_bonuses[name];
+            let steps = Object.keys(level_stats).sort((a, b) => Number(a) - Number(b)).map(a => Number(a));
+
+            let level = 0;
+            switch(name){
+                case "dungeon_catacombs":
+                    level = output.catacombs.level.level;
+                    output.catacombs.bonuses = {
+                        item_boost: 0
+                    };
+                    break;
+                default:
+                    continue;
+            }
+
+            for(let x = steps[0]; x <= steps[steps.length - 1]; x += 1){
+                if(level < x)
+                    break;
+
+                let level_step = steps.slice().reverse().find(a => a <= x);
+
+                let level_bonus = level_stats[level_step];
+
+                for(bonus in level_bonus)
+                    switch(name){
+                        case "dungeon_catacombs":
+                            output.catacombs.bonuses[bonus] += level_bonus[bonus];
+                    }
+            }
+        }
 
         return output;
     },
