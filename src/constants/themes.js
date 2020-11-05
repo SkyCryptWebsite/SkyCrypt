@@ -126,6 +126,28 @@ module.exports = {
                 hover: "#ba5fde",
                 skillbar: "#ba5fde"
             }
+        },
+        "candycane": {
+            name: "Candy Cane Theme",
+            author: "Cookie_Wookie_7",
+            community: true,
+            logo: "/img/themes/candycane/logo_square.svg",
+            backgrounds: {
+                "bg": {
+                    "png": "/img/themes/candycane/bg.png",
+                    "webp": "/img/themes/candycane/bg.webp"
+                },
+                "bg_blur": {
+                    "webp": "/img/themes/candycane/bg_blur.webp"
+                }
+            },
+            colors: {
+                icon: "#CA0000",
+                line: "#DA0000",
+                link: "#EA0000",
+                hover: "#EF0000",
+                skillbar: "#AA0000",
+            }
         }
     }
 }
