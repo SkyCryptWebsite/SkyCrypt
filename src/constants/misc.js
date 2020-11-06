@@ -503,6 +503,9 @@ module.exports = {
         ],
         BAT_PERSON_RING: [
             'BAT_PERSON_ARTIFACT'
+        ],
+        LUCKY_HOOF: [
+            'ETERNAL_HOOF'
         ]
     },
 
@@ -1051,6 +1054,9 @@ module.exports = {
             head: false
         },
         'CANDY_RELIC': {
+            head: false
+        },
+        'LUCKY_HOOF': {
             head: false
         }
     }
