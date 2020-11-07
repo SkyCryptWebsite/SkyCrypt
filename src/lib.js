@@ -109,8 +109,18 @@ function getXpByLevel(level, runecrafting){
     return output;
 }
 
-function getLevelByXp(xp, type){
-    let xp_table = type == 1 ? constants.runecrafting_xp : type == 2 ? constants.dungeoneering_xp : constants.leveling_xp;
+function getLevelByXp(xp, extra = {}){
+    let xp_table;
+    switch(extra.type){
+        case "runecrafting":
+            xp_table = constants.runecrafting_xp;
+            break;
+        case "dungeoneering":
+            xp_table = constants.dungeoneering_xp;
+            break;
+        default:
+            xp_table = constants.leveling_xp;
+    }
 
     if(isNaN(xp)){
         return {
@@ -118,16 +128,31 @@ function getLevelByXp(xp, type){
             level: 0,
             xpCurrent: 0,
             xpForNext: xp_table[1],
-            progress: 0
+            progress: 0,
+            level_cap: 0,
+            uncapped_level: 0
         };
     }
 
     let xpTotal = 0;
     let level = 0;
+    let uncappedLevel = 0;
 
     let xpForNext = Infinity;
 
-    let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
+    let levelCap = 1;
+    let maxLevel = 1;
+
+    if(extra.skill){
+        if(constants.default_skill_caps[extra.skill])
+            levelCap = constants.default_skill_caps[extra.skill];
+
+        if(constants.maxed_skill_caps[extra.skill])
+            maxLevel = constants.maxed_skill_caps[extra.skill];
+    }else levelCap = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
+
+    if(levelCap > maxLevel)
+        maxLevel = levelCap;
 
     for(let x = 1; x <= maxLevel; x++){
         xpTotal += xp_table[x];
@@ -136,13 +161,14 @@ function getLevelByXp(xp, type){
             xpTotal -= xp_table[x];
             break;
         }else{
-            level = x;
+            if(x <= levelCap) level = x;
+            uncappedLevel = x;
         }
     }
 
     let xpCurrent = Math.floor(xp - xpTotal);
 
-    if(level < maxLevel)
+    if(level < levelCap)
         xpForNext = Math.ceil(xp_table[level + 1]);
 
     let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
@@ -153,7 +179,9 @@ function getLevelByXp(xp, type){
         maxLevel,
         xpCurrent,
         xpForNext,
-        progress
+        progress,
+        levelCap,
+        uncappedLevel
     };
 }
 
@@ -680,19 +708,7 @@ module.exports = {
     },
 
     getLevelByXp: (xp) => {
-        let xpTotal = 0;
-        let level = 0;
-
-        let maxLevel = Object.keys(constants.leveling_xp).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
-
-        for(let x = 1; x <= maxLevel; x++){
-            xpTotal += constants.leveling_xp[x];
-
-            if(xp >= xpTotal)
-                level = x;
-        }
-
-        return level;
+        return getLevelByXp(xp);
     },
 
     // Get skill bonuses for a specific skill
@@ -1192,16 +1208,16 @@ module.exports = {
             let average_level_no_progress = 0;
 
             skillLevels = {
-                taming: getLevelByXp(userProfile.experience_skill_taming || 0),
-                farming: getLevelByXp(userProfile.experience_skill_farming || 0),
-                mining: getLevelByXp(userProfile.experience_skill_mining || 0),
-                combat: getLevelByXp(userProfile.experience_skill_combat || 0),
-                foraging: getLevelByXp(userProfile.experience_skill_foraging || 0),
-                fishing: getLevelByXp(userProfile.experience_skill_fishing || 0),
-                enchanting: getLevelByXp(userProfile.experience_skill_enchanting || 0),
-                alchemy: getLevelByXp(userProfile.experience_skill_alchemy || 0),
-                carpentry: getLevelByXp(userProfile.experience_skill_carpentry || 0),
-                runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting || 0, true),
+                taming: getLevelByXp(userProfile.experience_skill_taming || 0, {skill: "taming"}),
+                farming: getLevelByXp(userProfile.experience_skill_farming || 0, {skill: "farming"}),
+                mining: getLevelByXp(userProfile.experience_skill_mining || 0, {skill: "mining"}),
+                combat: getLevelByXp(userProfile.experience_skill_combat || 0, {skill: "combat"}),
+                foraging: getLevelByXp(userProfile.experience_skill_foraging || 0, {skill: "foraging"}),
+                fishing: getLevelByXp(userProfile.experience_skill_fishing || 0, {skill: "fishing"}),
+                enchanting: getLevelByXp(userProfile.experience_skill_enchanting || 0, {skill: "enchanting"}),
+                alchemy: getLevelByXp(userProfile.experience_skill_alchemy || 0, {skill: "alchemy"}),
+                carpentry: getLevelByXp(userProfile.experience_skill_carpentry || 0, {skill: "carpentry"}),
+                runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting || 0, {skill: "runecrafting", type: "runecrafting"}),
             };
 
             for(let skill in skillLevels){
@@ -2442,7 +2458,7 @@ module.exports = {
             output[type] = {
                 id: dungeon_id,
                 visited: true,
-                level: getLevelByXp(dungeon.experience, 2),
+                level: getLevelByXp(dungeon.experience, {type: "dungeoneering"}),
                 highest_floor: 
                     dungeons_data.floors[`${type}_${highest_floor}`] && dungeons_data.floors[`${type}_${highest_floor}`].name 
                     ? dungeons_data.floors[`${type}_${highest_floor}`].name : `floor_${highest_floor}`,
@@ -2458,7 +2474,7 @@ module.exports = {
         for(const className of Object.keys(dungeons.player_classes)){
             let data = dungeons.player_classes[className];
             output.classes[className] = {
-                experience: getLevelByXp(data.experience, 2),
+                experience: getLevelByXp(data.experience, {type: "dungeoneering"}),
                 current: false
             }
 
