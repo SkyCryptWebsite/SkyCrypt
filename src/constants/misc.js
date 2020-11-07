@@ -1058,6 +1058,9 @@ module.exports = {
         },
         'LUCKY_HOOF': {
             head: false
+        },
+        'ETERNAL_HOOF': {
+            head: false
         }
     }
 };
