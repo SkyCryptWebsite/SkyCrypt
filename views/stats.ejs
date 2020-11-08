@@ -839,17 +839,17 @@ const inventorySlot = item => { %>
     </div>
 <% };
 
-const skill_component = (skill, icon, level, boosts = null) => { %>
-    <div class="skill xp-skill <%= level.level == level.levelCap ? 'maxed-skill' : ''%>">
+const skill_component = (skill, icon, level, extra = {}) => { %>
+    <div class="skill xp-skill <%= level.level == level.maxLevel ? 'maxed-skill' : ''%>">
         <div class="skill-icon">
             <% if(icon.startsWith('head-')){ %>
                 <div class="head-icon" style="background-image:url(/head/<%= icon.substring(5) %>)"></div>
             <% }else{ %>
                 <div class="item-icon <%= icon %>"></div>
             <% } %>
-            <% if(level.level == level.levelCap){ %><div class="piece-shine"></div><% } %>
+            <% if(level.level == level.maxLevel){ %><div class="piece-shine"></div><% } %>
         </div>
-        <div class="skill-name"><%= skill %> <span class="skill-level"><%= level.level >= 0 ? level.level : '?' %> <% if(level.uncappedLevel > level.level){ %><small>(<%= level.uncappedLevel %>)</small><% } %></span></div>
+        <div class="skill-name"><%= skill %> <span class="skill-level"><%= level.level >= 0 ? level.level : '?' %></span></div>
         <div class="skill-bar" data-skill="<%= skill %>">
             <div class="skill-progress-bar" style="width: <%= level.level == level.levelCap ? 100 : level.progress * 100 %>%"></div>
             <% if('runecrafting' in calculated.levels){ %>
