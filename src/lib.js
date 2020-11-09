@@ -333,11 +333,17 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
     // Check backpack contents and add them to the list of items
     for(const [index, item] of items.entries()){
         if(helper.hasPath(item, 'tag', 'display', 'Name') && 
-        (item.tag.display.Name.endsWith('Backpack') || item.tag.display.Name.endsWith('New Year Cake Bag') || item.tag.display.Name.endsWith("Builder's Wand"))){
+        (item.tag.display.Name.endsWith('Backpack') 
+        || item.tag.display.Name.endsWith('New Year Cake Bag') 
+        || item.tag.display.Name.endsWith("Builder's Wand") 
+        || item.tag.display.Name.endsWith('Basket of Seeds'))){
             let backpackData;
 
             for(const key of Object.keys(item.tag.ExtraAttributes))
-                if(key.endsWith('backpack_data') || key == 'new_year_cake_bag_data' || key == "builder's_wand_data")
+                if(key.endsWith('backpack_data') 
+                || key == 'new_year_cake_bag_data' 
+                || key == "builder's_wand_data"
+                || key == 'basket_of_seeds_data')
                     backpackData = item.tag.ExtraAttributes[key];
 
             if(!Array.isArray(backpackData))
