@@ -38,7 +38,7 @@ const parseNbt = util.promisify(nbt.parse);
 
 const rarity_order = ['special', 'mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 
-const petTiers = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
+const petTiers = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic'];
 
 const MAX_SOULS = 209;
 
@@ -1946,7 +1946,7 @@ module.exports = {
 
             pet.rarity = pet.tier.toLowerCase();
 
-            if(pet.heldItem == 'PET_ITEM_TIER_BOOST')
+            if(pet.heldItem == 'PET_ITEM_TIER_BOOST' || pet.heldItem == 'PET_ITEM_VAMPIRE_FANG')
                 pet.rarity = petTiers[Math.min(petTiers.length - 1, petTiers.indexOf(pet.rarity) + 1)];
 
             pet.level = getPetLevel(pet);
@@ -1986,6 +1986,9 @@ module.exports = {
                         break;
                     case "legendary":
                         rarity = 4;
+                        break;
+                    case "mythic":
+                        rarity = 5;
                         break;
                 }
 

@@ -341,6 +341,8 @@ class Bat extends Pet {
 			list.push(this.second);
 		if (this.rarity > 3)
 			list.push(this.third);
+		if (this.rarity > 4)
+			list.push(this.fourth);
 		return list;
 	}
 
@@ -362,10 +364,18 @@ class Bat extends Pet {
 	}
 
 	get third() {
-		let mult = 0.75;
+		let mult = 0.5;
 		return {
-			name: "§6Fast Hooks",
-			desc: [`§7Decrease the cooldown of your grapping hook by §a${round(this.level * mult, 1)}%`]
+			name: "§6Wings of Steel",
+			desc: [`§7Deals §a+${round(this.level * mult, 1)}% §7damage to §6Spooky §7enemies during the §6Spooky Festival`]
+		};
+	}
+
+	get fourth() {
+		let mult = 0.25;
+		return {
+			name: "§6Sonar",
+			desc: [`§7+§a${round(this.level * mult, 1)}% §7chance to fish up spooky sea creatures`]
 		};
 	}
 }
