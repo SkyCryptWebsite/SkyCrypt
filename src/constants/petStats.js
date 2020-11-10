@@ -727,7 +727,7 @@ class Enderman extends Pet {
 	get second() {
 		let mult = this.rarity > 2 ? 0.5 : 0.4;
 		return {
-			name: "§6Teleport Savyy",
+			name: "§6Teleport Savvy",
 			desc: [`§7Buffs the Aspect of the End ability granting §a${round(this.level * mult, 1)} §7weapon damage for 5s on use.`]
 		};
 	}
