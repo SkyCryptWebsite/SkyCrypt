@@ -222,7 +222,7 @@ class Elephant extends Pet {
 	}
 
 	get third() {
-		let mult = 0.25;
+		let mult = 0.5;
 		return {
 			name: "§6Trunk Efficiency",
 			desc: [`§7Grants a §a${round(this.level * mult, 1)}% §7chance to get double crops while farming`]
@@ -1680,7 +1680,7 @@ class Monkey extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.3 : this.rarity > 0 ? 0.25 : 0.2;
+		let mult = this.rarity > 2 ? 0.6 : this.rarity > 0 ? 0.5 : 0.4;
 		return {
 			name: "§6Treeborn",
 			desc: [`§7Increase double drop rates for logs by §a${round(this.level * mult, 1)}%`]
