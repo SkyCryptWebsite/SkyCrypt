@@ -8,7 +8,7 @@ async function main(){
     const Redis = require("ioredis");
     const redisClient = new Redis();
 
-    const lbLimit = 50000;
+    const lbLimit = 25000;
 
     async function capLeaderboards(){
         const keys = await redisClient.keys('lb_*');
