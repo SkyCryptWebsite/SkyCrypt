@@ -2923,8 +2923,6 @@ module.exports = {
 
             userProfile.levels = await module.exports.getLevels(userProfile, hypixelProfile);
 
-            userProfile.dungeons = await module.exports.getDungeons(userProfile, hypixelProfile);
-
             let totalSlayerXp = 0;
 
             userProfile.slayer_xp = 0;
@@ -3006,21 +3004,29 @@ module.exports = {
             values[stat] = getMax(memberProfiles, 'data', 'stats', stat);
 
         // Dungeons (Mainly Catacombs now.)
-        for(const floor of getAllKeys(memberProfiles, 'data', 'dungeons', 'catacombs', 'floors')){
-            const floor_id = `catacombs_${floor}`;
-            if(!constants.dungeons.floors[floor_id] || !constants.dungeons.floors[floor_id].name) continue;
+        for(const stat of getAllKeys(memberProfiles, 'data', 'dungeons', 'dungeon_types', 'catacombs')){
+            switch(stat){
+                case "best_runs":
+                case "highest_tier_completed":
+                    break;
+                case "experience":
+                    values[`dungeons_catacombs_xp`] = getMax(memberProfiles, 'data', 'dungeons', 'dungeon_types', 'catacombs', 'experience');
+                    break;
+                default:
+                    for(const floor of getAllKeys(memberProfiles, 'data', 'dungeons', 'dungeon_types', 'catacombs', stat)){
+                        const floor_id = `catacombs_${floor}`;
+                        if(!constants.dungeons.floors[floor_id] || !constants.dungeons.floors[floor_id].name) continue;
 
-            const floor_name = constants.dungeons.floors[floor_id].name;
-            for(const stat of getAllKeys(memberProfiles, 'data', 'dungeons', 'catacombs', 'floors', floor, 'stats'))
-                values[`dungeons_catacombs_${floor_name}_${stat}`] = getMax(memberProfiles, 'data', 'dungeons', 'catacombs', 'floors', floor, 'stats', stat);
-        };
+                        const floor_name = constants.dungeons.floors[floor_id].name;
+                        values[`dungeons_catacombs_${floor_name}_${stat}`] = getMax(memberProfiles, 'data', 'dungeons', 'dungeon_types', 'catacombs', stat, floor);
+                    };
+            }
+        }
 
-        for(const dungeon_class of getAllKeys(memberProfiles, 'data', 'dungeons', 'classes'))
-            values[`dungeons_class_${dungeon_class}_xp`] = getMax(memberProfiles, 'data', 'dungeons', 'classes', dungeon_class, 'experience', 'xp');
+        for(const dungeon_class of getAllKeys(memberProfiles, 'data', 'dungeons', 'player_classes'))
+            values[`dungeons_class_${dungeon_class}_xp`] = getMax(memberProfiles, 'data', 'dungeons', 'player_classes', dungeon_class, 'experience');
 
-        values[`dungeons_journal_pages_collected`] = getMax(memberProfiles, 'data', 'dungeons', 'journals', 'pages_collected');
-        values[`dungeons_catacombs_xp`] = getMax(memberProfiles, 'data', 'dungeons', 'catacombs', 'level', 'xp');
-        values[`dungeons_secrets_found`] = getMax(memberProfiles, 'data', 'dungeons', 'secrets_found');
+        values[`dungeons_secrets_found`] = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
 
         const multi = redisClient.pipeline();
 
