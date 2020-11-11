@@ -157,7 +157,7 @@ module.exports = {
                 options['name'] = collectionData[0].name + ' Collection';
         }
 
-        if(lbName.includes('_best_time')){
+        if(lbName.includes('_best_time') || lbName.includes('_fastest_time')){
             options['sortedBy'] = 1;
             options['format'] = raceFormat;
         }

@@ -2431,9 +2431,12 @@ module.exports = {
         let output = {};
 
         const dungeons = userProfile.dungeons;
-        if (dungeons == null || Object.keys(dungeons).length === 0) return output;
+        if (dungeons == null 
+            || Object.keys(dungeons).length === 0) return output;
 
         const dungeons_data = constants.dungeons;
+        if (dungeons.dungeon_types == null
+            || Object.keys(dungeons.dungeon_types).length === 0) return output;
 
         // Main Dungeons Data
         for(const type of Object.keys(dungeons.dungeon_types)){
@@ -2920,6 +2923,8 @@ module.exports = {
 
             userProfile.levels = await module.exports.getLevels(userProfile, hypixelProfile);
 
+            userProfile.dungeons = await module.exports.getDungeons(userProfile, hypixelProfile);
+
             let totalSlayerXp = 0;
 
             userProfile.slayer_xp = 0;
@@ -2999,6 +3004,23 @@ module.exports = {
 
         for(const stat of getAllKeys(memberProfiles, 'data', 'stats'))
             values[stat] = getMax(memberProfiles, 'data', 'stats', stat);
+
+        // Dungeons (Mainly Catacombs now.)
+        for(const floor of getAllKeys(memberProfiles, 'data', 'dungeons', 'catacombs', 'floors')){
+            const floor_id = `catacombs_${floor}`;
+            if(!constants.dungeons.floors[floor_id] || !constants.dungeons.floors[floor_id].name) continue;
+
+            const floor_name = constants.dungeons.floors[floor_id].name;
+            for(const stat of getAllKeys(memberProfiles, 'data', 'dungeons', 'catacombs', 'floors', floor, 'stats'))
+                values[`dungeons_catacombs_${floor_name}_${stat}`] = getMax(memberProfiles, 'data', 'dungeons', 'catacombs', 'floors', floor, 'stats', stat);
+        };
+
+        for(const dungeon_class of getAllKeys(memberProfiles, 'data', 'dungeons', 'classes'))
+            values[`dungeons_class_${dungeon_class}_xp`] = getMax(memberProfiles, 'data', 'dungeons', 'classes', dungeon_class, 'experience', 'xp');
+
+        values[`dungeons_journal_pages_collected`] = getMax(memberProfiles, 'data', 'dungeons', 'journals', 'pages_collected');
+        values[`dungeons_catacombs_xp`] = getMax(memberProfiles, 'data', 'dungeons', 'catacombs', 'level', 'xp');
+        values[`dungeons_secrets_found`] = getMax(memberProfiles, 'data', 'dungeons', 'secrets_found');
 
         const multi = redisClient.pipeline();
 
