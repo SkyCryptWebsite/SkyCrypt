@@ -718,8 +718,8 @@ module.exports = {
         return constants.base_stats;
     },
 
-    getLevelByXp: (xp) => {
-        return getLevelByXp(xp);
+    getLevelByXp: (xp, extra = {}) => {
+        return getLevelByXp(xp, extra);
     },
 
     // Get skill bonuses for a specific skill
