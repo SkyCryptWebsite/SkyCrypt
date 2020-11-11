@@ -834,6 +834,7 @@ module.exports = {
         let quiver = 'quiver' in profile ? await getItems(profile.quiver.data, customTextures, packs, cacheOnly) : [];
         let potion_bag = 'potion_bag' in profile ? await getItems(profile.potion_bag.data, customTextures, packs, cacheOnly) : [];
         let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data, customTextures, packs, cacheOnly) : [];
+        let personal_vault = 'personal_vault_contents' in profile ? await getItems(profile.personal_vault_contents.data, customTextures, packs, cacheOnly) : [];
 
         const wardrobeColumns = wardrobe_inventory.length / 4;
 
@@ -860,14 +861,15 @@ module.exports = {
         output.armor = armor.filter(a => Object.keys(a).length != 0);
         output.wardrobe = wardrobe;
         output.wardrobe_inventory = wardrobe_inventory;
-        output.inventory = inventory
+        output.inventory = inventory;
         output.enderchest = enderchest;
         output.talisman_bag = talisman_bag;
         output.fishing_bag = fishing_bag;
         output.quiver = quiver;
         output.potion_bag = potion_bag;
+        output.personal_vault = personal_vault;
 
-        const all_items = armor.concat(inventory, enderchest, talisman_bag, fishing_bag, quiver, potion_bag, wardrobe_inventory);
+        const all_items = armor.concat(inventory, enderchest, talisman_bag, fishing_bag, quiver, potion_bag, personal_vault, wardrobe_inventory);
 
         for(const [index, item] of all_items.entries()){
             item.item_index = index;
@@ -1055,6 +1057,10 @@ module.exports = {
         // Check if inventory access disabled by user
         if(inventory.length == 0)
             output.no_inventory = true;
+
+        // Same for personal vault
+        if(personal_vault.length == 0)
+            output.no_personal_vault = true;
 
         // Sort talismans, weapons and rods by rarity
         output.weapons = output.weapons.sort((a, b) => {

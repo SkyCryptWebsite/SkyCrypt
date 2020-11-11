@@ -1321,6 +1321,9 @@ twitterDescription += '. Click to view more stats!'
             if(items.no_inventory)
                 notAvailable.push('Weapons', 'Accessories', 'Inventory');
 
+            if(items.no_personal_vault)
+                notAvailable.push('Personal Vault');
+
             if(Object.keys(calculated.collections).length == 0)
                 notAvailable.push('Collections');
 
@@ -1629,14 +1632,14 @@ twitterDescription += '. Click to view more stats!'
                                     if(items.potion_bag.length > 0){ %>
                                         <div class="inventory-tab" data-inventory-type="potion_bag">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/9f8b82427b260d0a61e6483fc3b2c35a585851e08a9a9df372548b4168cc817c)"></div>
-                                            <div class="inventory-tab-name">Potions</div>
+                                            <div class="inventory-tab-name">Pots</div>
                                         </div>
                                     <% }
 
                                     if(items.fishing_bag.length > 0){ %>
                                         <div class="inventory-tab" data-inventory-type="fishing_bag">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/eb8e297df6b8dffcf135dba84ec792d420ad8ecb458d144288572a84603b1631)"></div>
-                                            <div class="inventory-tab-name">Fishies</div>
+                                            <div class="inventory-tab-name">Fish</div>
                                         </div>
                                     <% }
 
@@ -1644,6 +1647,13 @@ twitterDescription += '. Click to view more stats!'
                                         <div class="inventory-tab" data-inventory-type="quiver">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/4cb3acdc11ca747bf710e59f4c8e9b3d949fdd364c6869831ca878f0763d1787)"></div>
                                             <div class="inventory-tab-name">Quiver</div>
+                                        </div>
+                                    <% }
+
+                                    if(items.personal_vault.length > 0){ %>
+                                        <div class="inventory-tab" data-inventory-type="personal_vault">
+                                            <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/f7aadff9ddc546fdcec6ed5919cc39dfa8d0c07ff4bc613a19f2e6d7f2593)"></div>
+                                            <div class="inventory-tab-name">Vault</div>
                                         </div>
                                     <% } %>
                                 </div>
