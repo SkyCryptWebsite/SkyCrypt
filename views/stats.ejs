@@ -4,7 +4,7 @@ const slayerOrder = ['zombie', 'spider', 'wolf'];
 
 const allItems = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory);
 
-const UNIQUE_ACCESSORIES = 59;
+const UNIQUE_ACCESSORIES = 60;
 
 const statSuffix = {
     health: '',
@@ -1840,7 +1840,7 @@ twitterDescription += '. Click to view more stats!'
                                 <div class="stat-sub-container sub-floor-extendable">
                                     <p class="stat-sub-header">Best Run</p>
                                     <div class="pieces">
-                                    <% for (let [stat, value] of Object.entries(floor.best_runs[0])) { 
+                                    <% for (let [stat, value] of Object.entries(floor.best_runs[0])) {
                                         if(stat == "teammates") continue; %>
                                         <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
                                         <span class="stat-value">
@@ -1886,7 +1886,7 @@ twitterDescription += '. Click to view more stats!'
                             claimedTooltip += '<br>';
                         }
 
-                        if (collection.unclaimed > 0) 
+                        if (collection.unclaimed > 0)
                             claimedTooltip += `<span class="stat-name">Unclaimed items: </span><span class="stat-value">${collection.unclaimed}</span>`;
                     %>
                     <div class="boss-collection" <% if (claimedTooltip != "") { %>data-tippy-content="<%= claimedTooltip %>"<% } %>>
@@ -2442,7 +2442,7 @@ twitterDescription += '. Click to view more stats!'
                     <% if('claimed_items' in calculated.misc){ %>
                         <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-339_0"></div></div><span>claimed items</span></div>
                         <p class="stat-raw-values">
-                            <% for(const key in calculated.misc.claimed_items){ 
+                            <% for(const key in calculated.misc.claimed_items){
                                 let timestamp = calculated.misc.claimed_items[key];
                             %>
                             <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
