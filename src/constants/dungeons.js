@@ -283,6 +283,10 @@ module.exports = {
             "catacombs_6": {
                 name: "floor_6",
                 texture: "3ce69d2ddcc81c9fc2e9948c92003eb0f7ebf0e7e952e801b7f2069dcee76d85"
+            },
+            "catacombs_7": {
+                name: "floor_7",
+                texture: "76965e3fd619de6b0a7ce1673072520a9360378e1cb8c19d4baf0c86769d3764"
             }
         },
         level_bonuses: {
