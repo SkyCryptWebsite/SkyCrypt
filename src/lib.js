@@ -30,6 +30,10 @@ const Hypixel = axios.create({
 const Redis = require("ioredis");
 const redisClient = new Redis();
 
+let leaderboards;
+function getLeaders() { return leaderboards; }
+function updateLeaders(lbs) { leaderboards = lbs; }
+
 const customResources = require('./custom-resources');
 const { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } = require('constants');
 const randomEmoji = require('./constants/randomEmoji');
@@ -3061,6 +3065,85 @@ module.exports = {
         }
     },
 
+    getLeaderboards: async () => {
+        const leaderboards = [];
+        const lbs = await db.collection('leaderboards').find({}, {'mappedBy': 1, 'sortedBy': 1, 'key': 1, 'name': 1}).toArray();
+
+        lbs.forEach(lb => {
+            delete lb._id;
+            leaderboards.push(lb);
+        });
+
+        return leaderboards;
+    },
+
+    getLeaderboard: async (lbName, lbPage = 1, userCount = 20, findUser = null) => {
+        let page, startIndex, endIndex;
+
+        const lb = constants.leaderboard(`lb_${lbName}`);
+
+        const count = Math.min(100, userCount || 20);
+        const lbCount = await redisClient.zcount(`lb_${lb.key}`, "-Infinity", "+Infinity");
+
+        if (lbCount == 0) {
+            return { return_code: 404, error: "Leaderboard not found." };
+        }
+
+        const output = {
+            positions: []
+        };
+
+        if (findUser) {
+            const uuid = (await helper.resolveUsernameOrUuid(findUser, db, true)).uuid;
+
+            const rank = lb.sortedBy > 0 ?
+                await redisClient.zrank(`lb_${lb.key}`, uuid) :
+                await redisClient.zrevrank(`lb_${lb.key}`, uuid);
+
+            if (rank == null) {
+                return { return_code: 404, error: "Specified user not found on leaderboard." };
+            }
+
+            output.self = { rank: rank + 1 };
+
+            page = Math.floor(rank / count) + 1;
+            startIndex = (page - 1) * count;
+            endIndex = startIndex - 1 + count;
+        } else {
+            page = Math.max(1, lbPage || 1);
+            startIndex = (page - 1) * count;
+            endIndex = startIndex - 1 + count;
+        }
+
+        page = Math.min(page, Math.floor(lbCount / count) + 1);
+
+        output.page = page;
+
+        startIndex = (page - 1) * count;
+        endIndex = startIndex - 1 + count;
+
+        let results = lb.sortedBy > 0 ?
+            await redisClient.zrange(`lb_${lb.key}`, startIndex, endIndex, 'WITHSCORES') :
+            await redisClient.zrevrange(`lb_${lb.key}`, startIndex, endIndex, 'WITHSCORES');
+
+        for (let i = 0; i < results.length; i += 2) {
+            const lbPosition = {
+                rank: i / 2 + startIndex + 1,
+                amount: lb.format(results[i + 1]),
+                raw: results[i + 1],
+                uuid: results[i],
+                username: (await helper.resolveUsernameOrUuid(results[i], db, true)).display_name
+            };
+
+            if ('self' in output && output.self.rank == lbPosition.rank)
+                output.self = lbPosition;
+
+            output.positions.push(lbPosition);
+        }
+
+        return output;
+    },
+
     getThemes: () => {
         return constants.themes;
     },
@@ -3071,6 +3154,7 @@ module.exports = {
 }
 
 async function init(){
+    // Collection Data
     const response = await axios('https://api.hypixel.net/resources/skyblock/collections');
 
     if(!helper.hasPath(response, 'data', 'collections'))

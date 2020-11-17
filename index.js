@@ -3,6 +3,7 @@ require('./src/donations/patreon');
 require('./src/scripts/cap-leaderboards');
 require('./src/scripts/update-bazaar');
 require('./src/scripts/update-items');
+require('./src/scripts/update-leaderboards');
 require('./src/scripts/update-top-profiles');
 
 const cluster = require('cluster');

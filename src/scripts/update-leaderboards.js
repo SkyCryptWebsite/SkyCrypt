@@ -20,20 +20,26 @@ async function main(){
     const redisClient = new Redis();
 
     async function updateLeaderboards(){
+        await db.collection('leaderboards').deleteMany({});
+
+        const leaderboards = [];
         const keys = await redisClient.keys('lb_*');
 
-        const multi = redisClient.pipeline();
+        /* const multi = redisClient.pipeline(); */
 
         for(const key of keys){
             const lb = constants.leaderboard(key);
 
-            if(lb.sortedBy < 0)
+            if (lb.mappedBy == 'uuid' && !lb.key.startsWith('collection_enchanted'))
+                leaderboards.push(lb);
+
+            /* if(lb.sortedBy < 0)
                 multi.zrevrange(key, 0, 49);
             else
-                multi.zrange(key, 0, 49);
-        }
+                multi.zrange(key, 0, 49); */
+        } 
 
-        const updateUsers = _.uniq((await multi.exec()).map(a => a[1]).flat());
+        /* const updateUsers = _.uniq((await multi.exec()).map(a => a[1]).flat());
 
         console.log('updating', updateUsers.length, 'profiles');
 
@@ -50,9 +56,19 @@ async function main(){
             .catch(() => {});
 
             await new Promise(r => setTimeout(r, 500));
-        }
+        } */
 
-        updateLeaderboards();
+        leaderboards.sort((a, b) => {
+            return a.key.localeCompare(b.key);
+        }); 
+
+        await db
+        .collection('leaderboards')
+        .insertMany(leaderboards)
+        .catch(console.error);
+
+        console.log(`Updated list of leaderboards!`);
+        setTimeout(updateLeaderboards, 1000 * 60 * 30);
     }
 
     updateLeaderboards();

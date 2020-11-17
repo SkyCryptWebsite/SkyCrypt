@@ -4,6 +4,7 @@ const cors = require('cors');
 const constants = require('./constants');
 
 const Redis = require("ioredis");
+const { getLeaderboards } = require('./lib');
 const redisClient = new Redis();
 
 function handleError(e, res) {
@@ -16,7 +17,6 @@ function handleError(e, res) {
 
 module.exports = (app, db) => {
     const productInfo = {};
-    const leaderboards = [];
 
     const init = new Promise(async (resolve, reject) => {
         const bazaarProducts = await db
@@ -35,19 +35,6 @@ module.exports = (app, db) => {
             if (info.length > 0)
                 productInfo[product.productId] = info[0];
         }
-
-        const keys = await redisClient.keys('lb_*');
-
-        for (const key of keys) {
-            const lb = constants.leaderboard(key);
-
-            if (lb.mappedBy == 'uuid' && !lb.key.startsWith('collection_enchanted'))
-                leaderboards.push(lb);
-        }
-
-        leaderboards.sort((a, b) => {
-            return a.key.localeCompare(b.key);
-        })
 
         resolve();
     });
@@ -68,11 +55,11 @@ module.exports = (app, db) => {
     });
 
     app.all('/api/v2/leaderboards', cors(), async (req, res) => {
-        res.json(leaderboards);
+        res.json(await lib.getLeaderboards());
     });
 
     app.all('/api/v2/leaderboard/:lbName', cors(), async (req, res) => {
-        const count = Math.min(100, req.query.count || 20)
+        /* const count = Math.min(100, req.query.count || 20)
 
         let page, startIndex, endIndex;
 
@@ -137,9 +124,10 @@ module.exports = (app, db) => {
                 output.self = lbPosition;
 
             output.positions.push(lbPosition);
-        }
+        } */
+        const output = await lib.getLeaderboard(req.params.lbName, req.query.page, req.params.count, req.query.find);
 
-        res.json(output);
+        res.status(output.return_code || 200).json(output);
     });
 
     app.all('/api/v2/bazaar', cors(), async (req, res) => {
@@ -435,5 +423,4 @@ module.exports = (app, db) => {
             handleError(e, res);
         }
     });
-
 };

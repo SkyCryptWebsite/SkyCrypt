@@ -363,6 +363,10 @@ Disallow: /item /head /leather /resources
         res.render('api', { error: null, player: null, extra: await getExtra('api'), helper, page: 'api' });
     });
 
+    app.all('/leaderboards', async (req, res, next) => {
+        res.render('leaderboards', { extra: await getExtra('leaderboards'), helper, page: 'leaderboards' });
+    });
+
     app.all('/:player/:profile?', async (req, res, next) => {
         res.redirect(`/stats${req.path}`);
     });
