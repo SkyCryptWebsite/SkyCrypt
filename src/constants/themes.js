@@ -7,15 +7,15 @@ module.exports = {
             name: "Default Theme",
             author: "SkyCrypt Team",
             official: true,
-            logo: "/img/logo_square.png",
+            logo: "/resources/img/logo_square.png",
             backgrounds: {
                 "bg": {
-                    "png": "/img/bg.png?v3",
-                    "webp": "/img/bg.webp?v3"
+                    "png": "/resources/img/bg.png?v3",
+                    "webp": "/resources/img/bg.webp?v3"
                 },
                 "bg_blur": {
-                    "png": "/img/bg_blur.png?v3",
-                    "webp": "/img/bg_blur.webp?v3"
+                    "png": "/resources/img/bg_blur.png?v3",
+                    "webp": "/resources/img/bg_blur.webp?v3"
                 }
             },
             colors: {
@@ -33,15 +33,15 @@ module.exports = {
             name: "sky.lea.moe",
             author: "LeaPhant",
             official: true,
-            logo: "/img/themes/skylea/logo_square.png",
+            logo: "/resources/img/themes/skylea/logo_square.png",
             backgrounds: {
                 "bg": {
-                    "png": "/img/themes/skylea/bg.png",
-                    "webp": "/img/themes/skylea/bg.webp"
+                    "png": "/resources/img/themes/skylea/bg.png",
+                    "webp": "/resources/img/themes/skylea/bg.webp"
                 },
                 "bg_blur": {
-                    "png": "/img/themes/skylea/bg_blur.png",
-                    "webp": "/img/themes/skylea/bg_blur.webp"
+                    "png": "/resources/img/themes/skylea/bg_blur.png",
+                    "webp": "/resources/img/themes/skylea/bg_blur.webp"
                 }
             },
             colors: {
@@ -62,15 +62,15 @@ module.exports = {
             name: "Night Blue Theme",
             author: "8KCoffeeWizard",
             community: true,
-            logo: "/img/themes/nightblue/logo_square.png",
+            logo: "/resources/img/themes/nightblue/logo_square.png",
             backgrounds: {
                 "bg": {
-                    "png": "/img/themes/nightblue/bg.png",
-                    "webp": "/img/themes/nightblue/bg.webp"
+                    "png": "/resources/img/themes/nightblue/bg.png",
+                    "webp": "/resources/img/themes/nightblue/bg.webp"
                 },
                 "bg_blur": {
-                    "png": "/img/themes/nightblue/bg_blur.png",
-                    "webp": "/img/themes/nightblue/bg_blur.webp"
+                    "png": "/resources/img/themes/nightblue/bg_blur.png",
+                    "webp": "/resources/img/themes/nightblue/bg_blur.webp"
                 }
             },
             colors: {
@@ -85,15 +85,15 @@ module.exports = {
             name: "Sunrise Orange Theme",
             author: "rainbowcraft2",
             community: true,
-            logo: "/img/themes/sunrise/logo_square.png",
+            logo: "/resources/img/themes/sunrise/logo_square.png",
             backgrounds: {
                 "bg": {
-                    "png": "/img/themes/sunrise/bg.png",
-                    "webp": "/img/themes/sunrise/bg.webp"
+                    "png": "/resources/img/themes/sunrise/bg.png",
+                    "webp": "/resources/img/themes/sunrise/bg.webp"
                 },
                 "bg_blur": {
-                    "png": "/img/themes/sunrise/bg_blur.png",
-                    "webp": "/img/themes/sunrise/bg_blur.webp"
+                    "png": "/resources/img/themes/sunrise/bg_blur.png",
+                    "webp": "/resources/img/themes/sunrise/bg_blur.webp"
                 }
             },
             colors: {
@@ -108,15 +108,15 @@ module.exports = {
             name: "Draconic Purple Theme",
             author: "rainbowcraft2",
             community: true,
-            logo: "/img/themes/draconic/logo_square.png",
+            logo: "/resources/img/themes/draconic/logo_square.png",
             backgrounds: {
                 "bg": {
-                    "png": "/img/themes/draconic/bg.png",
-                    "webp": "/img/themes/draconic/bg.webp"
+                    "png": "/resources/img/themes/draconic/bg.png",
+                    "webp": "/resources/img/themes/draconic/bg.webp"
                 },
                 "bg_blur": {
-                    "png": "/img/themes/draconic/bg_blur.png",
-                    "webp": "/img/themes/draconic/bg_blur.webp"
+                    "png": "/resources/img/themes/draconic/bg_blur.png",
+                    "webp": "/resources/img/themes/draconic/bg_blur.webp"
                 }
             },
             colors: {
@@ -131,14 +131,14 @@ module.exports = {
             name: "Candy Cane Theme",
             author: "Cookie_Wookie_7",
             community: true,
-            logo: "/img/themes/candycane/logo_square.svg",
+            logo: "/resources/img/themes/candycane/logo_square.svg",
             backgrounds: {
                 "bg": {
-                    "png": "/img/themes/candycane/bg.png",
-                    "webp": "/img/themes/candycane/bg.webp"
+                    "png": "/resources/img/themes/candycane/bg.png",
+                    "webp": "/resources/img/themes/candycane/bg.webp"
                 },
                 "bg_blur": {
-                    "webp": "/img/themes/candycane/bg_blur.webp"
+                    "webp": "/resources/img/themes/candycane/bg_blur.webp"
                 }
             },
             colors: {
