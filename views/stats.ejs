@@ -2459,6 +2459,11 @@ twitterDescription += '. Click to view more stats!'
     <script>
         let items = <%- JSON.stringify(items) %>;
         let calculated = <%- JSON.stringify(calculated) %>;
+
+        const constants = { 
+            minecraft_formatting: <%- JSON.stringify(constants.minecraft_formatting) %>, 
+            special_enchants: <%- JSON.stringify(constants.special_enchants) %> 
+        };
     </script>
 </body>
 </html>
