@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
-    const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory);
+    const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.personal_vault, items.wardrobe_inventory);
 
     let dimmer = document.querySelector("#dimmer");
 
@@ -123,6 +123,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
                 break;
             case 'enderchest':
+            case 'personal_vault':
                 break;
             default:
                 if(type in calculated.bag_sizes)
