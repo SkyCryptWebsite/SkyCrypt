@@ -77,24 +77,45 @@ function getAllKeys(profiles, ...path){
     return _.uniq([].concat(...profiles.map(a => _.keys(helper.getPath(a, ...path)))));
 }
 
-function getXpByLevel(level, runecrafting){
+function getXpByLevel(level, extra = {}){
+    let xp_table;
+    switch(extra.type){
+        case "runecrafting":
+            xp_table = constants.runecrafting_xp;
+            break;
+        case "dungeoneering":
+            xp_table = constants.dungeoneering_xp;
+            break;
+        default:
+            xp_table = constants.leveling_xp;
+    }
+
+    let levelCap = 1;
+    let maxLevel = 1;
+
+    if(extra.skill){
+        if(constants.default_skill_caps[extra.skill]
+            && constants.default_skill_caps[extra.skill] > levelCap)
+            levelCap = constants.default_skill_caps[extra.skill];
+
+        if(constants.maxed_skill_caps[extra.skill])
+            maxLevel = constants.maxed_skill_caps[extra.skill];
+    }else levelCap = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
+
+    if(levelCap > maxLevel)
+        maxLevel = levelCap;
+
     const output = {
-        level: Math.min(level, 50),
+        level: Math.min(level, maxLevel),
         xpCurrent: 0,
         xpForNext: null,
         progress: 0.05
     }
 
-    let xp_table = runecrafting ? constants.runecrafting_xp : constants.leveling_xp;
-
     if(isNaN(level))
         return 0;
 
     let xpTotal = 0;
-
-    let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
-
-    output.maxLevel = maxLevel;
 
     for(let x = 1; x <= level; x++)
         xpTotal += xp_table[x];
@@ -1245,13 +1266,13 @@ module.exports = {
             let skillsAmount = 0;
 
             for(const skill in skillLevels){
-                output.levels[skill] = getXpByLevel(skillLevels[skill]);
+                output.levels[skill] = getXpByLevel(skillLevels[skill], {skill: skill});
 
                 if(skillLevels[skill] < 0)
                     continue;
 
                 skillsAmount++;
-                average_level += skillLevels[skill];
+                average_level += output.levels[skill].level;
 
                 totalSkillXp += output.levels[skill].xp;
             }
