@@ -134,10 +134,11 @@ module.exports = {
             logo: "/resources/img/themes/candycane/logo_square.svg",
             backgrounds: {
                 "bg": {
-                    "png": "/resources/img/themes/candycane/bg.png",
+                    "png": "/resources/img/themes/candycane/bg.jpg",
                     "webp": "/resources/img/themes/candycane/bg.webp"
                 },
                 "bg_blur": {
+                    "png": "/resources/img/themes/candycane/bg_blur.jpg",
                     "webp": "/resources/img/themes/candycane/bg_blur.webp"
                 }
             },
