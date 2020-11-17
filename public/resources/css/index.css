@@ -696,20 +696,6 @@ html.no-webp #bg_blur{
     color: rgba(255,255,255,0.8);
 }
 
-.skill-bar::before{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -18px;
-    width: 18px;
-    bottom: 0;
-    background-color: var(--skillbar-hex);
-}
-
-.skill.maxed-skill .skill-bar::before{
-    background-color: var(--maxedbar-hex);
-}
-
 .skill-bar{
     position: absolute;
     bottom: 0;
@@ -723,8 +709,9 @@ html.no-webp #bg_blur{
 
 .skill-progress-bar{
     position: absolute;
+    padding-left: 18px;
+    left: -18px;
     top: 0;
-    left: 0;
     bottom: 0;
     background-color: var(--skillbar-hex);
     border-top-right-radius: 7px;
