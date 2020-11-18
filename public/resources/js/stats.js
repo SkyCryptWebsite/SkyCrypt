@@ -860,7 +860,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         element.addEventListener('click', async function(){
             let uuid = element.getAttribute("data-username");
-            if(element.getAttribute("data-username") == "0c0b857f415943248f772164bf76795c"){
+            if(uuid == "0c0b857f415943248f772164bf76795c"){
                 notification.setContent("No");
                 notification.show();
 
@@ -902,6 +902,52 @@ document.addEventListener('DOMContentLoaded', function(){
                         notification.hide();
                     }, 1500);
                 }
+            }
+        });
+    });
+
+    [].forEach.call(document.querySelectorAll('.remove-favorite'), function (e) {
+        let element = e;
+
+        let notification = tippy(element, {
+            trigger: 'manual'
+        });
+
+        element.addEventListener('click', async function () {
+            let uuid = element.getAttribute("data-username");
+            try {
+                let cookieArray = JSON.parse(getCookie("favorite"));
+                if (cookieArray.includes(uuid)) {
+                    cookieArray.splice(cookieArray.indexOf(uuid), 1);
+
+                    setCookie("favorite", JSON.stringify(cookieArray), 365);
+
+                    notification.setContent("Successfully removed favorite!");
+
+                    notification.show();
+
+                    setTimeout(function () {
+                        notification.hide();
+                    }, 1500);
+                } else {
+                    notification.setContent("That person isn't favorited!");
+                    notification.show();
+
+                    setTimeout(function () {
+                        notification.hide();
+                    }, 1500);
+                }
+            } catch {
+                let cookieArray = uuid ? [uuid] : [];
+                setCookie("favorite", JSON.stringify(cookieArray), 365);
+
+                notification.setContent("Set favorite using new system!");
+
+                notification.show();
+
+                setTimeout(function () {
+                    notification.hide();
+                }, 1500);
             }
         });
     });
