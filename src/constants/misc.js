@@ -503,6 +503,9 @@ module.exports = {
         ],
         BAT_PERSON_RING: [
             'BAT_PERSON_ARTIFACT'
+        ],
+        WITHER_ARTIFACT: [
+            'WITHER_RELIC'
         ]
     },
 
@@ -1051,6 +1054,9 @@ module.exports = {
             head: false
         },
         'CANDY_RELIC': {
+            head: false
+        },
+        'WITHER_RELIC': {
             head: false
         }
     }
