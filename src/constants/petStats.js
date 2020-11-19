@@ -2130,6 +2130,28 @@ class Megalodon extends Pet{
 			desc: [`§7On kill gain §c${round(mult*this.level,1)}${symbols.strength} Damage §7and §f${symbols.speed} Speed §7for 5 seconds`]
 		};
 	}
+
+	modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
+		if (this.rarity > 1) {
+			let mult = (1 + round(this.level * 0.2, 1) / 100);
+			if (hName.includes("SHARK")) {
+				for (const stat in helmet.stats)
+					helmet.stats[stat] = round(helmet.stats[stat] * mult, 1);
+			}
+			if (cName.includes("SHARK")) {
+				for (const stat in chest.stats)
+					chest.stats[stat] = round(chest.stats[stat] * mult, 1);
+			}
+			if (lName.includes("SHARK")) {
+				for (const stat in legs.stats)
+					legs.stats[stat] = round(legs.stats[stat] * mult, 1);
+			}
+			if (bName.includes("SHARK")) {
+				for (const stat in boots.stats)
+					boots.stats[stat] = round(boots.stats[stat] * mult, 1);
+			}
+		}
+	}
 }
 
 class Squid extends Pet {
