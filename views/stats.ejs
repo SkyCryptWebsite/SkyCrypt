@@ -1296,7 +1296,7 @@ twitterDescription += '. Click to view more stats!'
                 <% } %>
             </div>
         </div>
-        <div id="nav_bar">
+        <div id="nav_bar" data-margin-top="48" data-sticky-class="nav-bar-stickied">
             <div id="nav_bar_line"></div>
             <div id="nav_bar_background"></div>
             <div id="nav_items_container">
@@ -2459,11 +2459,6 @@ twitterDescription += '. Click to view more stats!'
     <script>
         let items = <%- JSON.stringify(items) %>;
         let calculated = <%- JSON.stringify(calculated) %>;
-
-        const constants = { 
-            minecraft_formatting: <%- JSON.stringify(constants.minecraft_formatting) %>, 
-            special_enchants: <%- JSON.stringify(constants.special_enchants) %> 
-        };
     </script>
 </body>
 </html>

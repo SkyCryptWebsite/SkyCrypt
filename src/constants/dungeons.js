@@ -30,11 +30,6 @@ module.exports = {
                 name: "Sadan",
                 texture: "fa06cb0c471c1c9bc169af270cd466ea701946776056e472ecdaeb49f0f4a4dc",
                 floor: "catacombs_6"
-            },
-            "necron": {
-                name: "Necron",
-                texture: "a435164c05cea299a3f016bbbed05706ebb720dac912ce4351c2296626aecd9a",
-                floor: "catacombs_7"
             }
         },
         boss_collections: {
@@ -232,17 +227,17 @@ module.exports = {
                         required: 100,
                         tier: 2
                     },
-                    "necromancer_helmet": {
+                    "necromancer_lord_helmet": {
                         name: "Necromancer Lord Helmet",
                         required: 150,
                         tier: 3
                     },
-                    "recombobulator": {
+                    "recomboculator": {
                         name: "Recombobulator 3000",
                         required: 250,
                         tier: 4
                     },
-                    "necromancer_chestplate": {
+                    "necromancer_lord_chestplate": {
                         name: "Necromancer Lord Chestplate",
                         required: 500,
                         tier: 5
@@ -254,47 +249,6 @@ module.exports = {
                     },
                     "diamond_sadan_head": {
                         name: "Diamond Sadan Head", 
-                        required: 1000,
-                        tier: 7
-                    }
-                }
-            },
-            "catacombs_7": {
-                boss: "necron",
-                max_tiers: 7,
-                rewards: {
-                    "wither_blood": {
-                        name: "Wither Blood",
-                        required: 50,
-                        tier: 1
-                    },
-                    "gold_necron_head": {
-                        name: "Golden Necron Head",
-                        required: 100,
-                        tier: 2
-                    },
-                    "wither_helmet": {
-                        name: "Wither Helmet",
-                        required: 150,
-                        tier: 3
-                    },
-                    "recombobulator": {
-                        name: "Recombobulator 3000",
-                        required: 250,
-                        tier: 4
-                    },
-                    "wither_leggings": {
-                        name: "Wither Leggings",
-                        required: 500,
-                        tier: 5
-                    },
-                    "wither_chestplate": {
-                        name: "Wither Chestplate",
-                        required: 750,
-                        tier: 6
-                    },
-                    "diamond_necron_head": {
-                        name: "Diamond Necron Head", 
                         required: 1000,
                         tier: 7
                     }
@@ -329,10 +283,6 @@ module.exports = {
             "catacombs_6": {
                 name: "floor_6",
                 texture: "3ce69d2ddcc81c9fc2e9948c92003eb0f7ebf0e7e952e801b7f2069dcee76d85"
-            },
-            "catacombs_7": {
-                name: "floor_7",
-                texture: "76965e3fd619de6b0a7ce1673072520a9360378e1cb8c19d4baf0c86769d3764"
             }
         },
         level_bonuses: {

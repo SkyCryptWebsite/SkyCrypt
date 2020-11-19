@@ -93,56 +93,6 @@ document.addEventListener('DOMContentLoaded', function(){
         return false;
     };
 
-    function renderLore(text){
-        let output = "";
-        let spansOpened = 0;
-
-        const parts = text.split("§");
-
-        if(parts.length == 1)
-            return text;
-
-        for(const part of parts){
-            const code = part.substring(0, 1);
-            const content = part.substring(1);
-
-            const format = constants.minecraft_formatting[code];
-
-            if(format === undefined)
-                continue;
-
-            if(format.type == 'color'){
-                for(; spansOpened > 0; spansOpened--)
-                    output += "</span>";
-
-                output += `<span style='${format.css}'>${content}`;
-
-                spansOpened++;
-            }else if(format.type == 'format'){
-                output += `<span style='${format.css}'>${content}`;
-
-                spansOpened++;
-            }else if(format.type == 'reset'){
-                for(; spansOpened > 0; spansOpened--)
-                    output += "</span>";
-
-                output += content;
-            }
-        }
-
-        for(; spansOpened > 0; spansOpened--)
-            output += "</span>";
-
-        const specialColor = constants.minecraft_formatting['6'];
-
-        const matchingEnchants = constants.special_enchants.filter(a => output.includes(a));
-
-        for(const enchantment of matchingEnchants)
-            output = output.replace(enchantment, `<span style='${specialColor.css}'>${enchantment}</span>`);
-
-        return output;
-    }
-
     let currentBackpack;
 
     function renderInventory(inventory, type){
@@ -319,20 +269,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
         itemLore.innerHTML = item.lore || '';
 
-        try{
-            if(item.lore != null)
-                throw null;
-
-            item.tag.display.Lore.forEach(function(line, index){
-                itemLore.innerHTML += renderLore(line);
-
-                if(index + 1 < item.tag.display.Lore.length)
-                    itemLore.innerHTML += '<br>';
-            });
-        }catch(e){
-
-        }
-
         if(item.texture_pack){
             const texturePack = extra.packs.filter(a => a.id == item.texture_pack)[0];
 
@@ -478,6 +414,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 skinViewer.setSize(playerModel.offsetHeight / 2, playerModel.offsetHeight);
         }
 
+        navBarSticky = new Sticky('#nav_bar');
         updateStatsPositions();
 
         let element = document.querySelector('.rich-item.sticky-stats');
@@ -949,10 +886,14 @@ document.addEventListener('DOMContentLoaded', function(){
 
     let positionY = {};
 
+    let navBarSticky = new Sticky('#nav_bar');
+
     function updateStatsPositions(){
         [].forEach.call(statContainers, function(statContainer){
             positionY[statContainer.getAttribute('data-stat')] = statContainer.offsetTop;
         });
+
+        navBarSticky = new Sticky('#nav_bar');
     }
 
     updateStatsPositions();
@@ -1141,16 +1082,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
     window.addEventListener('resize', resize);
 
-    const navBar = document.querySelector('#nav_bar')
-    function onScroll() {
-        if(navBar.getBoundingClientRect().top <= 48) {
-            navBar.classList.add('stuck')
-        } else {
-            navBar.classList.remove('stuck')
-        }
-    }
-    onScroll();
-    window.addEventListener('scroll', onScroll);
+    window.addEventListener('scroll', function(){
+
+    });
 
     setTimeout(resize, 1000);
 });

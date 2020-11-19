@@ -31,6 +31,7 @@
     --bg-webp: url(https://sky.shiiyu.moe/resources/img/bg.webp?v3);
 
     /* Blurred Backgrounds */
+    --bg_blur-png: url(https://sky.shiiyu.moe/resources/img/bg_blur.png?v3); 
     --bg_blur-webp: url(https://sky.shiiyu.moe/resources/img/bg_blur.webp?v3);
 }
 
@@ -40,8 +41,8 @@
 }
 
 html{
-    background-color: #121212;
-    background: var(--bg-webp) no-repeat center center fixed #121212;
+    background-color: black;
+    background: var(--bg-webp) no-repeat center center fixed;
     background-size: cover;
     font-family: 'Montserrat', sans-serif;
     color: white;
@@ -566,6 +567,10 @@ header{
     background-color: rgb(20,20,20);
 }
 
+html.no-webp #bg_blur{
+    background-image: var(--bg_blur-png)
+}
+
 #wrapper{
     position: absolute;
     left: 30vw;
@@ -583,11 +588,6 @@ header{
      user-select: none;
     -webkit-backdrop-filter: blur(16px) brightness(0.5);
     backdrop-filter: blur(16px) brightness(0.5);
-}
-
-#wrapper > * {
-    max-width: 100%;
-    overflow-x: hidden;
 }
 
 #base_stats_container{
@@ -1451,13 +1451,11 @@ a.additional-player-stat:hover{
 }
 
 #nav_bar{
-    position: sticky;
-    top: 48px;
+    position: absolute;
     width: 100%;
     text-align: center;
     padding-bottom: 6px;
     white-space: nowrap;
-    z-index: 25;
 }
 
 #nav_bar_background{
@@ -1488,7 +1486,14 @@ a.additional-player-stat:hover{
     z-index: 3;
 }
 
-#nav_bar.stuck #nav_bar_background{
+#nav_bar.nav-bar-stickied{
+    z-index: 25;
+    width: auto !important;
+    left: 0;
+    right: 0;
+}
+
+#nav_bar.nav-bar-stickied #nav_bar_background{
     background-color: rgba(20,20,20,0.9);
 }
 
@@ -2938,6 +2943,10 @@ a.additional-player-stat:hover{
     color: rgba(255,255,255,0.8);
 }
 
+html.no-webp #enter_player_box_wrapper{
+    background-image: var(--bg_blur-png);
+}
+
 #enter_player_box{
     text-align: center;
 }
@@ -3046,6 +3055,10 @@ a.additional-player-stat:hover{
     }
 }
 
+html.no-webp .top-profile{
+    background-image: var(--bg_blur-png);
+}
+
 .top-profile:hover{
     opacity: 1;
 }
@@ -3101,6 +3114,10 @@ a.additional-player-stat:hover{
 #error_box_wrapper{
     min-height: 70px;
     max-height: 500px;
+}
+
+html.no-webp #error_box_wrapper{
+    background-image: var(--bg_blur-png);
 }
 
 #top_profiles_box{
@@ -3300,6 +3317,7 @@ body {
         left: 50%;
         width: 1120px;
         margin-left: -560px;
+        overflow-x: hidden;
     }
 
     .skill {
@@ -3309,6 +3327,12 @@ body {
     .external-app{
         margin-left: -10px;
         margin-right: -10px;
+    }
+
+    #nav_bar.nav-bar-stickied{
+        left: auto;
+        right: auto;
+        width: 1120px !important;
     }
 
     #skin_display{
@@ -3360,10 +3384,15 @@ body {
         right: 0;
         margin-left: 0;
         width: 100vw;
+        overflow-x: hidden;
     }
 
     #skill_levels_container .skill{
         width: calc((100vw - 410px) / 2 - 60px);
+    }
+
+    #nav_bar.nav-bar-stickied{
+        width: 100vw !important;
     }
 
     .stat-fairy-souls{
@@ -3479,6 +3508,10 @@ body {
 
     .info-container-wrapper{
         text-align: center;
+    }
+
+    .stat-header{
+        width: 100vw;
     }
 
     .stat-header::before, .stat-header::after{
