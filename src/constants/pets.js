@@ -19,7 +19,8 @@ module.exports = {
         uncommon: 6,
         rare: 11,
         epic: 16,
-        legendary: 20
+        legendary: 20,
+        mythic: 20
     },
 
     pet_levels: [
@@ -387,7 +388,8 @@ module.exports = {
         "uncommon": 2,
         "rare": 3,
         "epic": 4,
-        "legendary": 5
+        "legendary": 5,
+        "mythic": 6
     },
 
     pet_rewards: {
@@ -574,11 +576,14 @@ module.exports = {
         CROCHET_TIGER_PLUSHIE: {
             description: `§7Increases §e${symbols.attack_speed} Bonus Attack Speed §7by §a40`,
             stats: {
-                attack_speed: 40
+                bonus_attack_speed: 40
             }
         },
         DWARF_TURTLE_SHELMET: {
             description: `§7Makes the pet's owner immune to knockback.`
+        },
+        PET_ITEM_VAMPIRE_FANG: {
+            description: "§7Upgrades a Bat pet from §6Legendary §7to §dMythic §7adding a bonus perk and bonus stats!"
         }
     }
 }

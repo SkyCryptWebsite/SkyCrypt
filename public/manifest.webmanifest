@@ -1,0 +1,62 @@
+{
+  "name": "SkyCrypt",
+  "short_name": "SkyCrypt",
+  "description": "A beautiful site for sharing your SkyBlock profile 🌹",
+  "display": "standalone",
+  "scope": "/",
+  "background_color": "#282828",
+  "theme_color": "#282828",
+  "icons": [
+    {
+      "src": "/resources/img/app-icons/svg.svg",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/resources/img/app-icons/192.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any"
+    },
+    {
+      "src": "/resources/img/app-icons/512.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any"
+    },
+    {
+      "src": "/resources/img/app-icons/maskable-svg.svg",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/resources/img/app-icons/maskable-192.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/resources/img/app-icons/maskable-512.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/resources/img/app-icons/monochrome-svg.svg",
+      "type": "image/svg+xml",
+      "purpose": "monochrome"
+    },
+    {
+      "src": "/resources/img/app-icons/monochrome-192.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "monochrome"
+    },
+    {
+      "src": "/resources/img/app-icons/monochrome-512.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "monochrome"
+    }
+  ]
+}

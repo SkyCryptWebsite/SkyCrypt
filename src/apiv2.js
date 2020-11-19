@@ -45,6 +45,10 @@ module.exports = (app, db) => {
                 leaderboards.push(lb);
         }
 
+        leaderboards.sort((a, b) => {
+            return a.key.localeCompare(b.key);
+        })
+
         resolve();
     });
 

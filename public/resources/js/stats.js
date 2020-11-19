@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', function(){
+    function setCookie(name,value,days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; SameSite=Lax; path=/";
+    }
+    
     let userAgent = window.navigator.userAgent;
     let tippyInstance;
 
@@ -46,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
-    const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory);
+    const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.personal_vault, items.wardrobe_inventory);
 
     let dimmer = document.querySelector("#dimmer");
 
@@ -83,6 +93,56 @@ document.addEventListener('DOMContentLoaded', function(){
         return false;
     };
 
+    function renderLore(text){
+        let output = "";
+        let spansOpened = 0;
+
+        const parts = text.split("§");
+
+        if(parts.length == 1)
+            return text;
+
+        for(const part of parts){
+            const code = part.substring(0, 1);
+            const content = part.substring(1);
+
+            const format = constants.minecraft_formatting[code];
+
+            if(format === undefined)
+                continue;
+
+            if(format.type == 'color'){
+                for(; spansOpened > 0; spansOpened--)
+                    output += "</span>";
+
+                output += `<span style='${format.css}'>${content}`;
+
+                spansOpened++;
+            }else if(format.type == 'format'){
+                output += `<span style='${format.css}'>${content}`;
+
+                spansOpened++;
+            }else if(format.type == 'reset'){
+                for(; spansOpened > 0; spansOpened--)
+                    output += "</span>";
+
+                output += content;
+            }
+        }
+
+        for(; spansOpened > 0; spansOpened--)
+            output += "</span>";
+
+        const specialColor = constants.minecraft_formatting['6'];
+
+        const matchingEnchants = constants.special_enchants.filter(a => output.includes(a));
+
+        for(const enchantment of matchingEnchants)
+            output = output.replace(enchantment, `<span style='${specialColor.css}'>${enchantment}</span>`);
+
+        return output;
+    }
+
     let currentBackpack;
 
     function renderInventory(inventory, type){
@@ -113,6 +173,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
                 break;
             case 'enderchest':
+            case 'personal_vault':
                 break;
             default:
                 if(type in calculated.bag_sizes)
@@ -257,6 +318,20 @@ document.addEventListener('DOMContentLoaded', function(){
             */
 
         itemLore.innerHTML = item.lore || '';
+
+        try{
+            if(item.lore != null)
+                throw null;
+
+            item.tag.display.Lore.forEach(function(line, index){
+                itemLore.innerHTML += renderLore(line);
+
+                if(index + 1 < item.tag.display.Lore.length)
+                    itemLore.innerHTML += '<br>';
+            });
+        }catch(e){
+
+        }
 
         if(item.texture_pack){
             const texturePack = extra.packs.filter(a => a.id == item.texture_pack)[0];
@@ -826,6 +901,33 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
+    [].forEach.call(document.querySelectorAll('.add-favorite'), function(e){
+        let element = e;
+
+        let setNotification = tippy(element, {
+            content: 'Set favorite!',
+            trigger: 'manual'
+        });
+
+        element.addEventListener('click', function(){
+            if(element.getAttribute("data-username") == "0c0b857f415943248f772164bf76795c"){
+                setNotification.show();
+
+                setTimeout(function(){
+                    setNotification.hide();
+                }, 1500);
+            }else{
+                setCookie("favorite", element.getAttribute("data-username"), 365);
+                
+                setNotification.show();
+
+                setTimeout(function(){
+                    setNotification.hide();
+                }, 1500);
+            }
+        });
+    });
+
     let socialsShown = false;
     let revealSocials = document.querySelector('#reveal_socials');
 
@@ -1049,4 +1151,16 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     setTimeout(resize, 1000);
+});
+
+
+
+//this is run after flow
+window.addEventListener('load', function() {
+    // checks if the scrollbar has a width should be true with desktop style scrollbars
+    if (window.innerWidth > document.documentElement.clientWidth) {
+        document.documentElement.classList.add('style-scrollbar');
+    } else {
+        document.documentElement.classList.remove('style-scrollbar');
+    }
 });
