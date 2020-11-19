@@ -38,7 +38,7 @@ const parseNbt = util.promisify(nbt.parse);
 
 const rarity_order = ['special', 'mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 
-const petTiers = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
+const petTiers = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic'];
 
 const MAX_SOULS = 209;
 
@@ -109,8 +109,18 @@ function getXpByLevel(level, runecrafting){
     return output;
 }
 
-function getLevelByXp(xp, type){
-    let xp_table = type == 1 ? constants.runecrafting_xp : type == 2 ? constants.dungeoneering_xp : constants.leveling_xp;
+function getLevelByXp(xp, extra = {}){
+    let xp_table;
+    switch(extra.type){
+        case "runecrafting":
+            xp_table = constants.runecrafting_xp;
+            break;
+        case "dungeoneering":
+            xp_table = constants.dungeoneering_xp;
+            break;
+        default:
+            xp_table = constants.leveling_xp;
+    }
 
     if(isNaN(xp)){
         return {
@@ -118,16 +128,35 @@ function getLevelByXp(xp, type){
             level: 0,
             xpCurrent: 0,
             xpForNext: xp_table[1],
-            progress: 0
+            progress: 0,
+            level_cap: 0,
+            uncapped_level: 0
         };
     }
 
     let xpTotal = 0;
     let level = 0;
+    let uncappedLevel = 0;
 
     let xpForNext = Infinity;
 
-    let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
+    let levelCap = 1;
+    let maxLevel = 1;
+
+    if(extra.cap)
+        levelCap = extra.cap; 
+
+    if(extra.skill){
+        if(constants.default_skill_caps[extra.skill]
+            && constants.default_skill_caps[extra.skill] > levelCap)
+            levelCap = constants.default_skill_caps[extra.skill];
+
+        if(constants.maxed_skill_caps[extra.skill])
+            maxLevel = constants.maxed_skill_caps[extra.skill];
+    }else levelCap = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
+
+    if(levelCap > maxLevel)
+        maxLevel = levelCap;
 
     for(let x = 1; x <= maxLevel; x++){
         xpTotal += xp_table[x];
@@ -136,13 +165,14 @@ function getLevelByXp(xp, type){
             xpTotal -= xp_table[x];
             break;
         }else{
-            level = x;
+            if(x <= levelCap) level = x;
+            uncappedLevel = x;
         }
     }
 
     let xpCurrent = Math.floor(xp - xpTotal);
 
-    if(level < maxLevel)
+    if(level < levelCap)
         xpForNext = Math.ceil(xp_table[level + 1]);
 
     let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
@@ -153,7 +183,9 @@ function getLevelByXp(xp, type){
         maxLevel,
         xpCurrent,
         xpForNext,
-        progress
+        progress,
+        levelCap,
+        uncappedLevel
     };
 }
 
@@ -300,11 +332,18 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
     // Check backpack contents and add them to the list of items
     for(const [index, item] of items.entries()){
-        if(helper.hasPath(item, 'tag', 'display', 'Name') && (item.tag.display.Name.endsWith('Backpack') || item.tag.display.Name.endsWith('New Year Cake Bag'))){
+        if(helper.hasPath(item, 'tag', 'display', 'Name') && 
+        (item.tag.display.Name.endsWith('Backpack') 
+        || item.tag.display.Name.endsWith('New Year Cake Bag') 
+        || item.tag.display.Name.endsWith("Builder's Wand") 
+        || item.tag.display.Name.endsWith('Basket of Seeds'))){
             let backpackData;
 
             for(const key of Object.keys(item.tag.ExtraAttributes))
-                if(key.endsWith('backpack_data') || key == 'new_year_cake_bag_data')
+                if(key.endsWith('backpack_data') 
+                || key == 'new_year_cake_bag_data' 
+                || key == "builder's_wand_data"
+                || key == 'basket_of_seeds_data')
                     backpackData = item.tag.ExtraAttributes[key];
 
             if(!Array.isArray(backpackData))
@@ -679,20 +718,8 @@ module.exports = {
         return constants.base_stats;
     },
 
-    getLevelByXp: (xp) => {
-        let xpTotal = 0;
-        let level = 0;
-
-        let maxLevel = Object.keys(constants.leveling_xp).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
-
-        for(let x = 1; x <= maxLevel; x++){
-            xpTotal += constants.leveling_xp[x];
-
-            if(xp >= xpTotal)
-                level = x;
-        }
-
-        return level;
+    getLevelByXp: (xp, extra = {}) => {
+        return getLevelByXp(xp, extra);
     },
 
     // Get skill bonuses for a specific skill
@@ -807,6 +834,7 @@ module.exports = {
         let quiver = 'quiver' in profile ? await getItems(profile.quiver.data, customTextures, packs, cacheOnly) : [];
         let potion_bag = 'potion_bag' in profile ? await getItems(profile.potion_bag.data, customTextures, packs, cacheOnly) : [];
         let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data, customTextures, packs, cacheOnly) : [];
+        let personal_vault = 'personal_vault_contents' in profile ? await getItems(profile.personal_vault_contents.data, customTextures, packs, cacheOnly) : [];
 
         const wardrobeColumns = wardrobe_inventory.length / 4;
 
@@ -833,14 +861,15 @@ module.exports = {
         output.armor = armor.filter(a => Object.keys(a).length != 0);
         output.wardrobe = wardrobe;
         output.wardrobe_inventory = wardrobe_inventory;
-        output.inventory = inventory
+        output.inventory = inventory;
         output.enderchest = enderchest;
         output.talisman_bag = talisman_bag;
         output.fishing_bag = fishing_bag;
         output.quiver = quiver;
         output.potion_bag = potion_bag;
+        output.personal_vault = personal_vault;
 
-        const all_items = armor.concat(inventory, enderchest, talisman_bag, fishing_bag, quiver, potion_bag, wardrobe_inventory);
+        const all_items = armor.concat(inventory, enderchest, talisman_bag, fishing_bag, quiver, potion_bag, personal_vault, wardrobe_inventory);
 
         for(const [index, item] of all_items.entries()){
             item.item_index = index;
@@ -1029,6 +1058,10 @@ module.exports = {
         if(inventory.length == 0)
             output.no_inventory = true;
 
+        // Same for personal vault
+        if(personal_vault.length == 0)
+            output.no_personal_vault = true;
+
         // Sort talismans, weapons and rods by rarity
         output.weapons = output.weapons.sort((a, b) => {
             if(a.rarity == b.rarity){
@@ -1192,16 +1225,16 @@ module.exports = {
             let average_level_no_progress = 0;
 
             skillLevels = {
-                taming: getLevelByXp(userProfile.experience_skill_taming || 0),
-                farming: getLevelByXp(userProfile.experience_skill_farming || 0),
-                mining: getLevelByXp(userProfile.experience_skill_mining || 0),
-                combat: getLevelByXp(userProfile.experience_skill_combat || 0),
-                foraging: getLevelByXp(userProfile.experience_skill_foraging || 0),
-                fishing: getLevelByXp(userProfile.experience_skill_fishing || 0),
-                enchanting: getLevelByXp(userProfile.experience_skill_enchanting || 0),
-                alchemy: getLevelByXp(userProfile.experience_skill_alchemy || 0),
-                carpentry: getLevelByXp(userProfile.experience_skill_carpentry || 0),
-                runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting || 0, true),
+                taming: getLevelByXp(userProfile.experience_skill_taming || 0, {skill: "taming"}),
+                farming: getLevelByXp(userProfile.experience_skill_farming || 0, {skill: "farming", cap: hypixelProfile.achievements.skyblock_harvester || 0}),
+                mining: getLevelByXp(userProfile.experience_skill_mining || 0, {skill: "mining"}),
+                combat: getLevelByXp(userProfile.experience_skill_combat || 0, {skill: "combat"}),
+                foraging: getLevelByXp(userProfile.experience_skill_foraging || 0, {skill: "foraging"}),
+                fishing: getLevelByXp(userProfile.experience_skill_fishing || 0, {skill: "fishing"}),
+                enchanting: getLevelByXp(userProfile.experience_skill_enchanting || 0, {skill: "enchanting"}),
+                alchemy: getLevelByXp(userProfile.experience_skill_alchemy || 0, {skill: "alchemy"}),
+                carpentry: getLevelByXp(userProfile.experience_skill_carpentry || 0, {skill: "carpentry"}),
+                runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting || 0, {skill: "runecrafting", type: "runecrafting"}),
             };
 
             for(let skill in skillLevels){
@@ -1919,7 +1952,7 @@ module.exports = {
 
             pet.rarity = pet.tier.toLowerCase();
 
-            if(pet.heldItem == 'PET_ITEM_TIER_BOOST')
+            if(pet.heldItem == 'PET_ITEM_TIER_BOOST' || pet.heldItem == 'PET_ITEM_VAMPIRE_FANG')
                 pet.rarity = petTiers[Math.min(petTiers.length - 1, petTiers.indexOf(pet.rarity) + 1)];
 
             pet.level = getPetLevel(pet);
@@ -1959,6 +1992,9 @@ module.exports = {
                         break;
                     case "legendary":
                         rarity = 4;
+                        break;
+                    case "mythic":
+                        rarity = 5;
                         break;
                 }
 
@@ -2395,9 +2431,12 @@ module.exports = {
         let output = {};
 
         const dungeons = userProfile.dungeons;
-        if (dungeons == null || Object.keys(dungeons).length === 0) return output;
+        if (dungeons == null 
+            || Object.keys(dungeons).length === 0) return output;
 
         const dungeons_data = constants.dungeons;
+        if (dungeons.dungeon_types == null
+            || Object.keys(dungeons.dungeon_types).length === 0) return output;
 
         // Main Dungeons Data
         for(const type of Object.keys(dungeons.dungeon_types)){
@@ -2442,7 +2481,7 @@ module.exports = {
             output[type] = {
                 id: dungeon_id,
                 visited: true,
-                level: getLevelByXp(dungeon.experience, 2),
+                level: getLevelByXp(dungeon.experience, {type: "dungeoneering"}),
                 highest_floor: 
                     dungeons_data.floors[`${type}_${highest_floor}`] && dungeons_data.floors[`${type}_${highest_floor}`].name 
                     ? dungeons_data.floors[`${type}_${highest_floor}`].name : `floor_${highest_floor}`,
@@ -2458,7 +2497,7 @@ module.exports = {
         for(const className of Object.keys(dungeons.player_classes)){
             let data = dungeons.player_classes[className];
             output.classes[className] = {
-                experience: getLevelByXp(data.experience, 2),
+                experience: getLevelByXp(data.experience, {type: "dungeoneering"}),
                 current: false
             }
 
@@ -2963,6 +3002,31 @@ module.exports = {
 
         for(const stat of getAllKeys(memberProfiles, 'data', 'stats'))
             values[stat] = getMax(memberProfiles, 'data', 'stats', stat);
+
+        // Dungeons (Mainly Catacombs now.)
+        for(const stat of getAllKeys(memberProfiles, 'data', 'dungeons', 'dungeon_types', 'catacombs')){
+            switch(stat){
+                case "best_runs":
+                case "highest_tier_completed":
+                    break;
+                case "experience":
+                    values[`dungeons_catacombs_xp`] = getMax(memberProfiles, 'data', 'dungeons', 'dungeon_types', 'catacombs', 'experience');
+                    break;
+                default:
+                    for(const floor of getAllKeys(memberProfiles, 'data', 'dungeons', 'dungeon_types', 'catacombs', stat)){
+                        const floor_id = `catacombs_${floor}`;
+                        if(!constants.dungeons.floors[floor_id] || !constants.dungeons.floors[floor_id].name) continue;
+
+                        const floor_name = constants.dungeons.floors[floor_id].name;
+                        values[`dungeons_catacombs_${floor_name}_${stat}`] = getMax(memberProfiles, 'data', 'dungeons', 'dungeon_types', 'catacombs', stat, floor);
+                    };
+            }
+        }
+
+        for(const dungeon_class of getAllKeys(memberProfiles, 'data', 'dungeons', 'player_classes'))
+            values[`dungeons_class_${dungeon_class}_xp`] = getMax(memberProfiles, 'data', 'dungeons', 'player_classes', dungeon_class, 'experience');
+
+        values[`dungeons_secrets_found`] = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
 
         const multi = redisClient.pipeline();
 
