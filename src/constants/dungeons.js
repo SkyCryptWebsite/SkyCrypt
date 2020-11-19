@@ -232,17 +232,17 @@ module.exports = {
                         required: 100,
                         tier: 2
                     },
-                    "necromancer_lord_helmet": {
+                    "necromancer_helmet": {
                         name: "Necromancer Lord Helmet",
                         required: 150,
                         tier: 3
                     },
-                    "recomboculator": {
+                    "recombobulator": {
                         name: "Recombobulator 3000",
                         required: 250,
                         tier: 4
                     },
-                    "necromancer_lord_chestplate": {
+                    "necromancer_chestplate": {
                         name: "Necromancer Lord Chestplate",
                         required: 500,
                         tier: 5
@@ -278,7 +278,7 @@ module.exports = {
                         required: 150,
                         tier: 3
                     },
-                    "recomboculator": {
+                    "recombobulator": {
                         name: "Recombobulator 3000",
                         required: 250,
                         tier: 4
