@@ -59,7 +59,7 @@ module.exports = {
                     lore_raw[i] = statType + ": " + split[1].substring(0, 3) + item.stats.pet_luck + " " + split.slice(2).join(" ");
                     break;
                 case 'Ferocity':
-                    lore_raw[i] = statType + ": " + split[1].substring(0, 3) + item.stats.ferocity + " " + split.slice(2).join(" ");
+                    lore_raw[i] = statType + ": " + split[1].substring(0, 3) + item.stats.pet_luck + " " + split.slice(2).join(" ");
                     break;
             }
         }
