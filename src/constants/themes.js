@@ -8,23 +8,6 @@ module.exports = {
             author: "SkyCrypt Team",
             official: true,
             logo: "/resources/img/logo_square.png",
-            backgrounds: {
-                "bg": {
-                    "webp": "/resources/img/bg.webp?v3"
-                },
-                "bg_blur": {
-                    "webp": "/resources/img/bg_blur.webp?v3"
-                }
-            },
-            colors: {
-                icon: "#0BCA51",
-                line: "#0BDA51",
-                link: "#0BEA51",
-                hover: "#09EF70",
-                maxed: "#DD980E",
-                gold: "#FDBB3C",
-                skillbar: "#0BAA51",
-                maxedbar: "#CE8F12"
             }
         },
         "skylea": {
@@ -45,10 +28,7 @@ module.exports = {
                 line: "#A6145D",
                 link: "#F94EA3",
                 hover: "#F78DC2",
-                maxed: "#DD980E",
-                gold: "#FDBB3C",
                 skillbar: "#850F4A",
-                maxedbar: "#CE8F12"
             }
         },
 
