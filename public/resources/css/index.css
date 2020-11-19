@@ -541,7 +541,7 @@ header{
     background-color: rgb(20,20,20);
 }
 
-#wrapper{
+#wrapper {
     position: absolute;
     left: 30vw;
     top: 45px;
@@ -739,7 +739,7 @@ header{
     outline: 0 !important;
 }
 
-#info_box{
+#info_box {
     position: fixed;
     left: 20px;
     width: calc(30vw - 40px);
@@ -756,7 +756,7 @@ header{
     overflow-y: auto;
 }
 
-#packs_box{
+#packs_box {
     position: fixed;
     right: 20px;
     width: 440px;
@@ -1126,7 +1126,7 @@ html.no-transform #info_box.opened{
     margin-left: -5px;
 }
 
-.rank-tag{
+.rank-tag {
     display: inline-block;
     font-size: 18px;
     height: 34px;
@@ -2906,7 +2906,7 @@ a.additional-player-stat:hover{
 }
 
 @supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
-    #enter_player_box_wrapper{
+    #enter_player_box_wrapper {
         background: none;
         -webkit-backdrop-filter: blur(16px) brightness(0.5);
         backdrop-filter: blur(16px) brightness(0.5);
@@ -2989,7 +2989,7 @@ a.additional-player-stat:hover{
 }
 
 @supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
-    #error_box_wrapper{
+    #error_box_wrapper {
         background: none;
         -webkit-backdrop-filter: blur(16px) brightness(0.5);
         backdrop-filter: blur(16px) brightness(0.5);
@@ -3330,7 +3330,7 @@ body {
 }
 
 @media (max-width: 1200px){
-    #info_button{
+    #info_button {
         vertical-align: top;
         display: inline-block;
         width: 35px;
@@ -3692,12 +3692,12 @@ body {
         margin-top: 20px;
     }
 
-    #themes_button{
+    #themes_button {
         padding-right: 3px;
         right: 60px;
     }
 
-    #packs_button{
+    #packs_button {
         padding-right: 3px;
     }
 
@@ -3778,11 +3778,11 @@ body {
         left: calc(100% - 60px);
     }
 
-    #themes_button{
+    #themes_button {
         display: none;
     }
 
-    #packs_button{
+    #packs_button {
         display: none;
     }
 }
