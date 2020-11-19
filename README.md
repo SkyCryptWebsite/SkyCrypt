@@ -37,8 +37,12 @@ You can now run `npm start` to start it. You will be able to access the site on 
 
 <h2 align="center">Credits</h2>
 
-- **Animated Custom Weapons and Armors**: <a href="https://hypixel.net/threads/2138599/">FurfSky+</a> by Furf__
-- **Additional Custom Textures**: <a href="https://hypixel.net/threads/2147652/">Vanilla+</a> by TBlazeWarriorT
+- **Defualt Pack**: Combo of Furfsky+ and Vanilla+ by Leaphant
+- **Furfsky+ Pack**: <a href="https://hypixel.net/threads/2138599/">FurfSky+</a> by Furf__
+- **Vanilla+ Pack**: <a href="https://hypixel.net/threads/2147652/">Vanilla+</a> by TBlazeWarriorT
+- **FAR Block Pack**: <a href="https://hypixel.net/threads/far-block-hypixel-skyblock-resource-pack.2377411/">FAR Block</a> by Farkonong
+- **Hypixel Skyblock Pack**: <a href="https://hypixel.net/threads/hypixel-skyblock-pack-the-dungeon-update-i.2103515/">Hypixel Skyblock Pack</a> by Hypixel Packs Hq(doesn't work at the moment)
+- **Duckblock Pack**: <a href="https://hypixel.net/threads/outdated-go-to-new-link-x16-v4-0-beta-duckblock-a-skyblock-pack-purely-made-by-me.2794366/">Duckblock Pack</a> by Duckiscool69
 - **Default Textures**: <a href="https://www.minecraft.net/">Minecraft</a> by Mojang
 - **Player Heads**: <a href="https://hypixel.net/forums/skyblock.157/">SkyBlock</a> by Hypixel. 
 - **Original Site**: <a href="https://sky.lea.moe/">sky.lea.moe</a> by LeaPhant
