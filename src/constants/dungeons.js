@@ -30,6 +30,11 @@ module.exports = {
                 name: "Sadan",
                 texture: "fa06cb0c471c1c9bc169af270cd466ea701946776056e472ecdaeb49f0f4a4dc",
                 floor: "catacombs_6"
+            },
+            "necron": {
+                name: "Necron",
+                texture: "a435164c05cea299a3f016bbbed05706ebb720dac912ce4351c2296626aecd9a",
+                floor: "catacombs_7"
             }
         },
         boss_collections: {
@@ -249,6 +254,47 @@ module.exports = {
                     },
                     "diamond_sadan_head": {
                         name: "Diamond Sadan Head", 
+                        required: 1000,
+                        tier: 7
+                    }
+                }
+            },
+            "catacombs_7": {
+                boss: "necron",
+                max_tiers: 7,
+                rewards: {
+                    "wither_blood": {
+                        name: "Wither Blood",
+                        required: 50,
+                        tier: 1
+                    },
+                    "gold_necron_head": {
+                        name: "Golden Necron Head",
+                        required: 100,
+                        tier: 2
+                    },
+                    "wither_helmet": {
+                        name: "Wither Helmet",
+                        required: 150,
+                        tier: 3
+                    },
+                    "recomboculator": {
+                        name: "Recombobulator 3000",
+                        required: 250,
+                        tier: 4
+                    },
+                    "wither_leggings": {
+                        name: "Wither Leggings",
+                        required: 500,
+                        tier: 5
+                    },
+                    "wither_chestplate": {
+                        name: "Wither Chestplate",
+                        required: 750,
+                        tier: 6
+                    },
+                    "diamond_necron_head": {
+                        name: "Diamond Necron Head", 
                         required: 1000,
                         tier: 7
                     }
