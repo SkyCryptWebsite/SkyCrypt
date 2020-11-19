@@ -570,6 +570,15 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             if(item.type == 'hatccessory')
                 item.type = 'accessory';
 
+            if(item.type == 'accessory')
+                item.equipmentType = 'accessory';
+            else if (item.type == 'helmet' || item.type == 'chestplate' || item.type == 'leggings' || item.type == 'boots')
+                item.equipmentType = 'armor';
+            else if (item.type == 'sword' || item.type == 'bow' || item.type == 'fishing weapon' || item.type == 'fishing rod')
+                item.equipmentType = 'weapon';
+            else
+                item.equipmentType = 'none';
+
             if(item.type != null && item.type.startsWith('dungeon'))
                 item.Damage = 0;
             
@@ -582,8 +591,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             item.stats = {};
 
             // Get item stats from lore
-            lore.forEach(line => {
-                let split = line.split(":");
+            // we need to use lore_raw so we can get the hpbs (since what part is hpbs depend on color)
+            lore_raw.forEach(line => {
+                let split = helper.getRawLore(line).split(":");
 
                 if(split.length < 2)
                     return;
@@ -593,9 +603,23 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
                 switch(statType){
                     case 'Damage':
+                        if(item.equipmentType == 'weapon'){
+                            const matches = line.match(/§e\(\+(\d+)\)/);
+                            if (matches)
+                                item.hpbs = parseFloat(matches[1]) / 2;
+                            else
+                                item.hpbs = 0;
+                        }
                         item.stats.damage = statValue;
                         break;
                     case 'Health':
+                        if(item.equipmentType == 'armor'){
+                            const matches = line.match(/§e\(\+(\d+)\)/);
+                            if (matches)
+                                item.hpbs = parseFloat(matches[1]) / 4;
+                            else
+                                item.hpbs = 0;
+                        }
                         item.stats.health = statValue;
                         break;
                     case 'Defense':
