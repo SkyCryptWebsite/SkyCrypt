@@ -1553,6 +1553,11 @@ class Tiger extends Pet {
 			desc: [`§7Deal ${round(this.level * mult, 1)}% damage against targets with no other mobs within 15 blocks`]
 		};
 	}
+
+	modifyStats(stats) {
+		let mult = this.rarity > 2 ? 1 : this.rarity > 0 ? 0.5 : 0.2;
+		stats.ferocity += round(this.level * mult, 1);
+	}
 }
 
 class Turtle extends Pet {
