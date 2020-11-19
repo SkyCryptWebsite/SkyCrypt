@@ -2,9 +2,6 @@
     /* Icon Green (used for Skill Icons, Underlines etc.) */
     --icon-hex: #0BCA51; --icon-rgb: 11, 202, 81; 
 
-    /* Line Green (used for Navigation Bar) */
-    --line-hex: #0BDA51; --line-rgb: 11, 218, 81;
-
     /* Link Green (used for Links, Unclaimed Slayers, Crafted Minions etc.) */
     --link-hex: #0BEA51; --link-rgb: 11, 234, 81; 
 
@@ -468,10 +465,6 @@ header{
     text-shadow: 0px 0px 3px rgba(0,0,0,0.5);
 }
 
-.switch_packs_button:hover{
-    background-color: rgba(var(--line-rgb), 0.9);
-}
-
 #themes_button{
     display: inline-block;
     position: absolute;
@@ -522,8 +515,9 @@ header{
     text-shadow: 0px 0px 3px rgba(0,0,0,0.5);
 }
 
-.switch_themes_button:hover{
-    background-color: rgba(var(--line-rgb), 0.9);
+.switch_packs_button:hover,
+.switch_themes_button:hover {
+    background-color: rgba(var(--icon-rgb), 0.9);
 }
 
 .selected_button{
@@ -1462,7 +1456,7 @@ a.additional-player-stat:hover{
     right: 0;
     bottom: 10px;
     height: 2px;
-    background-color: var(--line-hex);
+    background-color: var(--icon-hex);
     z-index: 2;
 }
 

@@ -25,7 +25,6 @@ module.exports = {
             },
             colors: {
                 icon: "#A6145D",
-                line: "#A6145D",
                 link: "#F94EA3",
                 hover: "#F78DC2",
                 skillbar: "#850F4A",
@@ -49,7 +48,6 @@ module.exports = {
             },
             colors: {
                 icon: "#3BB9FF",
-                line: "#0E8DCA",
                 link: "#00FFFB",
                 hover: "#0BAFCA",
                 skillbar: "#3BB9FF"
@@ -69,7 +67,6 @@ module.exports = {
                 }
             },
             colors: {
-                line: "#f2694e",
                 link: "#F2694E",
                 icon: "#F2694E",
                 hover: "#ff9d57",
@@ -90,7 +87,6 @@ module.exports = {
                 }
             },
             colors: {
-                line: "#7652b1",
                 link: "#7652b1",
                 icon: "#ba5fde",
                 hover: "#ba5fde",
@@ -112,7 +108,6 @@ module.exports = {
             },
             colors: {
                 icon: "#CA0000",
-                line: "#DA0000",
                 link: "#EA0000",
                 hover: "#EF0000",
                 skillbar: "#AA0000",
