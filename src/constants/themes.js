@@ -21,13 +21,15 @@ module.exports = {
                 bg_blur: "/resources/img/themes/skylea/bg_blur.webp"
             },
             backgrounds: {
+                skillbar: {
+                    type: "color",
+                    color: "#850F4A"
                 }
             },
             colors: {
                 icon: "#A6145D",
                 link: "#F94EA3",
                 hover: "#F78DC2",
-                skillbar: "#850F4A",
             }
         },
 
@@ -43,13 +45,15 @@ module.exports = {
                 bg_blur: "/resources/img/themes/nightblue/bg_blur.webp"
             },
             backgrounds: {
+                skillbar: {
+                    type: "color",
+                    color: "#3BB9FF"
                 }
             },
             colors: {
                 icon: "#3BB9FF",
                 link: "#00FFFB",
                 hover: "#0BAFCA",
-                skillbar: "#3BB9FF"
             }
         },
         "sunrise": {
@@ -62,13 +66,15 @@ module.exports = {
                 bg_blur: "/resources/img/themes/sunrise/bg_blur.webp"
             },
             backgrounds: {
+                skillbar: {
+                    type: "color",
+                    color: "#f2694e"
                 }
             },
             colors: {
                 link: "#F2694E",
                 icon: "#F2694E",
                 hover: "#ff9d57",
-                skillbar: "#f2694e"
             }
         },
         "draconic": {
@@ -81,13 +87,15 @@ module.exports = {
                 bg_blur: "/resources/img/themes/draconic/bg_blur.webp"
             },
             backgrounds: {
+                skillbar: {
+                    type: "color",
+                    color: "#ba5fde"
                 }
             },
             colors: {
                 link: "#7652b1",
                 icon: "#ba5fde",
                 hover: "#ba5fde",
-                skillbar: "#ba5fde"
             }
         },
         "candycane": {
@@ -101,14 +109,23 @@ module.exports = {
                 bg_blur: "/resources/img/themes/candycane/bg_blur.webp"
             },
             backgrounds: {
+                skillbar: {
+                    type: "stripes",
+                    angle: "45deg",
+                    colors: ["#ff3939", "#ffffff"],
+                    width: 10
                 },
+                maxedbar: {
+                    type: "stripes",
+                    angle: "45deg",
+                    colors: ["#ff4e2a", "#fdbb3c"],
+                    width: 10
                 }
             },
             colors: {
                 icon: "#CA0000",
                 link: "#EA0000",
                 hover: "#EF0000",
-                skillbar: "#AA0000",
             }
         }
     }

@@ -9,10 +9,10 @@
     --hover-hex: #09EF70;
 
     /* Skill Bar Green (used for Skill Progress Bars) */
-    --skillbar-hex: #0BAA51;
+    --skillbar: #0BAA51;
 
     /* Maxed Bar Gold (used for Maxed Progress Bars) */
-    --maxedbar-hex: #CE8F12;
+    --maxedbar: #CE8F12;
 
     /* Maxed Gold (used for Maxed things etc.) */
     --maxed-hex: #DD980E; 
@@ -697,13 +697,13 @@ header{
     left: -18px;
     top: 0;
     bottom: 0;
-    background-color: var(--skillbar-hex);
+    background: var(--skillbar);
     border-top-right-radius: 7px;
     border-bottom-right-radius: 7px;
 }
 
 .skill.maxed-skill .skill-progress-bar, .slayer-bar.maxed-slayer .skill-progress-bar{
-    background-color: var(--maxedbar-hex);
+    background: var(--maxedbar);
 }
 
 .skill-progress-text{

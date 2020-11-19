@@ -106,6 +106,27 @@
                 element.style.setProperty(`--${img}`, `url(${theme.images[img]})`);
             }
             
+            for (key in theme.backgrounds) {
+                const background = theme.backgrounds[key]
+                let value
+                switch (background.type) {
+                    case "color":
+                        value = background.color
+                        break
+                    case "stripes":
+                        value = `repeating-linear-gradient( ${background.angle}, ${
+                            background.colors.flatMap((color, i) => {
+                                return [
+                                    `${color} ${i * background.width}px`,
+                                    `${color} ${(i + 1) * background.width}px`
+                                ]
+                            }).join(', ')
+                        })`
+                        break
+
+                }
+                element.style.setProperty(`--${key}`, value);             
+            }
 
             console.log(`Loaded theme: ${currentTheme}`);
         }
