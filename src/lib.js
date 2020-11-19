@@ -614,7 +614,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                         break;
                     case 'Health':
                         if(item.equipmentType == 'armor'){
-                            const matches = line.match(/§e\(\+(\d+)\)/);
+                            const matches = line.match(/§e\(\+(\d+) HP\)/);
                             if (matches)
                                 item.hpbs = parseFloat(matches[1]) / 4;
                             else
