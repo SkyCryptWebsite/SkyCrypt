@@ -503,6 +503,9 @@ module.exports = {
         ],
         BAT_PERSON_RING: [
             'BAT_PERSON_ARTIFACT'
+        ],
+        WITHER_ARTIFACT: [
+            'WITHER_RELIC'
         ]
     },
 
@@ -1052,6 +1055,12 @@ module.exports = {
         },
         'CANDY_RELIC': {
             head: false
+        },
+        'WITHER_RELIC': {
+            head: false
+        },
+        'CATACOMBS_EXPERT_RING': {
+            head: false 
         }
     }
 };

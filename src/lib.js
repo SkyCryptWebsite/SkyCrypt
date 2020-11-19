@@ -77,24 +77,45 @@ function getAllKeys(profiles, ...path){
     return _.uniq([].concat(...profiles.map(a => _.keys(helper.getPath(a, ...path)))));
 }
 
-function getXpByLevel(level, runecrafting){
+function getXpByLevel(level, extra = {}){
+    let xp_table;
+    switch(extra.type){
+        case "runecrafting":
+            xp_table = constants.runecrafting_xp;
+            break;
+        case "dungeoneering":
+            xp_table = constants.dungeoneering_xp;
+            break;
+        default:
+            xp_table = constants.leveling_xp;
+    }
+
+    let levelCap = 1;
+    let maxLevel = 1;
+
+    if(extra.skill){
+        if(constants.default_skill_caps[extra.skill]
+            && constants.default_skill_caps[extra.skill] > levelCap)
+            levelCap = constants.default_skill_caps[extra.skill];
+
+        if(constants.maxed_skill_caps[extra.skill])
+            maxLevel = constants.maxed_skill_caps[extra.skill];
+    }else levelCap = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
+
+    if(levelCap > maxLevel)
+        maxLevel = levelCap;
+
     const output = {
-        level: Math.min(level, 50),
+        level: Math.min(level, maxLevel),
         xpCurrent: 0,
         xpForNext: null,
         progress: 0.05
     }
 
-    let xp_table = runecrafting ? constants.runecrafting_xp : constants.leveling_xp;
-
     if(isNaN(level))
         return 0;
 
     let xpTotal = 0;
-
-    let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
-
-    output.maxLevel = maxLevel;
 
     for(let x = 1; x <= level; x++)
         xpTotal += xp_table[x];
@@ -409,32 +430,20 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             }
         }
 
-        let lore_raw;
-
         const enchantments = helper.getPath(item, 'tag', 'ExtraAttributes', 'enchantments') || {};
-        const hasEnchantments = Object.keys(enchantments).length > 0;
+
+        let itemLore = helper.getPath(item, 'tag', 'display', 'Lore') || [];
+        let lore_raw = [...itemLore];
+
+        let lore = lore_raw != null ? lore_raw.map(a => a = helper.getRawLore(a)) : [];
 
         // Set HTML lore to be displayed on the website
-        if(helper.hasPath(item, 'tag', 'display', 'Lore')){
-            lore_raw = item.tag.display.Lore;
-
-            item.lore = '';
-
-            for(const [index, line] of lore_raw.entries()){
-                if(index == 0 && line == '')
-                    continue;
-
-                item.lore += helper.renderLore(line, hasEnchantments);
-
-                if(index + 1 < lore_raw.length)
-                    item.lore += '<br>';
-            }
-
+        if(itemLore.length > 0){
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'rarity_upgrades')){
                 const { rarity_upgrades } = item.tag.ExtraAttributes;
 
                 if(rarity_upgrades > 0)
-                    item.lore += "<br>" + helper.renderLore(`§8(Recombobulated)`);
+                    itemLore.push('§8(Recombobulated)');
             }
 
             let hasAnvilUses = false;
@@ -449,10 +458,10 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
                 anvil_uses -= hot_potato_count;
 
-                if(anvil_uses > 0 && lore_raw){
+                if(anvil_uses > 0){
                     hasAnvilUses = true;
 
-                    item.lore += "<br><br>" + helper.renderLore(`§7Anvil Uses: §c${anvil_uses}`);
+                    itemLore.push('', `§7Anvil Uses: §c${anvil_uses}`);
                 }
             }
 
@@ -460,9 +469,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                 let { expertise_kills } = item.tag.ExtraAttributes;
 
                 if(expertise_kills > 0 && lore_raw){
-                    item.lore += "<br><br>" + helper.renderLore(`§7Expertise Kills: §c${expertise_kills}`);
+                    itemLore.push('', `§7Expertise Kills: §c${expertise_kills}`);
                     if (expertise_kills >= 15000)
-                        item.lore += "<br>" + helper.renderLore(`§8MAXED OUT!`);
+                        itemLore.push(`§8MAXED OUT!`);
                     else{
                         let toNextLevel = 0;
                         for (const e of constants.expertise_kills_ladder){
@@ -471,13 +480,11 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                                 break;
                             }
                         }
-                        item.lore += "<br>" + helper.renderLore(`§8${toNextLevel} kills to tier up!`);}
+                        itemLore.push(`§8${toNextLevel} kills to tier up!`);}
                 }
             }
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp')){
-                item.lore += "<br>";
-
                 const { timestamp } = item.tag.ExtraAttributes;
 
                 let obtainmentDate;
@@ -492,46 +499,37 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                 if(!obtainmentDate.isValid())
                     obtainmentDate = moment(timestamp, "M/D/YY HH:mm");
 
-                item.lore += "<br>" + helper.renderLore(`§7Obtained: §c${obtainmentDate.format("D MMM YYYY")}`);
+                itemLore.push('', `§7Obtained: §c${obtainmentDate.format("D MMM YYYY")}`);
             }
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'spawnedFor')){
                 if(!helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp'))
-                    item.lore += "<br>";
+                    itemLore.push('');
 
                 const spawnedFor = item.tag.ExtraAttributes.spawnedFor.replace(/\-/g, '');
                 const spawnedForUser = await helper.resolveUsernameOrUuid(spawnedFor, db, cacheOnly);
 
-                item.lore += "<br>" + helper.renderLore(`§7By: §c<a href="/stats/${spawnedFor}">${spawnedForUser.display_name}</a>`);
+                itemLore.push(`§7By: §c<a href="/stats/${spawnedFor}">${spawnedForUser.display_name}</a>`);
             }
  
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'baseStatBoostPercentage')){
-
                 const boost = item.tag.ExtraAttributes.baseStatBoostPercentage;
 
-                item.lore += "<br><br>" + helper.renderLore(`§7Dungeon Item Quality: ${boost == 50 ? '§6' : '§c'}${boost}/50%`);
+                itemLore.push('', `§7Dungeon Item Quality: ${boost == 50 ? '§6' : '§c'}${boost}/50%`);
             }
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'item_tier')){
-
                 const floor = item.tag.ExtraAttributes.item_tier;
 
-                item.lore += "<br>"
-
-                item.lore += helper.renderLore(`§7Obtained From: §bFloor ${floor}`);
+                itemLore.push(`§7Obtained From: §bFloor ${floor}`);
             }
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'winning_bid')){
-
                 const price = item.tag.ExtraAttributes.winning_bid;
 
-                item.lore += "<br>"
-
-                item.lore += helper.renderLore(`§7Price Paid at Dark Auction: §b${price.toLocaleString()} coins`);
+                itemLore.push(`§7Price Paid at Dark Auction: §b${price.toLocaleString()} coins`);
             }
         }
-
-        let lore = lore_raw ? lore_raw.map(a => a = helper.getRawLore(a)) : [];
 
         let rarity, item_type;
 
@@ -1268,13 +1266,13 @@ module.exports = {
             let skillsAmount = 0;
 
             for(const skill in skillLevels){
-                output.levels[skill] = getXpByLevel(skillLevels[skill]);
+                output.levels[skill] = getXpByLevel(skillLevels[skill], {skill: skill});
 
                 if(skillLevels[skill] < 0)
                     continue;
 
                 skillsAmount++;
-                average_level += skillLevels[skill];
+                average_level += output.levels[skill].level;
 
                 totalSkillXp += output.levels[skill].xp;
             }
