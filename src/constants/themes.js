@@ -124,8 +124,10 @@ module.exports = {
             },
             colors: {
                 icon: "#CA0000",
-                link: "#EA0000",
-                hover: "#EF0000",
+                link: "#EB0000",
+                hover: "#B30000",
+                maxed: "#DD980E",
+                gold: "#c58000"
             }
         }
     }
