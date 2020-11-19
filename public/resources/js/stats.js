@@ -318,7 +318,6 @@ document.addEventListener('DOMContentLoaded', function(){
             */
 
         itemLore.innerHTML = item.lore || '';
-        console.log(item.lore);
 
         try{
             if(item.lore != null)
