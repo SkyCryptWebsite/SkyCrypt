@@ -1692,6 +1692,23 @@ class Zombie extends Pet {
 			desc: [`§7Increases the defense of all undead armor sets by §a${round(this.level * mult, 1)}%`]
 		};
 	}
+
+	modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
+		if (this.rarity > 3) {
+			if (hName.includes("ZOMBIE")) {
+				helmet.stats.defense += round(this.level * mult, 1);
+			}
+			if (cName.includes("ZOMBIE")) {
+				chest.stats.defense += round(this.level * mult, 1);
+			}
+			if (lName.includes("ZOMBIE")) {
+				legs.stats.defense += round(this.level * mult, 1);
+			}
+			if (bName.includes("ZOMBIE")) {
+				boots.stats.defense += round(this.level * mult, 1);
+			}
+		}
+	}
 }
 
 /*
