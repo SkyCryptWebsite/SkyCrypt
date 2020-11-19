@@ -1058,6 +1058,9 @@ module.exports = {
         },
         'WITHER_RELIC': {
             head: false
+        },
+        'CATACOMBS_EXPERT_RING': {
+            head: false 
         }
     }
 };
