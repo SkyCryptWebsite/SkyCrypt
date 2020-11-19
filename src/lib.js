@@ -2192,161 +2192,72 @@ module.exports = {
             if(name in constants.talisman_upgrades){ //if the name is in the upgrades list
                 for(let upgrade of constants.talisman_upgrades[name]){
                     if(talismans.includes(upgrade)){ //if talisman list includes the upgrade
-                        missing = missing.filter(item => item !== name)
+                        missing = missing.filter(item => item !== name);
                         break;
                     }
                 }
             }
         });
+
         const output = [];
         missing.forEach(async talisman => {
-            const data = await db
-                .collection('items')
-                .findOne({ id: talisman });
             let object = {
                 texture_path: null,
                 display_name: null,
                 rarity: null
             }
-            if(data){
-                object.texture_path = "/head/" + data.texture
-                object.display_name = data.name
-                object.rarity = data.tier.toLowerCase()
-            }
+
+            // SPECIFIC TALISMANS
             if(talisman.startsWith("WEDDING_RING_")){
                 object.texture_path = "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c"
                 object.display_name = "Ring of Love"
                 object.rarity = "legendary"
+
+                output.push(object);
+                return;
             }
             
             if(talisman.startsWith("CAMPFIRE_TALISMAN_")){
                 object.texture_path = "/head/4080bbefca87dc0f36536b6508425cfc4b95ba6e8f5e6a46ff9e9cb488a9ed"
                 object.display_name = "Campfire God Badge"
                 object.rarity = "legendary"
-            }
-            
-            if(talisman.startsWith("DAY_CRYSTAL")){
-                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/day_crystal.png"
-                object.display_name = "Day Crystal"
-                object.rarity = "rare"
-            }
-            
-            if(talisman.startsWith("NIGHT_CRYSTAL")){
-                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/night_crystal.png"
-                object.display_name = "Night Crystal"
-                object.rarity = "rare"
+
+                output.push(object);
+                return;
             }
 
-            if(talisman.startsWith("MELODY_HAIR")){
-                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/melodyshair.png"
-                object.display_name = "Melody's Hair"
-                object.rarity = "epic"
-            }
-            if(talisman.startsWith("PERSONAL_COMPACTOR")){
-                object.texture_path = `/item/${talisman}`
-            }
-            if(talisman.startsWith("ZOMBIE_TALISMAN")){
-                object.texture_path = "/item/item?id=397&damage=2"
-            }
-            if(talisman.startsWith("SKELETON_TALISMAN")){
-                object.texture_path = "/item/item?id=397"
-            }
-            if(talisman.startsWith("CAT_TALISMAN")){
-                object.texture_path = "/head/3a12188258601bcb7f76e3e2489555a26c0d76e6efec2fd966ca372b6dde00"
-                object.display_name = "Cat Talisman"
-                object.rarity = "uncommon"
-            }
-            if(talisman.startsWith("LYNX_TALISMAN")){
-                object.texture_path = "/head/12b84e9c79815a39b7be8ce6e91248d71f760f42b5a4de5e266b44b87a952229"
-                object.display_name = "Lynx Talisman"
-                object.rarity = "rare"
-            }
-            if(talisman.startsWith("CHEETAH_TALISMAN")){
-                object.texture_path = "/head/1553f8856dd46de7e05d46f5fc2fb58eafba6829b11b160a1545622e89caaa33"
-                object.display_name = "Cheetah Talisman"
-                object.rarity = "epic"
-            }
-            if(talisman.startsWith("CROOKED_ARTIFACT")){
-                object.texture_path = "/head/5b7ff88d154d04a8a26995c99f64e53b574c7b82ec21a12a9e448bca1e70f461"
-                object.display_name = "Crooked Artifact"
-                object.rarity = "rare"
-            }
-            if(talisman.startsWith("EXPERIENCE_ARTIFACT")){
-                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/experience_artifact.png"
-            }
-            if(talisman.startsWith("TREASURE_TALISMAN")){
-                object.texture_path = "/head/31f320025142596396032cc0088e2ac36489f24cfa5e9dda13e081cf69f77f4d"
-                object.display_name = "Treasure Talisman"
-                object.rarity = "rare"
-            }
-            if(talisman.startsWith("TREASURE_RING")){
-                object.texture_path = "/head/6a1cc5525a217a399b5b86c32f0f22dd91378874b5f44d5a383e18bc0f3bc301"
-                object.display_name = "Treasure Ring"
-                object.rarity = "epic"
-            }
-            if(talisman.startsWith("TREASURE_ARTIFACT")){
-                object.texture_path = "/head/e10f20a55b6e188ebe7578459b64a6fbd825067bc497b925ca43c2643d059025"
-                object.display_name = "Treasure Artifact"
+            if(talisman.startsWith("BEASTMASTER_CREST_")){
+                object.texture_path = "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c"
+                object.display_name = "Ring of Love"
                 object.rarity = "legendary"
+
+                output.push(object);
+                return;
             }
-            if(talisman.startsWith("RAGGEDY_SHARK_TOOTH_NECKLACE")){
-                object.texture_path = "/head/d77309ddebbdc278ee2772d92fa4905dd850c5f213a77ffaed5a67eecb23984a"
-                object.display_name = "Raggedy Shark Tooth Necklace"
-                object.rarity = "common"
+
+            // MAIN TALISMANS
+            if (constants.talismans[talisman] != null){
+                const data = constants.talismans[talisman];
+
+                object.texture_path = data.texture || null;
+                object.display_name = data.name || null;
+                object.rarity = data.rarity || null;
+            } else {
+                const data = await db
+                    .collection('items')
+                    .findOne({ id: talisman });
+
+                if(data){
+                    object.texture_path = data.texture ? "/head/" + data.texture : `/item/${talisman}`;
+                    object.display_name = data.name;
+                    object.rarity = data.tier.toLowerCase();
+                }
             }
-            if(talisman.startsWith("DULL_SHARK_TOOTH_NECKLACE")){
-                object.texture_path = "/head/f3ab3aa1ade74915dacd298613904361c18877eebfa81d9f936309f271e1389a"
-                object.display_name = "Dull Shark Tooth Necklace"
-                object.rarity = "uncommon"
-            }
-            if(talisman.startsWith("HONED_SHARK_TOOTH_NECKLACE")){
-                object.texture_path = "/head/e6b120938d83bf49ddab3a78666a0bf37a3de7b46b9d97b984da3be62ce3e5e3"
-                object.display_name = "Honed Shark Tooth Necklace"
-                object.rarity = "rare"
-            }
-            if(talisman.startsWith("SHARP_SHARK_TOOTH_NECKLACE")){
-                object.texture_path = "/head/228e3fb6bd9887d60434ccd279ec3e59227826c9a2f8dd9ce9899ea6683d4ee8"
-                object.display_name = "Sharp Shark Tooth Necklace"
-                object.rarity = "epic"
-            }
-            if(talisman.startsWith("RAZOR_SHARP_SHARK_TOOTH_NECKLACE")){
-                object.texture_path = "/head/7792676664ac711488641f72b25961835613da9ffd43ea3bdd163cb365343a6"
-                object.display_name = "Razor Sharp Shark Tooth Necklace"
-                object.rarity = "legendary"
-            }
-            if(talisman.startsWith("BITS_TALISMAN")){
-                object.texture_path = "/head/2ebadb1725aa85bb2810d0b73bf7cd74db3d9d8fc61c4cf9e543dbcc199187cc"
-                object.display_name = "Bits Talisman"
-                object.rarity = "rare"
-            }
-            if(talisman.startsWith('HEGEMONY_ARTIFACT')){
-                object.texture_path = "/head/313384a293cfbba3489b483ebc1de7584ca2726d7f5c3a620513474925e87b97"
-                object.display_name = "Hegemony Artifact"
-                object.rarity = "legendary"
-            }
-            if(talisman.startsWith('BAT_PERSON_TALISMAN')){
-                object.texture_path = "/head/b841a49b199a59c431bf3fc3783f6b6545ce78c38042617f66ebd87cdd548e8c"
-                object.display_name = "Bat Person Talisman"
-                object.rarity = "common"
-            }
-            if(talisman.startsWith("BAT_PERSON_RING")){
-                object.texture_path = "/head/b4451ecf2584a36de4297031c6d852977d3e249e85a3f0add967fcd7d6bde953"
-                object.display_name = "Bat Person Ring"
-                object.rarity = "uncommon"
-            }
-            if(talisman.startsWith("BAT_PERSON_ARTIFACT")){
-                object.texture_path = "/head/c4444c3982720b30938f504c4374232b11a4f6f56cd57c973d8abb07fd0dcff7"
-                object.display_name = "Bat Person Artifact"
-                object.rarity = "rare"
-            }
-            if(talisman.startsWith('CANDY_RELIC')){
-                object.texture_path = "/head/39668767f1141835e2c49ad2b415598f1b166be9173902a0257e77704f913e1f"
-                object.display_name = "Candy Relic"
-                object.rarity = "legendary"
-            }
+
             if(object.name == null){
                 object.name = talisman;
             }
+
             output.push(object);
         });
 
