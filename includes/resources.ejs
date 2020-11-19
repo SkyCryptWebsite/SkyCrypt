@@ -87,6 +87,8 @@
             const theme = extra.themes[currentTheme];
 
             const element = document.documentElement;
+            
+            element.classList.toggle("light", !!theme.light);
 
             element.style = ''
 
