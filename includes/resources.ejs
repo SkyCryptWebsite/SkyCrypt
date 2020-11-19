@@ -86,12 +86,12 @@
 
             const theme = extra.themes[currentTheme];
 
-            let colors = theme.colors;
             const element = document.documentElement;
 
-            for (color in colors) {
-                let value = colors[color];
 
+            for (color in theme.colors) {
+                const value = theme.colors[color];
+                
                 element.style.setProperty(`--${color}-hex`, value);
                 
                 if(['icon','link','text','background','header','grey_background'].includes(color)){
