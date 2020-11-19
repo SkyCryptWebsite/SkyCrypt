@@ -40,8 +40,8 @@
 }
 
 html{
-    background-color: black;
-    background: var(--bg-webp) no-repeat center center fixed;
+    background-color: #121212;
+    background: var(--bg-webp) no-repeat center center fixed #121212;
     background-size: cover;
     font-family: 'Montserrat', sans-serif;
     color: white;
