@@ -31,7 +31,6 @@
     --bg-webp: url(https://sky.shiiyu.moe/resources/img/bg.webp?v3);
 
     /* Blurred Backgrounds */
-    --bg_blur-png: url(https://sky.shiiyu.moe/resources/img/bg_blur.png?v3); 
     --bg_blur-webp: url(https://sky.shiiyu.moe/resources/img/bg_blur.webp?v3);
 }
 
@@ -41,8 +40,8 @@
 }
 
 html{
-    background-color: black;
-    background: var(--bg-webp) no-repeat center center fixed;
+    background-color: #121212;
+    background: var(--bg-webp) no-repeat center center fixed #121212;
     background-size: cover;
     font-family: 'Montserrat', sans-serif;
     color: white;
@@ -565,10 +564,6 @@ header{
     right: 0;
     bottom: 0;
     background-color: rgb(20,20,20);
-}
-
-html.no-webp #bg_blur{
-    background-image: var(--bg_blur-png)
 }
 
 #wrapper{
@@ -2943,10 +2938,6 @@ a.additional-player-stat:hover{
     color: rgba(255,255,255,0.8);
 }
 
-html.no-webp #enter_player_box_wrapper{
-    background-image: var(--bg_blur-png);
-}
-
 #enter_player_box{
     text-align: center;
 }
@@ -3055,10 +3046,6 @@ html.no-webp #enter_player_box_wrapper{
     }
 }
 
-html.no-webp .top-profile{
-    background-image: var(--bg_blur-png);
-}
-
 .top-profile:hover{
     opacity: 1;
 }
@@ -3114,10 +3101,6 @@ html.no-webp .top-profile{
 #error_box_wrapper{
     min-height: 70px;
     max-height: 500px;
-}
-
-html.no-webp #error_box_wrapper{
-    background-image: var(--bg_blur-png);
 }
 
 #top_profiles_box{
