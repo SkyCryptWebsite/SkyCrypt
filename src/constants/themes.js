@@ -14,7 +14,6 @@ module.exports = {
                     "webp": "../img/bg.webp?v3"
                 },
                 "bg_blur": {
-                    "png": "../img/bg_blur.png?v3",
                     "webp": "../img/bg_blur.webp?v3"
                 }
             },
@@ -40,7 +39,6 @@ module.exports = {
                     "webp": "../img/themes/skylea/bg.webp"
                 },
                 "bg_blur": {
-                    "png": "../img/themes/skylea/bg_blur.png",
                     "webp": "../img/themes/skylea/bg_blur.webp"
                 }
             },
@@ -69,7 +67,6 @@ module.exports = {
                     "webp": "../img/themes/nightblue/bg.webp"
                 },
                 "bg_blur": {
-                    "png": "../img/themes/nightblue/bg_blur.png",
                     "webp": "../img/themes/nightblue/bg_blur.webp"
                 }
             },
@@ -92,7 +89,6 @@ module.exports = {
                     "webp": "../img/themes/sunrise/bg.webp"
                 },
                 "bg_blur": {
-                    "png": "../img/themes/sunrise/bg_blur.png",
                     "webp": "../img/themes/sunrise/bg_blur.webp"
                 }
             },
@@ -115,7 +111,6 @@ module.exports = {
                     "webp": "../img/themes/draconic/bg.webp"
                 },
                 "bg_blur": {
-                    "png": "../img/themes/draconic/bg_blur.png",
                     "webp": "../img/themes/draconic/bg_blur.webp"
                 }
             },
