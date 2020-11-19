@@ -29,7 +29,7 @@ module.exports = {
             colors: {
                 icon: "#A6145D",
                 link: "#F94EA3",
-                hover: "#F78DC2",
+                hover: "#F78DC2"
             }
         },
 
@@ -53,7 +53,7 @@ module.exports = {
             colors: {
                 icon: "#3BB9FF",
                 link: "#00FFFB",
-                hover: "#0BAFCA",
+                hover: "#0BAFCA"
             }
         },
         "sunrise": {
@@ -74,7 +74,7 @@ module.exports = {
             colors: {
                 link: "#F2694E",
                 icon: "#F2694E",
-                hover: "#ff9d57",
+                hover: "#ff9d57"
             }
         },
         "draconic": {
@@ -95,7 +95,7 @@ module.exports = {
             colors: {
                 link: "#7652b1",
                 icon: "#ba5fde",
-                hover: "#ba5fde",
+                hover: "#ba5fde"
             }
         },
         "candycane": {
