@@ -1440,7 +1440,10 @@ module.exports = {
             for(const stat in pet.stats)
                 output.pet_bonus[stat] = (output.pet_bonus[stat] || 0) + pet.stats[stat];
         }
-
+        
+        //Counteract the fact that the angler armor ability is still in the lore
+        if(items.armor.filter(a=> getId(a).startsWith('Angler_Armor_')).length == 4)
+            
         // Apply all harp bonuses when Melody's Hair has been acquired
         if(items.talismans.filter(a => getId(a) == 'MELODY_HAIR').length == 1)
             output.stats.intelligence += 26;
