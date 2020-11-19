@@ -21,15 +21,13 @@
     --gold-hex: #FDBB3C;
 
     /* Header Logo */
-    --logo-square: url(https://sky.shiiyu.moe/resources/img/logo_square.png?v2);
+    --logo: url(https://sky.shiiyu.moe/resources/img/logo_square.png?v2);
 
-    /* Normal Backgrounds */
-    --bg-png: url(https://sky.shiiyu.moe/resources/img/bg.png?v3); 
-    --bg-webp: url(https://sky.shiiyu.moe/resources/img/bg.webp?v3);
+    /* Normal Background */
+    --bg: url(https://sky.shiiyu.moe/resources/img/bg.webp?v3);
 
-    /* Blurred Backgrounds */
-    --bg_blur-png: url(https://sky.shiiyu.moe/resources/img/bg_blur.png?v3); 
-    --bg_blur-webp: url(https://sky.shiiyu.moe/resources/img/bg_blur.webp?v3);
+    /* Blurred Background */
+    --bg_blur: url(https://sky.shiiyu.moe/resources/img/bg_blur.webp?v3);
 }
 
 *{
@@ -39,7 +37,7 @@
 
 html{
     background-color: black;
-    background: var(--bg-webp) no-repeat center center fixed;
+    background: var(--bg) no-repeat center center fixed;
     background-size: cover;
     font-family: 'Montserrat', sans-serif;
     color: white;
@@ -52,10 +50,6 @@ html{
 
 .stat-name, .stat-value, .skill-name, .skill-progress-text, .grey-text, .kill-stat{
     user-select: text !important;
-}
-
-html.no-webp{
-    background-image: var(--bg-png);
 }
 
 a.no-underline{
@@ -551,7 +545,7 @@ header{
 }
 
 #bg_blur{
-    background: var(--bg_blur-webp) no-repeat center center fixed;
+    background: var(--bg_blur) no-repeat center center fixed;
     background-size: cover;
     position: fixed;
     left: 30vw;
@@ -559,10 +553,6 @@ header{
     right: 0;
     bottom: 0;
     background-color: rgb(20,20,20);
-}
-
-html.no-webp #bg_blur{
-    background-image: var(--bg_blur-png)
 }
 
 #wrapper{
@@ -2904,7 +2894,7 @@ a.additional-player-stat:hover{
     margin-top: calc(50vh - 130px);
     width: 700px;
     height: 260px;
-    background: var(--bg_blur-webp) no-repeat center center fixed;
+    background: var(--bg_blur) no-repeat center center fixed;
     background-size: cover;
     border-radius: 10px;
     overflow: hidden;
@@ -2922,10 +2912,7 @@ a.additional-player-stat:hover{
 #enter_player_box_wrapper p:last-child{
     font-size: 16px;
     color: rgba(255,255,255,0.8);
-}
-
-html.no-webp #enter_player_box_wrapper{
-    background-image: var(--bg_blur-png);
+    color: rgba(var(--text-rgb),0.8);
 }
 
 #enter_player_box{
@@ -2986,7 +2973,7 @@ html.no-webp #enter_player_box_wrapper{
     margin: 0 auto;
     margin-top: 20px;
     width: 700px;
-    background: var(--bg_blur-webp) no-repeat center center fixed;
+    background: var(--bg_blur) no-repeat center center fixed;
     background-size: cover;
     border-radius: 10px;
     overflow: hidden;
@@ -3016,7 +3003,7 @@ html.no-webp #enter_player_box_wrapper{
 .top-profile{
     position: relative;
     display: inline-block;
-    background: var(--bg_blur-webp) no-repeat center center fixed;
+    background: var(--bg_blur) no-repeat center center fixed;
     background-size: cover;
     width: calc(100% / 2 - 10px);
     margin-bottom: 20px;
@@ -3034,10 +3021,6 @@ html.no-webp #enter_player_box_wrapper{
         -webkit-backdrop-filter: blur(16px) brightness(0.5);
         backdrop-filter: blur(16px) brightness(0.5);
     }
-}
-
-html.no-webp .top-profile{
-    background-image: var(--bg_blur-png);
 }
 
 .top-profile:hover{
@@ -3095,10 +3078,6 @@ html.no-webp .top-profile{
 #error_box_wrapper{
     min-height: 70px;
     max-height: 500px;
-}
-
-html.no-webp #error_box_wrapper{
-    background-image: var(--bg_blur-png);
 }
 
 #top_profiles_box{

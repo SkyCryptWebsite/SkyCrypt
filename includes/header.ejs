@@ -68,7 +68,7 @@
     <% for(const theme in extra.themes){
         if(extra.themes[theme].hidden) continue; %>
     <div class="theme">
-        <% const icon = extra.themes[theme].logo; %>
+        <% const icon = extra.themes[theme].images.logo; %>
         <img class="theme-icon" src="<%= icon %>">
         <span class="theme-name"><%= extra.themes[theme].name %></span>
         <div class="theme-author">by <span><%= extra.themes[theme].author %></span></div>

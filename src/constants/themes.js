@@ -7,20 +7,20 @@ module.exports = {
             name: "Default Theme",
             author: "SkyCrypt Team",
             official: true,
-            logo: "/resources/img/logo_square.png",
+            images: {
+                logo: "/resources/img/logo_square.png"
             }
         },
         "skylea": {
             name: "sky.lea.moe",
             author: "LeaPhant",
             official: true,
-            logo: "/resources/img/themes/skylea/logo_square.png",
+            images: {
+                logo: "/resources/img/themes/skylea/logo_square.png",
+                bg: "/resources/img/themes/skylea/bg.webp",
+                bg_blur: "/resources/img/themes/skylea/bg_blur.webp"
+            },
             backgrounds: {
-                "bg": {
-                    "webp": "/resources/img/themes/skylea/bg.webp"
-                },
-                "bg_blur": {
-                    "webp": "/resources/img/themes/skylea/bg_blur.webp"
                 }
             },
             colors: {
@@ -37,13 +37,12 @@ module.exports = {
             name: "Night Blue Theme",
             author: "8KCoffeeWizard",
             community: true,
-            logo: "/resources/img/themes/nightblue/logo_square.png",
+            images: {
+                logo: "/resources/img/themes/nightblue/logo_square.png",
+                bg: "/resources/img/themes/nightblue/bg.webp",
+                bg_blur: "/resources/img/themes/nightblue/bg_blur.webp"
+            },
             backgrounds: {
-                "bg": {
-                    "webp": "/resources/img/themes/nightblue/bg.webp"
-                },
-                "bg_blur": {
-                    "webp": "/resources/img/themes/nightblue/bg_blur.webp"
                 }
             },
             colors: {
@@ -57,13 +56,12 @@ module.exports = {
             name: "Sunrise Orange Theme",
             author: "rainbowcraft2",
             community: true,
-            logo: "/resources/img/themes/sunrise/logo_square.png",
+            images: {
+                logo: "/resources/img/themes/sunrise/logo_square.png",
+                bg: "/resources/img/themes/sunrise/bg.webp",
+                bg_blur: "/resources/img/themes/sunrise/bg_blur.webp"
+            },
             backgrounds: {
-                "bg": {
-                    "webp": "/resources/img/themes/sunrise/bg.webp"
-                },
-                "bg_blur": {
-                    "webp": "/resources/img/themes/sunrise/bg_blur.webp"
                 }
             },
             colors: {
@@ -77,13 +75,12 @@ module.exports = {
             name: "Draconic Purple Theme",
             author: "rainbowcraft2",
             community: true,
-            logo: "/resources/img/themes/draconic/logo_square.png",
+            images: {
+                logo: "/resources/img/themes/draconic/logo_square.png",
+                bg: "/resources/img/themes/draconic/bg.webp",
+                bg_blur: "/resources/img/themes/draconic/bg_blur.webp"
+            },
             backgrounds: {
-                "bg": {
-                    "webp": "/resources/img/themes/draconic/bg.webp"
-                },
-                "bg_blur": {
-                    "webp": "/resources/img/themes/draconic/bg_blur.webp"
                 }
             },
             colors: {
@@ -97,13 +94,14 @@ module.exports = {
             name: "Candy Cane Theme",
             author: "Cookie_Wookie_7",
             community: true,
-            logo: "/resources/img/themes/candycane/logo_square.svg",
+            light: true,
+            images: {
+                logo: "/resources/img/themes/candycane/logo_square.svg",
+                bg: "/resources/img/themes/candycane/bg.webp",
+                bg_blur: "/resources/img/themes/candycane/bg_blur.webp"
+            },
             backgrounds: {
-                "bg": {
-                    "webp": "/resources/img/themes/candycane/bg.webp"
                 },
-                "bg_blur": {
-                    "webp": "/resources/img/themes/candycane/bg_blur.webp"
                 }
             },
             colors: {

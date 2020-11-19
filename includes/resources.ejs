@@ -102,13 +102,10 @@
                 }
             }
 
-            let bgs = theme.backgrounds;
-            for (bg in bgs) 
-                for (img in bgs[bg]) 
-                    element.style.setProperty(`--${bg}-${img}`, `url(${bgs[bg][img]})`);
+            for (img in theme.images) {
+                element.style.setProperty(`--${img}`, `url(${theme.images[img]})`);
+            }
             
-            if (theme.logo)
-                element.style.setProperty('--logo-square', `url(${theme.logo})`);
 
             console.log(`Loaded theme: ${currentTheme}`);
         }
