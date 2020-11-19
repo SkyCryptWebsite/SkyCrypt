@@ -107,8 +107,12 @@ a.no-underline{
 
 *[data-tippy-content]::after{
     content: "*";
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(var(--text-rgb), 0.6);
     transition: color .2s;
+}
+
+.additional-player-stat[data-tippy-content]::after{
+    color: rgba(255, 255, 255, 0.6);
 }
 
 *[data-tippy-content]:hover::after{
