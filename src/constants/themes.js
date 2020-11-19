@@ -10,11 +10,9 @@ module.exports = {
             logo: "/resources/img/logo_square.png",
             backgrounds: {
                 "bg": {
-                    "png": "/resources/img/bg.png?v3",
                     "webp": "/resources/img/bg.webp?v3"
                 },
                 "bg_blur": {
-                    "png": "/resources/img/bg_blur.png?v3",
                     "webp": "/resources/img/bg_blur.webp?v3"
                 }
             },
@@ -36,11 +34,9 @@ module.exports = {
             logo: "/resources/img/themes/skylea/logo_square.png",
             backgrounds: {
                 "bg": {
-                    "png": "/resources/img/themes/skylea/bg.png",
                     "webp": "/resources/img/themes/skylea/bg.webp"
                 },
                 "bg_blur": {
-                    "png": "/resources/img/themes/skylea/bg_blur.png",
                     "webp": "/resources/img/themes/skylea/bg_blur.webp"
                 }
             },
@@ -65,11 +61,9 @@ module.exports = {
             logo: "/resources/img/themes/nightblue/logo_square.png",
             backgrounds: {
                 "bg": {
-                    "png": "/resources/img/themes/nightblue/bg.png",
                     "webp": "/resources/img/themes/nightblue/bg.webp"
                 },
                 "bg_blur": {
-                    "png": "/resources/img/themes/nightblue/bg_blur.png",
                     "webp": "/resources/img/themes/nightblue/bg_blur.webp"
                 }
             },
@@ -88,11 +82,9 @@ module.exports = {
             logo: "/resources/img/themes/sunrise/logo_square.png",
             backgrounds: {
                 "bg": {
-                    "png": "/resources/img/themes/sunrise/bg.png",
                     "webp": "/resources/img/themes/sunrise/bg.webp"
                 },
                 "bg_blur": {
-                    "png": "/resources/img/themes/sunrise/bg_blur.png",
                     "webp": "/resources/img/themes/sunrise/bg_blur.webp"
                 }
             },
@@ -111,11 +103,9 @@ module.exports = {
             logo: "/resources/img/themes/draconic/logo_square.png",
             backgrounds: {
                 "bg": {
-                    "png": "/resources/img/themes/draconic/bg.png",
                     "webp": "/resources/img/themes/draconic/bg.webp"
                 },
                 "bg_blur": {
-                    "png": "/resources/img/themes/draconic/bg_blur.png",
                     "webp": "/resources/img/themes/draconic/bg_blur.webp"
                 }
             },
@@ -134,11 +124,9 @@ module.exports = {
             logo: "/resources/img/themes/candycane/logo_square.svg",
             backgrounds: {
                 "bg": {
-                    "png": "/resources/img/themes/candycane/bg.jpg",
                     "webp": "/resources/img/themes/candycane/bg.webp"
                 },
                 "bg_blur": {
-                    "png": "/resources/img/themes/candycane/bg_blur.jpg",
                     "webp": "/resources/img/themes/candycane/bg_blur.webp"
                 }
             },
