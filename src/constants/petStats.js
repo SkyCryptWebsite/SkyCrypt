@@ -687,18 +687,38 @@ class Blaze extends Pet {
 	modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
 		let mult = (1 + round(this.level * 0.5, 1) / 100);
 		if (hName.includes("BLAZE_HELMET")) {
+			if (helmet.hpbs > 0) {
+				helmet.stats.defense += 2 * helmet.hpbs;
+				helmet.stats.health += 4 * helmet.hpbs;
+				helmet.hpbs *= 2;
+			}
 			for (const stat in helmet.stats)
 				helmet.stats[stat] = round(helmet.stats[stat] * mult, 1);
 		}
 		if (cName.includes("BLAZE")) {
+			if (chest.hpbs > 0) {
+				chest.stats.defense += 2 * chest.hpbs;
+				chest.stats.health += 4 * chest.hpbs;
+				chest.hpbs *= 2;
+			}
 			for (const stat in chest.stats)
 				chest.stats[stat] = round(chest.stats[stat] * mult, 1);
 		}
 		if (lName.includes("BLAZE")) {
+			if (legs.hpbs > 0) {
+				legs.stats.defense += 2 * legs.hpbs;
+				legs.stats.health += 4 * legs.hpbs;
+				legs.hpbs *= 2;
+			}
 			for (const stat in legs.stats)
 				legs.stats[stat] = round(legs.stats[stat] * mult, 1);
 		}
 		if (bName.includes("BLAZE")) {
+			if (boots.hpbs > 0) {
+				boots.stats.defense += 2 * boots.hpbs;
+				boots.stats.health += 4 * boots.hpbs;
+				boots.hpbs *= 2;
+			}
 			for (const stat in boots.stats)
 				boots.stats[stat] = round(boots.stats[stat] * mult, 1);
 		}
