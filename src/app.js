@@ -76,6 +76,10 @@ async function main(){
     require('./apiv2')(app, db);
     require('./donations/kofi')(app, db);
 
+    function parseFavorites(cookie) {
+        return cookie && cookie.split(',').filter(uuid => /^[0-9a-zA-Z]+$/.test(uuid)) || []
+    }
+
     async function getExtra(page = null, favorites = []){
         const output = {};
 
@@ -163,15 +167,15 @@ async function main(){
         const cacheOnly = req.query.cache === 'true';
 
         const playerUsername = paramPlayer.length == 32 ? await helper.resolveUsernameOrUuid(paramPlayer, db).display_name : paramPlayer;
-
-        const favorite = req.cookies.favorite || [];
+        
+        const favorites = parseFavorites(req.cookies.favorite);
         try{
             const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, { updateArea: true, cacheOnly });
 
             const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack);
             const calculated = await lib.getStats(db, profile, allProfiles, items);
 
-            res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra('stats', JSON.parse(favorite)), page: 'stats' });
+            res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), page: 'stats' });
         }catch(e){
             console.error(e);
 
@@ -179,7 +183,7 @@ async function main(){
                 req,
                 error: e,
                 player: playerUsername,
-                extra: await getExtra('index', JSON.parse(favorite)),
+                extra: await getExtra('index', favorites),
                 helper,
                 page: 'index'
             });
@@ -382,8 +386,8 @@ Disallow: /item /head /leather /resources
     });
 
     app.all('/', async (req, res, next) => {
-        const favorite = req.cookies.favorite || [];
-        res.render('index', { error: null, player: null, extra: await getExtra('index', JSON.parse(favorite)), helper, page: 'index' });
+        const favorites = parseFavorites(req.cookies.favorite);
+        res.render('index', { error: null, player: null, extra: await getExtra('index', favorites), helper, page: 'index' });
     });
 
     app.all('*', async (req, res, next) => {

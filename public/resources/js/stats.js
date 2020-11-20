@@ -915,15 +915,15 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
+    function parseFavorites(cookie) {
+        return cookie?.split(',').filter(uuid => /^[0-9a-zA-Z]+$/.test(uuid)) || []
+    }
+
     function checkFavorite() {
         const element = document.querySelector('.add-favorite');
-        let favorited;
-        try {
-            favorited = JSON.parse(getCookie("favorite")).includes(element.getAttribute("data-username"));
-        } catch {
-            favorited = false
-        }
+        const favorited = parseFavorites(getCookie("favorite")).includes(element.getAttribute("data-username"));
         element.setAttribute('aria-checked', favorited);
+        return favorited;
     }
 
     [].forEach.call(document.querySelectorAll('.add-favorite'), function(e){
@@ -933,14 +933,14 @@ document.addEventListener('DOMContentLoaded', function(){
             trigger: 'manual'
         });
 
-        element.addEventListener('click', async function(){
+        element.addEventListener('click', function(){
             let uuid = element.getAttribute("data-username");
             if(uuid == "0c0b857f415943248f772164bf76795c"){
                 notification.setContent("No");
             }else{
                 let cookieArray
                 try {
-                    cookieArray = JSON.parse(getCookie("favorite"));
+                    cookieArray = parseFavorites(getCookie("favorite"));
                     if(cookieArray.includes(uuid)){
                         cookieArray.splice(cookieArray.indexOf(uuid), 1);
 
@@ -959,7 +959,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
                     notification.setContent("Added favorite to new system!");
                 }
-                setCookie("favorite", JSON.stringify(cookieArray), 365);
+                setCookie("favorite", cookieArray.join(','), 365);
                 checkFavorite();
             }
             notification.show();
