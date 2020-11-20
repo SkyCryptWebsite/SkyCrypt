@@ -889,7 +889,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 } catch {
                     cookieArray = uuid ? [uuid] : [];
                     let oldCookie = getCookie("favorite");
-                    if (oldCookie.match(/^[1-9a-e]*$/) && !cookieArray.includes(oldCookie)) {
+                    if (oldCookie && oldCookie.match(/^[1-9a-e]*$/) && !cookieArray.includes(oldCookie)) {
                         cookieArray.unshift(oldCookie);
                     }
 
