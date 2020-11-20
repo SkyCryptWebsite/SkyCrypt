@@ -936,26 +936,15 @@ document.addEventListener('DOMContentLoaded', function(){
         if(uuid == "0c0b857f415943248f772164bf76795c"){
             favoriteNotification.setContent("No");
         }else{
-            let cookieArray
-            try {
-                cookieArray = parseFavorites(getCookie("favorite"));
-                if(cookieArray.includes(uuid)){
-                    cookieArray.splice(cookieArray.indexOf(uuid), 1);
+            let cookieArray = parseFavorites(getCookie("favorite"));
+            if(cookieArray.includes(uuid)){
+                cookieArray.splice(cookieArray.indexOf(uuid), 1);
 
-                    favoriteNotification.setContent("Removed favorite!");
-                }else{
-                    cookieArray.push(uuid);
+                favoriteNotification.setContent("Removed favorite!");
+            }else{
+                cookieArray.push(uuid);
 
-                    favoriteNotification.setContent("Added favorite!");
-                }
-            } catch {
-                cookieArray = uuid ? [uuid] : [];
-                let oldCookie = getCookie("favorite");
-                if (oldCookie && oldCookie.match(/^[1-9a-f]*$/) && !cookieArray.includes(oldCookie)) {
-                    cookieArray.unshift(oldCookie);
-                }
-
-                favoriteNotification.setContent("Added favorite to new system!");
+                favoriteNotification.setContent("Added favorite!");
             }
             setCookie("favorite", cookieArray.join(','), 365);
             checkFavorite();
