@@ -4,7 +4,7 @@ const slayerOrder = ['zombie', 'spider', 'wolf'];
 
 const allItems = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory);
 
-const UNIQUE_ACCESSORIES = 59;
+const UNIQUE_ACCESSORIES = 60;
 
 const statSuffix = {
     health: '',
@@ -379,6 +379,15 @@ const seaCreatures = [
             }
         ]
     }, {
+        name: 'Scarecrow',
+        id: 'scarecrow',
+        rarity: 'rare',
+        fishingLevel: 9,
+        level: 9,
+        requirements: [
+            'Spooky Festival'
+        ]
+    }, {
         name: 'Sea Archer',
         id: 'sea_archer',
         rarity: 'uncommon',
@@ -495,6 +504,15 @@ const seaCreatures = [
             }
         ]
     }, {
+        name: 'Nightmare',
+        id: 'nightmare',
+        rarity: 'rare',
+        fishingLevel: 14,
+        level: 24,
+        requirements: [
+            'Spooky Festival'
+        ]
+    }, {
         name: 'Carrot King',
         id: 'carrot_king',
         rarity: 'rare',
@@ -551,6 +569,15 @@ const seaCreatures = [
                 rarity: 'common',
                 name: 'Enchanted Book (Spiked Hook 6)'
             }
+        ]
+    }, {
+        name: 'Werewolf',
+        id: 'werewolf',
+        rarity: 'epic',
+        fishingLevel: 17,
+        level: 50,
+        requirements: [
+            'Spooky Festival'
         ]
     }, {
         name: 'Guardian Defender',
@@ -702,6 +729,15 @@ const seaCreatures = [
             }
         ]
     }, {
+        name: 'Phantom Fisherman',
+        id: 'phantom_fisherman',
+        rarity: 'legendary',
+        fishingLevel: 21,
+        level: 160,
+        requirements: [
+            'Spooky Festival'
+        ]
+    }, {
         name: 'Great White Shark',
         id: 'great_white_shark',
         rarity: 'special',
@@ -756,6 +792,15 @@ const seaCreatures = [
                 rarity: 'legendary',
                 name: 'Hilt of True Ice'
             }
+        ]
+    }, {
+        name: 'Grim Reaper',
+        id: 'grim_reaper',
+        rarity: 'legendary',
+        fishingLevel: 26,
+        level: 190,
+        requirements: [
+            'Spooky Festival'
         ]
     }
 ];
@@ -839,7 +884,7 @@ const inventorySlot = item => { %>
     </div>
 <% };
 
-const skill_component = (skill, icon, level, boosts = null) => { %>
+const skill_component = (skill, icon, level, extra = {}) => { %>
     <div class="skill xp-skill <%= level.level == level.maxLevel ? 'maxed-skill' : ''%>">
         <div class="skill-icon">
             <% if(icon.startsWith('head-')){ %>
@@ -851,7 +896,7 @@ const skill_component = (skill, icon, level, boosts = null) => { %>
         </div>
         <div class="skill-name"><%= skill %> <span class="skill-level"><%= level.level >= 0 ? level.level : '?' %></span></div>
         <div class="skill-bar" data-skill="<%= skill %>">
-            <div class="skill-progress-bar" style="width: <%= level.level == level.maxLevel ? 100 : level.progress * 100 %>%"></div>
+            <div class="skill-progress-bar" style="width: <%= level.level == level.levelCap ? 100 : level.progress * 100 %>%"></div>
             <% if('runecrafting' in calculated.levels){ %>
                 <div class="skill-progress-text" data-hover-text="<%= level.xpCurrent.toLocaleString() %><% if(level.xpForNext != Infinity){ %> / <%= level.xpForNext.toLocaleString() %><% } %> XP">
                     <%= helper.formatNumber(level.xpCurrent, true) %><% if(level.xpForNext != Infinity){ %> / <%= helper.formatNumber(level.xpForNext) %><% } %> XP
@@ -1255,7 +1300,7 @@ twitterDescription += '. Click to view more stats!'
                 <% } %>
             </div>
         </div>
-        <div id="nav_bar" data-margin-top="48" data-sticky-class="nav-bar-stickied">
+        <div id="nav_bar">
             <div id="nav_bar_line"></div>
             <div id="nav_bar_background"></div>
             <div id="nav_items_container">
@@ -1279,6 +1324,9 @@ twitterDescription += '. Click to view more stats!'
 
             if(items.no_inventory)
                 notAvailable.push('Weapons', 'Accessories', 'Inventory');
+
+            if(items.no_personal_vault)
+                notAvailable.push('Personal Vault');
 
             if(Object.keys(calculated.collections).length == 0)
                 notAvailable.push('Collections');
@@ -1588,14 +1636,14 @@ twitterDescription += '. Click to view more stats!'
                                     if(items.potion_bag.length > 0){ %>
                                         <div class="inventory-tab" data-inventory-type="potion_bag">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/9f8b82427b260d0a61e6483fc3b2c35a585851e08a9a9df372548b4168cc817c)"></div>
-                                            <div class="inventory-tab-name">Potions</div>
+                                            <div class="inventory-tab-name">Pots</div>
                                         </div>
                                     <% }
 
                                     if(items.fishing_bag.length > 0){ %>
                                         <div class="inventory-tab" data-inventory-type="fishing_bag">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/eb8e297df6b8dffcf135dba84ec792d420ad8ecb458d144288572a84603b1631)"></div>
-                                            <div class="inventory-tab-name">Fishies</div>
+                                            <div class="inventory-tab-name">Fish</div>
                                         </div>
                                     <% }
 
@@ -1603,6 +1651,13 @@ twitterDescription += '. Click to view more stats!'
                                         <div class="inventory-tab" data-inventory-type="quiver">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/4cb3acdc11ca747bf710e59f4c8e9b3d949fdd364c6869831ca878f0763d1787)"></div>
                                             <div class="inventory-tab-name">Quiver</div>
+                                        </div>
+                                    <% }
+
+                                    if(items.personal_vault.length > 0){ %>
+                                        <div class="inventory-tab" data-inventory-type="personal_vault">
+                                            <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/f7aadff9ddc546fdcec6ed5919cc39dfa8d0c07ff4bc613a19f2e6d7f2593)"></div>
+                                            <div class="inventory-tab-name">Vault</div>
                                         </div>
                                     <% } %>
                                 </div>
@@ -1789,7 +1844,7 @@ twitterDescription += '. Click to view more stats!'
                                 <div class="stat-sub-container sub-floor-extendable">
                                     <p class="stat-sub-header">Best Run</p>
                                     <div class="pieces">
-                                    <% for (let [stat, value] of Object.entries(floor.best_runs[0])) { 
+                                    <% for (let [stat, value] of Object.entries(floor.best_runs[0])) {
                                         if(stat == "teammates") continue; %>
                                         <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
                                         <span class="stat-value">
@@ -1835,7 +1890,7 @@ twitterDescription += '. Click to view more stats!'
                             claimedTooltip += '<br>';
                         }
 
-                        if (collection.unclaimed > 0) 
+                        if (collection.unclaimed > 0)
                             claimedTooltip += `<span class="stat-name">Unclaimed items: </span><span class="stat-value">${collection.unclaimed}</span>`;
                     %>
                     <div class="boss-collection" <% if (claimedTooltip != "") { %>data-tippy-content="<%= claimedTooltip %>"<% } %>>
@@ -2391,7 +2446,7 @@ twitterDescription += '. Click to view more stats!'
                     <% if('claimed_items' in calculated.misc){ %>
                         <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-339_0"></div></div><span>claimed items</span></div>
                         <p class="stat-raw-values">
-                            <% for(const key in calculated.misc.claimed_items){ 
+                            <% for(const key in calculated.misc.claimed_items){
                                 let timestamp = calculated.misc.claimed_items[key];
                             %>
                             <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
@@ -2408,6 +2463,11 @@ twitterDescription += '. Click to view more stats!'
     <script>
         let items = <%- JSON.stringify(items) %>;
         let calculated = <%- JSON.stringify(calculated) %>;
+
+        const constants = { 
+            minecraft_formatting: <%- JSON.stringify(constants.minecraft_formatting) %>, 
+            special_enchants: <%- JSON.stringify(constants.special_enchants) %> 
+        };
     </script>
 </body>
 </html>
