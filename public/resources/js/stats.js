@@ -919,55 +919,52 @@ document.addEventListener('DOMContentLoaded', function(){
         return cookie?.split(',').filter(uuid => /^[0-9a-zA-Z]+$/.test(uuid)) || []
     }
 
+    const favoriteElement = document.querySelector('.favorite');
+
     function checkFavorite() {
-        const element = document.querySelector('.favorite');
-        const favorited = parseFavorites(getCookie("favorite")).includes(element.getAttribute("data-username"));
-        element.setAttribute('aria-checked', favorited);
+        const favorited = parseFavorites(getCookie("favorite")).includes(favoriteElement.getAttribute("data-username"));
+        favoriteElement.setAttribute('aria-checked', favorited);
         return favorited;
     }
 
-    [].forEach.call(document.querySelectorAll('.favorite'), function(e){
-        const element = e;
+    let favoriteNotification = tippy(favoriteElement, {
+        trigger: 'manual'
+    });
 
-        let notification = tippy(element, {
-            trigger: 'manual'
-        });
+    favoriteElement.addEventListener('click', function(){
+        let uuid = favoriteElement.getAttribute("data-username");
+        if(uuid == "0c0b857f415943248f772164bf76795c"){
+            favoriteNotification.setContent("No");
+        }else{
+            let cookieArray
+            try {
+                cookieArray = parseFavorites(getCookie("favorite"));
+                if(cookieArray.includes(uuid)){
+                    cookieArray.splice(cookieArray.indexOf(uuid), 1);
 
-        element.addEventListener('click', function(){
-            let uuid = element.getAttribute("data-username");
-            if(uuid == "0c0b857f415943248f772164bf76795c"){
-                notification.setContent("No");
-            }else{
-                let cookieArray
-                try {
-                    cookieArray = parseFavorites(getCookie("favorite"));
-                    if(cookieArray.includes(uuid)){
-                        cookieArray.splice(cookieArray.indexOf(uuid), 1);
+                    favoriteNotification.setContent("Removed favorite!");
+                }else{
+                    cookieArray.push(uuid);
 
-                        notification.setContent("Removed favorite!");
-                    }else{
-                        cookieArray.push(uuid);
-
-                        notification.setContent("Added favorite!");
-                    }
-                } catch {
-                    cookieArray = uuid ? [uuid] : [];
-                    let oldCookie = getCookie("favorite");
-                    if (oldCookie && oldCookie.match(/^[1-9a-e]*$/) && !cookieArray.includes(oldCookie)) {
-                        cookieArray.unshift(oldCookie);
-                    }
-
-                    notification.setContent("Added favorite to new system!");
+                    favoriteNotification.setContent("Added favorite!");
                 }
-                setCookie("favorite", cookieArray.join(','), 365);
-                checkFavorite();
-            }
-            notification.show();
+            } catch {
+                cookieArray = uuid ? [uuid] : [];
+                let oldCookie = getCookie("favorite");
+                if (oldCookie && oldCookie.match(/^[1-9a-e]*$/) && !cookieArray.includes(oldCookie)) {
+                    cookieArray.unshift(oldCookie);
+                }
 
-            setTimeout(function(){
-                notification.hide();
-            }, 1500);
-        });
+                favoriteNotification.setContent("Added favorite to new system!");
+            }
+            setCookie("favorite", cookieArray.join(','), 365);
+            checkFavorite();
+        }
+        favoriteNotification.show();
+
+        setTimeout(function(){
+            favoriteNotification.hide();
+        }, 1500);
     });
 
     let socialsShown = false;
