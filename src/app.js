@@ -76,7 +76,7 @@ async function main(){
     require('./apiv2')(app, db);
     require('./donations/kofi')(app, db);
 
-    async function getExtra(page = null, favorites = ""){
+    async function getExtra(page = null, favorites = []){
         const output = {};
 
         output.twemoji = twemoji;
@@ -93,13 +93,7 @@ async function main(){
         if(patreonEntry != null)
             output.donations = { patreon: patreonEntry.amount || 0 };
 
-        if (page != 'index') return output;
-
-        output.devs = await db
-            .collection('topViews')
-            .find()
-            .sort({ position: 1 })
-            .toArray();
+        if (page == 'api') return output;
 
         output.favorites = [];
         if(typeof favorites === 'string') favorites = [favorites];
@@ -151,6 +145,14 @@ async function main(){
             }
         }
 
+        if (page != 'index') return output;
+
+        output.devs = await db
+            .collection('topViews')
+            .find()
+            .sort({ position: 1 })
+            .toArray();
+
         return output;
     }
 
@@ -162,17 +164,17 @@ async function main(){
 
         const playerUsername = paramPlayer.length == 32 ? await helper.resolveUsernameOrUuid(paramPlayer, db).display_name : paramPlayer;
 
+        const favorite = req.cookies.favorite || [];
         try{
             const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, { updateArea: true, cacheOnly });
 
             const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack);
             const calculated = await lib.getStats(db, profile, allProfiles, items);
 
-            res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra('stats'), page: 'stats' });
+            res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra('stats', JSON.parse(favorite)), page: 'stats' });
         }catch(e){
             console.error(e);
 
-            const favorite = req.cookies.favorite || false;
             res.render('index', {
                 req,
                 error: e,
@@ -380,7 +382,7 @@ Disallow: /item /head /leather /resources
     });
 
     app.all('/', async (req, res, next) => {
-        const favorite = req.cookies.favorite || null;
+        const favorite = req.cookies.favorite || [];
         res.render('index', { error: null, player: null, extra: await getExtra('index', JSON.parse(favorite)), helper, page: 'index' });
     });
 
