@@ -14,12 +14,12 @@ module.exports = {
             if (!lore_raw[i].includes(":"))
                 continue;
             
-            let split = lore_raw[i].split(" ");
+            let split = lore_raw[i].split(":")[1].split(" ");
 
             if(split.length < 2)
                 continue;
 
-            const statType = split[0].split(":")[0];
+            const statType = lore_raw[i].split(":")[0];
 
             switch(statType.substring(2)){
                 case 'Damage':

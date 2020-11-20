@@ -685,7 +685,7 @@ class Blaze extends Pet {
 	}
 
 	modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
-		let mult = (1 + round(this.level * this.rarity > 2 ? 0.4 : 0.3, 1) / 100);
+		let mult = (1 + round(this.level * (this.rarity > 2 ? 0.4 : 0.3), 1) / 100);
 		if (hName.includes("BLAZE_HELMET")) {
 			if (helmet.hpbs > 0) {
 				helmet.stats.defense += 2 * helmet.hpbs;
