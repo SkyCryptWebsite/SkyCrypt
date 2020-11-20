@@ -1398,15 +1398,15 @@ a.additional-player-stat:hover{
     height:20px
 }
 
-.additional-player-stat.add-favorite{
+.additional-player-stat.favorite{
     cursor: pointer;
 }
 
-.additional-player-stat.add-favorite:not([aria-checked="true"]) .solid {
+.additional-player-stat.favorite:not([aria-checked="true"]) .solid {
     visibility: hidden;
 }
 
-.additional-player-stat.add-favorite[aria-checked="true"] .outline {
+.additional-player-stat.favorite[aria-checked="true"] .outline {
     visibility: hidden;
 }
 

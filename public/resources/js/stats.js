@@ -920,13 +920,13 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     function checkFavorite() {
-        const element = document.querySelector('.add-favorite');
+        const element = document.querySelector('.favorite');
         const favorited = parseFavorites(getCookie("favorite")).includes(element.getAttribute("data-username"));
         element.setAttribute('aria-checked', favorited);
         return favorited;
     }
 
-    [].forEach.call(document.querySelectorAll('.add-favorite'), function(e){
+    [].forEach.call(document.querySelectorAll('.favorite'), function(e){
         const element = e;
 
         let notification = tippy(element, {
