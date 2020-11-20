@@ -861,7 +861,6 @@ document.addEventListener('DOMContentLoaded', function(){
         }
         element.setAttribute('aria-checked', favorited);
     }
-    checkFavorite();
 
     [].forEach.call(document.querySelectorAll('.add-favorite'), function(e){
         let element = e;
