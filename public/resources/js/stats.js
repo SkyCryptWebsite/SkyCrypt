@@ -915,18 +915,6 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
-    function checkFavorite() {
-        const element = document.querySelector('.add-favorite');
-        let favorited;
-        try {
-            favorited = JSON.parse(getCookie("favorite")).includes(element.getAttribute("data-username"));
-        } catch {
-            favorited = false
-        }
-        element.setAttribute('aria-checked', favorited);
-    }
-    checkFavorite();
-
     [].forEach.call(document.querySelectorAll('.add-favorite'), function(e){
         let element = e;
 
@@ -938,36 +926,47 @@ document.addEventListener('DOMContentLoaded', function(){
             let uuid = element.getAttribute("data-username");
             if(uuid == "0c0b857f415943248f772164bf76795c"){
                 notification.setContent("No");
-            }else{
-                let cookieArray
-                try {
-                    cookieArray = JSON.parse(getCookie("favorite"));
-                    if(cookieArray.includes(uuid)){
-                        cookieArray.splice(cookieArray.indexOf(uuid), 1);
+                notification.show();
 
-                        notification.setContent("Removed favorite!");
+                setTimeout(function(){
+                    notification.hide();
+                }, 1500);
+            }else{
+                try {
+                    let cookieArray = JSON.parse(getCookie("favorite"));
+                    if(cookieArray.includes(uuid)){
+                        notification.setContent("That person has already been favorited!");
+
+                        notification.show();
+
+                        setTimeout(function(){
+                            notification.hide();
+                        }, 1500);
                     }else{
                         cookieArray.push(uuid);
 
-                        notification.setContent("Added favorite!");
+                        setCookie("favorite", JSON.stringify(cookieArray), 365);
+
+                        notification.setContent("Set favorite!");
+                        notification.show();
+
+                        setTimeout(function(){
+                            notification.hide();
+                        }, 1500);
                     }
                 } catch {
-                    cookieArray = uuid ? [uuid] : [];
-                    let oldCookie = getCookie("favorite");
-                    if (oldCookie.match(/^[1-9a-e]*$/) && !cookieArray.includes(oldCookie)) {
-                        cookieArray.unshift(oldCookie);
-                    }
+                    let cookieArray = uuid ? [uuid] : [];
+                    setCookie("favorite", JSON.stringify(cookieArray), 365);
 
-                    notification.setContent("Added favorite to new system!");
+                    notification.setContent("Set favorite using new system!");
+                    
+                    notification.show();
+
+                    setTimeout(function(){
+                        notification.hide();
+                    }, 1500);
                 }
-                setCookie("favorite", JSON.stringify(cookieArray), 365);
-                checkFavorite();
             }
-            notification.show();
-
-            setTimeout(function(){
-                notification.hide();
-            }, 1500);
         });
     });
 

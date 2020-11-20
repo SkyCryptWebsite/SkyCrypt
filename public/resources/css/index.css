@@ -1388,14 +1388,15 @@ a.additional-player-stat:hover{
 }
 
 .additional-player-stat.add-favorite::after{
-    background-image: url(../img/icons/star-outline.svg);
-    background-size: 20px 20px;
+    background-image: url(../img/icons/star.png);
     cursor: pointer;
     user-select: none !important;
 }
 
-.additional-player-stat.add-favorite[aria-checked="true"]::after{
-    background-image: url(../img/icons/star.svg);
+.additional-player-stat.remove-favorite::after{
+    background-image: url(../img/icons/star_gold.png);
+    cursor: pointer;
+    user-select: none !important;
 }
 
 .additional-player-stat.external-twitter::after{

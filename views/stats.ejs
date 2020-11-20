@@ -1104,7 +1104,11 @@ twitterDescription += '. Click to view more stats!'
                 ">Views: <%= helper.formatNumber(calculated.views.total, true) %></div>
 
                 <% */ %>
-                <div class="additional-player-stat external-icon add-favorite" data-username="<%= calculated.uuid %>" role="checkbox" aria-checked="false"></div>
+                <% if(!extra.favoritesArray.includes(calculated.uuid)){ %>
+                    <div class="additional-player-stat external-icon add-favorite" data-username="<%= calculated.uuid %>"></div>
+                <% } else { %>
+                    <div class="additional-player-stat external-icon remove-favorite" data-username="<%= calculated.uuid %>"></div>
+                <% { %>
                 <% if(calculated.guild){ %><div class="additional-player-stat interactive-tooltip" data-tippy-content="
                 <% if(calculated.guild.rank){ %><span class='stat-name'>Rank: </span><span class='stat-value'><%= calculated.guild.rank %></span><br><br><% } %>
                 <span class='stat-name'>Guild Master: </span><a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %></a><br>
