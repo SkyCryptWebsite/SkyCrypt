@@ -76,7 +76,7 @@ async function main(){
     require('./apiv2')(app, db);
     require('./donations/kofi')(app, db);
 
-    async function getExtra(page = null, favorites = []){
+    async function getExtra(page = null, favorites = ""){
         const output = {};
 
         output.twemoji = twemoji;
@@ -101,9 +101,15 @@ async function main(){
             .sort({ position: 1 })
             .toArray();
 
-        if(typeof favorites === 'string') favorites = [favorites];
-        if(favorites.length > 5) return output;
         output.favorites = [];
+        if(typeof favorites === 'string') favorites = [favorites];
+        if(favorites.length < 0 || favorites.length > 5) {
+            output.favorites[0] = {
+                uuid: null,
+                error: "Illegal amount."
+            }
+            return output;
+        } else if(favorites.length == 0) return output;
 
         for(let i = 0; i < favorites.length; i++){
             let favorite = favorites[i];
@@ -171,7 +177,7 @@ async function main(){
                 req,
                 error: e,
                 player: playerUsername,
-                extra: await getExtra('index', favorite),
+                extra: await getExtra('index', JSON.parse(favorite)),
                 helper,
                 page: 'index'
             });
@@ -374,13 +380,8 @@ Disallow: /item /head /leather /resources
     });
 
     app.all('/', async (req, res, next) => {
-        try {
-            const favorite = JSON.parse(req.cookies.favorite);
-            res.render('index', { error: null, player: null, extra: await getExtra('index', favorite), helper, page: 'index' });
-        } catch {
-            res.render('index', { error: null, player: null, extra: await getExtra('index'), helper, page: 'index' });
-        }
-        
+        const favorite = req.cookies.favorite || null;
+        res.render('index', { error: null, player: null, extra: await getExtra('index', JSON.parse(favorite)), helper, page: 'index' });
     });
 
     app.all('*', async (req, res, next) => {
