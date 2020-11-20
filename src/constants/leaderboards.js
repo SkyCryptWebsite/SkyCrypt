@@ -22,99 +22,27 @@ const raceFormat = x => {
 };
 
 const skillFormat = xp => {
-    const xp_table = leveling.leveling_xp;
+    const { getLevelByXp } = require('../lib');
+    let levelObj = getLevelByXp(xp);
+    return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
+};
 
-    let levelObj = {
-        xp: 0,
-        level: 0,
-        xpCurrent: 0,
-        xpForNext: xp_table[1],
-        progress: 0
-    };
-
-    let xpTotal = 0;
-    let level = 0;
-
-    let xpForNext = Infinity;
-
-    let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
-
-    for(let x = 1; x <= maxLevel; x++){
-        xpTotal += xp_table[x];
-
-        if(xpTotal > xp){
-            xpTotal -= xp_table[x];
-            break;
-        }else{
-            level = x;
-        }
-    }
-
-    let xpCurrent = Math.floor(xp - xpTotal);
-
-    if(level < maxLevel)
-        xpForNext = Math.ceil(xp_table[level + 1]);
-
-    let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
-
-    levelObj = {
-        xp,
-        level,
-        maxLevel,
-        xpCurrent,
-        xpForNext,
-        progress
-    };
-
+const skillFormatFarming = xp => {
+    const { getLevelByXp } = require('../lib');
+    let levelObj = getLevelByXp(xp, {skill: "farming"});
     return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
 };
 
 const skillFormatRunecrafting = xp => {
-    const xp_table = leveling.runecrafting_xp;
+    const { getLevelByXp } = require('../lib');
+    let levelObj = getLevelByXp(xp, {type: "runecrafting"});
+    return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
+};
 
-    let levelObj = {
-        xp: 0,
-        level: 0,
-        xpCurrent: 0,
-        xpForNext: xp_table[1],
-        progress: 0
-    };
-
-    let xpTotal = 0;
-    let level = 0;
-
-    let xpForNext = Infinity;
-
-    let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
-
-    for(let x = 1; x <= maxLevel; x++){
-        xpTotal += xp_table[x];
-
-        if(xpTotal > xp){
-            xpTotal -= xp_table[x];
-            break;
-        }else{
-            level = x;
-        }
-    }
-
-    let xpCurrent = Math.floor(xp - xpTotal);
-
-    if(level < maxLevel)
-        xpForNext = Math.ceil(xp_table[level + 1]);
-
-    let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
-
-    levelObj = {
-        xp,
-        level,
-        maxLevel,
-        xpCurrent,
-        xpForNext,
-        progress
-    };
-
-    return `Level ${levelObj.level} + ${levelObj.current.toLocaleString()} XP`;
+const skillFormatDungeoneering = xp => {
+    const { getLevelByXp } = require('../lib');
+    let levelObj = getLevelByXp(xp, {type: "dungeoneering"});
+    return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
 };
 
 const overrides = {
@@ -157,15 +85,27 @@ module.exports = {
                 options['name'] = collectionData[0].name + ' Collection';
         }
 
-        if(lbName.includes('_best_time')){
+        if(lbName.includes('_best_time') || lbName.includes('_fastest_time')){
             options['sortedBy'] = 1;
             options['format'] = raceFormat;
         }
 
         if(lbName.startsWith('skill_')){
-            const skill = lbName.split("_")[1];
+            const skill = lbName.split("_").slice(1).join("_");
 
-            options['format'] = skill == 'runecrafting' ? skillFormatRunecrafting : skillFormat;
+            if(skill.includes('farming'))
+                options['format'] = skillFormatFarming;
+
+            else if(skill.includes('runecrafting'))
+                options['format'] = skillFormatRunecrafting;
+
+            else options['format'] = skillFormat;
+        }
+
+        if(lbName.startsWith('dungeons_') && lbName.includes('_xp')) {
+            const skill = lbName.split("_").slice(1).join("_");
+            if(skill.includes('catacombs') || skill.includes('class'))
+                options['format'] = skillFormatDungeoneering;
         }
 
         if(lbName.includes('_slayer_boss_kills_')){
