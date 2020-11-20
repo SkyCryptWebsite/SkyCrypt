@@ -6,7 +6,7 @@ const moment = require('moment');
 
 module.exports = {
     makeLore: function(item) {
-        let lore_raw;
+        let lore_raw = [];
         if(helper.hasPath(item, 'tag', 'display', 'Lore'))
             lore_raw = item.tag.display.Lore;
         
@@ -76,6 +76,7 @@ module.exports = {
         const hasEnchantments = Object.keys(enchantments).length > 0;
 
         // Set HTML lore to be displayed on the website
-        item.tag.display.lore = lore_raw;
+        if(helper.hasPath(item, 'tag', 'display', 'Lore'))
+            item.tag.display.lore = lore_raw;
     }
 }
