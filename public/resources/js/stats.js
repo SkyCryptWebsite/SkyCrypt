@@ -916,7 +916,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     function parseFavorites(cookie) {
-        return cookie?.split(',').filter(uuid => /^[0-9a-zA-Z]+$/.test(uuid)) || []
+        return cookie?.split(',').filter(uuid => /^[0-9a-f]+$/.test(uuid)) || []
     }
 
     const favoriteElement = document.querySelector('.favorite');
@@ -951,7 +951,7 @@ document.addEventListener('DOMContentLoaded', function(){
             } catch {
                 cookieArray = uuid ? [uuid] : [];
                 let oldCookie = getCookie("favorite");
-                if (oldCookie && oldCookie.match(/^[1-9a-e]*$/) && !cookieArray.includes(oldCookie)) {
+                if (oldCookie && oldCookie.match(/^[1-9a-f]*$/) && !cookieArray.includes(oldCookie)) {
                     cookieArray.unshift(oldCookie);
                 }
 

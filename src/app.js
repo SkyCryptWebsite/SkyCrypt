@@ -77,7 +77,7 @@ async function main(){
     require('./donations/kofi')(app, db);
 
     function parseFavorites(cookie) {
-        return cookie && cookie.split(',').filter(uuid => /^[0-9a-zA-Z]+$/.test(uuid)) || []
+        return cookie && cookie.split(',').filter(uuid => /^[0-9a-f]+$/.test(uuid)) || []
     }
 
     async function getExtra(page = null, favorites = []){
