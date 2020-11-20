@@ -927,7 +927,7 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     [].forEach.call(document.querySelectorAll('.add-favorite'), function(e){
-        let element = e;
+        const element = e;
 
         let notification = tippy(element, {
             trigger: 'manual'
