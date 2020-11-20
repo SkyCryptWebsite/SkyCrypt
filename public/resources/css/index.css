@@ -1396,6 +1396,9 @@ a.additional-player-stat:hover{
 
 .additional-player-stat.add-favorite[aria-checked="true"]::after{
     background-image: url(../img/icons/star.svg);
+    background-image: url(../img/icons/star_gold.png);
+    cursor: pointer;
+    user-select: none !important;
 }
 
 .additional-player-stat.external-twitter::after{
