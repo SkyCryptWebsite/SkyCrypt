@@ -30,6 +30,11 @@ module.exports = {
                 name: "Sadan",
                 texture: "fa06cb0c471c1c9bc169af270cd466ea701946776056e472ecdaeb49f0f4a4dc",
                 floor: "catacombs_6"
+            },
+            "necron": {
+                name: "Necron",
+                texture: "a435164c05cea299a3f016bbbed05706ebb720dac912ce4351c2296626aecd9a",
+                floor: "catacombs_7"
             }
         },
         boss_collections: {
@@ -227,17 +232,17 @@ module.exports = {
                         required: 100,
                         tier: 2
                     },
-                    "necromancer_lord_helmet": {
+                    "necromancer_helmet": {
                         name: "Necromancer Lord Helmet",
                         required: 150,
                         tier: 3
                     },
-                    "recomboculator": {
+                    "recombobulator": {
                         name: "Recombobulator 3000",
                         required: 250,
                         tier: 4
                     },
-                    "necromancer_lord_chestplate": {
+                    "necromancer_chestplate": {
                         name: "Necromancer Lord Chestplate",
                         required: 500,
                         tier: 5
@@ -253,6 +258,47 @@ module.exports = {
                         tier: 7
                     }
                 }
+            },
+            "catacombs_7": {
+                boss: "necron",
+                max_tiers: 7,
+                rewards: {
+                    "wither_blood": {
+                        name: "Wither Blood",
+                        required: 50,
+                        tier: 1
+                    },
+                    "gold_necron_head": {
+                        name: "Golden Necron Head",
+                        required: 100,
+                        tier: 2
+                    },
+                    "wither_helmet": {
+                        name: "Wither Helmet",
+                        required: 150,
+                        tier: 3
+                    },
+                    "recombobulator": {
+                        name: "Recombobulator 3000",
+                        required: 250,
+                        tier: 4
+                    },
+                    "wither_leggings": {
+                        name: "Wither Leggings",
+                        required: 500,
+                        tier: 5
+                    },
+                    "wither_chestplate": {
+                        name: "Wither Chestplate",
+                        required: 750,
+                        tier: 6
+                    },
+                    "diamond_necron_head": {
+                        name: "Diamond Necron Head", 
+                        required: 1000,
+                        tier: 7
+                    }
+                }
             }
         },
         floors: {
@@ -261,22 +307,32 @@ module.exports = {
                 texture: "35c3024f4d9d12ddf5959b6aea3c810f5ee85176aab1b2e7f462aa1c194c342b"
             },
             "catacombs_1": {
+                name: "floor_1",
                 texture: "726f384acdfbb7218e96efac630e9ae1a14fd2f820ab660cc68322a59b165a12"
             },
             "catacombs_2": {
+                name: "floor_2",
                 texture: "ebaf2ae74553a64587840d6e70fb27d2c0ae2f8bdfacbe56654c8db4001cdc98"
             },
             "catacombs_3": {
+                name: "floor_3",
                 texture: "5a2f67500a65f3ce79d34ec150de93df8f60ebe52e248f5e1cdb69b0726256f7"
             },
             "catacombs_4": {
+                name: "floor_4",
                 texture: "5720917cda0567442617f2721e88be9d2ffbb0b26a3f4c2fe21655814d4f4476"
             },
             "catacombs_5": {
+                name: "floor_5",
                 texture: "5720917cda0567442617f2721e88be9d2ffbb0b26a3f4c2fe21655814d4f4476"
             },
             "catacombs_6": {
+                name: "floor_6",
                 texture: "3ce69d2ddcc81c9fc2e9948c92003eb0f7ebf0e7e952e801b7f2069dcee76d85"
+            },
+            "catacombs_7": {
+                name: "floor_7",
+                texture: "76965e3fd619de6b0a7ce1673072520a9360378e1cb8c19d4baf0c86769d3764"
             }
         },
         level_bonuses: {
