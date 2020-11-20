@@ -2227,8 +2227,8 @@ module.exports = {
             }
 
             if(talisman.startsWith("BEASTMASTER_CREST_")){
-                object.texture_path = "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c"
-                object.display_name = "Ring of Love"
+                object.texture_path = "/head/53415667de3fb89c5f40c880c39e4971a0caa7f3a9d2c8f712ba37fadcee"
+                object.display_name = "Beastmaster Crest"
                 object.rarity = "legendary"
 
                 output.push(object);
