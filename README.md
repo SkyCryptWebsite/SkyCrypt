@@ -9,7 +9,7 @@ The SkyCrypt Project, which is based on LeaPhant's [sky.lea.moe](https://sky.lea
 ![Docker Image CI](https://github.com/SkyCryptWebsite/SkyCrypt/workflows/Docker%20Image%20CI/badge.svg) 
 <h2 align="center">Screenshot</h1>
 
-<p align="center"><img src="https://imgur.com/RNt2SCX"></p>
+<p align="center"><img src="https://i.imgur.com/RNt2SCX.png"></p>
 
 <h2 align="center">Contributing</h1>
 
@@ -40,9 +40,6 @@ You can now run `npm start` to start it. You will be able to access the site on 
 - **Defualt Pack**: Combo of Furfsky+ and Vanilla+ by Leaphant
 - **Furfsky+ Pack**: <a href="https://hypixel.net/threads/2138599/">FurfSky+</a> by Furf__
 - **Vanilla+ Pack**: <a href="https://hypixel.net/threads/2147652/">Vanilla+</a> by TBlazeWarriorT
-- **FAR Block Pack**: <a href="https://hypixel.net/threads/far-block-hypixel-skyblock-resource-pack.2377411/">FAR Block</a> by Farkonong
-- **Hypixel Skyblock Pack**: <a href="https://hypixel.net/threads/hypixel-skyblock-pack-the-dungeon-update-i.2103515/">Hypixel Skyblock Pack</a> by Hypixel Packs Hq(doesn't work at the moment)
-- **Duckblock Pack**: <a href="https://hypixel.net/threads/outdated-go-to-new-link-x16-v4-0-beta-duckblock-a-skyblock-pack-purely-made-by-me.2794366/">Duckblock Pack</a> by Duckiscool69
 - **Default Textures**: <a href="https://www.minecraft.net/">Minecraft</a> by Mojang
 - **Player Heads**: <a href="https://hypixel.net/forums/skyblock.157/">SkyBlock</a> by Hypixel. 
 - **Original Site**: <a href="https://sky.lea.moe/">sky.lea.moe</a> by LeaPhant
