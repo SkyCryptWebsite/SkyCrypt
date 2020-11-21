@@ -1422,6 +1422,7 @@ a.additional-player-stat:hover{
     grid-area: additional;
     font-size: 12px;
     font-weight: 600;
+    padding-bottom: 5ex;
     line-height: 1.75;
     overflow: visible;
 }
