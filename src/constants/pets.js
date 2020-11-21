@@ -465,7 +465,13 @@ module.exports = {
                 name: "Light Green",
                 head: "/head/cf183ec2fe58faa43e568419b7a0dc446ece4ea0be52ec784c94e1d74b75939d",
             },
-        }
+        },
+        "SILVERFISH": {
+            "SILVERFISH": {
+                name: "Fortified",
+                head: "/head/d8552ff591042c4a38f8ba0626784ae28c4545a97d423fd9037c341035593273",
+            },
+        },
     },
 
     pet_value: {
