@@ -3396,7 +3396,7 @@ body {
             "skin additional"
             ". ."
             "skill skill ";
-        grid-template-columns: min(250px, 30vw)  auto;
+        grid-template-columns: minmax(100px, 250px)  minmax(225px, 1fr);
         grid-template-rows: auto auto 30px auto;
         padding: 0;
         background-color: transparent;
