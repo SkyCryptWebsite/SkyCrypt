@@ -574,12 +574,8 @@ header > *{
     overflow-x: hidden;
 }
 
-#base_stats_container{
-    width: 260px;
-}
-
-#base_stats_container, #skill_levels_container{
-    display: inline-block;
+#base_stats_container {
+    grid-area: base;
 }
 
 #show_skills{
@@ -594,14 +590,11 @@ header > *{
     cursor: pointer;
 }
 
-#skill_levels_container{
-    width: calc(70vw - 360px);
-    vertical-align: top;
-    margin-top: -18px;
+#skill_levels_container {
+    grid-area: skill;
 }
 
 #skill_levels_container .no-access{
-    width: calc(70vw - 400px);
     margin-top: 20px;
     font-weight: 500;
     font-size: 15px;
@@ -618,10 +611,6 @@ header > *{
 
 #other_skills{
     display: inline;
-}
-
-#other_skills .skill:first-child{
-    margin-top: 18px;
 }
 
 .skill-icon{
@@ -738,6 +727,17 @@ header > *{
     left: 0;
     width: 30vw;
     bottom: 5vh;
+}
+
+#skin_display_mobile {
+    grid-area: skin;
+    position: relative;
+    width: 100%;
+    display: none;
+}
+
+#skin_display_mobile #player_model {
+    right: 20%;
 }
 
 #player_model{
@@ -1407,6 +1407,11 @@ a.additional-player-stat:hover{
 }
 
 #basic_stats{
+    display: inline-grid;
+    grid-template-areas: 
+        "base skill"
+        "base additional";
+    grid-template-columns: 260px auto;
     width: 100%;
     padding: 30px;
     box-sizing: border-box;
@@ -1414,12 +1419,12 @@ a.additional-player-stat:hover{
 }
 
 #additional_stats_container{
-    margin-top: -50px;
+    grid-area: additional;
     font-size: 12px;
     font-weight: 600;
+    padding-bottom: 5ex;
+    line-height: 1.75;
     overflow: visible;
-    margin-left: 268px;
-    width: calc(70vw - 410px);
 }
 
 .additional-stat{
@@ -3260,20 +3265,16 @@ body {
 
     #additional_stats_container{
         white-space: normal;
-        width: calc(1120px -  60px - 268px - 150px);
     }
 
-    #base_stats_container{
-        position: relative;
-        padding-left: 150px;
-    }
-
-    #skill_levels_container{
-        width: calc(1120px - 510px);
+    #basic_stats {
+        grid-template-areas: 
+            "skin base skill"
+            "skin base additional";
+        grid-template-columns: 150px 260px auto;
     }
 
     #skill_levels_container .no-access{
-        width: calc(1120px - 510px);
         font-size: 14px;
     }
 
@@ -3293,18 +3294,11 @@ body {
     }
 
     #skin_display{
-        visibility: hidden;
+        display: none
     }
 
     #skin_display_mobile{
-        position: absolute;
-        top: 30px;
-        left: 0;
-        bottom: 30px;
-        width: 110px;
-        background-size: 100% auto;
-        background-repeat: no-repeat;
-        background-position: center center;
+        display: initial;
     }
 }
 
@@ -3343,18 +3337,9 @@ body {
         width: 100vw;
     }
 
-    #skill_levels_container .skill{
-        width: calc((100vw - 410px) / 2 - 60px);
-    }
-
     .stat-fairy-souls{
         position: relative;
         margin-top: 1px;
-    }
-
-    #additional_stats_container{
-        margin-top: 25px;
-        margin-left: 0;
     }
 
     #info_button:hover{
@@ -3365,10 +3350,6 @@ body {
     #player_profile{
         font-size: 25px;
         margin: 25px;
-    }
-
-    #skin_display_mobile{
-        left: 20px;
     }
 
     #player_profile .text-stats-for{
@@ -3409,24 +3390,28 @@ body {
         padding-left: 20px;
     }
 
-    #basic_stats{
-        text-align: center;
+    #basic_stats {
+        grid-template-areas: 
+            "skin base"
+            "skin additional"
+            ". ."
+            "skill skill ";
+        grid-template-columns: min(250px, 30vw)  auto;
+        grid-template-rows: auto auto 30px auto;
         padding: 0;
         background-color: transparent;
     }
 
-    #base_stats_container{
-        width: 100%;
-        text-align: left;
+    #basic_stats > * {
         background-color: rgba(0,0,0,0.3);
+    }
+
+    #base_stats_container{
+        text-align: left;
         padding: 30px;
         box-sizing: border-box;
         position: relative;
-        padding-left: 150px;
-    }
-
-    #skill_levels_container{
-        margin-top: 0;
+        padding-left: 0;
     }
 
     #skill_levels_container .skill{
@@ -3440,18 +3425,19 @@ body {
     }
 
     #skill_levels_container{
-        width: 100%;
-        margin-top: 30px;
-        background-color: rgba(0,0,0,0.3);
         padding: 30px;
         box-sizing: border-box;
         padding-bottom: 15px;
     }
 
     #skill_levels_container .no-access{
-        width: 100%;
         text-align: left;
         white-space: normal;
+    }
+
+    #skin_display_mobile #player_model {
+        left: 10%;
+        right: 10%;
     }
 
     .info-container-wrapper{
@@ -3464,11 +3450,6 @@ body {
 
     .additional-stat{
         display: block;
-    }
-
-    .additional-stat:not(:first-child){
-        margin-left: 0;
-        margin-top: 4px;
     }
 
     #stats_content{
@@ -3900,20 +3881,6 @@ body {
 @media (max-width: 350px){
     .piece-icon{
         transform: translate(-50%, -50%) scale(0.35);
-    }
-
-    #skin_display_mobile{
-        left: 10px;
-        height: 190px;
-    }
-
-    #base_stats_container{
-        padding-left: 30px;
-    }
-
-    .basic-stat{
-        margin-left: 95px;
-        white-space: nowrap;
     }
 
     #wrapper{
