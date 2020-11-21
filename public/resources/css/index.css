@@ -3408,6 +3408,7 @@ body {
 
     #additional_stats_container,
     #base_stats_container{
+        padding-bottom: 5ex;
         text-align: left;
     }
 
