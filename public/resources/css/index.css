@@ -3403,11 +3403,16 @@ body {
     }
 
     #basic_stats > * {
+        text-align: center;
         background-color: rgba(0,0,0,0.3);
     }
 
+    #additional_stats_container,
     #base_stats_container{
         text-align: left;
+    }
+
+    #base_stats_container{
         padding: 30px;
         box-sizing: border-box;
         position: relative;
