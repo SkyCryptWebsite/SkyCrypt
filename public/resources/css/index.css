@@ -1116,6 +1116,7 @@ html.no-transform #info_box.opened{
     margin-top: 50px;
     margin-left: 50px;
     margin-bottom: 20px;
+    overflow: visible;
 }
 
 #stats_for_player, #stats_for_profile{
