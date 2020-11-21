@@ -1147,6 +1147,8 @@ twitterDescription += '. Click to view more stats!'
                     stats['sea_creature_chance'] = calculated.weapon_stats[rod[0].itemId]['sea_creature_chance'];
             %>
 
+            <div id="skin_display_mobile"></div>
+
             <div id="base_stats_container">
                 <%- stat_component({
                     name: 'health',
@@ -1243,31 +1245,31 @@ twitterDescription += '. Click to view more stats!'
                         Collect Fairy Souls to gain Health, Defense, Strength and Speed.</div>
                     "><span class="stat-name">Fairy Souls </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span></span>
                 </div>-->
-                <div id="skin_display_mobile"></div>
-                <div id="additional_stats_container">
-                    <% if(calculated.current_area){ %>
-                    <div class="additional-stat"><span class="stat-name"><%= calculated.current_area_updated ? 'Current' : 'Last' %> Area: </span><span class="stat-value"><%= calculated.current_area %></span></div>
-                    <% } %>
-                    <div class="additional-stat"><span data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></span></div>
-                    <div class="additional-stat"><span data-tippy-content="Joined on <%= moment(calculated.first_join.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></span></div>
-                    <div class="additional-stat"><span class="stat-name">Purse: </span><span class="stat-value"><%= helper.formatNumber(calculated.purse, true) %> Coin<%= Math.floor(calculated.purse) == 1 ? '': 's' %></span></div>
-                    <% if('bank' in calculated){ %>
-                        <div class="additional-stat"><span class="stat-name">Bank Account: </span><span class="stat-value"><%= helper.formatNumber(calculated.bank, true) %> Coin<%= Math.floor(calculated.bank) == 1 ? '': 's' %></span></div>
-                    <% } %>
-                    <% if('levels' in calculated){ %>
-                        <div class="additional-stat"><span data-tippy-content="
-                        <span class='stat-name'>Total Skill XP: </span><span class='stat-value'><%= Math.round(calculated.total_skill_xp).toLocaleString() %></span>
-                        <div class='tippy-explanation'>Total XP gained in all skills except Carpentry and Runecrafting.</div>
-                        <span class='stat-name'>Average Level: </span><span class='stat-value'><%= calculated.average_level.toFixed(2) %></span>
-                        <div class='tippy-explanation'>Average skill level over all skills except Carpentry and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div>
-                        <% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
-                        <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
-                        "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= Math.floor(calculated.average_level * 10) / 10 %></span></span></div>
-                        <div class="additional-stat">
-                            <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
-                        </div>
-                    <% } %>
-                </div>
+            </div>
+
+            <div id="additional_stats_container">
+                <% if(calculated.current_area){ %>
+                <div class="additional-stat"><span class="stat-name"><%= calculated.current_area_updated ? 'Current' : 'Last' %> Area: </span><span class="stat-value"><%= calculated.current_area %></span></div>
+                <% } %>
+                <div class="additional-stat"><span data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></span></div>
+                <div class="additional-stat"><span data-tippy-content="Joined on <%= moment(calculated.first_join.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></span></div>
+                <div class="additional-stat"><span class="stat-name">Purse: </span><span class="stat-value"><%= helper.formatNumber(calculated.purse, true) %> Coin<%= Math.floor(calculated.purse) == 1 ? '': 's' %></span></div>
+                <% if('bank' in calculated){ %>
+                    <div class="additional-stat"><span class="stat-name">Bank Account: </span><span class="stat-value"><%= helper.formatNumber(calculated.bank, true) %> Coin<%= Math.floor(calculated.bank) == 1 ? '': 's' %></span></div>
+                <% } %>
+                <% if('levels' in calculated){ %>
+                    <div class="additional-stat"><span data-tippy-content="
+                    <span class='stat-name'>Total Skill XP: </span><span class='stat-value'><%= Math.round(calculated.total_skill_xp).toLocaleString() %></span>
+                    <div class='tippy-explanation'>Total XP gained in all skills except Carpentry and Runecrafting.</div>
+                    <span class='stat-name'>Average Level: </span><span class='stat-value'><%= calculated.average_level.toFixed(2) %></span>
+                    <div class='tippy-explanation'>Average skill level over all skills except Carpentry and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div>
+                    <% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
+                    <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
+                    "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= Math.floor(calculated.average_level * 10) / 10 %></span></span></div>
+                    <div class="additional-stat">
+                        <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
+                    </div>
+                <% } %>
             </div>
 
             <div id="skill_levels_container">
