@@ -1964,8 +1964,14 @@ module.exports = {
 
             pet.texture_path = petData.head;
 
+            let petSkin = null;
+
+            if (pet.skin && constants.pet_skins?.[pet.type]?.[pet.skin]) {
+                pet.texture_path = constants.pet_skins[pet.type][pet.skin].head;
+                petSkin = constants.pet_skins[pet.type][pet.skin].name;
+            }
             let lore = [
-                `§8${helper.capitalizeFirstLetter(petData.type)} Pet`,
+                `§8${helper.capitalizeFirstLetter(petData.type)} Pet${petSkin ? `, ${petSkin} Skin` : ''}`,
             ];
 
             lore.push('');

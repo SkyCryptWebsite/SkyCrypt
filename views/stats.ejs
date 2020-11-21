@@ -1521,9 +1521,27 @@ twitterDescription += '. Click to view more stats!'
 
                         for(const pet of calculated.pets)
                             totalPetXp += pet.exp;
+
+                        let totalUniqueSkins = 0
+                        for(const skins of Object.values(constants.pet_skins)) {
+                            totalUniqueSkins += Object.keys(skins).length
+                        }
+
+                        let userUniqueSkins = 0
+                        let userSkins = []
+                        for (const pet of calculated.pets) {
+                            if (
+                                pet.skin &&
+                                userSkins.indexOf(`${pet.type}/${pet.skin}`) === -1
+                            ) {
+                                userSkins.push(`${pet.type}/${pet.skin}`)
+                                userUniqueSkins++
+                            }
+                        }
                     %>
                     <p class="stat-raw-values">
                         <% max = uniquePets.length >= Object.keys(constants.pet_data).length ? 'golden-text': '' %><span class="stat-name <%= max %>">Unique Pets: </span><span class="stat-value <%= max %>"><%= uniquePets.length %> / <%= Object.keys(constants.pet_data).length %></span><br>
+                        <% max = userUniqueSkins >= totalUniqueSkins ? 'golden-text': '' %><span class="stat-name <%= max %>">Unique Pet Skins: </span><span class="stat-value <%= max %>"><%= userUniqueSkins %> / <%= totalUniqueSkins %></span><br>
                         <% max = calculated.petScore >= Math.max(...Object.keys(constants.pet_rewards)) ? 'golden-text' : '' %><span data-tippy-content="
                         Increase your pet score by collecting unique pets with a high rarity.<br><br>
                         <table>
