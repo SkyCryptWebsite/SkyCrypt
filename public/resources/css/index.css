@@ -571,7 +571,6 @@ header > *{
 
 #wrapper > * {
     max-width: 100%;
-    overflow-x: hidden;
 }
 
 #base_stats_container {
@@ -1116,7 +1115,6 @@ html.no-transform #info_box.opened{
     margin-top: 50px;
     margin-left: 50px;
     margin-bottom: 20px;
-    overflow: visible;
 }
 
 #stats_for_player, #stats_for_profile{
@@ -1424,7 +1422,6 @@ a.additional-player-stat:hover{
     font-weight: 600;
     padding-bottom: 5ex;
     line-height: 1.75;
-    overflow: visible;
 }
 
 .additional-stat{
