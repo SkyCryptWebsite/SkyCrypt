@@ -3863,6 +3863,19 @@ body {
         font-size: 13.5px;
         line-height: 22px;
         height: 22px;
+    }    
+
+    .slayer-containers,
+    .race-containers,
+    .floor-containers {
+        scroll-snap-type: x mandatory;
+        scroll-padding: 30px;
+    }    
+
+    .slayer-containers > *,
+    .race-containers > *,
+    .floor-containers > * {
+        scroll-snap-align: center;
     }
 }
 
