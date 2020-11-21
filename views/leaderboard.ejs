@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Leaderboards | SkyCrypt</title>
+    <title>Leaderboard | SkyCrypt</title>
     <meta name="description" content="A beautiful site for sharing your SkyBlock profile 🍣">
     <link rel="shortcut icon" href="/resources/img/logo_square.png?v2" type="image/png">
     <link rel="icon" href="/favicon.ico?v2" type="image/x-icon">
@@ -15,19 +15,25 @@
         <%- include('../includes/header') %>
 
         <div id="wrapper" data-sticky-container>
-            <table>
-                <% for(let lb of leaderboards){ %>
-                    <tr>
-                       <td><a href="../leaderboard/<%= lb.key %>"><%= lb.name %></a></td>
-                    </tr>
-                <% } %>
-            </table>
+            <% if(!leaderboard.success){ %>
+
+            <% }else{ %>
+                <table>
+                    <% for(let lb of leaderboard.positions){ %>
+                        <tr>
+                            <td><%= lb.rank %></td>
+                            <td><%= lb.username %></td>
+                            <td><%= lb.amount %></td>
+                        </tr>
+                    <% } %>
+                </table>
+            <% } %>
         </div>
 
         <%- include('../includes/footer'); %>
     </body>
 
     <script>
-        const leaderboards = <%= leaderboards %>;
+        const leaderboard = <%= leaderboard %>;
     </script>
 </html>

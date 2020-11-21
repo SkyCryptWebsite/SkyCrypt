@@ -2994,13 +2994,16 @@ module.exports = {
         const count = Math.min(100, userCount || 20);
         const lbCount = await redisClient.zcount(`lb_${lb.key}`, "-Infinity", "+Infinity");
 
-        if (lbCount == 0) {
-            return { return_code: 404, error: "Leaderboard not found." };
-        }
-
         const output = {
+            success: true,
             positions: []
         };
+
+        if (lbCount == 0) {
+            output.success = false;
+            output.error = "Leaderboard not found.";
+            return output;
+        }
 
         if (findUser) {
             const uuid = (await helper.resolveUsernameOrUuid(findUser, db, true)).uuid;
@@ -3010,7 +3013,9 @@ module.exports = {
                 await redisClient.zrevrank(`lb_${lb.key}`, uuid);
 
             if (rank == null) {
-                return { return_code: 404, error: "Specified user not found on leaderboard." };
+                output.success = false;
+                output.error = "Specified user not found on leaderboard.";
+                return output;
             }
 
             output.self = { rank: rank + 1 };

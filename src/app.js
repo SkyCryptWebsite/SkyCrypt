@@ -1,4 +1,5 @@
 const cluster = require('cluster');
+const { getLeaderboards } = require('./lib');
 const lib = require('./lib');
 
 async function main(){
@@ -364,7 +365,11 @@ Disallow: /item /head /leather /resources
     });
 
     app.all('/leaderboards', async (req, res, next) => {
-        res.render('leaderboards', { extra: await getExtra('leaderboards'), helper, page: 'leaderboards' });
+        res.render('leaderboards', { extra: await getExtra('leaderboards'), leaderboards: await lib.getLeaderboards(), helper, page: 'leaderboards' });
+    });
+
+    app.all('/leaderboard/:name', async (req, res, next) => {
+        res.render('leaderboard', { extra: await getExtra('leaderboard'), leaderboard: await lib.getLeaderboard(req.params.name), helper, page: 'leaderboard' });
     });
 
     app.all('/:player/:profile?', async (req, res, next) => {
