@@ -50,7 +50,34 @@ module.exports = {
         47: 3100000,
         48: 3400000,
         49: 3700000,
-        50: 4000000
+        50: 4000000,
+        51: 4300000,
+        52: 4600000,
+        53: 4900000,
+        54: 5200000,
+        55: 5500000,
+        56: 5800000,
+        57: 6100000,
+        58: 6400000,
+        59: 6700000,
+        60: 7000000
+    },
+
+    default_skill_caps: {
+        farming: 50,
+        mining: 50,
+        combat: 50,
+        foraging: 50,
+        fishing: 50,
+        enchanting: 50,
+        alchemy: 50,
+        taming: 50,
+        carpentry: 50,
+        runecrafting: 25
+    },
+
+    maxed_skill_caps: {
+        farming: 60
     },
 
     // XP required for each level of Runecrafting

@@ -31,7 +31,6 @@
     --bg-webp: url(https://sky.shiiyu.moe/resources/img/bg.webp?v3);
 
     /* Blurred Backgrounds */
-    --bg_blur-png: url(https://sky.shiiyu.moe/resources/img/bg_blur.png?v3); 
     --bg_blur-webp: url(https://sky.shiiyu.moe/resources/img/bg_blur.webp?v3);
 }
 
@@ -41,8 +40,8 @@
 }
 
 html{
-    background-color: black;
-    background: var(--bg-webp) no-repeat center center fixed;
+    background-color: #121212;
+    background: var(--bg-webp) no-repeat center center fixed #121212;
     background-size: cover;
     font-family: 'Montserrat', sans-serif;
     color: white;
@@ -125,10 +124,19 @@ header{
     left: 0;
     right: 0;
     height: 48px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px;
     background-color: #282828;
     z-index: 1000;
     line-height: 48px;
     overflow: hidden;
+}
+
+header > *{
+    margin: 0 4px;
 }
 
 #not_supported{
@@ -155,18 +163,16 @@ header{
     vertical-align: top;
     text-decoration: none;
     color: white;
-    margin-left: 5px;
     font-weight: 600;
 }
 
 .pride-flag{
     display: inline-block;
     vertical-align: top;
-    margin-top: 15px;
-    margin-left: 20px;
     border-radius: 3px;
     height: 20px;
-    width: 32px;
+    width: 32px;    
+    flex-shrink: 0;
     cursor: pointer;
     user-select: none;
 }
@@ -245,7 +251,6 @@ header{
     background-repeat: no-repeat;
     width: 25px;
     height: 25px;
-    margin-top: 12px;
 }
 
 .pride-flag::after{
@@ -253,11 +258,10 @@ header{
 }
 
 .blm-logo{
-    position: absolute;
-    top: 0;
-    right: 205px;
-    width: 48px;
-    height: 48px;
+    display: inline-block;
+    width: 24px;
+    height: 100%;
+    flex-shrink: 0;
     background-image: url(/resources/img/icons/blm-logo.png);
     background-size: auto 24px;
     background-position: center;
@@ -269,12 +273,9 @@ header{
 }
 
 .social-button{
-    display: block;
-    margin-left: 5px;
-    vertical-align: middle;
     display: inline-block;
+    vertical-align: middle;
     position: relative;
-    cursor: pointer;
     cursor: pointer;
     text-transform: uppercase;
     height: 16px;
@@ -291,6 +292,7 @@ header{
 }
 
 .social-button:hover{
+    flex-shrink: 0;
     background-color: rgba(255,255,255,0.8);
 }
 
@@ -330,14 +332,24 @@ header{
 }
 
 #search_user{
-    position: absolute;
-    width: 360px;
+    position: relative;
+    flex-grow: 1;
+    flex-shrink: 1;
+    max-width: 500px;
     height: 36px;
-    left: 50%;
-    margin-left: -180px;
-    top: 6px;
     background-color: rgba(0,0,0,0.2);
     border-radius: 18px;
+}
+
+@media (min-width: 1100px){
+    #search_user{
+        margin: 0 auto;
+    }
+}
+@media (min-width: 960px){
+    :not(.patreon) + #search_user{
+        margin: 0 auto;
+    }
 }
 
 .page-index #search_user{
@@ -353,18 +365,25 @@ header{
     position: absolute;
     top: 0;
     left: 0;
-    border: 0 !important;
+    outline: 0;
+    border: 0;
+    border-radius: inherit;
     background-color: transparent;
     color: white;
-    height: 36px;
-    width: 360px;
-    padding: 4px;
-    padding-left: 15px;
-    padding-right: 15px;
+    height: 100%;
+    width: 100%;
+    padding: 4px 15px;
     font-size: 16px;
     box-sizing: border-box;
     font-family: Montserrat, sans-serif;
     font-weight: 600;
+    transition: background-color .1s;
+}
+
+#inp_search_user:focus,
+#inp_search_user:hover {
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 ::-webkit-input-placeholder { /* Edge */
@@ -380,15 +399,15 @@ header{
 }
 
 #btn_search_user{
-    display: block;
     position: absolute;
     top: 0;
-    left: 300px;
+    right: 0;
     height: 36px;
     width: 60px;
     border-radius: 18px;
-    background-color: rgba(0,0,0,0.15);
+    background-color: rgba(0,0,0,0.2);
     cursor: pointer;
+    box-sizing: border-box;
     background-image: url(/resources/img/icons/magnify.png);
     background-size: 24px 24px;
     background-position: center center;
@@ -396,8 +415,9 @@ header{
     transition: background-color .1s;
 }
 
+#btn_search_user:focus,
 #btn_search_user:hover{
-    background-color: rgba(0,0,0,0.07);
+    background-color: rgba(0,0,0,0.4);
 }
 
 #top_navigation .tab.soon span::after{
@@ -418,13 +438,12 @@ header{
     cursor: default;
 }
 
-#packs_button{
+#packs_button,
+#themes_button {
     display: inline-block;
-    position: absolute;
     height: 36px;
     line-height: 36px;
     box-sizing: border-box;
-    margin-left: 5px;
     vertical-align: middle;
     cursor: pointer;
     text-transform: capitalize;
@@ -438,66 +457,29 @@ header{
     top: 6px;
     right: 20px;
     background-color: rgba(0,0,0,0.2);
-    background-image: url(../img/icons/package-variant.png);
     background-size: 22px auto;
     background-position: 6px 7px;
     background-repeat: no-repeat;
+    transition: padding-right .2s;
 }
 
-.switch_packs_button{
-    display: inline-block;
-    position: absolute;
-    height: 30px;
-    line-height: 30px;
-    box-sizing: border-box;
-    margin-left: 5px;
-    cursor: pointer;
-    text-transform: capitalize;
-    font-weight: 600;
-    font-size: 12px;
-    color: white;
-    padding-left: 8px;
-    padding-right: 8px;
-    border-radius: 9999px;
-    top: 8px;
-    right: 20px;
-    background-color: rgba(var(--icon-rgb), 0.9);
-    background-size: 24px auto;
-    background-position: 6px 8px;
-    background-repeat: no-repeat;
-    text-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+#packs_button span,
+#themes_button span {
+    display: block;
+    transform: scaleX(1);
+    transition: transform .2s, font-size, .2s, opacity .2s;
 }
 
-.switch_packs_button:hover{
-    background-color: rgba(var(--line-rgb), 0.9);
+#packs_button {
+    background-image: url(../img/icons/package-variant.png);
+
 }
 
 #themes_button{
-    display: inline-block;
-    position: absolute;
-    height: 36px;
-    line-height: 36px;
-    box-sizing: border-box;
-    margin-left: 5px;
-    vertical-align: middle;
-    cursor: pointer;
-    text-transform: capitalize;
-    font-weight: 600;
-    font-size: 14px;
-    color: white;
-    padding-right: 5px;
-    padding-left: 32px;
-    padding-right: 10px;
-    border-radius: 9999px;
-    top: 6px;
-    right: 110px;
-    background-color: rgba(0,0,0,0.2);
     background-image: url(../img/icons/format-color-fill.png);
-    background-size: 24px auto;
-    background-position: 6px 8px;
-    background-repeat: no-repeat;
 }
 
+.switch_packs_button,
 .switch_themes_button{
     display: inline-block;
     position: absolute;
@@ -522,6 +504,7 @@ header{
     text-shadow: 0px 0px 3px rgba(0,0,0,0.5);
 }
 
+.switch_packs_button:hover,
 .switch_themes_button:hover{
     background-color: rgba(var(--line-rgb), 0.9);
 }
@@ -567,10 +550,6 @@ header{
     background-color: rgb(20,20,20);
 }
 
-html.no-webp #bg_blur{
-    background-image: var(--bg_blur-png)
-}
-
 #wrapper{
     position: absolute;
     left: 30vw;
@@ -590,12 +569,13 @@ html.no-webp #bg_blur{
     backdrop-filter: blur(16px) brightness(0.5);
 }
 
-#base_stats_container{
-    width: 260px;
+#wrapper > * {
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
-#base_stats_container, #skill_levels_container{
-    display: inline-block;
+#base_stats_container {
+    grid-area: base;
 }
 
 #show_skills{
@@ -610,14 +590,11 @@ html.no-webp #bg_blur{
     cursor: pointer;
 }
 
-#skill_levels_container{
-    width: calc(70vw - 360px);
-    vertical-align: top;
-    margin-top: -18px;
+#skill_levels_container {
+    grid-area: skill;
 }
 
 #skill_levels_container .no-access{
-    width: calc(70vw - 400px);
     margin-top: 20px;
     font-weight: 500;
     font-size: 15px;
@@ -634,10 +611,6 @@ html.no-webp #bg_blur{
 
 #other_skills{
     display: inline;
-}
-
-#other_skills .skill:first-child{
-    margin-top: 18px;
 }
 
 .skill-icon{
@@ -754,6 +727,17 @@ html.no-webp #bg_blur{
     left: 0;
     width: 30vw;
     bottom: 5vh;
+}
+
+#skin_display_mobile {
+    grid-area: skin;
+    position: relative;
+    width: 100%;
+    display: none;
+}
+
+#skin_display_mobile #player_model {
+    right: 20%;
 }
 
 #player_model{
@@ -1132,6 +1116,7 @@ html.no-transform #info_box.opened{
     margin-top: 50px;
     margin-left: 50px;
     margin-bottom: 20px;
+    overflow: visible;
 }
 
 #stats_for_player, #stats_for_profile{
@@ -1422,6 +1407,11 @@ a.additional-player-stat:hover{
 }
 
 #basic_stats{
+    display: inline-grid;
+    grid-template-areas: 
+        "base skill"
+        "base additional";
+    grid-template-columns: 260px auto;
     width: 100%;
     padding: 30px;
     box-sizing: border-box;
@@ -1429,12 +1419,11 @@ a.additional-player-stat:hover{
 }
 
 #additional_stats_container{
-    margin-top: -50px;
+    grid-area: additional;
     font-size: 12px;
     font-weight: 600;
+    line-height: 1.75;
     overflow: visible;
-    margin-left: 268px;
-    width: calc(70vw - 410px);
 }
 
 .additional-stat{
@@ -1451,11 +1440,13 @@ a.additional-player-stat:hover{
 }
 
 #nav_bar{
-    position: absolute;
+    position: sticky;
+    top: 48px;
     width: 100%;
     text-align: center;
     padding-bottom: 6px;
     white-space: nowrap;
+    z-index: 25;
 }
 
 #nav_bar_background{
@@ -1486,14 +1477,7 @@ a.additional-player-stat:hover{
     z-index: 3;
 }
 
-#nav_bar.nav-bar-stickied{
-    z-index: 25;
-    width: auto !important;
-    left: 0;
-    right: 0;
-}
-
-#nav_bar.nav-bar-stickied #nav_bar_background{
+#nav_bar.stuck #nav_bar_background{
     background-color: rgba(20,20,20,0.9);
 }
 
@@ -2943,10 +2927,6 @@ a.additional-player-stat:hover{
     color: rgba(255,255,255,0.8);
 }
 
-html.no-webp #enter_player_box_wrapper{
-    background-image: var(--bg_blur-png);
-}
-
 #enter_player_box{
     text-align: center;
 }
@@ -3055,10 +3035,6 @@ html.no-webp #enter_player_box_wrapper{
     }
 }
 
-html.no-webp .top-profile{
-    background-image: var(--bg_blur-png);
-}
-
 .top-profile:hover{
     opacity: 1;
 }
@@ -3114,10 +3090,6 @@ html.no-webp .top-profile{
 #error_box_wrapper{
     min-height: 70px;
     max-height: 500px;
-}
-
-html.no-webp #error_box_wrapper{
-    background-image: var(--bg_blur-png);
 }
 
 #top_profiles_box{
@@ -3281,10 +3253,6 @@ body {
 }
 
 @media (max-width: 1590px){
-    header{
-        width: 100%;
-    }
-
     #info_box{
         width: 440px;
     }
@@ -3296,20 +3264,16 @@ body {
 
     #additional_stats_container{
         white-space: normal;
-        width: calc(1120px -  60px - 268px - 150px);
     }
 
-    #base_stats_container{
-        position: relative;
-        padding-left: 150px;
-    }
-
-    #skill_levels_container{
-        width: calc(1120px - 510px);
+    #basic_stats {
+        grid-template-areas: 
+            "skin base skill"
+            "skin base additional";
+        grid-template-columns: 150px 260px auto;
     }
 
     #skill_levels_container .no-access{
-        width: calc(1120px - 510px);
         font-size: 14px;
     }
 
@@ -3317,7 +3281,6 @@ body {
         left: 50%;
         width: 1120px;
         margin-left: -560px;
-        overflow-x: hidden;
     }
 
     .skill {
@@ -3329,25 +3292,12 @@ body {
         margin-right: -10px;
     }
 
-    #nav_bar.nav-bar-stickied{
-        left: auto;
-        right: auto;
-        width: 1120px !important;
-    }
-
     #skin_display{
-        visibility: hidden;
+        display: none
     }
 
     #skin_display_mobile{
-        position: absolute;
-        top: 30px;
-        left: 0;
-        bottom: 30px;
-        width: 110px;
-        background-size: 100% auto;
-        background-repeat: no-repeat;
-        background-position: center center;
+        display: initial;
     }
 }
 
@@ -3384,25 +3334,11 @@ body {
         right: 0;
         margin-left: 0;
         width: 100vw;
-        overflow-x: hidden;
-    }
-
-    #skill_levels_container .skill{
-        width: calc((100vw - 410px) / 2 - 60px);
-    }
-
-    #nav_bar.nav-bar-stickied{
-        width: 100vw !important;
     }
 
     .stat-fairy-souls{
         position: relative;
         margin-top: 1px;
-    }
-
-    #additional_stats_container{
-        margin-top: 25px;
-        margin-left: 0;
     }
 
     #info_button:hover{
@@ -3413,14 +3349,6 @@ body {
     #player_profile{
         font-size: 25px;
         margin: 25px;
-    }
-
-    #skin_display_mobile{
-        left: 20px;
-    }
-
-    #search_user{
-        width: 360px;
     }
 
     #player_profile .text-stats-for{
@@ -3461,24 +3389,34 @@ body {
         padding-left: 20px;
     }
 
-    #basic_stats{
-        text-align: center;
+    #basic_stats {
+        grid-template-areas: 
+            "skin base"
+            "skin additional"
+            ". ."
+            "skill skill ";
+        grid-template-columns: minmax(100px, 250px)  minmax(225px, 1fr);
+        grid-template-rows: auto auto 30px auto;
         padding: 0;
         background-color: transparent;
     }
 
-    #base_stats_container{
-        width: 100%;
-        text-align: left;
+    #basic_stats > * {
+        text-align: center;
         background-color: rgba(0,0,0,0.3);
+    }
+
+    #additional_stats_container,
+    #base_stats_container{
+        padding-bottom: 5ex;
+        text-align: left;
+    }
+
+    #base_stats_container{
         padding: 30px;
         box-sizing: border-box;
         position: relative;
-        padding-left: 150px;
-    }
-
-    #skill_levels_container{
-        margin-top: 0;
+        padding-left: 0;
     }
 
     #skill_levels_container .skill{
@@ -3492,26 +3430,23 @@ body {
     }
 
     #skill_levels_container{
-        width: 100%;
-        margin-top: 30px;
-        background-color: rgba(0,0,0,0.3);
         padding: 30px;
         box-sizing: border-box;
         padding-bottom: 15px;
     }
 
     #skill_levels_container .no-access{
-        width: 100%;
         text-align: left;
         white-space: normal;
     }
 
-    .info-container-wrapper{
-        text-align: center;
+    #skin_display_mobile #player_model {
+        left: 10%;
+        right: 10%;
     }
 
-    .stat-header{
-        width: 100vw;
+    .info-container-wrapper{
+        text-align: center;
     }
 
     .stat-header::before, .stat-header::after{
@@ -3520,11 +3455,6 @@ body {
 
     .additional-stat{
         display: block;
-    }
-
-    .additional-stat:not(:first-child){
-        margin-left: 0;
-        margin-top: 4px;
     }
 
     #stats_content{
@@ -3613,9 +3543,6 @@ body {
 }
 
 @media (max-width: 800px){
-    header > .social-button{
-        display: none;
-    }
 
     .slayer-drop .stat-name{
         max-width: calc(100% - 95px);
@@ -3710,25 +3637,32 @@ body {
         margin-top: 20px;
     }
 
-    #themes_button{
-        padding-right: 3px;
-        right: 60px;
+    .social-button.patreon {
+        padding-left: 26px;
+        padding-right: 0;
     }
-
-    #packs_button{
-        padding-right: 3px;
-    }
-
-    #themes_button span{
+    
+    .social-button.patreon span {
         display: none;
     }
+}
 
-    #packs_button span{
-        display: none;
+@media (max-width: 745px){
+
+    :not(.page-index) > #themes_button,
+    :not(.page-index) > #packs_button,
+    #search_user.show-user-search ~ #themes_button,
+    #search_user.show-user-search ~ #packs_button {
+        padding-right: 3px;
     }
 
-    .blm-logo{
-        right: 90px;
+    :not(.page-index) > #themes_button span,
+    :not(.page-index) > #packs_button span,
+    #search_user.show-user-search ~ #themes_button span,
+    #search_user.show-user-search ~ #packs_button span {
+        transform: scaleX(0);
+        font-size: 0;
+        opacity: 0;
     }
 }
 
@@ -3771,40 +3705,25 @@ body {
         right: 0;
         max-height: calc(100vh - 45px);
     }
+}
 
+@media (max-width: 600px){
+    header > .social-button{
+        display: none;
+    }
+}
+
+@media (max-width: 560px){
     #api_button{
         display: none;
     }
 }
 
-@media (max-width: 580px){
+@media (max-width: 520px){
     .blm-logo{
         display: none;
     }
 
-    #search_user{
-        width: calc(100% - 210px);
-        margin-left: auto;
-        right: 10px;
-    }
-
-    #inp_search_user{
-        width: calc(100% - 60px);
-    }
-
-    #btn_search_user{
-        left: calc(100% - 60px);
-    }
-
-    #themes_button{
-        display: none;
-    }
-
-    #packs_button{
-        display: none;
-    }
-}
-@media (max-width: 520px){
     #stats_for_player, #stats_for_profile{
         font-size: 20px;
         height: 46px;
@@ -3858,6 +3777,15 @@ body {
 }
 
 @media (max-width: 480px){
+    #themes_button,
+    #packs_button {
+        display: none;
+    }
+
+    .page-index {
+        justify-content: center;
+    }
+
     #show_skills{
         display: block;
     }
@@ -3941,10 +3869,6 @@ body {
 }
 
 @media (max-width: 380px){
-    #search_user{
-        width: calc(100% - 180px);
-        margin-left: auto;
-    }
 
     .pride-flag:not(.logo){
         width: 20px;
@@ -3962,20 +3886,6 @@ body {
 @media (max-width: 350px){
     .piece-icon{
         transform: translate(-50%, -50%) scale(0.35);
-    }
-
-    #skin_display_mobile{
-        left: 10px;
-        height: 190px;
-    }
-
-    #base_stats_container{
-        padding-left: 30px;
-    }
-
-    .basic-stat{
-        margin-left: 95px;
-        white-space: nowrap;
     }
 
     #wrapper{

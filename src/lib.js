@@ -38,7 +38,7 @@ const parseNbt = util.promisify(nbt.parse);
 
 const rarity_order = ['special', 'mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 
-const petTiers = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
+const petTiers = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic'];
 
 const MAX_SOULS = 209;
 
@@ -77,24 +77,45 @@ function getAllKeys(profiles, ...path){
     return _.uniq([].concat(...profiles.map(a => _.keys(helper.getPath(a, ...path)))));
 }
 
-function getXpByLevel(level, runecrafting){
+function getXpByLevel(level, extra = {}){
+    let xp_table;
+    switch(extra.type){
+        case "runecrafting":
+            xp_table = constants.runecrafting_xp;
+            break;
+        case "dungeoneering":
+            xp_table = constants.dungeoneering_xp;
+            break;
+        default:
+            xp_table = constants.leveling_xp;
+    }
+
+    let levelCap = 1;
+    let maxLevel = 1;
+
+    if(extra.skill){
+        if(constants.default_skill_caps[extra.skill]
+            && constants.default_skill_caps[extra.skill] > levelCap)
+            levelCap = constants.default_skill_caps[extra.skill];
+
+        if(constants.maxed_skill_caps[extra.skill])
+            maxLevel = constants.maxed_skill_caps[extra.skill];
+    }else levelCap = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
+
+    if(levelCap > maxLevel)
+        maxLevel = levelCap;
+
     const output = {
-        level: Math.min(level, 50),
+        level: Math.min(level, maxLevel),
         xpCurrent: 0,
         xpForNext: null,
         progress: 0.05
     }
 
-    let xp_table = runecrafting ? constants.runecrafting_xp : constants.leveling_xp;
-
     if(isNaN(level))
         return 0;
 
     let xpTotal = 0;
-
-    let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
-
-    output.maxLevel = maxLevel;
 
     for(let x = 1; x <= level; x++)
         xpTotal += xp_table[x];
@@ -109,8 +130,18 @@ function getXpByLevel(level, runecrafting){
     return output;
 }
 
-function getLevelByXp(xp, type){
-    let xp_table = type == 1 ? constants.runecrafting_xp : type == 2 ? constants.dungeoneering_xp : constants.leveling_xp;
+function getLevelByXp(xp, extra = {}){
+    let xp_table;
+    switch(extra.type){
+        case "runecrafting":
+            xp_table = constants.runecrafting_xp;
+            break;
+        case "dungeoneering":
+            xp_table = constants.dungeoneering_xp;
+            break;
+        default:
+            xp_table = constants.leveling_xp;
+    }
 
     if(isNaN(xp)){
         return {
@@ -118,16 +149,35 @@ function getLevelByXp(xp, type){
             level: 0,
             xpCurrent: 0,
             xpForNext: xp_table[1],
-            progress: 0
+            progress: 0,
+            level_cap: 0,
+            uncapped_level: 0
         };
     }
 
     let xpTotal = 0;
     let level = 0;
+    let uncappedLevel = 0;
 
     let xpForNext = Infinity;
 
-    let maxLevel = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
+    let levelCap = 1;
+    let maxLevel = 1;
+
+    if(extra.cap)
+        levelCap = extra.cap; 
+
+    if(extra.skill){
+        if(constants.default_skill_caps[extra.skill]
+            && constants.default_skill_caps[extra.skill] > levelCap)
+            levelCap = constants.default_skill_caps[extra.skill];
+
+        if(constants.maxed_skill_caps[extra.skill])
+            maxLevel = constants.maxed_skill_caps[extra.skill];
+    }else levelCap = Object.keys(xp_table).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
+
+    if(levelCap > maxLevel)
+        maxLevel = levelCap;
 
     for(let x = 1; x <= maxLevel; x++){
         xpTotal += xp_table[x];
@@ -136,13 +186,14 @@ function getLevelByXp(xp, type){
             xpTotal -= xp_table[x];
             break;
         }else{
-            level = x;
+            if(x <= levelCap) level = x;
+            uncappedLevel = x;
         }
     }
 
     let xpCurrent = Math.floor(xp - xpTotal);
 
-    if(level < maxLevel)
+    if(level < levelCap)
         xpForNext = Math.ceil(xp_table[level + 1]);
 
     let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
@@ -153,7 +204,9 @@ function getLevelByXp(xp, type){
         maxLevel,
         xpCurrent,
         xpForNext,
-        progress
+        progress,
+        levelCap,
+        uncappedLevel
     };
 }
 
@@ -300,11 +353,18 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
     // Check backpack contents and add them to the list of items
     for(const [index, item] of items.entries()){
-        if(helper.hasPath(item, 'tag', 'display', 'Name') && (item.tag.display.Name.endsWith('Backpack') || item.tag.display.Name.endsWith('New Year Cake Bag'))){
+        if(helper.hasPath(item, 'tag', 'display', 'Name') && 
+        (item.tag.display.Name.endsWith('Backpack') 
+        || item.tag.display.Name.endsWith('New Year Cake Bag') 
+        || item.tag.display.Name.endsWith("Builder's Wand") 
+        || item.tag.display.Name.endsWith('Basket of Seeds'))){
             let backpackData;
 
             for(const key of Object.keys(item.tag.ExtraAttributes))
-                if(key.endsWith('backpack_data') || key == 'new_year_cake_bag_data')
+                if(key.endsWith('backpack_data') 
+                || key == 'new_year_cake_bag_data' 
+                || key == "builder's_wand_data"
+                || key == 'basket_of_seeds_data')
                     backpackData = item.tag.ExtraAttributes[key];
 
             if(!Array.isArray(backpackData))
@@ -370,32 +430,20 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             }
         }
 
-        let lore_raw;
-
         const enchantments = helper.getPath(item, 'tag', 'ExtraAttributes', 'enchantments') || {};
-        const hasEnchantments = Object.keys(enchantments).length > 0;
+
+        let itemLore = helper.getPath(item, 'tag', 'display', 'Lore') || [];
+        let lore_raw = [...itemLore];
+
+        let lore = lore_raw != null ? lore_raw.map(a => a = helper.getRawLore(a)) : [];
 
         // Set HTML lore to be displayed on the website
-        if(helper.hasPath(item, 'tag', 'display', 'Lore')){
-            lore_raw = item.tag.display.Lore;
-
-            item.lore = '';
-
-            for(const [index, line] of lore_raw.entries()){
-                if(index == 0 && line == '')
-                    continue;
-
-                item.lore += helper.renderLore(line, hasEnchantments);
-
-                if(index + 1 < lore_raw.length)
-                    item.lore += '<br>';
-            }
-
+        if(itemLore.length > 0){
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'rarity_upgrades')){
                 const { rarity_upgrades } = item.tag.ExtraAttributes;
 
                 if(rarity_upgrades > 0)
-                    item.lore += "<br>" + helper.renderLore(`§8(Recombobulated)`);
+                    itemLore.push('§8(Recombobulated)');
             }
 
             let hasAnvilUses = false;
@@ -410,10 +458,10 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
                 anvil_uses -= hot_potato_count;
 
-                if(anvil_uses > 0 && lore_raw){
+                if(anvil_uses > 0){
                     hasAnvilUses = true;
 
-                    item.lore += "<br><br>" + helper.renderLore(`§7Anvil Uses: §c${anvil_uses}`);
+                    itemLore.push('', `§7Anvil Uses: §c${anvil_uses}`);
                 }
             }
 
@@ -421,9 +469,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                 let { expertise_kills } = item.tag.ExtraAttributes;
 
                 if(expertise_kills > 0 && lore_raw){
-                    item.lore += "<br><br>" + helper.renderLore(`§7Expertise Kills: §c${expertise_kills}`);
+                    itemLore.push('', `§7Expertise Kills: §c${expertise_kills}`);
                     if (expertise_kills >= 15000)
-                        item.lore += "<br>" + helper.renderLore(`§8MAXED OUT!`);
+                        itemLore.push(`§8MAXED OUT!`);
                     else{
                         let toNextLevel = 0;
                         for (const e of constants.expertise_kills_ladder){
@@ -432,13 +480,11 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                                 break;
                             }
                         }
-                        item.lore += "<br>" + helper.renderLore(`§8${toNextLevel} kills to tier up!`);}
+                        itemLore.push(`§8${toNextLevel} kills to tier up!`);}
                 }
             }
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp')){
-                item.lore += "<br>";
-
                 const { timestamp } = item.tag.ExtraAttributes;
 
                 let obtainmentDate;
@@ -453,46 +499,37 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                 if(!obtainmentDate.isValid())
                     obtainmentDate = moment(timestamp, "M/D/YY HH:mm");
 
-                item.lore += "<br>" + helper.renderLore(`§7Obtained: §c${obtainmentDate.format("D MMM YYYY")}`);
+                itemLore.push('', `§7Obtained: §c${obtainmentDate.format("D MMM YYYY")}`);
             }
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'spawnedFor')){
                 if(!helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp'))
-                    item.lore += "<br>";
+                    itemLore.push('');
 
                 const spawnedFor = item.tag.ExtraAttributes.spawnedFor.replace(/\-/g, '');
                 const spawnedForUser = await helper.resolveUsernameOrUuid(spawnedFor, db, cacheOnly);
 
-                item.lore += "<br>" + helper.renderLore(`§7By: §c<a href="/stats/${spawnedFor}">${spawnedForUser.display_name}</a>`);
+                itemLore.push(`§7By: §c<a href="/stats/${spawnedFor}">${spawnedForUser.display_name}</a>`);
             }
  
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'baseStatBoostPercentage')){
-
                 const boost = item.tag.ExtraAttributes.baseStatBoostPercentage;
 
-                item.lore += "<br><br>" + helper.renderLore(`§7Dungeon Item Quality: ${boost == 50 ? '§6' : '§c'}${boost}/50%`);
+                itemLore.push('', `§7Dungeon Item Quality: ${boost == 50 ? '§6' : '§c'}${boost}/50%`);
             }
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'item_tier')){
-
                 const floor = item.tag.ExtraAttributes.item_tier;
 
-                item.lore += "<br>"
-
-                item.lore += helper.renderLore(`§7Obtained From: §bFloor ${floor}`);
+                itemLore.push(`§7Obtained From: §bFloor ${floor}`);
             }
 
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'winning_bid')){
-
                 const price = item.tag.ExtraAttributes.winning_bid;
 
-                item.lore += "<br>"
-
-                item.lore += helper.renderLore(`§7Price Paid at Dark Auction: §b${price.toLocaleString()} coins`);
+                itemLore.push(`§7Price Paid at Dark Auction: §b${price.toLocaleString()} coins`);
             }
         }
-
-        let lore = lore_raw ? lore_raw.map(a => a = helper.getRawLore(a)) : [];
 
         let rarity, item_type;
 
@@ -679,20 +716,8 @@ module.exports = {
         return constants.base_stats;
     },
 
-    getLevelByXp: (xp) => {
-        let xpTotal = 0;
-        let level = 0;
-
-        let maxLevel = Object.keys(constants.leveling_xp).sort((a, b) => Number(a) - Number(b)).map(a => Number(a)).pop();
-
-        for(let x = 1; x <= maxLevel; x++){
-            xpTotal += constants.leveling_xp[x];
-
-            if(xp >= xpTotal)
-                level = x;
-        }
-
-        return level;
+    getLevelByXp: (xp, extra = {}) => {
+        return getLevelByXp(xp, extra);
     },
 
     // Get skill bonuses for a specific skill
@@ -807,6 +832,7 @@ module.exports = {
         let quiver = 'quiver' in profile ? await getItems(profile.quiver.data, customTextures, packs, cacheOnly) : [];
         let potion_bag = 'potion_bag' in profile ? await getItems(profile.potion_bag.data, customTextures, packs, cacheOnly) : [];
         let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data, customTextures, packs, cacheOnly) : [];
+        let personal_vault = 'personal_vault_contents' in profile ? await getItems(profile.personal_vault_contents.data, customTextures, packs, cacheOnly) : [];
 
         const wardrobeColumns = wardrobe_inventory.length / 4;
 
@@ -833,14 +859,15 @@ module.exports = {
         output.armor = armor.filter(a => Object.keys(a).length != 0);
         output.wardrobe = wardrobe;
         output.wardrobe_inventory = wardrobe_inventory;
-        output.inventory = inventory
+        output.inventory = inventory;
         output.enderchest = enderchest;
         output.talisman_bag = talisman_bag;
         output.fishing_bag = fishing_bag;
         output.quiver = quiver;
         output.potion_bag = potion_bag;
+        output.personal_vault = personal_vault;
 
-        const all_items = armor.concat(inventory, enderchest, talisman_bag, fishing_bag, quiver, potion_bag, wardrobe_inventory);
+        const all_items = armor.concat(inventory, enderchest, talisman_bag, fishing_bag, quiver, potion_bag, personal_vault, wardrobe_inventory);
 
         for(const [index, item] of all_items.entries()){
             item.item_index = index;
@@ -1029,6 +1056,10 @@ module.exports = {
         if(inventory.length == 0)
             output.no_inventory = true;
 
+        // Same for personal vault
+        if(personal_vault.length == 0)
+            output.no_personal_vault = true;
+
         // Sort talismans, weapons and rods by rarity
         output.weapons = output.weapons.sort((a, b) => {
             if(a.rarity == b.rarity){
@@ -1192,16 +1223,16 @@ module.exports = {
             let average_level_no_progress = 0;
 
             skillLevels = {
-                taming: getLevelByXp(userProfile.experience_skill_taming || 0),
-                farming: getLevelByXp(userProfile.experience_skill_farming || 0),
-                mining: getLevelByXp(userProfile.experience_skill_mining || 0),
-                combat: getLevelByXp(userProfile.experience_skill_combat || 0),
-                foraging: getLevelByXp(userProfile.experience_skill_foraging || 0),
-                fishing: getLevelByXp(userProfile.experience_skill_fishing || 0),
-                enchanting: getLevelByXp(userProfile.experience_skill_enchanting || 0),
-                alchemy: getLevelByXp(userProfile.experience_skill_alchemy || 0),
-                carpentry: getLevelByXp(userProfile.experience_skill_carpentry || 0),
-                runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting || 0, true),
+                taming: getLevelByXp(userProfile.experience_skill_taming || 0, {skill: "taming"}),
+                farming: getLevelByXp(userProfile.experience_skill_farming || 0, {skill: "farming", cap: hypixelProfile.achievements.skyblock_harvester || 0}),
+                mining: getLevelByXp(userProfile.experience_skill_mining || 0, {skill: "mining"}),
+                combat: getLevelByXp(userProfile.experience_skill_combat || 0, {skill: "combat"}),
+                foraging: getLevelByXp(userProfile.experience_skill_foraging || 0, {skill: "foraging"}),
+                fishing: getLevelByXp(userProfile.experience_skill_fishing || 0, {skill: "fishing"}),
+                enchanting: getLevelByXp(userProfile.experience_skill_enchanting || 0, {skill: "enchanting"}),
+                alchemy: getLevelByXp(userProfile.experience_skill_alchemy || 0, {skill: "alchemy"}),
+                carpentry: getLevelByXp(userProfile.experience_skill_carpentry || 0, {skill: "carpentry"}),
+                runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting || 0, {skill: "runecrafting", type: "runecrafting"}),
             };
 
             for(let skill in skillLevels){
@@ -1235,13 +1266,13 @@ module.exports = {
             let skillsAmount = 0;
 
             for(const skill in skillLevels){
-                output.levels[skill] = getXpByLevel(skillLevels[skill]);
+                output.levels[skill] = getXpByLevel(skillLevels[skill], {skill: skill});
 
                 if(skillLevels[skill] < 0)
                     continue;
 
                 skillsAmount++;
-                average_level += skillLevels[skill];
+                average_level += output.levels[skill].level;
 
                 totalSkillXp += output.levels[skill].xp;
             }
@@ -1383,6 +1414,7 @@ module.exports = {
         }
 
         output.missingTalismans = await module.exports.getMissingTalismans(items.talisman_ids);
+        output.talismanCount = await module.exports.getTalismanCount();
         output.pets = await module.exports.getPets(userProfile);
         output.missingPets = await module.exports.getMissingPets(output.pets);
         output.petScore = await module.exports.getPetScore(output.pets);
@@ -1919,7 +1951,7 @@ module.exports = {
 
             pet.rarity = pet.tier.toLowerCase();
 
-            if(pet.heldItem == 'PET_ITEM_TIER_BOOST')
+            if(pet.heldItem == 'PET_ITEM_TIER_BOOST' || pet.heldItem == 'PET_ITEM_VAMPIRE_FANG')
                 pet.rarity = petTiers[Math.min(petTiers.length - 1, petTiers.indexOf(pet.rarity) + 1)];
 
             pet.level = getPetLevel(pet);
@@ -1959,6 +1991,9 @@ module.exports = {
                         break;
                     case "legendary":
                         rarity = 4;
+                        break;
+                    case "mythic":
+                        rarity = 5;
                         break;
                 }
 
@@ -2158,161 +2193,72 @@ module.exports = {
             if(name in constants.talisman_upgrades){ //if the name is in the upgrades list
                 for(let upgrade of constants.talisman_upgrades[name]){
                     if(talismans.includes(upgrade)){ //if talisman list includes the upgrade
-                        missing = missing.filter(item => item !== name)
+                        missing = missing.filter(item => item !== name);
                         break;
                     }
                 }
             }
         });
+
         const output = [];
         missing.forEach(async talisman => {
-            const data = await db
-                .collection('items')
-                .findOne({ id: talisman });
             let object = {
                 texture_path: null,
                 display_name: null,
                 rarity: null
             }
-            if(data){
-                object.texture_path = "/head/" + data.texture
-                object.display_name = data.name
-                object.rarity = data.tier.toLowerCase()
-            }
+
+            // SPECIFIC TALISMANS
             if(talisman.startsWith("WEDDING_RING_")){
                 object.texture_path = "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c"
                 object.display_name = "Ring of Love"
                 object.rarity = "legendary"
+
+                output.push(object);
+                return;
             }
             
             if(talisman.startsWith("CAMPFIRE_TALISMAN_")){
                 object.texture_path = "/head/4080bbefca87dc0f36536b6508425cfc4b95ba6e8f5e6a46ff9e9cb488a9ed"
                 object.display_name = "Campfire God Badge"
                 object.rarity = "legendary"
-            }
-            
-            if(talisman.startsWith("DAY_CRYSTAL")){
-                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/day_crystal.png"
-                object.display_name = "Day Crystal"
-                object.rarity = "rare"
-            }
-            
-            if(talisman.startsWith("NIGHT_CRYSTAL")){
-                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/night_crystal.png"
-                object.display_name = "Night Crystal"
-                object.rarity = "rare"
+
+                output.push(object);
+                return;
             }
 
-            if(talisman.startsWith("MELODY_HAIR")){
-                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/melodyshair.png"
-                object.display_name = "Melody's Hair"
-                object.rarity = "epic"
-            }
-            if(talisman.startsWith("PERSONAL_COMPACTOR")){
-                object.texture_path = `/item/${talisman}`
-            }
-            if(talisman.startsWith("ZOMBIE_TALISMAN")){
-                object.texture_path = "/item/item?id=397&damage=2"
-            }
-            if(talisman.startsWith("SKELETON_TALISMAN")){
-                object.texture_path = "/item/item?id=397"
-            }
-            if(talisman.startsWith("CAT_TALISMAN")){
-                object.texture_path = "/head/3a12188258601bcb7f76e3e2489555a26c0d76e6efec2fd966ca372b6dde00"
-                object.display_name = "Cat Talisman"
-                object.rarity = "uncommon"
-            }
-            if(talisman.startsWith("LYNX_TALISMAN")){
-                object.texture_path = "/head/12b84e9c79815a39b7be8ce6e91248d71f760f42b5a4de5e266b44b87a952229"
-                object.display_name = "Lynx Talisman"
-                object.rarity = "rare"
-            }
-            if(talisman.startsWith("CHEETAH_TALISMAN")){
-                object.texture_path = "/head/1553f8856dd46de7e05d46f5fc2fb58eafba6829b11b160a1545622e89caaa33"
-                object.display_name = "Cheetah Talisman"
-                object.rarity = "epic"
-            }
-            if(talisman.startsWith("CROOKED_ARTIFACT")){
-                object.texture_path = "/head/5b7ff88d154d04a8a26995c99f64e53b574c7b82ec21a12a9e448bca1e70f461"
-                object.display_name = "Crooked Artifact"
-                object.rarity = "rare"
-            }
-            if(talisman.startsWith("EXPERIENCE_ARTIFACT")){
-                object.texture_path = "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/experience_artifact.png"
-            }
-            if(talisman.startsWith("TREASURE_TALISMAN")){
-                object.texture_path = "/head/31f320025142596396032cc0088e2ac36489f24cfa5e9dda13e081cf69f77f4d"
-                object.display_name = "Treasure Talisman"
-                object.rarity = "rare"
-            }
-            if(talisman.startsWith("TREASURE_RING")){
-                object.texture_path = "/head/6a1cc5525a217a399b5b86c32f0f22dd91378874b5f44d5a383e18bc0f3bc301"
-                object.display_name = "Treasure Ring"
-                object.rarity = "epic"
-            }
-            if(talisman.startsWith("TREASURE_ARTIFACT")){
-                object.texture_path = "/head/e10f20a55b6e188ebe7578459b64a6fbd825067bc497b925ca43c2643d059025"
-                object.display_name = "Treasure Artifact"
+            if(talisman.startsWith("BEASTMASTER_CREST_")){
+                object.texture_path = "/head/53415667de3fb89c5f40c880c39e4971a0caa7f3a9d2c8f712ba37fadcee"
+                object.display_name = "Beastmaster Crest"
                 object.rarity = "legendary"
+
+                output.push(object);
+                return;
             }
-            if(talisman.startsWith("RAGGEDY_SHARK_TOOTH_NECKLACE")){
-                object.texture_path = "/head/d77309ddebbdc278ee2772d92fa4905dd850c5f213a77ffaed5a67eecb23984a"
-                object.display_name = "Raggedy Shark Tooth Necklace"
-                object.rarity = "common"
+
+            // MAIN TALISMANS
+            if (constants.talismans[talisman] != null){
+                const data = constants.talismans[talisman];
+
+                object.texture_path = data.texture || null;
+                object.display_name = data.name || null;
+                object.rarity = data.rarity || null;
+            } else {
+                const data = await db
+                    .collection('items')
+                    .findOne({ id: talisman });
+
+                if(data){
+                    object.texture_path = data.texture ? "/head/" + data.texture : `/item/${talisman}`;
+                    object.display_name = data.name;
+                    object.rarity = data.tier.toLowerCase();
+                }
             }
-            if(talisman.startsWith("DULL_SHARK_TOOTH_NECKLACE")){
-                object.texture_path = "/head/f3ab3aa1ade74915dacd298613904361c18877eebfa81d9f936309f271e1389a"
-                object.display_name = "Dull Shark Tooth Necklace"
-                object.rarity = "uncommon"
-            }
-            if(talisman.startsWith("HONED_SHARK_TOOTH_NECKLACE")){
-                object.texture_path = "/head/e6b120938d83bf49ddab3a78666a0bf37a3de7b46b9d97b984da3be62ce3e5e3"
-                object.display_name = "Honed Shark Tooth Necklace"
-                object.rarity = "rare"
-            }
-            if(talisman.startsWith("SHARP_SHARK_TOOTH_NECKLACE")){
-                object.texture_path = "/head/228e3fb6bd9887d60434ccd279ec3e59227826c9a2f8dd9ce9899ea6683d4ee8"
-                object.display_name = "Sharp Shark Tooth Necklace"
-                object.rarity = "epic"
-            }
-            if(talisman.startsWith("RAZOR_SHARP_SHARK_TOOTH_NECKLACE")){
-                object.texture_path = "/head/7792676664ac711488641f72b25961835613da9ffd43ea3bdd163cb365343a6"
-                object.display_name = "Razor Sharp Shark Tooth Necklace"
-                object.rarity = "legendary"
-            }
-            if(talisman.startsWith("BITS_TALISMAN")){
-                object.texture_path = "/head/2ebadb1725aa85bb2810d0b73bf7cd74db3d9d8fc61c4cf9e543dbcc199187cc"
-                object.display_name = "Bits Talisman"
-                object.rarity = "rare"
-            }
-            if(talisman.startsWith('HEGEMONY_ARTIFACT')){
-                object.texture_path = "/head/313384a293cfbba3489b483ebc1de7584ca2726d7f5c3a620513474925e87b97"
-                object.display_name = "Hegemony Artifact"
-                object.rarity = "legendary"
-            }
-            if(talisman.startsWith('BAT_PERSON_TALISMAN')){
-                object.texture_path = "/head/b841a49b199a59c431bf3fc3783f6b6545ce78c38042617f66ebd87cdd548e8c"
-                object.display_name = "Bat Person Talisman"
-                object.rarity = "common"
-            }
-            if(talisman.startsWith("BAT_PERSON_RING")){
-                object.texture_path = "/head/b4451ecf2584a36de4297031c6d852977d3e249e85a3f0add967fcd7d6bde953"
-                object.display_name = "Bat Person Ring"
-                object.rarity = "uncommon"
-            }
-            if(talisman.startsWith("BAT_PERSON_ARTIFACT")){
-                object.texture_path = "/head/c4444c3982720b30938f504c4374232b11a4f6f56cd57c973d8abb07fd0dcff7"
-                object.display_name = "Bat Person Artifact"
-                object.rarity = "rare"
-            }
-            if(talisman.startsWith('CANDY_RELIC')){
-                object.texture_path = "/head/39668767f1141835e2c49ad2b415598f1b166be9173902a0257e77704f913e1f"
-                object.display_name = "Candy Relic"
-                object.rarity = "legendary"
-            }
+
             if(object.name == null){
                 object.name = talisman;
             }
+
             output.push(object);
         });
 
@@ -2395,9 +2341,12 @@ module.exports = {
         let output = {};
 
         const dungeons = userProfile.dungeons;
-        if (dungeons == null || Object.keys(dungeons).length === 0) return output;
+        if (dungeons == null 
+            || Object.keys(dungeons).length === 0) return output;
 
         const dungeons_data = constants.dungeons;
+        if (dungeons.dungeon_types == null
+            || Object.keys(dungeons.dungeon_types).length === 0) return output;
 
         // Main Dungeons Data
         for(const type of Object.keys(dungeons.dungeon_types)){
@@ -2442,7 +2391,7 @@ module.exports = {
             output[type] = {
                 id: dungeon_id,
                 visited: true,
-                level: getLevelByXp(dungeon.experience, 2),
+                level: getLevelByXp(dungeon.experience, {type: "dungeoneering"}),
                 highest_floor: 
                     dungeons_data.floors[`${type}_${highest_floor}`] && dungeons_data.floors[`${type}_${highest_floor}`].name 
                     ? dungeons_data.floors[`${type}_${highest_floor}`].name : `floor_${highest_floor}`,
@@ -2458,7 +2407,7 @@ module.exports = {
         for(const className of Object.keys(dungeons.player_classes)){
             let data = dungeons.player_classes[className];
             output.classes[className] = {
-                experience: getLevelByXp(data.experience, 2),
+                experience: getLevelByXp(data.experience, {type: "dungeoneering"}),
                 current: false
             }
 
@@ -2964,6 +2913,31 @@ module.exports = {
         for(const stat of getAllKeys(memberProfiles, 'data', 'stats'))
             values[stat] = getMax(memberProfiles, 'data', 'stats', stat);
 
+        // Dungeons (Mainly Catacombs now.)
+        for(const stat of getAllKeys(memberProfiles, 'data', 'dungeons', 'dungeon_types', 'catacombs')){
+            switch(stat){
+                case "best_runs":
+                case "highest_tier_completed":
+                    break;
+                case "experience":
+                    values[`dungeons_catacombs_xp`] = getMax(memberProfiles, 'data', 'dungeons', 'dungeon_types', 'catacombs', 'experience');
+                    break;
+                default:
+                    for(const floor of getAllKeys(memberProfiles, 'data', 'dungeons', 'dungeon_types', 'catacombs', stat)){
+                        const floor_id = `catacombs_${floor}`;
+                        if(!constants.dungeons.floors[floor_id] || !constants.dungeons.floors[floor_id].name) continue;
+
+                        const floor_name = constants.dungeons.floors[floor_id].name;
+                        values[`dungeons_catacombs_${floor_name}_${stat}`] = getMax(memberProfiles, 'data', 'dungeons', 'dungeon_types', 'catacombs', stat, floor);
+                    };
+            }
+        }
+
+        for(const dungeon_class of getAllKeys(memberProfiles, 'data', 'dungeons', 'player_classes'))
+            values[`dungeons_class_${dungeon_class}_xp`] = getMax(memberProfiles, 'data', 'dungeons', 'player_classes', dungeon_class, 'experience');
+
+        values[`dungeons_secrets_found`] = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
+
         const multi = redisClient.pipeline();
 
         for(const key in values){
@@ -3003,6 +2977,16 @@ module.exports = {
 
     getPacks: () => {
         return customResources.packs;
+    },
+
+    getTalismanCount: () => {
+        let talismanArray = Object.keys(constants.talismans);
+        for(const talisman in constants.talisman_upgrades){
+            if(talismanArray.includes(talisman)){
+                talismanArray = talismanArray.filter(name => name !== talisman);
+            }
+        }
+        return talismanArray.length;
     }
 }
 
