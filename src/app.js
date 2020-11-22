@@ -44,9 +44,7 @@ async function main(){
     const db = mongo.db(credentials.dbName);
 
     const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
-
     const cachePath = path.resolve(__dirname, '../cache');
-
     await fs.ensureDir(cachePath);
 
     if(credentials.hypixel_api_key.length == 0)
@@ -76,6 +74,7 @@ async function main(){
     require('./apiv2')(app, db);
     require('./donations/kofi')(app, db);
 
+    let FEATURED_PROFILES;
     async function getExtra(page = null, favorite = false){
         const output = {};
 
@@ -95,11 +94,15 @@ async function main(){
 
         if (page != 'index') return output;
 
-        output.devs = await db
-            .collection('topViews')
-            .find()
-            .sort({ position: 1 })
-            .toArray();
+        if(FEATURED_PROFILES == null){
+            FEATURED_PROFILES = await db
+                .collection('topViews')
+                .find()
+                .sort({ position: 1 })
+                .toArray();
+        }
+
+        output.devs = FEATURED_PROFILES;
 
         if(favorite && favorite.length == 32){
             const cache = await db

@@ -23,12 +23,12 @@ async function main(){
         }
 
         await multi.exec();
+
+        console.log(`Capped Leaderboards in Redis!`);
+        setTimeout(capLeaderboards, 30 * 60 * 1000);
     }
 
-    await capLeaderboards();
-    console.log(`Capped Leaderboards in Redis!`);
-
-    await redisClient.quit();
+    capLeaderboards();
 }
 
 if(cluster.isMaster)
