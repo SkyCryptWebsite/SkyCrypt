@@ -3756,6 +3756,19 @@ body {
     .rank-tag .rank-plus{
         padding-right: 5px;
     }
+
+    .slayer-containers,
+    .race-containers,
+    .floor-containers {
+        scroll-snap-type: x proximity;
+        scroll-padding: 30px;
+    }    
+
+    .slayer-containers > *,
+    .race-containers > *,
+    .floor-containers > * {
+        scroll-snap-align: center;
+    }
 }
 
 @media (max-width: 480px){
@@ -3837,6 +3850,12 @@ body {
         min-width: 100vw;
         min-height: 100vh;
     }
+
+    .slayer-containers,
+    .race-containers,
+    .floor-containers {
+        scroll-snap-type: x mandatory;
+    }  
 }
 
 @media (max-width: 400px){
@@ -3862,19 +3881,6 @@ body {
         font-size: 13.5px;
         line-height: 22px;
         height: 22px;
-    }    
-
-    .slayer-containers,
-    .race-containers,
-    .floor-containers {
-        scroll-snap-type: x mandatory;
-        scroll-padding: 30px;
-    }    
-
-    .slayer-containers > *,
-    .race-containers > *,
-    .floor-containers > * {
-        scroll-snap-align: center;
     }
 }
 
