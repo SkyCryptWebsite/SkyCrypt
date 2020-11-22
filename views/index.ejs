@@ -100,10 +100,10 @@
                 console.log("An error occured with message: \"<%= error %>\"");
             <% } %>
 
-            let targetUsername = document.getElementById("inp_enter_username");
-            let searchUser = document.getElementById('search_user');
-            let inputSearchUser = document.getElementById('inp_search_user');
-            let btnSearchUser = document.getElementById('btn_search_user');
+            const targetUsername = document.getElementById("inp_enter_username");
+            const searchUser = document.getElementById('search_user');
+            const inputSearchUser = document.getElementById('inp_search_user');
+            const btnSearchUser = document.getElementById('btn_search_user');
 
             function updateUserTarget(e){
                 let playerName = targetUsername.value;
@@ -138,23 +138,31 @@
                         targetUsername.focus();
             });
 
-            window.addEventListener('scroll', function(){
-                if(window.scrollY > window.innerHeight * 0.5 && smallUserSearch === false){
+            window.addEventListener('scroll', checkSearchboxOverlap);
+            window.addEventListener('resize', checkSearchboxOverlap);
+            function checkSearchboxOverlap() {
+                if(targetUsername.getBoundingClientRect().bottom < 48 && smallUserSearch === false){
                     searchUser.classList.add('show-user-search');
                     smallUserSearch = true;
 
                     searchUser.setAttribute('tabindex', '0');
                     btnSearchUser.setAttribute('tabindex', '0');
 
-                    targetUsername.blur();
-                }else if(window.scrollY <= window.innerHeight * 0.5 && smallUserSearch){
+                    if(targetUsername === document.activeElement) {
+                        inputSearchUser.focus();
+                    }
+                } else if(targetUsername.getBoundingClientRect().top >= 48 && smallUserSearch){
                     searchUser.classList.remove('show-user-search');
                     smallUserSearch = false;
+
+                    targetUsername.value = inputSearchUser.value;
 
                     searchUser.setAttribute('tabindex', '-1');
                     btnSearchUser.setAttribute('tabindex', '-1');
 
-                    inputSearchUser.blur();
+                    if(inputSearchUser === document.activeElement) {
+                        targetUsername.focus();
+                    }
                 }
 
                 /*
@@ -210,7 +218,7 @@
                 }
 
                 */
-            });
+            }
         </script>
     </body>
 </html>
