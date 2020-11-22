@@ -3554,6 +3554,7 @@ body {
     }
 
     .collections,
+    .minions,
     .sea-creatures {
         white-space: nowrap;
         overflow-x: auto;
