@@ -2465,10 +2465,6 @@ a.additional-player-stat:hover{
     margin: 10px;
 }
 
-.slayer-containers, .race-containers{
-    white-space: nowrap;
-}
-
 .slayer-header{
     text-align: center;
     vertical-align: middle;
