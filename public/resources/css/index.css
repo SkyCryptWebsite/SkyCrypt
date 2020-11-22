@@ -1485,7 +1485,7 @@ a.additional-player-stat:hover{
 }
 
 #nav_bar.stuck #nav_bar_background{
-    background-color: rgba(20,20,20,0.9);
+    background-color: rgba(var(--background-rgb), 0.9);
 }
 
 .nav-item{
@@ -3439,7 +3439,7 @@ body {
 
     #basic_stats > * {
         text-align: center;
-        background-color: rgba(0,0,0,0.3);
+        background-color: rgba(var(--background-rgb),0.3);
     }
 
     #additional_stats_container,
