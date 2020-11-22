@@ -14,7 +14,7 @@ async function main(){
         // Clear cache for favorite
         await db.collection('favoriteCache').deleteMany({});
 
-        setTimeout(clearFavoriteCache(), 15 * 60 * 1000);
+        setTimeout(clearFavoriteCache, 15 * 60 * 1000);
     }
 
     clearFavoriteCache();
