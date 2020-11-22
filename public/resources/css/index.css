@@ -2650,7 +2650,7 @@ a.additional-player-stat:hover{
     line-height: 4px;
 }
 
-.minion-category-header{
+.category-header{
     text-transform: uppercase;
     font-weight: 600;
     font-size: 19px;
@@ -2670,7 +2670,7 @@ a.additional-player-stat:hover{
     color: rgba(255,255,255,0.8);
 }
 
-.minion-category-icon{
+.category-icon{
     width: 32px;
     height: 32px;
     display: inline-block;
@@ -2678,21 +2678,24 @@ a.additional-player-stat:hover{
     vertical-align: middle;
 }
 
-.minion-category-icon .item-icon{
+.category-icon .item-icon{
     transform: scale(0.25);
     transform-origin: top left;
 }
 
-.minion{
+.minion,
+.collection {
     position: relative;
     display: inline-block;
-    height: 40px;
-    padding: 10px;
-    padding-left: 60px;
-    margin-left: 5px;
     margin-bottom: 8px;
+    margin-left: 5px;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 5px;
+}
+
+.minion {
+    padding: 10px;
+    padding-left: 60px;
     line-height: 40px;
 }
 
@@ -2711,11 +2714,11 @@ a.additional-player-stat:hover{
     background-repeat: no-repeat;
 }
 
-.max-minion .stat-name{
+.max-stat .stat-name{
     color: var(--maxed-hex);
 }
 
-.max-minion .stat-value{
+.max-stat .stat-value{
     color: var(--gold-hex);
 }
 
@@ -2732,14 +2735,9 @@ a.additional-player-stat:hover{
     color: var(--link-hex);
 }
 
-.collection{
-    display: inline-block;
+.collection {
     padding: 7px;
     padding-right: 15px;
-    margin-left: 5px;
-    margin-bottom: 8px;
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 5px;
 }
 
 .collection::after{
