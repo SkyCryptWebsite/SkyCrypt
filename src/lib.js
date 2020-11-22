@@ -41,6 +41,7 @@ const rarity_order = ['special', 'mythic', 'legendary', 'epic', 'rare', 'uncommo
 const petTiers = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic'];
 
 const MAX_SOULS = 209;
+let TALISMAN_COUNT;
 
 function replaceAll(target, search, replacement){
     return target.split(search).join(replacement);
@@ -1413,8 +1414,11 @@ module.exports = {
             output.slayers = Object.assign({}, slayers);
         }
 
-        output.missingTalismans = await module.exports.getMissingTalismans(items.talisman_ids);
-        output.talismanCount = await module.exports.getTalismanCount();
+        if(!items.no_inventory){
+            output.missingTalismans = await module.exports.getMissingTalismans(items.talisman_ids);
+            output.talismanCount = await module.exports.getTalismanCount();
+        }
+
         output.pets = await module.exports.getPets(userProfile);
         output.missingPets = await module.exports.getMissingPets(output.pets);
         output.petScore = await module.exports.getPetScore(output.pets);
@@ -2203,9 +2207,9 @@ module.exports = {
         const output = [];
         missing.forEach(async talisman => {
             let object = {
-                texture_path: null,
                 display_name: null,
-                rarity: null
+                rarity: null,
+                texture_path: null
             }
 
             // SPECIFIC TALISMANS
@@ -2227,14 +2231,8 @@ module.exports = {
                 return;
             }
 
-            if(talisman.startsWith("BEASTMASTER_CREST_")){
-                object.texture_path = "/head/53415667de3fb89c5f40c880c39e4971a0caa7f3a9d2c8f712ba37fadcee"
-                object.display_name = "Beastmaster Crest"
-                object.rarity = "legendary"
-
-                output.push(object);
-                return;
-            }
+            if(object.name == null)
+                object.name = talisman;
 
             // MAIN TALISMANS
             if (constants.talismans[talisman] != null){
@@ -2255,14 +2253,24 @@ module.exports = {
                 }
             }
 
-            if(object.name == null){
-                object.name = talisman;
-            }
-
             output.push(object);
         });
 
         return output;
+    },
+
+    getTalismanCount: () => {
+        if(TALISMAN_COUNT != null) return TALISMAN_COUNT;
+        let talismanArray = Object.keys(constants.talismans);
+
+        for(const talisman in constants.talisman_upgrades){
+            if(talismanArray.includes(talisman)){
+                talismanArray = talismanArray.filter(name => name !== talisman);
+            }
+        }
+
+        TALISMAN_COUNT = talismanArray.length;
+        return talismanArray.length;
     },
 
     getCollections: async (uuid, profile, cacheOnly = false) => {
@@ -2977,16 +2985,6 @@ module.exports = {
 
     getPacks: () => {
         return customResources.packs;
-    },
-
-    getTalismanCount: () => {
-        let talismanArray = Object.keys(constants.talismans);
-        for(const talisman in constants.talisman_upgrades){
-            if(talismanArray.includes(talisman)){
-                talismanArray = talismanArray.filter(name => name !== talisman);
-            }
-        }
-        return talismanArray.length;
     }
 }
 
