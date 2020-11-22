@@ -129,6 +129,32 @@ module.exports = {
                 maxed: "#DD980E",
                 gold: "#c58000"
             }
+        },
+
+        /* Hidden Themes */
+
+        /* I have no idea if this theme is mentally sane so lmao */
+        "warpwing": {
+            name: "Forest Walk",
+            author: "WarpWing",
+            community: true,
+            hidden: true,
+            images: {
+                logo: "/resources/img/logo_square.png",
+                bg: "https://cdn.discordapp.com/attachments/713278398830477353/744929704611676221/farming_2.png",
+                bg_blur: "https://cdn.discordapp.com/attachments/713278398830477353/744929704611676221/farming_2.png"
+            },
+            backgrounds: {
+                skillbar: {
+                    type: "color",
+                    color: "#00aabb"
+                }
+            },
+            colors: {
+                icon: "#00aabb",
+                link: "#00aabb",
+                hover: "#00aabb"
+            }
         }
     }
 }
