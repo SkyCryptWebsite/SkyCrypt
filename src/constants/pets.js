@@ -435,8 +435,8 @@ module.exports = {
                 name: "Derp",
                 head: "/head/c4f89fbd12c209f7f26c1f34a1bd7f47635814759c09688dd212b205c73a8c02",
             },
-            "ROCK_EMBARASSED": {
-                name: "Embarassed",
+            "ROCK_EMBARRASSED": {
+                name: "Embarrassed",
                 head: "/head/27ff34992e66599e8529008be3fb577cb0ab545294253e25a0cc988e416c849",
             },
         },
