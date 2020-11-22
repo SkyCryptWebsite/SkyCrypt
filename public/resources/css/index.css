@@ -3761,7 +3761,6 @@ body {
     .race-containers,
     .floor-containers {
         scroll-snap-type: x proximity;
-        scroll-padding: 30px;
     }    
 
     .slayer-containers > *,
