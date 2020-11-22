@@ -1414,6 +1414,7 @@ module.exports = {
         }
 
         output.missingTalismans = await module.exports.getMissingTalismans(items.talisman_ids);
+        output.talismanCount = await module.exports.getTalismanCount();
         output.pets = await module.exports.getPets(userProfile);
         output.missingPets = await module.exports.getMissingPets(output.pets);
         output.petScore = await module.exports.getPetScore(output.pets);
@@ -2976,6 +2977,16 @@ module.exports = {
 
     getPacks: () => {
         return customResources.packs;
+    },
+
+    getTalismanCount: () => {
+        let talismanArray = Object.keys(constants.talismans);
+        for(const talisman in constants.talisman_upgrades){
+            if(talismanArray.includes(talisman)){
+                talismanArray = talismanArray.filter(name => name !== talisman);
+            }
+        }
+        return talismanArray.length;
     }
 }
 
