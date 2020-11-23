@@ -584,6 +584,13 @@ module.exports = {
         },
         PET_ITEM_VAMPIRE_FANG: {
             description: "§7Upgrades a Bat pet from §6Legendary §7to §dMythic §7adding a bonus perk and bonus stats!"
+        },
+        PET_ITEM_SPOOKY_CUPCAKE: {
+            description: `§7Increases §c${symbols.strength} Strength §7by §a30 §7and §f${symbols.speed} Speed §7by §a20`,
+            stats: {
+                strength: 30,
+                speed: 20
+            }
         }
     }
 }
