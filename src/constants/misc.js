@@ -560,5 +560,7 @@ module.exports = {
         },
 
         'NONE': null
-    }
+    },
+
+    max_favorites: 5
 };

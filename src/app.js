@@ -101,7 +101,7 @@ async function main(){
 
         output.favorites = [];
         if(typeof favorites === 'string') favorites = [favorites];
-        if(favorites.length < 0 || favorites.length > 5) {
+        if(favorites.length < 0 || favorites.length > constants.max_favorites) {
             output.favorites[0] = {
                 uuid: null,
                 error: "Illegal amount."
