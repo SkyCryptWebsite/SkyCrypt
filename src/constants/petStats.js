@@ -13,7 +13,8 @@ function formatStat(stat, ability_damage = false) {
 	let statFloored = Math.floor(stat);
 	if (statFloored > 0 && !ability_damage)
 		return `§a+${statFloored}`;
-	else return `§a${statFloored}`;
+	else 
+		return `§a${statFloored}`;
 }
 
 const symbols = {
