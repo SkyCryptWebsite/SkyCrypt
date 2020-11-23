@@ -329,10 +329,14 @@ Mining Pets
 
 class Bat extends Pet {
 	get stats() {
-		return {
+        let stats = {
 			intelligence: this.level * 1,
 			speed: this.level * 0.05
-		};
+		}
+        if (this.rarity > 4) {
+            stats.sea_creature_chance = this.level * 0.05
+        }
+		return stats
 	}
 
 	get abilities() {
