@@ -980,7 +980,8 @@ module.exports = {
                     talisman.isUnique = false;
                     talisman.isInactive = true;
                 }
-                talisman_ids.splice(talisman_ids.indexOf(id), 1, "CAMPFIRE_TALISMAN_");
+
+                talisman_ids.splice(talisman_ids.indexOf(id), 1, `CAMPFIRE_TALISMAN_${maxTier}`);
             }
 
             if(id.startsWith("WEDDING_RING_")){
@@ -992,7 +993,8 @@ module.exports = {
                     talisman.isUnique = false;
                     talisman.isInactive = true;
                 }
-                talisman_ids.splice(talisman_ids.indexOf(id), 1, "WEDDING_RING_");
+
+                talisman_ids.splice(talisman_ids.indexOf(id), 1, `WEDDING_RING_${maxTier}`);
             }
 
             if(id in constants.talisman_upgrades){
@@ -2191,6 +2193,16 @@ module.exports = {
 
     getMissingTalismans: async talismans => {
         let unique = Object.keys(constants.talismans);
+        unique.forEach(name => {
+            if(name in constants.talisman_duplicates){
+                for(let duplicate of constants.talisman_duplicates[name]){
+                    if(talismans.includes(duplicate)){
+                        talismans[talismans.indexOf(duplicate)] = name;
+                        break;
+                    }
+                }
+            }
+        });
 
         let missing = unique.filter(talisman => !talismans.includes(talisman));
         missing.forEach(name => {
@@ -2212,25 +2224,6 @@ module.exports = {
                 texture_path: null
             }
 
-            // SPECIFIC TALISMANS
-            if(talisman.startsWith("WEDDING_RING_")){
-                object.texture_path = "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c"
-                object.display_name = "Ring of Love"
-                object.rarity = "legendary"
-
-                output.push(object);
-                return;
-            }
-            
-            if(talisman.startsWith("CAMPFIRE_TALISMAN_")){
-                object.texture_path = "/head/4080bbefca87dc0f36536b6508425cfc4b95ba6e8f5e6a46ff9e9cb488a9ed"
-                object.display_name = "Campfire God Badge"
-                object.rarity = "legendary"
-
-                output.push(object);
-                return;
-            }
-
             if(object.name == null)
                 object.name = talisman;
 
@@ -2247,7 +2240,7 @@ module.exports = {
                     .findOne({ id: talisman });
 
                 if(data){
-                    object.texture_path = data.texture ? "/head/" + data.texture : `/item/${talisman}`;
+                    object.texture_path = data.texture ? `/head/${data.texture}` : `/item/${talisman}`;
                     object.display_name = data.name;
                     object.rarity = data.tier.toLowerCase();
                 }

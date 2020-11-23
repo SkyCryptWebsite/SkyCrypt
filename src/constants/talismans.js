@@ -174,16 +174,150 @@ module.exports = {
         ],
         WITHER_ARTIFACT: [
             'WITHER_RELIC'
+        ],
+
+        WEDDING_RING_0: [
+            'WEDDING_RING_2',
+            'WEDDING_RING_4',
+            'WEDDING_RING_7',
+            'WEDDING_RING_9'
+        ],
+        WEDDING_RING_2: [
+            'WEDDING_RING_4',
+            'WEDDING_RING_7',
+            'WEDDING_RING_9'
+        ],
+        WEDDING_RING_4: [
+            'WEDDING_RING_7',
+            'WEDDING_RING_9'
+        ],
+        WEDDING_RING_7: [
+            'WEDDING_RING_9'
+        ],
+
+        CAMPFIRE_TALISMAN_1: [
+            'CAMPFIRE_TALISMAN_4',
+            'CAMPFIRE_TALISMAN_8',
+            'CAMPFIRE_TALISMAN_13',
+            'CAMPFIRE_TALISMAN_21'
+        ],
+        CAMPFIRE_TALISMAN_4: [
+            'CAMPFIRE_TALISMAN_8',
+            'CAMPFIRE_TALISMAN_13',
+            'CAMPFIRE_TALISMAN_21'
+        ],
+        CAMPFIRE_TALISMAN_8: [
+            'CAMPFIRE_TALISMAN_13',
+            'CAMPFIRE_TALISMAN_21'
+        ],
+        CAMPFIRE_TALISMAN_13: [
+            'CAMPFIRE_TALISMAN_21'
         ]
     },
 
     talisman_duplicates: {
+        WEDDING_RING_0: [
+            'WEDDING_RING_1'
+        ],
+        WEDDING_RING_2: [
+            'WEDDING_RING_3'
+        ],
+        WEDDING_RING_4: [
+            'WEDDING_RING_5',
+            'WEDDING_RING_6'
+        ],
+        WEDDING_RING_7: [
+            'WEDDING_RING_8'
+        ],
 
+        CAMPFIRE_TALISMAN_1: [
+            'CAMPFIRE_TALISMAN_2',
+            'CAMPFIRE_TALISMAN_3'
+        ],
+        CAMPFIRE_TALISMAN_4: [
+            'CAMPFIRE_TALISMAN_5',
+            'CAMPFIRE_TALISMAN_6',
+            'CAMPFIRE_TALISMAN_7'
+        ],
+        CAMPFIRE_TALISMAN_8: [
+            'CAMPFIRE_TALISMAN_9',
+            'CAMPFIRE_TALISMAN_10',
+            'CAMPFIRE_TALISMAN_11',
+            'CAMPFIRE_TALISMAN_12'
+        ],
+        CAMPFIRE_TALISMAN_13: [
+            'CAMPFIRE_TALISMAN_14',
+            'CAMPFIRE_TALISMAN_15',
+            'CAMPFIRE_TALISMAN_16',
+            'CAMPFIRE_TALISMAN_17',
+            'CAMPFIRE_TALISMAN_18',
+            'CAMPFIRE_TALISMAN_19',
+            'CAMPFIRE_TALISMAN_20'
+        ],
+        CAMPFIRE_TALISMAN_21: [
+            'CAMPFIRE_TALISMAN_22',
+            'CAMPFIRE_TALISMAN_23',
+            'CAMPFIRE_TALISMAN_24',
+            'CAMPFIRE_TALISMAN_25',
+            'CAMPFIRE_TALISMAN_26',
+            'CAMPFIRE_TALISMAN_27',
+            'CAMPFIRE_TALISMAN_28',
+            'CAMPFIRE_TALISMAN_29'
+        ]
     },
 
     talismans: {
-        'WEDDING_RING_9': null,
-        'CAMPFIRE_TALISMAN_29': null,
+        'WEDDING_RING_0': {
+            name: "Shiny Yellow Rock",
+            rarity: "common",
+            texture: "/item/WEDDING_RING_0"
+        },
+        'WEDDING_RING_2': {
+            name: "Mediocre Ring of Love",
+            rarity: "uncommon",
+            texture: "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c"
+        },
+        'WEDDING_RING_4': {
+            name: "Modest Ring of Love",
+            rarity: "rare",
+            texture: "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c"
+        },
+        'WEDDING_RING_7': {
+            name: "Exquisite Ring of Love",
+            rarity: "epic",
+            texture: "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c"
+        },
+        'WEDDING_RING_9': {
+            name: "Legendary Ring of Love",
+            rarity: "legendary",
+            texture: "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c"
+        },
+
+        'CAMPFIRE_TALISMAN_1': {
+            name: "Campfire Initiate Badge",
+            rarity: "common",
+            texture: "/head/af41cc2250d2f5cfcf4384aa0cf3e23c19767549a2a8abd7532bd52c5a1de"
+        },
+        'CAMPFIRE_TALISMAN_4': {
+            name: "Campfire Adept Badge",
+            rarity: "uncommon",
+            texture: "/head/af41cc2250d2f5cfcf4384aa0cf3e23c19767549a2a8abd7532bd52c5a1de"
+        },
+        'CAMPFIRE_TALISMAN_8': {
+            name: "Campfire Cultist Badge",
+            rarity: "rare",
+            texture: "/head/a3cfd94e925eab4330a768afcae6c128b0a28e23149eee41c9c6df894c24f3de"
+        },
+        'CAMPFIRE_TALISMAN_13': {
+            name: "Campfire Scion Badge",
+            rarity: "epic",
+            texture: "/head/a3cfd94e925eab4330a768afcae6c128b0a28e23149eee41c9c6df894c24f3de"
+        },
+        'CAMPFIRE_TALISMAN_21': {
+            name: "Campfire God Badge",
+            rarity: "legendary",
+            texture: "/head/4080bbefca87dc0f36536b6508425cfc4b95ba6e8f5e6a46ff9e9cb488a9ed"
+        },
 
         'FARMING_TALISMAN': null,
         'VACCINE_TALISMAN': {
@@ -284,7 +418,6 @@ module.exports = {
         'HUNTER_RING': null,
         'PARTY_HAT_CRAB': null,
         'POTATO_TALISMAN': null,
-        'CAMPFIRE_TALISMAN_29': null,
         'PERSONAL_COMPACTOR_4000': {
             name: "Personal Compactor 4000",
             rarity: "uncommon",
@@ -333,7 +466,7 @@ module.exports = {
         'SCARF_STUDIES': {
             name: "Scarf's Studies",
             rarity: "rare",
-            texture: "/head/de4ab129e137f9f4cbf7060318ee1748dc39da9b5d129a8da0e614e2337693"
+            texture: "/head/6de4ab129e137f9f4cbf7060318ee1748dc39da9b5d129a8da0e614e2337693"
         },
         'SCARF_THESIS': {
             name: "Scarf's Thesis",
