@@ -294,15 +294,15 @@ class Pig extends Pet {
 			name: "§6Sprint",
 			desc: [`§7While holding an Enchanted Carrot on a Stick, increase the speed of your mount by §a${round(this.level * mult, 1)}%`]
 		};
-  }
+	}
 
-  get fourth() {
-    let mult = 0;
+	get fourth() {
+		let mult = 0;
 		return {
 			name: "§6Trample",
 			desc: [`§7While on your private island, break all crops your pig rides over`]
 		};
-  }
+	}
 }
 
 class Rabbit extends Pet {
@@ -956,7 +956,7 @@ class Griffin extends Pet {
 	}
 
 	get fourth() {
-		return  {
+		return {
 			name: "§6King of Kings",
 			desc: [`§7Gain §c+${round(1 + (this.level * 0.14), 1)}% §c❁ Strength §7when above §c85% §7health.`]
 		}
@@ -1429,8 +1429,8 @@ class Spider extends Pet {
 class Spirit extends Pet {
 	get stats() {
 		return {
-      intelligence: this.level * 1,
-      speed: this.level * 0.29
+			intelligence: this.level * 1,
+			speed: this.level * 0.29
 		};
 	}
 
@@ -2107,7 +2107,7 @@ class FlyingFish extends Pet {
 	}
 }
 
-class Megalodon extends Pet{
+class Megalodon extends Pet {
 	get stats() {
 		return {
 			strength: this.level * 0.5,
@@ -2128,7 +2128,7 @@ class Megalodon extends Pet{
 		let mult = 0.25;
 		return {
 			name: "§6Blood Scent",
-			desc: [`§7Deal up to §c+${round(mult*this.level,1)}% ${symbols.strength} §7Damage based on the enemy's missing health`]
+			desc: [`§7Deal up to §c+${round(mult * this.level, 1)}% ${symbols.strength} §7Damage based on the enemy's missing health`]
 		};
 	}
 
@@ -2136,7 +2136,7 @@ class Megalodon extends Pet{
 		let mult = 0.2;
 		return {
 			name: "§6Enhanced scales",
-			desc: [`§7Increases the stats of Shark Armor by §a${round(mult*this.level,1)}%`]
+			desc: [`§7Increases the stats of Shark Armor by §a${round(mult * this.level, 1)}%`]
 		};
 	}
 
@@ -2144,7 +2144,7 @@ class Megalodon extends Pet{
 		let mult = 0.5;
 		return {
 			name: "§6Feeding frenzy",
-			desc: [`§7On kill gain §c${round(mult*this.level,1)}${symbols.strength} Damage §7and §f${symbols.speed} Speed §7for 5 seconds`]
+			desc: [`§7On kill gain §c${round(mult * this.level, 1)}${symbols.strength} Damage §7and §f${symbols.speed} Speed §7for 5 seconds`]
 		};
 	}
 
