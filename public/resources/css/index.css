@@ -3371,7 +3371,7 @@ body {
         font-size: 13px;
     }
 
-    #other_profiles, stats_for_profile{
+    #other_profiles, #stats_for_profile{
         min-width: 130px;
     }
 
