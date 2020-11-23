@@ -100,16 +100,7 @@ async function main(){
         if (page == 'api') return output;
 
         output.favorites = [];
-        if(typeof favorites === 'string') favorites = [favorites];
-        if(favorites.length < 0 || favorites.length > constants.max_favorites) {
-            output.favorites[0] = {
-                uuid: null,
-                error: "Illegal amount."
-            }
-            return output;
-        } else if(favorites.length == 0) return output;
-
-        for(let i = 0; i < favorites.length; i++){
+        for(let i = 0; i < favorites.length && i < constants.max_favorites; i++){
             let favorite = favorites[i];
             if(favorite && favorite.length == 32){
                 const cache = await db
