@@ -941,6 +941,8 @@ document.addEventListener('DOMContentLoaded', function(){
                 cookieArray.splice(cookieArray.indexOf(uuid), 1);
 
                 favoriteNotification.setContent("Removed favorite!");
+            }else if(cookieArray.length >= 5){
+                favoriteNotification.setContent("You can only have 5 favorites!");
             }else{
                 cookieArray.push(uuid);
 
