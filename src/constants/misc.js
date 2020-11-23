@@ -123,7 +123,9 @@ module.exports = {
         'Thunderlord 6',
         'Thunderlord VI',
         'Lethality 6',
-        'Lethality VI'
+        'Lethality VI',
+        'Compact 10',
+        'Compact X'
     ],
 
     // Number of kills required for each level of expertise
