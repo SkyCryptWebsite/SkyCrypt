@@ -574,9 +574,9 @@ module.exports = {
             }
         },
         CROCHET_TIGER_PLUSHIE: {
-            description: `§7Increases §e${symbols.attack_speed} Bonus Attack Speed §7by §a40`,
+            description: `§7Increases §e${symbols.attack_speed} Bonus Attack Speed §7by §a35`,
             stats: {
-                bonus_attack_speed: 40
+                bonus_attack_speed: 35
             }
         },
         DWARF_TURTLE_SHELMET: {
@@ -584,6 +584,13 @@ module.exports = {
         },
         PET_ITEM_VAMPIRE_FANG: {
             description: "§7Upgrades a Bat pet from §6Legendary §7to §dMythic §7adding a bonus perk and bonus stats!"
+        },
+        PET_ITEM_SPOOKY_CUPCAKE: {
+            description: `§7Increases §c${symbols.strength} Strength §7by §a30 §7and §f${symbols.speed} Speed §7by §a20`,
+            stats: {
+                strength: 30,
+                speed: 20
+            }
         }
     }
 }
