@@ -907,7 +907,7 @@ class Golem extends Pet {
 	get third() {
 		let mult = 3;
 		return {
-			name: "§Toss",
+			name: "§6Toss",
 			desc: [`§7Every 5 hits, throw the enemy up into the air and deal ${200 + round(this.level * mult, 1)}% damage (10s cooldown)`]
 		};
 	}
