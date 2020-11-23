@@ -1,1426 +1,1406 @@
 {
-  "openapi": "3.0.1",
-  "info": {
-    "title": "SkyCrypt API Documentation",
-    "version": "hmmm",
-    "description": "Welcome to the SkyCrypt API Documentation page!<br> Here you can find information on all the endpoints we have, and how to use them.<br><br> The main API URL is `https://sky.shiiyu.moe/api/v2/`",
-    "license": {
-      "name": "MIT",
-      "url": "https://opensource.org/licenses/MIT"
-    }
-  },
-  "servers": [
-    {
-      "url": "https://sky.shiiyu.moe/api/v2"
-    }
-  ],
-  "tags": [
-    {
-      "name": "profile",
-      "description": "Player profiles with all stored data."
-    },
-    {
-      "name": "talismans",
-      "description": "A list of all talismans for a profile, with lore, stat boosts, etc."
-    },
-    {
-      "name": "slayers",
-      "description": "Slayer stats including kills, xp, and stat boosts."
-    },
-    {
-      "name": "coins",
-      "description": "Bank and purse data."
-    },
-    {
-      "name": "bazaar",
-      "description": "Bazaar buy and sell price/volume"
-    }
-  ],
-  "paths": {
-    "/profile/${playerName}": {
-      "get": {
-        "tags": [
-          "profile"
-        ],
-        "summary": "Get a list of a player's profiles, with extensive data.",
-        "parameters": [
-          {
-            "name": "playerName",
-            "in": "path",
-            "description": "Username of the player.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "PROFILE_ID": {
-                      "type": "object",
-                      "properties": {
-                        "profile_id": {
-                          "type": "string",
-                          "description": "The profile's unique ID."
-                        },
-                        "cute_name": {
-                          "type": "string",
-                          "description": "Profile's cute name, e.g. Lime, Strawberry"
-                        },
-                        "current": {
-                          "type": "boolean",
-                          "description": "If the profile was the most saved."
-                        },
-                        "last_save": {
-                          "type": "integer",
-                          "description": "The last time the profile was saved as a unix epoch."
-                        },
-                        "raw": {
-                          "type": "object",
-                          "description": "Raw Hypixel API data."
-                        },
-                        "items": {
-                          "type": "object",
-                          "description": "Items in a player's inventory, bags, or enderchest."
-                        },
-                        "data": {
-                          "type": "object",
-                          "description": "All other profile data, such as skills, slayers, stats, and more."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
+    "openapi": "3.0.1",
+    "info": {
+        "title": "SkyCrypt API Documentation",
+        "version": "hmmm",
+        "description": "Welcome to the SkyCrypt API Documentation page!<br> Here you can find information on all the endpoints we have, and how to use them.<br><br> The main API URL is `https://sky.shiiyu.moe/api/v2/`",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
         }
-      }
     },
-    "/talismans/{playerName}": {
-      "get": {
-        "tags": [
-          "talismans"
-        ],
-        "summary": "Get a list of a player's profiles with talisman data.",
-        "parameters": [
-          {
-            "name": "playerName",
-            "in": "path",
-            "description": "Username of the player.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Talismans"
-                }
-              }
-            }
-          }
+    "servers": [
+        {
+            "url": "https://sky.shiiyu.moe/api/v2"
         }
-      }
-    },
-    "/talismans/{playerName}/{profileName}": {
-      "get": {
-        "tags": [
-          "talismans"
-        ],
-        "summary": "Get a player's profile with talisman data.",
-        "parameters": [
-          {
-            "name": "playerName",
-            "in": "path",
-            "description": "Username of the player.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "profileName",
-            "in": "path",
-            "description": "Profile cute name.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "profiles": {
-                      "type": "object",
-                      "properties": {
-                        "PROFILE_ID": {
-                          "$ref": "#/components/schemas/Talismans"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/slayers/{playerName}": {
-      "get": {
-        "tags": [
-          "slayers"
-        ],
-        "summary": "Get a list of a player's profiles with slayer data.",
-        "parameters": [
-          {
-            "name": "playerName",
-            "in": "path",
-            "description": "Username of the player.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Slayer"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/slayers/{playerName}/{profileName}": {
-      "get": {
-        "tags": [
-          "slayers"
-        ],
-        "summary": "Get a player's profile with slayer data.",
-        "parameters": [
-          {
-            "name": "playerName",
-            "in": "path",
-            "description": "Username of the player.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "profileName",
-            "in": "path",
-            "description": "Profile cute name.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "profiles": {
-                      "type": "object",
-                      "properties": {
-                        "PROFILE_ID": {
-                          "$ref": "#/components/schemas/Slayer"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/coins/{playerName}": {
-      "get": {
-        "tags": [
-          "coins"
-        ],
-        "summary": "Get a list of a player's profiles with bank and purse data.",
-        "parameters": [
-          {
-            "name": "playerName",
-            "in": "path",
-            "description": "Username of the player.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Coins"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/coins/{playerName}/{profileName}": {
-      "get": {
-        "tags": [
-          "coins"
-        ],
-        "summary": "Get a player's profile with bank and purse data.",
-        "parameters": [
-          {
-            "name": "playerName",
-            "in": "path",
-            "description": "Username of the player.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "profileName",
-            "in": "path",
-            "description": "Profile cute name.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "profiles": {
-                      "type": "object",
-                      "properties": {
-                        "PROFILE_ID": {
-                          "$ref": "#/components/schemas/Coins"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/dungeons/{playerName}": {
-      "get": {
-        "tags": [
-          "dungeons"
-        ],
-        "summary": "Get a list of a player's profiles with dungeon and class data.",
-        "parameters": [
-          {
-            "name": "playerName",
-            "in": "path",
-            "description": "Username of the player.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "profiles": {
-                      "type": "object",
-                      "properties": {
-                        "PROFILE_ID": {
-                          "$ref": "#/components/schemas/Dungeons"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/dungeons/{playerName}/{profileName}": {
-      "get": {
-        "tags": [
-          "dungeons"
-        ],
-        "summary": "Get a player's profile with dungeon and class data.",
-        "parameters": [
-          {
-            "name": "playerName",
-            "in": "path",
-            "description": "Username of the player.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "profileName",
-            "in": "path",
-            "description": "Profile cute name.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Dungeons"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/bazaar": {
-      "get": {
-        "tags": [
-          "bazaar"
-        ],
-        "summary": "Get an object of every bazaar item and its data.",
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "ITEM_ID": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "name": {
-                          "type": "string"
-                        },
-                        "buyPrice": {
-                          "type": "integer"
-                        },
-                        "sellPrice": {
-                          "type": "integer"
-                        },
-                        "buyVolume": {
-                          "type": "integer"
-                        },
-                        "sellVolume": {
-                          "type": "integer"
-                        },
-                        "tag": {
-                          "type": "string"
-                        },
-                        "price": {
-                          "type": "integer"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Slayer": {
-        "type": "object",
-        "properties": {
-          "profile_id": {
-            "type": "string",
-            "description": "The profile's unique ID."
-          },
-          "cute_name": {
-            "type": "string",
-            "description": "Profile's cute name, e.g. Lime, Strawberry"
-          },
-          "slayer_xp": {
-            "type": "integer",
-            "description": "Total slayer xp earned."
-          },
-          "slayers": {
-            "type": "object",
-            "description": "XP, boss teir kills, and progress to next level.",
-            "properties": {
-              "zombie": {
-                "type": "object",
-                "properties": {
-                  "level": {
-                    "type": "object",
-                    "properties": {
-                      "current_level": {
-                        "type": "integer"
-                      },
-                      "xp": {
-                        "type": "integer"
-                      },
-                      "max_level": {
-                        "type": "integer"
-                      },
-                      "progress": {
-                        "type": "integer"
-                      },
-                      "xpForNext": {
-                        "type": "integer"
-                      }
-                    }
-                  },
-                  "kills": {
-                    "type": "object",
-                    "properties": {
-                      "1": {
-                        "type": "integer"
-                      },
-                      "2": {
-                        "type": "integer"
-                      },
-                      "3": {
-                        "type": "integer"
-                      },
-                      "4": {
-                        "type": "integer"
-                      }
-                    }
-                  },
-                  "claimed_levels": {
-                    "type": "object",
-                    "properties": {
-                      "level_1": {
-                        "type": "boolean"
-                      },
-                      "level_2": {
-                        "type": "boolean"
-                      },
-                      "level_3": {
-                        "type": "boolean"
-                      },
-                      "level_4": {
-                        "type": "boolean"
-                      },
-                      "level_5": {
-                        "type": "boolean"
-                      },
-                      "level_6": {
-                        "type": "boolean"
-                      },
-                      "level_7": {
-                        "type": "boolean"
-                      },
-                      "level_8": {
-                        "type": "boolean"
-                      },
-                      "level_9": {
-                        "type": "boolean"
-                      }
-                    }
-                  },
-                  "xp": {
-                    "type": "integer"
-                  },
-                  "boss_kills_teir_0": {
-                    "type": "integer"
-                  },
-                  "boss_kills_teir_1": {
-                    "type": "integer"
-                  },
-                  "boss_kills_teir_2": {
-                    "type": "integer"
-                  },
-                  "boss_kills_teir_3": {
-                    "type": "integer"
-                  }
-                }
-              },
-              "spider": {
-                "type": "object",
-                "properties": {
-                  "level": {
-                    "type": "object",
-                    "properties": {
-                      "current_level": {
-                        "type": "integer"
-                      },
-                      "xp": {
-                        "type": "integer"
-                      },
-                      "max_level": {
-                        "type": "integer"
-                      },
-                      "progress": {
-                        "type": "integer"
-                      },
-                      "xpForNext": {
-                        "type": "integer"
-                      }
-                    }
-                  },
-                  "kills": {
-                    "type": "object",
-                    "properties": {
-                      "1": {
-                        "type": "integer"
-                      },
-                      "2": {
-                        "type": "integer"
-                      },
-                      "3": {
-                        "type": "integer"
-                      },
-                      "4": {
-                        "type": "integer"
-                      }
-                    }
-                  },
-                  "claimed_levels": {
-                    "type": "object",
-                    "properties": {
-                      "level_1": {
-                        "type": "boolean"
-                      },
-                      "level_2": {
-                        "type": "boolean"
-                      },
-                      "level_3": {
-                        "type": "boolean"
-                      },
-                      "level_4": {
-                        "type": "boolean"
-                      },
-                      "level_5": {
-                        "type": "boolean"
-                      },
-                      "level_6": {
-                        "type": "boolean"
-                      },
-                      "level_7": {
-                        "type": "boolean"
-                      },
-                      "level_8": {
-                        "type": "boolean"
-                      },
-                      "level_9": {
-                        "type": "boolean"
-                      }
-                    }
-                  },
-                  "xp": {
-                    "type": "integer"
-                  },
-                  "boss_kills_teir_0": {
-                    "type": "integer"
-                  },
-                  "boss_kills_teir_1": {
-                    "type": "integer"
-                  },
-                  "boss_kills_teir_2": {
-                    "type": "integer"
-                  },
-                  "boss_kills_teir_3": {
-                    "type": "integer"
-                  }
-                }
-              },
-              "wolf": {
-                "type": "object",
-                "properties": {
-                  "level": {
-                    "type": "object",
-                    "properties": {
-                      "current_level": {
-                        "type": "integer"
-                      },
-                      "xp": {
-                        "type": "integer"
-                      },
-                      "max_level": {
-                        "type": "integer"
-                      },
-                      "progress": {
-                        "type": "integer"
-                      },
-                      "xpForNext": {
-                        "type": "integer"
-                      }
-                    }
-                  },
-                  "kills": {
-                    "type": "object",
-                    "properties": {
-                      "1": {
-                        "type": "integer"
-                      },
-                      "2": {
-                        "type": "integer"
-                      },
-                      "3": {
-                        "type": "integer"
-                      },
-                      "4": {
-                        "type": "integer"
-                      }
-                    }
-                  },
-                  "claimed_levels": {
-                    "type": "object",
-                    "properties": {
-                      "level_1": {
-                        "type": "boolean"
-                      },
-                      "level_2": {
-                        "type": "boolean"
-                      },
-                      "level_3": {
-                        "type": "boolean"
-                      },
-                      "level_4": {
-                        "type": "boolean"
-                      },
-                      "level_5": {
-                        "type": "boolean"
-                      },
-                      "level_6": {
-                        "type": "boolean"
-                      },
-                      "level_7": {
-                        "type": "boolean"
-                      },
-                      "level_8": {
-                        "type": "boolean"
-                      },
-                      "level_9": {
-                        "type": "boolean"
-                      }
-                    }
-                  },
-                  "xp": {
-                    "type": "integer"
-                  },
-                  "boss_kills_teir_0": {
-                    "type": "integer"
-                  },
-                  "boss_kills_teir_1": {
-                    "type": "integer"
-                  },
-                  "boss_kills_teir_2": {
-                    "type": "integer"
-                  },
-                  "boss_kills_teir_3": {
-                    "type": "integer"
-                  }
-                }
-              }
-            }
-          },
-          "slayer_bonus": {
-            "type": "object",
-            "description": "Bonus stats from slayer levels.",
-            "properties": {
-              "zombie": {
-                "type": "object",
-                "properties": {
-                  "damage": {
-                    "type": "integer"
-                  },
-                  "health": {
-                    "type": "integer"
-                  },
-                  "defense": {
-                    "type": "integer"
-                  },
-                  "effective_health": {
-                    "type": "integer"
-                  },
-                  "strength": {
-                    "type": "integer"
-                  },
-                  "damage_increase": {
-                    "type": "integer"
-                  },
-                  "speed": {
-                    "type": "integer"
-                  },
-                  "crit_chance": {
-                    "type": "integer"
-                  },
-                  "crit_damage": {
-                    "type": "integer"
-                  },
-                  "bonus_attack_speed": {
-                    "type": "integer"
-                  },
-                  "intelligence": {
-                    "type": "integer"
-                  },
-                  "sea_creature_chance": {
-                    "type": "integer"
-                  },
-                  "magic_find": {
-                    "type": "integer"
-                  },
-                  "pet_luck": {
-                    "type": "integer"
-                  }
-                }
-              },
-              "spider": {
-                "type": "object",
-                "properties": {
-                  "damage": {
-                    "type": "integer"
-                  },
-                  "health": {
-                    "type": "integer"
-                  },
-                  "defense": {
-                    "type": "integer"
-                  },
-                  "effective_health": {
-                    "type": "integer"
-                  },
-                  "strength": {
-                    "type": "integer"
-                  },
-                  "damage_increase": {
-                    "type": "integer"
-                  },
-                  "speed": {
-                    "type": "integer"
-                  },
-                  "crit_chance": {
-                    "type": "integer"
-                  },
-                  "crit_damage": {
-                    "type": "integer"
-                  },
-                  "bonus_attack_speed": {
-                    "type": "integer"
-                  },
-                  "intelligence": {
-                    "type": "integer"
-                  },
-                  "sea_creature_chance": {
-                    "type": "integer"
-                  },
-                  "magic_find": {
-                    "type": "integer"
-                  },
-                  "pet_luck": {
-                    "type": "integer"
-                  }
-                }
-              },
-              "wolf": {
-                "type": "object",
-                "properties": {
-                  "damage": {
-                    "type": "integer"
-                  },
-                  "health": {
-                    "type": "integer"
-                  },
-                  "defense": {
-                    "type": "integer"
-                  },
-                  "effective_health": {
-                    "type": "integer"
-                  },
-                  "strength": {
-                    "type": "integer"
-                  },
-                  "damage_increase": {
-                    "type": "integer"
-                  },
-                  "speed": {
-                    "type": "integer"
-                  },
-                  "crit_chance": {
-                    "type": "integer"
-                  },
-                  "crit_damage": {
-                    "type": "integer"
-                  },
-                  "bonus_attack_speed": {
-                    "type": "integer"
-                  },
-                  "intelligence": {
-                    "type": "integer"
-                  },
-                  "sea_creature_chance": {
-                    "type": "integer"
-                  },
-                  "magic_find": {
-                    "type": "integer"
-                  },
-                  "pet_luck": {
-                    "type": "integer"
-                  }
-                }
-              }
-            }
-          },
-          "slayer_coins_spent": {
-            "type": "object",
-            "description": "Coins spent for each type of slayer.",
-            "properties": {
-              "zombie": {
-                "type": "integer"
-              },
-              "spider": {
-                "type": "integer"
-              },
-              "wolf": {
-                "type": "integer"
-              },
-              "total": {
-                "type": "integer"
-              }
-            }
-          }
+    ],
+    "tags": [
+        {
+            "name": "profile",
+            "description": "Player profiles with all stored data."
         },
-        "xml": {
-          "name": "Slayer"
+        {
+            "name": "talismans",
+            "description": "A list of all talismans for a profile, with lore, stat boosts, etc."
+        },
+        {
+            "name": "slayers",
+            "description": "Slayer stats including kills, xp, and stat boosts."
+        },
+        {
+            "name": "coins",
+            "description": "Bank and purse data."
+        },
+        {
+            "name": "bazaar",
+            "description": "Bazaar buy and sell price/volume"
         }
-      },
-      "Talismans": {
-        "type": "object",
-        "properties": {
-          "profile_id": {
-            "type": "string",
-            "description": "The profile's unique ID."
-          },
-          "cute_name": {
-            "type": "string",
-            "description": "Profile's cute name, e.g. Lime, Strawberry"
-          },
-          "talismans": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "isUnique": {
-                  "type": "boolean"
-                },
-                "isInactive": {
-                  "type": "boolean"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "Count": {
-                  "type": "integer"
-                },
-                "tag": {
-                  "type": "object",
-                  "properties": {
-                    "HideFlags": {
-                      "type": "integer"
+    ],
+    "paths": {
+        "/profile/${playerName}": {
+            "get": {
+                "tags": ["profile"],
+                "summary": "Get a list of a player's profiles, with extensive data.",
+                "parameters": [
+                    {
+                        "name": "playerName",
+                        "in": "path",
+                        "description": "Username of the player.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "PROFILE_ID": {
+                                            "type": "object",
+                                            "properties": {
+                                                "profile_id": {
+                                                    "type": "string",
+                                                    "description": "The profile's unique ID."
+                                                },
+                                                "cute_name": {
+                                                    "type": "string",
+                                                    "description": "Profile's cute name, e.g. Lime, Strawberry"
+                                                },
+                                                "current": {
+                                                    "type": "boolean",
+                                                    "description": "If the profile was the most saved."
+                                                },
+                                                "last_save": {
+                                                    "type": "integer",
+                                                    "description": "The last time the profile was saved as a unix epoch."
+                                                },
+                                                "raw": {
+                                                    "type": "object",
+                                                    "description": "Raw Hypixel API data."
+                                                },
+                                                "items": {
+                                                    "type": "object",
+                                                    "description": "Items in a player's inventory, bags, or enderchest."
+                                                },
+                                                "data": {
+                                                    "type": "object",
+                                                    "description": "All other profile data, such as skills, slayers, stats, and more."
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/talismans/{playerName}": {
+            "get": {
+                "tags": ["talismans"],
+                "summary": "Get a list of a player's profiles with talisman data.",
+                "parameters": [
+                    {
+                        "name": "playerName",
+                        "in": "path",
+                        "description": "Username of the player.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Talismans"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/talismans/{playerName}/{profileName}": {
+            "get": {
+                "tags": ["talismans"],
+                "summary": "Get a player's profile with talisman data.",
+                "parameters": [
+                    {
+                        "name": "playerName",
+                        "in": "path",
+                        "description": "Username of the player.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     },
-                    "SkullOwner": {
-                      "type": "object",
-                      "properties": {
-                        "Id": {
-                          "type": "string"
-                        },
-                        "Properties": {
-                          "type": "object",
-                          "properties": {
-                            "textures": {
-                              "type": "array",
-                              "items": {
+                    {
+                        "name": "profileName",
+                        "in": "path",
+                        "description": "Profile cute name.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "profiles": {
+                                            "type": "object",
+                                            "properties": {
+                                                "PROFILE_ID": {
+                                                    "$ref": "#/components/schemas/Talismans"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/slayers/{playerName}": {
+            "get": {
+                "tags": ["slayers"],
+                "summary": "Get a list of a player's profiles with slayer data.",
+                "parameters": [
+                    {
+                        "name": "playerName",
+                        "in": "path",
+                        "description": "Username of the player.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Slayer"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/slayers/{playerName}/{profileName}": {
+            "get": {
+                "tags": ["slayers"],
+                "summary": "Get a player's profile with slayer data.",
+                "parameters": [
+                    {
+                        "name": "playerName",
+                        "in": "path",
+                        "description": "Username of the player.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "profileName",
+                        "in": "path",
+                        "description": "Profile cute name.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "profiles": {
+                                            "type": "object",
+                                            "properties": {
+                                                "PROFILE_ID": {
+                                                    "$ref": "#/components/schemas/Slayer"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/coins/{playerName}": {
+            "get": {
+                "tags": ["coins"],
+                "summary": "Get a list of a player's profiles with bank and purse data.",
+                "parameters": [
+                    {
+                        "name": "playerName",
+                        "in": "path",
+                        "description": "Username of the player.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Coins"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/coins/{playerName}/{profileName}": {
+            "get": {
+                "tags": ["coins"],
+                "summary": "Get a player's profile with bank and purse data.",
+                "parameters": [
+                    {
+                        "name": "playerName",
+                        "in": "path",
+                        "description": "Username of the player.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "profileName",
+                        "in": "path",
+                        "description": "Profile cute name.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "profiles": {
+                                            "type": "object",
+                                            "properties": {
+                                                "PROFILE_ID": {
+                                                    "$ref": "#/components/schemas/Coins"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/dungeons/{playerName}": {
+            "get": {
+                "tags": ["dungeons"],
+                "summary": "Get a list of a player's profiles with dungeon and class data.",
+                "parameters": [
+                    {
+                        "name": "playerName",
+                        "in": "path",
+                        "description": "Username of the player.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "profiles": {
+                                            "type": "object",
+                                            "properties": {
+                                                "PROFILE_ID": {
+                                                    "$ref": "#/components/schemas/Dungeons"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/dungeons/{playerName}/{profileName}": {
+            "get": {
+                "tags": ["dungeons"],
+                "summary": "Get a player's profile with dungeon and class data.",
+                "parameters": [
+                    {
+                        "name": "playerName",
+                        "in": "path",
+                        "description": "Username of the player.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "profileName",
+                        "in": "path",
+                        "description": "Profile cute name.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Dungeons"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/bazaar": {
+            "get": {
+                "tags": ["bazaar"],
+                "summary": "Get an object of every bazaar item and its data.",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "ITEM_ID": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "buyPrice": {
+                                                    "type": "integer"
+                                                },
+                                                "sellPrice": {
+                                                    "type": "integer"
+                                                },
+                                                "buyVolume": {
+                                                    "type": "integer"
+                                                },
+                                                "sellVolume": {
+                                                    "type": "integer"
+                                                },
+                                                "tag": {
+                                                    "type": "string"
+                                                },
+                                                "price": {
+                                                    "type": "integer"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Slayer": {
+                "type": "object",
+                "properties": {
+                    "profile_id": {
+                        "type": "string",
+                        "description": "The profile's unique ID."
+                    },
+                    "cute_name": {
+                        "type": "string",
+                        "description": "Profile's cute name, e.g. Lime, Strawberry"
+                    },
+                    "slayer_xp": {
+                        "type": "integer",
+                        "description": "Total slayer xp earned."
+                    },
+                    "slayers": {
+                        "type": "object",
+                        "description": "XP, boss teir kills, and progress to next level.",
+                        "properties": {
+                            "zombie": {
                                 "type": "object",
                                 "properties": {
-                                  "Value": {
-                                    "type": "string"
-                                  }
+                                    "level": {
+                                        "type": "object",
+                                        "properties": {
+                                            "current_level": {
+                                                "type": "integer"
+                                            },
+                                            "xp": {
+                                                "type": "integer"
+                                            },
+                                            "max_level": {
+                                                "type": "integer"
+                                            },
+                                            "progress": {
+                                                "type": "integer"
+                                            },
+                                            "xpForNext": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    },
+                                    "kills": {
+                                        "type": "object",
+                                        "properties": {
+                                            "1": {
+                                                "type": "integer"
+                                            },
+                                            "2": {
+                                                "type": "integer"
+                                            },
+                                            "3": {
+                                                "type": "integer"
+                                            },
+                                            "4": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    },
+                                    "claimed_levels": {
+                                        "type": "object",
+                                        "properties": {
+                                            "level_1": {
+                                                "type": "boolean"
+                                            },
+                                            "level_2": {
+                                                "type": "boolean"
+                                            },
+                                            "level_3": {
+                                                "type": "boolean"
+                                            },
+                                            "level_4": {
+                                                "type": "boolean"
+                                            },
+                                            "level_5": {
+                                                "type": "boolean"
+                                            },
+                                            "level_6": {
+                                                "type": "boolean"
+                                            },
+                                            "level_7": {
+                                                "type": "boolean"
+                                            },
+                                            "level_8": {
+                                                "type": "boolean"
+                                            },
+                                            "level_9": {
+                                                "type": "boolean"
+                                            }
+                                        }
+                                    },
+                                    "xp": {
+                                        "type": "integer"
+                                    },
+                                    "boss_kills_teir_0": {
+                                        "type": "integer"
+                                    },
+                                    "boss_kills_teir_1": {
+                                        "type": "integer"
+                                    },
+                                    "boss_kills_teir_2": {
+                                        "type": "integer"
+                                    },
+                                    "boss_kills_teir_3": {
+                                        "type": "integer"
+                                    }
                                 }
-                              }
+                            },
+                            "spider": {
+                                "type": "object",
+                                "properties": {
+                                    "level": {
+                                        "type": "object",
+                                        "properties": {
+                                            "current_level": {
+                                                "type": "integer"
+                                            },
+                                            "xp": {
+                                                "type": "integer"
+                                            },
+                                            "max_level": {
+                                                "type": "integer"
+                                            },
+                                            "progress": {
+                                                "type": "integer"
+                                            },
+                                            "xpForNext": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    },
+                                    "kills": {
+                                        "type": "object",
+                                        "properties": {
+                                            "1": {
+                                                "type": "integer"
+                                            },
+                                            "2": {
+                                                "type": "integer"
+                                            },
+                                            "3": {
+                                                "type": "integer"
+                                            },
+                                            "4": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    },
+                                    "claimed_levels": {
+                                        "type": "object",
+                                        "properties": {
+                                            "level_1": {
+                                                "type": "boolean"
+                                            },
+                                            "level_2": {
+                                                "type": "boolean"
+                                            },
+                                            "level_3": {
+                                                "type": "boolean"
+                                            },
+                                            "level_4": {
+                                                "type": "boolean"
+                                            },
+                                            "level_5": {
+                                                "type": "boolean"
+                                            },
+                                            "level_6": {
+                                                "type": "boolean"
+                                            },
+                                            "level_7": {
+                                                "type": "boolean"
+                                            },
+                                            "level_8": {
+                                                "type": "boolean"
+                                            },
+                                            "level_9": {
+                                                "type": "boolean"
+                                            }
+                                        }
+                                    },
+                                    "xp": {
+                                        "type": "integer"
+                                    },
+                                    "boss_kills_teir_0": {
+                                        "type": "integer"
+                                    },
+                                    "boss_kills_teir_1": {
+                                        "type": "integer"
+                                    },
+                                    "boss_kills_teir_2": {
+                                        "type": "integer"
+                                    },
+                                    "boss_kills_teir_3": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "wolf": {
+                                "type": "object",
+                                "properties": {
+                                    "level": {
+                                        "type": "object",
+                                        "properties": {
+                                            "current_level": {
+                                                "type": "integer"
+                                            },
+                                            "xp": {
+                                                "type": "integer"
+                                            },
+                                            "max_level": {
+                                                "type": "integer"
+                                            },
+                                            "progress": {
+                                                "type": "integer"
+                                            },
+                                            "xpForNext": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    },
+                                    "kills": {
+                                        "type": "object",
+                                        "properties": {
+                                            "1": {
+                                                "type": "integer"
+                                            },
+                                            "2": {
+                                                "type": "integer"
+                                            },
+                                            "3": {
+                                                "type": "integer"
+                                            },
+                                            "4": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    },
+                                    "claimed_levels": {
+                                        "type": "object",
+                                        "properties": {
+                                            "level_1": {
+                                                "type": "boolean"
+                                            },
+                                            "level_2": {
+                                                "type": "boolean"
+                                            },
+                                            "level_3": {
+                                                "type": "boolean"
+                                            },
+                                            "level_4": {
+                                                "type": "boolean"
+                                            },
+                                            "level_5": {
+                                                "type": "boolean"
+                                            },
+                                            "level_6": {
+                                                "type": "boolean"
+                                            },
+                                            "level_7": {
+                                                "type": "boolean"
+                                            },
+                                            "level_8": {
+                                                "type": "boolean"
+                                            },
+                                            "level_9": {
+                                                "type": "boolean"
+                                            }
+                                        }
+                                    },
+                                    "xp": {
+                                        "type": "integer"
+                                    },
+                                    "boss_kills_teir_0": {
+                                        "type": "integer"
+                                    },
+                                    "boss_kills_teir_1": {
+                                        "type": "integer"
+                                    },
+                                    "boss_kills_teir_2": {
+                                        "type": "integer"
+                                    },
+                                    "boss_kills_teir_3": {
+                                        "type": "integer"
+                                    }
+                                }
                             }
-                          }
                         }
-                      }
                     },
-                    "display": {
-                      "type": "object",
-                      "properties": {
-                        "Lore": {
-                          "type": "array",
-                          "items": {
+                    "slayer_bonus": {
+                        "type": "object",
+                        "description": "Bonus stats from slayer levels.",
+                        "properties": {
+                            "zombie": {
+                                "type": "object",
+                                "properties": {
+                                    "damage": {
+                                        "type": "integer"
+                                    },
+                                    "health": {
+                                        "type": "integer"
+                                    },
+                                    "defense": {
+                                        "type": "integer"
+                                    },
+                                    "effective_health": {
+                                        "type": "integer"
+                                    },
+                                    "strength": {
+                                        "type": "integer"
+                                    },
+                                    "damage_increase": {
+                                        "type": "integer"
+                                    },
+                                    "speed": {
+                                        "type": "integer"
+                                    },
+                                    "crit_chance": {
+                                        "type": "integer"
+                                    },
+                                    "crit_damage": {
+                                        "type": "integer"
+                                    },
+                                    "bonus_attack_speed": {
+                                        "type": "integer"
+                                    },
+                                    "intelligence": {
+                                        "type": "integer"
+                                    },
+                                    "sea_creature_chance": {
+                                        "type": "integer"
+                                    },
+                                    "magic_find": {
+                                        "type": "integer"
+                                    },
+                                    "pet_luck": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "spider": {
+                                "type": "object",
+                                "properties": {
+                                    "damage": {
+                                        "type": "integer"
+                                    },
+                                    "health": {
+                                        "type": "integer"
+                                    },
+                                    "defense": {
+                                        "type": "integer"
+                                    },
+                                    "effective_health": {
+                                        "type": "integer"
+                                    },
+                                    "strength": {
+                                        "type": "integer"
+                                    },
+                                    "damage_increase": {
+                                        "type": "integer"
+                                    },
+                                    "speed": {
+                                        "type": "integer"
+                                    },
+                                    "crit_chance": {
+                                        "type": "integer"
+                                    },
+                                    "crit_damage": {
+                                        "type": "integer"
+                                    },
+                                    "bonus_attack_speed": {
+                                        "type": "integer"
+                                    },
+                                    "intelligence": {
+                                        "type": "integer"
+                                    },
+                                    "sea_creature_chance": {
+                                        "type": "integer"
+                                    },
+                                    "magic_find": {
+                                        "type": "integer"
+                                    },
+                                    "pet_luck": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "wolf": {
+                                "type": "object",
+                                "properties": {
+                                    "damage": {
+                                        "type": "integer"
+                                    },
+                                    "health": {
+                                        "type": "integer"
+                                    },
+                                    "defense": {
+                                        "type": "integer"
+                                    },
+                                    "effective_health": {
+                                        "type": "integer"
+                                    },
+                                    "strength": {
+                                        "type": "integer"
+                                    },
+                                    "damage_increase": {
+                                        "type": "integer"
+                                    },
+                                    "speed": {
+                                        "type": "integer"
+                                    },
+                                    "crit_chance": {
+                                        "type": "integer"
+                                    },
+                                    "crit_damage": {
+                                        "type": "integer"
+                                    },
+                                    "bonus_attack_speed": {
+                                        "type": "integer"
+                                    },
+                                    "intelligence": {
+                                        "type": "integer"
+                                    },
+                                    "sea_creature_chance": {
+                                        "type": "integer"
+                                    },
+                                    "magic_find": {
+                                        "type": "integer"
+                                    },
+                                    "pet_luck": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "slayer_coins_spent": {
+                        "type": "object",
+                        "description": "Coins spent for each type of slayer.",
+                        "properties": {
+                            "zombie": {
+                                "type": "integer"
+                            },
+                            "spider": {
+                                "type": "integer"
+                            },
+                            "wolf": {
+                                "type": "integer"
+                            },
+                            "total": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                },
+                "xml": {
+                    "name": "Slayer"
+                }
+            },
+            "Talismans": {
+                "type": "object",
+                "properties": {
+                    "profile_id": {
+                        "type": "string",
+                        "description": "The profile's unique ID."
+                    },
+                    "cute_name": {
+                        "type": "string",
+                        "description": "Profile's cute name, e.g. Lime, Strawberry"
+                    },
+                    "talismans": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "isUnique": {
+                                    "type": "boolean"
+                                },
+                                "isInactive": {
+                                    "type": "boolean"
+                                },
+                                "id": {
+                                    "type": "integer"
+                                },
+                                "Count": {
+                                    "type": "integer"
+                                },
+                                "tag": {
+                                    "type": "object",
+                                    "properties": {
+                                        "HideFlags": {
+                                            "type": "integer"
+                                        },
+                                        "SkullOwner": {
+                                            "type": "object",
+                                            "properties": {
+                                                "Id": {
+                                                    "type": "string"
+                                                },
+                                                "Properties": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "textures": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "Value": {
+                                                                        "type": "string"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "display": {
+                                            "type": "object",
+                                            "properties": {
+                                                "Lore": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "Name": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "ExtraAttributes": {
+                                            "type": "object",
+                                            "properties": {
+                                                "modifier": {
+                                                    "type": "string"
+                                                },
+                                                "originTag": {
+                                                    "type": "string"
+                                                },
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "uuid": {
+                                                    "type": "string"
+                                                },
+                                                "timestamp": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "Damage": {
+                                    "type": "integer"
+                                },
+                                "display_name": {
+                                    "type": "string"
+                                },
+                                "texture_path": {
+                                    "type": "string"
+                                },
+                                "lore": {
+                                    "type": "string"
+                                },
+                                "rarity": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "type": "string"
+                                },
+                                "stats": {
+                                    "type": "object",
+                                    "properties": {
+                                        "damage": {
+                                            "type": "integer"
+                                        },
+                                        "health": {
+                                            "type": "integer"
+                                        },
+                                        "defense": {
+                                            "type": "integer"
+                                        },
+                                        "effective_health": {
+                                            "type": "integer"
+                                        },
+                                        "strength": {
+                                            "type": "integer"
+                                        },
+                                        "damage_increase": {
+                                            "type": "integer"
+                                        },
+                                        "speed": {
+                                            "type": "integer"
+                                        },
+                                        "crit_chance": {
+                                            "type": "integer"
+                                        },
+                                        "crit_damage": {
+                                            "type": "integer"
+                                        },
+                                        "bonus_attack_speed": {
+                                            "type": "integer"
+                                        },
+                                        "intelligence": {
+                                            "type": "integer"
+                                        },
+                                        "sea_creature_chance": {
+                                            "type": "integer"
+                                        },
+                                        "magic_find": {
+                                            "type": "integer"
+                                        },
+                                        "pet_luck": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "item_index": {
+                                    "type": "integer"
+                                },
+                                "itemId": {
+                                    "type": "string"
+                                },
+                                "base_name": {
+                                    "type": "string"
+                                },
+                                "reforge": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "xml": {
+                    "name": "Talismans"
+                }
+            },
+            "Coins": {
+                "type": "object",
+                "properties": {
+                    "profile_id": {
+                        "type": "string",
+                        "description": "The profile's unique ID."
+                    },
+                    "cute_name": {
+                        "type": "string",
+                        "description": "Profile's cute name, e.g. Lime, Strawberry"
+                    },
+                    "purse": {
+                        "type": "integer"
+                    },
+                    "bank": {
+                        "type": "integer"
+                    }
+                },
+                "xml": {
+                    "name": "Coins"
+                }
+            },
+            "Dungeons": {
+                "type": "object",
+                "properties": {
+                    "profile_id": {
+                        "type": "string",
+                        "description": "The profile's unique ID."
+                    },
+                    "cute_name": {
+                        "type": "string",
+                        "description": "Profile's cute name, e.g. Lime, Strawberry"
+                    },
+                    "dungeons": {
+                        "type": "object",
+                        "properties": {
+                            "catacombs": {
+                                "type": "object",
+                                "properties": {
+                                    "visited": {
+                                        "type": "boolean"
+                                    },
+                                    "level": {
+                                        "type": "object",
+                                        "properties": {
+                                            "xp": {
+                                                "type": "integer"
+                                            },
+                                            "level": {
+                                                "type": "integer"
+                                            },
+                                            "maxLevel": {
+                                                "type": "integer"
+                                            },
+                                            "xpCurrent": {
+                                                "type": "integer"
+                                            },
+                                            "xpForNext": {
+                                                "type": "integer"
+                                            },
+                                            "progress": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    },
+                                    "highest_floor": {
+                                        "type": "string"
+                                    },
+                                    "floors": {
+                                        "type": "object",
+                                        "properties": {
+                                            "1": {
+                                                "$ref": "#/components/schemas/dungeon_floor"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "classes": {
+                                "type": "object",
+                                "properties": {
+                                    "healer": {
+                                        "$ref": "#/components/schemas/dungeon_class"
+                                    },
+                                    "mage": {
+                                        "$ref": "#/components/schemas/dungeon_class"
+                                    },
+                                    "beserk": {
+                                        "$ref": "#/components/schemas/dungeon_class"
+                                    },
+                                    "archer": {
+                                        "$ref": "#/components/schemas/dungeon_class"
+                                    },
+                                    "tank": {
+                                        "$ref": "#/components/schemas/dungeon_class"
+                                    }
+                                }
+                            },
+                            "used_classes": {
+                                "type": "boolean"
+                            },
+                            "unlocked_collections": {
+                                "type": "boolean"
+                            },
+                            "boss_collections": {
+                                "type": "object",
+                                "properties": {
+                                    "1": {
+                                        "$ref": "#/components/schemas/dungeon_collection"
+                                    }
+                                }
+                            },
+                            "selected_class": {
+                                "type": "string"
+                            },
+                            "secrets_found": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                },
+                "xml": {
+                    "name": "Dungeons"
+                }
+            },
+            "dungeon_class": {
+                "type": "object",
+                "properties": {
+                    "experience": {
+                        "type": "object",
+                        "properties": {
+                            "xp": {
+                                "type": "integer"
+                            },
+                            "level": {
+                                "type": "integer"
+                            },
+                            "maxLevel": {
+                                "type": "integer"
+                            },
+                            "xpCurrent": {
+                                "type": "integer"
+                            },
+                            "xpForNext": {
+                                "type": "integer"
+                            },
+                            "progress": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "current": {
+                        "type": "boolean"
+                    }
+                },
+                "xml": {
+                    "name": "Dungeon_class"
+                }
+            },
+            "dungeon_collection": {
+                "description": "Each collection will have its own object",
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "texture": {
+                        "type": "string"
+                    },
+                    "tier": {
+                        "type": "integer"
+                    },
+                    "killed": {
+                        "type": "integer"
+                    },
+                    "claimed": {
+                        "type": "array",
+                        "items": {
                             "type": "string"
-                          }
-                        },
-                        "Name": {
-                          "type": "string"
                         }
-                      }
+                    }
+                },
+                "xml": {
+                    "name": "dungeon_collection"
+                }
+            },
+            "dungeon_floor": {
+                "description": "Each floor will have its own object",
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
                     },
-                    "ExtraAttributes": {
-                      "type": "object",
-                      "properties": {
-                        "modifier": {
-                          "type": "string"
-                        },
-                        "originTag": {
-                          "type": "string"
-                        },
-                        "id": {
-                          "type": "string"
-                        },
-                        "uuid": {
-                          "type": "string"
-                        },
-                        "timestamp": {
-                          "type": "string"
+                    "icon_texture": {
+                        "type": "string"
+                    },
+                    "stats": {
+                        "type": "object",
+                        "properties": {
+                            "times_played": {
+                                "type": "integer"
+                            },
+                            "tier_completions": {
+                                "type": "integer"
+                            },
+                            "fastest_time": {
+                                "type": "integer"
+                            },
+                            "best_score": {
+                                "type": "integer"
+                            },
+                            "mobs_killed": {
+                                "type": "integer"
+                            },
+                            "most_mobs_killed": {
+                                "type": "integer"
+                            },
+                            "most_healing": {
+                                "type": "integer"
+                            },
+                            "watcher_kills": {
+                                "type": "integer"
+                            },
+                            "fastest_time_s": {
+                                "type": "integer"
+                            },
+                            "fastest_time_s_plus": {
+                                "type": "integer"
+                            }
                         }
-                      }
+                    },
+                    "best_runs": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "timestamp": {
+                                    "type": "integer"
+                                },
+                                "score_exploration": {
+                                    "type": "integer"
+                                },
+                                "score_speed": {
+                                    "type": "integer"
+                                },
+                                "score_skill": {
+                                    "type": "integer"
+                                },
+                                "score_bonus": {
+                                    "type": "integer"
+                                },
+                                "dungeon_class": {
+                                    "type": "string"
+                                },
+                                "teammates": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "elapsed_time": {
+                                    "type": "integer"
+                                },
+                                "damage_dealt": {
+                                    "type": "integer"
+                                },
+                                "deaths": {
+                                    "type": "integer"
+                                },
+                                "mobs_kills": {
+                                    "type": "integer"
+                                },
+                                "secrets_found": {
+                                    "type": "integer"
+                                },
+                                "damage_mitigated": {
+                                    "type": "integer"
+                                },
+                                "ally_healing": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    },
+                    "most_damage": {
+                        "type": "object",
+                        "properties": {
+                            "class": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "current": {
+                        "type": "boolean"
                     }
-                  }
                 },
-                "Damage": {
-                  "type": "integer"
-                },
-                "display_name": {
-                  "type": "string"
-                },
-                "texture_path": {
-                  "type": "string"
-                },
-                "lore": {
-                  "type": "string"
-                },
-                "rarity": {
-                  "type": "string"
-                },
-                "type": {
-                  "type": "string"
-                },
-                "stats": {
-                  "type": "object",
-                  "properties": {
-                    "damage": {
-                      "type": "integer"
-                    },
-                    "health": {
-                      "type": "integer"
-                    },
-                    "defense": {
-                      "type": "integer"
-                    },
-                    "effective_health": {
-                      "type": "integer"
-                    },
-                    "strength": {
-                      "type": "integer"
-                    },
-                    "damage_increase": {
-                      "type": "integer"
-                    },
-                    "speed": {
-                      "type": "integer"
-                    },
-                    "crit_chance": {
-                      "type": "integer"
-                    },
-                    "crit_damage": {
-                      "type": "integer"
-                    },
-                    "bonus_attack_speed": {
-                      "type": "integer"
-                    },
-                    "intelligence": {
-                      "type": "integer"
-                    },
-                    "sea_creature_chance": {
-                      "type": "integer"
-                    },
-                    "magic_find": {
-                      "type": "integer"
-                    },
-                    "pet_luck": {
-                      "type": "integer"
-                    }
-                  }
-                },
-                "item_index": {
-                  "type": "integer"
-                },
-                "itemId": {
-                  "type": "string"
-                },
-                "base_name": {
-                  "type": "string"
-                },
-                "reforge": {
-                  "type": "string"
+                "xml": {
+                    "name": "dungeon_floor"
                 }
-              }
             }
-          }
-        },
-        "xml": {
-          "name": "Talismans"
         }
-      },
-      "Coins": {
-        "type": "object",
-        "properties": {
-          "profile_id": {
-            "type": "string",
-            "description": "The profile's unique ID."
-          },
-          "cute_name": {
-            "type": "string",
-            "description": "Profile's cute name, e.g. Lime, Strawberry"
-          },
-          "purse": {
-            "type": "integer"
-          },
-          "bank": {
-            "type": "integer"
-          }
-        },
-        "xml": {
-          "name": "Coins"
-        }
-      },
-      "Dungeons": {
-        "type": "object",
-        "properties": {
-          "profile_id": {
-            "type": "string",
-            "description": "The profile's unique ID."
-          },
-          "cute_name": {
-            "type": "string",
-            "description": "Profile's cute name, e.g. Lime, Strawberry"
-          },
-          "dungeons": {
-            "type": "object",
-            "properties": {
-              "catacombs": {
-                "type": "object",
-                "properties": {
-                  "visited": {
-                    "type": "boolean"
-                  },
-                  "level": {
-                    "type": "object",
-                    "properties": {
-                      "xp": {
-                        "type": "integer"
-                      },
-                      "level": {
-                        "type": "integer"
-                      },
-                      "maxLevel": {
-                        "type": "integer"
-                      },
-                      "xpCurrent": {
-                        "type": "integer"
-                      },
-                      "xpForNext": {
-                        "type": "integer"
-                      },
-                      "progress": {
-                        "type": "integer"
-                      }
-                    }
-                  },
-                  "highest_floor": {
-                    "type": "string"
-                  },
-                  "floors": {
-                    "type": "object",
-                    "properties": {
-                      "1": {
-                        "$ref": "#/components/schemas/dungeon_floor"
-                      }
-                    }
-                  }
-                }
-              },
-              "classes": {
-                "type": "object",
-                "properties": {
-                  "healer": {
-                    "$ref": "#/components/schemas/dungeon_class"
-                  },
-                  "mage": {
-                    "$ref": "#/components/schemas/dungeon_class"
-                  },
-                  "beserk": {
-                    "$ref": "#/components/schemas/dungeon_class"
-                  },
-                  "archer": {
-                    "$ref": "#/components/schemas/dungeon_class"
-                  },
-                  "tank": {
-                    "$ref": "#/components/schemas/dungeon_class"
-                  }
-                }
-              },
-              "used_classes": {
-                "type": "boolean"
-              },
-              "unlocked_collections": {
-                "type": "boolean"
-              },
-              "boss_collections": {
-                "type": "object",
-                "properties": {
-                  "1": {
-                    "$ref": "#/components/schemas/dungeon_collection"
-                  }
-                }
-              },
-              "selected_class": {
-                "type": "string"
-              },
-              "secrets_found": {
-                "type": "integer"
-              }
-            }
-          }
-        },
-        "xml": {
-          "name": "Dungeons"
-        }
-      },
-      "dungeon_class": {
-        "type": "object",
-        "properties": {
-          "experience": {
-            "type": "object",
-            "properties": {
-              "xp": {
-                "type": "integer"
-              },
-              "level": {
-                "type": "integer"
-              },
-              "maxLevel": {
-                "type": "integer"
-              },
-              "xpCurrent": {
-                "type": "integer"
-              },
-              "xpForNext": {
-                "type": "integer"
-              },
-              "progress": {
-                "type": "integer"
-              }
-            }
-          },
-          "current": {
-            "type": "boolean"
-          }
-        },
-        "xml": {
-          "name": "Dungeon_class"
-        }
-      },
-      "dungeon_collection": {
-        "description": "Each collection will have its own object",
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "texture": {
-            "type": "string"
-          },
-          "tier": {
-            "type": "integer"
-          },
-          "killed": {
-            "type": "integer"
-          },
-          "claimed": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "xml": {
-          "name": "dungeon_collection"
-        }
-      },
-      "dungeon_floor": {
-        "description": "Each floor will have its own object",
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "icon_texture": {
-            "type": "string"
-          },
-          "stats": {
-            "type": "object",
-            "properties": {
-              "times_played": {
-                "type": "integer"
-              },
-              "tier_completions": {
-                "type": "integer"
-              },
-              "fastest_time": {
-                "type": "integer"
-              },
-              "best_score": {
-                "type": "integer"
-              },
-              "mobs_killed": {
-                "type": "integer"
-              },
-              "most_mobs_killed": {
-                "type": "integer"
-              },
-              "most_healing": {
-                "type": "integer"
-              },
-              "watcher_kills": {
-                "type": "integer"
-              },
-              "fastest_time_s": {
-                "type": "integer"
-              },
-              "fastest_time_s_plus": {
-                "type": "integer"
-              }
-            }
-          },
-          "best_runs": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "timestamp": {
-                  "type": "integer"
-                },
-                "score_exploration": {
-                  "type": "integer"
-                },
-                "score_speed": {
-                  "type": "integer"
-                },
-                "score_skill": {
-                  "type": "integer"
-                },
-                "score_bonus": {
-                  "type": "integer"
-                },
-                "dungeon_class": {
-                  "type": "string"
-                },
-                "teammates": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "elapsed_time": {
-                  "type": "integer"
-                },
-                "damage_dealt": {
-                  "type": "integer"
-                },
-                "deaths": {
-                  "type": "integer"
-                },
-                "mobs_kills": {
-                  "type": "integer"
-                },
-                "secrets_found": {
-                  "type": "integer"
-                },
-                "damage_mitigated": {
-                  "type": "integer"
-                },
-                "ally_healing": {
-                  "type": "integer"
-                }
-              }
-            }
-          },
-          "most_damage": {
-            "type": "object",
-            "properties": {
-              "class": {
-                "type": "string"
-              },
-              "value": {
-                "type": "integer"
-              }
-            }
-          },
-          "current": {
-            "type": "boolean"
-          }
-        },
-        "xml": {
-          "name": "dungeon_floor"
-        }
-      }
     }
-  }
 }

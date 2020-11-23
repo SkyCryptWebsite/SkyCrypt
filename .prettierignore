@@ -1,0 +1,7 @@
+# This file is formatted just like a .gitignore, and tells prettier which files not to reformat.
+
+public/resourcepacks
+*.min.js
+*.bundle.js
+*.bundle.css
+public/resources/js/modernizr.js

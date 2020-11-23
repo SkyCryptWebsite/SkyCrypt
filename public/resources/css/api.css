@@ -1,13 +1,13 @@
-*{
+* {
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
 }
 
-html{
+html {
     background-color: black;
     background: no-repeat center center fixed;
     background-size: cover;
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
     color: white;
     overflow-x: hidden;
 }

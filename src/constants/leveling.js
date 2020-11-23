@@ -60,7 +60,7 @@ module.exports = {
         57: 6100000,
         58: 6400000,
         59: 6700000,
-        60: 7000000
+        60: 7000000,
     },
 
     default_skill_caps: {
@@ -73,11 +73,11 @@ module.exports = {
         alchemy: 50,
         taming: 50,
         carpentry: 50,
-        runecrafting: 25
+        runecrafting: 25,
     },
 
     maxed_skill_caps: {
-        farming: 60
+        farming: 60,
     },
 
     // XP required for each level of Runecrafting
@@ -106,7 +106,7 @@ module.exports = {
         22: 9800,
         23: 12200,
         24: 15300,
-        25: 19050
+        25: 19050,
     },
 
     dungeoneering_xp: {
@@ -159,7 +159,7 @@ module.exports = {
         47: 60000000,
         48: 75000000,
         49: 93000000,
-        50: 116250000
+        50: 116250000,
     },
 
     guild_xp: [
@@ -177,7 +177,7 @@ module.exports = {
         2500000,
         2500000,
         2500000,
-        3000000
+        3000000,
     ],
 
     // total XP required for level of Slayer
@@ -191,7 +191,7 @@ module.exports = {
             6: 20000,
             7: 100000,
             8: 400000,
-            9: 1000000
+            9: 1000000,
         },
         spider: {
             1: 5,
@@ -202,7 +202,7 @@ module.exports = {
             6: 20000,
             7: 100000,
             8: 400000,
-            9: 1000000
+            9: 1000000,
         },
         wolf: {
             1: 10,
@@ -213,14 +213,14 @@ module.exports = {
             6: 20000,
             7: 100000,
             8: 400000,
-            9: 1000000
-        }
+            9: 1000000,
+        },
     },
 
     slayer_boss_xp: {
         1: 5,
         2: 25,
         3: 100,
-        4: 500
-    }
+        4: 500,
+    },
 };

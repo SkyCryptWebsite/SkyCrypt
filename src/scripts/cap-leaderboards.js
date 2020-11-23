@@ -1,25 +1,23 @@
-const cluster = require('cluster');
+const cluster = require("cluster");
 
-async function main(){
-    const constants = require('./../constants');
+async function main() {
+    const constants = require("./../constants");
 
     const Redis = require("ioredis");
     const redisClient = new Redis();
 
     const lbLimit = 100000;
 
-    async function capLeaderboards(){
-        const keys = await redisClient.keys('lb_*');
+    async function capLeaderboards() {
+        const keys = await redisClient.keys("lb_*");
 
         const multi = redisClient.pipeline();
 
-        for(const key of keys){
+        for (const key of keys) {
             const lb = constants.leaderboard(key);
 
-            if(lb.sortedBy < 0)
-                redisClient.zremrangebyrank(key, 0, -lbLimit);
-            else
-                redisClient.zremrangebyrank(key, lbLimit, -1);
+            if (lb.sortedBy < 0) redisClient.zremrangebyrank(key, 0, -lbLimit);
+            else redisClient.zremrangebyrank(key, lbLimit, -1);
         }
 
         await multi.exec();
@@ -31,5 +29,4 @@ async function main(){
     capLeaderboards();
 }
 
-if(cluster.isMaster)
-    main();
+if (cluster.isMaster) main();

@@ -78,6 +78,6 @@ module.exports = {
         ENDER_STONE: "endstone",
         ENCHANTED_ENDSTONE: "endstone",
         HOT_POTATO_BOOK: "hpb",
-        RABBIT_FOOT: 'rabbit'
-    }
+        RABBIT_FOOT: "rabbit",
+    },
 };
