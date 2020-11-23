@@ -1,3 +1,6 @@
+// const helper = require('./../helper');
+// const loreGenerator = require('./../loreGenerator.js');
+
 function round(num, decimals) {
 	return Math.round(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
 }
@@ -10,7 +13,8 @@ function formatStat(stat, ability_damage = false) {
 	let statFloored = Math.floor(stat);
 	if (statFloored > 0 && !ability_damage)
 		return `§a+${statFloored}`;
-	else return `§a${statFloored}`;
+	else 
+		return `§a${statFloored}`;
 }
 
 const symbols = {
@@ -91,8 +95,15 @@ class Pet {
 		return list;
 	}
 
-	modifyStats(stats)
-	{
+	modifyStats(stats) {
+		// no-op
+	}
+
+	modifyWeapon(weapon, name) {
+		// no-op
+	}
+
+	modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
 		// no-op
 	}
 }
@@ -144,6 +155,13 @@ class Bee extends Pet { // todo: finish hive
 			name: "§6Weaponized Honey",
 			desc: [`§7Gain §a${round(5 + this.level * mult, 1)}% §7of recieved damage as §6${symbols.health} Absorption`]
 		};
+	}
+
+	modifyStats(stats) {
+		let intMult = this.rarity > 3 ? 0.19 : this.rarity > 2 ? 0.14 : this.rarity > 1 ? 0.09 : this.rarity > 0 ? 0.4 : 0.02;
+		let strMult = this.rarity > 3 ? 0.14 : this.rarity > 2 ? 0.11 : this.rarity > 1 ? 0.07 : this.rarity > 0 ? 0.4 : 0.02;
+		stats['strength'] += round(this.level * strMult + 1, 1);
+		stats['intelligence'] += round(this.level * intMult + 1, 1);
 	}
 }
 
@@ -206,7 +224,7 @@ class Elephant extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.2 : 0.1;
+		let mult = this.rarity > 2 ? 0.2 : this.rarity > 0 ? 0.15 : 0.1;
 		return {
 			name: "§6Stomp",
 			desc: [`§7Gain §a${round(this.level * mult, 1)} ${symbols.defense} Defense §7for every §f100 ${symbols.speed} Speed`]
@@ -228,6 +246,15 @@ class Elephant extends Pet {
 			desc: [`§7Grants a §a${round(this.level * mult, 1)}% §7chance to get double crops while farming`]
 		};
 	}
+
+	modifyStats(stats) {
+		let fmult = this.rarity > 2 ? 0.2 : this.rarity > 0 ? 0.15 : 0.1;
+		stats['defense'] += round(this.level * fmult * stats['speed'] / 100, 1);
+		if (this.rarity > 1) {
+			let mult = 0.01;
+			stats['health'] += round(this.level * mult * stats['defense'] / 10, 1);
+		}
+	}
 }
 
 class Pig extends Pet {
@@ -242,7 +269,7 @@ class Pig extends Pet {
 		if (this.rarity > 1)
 			list.push(this.third);
 		if (this.rarity > 3)
-      		list.push(this.fourth);
+			list.push(this.fourth);
 		return list;
 	}
 
@@ -268,15 +295,15 @@ class Pig extends Pet {
 			name: "§6Sprint",
 			desc: [`§7While holding an Enchanted Carrot on a Stick, increase the speed of your mount by §a${round(this.level * mult, 1)}%`]
 		};
-  }
+	}
 
-  get fourth() {
-    let mult = 0;
+	get fourth() {
+		let mult = 0;
 		return {
 			name: "§6Trample",
 			desc: [`§7While on your private island, break all crops your pig rides over`]
 		};
-  }
+	}
 }
 
 class Rabbit extends Pet {
@@ -514,6 +541,11 @@ class Silverfish extends Pet {
 			desc: [`§7Gives permanent haste III`]
 		};
 	}
+
+	modifyStats(stats) {
+		let mult = this.rarity > 2 ? 0.15 : this.rarity > 0 ? 0.1 : 0.05;
+		stats['true defense'] += floor(this.level * mult, 1);
+	}
 }
 
 class WitherSkeleton extends Pet {
@@ -607,6 +639,12 @@ class BlackCat extends Pet {
 			desc: [`§7Grants §b${floor(this.level * mult, 1)} ${symbols.magic_find} Magic Find`]
 		};
 	}
+
+	modifyStats(stats) {
+		let mult = 0.15;
+		stats['pet luck'] += floor(this.level * mult, 1);
+		stats['magic find'] += floor(this.level * mult, 1);
+	}
 }
 
 class Blaze extends Pet {
@@ -648,6 +686,46 @@ class Blaze extends Pet {
 			name: "§6Fusion-Style Potato",
 			desc: [`§7Doubles effects of hot potato books`]
 		};
+	}
+
+	modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
+		let mult = (1 + round(this.level * (this.rarity > 2 ? 0.4 : 0.3), 1) / 100);
+		if (hName.includes("BLAZE_HELMET")) {
+			if (helmet.hpbs > 0) {
+				helmet.stats.defense += 2 * helmet.hpbs;
+				helmet.stats.health += 4 * helmet.hpbs;
+				helmet.hpbs *= 2;
+			}
+			for (const stat in helmet.stats)
+				helmet.stats[stat] = round(helmet.stats[stat] * mult, 1);
+		}
+		if (cName.includes("BLAZE")) {
+			if (chest.hpbs > 0) {
+				chest.stats.defense += 2 * chest.hpbs;
+				chest.stats.health += 4 * chest.hpbs;
+				chest.hpbs *= 2;
+			}
+			for (const stat in chest.stats)
+				chest.stats[stat] = round(chest.stats[stat] * mult, 1);
+		}
+		if (lName.includes("BLAZE")) {
+			if (legs.hpbs > 0) {
+				legs.stats.defense += 2 * legs.hpbs;
+				legs.stats.health += 4 * legs.hpbs;
+				legs.hpbs *= 2;
+			}
+			for (const stat in legs.stats)
+				legs.stats[stat] = round(legs.stats[stat] * mult, 1);
+		}
+		if (bName.includes("BLAZE")) {
+			if (boots.hpbs > 0) {
+				boots.stats.defense += 2 * boots.hpbs;
+				boots.stats.health += 4 * boots.hpbs;
+				boots.hpbs *= 2;
+			}
+			for (const stat in boots.stats)
+				boots.stats[stat] = round(boots.stats[stat] * mult, 1);
+		}
 	}
 }
 
@@ -694,11 +772,18 @@ class EnderDragon extends Pet {
 	}
 
 	modifyStats(stats) {
-		if (this.level > 3) {
+		if (this.rarity > 3) {
 			let mult = 0.1;
 			for (const stat in stats) {
 				stats[stat] *= 1 + round(this.level * mult, 1) / 100;
 			}
+		}
+	}
+
+	modifyWeapon(weapon, name) {
+		if (name == "ASPECT_OF_THE_DRAGON") {
+			weapon.stats['damage'] += round(this.level * 0.5, 1);
+			weapon.stats['strength'] += round(this.level * 0.3, 1);
 		}
 	}
 }
@@ -875,7 +960,7 @@ class Griffin extends Pet {
 	}
 
 	get fourth() {
-		return  {
+		return {
 			name: "§6King of Kings",
 			desc: [`§7Gain §c+${round(1 + (this.level * 0.14), 1)}% §c❁ Strength §7when above §c85% §7health.`]
 		}
@@ -1007,6 +1092,13 @@ class Hound extends Pet {
 			desc: [`§7Grants ${round(this.level * mult, 1)}	§e${symbols.attack_speed} Bonus Attack Speed`]
 		};
 	}
+
+	modifyStats(stats) {
+		if (this.rarity > 3) {
+			let mult = 0.1;
+			stats['attack speed'] += round(this.level * mult, 1);
+		}
+	}
 }
 
 class MagmaCube extends Pet {
@@ -1049,6 +1141,28 @@ class MagmaCube extends Pet {
 			name: "§6Hot Ember",
 			desc: [`§7Buffs the stats of Ember Armor by ${round(this.level * mult, 1)}%`]
 		};
+	}
+
+	modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
+		if (this.rarity <= 3)
+			return;
+		let mult = (1 + round(this.level, 1) / 100);
+		if (hName.includes("EMBER")) {
+			for (const stat in helmet.stats)
+				helmet.stats[stat] = round(helmet.stats[stat] * mult, 1);
+		}
+		if (cName.includes("EMBER")) {
+			for (const stat in chest.stats)
+				chest.stats[stat] = round(chest.stats[stat] * mult, 1);
+		}
+		if (lName.includes("EMBER")) {
+			for (const stat in legs.stats)
+				legs.stats[stat] = round(legs.stats[stat] * mult, 1);
+		}
+		if (bName.includes("EMBER")) {
+			for (const stat in boots.stats)
+				boots.stats[stat] = round(boots.stats[stat] * mult, 1);
+		}
 	}
 }
 
@@ -1319,8 +1433,8 @@ class Spider extends Pet {
 class Spirit extends Pet {
 	get stats() {
 		return {
-      intelligence: this.level * 1,
-      speed: this.level * 0.29
+			intelligence: this.level * 1,
+			speed: this.level * 0.29
 		};
 	}
 
@@ -1443,6 +1557,11 @@ class Tiger extends Pet {
 			desc: [`§7Deal ${round(this.level * mult, 1)}% damage against targets with no other mobs within 15 blocks`]
 		};
 	}
+
+	modifyStats(stats) {
+		let mult = this.rarity > 2 ? 1 : this.rarity > 0 ? 0.5 : 0.2;
+		stats.ferocity += round(this.level * mult, 1);
+	}
 }
 
 class Turtle extends Pet {
@@ -1463,7 +1582,7 @@ class Turtle extends Pet {
 	}
 
 	get first() {
-		let mult = 0.20;
+		let mult = 0.2;
 		return {
 			name: "§6Turtle Tactics",
 			desc: [`§7Gain §a+${round(this.level * mult, 1)}% ${symbols.defense} Defense`]
@@ -1485,6 +1604,11 @@ class Turtle extends Pet {
 			name: "§6Unflippable",
 			desc: [`§7Gain §aimmunity §7to knockback`]
 		};
+	}
+
+	modifyStats(stats) {
+		let mult = 0.2;
+		stats['defense'] *= round(this.level * mult, 1) / 100;
 	}
 }
 
@@ -1571,6 +1695,23 @@ class Zombie extends Pet {
 			name: "§6Living Dead",
 			desc: [`§7Increases the defense of all undead armor sets by §a${round(this.level * mult, 1)}%`]
 		};
+	}
+
+	modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
+		if (this.rarity > 3) {
+			if (hName.includes("ZOMBIE")) {
+				helmet.stats.defense += round(this.level * mult, 1);
+			}
+			if (cName.includes("ZOMBIE")) {
+				chest.stats.defense += round(this.level * mult, 1);
+			}
+			if (lName.includes("ZOMBIE")) {
+				legs.stats.defense += round(this.level * mult, 1);
+			}
+			if (bName.includes("ZOMBIE")) {
+				boots.stats.defense += round(this.level * mult, 1);
+			}
+		}
 	}
 }
 
@@ -1842,6 +1983,18 @@ class BlueWhale extends Pet {
 			desc: [`§7Gain §c+${round(this.level * mult, 1)}% Max ${symbols.health} Health`]
 		};
 	}
+
+	modifyStats(stats) {
+		if (this.rarity > 1) {
+			let mult = 0.03;
+			let health = this.rarity > 3 ? 20 : this.rarity > 2 ? 25 : 30;
+			stats['defense'] += round(this.level * mult * stats['health'] / health, 1);
+		}
+		if (this.rarity > 3) {
+			let mult = 0.2;
+			stats['health'] *= 1 + round(this.level * mult / 100, 1);
+		}
+	}
 }
 
 class Dolphin extends Pet {
@@ -1885,6 +2038,13 @@ class Dolphin extends Pet {
 			desc: [`§7Stun sea creatures for §a5s §7after fishing them up`]
 		};
 	}
+
+	modifyStats(stats) {
+		if (rarity > 1) {
+			let mult = this.rarity > 2 ? 0.1 : 0.07;
+			stats['sea creature chance'] *= 1 + round(this.level * mult / 100, 1);
+		}
+	}
 }
 
 class FlyingFish extends Pet {
@@ -1927,9 +2087,31 @@ class FlyingFish extends Pet {
 			desc: [`§7Increases the stats of Diver Armor by §a${round(this.level * mult, 1)}%`]
 		};
 	}
+
+	modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
+		if (this.rarity > 3) {
+			let mult = (1 + round(this.level * 0.3, 1) / 100);
+			if (hName.includes("DIVERS")) {
+				for (const stat in helmet.stats)
+					helmet.stats[stat] = round(helmet.stats[stat] * mult, 1);
+			}
+			if (cName.includes("DIVERS")) {
+				for (const stat in chest.stats)
+					chest.stats[stat] = round(chest.stats[stat] * mult, 1);
+			}
+			if (lName.includes("DIVERS")) {
+				for (const stat in legs.stats)
+					legs.stats[stat] = round(legs.stats[stat] * mult, 1);
+			}
+			if (bName.includes("DIVERS")) {
+				for (const stat in boots.stats)
+					boots.stats[stat] = round(boots.stats[stat] * mult, 1);
+			}
+		}
+	}
 }
 
-class Megalodon extends Pet{
+class Megalodon extends Pet {
 	get stats() {
 		return {
 			strength: this.level * 0.5,
@@ -1950,7 +2132,7 @@ class Megalodon extends Pet{
 		let mult = 0.25;
 		return {
 			name: "§6Blood Scent",
-			desc: [`§7Deal up to §c+${round(mult*this.level,1)}% ${symbols.strength} §7Damage based on the enemy's missing health`]
+			desc: [`§7Deal up to §c+${round(mult * this.level, 1)}% ${symbols.strength} §7Damage based on the enemy's missing health`]
 		};
 	}
 
@@ -1958,7 +2140,7 @@ class Megalodon extends Pet{
 		let mult = 0.2;
 		return {
 			name: "§6Enhanced scales",
-			desc: [`§7Increases the stats of Shark Armor by §a${round(mult*this.level,1)}%`]
+			desc: [`§7Increases the stats of Shark Armor by §a${round(mult * this.level, 1)}%`]
 		};
 	}
 
@@ -1966,8 +2148,30 @@ class Megalodon extends Pet{
 		let mult = 0.5;
 		return {
 			name: "§6Feeding frenzy",
-			desc: [`§7On kill gain §c${round(mult*this.level,1)}${symbols.strength} Damage §7and §f${symbols.speed} Speed §7for 5 seconds`]
+			desc: [`§7On kill gain §c${round(mult * this.level, 1)}${symbols.strength} Damage §7and §f${symbols.speed} Speed §7for 5 seconds`]
 		};
+	}
+
+	modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
+		if (this.rarity > 1) {
+			let mult = (1 + round(this.level * 0.2, 1) / 100);
+			if (hName.includes("SHARK")) {
+				for (const stat in helmet.stats)
+					helmet.stats[stat] = round(helmet.stats[stat] * mult, 1);
+			}
+			if (cName.includes("SHARK")) {
+				for (const stat in chest.stats)
+					chest.stats[stat] = round(chest.stats[stat] * mult, 1);
+			}
+			if (lName.includes("SHARK")) {
+				for (const stat in legs.stats)
+					legs.stats[stat] = round(legs.stats[stat] * mult, 1);
+			}
+			if (bName.includes("SHARK")) {
+				for (const stat in boots.stats)
+					boots.stats[stat] = round(boots.stats[stat] * mult, 1);
+			}
+		}
 	}
 }
 
