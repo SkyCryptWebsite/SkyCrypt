@@ -97,56 +97,57 @@ async function main(){
         if(patreonEntry != null)
             output.donations = { patreon: patreonEntry.amount || 0 };
 
-        if (page == 'api') return output;
+        if (page === 'index') {
 
-        output.favorites = [];
-        for(let i = 0; i < favorites.length && i < constants.max_favorites; i++){
-            let favorite = favorites[i];
-            if(favorite && favorite.length == 32){
-                const cache = await db
-                .collection('favoriteCache')
-                .find( { uuid: favorite } )
-                .toArray();
-
-                if(cache[0]) {
-                    output.favorites[i] = cache[0];
-                } else {
-                    let output_cache = {
-                        uuid: favorite
-                    };
-                    
-                    const user = await db
-                    .collection('usernames')
+            output.favorites = [];
+            for(let i = 0; i < favorites.length && i < constants.max_favorites; i++){
+                let favorite = favorites[i];
+                if(favorite && favorite.length == 32){
+                    const cache = await db
+                    .collection('favoriteCache')
                     .find( { uuid: favorite } )
                     .toArray();
-    
-                    if(user[0]) {
-                        output_cache = user[0];
-    
-                        let profiles = await db
-                        .collection('profileStore')
+
+                    if(cache[0]) {
+                        output.favorites[i] = cache[0];
+                    } else {
+                        let output_cache = {
+                            uuid: favorite
+                        };
+                        
+                        const user = await db
+                        .collection('usernames')
                         .find( { uuid: favorite } )
                         .toArray();
-    
-                        if(profiles[0]) {
-                            const profile = profiles[0];
-                            output_cache.last_updated = profile.last_save;
-                        }else output_cache.error = "Profile doesn't exist.";
-                    }else output_cache.error = "User doesn't exist.";
-                    
-                    await db.collection('favoriteCache').insertOne(output_cache);
-                    output.favorites[i] = output_cache;
+        
+                        if(user[0]) {
+                            output_cache = user[0];
+        
+                            let profiles = await db
+                            .collection('profileStore')
+                            .find( { uuid: favorite } )
+                            .toArray();
+        
+                            if(profiles[0]) {
+                                const profile = profiles[0];
+                                output_cache.last_updated = profile.last_save;
+                            }else output_cache.error = "Profile doesn't exist.";
+                        }else output_cache.error = "User doesn't exist.";
+                        
+                        await db.collection('favoriteCache').insertOne(output_cache);
+                        output.favorites[i] = output_cache;
+                    }
                 }
             }
+
+            output.devs = await db
+                .collection('topViews')
+                .find()
+                .sort({ position: 1 })
+                .toArray();
+        } else if (page === 'stats') {
+            output.favoriteUUIDs = favorites;
         }
-
-        if (page != 'index') return output;
-
-        output.devs = await db
-            .collection('topViews')
-            .find()
-            .sort({ position: 1 })
-            .toArray();
 
         return output;
     }
