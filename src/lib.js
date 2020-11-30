@@ -32,6 +32,7 @@ const redisClient = new Redis();
 
 const customResources = require('./custom-resources');
 const { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } = require('constants');
+const loreGenerator = require('./loreGenerator');
 const randomEmoji = require('./constants/randomEmoji');
 
 const parseNbt = util.promisify(nbt.parse);
@@ -41,6 +42,7 @@ const rarity_order = ['special', 'mythic', 'legendary', 'epic', 'rare', 'uncommo
 const petTiers = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic'];
 
 const MAX_SOULS = 209;
+let TALISMAN_COUNT;
 
 function replaceAll(target, search, replacement){
     return target.split(search).join(replacement);
@@ -569,6 +571,15 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             if(item.type == 'hatccessory')
                 item.type = 'accessory';
 
+            if(item.type == 'accessory')
+                item.equipmentType = 'accessory';
+            else if (item.type == 'helmet' || item.type == 'chestplate' || item.type == 'leggings' || item.type == 'boots')
+                item.equipmentType = 'armor';
+            else if (item.type == 'sword' || item.type == 'bow' || item.type == 'fishing weapon' || item.type == 'fishing rod')
+                item.equipmentType = 'weapon';
+            else
+                item.equipmentType = 'none';
+
             if(item.type != null && item.type.startsWith('dungeon'))
                 item.Damage = 0;
             
@@ -581,8 +592,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             item.stats = {};
 
             // Get item stats from lore
-            lore.forEach(line => {
-                let split = line.split(":");
+            // we need to use lore_raw so we can get the hpbs (since what part is hpbs depend on color)
+            lore_raw.forEach(line => {
+                let split = helper.getRawLore(line).split(":");
 
                 if(split.length < 2)
                     return;
@@ -592,9 +604,23 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
                 switch(statType){
                     case 'Damage':
+                        if(item.equipmentType == 'weapon'){
+                            const matches = line.match(/§e\(\+(\d+)\)/);
+                            if (matches)
+                                item.hpbs = parseFloat(matches[1]) / 2;
+                            else
+                                item.hpbs = 0;
+                        }
                         item.stats.damage = statValue;
                         break;
                     case 'Health':
+                        if(item.equipmentType == 'armor'){
+                            const matches = line.match(/§e\(\+(\d+) HP\)/);
+                            if (matches)
+                                item.hpbs = parseFloat(matches[1]) / 4;
+                            else
+                                item.hpbs = 0;
+                        }
                         item.stats.health = statValue;
                         break;
                     case 'Defense':
@@ -979,7 +1005,8 @@ module.exports = {
                     talisman.isUnique = false;
                     talisman.isInactive = true;
                 }
-                talisman_ids.splice(talisman_ids.indexOf(id), 1, "CAMPFIRE_TALISMAN_");
+
+                talisman_ids.splice(talisman_ids.indexOf(id), 1, `CAMPFIRE_TALISMAN_${maxTier}`);
             }
 
             if(id.startsWith("WEDDING_RING_")){
@@ -991,7 +1018,8 @@ module.exports = {
                     talisman.isUnique = false;
                     talisman.isInactive = true;
                 }
-                talisman_ids.splice(talisman_ids.indexOf(id), 1, "WEDDING_RING_");
+
+                talisman_ids.splice(talisman_ids.indexOf(id), 1, `WEDDING_RING_${maxTier}`);
             }
 
             if(id in constants.talisman_upgrades){
@@ -1413,7 +1441,11 @@ module.exports = {
             output.slayers = Object.assign({}, slayers);
         }
 
-        output.missingTalismans = await module.exports.getMissingTalismans(items.talisman_ids);
+        if(!items.no_inventory){
+            output.missingTalismans = await module.exports.getMissingTalismans(items.talisman_ids);
+            output.talismanCount = await module.exports.getTalismanCount();
+        }
+
         output.pets = await module.exports.getPets(userProfile);
         output.missingPets = await module.exports.getMissingPets(output.pets);
         output.petScore = await module.exports.getPetScore(output.pets);
@@ -1454,6 +1486,19 @@ module.exports = {
         // Apply stats from pets
         for(const stat in output.pet_bonus)
             output.stats[stat] += output.pet_bonus[stat];
+
+        // Apply pet bonus to armor
+        if(activePet && Date.now() - userProfile.last_save >= 7 * 60 * 1 /* change to 1000 - its one for testing; 7 minutes*/) {
+            // We know they are not online so apply pets to armor
+            activePet.ref.modifyArmor(items.armor[3], getId(items.armor[3]), 
+                                      items.armor[2], getId(items.armor[2]), 
+                                      items.armor[1], getId(items.armor[1]), 
+                                      items.armor[0], getId(items.armor[0]));
+            loreGenerator.makeLore(items.armor[0]);
+            loreGenerator.makeLore(items.armor[1]);
+            loreGenerator.makeLore(items.armor[2]);
+            loreGenerator.makeLore(items.armor[3]);
+        }
 
         // Apply Lapis Armor full set bonus of +60 HP
         if(items.armor.filter(a => getId(a).startsWith('LAPIS_ARMOR_')).length == 4)
@@ -1550,8 +1595,13 @@ module.exports = {
 
         output.weapon_stats = {};
 
-        for(const item of items.weapons.concat(items.rods)){
+        for(const item of [/*{itemId:"NONE",stats:{}}*/].concat(items.weapons).concat(items.rods)){
             let stats = Object.assign({}, output.stats);
+
+            // Modify weapon based on pet
+            // if (activePet)
+            //     activePet.ref.modifyWeapon(item, getId(item));
+            // apparently we don't actually need this
 
             // Apply held weapon stats
             for(let stat in item.stats){
@@ -1567,10 +1617,15 @@ module.exports = {
                 for(const stat in stats)
                     stats[stat] *= 1.05;
 
+            // Apply Renowened bonus (whoever made this please comment)
             for(let i = 0; i < items.armor.filter(a => helper.getPath(a, 'tag', 'ExtraAttributes', 'modifier') == 'renowned').length; i++){
                 for(const stat in stats)
                     stats[stat] *= 1.01;
             }
+
+            // Modify stats based off of pet ability
+            if (activePet)
+                activePet.ref.modifyStats(stats);
 
             if(items.armor.filter(a => getId(a).startsWith('CHEAP_TUXEDO_')).length == 3)
                 stats['health'] = 75;
@@ -1607,6 +1662,7 @@ module.exports = {
             }
         }
 
+        // Same thing as Superior armor but for Renowned armor
         const renownedBonus = Object.assign({}, constants.stat_template);
 
         for(const item of items.armor){
@@ -1628,8 +1684,8 @@ module.exports = {
             }
         }
 
-        // Modify stats based off of pet ability
-        if (activePet) // hacky, ik; someone who is smarter than me fix this in the js correct way
+         // Modify stats based off of pet ability (because this one is for when you don't have armor)
+         if (activePet)
             activePet.ref.modifyStats(output.stats);
 
         // Stats shouldn't go into negative
@@ -1964,8 +2020,14 @@ module.exports = {
 
             pet.texture_path = petData.head;
 
+            let petSkin = null;
+
+            if (pet.skin && constants.pet_skins?.[pet.type]?.[pet.skin]) {
+                pet.texture_path = constants.pet_skins[pet.type][pet.skin].head;
+                petSkin = constants.pet_skins[pet.type][pet.skin].name;
+            }
             let lore = [
-                `§8${helper.capitalizeFirstLetter(petData.type)} Pet`,
+                `§8${helper.capitalizeFirstLetter(petData.type)} Pet${petSkin ? `, ${petSkin} Skin` : ''}`,
             ];
 
             lore.push('');
@@ -2186,6 +2248,16 @@ module.exports = {
 
     getMissingTalismans: async talismans => {
         let unique = Object.keys(constants.talismans);
+        unique.forEach(name => {
+            if(name in constants.talisman_duplicates){
+                for(let duplicate of constants.talisman_duplicates[name]){
+                    if(talismans.includes(duplicate)){
+                        talismans[talismans.indexOf(duplicate)] = name;
+                        break;
+                    }
+                }
+            }
+        });
 
         let missing = unique.filter(talisman => !talismans.includes(talisman));
         missing.forEach(name => {
@@ -2202,38 +2274,13 @@ module.exports = {
         const output = [];
         missing.forEach(async talisman => {
             let object = {
-                texture_path: null,
                 display_name: null,
-                rarity: null
+                rarity: null,
+                texture_path: null
             }
 
-            // SPECIFIC TALISMANS
-            if(talisman.startsWith("WEDDING_RING_")){
-                object.texture_path = "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c"
-                object.display_name = "Ring of Love"
-                object.rarity = "legendary"
-
-                output.push(object);
-                return;
-            }
-            
-            if(talisman.startsWith("CAMPFIRE_TALISMAN_")){
-                object.texture_path = "/head/4080bbefca87dc0f36536b6508425cfc4b95ba6e8f5e6a46ff9e9cb488a9ed"
-                object.display_name = "Campfire God Badge"
-                object.rarity = "legendary"
-
-                output.push(object);
-                return;
-            }
-
-            if(talisman.startsWith("BEASTMASTER_CREST_")){
-                object.texture_path = "/head/53415667de3fb89c5f40c880c39e4971a0caa7f3a9d2c8f712ba37fadcee"
-                object.display_name = "Beastmaster Crest"
-                object.rarity = "legendary"
-
-                output.push(object);
-                return;
-            }
+            if(object.name == null)
+                object.name = talisman;
 
             // MAIN TALISMANS
             if (constants.talismans[talisman] != null){
@@ -2248,20 +2295,30 @@ module.exports = {
                     .findOne({ id: talisman });
 
                 if(data){
-                    object.texture_path = data.texture ? "/head/" + data.texture : `/item/${talisman}`;
+                    object.texture_path = data.texture ? `/head/${data.texture}` : `/item/${talisman}`;
                     object.display_name = data.name;
                     object.rarity = data.tier.toLowerCase();
                 }
-            }
-
-            if(object.name == null){
-                object.name = talisman;
             }
 
             output.push(object);
         });
 
         return output;
+    },
+
+    getTalismanCount: () => {
+        if(TALISMAN_COUNT != null) return TALISMAN_COUNT;
+        let talismanArray = Object.keys(constants.talismans);
+
+        for(const talisman in constants.talisman_upgrades){
+            if(talismanArray.includes(talisman)){
+                talismanArray = talismanArray.filter(name => name !== talisman);
+            }
+        }
+
+        TALISMAN_COUNT = talismanArray.length;
+        return talismanArray.length;
     },
 
     getCollections: async (uuid, profile, cacheOnly = false) => {

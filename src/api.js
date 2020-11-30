@@ -39,7 +39,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/profiles', cors(), async (req, res) => {
         try{
-            const { allProfiles } = await lib.getProfile(db, req.params.player);
+            const { allProfiles } = await lib.getProfile(db, req.params.player, null, { cacheOnly: true });
 
             const profiles = [];
 
@@ -69,7 +69,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/pets', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
             const userProfile = profile.members[uuid];
 
             const pets = await lib.getPets(userProfile);
@@ -100,7 +100,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/minions', cors(), async (req, res) => {
         try{
-            const { profile } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
 
             const minions = [];
 
@@ -136,7 +136,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/accessories', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
             const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
@@ -163,7 +163,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/collections', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
             const userProfile = profile.members[uuid];
 
             const collections = await lib.getCollections(uuid, profile);
@@ -242,7 +242,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/cakebag', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
             const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
@@ -296,7 +296,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/weapons', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
             const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
@@ -348,7 +348,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/armor', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
             const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
@@ -400,7 +400,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/wardrobe', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
             const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);

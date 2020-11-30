@@ -123,7 +123,9 @@ module.exports = {
         'Thunderlord 6',
         'Thunderlord VI',
         'Lethality 6',
-        'Lethality VI'
+        'Lethality VI',
+        'Compact 10',
+        'Compact X'
     ],
 
     // Number of kills required for each level of expertise
@@ -189,7 +191,8 @@ module.exports = {
         1: 100,
         2: 2000,
         3: 10000,
-        4: 50000
+        4: 50000,
+        5: 100000
     },
 
     mob_mounts: {
