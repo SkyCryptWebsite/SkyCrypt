@@ -3870,7 +3870,12 @@ body {
     .race-containers,
     .floor-containers {
         scroll-snap-type: x mandatory;
-    }  
+    }
+    
+    .slayer-containers > *,
+    .race-containers > * {
+        scroll-snap-stop: always;
+    } 
 }
 
 @media (max-width: 400px){
