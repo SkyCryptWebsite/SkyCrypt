@@ -14,7 +14,8 @@
     <body>
         <%- include('../includes/header') %>
 
-        <div id="wrapper" data-sticky-container>
+        <div id="bg_blur_center"></div>
+        <div id="wrapper_center" data-sticky-container>
             <% if(!leaderboard.success){ %>
 
             <% }else{ %>
@@ -34,6 +35,7 @@
     </body>
 
     <script>
+        const extra = <%= extra %>;
         const leaderboard = <%= leaderboard %>;
     </script>
 </html>

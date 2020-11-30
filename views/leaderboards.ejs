@@ -14,9 +14,13 @@
     <body>
         <%- include('../includes/header') %>
 
-        <div id="wrapper" data-sticky-container>
+        <div id="bg_blur_center"></div>
+        <div id="wrapper_center" data-sticky-container>
+            <%
+                const lbs = leaderboards.leaderboards;
+            %>
             <table>
-                <% for(let lb of leaderboards){ %>
+                <% for(let lb of lbs.auctions){ %>
                     <tr>
                        <td><a href="../leaderboard/<%= lb.key %>"><%= lb.name %></a></td>
                     </tr>
@@ -28,6 +32,7 @@
     </body>
 
     <script>
+        const extra = <%= extra %>;
         const leaderboards = <%= leaderboards %>;
     </script>
 </html>

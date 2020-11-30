@@ -1,12 +1,15 @@
 const collections = require('./collections');
+const misc = require('./misc');
 const leveling = require('./leveling');
 const moment = require('moment');
+const _ = require('lodash');
 require('moment-duration-format')(moment);
 
 const defaultOptions = {
     mappedBy: 'uuid',
     sortedBy: -1,
-    format: x => Number(x)
+    format: x => Number(x),
+    category: 'misc'
 };
 
 const raceFormat = x => {
@@ -51,13 +54,21 @@ const overrides = {
 
     unique_minions: {
         mappedBy: 'profile_id'
+    },
+
+    'player_kills_k/d': {
+        name: 'Player K/D'
+    },
+
+    average_level: {
+        category: 'skill'
     }
 };
 
 const titleCase = string => {
-   let split = string.toLowerCase().split(' ');
+    let split = string.toLowerCase().split(' ');
 
-   for(let i = 0; i < split.length; i++)
+    for(let i = 0; i < split.length; i++)
         split[i] = split[i].charAt(0).toUpperCase() + split[i].substring(1);
 
     return split.join(' ');
@@ -72,10 +83,19 @@ module.exports = {
         options['key'] = lbName;
         options['name'] = titleCase(lbName.split("_").join(" "));
 
+        // Categories
+        const categories = ["kills", "deaths", "auctions", "collection", "dungeons", "skill", "slayer"];
+        categories.forEach(category => {
+            if(lbName.includes(category))
+                options['category'] = category;
+        });
+
+        // Override names
         if(overrides.hasOwnProperty(lbName))
             for(const key in overrides[lbName])
                 options[key] = overrides[lbName][key];
 
+        // Other specifications
         if(lbName.startsWith('collection_')){
             const collectionName = lbName.split("_").slice(1).join("_").toUpperCase();
             const collectionData = collections.collection_data.filter(a => a.skyblockId == collectionName);
@@ -87,6 +107,7 @@ module.exports = {
         if(lbName.includes('_best_time') || lbName.includes('_fastest_time')){
             options['sortedBy'] = 1;
             options['format'] = raceFormat;
+            options['category'] = 'races';
         }
 
         if(lbName.startsWith('skill_')){
@@ -101,11 +122,8 @@ module.exports = {
             else options['format'] = skillFormat;
         }
 
-        if(lbName.startsWith('dungeons_') && lbName.includes('_xp')) {
-            const skill = lbName.split("_").slice(1).join("_");
-            if(skill.includes('catacombs') || skill.includes('class'))
-                options['format'] = skillFormatDungeoneering;
-        }
+        if(lbName.startsWith('dungeons_') && lbName.includes('_xp'))
+            options['format'] = skillFormatDungeoneering;
 
         if(lbName.includes('_slayer_boss_kills_')){
             const tier = Number(lbName.split("_").pop()) + 1;
@@ -115,7 +133,15 @@ module.exports = {
             else if(lbName.startsWith('spider_slayer'))
                 options['name'] = `Kills Tarantula Broodfather Tier ${tier}`;
             else if(lbName.startsWith('wolf_slayer'))
-                options['name'] = `Kills Sven Packmaster Tier ${tier}`;;
+                options['name'] = `Kills Sven Packmaster Tier ${tier}`;
+        }
+
+        if(lbName.startsWith('kills_') || lbName.startsWith('deaths_')){
+            const type = _.capitalize(lbName.split('_')[0]);
+            const mobName = lbName.split('_').slice(1).join('_');
+
+            if(Object.keys(misc.mob_names).includes(mobName))
+                options['name'] = `${misc.mob_names[mobName]} ${type}`;
         }
 
         return options;

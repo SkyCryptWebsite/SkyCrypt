@@ -55,7 +55,7 @@ module.exports = (app, db) => {
     });
 
     app.all('/api/v2/leaderboards', cors(), async (req, res) => {
-        res.json(await lib.getLeaderboards());
+        res.json(await lib.getLeaderboards({ categorized: req.query.categorized || false }));
     });
 
     app.all('/api/v2/leaderboard/:lbName', cors(), async (req, res) => {

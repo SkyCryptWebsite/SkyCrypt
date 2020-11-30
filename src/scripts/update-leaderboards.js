@@ -63,9 +63,9 @@ async function main(){
         }); 
 
         await db
-        .collection('leaderboards')
-        .insertMany(leaderboards)
-        .catch(console.error);
+            .collection('leaderboards')
+            .insertMany(leaderboards)
+            .catch(console.error);
 
         console.log(`Updated list of leaderboards!`);
         setTimeout(updateLeaderboards, 1000 * 60 * 30);

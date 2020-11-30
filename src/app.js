@@ -365,7 +365,7 @@ Disallow: /item /head /leather /resources
     });
 
     app.all('/leaderboards', async (req, res, next) => {
-        res.render('leaderboards', { extra: await getExtra('leaderboards'), leaderboards: await lib.getLeaderboards(), helper, page: 'leaderboards' });
+        res.render('leaderboards', { extra: await getExtra('leaderboards'), leaderboards: await lib.getLeaderboards({categorized: true}), helper, page: 'leaderboards' });
     });
 
     app.all('/leaderboard/:name', async (req, res, next) => {

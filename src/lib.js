@@ -2910,8 +2910,12 @@ module.exports = {
             values[`${slayer}_slayer_xp`] = getMax(memberProfiles, 'data', 'slayer_bosses', slayer, 'xp');
         }
 
-        for(const item of getAllKeys(memberProfiles, 'data', 'collection'))
-            values[`collection_${item.toLowerCase()}`] = getMax(memberProfiles, 'data', 'collection', item);
+        for(const item of getAllKeys(memberProfiles, 'data', 'collection')){
+            const collectionData = collections.collection_data.filter(a => a.skyblockId == item);
+
+            if(collectionData.length > 0)
+                values[`collection_${item.toLowerCase()}`] = getMax(memberProfiles, 'data', 'collection', item);
+        }
 
         for(const stat of getAllKeys(memberProfiles, 'data', 'stats'))
             values[stat] = getMax(memberProfiles, 'data', 'stats', stat);
@@ -2974,16 +2978,28 @@ module.exports = {
         }
     },
 
-    getLeaderboards: async () => {
-        const leaderboards = [];
-        const lbs = await db.collection('leaderboards').find({}, {'mappedBy': 1, 'sortedBy': 1, 'key': 1, 'name': 1}).toArray();
+    getLeaderboards: async (options = { categorized: false }) => {
+        const leaderboards = options.categorized ? {} : [];
+        const lbs = await db.collection('leaderboards').find({}).toArray();
 
+        let lb_count = 0;
         lbs.forEach(lb => {
             delete lb._id;
-            leaderboards.push(lb);
+            lb_count++;
+            if(options.categorized){
+                if(!leaderboards[lb.category])
+                    leaderboards[lb.category] = [];
+                leaderboards[lb.category].push(lb);
+            }else leaderboards.push(lb);
         });
 
-        return leaderboards;
+        output = {
+            count: lb_count,
+            categorized: options.categorized,
+            leaderboards: leaderboards
+        }
+
+        return output;
     },
 
     getLeaderboard: async (lbName, lbPage = 1, userCount = 20, findUser = null) => {

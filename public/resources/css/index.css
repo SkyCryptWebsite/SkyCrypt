@@ -574,6 +574,41 @@ header > *{
     overflow-x: hidden;
 }
 
+#bg_blur_center{
+    background: var(--bg_blur-webp) no-repeat center center fixed;
+    background-size: cover;
+    position: fixed;
+    left: 15vw;
+    top: 35px;
+    right: 15vw;
+    bottom: 0;
+    background-color: rgb(20,20,20);
+}
+
+#wrapper_center{
+    position: absolute;
+    left: 15vw;
+    top: 45px;
+    right: 15vw;
+    padding-bottom: 30px;
+    min-height: 100%;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+     user-select: none;
+    -webkit-backdrop-filter: blur(16px) brightness(0.5);
+    backdrop-filter: blur(16px) brightness(0.5);
+}
+
+#wrapper_center > * {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 #base_stats_container {
     grid-area: base;
 }
