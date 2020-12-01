@@ -11,7 +11,7 @@ function floor(num, decimals) {
 
 function formatStat(stat, ability_damage = false) {
 	let statFloored = Math.floor(stat);
-	if (statFloored > 0 && !ability_damage)
+	if (statFloored > 0)
 		return `§a+${statFloored}`;
 	else 
 		return `§a${statFloored}`;
