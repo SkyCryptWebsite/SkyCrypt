@@ -93,10 +93,15 @@ module.exports = {
         ],
         PERSONAL_COMPACTOR_4000: [
             'PERSONAL_COMPACTOR_5000',
-            'PERSONAL_COMPACTOR_6000'
+            'PERSONAL_COMPACTOR_6000',
+            'PERSONAL_COMPACTOR_7000'
         ],
         PERSONAL_COMPACTOR_5000: [
-            'PERSONAL_COMPACTOR_6000'
+            'PERSONAL_COMPACTOR_6000',
+            'PERSONAL_COMPACTOR_7000'
+        ],
+        PERSONAL_COMPACTOR_6000: [
+            'PERSONAL_COMPACTOR_7000'
         ],
         SCARF_STUDIES: [
             'SCARF_THESIS',
@@ -418,6 +423,7 @@ module.exports = {
         'HUNTER_RING': null,
         'PARTY_HAT_CRAB': null,
         'POTATO_TALISMAN': null,
+        'EMERALD_RING': null,
         'PERSONAL_COMPACTOR_4000': {
             name: "Personal Compactor 4000",
             rarity: "uncommon",
@@ -432,6 +438,11 @@ module.exports = {
             name: "Personal Compactor 6000",
             rarity: "epic",
             texture: "/item/PERSONAL_COMPACTOR_6000"
+        },
+        'PERSONAL_COMPACTOR_7000': {
+            name: "Personal Compactor 7000",
+            rarity: "legendary",
+            texture: "/item/PERSONAL_COMPACTOR_7000"
         },
         'SPEED_TALISMAN': {
             name: "Speed Talisman",
