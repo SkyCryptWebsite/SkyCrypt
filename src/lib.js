@@ -167,7 +167,7 @@ function getLevelByXp(xp, extra = {}){
     let maxLevel = 1;
 
     if(extra.cap)
-        levelCap = extra.cap; 
+        levelCap = extra.cap;
 
     if(extra.skill){
         if(constants.default_skill_caps[extra.skill]
@@ -355,16 +355,16 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
     // Check backpack contents and add them to the list of items
     for(const [index, item] of items.entries()){
-        if(helper.hasPath(item, 'tag', 'display', 'Name') && 
-        (item.tag.display.Name.endsWith('Backpack') 
-        || item.tag.display.Name.endsWith('New Year Cake Bag') 
-        || item.tag.display.Name.endsWith("Builder's Wand") 
+        if(helper.hasPath(item, 'tag', 'display', 'Name') &&
+        (item.tag.display.Name.endsWith('Backpack')
+        || item.tag.display.Name.endsWith('New Year Cake Bag')
+        || item.tag.display.Name.endsWith("Builder's Wand")
         || item.tag.display.Name.endsWith('Basket of Seeds'))){
             let backpackData;
 
             for(const key of Object.keys(item.tag.ExtraAttributes))
-                if(key.endsWith('backpack_data') 
-                || key == 'new_year_cake_bag_data' 
+                if(key.endsWith('backpack_data')
+                || key == 'new_year_cake_bag_data'
                 || key == "builder's_wand_data"
                 || key == 'basket_of_seeds_data')
                     backpackData = item.tag.ExtraAttributes[key];
@@ -513,7 +513,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
                 itemLore.push(`§7By: §c<a href="/stats/${spawnedFor}">${spawnedForUser.display_name}</a>`);
             }
- 
+
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'baseStatBoostPercentage')){
                 const boost = item.tag.ExtraAttributes.baseStatBoostPercentage;
 
@@ -554,7 +554,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             if(rarity_type.length > 1)
                 item_type = rarity_type[1].trim();
 
-            let loreRarity = rarity.toLowerCase(); 
+            let loreRarity = rarity.toLowerCase();
             let colorRarity = loreRarity;
 
             if(rarity_type_color in constants.rarity_colors)
@@ -564,7 +564,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
             if(loreRarity != colorRarity)
                 item.localized = true;
-            
+
             if(item_type)
                 item.type = item_type.toLowerCase();
 
@@ -582,7 +582,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
             if(item.type != null && item.type.startsWith('dungeon'))
                 item.Damage = 0;
-            
+
             // fix custom maps texture
             if(item.id == 358){
                 item.id = 395;
@@ -1057,7 +1057,7 @@ module.exports = {
             }
         }
 
-        
+
         for(const talisman of talismans){
             talisman.base_name = talisman.display_name;
 
@@ -1467,7 +1467,7 @@ module.exports = {
         for(const pet of output.pets){
             if(!pet.active)
                 continue;
-            
+
             activePet = pet;
             for(const stat in pet.stats)
                 output.pet_bonus[stat] = (output.pet_bonus[stat] || 0) + pet.stats[stat];
@@ -1490,9 +1490,9 @@ module.exports = {
         // Apply pet bonus to armor
         if(activePet && Date.now() - userProfile.last_save >= 7 * 60 * 1 /* change to 1000 - its one for testing; 7 minutes*/) {
             // We know they are not online so apply pets to armor
-            activePet.ref.modifyArmor(items.armor[3], getId(items.armor[3]), 
-                                      items.armor[2], getId(items.armor[2]), 
-                                      items.armor[1], getId(items.armor[1]), 
+            activePet.ref.modifyArmor(items.armor[3], getId(items.armor[3]),
+                                      items.armor[2], getId(items.armor[2]),
+                                      items.armor[1], getId(items.armor[1]),
                                       items.armor[0], getId(items.armor[0]));
             loreGenerator.makeLore(items.armor[0]);
             loreGenerator.makeLore(items.armor[1]);
@@ -1778,7 +1778,7 @@ module.exports = {
 
             if('emoji' in userInfo)
                 output.display_emoji = userInfo.emoji;
-            
+
             if('emojiImg' in userInfo)
                 output.display_emoji_img = userInfo.emojiImg;
             if (userInfo.username == "jjww2") {
@@ -1868,9 +1868,9 @@ module.exports = {
             misc.claimed_items = hypixelProfile.claimed_items;
 
         const burrows = [
-            "mythos_burrows_dug_next", 
-            "mythos_burrows_dug_combat", 
-            "mythos_burrows_dug_treasure", 
+            "mythos_burrows_dug_next",
+            "mythos_burrows_dug_combat",
+            "mythos_burrows_dug_treasure",
             "mythos_burrows_chains_complete"
         ];
 
@@ -1880,11 +1880,11 @@ module.exports = {
         const chains_complete = {};
 
         for(const key of burrows)
-            if(key in userProfile.stats) 
+            if(key in userProfile.stats)
                 misc.burrows[key.replace("mythos_burrows_", "")] = { total: userProfile.stats[key] };
 
         misc.profile_upgrades = await module.exports.getProfileUpgrades(profile);
-        
+
         const auctions_buy = ["auctions_bids", "auctions_highest_bid", "auctions_won", "auctions_gold_spent"];
         const auctions_sell = ["auctions_fees", "auctions_gold_earned"];
 
@@ -2113,7 +2113,7 @@ module.exports = {
                 stats.forEach(line => {
                     lore.push(line);
                 });
-                
+
                 const abilities = pet.ref.abilities;
                 abilities.forEach(ability => {
                     lore.push(' ', ability.name);
@@ -2397,7 +2397,7 @@ module.exports = {
         let output = {};
 
         const dungeons = userProfile.dungeons;
-        if (dungeons == null 
+        if (dungeons == null
             || Object.keys(dungeons).length === 0) return output;
 
         const dungeons_data = constants.dungeons;
@@ -2409,7 +2409,7 @@ module.exports = {
             const dungeon = dungeons.dungeon_types[type];
             if (dungeon == null || Object.keys(dungeon).length === 0) {
                 output[type] = { visited: false };
-                continue;   
+                continue;
             };
 
             let floors = {};
@@ -2425,14 +2425,14 @@ module.exports = {
 
                     let id = `${type}_${floor}`; // Floor ID
                     if(dungeons_data.floors[id]){
-                        if(dungeons_data.floors[id].name) 
+                        if(dungeons_data.floors[id].name)
                             floors[floor].name = dungeons_data.floors[id].name;
-                        if(dungeons_data.floors[id].texture) 
+                        if(dungeons_data.floors[id].texture)
                             floors[floor].icon_texture = dungeons_data.floors[id].texture;
                     }
-                    
+
                     if(key.startsWith("most_damage")){
-                        if(!floors[floor].most_damage || dungeon[key][floor] > floors[floor].most_damage.value) 
+                        if(!floors[floor].most_damage || dungeon[key][floor] > floors[floor].most_damage.value)
                             floors[floor].most_damage = {
                                 class: key.replace("most_damage_", ""),
                                 value: dungeon[key][floor]
@@ -2448,8 +2448,8 @@ module.exports = {
                 id: dungeon_id,
                 visited: true,
                 level: getLevelByXp(dungeon.experience, {type: "dungeoneering"}),
-                highest_floor: 
-                    dungeons_data.floors[`${type}_${highest_floor}`] && dungeons_data.floors[`${type}_${highest_floor}`].name 
+                highest_floor:
+                    dungeons_data.floors[`${type}_${highest_floor}`] && dungeons_data.floors[`${type}_${highest_floor}`].name
                     ? dungeons_data.floors[`${type}_${highest_floor}`].name : `floor_${highest_floor}`,
                 floors: floors
             }
@@ -2469,7 +2469,7 @@ module.exports = {
 
             if (data.experience > 0)
                 used_classes = true;
-            if(className == current_class) 
+            if(className == current_class)
                 output.classes[className].current = true;
         }
 
@@ -2490,7 +2490,7 @@ module.exports = {
             if (!Object.keys(collection_data).includes(floor_id)) continue;
 
             let data = output.catacombs.floors[i];
-            if (data.stats.tier_completions == null || data.stats.tier_completions <= 0) continue; 
+            if (data.stats.tier_completions == null || data.stats.tier_completions <= 0) continue;
 
             let coll = collection_data[floor_id];
             let boss = boss_data[coll.boss];
@@ -2535,7 +2535,7 @@ module.exports = {
             collections[boss.floor].unclaimed--;
         }
 
-        if (Object.keys(collections).length === 0) 
+        if (Object.keys(collections).length === 0)
             output.unlocked_collections = false;
         else output.unlocked_collections = true;
 
@@ -2561,7 +2561,7 @@ module.exports = {
 
             journals.pages_collected += entry.pages_collected;
             if(entry.total_pages != null)
-                if(entry.pages_collected >= entry.total_pages) 
+                if(entry.pages_collected >= entry.total_pages)
                     journals.journals_completed++;
 
             journals.journal_entries.push(entry);
@@ -2570,7 +2570,7 @@ module.exports = {
         for(entry_id in journal_constants)
             journals.total_pages += journal_constants[entry_id].pages || 0;
 
-        if(journals.pages_collected >= journals.total_pages) 
+        if(journals.pages_collected >= journals.total_pages)
             journals.maxed = true;
 
         output.journals = journals;
@@ -2784,7 +2784,7 @@ module.exports = {
 
                 if(helper.hasPath(_profile, 'banking'))
                     insertCache.banking = _profile.banking;
-                
+
                 if(helper.hasPath(_profile, 'community_upgrades'))
                     insertCache.community_upgrades = _profile.community_upgrades;
 
