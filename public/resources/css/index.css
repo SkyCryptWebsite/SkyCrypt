@@ -24,11 +24,11 @@
     --gold-hex: #FDBB3C;
 
     /* Header Logo */
-    --logo-square: url(https://sky.shiiyu.moe/resources/img/logo_square.png?v2);
+    --logo-square: url(/resources/img/logo_square.svg);
 
     /* Normal Backgrounds */
-    --bg-png: url(https://sky.shiiyu.moe/resources/img/bg.png?v3); 
-    --bg-webp: url(https://sky.shiiyu.moe/resources/img/bg.webp?v3);
+    --bg-png: url(/resources/img/bg.png?v3); 
+    --bg-webp: url(/resources/img/bg.webp?v3);
 
     /* Blurred Backgrounds */
     --bg_blur-webp: url(https://sky.shiiyu.moe/resources/img/bg_blur.webp?v3);

@@ -45,7 +45,7 @@
     <% for(const theme in extra.themes){
         if(extra.themes[theme].hidden) continue; %>
     <div class="theme">
-        <% let icon = extra.themes[theme].logo.replace("../", "https://sky.shiiyu.moe/resources/"); %>
+        <% let icon = extra.themes[theme].logo.replace("../", "/resources/"); %>
         <img class="theme-icon" src="<%= icon %>">
         <span class="theme-name"><%= extra.themes[theme].name %></span>
         <div class="theme-author">by <span><%= extra.themes[theme].author %></span></div>
