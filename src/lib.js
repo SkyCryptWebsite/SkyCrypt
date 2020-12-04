@@ -1257,14 +1257,14 @@ module.exports = {
                 combat: getLevelByXp(userProfile.experience_skill_combat || 0, {skill: "combat"}),
                 foraging: getLevelByXp(userProfile.experience_skill_foraging || 0, {skill: "foraging"}),
                 fishing: getLevelByXp(userProfile.experience_skill_fishing || 0, {skill: "fishing"}),
-                enchanting: getLevelByXp(userProfile.experience_skill_enchanting || 0, {skill: "enchanting"}),
+                enchanting: getLevelByXp(userProfile.experience_skill_enchanting || 0, {skill: "enchanting", cap: hypixelProfile.achievements.skyblock_augmentation || 0}),
                 alchemy: getLevelByXp(userProfile.experience_skill_alchemy || 0, {skill: "alchemy"}),
                 carpentry: getLevelByXp(userProfile.experience_skill_carpentry || 0, {skill: "carpentry"}),
                 runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting || 0, {skill: "runecrafting", type: "runecrafting"}),
             };
 
             for(let skill in skillLevels){
-                if(skill != 'runecrafting' && skill != 'carpentry'){
+                if(skill != 'runecrafting' && skill != 'carpentry' && skill != 'social'){
                     average_level += skillLevels[skill].level + skillLevels[skill].progress;
                     average_level_no_progress += skillLevels[skill].level;
 
@@ -1316,7 +1316,7 @@ module.exports = {
 
         for(const skill of skillNames){
             if(output.levels[skill].xp == null){
-                output.levels[skill].rank = 100000;
+                output.levels[skill].rank = 0;
                 continue;
             }
 

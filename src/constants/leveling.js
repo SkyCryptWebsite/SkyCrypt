@@ -77,7 +77,8 @@ module.exports = {
     },
 
     maxed_skill_caps: {
-        farming: 60
+        farming: 60,
+        enchanting: 60
     },
 
     // XP required for each level of Runecrafting
