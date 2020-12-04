@@ -2030,7 +2030,12 @@ module.exports = {
             let loreFirstRow = [
                 '§8',
                 `${helper.capitalizeFirstLetter(petData.type)} `,
-                ['HORSE', 'SKELETON_HORSE'].indexOf(pet.type) === -1 ? 'Pet' : 'Mount',
+                [
+                    'HORSE',
+                    'SKELETON_HORSE',
+                    'PIG',
+                    'ROCK',
+                ].indexOf(pet.type) === -1 ? 'Pet' : 'Mount',
                 petSkin ? `, ${petSkin} Skin` : '',
             ]
 
