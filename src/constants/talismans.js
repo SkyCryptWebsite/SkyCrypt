@@ -423,7 +423,11 @@ module.exports = {
         'HUNTER_RING': null,
         'PARTY_HAT_CRAB': null,
         'POTATO_TALISMAN': null,
-        'EMERALD_RING': null,
+        'EMERALD_RING': {
+            name: "Emerald Ring",
+            rarity: "uncommon",
+            texture: "/head/f36b821c1afdd5a5d14e3b3bd0a32263c8df5df5db6e1e88bf65e97b27a8530"
+        },
         'PERSONAL_COMPACTOR_4000': {
             name: "Personal Compactor 4000",
             rarity: "uncommon",
