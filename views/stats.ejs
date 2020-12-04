@@ -805,6 +805,7 @@ const seaCreatures = [
     }
 ];
 
+const milestone_rarities = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
 const pet_milestones = {
     'sea_creatures_killed': [ 250, 1000, 2500, 5000, 10000],
     'ores_mined': [2500, 7500, 20000, 100000, 250000]
@@ -2406,15 +2407,32 @@ twitterDescription += '. Click to view more stats!'
                     <% if('milestones' in calculated.misc){ %>
                         <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/93c8aa3fde295fa9f9c27f734bdbab11d33a2e43e855accd7465352377413b)"></div></div><span>pet milestones</span></div>
                         <p class="stat-raw-values">
-                            <% for(const key in calculated.misc.milestones){ %>
-                                <%let percentage = {};%>
-                                <%for(let i = 0; i < pet_milestones[key].length; i++){%>
-                                    <%if(calculated.misc.milestones[key] < pet_milestones[key][i]){%>
-                                        <%percentage[key] = (calculated.misc.milestones[key]/pet_milestones[key][i]*100).toLocaleString().substring(0,5);%>
-                                         <% break; %>
-                                    <% } %>
-                                <% } %>
-                            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.milestones[key].toLocaleString();%> <% if(percentage[key]){%>(<%=percentage[key];%>% to next tier)<% } else { %><span class="golden-text">(Max tier)</span> <%}%></span><br>
+                            <% for(const key in calculated.misc.milestones){
+                                let progress = {
+                                    rarity: milestone_rarities[pet_milestones[key].length-1],
+                                    maxed: true
+                                };
+                                let tooltip = "";
+
+                                for(let i = 0; i < pet_milestones[key].length; i++){
+                                    if(calculated.misc.milestones[key] < pet_milestones[key][i]){
+                                        progress = {
+                                            percentage: Math.round(calculated.misc.milestones[key]/pet_milestones[key][i]*100),
+                                            rarity: milestone_rarities[i],
+                                            maxed: false
+                                        };
+                                        break;
+                                    }
+                                } 
+
+                                tooltip += `<span class="stat-name">Rarity: </span><span class="stat-value piece-${ progress.rarity }-fg">${ helper.capitalizeFirstLetter(progress.rarity) }</span><br><span class="stat-name">Progress: </span>`;
+                                if(progress.maxed)
+                                    tooltip += `<span class="stat-value golden-text">Maxed!</span>`;
+                                else 
+                                    tooltip += `<span class="stat-value">${ progress.percentage.toLocaleString() }%</span>`;
+                                %>
+                            <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>>
+                                <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.milestones[key].toLocaleString() %></span></span><br>
                             <% } %>
                         </p>
                     <% } %>
