@@ -79,7 +79,6 @@ module.exports = {
     },
 
     resolveUsernameOrUuid: async (uuid, db, cacheOnly = false) => {
-        let output;
         let user = null;
 
         uuid = uuid.replace(/\-/g, '');
@@ -101,7 +100,10 @@ module.exports = {
                     user = doc;
         }
 
-        let skin_data = { skinurl: 'https://textures.minecraft.net/texture/3b60a1f6d562f52aaebbf1434f1de147933a3affe0e764fa49ea057536623cd3', model: 'slim' };
+        let skin_data = { 
+            skinurl: 'https://textures.minecraft.net/texture/3b60a1f6d562f52aaebbf1434f1de147933a3affe0e764fa49ea057536623cd3', 
+            model: 'slim' 
+        };
 
         if(user && module.exports.hasPath(user, 'skinurl')){
             skin_data.skinurl = user.skinurl;
@@ -111,7 +113,7 @@ module.exports = {
                 skin_data.capeurl = user.capeurl;
         }
 
-        if(cacheOnly === false && (user === null || (+new Date() - user.date) > 4000 * 1000)){
+        if(cacheOnly === false && (user === null || (+new Date() - user.date) > 7200 * 1000)){
             let profileRequest = axios(`https://api.ashcon.app/mojang/v1/user/${uuid}`, { timeout: 5000 });
 
             profileRequest.then(async response => {
@@ -126,8 +128,6 @@ module.exports = {
                     }
 
                     if(module.exports.hasPath(data.textures, 'skin')){
-                        const skin = data.textures.skin;
-
                         skin_data.skinurl = data.textures.skin.url;
                         skin_data.model = data.textures.slim ? 'slim' : 'regular';
                     }
@@ -227,7 +227,7 @@ module.exports = {
             .collection('guilds')
             .findOne({ gid: guildMember.gid });
 
-        if(cacheOnly || (guildMember !== null && guildMember.gid !== null && (guildObject === null || (Date.now() - guildMember.last_updated) < 3600 * 1000))){
+        if(cacheOnly || (guildMember !== null && guildMember.gid !== null && (guildObject === null || (Date.now() - guildMember.last_updated) < 7200 * 1000))){
             if(guildMember.gid !== null){
                 const guildObject = await db
                 .collection('guilds')
@@ -245,7 +245,7 @@ module.exports = {
 
             return null;
         }else{
-            if(guildMember === null || (Date.now() - guildMember.last_updated) > 3600 * 1000){
+            if(guildMember === null || (Date.now() - guildMember.last_updated) > 7200 * 1000){
                 try{
                     const guildResponse = await Hypixel.get('guild', { params: { player: uuid, key: credentials.hypixel_api_key }});
 
@@ -561,7 +561,7 @@ module.exports = {
     },
 
     updateRank: async (uuid, db) => {
-        let rank = { rankText: null, rankColor: null, plusText: null, plusColor: null, socials: {}, achievements: {} };
+        let rank = { rankText: null, rankColor: null,plusText: null, plusColor: null,socials: {}, achievements: {}, claimed_items: {} };
 
         try{
             const response = await retry(async () => {
@@ -581,6 +581,19 @@ module.exports = {
 
             if(module.exports.hasPath(player, 'achievements'))
                 rank.achievements = player.achievements;
+
+            let claimable = {
+                "claimed_potato_talisman": "Potato Talisman",
+                "claimed_potato_basket": "Potato Basket",
+                "claim_potato_war_silver_medal": "Silver Medal (Potato War)",
+                "claim_potato_war_crown": "Crown (Potato War)",
+                "skyblock_free_cookie": "Free Booster Cookie",
+                "scorpius_bribe_96": "Scorpius Bribe (Year 96)"
+            };
+
+            for(item in claimable)
+                if(module.exports.hasPath(player, item)) 
+                    rank.claimed_items[claimable[item]] = player[item];
         }catch(e){
             console.error(e);
         }

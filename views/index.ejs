@@ -2,12 +2,11 @@
 <html lang="en">
 <head>
     <title>SkyCrypt</title>
-    <meta name="description" content="A beautiful site for sharing your SkyBlock profile 🌹">
-    <link rel="shortcut icon" href="/resources/img/logo_square.png?v2" type="image/png">
-    <link rel="icon" href="/favicon.ico?v2" type="image/x-icon">
-    <meta property="og:image" content="/resources/img/logo_square.png?v2">
+    <meta name="description" content="A beautiful site for sharing your SkyBlock profile 🍣">
+    <link rel="icon" href="/resources/img/logo_square.svg" sizes="any" type="image/svg+xml">
+    <meta property="og:image" content="/resources/img/logo_square.svg">
     <meta property="og:title" content="SkyBlock Stats">
-    <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🌹">
+    <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🍣">
 <%- include('../includes/resources') %>
     <style>
     @media (max-width: 480px){
@@ -43,46 +42,57 @@
         </div>
         <div id="error_box_wrapper" <% if(error){ %>class="show-error"<% } %>>
             <div id="error_box">
-                <div id="error_title">Error</div>
-                <div id="error_text">
-                    <%= error %><br>
-                    <% if(error && error.includes("Key throttle.")){ %>
-                        <small>This happens when the site reaches API limit.</small>
-                        <small>Please try again in a minute.</small>
+                <div id="error_top">
+                    <div id="error_title">Error</div>
+                    <div id="error_text">
+                        <%= error %><br>
+                    </div>
+                </div>
+                <div id="error_bottom">
+                    <% if(typeof error === 'string' && error.includes("Key throttle.")){ %>
+                    <div id="error_subtext">
+                        This happens when the site reaches the Hypixel API limit.<br>
+                        Please try again in a minute.
+                    </div>
                     <% } %>
-                </div>  
+                </div>
             </div>
         </div>
-        <% if('top_profiles' in extra){ %>
         <div id="top_profiles_box_wrapper">
-            <% for(const [index, profile] of extra.top_profiles.entries()){
-                const lastUpdated = profile.profileInfo.last_save;
-                let lastUpdatedText = "";
+            <% if(extra.favorites && !extra.favorites.error){ %>
+            <% let profile = extra.favorites
+            const lastUpdated = profile.last_updated;
+            let lastUpdatedText = "";
+            const diff = (+new Date() - lastUpdated) / 1000;
+            if(diff < 10 * 60)
+                lastUpdatedText = `<span class="stat-value">Currently online</span>`;
+            else
+                lastUpdatedText = `<span class="stat-name">Last online: </span><span class="stat-value">${moment(lastUpdated).fromNow()}</span>`;
+            %>
+            <a href="/stats/<%= profile.uuid %>" class="top-profile">
+                <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
+                <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
+                <div class="profile-last-online"><%- lastUpdatedText %></div>
+                <div class="profile-rank"><%- extra.twemoji.parse("★") %></div>
+            </a>
+            <% }else{ %>
+            <a class="top-profile">
+                <img src="/resources/img/icons/q.png" class="profile-avatar">
+                <div class="profile-name">No favorite set!</div><br>
+                <div class="profile-last-online">Why don't you set a favorite?</div>
+            </a>
+            <% } %>
 
-                const diff = (+new Date() - lastUpdated) / 1000;
-
-                if(diff < 10 * 60)
-                    lastUpdatedText = `<span class="stat-value">Currently online</span>`;
-                else
-                    lastUpdatedText = `<span class="stat-name">Last online: </span><span class="stat-value">${moment(lastUpdated).fromNow()}</span>`;
-
-                %>
+            <% for(const profile of extra.devs){ %>
+                <% let message = profile.username == "Shiiyu" ?  `<span class="stat-name">Last online: </span><span class="stat-value">January 1st, 1970</span>` : extra.twemoji.parse(profile.message)%>
                 <a href="/stats/<%= profile.uuid %>" class="top-profile">
                     <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
-                    <div class="profile-name"><%= profile.userInfo.username %><% if('emoji' in profile.userInfo){ %><%- extra.twemoji.parse(profile.userInfo.emoji) %><% } %></div><br>
-                    <div class="profile-last-online"><%- lastUpdatedText %></div>
-                    <% /*
-
-                    - Hide Views for now due to abuse -
-
-                    %>
-                    <div class="profile-views">Views: <%= helper.formatNumber(profile.total, true) %></div>
-                    <div class="profile-rank">#<%= index + 1 %></div>
-                    <% */ %>
+                    <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
+                    <div class="profile-last-online"><%- message %></div>
                 </a>
+
             <% } %>
         </div>
-        <% } %>
         <%- include('../includes/footer'); %>
         <script src="/resources/js/js.cookie.min.js"></script>
         <script>
@@ -90,10 +100,10 @@
                 console.log("An error occured with message: \"<%= error %>\"");
             <% } %>
 
-            let targetUsername = document.getElementById("inp_enter_username");
-            let searchUser = document.getElementById('search_user');
-            let inputSearchUser = document.getElementById('inp_search_user');
-            let btnSearchUser = document.getElementById('btn_search_user');
+            const targetUsername = document.getElementById("inp_enter_username");
+            const searchUser = document.getElementById('search_user');
+            const inputSearchUser = document.getElementById('inp_search_user');
+            const btnSearchUser = document.getElementById('btn_search_user');
 
             function updateUserTarget(e){
                 let playerName = targetUsername.value;
@@ -128,23 +138,31 @@
                         targetUsername.focus();
             });
 
-            window.addEventListener('scroll', function(){
-                if(window.scrollY > window.innerHeight * 0.5 && smallUserSearch === false){
+            window.addEventListener('scroll', checkSearchboxOverlap);
+            window.addEventListener('resize', checkSearchboxOverlap);
+            function checkSearchboxOverlap() {
+                if(targetUsername.getBoundingClientRect().bottom < 48 && smallUserSearch === false){
                     searchUser.classList.add('show-user-search');
                     smallUserSearch = true;
 
                     searchUser.setAttribute('tabindex', '0');
                     btnSearchUser.setAttribute('tabindex', '0');
 
-                    targetUsername.blur();
-                }else if(window.scrollY <= window.innerHeight * 0.5 && smallUserSearch){
+                    if(targetUsername === document.activeElement) {
+                        inputSearchUser.focus();
+                    }
+                } else if(targetUsername.getBoundingClientRect().top >= 48 && smallUserSearch){
                     searchUser.classList.remove('show-user-search');
                     smallUserSearch = false;
+
+                    targetUsername.value = inputSearchUser.value;
 
                     searchUser.setAttribute('tabindex', '-1');
                     btnSearchUser.setAttribute('tabindex', '-1');
 
-                    inputSearchUser.blur();
+                    if(inputSearchUser === document.activeElement) {
+                        targetUsername.focus();
+                    }
                 }
 
                 /*
@@ -200,7 +218,7 @@
                 }
 
                 */
-            });
+            }
         </script>
     </body>
 </html>

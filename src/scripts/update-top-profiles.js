@@ -10,35 +10,55 @@ async function main(){
 
     const db = mongo.db(credentials.dbName);
 
+    let featured = {
+        metalcupcake5: {
+            position: 1,
+            type: "DEV",
+            message: "a dev or something idk"
+        }, 
+        Shiiyu: {
+            position: 2,
+            type: "DEV",
+            message: ""
+        },
+        MartinNemi03: {
+            position: 3,
+            type: "DEV",
+            message: "\"lazy dev\" &nbsp; <b>(ﾉ´･ω･)ﾉ ﾐ ┸━┸</b>"
+        },
+        jjww2: {
+            position: 4,
+            type: "DEV",
+            message: "bob"
+        },
+        FantasmicGalaxy: {
+            position: 5,
+            type: "DEV",
+            message: ""
+        }
+    };
+
     async function updateTopProfiles(){
         await db.collection('topViews').deleteMany({});
 
-        for await(const doc of db.collection('viewsLeaderboard').aggregate([
-            {
-                "$lookup": {
-                    "from": "profileStore",
-                    "localField": "uuid",
-                    "foreignField": "uuid",
-                    "as": "profileInfo"
-                }
-            },
-            {
-                "$unwind": {
-                    "path": "$profileInfo"
-                }
-            },
-            {
-                "$limit": 20
-            }
-        ])){
-            await db.collection('topViews').updateOne(
-                { _id: doc._id },
-                { $set: doc },
-                { upsert: true }
-            )
-        }
+        for (name in featured) {
+            const user = await db
+            .collection('usernames')
+            .find( { username: name } )
+            .toArray();
 
-        setTimeout(updateTopProfiles, 60 * 1000);
+            if(!user[0]) continue;
+            let output = user[0];
+
+            for (data in featured[name]) 
+                output[data] = featured[name][data];
+
+            await db.collection('topViews').updateOne(
+                { _id: output._id },
+                { $set: output },
+                { upsert: true }
+            );
+        }
     }
 
     updateTopProfiles();

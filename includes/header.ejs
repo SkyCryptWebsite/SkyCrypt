@@ -10,11 +10,9 @@
     <div data-tippy-content="Supporting LGBTQ+ rights all around the year! ❤️<br><br>Click for a surprise. :)" class="pride-flag logo"></div>
     <a href="/" id="site_name">SkyCrypt</a>
     <div class="social-button" id="info_button" onclick="toggleInfo()">About</div>
-    <a href="/api" style="text-decoration: none;">
-        <div class="social-button" id="api_button">API</div>
-    </a>
+    <a href="/api" style="text-decoration: none;" class="social-button" id="api_button">API</a>
     <% if('donations' in extra){ %>
-        <a title="Patreon" target="_blank" rel="nofollow" href="https://patreon.com/shiiyu" class="social-button patreon"><%= extra.donations.patreon %> Patrons<div class="social-icon"></div></a>
+        <a title="Patreon" target="_blank" rel="nofollow" href="https://patreon.com/shiiyu" class="social-button patreon"><span><%= extra.donations.patreon %> Patrons</span><div class="social-icon"></div></a>
     <% } %>
     <div id="search_user"><input placeholder="Enter username" <% if(page == 'index'){ %>tabindex="-1"<% } %> type="text" id="inp_search_user"></input><a href="#" <% if(page == 'index'){ %>tabindex="-1"<% } %> id="btn_search_user"></a></div>
     <a href="https://blacklivesmatters.carrd.co/" target="_blank" rel="nofollow" data-tippy-content="<strong>Black Lives Matter!</strong><br><br>Click for a collection of links on how to support the fight against racial inequality." class="blm-logo"></a>
@@ -26,7 +24,7 @@
     <div id="info_box_content">
         <p>The SkyCrypt project is maintained by boblovespi, FantasmicGalaxy, MartinNemi03, metalcupcake5 and Shiiyu. It is an open-source project. </p>
         <p>You can report bugs, suggest features, or contribute to the code on <a class="link link-github" href="https://github.com/SkyCryptWebsite/SkyCrypt" target="_blank">GitHub</a>. It would be much appreciated!</p>
-        <p>Chat: <a class="link link-discord" href="https://discord.gg/Dk25bnB">discord.gg/Dk25bnB</a></p>
+        <p>Chat: <a class="link link-discord" href="https://discord.gg/cNgADv2kEQ">discord.gg/cNgADv2kEQ</a></p>
         <p>The original project, <a href="https://sky.lea.moe">sky.lea.moe</a>, was orginally created by <a class="link link-twitter" href="https://twitter.com/LeaPhant" target="_blank">LeaPhant</a>. Thanks for all of what you've done Lea!</p>
         <h4>Used Resources</h4>
         <ul>
@@ -44,16 +42,16 @@
 </div>
 <div id="themes_box" class="themes-closed">
     <div onclick="toggleThemes()" id="themes_close"></div>
-    <% for(const theme in extra.themes){ 
-        if(extra.themes[theme].hidden) continue; %> 
+    <% for(const theme in extra.themes){
+        if(extra.themes[theme].hidden) continue; %>
     <div class="theme">
-        <% let icon = extra.themes[theme].logo.replace("../", "https://sky.shiiyu.moe/resources/"); %>
+        <% let icon = extra.themes[theme].logo.replace("../", "/resources/"); %>
         <img class="theme-icon" src="<%= icon %>">
         <span class="theme-name"><%= extra.themes[theme].name %></span>
         <div class="theme-author">by <span><%= extra.themes[theme].author %></span></div>
         <div class="switch_themes_button" id="<%= theme %>-theme" onclick="switchTheme('<%= theme %>')">Switch</div>
     </div>
-    <% } %> 
+    <% } %>
 </div>
 <div id="packs_box" class="packs-closed">
     <div onclick="togglePacks()" id="packs_close"></div>
@@ -75,10 +73,14 @@
             <a class="pack-name" href="<%= pack.url %>" target="_blank"><%= pack.name %></a><br>
             <div class="pack-author">by <span><%= pack.author %></span></div>
             <% if(page == 'stats'){ %>
-                <% if(req.cookies.pack == pack.id){ %>
-                    <div class="selected_button">In Use</div>
+                <% if(pack.id == "SKYBLOCK_PACK"){ %>
+                    <div class="selected_button" title="Disabled due to unknown issues." disabled>Disabled</div>
                 <% } else { %>
-                    <div class="switch_packs_button" onclick="switchPack('<%= pack.id %>')">Switch</div>
+                    <% if(req.cookies.pack == pack.id){ %>
+                        <div class="selected_button">In Use</div>
+                    <% } else { %>
+                        <div class="switch_packs_button" onclick="switchPack('<%= pack.id %>')">Switch</div>
+                    <% } %>
                 <% } %>
             <% } %>
         </div>

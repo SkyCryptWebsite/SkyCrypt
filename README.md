@@ -5,8 +5,7 @@ The SkyCrypt Project, which is based on LeaPhant's [sky.lea.moe](https://sky.lea
 
 **Website**: https://sky.shiiyu.moe
 
-![Node.JS CI](https://github.com/SkyCryptWebsite/SkyCrypt/workflows/Node.js%20CI/badge.svg) 
-![Docker Image CI](https://github.com/SkyCryptWebsite/SkyCrypt/workflows/Docker%20Image%20CI/badge.svg) 
+![Node.JS CI](https://github.com/SkyCryptWebsite/SkyCrypt/workflows/Node.js%20CI/badge.svg)  
 <h2 align="center">Screenshot</h1>
 
 <p align="center"><img src="https://i.imgur.com/aa7HCev.png"></p>
@@ -25,6 +24,7 @@ You are free to report bugs or contribute to this project. Just open <a href="..
 
 
 <h3>Installation</h3>
+A more explanatory guide can be found in <a href="/CONTRIBUTING.md">CONTRIBUTING.md</a>
 
 Clone the project and and run `npm i` to install the dependencies.
 
