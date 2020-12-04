@@ -2477,13 +2477,15 @@ twitterDescription += '. Click to view more stats!'
     </div>
     <%- include('../includes/footer'); %>
     <script>
-        let items = <%- JSON.stringify(items) %>;
-        let calculated = <%- JSON.stringify(calculated) %>;
-
-        const constants = { 
-            minecraft_formatting: <%- JSON.stringify(constants.minecraft_formatting) %>, 
-            special_enchants: <%- JSON.stringify(constants.special_enchants) %> 
-        };
+        let items = JSON.parse(`<%- JSON.stringify(items).replace(/\\/g, '\\\\') %>`);
+        let calculated = JSON.parse(`<%- JSON.stringify(calculated).replace(/\\/g, '\\\\') %>`);
+        <%
+            const clientConstants = { 
+                minecraft_formatting: constants.minecraft_formatting, 
+                special_enchants: constants.special_enchants 
+            }
+        %>
+        const constants = JSON.parse(`<%- JSON.stringify(clientConstants).replace(/\\/g, '\\\\') %>`);
     </script>
 </body>
 </html>
