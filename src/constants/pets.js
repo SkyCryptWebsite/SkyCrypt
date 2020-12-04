@@ -273,7 +273,7 @@ module.exports = {
         },
         "GUARDIAN": {
             head: "/head/221025434045bda7025b3e514b316a4b770c6faa4ba9adb4be3809526db77f9d",
-            type: "combat",
+            type: "enchanting",
             emoji: "🐡"
         },
         "SQUID": {
