@@ -34,6 +34,7 @@ async function main(){
     const { MongoClient } = require('mongodb');
     const helper = require('./helper');
     const constants = require('./constants');
+    const manifest = require('../public/manifest.json');
     const { SitemapStream, streamToPromise } = require('sitemap');
     const { createGzip } = require('zlib');
     const twemoji = require('twemoji');
@@ -80,7 +81,49 @@ async function main(){
         return cookie?.split(',').filter(uuid => /^[0-9a-f]+$/.test(uuid)) || []
     }
 
-    async function getExtra(page = null, favorites = []){
+    async function getFavoritesFormUUIDs(uuids) {
+        favorites = [];
+        for(let i = 0; i < uuids.length && i < constants.max_favorites; i++){
+            let uuid = uuids[i];
+            if(uuid?.length == 32){
+                const cache = await db
+                .collection('favoriteCache')
+                .find( { uuid } )
+                .toArray();
+
+                if(cache[0]) {
+                    favorites[i] = cache[0];
+                } else {
+                    let output_cache = { uuid };
+                    
+                    const user = await db
+                    .collection('usernames')
+                    .find( { uuid } )
+                    .toArray();
+    
+                    if(user[0]) {
+                        output_cache = user[0];
+    
+                        let profiles = await db
+                        .collection('profileStore')
+                        .find( { uuid } )
+                        .toArray();
+    
+                        if(profiles[0]) {
+                            const profile = profiles[0];
+                            output_cache.last_updated = profile.last_save;
+                        }else output_cache.error = "Profile doesn't exist.";
+                    }else output_cache.error = "User doesn't exist.";
+                    
+                    await db.collection('favoriteCache').insertOne(output_cache);
+                    favorites[i] = output_cache;
+                }
+            }
+        }
+        return favorites;
+    }
+
+    async function getExtra(page = null, favoriteUUIDs = []){
         const output = {};
 
         output.twemoji = twemoji;
@@ -99,46 +142,7 @@ async function main(){
 
         if (page === 'index') {
 
-            output.favorites = [];
-            for(let i = 0; i < favorites.length && i < constants.max_favorites; i++){
-                let favorite = favorites[i];
-                if(favorite?.length == 32){
-                    const cache = await db
-                    .collection('favoriteCache')
-                    .find( { uuid: favorite } )
-                    .toArray();
-
-                    if(cache[0]) {
-                        output.favorites[i] = cache[0];
-                    } else {
-                        let output_cache = {
-                            uuid: favorite
-                        };
-                        
-                        const user = await db
-                        .collection('usernames')
-                        .find( { uuid: favorite } )
-                        .toArray();
-        
-                        if(user[0]) {
-                            output_cache = user[0];
-        
-                            let profiles = await db
-                            .collection('profileStore')
-                            .find( { uuid: favorite } )
-                            .toArray();
-        
-                            if(profiles[0]) {
-                                const profile = profiles[0];
-                                output_cache.last_updated = profile.last_save;
-                            }else output_cache.error = "Profile doesn't exist.";
-                        }else output_cache.error = "User doesn't exist.";
-                        
-                        await db.collection('favoriteCache').insertOne(output_cache);
-                        output.favorites[i] = output_cache;
-                    }
-                }
-            }
+            output.favorites = await getFavoritesFormUUIDs(favoriteUUIDs);
 
             output.devs = await db
                 .collection('topViews')
@@ -146,7 +150,7 @@ async function main(){
                 .sort({ position: 1 })
                 .toArray();
         } else if (page === 'stats') {
-            output.favoriteUUIDs = favorites;
+            output.favoriteUUIDs = favoriteUUIDs;
         }
 
         return output;
