@@ -2172,7 +2172,7 @@ module.exports = {
                     pet.lore += '<br>';
             }
 
-            pet.display_name = petName;
+            pet.display_name = `${petName}${petSkin ? ' ✦' : ''}`;
             pet.emoji = petData.emoji;
 
             output.push(pet);
