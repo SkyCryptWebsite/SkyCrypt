@@ -373,6 +373,20 @@ Disallow: /item /head /leather /resources
 
     app.all('/favicon.ico?v2', express.static(path.join(__dirname, 'public')));
 
+    app.all('/manifest.webmanifest', async (req, res) => {
+        const favorites = await getFavoritesFormUUIDs(parseFavorites(req.cookies.favorite))
+        const shortcuts = favorites.map(favorite => ({
+            url: `/stats/${favorite.uuid}`,
+            name: favorite.username,
+            icons: [48, 72, 96, 144, 192, 512].map(size => ({
+                src: `https://crafatar.com/avatars/${favorite.uuid}?size=${size}&overlay`,
+                sizes: `${size}x${size}`,
+                type: "image/png"
+            }))
+        }))
+        res.json(Object.assign({shortcuts}, manifest))
+    });
+
     app.all('/api', async (req, res, next) => {
         res.render('api', { error: null, player: null, extra: await getExtra('api'), helper, page: 'api' });
     });
