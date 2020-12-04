@@ -4,6 +4,7 @@
   "description": "A beautiful site for sharing your SkyBlock profile 🌹",
   "display": "standalone",
   "scope": "/",
+  "start_url": "/",
   "background_color": "#282828",
   "theme_color": "#282828",
   "icons": [
