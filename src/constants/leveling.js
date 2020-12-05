@@ -69,7 +69,7 @@ module.exports = {
         combat: 50,
         foraging: 50,
         fishing: 50,
-        enchanting: 50,
+        enchanting: 60,
         alchemy: 50,
         taming: 50,
         carpentry: 50,
@@ -77,8 +77,7 @@ module.exports = {
     },
 
     maxed_skill_caps: {
-        farming: 60,
-        enchanting: 60
+        farming: 60
     },
 
     // XP required for each level of Runecrafting
