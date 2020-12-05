@@ -76,7 +76,11 @@ async function main(){
     require('./apiv2')(app, db);
     require('./donations/kofi')(app, db);
 
-    async function getExtra(page = null, favorites = ""){
+    function parseFavorites(cookie) {
+        return cookie?.split(',').filter(uuid => /^[0-9a-f]+$/.test(uuid)) || []
+    }
+
+    async function getExtra(page = null, favorites = []){
         const output = {};
 
         output.twemoji = twemoji;
@@ -93,62 +97,56 @@ async function main(){
         if(patreonEntry != null)
             output.donations = { patreon: patreonEntry.amount || 0 };
 
-        if (page != 'index') return output;
+        if (page === 'index') {
 
-        output.devs = await db
-            .collection('topViews')
-            .find()
-            .sort({ position: 1 })
-            .toArray();
-
-        output.favorites = [];
-        if(typeof favorites === 'string') favorites = [favorites];
-        if(favorites.length < 0 || favorites.length > 5) {
-            output.favorites[0] = {
-                uuid: null,
-                error: "Illegal amount."
-            }
-            return output;
-        } else if(favorites.length == 0) return output;
-
-        for(let i = 0; i < favorites.length; i++){
-            let favorite = favorites[i];
-            if(favorite && favorite.length == 32){
-                const cache = await db
-                .collection('favoriteCache')
-                .find( { uuid: favorite } )
-                .toArray();
-
-                if(cache[0]) {
-                    output.favorites[i] = cache[0];
-                } else {
-                    let output_cache = {
-                        uuid: favorite
-                    };
-                    
-                    const user = await db
-                    .collection('usernames')
+            output.favorites = [];
+            for(let i = 0; i < favorites.length && i < constants.max_favorites; i++){
+                let favorite = favorites[i];
+                if(favorite?.length == 32){
+                    const cache = await db
+                    .collection('favoriteCache')
                     .find( { uuid: favorite } )
                     .toArray();
-    
-                    if(user[0]) {
-                        output_cache = user[0];
-    
-                        let profiles = await db
-                        .collection('profileStore')
+
+                    if(cache[0]) {
+                        output.favorites[i] = cache[0];
+                    } else {
+                        let output_cache = {
+                            uuid: favorite
+                        };
+                        
+                        const user = await db
+                        .collection('usernames')
                         .find( { uuid: favorite } )
                         .toArray();
-    
-                        if(profiles[0]) {
-                            const profile = profiles[0];
-                            output_cache.last_updated = profile.last_save;
-                        }else output_cache.error = "Profile doesn't exist.";
-                    }else output_cache.error = "User doesn't exist.";
-                    
-                    await db.collection('favoriteCache').insertOne(output_cache);
-                    output.favorites[i] = output_cache;
+        
+                        if(user[0]) {
+                            output_cache = user[0];
+        
+                            let profiles = await db
+                            .collection('profileStore')
+                            .find( { uuid: favorite } )
+                            .toArray();
+        
+                            if(profiles[0]) {
+                                const profile = profiles[0];
+                                output_cache.last_updated = profile.last_save;
+                            }else output_cache.error = "Profile doesn't exist.";
+                        }else output_cache.error = "User doesn't exist.";
+                        
+                        await db.collection('favoriteCache').insertOne(output_cache);
+                        output.favorites[i] = output_cache;
+                    }
                 }
             }
+
+            output.devs = await db
+                .collection('topViews')
+                .find()
+                .sort({ position: 1 })
+                .toArray();
+        } else if (page === 'stats') {
+            output.favoriteUUIDs = favorites;
         }
 
         return output;
@@ -161,23 +159,23 @@ async function main(){
         const cacheOnly = req.query.cache === 'true';
 
         const playerUsername = paramPlayer.length == 32 ? await helper.resolveUsernameOrUuid(paramPlayer, db).display_name : paramPlayer;
-
+        
+        const favorites = parseFavorites(req.cookies.favorite);
         try{
             const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, { updateArea: true, cacheOnly });
 
             const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack);
             const calculated = await lib.getStats(db, profile, allProfiles, items);
 
-            res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra('stats'), page: 'stats' });
+            res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), page: 'stats' });
         }catch(e){
             console.error(e);
 
-            const favorite = req.cookies.favorite || false;
             res.render('index', {
                 req,
                 error: e,
                 player: playerUsername,
-                extra: await getExtra('index', JSON.parse(favorite)),
+                extra: await getExtra('index', favorites),
                 helper,
                 page: 'index'
             });
@@ -380,8 +378,8 @@ Disallow: /item /head /leather /resources
     });
 
     app.all('/', async (req, res, next) => {
-        const favorite = req.cookies.favorite || null;
-        res.render('index', { error: null, player: null, extra: await getExtra('index', JSON.parse(favorite)), helper, page: 'index' });
+        const favorites = parseFavorites(req.cookies.favorite);
+        res.render('index', { error: null, player: null, extra: await getExtra('index', favorites), helper, page: 'index' });
     });
 
     app.all('*', async (req, res, next) => {

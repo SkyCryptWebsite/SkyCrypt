@@ -1352,7 +1352,8 @@ a.additional-player-stat:hover{
     background-repeat: no-repeat;
 }
 
-.additional-player-stat.external-icon:not(.external-discord){
+.additional-player-stat.external-icon:not(.external-discord),
+.additional-player-stat.svg-icon {
     width: 29px;
     padding: 0;
 }
@@ -1387,16 +1388,26 @@ a.additional-player-stat:hover{
     user-select: none !important;
 }
 
-.additional-player-stat.add-favorite::after{
-    background-image: url(../img/icons/star.png);
-    cursor: pointer;
-    user-select: none !important;
+.additional-player-stat.svg-icon {    
+    display: inline-grid;
+    place-items: center;
 }
 
-.additional-player-stat.remove-favorite::after{
-    background-image: url(../img/icons/star_gold.png);
+.additional-player-stat.svg-icon svg {
+    width:20px;
+    height:20px
+}
+
+.additional-player-stat.favorite{
     cursor: pointer;
-    user-select: none !important;
+}
+
+.additional-player-stat.favorite:not([aria-checked="true"]) .solid {
+    visibility: hidden;
+}
+
+.additional-player-stat.favorite[aria-checked="true"] .outline {
+    visibility: hidden;
 }
 
 .additional-player-stat.external-twitter::after{

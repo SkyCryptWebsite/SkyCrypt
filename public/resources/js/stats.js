@@ -915,105 +915,47 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
-    [].forEach.call(document.querySelectorAll('.add-favorite'), function(e){
-        let element = e;
+    function parseFavorites(cookie) {
+        return cookie?.split(',').filter(uuid => /^[0-9a-f]+$/.test(uuid)) || []
+    }
 
-        let notification = tippy(element, {
-            trigger: 'manual'
-        });
+    const favoriteElement = document.querySelector('.favorite');
 
-        element.addEventListener('click', async function(){
-            let uuid = element.getAttribute("data-username");
-            if(uuid == "0c0b857f415943248f772164bf76795c"){
-                notification.setContent("No");
-                notification.show();
+    function checkFavorite() {
+        const favorited = parseFavorites(getCookie("favorite")).includes(favoriteElement.getAttribute("data-username"));
+        favoriteElement.setAttribute('aria-checked', favorited);
+        return favorited;
+    }
 
-                setTimeout(function(){
-                    notification.hide();
-                }, 1500);
-            }else{
-                try {
-                    let cookieArray = JSON.parse(getCookie("favorite"));
-                    if(cookieArray.includes(uuid)){
-                        notification.setContent("That person has already been favorited!");
-
-                        notification.show();
-
-                        setTimeout(function(){
-                            notification.hide();
-                        }, 1500);
-                    }else{
-                        cookieArray.push(uuid);
-
-                        setCookie("favorite", JSON.stringify(cookieArray), 365);
-
-                        notification.setContent("Set favorite!");
-                        notification.show();
-
-                        setTimeout(function(){
-                            notification.hide();
-                        }, 1500);
-                    }
-                } catch {
-                    let cookieArray = uuid ? [uuid] : [];
-                    setCookie("favorite", JSON.stringify(cookieArray), 365);
-
-                    notification.setContent("Set favorite using new system!");
-                    
-                    notification.show();
-
-                    setTimeout(function(){
-                        notification.hide();
-                    }, 1500);
-                }
-            }
-        });
+    let favoriteNotification = tippy(favoriteElement, {
+        trigger: 'manual'
     });
 
-    [].forEach.call(document.querySelectorAll('.remove-favorite'), function (e) {
-        let element = e;
+    favoriteElement.addEventListener('click', function(){
+        let uuid = favoriteElement.getAttribute("data-username");
+        if(uuid == "0c0b857f415943248f772164bf76795c"){
+            favoriteNotification.setContent("No");
+        }else{
+            let cookieArray = parseFavorites(getCookie("favorite"));
+            if(cookieArray.includes(uuid)){
+                cookieArray.splice(cookieArray.indexOf(uuid), 1);
 
-        let notification = tippy(element, {
-            trigger: 'manual'
-        });
+                favoriteNotification.setContent("Removed favorite!");
+            }else if(cookieArray.length >= constants.max_favorites){
+                favoriteNotification.setContent(`You can only have ${constants.max_favorites} favorites!`);
+            }else{
+                cookieArray.push(uuid);
 
-        element.addEventListener('click', async function () {
-            let uuid = element.getAttribute("data-username");
-            try {
-                let cookieArray = JSON.parse(getCookie("favorite"));
-                if (cookieArray.includes(uuid)) {
-                    cookieArray.splice(cookieArray.indexOf(uuid), 1);
-
-                    setCookie("favorite", JSON.stringify(cookieArray), 365);
-
-                    notification.setContent("Successfully removed favorite!");
-
-                    notification.show();
-
-                    setTimeout(function () {
-                        notification.hide();
-                    }, 1500);
-                } else {
-                    notification.setContent("That person isn't favorited!");
-                    notification.show();
-
-                    setTimeout(function () {
-                        notification.hide();
-                    }, 1500);
-                }
-            } catch {
-                let cookieArray = uuid ? [uuid] : [];
-                setCookie("favorite", JSON.stringify(cookieArray), 365);
-
-                notification.setContent("Set favorite using new system!");
-
-                notification.show();
-
-                setTimeout(function () {
-                    notification.hide();
-                }, 1500);
+                favoriteNotification.setContent("Added favorite!");
             }
-        });
+            setCookie("favorite", cookieArray.join(','), 365);
+            checkFavorite();
+        }
+        favoriteNotification.show();
+
+        setTimeout(function(){
+            favoriteNotification.hide();
+        }, 1500);
     });
 
     let socialsShown = false;
