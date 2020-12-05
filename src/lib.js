@@ -533,22 +533,8 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                 }
             }
 
-            if(item.extra?.timestamp){
-                let timestamp = item.extra.timestamp;
-                let obtainmentDate;
-
-                if(!isNaN(timestamp))
-                    obtainmentDate = moment(parseInt(timestamp));
-                else if(timestamp.includes("AM") || timestamp.includes("PM"))
-                    obtainmentDate = moment(timestamp, "M/D/YY h:mm A");
-                else
-                    obtainmentDate = moment(timestamp, "D/M/YY HH:mm");
-
-                if(!obtainmentDate.isValid())
-                    obtainmentDate = moment(timestamp, "M/D/YY HH:mm");
-
-                itemLore.push('', `§7Obtained: §c${obtainmentDate.format("D MMM YYYY")}`);
-            }
+            if(item.extra?.timestamp)
+                itemLore.push('', `§7Obtained: §c${item.extra.timestamp.format("D MMM YYYY")}`);
 
             if(item.extra?.spawned_for){
                 if(!item.extra.timestamp)
