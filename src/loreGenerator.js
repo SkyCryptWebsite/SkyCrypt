@@ -69,6 +69,9 @@ module.exports = {
                 case 'Ferocity':
                     lore_raw[i] = statType + ": " + split[1].substring(0, 3) + item.stats.ferocity + " " + split.slice(2).join(" ");
                     break;
+                case 'Ability Damage':
+                    lore_raw[i] = statType + ": " + split[1].substring(0, 3) + item.stats.ability_damage + " " + split.slice(2).join(" ");
+                    break;
             }
         }
 

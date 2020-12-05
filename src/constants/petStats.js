@@ -30,7 +30,8 @@ const symbols = {
 	pet_luck: "♣",
 	attack_speed: "⚔️",
 	true_defense: "❂",
-	ferocity: "⫽"
+	ferocity: "⫽",
+	ability_damage: "✹"
 }
 
 class Pet {

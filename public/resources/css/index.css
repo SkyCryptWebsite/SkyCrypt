@@ -1584,7 +1584,16 @@ a.additional-player-stat:hover{
     background-image: url(../img/icons/health.png);
 }
 
-.stat-health .stat-name, .stat-effective-health .stat-name, .stat-strength .stat-name, .stat-ferocity .stat-name, .color-health, .color-effective-health, .color-strength, .color-ferocity{
+.stat-health .stat-name,
+.stat-effective-health .stat-name,
+.stat-strength .stat-name,
+.stat-ferocity .stat-name,
+.stat-ability-damage .stat-name,
+.color-health,
+.color-effective-health,
+.color-strength,
+.color-ferocity,
+.color-ability-damage{
     color: #EF5350;
 }
 
@@ -1674,6 +1683,10 @@ a.additional-player-stat:hover{
 
 .stat-ferocity{
     background-image: url(../img/icons/ferocity.png);
+}
+
+.stat-ability-damage{
+    background-image: url(../img/icons/ability-damage.png);
 }
 
 .stat-container{

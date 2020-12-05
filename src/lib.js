@@ -656,6 +656,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                     case 'Ferocity':
                         item.stats.ferocity = statValue;
                         break;
+                    case 'Ability Damage':
+                        item.stats.ability_damage = statValue;
+                        break;
                 }
             });
 
