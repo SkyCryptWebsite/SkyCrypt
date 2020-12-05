@@ -40,9 +40,11 @@ module.exports = {
                         lore_raw[i] = statType + ": " + split[1].substring(0, 3) + item.stats.defense + " " + split.slice(2).join(" ");
                     break;
                 case 'Strength':
+                case 'Drunkenness':
                     lore_raw[i] = statType + ": " + split[1].substring(0, 3) + item.stats.strength + " " + split.slice(2).join(" ");
                     break;
                 case 'Speed':
+                case 'Pegleg Boost':
                     lore_raw[i] = statType + ": " + split[1].substring(0, 3) + item.stats.speed + " " + split.slice(2).join(" ");
                     break;
                 case 'Crit Chance':

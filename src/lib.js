@@ -627,9 +627,11 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                         item.stats.defense = statValue;
                         break;
                     case 'Strength':
+                    case 'Drunkenness':
                         item.stats.strength = statValue;
                         break;
                     case 'Speed':
+                    case 'Pegleg Boost':
                         item.stats.speed = statValue;
                         break;
                     case 'Crit Chance':
@@ -763,6 +765,8 @@ module.exports = {
             crit_chance: 0,
             crit_damage: 0,
             intelligence: 0,
+            ability_damage: 0,
+            pet_luck: 0,
             damage_multiplicator: 1
         };
 
