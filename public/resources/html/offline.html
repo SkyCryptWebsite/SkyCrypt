@@ -99,6 +99,9 @@
             errorText.innerText = 'Please connect to the internet and try again.'
             window.addEventListener('online', () => window.location.reload());
         }
+        if (window.location.pathname === '/resources/html/offline.html') {
+            window.location.replace('/');
+        }
     </script>
 </body>
 
