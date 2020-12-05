@@ -22,7 +22,7 @@ self.addEventListener("fetch", (event) => {
                 return caches.match(event.request).then((response) => {
                     if (!response) {
                         const url = new URL(event.request.url)
-                        if (url.pathname === '/') {
+                        if (url.pathname === '/' || url.pathname.substring(0, 7) === '/stats/') {
                             return caches.match('/resources/html/offline.html');
                         }
                     }
