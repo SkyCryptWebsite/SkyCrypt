@@ -93,10 +93,15 @@ module.exports = {
         ],
         PERSONAL_COMPACTOR_4000: [
             'PERSONAL_COMPACTOR_5000',
-            'PERSONAL_COMPACTOR_6000'
+            'PERSONAL_COMPACTOR_6000',
+            'PERSONAL_COMPACTOR_7000'
         ],
         PERSONAL_COMPACTOR_5000: [
-            'PERSONAL_COMPACTOR_6000'
+            'PERSONAL_COMPACTOR_6000',
+            'PERSONAL_COMPACTOR_7000'
+        ],
+        PERSONAL_COMPACTOR_6000: [
+            'PERSONAL_COMPACTOR_7000'
         ],
         SCARF_STUDIES: [
             'SCARF_THESIS',
@@ -169,21 +174,173 @@ module.exports = {
         BAT_PERSON_RING: [
             'BAT_PERSON_ARTIFACT'
         ],
+        LUCKY_HOOF: [
+            'ETERNAL_HOOF'
+        ],
         WITHER_ARTIFACT: [
             'WITHER_RELIC'
+        ],
+
+        WEDDING_RING_0: [
+            'WEDDING_RING_2',
+            'WEDDING_RING_4',
+            'WEDDING_RING_7',
+            'WEDDING_RING_9'
+        ],
+        WEDDING_RING_2: [
+            'WEDDING_RING_4',
+            'WEDDING_RING_7',
+            'WEDDING_RING_9'
+        ],
+        WEDDING_RING_4: [
+            'WEDDING_RING_7',
+            'WEDDING_RING_9'
+        ],
+        WEDDING_RING_7: [
+            'WEDDING_RING_9'
+        ],
+
+        CAMPFIRE_TALISMAN_1: [
+            'CAMPFIRE_TALISMAN_4',
+            'CAMPFIRE_TALISMAN_8',
+            'CAMPFIRE_TALISMAN_13',
+            'CAMPFIRE_TALISMAN_21'
+        ],
+        CAMPFIRE_TALISMAN_4: [
+            'CAMPFIRE_TALISMAN_8',
+            'CAMPFIRE_TALISMAN_13',
+            'CAMPFIRE_TALISMAN_21'
+        ],
+        CAMPFIRE_TALISMAN_8: [
+            'CAMPFIRE_TALISMAN_13',
+            'CAMPFIRE_TALISMAN_21'
+        ],
+        CAMPFIRE_TALISMAN_13: [
+            'CAMPFIRE_TALISMAN_21'
         ]
     },
 
     talisman_duplicates: {
+        WEDDING_RING_0: [
+            'WEDDING_RING_1'
+        ],
+        WEDDING_RING_2: [
+            'WEDDING_RING_3'
+        ],
+        WEDDING_RING_4: [
+            'WEDDING_RING_5',
+            'WEDDING_RING_6'
+        ],
+        WEDDING_RING_7: [
+            'WEDDING_RING_8'
+        ],
 
+        CAMPFIRE_TALISMAN_1: [
+            'CAMPFIRE_TALISMAN_2',
+            'CAMPFIRE_TALISMAN_3'
+        ],
+        CAMPFIRE_TALISMAN_4: [
+            'CAMPFIRE_TALISMAN_5',
+            'CAMPFIRE_TALISMAN_6',
+            'CAMPFIRE_TALISMAN_7'
+        ],
+        CAMPFIRE_TALISMAN_8: [
+            'CAMPFIRE_TALISMAN_9',
+            'CAMPFIRE_TALISMAN_10',
+            'CAMPFIRE_TALISMAN_11',
+            'CAMPFIRE_TALISMAN_12'
+        ],
+        CAMPFIRE_TALISMAN_13: [
+            'CAMPFIRE_TALISMAN_14',
+            'CAMPFIRE_TALISMAN_15',
+            'CAMPFIRE_TALISMAN_16',
+            'CAMPFIRE_TALISMAN_17',
+            'CAMPFIRE_TALISMAN_18',
+            'CAMPFIRE_TALISMAN_19',
+            'CAMPFIRE_TALISMAN_20'
+        ],
+        CAMPFIRE_TALISMAN_21: [
+            'CAMPFIRE_TALISMAN_22',
+            'CAMPFIRE_TALISMAN_23',
+            'CAMPFIRE_TALISMAN_24',
+            'CAMPFIRE_TALISMAN_25',
+            'CAMPFIRE_TALISMAN_26',
+            'CAMPFIRE_TALISMAN_27',
+            'CAMPFIRE_TALISMAN_28',
+            'CAMPFIRE_TALISMAN_29'
+        ]
     },
 
     talismans: {
+        'WEDDING_RING_0': {
+            name: "Shiny Yellow Rock",
+            rarity: "common",
+            texture: "/item/WEDDING_RING_0"
+        },
+        'WEDDING_RING_2': {
+            name: "Mediocre Ring of Love",
+            rarity: "uncommon",
+            texture: "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c"
+        },
+        'WEDDING_RING_4': {
+            name: "Modest Ring of Love",
+            rarity: "rare",
+            texture: "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c"
+        },
+        'WEDDING_RING_7': {
+            name: "Exquisite Ring of Love",
+            rarity: "epic",
+            texture: "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c"
+        },
+        'WEDDING_RING_9': {
+            name: "Legendary Ring of Love",
+            rarity: "legendary",
+            texture: "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c"
+        },
+
+        'CAMPFIRE_TALISMAN_1': {
+            name: "Campfire Initiate Badge",
+            rarity: "common",
+            texture: "/head/af41cc2250d2f5cfcf4384aa0cf3e23c19767549a2a8abd7532bd52c5a1de"
+        },
+        'CAMPFIRE_TALISMAN_4': {
+            name: "Campfire Adept Badge",
+            rarity: "uncommon",
+            texture: "/head/af41cc2250d2f5cfcf4384aa0cf3e23c19767549a2a8abd7532bd52c5a1de"
+        },
+        'CAMPFIRE_TALISMAN_8': {
+            name: "Campfire Cultist Badge",
+            rarity: "rare",
+            texture: "/head/a3cfd94e925eab4330a768afcae6c128b0a28e23149eee41c9c6df894c24f3de"
+        },
+        'CAMPFIRE_TALISMAN_13': {
+            name: "Campfire Scion Badge",
+            rarity: "epic",
+            texture: "/head/a3cfd94e925eab4330a768afcae6c128b0a28e23149eee41c9c6df894c24f3de"
+        },
+        'CAMPFIRE_TALISMAN_21': {
+            name: "Campfire God Badge",
+            rarity: "legendary",
+            texture: "/head/4080bbefca87dc0f36536b6508425cfc4b95ba6e8f5e6a46ff9e9cb488a9ed"
+        },
+
         'FARMING_TALISMAN': null,
-        'VACCINE_TALISMAN': null,
-        'WOOD_TALISMAN': null,
+        'VACCINE_TALISMAN': {
+            name: "Vaccine Talisman",
+            rarity: "common",
+            texture: "/head/71408ede8b4f444015c59abd5cd32b8769de51881edabcc15abb6519f5b49"
+        },
+        'WOOD_TALISMAN': {
+            name: "Wood Affinity Talisman",
+            rarity: "uncommon",
+            texture: "/head/219ad5215ba6c7e4e4d0668f02d3a9c937ac536acc75ac49e7bd7b1c8ccf80"
+        },
         'SKELETON_TALISMAN': null,
-        'COIN_TALISMAN': null,
+        'COIN_TALISMAN': {
+            name: "Talisman of Coins",
+            rarity: "common",
+            texture: "/head/452dca68c8f8af533fb737faeeacbe717b968767fc18824dc2d37ac789fc77"
+        },
         'MAGNETIC_TALISMAN': null,
         'GRAVITY_TALISMAN': null,
         'VILLAGE_TALISMAN': null,
@@ -191,26 +348,27 @@ module.exports = {
         'NIGHT_VISION_CHARM': null,
         'LAVA_TALISMAN': null,
         'SCAVENGER_TALISMAN': null,
-        'WOLF_PAW': null,
         'FIRE_TALISMAN': null,
         'PIGGY_BANK': null,
         'CRACKED_PIGGY_BANK': null,
         'BROKEN_PIGGY_BANK': null,
         'PIGS_FOOT': null,
+        'WOLF_PAW': null,
         'FROZEN_CHICKEN': null,
         'FISH_AFFINITY_TALISMAN': null,
         'FARMER_ORB': null,
         'HASTE_RING': null,
+        'EXPERIENCE_ARTIFACT': null,
         'NEW_YEAR_CAKE_BAG': null,
         'DAY_CRYSTAL': {
             name: "Day Crystal",
             rarity: "rare",
-            texture: "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/day_crystal.png"
+            texture: "/item/DAY_CRYSTAL"
         },
         'NIGHT_CRYSTAL': {
             name: "Night Crystal",
             rarity: "rare",
-            texture: "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/night_crystal.png"
+            texture: "/item/NIGHT_CRYSTAL"
         },
         'FEATHER_TALISMAN': null,
         'FEATHER_RING': null,
@@ -226,9 +384,13 @@ module.exports = {
         'MELODY_HAIR': {
             name: "Melody's Hair",
             rarity: "epic",
-            texture: "/resourcepacks/FurfSky+_Release_1_71/assets/minecraft/mcpatcher/cit/items/items/melodyshair.png"
+            texture: "/item/MELODY_HAIR"
         },
-        'SEA_CREATURE_TALISMAN': null,
+        'SEA_CREATURE_TALISMAN': {
+            name: "Sea Creature Talisman",
+            rarity: "common",
+            texture: "/head/eaa44b170d749ce4099aa78d98945d193651484089efb87ba88892c6fed2af31"
+        },
         'SEA_CREATURE_RING': null,
         'SEA_CREATURE_ARTIFACT': null,
         'INTIMIDATION_TALISMAN': null,
@@ -259,12 +421,13 @@ module.exports = {
         'SEAL_OF_THE_FAMILY': null,
         'HUNTER_TALISMAN': null,
         'HUNTER_RING': null,
-        'CAMPFIRE_TALISMAN_': null,
-        'SCARF_STUDIES': null,
-        'SCARF_THESIS': null,
-        'SCARF_GRIMOIRE': null,
         'PARTY_HAT_CRAB': null,
         'POTATO_TALISMAN': null,
+        'EMERALD_RING': {
+            name: "Emerald Ring",
+            rarity: "uncommon",
+            texture: "/head/f36b821c1afdd5a5d14e3b3bd0a32263c8df5df5db6e1e88bf65e97b27a8530"
+        },
         'PERSONAL_COMPACTOR_4000': {
             name: "Personal Compactor 4000",
             rarity: "uncommon",
@@ -280,9 +443,26 @@ module.exports = {
             rarity: "epic",
             texture: "/item/PERSONAL_COMPACTOR_6000"
         },
-        'SPEED_TALISMAN': null,
-        'SPEED_RING': null,
-        'SPEED_ARTIFACT': null,
+        'PERSONAL_COMPACTOR_7000': {
+            name: "Personal Compactor 7000",
+            rarity: "legendary",
+            texture: "/item/PERSONAL_COMPACTOR_7000"
+        },
+        'SPEED_TALISMAN': {
+            name: "Speed Talisman",
+            rarity: "common",
+            texture: "/head/8624bacb5f1986e6477abce4ae7dca1820a5260b6233b55ba1d9ba936c84b"
+        },
+        'SPEED_RING': {
+            name: "Speed Ring",
+            rarity: "uncommon",
+            texture: "/head/c2da40a91f8fa7e1cbdd934da92a7668dc95d75b57c9c80a381c5e178cee6ba7"
+        },
+        'SPEED_ARTIFACT': {
+            name: "Speed Artifact",
+            rarity: "rare",
+            texture: "/head/f06706eecb2d558ace27abda0b0b7b801d36d17dd7a890a9520dbe522374f8a6"
+        },
         'CAT_TALISMAN': {
             name: "Cat Talisman",
             rarity: "uncommon",
@@ -297,6 +477,21 @@ module.exports = {
             name: "Cheetah Talisman",
             rarity: "epic",
             texture: "/head/1553f8856dd46de7e05d46f5fc2fb58eafba6829b11b160a1545622e89caaa33"
+        },
+        'SCARF_STUDIES': {
+            name: "Scarf's Studies",
+            rarity: "rare",
+            texture: "/head/6de4ab129e137f9f4cbf7060318ee1748dc39da9b5d129a8da0e614e2337693"
+        },
+        'SCARF_THESIS': {
+            name: "Scarf's Thesis",
+            rarity: "epic",
+            texture: "/head/8ce4c87eb4dde27459e3e7f85921e7e57b11199260caa5ce63f139ee3d188c"
+        },
+        'SCARF_GRIMOIRE': {
+            name: "Scarf's Grimoire",
+            rarity: "legendary",
+            texture: "/head/bafb195cc75f31b619a077b7853653254ac18f220dc32d1412982ff437b4d57a"
         },
         'TREASURE_TALISMAN': {
             name: "Treasure Talisman",
@@ -313,12 +508,36 @@ module.exports = {
             rarity: "legendary",
             texture: "/head/e10f20a55b6e188ebe7578459b64a6fbd825067bc497b925ca43c2643d059025"
         },
-        'MINERAL_TALISMAN': null,
-        'BEASTMASTER_CREST_COMMON': null,
-        'BEASTMASTER_CREST_UNCOMMON': null,
-        'BEASTMASTER_CREST_RARE': null,
-        'BEASTMASTER_CREST_EPIC': null,
-        'BEASTMASTER_CREST_LEGENDARY': null,
+        'MINERAL_TALISMAN': {
+            name: "Mineral Talisman",
+            rarity: "rare",
+            texture: "/head/3cbd70f73e2e09566ef914c697b13f48b97bfd6c11c83e540a15ff4d736b9c16"
+        },
+        'BEASTMASTER_CREST_COMMON': {
+            name: "Beastmaster Crest",
+            rarity: "common",
+            texture: "/head/53415667de3fb89c5f40c880c39e4971a0caa7f3a9d2c8f712ba37fadcee"
+        },
+        'BEASTMASTER_CREST_UNCOMMON': {
+            name: "Beastmaster Crest",
+            rarity: "uncommon",
+            texture: "/head/53415667de3fb89c5f40c880c39e4971a0caa7f3a9d2c8f712ba37fadcee"
+        },
+        'BEASTMASTER_CREST_RARE': {
+            name: "Beastmaster Crest",
+            rarity: "rare",
+            texture: "/head/53415667de3fb89c5f40c880c39e4971a0caa7f3a9d2c8f712ba37fadcee"
+        },
+        'BEASTMASTER_CREST_EPIC': {
+            name: "Beastmaster Crest",
+            rarity: "epic",
+            texture: "/head/53415667de3fb89c5f40c880c39e4971a0caa7f3a9d2c8f712ba37fadcee"
+        },
+        'BEASTMASTER_CREST_LEGENDARY': {
+            name: "Beastmaster Crest",
+            rarity: "legendary",
+            texture: "/head/53415667de3fb89c5f40c880c39e4971a0caa7f3a9d2c8f712ba37fadcee"
+        },
         'RAGGEDY_SHARK_TOOTH_NECKLACE': {
             name: "Raggedy Shark Tooth Necklace",
             rarity: "common",
@@ -374,6 +593,8 @@ module.exports = {
             rarity: "legendary",
             texture: "/head/39668767f1141835e2c49ad2b415598f1b166be9173902a0257e77704f913e1f"
         },
+        'LUCKY_HOOF': null,
+        'ETERNAL_HOOF': null,
         'WITHER_RELIC': {
             name: "Wither Relic",
             rarity: "epic",

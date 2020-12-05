@@ -49,7 +49,7 @@ async function main(){
             console.error(e);
         }
 
-        setTimeout(updateBazaar, 1000 * 60);
+        setTimeout(updateBazaar, 1000 * 120);
     }
 
     updateBazaar();
