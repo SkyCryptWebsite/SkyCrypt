@@ -26,15 +26,15 @@ module.exports = {
                     lore_raw[i] = statType + ": " + split[1].substring(0, 3) + item.stats.damage + " " + split.slice(2).join(" ");
                     break;
                 case 'Health':
-                    if (item.equipmentType == 'armor' && item.hpbs > 0){
-                        const hpbString = ` HP §e(+${item.hpbs * 4} HP) `;
+                    if (item.equipmentType == 'armor' && item.extra?.hpbs > 0){
+                        const hpbString = ` HP §e(+${item.extra?.hpbs * 4} HP) `;
                         lore_raw[i] = statType + ": " + split[1].substring(0, 3) + item.stats.health + hpbString + split.slice(5).join(" ");
                     } else
                         lore_raw[i] = statType + ": " + split[1].substring(0, 3) + item.stats.health + " " + split.slice(2).join(" ");
                     break;
                 case 'Defense':
-                    if (item.equipmentType == 'armor' && item.hpbs > 0){
-                        const hpbString = ` §e(+${item.hpbs * 2}) `;
+                    if (item.equipmentType == 'armor' && item.extra?.hpbs > 0){
+                        const hpbString = ` §e(+${item.extra?.hpbs * 2}) `;
                         lore_raw[i] = statType + ": " + split[1].substring(0, 3) + item.stats.defense + hpbString + split.slice(3).join(" ");
                     } else
                         lore_raw[i] = statType + ": " + split[1].substring(0, 3) + item.stats.defense + " " + split.slice(2).join(" ");

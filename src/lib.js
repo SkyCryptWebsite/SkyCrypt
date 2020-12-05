@@ -434,6 +434,76 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
         const enchantments = helper.getPath(item, 'tag', 'ExtraAttributes', 'enchantments') || {};
 
+        // Get extra info about certain things
+        if(helper.hasPath(item, 'tag', 'ExtraAttributes')){
+            item.extra = {
+                hpbs: 0,
+                anvil_uses: 0
+            };
+        }
+
+        if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'rarity_upgrades')){
+            const { rarity_upgrades } = item.tag.ExtraAttributes;
+
+            if(rarity_upgrades > 0)
+                item.extra.recombobulated = true;
+        }
+
+        if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'hot_potato_count'))
+            item.extra.hpbs = item.tag.ExtraAttributes.hot_potato_count;
+ 
+        if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'anvil_uses')){
+            let { anvil_uses } = item.tag.ExtraAttributes;
+
+            anvil_uses -= item.extra.hpbs;
+
+            if(anvil_uses > 0)
+                item.extra.anvil_uses = anvil_uses;
+        }
+
+        if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'expertise_kills')){
+            let { expertise_kills } = item.tag.ExtraAttributes;
+
+            if(expertise_kills > 0)
+                item.extra.expertise_kills = expertise_kills;
+        }
+
+        if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp')){
+            let { timestamp } = item.tag.ExtraAttributes;
+            let obtainmentDate;
+
+            if(!isNaN(timestamp))
+                obtainmentDate = moment(parseInt(timestamp));
+            else if(timestamp.includes("AM") || timestamp.includes("PM"))
+                obtainmentDate = moment(timestamp, "M/D/YY h:mm A");
+            else
+                obtainmentDate = moment(timestamp, "D/M/YY HH:mm");
+
+            if(!obtainmentDate.isValid())
+                obtainmentDate = moment(timestamp, "M/D/YY HH:mm");
+
+            item.extra.timestamp = obtainmentDate;
+        }
+
+        if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'spawnedFor'))
+            item.extra.spawned_for = item.tag.ExtraAttributes.spawnedFor.replace(/\-/g, '');
+
+        if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'baseStatBoostPercentage'))
+            item.extra.base_stat_boost = item.tag.ExtraAttributes.baseStatBoostPercentage;
+
+        if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'item_tier'))
+            item.extra.floor =  item.tag.ExtraAttributes.item_tier;
+
+        if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'winning_bid'))
+            item.extra.price_paid = item.tag.ExtraAttributes.winning_bid;
+
+        if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'modifier'))
+            item.extra.reforge = item.tag.ExtraAttributes.modifier;
+
+        if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'ability_scroll'))
+            item.extra.ability_scroll = item.tag.ExtraAttributes.ability_scroll;
+
+        // Lore stuff
         let itemLore = helper.getPath(item, 'tag', 'display', 'Lore') || [];
         let lore_raw = [...itemLore];
 
@@ -441,36 +511,13 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
         // Set HTML lore to be displayed on the website
         if(itemLore.length > 0){
-            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'rarity_upgrades')){
-                const { rarity_upgrades } = item.tag.ExtraAttributes;
+            if(item.extra?.recombobulated)
+                itemLore.push('§8(Recombobulated)');
 
-                if(rarity_upgrades > 0)
-                    itemLore.push('§8(Recombobulated)');
-            }
+            if(item.extra?.expertise_kills){
+                let expertise_kills = item.extra.expertise_kills;
 
-            let hasAnvilUses = false;
-
-            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'anvil_uses')){
-                let { anvil_uses } = item.tag.ExtraAttributes;
-
-                let hot_potato_count = 0;
-
-                if('hot_potato_count' in item.tag.ExtraAttributes)
-                    ({ hot_potato_count } = item.tag.ExtraAttributes);
-
-                anvil_uses -= hot_potato_count;
-
-                if(anvil_uses > 0){
-                    hasAnvilUses = true;
-
-                    itemLore.push('', `§7Anvil Uses: §c${anvil_uses}`);
-                }
-            }
-
-            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'expertise_kills')){
-                let { expertise_kills } = item.tag.ExtraAttributes;
-
-                if(expertise_kills > 0 && lore_raw){
+                if(lore_raw){
                     itemLore.push('', `§7Expertise Kills: §c${expertise_kills}`);
                     if (expertise_kills >= 15000)
                         itemLore.push(`§8MAXED OUT!`);
@@ -486,9 +533,8 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                 }
             }
 
-            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp')){
-                const { timestamp } = item.tag.ExtraAttributes;
-
+            if(item.extra?.timestamp){
+                let timestamp = item.extra.timestamp;
                 let obtainmentDate;
 
                 if(!isNaN(timestamp))
@@ -504,33 +550,24 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                 itemLore.push('', `§7Obtained: §c${obtainmentDate.format("D MMM YYYY")}`);
             }
 
-            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'spawnedFor')){
-                if(!helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp'))
+            if(item.extra?.spawned_for){
+                if(!item.extra.timestamp)
                     itemLore.push('');
 
-                const spawnedFor = item.tag.ExtraAttributes.spawnedFor.replace(/\-/g, '');
+                const spawnedFor = item.extra.spawned_for;
                 const spawnedForUser = await helper.resolveUsernameOrUuid(spawnedFor, db, cacheOnly);
 
                 itemLore.push(`§7By: §c<a href="/stats/${spawnedFor}">${spawnedForUser.display_name}</a>`);
             }
 
-            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'baseStatBoostPercentage')){
-                const boost = item.tag.ExtraAttributes.baseStatBoostPercentage;
+            if(item.extra?.base_stat_boost)
+                itemLore.push('', `§7Dungeon Item Quality: ${item.extra.base_stat_boost == 50 ? '§6' : '§c'}${item.extra.base_stat_boost}/50%`);
 
-                itemLore.push('', `§7Dungeon Item Quality: ${boost == 50 ? '§6' : '§c'}${boost}/50%`);
-            }
+            if(item.extra?.floor)
+                itemLore.push(`§7Obtained From: §bFloor ${item.extra.floor}`);
 
-            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'item_tier')){
-                const floor = item.tag.ExtraAttributes.item_tier;
-
-                itemLore.push(`§7Obtained From: §bFloor ${floor}`);
-            }
-
-            if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'winning_bid')){
-                const price = item.tag.ExtraAttributes.winning_bid;
-
-                itemLore.push(`§7Price Paid at Dark Auction: §b${price.toLocaleString()} coins`);
-            }
+            if(item.extra?.price_paid)
+                itemLore.push(`§7Price Paid at Dark Auction: §b${item.extra.price_paid.toLocaleString()} coins`);
         }
 
         let rarity, item_type;
@@ -604,23 +641,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
                 switch(statType){
                     case 'Damage':
-                        if(item.equipmentType == 'weapon'){
-                            const matches = line.match(/§e\(\+(\d+)\)/);
-                            if (matches)
-                                item.hpbs = parseFloat(matches[1]) / 2;
-                            else
-                                item.hpbs = 0;
-                        }
                         item.stats.damage = statValue;
                         break;
                     case 'Health':
-                        if(item.equipmentType == 'armor'){
-                            const matches = line.match(/§e\(\+(\d+) HP\)/);
-                            if (matches)
-                                item.hpbs = parseFloat(matches[1]) / 4;
-                            else
-                                item.hpbs = 0;
-                        }
                         item.stats.health = statValue;
                         break;
                     case 'Defense':
