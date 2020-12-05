@@ -35,7 +35,7 @@ const statShort = {
     pet_luck: 'PL',
     bonus_attack_speed: 'Atk',
     ferocity: 'Frc',
-    ability_damage: 'AbD'
+    ability_damage: 'AD'
 };
 
 const skillItems = {
@@ -1250,6 +1250,7 @@ twitterDescription += '. Click to view more stats!'
 
                 <%- stat_component({
                     name: 'ability_damage',
+                    suffix: '%',
                     baseExplanation: "Increased by leveling your Enchanting Skill."
                 }); %>
                 <!--<div data-stat="fairy_souls" class="basic-stat stat-fairy-souls">
