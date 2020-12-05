@@ -2,12 +2,10 @@ const VERSION = "1";
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open(`skyCrypt-static-v${VERSION}`).then((cache) => {
+        caches.open(`skyCrypt-offline-v${VERSION}`).then((cache) => {
             return cache.addAll([
                 '/resources/html/offline.html',
                 '/resources/img/bg.webp',
-                '/resources/css/index.css',
-                '/favicon.ico',
                 '/resources/img/logo_square.png',
             ]);
         }),
