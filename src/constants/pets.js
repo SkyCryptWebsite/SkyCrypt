@@ -472,6 +472,20 @@ module.exports = {
                 head: "/head/d8552ff591042c4a38f8ba0626784ae28c4545a97d423fd9037c341035593273",
             },
         },
+        "ELEPHANT": {
+            "ELEPHANT_PINK": {
+                name: "Pink",
+                head: "/head/570eef474ec0e56cc34c2307eaa39f024612f8cd7248e7d5b14169ebd307c742",
+            },
+            "ELEPHANT_BLUE": {
+                name: "Blue",
+                head: "/head/4b62969c005815d0409136380febc5ac468aaba9bda4db80954fa5426ee0a323",
+            },
+            "ELEPHANT_ORANGE": {
+                name: "Orange",
+                head: "/head/554a34a80c474206d3700b8fced6b44fab0b0ed0b05c1293ff0c5d86eda251d1",
+            },
+        },
     },
 
     pet_value: {
