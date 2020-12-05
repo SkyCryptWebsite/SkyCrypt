@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "optifine/cit/blocks/super_top",
+        "front": "optifine/cit/blocks/super_front",
+        "side": "optifine/cit/blocks/super_side"
+    }
+}

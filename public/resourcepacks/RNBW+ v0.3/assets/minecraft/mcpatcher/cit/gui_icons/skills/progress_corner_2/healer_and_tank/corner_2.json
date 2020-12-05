@@ -1,0 +1,18 @@
+{
+        "parent": "builtin/generated",
+    "textures": {
+        "layer0": "mcpatcher/cit/gui_icons/skills/progress_corner_2/healer_and_tank/blank.png"
+	"layer1": "mcpatcher/cit/gui_icons/skills/progress_corner_2/healer_and_tank/skill_complete_c2.png"
+    },
+    "display": {
+        "thirdperson": {
+            "rotation": [ 180, -45, 0 ],
+            "translation": [ 0, 1, -2.5 ],
+            "scale": [ 0.25, 0.25, 0.25 ]
+        },
+        "firstperson": {
+            "rotation": [ 0, -180, 0 ],
+            "scale": [ 0.55, 0.55, 0.55 ]
+        }
+    }
+}
