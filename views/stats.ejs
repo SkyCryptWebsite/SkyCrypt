@@ -4,7 +4,7 @@ const slayerOrder = ['zombie', 'spider', 'wolf'];
 
 const allItems = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory);
 
-const UNIQUE_ACCESSORIES = 60;
+const UNIQUE_ACCESSORIES = calculated.talismanCount;
 
 const statSuffix = {
     health: '',
@@ -34,7 +34,8 @@ const statShort = {
     magic_find: 'MF',
     pet_luck: 'PL',
     bonus_attack_speed: 'Atk',
-    ferocity: 'Frc'
+    ferocity: 'Frc',
+    ability_damage: 'AD'
 };
 
 const skillItems = {
@@ -805,6 +806,12 @@ const seaCreatures = [
     }
 ];
 
+const milestone_rarities = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
+const pet_milestones = {
+    'sea_creatures_killed': [ 250, 1000, 2500, 5000, 10000],
+    'ores_mined': [2500, 7500, 20000, 100000, 250000]
+};
+
 getStats = items => {
     const stats = Object.assign({}, constants.stat_template);
 
@@ -1042,7 +1049,7 @@ twitterDescription += '. Click to view more stats!'
 <head>
     <title><%- calculated.display_name %><% if(calculated.display_emoji){ %> <%- calculated.display_emoji %><% } %> | SkyCrypt</title>
     <meta name="description" content="<%= metaDescription %>">
-    <link rel="shortcut icon" href="https://crafatar.com/avatars/<%- calculated.uuid %>?size=32&overlay" type="image/png">
+    <link rel="icon" href="https://crafatar.com/avatars/<%- calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
     <meta property="og:type" content="website">
     <meta property="og:title" content="<%- calculated.display_name %><% if(calculated.display_emoji){ %> <%- calculated.display_emoji %><% } %> (<%= calculated.profile.cute_name %>)">
     <meta property="og:image" content="https://crafatar.com/avatars/<%- calculated.uuid %>?size=256&overlay">
@@ -1147,6 +1154,8 @@ twitterDescription += '. Click to view more stats!'
                     stats['sea_creature_chance'] = calculated.weapon_stats[rod[0].itemId]['sea_creature_chance'];
             %>
 
+            <div id="skin_display_mobile"></div>
+
             <div id="base_stats_container">
                 <%- stat_component({
                     name: 'health',
@@ -1238,36 +1247,42 @@ twitterDescription += '. Click to view more stats!'
                         }
                     ]
                 }); %>
+
+                <%- stat_component({
+                    name: 'ability_damage',
+                    suffix: '%',
+                    baseExplanation: "Increased by leveling your Enchanting Skill."
+                }); %>
                 <!--<div data-stat="fairy_souls" class="basic-stat stat-fairy-souls">
                     <span data-tippy-content="
                         Collect Fairy Souls to gain Health, Defense, Strength and Speed.</div>
                     "><span class="stat-name">Fairy Souls </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span></span>
                 </div>-->
-                <div id="skin_display_mobile"></div>
-                <div id="additional_stats_container">
-                    <% if(calculated.current_area){ %>
-                    <div class="additional-stat"><span class="stat-name"><%= calculated.current_area_updated ? 'Current' : 'Last' %> Area: </span><span class="stat-value"><%= calculated.current_area %></span></div>
-                    <% } %>
-                    <div class="additional-stat"><span data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></span></div>
-                    <div class="additional-stat"><span data-tippy-content="Joined on <%= moment(calculated.first_join.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></span></div>
-                    <div class="additional-stat"><span class="stat-name">Purse: </span><span class="stat-value"><%= helper.formatNumber(calculated.purse, true) %> Coin<%= Math.floor(calculated.purse) == 1 ? '': 's' %></span></div>
-                    <% if('bank' in calculated){ %>
-                        <div class="additional-stat"><span class="stat-name">Bank Account: </span><span class="stat-value"><%= helper.formatNumber(calculated.bank, true) %> Coin<%= Math.floor(calculated.bank) == 1 ? '': 's' %></span></div>
-                    <% } %>
-                    <% if('levels' in calculated){ %>
-                        <div class="additional-stat"><span data-tippy-content="
-                        <span class='stat-name'>Total Skill XP: </span><span class='stat-value'><%= Math.round(calculated.total_skill_xp).toLocaleString() %></span>
-                        <div class='tippy-explanation'>Total XP gained in all skills except Carpentry and Runecrafting.</div>
-                        <span class='stat-name'>Average Level: </span><span class='stat-value'><%= calculated.average_level.toFixed(2) %></span>
-                        <div class='tippy-explanation'>Average skill level over all skills except Carpentry and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div>
-                        <% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
-                        <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
-                        "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= Math.floor(calculated.average_level * 10) / 10 %></span></span></div>
-                        <div class="additional-stat">
-                            <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
-                        </div>
-                    <% } %>
-                </div>
+            </div>
+
+            <div id="additional_stats_container">
+                <% if(calculated.current_area){ %>
+                <div class="additional-stat"><span class="stat-name"><%= calculated.current_area_updated ? 'Current' : 'Last' %> Area: </span><span class="stat-value"><%= calculated.current_area %></span></div>
+                <% } %>
+                <div class="additional-stat"><span data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></span></div>
+                <div class="additional-stat"><span data-tippy-content="Joined on <%= moment(calculated.first_join.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></span></div>
+                <div class="additional-stat"><span class="stat-name">Purse: </span><span class="stat-value"><%= helper.formatNumber(calculated.purse, true) %> Coin<%= Math.floor(calculated.purse) == 1 ? '': 's' %></span></div>
+                <% if('bank' in calculated){ %>
+                    <div class="additional-stat"><span class="stat-name">Bank Account: </span><span class="stat-value"><%= helper.formatNumber(calculated.bank, true) %> Coin<%= Math.floor(calculated.bank) == 1 ? '': 's' %></span></div>
+                <% } %>
+                <% if('levels' in calculated){ %>
+                    <div class="additional-stat"><span data-tippy-content="
+                    <span class='stat-name'>Total Skill XP: </span><span class='stat-value'><%= Math.round(calculated.total_skill_xp).toLocaleString() %></span>
+                    <div class='tippy-explanation'>Total XP gained in all skills except Carpentry and Runecrafting.</div>
+                    <span class='stat-name'>Average Level: </span><span class='stat-value'><%= calculated.average_level.toFixed(2) %></span>
+                    <div class='tippy-explanation'>Average skill level over all skills except Carpentry and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div>
+                    <% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
+                    <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
+                    "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= Math.floor(calculated.average_level * 10) / 10 %></span></span></div>
+                    <div class="additional-stat">
+                        <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
+                    </div>
+                <% } %>
             </div>
 
             <div id="skill_levels_container">
@@ -1296,7 +1311,7 @@ twitterDescription += '. Click to view more stats!'
                 <% } %>
             </div>
         </div>
-        <div id="nav_bar" data-margin-top="48" data-sticky-class="nav-bar-stickied">
+        <div id="nav_bar">
             <div id="nav_bar_line"></div>
             <div id="nav_bar_background"></div>
             <div id="nav_items_container">
@@ -1521,9 +1536,27 @@ twitterDescription += '. Click to view more stats!'
 
                         for(const pet of calculated.pets)
                             totalPetXp += pet.exp;
+
+                        let totalUniqueSkins = 0
+                        for(const skins of Object.values(constants.pet_skins)) {
+                            totalUniqueSkins += Object.keys(skins).length
+                        }
+
+                        let userUniqueSkins = 0
+                        let userSkins = []
+                        for (const pet of calculated.pets) {
+                            if (
+                                pet.skin &&
+                                userSkins.indexOf(`${pet.type}/${pet.skin}`) === -1
+                            ) {
+                                userSkins.push(`${pet.type}/${pet.skin}`)
+                                userUniqueSkins++
+                            }
+                        }
                     %>
                     <p class="stat-raw-values">
                         <% max = uniquePets.length >= Object.keys(constants.pet_data).length ? 'golden-text': '' %><span class="stat-name <%= max %>">Unique Pets: </span><span class="stat-value <%= max %>"><%= uniquePets.length %> / <%= Object.keys(constants.pet_data).length %></span><br>
+                        <% max = userUniqueSkins >= totalUniqueSkins ? 'golden-text': '' %><span class="stat-name <%= max %>">Unique Pet Skins: </span><span class="stat-value <%= max %>"><%= userUniqueSkins %> / <%= totalUniqueSkins %></span><br>
                         <% max = calculated.petScore >= Math.max(...Object.keys(constants.pet_rewards)) ? 'golden-text' : '' %><span data-tippy-content="
                         Increase your pet score by collecting unique pets with a high rarity.<br><br>
                         <table>
@@ -2381,8 +2414,32 @@ twitterDescription += '. Click to view more stats!'
                     <% if('milestones' in calculated.misc){ %>
                         <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/93c8aa3fde295fa9f9c27f734bdbab11d33a2e43e855accd7465352377413b)"></div></div><span>pet milestones</span></div>
                         <p class="stat-raw-values">
-                            <% for(const key in calculated.misc.milestones){ %>
-                            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.milestones[key].toLocaleString() %></span><br>
+                            <% for(const key in calculated.misc.milestones){
+                                let progress = {
+                                    rarity: milestone_rarities[pet_milestones[key].length-1],
+                                    maxed: true
+                                };
+                                let tooltip = "";
+
+                                for(let i = 0; i < pet_milestones[key].length; i++){
+                                    if(calculated.misc.milestones[key] < pet_milestones[key][i]){
+                                        progress = {
+                                            percentage: Math.round(calculated.misc.milestones[key]/pet_milestones[key][i]*100),
+                                            rarity: milestone_rarities[i],
+                                            maxed: false
+                                        };
+                                        break;
+                                    }
+                                } 
+
+                                tooltip += `<span class="stat-name">Rarity: </span><span class="stat-value piece-${ progress.rarity }-fg">${ helper.capitalizeFirstLetter(progress.rarity) }</span><br><span class="stat-name">Progress: </span>`;
+                                if(progress.maxed)
+                                    tooltip += `<span class="stat-value golden-text">Maxed!</span>`;
+                                else 
+                                    tooltip += `<span class="stat-value">${ progress.percentage.toLocaleString() }%</span>`;
+                                %>
+                            <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>>
+                                <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.milestones[key].toLocaleString() %></span></span><br>
                             <% } %>
                         </p>
                     <% } %>
@@ -2457,8 +2514,15 @@ twitterDescription += '. Click to view more stats!'
     </div>
     <%- include('../includes/footer'); %>
     <script>
-        let items = <%- JSON.stringify(items) %>;
-        let calculated = <%- JSON.stringify(calculated) %>;
+        let items = JSON.parse(`<%- JSON.stringify(items).replace(/\\/g, '\\\\') %>`);
+        let calculated = JSON.parse(`<%- JSON.stringify(calculated).replace(/\\/g, '\\\\') %>`);
+        <%
+            const clientConstants = { 
+                minecraft_formatting: constants.minecraft_formatting, 
+                special_enchants: constants.special_enchants 
+            }
+        %>
+        const constants = JSON.parse(`<%- JSON.stringify(clientConstants).replace(/\\/g, '\\\\') %>`);
     </script>
 </body>
 </html>
