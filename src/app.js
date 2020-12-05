@@ -75,6 +75,8 @@ async function main(){
     require('./donations/kofi')(app, db);
 
     let FEATURED_PROFILES;
+    let FEATURED_LAST_UPDATED = 0;
+
     async function getExtra(page = null, favorite = false){
         const output = {};
 
@@ -94,7 +96,8 @@ async function main(){
 
         if (page != 'index') return output;
 
-        if(FEATURED_PROFILES == null){
+        if(FEATURED_PROFILES == null || (Date.now() - FEATURED_LAST_UPDATED < 900 * 1000)){
+            FEATURED_LAST_UPDATED = Date.now();
             FEATURED_PROFILES = await db
                 .collection('topViews')
                 .find()
