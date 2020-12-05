@@ -44,9 +44,7 @@ async function main(){
     const db = mongo.db(credentials.dbName);
 
     const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
-
     const cachePath = path.resolve(__dirname, '../cache');
-
     await fs.ensureDir(cachePath);
 
     if(credentials.hypixel_api_key.length == 0)
@@ -76,6 +74,9 @@ async function main(){
     require('./apiv2')(app, db);
     require('./donations/kofi')(app, db);
 
+    let FEATURED_PROFILES;
+    let FEATURED_LAST_UPDATED = 0;
+
     function parseFavorites(cookie) {
         return cookie?.split(',').filter(uuid => /^[0-9a-f]+$/.test(uuid)) || []
     }
@@ -98,6 +99,16 @@ async function main(){
             output.donations = { patreon: patreonEntry.amount || 0 };
 
         if (page === 'index') {
+            if(FEATURED_PROFILES == null || (Date.now() - FEATURED_LAST_UPDATED < 900 * 1000)){
+                FEATURED_LAST_UPDATED = Date.now();
+                FEATURED_PROFILES = await db
+                    .collection('topViews')
+                    .find()
+                    .sort({ position: 1 })
+                    .toArray();
+            }
+
+            output.devs = FEATURED_PROFILES;
 
             output.favorites = [];
             for(let i = 0; i < favorites.length && i < constants.max_favorites; i++){

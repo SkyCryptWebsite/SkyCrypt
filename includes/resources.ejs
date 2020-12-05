@@ -11,7 +11,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/resources/img/app-icons/square-180.png">
     <link rel="apple-touch-icon" sizes="512x512" href="/resources/img/app-icons/square-512.png">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap"></noscript>
-    <link rel="stylesheet" href="/resources/css/index.css?v137">
+    <link rel="stylesheet" href="/resources/css/index.css?v140">
     <noscript><link rel="stylesheet" href="/resources/css/inventory.css?v13"></noscript>
 
     <script>
@@ -102,16 +102,47 @@
                 }
             }
 
-            const resource_link = "https://sky.shiiyu.moe/resources/";
+            const resource_link = "/resources/";
 
             let bgs = theme.backgrounds;
             for (bg in bgs) 
                 for (img in bgs[bg]) 
                     element.style.setProperty(`--${bg}-${img}`, `url(${bgs[bg][img].replace("../", resource_link)})`);
             
-            if (theme.logo)
-                element.style.setProperty('--logo-square', `url(${theme.logo.replace("../", resource_link)})`);
+            if (theme.logo) {
+                const logoURL = theme.logo.replace("../", resource_link)
+                element.style.setProperty('--logo-square', `url(${logoURL})`);
+                document.querySelectorAll('link[rel="icon"]').forEach(favicon => {
+                    if (favicon.href.match('logo_square')) {
+                        favicon.href = logoURL;
+                    }
+                });
+
+            }
 
             console.log(`Loaded theme: ${currentTheme}`);
         }
+    </script>
+    <script>
+        /**
+         * checks if the scrollbar has a width and sets the style-scrollbar class accordingly
+         */
+        function checkScrollbarStyle() {   
+            outerDiv = document.createElement("div");
+            outerDiv.style.position = 'fixed';
+            innerDiv = document.createElement("div");
+            innerDiv.style.overflowY = 'scroll';
+            outerDiv.appendChild(innerDiv);
+            document.body.appendChild(outerDiv);
+            if (outerDiv.clientWidth > 0) {
+                // desktop style scrollbars
+                document.documentElement.classList.add('style-scrollbar');
+            } else {
+                // mobile style scrollbars
+                document.documentElement.classList.remove('style-scrollbar');
+            }
+            delete outerDiv;
+        }
+
+        window.setTimeout(checkScrollbarStyle);
     </script>

@@ -123,7 +123,9 @@ module.exports = {
         'Thunderlord 6',
         'Thunderlord VI',
         'Lethality 6',
-        'Lethality VI'
+        'Lethality VI',
+        'Compact 10',
+        'Compact X'
     ],
 
     // Number of kills required for each level of expertise
@@ -164,7 +166,8 @@ module.exports = {
         sea_creature_chance: 20,
         magic_find: 10,
         pet_luck: 0,
-        ferocity: 0
+        ferocity: 0,
+        ability_damage: 0
     },
 
     stat_template: {
@@ -182,14 +185,16 @@ module.exports = {
         sea_creature_chance: 0,
         magic_find: 0,
         pet_luck: 0,
-        ferocity: 0
+        ferocity: 0,
+        ability_damage: 0
     },
 
     slayer_cost: {
         1: 100,
         2: 2000,
         3: 10000,
-        4: 50000
+        4: 50000,
+        5: 100000
     },
 
     mob_mounts: {
@@ -262,6 +267,10 @@ module.exports = {
                 {
                     tier: 14,
                     slots: 45
+                },
+                {
+                    tier: 15,
+                    slots: 51
                 }
             ]
         },

@@ -15,25 +15,30 @@ async function main(){
 
     async function updateItems(){
         try{
+            const items = [];
             const { data } = await axios('https://api.slothpixel.me/api/skyblock/items');
 
             for(const skyblockId in data){
                 const skyblockItem = data[skyblockId];
 
-                const doc = {
+                const item = {
+                    id: skyblockId,
                     damage: 0
                 };
 
-                Object.assign(doc, skyblockItem);
-
-                await db
-                .collection('items')
-                .updateOne(
-                    { id: skyblockId },
-                    { $set: doc },
-                    { upsert: true }
-                );
+                Object.assign(item, skyblockItem);
+                items.push(item);
             }
+
+            items.forEach(async item => {
+                await db
+                    .collection('items')
+                    .updateOne(
+                        { id: item.id },
+                        { $set: item },
+                        { upsert: true }
+                    );
+            });
         }catch(e){
             console.error(e);
         }

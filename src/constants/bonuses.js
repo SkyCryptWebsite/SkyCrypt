@@ -64,10 +64,12 @@ module.exports = {
 
         enchanting_skill: {
             1: {
-                intelligence: 1
+                intelligence: 1,
+                ability_damage: 0.5
             },
             15: {
-                intelligence: 2
+                intelligence: 2,
+                ability_damage: 0.5
             }
         },
 
