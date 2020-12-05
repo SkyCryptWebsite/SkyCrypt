@@ -7,7 +7,8 @@ self.addEventListener('install', (event) => {
                 '/resources/html/offline.html',
                 '/resources/img/bg.webp',
                 '/resources/css/index.css',
-
+                '/favicon.ico',
+                '/resources/img/logo_square.png',
             ]);
         }),
     );
