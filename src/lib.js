@@ -682,6 +682,10 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
             if(getId(item) == 'SPEED_ARTIFACT')
                 item.stats.speed = 5;
+
+            // Apply Frozen Chicken bonus
+            if(getId(item) == 'FROZEN_CHICKEN')
+                item.stats.speed = 1;
         }
 
         // Workaround for detecting item types if another language is set by the player on Hypixel
