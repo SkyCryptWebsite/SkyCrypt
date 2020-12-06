@@ -67,6 +67,8 @@ async function init(){
     resourcePacks = resourcePacks.sort((a, b) => a.config.priority - b.config.priority);
 
     for(let pack of resourcePacks){
+        console.log(pack);
+
         pack.files = await getFiles(path.resolve(pack.basePath, 'assets', 'minecraft', 'mcpatcher', 'cit'));
         pack.textures = [];
 
@@ -485,6 +487,7 @@ module.exports = {
         }*/
 
         outputTexture.path = path.relative(path.resolve(__dirname, '..', 'public'), outputTexture.path).replace(/[\\]/g, '/');
+        console.log(`${item.display_name} -> ${outputTexture.file} (${outputTexture.path})`);
 
         return outputTexture;
     }
