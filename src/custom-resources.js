@@ -397,6 +397,8 @@ module.exports = {
             if('weight' in outputTexture)
                 outputTexture.weight = -9999;
 
+            console.log(`--- ${pack.config.id} ---`);
+
             for(const texture of pack.textures){
                 if(ignoreId === false && texture.id != item.id)
                     continue;
@@ -428,6 +430,7 @@ module.exports = {
                     }
                 }
 
+                console.log(`${texture.file} - ${matches}`)
                 if(matches == texture.match.length){
                     if(texture.weight < outputTexture.weight)
                         continue;
@@ -487,7 +490,8 @@ module.exports = {
         }*/
 
         outputTexture.path = path.relative(path.resolve(__dirname, '..', 'public'), outputTexture.path).replace(/[\\]/g, '/');
-        console.log(`${item.display_name} -> ${outputTexture.file} (${outputTexture.path})`);
+        console.log(`${item.display_name} -> ${outputTexture.pack.config.id} (${outputTexture.file})`);
+        console.log(`${outputTexture.path}`);
 
         return outputTexture;
     }
