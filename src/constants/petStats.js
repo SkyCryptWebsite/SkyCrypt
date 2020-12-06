@@ -9,11 +9,11 @@ function floor(num, decimals) {
 	return Math.floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
 }
 
-function formatStat(stat, ability_damage = false) {
+function formatStat(stat) {
 	let statFloored = Math.floor(stat);
 	if (statFloored > 0)
 		return `§a+${statFloored}`;
-	else 
+	else
 		return `§a${statFloored}`;
 }
 
@@ -83,7 +83,7 @@ class Pet {
 					list.push(`§7True Defense: ${formatStat(newStats[stat])}`);
 					break;
 				case "ability_damage":
-					list.push(`§7Ability Damage: ${formatStat(newStats[stat], true)}`);
+					list.push(`§7Ability Damage: ${formatStat(newStats[stat])}%`);
 					break;
 				case "damage":
 					list.push(`§7Damage: ${formatStat(newStats[stat])}`);
@@ -361,7 +361,7 @@ class Bat extends Pet {
 			intelligence: this.level * 1,
 			speed: this.level * 0.05
 		};
-        if (this.rarity > 4) 
+        if (this.rarity > 4)
             stats.sea_creature_chance = this.level * 0.05;
 		return stats;
 	}
@@ -2311,7 +2311,7 @@ class Parrot extends Pet {
 class Sheep extends Pet {
 	get stats() {
 		return {
-			ability_damage: this.level * 0.5,
+			ability_damage: this.level * 0.2,
 			intelligence: this.level * 1
 		};
 	}
