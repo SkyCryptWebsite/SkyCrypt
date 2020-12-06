@@ -2,6 +2,7 @@ const helper = require('./helper');
 const lib = require('./lib');
 const cors = require('cors');
 const constants = require('./constants');
+const customResources = require('./custom-resources');
 
 const Redis = require("ioredis");
 const redisClient = new Redis();
@@ -69,6 +70,10 @@ module.exports = (app, db) => {
 
     app.all('/api/v2/leaderboards', cors(), async (req, res) => {
         res.json(leaderboards);
+    });
+
+    app.all('/api/v2/packs', cors(), async (req, res) => {
+        res.json(customResources.detailedPacks);
     });
 
     app.all('/api/v2/leaderboard/:lbName', cors(), async (req, res) => {

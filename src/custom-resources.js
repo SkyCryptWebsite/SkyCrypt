@@ -378,6 +378,7 @@ readyPromise.then(() => {
 module.exports = {
     ready: false,
     packs: outputPacks,
+    detailedPacks: resourcePacks,
     getTexture: async (item, ignoreId = false, packIds) => {
         if(!module.exports.ready)
             await readyPromise;
