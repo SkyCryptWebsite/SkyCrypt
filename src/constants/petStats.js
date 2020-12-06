@@ -2454,9 +2454,9 @@ module.exports = {
 		'Ghoul': Ghoul,
 		'Golem': Golem,
 		'Griffin': Griffin,
-		'Guardian': Guardian,
 		'Horse': Horse,
 		'Hound': Hound,
+		'Jerry': Jerry,
 		'Magma Cube': MagmaCube,
 		'Phoenix': Phoenix,
 		'Pigman': Pigman,
@@ -2485,9 +2485,10 @@ module.exports = {
 		//Alchemy
 		'Jellyfish': Jellyfish,
 		'Parrot': Parrot,
-		'Sheep': Sheep,
+        'Sheep': Sheep,
+        //Enchanting
+		'Guardian': Guardian,
 		//Other
-		'Jerry': Jerry,
-		'???': QuestionMark
+		'???': QuestionMark,
 	}
 }
