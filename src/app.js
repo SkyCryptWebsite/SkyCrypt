@@ -34,6 +34,7 @@ async function main(){
     const { MongoClient } = require('mongodb');
     const helper = require('./helper');
     const constants = require('./constants');
+    const customResources = require('./custom-resources');
     const { SitemapStream, streamToPromise } = require('sitemap');
     const { createGzip } = require('zlib');
     const twemoji = require('twemoji');
@@ -85,6 +86,8 @@ async function main(){
         output.themes = lib.getThemes();
 
         output.packs = lib.getPacks();
+
+        output.detailedPacks = customResources.detailedPacks;
 
         if('recaptcha_site_key' in credentials)
             output.recaptcha_site_key = credentials.recaptcha_site_key;
