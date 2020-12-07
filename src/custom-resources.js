@@ -173,6 +173,8 @@ async function init(){
             if(!textureFile.endsWith('.png'))
                 textureFile += '.png';
 
+            if(pack.config.id=="FURFSKY_REBORN") console.log(textureFile);
+
             try{
                 await fs.access(textureFile, fs.F_OK);
             }catch(e){
