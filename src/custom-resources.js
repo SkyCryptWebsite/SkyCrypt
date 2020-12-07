@@ -180,6 +180,7 @@ async function init(){
             }
 
             texture.path = textureFile;
+            if(pack.config.id=="FURFSKY_REBORN") console.log(texture.path);
 
             const textureImage = sharp(textureFile);
             const textureMetadata = await textureImage.metadata();
