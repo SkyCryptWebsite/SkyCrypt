@@ -79,6 +79,9 @@ async function init(){
             if(pack.config.id=="FURFSKY_REBORN") console.log(`prop ${file}`);
 
             let lines = fs.readFileSync(file, 'utf8').split("\r\n");
+
+            if(pack.config.id=="FURFSKY_REBORN") console.log(`lines ${lines}`);
+
             let properties = {};
 
             for(let line of lines){
@@ -95,6 +98,8 @@ async function init(){
 
             if(properties.type != 'item')
                 continue;
+
+            // It doesn't get here..
 
             let texture = {weight: 0, animated: false, file: path.basename(file), match: []};
 
