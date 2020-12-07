@@ -100,6 +100,8 @@ async function init(){
             ? path.resolve(path.dirname(file), properties.texture)
             : path.resolve(path.dirname(file), path.basename(file, '.properties'));
 
+            if(pack.config.id=="FURFSKY_REBORN") console.log(`OWO ${textureFile}`);
+
             if('texture.bow_standby' in properties)
                 textureFile = path.resolve(path.dirname(file), properties['texture.bow_standby']);
 
@@ -172,8 +174,6 @@ async function init(){
 
             if(!textureFile.endsWith('.png'))
                 textureFile += '.png';
-
-            if(pack.config.id=="FURFSKY_REBORN") console.log(textureFile);
 
             try{
                 await fs.access(textureFile, fs.F_OK);
