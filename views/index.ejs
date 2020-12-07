@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
     <title>SkyCrypt</title>
-    <meta name="description" content="A beautiful site for sharing your SkyBlock profile 🍣">
+    <% const description = "A beautiful site for sharing your SkyBlock profile 🍣" %> 
+    <meta name="description" content="<%= description %>">
     <link rel="icon" href="/resources/img/logo_square.svg" sizes="any" type="image/svg+xml">
     <meta property="og:image" content="/resources/img/logo_square.svg">
     <meta property="og:title" content="SkyBlock Stats">
-    <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🍣">
+    <meta property="og:description" content="<%= description %>">
 <%- include('../includes/resources') %>
     <style>
     @media (max-width: 480px){
