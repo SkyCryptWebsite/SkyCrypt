@@ -76,6 +76,8 @@ async function init(){
             if(path.extname(file) != '.properties')
                 continue;
 
+            if(pack.config.id=="FURFSKY_REBORN") console.log(`prop ${file}`);
+
             let lines = fs.readFileSync(file, 'utf8').split("\r\n");
             let properties = {};
 
