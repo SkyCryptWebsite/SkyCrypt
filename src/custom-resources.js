@@ -74,7 +74,7 @@ async function init(){
             if(path.extname(file) != '.properties')
                 continue;
 
-            let lines = fs.readFileSync(file, 'utf8').split("\n");
+            let lines = fs.readFileSync(file, 'utf8').split("\r\n");
             let properties = {};
 
             for(let line of lines){
