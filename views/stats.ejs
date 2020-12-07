@@ -1045,12 +1045,12 @@ metaDescription += '.';
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title><%- calculated.display_name %><% if(calculated.display_emoji){ %> <%- calculated.display_emoji %><% } %> | SkyCrypt</title>
+    <title><%= calculated.display_name %><% if(calculated.display_emoji){ %> <%= calculated.display_emoji %><% } %> | SkyCrypt</title>
     <meta name="description" content="<%= metaDescription %>">
-    <link rel="icon" href="https://crafatar.com/avatars/<%- calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
+    <link rel="icon" href="https://crafatar.com/avatars/<%= calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
     <meta property="og:type" content="profile">
-    <meta property="og:title" content="<%- calculated.display_name %><% if(calculated.display_emoji){ %> <%- calculated.display_emoji %><% } %> (<%= calculated.profile.cute_name %>)">
-    <meta property="og:image" content="https://crafatar.com/avatars/<%- calculated.uuid %>?size=512&overlay">
+    <meta property="og:title" content="<%= calculated.display_name %><% if(calculated.display_emoji){ %> <%= calculated.display_emoji %><% } %> (<%= calculated.profile.cute_name %>)">
+    <meta property="og:image" content="https://crafatar.com/avatars/<%= calculated.uuid %>?size=512&overlay">
     <meta property="og:description" content="<%= description %>">
     <meta property="og:profile:username" content="<%= calculated.display_name %>">
     <meta name="twitter:card" content="summary"></meta>
@@ -1079,10 +1079,10 @@ metaDescription += '.';
                 <%- calculated.rank_prefix %>
                 <%= calculated.display_name %>
                 <% if(calculated.display_emoji_img){ %><img class="emoji" draggable="false" src="<%= calculated.display_emoji_img %>">
-                <% }else if(calculated.display_emoji){ %><%- extra.twemoji.parse(calculated.display_emoji) %><% } %>
+                <% }else if(calculated.display_emoji){ %><%= extra.twemoji.parse(calculated.display_emoji) %><% } %>
                 <div id="other_players">
                     <% calculated.members.forEach(member => { %>
-                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"><%= member.display_name %><% if(member.emojiImg){ %><img class="emoji" draggable="false" src="<%= member.emojiImg %>"><% }else if(member.emoji){ %> <%- extra.twemoji.parse(member.emoji) %><% } %><div class="goto-last-played"><%= 'last_updated' in member ? member.last_updated.text : '' %></div></a>
+                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"><%= member.display_name %><% if(member.emojiImg){ %><img class="emoji" draggable="false" src="<%= member.emojiImg %>"><% }else if(member.emoji){ %> <%= extra.twemoji.parse(member.emoji) %><% } %><div class="goto-last-played"><%= 'last_updated' in member ? member.last_updated.text : '' %></div></a>
                     <% }); %>
                 </div>
             </div><span class="text-on"> on </span><div tabindex="2" id="stats_for_profile">
