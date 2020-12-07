@@ -1023,25 +1023,23 @@ description += `💰 Purse: ${helper.formatNumber(calculated.purse, true)} Coins
 if(calculated.bank)
     description += `\n🏦 Bank Account: ${helper.formatNumber(calculated.bank, true)} Coin${Math.floor(calculated.bank) == 1 ? '': 's'}`;
 
-let twitterDescription = `${calculated.display_name} has been playing SkyBlock for ${moment(calculated.first_join.unix).fromNow(true)}`;
+let metaDescription = `${calculated.display_name} has been playing SkyBlock for ${moment(calculated.first_join.unix).fromNow(true)}`;
 
 if(items.armor_set){
     if(highestRaritySword)
-        twitterDescription += `, is wearing ${items.armor_set}`;
+        metaDescription += `, is wearing ${items.armor_set}`;
     else
-        twitterDescription += ` and is wearing ${items.armor_set}`;
+        metaDescription += ` and is wearing ${items.armor_set}`;
 }
 
 if(highestRaritySword){
     if(items.armor_set)
-        twitterDescription += ` and fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
+        metaDescription += ` and fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
     else
-        twitterDescription += ` and is fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
+        metaDescription += ` and is fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
 }
 
-let metaDescription = twitterDescription + '.';
-
-twitterDescription += '. Click to view more stats!'
+metaDescription += '.';
 
 %>
 <!DOCTYPE html>
@@ -1055,7 +1053,6 @@ twitterDescription += '. Click to view more stats!'
     <meta property="og:image" content="https://crafatar.com/avatars/<%- calculated.uuid %>?size=256&overlay">
     <meta property="twitter:image" content="https://crafatar.com/avatars/<%- calculated.uuid %>?size=256&overlay">
     <meta property="og:description" content="<%= description %>">
-    <meta property="twitter:description" content="<%= twitterDescription %>">
 <%- include('../includes/resources') %>
 </head>
 <body>
