@@ -80,7 +80,7 @@ async function init(){
 
             let lines = fs.readFileSync(file, 'utf8').split("\r\n");
 
-            if(pack.config.id=="FURFSKY_REBORN") console.log(`lines ${lines}`);
+            if(pack.config.id=="FURFSKY_REBORN") console.log(lines);
 
             let properties = {};
 
