@@ -272,12 +272,11 @@ module.exports = {
                 skyblockId = split[0];
                 query.damage = new Number(split[1]);
             }
-        }
-
-        if(skyblockId)
+    
             item = Object.assign(item, await db
-            .collection('items')
-            .findOne({ id: skyblockId }));
+                .collection('items')
+                .findOne({ id: skyblockId }));
+        }
 
         if(query.name){
             const results =  await db
