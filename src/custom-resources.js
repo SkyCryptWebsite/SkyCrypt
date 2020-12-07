@@ -67,8 +67,6 @@ async function init(){
     resourcePacks = resourcePacks.sort((a, b) => a.config.priority - b.config.priority);
 
     for(let pack of resourcePacks){
-        console.log(pack);
-
         pack.files = await getFiles(path.resolve(pack.basePath, 'assets', 'minecraft', 'mcpatcher', 'cit'));
         pack.textures = [];
 
@@ -76,21 +74,18 @@ async function init(){
             if(path.extname(file) != '.properties')
                 continue;
 
-            if(pack.config.id=="FURFSKY_REBORN") console.log(`prop ${file}`);
-
-            let lines = fs.readFileSync(file, 'utf8').split("\r\n");
-
-            if(pack.config.id=="FURFSKY_REBORN") console.log(lines);
-
+            let lines = fs.readFileSync(file, 'utf8').split("\n");
             let properties = {};
 
             for(let line of lines){
+                // line.replace("\r", "");
                 let split = line.split("=");
 
                 if(split.length < 2)
                     continue;
 
                 properties[split[0]] = split.slice(1).join("=");
+                if(pack.config.id=="FURFSKY_REBORN") console.log(`${split[0]}: ${properties[split[0]]}`);
             }
 
             if(!('type' in properties))
@@ -98,8 +93,6 @@ async function init(){
 
             if(properties.type != 'item')
                 continue;
-
-            // It doesn't get here..
 
             let texture = {weight: 0, animated: false, file: path.basename(file), match: []};
 
