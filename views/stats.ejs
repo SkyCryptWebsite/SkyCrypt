@@ -1320,7 +1320,7 @@ twitterDescription += '. Click to view more stats!'
                 <% if(!items.no_inventory){ %><div class="nav-item" data-target="accessories">Accessories</div><% } %>
                 <% if(calculated.pets.length > 0){ %><div class="nav-item" data-target="pets">Pets</div><% } %>
                 <% if(!items.no_inventory){ %><div class="nav-item" data-target="inventory">Inventory</div><% } %>
-                <div class="nav-item" data-target="fishing">Fishing</div>
+                <div class="nav-item" data-target="skills">Skills</div>
                 <div class="nav-item" data-target="dungeons">Dungeons</div>
                 <div class="nav-item" data-target="slayer">Slayer</div>
                 <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){ %><div class="nav-item" data-target="kills">Kills</div><% } %>
@@ -1708,10 +1708,11 @@ twitterDescription += '. Click to view more stats!'
                 </div>
             </div>
         <% } %>
-        <div data-stat="fishing" class="stat-container stat-fishing">
+        <div data-stat="skills" class="stat-container stat-fishing">
             <div class="stat-anchor"></div>
-            <div class="stat-header"><span>Fishing</span></div>
+            <div class="stat-header"><span>Skills</span></div>
             <div class="stat-content">
+                <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-346_0"></div></div><span>fishing</span></div>
                 <%
                 let totalSeaCreatureKills = 0;
 
