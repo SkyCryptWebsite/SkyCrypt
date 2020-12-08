@@ -1250,7 +1250,7 @@ module.exports = {
         return output;
     },
 
-    getLevels: async (userProfile, hypixelProfile) => {
+    getLevels: async (userProfile, hypixelProfile, levelCaps) => {
         let output = {};
 
         let skillLevels;
@@ -1272,12 +1272,13 @@ module.exports = {
 
             skillLevels = {
                 taming: getLevelByXp(userProfile.experience_skill_taming || 0, {skill: "taming"}),
-                farming: getLevelByXp(userProfile.experience_skill_farming || 0, {skill: "farming", cap: hypixelProfile.achievements.skyblock_harvester || 0}),
+                farming: getLevelByXp(userProfile.experience_skill_farming || 0, 
+                    {skill: "farming", cap: levelCaps.farming || 0}),
                 mining: getLevelByXp(userProfile.experience_skill_mining || 0, {skill: "mining"}),
                 combat: getLevelByXp(userProfile.experience_skill_combat || 0, {skill: "combat"}),
                 foraging: getLevelByXp(userProfile.experience_skill_foraging || 0, {skill: "foraging"}),
                 fishing: getLevelByXp(userProfile.experience_skill_fishing || 0, {skill: "fishing"}),
-                enchanting: getLevelByXp(userProfile.experience_skill_enchanting || 0, {skill: "enchanting", cap: hypixelProfile.achievements.skyblock_augmentation || 0}),
+                enchanting: getLevelByXp(userProfile.experience_skill_enchanting || 0, {skill: "enchanting"}),
                 alchemy: getLevelByXp(userProfile.experience_skill_alchemy || 0, {skill: "alchemy"}),
                 carpentry: getLevelByXp(userProfile.experience_skill_carpentry || 0, {skill: "carpentry"}),
                 runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting || 0, {skill: "runecrafting", type: "runecrafting"}),
@@ -1379,13 +1380,18 @@ module.exports = {
 
         output.fairy_souls = { collected: userProfile.fairy_souls_collected, total: MAX_SOULS, progress: Math.min(userProfile.fairy_souls_collected / MAX_SOULS, 1) };
 
-        const { levels, average_level, average_level_no_progress, total_skill_xp, average_level_rank } = await module.exports.getLevels(userProfile, hypixelProfile);
+        const levelCaps = {
+            farming: constants.default_skill_caps.farming + (userProfile.jacob2?.perks?.farming_level_cap || 0)
+        };
+
+        const { levels, average_level, average_level_no_progress, total_skill_xp, average_level_rank } = await module.exports.getLevels(userProfile, hypixelProfile, levelCaps);
 
         output.levels = levels;
         output.average_level = average_level;
         output.average_level_no_progress = average_level_no_progress;
         output.total_skill_xp = total_skill_xp;
         output.average_level_rank = average_level_rank;
+        output.level_caps = levelCaps;
 
         output.skill_bonus = {};
 
@@ -1393,7 +1399,7 @@ module.exports = {
             if(levels[skill].level == 0)
                 continue;
 
-            const skillBonus = getBonusStat(levels[skill].level || levels[skill], `${skill}_skill`, 50, 1);
+            const skillBonus = getBonusStat(levels[skill].level || levels[skill], `${skill}_skill`, levels[skill].levelCap, 1);
 
             output.skill_bonus[skill] = Object.assign({}, skillBonus);
 
