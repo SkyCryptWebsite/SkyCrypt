@@ -34,6 +34,7 @@ const customResources = require('./custom-resources');
 const { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } = require('constants');
 const loreGenerator = require('./loreGenerator');
 const randomEmoji = require('./constants/randomEmoji');
+const { outputJSON } = require('fs-extra');
 
 const parseNbt = util.promisify(nbt.parse);
 
@@ -1517,9 +1518,9 @@ module.exports = {
         if(activePet && Date.now() - userProfile.last_save >= 7 * 60 * 1 /* change to 1000 - its one for testing; 7 minutes*/) {
             // We know they are not online so apply pets to armor
             activePet.ref.modifyArmor(items.armor[3], getId(items.armor[3]),
-                                      items.armor[2], getId(items.armor[2]),
-                                      items.armor[1], getId(items.armor[1]),
-                                      items.armor[0], getId(items.armor[0]));
+                                    items.armor[2], getId(items.armor[2]),
+                                    items.armor[1], getId(items.armor[1]),
+                                    items.armor[0], getId(items.armor[0]));
             loreGenerator.makeLore(items.armor[0]);
             loreGenerator.makeLore(items.armor[1]);
             loreGenerator.makeLore(items.armor[2]);
@@ -1565,7 +1566,6 @@ module.exports = {
 
                     if(line.startsWith('Your bonus: ')){
                         item.stats.intelligence = parseInt(line.split(' ')[2].substring(1));
-
                         break;
                     }
                 }
@@ -1711,7 +1711,7 @@ module.exports = {
         }
 
          // Modify stats based off of pet ability (because this one is for when you don't have armor)
-         if (activePet)
+        if (activePet)
             activePet.ref.modifyStats(output.stats);
 
         // Stats shouldn't go into negative
@@ -1868,6 +1868,60 @@ module.exports = {
             shredder_fished: userProfile.stats.shredder_fished || 0,
             shredder_bait: userProfile.stats.shredder_bait || 0,
         };
+
+        const farming = {
+            talked: userProfile.jacob2.talked || false
+        };
+
+        if(farming.talked){
+            // Your current badges
+            farming.badges = {
+                bronze: userProfile.jacob2.medals_inv.bronze || 0,
+                silver: userProfile.jacob2.medals_inv.silver || 0,
+                gold: userProfile.jacob2.medals_inv.gold || 0
+            };
+
+            // Your current perks
+            farming.perks = {
+                double_drops: userProfile.jacob2.perks.double_drops || 0,
+                farming_level_cap: userProfile.jacob2.perks.farming_level_cap || 0
+            };
+
+            // Things about individual crops
+            farming.crops = {};
+
+            // Template for contests
+            const contests = {
+                attended_contests: 0,
+                all_contests: []
+            };
+
+            for(const contest in userProfile.jacob2.contests){
+                const data = userProfile.jacob2.contests[contest];
+
+                let contest_name = contest.split(':');
+                const date = `${contest_name[1]}_${contest_name[0]}`;
+                const crop = contest_name[2];
+
+                // TODO: Move personal best to farming.crops
+                if(!contests.personal_best[crop])
+                    contests.personal_best[crop] = data.collected;
+                else if(contests.personal_best[crop] < data.collected)
+                    contests.personal_best[crop] = data.collected;
+
+                contests.attended_contests++;
+                contests.all_contests.push({
+                    date: date,
+                    crop: crop,
+                    collected: data.collected,
+                    claimed: data.claimed_rewards || false
+                });
+            }
+
+            farming.contests = contests;
+        }
+
+        output.farming = farming;
 
         const misc = {};
 
