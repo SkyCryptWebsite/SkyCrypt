@@ -1177,9 +1177,10 @@ class Phoenix extends Pet {
 
 	get abilities() {
 		let list = [this.first, this.second];
-		if (this.rarity > 3)
+		if (this.rarity > 3){
 			list.push(this.third);
-		list.push(this.fourth);
+			list.push(this.fourth);
+		}
 		return list;
 	}
 
@@ -1203,7 +1204,6 @@ class Phoenix extends Pet {
 	}
 
 	get third() {
-		let mult = 0;
 		return {
 			name: "§6Magic Bird",
 			desc: [`§7You may always fly on your private island`]
@@ -1211,7 +1211,6 @@ class Phoenix extends Pet {
 	}
 
 	get fourth() {
-		let mult = 0;
 		return {
 			name: "§6Eternal Coins",
 			desc: [`§7Don't lose coins from death.`]
