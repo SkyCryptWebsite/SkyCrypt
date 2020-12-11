@@ -35,7 +35,7 @@
         <div id="enter_player_box_wrapper">
             <div id="enter_player_box">
                 <p>Show SkyBlock stats for</p>
-                <input <% if(player){ %> value="<%= player %>" <% }%> id="inp_enter_username" type="text" placeholder="Enter username">
+                <input <% if(player){ %> value="<%= player %>" <% }%> id="inp_enter_ign" type="text" placeholder="Enter username" autofocus>
                 <a href="<% if(player){ %>/stats/<%= player %><% }else{ %>#<% } %>" id="goto_target_username">Show me</a>
                 <!--<p>or take me to a <a href="/random/stats">random profile</a>.</p>-->
             </div>
@@ -100,7 +100,7 @@
                 console.log("An error occured with message: \"<%= error %>\"");
             <% } %>
 
-            const targetUsername = document.getElementById("inp_enter_username");
+            const targetUsername = document.getElementById("inp_enter_ign");
             const searchUser = document.getElementById('search_user');
             const inputSearchUser = document.getElementById('inp_search_user');
             const btnSearchUser = document.getElementById('btn_search_user');
