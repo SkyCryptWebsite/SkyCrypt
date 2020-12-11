@@ -1278,7 +1278,7 @@ twitterDescription += '. Click to view more stats!'
                     <div class='tippy-explanation'>Average skill level over all skills except Carpentry and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div>
                     <% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
                     <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
-                    "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= Math.floor(calculated.average_level * 10) / 10 %></span></span></div>
+                    "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level.toFixed(2) %></span></span></div>
                     <div class="additional-stat">
                         <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
                     </div>
@@ -2430,12 +2430,12 @@ twitterDescription += '. Click to view more stats!'
                                         };
                                         break;
                                     }
-                                } 
+                                }
 
                                 tooltip += `<span class="stat-name">Rarity: </span><span class="stat-value piece-${ progress.rarity }-fg">${ helper.capitalizeFirstLetter(progress.rarity) }</span><br><span class="stat-name">Progress: </span>`;
                                 if(progress.maxed)
                                     tooltip += `<span class="stat-value golden-text">Maxed!</span>`;
-                                else 
+                                else
                                     tooltip += `<span class="stat-value">${ progress.percentage.toLocaleString() }%</span>`;
                                 %>
                             <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>>
@@ -2517,9 +2517,9 @@ twitterDescription += '. Click to view more stats!'
         let items = JSON.parse(`<%- JSON.stringify(items).replace(/\\/g, '\\\\') %>`);
         let calculated = JSON.parse(`<%- JSON.stringify(calculated).replace(/\\/g, '\\\\') %>`);
         <%
-            const clientConstants = { 
-                minecraft_formatting: constants.minecraft_formatting, 
-                special_enchants: constants.special_enchants 
+            const clientConstants = {
+                minecraft_formatting: constants.minecraft_formatting,
+                special_enchants: constants.special_enchants
             }
         %>
         const constants = JSON.parse(`<%- JSON.stringify(clientConstants).replace(/\\/g, '\\\\') %>`);
