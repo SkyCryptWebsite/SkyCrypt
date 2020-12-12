@@ -1122,6 +1122,7 @@ twitterDescription += '. Click to view more stats!'
                 <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">Plancke</a>
                 <a href="https://skyblock.matdoes.dev/profile/<%= calculated.display_name %>/<%= calculated.profile.cute_name == 'Deleted' ? calculated.profile.profile_id : calculated.profile.cute_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">matdoes.dev</a>
                 <a href="https://auctions.craftlink.xyz/players/<%= calculated.uuid %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">HyAuctions</a>
+                <a href="https://namemc.com/profile/<%= calculated.uuid %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">NameMC</a>
                 <div id="additional_socials">
                     <div data-copy-text="<%= calculated.uuid %>" class="copy-text additional-player-stat">Copy UUID</div>
                     <% if('DISCORD' in calculated.social){ %><div data-copy-text="<%= calculated.social.DISCORD %>" class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></div><% } %>
