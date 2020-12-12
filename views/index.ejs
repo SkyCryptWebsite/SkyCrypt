@@ -88,7 +88,7 @@
                 <% let message = profile.username == "Shiiyu" ?  `<span class="stat-name">Last online: </span><span class="stat-value">January 1st, 1970</span>` : extra.twemoji.parse(profile.message)%>
                 <a href="/stats/<%= profile.uuid %>" class="top-profile">
                     <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
-                    <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%= extra.twemoji.parse(profile.emoji) %><% } %></div><br>
+                    <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
                     <div class="profile-last-online"><%- message %></div>
                 </a>
 
