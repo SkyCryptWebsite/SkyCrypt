@@ -696,6 +696,10 @@ module.exports = {
                 strength: 30,
                 speed: 20
             }
-        }
+        },
+        MINOS_RELIC: {
+            description: `§7Increases all pet stats by §a33.3%`,
+            multAllStats: 1.333,
+        },
     }
 }
