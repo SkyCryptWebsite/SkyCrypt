@@ -834,7 +834,8 @@ class Ghoul extends Pet {
 	get stats() {
 		return {
 			intelligence: this.level * 0.75,
-			health: this.level * 1
+            health: this.level * 1,
+            ferocity: this.level * 0.05,
 		};
 	}
 
@@ -1057,7 +1058,8 @@ class Hound extends Pet {
 	get stats() {
 		return {
 			strength: this.level * 0.4,
-			bonus_attack_speed: this.level * 0.15
+			bonus_attack_speed: this.level * 0.15,
+            ferocity: this.level * 0.05,
 		};
 	}
 
@@ -1222,7 +1224,8 @@ class Pigman extends Pet {
 	get stats() {
 		return {
 			strength: this.level * 0.5,
-			defense: this.level * 0.5
+            defense: this.level * 0.5,
+            ferocity: this.level * 0.05,
 		};
 	}
 
@@ -1851,7 +1854,8 @@ class Monkey extends Pet {
 class Ocelot extends Pet {
 	get stats() {
 		return {
-			speed: this.level * 0.5
+            speed: this.level * 0.5,
+            ferocity: this.level * 0.1,
 		};
 	}
 
@@ -2115,7 +2119,8 @@ class Megalodon extends Pet {
 	get stats() {
 		return {
 			strength: this.level * 0.5,
-			magic_find: this.level * 0.1
+            magic_find: this.level * 0.1,
+            ferocity: this.level * 0.05,
 		};
 	}
 
