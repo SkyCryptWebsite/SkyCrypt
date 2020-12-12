@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
     <title>SkyCrypt</title>
-    <meta name="description" content="A beautiful site for sharing your SkyBlock profile 🍣">
+    <% const description = "A beautiful site for sharing your SkyBlock profile 🍣" %> 
+    <meta name="description" content="<%= description %>">
     <link rel="icon" href="/resources/img/logo_square.svg" sizes="any" type="image/svg+xml">
     <meta property="og:image" content="/resources/img/logo_square.svg">
     <meta property="og:title" content="SkyBlock Stats">
-    <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🍣">
+    <meta property="og:description" content="<%= description %>">
 <%- include('../includes/resources') %>
     <style>
     @media (max-width: 480px){
@@ -71,9 +72,9 @@
             %>
             <a href="/stats/<%= profile.uuid %>" class="top-profile">
                 <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
-                <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
+                <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%= extra.twemoji.parse(profile.emoji) %><% } %></div><br>
                 <div class="profile-last-online"><%- lastUpdatedText %></div>
-                <div class="profile-rank"><%- extra.twemoji.parse("★") %></div>
+                <div class="profile-rank"><%= extra.twemoji.parse("★") %></div>
             </a>
             <% }else{ %>
             <a class="top-profile">
@@ -87,7 +88,7 @@
                 <% let message = profile.username == "Shiiyu" ?  `<span class="stat-name">Last online: </span><span class="stat-value">January 1st, 1970</span>` : extra.twemoji.parse(profile.message)%>
                 <a href="/stats/<%= profile.uuid %>" class="top-profile">
                     <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
-                    <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
+                    <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%= extra.twemoji.parse(profile.emoji) %><% } %></div><br>
                     <div class="profile-last-online"><%- message %></div>
                 </a>
 
