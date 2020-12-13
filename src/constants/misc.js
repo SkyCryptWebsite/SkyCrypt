@@ -569,5 +569,18 @@ module.exports = {
         },
 
         'NONE': null
-    }
+    },
+
+    farming_crops: [
+        'INK_SACK:3',
+        'POTATO_ITEM',
+        'CARROT_ITEM',
+        'CACTUS',
+        'SUGAR_CANE',
+        'MUSHROOM_COLLECTION',
+        'PUMPKIN',
+        'NETHER_STALK',
+        'WHEAT',
+        'MELON'
+    ]
 };

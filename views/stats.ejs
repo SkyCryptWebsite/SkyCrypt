@@ -1712,94 +1712,101 @@ twitterDescription += '. Click to view more stats!'
             <div class="stat-anchor"></div>
             <div class="stat-header"><span>Skills</span></div>
             <div class="stat-content">
-                <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-346_0"></div></div><span>fishing</span></div>
-                <%
-                let totalSeaCreatureKills = 0;
 
-                for(const creature of seaCreatures){
-                    let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
+                <div class="stat-fishing">
+                    <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-346_0"></div></div><span>fishing</span></div>
 
-                    totalSeaCreatureKills += mobKills.length > 0 ? mobKills[0].amount : 0;
-                }
-                %>
-
-                <p class="stat-raw-values">
-                    <span class="stat-name">Items fished: </span><span class="stat-value"><%= calculated.fishing.total.toLocaleString() %></span><br>
-                    <span class="stat-name">Treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure.toLocaleString() %></span><br>
-                    <span class="stat-name">Large treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure_large.toLocaleString() %></span><br>
-                    <span class="stat-name">Sea Creatures killed: </span><span class="stat-value"><%= totalSeaCreatureKills.toLocaleString() %></span><br>
                     <%
-                    if(calculated.fishing.shredder_fished > 0 && calculated.fishing.shredder_bait > 0){
+                    let totalSeaCreatureKills = 0;
 
-                        %>
-                    <span data-tippy-content='
-                    <span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span><br>
-                    <span class="stat-name">Bait used with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_bait.toLocaleString() %></span><br>
-                    '><span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span></span><br>
-                    <% } %>
-                </p>
+                    for(const creature of seaCreatures){
+                        let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
 
-                <% if(items.rods.length > 0){ %>
-                    <%- stat_component({
-                        name: 'sea_creature_chance',
-                        prettyName: 'SC Chance',
-                        suffix: '%',
-                        baseExplanation: null
-                    }); %>
+                        totalSeaCreatureKills += mobKills.length > 0 ? mobKills[0].amount : 0;
+                    }
+                    %>
 
-                    <p class="stat-sub-header">Fishing Rods</p>
-                    <% if(items.highest_rarity_rod){ %>
                     <p class="stat-raw-values">
-                        <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_rod.rarity %>-fg"><%= items.highest_rarity_rod.display_name %></span>
-                    </p>
-                    <% }else if(items.rods.length > 0){ %>
-                    <p class="stat-raw-values">
-                        <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-common-fg">None</span>
-                    </p>
-                    <% } %>
-                    <div class="pieces">
+                        <span class="stat-name">Items fished: </span><span class="stat-value"><%= calculated.fishing.total.toLocaleString() %></span><br>
+                        <span class="stat-name">Treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure.toLocaleString() %></span><br>
+                        <span class="stat-name">Large treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure_large.toLocaleString() %></span><br>
+                        <span class="stat-name">Sea Creatures killed: </span><span class="stat-value"><%= totalSeaCreatureKills.toLocaleString() %></span><br>
                         <%
-                            let rod = items.rods.slice().sort((a, b) => a.item_index - b.item_index);
+                        if(calculated.fishing.shredder_fished > 0 && calculated.fishing.shredder_bait > 0){
 
-                            if(items.highest_rarity_rod)
-                                rod = [items.highest_rarity_rod];
-
-                            items.rods.filter(a => !a.hidden).forEach(item => { %>
-                                <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece
-                                    <% if(rod.length > 0 && item.backpackIndex === undefined && item.item_index == rod[0].item_index){ %>piece-selected<% } %>
-                                    piece-<%= item.rarity %>-bg">
-                                    <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
-                                        <div class="piece-shine"></div>
-                                    <% } %>
-                                    <div class="piece-hover-area"></div>
-                                    <div class="select-rod"></div>
-                                    <% itemIcon(item, ['piece-icon']); %>
-                                </div>
-                        <%
-                            });
-                        %>
-                    </div>
-                <% } %>
-
-                <% if(totalSeaCreatureKills > 0){ %>
-                    <p class="stat-sub-header">Sea Creatures</p>
-                    <div class="sea-creatures">
-                        <% for(const creature of seaCreatures) {
-                            let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
-
-                            mobKills = mobKills.length > 0 ? mobKills[0].amount : 0;
-
-                            if(mobKills == 0)
-                                continue;
-                        %>
-                            <div class="sea-creature">
-                                <div class="sea-creature-name"><span><%= creature.name %></span></div>
-                                <div class="sea-creature-image" style="background-image: url(/resources/img/sea_creatures/<%= creature.id %>.webp)"></div>
-                                <div class="sea-creature-kills"><span class="stat-value"><%= mobKills.toLocaleString() %></span><span class="stat-name"> Kill<%= mobKills != 1 ? 's' : '' %></span></div>
-                            </div>
+                            %>
+                        <span data-tippy-content='
+                        <span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span><br>
+                        <span class="stat-name">Bait used with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_bait.toLocaleString() %></span><br>
+                        '><span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span></span><br>
                         <% } %>
-                    </div>
-                <% } %>
+                    </p>
+
+                    <% if(items.rods.length > 0){ %>
+                        <%- stat_component({
+                            name: 'sea_creature_chance',
+                            prettyName: 'SC Chance',
+                            suffix: '%',
+                            baseExplanation: null
+                        }); %>
+
+                        <p class="stat-sub-header">Fishing Rods</p>
+                        <% if(items.highest_rarity_rod){ %>
+                        <p class="stat-raw-values">
+                            <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_rod.rarity %>-fg"><%= items.highest_rarity_rod.display_name %></span>
+                        </p>
+                        <% }else if(items.rods.length > 0){ %>
+                        <p class="stat-raw-values">
+                            <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-common-fg">None</span>
+                        </p>
+                        <% } %>
+                        <div class="pieces">
+                            <%
+                                let rod = items.rods.slice().sort((a, b) => a.item_index - b.item_index);
+
+                                if(items.highest_rarity_rod)
+                                    rod = [items.highest_rarity_rod];
+
+                                items.rods.filter(a => !a.hidden).forEach(item => { %>
+                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece
+                                        <% if(rod.length > 0 && item.backpackIndex === undefined && item.item_index == rod[0].item_index){ %>piece-selected<% } %>
+                                        piece-<%= item.rarity %>-bg">
+                                        <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
+                                            <div class="piece-shine"></div>
+                                        <% } %>
+                                        <div class="piece-hover-area"></div>
+                                        <div class="select-rod"></div>
+                                        <% itemIcon(item, ['piece-icon']); %>
+                                    </div>
+                            <%
+                                });
+                            %>
+                        </div>
+                    <% } %>
+
+                    <% if(totalSeaCreatureKills > 0){ %>
+                        <p class="stat-sub-header">Sea Creatures</p>
+                        <div class="sea-creatures">
+                            <% for(const creature of seaCreatures) {
+                                let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
+
+                                mobKills = mobKills.length > 0 ? mobKills[0].amount : 0;
+
+                                if(mobKills == 0)
+                                    continue;
+                            %>
+                                <div class="sea-creature">
+                                    <div class="sea-creature-name"><span><%= creature.name %></span></div>
+                                    <div class="sea-creature-image" style="background-image: url(/resources/img/sea_creatures/<%= creature.id %>.webp)"></div>
+                                    <div class="sea-creature-kills"><span class="stat-value"><%= mobKills.toLocaleString() %></span><span class="stat-name"> Kill<%= mobKills != 1 ? 's' : '' %></span></div>
+                                </div>
+                            <% } %>
+                        </div>
+                    <% } %>
+                </div>
+
+                <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-346_0"></div></div><span>farming</span></div>
+
             </div>
         </div>
         <div data-stat="dungeons" class="stat-container stat-dungeons">

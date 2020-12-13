@@ -1274,7 +1274,7 @@ module.exports = {
             skillLevels = {
                 taming: getLevelByXp(userProfile.experience_skill_taming || 0, {skill: "taming"}),
                 farming: getLevelByXp(userProfile.experience_skill_farming || 0, 
-                    {skill: "farming", cap: levelCaps.farming || 0}),
+                    {skill: "farming", cap: levelCaps?.farming || constants.default_skill_caps.farming}),
                 mining: getLevelByXp(userProfile.experience_skill_mining || 0, {skill: "mining"}),
                 combat: getLevelByXp(userProfile.experience_skill_combat || 0, {skill: "combat"}),
                 foraging: getLevelByXp(userProfile.experience_skill_foraging || 0, {skill: "foraging"}),
@@ -1869,26 +1869,45 @@ module.exports = {
             shredder_bait: userProfile.stats.shredder_bait || 0,
         };
 
+        const farmingCrops = [];
         const farming = {
-            talked: userProfile.jacob2.talked || false
+            talked: userProfile.jacob2?.talked || false
         };
 
         if(farming.talked){
             // Your current badges
-            farming.badges = {
+            farming.current_badges = {
                 bronze: userProfile.jacob2.medals_inv.bronze || 0,
                 silver: userProfile.jacob2.medals_inv.silver || 0,
                 gold: userProfile.jacob2.medals_inv.gold || 0
             };
 
+            // Your total badges
+            farming.total_badges = {
+                bronze: 0,
+                silver: 0,
+                gold: 0
+            };
+
             // Your current perks
             farming.perks = {
-                double_drops: userProfile.jacob2.perks.double_drops || 0,
-                farming_level_cap: userProfile.jacob2.perks.farming_level_cap || 0
+                double_drops: userProfile.jacob2.perks?.double_drops || 0,
+                farming_level_cap: userProfile.jacob2.perks?.farming_level_cap || 0
             };
+
+            // Your amount of unique golds
+            farming.unique_golds = userProfile.jacob2.unique_golds2?.length || 0;
 
             // Things about individual crops
             farming.crops = {};
+
+            for(const crop of constants.farming_crops){
+                farming.crops[crop] = {
+                    attended: false,
+                    personal_best: 0,
+                    unique_gold: userProfile.jacob2.unique_golds2?.includes(crop) || false
+                };
+            }
 
             // Template for contests
             const contests = {
@@ -1896,26 +1915,47 @@ module.exports = {
                 all_contests: []
             };
 
-            for(const contest in userProfile.jacob2.contests){
-                const data = userProfile.jacob2.contests[contest];
+            for(const contest_id in userProfile.jacob2.contests){
+                const data = userProfile.jacob2.contests[contest_id];
 
-                let contest_name = contest.split(':');
+                let contest_name = contest_id.split(':');
                 const date = `${contest_name[1]}_${contest_name[0]}`;
-                const crop = contest_name[2];
+                const crop = contest_name.slice(2).join(':');
 
-                // TODO: Move personal best to farming.crops
-                if(!contests.personal_best[crop])
-                    contests.personal_best[crop] = data.collected;
-                else if(contests.personal_best[crop] < data.collected)
-                    contests.personal_best[crop] = data.collected;
+                farming.crops[crop].attended = true;
+                if(farming.crops[crop].personal_best < data.collected)
+                    farming.crops[crop].personal_best = data.collected;
 
-                contests.attended_contests++;
-                contests.all_contests.push({
+                const contest = {
                     date: date,
                     crop: crop,
                     collected: data.collected,
-                    claimed: data.claimed_rewards || false
-                });
+                    claimed: data.claimed_rewards || false,
+                    medal: null
+                };
+
+                const placing = {};
+
+                if(contest.claimed){
+                    placing.position = data.claimed_position || 0;
+                    placing.percentage = (data.claimed_position / data.claimed_participants * 100);
+
+                    if(placing.percentage <= 5){
+                        contest.medal = 'gold';
+                        farming.total_badges.gold++;
+                    }else if(placing.percentage <= 25){
+                        contest.medal = 'silver';
+                        farming.total_badges.silver++;
+                    }else if(placing.percentage <= 60){
+                        contest.medal = 'bronze';
+                        farming.total_badges.bronze++;
+                    }
+                }
+
+                contest.placing = placing;
+
+                contests.attended_contests++;
+                contests.all_contests.push(contest);
             }
 
             farming.contests = contests;
