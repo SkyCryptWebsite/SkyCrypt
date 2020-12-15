@@ -384,6 +384,10 @@ Disallow: /item /head /leather /resources
         res.render('api', { error: null, player: null, extra: await getExtra('api'), helper, page: 'api' });
     });
 
+    app.all('/arc-sw.js', async (req, res, next) => {
+        res.redirect(`https://arc.io/arc-sw.js`);
+    });
+
     app.all('/:player/:profile?', async (req, res, next) => {
         res.redirect(`/stats${req.path}`);
     });

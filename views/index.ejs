@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
     <title>SkyCrypt</title>
-    <meta name="description" content="A beautiful site for sharing your SkyBlock profile 🍣">
+    <% const description = "A beautiful site for sharing your SkyBlock profile 🍣" %> 
+    <meta name="description" content="<%= description %>">
     <link rel="icon" href="/resources/img/logo_square.svg" sizes="any" type="image/svg+xml">
     <meta property="og:image" content="/resources/img/logo_square.svg">
     <meta property="og:title" content="SkyBlock Stats">
-    <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🍣">
+    <meta property="og:description" content="<%= description %>">
 <%- include('../includes/resources') %>
     <style>
     @media (max-width: 480px){
@@ -35,7 +36,7 @@
         <div id="enter_player_box_wrapper">
             <div id="enter_player_box">
                 <p>Show SkyBlock stats for</p>
-                <input <% if(player){ %> value="<%= player %>" <% }%> id="inp_enter_username" type="text" placeholder="Enter username">
+                <input <% if(player){ %> value="<%= player %>" <% }%> id="inp_enter_ign" type="text" placeholder="Enter username" autofocus>
                 <a href="<% if(player){ %>/stats/<%= player %><% }else{ %>#<% } %>" id="goto_target_username">Show me</a>
                 <!--<p>or take me to a <a href="/random/stats">random profile</a>.</p>-->
             </div>
@@ -72,7 +73,7 @@
             %>
             <a href="/stats/<%= profile.uuid %>" class="top-profile">
                 <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
-                <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
+                <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%= extra.twemoji.parse(profile.emoji) %><% } %></div><br>
                 <div class="profile-last-online"><%- lastUpdatedText %></div>
                 <div class="profile-rank" title="Favorited profile"><%- extra.twemoji.parse("★") %></div>
             </a>
@@ -105,7 +106,7 @@
                 console.log("An error occured with message: \"<%= error %>\"");
             <% } %>
 
-            const targetUsername = document.getElementById("inp_enter_username");
+            const targetUsername = document.getElementById("inp_enter_ign");
             const searchUser = document.getElementById('search_user');
             const inputSearchUser = document.getElementById('inp_search_user');
             const btnSearchUser = document.getElementById('btn_search_user');

@@ -1023,39 +1023,37 @@ description += `💰 Purse: ${helper.formatNumber(calculated.purse, true)} Coins
 if(calculated.bank)
     description += `\n🏦 Bank Account: ${helper.formatNumber(calculated.bank, true)} Coin${Math.floor(calculated.bank) == 1 ? '': 's'}`;
 
-let twitterDescription = `${calculated.display_name} has been playing SkyBlock for ${moment(calculated.first_join.unix).fromNow(true)}`;
+let metaDescription = `${calculated.display_name} has been playing SkyBlock for ${moment(calculated.first_join.unix).fromNow(true)}`;
 
 if(items.armor_set){
     if(highestRaritySword)
-        twitterDescription += `, is wearing ${items.armor_set}`;
+        metaDescription += `, is wearing ${items.armor_set}`;
     else
-        twitterDescription += ` and is wearing ${items.armor_set}`;
+        metaDescription += ` and is wearing ${items.armor_set}`;
 }
 
 if(highestRaritySword){
     if(items.armor_set)
-        twitterDescription += ` and fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
+        metaDescription += ` and fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
     else
-        twitterDescription += ` and is fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
+        metaDescription += ` and is fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
 }
 
-let metaDescription = twitterDescription + '.';
-
-twitterDescription += '. Click to view more stats!'
+metaDescription += '.';
 
 %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title><%- calculated.display_name %><% if(calculated.display_emoji){ %> <%- calculated.display_emoji %><% } %> | SkyCrypt</title>
+    <title><%= calculated.display_name %><% if(calculated.display_emoji){ %> <%= calculated.display_emoji %><% } %> | SkyCrypt</title>
     <meta name="description" content="<%= metaDescription %>">
-    <link rel="icon" href="https://crafatar.com/avatars/<%- calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="<%- calculated.display_name %><% if(calculated.display_emoji){ %> <%- calculated.display_emoji %><% } %> (<%= calculated.profile.cute_name %>)">
-    <meta property="og:image" content="https://crafatar.com/avatars/<%- calculated.uuid %>?size=256&overlay">
-    <meta property="twitter:image" content="https://crafatar.com/avatars/<%- calculated.uuid %>?size=256&overlay">
+    <link rel="icon" href="https://crafatar.com/avatars/<%= calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
+    <meta property="og:type" content="profile">
+    <meta property="og:title" content="<%= calculated.display_name %><% if(calculated.display_emoji){ %> <%= calculated.display_emoji %><% } %> (<%= calculated.profile.cute_name %>)">
+    <meta property="og:image" content="https://crafatar.com/avatars/<%= calculated.uuid %>?size=512&overlay">
     <meta property="og:description" content="<%= description %>">
-    <meta property="twitter:description" content="<%= twitterDescription %>">
+    <meta property="og:profile:username" content="<%= calculated.display_name %>">
+    <meta name="twitter:card" content="summary"></meta>
 <%- include('../includes/resources') %>
 </head>
 <body>
@@ -1127,6 +1125,7 @@ twitterDescription += '. Click to view more stats!'
                 <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">Plancke</a>
                 <a href="https://skyblock.matdoes.dev/profile/<%= calculated.display_name %>/<%= calculated.profile.cute_name == 'Deleted' ? calculated.profile.profile_id : calculated.profile.cute_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">matdoes.dev</a>
                 <a href="https://auctions.craftlink.xyz/players/<%= calculated.uuid %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">HyAuctions</a>
+                <a href="https://namemc.com/profile/<%= calculated.uuid %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">NameMC</a>
                 <div id="additional_socials">
                     <div data-copy-text="<%= calculated.uuid %>" class="copy-text additional-player-stat">Copy UUID</div>
                     <% if('DISCORD' in calculated.social){ %><div data-copy-text="<%= calculated.social.DISCORD %>" class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></div><% } %>
@@ -1283,7 +1282,7 @@ twitterDescription += '. Click to view more stats!'
                     <div class='tippy-explanation'>Average skill level over all skills except Carpentry and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div>
                     <% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
                     <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
-                    "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= Math.floor(calculated.average_level * 10) / 10 %></span></span></div>
+                    "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level.toFixed(2) %></span></span></div>
                     <div class="additional-stat">
                         <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
                     </div>
@@ -2435,12 +2434,12 @@ twitterDescription += '. Click to view more stats!'
                                         };
                                         break;
                                     }
-                                } 
+                                }
 
                                 tooltip += `<span class="stat-name">Rarity: </span><span class="stat-value piece-${ progress.rarity }-fg">${ helper.capitalizeFirstLetter(progress.rarity) }</span><br><span class="stat-name">Progress: </span>`;
                                 if(progress.maxed)
                                     tooltip += `<span class="stat-value golden-text">Maxed!</span>`;
-                                else 
+                                else
                                     tooltip += `<span class="stat-value">${ progress.percentage.toLocaleString() }%</span>`;
                                 %>
                             <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>>
