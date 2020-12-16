@@ -113,7 +113,14 @@ async function main(){
             output.favorites = [];
             for(let i = 0; i < favorites.length && i < constants.max_favorites; i++){
                 let favorite = favorites[i];
-                if(favorite?.length == 32){
+                if(favorite == null){
+                    output.favorites[i] = {
+                        error: "Favorite is undefined."
+                    };
+                    continue;
+                }
+
+                if(favorite?.length == 32 && favorite){
                     const cache = await db
                     .collection('favoriteCache')
                     .find( { uuid: favorite } )
@@ -147,6 +154,10 @@ async function main(){
                         
                         await db.collection('favoriteCache').insertOne(output_cache);
                         output.favorites[i] = output_cache;
+                    }
+                }else{
+                    output.favorites[i] = {
+                        error: "Unknown error."
                     }
                 }
             }
