@@ -1079,10 +1079,10 @@ metaDescription += '.';
                 <%- calculated.rank_prefix %>
                 <%= calculated.display_name %>
                 <% if(calculated.display_emoji_img){ %><img class="emoji" draggable="false" src="<%= calculated.display_emoji_img %>">
-                <% }else if(calculated.display_emoji){ %><%= extra.twemoji.parse(calculated.display_emoji) %><% } %>
+                <% }else if(calculated.display_emoji){ %><%- extra.twemoji.parse(calculated.display_emoji) %><% } %>
                 <div id="other_players">
                     <% calculated.members.forEach(member => { %>
-                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"><%= member.display_name %><% if(member.emojiImg){ %><img class="emoji" draggable="false" src="<%= member.emojiImg %>"><% }else if(member.emoji){ %> <%= extra.twemoji.parse(member.emoji) %><% } %><div class="goto-last-played"><%= 'last_updated' in member ? member.last_updated.text : '' %></div></a>
+                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"><%= member.display_name %><% if(member.emojiImg){ %><img class="emoji" draggable="false" src="<%= member.emojiImg %>"><% }else if(member.emoji){ %> <%- extra.twemoji.parse(member.emoji) %><% } %><div class="goto-last-played"><%= 'last_updated' in member ? member.last_updated.text : '' %></div></a>
                     <% }); %>
                 </div>
             </div><span class="text-on"> on </span><div tabindex="2" id="stats_for_profile">
