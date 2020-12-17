@@ -1869,7 +1869,10 @@ module.exports = {
             shredder_bait: userProfile.stats.shredder_bait || 0,
         };
 
-        const farmingCrops = [];
+        //
+        //  FARMING 
+        //
+
         const farming = {
             talked: userProfile.jacob2?.talked || false
         };
@@ -1962,6 +1965,60 @@ module.exports = {
         }
 
         output.farming = farming;
+
+        //
+        //  ENCHANTING
+        //
+
+        // simon = Chronomatron
+        // numbers = Ultrasequencer
+        // pairings = Superpairs
+
+        const enchanting = {
+            experimented: (userProfile.experimentation != null && Object.keys(userProfile.experimentation).length >= 1) || false,
+            experiments: {}
+        }
+
+        if(enchanting.experimented){
+            const enchanting_data = userProfile.experimentation;
+
+            for(const game in constants.experiments.games){
+                if(!Object.keys(enchanting_data[game]).length >= 1)
+                    continue;
+
+                const game_data = enchanting_data[game];
+                const game_constants = constants.experiments.games[game];
+                enchanting.experiments[game] = {
+                    name: game_constants.name,
+                    stats: {},
+                    tiers: {}
+                };
+
+                for(const key in game_data){
+                    if(key.startsWith('attempts')
+                    || key.startsWith('claims')
+                    || key.startsWith('best_score')){
+                        // TODO: Individual tier processing
+                        continue;
+                    }
+                    
+                    if(key == 'last_attempt'
+                    || key == 'last_claimed'){
+                        enchanting.experiments[game].stats[key] = {
+                            unix: game_data[key],
+                            text: moment(game_data[key]).fromNow()
+                        };
+                        continue;
+                    }
+
+                    enchanting.experiments[game].stats[key] = game_data[key];
+                }
+            }
+        }
+
+        output.enchanting = enchanting;
+
+        // TODO: Enchanting stuff
 
         const misc = {};
 

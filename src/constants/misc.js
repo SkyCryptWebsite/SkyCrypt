@@ -582,5 +582,65 @@ module.exports = {
         'NETHER_STALK',
         'WHEAT',
         'MELON'
-    ]
+    ],
+
+    experiments: {
+        games: {
+            simon: {
+                name: "Chronomatron",
+                tiers: [
+                    'high',
+                    'grand',
+                    'supreme',
+                    'transcendent',
+                    'metaphysical'
+                ]
+            },
+            numbers: {
+                name: "Ultrasequencer",
+                tiers: [
+                    'supreme',
+                    'transcendent',
+                    'metaphysical'
+                ]
+            },
+            pairings: {
+                name: "Superpairs",
+                tiers: [
+                    'beginner',
+                    'high',
+                    'grand',
+                    'supreme',
+                    'transcendent',
+                    'metaphysical'
+                ]
+            }
+        },
+        tiers: {
+            beginner: {
+                name: "Beginner",
+                icon: "351:12"
+            },
+            high: {
+                name: "High",
+                icon: "351:10"
+            },
+            grand: {
+                name: "Grand",
+                icon: "351:11"
+            },
+            supreme: {
+                name: "Supreme",
+                icon: "351:14"
+            },
+            transcendent: {
+                name: "Transcendent",
+                icon: "351:1"
+            },
+            metaphysical: {
+                name: "Metaphysical",
+                icon: "351:13"
+            }
+        }
+    }
 };
