@@ -599,6 +599,7 @@ module.exports = {
             numbers: {
                 name: "Ultrasequencer",
                 tiers: [
+                    'grand',
                     'supreme',
                     'transcendent',
                     'metaphysical'

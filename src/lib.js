@@ -1988,7 +1988,8 @@ module.exports = {
 
                 const game_data = enchanting_data[game];
                 const game_constants = constants.experiments.games[game];
-                enchanting.experiments[game] = {
+                
+                const game_output = {
                     name: game_constants.name,
                     stats: {},
                     tiers: {}
@@ -1998,21 +1999,35 @@ module.exports = {
                     if(key.startsWith('attempts')
                     || key.startsWith('claims')
                     || key.startsWith('best_score')){
-                        // TODO: Individual tier processing
+                        let statKey = key.split('_');
+                        let tierValue = statKey.pop();
+
+                        statKey = statKey.join('_');
+                        const tierInfo = constants.experiments.tiers[game_constants.tiers[tierValue]];
+
+                        if(!game_output.tiers[tierValue])
+                            game_output.tiers[tierValue] = tierInfo;
+                        
+                        Object.assign(game_output.tiers[tierValue], {
+                            [statKey]: game_data[key]
+                        });
                         continue;
                     }
                     
                     if(key == 'last_attempt'
                     || key == 'last_claimed'){
-                        enchanting.experiments[game].stats[key] = {
+                        if(game_data[key] <= 0) continue;
+                        game_output.stats[key] = {
                             unix: game_data[key],
                             text: moment(game_data[key]).fromNow()
                         };
                         continue;
                     }
 
-                    enchanting.experiments[game].stats[key] = game_data[key];
+                    game_output.stats[key] = game_data[key];
                 }
+
+                enchanting.experiments[game] = game_output;
             }
         }
 
