@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>SkyCrypt</title>
-    <% const description = "A beautiful site for sharing your SkyBlock profile 🍣" %> 
+    <% const description = "A beautiful site for sharing your SkyBlock profile 🍣" %>
     <meta name="description" content="<%= description %>">
     <link rel="icon" href="/resources/img/logo_square.svg" sizes="any" type="image/svg+xml">
     <meta property="og:image" content="/resources/img/logo_square.svg">
@@ -60,7 +60,7 @@
             </div>
         </div>
         <div id="top_profiles_box_wrapper">
-            <% if(extra.favorites){ 
+            <% if(extra.favorites){
             for(let profile of extra.favorites){
             if(profile.error) continue;
             const lastUpdated = profile.last_updated;
@@ -73,7 +73,7 @@
             %>
             <a href="/stats/<%= profile.uuid %>" class="top-profile">
                 <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
-                <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
+                <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src=" <%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
                 <div class="profile-last-online"><%- lastUpdatedText %></div>
                 <div class="profile-rank" title="Favorited profile"><%- extra.twemoji.parse("★") %></div>
             </a>
