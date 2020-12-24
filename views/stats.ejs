@@ -1714,7 +1714,10 @@ twitterDescription += '. Click to view more stats!'
             <div class="stat-content">
 
                 <div class="stat-fishing">
-                    <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-346_0"></div></div><span>fishing</span></div>
+                    <div class="minion-category-header">
+                        <div class="minion-category-icon"><div class="item-icon icon-346_0"></div></div>
+                        <span>fishing</span>
+                    </div>
 
                     <%
                     let totalSeaCreatureKills = 0;
@@ -1785,27 +1788,54 @@ twitterDescription += '. Click to view more stats!'
                     <% } %>
 
                     <% if(totalSeaCreatureKills > 0){ %>
-                        <p class="stat-sub-header">Sea Creatures</p>
-                        <div class="sea-creatures">
-                            <% for(const creature of seaCreatures) {
-                                let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
+                        <div class="stat-sub-container sub-extendable">
+                            <p class="stat-sub-header">Sea Creatures</p>
+                            <div class="sea-creatures">
+                                <% for(const creature of seaCreatures) {
+                                    let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
 
-                                mobKills = mobKills.length > 0 ? mobKills[0].amount : 0;
+                                    mobKills = mobKills.length > 0 ? mobKills[0].amount : 0;
 
-                                if(mobKills == 0)
-                                    continue;
-                            %>
-                                <div class="sea-creature">
-                                    <div class="sea-creature-name"><span><%= creature.name %></span></div>
-                                    <div class="sea-creature-image" style="background-image: url(/resources/img/sea_creatures/<%= creature.id %>.webp)"></div>
-                                    <div class="sea-creature-kills"><span class="stat-value"><%= mobKills.toLocaleString() %></span><span class="stat-name"> Kill<%= mobKills != 1 ? 's' : '' %></span></div>
-                                </div>
-                            <% } %>
+                                    if(mobKills == 0)
+                                        continue;
+                                %>
+                                    <div class="sea-creature">
+                                        <div class="sea-creature-name"><span><%= creature.name %></span></div>
+                                        <div class="sea-creature-image" style="background-image: url(/resources/img/sea_creatures/<%= creature.id %>.webp)"></div>
+                                        <div class="sea-creature-kills"><span class="stat-value"><%= mobKills.toLocaleString() %></span><span class="stat-name"> Kill<%= mobKills != 1 ? 's' : '' %></span></div>
+                                    </div>
+                                <% } %>
+                            </div>
                         </div>
                     <% } %>
                 </div>
 
-                <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-346_0"></div></div><span>farming</span></div>
+                <div class="stat-farming">
+                    <div class="minion-category-header">
+                        <div class="minion-category-icon"><div class="item-icon icon-294_0"></div></div>
+                        <span>farming</span>
+                    </div>
+
+                    <% if(calculated.farming.talked){ 
+                    const farming = calculated.farming; %>
+                        <p class="stat-raw-values">
+                            <span class="stat-name">Contests attended: </span><span class="stat-value"><%= farming.contests.attended_contests.toLocaleString() %></span><br>
+                            
+                            <span class="stat-name">Current badges: </span>
+                            <span class="stat-value"><%= farming.current_badges.gold.toLocaleString() %> Gold / <%= farming.current_badges.silver.toLocaleString() %></span><br>
+
+                            
+                        </p>
+                    <% } %>
+
+                </div>
+
+                <div class="stat-enchanting">
+                    <div class="minion-category-header">
+                        <div class="minion-category-icon"><div class="item-icon icon-116_0"></div></div>
+                        <span>enchanting</span>
+                    </div>
+                </div>
 
             </div>
         </div>
