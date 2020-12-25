@@ -486,6 +486,12 @@ module.exports = {
                 head: "/head/554a34a80c474206d3700b8fced6b44fab0b0ed0b05c1293ff0c5d86eda251d1",
             },
         },
+        "BABY_YETI": {
+            "YETI_GROWN_UP": {
+                name: "Grown-up",
+                head: "/head/f5f29a975529276d916fc67998833c11ee178ff21e5941afdfb0fa7010f8374e",
+            },
+        },
     },
 
     pet_value: {
