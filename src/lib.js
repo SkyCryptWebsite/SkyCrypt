@@ -421,6 +421,15 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             }
         }
 
+        // Uses animated skin texture, if present
+        if (helper.hasPath(item, 'tag', 'ExtraAttributes', 'skin')) {
+            switch (item.tag.ExtraAttributes.skin) {
+                case "SNOW_SNOWGLOBE":
+                    item.texture_path = `/resources/img/items/snow_snowglobe.gif?v6`
+                    break;
+            }
+        }
+
         if(customTextures){
             const customTexture = await customResources.getTexture(item, false, packs);
 
