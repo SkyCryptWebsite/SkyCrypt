@@ -494,6 +494,12 @@ module.exports = {
             "JERRY_GREEN_ELF": {
                 name: "Green Elf",
                 head: "/head/4ec5455f43426ca1874b5c7b4a492ec3722a502f8b9599e758e133fed8b3c1e4",
+              },
+        },
+        "BABY_YETI": {
+            "YETI_GROWN_UP": {
+                name: "Grown-up",
+                head: "/head/f5f29a975529276d916fc67998833c11ee178ff21e5941afdfb0fa7010f8374e",
             },
         },
     },
