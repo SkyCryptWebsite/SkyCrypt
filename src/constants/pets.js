@@ -486,6 +486,16 @@ module.exports = {
                 head: "/head/554a34a80c474206d3700b8fced6b44fab0b0ed0b05c1293ff0c5d86eda251d1",
             },
         },
+        "JERRY": {
+            "JERRY_RED_ELF": {
+                name: "Red Elf",
+                head: "/head/1d82f9c36e824c1e37963a849bf5abd76d3b349125023504af58369086089ee9",
+            },
+            "JERRY_GREEN_ELF": {
+                name: "Green Elf",
+                head: "/head/4ec5455f43426ca1874b5c7b4a492ec3722a502f8b9599e758e133fed8b3c1e4",
+              },
+        },
         "BABY_YETI": {
             "YETI_GROWN_UP": {
                 name: "Grown-up",
