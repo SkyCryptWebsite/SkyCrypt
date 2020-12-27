@@ -1878,7 +1878,7 @@ metaDescription += '.';
                                 <div class="stat-sub-container sub-floor-extendable">
                                     <p class="stat-sub-header">Best Run</p>
                                     <div class="pieces">
-                                    <% for (let [stat, value] of Object.entries(floor.best_runs[0])) {
+                                    <% for (let [stat, value] of Object.entries(floor.best_runs[floor.best_runs.length - 1])) {
                                         if(stat == "teammates") continue; %>
                                         <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
                                         <span class="stat-value">
