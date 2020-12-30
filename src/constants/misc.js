@@ -571,77 +571,81 @@ module.exports = {
         'NONE': null
     },
 
-    farming_crops: [
-        'INK_SACK:3',
-        'POTATO_ITEM',
-        'CARROT_ITEM',
-        'CACTUS',
-        'SUGAR_CANE',
-        'MUSHROOM_COLLECTION',
-        'PUMPKIN',
-        'NETHER_STALK',
-        'WHEAT',
-        'MELON'
-    ],
+    farming_crops: {
+        'INK_SACK:3': {
+            name: 'Cocoa Beans',
+            icon: '351_3'
+        },
+        'POTATO_ITEM': {
+            name: 'Potato',
+            icon: '392_0'
+        },
+        'CARROT_ITEM': {
+            name: 'Carrot',
+            icon: '391_0'
+        },
+        'CACTUS': {
+            name: 'Cactus',
+            icon: '81_0'
+        },
+        'SUGAR_CANE': {
+            name: 'Sugar Cane',
+            icon: '338_0'
+        },
+        'MUSHROOM_COLLECTION': {
+            name: 'Mushroom',
+            icon: '40_0'
+        },
+        'PUMPKIN': {
+            name: 'Pumpkin',
+            icon: '86_0'
+        },
+        'NETHER_STALK': {
+            name: 'Nether Wart',
+            icon: '372_0'
+        },
+        'WHEAT': {
+            name: 'Wheat',
+            icon: '296_0'
+        },
+        'MELON': {
+            name: 'Melon',
+            icon: '360_0'
+        }
+    },
 
     experiments: {
         games: {
             simon: {
-                name: "Chronomatron",
-                tiers: [
-                    'high',
-                    'grand',
-                    'supreme',
-                    'transcendent',
-                    'metaphysical'
-                ]
+                name: "Chronomatron"
             },
             numbers: {
-                name: "Ultrasequencer",
-                tiers: [
-                    'grand',
-                    'supreme',
-                    'transcendent',
-                    'metaphysical'
-                ]
+                name: "Ultrasequencer"
             },
             pairings: {
-                name: "Superpairs",
-                tiers: [
-                    'beginner',
-                    'high',
-                    'grand',
-                    'supreme',
-                    'transcendent',
-                    'metaphysical'
-                ]
+                name: "Superpairs"
             }
         },
-        tiers: {
-            beginner: {
+        tiers: [
+            {
                 name: "Beginner",
                 icon: "351:12"
-            },
-            high: {
+            }, {
                 name: "High",
                 icon: "351:10"
-            },
-            grand: {
+            }, {
                 name: "Grand",
                 icon: "351:11"
-            },
-            supreme: {
+            }, {
                 name: "Supreme",
                 icon: "351:14"
-            },
-            transcendent: {
+            }, {
                 name: "Transcendent",
                 icon: "351:1"
-            },
-            metaphysical: {
+            }, {
                 name: "Metaphysical",
                 icon: "351:13"
             }
-        }
+        ]
     }
 };

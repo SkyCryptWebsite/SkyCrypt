@@ -1924,12 +1924,20 @@ module.exports = {
             // Things about individual crops
             farming.crops = {};
 
-            for(const crop of constants.farming_crops){
-                farming.crops[crop] = {
+            for(const crop in constants.farming_crops){
+                farming.crops[crop] = constants.farming_crops[crop];
+
+                Object.assign(farming.crops[crop], {
                     attended: false,
+                    unique_gold: userProfile.jacob2.unique_golds2?.includes(crop) || false,
+                    contests: 0,
                     personal_best: 0,
-                    unique_gold: userProfile.jacob2.unique_golds2?.includes(crop) || false
-                };
+                    badges: {
+                        gold: 0,
+                        silver: 0,
+                        bronze: 0
+                    }
+                });
             }
 
             // Template for contests
@@ -1945,6 +1953,7 @@ module.exports = {
                 const date = `${contest_name[1]}_${contest_name[0]}`;
                 const crop = contest_name.slice(2).join(':');
 
+                farming.crops[crop].contests++;
                 farming.crops[crop].attended = true;
                 if(farming.crops[crop].personal_best < data.collected)
                     farming.crops[crop].personal_best = data.collected;
@@ -1966,12 +1975,15 @@ module.exports = {
                     if(placing.percentage <= 5){
                         contest.medal = 'gold';
                         farming.total_badges.gold++;
+                        farming.crops[crop].badges.gold++;
                     }else if(placing.percentage <= 25){
                         contest.medal = 'silver';
                         farming.total_badges.silver++;
+                        farming.crops[crop].badges.silver++;
                     }else if(placing.percentage <= 60){
                         contest.medal = 'bronze';
                         farming.total_badges.bronze++;
+                        farming.crops[crop].badges.bronze++;
                     }
                 }
 
@@ -2023,7 +2035,7 @@ module.exports = {
                         let tierValue = statKey.pop();
 
                         statKey = statKey.join('_');
-                        const tierInfo = constants.experiments.tiers[game_constants.tiers[tierValue]];
+                        const tierInfo = constants.experiments.tiers[tierValue];
 
                         if(!game_output.tiers[tierValue])
                             game_output.tiers[tierValue] = tierInfo;
