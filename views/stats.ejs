@@ -1045,7 +1045,7 @@ metaDescription += '.';
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title><%= calculated.display_name %><% if(calculated.display_emoji){ %> <%= calculated.display_emoji %><% } %> | SkyCrypt</title>
+    <title><%= calculated.display_name %><% if(calculated.display_emoji){ %> <%= calculated.display_emoji %><% } %> <% if(calculated.profile.game_mode == 'ironman'){ %>♻️<% } %>| SkyCrypt</title>
     <meta name="description" content="<%= metaDescription %>">
     <link rel="icon" href="https://crafatar.com/avatars/<%= calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
     <meta property="og:type" content="profile">
