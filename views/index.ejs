@@ -29,6 +29,26 @@
             top: 45px;
         }
     }
+    
+    .form-banner{
+        position: relative;
+        display: inline-block;
+        background: url(/resources/img/bg_blur.webp?v2) no-repeat center center fixed;
+        background-size: cover;
+        width: 100%;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        padding: 20px 20px 20px 90px;
+        box-sizing: border-box;
+        text-decoration: none;
+        overflow: hidden;
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .external-app-icon{
+        width: 90px;
+    }
     </style>
 </head>
     <body>
@@ -60,6 +80,11 @@
             </div>
         </div>
         <div id="top_profiles_box_wrapper">
+            <a href="https://forms.gle/2d5iVtc8piRsJ3tM9" target="_blank" rel="nofollow" class="external-app form-banner">
+                <div class="external-app-icon" style="background-image: url(/resources/img/icons/google-forms.svg)"></div>
+                <div class="external-app-name">QOL Survey <span class="grey-text">– OPTIONAL</span></div>
+                <div class="external-app-description">A short survey about your SkyCrypt user experience and Skyblock experience.</div>
+            </a>
             <% if(extra.favorites){
             for(let profile of extra.favorites){
             if(profile.error) continue;
