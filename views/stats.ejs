@@ -1041,16 +1041,16 @@ if(highestRaritySword){
 
 metaDescription += '.';
 
-let metaTitle = "<%= calculated.display_name %>";
+let metaTitle = calculated.display_name;
 
 if(calculated.display_emoji){
-    metaTitle += "<%= calculated.display_emoji %> ";
+    metaTitle += calculated.display_emoji;
 }
 
 if(calculated.profile.game_mode == 'ironman'){
-    metaTitle += "(<%= calculated.profile.cute_name %>♻️)";
+    metaTitle += `(${calculated.profile.cute_name}♻️)`;
 } else {
-    metaTitle += "(<%= calculated.profile.cute_name %>)";
+    metaTitle +=  `(${calculated.profile.cute_name})`;
 }
 
 
@@ -1058,7 +1058,7 @@ if(calculated.profile.game_mode == 'ironman'){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title><%= calculated.display_name %><% if(calculated.display_emoji){ %> <%= calculated.display_emoji %>| SkyCrypt</title>
+    <title><%= calculated.display_name %><% if(calculated.display_emoji){ %> <%= calculated.display_emoji %><% } %> | SkyCrypt</title>
     <meta name="description" content="<%= metaDescription %>">
     <link rel="icon" href="https://crafatar.com/avatars/<%= calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
     <meta property="og:type" content="profile">
