@@ -2940,24 +2940,27 @@ main.grid {
     gap: 20px;
 }
 
+main.grid > * {
+    background: var(--bg_blur-webp) no-repeat center center fixed;
+    background-color: rgba(10, 10, 10, 0.5);
+    background-size: cover;
+    border-radius: 10px;
+}
+
+@supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+    main.grid > * {
+        background: none;
+        -webkit-backdrop-filter: blur(16px) brightness(0.5);
+        backdrop-filter: blur(16px) brightness(0.5);
+    }
+}
+
 #enter_player_box_wrapper{
     grid-column: 1 / -1;
     position: relative;
     margin-top: calc(50vh - 130px);
     height: 260px;
-    background: var(--bg_blur-webp) no-repeat center center fixed;
-    background-size: cover;
-    border-radius: 10px;
     overflow: hidden;
-    background-color: rgb(10,10,10);
-}
-
-@supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
-    #enter_player_box_wrapper{
-        background: none;
-        -webkit-backdrop-filter: blur(16px) brightness(0.5);
-        backdrop-filter: blur(16px) brightness(0.5);
-    }
 }
 
 #enter_player_box_wrapper p:last-child{
@@ -3023,27 +3026,13 @@ main.grid {
     margin: 0 auto;
     margin-top: 20px;
     width: 700px;
-    background: var(--bg_blur-webp) no-repeat center center fixed;
-    background-size: cover;
-    border-radius: 10px;
     overflow: hidden;
     display: none;
-}
-
-@supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
-    #error_box_wrapper{
-        background: none;
-        -webkit-backdrop-filter: blur(16px) brightness(0.5);
-        backdrop-filter: blur(16px) brightness(0.5);
-    }
 }
 
 .page-index .form-banner{
     position: relative;
     grid-column: 1 / -1;
-    background: var(--bg_blur-webp) no-repeat center center fixed;
-    background-size: cover;
-    border-radius: 10px;
     padding: 20px 20px 20px 90px;
     text-decoration: none;
     margin: 0;
@@ -3057,21 +3046,10 @@ main.grid {
 .top-profile{
     position: relative;
     display: inline-block;
-    background: var(--bg_blur-webp) no-repeat center center fixed;
-    background-size: cover;
-    border-radius: 10px;
     padding: 20px;
     text-decoration: none;
     opacity: 0.9;
     transition: opacity .2s;
-}
-
-@supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
-    .top-profile {
-        background: none;
-        -webkit-backdrop-filter: blur(16px) brightness(0.5);
-        backdrop-filter: blur(16px) brightness(0.5);
-    }
 }
 
 .top-profile:hover{
