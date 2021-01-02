@@ -2934,7 +2934,7 @@ a.additional-player-stat:hover{
 main.grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    width: 700px;
+    max-width: 700px;
     margin: 0 auto;
     justify-items: stretch;
     gap: 20px;
@@ -3682,10 +3682,6 @@ body {
 }
 
 @media (max-width: 735px){
-    #enter_player_box_wrapper, #error_box_wrapper, #top_profiles_box_wrapper{
-        width: calc(100vw - 30px);
-    }
-
     #enter_player_box_wrapper{
         height: 205px;
         font-size: 12px;
@@ -3703,8 +3699,8 @@ body {
         font-size: 20px;
     }
 
-    .top-profile{
-        width: 100%;
+    main.grid {
+        grid-template-columns: 1fr;
     }
 
     #themes_box{
