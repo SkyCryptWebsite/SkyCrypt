@@ -12,19 +12,14 @@
     <style>
     .form-banner{
         position: relative;
-        display: inline-block;
+        grid-column: 1 / -1;
         background: var(--bg_blur-webp) no-repeat center center fixed;
         background-size: cover;
-        width: 100%;
-        margin-bottom: 20px;
         border-radius: 10px;
         padding: 20px 20px 20px 90px;
-        box-sizing: border-box;
         text-decoration: none;
-        overflow: hidden;
-        max-width: 100%;
-        margin-left: 0;
-        margin-right: 0;
+        margin: 0;
+        max-width: unset;
     }
     .external-app-icon{
         width: 90px;
@@ -33,33 +28,33 @@
 </head>
     <body class="page-index">
         <%- include('../includes/header') %>
-        <div id="enter_player_box_wrapper">
-            <div id="enter_player_box">
-                <p>Show SkyBlock stats for</p>
-                <input <% if(player){ %> value="<%= player %>" <% }%> id="inp_enter_ign" type="text" placeholder="Enter username" autofocus>
-                <a href="<% if(player){ %>/stats/<%= player %><% }else{ %>#<% } %>" id="goto_target_username">Show me</a>
-                <!--<p>or take me to a <a href="/random/stats">random profile</a>.</p>-->
-            </div>
-        </div>
-        <div id="error_box_wrapper" <% if(error){ %>class="show-error"<% } %>>
-            <div id="error_box">
-                <div id="error_top">
-                    <div id="error_title">Error</div>
-                    <div id="error_text">
-                        <%= error %><br>
-                    </div>
-                </div>
-                <div id="error_bottom">
-                    <% if(typeof error === 'string' && error.includes("Key throttle.")){ %>
-                    <div id="error_subtext">
-                        This happens when the site reaches the Hypixel API limit.<br>
-                        Please try again in a minute.
-                    </div>
-                    <% } %>
+        <main class="grid">
+            <div id="enter_player_box_wrapper">
+                <div id="enter_player_box">
+                    <p>Show SkyBlock stats for</p>
+                    <input <% if(player){ %> value="<%= player %>" <% }%> id="inp_enter_ign" type="text" placeholder="Enter username" autofocus>
+                    <a href="<% if(player){ %>/stats/<%= player %><% }else{ %>#<% } %>" id="goto_target_username">Show me</a>
+                    <!--<p>or take me to a <a href="/random/stats">random profile</a>.</p>-->
                 </div>
             </div>
-        </div>
-        <div id="top_profiles_box_wrapper">
+            <div id="error_box_wrapper" <% if(error){ %>class="show-error"<% } %>>
+                <div id="error_box">
+                    <div id="error_top">
+                        <div id="error_title">Error</div>
+                        <div id="error_text">
+                            <%= error %><br>
+                        </div>
+                    </div>
+                    <div id="error_bottom">
+                        <% if(typeof error === 'string' && error.includes("Key throttle.")){ %>
+                        <div id="error_subtext">
+                            This happens when the site reaches the Hypixel API limit.<br>
+                            Please try again in a minute.
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
             <a href="https://forms.gle/2d5iVtc8piRsJ3tM9" target="_blank" rel="nofollow" class="external-app form-banner">
                 <div class="external-app-icon" style="background-image: url(/resources/img/icons/google-forms.svg)"></div>
                 <div class="external-app-name">QOL Survey <span class="grey-text">– OPTIONAL</span></div>
@@ -103,7 +98,7 @@
                 </a>
 
             <% } %>
-        </div>
+        </main>
         <%- include('../includes/footer'); %>
         <script src="/resources/js/js.cookie.min.js"></script>
         <script>

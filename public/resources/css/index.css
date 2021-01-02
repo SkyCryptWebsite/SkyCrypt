@@ -2931,11 +2931,19 @@ a.additional-player-stat:hover{
     padding-top: 0;
 }
 
-#enter_player_box_wrapper{
-    position: relative;
-    margin: 0 auto;
-    margin-top: calc(50vh - 130px);
+main.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     width: 700px;
+    margin: 0 auto;
+    justify-items: stretch;
+    gap: 20px;
+}
+
+#enter_player_box_wrapper{
+    grid-column: 1 / -1;
+    position: relative;
+    margin-top: calc(50vh - 130px);
     height: 260px;
     background: var(--bg_blur-webp) no-repeat center center fixed;
     background-size: cover;
@@ -3030,28 +3038,13 @@ a.additional-player-stat:hover{
     }
 }
 
-#top_profiles_box_wrapper{
-    position: relative;
-    margin: 0 auto;
-    margin-top: 20px;
-    width: 700px;
-    overflow: hidden;
-    display: flex;
-    justify-content: space-between;
-    align-content: space-between;
-    flex-wrap: wrap;
-}
-
 .top-profile{
     position: relative;
     display: inline-block;
     background: var(--bg_blur-webp) no-repeat center center fixed;
     background-size: cover;
-    width: calc(100% / 2 - 10px);
-    margin-bottom: 20px;
     border-radius: 10px;
     padding: 20px;
-    box-sizing: border-box;
     text-decoration: none;
     opacity: 0.9;
     transition: opacity .2s;
