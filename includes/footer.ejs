@@ -7,6 +7,14 @@
 <script async src="https://arc.io/widget.min.js#oNMq8LVU"></script>
 
 <script>
+    var imgsToDefer = document.getElementsByClassName("defer-img");
+    function loadImg(img) {
+        img.setAttribute('src', img.dataset.src);
+    }
+    imgsToDefer.forEach(loadImg);
+</script>
+
+<script>
     function setCookie(name,value,days) {
         var expires = "";
         if (days) {

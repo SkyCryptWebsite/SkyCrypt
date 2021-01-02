@@ -56,7 +56,7 @@
 <div id="packs_box" class="packs-closed">
     <div onclick="togglePacks()" id="packs_close"></div>
     <div class="resource-pack">
-        <img class="pack-icon" src="/resources/img/pack.png">
+        <img class="defer-img pack-icon" src="/resources/img/pack.png">
         <a class="pack-name" href="/" target="_blank">Default</a><br>
         <div class="pack-author">by <span>LeaPhant, various</span></div>
         <% if(page == 'stats'){ %>
@@ -69,7 +69,7 @@
     </div>
     <% for(const pack of extra.packs.filter(a => !a.hidden).sort((a, b) => b.priority - a.priority)){ %>
         <div class="resource-pack">
-            <img class="pack-icon" src="<%= pack.basePath + '/pack.png' %>">
+            <img class="defer-img pack-icon" src="<%= pack.basePath + '/pack.png' %>">
             <a class="pack-name" href="<%= pack.url %>" target="_blank"><%= pack.name %></a><br>
             <div class="pack-author">by <span><%= pack.author %></span></div>
             <% if(page == 'stats'){ %>
