@@ -1505,7 +1505,7 @@ class Tarantula extends Pet {
 		let mult = 0.5;
 		return {
 			name: "§6Eight Legs",
-			desc: [`§7Decreases the mana cost of Spider and Tarantula boots by §a${round(this.level * mult, 1)}%`]
+			desc: [`§7Decreases the mana cost of Spider, Tarantula and Thorn's boots by §a${round(this.level * mult, 1)}%`]
 		};
 	}
 
