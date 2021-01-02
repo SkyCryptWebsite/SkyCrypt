@@ -2419,7 +2419,7 @@ a.additional-player-stat:hover{
     font-weight: 600;
 }
 
-.external-app{
+.page-stats .external-app{
     display: block;
     text-decoration: none;
     padding: 15px;
@@ -3031,7 +3031,7 @@ main.grid > * {
     display: none;
 }
 
-.page-index .form-banner{
+.form-banner {
     position: relative;
     grid-column: 1 / -1;
     padding: 20px 20px 20px 90px;
@@ -3040,7 +3040,7 @@ main.grid > * {
     max-width: unset;
 }
 
-.page-index .external-app-icon{
+.form-banner .external-app-icon {
     width: 90px;
 }
 
