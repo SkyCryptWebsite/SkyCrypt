@@ -2963,7 +2963,6 @@ main.grid > * {
 
 #enter_player_box_wrapper{
     grid-column: 1 / -1;
-    position: relative;
     height: 260px;
     overflow: hidden;
 }
@@ -3028,7 +3027,6 @@ main.grid > * {
 
 #error_box_wrapper{
     grid-column: 1 / -1;
-    position: relative;
     overflow: hidden;
     display: none;
 }
@@ -3047,7 +3045,6 @@ main.grid > * {
 }
 
 .top-profile{
-    position: relative;
     display: inline-block;
     padding: 20px;
     text-decoration: none;
