@@ -48,6 +48,10 @@ html{
     overflow-x: hidden;
 }
 
+body {
+    margin: 0;
+}
+
 .grecaptcha-badge{
     visibility: hidden;
 }
@@ -2938,6 +2942,8 @@ main.grid {
     margin: 0 auto;
     justify-items: stretch;
     gap: 20px;
+    padding: 20px;
+    padding-top: calc(50vh - 130px);
 }
 
 main.grid > * {
@@ -2958,7 +2964,6 @@ main.grid > * {
 #enter_player_box_wrapper{
     grid-column: 1 / -1;
     position: relative;
-    margin-top: calc(50vh - 130px);
     height: 260px;
     overflow: hidden;
 }
