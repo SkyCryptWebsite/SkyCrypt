@@ -3038,6 +3038,22 @@ main.grid {
     }
 }
 
+.page-index .form-banner{
+    position: relative;
+    grid-column: 1 / -1;
+    background: var(--bg_blur-webp) no-repeat center center fixed;
+    background-size: cover;
+    border-radius: 10px;
+    padding: 20px 20px 20px 90px;
+    text-decoration: none;
+    margin: 0;
+    max-width: unset;
+}
+
+.page-index .external-app-icon{
+    width: 90px;
+}
+
 .top-profile{
     position: relative;
     display: inline-block;
