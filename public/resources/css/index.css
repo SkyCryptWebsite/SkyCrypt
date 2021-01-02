@@ -3816,6 +3816,10 @@ body {
         justify-content: center;
     }
 
+    .page-index #search_user{
+        display: none;
+    }
+
     #show_skills{
         display: block;
     }
