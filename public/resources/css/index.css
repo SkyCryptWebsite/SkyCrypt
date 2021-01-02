@@ -3679,15 +3679,15 @@ body {
 
 @media (max-width: 745px){
 
-    :not(.page-index) > #themes_button,
-    :not(.page-index) > #packs_button,
+    :not(.page-index) > header #themes_button,
+    :not(.page-index) > header #packs_button,
     #search_user.show-user-search ~ #themes_button,
     #search_user.show-user-search ~ #packs_button {
         padding-right: 3px;
     }
 
-    :not(.page-index) > #themes_button span,
-    :not(.page-index) > #packs_button span,
+    :not(.page-index) > header #themes_button span,
+    :not(.page-index) > header #packs_button span,
     #search_user.show-user-search ~ #themes_button span,
     #search_user.show-user-search ~ #packs_button span {
         transform: scaleX(0);
@@ -3812,7 +3812,7 @@ body {
         display: none;
     }
 
-    .page-index {
+    .page-index header{
         justify-content: center;
     }
 
