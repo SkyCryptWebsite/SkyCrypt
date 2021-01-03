@@ -2997,10 +2997,9 @@ main.grid > a:focus :not(img),
 
 #enter_player_box {
     grid-column: 1 / -1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
     gap: 25px;
     padding: 25px 0;
 }
