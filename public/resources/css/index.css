@@ -2991,6 +2991,12 @@ main.grid > a:focus :not(img),
     padding: 25px 0;
 }
 
+@supports not ((gap: 10px) with (display: flex)) {
+    #enter_player_box input {
+        margin: 20px 0;
+    }
+}
+
 #enter_player_box p:last-child {
     font-size: 16px;
     color: rgba(255,255,255,0.8);
