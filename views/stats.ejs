@@ -1282,7 +1282,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 <% if(calculated.current_area){ %>
                 <div class="additional-stat"><span class="stat-name"><%= calculated.current_area_updated ? 'Current' : 'Last' %> Area: </span><span class="stat-value"><%= calculated.current_area %></span></div>
                 <% } %>
-                <div class="additional-stat"><span data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></span></div>
+                <div class="additional-stat"><span data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Last Updated: </span><span id="data_age" class="stat-value"><%= calculated.last_updated.text %></span></span></div>
                 <div class="additional-stat"><span data-tippy-content="Joined on <%= moment(calculated.first_join.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></span></div>
                 <div class="additional-stat"><span class="stat-name">Purse: </span><span class="stat-value"><%= helper.formatNumber(calculated.purse, true) %> Coin<%= Math.floor(calculated.purse) == 1 ? '': 's' %></span></div>
                 <% if('bank' in calculated){ %>
@@ -2183,7 +2183,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 <p class="stat-raw-values">
                     <% max = uniqueMinions == 572 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Minions: </span><span class="stat-value <%= max %>"><%= uniqueMinions %> / 572</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 572 * 100) %>%)</span><br>
                     <% max = calculated.minion_slots.currentSlots == 24 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.minion_slots.currentSlots %></span><span class="grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
-                    <% max = calculated.misc.profile_upgrades.minion_slots == 5 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Bonus Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades.minion_slots %> / <%= constants.profile_upgrades['minion_slots'] %></span><br>
+                    <% max = calculated.misc.profile_upgrades.minion_slots == 5 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Bonus Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades.minion_slots %> / <%= constants.profile_upgrades['minion_slots'].max %></span><br>
                     <% max = maxedMinions == _.size(constants.minions) ? 'golden-text' : '' %><span class="stat-name <%= max %>">Maxed Minions: </span><span class="stat-value <%= max %>"><%= maxedMinions %> / <%= _.size(constants.minions) %></span><br>
                     <% if(skippedMinions > 0){ %>
                     <span class="stat-name">Skipped Minion Tiers: </span><span class="stat-value"><%= skippedMinions %></span><br>
@@ -2479,9 +2479,19 @@ if(calculated.profile.game_mode == 'ironman'){
                     <% } %>
                     <% if('profile_upgrades' in calculated.misc){ %>
                         <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-154_0"></div></div><span>profile upgrades</span></div>
+                        <% if(calculated.misc.profile_upgrades.currently_upgrading != null) { %>
+                            <span class="stat-name">Currently Upgrading: </span><br>
+                            <span class="stat-value"><%= helper.titleCase(calculated.misc.profile_upgrades.currently_upgrading.upgrade.split("_").join(" ")) %> <%= calculated.misc.profile_upgrades.currently_upgrading.new_tier %></span>
+                            <% const upgrade_time_left = Math.floor((calculated.misc.profile_upgrades.currently_upgrading.end_ms - Date.now()) / 1000); %>
+                            <% if (upgrade_time_left <= 0) { %>
+                                <span id="upgrade_time_left" class="grey-text"> (DONE!)</span>
+                            <% } else { %>
+                                <span id="upgrade_time_left" class="grey-text"> (<%= `${upgrade_time_left>(60*60*24)?Math.floor(upgrade_time_left/(60*60*24))+'d ':''}${upgrade_time_left>(60*60)?Math.floor((upgrade_time_left%(60*60*24))/(60*60))+'h ':''}${Math.floor((upgrade_time_left%(60*60*24)%(60*60))/60)}m` %> left)</span>
+                            <% } %>
+                        <% } %>
                         <p class="stat-raw-values">
                             <% for(const upgrade in constants.profile_upgrades){ %>
-                            <% max = calculated.misc.profile_upgrades[upgrade] == constants.profile_upgrades[upgrade] ? 'golden-text' : '' %><span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(upgrade.split("_").join(" ")); %>: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades[upgrade] %> / <%= constants.profile_upgrades[upgrade] %></span><br>
+                            <% max = calculated.misc.profile_upgrades[upgrade] == constants.profile_upgrades[upgrade].max ? 'golden-text' : '' %><span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(upgrade.split("_").join(" ")); %>: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades[upgrade] %> / <%= constants.profile_upgrades[upgrade].max %></span><br>
                             <% } %>
                         </p>
                     <% } %>

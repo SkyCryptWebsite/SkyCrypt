@@ -2678,6 +2678,11 @@ module.exports = {
         const output = {};
         for (const upgrade in constants.profile_upgrades)
             output[upgrade] = 0;
+        const upgrading = helper.hasPath(profile, 'community_upgrades') ? profile.community_upgrades.currently_upgrading : null;
+        output['currently_upgrading'] = null;
+        if (helper.hasPath(profile, 'community_upgrades', 'currently_upgrading') && upgrading != null)
+            output['currently_upgrading'] = {upgrade : upgrading.upgrade, new_tier: upgrading.new_tier, 
+                end_ms: upgrading.start_ms + constants.profile_upgrades[upgrading.upgrade].upgrade_times[upgrading.new_tier - 1] * 60 * 60 * 24 * 1000};
         if (helper.hasPath(profile, 'community_upgrades', 'upgrade_states'))
             for (const u of profile.community_upgrades.upgrade_states)
                 output[u.upgrade] = Math.max(output[u.upgrade] || 0, u.tier);
