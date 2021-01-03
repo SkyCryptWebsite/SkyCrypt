@@ -130,14 +130,6 @@
 
             let reachedEnd = false;
 
-            window.addEventListener('keydown', function(e){
-                if(/[a-zA-Z0-9-_ ]/.test(String.fromCharCode(e.keyCode)))
-                    if(smallUserSearch)
-                        inputSearchUser.focus();
-                    else
-                        targetUsername.focus();
-            });
-
             window.addEventListener('scroll', checkSearchboxOverlap);
             window.addEventListener('resize', checkSearchboxOverlap);
             function checkSearchboxOverlap() {
