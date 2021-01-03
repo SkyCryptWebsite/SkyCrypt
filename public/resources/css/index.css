@@ -2430,12 +2430,6 @@ a.additional-player-stat:hover{
     border-radius: 5px;
     margin-top: 5px;
     margin-bottom: 15px;
-    opacity: 0.9;
-    transition: opacity .1s;
-}
-
-.external-app:hover{
-    opacity: 1;
 }
 
 .external-app-name{
@@ -2961,6 +2955,19 @@ main.grid > * {
     }
 }
 
+main.grid > a,
+.external-app {
+    opacity: 0.9;
+    transition: opacity .15s;
+}
+
+main.grid > a:hover,
+main.grid > a:focus-visible,
+.external-app:hover,
+.external-app:focus-visible {
+    opacity: 1;
+}
+
 #enter_player_box_wrapper{
     grid-column: 1 / -1;
     height: 260px;
@@ -3016,12 +3023,13 @@ main.grid > * {
     font-weight: bold;
     text-decoration: none;
     margin-top: 20px;
-    transition: background-color .2s;
+    transition: background-color .15s;
     border-radius: 999px;
     text-shadow: 0px 0px 3px rgba(0,0,0,.5);
 }
 
-#goto_target_username:hover{
+#goto_target_username:hover,
+#goto_target_username:focus-visible {
     background-color: var(--link-hex);
 }
 
@@ -3048,12 +3056,6 @@ main.grid > * {
     display: inline-block;
     padding: 20px;
     text-decoration: none;
-    opacity: 0.9;
-    transition: opacity .2s;
-}
-
-.top-profile:hover{
-    opacity: 1;
 }
 
 .profile-avatar{
