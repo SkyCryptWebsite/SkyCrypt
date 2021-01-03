@@ -2968,19 +2968,20 @@ main.grid > a:focus-visible,
     opacity: 1;
 }
 
-#enter_player_box_wrapper{
+#enter_player_box {
     grid-column: 1 / -1;
-    height: 260px;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 25px;
+    padding: 25px 0;
 }
 
-#enter_player_box_wrapper p:last-child{
+#enter_player_box p:last-child {
     font-size: 16px;
     color: rgba(255,255,255,0.8);
-}
-
-#enter_player_box{
-    text-align: center;
+    margin: 0;
 }
 
 #enter_player_box p{
@@ -2988,6 +2989,7 @@ main.grid > a:focus-visible,
     text-align: center;
     font-size: 30px;
     font-weight: 600;
+    margin: 5px;
 }
 
 #enter_player_box input{
@@ -3003,14 +3005,6 @@ main.grid > a:focus-visible,
     font-weight: normal;
 }
 
-#enter_player_box{
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-}
-
 #goto_target_username{
     text-align: right;
     display: inline-block;
@@ -3022,7 +3016,6 @@ main.grid > a:focus-visible,
     text-transform: uppercase;
     font-weight: bold;
     text-decoration: none;
-    margin-top: 20px;
     transition: background-color .15s;
     border-radius: 999px;
     text-shadow: 0px 0px 3px rgba(0,0,0,.5);
@@ -3681,7 +3674,7 @@ body {
 }
 
 @media (max-width: 735px){
-    #enter_player_box_wrapper{
+    #enter_player_box {
         height: 205px;
         font-size: 12px;
     }

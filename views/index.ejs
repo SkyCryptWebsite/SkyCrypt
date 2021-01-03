@@ -13,13 +13,11 @@
     <body class="page-index">
         <%- include('../includes/header') %>
         <main class="grid">
-            <div id="enter_player_box_wrapper">
-                <div id="enter_player_box">
-                    <p>Show SkyBlock stats for</p>
-                    <input <% if(player){ %> value="<%= player %>" <% }%> id="inp_enter_ign" type="text" placeholder="Enter username" autofocus>
-                    <a href="<% if(player){ %>/stats/<%= player %><% }else{ %>#<% } %>" id="goto_target_username">Show me</a>
-                    <!--<p>or take me to a <a href="/random/stats">random profile</a>.</p>-->
-                </div>
+            <div id="enter_player_box">
+                <p>Show SkyBlock stats for</p>
+                <input <% if(player){ %> value="<%= player %>" <% }%> id="inp_enter_ign" type="text" placeholder="Enter username" autofocus>
+                <a href="<% if(player){ %>/stats/<%= player %><% }else{ %>#<% } %>" id="goto_target_username">Show me</a>
+                <!-- <p>or take me to a <a href="/random/stats">random profile</a>.</p> -->
             </div>
             <div id="error_box_wrapper" <% if(error){ %>class="show-error"<% } %>>
                 <div id="error_box">
