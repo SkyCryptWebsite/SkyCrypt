@@ -422,6 +422,15 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             }
         }
 
+        // Uses animated skin texture, if present
+        if (helper.hasPath(item, 'tag', 'ExtraAttributes', 'skin')) {
+            switch (item.tag.ExtraAttributes.skin) {
+                case "SNOW_SNOWGLOBE":
+                    item.texture_path = `/resources/img/items/snow_snowglobe.gif?v6`
+                    break;
+            }
+        }
+
         if(customTextures){
             const customTexture = await customResources.getTexture(item, false, packs);
 
@@ -452,7 +461,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
         if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'hot_potato_count'))
             item.extra.hpbs = item.tag.ExtraAttributes.hot_potato_count;
- 
+
         if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'anvil_uses')){
             let { anvil_uses } = item.tag.ExtraAttributes;
 
@@ -2315,13 +2324,28 @@ module.exports = {
                 .collection('items')
                 .findOne({ id: heldItem });
 
-                if(heldItem in constants.pet_items){
-                    if('stats' in constants.pet_items[heldItem])
-                        for(const stat in constants.pet_items[heldItem].stats)
-                            pet.stats[stat] = (pet.stats[stat] || 0) + constants.pet_items[heldItem].stats[stat];
-                    if('multStats' in constants.pet_items[heldItem])
-                        for(const stat in constants.pet_items[heldItem].multStats)
-                            if (pet.stats[stat]) { pet.stats[stat] = (pet.stats[stat] || 0) * constants.pet_items[heldItem].multStats[stat] };
+                if (heldItem in constants.pet_items) {
+                    if ('stats' in constants.pet_items[heldItem]) {
+                        for (const stat in constants.pet_items[heldItem].stats) {
+                            pet.stats[stat] =
+                                (pet.stats[stat] || 0) +
+                                constants.pet_items[heldItem].stats[stat]
+                        }
+                    }
+                    if ('multStats' in constants.pet_items[heldItem]) {
+                        for (const stat in constants.pet_items[heldItem].multStats) {
+                            if (pet.stats[stat]) {
+                                pet.stats[stat] =
+                                    (pet.stats[stat] || 0) *
+                                    constants.pet_items[heldItem].multStats[stat]
+                            }
+                        }
+                    }
+                    if ('multAllStats' in constants.pet_items[heldItem]) {
+                        for (const stat in pet.stats) {
+                            pet.stats[stat] *= constants.pet_items[heldItem].multAllStats
+                        }
+                    }
                 }
 
                 // push pet lore after held item stats added

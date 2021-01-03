@@ -1337,7 +1337,8 @@ a.additional-player-stat:hover{
     background-repeat: no-repeat;
 }
 
-.additional-player-stat.external-icon:not(.external-discord){
+.additional-player-stat.external-icon:not(.external-discord),
+.additional-player-stat.svg-icon {
     width: 29px;
     padding: 0;
 }
@@ -1372,10 +1373,26 @@ a.additional-player-stat:hover{
     user-select: none !important;
 }
 
-.additional-player-stat.add-favorite::after{
-    background-image: url(../img/icons/star.png);
+.additional-player-stat.svg-icon {    
+    display: inline-grid;
+    place-items: center;
+}
+
+.additional-player-stat.svg-icon svg {
+    width:20px;
+    height:20px
+}
+
+.additional-player-stat.favorite{
     cursor: pointer;
-    user-select: none !important;
+}
+
+.additional-player-stat.favorite:not([aria-checked="true"]) .solid {
+    visibility: hidden;
+}
+
+.additional-player-stat.favorite[aria-checked="true"] .outline {
+    visibility: hidden;
 }
 
 .additional-player-stat.external-twitter::after{
@@ -2390,7 +2407,7 @@ a.additional-player-stat:hover{
 
 .inventory-item .item-count{
     position: absolute;
-    z-index: 15;
+    z-index: 16;
     bottom: 2px;
     right: 2px;
     font-size: 24px;

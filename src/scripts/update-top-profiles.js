@@ -34,7 +34,7 @@ async function main(){
         FantasmicGalaxy: {
             position: 5,
             type: "DEV",
-            message: ""
+            message: "afk my melon minions :D"
         }
     };
 
