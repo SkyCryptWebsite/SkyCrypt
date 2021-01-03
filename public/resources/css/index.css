@@ -132,7 +132,9 @@ header{
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 0 8px;
+    padding-top: env(safe-area-inset-top, 0);
+    padding-left: max(8px, env(safe-area-inset-left));
+    padding-right: max(8px, env(safe-area-inset-right));
     background-color: #282828;
     z-index: 1000;
     line-height: 48px;
@@ -2936,8 +2938,10 @@ main.grid {
     margin: 0 auto;
     justify-items: stretch;
     gap: 20px;
-    padding: 20px;
     padding-top: calc(50vh - 130px);
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+    padding-left: max(20px, env(safe-area-inset-left));
+    padding-right: max(20px, env(safe-area-inset-right));
 }
 
 main.grid > * {
