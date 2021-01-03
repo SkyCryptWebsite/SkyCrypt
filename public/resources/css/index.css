@@ -2947,25 +2947,38 @@ main.grid > * {
     border-radius: 10px;
 }
 
+main.grid > a :not(img),
+.external-app :not(img) {
+    opacity: 0.85;
+    transition: opacity .15s ease-in-out;
+}
+
+main.grid > a:hover :not(img),
+main.grid > a:focus :not(img),
+.external-app:hover :not(img),
+.external-app:focus :not(img) {
+    opacity: 1;
+}
+
 @supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
     main.grid > * {
         background: none;
         -webkit-backdrop-filter: blur(16px) brightness(0.5);
         backdrop-filter: blur(16px) brightness(0.5);
     }
-}
 
-main.grid > a,
-.external-app {
-    opacity: 0.9;
-    transition: opacity .15s;
-}
+    main.grid > a,
+    .external-app {
+        transform: scale(1);
+        transition: transform .15s ease-in-out;
+    }
 
-main.grid > a:hover,
-main.grid > a:focus-visible,
-.external-app:hover,
-.external-app:focus-visible {
-    opacity: 1;
+    main.grid > a:hover,
+    main.grid > a:focus-visible,
+    .external-app:hover,
+    .external-app:focus-visible {
+        transform: scale(1.01);
+    }
 }
 
 #enter_player_box {
