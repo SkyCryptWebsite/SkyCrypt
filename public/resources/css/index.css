@@ -3306,11 +3306,6 @@ body {
         width: calc((1120px - 410px) / 2 - 60px);
     }
 
-    .external-app{
-        margin-left: -10px;
-        margin-right: -10px;
-    }
-
     #skin_display{
         display: none
     }
