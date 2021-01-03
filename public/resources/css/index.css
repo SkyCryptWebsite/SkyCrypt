@@ -3059,6 +3059,7 @@ main.grid > a:focus :not(img),
 }
 
 .top-profile{
+    position: relative;
     display: inline-block;
     padding: 20px;
     text-decoration: none;
