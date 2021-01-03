@@ -893,8 +893,8 @@ const inventorySlot = item => { %>
 <% };
 
 const skill_component = (skill, icon, level, extra = {}) => { %>
-    <div class="skill xp-skill <%= level.level == level.maxLevel ? 'maxed-skill' : ''%>">
-        <div class="skill-icon">
+    <div class="skill xp-skill<%= level.level == level.maxLevel ? ' maxed-skill' : ''%>">
+        <div class="skill-icon" data-tippy-content="<span>Rank: #69</span>">
             <% if(icon.startsWith('head-')){ %>
                 <div class="head-icon" style="background-image:url(/head/<%= icon.substring(5) %>)"></div>
             <% }else{ %>
@@ -1811,14 +1811,14 @@ twitterDescription += '. Click to view more stats!'
                     <% } %>
                 </div>
 
+                <% if(calculated.farming.talked){ %>
                 <div class="stat-farming">
                     <div class="minion-category-header">
-                        <div class="minion-category-icon"><div class="item-icon icon-294_0"></div></div>
+                        <div class="minion-category-icon" onclick="window.open('https://www.youtube.com/watch?v=pZaY1jV96jI')"><div class="item-icon icon-294_0"></div></div>
                         <span>farming</span>
                     </div>
 
-                    <% if(calculated.farming.talked){ 
-                    const farming = calculated.farming; %>
+                    <% const farming = calculated.farming; %>
                         <p class="stat-raw-values">
                             <span class="stat-name">Contests attended: </span><span class="stat-value"><%= farming.contests.attended_contests.toLocaleString() %></span><br>
                             <% max = farming.unique_golds == 10 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Golds: </span><span class="stat-value <%= max %>"><%= farming.unique_golds.toLocaleString() %></span></span><br>
@@ -1846,25 +1846,15 @@ twitterDescription += '. Click to view more stats!'
                         </p>
                         <% } %>
                         <div class="pieces">
-                            <%
-                                let hoe = items.hoes.slice().sort((a, b) => a.item_index - b.item_index);
-
-                                if(items.highest_rarity_hoe)
-                                    hoe = [items.highest_rarity_hoe];
-
-                                items.hoes.filter(a => !a.hidden).forEach(item => { %>
-                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece
-                                        <% if(rod.length > 0 && item.backpackIndex === undefined && item.item_index == rod[0].item_index){ %>piece-selected<% } %>
-                                        piece-<%= item.rarity %>-bg">
+                            <%  items.hoes.filter(a => !a.hidden).forEach(item => { %>
+                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
                                         <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                             <div class="piece-shine"></div>
                                         <% } %>
                                         <div class="piece-hover-area"></div>
                                         <% itemIcon(item, ['piece-icon']); %>
                                     </div>
-                            <%
-                                });
-                            %>
+                            <% }); %>
                         </div>
 
                         <div class="stat-sub-container sub-extendable">
@@ -1899,16 +1889,63 @@ twitterDescription += '. Click to view more stats!'
                                 <% } %>
                             </div>
                         </div>
-                    <% } %>
-
                 </div>
+                <% } %>
 
+                <% if(calculated.enchanting.experimented){ %>
                 <div class="stat-enchanting">
                     <div class="minion-category-header">
                         <div class="minion-category-icon"><div class="item-icon icon-116_0"></div></div>
                         <span>enchanting</span>
                     </div>
+
+                    <% const enchanting = calculated.enchanting; %>
+                    <div class="stat-sub-container sub-floor-extendable">
+                        <p class="stat-sub-header">Experiments</p>
+                        <div class="stat-experiments floor-containers">
+                            <% for(let game in enchanting.experiments){ 
+                            const game_data = enchanting.experiments[game]; %>
+                            <div class="narrow-info-container">
+                                <div class="narrow-info-header">
+                                    <span><%= game_data.name %></span>
+                                </div>
+                                <span>
+                                    <p class="stat-raw-values">
+                                        <% 
+                                            const game_stats = helper.sortObject(game_data.stats);
+                                            for(let stat in game_stats){ 
+                                        %>
+                                            <span class="stat-name"><%= helper.titleCase(stat.replace('_', ' ')) %>: </span>
+                                            <span class="stat-value"><%= (stat == 'last_attempt' || stat == 'last_claimed') ? game_stats[stat].text : game_stats[stat] %></span><br>
+                                        <% } %>
+                                    </p>
+                                    <% 
+                                    for(let tier in game_data.tiers) { 
+                                        const tier_data = game_data.tiers[tier]; 
+                                    %>
+                                    <hr>
+                                    <div class="collection">
+                                        <div class="collection-icon"><div class="item-icon icon-<%= tier_data.icon.replace(':', '_'); %>"></div></div>
+                                        <div class="collection-stats">
+                                            <div class="collection-name"><span class="stat-name"><%= tier_data.name %></span></div>
+                                            <div class="collection-amount">
+                                                <% 
+                                                for(let info in tier_data) { 
+                                                    if(info == 'name' || info == 'icon') continue; 
+                                                %>
+                                                <small class="stat-name"><%= helper.titleCase(info.replace('_', ' ')) %>: </small><small class="stat-value"><%= tier_data[info] %></small><br>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                </span>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
                 </div>
+                <% } %>
 
             </div>
         </div>

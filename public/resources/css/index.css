@@ -2480,6 +2480,17 @@ a.additional-player-stat:hover{
     margin: 10px;
 }
 
+.stat-enchanting .narrow-info-container{
+    min-width: 270px;
+    margin: 10px;
+}
+
+.stat-enchanting .collection{
+    padding: 0;
+    margin-bottom: 0;
+    background: 0;
+}
+
 .slayer-containers, .race-containers{
     white-space: nowrap;
 }

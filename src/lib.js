@@ -2049,10 +2049,12 @@ module.exports = {
                     if(key == 'last_attempt'
                     || key == 'last_claimed'){
                         if(game_data[key] <= 0) continue;
-                        game_output.stats[key] = {
+                        const last_time = {
                             unix: game_data[key],
                             text: moment(game_data[key]).fromNow()
                         };
+
+                        game_output.stats[key] = last_time;
                         continue;
                     }
 
