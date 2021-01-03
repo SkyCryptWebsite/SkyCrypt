@@ -57,7 +57,11 @@
                 <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
                 <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%-" " + extra.twemoji.parse(profile.emoji) %><% } %></div><br>
                 <div class="profile-last-online"><%- lastUpdatedText %></div>
-                <div class="profile-rank" title="Favorited profile"><%- extra.twemoji.parse("★") %></div>
+                <svg class="profile-rank" viewBox="0 0 24 24">
+                    <title>Favorited profile</title>
+                    <%# mdi-star %>
+                    <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+                </svg>
             </a>
             <% }}else{ %>
             <a class="top-profile">
@@ -73,10 +77,14 @@
                     <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
                     <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
                     <div class="profile-last-online"><%- message %></div>
-                    <% switch(profile.type){
-                        case "DEV": %>
-                        <div class="profile-rank" title="Member of SkyCrypt's Team">💻</div>
-                    <% } %>
+                    <svg class="profile-rank" viewBox="0 0 24 24">
+                        <% switch(profile.type){
+                            case "DEV": %>
+                            <title>Member of SkyCrypt's Team</title>
+                            <%# mdi-xml %>
+                            <path fill="currentColor" d="M12.89,3L14.85,3.4L11.11,21L9.15,20.6L12.89,3M19.59,12L16,8.41V5.58L22.42,12L16,18.41V15.58L19.59,12M1.58,12L8,5.58V8.41L4.41,12L8,15.58V18.41L1.58,12Z" />
+                        <% } %>
+                    </svg>
                 </a>
 
             <% } %>

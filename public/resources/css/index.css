@@ -3107,9 +3107,10 @@ main.grid > a:focus :not(img),
 
 .profile-rank{
     position: absolute;
-    bottom: 15px;
-    right: 15px;
-    font-weight: 600;
+    bottom: 10px;
+    right: 10px;
+    height: 20px;
+    width: 20px;
     color: rgba(255,255,255,0.6);
 }
 
