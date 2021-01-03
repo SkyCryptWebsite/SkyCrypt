@@ -2974,9 +2974,9 @@ main.grid > a:focus :not(img),
     }
 
     main.grid > a:hover,
-    main.grid > a:focus-visible,
+    main.grid > a:focus,
     .external-app:hover,
-    .external-app:focus-visible {
+    .external-app:focus {
         transform: scale(1.01);
     }
 }
@@ -3035,7 +3035,7 @@ main.grid > a:focus :not(img),
 }
 
 #goto_target_username:hover,
-#goto_target_username:focus-visible {
+#goto_target_username:focus {
     background-color: var(--link-hex);
 }
 
