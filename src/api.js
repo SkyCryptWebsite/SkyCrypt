@@ -5,6 +5,7 @@ const { getId } = helper;
 const lib = require('./lib');
 const constants = require('./constants');
 const cors = require('cors');
+const { hasPath } = require('./helper');
 
 function handleError(e, res){
     console.error(e);
@@ -308,24 +309,40 @@ module.exports = (app, db) => {
                 let enchantmentsOutput = enchantments;
 
                 const stats = weapon.stats;
-                let statsOutput = stats;
+                let statsOutput = weapon.stats;
 
-                if('html' in req.query && enchantments !== undefined){
-                    enchantmentsOutput = [];
+                const extra = weapon.extra;
+                let extraOutput = weapon.extra;
 
-                    for(const enchantment in enchantments)
-                        enchantmentsOutput.push(enchantment + '=' + enchantments[enchantment]);
+                if(hasPath(weapon, 'tag', 'ExtraAttributes'))
 
-                    enchantmentsOutput = enchantmentsOutput.join(",");
-                }
+                if('html' in req.query){
+                    if(enchantments !== undefined){
+                        enchantmentsOutput = [];
 
-                if('html' in req.query && stats !== undefined){
-                    statsOutput = [];
+                        for(const enchantment in enchantments)
+                            enchantmentsOutput.push(enchantment + '=' + enchantments[enchantment]);
 
-                    for(const stat in stats)
-                        statsOutput.push(stat + '=' + stats[stat]);
+                        enchantmentsOutput = enchantmentsOutput.join(",");
+                    }
 
-                    statsOutput = statsOutput.join(",");
+                    if(stats !== undefined){
+                        statsOutput = [];
+
+                        for(const stat in stats)
+                            statsOutput.push(stat + '=' + stats[stat]);
+
+                        statsOutput = statsOutput.join(",");
+                    }
+
+                    if(extra !== undefined){
+                        extraOutput = [];
+
+                        for(const value in extra)
+                            extraOutput.push(value + '=' + extra[value]);
+
+                        extraOutput = extraOutput.join(",");
+                    }
                 }
 
                 output.push({
@@ -334,6 +351,7 @@ module.exports = (app, db) => {
                     rarity: weapon.rarity,
                     enchantments: enchantmentsOutput,
                     stats: statsOutput,
+                    extra: extraOutput
                 });
             }
 

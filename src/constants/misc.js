@@ -48,18 +48,30 @@ module.exports = {
         'Giant Killer VII',
         'Giant Killer 6',
         'Giant Killer VI',
+        'Bane of Arthropods 7',
+        'Bane of Arthropods VII',
         'Bane of Arthropods 6',
         'Bane of Arthropods VI',
+        'Critical 7',
+        'Critical VII',
         'Critical 6',
         'Critical VI',
+        'Ender Slayer 7',
+        'Ender Slayer VII',
         'Ender Slayer 6',
         'Ender Slayer VI',
         'Experience 4',
         'Experience IV',
+        'Life Steal 5',
+        'Life Steal V',
         'Life Steal 4',
         'Life Steal IV',
+        'Looting 5',
+        'Looting V',
         'Looting 4',
         'Looting IV',
+        'Luck 7',
+        'Luck VII',
         'Luck 6',
         'Luck VI',
         'Scavenger 5',
@@ -80,10 +92,16 @@ module.exports = {
         'Growth VII',
         'Growth 6',
         'Growth VI',
+        'Blast Protection 7',
+        'Blast Protection VII',
         'Blast Protection 6',
         'Blast Protection VI',
+        'Fire Protection 7',
+        'Fire Protection VII',
         'Fire Protection 6',
         'Fire Protection VI',
+        'Projectile Protection 7',
+        'Projectile Protection VII',
         'Projectile Protection 6',
         'Projectile Protection VI',
         'Protection 7',
@@ -125,7 +143,17 @@ module.exports = {
         'Lethality 6',
         'Lethality VI',
         'Compact 10',
-        'Compact X'
+        'Compact X',
+        'First Strike 5',
+        'First Strike V',
+        'Execute 6',
+        'Execute VI',
+        'Cubism 6',
+        'Cubism VI',
+        'Venomous 6',
+        'Venomous VI',
+        'Cleave 6',
+        'Cleave VI',
     ],
 
     // Number of kills required for each level of expertise
@@ -166,7 +194,8 @@ module.exports = {
         sea_creature_chance: 20,
         magic_find: 10,
         pet_luck: 0,
-        ferocity: 0
+        ferocity: 0,
+        ability_damage: 0
     },
 
     stat_template: {
@@ -184,7 +213,8 @@ module.exports = {
         sea_creature_chance: 0,
         magic_find: 0,
         pet_luck: 0,
-        ferocity: 0
+        ferocity: 0,
+        ability_damage: 0
     },
 
     slayer_cost: {
@@ -265,6 +295,10 @@ module.exports = {
                 {
                     tier: 14,
                     slots: 45
+                },
+                {
+                    tier: 15,
+                    slots: 51
                 }
             ]
         },
@@ -563,5 +597,7 @@ module.exports = {
         },
 
         'NONE': null
-    }
+    },
+
+    max_favorites: 5
 };
