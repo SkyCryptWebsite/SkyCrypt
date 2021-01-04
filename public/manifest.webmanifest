@@ -61,7 +61,7 @@
   ],
   "screenshots" : [
     {
-      "src": "screenshot1.webp",
+      "src": "/resources/img/screenshot.jpg",
       "sizes": "3840x2160",
       "type": "image/jpeg"
     }
