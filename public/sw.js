@@ -1,3 +1,6 @@
+// add arc.io
+importScripts('https://arc.io/arc-sw-core.js')
+
 const VERSION = "1";
 
 self.addEventListener('install', (event) => {
