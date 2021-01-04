@@ -1,0 +1,16 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "optifine/cit/blocks/super_top",
+        "front": "optifine/cit/blocks/super_front",
+        "side": "optifine/cit/blocks/super_side"
+    },
+"display": {
+        "thirdperson": {
+	    "rotation": [ 10, -45, 170 ],
+            "translation": [ 0, 1.5, -2.75 ],
+            "scale": [ 0.375, 0.375, 0.375 ]
+        }
+        
+    }
+}

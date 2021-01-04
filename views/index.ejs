@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <title>SkyCrypt</title>
-    <meta name="description" content="A beautiful site for sharing your SkyBlock profile 🍣">
-    <link rel="shortcut icon" href="/resources/img/logo_square.png?v2" type="image/png">
-    <link rel="icon" href="/favicon.ico?v2" type="image/x-icon">
-    <meta property="og:image" content="/resources/img/logo_square.png?v2">
+    <% const description = "A beautiful site for sharing your SkyBlock profile 🍣" %>
+    <meta name="description" content="<%= description %>">
+    <link rel="icon" href="/resources/img/logo_square.svg" sizes="any" type="image/svg+xml">
+    <meta property="og:image" content="/resources/img/logo_square.svg">
     <meta property="og:title" content="SkyBlock Stats">
-    <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🍣">
+    <meta property="og:description" content="<%= description %>">
 <%- include('../includes/resources') %>
     <style>
     @media (max-width: 480px){
@@ -29,6 +29,26 @@
             top: 45px;
         }
     }
+    
+    .form-banner{
+        position: relative;
+        display: inline-block;
+        background: var(--bg_blur-webp) no-repeat center center fixed;
+        background-size: cover;
+        width: 100%;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        padding: 20px 20px 20px 90px;
+        box-sizing: border-box;
+        text-decoration: none;
+        overflow: hidden;
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .external-app-icon{
+        width: 90px;
+    }
     </style>
 </head>
     <body>
@@ -36,7 +56,7 @@
         <div id="enter_player_box_wrapper">
             <div id="enter_player_box">
                 <p>Show SkyBlock stats for</p>
-                <input <% if(player){ %> value="<%= player %>" <% }%> id="inp_enter_username" type="text" placeholder="Enter username">
+                <input <% if(player){ %> value="<%= player %>" <% }%> id="inp_enter_ign" type="text" placeholder="Enter username" autofocus>
                 <a href="<% if(player){ %>/stats/<%= player %><% }else{ %>#<% } %>" id="goto_target_username">Show me</a>
                 <!--<p>or take me to a <a href="/random/stats">random profile</a>.</p>-->
             </div>
@@ -60,8 +80,14 @@
             </div>
         </div>
         <div id="top_profiles_box_wrapper">
-            <% if(extra.favorites && !extra.favorites.error){ %>
-            <% let profile = extra.favorites
+            <a href="https://forms.gle/2d5iVtc8piRsJ3tM9" target="_blank" rel="nofollow" class="external-app form-banner">
+                <div class="external-app-icon" style="background-image: url(/resources/img/icons/google-forms.svg)"></div>
+                <div class="external-app-name">QOL Survey <span class="grey-text">– OPTIONAL</span></div>
+                <div class="external-app-description">A short survey about your SkyCrypt user experience and Skyblock experience.</div>
+            </a>
+            <% if(extra.favorites){
+            for(let profile of extra.favorites){
+            if(profile.error) continue;
             const lastUpdated = profile.last_updated;
             let lastUpdatedText = "";
             const diff = (+new Date() - lastUpdated) / 1000;
@@ -72,11 +98,11 @@
             %>
             <a href="/stats/<%= profile.uuid %>" class="top-profile">
                 <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
-                <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
+                <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%-" " + extra.twemoji.parse(profile.emoji) %><% } %></div><br>
                 <div class="profile-last-online"><%- lastUpdatedText %></div>
-                <div class="profile-rank"><%- extra.twemoji.parse("★") %></div>
+                <div class="profile-rank" title="Favorited profile"><%- extra.twemoji.parse("★") %></div>
             </a>
-            <% }else{ %>
+            <% }}else{ %>
             <a class="top-profile">
                 <img src="/resources/img/icons/q.png" class="profile-avatar">
                 <div class="profile-name">No favorite set!</div><br>
@@ -90,6 +116,10 @@
                     <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
                     <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
                     <div class="profile-last-online"><%- message %></div>
+                    <% switch(profile.type){
+                        case "DEV": %>
+                        <div class="profile-rank" title="Member of SkyCrypt's Team">💻</div>
+                    <% } %>
                 </a>
 
             <% } %>
@@ -101,7 +131,7 @@
                 console.log("An error occured with message: \"<%= error %>\"");
             <% } %>
 
-            const targetUsername = document.getElementById("inp_enter_username");
+            const targetUsername = document.getElementById("inp_enter_ign");
             const searchUser = document.getElementById('search_user');
             const inputSearchUser = document.getElementById('inp_search_user');
             const btnSearchUser = document.getElementById('btn_search_user');

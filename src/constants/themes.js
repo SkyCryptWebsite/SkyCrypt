@@ -8,7 +8,7 @@ module.exports = {
             author: "SkyCrypt Team",
             official: true,
             images: {
-                logo: "/resources/img/logo_square.png"
+                logo: "/resources/img/logo_square.svg"
             }
         },
         "skylea": {
@@ -16,7 +16,7 @@ module.exports = {
             author: "LeaPhant",
             official: true,
             images: {
-                logo: "/resources/img/themes/skylea/logo_square.png",
+                logo: "/resources/img/themes/skylea/logo_square.svg",
                 bg: "/resources/img/themes/skylea/bg.webp",
                 bg_blur: "/resources/img/themes/skylea/bg_blur.webp"
             },
@@ -40,7 +40,7 @@ module.exports = {
             author: "8KCoffeeWizard",
             community: true,
             images: {
-                logo: "/resources/img/themes/nightblue/logo_square.png",
+                logo: "/resources/img/themes/nightblue/logo_square.svg",
                 bg: "/resources/img/themes/nightblue/bg.webp",
                 bg_blur: "/resources/img/themes/nightblue/bg_blur.webp"
             },
@@ -61,7 +61,7 @@ module.exports = {
             author: "rainbowcraft2",
             community: true,
             images: {
-                logo: "/resources/img/themes/sunrise/logo_square.png",
+                logo: "/resources/img/themes/sunrise/logo_square.svg",
                 bg: "/resources/img/themes/sunrise/bg.webp",
                 bg_blur: "/resources/img/themes/sunrise/bg_blur.webp"
             },
@@ -82,7 +82,7 @@ module.exports = {
             author: "rainbowcraft2",
             community: true,
             images: {
-                logo: "/resources/img/themes/draconic/logo_square.png",
+                logo: "/resources/img/themes/draconic/logo_square.svg",
                 bg: "/resources/img/themes/draconic/bg.webp",
                 bg_blur: "/resources/img/themes/draconic/bg_blur.webp"
             },

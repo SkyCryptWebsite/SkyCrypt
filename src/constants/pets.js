@@ -273,7 +273,7 @@ module.exports = {
         },
         "GUARDIAN": {
             head: "/head/221025434045bda7025b3e514b316a4b770c6faa4ba9adb4be3809526db77f9d",
-            type: "combat",
+            type: "enchanting",
             emoji: "🐡"
         },
         "SQUID": {
@@ -381,6 +381,127 @@ module.exports = {
             type: "combat",
             emoji: "🦅"
         }
+    },
+
+    pet_skins: {
+        "ENDERMAN": {
+            "ENDERMAN": {
+                name: "Spooky",
+                head: "/head/ea84cc8818c293484fdaafc8fa2f0bf39e55733a247d68023df2c6c6b9b671d0",
+            },
+        },
+        "GUARDIAN": {
+            "GUARDIAN": {
+                name: "Watcher",
+                head: "/head/37cc76e7af29f5f3fbfd6ece794160811eff96f753459fa61d7ad176a064e3c5",
+            },
+        },
+        "TIGER": {
+            "TIGER_TWILIGHT": {
+                name: "Twilight",
+                head: "/head/896211dc599368dbd9056c0116ab61063991db793be93066a858eb4e9ce56438",
+            },
+        },
+        "RABBIT": {
+            "RABBIT": {
+                name: "Pretty",
+                head: "/head/a34631d940fddb689ddef6a3b352c50220c460dba05cd18dc83192b59dc647f8",
+            },
+        },
+        "WITHER_SKELETON": {
+            "WITHER": {
+                name: "Dark",
+                head: "/head/224c2d14a0219af5ccfcaa36e8a333e271724ed61276611f9529e16c10273a0d",
+            },
+        },
+        "ROCK": {
+            "ROCK_COOL": {
+                name: "Cool",
+                head: "/head/fefcdbb7d95502acc1ae35a32a40ce4dec8f4c9f0da26c9d9fe7c2c3eb748f6",
+            },
+            "ROCK_SMILE": {
+                name: "Smile",
+                head: "/head/713c8b2916a275db4c1762cf5f13d7b95b91d60baf5164a447d6efa7704cf11b",
+            },
+            "ROCK_THINKING": {
+                name: "Thinking",
+                head: "/head/dd2f781f03c365bbc5dd1e7186ab38dc69465e836c9fe066a9a844f34a4da92",
+            },
+            "ROCK_LAUGH": {
+                name: "Laughing",
+                head: "/head/8cc1ef513d5f616675242174acde7b9d6259a47c4fe8f6e4b6e20920319d7073",
+            },
+            "ROCK_DERP": {
+                name: "Derp",
+                head: "/head/c4f89fbd12c209f7f26c1f34a1bd7f47635814759c09688dd212b205c73a8c02",
+            },
+            "ROCK_EMBARRASSED": {
+                name: "Embarrassed",
+                head: "/head/27ff34992e66599e8529008be3fb577cb0ab545294253e25a0cc988e416c849",
+            },
+        },
+        "SHEEP": {
+            "SHEEP_WHITE": {
+                name: "White",
+                head: "/head/b92a1a5c325f25f7438a0abb4f86ba6cf75552d02c7349a7292981459b31d2f7",
+            },
+            "SHEEP_PURPLE": {
+                name: "Purple",
+                head: "/head/99a88cf7dd33063587c6b540e6130abc5d07f1a65c47573ab3c1ad3ccec8857f",
+            },
+            "SHEEP_BLACK": {
+                name: "Black",
+                head: "/head/aa9dcda642a807cd2daa4aa6be87cef96e08a8c8f5cec2657dda4266c6a884c2",
+            },
+            "SHEEP_PINK": {
+                name: "Pink",
+                head: "/head/afa7747684dcb96192d90342cea62742ec363da07cb5e6e25eecec888cd2076",
+            },
+            "SHEEP_LIGHT_BLUE": {
+                name: "Light Blue",
+                head: "/head/722220de1a863bc5d9b9e7a6a3b03214c9f3d698ed3fe0d28220f3b93b7685c5",
+            },
+            "SHEEP_LIGHT_GREEN": {
+                name: "Light Green",
+                head: "/head/cf183ec2fe58faa43e568419b7a0dc446ece4ea0be52ec784c94e1d74b75939d",
+            },
+        },
+        "SILVERFISH": {
+            "SILVERFISH": {
+                name: "Fortified",
+                head: "/head/d8552ff591042c4a38f8ba0626784ae28c4545a97d423fd9037c341035593273",
+            },
+        },
+        "ELEPHANT": {
+            "ELEPHANT_PINK": {
+                name: "Pink",
+                head: "/head/570eef474ec0e56cc34c2307eaa39f024612f8cd7248e7d5b14169ebd307c742",
+            },
+            "ELEPHANT_BLUE": {
+                name: "Blue",
+                head: "/head/4b62969c005815d0409136380febc5ac468aaba9bda4db80954fa5426ee0a323",
+            },
+            "ELEPHANT_ORANGE": {
+                name: "Orange",
+                head: "/head/554a34a80c474206d3700b8fced6b44fab0b0ed0b05c1293ff0c5d86eda251d1",
+            },
+        },
+        "JERRY": {
+            "JERRY_RED_ELF": {
+                name: "Red Elf",
+                head: "/head/1d82f9c36e824c1e37963a849bf5abd76d3b349125023504af58369086089ee9",
+            },
+            "JERRY_GREEN_ELF": {
+                name: "Green Elf",
+                head: "/head/4ec5455f43426ca1874b5c7b4a492ec3722a502f8b9599e758e133fed8b3c1e4",
+              },
+        },
+        "BABY_YETI": {
+            "YETI_GROWN_UP": {
+                name: "Grown-up",
+                head: "/head/f5f29a975529276d916fc67998833c11ee178ff21e5941afdfb0fa7010f8374e",
+            },
+        },
     },
 
     pet_value: {
@@ -574,9 +695,9 @@ module.exports = {
             }
         },
         CROCHET_TIGER_PLUSHIE: {
-            description: `§7Increases §e${symbols.attack_speed} Bonus Attack Speed §7by §a40`,
+            description: `§7Increases §e${symbols.attack_speed} Bonus Attack Speed §7by §a35`,
             stats: {
-                bonus_attack_speed: 40
+                bonus_attack_speed: 35
             }
         },
         DWARF_TURTLE_SHELMET: {
@@ -584,6 +705,17 @@ module.exports = {
         },
         PET_ITEM_VAMPIRE_FANG: {
             description: "§7Upgrades a Bat pet from §6Legendary §7to §dMythic §7adding a bonus perk and bonus stats!"
-        }
+        },
+        PET_ITEM_SPOOKY_CUPCAKE: {
+            description: `§7Increases §c${symbols.strength} Strength §7by §a30 §7and §f${symbols.speed} Speed §7by §a20`,
+            stats: {
+                strength: 30,
+                speed: 20
+            }
+        },
+        MINOS_RELIC: {
+            description: `§7Increases all pet stats by §a33.3%`,
+            multAllStats: 1.333,
+        },
     }
 }

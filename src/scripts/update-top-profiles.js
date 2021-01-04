@@ -10,7 +10,6 @@ async function main(){
 
     const db = mongo.db(credentials.dbName);
 
-    const moment = require('moment');
     let featured = {
         metalcupcake5: {
             position: 1,
@@ -25,7 +24,7 @@ async function main(){
         MartinNemi03: {
             position: 3,
             type: "DEV",
-            message: "lazy developer"
+            message: "\"lazy dev\" &nbsp; <b>(ﾉ´･ω･)ﾉ ﾐ ┸━┸</b>"
         },
         jjww2: {
             position: 4,
@@ -35,40 +34,12 @@ async function main(){
         FantasmicGalaxy: {
             position: 5,
             type: "DEV",
-            message: ""
+            message: "afk my melon minions :D"
         }
     };
 
     async function updateTopProfiles(){
         await db.collection('topViews').deleteMany({});
-
-        // Clear the favorite cache
-        await db.collection('favoriteCache').deleteMany({});
-
-        /* for await(const doc of db.collection('viewsLeaderboard').aggregate([
-            {
-                "$lookup": {
-                    "from": "profileStore",
-                    "localField": "uuid",
-                    "foreignField": "uuid",
-                    "as": "profileInfo"
-                }
-            },
-            {
-                "$unwind": {
-                    "path": "$profileInfo"
-                }
-            },
-            {
-                "$limit": 20
-            }
-        ])){
-            await db.collection('topViews').updateOne(
-                { _id: doc._id },
-                { $set: doc },
-                { upsert: true }
-            )
-        } */
 
         for (name in featured) {
             const user = await db
@@ -79,13 +50,6 @@ async function main(){
             if(!user[0]) continue;
             let output = user[0];
 
-            // For later use...
-            /* let profile = await db
-            .collection('profileStore')
-            .find( { uuid: output.uuid } );
-
-            output.last_updated = moment(profile.last_save).unix(); */
-
             for (data in featured[name]) 
                 output[data] = featured[name][data];
 
@@ -95,8 +59,6 @@ async function main(){
                 { upsert: true }
             );
         }
-
-        setTimeout(updateTopProfiles, 900 * 1000);
     }
 
     updateTopProfiles();

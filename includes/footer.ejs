@@ -4,6 +4,7 @@
 <script src="/resources/js/anime.min.js"></script>
 <script src="/resources/js/skinview3d.bundle.js"></script>
 <script src="/resources/js/modernizr.js"></script>
+<script async src="https://arc.io/widget.min.js#oNMq8LVU"></script>
 
 <script>
     function setCookie(name,value,days) {
@@ -71,6 +72,13 @@
         loadTheme(theme);
     }
 
+    window.addEventListener('storage', (event) => {
+        if (event.key === 'currentTheme') {
+            setInUseThemeButton(event.newValue);
+            loadTheme(event.newValue);
+        }
+    });
+
     setInUseThemeButton(localStorage.getItem("currentTheme"));
     function setInUseThemeButton(theme) {
         if(!extra.themes[theme]) return console.error(`Theme ${theme} doesn't exist.`);
@@ -121,7 +129,7 @@
     });
 </script>
 <% if(page == 'stats'){ %>
-    <script src="/resources/js/stats.js?v67"></script>
+    <script src="/resources/js/stats.js?v69"></script>
 <% } %>
 
 <% if(page == 'api'){ %>
