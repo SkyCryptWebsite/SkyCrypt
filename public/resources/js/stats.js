@@ -916,7 +916,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     function parseFavorites(cookie) {
-        return cookie?.split(',').filter(uuid => /^[0-9a-f]+$/.test(uuid) && uuid.length === 32) || []
+        return cookie?.split(',').filter(uuid => /^[0-9a-f]+$/.test(uuid) && uuid.length === 32) || [];
     }
 
     const favoriteElement = document.querySelector('.favorite');
