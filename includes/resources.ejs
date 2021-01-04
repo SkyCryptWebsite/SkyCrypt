@@ -80,8 +80,9 @@
         }
 
         function loadTheme(currentTheme) {
-            if (!extra.themes[currentTheme])
+            if (!extra.themes[currentTheme]) {
                 return console.error(`${currentTheme} isn't a valid theme.`);
+            }
 
             const theme = extra.themes[currentTheme];
 
