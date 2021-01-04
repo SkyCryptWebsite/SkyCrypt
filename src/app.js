@@ -93,7 +93,7 @@ async function main(){
                 .toArray();
 
                 if(cache[0]) {
-                    favorites[i] = cache[0];
+                    favorites.push(cache[0]);
                 } else {
                     let output_cache = { uuid };
                     
@@ -117,12 +117,12 @@ async function main(){
                     }else output_cache.error = "User doesn't exist.";
                     
                     await db.collection('favoriteCache').insertOne(output_cache);
-                    favorites[i] = output_cache;
+                    favorites.push(output_cache);
                 }
             } else {
-                favorites[i] = {
+                favorites.push({
                     error: "Unknown error."
-                }
+                });
             }
         }
         return favorites;
