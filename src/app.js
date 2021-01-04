@@ -84,14 +84,14 @@ async function main(){
 
     async function getFavoritesFormUUIDs(uuids) {
         favorites = [];
-        for(const uuid of uuids){
-            if(uuid != null){
+        for (const uuid of uuids) {
+            if (uuid != null) {
                 const cache = await db
                 .collection('favoriteCache')
                 .find( { uuid } )
                 .toArray();
 
-                if(cache[0]) {
+                if (cache[0]) {
                     favorites.push(cache[0]);
                 } else {
                     let output_cache = { uuid };
@@ -101,7 +101,7 @@ async function main(){
                     .find( { uuid } )
                     .toArray();
     
-                    if(user[0]) {
+                    if (user[0]) {
                         output_cache = user[0];
     
                         let profiles = await db
@@ -109,11 +109,15 @@ async function main(){
                         .find( { uuid } )
                         .toArray();
     
-                        if(profiles[0]) {
+                        if (profiles[0]) {
                             const profile = profiles[0];
                             output_cache.last_updated = profile.last_save;
-                        }else output_cache.error = "Profile doesn't exist.";
-                    }else output_cache.error = "User doesn't exist.";
+                        } else {
+                            output_cache.error = "Profile doesn't exist.";
+                        }
+                    } else {
+                        output_cache.error = "User doesn't exist.";
+                    }
                     
                     await db.collection('favoriteCache').insertOne(output_cache);
                     favorites.push(output_cache);
