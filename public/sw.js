@@ -6,7 +6,7 @@ self.addEventListener('install', (event) => {
             return cache.addAll([
                 '/resources/html/offline.html',
                 '/resources/img/bg.webp',
-                '/resources/img/logo_square.png',
+                '/resources/img/logo_square.svg',
             ]);
         }),
     );
