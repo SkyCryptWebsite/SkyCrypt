@@ -79,7 +79,7 @@ async function main(){
     let FEATURED_LAST_UPDATED = 0;
 
     function parseFavorites(cookie) {
-        return cookie?.split(',').filter(uuid => /^[0-9a-f]+$/.test(uuid) && uuid.length === 32) || [];
+        return cookie?.split(',').filter(uuid => /^[0-9a-f]{32}$/.test(uuid)) || [];
     }
 
     async function getFavoritesFormUUIDs(uuids) {
