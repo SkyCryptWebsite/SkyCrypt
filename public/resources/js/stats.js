@@ -8,6 +8,21 @@ document.addEventListener('DOMContentLoaded', function(){
         }
         document.cookie = name + "=" + (value || "")  + expires + "; SameSite=Lax; path=/";
     }
+
+    function getCookie(c_name) {
+        if (document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1) {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) {
+                    c_end = document.cookie.length;
+                }
+                return unescape(document.cookie.substring(c_start, c_end));
+            }
+        }
+        return "";
+    }
     
     let userAgent = window.navigator.userAgent;
     let tippyInstance;
@@ -911,31 +926,47 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
-    [].forEach.call(document.querySelectorAll('.add-favorite'), function(e){
-        let element = e;
+    function parseFavorites(cookie) {
+        return cookie?.split(',').filter(uuid => /^[0-9a-f]+$/.test(uuid)) || []
+    }
 
-        let setNotification = tippy(element, {
-            content: 'Set favorite!',
-            trigger: 'manual'
-        });
+    const favoriteElement = document.querySelector('.favorite');
 
-        element.addEventListener('click', function(){
-            if(element.getAttribute("data-username") == "0c0b857f415943248f772164bf76795c"){
-                setNotification.show();
+    function checkFavorite() {
+        const favorited = parseFavorites(getCookie("favorite")).includes(favoriteElement.getAttribute("data-username"));
+        favoriteElement.setAttribute('aria-checked', favorited);
+        return favorited;
+    }
 
-                setTimeout(function(){
-                    setNotification.hide();
-                }, 1500);
+    let favoriteNotification = tippy(favoriteElement, {
+        trigger: 'manual'
+    });
+
+    favoriteElement.addEventListener('click', function(){
+        let uuid = favoriteElement.getAttribute("data-username");
+        if(uuid == "0c0b857f415943248f772164bf76795c"){
+            favoriteNotification.setContent("No");
+        }else{
+            let cookieArray = parseFavorites(getCookie("favorite"));
+            if(cookieArray.includes(uuid)){
+                cookieArray.splice(cookieArray.indexOf(uuid), 1);
+
+                favoriteNotification.setContent("Removed favorite!");
+            }else if(cookieArray.length >= constants.max_favorites){
+                favoriteNotification.setContent(`You can only have ${constants.max_favorites} favorites!`);
             }else{
-                setCookie("favorite", element.getAttribute("data-username"), 365);
-                
-                setNotification.show();
+                cookieArray.push(uuid);
 
-                setTimeout(function(){
-                    setNotification.hide();
-                }, 1500);
+                favoriteNotification.setContent("Added favorite!");
             }
-        });
+            setCookie("favorite", cookieArray.join(','), 365);
+            checkFavorite();
+        }
+        favoriteNotification.show();
+
+        setTimeout(function(){
+            favoriteNotification.hide();
+        }, 1500);
     });
 
     let socialsShown = false;

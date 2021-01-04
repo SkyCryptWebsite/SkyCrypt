@@ -5,6 +5,7 @@ const { getId } = helper;
 const lib = require('./lib');
 const constants = require('./constants');
 const cors = require('cors');
+const { hasPath } = require('./helper');
 
 function handleError(e, res){
     console.error(e);
@@ -39,7 +40,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/profiles', cors(), async (req, res) => {
         try{
-            const { allProfiles } = await lib.getProfile(db, req.params.player);
+            const { allProfiles } = await lib.getProfile(db, req.params.player, null, { cacheOnly: true });
 
             const profiles = [];
 
@@ -69,7 +70,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/pets', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
             const userProfile = profile.members[uuid];
 
             const pets = await lib.getPets(userProfile);
@@ -100,7 +101,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/minions', cors(), async (req, res) => {
         try{
-            const { profile } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
 
             const minions = [];
 
@@ -136,7 +137,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/accessories', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
             const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
@@ -163,7 +164,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/collections', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
             const userProfile = profile.members[uuid];
 
             const collections = await lib.getCollections(uuid, profile);
@@ -242,7 +243,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/cakebag', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
             const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
@@ -296,7 +297,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/weapons', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
             const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
@@ -308,24 +309,40 @@ module.exports = (app, db) => {
                 let enchantmentsOutput = enchantments;
 
                 const stats = weapon.stats;
-                let statsOutput = stats;
+                let statsOutput = weapon.stats;
 
-                if('html' in req.query && enchantments !== undefined){
-                    enchantmentsOutput = [];
+                const extra = weapon.extra;
+                let extraOutput = weapon.extra;
 
-                    for(const enchantment in enchantments)
-                        enchantmentsOutput.push(enchantment + '=' + enchantments[enchantment]);
+                if(hasPath(weapon, 'tag', 'ExtraAttributes'))
 
-                    enchantmentsOutput = enchantmentsOutput.join(",");
-                }
+                if('html' in req.query){
+                    if(enchantments !== undefined){
+                        enchantmentsOutput = [];
 
-                if('html' in req.query && stats !== undefined){
-                    statsOutput = [];
+                        for(const enchantment in enchantments)
+                            enchantmentsOutput.push(enchantment + '=' + enchantments[enchantment]);
 
-                    for(const stat in stats)
-                        statsOutput.push(stat + '=' + stats[stat]);
+                        enchantmentsOutput = enchantmentsOutput.join(",");
+                    }
 
-                    statsOutput = statsOutput.join(",");
+                    if(stats !== undefined){
+                        statsOutput = [];
+
+                        for(const stat in stats)
+                            statsOutput.push(stat + '=' + stats[stat]);
+
+                        statsOutput = statsOutput.join(",");
+                    }
+
+                    if(extra !== undefined){
+                        extraOutput = [];
+
+                        for(const value in extra)
+                            extraOutput.push(value + '=' + extra[value]);
+
+                        extraOutput = extraOutput.join(",");
+                    }
                 }
 
                 output.push({
@@ -334,6 +351,7 @@ module.exports = (app, db) => {
                     rarity: weapon.rarity,
                     enchantments: enchantmentsOutput,
                     stats: statsOutput,
+                    extra: extraOutput
                 });
             }
 
@@ -348,7 +366,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/armor', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
             const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
@@ -400,7 +418,7 @@ module.exports = (app, db) => {
 
     app.all('/api/:player/:profile/wardrobe', cors(), async (req, res) => {
         try{
-            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile);
+            const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
             const userProfile = profile.members[uuid];
 
             const items = await lib.getItems(userProfile);
