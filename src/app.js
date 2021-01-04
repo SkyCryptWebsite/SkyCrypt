@@ -119,6 +119,10 @@ async function main(){
                     await db.collection('favoriteCache').insertOne(output_cache);
                     favorites[i] = output_cache;
                 }
+            } else {
+                favorites[i] = {
+                    error: "Unknown error."
+                }
             }
         }
         return favorites;
@@ -400,6 +404,10 @@ Disallow: /item /head /leather /resources
 
     app.all('/api', async (req, res, next) => {
         res.render('api', { error: null, player: null, extra: await getExtra('api'), helper, page: 'api' });
+    });
+
+    app.all('/arc-sw.js', async (req, res, next) => {
+        res.redirect(`https://arc.io/arc-sw.js`);
     });
 
     app.all('/:player/:profile?', async (req, res, next) => {

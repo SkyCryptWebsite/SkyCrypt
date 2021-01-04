@@ -1,7 +1,0 @@
-{
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "optifine/cit/potions/splash/blank",
-        "layer1": "optifine/cit/potions/splash/speed_potion_s"
-    }
-}
