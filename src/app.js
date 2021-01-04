@@ -79,14 +79,13 @@ async function main(){
     let FEATURED_LAST_UPDATED = 0;
 
     function parseFavorites(cookie) {
-        return cookie?.split(',').filter(uuid => /^[0-9a-f]+$/.test(uuid)) || []
+        return cookie?.split(',').filter(uuid => /^[0-9a-f]+$/.test(uuid) && uuid.length === 32) || []
     }
 
     async function getFavoritesFormUUIDs(uuids) {
         favorites = [];
-        for(let i = 0; i < uuids.length && i < constants.max_favorites; i++){
-            const uuid = uuids[i];
-            if(uuid?.length == 32){
+        for(const uuid of uuids){
+            if(uuid != null){
                 const cache = await db
                 .collection('favoriteCache')
                 .find( { uuid } )
