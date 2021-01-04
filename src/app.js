@@ -85,7 +85,7 @@ async function main(){
     async function getFavoritesFormUUIDs(uuids) {
         favorites = [];
         for(let i = 0; i < uuids.length && i < constants.max_favorites; i++){
-            let uuid = uuids[i];
+            const uuid = uuids[i];
             if(uuid?.length == 32){
                 const cache = await db
                 .collection('favoriteCache')
