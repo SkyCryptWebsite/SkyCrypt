@@ -1246,6 +1246,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 }
 
 .additional-player-stat{
+    all: unset;
     position: relative;
     padding: 0px 12px;
     margin-right: 7px;
