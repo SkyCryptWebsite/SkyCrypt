@@ -119,10 +119,6 @@ async function main(){
                     await db.collection('favoriteCache').insertOne(output_cache);
                     favorites.push(output_cache);
                 }
-            } else {
-                favorites.push({
-                    error: "Unknown error."
-                });
             }
         }
         return favorites;
