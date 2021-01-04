@@ -110,7 +110,9 @@
     if(!Modernizr.testAllProps('transform', 'translateY(10px)'))
         document.documentElement.classList.add('no-transform');
 
-    tippy('*[data-tippy-content]');
+    tippy('*[data-tippy-content]', {
+        boundary: 'window'
+    });
 
     const prideFlag = document.querySelector('.pride-flag');
     const prideFlags = ["rainbow", "trans", "lesbian", "bi", "pan", "nb", "ace", "genderfluid", "logo"];
