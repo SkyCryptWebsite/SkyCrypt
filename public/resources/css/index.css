@@ -1380,6 +1380,11 @@ a.additional-player-stat:hover{
 }
 
 .additional-player-stat.svg-icon svg {
+    width:18px;
+    height:18px
+}
+
+.additional-player-stat.svg-icon.favorite svg {
     width:20px;
     height:20px
 }
