@@ -159,8 +159,8 @@ class Bee extends Pet { // todo: finish hive
 	}
 
 	modifyStats(stats) {
-		let intMult = this.rarity > 3 ? 0.19 : this.rarity > 2 ? 0.14 : this.rarity > 1 ? 0.09 : this.rarity > 0 ? 0.4 : 0.02;
-		let strMult = this.rarity > 3 ? 0.14 : this.rarity > 2 ? 0.11 : this.rarity > 1 ? 0.07 : this.rarity > 0 ? 0.4 : 0.02;
+		let intMult = this.rarity > 3 ? 0.19 : this.rarity > 2 ? 0.14 : this.rarity > 1 ? 0.09 : this.rarity > 0 ? 0.04 : 0.02;
+		let strMult = this.rarity > 3 ? 0.14 : this.rarity > 2 ? 0.11 : this.rarity > 1 ? 0.07 : this.rarity > 0 ? 0.04 : 0.02;
 		stats['strength'] += round(this.level * strMult + 1, 1);
 		stats['intelligence'] += round(this.level * intMult + 1, 1);
 	}
@@ -902,7 +902,7 @@ class Golem extends Pet {
 		let mult = 0.25;
 		return {
 			name: "§6Ricochet",
-			desc: [`§7Your iron plating causes §a${round(this.level * mult, 1)}% §7of attacks to rocochet and hit the attacker`]
+			desc: [`§7Your iron plating causes §a${round(this.level * mult, 1)}% §7of attacks to ricochet and hit the attacker`]
 		};
 	}
 
@@ -946,10 +946,10 @@ class Griffin extends Pet {
 
 	get second() {
 		let regen = this.rarity > 3 ? "VII" : this.rarity > 1 ? "VI" : "V";
-		let stren = this.rarity > 2 ? "VIII" : "VII"
+		let strength = this.rarity > 2 ? "VIII" : "VII"
 		return {
 			name: "§6Legendary Constitution",
-			desc: [`§7Permanent §cRegeneration ${regen} §7and §4Strength ${stren}§7.`]
+			desc: [`§7Permanent §cRegeneration ${regen} §7and §4Strength ${strength}§7.`]
 		}
 	}
 
@@ -964,7 +964,7 @@ class Griffin extends Pet {
 	get fourth() {
 		return {
 			name: "§6King of Kings",
-			desc: [`§7Gain §c+${round(1 + (this.level * 0.14), 1)}% §c❁ Strength §7when above §c85% §7health.`]
+			desc: [`§7Gain §c+${round(1 + (this.level * 0.14), 1)}% §c${symbols.strength} Strength §7when above §c85% §7health.`]
 		}
 	}
 }
@@ -1788,12 +1788,12 @@ class Lion extends Pet {
 		let mult = this.rarity > 3 ? 0.2 : this.rarity > 2 ? 0.15 : this.rarity > 1 ? 0.1 : this.rarity > 0 ? 0.05 : 0.025;
 		return {
 			name: "§6Primal Force",
-			desc: [`§7Adds §c+${round(this.level * mult, 1)}❁ Damage §7to your weapons`]
+			desc: [`§7Adds §c+${round(this.level * mult, 1)}${symbols.strength} Damage §7to your weapons`]
 		};
 	}
 
 	get second() {
-		let mult = this.rarity > 2 ? this.rarity > 3 ? 0.5 : 0.4 : 0.3;
+		let mult = this.rarity > 3 ? 0.5 :this.rarity > 2 ? 0.4 : 0.3;
 		return {
 			name: "§6First Pounce",
 			desc: [`Increases damage dealt by §a${round(this.level * mult, 1)}% §7on your first hit on a mob`]
@@ -1804,7 +1804,7 @@ class Lion extends Pet {
 		let mult = 0.3;
 		return {
 			name: "§6King of the Jungle",
-			desc: [`Deal §c+${round(this.level * mult, 1)}% ❁ Damage §7against mobs below level §a80`]
+			desc: [`Deal §c+${round(this.level * mult, 1)}% ${symbols.strength} Damage §7against mobs below level §a80`]
 		};
 	}
 }
@@ -2333,12 +2333,12 @@ class Sheep extends Pet {
 		let mult = this.rarity > 2 ? 0.2 : this.rarity > 1 ? 0.125 : 0.05;
 		return {
 			name: "§6Mana Saver",
-			desc: [`§7Reduces the mana cost of abilites by §a${round(this.level * mult, 1)}%`]
+			desc: [`§7Reduces the mana cost of abilities by §a${round(this.level * mult, 1)}%`]
 		};
 	}
 
 	get second() {
-		let mult = this.rarity > 2 ? 0.1 : 0.4;
+		let mult = 0.1;
 		return {
 			name: "§6Overheal",
 			desc: [`§7Gives a §a${round(this.level * mult, 1)}% §7shield after not taking damage for 10s`]
