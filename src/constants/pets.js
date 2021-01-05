@@ -465,6 +465,22 @@ module.exports = {
                 name: "Light Green",
                 head: "/head/cf183ec2fe58faa43e568419b7a0dc446ece4ea0be52ec784c94e1d74b75939d",
             },
+            "SHEEP_NEON_YELLOW": {
+                name: "Neon Yellow",
+                head: "/head/94263428c23da9165b2639a8f2428ff4835227945c9e1038461cf644d67cc82a",
+            },
+            "SHEEP_NEON_RED": {
+                name: "Neon Red",
+                head: "/head/4918be142a20b2b39bc582f421f6ae87b3184b5c9523d16fbe6d69530107886a",
+            },
+            "SHEEP_NEON_BLUE": {
+                name: "Neon Blue",
+                head: "/head/e55b3fe9311c99342ea565483cbf9e969a258faf7afa30270fb9a0929377acfd",
+            },
+            "SHEEP_NEON_GREEN": {
+                name: "Neon Green",
+                head: "/head/2c14d66911554bd0882339074bf6b8110c2d3509b69e7a6144e4d5a7164bacc8",
+            },
         },
         "SILVERFISH": {
             "SILVERFISH": {
