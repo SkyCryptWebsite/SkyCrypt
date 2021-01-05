@@ -571,7 +571,6 @@ header > *{
 
 #wrapper > * {
     max-width: 100%;
-    overflow-x: hidden;
 }
 
 #base_stats_container {
@@ -1116,7 +1115,6 @@ html.no-transform #info_box.opened{
     margin-top: 50px;
     margin-left: 50px;
     margin-bottom: 20px;
-    overflow: visible;
 }
 
 #stats_for_player, #stats_for_profile{
@@ -1439,8 +1437,8 @@ a.additional-player-stat:hover{
     grid-area: additional;
     font-size: 12px;
     font-weight: 600;
+    padding-bottom: 5ex;
     line-height: 1.75;
-    overflow: visible;
 }
 
 .additional-stat{
@@ -2256,6 +2254,7 @@ a.additional-player-stat:hover{
     position: relative;
     width: 100%;
     height: 100%;
+    overflow-x: auto;
 }
 
 #inventory_header .inventory-tab{
@@ -2497,10 +2496,6 @@ a.additional-player-stat:hover{
     margin: 10px;
 }
 
-.slayer-containers, .race-containers{
-    white-space: nowrap;
-}
-
 .slayer-header{
     text-align: center;
     vertical-align: middle;
@@ -2682,7 +2677,7 @@ a.additional-player-stat:hover{
     line-height: 4px;
 }
 
-.minion-category-header{
+.category-header{
     text-transform: uppercase;
     font-weight: 600;
     font-size: 19px;
@@ -2702,7 +2697,7 @@ a.additional-player-stat:hover{
     color: rgba(255,255,255,0.8);
 }
 
-.minion-category-icon{
+.category-icon{
     width: 32px;
     height: 32px;
     display: inline-block;
@@ -2710,21 +2705,24 @@ a.additional-player-stat:hover{
     vertical-align: middle;
 }
 
-.minion-category-icon .item-icon{
+.category-icon .item-icon{
     transform: scale(0.25);
     transform-origin: top left;
 }
 
-.minion{
+.minion,
+.collection {
     position: relative;
     display: inline-block;
-    height: 40px;
-    padding: 10px;
-    padding-left: 60px;
-    margin-left: 5px;
     margin-bottom: 8px;
+    margin-left: 5px;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 5px;
+}
+
+.minion {
+    padding: 10px;
+    padding-left: 60px;
     line-height: 40px;
 }
 
@@ -2743,11 +2741,11 @@ a.additional-player-stat:hover{
     background-repeat: no-repeat;
 }
 
-.max-minion .stat-name{
+.max-stat .stat-name{
     color: var(--maxed-hex);
 }
 
-.max-minion .stat-value{
+.max-stat .stat-value{
     color: var(--gold-hex);
 }
 
@@ -2764,14 +2762,9 @@ a.additional-player-stat:hover{
     color: var(--link-hex);
 }
 
-.collection{
-    display: inline-block;
+.collection {
     padding: 7px;
     padding-right: 15px;
-    margin-left: 5px;
-    margin-bottom: 8px;
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 5px;
 }
 
 .collection::after{
@@ -3438,7 +3431,6 @@ body {
 
     #additional_stats_container,
     #base_stats_container{
-        padding-bottom: 5ex;
         text-align: left;
     }
 
@@ -3553,16 +3545,26 @@ body {
         width: calc(100vw / 3 - 85px);
     }
 
-    .slayer-containers, .race-containers, .floor-containers{
+    .slayer-containers,
+    .race-containers,
+    .floor-containers {
+        white-space: nowrap;
         overflow-x: auto;
-        margin-left: -40px;
-        margin-right: -40px;
-        padding-left: 40px;
+        margin-left: -30px;
+        margin-right: -30px;
         padding-bottom: 20px;
     }
 
-    .race-containers .narrow-info-container:last-child, .slayer-containers .narrow-info-container:last-child, .floor-containers .narrow-info-container:last-child{
-        margin-right: 40px;
+    .slayer-containers > :first-child,
+    .race-containers > :first-child,
+    .floor-containers > :first-child {
+        margin-inline-start: 30px;
+    }
+
+    .slayer-containers > :last-child,
+    .race-containers > :last-child,
+    .floor-containers > :last-child {
+        margin-inline-end: 30px;
     }
 }
 
@@ -3586,16 +3588,25 @@ body {
         padding-left: 30px;
     }
 
-    .collections{
+    .collections,
+    .minions,
+    .sea-creatures {
         white-space: nowrap;
         overflow-x: auto;
-        margin-left: -40px;
-        margin-right: -40px;
-        padding-left: 30px;
+        margin-left: -30px;
+        margin-right: -30px;
+    }    
+
+    .collections > :first-child,
+    .minions > :first-child,
+    .sea-creatures > :first-child {
+        margin-inline-start: 30px;
     }
 
-    .collection:last-child{
-        margin-right: 30px;
+    .collections > :last-child,
+    .minions > :last-child,
+    .sea-creatures > :last-child {
+        margin-inline-end: 30px;
     }
 
     .nav-item:not(.active):hover::after{
@@ -3632,28 +3643,12 @@ body {
         white-space: nowrap;
     }
 
-    #inventory_header .inventory-tabs-container{
-        overflow-x: scroll;
-    }
-
     #inventory_header .inventory-tab:last-child{
         margin-right: 20px;
     }
 
-    .sea-creatures{
-        white-space: nowrap;
-        overflow-x: auto;
-        margin-left: -40px;
-        margin-right: -40px;
-        padding-left: 40px;
-    }
-
     .sea-creature-name{
         white-space: break-spaces;
-    }
-
-    .sea-creature:last-child{
-        margin-right: 40px;
     }
 
     .top-deaths{
@@ -3804,6 +3799,18 @@ body {
     .rank-tag .rank-plus{
         padding-right: 5px;
     }
+
+    .slayer-containers,
+    .race-containers,
+    .floor-containers {
+        scroll-snap-type: x proximity;
+    }    
+
+    .slayer-containers > *,
+    .race-containers > *,
+    .floor-containers > * {
+        scroll-snap-align: center;
+    }
 }
 
 @media (max-width: 480px){
@@ -3885,6 +3892,17 @@ body {
         min-width: 100vw;
         min-height: 100vh;
     }
+
+    .slayer-containers,
+    .race-containers,
+    .floor-containers {
+        scroll-snap-type: x mandatory;
+    }
+    
+    .slayer-containers > *,
+    .race-containers > * {
+        scroll-snap-stop: always;
+    } 
 }
 
 @media (max-width: 400px){
