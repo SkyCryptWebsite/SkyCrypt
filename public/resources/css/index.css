@@ -3327,6 +3327,15 @@ body {
     #skin_display_mobile{
         display: initial;
     }
+
+    .slayer-drop .stat-name {
+        max-width: calc(100% - 95px);
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: middle;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 }
 
 @media (max-width: 1200px){
@@ -3580,14 +3589,6 @@ body {
 }
 
 @media (max-width: 800px){
-
-    .slayer-drop .stat-name{
-        max-width: calc(100% - 95px);
-        display: inline-block;
-        overflow: hidden;
-        vertical-align: middle;
-        text-overflow: ellipsis;
-    }
 
     .stat-header{
         padding-left: 30px;
