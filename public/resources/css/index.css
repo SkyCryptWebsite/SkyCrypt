@@ -2487,8 +2487,8 @@ a.additional-player-stat:hover{
     overflow: hidden;
 }
 
-.narrow-info-container:not(:first-of-type){
-    margin-left: 20px;
+.narrow-info-container:not(:last-of-type){
+    margin-inline-end: 20px;
 }
 
 .race-containers .narrow-info-container{
