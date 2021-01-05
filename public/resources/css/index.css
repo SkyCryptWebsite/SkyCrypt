@@ -3046,6 +3046,7 @@ main.grid > a:focus :not(img),
 }
 
 #error_box_wrapper{
+    position: relative;
     grid-column: 1 / -1;
     overflow: hidden;
     display: none;
