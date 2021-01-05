@@ -2027,12 +2027,8 @@ if(calculated.profile.game_mode == 'ironman'){
                             <div class="slayer-section-header"><span data-tippy-content="Average drops based on Slayer boss kills. The number ranges from 0% Magic Find to 100% Magic Find.">Your Average Drops</span></div>
                             <div class="slayer-section slayer-drops">
                                 <%
-                                function makeShortString(num) {
-                                    if(num === 0) {
-                                        return '0';
-                                    } else {
-                                        return num.toPrecision(2).replace(/(^0+)|(0+$)/g, '');
-                                    }
+                                function removeLeadingZero(num) {
+                                    return String(num).replace(/^0+\./, '.');
                                 }
                                 for(const drop of slayerInfo[slayerName].drops){
                                     let dropsMin = 0;
@@ -2069,7 +2065,7 @@ if(calculated.profile.game_mode == 'ironman'){
                                     if(dropsMin == 0)
                                         dropsText = dropsMin
                                     else
-                                        dropsText = `${makeShortString(dropsMin)} - ${makeShortString(dropsMax)}`;
+                                        dropsText = `${removeLeadingZero(dropsMin.toPrecision(2))} - ${removeLeadingZero(dropsMax.toPrecision(2))}`;
                                 %>
                                     <div class="slayer-drop">
                                         <div class="slayer-drop-icon item-icon
