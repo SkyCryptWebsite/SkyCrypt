@@ -154,7 +154,7 @@ class Bee extends Pet { // todo: finish hive
 		let mult = 0.2;
 		return {
 			name: "§6Weaponized Honey",
-			desc: [`§7Gain §a${round(5 + this.level * mult, 1)}% §7of recieved damage as §6${symbols.health} Absorption`]
+			desc: [`§7Gain §a${round(5 + this.level * mult, 1)}% §7of received damage as §6${symbols.health} Absorption`]
 		};
 	}
 
