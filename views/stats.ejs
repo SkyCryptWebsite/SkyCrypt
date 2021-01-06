@@ -1069,7 +1069,7 @@ if(calculated.profile.game_mode == 'ironman'){
     <meta name="twitter:card" content="summary"></meta>
 <%- include('../includes/resources') %>
 </head>
-<body>
+<body class="page-stats">
     <%- include('../includes/header') %>
     <div id="dimmer"></div>
     <video id="enable_api" loop>
@@ -1943,7 +1943,7 @@ if(calculated.profile.game_mode == 'ironman'){
                     <div class="boss-collection" <% if (claimedTooltip != "") { %>data-tippy-content="<%= claimedTooltip %>"<% } %>>
                         <div class="boss-collection-icon" style="background-image:url(/head/<%= collection.texture %>)"></div>
                         <div class="collection-stats">
-                            <div class="collection-name <%= collection.maxed ? 'max-minion' : '' %>"><span class="stat-name"><%= collection.name %> </span><% if (collection.tier > 0) { %><span class="stat-value"><%= collection.tier %></span><% } %></div>
+                            <div class="collection-name <%= collection.maxed ? 'max-stat' : '' %>"><span class="stat-name"><%= collection.name %> </span><% if (collection.tier > 0) { %><span class="stat-value"><%= collection.tier %></span><% } %></div>
                             <div class="collection-amount"><span class="stat-name">Bosses killed: </span><span class="stat-value"><%= collection.killed.toLocaleString() %></span></div>
                         </div>
                     </div>
@@ -2200,27 +2200,30 @@ if(calculated.profile.game_mode == 'ironman'){
                         continue;
 
                     %>
-                    <div class="minion-category">
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon <%= skillItems[type] %>"></div></div><span><%= type %></span>
-                        <% if(maxOfType >= totalOfType){ %><span class="category-header-maxed">max!</span>
-                        <% }else{ %><span class="category-header-detail">(<%= maxOfType %> / <%= totalOfType %> max)</span><% } %>
-                        </div>
-                    <%
-
-                    for(const minion of minions){ %>
-                        <div data-tippy-content="Crafted variants:<br><br>
-                        <% for(let i = 1; i <= 11; i++){ %>
-                        <div class='minion-variant <% if(minion.levels.includes(i)){ %>minion-crafted<% } %>'><%= romanize(i) %></div>
+                    <div class="category-header">
+                        <div class="category-icon"><div class="item-icon <%= skillItems[type] %>"></div></div>
+                        <span><%= type %></span>
+                        <% if(maxOfType >= totalOfType){ %>
+                            <span class="category-header-maxed">max!</span>
+                        <% }else{ %>
+                            <span class="category-header-detail">(<%= maxOfType %> / <%= totalOfType %> max)</span>
                         <% } %>
-                        " class="minion
-                        <%= minion.maxLevel == 0 ? 'no-minion' : '' %>
-                        <%= minion.maxLevel == 11 ? 'max-minion' : '' %>
-                        <%= minion.maxLevel != minion.levels.length ? 'skipped-minion' : '' %>
-                        ">
-                            <div class="minion-icon" style="background-image: url(<%= minion.head %>)"></div>
-                            <span class="stat-name"><%= minion.name %> </span><span class="stat-value"><%= minion.maxLevel %></span>
-                        </div>
-                    <% } %>
+                    </div>                        
+                    <div class="minions">
+                        <% for(const minion of minions){ %>
+                            <div data-tippy-content="Crafted variants:<br><br>
+                            <% for(let i = 1; i <= 11; i++){ %>
+                            <div class='minion-variant <% if(minion.levels.includes(i)){ %>minion-crafted<% } %>'><%= romanize(i) %></div>
+                            <% } %>
+                            " class="minion
+                            <%= minion.maxLevel == 0 ? 'no-minion' : '' %>
+                            <%= minion.maxLevel == 11 ? 'max-stat' : '' %>
+                            <%= minion.maxLevel != minion.levels.length ? 'skipped-minion' : '' %>
+                            ">
+                                <div class="minion-icon" style="background-image: url(<%= minion.head %>)"></div>
+                                <span class="stat-name"><%= minion.name %> </span><span class="stat-value"><%= minion.maxLevel %></span>
+                            </div>
+                        <% } %>                        
                     </div>
                     <%
                 } %>
@@ -2259,12 +2262,16 @@ if(calculated.profile.game_mode == 'ironman'){
                             continue;
 
                         %>
-                        <div class="minion-category">
-                            <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon <%= skillItems[type] %>"></div></div><span><%= type %></span>
-                            <% if(maxOfType >= totalOfType){ %><span class="category-header-maxed">max!</span>
-                            <% }else{ %><span class="category-header-detail">(<%= maxOfType %> / <%= totalOfType %> max)</span><% } %>
+                        <div class="category-header">
+                            <div class="category-icon"><div class="item-icon <%= skillItems[type] %>"></div></div>
+                            <span><%= type %></span>
+                            <% if(maxOfType >= totalOfType){ %>
+                                <span class="category-header-maxed">max!</span>
+                            <% }else{ %>
+                                <span class="category-header-detail">(<%= maxOfType %> / <%= totalOfType %> max)</span>
+                            <% } %>
                         </div>
-                            <div class="collections">
+                        <div class="collections">
                             <%
 
                             for(const collection of collections){
@@ -2282,12 +2289,11 @@ if(calculated.profile.game_mode == 'ironman'){
                                 <div class="collection" data-tippy-content="<%= amountsTooltip %>">
                                     <div class="collection-icon"><div class="item-icon icon-<%= collection.id %>_<%= collection.damage %>"></div></div>
                                     <div class="collection-stats">
-                                        <div class="collection-name <%= collection.tier >= collection.maxTier ? 'max-minion' : '' %>"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
+                                        <div class="collection-name <%= collection.tier >= collection.maxTier ? 'max-stat' : '' %>"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
                                         <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= collection.amount.toLocaleString() %></span></div>
                                     </div>
                                 </div>
                             <% } %>
-                            </div>
                         </div>
                     <% } %>
                 </div>
@@ -2299,7 +2305,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 <div class="stat-header"><span>Miscellaneous</span></div>
                 <div class="stat-content">
                     <% if('races' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-317_0"></div></div><span>races</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon icon-317_0"></div></div><span>races</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.races){
                                 if(key.startsWith('dungeon_hub'))
@@ -2380,7 +2386,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         </div>
                     <% } %>
                     <% if('gifts' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/b73a2114136b8ee4926caa51785414036a2b76e4f1668cb89d99716c421)"></div></div><span>gifts</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/b73a2114136b8ee4926caa51785414036a2b76e4f1668cb89d99716c421)"></div></div><span>gifts</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.gifts){ %>
                             <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.gifts[key].toLocaleString() %></span><br>
@@ -2388,7 +2394,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         </p>
                     <% } %>
                     <% if('winter' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-332_0"></div></div><span>season of jerry</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon icon-332_0"></div></div><span>season of jerry</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.winter){ %>
                             <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.winter[key].toLocaleString() %></span><br>
@@ -2396,7 +2402,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         </p>
                     <% } %>
                     <% if('dragons' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/aec3ff563290b13ff3bcc36898af7eaa988b6cc18dc254147f58374afe9b21b9)"></div></div><span>dragons</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/aec3ff563290b13ff3bcc36898af7eaa988b6cc18dc254147f58374afe9b21b9)"></div></div><span>dragons</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.dragons){
                                 let tooltip = "";
@@ -2414,7 +2420,7 @@ if(calculated.profile.game_mode == 'ironman'){
                     </p>
                     <% } %>
                     <% if('protector' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/89091d79ea0f59ef7ef94d7bba6e5f17f2f7d4572c44f90f76c4819a714)"></div></div><span>Endstone Protectors</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/89091d79ea0f59ef7ef94d7bba6e5f17f2f7d4572c44f90f76c4819a714)"></div></div><span>Endstone Protectors</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.protector){ %>
                             <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.protector[key].toLocaleString() %></span><br>
@@ -2422,7 +2428,7 @@ if(calculated.profile.game_mode == 'ironman'){
                     </p>
                     <% } %>
                     <% if('damage' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-267_0"></div></div><span>damage</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon icon-267_0"></div></div><span>damage</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.damage){ %>
                             <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= Math.floor(calculated.misc.damage[key]).toLocaleString() %></span><br>
@@ -2430,7 +2436,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         </p>
                     <% } %>
                     <% if('milestones' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/93c8aa3fde295fa9f9c27f734bdbab11d33a2e43e855accd7465352377413b)"></div></div><span>pet milestones</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/93c8aa3fde295fa9f9c27f734bdbab11d33a2e43e855accd7465352377413b)"></div></div><span>pet milestones</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.milestones){
                                 let progress = {
@@ -2462,7 +2468,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         </p>
                     <% } %>
                     <% if('burrows' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8)"></div></div><span>griffin burrows</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8)"></div></div><span>griffin burrows</span></div>
                         <p class="stat-raw-values">
                             <%  let burrow_naming = {"dug_next": "dug_arrows", "dug_combat": "dug_monsters"}
                             for(const key in calculated.misc.burrows){
@@ -2478,7 +2484,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         </p>
                     <% } %>
                     <% if('profile_upgrades' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-154_0"></div></div><span>profile upgrades</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon icon-154_0"></div></div><span>profile upgrades</span></div>
                         <p class="stat-raw-values">
                             <% for(const upgrade in constants.profile_upgrades){ %>
                             <% max = calculated.misc.profile_upgrades[upgrade] == constants.profile_upgrades[upgrade] ? 'golden-text' : '' %><span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(upgrade.split("_").join(" ")); %>: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades[upgrade] %> / <%= constants.profile_upgrades[upgrade] %></span><br>
@@ -2486,7 +2492,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         </p>
                     <% } %>
                     <% if('auctions_sell' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-266_0"></div></div><span>auctions sold</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon icon-266_0"></div></div><span>auctions sold</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.auctions_sell){
                                 let tooltip = "";
@@ -2500,7 +2506,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         </p>
                     <% } %>
                     <% if('auctions_buy' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-264_0"></div></div><span>auctions bought</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon icon-264_0"></div></div><span>auctions bought</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.auctions_buy){
                                 let tooltip = "";
@@ -2515,7 +2521,7 @@ if(calculated.profile.game_mode == 'ironman'){
                     <% } %>
 
                     <% if('claimed_items' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-339_0"></div></div><span>claimed items</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon icon-339_0"></div></div><span>claimed items</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.claimed_items){
                                 let timestamp = calculated.misc.claimed_items[key];

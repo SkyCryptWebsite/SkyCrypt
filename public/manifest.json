@@ -62,5 +62,12 @@
       "type": "image/svg+xml",
       "purpose": "monochrome"
     }
+  ],
+  "screenshots" : [
+    {
+      "src": "/resources/img/screenshot.jpg",
+      "sizes": "3840x2160",
+      "type": "image/jpeg"
+    }
   ]
 }
