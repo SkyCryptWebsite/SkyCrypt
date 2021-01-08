@@ -428,7 +428,7 @@ class Endermite extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 1 ? 0.5 : 0.4;
+		let mult = this.rarity > 1 ? 0.5 : this.rarity > 0 ? 0.4 : 0.3;
 		return {
 			name: "§6More Stonks",
 			desc: [`§7Gain more exp orbs for breaking end stone and gain a +§a${round(this.level * mult, 1)}% §7chance to get an extra block dropped.`]
@@ -528,7 +528,7 @@ class Silverfish extends Pet {
 	}
 
 	get second() {
-		let mult = this.rarity > 2 ? 0.3 : 0.2;
+		let mult = this.rarity > 2 ? 0.3 : 0.25;
 		return {
 			name: "§6Mining Exp Boost",
 			desc: [`§7Boosts your Mining exp by §a${round(this.level * mult, 1)}%`]
@@ -899,7 +899,7 @@ class Golem extends Pet {
 	}
 
 	get second() {
-		let mult = 0.25;
+		let mult = this.rarity > 3 ? 0.25 : 0.2;
 		return {
 			name: "§6Ricochet",
 			desc: [`§7Your iron plating causes §a${round(this.level * mult, 1)}% §7of attacks to ricochet and hit the attacker`]
@@ -1123,7 +1123,7 @@ class MagmaCube extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.3 : this.rarity > 0 ? 0.25 : 0.2;
+		let mult = this.rarity > 2 ? 0.3 : this.rarity > 1 ? 0.25 : 0.2;
 		return {
 			name: "§6Slimy Minions",
 			desc: [`§7Slime minions work §a${round(this.level * mult, 1)}% §7faster while on your island`]
@@ -1324,7 +1324,7 @@ class Skeleton extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.2 : 0.1;
+		let mult = this.rarity > 2 ? 0.2 : this.rarity > 0 ? 0.15 : 0.1;
 		return {
 			name: "§6Bone Arrows",
 			desc: [`§7Increase arrow damage by §a${round(this.level * mult, 1)}% §7which is tripled while in dungeons`]
