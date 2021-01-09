@@ -1,12 +1,12 @@
 :root{
     /* Icon Green (used for Skill Icons, Underlines etc.) */
-    --icon-hex: #0BCA51; --icon-rgb: 11, 202, 81; 
+    --icon-hex: #0BCA51; --icon-rgb: 11, 202, 81;
 
     /* Line Green (used for Navigation Bar) */
     --line-hex: #0BDA51; --line-rgb: 11, 218, 81;
 
     /* Link Green (used for Links, Unclaimed Slayers, Crafted Minions etc.) */
-    --link-hex: #0BEA51; --link-rgb: 11, 234, 81; 
+    --link-hex: #0BEA51; --link-rgb: 11, 234, 81;
 
     /* Hover Green (used only for link hovers) */
     --hover-hex: #09EF70;
@@ -18,7 +18,7 @@
     --maxedbar-hex: #CE8F12;
 
     /* Maxed Gold (used for Maxed things etc.) */
-    --maxed-hex: #DD980E; 
+    --maxed-hex: #DD980E;
 
     /* Golden Text (used for Golden Text) */
     --gold-hex: #FDBB3C;
@@ -27,7 +27,7 @@
     --logo-square: url(/resources/img/logo_square.svg);
 
     /* Normal Backgrounds */
-    --bg-png: url(/resources/img/bg.png?v3); 
+    --bg-png: url(/resources/img/bg.png?v3);
     --bg-webp: url(/resources/img/bg.webp?v3);
 
     /* Blurred Backgrounds */
@@ -187,7 +187,7 @@ header > *{
     vertical-align: top;
     border-radius: 3px;
     height: 20px;
-    width: 32px;    
+    width: 32px;
     flex-shrink: 0;
     cursor: pointer;
     user-select: none;
@@ -1387,7 +1387,7 @@ a.additional-player-stat:hover{
     user-select: none !important;
 }
 
-.additional-player-stat.svg-icon {    
+.additional-player-stat.svg-icon {
     display: inline-grid;
     place-items: center;
 }
@@ -1439,7 +1439,7 @@ a.additional-player-stat:hover{
 
 #basic_stats{
     display: inline-grid;
-    grid-template-areas: 
+    grid-template-areas:
         "base skill"
         "base additional";
     grid-template-columns: 260px auto;
@@ -1506,6 +1506,7 @@ a.additional-player-stat:hover{
     width: 100%;
     padding-bottom: 6px;
     z-index: 3;
+    overflow-x: scroll;
 }
 
 #nav_bar.stuck #nav_bar_background{
@@ -3301,7 +3302,7 @@ body {
     }
 
     #basic_stats {
-        grid-template-areas: 
+        grid-template-areas:
             "skin base skill"
             "skin base additional";
         grid-template-columns: 150px 260px auto;
@@ -3419,7 +3420,7 @@ body {
     }
 
     #basic_stats {
-        grid-template-areas: 
+        grid-template-areas:
             "skin base"
             "skin additional"
             ". ."
@@ -3574,12 +3575,6 @@ body {
     }
 }
 
-@media (max-width: 900px){
-    #nav_items_container{
-        overflow-x: scroll;
-    }
-}
-
 @media (max-width: 800px){
 
     .slayer-drop .stat-name{
@@ -3601,7 +3596,7 @@ body {
         overflow-x: auto;
         margin-left: -30px;
         margin-right: -30px;
-    }    
+    }
 
     .collections > :first-child,
     .minions > :first-child,
@@ -3672,7 +3667,7 @@ body {
         padding-left: 26px;
         padding-right: 0;
     }
-    
+
     .social-button.patreon span {
         display: none;
     }
@@ -3806,7 +3801,7 @@ body {
     .race-containers,
     .floor-containers {
         scroll-snap-type: x proximity;
-    }    
+    }
 
     .slayer-containers > *,
     .race-containers > *,
@@ -3904,11 +3899,11 @@ body {
     .floor-containers {
         scroll-snap-type: x mandatory;
     }
-    
+
     .slayer-containers > *,
     .race-containers > * {
         scroll-snap-stop: always;
-    } 
+    }
 }
 
 @media (max-width: 400px){
