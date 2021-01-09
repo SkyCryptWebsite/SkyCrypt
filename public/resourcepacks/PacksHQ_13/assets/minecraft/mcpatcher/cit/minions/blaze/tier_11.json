@@ -1,0 +1,7 @@
+{
+    "parent": "minecraft:minion",
+    "textures": {
+        "1": "./minion",
+        "2": "tier/tier_11"
+    }
+}
