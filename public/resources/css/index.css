@@ -2899,8 +2899,6 @@ a.additional-player-stat:hover{
 }
 
 .kills-deaths-container .narrow-info-content{
-    padding: 20px;
-    margin-top: 37px;
     box-sizing: border-box;
     scrollbar-color: var(--icon-hex) transparent;
 }
