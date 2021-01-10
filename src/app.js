@@ -189,7 +189,7 @@ async function main(){
             const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack);
             const calculated = await lib.getStats(db, profile, allProfiles, items);
 
-            res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), page: 'stats' });
+            res.render('stats_simple', { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), page: 'stats' });
         }catch(e){
             console.error(e);
 
