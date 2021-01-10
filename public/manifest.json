@@ -9,6 +9,12 @@
   "theme_color": "#282828",
   "icons": [
     {
+      "src": "/resources/img/app-icons/svg.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
       "src": "/resources/img/app-icons/192.webp",
       "sizes": "192x192",
       "type": "image/webp",
@@ -21,10 +27,10 @@
       "purpose": "any"
     },
     {
-      "src": "/resources/img/app-icons/svg.svg",
+      "src": "/resources/img/app-icons/maskable-svg.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any"
+      "purpose": "maskable"
     },
     {
       "src": "/resources/img/app-icons/maskable-192.webp",
@@ -39,10 +45,10 @@
       "purpose": "maskable"
     },
     {
-      "src": "/resources/img/app-icons/maskable-svg.svg",
+      "src": "/resources/img/app-icons/monochrome-svg.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "maskable"
+      "purpose": "monochrome"
     },
     {
       "src": "/resources/img/app-icons/monochrome-192.webp",
@@ -54,12 +60,6 @@
       "src": "/resources/img/app-icons/monochrome-512.webp",
       "sizes": "512x512",
       "type": "image/webp",
-      "purpose": "monochrome"
-    },
-    {
-      "src": "/resources/img/app-icons/monochrome-svg.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
       "purpose": "monochrome"
     }
   ],
