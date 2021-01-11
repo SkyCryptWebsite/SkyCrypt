@@ -1506,7 +1506,7 @@ a.additional-player-stat:hover{
     width: 100%;
     padding-bottom: 6px;
     z-index: 3;
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 
 #nav_bar.stuck #nav_bar_background{
