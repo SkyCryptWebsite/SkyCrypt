@@ -2490,8 +2490,8 @@ a.additional-player-stat:hover{
     overflow: hidden;
 }
 
-.narrow-info-container:not(:first-of-type){
-    margin-left: 20px;
+.narrow-info-container:not(:last-of-type){
+    margin-inline-end: 20px;
 }
 
 .race-containers .narrow-info-container{
@@ -2499,7 +2499,7 @@ a.additional-player-stat:hover{
 }
 
 .stat-slayer .narrow-info-container{
-    min-width: 270px;
+    min-width: 290px;
     padding-bottom: 30px;
 }
 
@@ -2507,6 +2507,10 @@ a.additional-player-stat:hover{
     min-width: 270px;
     padding-bottom: 30px;
     margin: 10px;
+}
+
+.slayer-containers {
+    white-space: nowrap;
 }
 
 .slayer-header{
@@ -3332,6 +3336,15 @@ body {
     #skin_display_mobile{
         display: initial;
     }
+
+    .slayer-drop .stat-name {
+        max-width: calc(100% - 95px);
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: middle;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 }
 
 @media (max-width: 1200px){
@@ -3577,14 +3590,6 @@ body {
     .stat-misc .kills-deaths-container .narrow-info-container{
         min-width: auto;
         width: 100%;
-    }
-
-    .slayer-drop .stat-name{
-        max-width: calc(100% - 95px);
-        display: inline-block;
-        overflow: hidden;
-        vertical-align: middle;
-        text-overflow: ellipsis;
     }
 
     .stat-header{
