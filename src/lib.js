@@ -2163,8 +2163,11 @@ module.exports = {
                     });
                 });
                 // now we push the lore of the held items
-                if(heldItemObj)
+                if(heldItemObj) {
                     lore.push('', `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
+                } else {
+                    lore.push('', `§6Held Item: §${constants.tier_colors[constants.pet_items[heldItem].tier.toLowerCase()]}${constants.pet_items[heldItem].name}`);
+                }
 
                 if(heldItem in constants.pet_items){
                     lore.push(constants.pet_items[heldItem].description);
