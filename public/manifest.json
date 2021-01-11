@@ -4,9 +4,16 @@
   "description": "A beautiful site for sharing your SkyBlock profile 🌹",
   "display": "standalone",
   "scope": "/",
+  "start_url": "/",
   "background_color": "#282828",
   "theme_color": "#282828",
   "icons": [
+    {
+      "src": "/resources/img/app-icons/svg.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
     {
       "src": "/resources/img/app-icons/192.webp",
       "sizes": "192x192",
@@ -20,10 +27,22 @@
       "purpose": "any"
     },
     {
-      "src": "/resources/img/app-icons/svg.svg",
+      "src": "/resources/img/app-icons/192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/resources/img/app-icons/512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/resources/img/app-icons/maskable-svg.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any"
+      "purpose": "maskable"
     },
     {
       "src": "/resources/img/app-icons/maskable-192.webp",
@@ -38,10 +57,22 @@
       "purpose": "maskable"
     },
     {
-      "src": "/resources/img/app-icons/maskable-svg.svg",
+      "src": "/resources/img/app-icons/maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/resources/img/app-icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/resources/img/app-icons/monochrome-svg.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "maskable"
+      "purpose": "monochrome"
     },
     {
       "src": "/resources/img/app-icons/monochrome-192.webp",
@@ -56,9 +87,15 @@
       "purpose": "monochrome"
     },
     {
-      "src": "/resources/img/app-icons/monochrome-svg.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "/resources/img/app-icons/monochrome-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "monochrome"
+    },
+    {
+      "src": "/resources/img/app-icons/monochrome-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "monochrome"
     }
   ],
