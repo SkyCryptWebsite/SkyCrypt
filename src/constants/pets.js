@@ -465,6 +465,22 @@ module.exports = {
                 name: "Light Green",
                 head: "/head/cf183ec2fe58faa43e568419b7a0dc446ece4ea0be52ec784c94e1d74b75939d",
             },
+            "SHEEP_NEON_YELLOW": {
+                name: "Neon Yellow",
+                head: "/head/94263428c23da9165b2639a8f2428ff4835227945c9e1038461cf644d67cc82a",
+            },
+            "SHEEP_NEON_RED": {
+                name: "Neon Red",
+                head: "/head/4918be142a20b2b39bc582f421f6ae87b3184b5c9523d16fbe6d69530107886a",
+            },
+            "SHEEP_NEON_BLUE": {
+                name: "Neon Blue",
+                head: "/head/e55b3fe9311c99342ea565483cbf9e969a258faf7afa30270fb9a0929377acfd",
+            },
+            "SHEEP_NEON_GREEN": {
+                name: "Neon Green",
+                head: "/head/2c14d66911554bd0882339074bf6b8110c2d3509b69e7a6144e4d5a7164bacc8",
+            },
         },
         "SILVERFISH": {
             "SILVERFISH": {
@@ -494,7 +510,7 @@ module.exports = {
             "JERRY_GREEN_ELF": {
                 name: "Green Elf",
                 head: "/head/4ec5455f43426ca1874b5c7b4a492ec3722a502f8b9599e758e133fed8b3c1e4",
-              },
+            },
         },
         "BABY_YETI": {
             "YETI_GROWN_UP": {
@@ -542,15 +558,21 @@ module.exports = {
 
     pet_items: {
         PET_ITEM_ALL_SKILLS_BOOST_COMMON: {
+            name: "All Skills Exp Boost",
+            tier: "COMMON",
             description: "§7Gives +§a10% §7pet exp for all skills"
         },
         PET_ITEM_BIG_TEETH_COMMON: {
+            name: "Big Teeth",
+            tier: "COMMON",
             description: `§7Increases §9${symbols.crit_chance} Crit Chance §7by §a5`,
             stats: {
                 crit_chance: 5
             }
         },
         PET_ITEM_IRON_CLAWS_COMMON: {
+            name: "Iron Claws",
+            tier: "COMMON",
             description: `§7Increases the pet's §9${symbols.crit_damage} Crit Damage §7by §a40% §7and §9${symbols.crit_chance} Crit Chance §7by §a40%`,
             multStats: {
                 crit_chance: 1.4,
@@ -558,109 +580,169 @@ module.exports = {
             }
         },
         PET_ITEM_SHARPENED_CLAWS_UNCOMMON: {
+            name: "Sharpened Claws",
+            tier: "UNCOMMON",
             description: `§7Increases §9${symbols.crit_damage} Crit Damage §7by §a15`,
             stats: {
                 crit_damage: 15
             }
         },
         PET_ITEM_HARDENED_SCALES_UNCOMMON: {
+            name: "Hardened Scales",
+            tier: "UNCOMMON",
             description: `§7Increases §a${symbols.defense} Defense §7by §a25`,
             stats: {
                 defense: 25
             }
         },
         PET_ITEM_BUBBLEGUM: {
+            name: "Bubblegum",
+            tier: "RARE",
             description: "§7Your pet fuses its power with placed §aOrbs §7to give them §a2x §7duration"
         },
         PET_ITEM_LUCKY_CLOVER: {
+            name: "Lucky Clover",
+            tier: "EPIC",
             description: `§7Increases §b${symbols.magic_find} Magic Find §7by §a7`,
             stats: {
                 magic_find: 7
             }
         },
         PET_ITEM_TEXTBOOK: {
+            name: "Textbook",
+            tier: "LEGENDARY",
             description: `§7Increases the pet's §b${symbols.intelligence} Intelligence §7by §a100%`,
             multStats: {
                 intelligence: 2
             }
         },
         PET_ITEM_SADDLE: {
+            name: "Saddle",
+            tier: "UNCOMMON",
             description: "§7Increase horse speed by §a50% §7 and jump boost by §a100%"
         },
         PET_ITEM_EXP_SHARE: {
+            name: "Exp Share",
+            tier: "EPIC",
             description: "§7While unequipped this pet gains §a25% §7of the equipped pet's xp, this is §7split between all pets holding the item."
         },
         PET_ITEM_TIER_BOOST: {
+            name: "Tier Boost",
+            tier: "LEGENDARY",
             description: "§7Boosts the §ararity §7of your pet by 1 tier!"
         },
         PET_ITEM_COMBAT_SKILL_BOOST_COMMON: {
+            name: "Combat Exp Boost",
+            tier: "COMMON",
             description: "§7Gives +§a20% §7pet exp for Combat"
         },
         PET_ITEM_COMBAT_SKILL_BOOST_UNCOMMON: {
+            name: "Combat Exp Boost",
+            tier: "UNCOMMON",
             description: "§7Gives +§a30% §7pet exp for Combat"
         },
         PET_ITEM_COMBAT_SKILL_BOOST_RARE: {
+            name: "Combat Exp Boost",
+            tier: "RARE",
             description: "§7Gives +§a40% §7pet exp for Combat"
         },
         PET_ITEM_COMBAT_SKILL_BOOST_EPIC: {
+            name: "Combat Exp Boost",
+            tier: "EPIC",
             description: "§7Gives +§a50% §7pet exp for Combat"
         },
         PET_ITEM_FISHING_SKILL_BOOST_COMMON: {
+            name: "Fishing Exp Boost",
+            tier: "COMMON",
             description: "§7Gives +§a20% §7pet exp for Fishing"
         },
         PET_ITEM_FISHING_SKILL_BOOST_UNCOMMON: {
+            name: "Fishing Exp Boost",
+            tier: "UNCOMMON",
             description: "§7Gives +§a30% §7pet exp for Fishing"
         },
         PET_ITEM_FISHING_SKILL_BOOST_RARE: {
+            name: "Fishing Exp Boost",
+            tier: "RARE",
             description: "§7Gives +§a40% §7pet exp for Fishing"
         },
         PET_ITEM_FISHING_SKILL_BOOST_EPIC: {
+            name: "Fishing Exp Boost",
+            tier: "EPIC",
             description: "§7Gives +§a50% §7pet exp for Fishing"
         },
         PET_ITEM_FORAGING_SKILL_BOOST_COMMON: {
+            name: "Foraging Exp Boost",
+            tier: "COMMON",
             description: "§7Gives +§a20% §7pet exp for Foraging"
         },
         PET_ITEM_FORAGING_SKILL_BOOST_UNCOMMON: {
+            name: "Foraging Exp Boost",
+            tier: "UNCOMMON",
             description: "§7Gives +§a30% §7pet exp for Foraging"
         },
         PET_ITEM_FORAGING_SKILL_BOOST_RARE: {
+            name: "Foraging Exp Boost",
+            tier: "RARE",
             description: "§7Gives +§a40% §7pet exp for Foraging"
         },
         PET_ITEM_FORAGING_SKILL_BOOST_EPIC: {
+            name: "Foraging Exp Boost",
+            tier: "EPIC",
             description: "§7Gives +§a50% §7pet exp for Foraging"
         },
         PET_ITEM_MINING_SKILL_BOOST_COMMON: {
+            name: "Mining Exp Boost",
+            tier: "COMMON",
             description: "§7Gives +§a20% §7pet exp for Mining"
         },
         PET_ITEM_MINING_SKILL_BOOST_UNCOMMON: {
+            name: "Mining Exp Boost",
+            tier: "UNCOMMON",
             description: "§7Gives +§a30% §7pet exp for Mining"
         },
         PET_ITEM_MINING_SKILL_BOOST_RARE: {
+            name: "Mining Exp Boost",
+            tier: "RARE",
             description: "§7Gives +§a40% §7pet exp for Mining"
         },
         PET_ITEM_MINING_SKILL_BOOST_EPIC: {
+            name: "Mining Exp Boost",
+            tier: "EPIC",
             description: "§7Gives +§a50% §7pet exp for Mining"
         },
         PET_ITEM_FARMING_SKILL_BOOST_COMMON: {
+            name: "Farming Exp Boost",
+            tier: "COMMON",
             description: "§7Gives +§a20% §7pet exp for Farming"
         },
         PET_ITEM_FARMING_SKILL_BOOST_UNCOMMON: {
+            name: "Farming Exp Boost",
+            tier: "UNCOMMON",
             description: "§7Gives +§a30% §7pet exp for Farming"
         },
         PET_ITEM_FARMING_SKILL_BOOST_RARE: {
+            name: "Farming Exp Boost",
+            tier: "RARE",
             description: "§7Gives +§a40% §7pet exp for Farming"
         },
         PET_ITEM_FARMING_SKILL_BOOST_EPIC: {
+            name: "Farming Exp Boost",
+            tier: "EPIC",
             description: "§7Gives +§a50% §7pet exp for Farming"
         },
         // new pet items from 0.9 update yay
         REINFORCED_SCALES: {
+            name: "Reinforced Scales",
+            tier: "RARE",
             description: `§7Increases §a${symbols.defense} Defense §7by §a40`,
             stats: {
                 defense: 40
             }
         },
         GOLD_CLAWS: {
+            name: "Gold Claws",
+            tier: "UNCOMMON",
             description: `§7Increases the pet's §9${symbols.crit_damage} Crit Damage §7by §a50% §7and §9${symbols.crit_chance} Crit Chance §7by §a50%`,
             multStats: {
                 crit_chance: 1.5,
@@ -668,45 +750,63 @@ module.exports = {
             }
         },
         ALL_SKILLS_SUPER_BOOST: {
+            name: "All Skills Exp Super-Boost",
+            tier: "COMMON",
             description: "§7Gives +§a20% §7pet exp for all skills"
         },
         BIGGER_TEETH: {
+            name: "Bigger Teeth",
+            tier: "UNCOMMON",
             description: `§7Increases §9${symbols.crit_chance} Crit Chance §7by §a10`,
             stats: {
                 crit_chance: 10
             }
         },
         SERRATED_CLAWS: {
+            name: "Serrated Claws",
+            tier: "RARE",
             description: `§7Increases §9${symbols.crit_damage} Crit Damage §7by §a25`,
             stats: {
                 crit_damage: 25
             }
         },
         WASHED_UP_SOUVENIR: {
+            name: "Washed-up Souvenir",
+            tier: "LEGENDARY",
             description: `§7Increases §3${symbols.sea_creature_chance} Sea Creature Chance §7by §a5`,
             stats: {
                 sea_creature_chance: 5
             }
         },
         ANTIQUE_REMEDIES: {
+            name: "Antique Remedies",
+            tier: "EPIC",
             description: `§7Increases the pet's §c${symbols.strength} Strength §7by §a80%`,
             multStats: {
                 strength: 1.8
             }
         },
         CROCHET_TIGER_PLUSHIE: {
+            name: "Crochet Tiger Plushie",
+            tier: "EPIC",
             description: `§7Increases §e${symbols.attack_speed} Bonus Attack Speed §7by §a35`,
             stats: {
                 bonus_attack_speed: 35
             }
         },
         DWARF_TURTLE_SHELMET: {
+            name: "Dwarf Turtle Shelmet",
+            tier: "RARE",
             description: `§7Makes the pet's owner immune to knockback.`
         },
         PET_ITEM_VAMPIRE_FANG: {
+            name: "Vampire Fang",
+            tier: "LEGENDARY",
             description: "§7Upgrades a Bat pet from §6Legendary §7to §dMythic §7adding a bonus perk and bonus stats!"
         },
         PET_ITEM_SPOOKY_CUPCAKE: {
+            name: "Spooky Cupcake",
+            tier: "UNCOMMON",
             description: `§7Increases §c${symbols.strength} Strength §7by §a30 §7and §f${symbols.speed} Speed §7by §a20`,
             stats: {
                 strength: 30,
@@ -714,6 +814,8 @@ module.exports = {
             }
         },
         MINOS_RELIC: {
+            name: "Minos Relic",
+            tier: "EPIC",
             description: `§7Increases all pet stats by §a33.3%`,
             multAllStats: 1.333,
         },

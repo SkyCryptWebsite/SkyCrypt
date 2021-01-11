@@ -1,0 +1,15 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "mcpatcher/cit/blocks/comp_top",
+        "front": "mcpatcher/cit/blocks/comp_front",
+        "side": "mcpatcher/cit/blocks/comp_side"
+    },
+    "display": {
+        "thirdperson": {
+            "rotation": [ 10, -45, 170 ],
+            "translation": [ 0, 1.5, -2.75 ],
+            "scale": [ 0.375, 0.375, 0.375 ]
+        }
+    }
+}
