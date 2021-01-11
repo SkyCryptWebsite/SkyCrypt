@@ -2,7 +2,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0<%= page === 'index' ? ',viewport-fit=cover' : ''%>">
     <meta property="og:site_name" content="SkyCrypt">
     <link rel="sitemap" href="/sitemap.xml">
-    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
     <meta name="theme-color" content="#282828">
     <meta name="apple-mobile-web-app-title" content="SkyCrypt">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/resources/img/app-icons/square-180.png">
     <link rel="apple-touch-icon" sizes="512x512" href="/resources/img/app-icons/square-512.png">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap"></noscript>
-    <link rel="stylesheet" href="/resources/css/index.css?v145">
+    <link rel="stylesheet" href="/resources/css/index.css?v146">
     <noscript><link rel="stylesheet" href="/resources/css/inventory.css?v13"></noscript>
 
     <script>
@@ -94,9 +94,9 @@
                 switch (color) {
                     case 'icon':
                     case 'line':
-                    case 'link': 
+                    case 'link':
                         element.style.setProperty(`--${color}-rgb`, convertHex(value));
-                    default: 
+                    default:
                         element.style.setProperty(`--${color}-hex`, value);
                 }
             }
@@ -104,10 +104,10 @@
             const resource_link = "/resources/";
 
             let bgs = theme.backgrounds;
-            for (bg in bgs) 
-                for (img in bgs[bg]) 
+            for (bg in bgs)
+                for (img in bgs[bg])
                     element.style.setProperty(`--${bg}-${img}`, `url(${bgs[bg][img].replace("../", resource_link)})`);
-            
+
             if (theme.logo) {
                 const logoURL = theme.logo.replace("../", resource_link)
                 element.style.setProperty('--logo-square', `url(${logoURL})`);
@@ -126,7 +126,7 @@
         /**
          * checks if the scrollbar has a width and sets the style-scrollbar class accordingly
          */
-        function checkScrollbarStyle() {   
+        function checkScrollbarStyle() {
             outerDiv = document.createElement("div");
             outerDiv.style.position = 'fixed';
             innerDiv = document.createElement("div");

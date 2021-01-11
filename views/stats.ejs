@@ -1341,7 +1341,6 @@ if(calculated.profile.game_mode == 'ironman'){
                 <div class="nav-item" data-target="fishing">Fishing</div>
                 <div class="nav-item" data-target="dungeons">Dungeons</div>
                 <div class="nav-item" data-target="slayer">Slayer</div>
-                <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){ %><div class="nav-item" data-target="kills">Kills</div><% } %>
                 <div class="nav-item" data-target="minions">Minions</div>
                 <% if(Object.keys(calculated.collections).length > 0){ %><div class="nav-item" data-target="collections">Collections</div><% } %>
                 <% if(Object.keys(calculated.misc).length > 0){ %><div class="nav-item" data-target="misc">Misc</div><% } %>
@@ -2102,62 +2101,6 @@ if(calculated.profile.game_mode == 'ironman'){
                 <% } %>
             </div>
         </div>
-        <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){
-            let totalKills = calculated.kills.length;
-            let totalDeaths = calculated.deaths.length;
-
-            let rows = Math.min(Math.max(totalKills, totalDeaths), 10);
-
-            %>
-            <div data-stat="kills" class="stat-container stat-kills">
-                <div class="stat-anchor"></div>
-                <div class="stat-header"><span>Top Kills & Deaths</span></div>
-                <div class="stat-content">
-                    <p class="stat-raw-values">
-                        <span class="stat-name">Total Kills: </span><span class="stat-value"><%= calculated.kills.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span><br>
-                        <span class="stat-name">Total Deaths: </span><span class="stat-value"><%= calculated.deaths.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span>
-                    </p>
-                    <div class="kills-deaths-container">
-                        <div class="narrow-info-container top-kills">
-                            <div class="narrow-info-header">Kills</div>
-                            <div class="narrow-info-content">
-                                <% for(let i = 0; i < rows; i++){
-                                    const kill = calculated.kills[i];
-
-                                    if(typeof calculated.kills[i] === 'undefined'){
-                                    %>
-                                        <div class="kill-stat"><div class="kill-rank"></div></div>
-                                    <% }else{ %>
-                                        <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %>&nbsp;</div><div class="kill-entity"><%= kill.entityName %></div><div class="stat-separator">:&nbsp;</div><div class="kill-amount"><%= kill.amount.toLocaleString() %></div></div>
-                                    <% }
-                                } %>
-                                <% if(calculated.kills.length > 10 || calculated.deaths.length > 10){ %>
-                                    <div class="kill-stat show-all <%= calculated.kills.length > 10 ? 'enabled' : '' %>" data-type="kills">show all</div>
-                                <% } %>
-                            </div>
-                        </div>
-                        <div class="narrow-info-container top-deaths">
-                            <div class="narrow-info-header">Deaths</div>
-                            <div class="narrow-info-content">
-                                <% for(let i = 0; i < rows; i++){
-                                    const death = calculated.deaths[i];
-
-                                    if(typeof death === 'undefined'){
-                                    %>
-                                        <div class="kill-stat"><div class="kill-rank"></div></div>
-                                    <% }else{ %>
-                                        <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %>&nbsp;</div><div class="kill-entity"><%= death.entityName %></div><div class="stat-separator">:&nbsp;</div><div class="kill-amount"><%= death.amount.toLocaleString() %></div></div>
-                                    <% }
-                                } %>
-                                <% if(calculated.kills.length > 10 || calculated.deaths.length > 10){ %>
-                                    <div class="kill-stat show-all <%= calculated.deaths.length > 10 ? 'enabled' : '' %>" data-type="deaths">show all</div>
-                                <% } %>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <% } %>
         <div data-stat="minions" class="stat-container stat-minions">
             <div class="stat-anchor"></div>
             <div class="stat-header"><span>Minions</span></div>
@@ -2304,6 +2247,59 @@ if(calculated.profile.game_mode == 'ironman'){
                 <div class="stat-anchor"></div>
                 <div class="stat-header"><span>Miscellaneous</span></div>
                 <div class="stat-content">
+                <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){
+                    let totalKills = calculated.kills.length;
+                    let totalDeaths = calculated.deaths.length;
+
+                    let rows = Math.min(Math.max(totalKills, totalDeaths), 10);
+
+                    %>
+                    <div class="category-header"><div class="category-icon"><div class="item-icon icon-267_0"></div></div><span>kills</span></div>
+                    <p class="stat-raw-values stat-kills">
+                        <span class="stat-name">Total Kills: </span><span class="stat-value"><%= calculated.kills.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span><br>
+                        <span class="stat-name">Total Deaths: </span><span class="stat-value"><%= calculated.deaths.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span><br>
+
+                        <div class="kills-deaths-container">
+                            <div class="narrow-info-container top-kills">
+                                <div class="narrow-info-header">Kills</div>
+                                <div class="narrow-info-content">
+                                    <% for(let i = 0; i < rows; i++){
+                                        const kill = calculated.kills[i];
+
+                                        if(typeof calculated.kills[i] === 'undefined'){
+                                        %>
+                                            <div class="kill-stat"><div class="kill-rank"></div></div>
+                                        <% }else{ %>
+                                            <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %>&nbsp;</div><div class="kill-entity"><%= kill.entityName %></div><div class="stat-separator">:&nbsp;</div><div class="kill-amount"><%= kill.amount.toLocaleString() %></div></div>
+                                        <% }
+                                    } %>
+                                    <% if(calculated.kills.length > 10 || calculated.deaths.length > 10){ %>
+                                        <div class="kill-stat show-all <%= calculated.kills.length > 10 ? 'enabled' : '' %>" data-type="kills">show all</div>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="narrow-info-container top-deaths">
+                                <div class="narrow-info-header">Deaths</div>
+                                <div class="narrow-info-content">
+                                    <% for(let i = 0; i < rows; i++){
+                                        const death = calculated.deaths[i];
+
+                                        if(typeof death === 'undefined'){
+                                        %>
+                                            <div class="kill-stat"><div class="kill-rank"></div></div>
+                                        <% }else{ %>
+                                            <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %>&nbsp;</div><div class="kill-entity"><%= death.entityName %></div><div class="stat-separator">:&nbsp;</div><div class="kill-amount"><%= death.amount.toLocaleString() %></div></div>
+                                        <% }
+                                    } %>
+                                    <% if(calculated.kills.length > 10 || calculated.deaths.length > 10){ %>
+                                        <div class="kill-stat show-all <%= calculated.deaths.length > 10 ? 'enabled' : '' %>" data-type="deaths">show all</div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </p>
+                    <% } %>
+
                     <% if('races' in calculated.misc){ %>
                         <div class="category-header"><div class="category-icon"><div class="item-icon icon-317_0"></div></div><span>races</span></div>
                         <p class="stat-raw-values">
