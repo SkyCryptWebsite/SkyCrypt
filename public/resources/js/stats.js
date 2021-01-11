@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function(){
         }
         return "";
     }
-    
+
     let userAgent = window.navigator.userAgent;
     let tippyInstance;
 
@@ -57,14 +57,14 @@ document.addEventListener('DOMContentLoaded', function(){
 
     let skinViewer;
 
-    if(calculated.skin_data){
+    if(playerModel && calculated.skin_data){
         skinViewer = new skinview3d.SkinViewer({
     		width: playerModel.offsetWidth,
     		height: playerModel.offsetHeight,
     		skin: "/texture/" + calculated.skin_data.skinurl.split("/").pop(),
     		cape: 'capeurl' in calculated.skin_data ? "/texture/" + calculated.skin_data.capeurl.split("/").pop() : "/cape/" + calculated.display_name
         });
-        
+
         playerModel.appendChild(skinViewer.canvas);
 
     	skinViewer.camera.position.set(-18, -3, 58);
@@ -76,15 +76,15 @@ document.addEventListener('DOMContentLoaded', function(){
 
     	skinViewer.animations.add((player, time) => {
             const skin = player.skin;
-        
+
             // Multiply by animation's natural speed
             time *= 2;
-        
+
             // Arm swing
             const basicArmRotationZ = Math.PI * 0.02;
             skin.leftArm.rotation.z = Math.cos(time) * 0.03 + basicArmRotationZ;
             skin.rightArm.rotation.z = Math.cos(time + Math.PI) * 0.03 - basicArmRotationZ;
-        
+
             // Always add an angle for cape around the x axis
             const basicCapeRotationX = Math.PI * 0.06;
             player.cape.rotation.x = Math.sin(time) * 0.01 + basicCapeRotationX;
@@ -511,15 +511,17 @@ document.addEventListener('DOMContentLoaded', function(){
     let oldheight = null;
 
     function resize(){
-        if(window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570))
-            document.getElementById("skin_display_mobile").appendChild(playerModel);
+        if (playerModel) {
+            if(window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570))
+                document.getElementById("skin_display_mobile").appendChild(playerModel);
 
-        if(window.innerWidth > 1570 && oldWidth <= 1570)
-            document.getElementById("skin_display").appendChild(playerModel);
+            if(window.innerWidth > 1570 && oldWidth <= 1570)
+                document.getElementById("skin_display").appendChild(playerModel);
+        }
 
         tippy('*[data-tippy-content]');
 
-        if(skinViewer){
+        if(playerModel && skinViewer){
             if(playerModel.offsetWidth / playerModel.offsetHeight < 0.6)
                 skinViewer.setSize(playerModel.offsetWidth, playerModel.offsetWidth * 2);
             else
