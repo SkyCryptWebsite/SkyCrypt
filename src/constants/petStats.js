@@ -2369,6 +2369,8 @@ class Jerry extends Pet {
 		let list = [this.first, this.second];
 		if (this.rarity > 3)
 			list.push(this.third);
+        if (this.rarity > 4)
+            list.push(this.fourth);
 		return list;
 	}
 
@@ -2376,7 +2378,7 @@ class Jerry extends Pet {
 		let mult = 50;
 		return {
 			name: "§6Jerry",
-			desc: [`§7Gain §a${round(mult, 1)}% §7chance to deal your regular damage.`]
+			desc: [`§7Gain §a${round(mult, 1)}% §7chance to deal your regular damage`]
 		};
 	}
 
@@ -2384,7 +2386,7 @@ class Jerry extends Pet {
 		let mult = 100;
 		return {
 			name: "§6Jerry",
-			desc: [`§7Gain §a${round(mult, 1)}% §7chance to receive a normal amount of drops from mobs.`]
+			desc: [`§7Gain §a${round(mult, 1)}% §7chance to receive a normal amount of drops from mobs`]
 		};
 	}
 
@@ -2392,7 +2394,14 @@ class Jerry extends Pet {
 		let mult = 0.1;
 		return {
 			name: "§6Jerry",
-			desc: [`§7Actually adds ${Math.floor(this.level * mult)} damage to the Aspect of the Jerry.`]
+			desc: [`§7Actually adds ${Math.floor(this.level * mult)} damage to the Aspect of the Jerry`]
+		};
+	}
+
+	get fourth() {
+		return {
+			name: "§6Jerry",
+			desc: [`§7Tiny chance to find Jerry Candies when killing mobs`]
 		};
 	}
 }

@@ -819,5 +819,10 @@ module.exports = {
             description: `§7Increases all pet stats by §a33.3%`,
             multAllStats: 1.333,
         },
+        PET_ITEM_TOY_JERRY: {
+            name: "Jerry 3D Glasses",
+            tier: "LEGENDARY",
+            description: "§7Upgrades a Jerry pet from §6Legendary §7to §dMythic §7and granting it a new perk!"
+        },
     }
 }

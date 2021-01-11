@@ -2041,8 +2041,13 @@ module.exports = {
 
             pet.rarity = pet.tier.toLowerCase();
 
-            if(pet.heldItem == 'PET_ITEM_TIER_BOOST' || pet.heldItem == 'PET_ITEM_VAMPIRE_FANG')
+            if (
+                pet.heldItem == 'PET_ITEM_TIER_BOOST' ||
+                pet.heldItem == 'PET_ITEM_VAMPIRE_FANG' ||
+                pet.heldItem == 'PET_ITEM_TOY_JERRY'
+            ) {
                 pet.rarity = petTiers[Math.min(petTiers.length - 1, petTiers.indexOf(pet.rarity) + 1)];
+            }
 
             pet.level = getPetLevel(pet);
             pet.stats = {};
