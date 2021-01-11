@@ -1737,11 +1737,7 @@ a.additional-player-stat:hover{
     margin-top: 20px;
 }
 
-.stat-kills{
-    margin-top: 25px;
-}
-
-.info-container-wrapper ~ .stat-kills {
+.info-container-wrapper ~ .stat-misc {
     margin-top: 35px !important;
 }
 
@@ -2899,6 +2895,8 @@ a.additional-player-stat:hover{
 }
 
 .kills-deaths-container .narrow-info-content{
+    padding: 20px;
+    margin-top: 37px;
     box-sizing: border-box;
     scrollbar-color: var(--icon-hex) transparent;
 }
@@ -2928,7 +2926,7 @@ a.additional-player-stat:hover{
     background-color: transparent;
 }
 
-.stat-kills .narrow-info-container{
+.stat-misc .kills-deaths-container .narrow-info-container{
     padding: 0;
     padding-top: 0;
 }
@@ -3318,6 +3316,7 @@ body {
 
     .skill {
         width: calc((1120px - 410px) / 2 - 60px);
+        max-width: 100%;
     }
 
     #skin_display{
@@ -3423,7 +3422,7 @@ body {
             "skin additional"
             ". ."
             "skill skill ";
-        grid-template-columns: minmax(100px, 250px)  minmax(225px, 1fr);
+        grid-template-columns: minmax(100px, 250px)  minmax(220px, 1fr);
         grid-template-rows: auto auto 30px auto;
         padding: 0;
         background-color: transparent;
@@ -3541,11 +3540,6 @@ body {
         margin-top: 45px;
     }
 
-    .stat-kills .narrow-info-container{
-        min-width: 0;
-        width: calc(100vw / 2 - 85px);
-    }
-
     .stat-slayer .narrow-info-container{
         width: calc(100vw / 3 - 85px);
     }
@@ -3574,6 +3568,10 @@ body {
 }
 
 @media (max-width: 800px){
+    .stat-misc .kills-deaths-container .narrow-info-container{
+        min-width: auto;
+        width: 100%;
+    }
 
     .slayer-drop .stat-name{
         max-width: calc(100% - 95px);
@@ -3655,10 +3653,9 @@ body {
         margin-top: 25px;
     }
 
-    .stat-kills .narrow-info-container{
+    .stat-misc .kills-deaths-container .narrow-info-container{
         width: calc(100vw - 60px);
         margin-left: 0 !important;
-        margin-top: 20px;
     }
 
     .social-button.patreon {
@@ -3962,4 +3959,8 @@ body {
 .inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-last-of-type(8),
 .inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-last-of-type(9) {
     margin-bottom: 1px;
+}
+
+.narrow-info-container.top-deaths {
+    margin-bottom: 15px;
 }
