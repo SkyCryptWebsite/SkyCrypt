@@ -2391,10 +2391,10 @@ class Jerry extends Pet {
 	}
 
 	get third() {
-		let mult = 0.1;
+		let mult = this.level > 4 ? 0.5 : 0.1;
 		return {
 			name: "§6Jerry",
-			desc: [`§7Actually adds ${Math.floor(this.level * mult)} damage to the Aspect of the Jerry`]
+			desc: [`§7Actually adds §c${Math.floor(this.level * mult)} damage §7to the Aspect of the Jerry`]
 		};
 	}
 
