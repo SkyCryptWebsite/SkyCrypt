@@ -1260,6 +1260,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 }
 
 .additional-player-stat{
+    all: unset;
     position: relative;
     padding: 0px 12px;
     margin-right: 7px;
@@ -1393,6 +1394,11 @@ a.additional-player-stat:hover{
 }
 
 .additional-player-stat.svg-icon svg {
+    width:18px;
+    height:18px
+}
+
+.additional-player-stat.svg-icon.favorite svg {
     width:20px;
     height:20px
 }
