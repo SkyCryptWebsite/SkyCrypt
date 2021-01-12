@@ -145,6 +145,10 @@ document.addEventListener('DOMContentLoaded', function(){
         let output = "";
         let spansOpened = 0;
 
+        if (!text.startsWith("§")) {
+            text = `§7${text}`
+        }
+
         const parts = text.split("§");
 
         if(parts.length == 1)
