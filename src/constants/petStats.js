@@ -1142,7 +1142,7 @@ class MagmaCube extends Pet {
 		let mult = 1;
 		return {
 			name: "§6Hot Ember",
-			desc: [`§7Buffs the stats of Ember Armor by ${round(this.level * mult, 1)}%`]
+			desc: [`§7Buffs the stats of Ember Armor by §a${round(this.level * mult, 1)}%`]
 		};
 	}
 
@@ -1688,7 +1688,7 @@ class Zombie extends Pet {
 		let mult = 0.2;
 		return {
 			name: "§6Rotten Blade",
-			desc: [`Deal §a${round(this.level * mult, 1)} §7more damage to zombies`]
+			desc: [`§7Deal §a${round(this.level * mult, 1)} §7more damage to zombies`]
 		};
 	}
 
@@ -1754,7 +1754,7 @@ class Giraffe extends Pet {
 		let cdMult = this.rarity > 3 ? 0.4 : this.rarity > 2 ? 0.25 : 0.1;
 		return {
 			name: "§6Higher Ground",
-			desc: [`Grants §c+${round(this.level * strMult, 1)} ${symbols.strength} Strength §7and §9+${round(this.level * cdMult + 20, 1)} ${symbols.crit_damage} Crit Damage §7when mid air or jumping`]
+			desc: [`§7Grants §c+${round(this.level * strMult, 1)} ${symbols.strength} Strength §7and §9+${round(this.level * cdMult + 20, 1)} ${symbols.crit_damage} Crit Damage §7when mid air or jumping`]
 		};
 	}
 
@@ -1796,7 +1796,7 @@ class Lion extends Pet {
 		let mult = this.rarity > 3 ? 0.5 :this.rarity > 2 ? 0.4 : 0.3;
 		return {
 			name: "§6First Pounce",
-			desc: [`Increases damage dealt by §a${round(this.level * mult, 1)}% §7on your first hit on a mob`]
+			desc: [`§7Increases damage dealt by §a${round(this.level * mult, 1)}% §7on your first hit on a mob`]
 		};
 	}
 
@@ -1804,7 +1804,7 @@ class Lion extends Pet {
 		let mult = 0.3;
 		return {
 			name: "§6King of the Jungle",
-			desc: [`Deal §c+${round(this.level * mult, 1)}% ${symbols.strength} Damage §7against mobs below level §a80`]
+			desc: [`§7Deal §c+${round(this.level * mult, 1)}% ${symbols.strength} Damage §7against mobs below level §a80`]
 		};
 	}
 }
