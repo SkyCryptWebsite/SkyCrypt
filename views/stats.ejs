@@ -1555,8 +1555,11 @@ if(calculated.profile.game_mode == 'ironman'){
                             totalPetXp += pet.exp;
 
                         let totalUniqueSkins = 0
+                        const currentTime = new Date().getTime()
                         for(const skins of Object.values(constants.pet_skins)) {
-                            totalUniqueSkins += Object.keys(skins).length
+                            totalUniqueSkins += Object.values(skins).filter(
+                                s => s.release < currentTime
+                            ).length
                         }
 
                         let userUniqueSkins = 0
