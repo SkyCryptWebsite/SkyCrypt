@@ -216,11 +216,18 @@ module.exports = {
         CAMPFIRE_TALISMAN_13: [
             'CAMPFIRE_TALISMAN_21'
         ],
-        JERRY_TALISMAN_GOLDEN: [
-            'JERRY_TALISMAN_PURPLE',
+        JERRY_TALISMAN_GREEN: [
             'JERRY_TALISMAN_BLUE',
-            'JERRY_TALISMAN_GREEN',
-        ]
+            'JERRY_TALISMAN_PURPLE',
+            'JERRY_TALISMAN_GOLDEN',
+        ],
+        JERRY_TALISMAN_BLUE: [
+            'JERRY_TALISMAN_PURPLE',
+            'JERRY_TALISMAN_GOLDEN',
+        ],
+        JERRY_TALISMAN_PURPLE: [
+            'JERRY_TALISMAN_GOLDEN',
+        ],
     },
 
     talisman_duplicates: {
