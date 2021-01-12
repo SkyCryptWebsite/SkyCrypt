@@ -1142,7 +1142,7 @@ class MagmaCube extends Pet {
 		let mult = 1;
 		return {
 			name: "§6Hot Ember",
-			desc: [`§7Buffs the stats of Ember Armor by ${round(this.level * mult, 1)}%`]
+			desc: [`§7Buffs the stats of Ember Armor by §a${round(this.level * mult, 1)}%`]
 		};
 	}
 
