@@ -518,6 +518,12 @@ module.exports = {
                 head: "/head/f5f29a975529276d916fc67998833c11ee178ff21e5941afdfb0fa7010f8374e",
             },
         },
+        "MONKEY": {
+            "MONKEY_GOLDEN": {
+                name: "Golden",
+                head: "/head/e9281c4d87d68526b0749d4361e6ef786c8a35717aa053da704b1d53410d37a6",
+            },
+        },
     },
 
     pet_value: {
