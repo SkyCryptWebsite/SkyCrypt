@@ -34,6 +34,7 @@ async function main(){
     const { MongoClient } = require('mongodb');
     const helper = require('./helper');
     const constants = require('./constants');
+    const manifest = require('../public/manifest.json');
     const { SitemapStream, streamToPromise } = require('sitemap');
     const { createGzip } = require('zlib');
     const twemoji = require('twemoji');
@@ -78,10 +79,55 @@ async function main(){
     let FEATURED_LAST_UPDATED = 0;
 
     function parseFavorites(cookie) {
-        return cookie?.split(',').filter(uuid => /^[0-9a-f]+$/.test(uuid)) || []
+        return cookie?.split(',').filter(uuid => /^[0-9a-f]{32}$/.test(uuid)) || [];
     }
 
-    async function getExtra(page = null, favorites = []){
+    async function getFavoritesFormUUIDs(uuids) {
+        favorites = [];
+        for (const uuid of uuids) {
+            if (uuid != null) {
+                const cache = await db
+                .collection('favoriteCache')
+                .find( { uuid } )
+                .toArray();
+
+                if (cache[0]) {
+                    favorites.push(cache[0]);
+                } else {
+                    let output_cache = { uuid };
+                    
+                    const user = await db
+                    .collection('usernames')
+                    .find( { uuid } )
+                    .toArray();
+    
+                    if (user[0]) {
+                        output_cache = user[0];
+    
+                        let profiles = await db
+                        .collection('profileStore')
+                        .find( { uuid } )
+                        .toArray();
+    
+                        if (profiles[0]) {
+                            const profile = profiles[0];
+                            output_cache.last_updated = profile.last_save;
+                        } else {
+                            output_cache.error = "Profile doesn't exist.";
+                        }
+                    } else {
+                        output_cache.error = "User doesn't exist.";
+                    }
+                    
+                    await db.collection('favoriteCache').insertOne(output_cache);
+                    favorites.push(output_cache);
+                }
+            }
+        }
+        return favorites;
+    }
+
+    async function getExtra(page = null, favoriteUUIDs = []){
         const output = {};
 
         output.twemoji = twemoji;
@@ -110,57 +156,7 @@ async function main(){
 
             output.devs = FEATURED_PROFILES;
 
-            output.favorites = [];
-            for(let i = 0; i < favorites.length && i < constants.max_favorites; i++){
-                let favorite = favorites[i];
-                if(favorite == null){
-                    output.favorites[i] = {
-                        error: "Favorite is undefined."
-                    };
-                    continue;
-                }
-
-                if(favorite?.length == 32 && favorite){
-                    const cache = await db
-                    .collection('favoriteCache')
-                    .find( { uuid: favorite } )
-                    .toArray();
-
-                    if(cache[0]) {
-                        output.favorites[i] = cache[0];
-                    } else {
-                        let output_cache = {
-                            uuid: favorite
-                        };
-                        
-                        const user = await db
-                        .collection('usernames')
-                        .find( { uuid: favorite } )
-                        .toArray();
-        
-                        if(user[0]) {
-                            output_cache = user[0];
-        
-                            let profiles = await db
-                            .collection('profileStore')
-                            .find( { uuid: favorite } )
-                            .toArray();
-        
-                            if(profiles[0]) {
-                                const profile = profiles[0];
-                                output_cache.last_updated = profile.last_save;
-                            }else output_cache.error = "Profile doesn't exist.";
-                        }else output_cache.error = "User doesn't exist.";
-                        
-                        await db.collection('favoriteCache').insertOne(output_cache);
-                        output.favorites[i] = output_cache;
-                    }
-                }else{
-                    output.favorites[i] = {
-                        error: "Unknown error."
-                    }
-                }
-            }
+            output.favorites = await getFavoritesFormUUIDs(favoriteUUIDs);
 
             output.devs = await db
                 .collection('topViews')
@@ -168,7 +164,7 @@ async function main(){
                 .sort({ position: 1 })
                 .toArray();
         } else if (page === 'stats') {
-            output.favoriteUUIDs = favorites;
+            output.favoriteUUIDs = favoriteUUIDs;
         }
 
         return output;
@@ -391,12 +387,22 @@ Disallow: /item /head /leather /resources
 
     app.all('/favicon.ico?v2', express.static(path.join(__dirname, 'public')));
 
-    app.all('/api', async (req, res, next) => {
-        res.render('api', { error: null, player: null, extra: await getExtra('api'), helper, page: 'api' });
+    app.all('/manifest.webmanifest', async (req, res) => {
+        const favorites = await getFavoritesFormUUIDs(parseFavorites(req.cookies.favorite))
+        const shortcuts = favorites.map(favorite => ({
+            url: `/stats/${favorite.uuid}`,
+            name: favorite.username,
+            icons: [48, 72, 96, 144, 192, 512].map(size => ({
+                src: `https://crafatar.com/avatars/${favorite.uuid}?size=${size}&overlay`,
+                sizes: `${size}x${size}`,
+                type: "image/png"
+            }))
+        }))
+        res.json(Object.assign({shortcuts}, manifest))
     });
 
-    app.all('/arc-sw.js', async (req, res, next) => {
-        res.redirect(`https://arc.io/arc-sw.js`);
+    app.all('/api', async (req, res, next) => {
+        res.render('api', { error: null, player: null, extra: await getExtra('api'), helper, page: 'api' });
     });
 
     app.all('/:player/:profile?', async (req, res, next) => {

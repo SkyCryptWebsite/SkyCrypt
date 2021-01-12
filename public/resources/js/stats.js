@@ -1,4 +1,26 @@
 document.addEventListener('DOMContentLoaded', function(){
+
+    const favoriteElement = document.querySelector('.favorite');
+
+    if('share' in navigator) {
+        iosShareIcon = 'M12,1L8,5H11V14H13V5H16M18,23H6C4.89,23 4,22.1 4,21V9A2,2 0 0,1 6,7H9V9H6V21H18V9H15V7H18A2,2 0 0,1 20,9V21A2,2 0 0,1 18,23Z';
+        androidShareIcon = 'M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,0 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9A3,3 0 0,0 3,12A3,3 0 0,0 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19A2.92,2.92 0 0,0 18,16.08Z';
+        favoriteElement.insertAdjacentHTML('afterend', /*html*/ `
+            <button class="additional-player-stat svg-icon">
+                <svg viewBox="0 0 24 24">
+                    <title>share</title>
+                    <path fill="white" d="${navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i) ? iosShareIcon : androidShareIcon}" />
+                </svg>
+            </button>
+        `);
+        favoriteElement.nextElementSibling.addEventListener('click', () => {
+            navigator.share({
+                text: `Check out ${calculated.display_name} on SkyCrypt`,
+                url: window.location.href,
+            });
+        })
+    }
+
     function setCookie(name,value,days) {
         var expires = "";
         if (days) {
@@ -23,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function(){
         }
         return "";
     }
-    
+
     let userAgent = window.navigator.userAgent;
     let tippyInstance;
 
@@ -35,14 +57,14 @@ document.addEventListener('DOMContentLoaded', function(){
 
     let skinViewer;
 
-    if(calculated.skin_data){
+    if(playerModel && calculated.skin_data){
         skinViewer = new skinview3d.SkinViewer({
     		width: playerModel.offsetWidth,
     		height: playerModel.offsetHeight,
     		skin: "/texture/" + calculated.skin_data.skinurl.split("/").pop(),
     		cape: 'capeurl' in calculated.skin_data ? "/texture/" + calculated.skin_data.capeurl.split("/").pop() : "/cape/" + calculated.display_name
         });
-        
+
         playerModel.appendChild(skinViewer.canvas);
 
     	skinViewer.camera.position.set(-18, -3, 58);
@@ -54,15 +76,15 @@ document.addEventListener('DOMContentLoaded', function(){
 
     	skinViewer.animations.add((player, time) => {
             const skin = player.skin;
-        
+
             // Multiply by animation's natural speed
             time *= 2;
-        
+
             // Arm swing
             const basicArmRotationZ = Math.PI * 0.02;
             skin.leftArm.rotation.z = Math.cos(time) * 0.03 + basicArmRotationZ;
             skin.rightArm.rotation.z = Math.cos(time + Math.PI) * 0.03 - basicArmRotationZ;
-        
+
             // Always add an angle for cape around the x axis
             const basicCapeRotationX = Math.PI * 0.06;
             player.cape.rotation.x = Math.sin(time) * 0.01 + basicCapeRotationX;
@@ -122,6 +144,10 @@ document.addEventListener('DOMContentLoaded', function(){
     function renderLore(text){
         let output = "";
         let spansOpened = 0;
+
+        if (!text.startsWith("§")) {
+            text = `§7${text}`
+        }
 
         const parts = text.split("§");
 
@@ -489,15 +515,17 @@ document.addEventListener('DOMContentLoaded', function(){
     let oldheight = null;
 
     function resize(){
-        if(window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570))
-            document.getElementById("skin_display_mobile").appendChild(playerModel);
+        if (playerModel) {
+            if(window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570))
+                document.getElementById("skin_display_mobile").appendChild(playerModel);
 
-        if(window.innerWidth > 1570 && oldWidth <= 1570)
-            document.getElementById("skin_display").appendChild(playerModel);
+            if(window.innerWidth > 1570 && oldWidth <= 1570)
+                document.getElementById("skin_display").appendChild(playerModel);
+        }
 
         tippy('*[data-tippy-content]');
 
-        if(skinViewer){
+        if(playerModel && skinViewer){
             if(playerModel.offsetWidth / playerModel.offsetHeight < 0.6)
                 skinViewer.setSize(playerModel.offsetWidth, playerModel.offsetWidth * 2);
             else
@@ -927,10 +955,8 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     function parseFavorites(cookie) {
-        return cookie?.split(',').filter(uuid => /^[0-9a-f]+$/.test(uuid)) || []
+        return cookie?.split(',').filter(uuid => /^[0-9a-f]{32}$/.test(uuid)) || [];
     }
-
-    const favoriteElement = document.querySelector('.favorite');
 
     function checkFavorite() {
         const favorited = parseFavorites(getCookie("favorite")).includes(favoriteElement.getAttribute("data-username"));
