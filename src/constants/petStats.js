@@ -134,8 +134,8 @@ class Bee extends Pet { // todo: finish hive
 	}
 
 	get first() {
-		let intMult = this.rarity > 3 ? 0.19 : this.rarity > 2 ? 0.14 : this.rarity > 1 ? 0.09 : this.rarity > 0 ? 0.4 : 0.02;
-		let strMult = this.rarity > 3 ? 0.14 : this.rarity > 2 ? 0.11 : this.rarity > 1 ? 0.07 : this.rarity > 0 ? 0.4 : 0.02;
+		let intMult = this.rarity > 3 ? 0.19 : this.rarity > 2 ? 0.14 : this.rarity > 1 ? 0.09 : this.rarity > 0 ? 0.04 : 0.02;
+		let strMult = this.rarity > 3 ? 0.14 : this.rarity > 2 ? 0.11 : this.rarity > 1 ? 0.07 : this.rarity > 0 ? 0.04 : 0.02;
 		return {
 			name: "§6Hive",
 			desc: [`§7Gain §b+${round(this.level * intMult + 1, 1)}${symbols.intelligence} Intelligence §7and §c+${round(this.level * strMult + 1, 1)}${symbols.strength} Strength §7for each nearby bee.`, `§8Max 15 bees`]
