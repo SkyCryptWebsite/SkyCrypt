@@ -2241,8 +2241,13 @@ module.exports = {
 
             pet.rarity = pet.tier.toLowerCase();
 
-            if(pet.heldItem == 'PET_ITEM_TIER_BOOST' || pet.heldItem == 'PET_ITEM_VAMPIRE_FANG')
+            if (
+                pet.heldItem == 'PET_ITEM_TIER_BOOST' ||
+                pet.heldItem == 'PET_ITEM_VAMPIRE_FANG' ||
+                pet.heldItem == 'PET_ITEM_TOY_JERRY'
+            ) {
                 pet.rarity = petTiers[Math.min(petTiers.length - 1, petTiers.indexOf(pet.rarity) + 1)];
+            }
 
             pet.level = getPetLevel(pet);
             pet.stats = {};
@@ -2363,8 +2368,11 @@ module.exports = {
                     });
                 });
                 // now we push the lore of the held items
-                if(heldItemObj)
+                if(heldItemObj) {
                     lore.push('', `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
+                } else {
+                    lore.push('', `§6Held Item: §${constants.tier_colors[constants.pet_items[heldItem].tier.toLowerCase()]}${constants.pet_items[heldItem].name}`);
+                }
 
                 if(heldItem in constants.pet_items){
                     lore.push(constants.pet_items[heldItem].description);

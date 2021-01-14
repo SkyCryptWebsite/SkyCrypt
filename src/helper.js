@@ -100,9 +100,9 @@ module.exports = {
                     user = doc;
         }
 
-        let skin_data = { 
-            skinurl: 'https://textures.minecraft.net/texture/3b60a1f6d562f52aaebbf1434f1de147933a3affe0e764fa49ea057536623cd3', 
-            model: 'slim' 
+        let skin_data = {
+            skinurl: 'https://textures.minecraft.net/texture/3b60a1f6d562f52aaebbf1434f1de147933a3affe0e764fa49ea057536623cd3',
+            model: 'slim'
         };
 
         if(user && module.exports.hasPath(user, 'skinurl')){
@@ -342,6 +342,10 @@ module.exports = {
     renderLore: (text, enchants = false) => {
         let output = "";
         let spansOpened = 0;
+
+        if (!text.startsWith("§")) {
+            text = `§7${text}`
+        }
 
         const parts = text.split("§");
 
@@ -599,7 +603,7 @@ module.exports = {
             };
 
             for(item in claimable)
-                if(module.exports.hasPath(player, item)) 
+                if(module.exports.hasPath(player, item))
                     rank.claimed_items[claimable[item]] = player[item];
         }catch(e){
             console.error(e);

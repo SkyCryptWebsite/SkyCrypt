@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title>SkyCrypt</title>
+    <% if(error){ %> <meta name="robots" content="noindex" /> <% } %>
     <% const description = "A beautiful site for sharing your SkyBlock profile 🍣" %>
     <meta name="description" content="<%= description %>">
     <link rel="icon" href="/resources/img/logo_square.svg" sizes="any" type="image/svg+xml">
@@ -9,77 +10,34 @@
     <meta property="og:title" content="SkyBlock Stats">
     <meta property="og:description" content="<%= description %>">
 <%- include('../includes/resources') %>
-    <style>
-    @media (max-width: 480px){
-        #search_user{
-            display: none;
-        }
-
-        header{
-            height: 45px;
-            text-align: center;
-            width: 100vw;
-        }
-
-        header::after{
-            top: 45px;
-        }
-
-        #info_box{
-            top: 45px;
-        }
-    }
-    
-    .form-banner{
-        position: relative;
-        display: inline-block;
-        background: var(--bg_blur-webp) no-repeat center center fixed;
-        background-size: cover;
-        width: 100%;
-        margin-bottom: 20px;
-        border-radius: 10px;
-        padding: 20px 20px 20px 90px;
-        box-sizing: border-box;
-        text-decoration: none;
-        overflow: hidden;
-        max-width: 100%;
-        margin-left: 0;
-        margin-right: 0;
-    }
-    .external-app-icon{
-        width: 90px;
-    }
-    </style>
 </head>
-    <body>
+    <body class="page-index">
         <%- include('../includes/header') %>
-        <div id="enter_player_box_wrapper">
+        <main class="grid">
             <div id="enter_player_box">
                 <p>Show SkyBlock stats for</p>
                 <input <% if(player){ %> value="<%= player %>" <% }%> id="inp_enter_ign" type="text" placeholder="Enter username" autofocus>
                 <a href="<% if(player){ %>/stats/<%= player %><% }else{ %>#<% } %>" id="goto_target_username">Show me</a>
-                <!--<p>or take me to a <a href="/random/stats">random profile</a>.</p>-->
+                <!-- <p>or take me to a <a href="/random/stats">random profile</a>.</p> -->
             </div>
-        </div>
-        <div id="error_box_wrapper" <% if(error){ %>class="show-error"<% } %>>
-            <div id="error_box">
-                <div id="error_top">
-                    <div id="error_title">Error</div>
-                    <div id="error_text">
-                        <%= error %><br>
+            <div id="error_box_wrapper" <% if(error){ %>class="show-error"<% } %>>
+                <div id="error_box">
+                    <div id="error_top">
+                        <div id="error_title">Error</div>
+                        <div id="error_text">
+                            <%= error %><br>
+                        </div>
+                    </div>
+                    <div id="error_bottom">
+                        <% if(typeof error === 'string' && error.includes("Key throttle.")){ %>
+                        <div id="error_subtext">
+                            This happens when the site reaches the Hypixel API limit.<br>
+                            Please try again in a minute.
+                        </div>
+                        <% } %>
                     </div>
                 </div>
-                <div id="error_bottom">
-                    <% if(typeof error === 'string' && error.includes("Key throttle.")){ %>
-                    <div id="error_subtext">
-                        This happens when the site reaches the Hypixel API limit.<br>
-                        Please try again in a minute.
-                    </div>
-                    <% } %>
-                </div>
             </div>
-        </div>
-        <div id="top_profiles_box_wrapper">
             <a href="https://forms.gle/2d5iVtc8piRsJ3tM9" target="_blank" rel="nofollow" class="external-app form-banner">
                 <div class="external-app-icon" style="background-image: url(/resources/img/icons/google-forms.svg)"></div>
                 <div class="external-app-name">QOL Survey <span class="grey-text">– OPTIONAL</span></div>
@@ -100,7 +58,11 @@
                 <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
                 <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%-" " + extra.twemoji.parse(profile.emoji) %><% } %></div><br>
                 <div class="profile-last-online"><%- lastUpdatedText %></div>
-                <div class="profile-rank" title="Favorited profile"><%- extra.twemoji.parse("★") %></div>
+                <svg class="profile-rank" viewBox="0 0 24 24">
+                    <title>Favorited profile</title>
+                    <%# mdi-star %>
+                    <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+                </svg>
             </a>
             <% }}else{ %>
             <a class="top-profile">
@@ -116,14 +78,22 @@
                     <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
                     <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
                     <div class="profile-last-online"><%- message %></div>
-                    <% switch(profile.type){
-                        case "DEV": %>
-                        <div class="profile-rank" title="Member of SkyCrypt's Team">💻</div>
-                    <% } %>
+                    <svg class="profile-rank" viewBox="0 0 24 24">
+                        <% switch(profile.type){
+                            case "DEV": %>
+                            <title>Member of SkyCrypt's Team</title>
+                            <%# mdi-xml %>
+                            <path fill="currentColor" d="M12.89,3L14.85,3.4L11.11,21L9.15,20.6L12.89,3M19.59,12L16,8.41V5.58L22.42,12L16,18.41V15.58L19.59,12M1.58,12L8,5.58V8.41L4.41,12L8,15.58V18.41L1.58,12Z" />
+                            <% break; default: %>
+                            <title>Error</title>
+                            <%# mdi-alert-circle %>
+                            <path fill="currentColor" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+                        <% } %>
+                    </svg>
                 </a>
 
             <% } %>
-        </div>
+        </main>
         <%- include('../includes/footer'); %>
         <script src="/resources/js/js.cookie.min.js"></script>
         <script>
@@ -160,14 +130,6 @@
             let smallUserSearch = false;
 
             let reachedEnd = false;
-
-            window.addEventListener('keydown', function(e){
-                if(/[a-zA-Z0-9-_ ]/.test(String.fromCharCode(e.keyCode)))
-                    if(smallUserSearch)
-                        inputSearchUser.focus();
-                    else
-                        targetUsername.focus();
-            });
 
             window.addEventListener('scroll', checkSearchboxOverlap);
             window.addEventListener('resize', checkSearchboxOverlap);
