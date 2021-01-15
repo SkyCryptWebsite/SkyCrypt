@@ -259,6 +259,7 @@ module.exports = {
         hub: "Hub",
         mining_1: "Gold Mine",
         mining_2: "Deep Caverns",
+        mining_3: "Dwarven Mines",
         combat_1: "Spider's Den",
         combat_2: "Blazing Fortress",
         combat_3: "The End",
