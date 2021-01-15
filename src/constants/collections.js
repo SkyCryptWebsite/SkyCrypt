@@ -267,6 +267,14 @@ module.exports = {
             damage: 0,
             maxTier: 9
         },
+        {
+            type: 'mining',
+            skyblockId: 'MITHRIL_ORE',
+            name: 'Mithril',
+            id: 138,
+            damage: 0,
+            maxTier: 9
+        },
 
         {
             type: 'combat',
