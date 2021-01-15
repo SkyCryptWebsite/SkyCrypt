@@ -2114,7 +2114,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         uniqueMinions += minion.levels.length;
                         skippedMinions += minion.maxLevel - minion.levels.length;
 
-                        if(minion.maxLevel == 11)
+                        if(minion.maxLevel == minion.tiers)
                             maxedMinions++;
                     }
                 %>
@@ -2124,7 +2124,7 @@ if(calculated.profile.game_mode == 'ironman'){
                     <div class="external-app-description">Check the next cheapest or fastest Minion upgrades and find out which Minions will earn you the most from Bazaar, for free.</div>
                 </a>
                 <p class="stat-raw-values">
-                    <% max = uniqueMinions == 572 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Minions: </span><span class="stat-value <%= max %>"><%= uniqueMinions %> / 572</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 572 * 100) %>%)</span><br>
+                    <% max = uniqueMinions == 593 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Minions: </span><span class="stat-value <%= max %>"><%= uniqueMinions %> / 593</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 593 * 100) %>%)</span><br>
                     <% max = calculated.minion_slots.currentSlots == 24 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.minion_slots.currentSlots %></span><span class="grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
                     <% max = calculated.misc.profile_upgrades.minion_slots == 5 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Bonus Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades.minion_slots %> / <%= constants.profile_upgrades['minion_slots'] %></span><br>
                     <% max = maxedMinions == _.size(constants.minions) ? 'golden-text' : '' %><span class="stat-name <%= max %>">Maxed Minions: </span><span class="stat-value <%= max %>"><%= maxedMinions %> / <%= _.size(constants.minions) %></span><br>
@@ -2155,12 +2155,12 @@ if(calculated.profile.game_mode == 'ironman'){
                     <div class="minions">
                         <% for(const minion of minions){ %>
                             <div data-tippy-content="Crafted variants:<br><br>
-                            <% for(let i = 1; i <= 11; i++){ %>
+                            <% for(let i = 1; i <= minion.tiers; i++){ %>
                             <div class='minion-variant <% if(minion.levels.includes(i)){ %>minion-crafted<% } %>'><%= romanize(i) %></div>
                             <% } %>
                             " class="minion
                             <%= minion.maxLevel == 0 ? 'no-minion' : '' %>
-                            <%= minion.maxLevel == 11 ? 'max-stat' : '' %>
+                            <%= minion.maxLevel == minion.tiers ? 'max-stat' : '' %>
                             <%= minion.maxLevel != minion.levels.length ? 'skipped-minion' : '' %>
                             ">
                                 <div class="minion-icon" style="background-image: url(<%= minion.head %>)"></div>
