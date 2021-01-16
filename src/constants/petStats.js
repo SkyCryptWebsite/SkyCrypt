@@ -1688,7 +1688,7 @@ class Zombie extends Pet {
 		let mult = 0.2;
 		return {
 			name: "§6Rotten Blade",
-			desc: [`§7Deal §a${round(this.level * mult, 1)} §7more damage to zombies`]
+			desc: [`§7Deal §a${round(this.level * mult, 1)}% §7more damage to zombies`]
 		};
 	}
 
