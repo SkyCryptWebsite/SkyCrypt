@@ -1478,8 +1478,25 @@ if(calculated.profile.game_mode == 'ironman'){
                         <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
                     <% }else{ %>
                         <p class="stat-raw-values">
-                            <% max = items.talismans.filter(a => a.isUnique).length >= UNIQUE_ACCESSORIES ? 'golden-text': '' %><span class="stat-name <%= max %>">Unique Accessories: </span><span class="stat-value <%= max %>"><%= items.talismans.filter(a => a.isUnique).length %> / <%= UNIQUE_ACCESSORIES %></span><br>
-                            <span class="stat-name <%= max %>">Completion: </span><span class="stat-value <%= max %>"><%= Math.round(items.talismans.filter(a => a.isUnique).length / UNIQUE_ACCESSORIES * 100) %>%</span>
+                            <%
+                                const maxTalis = items.talismans.filter(a => a.isUnique).length >= UNIQUE_ACCESSORIES ? 'golden-text': ''
+                                const maxRecombTalis = items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length >= UNIQUE_ACCESSORIES ? 'golden-text': ''
+                            %>
+
+                            <span class="stat-name <%= maxTalis %>">Unique Accessories: </span>
+                            <span class="stat-value <%= maxTalis %>">
+                                <%= items.talismans.filter(a => a.isUnique).length %> / <%= UNIQUE_ACCESSORIES %>
+                            </span>
+                            <br>
+                            <span class="stat-name <%= maxTalis %>">Completion: </span>
+                            <span class="stat-value <%= maxTalis %>">
+                                <%= Math.round(items.talismans.filter(a => a.isUnique).length / UNIQUE_ACCESSORIES * 100) %>%
+                            </span>
+                            <br>
+                            <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
+                            <span class="stat-value <%= maxRecombTalis %>">
+                                <%= items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= UNIQUE_ACCESSORIES %>
+                            </span>
                         </p>
                         <% if(items.talismans.filter(a => !a.isInactive).length > 0){ %>
                             <div class="accessory-list">
