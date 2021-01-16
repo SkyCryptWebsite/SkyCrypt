@@ -1135,11 +1135,8 @@ if(calculated.profile.game_mode == 'ironman'){
                 <% if(calculated.guild.members){ %><span class='stat-name'>Members: </span><span class='stat-value'><%= calculated.guild.members %></span><br><% } %>
                 <% if(calculated.guild.level){ %><span class='stat-name'>Level: </span><span class='stat-value'><%= calculated.guild.level %></span><br><% } %>
                 ">Guild: <%= calculated.guild.name %></button><% } %>
-                <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">Plancke</a>
-                <a href="https://skyblock.matdoes.dev/profile/<%= calculated.display_name %>/<%= calculated.profile.cute_name == 'Deleted' ? calculated.profile.profile_id : calculated.profile.cute_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">matdoes.dev</a>
                 <a href="https://auctions.craftlink.xyz/players/<%= calculated.uuid %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">HyAuctions</a>
-                <a href="https://namemc.com/profile/<%= calculated.uuid %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">NameMC</a>
-                <a href="https://ss.sushipython.us/stats/<%= calculated.display_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">SushiStats</a>
+                <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">Plancke</a>
                 <div id="additional_socials">
                     <button data-copy-text="<%= calculated.uuid %>" class="copy-text additional-player-stat">Copy UUID</button>
                     <% if('DISCORD' in calculated.social){ %><button data-copy-text="<%= calculated.social.DISCORD %>" class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></button><% } %>
@@ -1481,8 +1478,25 @@ if(calculated.profile.game_mode == 'ironman'){
                         <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
                     <% }else{ %>
                         <p class="stat-raw-values">
-                            <% max = items.talismans.filter(a => a.isUnique).length >= UNIQUE_ACCESSORIES ? 'golden-text': '' %><span class="stat-name <%= max %>">Unique Accessories: </span><span class="stat-value <%= max %>"><%= items.talismans.filter(a => a.isUnique).length %> / <%= UNIQUE_ACCESSORIES %></span><br>
-                            <span class="stat-name <%= max %>">Completion: </span><span class="stat-value <%= max %>"><%= Math.round(items.talismans.filter(a => a.isUnique).length / UNIQUE_ACCESSORIES * 100) %>%</span>
+                            <%
+                                const maxTalis = items.talismans.filter(a => a.isUnique).length >= UNIQUE_ACCESSORIES ? 'golden-text': ''
+                                const maxRecombTalis = items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length >= UNIQUE_ACCESSORIES ? 'golden-text': ''
+                            %>
+
+                            <span class="stat-name <%= maxTalis %>">Unique Accessories: </span>
+                            <span class="stat-value <%= maxTalis %>">
+                                <%= items.talismans.filter(a => a.isUnique).length %> / <%= UNIQUE_ACCESSORIES %>
+                            </span>
+                            <br>
+                            <span class="stat-name <%= maxTalis %>">Completion: </span>
+                            <span class="stat-value <%= maxTalis %>">
+                                <%= Math.round(items.talismans.filter(a => a.isUnique).length / UNIQUE_ACCESSORIES * 100) %>%
+                            </span>
+                            <br>
+                            <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
+                            <span class="stat-value <%= maxRecombTalis %>">
+                                <%= items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= UNIQUE_ACCESSORIES %>
+                            </span>
                         </p>
                         <% if(items.talismans.filter(a => !a.isInactive).length > 0){ %>
                             <div class="accessory-list">
@@ -2117,7 +2131,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         uniqueMinions += minion.levels.length;
                         skippedMinions += minion.maxLevel - minion.levels.length;
 
-                        if(minion.maxLevel == 11)
+                        if(minion.maxLevel == minion.tiers)
                             maxedMinions++;
                     }
                 %>
@@ -2127,7 +2141,7 @@ if(calculated.profile.game_mode == 'ironman'){
                     <div class="external-app-description">Check the next cheapest or fastest Minion upgrades and find out which Minions will earn you the most from Bazaar, for free.</div>
                 </a>
                 <p class="stat-raw-values">
-                    <% max = uniqueMinions == 572 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Minions: </span><span class="stat-value <%= max %>"><%= uniqueMinions %> / 572</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 572 * 100) %>%)</span><br>
+                    <% max = uniqueMinions == 593 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Minions: </span><span class="stat-value <%= max %>"><%= uniqueMinions %> / 593</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 593 * 100) %>%)</span><br>
                     <% max = calculated.minion_slots.currentSlots == 24 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.minion_slots.currentSlots %></span><span class="grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
                     <% max = calculated.misc.profile_upgrades.minion_slots == 5 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Bonus Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades.minion_slots %> / <%= constants.profile_upgrades['minion_slots'] %></span><br>
                     <% max = maxedMinions == _.size(constants.minions) ? 'golden-text' : '' %><span class="stat-name <%= max %>">Maxed Minions: </span><span class="stat-value <%= max %>"><%= maxedMinions %> / <%= _.size(constants.minions) %></span><br>
@@ -2158,12 +2172,12 @@ if(calculated.profile.game_mode == 'ironman'){
                     <div class="minions">
                         <% for(const minion of minions){ %>
                             <div data-tippy-content="Crafted variants:<br><br>
-                            <% for(let i = 1; i <= 11; i++){ %>
+                            <% for(let i = 1; i <= minion.tiers; i++){ %>
                             <div class='minion-variant <% if(minion.levels.includes(i)){ %>minion-crafted<% } %>'><%= romanize(i) %></div>
                             <% } %>
                             " class="minion
                             <%= minion.maxLevel == 0 ? 'no-minion' : '' %>
-                            <%= minion.maxLevel == 11 ? 'max-stat' : '' %>
+                            <%= minion.maxLevel == minion.tiers ? 'max-stat' : '' %>
                             <%= minion.maxLevel != minion.levels.length ? 'skipped-minion' : '' %>
                             ">
                                 <div class="minion-icon" style="background-image: url(<%= minion.head %>)"></div>

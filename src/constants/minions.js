@@ -34,11 +34,13 @@ module.exports = {
     minions: {
         COBBLESTONE: {
             type: 'mining',
-            head: '/head/2f93289a82bd2a06cbbe61b733cfdc1f1bd93c4340f7a90abd9bdda774109071'
+            head: '/head/2f93289a82bd2a06cbbe61b733cfdc1f1bd93c4340f7a90abd9bdda774109071',
+            tiers: 12
         },
         OBSIDIAN: {
             type: 'mining',
-            head: '/head/320c29ab966637cb9aecc34ee76d5a0130461e0c4fdb08cdaf80939fa1209102'
+            head: '/head/320c29ab966637cb9aecc34ee76d5a0130461e0c4fdb08cdaf80939fa1209102',
+            tiers: 12
         },
         GLOWSTONE: {
             type: 'mining',
@@ -66,31 +68,43 @@ module.exports = {
         },
         COAL: {
             type: 'mining',
-            head: '/head/425b8d2ea965c780652d29c26b1572686fd74f6fe6403b5a3800959feb2ad935'
+            head: '/head/425b8d2ea965c780652d29c26b1572686fd74f6fe6403b5a3800959feb2ad935',
+            tiers: 12
         },
         IRON: {
             type: 'mining',
-            head: '/head/af435022cb3809a68db0fccfa8993fc1954dc697a7181494905b03fdda035e4a'
+            head: '/head/af435022cb3809a68db0fccfa8993fc1954dc697a7181494905b03fdda035e4a',
+            tiers: 12
         },
         GOLD: {
             type: 'mining',
-            head: '/head/f6da04ed8c810be29bba53c62e712d65cfb25238117b94d7e85a4615775bf14f'
+            head: '/head/f6da04ed8c810be29bba53c62e712d65cfb25238117b94d7e85a4615775bf14f',
+            tiers: 12
         },
         DIAMOND: {
             type: 'mining',
-            head: '/head/2354bbe604dfe58bf92e7729730d0c8e37844e831ee3816d7e8427c27a1824a2'
+            head: '/head/2354bbe604dfe58bf92e7729730d0c8e37844e831ee3816d7e8427c27a1824a2',
+            tiers: 12
         },
         LAPIS: {
             type: 'mining',
-            head: '/head/64fd97b9346c1208c1db3957530cdfc5789e3e65943786b0071cf2b2904a6b5c'
+            head: '/head/64fd97b9346c1208c1db3957530cdfc5789e3e65943786b0071cf2b2904a6b5c',
+            tiers: 12
         },
         REDSTONE: {
             type: 'mining',
-            head: '/head/1edefcf1a89d687a0a4ecf1589977af1e520fc673c48a0434be426612e8faa67'
+            head: '/head/1edefcf1a89d687a0a4ecf1589977af1e520fc673c48a0434be426612e8faa67',
+            tiers: 12
         },
         EMERALD: {
             type: 'mining',
-            head: '/head/9bf57f3401b130c6b53808f2b1e119cc7b984622dac7077bbd53454e1f65bbf0'
+            head: '/head/9bf57f3401b130c6b53808f2b1e119cc7b984622dac7077bbd53454e1f65bbf0',
+            tiers: 12
+        },
+        MITHRIL: {
+            type: 'mining',
+            head: '/head/c62fa670ff8599b32ab344195ba15f3ef64c3a8aa8a37821c08375950cb74cd0',
+            tiers: 12
         },
         QUARTZ: {
             type: 'mining',

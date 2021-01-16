@@ -195,7 +195,11 @@ module.exports = {
         magic_find: 10,
         pet_luck: 0,
         ferocity: 0,
-        ability_damage: 0
+        ability_damage: 0,
+        mining_speed: 0,
+        mining_fortune: 0,
+        farming_fortune: 0,
+        foraging_fortune: 0
     },
 
     stat_template: {
@@ -214,7 +218,11 @@ module.exports = {
         magic_find: 0,
         pet_luck: 0,
         ferocity: 0,
-        ability_damage: 0
+        ability_damage: 0,
+        mining_speed: 0,
+        mining_fortune: 0,
+        farming_fortune: 0,
+        foraging_fortune: 0
     },
 
     slayer_cost: {
@@ -251,6 +259,7 @@ module.exports = {
         hub: "Hub",
         mining_1: "Gold Mine",
         mining_2: "Deep Caverns",
+        mining_3: "Dwarven Mines",
         combat_1: "Spider's Den",
         combat_2: "Blazing Fortress",
         combat_3: "The End",
@@ -299,6 +308,10 @@ module.exports = {
                 {
                     tier: 15,
                     slots: 51
+                },
+                {
+                    tier: 16,
+                    slots: 57
                 }
             ]
         },

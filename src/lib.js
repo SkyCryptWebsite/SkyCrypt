@@ -844,6 +844,7 @@ module.exports = {
         for(const minion of minions){
             minion.levels = _.uniq(minion.levels.sort((a, b) => a - b));
             minion.maxLevel = minion.levels.length > 0 ? Math.max(...minion.levels) : 0;
+            minion.tiers = minion.tiers != null ? minion.tiers : 11;
 
             if(!('name' in minion))
                 minion.name = _.startCase(_.toLower(minion.id));
