@@ -640,5 +640,10 @@ module.exports = {
             rarity: "uncommon",
             texture: "/head/2567251d71b6f3a4dc03fa01e441de7edf9354794e74aec16c04f141ddf31c70"
         },
+        'KING_TALISMAN': {
+            name: "King Talisman",
+            rarity: "common",
+            texture: "/head/ba3fe344a6a027b6c66d8541146d4819df36ab91e9fc4df532748a0d76d74b13"
+        }
     }
 }
