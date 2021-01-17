@@ -380,6 +380,10 @@ module.exports = {
             head: "/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8",
             type: "combat",
             emoji: "🦅"
+        },
+        "MITHRIL_GOLEM": {
+            head: "/head/c1b2dfe8ed5dffc5b1687bc1c249c39de2d8a6c3d90305c95f6d1a1a330a0b1",
+            type: "mining"
         }
     },
 

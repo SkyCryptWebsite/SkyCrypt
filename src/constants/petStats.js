@@ -31,7 +31,8 @@ const symbols = {
 	attack_speed: "⚔️",
 	true_defense: "❂",
 	ferocity: "⫽",
-	ability_damage: "✹"
+	ability_damage: "✹",
+	mining_speed: "↑"
 }
 
 class Pet {
@@ -448,6 +449,45 @@ class Endermite extends Pet {
 		return {
 			name: "§6Pearl Powered",
 			desc: [`§7Upon consuming an ender pearl, gain +§a${10 + round(this.level * mult, 1)} §7speed for 10 seconds`]
+		};
+	}
+}
+
+class MithrilGolem extends Pet {
+	get stats() {
+		return {
+			true_defense: this.level * 0.5
+		};
+	}
+
+	get abilities() {
+		let list = [this.first, this.second];
+		if (this.rarity > 1)
+			list.push(this.third);
+		return list;
+	}
+
+	get first() {
+		let mult = 1;
+		return {
+			name: "§6Mithril Affinity",
+			desc: [`§7Gain +§a${round(this.level * mult, 1)} §6${symbols.mining_speed} Mining Speed §7when mining §Mithril`]
+		};
+	}
+
+	get second() {
+		let mult = 0.2;
+		return {
+			name: "§6The Smell Of Powder",
+			desc: [`§7Gain +§a${round(this.level * mult, 1)}% §7more §2Mithril Powder`]
+		};
+	}
+
+	get third() {
+		let mult = 0.2;
+		return {
+			name: "§6Danger Averse",
+			desc: [`§7Increases your combat stats by +§a${round(this.level * mult, 1)}% §7on mining islands`]
 		};
 	}
 }
@@ -2456,6 +2496,7 @@ module.exports = {
 		//Mining
 		'Bat': Bat,
 		'Endermite': Endermite,
+		'Mithril Golem': MithrilGolem,
 		'Rock': Rock,
 		'Silverfish': Silverfish,
 		'Wither Skeleton': WitherSkeleton,
