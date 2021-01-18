@@ -1748,9 +1748,101 @@ if(calculated.profile.game_mode == 'ironman'){
             <div class="stat-header"><span>Skills</span></div>
             <div class="stat-content">
 
+                <div class="stat-mining">
+                    <div class="category-header">
+                        <div class="category-icon"><div class="item-icon icon-274_0"></div></div>
+                        <span>mining</span>
+                    </div>
+
+                    <p class="stat-raw-values">
+                        
+                    </p>
+                </div>
+
+                <% if(calculated.farming.talked){ %>
+                <div class="stat-farming">
+                    <div class="category-header">
+                        <div class="category-icon" onclick="window.open('https://www.youtube.com/watch?v=pZaY1jV96jI')"><div class="item-icon icon-294_0"></div></div>
+                        <span>farming</span>
+                    </div>
+
+                    <% const farming = calculated.farming; %>
+                        <p class="stat-raw-values">
+                            <span class="stat-name">Contests attended: </span><span class="stat-value"><%= farming.contests.attended_contests.toLocaleString() %></span><br>
+                            <% max = farming.unique_golds == 10 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Golds: </span><span class="stat-value <%= max %>"><%= farming.unique_golds.toLocaleString() %></span></span><br>
+                        </p>
+
+                        <p class="stat-raw-values">
+                            <% for(let badge of badgeOrder){ %>
+                                <span data-tippy-content='
+                                    <span class="stat-name">Current: </span><span class="stat-value"><%= farming.current_badges[badge].toLocaleString() %> Badges</span><br>
+                                    <span class="stat-name">Total: </span><span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %> Badges</span>
+                                '>
+                                <span class="stat-name"><%= badge %> badges: </span>
+                                <span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %></span></span><br>
+                            <% } %>
+                        </p>
+
+                        <p class="stat-sub-header">Farming Hoes</p>
+                        <% if(items.highest_rarity_hoe){ %>
+                        <p class="stat-raw-values">
+                            <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_hoe.rarity %>-fg"><%= items.highest_rarity_hoe.display_name %></span>
+                        </p>
+                        <% }else if(items.hoes.length > 0){ %>
+                        <p class="stat-raw-values">
+                            <span class="stat-name">Active Rod: </span><span class="stat-active-hoe stat-value piece-common-fg">None</span>
+                        </p>
+                        <% } %>
+                        <div class="pieces">
+                            <%  items.hoes.filter(a => !a.hidden).forEach(item => { %>
+                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
+                                        <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
+                                            <div class="piece-shine"></div>
+                                        <% } %>
+                                        <div class="piece-hover-area"></div>
+                                        <% itemIcon(item, ['piece-icon']); %>
+                                    </div>
+                            <% }); %>
+                        </div>
+
+                        <div class="stat-sub-container sub-extendable">
+                            <p class="stat-sub-header">Farming Crops</p>
+                            <div class="stat-farming-crops">
+                                <%  
+                                const crops = Object.values(farming.crops).sort((a, b) => {
+                                    return b.contests - a.contests; 
+                                });
+
+                                for(const crop of crops){
+                                    if(!crop.attended) continue;
+
+                                    let amountsTooltip = '';
+
+                                    for(let badge of badgeOrder)
+                                        amountsTooltip += `
+                                            <span class="stat-name">${helper.titleCase(badge)} Badges: </span>
+                                            <span class="stat-value">${crop.badges[badge].toLocaleString()}</span><br>
+                                        `;
+                                %>
+                                <div class="collection" data-tippy-content="<%= amountsTooltip %>">
+                                    <div class="collection-icon"><div class="item-icon icon-<%= crop.icon %>"></div></div>
+                                    <div class="collection-stats">
+                                        <div class="collection-name <%= crop.unique_gold ? 'max-minion' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
+                                        <div class="collection-amount">
+                                            <small class="stat-name">Personal Best: </small><small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small><br>
+                                            <small class="stat-name">Contests: </small><small class="stat-value"><%= crop.contests.toLocaleString() %></small><br>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </div>
+                        </div>
+                </div>
+                <% } %>
+
                 <div class="stat-fishing">
-                    <div class="minion-category-header">
-                        <div class="minion-category-icon"><div class="item-icon icon-346_0"></div></div>
+                    <div class="category-header">
+                        <div class="category-icon"><div class="item-icon icon-346_0"></div></div>
                         <span>fishing</span>
                     </div>
 
@@ -1845,91 +1937,10 @@ if(calculated.profile.game_mode == 'ironman'){
                     <% } %>
                 </div>
 
-                <% if(calculated.farming.talked){ %>
-                <div class="stat-farming">
-                    <div class="minion-category-header">
-                        <div class="minion-category-icon" onclick="window.open('https://www.youtube.com/watch?v=pZaY1jV96jI')"><div class="item-icon icon-294_0"></div></div>
-                        <span>farming</span>
-                    </div>
-
-                    <% const farming = calculated.farming; %>
-                        <p class="stat-raw-values">
-                            <span class="stat-name">Contests attended: </span><span class="stat-value"><%= farming.contests.attended_contests.toLocaleString() %></span><br>
-                            <% max = farming.unique_golds == 10 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Golds: </span><span class="stat-value <%= max %>"><%= farming.unique_golds.toLocaleString() %></span></span><br>
-                        </p>
-
-                        <p class="stat-raw-values">
-                            <% for(let badge of badgeOrder){ %>
-                                <span data-tippy-content='
-                                    <span class="stat-name">Current: </span><span class="stat-value"><%= farming.current_badges[badge].toLocaleString() %> Badges</span><br>
-                                    <span class="stat-name">Total: </span><span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %> Badges</span>
-                                '>
-                                <span class="stat-name"><%= badge %> badges: </span>
-                                <span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %></span></span><br>
-                            <% } %>
-                        </p>
-
-                        <p class="stat-sub-header">Farming Hoes</p>
-                        <% if(items.highest_rarity_hoe){ %>
-                        <p class="stat-raw-values">
-                            <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_hoe.rarity %>-fg"><%= items.highest_rarity_hoe.display_name %></span>
-                        </p>
-                        <% }else if(items.hoes.length > 0){ %>
-                        <p class="stat-raw-values">
-                            <span class="stat-name">Active Rod: </span><span class="stat-active-hoe stat-value piece-common-fg">None</span>
-                        </p>
-                        <% } %>
-                        <div class="pieces">
-                            <%  items.hoes.filter(a => !a.hidden).forEach(item => { %>
-                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
-                                        <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
-                                            <div class="piece-shine"></div>
-                                        <% } %>
-                                        <div class="piece-hover-area"></div>
-                                        <% itemIcon(item, ['piece-icon']); %>
-                                    </div>
-                            <% }); %>
-                        </div>
-
-                        <div class="stat-sub-container sub-extendable">
-                            <p class="stat-sub-header">Farming Crops</p>
-                            <div class="stat-farming-crops">
-                                <%  
-                                const crops = Object.values(farming.crops).sort((a, b) => {
-                                    return b.contests - a.contests; 
-                                });
-
-                                for(const crop of crops){
-                                    if(!crop.attended) continue;
-
-                                    let amountsTooltip = '';
-
-                                    for(let badge of badgeOrder)
-                                        amountsTooltip += `
-                                            <span class="stat-name">${helper.titleCase(badge)} Badges: </span>
-                                            <span class="stat-value">${crop.badges[badge].toLocaleString()}</span><br>
-                                        `;
-                                %>
-                                <div class="collection" data-tippy-content="<%= amountsTooltip %>">
-                                    <div class="collection-icon"><div class="item-icon icon-<%= crop.icon %>"></div></div>
-                                    <div class="collection-stats">
-                                        <div class="collection-name <%= crop.unique_gold ? 'max-minion' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
-                                        <div class="collection-amount">
-                                            <small class="stat-name">Personal Best: </small><small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small><br>
-                                            <small class="stat-name">Contests: </small><small class="stat-value"><%= crop.contests.toLocaleString() %></small><br>
-                                        </div>
-                                    </div>
-                                </div>
-                                <% } %>
-                            </div>
-                        </div>
-                </div>
-                <% } %>
-
                 <% if(calculated.enchanting.experimented){ %>
                 <div class="stat-enchanting">
-                    <div class="minion-category-header">
-                        <div class="minion-category-icon"><div class="item-icon icon-116_0"></div></div>
+                    <div class="category-header">
+                        <div class="category-icon"><div class="item-icon icon-116_0"></div></div>
                         <span>enchanting</span>
                     </div>
 
