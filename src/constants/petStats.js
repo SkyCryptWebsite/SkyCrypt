@@ -462,7 +462,7 @@ class MithrilGolem extends Pet {
 
 	get abilities() {
 		let list = [this.first, this.second];
-		if (this.rarity > 1)
+		if (this.rarity > 3)
 			list.push(this.third);
 		return list;
 	}
