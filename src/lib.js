@@ -619,6 +619,15 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             if(item.type != null && item.type.startsWith('dungeon'))
                 item.Damage = 0;
 
+            // Get breaking power for Pickaxes
+            if(item.type == 'pickaxe' || item.type == 'drill'){
+                if(lore[0].startsWith('Breaking Power')){
+                    item.breaking_power = lore[0].substring(15);
+                }else{
+                    item.breaking_power = 0;
+                }
+            }
+
             // fix custom maps texture
             if(item.id == 358){
                 item.id = 395;
@@ -682,6 +691,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                         break;
                     case 'Ability Damage':
                         item.stats.ability_damage = statValue;
+                        break;
+                    case 'Mining Speed':
+                        item.stats.mining_speed = statValue;
                         break;
                 }
             });
@@ -793,6 +805,9 @@ module.exports = {
             intelligence: 0,
             ability_damage: 0,
             pet_luck: 0,
+            mining_fortune: 0,
+            farming_fortune: 0,
+            foraging_fortune: 0,
             damage_multiplicator: 1
         };
 
@@ -1103,17 +1118,24 @@ module.exports = {
 
         output.talismans = talismans;
         output.talisman_ids = talisman_ids;
-        output.weapons = all_items.filter(a => a.type != null && (a.type.endsWith('sword') || a.type.endsWith('bow')));
-        output.rods = all_items.filter(a => a.type != null && (a.type.endsWith('fishing rod') || a.type.endsWith('fishing weapon')));
+        output.weapons = all_items.filter(a => a.type != null && 
+            (a.type.endsWith('sword')
+            || a.type.endsWith('cutlass') // Pirate English
+            || a.type.endsWith('bow'))
+        );
+
         output.hoes = all_items.filter(a => a.type != null && a.type.endsWith('hoe'));
+        output.pickaxes = all_items.filter(a => a.type != null && (a.type.endsWith('pickaxe') || a.type.endsWith('drill')));
+        output.rods = all_items.filter(a => a.type != null && (a.type.endsWith('fishing rod') || a.type.endsWith('fishing weapon')));
 
         for(const item of all_items){
             if(!Array.isArray(item.containsItems))
                 continue;
 
             output.weapons.push(...item.containsItems.filter(a => a.type != null && (a.type.endsWith('sword') || a.type.endsWith('bow'))));
-            output.rods.push(...item.containsItems.filter(a => a.type != null && (a.type.endsWith('fishing rod') || a.type.endsWith('fishing weapon'))));
             output.hoes.push(...item.containsItems.filter(a => a.type != null && a.type.endsWith('hoe')));
+            output.pickaxes.push(...item.containsItems.filter(a => a.type != null && (a.type.endsWith('pickaxe') || a.type.endsWith('drill'))));
+            output.rods.push(...item.containsItems.filter(a => a.type != null && (a.type.endsWith('fishing rod') || a.type.endsWith('fishing weapon'))));
         }
 
         // Check if inventory access disabled by user
@@ -1156,6 +1178,17 @@ module.exports = {
             }
 
             return rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity)
+        });
+
+        output.pickaxes = output.pickaxes.sort((a, b) => {
+            if(a.breaking_power == b.breaking_power){
+                if(b.inBackpack)
+                    return -1;
+
+                return rarity_order.indexOf(a.rarity) > rarity_order.indexOf(b.rarity) ? 1 : -1;
+            }
+
+            return b.breaking_power - a.breaking_power
         });
 
         const countsOfId = {};
