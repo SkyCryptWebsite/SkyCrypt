@@ -1750,9 +1750,8 @@ a.additional-player-stat:hover {
 .wardrobe-set {
     vertical-align: top;
     display: inline-block;
-    max-height: 90px;
+    max-height: 115px;
     overflow: hidden;
-    transition: max-height 0.2s;
 
     &:hover,
     &:focus-within,
@@ -1760,10 +1759,38 @@ a.additional-player-stat:hover {
         max-height: 360px;
     }
 
+    transition: max-height .2s;
+    margin-right: 8px;
+
+    
     .piece {
         display: block;
     }
 }
+
+.wardrobe-set:first-child {
+    margin-right: 0px;   
+}
+
+.wardrobe-set .select-armor {
+    width: 22px;
+    height: 22px;
+    border: 3px solid white;
+    border-radius: 3px;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background-color .2s;
+    margin: 0 auto;
+}
+
+.select-armor.active-armor {
+    background-color: white !important;
+}
+
+.wardrobe-set:hover, .wardrobe-set.wardrobe-opened{
+    max-height: 385px;
+}
+
 
 .piece {
     display: inline-block;
