@@ -570,6 +570,108 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
+    let lastArmorChange = {};
+
+    [].forEach.call(document.querySelectorAll('.select-armor'), function(element) {
+        // First of all we need to get all the data-item-id inside this parent node
+        let parent = element.parentNode.children;
+        let resultItems = []
+
+        // We get the items data.
+        for (let i = 0; i < parent.length; i++) {
+            const child = parent[i];
+            let filterItems
+
+            if(!child.hasAttribute("data-item-id")) {
+                continue;
+            }
+
+            let itemId = child.getAttribute("data-item-id");
+
+            Object.values(items.wardrobe).forEach(wEl => {
+                wEl.forEach(arEl => {
+                    if(arEl) {
+                        if(arEl.itemId == itemId) {
+                            resultItems.push(arEl)
+                        }
+                    }
+                })
+            })
+        }
+
+        element.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+        });
+
+        let armorStats = {};
+
+        resultItems.forEach(it => {
+            Object.entries(it.stats).forEach(entry => {
+                const [key, value] = entry
+                if(armorStats[key]) {
+                    armorStats[key] += Number(value)
+                } else {
+                    armorStats[key] = Number(value)
+                }
+
+                
+            })
+        })
+
+        element.addEventListener('click', function(e) {               
+            let picked = element.classList.contains("active-armor");
+
+            if(picked) {
+                element.classList.remove("active-armor")
+            } else {
+                element.classList.add("active-armor")         
+            }
+
+            for(let stat in calculated.stats) {
+                if(stat == 'sea_creature_chance') 
+                    continue;
+                let element = document.querySelector('.basic-stat[data-stat=' + stat + '] .stat-value');
+                if(!element)
+                    continue;            
+
+                let currentValue = parseInt(element.innerHTML);
+                let newValue = currentValue
+
+                if(lastArmorChange[stat]) {
+                    newValue -= lastArmorChange[stat]
+                    delete lastArmorChange[stat]
+                }
+
+                if(!picked) { // We need to add stats                
+                    if(armorStats[stat]) {
+                        newValue += armorStats[stat]
+
+                        if(lastArmorChange && lastArmorChange[stat]) { // We need to remove the old armor.
+                            newValue -= lastArmorChange[stat]
+                        }
+    
+                        lastArmorChange[stat] = armorStats[stat]                        
+                    }            
+                }                   
+          
+                if(newValue != currentValue){
+                    anime({
+                        targets: '.basic-stat[data-stat=' + stat + '] .stat-value',
+                        innerHTML: newValue,
+                        backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
+                        duration: 500,
+                        round: 1,
+                        easing: 'easeOutCubic'
+                    });
+                }
+
+            }
+
+        });
+
+
+    });
+
     [].forEach.call(document.querySelectorAll('.stat-weapons .select-weapon'), function(element){
         let itemId = element.parentNode.getAttribute('data-item-id');
         let filterItems;
