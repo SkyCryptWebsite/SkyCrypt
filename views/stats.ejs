@@ -1390,7 +1390,10 @@ if(calculated.profile.game_mode == 'ironman'){
                             <span class="stat-name">Set: </span><span class="stat-value piece-<%= items.armor_set_rarity %>-fg"><%= items.armor_set %></span>
                         </p>
                     <% } %>
-                    <div class="pieces">
+                    <div class="pieces armor-set">
+                        <% if(items.armor.length != 0){ %>
+                            <div class="select-armor active-armor"></div>
+                        <% } %>
                         <% for(const item of items.armor.slice().reverse()){ %>
                             <div tabindex="3" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
                                 <% if(rarityOrder.indexOf(item.rarity) < 3){ %>

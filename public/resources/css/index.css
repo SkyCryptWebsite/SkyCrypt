@@ -1853,8 +1853,21 @@ a.additional-player-stat:hover{
     margin: 0 auto;
 }
 
-.select-armor.active-armor {
-    background-color: white !important;
+.armor-set .select-armor {
+    width: 22px;
+    height: 22px;
+    border: 3px solid white;
+    border-radius: 3px;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background-color .2s;
+    display: inline-block;
+    margin-top: 38px;
+    margin-right: 8px;
+}
+
+.active-armor {
+    background-color: #fff !important;
 }
 
 .wardrobe-set:hover, .wardrobe-set.wardrobe-opened{
