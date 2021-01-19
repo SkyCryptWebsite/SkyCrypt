@@ -584,7 +584,24 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
+    function extractArmorStats(itemSet) {
+        let totalStats = {}
+        itemSet.forEach(it => {
+            if(it)
+                Object.entries(it.stats).forEach(entry => {
+                    const [key, value] = entry
+                    if(totalStats[key]) {
+                        totalStats[key] += Number(value)
+                    } else {
+                        totalStats[key] = Number(value)
+                    }
+                })
+        })
+        return totalStats
+    }
+
     let lastArmorChange = {};
+    let needToCalculateOldArmor = true;
 
     [].forEach.call(document.querySelectorAll('.select-armor'), function(element) {
         // First of all we need to get all the data-item-id inside this parent node
@@ -603,13 +620,21 @@ document.addEventListener('DOMContentLoaded', function(){
             let itemId = child.getAttribute("data-item-id");
 
             Object.values(items.wardrobe).forEach(wEl => {
-                wEl.forEach(arEl => {
-                    if(arEl) {
-                        if(arEl.itemId == itemId) {
-                            resultItems.push(arEl)
+                if(wEl)
+                    wEl.forEach(arEl => {
+                        if(arEl) {
+                            if(arEl.itemId == itemId) {
+                                resultItems.push(arEl)
+                            }
                         }
+                    })
+            })
+            items.armor.forEach(arEl => {
+                if(arEl) {
+                    if(arEl.itemId == itemId) {
+                        resultItems.push(arEl)
                     }
-                })
+                }
             })
         }
 
@@ -617,20 +642,7 @@ document.addEventListener('DOMContentLoaded', function(){
             e.preventDefault();
         });
 
-        let armorStats = {};
-
-        resultItems.forEach(it => {
-            Object.entries(it.stats).forEach(entry => {
-                const [key, value] = entry
-                if(armorStats[key]) {
-                    armorStats[key] += Number(value)
-                } else {
-                    armorStats[key] = Number(value)
-                }
-
-                
-            })
-        })
+        let armorStats = extractArmorStats(resultItems);
 
         element.addEventListener('click', function(e) {               
             let picked = element.classList.contains("active-armor");
@@ -638,6 +650,10 @@ document.addEventListener('DOMContentLoaded', function(){
             if(picked) {
                 element.classList.remove("active-armor")
             } else {
+                [].forEach.call(document.querySelectorAll('.active-armor'), function(_element){
+                    _element.classList.remove("active-armor");
+                });
+
                 element.classList.add("active-armor")         
             }
 
@@ -651,12 +667,14 @@ document.addEventListener('DOMContentLoaded', function(){
                 let currentValue = parseInt(element.innerHTML);
                 let newValue = currentValue
 
+                // We remove the stats of the last written stats update.
                 if(lastArmorChange[stat]) {
                     newValue -= lastArmorChange[stat]
                     delete lastArmorChange[stat]
                 }
 
-                if(!picked) { // We need to add stats                
+                // We append the new stats of the selected armor.          
+                if(!picked) { 
                     if(armorStats[stat]) {
                         newValue += armorStats[stat]
 
@@ -666,7 +684,16 @@ document.addEventListener('DOMContentLoaded', function(){
     
                         lastArmorChange[stat] = armorStats[stat]                        
                     }            
-                }                   
+                }         
+                
+                // IF THE PLAYER ALREADY HAS AN ARMOR, WE REMOVE THE STATS FROM IT.
+                if(needToCalculateOldArmor && items.armor) {
+                    let oldArmorStats = extractArmorStats(items.armor)
+                    if(oldArmorStats[stat]) {
+                        newValue -= oldArmorStats[stat]
+                    }                   
+                    needToCalculateOldArmor = false;
+                }
           
                 if(newValue != currentValue){
                     anime({
@@ -711,7 +738,20 @@ document.addEventListener('DOMContentLoaded', function(){
         });
 
         element.addEventListener('click', function(e){
-            if(element.parentNode.classList.contains('piece-selected')){
+            // Since this code recalculates everything, we just need 
+            // to delete the last armor 
+            // changed and this will be in charge of everything
+            // I might add support for different weapons and different armors in the future.
+            // Since the code is a little bit messy it's hard and takes times. 
+            // If anyone want's to change it, just create a new lib where it calculates each item stats
+            // and then another where it modifies depending on other items. Also, the wp and picked armor should be instantiated above this.
+            lastArmorChange = {} 
+            needToCalculateOldArmor = true;
+            [].forEach.call(document.querySelectorAll('.active-armor'), function(_element){
+                _element.classList.remove("active-armor");
+            });
+
+            if(element.parentNode.classList.contains('piece-selected')){    
                 element.parentNode.classList.remove("piece-selected");
 
                 stats = calculated.stats;
