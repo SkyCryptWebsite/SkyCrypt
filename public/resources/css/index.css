@@ -1740,7 +1740,7 @@ a.additional-player-stat:hover{
     padding-left: 30px;
     box-sizing: border-box;
     padding-right: 30px;
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
 .info-container-wrapper ~ .stat-misc {
@@ -2253,10 +2253,12 @@ a.additional-player-stat:hover{
 
 #inventory_header{
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 6px;
+    left: 5px;
+    right: 5px;
     height: 50px;
+    overflow: hidden;
+    margin-top: 5px;
 }
 
 .inventory-header-line{
@@ -2273,7 +2275,7 @@ a.additional-player-stat:hover{
     position: relative;
     width: 100%;
     height: 100%;
-    overflow-x: auto;
+    overflow-y: auto;
 }
 
 #inventory_header .inventory-tab{
