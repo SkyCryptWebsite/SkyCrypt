@@ -406,10 +406,6 @@ header > *{
   color: rgba(255,255,255,0.8);
 }
 
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: rgba(255,255,255,0.8);
-}
-
 ::placeholder {
   color: rgba(255,255,255,0.8);
 }
@@ -577,10 +573,7 @@ header > *{
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-     user-select: none;
+    user-select: none;
     -webkit-backdrop-filter: blur(16px) brightness(0.5);
     backdrop-filter: blur(16px) brightness(0.5);
 }
