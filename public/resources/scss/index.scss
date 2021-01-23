@@ -98,8 +98,8 @@ a.no-underline {
 
 *[data-tippy-content]::after {
     content: "*";
-    color: rgba(255,255,255,0.6);
-    transition: color .2s;
+    color: rgba(255, 255, 255, 0.6);
+    transition: color 0.2s;
 }
 
 *[data-tippy-content]:hover::after {
@@ -118,7 +118,7 @@ a.no-underline {
 
 a {
     color: var(--link-hex);
-    transition: color .2s;
+    transition: color 0.2s;
 }
 
 a:hover {
@@ -307,7 +307,7 @@ header > * {
     padding-right: 10px;
     border-radius: 9999px;
     line-height: normal;
-    transition: background-color .1s;
+    transition: background-color 0.1s;
 }
 
 .social-button:hover {
@@ -375,7 +375,7 @@ header > * {
 
 .page-index #search_user {
     transform: translateY(150%);
-    transition: transform .15s;
+    transition: transform 0.15s;
 }
 
 .page-index #search_user.show-user-search {
@@ -398,7 +398,7 @@ header > * {
     box-sizing: border-box;
     font-family: Montserrat, sans-serif;
     font-weight: 600;
-    transition: background-color .1s;
+    transition: background-color 0.1s;
 }
 
 #inp_search_user:focus,
@@ -433,7 +433,7 @@ header > * {
     background-size: 24px 24px;
     background-position: center center;
     background-repeat: no-repeat;
-    transition: background-color .1s;
+    transition: background-color 0.1s;
 }
 
 #btn_search_user:focus,
@@ -481,14 +481,14 @@ header > * {
     background-size: 22px auto;
     background-position: 6px 7px;
     background-repeat: no-repeat;
-    transition: padding-right .2s;
+    transition: padding-right 0.2s;
 }
 
 #packs_button span,
 #themes_button span {
     display: block;
     transform: scaleX(1);
-    transition: transform .2s, font-size, .2s, opacity .2s;
+    transition: transform 0.2s, font-size, 0.2s, opacity 0.2s;
 }
 
 #packs_button {
@@ -793,7 +793,7 @@ header > * {
     padding-top: 45px;
     box-sizing: border-box;
     transform: translateY(calc(-100% - 48px));
-    transition: transform .3s;
+    transition: transform 0.3s;
     z-index: 100;
     max-height: calc(100vh - 48px - 30px);
     overflow-y: auto;
@@ -809,7 +809,7 @@ header > * {
     padding: 20px;
     box-sizing: border-box;
     transform: translateY(-100%);
-    transition: transform .3s;
+    transition: transform 0.3s;
     z-index: 100;
     overflow-y: auto;
 }
@@ -854,7 +854,7 @@ header > * {
     padding: 20px;
     box-sizing: border-box;
     transform: translateY(-100%);
-    transition: transform .3s;
+    transition: transform 0.3s;
     z-index: 100;
     overflow-y: auto;
 }
@@ -935,8 +935,8 @@ html.no-transform #info_box.opened {
     background-size: 24px 24px;
     background-position: center center;
     background-repeat: no-repeat;
-    background-color: rgba(255,255,255,0);
-    transition: background-color .1s;
+    background-color: rgba(255, 255, 255, 0);
+    transition: background-color 0.1s;
     border-radius: 5px;
 }
 
@@ -1010,7 +1010,7 @@ html.no-transform #info_box.opened {
     opacity: 0;
     transform: translateX(-25px);
     pointer-events: none;
-    transition: visibility .2s, opacity .2s, transform .2s, left .1s;
+    transition: visibility 0.2s, opacity 0.2s, transform 0.2s, left 0.1s;
     visibility: hidden;
     border-radius: 10px;
     overflow: hidden;
@@ -1224,7 +1224,7 @@ html.no-transform #info_box.opened {
     background-color: rgba(30, 30, 30, 0.95);
     min-width: 260px;
     clip-path: ellipse(0% 0% at 0% 0%);
-    transition: clip-path .3s, visibility .3s;
+    transition: clip-path 0.3s, visibility 0.3s;
     visibility: hidden;
     border-radius: 17px;
     overflow: hidden;
@@ -1287,7 +1287,7 @@ html.no-clip-path #other_profiles {
     text-decoration: none;
     color: white;
     font-weight: 600;
-    transition: background-color .1s;
+    transition: background-color 0.1s;
     vertical-align: top;
     text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
 }
@@ -1320,7 +1320,7 @@ html.no-clip-path #other_profiles {
 
 #additional_socials {
     display: inline-block;
-    transition: max-width .2s;
+    transition: max-width 0.2s;
 }
 
 #additional_socials .additional-player-stat:not(#reveal_socials) {
@@ -1541,7 +1541,7 @@ a.additional-player-stat:hover {
     padding-bottom: 12px;
     margin-left: 8px;
     font-weight: 600;
-    transition: background-color .1s, color .1s;
+    transition: background-color 0.1s, color 0.1s;
     position: relative;
     color: rgba(255, 255, 255, 0.8);
 }
@@ -1563,7 +1563,7 @@ a.additional-player-stat:hover {
     top: 100%;
     background-color: var(--icon-hex);
     border-radius: 4px;
-    transition: height .1s, top .1s;
+    transition: height 0.1s, top 0.1s;
 }
 
 .nav-item.active::after {
@@ -1793,7 +1793,7 @@ a.additional-player-stat:hover {
 
 .inactive-accessory {
     opacity: 0.3;
-    transition: opacity .1s;
+    transition: opacity 0.1s;
 }
 
 .inactive-accessory:hover {
@@ -1860,7 +1860,7 @@ a.additional-player-stat:hover {
     display: inline-block;
     max-height: 90px;
     overflow: hidden;
-    transition: max-height .2s;
+    transition: max-height 0.2s;
 }
 
 .wardrobe-set:hover,
@@ -1884,7 +1884,7 @@ a.additional-player-stat:hover {
     border-radius: 5px;
     user-select: none;
     cursor: pointer;
-    transition: z-index .2s;
+    transition: z-index 0.2s;
     background-color: #555555;
 }
 
@@ -1900,7 +1900,7 @@ a.additional-player-stat:hover {
     transform: translateY(-15px);
     border: 4px solid rgba(255, 255, 255, 0.9);
     opacity: 0;
-    transition: transform .2s, opacity .2s;
+    transition: transform 0.2s, opacity 0.2s;
 }
 
 .piece-hover-area {
@@ -1910,7 +1910,7 @@ a.additional-player-stat:hover {
     top: 0;
     bottom: 0;
     z-index: 10;
-    transition: background-color .2s;
+    transition: background-color 0.2s;
     border-radius: 5px;
 }
 
@@ -1946,7 +1946,7 @@ a.additional-player-stat:hover {
     border-radius: 3px;
     cursor: pointer;
     box-sizing: border-box;
-    transition: background-color .2s;
+    transition: background-color 0.2s;
 }
 
 .piece .select-weapon:hover,
@@ -2136,7 +2136,7 @@ a.additional-player-stat:hover {
 
 .sub-extendable .stat-sub-header {
     cursor: pointer;
-    transition: color .2s;
+    transition: color 0.2s;
 }
 
 .sub-extendable .stat-sub-header:hover, .sub-extended .stat-sub-header{
@@ -2174,7 +2174,7 @@ a.additional-player-stat:hover {
     margin-bottom: 16px;
     font-size: 18px;
     cursor: pointer;
-    transition: color .2s;
+    transition: color 0.2s;
 }
 
 .sub-floor-extendable .stat-sub-header:hover, .sub-extended .stat-sub-header{
@@ -2238,12 +2238,12 @@ a.additional-player-stat:hover {
 
 .missing-pet {
     background-color: #555555;
-    transition: background-color .2s;
+    transition: background-color 0.2s;
 }
 
 .missing-pet .piece-icon {
     filter: saturate(0%);
-    transition: filter .2s;
+    transition: filter 0.2s;
 }
 
 .missing-pet:hover,
@@ -2258,12 +2258,12 @@ a.additional-player-stat:hover {
 
 .missing-talisman {
     background-color: #555555;
-    transition: background-color .2s;
+    transition: background-color 0.2s;
 }
 
 .missing-talisman .piece-icon {
     filter: saturate(0%);
-    transition: filter .2s;
+    transition: filter 0.2s;
 }
 
 .missing-talisman:hover,
@@ -2325,7 +2325,7 @@ a.additional-player-stat:hover {
     font-weight: 600;
     text-transform: uppercase;
     cursor: pointer;
-    transition: color .1s;
+    transition: color 0.1s;
     cursor: pointer;
     vertical-align: top;
     color: rgba(255,255,255,0.8);
@@ -2344,7 +2344,7 @@ a.additional-player-stat:hover {
     top: 100%;
     background-color: var(--icon-hex);
     border-radius: 4px;
-    transition: height .1s, top .1s;
+    transition: height 0.1s, top 0.1s;
 }
 
 #inventory_header .inventory-tab.active-inventory {
@@ -2416,7 +2416,7 @@ a.additional-player-stat:hover {
     opacity: 0;
     background-color: rgba(0, 0, 0, 0.4);
     color: white;
-    transition: opacity .2s;
+    transition: opacity 0.2s;
     cursor: pointer;
     z-index: 1000;
     font-size: 22px;
@@ -3004,7 +3004,7 @@ main.grid > * {
 main.grid > a :not(img),
 .external-app :not(img) {
     opacity: 0.85;
-    transition: opacity .15s ease-in-out;
+    transition: opacity 0.15s ease-in-out;
 }
 
 main.grid > a:hover :not(img),
@@ -3024,7 +3024,7 @@ main.grid > a:focus :not(img),
     main.grid > a,
     .external-app {
         transform: scale(1);
-        transition: transform .15s ease-in-out;
+        transition: transform 0.15s ease-in-out;
     }
 
     main.grid > a:hover,
@@ -3082,7 +3082,7 @@ main.grid > a:focus :not(img),
     text-transform: uppercase;
     font-weight: bold;
     text-decoration: none;
-    transition: background-color .15s;
+    transition: background-color 0.15s;
     border-radius: 999px;
     text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
 }
@@ -3268,7 +3268,7 @@ main.grid > a:focus :not(img),
     z-index: 8500;
     opacity: 0;
     visibility: hidden;
-    transition: opacity .3s, visibility .3s;
+    transition: opacity 0.3s, visibility 0.3s;
 }
 
 #enable_api.show {
@@ -3556,7 +3556,7 @@ body {
         top: 50% !important;
         transform: translate(-50%, -50%) !important;
         max-width: 100% !important;
-        transition: opacity .2s, visibility .2s !important;
+        transition: opacity 0.2s, visibility 0.2s !important;
     }
 
     #stats_content.show-stats:not(.sticky-stats) {
