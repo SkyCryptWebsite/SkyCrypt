@@ -1,27 +1,30 @@
 :root {
     /* Icon Green (used for Skill Icons, Underlines etc.) */
-    --icon-hex: #0BCA51; --icon-rgb: 11, 202, 81;
+    --icon-hex: #0bca51;
+    --icon-rgb: 11, 202, 81;
 
     /* Line Green (used for Navigation Bar) */
-    --line-hex: #0BDA51; --line-rgb: 11, 218, 81;
+    --line-hex: #0bda51;
+    --line-rgb: 11, 218, 81;
 
     /* Link Green (used for Links, Unclaimed Slayers, Crafted Minions etc.) */
-    --link-hex: #0BEA51; --link-rgb: 11, 234, 81;
+    --link-hex: #0bea51;
+    --link-rgb: 11, 234, 81;
 
     /* Hover Green (used only for link hovers) */
-    --hover-hex: #09EF70;
+    --hover-hex: #09ef70;
 
     /* Skill Bar Green (used for Skill Progress Bars) */
-    --skillbar-hex: #0BAA51;
+    --skillbar-hex: #0baa51;
 
     /* Maxed Bar Gold (used for Maxed Progress Bars) */
-    --maxedbar-hex: #CE8F12;
+    --maxedbar-hex: #ce8f12;
 
     /* Maxed Gold (used for Maxed things etc.) */
-    --maxed-hex: #DD980E;
+    --maxed-hex: #dd980e;
 
     /* Golden Text (used for Golden Text) */
-    --gold-hex: #FDBB3C;
+    --gold-hex: #fdbb3c;
 
     /* Header Logo */
     --logo-square: url(/resources/img/logo_square.svg);
@@ -442,7 +445,7 @@ header > * {
     content: "SOON";
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 999px;
-    color: #A6145D;
+    color: #a6145d;
     padding: 4px;
     padding-left: 6px;
     padding-right: 6px;
@@ -1198,7 +1201,7 @@ html.no-transform #info_box.opened {
     top: 0;
     left: -7px;
     width: 999px;
-    background-color: #D985BC;
+    background-color: #d985bc;
     height: 100%;
     transform: skew(-20deg);
 }
@@ -1643,16 +1646,17 @@ a.additional-player-stat:hover {
 .color-effective-health,
 .color-strength,
 .color-ferocity,
-.color-ability-damage{
-    color: #EF5350;
+.color-ability-damage {
+    color: #ef5350;
 }
 
 .stat-defense {
     background-image: url(../img/icons/defense.png);
 }
 
-.stat-defense .stat-name, .color-defense{
-    color: #66BB6A;
+.stat-defense .stat-name,
+.color-defense {
+    color: #66bb6a;
 }
 
 .stat-effective-health {
@@ -1680,56 +1684,65 @@ a.additional-player-stat:hover {
     background-image: url(../img/icons/crit-damage.png);
 }
 
-.stat-crit-chance .stat-name, .stat-crit-damage .stat-name, .color-crit-chance, .color-crit-damage{
-    color: #9FA8DA;
+.stat-crit-chance .stat-name,
+.stat-crit-damage .stat-name,
+.color-crit-chance,
+.color-crit-damage {
+    color: #9fa8da;
 }
 
 .stat-bonus-attack-speed {
     background-image: url(../img/icons/bonus-attack-speed.png);
 }
 
-.stat-bonus-attack-speed .stat-name, .color-bonus-attack-speed{
-    color: #F7F778;
+.stat-bonus-attack-speed .stat-name,
+.color-bonus-attack-speed {
+    color: #f7f778;
 }
 
 .stat-intelligence {
     background-image: url(../img/icons/intelligence.png);
 }
 
-.stat-intelligence .stat-name, .color-intelligence{
-    color: #4FC3F7;
+.stat-intelligence .stat-name,
+.color-intelligence {
+    color: #4fc3f7;
 }
 
 .stat-sea-creature-chance {
     background-image: url(../img/icons/sea-creature-chance.png);
 }
 
-.stat-sea-creature-chance .stat-name, .color-sea-creature-chance{
-    color: #00AAAA;
+.stat-sea-creature-chance .stat-name,
+.color-sea-creature-chance {
+    color: #00aaaa;
 }
 
 .stat-sea-creature-chance {
     background-image: url(../img/icons/sea-creature-chance.png);
 }
 
-.stat-sea-creature-chance .stat-name, .color-sea-creature-chance{
-    color: #1CD2D2;
+.stat-sea-creature-chance .stat-name,
+.color-sea-creature-chance {
+    color: #1cd2d2;
 }
 
 .stat-magic-find {
     background-image: url(../img/icons/magic-find.png);
 }
 
-.stat-magic-find .stat-name, .color-magic-find{
-    color: #3BDDDD;
+.stat-magic-find .stat-name,
+.color-magic-find {
+    color: #3bdddd;
 }
 
 .stat-pet-luck {
     background-image: url(../img/icons/pet-luck.png);
 }
 
-.stat-pet-luck .stat-name, .color-pet-luck{
-    color: #FD64DE;
+.stat-pet-luck .stat-name,
+.color-pet-luck {
+    color: #fd64de;
 }
 
 .stat-ferocity {
@@ -2022,19 +2035,19 @@ a.additional-player-stat:hover {
 }
 
 .piece-special-bg,
-.style-scrollbar .piece-special-bg + .item-lore::-webkit-scrollbar-thumb{
-    background-color: #FF5555;
+.style-scrollbar .piece-special-bg + .item-lore::-webkit-scrollbar-thumb {
+    background-color: #ff5555;
 }
-.piece-special-bg + .item-lore{
-    scrollbar-color: #FF5555 transparent;
+.piece-special-bg + .item-lore {
+    scrollbar-color: #ff5555 transparent;
 }
 
 .piece-mythic-bg,
-.style-scrollbar .piece-mythic-bg + .item-lore::-webkit-scrollbar-thumb{
-    background-color: #D762d7;
+.style-scrollbar .piece-mythic-bg + .item-lore::-webkit-scrollbar-thumb {
+    background-color: #d762d7;
 }
-.piece-mythic-bg + .item-lore{
-    scrollbar-color: #D762d7 transparent;
+.piece-mythic-bg + .item-lore {
+    scrollbar-color: #d762d7 transparent;
 }
 
 .piece-legendary-bg,
@@ -2046,19 +2059,19 @@ a.additional-player-stat:hover {
 }
 
 .piece-epic-bg,
-.style-scrollbar .piece-epic-bg + .item-lore::-webkit-scrollbar-thumb{
-    background-color: #AA00AA;
+.style-scrollbar .piece-epic-bg + .item-lore::-webkit-scrollbar-thumb {
+    background-color: #aa00aa;
 }
-.piece-epic-bg + .item-lore{
-    scrollbar-color: #AA00AA transparent;
+.piece-epic-bg + .item-lore {
+    scrollbar-color: #aa00aa transparent;
 }
 
 .piece-rare-bg,
-.style-scrollbar .piece-rare-bg + .item-lore::-webkit-scrollbar-thumb{
-    background-color: #5555FF;
+.style-scrollbar .piece-rare-bg + .item-lore::-webkit-scrollbar-thumb {
+    background-color: #5555ff;
 }
-.piece-rare-bg+.item-lore{
-    scrollbar-color: #5555FF transparent;
+.piece-rare-bg + .item-lore {
+    scrollbar-color: #5555ff transparent;
 }
 
 .piece-uncommon-bg,
@@ -2077,24 +2090,24 @@ a.additional-player-stat:hover {
     scrollbar-color: #555555 transparent;
 }
 
-.piece-special-fg{
-    color: #FF5555 !important;
+.piece-special-fg {
+    color: #ff5555 !important;
 }
 
-.piece-mythic-fg{
-    color: #D762D7 !important;
+.piece-mythic-fg {
+    color: #d762d7 !important;
 }
 
-.piece-legendary-fg{
-    color: #F9B837 !important;
+.piece-legendary-fg {
+    color: #f9b837 !important;
 }
 
-.piece-epic-fg{
-    color: #F23EF2 !important;
+.piece-epic-fg {
+    color: #f23ef2 !important;
 }
 
-.piece-rare-fg{
-    color: #7373E6 !important;
+.piece-rare-fg {
+    color: #7373e6 !important;
 }
 
 .piece-uncommon-fg {
