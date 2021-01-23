@@ -38,7 +38,6 @@
 }
 
 * {
-    -webkit-text-size-adjust: none;
     text-size-adjust: none;
 }
 
@@ -412,14 +411,6 @@ header > * {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-::-webkit-input-placeholder { /* Edge */
-  color: rgba(255,255,255,0.8);
-}
-
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: rgba(255,255,255,0.8);
-}
-
 ::placeholder {
     color: rgba(255, 255, 255, 0.8);
 }
@@ -558,7 +549,7 @@ header > * {
     text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
 }
 
-@supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+@supports (backdrop-filter: blur(16px)) {
     #bg_blur {
         display: none;
     }
@@ -585,12 +576,7 @@ header > * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-     user-select: none;
-    -webkit-backdrop-filter: blur(16px) brightness(0.5);
+    user-select: none;
     backdrop-filter: blur(16px) brightness(0.5);
 }
 
@@ -1985,13 +1971,6 @@ a.additional-player-stat:hover {
     right: 0;
     transform: translateY(-100%);
     background: linear-gradient(
-        to top,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.8) 50%,
-        rgba(128, 186, 232, 0) 99%,
-        rgba(125, 185, 232, 0) 100%
-    );
-    background: -moz-linear-gradient(
         to top,
         rgba(255, 255, 255, 0) 0%,
         rgba(255, 255, 255, 0.8) 50%,
