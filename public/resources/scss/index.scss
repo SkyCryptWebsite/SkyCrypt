@@ -59,7 +59,12 @@ body {
     visibility: hidden;
 }
 
-.stat-name, .stat-value, .skill-name, .skill-progress-text, .grey-text, .kill-stat{
+.stat-name,
+.stat-value,
+.skill-name,
+.skill-progress-text,
+.grey-text,
+.kill-stat {
     user-select: text !important;
 }
 
@@ -493,7 +498,6 @@ header > * {
 
 #packs_button {
     background-image: url(../img/icons/package-variant.png);
-
 }
 
 #themes_button {
@@ -1914,8 +1918,9 @@ a.additional-player-stat:hover {
     border-radius: 5px;
 }
 
-.piece-hover-area:hover, .sticky-stats .piece-hover-area{
-    background-color: rgba(255,255,255,0.2);
+.piece-hover-area:hover,
+.sticky-stats .piece-hover-area {
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .pieces {
@@ -1979,14 +1984,26 @@ a.additional-player-stat:hover {
     bottom: 0;
     right: 0;
     transform: translateY(-100%);
-    background: linear-gradient(to top, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(128,186,232,0) 99%, rgba(125,185,232,0) 100%);
-    background: -moz-linear-gradient(to top, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(128,186,232,0) 99%, rgba(125,185,232,0) 100%);
+    background: linear-gradient(
+        to top,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(128, 186, 232, 0) 99%,
+        rgba(125, 185, 232, 0) 100%
+    );
+    background: -moz-linear-gradient(
+        to top,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(128, 186, 232, 0) 99%,
+        rgba(125, 185, 232, 0) 100%
+    );
     z-index: 10;
     animation: shine 4s infinite;
 }
 
 @keyframes shine {
-	0% {
+    0% {
         transform: translateY(120%);
     }
 
@@ -2139,8 +2156,9 @@ a.additional-player-stat:hover {
     transition: color 0.2s;
 }
 
-.sub-extendable .stat-sub-header:hover, .sub-extended .stat-sub-header{
-    color: rgba(255,255,255,1);
+.sub-extendable .stat-sub-header:hover,
+.sub-extended .stat-sub-header {
+    color: rgba(255, 255, 255, 1);
 }
 
 .sub-extendable .stat-sub-header::before {
@@ -2177,8 +2195,9 @@ a.additional-player-stat:hover {
     transition: color 0.2s;
 }
 
-.sub-floor-extendable .stat-sub-header:hover, .sub-extended .stat-sub-header{
-    color: rgba(255,255,255,1);
+.sub-floor-extendable .stat-sub-header:hover,
+.sub-extended .stat-sub-header {
+    color: rgba(255, 255, 255, 1);
 }
 
 .sub-floor-extendable .stat-sub-header::before {
@@ -2312,7 +2331,6 @@ a.additional-player-stat:hover {
     height: 100%;
     overflow-y: auto;
     padding-bottom: 4px;
-
 }
 
 #inventory_header .inventory-tab {
@@ -2328,7 +2346,7 @@ a.additional-player-stat:hover {
     transition: color 0.1s;
     cursor: pointer;
     vertical-align: top;
-    color: rgba(255,255,255,0.8);
+    color: rgba(255, 255, 255, 0.8);
 }
 
 #inventory_header .inventory-tab:first-child {
@@ -3568,8 +3586,8 @@ body {
         width: 100vw;
         left: 0;
         margin-left: 0;
-        height: calc(100vw * 9/16);
-        margin-top: calc(-1 * ((100vw * 9/16) / 2));
+        height: calc(100vw * 9 / 16);
+        margin-top: calc(-1 * ((100vw * 9 / 16) / 2));
     }
 
     #inventory_header {
