@@ -11,3 +11,23 @@ html{
     color: white;
     overflow-x: hidden;
 }
+
+@media (max-width: 480px) {
+    #search_user {
+        display: none;
+    }
+
+    header {
+        height: 45px;
+        text-align: center;
+        width: 100vw;
+    }
+
+    header::after {
+        top: 45px;
+    }
+
+    #info_box {
+        top: 45px;
+    }
+}
