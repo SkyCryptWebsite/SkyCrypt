@@ -8,7 +8,6 @@
     "postinstall": "node init",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prestart": "npm run buildscss",
-    "poststart": "echo hi",
     "buildscss": "sass public/resources/scss:public/resources/css --style=compressed",
     "watchscss": "sass --watch public/resources/scss:public/resources/css"
   },
