@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node init && node index",
     "postinstall": "node init",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prestart": "npm run buildscss",
+    "poststart": "echo hi",
+    "buildscss": "sass public/resources/scss:public/resources/css --style=compressed",
+    "watchscss": "sass --watch public/resources/scss:public/resources/css"
   },
   "repository": {
     "type": "git",
@@ -61,5 +65,8 @@
     "twemoji": "^13.0.1",
     "upng-js": "^2.1.0",
     "uuid": "^8.3.1"
+  },
+  "devDependencies": {
+    "sass": "^1.32.5"
   }
 }
