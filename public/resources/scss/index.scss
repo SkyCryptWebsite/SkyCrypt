@@ -46,7 +46,7 @@ html {
     background-color: #121212;
     background: var(--bg-webp) no-repeat center center fixed #121212;
     background-size: cover;
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
     color: white;
     overflow-x: hidden;
 }
@@ -3998,26 +3998,26 @@ body {
 }
 
 /* Adding some extra margin between enderchest pages */
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-of-type(45n-8),
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-of-type(45n-7),
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-of-type(45n-6),
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-of-type(45n-5),
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-of-type(45n-4),
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-of-type(45n-3),
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-of-type(45n-2),
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-of-type(45n-1),
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-of-type(45n) {
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-8),
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-7),
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-6),
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-5),
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-4),
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-3),
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-2),
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-1),
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n) {
     margin-bottom: 1rem;
 }
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-last-of-type(1),
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-last-of-type(2),
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-last-of-type(3),
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-last-of-type(4),
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-last-of-type(5),
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-last-of-type(6),
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-last-of-type(7),
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-last-of-type(8),
-.inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-last-of-type(9) {
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(1),
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(2),
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(3),
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(4),
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(5),
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(6),
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(7),
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(8),
+.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(9) {
     margin-bottom: 1px;
 }
 
