@@ -1218,6 +1218,7 @@ module.exports = {
         let bowsInventory = bows.filter(a => a.backpackIndex === undefined);
         let rodsInventory = output.rods.filter(a => a.backpackIndex === undefined);
         let hoesInventory = output.hoes.filter(a => a.backpackIndex === undefined);
+        let pickaxesInventory = output.pickaxes.filter(a => a.backpackIndex === undefined);
 
         if(swords.length > 0)
             output.highest_rarity_sword = swordsInventory.filter(a =>  a.rarity == swordsInventory[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
@@ -1230,6 +1231,9 @@ module.exports = {
 
         if(output.hoes.length > 0)
             output.highest_rarity_hoe = hoesInventory.filter(a => a.rarity == hoesInventory[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
+
+        if(output.pickaxes.length > 0)
+            output.highest_rarity_pickaxe = pickaxesInventory.filter(a => a.rarity == pickaxesInventory[0].rarity).sort((a, b) => a.item_index - b.item_index)[0];
 
         if(armor.filter(a => Object.keys(a).length > 2).length == 1){
             const armorPiece = armor.filter(a => Object.keys(a).length > 2)[0];
@@ -2110,7 +2114,25 @@ module.exports = {
 
         output.enchanting = enchanting;
 
-        // TODO: Enchanting stuff
+        // MINING
+
+        const mining = {
+            commissions: {
+                milestone: 0
+            }
+        }
+
+        for(const key of userProfile.tutorial){
+            if(key.startsWith('commission_milestone_reward_mining_xp_tier_')){
+                let milestone_tier = key.slice(43);
+                if(mining.commissions.milestone < milestone_tier)
+                    mining.commissions.milestone = milestone_tier;
+            } else continue;
+        }
+
+        output.mining = mining;
+
+        // TODO: Mining stuff
 
         const misc = {};
 

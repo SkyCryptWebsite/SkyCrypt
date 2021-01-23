@@ -1,5 +1,5 @@
 <%
-const rarityOrder = ['special', 'mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
+const rarityOrder = ['special', 'supreme', 'mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 const slayerOrder = ['zombie', 'spider', 'wolf'];
 const badgeOrder = ['gold', 'silver', 'bronze'];
 
@@ -894,7 +894,9 @@ const inventorySlot = item => { %>
 
 const skill_component = (skill, icon, level, extra = {}) => { %>
     <div class="skill xp-skill<%= level.level == level.maxLevel ? ' maxed-skill' : ''%>">
-        <div class="skill-icon" data-tippy-content="<span>Rank: #69</span>">
+        <div class="skill-icon" <% if(level.rank && level.rank < 50000){ %>
+            data-tippy-content="<span class='stat-name'>Rank: </span><span class='stat-value'></span>#<%= level.rank %></span>"
+        <% } %>>
             <% if(icon.startsWith('head-')){ %>
                 <div class="head-icon" style="background-image:url(/head/<%= icon.substring(5) %>)"></div>
             <% }else{ %>
@@ -1754,9 +1756,35 @@ if(calculated.profile.game_mode == 'ironman'){
                         <span>mining</span>
                     </div>
 
+                    <% const mining = calculated.mining; %>
                     <p class="stat-raw-values">
-                        
+                        <% max = mining.commissions.milestone == 5 ? 'golden-text' : '' %>
+                        <span class="stat-name <%= max %>">Commissions Milestone: </span><span class="stat-value <%= max %>"><%= mining.commissions.milestone.toLocaleString() %></span><br>
                     </p>
+
+                    <% if(items.pickaxes.length > 0){ %>
+                        <p class="stat-sub-header">Mining Pickaxes</p>
+                        <% if(items.highest_rarity_pickaxe){ %>
+                            <p class="stat-raw-values">
+                                <span class="stat-name">Active Pickaxe: </span><span class="stat-active-pickaxe stat-value piece-<%= items.highest_rarity_pickaxe.rarity %>-fg"><%= items.highest_rarity_pickaxe.display_name %></span>
+                            </p>
+                        <% }else{ %>
+                            <p class="stat-raw-values">
+                                <span class="stat-name">Active Pickaxe: </span><span class="stat-active-pickaxe stat-value piece-common-fg">None</span>
+                            </p>
+                        <% } %>
+                        <div class="pieces">
+                            <%  items.pickaxes.filter(a => !a.hidden).forEach(item => { %>
+                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
+                                        <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
+                                            <div class="piece-shine"></div>
+                                        <% } %>
+                                        <div class="piece-hover-area"></div>
+                                        <% itemIcon(item, ['piece-icon']); %>
+                                    </div>
+                            <% }); %>
+                        </div>
+                    <% } %>
                 </div>
 
                 <% if(calculated.farming.talked){ %>
@@ -1766,7 +1794,8 @@ if(calculated.profile.game_mode == 'ironman'){
                         <span>farming</span>
                     </div>
 
-                    <% const farming = calculated.farming; %>
+                    <% const farming = calculated.farming;
+                    if (farming.contests.attended_contests > 0) {%>
                         <p class="stat-raw-values">
                             <span class="stat-name">Contests attended: </span><span class="stat-value"><%= farming.contests.attended_contests.toLocaleString() %></span><br>
                             <% max = farming.unique_golds == 10 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Golds: </span><span class="stat-value <%= max %>"><%= farming.unique_golds.toLocaleString() %></span></span><br>
@@ -1782,16 +1811,22 @@ if(calculated.profile.game_mode == 'ironman'){
                                 <span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %></span></span><br>
                             <% } %>
                         </p>
+                    <% }else{ %>
+                        <p class="stat-raw-values">
+                            <%= calculated.display_name %> didn't attend any contests yet.
+                        </p>
+                    <% } %>
 
+                    <% if(items.hoes.length > 0){ %>
                         <p class="stat-sub-header">Farming Hoes</p>
                         <% if(items.highest_rarity_hoe){ %>
-                        <p class="stat-raw-values">
-                            <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_hoe.rarity %>-fg"><%= items.highest_rarity_hoe.display_name %></span>
-                        </p>
-                        <% }else if(items.hoes.length > 0){ %>
-                        <p class="stat-raw-values">
-                            <span class="stat-name">Active Rod: </span><span class="stat-active-hoe stat-value piece-common-fg">None</span>
-                        </p>
+                            <p class="stat-raw-values">
+                                <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_hoe.rarity %>-fg"><%= items.highest_rarity_hoe.display_name %></span>
+                            </p>
+                        <% }else{ %>
+                            <p class="stat-raw-values">
+                                <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-common-fg">None</span>
+                            </p>
                         <% } %>
                         <div class="pieces">
                             <%  items.hoes.filter(a => !a.hidden).forEach(item => { %>
@@ -1804,7 +1839,9 @@ if(calculated.profile.game_mode == 'ironman'){
                                     </div>
                             <% }); %>
                         </div>
+                    <% } %>
 
+                    <% if(farming.crops.length > 0){ %>
                         <div class="stat-sub-container sub-extendable">
                             <p class="stat-sub-header">Farming Crops</p>
                             <div class="stat-farming-crops">
@@ -1837,6 +1874,7 @@ if(calculated.profile.game_mode == 'ironman'){
                                 <% } %>
                             </div>
                         </div>
+                    <% } %>
                 </div>
                 <% } %>
 
@@ -1992,6 +2030,10 @@ if(calculated.profile.game_mode == 'ironman'){
                 </div>
                 <% } %>
 
+<br>    
+                <p class='stat-raw-values'><small><i>
+                Please note that this section is still in the works and many things are now in development. Thanks for your support!
+                </i></small></p>
             </div>
         </div>
         <div data-stat="dungeons" class="stat-container stat-dungeons">
@@ -2126,10 +2168,6 @@ if(calculated.profile.game_mode == 'ironman'){
                     </div>
                 <% } %>
             <% } %>
-
-            <p class='stat-raw-values'><small><i>
-                Please note that this section is still in the works and many things are now in development. Thanks for your support!
-            </i></small></p>
             </div>
         </div>
         <div data-stat="slayer" class="stat-container stat-slayer">
