@@ -1,3 +1,5 @@
+@use "./stripes";
+
 :root {
     /* Icon Green (used for Skill Icons, Underlines etc.) */
     --icon-hex: #0bca51;
@@ -200,74 +202,39 @@ header > * {
     user-select: none;
 }
 
-.pride-flag.rainbow{
-    background: linear-gradient(180deg,
-        #FF0018 0%, #FF0018 16.7%,
-        #FFA52C 16.7%, #FFA52C 33.3%,
-        #FFFF41 33.3%, #FFFF41 50%,
-        #008018 50%, #008018 66.7%,
-        #0000F9 66.7%, #0000F9 83.3%,
-        #86007D 83.3%, #86007D 100%);
+.pride-flag.rainbow {
+    @include stripes.stripes(180deg, #ff0018 #ffa52c #ffff41 #008018 #0000f9 #86007d);
 }
 
-.pride-flag.trans{
-    background: linear-gradient(180deg,
-        #5bcffa 0%, #5bcffa 20%,
-        #f5abb9 20%, #f5abb9 40%,
-        white 40%, white 60%,
-        #f5abb9 60%, #f5abb9 80%,
-        #5bcffa 80%, #5bcffa 100%);
+.pride-flag.trans {
+    @include stripes.stripes(180deg, #5bcffa #f5abb9 #ffffff #f5abb9 #5bcffa);
 }
 
-.pride-flag.lesbian{
-    background: linear-gradient(180deg,
-        #d62900 0%, #d62900 20%,
-        #ff9b55 20%, #ff9b55 40%,
-        white 40%, white 60%,
-        #d362a4 60%, #d362a4 80%,
-        #a30262 80%, #a30262 100%);
+.pride-flag.lesbian {
+    @include stripes.stripes(180deg, #d62900 #ff9b55 #ffffff #d362a4 #a30262);
 }
 
-.pride-flag.bi{
-    background: linear-gradient(180deg,
-        #d70071 0%, #d70071 40%,
-        #9c4e97 40%, #9c4e97 60%,
-        #0035aa 60%, #0035aa 100%);
+.pride-flag.bi {
+    @include stripes.stripes(180deg, #d70071 #d70071 #9c4e97 #0035aa #0035aa);
 }
 
-.pride-flag.pan{
-    background: linear-gradient(180deg,
-        #ff218c 0%, #ff218c 33.3%,
-        #ffd800 33.3%, #ffd800 66.6%,
-        #21b1ff 66.6%, #21b1ff 100%);
+.pride-flag.pan {
+    @include stripes.stripes(180deg, #ff218c #ffd800 #21b1ff);
 }
 
-.pride-flag.nb{
-    background: linear-gradient(180deg,
-        #fcf431 0%, #fcf431 25%,
-        #fcfcfc 25%, #fcfcfc 50%,
-        #9d5cd5 50%, #9d5cd5 75%,
-        #282828 75%, #282828 100%);
+.pride-flag.nb {
+    @include stripes.stripes(180deg, #fcf431 #fcfcfc #9d5cd5 #282828);
 }
 
-.pride-flag.ace{
-    background: linear-gradient(180deg,
-        black 0%, black 25%,
-        #a3a3a3 25%, #a3a3a3 50%,
-        white 50%, white 75%,
-        #800080 75%, #800080 100%);
+.pride-flag.ace {
+    @include stripes.stripes(180deg, #000000 #a3a3a3 #ffffff #800080);
 }
 
-.pride-flag.genderfluid{
-    background: linear-gradient(180deg,
-        #ff76a4 0%, #ff76a4 20%,
-        white 20%, white 40%,
-        #bf11d7 40%, #bf11d7 60%,
-        black 60%, black 80%,
-        #303cbe 80%, #303cbe 100%);
+.pride-flag.genderfluid {
+    @include stripes.stripes(180deg, #ff76a4 #ffffff #bf11d7 #000000 #303cbe);
 }
 
-.pride-flag.logo{
+.pride-flag.logo {
     background: var(--logo-square);
     background-size: auto 100%;
     background-position: center;
