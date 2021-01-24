@@ -867,18 +867,11 @@ header > * {
 
 .theme-author span {
     color: rgba(255, 255, 255, 0.8);
-}
 
-html.no-transform #info_box {
-    top: -100%;
 }
 
 #info_box.info-opened {
     transform: translateY(0%);
-}
-
-html.no-transform #info_box.opened {
-    top: 45px;
 }
 
 #info_close {
