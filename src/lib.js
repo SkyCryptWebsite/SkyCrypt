@@ -41,7 +41,7 @@ const rarity_order = ['special', 'mythic', 'legendary', 'epic', 'rare', 'uncommo
 
 const petTiers = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic'];
 
-const MAX_SOULS = 209;
+const MAX_SOULS = 220;
 let TALISMAN_COUNT;
 
 function replaceAll(target, search, replacement){
@@ -418,6 +418,15 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                 item.texture_path = `/head/${uuid}?v6`;
             }catch(e){
 
+            }
+        }
+
+        // Uses animated skin texture, if present
+        if (helper.hasPath(item, 'tag', 'ExtraAttributes', 'skin')) {
+            switch (item.tag.ExtraAttributes.skin) {
+                case "SNOW_SNOWGLOBE":
+                    item.texture_path = `/resources/img/items/snow_snowglobe.gif?v6`
+                    break;
             }
         }
 
@@ -835,6 +844,7 @@ module.exports = {
         for(const minion of minions){
             minion.levels = _.uniq(minion.levels.sort((a, b) => a - b));
             minion.maxLevel = minion.levels.length > 0 ? Math.max(...minion.levels) : 0;
+            minion.tiers = minion.tiers != null ? minion.tiers : 11;
 
             if(!('name' in minion))
                 minion.name = _.startCase(_.toLower(minion.id));
@@ -2032,8 +2042,13 @@ module.exports = {
 
             pet.rarity = pet.tier.toLowerCase();
 
-            if(pet.heldItem == 'PET_ITEM_TIER_BOOST' || pet.heldItem == 'PET_ITEM_VAMPIRE_FANG')
+            if (
+                pet.heldItem == 'PET_ITEM_TIER_BOOST' ||
+                pet.heldItem == 'PET_ITEM_VAMPIRE_FANG' ||
+                pet.heldItem == 'PET_ITEM_TOY_JERRY'
+            ) {
                 pet.rarity = petTiers[Math.min(petTiers.length - 1, petTiers.indexOf(pet.rarity) + 1)];
+            }
 
             pet.level = getPetLevel(pet);
             pet.stats = {};
@@ -2154,8 +2169,11 @@ module.exports = {
                     });
                 });
                 // now we push the lore of the held items
-                if(heldItemObj)
+                if(heldItemObj) {
                     lore.push('', `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
+                } else {
+                    lore.push('', `§6Held Item: §${constants.tier_colors[constants.pet_items[heldItem].tier.toLowerCase()]}${constants.pet_items[heldItem].name}`);
+                }
 
                 if(heldItem in constants.pet_items){
                     lore.push(constants.pet_items[heldItem].description);

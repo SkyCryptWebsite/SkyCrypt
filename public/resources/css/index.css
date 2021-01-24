@@ -1,12 +1,12 @@
 :root{
     /* Icon Green (used for Skill Icons, Underlines etc.) */
-    --icon-hex: #0BCA51; --icon-rgb: 11, 202, 81; 
+    --icon-hex: #0BCA51; --icon-rgb: 11, 202, 81;
 
     /* Line Green (used for Navigation Bar) */
     --line-hex: #0BDA51; --line-rgb: 11, 218, 81;
 
     /* Link Green (used for Links, Unclaimed Slayers, Crafted Minions etc.) */
-    --link-hex: #0BEA51; --link-rgb: 11, 234, 81; 
+    --link-hex: #0BEA51; --link-rgb: 11, 234, 81;
 
     /* Hover Green (used only for link hovers) */
     --hover-hex: #09EF70;
@@ -18,7 +18,7 @@
     --maxedbar-hex: #CE8F12;
 
     /* Maxed Gold (used for Maxed things etc.) */
-    --maxed-hex: #DD980E; 
+    --maxed-hex: #DD980E;
 
     /* Golden Text (used for Golden Text) */
     --gold-hex: #FDBB3C;
@@ -27,7 +27,7 @@
     --logo-square: url(/resources/img/logo_square.svg);
 
     /* Normal Backgrounds */
-    --bg-png: url(/resources/img/bg.png?v3); 
+    --bg-png: url(/resources/img/bg.png?v3);
     --bg-webp: url(/resources/img/bg.webp?v3);
 
     /* Blurred Backgrounds */
@@ -46,6 +46,10 @@ html{
     font-family: 'Montserrat', sans-serif;
     color: white;
     overflow-x: hidden;
+}
+
+body {
+    margin: 0;
 }
 
 .grecaptcha-badge{
@@ -118,6 +122,16 @@ a:hover{
     color: var(--hover-hex);
 }
 
+#status-bar {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: -100vh;
+    height: 100vh;
+    background-color: #121212;
+    z-index: 1000;
+}
+
 header{
     position: fixed;
     top: 0;
@@ -128,7 +142,9 @@ header{
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 0 8px;
+    padding-top: env(safe-area-inset-top, 0);
+    padding-left: max(8px, env(safe-area-inset-left));
+    padding-right: max(8px, env(safe-area-inset-right));
     background-color: #282828;
     z-index: 1000;
     line-height: 48px;
@@ -171,7 +187,7 @@ header > *{
     vertical-align: top;
     border-radius: 3px;
     height: 20px;
-    width: 32px;    
+    width: 32px;
     flex-shrink: 0;
     cursor: pointer;
     user-select: none;
@@ -571,7 +587,6 @@ header > *{
 
 #wrapper > * {
     max-width: 100%;
-    overflow-x: hidden;
 }
 
 #base_stats_container {
@@ -1116,7 +1131,6 @@ html.no-transform #info_box.opened{
     margin-top: 50px;
     margin-left: 50px;
     margin-bottom: 20px;
-    overflow: visible;
 }
 
 #stats_for_player, #stats_for_profile{
@@ -1246,6 +1260,7 @@ html.no-clip-path #other_players, html.no-clip-path #other_profiles{
 }
 
 .additional-player-stat{
+    all: unset;
     position: relative;
     padding: 0px 12px;
     margin-right: 7px;
@@ -1373,12 +1388,17 @@ a.additional-player-stat:hover{
     user-select: none !important;
 }
 
-.additional-player-stat.svg-icon {    
+.additional-player-stat.svg-icon {
     display: inline-grid;
     place-items: center;
 }
 
 .additional-player-stat.svg-icon svg {
+    width:18px;
+    height:18px
+}
+
+.additional-player-stat.svg-icon.favorite svg {
     width:20px;
     height:20px
 }
@@ -1425,7 +1445,7 @@ a.additional-player-stat:hover{
 
 #basic_stats{
     display: inline-grid;
-    grid-template-areas: 
+    grid-template-areas:
         "base skill"
         "base additional";
     grid-template-columns: 260px auto;
@@ -1439,8 +1459,8 @@ a.additional-player-stat:hover{
     grid-area: additional;
     font-size: 12px;
     font-weight: 600;
+    padding-bottom: 5ex;
     line-height: 1.75;
-    overflow: visible;
 }
 
 .additional-stat{
@@ -1492,6 +1512,7 @@ a.additional-player-stat:hover{
     width: 100%;
     padding-bottom: 6px;
     z-index: 3;
+    overflow-x: auto;
 }
 
 #nav_bar.stuck #nav_bar_background{
@@ -1719,14 +1740,10 @@ a.additional-player-stat:hover{
     padding-left: 30px;
     box-sizing: border-box;
     padding-right: 30px;
-    margin-top: 20px;
-}
-
-.stat-kills{
     margin-top: 25px;
 }
 
-.info-container-wrapper ~ .stat-kills {
+.info-container-wrapper ~ .stat-misc {
     margin-top: 35px !important;
 }
 
@@ -2236,17 +2253,19 @@ a.additional-player-stat:hover{
 
 #inventory_header{
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 6px;
+    left: 5px;
+    right: 5px;
     height: 50px;
+    overflow: hidden;
+    margin-top: 5px;
 }
 
 .inventory-header-line{
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -2px;
+    bottom: 3px;
     height: 2px;
     background-color: var(--icon-hex);
     z-index: 2;
@@ -2256,12 +2275,15 @@ a.additional-player-stat:hover{
     position: relative;
     width: 100%;
     height: 100%;
+    overflow-y: auto;
+    padding-bottom: 4px;
+
 }
 
 #inventory_header .inventory-tab{
     position: relative;
     display: inline-block;
-    height: 100%;
+    height: 90%;
     padding-right: 10px;
     margin-left: 5px;
     font-size: 12px;
@@ -2415,7 +2437,7 @@ a.additional-player-stat:hover{
     font-weight: 600;
 }
 
-.external-app{
+.page-stats .external-app{
     display: block;
     text-decoration: none;
     padding: 15px;
@@ -2426,12 +2448,6 @@ a.additional-player-stat:hover{
     border-radius: 5px;
     margin-top: 5px;
     margin-bottom: 15px;
-    opacity: 0.9;
-    transition: opacity .1s;
-}
-
-.external-app:hover{
-    opacity: 1;
 }
 
 .external-app-name{
@@ -2478,8 +2494,8 @@ a.additional-player-stat:hover{
     overflow: hidden;
 }
 
-.narrow-info-container:not(:first-of-type){
-    margin-left: 20px;
+.narrow-info-container:not(:last-of-type){
+    margin-inline-end: 20px;
 }
 
 .race-containers .narrow-info-container{
@@ -2487,7 +2503,7 @@ a.additional-player-stat:hover{
 }
 
 .stat-slayer .narrow-info-container{
-    min-width: 270px;
+    min-width: 290px;
     padding-bottom: 30px;
 }
 
@@ -2497,7 +2513,7 @@ a.additional-player-stat:hover{
     margin: 10px;
 }
 
-.slayer-containers, .race-containers{
+.slayer-containers {
     white-space: nowrap;
 }
 
@@ -2682,7 +2698,7 @@ a.additional-player-stat:hover{
     line-height: 4px;
 }
 
-.minion-category-header{
+.category-header{
     text-transform: uppercase;
     font-weight: 600;
     font-size: 19px;
@@ -2702,7 +2718,7 @@ a.additional-player-stat:hover{
     color: rgba(255,255,255,0.8);
 }
 
-.minion-category-icon{
+.category-icon{
     width: 32px;
     height: 32px;
     display: inline-block;
@@ -2710,21 +2726,24 @@ a.additional-player-stat:hover{
     vertical-align: middle;
 }
 
-.minion-category-icon .item-icon{
+.category-icon .item-icon{
     transform: scale(0.25);
     transform-origin: top left;
 }
 
-.minion{
+.minion,
+.collection {
     position: relative;
     display: inline-block;
-    height: 40px;
-    padding: 10px;
-    padding-left: 60px;
-    margin-left: 5px;
     margin-bottom: 8px;
+    margin-left: 5px;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 5px;
+}
+
+.minion {
+    padding: 10px;
+    padding-left: 60px;
     line-height: 40px;
 }
 
@@ -2743,11 +2762,11 @@ a.additional-player-stat:hover{
     background-repeat: no-repeat;
 }
 
-.max-minion .stat-name{
+.max-stat .stat-name{
     color: var(--maxed-hex);
 }
 
-.max-minion .stat-value{
+.max-stat .stat-value{
     color: var(--gold-hex);
 }
 
@@ -2764,14 +2783,9 @@ a.additional-player-stat:hover{
     color: var(--link-hex);
 }
 
-.collection{
-    display: inline-block;
+.collection {
     padding: 7px;
     padding-right: 15px;
-    margin-left: 5px;
-    margin-bottom: 8px;
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 5px;
 }
 
 .collection::after{
@@ -2926,39 +2940,78 @@ a.additional-player-stat:hover{
     background-color: transparent;
 }
 
-.stat-kills .narrow-info-container{
+.stat-misc .kills-deaths-container .narrow-info-container{
     padding: 0;
     padding-top: 0;
 }
 
-#enter_player_box_wrapper{
-    position: relative;
+main.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 700px;
     margin: 0 auto;
-    margin-top: calc(50vh - 130px);
-    width: 700px;
-    height: 260px;
+    justify-items: stretch;
+    gap: 20px;
+    padding-top: calc(50vh - 130px);
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+    padding-left: max(20px, env(safe-area-inset-left));
+    padding-right: max(20px, env(safe-area-inset-right));
+}
+
+main.grid > * {
     background: var(--bg_blur-webp) no-repeat center center fixed;
+    background-color: rgba(10, 10, 10, 0.5);
     background-size: cover;
     border-radius: 10px;
-    overflow: hidden;
-    background-color: rgb(10,10,10);
+}
+
+main.grid > a :not(img),
+.external-app :not(img) {
+    opacity: 0.85;
+    transition: opacity .15s ease-in-out;
+}
+
+main.grid > a:hover :not(img),
+main.grid > a:focus :not(img),
+.external-app:hover :not(img),
+.external-app:focus :not(img) {
+    opacity: 1;
 }
 
 @supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
-    #enter_player_box_wrapper{
+    main.grid > * {
         background: none;
         -webkit-backdrop-filter: blur(16px) brightness(0.5);
         backdrop-filter: blur(16px) brightness(0.5);
     }
+
+    main.grid > a,
+    .external-app {
+        transform: scale(1);
+        transition: transform .15s ease-in-out;
+    }
+
+    main.grid > a:hover,
+    main.grid > a:focus,
+    .external-app:hover,
+    .external-app:focus {
+        transform: scale(1.01);
+    }
 }
 
-#enter_player_box_wrapper p:last-child{
+#enter_player_box {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 25px;
+    padding: 25px 0;
+}
+
+#enter_player_box p:last-child {
     font-size: 16px;
     color: rgba(255,255,255,0.8);
-}
-
-#enter_player_box{
-    text-align: center;
+    margin: 0;
 }
 
 #enter_player_box p{
@@ -2966,6 +3019,7 @@ a.additional-player-stat:hover{
     text-align: center;
     font-size: 30px;
     font-weight: 600;
+    margin: 5px;
 }
 
 #enter_player_box input{
@@ -2981,14 +3035,6 @@ a.additional-player-stat:hover{
     font-weight: normal;
 }
 
-#enter_player_box{
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-}
-
 #goto_target_username{
     text-align: right;
     display: inline-block;
@@ -3000,73 +3046,41 @@ a.additional-player-stat:hover{
     text-transform: uppercase;
     font-weight: bold;
     text-decoration: none;
-    margin-top: 20px;
-    transition: background-color .2s;
+    transition: background-color .15s;
     border-radius: 999px;
     text-shadow: 0px 0px 3px rgba(0,0,0,.5);
 }
 
-#goto_target_username:hover{
+#goto_target_username:hover,
+#goto_target_username:focus {
     background-color: var(--link-hex);
 }
 
 #error_box_wrapper{
     position: relative;
-    margin: 0 auto;
-    margin-top: 20px;
-    width: 700px;
-    background: var(--bg_blur-webp) no-repeat center center fixed;
-    background-size: cover;
-    border-radius: 10px;
+    grid-column: 1 / -1;
     overflow: hidden;
     display: none;
 }
 
-@supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
-    #error_box_wrapper{
-        background: none;
-        -webkit-backdrop-filter: blur(16px) brightness(0.5);
-        backdrop-filter: blur(16px) brightness(0.5);
-    }
+.form-banner {
+    position: relative;
+    grid-column: 1 / -1;
+    padding: 20px 20px 20px 90px;
+    text-decoration: none;
+    margin: 0;
+    max-width: unset;
 }
 
-#top_profiles_box_wrapper{
-    position: relative;
-    margin: 0 auto;
-    margin-top: 20px;
-    width: 700px;
-    overflow: hidden;
-    display: flex;
-    justify-content: space-between;
-    align-content: space-between;
-    flex-wrap: wrap;
+.form-banner .external-app-icon {
+    width: 90px;
 }
 
 .top-profile{
     position: relative;
     display: inline-block;
-    background: var(--bg_blur-webp) no-repeat center center fixed;
-    background-size: cover;
-    width: calc(100% / 2 - 10px);
-    margin-bottom: 20px;
-    border-radius: 10px;
     padding: 20px;
-    box-sizing: border-box;
     text-decoration: none;
-    opacity: 0.9;
-    transition: opacity .2s;
-}
-
-@supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
-    .top-profile {
-        background: none;
-        -webkit-backdrop-filter: blur(16px) brightness(0.5);
-        backdrop-filter: blur(16px) brightness(0.5);
-    }
-}
-
-.top-profile:hover{
-    opacity: 1;
 }
 
 .profile-avatar{
@@ -3111,9 +3125,10 @@ a.additional-player-stat:hover{
 
 .profile-rank{
     position: absolute;
-    bottom: 15px;
-    right: 15px;
-    font-weight: 600;
+    bottom: 10px;
+    right: 10px;
+    height: 20px;
+    width: 20px;
     color: rgba(255,255,255,0.6);
 }
 
@@ -3297,7 +3312,7 @@ body {
     }
 
     #basic_stats {
-        grid-template-areas: 
+        grid-template-areas:
             "skin base skill"
             "skin base additional";
         grid-template-columns: 150px 260px auto;
@@ -3315,11 +3330,7 @@ body {
 
     .skill {
         width: calc((1120px - 410px) / 2 - 60px);
-    }
-
-    .external-app{
-        margin-left: -10px;
-        margin-right: -10px;
+        max-width: 100%;
     }
 
     #skin_display{
@@ -3328,6 +3339,15 @@ body {
 
     #skin_display_mobile{
         display: initial;
+    }
+
+    .slayer-drop .stat-name {
+        max-width: calc(100% - 95px);
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: middle;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
 
@@ -3420,12 +3440,12 @@ body {
     }
 
     #basic_stats {
-        grid-template-areas: 
+        grid-template-areas:
             "skin base"
             "skin additional"
             ". ."
             "skill skill ";
-        grid-template-columns: minmax(100px, 250px)  minmax(225px, 1fr);
+        grid-template-columns: minmax(100px, 250px)  minmax(220px, 1fr);
         grid-template-rows: auto auto 30px auto;
         padding: 0;
         background-color: transparent;
@@ -3438,7 +3458,6 @@ body {
 
     #additional_stats_container,
     #base_stats_container{
-        padding-bottom: 5ex;
         text-align: left;
     }
 
@@ -3512,6 +3531,7 @@ body {
     #inventory_header{
         height: 50px;
         padding-top: 5px;
+        top: 0;
     }
 
     #inventory_header .inventory-tab{
@@ -3544,58 +3564,62 @@ body {
         margin-top: 45px;
     }
 
-    .stat-kills .narrow-info-container{
-        min-width: 0;
-        width: calc(100vw / 2 - 85px);
-    }
-
     .stat-slayer .narrow-info-container{
         width: calc(100vw / 3 - 85px);
     }
 
-    .slayer-containers, .race-containers, .floor-containers{
+    .slayer-containers,
+    .race-containers,
+    .floor-containers {
+        white-space: nowrap;
         overflow-x: auto;
-        margin-left: -40px;
-        margin-right: -40px;
-        padding-left: 40px;
+        margin-left: -30px;
+        margin-right: -30px;
         padding-bottom: 20px;
     }
 
-    .race-containers .narrow-info-container:last-child, .slayer-containers .narrow-info-container:last-child, .floor-containers .narrow-info-container:last-child{
-        margin-right: 40px;
+    .slayer-containers > :first-child,
+    .race-containers > :first-child,
+    .floor-containers > :first-child {
+        margin-inline-start: 30px;
     }
-}
 
-@media (max-width: 900px){
-    #nav_items_container{
-        overflow-x: scroll;
+    .slayer-containers > :last-child,
+    .race-containers > :last-child,
+    .floor-containers > :last-child {
+        margin-inline-end: 30px;
     }
 }
 
 @media (max-width: 800px){
-
-    .slayer-drop .stat-name{
-        max-width: calc(100% - 95px);
-        display: inline-block;
-        overflow: hidden;
-        vertical-align: middle;
-        text-overflow: ellipsis;
+    .stat-misc .kills-deaths-container .narrow-info-container{
+        min-width: auto;
+        width: 100%;
     }
 
     .stat-header{
         padding-left: 30px;
     }
 
-    .collections{
+    .collections,
+    .minions,
+    .sea-creatures {
         white-space: nowrap;
         overflow-x: auto;
-        margin-left: -40px;
-        margin-right: -40px;
-        padding-left: 30px;
+        margin-left: -30px;
+        margin-right: -30px;
     }
 
-    .collection:last-child{
-        margin-right: 30px;
+    .collections > :first-child,
+    .minions > :first-child,
+    .sea-creatures > :first-child {
+        margin-inline-start: 30px;
+    }
+
+    .collections > :last-child,
+    .minions > :last-child,
+    .sea-creatures > :last-child {
+        margin-inline-end: 30px;
     }
 
     .nav-item:not(.active):hover::after{
@@ -3632,28 +3656,12 @@ body {
         white-space: nowrap;
     }
 
-    #inventory_header .inventory-tabs-container{
-        overflow-x: scroll;
-    }
-
     #inventory_header .inventory-tab:last-child{
         margin-right: 20px;
     }
 
-    .sea-creatures{
-        white-space: nowrap;
-        overflow-x: auto;
-        margin-left: -40px;
-        margin-right: -40px;
-        padding-left: 40px;
-    }
-
     .sea-creature-name{
         white-space: break-spaces;
-    }
-
-    .sea-creature:last-child{
-        margin-right: 40px;
     }
 
     .top-deaths{
@@ -3661,17 +3669,16 @@ body {
         margin-top: 25px;
     }
 
-    .stat-kills .narrow-info-container{
+    .stat-misc .kills-deaths-container .narrow-info-container{
         width: calc(100vw - 60px);
         margin-left: 0 !important;
-        margin-top: 20px;
     }
 
     .social-button.patreon {
         padding-left: 26px;
         padding-right: 0;
     }
-    
+
     .social-button.patreon span {
         display: none;
     }
@@ -3679,15 +3686,15 @@ body {
 
 @media (max-width: 745px){
 
-    :not(.page-index) > #themes_button,
-    :not(.page-index) > #packs_button,
+    :not(.page-index) > header #themes_button,
+    :not(.page-index) > header #packs_button,
     #search_user.show-user-search ~ #themes_button,
     #search_user.show-user-search ~ #packs_button {
         padding-right: 3px;
     }
 
-    :not(.page-index) > #themes_button span,
-    :not(.page-index) > #packs_button span,
+    :not(.page-index) > header #themes_button span,
+    :not(.page-index) > header #packs_button span,
     #search_user.show-user-search ~ #themes_button span,
     #search_user.show-user-search ~ #packs_button span {
         transform: scaleX(0);
@@ -3697,11 +3704,7 @@ body {
 }
 
 @media (max-width: 735px){
-    #enter_player_box_wrapper, #error_box_wrapper, #top_profiles_box_wrapper{
-        width: calc(100vw - 30px);
-    }
-
-    #enter_player_box_wrapper{
+    #enter_player_box {
         height: 205px;
         font-size: 12px;
     }
@@ -3718,8 +3721,8 @@ body {
         font-size: 20px;
     }
 
-    .top-profile{
-        width: 100%;
+    main.grid {
+        grid-template-columns: 1fr;
     }
 
     #themes_box{
@@ -3804,6 +3807,18 @@ body {
     .rank-tag .rank-plus{
         padding-right: 5px;
     }
+
+    .slayer-containers,
+    .race-containers,
+    .floor-containers {
+        scroll-snap-type: x proximity;
+    }
+
+    .slayer-containers > *,
+    .race-containers > *,
+    .floor-containers > * {
+        scroll-snap-align: center;
+    }
 }
 
 @media (max-width: 480px){
@@ -3812,8 +3827,12 @@ body {
         display: none;
     }
 
-    .page-index {
+    .page-index header{
         justify-content: center;
+    }
+
+    .page-index #search_user{
+        display: none;
     }
 
     #show_skills{
@@ -3885,6 +3904,17 @@ body {
         min-width: 100vw;
         min-height: 100vh;
     }
+
+    .slayer-containers,
+    .race-containers,
+    .floor-containers {
+        scroll-snap-type: x mandatory;
+    }
+
+    .slayer-containers > *,
+    .race-containers > * {
+        scroll-snap-stop: always;
+    }
 }
 
 @media (max-width: 400px){
@@ -3945,4 +3975,8 @@ body {
 .inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-last-of-type(8),
 .inventory-view[data-inventory-type=enderchest] .inventory-slot:nth-last-of-type(9) {
     margin-bottom: 1px;
+}
+
+.narrow-info-container.top-deaths {
+    margin-bottom: 15px;
 }

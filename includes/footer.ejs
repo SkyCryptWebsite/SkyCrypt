@@ -2,7 +2,7 @@
 <script src="https://unpkg.com/tippy.js@5"></script>
 <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
 <script src="/resources/js/anime.min.js"></script>
-<script src="/resources/js/skinview3d.bundle.js"></script>
+<script src="/resources/js/skinview3d.bundle.js?v2"></script>
 <script src="/resources/js/modernizr.js"></script>
 <script async src="https://arc.io/widget.min.js#oNMq8LVU"></script>
 
@@ -17,7 +17,7 @@
         document.cookie = name + "=" + (value || "")  + expires + "; SameSite=Lax; path=/";
     }
 
-    function eraseCookie(name) {   
+    function eraseCookie(name) {
         document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }
 
@@ -72,6 +72,13 @@
         loadTheme(theme);
     }
 
+    window.addEventListener('storage', (event) => {
+        if (event.key === 'currentTheme') {
+            setInUseThemeButton(event.newValue);
+            loadTheme(event.newValue);
+        }
+    });
+
     setInUseThemeButton(localStorage.getItem("currentTheme"));
     function setInUseThemeButton(theme) {
         if(!extra.themes[theme]) return console.error(`Theme ${theme} doesn't exist.`);
@@ -84,7 +91,7 @@
             currentlySelected.textContent = "Switch";
             currentlySelected.classList.add('switch_themes_button');
             currentlySelected.classList.remove('selected_button');
-        } 
+        }
 
         let toBeSelected = document.querySelector(`#${theme}-theme`);
         toBeSelected.disabled = true;
@@ -111,7 +118,9 @@
     if(!Modernizr.testAllProps('transform', 'translateY(10px)'))
         document.documentElement.classList.add('no-transform');
 
-    tippy('*[data-tippy-content]');
+    tippy('*[data-tippy-content]', {
+        boundary: 'window'
+    });
 
     const prideFlag = document.querySelector('.pride-flag');
     const prideFlags = ["rainbow", "trans", "lesbian", "bi", "pan", "nb", "ace", "genderfluid", "logo"];
@@ -132,9 +141,22 @@
         localStorage.setItem('currentFlag', currentFlag);
         prideFlag.className = 'pride-flag ' + prideFlags[currentFlag];
     });
+
+    window.addEventListener('load', (event) => {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js', {scope: '/'})
+            .then((reg) => {
+                // registration worked
+                console.log('Registration succeeded. Scope is ' + reg.scope);
+            }).catch((error) => {
+                // registration failed
+                console.log('Registration failed with ' + error);
+            });
+        }
+    });
 </script>
 <% if(page == 'stats'){ %>
-    <script src="/resources/js/stats.js?v68"></script>
+    <script src="/resources/js/stats.js?v72"></script>
 <% } %>
 
 <% if(page == 'api'){ %>
