@@ -513,6 +513,11 @@ module.exports = {
                 head: "/head/d8552ff591042c4a38f8ba0626784ae28c4545a97d423fd9037c341035593273",
                 release: 1560284720000,
             },
+            "SILVERFISH_FOSSILIZED": {
+                name: "Fossilized",
+                head: "/head/ca3a363368ed1e06cee3900717f062e02ec39aee1747675392255b48f7f83600",
+                release: 1611334800000,
+            },
         },
         "ELEPHANT": {
             "ELEPHANT_PINK": {
