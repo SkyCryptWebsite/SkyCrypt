@@ -471,7 +471,7 @@ class MithrilGolem extends Pet {
 		let mult = 1;
 		return {
 			name: "§6Mithril Affinity",
-			desc: [`§7Gain +§a${round(this.level * mult, 1)} §6${symbols.mining_speed} Mining Speed §7when mining §Mithril`]
+			desc: [`§7Gain +§a${round(this.level * mult, 1)} §6${symbols.mining_speed} Mining Speed §7when mining §eMithril`]
 		};
 	}
 
