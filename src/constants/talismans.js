@@ -228,6 +228,18 @@ module.exports = {
         JERRY_TALISMAN_PURPLE: [
             'JERRY_TALISMAN_GOLDEN',
         ],
+        TITANIUM_TALISMAN: [
+            'TITANIUM_RING',
+            'TITANIUM_ARTIFACT',
+            'TITANIUM_RELIC',
+        ],
+        TITANIUM_RING: [
+            'TITANIUM_ARTIFACT',
+            'TITANIUM_RELIC',
+        ],
+        TITANIUM_ARTIFACT: [
+            'TITANIUM_RELIC',
+        ],
     },
 
     talisman_duplicates: {
@@ -644,6 +656,26 @@ module.exports = {
             name: "King Talisman",
             rarity: "common",
             texture: "/head/ba3fe344a6a027b6c66d8541146d4819df36ab91e9fc4df532748a0d76d74b13"
+        },
+        'TITANIUM_TALISMAN': {
+            name: "Titanium Talisman",
+            rarity: "uncommon",
+            texture: "/head/10feda53576c8a6e57466f5dbdb99ea480ed122a09fdd850ed8c2e755f55cac2"
+        },
+        'TITANIUM_RING': {
+            name: "Titanium Ring",
+            rarity: "rare",
+            texture: "/head/2c3edd919c0cc6d9668ffd210e46d2c07fe088c44d85f47d251b4f87481174f5"
+        },
+        'TITANIUM_ARTIFACT': {
+            name: "Titanium Artifact",
+            rarity: "epic",
+            texture: "/head/98ec21d20f1aaf5635f48beda88626403c6385b81673fb7cfa7ff82179c63e39"
+        },
+        'TITANIUM_RELIC': {
+            name: "Titanium Relic",
+            rarity: "legendary",
+            texture: "/head/d2f2405a7b8defddb0b8268bea8f2e12fc09bbc7de12981f85db2a7001ac81eb"
         }
     }
 }
