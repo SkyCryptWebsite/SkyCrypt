@@ -536,7 +536,7 @@ header > * {
     user-select: none;
     -webkit-backdrop-filter: blur(16px) brightness(0.5);
     backdrop-filter: blur(16px) brightness(0.5);
-    & > * {
+    > * {
         max-width: 100%;
     }
 }
@@ -2897,7 +2897,7 @@ main.grid {
     padding-left: max(20px, env(safe-area-inset-left));
     padding-right: max(20px, env(safe-area-inset-right));
 
-    & > * {
+    > * {
         background: var(--bg_blur-webp) no-repeat center center fixed;
         background-color: rgba(10, 10, 10, 0.5);
         background-size: cover;
@@ -3391,7 +3391,7 @@ body {
         padding: 0;
         background-color: transparent;
 
-        & > * {
+        > * {
             text-align: center;
             background-color: rgba(0, 0, 0, 0.3);
         }
@@ -3519,10 +3519,10 @@ body {
         margin-right: -30px;
         padding-bottom: 20px;
 
-        & > :first-child {
+        > :first-child {
             margin-inline-start: 30px;
         }
-        & > :last-child {
+        > :last-child {
             margin-inline-end: 30px;
         }
     }
@@ -3546,10 +3546,10 @@ body {
         margin-left: -30px;
         margin-right: -30px;
 
-        & > :first-child {
+        > :first-child {
             margin-inline-start: 30px;
         }
-        & > :last-child {
+        > :last-child {
             margin-inline-end: 30px;
         }
     }
@@ -3742,7 +3742,7 @@ body {
     .floor-containers {
         scroll-snap-type: x proximity;
 
-        & > * {
+        > * {
             scroll-snap-align: center;
         }
     }
