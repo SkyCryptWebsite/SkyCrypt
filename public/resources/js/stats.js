@@ -74,21 +74,29 @@ document.addEventListener('DOMContentLoaded', function(){
         controls.enableZoom = false;
         controls.enablePan = false;
 
-    	skinViewer.animations.add((player, time) => {
-            const skin = player.skin;
+        /**
+         * the average Z rotation of the arms
+         */
+        const basicArmRotationZ = Math.PI * 0.02;
 
+        /**
+         * the average X rotation of the cape
+         */
+        const basicCapeRotationX = Math.PI * 0.06;
+
+        skinViewer.animations.add((player, time) => {
             // Multiply by animation's natural speed
             time *= 2;
 
             // Arm swing
-            const basicArmRotationZ = Math.PI * 0.02;
-            skin.leftArm.rotation.z = Math.cos(time) * 0.03 + basicArmRotationZ;
-            skin.rightArm.rotation.z = Math.cos(time + Math.PI) * 0.03 - basicArmRotationZ;
+            const armRotation = Math.cos(time) * 0.03 + basicArmRotationZ
+            player.skin.leftArm.rotation.z = armRotation;
+            player.skin.rightArm.rotation.z = armRotation * -1;
 
-            // Always add an angle for cape around the x axis
-            const basicCapeRotationX = Math.PI * 0.06;
+            // Cape wave
             player.cape.rotation.x = Math.sin(time) * 0.01 + basicCapeRotationX;
         });
+
     }
 
     tippyInstance = tippy('.interactive-tooltip', {
