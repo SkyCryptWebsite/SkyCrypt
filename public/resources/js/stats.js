@@ -200,15 +200,14 @@ document.addEventListener('DOMContentLoaded', function(){
     function renderInventory(inventory, type){
         let scrollTop = window.pageYOffset;
 
-        let visibleInventory = document.querySelector('.inventory-view.current-inventory');
+        let visibleInventory = document.querySelector('.inventory-view');
 
         if(visibleInventory){
-            visibleInventory.classList.remove('current-inventory');
             document.querySelector('#inventory_container').removeChild(visibleInventory);
         }
 
         let inventoryView = document.createElement('div');
-        inventoryView.className = 'inventory-view current-inventory processed';
+        inventoryView.className = 'inventory-view processed';
         inventoryView.setAttribute('data-inventory-type', type);
 
         let countSlotsUsed = 0;
