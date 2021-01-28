@@ -2279,10 +2279,13 @@ a.additional-player-stat:hover {
                 }
             }
         }
+
+        + * {
+            margin-top: 50px;
+        }
     }
 
     .inventory-view {
-        margin-top: 50px;
         white-space: nowrap;
         overflow: hidden;
     }
