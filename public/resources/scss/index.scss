@@ -3470,11 +3470,16 @@ body {
         height: 50px;
         padding-top: 5px;
         top: 0;
+        text-align: center;
 
         .inventory-tabs-container .inventory-tab {
             border-radius: 1000px;
             height: 38px;
             margin-left: 10px;
+        }
+
+        .inventory-header-line {
+            bottom: 10px;
         }
     }
 
@@ -3487,14 +3492,6 @@ body {
         padding: 0;
         padding-top: 10px;
         border-radius: 0;
-    }
-
-    #inventory_header {
-        text-align: center;
-    }
-
-    #inventory_header .inventory-header-line {
-        bottom: 10px;
     }
 
     .inventory-view {
