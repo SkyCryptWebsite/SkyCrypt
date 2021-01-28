@@ -84,18 +84,24 @@ document.addEventListener('DOMContentLoaded', function(){
          */
         const basicCapeRotationX = Math.PI * 0.06;
 
-        skinViewer.animations.add((player, time) => {
-            // Multiply by animation's natural speed
-            time *= 2;
+        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            skinViewer.animations.add((player, time) => {
+                // Multiply by animation's natural speed
+                time *= 2;
 
-            // Arm swing
-            const armRotation = Math.cos(time) * 0.03 + basicArmRotationZ
-            player.skin.leftArm.rotation.z = armRotation;
-            player.skin.rightArm.rotation.z = armRotation * -1;
+                // Arm swing
+                const armRotation = Math.cos(time) * 0.03 + basicArmRotationZ
+                player.skin.leftArm.rotation.z = armRotation;
+                player.skin.rightArm.rotation.z = armRotation * -1;
 
-            // Cape wave
-            player.cape.rotation.x = Math.sin(time) * 0.01 + basicCapeRotationX;
-        });
+                // Cape wave
+                player.cape.rotation.x = Math.sin(time) * 0.01 + basicCapeRotationX;
+            });
+        } else {
+            skinViewer.playerObject.skin.leftArm.rotation.z = basicArmRotationZ;
+            skinViewer.playerObject.skin.rightArm.rotation.z = basicArmRotationZ * -1;
+            skinViewer.playerObject.cape.rotation.x = basicCapeRotationX;
+        }
 
     }
 
