@@ -279,11 +279,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
             inventoryView.appendChild(document.createTextNode(" "));
 
-            if((index + 1) % 9 == 0)
-                inventoryView.appendChild(document.createElement("br"));
-
-            if((index + 1) % 27 == 0 && type == 'inventory')
-                inventoryView.appendChild(document.createElement("br"));
+            if ((index + 1) % 27 == 0 && type == 'inventory') {
+                inventoryView.appendChild(document.createElement("hr"));
+            }
         });
 
         inventoryContainer.appendChild(inventoryView);

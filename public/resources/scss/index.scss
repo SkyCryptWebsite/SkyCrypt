@@ -2286,8 +2286,18 @@ a.additional-player-stat:hover {
     }
 
     .inventory-view {
-        white-space: nowrap;
-        overflow: hidden;
+        display: grid;
+        justify-content: center;
+        gap: 6px;
+        padding: 6px;
+
+        grid-template-columns: repeat(9, 70px);
+
+        hr {
+            all: unset;
+            grid-column: 1 / 10;
+            height: 1rem;
+        }
     }
 }
 
@@ -2297,7 +2307,6 @@ a.additional-player-stat:hover {
     display: inline-block;
     position: relative;
     background-color: rgba(255, 255, 255, 0.04);
-    margin: 1px;
     border-radius: 5px;
 }
 
