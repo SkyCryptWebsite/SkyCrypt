@@ -32,7 +32,8 @@ const symbols = {
 	true_defense: "❂",
 	ferocity: "⫽",
 	ability_damage: "✹",
-	mining_speed: "↑"
+	mining_speed: "↑",
+    fortune: "☘",
 }
 
 class Pet {
@@ -245,7 +246,7 @@ class Elephant extends Pet {
 		let mult = 0.5;
 		return {
 			name: "§6Trunk Efficiency",
-			desc: [`§7Grants a §a${round(this.level * mult, 1)}% §7chance to get double crops while farming`]
+			desc: [`§7Grants §a+${round(this.level * mult, 1)} §6${symbols.fortune} Farming Fortune§7, which increases your chance for multiple drops`]
 		};
 	}
 
@@ -256,6 +257,9 @@ class Elephant extends Pet {
 			let mult = 0.01;
 			stats['health'] += round(this.level * mult * stats['defense'] / 10, 1);
 		}
+        if (this.rarity > 3) {
+            stats['farming fortune'] += round(this.level * 0.5)
+        }
 	}
 }
 
@@ -1870,7 +1874,7 @@ class Monkey extends Pet {
 		let mult = this.rarity > 2 ? 0.6 : this.rarity > 0 ? 0.5 : 0.4;
 		return {
 			name: "§6Treeborn",
-			desc: [`§7Increase double drop rates for logs by §a${round(this.level * mult, 1)}%`]
+			desc: [`§7Grants §a+${round(this.level * mult, 1)} §6${symbols.fortune} Foraging Fortune§7, which increases your chance at double logs`]
 		};
 	}
 
@@ -1888,6 +1892,13 @@ class Monkey extends Pet {
 			name: "§6Evolved Axes",
 			desc: [`§7Reduce the cooldown of Jungle Axe and Treecapitator by §a${round(this.level * mult, 1)}%`]
 		};
+	}
+
+	modifyStats(stats) {
+		let mult = this.rarity > 2 ? 0.6 : this.rarity > 0 ? 0.5 : 0.4;
+        if (this.rarity > 3) {
+            stats['foraging fortune'] += round(this.level * fmult)
+        }
 	}
 }
 
