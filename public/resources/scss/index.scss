@@ -577,7 +577,7 @@ header > * {
 
     &.maxed-skill {
         --icon-hex: var(--maxed-hex);
-        --skillbar-hex: var(-maxedbar-hex);
+        --skillbar-hex: var(--maxedbar-hex);
     }
 
     .skill-icon {
