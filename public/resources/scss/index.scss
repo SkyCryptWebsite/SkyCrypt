@@ -2296,7 +2296,7 @@ a.additional-player-stat:hover {
         hr {
             all: unset;
             grid-column: 1 / 10;
-            height: 1rem;
+            height: 10px;
         }
     }
 }
@@ -3883,30 +3883,6 @@ body {
     #wrapper {
         background-color: rgb(20, 20, 20);
     }
-}
-
-/* Adding some extra margin between enderchest pages */
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-8),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-7),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-6),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-5),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-4),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-3),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-2),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-1),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n) {
-    margin-bottom: 1rem;
-}
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(1),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(2),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(3),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(4),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(5),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(6),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(7),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(8),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(9) {
-    margin-bottom: 1px;
 }
 
 .narrow-info-container.top-deaths {

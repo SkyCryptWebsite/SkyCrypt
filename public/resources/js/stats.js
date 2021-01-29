@@ -218,10 +218,12 @@ document.addEventListener('DOMContentLoaded', function(){
         });
 
         countSlotsUsed = Math.max(countSlotsUsed, 9);
+        let pagesize = 5 * 9;
 
         switch(type){
             case 'inventory':
                 inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
+                pagesize = 3 * 9;
                 break;
             case 'enderchest':
             case 'personal_vault':
@@ -279,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             inventoryView.appendChild(document.createTextNode(" "));
 
-            if ((index + 1) % 27 == 0 && type == 'inventory') {
+            if ((index + 1) % pagesize == 0) {
                 inventoryView.appendChild(document.createElement("hr"));
             }
         });
