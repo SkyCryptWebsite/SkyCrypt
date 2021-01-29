@@ -1897,7 +1897,7 @@ class Monkey extends Pet {
 	modifyStats(stats) {
 		let mult = this.rarity > 2 ? 0.6 : this.rarity > 0 ? 0.5 : 0.4;
         if (this.rarity > 3) {
-            stats['foraging fortune'] += round(this.level * fmult)
+            stats['foraging fortune'] += round(this.level * mult)
         }
 	}
 }
