@@ -2288,26 +2288,26 @@ a.additional-player-stat:hover {
     .inventory-view {
         display: grid;
         justify-content: center;
-        gap: 6px;
-        padding: 6px;
+        --inventory-width: clamp(300px, calc(100vw - 40px), 700px);
+        gap: calc(var(--inventory-width) * 0.01);
+        padding: calc(var(--inventory-width) * 0.01);
 
-        grid-template-columns: repeat(9, 70px);
+        grid-template-columns: repeat(9, auto);
+
+        .inventory-slot {
+            width: calc(var(--inventory-width) * 0.1);
+            height: calc(var(--inventory-width) * 0.1);
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.04);
+            border-radius: 5px;
+        }
 
         hr {
             all: unset;
             grid-column: 1 / 10;
-            height: 10px;
+            height: calc(var(--inventory-width) * 0.02);
         }
     }
-}
-
-.inventory-slot {
-    width: 70px;
-    height: 70px;
-    display: inline-block;
-    position: relative;
-    background-color: rgba(255, 255, 255, 0.04);
-    border-radius: 5px;
 }
 
 .backpack-contents {
@@ -3568,23 +3568,6 @@ body {
         margin-left: 0;
     }
 
-    .inventory-slot {
-        width: calc(100vw / 9 - 15px);
-        height: calc(100vw / 9 - 15px);
-        display: inline-block;
-        position: relative;
-        margin: 0;
-        background-color: rgba(255, 255, 255, 0.04);
-
-        .piece-icon {
-            transform: translate(-50%, -50%) scale(0.25);
-        }
-
-        .enchanted-overlay {
-            transform: translate(-50%, -50%) scale(0.25);
-        }
-    }
-
     .inventory-item .item-count {
         font-size: 4vw;
     }
@@ -3671,6 +3654,11 @@ body {
         right: 0;
         max-height: calc(100vh - 45px);
     }
+
+    .inventory-slot .piece-icon,
+    .inventory-slot .enchanted-overlay {
+        transform: translate(-50%, -50%) scale(0.333333);
+    }
 }
 
 @media (max-width: 600px) {
@@ -3740,6 +3728,11 @@ body {
         .rank-plus {
             padding-right: 5px;
         }
+    }
+
+    .inventory-slot .piece-icon,
+    .inventory-slot .enchanted-overlay {
+        transform: translate(-50%, -50%) scale(0.25);
     }
 
     .slayer-containers,
@@ -3822,15 +3815,6 @@ body {
         .item-name {
             padding-right: 60px;
         }
-    }
-
-    .inventory-slot {
-        width: calc(100vw / 9 - 5px);
-        height: calc(100vw / 9 - 5px);
-        display: inline-block;
-        position: relative;
-        background-color: rgba(255, 255, 255, 0.04);
-        margin: 0;
     }
 
     html {
