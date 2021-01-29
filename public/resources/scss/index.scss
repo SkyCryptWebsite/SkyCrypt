@@ -3504,11 +3504,10 @@ body {
         padding: 0;
         padding-top: 10px;
         border-radius: 0;
-    }
 
-    #inventory_container .inventory-view {
-        text-align: center;
-        margin-top: 45px;
+        #inventory_header + * {
+            margin-top: 45px;
+        }
     }
 
     .stat-slayer .narrow-info-container {
