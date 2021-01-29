@@ -210,27 +210,11 @@ document.addEventListener('DOMContentLoaded', function(){
         inventoryView.className = 'inventory-view processed';
         inventoryView.setAttribute('data-inventory-type', type);
 
-        let countSlotsUsed = 0;
-
-        inventory.forEach(function(item){
-            if(Object.keys(item).length > 2)
-                countSlotsUsed++;
-        });
-
-        countSlotsUsed = Math.max(countSlotsUsed, 9);
         let pagesize = 5 * 9;
 
-        switch(type){
-            case 'inventory':
-                inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
-                pagesize = 3 * 9;
-                break;
-            case 'enderchest':
-            case 'personal_vault':
-                break;
-            default:
-                if(type in calculated.bag_sizes)
-                    inventory = inventory.slice(0, Math.max(countSlotsUsed - 1, calculated.bag_sizes[type]));
+        if (type === 'inventory') {
+            inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
+            pagesize = 3 * 9;
         }
 
         inventory.forEach(function(item, index){
