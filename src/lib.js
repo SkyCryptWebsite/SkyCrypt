@@ -1582,7 +1582,7 @@ module.exports = {
             output.stats[stat] += output.pet_bonus[stat];
 
         // Apply pet bonus to armor
-        if(activePet && Date.now() - userProfile.last_save >= 7 * 60 * 1 /* change to 1000 - its one for testing; 7 minutes*/) {
+        if(activePet && Date.now() - userProfile.last_save >= 7 * 60 * 1000 /* change to 1000 - its one for testing; 7 minutes*/) {
             // We know they are not online so apply pets to armor
             activePet.ref.modifyArmor(items.armor[3], getId(items.armor[3]),
                                     items.armor[2], getId(items.armor[2]),
