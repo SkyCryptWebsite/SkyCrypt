@@ -562,6 +562,13 @@ module.exports = {
                 release: 1610557200000,
             },
         },
+        "SKELETON_HORSE": {
+            "HORSE_ZOMBIE": {
+                name: "Zombie",
+                head: "/head/578211e1b4d99d1c7bfda4838e48fc884c3eae376f58d932bc2f78b0a919f8e7",
+                release: 1611939600000,
+            },
+        },
     },
 
     pet_value: {

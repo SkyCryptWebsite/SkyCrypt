@@ -2062,6 +2062,7 @@ module.exports = {
             const enchanting_data = userProfile.experimentation;
 
             for(const game in constants.experiments.games){
+                if(enchanting_data[game] == null) continue;
                 if(!Object.keys(enchanting_data[game]).length >= 1)
                     continue;
 
@@ -2110,6 +2111,9 @@ module.exports = {
 
                 enchanting.experiments[game] = game_output;
             }
+
+            if(!Object.keys(enchanting.experiments).length >= 1)
+                enchanting.experimented = false;
         }
 
         output.enchanting = enchanting;
