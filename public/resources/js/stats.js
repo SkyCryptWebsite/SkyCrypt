@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function(){
     function renderInventory(inventory, type){
         let scrollTop = window.pageYOffset;
 
-        let visibleInventory = document.querySelector('.inventory-view');
+        let visibleInventory = document.querySelector('.stat-inventory .inventory-view');
 
         if(visibleInventory){
             document.querySelector('#inventory_container').removeChild(visibleInventory);
