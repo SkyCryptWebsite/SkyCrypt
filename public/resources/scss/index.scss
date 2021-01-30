@@ -2321,9 +2321,10 @@ a.additional-player-stat:hover {
     position: relative;
     --inventory-width: 340px;
     margin-bottom: 10px;
+    min-height: 60px;
 
-    &.contains-backpack {
-        min-height: 60px;
+    &:not(.contains-backpack) {
+        display: none;
     }
 
     &:hover .view-backpack {
