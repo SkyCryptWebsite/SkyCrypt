@@ -364,16 +364,6 @@ header > * {
     }
 }
 
-::-webkit-input-placeholder {
-    /* Edge */
-    color: rgba(255, 255, 255, 0.8);
-}
-
-:-ms-input-placeholder {
-    /* Internet Explorer 10-11 */
-    color: rgba(255, 255, 255, 0.8);
-}
-
 ::placeholder {
     color: rgba(255, 255, 255, 0.8);
 }
@@ -577,7 +567,7 @@ header > * {
 
     &.maxed-skill {
         --icon-hex: var(--maxed-hex);
-        --skillbar-hex: var(-maxedbar-hex);
+        --skillbar-hex: var(--maxedbar-hex);
     }
 
     .skill-icon {
