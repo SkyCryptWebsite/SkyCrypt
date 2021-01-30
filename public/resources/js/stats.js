@@ -404,7 +404,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             item.containsItems.forEach((backpackItem, index) => {
                 let inventorySlot = document.createElement('div');
-                inventorySlot.className = 'inventory-slot backpack-slot';
+                inventorySlot.className = 'inventory-slot';
 
                 if(backpackItem.id){
                     let inventoryItemIcon = document.createElement('div');
@@ -438,8 +438,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 backpackContents.appendChild(document.createTextNode(" "));
 
-                if((index + 1) % 9 == 0)
-                    backpackContents.appendChild(document.createElement("br"));
+                if ((index + 1) % 27 == 0) {
+                    inventoryView.appendChild(document.createElement("hr"));
+                }
             });
 
             [].forEach.call(document.querySelectorAll('.contains-backpack .item-icon.is-enchanted'), handleEnchanted);
