@@ -728,8 +728,6 @@ document.addEventListener('DOMContentLoaded', function(){
         canvas.width = size;
         canvas.height = size;
 
-        canvas.className = 'enchanted-overlay';
-
         let ctx = canvas.getContext('2d');
 
         let src = window.getComputedStyle(element).backgroundImage.split('("').pop().split('")')[0];
