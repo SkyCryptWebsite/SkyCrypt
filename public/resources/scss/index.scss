@@ -2273,14 +2273,17 @@ a.additional-player-stat:hover {
     --inventory-width: clamp(300px, calc(100vw - 40px), 700px);
     gap: calc(var(--inventory-width) * 0.01);
     padding: calc(var(--inventory-width) * 0.01);
-    grid-template-columns: repeat(9, auto);
+    grid-template-columns: repeat(9, calc(var(--inventory-width) * 0.1));
 
     .inventory-slot {
-        width: calc(var(--inventory-width) * 0.1);
-        height: calc(var(--inventory-width) * 0.1);
+        aspect-ratio: 1;
         position: relative;
         background-color: rgba(255, 255, 255, 0.04);
         border-radius: 5px;
+
+        @supports not (aspect-ratio: 1) {
+            padding-bottom: 100%;
+        }
 
         .inventory-item {
             width: 100%;
