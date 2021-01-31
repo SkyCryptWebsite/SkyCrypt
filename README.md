@@ -8,7 +8,7 @@ The SkyCrypt Project, which is based on LeaPhant's [sky.lea.moe](https://sky.lea
 ![Node.JS CI](https://github.com/SkyCryptWebsite/SkyCrypt/workflows/Node.js%20CI/badge.svg)  
 <h2 align="center">Screenshot</h1>
 
-<p align="center"><img src="https://i.imgur.com/aa7HCev.png"></p>
+![Screenshot](public/resources/img/screenshot.jpg)
 
 <h2 align="center">Contributing</h1>
 

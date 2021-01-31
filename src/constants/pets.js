@@ -380,6 +380,10 @@ module.exports = {
             head: "/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8",
             type: "combat",
             emoji: "🦅"
+        },
+        "MITHRIL_GOLEM": {
+            head: "/head/c1b2dfe8ed5dffc5b1687bc1c249c39de2d8a6c3d90305c95f6d1a1a330a0b1",
+            type: "mining"
         }
     },
 
@@ -388,118 +392,181 @@ module.exports = {
             "ENDERMAN": {
                 name: "Spooky",
                 head: "/head/ea84cc8818c293484fdaafc8fa2f0bf39e55733a247d68023df2c6c6b9b671d0",
+                release: 1560284720000,
             },
         },
         "GUARDIAN": {
             "GUARDIAN": {
                 name: "Watcher",
                 head: "/head/37cc76e7af29f5f3fbfd6ece794160811eff96f753459fa61d7ad176a064e3c5",
+                release: 1560284720000,
             },
         },
         "TIGER": {
             "TIGER_TWILIGHT": {
                 name: "Twilight",
                 head: "/head/896211dc599368dbd9056c0116ab61063991db793be93066a858eb4e9ce56438",
+                release: 1560284720000,
             },
         },
         "RABBIT": {
             "RABBIT": {
                 name: "Pretty",
                 head: "/head/a34631d940fddb689ddef6a3b352c50220c460dba05cd18dc83192b59dc647f8",
+                release: 1560284720000,
             },
         },
         "WITHER_SKELETON": {
             "WITHER": {
                 name: "Dark",
                 head: "/head/224c2d14a0219af5ccfcaa36e8a333e271724ed61276611f9529e16c10273a0d",
+                release: 1560284720000,
             },
         },
         "ROCK": {
             "ROCK_COOL": {
                 name: "Cool",
                 head: "/head/fefcdbb7d95502acc1ae35a32a40ce4dec8f4c9f0da26c9d9fe7c2c3eb748f6",
+                release: 1560284720000,
             },
             "ROCK_SMILE": {
                 name: "Smile",
                 head: "/head/713c8b2916a275db4c1762cf5f13d7b95b91d60baf5164a447d6efa7704cf11b",
+                release: 1560284720000,
             },
             "ROCK_THINKING": {
                 name: "Thinking",
                 head: "/head/dd2f781f03c365bbc5dd1e7186ab38dc69465e836c9fe066a9a844f34a4da92",
+                release: 1560284720000,
             },
             "ROCK_LAUGH": {
                 name: "Laughing",
                 head: "/head/8cc1ef513d5f616675242174acde7b9d6259a47c4fe8f6e4b6e20920319d7073",
+                release: 1560284720000,
             },
             "ROCK_DERP": {
                 name: "Derp",
                 head: "/head/c4f89fbd12c209f7f26c1f34a1bd7f47635814759c09688dd212b205c73a8c02",
+                release: 1560284720000,
             },
             "ROCK_EMBARRASSED": {
                 name: "Embarrassed",
                 head: "/head/27ff34992e66599e8529008be3fb577cb0ab545294253e25a0cc988e416c849",
+                release: 1560284720000,
             },
         },
         "SHEEP": {
             "SHEEP_WHITE": {
                 name: "White",
                 head: "/head/b92a1a5c325f25f7438a0abb4f86ba6cf75552d02c7349a7292981459b31d2f7",
+                release: 1560284720000,
             },
             "SHEEP_PURPLE": {
                 name: "Purple",
                 head: "/head/99a88cf7dd33063587c6b540e6130abc5d07f1a65c47573ab3c1ad3ccec8857f",
+                release: 1560284720000,
             },
             "SHEEP_BLACK": {
                 name: "Black",
                 head: "/head/aa9dcda642a807cd2daa4aa6be87cef96e08a8c8f5cec2657dda4266c6a884c2",
+                release: 1560284720000,
             },
             "SHEEP_PINK": {
                 name: "Pink",
                 head: "/head/afa7747684dcb96192d90342cea62742ec363da07cb5e6e25eecec888cd2076",
+                release: 1560284720000,
             },
             "SHEEP_LIGHT_BLUE": {
                 name: "Light Blue",
                 head: "/head/722220de1a863bc5d9b9e7a6a3b03214c9f3d698ed3fe0d28220f3b93b7685c5",
+                release: 1560284720000,
             },
             "SHEEP_LIGHT_GREEN": {
                 name: "Light Green",
                 head: "/head/cf183ec2fe58faa43e568419b7a0dc446ece4ea0be52ec784c94e1d74b75939d",
+                release: 1560284720000,
+            },
+            "SHEEP_NEON_YELLOW": {
+                name: "Neon Yellow",
+                head: "/head/94263428c23da9165b2639a8f2428ff4835227945c9e1038461cf644d67cc82a",
+                release: 1560284720000,
+            },
+            "SHEEP_NEON_RED": {
+                name: "Neon Red",
+                head: "/head/4918be142a20b2b39bc582f421f6ae87b3184b5c9523d16fbe6d69530107886a",
+                release: 1560284720000,
+            },
+            "SHEEP_NEON_BLUE": {
+                name: "Neon Blue",
+                head: "/head/e55b3fe9311c99342ea565483cbf9e969a258faf7afa30270fb9a0929377acfd",
+                release: 1560284720000,
+            },
+            "SHEEP_NEON_GREEN": {
+                name: "Neon Green",
+                head: "/head/2c14d66911554bd0882339074bf6b8110c2d3509b69e7a6144e4d5a7164bacc8",
+                release: 1560284720000,
             },
         },
         "SILVERFISH": {
             "SILVERFISH": {
                 name: "Fortified",
                 head: "/head/d8552ff591042c4a38f8ba0626784ae28c4545a97d423fd9037c341035593273",
+                release: 1560284720000,
+            },
+            "SILVERFISH_FOSSILIZED": {
+                name: "Fossilized",
+                head: "/head/ca3a363368ed1e06cee3900717f062e02ec39aee1747675392255b48f7f83600",
+                release: 1611334800000,
             },
         },
         "ELEPHANT": {
             "ELEPHANT_PINK": {
                 name: "Pink",
                 head: "/head/570eef474ec0e56cc34c2307eaa39f024612f8cd7248e7d5b14169ebd307c742",
+                release: 1560284720000,
             },
             "ELEPHANT_BLUE": {
                 name: "Blue",
                 head: "/head/4b62969c005815d0409136380febc5ac468aaba9bda4db80954fa5426ee0a323",
+                release: 1560284720000,
             },
             "ELEPHANT_ORANGE": {
                 name: "Orange",
                 head: "/head/554a34a80c474206d3700b8fced6b44fab0b0ed0b05c1293ff0c5d86eda251d1",
+                release: 1560284720000,
             },
         },
         "JERRY": {
             "JERRY_RED_ELF": {
                 name: "Red Elf",
                 head: "/head/1d82f9c36e824c1e37963a849bf5abd76d3b349125023504af58369086089ee9",
+                release: 1560284720000,
             },
             "JERRY_GREEN_ELF": {
                 name: "Green Elf",
                 head: "/head/4ec5455f43426ca1874b5c7b4a492ec3722a502f8b9599e758e133fed8b3c1e4",
-              },
+                release: 1560284720000,
+            },
         },
         "BABY_YETI": {
             "YETI_GROWN_UP": {
                 name: "Grown-up",
                 head: "/head/f5f29a975529276d916fc67998833c11ee178ff21e5941afdfb0fa7010f8374e",
+                release: 1560284720000,
+            },
+        },
+        "MONKEY": {
+            "MONKEY_GOLDEN": {
+                name: "Golden",
+                head: "/head/e9281c4d87d68526b0749d4361e6ef786c8a35717aa053da704b1d53410d37a6",
+                release: 1610557200000,
+            },
+        },
+        "SKELETON_HORSE": {
+            "HORSE_ZOMBIE": {
+                name: "Zombie",
+                head: "/head/578211e1b4d99d1c7bfda4838e48fc884c3eae376f58d932bc2f78b0a919f8e7",
+                release: 1611939600000,
             },
         },
     },
@@ -542,15 +609,21 @@ module.exports = {
 
     pet_items: {
         PET_ITEM_ALL_SKILLS_BOOST_COMMON: {
+            name: "All Skills Exp Boost",
+            tier: "COMMON",
             description: "§7Gives +§a10% §7pet exp for all skills"
         },
         PET_ITEM_BIG_TEETH_COMMON: {
+            name: "Big Teeth",
+            tier: "COMMON",
             description: `§7Increases §9${symbols.crit_chance} Crit Chance §7by §a5`,
             stats: {
                 crit_chance: 5
             }
         },
         PET_ITEM_IRON_CLAWS_COMMON: {
+            name: "Iron Claws",
+            tier: "COMMON",
             description: `§7Increases the pet's §9${symbols.crit_damage} Crit Damage §7by §a40% §7and §9${symbols.crit_chance} Crit Chance §7by §a40%`,
             multStats: {
                 crit_chance: 1.4,
@@ -558,109 +631,169 @@ module.exports = {
             }
         },
         PET_ITEM_SHARPENED_CLAWS_UNCOMMON: {
+            name: "Sharpened Claws",
+            tier: "UNCOMMON",
             description: `§7Increases §9${symbols.crit_damage} Crit Damage §7by §a15`,
             stats: {
                 crit_damage: 15
             }
         },
         PET_ITEM_HARDENED_SCALES_UNCOMMON: {
+            name: "Hardened Scales",
+            tier: "UNCOMMON",
             description: `§7Increases §a${symbols.defense} Defense §7by §a25`,
             stats: {
                 defense: 25
             }
         },
         PET_ITEM_BUBBLEGUM: {
+            name: "Bubblegum",
+            tier: "RARE",
             description: "§7Your pet fuses its power with placed §aOrbs §7to give them §a2x §7duration"
         },
         PET_ITEM_LUCKY_CLOVER: {
+            name: "Lucky Clover",
+            tier: "EPIC",
             description: `§7Increases §b${symbols.magic_find} Magic Find §7by §a7`,
             stats: {
                 magic_find: 7
             }
         },
         PET_ITEM_TEXTBOOK: {
+            name: "Textbook",
+            tier: "LEGENDARY",
             description: `§7Increases the pet's §b${symbols.intelligence} Intelligence §7by §a100%`,
             multStats: {
                 intelligence: 2
             }
         },
         PET_ITEM_SADDLE: {
+            name: "Saddle",
+            tier: "UNCOMMON",
             description: "§7Increase horse speed by §a50% §7 and jump boost by §a100%"
         },
         PET_ITEM_EXP_SHARE: {
+            name: "Exp Share",
+            tier: "EPIC",
             description: "§7While unequipped this pet gains §a25% §7of the equipped pet's xp, this is §7split between all pets holding the item."
         },
         PET_ITEM_TIER_BOOST: {
+            name: "Tier Boost",
+            tier: "LEGENDARY",
             description: "§7Boosts the §ararity §7of your pet by 1 tier!"
         },
         PET_ITEM_COMBAT_SKILL_BOOST_COMMON: {
+            name: "Combat Exp Boost",
+            tier: "COMMON",
             description: "§7Gives +§a20% §7pet exp for Combat"
         },
         PET_ITEM_COMBAT_SKILL_BOOST_UNCOMMON: {
+            name: "Combat Exp Boost",
+            tier: "UNCOMMON",
             description: "§7Gives +§a30% §7pet exp for Combat"
         },
         PET_ITEM_COMBAT_SKILL_BOOST_RARE: {
+            name: "Combat Exp Boost",
+            tier: "RARE",
             description: "§7Gives +§a40% §7pet exp for Combat"
         },
         PET_ITEM_COMBAT_SKILL_BOOST_EPIC: {
+            name: "Combat Exp Boost",
+            tier: "EPIC",
             description: "§7Gives +§a50% §7pet exp for Combat"
         },
         PET_ITEM_FISHING_SKILL_BOOST_COMMON: {
+            name: "Fishing Exp Boost",
+            tier: "COMMON",
             description: "§7Gives +§a20% §7pet exp for Fishing"
         },
         PET_ITEM_FISHING_SKILL_BOOST_UNCOMMON: {
+            name: "Fishing Exp Boost",
+            tier: "UNCOMMON",
             description: "§7Gives +§a30% §7pet exp for Fishing"
         },
         PET_ITEM_FISHING_SKILL_BOOST_RARE: {
+            name: "Fishing Exp Boost",
+            tier: "RARE",
             description: "§7Gives +§a40% §7pet exp for Fishing"
         },
         PET_ITEM_FISHING_SKILL_BOOST_EPIC: {
+            name: "Fishing Exp Boost",
+            tier: "EPIC",
             description: "§7Gives +§a50% §7pet exp for Fishing"
         },
         PET_ITEM_FORAGING_SKILL_BOOST_COMMON: {
+            name: "Foraging Exp Boost",
+            tier: "COMMON",
             description: "§7Gives +§a20% §7pet exp for Foraging"
         },
         PET_ITEM_FORAGING_SKILL_BOOST_UNCOMMON: {
+            name: "Foraging Exp Boost",
+            tier: "UNCOMMON",
             description: "§7Gives +§a30% §7pet exp for Foraging"
         },
         PET_ITEM_FORAGING_SKILL_BOOST_RARE: {
+            name: "Foraging Exp Boost",
+            tier: "RARE",
             description: "§7Gives +§a40% §7pet exp for Foraging"
         },
         PET_ITEM_FORAGING_SKILL_BOOST_EPIC: {
+            name: "Foraging Exp Boost",
+            tier: "EPIC",
             description: "§7Gives +§a50% §7pet exp for Foraging"
         },
         PET_ITEM_MINING_SKILL_BOOST_COMMON: {
+            name: "Mining Exp Boost",
+            tier: "COMMON",
             description: "§7Gives +§a20% §7pet exp for Mining"
         },
         PET_ITEM_MINING_SKILL_BOOST_UNCOMMON: {
+            name: "Mining Exp Boost",
+            tier: "UNCOMMON",
             description: "§7Gives +§a30% §7pet exp for Mining"
         },
         PET_ITEM_MINING_SKILL_BOOST_RARE: {
+            name: "Mining Exp Boost",
+            tier: "RARE",
             description: "§7Gives +§a40% §7pet exp for Mining"
         },
         PET_ITEM_MINING_SKILL_BOOST_EPIC: {
+            name: "Mining Exp Boost",
+            tier: "EPIC",
             description: "§7Gives +§a50% §7pet exp for Mining"
         },
         PET_ITEM_FARMING_SKILL_BOOST_COMMON: {
+            name: "Farming Exp Boost",
+            tier: "COMMON",
             description: "§7Gives +§a20% §7pet exp for Farming"
         },
         PET_ITEM_FARMING_SKILL_BOOST_UNCOMMON: {
+            name: "Farming Exp Boost",
+            tier: "UNCOMMON",
             description: "§7Gives +§a30% §7pet exp for Farming"
         },
         PET_ITEM_FARMING_SKILL_BOOST_RARE: {
+            name: "Farming Exp Boost",
+            tier: "RARE",
             description: "§7Gives +§a40% §7pet exp for Farming"
         },
         PET_ITEM_FARMING_SKILL_BOOST_EPIC: {
+            name: "Farming Exp Boost",
+            tier: "EPIC",
             description: "§7Gives +§a50% §7pet exp for Farming"
         },
         // new pet items from 0.9 update yay
         REINFORCED_SCALES: {
+            name: "Reinforced Scales",
+            tier: "RARE",
             description: `§7Increases §a${symbols.defense} Defense §7by §a40`,
             stats: {
                 defense: 40
             }
         },
         GOLD_CLAWS: {
+            name: "Gold Claws",
+            tier: "UNCOMMON",
             description: `§7Increases the pet's §9${symbols.crit_damage} Crit Damage §7by §a50% §7and §9${symbols.crit_chance} Crit Chance §7by §a50%`,
             multStats: {
                 crit_chance: 1.5,
@@ -668,45 +801,63 @@ module.exports = {
             }
         },
         ALL_SKILLS_SUPER_BOOST: {
+            name: "All Skills Exp Super-Boost",
+            tier: "COMMON",
             description: "§7Gives +§a20% §7pet exp for all skills"
         },
         BIGGER_TEETH: {
+            name: "Bigger Teeth",
+            tier: "UNCOMMON",
             description: `§7Increases §9${symbols.crit_chance} Crit Chance §7by §a10`,
             stats: {
                 crit_chance: 10
             }
         },
         SERRATED_CLAWS: {
+            name: "Serrated Claws",
+            tier: "RARE",
             description: `§7Increases §9${symbols.crit_damage} Crit Damage §7by §a25`,
             stats: {
                 crit_damage: 25
             }
         },
         WASHED_UP_SOUVENIR: {
+            name: "Washed-up Souvenir",
+            tier: "LEGENDARY",
             description: `§7Increases §3${symbols.sea_creature_chance} Sea Creature Chance §7by §a5`,
             stats: {
                 sea_creature_chance: 5
             }
         },
         ANTIQUE_REMEDIES: {
+            name: "Antique Remedies",
+            tier: "EPIC",
             description: `§7Increases the pet's §c${symbols.strength} Strength §7by §a80%`,
             multStats: {
                 strength: 1.8
             }
         },
         CROCHET_TIGER_PLUSHIE: {
+            name: "Crochet Tiger Plushie",
+            tier: "EPIC",
             description: `§7Increases §e${symbols.attack_speed} Bonus Attack Speed §7by §a35`,
             stats: {
                 bonus_attack_speed: 35
             }
         },
         DWARF_TURTLE_SHELMET: {
+            name: "Dwarf Turtle Shelmet",
+            tier: "RARE",
             description: `§7Makes the pet's owner immune to knockback.`
         },
         PET_ITEM_VAMPIRE_FANG: {
+            name: "Vampire Fang",
+            tier: "LEGENDARY",
             description: "§7Upgrades a Bat pet from §6Legendary §7to §dMythic §7adding a bonus perk and bonus stats!"
         },
         PET_ITEM_SPOOKY_CUPCAKE: {
+            name: "Spooky Cupcake",
+            tier: "UNCOMMON",
             description: `§7Increases §c${symbols.strength} Strength §7by §a30 §7and §f${symbols.speed} Speed §7by §a20`,
             stats: {
                 strength: 30,
@@ -714,8 +865,15 @@ module.exports = {
             }
         },
         MINOS_RELIC: {
+            name: "Minos Relic",
+            tier: "EPIC",
             description: `§7Increases all pet stats by §a33.3%`,
             multAllStats: 1.333,
+        },
+        PET_ITEM_TOY_JERRY: {
+            name: "Jerry 3D Glasses",
+            tier: "LEGENDARY",
+            description: "§7Upgrades a Jerry pet from §6Legendary §7to §dMythic §7and granting it a new perk!"
         },
     }
 }

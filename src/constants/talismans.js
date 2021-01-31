@@ -180,7 +180,6 @@ module.exports = {
         WITHER_ARTIFACT: [
             'WITHER_RELIC'
         ],
-
         WEDDING_RING_0: [
             'WEDDING_RING_2',
             'WEDDING_RING_4',
@@ -199,7 +198,6 @@ module.exports = {
         WEDDING_RING_7: [
             'WEDDING_RING_9'
         ],
-
         CAMPFIRE_TALISMAN_1: [
             'CAMPFIRE_TALISMAN_4',
             'CAMPFIRE_TALISMAN_8',
@@ -217,7 +215,31 @@ module.exports = {
         ],
         CAMPFIRE_TALISMAN_13: [
             'CAMPFIRE_TALISMAN_21'
-        ]
+        ],
+        JERRY_TALISMAN_GREEN: [
+            'JERRY_TALISMAN_BLUE',
+            'JERRY_TALISMAN_PURPLE',
+            'JERRY_TALISMAN_GOLDEN',
+        ],
+        JERRY_TALISMAN_BLUE: [
+            'JERRY_TALISMAN_PURPLE',
+            'JERRY_TALISMAN_GOLDEN',
+        ],
+        JERRY_TALISMAN_PURPLE: [
+            'JERRY_TALISMAN_GOLDEN',
+        ],
+        TITANIUM_TALISMAN: [
+            'TITANIUM_RING',
+            'TITANIUM_ARTIFACT',
+            'TITANIUM_RELIC',
+        ],
+        TITANIUM_RING: [
+            'TITANIUM_ARTIFACT',
+            'TITANIUM_RELIC',
+        ],
+        TITANIUM_ARTIFACT: [
+            'TITANIUM_RELIC',
+        ],
     },
 
     talisman_duplicates: {
@@ -609,6 +631,51 @@ module.exports = {
             name: "Auto Recombobulator",
             rarity: "legendary",
             texture: "/head/5dff8dbbab15bfbb11e23b1f50b34ef548ad9832c0bd7f5a13791adad0057e1b"
+        },
+        'JERRY_TALISMAN_GOLDEN': {
+            name: "Golden Jerry Artifact",
+            rarity: "legendary",
+            texture: "/head/29251e18657e7304eaceac5f8d446d248ea46af2eab145f8185cece779f1648"
+        },
+        'JERRY_TALISMAN_PURPLE': {
+            name: "Purple Jerry Talisman",
+            rarity: "epic",
+            texture: "/head/ff8bd61b60a425d2e0deb1df9665327750ceba822a0be85e2f4a3a722e20f7d6"
+        },
+        'JERRY_TALISMAN_BLUE': {
+            name: "Blue Jerry Talisman",
+            rarity: "rare",
+            texture: "/head/d3b919f040922eb17733b42d216b7cdefeaea366be14c1ae6993ca7e5909e0f0"
+        },
+        'JERRY_TALISMAN_GREEN': {
+            name: "Green Jerry Talisman",
+            rarity: "uncommon",
+            texture: "/head/2567251d71b6f3a4dc03fa01e441de7edf9354794e74aec16c04f141ddf31c70"
+        },
+        'KING_TALISMAN': {
+            name: "King Talisman",
+            rarity: "common",
+            texture: "/head/ba3fe344a6a027b6c66d8541146d4819df36ab91e9fc4df532748a0d76d74b13"
+        },
+        'TITANIUM_TALISMAN': {
+            name: "Titanium Talisman",
+            rarity: "uncommon",
+            texture: "/head/10feda53576c8a6e57466f5dbdb99ea480ed122a09fdd850ed8c2e755f55cac2"
+        },
+        'TITANIUM_RING': {
+            name: "Titanium Ring",
+            rarity: "rare",
+            texture: "/head/2c3edd919c0cc6d9668ffd210e46d2c07fe088c44d85f47d251b4f87481174f5"
+        },
+        'TITANIUM_ARTIFACT': {
+            name: "Titanium Artifact",
+            rarity: "epic",
+            texture: "/head/98ec21d20f1aaf5635f48beda88626403c6385b81673fb7cfa7ff82179c63e39"
+        },
+        'TITANIUM_RELIC': {
+            name: "Titanium Relic",
+            rarity: "legendary",
+            texture: "/head/d2f2405a7b8defddb0b8268bea8f2e12fc09bbc7de12981f85db2a7001ac81eb"
         }
     }
 }

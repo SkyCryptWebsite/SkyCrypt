@@ -195,7 +195,11 @@ module.exports = {
         magic_find: 10,
         pet_luck: 0,
         ferocity: 0,
-        ability_damage: 0
+        ability_damage: 0,
+        mining_speed: 0,
+        mining_fortune: 0,
+        farming_fortune: 0,
+        foraging_fortune: 0
     },
 
     stat_template: {
@@ -214,7 +218,11 @@ module.exports = {
         magic_find: 0,
         pet_luck: 0,
         ferocity: 0,
-        ability_damage: 0
+        ability_damage: 0,
+        mining_speed: 0,
+        mining_fortune: 0,
+        farming_fortune: 0,
+        foraging_fortune: 0
     },
 
     slayer_cost: {
@@ -251,6 +259,7 @@ module.exports = {
         hub: "Hub",
         mining_1: "Gold Mine",
         mining_2: "Deep Caverns",
+        mining_3: "Dwarven Mines",
         combat_1: "Spider's Den",
         combat_2: "Blazing Fortress",
         combat_3: "The End",
@@ -299,6 +308,10 @@ module.exports = {
                 {
                     tier: 15,
                     slots: 51
+                },
+                {
+                    tier: 16,
+                    slots: 57
                 }
             ]
         },
@@ -599,5 +612,84 @@ module.exports = {
         'NONE': null
     },
 
+    farming_crops: {
+        'INK_SACK:3': {
+            name: 'Cocoa Beans',
+            icon: '351_3'
+        },
+        'POTATO_ITEM': {
+            name: 'Potato',
+            icon: '392_0'
+        },
+        'CARROT_ITEM': {
+            name: 'Carrot',
+            icon: '391_0'
+        },
+        'CACTUS': {
+            name: 'Cactus',
+            icon: '81_0'
+        },
+        'SUGAR_CANE': {
+            name: 'Sugar Cane',
+            icon: '338_0'
+        },
+        'MUSHROOM_COLLECTION': {
+            name: 'Mushroom',
+            icon: '40_0'
+        },
+        'PUMPKIN': {
+            name: 'Pumpkin',
+            icon: '86_0'
+        },
+        'NETHER_STALK': {
+            name: 'Nether Wart',
+            icon: '372_0'
+        },
+        'WHEAT': {
+            name: 'Wheat',
+            icon: '296_0'
+        },
+        'MELON': {
+            name: 'Melon',
+            icon: '360_0'
+        }
+    },
+
+    experiments: {
+        games: {
+            simon: {
+                name: "Chronomatron"
+            },
+            numbers: {
+                name: "Ultrasequencer"
+            },
+            pairings: {
+                name: "Superpairs"
+            }
+        },
+        tiers: [
+            {
+                name: "Beginner",
+                icon: "351:12"
+            }, {
+                name: "High",
+                icon: "351:10"
+            }, {
+                name: "Grand",
+                icon: "351:11"
+            }, {
+                name: "Supreme",
+                icon: "351:14"
+            }, {
+                name: "Transcendent",
+                icon: "351:1"
+            }, {
+                name: "Metaphysical",
+                icon: "351:13"
+            }
+        ]
+    },
+
     max_favorites: 5
+
 };
