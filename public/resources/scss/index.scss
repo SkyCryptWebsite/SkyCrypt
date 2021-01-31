@@ -51,18 +51,18 @@
 
     /* Blurred Background */
     --bg_blur: url(https://sky.shiiyu.moe/resources/img/bg_blur.webp?v3);
-}
 
-:root.light {
-    --text-hex: black;
-    --text-rgb: 0, 0, 0;
-    --background-hex: white;
-    --background-rgb: 255, 255, 255;
-    --header-hex: #dbdbdb;
-    --header-rgb: 219, 219, 219;
-    --grey_background-hex: #e2e2e2;
-    --grey_background-rgb: 226, 226, 226;
-    --bg-hex: white;
+    &.light {
+        --text-hex: black;
+        --text-rgb: 0, 0, 0;
+        --background-hex: white;
+        --background-rgb: 255, 255, 255;
+        --header-hex: #dbdbdb;
+        --header-rgb: 219, 219, 219;
+        --grey_background-hex: #e2e2e2;
+        --grey_background-rgb: 226, 226, 226;
+        --bg-hex: white;
+    }
 }
 
 * {
@@ -784,6 +784,10 @@ header > * {
         background-size: auto 100%;
         background-position: center center;
         background-repeat: no-repeat;
+
+        .light & {
+            filter: "invert()";
+        }
     }
 
     &.link-twitter::before {
@@ -809,10 +813,6 @@ header > * {
     &.link-discord::before {
         background-image: url(/resources/img/icons/discord.png);
     }
-}
-
-.light #info_box .link::before {
-    filter: "invert()";
 }
 
 #packs_box {
@@ -2067,10 +2067,10 @@ a.additional-player-stat:hover {
     background-repeat: no-repeat;
     display: inline-block;
     vertical-align: top;
-}
 
-.light .sub-extendable .stat-sub-header::before {
-    filter: "invert()";
+    .light & {
+        filter: "invert()";
+    }
 }
 
 .sub-extendable.sub-extended .stat-sub-header::before {
@@ -2108,12 +2108,12 @@ a.additional-player-stat:hover {
             background-repeat: no-repeat;
             display: inline-block;
             vertical-align: top;
+
+            .light & {
+                filter: "invert()";
+            }
         }
     }
-}
-
-.light .sub-floor-extendable .stat-sub-header::before {
-    filter: "invert()";
 }
 
 .sub-floor-extendable.sub-extended {
