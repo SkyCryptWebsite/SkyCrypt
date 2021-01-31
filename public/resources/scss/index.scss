@@ -786,7 +786,7 @@ header > * {
         background-repeat: no-repeat;
 
         .light & {
-            filter: "invert()";
+            filter: invert(1);
         }
     }
 
@@ -2069,7 +2069,7 @@ a.additional-player-stat:hover {
     vertical-align: top;
 
     .light & {
-        filter: "invert()";
+        filter: invert(1);
     }
 }
 
@@ -2110,7 +2110,7 @@ a.additional-player-stat:hover {
             vertical-align: top;
 
             .light & {
-                filter: "invert()";
+                filter: invert(1);
             }
         }
     }
@@ -3333,7 +3333,7 @@ body {
         }
 
         .light & {
-            filter: "invert()";
+            filter: invert(1);
         }
     }
 
