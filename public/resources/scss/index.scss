@@ -40,6 +40,9 @@
     --grey_background-hex: #1e1e1e;
     --grey_background-rgb: 30, 30, 30;
 
+    /* used for item lore */
+    --lore_background-hex: #0f0f0fe6;
+
     /* used when --bg can't be used */
     --bg-hex: #121212;
 
@@ -61,6 +64,7 @@
         --header-rgb: 219, 219, 219;
         --grey_background-hex: #e2e2e2;
         --grey_background-rgb: 226, 226, 226;
+        --lore_background-hex: #ffffffee;
         --bg-hex: white;
     }
 }
@@ -919,7 +923,7 @@ header > * {
 #stats_content {
     position: fixed;
     right: calc(70vw + 20px);
-    background-color: rgba(15, 15, 15, 0.9);
+    background-color: var(--lore_background-hex);
     text-align: center;
     width: 360px;
     max-width: calc(30vw - 20px);
