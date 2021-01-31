@@ -109,7 +109,7 @@ a.no-underline {
 
     .tippy-content {
         border-radius: 5px;
-        background-color: rgb(30, 30, 30);
+        background-color: var(--grey_background-hex);
         padding: 15px;
 
         .stat-name {
