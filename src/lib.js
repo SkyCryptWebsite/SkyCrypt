@@ -1979,7 +1979,6 @@ module.exports = {
         output.minions = module.exports.getMinions(profile.members);
         output.minion_slots = module.exports.getMinionSlots(output.minions);
         output.collections = await module.exports.getCollections(profile.uuid, profile, cacheOnly);
-        output.bag_sizes = await module.exports.getBagSizes(output.collections);
         output.social = hypixelProfile.socials;
 
         output.dungeons = await module.exports.getDungeons(userProfile, hypixelProfile);
@@ -2754,27 +2753,6 @@ module.exports = {
                     }
                 }
             }
-        }
-
-        return output;
-    },
-
-    getBagSizes: async (collections) => {
-        const output = {};
-
-        for(const bag in constants.bag_size){
-            const bagSize = constants.bag_size[bag];
-
-            if(!(bagSize.collection in collections))
-                continue;
-
-            let slots = 0;
-
-            for(const size of bagSize.sizes)
-                if(collections[bagSize.collection].tier >= size.tier)
-                    slots = size.slots;
-
-            output[bag] = slots;
         }
 
         return output;
