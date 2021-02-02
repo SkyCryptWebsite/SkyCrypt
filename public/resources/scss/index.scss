@@ -2393,7 +2393,8 @@ a.additional-player-stat:hover {
     bottom: 2px;
     right: 2px;
     font-size: 24px;
-    text-shadow: 0px 0px 4px rgba(var(--background-rgb), 0.4);
+    color: white;
+    text-shadow: 0.1em 0.1em 0.1em black;
     font-weight: 600;
 }
 
