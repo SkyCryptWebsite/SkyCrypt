@@ -650,31 +650,31 @@ header > * {
         background-color: rgba(var(--text-rgb), 0.3);
         border-top-right-radius: 7px;
         border-bottom-right-radius: 7px;
-
-        .skill-progress-bar {
-            position: absolute;
-            padding-left: 18px;
-            left: -18px;
-            top: 0;
-            bottom: 0;
-            background: var(--skillbar);
-            border-top-right-radius: 7px;
-            border-bottom-right-radius: 7px;
-        }
-
-        .skill-progress-text {
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            text-align: center;
-            font-weight: 600;
-            font-size: 12px;
-            line-height: 14px;
-            text-shadow: 0px 0px 3px rgba(var(--background-rgb), 0.5);
-        }
     }
+}
+
+.skill-progress-bar {
+    position: absolute;
+    padding-left: 18px;
+    left: -18px;
+    top: 0;
+    bottom: 0;
+    background: var(--skillbar);
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+.skill-progress-text {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 14px;
+    text-shadow: 0px 0px 3px rgba(var(--background-rgb), 0.5);
 }
 
 .slayer-bar.maxed-slayer .skill-progress-bar {
@@ -1937,15 +1937,6 @@ a.additional-player-stat:hover {
     transform-origin: center center;
 }
 
-.enchanted-overlay {
-    transform-origin: center;
-    transform: translate(-50%, -50%) scale(0.5);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 20;
-}
-
 .custom-icon {
     background-repeat: no-repeat;
     background-position: center center !important;
@@ -2209,129 +2200,162 @@ a.additional-player-stat:hover {
     margin-bottom: 0px;
     overflow: hidden;
     border-radius: 10px;
-}
 
-#inventory_header {
-    position: absolute;
-    top: 6px;
-    left: 5px;
-    right: 5px;
-    height: 50px;
-    overflow: hidden;
-    margin-top: 5px;
-
-    .inventory-header-line {
+    #inventory_header {
         position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 3px;
-        height: 2px;
-        background-color: var(--icon-hex);
-        z-index: 2;
-    }
+        top: 6px;
+        left: 5px;
+        right: 5px;
+        height: 50px;
+        overflow: hidden;
+        margin-top: 5px;
 
-    .inventory-tabs-container {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        overflow-y: auto;
-        padding-bottom: 4px;
+        .inventory-header-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 3px;
+            height: 2px;
+            background-color: var(--icon-hex);
+            z-index: 2;
+        }
 
-        .inventory-tab {
+        .inventory-tabs-container {
             position: relative;
-            display: inline-block;
-            height: 90%;
-            padding-right: 10px;
-            margin-left: 5px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: color 0.1s;
-            cursor: pointer;
-            vertical-align: top;
-            color: rgba(var(--text-rgb), 0.8);
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            padding-bottom: 4px;
 
-            &:first-child {
-                margin-left: 10px;
-            }
-
-            &::after {
-                content: "";
-                position: absolute;
-                left: 0;
-                right: 0;
-                height: 2px;
-                top: 100%;
-                background-color: var(--icon-hex);
-                border-radius: 4px;
-                transition: height 0.1s, top 0.1s;
-            }
-
-            &.active-inventory {
-                cursor: default;
-                color: rgba(var(--text-rgb), 1);
-            }
-
-            &.active-inventory::after,
-            &:hover::after {
-                height: 8px;
-                top: calc(100% - 3px);
-            }
-
-            .inventory-tab-icon {
-                position: absolute;
-                left: 3px;
-                top: 50%;
-                display: inline-block;
-                transform: scale(0.25) translateY(-50%);
-                transform-origin: top left;
-            }
-
-            .inventory-tab-name {
-                display: inline-block;
-                vertical-align: middle;
-                margin-left: 38px;
+            .inventory-tab {
                 position: relative;
-                top: 50%;
-                transform: translateY(-50%);
-                margin-top: -2px;
+                display: inline-block;
+                height: 90%;
+                padding-right: 10px;
+                margin-left: 5px;
+                font-size: 12px;
+                font-weight: 600;
+                text-transform: uppercase;
+                cursor: pointer;
+                transition: color 0.1s;
+                cursor: pointer;
+                vertical-align: top;
+                color: rgba(255, 255, 255, 0.8);
+
+                &:first-child {
+                    margin-left: 10px;
+                }
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    height: 2px;
+                    top: 100%;
+                    background-color: var(--icon-hex);
+                    border-radius: 4px;
+                    transition: height 0.1s, top 0.1s;
+                }
+
+                &.active-inventory {
+                    cursor: default;
+                    color: rgba(255, 255, 255, 1);
+                }
+
+                &.active-inventory::after,
+                &:hover::after {
+                    height: 8px;
+                    top: calc(100% - 3px);
+                }
+
+                .inventory-tab-icon {
+                    position: absolute;
+                    left: 3px;
+                    top: 50%;
+                    display: inline-block;
+                    transform: scale(0.25) translateY(-50%);
+                    transform-origin: top left;
+                }
+
+                .inventory-tab-name {
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin-left: 38px;
+                    position: relative;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    margin-top: -2px;
+                }
             }
+        }
+
+        + * {
+            margin-top: 50px;
         }
     }
 }
 
 .inventory-view {
-    margin-top: 50px;
-    white-space: nowrap;
-    overflow: hidden;
+    display: grid;
+    place-content: center center;
+    --inventory-width: clamp(300px, calc(100vw - 40px), 700px);
+    gap: calc(var(--inventory-width) * 0.01);
+    padding: calc(var(--inventory-width) * 0.01);
+    grid-template-columns: repeat(9, calc(var(--inventory-width) * 0.1));
 
-    &.current-inventory {
-        visibility: visible;
+    .inventory-slot {
+        aspect-ratio: 1;
+        position: relative;
+        background-color: rgba(255, 255, 255, 0.04);
+        border-radius: 5px;
+
+        @supports not (aspect-ratio: 1) {
+            padding-bottom: 100%;
+        }
+
+        .inventory-item {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            cursor: pointer;
+
+            .item-count {
+                position: absolute;
+                z-index: 16;
+                bottom: calc(var(--inventory-width) * 0.0025);
+                right: calc(var(--inventory-width) * 0.0025);
+                font-size: calc(var(--inventory-width) * 0.03333);
+                color: white;
+                text-shadow: 0.1em 0.1em 0.1em black;
+                font-weight: 600;
+            }
+        }
+    }
+
+    hr {
+        all: unset;
+        grid-column: 1 / 10;
+        height: calc(var(--inventory-width) * 0.02);
     }
 }
 
-.inventory-slot {
-    width: 70px;
-    height: 70px;
-    display: inline-block;
-    position: relative;
-    background-color: rgba(var(--text-rgb), 0.04);
-    margin: 1px;
-    border-radius: 5px;
-}
-
 .backpack-contents {
-    white-space: nowrap;
     position: relative;
-    margin-bottom: 5px;
+    --inventory-width: 340px;
+    margin-bottom: 10px;
+    min-height: 60px;
 
-    &.contains-backpack {
-        min-height: 60px;
+    &:not(.contains-backpack) {
+        display: none;
     }
 
     &:hover .view-backpack {
         opacity: 1;
+    }
+
+    .inventory-slot .piece-icon {
+        transform: translate(-50%, -50%) scale(0.25);
     }
 }
 
@@ -2364,38 +2388,6 @@ a.additional-player-stat:hover {
         top: 50%;
         transform: translateY(-50%);
     }
-}
-
-.inventory-slot.backpack-slot {
-    width: 34px;
-    height: 34px;
-    margin: 0;
-}
-
-.backpack-slot .piece-icon {
-    transform: translate(-50%, -50%) scale(0.25);
-}
-
-.backpack-slot .inventory-item .item-count {
-    font-size: 15px;
-}
-
-.inventory-view .inventory-slot .inventory-item {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    cursor: pointer;
-}
-
-.inventory-item .item-count {
-    position: absolute;
-    z-index: 16;
-    bottom: 2px;
-    right: 2px;
-    font-size: 24px;
-    color: white;
-    text-shadow: 0.1em 0.1em 0.1em black;
-    font-weight: 600;
 }
 
 .page-stats .external-app {
@@ -3499,15 +3491,20 @@ body {
         margin-top: calc(-1 * ((100vw * 9 / 16) / 2));
     }
 
-    #inventory_header {
+    #inventory_container #inventory_header {
         height: 50px;
         padding-top: 5px;
         top: 0;
+        text-align: center;
 
         .inventory-tabs-container .inventory-tab {
             border-radius: 1000px;
             height: 38px;
             margin-left: 10px;
+        }
+
+        .inventory-header-line {
+            bottom: 10px;
         }
     }
 
@@ -3520,19 +3517,10 @@ body {
         padding: 0;
         padding-top: 10px;
         border-radius: 0;
-    }
 
-    #inventory_header {
-        text-align: center;
-    }
-
-    #inventory_header .inventory-header-line {
-        bottom: 10px;
-    }
-
-    .inventory-view {
-        text-align: center;
-        margin-top: 45px;
+        #inventory_header + * {
+            margin-top: 45px;
+        }
     }
 
     .stat-slayer .narrow-info-container {
@@ -3592,28 +3580,7 @@ body {
         margin-left: 0;
     }
 
-    .inventory-slot {
-        width: calc(100vw / 9 - 15px);
-        height: calc(100vw / 9 - 15px);
-        display: inline-block;
-        position: relative;
-        margin: 0;
-        background-color: rgba(var(--text-rgb), 0.04);
-
-        .piece-icon {
-            transform: translate(-50%, -50%) scale(0.25);
-        }
-
-        .enchanted-overlay {
-            transform: translate(-50%, -50%) scale(0.25);
-        }
-    }
-
-    .inventory-item .item-count {
-        font-size: 4vw;
-    }
-
-    #inventory_header {
+    #inventory_container #inventory_header {
         white-space: nowrap;
 
         .inventory-tab:last-child {
@@ -3695,6 +3662,10 @@ body {
         right: 0;
         max-height: calc(100vh - 45px);
     }
+
+    .inventory-slot .piece-icon {
+        transform: translate(-50%, -50%) scale(0.333333);
+    }
 }
 
 @media (max-width: 600px) {
@@ -3764,6 +3735,10 @@ body {
         .rank-plus {
             padding-right: 5px;
         }
+    }
+
+    .inventory-slot .piece-icon {
+        transform: translate(-50%, -50%) scale(0.25);
     }
 
     .slayer-containers,
@@ -3848,15 +3823,6 @@ body {
         }
     }
 
-    .inventory-slot {
-        width: calc(100vw / 9 - 5px);
-        height: calc(100vw / 9 - 5px);
-        display: inline-block;
-        position: relative;
-        background-color: rgba(var(--text-rgb), 0.04);
-        margin: 0;
-    }
-
     html {
         min-width: 100vw;
         min-height: 100vh;
@@ -3875,11 +3841,6 @@ body {
 }
 
 @media (max-width: 400px) {
-    .inventory-slot.backpack-slot {
-        width: calc((100vw - 40px) / 9 - 5px);
-        height: calc((100vw - 40px) / 9 - 5px);
-    }
-
     .piece-icon {
         transform: translate(-50%, -50%) scale(0.4);
     }
@@ -3907,30 +3868,6 @@ body {
     #wrapper {
         background-color: rgb(20, 20, 20);
     }
-}
-
-/* Adding some extra margin between enderchest pages */
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-8),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-7),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-6),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-5),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-4),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-3),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-2),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n-1),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-of-type(45n) {
-    margin-bottom: 1rem;
-}
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(1),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(2),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(3),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(4),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(5),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(6),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(7),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(8),
-.inventory-view[data-inventory-type="enderchest"] .inventory-slot:nth-last-of-type(9) {
-    margin-bottom: 1px;
 }
 
 .narrow-info-container.top-deaths {
