@@ -1393,7 +1393,10 @@ if(calculated.profile.game_mode == 'ironman'){
                             <span class="stat-name">Set: </span><span class="stat-value piece-<%= items.armor_set_rarity %>-fg"><%= items.armor_set %></span>
                         </p>
                     <% } %>
-                    <div class="pieces">
+                    <div class="pieces armor-set">
+                        <% if(items.armor.length != 0){ %>
+                            <div class="select-armor active-armor"></div>
+                        <% } %>
                         <% for(const item of items.armor.slice().reverse()){ %>
                             <div tabindex="3" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
                                 <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
@@ -1411,11 +1414,14 @@ if(calculated.profile.game_mode == 'ironman'){
                 <% if(items.wardrobe.length > 0){ %>
                     <p class="stat-sub-header">Wardrobe</p>
                     <div class="pieces">
-                    <% for(const set of items.wardrobe){ %>
+                    <% for(const set of items.wardrobe){ %>                
                         <div class="wardrobe-set">
+                            <div class="select-armor"></div>
                             <% for(const [index, item] of set.filter(a => a !== null).entries()){
                                  %>
-                                <div tabindex="3" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item <%= index == 0 ? 'wardrobe-piece' : '' %> piece piece-<%= item.rarity %>-bg">
+                                <div 
+                                style="margin-right: 0px;" <%#  We override the piece margin-right since its not corectly aligned (will be added on the set) %>
+                                tabindex="3" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item <%= index == 0 ? 'wardrobe-piece' : '' %> piece piece-<%= item.rarity %>-bg">
                                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                         <div class="piece-shine"></div>
                                     <% } %>

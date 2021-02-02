@@ -1738,6 +1738,62 @@ module.exports = {
             stats.effective_health = getEffectiveHealth(stats.health, stats.defense);
         }
 
+        output.armor_stats = {};
+
+        for(const armor of [/*{itemId:"NONE",stats:{}}*/].concat(items.wardrobe)){
+            let stats = Object.assign({}, output.stats);
+
+            armor.forEach(item => {
+                if(!item) return;
+
+            // Modify weapon based on pet
+            // if (activePet)
+            //     activePet.ref.modifyWeapon(item, getId(item));
+            // apparently we don't actually need this
+
+            // Apply held weapon stats
+            for(let stat in item.stats){
+                stats[stat] += item.stats[stat];
+            }
+
+            // Add crit damage from held weapon to Mastiff Armor full set bonus
+            if(item.stats.crit_damage > 0 && armor.filter(a => getId(a).startsWith('MASTIFF_')).length == 4)
+                stats.health += 50 * item.stats.crit_damage;
+
+            // Apply Superior Dragon Armor full set bonus of 5% stat increase
+            if(armor.filter(a => getId(a).startsWith('SUPERIOR_DRAGON_')).length == 4)
+                for(const stat in stats)
+                    stats[stat] *= 1.05;
+
+            // Apply Renowened bonus (whoever made this please comment)
+            for(let i = 0; i < armor.filter(a => helper.getPath(a, 'tag', 'ExtraAttributes', 'modifier') == 'renowned').length; i++){
+                for(const stat in stats)
+                    stats[stat] *= 1.01;
+            }
+
+            // Modify stats based off of pet ability
+            if (activePet)
+                activePet.ref.modifyStats(stats);
+
+            if(armor.filter(a => getId(a).startsWith('CHEAP_TUXEDO_')).length == 3)
+                stats['health'] = 75;
+
+            if(armor.filter(a => getId(a).startsWith('FANCY_TUXEDO_')).length == 3)
+                stats['health'] = 150;
+
+            if(armor.filter(a => getId(a).startsWith('ELEGANT_TUXEDO_')).length == 3)
+                stats['health'] = 250;
+
+            output.armor_stats[item.itemId] = stats;
+
+            // Stats shouldn't go into negative
+            for(let stat in stats)
+                output.armor_stats[item.itemId][stat] = Math.max(0, Math.round(stats[stat]));
+
+            stats.effective_health = getEffectiveHealth(stats.health, stats.defense);
+        });
+        }
+
         const superiorBonus = Object.assign({}, constants.stat_template);
 
         // Apply Superior Dragon Armor full set bonus of 5% stat increase
