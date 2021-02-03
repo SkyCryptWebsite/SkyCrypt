@@ -1,0 +1,33 @@
+* {
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+}
+
+html {
+    background-color: black;
+    background: no-repeat center center fixed;
+    background-size: cover;
+    font-family: "Montserrat", sans-serif;
+    color: white;
+    overflow-x: hidden;
+}
+
+@media (max-width: 480px) {
+    #search_user {
+        display: none;
+    }
+
+    header {
+        height: 45px;
+        text-align: center;
+        width: 100vw;
+    }
+
+    header::after {
+        top: 45px;
+    }
+
+    #info_box {
+        top: 45px;
+    }
+}

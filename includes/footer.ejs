@@ -115,9 +115,6 @@
     if(!Modernizr.testAllProps('clip-path', 'ellipse(10px 10px at 10px 10px)'))
         document.documentElement.classList.add('no-clip-path');
 
-    if(!Modernizr.testAllProps('transform', 'translateY(10px)'))
-        document.documentElement.classList.add('no-transform');
-
     tippy('*[data-tippy-content]', {
         boundary: 'window'
     });
@@ -156,7 +153,7 @@
     });
 </script>
 <% if(page == 'stats'){ %>
-    <script src="/resources/js/stats.js?v72"></script>
+    <script src="/resources/js/stats.js?v73"></script>
 <% } %>
 
 <% if(page == 'api'){ %>

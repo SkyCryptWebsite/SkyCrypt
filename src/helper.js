@@ -423,6 +423,13 @@ module.exports = {
        return ['a', 'e', 'i', 'o', 'u'].includes(string.charAt(0).toLowerCase()) ? 'an': 'a';
     },
 
+    sortObject: obj => {
+        return Object.keys(obj).sort().reduce(function (res, key) {
+            res[key] = obj[key];
+            return res;
+        }, {});
+    },
+
     getPrice: orderSummary => {
         orderSummary = orderSummary.slice(0, Math.ceil(orderSummary.length / 2));
 

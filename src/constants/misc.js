@@ -269,121 +269,6 @@ module.exports = {
         winter: "Jerry's Workshop"
     },
 
-    bag_size: {
-        talisman_bag: {
-            collection: 'REDSTONE',
-            sizes: [
-                {
-                    tier: 2,
-                    slots: 3
-                },
-                {
-                    tier: 7,
-                    slots: 9
-                },
-                {
-                    tier: 9,
-                    slots: 15
-                },
-                {
-                    tier: 10,
-                    slots: 21
-                },
-                {
-                    tier: 11,
-                    slots: 27
-                },
-                {
-                    tier: 12,
-                    slots: 33
-                },
-                {
-                    tier: 13,
-                    slots: 39
-                },
-                {
-                    tier: 14,
-                    slots: 45
-                },
-                {
-                    tier: 15,
-                    slots: 51
-                },
-                {
-                    tier: 16,
-                    slots: 57
-                }
-            ]
-        },
-        potion_bag: {
-            collection: 'NETHER_STALK',
-            sizes: [
-                {
-                    tier: 2,
-                    slots: 9
-                },
-                {
-                    tier: 5,
-                    slots: 18
-                },
-                {
-                    tier: 8,
-                    slots: 27
-                },
-                {
-                    tier: 10,
-                    slots: 36
-                },
-                {
-                    tier: 11,
-                    slots: 45
-                }
-            ]
-        },
-        fishing_bag: {
-            collection: 'RAW_FISH',
-            sizes: [
-                {
-                    tier: 3,
-                    slots: 9
-                },
-                {
-                    tier: 7,
-                    slots: 18
-                },
-                {
-                    tier: 9,
-                    slots: 27
-                },
-                {
-                    tier: 10,
-                    slots: 36
-                },
-                {
-                    tier: 11,
-                    slots: 45
-                }
-            ]
-        },
-        quiver: {
-            collection: 'STRING',
-            sizes: [
-                {
-                    tier: 3,
-                    slots: 27
-                },
-                {
-                    tier: 6,
-                    slots: 36
-                },
-                {
-                    tier: 9,
-                    slots: 45
-                }
-            ]
-        }
-    },
-
     // Minecraft color and formatting codes
     minecraft_formatting: {
         0: {
@@ -612,5 +497,84 @@ module.exports = {
         'NONE': null
     },
 
+    farming_crops: {
+        'INK_SACK:3': {
+            name: 'Cocoa Beans',
+            icon: '351_3'
+        },
+        'POTATO_ITEM': {
+            name: 'Potato',
+            icon: '392_0'
+        },
+        'CARROT_ITEM': {
+            name: 'Carrot',
+            icon: '391_0'
+        },
+        'CACTUS': {
+            name: 'Cactus',
+            icon: '81_0'
+        },
+        'SUGAR_CANE': {
+            name: 'Sugar Cane',
+            icon: '338_0'
+        },
+        'MUSHROOM_COLLECTION': {
+            name: 'Mushroom',
+            icon: '40_0'
+        },
+        'PUMPKIN': {
+            name: 'Pumpkin',
+            icon: '86_0'
+        },
+        'NETHER_STALK': {
+            name: 'Nether Wart',
+            icon: '372_0'
+        },
+        'WHEAT': {
+            name: 'Wheat',
+            icon: '296_0'
+        },
+        'MELON': {
+            name: 'Melon',
+            icon: '360_0'
+        }
+    },
+
+    experiments: {
+        games: {
+            simon: {
+                name: "Chronomatron"
+            },
+            numbers: {
+                name: "Ultrasequencer"
+            },
+            pairings: {
+                name: "Superpairs"
+            }
+        },
+        tiers: [
+            {
+                name: "Beginner",
+                icon: "351:12"
+            }, {
+                name: "High",
+                icon: "351:10"
+            }, {
+                name: "Grand",
+                icon: "351:11"
+            }, {
+                name: "Supreme",
+                icon: "351:14"
+            }, {
+                name: "Transcendent",
+                icon: "351:1"
+            }, {
+                name: "Metaphysical",
+                icon: "351:13"
+            }
+        ]
+    },
+
     max_favorites: 5
+
 };
