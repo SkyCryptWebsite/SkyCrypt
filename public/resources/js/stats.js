@@ -214,36 +214,21 @@ document.addEventListener('DOMContentLoaded', function(){
     function renderInventory(inventory, type){
         let scrollTop = window.pageYOffset;
 
-        let visibleInventory = document.querySelector('.inventory-view.current-inventory');
+        let visibleInventory = document.querySelector('.stat-inventory .inventory-view');
 
         if(visibleInventory){
-            visibleInventory.classList.remove('current-inventory');
             document.querySelector('#inventory_container').removeChild(visibleInventory);
         }
 
         let inventoryView = document.createElement('div');
-        inventoryView.className = 'inventory-view current-inventory processed';
+        inventoryView.className = 'inventory-view processed';
         inventoryView.setAttribute('data-inventory-type', type);
 
-        let countSlotsUsed = 0;
+        let pagesize = 5 * 9;
 
-        inventory.forEach(function(item){
-            if(Object.keys(item).length > 2)
-                countSlotsUsed++;
-        });
-
-        countSlotsUsed = Math.max(countSlotsUsed, 9);
-
-        switch(type){
-            case 'inventory':
-                inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
-                break;
-            case 'enderchest':
-            case 'personal_vault':
-                break;
-            default:
-                if(type in calculated.bag_sizes)
-                    inventory = inventory.slice(0, Math.max(countSlotsUsed - 1, calculated.bag_sizes[type]));
+        if (type === 'inventory') {
+            inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
+            pagesize = 3 * 9;
         }
 
         inventory.forEach(function(item, index){
@@ -294,11 +279,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
             inventoryView.appendChild(document.createTextNode(" "));
 
-            if((index + 1) % 9 == 0)
-                inventoryView.appendChild(document.createElement("br"));
-
-            if((index + 1) % 27 == 0 && type == 'inventory')
-                inventoryView.appendChild(document.createElement("br"));
+            if ((index + 1) % pagesize == 0) {
+                inventoryView.appendChild(document.createElement("hr"));
+            }
         });
 
         inventoryContainer.appendChild(inventoryView);
@@ -435,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             item.containsItems.forEach((backpackItem, index) => {
                 let inventorySlot = document.createElement('div');
-                inventorySlot.className = 'inventory-slot backpack-slot';
+                inventorySlot.className = 'inventory-slot';
 
                 if(backpackItem.id){
                     let inventoryItemIcon = document.createElement('div');
@@ -469,8 +452,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 backpackContents.appendChild(document.createTextNode(" "));
 
-                if((index + 1) % 9 == 0)
-                    backpackContents.appendChild(document.createElement("br"));
+                if ((index + 1) % 27 == 0) {
+                    inventoryView.appendChild(document.createElement("hr"));
+                }
             });
 
             [].forEach.call(document.querySelectorAll('.contains-backpack .item-icon.is-enchanted'), handleEnchanted);
@@ -757,8 +741,6 @@ document.addEventListener('DOMContentLoaded', function(){
         let canvas = document.createElement('canvas');
         canvas.width = size;
         canvas.height = size;
-
-        canvas.className = 'enchanted-overlay';
 
         let ctx = canvas.getContext('2d');
 
