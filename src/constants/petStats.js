@@ -243,7 +243,7 @@ class Elephant extends Pet {
 	}
 
 	get third() {
-		let mult = 0.5;
+		let mult = 1.8;
 		return {
 			name: "§6Trunk Efficiency",
 			desc: [`§7Grants §a+${round(this.level * mult, 1)} §6${symbols.fortune} Farming Fortune§7, which increases your chance for multiple drops`]
