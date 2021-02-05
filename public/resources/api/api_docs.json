@@ -1151,7 +1151,7 @@
             "type": "string",
             "description": "Profile's cute name, e.g. Lime, Strawberry"
           },
-          "dungeons": {
+          "dungeonData": {
             "type": "object",
             "properties": {
               "catacombs": {
