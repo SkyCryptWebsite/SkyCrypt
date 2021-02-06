@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 inventoryItem.className = 'rich-item inventory-item';
 
-                if(type == 'backpack')
+                if(type === 'backpack')
                     inventoryItem.setAttribute('data-backpack-item-index', index);
                 else
                     inventoryItem.setAttribute('data-item-index', item.item_index);
