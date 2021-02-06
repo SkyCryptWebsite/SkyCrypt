@@ -6,7 +6,6 @@
         document.getElementById('not_supported').className = 'show-not-supported';
     }
 </script>
-<% if(page !== 'index') { %>
 <div id="status-bar" style="display: none;"></div>
 <script>
     const iOS = [
@@ -21,7 +20,6 @@
         document.querySelector('#status-bar').style.removeProperty('display');
     }
 </script>
-<% } %>
 <header>
     <div data-tippy-content="Supporting LGBTQ+ rights all around the year! ❤️<br><br>Click for a surprise. :)" class="pride-flag logo"></div>
     <a href="/" id="site_name">SkyCrypt</a>
