@@ -526,9 +526,6 @@ header > * {
     user-select: none;
     -webkit-backdrop-filter: blur(16px) brightness(0.5);
     backdrop-filter: blur(16px) brightness(0.5);
-    > * {
-        max-width: 100%;
-    }
 }
 
 #base_stats_container {
@@ -709,13 +706,13 @@ header > * {
     top: 48px;
     z-index: 1;
     background-color: rgba(30, 30, 30, 0.95);
-    padding: 30px;
+    padding: var(--padding);
     padding-top: 45px;
     box-sizing: border-box;
     transform: translateY(0%);
     transition: transform 0.3s;
     z-index: 100;
-    max-height: calc(100vh - 48px - 30px);
+    max-height: calc(100vh - 48px - var(--padding));
     overflow-y: auto;
 
     &:not(.info-opened) {
@@ -1033,7 +1030,7 @@ header > * {
 #player_profile {
     font-size: 36px;
     margin-top: 50px;
-    margin-left: 50px;
+    margin-left: 20px;
     margin-bottom: 20px;
 }
 
@@ -1359,8 +1356,9 @@ a.additional-player-stat:hover {
         "base skill"
         "base additional";
     grid-template-columns: 260px auto;
-    width: 100%;
-    padding: 30px;
+    padding: var(--padding);
+    margin-left: calc(-1 * var(--padding));
+    margin-right: calc(-1 * var(--padding));
     box-sizing: border-box;
     background-color: rgba(0, 0, 0, 0.3);
 }
@@ -1657,9 +1655,7 @@ a.additional-player-stat:hover {
 }
 
 .stat-content {
-    padding-left: 30px;
     box-sizing: border-box;
-    padding-right: 30px;
     margin-top: 25px;
 }
 
@@ -1703,7 +1699,7 @@ a.additional-player-stat:hover {
     font-size: 24px;
     text-shadow: 0px 0px 7px rgba(0, 0, 0, 0.3);
     position: relative;
-    padding-left: 35px;
+    padding-left: 5px;
     margin-bottom: 15px;
 
     span {
@@ -1713,7 +1709,6 @@ a.additional-player-stat:hover {
 
 .info-container {
     background-color: rgba(0, 0, 0, 0.3);
-    margin-left: 30px;
     margin-bottom: 0px;
     padding: 20px;
     padding-top: 55px;
@@ -3385,14 +3380,14 @@ body {
     }
 
     #base_stats_container {
-        padding: 30px;
+        padding: var(--padding);
         box-sizing: border-box;
         position: relative;
         padding-left: 0;
     }
 
     #skill_levels_container {
-        padding: 30px;
+        padding: var(--padding);
         box-sizing: border-box;
         padding-bottom: 15px;
 
@@ -3470,9 +3465,8 @@ body {
     }
 
     #inventory_container {
-        width: 100%;
-        margin-left: 0;
-        margin-right: 0;
+        margin-left: calc(-1 * var(--padding));
+        margin-right: calc(-1 * var(--padding));
         margin-top: 0;
         box-sizing: border-box;
         padding: 0;
@@ -3493,15 +3487,15 @@ body {
     .floor-containers {
         white-space: nowrap;
         overflow-x: auto;
-        margin-left: -30px;
-        margin-right: -30px;
+        margin-left: calc(-1 * var(--padding));
+        margin-right: calc(-1 * var(--padding));
         padding-bottom: 20px;
 
         > :first-child {
-            margin-inline-start: 30px;
+            margin-inline-start: var(--padding);
         }
         > :last-child {
-            margin-inline-end: 30px;
+            margin-inline-end: var(--padding);
         }
     }
 }
