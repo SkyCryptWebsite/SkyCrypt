@@ -1307,7 +1307,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 <%
                     if('levels' in calculated){
                 %>
-                    <div id="other_skills">
+                    <div id="other_skills" class="skill-bars">
                         <%= skill_component('Taming', 'icon-383_0_12', calculated.levels.taming) %>
                         <%= skill_component('Farming', 'icon-294_0', calculated.levels.farming) %>
                         <%= skill_component('Mining', 'icon-274_0', calculated.levels.mining) %>
@@ -2049,19 +2049,23 @@ if(calculated.profile.game_mode == 'ironman'){
                 <p class="stat-sub-header">Classes</p>
 
                 <span class="stat-name">Selected Class: </span>
-                <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span><br>
-                <%= skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) %>
-                <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) %>
-                <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) %>
-                <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) %>
-                <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) %>
+                <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span>
+                <div class="skill-bars">
+                    <%= skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) %>
+                    <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) %>
+                    <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) %>
+                    <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) %>
+                    <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) %>
+                </div>
                 <% } %>
 
                 <% if (calculated.dungeons.catacombs.visited) { %>
                     <p class="stat-sub-header">Catacombs</p>
 
                     <p class="stat-raw-values">
-                        <%= skill_component('Catacombs', 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793', calculated.dungeons.catacombs.level) %><br>
+                        <div class="skill-bars">
+                            <%= skill_component('Catacombs', 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793', calculated.dungeons.catacombs.level) %><br>
+                        </div>
                         <span class="stat-name">Dungeon Item Boost: </span><span class="stat-value"><%= calculated.dungeons.catacombs.bonuses.item_boost %>%</span><br>
                     </p>
 
