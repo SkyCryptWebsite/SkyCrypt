@@ -513,11 +513,11 @@ header > * {
 }
 
 #wrapper {
-    position: absolute;
-    left: 30vw;
-    top: 45px;
-    right: 0;
-    padding-bottom: 30px;
+    margin-left: 30vw;
+    --padding: 30px;
+    padding: var(--padding);
+    padding-top: calc(48px + env(safe-area-inset-top, 0));
+    padding-bottom: calc(var(--padding) + env(safe-area-inset-bottom));
     min-height: 100%;
     box-sizing: border-box;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -1389,8 +1389,10 @@ a.additional-player-stat:hover {
 
 #nav_bar {
     position: sticky;
-    top: 48px;
     width: 100%;
+    top: calc(48px + env(safe-area-inset-top, 0));
+    margin-left: calc(-1 * var(--padding));
+    margin-right: calc(-1 * var(--padding));
     text-align: center;
     padding-bottom: 6px;
     white-space: nowrap;
@@ -3242,9 +3244,7 @@ body {
 
     #wrapper,
     #bg_blur {
-        left: 50%;
         width: 1120px;
-        margin-left: -560px;
     }
 
     .skill {
@@ -3300,10 +3300,9 @@ body {
 
     #wrapper,
     #bg_blur {
-        left: 0;
-        right: 0;
-        margin-left: 0;
-        width: 100vw;
+        margin-left: env(safe-area-inset-left, 0);
+        margin-right: env(safe-area-inset-right, 0);
+        width: calc(100vw - env(safe-area-inset-left, 0) - env(safe-area-inset-right, 0));
     }
 
     .stat-fairy-souls {

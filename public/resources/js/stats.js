@@ -1092,7 +1092,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             anime({
                 targets: window.document.scrollingElement || window.document.body || window.document.documentElement,
-                scrollTop: positionY[newActiveTab.getAttribute('data-target')] - 60,
+                scrollTop: positionY[newActiveTab.getAttribute('data-target')] - 110,
                 duration: 350,
                 easing: 'easeOutCubic',
                 complete: function(){
