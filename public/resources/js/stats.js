@@ -229,6 +229,8 @@ document.addEventListener('DOMContentLoaded', function(){
         if (type === 'inventory') {
             inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
             pagesize = 3 * 9;
+        } else if (type === 'backpack') {
+            pagesize = 6 * 9;
         }
 
         inventory.forEach(function(item, index){
