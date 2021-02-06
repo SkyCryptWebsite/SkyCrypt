@@ -451,10 +451,6 @@ document.addEventListener('DOMContentLoaded', function(){
                 backpackContents.appendChild(inventorySlot);
 
                 backpackContents.appendChild(document.createTextNode(" "));
-
-                if ((index + 1) % 27 == 0) {
-                    backpackContents.appendChild(document.createElement("hr"));
-                }
             });
 
             [].forEach.call(document.querySelectorAll('.contains-backpack .item-icon.is-enchanted'), handleEnchanted);
