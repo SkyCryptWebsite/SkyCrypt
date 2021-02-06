@@ -281,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             inventoryView.appendChild(document.createTextNode(" "));
 
-            if ((index + 1) % pagesize == 0) {
+            if ((index + 1) % pagesize == 0 && pagesize !== inventory.length) {
                 inventoryView.appendChild(document.createElement("hr"));
             }
         });
