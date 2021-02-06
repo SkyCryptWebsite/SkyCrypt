@@ -319,7 +319,7 @@ module.exports = {
         const outputTexture = { mime: 'image/png' };
 
         for(const rule of itemsCss.stylesheet.rules){
-            if(!rule.selectors.includes(`.icon-${item.id}_${item.Damage}`))
+            if(!rule.selectors?.includes(`.icon-${item.id}_${item.Damage}`))
                 continue;
 
             const coords = rule.declarations[0].value.split(" ").map(a => Math.abs(parseInt(a)));

@@ -380,6 +380,10 @@ module.exports = {
             head: "/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8",
             type: "combat",
             emoji: "🦅"
+        },
+        "MITHRIL_GOLEM": {
+            head: "/head/c1b2dfe8ed5dffc5b1687bc1c249c39de2d8a6c3d90305c95f6d1a1a330a0b1",
+            type: "mining"
         }
     },
 
@@ -509,6 +513,11 @@ module.exports = {
                 head: "/head/d8552ff591042c4a38f8ba0626784ae28c4545a97d423fd9037c341035593273",
                 release: 1560284720000,
             },
+            "SILVERFISH_FOSSILIZED": {
+                name: "Fossilized",
+                head: "/head/ca3a363368ed1e06cee3900717f062e02ec39aee1747675392255b48f7f83600",
+                release: 1611334800000,
+            },
         },
         "ELEPHANT": {
             "ELEPHANT_PINK": {
@@ -551,6 +560,13 @@ module.exports = {
                 name: "Golden",
                 head: "/head/e9281c4d87d68526b0749d4361e6ef786c8a35717aa053da704b1d53410d37a6",
                 release: 1610557200000,
+            },
+        },
+        "SKELETON_HORSE": {
+            "HORSE_ZOMBIE": {
+                name: "Zombie",
+                head: "/head/578211e1b4d99d1c7bfda4838e48fc884c3eae376f58d932bc2f78b0a919f8e7",
+                release: 1611939600000,
             },
         },
     },

@@ -31,7 +31,9 @@ const symbols = {
 	attack_speed: "⚔️",
 	true_defense: "❂",
 	ferocity: "⫽",
-	ability_damage: "✹"
+	ability_damage: "✹",
+	mining_speed: "↑",
+    fortune: "☘",
 }
 
 class Pet {
@@ -241,10 +243,10 @@ class Elephant extends Pet {
 	}
 
 	get third() {
-		let mult = 0.5;
+		let mult = 1.8;
 		return {
 			name: "§6Trunk Efficiency",
-			desc: [`§7Grants a §a${round(this.level * mult, 1)}% §7chance to get double crops while farming`]
+			desc: [`§7Grants §a+${round(this.level * mult, 1)} §6${symbols.fortune} Farming Fortune§7, which increases your chance for multiple drops`]
 		};
 	}
 
@@ -255,6 +257,9 @@ class Elephant extends Pet {
 			let mult = 0.01;
 			stats['health'] += round(this.level * mult * stats['defense'] / 10, 1);
 		}
+        if (this.rarity > 3) {
+            stats['farming fortune'] += round(this.level * 0.5)
+        }
 	}
 }
 
@@ -448,6 +453,45 @@ class Endermite extends Pet {
 		return {
 			name: "§6Pearl Powered",
 			desc: [`§7Upon consuming an ender pearl, gain +§a${10 + round(this.level * mult, 1)} §7speed for 10 seconds`]
+		};
+	}
+}
+
+class MithrilGolem extends Pet {
+	get stats() {
+		return {
+			true_defense: this.level * 0.5
+		};
+	}
+
+	get abilities() {
+		let list = [this.first, this.second];
+		if (this.rarity > 3)
+			list.push(this.third);
+		return list;
+	}
+
+	get first() {
+		let mult = 1;
+		return {
+			name: "§6Mithril Affinity",
+			desc: [`§7Gain +§a${round(this.level * mult, 1)} §6${symbols.mining_speed} Mining Speed §7when mining §eMithril`]
+		};
+	}
+
+	get second() {
+		let mult = 0.2;
+		return {
+			name: "§6The Smell Of Powder",
+			desc: [`§7Gain +§a${round(this.level * mult, 1)}% §7more §2Mithril Powder`]
+		};
+	}
+
+	get third() {
+		let mult = 0.2;
+		return {
+			name: "§6Danger Averse",
+			desc: [`§7Increases your combat stats by +§a${round(this.level * mult, 1)}% §7on mining islands`]
 		};
 	}
 }
@@ -1830,7 +1874,7 @@ class Monkey extends Pet {
 		let mult = this.rarity > 2 ? 0.6 : this.rarity > 0 ? 0.5 : 0.4;
 		return {
 			name: "§6Treeborn",
-			desc: [`§7Increase double drop rates for logs by §a${round(this.level * mult, 1)}%`]
+			desc: [`§7Grants §a+${round(this.level * mult, 1)} §6${symbols.fortune} Foraging Fortune§7, which increases your chance at double logs`]
 		};
 	}
 
@@ -1848,6 +1892,13 @@ class Monkey extends Pet {
 			name: "§6Evolved Axes",
 			desc: [`§7Reduce the cooldown of Jungle Axe and Treecapitator by §a${round(this.level * mult, 1)}%`]
 		};
+	}
+
+	modifyStats(stats) {
+		let mult = this.rarity > 2 ? 0.6 : this.rarity > 0 ? 0.5 : 0.4;
+        if (this.rarity > 3) {
+            stats['foraging fortune'] += round(this.level * mult)
+        }
 	}
 }
 
@@ -2456,6 +2507,7 @@ module.exports = {
 		//Mining
 		'Bat': Bat,
 		'Endermite': Endermite,
+		'Mithril Golem': MithrilGolem,
 		'Rock': Rock,
 		'Silverfish': Silverfish,
 		'Wither Skeleton': WitherSkeleton,
