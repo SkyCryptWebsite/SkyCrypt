@@ -453,7 +453,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 backpackContents.appendChild(document.createTextNode(" "));
 
                 if ((index + 1) % 27 == 0) {
-                    inventoryView.appendChild(document.createElement("hr"));
+                    backpackContents.appendChild(document.createElement("hr"));
                 }
             });
 
