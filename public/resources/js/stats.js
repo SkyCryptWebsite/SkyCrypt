@@ -229,6 +229,8 @@ document.addEventListener('DOMContentLoaded', function(){
         if (type === 'inventory') {
             inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
             pagesize = 3 * 9;
+        } else if (type === 'backpack') {
+            pagesize = 6 * 9;
         }
 
         inventory.forEach(function(item, index){
@@ -259,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 inventoryItem.className = 'rich-item inventory-item';
 
-                if(type == 'backpack')
+                if(type === 'backpack')
                     inventoryItem.setAttribute('data-backpack-item-index', index);
                 else
                     inventoryItem.setAttribute('data-item-index', item.item_index);
@@ -279,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             inventoryView.appendChild(document.createTextNode(" "));
 
-            if ((index + 1) % pagesize == 0) {
+            if ((index + 1) % pagesize == 0 && pagesize !== inventory.length) {
                 inventoryView.appendChild(document.createElement("hr"));
             }
         });
@@ -451,10 +453,6 @@ document.addEventListener('DOMContentLoaded', function(){
                 backpackContents.appendChild(inventorySlot);
 
                 backpackContents.appendChild(document.createTextNode(" "));
-
-                if ((index + 1) % 27 == 0) {
-                    inventoryView.appendChild(document.createElement("hr"));
-                }
             });
 
             [].forEach.call(document.querySelectorAll('.contains-backpack .item-icon.is-enchanted'), handleEnchanted);
