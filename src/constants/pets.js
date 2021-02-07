@@ -569,6 +569,23 @@ module.exports = {
                 release: 1611939600000,
             },
         },
+        "ENDER_DRAGON": {
+            "DRAGON_NEON_BLUE": {
+                name: "Neon Blue",
+                head: "/head/96a4b9fbcf8c3e7e1232e57d6a2870ba3ea30f76407ae1197fd52e9f76ca46ac",
+                release: 1612803600000,
+            },
+            "DRAGON_NEON_PURPLE": {
+                name: "Neon Purple",
+                head: "/head/54bdf5ba6289b29e27c57db1ec7f76151c39492d409268e00a9838e8c963159",
+                release: 1612803600000,
+            },
+            "DRAGON_NEON_RED": {
+                name: "Neon Red",
+                head: "/head/e05c9b4f4218677c5b4bcc9c7d9e29e18d1684a536781fede1280fc5e6961538",
+                release: 1612803600000,
+            },
+        },
     },
 
     pet_value: {
