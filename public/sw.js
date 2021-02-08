@@ -13,7 +13,6 @@ self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.has(cacheName).then( async (exists) => {
             if (!exists) {
-                console.log('reloading')
                 const cache = await caches.open(cacheName);
                 await cache.addAll(offlineResources.map(url => new Request(url, { cache: "reload" })));
             }
