@@ -14,12 +14,12 @@
     <body class="page-index">
         <%- include('../includes/header') %>
         <main class="grid">
-            <div id="enter_player_box">
+            <form class="lookup-player">
                 <p>Show SkyBlock stats for</p>
-                <input <% if(player){ %> value="<%= player %>" <% }%> id="inp_enter_ign" type="text" placeholder="Enter username" autofocus>
-                <a href="<% if(player){ %>/stats/<%= player %><% }else{ %>#<% } %>" id="goto_target_username">Show me</a>
+                <input name="username" <% if(player){ %> value="<%= player %>" <% }%> type="search" enterkeyhint="go" placeholder="Enter username" autofocus required>
+                <button type="submit" class="big-green-button">Show me</button>
                 <%# <p>or take me to a <a href="/random/stats">random profile</a>.</p> %>
-            </div>
+            </form>
             <div id="error_box_wrapper" <% if(error){ %>class="show-error"<% } %>>
                 <div id="error_box">
                     <div id="error_top">
@@ -101,66 +101,48 @@
                 console.log("An error occured with message: \"<%= error %>\"");
             <% } %>
 
-            const targetUsername = document.getElementById("inp_enter_ign");
-            const searchUser = document.getElementById('search_user');
-            const inputSearchUser = document.getElementById('inp_search_user');
-            const btnSearchUser = document.getElementById('btn_search_user');
+            const mainUsernameInput = document.querySelector('main .lookup-player input');
+            const headerUsernameInput = document.querySelector('header .lookup-player input');
+            const headerUsernameForm = document.querySelector('header .lookup-player');
 
-            function updateUserTarget(e){
-                let playerName = targetUsername.value;
+            mainUsernameInput.addEventListener('input', (e) => {
+                headerUsernameInput.value = mainUsernameInput.value;
+            });
 
-                if(playerName)
-                    inputSearchUser.value = playerName;
-
-                if(e.keyCode == 13 && playerName.trim().length > 0)
-                    document.location = '/stats/' + playerName;
-                else
-                    document.querySelector('#goto_target_username').href = '/stats/' + playerName;
-
-                if(playerName.trim().length == 0)
-                    document.querySelector('#goto_target_username').href = '#';
-            }
-
-            targetUsername.addEventListener('keyup', updateUserTarget);
-            targetUsername.addEventListener('change', updateUserTarget);
-
-            let scrollLock = false;
-            let currentOffset = 10;
-            let limit = 20;
+            headerUsernameInput.addEventListener('input', (e) => {
+                mainUsernameInput.value = headerUsernameInput.value;
+            });
+            
             let smallUserSearch = false;
-
-            let reachedEnd = false;
 
             window.addEventListener('scroll', checkSearchboxOverlap);
             window.addEventListener('resize', checkSearchboxOverlap);
             function checkSearchboxOverlap() {
-                if(targetUsername.getBoundingClientRect().bottom < 48 && smallUserSearch === false){
-                    searchUser.classList.add('show-user-search');
+                if (mainUsernameInput.getBoundingClientRect().bottom < 48 && smallUserSearch === false) {
+                    headerUsernameForm.classList.add('show-user-search');
                     smallUserSearch = true;
 
-                    searchUser.setAttribute('tabindex', '0');
-                    btnSearchUser.setAttribute('tabindex', '0');
-
-                    if(targetUsername === document.activeElement) {
-                        inputSearchUser.focus();
+                    if (mainUsernameInput === document.activeElement) {
+                        headerUsernameInput.focus({ preventScroll: true });
                     }
-                } else if(targetUsername.getBoundingClientRect().top >= 48 && smallUserSearch){
-                    searchUser.classList.remove('show-user-search');
+                } else if (mainUsernameInput.getBoundingClientRect().top >= 48 && smallUserSearch) {
+                    headerUsernameForm.classList.remove('show-user-search');
                     smallUserSearch = false;
 
-                    targetUsername.value = inputSearchUser.value;
-
-                    searchUser.setAttribute('tabindex', '-1');
-                    btnSearchUser.setAttribute('tabindex', '-1');
-
-                    if(inputSearchUser === document.activeElement) {
-                        targetUsername.focus();
+                    if (headerUsernameInput === document.activeElement) {
+                        mainUsernameInput.focus({ preventScroll: true });
                     }
                 }
 
                 <%#
 
                 - Hide Views for now due to abuse -
+
+                let scrollLock = false;
+                let currentOffset = 10;
+                let limit = 20;
+
+                let reachedEnd = false;
 
                 if(window.innerHeight + window.scrollY > document.documentElement.offsetHeight - 100 && !scrollLock && !reachedEnd){
                     scrollLock = true;
