@@ -59,6 +59,7 @@ async function main(){
     app.locals.moment = moment;
     app.use(bodyParser.urlencoded({ extended: true }));
     app.set('view engine', 'ejs');
+    express.static.mime.define({ 'application/opensearchdescription+xml': ['osd'] });
     app.use(express.static('public', { maxAge: CACHE_DURATION }));
     app.use(cookieParser())
 
