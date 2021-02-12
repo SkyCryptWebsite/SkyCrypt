@@ -332,49 +332,49 @@ header .lookup-player {
     }
 
     input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    outline: 0;
-    border: 0;
-    border-radius: inherit;
-    background-color: transparent;
-    color: white;
-    height: 100%;
-    width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        outline: 0;
+        border: 0;
+        border-radius: inherit;
+        background-color: transparent;
+        color: white;
+        height: 100%;
+        width: 100%;
         padding: 0 65px 0 15px;
-    font-size: 16px;
-    box-sizing: border-box;
-    font-weight: 600;
-    transition: background-color 0.1s;
-    &:focus,
-    &:hover {
-        outline: none;
-        background-color: rgba(0, 0, 0, 0.2);
+        font-size: 16px;
+        box-sizing: border-box;
+        font-weight: 600;
+        transition: background-color 0.1s;
+        &:focus,
+        &:hover {
+            outline: none;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
     }
-}
 
     button {
-    position: absolute;
-    top: 0;
-    right: 0;
+        position: absolute;
+        top: 0;
+        right: 0;
         bottom: 0;
-    width: 60px;
+        width: 60px;
         appearance: none;
         border: none;
-    border-radius: 18px;
-    background-color: rgba(0, 0, 0, 0.2);
-    box-sizing: border-box;
-    background-image: url(/resources/img/icons/magnify.png);
-    background-size: 24px 24px;
-    background-position: center center;
-    background-repeat: no-repeat;
-    transition: background-color 0.1s;
-    &:focus,
-    &:hover {
-        background-color: rgba(0, 0, 0, 0.4);
+        border-radius: 18px;
+        background-color: rgba(0, 0, 0, 0.2);
+        box-sizing: border-box;
+        background-image: url(/resources/img/icons/magnify.png);
+        background-size: 24px 24px;
+        background-position: center center;
+        background-repeat: no-repeat;
+        transition: background-color 0.1s;
+        &:focus,
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
     }
-}
 }
 
 @media (min-width: 960px) {
@@ -2911,39 +2911,40 @@ main.grid {
     }
 
     .lookup-player {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: 1fr;
-    justify-items: center;
-    gap: 25px;
-    padding: 25px 0;
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 25px;
+        padding: 25px 0;
         font-size: 30px;
 
-    p {
-        width: 100%;
-        text-align: center;
-        font-weight: 600;
-        margin: 5px;
+        p {
+            width: 100%;
+            text-align: center;
+            font-weight: 600;
+            margin: 5px;
 
-        &:last-child {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.8);
-            margin: 0;
+            // //this is for random player
+            // &:last-child {
+            //     font-size: 16px;
+            //     color: rgba(255, 255, 255, 0.8);
+            //     margin: 0;
+            // }
         }
-    }
 
-    input {
+        input {
             position: relative;
-        width: 100%;
+            width: 100%;
             height: 2.25em;
-        text-align: center;
+            text-align: center;
             font-size: inherit;
-        font-weight: 600;
-        box-sizing: border-box;
-        background-color: rgba(255, 255, 255, 0.1);
-        border: 0;
-        color: white;
-        font-weight: normal;
+            font-weight: 600;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 0;
+            color: white;
+            font-weight: normal;
             -webkit-appearance: none;
 
             &::-webkit-search-cancel-button {
@@ -2952,8 +2953,8 @@ main.grid {
                 bottom: 0;
                 height: unset;
                 right: 0.5em;
-    }
-}
+            }
+        }
 
         .big-green-button {
             display: flex;
@@ -2963,18 +2964,18 @@ main.grid {
             align-items: center;
             border: none;
             appearance: none;
-    background-color: var(--icon-hex);
-    color: white;
-    text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+            background-color: var(--icon-hex);
+            color: white;
+            text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
             text-transform: uppercase;
             font-weight: 700;
             font-size: 16px;
             transform: scale(1);
             transition: transform 0.15s ease-in-out, background-color 0.15s;
 
-    &:hover,
-    &:focus {
-        background-color: var(--link-hex);
+            &:hover,
+            &:focus {
+                background-color: var(--link-hex);
                 transform: scale(1.015);
             }
         }
