@@ -53,6 +53,12 @@ html {
     overflow-x: hidden;
 }
 
+input,
+textarea,
+button {
+    font-family: inherit;
+}
+
 body {
     margin: 0;
 }
