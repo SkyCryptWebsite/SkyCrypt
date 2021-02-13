@@ -1140,21 +1140,17 @@ header > * {
     visibility: hidden;
     border-radius: 17px;
     overflow: hidden;
-}
 
-html.no-clip-path #other_players,
-html.no-clip-path #other_profiles {
+    html.no-clip-path & {
     transition: none !important;
 }
 
-#stats_for_player:hover #other_players,
-#stats_for_profile:hover #other_profiles {
+    :hover > & {
     clip-path: ellipse(200% 200% at 0% 0%);
     visibility: visible;
 }
 
-#other_players .goto,
-#other_profiles .goto {
+    .goto {
     display: block;
     color: white;
     text-decoration: none;
@@ -1170,11 +1166,11 @@ html.no-clip-path #other_profiles {
     }
 }
 
-#other_players .goto-last-played,
-#other_profiles .goto-last-played {
+    .goto-last-played {
     font-size: 15px;
     color: rgba(255, 255, 255, 0.8);
     line-height: normal;
+}
 }
 
 #additional_player_stats {
