@@ -59,7 +59,6 @@ async function main(){
     app.locals.moment = moment;
     app.use(bodyParser.urlencoded({ extended: true }));
     app.set('view engine', 'ejs');
-    express.static.mime.define({ 'application/opensearchdescription+xml': ['osd'] });
     app.use(express.static('public', { maxAge: CACHE_DURATION }));
     app.use(cookieParser())
 
@@ -172,7 +171,7 @@ async function main(){
     }
 
     app.all('/stats/:player/:profile?', async (req, res, next) => {
-        let paramPlayer = req.params.player.toLowerCase().replace(/[ +]/g, '_').replace(/[^a-z\d\-\_:]/g, '');
+        let paramPlayer = req.params.player.toLowerCase().replace(/[^a-z\d\-\_:]/g, '');
         let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
 
         const cacheOnly = req.query.cache === 'true';
