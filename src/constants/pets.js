@@ -535,6 +535,21 @@ module.exports = {
                 head: "/head/554a34a80c474206d3700b8fced6b44fab0b0ed0b05c1293ff0c5d86eda251d1",
                 release: 1560284720000,
             },
+            "ELEPHANT_RED": {
+                name: "Red",
+                head: "/head/ba5c66ec66cb6b4b5550085f583b4e5c1cee5247bec5fbcc5c318c30c66cab42",
+                release: new Date('2021-02-13 18:00:00 GMT+1').getTime(),
+            },
+            "ELEPHANT_PURPLE": {
+                name: "Purple",
+                head: "/head/5ff9df290b6c5a4984fc6e516605f9816b9882f7bf04db08d3f7ee32d1969a44",
+                release: new Date('2021-02-13 18:00:00 GMT+1').getTime(),
+            },
+            "ELEPHANT_GREEN": {
+                name: "Green",
+                head: "/head/360c122ade5b2fedca14aa78c834a7b0ac9cb5da2a0c93112163086f90c13b68",
+                release: new Date('2021-02-13 18:00:00 GMT+1').getTime(),
+            },
         },
         "JERRY": {
             "JERRY_RED_ELF": {
