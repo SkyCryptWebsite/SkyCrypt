@@ -1,0 +1,8 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>SkyCrypt</ShortName>
+  <Description>SkyCrypt Player Lookup</Description>
+  <Image type="image/svg+xml">https://sky.shiiyu.moe/resources/img/logo_square.svg</Image>
+  <Url type="text/html" method="get" template="https://sky.shiiyu.moe/stats/{searchTerms}"/>
+  <Url type="application/opensearchdescription+xml" rel="self" template="https://sky.shiiyu.moe/skycrypt.opensearchdescription.xml" />
+  <moz:SearchForm>https://sky.shiiyu.moe/</moz:SearchForm>
+</OpenSearchDescription>
