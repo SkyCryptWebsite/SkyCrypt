@@ -51,6 +51,20 @@ html {
     font-family: "Montserrat", sans-serif;
     color: white;
     overflow-x: hidden;
+
+    @supports (-webkit-touch-callout: none) {
+        background-image: none;
+        &:before {
+            content: "";
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            background: var(--bg-webp) no-repeat center center;
+            background-size: cover;
+        }
+    }
 }
 
 body {
