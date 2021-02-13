@@ -1,22 +1,33 @@
 // add arc.io
 importScripts('https://arc.io/arc-sw-core.js')
 
-const VERSION = "1";
+const cacheName = "offline-v1";
+
+const offlineResources = [
+    '/resources/html/offline.html',
+    '/resources/img/bg.webp',
+    '/resources/img/logo_square.svg',
+]
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open(`skyCrypt-offline-v${VERSION}`).then((cache) => {
-            return cache.addAll([
-                '/resources/html/offline.html',
-                '/resources/img/bg.webp',
-                '/resources/img/logo_square.svg',
-            ]);
-        }),
+        caches.has(cacheName).then( async (exists) => {
+            if (!exists) {
+                const cache = await caches.open(cacheName);
+                await cache.addAll(offlineResources.map(url => new Request(url, { cache: "reload" })));
+            }
+            const keys = await caches.keys();
+            const deletions = keys.map((key) => {
+                if (key !== cacheName) {
+                    return caches.delete(key);
+                }
+            });
+            await Promise.all(deletions);
+        })
     );
 });
 
 self.addEventListener("fetch", (event) => {
-
     event.respondWith(
         fetch(event.request)
             .catch(() => {
