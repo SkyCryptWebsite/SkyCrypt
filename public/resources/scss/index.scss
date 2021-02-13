@@ -67,6 +67,12 @@ html {
     }
 }
 
+input,
+textarea,
+button {
+    font-family: inherit;
+}
+
 body {
     margin: 0;
 }
@@ -327,7 +333,7 @@ header > * {
     background-image: url(/resources/img/icons/kofi.png);
 }
 
-#search_user {
+header .lookup-player {
     position: relative;
     flex-grow: 1;
     flex-shrink: 1;
@@ -338,43 +344,66 @@ header > * {
     @media (min-width: 1100px) {
         margin: 0 auto;
     }
+
+    input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        outline: 0;
+        border: 0;
+        border-radius: inherit;
+        background-color: transparent;
+        color: white;
+        height: 100%;
+        width: 100%;
+        padding: 0 65px 0 15px;
+        font-size: 16px;
+        box-sizing: border-box;
+        font-weight: 600;
+        transition: background-color 0.1s;
+        &:focus,
+        &:hover {
+            outline: none;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 60px;
+        appearance: none;
+        border: none;
+        border-radius: 18px;
+        background-color: rgba(0, 0, 0, 0.2);
+        box-sizing: border-box;
+        background-image: url(/resources/img/icons/magnify.png);
+        background-size: 24px 24px;
+        background-position: center center;
+        background-repeat: no-repeat;
+        transition: background-color 0.1s;
+        &:focus,
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+    }
 }
 
 @media (min-width: 960px) {
-    :not(.patreon) + #search_user {
+    header :not(.patreon) + .lookup-player {
         margin: 0 auto;
     }
 }
 
-.page-index #search_user {
-    transform: translateY(150%);
-    transition: transform 0.15s;
-    &.show-user-search {
-        transform: translateY(0%);
-    }
-}
-
-#inp_search_user {
-    position: absolute;
-    top: 0;
-    left: 0;
-    outline: 0;
-    border: 0;
-    border-radius: inherit;
-    background-color: transparent;
-    color: white;
-    height: 100%;
-    width: 100%;
-    padding: 4px 15px;
-    font-size: 16px;
-    box-sizing: border-box;
-    font-family: Montserrat, sans-serif;
-    font-weight: 600;
-    transition: background-color 0.1s;
-    &:focus,
-    &:hover {
-        outline: none;
-        background-color: rgba(0, 0, 0, 0.2);
+.page-index header .lookup-player {
+    transform: translateY(0%);
+    transition: transform 0.15s, visibility 0s linear 0s;
+    &:not(.show-user-search) {
+        transform: translateY(150%);
+        transition: transform 0.15s, visibility 0s linear 0.15s;
+        visibility: hidden;
     }
 }
 
@@ -382,25 +411,14 @@ header > * {
     color: rgba(255, 255, 255, 0.8);
 }
 
-#btn_search_user {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 36px;
-    width: 60px;
-    border-radius: 18px;
-    background-color: rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    box-sizing: border-box;
-    background-image: url(/resources/img/icons/magnify.png);
-    background-size: 24px 24px;
-    background-position: center center;
+input[type="search"]::-webkit-search-cancel-button {
+    height: 0.8em;
+    width: 0.8em;
+    appearance: none;
+    background-image: url(/resources/img/icons/window-close.png);
+    background-size: 100%;
+    background-position: center;
     background-repeat: no-repeat;
-    transition: background-color 0.1s;
-    &:focus,
-    &:hover {
-        background-color: rgba(0, 0, 0, 0.4);
-    }
 }
 
 #top_navigation .tab.soon span::after {
@@ -2901,6 +2919,77 @@ main.grid {
             backdrop-filter: blur(16px) brightness(0.5);
         }
     }
+
+    .lookup-player {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 25px;
+        padding: 25px 0;
+        font-size: 30px;
+
+        p {
+            width: 100%;
+            text-align: center;
+            font-weight: 600;
+            margin: 5px;
+
+            // //this is for random player
+            // &:last-child {
+            //     font-size: 16px;
+            //     color: rgba(255, 255, 255, 0.8);
+            //     margin: 0;
+            // }
+        }
+
+        input {
+            position: relative;
+            width: 100%;
+            height: 2.25em;
+            text-align: center;
+            font-size: inherit;
+            font-weight: 600;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 0;
+            color: white;
+            font-weight: normal;
+            -webkit-appearance: none;
+
+            &::-webkit-search-cancel-button {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                height: unset;
+                right: 0.5em;
+            }
+        }
+
+        .big-green-button {
+            display: flex;
+            height: 48px;
+            border-radius: 24px;
+            padding: 0 24px;
+            align-items: center;
+            border: none;
+            appearance: none;
+            background-color: var(--icon-hex);
+            color: white;
+            text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 16px;
+            transform: scale(1);
+            transition: transform 0.15s ease-in-out, background-color 0.15s;
+
+            &:hover,
+            &:focus {
+                background-color: var(--link-hex);
+                transform: scale(1.015);
+            }
+        }
+    }
 }
 
 main.grid > a,
@@ -2926,63 +3015,6 @@ main.grid > a,
         &:focus {
             transform: scale(1.01);
         }
-    }
-}
-
-#enter_player_box {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: 1fr;
-    justify-items: center;
-    gap: 25px;
-    padding: 25px 0;
-
-    p {
-        width: 100%;
-        text-align: center;
-        font-size: 30px;
-        font-weight: 600;
-        margin: 5px;
-
-        &:last-child {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.8);
-            margin: 0;
-        }
-    }
-
-    input {
-        width: 100%;
-        text-align: center;
-        font-size: 30px;
-        font-weight: 600;
-        box-sizing: border-box;
-        padding: 15px;
-        background-color: rgba(255, 255, 255, 0.1);
-        border: 0;
-        color: white;
-        font-weight: normal;
-    }
-}
-
-#goto_target_username {
-    text-align: right;
-    display: inline-block;
-    padding: 15px;
-    padding-left: 25px;
-    padding-right: 25px;
-    background-color: var(--icon-hex);
-    color: white;
-    text-transform: uppercase;
-    font-weight: bold;
-    text-decoration: none;
-    transition: background-color 0.15s;
-    border-radius: 999px;
-    text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
-
-    &:hover,
-    &:focus {
-        background-color: var(--link-hex);
     }
 }
 
@@ -3587,8 +3619,8 @@ body {
 @media (max-width: 745px) {
     :not(.page-index) > header #themes_button,
     :not(.page-index) > header #packs_button,
-    #search_user.show-user-search ~ #themes_button,
-    #search_user.show-user-search ~ #packs_button {
+    .lookup-player.show-user-search ~ #themes_button,
+    .lookup-player.show-user-search ~ #packs_button {
         padding-right: 3px;
 
         span {
@@ -3600,23 +3632,6 @@ body {
 }
 
 @media (max-width: 735px) {
-    #enter_player_box {
-        height: 205px;
-        font-size: 12px;
-
-        p {
-            font-size: 20px;
-
-            &:last-child {
-                font-size: 14px;
-            }
-        }
-
-        input {
-            font-size: 20px;
-        }
-    }
-
     main.grid {
         grid-template-columns: 1fr;
     }
@@ -3653,6 +3668,10 @@ body {
 }
 
 @media (max-width: 520px) {
+    main.grid .lookup-player {
+        font-size: 20px;
+    }
+
     .blm-logo {
         display: none;
     }
@@ -3734,7 +3753,7 @@ body {
         justify-content: center;
     }
 
-    .page-index #search_user {
+    .page-index header .lookup-player {
         display: none;
     }
 
