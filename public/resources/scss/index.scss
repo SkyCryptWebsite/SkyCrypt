@@ -730,8 +730,8 @@ input[type="search"]::-webkit-search-cancel-button {
         left: 50%;
         transform: translate(-50%, -50%);
         cursor: pointer;
-        }
-        }
+    }
+}
 
 #info_box {
     position: fixed;
@@ -1159,38 +1159,38 @@ input[type="search"]::-webkit-search-cancel-button {
     overflow: hidden;
 
     html.no-clip-path & {
-    transition: none !important;
-}
+        transition: none !important;
+    }
 
     :focus-within > &,
     :hover > & {
-    clip-path: ellipse(200% 200% at 0% 0%);
-    visibility: visible;
-}
+        clip-path: ellipse(200% 200% at 0% 0%);
+        visibility: visible;
+    }
 
     .goto {
-    display: block;
-    color: white;
-    text-decoration: none;
-    padding: 20px;
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0);
-    transition: background-color 0.2s;
-    box-sizing: border-box;
-    min-width: 200px;
+        display: block;
+        color: white;
+        text-decoration: none;
+        padding: 20px;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0);
+        transition: background-color 0.2s;
+        box-sizing: border-box;
+        min-width: 200px;
 
         &:focus,
-    &:hover {
-        background-color: rgba(255, 255, 255, 0.2);
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.2);
             outline: none;
+        }
     }
-}
 
     .goto-last-played {
-    font-size: 15px;
-    color: rgba(255, 255, 255, 0.8);
-    line-height: normal;
-}
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: normal;
+    }
 }
 
 #additional_player_stats {
