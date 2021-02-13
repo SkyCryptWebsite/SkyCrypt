@@ -1182,12 +1182,12 @@ document.addEventListener('DOMContentLoaded', function(){
     window.addEventListener('keydown', function(e){
         let selectedPiece = document.querySelector('.rich-item:focus');
 
-        if(selectedPiece !== null && e.keyCode == 13){
+        if(selectedPiece !== null && e.key === 'Enter'){
             fillLore(selectedPiece);
             showLore(selectedPiece);
         }
 
-        if(e.keyCode == 27){
+        if (e.key === 'Escape'){
             dimmer.classList.remove('show-dimmer');
             enableApiPlayer.classList.remove('show');
             if(document.querySelector('#stats_content.sticky-stats') != null){
@@ -1195,7 +1195,7 @@ document.addEventListener('DOMContentLoaded', function(){
             }
         }
 
-        if(document.querySelector('.rich-item.sticky-stats') != null && e.keyCode == 9)
+        if(document.querySelector('.rich-item.sticky-stats') != null && e.key === 'Tab')
             e.preventDefault();
     });
 
