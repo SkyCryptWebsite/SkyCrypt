@@ -1927,7 +1927,7 @@ a.additional-player-stat:hover {
 }
 
 .piece:focus {
-    outline: 0 !important;
+    outline: none;
 }
 
 .piece.sticky-stats::after,
