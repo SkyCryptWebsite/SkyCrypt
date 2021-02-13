@@ -3190,13 +3190,11 @@ main.grid > a,
     border-radius: 1%;
     cursor: default;
     z-index: 8500;
-    opacity: 0;
-    visibility: hidden;
     transition: opacity 0.3s, visibility 0.3s;
 
-    &.show {
-        visibility: visible;
-        opacity: 1;
+    &:not(.show) {
+        visibility: hidden;
+        opacity: 0;
     }
 }
 
