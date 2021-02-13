@@ -730,12 +730,8 @@ input[type="search"]::-webkit-search-cancel-button {
         left: 50%;
         transform: translate(-50%, -50%);
         cursor: pointer;
-
-        &:focus {
-            outline: none !important;
         }
         }
-    }
 
 #info_box {
     position: fixed;
