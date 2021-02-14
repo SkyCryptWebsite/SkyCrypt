@@ -625,13 +625,13 @@ document.addEventListener('DOMContentLoaded', function(){
                 if(stat == 'sea_creature_chance')
                     continue;
 
-                let element = document.querySelector('.basic-stat[data-stat=' + stat + '] .stat-value');
+                const element = document.querySelector('.basic-stat[data-stat=' + stat + '] .stat-value');
 
                 if(!element)
                     continue;
 
-                let currentValue = parseInt(element.innerHTML);
-                let newValue = stats[stat];
+                const currentValue = parseInt(element.innerHTML);
+                const newValue = stats[stat];
 
                 if(newValue != currentValue){
                     anime({
@@ -702,13 +702,13 @@ document.addEventListener('DOMContentLoaded', function(){
                 easing: 'easeOutCubic'
             });
 
-            let _element = document.querySelector('.basic-stat[data-stat=sea_creature_chance] .stat-value');
+            const _element = document.querySelector('.basic-stat[data-stat=sea_creature_chance] .stat-value');
 
             if(!_element)
                 return;
 
-            let currentValue = parseInt(_element.innerHTML);
-            let newValue = stats['sea_creature_chance'];
+            const currentValue = parseInt(_element.innerHTML);
+            const newValue = stats['sea_creature_chance'];
 
             if(newValue != currentValue){
                 anime({
