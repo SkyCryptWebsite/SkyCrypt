@@ -49,7 +49,7 @@
             function handleSubmit(submitEvent) {
                 submitEvent.preventDefault();
                 const formData = new FormData(submitEvent.srcElement);
-                const urlSegments =  formData.get('username').split('/');
+                const urlSegments =  formData.get('ign').split('/');
                 let error;
                 switch(urlSegments.length) {
                     case 2:
