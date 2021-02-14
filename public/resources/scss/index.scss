@@ -1530,6 +1530,10 @@ a.additional-player-stat:hover {
     margin-left: 2px;
 }
 
+.percent::after {
+    content: '%';
+}
+
 .basic-stat {
     background-size: 24px 24px;
     background-repeat: no-repeat;
