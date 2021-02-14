@@ -566,6 +566,13 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
+    function flashForUpdate(element) {
+        element.classList.add('updated');
+        element.addEventListener('animationend', () => {
+            element.classList.remove('updated');
+        });
+    }
+
     [].forEach.call(document.querySelectorAll('.stat-weapons .select-weapon'), function(element){
         let itemId = element.parentNode.getAttribute('data-item-id');
         let filterItems;
@@ -613,13 +620,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 stats = weaponStats;
             }
 
-            anime({
-                targets: '.stat-active-weapon',
-                backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                duration: 500,
-                round: 1,
-                easing: 'easeOutCubic'
-            });
+            flashForUpdate(activeWeaponElement);
 
             for(let stat in stats){
                 if(stat == 'sea_creature_chance')
@@ -634,14 +635,8 @@ document.addEventListener('DOMContentLoaded', function(){
                 const newValue = stats[stat];
 
                 if(newValue != currentValue){
-                    anime({
-                        targets: '.basic-stat[data-stat=' + stat + '] .stat-value',
-                        innerHTML: newValue,
-                        backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                        duration: 500,
-                        round: 1,
-                        easing: 'easeOutCubic'
-                    });
+                    element.innerHTML = newValue;
+                    flashForUpdate(element);
                 }
             }
         });
@@ -694,13 +689,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 stats = weaponStats;
             }
 
-            anime({
-                targets: '.stat-active-rod',
-                backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                duration: 500,
-                round: 1,
-                easing: 'easeOutCubic'
-            });
+            flashForUpdate(activeRodElement);
 
             const _element = document.querySelector('.basic-stat[data-stat=sea_creature_chance] .stat-value');
 
@@ -711,14 +700,8 @@ document.addEventListener('DOMContentLoaded', function(){
             const newValue = stats['sea_creature_chance'];
 
             if(newValue != currentValue){
-                anime({
-                    targets: '.basic-stat[data-stat=sea_creature_chance] .stat-value',
-                    innerHTML: newValue,
-                    backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                    duration: 500,
-                    round: 1,
-                    easing: 'easeOutCubic'
-                });
+                _element.innerHTML = newValue;
+                flashForUpdate(_element);
             }
         });
     });
