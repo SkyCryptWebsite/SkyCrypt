@@ -590,14 +590,16 @@ document.addEventListener('DOMContentLoaded', function(){
             e.preventDefault();
         });
 
+        const activeWeaponElement = document.querySelector('.stat-active-weapon');
+
         element.addEventListener('click', function(e){
             if(element.parentNode.classList.contains('piece-selected')){
                 element.parentNode.classList.remove("piece-selected");
 
                 stats = calculated.stats;
 
-                document.querySelector('.stat-active-weapon').className = 'stat-value stat-active-weapon piece-common-fg';
-                document.querySelector('.stat-active-weapon').innerHTML = 'None';
+                activeWeaponElement.className = 'stat-value stat-active-weapon piece-common-fg';
+                activeWeaponElement.innerHTML = 'None';
             }else{
                 [].forEach.call(document.querySelectorAll('.stat-weapons .piece'), function(_element){
                     _element.classList.remove("piece-selected");
@@ -605,8 +607,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 element.parentNode.classList.add("piece-selected");
 
-                document.querySelector('.stat-active-weapon').className = 'stat-value stat-active-weapon piece-' + item.rarity + '-fg';
-                document.querySelector('.stat-active-weapon').innerHTML = item.display_name;
+                activeWeaponElement.className = 'stat-value stat-active-weapon piece-' + item.rarity + '-fg';
+                activeWeaponElement.innerHTML = item.display_name;
 
                 stats = weaponStats;
             }
@@ -669,14 +671,16 @@ document.addEventListener('DOMContentLoaded', function(){
             e.preventDefault();
         });
 
+        const activeRodElement = document.querySelector('.stat-active-rod');
+
         element.addEventListener('click', function(e){
             if(element.parentNode.classList.contains('piece-selected')){
                 element.parentNode.classList.remove("piece-selected");
 
                 stats = calculated.stats;
 
-                document.querySelector('.stat-active-rod').className = 'stat-value stat-active-rod piece-common-fg';
-                document.querySelector('.stat-active-rod').innerHTML = 'None';
+                activeRodElement.className = 'stat-value stat-active-rod piece-common-fg';
+                activeRodElement.innerHTML = 'None';
             }else{
                 [].forEach.call(document.querySelectorAll('.stat-fishing .piece'), function(_element){
                     _element.classList.remove("piece-selected");
@@ -684,8 +688,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 element.parentNode.classList.add("piece-selected");
 
-                document.querySelector('.stat-active-rod').className = 'stat-value stat-active-rod piece-' + item.rarity + '-fg';
-                document.querySelector('.stat-active-rod').innerHTML = item.display_name;
+                activeRodElement.className = 'stat-value stat-active-rod piece-' + item.rarity + '-fg';
+                activeRodElement.innerHTML = item.display_name;
 
                 stats = weaponStats;
             }
