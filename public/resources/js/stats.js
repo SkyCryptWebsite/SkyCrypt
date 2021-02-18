@@ -69,7 +69,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
     	skinViewer.camera.position.set(-18, -3, 58);
 
-    	const controls = new skinview3d.createOrbitControls(skinViewer);
+        const controls = new skinview3d.createOrbitControls(skinViewer);
+
+        skinViewer.canvas.removeAttribute("tabindex");
 
         controls.enableZoom = false;
         controls.enablePan = false;
