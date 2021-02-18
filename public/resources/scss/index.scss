@@ -2946,6 +2946,7 @@ main.grid {
             color: white;
             font-weight: normal;
             -webkit-appearance: none;
+            border-radius: 0;
 
             &::-webkit-search-cancel-button {
                 position: absolute;
