@@ -29,7 +29,7 @@
     </script>
 
     <script>
-        let extra = <%- JSON.stringify(extra) %>;
+        const extra = JSON.parse(`<%- JSON.stringify(extra).replace(/\\/g, '\\\\') %>`);
 
         function formatNumber(number, floor, rounding = 10) {
             let roundFunc = floor ? Math.floor : Math.ceil;
