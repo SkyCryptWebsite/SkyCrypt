@@ -10,10 +10,14 @@ html {
     font-family: "Montserrat", sans-serif;
     color: white;
     overflow-x: hidden;
+
+    &::before {
+        content: none;
+    }
 }
 
 @media (max-width: 480px) {
-    #search_user {
+    header .lookup-player {
         display: none;
     }
 
