@@ -6,17 +6,13 @@ module.exports = {
         "default": {
             name: "Default Theme",
             author: "SkyCrypt Team",
-            official: true,
-            images: {
-                logo: "/resources/img/logo_square.svg"
-            }
+            official: true
         },
         "skylea": {
             name: "sky.lea.moe",
             author: "LeaPhant",
             official: true,
             images: {
-                logo: "/resources/img/themes/skylea/logo_square.svg",
                 bg: "/resources/img/themes/skylea/bg.webp",
                 bg_blur: "/resources/img/themes/skylea/bg_blur.webp"
             },
@@ -27,6 +23,7 @@ module.exports = {
                 }
             },
             colors: {
+                logo: "#f03c96",
                 icon: "#A6145D",
                 link: "#F94EA3",
                 hover: "#F78DC2"
@@ -40,7 +37,6 @@ module.exports = {
             author: "8KCoffeeWizard",
             community: true,
             images: {
-                logo: "/resources/img/themes/nightblue/logo_square.svg",
                 bg: "/resources/img/themes/nightblue/bg.webp",
                 bg_blur: "/resources/img/themes/nightblue/bg_blur.webp"
             },
@@ -51,6 +47,7 @@ module.exports = {
                 }
             },
             colors: {
+                logo: "#0b8ada",
                 icon: "#3BB9FF",
                 link: "#00FFFB",
                 hover: "#0BAFCA"
@@ -61,7 +58,6 @@ module.exports = {
             author: "rainbowcraft2",
             community: true,
             images: {
-                logo: "/resources/img/themes/sunrise/logo_square.svg",
                 bg: "/resources/img/themes/sunrise/bg.webp",
                 bg_blur: "/resources/img/themes/sunrise/bg_blur.webp"
             },
@@ -72,6 +68,7 @@ module.exports = {
                 }
             },
             colors: {
+                logo: "#f5694c",
                 link: "#F2694E",
                 icon: "#F2694E",
                 hover: "#ff9d57"
@@ -82,7 +79,6 @@ module.exports = {
             author: "rainbowcraft2",
             community: true,
             images: {
-                logo: "/resources/img/themes/draconic/logo_square.svg",
                 bg: "/resources/img/themes/draconic/bg.webp",
                 bg_blur: "/resources/img/themes/draconic/bg_blur.webp"
             },
@@ -93,6 +89,7 @@ module.exports = {
                 }
             },
             colors: {
+                logo: "#a956c8",
                 link: "#7652b1",
                 icon: "#ba5fde",
                 hover: "#ba5fde"
@@ -104,7 +101,6 @@ module.exports = {
             community: true,
             light: true,
             images: {
-                logo: "/resources/img/themes/candycane/logo_square.svg",
                 bg: "/resources/img/themes/candycane/bg.webp",
                 bg_blur: "/resources/img/themes/candycane/bg_blur.webp"
             },
@@ -123,6 +119,7 @@ module.exports = {
                 }
             },
             colors: {
+                logo: "#cc0000",
                 icon: "#CA0000",
                 link: "#EB0000",
                 hover: "#B30000",
@@ -140,7 +137,6 @@ module.exports = {
             community: true,
             hidden: true,
             images: {
-                logo: "/resources/img/logo_square.png",
                 bg: "https://cdn.discordapp.com/attachments/713278398830477353/744929704611676221/farming_2.png",
                 bg_blur: "https://cdn.discordapp.com/attachments/713278398830477353/744929704611676221/farming_2.png"
             },
@@ -151,6 +147,7 @@ module.exports = {
                 }
             },
             colors: {
+                logo: "#117d87",
                 icon: "#00aabb",
                 link: "#00aabb",
                 hover: "#00aabb"

@@ -388,6 +388,24 @@ Disallow: /item /head /leather /resources
 
     app.all('/favicon.ico?v2', express.static(path.join(__dirname, 'public')));
 
+    app.all('/resources/img/logo_square.svg', async (req, res, next) => {
+        let color = '0bda51';
+        if (typeof req.query.color === 'string' && req.query.color.match(/^[0-9a-fA-F]{6}$/)) {
+            color = req.query.color;
+        }
+        res.type('svg').send(/*xml*/`
+            <svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+                <title>SkyCrypt Logo</title>
+                <rect rx="16" height="120" width="120" y="0" x="0" fill="#${color}"/>
+                <g fill="#ffffff">
+                    <rect rx="4" height="28" width="19" y="69" x="22"/>
+                    <rect rx="4" height="75" width="19" y="22" x="50"/>
+                    <rect rx="4" height="47" width="19" y="50" x="79"/>
+                </g>
+            </svg>
+        `);
+    });
+
     app.all('/manifest.webmanifest', async (req, res) => {
         const favorites = await getFavoritesFormUUIDs(parseFavorites(req.cookies.favorite))
         const shortcuts = favorites.map(favorite => ({

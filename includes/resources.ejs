@@ -148,13 +148,14 @@
                 element.style.setProperty(`--${key}`, value);
             }
             
-            if (theme.images?.logo) {
-                document.querySelectorAll('link[rel="icon"]').forEach(favicon => {
-                    if (favicon.href.match('logo_square')) {
-                        favicon.href = theme.images?.logo;
-                    }
-                });
-            }
+            
+            const logoURL = '/resources/img/logo_square.svg' + (theme.colors?.logo?.replace('#', '?color=') ?? '');
+            element.style.setProperty(`--logo`, `url(${logoURL})`);
+            document.querySelectorAll('link[rel="icon"]').forEach(favicon => {
+                if (favicon.href.match('logo_square')) {
+                    favicon.href = logoURL;
+                }
+            });
 
             console.log(`Loaded theme: ${currentTheme}`);
         }

@@ -83,7 +83,7 @@
         const theme = extra.themes[theme_id];
         if(theme.hidden) continue; %>
     <div class="theme">
-        <% const icon = theme.images.logo; %>
+        <% const icon = '/resources/img/logo_square.svg' + (theme.colors?.logo?.replace('#', '?color=') ?? ''); %>
         <img class="theme-icon" src="<%= icon %>">
         <span class="theme-name"><%= theme.name %></span>
         <div class="theme-author">by <span><%= theme.author %></span></div>
