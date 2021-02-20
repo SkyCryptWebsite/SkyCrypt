@@ -1,5 +1,6 @@
 const cluster = require('cluster');
 const lib = require('./lib');
+const { getFileHashes } = require('./hashes');
 
 async function main(){
     const express = require('express');
@@ -24,6 +25,8 @@ async function main(){
     const renderer = require('./renderer');
 
     await renderer.init();
+
+    const fileHashes = await getFileHashes();
 
     const credentials = require(path.resolve(__dirname, '../credentials.json'));
 
@@ -186,7 +189,7 @@ async function main(){
             const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack);
             const calculated = await lib.getStats(db, profile, allProfiles, items);
 
-            res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), page: 'stats' });
+            res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), fileHashes, page: 'stats' });
         }catch(e){
             console.error(e);
 
@@ -195,6 +198,7 @@ async function main(){
                 error: e,
                 player: playerUsername,
                 extra: await getExtra('index', favorites),
+                fileHashes,
                 helper,
                 page: 'index'
             });
@@ -403,7 +407,7 @@ Disallow: /item /head /leather /resources
     });
 
     app.all('/api', async (req, res, next) => {
-        res.render('api', { error: null, player: null, extra: await getExtra('api'), helper, page: 'api' });
+        res.render('api', { error: null, player: null, extra: await getExtra('api'), fileHashes, helper, page: 'api' });
     });
 
     app.all('/:player/:profile?', async (req, res, next) => {
@@ -412,7 +416,7 @@ Disallow: /item /head /leather /resources
 
     app.all('/', async (req, res, next) => {
         const favorites = parseFavorites(req.cookies.favorite);
-        res.render('index', { error: null, player: null, extra: await getExtra('index', favorites), helper, page: 'index' });
+        res.render('index', { error: null, player: null, extra: await getExtra('index', favorites), fileHashes, helper, page: 'index' });
     });
 
     app.all('*', async (req, res, next) => {
