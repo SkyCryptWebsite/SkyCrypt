@@ -386,8 +386,6 @@ Disallow: /item /head /leather /resources
         res.redirect(`/stats/20934ef9488c465180a78f861586b4cf/bf7c14fb018946899d944d56e65222d2`);
     });
 
-    app.all('/favicon.ico?v2', express.static(path.join(__dirname, 'public')));
-
     app.all('/manifest.webmanifest', async (req, res) => {
         const favorites = await getFavoritesFormUUIDs(parseFavorites(req.cookies.favorite))
         const shortcuts = favorites.map(favorite => ({
