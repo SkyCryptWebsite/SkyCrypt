@@ -7,7 +7,6 @@ async function main(){
     const session = require('express-session');
     const MongoStore = require('connect-mongo')(session);
     const bodyParser = require('body-parser');
-    const crypto = require('crypto');
     const cors = require('cors');
 
     const Redis = require("ioredis");
