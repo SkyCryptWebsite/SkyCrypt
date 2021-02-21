@@ -512,6 +512,9 @@ document.addEventListener('DOMContentLoaded', function(){
     let oldWidth = null;
     let oldheight = null;
 
+    const navBar = document.querySelector('#nav_bar');
+    let navBarHeight;
+
     function resize(){
         if (playerModel) {
             if(window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570))
@@ -529,6 +532,8 @@ document.addEventListener('DOMContentLoaded', function(){
             else
                 skinViewer.setSize(playerModel.offsetHeight / 2, playerModel.offsetHeight);
         }
+
+        navBarHeight = parseFloat(getComputedStyle(navBar).top);
 
         updateStatsPositions();
 
@@ -1205,9 +1210,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
     window.addEventListener('resize', resize);
 
-    const navBar = document.querySelector('#nav_bar')
     function onScroll() {
-        if(navBar.getBoundingClientRect().top <= 48) {
+        if (navBar.getBoundingClientRect().top <= navBarHeight ) {
             navBar.classList.add('stuck')
         } else {
             navBar.classList.remove('stuck')
