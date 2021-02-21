@@ -3,6 +3,7 @@
     <meta property="og:site_name" content="SkyCrypt">
     <link rel="sitemap" href="/sitemap.xml">
     <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
+    <link rel="search" type="application/opensearchdescription+xml" title="SkyCrypt" href="/search.osd">
     <meta name="theme-color" content="#282828">
     <meta name="apple-mobile-web-app-title" content="SkyCrypt">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -10,7 +11,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/resources/img/app-icons/square-180.png">
     <link rel="apple-touch-icon" sizes="512x512" href="/resources/img/app-icons/square-512.png">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap"></noscript>
-    <link rel="stylesheet" href="/resources/css/index.css?v150">
+    <link rel="stylesheet" href="/resources/css/index.css?v153">
     <noscript><link rel="stylesheet" href="/resources/css/inventory.css?v13"></noscript>
 
     <script>
@@ -45,25 +46,44 @@
         }
 
         document.addEventListener('DOMContentLoaded', function(){
-            let searchUser = document.querySelector('#inp_search_user');
-
-            function updateUserTarget(e){
-                let playerName = searchUser.value;
-
-                if(window.hasOwnProperty("targetUsername") && playerName)
-                    targetUsername.value = playerName;
-
-                if(e.keyCode == 13 && playerName.trim().length > 0)
-                    document.location = '/stats/' + playerName;
-                else
-                    document.querySelector('#btn_search_user').href = '/stats/' + playerName;
-
-                if(playerName.trim().length == 0)
-                    document.querySelector('#btn_search_user').href = '#';
+            function handleSubmit(submitEvent) {
+                submitEvent.preventDefault();
+                const formData = new FormData(submitEvent.srcElement);
+                const urlSegments =  formData.get('ign').trim().split('/');
+                let error;
+                switch(urlSegments.length) {
+                    case 2:
+                        if (!(urlSegments[1].match(/^([0-9a-fA-F]{32})$/) || urlSegments[1].match(/^[A-Z][a-z]+/))) {
+                            error = `"${urlSegments[1]}" is not a valid profile name or ID`
+                            break;
+                        }
+                    case 1:
+                        if (urlSegments[0].match(/^([0-9a-fA-F]{8})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{12})$/)) {
+                            urlSegments[0] = urlSegments[0].replace(/-/g, '');
+                        } else if(urlSegments[0].match(/^[\w ]{3,16}$/)) {
+                            urlSegments[0] = urlSegments[0].replace(/ /g, '_');
+                        } else {
+                            error = `"${urlSegments[0]}" is not a valid username or UUID`
+                            break;
+                        }
+                        window.location.href = '/stats/' + urlSegments.join('/');
+                        return;
+                }
+                let errorTip = tippy(submitEvent.srcElement.querySelector('input'), {
+                    trigger: 'manual',
+                    content: (error || "please enter a valid Minecraft username or UUID")
+                });
+                errorTip.show();
+                setTimeout(() => {
+                    errorTip.hide();
+                    setTimeout(() => {
+                        errorTip.destroy();
+                    }, 500);
+                }, 1500);
             }
-
-            searchUser.addEventListener('keyup', updateUserTarget);
-            searchUser.addEventListener('change', updateUserTarget);
+            document.querySelectorAll('.lookup-player').forEach(form => {
+                form.addEventListener('submit', handleSubmit);
+            });
         });
     </script>
 

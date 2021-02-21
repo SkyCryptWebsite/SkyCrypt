@@ -69,7 +69,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
     	skinViewer.camera.position.set(-18, -3, 58);
 
-    	const controls = new skinview3d.createOrbitControls(skinViewer);
+        const controls = new skinview3d.createOrbitControls(skinViewer);
+
+        skinViewer.canvas.removeAttribute("tabindex");
 
         controls.enableZoom = false;
         controls.enablePan = false;
@@ -229,6 +231,8 @@ document.addEventListener('DOMContentLoaded', function(){
         if (type === 'inventory') {
             inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
             pagesize = 3 * 9;
+        } else if (type === 'backpack') {
+            pagesize = 6 * 9;
         }
 
         inventory.forEach(function(item, index){
@@ -259,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 inventoryItem.className = 'rich-item inventory-item';
 
-                if(type == 'backpack')
+                if(type === 'backpack')
                     inventoryItem.setAttribute('data-backpack-item-index', index);
                 else
                     inventoryItem.setAttribute('data-item-index', item.item_index);
@@ -279,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             inventoryView.appendChild(document.createTextNode(" "));
 
-            if ((index + 1) % pagesize == 0) {
+            if ((index + 1) % pagesize == 0 && pagesize !== inventory.length) {
                 inventoryView.appendChild(document.createElement("hr"));
             }
         });
@@ -451,10 +455,6 @@ document.addEventListener('DOMContentLoaded', function(){
                 backpackContents.appendChild(inventorySlot);
 
                 backpackContents.appendChild(document.createTextNode(" "));
-
-                if ((index + 1) % 27 == 0) {
-                    inventoryView.appendChild(document.createElement("hr"));
-                }
             });
 
             [].forEach.call(document.querySelectorAll('.contains-backpack .item-icon.is-enchanted'), handleEnchanted);
@@ -1184,12 +1184,12 @@ document.addEventListener('DOMContentLoaded', function(){
     window.addEventListener('keydown', function(e){
         let selectedPiece = document.querySelector('.rich-item:focus');
 
-        if(selectedPiece !== null && e.keyCode == 13){
+        if(selectedPiece !== null && e.key === 'Enter'){
             fillLore(selectedPiece);
             showLore(selectedPiece);
         }
 
-        if(e.keyCode == 27){
+        if (e.key === 'Escape'){
             dimmer.classList.remove('show-dimmer');
             enableApiPlayer.classList.remove('show');
             if(document.querySelector('#stats_content.sticky-stats') != null){
@@ -1197,7 +1197,7 @@ document.addEventListener('DOMContentLoaded', function(){
             }
         }
 
-        if(document.querySelector('.rich-item.sticky-stats') != null && e.keyCode == 9)
+        if(document.querySelector('.rich-item.sticky-stats') != null && e.key === 'Tab')
             e.preventDefault();
     });
 

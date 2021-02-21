@@ -401,7 +401,7 @@ module.exports = (app, db) => {
                 output = {
                     profile_id: singleProfile.profile_id,
                     cute_name: singleProfile.cute_name,
-                    dungeonData
+                    dungeons: dungeonData
                 };
             }
 
