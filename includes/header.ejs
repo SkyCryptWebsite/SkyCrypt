@@ -58,7 +58,6 @@
     </div>
 </div>
 <div id="themes_box" class="themes-closed">
-    <div onclick="toggleThemes()" id="themes_close"></div>
     <% for(const theme_id in extra.themes){
         const theme = extra.themes[theme_id];
         if(theme.hidden) continue; %>
@@ -72,7 +71,6 @@
     <% } %>
 </div>
 <div id="packs_box" class="packs-closed">
-    <div onclick="togglePacks()" id="packs_close"></div>
     <div class="resource-pack">
         <img class="pack-icon" src="/resources/img/pack.png">
         <a class="pack-name" href="/" target="_blank">Default</a><br>
