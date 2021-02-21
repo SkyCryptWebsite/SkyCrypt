@@ -856,9 +856,12 @@ input[type="search"]::-webkit-search-cancel-button {
     padding: 6px;
     border-radius: 5px;
     background-color: rgba(255, 255, 255, 0.05);
-    margin-top: 15px;
     padding-left: 48px;
     font-size: 14px;
+
+    &:not(:first-of-type) {
+        margin-top: 15px;
+    }
 
     .pack-icon {
         top: 8px;
@@ -902,10 +905,13 @@ input[type="search"]::-webkit-search-cancel-button {
     padding: 6px;
     border-radius: 5px;
     background-color: rgba(255, 255, 255, 0.05);
-    margin-top: 15px;
     padding-left: 48px;
     font-size: 14px;
     
+    &:not(:first-of-type) {
+        margin-top: 15px;
+    }
+
     .theme-icon {
         top: 8px;
         left: 8px;
