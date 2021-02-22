@@ -1091,26 +1091,51 @@ if(calculated.profile.game_mode == 'ironman'){
     </div>
     <div id="wrapper" data-sticky-container>
         <div id="player_profile"><span class="text-stats-for">Stats for</span>
-            <div tabindex="1" id="stats_for_player">
+            <span tabindex="0" id="stats_for_player">
                 <%- calculated.rank_prefix %>
                 <%= calculated.display_name %>
-                <% if(calculated.display_emoji_img){ %><img class="emoji" draggable="false" src="<%= calculated.display_emoji_img %>">
-                <% }else if(calculated.display_emoji){ %><%- extra.twemoji.parse(calculated.display_emoji) %><% } %>
-                <div id="other_players">
+                <% if(calculated.display_emoji_img){ %>
+                    <img class="emoji" draggable="false" src="<%= calculated.display_emoji_img %>">
+                <% }else if(calculated.display_emoji){ %>
+                    <%- extra.twemoji.parse(calculated.display_emoji) %>
+                <% } %>
+                <ul id="other_players">
                     <% calculated.members.forEach(member => { %>
-                        <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"><%= member.display_name %><% if(member.emojiImg){ %><img class="emoji" draggable="false" src="<%= member.emojiImg %>"><% }else if(member.emoji){ %> <%- extra.twemoji.parse(member.emoji) %><% } %><div class="goto-last-played"><%= 'last_updated' in member ? member.last_updated.text : '' %></div></a>
+                        <li>
+                            <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>">
+                                <%= member.display_name %>
+                                <% if(member.emojiImg){ %>
+                                    <img class="emoji" draggable="false" src="<%= member.emojiImg %>">
+                                <% }else if(member.emoji){ %>
+                                    <%- extra.twemoji.parse(member.emoji) %>
+                                <% } %>
+                                <span class="goto-last-played"><%= 'last_updated' in member ? member.last_updated.text : '' %></span>
+                            </a>
+                        </li>
                     <% }); %>
-                </div>
-            </div><span class="text-on"> on </span><div tabindex="2" id="stats_for_profile">
+                </ul>
+            </span>
+            <span class="text-on"> on </span>
+            <span tabindex="0" id="stats_for_profile">
                 <%= calculated.profile.cute_name %>
-                <% if(calculated.profile.game_mode == 'ironman'){ %><img src="/resources/img/icons/ironman.png" class="emoji"><% } %>
-                <div id="other_profiles">
+                <% if(calculated.profile.game_mode == 'ironman'){ %>
+                    <img src="/resources/img/icons/ironman.png" class="emoji">
+                <% } %>
+                <ul id="other_profiles">
                     <% for(let profile_id in calculated.profiles){ %>
                         <% let _profile = calculated.profiles[profile_id]; %>
-                        <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"><%= _profile.cute_name %><% if(_profile.game_mode == 'ironman'){ %> <img src="/resources/img/icons/ironman.png" class="emoji"><% } %><div class="goto-last-played"><%= 'last_updated' in _profile ? _profile.last_updated.text : '' %></div></a>
+                        <li>
+                            <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>">
+                                <%= _profile.cute_name %>
+                                <% if(_profile.game_mode == 'ironman'){ %>
+                                    <img src="/resources/img/icons/ironman.png" class="emoji">
+                                <% } %>
+                                <span class="goto-last-played"><%= 'last_updated' in _profile ? _profile.last_updated.text : '' %></span>
+                            </a>
+                        </li>
                     <% } %>
-                </div>
-            </div>
+                </ul>
+            </span> 
             <div id="additional_player_stats">
                 <% /*
 
