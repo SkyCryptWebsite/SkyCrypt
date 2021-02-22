@@ -1420,7 +1420,7 @@ if(calculated.profile.game_mode == 'ironman'){
                     <% } %>
                     <div class="pieces">
                         <% for(const item of items.armor.slice().reverse()){ %>
-                            <div tabindex="3" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
+                            <div tabindex="0" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
                                 <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                     <div class="piece-shine"></div>
                                 <% } %>
@@ -1440,7 +1440,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         <div class="wardrobe-set">
                             <% for(const [index, item] of set.filter(a => a !== null).entries()){
                                  %>
-                                <div tabindex="3" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item <%= index == 0 ? 'wardrobe-piece' : '' %> piece piece-<%= item.rarity %>-bg">
+                                <div tabindex="0" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item <%= index == 0 ? 'wardrobe-piece' : '' %> piece piece-<%= item.rarity %>-bg">
                                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                         <div class="piece-shine"></div>
                                     <% } %>
@@ -1479,7 +1479,7 @@ if(calculated.profile.game_mode == 'ironman'){
                                     sword = [items.highest_rarity_sword];
 
                                 items.weapons.filter(a => !a.hidden).forEach(item => { %>
-                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece
+                                    <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece
                                         <% if(sword.length > 0 && item.backpackIndex === undefined && item.item_index == sword[0].item_index){ %>piece-selected<% } %>
                                         piece-<%= item.rarity %>-bg">
                                         <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
@@ -1531,7 +1531,7 @@ if(calculated.profile.game_mode == 'ironman'){
                                 <p class="stat-sub-header" style="margin-bottom: 5px">Active Accessories</p>
                                 <% items.talismans.filter(a => !a.isInactive).forEach(item => {
                                     %>
-                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>"
+                                    <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>"
                                     class="rich-item piece piece-<%= item.rarity %>-bg">
                                         <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                             <div class="piece-shine"></div>
@@ -1549,7 +1549,7 @@ if(calculated.profile.game_mode == 'ironman'){
                             <div class="accessory-list">
                                 <p class="stat-sub-header">Inactive Accessories</p>
                                 <% items.talismans.filter(a => a.isUnique && a.isInactive).forEach(item => { %>
-                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>"
+                                    <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>"
                                     class="rich-item piece piece-<%= item.rarity %>-bg">
                                         <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                             <div class="piece-shine"></div>
@@ -1800,7 +1800,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         <% } %>
                         <div class="pieces">
                             <%  items.pickaxes.filter(a => !a.hidden).forEach(item => { %>
-                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
+                                    <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
                                         <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                             <div class="piece-shine"></div>
                                         <% } %>
@@ -1855,7 +1855,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         <% } %>
                         <div class="pieces">
                             <%  items.hoes.filter(a => !a.hidden).forEach(item => { %>
-                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
+                                    <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
                                         <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                             <div class="piece-shine"></div>
                                         <% } %>
@@ -1961,7 +1961,7 @@ if(calculated.profile.game_mode == 'ironman'){
                                     rod = [items.highest_rarity_rod];
 
                                 items.rods.filter(a => !a.hidden).forEach(item => { %>
-                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece
+                                    <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece
                                         <% if(rod.length > 0 && item.backpackIndex === undefined && item.item_index == rod[0].item_index){ %>piece-selected<% } %>
                                         piece-<%= item.rarity %>-bg">
                                         <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
