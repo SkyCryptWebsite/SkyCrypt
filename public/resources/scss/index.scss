@@ -1540,6 +1540,10 @@ a.additional-player-stat:hover {
     margin-left: 2px;
 }
 
+.percent::after {
+    content: '%';
+}
+
 .basic-stat {
     background-size: 24px 24px;
     background-repeat: no-repeat;
@@ -1889,6 +1893,23 @@ a.additional-player-stat:hover {
 .piece-selected .select-weapon,
 .piece-selected .select-rod {
     background-color: white !important;
+}
+
+@keyframes flash {
+    from {
+        background-color: rgb(255, 255, 255, 1);
+    }
+
+    to {
+        background-color: rgba(255, 255, 255, 0);
+    }
+}
+
+.updated {
+    animation-name: flash;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-out;
+    border-radius: 2px;
 }
 
 .piece-shine {
