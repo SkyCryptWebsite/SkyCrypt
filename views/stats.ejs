@@ -916,21 +916,21 @@ const skill_component = (skill, icon, level, extra = {}) => { %>
     </div>
 <% };
 
-const stat_component = stat => {
+const stat_component = (stat) => {
     const bonusStats = stats[stat.name] - calculated.base_stats[stat.name]
     %>
     <div data-stat="<%= stat.name %>" class="basic-stat stat-<%= stat.name.replace(/\_/g, "-") %>">
         <span data-tippy-content="
-        <span class='stat-name'>Base <%= helper.titleCase(stat.name.replace(/\_/g, " ")) %>: </span><span class='stat-value'><%= calculated.base_stats[stat.name].toLocaleString() %><%= stat.suffix || '' %></span>
+        <span class='stat-name'>Base <%= helper.titleCase(stat.name.replace(/\_/g, " ")) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= calculated.base_stats[stat.name].toLocaleString() %></span>
         <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= stat.baseExplanation %><% } %></div><br>
-        <span class='stat-name'>Bonus <%= helper.titleCase(stat.name.replace(/\_/g, " ")) %>: </span><span class='stat-value'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %><%= stat.suffix || '' %></span>
+        <span class='stat-name'>Bonus <%= helper.titleCase(stat.name.replace(/\_/g, " ")) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %></span>
         <div class='tippy-explanation'>Additional bonuses from Armor, held items, Accessories and active Pets.</div>
         <% if(Array.isArray(stat.extraStats)){
             for(const extraStat of stat.extraStats){ %>
-        <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value'><%= extraStat.value.toLocaleString() %><%= extraStat.suffix || '' %></span>
+        <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value<%= extraStat.percent ? ' percent' : ''%>'><%= extraStat.value.toLocaleString() %></span>
         <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= extraStat.explanation %><% } %></div>
         <% }} %>
-        "><span class="stat-name"><%= stat.prettyName || helper.titleCase(stat.name.replace(/\_/g, " ")) %> </span><span class="stat-value"><%= stats[stat.name].toLocaleString() %><%= stat.suffix || '' %></span></span></div>
+        "><span class="stat-name"><%= stat.prettyName || helper.titleCase(stat.name.replace(/\_/g, " ")) %> </span><span class="stat-value<%= stat.percent ? ' percent' : ''%>"><%= stats[stat.name].toLocaleString() %></span></span></div>
 <% };
 
 let description = "";
@@ -1089,7 +1089,7 @@ if(calculated.profile.game_mode == 'ironman'){
     <div id="skin_display">
         <div id="player_model"></div>
     </div>
-    <div id="wrapper" data-sticky-container>
+    <main id="wrapper" data-sticky-container>
         <div id="player_profile"><span class="text-stats-for">Stats for</span>
             <span tabindex="0" id="stats_for_player">
                 <%- calculated.rank_prefix %>
@@ -1212,7 +1212,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         {
                             stat: 'Damage Reduction',
                             value: (stats.defense / (stats.defense + 100) * 100).toFixed(1),
-                            suffix: '%'
+                            percent: true
                         },
                         {
                             stat: 'Effective Health',
@@ -1229,26 +1229,26 @@ if(calculated.profile.game_mode == 'ironman'){
 
                 <%- stat_component({
                     name: 'speed',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: "Increased by collecting Fairy Souls and leveling up in Wolf Slayer."
                 }); %>
 
                 <%- stat_component({
                     name: 'crit_chance',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: "Increased by leveling your Combat skill and leveling up in Spider Slayer."
                 }); %>
 
                 <%- stat_component({
                     name: 'crit_damage',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: "Increased by leveling up in Spider or Wolf Slayer."
                 }); %>
 
                 <%- stat_component({
                     name: 'bonus_attack_speed',
                     prettyName: 'Attack Speed',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: null
                 }); %>
 
@@ -1260,7 +1260,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 <%- stat_component({
                     name: 'sea_creature_chance',
                     prettyName: 'SC Chance',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: null
                 }); %>
 
@@ -1286,14 +1286,14 @@ if(calculated.profile.game_mode == 'ironman'){
                         {
                             stat: 'Chance for 1 more',
                             value: stats.ferocity % 100,
-                            suffix: '%'
+                            percent: true
                         }
                     ]
                 }); %>
 
                 <%- stat_component({
                     name: 'ability_damage',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: "Increased by leveling your Enchanting Skill."
                 }); %>
                 <!--<div data-stat="fairy_souls" class="basic-stat stat-fairy-souls">
@@ -1332,7 +1332,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 <%
                     if('levels' in calculated){
                 %>
-                    <div id="other_skills">
+                    <div id="other_skills" class="skill-bars">
                         <%= skill_component('Taming', 'icon-383_0_12', calculated.levels.taming) %>
                         <%= skill_component('Farming', 'icon-294_0', calculated.levels.farming) %>
                         <%= skill_component('Mining', 'icon-274_0', calculated.levels.mining) %>
@@ -1512,19 +1512,13 @@ if(calculated.profile.game_mode == 'ironman'){
                             %>
 
                             <span class="stat-name <%= maxTalis %>">Unique Accessories: </span>
-                            <span class="stat-value <%= maxTalis %>">
-                                <%= items.talismans.filter(a => a.isUnique).length %> / <%= UNIQUE_ACCESSORIES %>
-                            </span>
+                            <span class="stat-value <%= maxTalis %>"><%= items.talismans.filter(a => a.isUnique).length %> / <%= UNIQUE_ACCESSORIES %></span>
                             <br>
                             <span class="stat-name <%= maxTalis %>">Completion: </span>
-                            <span class="stat-value <%= maxTalis %>">
-                                <%= Math.round(items.talismans.filter(a => a.isUnique).length / UNIQUE_ACCESSORIES * 100) %>%
-                            </span>
+                            <span class="stat-value percent <%= maxTalis %>"><%= Math.round(items.talismans.filter(a => a.isUnique).length / UNIQUE_ACCESSORIES * 100) %></span>
                             <br>
                             <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
-                            <span class="stat-value <%= maxRecombTalis %>">
-                                <%= items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= UNIQUE_ACCESSORIES %>
-                            </span>
+                            <span class="stat-value <%= maxRecombTalis %>"><%= items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= UNIQUE_ACCESSORIES %></span>
                         </p>
                         <% if(items.talismans.filter(a => !a.isInactive).length > 0){ %>
                             <div class="accessory-list">
@@ -1939,7 +1933,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         <%- stat_component({
                             name: 'sea_creature_chance',
                             prettyName: 'SC Chance',
-                            suffix: '%',
+                            percent: true,
                             baseExplanation: null
                         }); %>
 
@@ -2074,20 +2068,24 @@ if(calculated.profile.game_mode == 'ironman'){
                 <p class="stat-sub-header">Classes</p>
 
                 <span class="stat-name">Selected Class: </span>
-                <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span><br>
-                <%= skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) %>
-                <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) %>
-                <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) %>
-                <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) %>
-                <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) %>
+                <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span>
+                <div class="skill-bars">
+                    <%= skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) %>
+                    <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) %>
+                    <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) %>
+                    <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) %>
+                    <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) %>
+                </div>
                 <% } %>
 
                 <% if (calculated.dungeons.catacombs.visited) { %>
                     <p class="stat-sub-header">Catacombs</p>
 
                     <p class="stat-raw-values">
-                        <%= skill_component('Catacombs', 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793', calculated.dungeons.catacombs.level) %><br>
-                        <span class="stat-name">Dungeon Item Boost: </span><span class="stat-value"><%= calculated.dungeons.catacombs.bonuses.item_boost %>%</span><br>
+                        <div class="skill-bars">
+                            <%= skill_component('Catacombs', 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793', calculated.dungeons.catacombs.level) %>
+                        </div>
+                        <span class="stat-name">Dungeon Item Boost: </span><span class="stat-value percent"><%= calculated.dungeons.catacombs.bonuses.item_boost %></span>
                     </p>
 
                     <p class="stat-raw-values">
@@ -2695,7 +2693,7 @@ if(calculated.profile.game_mode == 'ironman'){
                                 if(progress.maxed)
                                     tooltip += `<span class="stat-value golden-text">Maxed!</span>`;
                                 else
-                                    tooltip += `<span class="stat-value">${ progress.percentage.toLocaleString() }%</span>`;
+                                    tooltip += `<span class="stat-value percent">${ progress.percentage.toLocaleString() }</span>`;
                                 %>
                             <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>>
                                 <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.milestones[key].toLocaleString() %></span></span><br>
@@ -2770,7 +2768,7 @@ if(calculated.profile.game_mode == 'ironman'){
             </div>
         <% } %>
         </div>
-    </div>
+    </main>
     <%- include('../includes/footer'); %>
     <script>
         let items = JSON.parse(`<%- JSON.stringify(items).replace(/\\/g, '\\\\') %>`);
