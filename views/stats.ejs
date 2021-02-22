@@ -1089,7 +1089,7 @@ if(calculated.profile.game_mode == 'ironman'){
     <div id="skin_display">
         <div id="player_model"></div>
     </div>
-    <div id="wrapper" data-sticky-container>
+    <main id="wrapper" data-sticky-container>
         <div id="player_profile"><span class="text-stats-for">Stats for</span>
             <div tabindex="1" id="stats_for_player">
                 <%- calculated.rank_prefix %>
@@ -1307,7 +1307,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 <%
                     if('levels' in calculated){
                 %>
-                    <div id="other_skills">
+                    <div id="other_skills" class="skill-bars">
                         <%= skill_component('Taming', 'icon-383_0_12', calculated.levels.taming) %>
                         <%= skill_component('Farming', 'icon-294_0', calculated.levels.farming) %>
                         <%= skill_component('Mining', 'icon-274_0', calculated.levels.mining) %>
@@ -2043,12 +2043,14 @@ if(calculated.profile.game_mode == 'ironman'){
                 <p class="stat-sub-header">Classes</p>
 
                 <span class="stat-name">Selected Class: </span>
-                <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span><br>
-                <%= skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) %>
-                <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) %>
-                <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) %>
-                <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) %>
-                <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) %>
+                <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span>
+                <div class="skill-bars">
+                    <%= skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) %>
+                    <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) %>
+                    <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) %>
+                    <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) %>
+                    <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) %>
+                </div>
                 <% } %>
 
                 <% if (calculated.dungeons.catacombs.visited) { %>
@@ -2739,7 +2741,7 @@ if(calculated.profile.game_mode == 'ironman'){
             </div>
         <% } %>
         </div>
-    </div>
+    </main>
     <%- include('../includes/footer'); %>
     <script>
         let items = JSON.parse(`<%- JSON.stringify(items).replace(/\\/g, '\\\\') %>`);
