@@ -21,26 +21,24 @@
         document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }
 
-    function toggleInfo(){
-        let infoBox = document.querySelector('#info_box');
-        if(document.querySelector('.packs-opened')) togglePacks();
-        if(document.querySelector('.themes-opened')) toggleThemes();
+    for (const boxName of ['info', 'packs', 'themes']) {
+        const BoxElement = document.querySelector(`#${boxName}-box`);
+        const ButtonElement = document.querySelector(`#${boxName}-button`);
 
-        if(infoBox.classList.contains('info-opened'))
-            infoBox.classList.remove('info-opened')
-        else
-            infoBox.classList.add('info-opened');
-    }
+        function toggle(value) {
+            ButtonElement.toggleAttribute('aria-expanded', value);
+        }
 
-    function togglePacks(){
-        let infoBox = document.querySelector('#packs_box');
-        if(document.querySelector('.info-opened')) toggleInfo();
-        if(document.querySelector('.themes-opened')) toggleThemes();
+        ButtonElement.addEventListener('click', () => toggle());
 
-        if(infoBox.classList.contains('packs-opened'))
-            infoBox.classList.remove('packs-opened')
-        else
-            infoBox.classList.add('packs-opened');
+        function listener(event) {
+            if (!BoxElement.contains(event.relatedTarget)) {
+                toggle(false);
+            }
+        }
+
+        BoxElement.addEventListener('focusout', listener);
+        ButtonElement.addEventListener('focusout', listener);
     }
 
     function switchPack(pack = false){
@@ -50,17 +48,6 @@
             eraseCookie("pack");
         }
         window.location.reload()
-    }
-
-    function toggleThemes(){
-        let box = document.querySelector('#themes_box');
-        if(document.querySelector('.info-opened')) toggleInfo();
-        if(document.querySelector('.packs-opened')) togglePacks();
-
-        if(box.classList.contains('themes-opened'))
-            box.classList.remove('themes-opened')
-        else
-            box.classList.add('themes-opened');
     }
 
     function switchTheme(theme){

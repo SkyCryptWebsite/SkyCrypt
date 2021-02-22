@@ -280,11 +280,13 @@ header > * {
 }
 
 .social-button {
+    appearance: none;
     display: inline-block;
     vertical-align: middle;
     position: relative;
     cursor: pointer;
     text-transform: uppercase;
+    box-sizing: unset;
     height: 16px;
     font-weight: 600;
     font-size: 13px;
@@ -296,6 +298,7 @@ header > * {
     border-radius: 9999px;
     line-height: normal;
     transition: background-color 0.1s;
+    border: none;
     &:hover {
         flex-shrink: 0;
         background-color: rgba(255, 255, 255, 0.8);
@@ -442,9 +445,11 @@ input[type="search"]::-webkit-search-cancel-button {
     cursor: default;
 }
 
-#packs_button,
-#themes_button {
+#packs-button,
+#themes-button {
+    appearance: none;
     display: inline-block;
+    box-sizing: unset;
     height: 36px;
     line-height: 36px;
     box-sizing: border-box;
@@ -465,6 +470,7 @@ input[type="search"]::-webkit-search-cancel-button {
     background-position: 6px 7px;
     background-repeat: no-repeat;
     transition: padding-right 0.2s;
+    border: none;
 
     span {
         display: block;
@@ -473,11 +479,11 @@ input[type="search"]::-webkit-search-cancel-button {
     }
 }
 
-#packs_button {
+#packs-button {
     background-image: url(../img/icons/package-variant.png);
 }
 
-#themes_button {
+#themes-button {
     background-image: url(../img/icons/format-color-fill.png);
 }
 
@@ -733,7 +739,7 @@ input[type="search"]::-webkit-search-cancel-button {
     }
 }
 
-#info_box {
+#info-box {
     position: fixed;
     left: 20px;
     width: calc(30vw - 40px);
@@ -742,35 +748,18 @@ input[type="search"]::-webkit-search-cancel-button {
     background-color: rgba(30, 30, 30, 0.95);
     padding: 30px;
     padding-top: 45px;
-    box-sizing: border-box;
-    transform: translateY(0%);
-    transition: transform 0.3s;
+    transform: translateY(calc(-100% - 48px));
+    visibility: hidden;
+    transition: transform 0.3s ease-in-out, visibility 0s linear 0.3s;
     z-index: 100;
     max-height: calc(100vh - 48px - 30px);
     overflow-y: auto;
+    line-height: initial;
 
-    &:not(.info-opened) {
-        transform: translateY(calc(-100% - 48px));
-    }
-
-    #info_close {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        width: 32px;
-        height: 32px;
-        cursor: pointer;
-        background-image: url(/resources/img/icons/window-close.png);
-        background-size: 24px 24px;
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-color: rgba(255, 255, 255, 0);
-        transition: background-color 0.1s;
-        border-radius: 5px;
-
-        &:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
+    [aria-expanded] + & {
+        visibility: visible;
+        transform: translateY(0%);
+        transition: transform 0.3s ease-in-out;
     }
 
     a {
@@ -779,11 +768,11 @@ input[type="search"]::-webkit-search-cancel-button {
         display: inline-block;
     }
 
-    #info_box .name {
+    #info-box .name {
         color: rgba(255, 255, 255, 0.7);
     }
 
-    #info_box .patron {
+    #info-box .patron {
         font-weight: 500;
     }
 }
@@ -829,22 +818,25 @@ input[type="search"]::-webkit-search-cancel-button {
     }
 }
 
-#packs_box {
+#packs-box,
+#themes-box {
     position: fixed;
     right: 20px;
     width: 440px;
     top: 45px;
-    z-index: 1;
     background-color: rgba(30, 30, 30, 0.95);
     padding: 20px;
-    box-sizing: border-box;
-    transform: translateY(-100%);
-    transition: transform 0.3s;
+    transform: translateY(calc(-100% - 48px));
+    visibility: hidden;
+    transition: transform 0.3s ease-in-out, visibility 0s linear 0.3s;
     z-index: 100;
     overflow-y: auto;
+    line-height: initial;
 
-    &.packs-opened {
+    [aria-expanded] + & {
+        visibility: visible;
         transform: translateY(0%);
+        transition: transform 0.3s ease-in-out;
     }
 }
 
@@ -871,25 +863,6 @@ input[type="search"]::-webkit-search-cancel-button {
 
     .pack-author {
         font-weight: 500;
-    }
-}
-
-#themes_box {
-    position: fixed;
-    right: 20px;
-    width: 440px;
-    top: 45px;
-    z-index: 1;
-    background-color: rgba(30, 30, 30, 0.95);
-    padding: 20px;
-    box-sizing: border-box;
-    transform: translateY(-100%);
-    transition: transform 0.3s;
-    z-index: 100;
-    overflow-y: auto;
-
-    &.themes-opened {
-        transform: translateY(0%);
     }
 }
 
@@ -3264,7 +3237,7 @@ body {
 }
 
 @media (max-width: 1590px) {
-    #info_box {
+    #info-box {
         width: 440px;
     }
 
@@ -3319,7 +3292,7 @@ body {
 }
 
 @media (max-width: 1200px) {
-    #info_button {
+    #info-button {
         vertical-align: top;
         display: inline-block;
         width: 35px;
@@ -3339,7 +3312,7 @@ body {
         margin-left: -5px;
     }
 
-    #info_box {
+    #info-box {
         left: 0;
         width: 100vw;
         right: 0;
@@ -3359,7 +3332,7 @@ body {
         margin-top: 1px;
     }
 
-    #info_button:hover {
+    #info-button:hover {
         opacity: 1;
         background-color: transparent;
     }
@@ -3618,10 +3591,10 @@ body {
 }
 
 @media (max-width: 745px) {
-    :not(.page-index) > header #themes_button,
-    :not(.page-index) > header #packs_button,
-    .lookup-player.show-user-search ~ #themes_button,
-    .lookup-player.show-user-search ~ #packs_button {
+    :not(.page-index) > header #themes-button,
+    :not(.page-index) > header #packs-button,
+    .lookup-player.show-user-search ~ #themes-button,
+    .lookup-player.show-user-search ~ #packs-button {
         padding-right: 3px;
 
         span {
@@ -3637,14 +3610,14 @@ body {
         grid-template-columns: 1fr;
     }
 
-    #themes_box {
+    #themes-box {
         left: 0;
         width: 100vw;
         right: 0;
         max-height: calc(100vh - 45px);
     }
 
-    #packs_box {
+    #packs-box {
         left: 0;
         width: 100vw;
         right: 0;
@@ -3745,8 +3718,8 @@ body {
 }
 
 @media (max-width: 480px) {
-    #themes_button,
-    #packs_button {
+    #themes-button,
+    #packs-button {
         display: none;
     }
 
