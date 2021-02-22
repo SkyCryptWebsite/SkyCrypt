@@ -533,21 +533,8 @@ input[type="search"]::-webkit-search-cancel-button {
     text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
 }
 
-#bg_blur {
-    @supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
-        display: none;
-    }
-    background: var(--bg_blur-webp) no-repeat center center fixed;
-    background-size: cover;
-    position: fixed;
-    left: 30vw;
-    top: 35px;
-    right: 0;
-    bottom: 0;
-    background-color: rgb(20, 20, 20);
-}
-
 #wrapper {
+    position: relative;
     margin-left: 30vw;
     --padding: 30px;
     padding: var(--padding);
@@ -561,6 +548,21 @@ input[type="search"]::-webkit-search-cancel-button {
     user-select: none;
     -webkit-backdrop-filter: blur(16px) brightness(0.5);
     backdrop-filter: blur(16px) brightness(0.5);
+
+    #bg_blur {
+        @supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+            display: none;
+        }
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: -1;
+        background: var(--bg_blur-webp) no-repeat center center fixed;
+        background-color: rgb(20, 20, 20);
+        background-size: cover;
+    }
 }
 
 #base_stats_container {
@@ -907,7 +909,7 @@ input[type="search"]::-webkit-search-cancel-button {
     background-color: rgba(255, 255, 255, 0.05);
     padding-left: 48px;
     font-size: 14px;
-    
+
     &:not(:first-of-type) {
         margin-top: 15px;
     }
@@ -1541,7 +1543,7 @@ a.additional-player-stat:hover {
 }
 
 .percent::after {
-    content: '%';
+    content: "%";
 }
 
 .basic-stat {
@@ -3308,8 +3310,7 @@ body {
         font-size: 14px;
     }
 
-    #wrapper,
-    #bg_blur {
+    #wrapper {
         width: 1120px;
         margin-right: auto;
         margin-left: auto;
@@ -3360,8 +3361,7 @@ body {
         width: unset;
     }
 
-    #wrapper,
-    #bg_blur {
+    #wrapper {
         margin-left: env(safe-area-inset-left, 0);
         margin-right: env(safe-area-inset-right, 0);
         width: calc(100vw - env(safe-area-inset-left, 0) - env(safe-area-inset-right, 0));
