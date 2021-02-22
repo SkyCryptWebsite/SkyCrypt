@@ -2,7 +2,7 @@
 <script src="https://unpkg.com/tippy.js@5"></script>
 <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
 <script src="/resources/js/anime.min.js"></script>
-<script src="/resources/js/skinview3d.bundle.js?v3"></script>
+<script src="/resources/js/skinview3d.bundle.js?<%- fileHashes.js['skinview3d.bundle.js'] %>"></script>
 <script src="/resources/js/modernizr.js"></script>
 <script async src="https://arc.io/widget.min.js#oNMq8LVU"></script>
 
@@ -153,9 +153,9 @@
     });
 </script>
 <% if(page == 'stats'){ %>
-    <script src="/resources/js/stats.js?v74"></script>
+    <script src="/resources/js/stats.js?<%- fileHashes.js['stats.js'] %>"></script>
 <% } %>
 
 <% if(page == 'api'){ %>
-    <link rel="stylesheet" href="/resources/css/api.css?v9">
+    <link rel="stylesheet" href="/resources/css/api.css?<%- fileHashes.css['api.css'] %>">
 <% } %>

@@ -6,7 +6,6 @@
         document.getElementById('not_supported').className = 'show-not-supported';
     }
 </script>
-<% if(page !== 'index') { %>
 <div id="status-bar" style="display: none;"></div>
 <script>
     const iOS = [
@@ -21,7 +20,6 @@
         document.querySelector('#status-bar').style.removeProperty('display');
     }
 </script>
-<% } %>
 <header>
     <div data-tippy-content="Supporting LGBTQ+ rights all around the year! ❤️<br><br>Click for a surprise. :)" class="pride-flag logo"></div>
     <a href="/" id="site_name">SkyCrypt</a>
@@ -31,7 +29,7 @@
         <a title="Patreon" target="_blank" rel="nofollow" href="https://patreon.com/shiiyu" class="social-button patreon"><span><%= extra.donations.patreon %> Patrons</span><div class="social-icon"></div></a>
     <% } %>
     <form class="lookup-player">
-        <input name="username" type="search" enterkeyhint="go" placeholder="Enter username" required>
+        <input name="ign" type="search" enterkeyhint="go" placeholder="Enter username" required>
         <button type="submit"></button>
     </form>
     <a href="https://blacklivesmatters.carrd.co/" target="_blank" rel="nofollow" data-tippy-content="<strong>Black Lives Matter!</strong><br><br>Click for a collection of links on how to support the fight against racial inequality." class="blm-logo"></a>
@@ -60,7 +58,6 @@
     </div>
 </div>
 <div id="themes_box" class="themes-closed">
-    <div onclick="toggleThemes()" id="themes_close"></div>
     <% for(const theme_id in extra.themes){
         const theme = extra.themes[theme_id];
         if(theme.hidden) continue; %>
@@ -74,7 +71,6 @@
     <% } %>
 </div>
 <div id="packs_box" class="packs-closed">
-    <div onclick="togglePacks()" id="packs_close"></div>
     <div class="resource-pack">
         <img class="pack-icon" src="/resources/img/pack.png">
         <a class="pack-name" href="/" target="_blank">Default</a><br>
