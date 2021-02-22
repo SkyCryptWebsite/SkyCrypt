@@ -2057,8 +2057,10 @@ if(calculated.profile.game_mode == 'ironman'){
                     <p class="stat-sub-header">Catacombs</p>
 
                     <p class="stat-raw-values">
-                        <%= skill_component('Catacombs', 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793', calculated.dungeons.catacombs.level) %><br>
-                        <span class="stat-name">Dungeon Item Boost: </span><span class="stat-value percent"><%= calculated.dungeons.catacombs.bonuses.item_boost %></span><br>
+                        <div class="skill-bars">
+                            <%= skill_component('Catacombs', 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793', calculated.dungeons.catacombs.level) %>
+                        </div>
+                        <span class="stat-name">Dungeon Item Boost: </span><span class="stat-value percent"><%= calculated.dungeons.catacombs.bonuses.item_boost %></span>
                     </p>
 
                     <p class="stat-raw-values">
