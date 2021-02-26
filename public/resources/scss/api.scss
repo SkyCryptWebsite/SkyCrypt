@@ -5,6 +5,10 @@
 
 html {
     background: white;
+
+    &:before {
+      content: none;  
+    }
 }
 
 #packs-button,
