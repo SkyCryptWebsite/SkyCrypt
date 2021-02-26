@@ -1464,13 +1464,19 @@ a.additional-player-stat:hover {
             transition: background-color 0.1s, color 0.1s;
             position: relative;
             color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
 
             &:last-child {
                 margin-right: 8px;
             }
 
-            &.active {
+            &[aria-current] {
                 color: rgba(255, 255, 255, 1);
+            }
+
+            &:focus-visible {
+                outline: 1px white currentColor;
+                outline-offset: -6px;
             }
 
             &::after {
@@ -1485,10 +1491,15 @@ a.additional-player-stat:hover {
                 transition: height 0.1s, top 0.1s;
             }
 
-            &.active::after,
-            &:hover::after {
+            &[aria-current]::after{
                 height: 8px;
                 top: calc(100% - 3px);
+            }
+            @media (hover: hover) {
+                &:hover::after {
+                    height: 8px;
+                    top: calc(100% - 3px);
+                }
             }
         }
     }
