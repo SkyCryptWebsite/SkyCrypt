@@ -1202,6 +1202,15 @@ module.exports = {
                 weapon.hidden = true;
         }
 
+        for(const rod of output.rods){
+            const id = getId(rod);
+
+            countsOfId[id] = (countsOfId[id] || 0) + 1;
+
+            if(countsOfId[id] > 2)
+                rod.hidden = true;
+        }
+
         output.talismans = output.talismans.sort((a, b) => {
             const rarityOrder = rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);
 
