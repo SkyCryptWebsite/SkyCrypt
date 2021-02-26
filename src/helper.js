@@ -599,7 +599,8 @@ module.exports = {
                 "claim_potato_war_silver_medal": "Silver Medal (Potato War)",
                 "claim_potato_war_crown": "Crown (Potato War)",
                 "skyblock_free_cookie": "Free Booster Cookie",
-                "scorpius_bribe_96": "Scorpius Bribe (Year 96)"
+                "scorpius_bribe_96": "Scorpius Bribe (Year 96)",
+                "scorpius_bribe_120": "Scorpius Bribe (Year 120)"
             };
 
             for(item in claimable)
