@@ -51,6 +51,7 @@ html {
     font-family: "Montserrat", sans-serif;
     color: white;
     overflow-x: hidden;
+    scroll-behavior: smooth;
 
     @supports (-webkit-touch-callout: none) {
         background-image: none;
