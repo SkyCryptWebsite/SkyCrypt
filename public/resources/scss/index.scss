@@ -2227,6 +2227,7 @@ a.additional-player-stat:hover {
 }
 
 #inventory_container {
+    display: inline-block;
     background-color: rgba(0, 0, 0, 0.3);
     padding: 20px;
     position: relative;
@@ -3517,6 +3518,7 @@ body {
     }
 
     #inventory_container {
+        display: block;
         margin-left: calc(-1 * var(--padding));
         margin-right: calc(-1 * var(--padding));
         margin-top: 0;
