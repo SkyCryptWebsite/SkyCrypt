@@ -205,8 +205,14 @@ document.addEventListener('DOMContentLoaded', function(){
 
         const matchingEnchants = constants.special_enchants.filter(a => output.includes(a));
 
-        for(const enchantment of matchingEnchants)
+        for(const enchantment of matchingEnchants){
+            console.log(enchantment);
+            console.log(text)
+            if(enchantment == 'Power 6' || enchantment == 'Power 7' && text.startsWith("§8Breaking")){
+                continue;
+            }
             output = output.replace(enchantment, `<span style='${specialColor.css}'>${enchantment}</span>`);
+        }
 
         return output;
     }
