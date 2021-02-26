@@ -279,11 +279,11 @@ document.addEventListener('DOMContentLoaded', function(){
                 bindLoreEvents(pieceHoverArea);
             }
 
-            inventoryView.appendChild(inventorySlot);
-
-            if ((index + 1) % pagesize === 0 && (index + 1) !== inventory.length) {
+            if (index % pagesize === 0 && index !== 0) {
                 inventoryView.appendChild(document.createElement("hr"));
             }
+
+            inventoryView.appendChild(inventorySlot);
         });
 
         inventoryContainer.appendChild(inventoryView);
