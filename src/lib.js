@@ -357,7 +357,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
     // Check backpack contents and add them to the list of items
     for(const [index, item] of items.entries()){
         if(helper.hasPath(item, 'tag', 'display', 'Name') &&
-        (item.tag.display.Name.endsWith('Backpack')
+        (item.tag.display.Name.includes('Backpack')
         || item.tag.display.Name.endsWith('New Year Cake Bag')
         || item.tag.display.Name.endsWith("Builder's Wand")
         || item.tag.display.Name.endsWith('Basket of Seeds'))){
