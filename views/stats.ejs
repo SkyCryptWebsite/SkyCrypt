@@ -1407,8 +1407,8 @@ if(calculated.profile.game_mode == 'ironman'){
             </div>
         <% } %>
         <div data-stat="armor" class="stat-container stat-armor">
-            <div class="stat-anchor"></div>
-            <div class="stat-header"><span>Armor</span></div>
+            <a class="stat-anchor" id="Armor"></a>
+            <h2 class="stat-header">Armor</h2>
             <div class="stat-content">
                 <% if(items.armor.length == 0){ %>
                     <div class="no-access"><%= calculated.display_name %> doesn't have any armor equipped.</div>
@@ -1456,8 +1456,8 @@ if(calculated.profile.game_mode == 'ironman'){
         </div>
         <% if(!items.no_inventory){ %>
             <div data-stat="weapons" class="stat-container stat-weapons">
-                <div class="stat-anchor"></div>
-                <div class="stat-header"><span>Weapons</span></div>
+                <a class="stat-anchor" id="Weapons"></a>
+                <h2 class="stat-header">Weapons</h2>
                 <div class="stat-content">
                     <% if(items.weapons.length == 0){ %>
                         <div class="no-access"><%= calculated.display_name %> doesn't have any weapons.</div>
@@ -1497,8 +1497,8 @@ if(calculated.profile.game_mode == 'ironman'){
                 </div>
             </div>
             <div data-stat="accessories" class="stat-container stat-accessories">
-                <div class="stat-anchor"></div>
-                <div class="stat-header"><span>Accessories</span></div>
+                <a class="stat-anchor" id="Accessories"></a>
+                <h2 class="stat-header">Accessories</h2>
                 <div class="stat-content">
                     <% if(items.no_inventory){ %>
                         <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
@@ -1580,8 +1580,8 @@ if(calculated.profile.game_mode == 'ironman'){
         <% } %>
         <% if(calculated.pets.length > 0){ %>
             <div data-stat="pets" class="stat-container stat-pets">
-                <div class="stat-anchor"></div>
-                <div class="stat-header"><span>Pets</span></div>
+                <a class="stat-anchor" id="Pets"></a>
+                <h2 class="stat-header">Pets</h2>
                 <div class="stat-content">
                     <%
                         const uniquePets = _.uniq(calculated.pets.map(a => a.type));
@@ -1688,8 +1688,8 @@ if(calculated.profile.game_mode == 'ironman'){
         <% } %>
         <% if(!items.no_inventory){ %>
             <div data-stat="inventory" class="stat-container stat-inventory">
-                <div class="stat-anchor"></div>
-                <div class="stat-header"><span>Inventory</span></div>
+                <a class="stat-anchor" id="Inventory"></a>
+                <h2 class="stat-header">Inventory</h2>
                 <div class="stat-content">
                     <% if(items.no_inventory){ %>
                         <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
@@ -1765,8 +1765,8 @@ if(calculated.profile.game_mode == 'ironman'){
             </div>
         <% } %>
         <div data-stat="skills" class="stat-container stat-skills">
-            <div class="stat-anchor"></div>
-            <div class="stat-header"><span>Skills</span></div>
+            <a class="stat-anchor" id="Skills"></a>
+            <h2 class="stat-header">Skills</h2>
             <div class="stat-content">
 
                 <div class="stat-mining">
@@ -2056,8 +2056,8 @@ if(calculated.profile.game_mode == 'ironman'){
             </div>
         </div>
         <div data-stat="dungeons" class="stat-container stat-dungeons">
-            <div class="stat-anchor"></div>
-            <div class="stat-header"><span>Dungeons</span></div>
+            <a class="stat-anchor" id="Dungeons"></a>
+            <h2 class="stat-header">Dungeons</h2>
             <div class="stat-content">
             <% if (Object.keys(calculated.dungeons).length === 0) { %>
                 <p class="stat-raw-values">
@@ -2194,8 +2194,8 @@ if(calculated.profile.game_mode == 'ironman'){
             </div>
         </div>
         <div data-stat="slayer" class="stat-container stat-slayer">
-            <div class="stat-anchor"></div>
-            <div class="stat-header"><span>Slayer</span></div>
+            <a class="stat-anchor" id="Slayer"></a>
+            <h2 class="stat-header">Slayer</h2>
             <div class="stat-content">
                 <% if(calculated.slayer_coins_spent.total == 0 || calculated.slayer_coins_spent.total === undefined){ %>
                     <p class="stat-raw-values">
@@ -2339,8 +2339,8 @@ if(calculated.profile.game_mode == 'ironman'){
             </div>
         </div>
         <div data-stat="minions" class="stat-container stat-minions">
-            <div class="stat-anchor"></div>
-            <div class="stat-header"><span>Minions</span></div>
+            <a class="stat-anchor" id="Minions"></a>
+            <h2 class="stat-header">Minions</h2>
             <div class="stat-content">
                 <%
                     let uniqueMinions = 0;
@@ -2411,8 +2411,8 @@ if(calculated.profile.game_mode == 'ironman'){
         </div>
         <% if(Object.keys(calculated.collections).length > 0){ %>
             <div data-stat="collections" class="stat-container stat-collections">
-                <div class="stat-anchor"></div>
-                <div class="stat-header"><span>Collections</span></div>
+                <a class="stat-anchor" id="Collections"></a>
+                <h2 class="stat-header">Collections</h2>
                 <div class="stat-content">
                     <p class="stat-raw-values">
                         <%
@@ -2481,8 +2481,8 @@ if(calculated.profile.game_mode == 'ironman'){
         <% } %>
         <% if(Object.keys(calculated.misc).length > 0){ %>
             <div data-stat="misc" class="stat-container stat-misc">
-                <div class="stat-anchor"></div>
-                <div class="stat-header"><span>Miscellaneous</span></div>
+                <a class="stat-anchor" id="Misc"></a>
+                <h2 class="stat-header">Miscellaneous</h2>
                 <div class="stat-content">
                 <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){
                     let totalKills = calculated.kills.length;

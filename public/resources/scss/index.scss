@@ -1720,6 +1720,13 @@ a.additional-player-stat:hover {
     }
 }
 
+.stat-anchor {
+    display: block;
+    position: relative;
+    top: calc(-120px - env(safe-area-inset-top, 0));
+    visibility: hidden;
+}
+
 .stat-header {
     height: 40px;
     line-height: 40px;
@@ -1731,10 +1738,8 @@ a.additional-player-stat:hover {
     position: relative;
     padding-left: 5px;
     margin-bottom: 15px;
-
-    span {
-        border-bottom: 4px solid var(--icon-hex);
-    }
+    text-decoration: underline 4px var(--icon-hex);
+    text-underline-position: under;
 }
 
 .info-container {
