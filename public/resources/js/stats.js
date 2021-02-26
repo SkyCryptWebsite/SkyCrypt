@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function(){
         favoriteElement.nextElementSibling.addEventListener('click', () => {
             navigator.share({
                 text: `Check out ${calculated.display_name} on SkyCrypt`,
-                url: window.location.href,
+                url: location.href.split('#')[0],
             });
         })
     }
