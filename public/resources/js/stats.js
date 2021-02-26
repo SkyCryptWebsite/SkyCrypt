@@ -281,8 +281,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
             inventoryView.appendChild(inventorySlot);
 
-            inventoryView.appendChild(document.createTextNode(" "));
-
             if ((index + 1) % pagesize === 0 && (index + 1) !== inventory.length) {
                 inventoryView.appendChild(document.createElement("hr"));
             }
