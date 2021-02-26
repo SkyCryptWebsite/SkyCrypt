@@ -16,22 +16,29 @@ html {
     }
 }
 
-@media (max-width: 480px) {
-    header .lookup-player {
+#packs-button,
+#api_button {
+    display: none;
+}
+
+header .lookup-player {
+    visibility: hidden;
+    max-width: none;
+    * {
         display: none;
     }
+}
 
+@media (max-width: 480px) {
     header {
-        height: 45px;
-        text-align: center;
-        width: 100vw;
-    }
+        justify-content: center;
 
-    header::after {
-        top: 45px;
+        .lookup-player {
+            display: none;
+        }
     }
+}
 
-    #info_box {
-        top: 45px;
-    }
+.api-content {
+    padding-top: calc(env(safe-area-inset-top) + 48px);
 }
