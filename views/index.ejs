@@ -43,7 +43,7 @@
                 <div class="external-app-name"><span class="grey-text">SkyCrypt's</span> Discord</div>
                 <div class="external-app-description">A simple way to get informed about current undergoings in SkyCrypt with suggestions, bug reports and support.</div>
             </a>
-            <% if(extra.favorites){
+            <% if(extra.favorites?.length){
             for(let profile of extra.favorites){
             if(profile.error) continue;
             const lastUpdated = profile.last_updated;
