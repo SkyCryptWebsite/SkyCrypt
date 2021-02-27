@@ -285,13 +285,11 @@ document.addEventListener('DOMContentLoaded', function(){
                 bindLoreEvents(pieceHoverArea);
             }
 
-            inventoryView.appendChild(inventorySlot);
-
-            inventoryView.appendChild(document.createTextNode(" "));
-
-            if ((index + 1) % pagesize == 0 && pagesize !== inventory.length) {
+            if (index % pagesize === 0 && index !== 0) {
                 inventoryView.appendChild(document.createElement("hr"));
             }
+
+            inventoryView.appendChild(inventorySlot);
         });
 
         inventoryContainer.appendChild(inventoryView);
