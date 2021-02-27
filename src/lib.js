@@ -3363,11 +3363,19 @@ async function init(){
     for(const type in response.data.collections){
         for(const itemType in response.data.collections[type].items){
             const item = response.data.collections[type].items[itemType];
+            try {
+                const collectionData = constants.collection_data.filter(a => a.skyblockId == itemType)[0];
 
-            const collectionData = constants.collection_data.filter(a => a.skyblockId == itemType)[0];
-
-            collectionData.maxTier = item.maxTiers;
-            collectionData.tiers = item.tiers;
+                collectionData.maxTier = item.maxTiers;
+                collectionData.tiers = item.tiers;
+            } catch (e){
+                if (e instanceof TypeError){
+                     //Collection Data filter error
+                } else {
+                     //Throw exception unchanged
+                     throw e;
+                }
+            }
         }
     }
 }
