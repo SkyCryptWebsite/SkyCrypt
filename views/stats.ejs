@@ -1287,7 +1287,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 <% if('bank' in calculated){ %>
                     <div class="additional-stat"><span class="stat-name">Bank Account: </span><span class="stat-value"><%= helper.formatNumber(calculated.bank, true) %> Coin<%= Math.floor(calculated.bank) == 1 ? '': 's' %></span></div>
                 <% } %>
-                <% if('levels' in calculated){ %>
+                <% if('levels' in calculated && 'runecrafting' in calculated.levels){ %>
                     <div class="additional-stat"><span data-tippy-content="
                     <span class='stat-name'>Total Skill XP: </span><span class='stat-value'><%= Math.round(calculated.total_skill_xp).toLocaleString() %></span>
                     <div class='tippy-explanation'>Total XP gained in all skills except Carpentry and Runecrafting.</div>
@@ -1306,7 +1306,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 <%
                     if('levels' in calculated){
                 %>
-                    <div id="other_skills" class="skill-bars">
+                    <div id="other_skills" class="skill-bars" data-api-enabled="<%= 'runecrafting' in calculated.levels %>">
                         <%= skill_component('Taming', 'icon-383_0_12', calculated.levels.taming) %>
                         <%= skill_component('Farming', 'icon-294_0', calculated.levels.farming) %>
                         <%= skill_component('Mining', 'icon-274_0', calculated.levels.mining) %>
@@ -1725,7 +1725,7 @@ if(calculated.profile.game_mode == 'ironman'){
                                 <% for(let i = 9; i < items.inventory.length; i++){ %>
                                     <% let item = items.inventory[i]; %>
                                     <%= inventorySlot(item); %>
-                                    
+
                                 <% } %>
                                 <hr>
                                 <% for(let i = 0; i < 9; i++){ %>
@@ -1838,9 +1838,9 @@ if(calculated.profile.game_mode == 'ironman'){
                         <div class="stat-sub-container sub-extendable">
                             <p class="stat-sub-header">Farming Crops</p>
                             <div class="stat-farming-crops">
-                                <%  
+                                <%
                                 const crops = Object.values(farming.crops).sort((a, b) => {
-                                    return b.contests - a.contests; 
+                                    return b.contests - a.contests;
                                 });
 
                                 for(const crop of crops){
@@ -1979,7 +1979,7 @@ if(calculated.profile.game_mode == 'ironman'){
                     <div class="stat-sub-container sub-floor-extendable">
                         <p class="stat-sub-header">Experiments</p>
                         <div class="stat-experiments floor-containers">
-                            <% for(let game in enchanting.experiments){ 
+                            <% for(let game in enchanting.experiments){
                             const game_data = enchanting.experiments[game]; %>
                             <div class="narrow-info-container">
                                 <div class="narrow-info-header">
@@ -1987,17 +1987,17 @@ if(calculated.profile.game_mode == 'ironman'){
                                 </div>
                                 <span>
                                     <p class="stat-raw-values">
-                                        <% 
+                                        <%
                                             const game_stats = helper.sortObject(game_data.stats);
-                                            for(let stat in game_stats){ 
+                                            for(let stat in game_stats){
                                         %>
                                             <span class="stat-name"><%= helper.titleCase(stat.replace('_', ' ')) %>: </span>
                                             <span class="stat-value"><%= (stat == 'last_attempt' || stat == 'last_claimed') ? game_stats[stat].text : game_stats[stat] %></span><br>
                                         <% } %>
                                     </p>
-                                    <% 
-                                    for(let tier in game_data.tiers) { 
-                                        const tier_data = game_data.tiers[tier]; 
+                                    <%
+                                    for(let tier in game_data.tiers) {
+                                        const tier_data = game_data.tiers[tier];
                                     %>
                                     <hr>
                                     <div class="collection">
@@ -2005,9 +2005,9 @@ if(calculated.profile.game_mode == 'ironman'){
                                         <div class="collection-stats">
                                             <div class="collection-name"><span class="stat-name"><%= tier_data.name %></span></div>
                                             <div class="collection-amount">
-                                                <% 
-                                                for(let info in tier_data) { 
-                                                    if(info == 'name' || info == 'icon') continue; 
+                                                <%
+                                                for(let info in tier_data) {
+                                                    if(info == 'name' || info == 'icon') continue;
                                                 %>
                                                 <small class="stat-name"><%= helper.titleCase(info.replace('_', ' ')) %>: </small><small class="stat-value"><%= tier_data[info] %></small><br>
                                                 <% } %>
@@ -2023,7 +2023,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 </div>
                 <% } %>
 
-<br>    
+<br>
                 <p class='stat-raw-values'><small><i>
                 Please note that this section is still in the works and many things are now in development. Thanks for your support!
                 </i></small></p>
