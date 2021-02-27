@@ -1137,17 +1137,17 @@ if(calculated.profile.game_mode == 'ironman'){
                 <% if(calculated.guild.members){ %><span class='stat-name'>Members: </span><span class='stat-value'><%= calculated.guild.members %></span><br><% } %>
                 <% if(calculated.guild.level){ %><span class='stat-name'>Level: </span><span class='stat-value'><%= calculated.guild.level %></span><br><% } %>
                 ">Guild: <%= calculated.guild.name %></button><% } %>
-                <a href="https://auctions.craftlink.xyz/players/<%= calculated.uuid %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">HyAuctions</a>
-                <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">Plancke</a>
+                <a href="https://auctions.craftlink.xyz/players/<%= calculated.uuid %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">HyAuctions</a>
+                <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">Plancke</a>
                 <div id="additional_socials">
                     <button data-copy-text="<%= calculated.uuid %>" class="copy-text additional-player-stat">Copy UUID</button>
                     <% if('DISCORD' in calculated.social){ %><button data-copy-text="<%= calculated.social.DISCORD %>" class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></button><% } %>
-                    <% if('TWITTER' in calculated.social){ %><a data-tippy-content="Twitter" href="<%= calculated.social.TWITTER %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-twitter"></a><% } %>
-                    <% if('YOUTUBE' in calculated.social){ %><a data-tippy-content="YouTube" href="<%= calculated.social.YOUTUBE %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-youtube"></a><% } %>
-                    <% if('INSTAGRAM' in calculated.social){ %><a data-tippy-content="Instagram" href="<%= calculated.social.INSTAGRAM %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-instagram"></a><% } %>
-                    <% if('TWITCH' in calculated.social){ %><a data-tippy-content="Twitch" href="<%= calculated.social.TWITCH %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-twitch"></a><% } %>
-                    <% if('MIXER' in calculated.social){ %><a data-tippy-content="Mixer" href="<%= calculated.social.MIXER %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-mixer"></a><% } %>
-                    <% if('HYPIXEL' in calculated.social){ %><a data-tippy-content="Hypixel Forums" href="<%= calculated.social.HYPIXEL %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-hypixel"></a><% } %>
+                    <% if('TWITTER' in calculated.social){ %><a data-tippy-content="Twitter" href="<%= calculated.social.TWITTER %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitter"></a><% } %>
+                    <% if('YOUTUBE' in calculated.social){ %><a data-tippy-content="YouTube" href="<%= calculated.social.YOUTUBE %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-youtube"></a><% } %>
+                    <% if('INSTAGRAM' in calculated.social){ %><a data-tippy-content="Instagram" href="<%= calculated.social.INSTAGRAM %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-instagram"></a><% } %>
+                    <% if('TWITCH' in calculated.social){ %><a data-tippy-content="Twitch" href="<%= calculated.social.TWITCH %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitch"></a><% } %>
+                    <% if('MIXER' in calculated.social){ %><a data-tippy-content="Mixer" href="<%= calculated.social.MIXER %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-mixer"></a><% } %>
+                    <% if('HYPIXEL' in calculated.social){ %><a data-tippy-content="Hypixel Forums" href="<%= calculated.social.HYPIXEL %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-hypixel"></a><% } %>
                     <button class="additional-player-stat" id="reveal_socials"></button>
                 </div>
             </div>
@@ -2329,7 +2329,7 @@ if(calculated.profile.game_mode == 'ironman'){
                             maxedMinions++;
                     }
                 %>
-                <a href="https://hypixel.net/threads/2166857/" target="_blank" rel="nofollow" class="external-app">
+                <a href="https://hypixel.net/threads/2166857/" target="_blank" rel="noreferrer" class="external-app">
                     <div class="external-app-icon icon-google-sheets"></div>
                     <div class="external-app-name">Minions Sheet <span class="grey-text">by TBlazeWarriorT</span></div>
                     <div class="external-app-description">Check the next cheapest or fastest Minion upgrades and find out which Minions will earn you the most from Bazaar, for free.</div>
