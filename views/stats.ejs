@@ -1296,10 +1296,10 @@ if(calculated.profile.game_mode == 'ironman'){
                     <% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
                     <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
                     "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level.toFixed(2) %></span></span></div>
-                    <div class="additional-stat">
-                        <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
-                    </div>
                 <% } %>
+                <div class="additional-stat">
+                    <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
+                </div>
             </div>
 
             <div id="skill_levels_container">
