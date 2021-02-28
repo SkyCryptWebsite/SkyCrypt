@@ -29,10 +29,10 @@
         <a title="Patreon" target="_blank" rel="noreferrer" href="https://patreon.com/shiiyu" class="social-button patreon"><span><%= extra.donations.patreon %> Patrons</span><div class="social-icon"></div></a>
     <% } %>
     <form class="lookup-player">
-        <input name="ign" type="search" enterkeyhint="go" placeholder="Enter username" required>
-        <button type="submit"></button>
+        <input name="ign" type="search" enterkeyhint="go" placeholder="Enter username" aria-label="username" required>
+        <button type="submit" aria-label="search"></button>
     </form>
-    <a href="https://blacklivesmatters.carrd.co/" target="_blank" rel="noreferrer" data-tippy-content="<strong>Black Lives Matter!</strong><br><br>Click for a collection of links on how to support the fight against racial inequality." class="blm-logo"></a>
+    <a href="https://blacklivesmatters.carrd.co/" target="_blank" rel="noreferrer" data-tippy-content="<strong>Black Lives Matter!</strong><br><br>Click for a collection of links on how to support the fight against racial inequality." class="blm-logo" aria-label="Black Lives Matter"></a>
     <div id="themes_button" onclick="toggleThemes()"><span>Themes</span></div>
     <div id="packs_button" onclick="togglePacks()"><span>Packs</span></div>
 </header>
@@ -63,7 +63,7 @@
         if(theme.hidden) continue; %>
     <div class="theme">
         <% let icon = theme.logo.replace("../", "/resources/"); %>
-        <img class="theme-icon" src="<%= icon %>">
+        <img class="theme-icon" src="<%= icon %>" alt="">
         <span class="theme-name"><%= theme.name %></span>
         <div class="theme-author">by <span><%= theme.author %></span></div>
         <div class="switch_themes_button" id="<%= theme_id %>-theme" onclick="switchTheme('<%= theme_id %>')">Switch</div>
@@ -72,7 +72,7 @@
 </div>
 <div id="packs_box" class="packs-closed">
     <div class="resource-pack">
-        <img class="pack-icon" src="/resources/img/pack.png">
+        <img class="pack-icon" src="/resources/img/pack.png" alt="">
         <a class="pack-name" href="/" target="_blank">Default</a><br>
         <div class="pack-author">by <span>LeaPhant, various</span></div>
         <% if(page == 'stats'){ %>
@@ -85,7 +85,7 @@
     </div>
     <% for(const pack of extra.packs.filter(a => !a.hidden).sort((a, b) => b.priority - a.priority)){ %>
         <div class="resource-pack">
-            <img class="pack-icon" src="<%= pack.basePath + '/pack.png' %>">
+            <img class="pack-icon" src="<%= pack.basePath + '/pack.png' %>" alt="">
             <a class="pack-name" href="<%= pack.url %>" target="_blank" rel="noreferrer"><%= pack.name %> <% if(pack.version){ %><small><%= pack.version %></small><% } %></a><br>
             <div class="pack-author">by <span><%= pack.author %></span></div>
             <% if(page == 'stats'){ %>
