@@ -44,43 +44,6 @@
     --lore_background-hex: #0f0f0fe6;
 
     /* used when --bg can't be used */
-    --bg-hex: #121212;
-
-    /* Minecraft color codes */
-    --§0: #000000;
-    --§1: #0000aa;
-    --§2: #00aa00;
-    --§3: #00aaaa;
-    --§4: #aa0000;
-    --§5: #aa00aa;
-    --§6: #ffaa00;
-    --§7: #aaaaaa;
-    --§8: #555555;
-    --§9: #5555ff;
-    --§a: #55ff55;
-    --§b: #55ffff;
-    --§c: #ff5555;
-    --§d: #ff55ff;
-    --§e: #ffff55;
-    --§f: var(--text-hex);
-
-    /* Nicer Minecraft color codes for use in rank */
-    --§0-nice: var(--§0);
-    --§1-nice: #3251ae;
-    --§2-nice: var(--§2);
-    --§3-nice: var(--§3);
-    --§4-nice: var(--§4);
-    --§5-nice: var(--§5);
-    --§6-nice: var(--§6);
-    --§7-nice: #333333;
-    --§8-nice: var(--§8);
-    --§9-nice: var(--§9);
-    --§a-nice: #40bb40;
-    --§b-nice: #51c4d7;
-    --§c-nice: #c43c3c;
-    --§d-nice: #d985bc;
-    --§e-nice: #eaa522;
-    --§f-nice: #000000;
 
     /* Header Logo */
     --logo: url(https://sky.shiiyu.moe/resources/img/logo_square.svg);
@@ -119,6 +82,67 @@
 }
 .§o {
     font-style: italic;
+}
+
+:root,
+.true-colors {
+    /* Minecraft color codes */
+    --§0: #000000;
+    --§1: #0000aa;
+    --§2: #00aa00;
+    --§3: #00aaaa;
+    --§4: #aa0000;
+    --§5: #aa00aa;
+    --§6: #ffaa00;
+    --§7: #aaaaaa;
+    --§8: #555555;
+    --§9: #5555ff;
+    --§a: #55ff55;
+    --§b: #55ffff;
+    --§c: #ff5555;
+    --§d: #ff55ff;
+    --§e: #ffff55;
+    --§f: #ffffff;
+}
+
+.nice-colors-dark {
+    /* these colors look nice and have significant contrast with white */
+    // --§0: #;
+    --§1: #3251ae;
+    // --§2: #;
+    // --§3: #;
+    // --§4: #;
+    // --§5: #;
+    // --§6: #;
+    --§7: #333333;
+    // --§8: #;
+    // --§9: #;
+    --§a: #40bb40;
+    --§b: #51c4d7;
+    --§c: #c43c3c;
+    --§d: #d985bc;
+    --§e: #eaa522;
+    --§f: #000000;
+}
+
+.nice-colors-light {
+    /* these colors look nice and have significant contrast with black */
+    --§0: #ffffff;
+    // --§1: #;
+    // --§2: #;
+    // --§3: #;
+    --§4: #cc3333;
+    --§5: #eb17eb;
+    // --§6: #;
+    // --§7: #;
+    --§8: #777777;
+    --§9: #8888ff;
+    // --§a: #;
+    // --§b: #;
+    // --§c: #;
+    // --§d: #;
+    // --§e: #;
+    // --§f: #;
 }
 
 * {

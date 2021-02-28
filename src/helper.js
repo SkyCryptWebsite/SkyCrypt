@@ -546,11 +546,11 @@ module.exports = {
             return "";
         } else {
             return /*html*/`
-                <div class="rank-tag">
-                    <div class="rank-name" style="background-color: var(--§${rankColor}-nice)">${rankText}</div>
+                <div class="rank-tag nice-colors-dark">
+                    <div class="rank-name" style="background-color: var(--§${rankColor})">${rankText}</div>
                     ${
                         plusText ? 
-                        /*html*/`<div class="rank-plus" style="background-color: var(--§${plusColor}-nice)">${plusText}</div>`
+                        /*html*/`<div class="rank-plus" style="background-color: var(--§${plusColor})">${plusText}</div>`
                         : ''
                     }
                 </div>
