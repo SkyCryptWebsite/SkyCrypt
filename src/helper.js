@@ -344,9 +344,9 @@ module.exports = {
 
         color = null
         formats = {}
-        const formatCodes = ['k', 'l', 'w', 'n', 'o']
+        const formatCodes = ['k', 'l', 'm', 'n', 'o']
 
-        for (part of text.match(/(§[0-9a-f])*[^§]*/g)) {
+        for (part of text.match(/(§[0-9a-fk-or])*[^§]*/g)) {
 
             while (part.charAt(0) === '§') {
                 const code = part.charAt(1);
