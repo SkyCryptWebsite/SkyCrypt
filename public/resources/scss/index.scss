@@ -1895,7 +1895,7 @@ a.additional-player-stat:hover {
 
 .piece-hover-area:hover,
 .sticky-stats .piece-hover-area {
-    background-color: rgba(var(--text-rgb), 0.2);
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .pieces {
@@ -2323,7 +2323,7 @@ a.additional-player-stat:hover {
                 transition: color 0.1s;
                 cursor: pointer;
                 vertical-align: top;
-                color: rgba(255, 255, 255, 0.8);
+                color: rgba(var(--text-rgb), 0.8);
 
                 &:first-child {
                     margin-left: 10px;
@@ -2343,7 +2343,7 @@ a.additional-player-stat:hover {
 
                 &.active-inventory {
                     cursor: default;
-                    color: rgba(255, 255, 255, 1);
+                    color: rgba(var(--text-rgb), 1);
                 }
 
                 &.active-inventory::after,
@@ -2390,7 +2390,7 @@ a.additional-player-stat:hover {
     .inventory-slot {
         aspect-ratio: 1;
         position: relative;
-        background-color: rgba(255, 255, 255, 0.04);
+        background-color: rgba(var(--text-rgb), 0.04);
         border-radius: 5px;
 
         @supports not (aspect-ratio: 1) {
