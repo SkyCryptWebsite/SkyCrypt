@@ -162,7 +162,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
         let color = null;
         let formats = new Set();
-        const formatCodes = ['k', 'l', 'm', 'n', 'o'];
 
         for (let part of text.match(/(§[0-9a-fk-or])*[^§]*/g)) {
 
@@ -171,9 +170,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 if (/[0-9a-f]/.test(code)) {
                     color = code;
-                } else if (formatCodes.includes(code)){
+                } else if (/[k-o]/.test(code)) {
                     formats.add(code);
-                } else if (code === 'r'){
+                } else if (code === 'r') {
                     color = null;
                     formats.clear();
                 }
@@ -183,16 +182,14 @@ document.addEventListener('DOMContentLoaded', function(){
 
             if (part.length === 0) continue;
 
-            const classes = formatCodes.filter(key => formats.has(key)).map(x => '§' + x)
-
             output += '<span';
 
             if (color !== null) {
                 output += ` style='color: var(--§${color});'`;
             }
 
-            if (classes.length > 0) {
-                output += ` class='${classes.join(', ')}'`;
+            if (formats.size > 0) {
+                output += ` class='${Array.from(formats, x => '§' + x).join(', ')}'`;
             }
 
             output += `>${part}</span>`;
