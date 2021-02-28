@@ -645,7 +645,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
         &.maxed-skill {
             --icon-hex: var(--maxed-hex);
-            --skillbar-hex: var(--maxedbar-hex);
+            --skillbar: var(--maxedbar);
         }
 
         .skill-icon {
