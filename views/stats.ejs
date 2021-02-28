@@ -916,21 +916,21 @@ const skill_component = (skill, icon, level, extra = {}) => { %>
     </div>
 <% };
 
-const stat_component = stat => {
+const stat_component = (stat) => {
     const bonusStats = stats[stat.name] - calculated.base_stats[stat.name]
     %>
     <div data-stat="<%= stat.name %>" class="basic-stat stat-<%= stat.name.replace(/\_/g, "-") %>">
         <span data-tippy-content="
-        <span class='stat-name'>Base <%= helper.titleCase(stat.name.replace(/\_/g, " ")) %>: </span><span class='stat-value'><%= calculated.base_stats[stat.name].toLocaleString() %><%= stat.suffix || '' %></span>
+        <span class='stat-name'>Base <%= helper.titleCase(stat.name.replace(/\_/g, " ")) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= calculated.base_stats[stat.name].toLocaleString() %></span>
         <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= stat.baseExplanation %><% } %></div><br>
-        <span class='stat-name'>Bonus <%= helper.titleCase(stat.name.replace(/\_/g, " ")) %>: </span><span class='stat-value'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %><%= stat.suffix || '' %></span>
+        <span class='stat-name'>Bonus <%= helper.titleCase(stat.name.replace(/\_/g, " ")) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %></span>
         <div class='tippy-explanation'>Additional bonuses from Armor, held items, Accessories and active Pets.</div>
         <% if(Array.isArray(stat.extraStats)){
             for(const extraStat of stat.extraStats){ %>
-        <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value'><%= extraStat.value.toLocaleString() %><%= extraStat.suffix || '' %></span>
+        <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value<%= extraStat.percent ? ' percent' : ''%>'><%= extraStat.value.toLocaleString() %></span>
         <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= extraStat.explanation %><% } %></div>
         <% }} %>
-        "><span class="stat-name"><%= stat.prettyName || helper.titleCase(stat.name.replace(/\_/g, " ")) %> </span><span class="stat-value"><%= stats[stat.name].toLocaleString() %><%= stat.suffix || '' %></span></span></div>
+        "><span class="stat-name"><%= stat.prettyName || helper.titleCase(stat.name.replace(/\_/g, " ")) %> </span><span class="stat-value<%= stat.percent ? ' percent' : ''%>"><%= stats[stat.name].toLocaleString() %></span></span></div>
 <% };
 
 let description = "";
@@ -1079,7 +1079,6 @@ if(calculated.profile.game_mode == 'ironman'){
         <source type="video/webm" src="/resources/video/enable_api.webm"></source>
         <source type="video/mp4" src="/resources/video/enable_api.mp4"></source>
     </video>
-    <div id="bg_blur"></div>
     <div id="stats_content">
         <div class="item-name">
             <div></div><span></span><div class="close-lore"></div></div>
@@ -1089,7 +1088,7 @@ if(calculated.profile.game_mode == 'ironman'){
     <div id="skin_display">
         <div id="player_model"></div>
     </div>
-    <div id="wrapper" data-sticky-container>
+    <main id="wrapper" data-sticky-container>
         <div id="player_profile"><span class="text-stats-for">Stats for</span>
             <div tabindex="1" id="stats_for_player">
                 <%- calculated.rank_prefix %>
@@ -1138,17 +1137,17 @@ if(calculated.profile.game_mode == 'ironman'){
                 <% if(calculated.guild.members){ %><span class='stat-name'>Members: </span><span class='stat-value'><%= calculated.guild.members %></span><br><% } %>
                 <% if(calculated.guild.level){ %><span class='stat-name'>Level: </span><span class='stat-value'><%= calculated.guild.level %></span><br><% } %>
                 ">Guild: <%= calculated.guild.name %></button><% } %>
-                <a href="https://auctions.craftlink.xyz/players/<%= calculated.uuid %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">HyAuctions</a>
-                <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">Plancke</a>
+                <a href="https://auctions.craftlink.xyz/players/<%= calculated.uuid %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">HyAuctions</a>
+                <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">Plancke</a>
                 <div id="additional_socials">
                     <button data-copy-text="<%= calculated.uuid %>" class="copy-text additional-player-stat">Copy UUID</button>
                     <% if('DISCORD' in calculated.social){ %><button data-copy-text="<%= calculated.social.DISCORD %>" class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></button><% } %>
-                    <% if('TWITTER' in calculated.social){ %><a data-tippy-content="Twitter" href="<%= calculated.social.TWITTER %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-twitter"></a><% } %>
-                    <% if('YOUTUBE' in calculated.social){ %><a data-tippy-content="YouTube" href="<%= calculated.social.YOUTUBE %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-youtube"></a><% } %>
-                    <% if('INSTAGRAM' in calculated.social){ %><a data-tippy-content="Instagram" href="<%= calculated.social.INSTAGRAM %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-instagram"></a><% } %>
-                    <% if('TWITCH' in calculated.social){ %><a data-tippy-content="Twitch" href="<%= calculated.social.TWITCH %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-twitch"></a><% } %>
-                    <% if('MIXER' in calculated.social){ %><a data-tippy-content="Mixer" href="<%= calculated.social.MIXER %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-mixer"></a><% } %>
-                    <% if('HYPIXEL' in calculated.social){ %><a data-tippy-content="Hypixel Forums" href="<%= calculated.social.HYPIXEL %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-hypixel"></a><% } %>
+                    <% if('TWITTER' in calculated.social){ %><a data-tippy-content="Twitter" href="<%= calculated.social.TWITTER %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitter"></a><% } %>
+                    <% if('YOUTUBE' in calculated.social){ %><a data-tippy-content="YouTube" href="<%= calculated.social.YOUTUBE %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-youtube"></a><% } %>
+                    <% if('INSTAGRAM' in calculated.social){ %><a data-tippy-content="Instagram" href="<%= calculated.social.INSTAGRAM %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-instagram"></a><% } %>
+                    <% if('TWITCH' in calculated.social){ %><a data-tippy-content="Twitch" href="<%= calculated.social.TWITCH %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitch"></a><% } %>
+                    <% if('MIXER' in calculated.social){ %><a data-tippy-content="Mixer" href="<%= calculated.social.MIXER %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-mixer"></a><% } %>
+                    <% if('HYPIXEL' in calculated.social){ %><a data-tippy-content="Hypixel Forums" href="<%= calculated.social.HYPIXEL %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-hypixel"></a><% } %>
                     <button class="additional-player-stat" id="reveal_socials"></button>
                 </div>
             </div>
@@ -1187,7 +1186,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         {
                             stat: 'Damage Reduction',
                             value: (stats.defense / (stats.defense + 100) * 100).toFixed(1),
-                            suffix: '%'
+                            percent: true
                         },
                         {
                             stat: 'Effective Health',
@@ -1204,26 +1203,26 @@ if(calculated.profile.game_mode == 'ironman'){
 
                 <%- stat_component({
                     name: 'speed',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: "Increased by collecting Fairy Souls and leveling up in Wolf Slayer."
                 }); %>
 
                 <%- stat_component({
                     name: 'crit_chance',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: "Increased by leveling your Combat skill and leveling up in Spider Slayer."
                 }); %>
 
                 <%- stat_component({
                     name: 'crit_damage',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: "Increased by leveling up in Spider or Wolf Slayer."
                 }); %>
 
                 <%- stat_component({
                     name: 'bonus_attack_speed',
                     prettyName: 'Attack Speed',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: null
                 }); %>
 
@@ -1235,7 +1234,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 <%- stat_component({
                     name: 'sea_creature_chance',
                     prettyName: 'SC Chance',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: null
                 }); %>
 
@@ -1261,14 +1260,14 @@ if(calculated.profile.game_mode == 'ironman'){
                         {
                             stat: 'Chance for 1 more',
                             value: stats.ferocity % 100,
-                            suffix: '%'
+                            percent: true
                         }
                     ]
                 }); %>
 
                 <%- stat_component({
                     name: 'ability_damage',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: "Increased by leveling your Enchanting Skill."
                 }); %>
                 <!--<div data-stat="fairy_souls" class="basic-stat stat-fairy-souls">
@@ -1288,7 +1287,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 <% if('bank' in calculated){ %>
                     <div class="additional-stat"><span class="stat-name">Bank Account: </span><span class="stat-value"><%= helper.formatNumber(calculated.bank, true) %> Coin<%= Math.floor(calculated.bank) == 1 ? '': 's' %></span></div>
                 <% } %>
-                <% if('levels' in calculated){ %>
+                <% if('levels' in calculated && 'runecrafting' in calculated.levels){ %>
                     <div class="additional-stat"><span data-tippy-content="
                     <span class='stat-name'>Total Skill XP: </span><span class='stat-value'><%= Math.round(calculated.total_skill_xp).toLocaleString() %></span>
                     <div class='tippy-explanation'>Total XP gained in all skills except Carpentry and Runecrafting.</div>
@@ -1297,17 +1296,17 @@ if(calculated.profile.game_mode == 'ironman'){
                     <% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
                     <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
                     "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level.toFixed(2) %></span></span></div>
-                    <div class="additional-stat">
-                        <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
-                    </div>
                 <% } %>
+                <div class="additional-stat">
+                    <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
+                </div>
             </div>
 
             <div id="skill_levels_container">
                 <%
                     if('levels' in calculated){
                 %>
-                    <div id="other_skills">
+                    <div id="other_skills" class="skill-bars" data-api-enabled="<%= 'runecrafting' in calculated.levels %>">
                         <%= skill_component('Taming', 'icon-383_0_12', calculated.levels.taming) %>
                         <%= skill_component('Farming', 'icon-294_0', calculated.levels.farming) %>
                         <%= skill_component('Mining', 'icon-274_0', calculated.levels.mining) %>
@@ -1487,19 +1486,13 @@ if(calculated.profile.game_mode == 'ironman'){
                             %>
 
                             <span class="stat-name <%= maxTalis %>">Unique Accessories: </span>
-                            <span class="stat-value <%= maxTalis %>">
-                                <%= items.talismans.filter(a => a.isUnique).length %> / <%= UNIQUE_ACCESSORIES %>
-                            </span>
+                            <span class="stat-value <%= maxTalis %>"><%= items.talismans.filter(a => a.isUnique).length %> / <%= UNIQUE_ACCESSORIES %></span>
                             <br>
                             <span class="stat-name <%= maxTalis %>">Completion: </span>
-                            <span class="stat-value <%= maxTalis %>">
-                                <%= Math.round(items.talismans.filter(a => a.isUnique).length / UNIQUE_ACCESSORIES * 100) %>%
-                            </span>
+                            <span class="stat-value percent <%= maxTalis %>"><%= Math.round(items.talismans.filter(a => a.isUnique).length / UNIQUE_ACCESSORIES * 100) %></span>
                             <br>
                             <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
-                            <span class="stat-value <%= maxRecombTalis %>">
-                                <%= items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= UNIQUE_ACCESSORIES %>
-                            </span>
+                            <span class="stat-value <%= maxRecombTalis %>"><%= items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= UNIQUE_ACCESSORIES %></span>
                         </p>
                         <% if(items.talismans.filter(a => !a.isInactive).length > 0){ %>
                             <div class="accessory-list">
@@ -1732,7 +1725,7 @@ if(calculated.profile.game_mode == 'ironman'){
                                 <% for(let i = 9; i < items.inventory.length; i++){ %>
                                     <% let item = items.inventory[i]; %>
                                     <%= inventorySlot(item); %>
-                                    
+
                                 <% } %>
                                 <hr>
                                 <% for(let i = 0; i < 9; i++){ %>
@@ -1845,9 +1838,9 @@ if(calculated.profile.game_mode == 'ironman'){
                         <div class="stat-sub-container sub-extendable">
                             <p class="stat-sub-header">Farming Crops</p>
                             <div class="stat-farming-crops">
-                                <%  
+                                <%
                                 const crops = Object.values(farming.crops).sort((a, b) => {
-                                    return b.contests - a.contests; 
+                                    return b.contests - a.contests;
                                 });
 
                                 for(const crop of crops){
@@ -1914,7 +1907,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         <%- stat_component({
                             name: 'sea_creature_chance',
                             prettyName: 'SC Chance',
-                            suffix: '%',
+                            percent: true,
                             baseExplanation: null
                         }); %>
 
@@ -1986,7 +1979,7 @@ if(calculated.profile.game_mode == 'ironman'){
                     <div class="stat-sub-container sub-floor-extendable">
                         <p class="stat-sub-header">Experiments</p>
                         <div class="stat-experiments floor-containers">
-                            <% for(let game in enchanting.experiments){ 
+                            <% for(let game in enchanting.experiments){
                             const game_data = enchanting.experiments[game]; %>
                             <div class="narrow-info-container">
                                 <div class="narrow-info-header">
@@ -1994,17 +1987,17 @@ if(calculated.profile.game_mode == 'ironman'){
                                 </div>
                                 <span>
                                     <p class="stat-raw-values">
-                                        <% 
+                                        <%
                                             const game_stats = helper.sortObject(game_data.stats);
-                                            for(let stat in game_stats){ 
+                                            for(let stat in game_stats){
                                         %>
                                             <span class="stat-name"><%= helper.titleCase(stat.replace('_', ' ')) %>: </span>
                                             <span class="stat-value"><%= (stat == 'last_attempt' || stat == 'last_claimed') ? game_stats[stat].text : game_stats[stat] %></span><br>
                                         <% } %>
                                     </p>
-                                    <% 
-                                    for(let tier in game_data.tiers) { 
-                                        const tier_data = game_data.tiers[tier]; 
+                                    <%
+                                    for(let tier in game_data.tiers) {
+                                        const tier_data = game_data.tiers[tier];
                                     %>
                                     <hr>
                                     <div class="collection">
@@ -2012,9 +2005,9 @@ if(calculated.profile.game_mode == 'ironman'){
                                         <div class="collection-stats">
                                             <div class="collection-name"><span class="stat-name"><%= tier_data.name %></span></div>
                                             <div class="collection-amount">
-                                                <% 
-                                                for(let info in tier_data) { 
-                                                    if(info == 'name' || info == 'icon') continue; 
+                                                <%
+                                                for(let info in tier_data) {
+                                                    if(info == 'name' || info == 'icon') continue;
                                                 %>
                                                 <small class="stat-name"><%= helper.titleCase(info.replace('_', ' ')) %>: </small><small class="stat-value"><%= tier_data[info] %></small><br>
                                                 <% } %>
@@ -2030,7 +2023,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 </div>
                 <% } %>
 
-<br>    
+<br>
                 <p class='stat-raw-values'><small><i>
                 Please note that this section is still in the works and many things are now in development. Thanks for your support!
                 </i></small></p>
@@ -2049,20 +2042,24 @@ if(calculated.profile.game_mode == 'ironman'){
                 <p class="stat-sub-header">Classes</p>
 
                 <span class="stat-name">Selected Class: </span>
-                <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span><br>
-                <%= skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) %>
-                <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) %>
-                <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) %>
-                <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) %>
-                <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) %>
+                <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span>
+                <div class="skill-bars">
+                    <%= skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) %>
+                    <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) %>
+                    <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) %>
+                    <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) %>
+                    <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) %>
+                </div>
                 <% } %>
 
                 <% if (calculated.dungeons.catacombs.visited) { %>
                     <p class="stat-sub-header">Catacombs</p>
 
                     <p class="stat-raw-values">
-                        <%= skill_component('Catacombs', 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793', calculated.dungeons.catacombs.level) %><br>
-                        <span class="stat-name">Dungeon Item Boost: </span><span class="stat-value"><%= calculated.dungeons.catacombs.bonuses.item_boost %>%</span><br>
+                        <div class="skill-bars">
+                            <%= skill_component('Catacombs', 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793', calculated.dungeons.catacombs.level) %>
+                        </div>
+                        <span class="stat-name">Dungeon Item Boost: </span><span class="stat-value percent"><%= calculated.dungeons.catacombs.bonuses.item_boost %></span>
                     </p>
 
                     <p class="stat-raw-values">
@@ -2332,7 +2329,7 @@ if(calculated.profile.game_mode == 'ironman'){
                             maxedMinions++;
                     }
                 %>
-                <a href="https://hypixel.net/threads/2166857/" target="_blank" rel="nofollow" class="external-app">
+                <a href="https://hypixel.net/threads/2166857/" target="_blank" rel="noreferrer" class="external-app">
                     <div class="external-app-icon icon-google-sheets"></div>
                     <div class="external-app-name">Minions Sheet <span class="grey-text">by TBlazeWarriorT</span></div>
                     <div class="external-app-description">Check the next cheapest or fastest Minion upgrades and find out which Minions will earn you the most from Bazaar, for free.</div>
@@ -2670,7 +2667,7 @@ if(calculated.profile.game_mode == 'ironman'){
                                 if(progress.maxed)
                                     tooltip += `<span class="stat-value golden-text">Maxed!</span>`;
                                 else
-                                    tooltip += `<span class="stat-value">${ progress.percentage.toLocaleString() }%</span>`;
+                                    tooltip += `<span class="stat-value percent">${ progress.percentage.toLocaleString() }</span>`;
                                 %>
                             <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>>
                                 <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.milestones[key].toLocaleString() %></span></span><br>
@@ -2745,7 +2742,7 @@ if(calculated.profile.game_mode == 'ironman'){
             </div>
         <% } %>
         </div>
-    </div>
+    </main>
     <%- include('../includes/footer'); %>
     <script>
         let items = JSON.parse(`<%- JSON.stringify(items).replace(/\\/g, '\\\\') %>`);

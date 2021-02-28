@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </div>
-            <a href="https://discord.gg/cNgADv2kEQ" target="_blank" rel="nofollow" class="external-app form-banner">
+            <a href="https://discord.gg/cNgADv2kEQ" target="_blank" rel="noreferrer" class="external-app form-banner">
                 <div class="external-app-icon" style="background-image: url(/resources/img/icons/discord.svg?v2)"></div>
                 <div class="external-app-name"><span class="grey-text">SkyCrypt's</span> Discord</div>
                 <div class="external-app-description">A simple way to get informed about current undergoings in SkyCrypt with suggestions, bug reports and support.</div>
@@ -56,7 +56,7 @@
             %>
             <a href="/stats/<%= profile.uuid %>" class="top-profile">
                 <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
-                <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%-" " + extra.twemoji.parse(profile.emoji) %><% } %></div><br>
+                <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%-" " + extra.twemoji.parse(profile.emoji) %><% } %></div>
                 <div class="profile-last-online"><%- lastUpdatedText %></div>
                 <svg class="profile-rank" viewBox="0 0 24 24">
                     <title>Favorited profile</title>
@@ -67,7 +67,7 @@
             <% }}else{ %>
             <a class="top-profile">
                 <img src="/resources/img/icons/q.png" class="profile-avatar">
-                <div class="profile-name">No favorite set!</div><br>
+                <div class="profile-name">No favorite set!</div>
                 <div class="profile-last-online">Why don't you set a favorite?</div>
             </a>
             <% } %>
@@ -76,7 +76,7 @@
                 <% let message = profile.username == "Shiiyu" ?  `<span class="stat-name">Last online: </span><span class="stat-value">January 1st, 1970</span>` : extra.twemoji.parse(profile.message)%>
                 <a href="/stats/<%= profile.uuid %>" class="top-profile">
                     <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar">
-                    <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div><br>
+                    <div class="profile-name"><%= profile.username %><% if('emojiImg' in profile){ %><img class="emoji" draggable="false" src="<%= profile.emojiImg %>"><% }else if('emoji' in profile){ %><%- extra.twemoji.parse(profile.emoji) %><% } %></div>
                     <div class="profile-last-online"><%- message %></div>
                     <svg class="profile-rank" viewBox="0 0 24 24">
                         <% switch(profile.type){

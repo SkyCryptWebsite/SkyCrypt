@@ -6,7 +6,6 @@
         document.getElementById('not_supported').className = 'show-not-supported';
     }
 </script>
-<% if(page !== 'index') { %>
 <div id="status-bar" style="display: none;"></div>
 <script>
     const iOS = [
@@ -21,14 +20,13 @@
         document.querySelector('#status-bar').style.removeProperty('display');
     }
 </script>
-<% } %>
 <header>
     <div data-tippy-content="Supporting LGBTQ+ rights all around the year! ❤️<br><br>Click for a surprise. :)" class="pride-flag logo"></div>
     <a href="/" id="site_name">SkyCrypt</a>
     <div class="social-button" id="info_button" onclick="toggleInfo()">About</div>
     <a href="/api" style="text-decoration: none;" class="social-button" id="api_button">API</a>
     <% if('donations' in extra){ %>
-        <a title="Patreon" target="_blank" rel="nofollow" href="https://patreon.com/shiiyu" class="social-button patreon"><span><%= extra.donations.patreon %> Patrons</span><div class="social-icon"></div></a>
+        <a title="Patreon" target="_blank" rel="noreferrer" href="https://patreon.com/shiiyu" class="social-button patreon"><span><%= extra.donations.patreon %> Patrons</span><div class="social-icon"></div></a>
     <% } %>
     <form class="lookup-player">
         <input name="ign" type="search" enterkeyhint="go" placeholder="Enter username" required>
@@ -38,7 +36,7 @@
             </svg>
         </button>
     </form>
-    <a href="https://blacklivesmatters.carrd.co/" target="_blank" rel="nofollow" data-tippy-content="<strong>Black Lives Matter!</strong><br><br>Click for a collection of links on how to support the fight against racial inequality." class="blm-logo"></a>
+    <a href="https://blacklivesmatters.carrd.co/" target="_blank" rel="noreferrer" data-tippy-content="<strong>Black Lives Matter!</strong><br><br>Click for a collection of links on how to support the fight against racial inequality." class="blm-logo"></a>
     <div id="themes_button" onclick="toggleThemes()">
         <svg viewBox="0 0 24 24">
             <path fill="currentColor" d="M19,11.5C19,11.5 17,13.67 17,15A2,2 0 0,0 19,17A2,2 0 0,0 21,15C21,13.67 19,11.5 19,11.5M5.21,10L10,5.21L14.79,10M16.56,8.94L7.62,0L6.21,1.41L8.59,3.79L3.44,8.94C2.85,9.5 2.85,10.47 3.44,11.06L8.94,16.56C9.23,16.85 9.62,17 10,17C10.38,17 10.77,16.85 11.06,16.56L16.56,11.06C17.15,10.47 17.15,9.5 16.56,8.94Z" />
@@ -60,25 +58,24 @@
     </div>
     <div id="info_box_content">
         <p>The SkyCrypt project is maintained by boblovespi, FantasmicGalaxy, MartinNemi03, metalcupcake5 and Shiiyu. It is an open-source project. </p>
-        <p>You can report bugs, suggest features, or contribute to the code on <a class="link link-github" href="https://github.com/SkyCryptWebsite/SkyCrypt" target="_blank">GitHub</a>. It would be much appreciated!</p>
+        <p>You can report bugs, suggest features, or contribute to the code on <a class="link link-github" href="https://github.com/SkyCryptWebsite/SkyCrypt" target="_blank" rel="noreferrer">GitHub</a>. It would be much appreciated!</p>
         <p>Chat: <a class="link link-discord" href="https://discord.gg/cNgADv2kEQ">discord.gg/cNgADv2kEQ</a></p>
-        <p>The original project, <a href="https://sky.lea.moe">sky.lea.moe</a>, was orginally created by <a class="link link-twitter" href="https://twitter.com/LeaPhant" target="_blank">LeaPhant</a>. Thanks for all of what you've done Lea!</p>
+        <p>The original project, <a href="https://sky.lea.moe">sky.lea.moe</a>, was orginally created by <a class="link link-twitter" href="https://twitter.com/LeaPhant" target="_blank" rel="noreferrer">LeaPhant</a>. Thanks for all of what you've done Lea!</p>
         <h4>Used Resources</h4>
         <ul>
-            <li>Data: <a rel="nofollow" href="https://api.hypixel.net/" target="_blank">Hypixel API</a> by <span class="name">Hypixel</span>.</li>
-            <li>Animated Custom Weapons and Armors: <a rel="nofollow" href="https://hypixel.net/threads/2138599/" target="_blank">FurfSky+</a> by <span class="name">Furf__</span>.</li>
-            <li>Additional Custom Textures: <a rel="nofollow" href="https://hypixel.net/threads/2147652/" target="_blank">Vanilla+</a> by <span class="name">TBlazeWarriorT</span>.</li>
-            <li>Default Textures: <a rel="nofollow" href="https://www.minecraft.net/" target="_blank">Minecraft</a> by <span class="name">Mojang</span>.</li>
-            <li>Player Heads: <a rel="nofollow" href="https://hypixel.net/forums/skyblock.157/" target="_blank">SkyBlock</a> by <span class="name">Hypixel</span>.</li>
-            <li>Background Resource Pack: <a rel="nofollow" href="https://www.planetminecraft.com/texture_pack/16x132-dandelion-cute-and-swirly/" target="_blank">Dandelion</a> by <span class="name">Steelfeathers</span>.</li>
-            <li>Background Shaders: <a rel="nofollow" href="https://sildurs-shaders.github.io/" target="_blank">Sildur's Vibrant Shaders</a> by <span class="name">Sildur</span>.</li>
-            <li>Emojis: <a rel="nofollow" href="https://twemoji.twitter.com/" target="_blank">Twemoji</a> by <span class="name">Twitter</span>.</li>
-            <li>Skin Renderer: <a rel="nofollow" href="https://github.com/bs-community/skinview3d/" target="_blank">skinview3d</a> by <span class="name">Blessing Skin</span>.</li>
+            <li>Data: <a rel="noreferrer" href="https://api.hypixel.net/" target="_blank">Hypixel API</a> by <span class="name">Hypixel</span>.</li>
+            <li>Animated Custom Weapons and Armors: <a rel="noreferrer" href="https://hypixel.net/threads/2138599/" target="_blank">FurfSky+</a> by <span class="name">Furf__</span>.</li>
+            <li>Additional Custom Textures: <a rel="noreferrer" href="https://hypixel.net/threads/2147652/" target="_blank">Vanilla+</a> by <span class="name">TBlazeWarriorT</span>.</li>
+            <li>Default Textures: <a rel="noreferrer" href="https://www.minecraft.net/" target="_blank">Minecraft</a> by <span class="name">Mojang</span>.</li>
+            <li>Player Heads: <a rel="noreferrer" href="https://hypixel.net/forums/skyblock.157/" target="_blank">SkyBlock</a> by <span class="name">Hypixel</span>.</li>
+            <li>Background Resource Pack: <a rel="noreferrer" href="https://www.planetminecraft.com/texture_pack/16x132-dandelion-cute-and-swirly/" target="_blank">Dandelion</a> by <span class="name">Steelfeathers</span>.</li>
+            <li>Background Shaders: <a rel="noreferrer" href="https://sildurs-shaders.github.io/" target="_blank">Sildur's Vibrant Shaders</a> by <span class="name">Sildur</span>.</li>
+            <li>Emojis: <a rel="noreferrer" href="https://twemoji.twitter.com/" target="_blank">Twemoji</a> by <span class="name">Twitter</span>.</li>
+            <li>Skin Renderer: <a rel="noreferrer" href="https://github.com/bs-community/skinview3d/" target="_blank">skinview3d</a> by <span class="name">Blessing Skin</span>.</li>
         </ul>
     </div>
 </div>
 <div id="themes_box" class="themes-closed">
-    <div onclick="toggleThemes()" id="themes_close"></div>
     <% for(const theme_id in extra.themes){
         const theme = extra.themes[theme_id];
         if(theme.hidden) continue; %>
@@ -92,7 +89,6 @@
     <% } %>
 </div>
 <div id="packs_box" class="packs-closed">
-    <div onclick="togglePacks()" id="packs_close"></div>
     <div class="resource-pack">
         <img class="pack-icon" src="/resources/img/pack.png">
         <a class="pack-name" href="/" target="_blank">Default</a><br>
@@ -108,7 +104,7 @@
     <% for(const pack of extra.packs.filter(a => !a.hidden).sort((a, b) => b.priority - a.priority)){ %>
         <div class="resource-pack">
             <img class="pack-icon" src="<%= pack.basePath + '/pack.png' %>">
-            <a class="pack-name" href="<%= pack.url %>" target="_blank"><%= pack.name %> <% if(pack.version){ %><small><%= pack.version %></small><% } %></a><br>
+            <a class="pack-name" href="<%= pack.url %>" target="_blank" rel="noreferrer"><%= pack.name %> <% if(pack.version){ %><small><%= pack.version %></small><% } %></a><br>
             <div class="pack-author">by <span><%= pack.author %></span></div>
             <% if(page == 'stats'){ %>
                 <% if(/* pack.id == "SKYBLOCK_PACK" */false){ %>

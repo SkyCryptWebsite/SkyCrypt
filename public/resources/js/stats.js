@@ -205,8 +205,14 @@ document.addEventListener('DOMContentLoaded', function(){
 
         const matchingEnchants = constants.special_enchants.filter(a => output.includes(a));
 
-        for(const enchantment of matchingEnchants)
+        for(const enchantment of matchingEnchants){
+            console.log(enchantment);
+            console.log(text)
+            if(enchantment == 'Power 6' || enchantment == 'Power 7' && text.startsWith("§8Breaking")){
+                continue;
+            }
             output = output.replace(enchantment, `<span style='${specialColor.css}'>${enchantment}</span>`);
+        }
 
         return output;
     }
@@ -279,13 +285,11 @@ document.addEventListener('DOMContentLoaded', function(){
                 bindLoreEvents(pieceHoverArea);
             }
 
-            inventoryView.appendChild(inventorySlot);
-
-            inventoryView.appendChild(document.createTextNode(" "));
-
-            if ((index + 1) % pagesize == 0 && pagesize !== inventory.length) {
+            if (index % pagesize === 0 && index !== 0) {
                 inventoryView.appendChild(document.createElement("hr"));
             }
+
+            inventoryView.appendChild(inventorySlot);
         });
 
         inventoryContainer.appendChild(inventoryView);
@@ -512,6 +516,9 @@ document.addEventListener('DOMContentLoaded', function(){
     let oldWidth = null;
     let oldheight = null;
 
+    const navBar = document.querySelector('#nav_bar');
+    let navBarHeight;
+
     function resize(){
         if (playerModel) {
             if(window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570))
@@ -529,6 +536,8 @@ document.addEventListener('DOMContentLoaded', function(){
             else
                 skinViewer.setSize(playerModel.offsetHeight / 2, playerModel.offsetHeight);
         }
+
+        navBarHeight = parseFloat(getComputedStyle(navBar).top);
 
         updateStatsPositions();
 
@@ -568,6 +577,13 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
+    function flashForUpdate(element) {
+        element.classList.add('updated');
+        element.addEventListener('animationend', () => {
+            element.classList.remove('updated');
+        });
+    }
+
     [].forEach.call(document.querySelectorAll('.stat-weapons .select-weapon'), function(element){
         let itemId = element.parentNode.getAttribute('data-item-id');
         let filterItems;
@@ -592,14 +608,16 @@ document.addEventListener('DOMContentLoaded', function(){
             e.preventDefault();
         });
 
+        const activeWeaponElement = document.querySelector('.stat-active-weapon');
+
         element.addEventListener('click', function(e){
             if(element.parentNode.classList.contains('piece-selected')){
                 element.parentNode.classList.remove("piece-selected");
 
                 stats = calculated.stats;
 
-                document.querySelector('.stat-active-weapon').className = 'stat-value stat-active-weapon piece-common-fg';
-                document.querySelector('.stat-active-weapon').innerHTML = 'None';
+                activeWeaponElement.className = 'stat-value stat-active-weapon piece-common-fg';
+                activeWeaponElement.innerHTML = 'None';
             }else{
                 [].forEach.call(document.querySelectorAll('.stat-weapons .piece'), function(_element){
                     _element.classList.remove("piece-selected");
@@ -607,41 +625,29 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 element.parentNode.classList.add("piece-selected");
 
-                document.querySelector('.stat-active-weapon').className = 'stat-value stat-active-weapon piece-' + item.rarity + '-fg';
-                document.querySelector('.stat-active-weapon').innerHTML = item.display_name;
+                activeWeaponElement.className = 'stat-value stat-active-weapon piece-' + item.rarity + '-fg';
+                activeWeaponElement.innerHTML = item.display_name;
 
                 stats = weaponStats;
             }
 
-            anime({
-                targets: '.stat-active-weapon',
-                backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                duration: 500,
-                round: 1,
-                easing: 'easeOutCubic'
-            });
+            flashForUpdate(activeWeaponElement);
 
             for(let stat in stats){
                 if(stat == 'sea_creature_chance')
                     continue;
 
-                let element = document.querySelector('.basic-stat[data-stat=' + stat + '] .stat-value');
+                const element = document.querySelector('.basic-stat[data-stat=' + stat + '] .stat-value');
 
                 if(!element)
                     continue;
 
-                let currentValue = parseInt(element.innerHTML);
-                let newValue = stats[stat];
+                const currentValue = parseInt(element.innerHTML);
+                const newValue = stats[stat];
 
                 if(newValue != currentValue){
-                    anime({
-                        targets: '.basic-stat[data-stat=' + stat + '] .stat-value',
-                        innerHTML: newValue,
-                        backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                        duration: 500,
-                        round: 1,
-                        easing: 'easeOutCubic'
-                    });
+                    element.innerHTML = newValue;
+                    flashForUpdate(element);
                 }
             }
         });
@@ -671,14 +677,16 @@ document.addEventListener('DOMContentLoaded', function(){
             e.preventDefault();
         });
 
+        const activeRodElement = document.querySelector('.stat-active-rod');
+
         element.addEventListener('click', function(e){
             if(element.parentNode.classList.contains('piece-selected')){
                 element.parentNode.classList.remove("piece-selected");
 
                 stats = calculated.stats;
 
-                document.querySelector('.stat-active-rod').className = 'stat-value stat-active-rod piece-common-fg';
-                document.querySelector('.stat-active-rod').innerHTML = 'None';
+                activeRodElement.className = 'stat-value stat-active-rod piece-common-fg';
+                activeRodElement.innerHTML = 'None';
             }else{
                 [].forEach.call(document.querySelectorAll('.stat-fishing .piece'), function(_element){
                     _element.classList.remove("piece-selected");
@@ -686,37 +694,25 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 element.parentNode.classList.add("piece-selected");
 
-                document.querySelector('.stat-active-rod').className = 'stat-value stat-active-rod piece-' + item.rarity + '-fg';
-                document.querySelector('.stat-active-rod').innerHTML = item.display_name;
+                activeRodElement.className = 'stat-value stat-active-rod piece-' + item.rarity + '-fg';
+                activeRodElement.innerHTML = item.display_name;
 
                 stats = weaponStats;
             }
 
-            anime({
-                targets: '.stat-active-rod',
-                backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                duration: 500,
-                round: 1,
-                easing: 'easeOutCubic'
-            });
+            flashForUpdate(activeRodElement);
 
-            let _element = document.querySelector('.basic-stat[data-stat=sea_creature_chance] .stat-value');
+            const _element = document.querySelector('.basic-stat[data-stat=sea_creature_chance] .stat-value');
 
             if(!_element)
                 return;
 
-            let currentValue = parseInt(_element.innerHTML);
-            let newValue = stats['sea_creature_chance'];
+            const currentValue = parseInt(_element.innerHTML);
+            const newValue = stats['sea_creature_chance'];
 
             if(newValue != currentValue){
-                anime({
-                    targets: '.basic-stat[data-stat=sea_creature_chance] .stat-value',
-                    innerHTML: newValue,
-                    backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                    duration: 500,
-                    round: 1,
-                    easing: 'easeOutCubic'
-                });
+                _element.innerHTML = newValue;
+                flashForUpdate(_element);
             }
         });
     });
@@ -1092,7 +1088,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             anime({
                 targets: window.document.scrollingElement || window.document.body || window.document.documentElement,
-                scrollTop: positionY[newActiveTab.getAttribute('data-target')] - 60,
+                scrollTop: positionY[newActiveTab.getAttribute('data-target')] - 110,
                 duration: 350,
                 easing: 'easeOutCubic',
                 complete: function(){
@@ -1205,9 +1201,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
     window.addEventListener('resize', resize);
 
-    const navBar = document.querySelector('#nav_bar')
     function onScroll() {
-        if(navBar.getBoundingClientRect().top <= 48) {
+        if (navBar.getBoundingClientRect().top <= navBarHeight ) {
             navBar.classList.add('stuck')
         } else {
             navBar.classList.remove('stuck')

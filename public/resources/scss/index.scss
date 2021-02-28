@@ -187,7 +187,7 @@ a:hover {
     left: 0;
     top: -100vh;
     height: 100vh;
-    background-color: #121212;
+    background-color: #282828;
     z-index: 1000;
 }
 
@@ -561,26 +561,13 @@ input[type="search"]::-webkit-search-cancel-button {
     text-shadow: 0px 0px 3px rgba(var(--background-rgb), 0.5);
 }
 
-#bg_blur {
-    @supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
-        display: none;
-    }
-    background: var(--bg_blur) no-repeat center center fixed;
-    background-size: cover;
-    position: fixed;
-    left: 30vw;
-    top: 35px;
-    right: 0;
-    bottom: 0;
-    background-color: rgb(20, 20, 20);
-}
-
 #wrapper {
-    position: absolute;
-    left: 30vw;
-    top: 45px;
-    right: 0;
-    padding-bottom: 30px;
+    position: relative;
+    margin-left: 30vw;
+    --padding: 30px;
+    padding: var(--padding);
+    padding-top: calc(48px + env(safe-area-inset-top, 0));
+    padding-bottom: calc(var(--padding) + env(safe-area-inset-bottom));
     min-height: 100%;
     box-sizing: border-box;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -589,8 +576,20 @@ input[type="search"]::-webkit-search-cancel-button {
     user-select: none;
     -webkit-backdrop-filter: blur(16px) brightness(0.5);
     backdrop-filter: blur(16px) brightness(0.5);
-    > * {
-        max-width: 100%;
+
+    @supports not ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: -1;
+            background: var(--bg_blur-webp) no-repeat center center fixed;
+            background-color: rgb(20, 20, 20);
+            background-size: cover;
+        }
     }
 
     .light & {
@@ -618,78 +617,100 @@ input[type="search"]::-webkit-search-cancel-button {
 #skill_levels_container {
     grid-area: skill;
 
+    .skill-bars[data-api-enabled="false"] {
+        .xp-skill {
+            filter: grayscale(1) opacity(0.5);
+        }
+    }
+
     .no-access {
         margin-top: 20px;
         font-weight: 500;
         font-size: 15px;
         color: rgba(var(--text-rgb), 0.85);
         white-space: nowrap;
+        grid-column: 1 / -1;
     }
 }
 
-.skill {
-    width: calc((70vw - 260px) / 2 - 60px);
-    display: inline-block;
-    position: relative;
-    height: 36px;
+.skill-bars {
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 24px;
 
-    &.maxed-skill {
-        --icon-hex: var(--maxed-hex);
-        --skillbar: var(--maxedbar);
-    }
-
-    .skill-icon {
-        width: 36px;
-        height: 36px;
-        background-color: var(--icon-hex);
-        border-radius: 50%;
+    .skill {
         position: relative;
-        z-index: 10;
-        filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
-        overflow: hidden;
+        height: 36px;
 
-        .item-icon,
-        .head-icon {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            width: 128px;
-            height: 128px;
+        &.maxed-skill {
+            --icon-hex: var(--maxed-hex);
+            --skillbar-hex: var(--maxedbar-hex);
+        }
+
+        .skill-icon {
+            width: 36px;
+            height: 36px;
+            background-color: var(--icon-hex);
+            border-radius: 50%;
+            position: relative;
             z-index: 10;
-            transform: scale(0.2);
-            transform-origin: top left;
             filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
+            overflow: hidden;
+
+            .item-icon,
+            .head-icon {
+                position: absolute;
+                top: 5px;
+                left: 5px;
+                width: 128px;
+                height: 128px;
+                z-index: 10;
+                transform: scale(0.2);
+                transform-origin: top left;
+                filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
+            }
+
+            .head-icon {
+                top: 6px;
+                background-repeat: no-repeat;
+            }
         }
 
-        .head-icon {
-            top: 6px;
-            background-repeat: no-repeat;
+        .skill-name {
+            position: absolute;
+            left: 40px;
+            top: 0;
+            font-weight: 600;
+            font-size: 14px;
+            height: 22px;
+            line-height: 22px;
+
+            .skill-level {
+                color: rgba(var(--text-rgb), 0.8);
+            }
         }
-    }
 
-    .skill-name {
-        position: absolute;
-        left: 40px;
-        top: 0;
-        font-weight: 600;
-        font-size: 14px;
-        height: 22px;
-        line-height: 22px;
+        .skill-bar {
+            position: absolute;
+            bottom: 0;
+            left: 36px;
+            right: 0;
+            height: 14px;
+            background-color: rgba(var(--text-rgb), 0.3);
+            border-top-right-radius: 7px;
+            border-bottom-right-radius: 7px;
 
-        .skill-level {
-            color: rgba(var(--text-rgb), 0.8);
+            &::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -18px;
+                width: 18px;
+                bottom: 0;
+                background-color: var(--skillbar-hex);
+            }
         }
-    }
-
-    .skill-bar {
-        position: absolute;
-        bottom: 0;
-        left: 36px;
-        right: 30px;
-        height: 14px;
-        background-color: rgba(var(--text-rgb), 0.3);
-        border-top-right-radius: 7px;
-        border-bottom-right-radius: 7px;
     }
 }
 
@@ -761,7 +782,7 @@ input[type="search"]::-webkit-search-cancel-button {
     position: fixed;
     left: 20px;
     width: calc(30vw - 40px);
-    top: 48px;
+    top: calc(48px + env(safe-area-inset-top, 0));
     z-index: 1;
     background-color: rgba(var(--grey_background-rgb), 0.95);
     padding: 30px;
@@ -770,7 +791,7 @@ input[type="search"]::-webkit-search-cancel-button {
     transform: translateY(0%);
     transition: transform 0.3s;
     z-index: 100;
-    max-height: calc(100vh - 48px - 30px);
+    max-height: calc(100vh - 48px - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
     overflow-y: auto;
 
     &:not(.info-opened) {
@@ -801,11 +822,11 @@ input[type="search"]::-webkit-search-cancel-button {
         display: inline-block;
     }
 
-    #info_box .name {
+    .name {
         color: rgba(var(--text-rgb), 0.7);
     }
 
-    #info_box .patron {
+    .patron {
         font-weight: 500;
     }
 }
@@ -859,7 +880,7 @@ input[type="search"]::-webkit-search-cancel-button {
     position: fixed;
     right: 20px;
     width: 440px;
-    top: 45px;
+    top: calc(48px + env(safe-area-inset-top, 0));
     z-index: 1;
     background-color: rgba(var(--grey_background-rgb), 0.95);
     padding: 20px;
@@ -868,6 +889,7 @@ input[type="search"]::-webkit-search-cancel-button {
     transition: transform 0.3s;
     z-index: 100;
     overflow-y: auto;
+    max-height: calc(100vh - 48px - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
 
     &.packs-opened {
         transform: translateY(0%);
@@ -879,9 +901,12 @@ input[type="search"]::-webkit-search-cancel-button {
     padding: 6px;
     border-radius: 5px;
     background-color: rgba(var(--text-rgb), 0.05);
-    margin-top: 15px;
     padding-left: 48px;
     font-size: 14px;
+
+    &:not(:first-of-type) {
+        margin-top: 15px;
+    }
 
     .pack-icon {
         top: 8px;
@@ -904,7 +929,7 @@ input[type="search"]::-webkit-search-cancel-button {
     position: fixed;
     right: 20px;
     width: 440px;
-    top: 45px;
+    top: calc(48px + env(safe-area-inset-top, 0));
     z-index: 1;
     background-color: rgba(var(--grey_background-rgb), 0.95);
     padding: 20px;
@@ -913,6 +938,7 @@ input[type="search"]::-webkit-search-cancel-button {
     transition: transform 0.3s;
     z-index: 100;
     overflow-y: auto;
+    max-height: calc(100vh - 48px - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
 
     &.themes-opened {
         transform: translateY(0%);
@@ -924,9 +950,12 @@ input[type="search"]::-webkit-search-cancel-button {
     padding: 6px;
     border-radius: 5px;
     background-color: rgba(var(--text-rgb), 0.05);
-    margin-top: 15px;
     padding-left: 48px;
     font-size: 14px;
+
+    &:not(:first-of-type) {
+        margin-top: 15px;
+    }
 
     .theme-icon {
         top: 8px;
@@ -1090,7 +1119,7 @@ input[type="search"]::-webkit-search-cancel-button {
 #player_profile {
     font-size: 36px;
     margin-top: 50px;
-    margin-left: 50px;
+    margin-left: 20px;
     margin-bottom: 20px;
 }
 
@@ -1411,13 +1440,14 @@ a.additional-player-stat:hover {
 }
 
 #basic_stats {
-    display: inline-grid;
+    display: grid;
     grid-template-areas:
         "base skill"
         "base additional";
     grid-template-columns: 260px auto;
-    width: 100%;
-    padding: 30px;
+    padding: var(--padding);
+    margin-left: calc(-1 * var(--padding));
+    margin-right: calc(-1 * var(--padding));
     box-sizing: border-box;
     background-color: rgba(var(--background-rgb), 0.3);
 }
@@ -1442,8 +1472,9 @@ a.additional-player-stat:hover {
 
 #nav_bar {
     position: sticky;
-    top: 48px;
-    width: 100%;
+    top: calc(48px + env(safe-area-inset-top, 0));
+    margin-left: calc(-1 * var(--padding));
+    margin-right: calc(-1 * var(--padding));
     text-align: center;
     padding-bottom: 6px;
     white-space: nowrap;
@@ -1549,6 +1580,10 @@ a.additional-player-stat:hover {
 .stat-value {
     font-weight: 700;
     margin-left: 2px;
+}
+
+.percent::after {
+    content: "%";
 }
 
 .basic-stat {
@@ -1708,9 +1743,7 @@ a.additional-player-stat:hover {
 }
 
 .stat-content {
-    padding-left: 30px;
     box-sizing: border-box;
-    padding-right: 30px;
     margin-top: 25px;
 }
 
@@ -1754,7 +1787,7 @@ a.additional-player-stat:hover {
     font-size: 24px;
     text-shadow: 0px 0px 7px rgba(var(--background-rgb), 0.3);
     position: relative;
-    padding-left: 35px;
+    padding-left: 5px;
     margin-bottom: 15px;
 
     span {
@@ -1764,7 +1797,6 @@ a.additional-player-stat:hover {
 
 .info-container {
     background-color: rgba(var(--background-rgb), 0.3);
-    margin-left: 30px;
     margin-bottom: 0px;
     padding: 20px;
     padding-top: 55px;
@@ -1904,6 +1936,23 @@ a.additional-player-stat:hover {
 .piece-selected .select-weapon,
 .piece-selected .select-rod {
     background-color: var(--text-hex) !important;
+}
+
+@keyframes flash {
+    from {
+        background-color: rgb(255, 255, 255, 1);
+    }
+
+    to {
+        background-color: rgba(255, 255, 255, 0);
+    }
+}
+
+.updated {
+    animation-name: flash;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-out;
+    border-radius: 2px;
 }
 
 .piece-shine {
@@ -2996,6 +3045,7 @@ main.grid {
             color: var(--text-hex);
             font-weight: normal;
             -webkit-appearance: none;
+            border-radius: 0;
 
             &::-webkit-search-cancel-button {
                 position: absolute;
@@ -3091,6 +3141,7 @@ main.grid > a,
 }
 
 .profile-avatar {
+    display: block;
     width: 64px;
     height: 64px;
     border-radius: 5px;
@@ -3316,16 +3367,10 @@ body {
         font-size: 14px;
     }
 
-    #wrapper,
-    #bg_blur {
-        left: 50%;
+    #wrapper {
         width: 1120px;
-        margin-left: -560px;
-    }
-
-    .skill {
-        width: calc((1120px - 410px) / 2 - 60px);
-        max-width: 100%;
+        margin-right: auto;
+        margin-left: auto;
     }
 
     #skin_display {
@@ -3377,18 +3422,15 @@ body {
     }
 
     #info_box {
-        left: 0;
-        width: 100vw;
-        right: 0;
-        max-height: calc(100vh - 45px);
+        left: env(safe-area-inset-left, 0);
+        right: env(safe-area-inset-right, 0);
+        width: unset;
     }
 
-    #wrapper,
-    #bg_blur {
-        left: 0;
-        right: 0;
-        margin-left: 0;
-        width: 100vw;
+    #wrapper {
+        margin-left: env(safe-area-inset-left, 0);
+        margin-right: env(safe-area-inset-right, 0);
+        width: calc(100vw - env(safe-area-inset-left, 0) - env(safe-area-inset-right, 0));
     }
 
     .stat-fairy-souls {
@@ -3398,7 +3440,7 @@ body {
 
     #player_profile {
         font-size: 25px;
-        margin: 25px;
+        margin: 25px 0;
     }
 
     #player_profile .text-stats-for {
@@ -3461,26 +3503,16 @@ body {
     }
 
     #base_stats_container {
-        padding: 30px;
+        padding: var(--padding);
         box-sizing: border-box;
         position: relative;
         padding-left: 0;
     }
 
     #skill_levels_container {
-        padding: 30px;
+        padding: var(--padding);
         box-sizing: border-box;
         padding-bottom: 15px;
-
-        .skill {
-            width: calc(50vw - 60px);
-            margin-left: 12px;
-            margin-right: 12px;
-        }
-
-        .skill-bar {
-            right: 0;
-        }
 
         .no-access {
             text-align: left;
@@ -3546,9 +3578,9 @@ body {
     }
 
     #inventory_container {
-        width: 100%;
-        margin-left: 0;
-        margin-right: 0;
+        display: block;
+        margin-left: calc(-1 * var(--padding));
+        margin-right: calc(-1 * var(--padding));
         margin-top: 0;
         box-sizing: border-box;
         padding: 0;
@@ -3569,15 +3601,15 @@ body {
     .floor-containers {
         white-space: nowrap;
         overflow-x: auto;
-        margin-left: -30px;
-        margin-right: -30px;
+        margin-left: calc(-1 * var(--padding));
+        margin-right: calc(-1 * var(--padding));
         padding-bottom: 20px;
 
         > :first-child {
-            margin-inline-start: 30px;
+            margin-inline-start: var(--padding);
         }
         > :last-child {
-            margin-inline-end: 30px;
+            margin-inline-end: var(--padding);
         }
     }
 }
@@ -3589,7 +3621,7 @@ body {
     }
 
     .stat-header {
-        padding-left: 30px;
+        padding-left: 0;
     }
 
     .collections,
@@ -3597,14 +3629,14 @@ body {
     .sea-creatures {
         white-space: nowrap;
         overflow-x: auto;
-        margin-left: -30px;
-        margin-right: -30px;
+        margin-left: calc(-1 * var(--padding));
+        margin-right: calc(-1 * var(--padding));
 
         > :first-child {
-            margin-inline-start: 30px;
+            margin-inline-start: var(--padding);
         }
         > :last-child {
-            margin-inline-end: 30px;
+            margin-inline-end: var(--padding);
         }
     }
 
@@ -3669,18 +3701,11 @@ body {
         grid-template-columns: 1fr;
     }
 
-    #themes_box {
-        left: 0;
-        width: 100vw;
-        right: 0;
-        max-height: calc(100vh - 45px);
-    }
-
+    #themes_box,
     #packs_box {
-        left: 0;
-        width: 100vw;
-        right: 0;
-        max-height: calc(100vh - 45px);
+        left: env(safe-area-inset-left, 0);
+        right: env(safe-area-inset-right, 0);
+        width: unset;
     }
 
     .inventory-slot .piece-icon {
@@ -3794,10 +3819,14 @@ body {
         display: block;
     }
 
+    .skill-bars {
+        grid-template-columns: 1fr;
+    }
+
     #other_skills {
         max-height: 0;
         overflow: hidden;
-        display: block;
+        transition: max-height 0.2s ease-in-out;
 
         &.show-skills {
             max-height: 500px;
@@ -3807,10 +3836,6 @@ body {
     #skill_levels_container .skill {
         width: 100%;
         margin: 0;
-    }
-
-    #skill_levels_container .skill-bar {
-        right: 0;
     }
 
     .wardrobe-set {
