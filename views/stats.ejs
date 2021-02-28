@@ -2105,7 +2105,8 @@ if(calculated.profile.game_mode == 'ironman'){
                                 <% if(floor.best_runs) { %>
                                 <div class="stat-sub-container sub-floor-extendable">
                                     <p class="stat-sub-header">Best Run</p>
-                                    <div class="pieces">
+                                    <div class="pieces" style="position: relative;">
+                                    <div class="dungeon-grade <%= helper.calcDungeonGrade(floor.best_runs[floor.best_runs.length - 1]) %>"></div>
                                     <% for (let [stat, value] of Object.entries(floor.best_runs[floor.best_runs.length - 1])) {
                                         if(stat == "teammates") continue; %>
                                         <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>

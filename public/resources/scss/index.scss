@@ -3868,3 +3868,33 @@ body {
 .narrow-info-container.top-deaths {
     margin-bottom: 15px;
 }
+
+.dungeon-grade {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-size: 70%;
+    background-repeat: round;
+    opacity: 0.7;
+    z-index: -1;
+}
+
+.dungeon-grade.D {
+    background-image: url('https://ainu.pw/static/D-RANK.png')
+}
+.dungeon-grade.C {
+    background-image: url('https://ainu.pw/static/C-RANK.png')
+}
+.dungeon-grade.B {
+    background-image: url('https://ainu.pw/static/B-RANK.png')
+}
+.dungeon-grade.A {
+    background-image: url('https://ainu.pw/static/A-RANK.png')
+}
+.dungeon-grade.S {
+    background-image: url('https://ainu.pw/static/S-RANK.png')
+}
+.dungeon-grade.SS {
+    background-image: url('https://ainu.pw/static/S+-RANK.png')
+}
+
