@@ -160,11 +160,11 @@ document.addEventListener('DOMContentLoaded', function(){
     function renderLore(text) {
         let output = "";
 
-        color = null
-        formats = {}
-        const formatCodes = ['k', 'l', 'm', 'n', 'o']
+        let color = null;
+        let formats = new Set();
+        const formatCodes = ['k', 'l', 'm', 'n', 'o'];
 
-        for (part of text.match(/(§[0-9a-fk-or])*[^§]*/g)) {
+        for (let part of text.match(/(§[0-9a-fk-or])*[^§]*/g)) {
 
             while (part.charAt(0) === '§') {
                 const code = part.charAt(1);
@@ -172,10 +172,10 @@ document.addEventListener('DOMContentLoaded', function(){
                 if (/[0-9a-f]/.test(code)) {
                     color = code;
                 } else if (formatCodes.includes(code)){
-                    formats[code] = true;
+                    formats.add(code);
                 } else if (code === 'r'){
                     color = null;
-                    formats = {};
+                    formats.clear();
                 }
 
                 part = part.substring(2);
@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             if (part.length === 0) continue;
 
-            classes = formatCodes.filter(key => formats[key]).map(x => '§' + x)
+            const classes = formatCodes.filter(key => formats.has(key)).map(x => '§' + x)
 
             output += '<span';
 
