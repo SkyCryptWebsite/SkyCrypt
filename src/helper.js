@@ -544,28 +544,21 @@ module.exports = {
         return output;
     },
 
-    renderRank: rank => {
-        let { rankText, rankColor, plusText, plusColor } = rank;
-        let output = "";
-
-        if(rankText === null)
-            return output;
-
-        rankColor = constants.minecraft_formatting[rankColor].niceColor
-        || constants.minecraft_formatting[rankColor].color;
-
-        output = `<div class="rank-tag ${plusText ? 'rank-plus' : ''}"><div class="rank-name" style="background-color: ${rankColor}">${rankText}</div>`;
-
-        if(plusText){
-            plusColor = constants.minecraft_formatting[plusColor].niceColor
-            || constants.minecraft_formatting[plusColor].color
-
-            output += `<div class="rank-plus" style="background-color: ${plusColor}"><div class="rank-plus-before" style="background-color: ${plusColor};"></div><span class="rank-plus-text">${plusText}</span></div>`;
+    renderRank: ({ rankText, rankColor, plusText, plusColor }) => {
+        if (rankText === null) {
+            return "";
+        } else {
+            return /*html*/`
+                <div class="rank-tag">
+                    <div class="rank-name" style="background-color: var(--§${rankColor}-nice)">${rankText}</div>
+                    ${
+                        plusText ? 
+                        /*html*/`<div class="rank-plus" style="background-color: var(--§${plusColor}-nice)">${plusText}</div>`
+                        : ''
+                    }
+                </div>
+            `;
         }
-
-        output += `</div>`;
-
-        return output;
     },
 
     updateRank: async (uuid, db) => {
