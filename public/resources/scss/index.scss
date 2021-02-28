@@ -156,7 +156,7 @@ a:hover {
     left: 0;
     top: -100vh;
     height: 100vh;
-    background-color: #121212;
+    background-color: #282828;
     z-index: 1000;
 }
 
@@ -583,13 +583,18 @@ input[type="search"]::-webkit-search-cancel-button {
 
 #skill_levels_container {
     grid-area: skill;
-
-    &.no-access {
+    .skill-bars[data-api-enabled="false"] {
+        .xp-skill {
+            filter: grayscale(1) opacity(0.5);
+        }
+    }
+    .no-access {
         margin-top: 20px;
         font-weight: 500;
         font-size: 15px;
         color: rgba(255, 255, 255, 0.85);
         white-space: nowrap;
+        grid-column: 1 / -1;
     }
 }
 
@@ -2227,6 +2232,7 @@ a.additional-player-stat:hover {
 }
 
 #inventory_container {
+    display: inline-block;
     background-color: rgba(0, 0, 0, 0.3);
     padding: 20px;
     position: relative;
@@ -3085,6 +3091,7 @@ main.grid > a,
 }
 
 .profile-avatar {
+    display: block;
     width: 64px;
     height: 64px;
     border-radius: 5px;
@@ -3517,6 +3524,7 @@ body {
     }
 
     #inventory_container {
+        display: block;
         margin-left: calc(-1 * var(--padding));
         margin-right: calc(-1 * var(--padding));
         margin-top: 0;
