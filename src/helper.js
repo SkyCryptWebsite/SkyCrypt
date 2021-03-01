@@ -505,7 +505,7 @@ module.exports = {
         else if(total_score <= 299)
             result = "S";
         else
-            result = "SS";
+            result = "S+";
         
         return result;
     },
