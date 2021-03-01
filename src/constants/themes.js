@@ -108,7 +108,7 @@ module.exports = {
                 skillbar: {
                     type: "stripes",
                     angle: "45deg",
-                    colors: ["#ff3939", "#ffffff"],
+                    colors: ["#ff5555", "#ffffff"],
                     width: 10
                 },
                 maxedbar: {
