@@ -623,6 +623,10 @@ input[type="search"]::-webkit-search-cancel-button {
             filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
             overflow: hidden;
 
+            &::after {
+                content: none;
+            }
+
             .item-icon,
             .head-icon {
                 position: absolute;
