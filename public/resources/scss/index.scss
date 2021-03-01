@@ -1573,7 +1573,10 @@ a.additional-player-stat:hover {
         z-index: 1;
     }
     &.stuck #nav_bar_background {
-        background-color: rgba(var(--background-rgb), 0.9);
+        background-color: rgba(20, 20, 20, 0.9);
+        .light & {
+            background-color: rgba(240, 240, 240, 0.92);
+        }
     }
 
     #nav_items_container {
