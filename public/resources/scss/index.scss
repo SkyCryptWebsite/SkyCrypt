@@ -3095,6 +3095,7 @@ main.grid {
             font-size: 16px;
             transform: scale(1);
             transition: transform 0.15s ease-in-out, background-color 0.15s;
+            will-change: transform;
 
             &:hover,
             &:focus {
