@@ -830,6 +830,16 @@ input[type="search"]::-webkit-search-cancel-button {
     }
 }
 
+.expander[aria-expanded]::before {
+    content: "";
+    position: fixed;
+    top: calc(48px + env(safe-area-inset-top, 0));
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
 #info-box {
     position: fixed;
     left: 20px;
@@ -847,7 +857,7 @@ input[type="search"]::-webkit-search-cancel-button {
     overflow-y: auto;
     line-height: initial;
 
-    [aria-expanded] + & {
+    .expander[aria-expanded] + & {
         visibility: visible;
         transform: translateY(0%);
         transition: transform 0.3s ease-in-out;
@@ -926,7 +936,7 @@ input[type="search"]::-webkit-search-cancel-button {
     line-height: initial;
     max-height: calc(100vh - 48px - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
 
-    [aria-expanded] + & {
+    .expander[aria-expanded] + & {
         visibility: visible;
         transform: translateY(0%);
         transition: transform 0.3s ease-in-out;

@@ -20,24 +20,23 @@
         document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }
 
-    for (const boxName of ['info', 'packs', 'themes']) {
-        const BoxElement = document.querySelector(`#${boxName}-box`);
-        const ButtonElement = document.querySelector(`#${boxName}-button`);
-
-        function toggle(value) {
-            ButtonElement.toggleAttribute('aria-expanded', value);
-        }
-
-        ButtonElement.addEventListener('click', () => toggle());
-
-        function listener(event) {
-            if (!BoxElement.contains(event.relatedTarget)) {
-                toggle(false);
+    const expanders = document.querySelectorAll('.expander')
+    for (const expander of expanders) {
+        expander.addEventListener('click', () => {
+            for (const otherExpander of expanders) {
+                if(otherExpander != expander){
+                    otherExpander.removeAttribute('aria-expanded');
+                }
             }
-        }
-
-        BoxElement.addEventListener('focusout', listener);
-        ButtonElement.addEventListener('focusout', listener);
+            expander.toggleAttribute('aria-expanded');
+        });
+        expander.nextElementSibling.addEventListener('focusout', () => {
+            setTimeout(() => {
+                if (document.activeElement != document.body && !expander.nextElementSibling.contains(document.activeElement)) {
+                    expander.removeAttribute('aria-expanded');
+                }
+            });
+        });
     }
 
     function switchPack(pack = false){
