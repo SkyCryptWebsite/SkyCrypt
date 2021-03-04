@@ -339,57 +339,51 @@ module.exports = {
     },
 
     // Convert Minecraft lore to HTML
-    renderLore: (text, enchants = false) => {
+    renderLore: (text) => {
         let output = "";
-        let spansOpened = 0;
 
-        if (!text.startsWith("§")) {
-            text = `§7${text}`
-        }
+        let color = null;
+        let formats = new Set();
 
-        const parts = text.split("§");
+        for (let part of text.match(/(§[0-9a-fk-or])*[^§]*/g)) {
 
-        if(parts.length == 1)
-            return text;
+            while (part.charAt(0) === '§') {
+                const code = part.charAt(1);
 
-        for(const part of parts){
-            const code = part.substring(0, 1);
-            const content = part.substring(1);
+                if (/[0-9a-f]/.test(code)) {
+                    color = code;
+                } else if (/[k-o]/.test(code)) {
+                    formats.add(code);
+                } else if (code === 'r') {
+                    color = null;
+                    formats.clear();
+                }
 
-            const format = constants.minecraft_formatting[code];
-
-            if(format === undefined)
-                continue;
-
-            if(format.type == 'color'){
-                for(; spansOpened > 0; spansOpened--)
-                    output += "</span>";
-
-                output += `<span style='${format.css}'>${content}`;
-
-                spansOpened++;
-            }else if(format.type == 'format'){
-                output += `<span style='${format.css}'>${content}`;
-
-                spansOpened++;
-            }else if(format.type == 'reset'){
-                for(; spansOpened > 0; spansOpened--)
-                    output += "</span>";
-
-                output += content;
+                part = part.substring(2);
             }
+
+            if (part.length === 0) continue;
+
+            output += '<span';
+
+            if (color !== null) {
+                output += ` style='color: var(--§${color});'`;
+            }
+
+            if (formats.size > 0) {
+                output += ` class='${Array.from(formats, x => '§' + x).join(', ')}'`;
+            }
+
+            output += `>${part}</span>`;
         }
 
-        for(; spansOpened > 0; spansOpened--)
-            output += "</span>";
+        const matchingEnchants = constants.special_enchants.filter(a => output.includes(a));
 
-        if(enchants){
-            const specialColor = constants.minecraft_formatting['6'];
-
-            const matchingEnchants = constants.special_enchants.filter(a => output.includes(a));
-
-            for(const enchantment of matchingEnchants)
-                output = output.replace(enchantment, `<span style='${specialColor.css}'>${enchantment}</span>`);
+        for (const enchantment of matchingEnchants) {
+            if (enchantment == 'Power 6' || enchantment == 'Power 7' && text.startsWith("§8Breaking")) {
+                continue;
+            }
+            output = output.replace(enchantment, `<span style='color: var(--§6)'>${enchantment}</span>`);
         }
 
         return output;
@@ -547,28 +541,21 @@ module.exports = {
         return output;
     },
 
-    renderRank: rank => {
-        let { rankText, rankColor, plusText, plusColor } = rank;
-        let output = "";
-
-        if(rankText === null)
-            return output;
-
-        rankColor = constants.minecraft_formatting[rankColor].niceColor
-        || constants.minecraft_formatting[rankColor].color;
-
-        output = `<div class="rank-tag ${plusText ? 'rank-plus' : ''}"><div class="rank-name" style="background-color: ${rankColor}">${rankText}</div>`;
-
-        if(plusText){
-            plusColor = constants.minecraft_formatting[plusColor].niceColor
-            || constants.minecraft_formatting[plusColor].color
-
-            output += `<div class="rank-plus" style="background-color: ${plusColor}"><div class="rank-plus-before" style="background-color: ${plusColor};"></div><span class="rank-plus-text">${plusText}</span></div>`;
+    renderRank: ({ rankText, rankColor, plusText, plusColor }) => {
+        if (rankText === null) {
+            return "";
+        } else {
+            return /*html*/`
+                <div class="rank-tag nice-colors-dark">
+                    <div class="rank-name" style="background-color: var(--§${rankColor})">${rankText}</div>
+                    ${
+                        plusText ? 
+                        /*html*/`<div class="rank-plus" style="background-color: var(--§${plusColor})">${plusText}</div>`
+                        : ''
+                    }
+                </div>
+            `;
         }
-
-        output += `</div>`;
-
-        return output;
     },
 
     updateRank: async (uuid, db) => {

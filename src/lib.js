@@ -357,7 +357,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
     // Check backpack contents and add them to the list of items
     for(const [index, item] of items.entries()){
         if(helper.hasPath(item, 'tag', 'display', 'Name') &&
-        (item.tag.display.Name.endsWith('Backpack')
+        (item.tag.display.Name.includes('Backpack')
         || item.tag.display.Name.endsWith('New Year Cake Bag')
         || item.tag.display.Name.endsWith("Builder's Wand")
         || item.tag.display.Name.endsWith('Basket of Seeds'))){
@@ -1197,9 +1197,23 @@ module.exports = {
             const id = getId(weapon);
 
             countsOfId[id] = (countsOfId[id] || 0) + 1;
+            
+            if(id == "BONE_BOOMERANG"){
+                if(countsOfId[id] > 6){
+                    weapon.hidden = true;
+                }
+            } else if(countsOfId[id] > 2){
+                weapon.hidden = true;
+            }
+        }
+
+        for(const rod of output.rods){
+            const id = getId(rod);
+
+            countsOfId[id] = (countsOfId[id] || 0) + 1;
 
             if(countsOfId[id] > 2)
-                weapon.hidden = true;
+                rod.hidden = true;
         }
 
         output.talismans = output.talismans.sort((a, b) => {
@@ -3354,11 +3368,19 @@ async function init(){
     for(const type in response.data.collections){
         for(const itemType in response.data.collections[type].items){
             const item = response.data.collections[type].items[itemType];
+            try {
+                const collectionData = constants.collection_data.filter(a => a.skyblockId == itemType)[0];
 
-            const collectionData = constants.collection_data.filter(a => a.skyblockId == itemType)[0];
-
-            collectionData.maxTier = item.maxTiers;
-            collectionData.tiers = item.tiers;
+                collectionData.maxTier = item.maxTiers;
+                collectionData.tiers = item.tiers;
+            } catch (e){
+                if (e instanceof TypeError){
+                     //Collection Data filter error
+                } else {
+                     //Throw exception unchanged
+                     throw e;
+                }
+            }
         }
     }
 }

@@ -36,7 +36,8 @@ const statShort = {
     pet_luck: 'PL',
     bonus_attack_speed: 'Atk',
     ferocity: 'Frc',
-    ability_damage: 'AD'
+    ability_damage: 'AD',
+    mining_speed: "MngSpd"
 };
 
 const skillItems = {
@@ -1082,7 +1083,7 @@ if(calculated.profile.game_mode == 'ironman'){
     <div id="stats_content">
         <div class="item-name">
             <div></div><span></span><div class="close-lore"></div></div>
-        <div class="item-lore"></div>
+        <div class="item-lore nice-colors-light"></div>
         <div class="backpack-contents inventory-view"></div>
     </div>
     <div id="skin_display">
@@ -1118,7 +1119,7 @@ if(calculated.profile.game_mode == 'ironman'){
             <span tabindex="0" id="stats_for_profile">
                 <%= calculated.profile.cute_name %>
                 <% if(calculated.profile.game_mode == 'ironman'){ %>
-                    <img src="/resources/img/icons/ironman.png" class="emoji">
+                    <img src="/resources/img/icons/ironman.png" class="emoji" alt="ironman">
                 <% } %>
                 <ul id="other_profiles">
                     <% for(let profile_id in calculated.profiles){ %>
@@ -1151,6 +1152,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 <% */ %>
                 <div class="additional-player-stat svg-icon favorite" data-username="<%= calculated.uuid %>" role="checkbox" aria-checked="<%= extra.favoriteUUIDs.includes(calculated.uuid) %>">
                     <svg viewBox="0 0 24 24">
+                        <title>star</title>
                         <path class="solid" fill="white" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
                         <path class="outline" fill="white" d="M12,15.39L8.24,17.66L9.23,13.38L5.91,10.5L10.29,10.13L12,6.09L13.71,10.13L18.09,10.5L14.77,13.38L15.76,17.66M22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.45,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24Z" />
                     </svg>
@@ -1162,18 +1164,18 @@ if(calculated.profile.game_mode == 'ironman'){
                 <% if(calculated.guild.members){ %><span class='stat-name'>Members: </span><span class='stat-value'><%= calculated.guild.members %></span><br><% } %>
                 <% if(calculated.guild.level){ %><span class='stat-name'>Level: </span><span class='stat-value'><%= calculated.guild.level %></span><br><% } %>
                 ">Guild: <%= calculated.guild.name %></button><% } %>
-                <a href="https://auctions.craftlink.xyz/players/<%= calculated.uuid %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">HyAuctions</a>
-                <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">Plancke</a>
+                <a href="https://auctions.craftlink.xyz/players/<%= calculated.uuid %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">HyAuctions</a>
+                <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">Plancke</a>
                 <div id="additional_socials">
                     <button data-copy-text="<%= calculated.uuid %>" class="copy-text additional-player-stat">Copy UUID</button>
                     <% if('DISCORD' in calculated.social){ %><button data-copy-text="<%= calculated.social.DISCORD %>" class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></button><% } %>
-                    <% if('TWITTER' in calculated.social){ %><a data-tippy-content="Twitter" href="<%= calculated.social.TWITTER %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-twitter"></a><% } %>
-                    <% if('YOUTUBE' in calculated.social){ %><a data-tippy-content="YouTube" href="<%= calculated.social.YOUTUBE %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-youtube"></a><% } %>
-                    <% if('INSTAGRAM' in calculated.social){ %><a data-tippy-content="Instagram" href="<%= calculated.social.INSTAGRAM %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-instagram"></a><% } %>
-                    <% if('TWITCH' in calculated.social){ %><a data-tippy-content="Twitch" href="<%= calculated.social.TWITCH %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-twitch"></a><% } %>
-                    <% if('MIXER' in calculated.social){ %><a data-tippy-content="Mixer" href="<%= calculated.social.MIXER %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-mixer"></a><% } %>
-                    <% if('HYPIXEL' in calculated.social){ %><a data-tippy-content="Hypixel Forums" href="<%= calculated.social.HYPIXEL %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-hypixel"></a><% } %>
-                    <button class="additional-player-stat" id="reveal_socials"></button>
+                    <% if('TWITTER' in calculated.social){ %><a data-tippy-content="Twitter" href="<%= calculated.social.TWITTER %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitter"></a><% } %>
+                    <% if('YOUTUBE' in calculated.social){ %><a data-tippy-content="YouTube" href="<%= calculated.social.YOUTUBE %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-youtube"></a><% } %>
+                    <% if('INSTAGRAM' in calculated.social){ %><a data-tippy-content="Instagram" href="<%= calculated.social.INSTAGRAM %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-instagram"></a><% } %>
+                    <% if('TWITCH' in calculated.social){ %><a data-tippy-content="Twitch" href="<%= calculated.social.TWITCH %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitch"></a><% } %>
+                    <% if('MIXER' in calculated.social){ %><a data-tippy-content="Mixer" href="<%= calculated.social.MIXER %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-mixer"></a><% } %>
+                    <% if('HYPIXEL' in calculated.social){ %><a data-tippy-content="Hypixel Forums" href="<%= calculated.social.HYPIXEL %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-hypixel"></a><% } %>
+                    <button class="additional-player-stat" id="reveal_socials" aria-label="reveal socials"></button>
                 </div>
             </div>
         </div>
@@ -1312,7 +1314,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 <% if('bank' in calculated){ %>
                     <div class="additional-stat"><span class="stat-name">Bank Account: </span><span class="stat-value"><%= helper.formatNumber(calculated.bank, true) %> Coin<%= Math.floor(calculated.bank) == 1 ? '': 's' %></span></div>
                 <% } %>
-                <% if('levels' in calculated){ %>
+                <% if('levels' in calculated && 'runecrafting' in calculated.levels){ %>
                     <div class="additional-stat"><span data-tippy-content="
                     <span class='stat-name'>Total Skill XP: </span><span class='stat-value'><%= Math.round(calculated.total_skill_xp).toLocaleString() %></span>
                     <div class='tippy-explanation'>Total XP gained in all skills except Carpentry and Runecrafting.</div>
@@ -1321,17 +1323,17 @@ if(calculated.profile.game_mode == 'ironman'){
                     <% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
                     <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
                     "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level.toFixed(2) %></span></span></div>
-                    <div class="additional-stat">
-                        <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
-                    </div>
                 <% } %>
+                <div class="additional-stat">
+                    <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
+                </div>
             </div>
 
             <div id="skill_levels_container">
                 <%
                     if('levels' in calculated){
                 %>
-                    <div id="other_skills" class="skill-bars">
+                    <div id="other_skills" class="skill-bars" data-api-enabled="<%= 'runecrafting' in calculated.levels %>">
                         <%= skill_component('Taming', 'icon-383_0_12', calculated.levels.taming) %>
                         <%= skill_component('Farming', 'icon-294_0', calculated.levels.farming) %>
                         <%= skill_component('Mining', 'icon-274_0', calculated.levels.mining) %>
@@ -1750,7 +1752,7 @@ if(calculated.profile.game_mode == 'ironman'){
                                 <% for(let i = 9; i < items.inventory.length; i++){ %>
                                     <% let item = items.inventory[i]; %>
                                     <%= inventorySlot(item); %>
-                                    
+
                                 <% } %>
                                 <hr>
                                 <% for(let i = 0; i < 9; i++){ %>
@@ -1863,9 +1865,9 @@ if(calculated.profile.game_mode == 'ironman'){
                         <div class="stat-sub-container sub-extendable">
                             <p class="stat-sub-header">Farming Crops</p>
                             <div class="stat-farming-crops">
-                                <%  
+                                <%
                                 const crops = Object.values(farming.crops).sort((a, b) => {
-                                    return b.contests - a.contests; 
+                                    return b.contests - a.contests;
                                 });
 
                                 for(const crop of crops){
@@ -2004,7 +2006,7 @@ if(calculated.profile.game_mode == 'ironman'){
                     <div class="stat-sub-container sub-floor-extendable">
                         <p class="stat-sub-header">Experiments</p>
                         <div class="stat-experiments floor-containers">
-                            <% for(let game in enchanting.experiments){ 
+                            <% for(let game in enchanting.experiments){
                             const game_data = enchanting.experiments[game]; %>
                             <div class="narrow-info-container">
                                 <div class="narrow-info-header">
@@ -2012,17 +2014,17 @@ if(calculated.profile.game_mode == 'ironman'){
                                 </div>
                                 <span>
                                     <p class="stat-raw-values">
-                                        <% 
+                                        <%
                                             const game_stats = helper.sortObject(game_data.stats);
-                                            for(let stat in game_stats){ 
+                                            for(let stat in game_stats){
                                         %>
                                             <span class="stat-name"><%= helper.titleCase(stat.replace('_', ' ')) %>: </span>
                                             <span class="stat-value"><%= (stat == 'last_attempt' || stat == 'last_claimed') ? game_stats[stat].text : game_stats[stat] %></span><br>
                                         <% } %>
                                     </p>
-                                    <% 
-                                    for(let tier in game_data.tiers) { 
-                                        const tier_data = game_data.tiers[tier]; 
+                                    <%
+                                    for(let tier in game_data.tiers) {
+                                        const tier_data = game_data.tiers[tier];
                                     %>
                                     <hr>
                                     <div class="collection">
@@ -2030,9 +2032,9 @@ if(calculated.profile.game_mode == 'ironman'){
                                         <div class="collection-stats">
                                             <div class="collection-name"><span class="stat-name"><%= tier_data.name %></span></div>
                                             <div class="collection-amount">
-                                                <% 
-                                                for(let info in tier_data) { 
-                                                    if(info == 'name' || info == 'icon') continue; 
+                                                <%
+                                                for(let info in tier_data) {
+                                                    if(info == 'name' || info == 'icon') continue;
                                                 %>
                                                 <small class="stat-name"><%= helper.titleCase(info.replace('_', ' ')) %>: </small><small class="stat-value"><%= tier_data[info] %></small><br>
                                                 <% } %>
@@ -2048,7 +2050,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 </div>
                 <% } %>
 
-<br>    
+<br>
                 <p class='stat-raw-values'><small><i>
                 Please note that this section is still in the works and many things are now in development. Thanks for your support!
                 </i></small></p>
@@ -2354,7 +2356,7 @@ if(calculated.profile.game_mode == 'ironman'){
                             maxedMinions++;
                     }
                 %>
-                <a href="https://hypixel.net/threads/2166857/" target="_blank" rel="nofollow" class="external-app">
+                <a href="https://hypixel.net/threads/2166857/" target="_blank" rel="noreferrer" class="external-app">
                     <div class="external-app-icon icon-google-sheets"></div>
                     <div class="external-app-name">Minions Sheet <span class="grey-text">by TBlazeWarriorT</span></div>
                     <div class="external-app-description">Check the next cheapest or fastest Minion upgrades and find out which Minions will earn you the most from Bazaar, for free.</div>
@@ -2774,7 +2776,6 @@ if(calculated.profile.game_mode == 'ironman'){
         let calculated = JSON.parse(`<%- JSON.stringify(calculated).replace(/\\/g, '\\\\') %>`);
         <%
             const clientConstants = {
-                minecraft_formatting: constants.minecraft_formatting,
                 special_enchants: constants.special_enchants,
                 max_favorites: constants.max_favorites
             }

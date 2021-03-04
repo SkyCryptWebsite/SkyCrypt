@@ -39,6 +39,83 @@
     --bg_blur-webp: url(https://sky.shiiyu.moe/resources/img/bg_blur.webp?v3);
 }
 
+.§k {
+    text-decoration: line-through wavy 0.25em;
+}
+.§l {
+    font-weight: bold;
+}
+.§m {
+    text-decoration: line-through;
+}
+.§n {
+    text-decoration: underline;
+}
+.§o {
+    font-style: italic;
+}
+
+:root,
+.true-colors {
+    /* Minecraft color codes */
+    --§0: #000000;
+    --§1: #0000aa;
+    --§2: #00aa00;
+    --§3: #00aaaa;
+    --§4: #aa0000;
+    --§5: #aa00aa;
+    --§6: #ffaa00;
+    --§7: #aaaaaa;
+    --§8: #555555;
+    --§9: #5555ff;
+    --§a: #55ff55;
+    --§b: #55ffff;
+    --§c: #ff5555;
+    --§d: #ff55ff;
+    --§e: #ffff55;
+    --§f: #ffffff;
+}
+
+.nice-colors-dark {
+    /* these colors look nice and have significant contrast with white */
+    // --§0: #;
+    --§1: #3251ae;
+    // --§2: #;
+    // --§3: #;
+    // --§4: #;
+    // --§5: #;
+    // --§6: #;
+    --§7: #333333;
+    // --§8: #;
+    // --§9: #;
+    --§a: #40bb40;
+    --§b: #51c4d7;
+    --§c: #c43c3c;
+    --§d: #d985bc;
+    --§e: #eaa522;
+    --§f: #000000;
+}
+
+.nice-colors-light {
+    /* these colors look nice and have significant contrast with black */
+    --§0: #ffffff;
+    // --§1: #;
+    // --§2: #;
+    // --§3: #;
+    --§4: #cc3333;
+    --§5: #eb17eb;
+    // --§6: #;
+    // --§7: #;
+    --§8: #777777;
+    --§9: #8888ff;
+    // --§a: #;
+    // --§b: #;
+    // --§c: #;
+    // --§d: #;
+    // --§e: #;
+    // --§f: #;
+}
+
 * {
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
@@ -157,7 +234,7 @@ a:hover {
     left: 0;
     top: -100vh;
     height: 100vh;
-    background-color: #121212;
+    background-color: #282828;
     z-index: 1000;
 }
 
@@ -590,13 +667,18 @@ input[type="search"]::-webkit-search-cancel-button {
 
 #skill_levels_container {
     grid-area: skill;
-
-    &.no-access {
+    .skill-bars[data-api-enabled="false"] {
+        .xp-skill {
+            filter: grayscale(1) opacity(0.5);
+        }
+    }
+    .no-access {
         margin-top: 20px;
         font-weight: 500;
         font-size: 15px;
         color: rgba(255, 255, 255, 0.85);
         white-space: nowrap;
+        grid-column: 1 / -1;
     }
 }
 
@@ -624,6 +706,10 @@ input[type="search"]::-webkit-search-cancel-button {
             z-index: 10;
             filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
             overflow: hidden;
+
+            &::after {
+                content: none;
+            }
 
             .item-icon,
             .head-icon {
@@ -1084,7 +1170,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .rank-tag {
-    display: inline-block;
+    display: inline-flex;
     font-size: 18px;
     height: 34px;
     line-height: 34px;
@@ -1096,33 +1182,25 @@ input[type="search"]::-webkit-search-cancel-button {
     font-weight: 700;
 
     .rank-name {
-        border-radius: 100px;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
         padding: 0 15px;
     }
 
     .rank-plus {
-        border-radius: 100px;
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
         padding-right: 8px;
         position: relative;
-    }
+        z-index: 1;
 
-    .rank-plus-before {
-        position: absolute;
-        top: 0;
-        left: -7px;
-        width: 999px;
-        background-color: #d985bc;
-        height: 100%;
-        transform: skew(-20deg);
-    }
-
-    .rank-plus-text {
-        position: relative;
-        z-index: 2;
+        &::before {
+            content: "";
+            z-index: -1;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: -7px;
+            right: 0;
+            transform: skew(-20deg);
+            background-color: inherit;
+        }
     }
 
     div {
@@ -1650,7 +1728,7 @@ a.additional-player-stat:hover {
 
 .stat-sea-creature-chance .stat-name,
 .color-sea-creature-chance {
-    color: #00aaaa;
+    color: var(--§3);
 }
 
 .stat-sea-creature-chance {
@@ -1686,6 +1764,10 @@ a.additional-player-stat:hover {
 
 .stat-ability-damage {
     background-image: url(../img/icons/ability-damage.png);
+}
+
+.color-mining-speed {
+    color: #FFAA00
 }
 
 .stat-container {
@@ -1823,7 +1905,7 @@ a.additional-player-stat:hover {
     user-select: none;
     cursor: pointer;
     transition: z-index 0.2s;
-    background-color: #555555;
+    background-color: var(--§8);
 
     &::after {
         content: "";
@@ -1986,10 +2068,10 @@ a.additional-player-stat:hover {
 
 .piece-special-bg,
 .style-scrollbar .piece-special-bg + .item-lore::-webkit-scrollbar-thumb {
-    background-color: #ff5555;
+    background-color: var(--§c);
 }
 .piece-special-bg + .item-lore {
-    scrollbar-color: #ff5555 transparent;
+    scrollbar-color: var(--§c) transparent;
 }
 
 .piece-mythic-bg,
@@ -2010,18 +2092,18 @@ a.additional-player-stat:hover {
 
 .piece-epic-bg,
 .style-scrollbar .piece-epic-bg + .item-lore::-webkit-scrollbar-thumb {
-    background-color: #aa00aa;
+    background-color: var(--§5);
 }
 .piece-epic-bg + .item-lore {
-    scrollbar-color: #aa00aa transparent;
+    scrollbar-color: var(--§5) transparent;
 }
 
 .piece-rare-bg,
 .style-scrollbar .piece-rare-bg + .item-lore::-webkit-scrollbar-thumb {
-    background-color: #5555ff;
+    background-color: var(--§9);
 }
 .piece-rare-bg + .item-lore {
-    scrollbar-color: #5555ff transparent;
+    scrollbar-color: var(--§9) transparent;
 }
 
 .piece-uncommon-bg,
@@ -2034,14 +2116,14 @@ a.additional-player-stat:hover {
 
 .piece-common-bg,
 .style-scrollbar .piece-common-bg + .item-lore::-webkit-scrollbar-thumb {
-    background-color: #555555;
+    background-color: var(--§8);
 }
 .piece-common-bg + .item-lore {
-    scrollbar-color: #555555 transparent;
+    scrollbar-color: var(--§8) transparent;
 }
 
 .piece-special-fg {
-    color: #ff5555 !important;
+    color: var(--§c) !important;
 }
 
 .piece-mythic-fg {
@@ -2189,7 +2271,7 @@ a.additional-player-stat:hover {
 }
 
 .missing-pet {
-    background-color: #555555;
+    background-color: var(--§8);
     transition: background-color 0.2s;
 
     .piece-icon {
@@ -2208,7 +2290,7 @@ a.additional-player-stat:hover {
 }
 
 .missing-talisman {
-    background-color: #555555;
+    background-color: var(--§8);
     transition: background-color 0.2s;
 
     .piece-icon {
@@ -2218,7 +2300,7 @@ a.additional-player-stat:hover {
 
     &:hover,
     &.sticky-stats {
-        background-color: #555555;
+        background-color: var(--§8);
 
         .piece-icon {
             filter: saturate(100%);
@@ -2227,6 +2309,7 @@ a.additional-player-stat:hover {
 }
 
 #inventory_container {
+    display: inline-block;
     background-color: rgba(0, 0, 0, 0.3);
     padding: 20px;
     position: relative;
@@ -3016,6 +3099,7 @@ main.grid {
             font-size: 16px;
             transform: scale(1);
             transition: transform 0.15s ease-in-out, background-color 0.15s;
+            will-change: transform;
 
             &:hover,
             &:focus {
@@ -3085,6 +3169,7 @@ main.grid > a,
 }
 
 .profile-avatar {
+    display: block;
     width: 64px;
     height: 64px;
     border-radius: 5px;
@@ -3517,6 +3602,7 @@ body {
     }
 
     #inventory_container {
+        display: block;
         margin-left: calc(-1 * var(--padding));
         margin-right: calc(-1 * var(--padding));
         margin-top: 0;
