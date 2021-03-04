@@ -830,14 +830,21 @@ input[type="search"]::-webkit-search-cancel-button {
     }
 }
 
-.expander[aria-expanded]::before {
+.expander::before {
     content: "";
     position: fixed;
     top: calc(48px + env(safe-area-inset-top, 0));
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 0.3s ease-in-out, visibility 0.3s linear;
+}
+
+.expander[aria-expanded]::before {
+    visibility: visible;
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 #info-box {
@@ -1581,7 +1588,7 @@ a.additional-player-stat:hover {
                 transition: height 0.1s, top 0.1s;
             }
 
-            &[aria-current]::after{
+            &[aria-current]::after {
                 height: 8px;
                 top: calc(100% - 3px);
             }
@@ -1777,7 +1784,7 @@ a.additional-player-stat:hover {
 }
 
 .color-mining-speed {
-    color: #FFAA00
+    color: #ffaa00;
 }
 
 .stat-container {
