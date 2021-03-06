@@ -87,7 +87,7 @@
                 <a class="pack-name" href="<%= pack.url %>" target="_blank" rel="noreferrer"><%= pack.name %> <% if(pack.version){ %><small><%= pack.version %></small><% } %></a><br>
                 <div class="pack-author">by <span><%= pack.author %></span></div>
                 <% if(page == 'stats'){ %>
-                    <% if(/* pack.id == "SKYBLOCK_PACK" */false){ %>
+                    <% if(pack.disabled){ %>
                         <div class="selected_button" title="Disabled due to unknown issues." disabled>Disabled</div>
                     <% } else { %>
                         <% if(req.cookies.pack == pack.id){ %>
