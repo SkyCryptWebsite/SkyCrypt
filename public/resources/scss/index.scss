@@ -565,58 +565,6 @@ input[type="search"]::-webkit-search-cancel-button {
     background-image: url(../img/icons/format-color-fill.png);
 }
 
-.switch_packs_button,
-.switch_themes_button {
-    display: inline-block;
-    position: absolute;
-    height: 30px;
-    line-height: 30px;
-    box-sizing: border-box;
-    margin-left: 5px;
-    cursor: pointer;
-    text-transform: capitalize;
-    font-weight: 600;
-    font-size: 12px;
-    color: white;
-    padding-left: 8px;
-    padding-right: 8px;
-    border-radius: 9999px;
-    top: 8px;
-    right: 20px;
-    background-color: rgba(var(--icon-rgb), 0.9);
-    background-size: 24px auto;
-    background-position: 6px 8px;
-    background-repeat: no-repeat;
-    text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
-    &:hover {
-        background-color: rgba(var(--line-rgb), 0.9);
-    }
-}
-
-.selected_button {
-    display: inline-block;
-    position: absolute;
-    height: 30px;
-    line-height: 30px;
-    box-sizing: border-box;
-    margin-left: 5px;
-    cursor: pointer;
-    text-transform: capitalize;
-    font-weight: 600;
-    font-size: 12px;
-    color: white;
-    padding-left: 8px;
-    padding-right: 8px;
-    border-radius: 9999px;
-    top: 8px;
-    right: 20px;
-    background-color: rgba(0, 0, 0, 0.5);
-    background-size: 24px auto;
-    background-position: 6px 8px;
-    background-repeat: no-repeat;
-    text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
-}
-
 #wrapper {
     position: relative;
     margin-left: 30vw;
@@ -953,6 +901,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .resource-pack {
+    display: block;
     position: relative;
     padding: 6px;
     border-radius: 5px;
@@ -978,6 +927,38 @@ input[type="search"]::-webkit-search-cancel-button {
 
     .pack-author {
         font-weight: 500;
+    }
+
+    button {
+        appearance: none;
+        border: 0;
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        display: block;
+        width: 32px;
+        height: 32px;
+        background-color: rgba(255 255 255 / 0);
+        -webkit-mask-image: url(/resources/img/icons/check.svg);
+        mask-image: url(/resources/img/icons/check.svg);
+        -webkit-mask-size: 100%;
+        mask-size: 100%;
+
+        &:hover,
+        &:focus-visible {
+            background-color: rgb(255 255 255 / 30%);
+
+            &:disabled:not([aria-selected]) {
+                -webkit-mask-image: url(/resources/img/icons/cancel.svg);
+                mask-image: url(/resources/img/icons/cancel.svg);
+                background-color: rgb(255 0 0 / 50%);
+            }
+        }
+
+        &[aria-selected] {
+            background-color: var(--icon-hex);
+            transition: background-color 0.15s ease-out;
+        }
     }
 }
 
