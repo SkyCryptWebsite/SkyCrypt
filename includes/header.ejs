@@ -57,7 +57,7 @@
     </form>
     <a href="https://blacklivesmatters.carrd.co/" target="_blank" rel="noreferrer" data-tippy-content="<strong>Black Lives Matter!</strong><br><br>Click for a collection of links on how to support the fight against racial inequality." class="blm-logo" aria-label="Black Lives Matter"></a>
     <button id="themes-button" class="expander"><span>Themes</span></button>
-    <form id="themes-box">
+    <div id="themes-box">
         <% for(const theme_id in extra.themes){
             const theme = extra.themes[theme_id];
             if(theme.hidden) continue; %>
@@ -69,7 +69,7 @@
             <input type="radio" name="theme" value="<%= theme_id %>">
         </label>
         <% } %>
-    </form>
+    </div>
     <button id="packs-button" class="expander"><span>Packs</span></button>
     <div id="packs-box">
         <%
