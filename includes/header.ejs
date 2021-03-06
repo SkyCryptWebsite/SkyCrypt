@@ -87,14 +87,12 @@
                 <a class="pack-name" href="<%= pack.url %>" target="_blank" rel="noreferrer"><%= pack.name %> <% if(pack.version){ %><small><%= pack.version %></small><% } %></a><br>
                 <div class="pack-author">by <span><%= pack.author %></span></div>
                 <% if(page == 'stats'){ %>
-                    <% if(pack.disabled){ %>
+                    <% if (pack.disabled) { %>
                         <div class="selected_button" title="Disabled due to unknown issues." disabled>Disabled</div>
+                    <% } else if(req.cookies.pack == pack.id){ %>
+                        <div class="selected_button" disabled>In Use</div>
                     <% } else { %>
-                        <% if(req.cookies.pack == pack.id){ %>
-                            <div class="selected_button">In Use</div>
-                        <% } else { %>
-                            <div class="switch_packs_button" onclick="switchPack('<%= pack.id %>')">Switch</div>
-                        <% } %>
+                        <div class="switch_packs_button" onclick="switchPack('<%= pack.id %>')">Switch</div>
                     <% } %>
                 <% } %>
             </div>
