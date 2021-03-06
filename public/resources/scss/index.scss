@@ -358,6 +358,7 @@ header > * {
 }
 
 .social-button {
+    -webkit-appearance: none;
     appearance: none;
     display: inline-block;
     vertical-align: middle;
@@ -458,6 +459,7 @@ header .lookup-player {
         right: 0;
         bottom: 0;
         width: 60px;
+        -webkit-appearance: none;
         appearance: none;
         border: none;
         border-radius: 18px;
@@ -498,6 +500,7 @@ header .lookup-player {
 input[type="search"]::-webkit-search-cancel-button {
     height: 0.8em;
     width: 0.8em;
+    -webkit-appearance: none;
     appearance: none;
     background-image: url(/resources/img/icons/window-close.png);
     background-size: 100%;
@@ -525,6 +528,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
 #packs-button,
 #themes-button {
+    -webkit-appearance: none;
     appearance: none;
     display: inline-block;
     box-sizing: unset;
@@ -936,6 +940,7 @@ input[type="search"]::-webkit-search-cancel-button {
     }
 
     button {
+        -webkit-appearance: none;
         appearance: none;
         border: 0;
         position: absolute;
@@ -1006,6 +1011,7 @@ input[type="search"]::-webkit-search-cancel-button {
     }
 
     input {
+        -webkit-appearance: none;
         appearance: none;
         margin: 0;
         position: absolute;
@@ -3125,6 +3131,7 @@ main.grid {
             padding: 0 24px;
             align-items: center;
             border: none;
+            -webkit-appearance: none;
             appearance: none;
             background-color: var(--icon-hex);
             color: white;
