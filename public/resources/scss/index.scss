@@ -900,6 +900,12 @@ input[type="search"]::-webkit-search-cancel-button {
     }
 }
 
+@keyframes brighten {
+    to {
+        filter: brightness(2);
+    }
+}
+
 .resource-pack {
     display: block;
     position: relative;
@@ -1017,6 +1023,10 @@ input[type="search"]::-webkit-search-cancel-button {
         &:hover,
         &:focus-visible {
             background-color: rgb(255 255 255 / 30%);
+        }
+
+        &:focus-visible {
+            animation: brighten 0.1s ease-out 0s 2 alternate;
         }
 
         &:checked {
