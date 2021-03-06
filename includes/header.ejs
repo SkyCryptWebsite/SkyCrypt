@@ -57,19 +57,19 @@
     </form>
     <a href="https://blacklivesmatters.carrd.co/" target="_blank" rel="noreferrer" data-tippy-content="<strong>Black Lives Matter!</strong><br><br>Click for a collection of links on how to support the fight against racial inequality." class="blm-logo" aria-label="Black Lives Matter"></a>
     <button id="themes-button" class="expander"><span>Themes</span></button>
-    <div id="themes-box">
+    <form id="themes-box">
         <% for(const theme_id in extra.themes){
             const theme = extra.themes[theme_id];
             if(theme.hidden) continue; %>
-        <div class="theme">
+        <label class="theme">
             <% let icon = theme.logo.replace("../", "/resources/"); %>
             <img class="theme-icon" src="<%= icon %>" alt="">
             <span class="theme-name"><%= theme.name %></span>
             <div class="theme-author">by <span><%= theme.author %></span></div>
-            <div class="switch_themes_button" id="<%= theme_id %>-theme" onclick="switchTheme('<%= theme_id %>')">Switch</div>
-        </div>
+            <input type="radio" name="theme" value="<%= theme_id %>">
+        </label>
         <% } %>
-    </div>
+    </form>
     <button id="packs-button" class="expander"><span>Packs</span></button>
     <div id="packs-box">
         <div class="resource-pack">
