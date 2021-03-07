@@ -3498,7 +3498,7 @@ body {
         margin-left: -5px;
     }
 
-    #info_box {
+    #info-box {
         left: env(safe-area-inset-left, 0);
         right: env(safe-area-inset-right, 0);
         width: unset;
@@ -3783,8 +3783,8 @@ body {
         grid-template-columns: 1fr;
     }
 
-    #themes_box,
-    #packs_box {
+    #themes-box,
+    #packs-box {
         left: env(safe-area-inset-left, 0);
         right: env(safe-area-inset-right, 0);
         width: unset;
