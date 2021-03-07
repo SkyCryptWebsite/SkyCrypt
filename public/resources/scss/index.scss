@@ -3781,6 +3781,7 @@ body {
         left: env(safe-area-inset-left, 0);
         right: env(safe-area-inset-right, 0);
         width: unset;
+        min-width: unset;
         border-radius: 0;
     }
 
