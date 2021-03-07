@@ -801,17 +801,17 @@ input[type="search"]::-webkit-search-cancel-button {
 
 #info-box {
     position: fixed;
+    top: calc(48px + env(safe-area-inset-top, 0));
     left: 20px;
     width: calc(30vw - 40px);
-    top: calc(48px + env(safe-area-inset-top, 0));
-    background-color: rgba(30, 30, 30, 0.95);
+    max-height: calc(100vh - 48px - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
     padding: 30px;
     padding-top: 45px;
+    background-color: rgba(30, 30, 30, 0.95);
     transform: translateY(calc(-100% - 48px));
     visibility: hidden;
     transition: transform 0.3s ease-in-out, visibility 0s linear 0.3s;
     z-index: 100;
-    max-height: calc(100vh - 48px - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
     overflow-y: auto;
     overscroll-behavior: contain;
     line-height: initial;
@@ -881,11 +881,12 @@ input[type="search"]::-webkit-search-cancel-button {
 #packs-box,
 #themes-box {
     position: fixed;
+    top: calc(48px + env(safe-area-inset-top, 0));
     right: 20px;
     width: 360px;
-    top: calc(48px + env(safe-area-inset-top, 0));
-    background-color: rgba(30, 30, 30, 0.95);
+    max-height: calc(100vh - 48px - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
     padding: 20px;
+    background-color: rgba(30, 30, 30, 0.95);
     transform: translateY(calc(-100% - 48px));
     visibility: hidden;
     transition: transform 0.3s ease-in-out, visibility 0s linear 0.3s;
@@ -893,7 +894,6 @@ input[type="search"]::-webkit-search-cancel-button {
     overflow-y: auto;
     overscroll-behavior: contain;
     line-height: initial;
-    max-height: calc(100vh - 48px - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
 
     .expander[aria-expanded] + & {
         visibility: visible;
