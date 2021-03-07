@@ -54,6 +54,7 @@
 
             <% if (page == 'stats') { %>
                 event.target.classList.add('loading');
+                sessionStorage.setItem("open packs", true);
                 window.location.reload();
             <% } else { %>
                 event.target.setAttribute("aria-selected", "");
@@ -61,6 +62,11 @@
             <% } %>
         });
     });
+    
+    if (sessionStorage.getItem("open packs")) {
+        sessionStorage.removeItem("open packs");
+        document.querySelector('#packs-button').click();
+    }
 
     document.querySelector('#themes-box').addEventListener("change", (event) => {
         newTheme = event.target.value;
