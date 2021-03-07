@@ -3483,23 +3483,34 @@ body {
         display: inline-block;
         width: 35px;
         height: 48px;
-        background-image: url(/resources/img/icons/information.svg);
-        background-size: 20px 20px;
         position: relative;
-        opacity: 0.8;
-        cursor: pointer;
-        background-position: center center;
-        background-repeat: no-repeat;
-        cursor: pointer;
         padding: 0;
         color: transparent;
         background-color: transparent;
         margin: 0;
         margin-left: -5px;
 
-        &:hover {
-            opacity: 1;
-            background-color: transparent;
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            -webkit-mask-image: url(/resources/img/icons/information.svg);
+            mask-image: url(/resources/img/icons/information.svg);
+            -webkit-mask-size: 20px 20px;
+            mask-size: 20px 20px;
+            -webkit-mask-position: center;
+            mask-position: center;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            background-color: rgb(255 255 255 / 80%);
+        }
+
+        &:hover::after,
+        &:focus::after {
+            background-color: rgb(255 255 255 / 100%);
         }
     }
 
