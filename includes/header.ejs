@@ -70,34 +70,38 @@
         </label>
         <% } %>
     </div>
-    <button id="packs-button" class="expander"><span>Packs</span></button>
-    <div id="packs-box">
-        <%
-            const defaultPack = {
-                name: "Default",
-                author: "LeaPhant, various",
-                basePath: "/resources/img",
-                url: "",
-                id: null
-            }
-        %>
-        <% for(const pack of [defaultPack, ...extra.packs].filter(a => !a.hidden)) { %>
-            <label class="resource-pack">
-                <img class="pack-icon" src="<%= pack.basePath + '/pack.png' %>" alt="">
-                <a class="pack-name" href="<%= pack.url %>" target="_blank" rel="noreferrer"><%= pack.name %> <% if(pack.version){ %><small><%= pack.version %></small><% } %></a><br>
-                <div class="pack-author">by <span><%= pack.author %></span></div>
-                <% if(page == 'stats'){ %>
-                    <% if (pack.disabled) { %>
-                        <button title="Disabled due to unknown issues." disabled></button>
-                    <% } else if(req.cookies.pack == pack.id){ %>
-                        <button aria-selected disabled></button>
-                    <% } else { %>
-                        <button onclick="switchPack('<%= pack.id %>')"></button>
-                    <% } %>
-                <% } %>
-            </label>
-        <% } %>
-    </div>
+    <% if (page != 'api') { %>
+        <button id="packs-button" class="expander"><span>Packs</span></button>
+        <div id="packs-box">
+            <%
+                const defaultPack = {
+                    name: "Default",
+                    author: "LeaPhant, various",
+                    basePath: "/resources/img",
+                    url: "",
+                    id: null
+                }
+            %>
+            <% for(const pack of [defaultPack, ...extra.packs].filter(a => !a.hidden)) { %>
+                <label class="resource-pack">
+                    <img class="pack-icon" src="<%= pack.basePath + '/pack.png' %>" alt="">
+                    <a class="pack-name" href="<%= pack.url %>" target="_blank" rel="noreferrer"><%= pack.name %> <% if(pack.version){ %><small><%= pack.version %></small><% } %></a><br>
+                    <div class="pack-author">by <span><%= pack.author %></span></div>
+                    <button
+                        name="pack"
+                        value="<%= pack.id %>"
+                        <% if (pack.disabled) { %>
+                            title="Disabled due to unknown issues."
+                            disabled
+                        <% } else if (req.cookies.pack == pack.id) { %>
+                            aria-selected
+                            disabled
+                        <% } %>
+                    ></button>
+                </label>
+            <% } %>
+        </div>
+    <% } %>
 </header>
 
 

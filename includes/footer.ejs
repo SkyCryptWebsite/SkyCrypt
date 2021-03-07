@@ -39,16 +39,29 @@
         });
     }
 
-    function switchPack(pack = false){
-        if(pack){
-            setCookie("pack", pack, 365);
-        }else{
-            eraseCookie("pack");
-        }
-        window.location.reload()
-    }
+    document.querySelectorAll('#packs-box button[name="pack"]').forEach((element) => {
+        element.addEventListener("click", (event) => {
+            const newPack = event.target.value;
+            if (newPack) {
+                setCookie("pack", newPack, 365);
+            } else {
+                eraseCookie("pack");
+            }
 
-    document.querySelector(`#themes-box`).addEventListener("change", (event) => {
+            const oldElement = document.querySelector(`#packs-box button[name="pack"][aria-selected]`);
+            oldElement.removeAttribute("disabled");
+            oldElement.removeAttribute("aria-selected");
+
+            <% if (page == 'stats') { %>
+                window.location.reload();
+            <% } else { %>
+                event.target.setAttribute("aria-selected", "");
+                event.target.setAttribute("disabled", "");
+            <% } %>
+        });
+    });
+
+    document.querySelector('#themes-box').addEventListener("change", (event) => {
         newTheme = event.target.value;
         localStorage.setItem("currentTheme", newTheme);
         loadTheme(newTheme);
