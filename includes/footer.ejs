@@ -66,6 +66,13 @@
     if (sessionStorage.getItem("open packs")) {
         sessionStorage.removeItem("open packs");
         document.querySelector('#packs-button').click();
+        const packsBox = document.querySelector('#packs-box');
+        packsBox.style.transition = 'none';
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                packsBox.style.transition = null;
+            });
+        });
     }
 
     document.querySelector('#themes-box').addEventListener("change", (event) => {
