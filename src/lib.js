@@ -1197,9 +1197,14 @@ module.exports = {
             const id = getId(weapon);
 
             countsOfId[id] = (countsOfId[id] || 0) + 1;
-
-            if(countsOfId[id] > 2)
+            
+            if(id == "BONE_BOOMERANG"){
+                if(countsOfId[id] > 6){
+                    weapon.hidden = true;
+                }
+            } else if(countsOfId[id] > 2){
                 weapon.hidden = true;
+            }
         }
 
         for(const rod of output.rods){

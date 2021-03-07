@@ -737,6 +737,10 @@ input[type="search"]::-webkit-search-cancel-button {
             filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
             overflow: hidden;
 
+            &::after {
+                content: none;
+            }
+
             .item-icon,
             .head-icon {
                 position: absolute;
@@ -1806,6 +1810,10 @@ a.additional-player-stat:hover {
 
 .stat-ability-damage {
     background-image: url(../img/icons/ability-damage.png);
+}
+
+.color-mining-speed {
+    color: #FFAA00
 }
 
 .stat-container {
@@ -3147,6 +3155,7 @@ main.grid {
             font-size: 16px;
             transform: scale(1);
             transition: transform 0.15s ease-in-out, background-color 0.15s;
+            will-change: transform;
 
             &:hover,
             &:focus {

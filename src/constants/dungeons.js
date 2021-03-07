@@ -208,13 +208,18 @@ module.exports = {
                     },
                     "last_breath": {
                         name: "Last Breath",
-                        required: 400,
+                        required: 500,
                         tier: 5
+                    },
+                    "shadow_assasin_chestplate": {
+                        name: "Shadow Assasin Chestplate",
+                        required: 750,
+                        tier: 6
                     },
                     "diamond_livid_head": {
                         name: "Diamond Livid Head",
                         required: 1000,
-                        tier: 6
+                        tier: 7
                     }
                 }
             },
