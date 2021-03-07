@@ -910,6 +910,15 @@ input[type="search"]::-webkit-search-cancel-button {
     }
 }
 
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 .resource-pack {
     display: block;
     position: relative;
@@ -964,6 +973,13 @@ input[type="search"]::-webkit-search-cancel-button {
                 mask-image: url(/resources/img/icons/cancel.svg);
                 background-color: rgb(255 0 0 / 50%);
             }
+        }
+
+        &.loading {
+            -webkit-mask-image: url(/resources/img/icons/loading.svg);
+            mask-image: url(/resources/img/icons/loading.svg);
+            background-color: rgb(255 255 255 / 50%);
+            animation: spin 0.75s linear 0s infinite;
         }
 
         &[aria-selected] {

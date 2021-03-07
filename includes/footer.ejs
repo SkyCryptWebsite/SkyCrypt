@@ -53,6 +53,7 @@
             oldElement.removeAttribute("aria-selected");
 
             <% if (page == 'stats') { %>
+                event.target.classList.add('loading');
                 window.location.reload();
             <% } else { %>
                 event.target.setAttribute("aria-selected", "");
