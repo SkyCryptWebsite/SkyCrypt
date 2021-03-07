@@ -804,7 +804,6 @@ input[type="search"]::-webkit-search-cancel-button {
     left: 20px;
     width: calc(30vw - 40px);
     top: calc(48px + env(safe-area-inset-top, 0));
-    z-index: 1;
     background-color: rgba(30, 30, 30, 0.95);
     padding: 30px;
     padding-top: 45px;
@@ -885,7 +884,6 @@ input[type="search"]::-webkit-search-cancel-button {
     right: 20px;
     width: 360px;
     top: calc(48px + env(safe-area-inset-top, 0));
-    z-index: 1;
     background-color: rgba(30, 30, 30, 0.95);
     padding: 20px;
     transform: translateY(calc(-100% - 48px));
