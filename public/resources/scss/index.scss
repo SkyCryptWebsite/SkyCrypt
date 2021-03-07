@@ -665,7 +665,7 @@ input[type="search"]::-webkit-search-cancel-button {
             left: 0;
             right: 0;
             z-index: -1;
-            background: var(--bg_blur-webp) no-repeat center center fixed;
+            background: var(--bg_blur) no-repeat center center fixed;
             background-color: rgb(20, 20, 20);
             background-size: cover;
         }
