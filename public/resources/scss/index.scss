@@ -40,7 +40,8 @@
 }
 
 .§k {
-    text-decoration: line-through wavy 0.25em;
+    background-color: currentColor;
+    border-radius: 0.25em;
 }
 .§l {
     font-weight: bold;
@@ -1772,7 +1773,7 @@ a.additional-player-stat:hover {
 }
 
 .color-mining-speed {
-    color: #FFAA00
+    color: #ffaa00;
 }
 
 .stat-container {
