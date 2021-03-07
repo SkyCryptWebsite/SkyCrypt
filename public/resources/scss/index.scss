@@ -3496,6 +3496,11 @@ body {
         background-color: transparent;
         margin: 0;
         margin-left: -5px;
+
+        &:hover {
+            opacity: 1;
+            background-color: transparent;
+        }
     }
 
     #wrapper {
@@ -3507,11 +3512,6 @@ body {
     .stat-fairy-souls {
         position: relative;
         margin-top: 1px;
-    }
-
-    #info-button:hover {
-        opacity: 1;
-        background-color: transparent;
     }
 
     #player_profile {
