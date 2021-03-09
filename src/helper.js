@@ -485,6 +485,25 @@ module.exports = {
             return (Math.ceil(number / 1000 / 1000 / 1000 * rounding * 10) / (rounding * 10)).toFixed(rounding.toString().length) + 'B';
     },
 
+    calcDungeonGrade: data => {
+        let total_score = data["score_exploration"] + data["score_speed"] + data["score_skill"] + data["score_bonus"]
+        var result;
+        if(total_score <= 99)
+            result = "D";
+        else if(total_score <= 159)
+            result = "C";
+        else if(total_score <= 229)
+            result = "B";
+        else if(total_score <= 269)
+            result = "A";
+        else if(total_score <= 299)
+            result = "S";
+        else
+            result = "S+";
+        
+        return result;
+    },
+
     parseRank: player => {
         let rankName = 'NONE';
         let rank = null;
