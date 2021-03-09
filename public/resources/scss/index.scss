@@ -948,6 +948,11 @@ input[type="search"]::-webkit-search-cancel-button {
         color: rgba(255, 255, 255, 0.9);
     }
 
+    a:hover,
+    a:focus-visible {
+        text-decoration: underline;
+    }
+
     .pack-author {
         font-weight: 500;
     }
