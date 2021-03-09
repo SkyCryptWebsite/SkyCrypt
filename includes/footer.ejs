@@ -30,13 +30,15 @@
             }
             expander.toggleAttribute('aria-expanded');
         });
-        expander.nextElementSibling.addEventListener('focusout', () => {
+        function focusOutHandler() {
             setTimeout(() => {
                 if (document.activeElement != document.body && document.activeElement != expander && !expander.nextElementSibling.contains(document.activeElement)) {
                     expander.removeAttribute('aria-expanded');
                 }
             });
-        });
+        }
+        expander.addEventListener('focusout', focusOutHandler);
+        expander.nextElementSibling.addEventListener('focusout', focusOutHandler);
     }
 
     document.querySelectorAll('#packs-box button[name="pack"]').forEach((element) => {
