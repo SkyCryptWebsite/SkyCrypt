@@ -811,9 +811,9 @@ input[type="search"]::-webkit-search-cancel-button {
     padding: 14px 30px;
     border-radius: 10px;
     background-color: rgba(30, 30, 30, 0.95);
-    transform: translateY(calc(-100% - 48px));
     visibility: hidden;
-    transition: transform 0.3s ease-in-out, visibility 0s linear 0.3s;
+    clip-path: circle(0% at 120px 0);
+    transition: clip-path 0.3s ease-in-out, visibility 0s linear 0.3s;
     z-index: 100;
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -821,8 +821,8 @@ input[type="search"]::-webkit-search-cancel-button {
 
     .expander[aria-expanded] + & {
         visibility: visible;
-        transform: translateY(0%);
-        transition: transform 0.3s ease-in-out;
+        clip-path: circle(150% at 120px 0);
+        transition: clip-path 0.3s ease-in-out;
     }
 
     a {
@@ -893,9 +893,9 @@ input[type="search"]::-webkit-search-cancel-button {
     padding: 20px;
     border-radius: 10px;
     background-color: rgba(30, 30, 30, 0.95);
-    transform: translateY(calc(-100% - 48px));
     visibility: hidden;
-    transition: transform 0.3s ease-in-out, visibility 0s linear 0.3s;
+    clip-path: circle(0% at 90% 0);
+    transition: clip-path 0.3s ease-in-out, visibility 0s linear 0.3s;
     z-index: 100;
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -903,8 +903,8 @@ input[type="search"]::-webkit-search-cancel-button {
 
     .expander[aria-expanded] + & {
         visibility: visible;
-        transform: translateY(0%);
-        transition: transform 0.3s ease-in-out;
+        clip-path: circle(150% at 90% 0);
+        transition: clip-path 0.3s ease-in-out;
     }
 }
 
