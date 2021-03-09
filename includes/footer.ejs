@@ -32,7 +32,7 @@
         });
         expander.nextElementSibling.addEventListener('focusout', () => {
             setTimeout(() => {
-                if (document.activeElement != document.body && !expander.nextElementSibling.contains(document.activeElement)) {
+                if (document.activeElement != document.body && document.activeElement != expander && !expander.nextElementSibling.contains(document.activeElement)) {
                     expander.removeAttribute('aria-expanded');
                 }
             });
