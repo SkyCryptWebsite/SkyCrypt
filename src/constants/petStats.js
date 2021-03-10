@@ -1703,6 +1703,47 @@ class Wolf extends Pet {
 	}
 }
 
+class GrandmaWolf extends Pet {
+	get stats() {
+		return {
+			health: this.level * 1,
+			strength: this.level * 0.25
+		};
+	}
+
+	get abilities() {
+		let list = [this.first];
+		return list;
+	}
+
+	get first() {
+		let mult = this.rarity > 2 ? 0.3 : this.rarity > 1 ? 0.2 : 0.1;
+		return {
+			name: "§6Kill Combo",
+			desc: [
+				`§7Gain buffs for combo kills.`,
+				`§7Effects stack as you increase`,
+				`§7your combo. This pet does not`,
+				`§7need to be spawned for combos to`,
+				`§7be active!`,
+				``,
+				`§a5 Combo §8(lasts §a${Math.floor((8 + this.level * 0.02) * 10) / 10}s§8)`,
+				`§8+§b3% §b✯ Magic Find`,
+				`§a10 Combo §8(lasts §a${Math.floor((6 + this.level * 0.02) * 10) / 10}s§8)`,
+				`§8+§610 §7coins per kill`,
+				`§a15 Combo §8(lasts §a${Math.floor((4 + this.level * 0.02) * 10) / 10}s§8)`,
+				`§8+§b3% §b✯ Magic Find`,
+				`§a20 Combo §8(lasts §a${Math.floor((3 + this.level * 0.02) * 10) / 10}s§8)`,
+				`§8+§315% §7Combat Exp`,
+				`§a25 Combo §8(lasts §a${Math.floor((3 + this.level * 0.01) * 10) / 10}s§8)`,
+				`§8+§b3% §b✯ Magic Find`,
+				`§a30 Combo §8(lasts §a${Math.floor((2 + this.level * 0.01) * 10) / 10}s§8)`,
+				`§8+§610 §7coins per kill`,
+			]
+		};
+	}
+}
+
 class Zombie extends Pet {
 	get stats() {
 		return {
@@ -2518,6 +2559,7 @@ module.exports = {
 		'Enderman': Enderman,
 		'Ghoul': Ghoul,
 		'Golem': Golem,
+		'Grandma Wolf': GrandmaWolf,
 		'Griffin': Griffin,
 		'Horse': Horse,
 		'Hound': Hound,
