@@ -601,6 +601,13 @@ module.exports = {
                 release: 1612803600000,
             },
         },
+        "BLUE_WHALE": {
+            "WHALE_ORCA": {
+                name: "Orca",
+                head: "/head/b008ca9c00cecf499685030e8ef0c230a32908619ce9dc10690b69111591faa1",
+                release: new Date('2021-03-10 18:00:00 GMT+1').getTime(),
+            },
+        },
     },
 
     pet_value: {
