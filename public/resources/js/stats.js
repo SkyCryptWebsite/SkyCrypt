@@ -899,7 +899,8 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
-    enableApiPlayer.addEventListener('click', function(){
+    enableApiPlayer.addEventListener('click', function(event) {
+        event.stopPropagation();
         if(enableApiPlayer.paused)
             enableApiPlayer.play();
         else

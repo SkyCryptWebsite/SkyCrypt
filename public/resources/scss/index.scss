@@ -3368,6 +3368,8 @@ main.grid > a,
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s, visibility 0.3s;
+    display: grid;
+    place-items: center;
 
     &.show-dimmer {
         visibility: visible;
@@ -3376,21 +3378,13 @@ main.grid > a,
 }
 
 #enable_api {
-    position: fixed;
-    width: 66vw;
-    height: calc(66vw * 9 / 16);
-    left: 50vw;
-    margin-left: -33vw;
-    top: 50vh;
-    margin-top: calc(-1 * ((66vw * 9 / 16) / 2));
-    border-radius: 1%;
-    cursor: default;
-    z-index: 8500;
-    transition: opacity 0.3s, visibility 0.3s;
+    width: 80vw;
+    max-width: calc(90vh / 9 * 16);
+    border-radius: 10px;
+    transition: visibility 0.3s;
 
     &:not(.show) {
         visibility: hidden;
-        opacity: 0;
     }
 }
 
