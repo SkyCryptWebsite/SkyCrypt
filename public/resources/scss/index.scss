@@ -3065,7 +3065,7 @@ a.additional-player-stat:hover {
     overflow-y: scroll;
     padding-bottom: 0;
 
-    &.kill-stat:last-child {
+    .kill-stat:last-child {
         margin-bottom: 35px;
     }
 }
