@@ -3035,17 +3035,22 @@ a.additional-player-stat:hover {
 }
 
 .kills-deaths-container .show-all {
-    text-align: center;
+    display: block;
+    margin: auto;
+    margin-top: 12px;
+    border: none;
     padding: 5px 0px;
+    background: none;
     font-weight: 600;
     text-transform: capitalize;
     color: var(--link-hex);
-    margin-top: 12px;
-    opacity: 0;
 
-    &.enabled {
-        opacity: 1;
-        cursor: pointer;
+    &:hover, &:focus-visible {
+        color: var(--hover-hex);
+    }
+
+    &:not(.enabled) {
+        visibility: hidden;
     }
 }
 

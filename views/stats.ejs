@@ -2515,7 +2515,7 @@ if(calculated.profile.game_mode == 'ironman'){
                                         <% }
                                     } %>
                                     <% if(calculated.kills.length > 10 || calculated.deaths.length > 10){ %>
-                                        <div class="kill-stat show-all <%= calculated.kills.length > 10 ? 'enabled' : '' %>" data-type="kills">show all</div>
+                                        <button class="kill-stat show-all <%= calculated.kills.length > 10 ? 'enabled' : '' %>" data-type="kills">show all</button>
                                     <% } %>
                                 </div>
                             </div>
@@ -2533,7 +2533,7 @@ if(calculated.profile.game_mode == 'ironman'){
                                         <% }
                                     } %>
                                     <% if(calculated.kills.length > 10 || calculated.deaths.length > 10){ %>
-                                        <div class="kill-stat show-all <%= calculated.deaths.length > 10 ? 'enabled' : '' %>" data-type="deaths">show all</div>
+                                        <button class="kill-stat show-all <%= calculated.deaths.length > 10 ? 'enabled' : '' %>" data-type="deaths">show all</button>
                                     <% } %>
                                 </div>
                             </div>
