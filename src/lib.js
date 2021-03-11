@@ -358,17 +358,11 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
     for(const [index, item] of items.entries()){
         if(helper.hasPath(item, 'tag', 'display', 'Name') &&
         (item.tag.display.Name.includes('Backpack')
-        || item.tag.display.Name.endsWith('New Year Cake Bag')
-        || item.tag.display.Name.endsWith("Builder's Wand")
-        || item.tag.display.Name.endsWith('Basket of Seeds'))){
+        || ['NEW_YEAR_CAKE_BAG', 'BUILDERS_WAND', 'BASKET_OF_SEEDS'].includes(item.tag.ExtraAttributes.id))){
             let backpackData;
 
             for(const key of Object.keys(item.tag.ExtraAttributes))
-                if(key.endsWith('backpack_data')
-                || key == 'new_year_cake_bag_data'
-                || key == "builder's_wand_data"
-                || key == 'basket_of_seeds_data')
-                    backpackData = item.tag.ExtraAttributes[key];
+                if(key.endsWith('_data')) backpackData = item.tag.ExtraAttributes[key];
 
             if(!Array.isArray(backpackData))
                 continue;
