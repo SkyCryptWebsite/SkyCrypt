@@ -42,7 +42,7 @@ const rarity_order = ['special', 'mythic', 'legendary', 'epic', 'rare', 'uncommo
 
 const petTiers = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic'];
 
-const MAX_SOULS = 220;
+const MAX_SOULS = 222;
 let TALISMAN_COUNT;
 
 function replaceAll(target, search, replacement){
