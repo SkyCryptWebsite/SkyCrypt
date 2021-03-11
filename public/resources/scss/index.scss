@@ -133,7 +133,8 @@
 }
 
 .§k {
-    text-decoration: line-through wavy 0.25em;
+    background-color: currentColor;
+    border-radius: 0.25em;
 }
 .§l {
     font-weight: bold;
@@ -853,14 +854,17 @@ input[type="search"]::-webkit-search-cancel-button {
     left: 0;
     right: 0;
     bottom: 0;
-    cursor: pointer;
 
     canvas {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        cursor: pointer;
+        cursor: grab;
+
+        &:active {
+            cursor: grabbing;
+        }
     }
 }
 
