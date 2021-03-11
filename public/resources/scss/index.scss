@@ -1138,7 +1138,12 @@ input[type="search"]::-webkit-search-cancel-button {
         background-repeat: no-repeat;
         visibility: hidden;
         filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.1));
-        cursor: pointer;
+        background-color: rgb(255 255 255 / 0%);
+        clip-path: circle(15px);
+        &:hover,
+        &:focus-visible {
+            background-color: rgb(255 255 255 / 15%);
+        }
     }
 
     .item-name {
