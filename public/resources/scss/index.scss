@@ -1413,11 +1413,7 @@ input[type="search"]::-webkit-search-cancel-button {
     pointer-events: none;
 }
 
-div.additional-player-stat {
-    user-select: text !important;
-    cursor: default;
-}
-
+.additional-player-stat:focus-visible,
 .additional-player-stat:hover {
     background-color: var(--icon-hex);
 }

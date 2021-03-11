@@ -1150,13 +1150,13 @@ if(calculated.profile.game_mode == 'ironman'){
                 ">Views: <%= helper.formatNumber(calculated.views.total, true) %></div>
 
                 <% */ %>
-                <div class="additional-player-stat svg-icon favorite" data-username="<%= calculated.uuid %>" role="checkbox" aria-checked="<%= extra.favoriteUUIDs.includes(calculated.uuid) %>">
+                <button class="additional-player-stat svg-icon favorite" data-username="<%= calculated.uuid %>" role="checkbox" aria-checked="<%= extra.favoriteUUIDs.includes(calculated.uuid) %>">
                     <svg viewBox="0 0 24 24">
                         <title>star</title>
                         <path class="solid" fill="white" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
                         <path class="outline" fill="white" d="M12,15.39L8.24,17.66L9.23,13.38L5.91,10.5L10.29,10.13L12,6.09L13.71,10.13L18.09,10.5L14.77,13.38L15.76,17.66M22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.45,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24Z" />
                     </svg>
-                </div>
+                </button>
                 <% if(calculated.guild){ %><button class="additional-player-stat interactive-tooltip" data-tippy-content="
                 <% if(calculated.guild.rank){ %><span class='stat-name'>Rank: </span><span class='stat-value'><%= calculated.guild.rank %></span><br><br><% } %>
                 <span class='stat-name'>Guild Master: </span><a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %></a><br>
