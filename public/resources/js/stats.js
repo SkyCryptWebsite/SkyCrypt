@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function(){
             }
 
             if (formats.size > 0) {
-                output += ` class='${Array.from(formats, x => '§' + x).join(', ')}'`;
+                output += ` class='${Array.from(formats, x => '§' + x).join(' ')}'`;
             }
 
             output += `>${part}</span>`;
