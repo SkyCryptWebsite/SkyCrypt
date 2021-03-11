@@ -53,7 +53,12 @@ Caretaker/checkstat.sh
 # custom dyed leather armor cache
 public/resourcepacks/**/leatherCache
 
+# IDE files
 .vscode/
+
+# compiled sass
+public/resources/css/**
+
 Caretaker/checkstat.sh
 public/resourcepacks/Skyblock Pack 32x/assets/minecraft/mcpatcher/cit/enchanted books/Aiming1-32.png
 public/resourcepacks/Skyblock Pack 32x/assets/minecraft/mcpatcher/cit/enchanted books/Aiming2-32.png

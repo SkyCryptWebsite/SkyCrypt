@@ -1,6 +1,7 @@
 <%
-const rarityOrder = ['special', 'mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
+const rarityOrder = ['special', 'supreme', 'mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 const slayerOrder = ['zombie', 'spider', 'wolf'];
+const badgeOrder = ['gold', 'silver', 'bronze'];
 
 const allItems = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory);
 
@@ -34,7 +35,9 @@ const statShort = {
     magic_find: 'MF',
     pet_luck: 'PL',
     bonus_attack_speed: 'Atk',
-    ferocity: 'Frc'
+    ferocity: 'Frc',
+    ability_damage: 'AD',
+    mining_speed: "MngSpd"
 };
 
 const skillItems = {
@@ -805,6 +808,12 @@ const seaCreatures = [
     }
 ];
 
+const milestone_rarities = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
+const pet_milestones = {
+    'sea_creatures_killed': [ 250, 1000, 2500, 5000, 10000],
+    'ores_mined': [2500, 7500, 20000, 100000, 250000]
+};
+
 getStats = items => {
     const stats = Object.assign({}, constants.stat_template);
 
@@ -885,8 +894,10 @@ const inventorySlot = item => { %>
 <% };
 
 const skill_component = (skill, icon, level, extra = {}) => { %>
-    <div class="skill xp-skill <%= level.level == level.maxLevel ? 'maxed-skill' : ''%>">
-        <div class="skill-icon">
+    <div class="skill xp-skill<%= level.level == level.maxLevel ? ' maxed-skill' : ''%>">
+        <div class="skill-icon" <% if(level.rank && level.rank < 50000){ %>
+            data-tippy-content="<span class='stat-name'>Rank: </span><span class='stat-value'></span>#<%= level.rank %></span>"
+        <% } %>>
             <% if(icon.startsWith('head-')){ %>
                 <div class="head-icon" style="background-image:url(/head/<%= icon.substring(5) %>)"></div>
             <% }else{ %>
@@ -906,21 +917,21 @@ const skill_component = (skill, icon, level, extra = {}) => { %>
     </div>
 <% };
 
-const stat_component = stat => {
+const stat_component = (stat) => {
     const bonusStats = stats[stat.name] - calculated.base_stats[stat.name]
     %>
     <div data-stat="<%= stat.name %>" class="basic-stat stat-<%= stat.name.replace(/\_/g, "-") %>">
         <span data-tippy-content="
-        <span class='stat-name'>Base <%= helper.titleCase(stat.name.replace(/\_/g, " ")) %>: </span><span class='stat-value'><%= calculated.base_stats[stat.name].toLocaleString() %><%= stat.suffix || '' %></span>
+        <span class='stat-name'>Base <%= helper.titleCase(stat.name.replace(/\_/g, " ")) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= calculated.base_stats[stat.name].toLocaleString() %></span>
         <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= stat.baseExplanation %><% } %></div><br>
-        <span class='stat-name'>Bonus <%= helper.titleCase(stat.name.replace(/\_/g, " ")) %>: </span><span class='stat-value'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %><%= stat.suffix || '' %></span>
+        <span class='stat-name'>Bonus <%= helper.titleCase(stat.name.replace(/\_/g, " ")) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %></span>
         <div class='tippy-explanation'>Additional bonuses from Armor, held items, Accessories and active Pets.</div>
         <% if(Array.isArray(stat.extraStats)){
             for(const extraStat of stat.extraStats){ %>
-        <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value'><%= extraStat.value.toLocaleString() %><%= extraStat.suffix || '' %></span>
+        <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value<%= extraStat.percent ? ' percent' : ''%>'><%= extraStat.value.toLocaleString() %></span>
         <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= extraStat.explanation %><% } %></div>
         <% }} %>
-        "><span class="stat-name"><%= stat.prettyName || helper.titleCase(stat.name.replace(/\_/g, " ")) %> </span><span class="stat-value"><%= stats[stat.name].toLocaleString() %><%= stat.suffix || '' %></span></span></div>
+        "><span class="stat-name"><%= stat.prettyName || helper.titleCase(stat.name.replace(/\_/g, " ")) %> </span><span class="stat-value<%= stat.percent ? ' percent' : ''%>"><%= stats[stat.name].toLocaleString() %></span></span></div>
 <% };
 
 let description = "";
@@ -1016,59 +1027,69 @@ description += `💰 Purse: ${helper.formatNumber(calculated.purse, true)} Coins
 if(calculated.bank)
     description += `\n🏦 Bank Account: ${helper.formatNumber(calculated.bank, true)} Coin${Math.floor(calculated.bank) == 1 ? '': 's'}`;
 
-let twitterDescription = `${calculated.display_name} has been playing SkyBlock for ${moment(calculated.first_join.unix).fromNow(true)}`;
+let metaDescription = `${calculated.display_name} has been playing SkyBlock for ${moment(calculated.first_join.unix).fromNow(true)}`;
 
 if(items.armor_set){
     if(highestRaritySword)
-        twitterDescription += `, is wearing ${items.armor_set}`;
+        metaDescription += `, is wearing ${items.armor_set}`;
     else
-        twitterDescription += ` and is wearing ${items.armor_set}`;
+        metaDescription += ` and is wearing ${items.armor_set}`;
 }
 
 if(highestRaritySword){
     if(items.armor_set)
-        twitterDescription += ` and fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
+        metaDescription += ` and fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
     else
-        twitterDescription += ` and is fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
+        metaDescription += ` and is fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
 }
 
-let metaDescription = twitterDescription + '.';
+metaDescription += '.';
 
-twitterDescription += '. Click to view more stats!'
+let metaTitle = calculated.display_name;
+
+if(calculated.display_emoji){
+    metaTitle += calculated.display_emoji;
+}
+
+if(calculated.profile.game_mode == 'ironman'){
+    metaTitle += ` (${calculated.profile.cute_name}♻️)`;
+} else {
+    metaTitle +=  ` (${calculated.profile.cute_name})`;
+}
+
 
 %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title><%- calculated.display_name %><% if(calculated.display_emoji){ %> <%- calculated.display_emoji %><% } %> | SkyCrypt</title>
+    <title><%= calculated.display_name %><% if(calculated.display_emoji){ %> <%= calculated.display_emoji %><% } %> | SkyCrypt</title>
     <meta name="description" content="<%= metaDescription %>">
-    <link rel="shortcut icon" href="https://crafatar.com/avatars/<%- calculated.uuid %>?size=32&overlay" type="image/png">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="<%- calculated.display_name %><% if(calculated.display_emoji){ %> <%- calculated.display_emoji %><% } %> (<%= calculated.profile.cute_name %>)">
-    <meta property="og:image" content="https://crafatar.com/avatars/<%- calculated.uuid %>?size=256&overlay">
-    <meta property="twitter:image" content="https://crafatar.com/avatars/<%- calculated.uuid %>?size=256&overlay">
+    <link rel="icon" href="https://crafatar.com/avatars/<%= calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
+    <meta property="og:type" content="profile">
+    <meta property="og:title" content="<%= metaTitle %>">
+    <meta property="og:image" content="https://crafatar.com/avatars/<%= calculated.uuid %>?size=512&overlay">
     <meta property="og:description" content="<%= description %>">
-    <meta property="twitter:description" content="<%= twitterDescription %>">
+    <meta property="og:profile:username" content="<%= calculated.display_name %>">
+    <meta name="twitter:card" content="summary"></meta>
 <%- include('../includes/resources') %>
 </head>
-<body>
+<body class="page-stats">
     <%- include('../includes/header') %>
     <div id="dimmer"></div>
     <video id="enable_api" loop>
         <source type="video/webm" src="/resources/video/enable_api.webm"></source>
         <source type="video/mp4" src="/resources/video/enable_api.mp4"></source>
     </video>
-    <div id="bg_blur"></div>
     <div id="stats_content">
         <div class="item-name">
             <div></div><span></span><div class="close-lore"></div></div>
-        <div class="item-lore"></div>
-        <div class="backpack-contents"></div>
+        <div class="item-lore nice-colors-light"></div>
+        <div class="backpack-contents inventory-view"></div>
     </div>
     <div id="skin_display">
         <div id="player_model"></div>
     </div>
-    <div id="wrapper" data-sticky-container>
+    <main id="wrapper" data-sticky-container>
         <div id="player_profile"><span class="text-stats-for">Stats for</span>
             <div tabindex="1" id="stats_for_player">
                 <%- calculated.rank_prefix %>
@@ -1082,7 +1103,7 @@ twitterDescription += '. Click to view more stats!'
                 </div>
             </div><span class="text-on"> on </span><div tabindex="2" id="stats_for_profile">
                 <%= calculated.profile.cute_name %>
-                <% if(calculated.profile.game_mode == 'ironman'){ %><img src="/resources/img/icons/ironman.png" class="emoji"><% } %>
+                <% if(calculated.profile.game_mode == 'ironman'){ %><img src="/resources/img/icons/ironman.png" class="emoji" alt="ironman"><% } %>
                 <div id="other_profiles">
                     <% for(let profile_id in calculated.profiles){ %>
                         <% let _profile = calculated.profiles[profile_id]; %>
@@ -1104,27 +1125,32 @@ twitterDescription += '. Click to view more stats!'
                 ">Views: <%= helper.formatNumber(calculated.views.total, true) %></div>
 
                 <% */ %>
-                <div class="additional-player-stat external-icon add-favorite" data-username="<%= calculated.uuid %>"></div>
-                <% if(calculated.guild){ %><div class="additional-player-stat interactive-tooltip" data-tippy-content="
+                <div class="additional-player-stat svg-icon favorite" data-username="<%= calculated.uuid %>" role="checkbox" aria-checked="<%= extra.favoriteUUIDs.includes(calculated.uuid) %>">
+                    <svg viewBox="0 0 24 24">
+                        <title>star</title>
+                        <path class="solid" fill="white" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+                        <path class="outline" fill="white" d="M12,15.39L8.24,17.66L9.23,13.38L5.91,10.5L10.29,10.13L12,6.09L13.71,10.13L18.09,10.5L14.77,13.38L15.76,17.66M22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.45,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24Z" />
+                    </svg>
+                </div>
+                <% if(calculated.guild){ %><button class="additional-player-stat interactive-tooltip" data-tippy-content="
                 <% if(calculated.guild.rank){ %><span class='stat-name'>Rank: </span><span class='stat-value'><%= calculated.guild.rank %></span><br><br><% } %>
                 <span class='stat-name'>Guild Master: </span><a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %></a><br>
-                <% if(calculated.guild.tag){ %><span class='stat-name'>Tag: </span><span class='stat-value'><%- helper.renderLore(calculated.guild.tag) %></span><br><% } %>
+                <% if(calculated.guild.tag){ %><span class='stat-name'>Tag: </span><span class='stat-value'><%- helper.renderLore('§f'+calculated.guild.tag) %></span><br><% } %>
                 <% if(calculated.guild.members){ %><span class='stat-name'>Members: </span><span class='stat-value'><%= calculated.guild.members %></span><br><% } %>
                 <% if(calculated.guild.level){ %><span class='stat-name'>Level: </span><span class='stat-value'><%= calculated.guild.level %></span><br><% } %>
-                ">Guild: <%= calculated.guild.name %></div><% } %>
-                <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">Plancke</a>
-                <a href="https://skyblock.matdoes.dev/profile/<%= calculated.display_name %>/<%= calculated.profile.cute_name == 'Deleted' ? calculated.profile.profile_id : calculated.profile.cute_name %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">matdoes.dev</a>
-                <a href="https://auctions.craftlink.xyz/players/<%= calculated.uuid %>" target="_blank" rel="nofollow" class="additional-player-stat external-link">HyAuctions</a>
+                ">Guild: <%= calculated.guild.name %></button><% } %>
+                <a href="https://auctions.craftlink.xyz/players/<%= calculated.uuid %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">HyAuctions</a>
+                <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">Plancke</a>
                 <div id="additional_socials">
-                    <div data-copy-text="<%= calculated.uuid %>" class="copy-text additional-player-stat">Copy UUID</div>
-                    <% if('DISCORD' in calculated.social){ %><div data-copy-text="<%= calculated.social.DISCORD %>" class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></div><% } %>
-                    <% if('TWITTER' in calculated.social){ %><a data-tippy-content="Twitter" href="<%= calculated.social.TWITTER %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-twitter"></a><% } %>
-                    <% if('YOUTUBE' in calculated.social){ %><a data-tippy-content="YouTube" href="<%= calculated.social.YOUTUBE %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-youtube"></a><% } %>
-                    <% if('INSTAGRAM' in calculated.social){ %><a data-tippy-content="Instagram" href="<%= calculated.social.INSTAGRAM %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-instagram"></a><% } %>
-                    <% if('TWITCH' in calculated.social){ %><a data-tippy-content="Twitch" href="<%= calculated.social.TWITCH %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-twitch"></a><% } %>
-                    <% if('MIXER' in calculated.social){ %><a data-tippy-content="Mixer" href="<%= calculated.social.MIXER %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-mixer"></a><% } %>
-                    <% if('HYPIXEL' in calculated.social){ %><a data-tippy-content="Hypixel Forums" href="<%= calculated.social.HYPIXEL %>" target="_blank" rel="nofollow" class="additional-player-stat external-link external-icon external-hypixel"></a><% } %>
-                    <div class="additional-player-stat" id="reveal_socials"></div>
+                    <button data-copy-text="<%= calculated.uuid %>" class="copy-text additional-player-stat">Copy UUID</button>
+                    <% if('DISCORD' in calculated.social){ %><button data-copy-text="<%= calculated.social.DISCORD %>" class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></button><% } %>
+                    <% if('TWITTER' in calculated.social){ %><a data-tippy-content="Twitter" href="<%= calculated.social.TWITTER %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitter"></a><% } %>
+                    <% if('YOUTUBE' in calculated.social){ %><a data-tippy-content="YouTube" href="<%= calculated.social.YOUTUBE %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-youtube"></a><% } %>
+                    <% if('INSTAGRAM' in calculated.social){ %><a data-tippy-content="Instagram" href="<%= calculated.social.INSTAGRAM %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-instagram"></a><% } %>
+                    <% if('TWITCH' in calculated.social){ %><a data-tippy-content="Twitch" href="<%= calculated.social.TWITCH %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitch"></a><% } %>
+                    <% if('MIXER' in calculated.social){ %><a data-tippy-content="Mixer" href="<%= calculated.social.MIXER %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-mixer"></a><% } %>
+                    <% if('HYPIXEL' in calculated.social){ %><a data-tippy-content="Hypixel Forums" href="<%= calculated.social.HYPIXEL %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-hypixel"></a><% } %>
+                    <button class="additional-player-stat" id="reveal_socials" aria-label="reveal socials"></button>
                 </div>
             </div>
         </div>
@@ -1162,7 +1188,7 @@ twitterDescription += '. Click to view more stats!'
                         {
                             stat: 'Damage Reduction',
                             value: (stats.defense / (stats.defense + 100) * 100).toFixed(1),
-                            suffix: '%'
+                            percent: true
                         },
                         {
                             stat: 'Effective Health',
@@ -1179,26 +1205,26 @@ twitterDescription += '. Click to view more stats!'
 
                 <%- stat_component({
                     name: 'speed',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: "Increased by collecting Fairy Souls and leveling up in Wolf Slayer."
                 }); %>
 
                 <%- stat_component({
                     name: 'crit_chance',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: "Increased by leveling your Combat skill and leveling up in Spider Slayer."
                 }); %>
 
                 <%- stat_component({
                     name: 'crit_damage',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: "Increased by leveling up in Spider or Wolf Slayer."
                 }); %>
 
                 <%- stat_component({
                     name: 'bonus_attack_speed',
                     prettyName: 'Attack Speed',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: null
                 }); %>
 
@@ -1210,7 +1236,7 @@ twitterDescription += '. Click to view more stats!'
                 <%- stat_component({
                     name: 'sea_creature_chance',
                     prettyName: 'SC Chance',
-                    suffix: '%',
+                    percent: true,
                     baseExplanation: null
                 }); %>
 
@@ -1236,9 +1262,15 @@ twitterDescription += '. Click to view more stats!'
                         {
                             stat: 'Chance for 1 more',
                             value: stats.ferocity % 100,
-                            suffix: '%'
+                            percent: true
                         }
                     ]
+                }); %>
+
+                <%- stat_component({
+                    name: 'ability_damage',
+                    percent: true,
+                    baseExplanation: "Increased by leveling your Enchanting Skill."
                 }); %>
                 <!--<div data-stat="fairy_souls" class="basic-stat stat-fairy-souls">
                     <span data-tippy-content="
@@ -1257,7 +1289,7 @@ twitterDescription += '. Click to view more stats!'
                 <% if('bank' in calculated){ %>
                     <div class="additional-stat"><span class="stat-name">Bank Account: </span><span class="stat-value"><%= helper.formatNumber(calculated.bank, true) %> Coin<%= Math.floor(calculated.bank) == 1 ? '': 's' %></span></div>
                 <% } %>
-                <% if('levels' in calculated){ %>
+                <% if('levels' in calculated && 'runecrafting' in calculated.levels){ %>
                     <div class="additional-stat"><span data-tippy-content="
                     <span class='stat-name'>Total Skill XP: </span><span class='stat-value'><%= Math.round(calculated.total_skill_xp).toLocaleString() %></span>
                     <div class='tippy-explanation'>Total XP gained in all skills except Carpentry and Runecrafting.</div>
@@ -1265,18 +1297,18 @@ twitterDescription += '. Click to view more stats!'
                     <div class='tippy-explanation'>Average skill level over all skills except Carpentry and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div>
                     <% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
                     <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
-                    "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= Math.floor(calculated.average_level * 10) / 10 %></span></span></div>
-                    <div class="additional-stat">
-                        <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
-                    </div>
+                    "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level.toFixed(2) %></span></span></div>
                 <% } %>
+                <div class="additional-stat">
+                    <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
+                </div>
             </div>
 
             <div id="skill_levels_container">
                 <%
                     if('levels' in calculated){
                 %>
-                    <div id="other_skills">
+                    <div id="other_skills" class="skill-bars" data-api-enabled="<%= 'runecrafting' in calculated.levels %>">
                         <%= skill_component('Taming', 'icon-383_0_12', calculated.levels.taming) %>
                         <%= skill_component('Farming', 'icon-294_0', calculated.levels.farming) %>
                         <%= skill_component('Mining', 'icon-274_0', calculated.levels.mining) %>
@@ -1307,10 +1339,9 @@ twitterDescription += '. Click to view more stats!'
                 <% if(!items.no_inventory){ %><div class="nav-item" data-target="accessories">Accessories</div><% } %>
                 <% if(calculated.pets.length > 0){ %><div class="nav-item" data-target="pets">Pets</div><% } %>
                 <% if(!items.no_inventory){ %><div class="nav-item" data-target="inventory">Inventory</div><% } %>
-                <div class="nav-item" data-target="fishing">Fishing</div>
+                <div class="nav-item" data-target="skills">Skills</div>
                 <div class="nav-item" data-target="dungeons">Dungeons</div>
                 <div class="nav-item" data-target="slayer">Slayer</div>
-                <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){ %><div class="nav-item" data-target="kills">Kills</div><% } %>
                 <div class="nav-item" data-target="minions">Minions</div>
                 <% if(Object.keys(calculated.collections).length > 0){ %><div class="nav-item" data-target="collections">Collections</div><% } %>
                 <% if(Object.keys(calculated.misc).length > 0){ %><div class="nav-item" data-target="misc">Misc</div><% } %>
@@ -1451,8 +1482,19 @@ twitterDescription += '. Click to view more stats!'
                         <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
                     <% }else{ %>
                         <p class="stat-raw-values">
-                            <% max = items.talismans.filter(a => a.isUnique).length >= UNIQUE_ACCESSORIES ? 'golden-text': '' %><span class="stat-name <%= max %>">Unique Accessories: </span><span class="stat-value <%= max %>"><%= items.talismans.filter(a => a.isUnique).length %> / <%= UNIQUE_ACCESSORIES %></span><br>
-                            <span class="stat-name <%= max %>">Completion: </span><span class="stat-value <%= max %>"><%= Math.round(items.talismans.filter(a => a.isUnique).length / UNIQUE_ACCESSORIES * 100) %>%</span>
+                            <%
+                                const maxTalis = items.talismans.filter(a => a.isUnique).length >= UNIQUE_ACCESSORIES ? 'golden-text': ''
+                                const maxRecombTalis = items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length >= UNIQUE_ACCESSORIES ? 'golden-text': ''
+                            %>
+
+                            <span class="stat-name <%= maxTalis %>">Unique Accessories: </span>
+                            <span class="stat-value <%= maxTalis %>"><%= items.talismans.filter(a => a.isUnique).length %> / <%= UNIQUE_ACCESSORIES %></span>
+                            <br>
+                            <span class="stat-name <%= maxTalis %>">Completion: </span>
+                            <span class="stat-value percent <%= maxTalis %>"><%= Math.round(items.talismans.filter(a => a.isUnique).length / UNIQUE_ACCESSORIES * 100) %></span>
+                            <br>
+                            <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
+                            <span class="stat-value <%= maxRecombTalis %>"><%= items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= UNIQUE_ACCESSORIES %></span>
                         </p>
                         <% if(items.talismans.filter(a => !a.isInactive).length > 0){ %>
                             <div class="accessory-list">
@@ -1525,8 +1567,11 @@ twitterDescription += '. Click to view more stats!'
                             totalPetXp += pet.exp;
 
                         let totalUniqueSkins = 0
+                        const currentTime = new Date().getTime()
                         for(const skins of Object.values(constants.pet_skins)) {
-                            totalUniqueSkins += Object.keys(skins).length
+                            totalUniqueSkins += Object.values(skins).filter(
+                                s => s.release < currentTime
+                            ).length
                         }
 
                         let userUniqueSkins = 0
@@ -1678,13 +1723,13 @@ twitterDescription += '. Click to view more stats!'
                                     <% } %>
                                 </div>
                             </div>
-                            <div class="inventory-view current-inventory" data-inventory-type="inventory">
+                            <div class="inventory-view" data-inventory-type="inventory">
                                 <% for(let i = 9; i < items.inventory.length; i++){ %>
                                     <% let item = items.inventory[i]; %>
                                     <%= inventorySlot(item); %>
-                                    <% if((i + 1) % 9 == 0) { %><br><% } %>
+
                                 <% } %>
-                                <br>
+                                <hr>
                                 <% for(let i = 0; i < 9; i++){ %>
                                     <% let item = items.inventory[i]; %>
                                     <%= inventorySlot(item); %>
@@ -1695,97 +1740,295 @@ twitterDescription += '. Click to view more stats!'
                 </div>
             </div>
         <% } %>
-        <div data-stat="fishing" class="stat-container stat-fishing">
+        <div data-stat="skills" class="stat-container stat-skills">
             <div class="stat-anchor"></div>
-            <div class="stat-header"><span>Fishing</span></div>
+            <div class="stat-header"><span>Skills</span></div>
             <div class="stat-content">
-                <%
-                let totalSeaCreatureKills = 0;
 
-                for(const creature of seaCreatures){
-                    let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
-
-                    totalSeaCreatureKills += mobKills.length > 0 ? mobKills[0].amount : 0;
-                }
-                %>
-
-                <p class="stat-raw-values">
-                    <span class="stat-name">Items fished: </span><span class="stat-value"><%= calculated.fishing.total.toLocaleString() %></span><br>
-                    <span class="stat-name">Treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure.toLocaleString() %></span><br>
-                    <span class="stat-name">Large treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure_large.toLocaleString() %></span><br>
-                    <span class="stat-name">Sea Creatures killed: </span><span class="stat-value"><%= totalSeaCreatureKills.toLocaleString() %></span><br>
-                    <%
-                    if(calculated.fishing.shredder_fished > 0 && calculated.fishing.shredder_bait > 0){
-
-                        %>
-                    <span data-tippy-content='
-                    <span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span><br>
-                    <span class="stat-name">Bait used with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_bait.toLocaleString() %></span><br>
-                    '><span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span></span><br>
-                    <% } %>
-                </p>
-
-                <% if(items.rods.length > 0){ %>
-                    <%- stat_component({
-                        name: 'sea_creature_chance',
-                        prettyName: 'SC Chance',
-                        suffix: '%',
-                        baseExplanation: null
-                    }); %>
-
-                    <p class="stat-sub-header">Fishing Rods</p>
-                    <% if(items.highest_rarity_rod){ %>
-                    <p class="stat-raw-values">
-                        <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_rod.rarity %>-fg"><%= items.highest_rarity_rod.display_name %></span>
-                    </p>
-                    <% }else if(items.rods.length > 0){ %>
-                    <p class="stat-raw-values">
-                        <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-common-fg">None</span>
-                    </p>
-                    <% } %>
-                    <div class="pieces">
-                        <%
-                            let rod = items.rods.slice().sort((a, b) => a.item_index - b.item_index);
-
-                            if(items.highest_rarity_rod)
-                                rod = [items.highest_rarity_rod];
-
-                            items.rods.filter(a => !a.hidden).forEach(item => { %>
-                                <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece
-                                    <% if(rod.length > 0 && item.backpackIndex === undefined && item.item_index == rod[0].item_index){ %>piece-selected<% } %>
-                                    piece-<%= item.rarity %>-bg">
-                                    <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
-                                        <div class="piece-shine"></div>
-                                    <% } %>
-                                    <div class="piece-hover-area"></div>
-                                    <div class="select-rod"></div>
-                                    <% itemIcon(item, ['piece-icon']); %>
-                                </div>
-                        <%
-                            });
-                        %>
+                <div class="stat-mining">
+                    <div class="category-header">
+                        <div class="category-icon"><div class="item-icon icon-274_0"></div></div>
+                        <span>mining</span>
                     </div>
-                <% } %>
 
-                <% if(totalSeaCreatureKills > 0){ %>
-                    <p class="stat-sub-header">Sea Creatures</p>
-                    <div class="sea-creatures">
-                        <% for(const creature of seaCreatures) {
-                            let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
+                    <% const mining = calculated.mining; %>
+                    <p class="stat-raw-values">
+                        <% max = mining.commissions.milestone == 5 ? 'golden-text' : '' %>
+                        <span class="stat-name <%= max %>">Commissions Milestone: </span><span class="stat-value <%= max %>"><%= mining.commissions.milestone.toLocaleString() %></span><br>
+                    </p>
 
-                            mobKills = mobKills.length > 0 ? mobKills[0].amount : 0;
-
-                            if(mobKills == 0)
-                                continue;
-                        %>
-                            <div class="sea-creature">
-                                <div class="sea-creature-name"><span><%= creature.name %></span></div>
-                                <div class="sea-creature-image" style="background-image: url(/resources/img/sea_creatures/<%= creature.id %>.webp)"></div>
-                                <div class="sea-creature-kills"><span class="stat-value"><%= mobKills.toLocaleString() %></span><span class="stat-name"> Kill<%= mobKills != 1 ? 's' : '' %></span></div>
-                            </div>
+                    <% if(items.pickaxes.length > 0){ %>
+                        <p class="stat-sub-header">Mining Pickaxes</p>
+                        <% if(items.highest_rarity_pickaxe){ %>
+                            <p class="stat-raw-values">
+                                <span class="stat-name">Active Pickaxe: </span><span class="stat-active-pickaxe stat-value piece-<%= items.highest_rarity_pickaxe.rarity %>-fg"><%= items.highest_rarity_pickaxe.display_name %></span>
+                            </p>
+                        <% }else{ %>
+                            <p class="stat-raw-values">
+                                <span class="stat-name">Active Pickaxe: </span><span class="stat-active-pickaxe stat-value piece-common-fg">None</span>
+                            </p>
                         <% } %>
+                        <div class="pieces">
+                            <%  items.pickaxes.filter(a => !a.hidden).forEach(item => { %>
+                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
+                                        <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
+                                            <div class="piece-shine"></div>
+                                        <% } %>
+                                        <div class="piece-hover-area"></div>
+                                        <% itemIcon(item, ['piece-icon']); %>
+                                    </div>
+                            <% }); %>
+                        </div>
+                    <% } %>
+                </div>
+
+                <% if(calculated.farming.talked){ %>
+                <div class="stat-farming">
+                    <div class="category-header">
+                        <div class="category-icon" onclick="window.open('https://www.youtube.com/watch?v=pZaY1jV96jI')"><div class="item-icon icon-294_0"></div></div>
+                        <span>farming</span>
                     </div>
+
+                    <% const farming = calculated.farming;
+                    if (farming.contests.attended_contests > 0) {%>
+                        <p class="stat-raw-values">
+                            <span class="stat-name">Contests attended: </span><span class="stat-value"><%= farming.contests.attended_contests.toLocaleString() %></span><br>
+                            <% max = farming.unique_golds == 10 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Golds: </span><span class="stat-value <%= max %>"><%= farming.unique_golds.toLocaleString() %></span></span><br>
+                        </p>
+
+                        <p class="stat-raw-values">
+                            <% for(let badge of badgeOrder){ %>
+                                <span data-tippy-content='
+                                    <span class="stat-name">Current: </span><span class="stat-value"><%= farming.current_badges[badge].toLocaleString() %> Badges</span><br>
+                                    <span class="stat-name">Total: </span><span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %> Badges</span>
+                                '>
+                                <span class="stat-name"><%= badge %> badges: </span>
+                                <span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %></span></span><br>
+                            <% } %>
+                        </p>
+                    <% }else{ %>
+                        <p class="stat-raw-values">
+                            <%= calculated.display_name %> hasn't attended any contests yet.
+                        </p>
+                    <% } %>
+
+                    <% if(items.hoes.length > 0){ %>
+                        <p class="stat-sub-header">Farming Hoes</p>
+                        <% if(items.highest_rarity_hoe){ %>
+                            <p class="stat-raw-values">
+                                <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_hoe.rarity %>-fg"><%= items.highest_rarity_hoe.display_name %></span>
+                            </p>
+                        <% }else{ %>
+                            <p class="stat-raw-values">
+                                <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-common-fg">None</span>
+                            </p>
+                        <% } %>
+                        <div class="pieces">
+                            <%  items.hoes.filter(a => !a.hidden).forEach(item => { %>
+                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
+                                        <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
+                                            <div class="piece-shine"></div>
+                                        <% } %>
+                                        <div class="piece-hover-area"></div>
+                                        <% itemIcon(item, ['piece-icon']); %>
+                                    </div>
+                            <% }); %>
+                        </div>
+                    <% } %>
+
+                    <% if(farming.crops.length > 0){ %>
+                        <div class="stat-sub-container sub-extendable">
+                            <p class="stat-sub-header">Farming Crops</p>
+                            <div class="stat-farming-crops">
+                                <%
+                                const crops = Object.values(farming.crops).sort((a, b) => {
+                                    return b.contests - a.contests;
+                                });
+
+                                for(const crop of crops){
+                                    if(!crop.attended) continue;
+
+                                    let amountsTooltip = '';
+
+                                    for(let badge of badgeOrder)
+                                        amountsTooltip += `
+                                            <span class="stat-name">${helper.titleCase(badge)} Badges: </span>
+                                            <span class="stat-value">${crop.badges[badge].toLocaleString()}</span><br>
+                                        `;
+                                %>
+                                <div class="collection" data-tippy-content="<%= amountsTooltip %>">
+                                    <div class="collection-icon"><div class="item-icon icon-<%= crop.icon %>"></div></div>
+                                    <div class="collection-stats">
+                                        <div class="collection-name <%= crop.unique_gold ? 'max-minion' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
+                                        <div class="collection-amount">
+                                            <small class="stat-name">Personal Best: </small><small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small><br>
+                                            <small class="stat-name">Contests: </small><small class="stat-value"><%= crop.contests.toLocaleString() %></small><br>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
                 <% } %>
+
+                <div class="stat-fishing">
+                    <div class="category-header">
+                        <div class="category-icon"><div class="item-icon icon-346_0"></div></div>
+                        <span>fishing</span>
+                    </div>
+
+                    <%
+                    let totalSeaCreatureKills = 0;
+
+                    for(const creature of seaCreatures){
+                        let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
+
+                        totalSeaCreatureKills += mobKills.length > 0 ? mobKills[0].amount : 0;
+                    }
+                    %>
+
+                    <p class="stat-raw-values">
+                        <span class="stat-name">Items fished: </span><span class="stat-value"><%= calculated.fishing.total.toLocaleString() %></span><br>
+                        <span class="stat-name">Treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure.toLocaleString() %></span><br>
+                        <span class="stat-name">Large treasures fished: </span><span class="stat-value"><%= calculated.fishing.treasure_large.toLocaleString() %></span><br>
+                        <span class="stat-name">Sea Creatures killed: </span><span class="stat-value"><%= totalSeaCreatureKills.toLocaleString() %></span><br>
+                        <%
+                        if(calculated.fishing.shredder_fished > 0 && calculated.fishing.shredder_bait > 0){
+
+                            %>
+                        <span data-tippy-content='
+                        <span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span><br>
+                        <span class="stat-name">Bait used with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_bait.toLocaleString() %></span><br>
+                        '><span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span></span><br>
+                        <% } %>
+                    </p>
+
+                    <% if(items.rods.length > 0){ %>
+                        <%- stat_component({
+                            name: 'sea_creature_chance',
+                            prettyName: 'SC Chance',
+                            percent: true,
+                            baseExplanation: null
+                        }); %>
+
+                        <p class="stat-sub-header">Fishing Rods</p>
+                        <% if(items.highest_rarity_rod){ %>
+                        <p class="stat-raw-values">
+                            <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_rod.rarity %>-fg"><%= items.highest_rarity_rod.display_name %></span>
+                        </p>
+                        <% }else if(items.rods.length > 0){ %>
+                        <p class="stat-raw-values">
+                            <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-common-fg">None</span>
+                        </p>
+                        <% } %>
+                        <div class="pieces">
+                            <%
+                                let rod = items.rods.slice().sort((a, b) => a.item_index - b.item_index);
+
+                                if(items.highest_rarity_rod)
+                                    rod = [items.highest_rarity_rod];
+
+                                items.rods.filter(a => !a.hidden).forEach(item => { %>
+                                    <div tabindex="3" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece
+                                        <% if(rod.length > 0 && item.backpackIndex === undefined && item.item_index == rod[0].item_index){ %>piece-selected<% } %>
+                                        piece-<%= item.rarity %>-bg">
+                                        <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
+                                            <div class="piece-shine"></div>
+                                        <% } %>
+                                        <div class="piece-hover-area"></div>
+                                        <div class="select-rod"></div>
+                                        <% itemIcon(item, ['piece-icon']); %>
+                                    </div>
+                            <%
+                                });
+                            %>
+                        </div>
+                    <% } %>
+
+                    <% if(totalSeaCreatureKills > 0){ %>
+                        <div class="stat-sub-container sub-extendable">
+                            <p class="stat-sub-header">Sea Creatures</p>
+                            <div class="sea-creatures">
+                                <% for(const creature of seaCreatures) {
+                                    let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
+
+                                    mobKills = mobKills.length > 0 ? mobKills[0].amount : 0;
+
+                                    if(mobKills == 0)
+                                        continue;
+                                %>
+                                    <div class="sea-creature">
+                                        <div class="sea-creature-name"><span><%= creature.name %></span></div>
+                                        <div class="sea-creature-image" style="background-image: url(/resources/img/sea_creatures/<%= creature.id %>.webp)"></div>
+                                        <div class="sea-creature-kills"><span class="stat-value"><%= mobKills.toLocaleString() %></span><span class="stat-name"> Kill<%= mobKills != 1 ? 's' : '' %></span></div>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+
+                <% if(calculated.enchanting.experimented){ %>
+                <div class="stat-enchanting">
+                    <div class="category-header">
+                        <div class="category-icon"><div class="item-icon icon-116_0"></div></div>
+                        <span>enchanting</span>
+                    </div>
+
+                    <% const enchanting = calculated.enchanting; %>
+                    <div class="stat-sub-container sub-floor-extendable">
+                        <p class="stat-sub-header">Experiments</p>
+                        <div class="stat-experiments floor-containers">
+                            <% for(let game in enchanting.experiments){
+                            const game_data = enchanting.experiments[game]; %>
+                            <div class="narrow-info-container">
+                                <div class="narrow-info-header">
+                                    <span><%= game_data.name %></span>
+                                </div>
+                                <span>
+                                    <p class="stat-raw-values">
+                                        <%
+                                            const game_stats = helper.sortObject(game_data.stats);
+                                            for(let stat in game_stats){
+                                        %>
+                                            <span class="stat-name"><%= helper.titleCase(stat.replace('_', ' ')) %>: </span>
+                                            <span class="stat-value"><%= (stat == 'last_attempt' || stat == 'last_claimed') ? game_stats[stat].text : game_stats[stat] %></span><br>
+                                        <% } %>
+                                    </p>
+                                    <%
+                                    for(let tier in game_data.tiers) {
+                                        const tier_data = game_data.tiers[tier];
+                                    %>
+                                    <hr>
+                                    <div class="collection">
+                                        <div class="collection-icon"><div class="item-icon icon-<%= tier_data.icon.replace(':', '_'); %>"></div></div>
+                                        <div class="collection-stats">
+                                            <div class="collection-name"><span class="stat-name"><%= tier_data.name %></span></div>
+                                            <div class="collection-amount">
+                                                <%
+                                                for(let info in tier_data) {
+                                                    if(info == 'name' || info == 'icon') continue;
+                                                %>
+                                                <small class="stat-name"><%= helper.titleCase(info.replace('_', ' ')) %>: </small><small class="stat-value"><%= tier_data[info] %></small><br>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                </span>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+
+<br>
+                <p class='stat-raw-values'><small><i>
+                Please note that this section is still in the works and many things are now in development. Thanks for your support!
+                </i></small></p>
             </div>
         </div>
         <div data-stat="dungeons" class="stat-container stat-dungeons">
@@ -1801,20 +2044,24 @@ twitterDescription += '. Click to view more stats!'
                 <p class="stat-sub-header">Classes</p>
 
                 <span class="stat-name">Selected Class: </span>
-                <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span><br>
-                <%= skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) %>
-                <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) %>
-                <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) %>
-                <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) %>
-                <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) %>
+                <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span>
+                <div class="skill-bars">
+                    <%= skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) %>
+                    <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) %>
+                    <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) %>
+                    <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) %>
+                    <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) %>
+                </div>
                 <% } %>
 
                 <% if (calculated.dungeons.catacombs.visited) { %>
                     <p class="stat-sub-header">Catacombs</p>
 
                     <p class="stat-raw-values">
-                        <%= skill_component('Catacombs', 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793', calculated.dungeons.catacombs.level) %><br>
-                        <span class="stat-name">Dungeon Item Boost: </span><span class="stat-value"><%= calculated.dungeons.catacombs.bonuses.item_boost %>%</span><br>
+                        <div class="skill-bars">
+                            <%= skill_component('Catacombs', 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793', calculated.dungeons.catacombs.level) %>
+                        </div>
+                        <span class="stat-name">Dungeon Item Boost: </span><span class="stat-value percent"><%= calculated.dungeons.catacombs.bonuses.item_boost %></span>
                     </p>
 
                     <p class="stat-raw-values">
@@ -1860,7 +2107,10 @@ twitterDescription += '. Click to view more stats!'
                                 <div class="stat-sub-container sub-floor-extendable">
                                     <p class="stat-sub-header">Best Run</p>
                                     <div class="pieces">
-                                    <% for (let [stat, value] of Object.entries(floor.best_runs[0])) {
+                                        <span class="stat-name">Grade</span>
+                                        <span class="stat-value"><%= helper.calcDungeonGrade(floor.best_runs[floor.best_runs.length - 1]) %></span>
+                                        <br>
+                                    <% for (let [stat, value] of Object.entries(floor.best_runs[floor.best_runs.length - 1])) {
                                         if(stat == "teammates") continue; %>
                                         <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
                                         <span class="stat-value">
@@ -1912,7 +2162,7 @@ twitterDescription += '. Click to view more stats!'
                     <div class="boss-collection" <% if (claimedTooltip != "") { %>data-tippy-content="<%= claimedTooltip %>"<% } %>>
                         <div class="boss-collection-icon" style="background-image:url(/head/<%= collection.texture %>)"></div>
                         <div class="collection-stats">
-                            <div class="collection-name <%= collection.maxed ? 'max-minion' : '' %>"><span class="stat-name"><%= collection.name %> </span><% if (collection.tier > 0) { %><span class="stat-value"><%= collection.tier %></span><% } %></div>
+                            <div class="collection-name <%= collection.maxed ? 'max-stat' : '' %>"><span class="stat-name"><%= collection.name %> </span><% if (collection.tier > 0) { %><span class="stat-value"><%= collection.tier %></span><% } %></div>
                             <div class="collection-amount"><span class="stat-name">Bosses killed: </span><span class="stat-value"><%= collection.killed.toLocaleString() %></span></div>
                         </div>
                     </div>
@@ -1920,10 +2170,6 @@ twitterDescription += '. Click to view more stats!'
                     </div>
                 <% } %>
             <% } %>
-
-            <p class='stat-raw-values'><small><i>
-                Please note that this section is still in the works and many things are now in development. Thanks for your support!
-            </i></small></p>
             </div>
         </div>
         <div data-stat="slayer" class="stat-container stat-slayer">
@@ -2071,62 +2317,6 @@ twitterDescription += '. Click to view more stats!'
                 <% } %>
             </div>
         </div>
-        <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){
-            let totalKills = calculated.kills.length;
-            let totalDeaths = calculated.deaths.length;
-
-            let rows = Math.min(Math.max(totalKills, totalDeaths), 10);
-
-            %>
-            <div data-stat="kills" class="stat-container stat-kills">
-                <div class="stat-anchor"></div>
-                <div class="stat-header"><span>Top Kills & Deaths</span></div>
-                <div class="stat-content">
-                    <p class="stat-raw-values">
-                        <span class="stat-name">Total Kills: </span><span class="stat-value"><%= calculated.kills.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span><br>
-                        <span class="stat-name">Total Deaths: </span><span class="stat-value"><%= calculated.deaths.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span>
-                    </p>
-                    <div class="kills-deaths-container">
-                        <div class="narrow-info-container top-kills">
-                            <div class="narrow-info-header">Kills</div>
-                            <div class="narrow-info-content">
-                                <% for(let i = 0; i < rows; i++){
-                                    const kill = calculated.kills[i];
-
-                                    if(typeof calculated.kills[i] === 'undefined'){
-                                    %>
-                                        <div class="kill-stat"><div class="kill-rank"></div></div>
-                                    <% }else{ %>
-                                        <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %>&nbsp;</div><div class="kill-entity"><%= kill.entityName %></div><div class="stat-separator">:&nbsp;</div><div class="kill-amount"><%= kill.amount.toLocaleString() %></div></div>
-                                    <% }
-                                } %>
-                                <% if(calculated.kills.length > 10 || calculated.deaths.length > 10){ %>
-                                    <div class="kill-stat show-all <%= calculated.kills.length > 10 ? 'enabled' : '' %>" data-type="kills">show all</div>
-                                <% } %>
-                            </div>
-                        </div>
-                        <div class="narrow-info-container top-deaths">
-                            <div class="narrow-info-header">Deaths</div>
-                            <div class="narrow-info-content">
-                                <% for(let i = 0; i < rows; i++){
-                                    const death = calculated.deaths[i];
-
-                                    if(typeof death === 'undefined'){
-                                    %>
-                                        <div class="kill-stat"><div class="kill-rank"></div></div>
-                                    <% }else{ %>
-                                        <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %>&nbsp;</div><div class="kill-entity"><%= death.entityName %></div><div class="stat-separator">:&nbsp;</div><div class="kill-amount"><%= death.amount.toLocaleString() %></div></div>
-                                    <% }
-                                } %>
-                                <% if(calculated.kills.length > 10 || calculated.deaths.length > 10){ %>
-                                    <div class="kill-stat show-all <%= calculated.deaths.length > 10 ? 'enabled' : '' %>" data-type="deaths">show all</div>
-                                <% } %>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <% } %>
         <div data-stat="minions" class="stat-container stat-minions">
             <div class="stat-anchor"></div>
             <div class="stat-header"><span>Minions</span></div>
@@ -2140,17 +2330,17 @@ twitterDescription += '. Click to view more stats!'
                         uniqueMinions += minion.levels.length;
                         skippedMinions += minion.maxLevel - minion.levels.length;
 
-                        if(minion.maxLevel == 11)
+                        if(minion.maxLevel == minion.tiers)
                             maxedMinions++;
                     }
                 %>
-                <a href="https://hypixel.net/threads/2166857/" target="_blank" rel="nofollow" class="external-app">
+                <a href="https://hypixel.net/threads/2166857/" target="_blank" rel="noreferrer" class="external-app">
                     <div class="external-app-icon icon-google-sheets"></div>
                     <div class="external-app-name">Minions Sheet <span class="grey-text">by TBlazeWarriorT</span></div>
                     <div class="external-app-description">Check the next cheapest or fastest Minion upgrades and find out which Minions will earn you the most from Bazaar, for free.</div>
                 </a>
                 <p class="stat-raw-values">
-                    <% max = uniqueMinions == 572 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Minions: </span><span class="stat-value <%= max %>"><%= uniqueMinions %> / 572</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 572 * 100) %>%)</span><br>
+                    <% max = uniqueMinions == 593 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Minions: </span><span class="stat-value <%= max %>"><%= uniqueMinions %> / 593</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 593 * 100) %>%)</span><br>
                     <% max = calculated.minion_slots.currentSlots == 24 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.minion_slots.currentSlots %></span><span class="grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
                     <% max = calculated.misc.profile_upgrades.minion_slots == 5 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Bonus Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades.minion_slots %> / <%= constants.profile_upgrades['minion_slots'] %></span><br>
                     <% max = maxedMinions == _.size(constants.minions) ? 'golden-text' : '' %><span class="stat-name <%= max %>">Maxed Minions: </span><span class="stat-value <%= max %>"><%= maxedMinions %> / <%= _.size(constants.minions) %></span><br>
@@ -2163,33 +2353,36 @@ twitterDescription += '. Click to view more stats!'
                     const minions = calculated.minions.filter(a => a.type == type && a.maxLevel > 0).sort((a, b) => b.maxLevel - a.maxLevel);
 
                     const totalOfType = _.size(_.pickBy(constants.minions, a => a.type == type));
-                    const maxOfType = minions.filter(a => a.maxLevel == 11).length;
+                    const maxOfType = minions.filter(a => a.maxLevel == a.tiers).length;
 
                     if(minions.length == 0)
                         continue;
 
                     %>
-                    <div class="minion-category">
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon <%= skillItems[type] %>"></div></div><span><%= type %></span>
-                        <% if(maxOfType >= totalOfType){ %><span class="category-header-maxed">max!</span>
-                        <% }else{ %><span class="category-header-detail">(<%= maxOfType %> / <%= totalOfType %> max)</span><% } %>
-                        </div>
-                    <%
-
-                    for(const minion of minions){ %>
-                        <div data-tippy-content="Crafted variants:<br><br>
-                        <% for(let i = 1; i <= 11; i++){ %>
-                        <div class='minion-variant <% if(minion.levels.includes(i)){ %>minion-crafted<% } %>'><%= romanize(i) %></div>
+                    <div class="category-header">
+                        <div class="category-icon"><div class="item-icon <%= skillItems[type] %>"></div></div>
+                        <span><%= type %></span>
+                        <% if(maxOfType >= totalOfType){ %>
+                            <span class="category-header-maxed">max!</span>
+                        <% }else{ %>
+                            <span class="category-header-detail">(<%= maxOfType %> / <%= totalOfType %> max)</span>
                         <% } %>
-                        " class="minion
-                        <%= minion.maxLevel == 0 ? 'no-minion' : '' %>
-                        <%= minion.maxLevel == 11 ? 'max-minion' : '' %>
-                        <%= minion.maxLevel != minion.levels.length ? 'skipped-minion' : '' %>
-                        ">
-                            <div class="minion-icon" style="background-image: url(<%= minion.head %>)"></div>
-                            <span class="stat-name"><%= minion.name %> </span><span class="stat-value"><%= minion.maxLevel %></span>
-                        </div>
-                    <% } %>
+                    </div>
+                    <div class="minions">
+                        <% for(const minion of minions){ %>
+                            <div data-tippy-content="Crafted variants:<br><br>
+                            <% for(let i = 1; i <= minion.tiers; i++){ %>
+                            <div class='minion-variant <% if(minion.levels.includes(i)){ %>minion-crafted<% } %>'><%= romanize(i) %></div>
+                            <% } %>
+                            " class="minion
+                            <%= minion.maxLevel == 0 ? 'no-minion' : '' %>
+                            <%= minion.maxLevel == minion.tiers ? 'max-stat' : '' %>
+                            <%= minion.maxLevel != minion.levels.length ? 'skipped-minion' : '' %>
+                            ">
+                                <div class="minion-icon" style="background-image: url(<%= minion.head %>)"></div>
+                                <span class="stat-name"><%= minion.name %> </span><span class="stat-value"><%= minion.maxLevel %></span>
+                            </div>
+                        <% } %>
                     </div>
                     <%
                 } %>
@@ -2228,12 +2421,16 @@ twitterDescription += '. Click to view more stats!'
                             continue;
 
                         %>
-                        <div class="minion-category">
-                            <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon <%= skillItems[type] %>"></div></div><span><%= type %></span>
-                            <% if(maxOfType >= totalOfType){ %><span class="category-header-maxed">max!</span>
-                            <% }else{ %><span class="category-header-detail">(<%= maxOfType %> / <%= totalOfType %> max)</span><% } %>
+                        <div class="category-header">
+                            <div class="category-icon"><div class="item-icon <%= skillItems[type] %>"></div></div>
+                            <span><%= type %></span>
+                            <% if(maxOfType >= totalOfType){ %>
+                                <span class="category-header-maxed">max!</span>
+                            <% }else{ %>
+                                <span class="category-header-detail">(<%= maxOfType %> / <%= totalOfType %> max)</span>
+                            <% } %>
                         </div>
-                            <div class="collections">
+                        <div class="collections">
                             <%
 
                             for(const collection of collections){
@@ -2251,12 +2448,11 @@ twitterDescription += '. Click to view more stats!'
                                 <div class="collection" data-tippy-content="<%= amountsTooltip %>">
                                     <div class="collection-icon"><div class="item-icon icon-<%= collection.id %>_<%= collection.damage %>"></div></div>
                                     <div class="collection-stats">
-                                        <div class="collection-name <%= collection.tier >= collection.maxTier ? 'max-minion' : '' %>"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
+                                        <div class="collection-name <%= collection.tier >= collection.maxTier ? 'max-stat' : '' %>"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
                                         <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= collection.amount.toLocaleString() %></span></div>
                                     </div>
                                 </div>
                             <% } %>
-                            </div>
                         </div>
                     <% } %>
                 </div>
@@ -2267,8 +2463,61 @@ twitterDescription += '. Click to view more stats!'
                 <div class="stat-anchor"></div>
                 <div class="stat-header"><span>Miscellaneous</span></div>
                 <div class="stat-content">
+                <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){
+                    let totalKills = calculated.kills.length;
+                    let totalDeaths = calculated.deaths.length;
+
+                    let rows = Math.min(Math.max(totalKills, totalDeaths), 10);
+
+                    %>
+                    <div class="category-header"><div class="category-icon"><div class="item-icon icon-267_0"></div></div><span>kills</span></div>
+                    <p class="stat-raw-values stat-kills">
+                        <span class="stat-name">Total Kills: </span><span class="stat-value"><%= calculated.kills.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span><br>
+                        <span class="stat-name">Total Deaths: </span><span class="stat-value"><%= calculated.deaths.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span><br>
+
+                        <div class="kills-deaths-container">
+                            <div class="narrow-info-container top-kills">
+                                <div class="narrow-info-header">Kills</div>
+                                <div class="narrow-info-content">
+                                    <% for(let i = 0; i < rows; i++){
+                                        const kill = calculated.kills[i];
+
+                                        if(typeof calculated.kills[i] === 'undefined'){
+                                        %>
+                                            <div class="kill-stat"><div class="kill-rank"></div></div>
+                                        <% }else{ %>
+                                            <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %>&nbsp;</div><div class="kill-entity"><%= kill.entityName %></div><div class="stat-separator">:&nbsp;</div><div class="kill-amount"><%= kill.amount.toLocaleString() %></div></div>
+                                        <% }
+                                    } %>
+                                    <% if(calculated.kills.length > 10 || calculated.deaths.length > 10){ %>
+                                        <div class="kill-stat show-all <%= calculated.kills.length > 10 ? 'enabled' : '' %>" data-type="kills">show all</div>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="narrow-info-container top-deaths">
+                                <div class="narrow-info-header">Deaths</div>
+                                <div class="narrow-info-content">
+                                    <% for(let i = 0; i < rows; i++){
+                                        const death = calculated.deaths[i];
+
+                                        if(typeof death === 'undefined'){
+                                        %>
+                                            <div class="kill-stat"><div class="kill-rank"></div></div>
+                                        <% }else{ %>
+                                            <div class="kill-stat"><div class="kill-rank">#<%= i + 1 %>&nbsp;</div><div class="kill-entity"><%= death.entityName %></div><div class="stat-separator">:&nbsp;</div><div class="kill-amount"><%= death.amount.toLocaleString() %></div></div>
+                                        <% }
+                                    } %>
+                                    <% if(calculated.kills.length > 10 || calculated.deaths.length > 10){ %>
+                                        <div class="kill-stat show-all <%= calculated.deaths.length > 10 ? 'enabled' : '' %>" data-type="deaths">show all</div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </p>
+                    <% } %>
+
                     <% if('races' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-317_0"></div></div><span>races</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon icon-317_0"></div></div><span>races</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.races){
                                 if(key.startsWith('dungeon_hub'))
@@ -2349,7 +2598,7 @@ twitterDescription += '. Click to view more stats!'
                         </div>
                     <% } %>
                     <% if('gifts' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/b73a2114136b8ee4926caa51785414036a2b76e4f1668cb89d99716c421)"></div></div><span>gifts</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/b73a2114136b8ee4926caa51785414036a2b76e4f1668cb89d99716c421)"></div></div><span>gifts</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.gifts){ %>
                             <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.gifts[key].toLocaleString() %></span><br>
@@ -2357,7 +2606,7 @@ twitterDescription += '. Click to view more stats!'
                         </p>
                     <% } %>
                     <% if('winter' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-332_0"></div></div><span>season of jerry</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon icon-332_0"></div></div><span>season of jerry</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.winter){ %>
                             <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.winter[key].toLocaleString() %></span><br>
@@ -2365,7 +2614,7 @@ twitterDescription += '. Click to view more stats!'
                         </p>
                     <% } %>
                     <% if('dragons' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/aec3ff563290b13ff3bcc36898af7eaa988b6cc18dc254147f58374afe9b21b9)"></div></div><span>dragons</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/aec3ff563290b13ff3bcc36898af7eaa988b6cc18dc254147f58374afe9b21b9)"></div></div><span>dragons</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.dragons){
                                 let tooltip = "";
@@ -2383,7 +2632,7 @@ twitterDescription += '. Click to view more stats!'
                     </p>
                     <% } %>
                     <% if('protector' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/89091d79ea0f59ef7ef94d7bba6e5f17f2f7d4572c44f90f76c4819a714)"></div></div><span>Endstone Protectors</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/89091d79ea0f59ef7ef94d7bba6e5f17f2f7d4572c44f90f76c4819a714)"></div></div><span>Endstone Protectors</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.protector){ %>
                             <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.protector[key].toLocaleString() %></span><br>
@@ -2391,7 +2640,7 @@ twitterDescription += '. Click to view more stats!'
                     </p>
                     <% } %>
                     <% if('damage' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-267_0"></div></div><span>damage</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon icon-267_0"></div></div><span>damage</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.damage){ %>
                             <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= Math.floor(calculated.misc.damage[key]).toLocaleString() %></span><br>
@@ -2399,15 +2648,39 @@ twitterDescription += '. Click to view more stats!'
                         </p>
                     <% } %>
                     <% if('milestones' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/93c8aa3fde295fa9f9c27f734bdbab11d33a2e43e855accd7465352377413b)"></div></div><span>pet milestones</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/93c8aa3fde295fa9f9c27f734bdbab11d33a2e43e855accd7465352377413b)"></div></div><span>pet milestones</span></div>
                         <p class="stat-raw-values">
-                            <% for(const key in calculated.misc.milestones){ %>
-                            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.milestones[key].toLocaleString() %></span><br>
+                            <% for(const key in calculated.misc.milestones){
+                                let progress = {
+                                    rarity: milestone_rarities[pet_milestones[key].length-1],
+                                    maxed: true
+                                };
+                                let tooltip = "";
+
+                                for(let i = 0; i < pet_milestones[key].length; i++){
+                                    if(calculated.misc.milestones[key] < pet_milestones[key][i]){
+                                        progress = {
+                                            percentage: Math.round(calculated.misc.milestones[key]/pet_milestones[key][i]*100),
+                                            rarity: milestone_rarities[i],
+                                            maxed: false
+                                        };
+                                        break;
+                                    }
+                                }
+
+                                tooltip += `<span class="stat-name">Rarity: </span><span class="stat-value piece-${ progress.rarity }-fg">${ helper.capitalizeFirstLetter(progress.rarity) }</span><br><span class="stat-name">Progress: </span>`;
+                                if(progress.maxed)
+                                    tooltip += `<span class="stat-value golden-text">Maxed!</span>`;
+                                else
+                                    tooltip += `<span class="stat-value percent">${ progress.percentage.toLocaleString() }</span>`;
+                                %>
+                            <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>>
+                                <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.milestones[key].toLocaleString() %></span></span><br>
                             <% } %>
                         </p>
                     <% } %>
                     <% if('burrows' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8)"></div></div><span>griffin burrows</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8)"></div></div><span>griffin burrows</span></div>
                         <p class="stat-raw-values">
                             <%  let burrow_naming = {"dug_next": "dug_arrows", "dug_combat": "dug_monsters"}
                             for(const key in calculated.misc.burrows){
@@ -2423,7 +2696,7 @@ twitterDescription += '. Click to view more stats!'
                         </p>
                     <% } %>
                     <% if('profile_upgrades' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-154_0"></div></div><span>profile upgrades</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon icon-154_0"></div></div><span>profile upgrades</span></div>
                         <p class="stat-raw-values">
                             <% for(const upgrade in constants.profile_upgrades){ %>
                             <% max = calculated.misc.profile_upgrades[upgrade] == constants.profile_upgrades[upgrade] ? 'golden-text' : '' %><span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(upgrade.split("_").join(" ")); %>: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades[upgrade] %> / <%= constants.profile_upgrades[upgrade] %></span><br>
@@ -2431,7 +2704,7 @@ twitterDescription += '. Click to view more stats!'
                         </p>
                     <% } %>
                     <% if('auctions_sell' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-266_0"></div></div><span>auctions sold</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon icon-266_0"></div></div><span>auctions sold</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.auctions_sell){
                                 let tooltip = "";
@@ -2445,7 +2718,7 @@ twitterDescription += '. Click to view more stats!'
                         </p>
                     <% } %>
                     <% if('auctions_buy' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-264_0"></div></div><span>auctions bought</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon icon-264_0"></div></div><span>auctions bought</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.auctions_buy){
                                 let tooltip = "";
@@ -2460,7 +2733,7 @@ twitterDescription += '. Click to view more stats!'
                     <% } %>
 
                     <% if('claimed_items' in calculated.misc){ %>
-                        <div class="minion-category-header"><div class="minion-category-icon"><div class="item-icon icon-339_0"></div></div><span>claimed items</span></div>
+                        <div class="category-header"><div class="category-icon"><div class="item-icon icon-339_0"></div></div><span>claimed items</span></div>
                         <p class="stat-raw-values">
                             <% for(const key in calculated.misc.claimed_items){
                                 let timestamp = calculated.misc.claimed_items[key];
@@ -2474,16 +2747,18 @@ twitterDescription += '. Click to view more stats!'
             </div>
         <% } %>
         </div>
-    </div>
+    </main>
     <%- include('../includes/footer'); %>
     <script>
-        let items = <%- JSON.stringify(items) %>;
-        let calculated = <%- JSON.stringify(calculated) %>;
-
-        const constants = { 
-            minecraft_formatting: <%- JSON.stringify(constants.minecraft_formatting) %>, 
-            special_enchants: <%- JSON.stringify(constants.special_enchants) %> 
-        };
+        let items = JSON.parse(`<%- JSON.stringify(items).replace(/\\/g, '\\\\') %>`);
+        let calculated = JSON.parse(`<%- JSON.stringify(calculated).replace(/\\/g, '\\\\') %>`);
+        <%
+            const clientConstants = {
+                special_enchants: constants.special_enchants,
+                max_favorites: constants.max_favorites
+            }
+        %>
+        const constants = JSON.parse(`<%- JSON.stringify(clientConstants).replace(/\\/g, '\\\\') %>`);
     </script>
 </body>
 </html>

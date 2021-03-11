@@ -1,4 +1,26 @@
 document.addEventListener('DOMContentLoaded', function(){
+
+    const favoriteElement = document.querySelector('.favorite');
+
+    if('share' in navigator) {
+        iosShareIcon = 'M12,1L8,5H11V14H13V5H16M18,23H6C4.89,23 4,22.1 4,21V9A2,2 0 0,1 6,7H9V9H6V21H18V9H15V7H18A2,2 0 0,1 20,9V21A2,2 0 0,1 18,23Z';
+        androidShareIcon = 'M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,0 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9A3,3 0 0,0 3,12A3,3 0 0,0 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19A2.92,2.92 0 0,0 18,16.08Z';
+        favoriteElement.insertAdjacentHTML('afterend', /*html*/ `
+            <button class="additional-player-stat svg-icon">
+                <svg viewBox="0 0 24 24">
+                    <title>share</title>
+                    <path fill="white" d="${navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i) ? iosShareIcon : androidShareIcon}" />
+                </svg>
+            </button>
+        `);
+        favoriteElement.nextElementSibling.addEventListener('click', () => {
+            navigator.share({
+                text: `Check out ${calculated.display_name} on SkyCrypt`,
+                url: window.location.href,
+            });
+        })
+    }
+
     function setCookie(name,value,days) {
         var expires = "";
         if (days) {
@@ -8,7 +30,22 @@ document.addEventListener('DOMContentLoaded', function(){
         }
         document.cookie = name + "=" + (value || "")  + expires + "; SameSite=Lax; path=/";
     }
-    
+
+    function getCookie(c_name) {
+        if (document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1) {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) {
+                    c_end = document.cookie.length;
+                }
+                return unescape(document.cookie.substring(c_start, c_end));
+            }
+        }
+        return "";
+    }
+
     let userAgent = window.navigator.userAgent;
     let tippyInstance;
 
@@ -20,27 +57,54 @@ document.addEventListener('DOMContentLoaded', function(){
 
     let skinViewer;
 
-    if(calculated.skin_data){
+    if(playerModel && calculated.skin_data){
         skinViewer = new skinview3d.SkinViewer({
-    		domElement: playerModel,
     		width: playerModel.offsetWidth,
     		height: playerModel.offsetHeight,
-    		skinUrl: "/texture/" + calculated.skin_data.skinurl.split("/").pop(),
-    		capeUrl: 'capeurl' in calculated.skin_data ? "/texture/" + calculated.skin_data.capeurl.split("/").pop() : "/cape/" + calculated.display_name
-    	});
+    		skin: "/texture/" + calculated.skin_data.skinurl.split("/").pop(),
+    		cape: 'capeurl' in calculated.skin_data ? "/texture/" + calculated.skin_data.capeurl.split("/").pop() : "/cape/" + calculated.display_name
+        });
+
+        playerModel.appendChild(skinViewer.canvas);
 
     	skinViewer.camera.position.set(-18, -3, 58);
-    	skinViewer.detectModel = false;
 
-        if(calculated.skin_data.model == 'slim')
-    	   skinViewer.playerObject.skin.slim = true;
+        const controls = new skinview3d.createOrbitControls(skinViewer);
 
-    	let controls = new skinview3d.createOrbitControls(skinViewer);
+        skinViewer.canvas.removeAttribute("tabindex");
 
         controls.enableZoom = false;
         controls.enablePan = false;
 
-    	skinViewer.animations.add(skinview3d.IdleAnimation);
+        /**
+         * the average Z rotation of the arms
+         */
+        const basicArmRotationZ = Math.PI * 0.02;
+
+        /**
+         * the average X rotation of the cape
+         */
+        const basicCapeRotationX = Math.PI * 0.06;
+
+        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            skinViewer.animations.add((player, time) => {
+                // Multiply by animation's natural speed
+                time *= 2;
+
+                // Arm swing
+                const armRotation = Math.cos(time) * 0.03 + basicArmRotationZ
+                player.skin.leftArm.rotation.z = armRotation;
+                player.skin.rightArm.rotation.z = armRotation * -1;
+
+                // Cape wave
+                player.cape.rotation.x = Math.sin(time) * 0.01 + basicCapeRotationX;
+            });
+        } else {
+            skinViewer.playerObject.skin.leftArm.rotation.z = basicArmRotationZ;
+            skinViewer.playerObject.skin.rightArm.rotation.z = basicArmRotationZ * -1;
+            skinViewer.playerObject.cape.rotation.x = basicCapeRotationX;
+        }
+
     }
 
     tippyInstance = tippy('.interactive-tooltip', {
@@ -93,52 +157,52 @@ document.addEventListener('DOMContentLoaded', function(){
         return false;
     };
 
-    function renderLore(text){
+    function renderLore(text) {
         let output = "";
-        let spansOpened = 0;
 
-        const parts = text.split("§");
+        let color = null;
+        let formats = new Set();
 
-        if(parts.length == 1)
-            return text;
+        for (let part of text.match(/(§[0-9a-fk-or])*[^§]*/g)) {
 
-        for(const part of parts){
-            const code = part.substring(0, 1);
-            const content = part.substring(1);
+            while (part.charAt(0) === '§') {
+                const code = part.charAt(1);
 
-            const format = constants.minecraft_formatting[code];
+                if (/[0-9a-f]/.test(code)) {
+                    color = code;
+                } else if (/[k-o]/.test(code)) {
+                    formats.add(code);
+                } else if (code === 'r') {
+                    color = null;
+                    formats.clear();
+                }
 
-            if(format === undefined)
-                continue;
-
-            if(format.type == 'color'){
-                for(; spansOpened > 0; spansOpened--)
-                    output += "</span>";
-
-                output += `<span style='${format.css}'>${content}`;
-
-                spansOpened++;
-            }else if(format.type == 'format'){
-                output += `<span style='${format.css}'>${content}`;
-
-                spansOpened++;
-            }else if(format.type == 'reset'){
-                for(; spansOpened > 0; spansOpened--)
-                    output += "</span>";
-
-                output += content;
+                part = part.substring(2);
             }
+
+            if (part.length === 0) continue;
+
+            output += '<span';
+
+            if (color !== null) {
+                output += ` style='color: var(--§${color});'`;
+            }
+
+            if (formats.size > 0) {
+                output += ` class='${Array.from(formats, x => '§' + x).join(' ')}'`;
+            }
+
+            output += `>${part}</span>`;
         }
-
-        for(; spansOpened > 0; spansOpened--)
-            output += "</span>";
-
-        const specialColor = constants.minecraft_formatting['6'];
 
         const matchingEnchants = constants.special_enchants.filter(a => output.includes(a));
 
-        for(const enchantment of matchingEnchants)
-            output = output.replace(enchantment, `<span style='${specialColor.css}'>${enchantment}</span>`);
+        for (const enchantment of matchingEnchants) {
+            if (enchantment == 'Power 6' || enchantment == 'Power 7' && text.startsWith("§8Breaking")) {
+                continue;
+            }
+            output = output.replace(enchantment, `<span style='color: var(--§6)'>${enchantment}</span>`);
+        }
 
         return output;
     }
@@ -148,36 +212,23 @@ document.addEventListener('DOMContentLoaded', function(){
     function renderInventory(inventory, type){
         let scrollTop = window.pageYOffset;
 
-        let visibleInventory = document.querySelector('.inventory-view.current-inventory');
+        let visibleInventory = document.querySelector('.stat-inventory .inventory-view');
 
         if(visibleInventory){
-            visibleInventory.classList.remove('current-inventory');
             document.querySelector('#inventory_container').removeChild(visibleInventory);
         }
 
         let inventoryView = document.createElement('div');
-        inventoryView.className = 'inventory-view current-inventory processed';
+        inventoryView.className = 'inventory-view processed';
         inventoryView.setAttribute('data-inventory-type', type);
 
-        let countSlotsUsed = 0;
+        let pagesize = 5 * 9;
 
-        inventory.forEach(function(item){
-            if(Object.keys(item).length > 2)
-                countSlotsUsed++;
-        });
-
-        countSlotsUsed = Math.max(countSlotsUsed, 9);
-
-        switch(type){
-            case 'inventory':
-                inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
-                break;
-            case 'enderchest':
-            case 'personal_vault':
-                break;
-            default:
-                if(type in calculated.bag_sizes)
-                    inventory = inventory.slice(0, Math.max(countSlotsUsed - 1, calculated.bag_sizes[type]));
+        if (type === 'inventory') {
+            inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
+            pagesize = 3 * 9;
+        } else if (type === 'backpack') {
+            pagesize = 6 * 9;
         }
 
         inventory.forEach(function(item, index){
@@ -208,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 inventoryItem.className = 'rich-item inventory-item';
 
-                if(type == 'backpack')
+                if(type === 'backpack')
                     inventoryItem.setAttribute('data-backpack-item-index', index);
                 else
                     inventoryItem.setAttribute('data-item-index', item.item_index);
@@ -224,15 +275,11 @@ document.addEventListener('DOMContentLoaded', function(){
                 bindLoreEvents(pieceHoverArea);
             }
 
+            if (index % pagesize === 0 && index !== 0) {
+                inventoryView.appendChild(document.createElement("hr"));
+            }
+
             inventoryView.appendChild(inventorySlot);
-
-            inventoryView.appendChild(document.createTextNode(" "));
-
-            if((index + 1) % 9 == 0)
-                inventoryView.appendChild(document.createElement("br"));
-
-            if((index + 1) % 27 == 0 && type == 'inventory')
-                inventoryView.appendChild(document.createElement("br"));
         });
 
         inventoryContainer.appendChild(inventoryView);
@@ -369,7 +416,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             item.containsItems.forEach((backpackItem, index) => {
                 let inventorySlot = document.createElement('div');
-                inventorySlot.className = 'inventory-slot backpack-slot';
+                inventorySlot.className = 'inventory-slot';
 
                 if(backpackItem.id){
                     let inventoryItemIcon = document.createElement('div');
@@ -402,9 +449,6 @@ document.addEventListener('DOMContentLoaded', function(){
                 backpackContents.appendChild(inventorySlot);
 
                 backpackContents.appendChild(document.createTextNode(" "));
-
-                if((index + 1) % 9 == 0)
-                    backpackContents.appendChild(document.createElement("br"));
             });
 
             [].forEach.call(document.querySelectorAll('.contains-backpack .item-icon.is-enchanted'), handleEnchanted);
@@ -462,21 +506,28 @@ document.addEventListener('DOMContentLoaded', function(){
     let oldWidth = null;
     let oldheight = null;
 
-    function resize(){
-        if(window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570))
-            document.getElementById("skin_display_mobile").appendChild(skinViewer.domElement);
+    const navBar = document.querySelector('#nav_bar');
+    let navBarHeight;
 
-        if(window.innerWidth > 1570 && oldWidth <= 1570)
-            document.getElementById("skin_display").appendChild(skinViewer.domElement);
+    function resize(){
+        if (playerModel) {
+            if(window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570))
+                document.getElementById("skin_display_mobile").appendChild(playerModel);
+
+            if(window.innerWidth > 1570 && oldWidth <= 1570)
+                document.getElementById("skin_display").appendChild(playerModel);
+        }
 
         tippy('*[data-tippy-content]');
 
-        if(skinViewer){
+        if(playerModel && skinViewer){
             if(playerModel.offsetWidth / playerModel.offsetHeight < 0.6)
                 skinViewer.setSize(playerModel.offsetWidth, playerModel.offsetWidth * 2);
             else
                 skinViewer.setSize(playerModel.offsetHeight / 2, playerModel.offsetHeight);
         }
+
+        navBarHeight = parseFloat(getComputedStyle(navBar).top);
 
         updateStatsPositions();
 
@@ -516,6 +567,13 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
+    function flashForUpdate(element) {
+        element.classList.add('updated');
+        element.addEventListener('animationend', () => {
+            element.classList.remove('updated');
+        });
+    }
+
     [].forEach.call(document.querySelectorAll('.stat-weapons .select-weapon'), function(element){
         let itemId = element.parentNode.getAttribute('data-item-id');
         let filterItems;
@@ -540,14 +598,16 @@ document.addEventListener('DOMContentLoaded', function(){
             e.preventDefault();
         });
 
+        const activeWeaponElement = document.querySelector('.stat-active-weapon');
+
         element.addEventListener('click', function(e){
             if(element.parentNode.classList.contains('piece-selected')){
                 element.parentNode.classList.remove("piece-selected");
 
                 stats = calculated.stats;
 
-                document.querySelector('.stat-active-weapon').className = 'stat-value stat-active-weapon piece-common-fg';
-                document.querySelector('.stat-active-weapon').innerHTML = 'None';
+                activeWeaponElement.className = 'stat-value stat-active-weapon piece-common-fg';
+                activeWeaponElement.innerHTML = 'None';
             }else{
                 [].forEach.call(document.querySelectorAll('.stat-weapons .piece'), function(_element){
                     _element.classList.remove("piece-selected");
@@ -555,41 +615,29 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 element.parentNode.classList.add("piece-selected");
 
-                document.querySelector('.stat-active-weapon').className = 'stat-value stat-active-weapon piece-' + item.rarity + '-fg';
-                document.querySelector('.stat-active-weapon').innerHTML = item.display_name;
+                activeWeaponElement.className = 'stat-value stat-active-weapon piece-' + item.rarity + '-fg';
+                activeWeaponElement.innerHTML = item.display_name;
 
                 stats = weaponStats;
             }
 
-            anime({
-                targets: '.stat-active-weapon',
-                backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                duration: 500,
-                round: 1,
-                easing: 'easeOutCubic'
-            });
+            flashForUpdate(activeWeaponElement);
 
             for(let stat in stats){
                 if(stat == 'sea_creature_chance')
                     continue;
 
-                let element = document.querySelector('.basic-stat[data-stat=' + stat + '] .stat-value');
+                const element = document.querySelector('.basic-stat[data-stat=' + stat + '] .stat-value');
 
                 if(!element)
                     continue;
 
-                let currentValue = parseInt(element.innerHTML);
-                let newValue = stats[stat];
+                const currentValue = parseInt(element.innerHTML);
+                const newValue = stats[stat];
 
                 if(newValue != currentValue){
-                    anime({
-                        targets: '.basic-stat[data-stat=' + stat + '] .stat-value',
-                        innerHTML: newValue,
-                        backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                        duration: 500,
-                        round: 1,
-                        easing: 'easeOutCubic'
-                    });
+                    element.innerHTML = newValue;
+                    flashForUpdate(element);
                 }
             }
         });
@@ -619,14 +667,16 @@ document.addEventListener('DOMContentLoaded', function(){
             e.preventDefault();
         });
 
+        const activeRodElement = document.querySelector('.stat-active-rod');
+
         element.addEventListener('click', function(e){
             if(element.parentNode.classList.contains('piece-selected')){
                 element.parentNode.classList.remove("piece-selected");
 
                 stats = calculated.stats;
 
-                document.querySelector('.stat-active-rod').className = 'stat-value stat-active-rod piece-common-fg';
-                document.querySelector('.stat-active-rod').innerHTML = 'None';
+                activeRodElement.className = 'stat-value stat-active-rod piece-common-fg';
+                activeRodElement.innerHTML = 'None';
             }else{
                 [].forEach.call(document.querySelectorAll('.stat-fishing .piece'), function(_element){
                     _element.classList.remove("piece-selected");
@@ -634,37 +684,25 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 element.parentNode.classList.add("piece-selected");
 
-                document.querySelector('.stat-active-rod').className = 'stat-value stat-active-rod piece-' + item.rarity + '-fg';
-                document.querySelector('.stat-active-rod').innerHTML = item.display_name;
+                activeRodElement.className = 'stat-value stat-active-rod piece-' + item.rarity + '-fg';
+                activeRodElement.innerHTML = item.display_name;
 
                 stats = weaponStats;
             }
 
-            anime({
-                targets: '.stat-active-rod',
-                backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                duration: 500,
-                round: 1,
-                easing: 'easeOutCubic'
-            });
+            flashForUpdate(activeRodElement);
 
-            let _element = document.querySelector('.basic-stat[data-stat=sea_creature_chance] .stat-value');
+            const _element = document.querySelector('.basic-stat[data-stat=sea_creature_chance] .stat-value');
 
             if(!_element)
                 return;
 
-            let currentValue = parseInt(_element.innerHTML);
-            let newValue = stats['sea_creature_chance'];
+            const currentValue = parseInt(_element.innerHTML);
+            const newValue = stats['sea_creature_chance'];
 
             if(newValue != currentValue){
-                anime({
-                    targets: '.basic-stat[data-stat=sea_creature_chance] .stat-value',
-                    innerHTML: newValue,
-                    backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                    duration: 500,
-                    round: 1,
-                    easing: 'easeOutCubic'
-                });
+                _element.innerHTML = newValue;
+                flashForUpdate(_element);
             }
         });
     });
@@ -689,8 +727,6 @@ document.addEventListener('DOMContentLoaded', function(){
         let canvas = document.createElement('canvas');
         canvas.width = size;
         canvas.height = size;
-
-        canvas.className = 'enchanted-overlay';
 
         let ctx = canvas.getContext('2d');
 
@@ -900,31 +936,45 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
-    [].forEach.call(document.querySelectorAll('.add-favorite'), function(e){
-        let element = e;
+    function parseFavorites(cookie) {
+        return cookie?.split(',').filter(uuid => /^[0-9a-f]{32}$/.test(uuid)) || [];
+    }
 
-        let setNotification = tippy(element, {
-            content: 'Set favorite!',
-            trigger: 'manual'
-        });
+    function checkFavorite() {
+        const favorited = parseFavorites(getCookie("favorite")).includes(favoriteElement.getAttribute("data-username"));
+        favoriteElement.setAttribute('aria-checked', favorited);
+        return favorited;
+    }
 
-        element.addEventListener('click', function(){
-            if(element.getAttribute("data-username") == "0c0b857f415943248f772164bf76795c"){
-                setNotification.show();
+    let favoriteNotification = tippy(favoriteElement, {
+        trigger: 'manual'
+    });
 
-                setTimeout(function(){
-                    setNotification.hide();
-                }, 1500);
+    favoriteElement.addEventListener('click', function(){
+        let uuid = favoriteElement.getAttribute("data-username");
+        if(uuid == "0c0b857f415943248f772164bf76795c"){
+            favoriteNotification.setContent("No");
+        }else{
+            let cookieArray = parseFavorites(getCookie("favorite"));
+            if(cookieArray.includes(uuid)){
+                cookieArray.splice(cookieArray.indexOf(uuid), 1);
+
+                favoriteNotification.setContent("Removed favorite!");
+            }else if(cookieArray.length >= constants.max_favorites){
+                favoriteNotification.setContent(`You can only have ${constants.max_favorites} favorites!`);
             }else{
-                setCookie("favorite", element.getAttribute("data-username"), 365);
-                
-                setNotification.show();
+                cookieArray.push(uuid);
 
-                setTimeout(function(){
-                    setNotification.hide();
-                }, 1500);
+                favoriteNotification.setContent("Added favorite!");
             }
-        });
+            setCookie("favorite", cookieArray.join(','), 365);
+            checkFavorite();
+        }
+        favoriteNotification.show();
+
+        setTimeout(function(){
+            favoriteNotification.hide();
+        }, 1500);
     });
 
     let socialsShown = false;
@@ -1028,7 +1078,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             anime({
                 targets: window.document.scrollingElement || window.document.body || window.document.documentElement,
-                scrollTop: positionY[newActiveTab.getAttribute('data-target')] - 60,
+                scrollTop: positionY[newActiveTab.getAttribute('data-target')] - 110,
                 duration: 350,
                 easing: 'easeOutCubic',
                 complete: function(){
@@ -1120,12 +1170,12 @@ document.addEventListener('DOMContentLoaded', function(){
     window.addEventListener('keydown', function(e){
         let selectedPiece = document.querySelector('.rich-item:focus');
 
-        if(selectedPiece !== null && e.keyCode == 13){
+        if(selectedPiece !== null && e.key === 'Enter'){
             fillLore(selectedPiece);
             showLore(selectedPiece);
         }
 
-        if(e.keyCode == 27){
+        if (e.key === 'Escape'){
             dimmer.classList.remove('show-dimmer');
             enableApiPlayer.classList.remove('show');
             if(document.querySelector('#stats_content.sticky-stats') != null){
@@ -1133,7 +1183,7 @@ document.addEventListener('DOMContentLoaded', function(){
             }
         }
 
-        if(document.querySelector('.rich-item.sticky-stats') != null && e.keyCode == 9)
+        if(document.querySelector('.rich-item.sticky-stats') != null && e.key === 'Tab')
             e.preventDefault();
     });
 
@@ -1141,9 +1191,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
     window.addEventListener('resize', resize);
 
-    const navBar = document.querySelector('#nav_bar')
     function onScroll() {
-        if(navBar.getBoundingClientRect().top <= 48) {
+        if (navBar.getBoundingClientRect().top <= navBarHeight ) {
             navBar.classList.add('stuck')
         } else {
             navBar.classList.remove('stuck')

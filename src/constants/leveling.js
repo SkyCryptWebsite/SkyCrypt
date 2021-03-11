@@ -65,11 +65,11 @@ module.exports = {
 
     default_skill_caps: {
         farming: 50,
-        mining: 50,
-        combat: 50,
+        mining: 60,
+        combat: 60,
         foraging: 50,
         fishing: 50,
-        enchanting: 50,
+        enchanting: 60,
         alchemy: 50,
         taming: 50,
         carpentry: 50,
@@ -184,9 +184,9 @@ module.exports = {
     slayer_xp: {
         zombie: {
             1: 5,
-            2: 25,
-            3: 100,
-            4: 500,
+            2: 15,
+            3: 200,
+            4: 1000,
             5: 5000,
             6: 20000,
             7: 100000,
@@ -196,8 +196,8 @@ module.exports = {
         spider: {
             1: 5,
             2: 25,
-            3: 100,
-            4: 500,
+            3: 200,
+            4: 1000,
             5: 5000,
             6: 20000,
             7: 100000,
@@ -206,7 +206,7 @@ module.exports = {
         },
         wolf: {
             1: 10,
-            2: 25,
+            2: 30,
             3: 250,
             4: 1500,
             5: 5000,

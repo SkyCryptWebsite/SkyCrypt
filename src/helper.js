@@ -100,9 +100,9 @@ module.exports = {
                     user = doc;
         }
 
-        let skin_data = { 
-            skinurl: 'https://textures.minecraft.net/texture/3b60a1f6d562f52aaebbf1434f1de147933a3affe0e764fa49ea057536623cd3', 
-            model: 'slim' 
+        let skin_data = {
+            skinurl: 'https://textures.minecraft.net/texture/3b60a1f6d562f52aaebbf1434f1de147933a3affe0e764fa49ea057536623cd3',
+            model: 'slim'
         };
 
         if(user && module.exports.hasPath(user, 'skinurl')){
@@ -339,53 +339,51 @@ module.exports = {
     },
 
     // Convert Minecraft lore to HTML
-    renderLore: (text, enchants = false) => {
+    renderLore: (text) => {
         let output = "";
-        let spansOpened = 0;
 
-        const parts = text.split("§");
+        let color = null;
+        let formats = new Set();
 
-        if(parts.length == 1)
-            return text;
+        for (let part of text.match(/(§[0-9a-fk-or])*[^§]*/g)) {
 
-        for(const part of parts){
-            const code = part.substring(0, 1);
-            const content = part.substring(1);
+            while (part.charAt(0) === '§') {
+                const code = part.charAt(1);
 
-            const format = constants.minecraft_formatting[code];
+                if (/[0-9a-f]/.test(code)) {
+                    color = code;
+                } else if (/[k-o]/.test(code)) {
+                    formats.add(code);
+                } else if (code === 'r') {
+                    color = null;
+                    formats.clear();
+                }
 
-            if(format === undefined)
-                continue;
-
-            if(format.type == 'color'){
-                for(; spansOpened > 0; spansOpened--)
-                    output += "</span>";
-
-                output += `<span style='${format.css}'>${content}`;
-
-                spansOpened++;
-            }else if(format.type == 'format'){
-                output += `<span style='${format.css}'>${content}`;
-
-                spansOpened++;
-            }else if(format.type == 'reset'){
-                for(; spansOpened > 0; spansOpened--)
-                    output += "</span>";
-
-                output += content;
+                part = part.substring(2);
             }
+
+            if (part.length === 0) continue;
+
+            output += '<span';
+
+            if (color !== null) {
+                output += ` style='color: var(--§${color});'`;
+            }
+
+            if (formats.size > 0) {
+                output += ` class='${Array.from(formats, x => '§' + x).join(' ')}'`;
+            }
+
+            output += `>${part}</span>`;
         }
 
-        for(; spansOpened > 0; spansOpened--)
-            output += "</span>";
+        const matchingEnchants = constants.special_enchants.filter(a => output.includes(a));
 
-        if(enchants){
-            const specialColor = constants.minecraft_formatting['6'];
-
-            const matchingEnchants = constants.special_enchants.filter(a => output.includes(a));
-
-            for(const enchantment of matchingEnchants)
-                output = output.replace(enchantment, `<span style='${specialColor.css}'>${enchantment}</span>`);
+        for (const enchantment of matchingEnchants) {
+            if (enchantment == 'Power 6' || enchantment == 'Power 7' && text.startsWith("§8Breaking")) {
+                continue;
+            }
+            output = output.replace(enchantment, `<span style='color: var(--§6)'>${enchantment}</span>`);
         }
 
         return output;
@@ -417,6 +415,13 @@ module.exports = {
 
     aOrAn: string => {
        return ['a', 'e', 'i', 'o', 'u'].includes(string.charAt(0).toLowerCase()) ? 'an': 'a';
+    },
+
+    sortObject: obj => {
+        return Object.keys(obj).sort().reduce(function (res, key) {
+            res[key] = obj[key];
+            return res;
+        }, {});
     },
 
     getPrice: orderSummary => {
@@ -480,6 +485,25 @@ module.exports = {
             return (Math.ceil(number / 1000 / 1000 / 1000 * rounding * 10) / (rounding * 10)).toFixed(rounding.toString().length) + 'B';
     },
 
+    calcDungeonGrade: data => {
+        let total_score = data["score_exploration"] + data["score_speed"] + data["score_skill"] + data["score_bonus"]
+        var result;
+        if(total_score <= 99)
+            result = "D";
+        else if(total_score <= 159)
+            result = "C";
+        else if(total_score <= 229)
+            result = "B";
+        else if(total_score <= 269)
+            result = "A";
+        else if(total_score <= 299)
+            result = "S";
+        else
+            result = "S+";
+        
+        return result;
+    },
+
     parseRank: player => {
         let rankName = 'NONE';
         let rank = null;
@@ -536,28 +560,21 @@ module.exports = {
         return output;
     },
 
-    renderRank: rank => {
-        let { rankText, rankColor, plusText, plusColor } = rank;
-        let output = "";
-
-        if(rankText === null)
-            return output;
-
-        rankColor = constants.minecraft_formatting[rankColor].niceColor
-        || constants.minecraft_formatting[rankColor].color;
-
-        output = `<div class="rank-tag ${plusText ? 'rank-plus' : ''}"><div class="rank-name" style="background-color: ${rankColor}">${rankText}</div>`;
-
-        if(plusText){
-            plusColor = constants.minecraft_formatting[plusColor].niceColor
-            || constants.minecraft_formatting[plusColor].color
-
-            output += `<div class="rank-plus" style="background-color: ${plusColor}"><div class="rank-plus-before" style="background-color: ${plusColor};"></div><span class="rank-plus-text">${plusText}</span></div>`;
+    renderRank: ({ rankText, rankColor, plusText, plusColor }) => {
+        if (rankText === null) {
+            return "";
+        } else {
+            return /*html*/`
+                <div class="rank-tag nice-colors-dark">
+                    <div class="rank-name" style="background-color: var(--§${rankColor})">${rankText}</div>
+                    ${
+                        plusText ? 
+                        /*html*/`<div class="rank-plus" style="background-color: var(--§${plusColor})">${plusText}</div>`
+                        : ''
+                    }
+                </div>
+            `;
         }
-
-        output += `</div>`;
-
-        return output;
     },
 
     updateRank: async (uuid, db) => {
@@ -588,11 +605,12 @@ module.exports = {
                 "claim_potato_war_silver_medal": "Silver Medal (Potato War)",
                 "claim_potato_war_crown": "Crown (Potato War)",
                 "skyblock_free_cookie": "Free Booster Cookie",
-                "scorpius_bribe_96": "Scorpius Bribe (Year 96)"
+                "scorpius_bribe_96": "Scorpius Bribe (Year 96)",
+                "scorpius_bribe_120": "Scorpius Bribe (Year 120)"
             };
 
             for(item in claimable)
-                if(module.exports.hasPath(player, item)) 
+                if(module.exports.hasPath(player, item))
                     rank.claimed_items[claimable[item]] = player[item];
         }catch(e){
             console.error(e);

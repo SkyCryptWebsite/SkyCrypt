@@ -3,41 +3,36 @@
 <head>
     <title>API Documentation | SkyCrypt</title>
     <meta name="description" content="A beautiful site for sharing your SkyBlock profile 🍣">
-    <link rel="shortcut icon" href="/resources/img/logo_square.png?v2" type="image/png">
-    <link rel="icon" href="/favicon.ico?v2" type="image/x-icon">
-    <meta property="og:image" content="/resources/img/logo_square.png?v2">
+    <link rel="icon" href="/resources/img/logo_square.svg" sizes="any" type="image/svg+xml">
+    <meta property="og:image" content="/resources/img/logo_square.svg">
     <meta property="og:title" content="SkyCrypt">
     <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🍣">
 
     <%- include('../includes/resources') %>
-    <style>
-    @media (max-width: 480px){
-        #search_user{
-            display: none;
-        }
-
-        header{
-            height: 45px;
-            text-align: center;
-            width: 100vw;
-        }
-
-        header::after{
-            top: 45px;
-        }
-
-        #info_box{
-            top: 45px;
-        }
-    }
-    </style>
 </head>
     <body>
         <%- include('../includes/header') %>
 
         <!-- Redoc Library-->
-        <redoc id="docs" spec-url='resources/api/api_docs.json'></redoc>
+        <redoc id="docs"></redoc>
         <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
+        <script>
+            themeColors = extra.themes[localStorage.getItem("currentTheme")].colors;
+            Redoc.init(
+                'resources/api/api_docs.json',
+                {
+                    scrollYOffset: 'header',
+                    theme: {
+                        colors: {
+                            primary: {
+                                main: themeColors.icon,
+                            }
+                        }
+                    }
+                },
+                document.getElementById('docs')
+            );
+        </script>
 
         <%- include('../includes/footer'); %>
     </body>

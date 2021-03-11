@@ -117,7 +117,7 @@ module.exports = (app, db) => {
         output.page = page;
 
         startIndex = (page - 1) * count;
-         endIndex = startIndex - 1 + count;
+        endIndex = startIndex - 1 + count;
 
 
         let results = lb.sortedBy > 0 ?
@@ -401,7 +401,7 @@ module.exports = (app, db) => {
                 output = {
                     profile_id: singleProfile.profile_id,
                     cute_name: singleProfile.cute_name,
-                    dungeonData
+                    dungeons: dungeonData
                 };
             }
 

@@ -1,12 +1,12 @@
 const cluster = require('cluster');
 const lib = require('./lib');
+const { getFileHashes } = require('./hashes');
 
 async function main(){
     const express = require('express');
     const session = require('express-session');
     const MongoStore = require('connect-mongo')(session);
     const bodyParser = require('body-parser');
-    const crypto = require('crypto');
     const cors = require('cors');
 
     const Redis = require("ioredis");
@@ -25,6 +25,8 @@ async function main(){
 
     await renderer.init();
 
+    const fileHashes = await getFileHashes();
+
     const credentials = require(path.resolve(__dirname, '../credentials.json'));
 
     const _ = require('lodash');
@@ -34,6 +36,7 @@ async function main(){
     const { MongoClient } = require('mongodb');
     const helper = require('./helper');
     const constants = require('./constants');
+    const manifest = require('../public/manifest.json');
     const { SitemapStream, streamToPromise } = require('sitemap');
     const { createGzip } = require('zlib');
     const twemoji = require('twemoji');
@@ -58,6 +61,7 @@ async function main(){
     app.locals.moment = moment;
     app.use(bodyParser.urlencoded({ extended: true }));
     app.set('view engine', 'ejs');
+    express.static.mime.define({ 'application/opensearchdescription+xml': ['osd'] });
     app.use(express.static('public', { maxAge: CACHE_DURATION }));
     app.use(cookieParser())
 
@@ -75,7 +79,58 @@ async function main(){
     require('./donations/kofi')(app, db);
 
     let FEATURED_PROFILES;
-    async function getExtra(page = null, favorite = false){
+    let FEATURED_LAST_UPDATED = 0;
+
+    function parseFavorites(cookie) {
+        return cookie?.split(',').filter(uuid => /^[0-9a-f]{32}$/.test(uuid)) || [];
+    }
+
+    async function getFavoritesFormUUIDs(uuids) {
+        favorites = [];
+        for (const uuid of uuids) {
+            if (uuid != null) {
+                const cache = await db
+                .collection('favoriteCache')
+                .find( { uuid } )
+                .toArray();
+
+                if (cache[0]) {
+                    favorites.push(cache[0]);
+                } else {
+                    let output_cache = { uuid };
+                    
+                    const user = await db
+                    .collection('usernames')
+                    .find( { uuid } )
+                    .toArray();
+    
+                    if (user[0]) {
+                        output_cache = user[0];
+    
+                        let profiles = await db
+                        .collection('profileStore')
+                        .find( { uuid } )
+                        .toArray();
+    
+                        if (profiles[0]) {
+                            const profile = profiles[0];
+                            output_cache.last_updated = profile.last_save;
+                        } else {
+                            output_cache.error = "Profile doesn't exist.";
+                        }
+                    } else {
+                        output_cache.error = "User doesn't exist.";
+                    }
+                    
+                    await db.collection('favoriteCache').insertOne(output_cache);
+                    favorites.push(output_cache);
+                }
+            }
+        }
+        return favorites;
+    }
+
+    async function getExtra(page = null, favoriteUUIDs = []){
         const output = {};
 
         output.twemoji = twemoji;
@@ -92,83 +147,57 @@ async function main(){
         if(patreonEntry != null)
             output.donations = { patreon: patreonEntry.amount || 0 };
 
-        if (page != 'index') return output;
+        if (page === 'index') {
+            if(FEATURED_PROFILES == null || (Date.now() - FEATURED_LAST_UPDATED < 900 * 1000)){
+                FEATURED_LAST_UPDATED = Date.now();
+                FEATURED_PROFILES = await db
+                    .collection('topViews')
+                    .find()
+                    .sort({ position: 1 })
+                    .toArray();
+            }
 
-        if(FEATURED_PROFILES == null){
-            FEATURED_PROFILES = await db
+            output.devs = FEATURED_PROFILES;
+
+            output.favorites = await getFavoritesFormUUIDs(favoriteUUIDs);
+
+            output.devs = await db
                 .collection('topViews')
                 .find()
                 .sort({ position: 1 })
                 .toArray();
-        }
-
-        output.devs = FEATURED_PROFILES;
-
-        if(favorite && favorite.length == 32){
-            const cache = await db
-            .collection('favoriteCache')
-            .find( { uuid: favorite } )
-            .toArray();
-
-            if(cache[0]) {
-                output.favorites = cache[0];
-                return output;
-            }
-
-            let output_cache = {
-                uuid: favorite
-            };
-            
-            const user = await db
-            .collection('usernames')
-            .find( { uuid: favorite } )
-            .toArray();
-
-            if(user[0]) {
-                output_cache = user[0];
-
-                let profiles = await db
-                .collection('profileStore')
-                .find( { uuid: favorite } )
-                .toArray();
-
-                if(profiles[0]) {
-                    const profile = profiles[0];
-                    output_cache.last_updated = profile.last_save;
-                }else output_cache.error = "Profile doesn't exist.";
-            }else output_cache.error = "User doesn't exist.";
-            
-            await db.collection('favoriteCache').insertOne(output_cache);
-            output.favorites = output_cache;
+        } else if (page === 'stats') {
+            output.favoriteUUIDs = favoriteUUIDs;
         }
 
         return output;
     }
 
     app.all('/stats/:player/:profile?', async (req, res, next) => {
-        let paramPlayer = req.params.player.toLowerCase().replace(/[^a-z\d\-\_:]/g, '');
+        let paramPlayer = req.params.player.toLowerCase().replace(/[ +]/g, '_').replace(/[^a-z\d\-\_:]/g, '');
         let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
 
         const cacheOnly = req.query.cache === 'true';
 
         const playerUsername = paramPlayer.length == 32 ? await helper.resolveUsernameOrUuid(paramPlayer, db).display_name : paramPlayer;
-
+        
+        const favorites = parseFavorites(req.cookies.favorite);
         try{
             const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, { updateArea: true, cacheOnly });
 
             const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack);
             const calculated = await lib.getStats(db, profile, allProfiles, items);
 
-            res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra('stats'), page: 'stats' });
+            res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), fileHashes, page: 'stats' });
         }catch(e){
             console.error(e);
 
-            const favorite = req.cookies.favorite || false;
             res.render('index', {
                 req,
                 error: e,
                 player: playerUsername,
-                extra: await getExtra('index', favorite),
+                extra: await getExtra('index', favorites),
+                fileHashes,
                 helper,
                 page: 'index'
             });
@@ -360,10 +389,22 @@ Disallow: /item /head /leather /resources
         res.redirect(`/stats/20934ef9488c465180a78f861586b4cf/bf7c14fb018946899d944d56e65222d2`);
     });
 
-    app.all('/favicon.ico?v2', express.static(path.join(__dirname, 'public')));
+    app.all('/manifest.webmanifest', async (req, res) => {
+        const favorites = await getFavoritesFormUUIDs(parseFavorites(req.cookies.favorite))
+        const shortcuts = favorites.map(favorite => ({
+            url: `/stats/${favorite.uuid}`,
+            name: favorite.username,
+            icons: [48, 72, 96, 144, 192, 512].map(size => ({
+                src: `https://crafatar.com/avatars/${favorite.uuid}?size=${size}&overlay`,
+                sizes: `${size}x${size}`,
+                type: "image/png"
+            }))
+        }))
+        res.json(Object.assign({shortcuts}, manifest))
+    });
 
     app.all('/api', async (req, res, next) => {
-        res.render('api', { error: null, player: null, extra: await getExtra('api'), helper, page: 'api' });
+        res.render('api', { error: null, player: null, extra: await getExtra('api'), fileHashes, helper, page: 'api' });
     });
 
     app.all('/:player/:profile?', async (req, res, next) => {
@@ -371,8 +412,8 @@ Disallow: /item /head /leather /resources
     });
 
     app.all('/', async (req, res, next) => {
-        const favorite = req.cookies.favorite || false;
-        res.render('index', { error: null, player: null, extra: await getExtra('index', favorite), helper, page: 'index' });
+        const favorites = parseFavorites(req.cookies.favorite);
+        res.render('index', { error: null, player: null, extra: await getExtra('index', favorites), fileHashes, helper, page: 'index' });
     });
 
     app.all('*', async (req, res, next) => {

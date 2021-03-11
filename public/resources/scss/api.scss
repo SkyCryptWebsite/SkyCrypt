@@ -1,0 +1,48 @@
+* {
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+}
+
+html {
+    background: white;
+
+    &:before {
+      content: none;  
+    }
+}
+
+#packs-button,
+#api_button {
+    display: none;
+}
+
+header .lookup-player {
+    visibility: hidden;
+    max-width: none;
+    * {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        justify-content: center;
+
+        .lookup-player {
+            display: none;
+        }
+    }
+}
+
+redoc {
+    .api-content {
+        padding-top: calc(env(safe-area-inset-top) + 48px);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+    }
+    .menu-content {
+        top: calc(env(safe-area-inset-top) + 48px) !important;
+        height: calc(100vh - env(safe-area-inset-top) - 48px) !important;
+        left: env(safe-area-inset-left);
+    }
+}
