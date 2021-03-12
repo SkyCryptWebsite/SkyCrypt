@@ -36,6 +36,11 @@ async function main(){
             type: "HOST",
             message: "<span class=\"stat-name\">Last online: </span><span class=\"stat-value\">January 1st, 1970</span>"
         },
+        Cookie_Wookie_7: {
+            position: 6,
+            type: "CONTRIBUTOR",
+            message: "Nate: CSS Wizard"
+        },
     };
 
     async function updateTopProfiles(){
