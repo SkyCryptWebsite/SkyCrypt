@@ -80,7 +80,6 @@
             <% } %>
 
             <% for(const profile of extra.devs){ %>
-                <% let message = profile.username == "Shiiyu" ?  `<span class="stat-name">Last online: </span><span class="stat-value">January 1st, 1970</span>` : extra.twemoji.parse(profile.message)%>
                 <a href="/stats/<%= profile.uuid %>" class="top-profile">
                     <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=128&overlay" class="profile-avatar" alt="">
                     <div class="profile-name">
@@ -91,7 +90,7 @@
                             <%- extra.twemoji.parse(profile.emoji) %>
                         <% } %>
                     </div>
-                    <div class="profile-last-online"><%- message %></div>
+                    <div class="profile-last-online"><%- extra.twemoji.parse(profile.message) %></div>
                     <svg class="profile-rank" viewBox="0 0 24 24">
                         <% switch(profile.type){
                             case "DEV": %>

@@ -19,7 +19,7 @@ async function main(){
         Shiiyu: {
             position: 2,
             type: "DEV",
-            message: ""
+            message: "<span class=\"stat-name\">Last online: </span><span class=\"stat-value\">January 1st, 1970</span>"
         },
         MartinNemi03: {
             position: 3,
