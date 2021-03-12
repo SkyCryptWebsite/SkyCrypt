@@ -41,6 +41,11 @@ async function main(){
             type: "CONTRIBUTOR",
             message: "Nate: CSS Wizard"
         },
+        dukio: { //TODO find dukio's ign
+            position: 7,
+            type: "CONTRIBUTOR",
+            message: "placeholder" //TODO make dukio write a message
+        },
     };
 
     async function updateTopProfiles(){
