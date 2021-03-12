@@ -13,27 +13,27 @@ async function main(){
     let featured = {
         metalcupcake5: {
             position: 1,
-            type: "DEV",
+            type: "MAINTAINER",
             message: "a dev or something idk"
         }, 
         Shiiyu: {
             position: 2,
-            type: "DEV",
+            type: "MAINTAINER",
             message: "<span class=\"stat-name\">Last online: </span><span class=\"stat-value\">January 1st, 1970</span>"
         },
         MartinNemi03: {
             position: 3,
-            type: "DEV",
+            type: "MAINTAINER",
             message: "\"lazy dev\" &nbsp; <b>(ﾉ´･ω･)ﾉ ﾐ ┸━┸</b>"
         },
         jjww2: {
             position: 4,
-            type: "DEV",
+            type: "MAINTAINER",
             message: "bob"
         },
         FantasmicGalaxy: {
             position: 5,
-            type: "DEV",
+            type: "MAINTAINER",
             message: "afk my melon minions :D"
         }
     };
