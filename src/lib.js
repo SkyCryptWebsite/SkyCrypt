@@ -1515,6 +1515,7 @@ module.exports = {
             output.average_level = (average_level / skillsAmount);
             output.average_level_no_progress = output.average_level;
             output.total_skill_xp = totalSkillXp;
+            output.skillWeight = 0;
         }
 
         const multi = redisClient.pipeline();
