@@ -27,7 +27,7 @@ async function main(){
 
     const fileHashes = await getFileHashes();
 
-    if (process.env.NODE_ENV == 'development' || true) {
+    if (process.env.NODE_ENV == 'development') {
         const { default: watch } = await import('node-watch');
         
         watch('public/resources', { recursive: true }, async (evt, name) => {
