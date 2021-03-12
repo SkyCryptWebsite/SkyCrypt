@@ -3,5 +3,8 @@
         ".git",
         "node_modules",
         "public"
-    ]
+    ],
+    "env": {
+        "NODE_ENV": "development"
+    }
 }
