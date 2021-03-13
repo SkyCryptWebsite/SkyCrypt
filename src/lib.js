@@ -864,7 +864,6 @@ function calcDungeonsWeight(type, level, experience){
     let remaining = experience - level50Experience
     let splitter = (4 * level50Experience) / base
 
-    // Calculates the dungeon overflow weight and returns it to the weight object builder.
     return {
       weight: Math.floor(base),
       weight_overflow: Math.pow(remaining / splitter, 0.968),
@@ -1439,6 +1438,7 @@ module.exports = {
         let totalSkillXp = 0;
         let average_level = 0;
         let weight = 0;
+        let overflowWeight = 0;
 
         // Apply skill bonuses
         if(helper.hasPath(userProfile, 'experience_skill_taming')
@@ -1474,7 +1474,10 @@ module.exports = {
 
                     totalSkillXp += skillLevels[skill].xp;
 
-                    weight += calcSkillWeight(constants.skillWeight[skill], skillLevels[skill].levelWithProgress, skillLevels[skill].xp).weight
+                    let skillWeight = calcSkillWeight(constants.skillWeight[skill], skillLevels[skill].levelWithProgress, skillLevels[skill].xp)
+
+                    weight += skillWeight.weight;
+                    weight += skillWeight.weight_overflow;
                 }
             }
 
@@ -1630,6 +1633,7 @@ module.exports = {
                     }
 
                     slayerWeight += slayers[slayerName].level.weight.weight;
+                    slayerWeight += slayers[slayerName].level.weight.weight_overflow;
                 }
 
                 for(const slayerName in output.slayer_coins_spent){
@@ -2901,7 +2905,9 @@ module.exports = {
                 floors: floors
             }
             let dungeonLevelWithProgress = calcDungeonsClassLevelWithProgress(dungeon.experience);
-            output.dungeonsWeight += calcDungeonsWeight(type, dungeonLevelWithProgress, dungeon.experience).weight;
+            let dungeonsWeight = calcDungeonsWeight(type, dungeonLevelWithProgress, dungeon.experience);
+            output.dungeonsWeight += dungeonsWeight.weight;
+            output.dungeonsWeight += dungeonsWeight.weight_overflow;
         }
 
         // Classes
@@ -2922,7 +2928,9 @@ module.exports = {
                 output.classes[className].current = true;
             
             let levelWithProgress = calcDungeonsClassLevelWithProgress(data.experience);
-            output.dungeonsWeight += calcDungeonsWeight(className, levelWithProgress, data.experience).weight;
+            let classWeight = calcDungeonsWeight(className, levelWithProgress, data.experience)
+            output.dungeonsWeight += classWeight.weight;
+            output.dungeonsWeight += classWeight.weight_overflow;
         }
 
         output.used_classes = used_classes;
