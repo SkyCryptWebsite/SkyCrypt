@@ -53,26 +53,29 @@ async function main(){
 
         for (let name in featured) {
             const user = await db
-            .collection('usernames')
-            .find( { username: name } )
-            .toArray();
+                .collection('usernames')
+                .find( { username: name } )
+                .toArray();
 
-            if(!user[0]) continue;
-            let output = user[0];
+            if (user[0]) {
+                let output = user[0];
 
-            for (let data in featured[name])
-                output[data] = featured[name][data];
+                for (let data in featured[name]) {
+                    output[data] = featured[name][data];
+                }
 
-            await db.collection('topViews').updateOne(
-                { _id: output._id },
-                { $set: output },
-                { upsert: true }
-            );
+                await db.collection('topViews').updateOne(
+                    { _id: output._id },
+                    { $set: output },
+                    { upsert: true }
+                );
+            }
         }
     }
 
     updateTopProfiles();
 }
 
-if(cluster.isMaster)
+if (cluster.isMaster) {
     main();
+}
