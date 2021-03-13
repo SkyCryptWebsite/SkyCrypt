@@ -36,13 +36,18 @@ async function main(){
             type: "HOST",
             message: "<span class=\"stat-name\">Last online: </span><span class=\"stat-value\">January 1st, 1970</span>"
         },
-        Cookie_Wookie_7: {
+        LeaPhant: {
             position: 6,
+            type: "CONTRIBUTOR",
+            message: "lea plant"
+        },
+        Cookie_Wookie_7: {
+            position: 7,
             type: "CONTRIBUTOR",
             message: "Nate: CSS Wizard"
         },
         dukioooo: {
-            position: 7,
+            position: 8,
             type: "CONTRIBUTOR",
             message: "¯\\_(ツ)_/¯"
         },
