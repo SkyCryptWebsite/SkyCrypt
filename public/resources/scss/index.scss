@@ -3698,6 +3698,14 @@ body {
             font-size: 0;
             opacity: 0;
         }
+
+        & + #packs-box {
+            --clip-center: 100% 0;
+        }
+
+        & + #themes-box {
+            --clip-center: 85% 0;
+        }
     }
 }
 
