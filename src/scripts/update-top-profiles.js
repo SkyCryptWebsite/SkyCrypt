@@ -58,7 +58,7 @@ async function main(){
                 .toArray();
 
             if (user[0]) {
-                let output = user[0];
+                const output = user[0];
 
                 for (let data in featured[name]) {
                     output[data] = featured[name][data];
