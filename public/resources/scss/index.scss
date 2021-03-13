@@ -820,13 +820,12 @@ input[type="search"]::-webkit-search-cancel-button {
 
         visibility: hidden;
         clip-path: circle(0% at var(--clip-center));
-        transition: clip-path 0.3s ease-in-out, visibility 0s linear 0.3s;
+        transition: clip-path 0.3s ease-in-out, visibility 0.3s linear;
     }
 
     &[aria-expanded] + .expandable {
         visibility: visible;
         clip-path: circle(150% at var(--clip-center));
-        transition: clip-path 0.3s ease-in-out;
     }
 }
 
