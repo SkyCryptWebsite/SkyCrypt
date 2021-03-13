@@ -805,33 +805,38 @@ input[type="search"]::-webkit-search-cancel-button {
         visibility: visible;
         background-color: rgba(0, 0, 0, 0.8);
     }
+
+    & + .expandable {
+        position: fixed;
+        top: calc(48px + env(safe-area-inset-top, 0));
+        max-height: calc(100vh - 48px - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
+        box-sizing: border-box;
+        margin: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        z-index: 100;
+        border-radius: 10px;
+        background-color: rgba(30, 30, 30, 0.95);
+
+        visibility: hidden;
+        clip-path: circle(0% at var(--clip-center));
+        transition: clip-path 0.3s ease-in-out, visibility 0s linear 0.3s;
+    }
+
+    &[aria-expanded] + .expandable {
+        visibility: visible;
+        clip-path: circle(150% at var(--clip-center));
+        transition: clip-path 0.3s ease-in-out;
+    }
 }
 
 #info-box {
-    position: fixed;
-    top: calc(48px + env(safe-area-inset-top, 0));
     left: max(20px, env(safe-area-inset-left, 0));
-    box-sizing: border-box;
     width: calc(30vw - 40px);
     min-width: 440px;
-    max-height: calc(100vh - 48px - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
-    margin: 0;
     padding: 14px 30px;
-    border-radius: 10px;
-    background-color: rgba(30, 30, 30, 0.95);
-    visibility: hidden;
-    clip-path: circle(0% at 120px 0);
-    transition: clip-path 0.3s ease-in-out, visibility 0s linear 0.3s;
-    z-index: 100;
-    overflow-y: auto;
-    overscroll-behavior: contain;
     line-height: initial;
-
-    .expander[aria-expanded] + & {
-        visibility: visible;
-        clip-path: circle(150% at 120px 0);
-        transition: clip-path 0.3s ease-in-out;
-    }
+    --clip-center: 120px 0;
 
     a {
         font-weight: 600;
@@ -887,29 +892,11 @@ input[type="search"]::-webkit-search-cancel-button {
 
 #packs-box,
 #themes-box {
-    position: fixed;
-    top: calc(48px + env(safe-area-inset-top, 0));
     right: max(20px, env(safe-area-inset-right, 0));
-    box-sizing: border-box;
     width: 360px;
-    max-height: calc(100vh - 48px - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
-    margin: 0;
     padding: 20px;
-    border-radius: 10px;
-    background-color: rgba(30, 30, 30, 0.95);
-    visibility: hidden;
-    clip-path: circle(0% at 90% 0);
-    transition: clip-path 0.3s ease-in-out, visibility 0s linear 0.3s;
-    z-index: 100;
-    overflow-y: auto;
-    overscroll-behavior: contain;
     line-height: initial;
-
-    .expander[aria-expanded] + & {
-        visibility: visible;
-        clip-path: circle(150% at 90% 0);
-        transition: clip-path 0.3s ease-in-out;
-    }
+    --clip-center: 90% 0;
 }
 
 @keyframes brighten {

@@ -26,7 +26,7 @@
     <button class="social-button expander" id="info-button" onclick="toggleInfo()">
         About
     </button>
-    <div id="info-box">
+    <div id="info-box" class="expandable">
         <div id="info_box_content">
             <p>The SkyCrypt project is maintained by boblovespi, FantasmicGalaxy, MartinNemi03, metalcupcake5 and Shiiyu. It is an open-source project. </p>
             <p>You can report bugs, suggest features, or contribute to the code on <a class="link link-github" href="https://github.com/SkyCryptWebsite/SkyCrypt" target="_blank" rel="noreferrer">GitHub</a>. It would be much appreciated!</p>
@@ -57,7 +57,7 @@
     </form>
     <a href="https://blacklivesmatters.carrd.co/" target="_blank" rel="noreferrer" data-tippy-content="<strong>Black Lives Matter!</strong><br><br>Click for a collection of links on how to support the fight against racial inequality." class="blm-logo" aria-label="Black Lives Matter"></a>
     <button id="themes-button" class="expander"><span>Themes</span></button>
-    <div id="themes-box">
+    <div id="themes-box" class="expandable">
         <% for(const theme_id in extra.themes){
             const theme = extra.themes[theme_id];
             if(theme.hidden) continue; %>
@@ -72,7 +72,7 @@
     </div>
     <% if (page != 'api') { %>
         <button id="packs-button" class="expander"><span>Packs</span></button>
-        <div id="packs-box">
+        <div id="packs-box" class="expandable">
             <%
                 const defaultPack = {
                     name: "Default",
