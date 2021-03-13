@@ -41,10 +41,10 @@ async function main(){
             type: "CONTRIBUTOR",
             message: "Nate: CSS Wizard"
         },
-        dukio: { //TODO find dukio's ign
+        dukioooo: {
             position: 7,
             type: "CONTRIBUTOR",
-            message: "placeholder" //TODO make dukio write a message
+            message: "¯\\_(ツ)_/¯"
         },
     };
 
