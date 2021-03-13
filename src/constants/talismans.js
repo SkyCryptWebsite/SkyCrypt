@@ -708,6 +708,11 @@ module.exports = {
             name: "Titanium Relic",
             rarity: "legendary",
             texture: "/head/d2f2405a7b8defddb0b8268bea8f2e12fc09bbc7de12981f85db2a7001ac81eb"
-        }
+        },
+        "REAPER_ORB": {
+            name: "Reaper Orb",
+            rarity: "legendary",
+            texture: "/head/3a7cda9004fc197d66afbc2b003a5b9ef13cf4600b1fc7490067590f047181e"
+        },
     }
 }
