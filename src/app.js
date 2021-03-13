@@ -98,20 +98,20 @@ async function main(){
                     favorites.push(cache[0]);
                 } else {
                     let output_cache = { uuid };
-                    
+
                     const user = await db
                     .collection('usernames')
                     .find( { uuid } )
                     .toArray();
-    
+
                     if (user[0]) {
                         output_cache = user[0];
-    
+
                         let profiles = await db
                         .collection('profileStore')
                         .find( { uuid } )
                         .toArray();
-    
+
                         if (profiles[0]) {
                             const profile = profiles[0];
                             output_cache.last_updated = profile.last_save;
@@ -121,7 +121,7 @@ async function main(){
                     } else {
                         output_cache.error = "User doesn't exist.";
                     }
-                    
+
                     await db.collection('favoriteCache').insertOne(output_cache);
                     favorites.push(output_cache);
                 }
@@ -161,11 +161,30 @@ async function main(){
 
             output.favorites = await getFavoritesFormUUIDs(favoriteUUIDs);
 
-            output.devs = await db
+            const devs = await db
                 .collection('topViews')
                 .find()
                 .sort({ position: 1 })
                 .toArray();
+
+            const contributors = [
+                {
+                    username: 'Cookie_Wookie_7',
+                    uuid: '8a3fa60d87aa4240bcdc624b90632529',
+                    type: 'CONTRIBUTOR',
+                    message: 'Cookies!',
+                    emoji: '\uD83C\uDF6A',
+                },
+                {
+                    username: 'dukioooo',
+                    uuid: '5435b597612f4554a3c651fd1c3ee96a',
+                    type: 'CONTRIBUTOR',
+                    message: '¯\\_(ツ)_/¯',
+                    emoji: '\uD83C\uDF55',
+                },
+            ]
+
+            output.devs = [...devs, ...contributors]
         } else if (page === 'stats') {
             output.favoriteUUIDs = favoriteUUIDs;
         }
@@ -180,7 +199,7 @@ async function main(){
         const cacheOnly = req.query.cache === 'true';
 
         const playerUsername = paramPlayer.length == 32 ? await helper.resolveUsernameOrUuid(paramPlayer, db).display_name : paramPlayer;
-        
+
         const favorites = parseFavorites(req.cookies.favorite);
         try{
             const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, { updateArea: true, cacheOnly });
