@@ -170,7 +170,8 @@ module.exports = {
         },
         REVENANT: {
             type: 'combat',
-            head: '/head/a3dce8555923558d8d74c2a2b261b2b2d630559db54ef97ed3f9c30e9a20aba'
+            head: '/head/a3dce8555923558d8d74c2a2b261b2b2d630559db54ef97ed3f9c30e9a20aba',
+            tiers: 12
         },
         SKELETON: {
             type: 'combat',
