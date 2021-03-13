@@ -3032,7 +3032,8 @@ a.additional-player-stat:hover {
     text-transform: capitalize;
     color: var(--link-hex);
 
-    &:hover, &:focus-visible {
+    &:hover,
+    &:focus-visible {
         color: var(--hover-hex);
     }
 
