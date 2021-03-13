@@ -51,7 +51,7 @@ async function main(){
     async function updateTopProfiles(){
         await db.collection('topViews').deleteMany({});
 
-        for (name in featured) {
+        for (let name in featured) {
             const user = await db
             .collection('usernames')
             .find( { username: name } )
@@ -60,7 +60,7 @@ async function main(){
             if(!user[0]) continue;
             let output = user[0];
 
-            for (data in featured[name]) 
+            for (let data in featured[name])
                 output[data] = featured[name][data];
 
             await db.collection('topViews').updateOne(
