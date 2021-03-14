@@ -389,16 +389,16 @@ document.addEventListener('DOMContentLoaded', function(){
 
             let packIcon = document.createElement('img');
             packIcon.setAttribute('src', item.texture_pack.base_path + '/pack.png');
-            packIcon.classList.add('pack-icon');
+            packIcon.classList.add('icon');
 
             let packName = document.createElement('a');
             packName.setAttribute('href', item.texture_pack.url);
             packName.setAttribute('target', '_blank');
-            packName.classList.add('pack-name');
+            packName.classList.add('name');
             packName.innerHTML = item.texture_pack.name;
 
             let packAuthor = document.createElement('div');
-            packAuthor.classList.add('pack-author');
+            packAuthor.classList.add('author');
             packAuthor.innerHTML = 'by <span>' + item.texture_pack.author + '</span>';
 
             packContent.appendChild(packIcon);
