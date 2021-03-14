@@ -387,6 +387,7 @@ document.addEventListener('DOMContentLoaded', function(){
             let packContent = document.createElement('a');
             packContent.setAttribute('href', item.texture_pack.url);
             packContent.setAttribute('target', '_blank');
+            packContent.setAttribute('rel', 'noreferrer');
             packContent.classList.add('pack-credit');
 
             let packIcon = document.createElement('img');
