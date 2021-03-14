@@ -627,17 +627,16 @@ document.addEventListener('DOMContentLoaded', function(){
                 if(stat == 'sea_creature_chance')
                     continue;
 
-                const element = document.querySelector('.basic-stat[data-stat=' + stat + '] .stat-value');
+                const elements = document.querySelectorAll('.basic-stat[data-stat=' + stat + '] .stat-value');
 
-                if(!element)
-                    continue;
+                for (const element of elements) {
+                    const currentValue = parseInt(element.innerHTML);
+                    const newValue = stats[stat];
 
-                const currentValue = parseInt(element.innerHTML);
-                const newValue = stats[stat];
-
-                if(newValue != currentValue){
-                    element.innerHTML = newValue;
-                    flashForUpdate(element);
+                    if (newValue != currentValue) {
+                        element.innerHTML = newValue;
+                        flashForUpdate(element);
+                    }
                 }
             }
         });
@@ -692,17 +691,16 @@ document.addEventListener('DOMContentLoaded', function(){
 
             flashForUpdate(activeRodElement);
 
-            const _element = document.querySelector('.basic-stat[data-stat=sea_creature_chance] .stat-value');
+            const elements = document.querySelectorAll('.basic-stat[data-stat=sea_creature_chance] .stat-value');
 
-            if(!_element)
-                return;
+            for (const element of elements) {
+                const currentValue = parseInt(element.innerHTML);
+                const newValue = stats.sea_creature_chance;
 
-            const currentValue = parseInt(_element.innerHTML);
-            const newValue = stats['sea_creature_chance'];
-
-            if(newValue != currentValue){
-                _element.innerHTML = newValue;
-                flashForUpdate(_element);
+                if (newValue != currentValue) {
+                    element.innerHTML = newValue;
+                    flashForUpdate(element);
+                }
             }
         });
     });
