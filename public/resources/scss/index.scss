@@ -1103,13 +1103,23 @@ input[type="search"]::-webkit-search-cancel-button {
     }
 
     .pack-credit {
-        margin-top: 25px;
+        margin-top: 15px;
         position: relative;
         display: inline-block;
         text-align: left;
-        padding-left: 42px;
+        padding: 10px;
+        padding-left: 52px;
         font-size: 14px;
-        margin-bottom: 10px;
+        border-radius: 10px;
+
+        &:hover,
+        &:focus-visible {
+            background-color: rgb(255 255 255 / 5%);
+
+            * {
+                text-decoration: underline;
+            }
+        }
 
         .icon {
             width: 32px;
@@ -1117,8 +1127,8 @@ input[type="search"]::-webkit-search-cancel-button {
             image-rendering: crisp-edges;
             image-rendering: pixelated;
             position: absolute;
-            top: 4px;
-            left: 0;
+            top: 14px;
+            left: 10px;
         }
 
         .author {
