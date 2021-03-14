@@ -2354,18 +2354,24 @@ a.additional-player-stat:hover {
             padding-bottom: 4px;
 
             .inventory-tab {
+                -webkit-appearance: none;
+                appearance: none;
                 position: relative;
                 display: inline-block;
                 height: 90%;
+                padding: 0;
                 padding-right: 10px;
                 margin-left: 5px;
+                border: none;
                 font-size: 12px;
                 font-weight: 600;
                 text-transform: uppercase;
                 transition: color 0.1s;
                 cursor: pointer;
                 vertical-align: top;
+                background: none;
                 color: rgba(255, 255, 255, 0.8);
+                outline-offset: -2px;
 
                 &:first-child {
                     margin-left: 10px;
@@ -2404,13 +2410,7 @@ a.additional-player-stat:hover {
                 }
 
                 .inventory-tab-name {
-                    display: inline-block;
-                    vertical-align: middle;
                     margin-left: 38px;
-                    position: relative;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    margin-top: -2px;
                 }
             }
         }

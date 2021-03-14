@@ -1700,52 +1700,52 @@ if(calculated.profile.game_mode == 'ironman'){
                             <div id="inventory_header">
                                 <div class="inventory-header-line"></div>
                                 <div class="inventory-tabs-container">
-                                    <div class="inventory-tab active-inventory" data-inventory-type="inventory">
+                                    <button class="inventory-tab active-inventory" data-inventory-type="inventory">
                                         <div class="inventory-tab-icon item-icon icon-54_0"></div>
                                         <div class="inventory-tab-name">Inventory</div>
-                                    </div>
+                                    </button>
                                     <%
 
                                     if(items.enderchest.length > 0){ %>
-                                        <div class="inventory-tab" data-inventory-type="enderchest">
+                                        <button class="inventory-tab" data-inventory-type="enderchest">
                                             <div class="inventory-tab-icon item-icon icon-130_0"></div>
                                             <div class="inventory-tab-name">Ender</div>
-                                        </div>
+                                        </button>
                                     <% }
 
                                     if(items.talisman_bag.length > 0){ %>
-                                        <div class="inventory-tab" data-inventory-type="talisman_bag">
+                                        <button class="inventory-tab" data-inventory-type="talisman_bag">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/961a918c0c49ba8d053e522cb91abc74689367b4d8aa06bfc1ba9154730985ff)"></div>
                                             <div class="inventory-tab-name">Accs</div>
-                                        </div>
+                                        </button>
                                     <% }
 
                                     if(items.potion_bag.length > 0){ %>
-                                        <div class="inventory-tab" data-inventory-type="potion_bag">
+                                        <button class="inventory-tab" data-inventory-type="potion_bag">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/9f8b82427b260d0a61e6483fc3b2c35a585851e08a9a9df372548b4168cc817c)"></div>
                                             <div class="inventory-tab-name">Pots</div>
-                                        </div>
+                                        </button>
                                     <% }
 
                                     if(items.fishing_bag.length > 0){ %>
-                                        <div class="inventory-tab" data-inventory-type="fishing_bag">
+                                        <button class="inventory-tab" data-inventory-type="fishing_bag">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/eb8e297df6b8dffcf135dba84ec792d420ad8ecb458d144288572a84603b1631)"></div>
                                             <div class="inventory-tab-name">Fish</div>
-                                        </div>
+                                        </button>
                                     <% }
 
                                     if(items.quiver.length > 0){ %>
-                                        <div class="inventory-tab" data-inventory-type="quiver">
+                                        <button class="inventory-tab" data-inventory-type="quiver">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/4cb3acdc11ca747bf710e59f4c8e9b3d949fdd364c6869831ca878f0763d1787)"></div>
                                             <div class="inventory-tab-name">Quiver</div>
-                                        </div>
+                                        </button>
                                     <% }
 
                                     if(items.personal_vault.length > 0){ %>
-                                        <div class="inventory-tab" data-inventory-type="personal_vault">
+                                        <button class="inventory-tab" data-inventory-type="personal_vault">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/f7aadff9ddc546fdcec6ed5919cc39dfa8d0c07ff4bc613a19f2e6d7f2593)"></div>
                                             <div class="inventory-tab-name">Vault</div>
-                                        </div>
+                                        </button>
                                     <% } %>
                                 </div>
                             </div>
