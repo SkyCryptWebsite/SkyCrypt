@@ -394,7 +394,7 @@ document.addEventListener('DOMContentLoaded', function(){
             packIcon.setAttribute('src', item.texture_pack.base_path + '/pack.png');
             packIcon.classList.add('icon');
 
-            const packName = document.createElement('a');
+            const packName = document.createElement('div');
             packName.classList.add('name');
             packName.innerHTML = item.texture_pack.name;
 
