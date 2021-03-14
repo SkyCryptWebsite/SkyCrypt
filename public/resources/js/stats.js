@@ -384,21 +384,21 @@ document.addEventListener('DOMContentLoaded', function(){
         if(item.texture_pack){
             const texturePack = extra.packs.filter(a => a.id == item.texture_pack)[0];
 
-            let packContent = document.createElement('a');
+            const packContent = document.createElement('a');
             packContent.setAttribute('href', item.texture_pack.url);
             packContent.setAttribute('target', '_blank');
             packContent.setAttribute('rel', 'noreferrer');
             packContent.classList.add('pack-credit');
 
-            let packIcon = document.createElement('img');
+            const packIcon = document.createElement('img');
             packIcon.setAttribute('src', item.texture_pack.base_path + '/pack.png');
             packIcon.classList.add('icon');
 
-            let packName = document.createElement('a');
+            const packName = document.createElement('a');
             packName.classList.add('name');
             packName.innerHTML = item.texture_pack.name;
 
-            let packAuthor = document.createElement('div');
+            const packAuthor = document.createElement('div');
             packAuthor.classList.add('author');
             packAuthor.innerHTML = 'by <span>' + item.texture_pack.author + '</span>';
 
