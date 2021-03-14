@@ -688,10 +688,10 @@ document.addEventListener('DOMContentLoaded', function(){
         const elements = document.querySelectorAll('.basic-stat[data-stat=' + stat + '] .stat-value');
 
         for (const element of elements) {
-            const currentValue = parseInt(element.innerHTML);
+            const currentValue = parseFloat(element.innerHTML.replaceAll(',', ''));
 
             if (newValue != currentValue) {
-                element.innerHTML = newValue;
+                element.innerHTML = newValue.toLocaleString();
                 flashForUpdate(element);
             }
         }
