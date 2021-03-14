@@ -296,6 +296,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 top = rect.bottom - window.innerHeight;
             }
             window.scrollBy({ top, behavior: "smooth" });
+            scrollMemory.isSmoothScrolling = true;
         }
     }
 
@@ -996,17 +997,50 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     }
 
+    class ScrollMemory {
+        _isSmoothScrolling = false;
+        _scrollTimeout = -1;
+        _loaded = false;
 
-    let scrollTimeout;
-    let scrollCallback;
-    window.addEventListener('scroll', () => {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-            scrollCallback?.()
-            scrollCallback = undefined;
-        }, 500);
-    }, false);
-    
+        constructor() {
+
+
+            window.addEventListener('load', () => {
+                this._loaded = true;
+                this.isSmoothScrolling = true;
+            }, { once: true });
+
+            window.addEventListener("hashchange", () => {
+                this.isSmoothScrolling = true;
+            });
+        }
+
+        /** wether the document currently has a smooth scroll taking place */
+        get isSmoothScrolling() {
+            return this._isSmoothScrolling || !this._loaded;
+        }
+
+        set isSmoothScrolling(value) {
+            if (this._isSmoothScrolling !== value) {
+                this._isSmoothScrolling = value;
+                if (value) {
+                    window.addEventListener('scroll', this._onScroll);
+                    this._onScroll();
+                } else {
+                    window.removeEventListener('scroll', this._onScroll);
+                }   
+            }
+        }
+
+        _onScroll = () => {
+            clearTimeout(this._scrollTimeout);
+            this._scrollTimeout = setTimeout(() => {
+                this.isSmoothScrolling = false;
+            }, 500);
+        }
+    }
+
+    const scrollMemory = new ScrollMemory();
 
     const intersectingElements = new Map();    
 
@@ -1027,10 +1061,10 @@ document.addEventListener('DOMContentLoaded', function(){
                     if (link.hash === newHash) {
                         link.setAttribute('aria-current', true);
                         
-                        scrollCallback = () => {
+                        if (!scrollMemory.isSmoothScrolling) {
                             const left = link.offsetLeft + (link.getBoundingClientRect().width / 2) - (link.parentElement.getBoundingClientRect().width / 2);
                             link.parentElement.scrollTo({left, behavior: 'smooth'});
-                        }         
+                        }
                     } else {
                         link.removeAttribute('aria-current');
                     }
@@ -1039,6 +1073,12 @@ document.addEventListener('DOMContentLoaded', function(){
             }
         }
     }, {rootMargin: "-100px 0px -25% 0px"});
+
+    {
+        const link = document.querySelector(`[href="${location.hash}"]`);
+        const left = link.offsetLeft + (link.getBoundingClientRect().width / 2) - (link.parentElement.getBoundingClientRect().width / 2);
+        link.parentElement.scrollTo({ left });
+    }
 
     const playerProfileElement = document.querySelector('#player_profile');
 
