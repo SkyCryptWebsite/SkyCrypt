@@ -211,7 +211,6 @@ document.addEventListener('DOMContentLoaded', function(){
     let currentBackpack;
 
     function renderInventory(inventory, type){
-        let scrollTop = window.pageYOffset;
 
         let visibleInventory = document.querySelector('.stat-inventory .inventory-view');
 
@@ -287,16 +286,17 @@ document.addEventListener('DOMContentLoaded', function(){
 
         [].forEach.call(inventoryView.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
 
-        window.scrollTo({
-            top: scrollTop
-        });
+        const rect = document.querySelector('#inventory_container').getBoundingClientRect();
 
-        let inventoryStatContainer = document.querySelector('.stat-inventory');
-
-        let rect = inventoryStatContainer.getBoundingClientRect();
-
-        if(rect.top < 0 || rect.bottom > window.innerHeight)
-            inventoryStatContainer.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        if (rect.top > 100 && rect.bottom > window.innerHeight) {
+            let top;
+            if (rect.height > window.innerHeight - 100) {
+                top = rect.top - 100;
+            } else {
+                top = rect.bottom - window.innerHeight;
+            }
+            window.scrollBy({ top, behavior: "smooth" });
+        }
     }
 
     function showBackpack(item){
