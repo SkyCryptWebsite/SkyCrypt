@@ -400,7 +400,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             const packAuthor = document.createElement('div');
             packAuthor.classList.add('author');
-            packAuthor.innerHTML = 'by <span>' + item.texture_pack.author + '</span>';
+            packAuthor.innerHTML = `by <span>${item.texture_pack.author}</span>`;
 
             packContent.appendChild(packIcon);
             packContent.appendChild(packName);
