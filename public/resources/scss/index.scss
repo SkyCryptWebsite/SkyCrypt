@@ -3188,6 +3188,8 @@ main.grid > a,
     width: 64px;
     height: 64px;
     border-radius: 5px;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
 }
 
 .profile-name {

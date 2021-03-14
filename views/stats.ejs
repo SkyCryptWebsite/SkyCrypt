@@ -1328,6 +1328,16 @@ if(calculated.profile.game_mode == 'ironman'){
                 <div class="additional-stat">
                     <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
                 </div>
+                <div class="additional-stat">
+                    <span data-tippy-content="
+                    <span class='stat-name'>Skill Weight: </span><span class='stat-value'><%= parseFloat(calculated.skillWeight.toFixed(2)).toLocaleString() %></span><br/>
+                    <span class='stat-name'>Slayer Weight: </span><span class='stat-value'><%= parseFloat(calculated.slayerWeight.toFixed(2)).toLocaleString() %></span><br/>
+                    <span class='stat-name'>Dungeon Weight: </span><span class='stat-value'><%= parseFloat(calculated.dungeonsWeight.toFixed(2)).toLocaleString() %></span><br/>
+                    <br/>
+                    <div class='tippy-explanation'>Weight calculations provided by Senither</div>
+                    ">
+                    <span class="stat-name">Weight: </span><span class="stat-value"><%= parseFloat(calculated.weight.toFixed(2)).toLocaleString() %></span></span>
+                </div>
             </div>
 
             <div id="skill_levels_container">
@@ -2366,7 +2376,7 @@ if(calculated.profile.game_mode == 'ironman'){
                     <div class="external-app-description">Check the next cheapest or fastest Minion upgrades and find out which Minions will earn you the most from Bazaar, for free.</div>
                 </a>
                 <p class="stat-raw-values">
-                    <% max = uniqueMinions == 593 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Minions: </span><span class="stat-value <%= max %>"><%= uniqueMinions %> / 593</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 593 * 100) %>%)</span><br>
+                    <% max = uniqueMinions == 594 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Minions: </span><span class="stat-value <%= max %>"><%= uniqueMinions %> / 594</span><span class="grey-text"> (<%= Math.floor(uniqueMinions / 594 * 100) %>%)</span><br>
                     <% max = calculated.minion_slots.currentSlots == 24 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.minion_slots.currentSlots %></span><span class="grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
                     <% max = calculated.misc.profile_upgrades.minion_slots == 5 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Bonus Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades.minion_slots %> / <%= constants.profile_upgrades['minion_slots'] %></span><br>
                     <% max = maxedMinions == _.size(constants.minions) ? 'golden-text' : '' %><span class="stat-name <%= max %>">Maxed Minions: </span><span class="stat-value <%= max %>"><%= maxedMinions %> / <%= _.size(constants.minions) %></span><br>
