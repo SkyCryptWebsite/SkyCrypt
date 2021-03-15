@@ -623,21 +623,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
             flashForUpdate(activeWeaponElement);
 
-            for(let stat in stats){
-                if(stat == 'sea_creature_chance')
-                    continue;
-
-                const element = document.querySelector('.basic-stat[data-stat=' + stat + '] .stat-value');
-
-                if(!element)
-                    continue;
-
-                const currentValue = parseInt(element.innerHTML);
-                const newValue = stats[stat];
-
-                if(newValue != currentValue){
-                    element.innerHTML = newValue;
-                    flashForUpdate(element);
+            for(const stat in stats){
+                if (stat != 'sea_creature_chance') {
+                    updateStat(stat, stats[stat]);
                 }
             }
         });
@@ -692,20 +680,22 @@ document.addEventListener('DOMContentLoaded', function(){
 
             flashForUpdate(activeRodElement);
 
-            const _element = document.querySelector('.basic-stat[data-stat=sea_creature_chance] .stat-value');
-
-            if(!_element)
-                return;
-
-            const currentValue = parseInt(_element.innerHTML);
-            const newValue = stats['sea_creature_chance'];
-
-            if(newValue != currentValue){
-                _element.innerHTML = newValue;
-                flashForUpdate(_element);
-            }
+            updateStat('sea_creature_chance', stats.sea_creature_chance);
         });
     });
+
+    function updateStat(stat, newValue) {
+        const elements = document.querySelectorAll('.basic-stat[data-stat=' + stat + '] .stat-value');
+
+        for (const element of elements) {
+            const currentValue = parseFloat(element.innerHTML.replaceAll(',', ''));
+
+            if (newValue != currentValue) {
+                element.innerHTML = newValue.toLocaleString();
+                flashForUpdate(element);
+            }
+        }
+    }
 
     function getPart(src, x, y, width, height){
         let dst = document.createElement('canvas');
