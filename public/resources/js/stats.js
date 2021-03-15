@@ -1003,6 +1003,10 @@ document.addEventListener('DOMContentLoaded', function(){
             window.addEventListener("hashchange", () => {
                 this.isSmoothScrolling = true;
             });
+
+            document.addEventListener('focusin', () => {
+                this.isSmoothScrolling = true;
+            });
         }
 
         /** wether the document currently has a smooth scroll taking place */
@@ -1018,6 +1022,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     this._onScroll();
                 } else {
                     window.removeEventListener('scroll', this._onScroll);
+                    scrollToTab();
                 }   
             }
         }
@@ -1052,8 +1057,7 @@ document.addEventListener('DOMContentLoaded', function(){
                         link.setAttribute('aria-current', true);
                         
                         if (!scrollMemory.isSmoothScrolling) {
-                            const left = link.offsetLeft + (link.getBoundingClientRect().width / 2) - (link.parentElement.getBoundingClientRect().width / 2);
-                            link.parentElement.scrollTo({left, behavior: 'smooth'});
+                            scrollToTab(true, link);
                         }
                     } else {
                         link.removeAttribute('aria-current');
@@ -1064,11 +1068,14 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     }, {rootMargin: "-100px 0px -25% 0px"});
 
-    {
-        const link = document.querySelector(`[href="${location.hash}"]`);
+    function scrollToTab(smooth = true, element) {
+        const link = element ?? document.querySelector(`[href="${location.hash}"]`);
+        const behavior = smooth ? 'smooth' : 'auto';
         const left = link.offsetLeft + (link.getBoundingClientRect().width / 2) - (link.parentElement.getBoundingClientRect().width / 2);
-        link.parentElement.scrollTo({ left });
+        link.parentElement.scrollTo({ left, behavior });
     }
+
+    scrollToTab(false);
 
     const playerProfileElement = document.querySelector('#player_profile');
 
