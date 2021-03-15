@@ -2374,8 +2374,10 @@ class Parrot extends Pet {
 		let list = [this.first];
 		if (this.rarity > 1)
 			list.push(this.second);
-		if (this.rarity > 3)
+		if (this.rarity > 3) {
 			list.push(this.third);
+			list.push(this.fourth);
+		}
 		return list;
 	}
 
@@ -2400,6 +2402,13 @@ class Parrot extends Pet {
 		return {
 			name: "§6Bird Discourse",
 			desc: [`§7Gives §c+${symbols.strength}${round(5 + (this.level * mult), 1)} Strength §7to players within §a20 §7blocks`, `§7Doesn't stack`]
+		};
+	}
+
+	get fourth() {
+		return {
+			name: "§6Parrot Feather Infusion",
+			desc: [`§7When summoned or in your pets menu, boost the duration of consumed §cGod Potions §7by §a${round((this.level * 0.2), 1)}%`]
 		};
 	}
 }

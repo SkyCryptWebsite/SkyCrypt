@@ -1022,7 +1022,10 @@ if(calculated.slayer_coins_spent.total > 0){
 if(calculated.average_level)
     description += `⚒ Avg Skill Level: ${Math.floor(calculated.average_level * 10) / 10} `;
 
-description += `💰 Purse: ${helper.formatNumber(calculated.purse, true)} Coins`;
+if(calculated.weight)
+    description += `💪 Weight: ${Math.floor(calculated.weight * 10) / 10} `;
+
+description += `💰 Purse: ${helper.formatNumber(calculated.purse, true)} Coins `;
 
 if(calculated.bank)
     description += `\n🏦 Bank Account: ${helper.formatNumber(calculated.bank, true)} Coin${Math.floor(calculated.bank) == 1 ? '': 's'}`;
@@ -2090,7 +2093,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 </div>
                 <% } %>
 
-                <% if (calculated.dungeons.catacombs.visited) { %>
+                <% if (calculated.dungeons.catacombs?.visited) { %>
                     <p class="stat-sub-header">Catacombs</p>
 
                     <p class="stat-raw-values">
