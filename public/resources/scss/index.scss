@@ -2291,6 +2291,7 @@ a.additional-player-stat:hover {
     }
 
     &:hover,
+    &:focus-visible,
     &.sticky-stats {
         background-color: var(--maxed-hex);
 
@@ -2310,6 +2311,7 @@ a.additional-player-stat:hover {
     }
 
     &:hover,
+    &:focus-visible,
     &.sticky-stats {
         background-color: var(--§8);
 
