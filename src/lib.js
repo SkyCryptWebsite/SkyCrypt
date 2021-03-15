@@ -228,7 +228,15 @@ function getSlayerLevel(slayer, slayerName){
     const maxLevel = Math.max(...Object.keys(constants.slayer_xp[slayerName]));
 
     for(const level_name in claimed_levels){
-        const level = parseInt(level_name.split("_").pop());
+        // Ignoring legacy levels for zombie
+        if (
+            slayerName === 'zombie' &&
+            ['level_7', 'level_8', 'level_9'].includes(level_name)
+        ) {
+            continue;
+        }
+
+        const level = parseInt(level_name.split("_")[1]);
 
         if(level > currentLevel)
             currentLevel = level;
@@ -1217,7 +1225,7 @@ module.exports = {
 
         output.talismans = talismans;
         output.talisman_ids = talisman_ids;
-        output.weapons = all_items.filter(a => a.type != null && 
+        output.weapons = all_items.filter(a => a.type != null &&
             (a.type.endsWith('sword')
             || a.type.endsWith('cutlass') // Pirate English
             || a.type.endsWith('bow'))
@@ -1296,7 +1304,7 @@ module.exports = {
             const id = getId(weapon);
 
             countsOfId[id] = (countsOfId[id] || 0) + 1;
-            
+
             if(id == "BONE_BOOMERANG"){
                 if(countsOfId[id] > 6){
                     weapon.hidden = true;
@@ -1455,7 +1463,7 @@ module.exports = {
 
             skillLevels = {
                 taming: getLevelByXp(userProfile.experience_skill_taming || 0, {skill: "taming"}),
-                farming: getLevelByXp(userProfile.experience_skill_farming || 0, 
+                farming: getLevelByXp(userProfile.experience_skill_farming || 0,
                     {skill: "farming", cap: levelCaps?.farming || constants.default_skill_caps.farming}),
                 mining: getLevelByXp(userProfile.experience_skill_mining || 0, {skill: "mining"}),
                 combat: getLevelByXp(userProfile.experience_skill_combat || 0, {skill: "combat"}),
@@ -2063,7 +2071,7 @@ module.exports = {
         };
 
         //
-        //  FARMING 
+        //  FARMING
         //
 
         const farming = {
@@ -2194,7 +2202,7 @@ module.exports = {
 
                 const game_data = enchanting_data[game];
                 const game_constants = constants.experiments.games[game];
-                
+
                 const game_output = {
                     name: game_constants.name,
                     stats: {},
@@ -2213,13 +2221,13 @@ module.exports = {
 
                         if(!game_output.tiers[tierValue])
                             game_output.tiers[tierValue] = tierInfo;
-                        
+
                         Object.assign(game_output.tiers[tierValue], {
                             [statKey]: game_data[key]
                         });
                         continue;
                     }
-                    
+
                     if(key == 'last_attempt'
                     || key == 'last_claimed'){
                         if(game_data[key] <= 0) continue;
@@ -2414,9 +2422,9 @@ module.exports = {
 
 
         /*
-        
+
         WEIGHT
-        
+
         */
 
         output.dungeonsWeight = output.dungeons.dungeonsWeight;
@@ -2926,7 +2934,7 @@ module.exports = {
                 used_classes = true;
             if(className == current_class)
                 output.classes[className].current = true;
-            
+
             let levelWithProgress = calcDungeonsClassLevelWithProgress(data.experience);
             let classWeight = calcDungeonsWeight(className, levelWithProgress, data.experience)
             output.dungeonsWeight += classWeight.weight;
