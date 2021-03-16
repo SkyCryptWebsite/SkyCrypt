@@ -1573,20 +1573,14 @@ if(calculated.profile.game_mode == 'ironman'){
                             <% if(items.talismans.length == 1){ %>
                                 <br>
                             <% } %>
-                            <div class="stat-sub-container sub-extendable sub-missing-talismans">
-                                <p class="stat-sub-header">Missing Talismans</p>
-                                <div class="pieces">
-                                <%
-                                    for(const [index, talisman] of calculated.missingTalismans.entries()){
-                                        %>
-                                        <div tabindex="0" data-missing-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
-                                            <div class="piece-hover-area"></div>
-                                            <div style='background-image: url("<%= talisman.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
-                                        </div>
-                                        <%
-                                    }
-                                %>
+                            <button class="stat-sub-header extender" aria-controls="missing-accessories" aria-expanded="false">Missing Talismans</button>
+                            <div class="pieces extendable" id="missing-accessories">
+                            <% for(const [index, talisman] of calculated.missingTalismans.entries()){ %>
+                                <div tabindex="0" data-missing-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
+                                    <div class="piece-hover-area"></div>
+                                    <div style='background-image: url("<%= talisman.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                                 </div>
+                            <% } %>
                             </div>
                         <% } %>
                     <% } %>
@@ -1682,21 +1676,15 @@ if(calculated.profile.game_mode == 'ironman'){
                         <% if(calculated.pets.length == 1){ %>
                             <br>
                         <% } %>
-                        <div class="stat-sub-container sub-extendable sub-missing-pets">
-                            <p class="stat-sub-header">Missing Pets</p>
-                            <div class="pieces">
-                            <%
-                                for(const [index, pet] of calculated.missingPets.entries()){
-                                    %>
-                                    <div tabindex="0" data-missing-pet-index="<%= index %>" class="rich-item piece piece-<%= pet.rarity %>-bg missing-pet">
-                                        <div class="piece-hover-area"></div>
-                                        <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
-                                    </div>
-                                    <%
-                                }
-                            %>
+                            <button class="stat-sub-header extender" aria-controls="missing-pets" aria-expanded="false">Missing Pets</button>
+                            <div class="pieces extendable" id="missing-pets">
+                            <% for(const [index, pet] of calculated.missingPets.entries()){ %>
+                                <div tabindex="0" data-missing-pet-index="<%= index %>" class="rich-item piece piece-<%= pet.rarity %>-bg missing-pet">
+                                    <div class="piece-hover-area"></div>
+                                    <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                                </div>
+                            <% } %>
                             </div>
-                        </div>
                     <% } %>
                 </div>
             </div>
@@ -1876,37 +1864,35 @@ if(calculated.profile.game_mode == 'ironman'){
                     <% } %>
 
                     <% if(farming.crops.length > 0){ %>
-                        <div class="stat-sub-container sub-extendable">
-                            <p class="stat-sub-header">Farming Crops</p>
-                            <div class="stat-farming-crops">
-                                <%
-                                const crops = Object.values(farming.crops).sort((a, b) => {
-                                    return b.contests - a.contests;
-                                });
+                        <button class="stat-sub-header extender" aria-controls="farming-crops" aria-expanded="false">Farming Crops</button>
+                        <div class="stat-farming-crops extendable" id="farming-crops">
+                            <%
+                            const crops = Object.values(farming.crops).sort((a, b) => {
+                                return b.contests - a.contests;
+                            });
 
-                                for(const crop of crops){
-                                    if(!crop.attended) continue;
+                            for(const crop of crops){
+                                if(!crop.attended) continue;
 
-                                    let amountsTooltip = '';
+                                let amountsTooltip = '';
 
-                                    for(let badge of badgeOrder)
-                                        amountsTooltip += `
-                                            <span class="stat-name">${helper.titleCase(badge)} Badges: </span>
-                                            <span class="stat-value">${crop.badges[badge].toLocaleString()}</span><br>
-                                        `;
-                                %>
-                                <div class="collection" data-tippy-content="<%= amountsTooltip %>">
-                                    <div class="collection-icon"><div class="item-icon icon-<%= crop.icon %>"></div></div>
-                                    <div class="collection-stats">
-                                        <div class="collection-name <%= crop.unique_gold ? 'max-minion' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
-                                        <div class="collection-amount">
-                                            <small class="stat-name">Personal Best: </small><small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small><br>
-                                            <small class="stat-name">Contests: </small><small class="stat-value"><%= crop.contests.toLocaleString() %></small><br>
-                                        </div>
+                                for(let badge of badgeOrder)
+                                    amountsTooltip += `
+                                        <span class="stat-name">${helper.titleCase(badge)} Badges: </span>
+                                        <span class="stat-value">${crop.badges[badge].toLocaleString()}</span><br>
+                                    `;
+                            %>
+                            <div class="collection" data-tippy-content="<%= amountsTooltip %>">
+                                <div class="collection-icon"><div class="item-icon icon-<%= crop.icon %>"></div></div>
+                                <div class="collection-stats">
+                                    <div class="collection-name <%= crop.unique_gold ? 'max-minion' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
+                                    <div class="collection-amount">
+                                        <small class="stat-name">Personal Best: </small><small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small><br>
+                                        <small class="stat-name">Contests: </small><small class="stat-value"><%= crop.contests.toLocaleString() %></small><br>
                                     </div>
                                 </div>
-                                <% } %>
                             </div>
+                            <% } %>
                         </div>
                     <% } %>
                 </div>
@@ -1987,24 +1973,22 @@ if(calculated.profile.game_mode == 'ironman'){
                     <% } %>
 
                     <% if(totalSeaCreatureKills > 0){ %>
-                        <div class="stat-sub-container sub-extendable">
-                            <p class="stat-sub-header">Sea Creatures</p>
-                            <div class="sea-creatures">
-                                <% for(const creature of seaCreatures) {
-                                    let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
+                        <button class="stat-sub-header extender" aria-controls="missing-seacreatures" aria-expanded="false">Sea Creatures</button>
+                        <div class="sea-creatures extendable" id="missing-seacreatures">
+                            <% for(const creature of seaCreatures) {
+                                let mobKills = calculated.kills.filter(a => a.entityId == creature.id);
 
-                                    mobKills = mobKills.length > 0 ? mobKills[0].amount : 0;
+                                mobKills = mobKills.length > 0 ? mobKills[0].amount : 0;
 
-                                    if(mobKills == 0)
-                                        continue;
-                                %>
-                                    <div class="sea-creature">
-                                        <div class="sea-creature-name"><span><%= creature.name %></span></div>
-                                        <div class="sea-creature-image" style="background-image: url(/resources/img/sea_creatures/<%= creature.id %>.webp)"></div>
-                                        <div class="sea-creature-kills"><span class="stat-value"><%= mobKills.toLocaleString() %></span><span class="stat-name"> Kill<%= mobKills != 1 ? 's' : '' %></span></div>
-                                    </div>
-                                <% } %>
-                            </div>
+                                if(mobKills == 0)
+                                    continue;
+                            %>
+                                <div class="sea-creature">
+                                    <div class="sea-creature-name"><span><%= creature.name %></span></div>
+                                    <div class="sea-creature-image" style="background-image: url(/resources/img/sea_creatures/<%= creature.id %>.webp)"></div>
+                                    <div class="sea-creature-kills"><span class="stat-value"><%= mobKills.toLocaleString() %></span><span class="stat-name"> Kill<%= mobKills != 1 ? 's' : '' %></span></div>
+                                </div>
+                            <% } %>
                         </div>
                     <% } %>
                 </div>
@@ -2017,49 +2001,47 @@ if(calculated.profile.game_mode == 'ironman'){
                     </div>
 
                     <% const enchanting = calculated.enchanting; %>
-                    <div class="stat-sub-container sub-floor-extendable">
-                        <p class="stat-sub-header">Experiments</p>
-                        <div class="stat-experiments floor-containers">
-                            <% for(let game in enchanting.experiments){
-                            const game_data = enchanting.experiments[game]; %>
-                            <div class="narrow-info-container">
-                                <div class="narrow-info-header">
-                                    <span><%= game_data.name %></span>
-                                </div>
-                                <span>
-                                    <p class="stat-raw-values">
-                                        <%
-                                            const game_stats = helper.sortObject(game_data.stats);
-                                            for(let stat in game_stats){
-                                        %>
-                                            <span class="stat-name"><%= helper.titleCase(stat.replace('_', ' ')) %>: </span>
-                                            <span class="stat-value"><%= (stat == 'last_attempt' || stat == 'last_claimed') ? game_stats[stat].text : game_stats[stat] %></span><br>
-                                        <% } %>
-                                    </p>
+                    <button class="stat-sub-header extender" aria-controls="Experiments" aria-expanded="false">Experiments</button>
+                    <div class="stat-experiments floor-containers extendable" id="Experiments">
+                        <% for(let game in enchanting.experiments){
+                        const game_data = enchanting.experiments[game]; %>
+                        <div class="narrow-info-container">
+                            <div class="narrow-info-header">
+                                <span><%= game_data.name %></span>
+                            </div>
+                            <span>
+                                <p class="stat-raw-values">
                                     <%
-                                    for(let tier in game_data.tiers) {
-                                        const tier_data = game_data.tiers[tier];
+                                        const game_stats = helper.sortObject(game_data.stats);
+                                        for(let stat in game_stats){
                                     %>
-                                    <hr>
-                                    <div class="collection">
-                                        <div class="collection-icon"><div class="item-icon icon-<%= tier_data.icon.replace(':', '_'); %>"></div></div>
-                                        <div class="collection-stats">
-                                            <div class="collection-name"><span class="stat-name"><%= tier_data.name %></span></div>
-                                            <div class="collection-amount">
-                                                <%
-                                                for(let info in tier_data) {
-                                                    if(info == 'name' || info == 'icon') continue;
-                                                %>
-                                                <small class="stat-name"><%= helper.titleCase(info.replace('_', ' ')) %>: </small><small class="stat-value"><%= tier_data[info] %></small><br>
-                                                <% } %>
-                                            </div>
+                                        <span class="stat-name"><%= helper.titleCase(stat.replace('_', ' ')) %>: </span>
+                                        <span class="stat-value"><%= (stat == 'last_attempt' || stat == 'last_claimed') ? game_stats[stat].text : game_stats[stat] %></span><br>
+                                    <% } %>
+                                </p>
+                                <%
+                                for(let tier in game_data.tiers) {
+                                    const tier_data = game_data.tiers[tier];
+                                %>
+                                <hr>
+                                <div class="collection">
+                                    <div class="collection-icon"><div class="item-icon icon-<%= tier_data.icon.replace(':', '_'); %>"></div></div>
+                                    <div class="collection-stats">
+                                        <div class="collection-name"><span class="stat-name"><%= tier_data.name %></span></div>
+                                        <div class="collection-amount">
+                                            <%
+                                            for(let info in tier_data) {
+                                                if(info == 'name' || info == 'icon') continue;
+                                            %>
+                                            <small class="stat-name"><%= helper.titleCase(info.replace('_', ' ')) %>: </small><small class="stat-value"><%= tier_data[info] %></small><br>
+                                            <% } %>
                                         </div>
                                     </div>
-                                    <% } %>
-                                </span>
-                            </div>
-                            <% } %>
+                                </div>
+                                <% } %>
+                            </span>
                         </div>
+                        <% } %>
                     </div>
                 </div>
                 <% } %>
@@ -2122,30 +2104,27 @@ if(calculated.profile.game_mode == 'ironman'){
                                 <span><%= floor.name.replace("_", " ") %></span>
                             </div>
                             <span>
-                                <div class="stat-sub-container sub-floor-extendable">
-                                    <p class="stat-sub-header">Floor Stats</p>
-                                    <div class="pieces">
-                                    <% for (let [stat, value] of Object.entries(floor.stats)) { %>
-                                        <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
-                                        <span class="stat-value">
-                                        <% if(stat.startsWith("fastest_time")) { %>
-                                            <%= moment.duration(value, "milliseconds").format("m:ss.SSS") %>
-                                        <% } else { %>
-                                            <%= helper.formatNumber(value) %>
-                                        <% } %>
-                                        </span><br>
+                                <button class="stat-sub-header extender" aria-controls="floor-<%= id %>" aria-expanded="false">Floor Stats</button>
+                                <div class="pieces extendable" id="floor-<%= id %>">
+                                <% for (let [stat, value] of Object.entries(floor.stats)) { %>
+                                    <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
+                                    <span class="stat-value">
+                                    <% if(stat.startsWith("fastest_time")) { %>
+                                        <%= moment.duration(value, "milliseconds").format("m:ss.SSS") %>
+                                    <% } else { %>
+                                        <%= helper.formatNumber(value) %>
                                     <% } %>
-                                    <% if(floor.most_damage) { %>
-                                        <span class="stat-name">Most Damage: </span>
-                                        <span class="stat-value"><%= helper.formatNumber(floor.most_damage.value) %></span>
-                                        <span class="stat-name">(<%= helper.titleCase(floor.most_damage.class) %>)</span>
-                                    <% } %>
-                                    </div>
+                                    </span><br>
+                                <% } %>
+                                <% if(floor.most_damage) { %>
+                                    <span class="stat-name">Most Damage: </span>
+                                    <span class="stat-value"><%= helper.formatNumber(floor.most_damage.value) %></span>
+                                    <span class="stat-name">(<%= helper.titleCase(floor.most_damage.class) %>)</span>
+                                <% } %>
                                 </div>
                                 <% if(floor.best_runs) { %>
-                                <div class="stat-sub-container sub-floor-extendable">
-                                    <p class="stat-sub-header">Best Run</p>
-                                    <div class="pieces">
+                                    <button class="stat-sub-header extender" aria-controls="runs-<%= id %>" aria-expanded="false">Best Run</button>
+                                    <div class="pieces extendable" id="runs-<%= id %>">
                                         <span class="stat-name">Grade</span>
                                         <span class="stat-value"><%= helper.calcDungeonGrade(floor.best_runs[floor.best_runs.length - 1]) %></span>
                                         <br>
@@ -2165,7 +2144,6 @@ if(calculated.profile.game_mode == 'ironman'){
                                         </span><br>
                                     <% } %>
                                     </div>
-                                </div>
                                 <% } %>
                             </span>
                         </div>

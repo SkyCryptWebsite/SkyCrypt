@@ -551,22 +551,8 @@ document.addEventListener('DOMContentLoaded', function(){
         oldHeight = window.innerHeight;
     }
 
-    [].forEach.call(document.querySelectorAll('.sub-extendable .stat-sub-header'), function(element){
-        element.addEventListener('click', function(e){
-            if(element.parentNode.classList.contains('sub-extended'))
-                element.parentNode.classList.remove('sub-extended')
-            else
-                element.parentNode.classList.add('sub-extended');
-        });
-    });
-
-    [].forEach.call(document.querySelectorAll('.sub-floor-extendable .stat-sub-header'), function(element){
-        element.addEventListener('click', function(e){
-            if(element.parentNode.classList.contains('sub-extended'))
-                element.parentNode.classList.remove('sub-extended')
-            else
-                element.parentNode.classList.add('sub-extended');
-        });
+    document.querySelectorAll('.extender').forEach((element) => {
+        element.addEventListener('click', () => element.setAttribute('aria-expanded', element.getAttribute('aria-expanded') != 'true'));
     });
 
     function flashForUpdate(element) {

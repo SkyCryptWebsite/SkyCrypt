@@ -2174,75 +2174,43 @@ a.additional-player-stat:hover {
     }
 }
 
-.sub-extendable {
-    max-height: 50px;
-    overflow: hidden;
-}
+.extender {
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    padding-left: 0;
+    padding-right: 4px;
+    border: none;
+    margin: 1em 0;
+    background: none;
+    transition: color 0.1s;
 
-.sub-extendable .stat-sub-header {
-    transition: color 0.2s;
-}
-
-.sub-extendable .stat-sub-header:hover,
-.sub-extended .stat-sub-header {
-    color: rgba(255, 255, 255, 1);
-}
-
-.sub-extendable .stat-sub-header::before {
-    content: "";
-    width: 24px;
-    height: 24px;
-    background-image: url(/resources/img/icons/chevron-down.png);
-    background-size: 24px 24px;
-    background-position: center;
-    background-repeat: no-repeat;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.sub-extendable.sub-extended .stat-sub-header::before {
-    background-image: url(/resources/img/icons/chevron-up.png);
-}
-
-.sub-extendable.sub-extended {
-    max-height: none;
-}
-
-.sub-floor-extendable {
-    max-height: 30px;
-    overflow: hidden;
-    margin-bottom: 4px;
-
-    .stat-sub-header {
-        margin-top: 12px;
-        margin-bottom: 16px;
-        font-size: 18px;
-        transition: color 0.15s;
-
-        &:hover,
-        .sub-extended .stat-sub-header {
-            color: rgba(255, 255, 255, 1);
-        }
-
-        &::before {
-            content: "";
-            width: 24px;
-            height: 24px;
-            background-image: url(/resources/img/icons/chevron-down.png);
-            background-size: 24px 24px;
-            background-position: center;
-            background-repeat: no-repeat;
-            display: inline-block;
-            vertical-align: top;
-        }
+    &:hover,
+    &:focus-visible {
+        color: rgb(255 255 255);
     }
-}
 
-.sub-floor-extendable.sub-extended {
-    max-height: none;
+    &::before {
+        content: "";
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        vertical-align: top;
+        background-color: currentColor;
+        -webkit-mask-image: url(/resources/img/icons/chevron-down.svg);
+        mask-image: url(/resources/img/icons/chevron-down.svg);
+        -webkit-mask-size: 100%;
+        mask-size: 100%;
+        transform: rotate(0deg);
+        transition: transform 0.1s ease-in-out;
+    }
 
-    .stat-sub-header::before {
-        background-image: url(/resources/img/icons/chevron-up.png);
+    &[aria-expanded="true"]::before {
+        transform: rotate(-180deg);
+    }
+
+    &[aria-expanded="false"] + .extendable {
+        display: none;
     }
 }
 
