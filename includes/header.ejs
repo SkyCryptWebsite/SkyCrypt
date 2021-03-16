@@ -23,7 +23,7 @@
 <header>
     <div data-tippy-content="Supporting LGBTQ+ rights all around the year! ❤️<br><br>Click for a surprise. :)" class="pride-flag logo"></div>
     <a href="/" id="site_name">SkyCrypt</a>
-    <button class="social-button expander" id="info-button" onclick="toggleInfo()">
+    <button class="social-button expander" id="info-button" onclick="toggleInfo()" aria-expanded="false">
         About
     </button>
     <div id="info-box" class="expandable">
@@ -57,7 +57,7 @@
         <button type="submit" aria-label="search"></button>
     </form>
     <a href="https://blacklivesmatters.carrd.co/" target="_blank" rel="noreferrer" data-tippy-content="<strong>Black Lives Matter!</strong><br><br>Click for a collection of links on how to support the fight against racial inequality." class="blm-logo" aria-label="Black Lives Matter"></a>
-    <button id="themes-button" class="expander"><span>Themes</span></button>
+    <button id="themes-button" class="expander" aria-expanded="false"><span>Themes</span></button>
     <div id="themes-box" class="expandable list">
         <% for(const theme_id in extra.themes){
             const theme = extra.themes[theme_id];
@@ -72,7 +72,7 @@
         <% } %>
     </div>
     <% if (page != 'api') { %>
-        <button id="packs-button" class="expander"><span>Packs</span></button>
+        <button id="packs-button" class="expander" aria-expanded="false"><span>Packs</span></button>
         <div id="packs-box" class="expandable list">
             <%
                 const defaultPack = {

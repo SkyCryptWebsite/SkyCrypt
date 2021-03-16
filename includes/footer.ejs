@@ -25,15 +25,15 @@
         expander.addEventListener('click', () => {
             for (const otherExpander of expanders) {
                 if(otherExpander != expander){
-                    otherExpander.removeAttribute('aria-expanded');
+                    otherExpander.setAttribute('aria-expanded', false);
                 }
             }
-            expander.toggleAttribute('aria-expanded');
+            expander.setAttribute('aria-expanded', expander.getAttribute('aria-expanded') != 'true');
         });
         function focusOutHandler() {
             setTimeout(() => {
                 if (document.activeElement != document.body && document.activeElement != expander && !expander.nextElementSibling.contains(document.activeElement)) {
-                    expander.removeAttribute('aria-expanded');
+                    expander.setAttribute('aria-expanded', false);
                 }
             });
         }

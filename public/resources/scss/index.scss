@@ -801,7 +801,7 @@ input[type="search"]::-webkit-search-cancel-button {
         transition: background-color 0.3s ease-in-out, visibility 0.3s linear;
     }
 
-    &[aria-expanded]::before {
+    &[aria-expanded="true"]::before {
         visibility: visible;
         background-color: rgba(0, 0, 0, 0.8);
     }
@@ -823,7 +823,7 @@ input[type="search"]::-webkit-search-cancel-button {
         transition: clip-path 0.3s ease-in-out, visibility 0.3s linear;
     }
 
-    &[aria-expanded] + .expandable {
+    &[aria-expanded="true"] + .expandable {
         visibility: visible;
         clip-path: circle(150% at var(--clip-center));
     }
