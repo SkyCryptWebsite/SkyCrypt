@@ -85,7 +85,7 @@
             %>
             <% for(const pack of [defaultPack, ...extra.packs].filter(a => !a.hidden)) { %>
                 <label class="list-item">
-                    <img class="icon" src="<%= pack.basePath + '/pack.png' %>" alt="">
+                    <img class="icon pack-icon" src="<%= pack.basePath + '/pack.png' %>" alt="">
                     <a class="name" href="<%= pack.url %>" target="_blank" rel="noreferrer"><%= pack.name %> <% if(pack.version){ %><small><%= pack.version %></small><% } %></a><br>
                     <div class="author">by <span><%= pack.author %></span></div>
                     <button
