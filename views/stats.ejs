@@ -861,7 +861,7 @@ const getBonus = (stats, prefix) => {
         if(stats[stat] == 0)
             continue;
         %>
-        <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replace(/\_/g, "-") %>"><%= stats[stat].toLocaleString() %><%= statSuffix[stat] %> <%= statShort[stat] %></span>
+        <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replace(/\_/g, "-") %>"><%= stats[stat].toLocaleString() %><%= statSuffix[stat] %> <abbr title="<%= getPrettyName(stat) %>"><%= statShort[stat] %></abbr></span>
         <% if(index < statsNotZero.length - 1){ %><span class="bonus-divider" role="presentation">//</span><% } %>
     <% }
 }
