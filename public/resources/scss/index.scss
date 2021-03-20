@@ -1624,6 +1624,11 @@ a.additional-player-stat:hover {
     margin-left: 2px;
 }
 
+.bonus-divider {
+    color: rgb(255 255 255 / 60%);
+    font-weight: bold;
+}
+
 .percent::after {
     content: "%";
 }
