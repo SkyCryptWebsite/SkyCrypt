@@ -64,7 +64,7 @@ async function init(){
         }
     }
 
-    resourcePacks = resourcePacks.sort((a, b) => a.config.priority - b.config.priority);
+    resourcePacks = resourcePacks.sort((a, b) => b.config.priority - a.config.priority);
 
     for(let pack of resourcePacks){
         pack.files = await getFiles(path.resolve(pack.basePath, 'assets', 'minecraft', 'mcpatcher', 'cit'));
