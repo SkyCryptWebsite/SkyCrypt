@@ -1357,7 +1357,7 @@ if(calculated.profile.game_mode == 'ironman'){
                 <div class="nav-item" data-target="slayer">Slayer</div>
                 <div class="nav-item" data-target="minions">Minions</div>
                 <% if(Object.keys(calculated.collections).length > 0){ %><div class="nav-item" data-target="collections">Collections</div><% } %>
-                <% if(Object.keys(calculated.misc).length > 0){ %><div class="nav-item" data-target="misc">Misc</div><% } %>
+                <% if(Object.keys(calculated.misc).length > 0){ %><div class="nav-item" data-target="misc"><abbr title="Miscellaneous">Misc</abbr></div><% } %>
             </div>
         </div>
         <div class="stat-containers">
@@ -1613,7 +1613,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         <tr><td>130 Score: </td><td><span class='color-magic-find grey-text'>+6 Magic Find</span></td>
                         <tr><td>175 Score: </td><td><span class='color-magic-find grey-text'>+7 Magic Find</span></td>
                         </table>
-                        "><span class="stat-name <%= max %>">Pet Score: </span><span class="stat-value <%= max %>"><%= calculated.petScore %></span></span><% if(calculated.pet_score_bonus.magic_find > 0){ %><span class="grey-text color-magic-find"> (+<%= calculated.pet_score_bonus.magic_find %> MF)</span><% } %><br>
+                        "><span class="stat-name <%= max %>">Pet Score: </span><span class="stat-value <%= max %>"><%= calculated.petScore %></span></span><% if(calculated.pet_score_bonus.magic_find > 0){ %><span class="grey-text color-magic-find"> (+<%= calculated.pet_score_bonus.magic_find %> <abbr title="Magic Find">MF</abbr>)</span><% } %><br>
                         <span class="stat-name">Total Pet XP: </span><span class="stat-value"><%= helper.formatNumber(totalPetXp, true) %></span>
                     </p>
                     <% for(const [index, pet] of calculated.pets.entries()){
@@ -1631,7 +1631,7 @@ if(calculated.profile.game_mode == 'ironman'){
                                 <div class="piece-hover-area"></div>
                                 <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                                 <% if(index > 0 || index == 0 && !pet.active){ %>
-                                    <div class="other-pet-level">Lvl <%= pet.level.level %></div>
+                                    <div class="other-pet-level"><abbr title="Level">Lvl</abbr> <%= pet.level.level %></div>
                                 <% } %>
                             </div>
                         <% if(index == 0 && pet.active){ %>
@@ -1703,14 +1703,14 @@ if(calculated.profile.game_mode == 'ironman'){
                                     if(items.talisman_bag.length > 0){ %>
                                         <div class="inventory-tab" data-inventory-type="talisman_bag">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/961a918c0c49ba8d053e522cb91abc74689367b4d8aa06bfc1ba9154730985ff)"></div>
-                                            <div class="inventory-tab-name">Accs</div>
+                                            <div class="inventory-tab-name"><abbr title="Accessories">Accs</abbr></div>
                                         </div>
                                     <% }
 
                                     if(items.potion_bag.length > 0){ %>
                                         <div class="inventory-tab" data-inventory-type="potion_bag">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/9f8b82427b260d0a61e6483fc3b2c35a585851e08a9a9df372548b4168cc817c)"></div>
-                                            <div class="inventory-tab-name">Pots</div>
+                                            <div class="inventory-tab-name"><abbr title="Potions">Pots</abbr></div>
                                         </div>
                                     <% }
 
