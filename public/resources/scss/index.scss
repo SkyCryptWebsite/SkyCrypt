@@ -2150,18 +2150,18 @@ a.additional-player-stat:hover {
 
 .piece-mythic-bg,
 .style-scrollbar .piece-mythic-bg + .item-lore::-webkit-scrollbar-thumb {
-    background-color: #d762d7;
+    background-color: var(--§d);
 }
 .piece-mythic-bg + .item-lore {
-    scrollbar-color: #d762d7 transparent;
+    scrollbar-color: var(--§d) transparent;
 }
 
 .piece-legendary-bg,
 .style-scrollbar .piece-legendary-bg + .item-lore::-webkit-scrollbar-thumb {
-    background-color: var(--maxed-hex);
+    background-color: var(--§6);
 }
 .piece-legendary-bg + .item-lore {
-    scrollbar-color: var(--maxed-hex) transparent;
+    scrollbar-color: var(--§6) transparent;
 }
 
 .piece-epic-bg,
@@ -2182,10 +2182,10 @@ a.additional-player-stat:hover {
 
 .piece-uncommon-bg,
 .style-scrollbar .piece-uncommon-bg + .item-lore::-webkit-scrollbar-thumb {
-    background-color: #3cbd3c;
+    background-color: var(--§a);
 }
 .piece-uncommon-bg + .item-lore {
-    scrollbar-color: #3cbd3c transparent;
+    scrollbar-color: var(--§a) transparent;
 }
 
 .piece-common-bg,
@@ -2201,23 +2201,23 @@ a.additional-player-stat:hover {
 }
 
 .piece-mythic-fg {
-    color: #d762d7 !important;
+    color: var(--§d) !important;
 }
 
 .piece-legendary-fg {
-    color: #f9b837 !important;
+    color: var(--§6) !important;
 }
 
 .piece-epic-fg {
-    color: #f23ef2 !important;
+    color: var(--§5) !important;
 }
 
 .piece-rare-fg {
-    color: #7373e6 !important;
+    color: var(--§9) !important;
 }
 
 .piece-uncommon-fg {
-    color: #61df61 !important;
+    color: var(--§a) !important;
 }
 
 .piece-common-fg {
