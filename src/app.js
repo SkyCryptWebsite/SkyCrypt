@@ -1,6 +1,6 @@
 const cluster = require('cluster');
 const lib = require('./lib');
-const { getFileHashes } = require('./hashes');
+const { getFileHashes, getFileHash, hashedDirectories } = require('./hashes');
 
 async function main(){
     const express = require('express');
@@ -26,6 +26,17 @@ async function main(){
     await renderer.init();
 
     const fileHashes = await getFileHashes();
+
+    if (process.env.NODE_ENV == 'development') {
+        const { default: watch } = await import('node-watch');
+        
+        watch('public/resources', { recursive: true }, async (evt, name) => {
+            const [, , directory, fileName] = name.split(/\/|\\/);
+            if (hashedDirectories.includes(directory)) {
+                fileHashes[directory][fileName] = await getFileHash(name);
+            }
+        });
+    }
 
     const credentials = require(path.resolve(__dirname, '../credentials.json'));
 
@@ -431,7 +442,7 @@ Disallow: /item /head /leather /resources
 
     app.all('/', async (req, res, next) => {
         const favorites = parseFavorites(req.cookies.favorite);
-        res.render('index', { error: null, player: null, extra: await getExtra('index', favorites), fileHashes, helper, page: 'index' });
+        res.render('index', { req, error: null, player: null, extra: await getExtra('index', favorites), fileHashes, helper, page: 'index' });
     });
 
     app.all('*', async (req, res, next) => {
