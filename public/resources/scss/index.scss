@@ -3341,7 +3341,7 @@ main.grid > a,
     left: 0;
     bottom: 0;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.8);
     z-index: 7500;
     opacity: 0;
     visibility: hidden;
@@ -3352,6 +3352,10 @@ main.grid > a,
     &.show-dimmer {
         visibility: visible;
         opacity: 1;
+    }
+
+    .light & {
+        background-color: rgba(0, 0, 0, 0.4);
     }
 }
 
