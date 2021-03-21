@@ -1693,9 +1693,6 @@ a.additional-player-stat:hover {
 }
 
 .basic-stat {
-    background-size: 24px 24px;
-    background-repeat: no-repeat;
-    padding-left: 28px;
     line-height: 24px;
     margin-top: 1px;
     height: 24px;
@@ -1707,26 +1704,34 @@ a.additional-player-stat:hover {
     [data-tippy-content]::after {
         content: none;
     }
+
+    &::before {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+        height: 24px;
+        width: 24px;
+        background-color: currentColor;
+    }
+
+    .stat-name {
+        color: inherit;
+    }
+
+    .stat-value {
+        color: var(--text-hex);
+    }
 }
 
-.stat-fairy-souls {
-    background-image: url(/head/b96923ad247310007f6ae5d326d847ad53864cf16c3565a181dc8e6b20be2387);
-    position: absolute;
-    margin-top: 25px;
+.stat-health::before {
+    -webkit-mask-image: url(../img/icons/heart.svg);
+    mask-image: url(../img/icons/heart.svg);
 }
 
-.stat-fairy-souls .stat-name {
-    color: #e35c95;
-}
-
-.stat-health {
-    background-image: url(../img/icons/health.png);
-}
-
-.stat-health .stat-name,
-.stat-strength .stat-name,
-.stat-ferocity .stat-name,
-.stat-ability-damage .stat-name,
+.stat-health,
+.stat-strength,
+.stat-ferocity,
+.stat-ability-damage,
 .color-health,
 .color-strength,
 .color-ferocity,
@@ -1734,103 +1739,106 @@ a.additional-player-stat:hover {
     color: #ef5350;
 }
 
-.stat-defense {
-    background-image: url(../img/icons/defense.png);
+.stat-defense::before {
+    -webkit-mask-image: url(../img/icons/shield.svg);
+    mask-image: url(../img/icons/shield.svg);
 }
 
-.stat-defense .stat-name,
+.stat-defense,
 .color-defense {
     color: #66bb6a;
 }
 
-.stat-strength {
-    background-image: url(../img/icons/strength-new.png);
+.stat-strength::before {
+    -webkit-mask-image: url(../img/icons/flower-poppy.svg);
+    mask-image: url(../img/icons/flower-poppy.svg);
 }
 
-.stat-speed {
-    background-image: url(../img/icons/speed.png);
+.stat-speed::before {
+    -webkit-mask-image: url(../img/icons/star-four-points.svg);
+    mask-image: url(../img/icons/star-four-points.svg);
 }
 
-.stat-speed .stat-name,
+.stat-speed,
 .color-speed {
     color: var(--text-hex);
 }
 
-.stat-crit-chance {
-    background-image: url(../img/icons/crit-chance.png);
+.stat-crit-chance::before {
+    -webkit-mask-image: url(../img/icons/atom.svg);
+    mask-image: url(../img/icons/atom.svg);
 }
 
-.stat-crit-damage {
-    background-image: url(../img/icons/crit-damage.png);
+.stat-crit-damage::before {
+    -webkit-mask-image: url(../img/icons/skull-crossbones.svg);
+    mask-image: url(../img/icons/skull-crossbones.svg);
 }
 
-.stat-crit-chance .stat-name,
-.stat-crit-damage .stat-name,
+.stat-crit-chance,
+.stat-crit-damage,
 .color-crit-chance,
 .color-crit-damage {
     color: #9fa8da;
 }
 
-.stat-bonus-attack-speed {
-    background-image: url(../img/icons/bonus-attack-speed.png);
+.stat-bonus-attack-speed::before {
+    -webkit-mask-image: url(../img/icons/sword-cross.svg);
+    mask-image: url(../img/icons/sword-cross.svg);
 }
 
-.stat-bonus-attack-speed .stat-name,
+.stat-bonus-attack-speed,
 .color-bonus-attack-speed {
     color: #f7f778;
 }
 
-.stat-intelligence {
-    background-image: url(../img/icons/intelligence.png);
+.stat-intelligence::before {
+    -webkit-mask-image: url(../img/icons/lead-pencil.svg);
+    mask-image: url(../img/icons/lead-pencil.svg);
 }
 
-.stat-intelligence .stat-name,
+.stat-intelligence,
 .color-intelligence {
     color: #4fc3f7;
 }
 
-.stat-sea-creature-chance {
-    background-image: url(../img/icons/sea-creature-chance.png);
+.stat-sea-creature-chance::before {
+    -webkit-mask-image: url(../img/icons/fish.svg);
+    mask-image: url(../img/icons/fish.svg);
 }
 
-.stat-sea-creature-chance .stat-name,
+.stat-sea-creature-chance,
 .color-sea-creature-chance {
     color: var(--§3);
 }
 
-.stat-sea-creature-chance {
-    background-image: url(../img/icons/sea-creature-chance.png);
+.stat-magic-find::before {
+    -webkit-mask-image: url(../img/icons/star.svg);
+    mask-image: url(../img/icons/star.svg);
 }
 
-.stat-sea-creature-chance .stat-name,
-.color-sea-creature-chance {
-    color: #1cd2d2;
-}
-
-.stat-magic-find {
-    background-image: url(../img/icons/magic-find.png);
-}
-
-.stat-magic-find .stat-name,
+.stat-magic-find,
 .color-magic-find {
     color: #3bdddd;
 }
 
-.stat-pet-luck {
-    background-image: url(../img/icons/pet-luck.png);
+.stat-pet-luck::before {
+    -webkit-mask-image: url(../img/icons/cards-club.svg);
+    mask-image: url(../img/icons/cards-club.svg);
 }
 
-.stat-pet-luck .stat-name,
+.stat-pet-luck,
 .color-pet-luck {
     color: #fd64de;
 }
 
-.stat-ferocity {
-    background-image: url(../img/icons/ferocity.png);
+.stat-ferocity::before {
+    -webkit-mask-image: url(../img/icons/ferocity.svg);
+    mask-image: url(../img/icons/ferocity.svg);
 }
 
-.stat-ability-damage {
-    background-image: url(../img/icons/ability-damage.png);
+.stat-ability-damage::before {
+    -webkit-mask-image: url(../img/icons/decagram.svg);
+    mask-image: url(../img/icons/decagram.svg);
 }
 
 .color-mining-speed {
@@ -3508,11 +3516,6 @@ body {
         margin-left: env(safe-area-inset-left, 0);
         margin-right: env(safe-area-inset-right, 0);
         width: calc(100vw - env(safe-area-inset-left, 0) - env(safe-area-inset-right, 0));
-    }
-
-    .stat-fairy-souls {
-        position: relative;
-        margin-top: 1px;
     }
 
     #player_profile {
