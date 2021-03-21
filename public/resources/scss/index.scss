@@ -89,6 +89,7 @@
         --§f: #ffffff;
     }
 
+    &.light,
     &.light .nice-colors-auto,
     .nice-colors-dark {
         /* these colors look nice and have significant contrast with white */
@@ -110,6 +111,7 @@
         --§f: #000000;
     }
 
+    &:not(.light),
     &:not(.light) .nice-colors-auto,
     .nice-colors-light {
         /* these colors look nice and have significant contrast with black */
