@@ -1721,12 +1721,10 @@ a.additional-player-stat:hover {
 }
 
 .stat-health .stat-name,
-.stat-effective-health .stat-name,
 .stat-strength .stat-name,
 .stat-ferocity .stat-name,
 .stat-ability-damage .stat-name,
 .color-health,
-.color-effective-health,
 .color-strength,
 .color-ferocity,
 .color-ability-damage {
@@ -1740,10 +1738,6 @@ a.additional-player-stat:hover {
 .stat-defense .stat-name,
 .color-defense {
     color: #66bb6a;
-}
-
-.stat-effective-health {
-    background-image: url(../img/icons/effective-health.png);
 }
 
 .stat-strength {
