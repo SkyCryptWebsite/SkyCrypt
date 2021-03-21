@@ -68,7 +68,6 @@
         --bg-hex: white;
     }
 
-    &,
     .true-colors {
         /* Minecraft color codes */
         --§0: #000000;
@@ -93,15 +92,15 @@
     &.light .nice-colors-auto,
     .nice-colors-dark {
         /* these colors look nice and have significant contrast with white */
-        // --§0: #;
+        --§0: #000000;
         --§1: #0b277a;
-        // --§2: #;
+        --§2: #00aa00;
         --§3: #049191;
-        // --§4: #;
-        // --§5: #;
+        --§4: #aa0000;
+        --§5: #aa00aa;
         --§6: #d88407;
         --§7: #333333;
-        // --§8: #;
+        --§8: #555555;
         --§9: #4545d2;
         --§a: #40bb40;
         --§b: #33aec3;
@@ -116,13 +115,13 @@
     .nice-colors-light {
         /* these colors look nice and have significant contrast with black */
         --§0: #ffffff;
-        // --§1: #;
-        // --§2: #;
+        --§1: #0000aa;
+        --§2: #00aa00;
         --§3: #0cb9ac;
         --§4: #cc3333;
         --§5: #eb17eb;
-        // --§6: #;
-        // --§7: #;
+        --§6: #ffaa00;
+        --§7: #aaaaaa;
         --§8: #777777;
         --§9: #7b8df1;
         --§a: #5bda5b;
@@ -130,7 +129,7 @@
         --§c: #fb5858;
         --§d: #fd64de;
         --§e: #f2f267;
-        // --§f: #;
+        --§f: #ffffff;
     }
 }
 
