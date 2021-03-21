@@ -90,7 +90,8 @@
 
     &.light,
     &.light .nice-colors-auto,
-    .nice-colors-dark {
+    .nice-colors-dark,
+    .piece {
         /* these colors look nice and have significant contrast with white */
         --§0: #000000;
         --§1: #0b277a;
