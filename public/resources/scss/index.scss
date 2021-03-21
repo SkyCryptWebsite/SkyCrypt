@@ -1736,7 +1736,7 @@ a.additional-player-stat:hover {
 .color-strength,
 .color-ferocity,
 .color-ability-damage {
-    color: #ef5350;
+    color: var(--§c);
 }
 
 .stat-defense::before {
@@ -1746,7 +1746,7 @@ a.additional-player-stat:hover {
 
 .stat-defense,
 .color-defense {
-    color: #66bb6a;
+    color: var(--§a);
 }
 
 .stat-strength::before {
@@ -1761,7 +1761,7 @@ a.additional-player-stat:hover {
 
 .stat-speed,
 .color-speed {
-    color: var(--text-hex);
+    color: var(--§f);
 }
 
 .stat-crit-chance::before {
@@ -1778,7 +1778,7 @@ a.additional-player-stat:hover {
 .stat-crit-damage,
 .color-crit-chance,
 .color-crit-damage {
-    color: #9fa8da;
+    color: var(--§9);
 }
 
 .stat-bonus-attack-speed::before {
@@ -1788,7 +1788,7 @@ a.additional-player-stat:hover {
 
 .stat-bonus-attack-speed,
 .color-bonus-attack-speed {
-    color: #f7f778;
+    color: var(--§e);
 }
 
 .stat-intelligence::before {
@@ -1798,7 +1798,7 @@ a.additional-player-stat:hover {
 
 .stat-intelligence,
 .color-intelligence {
-    color: #4fc3f7;
+    color: var(--§b);
 }
 
 .stat-sea-creature-chance::before {
@@ -1818,7 +1818,7 @@ a.additional-player-stat:hover {
 
 .stat-magic-find,
 .color-magic-find {
-    color: #3bdddd;
+    color: var(--§b);
 }
 
 .stat-pet-luck::before {
@@ -1828,7 +1828,7 @@ a.additional-player-stat:hover {
 
 .stat-pet-luck,
 .color-pet-luck {
-    color: #fd64de;
+    color: var(--§d);
 }
 
 .stat-ferocity::before {
@@ -1842,7 +1842,7 @@ a.additional-player-stat:hover {
 }
 
 .color-mining-speed {
-    color: #ffaa00;
+    color: var(--§6);
 }
 
 .stat-container {
