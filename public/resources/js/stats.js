@@ -346,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function(){
         else if(element.hasAttribute('data-pet-index'))
             statsContent.setAttribute("data-backpack-item-index", element.getAttribute('data-pet-index'));
 
-        itemName.className = `item-name piece-${item.rarity || 'common'}-bg`;
+        itemName.className = `item-name piece-${item.rarity || 'common'}-bg nice-colors-dark`;
         itemNameContent.innerHTML = item.display_name || 'null';
 
         if(element.hasAttribute('data-pet-index'))
