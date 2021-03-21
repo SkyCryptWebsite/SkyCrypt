@@ -1705,7 +1705,7 @@ a.additional-player-stat:hover {
     position: relative;
 
     [data-tippy-content]::after {
-        content: "";
+        content: none;
     }
 }
 
