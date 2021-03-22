@@ -435,7 +435,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
         if (helper.hasPath(item, 'tag', 'ExtraAttributes', 'skin')) {
             switch (item.tag.ExtraAttributes.skin) {
                 case "SNOW_SNOWGLOBE":
-                    item.texture_path = `/resources/img/items/snow_snowglobe.gif?v6`
+                    item.texture_path = `/resources/img/items/skin_snowglobe.png?v6`
                     break;
             }
         }
