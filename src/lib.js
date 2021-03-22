@@ -2629,7 +2629,7 @@ module.exports = {
 
             lore.push(
                 '',
-                `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)} §6/ §e${helper.formatNumber(pet.level.xpMaxLevel, true, 10)}`,
+                `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)} §6/ §e${helper.formatNumber(pet.level.xpMaxLevel, true, 10)} §6(${Math.floor((pet.exp / pet.level.xpMaxLevel) * 100)}%)`,
                 `§7Candy Used: §e${pet.candyUsed || 0} §6/ §e10`
             );
 
