@@ -1139,7 +1139,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         </li>
                     <% } %>
                 </ul>
-            </span> 
+            </span>
             <div id="additional_player_stats">
                 <% /*
 
@@ -1636,55 +1636,67 @@ if(calculated.profile.game_mode == 'ironman'){
                         "><span class="stat-name <%= max %>">Pet Score: </span><span class="stat-value <%= max %>"><%= calculated.petScore %></span></span><% if(calculated.pet_score_bonus.magic_find > 0){ %><span class="grey-text color-magic-find"> (+<%= calculated.pet_score_bonus.magic_find %> MF)</span><% } %><br>
                         <span class="stat-name">Total Pet XP: </span><span class="stat-value"><%= helper.formatNumber(totalPetXp, true) %></span>
                     </p>
-                    <% for(const [index, pet] of calculated.pets.entries()){
-                        if(index == 0 && pet.active){ %>
-                            <p class="stat-sub-header">Active Pet</p>
-                            <div class="pieces">
-                        <% }else if(index == 0){ %>
-                            <p></p>
-                            <div class="pieces">
-                        <% } %>
-                            <div tabindex="0" data-pet-index="<%= index %>" class="<%= pet.active ? 'active-pet' : '' %> <%= index > 0 || index == 0 && !pet.active ? 'other-pet' : '' %> rich-item piece piece-<%= pet.rarity %>-bg">
-                                <% if(rarityOrder.indexOf(pet.rarity) < 3){ %>
+                    <%
+                        const petsToShow = 100
+                        const petsToShowLimit = 250
+                        const activePet = calculated.pets.find(pet => pet.active)
+                        const otherPets = calculated.pets.filter(pet => !pet.active).slice(0, petsToShowLimit)
+                    %>
+                    <% if (activePet) { %>
+                        <p class="stat-sub-header">Active Pet</p>
+                        <div class="pieces">
+                            <div tabindex="0" data-pet-index="0" class="active-pet rich-item piece piece-<%= activePet.rarity %>-bg">
+                                <% if (rarityOrder.indexOf(activePet.rarity) < 3) { %>
                                     <div class="piece-shine"></div>
                                 <% } %>
                                 <div class="piece-hover-area"></div>
-                                <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
-                                <% if(index > 0 || index == 0 && !pet.active){ %>
-                                    <div class="other-pet-level">Lvl <%= pet.level.level %></div>
-                                <% } %>
+                                <div style='background-image: url("<%= activePet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                             </div>
-                        <% if(index == 0 && pet.active){ %>
                             <div class="active-pet-info">
-                                <div class="pet-name piece-<%= pet.rarity %>-fg"><%= pet.rarity %> <%= pet.display_name %></div>
-                                <div class="pet-level">Level <%= pet.level.level %></div>
+                                <div class="pet-name piece-<%= activePet.rarity %>-fg"><%= activePet.rarity %> <%= activePet.display_name %></div>
+                                <div class="pet-level">Level <%= activePet.level.level %></div>
                             </div>
-                            </div>
-                            <%- getBonus(pet.stats, '<br>') %>
-                            <% if(calculated.pets.length > 1){ %>
-                                <div class="stat-sub-container sub-other-pets">
-                                <p class="stat-sub-header">Other Pets</p>
+                        </div>
+                        <%- getBonus(activePet.stats, '<br>') %>
+                    <% } %>
+                    <% if (otherPets) { %>
+                        <p class="stat-sub-header"><%= activePet ? 'Other Pets' : '' %></p>
+                        <div class="pieces">
+                            <% for(const [index, pet] of otherPets.entries()) { %>
+
+                                <% if (
+                                    (activePet && index === petsToShow - 1) ||
+                                    (!activePet && index === petsToShow)
+                                ) { %>
+                                    </div>
+                                    <button class="stat-sub-header extender" aria-controls="showmore-pets" aria-expanded="false">Show More Pets</button>
+                                    <div class="pieces extendable" id="showmore-pets">
+                                <% } %>
+
+                                <div tabindex="0" data-pet-index="<%= activePet ? index + 1 : index %>" class="other-pet rich-item piece piece-<%= pet.rarity %>-bg">
+                                    <% if(rarityOrder.indexOf(pet.rarity) < 3) { %>
+                                        <div class="piece-shine"></div>
+                                    <% } %>
+                                    <div class="piece-hover-area"></div>
+                                    <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                                    <div class="other-pet-level">Lvl <%= pet.level.level %></div>
+                                </div>
                             <% } %>
-                            <div class="pieces">
-                        <% }
-                    } %>
-                    <% if(calculated.pets.length > 1 && calculated.pets[0].active){ %>
                         </div>
                     <% } %>
-                    </div>
-                    <% if(calculated.missingPets.length > 0){ %>
-                        <% if(calculated.pets.length == 1){ %>
+                    <% if(calculated.missingPets.length > 0) { %>
+                        <% if(calculated.pets.length == 1) { %>
                             <br>
                         <% } %>
-                            <button class="stat-sub-header extender" aria-controls="missing-pets" aria-expanded="false">Missing Pets</button>
-                            <div class="pieces extendable" id="missing-pets">
-                            <% for(const [index, pet] of calculated.missingPets.entries()){ %>
+                        <button class="stat-sub-header extender" aria-controls="missing-pets" aria-expanded="false">Missing Pets</button>
+                        <div class="pieces extendable" id="missing-pets">
+                            <% for(const [index, pet] of calculated.missingPets.entries()) { %>
                                 <div tabindex="0" data-missing-pet-index="<%= index %>" class="rich-item piece piece-<%= pet.rarity %>-bg missing-pet">
                                     <div class="piece-hover-area"></div>
                                     <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                                 </div>
                             <% } %>
-                            </div>
+                        </div>
                     <% } %>
                 </div>
             </div>
