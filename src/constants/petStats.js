@@ -1762,7 +1762,7 @@ class Zombie extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.3 : this.rarity > 1 ? 0.2 : 0.1;
+		let mult = this.rarity > 2 ? 0.25 : this.rarity > 1 ? 0.2 : 0.1;
 		return {
 			name: "§6Chomp",
 			desc: [`§7Gain +§a${round(this.level * mult, 1)} §7hp per zombie kill`]
@@ -1770,7 +1770,7 @@ class Zombie extends Pet {
 	}
 
 	get second() {
-		let mult = 0.2;
+		let mult = 0.25;
 		return {
 			name: "§6Rotten Blade",
 			desc: [`§7Deal §a${round(this.level * mult, 1)}% §7more damage to zombies`]
@@ -1778,7 +1778,7 @@ class Zombie extends Pet {
 	}
 
 	get third() {
-		let mult = 0.25;
+		let mult = 0.2;
 		return {
 			name: "§6Living Dead",
 			desc: [`§7Increases the defense of all undead armor sets by §a${round(this.level * mult, 1)}%`]
