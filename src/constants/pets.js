@@ -556,6 +556,11 @@ module.exports = {
                 head: "/head/360c122ade5b2fedca14aa78c834a7b0ac9cb5da2a0c93112163086f90c13b68",
                 release: new Date('2021-02-13 18:00:00 GMT+1').getTime(),
             },
+            "ELEPHANT_MONOCHROME": {
+                name: "Monochrome",
+                head: "/head/4bdf0f628c05e86cabdee2f5858dd5def7f8b8d940cbf25f9937e2ffb53432f4",
+                release: new Date('2021-03-22 18:00:00 GMT+1').getTime(),
+            },
         },
         "JERRY": {
             "JERRY_RED_ELF": {
