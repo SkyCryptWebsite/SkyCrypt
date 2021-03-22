@@ -52,7 +52,7 @@ const skillItems = {
     runecrafting: 'icon-378_0'
 };
 
-const MAX_MAGIC_FIND = 2.00;
+const MAX_MAGIC_FIND = 3.00;
 
 const romanize = num => {
 	if (!+num)
@@ -75,7 +75,8 @@ const slayerInfo = {
         drops: [
             {
                 chance: {
-                    4: 42 / 13000
+                    4: 42 / 13000,
+                    5: 42 / 13000,
                 },
                 levelReq: 6,
                 name: 'Snake Rune',
@@ -83,7 +84,8 @@ const slayerInfo = {
             },
             {
                 chance: {
-                    4: 21 / 13000
+                    4: 21 / 13000,
+                    5: 21 / 13000,
                 },
                 levelReq: 5,
                 name: 'Beheaded Horror',
@@ -91,13 +93,30 @@ const slayerInfo = {
             },
             {
                 chance: {
-                    4: 7 / 13000
+                    4: 7 / 13000,
+                    5: 7 / 13000,
                 },
                 levelReq: 7,
                 name: 'Scythe Blade',
                 id: 264,
                 damage: 0
-            }
+            },
+            {
+                chance: {
+                    5: 7 / 13000
+                },
+                levelReq: 7,
+                name: 'Shard of the Shredded',
+                icon: '/head/70c5cc728c869ecf3c6e0979e8aa09c10147ed770417e4ba541aac382f0'
+            },
+            {
+                chance: {
+                    5: 7 / 13000
+                },
+                levelReq: 7,
+                name: 'Warden Heart',
+                icon: '/head/d45f4d139c9e89262ec06b27aaad73fa488ab49290d2ccd685a2554725373c9b'
+            },
         ]
     },
     spider: {
@@ -1139,7 +1158,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         </li>
                     <% } %>
                 </ul>
-            </span> 
+            </span>
             <div id="additional_player_stats">
                 <% /*
 
@@ -2256,7 +2275,7 @@ if(calculated.profile.game_mode == 'ironman'){
                                     <% } %>
                                 </div>
                             </div>
-                            <div class="slayer-section-header"><span data-tippy-content="Average drops based on Slayer boss kills. The number ranges from 0% Magic Find to 100% Magic Find.">Your Average Drops</span></div>
+                            <div class="slayer-section-header"><span data-tippy-content="Average drops based on Slayer boss kills. The number ranges from 0% Magic Find to 200% Magic Find.">Your Average Drops</span></div>
                             <div class="slayer-section slayer-drops">
                                 <%
                                 for(const drop of slayerInfo[slayerName].drops){
