@@ -1238,8 +1238,9 @@ module.exports = {
         output.pickaxes = all_items.filter(a => a.type != null && (a.type.endsWith('pickaxe') || a.type.endsWith('drill')));
         output.rods = all_items.filter(a => a.type != null && (a.type.endsWith('fishing rod') || a.type.endsWith('fishing weapon')));
 
-        output.pets = all_items.filter(a => a.tag?.ExtraAttributes?.petInfo).map(a => (
-            {
+        output.pets = all_items
+            .filter(a => a.tag?.ExtraAttributes?.petInfo)
+            .map(a => ({
                 uuid: a.tag.ExtraAttributes.uuid,
                 type: a.tag.ExtraAttributes.petInfo.type,
                 exp: a.tag.ExtraAttributes.petInfo.exp,
@@ -1248,8 +1249,7 @@ module.exports = {
                 heldItem: a.tag.ExtraAttributes.petInfo.heldItem || null,
                 candyUsed: a.tag.ExtraAttributes.petInfo.candyUsed,
                 skin: a.tag.ExtraAttributes.petInfo.skin || null,
-            }
-        ));
+            }));
 
         for(const item of all_items){
             if(!Array.isArray(item.containsItems))
@@ -1259,6 +1259,22 @@ module.exports = {
             output.hoes.push(...item.containsItems.filter(a => a.type != null && a.type.endsWith('hoe')));
             output.pickaxes.push(...item.containsItems.filter(a => a.type != null && (a.type.endsWith('pickaxe') || a.type.endsWith('drill'))));
             output.rods.push(...item.containsItems.filter(a => a.type != null && (a.type.endsWith('fishing rod') || a.type.endsWith('fishing weapon'))));
+
+            output.pets.push(
+                ...item.containsItems
+                    .filter(a => a.tag?.ExtraAttributes?.petInfo)
+                    .map(a => ({
+                        uuid: a.tag.ExtraAttributes.uuid,
+                        type: a.tag.ExtraAttributes.petInfo.type,
+                        exp: a.tag.ExtraAttributes.petInfo.exp,
+                        active: a.tag.ExtraAttributes.petInfo.active,
+                        tier: a.tag.ExtraAttributes.petInfo.tier,
+                        heldItem:
+                            a.tag.ExtraAttributes.petInfo.heldItem || null,
+                        candyUsed: a.tag.ExtraAttributes.petInfo.candyUsed,
+                        skin: a.tag.ExtraAttributes.petInfo.skin || null,
+                    }))
+            );
         }
 
         // Check if inventory access disabled by user
