@@ -393,6 +393,11 @@ module.exports = {
         },
     },
 
+    /*
+        Animted skins created at ezgif.com/apng-maker with the following settings:
+        - Delay time: 500
+        - Enable crossfade frames: delay = 3, count = 10
+    */
     pet_skins: {
         "ENDERMAN": {
             "ENDERMAN": {
@@ -411,8 +416,12 @@ module.exports = {
         "TIGER": {
             "TIGER_TWILIGHT": {
                 name: "Twilight",
-                head: "/head/896211dc599368dbd9056c0116ab61063991db793be93066a858eb4e9ce56438",
+                head: "/resources/img/items/tiger_twilight.png",
                 release: 1560284720000,
+                animation: {
+                    day: "/head/896211dc599368dbd9056c0116ab61063991db793be93066a858eb4e9ce56438",
+                    night: "/head/25afc37dc1909ee0a3eb8d0404271fc47660cff1153495412d6e9896632eaa8e",
+                }
             },
         },
         "RABBIT": {
@@ -558,8 +567,12 @@ module.exports = {
             },
             "ELEPHANT_MONOCHROME": {
                 name: "Monochrome",
-                head: "/head/4bdf0f628c05e86cabdee2f5858dd5def7f8b8d940cbf25f9937e2ffb53432f4",
+                head: "/resources/img/items/elephant_monochrome.png",
                 release: new Date('2021-03-22 18:00:00 GMT+1').getTime(),
+                animation: {
+                    day: "/head/4bdf0f628c05e86cabdee2f5858dd5def7f8b8d940cbf25f9937e2ffb53432f4",
+                    night: "/head/176e8db6cd2db2fd11747c750d24040f3435b3301d91949f33f9615d16dab060",
+                }
             },
         },
         "JERRY": {
