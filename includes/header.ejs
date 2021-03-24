@@ -57,21 +57,21 @@
         <button type="submit" aria-label="search"></button>
     </form>
     <a href="https://blacklivesmatters.carrd.co/" target="_blank" rel="noreferrer" data-tippy-content="<strong>Black Lives Matter!</strong><br><br>Click for a collection of links on how to support the fight against racial inequality." class="blm-logo" aria-label="Black Lives Matter"></a>
-    <button id="themes-button" class="expander" aria-expanded="false"><span>Themes</span></button>
-    <div id="themes-box" class="expandable list">
-        <% for(const theme_id in extra.themes){
-            const theme = extra.themes[theme_id];
-            if(theme.hidden) continue; %>
-        <label class="list-item">
-            <% let icon = theme.logo.replace("../", "/resources/"); %>
-            <img class="icon" src="<%= icon %>" alt="">
-            <span class="name"><%= theme.name %></span>
-            <div class="author">by <span><%= theme.author %></span></div>
-            <input type="radio" name="theme" value="<%= theme_id %>">
-        </label>
-        <% } %>
-    </div>
     <% if (page != 'api') { %>
+        <button id="themes-button" class="expander" aria-expanded="false"><span>Themes</span></button>
+        <div id="themes-box" class="expandable list">
+            <% for(const theme_id in extra.themes){
+                const theme = extra.themes[theme_id];
+                if(theme.hidden) continue; %>
+            <label class="list-item">
+                <% let icon = theme.logo.replace("../", "/resources/"); %>
+                <img class="icon" src="<%= icon %>" alt="">
+                <span class="name"><%= theme.name %></span>
+                <div class="author">by <span><%= theme.author %></span></div>
+                <input type="radio" name="theme" value="<%= theme_id %>">
+            </label>
+            <% } %>
+        </div>
         <button id="packs-button" class="expander" aria-expanded="false"><span>Packs</span></button>
         <div id="packs-box" class="expandable list">
             <%
