@@ -2564,6 +2564,8 @@ a.additional-player-stat:hover {
 
 .slayer-containers {
     white-space: nowrap;
+    content-visibility: auto;
+    contain-intrinsic-size: 230px 424px;
 }
 
 .slayer-header {
@@ -2584,6 +2586,11 @@ a.additional-player-stat:hover {
     background-repeat: no-repeat;
     background-position: center;
     vertical-align: middle;
+}
+
+.floor-containers {
+    content-visibility: auto;
+    contain-intrinsic-size: 350px 212px;
 }
 
 .floor-icon {
@@ -3641,6 +3648,12 @@ body {
         overflow-x: auto;
         margin-left: calc(-1 * var(--padding));
         margin-right: calc(-1 * var(--padding));
+        content-visibility: auto;
+        contain-intrinsic-size: 200px 70px;
+
+        &.sea-creature {
+            contain-intrinsic-size: 155px 245px;
+        }
 
         > :first-child {
             margin-inline-start: var(--padding);
