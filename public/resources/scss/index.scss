@@ -101,8 +101,8 @@
         --§4: #aa0000;
         --§5: #aa00aa;
         --§6: #d88f07;
-        --§7: #333333;
-        --§8: #555555;
+        --§7: #555555;
+        --§8: #333333;
         --§9: #4444f3;
         --§a: #40bb40;
         --§b: #33aec3;
@@ -116,7 +116,7 @@
     &:not(.light) .nice-colors-auto,
     .nice-colors-light {
         /* these colors look nice and have significant contrast with black */
-        --§0: #ffffff;
+        --§0: #777777;
         --§1: #0000aa;
         --§2: #00aa00;
         --§3: #0cb9ac;
@@ -131,7 +131,7 @@
         --§c: #fb5858;
         --§d: #fd64de;
         --§e: #f2f267;
-        --§f: #777777;
+        --§f: #ffffff;
     }
 }
 
