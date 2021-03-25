@@ -1,3 +1,4 @@
+    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
     <meta property="og:site_name" content="SkyCrypt">
@@ -21,6 +22,15 @@
     <link rel="stylesheet" href="/resources/css/index.css?<%- fileHashes.css['index.css'] %> ">
     <noscript><link rel="stylesheet" href="/resources/css/inventory.css?<%- fileHashes.css['inventory.css'] %>"></noscript>
 
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-185827357-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-185827357-1');
+    </script>
+    
     <script>
         const stylesheets = [
             "/resources/css/inventory.css?<%- fileHashes.css['inventory.css'] %>",
