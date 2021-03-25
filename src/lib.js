@@ -435,7 +435,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
         if (helper.hasPath(item, 'tag', 'ExtraAttributes', 'skin')) {
             switch (item.tag.ExtraAttributes.skin) {
                 case "SNOW_SNOWGLOBE":
-                    item.texture_path = `/resources/img/items/snow_snowglobe.gif?v6`
+                    item.texture_path = `/resources/img/items/skin_snowglobe.png?v6`
                     break;
             }
         }
@@ -524,6 +524,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
         if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'mined_crops'))
             item.extra.crop_counter = item.tag.ExtraAttributes.mined_crops;
+
+        if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'petInfo'))
+            item.tag.ExtraAttributes.petInfo = JSON.parse(item.tag.ExtraAttributes.petInfo);
 
         // Lore stuff
         let itemLore = helper.getPath(item, 'tag', 'display', 'Lore') || [];
@@ -1235,6 +1238,19 @@ module.exports = {
         output.pickaxes = all_items.filter(a => a.type != null && (a.type.endsWith('pickaxe') || a.type.endsWith('drill')));
         output.rods = all_items.filter(a => a.type != null && (a.type.endsWith('fishing rod') || a.type.endsWith('fishing weapon')));
 
+        output.pets = all_items.filter(a => a.tag?.ExtraAttributes?.petInfo).map(a => (
+            {
+                uuid: a.tag.ExtraAttributes.uuid,
+                type: a.tag.ExtraAttributes.petInfo.type,
+                exp: a.tag.ExtraAttributes.petInfo.exp,
+                active: a.tag.ExtraAttributes.petInfo.active,
+                tier: a.tag.ExtraAttributes.petInfo.tier,
+                heldItem: a.tag.ExtraAttributes.petInfo.heldItem || null,
+                candyUsed: a.tag.ExtraAttributes.petInfo.candyUsed,
+                skin: a.tag.ExtraAttributes.petInfo.skin || null,
+            }
+        ));
+
         for(const item of all_items){
             if(!Array.isArray(item.containsItems))
                 continue;
@@ -1674,6 +1690,11 @@ module.exports = {
             output.missingTalismans = await module.exports.getMissingTalismans(items.talisman_ids);
             output.talismanCount = await module.exports.getTalismanCount();
         }
+
+        if (!userProfile.pets) {
+            userProfile.pets = []
+        }
+        userProfile.pets.push(...items.pets)
 
         output.pets = await module.exports.getPets(userProfile);
         output.missingPets = await module.exports.getMissingPets(output.pets);
@@ -2629,7 +2650,7 @@ module.exports = {
 
             lore.push(
                 '',
-                `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)} §6/ §e${helper.formatNumber(pet.level.xpMaxLevel, true, 10)}`,
+                `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)} §6/ §e${helper.formatNumber(pet.level.xpMaxLevel, true, 10)} §6(${Math.floor((pet.exp / pet.level.xpMaxLevel) * 100)}%)`,
                 `§7Candy Used: §e${pet.candyUsed || 0} §6/ §e10`
             );
 
