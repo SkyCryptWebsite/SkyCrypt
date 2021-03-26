@@ -1988,6 +1988,34 @@ module.exports = {
 
             stat.entityName = entityName;
         }
+        if('kills_obsidian_wither' in userProfile.stats )
+            killsDeaths.push({
+                type: 'kills',
+                entityId: 'obsidian_defender',
+                entityName: 'Obsidian Defender',
+                amount: (userProfile.stats['kills_obsidian_wither'] || 0)
+            });
+        if('deaths_obsidian_wither' in userProfile.stats )
+            killsDeaths.push({
+                type: 'deaths',
+                entityId: 'obsidian_defender',
+                entityName: 'Obsidian Defender',
+                amount: (userProfile.stats['deaths_obsidian_wither'] || 0)
+            });
+        if('kills_sadan_statue' in userProfile.stats )
+            killsDeaths.push({
+                type: 'kills',
+                entityId: 'terracotta',
+                entityName: 'Terracotta',
+                amount: (userProfile.stats['kills_sadan_statue'] || 0)
+            });
+        if('deaths_sadan_statue' in userProfile.stats )
+            killsDeaths.push({
+                type: 'deaths',
+                entityId: 'terracotta',
+                entityName: 'Terracotta',
+                amount: (userProfile.stats['deaths_sadan_statue'] || 0)
+            });
 
         if('kills_guardian_emperor' in userProfile.stats || 'kills_skeleton_emperor' in userProfile.stats)
             killsDeaths.push({
@@ -2010,7 +2038,9 @@ module.exports = {
                 'guardian_emperor',
                 'skeleton_emperor',
                 'chicken_deep',
-                'zombie_deep'
+                'zombie_deep',
+                'sadan_statue',
+                'obsidian_wither'
             ].includes(a.entityId);
         });
 
