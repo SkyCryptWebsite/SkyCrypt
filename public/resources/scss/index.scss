@@ -2149,6 +2149,9 @@ a.additional-player-stat:hover {
 .piece-special-bg + .item-lore {
     scrollbar-color: var(--§c) transparent;
 }
+.piece-special-fg {
+    color: var(--§c) !important;
+}
 
 .piece-mythic-bg,
 .style-scrollbar .piece-mythic-bg + .item-lore::-webkit-scrollbar-thumb {
@@ -2156,6 +2159,9 @@ a.additional-player-stat:hover {
 }
 .piece-mythic-bg + .item-lore {
     scrollbar-color: var(--§d) transparent;
+}
+.piece-mythic-fg {
+    color: var(--§d) !important;
 }
 
 .piece-legendary-bg,
@@ -2165,6 +2171,9 @@ a.additional-player-stat:hover {
 .piece-legendary-bg + .item-lore {
     scrollbar-color: var(--§6) transparent;
 }
+.piece-legendary-fg {
+    color: var(--§6) !important;
+}
 
 .piece-epic-bg,
 .style-scrollbar .piece-epic-bg + .item-lore::-webkit-scrollbar-thumb {
@@ -2172,6 +2181,9 @@ a.additional-player-stat:hover {
 }
 .piece-epic-bg + .item-lore {
     scrollbar-color: var(--§5) transparent;
+}
+.piece-epic-fg {
+    color: var(--§5) !important;
 }
 
 .piece-rare-bg,
@@ -2181,6 +2193,9 @@ a.additional-player-stat:hover {
 .piece-rare-bg + .item-lore {
     scrollbar-color: var(--§9) transparent;
 }
+.piece-rare-fg {
+    color: var(--§9) !important;
+}
 
 .piece-uncommon-bg,
 .style-scrollbar .piece-uncommon-bg + .item-lore::-webkit-scrollbar-thumb {
@@ -2188,6 +2203,9 @@ a.additional-player-stat:hover {
 }
 .piece-uncommon-bg + .item-lore {
     scrollbar-color: var(--§a) transparent;
+}
+.piece-uncommon-fg {
+    color: var(--§a) !important;
 }
 
 .piece-common-bg,
@@ -2197,31 +2215,6 @@ a.additional-player-stat:hover {
 .piece-common-bg + .item-lore {
     scrollbar-color: var(--§f) transparent;
 }
-
-.piece-special-fg {
-    color: var(--§c) !important;
-}
-
-.piece-mythic-fg {
-    color: var(--§d) !important;
-}
-
-.piece-legendary-fg {
-    color: var(--§6) !important;
-}
-
-.piece-epic-fg {
-    color: var(--§5) !important;
-}
-
-.piece-rare-fg {
-    color: var(--§9) !important;
-}
-
-.piece-uncommon-fg {
-    color: var(--§a) !important;
-}
-
 .piece-common-fg {
     color: var(--§f) !important;
 }
