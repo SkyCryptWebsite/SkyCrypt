@@ -2142,6 +2142,17 @@ a.additional-player-stat:hover {
     background-position: center center !important;
 }
 
+.piece-supreme-bg,
+.style-scrollbar .piece-supreme-bg + .item-lore::-webkit-scrollbar-thumb {
+    background-color: var(--§4);
+}
+.piece-supreme-bg + .item-lore {
+    scrollbar-color: var(--§4) transparent;
+}
+.piece-supreme-fg {
+    color: var(--§4) !important;
+}
+
 .piece-special-bg,
 .style-scrollbar .piece-special-bg + .item-lore::-webkit-scrollbar-thumb {
     background-color: var(--§c);
