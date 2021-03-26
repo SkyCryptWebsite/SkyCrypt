@@ -26,21 +26,25 @@
         <redoc id="docs"></redoc>
         <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
         <script>
-            themeColors = extra.themes[localStorage.getItem("currentTheme")].colors;
-            Redoc.init(
-                'resources/api/api_docs.json',
-                {
-                    scrollYOffset: 'header',
-                    theme: {
-                        colors: {
-                            primary: {
-                                main: themeColors.icon,
+            function redocInit() {
+                const themeColors = extra.themes[localStorage.getItem("currentTheme")].colors;
+                Redoc.init(
+                    'resources/api/api_docs.json',
+                    {
+                        scrollYOffset: 'header',
+                        theme: {
+                            colors: {
+                                primary: {
+                                    main: themeColors.icon,
+                                }
                             }
                         }
-                    }
-                },
-                document.getElementById('docs')
-            );
+                    },
+                    document.getElementById('docs')
+                );
+            }
+            redocInit();
+            document.querySelector('#themes-box').addEventListener("change", () => setTimeout(redocInit));
         </script>
 
         <%- include('../includes/footer'); %>
