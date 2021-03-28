@@ -438,7 +438,7 @@ Disallow: /item /head /leather /resources
 
     app.all('/', async (req, res, next) => {
         const favorites = parseFavorites(req.cookies.favorite);
-        res.render('index', { error: null, player: null, extra: await getExtra('index', favorites), fileHashes, helper, page: 'index' });
+        res.render('index', { req, error: null, player: null, extra: await getExtra('index', favorites), fileHashes, helper, page: 'index' });
     });
 
     app.all('*', async (req, res, next) => {
