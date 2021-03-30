@@ -49,6 +49,9 @@ function getFrame(src, frame){
 let resourcePacks = [];
 
 async function init(){
+    console.log("Custom Resources loading started.");
+    console.time("custom_resources");
+
     for(const pack of await fs.readdir(RESOURCE_PACK_FOLDER)){
         const basePath = path.resolve(RESOURCE_PACK_FOLDER, pack);
 
@@ -359,6 +362,9 @@ async function init(){
             pack.textures.push(texture);
         }
     }
+
+    console.log("Custom Resources loading done.");
+    console.timeEnd("custom_resources");
 }
 
 const outputPacks = [];
