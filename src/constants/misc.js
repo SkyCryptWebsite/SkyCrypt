@@ -251,7 +251,11 @@ module.exports = {
         generator_ghast: "Minion Ghast",
         generator_magma_cube: "Minion Magma Cube",
         generator_slime: "Minion Slime",
-        brood_mother_spider: "Brood Mother"
+        brood_mother_spider: "Brood Mother",
+        obsidian_wither: "Obsidian Defender",
+        sadan_statue: "Terracotta",
+        diamond_guy: "Angry Archaeologist",
+        tentaclees: "Fels"
     },
 
     area_names: {

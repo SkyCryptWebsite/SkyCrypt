@@ -1,6 +1,6 @@
 const cluster = require('cluster');
 const lib = require('./lib');
-const { getFileHashes } = require('./hashes');
+const { getFileHashes, getFileHash, hashedDirectories } = require('./hashes');
 
 async function main(){
     const express = require('express');
@@ -27,6 +27,17 @@ async function main(){
 
     const fileHashes = await getFileHashes();
 
+    if (process.env.NODE_ENV == 'development') {
+        const { default: watch } = await import('node-watch');
+        
+        watch('public/resources', { recursive: true }, async (evt, name) => {
+            const [, , directory, fileName] = name.split(/\/|\\/);
+            if (hashedDirectories.includes(directory)) {
+                fileHashes[directory][fileName] = await getFileHash(name);
+            }
+        });
+    }
+
     const credentials = require(path.resolve(__dirname, '../credentials.json'));
 
     const _ = require('lodash');
@@ -52,6 +63,14 @@ async function main(){
 
     if(credentials.hypixel_api_key.length == 0)
         throw "Please enter a valid Hypixel API Key. Join mc.hypixel.net and enter /api to obtain one.";
+
+    let isFoolsDay;
+    function updateIsFoolsDay() {
+        const date = new Date();
+        isFoolsDay = date.getUTCMonth() === 3 && date.getUTCDate() === 1;
+    }
+    updateIsFoolsDay();
+    setInterval(updateIsFoolsDay, 60_000);
 
     const app = express();
     const port = 32464;
@@ -139,6 +158,8 @@ async function main(){
 
         output.packs = lib.getPacks();
 
+        output.isFoolsDay = isFoolsDay;
+
         if('recaptcha_site_key' in credentials)
             output.recaptcha_site_key = credentials.recaptcha_site_key;
 
@@ -187,6 +208,10 @@ async function main(){
 
             const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack);
             const calculated = await lib.getStats(db, profile, allProfiles, items);
+
+            if (isFoolsDay) {
+                calculated.skin_data.skinurl = "http://textures.minecraft.net/texture/b4bd832813ac38e68648938d7a32f6ba29801aaf317404367f214b78b4d4754c";
+            }
 
             res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), fileHashes, page: 'stats' });
         }catch(e){
@@ -413,7 +438,7 @@ Disallow: /item /head /leather /resources
 
     app.all('/', async (req, res, next) => {
         const favorites = parseFavorites(req.cookies.favorite);
-        res.render('index', { error: null, player: null, extra: await getExtra('index', favorites), fileHashes, helper, page: 'index' });
+        res.render('index', { req, error: null, player: null, extra: await getExtra('index', favorites), fileHashes, helper, page: 'index' });
     });
 
     app.all('*', async (req, res, next) => {

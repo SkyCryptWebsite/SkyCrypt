@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function(){
         favoriteElement.nextElementSibling.addEventListener('click', () => {
             navigator.share({
                 text: `Check out ${calculated.display_name} on SkyCrypt`,
-                url: window.location.href,
+                url: location.href.split('#')[0],
             });
         })
     }
@@ -126,17 +126,18 @@ document.addEventListener('DOMContentLoaded', function(){
 
     let inventoryContainer = document.querySelector('#inventory_container');
 
-    const urlParams = new URLSearchParams(window.location.search);
+    const url = new URL(location);
 
-    urlParams.delete('__cf_chl_jschl_tk__');
-    urlParams.delete('__cf_chl_captcha_tk__');
+    url.searchParams.delete('__cf_chl_jschl_tk__');
+    url.searchParams.delete('__cf_chl_captcha_tk__');
 
-    const urlParamsString = urlParams.toString().length > 0 ? '?' + urlParams.toString() : '';
+    if(calculated.profile.cute_name == 'Deleted') {
+        url.pathname = `/stats/${calculated.display_name}/${calculated.profile.profile_id}`;
+    } else {
+        url.pathname = `/stats/${calculated.display_name}/${calculated.profile.cute_name}`;
+    }
 
-    if(calculated.profile.cute_name == 'Deleted')
-        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.profile_id + urlParamsString);
-    else
-        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name + urlParamsString);
+    history.replaceState({}, document.title, url);
 
     function isEnchanted(item){
         if(item.animated)
@@ -210,7 +211,6 @@ document.addEventListener('DOMContentLoaded', function(){
     let currentBackpack;
 
     function renderInventory(inventory, type){
-        let scrollTop = window.pageYOffset;
 
         let visibleInventory = document.querySelector('.stat-inventory .inventory-view');
 
@@ -286,16 +286,18 @@ document.addEventListener('DOMContentLoaded', function(){
 
         [].forEach.call(inventoryView.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
 
-        window.scrollTo({
-            top: scrollTop
-        });
+        const rect = document.querySelector('#inventory_container').getBoundingClientRect();
 
-        let inventoryStatContainer = document.querySelector('.stat-inventory');
-
-        let rect = inventoryStatContainer.getBoundingClientRect();
-
-        if(rect.top < 0 || rect.bottom > window.innerHeight)
-            inventoryStatContainer.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        if (rect.top > 100 && rect.bottom > window.innerHeight) {
+            let top;
+            if (rect.height > window.innerHeight - 100) {
+                top = rect.top - 100;
+            } else {
+                top = rect.bottom - window.innerHeight;
+            }
+            window.scrollBy({ top, behavior: "smooth" });
+            scrollMemory.isSmoothScrolling = true;
+        }
     }
 
     function showBackpack(item){
@@ -383,22 +385,23 @@ document.addEventListener('DOMContentLoaded', function(){
         if(item.texture_pack){
             const texturePack = extra.packs.filter(a => a.id == item.texture_pack)[0];
 
-            let packContent = document.createElement('div');
+            const packContent = document.createElement('a');
+            packContent.setAttribute('href', item.texture_pack.url);
+            packContent.setAttribute('target', '_blank');
+            packContent.setAttribute('rel', 'noreferrer');
             packContent.classList.add('pack-credit');
 
-            let packIcon = document.createElement('img');
+            const packIcon = document.createElement('img');
             packIcon.setAttribute('src', item.texture_pack.base_path + '/pack.png');
-            packIcon.classList.add('pack-icon');
+            packIcon.classList.add('icon');
 
-            let packName = document.createElement('a');
-            packName.setAttribute('href', item.texture_pack.url);
-            packName.setAttribute('target', '_blank');
-            packName.classList.add('pack-name');
+            const packName = document.createElement('div');
+            packName.classList.add('name');
             packName.innerHTML = item.texture_pack.name;
 
-            let packAuthor = document.createElement('div');
-            packAuthor.classList.add('pack-author');
-            packAuthor.innerHTML = 'by <span>' + item.texture_pack.author + '</span>';
+            const packAuthor = document.createElement('div');
+            packAuthor.classList.add('author');
+            packAuthor.innerHTML = `by <span>${item.texture_pack.author}</span>`;
 
             packContent.appendChild(packIcon);
             packContent.appendChild(packName);
@@ -507,6 +510,7 @@ document.addEventListener('DOMContentLoaded', function(){
     let oldheight = null;
 
     const navBar = document.querySelector('#nav_bar');
+    const navBarLinks = navBar.querySelectorAll('.nav-item');
     let navBarHeight;
 
     function resize(){
@@ -529,8 +533,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
         navBarHeight = parseFloat(getComputedStyle(navBar).top);
 
-        updateStatsPositions();
-
         let element = document.querySelector('.rich-item.sticky-stats');
 
         if(element == null)
@@ -549,22 +551,8 @@ document.addEventListener('DOMContentLoaded', function(){
         oldHeight = window.innerHeight;
     }
 
-    [].forEach.call(document.querySelectorAll('.sub-extendable .stat-sub-header'), function(element){
-        element.addEventListener('click', function(e){
-            if(element.parentNode.classList.contains('sub-extended'))
-                element.parentNode.classList.remove('sub-extended')
-            else
-                element.parentNode.classList.add('sub-extended');
-        });
-    });
-
-    [].forEach.call(document.querySelectorAll('.sub-floor-extendable .stat-sub-header'), function(element){
-        element.addEventListener('click', function(e){
-            if(element.parentNode.classList.contains('sub-extended'))
-                element.parentNode.classList.remove('sub-extended')
-            else
-                element.parentNode.classList.add('sub-extended');
-        });
+    document.querySelectorAll('.extender').forEach((element) => {
+        element.addEventListener('click', () => element.setAttribute('aria-expanded', element.getAttribute('aria-expanded') != 'true'));
     });
 
     function flashForUpdate(element) {
@@ -623,21 +611,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
             flashForUpdate(activeWeaponElement);
 
-            for(let stat in stats){
-                if(stat == 'sea_creature_chance')
-                    continue;
-
-                const element = document.querySelector('.basic-stat[data-stat=' + stat + '] .stat-value');
-
-                if(!element)
-                    continue;
-
-                const currentValue = parseInt(element.innerHTML);
-                const newValue = stats[stat];
-
-                if(newValue != currentValue){
-                    element.innerHTML = newValue;
-                    flashForUpdate(element);
+            for(const stat in stats){
+                if (stat != 'sea_creature_chance') {
+                    updateStat(stat, stats[stat]);
                 }
             }
         });
@@ -692,20 +668,22 @@ document.addEventListener('DOMContentLoaded', function(){
 
             flashForUpdate(activeRodElement);
 
-            const _element = document.querySelector('.basic-stat[data-stat=sea_creature_chance] .stat-value');
-
-            if(!_element)
-                return;
-
-            const currentValue = parseInt(_element.innerHTML);
-            const newValue = stats['sea_creature_chance'];
-
-            if(newValue != currentValue){
-                _element.innerHTML = newValue;
-                flashForUpdate(_element);
-            }
+            updateStat('sea_creature_chance', stats.sea_creature_chance);
         });
     });
+
+    function updateStat(stat, newValue) {
+        const elements = document.querySelectorAll('.basic-stat[data-stat=' + stat + '] .stat-value');
+
+        for (const element of elements) {
+            const currentValue = parseFloat(element.innerHTML.replaceAll(',', ''));
+
+            if (newValue != currentValue) {
+                element.innerHTML = newValue.toLocaleString();
+                flashForUpdate(element);
+            }
+        }
+    }
 
     function getPart(src, x, y, width, height){
         let dst = document.createElement('canvas');
@@ -899,7 +877,8 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
-    enableApiPlayer.addEventListener('click', function(){
+    enableApiPlayer.addEventListener('click', function(event) {
+        event.stopPropagation();
         if(enableApiPlayer.paused)
             enableApiPlayer.play();
         else
@@ -994,106 +973,102 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     }
 
-    let statContainers = document.querySelectorAll('.stat-container[data-stat]');
-    let wrapperHeight = document.querySelector('#wrapper').offsetHeight;
+    class ScrollMemory {
+        _isSmoothScrolling = false;
+        _scrollTimeout = -1;
+        _loaded = false;
 
-    let positionY = {};
+        constructor() {
 
-    function updateStatsPositions(){
-        [].forEach.call(statContainers, function(statContainer){
-            positionY[statContainer.getAttribute('data-stat')] = statContainer.offsetTop;
-        });
-    }
 
-    updateStatsPositions();
+            window.addEventListener('load', () => {
+                this._loaded = true;
+                this.isSmoothScrolling = true;
+            }, { once: true });
 
-    let updateTab = false;
-    let updateTabLock = false;
-
-    function updateActiveTab(){
-        if(!updateTab)
-            return false;
-
-        let rectYs = [];
-        let activeIndex = 0;
-        let activeY = -Infinity;
-        let activeStatContainer;
-
-        if((window.innerHeight + window.scrollY) >= wrapperHeight){
-            activeStatContainer = [].slice.call(statContainers).pop();
-        }else{
-            [].forEach.call(statContainers, function(statContainer){
-                rectYs.push(statContainer.getBoundingClientRect().y);
+            window.addEventListener("hashchange", () => {
+                this.isSmoothScrolling = true;
             });
 
-            rectYs.forEach(function(rectY, index){
-                if(rectY < 250 && rectY > activeY){
-                    activeY = rectY;
-                    activeIndex = index;
-                }
+            document.addEventListener('focusin', () => {
+                this.isSmoothScrolling = true;
             });
-
-            activeStatContainer = statContainers[activeIndex];
         }
 
-        let activeTab = document.querySelector('.nav-item[data-target=' + activeStatContainer.getAttribute('data-stat') + ']');
-
-        if(!activeTab.classList.contains('active')){
-            [].forEach.call(document.querySelectorAll('.nav-item.active'), function(statContainer){
-                statContainer.classList.remove('active');
-            });
-
-            anime({
-                targets: '#nav_items_container',
-                scrollLeft: activeTab.offsetLeft - window.innerWidth / 2 + activeTab.offsetWidth / 2,
-                duration: 350,
-                easing: 'easeOutCubic'
-            });
-
-            activeTab.classList.add('active');
+        /** wether the document currently has a smooth scroll taking place */
+        get isSmoothScrolling() {
+            return this._isSmoothScrolling || !this._loaded;
         }
 
-        updateTab = false;
+        set isSmoothScrolling(value) {
+            if (this._isSmoothScrolling !== value) {
+                this._isSmoothScrolling = value;
+                if (value) {
+                    window.addEventListener('scroll', this._onScroll);
+                    this._onScroll();
+                } else {
+                    window.removeEventListener('scroll', this._onScroll);
+                    scrollToTab();
+                }   
+            }
+        }
+
+        _onScroll = () => {
+            clearTimeout(this._scrollTimeout);
+            this._scrollTimeout = setTimeout(() => {
+                this.isSmoothScrolling = false;
+            }, 500);
+        }
     }
 
-    setInterval(updateActiveTab, 100);
+    const scrollMemory = new ScrollMemory();
 
-    document.addEventListener('scroll', function(){
-        if(!updateTabLock)
-            updateTab = true;
-    });
+    const intersectingElements = new Map();    
 
-    updateTab = true;
-
-    [].forEach.call(document.querySelectorAll('.nav-item'), function(element){
-        element.addEventListener('click', function(){
-            updateTabLock = true;
-            updateTab = false;
-
-            let newActiveTab = this;
-
-            [].forEach.call(document.querySelectorAll('.nav-item.active'), function(statContainer){
-                statContainer.classList.remove('active');
-            });
-
-            anime({
-                targets: window.document.scrollingElement || window.document.body || window.document.documentElement,
-                scrollTop: positionY[newActiveTab.getAttribute('data-target')] - 110,
-                duration: 350,
-                easing: 'easeOutCubic',
-                complete: function(){
-                    updateTabLock = false;
-                    newActiveTab.classList.add('active');
+    const sectionObserver = new IntersectionObserver((entries, observer) => {
+        for (const entry of entries) {
+            intersectingElements.set(entry.target, entry.isIntersecting);
+        }
+        for (const [element, isIntersecting] of intersectingElements) {
+            if (isIntersecting) {
+                let newHash;
+                if (element !== playerProfileElement) {
+                    newHash = '#' + element.parentElement.querySelector('a[id]').id;
+                    history.replaceState({}, document.title, newHash);
+                } else {
+                    history.replaceState({}, document.title, location.href.split('#')[0]);
                 }
-            });
+                for (const link of navBarLinks) {
+                    if (link.hash === newHash) {
+                        link.setAttribute('aria-current', true);
+                        
+                        if (!scrollMemory.isSmoothScrolling) {
+                            scrollToTab(true, link);
+                        }
+                    } else {
+                        link.removeAttribute('aria-current');
+                    }
+                }
+                break;
+            }
+        }
+    }, {rootMargin: "-100px 0px -25% 0px"});
 
-            anime({
-                targets: '#nav_items_container',
-                scrollLeft: newActiveTab.offsetLeft - window.innerWidth / 2 + newActiveTab.offsetWidth / 2,
-                duration: 350,
-                easing: 'easeOutCubic'
-            });
-        });
+    function scrollToTab(smooth = true, element) {
+        const link = element ?? document.querySelector(`[href="${location.hash}"]`);
+        const behavior = smooth ? 'smooth' : 'auto';
+        const left = link.offsetLeft + (link.getBoundingClientRect().width / 2) - (link.parentElement.getBoundingClientRect().width / 2);
+        link.parentElement.scrollTo({ left, behavior });
+    }
+
+    scrollToTab(false);
+
+    const playerProfileElement = document.querySelector('#player_profile');
+
+    sectionObserver.observe(playerProfileElement);
+
+    document.querySelectorAll('.stat-header').forEach((element) => {
+        sectionObserver.observe(element);
     });
 
     let otherSkills = document.querySelector('#other_skills');
@@ -1108,8 +1083,6 @@ document.addEventListener('DOMContentLoaded', function(){
                 otherSkills.classList.add('show-skills');
                 show_skills.innerHTML = 'Hide Skills';
             }
-
-            updateStatsPositions();
         });
     }
 
