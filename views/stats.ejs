@@ -2080,9 +2080,10 @@ function jerriefy(rank) {
             <a class="stat-anchor" id="Dungeons"></a>
             <h2 class="stat-header">Dungeons</h2>
             <div class="stat-content">
-            <% if (Object.keys(calculated.dungeons).length === 0) { %>
+            <% if (Object.keys(calculated.dungeons).length === 0 || 
+            !(calculated.dungeons.catacombs?.visited || calculated.dungeons.master_catacombs?.visited)) { %>
                 <p class="stat-raw-values">
-                    <%= calculated.display_name %> hasn't entered the Catacombs yet.
+                    <%= calculated.display_name %> hasn't entered any dungeon yet.
                 </p>
             <% } else { %>
                 <% if (calculated.dungeons.used_classes) { %>
@@ -2174,10 +2175,69 @@ function jerriefy(rank) {
                         <% } %>
                     </div>
                     <br>
-                <% } else { %>
+                <% } %>
+
+                <% if (calculated.dungeons.master_catacombs?.visited) { %>
+                    <p class="stat-sub-header">Master Catacombs</p>
+
                     <p class="stat-raw-values">
-                        <%= calculated.display_name %> hasn't entered the Catacombs yet.
+                        <span class="stat-name">Highest Floor Beaten: </span><span class="stat-value"><%= helper.titleCase(calculated.dungeons.master_catacombs.highest_floor.replace("_", " ")) %></span><br>
                     </p>
+
+                    <div class="floor-containers">
+                        <% for (let [id, floor] of Object.entries(calculated.dungeons.master_catacombs.floors)) { %>
+                        <div class="narrow-info-container">
+                            <div class="narrow-info-header">
+                                <div class="floor-icon" style="background-image: url(/head/<%= floor.icon_texture %>)"></div>
+                                <span><%= floor.name.replace("_", " ") %></span>
+                            </div>
+                            <span>
+                                <button class="stat-sub-header extender" aria-controls="floor-<%= id %>" aria-expanded="false">Floor Stats</button>
+                                <div class="pieces extendable" id="floor-<%= id %>">
+                                <% for (let [stat, value] of Object.entries(floor.stats)) { %>
+                                    <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
+                                    <span class="stat-value">
+                                    <% if(stat.startsWith("fastest_time")) { %>
+                                        <%= moment.duration(value, "milliseconds").format("m:ss.SSS") %>
+                                    <% } else { %>
+                                        <%= helper.formatNumber(value) %>
+                                    <% } %>
+                                    </span><br>
+                                <% } %>
+                                <% if(floor.most_damage) { %>
+                                    <span class="stat-name">Most Damage: </span>
+                                    <span class="stat-value"><%= helper.formatNumber(floor.most_damage.value) %></span>
+                                    <span class="stat-name">(<%= helper.titleCase(floor.most_damage.class) %>)</span>
+                                <% } %>
+                                </div>
+                                <% if(floor.best_runs) { %>
+                                    <button class="stat-sub-header extender" aria-controls="runs-<%= id %>" aria-expanded="false">Best Run</button>
+                                    <div class="pieces extendable" id="runs-<%= id %>">
+                                        <span class="stat-name">Grade</span>
+                                        <span class="stat-value"><%= helper.calcDungeonGrade(floor.best_runs[floor.best_runs.length - 1]) %></span>
+                                        <br>
+                                    <% for (let [stat, value] of Object.entries(floor.best_runs[floor.best_runs.length - 1])) {
+                                        if(stat == "teammates") continue; %>
+                                        <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
+                                        <span class="stat-value">
+                                        <% switch (stat) { case "timestamp": %>
+                                            <%= moment(value).fromNow() %>
+                                        <% break; case "elapsed_time": %>
+                                            <%= moment.duration(value, "milliseconds").format("m:ss.SSS") %>
+                                        <% break; case "dungeon_class": %>
+                                            <%= helper.titleCase(value) %>
+                                        <% break; default: %>
+                                            <%= helper.formatNumber(value) %>
+                                        <% } %>
+                                        </span><br>
+                                    <% } %>
+                                    </div>
+                                <% } %>
+                            </span>
+                        </div>
+                        <% } %>
+                    </div>
+                    <br>
                 <% } %>
 
                 <% if (calculated.dungeons.unlocked_collections) { %>
