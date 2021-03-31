@@ -1481,7 +1481,7 @@ class Spirit extends Pet {
 	get stats() {
 		return {
 			intelligence: this.level * 1,
-			speed: this.level * 0.29
+			speed: this.level * 0.3
 		};
 	}
 
@@ -1503,18 +1503,17 @@ class Spirit extends Pet {
 	}
 
 	get second() {
-		let mult = 0;
-		return {
-			name: "§6Spirit Leap",
-			desc: [`§7Grants a §a10% §7chance for mini-bosses in dungeons to drop §b5 §7Spirit Leap Pearls.`]
-		};
-	}
-
-	get third() {
 		let mult = 0.45;
 		return {
 			name: "§6Spirit Cooldowns",
 			desc: [`§7Reduces the cooldown of your ghost abilities in dungeons by §a${round(5 + this.level * mult, 1)}%§7.`]
+		};
+	}
+
+	get third() {
+		return {
+			name: "§6Half Life",
+			desc: [`§7If you are the first player to die in a dungeon, the score penalty for that death is reduced to §a1§7.`]
 		};
 	}
 }
