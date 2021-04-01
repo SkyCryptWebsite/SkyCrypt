@@ -1387,7 +1387,7 @@ class Skeleton extends Pet {
 		let mult = 0;
 		return {
 			name: "§6Skeletal Defense",
-			desc: [`§7Your skeleton shoots an arrow dealing §a60x §7your §9${symbols.crit_damage} Crit Damage §7when a mob gets close to you (15s cooldown)`]
+			desc: [`§7Your skeleton shoots an arrow dealing §a30x §7your §9${symbols.crit_damage} Crit Damage §7when a mob gets close to you (5s cooldown)`]
 		};
 	}
 }
