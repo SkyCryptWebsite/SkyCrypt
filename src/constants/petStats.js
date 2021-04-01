@@ -1855,7 +1855,8 @@ class Lion extends Pet {
 	get stats() {
 		return {
 			strength: this.level * 0.5,
-			speed: this.level * 0.25
+			speed: this.level * 0.25,
+			ferocity: this.level * 0.05,
 		};
 	}
 
@@ -1877,18 +1878,18 @@ class Lion extends Pet {
 	}
 
 	get second() {
-		let mult = this.rarity > 3 ? 0.5 :this.rarity > 2 ? 0.4 : 0.3;
+		let mult = this.rarity > 2 ? 1 : 0.75;
 		return {
 			name: "§6First Pounce",
-			desc: [`§7Increases damage dealt by §a${round(this.level * mult, 1)}% §7on your first hit on a mob`]
+			desc: [`§7First Strike, Triple-Strike, and §d§lCombo §r§7are §a${round(this.level * mult, 1)}% §7more effective.`]
 		};
 	}
 
 	get third() {
-		let mult = 0.3;
+		let mult = 0.15;
 		return {
 			name: "§6King of the Jungle",
-			desc: [`§7Deal §c+${round(this.level * mult, 1)}% ${symbols.strength} Damage §7against mobs below level §a80`]
+			desc: [`§7Deal §c+${round(this.level * mult, 1)}% ${symbols.strength} Damage §7against mobs that have attacked you.`]
 		};
 	}
 }
