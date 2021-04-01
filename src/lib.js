@@ -2006,7 +2006,7 @@ module.exports = {
             });
 
         const random = Math.random() < 0.01;
-        
+
 
         killsDeaths = killsDeaths.filter(a => {
             return ![
@@ -2484,11 +2484,13 @@ module.exports = {
 
         */
 
-        output.dungeonsWeight = output.dungeons.dungeonsWeight;
-        output.skillWeight = skillWeight;
-        output.slayerWeight = slayerWeight;
+        output.dungeonsWeight = output.dungeons.dungeonsWeight || -1;
+        output.skillWeight = skillWeight || -1;
+        output.slayerWeight = slayerWeight || -1;
 
-        output.weight = output.dungeonsWeight + skillWeight + slayerWeight;
+        output.weight = [output.dungeonsWeight, skillWeight, slayerWeight]
+            .filter(x => x >= 0)
+            .reduce((total, value) => total + value)
 
         return output;
     },

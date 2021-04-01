@@ -1345,9 +1345,9 @@ function jerriefy(rank) {
                 </div>
                 <div class="additional-stat">
                     <span data-tippy-content="
-                    <span class='stat-name'>Skill Weight: </span><span class='stat-value'><%= parseFloat(calculated.skillWeight.toFixed(2)).toLocaleString() %></span><br/>
-                    <span class='stat-name'>Slayer Weight: </span><span class='stat-value'><%= parseFloat(calculated.slayerWeight.toFixed(2)).toLocaleString() %></span><br/>
-                    <span class='stat-name'>Dungeon Weight: </span><span class='stat-value'><%= parseFloat(calculated.dungeonsWeight.toFixed(2)).toLocaleString() %></span><br/>
+                    <span class='stat-name'>Skill Weight: </span><span class='stat-value'><%= calculated.skillWeight >= 0 ? parseFloat(calculated.skillWeight.toFixed(2)).toLocaleString() : 'Error' %></span><br/>
+                    <span class='stat-name'>Slayer Weight: </span><span class='stat-value'><%= calculated.slayerWeight >= 0 ? parseFloat(calculated.slayerWeight.toFixed(2)).toLocaleString() : 'Error'  %></span><br/>
+                    <span class='stat-name'>Dungeon Weight: </span><span class='stat-value'><%= calculated.dungeonsWeight >= 0 ? parseFloat(calculated.dungeonsWeight.toFixed(2)).toLocaleString() : 'Error'  %></span><br/>
                     <br/>
                     <div class='tippy-explanation'>Weight calculations provided by Senither</div>
                     ">
@@ -2080,7 +2080,7 @@ function jerriefy(rank) {
             <a class="stat-anchor" id="Dungeons"></a>
             <h2 class="stat-header">Dungeons</h2>
             <div class="stat-content">
-            <% if (Object.keys(calculated.dungeons).length === 0 || 
+            <% if (Object.keys(calculated.dungeons).length === 0 ||
             !(calculated.dungeons.catacombs?.visited || calculated.dungeons.master_catacombs?.visited)) { %>
                 <p class="stat-raw-values">
                     <%= calculated.display_name %> hasn't entered any dungeon yet.
