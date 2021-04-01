@@ -1060,6 +1060,18 @@ if(calculated.profile.game_mode == 'ironman'){
     metaTitle +=  ` (${calculated.profile.cute_name})`;
 }
 
+function jerriefy(rank) {
+    if (extra.isFoolsDay) {
+        rank = rank.replace("VIP", "JER");
+        rank = rank.replace("MVP", "JRY");
+        rank = rank.replace("HELPER", "JERRY");
+        rank = rank.replace("MOD", "JERRY");
+        rank = rank.replace("PIG", "JERRY");
+        rank = rank.replace("ADMIN", "SR JERRY");
+        rank = rank.replace("YOUTUBE", "YERRY");
+    }
+    return rank;
+}
 
 %>
 <!DOCTYPE html>
@@ -1095,7 +1107,7 @@ if(calculated.profile.game_mode == 'ironman'){
     <main id="wrapper" data-sticky-container>
         <div id="player_profile"><span class="text-stats-for">Stats for</span>
             <div tabindex="1" id="stats_for_player">
-                <%- calculated.rank_prefix %>
+                <%- jerriefy(calculated.rank_prefix) %>
                 <%= calculated.display_name %>
                 <% if(calculated.display_emoji_img){ %><img class="emoji" draggable="false" src="<%= calculated.display_emoji_img %>">
                 <% }else if(calculated.display_emoji){ %><%- extra.twemoji.parse(calculated.display_emoji) %><% } %>
