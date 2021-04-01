@@ -198,6 +198,10 @@ async function main(){
             const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack);
             const calculated = await lib.getStats(db, profile, allProfiles, items);
 
+            if (isFoolsDay) {
+                calculated.skin_data.skinurl = "http://textures.minecraft.net/texture/b4bd832813ac38e68648938d7a32f6ba29801aaf317404367f214b78b4d4754c";
+            }
+
             res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), fileHashes, page: 'stats' });
         }catch(e){
             console.error(e);

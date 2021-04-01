@@ -1067,7 +1067,7 @@ if(calculated.profile.game_mode == 'ironman'){
 <head>
     <title><%= calculated.display_name %><% if(calculated.display_emoji){ %> <%= calculated.display_emoji %><% } %> | SkyCrypt</title>
     <meta name="description" content="<%= metaDescription %>">
-    <link rel="icon" href="https://crafatar.com/avatars/<%= calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
+    <link rel="icon" href="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
     <meta property="og:type" content="profile">
     <meta property="og:title" content="<%= metaTitle %>">
     <meta property="og:image" content="https://crafatar.com/avatars/<%= calculated.uuid %>?size=512&overlay">
