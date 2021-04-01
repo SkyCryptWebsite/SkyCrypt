@@ -1567,7 +1567,7 @@ class Tiger extends Pet {
 			strength: 5 + this.level * 0.1,
 			crit_chance: this.level * 0.05,
 			crit_damage: this.level * 0.5,
-			ferocity: this.level * 0.1
+			ferocity: this.level * 0.25
 		};
 	}
 
@@ -1581,7 +1581,7 @@ class Tiger extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 1 : this.rarity > 0 ? 0.5 : 0.2;
+		let mult = this.rarity > 2 ? 0.5 : this.rarity > 0 ? 0.33 : 0.15;
 		return {
 			name: "§6Merciless Swipe",
 			desc: [`§7Gain 	§c+${round(this.level * mult, 1)}% ${symbols.ferocity} Ferocity.`]
@@ -1592,7 +1592,7 @@ class Tiger extends Pet {
 		let mult = this.rarity > 2 ? 0.55 : 0.3;
 		return {
 			name: "§6Hemorrhage",
-			desc: [`§7Melee attacks reduce healing by §a${round(this.level * mult, 1)}% §7for 10 seconds`]
+			desc: [`§7Melee attacks reduce healing by §6${round(this.level * mult, 1)}% §7for §a10s`]
 		};
 	}
 
@@ -1600,7 +1600,7 @@ class Tiger extends Pet {
 		let mult = 0.2;
 		return {
 			name: "§6Apex Predator",
-			desc: [`§7Deal ${round(this.level * mult, 1)}% damage against targets with no other mobs within 15 blocks`]
+			desc: [`§7Deal §c+${round(this.level * mult, 1)}% §7damage against targets with no other mobs within §a15 §7blocks`]
 		};
 	}
 
