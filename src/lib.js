@@ -859,7 +859,14 @@ function calcDungeonsClassLevelWithProgress(experience){
     return Math.min(level, 50);
 }
 
-function calcDungeonsWeight(type, level, experience){
+function calcDungeonsWeight(type, level, experience) {
+    if (type.startsWith('master_')) {
+        return {
+            weight: 0,
+            weight_overflow: 0,
+        }
+    }
+
     let percentageModifier = constants.dungeonsWeight[type];
     let level50Experience = 569809640
 
@@ -2006,7 +2013,7 @@ module.exports = {
             });
 
         const random = Math.random() < 0.01;
-        
+
 
         killsDeaths = killsDeaths.filter(a => {
             return ![
