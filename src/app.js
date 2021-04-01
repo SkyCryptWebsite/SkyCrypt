@@ -53,6 +53,14 @@ async function main(){
     if(credentials.hypixel_api_key.length == 0)
         throw "Please enter a valid Hypixel API Key. Join mc.hypixel.net and enter /api to obtain one.";
 
+    let isFoolsDay;
+    function updateIsFoolsDay() {
+        const date = new Date();
+        isFoolsDay = date.getUTCMonth() === 3 && date.getUTCDate() === 1;
+    }
+    updateIsFoolsDay();
+    setInterval(updateIsFoolsDay, 60_000);
+
     const app = express();
     const port = 32464;
 
@@ -138,6 +146,8 @@ async function main(){
         output.themes = lib.getThemes();
 
         output.packs = lib.getPacks();
+
+        output.isFoolsDay = isFoolsDay;
 
         if('recaptcha_site_key' in credentials)
             output.recaptcha_site_key = credentials.recaptcha_site_key;
