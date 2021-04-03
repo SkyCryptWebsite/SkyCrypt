@@ -117,6 +117,8 @@
             
             element.classList.toggle("light", !!theme.light);
 
+            document.querySelector('meta[name="theme-color"]').content = theme.light ? '#dbdbdb' : '#282828';
+
             element.style = ''
 
             for (color in theme.colors) {
