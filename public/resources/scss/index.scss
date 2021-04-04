@@ -2318,13 +2318,13 @@ a.additional-player-stat:hover {
 
 .missing-pet,
 .missing-talisman {
-    filter: saturate(0%);
+    filter: grayscale(1);
     transition: filter 0.2s;
 
     &:hover,
     &:focus-visible,
     &.sticky-stats {
-        filter: saturate(100%);
+        filter: grayscale(0);
     }
 }
 
