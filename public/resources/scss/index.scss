@@ -2316,43 +2316,15 @@ a.additional-player-stat:hover {
     font-size: 15px;
 }
 
-.missing-pet {
-    background-color: var(--§8);
-    transition: background-color 0.2s;
-
-    .piece-icon {
-        filter: saturate(0%);
-        transition: filter 0.2s;
-    }
-
-    &:hover,
-    &:focus-visible,
-    &.sticky-stats {
-        background-color: var(--maxed-hex);
-
-        .piece-icon {
-            filter: saturate(100%);
-        }
-    }
-}
-
+.missing-pet,
 .missing-talisman {
-    background-color: var(--§8);
-    transition: background-color 0.2s;
-
-    .piece-icon {
-        filter: saturate(0%);
-        transition: filter 0.2s;
-    }
+    filter: saturate(0%);
+    transition: filter 0.2s;
 
     &:hover,
     &:focus-visible,
     &.sticky-stats {
-        background-color: var(--§8);
-
-        .piece-icon {
-            filter: saturate(100%);
-        }
+        filter: saturate(100%);
     }
 }
 
