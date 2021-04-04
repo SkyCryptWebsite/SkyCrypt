@@ -557,6 +557,9 @@ module.exports = {
         if(rankName == 'PIG+++')
             output.plusColor = 'b';
 
+        if(rankName == 'VIP_PLUS')
+             output.plusColor = '6';
+
         return output;
     },
 
