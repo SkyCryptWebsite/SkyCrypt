@@ -632,6 +632,13 @@ module.exports = {
                 release: new Date('2021-03-09 18:00:00 GMT+1').getTime(),
             },
         },
+        "CHICKEN": {
+            "BABY_CHICK": {
+                name: "Baby Chick",
+                head: "/head/1bde55ed54cb5c87661b86c349186a9d5baffb3cb934b449a2d329e399d34bf",
+                release: new Date('2021-04-05 18:00:00 GMT+1').getTime(),
+            },
+        },
     },
 
     pet_value: {
