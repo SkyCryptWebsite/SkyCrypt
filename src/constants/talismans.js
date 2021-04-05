@@ -651,7 +651,7 @@ module.exports = {
         'ETERNAL_HOOF': null,
         'WITHER_RELIC': {
             name: "Wither Relic",
-            rarity: "epic",
+            rarity: "legendary",
             texture: "/head/964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793"
         },
         'CATACOMBS_EXPERT_RING': {
