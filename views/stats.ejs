@@ -1104,6 +1104,22 @@ function jerriefy(rank) {
     </div>
     <div id="skin_display">
         <div id="player_model"></div>
+	<script>
+		function startRotate() {
+			let num = Math.floor(Math.random() * 1000);
+			let num2 = Math.floor(Math.random() * 1000);
+			if (num != num2) return;
+			
+			var deg_ = 0;
+			setInterval(() => {
+				document.getElementById("player_model").style = "transform: rotate(" + deg_ + "deg)";
+				deg_ += 10;
+			}, 100)
+		}
+		window.onload = (event) => {
+			startRotate();
+		}
+	</script>
     </div>
     <main id="wrapper" data-sticky-container>
         <div id="player_profile"><span class="text-stats-for">Stats for</span>
