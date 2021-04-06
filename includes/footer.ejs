@@ -137,6 +137,20 @@
     });
 </script>
 
+<% if (extra.isFoolsDay) { %>
+    <style>
+        #player_model {
+            transform: scaleY(-1);
+        }
+        .profile-avatar {
+            transition: transform 0.2s ease-in-out;
+        }
+        :hover > .profile-avatar {
+            transform: rotate(180deg);
+        }
+    </style>
+<% } %>
+
 <% if(page == 'stats'){ %>
     <script src="/resources/js/stats.js?<%- fileHashes.js['stats.js'] %>"></script>
 <% } %>

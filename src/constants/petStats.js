@@ -1387,7 +1387,7 @@ class Skeleton extends Pet {
 		let mult = 0;
 		return {
 			name: "§6Skeletal Defense",
-			desc: [`§7Your skeleton shoots an arrow dealing §a60x §7your §9${symbols.crit_damage} Crit Damage §7when a mob gets close to you (15s cooldown)`]
+			desc: [`§7Your skeleton shoots an arrow dealing §a30x §7your §9${symbols.crit_damage} Crit Damage §7when a mob gets close to you (5s cooldown)`]
 		};
 	}
 }
@@ -1481,7 +1481,7 @@ class Spirit extends Pet {
 	get stats() {
 		return {
 			intelligence: this.level * 1,
-			speed: this.level * 0.29
+			speed: this.level * 0.3
 		};
 	}
 
@@ -1503,18 +1503,17 @@ class Spirit extends Pet {
 	}
 
 	get second() {
-		let mult = 0;
-		return {
-			name: "§6Spirit Leap",
-			desc: [`§7Grants a §a10% §7chance for mini-bosses in dungeons to drop §b5 §7Spirit Leap Pearls.`]
-		};
-	}
-
-	get third() {
 		let mult = 0.45;
 		return {
 			name: "§6Spirit Cooldowns",
 			desc: [`§7Reduces the cooldown of your ghost abilities in dungeons by §a${round(5 + this.level * mult, 1)}%§7.`]
+		};
+	}
+
+	get third() {
+		return {
+			name: "§6Half Life",
+			desc: [`§7If you are the first player to die in a dungeon, the score penalty for that death is reduced to §a1§7.`]
 		};
 	}
 }
@@ -1568,7 +1567,7 @@ class Tiger extends Pet {
 			strength: 5 + this.level * 0.1,
 			crit_chance: this.level * 0.05,
 			crit_damage: this.level * 0.5,
-			ferocity: this.level * 0.1
+			ferocity: this.level * 0.25
 		};
 	}
 
@@ -1582,7 +1581,7 @@ class Tiger extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 1 : this.rarity > 0 ? 0.5 : 0.2;
+		let mult = this.rarity > 2 ? 0.5 : this.rarity > 0 ? 0.33 : 0.15;
 		return {
 			name: "§6Merciless Swipe",
 			desc: [`§7Gain 	§c+${round(this.level * mult, 1)}% ${symbols.ferocity} Ferocity.`]
@@ -1593,7 +1592,7 @@ class Tiger extends Pet {
 		let mult = this.rarity > 2 ? 0.55 : 0.3;
 		return {
 			name: "§6Hemorrhage",
-			desc: [`§7Melee attacks reduce healing by §a${round(this.level * mult, 1)}% §7for 10 seconds`]
+			desc: [`§7Melee attacks reduce healing by §6${round(this.level * mult, 1)}% §7for §a10s`]
 		};
 	}
 
@@ -1601,7 +1600,7 @@ class Tiger extends Pet {
 		let mult = 0.2;
 		return {
 			name: "§6Apex Predator",
-			desc: [`§7Deal ${round(this.level * mult, 1)}% damage against targets with no other mobs within 15 blocks`]
+			desc: [`§7Deal §c+${round(this.level * mult, 1)}% §7damage against targets with no other mobs within §a15 §7blocks`]
 		};
 	}
 
@@ -1856,7 +1855,8 @@ class Lion extends Pet {
 	get stats() {
 		return {
 			strength: this.level * 0.5,
-			speed: this.level * 0.25
+			speed: this.level * 0.25,
+			ferocity: this.level * 0.05,
 		};
 	}
 
@@ -1878,18 +1878,18 @@ class Lion extends Pet {
 	}
 
 	get second() {
-		let mult = this.rarity > 3 ? 0.5 :this.rarity > 2 ? 0.4 : 0.3;
+		let mult = this.rarity > 2 ? 1 : 0.75;
 		return {
 			name: "§6First Pounce",
-			desc: [`§7Increases damage dealt by §a${round(this.level * mult, 1)}% §7on your first hit on a mob`]
+			desc: [`§7First Strike, Triple-Strike, and §d§lCombo §r§7are §a${round(this.level * mult, 1)}% §7more effective.`]
 		};
 	}
 
 	get third() {
-		let mult = 0.3;
+		let mult = 0.15;
 		return {
 			name: "§6King of the Jungle",
-			desc: [`§7Deal §c+${round(this.level * mult, 1)}% ${symbols.strength} Damage §7against mobs below level §a80`]
+			desc: [`§7Deal §c+${round(this.level * mult, 1)}% ${symbols.strength} Damage §7against mobs that have attacked you.`]
 		};
 	}
 }

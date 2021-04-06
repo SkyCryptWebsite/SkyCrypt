@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-185827357-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'UA-185827357-1');
-    </script>
     <title>API Documentation | SkyCrypt</title>
     <meta name="description" content="A beautiful site for sharing your SkyBlock profile 🍣">
     <link rel="icon" href="/resources/img/logo_square.svg" sizes="any" type="image/svg+xml">
@@ -25,21 +17,25 @@
         <redoc id="docs"></redoc>
         <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
         <script>
-            themeColors = extra.themes[localStorage.getItem("currentTheme")].colors;
-            Redoc.init(
-                'resources/api/api_docs.json',
-                {
-                    scrollYOffset: 'header',
-                    theme: {
-                        colors: {
-                            primary: {
-                                main: themeColors?.icon ?? '#0bda51',
+            function redocInit() {
+                const themeColors = extra.themes[localStorage.getItem("currentTheme")].colors;
+                Redoc.init(
+                    'resources/api/api_docs.json',
+                    {
+                        scrollYOffset: 'header',
+                        theme: {
+                            colors: {
+                                primary: {
+                                    main: themeColors?.icon ?? '#0bda51',
+                                }
                             }
                         }
-                    }
-                },
-                document.getElementById('docs')
-            );
+                    },
+                    document.getElementById('docs')
+                );
+            }
+            redocInit();
+            document.querySelector('#themes-box').addEventListener("change", () => setTimeout(redocInit));
         </script>
 
         <%- include('../includes/footer'); %>
