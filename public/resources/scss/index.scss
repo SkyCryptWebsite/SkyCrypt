@@ -568,12 +568,11 @@ input[type="search"]::-webkit-search-cancel-button {
 #themes-button {
     -webkit-appearance: none;
     appearance: none;
-    display: inline-block;
+    display: flex;
     box-sizing: unset;
     height: 36px;
     line-height: 36px;
     box-sizing: border-box;
-    vertical-align: middle;
     text-transform: capitalize;
     font-weight: 600;
     font-size: 14px;
@@ -583,26 +582,24 @@ input[type="search"]::-webkit-search-cancel-button {
     top: 6px;
     right: 20px;
     background-color: rgba(var(--background-rgb), 0.2);
-    background-size: 22px auto;
-    background-position: 6px 7px;
-    background-repeat: no-repeat;
-    transition: padding-right 0.2s;
     border: none;
+    align-items: center;
 
     svg {
         width: 24px;
         height: 24px;
-        display: inline-block;
-        vertical-align: middle;
+    }
+
+    span {
+        display: block;
+        transform: scaleX(1);
+        transition: transform 0.2s, font-size, 0.2s, opacity 0.2s, padding-right 0.2s;
+        padding: 0 6px 0 4px;
     }
 }
 
-#packs-button {
-    background-image: url(../img/icons/package-variant.png);
-}
-
-#themes-button {
-    background-image: url(../img/icons/format-color-fill.png);
+#themes-button svg {
+    transform: translateY(2px);
 }
 
 #wrapper {
@@ -3744,10 +3741,10 @@ body {
     :not(.page-index) > header #packs-button,
     .lookup-player.show-user-search ~ #themes-button,
     .lookup-player.show-user-search ~ #packs-button {
-        padding-right: 3px;
 
         span {
             transform: scaleX(0);
+            padding: 0;
             font-size: 0;
             opacity: 0;
         }
