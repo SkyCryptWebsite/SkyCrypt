@@ -331,13 +331,15 @@ module.exports = {
         'SUPERSTAR': {
             color: '6',
             tag: 'MVP',
-            plus: '++'
+            plus: '++',
+            plusColor: 'c'
         },
 
         'MVP_PLUS': {
             color: 'b',
             tag: 'MVP',
-            plus: '+'
+            plus: '+',
+            plusColor: 'c'
         },
 
         'MVP': {
@@ -349,6 +351,7 @@ module.exports = {
             color: 'a',
             tag: 'VIP',
             plus: '+',
+            plusColor: '6'
         },
 
         'VIP': {
@@ -359,7 +362,8 @@ module.exports = {
         'PIG+++': {
             color: 'd',
             tag: 'PIG',
-            plus: '+++'
+            plus: '+++',
+            plusColor: 'b'
         },
 
         'NONE': null
