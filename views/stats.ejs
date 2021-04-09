@@ -1324,8 +1324,8 @@ function jerriefy(rank) {
                 <% if(calculated.current_area){ %>
                 <div class="additional-stat"><span class="stat-name"><%= calculated.current_area_updated ? 'Current' : 'Last' %> Area: </span><span class="stat-value"><%= calculated.current_area %></span></div>
                 <% } %>
-                <div class="additional-stat"><span data-tippy-content="Last updated on <local-time timestamp=&quot;<%= calculated.last_updated.unix %>&quot;></local-time>"><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></span></div>
-                <div class="additional-stat"><span data-tippy-content="Joined on <local-time timestamp=&quot;<%= calculated.first_join.unix %>&quot;></local-time>"><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></span></div>
+                <div class="additional-stat"><span data-tippy-content='Last updated on <local-time timestamp="<%= calculated.last_updated.unix %>"></local-time>'><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></span></div>
+                <div class="additional-stat"><span data-tippy-content='Joined on <local-time timestamp="<%= calculated.first_join.unix %>"></local-time>'><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></span></div>
                 <div class="additional-stat"><span class="stat-name">Purse: </span><span class="stat-value"><%= helper.formatNumber(calculated.purse, true) %> Coin<%= Math.floor(calculated.purse) == 1 ? '': 's' %></span></div>
                 <% if('bank' in calculated){ %>
                     <div class="additional-stat"><span class="stat-name">Bank Account: </span><span class="stat-value"><%= helper.formatNumber(calculated.bank, true) %> Coin<%= Math.floor(calculated.bank) == 1 ? '': 's' %></span></div>
