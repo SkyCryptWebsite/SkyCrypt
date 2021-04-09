@@ -2840,7 +2840,7 @@ function jerriefy(rank) {
                                 let timestamp = calculated.misc.claimed_items[key];
                             %>
                             <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
-                            <span class="stat-value" data-tippy-content='Claimed on <%= moment(timestamp).format('D MMMM YYYY HH:mm') %>'><%= moment(timestamp).fromNow() %></span><br>
+                            <span class="stat-value" data-tippy-content='Claimed on <local-time timestamp="<%= timestamp %>"></local-time>'><%= moment(timestamp).fromNow() %></span><br>
                             <% } %>
                         </p>
                     <% } %>
