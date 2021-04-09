@@ -633,7 +633,7 @@ module.exports = {
             },
         },
         "CHICKEN": {
-            "BABY_CHICK": {
+            "CHICKEN_BABY_CHICK": {
                 name: "Baby Chick",
                 head: "/head/1bde55ed54cb5c87661b86c349186a9d5baffb3cb934b449a2d329e399d34bf",
                 release: new Date('2021-04-05 18:00:00 GMT+1').getTime(),
