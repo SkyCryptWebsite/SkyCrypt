@@ -548,14 +548,11 @@ module.exports = {
 
         if(module.exports.hasPath(rank, 'plus')){
             output.plusText = rank.plus;
-            output.plusColor = output.rankColor;
+            output.plusColor = rank.plusColor;
         }
 
         if(output.plusText && module.exports.hasPath(player, 'rankPlusColor'))
             output.plusColor = constants.color_names[player.rankPlusColor];
-
-        if(rankName == 'PIG+++')
-            output.plusColor = 'b';
 
         return output;
     },

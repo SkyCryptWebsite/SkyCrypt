@@ -3483,7 +3483,7 @@ body {
             "skin additional"
             ". ."
             "skill skill ";
-        grid-template-columns: minmax(100px, 250px) minmax(220px, 1fr);
+        grid-template-columns: minmax(100px, 250px) minmax(225px, 1fr);
         grid-template-rows: auto auto 30px auto;
         padding: 0;
         background-color: transparent;
@@ -3504,6 +3504,7 @@ body {
         box-sizing: border-box;
         position: relative;
         padding-left: 0;
+        padding-right: 0;
     }
 
     #skill_levels_container {

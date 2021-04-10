@@ -859,7 +859,14 @@ function calcDungeonsClassLevelWithProgress(experience){
     return Math.min(level, 50);
 }
 
-function calcDungeonsWeight(type, level, experience){
+function calcDungeonsWeight(type, level, experience) {
+    if (type.startsWith('master_')) {
+        return {
+            weight: 0,
+            weight_overflow: 0,
+        }
+    }
+
     let percentageModifier = constants.dungeonsWeight[type];
     let level50Experience = 569809640
 
@@ -2005,14 +2012,34 @@ module.exports = {
                 amount: (userProfile.stats['kills_chicken_deep'] || 0) + (userProfile.stats['kills_zombie_deep'] || 0)
             });
 
+        const random = Math.random() < 0.01;
+
+
         killsDeaths = killsDeaths.filter(a => {
             return ![
                 'guardian_emperor',
                 'skeleton_emperor',
                 'chicken_deep',
-                'zombie_deep'
+                'zombie_deep',
+                random ? 'yeti' : null
             ].includes(a.entityId);
         });
+
+        if('kills_yeti' in userProfile.stats && random )
+            killsDeaths.push({
+                type: 'kills',
+                entityId: 'yeti',
+                entityName: 'Snow Monke',
+                amount: (userProfile.stats['kills_yeti'] || 0)
+            });
+
+        if('deaths_yeti' in userProfile.stats )
+            killsDeaths.push({
+                type: 'deaths',
+                entityId: 'yeti',
+                entityName: 'Snow Monke',
+                amount: (userProfile.stats['deaths_yeti'] || 0)
+            });
 
         output.kills = killsDeaths.filter(a => a.type == 'kills').sort((a, b) => b.amount - a.amount);
         output.deaths = killsDeaths.filter(a => a.type == 'deaths').sort((a, b) => b.amount - a.amount);
@@ -2464,11 +2491,13 @@ module.exports = {
 
         */
 
-        output.dungeonsWeight = output.dungeons.dungeonsWeight;
-        output.skillWeight = skillWeight;
-        output.slayerWeight = slayerWeight;
+        output.dungeonsWeight = output.dungeons.dungeonsWeight ?? -1;
+        output.skillWeight = skillWeight ?? -1;
+        output.slayerWeight = slayerWeight ?? -1;
 
-        output.weight = output.dungeonsWeight + skillWeight + slayerWeight;
+        output.weight = [output.dungeonsWeight, skillWeight, slayerWeight]
+            .filter(x => x >= 0)
+            .reduce((total, value) => total + value)
 
         return output;
     },

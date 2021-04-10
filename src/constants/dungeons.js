@@ -338,6 +338,26 @@ module.exports = {
             "catacombs_7": {
                 name: "floor_7",
                 texture: "76965e3fd619de6b0a7ce1673072520a9360378e1cb8c19d4baf0c86769d3764"
+            },
+            "master_catacombs_1": {
+                name: "floor_1",
+                texture: "1eb5b21af330af122b268b7aa390733bd1b699b4d0923233ecd24f81e08b9bce"
+            },
+            "master_catacombs_2": {
+                name: "floor_2",
+                texture: "32292e4e0fa62667256ef8da0f01982a996499f4d5d894bd058c3e6f3d2fb2d9"
+            },
+            "master_catacombs_3": {
+                name: "floor_3",
+                texture: "c969f6b148648aa8d027228a52fb5a3ca1ee84dc76e47851f14db029a730a8a3"
+            },
+            "master_catacombs_4": {
+                name: "floor_4",
+                texture: "d7b69021f9c09647dfd9b34df3deaff70cfc740f6a26f612dd47503fc34c97f0"
+            },
+            "master_catacombs_5": {
+                name: "floor_5",
+                texture: "d65cbce40e60e7a59a87fa8f4ecb6ccfc1514338c262614bf33739a6263f5405"
             }
         },
         level_bonuses: {
