@@ -862,32 +862,32 @@ const formatReforge = (string) => {
 }
 
 const getReforges = (accessories) => {
-    const rr = {}
+    const rarityReforgeCounts = {}
 
     accessories.forEach(acc => {
         const rarity = acc.rarity
         const reforge = acc.reforge || 'no_reforge'
 
-        if (!rr[rarity]) {
-            rr[rarity] = {}
+        if (!rarityReforgeCounts[rarity]) {
+            rarityReforgeCounts[rarity] = {}
         }
-        if (!rr[rarity][reforge]) {
-            rr[rarity][reforge] = 0
+        if (!rarityReforgeCounts[rarity][reforge]) {
+            rarityReforgeCounts[rarity][reforge] = 0
         }
-        rr[rarity][reforge] += 1
+        rarityReforgeCounts[rarity][reforge] += 1
     })
 
     %>
     <span class="stat-name">Reforges: </span>
     <%
-    for (const [rarity, reforges] of Object.entries(rr)) {
+    for (const [rarity, reforges] of Object.entries(rarityReforgeCounts)) {
         for (const [reforge, amount] of Object.entries(reforges)) {
             %><span class="stat-value piece-<%= rarity %>-fg"><%= amount %>× <%= formatReforge(reforge) %></span><%
             if (reforge !== Object.keys(reforges).pop()) {
                 %><strong style="opacity: 0.6">, </strong><%
             }
         }
-        if (rarity !== Object.keys(rr).pop()) {
+        if (rarity !== Object.keys(rarityReforgeCounts).pop()) {
             %><strong style="opacity: 0.6"> // </strong><%
         }
     }
