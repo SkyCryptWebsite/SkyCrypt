@@ -1928,22 +1928,14 @@ a.additional-player-stat:hover {
     border-radius: 5px;
     user-select: none;
     cursor: context-menu;
-    transition: z-index 0.2s;
+    transition: box-shadow 0.2s ease-in-out;
     background-color: var(--§8);
+    box-shadow: rgba(255, 255, 255, 0) 0 0 0 0px inset;
+    content-visibility: auto;
 
-    &::after {
-        content: "";
-        position: absolute;
-        width: 75px;
-        height: 75px;
-        top: 0;
-        left: 0;
-        box-sizing: border-box;
-        border-radius: 5px;
-        transform: translateY(-15px);
-        border: 4px solid rgba(255, 255, 255, 0.9);
-        opacity: 0;
-        transition: transform 0.2s, opacity 0.2s;
+    &.sticky-stats,
+    &:focus {
+        box-shadow: rgba(255, 255, 255, 0.9) 0 0 0 4px inset;
     }
 }
 
@@ -1969,14 +1961,12 @@ a.additional-player-stat:hover {
 
 .stat-weapons {
     margin-bottom: -10px;
-
-    .piece {
-        margin-bottom: 50px;
-    }
 }
 
+.stat-weapons .piece,
 .stat-fishing .piece {
     margin-bottom: 50px;
+    content-visibility: visible;
 }
 
 .piece .select-weapon,
@@ -2061,16 +2051,6 @@ a.additional-player-stat:hover {
     100% {
         transform: translateY(-120%);
     }
-}
-
-.piece:focus {
-    outline: none;
-}
-
-.piece.sticky-stats::after,
-.piece:focus::after {
-    opacity: 1;
-    transform: translateY(0px);
 }
 
 .piece-icon {
@@ -2242,6 +2222,7 @@ a.additional-player-stat:hover {
 
 .piece.other-pet {
     margin-bottom: 25px;
+    content-visibility: visible;
 }
 
 .pet-name {
@@ -2573,6 +2554,8 @@ a.additional-player-stat:hover {
 
 .slayer-containers {
     white-space: nowrap;
+    content-visibility: auto;
+    contain-intrinsic-size: 230px 424px;
 }
 
 .slayer-header {
@@ -2593,6 +2576,11 @@ a.additional-player-stat:hover {
     background-repeat: no-repeat;
     background-position: center;
     vertical-align: middle;
+}
+
+.floor-containers {
+    content-visibility: auto;
+    contain-intrinsic-size: 350px 212px;
 }
 
 .floor-icon {
@@ -3504,7 +3492,7 @@ body {
             "skin additional"
             ". ."
             "skill skill ";
-        grid-template-columns: minmax(100px, 250px) minmax(220px, 1fr);
+        grid-template-columns: minmax(100px, 250px) minmax(225px, 1fr);
         grid-template-rows: auto auto 30px auto;
         padding: 0;
         background-color: transparent;
@@ -3525,6 +3513,7 @@ body {
         box-sizing: border-box;
         position: relative;
         padding-left: 0;
+        padding-right: 0;
     }
 
     #skill_levels_container {
@@ -3650,6 +3639,12 @@ body {
         overflow-x: auto;
         margin-left: calc(-1 * var(--padding));
         margin-right: calc(-1 * var(--padding));
+        content-visibility: auto;
+        contain-intrinsic-size: 200px 70px;
+
+        &.sea-creature {
+            contain-intrinsic-size: 155px 245px;
+        }
 
         > :first-child {
             margin-inline-start: var(--padding);

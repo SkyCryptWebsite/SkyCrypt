@@ -56,7 +56,7 @@
                 lastUpdatedText = `<span class="stat-name">Last online: </span><span class="stat-value">${moment(lastUpdated).fromNow()}</span>`;
             %>
             <a href="/stats/<%= profile.uuid %>" class="top-profile">
-                <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
+                <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
                 <div class="profile-name">
                     <%= profile.username %>
                     <% if('emojiImg' in profile){ %>
@@ -103,7 +103,7 @@
 
             <% for(const profile of extra.devs){ %>
                 <a href="/stats/<%= profile.uuid %>" class="top-profile">
-                    <img src="https://crafatar.com/avatars/<%= profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
+                    <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
                     <div class="profile-name">
                         <%= profile.username %>
                         <% if('emojiImg' in profile){ %>
@@ -139,7 +139,7 @@
             headerUsernameInput.addEventListener('input', (e) => {
                 mainUsernameInput.value = headerUsernameInput.value;
             });
-            
+
             let smallUserSearch = false;
 
             window.addEventListener('scroll', checkSearchboxOverlap);

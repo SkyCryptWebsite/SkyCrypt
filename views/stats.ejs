@@ -1071,6 +1071,18 @@ if(calculated.profile.game_mode == 'ironman'){
     metaTitle +=  ` (${calculated.profile.cute_name})`;
 }
 
+function jerriefy(rank) {
+    if (extra.isFoolsDay) {
+        rank = rank.replace("VIP", "JER");
+        rank = rank.replace("MVP", "JRY");
+        rank = rank.replace("HELPER", "JERRY");
+        rank = rank.replace("MOD", "JERRY");
+        rank = rank.replace("PIG", "JERRY");
+        rank = rank.replace("ADMIN", "SR JERRY");
+        rank = rank.replace("YOUTUBE", "YERRY");
+    }
+    return rank;
+}
 
 %>
 <!DOCTYPE html>
@@ -1078,7 +1090,7 @@ if(calculated.profile.game_mode == 'ironman'){
 <head>
     <title><%= calculated.display_name %><% if(calculated.display_emoji){ %> <%= calculated.display_emoji %><% } %> | SkyCrypt</title>
     <meta name="description" content="<%= metaDescription %>">
-    <link rel="icon" href="https://crafatar.com/avatars/<%= calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
+    <link rel="icon" href="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
     <meta property="og:type" content="profile">
     <meta property="og:title" content="<%= metaTitle %>">
     <meta property="og:image" content="https://crafatar.com/avatars/<%= calculated.uuid %>?size=512&overlay">
@@ -1107,7 +1119,7 @@ if(calculated.profile.game_mode == 'ironman'){
     <main id="wrapper" data-sticky-container>
         <div id="player_profile"><span class="text-stats-for">Stats for</span>
             <span tabindex="0" id="stats_for_player">
-                <%- calculated.rank_prefix %>
+                <%- jerriefy(calculated.rank_prefix) %>
                 <%= calculated.display_name %>
                 <% if(calculated.display_emoji_img){ %>
                     <img class="emoji" draggable="false" src="<%= calculated.display_emoji_img %>">
@@ -1150,7 +1162,7 @@ if(calculated.profile.game_mode == 'ironman'){
                         </li>
                     <% } %>
                 </ul>
-            </span> 
+            </span>
             <div id="additional_player_stats">
                 <% /*
 
@@ -1341,9 +1353,9 @@ if(calculated.profile.game_mode == 'ironman'){
                 </div>
                 <div class="additional-stat">
                     <span data-tippy-content="
-                    <span class='stat-name'>Skill Weight: </span><span class='stat-value'><%= parseFloat(calculated.skillWeight.toFixed(2)).toLocaleString() %></span><br/>
-                    <span class='stat-name'>Slayer Weight: </span><span class='stat-value'><%= parseFloat(calculated.slayerWeight.toFixed(2)).toLocaleString() %></span><br/>
-                    <span class='stat-name'>Dungeon Weight: </span><span class='stat-value'><%= parseFloat(calculated.dungeonsWeight.toFixed(2)).toLocaleString() %></span><br/>
+                    <span class='stat-name'>Skill Weight: </span><span class='stat-value'><%= calculated.skillWeight >= 0 ? parseFloat(calculated.skillWeight.toFixed(2)).toLocaleString() : 'Error' %></span><br/>
+                    <span class='stat-name'>Slayer Weight: </span><span class='stat-value'><%= calculated.slayerWeight >= 0 ? parseFloat(calculated.slayerWeight.toFixed(2)).toLocaleString() : 'Error'  %></span><br/>
+                    <span class='stat-name'>Dungeon Weight: </span><span class='stat-value'><%= calculated.dungeonsWeight >= 0 ? parseFloat(calculated.dungeonsWeight.toFixed(2)).toLocaleString() : 'Error'  %></span><br/>
                     <br/>
                     <div class='tippy-explanation'>Weight calculations provided by Senither</div>
                     ">
@@ -1644,55 +1656,67 @@ if(calculated.profile.game_mode == 'ironman'){
                         "><span class="stat-name <%= max %>">Pet Score: </span><span class="stat-value <%= max %>"><%= calculated.petScore %></span></span><% if(calculated.pet_score_bonus.magic_find > 0){ %><span class="grey-text color-magic-find"> (+<%= calculated.pet_score_bonus.magic_find %> <abbr title="Magic Find">MF</abbr>)</span><% } %><br>
                         <span class="stat-name">Total Pet XP: </span><span class="stat-value"><%= helper.formatNumber(totalPetXp, true) %></span>
                     </p>
-                    <% for(const [index, pet] of calculated.pets.entries()){
-                        if(index == 0 && pet.active){ %>
-                            <p class="stat-sub-header">Active Pet</p>
-                            <div class="pieces">
-                        <% }else if(index == 0){ %>
-                            <p></p>
-                            <div class="pieces">
-                        <% } %>
-                            <div tabindex="0" data-pet-index="<%= index %>" class="<%= pet.active ? 'active-pet' : '' %> <%= index > 0 || index == 0 && !pet.active ? 'other-pet' : '' %> rich-item piece piece-<%= pet.rarity %>-bg">
-                                <% if(rarityOrder.indexOf(pet.rarity) < 3){ %>
+                    <%
+                        const petsToShow = 100
+                        const petsToShowLimit = 250
+                        const activePet = calculated.pets.find(pet => pet.active)
+                        const otherPets = calculated.pets.filter(pet => !pet.active).slice(0, petsToShowLimit)
+                    %>
+                    <% if (activePet) { %>
+                        <p class="stat-sub-header">Active Pet</p>
+                        <div class="pieces">
+                            <div tabindex="0" data-pet-index="0" class="active-pet rich-item piece piece-<%= activePet.rarity %>-bg">
+                                <% if (rarityOrder.indexOf(activePet.rarity) < 3) { %>
                                     <div class="piece-shine"></div>
                                 <% } %>
                                 <div class="piece-hover-area"></div>
-                                <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
-                                <% if(index > 0 || index == 0 && !pet.active){ %>
-                                    <div class="other-pet-level"><abbr title="Level">Lvl</abbr> <%= pet.level.level %></div>
-                                <% } %>
+                                <div style='background-image: url("<%= activePet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                             </div>
-                        <% if(index == 0 && pet.active){ %>
                             <div class="active-pet-info">
-                                <div class="pet-name piece-<%= pet.rarity %>-fg"><%= pet.rarity %> <%= pet.display_name %></div>
-                                <div class="pet-level">Level <%= pet.level.level %></div>
+                                <div class="pet-name piece-<%= activePet.rarity %>-fg"><%= activePet.rarity %> <%= activePet.display_name %></div>
+                                <div class="pet-level">Level <%= activePet.level.level %></div>
                             </div>
-                            </div>
-                            <%- getBonus(pet.stats, '<br>') %>
-                            <% if(calculated.pets.length > 1){ %>
-                                <div class="stat-sub-container sub-other-pets">
-                                <p class="stat-sub-header">Other Pets</p>
+                        </div>
+                        <%- getBonus(activePet.stats, '<br>') %>
+                    <% } %>
+                    <% if (otherPets) { %>
+                        <p class="stat-sub-header"><%= activePet ? 'Other Pets' : '' %></p>
+                        <div class="pieces">
+                            <% for(const [index, pet] of otherPets.entries()) { %>
+
+                                <% if (
+                                    (activePet && index === petsToShow - 1) ||
+                                    (!activePet && index === petsToShow)
+                                ) { %>
+                                    </div>
+                                    <button class="stat-sub-header extender" aria-controls="showmore-pets" aria-expanded="false">Show More Pets</button>
+                                    <div class="pieces extendable" id="showmore-pets">
+                                <% } %>
+
+                                <div tabindex="0" data-pet-index="<%= activePet ? index + 1 : index %>" class="other-pet rich-item piece piece-<%= pet.rarity %>-bg">
+                                    <% if(rarityOrder.indexOf(pet.rarity) < 3) { %>
+                                        <div class="piece-shine"></div>
+                                    <% } %>
+                                    <div class="piece-hover-area"></div>
+                                    <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                                    <div class="other-pet-level">Lvl <%= pet.level.level %></div>
+                                </div>
                             <% } %>
-                            <div class="pieces">
-                        <% }
-                    } %>
-                    <% if(calculated.pets.length > 1 && calculated.pets[0].active){ %>
                         </div>
                     <% } %>
-                    </div>
-                    <% if(calculated.missingPets.length > 0){ %>
-                        <% if(calculated.pets.length == 1){ %>
+                    <% if(calculated.missingPets.length > 0) { %>
+                        <% if(calculated.pets.length == 1) { %>
                             <br>
                         <% } %>
-                            <button class="stat-sub-header extender" aria-controls="missing-pets" aria-expanded="false">Missing Pets</button>
-                            <div class="pieces extendable" id="missing-pets">
-                            <% for(const [index, pet] of calculated.missingPets.entries()){ %>
+                        <button class="stat-sub-header extender" aria-controls="missing-pets" aria-expanded="false">Missing Pets</button>
+                        <div class="pieces extendable" id="missing-pets">
+                            <% for(const [index, pet] of calculated.missingPets.entries()) { %>
                                 <div tabindex="0" data-missing-pet-index="<%= index %>" class="rich-item piece piece-<%= pet.rarity %>-bg missing-pet">
                                     <div class="piece-hover-area"></div>
                                     <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                                 </div>
                             <% } %>
-                            </div>
+                        </div>
                     <% } %>
                 </div>
             </div>
@@ -2063,9 +2087,10 @@ if(calculated.profile.game_mode == 'ironman'){
             <a class="stat-anchor" id="Dungeons"></a>
             <h2 class="stat-header">Dungeons</h2>
             <div class="stat-content">
-            <% if (Object.keys(calculated.dungeons).length === 0) { %>
+            <% if (Object.keys(calculated.dungeons).length === 0 ||
+            !(calculated.dungeons.catacombs?.visited || calculated.dungeons.master_catacombs?.visited)) { %>
                 <p class="stat-raw-values">
-                    <%= calculated.display_name %> hasn't entered the Catacombs yet.
+                    <%= calculated.display_name %> hasn't entered any dungeon yet.
                 </p>
             <% } else { %>
                 <% if (calculated.dungeons.used_classes) { %>
@@ -2157,10 +2182,69 @@ if(calculated.profile.game_mode == 'ironman'){
                         <% } %>
                     </div>
                     <br>
-                <% } else { %>
+                <% } %>
+
+                <% if (calculated.dungeons.master_catacombs?.visited) { %>
+                    <p class="stat-sub-header">Master Catacombs</p>
+
                     <p class="stat-raw-values">
-                        <%= calculated.display_name %> hasn't entered the Catacombs yet.
+                        <span class="stat-name">Highest Floor Beaten: </span><span class="stat-value"><%= helper.titleCase(calculated.dungeons.master_catacombs.highest_floor.replace("_", " ")) %></span><br>
                     </p>
+
+                    <div class="floor-containers">
+                        <% for (let [id, floor] of Object.entries(calculated.dungeons.master_catacombs.floors)) { %>
+                        <div class="narrow-info-container">
+                            <div class="narrow-info-header">
+                                <div class="floor-icon" style="background-image: url(/head/<%= floor.icon_texture %>)"></div>
+                                <span><%= floor.name.replace("_", " ") %></span>
+                            </div>
+                            <span>
+                                <button class="stat-sub-header extender" aria-controls="floor-<%= id %>" aria-expanded="false">Floor Stats</button>
+                                <div class="pieces extendable" id="floor-<%= id %>">
+                                <% for (let [stat, value] of Object.entries(floor.stats)) { %>
+                                    <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
+                                    <span class="stat-value">
+                                    <% if(stat.startsWith("fastest_time")) { %>
+                                        <%= moment.duration(value, "milliseconds").format("m:ss.SSS") %>
+                                    <% } else { %>
+                                        <%= helper.formatNumber(value) %>
+                                    <% } %>
+                                    </span><br>
+                                <% } %>
+                                <% if(floor.most_damage) { %>
+                                    <span class="stat-name">Most Damage: </span>
+                                    <span class="stat-value"><%= helper.formatNumber(floor.most_damage.value) %></span>
+                                    <span class="stat-name">(<%= helper.titleCase(floor.most_damage.class) %>)</span>
+                                <% } %>
+                                </div>
+                                <% if(floor.best_runs) { %>
+                                    <button class="stat-sub-header extender" aria-controls="runs-<%= id %>" aria-expanded="false">Best Run</button>
+                                    <div class="pieces extendable" id="runs-<%= id %>">
+                                        <span class="stat-name">Grade</span>
+                                        <span class="stat-value"><%= helper.calcDungeonGrade(floor.best_runs[floor.best_runs.length - 1]) %></span>
+                                        <br>
+                                    <% for (let [stat, value] of Object.entries(floor.best_runs[floor.best_runs.length - 1])) {
+                                        if(stat == "teammates") continue; %>
+                                        <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
+                                        <span class="stat-value">
+                                        <% switch (stat) { case "timestamp": %>
+                                            <%= moment(value).fromNow() %>
+                                        <% break; case "elapsed_time": %>
+                                            <%= moment.duration(value, "milliseconds").format("m:ss.SSS") %>
+                                        <% break; case "dungeon_class": %>
+                                            <%= helper.titleCase(value) %>
+                                        <% break; default: %>
+                                            <%= helper.formatNumber(value) %>
+                                        <% } %>
+                                        </span><br>
+                                    <% } %>
+                                    </div>
+                                <% } %>
+                            </span>
+                        </div>
+                        <% } %>
+                    </div>
+                    <br>
                 <% } %>
 
                 <% if (calculated.dungeons.unlocked_collections) { %>
@@ -2263,7 +2347,7 @@ if(calculated.profile.game_mode == 'ironman'){
                                     <% } %>
                                 </div>
                             </div>
-                            <div class="slayer-section-header"><span data-tippy-content="Average drops based on Slayer boss kills. The number ranges from 0% Magic Find to 100% Magic Find.">Your Average Drops</span></div>
+                            <div class="slayer-section-header"><span data-tippy-content="Average drops based on Slayer boss kills. The number ranges from 0% Magic Find to 100% Magic Find.">Average Drops</span></div>
                             <div class="slayer-section slayer-drops">
                                 <%
                                 for(const drop of slayerInfo[slayerName].drops){

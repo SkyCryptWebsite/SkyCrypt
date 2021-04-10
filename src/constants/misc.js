@@ -251,7 +251,11 @@ module.exports = {
         generator_ghast: "Minion Ghast",
         generator_magma_cube: "Minion Magma Cube",
         generator_slime: "Minion Slime",
-        brood_mother_spider: "Brood Mother"
+        brood_mother_spider: "Brood Mother",
+        obsidian_wither: "Obsidian Defender",
+        sadan_statue: "Terracotta",
+        diamond_guy: "Angry Archaeologist",
+        tentaclees: "Fels"
     },
 
     area_names: {
@@ -327,13 +331,15 @@ module.exports = {
         'SUPERSTAR': {
             color: '6',
             tag: 'MVP',
-            plus: '++'
+            plus: '++',
+            plusColor: 'c'
         },
 
         'MVP_PLUS': {
             color: 'b',
             tag: 'MVP',
-            plus: '+'
+            plus: '+',
+            plusColor: 'c'
         },
 
         'MVP': {
@@ -345,6 +351,7 @@ module.exports = {
             color: 'a',
             tag: 'VIP',
             plus: '+',
+            plusColor: '6'
         },
 
         'VIP': {
@@ -355,7 +362,8 @@ module.exports = {
         'PIG+++': {
             color: 'd',
             tag: 'PIG',
-            plus: '+++'
+            plus: '+++',
+            plusColor: 'b'
         },
 
         'NONE': null

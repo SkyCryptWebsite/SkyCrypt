@@ -435,7 +435,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
         if (helper.hasPath(item, 'tag', 'ExtraAttributes', 'skin')) {
             switch (item.tag.ExtraAttributes.skin) {
                 case "SNOW_SNOWGLOBE":
-                    item.texture_path = `/resources/img/items/snow_snowglobe.gif?v6`
+                    item.texture_path = `/resources/img/items/skin_snowglobe.png?v6`
                     break;
             }
         }
@@ -524,6 +524,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
         if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'mined_crops'))
             item.extra.crop_counter = item.tag.ExtraAttributes.mined_crops;
+
+        if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'petInfo'))
+            item.tag.ExtraAttributes.petInfo = JSON.parse(item.tag.ExtraAttributes.petInfo);
 
         // Lore stuff
         let itemLore = helper.getPath(item, 'tag', 'display', 'Lore') || [];
@@ -856,7 +859,14 @@ function calcDungeonsClassLevelWithProgress(experience){
     return Math.min(level, 50);
 }
 
-function calcDungeonsWeight(type, level, experience){
+function calcDungeonsWeight(type, level, experience) {
+    if (type.startsWith('master_')) {
+        return {
+            weight: 0,
+            weight_overflow: 0,
+        }
+    }
+
     let percentageModifier = constants.dungeonsWeight[type];
     let level50Experience = 569809640
 
@@ -1235,6 +1245,19 @@ module.exports = {
         output.pickaxes = all_items.filter(a => a.type != null && (a.type.endsWith('pickaxe') || a.type.endsWith('drill')));
         output.rods = all_items.filter(a => a.type != null && (a.type.endsWith('fishing rod') || a.type.endsWith('fishing weapon')));
 
+        output.pets = all_items
+            .filter(a => a.tag?.ExtraAttributes?.petInfo)
+            .map(a => ({
+                uuid: a.tag.ExtraAttributes.uuid,
+                type: a.tag.ExtraAttributes.petInfo.type,
+                exp: a.tag.ExtraAttributes.petInfo.exp,
+                active: a.tag.ExtraAttributes.petInfo.active,
+                tier: a.tag.ExtraAttributes.petInfo.tier,
+                heldItem: a.tag.ExtraAttributes.petInfo.heldItem || null,
+                candyUsed: a.tag.ExtraAttributes.petInfo.candyUsed,
+                skin: a.tag.ExtraAttributes.petInfo.skin || null,
+            }));
+
         for(const item of all_items){
             if(!Array.isArray(item.containsItems))
                 continue;
@@ -1243,6 +1266,22 @@ module.exports = {
             output.hoes.push(...item.containsItems.filter(a => a.type != null && a.type.endsWith('hoe')));
             output.pickaxes.push(...item.containsItems.filter(a => a.type != null && (a.type.endsWith('pickaxe') || a.type.endsWith('drill'))));
             output.rods.push(...item.containsItems.filter(a => a.type != null && (a.type.endsWith('fishing rod') || a.type.endsWith('fishing weapon'))));
+
+            output.pets.push(
+                ...item.containsItems
+                    .filter(a => a.tag?.ExtraAttributes?.petInfo)
+                    .map(a => ({
+                        uuid: a.tag.ExtraAttributes.uuid,
+                        type: a.tag.ExtraAttributes.petInfo.type,
+                        exp: a.tag.ExtraAttributes.petInfo.exp,
+                        active: a.tag.ExtraAttributes.petInfo.active,
+                        tier: a.tag.ExtraAttributes.petInfo.tier,
+                        heldItem:
+                            a.tag.ExtraAttributes.petInfo.heldItem || null,
+                        candyUsed: a.tag.ExtraAttributes.petInfo.candyUsed,
+                        skin: a.tag.ExtraAttributes.petInfo.skin || null,
+                    }))
+            );
         }
 
         // Check if inventory access disabled by user
@@ -1675,6 +1714,11 @@ module.exports = {
             output.talismanCount = await module.exports.getTalismanCount();
         }
 
+        if (!userProfile.pets) {
+            userProfile.pets = []
+        }
+        userProfile.pets.push(...items.pets)
+
         output.pets = await module.exports.getPets(userProfile);
         output.missingPets = await module.exports.getMissingPets(output.pets);
         output.petScore = await module.exports.getPetScore(output.pets);
@@ -1968,14 +2012,34 @@ module.exports = {
                 amount: (userProfile.stats['kills_chicken_deep'] || 0) + (userProfile.stats['kills_zombie_deep'] || 0)
             });
 
+        const random = Math.random() < 0.01;
+
+
         killsDeaths = killsDeaths.filter(a => {
             return ![
                 'guardian_emperor',
                 'skeleton_emperor',
                 'chicken_deep',
-                'zombie_deep'
+                'zombie_deep',
+                random ? 'yeti' : null
             ].includes(a.entityId);
         });
+
+        if('kills_yeti' in userProfile.stats && random )
+            killsDeaths.push({
+                type: 'kills',
+                entityId: 'yeti',
+                entityName: 'Snow Monke',
+                amount: (userProfile.stats['kills_yeti'] || 0)
+            });
+
+        if('deaths_yeti' in userProfile.stats )
+            killsDeaths.push({
+                type: 'deaths',
+                entityId: 'yeti',
+                entityName: 'Snow Monke',
+                amount: (userProfile.stats['deaths_yeti'] || 0)
+            });
 
         output.kills = killsDeaths.filter(a => a.type == 'kills').sort((a, b) => b.amount - a.amount);
         output.deaths = killsDeaths.filter(a => a.type == 'deaths').sort((a, b) => b.amount - a.amount);
@@ -2427,11 +2491,13 @@ module.exports = {
 
         */
 
-        output.dungeonsWeight = output.dungeons.dungeonsWeight;
-        output.skillWeight = skillWeight;
-        output.slayerWeight = slayerWeight;
+        output.dungeonsWeight = output.dungeons.dungeonsWeight ?? -1;
+        output.skillWeight = skillWeight ?? -1;
+        output.slayerWeight = slayerWeight ?? -1;
 
-        output.weight = output.dungeonsWeight + skillWeight + slayerWeight;
+        output.weight = [output.dungeonsWeight, skillWeight, slayerWeight]
+            .filter(x => x >= 0)
+            .reduce((total, value) => total + value)
 
         return output;
     },
@@ -2629,7 +2695,7 @@ module.exports = {
 
             lore.push(
                 '',
-                `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)} §6/ §e${helper.formatNumber(pet.level.xpMaxLevel, true, 10)}`,
+                `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)} §6/ §e${helper.formatNumber(pet.level.xpMaxLevel, true, 10)} §6(${Math.floor((pet.exp / pet.level.xpMaxLevel) * 100)}%)`,
                 `§7Candy Used: §e${pet.candyUsed || 0} §6/ §e10`
             );
 

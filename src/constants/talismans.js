@@ -714,5 +714,10 @@ module.exports = {
             rarity: "legendary",
             texture: "/head/3a7cda9004fc197d66afbc2b003a5b9ef13cf4600b1fc7490067590f047181e"
         },
+        "DANTE_TALISMAN": {
+            name: "Dante Talisman",
+            rarity: "common",
+            texture: "/head/cf92982f1a302310643a20ce51623f8199b7545e70dc6b93ed6bd61dc42ff213"
+        },
     }
 }

@@ -393,6 +393,11 @@ module.exports = {
         },
     },
 
+    /*
+        Animted skins created at ezgif.com/apng-maker with the following settings:
+        - Delay time: 500
+        - Enable crossfade frames: delay = 3, count = 10
+    */
     pet_skins: {
         "ENDERMAN": {
             "ENDERMAN": {
@@ -411,8 +416,12 @@ module.exports = {
         "TIGER": {
             "TIGER_TWILIGHT": {
                 name: "Twilight",
-                head: "/head/896211dc599368dbd9056c0116ab61063991db793be93066a858eb4e9ce56438",
+                head: "/resources/img/items/tiger_twilight.png",
                 release: 1560284720000,
+                animation: {
+                    day: "/head/896211dc599368dbd9056c0116ab61063991db793be93066a858eb4e9ce56438",
+                    night: "/head/25afc37dc1909ee0a3eb8d0404271fc47660cff1153495412d6e9896632eaa8e",
+                }
             },
         },
         "RABBIT": {
@@ -556,6 +565,15 @@ module.exports = {
                 head: "/head/360c122ade5b2fedca14aa78c834a7b0ac9cb5da2a0c93112163086f90c13b68",
                 release: new Date('2021-02-13 18:00:00 GMT+1').getTime(),
             },
+            "ELEPHANT_MONOCHROME": {
+                name: "Monochrome",
+                head: "/resources/img/items/elephant_monochrome.png",
+                release: new Date('2021-03-22 18:00:00 GMT+1').getTime(),
+                animation: {
+                    day: "/head/4bdf0f628c05e86cabdee2f5858dd5def7f8b8d940cbf25f9937e2ffb53432f4",
+                    night: "/head/176e8db6cd2db2fd11747c750d24040f3435b3301d91949f33f9615d16dab060",
+                }
+            },
         },
         "JERRY": {
             "JERRY_RED_ELF": {
@@ -612,6 +630,13 @@ module.exports = {
                 name: "Orca",
                 head: "/head/b008ca9c00cecf499685030e8ef0c230a32908619ce9dc10690b69111591faa1",
                 release: new Date('2021-03-09 18:00:00 GMT+1').getTime(),
+            },
+        },
+        "CHICKEN": {
+            "CHICKEN_BABY_CHICK": {
+                name: "Baby Chick",
+                head: "/head/1bde55ed54cb5c87661b86c349186a9d5baffb3cb934b449a2d329e399d34bf",
+                release: new Date('2021-04-05 18:00:00 GMT+1').getTime(),
             },
         },
     },
