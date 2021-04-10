@@ -855,6 +855,44 @@ const getBonus = (stats, prefix) => {
     <% }
 }
 
+const formatReforge = (string) => {
+    let reforge = string.split('_').join(' ').trim()
+    reforge = reforge.charAt(0).toUpperCase() + reforge.slice(1)
+    return reforge
+}
+
+const getReforges = (accessories) => {
+    const rr = {}
+
+    accessories.forEach(acc => {
+        const rarity = acc.rarity
+        const reforge = acc.reforge || 'no_reforge'
+
+        if (!rr[rarity]) {
+            rr[rarity] = {}
+        }
+        if (!rr[rarity][reforge]) {
+            rr[rarity][reforge] = 0
+        }
+        rr[rarity][reforge] += 1
+    })
+
+    %>
+    <span class="stat-name">Reforges: </span>
+    <%
+    for (const [rarity, reforges] of Object.entries(rr)) {
+        for (const [reforge, amount] of Object.entries(reforges)) {
+            %><span class="stat-value piece-<%= rarity %>-fg"><%= amount %>× <%= formatReforge(reforge) %></span><%
+            if (reforge !== Object.keys(reforges).pop()) {
+                %><strong style="opacity: 0.6">, </strong><%
+            }
+        }
+        if (rarity !== Object.keys(rr).pop()) {
+            %><strong style="opacity: 0.6"> // </strong><%
+        }
+    }
+}
+
 const isEnchanted = item => {
     if(item.animated)
         return false;
@@ -1561,9 +1599,8 @@ function jerriefy(rank) {
                                         <% itemIcon(item, ['piece-icon']); %>
                                     </div>
                                 <% }) %>
-                                <p>
-                                <%- getBonus(getStats(items.talismans.filter(a => a.isUnique && !a.isInactive))) %>
-                                </p>
+                                <p><%- getReforges(items.talismans.filter(a => a.isUnique && !a.isInactive)) %></p>
+                                <p><%- getBonus(getStats(items.talismans.filter(a => a.isUnique && !a.isInactive))) %></p>
                             </div>
                         <% } %>
                         <% if(items.talismans.filter(a => a.isUnique && a.isInactive).length > 0){ %>
