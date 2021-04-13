@@ -195,6 +195,8 @@ async function main(){
     }
 
     app.all('/stats/:player/:profile?', async (req, res, next) => {
+        const timeStarted = new Date().getTime();
+
         let paramPlayer = req.params.player.toLowerCase().replace(/[ +]/g, '_').replace(/[^a-z\d\-\_:]/g, '');
         let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
 
@@ -213,19 +215,27 @@ async function main(){
                 calculated.skin_data.skinurl = "http://textures.minecraft.net/texture/b4bd832813ac38e68648938d7a32f6ba29801aaf317404367f214b78b4d4754c";
             }
 
-            res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), fileHashes, page: 'stats' });
+            res.render('stats', 
+                { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), fileHashes, page: 'stats' },
+                (err, html) => {
+                    if(cluster.isWorker)
+                        res.set('X-Worker-ID', `${cluster.worker.id}`);
+                    res.set('X-Process-Time', `${new Date().getTime() - timeStarted}`);
+                    res.send(html);
+                }
+            );
         }catch(e){
             console.error(e);
 
-            res.render('index', {
-                req,
-                error: e,
-                player: playerUsername,
-                extra: await getExtra('index', favorites),
-                fileHashes,
-                helper,
-                page: 'index'
-            });
+            res.render('index', 
+                { req, error: e, player: playerUsername, extra: await getExtra('index', favorites), fileHashes, helper, page: 'index' },
+                (err, html) => {
+                    if(cluster.isWorker)
+                        res.set('X-Worker-ID', `${cluster.worker.id}`);
+                    res.set('X-Process-Time', `${new Date().getTime() - timeStarted}`);
+                    res.send(html);
+                }
+            );
 
             return false;
         }
@@ -384,12 +394,12 @@ Disallow: /item /head /leather /resources
             const smStream = new SitemapStream({ hostname: 'https://sky.shiiyu.moe/' });
             const pipeline = smStream.pipe(createGzip());
 
-            const cursor = await db.collection('viewsLeaderboard').find().limit(10000);
+            const cursor = await db.collection('topViews').find();
 
             while(await cursor.hasNext()){
                 const doc = await cursor.next();
 
-                smStream.write({ url: `/stats/${doc.userInfo.username}` });
+                smStream.write({ url: `/stats/${doc.username}` });
             }
 
             smStream.end();
@@ -398,8 +408,8 @@ Disallow: /item /head /leather /resources
 
             pipeline.pipe(res).on('error', (e) => {throw e});
         }catch(e){
-            console.error(e)
-            res.status(500).end()
+            console.error(e);
+            res.status(500).end();
         }
     });
 
@@ -437,8 +447,18 @@ Disallow: /item /head /leather /resources
     });
 
     app.all('/', async (req, res, next) => {
+        const timeStarted = new Date().getTime();
         const favorites = parseFavorites(req.cookies.favorite);
-        res.render('index', { req, error: null, player: null, extra: await getExtra('index', favorites), fileHashes, helper, page: 'index' });
+
+        res.render('index', 
+            { req, error: null, player: null, extra: await getExtra('index', favorites), fileHashes, helper, page: 'index' },
+            (err, html) => {
+                if(cluster.isWorker)
+                    res.set('X-Worker-ID', `${cluster.worker.id}`);
+                res.set('X-Process-Time', `${new Date().getTime() - timeStarted}`);
+                res.send(html);
+            }
+        );
     });
 
     app.all('*', async (req, res, next) => {
@@ -448,17 +468,19 @@ Disallow: /item /head /leather /resources
         .send('Not found')
     });
 
-    app.listen(port, () => console.log(`SkyBlock Stats running on http://localhost:${port}`));
+    app.listen(port, () => console.log(`SkyBlock Stats running on http://localhost:${port} (Worker ${cluster.worker.id})`));
 }
 
+
 if(cluster.isMaster){
-    const cpus = Math.min(4, require('os').cpus().length);
+    const totalCpus = require('os').cpus().length;
+    const cpus = Math.min(4, Math.round(totalCpus-(totalCpus/4)));
 
     for(let i = 0; i < cpus; i += 1){
         cluster.fork();
     }
 
-    console.log('Running SkyBlock Stats on %i cores', cpus);
+    console.log(`Running SkyBlock Stats on ${cpus} cores`);
 }else{
     main();
 }

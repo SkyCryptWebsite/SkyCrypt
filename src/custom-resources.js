@@ -1,3 +1,4 @@
+const cluster = require('cluster');
 const fs = require('fs-extra');
 const path = require('path');
 const helper = require('./helper');
@@ -50,7 +51,7 @@ let resourcePacks = [];
 
 async function init(){
     console.log("Custom Resources loading started.");
-    console.time("custom_resources");
+    console.time(`custom_resources`);
 
     for(const pack of await fs.readdir(RESOURCE_PACK_FOLDER)){
         const basePath = path.resolve(RESOURCE_PACK_FOLDER, pack);
