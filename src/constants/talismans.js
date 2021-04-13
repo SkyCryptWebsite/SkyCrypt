@@ -651,7 +651,7 @@ module.exports = {
         'ETERNAL_HOOF': null,
         'WITHER_RELIC': {
             name: "Wither Relic",
-            rarity: "epic",
+            rarity: "legendary",
             texture: "/head/964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793"
         },
         'CATACOMBS_EXPERT_RING': {
@@ -713,6 +713,11 @@ module.exports = {
             name: "Reaper Orb",
             rarity: "legendary",
             texture: "/head/3a7cda9004fc197d66afbc2b003a5b9ef13cf4600b1fc7490067590f047181e"
+        },
+        "DANTE_TALISMAN": {
+            name: "Dante Talisman",
+            rarity: "common",
+            texture: "/head/cf92982f1a302310643a20ce51623f8199b7545e70dc6b93ed6bd61dc42ff213"
         },
     }
 }

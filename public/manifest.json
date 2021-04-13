@@ -2,6 +2,7 @@
   "name": "SkyCrypt",
   "short_name": "SkyCrypt",
   "description": "A beautiful site for sharing your SkyBlock profile 🌹",
+  "categories": ["games", "utilities"],
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
