@@ -500,7 +500,7 @@ module.exports = {
             result = "S";
         else
             result = "S+";
-        
+
         return result;
     },
 
@@ -551,7 +551,7 @@ module.exports = {
             output.plusColor = rank.plusColor;
         }
 
-        if(output.plusText && module.exports.hasPath(player, 'rankPlusColor'))
+        if(output.plusText && rankName !== 'PIG+++' && module.exports.hasPath(player, 'rankPlusColor'))
             output.plusColor = constants.color_names[player.rankPlusColor];
 
         return output;
@@ -565,7 +565,7 @@ module.exports = {
                 <div class="rank-tag nice-colors-dark">
                     <div class="rank-name" style="background-color: var(--§${rankColor})">${rankText}</div>
                     ${
-                        plusText ? 
+                        plusText ?
                         /*html*/`<div class="rank-plus" style="background-color: var(--§${plusColor})">${plusText}</div>`
                         : ''
                     }
