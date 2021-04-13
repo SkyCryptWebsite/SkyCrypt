@@ -1894,6 +1894,7 @@ a.additional-player-stat:hover {
     display: inline-block;
     max-height: 90px;
     overflow: hidden;
+    overflow: clip;
     transition: max-height 0.2s;
 
     &:hover,
