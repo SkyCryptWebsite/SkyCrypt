@@ -551,7 +551,7 @@ module.exports = {
             output.plusColor = rank.plusColor;
         }
 
-        if(output.plusText && module.exports.hasPath(player, 'rankPlusColor'))
+        if ((rankName == 'SUPERSTAR' || rankName == 'MVP_PLUS') && typeof player.rankPlusColor == 'string')
             output.plusColor = constants.color_names[player.rankPlusColor];
 
         return output;
