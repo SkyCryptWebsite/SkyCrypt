@@ -505,54 +505,41 @@ module.exports = {
     },
 
     parseRank: player => {
-        let rankName = 'NONE';
-        let rank = null;
 
-        let output = {
+        const output = {
             rankText: null,
             rankColor: null,
             plusText: null,
             plusColor: null
         };
 
-        if(module.exports.hasPath(player, 'packageRank'))
-            rankName = player.packageRank;
+        const rankName = player.prefix ? module.exports.getRawLore(player.prefix).replace(/\[|\]/g, '')
+            : player.rank && player.rank != 'NORMAL'? player.rank
+            : player.monthlyPackageRank && player.monthlyPackageRank != 'NONE' ? player.monthlyPackageRank
+            : player.newPackageRank ? player.newPackageRank
+            : player.packageRank ? player.packageRank
+            : 'NONE';
 
-        if(module.exports.hasPath(player, 'newPackageRank'))
-            rankName = player.newPackageRank;
+        if (constants.ranks[rankName]) {
+            const {tag, color, plus, plusColor} = constants.ranks[rankName];
+            output.rankText = tag;
 
-        if(module.exports.hasPath(player, 'monthlyPackageRank') && player.monthlyPackageRank != 'NONE')
-            rankName = player.monthlyPackageRank;
+            if (rankName == 'SUPERSTAR') {
+                output.rankColor = constants.color_names[player.monthlyRankColor] ?? color;
+            } else {
+                output.rankColor = color;
+            }
 
-        if(module.exports.hasPath(player, 'rank') && player.rank != 'NORMAL')
-            rankName = player.rank;
+            if (plus) {
+                output.plusText = plus;
 
-        if(module.exports.hasPath(player, 'prefix'))
-            rankName = module.exports.getRawLore(player.prefix).replace(/\[|\]/g, '');
-
-        if(module.exports.hasPath(constants.ranks, rankName))
-            rank = constants.ranks[rankName];
-
-        if(!rank)
-            return output;
-
-        output.rankText = rank.tag;
-        output.rankColor = rank.color;
-
-        if(rankName == 'SUPERSTAR'){
-            if(!module.exports.hasPath(player, 'monthlyRankColor'))
-                player.monthlyRankColor = 'GOLD';
-
-            output.rankColor = constants.color_names[player.monthlyRankColor];
+                if (rankName == 'SUPERSTAR' || rankName == 'MVP_PLUS') {
+                    output.plusColor = constants.color_names[player.rankPlusColor] ?? plusColor;
+                } else {
+                    output.plusColor = plusColor;
+                }
+            }
         }
-
-        if(module.exports.hasPath(rank, 'plus')){
-            output.plusText = rank.plus;
-            output.plusColor = rank.plusColor;
-        }
-
-        if ((rankName == 'SUPERSTAR' || rankName == 'MVP_PLUS') && typeof player.rankPlusColor == 'string')
-            output.plusColor = constants.color_names[player.rankPlusColor];
 
         return output;
     },
