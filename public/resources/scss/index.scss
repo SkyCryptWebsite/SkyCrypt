@@ -3256,6 +3256,30 @@ main.grid > a,
     background-color: rgba(255, 255, 255, 0.1);
 }
 
+#social_wrapper {
+    position: relative;
+    display: block flex;
+    grid-column: 1 / -1;
+    overflow: hidden;
+}
+
+#time_subtext {
+    display: block;
+    top: 70px;
+    right: 0;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 16px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#time_container {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
 #dimmer {
     position: fixed;
     top: 0;

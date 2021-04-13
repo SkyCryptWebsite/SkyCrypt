@@ -131,20 +131,21 @@ function getTime(time){
     
     
     
-    const formattedTime = `${currentHour}:${(Math.floor(currentMinute / 10) * 10).toString().padStart(2, '0')}${suffix}${emoji}`;
+    const formattedTime = `${currentHour}:${(Math.floor(currentMinute / 10) * 10).toString().padStart(2, '0')}${suffix}<br>${emoji}`;
 
 
     return {
-        date: `${MONTHS[currentMonth]} ${nth(currentDay + 1)}`,
+        date: `${MONTHS[currentMonth]}<br>${nth(currentDay + 1)}`,
         time: formattedTime
     }
 }
 
 document.addEventListener('DOMContentLoaded', function(){
-    const time = document.getElementById("time");
+    const time = document.getElementById("time_subtext");
     const updateTimes = () => {
         const currentTime = getTime(Date.now());
-        time.innerHTML = `${currentTime.date} ${currentTime.time}`;
+        //time.innerHTML = `${currentTime.date}<br>${currentTime.time}`;
+        time.innerHTML = `Early Autumn<br>39th<br>12:50pm<br>☀️`;
     }
     setInterval(updateTimes, 2000);
     updateTimes();
