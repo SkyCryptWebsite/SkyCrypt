@@ -2152,6 +2152,29 @@ a.additional-player-stat:hover {
     color: white !important;
 }
 
+.piece.piece-rarity-upgrade-1 {
+    border: 0 dashed;
+    position: relative;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 1rem;
+        height: 1rem;
+        clip-path: polygon(0 0, 100% 0, 100% 100%);
+    }
+    &.piece-very-special-bg::before { background-color: var(--§c); }
+    &.piece-special-bg::before { background-color: var(--§4); }
+    &.piece-supreme-bg::before { background-color: #d762d7; }
+    &.piece-mythic-bg::before { background-color: var(--maxed-hex); }
+    &.piece-legendary-bg::before { background-color: var(--§5); }
+    &.piece-epic-bg::before { background-color: var(--§9); }
+    &.piece-rare-bg::before { background-color: #3cbd3c; }
+    &.piece-uncommon-bg::before { background-color: var(--§8); }
+    &.piece-common-bg::before { background-color: #888888; }
+}
+
 .stat-sub-header {
     font-weight: 500;
     font-size: 20px;
