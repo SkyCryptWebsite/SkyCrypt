@@ -1007,7 +1007,7 @@ module.exports = {
         return output;
     },
 
-    getItems: async (profile, customTextures = false, packs, options = { cacheOnly: false, debugId: "unknown" }) => {
+    getItems: async (profile, customTextures = false, packs, options = { cacheOnly: false, debugId: "unknown/getItems" }) => {
         const output = {};
 
         console.debug(`${options.debugId}: getItems called.`);
@@ -1592,7 +1592,7 @@ module.exports = {
         return output;
     },
 
-    getStats: async (db, profile, allProfiles, items, options = { cacheOnly: false, debugId: "unknown" }) => {
+    getStats: async (db, profile, allProfiles, items, options = { cacheOnly: false, debugId: "unknown/getStats" }) => {
         let output = {};
 
         console.debug(`${options.debugId}: getStats called.`);
@@ -3159,7 +3159,7 @@ module.exports = {
         return output;
     },
 
-    getProfile: async (db, paramPlayer, paramProfile, options = { cacheOnly: false, debugId: "unknown" }) => {
+    getProfile: async (db, paramPlayer, paramProfile, options = { cacheOnly: false, debugId: "unknown/getProfile" }) => {
         console.debug(`${options.debugId}: getProfile called.`);
         const timeStarted = new Date().getTime();
 
