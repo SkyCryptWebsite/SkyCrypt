@@ -1889,13 +1889,21 @@ module.exports = {
 
             // Apply Superior Dragon Armor full set bonus of 5% stat increase
             if(items.armor.filter(a => getId(a).startsWith('SUPERIOR_DRAGON_')).length == 4)
-                for(const stat in stats)
+                for(const stat in stats) {
+                    if (constants.increase_most_stats_exclude.includes(stat)) {
+                        continue
+                    }
                     stats[stat] *= 1.05;
+                }
 
             // Apply Renowened bonus (whoever made this please comment)
             for(let i = 0; i < items.armor.filter(a => helper.getPath(a, 'tag', 'ExtraAttributes', 'modifier') == 'renowned').length; i++){
-                for(const stat in stats)
+                for(const stat in stats) {
+                    if (constants.increase_most_stats_exclude.includes(stat)) {
+                        continue
+                    }
                     stats[stat] *= 1.01;
+                }
             }
 
             // Modify stats based off of pet ability
@@ -1924,8 +1932,12 @@ module.exports = {
 
         // Apply Superior Dragon Armor full set bonus of 5% stat increase
         if(items.armor.filter(a => getId(a).startsWith('SUPERIOR_DRAGON_')).length == 4){
-            for(const stat in output.stats)
+            for(const stat in output.stats) {
+                if (constants.increase_most_stats_exclude.includes(stat)) {
+                    continue
+                }
                 superiorBonus[stat] = output.stats[stat] * 0.05;
+            }
 
             for(const stat in superiorBonus){
                 output.stats[stat] += superiorBonus[stat];
@@ -1942,9 +1954,11 @@ module.exports = {
 
         for(const item of items.armor){
             if(helper.getPath(item, 'tag', 'ExtraAttributes', 'modifier') == 'renowned'){
-                for(const stat in output.stats){
+                for(const stat in output.stats) {
+                    if (constants.increase_most_stats_exclude.includes(stat)) {
+                        continue
+                    }
                     renownedBonus[stat] += output.stats[stat] * 0.01;
-
                     output.stats[stat] *= 1.01;
                 }
             }
