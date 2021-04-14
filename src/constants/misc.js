@@ -26,7 +26,9 @@ module.exports = {
         "uncommon": "§a",
         "rare": "§9",
         "epic": "§5",
-        "legendary": "§6"
+        "legendary": "§6",
+        "mythic": "§d",
+        "supreme": "§4"
     },
 
     rarity_colors: {
@@ -36,6 +38,7 @@ module.exports = {
         "5": "epic",
         "6": "legendary",
         "d": "mythic",
+        "4": "supreme",
         "c": "special"
     },
 

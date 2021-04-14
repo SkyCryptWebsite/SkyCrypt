@@ -195,7 +195,10 @@ async function main(){
     }
 
     app.all('/stats/:player/:profile?', async (req, res, next) => {
+        const debugId = helper.generateDebugId('stats');
         const timeStarted = new Date().getTime();
+
+        console.debug(`${debugId}: stats page was called.`);
 
         let paramPlayer = req.params.player.toLowerCase().replace(/[ +]/g, '_').replace(/[^a-z\d\-\_:]/g, '');
         let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
@@ -206,32 +209,35 @@ async function main(){
         
         const favorites = parseFavorites(req.cookies.favorite);
         try{
-            const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, { updateArea: true, cacheOnly });
+            const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, { updateArea: true, cacheOnly, debugId });
 
-            const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack);
-            const calculated = await lib.getStats(db, profile, allProfiles, items);
+            const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack, { cacheOnly, debugId });
+            const calculated = await lib.getStats(db, profile, allProfiles, items, { cacheOnly, debugId });
 
             if (isFoolsDay) {
                 calculated.skin_data.skinurl = "http://textures.minecraft.net/texture/b4bd832813ac38e68648938d7a32f6ba29801aaf317404367f214b78b4d4754c";
             }
 
+            console.debug(`${debugId}: starting page render.`);
+            const renderStart = new Date().getTime();
+
             res.render('stats', 
                 { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), fileHashes, page: 'stats' },
                 (err, html) => {
-                    if(cluster.isWorker)
-                        res.set('X-Worker-ID', `${cluster.worker.id}`);
+                    console.debug(`${debugId}: page succesfully rendered. (${new Date().getTime() - renderStart}ms)`);
+                    res.set('X-Debug-ID', `${debugId}`);
                     res.set('X-Process-Time', `${new Date().getTime() - timeStarted}`);
                     res.send(html);
                 }
             );
         }catch(e){
+            console.debug(`${debugId}: an error has occured.`);
             console.error(e);
 
             res.render('index', 
                 { req, error: e, player: playerUsername, extra: await getExtra('index', favorites), fileHashes, helper, page: 'index' },
                 (err, html) => {
-                    if(cluster.isWorker)
-                        res.set('X-Worker-ID', `${cluster.worker.id}`);
+                    res.set('X-Debug-ID', `${debugId}`);
                     res.set('X-Process-Time', `${new Date().getTime() - timeStarted}`);
                     res.send(html);
                 }
@@ -245,6 +251,7 @@ async function main(){
         const { uuid } = req.params;
 
         const filename = `texture_${uuid}.png`;
+        res.set('X-Cluster-ID', `${helper.getClusterId()}`);
 
         try{
             file = await fs.readFile(path.resolve(cachePath, filename));
@@ -273,6 +280,7 @@ async function main(){
         const { username } = req.params;
 
         const filename = `cape_${username}.png`;
+        res.set('X-Cluster-ID', `${helper.getClusterId()}`);
 
         try{
             file = await fs.readFile(path.resolve(cachePath, filename));
@@ -323,6 +331,8 @@ async function main(){
             });
         }
 
+        res.set('X-Cluster-ID', `${helper.getClusterId()}`);
+
         res.setHeader('Cache-Control', `public, max-age=${CACHE_DURATION}`);
         res.contentType('image/png');
         res.send(file);
@@ -331,6 +341,8 @@ async function main(){
     app.all('/item(.gif)?/:skyblockId?', cors(), async (req, res) => {
         const skyblockId = req.params.skyblockId || null;
         const item = await renderer.renderItem(skyblockId, req.query, db);
+
+        res.set('X-Cluster-ID', `${helper.getClusterId()}`);
 
         if(item.error){
             res.status(500);
@@ -439,7 +451,11 @@ Disallow: /item /head /leather /resources
     });
 
     app.all('/api', async (req, res, next) => {
-        res.render('api', { error: null, player: null, extra: await getExtra('api'), fileHashes, helper, page: 'api' });
+        res.render('api', { error: null, player: null, extra: await getExtra('api'), fileHashes, helper, page: 'api' },
+        (err, html) => {
+            res.set('X-Cluster-ID', `${helper.getClusterId()}`);
+            res.send(html);
+        });
     });
 
     app.all('/:player/:profile?', async (req, res, next) => {
@@ -453,8 +469,7 @@ Disallow: /item /head /leather /resources
         res.render('index', 
             { req, error: null, player: null, extra: await getExtra('index', favorites), fileHashes, helper, page: 'index' },
             (err, html) => {
-                if(cluster.isWorker)
-                    res.set('X-Worker-ID', `${cluster.worker.id}`);
+                res.set('X-Cluster-ID', `${helper.getClusterId()}`);
                 res.set('X-Process-Time', `${new Date().getTime() - timeStarted}`);
                 res.send(html);
             }
@@ -468,13 +483,12 @@ Disallow: /item /head /leather /resources
         .send('Not found')
     });
 
-    app.listen(port, () => console.log(`SkyBlock Stats running on http://localhost:${port} (Worker ${cluster.worker.id})`));
+    app.listen(port, () => console.log(`SkyBlock Stats running on http://localhost:${port} (${helper.getClusterId()})`));
 }
-
 
 if(cluster.isMaster){
     const totalCpus = require('os').cpus().length;
-    const cpus = Math.min(4, Math.round(totalCpus-(totalCpus/4)));
+    const cpus = Math.min(4, /* Math.round(totalCpus-(totalCpus/4)) */ totalCpus);
 
     for(let i = 0; i < cpus; i += 1){
         cluster.fork();

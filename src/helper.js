@@ -1,3 +1,4 @@
+const cluster = require('cluster');
 const axios = require('axios');
 require('axios-debug-log');
 
@@ -673,5 +674,16 @@ module.exports = {
         }
 
         return output;
+    },
+
+    getClusterId: (fullName = false) => {
+        if(fullName)
+            return cluster.isWorker ? `worker${cluster.worker.id}` : "master";
+
+        return cluster.isWorker ? `w${cluster.worker.id}` : "m";
+    },
+
+    generateDebugId: (endpointName = "unknown") => {
+        return `${module.exports.getClusterId()}/${endpointName}_${new Date().getTime()}.${Math.floor((Math.random() * 9000) + 1000)}`;
     }
 }
