@@ -1786,7 +1786,30 @@ a.additional-player-stat:hover {
     background-image: url(../img/icons/ability-damage.png);
 }
 
-.color-mining-speed {
+.stat-mining-speed {
+    background-image: url(../img/icons/mining-speed.png);
+}
+
+.stat-mining-fortune {
+    background-image: url(../img/icons/mining-fortune.png);
+}
+
+.stat-farming-fortune {
+    background-image: url(../img/icons/farming-fortune.png);
+}
+
+.stat-foraging-fortune {
+    background-image: url(../img/icons/foraging-fortune.png);
+}
+
+.stat-mining-speed .stat-name,
+.stat-mining-fortune .stat-name,
+.stat-farming-fortune .stat-name,
+.stat-foraging-fortune .stat-name,
+.color-mining-speed,
+.color-mining-fortune,
+.color-farming-fortune,
+.color-foraging-fortune {
     color: #ffaa00;
 }
 
