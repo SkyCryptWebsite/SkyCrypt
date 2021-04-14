@@ -487,21 +487,16 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                 item.extra.expertise_kills = expertise_kills;
         }
 
-        if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp')){
-            let { timestamp } = item.tag.ExtraAttributes;
-            let obtainmentDate;
+        if (helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp')) {
+            let timestamp = item.tag.ExtraAttributes.timestamp;
 
-            if(!isNaN(timestamp))
-                obtainmentDate = moment(parseInt(timestamp));
-            else if(timestamp.includes("AM") || timestamp.includes("PM"))
-                obtainmentDate = moment(timestamp, "M/D/YY h:mm A");
-            else
-                obtainmentDate = moment(timestamp, "D/M/YY HH:mm");
+            if (!isNaN(timestamp)) {
+                item.extra.timestamp = timestamp
+            } else {
+                item.extra.timestamp = Date.parse(timestamp + ' EDT');
+            }
 
-            if(!obtainmentDate.isValid())
-                obtainmentDate = moment(timestamp, "M/D/YY HH:mm");
-
-            item.extra.timestamp = obtainmentDate;
+            item.extra.timestamp;
         }
 
         if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'spawnedFor'))
@@ -559,7 +554,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             }
 
             if(item.extra?.timestamp)
-                itemLore.push('', `§7Obtained: §c${item.extra.timestamp.format("D MMM YYYY")}`);
+                itemLore.push('', `§7Obtained: §c<local-time timestamp="${item.extra.timestamp}"></local-time>`);
 
             if(item.extra?.spawned_for){
                 if(!item.extra.timestamp)
