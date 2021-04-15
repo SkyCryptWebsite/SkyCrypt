@@ -862,7 +862,7 @@ const getBonus = (stats, prefix) => {
             continue;
         %>
         <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replace(/\_/g, "-") %>"><%= stats[stat].toLocaleString() %><%= statSuffix[stat] %> <abbr title="<%= getPrettyName(stat) %>"><%= statShort[stat] %></abbr></span>
-        <% if(index < statsNotZero.length - 1){ %><span class="bonus-divider" role="presentation">//</span><% } %>
+        <% if(index < statsNotZero.length - 1){ %><span class="bonus-divider" role="separator">//</span><% } %>
     <% }
 }
 
@@ -899,7 +899,7 @@ const getReforges = (accessories) => {
             }
         }
         if (rarity !== Object.keys(rarityReforgeCounts).pop()) {
-            %><span class="bonus-divider" role="presentation"> // </span><%
+            %><span class="bonus-divider" role="separator"> // </span><%
         }
     }
 }
