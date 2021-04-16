@@ -391,6 +391,11 @@ module.exports = {
             type: "combat",
             emoji: "👵"
         },
+        "RAT": {
+            head: "/head/a8abb471db0ab78703011979dc8b40798a941f3a4dec3ec61cbeec2af8cffe8",
+            type: "combat",
+            emoji: "🐀"
+        }
     },
 
     /*

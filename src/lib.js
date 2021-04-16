@@ -2544,15 +2544,18 @@ module.exports = {
                 petSkin = constants.pet_skins[pet.type][pet.skin].name;
             }
 
+            let isMount = [
+                'HORSE',
+                'SKELETON_HORSE',
+                'PIG',
+                'ROCK',
+            ].indexOf(pet.type) != -1;
+            let isMorph = [ 'RAT' ].indexOf(pet.type) != -1;
+
             let loreFirstRow = [
                 '§8',
                 `${helper.capitalizeFirstLetter(petData.type)} `,
-                [
-                    'HORSE',
-                    'SKELETON_HORSE',
-                    'PIG',
-                    'ROCK',
-                ].indexOf(pet.type) === -1 ? 'Pet' : 'Mount',
+                isMount ? 'Mount' : isMorph ? 'Morph' : 'Pet',
                 petSkin ? `, ${petSkin} Skin` : '',
             ]
 

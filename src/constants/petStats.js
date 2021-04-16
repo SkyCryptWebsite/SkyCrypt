@@ -2618,6 +2618,7 @@ module.exports = {
 		'Magma Cube': MagmaCube,
 		'Phoenix': Phoenix,
 		'Pigman': Pigman,
+		'Rat': Rat,
 		'Skeleton Horse': SkeletonHorse,
 		'Skeleton': Skeleton,
 		'Snowman': Snowman,
