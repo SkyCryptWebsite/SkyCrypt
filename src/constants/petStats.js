@@ -1312,8 +1312,8 @@ class Rat extends Pet {
 	get stats() {
 		return {
 			strength: this.level * 0.5,
-			health: this.level,
 			crit_damage: this.level * 0.1,
+			health: this.level,
 		};
 	}
 
