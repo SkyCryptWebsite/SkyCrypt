@@ -1111,6 +1111,17 @@ function jerriefy(rank) {
     return rank;
 }
 
+const getRarityUpgradeClass = item => {
+    let upgrades = 0
+
+    upgrades += item.extra?.recombobulated ? 1 : 0
+    upgrades += item.heldItem === 'PET_ITEM_TIER_BOOST' ? 1 : 0
+    upgrades += item.heldItem === 'PET_ITEM_VAMPIRE_FANG' ? 1 : 0
+    upgrades += item.heldItem === 'PET_ITEM_TOY_JERRY' ? 1 : 0
+
+    return `piece-rarity-upgrade-${upgrades}`
+}
+
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -1485,7 +1496,7 @@ function jerriefy(rank) {
                     <% } %>
                     <div class="pieces">
                         <% for(const item of items.armor.slice().reverse()){ %>
-                            <div tabindex="0" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
+                            <div tabindex="0" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                                 <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                     <div class="piece-shine"></div>
                                 <% } %>
@@ -1505,7 +1516,7 @@ function jerriefy(rank) {
                         <div class="wardrobe-set">
                             <% for(const [index, item] of set.filter(a => a !== null).entries()){
                                  %>
-                                <div tabindex="0" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item <%= index == 0 ? 'wardrobe-piece' : '' %> piece piece-<%= item.rarity %>-bg">
+                                <div tabindex="0" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item <%= index == 0 ? 'wardrobe-piece' : '' %> piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                         <div class="piece-shine"></div>
                                     <% } %>
@@ -1546,7 +1557,7 @@ function jerriefy(rank) {
                                 items.weapons.filter(a => !a.hidden).forEach(item => { %>
                                     <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece
                                         <% if(sword.length > 0 && item.backpackIndex === undefined && item.item_index == sword[0].item_index){ %>piece-selected<% } %>
-                                        piece-<%= item.rarity %>-bg">
+                                        piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                                         <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                             <div class="piece-shine"></div>
                                         <% } %>
@@ -1591,7 +1602,7 @@ function jerriefy(rank) {
                                 <% items.talismans.filter(a => !a.isInactive).forEach(item => {
                                     %>
                                     <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>"
-                                    class="rich-item piece piece-<%= item.rarity %>-bg <%= item.extra.recombobulated ? 'piece-rarity-upgrade-1' : '' %>">
+                                    class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                                         <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                             <div class="piece-shine"></div>
                                         <% } %>
@@ -1608,7 +1619,7 @@ function jerriefy(rank) {
                                 <p class="stat-sub-header">Inactive Accessories</p>
                                 <% items.talismans.filter(a => a.isUnique && a.isInactive).forEach(item => { %>
                                     <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>"
-                                    class="rich-item piece piece-<%= item.rarity %>-bg">
+                                    class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                                         <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                             <div class="piece-shine"></div>
                                         <% } %>
@@ -1704,7 +1715,7 @@ function jerriefy(rank) {
                     <% if (activePet) { %>
                         <p class="stat-sub-header">Active Pet</p>
                         <div class="pieces">
-                            <div tabindex="0" data-pet-index="0" class="active-pet rich-item piece piece-<%= activePet.rarity %>-bg">
+                            <div tabindex="0" data-pet-index="0" class="active-pet rich-item piece piece-<%= activePet.rarity %>-bg <%= getRarityUpgradeClass(activePet) %>">
                                 <% if (rarityOrder.indexOf(activePet.rarity) < 3) { %>
                                     <div class="piece-shine"></div>
                                 <% } %>
@@ -1732,7 +1743,7 @@ function jerriefy(rank) {
                                     <div class="pieces extendable" id="showmore-pets">
                                 <% } %>
 
-                                <div tabindex="0" data-pet-index="<%= activePet ? index + 1 : index %>" class="other-pet rich-item piece piece-<%= pet.rarity %>-bg">
+                                <div tabindex="0" data-pet-index="<%= activePet ? index + 1 : index %>" class="other-pet rich-item piece piece-<%= pet.rarity %>-bg <%= getRarityUpgradeClass(pet) %>">
                                     <% if(rarityOrder.indexOf(pet.rarity) < 3) { %>
                                         <div class="piece-shine"></div>
                                     <% } %>
@@ -1868,7 +1879,7 @@ function jerriefy(rank) {
                         <% } %>
                         <div class="pieces">
                             <%  items.pickaxes.filter(a => !a.hidden).forEach(item => { %>
-                                    <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
+                                    <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                                         <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                             <div class="piece-shine"></div>
                                         <% } %>
@@ -1923,7 +1934,7 @@ function jerriefy(rank) {
                         <% } %>
                         <div class="pieces">
                             <%  items.hoes.filter(a => !a.hidden).forEach(item => { %>
-                                    <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg">
+                                    <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                                         <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                             <div class="piece-shine"></div>
                                         <% } %>
@@ -2029,7 +2040,7 @@ function jerriefy(rank) {
                                 items.rods.filter(a => !a.hidden).forEach(item => { %>
                                     <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece
                                         <% if(rod.length > 0 && item.backpackIndex === undefined && item.item_index == rod[0].item_index){ %>piece-selected<% } %>
-                                        piece-<%= item.rarity %>-bg">
+                                        piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                                         <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                                             <div class="piece-shine"></div>
                                         <% } %>
