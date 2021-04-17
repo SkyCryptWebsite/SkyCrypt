@@ -147,6 +147,8 @@ module.exports = {
         'Lethality VI',
         'Compact 10',
         'Compact X',
+        'Cultivating 10',
+        'Cultivating X',
         'First Strike 5',
         'First Strike V',
         'Execute 6',
@@ -157,6 +159,8 @@ module.exports = {
         'Venomous VI',
         'Cleave 6',
         'Cleave VI',
+        'Harvesting 6',
+        'Harvesting VI',
     ],
 
     // Number of kills required for each level of expertise
