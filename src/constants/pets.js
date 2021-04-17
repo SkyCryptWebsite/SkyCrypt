@@ -391,6 +391,11 @@ module.exports = {
             type: "combat",
             emoji: "👵"
         },
+        "RAT": {
+            head: "/head/a8abb471db0ab78703011979dc8b40798a941f3a4dec3ec61cbeec2af8cffe8",
+            type: "combat",
+            emoji: "🐀"
+        }
     },
 
     /*
@@ -429,6 +434,16 @@ module.exports = {
                 name: "Pretty",
                 head: "/head/a34631d940fddb689ddef6a3b352c50220c460dba05cd18dc83192b59dc647f8",
                 release: 1560284720000,
+            },
+            "RABBIT_AQUAMARINE": {
+                name: "Aquamarine",
+                head: "/head/35a2119d122961852c010c1007ab2aff95b4bbeb74407463f6d2e1ff0792c812",
+                release: new Date('2021-04-15 18:00:00 GMT+1').getTime(),
+            },
+            "RABBIT_ROSE": {
+                name: "Rose",
+                head: "/head/d7cddf5b20cb50d6600e5333c6bb3fb15b4741f17e3675fc2bfc09c2cd09e619",
+                release: new Date('2021-04-15 18:00:00 GMT+1').getTime(),
             },
         },
         "WITHER_SKELETON": {

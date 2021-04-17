@@ -256,6 +256,7 @@ header {
     z-index: 1000;
     line-height: 48px;
     overflow: hidden;
+    overflow: clip;
 }
 
 header > * {
@@ -659,6 +660,7 @@ input[type="search"]::-webkit-search-cancel-button {
             z-index: 10;
             filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
             overflow: hidden;
+            overflow: clip;
 
             &::after {
                 content: none;
@@ -1029,6 +1031,7 @@ input[type="search"]::-webkit-search-cancel-button {
     visibility: hidden;
     border-radius: 10px;
     overflow: hidden;
+    overflow: clip;
 
     &.show-stats {
         opacity: 1;
@@ -1199,6 +1202,7 @@ input[type="search"]::-webkit-search-cancel-button {
     margin-top: 10px;
     margin-left: -5px;
     overflow: hidden;
+    overflow: clip;
     border-radius: 100px;
     vertical-align: top;
     font-weight: 700;
@@ -1243,6 +1247,7 @@ input[type="search"]::-webkit-search-cancel-button {
     visibility: hidden;
     border-radius: 17px;
     overflow: hidden;
+    overflow: clip;
     padding: 0;
     margin: 0;
 
@@ -1863,6 +1868,7 @@ a.additional-player-stat:hover {
     max-width: 500px;
     border-radius: 10px;
     overflow: hidden;
+    overflow: clip;
     font-weight: 500;
 
     span {
@@ -1894,6 +1900,7 @@ a.additional-player-stat:hover {
     display: inline-block;
     max-height: 90px;
     overflow: hidden;
+    overflow: clip;
     transition: max-height 0.2s;
 
     &:hover,
@@ -2007,6 +2014,7 @@ a.additional-player-stat:hover {
     bottom: 0;
     right: 0;
     overflow: hidden;
+    overflow: clip;
     opacity: 0.7;
     border-radius: 5px;
 
@@ -2278,6 +2286,7 @@ a.additional-player-stat:hover {
     position: relative;
     margin-bottom: 0px;
     overflow: hidden;
+    overflow: clip;
     border-radius: 10px;
 
     #inventory_header {
@@ -2287,6 +2296,7 @@ a.additional-player-stat:hover {
         right: 5px;
         height: 50px;
         overflow: hidden;
+        overflow: clip;
         margin-top: 5px;
 
         .inventory-header-line {
@@ -3117,6 +3127,7 @@ main.grid > a,
     position: relative;
     grid-column: 1 / -1;
     overflow: hidden;
+    overflow: clip;
     min-height: 70px;
     max-height: 500px;
 
@@ -3381,6 +3392,7 @@ body {
         max-width: calc(100% - 95px);
         display: inline-block;
         overflow: hidden;
+        overflow: clip;
         vertical-align: middle;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -3789,7 +3801,6 @@ body {
         font-size: 14px;
         height: 28px;
         line-height: 28px;
-        overflow: hidden;
 
         .rank-name {
             padding: 0 10px;
@@ -3848,6 +3859,7 @@ body {
     #other_skills {
         max-height: 0;
         overflow: hidden;
+        overflow: clip;
         transition: max-height 0.2s ease-in-out;
 
         &.show-skills {
