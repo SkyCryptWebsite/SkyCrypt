@@ -1308,6 +1308,48 @@ class Pigman extends Pet {
 	}
 }
 
+class Rat extends Pet {
+	get stats() {
+		return {
+			strength: this.level * 0.5,
+			crit_damage: this.level * 0.1,
+			health: this.level,
+		};
+	}
+
+	get abilities() {
+		let list = [this.first];
+		if (this.rarity > 1)
+			list.push(this.second);
+		if (this.rarity > 3)
+			list.push(this.third);
+		return list;
+	}
+
+	get first() {
+		return {
+			name: "§6Morph",
+			desc: [`§7Right-click your summoned pet to morph into it!`]
+		};
+	}
+
+	get second() {
+		return {
+			name: "§6CHEESE!",
+			desc: [`§7As a Rat, you smell §e§lCHEESE §r§7nearby! Yummy!`]
+		};
+	}
+
+	get third() {
+		let mult_mf = 0.05;
+		let mult_time = 0.2;
+		return {
+			name: "§6Rat's Blessing",
+			desc: [`§7Has a chance to grant a random player §b+${floor(2 + this.level * mult_mf, 1)}${symbols.magic_find} Magic Find §7for §a${round(20 + this.level * mult_time, 0)} §7seconds after finding a yummy piece of Cheese! If the player gets a drop during this buff, you have a §a20% §7to get it too.`]
+		};
+	}
+}
+
 class SkeletonHorse extends Pet {
 	get stats() {
 		return {
@@ -2576,6 +2618,7 @@ module.exports = {
 		'Magma Cube': MagmaCube,
 		'Phoenix': Phoenix,
 		'Pigman': Pigman,
+		'Rat': Rat,
 		'Skeleton Horse': SkeletonHorse,
 		'Skeleton': Skeleton,
 		'Snowman': Snowman,
