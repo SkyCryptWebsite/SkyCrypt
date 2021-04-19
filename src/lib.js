@@ -1764,16 +1764,21 @@ module.exports = {
             output.stats[stat] += output.pet_bonus[stat];
 
         // Apply pet bonus to armor
-        if(activePet && Date.now() - userProfile.last_save >= 7 * 60 * 1000 /* change to 1000 - its one for testing; 7 minutes*/) {
-            // We know they are not online so apply pets to armor
-            activePet.ref.modifyArmor(items.armor[3], getId(items.armor[3]),
-                                    items.armor[2], getId(items.armor[2]),
-                                    items.armor[1], getId(items.armor[1]),
-                                    items.armor[0], getId(items.armor[0]));
-            loreGenerator.makeLore(items.armor[0]);
-            loreGenerator.makeLore(items.armor[1]);
-            loreGenerator.makeLore(items.armor[2]);
-            loreGenerator.makeLore(items.armor[3]);
+        if(activePet) {
+            activePet.ref.modifyArmor(
+                items.armor.find(a => a.type === 'helmet'),
+                getId(items.armor.find(a => a.type === 'helmet')),
+                items.armor.find(a => a.type === 'chestplate'),
+                getId(items.armor.find(a => a.type === 'chestplate')),
+                items.armor.find(a => a.type === 'leggings'),
+                getId(items.armor.find(a => a.type === 'leggings')),
+                items.armor.find(a => a.type === 'boots'),
+                getId(items.armor.find(a => a.type === 'boots'))
+            )
+            loreGenerator.makeLore(items.armor.find(a => a.type === 'helmet'))
+            loreGenerator.makeLore(items.armor.find(a => a.type === 'chestplate'))
+            loreGenerator.makeLore(items.armor.find(a => a.type === 'leggings'))
+            loreGenerator.makeLore(items.armor.find(a => a.type === 'boots'))
         }
 
         // Apply Lapis Armor full set bonus of +60 HP
