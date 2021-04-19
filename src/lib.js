@@ -1007,7 +1007,7 @@ module.exports = {
         return output;
     },
 
-    getItems: async (profile, customTextures = false, packs, options = { cacheOnly: false, debugId: "unknown/getItems" }) => {
+    getItems: async (profile, customTextures = false, packs, options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getItems` }) => {
         const output = {};
 
         console.debug(`${options.debugId}: getItems called.`);
@@ -1592,7 +1592,7 @@ module.exports = {
         return output;
     },
 
-    getStats: async (db, profile, allProfiles, items, options = { cacheOnly: false, debugId: "unknown/getStats" }) => {
+    getStats: async (db, profile, allProfiles, items, options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getStats` }) => {
         let output = {};
 
         console.debug(`${options.debugId}: getStats called.`);
@@ -3181,7 +3181,7 @@ module.exports = {
         return output;
     },
 
-    getProfile: async (db, paramPlayer, paramProfile, options = { cacheOnly: false, debugId: "unknown/getProfile" }) => {
+    getProfile: async (db, paramPlayer, paramProfile, options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` }) => {
         console.debug(`${options.debugId}: getProfile called.`);
         const timeStarted = new Date().getTime();
 
