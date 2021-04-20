@@ -19,7 +19,7 @@ async function main(){
 
     async function updateBazaar(){
         try{
-            const response = await Hypixel.get('skyblock/bazaar', { params: { key: credentials.hypixel_api_key }});
+            const response = await Hypixel.get('skyblock/bazaar'/*, { params: { key: credentials.hypixel_api_key }}*/);
 
             const { products } = response.data;
 

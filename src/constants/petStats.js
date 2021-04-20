@@ -735,7 +735,7 @@ class Blaze extends Pet {
 
 	modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
 		let mult = (1 + round(this.level * (this.rarity > 2 ? 0.4 : 0.3), 1) / 100);
-		if (helmet.extra?.hpbs > 0) {
+		if (helmet?.extra?.hpbs > 0) {
 			helmet.stats.defense += 2 * helmet.extra.hpbs;
 			helmet.stats.health += 4 * helmet.extra.hpbs;
 			helmet.extra.hpbs *= 2;
@@ -744,7 +744,7 @@ class Blaze extends Pet {
 			for (const stat in helmet.stats)
 				helmet.stats[stat] = round(helmet.stats[stat] * mult, 1);
 		}
-		if (chest.extra?.hpbs > 0) {
+		if (chest?.extra?.hpbs > 0) {
 			chest.stats.defense += 2 * chest.extra.hpbs;
 			chest.stats.health += 4 * chest.extra.hpbs;
 			chest.extra.hpbs *= 2;
@@ -753,7 +753,7 @@ class Blaze extends Pet {
 			for (const stat in chest.stats)
 				chest.stats[stat] = round(chest.stats[stat] * mult, 1);
 		}
-		if (legs.extra?.hpbs > 0) {
+		if (legs?.extra?.hpbs > 0) {
 			legs.stats.defense += 2 * legs.extra.hpbs;
 			legs.stats.health += 4 * legs.extra.hpbs;
 			legs.extra.hpbs *= 2;
@@ -762,7 +762,7 @@ class Blaze extends Pet {
 			for (const stat in legs.stats)
 				legs.stats[stat] = round(legs.stats[stat] * mult, 1);
 		}
-		if (boots.extra?.hpbs > 0) {
+		if (boots?.extra?.hpbs > 0) {
 			boots.stats.defense += 2 * boots.extra.hpbs;
 			boots.stats.health += 4 * boots.extra.hpbs;
 			boots.extra.hpbs *= 2;
@@ -1304,6 +1304,48 @@ class Pigman extends Pet {
 		return {
 			name: "§6Giant Slayer",
 			desc: [`§7Deal §a${round(this.level * mult, 1)}% §7extra damage to monsters level 100 and up`]
+		};
+	}
+}
+
+class Rat extends Pet {
+	get stats() {
+		return {
+			strength: this.level * 0.5,
+			crit_damage: this.level * 0.1,
+			health: this.level,
+		};
+	}
+
+	get abilities() {
+		let list = [this.first];
+		if (this.rarity > 1)
+			list.push(this.second);
+		if (this.rarity > 3)
+			list.push(this.third);
+		return list;
+	}
+
+	get first() {
+		return {
+			name: "§6Morph",
+			desc: [`§7Right-click your summoned pet to morph into it!`]
+		};
+	}
+
+	get second() {
+		return {
+			name: "§6CHEESE!",
+			desc: [`§7As a Rat, you smell §e§lCHEESE §r§7nearby! Yummy!`]
+		};
+	}
+
+	get third() {
+		let mult_mf = 0.05;
+		let mult_time = 0.2;
+		return {
+			name: "§6Rat's Blessing",
+			desc: [`§7Has a chance to grant a random player §b+${floor(2 + this.level * mult_mf, 1)}${symbols.magic_find} Magic Find §7for §a${round(20 + this.level * mult_time, 0)} §7seconds after finding a yummy piece of Cheese! If the player gets a drop during this buff, you have a §a20% §7to get it too.`]
 		};
 	}
 }
@@ -2576,6 +2618,7 @@ module.exports = {
 		'Magma Cube': MagmaCube,
 		'Phoenix': Phoenix,
 		'Pigman': Pigman,
+		'Rat': Rat,
 		'Skeleton Horse': SkeletonHorse,
 		'Skeleton': Skeleton,
 		'Snowman': Snowman,

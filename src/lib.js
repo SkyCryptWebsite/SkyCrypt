@@ -1,3 +1,4 @@
+const cluster = require('cluster');
 const fs = require('fs');
 const path = require('path');
 const nbt = require('prismarine-nbt');
@@ -487,21 +488,16 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                 item.extra.expertise_kills = expertise_kills;
         }
 
-        if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp')){
-            let { timestamp } = item.tag.ExtraAttributes;
-            let obtainmentDate;
+        if (helper.hasPath(item, 'tag', 'ExtraAttributes', 'timestamp')) {
+            let timestamp = item.tag.ExtraAttributes.timestamp;
 
-            if(!isNaN(timestamp))
-                obtainmentDate = moment(parseInt(timestamp));
-            else if(timestamp.includes("AM") || timestamp.includes("PM"))
-                obtainmentDate = moment(timestamp, "M/D/YY h:mm A");
-            else
-                obtainmentDate = moment(timestamp, "D/M/YY HH:mm");
+            if (!isNaN(timestamp)) {
+                item.extra.timestamp = timestamp
+            } else {
+                item.extra.timestamp = Date.parse(timestamp + ' EDT');
+            }
 
-            if(!obtainmentDate.isValid())
-                obtainmentDate = moment(timestamp, "M/D/YY HH:mm");
-
-            item.extra.timestamp = obtainmentDate;
+            item.extra.timestamp;
         }
 
         if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'spawnedFor'))
@@ -559,7 +555,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             }
 
             if(item.extra?.timestamp)
-                itemLore.push('', `§7Obtained: §c${item.extra.timestamp.format("D MMM YYYY")}`);
+                itemLore.push('', `§7Obtained: §c<local-time timestamp="${item.extra.timestamp}"></local-time>`);
 
             if(item.extra?.spawned_for){
                 if(!item.extra.timestamp)
@@ -1011,20 +1007,23 @@ module.exports = {
         return output;
     },
 
-    getItems: async (profile, customTextures = false, packs, cacheOnly = false) => {
+    getItems: async (profile, customTextures = false, packs, options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getItems` }) => {
         const output = {};
 
+        console.debug(`${options.debugId}: getItems called.`);
+        const timeStarted = new Date().getTime();
+
         // Process inventories returned by API
-        let armor = 'inv_armor' in profile ? await getItems(profile.inv_armor.data, customTextures, packs, cacheOnly) : [];
-        let inventory = 'inv_contents' in profile ? await getItems(profile.inv_contents.data, customTextures, packs, cacheOnly) : [];
-        let wardrobe_inventory = 'wardrobe_contents' in profile ? await getItems(profile.wardrobe_contents.data, customTextures, packs, cacheOnly) : [];
-        let enderchest = 'ender_chest_contents' in profile ? await getItems(profile.ender_chest_contents.data, customTextures, packs, cacheOnly) : [];
-        let talisman_bag = 'talisman_bag' in profile ? await getItems(profile.talisman_bag.data, customTextures, packs, cacheOnly) : [];
-        let fishing_bag = 'fishing_bag' in profile ? await getItems(profile.fishing_bag.data, customTextures, packs, cacheOnly) : [];
-        let quiver = 'quiver' in profile ? await getItems(profile.quiver.data, customTextures, packs, cacheOnly) : [];
-        let potion_bag = 'potion_bag' in profile ? await getItems(profile.potion_bag.data, customTextures, packs, cacheOnly) : [];
-        let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data, customTextures, packs, cacheOnly) : [];
-        let personal_vault = 'personal_vault_contents' in profile ? await getItems(profile.personal_vault_contents.data, customTextures, packs, cacheOnly) : [];
+        let armor = 'inv_armor' in profile ? await getItems(profile.inv_armor.data, customTextures, packs, options.cacheOnly) : [];
+        let inventory = 'inv_contents' in profile ? await getItems(profile.inv_contents.data, customTextures, packs, options.cacheOnly) : [];
+        let wardrobe_inventory = 'wardrobe_contents' in profile ? await getItems(profile.wardrobe_contents.data, customTextures, packs, options.cacheOnly) : [];
+        let enderchest = 'ender_chest_contents' in profile ? await getItems(profile.ender_chest_contents.data, customTextures, packs, options.cacheOnly) : [];
+        let talisman_bag = 'talisman_bag' in profile ? await getItems(profile.talisman_bag.data, customTextures, packs, options.cacheOnly) : [];
+        let fishing_bag = 'fishing_bag' in profile ? await getItems(profile.fishing_bag.data, customTextures, packs, options.cacheOnly) : [];
+        let quiver = 'quiver' in profile ? await getItems(profile.quiver.data, customTextures, packs, options.cacheOnly) : [];
+        let potion_bag = 'potion_bag' in profile ? await getItems(profile.potion_bag.data, customTextures, packs, options.cacheOnly) : [];
+        let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data, customTextures, packs, options.cacheOnly) : [];
+        let personal_vault = 'personal_vault_contents' in profile ? await getItems(profile.personal_vault_contents.data, customTextures, packs, options.cacheOnly) : [];
 
         const wardrobeColumns = wardrobe_inventory.length / 4;
 
@@ -1475,6 +1474,7 @@ module.exports = {
             }
         }
 
+        console.debug(`${options.debugId}: getItems returned. (${new Date().getTime() - timeStarted}ms)`);
         return output;
     },
 
@@ -1592,11 +1592,14 @@ module.exports = {
         return output;
     },
 
-    getStats: async (db, profile, allProfiles, items, cacheOnly = false) => {
+    getStats: async (db, profile, allProfiles, items, options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getStats` }) => {
         let output = {};
 
+        console.debug(`${options.debugId}: getStats called.`);
+        const timeStarted = new Date().getTime();
+
         const userProfile = profile.members[profile.uuid];
-        const hypixelProfile = await helper.getRank(profile.uuid, db, cacheOnly);
+        const hypixelProfile = await helper.getRank(profile.uuid, db, options.cacheOnly);
 
         output.stats = Object.assign({}, constants.base_stats);
 
@@ -1761,16 +1764,21 @@ module.exports = {
             output.stats[stat] += output.pet_bonus[stat];
 
         // Apply pet bonus to armor
-        if(activePet && Date.now() - userProfile.last_save >= 7 * 60 * 1000 /* change to 1000 - its one for testing; 7 minutes*/) {
-            // We know they are not online so apply pets to armor
-            activePet.ref.modifyArmor(items.armor[3], getId(items.armor[3]),
-                                    items.armor[2], getId(items.armor[2]),
-                                    items.armor[1], getId(items.armor[1]),
-                                    items.armor[0], getId(items.armor[0]));
-            loreGenerator.makeLore(items.armor[0]);
-            loreGenerator.makeLore(items.armor[1]);
-            loreGenerator.makeLore(items.armor[2]);
-            loreGenerator.makeLore(items.armor[3]);
+        if(activePet) {
+            activePet.ref.modifyArmor(
+                items.armor.find(a => a.type === 'helmet'),
+                getId(items.armor.find(a => a.type === 'helmet')),
+                items.armor.find(a => a.type === 'chestplate'),
+                getId(items.armor.find(a => a.type === 'chestplate')),
+                items.armor.find(a => a.type === 'leggings'),
+                getId(items.armor.find(a => a.type === 'leggings')),
+                items.armor.find(a => a.type === 'boots'),
+                getId(items.armor.find(a => a.type === 'boots'))
+            )
+            loreGenerator.makeLore(items.armor.find(a => a.type === 'helmet'))
+            loreGenerator.makeLore(items.armor.find(a => a.type === 'chestplate'))
+            loreGenerator.makeLore(items.armor.find(a => a.type === 'leggings'))
+            loreGenerator.makeLore(items.armor.find(a => a.type === 'boots'))
         }
 
         // Apply Lapis Armor full set bonus of +60 HP
@@ -1886,13 +1894,21 @@ module.exports = {
 
             // Apply Superior Dragon Armor full set bonus of 5% stat increase
             if(items.armor.filter(a => getId(a).startsWith('SUPERIOR_DRAGON_')).length == 4)
-                for(const stat in stats)
+                for(const stat in stats) {
+                    if (constants.increase_most_stats_exclude.includes(stat)) {
+                        continue
+                    }
                     stats[stat] *= 1.05;
+                }
 
             // Apply Renowened bonus (whoever made this please comment)
             for(let i = 0; i < items.armor.filter(a => helper.getPath(a, 'tag', 'ExtraAttributes', 'modifier') == 'renowned').length; i++){
-                for(const stat in stats)
+                for(const stat in stats) {
+                    if (constants.increase_most_stats_exclude.includes(stat)) {
+                        continue
+                    }
                     stats[stat] *= 1.01;
+                }
             }
 
             // Modify stats based off of pet ability
@@ -1921,8 +1937,12 @@ module.exports = {
 
         // Apply Superior Dragon Armor full set bonus of 5% stat increase
         if(items.armor.filter(a => getId(a).startsWith('SUPERIOR_DRAGON_')).length == 4){
-            for(const stat in output.stats)
+            for(const stat in output.stats) {
+                if (constants.increase_most_stats_exclude.includes(stat)) {
+                    continue
+                }
                 superiorBonus[stat] = output.stats[stat] * 0.05;
+            }
 
             for(const stat in superiorBonus){
                 output.stats[stat] += superiorBonus[stat];
@@ -1939,9 +1959,11 @@ module.exports = {
 
         for(const item of items.armor){
             if(helper.getPath(item, 'tag', 'ExtraAttributes', 'modifier') == 'renowned'){
-                for(const stat in output.stats){
+                for(const stat in output.stats) {
+                    if (constants.increase_most_stats_exclude.includes(stat)) {
+                        continue
+                    }
                     renownedBonus[stat] += output.stats[stat] * 0.01;
-
                     output.stats[stat] *= 1.01;
                 }
             }
@@ -2044,7 +2066,7 @@ module.exports = {
         output.kills = killsDeaths.filter(a => a.type == 'kills').sort((a, b) => b.amount - a.amount);
         output.deaths = killsDeaths.filter(a => a.type == 'deaths').sort((a, b) => b.amount - a.amount);
 
-        const playerObject = await helper.resolveUsernameOrUuid(profile.uuid, db, cacheOnly);
+        const playerObject = await helper.resolveUsernameOrUuid(profile.uuid, db, options.cacheOnly);
 
         output.display_name = playerObject.display_name;
 
@@ -2057,7 +2079,7 @@ module.exports = {
 
         const members = await Promise
         .all(
-            Object.keys(profile.members).map(a => helper.resolveUsernameOrUuid(a, db, cacheOnly))
+            Object.keys(profile.members).map(a => helper.resolveUsernameOrUuid(a, db, options.cacheOnly))
         );
 
         if(userInfo){
@@ -2093,7 +2115,7 @@ module.exports = {
         if(helper.hasPath(profile, 'banking', 'balance'))
             output.bank = profile.banking.balance;
 
-        output.guild = await helper.getGuild(profile.uuid, db, cacheOnly);
+        output.guild = await helper.getGuild(profile.uuid, db, options.cacheOnly);
 
         output.rank_prefix = helper.renderRank(hypixelProfile);
         output.purse = userProfile.coin_purse || 0;
@@ -2121,7 +2143,7 @@ module.exports = {
         output.members = members.filter(a => a.uuid != profile.uuid);
         output.minions = module.exports.getMinions(profile.members);
         output.minion_slots = module.exports.getMinionSlots(output.minions);
-        output.collections = await module.exports.getCollections(profile.uuid, profile, cacheOnly);
+        output.collections = await module.exports.getCollections(profile.uuid, profile, options.cacheOnly);
         output.social = hypixelProfile.socials;
 
         output.dungeons = await module.exports.getDungeons(userProfile, hypixelProfile);
@@ -2499,6 +2521,7 @@ module.exports = {
             .filter(x => x >= 0)
             .reduce((total, value) => total + value)
 
+        console.debug(`${options.debugId}: getStats returned. (${new Date().getTime() - timeStarted}ms)`);
         return output;
     },
 
@@ -2540,15 +2563,18 @@ module.exports = {
                 petSkin = constants.pet_skins[pet.type][pet.skin].name;
             }
 
+            const isMount = [
+                'HORSE',
+                'SKELETON_HORSE',
+                'PIG',
+                'ROCK',
+            ].indexOf(pet.type) != -1;
+            const isMorph = [ 'RAT' ].indexOf(pet.type) != -1;
+
             let loreFirstRow = [
                 '§8',
                 `${helper.capitalizeFirstLetter(petData.type)} `,
-                [
-                    'HORSE',
-                    'SKELETON_HORSE',
-                    'PIG',
-                    'ROCK',
-                ].indexOf(pet.type) === -1 ? 'Pet' : 'Mount',
+                isMount ? 'Mount' : isMorph ? 'Morph' : 'Pet',
                 petSkin ? `, ${petSkin} Skin` : '',
             ]
 
@@ -3155,7 +3181,10 @@ module.exports = {
         return output;
     },
 
-    getProfile: async (db, paramPlayer, paramProfile, options = { cacheOnly: false }) => {
+    getProfile: async (db, paramPlayer, paramProfile, options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` }) => {
+        console.debug(`${options.debugId}: getProfile called.`);
+        const timeStarted = new Date().getTime();
+
         if(paramPlayer.length != 32){
             try{
                 const { uuid } = await helper.resolveUsernameOrUuid(paramPlayer, db);
@@ -3254,7 +3283,7 @@ module.exports = {
                     const profileResponse = await retry(async () => {
                         const response = await Hypixel.get('skyblock/profile', {
                             params: { key: credentials.hypixel_api_key, profile: paramProfile }
-                        }, { retries: 3 });
+                        }, { retries: 2 });
 
                         if(!response.data.success)
                             throw "api request failed";
@@ -3404,6 +3433,7 @@ module.exports = {
             ).catch(console.error);
         }
 
+        console.debug(`${options.debugId}: getProfile returned. (${new Date().getTime() - timeStarted}ms)`);
         return { profile: profile, allProfiles: allSkyBlockProfiles, uuid: paramPlayer };
     },
 
@@ -3573,7 +3603,7 @@ module.exports = {
 async function init(){
     const response = await axios('https://api.hypixel.net/resources/skyblock/collections');
 
-    if(!helper.hasPath(response, 'data', 'collections'))
+    if(!response?.data?.collections)
         return;
 
     for(const type in response.data.collections){
@@ -3586,14 +3616,15 @@ async function init(){
                 collectionData.tiers = item.tiers;
             } catch (e){
                 if (e instanceof TypeError){
-                     //Collection Data filter error
+                    //Collection Data filter error
                 } else {
-                     //Throw exception unchanged
-                     throw e;
+                    //Throw exception unchanged
+                    throw e;
                 }
             }
         }
     }
 }
 
-init();
+if(cluster.isWorker)
+    init();

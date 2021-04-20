@@ -1362,8 +1362,8 @@ function jerriefy(rank) {
                 <% if(calculated.current_area){ %>
                 <div class="additional-stat"><span class="stat-name"><%= calculated.current_area_updated ? 'Current' : 'Last' %> Area: </span><span class="stat-value"><%= calculated.current_area %></span></div>
                 <% } %>
-                <div class="additional-stat"><span data-tippy-content="Last updated on <%= moment(calculated.last_updated.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></span></div>
-                <div class="additional-stat"><span data-tippy-content="Joined on <%= moment(calculated.first_join.unix).format('D MMMM YYYY HH:mm') %>"><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></span></div>
+                <div class="additional-stat"><span data-tippy-content='Last updated on <local-time timestamp="<%= calculated.last_updated.unix %>"></local-time>'><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></span></div>
+                <div class="additional-stat"><span data-tippy-content='Joined on <local-time timestamp="<%= calculated.first_join.unix %>"></local-time>'><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></span></div>
                 <div class="additional-stat"><span class="stat-name">Purse: </span><span class="stat-value"><%= helper.formatNumber(calculated.purse, true) %> Coin<%= Math.floor(calculated.purse) == 1 ? '': 's' %></span></div>
                 <% if('bank' in calculated){ %>
                     <div class="additional-stat"><span class="stat-name">Bank Account: </span><span class="stat-value"><%= helper.formatNumber(calculated.bank, true) %> Coin<%= Math.floor(calculated.bank) == 1 ? '': 's' %></span></div>
@@ -1667,10 +1667,16 @@ function jerriefy(rank) {
                                 userUniqueSkins++
                             }
                         }
+
+                        let totalCandiesUsed = calculated.pets.reduce((total, pet) => total + pet.candyUsed, 0)
                     %>
                     <p class="stat-raw-values">
-                        <% max = uniquePets.length >= Object.keys(constants.pet_data).length ? 'golden-text': '' %><span class="stat-name <%= max %>">Unique Pets: </span><span class="stat-value <%= max %>"><%= uniquePets.length %> / <%= Object.keys(constants.pet_data).length %></span><br>
-                        <% max = userUniqueSkins >= totalUniqueSkins ? 'golden-text': '' %><span class="stat-name <%= max %>">Unique Pet Skins: </span><span class="stat-value <%= max %>"><%= userUniqueSkins %> / <%= totalUniqueSkins %></span><br>
+                        <% max = uniquePets.length >= Object.keys(constants.pet_data).length ? 'golden-text': '' %>
+                        <span class="stat-name <%= max %>">Unique Pets: </span><span class="stat-value <%= max %>"><%= uniquePets.length %> / <%= Object.keys(constants.pet_data).length %></span><br>
+
+                        <% max = userUniqueSkins >= totalUniqueSkins ? 'golden-text': '' %>
+                        <span class="stat-name <%= max %>">Unique Pet Skins: </span><span class="stat-value <%= max %>"><%= userUniqueSkins %> / <%= totalUniqueSkins %></span><br>
+
                         <% max = calculated.petScore >= Math.max(...Object.keys(constants.pet_rewards)) ? 'golden-text' : '' %><span data-tippy-content="
                         Increase your pet score by collecting unique pets with a high rarity.<br><br>
                         <table>
@@ -1683,6 +1689,10 @@ function jerriefy(rank) {
                         <tr><td>175 Score: </td><td><span class='color-magic-find grey-text'>+7 Magic Find</span></td>
                         </table>
                         "><span class="stat-name <%= max %>">Pet Score: </span><span class="stat-value <%= max %>"><%= calculated.petScore %></span></span><% if(calculated.pet_score_bonus.magic_find > 0){ %><span class="grey-text color-magic-find"> (+<%= calculated.pet_score_bonus.magic_find %> MF)</span><% } %><br>
+
+                        <% max = totalCandiesUsed === 0 ? 'golden-text': '' %>
+                        <span class="stat-name <%= max %>">Total Candies Used: </span><span class="stat-value <%= max %>"><%= totalCandiesUsed %></span><br>
+
                         <span class="stat-name">Total Pet XP: </span><span class="stat-value"><%= helper.formatNumber(totalPetXp, true) %></span>
                     </p>
                     <%
@@ -2877,7 +2887,7 @@ function jerriefy(rank) {
                                 let timestamp = calculated.misc.claimed_items[key];
                             %>
                             <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
-                            <span class="stat-value" data-tippy-content='Claimed on <%= moment(timestamp).format('D MMMM YYYY HH:mm') %>'><%= moment(timestamp).fromNow() %></span><br>
+                            <span class="stat-value" data-tippy-content='Claimed on <local-time timestamp="<%= timestamp %>"></local-time>'><%= moment(timestamp).fromNow() %></span><br>
                             <% } %>
                         </p>
                     <% } %>
