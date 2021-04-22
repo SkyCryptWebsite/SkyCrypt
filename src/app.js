@@ -490,7 +490,7 @@ Disallow: /item /head /leather /resources
 
 if(cluster.isMaster){
     const totalCpus = require('os').cpus().length;
-    const cpus = Math.min(4, /* Math.round(totalCpus-(totalCpus/4)) */ totalCpus);
+    const cpus = Math.min(process.env?.NODE_ENV != 'development' ? 8 : 2, totalCpus);
 
     for(let i = 0; i < cpus; i += 1){
         cluster.fork();
