@@ -29,6 +29,7 @@ module.exports = {
         500: 23,
         550: 24,
         600: 25,
+        650: 26,
     },
 
     minions_max_uniques: 609,
