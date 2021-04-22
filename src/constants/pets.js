@@ -10,7 +10,8 @@ const symbols = {
 	magic_find: "✯",
 	pet_luck: "♣",
 	attack_speed: "⚔️",
-	true_defense: "❂"
+	true_defense: "❂",
+	ferocity: "⫽",
 }
 
 module.exports = {
@@ -959,6 +960,11 @@ module.exports = {
             name: "Jerry 3D Glasses",
             tier: "LEGENDARY",
             description: "§7Upgrades a Jerry pet from §6Legendary §7to §dMythic §7and granting it a new perk!"
+        },
+        REAPER_GEM: {
+            name: "Reaper Gem",
+            tier: "LEGENDARY",
+            description: `§7Gain §c8${symbols.ferocity} Ferocity §7for 5s on kill`
         },
     }
 }
