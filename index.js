@@ -7,7 +7,7 @@ require('./src/scripts/update-items');
 require('./src/scripts/update-top-profiles');
 
 const cluster = require('cluster');
-const io = require('@pm2/io');
+// const io = require('@pm2/io');
 
 let requests = [];
 
@@ -38,6 +38,16 @@ async function init() {
 }
 
 if(cluster.isMaster){
+    /* const apiRequests = io.metric({
+        name: 'API Requests',
+        unit: 'reqs/min',
+        value: () => {
+            return requests.length;
+        }
+    });
+    
+    console.log(apiRequests); */
+
     for (const id in cluster.workers) {
         cluster.workers[id].on("message", (msg) => {
             if(msg?.type != 'api_request' || !msg?.time)
@@ -46,13 +56,6 @@ if(cluster.isMaster){
             requests.push(msg.time);
         });
     }
-
-    io.metric({
-        name: 'API Requests',
-        value: () => {
-            return requests.length;
-        }
-    });
 
     init();
 }
