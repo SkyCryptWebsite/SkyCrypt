@@ -655,6 +655,18 @@ module.exports = {
                 release: new Date('2021-04-05 18:00:00 GMT+1').getTime(),
             },
         },
+        "BLACK_CAT": {
+            "BLACK_CAT_IVORY": {
+                name: "Ivory",
+                head: "/head/f51b17d7ded6c7e8f3b2dac12378a6fc4e9228b911986f64c8af45837ae6d9e1",
+                release: new Date('2021-04-26 18:00:00 GMT+1').getTime(),
+            },
+            "BLACK_CAT_ONYX": {
+                name: "Onyx",
+                head: "/head/be924115d3a8bbacfd4fafb6cc70f99a2f7580e4583a50fa9b9c285a98ac0c56",
+                release: new Date('2021-04-26 18:00:00 GMT+1').getTime(),
+            },
+        },
     },
 
     pet_value: {
