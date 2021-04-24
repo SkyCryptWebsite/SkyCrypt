@@ -1642,31 +1642,26 @@ function jerriefy(rank) {
                 <h2 class="stat-header">Pets</h2>
                 <div class="stat-content">
                     <%
-                        const uniquePets = _.uniq(calculated.pets.map(a => a.type));
-                        let totalPetXp = 0;
+                        const uniquePets = _.uniq(calculated.pets.map(a => a.type))
 
-                        for(const pet of calculated.pets)
-                            totalPetXp += pet.exp;
-
-                        let totalUniqueSkins = 0
-                        const currentTime = new Date().getTime()
-                        for(const skins of Object.values(constants.pet_skins)) {
-                            totalUniqueSkins += Object.values(skins).filter(
-                                s => s.release < currentTime
-                            ).length
+                        let totalPetXp = 0
+                        for (const pet of calculated.pets) {
+                            totalPetXp += pet.exp
                         }
 
-                        let userUniqueSkins = 0
-                        let userSkins = []
-                        for (const pet of calculated.pets) {
-                            if (
-                                pet.skin &&
-                                userSkins.indexOf(`${pet.type}/${pet.skin}`) === -1
-                            ) {
-                                userSkins.push(`${pet.type}/${pet.skin}`)
-                                userUniqueSkins++
+                        let totalSkins = {}
+                        for (const [petType, petSkins] of Object.entries(constants.pet_skins)) {
+                            for (const [skin, skinData] of Object.entries(petSkins)) {
+                                if (skinData.release < Date.now()) {
+                                    totalSkins[`${petType}/${skin}`] =
+                                        calculated.pets.filter(
+                                            (pet) => pet.type === petType && pet.skin === skin
+                                        ).length > 0
+                                }
                             }
                         }
+                        let userUniqueSkins = Object.values(totalSkins).filter(skin => skin).length
+                        let totalUniqueSkins = Object.keys(totalSkins).length
 
                         let totalCandiesUsed = calculated.pets.reduce((total, pet) => total + pet.candyUsed, 0)
                     %>
@@ -1677,17 +1672,18 @@ function jerriefy(rank) {
                         <% max = userUniqueSkins >= totalUniqueSkins ? 'golden-text': '' %>
                         <span class="stat-name <%= max %>">Unique Pet Skins: </span><span class="stat-value <%= max %>"><%= userUniqueSkins %> / <%= totalUniqueSkins %></span><br>
 
-                        <% max = calculated.petScore >= Math.max(...Object.keys(constants.pet_rewards)) ? 'golden-text' : '' %><span data-tippy-content="
-                        Increase your pet score by collecting unique pets with a high rarity.<br><br>
-                        <table>
-                        <tr><td>10 Score: </td><td><span class='color-magic-find grey-text'>+1 Magic Find</span></td>
-                        <tr><td>25 Score: </td><td><span class='color-magic-find grey-text'>+2 Magic Find</span></td>
-                        <tr><td>50 Score: </td><td><span class='color-magic-find grey-text'>+3 Magic Find</span></td>
-                        <tr><td>75 Score: </td><td><span class='color-magic-find grey-text'>+4 Magic Find</span></td>
-                        <tr><td>100 Score: </td><td><span class='color-magic-find grey-text'>+5 Magic Find</span></td>
-                        <tr><td>130 Score: </td><td><span class='color-magic-find grey-text'>+6 Magic Find</span></td>
-                        <tr><td>175 Score: </td><td><span class='color-magic-find grey-text'>+7 Magic Find</span></td>
-                        </table>
+                        <% max = calculated.petScore >= Math.max(...Object.keys(constants.pet_rewards)) ? 'golden-text' : '' %>
+                        <span data-tippy-content="
+                            Increase your pet score by collecting unique pets with a high rarity.<br><br>
+                            <table>
+                            <tr><td>10 Score: </td><td><span class='color-magic-find grey-text'>+1 Magic Find</span></td>
+                            <tr><td>25 Score: </td><td><span class='color-magic-find grey-text'>+2 Magic Find</span></td>
+                            <tr><td>50 Score: </td><td><span class='color-magic-find grey-text'>+3 Magic Find</span></td>
+                            <tr><td>75 Score: </td><td><span class='color-magic-find grey-text'>+4 Magic Find</span></td>
+                            <tr><td>100 Score: </td><td><span class='color-magic-find grey-text'>+5 Magic Find</span></td>
+                            <tr><td>130 Score: </td><td><span class='color-magic-find grey-text'>+6 Magic Find</span></td>
+                            <tr><td>175 Score: </td><td><span class='color-magic-find grey-text'>+7 Magic Find</span></td>
+                            </table>
                         "><span class="stat-name <%= max %>">Pet Score: </span><span class="stat-value <%= max %>"><%= calculated.petScore %></span></span><% if(calculated.pet_score_bonus.magic_find > 0){ %><span class="grey-text color-magic-find"> (+<%= calculated.pet_score_bonus.magic_find %> MF)</span><% } %><br>
 
                         <% max = totalCandiesUsed === 0 ? 'golden-text': '' %>
