@@ -821,19 +821,29 @@ function calcSkillWeight(skillGroup, level, experience){
     }
 }
 
-function calcSlayerWeight(type, experience){
-    const divider = constants.slayerWeight[type]
+function calcSlayerWeight(type, experience) {
+    const slayerWeight = constants.slayerWeight[type]
 
     if (experience <= 1000000) {
         return {
-            weight: experience == 0 ? 0 : experience / divider,
+            weight: experience == 0 ? 0 : experience / slayerWeight.divider,
             weight_overflow: 0,
         }
     }
 
-    let base = 1000000 / divider
+    let base = 1000000 / slayerWeight.divider
     let remaining = experience - 1000000
-    let overflow = Math.pow(remaining / (divider * 1.5), 0.942)
+
+    let modifier = slayerWeight.modifier
+    let overflow = 0
+
+    while (remaining > 0) {
+        let left = Math.min(remaining, 1000000)
+
+        overflow += Math.pow(left / (slayerWeight.divider * (1.5 + modifier)), 0.942)
+        modifier += slayerWeight.modifier
+        remaining -= left
+    }
 
     return {
         weight: base,
