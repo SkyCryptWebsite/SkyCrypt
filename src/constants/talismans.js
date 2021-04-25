@@ -252,6 +252,9 @@ module.exports = {
         TITANIUM_ARTIFACT: [
             'TITANIUM_RELIC',
         ],
+        BAIT_RING: [
+            'SPIKED_ATROCITY',
+        ],
     },
 
     talisman_duplicates: {
@@ -718,6 +721,16 @@ module.exports = {
             name: "Dante Talisman",
             rarity: "common",
             texture: "/head/cf92982f1a302310643a20ce51623f8199b7545e70dc6b93ed6bd61dc42ff213"
+        },
+        "SPIKED_ATROCITY": {
+            name: "Spiked Atrocity",
+            rarity: "epic",
+            texture: "/head/df4eeca825dddb7f861352ecb0be2df4615728b63894b7c54418af0105a39172"
+        },
+        "BLOOD_GOD_CREST": {
+            name: "Blood God Crest",
+            rarity: "common",
+            texture: "/head/5b8b51eaefe0e3a10ad7fa1627801d2ce4412b4e432685906192f83283708233"
         },
     }
 }

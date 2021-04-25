@@ -107,44 +107,46 @@ async function main(){
     async function getFavoritesFormUUIDs(uuids) {
         favorites = [];
         for (const uuid of uuids) {
-            if (uuid != null) {
-                const cache = await db
-                .collection('favoriteCache')
+            if (uuid == null) continue;
+
+            const cache = await db
+            .collection('favoriteCache')
+            .find( { uuid } )
+            .toArray();
+
+            if (cache[0]) {
+                favorites.push(cache[0]);
+                continue;
+            } else {
+                let output_cache = { uuid };
+                
+                const user = await db
+                .collection('usernames')
                 .find( { uuid } )
                 .toArray();
 
-                if (cache[0]) {
-                    favorites.push(cache[0]);
-                } else {
-                    let output_cache = { uuid };
-                    
-                    const user = await db
-                    .collection('usernames')
+                if (user[0]) {
+                    output_cache = user[0];
+
+                    let profiles = await db
+                    .collection('profileStore')
                     .find( { uuid } )
                     .toArray();
-    
-                    if (user[0]) {
-                        output_cache = user[0];
-    
-                        let profiles = await db
-                        .collection('profileStore')
-                        .find( { uuid } )
-                        .toArray();
-    
-                        if (profiles[0]) {
-                            const profile = profiles[0];
-                            output_cache.last_updated = profile.last_save;
-                        } else {
-                            output_cache.error = "Profile doesn't exist.";
-                        }
+
+                    if (profiles[0]) {
+                        const profile = profiles[0];
+                        output_cache.last_updated = profile.last_save;
                     } else {
-                        output_cache.error = "User doesn't exist.";
+                        output_cache.error = "Profile doesn't exist.";
                     }
-                    
-                    await db.collection('favoriteCache').insertOne(output_cache);
-                    favorites.push(output_cache);
+                } else {
+                    output_cache.error = "User doesn't exist.";
                 }
+                
+                await db.collection('favoriteCache').insertOne(output_cache);
+                favorites.push(output_cache);
             }
+        
         }
         return favorites;
     }
@@ -515,7 +517,7 @@ Disallow: /item /head /leather /resources
 
 if(cluster.isMaster){
     const totalCpus = require('os').cpus().length;
-    const cpus = Math.min(4, /* Math.round(totalCpus-(totalCpus/4)) */ totalCpus);
+    const cpus = Math.min(process.env?.NODE_ENV != 'development' ? 8 : 2, totalCpus);
 
     for(let i = 0; i < cpus; i += 1){
         cluster.fork();
