@@ -152,6 +152,11 @@ button {
     font-family: inherit;
 }
 
+abbr {
+    display: contents;
+    text-decoration: inherit;
+}
+
 body {
     margin: 0;
 }
@@ -1633,6 +1638,11 @@ a.additional-player-stat:hover {
 .stat-value {
     font-weight: 700;
     margin-left: 2px;
+}
+
+.bonus-divider {
+    color: rgb(255 255 255 / 60%);
+    font-weight: bold;
 }
 
 .percent::after {
