@@ -28,8 +28,12 @@ module.exports = {
         450: 22,
         500: 23,
         550: 24,
-        600: 25
+        600: 25,
+        650: 26,
     },
+
+    minions_max_uniques: 609,
+    minions_max_slots: 25, // From unique tiers (excludes community shop upgrades)
 
     minions: {
         COBBLESTONE: {
@@ -117,43 +121,53 @@ module.exports = {
         },
         WHEAT: {
             type: 'farming',
+            tiers: 12,
             head: '/head/bbc571c5527336352e2fee2b40a9edfa2e809f64230779aa01253c6aa535881b'
         },
         MELON: {
             type: 'farming',
+            tiers: 12,
             head: '/head/95d54539ac8d3fba9696c91f4dcc7f15c320ab86029d5c92f12359abd4df811e'
         },
         PUMPKIN: {
             type: 'farming',
+            tiers: 12,
             head: '/head/f3fb663e843a7da787e290f23c8af2f97f7b6f572fa59a0d4d02186db6eaabb7'
         },
         CARROT: {
             type: 'farming',
+            tiers: 12,
             head: '/head/4baea990b45d330998cb0c1f8515c27b24f93bff1df0db056e647f8200d03b9d'
         },
         POTATO: {
             type: 'farming',
+            tiers: 12,
             head: '/head/7dda35a044cb0374b516015d991a0f65bf7d0fb6566e350496642cf2059ff1d9'
         },
         MUSHROOM: {
             type: 'farming',
+            tiers: 12,
             head: '/head/4a3b58341d196a9841ef1526b367209cbc9f96767c24f5f587cf413d42b74a93'
         },
         CACTUS: {
             type: 'farming',
+            tiers: 12,
             head: '/head/ef93ec6e67a6cd272c9a9684b67df62584cb084a265eee3cde141d20e70d7d72'
         },
         COCOA: {
             type: 'farming',
+            tiers: 12,
             head: '/head/acb680e96f6177cd8ffaf27e9625d8b544d720afc50738801818d0e745c0e5f7'
         },
         SUGAR_CANE: {
             type: 'farming',
+            tiers: 12,
             head: '/head/2fced0e80f0d7a5d1f45a1a7217e6a99ea9720156c63f6efc84916d4837fabde'
         },
         NETHER_WARTS: {
             name: 'Nether Wart',
             type: 'farming',
+            tiers: 12,
             head: '/head/71a4620bb3459c1c2fa74b210b1c07b4a02254351f75173e643a0e009a63f558'
         },
         FLOWER: {
@@ -216,22 +230,27 @@ module.exports = {
         },
         COW: {
             type: 'farming',
+            tiers: 12,
             head: '/head/c2fd8976e1b64aebfd38afbe62aa1429914253df3417ace1f589e5cf45fbd717'
         },
         PIG: {
             type: 'farming',
+            tiers: 12,
             head: '/head/a9bb5f0c56408c73cfa412345c8fc51f75b6c7311ae60e7099c4781c48760562'
         },
         CHICKEN: {
             type: 'farming',
+            tiers: 12,
             head: '/head/a04b7da13b0a97839846aa5648f5ac6736ba0ca9fbf38cd366916e417153fd7f'
         },
         SHEEP: {
             type: 'farming',
+            tiers: 12,
             head: '/head/fd15d4b8bce708f77f963f1b4e87b1b969fef1766a3e9b67b249c59d5e80e8c5'
         },
         RABBIT: {
             type: 'farming',
+            tiers: 12,
             head: '/head/ef59c052d339bb6305cad370fd8c52f58269a957dfaf433a255597d95e68a373'
         },
         OAK: {

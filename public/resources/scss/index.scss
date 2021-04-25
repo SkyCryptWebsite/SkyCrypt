@@ -152,6 +152,11 @@ button {
     font-family: inherit;
 }
 
+abbr {
+    display: contents;
+    text-decoration: inherit;
+}
+
 body {
     margin: 0;
 }
@@ -1633,6 +1638,11 @@ a.additional-player-stat:hover {
 .stat-value {
     font-weight: 700;
     margin-left: 2px;
+}
+
+.bonus-divider {
+    color: rgb(255 255 255 / 60%);
+    font-weight: bold;
 }
 
 .percent::after {
@@ -3955,4 +3965,28 @@ body {
 
 .narrow-info-container.top-deaths {
     margin-bottom: 15px;
+}
+
+.piece.piece-rarity-upgrade-1 {
+    border: 0 dashed;
+    position: relative;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 20%;
+        height: 20%;
+        clip-path: polygon(0 0, 100% 0, 100% 100%);
+        border-top-right-radius: 5px;
+    }
+    &.piece-very-special-bg::before { background-color: var(--§c); }
+    &.piece-special-bg::before { background-color: var(--§4); }
+    &.piece-supreme-bg::before { background-color: #d762d7; }
+    &.piece-mythic-bg::before { background-color: var(--maxed-hex); }
+    &.piece-legendary-bg::before { background-color: var(--§5); }
+    &.piece-epic-bg::before { background-color: var(--§9); }
+    &.piece-rare-bg::before { background-color: #3cbd3c; }
+    &.piece-uncommon-bg::before { background-color: var(--§8); }
+    &.piece-common-bg::before { background-color: #888888; }
 }
