@@ -824,9 +824,9 @@ function calcSkillWeight(skillGroup, level, experience){
 function calcSlayerWeight(type, experience) {
     const slayerWeight = constants.slayerWeight[type]
 
-    if (experience <= 1000000) {
+    if (!experience || experience <= 1000000) {
         return {
-            weight: experience == 0 ? 0 : experience / slayerWeight.divider,
+            weight: !experience ? 0 : experience / slayerWeight.divider, // for some reason experience can be undefined
             weight_overflow: 0,
         }
     }
