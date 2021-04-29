@@ -443,7 +443,7 @@ module.exports = {
                     if(texture.weight == outputTexture.weight && texture.file < outputTexture.file)
                         continue;
 
-                    outputTexture = Object.assign({ pack }, texture);
+                    outputTexture = Object.assign({ pack: { basePath: pack.basePath, config: pack.config } }, texture);
                 }
             }
         }
@@ -495,6 +495,7 @@ module.exports = {
         }*/
 
         outputTexture.path = path.relative(path.resolve(__dirname, '..', 'public'), outputTexture.path).replace(/[\\]/g, '/');
+        process.send({type: "used_pack", id: outputTexture?.pack.config.id});
 
         return outputTexture;
     }
