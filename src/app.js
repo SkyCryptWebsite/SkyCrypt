@@ -223,6 +223,9 @@ async function main(){
             console.debug(`${debugId}: starting page render.`);
             const renderStart = new Date().getTime();
 
+            if(req.cookies.pack)
+                process.send({type: "selected_pack", id: req.cookies.pack});
+
             res.render('stats', 
                 { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), fileHashes, page: 'stats' },
                 (err, html) => {
@@ -490,7 +493,7 @@ Disallow: /item /head /leather /resources
 
 if(cluster.isMaster){
     const totalCpus = require('os').cpus().length;
-    const cpus = Math.min(4, /* Math.round(totalCpus-(totalCpus/4)) */ totalCpus);
+    const cpus = Math.min(process.env?.NODE_ENV != 'development' ? 8 : 2, totalCpus);
 
     for(let i = 0; i < cpus; i += 1){
         cluster.fork();
