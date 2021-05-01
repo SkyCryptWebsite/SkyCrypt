@@ -1921,6 +1921,11 @@ module.exports = {
                 }
             }
 
+            // Apply Loving reforge bonus
+            for(let i = 0; i < items.armor.filter(a => helper.getPath(a, 'tag', 'ExtraAttributes', 'modifier') == 'loving').length; i++){
+                stats['ability_damage'] += 5;
+            }
+
             // Modify stats based off of pet ability
             if (activePet)
                 activePet.ref.modifyStats(stats);
