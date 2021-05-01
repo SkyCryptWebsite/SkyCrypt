@@ -2313,7 +2313,7 @@ module.exports = {
                         let tierValue = statKey.pop();
 
                         statKey = statKey.join('_');
-                        const tierInfo = constants.experiments.tiers[tierValue];
+                        const tierInfo = _.cloneDeep(constants.experiments.tiers[tierValue]);
 
                         if(!game_output.tiers[tierValue])
                             game_output.tiers[tierValue] = tierInfo;
