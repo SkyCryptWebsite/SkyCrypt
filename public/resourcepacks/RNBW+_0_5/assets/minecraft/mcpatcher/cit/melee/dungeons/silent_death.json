@@ -1,0 +1,28 @@
+{
+    "parent": "builtin/generated",
+    "textures": {
+        "layer0": "items/emerald"
+    },
+   "display": {
+		"firstperson": {
+            "rotation": [ 5, 40, 0 ],
+            "translation": [ 3.0, 4.5, 2.0 ],
+            "scale": [ 1.5, 1.5, 1.5 ]
+        },
+        "thirdperson": {
+            "rotation": [ 0, -90, 45 ],
+            "translation": [ 0, 3.0, -0.5 ],
+            "scale": [ 0.7, 0.7, 0.7 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 5, -35, 30 ],
+            "translation": [ 3.5, 4.5, 2.4 ],
+            "scale": [ 2.0, 2.0, 2.0 ]
+        },
+		"thirdperson_righthand": {
+            "rotation": [ 0, 90, -35 ],
+            "translation": [ 0, 1.25, -4.5 ],
+            "scale": [ 1.1, 1.1, 1.1 ]
+        }
+    }
+}

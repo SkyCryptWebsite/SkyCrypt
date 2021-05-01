@@ -1,3 +1,4 @@
+const cluster = require('cluster');
 const axios = require('axios');
 require('axios-debug-log');
 
@@ -79,7 +80,6 @@ module.exports = {
     },
 
     resolveUsernameOrUuid: async (uuid, db, cacheOnly = false) => {
-        let output;
         let user = null;
 
         uuid = uuid.replace(/\-/g, '');
@@ -101,7 +101,10 @@ module.exports = {
                     user = doc;
         }
 
-        let skin_data = { skinurl: 'https://textures.minecraft.net/texture/3b60a1f6d562f52aaebbf1434f1de147933a3affe0e764fa49ea057536623cd3', model: 'slim' };
+        let skin_data = {
+            skinurl: 'https://textures.minecraft.net/texture/3b60a1f6d562f52aaebbf1434f1de147933a3affe0e764fa49ea057536623cd3',
+            model: 'slim'
+        };
 
         if(user && module.exports.hasPath(user, 'skinurl')){
             skin_data.skinurl = user.skinurl;
@@ -111,7 +114,7 @@ module.exports = {
                 skin_data.capeurl = user.capeurl;
         }
 
-        if(cacheOnly === false && (user === null || (+new Date() - user.date) > 4000 * 1000)){
+        if(cacheOnly === false && (user === null || (+new Date() - user.date) > 7200 * 1000)){
             let profileRequest = axios(`https://api.ashcon.app/mojang/v1/user/${uuid}`, { timeout: 5000 });
 
             profileRequest.then(async response => {
@@ -126,8 +129,6 @@ module.exports = {
                     }
 
                     if(module.exports.hasPath(data.textures, 'skin')){
-                        const skin = data.textures.skin;
-
                         skin_data.skinurl = data.textures.skin.url;
                         skin_data.model = data.textures.slim ? 'slim' : 'regular';
                     }
@@ -227,7 +228,7 @@ module.exports = {
             .collection('guilds')
             .findOne({ gid: guildMember.gid });
 
-        if(cacheOnly || (guildMember !== null && guildMember.gid !== null && (guildObject === null || (Date.now() - guildMember.last_updated) < 3600 * 1000))){
+        if(cacheOnly || (guildMember !== null && guildMember.gid !== null && (guildObject === null || (Date.now() - guildMember.last_updated) < 7200 * 1000))){
             if(guildMember.gid !== null){
                 const guildObject = await db
                 .collection('guilds')
@@ -245,7 +246,7 @@ module.exports = {
 
             return null;
         }else{
-            if(guildMember === null || (Date.now() - guildMember.last_updated) > 3600 * 1000){
+            if(guildMember === null || (Date.now() - guildMember.last_updated) > 7200 * 1000){
                 try{
                     const guildResponse = await Hypixel.get('guild', { params: { player: uuid, key: credentials.hypixel_api_key }});
 
@@ -339,53 +340,51 @@ module.exports = {
     },
 
     // Convert Minecraft lore to HTML
-    renderLore: (text, enchants = false) => {
+    renderLore: (text) => {
         let output = "";
-        let spansOpened = 0;
 
-        const parts = text.split("§");
+        let color = null;
+        let formats = new Set();
 
-        if(parts.length == 1)
-            return text;
+        for (let part of text.match(/(§[0-9a-fk-or])*[^§]*/g)) {
 
-        for(const part of parts){
-            const code = part.substring(0, 1);
-            const content = part.substring(1);
+            while (part.charAt(0) === '§') {
+                const code = part.charAt(1);
 
-            const format = constants.minecraft_formatting[code];
+                if (/[0-9a-f]/.test(code)) {
+                    color = code;
+                } else if (/[k-o]/.test(code)) {
+                    formats.add(code);
+                } else if (code === 'r') {
+                    color = null;
+                    formats.clear();
+                }
 
-            if(format === undefined)
-                continue;
-
-            if(format.type == 'color'){
-                for(; spansOpened > 0; spansOpened--)
-                    output += "</span>";
-
-                output += `<span style='${format.css}'>${content}`;
-
-                spansOpened++;
-            }else if(format.type == 'format'){
-                output += `<span style='${format.css}'>${content}`;
-
-                spansOpened++;
-            }else if(format.type == 'reset'){
-                for(; spansOpened > 0; spansOpened--)
-                    output += "</span>";
-
-                output += content;
+                part = part.substring(2);
             }
+
+            if (part.length === 0) continue;
+
+            output += '<span';
+
+            if (color !== null) {
+                output += ` style='color: var(--§${color});'`;
+            }
+
+            if (formats.size > 0) {
+                output += ` class='${Array.from(formats, x => '§' + x).join(' ')}'`;
+            }
+
+            output += `>${part}</span>`;
         }
 
-        for(; spansOpened > 0; spansOpened--)
-            output += "</span>";
+        const matchingEnchants = constants.special_enchants.filter(a => output.includes(a));
 
-        if(enchants){
-            const specialColor = constants.minecraft_formatting['6'];
-
-            const matchingEnchants = constants.special_enchants.filter(a => output.includes(a));
-
-            for(const enchantment of matchingEnchants)
-                output = output.replace(enchantment, `<span style='${specialColor.css}'>${enchantment}</span>`);
+        for (const enchantment of matchingEnchants) {
+            if (enchantment == 'Power 6' || enchantment == 'Power 7' && text.startsWith("§8Breaking")) {
+                continue;
+            }
+            output = output.replace(enchantment, `<span style='color: var(--§6)'>${enchantment}</span>`);
         }
 
         return output;
@@ -417,6 +416,13 @@ module.exports = {
 
     aOrAn: string => {
        return ['a', 'e', 'i', 'o', 'u'].includes(string.charAt(0).toLowerCase()) ? 'an': 'a';
+    },
+
+    sortObject: obj => {
+        return Object.keys(obj).sort().reduce(function (res, key) {
+            res[key] = obj[key];
+            return res;
+        }, {});
     },
 
     getPrice: orderSummary => {
@@ -480,88 +486,84 @@ module.exports = {
             return (Math.ceil(number / 1000 / 1000 / 1000 * rounding * 10) / (rounding * 10)).toFixed(rounding.toString().length) + 'B';
     },
 
-    parseRank: player => {
-        let rankName = 'NONE';
-        let rank = null;
+    calcDungeonGrade: data => {
+        let total_score = data["score_exploration"] + data["score_speed"] + data["score_skill"] + data["score_bonus"]
+        var result;
+        if(total_score <= 99)
+            result = "D";
+        else if(total_score <= 159)
+            result = "C";
+        else if(total_score <= 229)
+            result = "B";
+        else if(total_score <= 269)
+            result = "A";
+        else if(total_score <= 299)
+            result = "S";
+        else
+            result = "S+";
+        
+        return result;
+    },
 
-        let output = {
+    parseRank: player => {
+
+        const output = {
             rankText: null,
             rankColor: null,
             plusText: null,
             plusColor: null
         };
 
-        if(module.exports.hasPath(player, 'packageRank'))
-            rankName = player.packageRank;
+        const rankName = player.prefix ? module.exports.getRawLore(player.prefix).replace(/\[|\]/g, '')
+            : player.rank && player.rank != 'NORMAL'? player.rank
+            : player.monthlyPackageRank && player.monthlyPackageRank != 'NONE' ? player.monthlyPackageRank
+            : player.newPackageRank ? player.newPackageRank
+            : player.packageRank ? player.packageRank
+            : 'NONE';
 
-        if(module.exports.hasPath(player, 'newPackageRank'))
-            rankName = player.newPackageRank;
+        if (constants.ranks[rankName]) {
+            const {tag, color, plus, plusColor} = constants.ranks[rankName];
+            output.rankText = tag;
 
-        if(module.exports.hasPath(player, 'monthlyPackageRank') && player.monthlyPackageRank != 'NONE')
-            rankName = player.monthlyPackageRank;
+            if (rankName == 'SUPERSTAR') {
+                output.rankColor = constants.color_names[player.monthlyRankColor] ?? color;
+            } else {
+                output.rankColor = color;
+            }
 
-        if(module.exports.hasPath(player, 'rank') && player.rank != 'NORMAL')
-            rankName = player.rank;
+            if (plus) {
+                output.plusText = plus;
 
-        if(module.exports.hasPath(player, 'prefix'))
-            rankName = module.exports.getRawLore(player.prefix).replace(/\[|\]/g, '');
-
-        if(module.exports.hasPath(constants.ranks, rankName))
-            rank = constants.ranks[rankName];
-
-        if(!rank)
-            return output;
-
-        output.rankText = rank.tag;
-        output.rankColor = rank.color;
-
-        if(rankName == 'SUPERSTAR'){
-            if(!module.exports.hasPath(player, 'monthlyRankColor'))
-                player.monthlyRankColor = 'GOLD';
-
-            output.rankColor = constants.color_names[player.monthlyRankColor];
+                if (rankName == 'SUPERSTAR' || rankName == 'MVP_PLUS') {
+                    output.plusColor = constants.color_names[player.rankPlusColor] ?? plusColor;
+                } else {
+                    output.plusColor = plusColor;
+                }
+            }
         }
-
-        if(module.exports.hasPath(rank, 'plus')){
-            output.plusText = rank.plus;
-            output.plusColor = output.rankColor;
-        }
-
-        if(output.plusText && module.exports.hasPath(player, 'rankPlusColor'))
-            output.plusColor = constants.color_names[player.rankPlusColor];
-
-        if(rankName == 'PIG+++')
-            output.plusColor = 'b';
 
         return output;
     },
 
-    renderRank: rank => {
-        let { rankText, rankColor, plusText, plusColor } = rank;
-        let output = "";
-
-        if(rankText === null)
-            return output;
-
-        rankColor = constants.minecraft_formatting[rankColor].niceColor
-        || constants.minecraft_formatting[rankColor].color;
-
-        output = `<div class="rank-tag ${plusText ? 'rank-plus' : ''}"><div class="rank-name" style="background-color: ${rankColor}">${rankText}</div>`;
-
-        if(plusText){
-            plusColor = constants.minecraft_formatting[plusColor].niceColor
-            || constants.minecraft_formatting[plusColor].color
-
-            output += `<div class="rank-plus" style="background-color: ${plusColor}"><div class="rank-plus-before" style="background-color: ${plusColor};"></div><span class="rank-plus-text">${plusText}</span></div>`;
+    renderRank: ({ rankText, rankColor, plusText, plusColor }) => {
+        if (rankText === null) {
+            return "";
+        } else {
+            return /*html*/`
+                <div class="rank-tag nice-colors-dark">
+                    <div class="rank-name" style="background-color: var(--§${rankColor})">${rankText}</div>
+                    ${
+                        plusText ? 
+                        /*html*/`<div class="rank-plus" style="background-color: var(--§${plusColor})">${plusText}</div>`
+                        : ''
+                    }
+                </div>
+            `;
         }
-
-        output += `</div>`;
-
-        return output;
     },
 
     updateRank: async (uuid, db) => {
-        let rank = { rankText: null, rankColor: null, plusText: null, plusColor: null, socials: {}, achievements: {}, claimed_items: {} };
+        let rank = { rankText: null, rankColor: null,plusText: null, plusColor: null,socials: {}, achievements: {}, claimed_items: {} };
 
         try{
             const response = await retry(async () => {
@@ -584,12 +586,16 @@ module.exports = {
 
             let claimable = {
                 "claimed_potato_talisman": "Potato Talisman",
+                "claimed_potato_basket": "Potato Basket",
+                "claim_potato_war_silver_medal": "Silver Medal (Potato War)",
+                "claim_potato_war_crown": "Crown (Potato War)",
                 "skyblock_free_cookie": "Free Booster Cookie",
-                "scorpius_bribe_96": "Scorpius Bribe (Year 96)"
+                "scorpius_bribe_96": "Scorpius Bribe (Year 96)",
+                "scorpius_bribe_120": "Scorpius Bribe (Year 120)"
             };
 
             for(item in claimable)
-                if(module.exports.hasPath(player, item)) 
+                if(module.exports.hasPath(player, item))
                     rank.claimed_items[claimable[item]] = player[item];
         }catch(e){
             console.error(e);
@@ -668,5 +674,16 @@ module.exports = {
         }
 
         return output;
+    },
+
+    getClusterId: (fullName = false) => {
+        if(fullName)
+            return cluster.isWorker ? `worker${cluster.worker.id}` : "master";
+
+        return cluster.isWorker ? `w${cluster.worker.id}` : "m";
+    },
+
+    generateDebugId: (endpointName = "unknown") => {
+        return `${module.exports.getClusterId()}/${endpointName}_${new Date().getTime()}.${Math.floor((Math.random() * 9000) + 1000)}`;
     }
 } 

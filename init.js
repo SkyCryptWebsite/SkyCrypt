@@ -65,6 +65,13 @@ async function main(){
     );
 
     await db
+    .collection('favoriteCache')
+    .createIndex(
+        { uuid: 1 },
+        { unique: true }
+    );
+
+    await db
     .collection('members')
     .createIndex(
         { uuid: 1, profile_id: 1 },

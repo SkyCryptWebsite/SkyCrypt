@@ -26,7 +26,9 @@ module.exports = {
         "uncommon": "§a",
         "rare": "§9",
         "epic": "§5",
-        "legendary": "§6"
+        "legendary": "§6",
+        "mythic": "§d",
+        "supreme": "§4"
     },
 
     rarity_colors: {
@@ -36,6 +38,7 @@ module.exports = {
         "5": "epic",
         "6": "legendary",
         "d": "mythic",
+        "4": "supreme",
         "c": "special"
     },
 
@@ -48,18 +51,30 @@ module.exports = {
         'Giant Killer VII',
         'Giant Killer 6',
         'Giant Killer VI',
+        'Bane of Arthropods 7',
+        'Bane of Arthropods VII',
         'Bane of Arthropods 6',
         'Bane of Arthropods VI',
+        'Critical 7',
+        'Critical VII',
         'Critical 6',
         'Critical VI',
+        'Ender Slayer 7',
+        'Ender Slayer VII',
         'Ender Slayer 6',
         'Ender Slayer VI',
         'Experience 4',
         'Experience IV',
+        'Life Steal 5',
+        'Life Steal V',
         'Life Steal 4',
         'Life Steal IV',
+        'Looting 5',
+        'Looting V',
         'Looting 4',
         'Looting IV',
+        'Luck 7',
+        'Luck VII',
         'Luck 6',
         'Luck VI',
         'Scavenger 5',
@@ -80,10 +95,16 @@ module.exports = {
         'Growth VII',
         'Growth 6',
         'Growth VI',
+        'Blast Protection 7',
+        'Blast Protection VII',
         'Blast Protection 6',
         'Blast Protection VI',
+        'Fire Protection 7',
+        'Fire Protection VII',
         'Fire Protection 6',
         'Fire Protection VI',
+        'Projectile Protection 7',
+        'Projectile Protection VII',
         'Projectile Protection 6',
         'Projectile Protection VI',
         'Protection 7',
@@ -123,7 +144,23 @@ module.exports = {
         'Thunderlord 6',
         'Thunderlord VI',
         'Lethality 6',
-        'Lethality VI'
+        'Lethality VI',
+        'Compact 10',
+        'Compact X',
+        'Cultivating 10',
+        'Cultivating X',
+        'First Strike 5',
+        'First Strike V',
+        'Execute 6',
+        'Execute VI',
+        'Cubism 6',
+        'Cubism VI',
+        'Venomous 6',
+        'Venomous VI',
+        'Cleave 6',
+        'Cleave VI',
+        'Harvesting 6',
+        'Harvesting VI',
     ],
 
     // Number of kills required for each level of expertise
@@ -164,7 +201,12 @@ module.exports = {
         sea_creature_chance: 20,
         magic_find: 10,
         pet_luck: 0,
-        ferocity: 0
+        ferocity: 0,
+        ability_damage: 0,
+        mining_speed: 0,
+        mining_fortune: 0,
+        farming_fortune: 0,
+        foraging_fortune: 0
     },
 
     stat_template: {
@@ -182,14 +224,20 @@ module.exports = {
         sea_creature_chance: 0,
         magic_find: 0,
         pet_luck: 0,
-        ferocity: 0
+        ferocity: 0,
+        ability_damage: 0,
+        mining_speed: 0,
+        mining_fortune: 0,
+        farming_fortune: 0,
+        foraging_fortune: 0
     },
 
     slayer_cost: {
         1: 100,
         2: 2000,
         3: 10000,
-        4: 50000
+        4: 50000,
+        5: 100000
     },
 
     mob_mounts: {
@@ -210,7 +258,11 @@ module.exports = {
         generator_ghast: "Minion Ghast",
         generator_magma_cube: "Minion Magma Cube",
         generator_slime: "Minion Slime",
-        brood_mother_spider: "Brood Mother"
+        brood_mother_spider: "Brood Mother",
+        obsidian_wither: "Obsidian Defender",
+        sadan_statue: "Terracotta",
+        diamond_guy: "Angry Archaeologist",
+        tentaclees: "Fels"
     },
 
     area_names: {
@@ -218,6 +270,7 @@ module.exports = {
         hub: "Hub",
         mining_1: "Gold Mine",
         mining_2: "Deep Caverns",
+        mining_3: "Dwarven Mines",
         combat_1: "Spider's Den",
         combat_2: "Blazing Fortress",
         combat_3: "The End",
@@ -225,249 +278,6 @@ module.exports = {
         farming_2: "Mushroom Desert",
         foraging_1: "The Park",
         winter: "Jerry's Workshop"
-    },
-
-    bag_size: {
-        talisman_bag: {
-            collection: 'REDSTONE',
-            sizes: [
-                {
-                    tier: 2,
-                    slots: 3
-                },
-                {
-                    tier: 7,
-                    slots: 9
-                },
-                {
-                    tier: 9,
-                    slots: 15
-                },
-                {
-                    tier: 10,
-                    slots: 21
-                },
-                {
-                    tier: 11,
-                    slots: 27
-                },
-                {
-                    tier: 12,
-                    slots: 33
-                },
-                {
-                    tier: 13,
-                    slots: 39
-                },
-                {
-                    tier: 14,
-                    slots: 45
-                }
-            ]
-        },
-        potion_bag: {
-            collection: 'NETHER_STALK',
-            sizes: [
-                {
-                    tier: 2,
-                    slots: 9
-                },
-                {
-                    tier: 5,
-                    slots: 18
-                },
-                {
-                    tier: 8,
-                    slots: 27
-                },
-                {
-                    tier: 10,
-                    slots: 36
-                },
-                {
-                    tier: 11,
-                    slots: 45
-                }
-            ]
-        },
-        fishing_bag: {
-            collection: 'RAW_FISH',
-            sizes: [
-                {
-                    tier: 3,
-                    slots: 9
-                },
-                {
-                    tier: 7,
-                    slots: 18
-                },
-                {
-                    tier: 9,
-                    slots: 27
-                },
-                {
-                    tier: 10,
-                    slots: 36
-                },
-                {
-                    tier: 11,
-                    slots: 45
-                }
-            ]
-        },
-        quiver: {
-            collection: 'STRING',
-            sizes: [
-                {
-                    tier: 3,
-                    slots: 27
-                },
-                {
-                    tier: 6,
-                    slots: 36
-                },
-                {
-                    tier: 9,
-                    slots: 45
-                }
-            ]
-        }
-    },
-
-    // Minecraft color and formatting codes
-    minecraft_formatting: {
-        0: {
-            type: 'color',
-            color: '#000000',
-            css: 'color: #000000'
-        },
-
-        1: {
-            type: 'color',
-            color: '#0000AA',
-            niceColor: '#3251AE',
-            css: 'color: #0000AA'
-        },
-
-        2: {
-            type: 'color',
-            color: '#00AA00',
-            css: 'color: #00AA00'
-        },
-
-        3: {
-            type: 'color',
-            color: '#00AAAA',
-            css: 'color: #00AAAA'
-        },
-
-        4: {
-            type: 'color',
-            color: '#CC3333',
-            css: 'color: #CC3333'
-        },
-
-        5: {
-            type: 'color',
-            color: '#eb17eb',
-            css: 'color: #eb17eb'
-        },
-
-        6: {
-            type: 'color',
-            color: '#FFAA00',
-            css: 'color: #FFAA00'
-        },
-
-        7: {
-            type: 'color',
-            color: '#AAAAAA',
-            niceColor: '#333333',
-            css: 'color: #AAAAAA'
-        },
-
-        8: {
-            type: 'color',
-            color: '#777777',
-            css: 'color: #777777'
-        },
-
-        9: {
-            type: 'color',
-            color: '#5555FF',
-            css: 'color: #8888FF'
-        },
-
-        a: {
-            type: 'color',
-            color: '#55FF55',
-            niceColor: '#40BB40',
-            css: 'color: #55FF55'
-        },
-
-        b: {
-            type: 'color',
-            color: '#55FFFF',
-            niceColor: '#51C4D7',
-            css: 'color: #55FFFF'
-        },
-
-        c: {
-            type: 'color',
-            color: '#FF5555',
-            niceColor: '#C43C3C',
-            css: 'color: #FF5555'
-        },
-
-        d: {
-            type: 'color',
-            color: '#FF55FF',
-            niceColor: '#D985BC',
-            css: 'color: #FF55FF'
-        },
-
-        e: {
-            type: 'color',
-            color: '#FFFF55',
-            niceColor: '#EAA522',
-            css: 'color: #FFFF55'
-        },
-
-        f: {
-            type: 'color',
-            color: '#FFFFFF',
-            niceColor: '#000000',
-            css: 'color: #FFFFFF'
-        },
-
-        k: {
-            type: 'format',
-            css: 'display: none'
-        },
-
-        l: {
-            type: 'format',
-            css: 'font-weight: bold'
-        },
-
-        m: {
-            type: 'format',
-            css: 'text-decoration: line-through'
-        },
-
-        n: {
-            type: 'format',
-            css: 'text-decoration: underline'
-        },
-
-        o: {
-            type: 'format',
-            css: 'font-style: italic'
-        },
-
-        r: {
-            type: 'reset'
-        }
     },
 
     color_names: {
@@ -528,13 +338,15 @@ module.exports = {
         'SUPERSTAR': {
             color: '6',
             tag: 'MVP',
-            plus: '++'
+            plus: '++',
+            plusColor: 'c'
         },
 
         'MVP_PLUS': {
             color: 'b',
             tag: 'MVP',
-            plus: '+'
+            plus: '+',
+            plusColor: 'c'
         },
 
         'MVP': {
@@ -546,6 +358,7 @@ module.exports = {
             color: 'a',
             tag: 'VIP',
             plus: '+',
+            plusColor: '6'
         },
 
         'VIP': {
@@ -556,9 +369,107 @@ module.exports = {
         'PIG+++': {
             color: 'd',
             tag: 'PIG',
-            plus: '+++'
+            plus: '+++',
+            plusColor: 'b'
+        },
+
+        'MAYOR': {
+            color: 'd',
+            tag: 'MAYOR',
+        },
+
+        'MINISTER': {
+            color: 'c',
+            tag: 'MINISTER',
         },
 
         'NONE': null
-    }
+    },
+
+    farming_crops: {
+        'INK_SACK:3': {
+            name: 'Cocoa Beans',
+            icon: '351_3'
+        },
+        'POTATO_ITEM': {
+            name: 'Potato',
+            icon: '392_0'
+        },
+        'CARROT_ITEM': {
+            name: 'Carrot',
+            icon: '391_0'
+        },
+        'CACTUS': {
+            name: 'Cactus',
+            icon: '81_0'
+        },
+        'SUGAR_CANE': {
+            name: 'Sugar Cane',
+            icon: '338_0'
+        },
+        'MUSHROOM_COLLECTION': {
+            name: 'Mushroom',
+            icon: '40_0'
+        },
+        'PUMPKIN': {
+            name: 'Pumpkin',
+            icon: '86_0'
+        },
+        'NETHER_STALK': {
+            name: 'Nether Wart',
+            icon: '372_0'
+        },
+        'WHEAT': {
+            name: 'Wheat',
+            icon: '296_0'
+        },
+        'MELON': {
+            name: 'Melon',
+            icon: '360_0'
+        }
+    },
+
+    experiments: {
+        games: {
+            simon: {
+                name: "Chronomatron"
+            },
+            numbers: {
+                name: "Ultrasequencer"
+            },
+            pairings: {
+                name: "Superpairs"
+            }
+        },
+        tiers: [
+            {
+                name: "Beginner",
+                icon: "351:12"
+            }, {
+                name: "High",
+                icon: "351:10"
+            }, {
+                name: "Grand",
+                icon: "351:11"
+            }, {
+                name: "Supreme",
+                icon: "351:14"
+            }, {
+                name: "Transcendent",
+                icon: "351:1"
+            }, {
+                name: "Metaphysical",
+                icon: "351:13"
+            }
+        ]
+    },
+
+    max_favorites: 5,
+
+    increase_most_stats_exclude: [
+        'mining_speed',
+        'mining_fortune',
+        'farming_fortune',
+        'foraging_fortune'
+    ],
 };

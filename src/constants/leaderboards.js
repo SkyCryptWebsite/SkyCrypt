@@ -35,6 +35,12 @@ const skillFormatFarming = xp => {
     return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
 };
 
+const skillFormatEnchanting = xp => {
+    const { getLevelByXp } = require('../lib');
+    let levelObj = getLevelByXp(xp, {skill: "enchanting"});
+    return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
+};
+
 const skillFormatRunecrafting = xp => {
     const { getLevelByXp } = require('../lib');
     let levelObj = getLevelByXp(xp, {type: "runecrafting"});
@@ -115,6 +121,9 @@ module.exports = {
 
             if(skill.includes('farming'))
                 options['format'] = skillFormatFarming;
+
+            else if(skill.includes('enchanting'))
+                options['format'] = skillFormatEnchanting;
 
             else if(skill.includes('runecrafting'))
                 options['format'] = skillFormatRunecrafting;

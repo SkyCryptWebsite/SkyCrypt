@@ -272,12 +272,11 @@ module.exports = {
                 skyblockId = split[0];
                 query.damage = new Number(split[1]);
             }
-        }
-
-        if(skyblockId)
+    
             item = Object.assign(item, await db
-            .collection('items')
-            .findOne({ id: skyblockId }));
+                .collection('items')
+                .findOne({ id: skyblockId }));
+        }
 
         if(query.name){
             const results =  await db
@@ -320,7 +319,7 @@ module.exports = {
         const outputTexture = { mime: 'image/png' };
 
         for(const rule of itemsCss.stylesheet.rules){
-            if(!rule.selectors.includes(`.icon-${item.id}_${item.Damage}`))
+            if(!rule.selectors?.includes(`.icon-${item.id}_${item.Damage}`))
                 continue;
 
             const coords = rule.declarations[0].value.split(" ").map(a => Math.abs(parseInt(a)));

@@ -1,22 +1,38 @@
+    
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
     <meta property="og:site_name" content="SkyCrypt">
-    <meta property="og:type" content="object">
     <link rel="sitemap" href="/sitemap.xml">
-    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
+    <link rel="search" type="application/opensearchdescription+xml" title="SkyCrypt" href="/search.osd">
     <meta name="theme-color" content="#282828">
     <meta name="apple-mobile-web-app-title" content="SkyCrypt">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" sizes="180x180" href="/resources/img/app-icons/square-180.png">
     <link rel="apple-touch-icon" sizes="512x512" href="/resources/img/app-icons/square-512.png">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap"></noscript>
-    <link rel="stylesheet" href="/resources/css/index.css?v137">
-    <noscript><link rel="stylesheet" href="/resources/css/inventory.css?v13"></noscript>
+    <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone12ProMax.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone12.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhoneXsMax.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhoneXr.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhoneX.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone8Plus.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone8.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="stylesheet" href="/resources/css/index.css?<%- fileHashes.css['index.css'] %> ">
 
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-185827357-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-185827357-1');
+    </script>
+    <script data-ad-client="ca-pub-7557628142725978" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    
     <script>
         const stylesheets = [
-            "/resources/css/inventory.css?v13",
+            "/resources/css/inventory.css?<%- fileHashes.css['inventory.css'] %>",
             "https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap"
         ];
 
@@ -29,7 +45,7 @@
     </script>
 
     <script>
-        let extra = <%- JSON.stringify(extra) %>;
+        const extra = JSON.parse(`<%- JSON.stringify(extra).replace(/\\/g, '\\\\') %>`);
 
         function formatNumber(number, floor, rounding = 10) {
             let roundFunc = floor ? Math.floor : Math.ceil;
@@ -46,25 +62,44 @@
         }
 
         document.addEventListener('DOMContentLoaded', function(){
-            let searchUser = document.querySelector('#inp_search_user');
-
-            function updateUserTarget(e){
-                let playerName = searchUser.value;
-
-                if(window.hasOwnProperty("targetUsername") && playerName)
-                    targetUsername.value = playerName;
-
-                if(e.keyCode == 13 && playerName.trim().length > 0)
-                    document.location = '/stats/' + playerName;
-                else
-                    document.querySelector('#btn_search_user').href = '/stats/' + playerName;
-
-                if(playerName.trim().length == 0)
-                    document.querySelector('#btn_search_user').href = '#';
+            function handleSubmit(submitEvent) {
+                submitEvent.preventDefault();
+                const formData = new FormData(submitEvent.srcElement);
+                const urlSegments =  formData.get('ign').trim().split('/');
+                let error;
+                switch(urlSegments.length) {
+                    case 2:
+                        if (!(urlSegments[1].match(/^([0-9a-fA-F]{32})$/) || urlSegments[1].match(/^[A-Z][a-z]+/))) {
+                            error = `"${urlSegments[1]}" is not a valid profile name or ID`
+                            break;
+                        }
+                    case 1:
+                        if (urlSegments[0].match(/^([0-9a-fA-F]{8})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{12})$/)) {
+                            urlSegments[0] = urlSegments[0].replace(/-/g, '');
+                        } else if(urlSegments[0].match(/^[\w ]{1,16}$/)) {
+                            urlSegments[0] = urlSegments[0].replace(/ /g, '_');
+                        } else {
+                            error = `"${urlSegments[0]}" is not a valid username or UUID`
+                            break;
+                        }
+                        window.location.href = '/stats/' + urlSegments.join('/');
+                        return;
+                }
+                let errorTip = tippy(submitEvent.srcElement.querySelector('input'), {
+                    trigger: 'manual',
+                    content: (error || "please enter a valid Minecraft username or UUID")
+                });
+                errorTip.show();
+                setTimeout(() => {
+                    errorTip.hide();
+                    setTimeout(() => {
+                        errorTip.destroy();
+                    }, 500);
+                }, 1500);
             }
-
-            searchUser.addEventListener('keyup', updateUserTarget);
-            searchUser.addEventListener('change', updateUserTarget);
+            document.querySelectorAll('.lookup-player').forEach(form => {
+                form.addEventListener('submit', handleSubmit);
+            });
         });
     </script>
 
@@ -95,22 +130,30 @@
                 switch (color) {
                     case 'icon':
                     case 'line':
-                    case 'link': 
+                    case 'link':
                         element.style.setProperty(`--${color}-rgb`, convertHex(value));
-                    default: 
+                    default:
                         element.style.setProperty(`--${color}-hex`, value);
                 }
             }
 
-            const resource_link = "https://sky.shiiyu.moe/resources/";
+            const resource_link = "/resources/";
 
             let bgs = theme.backgrounds;
-            for (bg in bgs) 
-                for (img in bgs[bg]) 
+            for (bg in bgs)
+                for (img in bgs[bg])
                     element.style.setProperty(`--${bg}-${img}`, `url(${bgs[bg][img].replace("../", resource_link)})`);
-            
-            if (theme.logo)
-                element.style.setProperty('--logo-square', `url(${theme.logo.replace("../", resource_link)})`);
+
+            if (theme.logo) {
+                const logoURL = theme.logo.replace("../", resource_link)
+                element.style.setProperty('--logo-square', `url(${logoURL})`);
+                document.querySelectorAll('link[rel="icon"]').forEach(favicon => {
+                    if (favicon.href.match('logo_square')) {
+                        favicon.href = logoURL;
+                    }
+                });
+
+            }
 
             console.log(`Loaded theme: ${currentTheme}`);
         }
@@ -119,7 +162,7 @@
         /**
          * checks if the scrollbar has a width and sets the style-scrollbar class accordingly
          */
-        function checkScrollbarStyle() {   
+        function checkScrollbarStyle() {
             outerDiv = document.createElement("div");
             outerDiv.style.position = 'fixed';
             innerDiv = document.createElement("div");

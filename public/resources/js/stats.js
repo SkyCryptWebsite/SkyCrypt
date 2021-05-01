@@ -1,4 +1,57 @@
+class LocalTimeElement extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+        this.timeElement = document.createElement('time');
+        this.shadowRoot.appendChild(this.timeElement);
+    }
+
+    static get observedAttributes() {
+        return ['timestamp'];
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (name === 'timestamp') {
+            if (newValue != undefined) {
+                if (!isNaN(newValue)) {
+                    newValue = parseInt(newValue);
+                }
+                const date = new Date(newValue);
+                this.timeElement.setAttribute('datetime', date.toISOString())
+                this.timeElement.innerHTML = date.toLocaleString(undefined, { dateStyle: "long", timeStyle: "short" });
+            } else {
+                console.error('local-time must have a timestamp')
+            }
+        }
+    }
+}
+
+window.customElements.define('local-time', LocalTimeElement);
+
+
 document.addEventListener('DOMContentLoaded', function(){
+
+    const favoriteElement = document.querySelector('.favorite');
+
+    if('share' in navigator) {
+        iosShareIcon = 'M12,1L8,5H11V14H13V5H16M18,23H6C4.89,23 4,22.1 4,21V9A2,2 0 0,1 6,7H9V9H6V21H18V9H15V7H18A2,2 0 0,1 20,9V21A2,2 0 0,1 18,23Z';
+        androidShareIcon = 'M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,0 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9A3,3 0 0,0 3,12A3,3 0 0,0 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19A2.92,2.92 0 0,0 18,16.08Z';
+        favoriteElement.insertAdjacentHTML('afterend', /*html*/ `
+            <button class="additional-player-stat svg-icon">
+                <svg viewBox="0 0 24 24">
+                    <title>share</title>
+                    <path fill="white" d="${navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i) ? iosShareIcon : androidShareIcon}" />
+                </svg>
+            </button>
+        `);
+        favoriteElement.nextElementSibling.addEventListener('click', () => {
+            navigator.share({
+                text: `Check out ${calculated.display_name} on SkyCrypt`,
+                url: location.href.split('#')[0],
+            });
+        })
+    }
+
     function setCookie(name,value,days) {
         var expires = "";
         if (days) {
@@ -8,7 +61,22 @@ document.addEventListener('DOMContentLoaded', function(){
         }
         document.cookie = name + "=" + (value || "")  + expires + "; SameSite=Lax; path=/";
     }
-    
+
+    function getCookie(c_name) {
+        if (document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1) {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) {
+                    c_end = document.cookie.length;
+                }
+                return unescape(document.cookie.substring(c_start, c_end));
+            }
+        }
+        return "";
+    }
+
     let userAgent = window.navigator.userAgent;
     let tippyInstance;
 
@@ -20,27 +88,54 @@ document.addEventListener('DOMContentLoaded', function(){
 
     let skinViewer;
 
-    if(calculated.skin_data){
+    if(playerModel && calculated.skin_data){
         skinViewer = new skinview3d.SkinViewer({
-    		domElement: playerModel,
     		width: playerModel.offsetWidth,
     		height: playerModel.offsetHeight,
-    		skinUrl: "/texture/" + calculated.skin_data.skinurl.split("/").pop(),
-    		capeUrl: 'capeurl' in calculated.skin_data ? "/texture/" + calculated.skin_data.capeurl.split("/").pop() : "/cape/" + calculated.display_name
-    	});
+    		skin: "/texture/" + calculated.skin_data.skinurl.split("/").pop(),
+    		cape: 'capeurl' in calculated.skin_data ? "/texture/" + calculated.skin_data.capeurl.split("/").pop() : "/cape/" + calculated.display_name
+        });
+
+        playerModel.appendChild(skinViewer.canvas);
 
     	skinViewer.camera.position.set(-18, -3, 58);
-    	skinViewer.detectModel = false;
 
-        if(calculated.skin_data.model == 'slim')
-    	   skinViewer.playerObject.skin.slim = true;
+        const controls = new skinview3d.createOrbitControls(skinViewer);
 
-    	let controls = new skinview3d.createOrbitControls(skinViewer);
+        skinViewer.canvas.removeAttribute("tabindex");
 
         controls.enableZoom = false;
         controls.enablePan = false;
 
-    	skinViewer.animations.add(skinview3d.IdleAnimation);
+        /**
+         * the average Z rotation of the arms
+         */
+        const basicArmRotationZ = Math.PI * 0.02;
+
+        /**
+         * the average X rotation of the cape
+         */
+        const basicCapeRotationX = Math.PI * 0.06;
+
+        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            skinViewer.animations.add((player, time) => {
+                // Multiply by animation's natural speed
+                time *= 2;
+
+                // Arm swing
+                const armRotation = Math.cos(time) * 0.03 + basicArmRotationZ
+                player.skin.leftArm.rotation.z = armRotation;
+                player.skin.rightArm.rotation.z = armRotation * -1;
+
+                // Cape wave
+                player.cape.rotation.x = Math.sin(time) * 0.01 + basicCapeRotationX;
+            });
+        } else {
+            skinViewer.playerObject.skin.leftArm.rotation.z = basicArmRotationZ;
+            skinViewer.playerObject.skin.rightArm.rotation.z = basicArmRotationZ * -1;
+            skinViewer.playerObject.cape.rotation.x = basicCapeRotationX;
+        }
+
     }
 
     tippyInstance = tippy('.interactive-tooltip', {
@@ -62,17 +157,18 @@ document.addEventListener('DOMContentLoaded', function(){
 
     let inventoryContainer = document.querySelector('#inventory_container');
 
-    const urlParams = new URLSearchParams(window.location.search);
+    const url = new URL(location);
 
-    urlParams.delete('__cf_chl_jschl_tk__');
-    urlParams.delete('__cf_chl_captcha_tk__');
+    url.searchParams.delete('__cf_chl_jschl_tk__');
+    url.searchParams.delete('__cf_chl_captcha_tk__');
 
-    const urlParamsString = urlParams.toString().length > 0 ? '?' + urlParams.toString() : '';
+    if(calculated.profile.cute_name == 'Deleted') {
+        url.pathname = `/stats/${calculated.display_name}/${calculated.profile.profile_id}`;
+    } else {
+        url.pathname = `/stats/${calculated.display_name}/${calculated.profile.cute_name}`;
+    }
 
-    if(calculated.profile.cute_name == 'Deleted')
-        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.profile_id + urlParamsString);
-    else
-        history.replaceState({}, document.title, '/stats/' + calculated.display_name + '/' + calculated.profile.cute_name + urlParamsString);
+    history.replaceState({}, document.title, url);
 
     function isEnchanted(item){
         if(item.animated)
@@ -93,52 +189,52 @@ document.addEventListener('DOMContentLoaded', function(){
         return false;
     };
 
-    function renderLore(text){
+    function renderLore(text) {
         let output = "";
-        let spansOpened = 0;
 
-        const parts = text.split("§");
+        let color = null;
+        let formats = new Set();
 
-        if(parts.length == 1)
-            return text;
+        for (let part of text.match(/(§[0-9a-fk-or])*[^§]*/g)) {
 
-        for(const part of parts){
-            const code = part.substring(0, 1);
-            const content = part.substring(1);
+            while (part.charAt(0) === '§') {
+                const code = part.charAt(1);
 
-            const format = constants.minecraft_formatting[code];
+                if (/[0-9a-f]/.test(code)) {
+                    color = code;
+                } else if (/[k-o]/.test(code)) {
+                    formats.add(code);
+                } else if (code === 'r') {
+                    color = null;
+                    formats.clear();
+                }
 
-            if(format === undefined)
-                continue;
-
-            if(format.type == 'color'){
-                for(; spansOpened > 0; spansOpened--)
-                    output += "</span>";
-
-                output += `<span style='${format.css}'>${content}`;
-
-                spansOpened++;
-            }else if(format.type == 'format'){
-                output += `<span style='${format.css}'>${content}`;
-
-                spansOpened++;
-            }else if(format.type == 'reset'){
-                for(; spansOpened > 0; spansOpened--)
-                    output += "</span>";
-
-                output += content;
+                part = part.substring(2);
             }
+
+            if (part.length === 0) continue;
+
+            output += '<span';
+
+            if (color !== null) {
+                output += ` style='color: var(--§${color});'`;
+            }
+
+            if (formats.size > 0) {
+                output += ` class='${Array.from(formats, x => '§' + x).join(' ')}'`;
+            }
+
+            output += `>${part}</span>`;
         }
-
-        for(; spansOpened > 0; spansOpened--)
-            output += "</span>";
-
-        const specialColor = constants.minecraft_formatting['6'];
 
         const matchingEnchants = constants.special_enchants.filter(a => output.includes(a));
 
-        for(const enchantment of matchingEnchants)
-            output = output.replace(enchantment, `<span style='${specialColor.css}'>${enchantment}</span>`);
+        for (const enchantment of matchingEnchants) {
+            if (enchantment == 'Power 6' || enchantment == 'Power 7' && text.startsWith("§8Breaking")) {
+                continue;
+            }
+            output = output.replace(enchantment, `<span style='color: var(--§6)'>${enchantment}</span>`);
+        }
 
         return output;
     }
@@ -146,38 +242,24 @@ document.addEventListener('DOMContentLoaded', function(){
     let currentBackpack;
 
     function renderInventory(inventory, type){
-        let scrollTop = window.pageYOffset;
 
-        let visibleInventory = document.querySelector('.inventory-view.current-inventory');
+        let visibleInventory = document.querySelector('.stat-inventory .inventory-view');
 
         if(visibleInventory){
-            visibleInventory.classList.remove('current-inventory');
             document.querySelector('#inventory_container').removeChild(visibleInventory);
         }
 
         let inventoryView = document.createElement('div');
-        inventoryView.className = 'inventory-view current-inventory processed';
+        inventoryView.className = 'inventory-view processed';
         inventoryView.setAttribute('data-inventory-type', type);
 
-        let countSlotsUsed = 0;
+        let pagesize = 5 * 9;
 
-        inventory.forEach(function(item){
-            if(Object.keys(item).length > 2)
-                countSlotsUsed++;
-        });
-
-        countSlotsUsed = Math.max(countSlotsUsed, 9);
-
-        switch(type){
-            case 'inventory':
-                inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
-                break;
-            case 'enderchest':
-            case 'personal_vault':
-                break;
-            default:
-                if(type in calculated.bag_sizes)
-                    inventory = inventory.slice(0, Math.max(countSlotsUsed - 1, calculated.bag_sizes[type]));
+        if (type === 'inventory') {
+            inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
+            pagesize = 3 * 9;
+        } else if (type === 'backpack') {
+            pagesize = 6 * 9;
         }
 
         inventory.forEach(function(item, index){
@@ -208,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 inventoryItem.className = 'rich-item inventory-item';
 
-                if(type == 'backpack')
+                if(type === 'backpack')
                     inventoryItem.setAttribute('data-backpack-item-index', index);
                 else
                     inventoryItem.setAttribute('data-item-index', item.item_index);
@@ -224,31 +306,29 @@ document.addEventListener('DOMContentLoaded', function(){
                 bindLoreEvents(pieceHoverArea);
             }
 
+            if (index % pagesize === 0 && index !== 0) {
+                inventoryView.appendChild(document.createElement("hr"));
+            }
+
             inventoryView.appendChild(inventorySlot);
-
-            inventoryView.appendChild(document.createTextNode(" "));
-
-            if((index + 1) % 9 == 0)
-                inventoryView.appendChild(document.createElement("br"));
-
-            if((index + 1) % 27 == 0 && type == 'inventory')
-                inventoryView.appendChild(document.createElement("br"));
         });
 
         inventoryContainer.appendChild(inventoryView);
 
         [].forEach.call(inventoryView.querySelectorAll('.item-icon.is-enchanted'), handleEnchanted);
 
-        window.scrollTo({
-            top: scrollTop
-        });
+        const rect = document.querySelector('#inventory_container').getBoundingClientRect();
 
-        let inventoryStatContainer = document.querySelector('.stat-inventory');
-
-        let rect = inventoryStatContainer.getBoundingClientRect();
-
-        if(rect.top < 0 || rect.bottom > window.innerHeight)
-            inventoryStatContainer.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        if (rect.top > 100 && rect.bottom > window.innerHeight) {
+            let top;
+            if (rect.height > window.innerHeight - 100) {
+                top = rect.top - 100;
+            } else {
+                top = rect.bottom - window.innerHeight;
+            }
+            window.scrollBy({ top, behavior: "smooth" });
+            scrollMemory.isSmoothScrolling = true;
+        }
     }
 
     function showBackpack(item){
@@ -336,22 +416,23 @@ document.addEventListener('DOMContentLoaded', function(){
         if(item.texture_pack){
             const texturePack = extra.packs.filter(a => a.id == item.texture_pack)[0];
 
-            let packContent = document.createElement('div');
+            const packContent = document.createElement('a');
+            packContent.setAttribute('href', item.texture_pack.url);
+            packContent.setAttribute('target', '_blank');
+            packContent.setAttribute('rel', 'noreferrer');
             packContent.classList.add('pack-credit');
 
-            let packIcon = document.createElement('img');
+            const packIcon = document.createElement('img');
             packIcon.setAttribute('src', item.texture_pack.base_path + '/pack.png');
-            packIcon.classList.add('pack-icon');
+            packIcon.classList.add('icon');
 
-            let packName = document.createElement('a');
-            packName.setAttribute('href', item.texture_pack.url);
-            packName.setAttribute('target', '_blank');
-            packName.classList.add('pack-name');
+            const packName = document.createElement('div');
+            packName.classList.add('name');
             packName.innerHTML = item.texture_pack.name;
 
-            let packAuthor = document.createElement('div');
-            packAuthor.classList.add('pack-author');
-            packAuthor.innerHTML = 'by <span>' + item.texture_pack.author + '</span>';
+            const packAuthor = document.createElement('div');
+            packAuthor.classList.add('author');
+            packAuthor.innerHTML = `by <span>${item.texture_pack.author}</span>`;
 
             packContent.appendChild(packIcon);
             packContent.appendChild(packName);
@@ -369,7 +450,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             item.containsItems.forEach((backpackItem, index) => {
                 let inventorySlot = document.createElement('div');
-                inventorySlot.className = 'inventory-slot backpack-slot';
+                inventorySlot.className = 'inventory-slot';
 
                 if(backpackItem.id){
                     let inventoryItemIcon = document.createElement('div');
@@ -402,9 +483,6 @@ document.addEventListener('DOMContentLoaded', function(){
                 backpackContents.appendChild(inventorySlot);
 
                 backpackContents.appendChild(document.createTextNode(" "));
-
-                if((index + 1) % 9 == 0)
-                    backpackContents.appendChild(document.createElement("br"));
             });
 
             [].forEach.call(document.querySelectorAll('.contains-backpack .item-icon.is-enchanted'), handleEnchanted);
@@ -462,23 +540,29 @@ document.addEventListener('DOMContentLoaded', function(){
     let oldWidth = null;
     let oldheight = null;
 
-    function resize(){
-        if(window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570))
-            document.getElementById("skin_display_mobile").appendChild(skinViewer.domElement);
+    const navBar = document.querySelector('#nav_bar');
+    const navBarLinks = navBar.querySelectorAll('.nav-item');
+    let navBarHeight;
 
-        if(window.innerWidth > 1570 && oldWidth <= 1570)
-            document.getElementById("skin_display").appendChild(skinViewer.domElement);
+    function resize(){
+        if (playerModel) {
+            if(window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570))
+                document.getElementById("skin_display_mobile").appendChild(playerModel);
+
+            if(window.innerWidth > 1570 && oldWidth <= 1570)
+                document.getElementById("skin_display").appendChild(playerModel);
+        }
 
         tippy('*[data-tippy-content]');
 
-        if(skinViewer){
+        if(playerModel && skinViewer){
             if(playerModel.offsetWidth / playerModel.offsetHeight < 0.6)
                 skinViewer.setSize(playerModel.offsetWidth, playerModel.offsetWidth * 2);
             else
                 skinViewer.setSize(playerModel.offsetHeight / 2, playerModel.offsetHeight);
         }
 
-        updateStatsPositions();
+        navBarHeight = parseFloat(getComputedStyle(navBar).top);
 
         let element = document.querySelector('.rich-item.sticky-stats');
 
@@ -498,23 +582,16 @@ document.addEventListener('DOMContentLoaded', function(){
         oldHeight = window.innerHeight;
     }
 
-    [].forEach.call(document.querySelectorAll('.sub-extendable .stat-sub-header'), function(element){
-        element.addEventListener('click', function(e){
-            if(element.parentNode.classList.contains('sub-extended'))
-                element.parentNode.classList.remove('sub-extended')
-            else
-                element.parentNode.classList.add('sub-extended');
-        });
+    document.querySelectorAll('.extender').forEach((element) => {
+        element.addEventListener('click', () => element.setAttribute('aria-expanded', element.getAttribute('aria-expanded') != 'true'));
     });
 
-    [].forEach.call(document.querySelectorAll('.sub-floor-extendable .stat-sub-header'), function(element){
-        element.addEventListener('click', function(e){
-            if(element.parentNode.classList.contains('sub-extended'))
-                element.parentNode.classList.remove('sub-extended')
-            else
-                element.parentNode.classList.add('sub-extended');
+    function flashForUpdate(element) {
+        element.classList.add('updated');
+        element.addEventListener('animationend', () => {
+            element.classList.remove('updated');
         });
-    });
+    }
 
     [].forEach.call(document.querySelectorAll('.stat-weapons .select-weapon'), function(element){
         let itemId = element.parentNode.getAttribute('data-item-id');
@@ -540,14 +617,16 @@ document.addEventListener('DOMContentLoaded', function(){
             e.preventDefault();
         });
 
+        const activeWeaponElement = document.querySelector('.stat-active-weapon');
+
         element.addEventListener('click', function(e){
             if(element.parentNode.classList.contains('piece-selected')){
                 element.parentNode.classList.remove("piece-selected");
 
                 stats = calculated.stats;
 
-                document.querySelector('.stat-active-weapon').className = 'stat-value stat-active-weapon piece-common-fg';
-                document.querySelector('.stat-active-weapon').innerHTML = 'None';
+                activeWeaponElement.className = 'stat-value stat-active-weapon piece-common-fg';
+                activeWeaponElement.innerHTML = 'None';
             }else{
                 [].forEach.call(document.querySelectorAll('.stat-weapons .piece'), function(_element){
                     _element.classList.remove("piece-selected");
@@ -555,41 +634,17 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 element.parentNode.classList.add("piece-selected");
 
-                document.querySelector('.stat-active-weapon').className = 'stat-value stat-active-weapon piece-' + item.rarity + '-fg';
-                document.querySelector('.stat-active-weapon').innerHTML = item.display_name;
+                activeWeaponElement.className = 'stat-value stat-active-weapon piece-' + item.rarity + '-fg';
+                activeWeaponElement.innerHTML = item.display_name;
 
                 stats = weaponStats;
             }
 
-            anime({
-                targets: '.stat-active-weapon',
-                backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                duration: 500,
-                round: 1,
-                easing: 'easeOutCubic'
-            });
+            flashForUpdate(activeWeaponElement);
 
-            for(let stat in stats){
-                if(stat == 'sea_creature_chance')
-                    continue;
-
-                let element = document.querySelector('.basic-stat[data-stat=' + stat + '] .stat-value');
-
-                if(!element)
-                    continue;
-
-                let currentValue = parseInt(element.innerHTML);
-                let newValue = stats[stat];
-
-                if(newValue != currentValue){
-                    anime({
-                        targets: '.basic-stat[data-stat=' + stat + '] .stat-value',
-                        innerHTML: newValue,
-                        backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                        duration: 500,
-                        round: 1,
-                        easing: 'easeOutCubic'
-                    });
+            for(const stat in stats){
+                if (stat != 'sea_creature_chance') {
+                    updateStat(stat, stats[stat]);
                 }
             }
         });
@@ -619,14 +674,16 @@ document.addEventListener('DOMContentLoaded', function(){
             e.preventDefault();
         });
 
+        const activeRodElement = document.querySelector('.stat-active-rod');
+
         element.addEventListener('click', function(e){
             if(element.parentNode.classList.contains('piece-selected')){
                 element.parentNode.classList.remove("piece-selected");
 
                 stats = calculated.stats;
 
-                document.querySelector('.stat-active-rod').className = 'stat-value stat-active-rod piece-common-fg';
-                document.querySelector('.stat-active-rod').innerHTML = 'None';
+                activeRodElement.className = 'stat-value stat-active-rod piece-common-fg';
+                activeRodElement.innerHTML = 'None';
             }else{
                 [].forEach.call(document.querySelectorAll('.stat-fishing .piece'), function(_element){
                     _element.classList.remove("piece-selected");
@@ -634,40 +691,30 @@ document.addEventListener('DOMContentLoaded', function(){
 
                 element.parentNode.classList.add("piece-selected");
 
-                document.querySelector('.stat-active-rod').className = 'stat-value stat-active-rod piece-' + item.rarity + '-fg';
-                document.querySelector('.stat-active-rod').innerHTML = item.display_name;
+                activeRodElement.className = 'stat-value stat-active-rod piece-' + item.rarity + '-fg';
+                activeRodElement.innerHTML = item.display_name;
 
                 stats = weaponStats;
             }
 
-            anime({
-                targets: '.stat-active-rod',
-                backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                duration: 500,
-                round: 1,
-                easing: 'easeOutCubic'
-            });
+            flashForUpdate(activeRodElement);
 
-            let _element = document.querySelector('.basic-stat[data-stat=sea_creature_chance] .stat-value');
-
-            if(!_element)
-                return;
-
-            let currentValue = parseInt(_element.innerHTML);
-            let newValue = stats['sea_creature_chance'];
-
-            if(newValue != currentValue){
-                anime({
-                    targets: '.basic-stat[data-stat=sea_creature_chance] .stat-value',
-                    innerHTML: newValue,
-                    backgroundColor: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
-                    duration: 500,
-                    round: 1,
-                    easing: 'easeOutCubic'
-                });
-            }
+            updateStat('sea_creature_chance', stats.sea_creature_chance);
         });
     });
+
+    function updateStat(stat, newValue) {
+        const elements = document.querySelectorAll('.basic-stat[data-stat=' + stat + '] .stat-value');
+
+        for (const element of elements) {
+            const currentValue = parseFloat(element.innerHTML.replaceAll(',', ''));
+
+            if (newValue != currentValue) {
+                element.innerHTML = newValue.toLocaleString();
+                flashForUpdate(element);
+            }
+        }
+    }
 
     function getPart(src, x, y, width, height){
         let dst = document.createElement('canvas');
@@ -689,8 +736,6 @@ document.addEventListener('DOMContentLoaded', function(){
         let canvas = document.createElement('canvas');
         canvas.width = size;
         canvas.height = size;
-
-        canvas.className = 'enchanted-overlay';
 
         let ctx = canvas.getContext('2d');
 
@@ -863,7 +908,8 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
-    enableApiPlayer.addEventListener('click', function(){
+    enableApiPlayer.addEventListener('click', function(event) {
+        event.stopPropagation();
         if(enableApiPlayer.paused)
             enableApiPlayer.play();
         else
@@ -900,31 +946,45 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
-    [].forEach.call(document.querySelectorAll('.add-favorite'), function(e){
-        let element = e;
+    function parseFavorites(cookie) {
+        return cookie?.split(',').filter(uuid => /^[0-9a-f]{32}$/.test(uuid)) || [];
+    }
 
-        let setNotification = tippy(element, {
-            content: 'Set favorite!',
-            trigger: 'manual'
-        });
+    function checkFavorite() {
+        const favorited = parseFavorites(getCookie("favorite")).includes(favoriteElement.getAttribute("data-username"));
+        favoriteElement.setAttribute('aria-checked', favorited);
+        return favorited;
+    }
 
-        element.addEventListener('click', function(){
-            if(element.getAttribute("data-username") == "0c0b857f415943248f772164bf76795c"){
-                setNotification.show();
+    let favoriteNotification = tippy(favoriteElement, {
+        trigger: 'manual'
+    });
 
-                setTimeout(function(){
-                    setNotification.hide();
-                }, 1500);
+    favoriteElement.addEventListener('click', function(){
+        let uuid = favoriteElement.getAttribute("data-username");
+        if(uuid == "0c0b857f415943248f772164bf76795c"){
+            favoriteNotification.setContent("No");
+        }else{
+            let cookieArray = parseFavorites(getCookie("favorite"));
+            if(cookieArray.includes(uuid)){
+                cookieArray.splice(cookieArray.indexOf(uuid), 1);
+
+                favoriteNotification.setContent("Removed favorite!");
+            }else if(cookieArray.length >= constants.max_favorites){
+                favoriteNotification.setContent(`You can only have ${constants.max_favorites} favorites!`);
             }else{
-                setCookie("favorite", element.getAttribute("data-username"), 365);
-                
-                setNotification.show();
+                cookieArray.push(uuid);
 
-                setTimeout(function(){
-                    setNotification.hide();
-                }, 1500);
+                favoriteNotification.setContent("Added favorite!");
             }
-        });
+            setCookie("favorite", cookieArray.join(','), 365);
+            checkFavorite();
+        }
+        favoriteNotification.show();
+
+        setTimeout(function(){
+            favoriteNotification.hide();
+        }, 1500);
     });
 
     let socialsShown = false;
@@ -944,106 +1004,102 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     }
 
-    let statContainers = document.querySelectorAll('.stat-container[data-stat]');
-    let wrapperHeight = document.querySelector('#wrapper').offsetHeight;
+    class ScrollMemory {
+        _isSmoothScrolling = false;
+        _scrollTimeout = -1;
+        _loaded = false;
 
-    let positionY = {};
+        constructor() {
 
-    function updateStatsPositions(){
-        [].forEach.call(statContainers, function(statContainer){
-            positionY[statContainer.getAttribute('data-stat')] = statContainer.offsetTop;
-        });
-    }
 
-    updateStatsPositions();
+            window.addEventListener('load', () => {
+                this._loaded = true;
+                this.isSmoothScrolling = true;
+            }, { once: true });
 
-    let updateTab = false;
-    let updateTabLock = false;
-
-    function updateActiveTab(){
-        if(!updateTab)
-            return false;
-
-        let rectYs = [];
-        let activeIndex = 0;
-        let activeY = -Infinity;
-        let activeStatContainer;
-
-        if((window.innerHeight + window.scrollY) >= wrapperHeight){
-            activeStatContainer = [].slice.call(statContainers).pop();
-        }else{
-            [].forEach.call(statContainers, function(statContainer){
-                rectYs.push(statContainer.getBoundingClientRect().y);
+            window.addEventListener("hashchange", () => {
+                this.isSmoothScrolling = true;
             });
 
-            rectYs.forEach(function(rectY, index){
-                if(rectY < 250 && rectY > activeY){
-                    activeY = rectY;
-                    activeIndex = index;
-                }
+            document.addEventListener('focusin', () => {
+                this.isSmoothScrolling = true;
             });
-
-            activeStatContainer = statContainers[activeIndex];
         }
 
-        let activeTab = document.querySelector('.nav-item[data-target=' + activeStatContainer.getAttribute('data-stat') + ']');
-
-        if(!activeTab.classList.contains('active')){
-            [].forEach.call(document.querySelectorAll('.nav-item.active'), function(statContainer){
-                statContainer.classList.remove('active');
-            });
-
-            anime({
-                targets: '#nav_items_container',
-                scrollLeft: activeTab.offsetLeft - window.innerWidth / 2 + activeTab.offsetWidth / 2,
-                duration: 350,
-                easing: 'easeOutCubic'
-            });
-
-            activeTab.classList.add('active');
+        /** wether the document currently has a smooth scroll taking place */
+        get isSmoothScrolling() {
+            return this._isSmoothScrolling || !this._loaded;
         }
 
-        updateTab = false;
+        set isSmoothScrolling(value) {
+            if (this._isSmoothScrolling !== value) {
+                this._isSmoothScrolling = value;
+                if (value) {
+                    window.addEventListener('scroll', this._onScroll);
+                    this._onScroll();
+                } else {
+                    window.removeEventListener('scroll', this._onScroll);
+                    scrollToTab();
+                }   
+            }
+        }
+
+        _onScroll = () => {
+            clearTimeout(this._scrollTimeout);
+            this._scrollTimeout = setTimeout(() => {
+                this.isSmoothScrolling = false;
+            }, 500);
+        }
     }
 
-    setInterval(updateActiveTab, 100);
+    const scrollMemory = new ScrollMemory();
 
-    document.addEventListener('scroll', function(){
-        if(!updateTabLock)
-            updateTab = true;
-    });
+    const intersectingElements = new Map();    
 
-    updateTab = true;
-
-    [].forEach.call(document.querySelectorAll('.nav-item'), function(element){
-        element.addEventListener('click', function(){
-            updateTabLock = true;
-            updateTab = false;
-
-            let newActiveTab = this;
-
-            [].forEach.call(document.querySelectorAll('.nav-item.active'), function(statContainer){
-                statContainer.classList.remove('active');
-            });
-
-            anime({
-                targets: window.document.scrollingElement || window.document.body || window.document.documentElement,
-                scrollTop: positionY[newActiveTab.getAttribute('data-target')] - 60,
-                duration: 350,
-                easing: 'easeOutCubic',
-                complete: function(){
-                    updateTabLock = false;
-                    newActiveTab.classList.add('active');
+    const sectionObserver = new IntersectionObserver((entries, observer) => {
+        for (const entry of entries) {
+            intersectingElements.set(entry.target, entry.isIntersecting);
+        }
+        for (const [element, isIntersecting] of intersectingElements) {
+            if (isIntersecting) {
+                let newHash;
+                if (element !== playerProfileElement) {
+                    newHash = '#' + element.parentElement.querySelector('a[id]').id;
+                    history.replaceState({}, document.title, newHash);
+                } else {
+                    history.replaceState({}, document.title, location.href.split('#')[0]);
                 }
-            });
+                for (const link of navBarLinks) {
+                    if (link.hash === newHash) {
+                        link.setAttribute('aria-current', true);
+                        
+                        if (!scrollMemory.isSmoothScrolling) {
+                            scrollToTab(true, link);
+                        }
+                    } else {
+                        link.removeAttribute('aria-current');
+                    }
+                }
+                break;
+            }
+        }
+    }, {rootMargin: "-100px 0px -25% 0px"});
 
-            anime({
-                targets: '#nav_items_container',
-                scrollLeft: newActiveTab.offsetLeft - window.innerWidth / 2 + newActiveTab.offsetWidth / 2,
-                duration: 350,
-                easing: 'easeOutCubic'
-            });
-        });
+    function scrollToTab(smooth = true, element) {
+        const link = element ?? document.querySelector(`[href="${location.hash}"]`);
+        const behavior = smooth ? 'smooth' : 'auto';
+        const left = link.offsetLeft + (link.getBoundingClientRect().width / 2) - (link.parentElement.getBoundingClientRect().width / 2);
+        link.parentElement.scrollTo({ left, behavior });
+    }
+
+    scrollToTab(false);
+
+    const playerProfileElement = document.querySelector('#player_profile');
+
+    sectionObserver.observe(playerProfileElement);
+
+    document.querySelectorAll('.stat-header').forEach((element) => {
+        sectionObserver.observe(element);
     });
 
     let otherSkills = document.querySelector('#other_skills');
@@ -1058,8 +1114,6 @@ document.addEventListener('DOMContentLoaded', function(){
                 otherSkills.classList.add('show-skills');
                 show_skills.innerHTML = 'Hide Skills';
             }
-
-            updateStatsPositions();
         });
     }
 
@@ -1120,12 +1174,12 @@ document.addEventListener('DOMContentLoaded', function(){
     window.addEventListener('keydown', function(e){
         let selectedPiece = document.querySelector('.rich-item:focus');
 
-        if(selectedPiece !== null && e.keyCode == 13){
+        if(selectedPiece !== null && e.key === 'Enter'){
             fillLore(selectedPiece);
             showLore(selectedPiece);
         }
 
-        if(e.keyCode == 27){
+        if (e.key === 'Escape'){
             dimmer.classList.remove('show-dimmer');
             enableApiPlayer.classList.remove('show');
             if(document.querySelector('#stats_content.sticky-stats') != null){
@@ -1133,7 +1187,7 @@ document.addEventListener('DOMContentLoaded', function(){
             }
         }
 
-        if(document.querySelector('.rich-item.sticky-stats') != null && e.keyCode == 9)
+        if(document.querySelector('.rich-item.sticky-stats') != null && e.key === 'Tab')
             e.preventDefault();
     });
 
@@ -1141,9 +1195,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
     window.addEventListener('resize', resize);
 
-    const navBar = document.querySelector('#nav_bar')
     function onScroll() {
-        if(navBar.getBoundingClientRect().top <= 48) {
+        if (navBar.getBoundingClientRect().top <= navBarHeight ) {
             navBar.classList.add('stuck')
         } else {
             navBar.classList.remove('stuck')
