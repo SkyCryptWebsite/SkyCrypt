@@ -9,16 +9,20 @@ module.exports = {
 
         farming_skill: {
             1: {
-                health: 2
+                health: 2,
+                farming_fortune: 4
             },
             15: {
-                health: 3
+                health: 3,
+                farming_fortune: 4
             },
             20: {
-                health: 4
+                health: 4,
+                farming_fortune: 4
             },
             26: {
-                health: 5
+                health: 5,
+                farming_fortune: 4
             }
         },
 
@@ -31,19 +35,23 @@ module.exports = {
 
         mining_skill: {
             1: {
-                defense: 1
+                defense: 1,
+                mining_fortune: 4
             },
             15: {
-                defense: 2
+                defense: 2,
+                mining_fortune: 4
             }
         },
 
         foraging_skill: {
             1: {
-                strength: 1
+                strength: 1,
+                foraging_fortune: 4
             },
             15: {
-                strength: 2
+                strength: 2,
+                foraging_fortune: 4
             }
         },
 
@@ -64,10 +72,12 @@ module.exports = {
 
         enchanting_skill: {
             1: {
-                intelligence: 1
+                intelligence: 1,
+                ability_damage: 0.5
             },
             15: {
-                intelligence: 2
+                intelligence: 2,
+                ability_damage: 0.5
             }
         },
 

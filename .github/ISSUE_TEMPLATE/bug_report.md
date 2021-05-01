@@ -2,7 +2,7 @@
 name: Bug report
 about: Report an error with the site
 title: ''
-labels: ''
+labels: bug
 assignees: ''
 
 ---

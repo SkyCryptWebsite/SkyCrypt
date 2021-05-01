@@ -28,17 +28,23 @@ module.exports = {
         450: 22,
         500: 23,
         550: 24,
-        600: 25
+        600: 25,
+        650: 26,
     },
+
+    minions_max_uniques: 609,
+    minions_max_slots: 25, // From unique tiers (excludes community shop upgrades)
 
     minions: {
         COBBLESTONE: {
             type: 'mining',
-            head: '/head/2f93289a82bd2a06cbbe61b733cfdc1f1bd93c4340f7a90abd9bdda774109071'
+            head: '/head/2f93289a82bd2a06cbbe61b733cfdc1f1bd93c4340f7a90abd9bdda774109071',
+            tiers: 12
         },
         OBSIDIAN: {
             type: 'mining',
-            head: '/head/320c29ab966637cb9aecc34ee76d5a0130461e0c4fdb08cdaf80939fa1209102'
+            head: '/head/320c29ab966637cb9aecc34ee76d5a0130461e0c4fdb08cdaf80939fa1209102',
+            tiers: 12
         },
         GLOWSTONE: {
             type: 'mining',
@@ -66,31 +72,43 @@ module.exports = {
         },
         COAL: {
             type: 'mining',
-            head: '/head/425b8d2ea965c780652d29c26b1572686fd74f6fe6403b5a3800959feb2ad935'
+            head: '/head/425b8d2ea965c780652d29c26b1572686fd74f6fe6403b5a3800959feb2ad935',
+            tiers: 12
         },
         IRON: {
             type: 'mining',
-            head: '/head/af435022cb3809a68db0fccfa8993fc1954dc697a7181494905b03fdda035e4a'
+            head: '/head/af435022cb3809a68db0fccfa8993fc1954dc697a7181494905b03fdda035e4a',
+            tiers: 12
         },
         GOLD: {
             type: 'mining',
-            head: '/head/f6da04ed8c810be29bba53c62e712d65cfb25238117b94d7e85a4615775bf14f'
+            head: '/head/f6da04ed8c810be29bba53c62e712d65cfb25238117b94d7e85a4615775bf14f',
+            tiers: 12
         },
         DIAMOND: {
             type: 'mining',
-            head: '/head/2354bbe604dfe58bf92e7729730d0c8e37844e831ee3816d7e8427c27a1824a2'
+            head: '/head/2354bbe604dfe58bf92e7729730d0c8e37844e831ee3816d7e8427c27a1824a2',
+            tiers: 12
         },
         LAPIS: {
             type: 'mining',
-            head: '/head/64fd97b9346c1208c1db3957530cdfc5789e3e65943786b0071cf2b2904a6b5c'
+            head: '/head/64fd97b9346c1208c1db3957530cdfc5789e3e65943786b0071cf2b2904a6b5c',
+            tiers: 12
         },
         REDSTONE: {
             type: 'mining',
-            head: '/head/1edefcf1a89d687a0a4ecf1589977af1e520fc673c48a0434be426612e8faa67'
+            head: '/head/1edefcf1a89d687a0a4ecf1589977af1e520fc673c48a0434be426612e8faa67',
+            tiers: 12
         },
         EMERALD: {
             type: 'mining',
-            head: '/head/9bf57f3401b130c6b53808f2b1e119cc7b984622dac7077bbd53454e1f65bbf0'
+            head: '/head/9bf57f3401b130c6b53808f2b1e119cc7b984622dac7077bbd53454e1f65bbf0',
+            tiers: 12
+        },
+        MITHRIL: {
+            type: 'mining',
+            head: '/head/c62fa670ff8599b32ab344195ba15f3ef64c3a8aa8a37821c08375950cb74cd0',
+            tiers: 12
         },
         QUARTZ: {
             type: 'mining',
@@ -103,43 +121,53 @@ module.exports = {
         },
         WHEAT: {
             type: 'farming',
+            tiers: 12,
             head: '/head/bbc571c5527336352e2fee2b40a9edfa2e809f64230779aa01253c6aa535881b'
         },
         MELON: {
             type: 'farming',
+            tiers: 12,
             head: '/head/95d54539ac8d3fba9696c91f4dcc7f15c320ab86029d5c92f12359abd4df811e'
         },
         PUMPKIN: {
             type: 'farming',
+            tiers: 12,
             head: '/head/f3fb663e843a7da787e290f23c8af2f97f7b6f572fa59a0d4d02186db6eaabb7'
         },
         CARROT: {
             type: 'farming',
+            tiers: 12,
             head: '/head/4baea990b45d330998cb0c1f8515c27b24f93bff1df0db056e647f8200d03b9d'
         },
         POTATO: {
             type: 'farming',
+            tiers: 12,
             head: '/head/7dda35a044cb0374b516015d991a0f65bf7d0fb6566e350496642cf2059ff1d9'
         },
         MUSHROOM: {
             type: 'farming',
+            tiers: 12,
             head: '/head/4a3b58341d196a9841ef1526b367209cbc9f96767c24f5f587cf413d42b74a93'
         },
         CACTUS: {
             type: 'farming',
+            tiers: 12,
             head: '/head/ef93ec6e67a6cd272c9a9684b67df62584cb084a265eee3cde141d20e70d7d72'
         },
         COCOA: {
             type: 'farming',
+            tiers: 12,
             head: '/head/acb680e96f6177cd8ffaf27e9625d8b544d720afc50738801818d0e745c0e5f7'
         },
         SUGAR_CANE: {
             type: 'farming',
+            tiers: 12,
             head: '/head/2fced0e80f0d7a5d1f45a1a7217e6a99ea9720156c63f6efc84916d4837fabde'
         },
         NETHER_WARTS: {
             name: 'Nether Wart',
             type: 'farming',
+            tiers: 12,
             head: '/head/71a4620bb3459c1c2fa74b210b1c07b4a02254351f75173e643a0e009a63f558'
         },
         FLOWER: {
@@ -156,7 +184,8 @@ module.exports = {
         },
         REVENANT: {
             type: 'combat',
-            head: '/head/a3dce8555923558d8d74c2a2b261b2b2d630559db54ef97ed3f9c30e9a20aba'
+            head: '/head/a3dce8555923558d8d74c2a2b261b2b2d630559db54ef97ed3f9c30e9a20aba',
+            tiers: 12
         },
         SKELETON: {
             type: 'combat',
@@ -201,22 +230,27 @@ module.exports = {
         },
         COW: {
             type: 'farming',
+            tiers: 12,
             head: '/head/c2fd8976e1b64aebfd38afbe62aa1429914253df3417ace1f589e5cf45fbd717'
         },
         PIG: {
             type: 'farming',
+            tiers: 12,
             head: '/head/a9bb5f0c56408c73cfa412345c8fc51f75b6c7311ae60e7099c4781c48760562'
         },
         CHICKEN: {
             type: 'farming',
+            tiers: 12,
             head: '/head/a04b7da13b0a97839846aa5648f5ac6736ba0ca9fbf38cd366916e417153fd7f'
         },
         SHEEP: {
             type: 'farming',
+            tiers: 12,
             head: '/head/fd15d4b8bce708f77f963f1b4e87b1b969fef1766a3e9b67b249c59d5e80e8c5'
         },
         RABBIT: {
             type: 'farming',
+            tiers: 12,
             head: '/head/ef59c052d339bb6305cad370fd8c52f58269a957dfaf433a255597d95e68a373'
         },
         OAK: {

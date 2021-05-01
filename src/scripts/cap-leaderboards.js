@@ -1,14 +1,10 @@
 const cluster = require('cluster');
 
 async function main(){
-    const _ = require('lodash');
-
     const constants = require('./../constants');
 
     const Redis = require("ioredis");
     const redisClient = new Redis();
-
-    const lbLimit = 50000;
 
     async function capLeaderboards(){
         const keys = await redisClient.keys('lb_*');
@@ -17,6 +13,12 @@ async function main(){
 
         for(const key of keys){
             const lb = constants.leaderboard(key);
+            let lbLimit = 10000;
+
+            if(key.endsWith('xp') || key.endsWith('completions'))
+                lbLimit = 100000;
+            else if(key.startsWith('lb_collection'))
+                lbLimit = 50000;
 
             if(lb.sortedBy < 0)
                 redisClient.zremrangebyrank(key, 0, -lbLimit);
@@ -25,11 +27,12 @@ async function main(){
         }
 
         await multi.exec();
+
+        console.log(`Capped ${keys.length} leaderboards in Redis!`);
+        setTimeout(capLeaderboards, 30 * 60 * 1000);
     }
 
-    await capLeaderboards();
-
-    await redisClient.quit();
+    capLeaderboards();
 }
 
 if(cluster.isMaster)

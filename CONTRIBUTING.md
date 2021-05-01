@@ -4,7 +4,7 @@ Contributing to the SkyCrypt
 Before contributing to SkyCrypt, make sure you install the development environment first.
 
 ### Prerequisites
-- [Node.js](https://nodejs.org)
+- [Node.js](https://nodejs.org) (at least v14, as some of the features we use require it)
 - [MongoDB](https://docs.mongodb.com/manual/administration/install-community/), alternatively you can use the free online version (more instructions below)
 - Redis, use [this link](https://github.com/MicrosoftArchive/redis/releases/tag/win-3.2.100) for Windows, and [this link](https://redis.io/) for other OS's (more instructions below)
 - A [Hypixel API key](https://api.hypixel.net/)
@@ -25,7 +25,8 @@ Before contributing to SkyCrypt, make sure you install the development environme
      ```
     Alternatively, you can use a git GUI like GitKraken to clone it.
 
-2. Run `npm i` in the project directory to install the necessary dependencies. 
+2. Run `npm i` in the project directory to install the necessary dependencies.
+    - Some operating systems may require extra dependencies, such as [node-canvas](https://github.com/Automattic/node-canvas/wiki)
 3. On minecraft, log into `mc.hypixel.net`. Run the command `/api`, and copy the result.
 4. Open `credentials.json` and input your Hypixel API key into the `hypixel_api_key` field.
 5. In the `dbUrl` field, input your MongoDB url. In the `dbName` field, input the name of the database you would like to use.
