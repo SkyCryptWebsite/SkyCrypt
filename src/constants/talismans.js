@@ -787,18 +787,18 @@ module.exports = {
         },
         "MASTER_SKULL_TIER_5": {
             name: "Master Skull - Tier 5",
-            rarity: "rare", // guessed
-            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623" // guessed
+            rarity: "rare",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
         },
         "MASTER_SKULL_TIER_6": {
             name: "Master Skull - Tier 6",
-            rarity: "epic", // guessed
-            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623" // guessed
+            rarity: "epic",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
         },
         "MASTER_SKULL_TIER_7": {
             name: "Master Skull - Tier 7",
-            rarity: "legendary", // guessed
-            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623" // guessed
+            rarity: "legendary",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
         },
     }
 }
