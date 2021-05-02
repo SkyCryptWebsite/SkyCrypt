@@ -2172,7 +2172,8 @@ const getRarityUpgradeClass = item => {
                     </p>
 
                     <p class="stat-raw-values">
-                        <span class="stat-name">Highest Floor Beaten: </span><span class="stat-value"><%= helper.titleCase(calculated.dungeons.catacombs.highest_floor.replace("_", " ")) %></span><br>
+                        <% max = calculated.dungeons.catacombs.highest_floor === 'floor_7' ? 'golden-text' : '' %>
+                        <span class="stat-name <%= max %>">Highest Floor Beaten: </span><span class="stat-value <%= max %>"><%= helper.titleCase(calculated.dungeons.catacombs.highest_floor.replace("_", " ")) %></span><br>
                         <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span><br>
                         <span>
                             <% max = calculated.dungeons.journals.maxed ? "golden-text" : "" %>
@@ -2242,7 +2243,8 @@ const getRarityUpgradeClass = item => {
                     <p class="stat-sub-header">Master Catacombs</p>
 
                     <p class="stat-raw-values">
-                        <span class="stat-name">Highest Floor Beaten: </span><span class="stat-value"><%= helper.titleCase(calculated.dungeons.master_catacombs.highest_floor.replace("_", " ")) %></span><br>
+                        <% max = calculated.dungeons.master_catacombs.highest_floor === 'floor_6' ? 'golden-text' : '' %>
+                        <span class="stat-name <%= max %>">Highest Floor Beaten: </span><span class="stat-value <%= max %>"><%= helper.titleCase(calculated.dungeons.master_catacombs.highest_floor.replace("_", " ")) %></span><br>
                     </p>
 
                     <div class="floor-containers">
