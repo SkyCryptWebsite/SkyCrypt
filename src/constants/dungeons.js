@@ -258,7 +258,7 @@ module.exports = {
                         tier: 6
                     },
                     "diamond_sadan_head": {
-                        name: "Diamond Sadan Head", 
+                        name: "Diamond Sadan Head",
                         required: 1000,
                         tier: 7
                     }
@@ -299,7 +299,7 @@ module.exports = {
                         tier: 6
                     },
                     "diamond_necron_head": {
-                        name: "Diamond Necron Head", 
+                        name: "Diamond Necron Head",
                         required: 1000,
                         tier: 7
                     }
@@ -434,7 +434,19 @@ module.exports = {
             "the_apprentice_2": {
                 name: "The Apprentice 2",
                 pages: 14
-            }
+            },
+            "the_apprentice_3": {
+                name: "The Apprentice 3",
+                pages: 34
+            },
+            "the_follower_2": {
+                name: "The Follower 2",
+                pages: 13
+            },
+            "murderer": {
+                name: "Murderer",
+                pages: 18
+            },
         }
     }
 };
