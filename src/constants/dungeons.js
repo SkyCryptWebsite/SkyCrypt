@@ -258,7 +258,7 @@ module.exports = {
                         tier: 6
                     },
                     "diamond_sadan_head": {
-                        name: "Diamond Sadan Head", 
+                        name: "Diamond Sadan Head",
                         required: 1000,
                         tier: 7
                     }
@@ -299,7 +299,7 @@ module.exports = {
                         tier: 6
                     },
                     "diamond_necron_head": {
-                        name: "Diamond Necron Head", 
+                        name: "Diamond Necron Head",
                         required: 1000,
                         tier: 7
                     }
@@ -358,7 +358,15 @@ module.exports = {
             "master_catacombs_5": {
                 name: "floor_5",
                 texture: "d65cbce40e60e7a59a87fa8f4ecb6ccfc1514338c262614bf33739a6263f5405"
-            }
+            },
+            "master_catacombs_6": {
+                name: "floor_6",
+                texture: "d65cbce40e60e7a59a87fa8f4ecb6ccfc1514338c262614bf33739a6263f5405"
+            },
+            "master_catacombs_7": {
+                name: "floor_7",
+                texture: "d65cbce40e60e7a59a87fa8f4ecb6ccfc1514338c262614bf33739a6263f5405"
+            },
         },
         level_bonuses: {
             "dungeon_catacombs": {
