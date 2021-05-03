@@ -255,6 +255,39 @@ module.exports = {
         BAIT_RING: [
             'SPIKED_ATROCITY',
         ],
+        MASTER_SKULL_TIER_1: [
+            'MASTER_SKULL_TIER_2',
+            'MASTER_SKULL_TIER_3',
+            'MASTER_SKULL_TIER_4',
+            'MASTER_SKULL_TIER_5',
+            'MASTER_SKULL_TIER_6',
+            'MASTER_SKULL_TIER_7'
+        ],
+        MASTER_SKULL_TIER_2: [
+            'MASTER_SKULL_TIER_3',
+            'MASTER_SKULL_TIER_4',
+            'MASTER_SKULL_TIER_5',
+            'MASTER_SKULL_TIER_6',
+            'MASTER_SKULL_TIER_7'
+        ],
+        MASTER_SKULL_TIER_3: [
+            'MASTER_SKULL_TIER_4',
+            'MASTER_SKULL_TIER_5',
+            'MASTER_SKULL_TIER_6',
+            'MASTER_SKULL_TIER_7'
+        ],
+        MASTER_SKULL_TIER_4: [
+            'MASTER_SKULL_TIER_5',
+            'MASTER_SKULL_TIER_6',
+            'MASTER_SKULL_TIER_7'
+        ],
+        MASTER_SKULL_TIER_5: [
+            'MASTER_SKULL_TIER_6',
+            'MASTER_SKULL_TIER_7'
+        ],
+        MASTER_SKULL_TIER_6: [
+            'MASTER_SKULL_TIER_7'
+        ]
     },
 
     talisman_duplicates: {
@@ -732,5 +765,41 @@ module.exports = {
             rarity: "common",
             texture: "/head/5b8b51eaefe0e3a10ad7fa1627801d2ce4412b4e432685906192f83283708233"
         },
+        "MASTER_SKULL_TIER_1": {
+            name: "Master Skull - Tier 1",
+            rarity: "common",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
+        },
+        "MASTER_SKULL_TIER_2": {
+            name: "Master Skull - Tier 2",
+            rarity: "common",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
+        },
+        "MASTER_SKULL_TIER_3": {
+            name: "Master Skull - Tier 3",
+            rarity: "uncommon",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
+        },
+        "MASTER_SKULL_TIER_4": {
+            name: "Master Skull - Tier 4",
+            rarity: "uncommon",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
+        },
+        "MASTER_SKULL_TIER_5": {
+            name: "Master Skull - Tier 5",
+            rarity: "rare",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
+        },
+        "MASTER_SKULL_TIER_6": {
+            name: "Master Skull - Tier 6",
+            rarity: "epic",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
+        },
+        "MASTER_SKULL_TIER_7": {
+            name: "Master Skull - Tier 7",
+            rarity: "legendary",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
+        },
+        
     }
 }
