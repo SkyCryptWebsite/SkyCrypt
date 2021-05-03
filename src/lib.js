@@ -2856,7 +2856,8 @@ module.exports = {
             }
         });
 
-        const output = [];
+        const upgrades = [];
+        const other = [];
         missing.forEach(async talisman => {
             let object = {
                 display_name: null,
@@ -2886,10 +2887,17 @@ module.exports = {
                 }
             }
 
-            output.push(object);
+            if(Object.keys(constants.talisman_upgrades).includes(talisman)){
+                upgrades.push(object)
+            }else{
+                other.push(object);
+            }
         });
 
-        return output;
+        return {
+            missing: other,
+            upgrades: upgrades
+        };
     },
 
     getTalismanCount: () => {
