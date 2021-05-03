@@ -358,7 +358,15 @@ module.exports = {
             "master_catacombs_5": {
                 name: "floor_5",
                 texture: "d65cbce40e60e7a59a87fa8f4ecb6ccfc1514338c262614bf33739a6263f5405"
-            }
+            },
+            "master_catacombs_6": {
+                name: "floor_6",
+                texture: "d65cbce40e60e7a59a87fa8f4ecb6ccfc1514338c262614bf33739a6263f5405"
+            },
+            "master_catacombs_7": {
+                name: "floor_7",
+                texture: "d65cbce40e60e7a59a87fa8f4ecb6ccfc1514338c262614bf33739a6263f5405"
+            },
         },
         level_bonuses: {
             "dungeon_catacombs": {
