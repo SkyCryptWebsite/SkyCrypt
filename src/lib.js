@@ -2887,7 +2887,13 @@ module.exports = {
                 }
             }
 
-            if(Object.keys(constants.talisman_upgrades).includes(talisman)){
+            let includes = false;
+            
+            for(const array of Object.values(constants.talisman_upgrades)){
+                if(array.includes(talisman))
+                    includes = true;
+            }
+            if(includes){
                 upgrades.push(object)
             }else{
                 other.push(object);
