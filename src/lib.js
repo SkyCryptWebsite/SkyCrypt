@@ -824,9 +824,9 @@ function calcSkillWeight(skillGroup, level, experience){
 function calcSlayerWeight(type, experience) {
     const slayerWeight = constants.slayerWeight[type]
 
-    if (experience <= 1000000) {
+    if (!experience || experience <= 1000000) {
         return {
-            weight: experience == 0 ? 0 : experience / slayerWeight.divider,
+            weight: !experience ? 0 : experience / slayerWeight.divider, // for some reason experience can be undefined
             weight_overflow: 0,
         }
     }
@@ -1921,6 +1921,11 @@ module.exports = {
                 }
             }
 
+            // Apply Loving reforge bonus
+            for(let i = 0; i < items.armor.filter(a => helper.getPath(a, 'tag', 'ExtraAttributes', 'modifier') == 'loving').length; i++){
+                stats['ability_damage'] += 5;
+            }
+
             // Modify stats based off of pet ability
             if (activePet)
                 activePet.ref.modifyStats(stats);
@@ -2313,7 +2318,7 @@ module.exports = {
                         let tierValue = statKey.pop();
 
                         statKey = statKey.join('_');
-                        const tierInfo = constants.experiments.tiers[tierValue];
+                        const tierInfo = _.cloneDeep(constants.experiments.tiers[tierValue]);
 
                         if(!game_output.tiers[tierValue])
                             game_output.tiers[tierValue] = tierInfo;

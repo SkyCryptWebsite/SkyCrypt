@@ -223,6 +223,9 @@ async function main(){
             console.debug(`${debugId}: starting page render.`);
             const renderStart = new Date().getTime();
 
+            if(req.cookies.pack)
+                process.send({type: "selected_pack", id: req.cookies.pack});
+
             res.render('stats', 
                 { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), fileHashes, page: 'stats' },
                 (err, html) => {
