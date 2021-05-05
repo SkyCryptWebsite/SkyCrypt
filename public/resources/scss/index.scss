@@ -1085,7 +1085,7 @@ input[type="search"]::-webkit-search-cancel-button {
     text-align: center;
     min-width: 360px;
     width: max-content;
-    max-width: 50vw;
+    max-width: min(500px, 100vw - 40px);
     z-index: 100;
     opacity: 0;
     transform: translateX(-25px);
@@ -3626,7 +3626,6 @@ body {
         left: 50% !important;
         top: 50% !important;
         transform: translate(-50%, -50%) !important;
-        max-width: calc(100vw - 40px);
         transition: opacity 0.2s, visibility 0.2s !important;
     }
 
