@@ -971,16 +971,20 @@ const stat_component = (stat) => {
     %>
     <div data-stat="<%= stat.name %>" class="basic-stat stat-<%= stat.name.replace(/\_/g, "-") %>">
         <span data-tippy-content="
-        <span class='stat-name'>Base <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= calculated.base_stats[stat.name].toLocaleString() %></span>
-        <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= stat.baseExplanation %><% } %></div><br>
-        <span class='stat-name'>Bonus <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %></span>
-        <div class='tippy-explanation'>Additional bonuses from Armor, held items, Accessories and active Pets.</div>
-        <% if(Array.isArray(stat.extraStats)){
-            for(const extraStat of stat.extraStats){ %>
-        <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value<%= extraStat.percent ? ' percent' : ''%>'><%= extraStat.value.toLocaleString() %></span>
-        <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= extraStat.explanation %><% } %></div>
-        <% }} %>
-        "><span class="stat-name"><%- getPrettyName(stat.name, true) %> </span><span class="stat-value<%= stat.percent ? ' percent' : ''%>"><%= stats[stat.name].toLocaleString() %></span></span></div>
+            <span class='stat-name'>Base <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= calculated.base_stats[stat.name].toLocaleString() %></span>
+            <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= stat.baseExplanation %><% } %></div><br>
+            <span class='stat-name'>Bonus <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %></span>
+            <div class='tippy-explanation'>Additional bonuses from Armor, held items, Accessories and active Pets.</div>
+            <% if(Array.isArray(stat.extraStats)){
+                for(const extraStat of stat.extraStats){ %>
+            <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value<%= extraStat.percent ? ' percent' : ''%>'><%= extraStat.value.toLocaleString() %></span>
+            <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= extraStat.explanation %><% } %></div>
+            <% }} %>
+        ">
+            <span class="stat-name"><%- getPrettyName(stat.name, true) %> </span>
+            <span class="stat-value<%= stat.percent ? ' percent' : ''%>"><%= stats[stat.name].toLocaleString() %></span>
+        </span>
+    </div>
 <% };
 
 let description = "";
@@ -1159,7 +1163,7 @@ const getRarityUpgradeClass = item => {
     <div id="stats_content">
         <div class="item-name">
             <div></div><span></span><button class="close-lore" aria-label="Close"></button></div>
-        <div class="item-lore nice-colors-light"></div>
+        <div class="item-lore"></div>
         <div class="backpack-contents inventory-view"></div>
     </div>
     <div id="skin_display">
@@ -1370,11 +1374,6 @@ const getRarityUpgradeClass = item => {
                     percent: true,
                     baseExplanation: "Increased by leveling your Enchanting Skill."
                 }); %>
-                <!--<div data-stat="fairy_souls" class="basic-stat stat-fairy-souls">
-                    <span data-tippy-content="
-                        Collect Fairy Souls to gain Health, Defense, Strength and Speed.</div>
-                    "><span class="stat-name">Fairy Souls </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span></span>
-                </div>-->
             </div>
 
             <div id="additional_stats_container">
