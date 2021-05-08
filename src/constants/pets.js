@@ -978,5 +978,10 @@ module.exports = {
             tier: "LEGENDARY",
             description: `§7Gain §c8${symbols.ferocity} Ferocity §7for 5s on kill`
         },
+        PET_ITEM_FLYING_PIG: {
+            name: "Flying Pig",
+            tier: "UNCOMMON",
+            description: `§7Grants your pig pet the ability to fly while on your private island! You also don't need to hold a carrot on a stick to control your pig.`
+        },
     }
 }
