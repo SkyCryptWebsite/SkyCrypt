@@ -924,10 +924,11 @@ const enrichmentToStatName = (enrichment) => {
 
 const getEnrichments = (accessories) => {
     const enrichmentCounts = {}
-
-    accessories
+    const filteredAccessories = accessories
         .filter(acc => ['legendary', 'mythic'].includes(acc.rarity.toLowerCase()))
-        .forEach(acc => {
+
+    if (filteredAccessories.length > 0) {
+        filteredAccessories.forEach(acc => {
             const enrichment = acc.enrichment || 'missing_enrichment!'
 
             if (!enrichmentCounts[enrichment]) {
@@ -936,7 +937,6 @@ const getEnrichments = (accessories) => {
             enrichmentCounts[enrichment] += 1
         })
 
-    if (Object.keys(enrichmentCounts).length > 0) {
         %>
         <span class="stat-name">Enrichments: </span>
         <%
