@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', function(){
             statsContent.setAttribute("data-backpack-item-index", element.getAttribute('data-pet-index'));
 
         itemName.className = `item-name piece-${item.rarity || 'common'}-bg nice-colors-dark`;
-        itemNameContent.innerHTML = item.display_name || 'null';
+        itemNameContent.innerHTML = printItemDisplayName(item) || 'null';
 
         if(element.hasAttribute('data-pet-index'))
             itemNameContent.innerHTML = `[Lvl ${item.level.level}] ${item.display_name}`;
@@ -1042,7 +1042,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 } else {
                     window.removeEventListener('scroll', this._onScroll);
                     scrollToTab();
-                }   
+                }
             }
         }
 
@@ -1056,7 +1056,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     const scrollMemory = new ScrollMemory();
 
-    const intersectingElements = new Map();    
+    const intersectingElements = new Map();
 
     const sectionObserver = new IntersectionObserver((entries, observer) => {
         for (const entry of entries) {
@@ -1074,7 +1074,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 for (const link of navBarLinks) {
                     if (link.hash === newHash) {
                         link.setAttribute('aria-current', true);
-                        
+
                         if (!scrollMemory.isSmoothScrolling) {
                             scrollToTab(true, link);
                         }
@@ -1208,4 +1208,30 @@ document.addEventListener('DOMContentLoaded', function(){
     window.addEventListener('scroll', onScroll);
 
     setTimeout(resize, 1000);
+
+    function printItemDisplayName(item) {
+        let output = item.display_name
+
+        if (item.tag?.ExtraAttributes?.dungeon_item_level > 0) {
+            const itemLevel = item.tag.ExtraAttributes.dungeon_item_level
+            let newName = item.display_name.replace(/(✪+)/, '%STARS%')
+            let newStars = ''
+
+            switch (itemLevel) {
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                    newStars = '⍟'.repeat(itemLevel - 5) + '✪'.repeat(Math.abs(itemLevel - 10))
+                    break;
+                default:
+                    newStars = '✪'.repeat(itemLevel)
+                    break;
+            }
+            output = newName.replace('%STARS%', newStars)
+        }
+
+        return output
+    }
 });

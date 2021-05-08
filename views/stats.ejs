@@ -1137,6 +1137,32 @@ const getRarityUpgradeClass = item => {
     return `piece-rarity-upgrade-${upgrades}`
 }
 
+const printItemDisplayName = item => {
+    let output = item.display_name
+
+    if (item.tag?.ExtraAttributes?.dungeon_item_level > 0) {
+        const itemLevel = item.tag.ExtraAttributes.dungeon_item_level
+        let newName = item.display_name.replace(/(✪+)/, '%STARS%')
+        let newStars = ''
+
+        switch (itemLevel) {
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+                newStars = '⍟'.repeat(itemLevel - 5) + '✪'.repeat(Math.abs(itemLevel - 10))
+                break;
+            default:
+                newStars = '✪'.repeat(itemLevel)
+                break;
+        }
+        output = newName.replace('%STARS%', newStars)
+    }
+
+    return output
+}
+
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -1547,7 +1573,7 @@ const getRarityUpgradeClass = item => {
                     <% }else{ %>
                         <% if(items.highest_rarity_sword){ %>
                         <p class="stat-raw-values">
-                            <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%= items.highest_rarity_sword.display_name %></span>
+                            <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%= printItemDisplayName(items.highest_rarity_sword) %></span>
                         </p>
                         <% }else if(items.weapons.length > 0){ %>
                         <p class="stat-raw-values">
@@ -1881,7 +1907,7 @@ const getRarityUpgradeClass = item => {
                         <p class="stat-sub-header">Mining Pickaxes</p>
                         <% if(items.highest_rarity_pickaxe){ %>
                             <p class="stat-raw-values">
-                                <span class="stat-name">Active Pickaxe: </span><span class="stat-active-pickaxe stat-value piece-<%= items.highest_rarity_pickaxe.rarity %>-fg"><%= items.highest_rarity_pickaxe.display_name %></span>
+                                <span class="stat-name">Active Pickaxe: </span><span class="stat-active-pickaxe stat-value piece-<%= items.highest_rarity_pickaxe.rarity %>-fg"><%= printItemDisplayName(items.highest_rarity_pickaxe) %></span>
                             </p>
                         <% }else{ %>
                             <p class="stat-raw-values">
@@ -1936,7 +1962,7 @@ const getRarityUpgradeClass = item => {
                         <p class="stat-sub-header">Farming Hoes</p>
                         <% if(items.highest_rarity_hoe){ %>
                             <p class="stat-raw-values">
-                                <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_hoe.rarity %>-fg"><%= items.highest_rarity_hoe.display_name %></span>
+                                <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_hoe.rarity %>-fg"><%= printItemDisplayName(items.highest_rarity_hoe) %></span>
                             </p>
                         <% }else{ %>
                             <p class="stat-raw-values">
@@ -2033,7 +2059,7 @@ const getRarityUpgradeClass = item => {
                         <p class="stat-sub-header">Fishing Rods</p>
                         <% if(items.highest_rarity_rod){ %>
                         <p class="stat-raw-values">
-                            <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_rod.rarity %>-fg"><%= items.highest_rarity_rod.display_name %></span>
+                            <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_rod.rarity %>-fg"><%= printItemDisplayName(items.highest_rarity_rod) %></span>
                         </p>
                         <% }else if(items.rods.length > 0){ %>
                         <p class="stat-raw-values">
