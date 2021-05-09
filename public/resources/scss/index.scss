@@ -772,8 +772,7 @@ input[type="search"]::-webkit-search-cancel-button {
     top: 0;
     bottom: 0;
     background: var(--skillbar);
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
+    border-radius: inherit;
 
     .slayer-bar.maxed-slayer & {
         --skillbar: var(--maxedbar);
