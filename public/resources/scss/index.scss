@@ -753,10 +753,11 @@ input[type="search"]::-webkit-search-cancel-button {
         }
 
         .skill-bar {
+            --overhang: 18px;
             position: absolute;
             bottom: 0;
             left: 18px;
-            padding-left: 18px;
+            padding-left: var(--overhang);
             right: 0;
             height: 14px;
             background-color: rgba(var(--text-rgb), 0.3);
@@ -767,9 +768,9 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .skill-progress-bar {
+    width: calc((100% - var(--overhang)) * var(--progress));
     position: absolute;
-    box-sizing: border-box;
-    padding-left: 18px;
+    padding-left: var(--overhang);
     left: 0;
     top: 0;
     bottom: 0;
@@ -2750,6 +2751,7 @@ a.additional-player-stat:hover {
 }
 
 .slayer-bar {
+    --overhang: 0px;
     position: absolute;
     bottom: 0;
     left: 0;

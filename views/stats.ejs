@@ -956,7 +956,7 @@ const skill_component = (skill, icon, level, extra = {}) => { %>
         </div>
         <div class="skill-name"><%= skill %> <span class="skill-level"><%= level.level >= 0 ? level.level : '?' %></span></div>
         <div class="skill-bar" data-skill="<%= skill %>">
-            <div class="skill-progress-bar" style="width: <%= level.level == level.levelCap ? 100 : level.progress * 100 %>%"></div>
+            <div class="skill-progress-bar" style="--progress: <%= level.level == level.levelCap ? 1 : level.progress %>"></div>
             <% if('runecrafting' in calculated.levels){ %>
                 <div class="skill-progress-text" data-hover-text="<%= level.xpCurrent.toLocaleString() %><% if(level.xpForNext != Infinity){ %> / <%= level.xpForNext.toLocaleString() %><% } %> XP">
                     <%= helper.formatNumber(level.xpCurrent, true) %><% if(level.xpForNext != Infinity){ %> / <%= helper.formatNumber(level.xpForNext) %><% } %> XP
@@ -2465,7 +2465,7 @@ const getRarityUpgradeClass = item => {
                                 <div class="slayer-unclaimed"><%= slayer.level.unclaimed ? 'unclaimed slayer rewards!' : '' %></div>
                             <% } %>
                             <div class="slayer-bar <%= slayer.level.currentLevel == slayer.level.maxLevel ? 'maxed-slayer' : ''%>">
-                                <div class="skill-progress-bar slayer-progress-bar" style="width: <%= slayer.level.currentLevel == slayer.level.maxLevel ? 100 : slayer.level.progress * 100 %>%"></div>
+                                <div class="skill-progress-bar slayer-progress-bar" style="--progress: <%= slayer.level.currentLevel == slayer.level.maxLevel ? 1 : slayer.level.progress %>"></div>
                                 <div class="skill-progress-text slayer-progress-text">
                                     <%= slayer.level.xp.toLocaleString() %><% if(slayer.level.xpForNext != 0){ %> / <%= slayer.level.xpForNext.toLocaleString() %><% } %> XP
                                 </div>
