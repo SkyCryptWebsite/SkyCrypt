@@ -761,16 +761,6 @@ input[type="search"]::-webkit-search-cancel-button {
             background-color: rgba(var(--text-rgb), 0.3);
             border-top-right-radius: 7px;
             border-bottom-right-radius: 7px;
-
-            &::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: -18px;
-                width: 18px;
-                bottom: 0;
-                background-color: var(--skillbar-hex);
-            }
         }
     }
 }
