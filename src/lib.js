@@ -2745,7 +2745,7 @@ module.exports = {
             pet.lore = '';
 
             for(const [index, line] of lore.entries()){
-                pet.lore += '<span class="lore-row">' + helper.renderLore(line) + '</span>';
+                pet.lore += '<span class="lore-row wrap">' + helper.renderLore(line) + '</span>';
             }
 
             pet.display_name = `${petName}${petSkin ? ' ✦' : ''}`;
