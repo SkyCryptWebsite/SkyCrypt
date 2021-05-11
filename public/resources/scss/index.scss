@@ -1082,7 +1082,6 @@ input[type="search"]::-webkit-search-cancel-button {
     position: fixed;
     right: calc(70vw + 20px);
     background-color: var(--lore_background-hex);
-    text-align: center;
     min-width: 360px;
     width: max-content;
     max-width: min(500px, 100vw - 40px);
