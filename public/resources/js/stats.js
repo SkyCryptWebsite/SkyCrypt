@@ -363,7 +363,9 @@ document.addEventListener('DOMContentLoaded', function(){
         else if(element.hasAttribute('data-missing-pet-index'))
             item = [calculated.missingPets[parseInt(element.getAttribute('data-missing-pet-index'))]];
         else if(element.hasAttribute('data-missing-talisman-index'))
-            item = [calculated.missingTalismans[parseInt(element.getAttribute('data-missing-talisman-index'))]];
+            item = [calculated.missingTalismans.missing[parseInt(element.getAttribute('data-missing-talisman-index'))]];
+        else if(element.hasAttribute('data-upgrade-talisman-index'))
+            item = [calculated.missingTalismans.upgrades[parseInt(element.getAttribute('data-upgrade-talisman-index'))]];
 
         if(item.length == 0)
             return;

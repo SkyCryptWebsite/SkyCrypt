@@ -238,7 +238,7 @@ module.exports = {
                     return null;
 
                 guildObject.level = module.exports.getGuildLevel(guildObject.exp);
-                guildObject.gmUser = await module.exports.resolveUsernameOrUuid(guildObject.gm, db, cacheOnly);
+                guildObject.gmUser = guildObject.gm ? await module.exports.resolveUsernameOrUuid(guildObject.gm, db, cacheOnly) : "None";
                 guildObject.rank = guildMember.rank;
 
                 return guildObject;

@@ -971,20 +971,16 @@ const stat_component = (stat) => {
     %>
     <div data-stat="<%= stat.name %>" class="basic-stat stat-<%= stat.name.replace(/\_/g, "-") %>">
         <span data-tippy-content="
-            <span class='stat-name'>Base <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= calculated.base_stats[stat.name].toLocaleString() %></span>
-            <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= stat.baseExplanation %><% } %></div><br>
-            <span class='stat-name'>Bonus <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %></span>
-            <div class='tippy-explanation'>Additional bonuses from Armor, held items, Accessories and active Pets.</div>
-            <% if(Array.isArray(stat.extraStats)){
-                for(const extraStat of stat.extraStats){ %>
-            <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value<%= extraStat.percent ? ' percent' : ''%>'><%= extraStat.value.toLocaleString() %></span>
-            <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= extraStat.explanation %><% } %></div>
-            <% }} %>
-        ">
-            <span class="stat-name"><%- getPrettyName(stat.name, true) %> </span>
-            <span class="stat-value<%= stat.percent ? ' percent' : ''%>"><%= stats[stat.name].toLocaleString() %></span>
-        </span>
-    </div>
+        <span class='stat-name'>Base <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= calculated.base_stats[stat.name].toLocaleString() %></span>
+        <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= stat.baseExplanation %><% } %></div><br>
+        <span class='stat-name'>Bonus <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %></span>
+        <div class='tippy-explanation'>Additional bonuses from Armor, held items, Accessories and active Pets.</div>
+        <% if(Array.isArray(stat.extraStats)){
+            for(const extraStat of stat.extraStats){ %>
+        <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value<%= extraStat.percent ? ' percent' : ''%>'><%= extraStat.value.toLocaleString() %></span>
+        <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= extraStat.explanation %><% } %></div>
+        <% }} %>
+        "><span class="stat-name"><%- getPrettyName(stat.name, true) %> </span><span class="stat-value<%= stat.percent ? ' percent' : ''%>"><%= stats[stat.name].toLocaleString() %></span></span></div>
 <% };
 
 let description = "";
@@ -1163,7 +1159,7 @@ const getRarityUpgradeClass = item => {
     <div id="stats_content">
         <div class="item-name">
             <div></div><span></span><button class="close-lore" aria-label="Close"></button></div>
-        <div class="item-lore"></div>
+        <div class="item-lore nice-colors-light"></div>
         <div class="backpack-contents inventory-view"></div>
     </div>
     <div id="skin_display">
@@ -1239,7 +1235,7 @@ const getRarityUpgradeClass = item => {
                 </button>
                 <% if(calculated.guild){ %><button class="additional-player-stat interactive-tooltip" data-tippy-content="
                 <% if(calculated.guild.rank){ %><span class='stat-name'>Rank: </span><span class='stat-value'><%= calculated.guild.rank %></span><br><br><% } %>
-                <span class='stat-name'>Guild Master: </span><a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %></a><br>
+                <span class='stat-name'>Guild Master: </span><% if(calculated.guild.gm) {%> <a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %><%} else { %>None<% } %></a><br>
                 <% if(calculated.guild.tag){ %><span class='stat-name'>Tag: </span><span class='stat-value'><%- helper.renderLore('§f'+calculated.guild.tag) %></span><br><% } %>
                 <% if(calculated.guild.members){ %><span class='stat-name'>Members: </span><span class='stat-value'><%= calculated.guild.members %></span><br><% } %>
                 <% if(calculated.guild.level){ %><span class='stat-name'>Level: </span><span class='stat-value'><%= calculated.guild.level %></span><br><% } %>
@@ -1374,6 +1370,11 @@ const getRarityUpgradeClass = item => {
                     percent: true,
                     baseExplanation: "Increased by leveling your Enchanting Skill."
                 }); %>
+                <!--<div data-stat="fairy_souls" class="basic-stat stat-fairy-souls">
+                    <span data-tippy-content="
+                        Collect Fairy Souls to gain Health, Defense, Strength and Speed.</div>
+                    "><span class="stat-name">Fairy Souls </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span></span>
+                </div>-->
             </div>
 
             <div id="additional_stats_container">
@@ -1636,18 +1637,26 @@ const getRarityUpgradeClass = item => {
                                 <% }) %>
                             </div>
                         <% } %>
-                        <% if(calculated.missingTalismans.length > 0){ %>
+                        <% if(calculated.missingTalismans.missing.length > 0 || calculated.missingTalismans.upgrades.length > 0){ %>
                             <% if(items.talismans.length == 1){ %>
                                 <br>
                             <% } %>
                             <button class="stat-sub-header extender" aria-controls="missing-accessories" aria-expanded="false">Missing Talismans</button>
                             <div class="pieces extendable" id="missing-accessories">
-                            <% for(const [index, talisman] of calculated.missingTalismans.entries()){ %>
-                                <div tabindex="0" data-missing-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
-                                    <div class="piece-hover-area"></div>
-                                    <div style='background-image: url("<%= talisman.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
-                                </div>
-                            <% } %>
+                                <p class="stat-sub-header">Missing Accessories<span data-tippy-content='Missing accessories that are <b>not</b> upgrades of another talisman.'></span></p>
+                                <% for(const [index, talisman] of calculated.missingTalismans.missing.entries()){ %>
+                                    <div tabindex="0" data-missing-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
+                                        <div class="piece-hover-area"></div>
+                                        <div style='background-image: url("<%= talisman.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                                    </div>
+                                <% } %>
+                                <p class="stat-sub-header">Missing Accessory Upgrades<span data-tippy-content='Missing accessories that are upgrades of a lower tier talisman.<br>s'></span></p>
+                                <% for(const [index, talisman] of calculated.missingTalismans.upgrades.entries()){ %>
+                                    <div tabindex="0" data-upgrade-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
+                                        <div class="piece-hover-area"></div>
+                                        <div style='background-image: url("<%= talisman.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                                    </div>
+                                <% } %>
                             </div>
                         <% } %>
                     <% } %>
@@ -2171,8 +2180,7 @@ const getRarityUpgradeClass = item => {
                     </p>
 
                     <p class="stat-raw-values">
-                        <% max = calculated.dungeons.catacombs.highest_floor === 'floor_7' ? 'golden-text' : '' %>
-                        <span class="stat-name <%= max %>">Highest Floor Beaten: </span><span class="stat-value <%= max %>"><%= helper.titleCase(calculated.dungeons.catacombs.highest_floor.replace("_", " ")) %></span><br>
+                        <span class="stat-name">Highest Floor Beaten: </span><span class="stat-value"><%= helper.titleCase(calculated.dungeons.catacombs.highest_floor.replace("_", " ")) %></span><br>
                         <span class="stat-name">Secrets Found: </span><span class="stat-value"><%= calculated.dungeons.secrets_found %></span><br>
                         <span>
                             <% max = calculated.dungeons.journals.maxed ? "golden-text" : "" %>
@@ -2242,8 +2250,7 @@ const getRarityUpgradeClass = item => {
                     <p class="stat-sub-header">Master Catacombs</p>
 
                     <p class="stat-raw-values">
-                        <% max = calculated.dungeons.master_catacombs.highest_floor === 'floor_6' ? 'golden-text' : '' %>
-                        <span class="stat-name <%= max %>">Highest Floor Beaten: </span><span class="stat-value <%= max %>"><%= helper.titleCase(calculated.dungeons.master_catacombs.highest_floor.replace("_", " ")) %></span><br>
+                        <span class="stat-name">Highest Floor Beaten: </span><span class="stat-value"><%= helper.titleCase(calculated.dungeons.master_catacombs.highest_floor.replace("_", " ")) %></span><br>
                     </p>
 
                     <div class="floor-containers">

@@ -2684,8 +2684,10 @@ module.exports = {
                 // now we push the lore of the held items
                 if(heldItemObj) {
                     lore.push('', `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
-                } else {
+                } else if (heldItem in constants.pet_items) {
                     lore.push('', `§6Held Item: §${constants.tier_colors[constants.pet_items[heldItem].tier.toLowerCase()]}${constants.pet_items[heldItem].name}`);
+                } else {
+                    lore.push('', `§6Held Item: §fUnknown item (${heldItem})`);
                 }
 
                 if(heldItem in constants.pet_items){
@@ -2856,7 +2858,8 @@ module.exports = {
             }
         });
 
-        const output = [];
+        const upgrades = [];
+        const other = [];
         missing.forEach(async talisman => {
             let object = {
                 display_name: null,
@@ -2886,10 +2889,23 @@ module.exports = {
                 }
             }
 
-            output.push(object);
+            let includes = false;
+            
+            for(const array of Object.values(constants.talisman_upgrades)){
+                if(array.includes(talisman))
+                    includes = true;
+            }
+            if(includes){
+                upgrades.push(object)
+            }else{
+                other.push(object);
+            }
         });
 
-        return output;
+        return {
+            missing: other,
+            upgrades: upgrades
+        };
     },
 
     getTalismanCount: () => {
