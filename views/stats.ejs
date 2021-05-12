@@ -1641,8 +1641,9 @@ const getRarityUpgradeClass = item => {
                             <% if(items.talismans.length == 1){ %>
                                 <br>
                             <% } %>
-                            <button class="stat-sub-header extender" aria-controls="missing-accessories" aria-expanded="false">Missing Talismans</button>
+                            <button class="stat-sub-header extender" aria-controls="missing-accessories" aria-expanded="false">Missing Accessories</button>
                             <div class="pieces extendable" id="missing-accessories">
+                                <br>
                                 <p class="stat-sub-header">Missing Accessories<span data-tippy-content='Missing accessories that are <b>not</b> upgrades of another talisman.'></span></p>
                                 <% for(const [index, talisman] of calculated.missingTalismans.missing.entries()){ %>
                                     <div tabindex="0" data-missing-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
@@ -1650,7 +1651,7 @@ const getRarityUpgradeClass = item => {
                                         <div style='background-image: url("<%= talisman.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                                     </div>
                                 <% } %>
-                                <p class="stat-sub-header">Missing Accessory Upgrades<span data-tippy-content='Missing accessories that are upgrades of a lower tier talisman.<br>s'></span></p>
+                                <p class="stat-sub-header">Missing Accessory Upgrades<span data-tippy-content='Missing accessories that are upgrades of a lower tier talisman.'></span></p>
                                 <% for(const [index, talisman] of calculated.missingTalismans.upgrades.entries()){ %>
                                     <div tabindex="0" data-upgrade-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
                                         <div class="piece-hover-area"></div>
