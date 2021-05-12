@@ -1233,12 +1233,16 @@ module.exports = {
         }
 
 
-        for(const talisman of talismans){
+        for (const talisman of talismans) {
             talisman.base_name = talisman.display_name;
 
-            if(helper.hasPath(talisman, 'tag', 'ExtraAttributes', 'modifier')){
-                talisman.base_name = talisman.display_name.split(" ").slice(1).join(" ");
+            if (helper.hasPath(talisman, 'tag', 'ExtraAttributes', 'modifier')) {
+                talisman.base_name = talisman.display_name.split(" ").slice(1).join(" ")
                 talisman.reforge = talisman.tag.ExtraAttributes.modifier
+            }
+
+            if (helper.hasPath(talisman, 'tag', 'ExtraAttributes', 'talisman_enrichment')) {
+                talisman.enrichment = talisman.tag.ExtraAttributes.talisman_enrichment
             }
         }
 
@@ -2890,7 +2894,7 @@ module.exports = {
             }
 
             let includes = false;
-            
+
             for(const array of Object.values(constants.talisman_upgrades)){
                 if(array.includes(talisman))
                     includes = true;
