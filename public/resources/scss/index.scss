@@ -753,37 +753,29 @@ input[type="search"]::-webkit-search-cancel-button {
         }
 
         .skill-bar {
+            --overhang: 18px;
             position: absolute;
             bottom: 0;
-            left: 36px;
+            left: 18px;
+            padding-left: var(--overhang);
             right: 0;
             height: 14px;
             background-color: rgba(var(--text-rgb), 0.3);
             border-top-right-radius: 7px;
             border-bottom-right-radius: 7px;
-
-            &::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: -18px;
-                width: 18px;
-                bottom: 0;
-                background-color: var(--skillbar-hex);
-            }
         }
     }
 }
 
 .skill-progress-bar {
+    width: calc((100% - var(--overhang)) * var(--progress));
     position: absolute;
-    padding-left: 18px;
-    left: -18px;
+    padding-left: var(--overhang);
+    left: 0;
     top: 0;
     bottom: 0;
     background: var(--skillbar);
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
+    border-radius: inherit;
 
     .slayer-bar.maxed-slayer & {
         --skillbar: var(--maxedbar);
@@ -792,7 +784,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
 .skill-progress-text {
     position: absolute;
-    left: 0;
+    left: var(--overhang);
     top: 0;
     bottom: 0;
     right: 0;
@@ -2759,6 +2751,7 @@ a.additional-player-stat:hover {
 }
 
 .slayer-bar {
+    --overhang: 0px;
     position: absolute;
     bottom: 0;
     left: 0;
