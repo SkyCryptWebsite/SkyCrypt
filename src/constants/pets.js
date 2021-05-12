@@ -616,6 +616,11 @@ module.exports = {
                 head: "/head/e9281c4d87d68526b0749d4361e6ef786c8a35717aa053da704b1d53410d37a6",
                 release: 1610557200000,
             },
+            "MONKEY_GORILLA": {
+                name: "Gorilla",
+                head: "/head/c3eb3e37e9873bfc176b9ed8ef4fbef833de144546bfaefdf24863c3eb87bb86",
+                release: new Date('2021-05-13 18:00:00 GMT+1').getTime(),
+            },
         },
         "SKELETON_HORSE": {
             "HORSE_ZOMBIE": {
