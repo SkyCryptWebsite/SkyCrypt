@@ -2276,7 +2276,7 @@ const getRarityUpgradeClass = item => {
                                 <% if(floor.best_runs) { %>
                                     <button class="stat-sub-header extender" aria-controls="runs-<%= id %>" aria-expanded="false">Best Run</button>
                                     <div class="pieces extendable" id="runs-<%= id %>">
-                                        <span class="stat-name">Grade</span>
+                                        <span class="stat-name">Grade:</span>
                                         <span class="stat-value"><%= helper.calcDungeonGrade(floor.best_runs[floor.best_runs.length - 1]) %></span>
                                         <br>
                                     <% for (let [stat, value] of Object.entries(floor.best_runs[floor.best_runs.length - 1])) {
@@ -2339,7 +2339,7 @@ const getRarityUpgradeClass = item => {
                                 <% if(floor.best_runs) { %>
                                     <button class="stat-sub-header extender" aria-controls="runs-<%= id %>" aria-expanded="false">Best Run</button>
                                     <div class="pieces extendable" id="runs-<%= id %>">
-                                        <span class="stat-name">Grade</span>
+                                        <span class="stat-name">Grade:</span>
                                         <span class="stat-value"><%= helper.calcDungeonGrade(floor.best_runs[floor.best_runs.length - 1]) %></span>
                                         <br>
                                     <% for (let [stat, value] of Object.entries(floor.best_runs[floor.best_runs.length - 1])) {
