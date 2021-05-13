@@ -164,7 +164,6 @@ module.exports = (app, db) => {
     app.all('/api/:player/:profile/collections', cors(), async (req, res) => {
         try{
             const { profile, uuid } = await lib.getProfile(db, req.params.player, req.params.profile, { cacheOnly: true });
-            const userProfile = profile.members[uuid];
 
             const collections = await lib.getCollections(uuid, profile);
 
