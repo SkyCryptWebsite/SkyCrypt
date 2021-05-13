@@ -4,12 +4,16 @@ name: SkyCrypt CI Workflow
 on:
  push:
     branches: [ master ]
+
+env:
+  NODE_VERSION: 14.x
+
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: ["${{ env.NODE_VERSION }}"]
         redis-version: [6]
         mongodb-version: [4.4]
     steps:
