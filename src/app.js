@@ -5,7 +5,7 @@ const { getFileHashes, getFileHash, hashedDirectories } = require('./hashes');
 async function main(){
     const express = require('express');
     const session = require('express-session');
-    const MongoStore = require('connect-mongo')(session);
+    const MongoStore = require('connect-mongo');
     const bodyParser = require('body-parser');
     const cors = require('cors');
 
@@ -88,7 +88,7 @@ async function main(){
         secret: credentials.session_secret,
         resave: false,
         saveUninitialized: false,
-        store: new MongoStore({
+        store: MongoStore.create({
             client: mongo
         })
     }));
