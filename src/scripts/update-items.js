@@ -5,7 +5,6 @@ async function main(){
     const axios = require('axios');
     require('axios-debug-log');
 
-    const helper = require('./../helper');
     const credentials = require('./../../credentials.json');
 
     const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });

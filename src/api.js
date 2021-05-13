@@ -1,5 +1,4 @@
 const tableify = require('@tillhub/tableify');
-const _ = require('lodash');
 const helper = require('./helper');
 const { getId } = helper;
 const lib = require('./lib');
