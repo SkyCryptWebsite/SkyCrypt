@@ -7,6 +7,7 @@
     "start": "node init && node index",
     "postinstall": "node init",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint .",
     "prestart": "npm run buildscss",
     "buildscss": "sass public/resources/scss:public/resources/css --style=compressed",
     "watchscss": "sass --watch public/resources/scss:public/resources/css",

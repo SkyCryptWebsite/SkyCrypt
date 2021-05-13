@@ -10,6 +10,20 @@ env:
   NODE_VERSION: 14.x
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Git checkout
+      uses: actions/checkout@v1
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: es-lint
+      run: npm run lint
+
   build:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
