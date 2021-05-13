@@ -3628,7 +3628,7 @@ module.exports = {
     },
 
     getPacks: () => {
-        return customResources.packs;
+        return customResources.packs.sort((a, b) => b.priority - a.priority);
     }
 }
 
