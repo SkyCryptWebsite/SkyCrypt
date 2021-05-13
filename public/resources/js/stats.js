@@ -406,10 +406,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 throw null;
 
             item.tag.display.Lore.forEach(function(line, index){
-                itemLore.innerHTML += renderLore(line);
-
-                if(index + 1 < item.tag.display.Lore.length)
-                    itemLore.innerHTML += '<br>';
+                itemLore.innerHTML += '<span class="lore-row">' + renderLore(line) + '</span>';
             });
         }catch(e){
 
@@ -439,8 +436,6 @@ document.addEventListener('DOMContentLoaded', function(){
             packContent.appendChild(packIcon);
             packContent.appendChild(packName);
             packContent.appendChild(packAuthor);
-
-            itemLore.appendChild(document.createElement('br'));
 
             itemLore.appendChild(packContent);
         }

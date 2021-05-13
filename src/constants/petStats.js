@@ -33,7 +33,7 @@ const symbols = {
 	ferocity: "⫽",
 	ability_damage: "✹",
 	mining_speed: "↑",
-    fortune: "☘",
+	fortune: "☘",
 }
 
 class Pet {
@@ -257,9 +257,9 @@ class Elephant extends Pet {
 			let mult = 0.01;
 			stats['health'] += round(this.level * mult * stats['defense'] / 10, 1);
 		}
-        if (this.rarity > 3) {
-            stats['farming fortune'] += round(this.level * 0.5)
-        }
+		if (this.rarity > 3) {
+			stats['farming fortune'] += round(this.level * 0.5)
+		}
 	}
 }
 
@@ -362,12 +362,12 @@ Mining Pets
 
 class Bat extends Pet {
 	get stats() {
-        let stats = {
+		let stats = {
 			intelligence: this.level * 1,
 			speed: this.level * 0.05
 		};
-        if (this.rarity > 4)
-            stats.sea_creature_chance = this.level * 0.05;
+		if (this.rarity > 4)
+			stats.sea_creature_chance = this.level * 0.05;
 		return stats;
 	}
 
@@ -878,8 +878,8 @@ class Ghoul extends Pet {
 	get stats() {
 		return {
 			intelligence: this.level * 0.75,
-            health: this.level * 1,
-            ferocity: this.level * 0.05,
+			health: this.level * 1,
+			ferocity: this.level * 0.05,
 		};
 	}
 
@@ -1103,7 +1103,7 @@ class Hound extends Pet {
 		return {
 			strength: this.level * 0.4,
 			bonus_attack_speed: this.level * 0.15,
-            ferocity: this.level * 0.05,
+			ferocity: this.level * 0.05,
 		};
 	}
 
@@ -1223,7 +1223,7 @@ class Phoenix extends Pet {
 
 	get abilities() {
 		let list = [this.first, this.second];
-		if (this.rarity > 3){
+		if (this.rarity > 3) {
 			list.push(this.third);
 			list.push(this.fourth);
 		}
@@ -1268,8 +1268,8 @@ class Pigman extends Pet {
 	get stats() {
 		return {
 			strength: this.level * 0.5,
-            defense: this.level * 0.5,
-            ferocity: this.level * 0.05,
+			defense: this.level * 0.5,
+			ferocity: this.level * 0.05,
 		};
 	}
 
@@ -1979,17 +1979,17 @@ class Monkey extends Pet {
 
 	modifyStats(stats) {
 		let mult = this.rarity > 2 ? 0.6 : this.rarity > 0 ? 0.5 : 0.4;
-        if (this.rarity > 3) {
-            stats['foraging fortune'] += round(this.level * mult)
-        }
+		if (this.rarity > 3) {
+			stats['foraging fortune'] += round(this.level * mult)
+		}
 	}
 }
 
 class Ocelot extends Pet {
 	get stats() {
 		return {
-            speed: this.level * 0.5,
-            ferocity: this.level * 0.1,
+			speed: this.level * 0.5,
+			ferocity: this.level * 0.1,
 		};
 	}
 
@@ -2253,8 +2253,8 @@ class Megalodon extends Pet {
 	get stats() {
 		return {
 			strength: this.level * 0.5,
-            magic_find: this.level * 0.1,
-            ferocity: this.level * 0.05,
+			magic_find: this.level * 0.1,
+			ferocity: this.level * 0.05,
 		};
 	}
 
@@ -2512,8 +2512,8 @@ class Jerry extends Pet {
 		let list = [this.first, this.second];
 		if (this.rarity > 3)
 			list.push(this.third);
-        if (this.rarity > 4)
-            list.push(this.fourth);
+		if (this.rarity > 4)
+			list.push(this.fourth);
 		return list;
 	}
 
@@ -2644,8 +2644,8 @@ module.exports = {
 		//Alchemy
 		'Jellyfish': Jellyfish,
 		'Parrot': Parrot,
-        'Sheep': Sheep,
-        //Enchanting
+		'Sheep': Sheep,
+		//Enchanting
 		'Guardian': Guardian,
 		//Other
 		'???': QuestionMark,
