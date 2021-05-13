@@ -3,13 +3,15 @@ name: SkyCrypt CI Workflow
 
 on:
   push:
-    branches: [ master ]
+  pull_request:
+  workflow_dispatch:
 
 env:
   NODE_VERSION: 14.x
 
 jobs:
   build:
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     strategy:
       matrix:
