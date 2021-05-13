@@ -280,7 +280,6 @@ class Pig extends Pet {
 	}
 
 	get first() {
-		let mult = 0;
 		return {
 			name: "§6Ridable",
 			desc: [`§7Right-click your summoned pet to ride it!`]
@@ -304,7 +303,6 @@ class Pig extends Pet {
 	}
 
 	get fourth() {
-		let mult = 0;
 		return {
 			name: "§6Trample",
 			desc: [`§7While on your private island, break all crops your pig rides over`]
@@ -514,7 +512,6 @@ class Rock extends Pet {
 	}
 
 	get first() {
-		let mult = 0;
 		return {
 			name: "§6Ridable",
 			desc: [`§7Right-click on your summoned pet to ride it!`]
@@ -522,7 +519,6 @@ class Rock extends Pet {
 	}
 
 	get second() {
-		let mult = 0;
 		return {
 			name: "§6Sailing Stone",
 			desc: [`§7Sneak to move your rock to your location (15s cooldown)`]
@@ -580,7 +576,6 @@ class Silverfish extends Pet {
 	}
 
 	get third() {
-		let mult = 0;
 		return {
 			name: "§6Dexterity",
 			desc: [`§7Gives permanent haste III`]
@@ -726,7 +721,6 @@ class Blaze extends Pet {
 	}
 
 	get third() {
-		let mult = 0.1;
 		return {
 			name: "§6Fusion-Style Potato",
 			desc: [`§7Doubles effects of hot potato books`]
@@ -801,7 +795,6 @@ class EnderDragon extends Pet {
 	}
 
 	get second() {
-		let mult = this.rarity > 2 ? 0.5 : 0.3;
 		return {
 			name: "§6One With The Dragon",
 			desc: [`§7Buffs the Aspect of the Dragons sword by §a${round(this.level * 0.5, 1)} §c${symbols.strength} Damage and §a${round(this.level * 0.3, 1)} §c${symbols.strength} Strength`]
@@ -1074,7 +1067,6 @@ class Horse extends Pet {
 	}
 
 	get first() {
-		let mult = 0;
 		return {
 			name: "§6Ridable",
 			desc: [`§7Right-click your summoned pet to ride it!`]
@@ -1368,7 +1360,6 @@ class SkeletonHorse extends Pet {
 	}
 
 	get first() {
-		let mult = 0;
 		return {
 			name: "§6Ridable",
 			desc: [`§7Right-click your summoned pet to ride it!`]
@@ -1426,7 +1417,6 @@ class Skeleton extends Pet {
 	}
 
 	get third() {
-		let mult = 0;
 		return {
 			name: "§6Skeletal Defense",
 			desc: [`§7Your skeleton shoots an arrow dealing §a30x §7your §9${symbols.crit_damage} Crit Damage §7when a mob gets close to you (5s cooldown)`]
@@ -1469,7 +1459,6 @@ class Snowman extends Pet {
 	}
 
 	get third() {
-		let mult = 0;
 		return {
 			name: "§6Snow Cannon",
 			desc: [`§7Your snowman fires a snowball dealing §a5x §7your §c${symbols.strength} Strength §7when a mob gets close to you (1s cooldown)`]
@@ -1537,7 +1526,6 @@ class Spirit extends Pet {
 	}
 
 	get first() {
-		let mult = 0;
 		return {
 			name: "§6Spirit Assistance",
 			desc: [`§7Spawns and assists you when you are ghost in dungeons.`]
@@ -1687,7 +1675,6 @@ class Turtle extends Pet {
 	}
 
 	get third() {
-		let mult = 0;
 		return {
 			name: "§6Unflippable",
 			desc: [`§7Gain §aimmunity §7to knockback`]
@@ -1758,7 +1745,6 @@ class GrandmaWolf extends Pet {
 	}
 
 	get first() {
-		let mult = this.rarity > 2 ? 0.3 : this.rarity > 1 ? 0.2 : 0.1;
 		return {
 			name: "§6Kill Combo",
 			desc: [
@@ -2170,7 +2156,6 @@ class Dolphin extends Pet {
 	}
 
 	get third() {
-		let mult = 0;
 		return {
 			name: "§6Splash Surprise",
 			desc: [`§7Stun sea creatures for §a5s §7after fishing them up`]
@@ -2388,7 +2373,6 @@ class Jellyfish extends Pet {
 	}
 
 	get second() {
-		let mult = 0;
 		return {
 			name: "§6Hungry Healer",
 			desc: [`§7While in dungeons, for every 1000 you heal teammates apply the §aenchanted golden apple §7effect to all players within 10 blocks (10s cooldown)`]
@@ -2564,7 +2548,6 @@ class QuestionMark extends Pet {
 	}
 
 	get first() {
-		let mult = 0;
 		return {
 			name: "§6???",
 			desc: [`§7???`]
@@ -2572,7 +2555,6 @@ class QuestionMark extends Pet {
 	}
 
 	get second() {
-		let mult = 0;
 		return {
 			name: "§6???",
 			desc: [`§7???`]
@@ -2580,7 +2562,6 @@ class QuestionMark extends Pet {
 	}
 
 	get third() {
-		let mult = 0;
 		return {
 			name: "§6???",
 			desc: [`§7???`]

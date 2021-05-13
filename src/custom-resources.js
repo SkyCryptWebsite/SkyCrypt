@@ -290,7 +290,6 @@ async function init(){
                 animation.frametime = animation.frametime / 20 * 1000;
 
                 if('frames' in animation){
-                    let frameCount = animation.frames.length;
 
                     if(animation.interpolate){
                         let totalLength = 0;

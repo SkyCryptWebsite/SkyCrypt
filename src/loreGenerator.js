@@ -73,9 +73,6 @@ module.exports = {
             }
         }
 
-        const enchantments = helper.getPath(item, 'tag', 'ExtraAttributes', 'enchantments') || {};
-        const hasEnchantments = Object.keys(enchantments).length > 0;
-
         // Set HTML lore to be displayed on the website
         if(helper.hasPath(item, 'tag', 'display', 'Lore'))
             item.tag.display.lore = lore_raw;
