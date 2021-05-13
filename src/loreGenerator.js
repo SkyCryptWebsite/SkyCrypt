@@ -1,8 +1,4 @@
-const constants = require('./constants');
 const helper = require('./helper');
-const { SitemapItemStream } = require('sitemap');
-const { getId } = helper;
-const moment = require('moment');
 
 module.exports = {
     makeLore: function(item) {

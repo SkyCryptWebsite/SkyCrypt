@@ -4,13 +4,8 @@ require('axios-debug-log');
 
 const retry = require('async-retry');
 
-const _ = require('lodash');
-
 const constants = require('./constants');
 const credentials = require('./../credentials.json');
-
-const Redis = require("ioredis");
-const redisClient = new Redis();
 
 const Hypixel = axios.create({
     baseURL: 'https://api.hypixel.net/'

@@ -1,5 +1,4 @@
 const cluster = require('cluster');
-const fs = require('fs');
 const path = require('path');
 const nbt = require('prismarine-nbt');
 const util = require('util');
@@ -32,10 +31,8 @@ const Redis = require("ioredis");
 const redisClient = new Redis();
 
 const customResources = require('./custom-resources');
-const { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } = require('constants');
 const loreGenerator = require('./loreGenerator');
 const randomEmoji = require('./constants/randomEmoji');
-const { outputJSON } = require('fs-extra');
 
 const parseNbt = util.promisify(nbt.parse);
 

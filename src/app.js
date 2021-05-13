@@ -9,18 +9,12 @@ async function main(){
     const bodyParser = require('body-parser');
     const cors = require('cors');
 
-    const Redis = require("ioredis");
-    const redisClient = new Redis();
-
     const axios = require('axios');
     require('axios-debug-log');
-
-    const retry = require('async-retry');
 
     const fs = require('fs-extra');
 
     const path = require('path');
-    const util = require('util');
     const renderer = require('./renderer');
 
     await renderer.init();
