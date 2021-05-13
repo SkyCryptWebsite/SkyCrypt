@@ -23,6 +23,9 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
 
+    - name: Install node dependencies
+      run: npm ci
+
     - name: es-lint
       run: npm run lint
 

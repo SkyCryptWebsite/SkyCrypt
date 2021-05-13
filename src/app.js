@@ -196,7 +196,7 @@ async function main(){
 
         console.debug(`${debugId}: stats page was called.`);
 
-        let paramPlayer = req.params.player.toLowerCase().replace(/[ +]/g, '_').replace(/[^a-z\d\-\_:]/g, '');
+        let paramPlayer = req.params.player.toLowerCase().replace(/[ +]/g, '_').replace(/[^a-z\d\-_:]/g, '');
         let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
 
         const cacheOnly = req.query.cache === 'true';
