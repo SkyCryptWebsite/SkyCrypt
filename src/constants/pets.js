@@ -401,8 +401,16 @@ module.exports = {
 
     /*
         Animted skins created at ezgif.com/apng-maker with the following settings:
-        - Delay time: 500
-        - Enable crossfade frames: delay = 3, count = 10
+        - Skins that change based on time of day
+            - Delay time: 500
+            - Enable crossfade frames: delay = 3, count = 10
+        - Skins that are always animated
+            - Delay time: 20 (but do what looks best)
+            - No crossfade
+            - Don't stack frames (unless needed)
+        Animation object:
+        a) day and night for skins that change based on time of day
+        b) progressive timings (in ms) since the first frame to the next occurrence of the first frame to close the cycle
     */
     pet_skins: {
         "ENDERMAN": {
@@ -618,8 +626,19 @@ module.exports = {
             },
             "MONKEY_GORILLA": {
                 name: "Gorilla",
-                head: "/head/c3eb3e37e9873bfc176b9ed8ef4fbef833de144546bfaefdf24863c3eb87bb86",
+                head: "/resources/img/items/monkey_gorilla.png",
                 release: new Date('2021-05-13 18:00:00 GMT+1').getTime(),
+                animation: {
+                    0: "/head/ac75d405235a58c68bddadad082e895e84feadfffd9f69c00a2194498732d48",
+                    1000: "/head/2a8be837b3361464b5ca555029658f0fdc9432cb351f088996f6da7210e1fc75",
+                    1200: "/head/75c6a5d6361a7b847fa6bbf6905c381f764a84f1c820d8e82c76e7db0feb9ee7",
+                    1500: "/head/e6227de20348cf220bb15a6c5d1c7d5405b0bbd9f759cecf891c3991f07f4f9f",
+                    1800: "/head/20cbac153bc024d35a6d7df3d57b6ee814ae01e643bcd2f77a2aaae0acd771d2",
+                    3600: "/head/e6227de20348cf220bb15a6c5d1c7d5405b0bbd9f759cecf891c3991f07f4f9f",
+                    3800: "/head/75c6a5d6361a7b847fa6bbf6905c381f764a84f1c820d8e82c76e7db0feb9ee7",
+                    4100: "/head/2a8be837b3361464b5ca555029658f0fdc9432cb351f088996f6da7210e1fc75",
+                    4300: "/head/ac75d405235a58c68bddadad082e895e84feadfffd9f69c00a2194498732d48",
+                }
             },
         },
         "SKELETON_HORSE": {
