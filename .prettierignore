@@ -1,0 +1,5 @@
+# extend .eslintignore
+$ cat .eslintignore
+
+# resourcepacks
+/public/resourcepacks/*/assets/**
