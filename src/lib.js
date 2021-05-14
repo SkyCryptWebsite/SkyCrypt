@@ -2952,7 +2952,7 @@ module.exports = {
       if (pet.heldItem) {
         const { heldItem } = pet;
 
-        const heldItemObj = await db.collection("items").findOne({ id: heldItem });
+        let heldItemObj = await db.collection("items").findOne({ id: heldItem });
 
         if (heldItem in constants.pet_items) {
           if ("stats" in constants.pet_items[heldItem]) {
@@ -2989,16 +2989,10 @@ module.exports = {
           });
         });
         // now we push the lore of the held items
-        if (heldItemObj) {
-          lore.push("", `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
-        } else {
-          lore.push(
-            "",
-            `§6Held Item: §${constants.tier_colors[constants.pet_items[heldItem].tier.toLowerCase()]}${
-              constants.pet_items[heldItem].name
-            }`
-          );
+        if (!heldItemObj) {
+          heldItemObj = constants.pet_items[heldItem];
         }
+        lore.push("", `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
 
         if (heldItem in constants.pet_items) {
           lore.push(constants.pet_items[heldItem].description);
