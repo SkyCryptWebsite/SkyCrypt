@@ -1233,12 +1233,16 @@ module.exports = {
         }
 
 
-        for(const talisman of talismans){
+        for (const talisman of talismans) {
             talisman.base_name = talisman.display_name;
 
-            if(helper.hasPath(talisman, 'tag', 'ExtraAttributes', 'modifier')){
-                talisman.base_name = talisman.display_name.split(" ").slice(1).join(" ");
+            if (helper.hasPath(talisman, 'tag', 'ExtraAttributes', 'modifier')) {
+                talisman.base_name = talisman.display_name.split(" ").slice(1).join(" ")
                 talisman.reforge = talisman.tag.ExtraAttributes.modifier
+            }
+
+            if (helper.hasPath(talisman, 'tag', 'ExtraAttributes', 'talisman_enrichment')) {
+                talisman.enrichment = talisman.tag.ExtraAttributes.talisman_enrichment
             }
         }
 
@@ -1921,6 +1925,11 @@ module.exports = {
                 }
             }
 
+            // Apply Loving reforge bonus
+            for(let i = 0; i < items.armor.filter(a => helper.getPath(a, 'tag', 'ExtraAttributes', 'modifier') == 'loving').length; i++){
+                stats['ability_damage'] += 5;
+            }
+
             // Modify stats based off of pet ability
             if (activePet)
                 activePet.ref.modifyStats(stats);
@@ -2313,7 +2322,7 @@ module.exports = {
                         let tierValue = statKey.pop();
 
                         statKey = statKey.join('_');
-                        const tierInfo = constants.experiments.tiers[tierValue];
+                        const tierInfo = _.cloneDeep(constants.experiments.tiers[tierValue]);
 
                         if(!game_output.tiers[tierValue])
                             game_output.tiers[tierValue] = tierInfo;
@@ -2679,8 +2688,10 @@ module.exports = {
                 // now we push the lore of the held items
                 if(heldItemObj) {
                     lore.push('', `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
-                } else {
+                } else if (heldItem in constants.pet_items) {
                     lore.push('', `§6Held Item: §${constants.tier_colors[constants.pet_items[heldItem].tier.toLowerCase()]}${constants.pet_items[heldItem].name}`);
+                } else {
+                    lore.push('', `§6Held Item: §fUnknown item (${heldItem})`);
                 }
 
                 if(heldItem in constants.pet_items){
@@ -2738,10 +2749,7 @@ module.exports = {
             pet.lore = '';
 
             for(const [index, line] of lore.entries()){
-                pet.lore += helper.renderLore(line);
-
-                if(index < lore.length)
-                    pet.lore += '<br>';
+                pet.lore += '<span class="lore-row wrap">' + helper.renderLore(line) + '</span>';
             }
 
             pet.display_name = `${petName}${petSkin ? ' ✦' : ''}`;
@@ -2851,7 +2859,8 @@ module.exports = {
             }
         });
 
-        const output = [];
+        const upgrades = [];
+        const other = [];
         missing.forEach(async talisman => {
             let object = {
                 display_name: null,
@@ -2881,10 +2890,23 @@ module.exports = {
                 }
             }
 
-            output.push(object);
+            let includes = false;
+
+            for(const array of Object.values(constants.talisman_upgrades)){
+                if(array.includes(talisman))
+                    includes = true;
+            }
+            if(includes){
+                upgrades.push(object)
+            }else{
+                other.push(object);
+            }
         });
 
-        return output;
+        return {
+            missing: other,
+            upgrades: upgrades
+        };
     },
 
     getTalismanCount: () => {
@@ -3606,7 +3628,7 @@ module.exports = {
     },
 
     getPacks: () => {
-        return customResources.packs;
+        return customResources.packs.sort((a, b) => b.priority - a.priority);
     }
 }
 

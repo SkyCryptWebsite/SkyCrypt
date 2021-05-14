@@ -363,7 +363,9 @@ document.addEventListener('DOMContentLoaded', function(){
         else if(element.hasAttribute('data-missing-pet-index'))
             item = [calculated.missingPets[parseInt(element.getAttribute('data-missing-pet-index'))]];
         else if(element.hasAttribute('data-missing-talisman-index'))
-            item = [calculated.missingTalismans[parseInt(element.getAttribute('data-missing-talisman-index'))]];
+            item = [calculated.missingTalismans.missing[parseInt(element.getAttribute('data-missing-talisman-index'))]];
+        else if(element.hasAttribute('data-upgrade-talisman-index'))
+            item = [calculated.missingTalismans.upgrades[parseInt(element.getAttribute('data-upgrade-talisman-index'))]];
 
         if(item.length == 0)
             return;
@@ -377,7 +379,7 @@ document.addEventListener('DOMContentLoaded', function(){
         else if(element.hasAttribute('data-pet-index'))
             statsContent.setAttribute("data-backpack-item-index", element.getAttribute('data-pet-index'));
 
-        itemName.className = 'item-name ' + 'piece-' + (item.rarity || 'common') + '-bg';
+        itemName.className = `item-name piece-${item.rarity || 'common'}-bg nice-colors-dark`;
         itemNameContent.innerHTML = item.display_name || 'null';
 
         if(element.hasAttribute('data-pet-index'))
@@ -404,10 +406,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 throw null;
 
             item.tag.display.Lore.forEach(function(line, index){
-                itemLore.innerHTML += renderLore(line);
-
-                if(index + 1 < item.tag.display.Lore.length)
-                    itemLore.innerHTML += '<br>';
+                itemLore.innerHTML += '<span class="lore-row">' + renderLore(line) + '</span>';
             });
         }catch(e){
 
@@ -437,8 +436,6 @@ document.addEventListener('DOMContentLoaded', function(){
             packContent.appendChild(packIcon);
             packContent.appendChild(packName);
             packContent.appendChild(packAuthor);
-
-            itemLore.appendChild(document.createElement('br'));
 
             itemLore.appendChild(packContent);
         }

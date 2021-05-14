@@ -29,7 +29,7 @@ async function main(){
         FantasmicGalaxy: {
             position: 4,
             type: "MAINTAINER",
-            message: "Ember armor on top"
+            message: "ember armor on top"
         },
         Shiiyu: {
             position: 5,
