@@ -9,6 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint .",
     "prettier": "npx prettier --check .",
+    "prettier:fix": "npx prettier --write .",
     "prestart": "npm run buildscss",
     "buildscss": "sass public/resources/scss:public/resources/css --style=compressed",
     "watchscss": "sass --watch public/resources/scss:public/resources/css",
