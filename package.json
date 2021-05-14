@@ -8,6 +8,7 @@
     "postinstall": "node init",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint .",
+    "lint:fix": "npx eslint . --fix",
     "prettier": "npx prettier --check .",
     "prettier:fix": "npx prettier --write .",
     "prestart": "npm run buildscss",
