@@ -43,7 +43,7 @@ jobs:
     - name: Install node dependencies
       run: npm ci
 
-    - name: es-lint
+    - name: prettier
       run: npm run prettier
 
   build:
