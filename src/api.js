@@ -78,7 +78,7 @@ module.exports = (app, db) => {
         for (const key in petLevel) pet[key] = petLevel[key];
       }
 
-      if ("html" in req.query)
+      if ("html" in req.query) {
         res.send(
           tableify(
             pets.map((a) => [
@@ -97,7 +97,9 @@ module.exports = (app, db) => {
             { showHeaders: false }
           )
         );
-      else res.status(403).send("Old JSON API has been disabled.");
+      } else {
+        res.status(403).send("Old JSON API has been disabled.");
+      }
     } catch (e) {
       console.error(e, res);
     }
@@ -119,8 +121,9 @@ module.exports = (app, db) => {
 
           const minionLevel = parseInt(minion.split("_").pop());
 
-          if (minions.filter((a) => a.minion == minionName).length == 0)
+          if (minions.filter((a) => a.minion == minionName).length == 0) {
             minions.push({ minion: minionName, level: minionLevel });
+          }
 
           let minionObject = minions.filter((a) => a.minion == minionName)[0];
 
@@ -170,8 +173,9 @@ module.exports = (app, db) => {
 
       const collections = await lib.getCollections(uuid, profile);
 
-      for (const collection in collections)
+      for (const collection in collections) {
         collections[collection].name = constants.collection_data.filter((a) => a.skyblockId == collection)[0].name;
+      }
 
       if ("html" in req.query) {
         res.send(
@@ -208,13 +212,14 @@ module.exports = (app, db) => {
         for (const skill in calculated.levels) {
           const pushArr = [helper.titleCase(skill), calculated.levels[skill].level.toString()];
 
-          if ("progress" in req.query)
+          if ("progress" in req.query) {
             pushArr.push(
               calculated.levels[skill].maxLevel,
               calculated.levels[skill].xp,
               calculated.levels[skill].xpCurrent,
               calculated.levels[skill].xpForNext
             );
+          }
 
           response.push(pushArr);
         }
@@ -222,13 +227,14 @@ module.exports = (app, db) => {
         for (const slayer in calculated.slayers) {
           const pushArr = [helper.titleCase(slayer), calculated.slayers[slayer].level.currentLevel.toString()];
 
-          if ("progress" in req.query)
+          if ("progress" in req.query) {
             pushArr.push(
               calculated.slayers[slayer].level.maxLevel,
               calculated.slayers[slayer].xp,
               calculated.slayers[slayer].xp,
               calculated.slayers[slayer].level.xpForNext
             );
+          }
 
           response.push(pushArr);
         }
@@ -263,9 +269,11 @@ module.exports = (app, db) => {
 
         let cakes = [];
 
-        for (const item of cakeBag.containsItems)
-          if (helper.hasPath(item, "tag", "ExtraAttributes", "new_years_cake"))
+        for (const item of cakeBag.containsItems) {
+          if (helper.hasPath(item, "tag", "ExtraAttributes", "new_years_cake")) {
             cakes.push({ cake: item.tag.ExtraAttributes.new_years_cake });
+          }
+        }
 
         cakes = cakes.sort((a, b) => a.cake - b.cake);
 
@@ -287,7 +295,7 @@ module.exports = (app, db) => {
 
       for (const item of allItems) if (Array.isArray(item.containsItems)) allItems.push(...item.containsItems);
 
-      if ("html" in req.query)
+      if ("html" in req.query) {
         res.send(
           tableify(
             allItems
@@ -296,7 +304,9 @@ module.exports = (app, db) => {
             { showHeaders: false }
           )
         );
-      else res.status(403).send("Old JSON API has been disabled.");
+      } else {
+        res.status(403).send("Old JSON API has been disabled.");
+      }
     } catch (e) {
       handleError(e, res);
     }
@@ -321,13 +331,14 @@ module.exports = (app, db) => {
         const extra = weapon.extra;
         let extraOutput = weapon.extra;
 
-        if (hasPath(weapon, "tag", "ExtraAttributes"))
+        if (hasPath(weapon, "tag", "ExtraAttributes")) {
           if ("html" in req.query) {
             if (enchantments !== undefined) {
               enchantmentsOutput = [];
 
-              for (const enchantment in enchantments)
+              for (const enchantment in enchantments) {
                 enchantmentsOutput.push(enchantment + "=" + enchantments[enchantment]);
+              }
 
               enchantmentsOutput = enchantmentsOutput.join(",");
             }
@@ -348,6 +359,7 @@ module.exports = (app, db) => {
               extraOutput = extraOutput.join(",");
             }
           }
+        }
 
         output.push({
           id: getId(weapon),
@@ -385,8 +397,9 @@ module.exports = (app, db) => {
         if ("html" in req.query && enchantments !== undefined) {
           enchantmentsOutput = [];
 
-          for (const enchantment in enchantments)
+          for (const enchantment in enchantments) {
             enchantmentsOutput.push(enchantment + "=" + enchantments[enchantment]);
+          }
 
           enchantmentsOutput = enchantmentsOutput.join(",");
         }
@@ -440,8 +453,9 @@ module.exports = (app, db) => {
           if ("html" in req.query && enchantments !== undefined) {
             enchantmentsOutput = [];
 
-            for (const enchantment in enchantments)
+            for (const enchantment in enchantments) {
               enchantmentsOutput.push(enchantment + "=" + enchantments[enchantment]);
+            }
 
             enchantmentsOutput = enchantmentsOutput.join(",");
           }
