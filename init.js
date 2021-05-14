@@ -9,11 +9,7 @@ const credentialsDefault = {
   dbName: "sbstats",
 };
 
-if (!fs.existsSync("./credentials.json")) {
-  fs.writeFileSync("./credentials.json", JSON.stringify(credentialsDefault, null, 2) + "\n");
-}
-
-const credentials = require("./credentials.json");
+const credentials = fs.existsSync("./credentials.json") ? require("./credentials.json") : credentialsDefault;
 
 if (!("session_secret" in credentials)) {
   credentials.session_secret = randomBytes(32).toString("hex");
