@@ -29,6 +29,23 @@ jobs:
     - name: es-lint
       run: npm run lint
 
+  pretier:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Git checkout
+      uses: actions/checkout@v1
+
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Install node dependencies
+      run: npm ci
+
+    - name: es-lint
+      run: npm run prettier
+
   build:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
