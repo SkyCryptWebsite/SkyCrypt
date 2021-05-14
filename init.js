@@ -10,7 +10,7 @@ const credentialsDefault = {
 };
 
 if (!fs.existsSync("./credentials.json")) {
-  fs.writeFileSync("./credentials.json", JSON.stringify(credentialsDefault, null, 4));
+  fs.writeFileSync("./credentials.json", JSON.stringify(credentialsDefault, null, 2));
 }
 
 const credentials = require("./credentials.json");
@@ -19,7 +19,7 @@ if (!("session_secret" in credentials)) {
   credentials.session_secret = randomBytes(32).toString("hex");
 }
 
-fs.writeFileSync("./credentials.json", JSON.stringify(credentials, null, 4));
+fs.writeFileSync("./credentials.json", JSON.stringify(credentials, null, 2));
 
 fs.ensureDirSync("cache");
 
