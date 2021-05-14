@@ -1,5 +1,14 @@
-# extend .eslintignore
-$ cat .eslintignore
+# compiled dependencies
+/public/resources/js/*.min.js
+/public/resources/js/*.bundle.js
+/public/resources/js/modernizr.js
 
 # resourcepacks
 /public/resourcepacks/*/assets/**
+
+# compiled css dependencies
+/public/resources/scss/*.bundle.css
+/public/resources/scss/inventory.css
+
+# compiled css from sass
+/public/resources/css/**
