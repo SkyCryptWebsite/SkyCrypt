@@ -714,8 +714,14 @@ module.exports = {
   },
 
   generateDebugId: (endpointName = "unknown") => {
-    return `${module.exports.getClusterId()}/${endpointName}_${new Date().getTime()}.${Math.floor(
-      Math.random() * 9000 + 1000
-    )}`;
+    return (
+      module.exports.getClusterId() +
+      "/" +
+      endpointName +
+      "_" +
+      new Date().getTime() +
+      "." +
+      Math.floor(Math.random() * 9000 + 1000)
+    );
   },
 };
