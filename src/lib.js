@@ -3246,7 +3246,7 @@ module.exports = {
       const amounts = [];
       let totalAmount = 0;
 
-      for (member in profile.members) {
+      for (const member in profile.members) {
         const memberProfile = profile.members[member];
 
         if ("collection" in memberProfile) {
@@ -3388,7 +3388,7 @@ module.exports = {
     const boss_data = dungeons_data.bosses;
     let collections = {};
 
-    for (i in output.catacombs.floors) {
+    for (const i in output.catacombs.floors) {
       let floor_id = `catacombs_${i}`;
       if (!Object.keys(collection_data).includes(floor_id)) continue;
 
@@ -3410,7 +3410,7 @@ module.exports = {
         };
       }
 
-      for (reward_id in coll.rewards) {
+      for (const reward_id in coll.rewards) {
         let reward = coll.rewards[reward_id];
         if (collections[floor_id].killed >= reward.required) {
           collections[floor_id].tier = reward.tier;
@@ -3462,7 +3462,7 @@ module.exports = {
       journal_entries: [],
     };
 
-    for (entry_id in journal_entries) {
+    for (const entry_id in journal_entries) {
       let entry = {
         name: journal_constants[entry_id] ? journal_constants[entry_id].name : entry_id,
         pages_collected: journal_entries[entry_id].length || 0,
@@ -3479,7 +3479,7 @@ module.exports = {
       journals.journal_entries.push(entry);
     }
 
-    for (entry_id in journal_constants) {
+    for (const entry_id in journal_constants) {
       journals.total_pages += journal_constants[entry_id].pages || 0;
     }
 
@@ -3520,7 +3520,7 @@ module.exports = {
 
         let level_bonus = level_stats[level_step];
 
-        for (bonus in level_bonus) {
+        for (const bonus in level_bonus) {
           switch (name) {
             case "dungeon_catacombs":
               output.catacombs.bonuses[bonus] += level_bonus[bonus];
