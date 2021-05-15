@@ -392,9 +392,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* broken sometimes
-        if(isEnchanted(item))
-            handleEnchanted(itemIcon);
-            */
+      if (isEnchanted(item)) {
+          handleEnchanted(itemIcon);
+      }
+    */
 
     itemLore.innerHTML = item.lore || "";
 
