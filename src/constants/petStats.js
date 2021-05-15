@@ -2833,7 +2833,7 @@ class Jerry extends Pet {
 
 class QuestionMark extends Pet {
   get stats() {
-    return;
+    return {};
   }
 
   get abilities() {
