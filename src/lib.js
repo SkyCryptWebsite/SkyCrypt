@@ -3518,7 +3518,7 @@ module.exports = {
     }
 
     const tasks = userProfile.tutorial;
-    for (i in tasks) {
+    for (const i in tasks) {
       if (!tasks[i].startsWith("boss_collection_claimed")) continue;
       let task = tasks[i].split("_").splice(3);
 
