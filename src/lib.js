@@ -1984,6 +1984,7 @@ module.exports = {
 
     output.pet_bonus = {};
 
+    // eslint-disable-next-line no-unused-vars
     for (const [index, score] of petScoreRequired.entries()) {
       if (parseInt(score) > output.petScore) {
         continue;
@@ -3689,6 +3690,7 @@ module.exports = {
 
     const profiles = [];
 
+    // eslint-disable-next-line no-unused-vars
     for (const [index, profile] of skyBlockProfiles.entries()) {
       let memberCount = 0;
 
@@ -3754,6 +3756,7 @@ module.exports = {
       }
     }
 
+    // eslint-disable-next-line no-unused-vars
     for (const [index, _profile] of profiles.entries()) {
       if (_profile === undefined || _profile === null) {
         return;
