@@ -401,7 +401,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'color'))
                 color = item.tag.ExtraAttributes.color.split(":");
 
-            const type = ["leather_helmet", "leather_chestplate", "leather_leggings", "leather_boots"][item.id - 298].replace('_', '/');
+            const type = ["leather/helmet", "leather/chestplate", "leather/leggings", "leather/boots"][item.id - 298];
 
             item.texture_path = `/${type}/${color.join(',')}`;
         }
