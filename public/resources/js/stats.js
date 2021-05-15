@@ -1113,7 +1113,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 showSkills.innerHTML = 'Show Skills';
             }else{
                 otherSkills.classList.add('show-skills');
-                show_skills.innerHTML = 'Hide Skills';
+                showSkills.innerHTML = "Hide Skills";
             }
         });
     }
