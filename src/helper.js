@@ -84,7 +84,7 @@ module.exports = {
   resolveUsernameOrUuid: async (uuid, db, cacheOnly = false) => {
     let user = null;
 
-    uuid = uuid.replace(/\-/g, "");
+    uuid = uuid.replace(/-/g, "");
 
     const isUuid = uuid.length == 32;
 
@@ -126,7 +126,7 @@ module.exports = {
           try {
             const { data } = response;
 
-            data.id = data.uuid.replace(/\-/g, "");
+            data.id = data.uuid.replace(/-/g, "");
 
             let updateDoc = {
               username: data.username,
@@ -175,7 +175,7 @@ module.exports = {
         try {
           let { data } = await profileRequest;
 
-          data.id = data.uuid.replace(/\-/g, "");
+          data.id = data.uuid.replace(/-/g, "");
 
           if (module.exports.hasPath(data.textures, "skin")) {
             skin_data.skinurl = data.textures.skin.url;
