@@ -12,6 +12,7 @@
     "ecmaVersion": 12
   },
   "rules": {
-    "curly": ["warn", "multi-line", "consistent"]
+    "curly": ["warn", "multi-line", "consistent"],
+    "no-unused-vars": ["error", { "args": "none" }]
   }
 }
