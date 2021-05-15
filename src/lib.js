@@ -563,7 +563,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
     }
 
     if (helper.hasPath(item, "tag", "ExtraAttributes", "spawnedFor")) {
-      item.extra.spawned_for = item.tag.ExtraAttributes.spawnedFor.replace(/\-/g, "");
+      item.extra.spawned_for = item.tag.ExtraAttributes.spawnedFor.replace(/-/g, "");
     }
 
     if (helper.hasPath(item, "tag", "ExtraAttributes", "baseStatBoostPercentage")) {
@@ -1689,7 +1689,7 @@ module.exports = {
       let reforgeName;
 
       armor.forEach((armorPiece) => {
-        let name = armorPiece.display_name.replace(/\✪/g, "").trim();
+        let name = armorPiece.display_name.replace(/✪/g, "").trim();
 
         if (helper.hasPath(armorPiece, "tag", "ExtraAttributes", "modifier")) {
           name = name.split(" ").slice(1).join(" ");
@@ -2994,7 +2994,7 @@ module.exports = {
 
       lore.push("");
 
-      const petName = helper.titleCase(pet.type.replace(/\_/g, " "));
+      const petName = helper.titleCase(pet.type.replace(/_/g, " "));
       const searchName = petName in constants.petStats ? petName : "???";
 
       if (searchName in constants.petStats) {
@@ -3192,7 +3192,7 @@ module.exports = {
       const pet = Object.assign({}, constants.pet_data[petType]);
 
       pet.texture_path = pet.head;
-      pet.display_name = helper.titleCase(petType.replace(/\_/g, " "));
+      pet.display_name = helper.titleCase(petType.replace(/_/g, " "));
       pet.rarity = "legendary";
 
       let lore = [`§8${helper.capitalizeFirstLetter(pet.type)} Pet`];
@@ -3903,7 +3903,7 @@ module.exports = {
           const areaData = statusResponse.data.session;
 
           if (areaData.online && areaData.gameType == "SKYBLOCK") {
-            const areaName = constants.area_names[areaData.mode] || helper.titleCase(areaData.mode.replace(/\_/g, " "));
+            const areaName = constants.area_names[areaData.mode] || helper.titleCase(areaData.mode.replace(/_/g, " "));
 
             userProfile.current_area = areaName;
             insertProfileStore.current_area = areaName;
