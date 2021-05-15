@@ -189,9 +189,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (item.id == 399) return true;
 
-    if ("texture_path" in item && item.texture_path.endsWith(".gif"))
+    if ("texture_path" in item && item.texture_path.endsWith(".gif")) {
       // disable enchanted overlay for gifs cause laggy
       return false;
+    }
 
     if ("id" in item && [403, 384].includes(item.id)) return true;
 
@@ -357,32 +358,36 @@ document.addEventListener("DOMContentLoaded", function () {
       backpack = backpack[0];
 
       item = backpack.containsItems.filter((a) => a.item_index == Number(element.getAttribute("data-item-index")));
-    } else if (element.hasAttribute("data-item-index"))
+    } else if (element.hasAttribute("data-item-index")) {
       item = all_items.filter((a) => a.item_index == Number(element.getAttribute("data-item-index")));
-    else if (element.hasAttribute("data-backpack-item-index"))
+    } else if (element.hasAttribute("data-backpack-item-index")) {
       item = [currentBackpack.containsItems[Number(element.getAttribute("data-backpack-item-index"))]];
-    else if (element.hasAttribute("data-pet-index"))
+    } else if (element.hasAttribute("data-pet-index")) {
       item = [calculated.pets[parseInt(element.getAttribute("data-pet-index"))]];
-    else if (element.hasAttribute("data-missing-pet-index"))
+    } else if (element.hasAttribute("data-missing-pet-index")) {
       item = [calculated.missingPets[parseInt(element.getAttribute("data-missing-pet-index"))]];
-    else if (element.hasAttribute("data-missing-talisman-index"))
+    } else if (element.hasAttribute("data-missing-talisman-index")) {
       item = [calculated.missingTalismans[parseInt(element.getAttribute("data-missing-talisman-index"))]];
+    }
 
     if (item.length == 0) return;
 
     item = item[0];
 
-    if (element.hasAttribute("data-item-index")) statsContent.setAttribute("data-item-index", item.item_index);
-    else if (element.hasAttribute("data-backpack-item-index"))
+    if (element.hasAttribute("data-item-index")) {
+      statsContent.setAttribute("data-item-index", item.item_index);
+    } else if (element.hasAttribute("data-backpack-item-index")) {
       statsContent.setAttribute("data-backpack-item-index", element.getAttribute("data-backpack-item-index"));
-    else if (element.hasAttribute("data-pet-index"))
+    } else if (element.hasAttribute("data-pet-index")) {
       statsContent.setAttribute("data-backpack-item-index", element.getAttribute("data-pet-index"));
+    }
 
     itemName.className = "item-name " + "piece-" + (item.rarity || "common") + "-bg";
     itemNameContent.innerHTML = item.display_name || "null";
 
-    if (element.hasAttribute("data-pet-index"))
+    if (element.hasAttribute("data-pet-index")) {
       itemNameContent.innerHTML = `[Lvl ${item.level.level}] ${item.display_name}`;
+    }
 
     if (item.texture_path) {
       itemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
@@ -543,19 +548,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function resize() {
     if (playerModel) {
-      if (window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570))
+      if (window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570)) {
         document.getElementById("skin_display_mobile").appendChild(playerModel);
+      }
 
-      if (window.innerWidth > 1570 && oldWidth <= 1570)
+      if (window.innerWidth > 1570 && oldWidth <= 1570) {
         document.getElementById("skin_display").appendChild(playerModel);
+      }
     }
 
     tippy("*[data-tippy-content]");
 
     if (playerModel && skinViewer) {
-      if (playerModel.offsetWidth / playerModel.offsetHeight < 0.6)
+      if (playerModel.offsetWidth / playerModel.offsetHeight < 0.6) {
         skinViewer.setSize(playerModel.offsetWidth, playerModel.offsetWidth * 2);
-      else skinViewer.setSize(playerModel.offsetHeight / 2, playerModel.offsetHeight);
+      } else {
+        skinViewer.setSize(playerModel.offsetHeight / 2, playerModel.offsetHeight);
+      }
     }
 
     navBarHeight = parseFloat(getComputedStyle(navBar).top);
@@ -569,9 +578,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (rect.x) statsContent.style.left = rect.x - statsContent.offsetWidth - 10 + "px";
 
-    if (rect.y)
+    if (rect.y) {
       statsContent.style.top =
         Math.max(70, Math.min(maxTop, rect.y + element.offsetHeight / 2 - statsContent.offsetHeight / 2)) + "px";
+    }
 
     oldWidth = window.innerWidth;
     oldHeight = window.innerHeight;
@@ -818,8 +828,9 @@ document.addEventListener("DOMContentLoaded", function () {
         touchDevice &&
         element.parentNode.classList.contains("wardrobe-piece") &&
         !element.parentNode.parentNode.classList.contains("wardrobe-opened")
-      )
+      ) {
         return;
+      }
 
       statsContent.classList.add("show-stats");
     });
@@ -870,8 +881,9 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      if (element.parentNode.parentNode.classList.contains("wardrobe-set"))
+      if (element.parentNode.parentNode.classList.contains("wardrobe-set")) {
         element.parentNode.parentNode.classList.add("wardrobe-opened");
+      }
 
       if (e.ctrlKey && item && Array.isArray(item.containsItems)) {
         showBackpack(item);
