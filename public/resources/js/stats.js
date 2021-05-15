@@ -1,3 +1,5 @@
+/* global calculated:readonly, items:writable, constants:readonly, extra:readonly, tippy:readonly, skinview3d:readonly */
+
 class LocalTimeElement extends HTMLElement {
   constructor() {
     super();
