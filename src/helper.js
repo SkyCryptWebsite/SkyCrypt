@@ -620,7 +620,7 @@ module.exports = {
         scorpius_bribe_120: "Scorpius Bribe (Year 120)",
       };
 
-      for (item in claimable) {
+      for (const item in claimable) {
         if (module.exports.hasPath(player, item)) {
           rank.claimed_items[claimable[item]] = player[item];
         }

@@ -103,7 +103,7 @@ async function main() {
   }
 
   async function getFavoritesFormUUIDs(uuids) {
-    favorites = [];
+    let favorites = [];
     for (let uuid of uuids) {
       if (uuid == null) continue;
       uuid = sanitize(uuid);
@@ -273,6 +273,8 @@ async function main() {
     const filename = `texture_${uuid}.png`;
     res.set("X-Cluster-ID", `${helper.getClusterId()}`);
 
+    let file;
+
     try {
       file = await fs.readFile(path.resolve(cachePath, filename));
     } catch (e) {
@@ -303,6 +305,8 @@ async function main() {
 
     const filename = `cape_${username}.png`;
     res.set("X-Cluster-ID", `${helper.getClusterId()}`);
+
+    let file;
 
     try {
       file = await fs.readFile(path.resolve(cachePath, filename));
@@ -341,6 +345,8 @@ async function main() {
     const { uuid } = req.params;
 
     const filename = `head_${uuid}.png`;
+
+    let file;
 
     try {
       file = await fs.readFile(path.resolve(cachePath, filename));
