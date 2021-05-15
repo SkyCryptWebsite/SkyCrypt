@@ -12,3 +12,6 @@
 
 # compiled css from sass
 /public/resources/css/**
+
+# ejs
+**/*.ejs
