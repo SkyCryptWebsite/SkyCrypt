@@ -411,7 +411,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (index + 1 < item.tag.display.Lore.length) itemLore.innerHTML += "<br>";
       });
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+    }
 
     if (item.texture_pack) {
       const packContent = document.createElement("a");
