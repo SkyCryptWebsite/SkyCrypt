@@ -3947,7 +3947,7 @@ module.exports = {
 
       userProfile.slayer_xp = 0;
 
-      if (userProfile.hasOwnProperty("slayer_bosses")) {
+      if (userProfile.slayer_bosses != undefined) {
         for (const slayer in userProfile.slayer_bosses) {
           totalSlayerXp += userProfile.slayer_bosses[slayer].xp || 0;
         }
