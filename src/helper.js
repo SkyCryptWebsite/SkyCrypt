@@ -63,7 +63,7 @@ module.exports = {
     let loc = obj || {};
 
     for (i = 0; i < keys.length - 1; i++) {
-      if (!loc.hasOwnProperty(keys[i])) {
+      if (loc[keys[i]] == undefined) {
         loc[keys[i]] = {};
       }
 
