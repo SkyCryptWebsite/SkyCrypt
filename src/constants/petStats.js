@@ -2011,20 +2011,21 @@ class Zombie extends Pet {
   }
 
   modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
-    if (this.rarity > 3) {
-      if (hName.includes("ZOMBIE")) {
-        helmet.stats.defense += round(this.level * mult, 1);
-      }
-      if (cName.includes("ZOMBIE")) {
-        chest.stats.defense += round(this.level * mult, 1);
-      }
-      if (lName.includes("ZOMBIE")) {
-        legs.stats.defense += round(this.level * mult, 1);
-      }
-      if (bName.includes("ZOMBIE")) {
-        boots.stats.defense += round(this.level * mult, 1);
-      }
-    }
+    // TODO resolve #446
+    // if (this.rarity > 3) {
+    //   if (hName.includes("ZOMBIE")) {
+    //     helmet.stats.defense += round(this.level * mult, 1);
+    //   }
+    //   if (cName.includes("ZOMBIE")) {
+    //     chest.stats.defense += round(this.level * mult, 1);
+    //   }
+    //   if (lName.includes("ZOMBIE")) {
+    //     legs.stats.defense += round(this.level * mult, 1);
+    //   }
+    //   if (bName.includes("ZOMBIE")) {
+    //     boots.stats.defense += round(this.level * mult, 1);
+    //   }
+    // }
   }
 }
 
