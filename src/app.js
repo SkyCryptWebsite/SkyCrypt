@@ -311,11 +311,13 @@ async function main() {
     try {
       file = await fs.readFile(path.resolve(cachePath, filename));
 
-      if (Date.now() - stats.mtime > 10 * 1000) {
+      const fileStats = await fs.stat(path.resolve(cachePath, filename));
+
+      if (Date.now() - fileStats.mtime > 10 * 1000) {
         const optifineCape = await axios.head(`https://optifine.net/capes/${username}.png`);
         const lastUpdated = moment(optifineCape.headers["last-modified"]);
 
-        if (lastUpdated.unix() > stats.mtime) {
+        if (lastUpdated.unix() > fileStats.mtime) {
           throw "optifine cape changed";
         }
       }
