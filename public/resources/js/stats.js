@@ -380,10 +380,10 @@ document.addEventListener('DOMContentLoaded', function(){
             statsContent.setAttribute("data-backpack-item-index", element.getAttribute('data-pet-index'));
 
         itemName.className = `item-name piece-${item.rarity || 'common'}-bg nice-colors-dark`;
-        itemNameContent.innerHTML = item.display_name || 'null';
+        itemNameContent.innerHTML = item.display_name_print || item.display_name || 'null';
 
         if(element.hasAttribute('data-pet-index'))
-            itemNameContent.innerHTML = `[Lvl ${item.level.level}] ${item.display_name}`;
+            itemNameContent.innerHTML = `[Lvl ${item.level.level}] ${item.display_name_print || item.display_name}`;
 
         if(item.texture_path){
             itemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
@@ -632,7 +632,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 element.parentNode.classList.add("piece-selected");
 
                 activeWeaponElement.className = 'stat-value stat-active-weapon piece-' + item.rarity + '-fg';
-                activeWeaponElement.innerHTML = item.display_name;
+                activeWeaponElement.innerHTML = item.display_name_print || item.display_name;
 
                 stats = weaponStats;
             }
@@ -689,7 +689,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 element.parentNode.classList.add("piece-selected");
 
                 activeRodElement.className = 'stat-value stat-active-rod piece-' + item.rarity + '-fg';
-                activeRodElement.innerHTML = item.display_name;
+                activeRodElement.innerHTML = item.display_name_print || item.display_name;
 
                 stats = weaponStats;
             }
@@ -1037,7 +1037,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 } else {
                     window.removeEventListener('scroll', this._onScroll);
                     scrollToTab();
-                }   
+                }
             }
         }
 
@@ -1051,7 +1051,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     const scrollMemory = new ScrollMemory();
 
-    const intersectingElements = new Map();    
+    const intersectingElements = new Map();
 
     const sectionObserver = new IntersectionObserver((entries, observer) => {
         for (const entry of entries) {
@@ -1069,7 +1069,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 for (const link of navBarLinks) {
                     if (link.hash === newHash) {
                         link.setAttribute('aria-current', true);
-                        
+
                         if (!scrollMemory.isSmoothScrolling) {
                             scrollToTab(true, link);
                         }
