@@ -71,9 +71,10 @@ function getMax(profiles, ...path) {
   return getMinMax(profiles, false, ...path);
 }
 
-function getMin(profiles, ...path) {
-  return getMinMax(profiles, true, ...path);
-}
+// Commented out because it is never used
+// function getMin(profiles, ...path) {
+//   return getMinMax(profiles, true, ...path);
+// }
 
 function getAllKeys(profiles, ...path) {
   return _.uniq([].concat(...profiles.map((a) => _.keys(helper.getPath(a, ...path)))));

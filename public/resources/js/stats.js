@@ -1,4 +1,4 @@
-/* global calculated:readonly, items:writable, constants:readonly, extra:readonly, tippy:readonly, skinview3d:readonly */
+/* global calculated:readonly, items:writable, constants:readonly, tippy:readonly, skinview3d:readonly */
 
 class LocalTimeElement extends HTMLElement {
   constructor() {
@@ -81,9 +81,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return "";
   }
 
-  let userAgent = window.navigator.userAgent;
-  let tippyInstance;
-
   tippy("*[data-tippy-content]:not(.interactive-tooltip)", {
     trigger: "mouseenter click",
   });
@@ -144,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  tippyInstance = tippy(".interactive-tooltip", {
+  tippy(".interactive-tooltip", {
     trigger: "mouseenter click",
     interactive: true,
     appendTo: () => document.body,
@@ -417,8 +414,6 @@ document.addEventListener("DOMContentLoaded", function () {
     } catch (e) {}
 
     if (item.texture_pack) {
-      const texturePack = extra.packs.filter((a) => a.id == item.texture_pack)[0];
-
       const packContent = document.createElement("a");
       packContent.setAttribute("href", item.texture_pack.url);
       packContent.setAttribute("target", "_blank");
@@ -540,7 +535,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   let oldWidth = null;
-  let oldheight = null;
 
   const navBar = document.querySelector("#nav_bar");
   const navBarLinks = navBar.querySelectorAll(".nav-item");
@@ -584,7 +578,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     oldWidth = window.innerWidth;
-    oldHeight = window.innerHeight;
   }
 
   document.querySelectorAll(".extender").forEach((element) => {
