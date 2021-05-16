@@ -329,19 +329,16 @@ module.exports = {
   getGuildLevel: (xp) => {
     let level = 0;
 
-    for (let i = 0; ; i++) {
-      const xpNeeded = constants.guild_xp[Math.min(constants.guild_xp.length - 1, i)];
+    while (true) {
+      const xpNeeded = constants.guild_xp[Math.min(constants.guild_xp.length - 1, level)];
 
-      xp -= xpNeeded;
-
-      if (xp < 0) {
+      if (xp > xpNeeded) {
+        xp -= xpNeeded;
+        level++;
+      } else {
         return level;
       }
-
-      level++;
     }
-
-    return level;
   },
 
   // Convert Minecraft lore to HTML
