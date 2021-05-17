@@ -1858,6 +1858,13 @@ const getRarityUpgradeClass = item => {
                                     </button>
                                     <%
 
+                                    if(items.storage.length > 0){ %>
+                                        <button class="inventory-tab" data-inventory-type="storage">
+                                            <div class="inventory-tab-icon item-icon icon-54_0"></div>
+                                            <div class="inventory-tab-name">Storage</div>
+                                        </button>
+                                    <% }
+
                                     if(items.enderchest.length > 0){ %>
                                         <button class="inventory-tab" data-inventory-type="enderchest">
                                             <div class="inventory-tab-icon item-icon icon-130_0"></div>
