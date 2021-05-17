@@ -96,9 +96,6 @@
     
     setCheckedTheme(localStorage.getItem('currentTheme'));
 
-    if(!Modernizr.testAllProps('clip-path', 'ellipse(10px 10px at 10px 10px)'))
-        document.documentElement.classList.add('no-clip-path');
-
     tippy('*[data-tippy-content]', {
         boundary: 'window'
     });
