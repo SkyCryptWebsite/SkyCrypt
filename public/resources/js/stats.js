@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
-    const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.personal_vault, items.wardrobe_inventory);
+    const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.personal_vault, items.wardrobe_inventory, items.storage);
 
     let dimmer = document.querySelector("#dimmer");
 
@@ -1037,7 +1037,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 } else {
                     window.removeEventListener('scroll', this._onScroll);
                     scrollToTab();
-                }   
+                }
             }
         }
 
@@ -1051,7 +1051,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     const scrollMemory = new ScrollMemory();
 
-    const intersectingElements = new Map();    
+    const intersectingElements = new Map();
 
     const sectionObserver = new IntersectionObserver((entries, observer) => {
         for (const entry of entries) {
@@ -1069,7 +1069,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 for (const link of navBarLinks) {
                     if (link.hash === newHash) {
                         link.setAttribute('aria-current', true);
-                        
+
                         if (!scrollMemory.isSmoothScrolling) {
                             scrollToTab(true, link);
                         }

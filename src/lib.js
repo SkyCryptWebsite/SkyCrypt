@@ -1104,13 +1104,10 @@ module.exports = {
             item.item_index = index;
             item.itemId = v4('itemId');
 
-            if('containsItems' in item && Array.isArray(item.containsItems)) {
+            if ('containsItems' in item && Array.isArray(item.containsItems)) {
                 item.containsItems.forEach((a, idx) => {
                     a.backpackIndex = item.item_index
                     a.itemId = v4('itemId')
-                    // if (!a.item_index) {
-                    //     a.item_index = idx
-                    // }
                 })
             }
         }
