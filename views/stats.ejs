@@ -1852,9 +1852,15 @@ const getRarityUpgradeClass = item => {
                             <div id="inventory_header">
                                 <div class="inventory-header-line"></div>
                                 <div class="inventory-tabs-container">
+                                    <%
+                                        const inventoryIconUrl = `https://crafatar.com/renders/head/${extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : calculated.uuid }?size=32&overlay`
+                                    %>
                                     <button class="inventory-tab active-inventory" data-inventory-type="inventory">
-                                        <div class="inventory-tab-icon item-icon icon-54_0"></div>
-                                        <div class="inventory-tab-name">Inventory</div>
+                                        <div
+                                            class="inventory-tab-icon item-icon custom-icon"
+                                            style="background-image: url('<%= inventoryIconUrl %>')"
+                                        ></div>
+                                        <div class="inventory-tab-name"><abbr title="Inventory">Inv</abbr></div>
                                     </button>
                                     <%
 
