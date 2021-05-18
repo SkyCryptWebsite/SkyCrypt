@@ -372,9 +372,14 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
     // Check backpack contents and add them to the list of items
     for(const [index, item] of items.entries()){
-        if(helper.hasPath(item, 'tag', 'display', 'Name') && helper.hasPath(item, 'tag', 'ExtraAttributes', 'id')
-          && (item.tag.display.Name.includes('Backpack')
-            || ['NEW_YEAR_CAKE_BAG', 'BUILDERS_WAND', 'BASKET_OF_SEEDS'].includes(item.tag.ExtraAttributes.id))){
+        if(
+            helper.hasPath(item, 'tag', 'display', 'Name') &&
+            helper.hasPath(item, 'tag', 'ExtraAttributes', 'id') &&
+            (
+                item.tag.display.Name.includes('Backpack') ||
+                ['NEW_YEAR_CAKE_BAG', 'BUILDERS_WAND', 'BASKET_OF_SEEDS'].includes(item.tag.ExtraAttributes.id)
+            )
+        ) {
             let backpackData;
 
             for(const key of Object.keys(item.tag.ExtraAttributes))
@@ -396,7 +401,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
     let index = 0;
 
-    for(const item of items){
+    for (const item of items) {
         // Set custom texture for colored leather armor
         if(helper.hasPath(item, 'id') && item.id >= 298 && item.id <= 301){
             let color = [149, 94, 59];
@@ -418,18 +423,18 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                 item.Damage = 17;
 
         // Resolve skull textures to their image path
-        if(helper.hasPath(item, 'tag', 'SkullOwner', 'Properties', 'textures')
-        && Array.isArray(item.tag.SkullOwner.Properties.textures)
-        && item.tag.SkullOwner.Properties.textures.length > 0){
-            try{
+        if(
+            helper.hasPath(item, 'tag', 'SkullOwner', 'Properties', 'textures') &&
+            Array.isArray(item.tag.SkullOwner.Properties.textures) &&
+            item.tag.SkullOwner.Properties.textures.length > 0
+        ) {
+            try {
                 const json = JSON.parse(Buffer.from(item.tag.SkullOwner.Properties.textures[0].Value, 'base64').toString());
                 const url = json.textures.SKIN.url;
                 const uuid = url.split("/").pop();
 
                 item.texture_path = `/head/${uuid}?v6`;
-            }catch(e){
-
-            }
+            } catch(e) {}
         }
 
         // Uses animated skin texture, if present
@@ -441,10 +446,13 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             }
         }
 
-        if(customTextures){
+        if (
+            !helper.hasPath(item, 'tag', 'ExtraAttributes', 'skin') &&
+            customTextures
+        ) {
             const customTexture = await customResources.getTexture(item, false, packs);
 
-            if(customTexture){
+            if (customTexture) {
                 item.animated = customTexture.animated;
                 item.texture_path = '/' + customTexture.path;
                 item.texture_pack = customTexture.pack.config;
@@ -1062,6 +1070,36 @@ module.exports = {
         let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data, customTextures, packs, options.cacheOnly) : [];
         let personal_vault = 'personal_vault_contents' in profile ? await getItems(profile.personal_vault_contents.data, customTextures, packs, options.cacheOnly) : [];
 
+        let storage = []
+        if (profile.backpack_contents) {
+            const storage_size = Math.max(18, Object.keys(profile.backpack_contents).length)
+            for (let slot = 0; slot < storage_size; slot++) {
+                storage.push({})
+
+                if (
+                    profile.backpack_contents[slot] &&
+                    profile.backpack_icons[slot]
+                ) {
+                    const icon = await getItems(
+                        profile.backpack_icons[slot].data,
+                        customTextures,
+                        packs,
+                        options.cacheOnly
+                    )
+                    const items = await getItems(
+                        profile.backpack_contents[slot].data,
+                        customTextures,
+                        packs,
+                        options.cacheOnly
+                    )
+
+                    const storage_unit = icon[0]
+                    storage_unit.containsItems = items
+                    storage[slot] = storage_unit
+                }
+            }
+        }
+
         const wardrobeColumns = wardrobe_inventory.length / 4;
 
         let wardrobe = [];
@@ -1094,19 +1132,35 @@ module.exports = {
         output.quiver = quiver;
         output.potion_bag = potion_bag;
         output.personal_vault = personal_vault;
+        output.storage = storage;
 
-        const all_items = armor.concat(inventory, enderchest, talisman_bag, fishing_bag, quiver, potion_bag, personal_vault, wardrobe_inventory);
+        const all_items = armor.concat(
+            inventory,
+            enderchest,
+            talisman_bag,
+            fishing_bag,
+            quiver,
+            potion_bag,
+            personal_vault,
+            wardrobe_inventory,
+            storage,
+        )
 
         for(const [index, item] of all_items.entries()){
             item.item_index = index;
             item.itemId = v4('itemId');
 
-            if('containsItems' in item && Array.isArray(item.containsItems))
-                item.containsItems.forEach(a => { a.backpackIndex = item.item_index; a.itemId = v4('itemId'); });
+            if ('containsItems' in item && Array.isArray(item.containsItems)) {
+                item.containsItems.forEach((a, idx) => {
+                    a.backpackIndex = item.item_index
+                    a.itemId = v4('itemId')
+                })
+            }
         }
 
         // All items not in the inventory or accessory bag should be inactive so they don't contribute to the total stats
         enderchest = enderchest.map(a => Object.assign({ isInactive: true}, a) );
+        storage = storage.map(a => Object.assign({ isInactive: true}, a) );
 
         // Add candy bag contents as backpack contents to candy bag
         for(let item of all_items){
@@ -1175,7 +1229,7 @@ module.exports = {
         }
 
         // Add inactive talismans from enderchest and backpacks
-        for(const item of inventory.concat(enderchest)){
+        for(const item of inventory.concat(enderchest, storage)) {
             let items = [item];
 
             if(item.type != 'accessory' && 'containsItems' in item && Array.isArray(item.containsItems))

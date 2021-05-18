@@ -2413,6 +2413,14 @@ a.additional-player-stat:hover {
                     margin-left: 10px;
                 }
 
+                &:last-child {
+                    padding-right: 0;
+                }
+
+                @media (min-width: 1200px) {
+                    padding-right: 0;
+                }
+
                 &::after {
                     content: "";
                     position: absolute;
