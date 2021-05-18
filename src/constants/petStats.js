@@ -735,39 +735,43 @@ class Blaze extends Pet {
 
 	modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
 		let mult = (1 + round(this.level * (this.rarity > 2 ? 0.4 : 0.3), 1) / 100);
+
+        // This is required since double HPB are not saved in the API when the player is offline
 		if (helmet?.extra?.hpbs > 0) {
 			helmet.stats.defense += 2 * helmet.extra.hpbs;
 			helmet.stats.health += 4 * helmet.extra.hpbs;
 			helmet.extra.hpbs *= 2;
-		}
-		if (hName.includes("BLAZE_HELMET")) {
-			for (const stat in helmet.stats)
-				helmet.stats[stat] = round(helmet.stats[stat] * mult, 1);
 		}
 		if (chest?.extra?.hpbs > 0) {
 			chest.stats.defense += 2 * chest.extra.hpbs;
 			chest.stats.health += 4 * chest.extra.hpbs;
 			chest.extra.hpbs *= 2;
 		}
-		if (cName.includes("BLAZE")) {
-			for (const stat in chest.stats)
-				chest.stats[stat] = round(chest.stats[stat] * mult, 1);
-		}
 		if (legs?.extra?.hpbs > 0) {
 			legs.stats.defense += 2 * legs.extra.hpbs;
 			legs.stats.health += 4 * legs.extra.hpbs;
 			legs.extra.hpbs *= 2;
-		}
-		if (lName.includes("BLAZE")) {
-			for (const stat in legs.stats)
-				legs.stats[stat] = round(legs.stats[stat] * mult, 1);
 		}
 		if (boots?.extra?.hpbs > 0) {
 			boots.stats.defense += 2 * boots.extra.hpbs;
 			boots.stats.health += 4 * boots.extra.hpbs;
 			boots.extra.hpbs *= 2;
 		}
-		if (bName.includes("BLAZE")) {
+
+        // Fixing blaze + frozen blaze armors bonus stats
+		if (hName.includes("BLAZE_HELMET")) {
+			for (const stat in helmet.stats)
+				helmet.stats[stat] = round(helmet.stats[stat] * mult, 1);
+		}
+		if (cName.includes("BLAZE_CHESTPLATE")) {
+			for (const stat in chest.stats)
+				chest.stats[stat] = round(chest.stats[stat] * mult, 1);
+		}
+		if (lName.includes("BLAZE_LEGGINGS")) {
+			for (const stat in legs.stats)
+				legs.stats[stat] = round(legs.stats[stat] * mult, 1);
+		}
+		if (bName.includes("BLAZE_BOOTS")) {
 			for (const stat in boots.stats)
 				boots.stats[stat] = round(boots.stats[stat] * mult, 1);
 		}
@@ -1824,23 +1828,6 @@ class Zombie extends Pet {
 			name: "§6Living Dead",
 			desc: [`§7Increases the defense of all undead armor sets by §a${round(this.level * mult, 1)}%`]
 		};
-	}
-
-	modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
-		if (this.rarity > 3) {
-			if (hName.includes("ZOMBIE")) {
-				helmet.stats.defense += round(this.level * mult, 1);
-			}
-			if (cName.includes("ZOMBIE")) {
-				chest.stats.defense += round(this.level * mult, 1);
-			}
-			if (lName.includes("ZOMBIE")) {
-				legs.stats.defense += round(this.level * mult, 1);
-			}
-			if (bName.includes("ZOMBIE")) {
-				boots.stats.defense += round(this.level * mult, 1);
-			}
-		}
 	}
 }
 

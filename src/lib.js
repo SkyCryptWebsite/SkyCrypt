@@ -1807,19 +1807,19 @@ module.exports = {
         // Apply pet bonus to armor
         if(activePet) {
             activePet.ref.modifyArmor(
-                items.armor.find(a => a.type === 'helmet'),
-                getId(items.armor.find(a => a.type === 'helmet')),
-                items.armor.find(a => a.type === 'chestplate'),
-                getId(items.armor.find(a => a.type === 'chestplate')),
-                items.armor.find(a => a.type === 'leggings'),
-                getId(items.armor.find(a => a.type === 'leggings')),
-                items.armor.find(a => a.type === 'boots'),
-                getId(items.armor.find(a => a.type === 'boots'))
+                items.armor.find(a => a.type === 'helmet' || a.type === 'dungeon helmet'),
+                getId(items.armor.find(a => a.type === 'helmet' || a.type === 'dungeon helmet')),
+                items.armor.find(a => a.type === 'chestplate' || a.type === 'dungeon chestplate'),
+                getId(items.armor.find(a => a.type === 'chestplate' || a.type === 'dungeon chestplate')),
+                items.armor.find(a => a.type === 'leggings' || a.type === 'dungeon leggings'),
+                getId(items.armor.find(a => a.type === 'leggings' || a.type === 'dungeon leggings')),
+                items.armor.find(a => a.type === 'boots' || a.type === 'dungeon boots'),
+                getId(items.armor.find(a => a.type === 'boots' || a.type === 'dungeon boots'))
             )
-            loreGenerator.makeLore(items.armor.find(a => a.type === 'helmet'))
-            loreGenerator.makeLore(items.armor.find(a => a.type === 'chestplate'))
-            loreGenerator.makeLore(items.armor.find(a => a.type === 'leggings'))
-            loreGenerator.makeLore(items.armor.find(a => a.type === 'boots'))
+            loreGenerator.makeLore(items.armor.find(a => a.type === 'helmet' || a.type === 'dungeon helmet'))
+            loreGenerator.makeLore(items.armor.find(a => a.type === 'chestplate' || a.type === 'dungeon chestplate'))
+            loreGenerator.makeLore(items.armor.find(a => a.type === 'leggings' || a.type === 'dungeon leggings'))
+            loreGenerator.makeLore(items.armor.find(a => a.type === 'boots' || a.type === 'dungeon boots'))
         }
 
         // Apply Lapis Armor full set bonus of +60 HP
