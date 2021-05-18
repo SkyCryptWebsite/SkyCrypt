@@ -615,14 +615,34 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             if(item.type == 'hatccessory')
                 item.type = 'accessory';
 
-            if(item.type == 'accessory')
-                item.equipmentType = 'accessory';
-            else if (item.type == 'helmet' || item.type == 'chestplate' || item.type == 'leggings' || item.type == 'boots')
-                item.equipmentType = 'armor';
-            else if (item.type == 'sword' || item.type == 'bow' || item.type == 'fishing weapon' || item.type == 'fishing rod')
-                item.equipmentType = 'weapon';
-            else
-                item.equipmentType = 'none';
+            switch (item.type) {
+                case 'accessory':
+                    item.equipmentType = 'accessory'
+                    break
+                case 'helmet':
+                case 'chestplate':
+                case 'leggings':
+                case 'boots':
+                case 'dungeon helmet':
+                case 'dungeon chestplate':
+                case 'dungeon leggings':
+                case 'dungeon boots':
+                    item.equipmentType = 'armor'
+                    break
+                case 'sword':
+                case 'bow':
+                case 'fishing weapon':
+                case 'fishing rod':
+                case 'dungeon sword':
+                case 'dungeon bow':
+                case 'dungeon fishing weapon':
+                case 'dungeon fishing rod':
+                    item.equipmentType = 'weapon'
+                    break
+                default:
+                    item.equipmentType = 'none'
+                    break
+            }
 
             if(item.type != null && item.type.startsWith('dungeon'))
                 item.Damage = 0;
@@ -722,42 +742,49 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
         }
 
         // Workaround for detecting item types if another language is set by the player on Hypixel
-        if(getId(item) != 'ENCHANTED_BOOK'
-        && !constants.item_types.includes(item.type)){
-            if('sharpness' in enchantments
-            || 'crticial' in enchantments
-            || 'ender_slayer' in enchantments
-            || 'execute' in enchantments
-            || 'first_strike' in enchantments
-            || 'giant_killer' in enchantments
-            || 'lethality' in enchantments
-            || 'life_steal' in enchantments
-            || 'looting' in enchantments
-            || 'luck' in enchantments
-            || 'scavenger' in enchantments
-            || 'vampirism' in enchantments
-            || 'bane_of_arthropods' in enchantments
-            || 'smite' in enchantments)
-                item.type = 'sword';
+        if (
+            getId(item) != 'ENCHANTED_BOOK' &&
+            !constants.item_types.includes(item.type)
+        ) {
+            if (
+                'sharpness' in enchantments ||
+                'crticial' in enchantments ||
+                'ender_slayer' in enchantments ||
+                'execute' in enchantments ||
+                'first_strike' in enchantments ||
+                'giant_killer' in enchantments ||
+                'lethality' in enchantments ||
+                'life_steal' in enchantments ||
+                'luck' in enchantments ||
+                'scavenger' in enchantments ||
+                'vampirism' in enchantments ||
+                'bane_of_arthropods' in enchantments ||
+                'smite' in enchantments
+            )
+                item.type = 'sword'
 
-            if('power' in enchantments
-            || 'aiming' in enchantments
-            || 'infinite_quiver' in enchantments
-            || 'power' in enchantments
-            || 'snipe' in enchantments
-            || 'punch' in enchantments
-            || 'flame' in enchantments
-            || 'piercing' in enchantments)
-                item.type = 'bow';
+            if (
+                'power' in enchantments ||
+                'aiming' in enchantments ||
+                'infinite_quiver' in enchantments ||
+                'power' in enchantments ||
+                'snipe' in enchantments ||
+                'punch' in enchantments ||
+                'flame' in enchantments ||
+                'piercing' in enchantments
+            )
+                item.type = 'bow'
 
-            if('angler' in enchantments
-            || 'blessing' in enchantments
-            || 'caster' in enchantments
-            || 'frail' in enchantments
-            || 'luck_of_the_sea' in enchantments
-            || 'lure' in enchantments
-            || 'magnet' in enchantments)
-                item.type = 'fishing rod';
+            if (
+                'angler' in enchantments ||
+                'blessing' in enchantments ||
+                'caster' in enchantments ||
+                'frail' in enchantments ||
+                'luck_of_the_sea' in enchantments ||
+                'lure' in enchantments ||
+                'magnet' in enchantments
+            )
+                item.type = 'fishing rod'
         }
 
         if(!helper.hasPath(item, 'display_name') && helper.hasPath(item, 'id')){
@@ -1091,7 +1118,7 @@ module.exports = {
         const talisman_ids = [];
 
         // Modify talismans on armor and add
-        for(const talisman of armor.filter(a => a.type == 'accessory')){
+        for(const talisman of armor.filter(a => a.type == 'accessory' || a.type == 'dungeon accessory')){
             const id = getId(talisman);
 
             if(id === "")
@@ -1154,7 +1181,7 @@ module.exports = {
             if(item.type != 'accessory' && 'containsItems' in item && Array.isArray(item.containsItems))
                 items = item.containsItems.slice(0);
 
-            for(const talisman of items.filter(a => a.type == 'accessory')){
+            for(const talisman of items.filter(a => a.type == 'accessory' || a.type == 'dungeon accessory')){
                 const id = getId(talisman);
 
                 const insertTalisman = Object.assign({ isUnique: true, isInactive: true }, talisman);
@@ -1384,8 +1411,8 @@ module.exports = {
             return rarityOrder;
         });
 
-        let swords = output.weapons.filter(a => a.type == 'sword');
-        let bows = output.weapons.filter(a => a.type == 'bow');
+        let swords = output.weapons.filter(a => a.type == 'sword' || a.type == 'dungeon sword');
+        let bows = output.weapons.filter(a => a.type == 'bow' || a.type == 'dungeon bow');
 
         let swordsInventory = swords.filter(a => a.backpackIndex === undefined);
         let bowsInventory = bows.filter(a => a.backpackIndex === undefined);
@@ -1823,7 +1850,7 @@ module.exports = {
 
         // Apply basic armor stats
         for(const item of items.armor){
-            if(item.isInactive || item.type == 'accessory'){
+            if(item.isInactive || item.type == 'accessory' || item.type == 'dungeon accessory'){
                 item.stats = {};
 
                 if(getId(item) != 'PARTY_HAT_CRAB')
