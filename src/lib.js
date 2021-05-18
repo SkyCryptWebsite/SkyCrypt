@@ -1046,17 +1046,17 @@ module.exports = {
         let storage = []
         if (profile.backpack_contents) {
             const storage_size = Math.max(18, Object.keys(profile.backpack_contents).length)
-            for (let i = 0; i < storage_size; i++) {
+            for (let slot = 0; slot < storage_size; slot++) {
                 storage.push({})
-            }
-            for (const [slot, slot_data] of Object.entries(profile.backpack_contents)) {
-                const icon = await getItems(profile.backpack_icons[slot].data, customTextures, packs, options.cacheOnly)
-                const items = await getItems(slot_data.data, customTextures, packs, options.cacheOnly)
 
-                const storage_unit = icon[0]
-                storage_unit.containsItems = items
+                if (profile.backpack_contents[slot]) {
+                    const icon = await getItems(profile.backpack_icons[slot].data, customTextures, packs, options.cacheOnly)
+                    const items = await getItems(profile.backpack_contents[slot].data, customTextures, packs, options.cacheOnly)
 
-                storage[slot] = storage_unit
+                    const storage_unit = icon[0]
+                    storage_unit.containsItems = items
+                    storage[slot] = storage_unit
+                }
             }
         }
 
