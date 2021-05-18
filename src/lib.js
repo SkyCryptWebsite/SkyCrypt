@@ -1049,9 +1049,22 @@ module.exports = {
             for (let slot = 0; slot < storage_size; slot++) {
                 storage.push({})
 
-                if (profile.backpack_contents[slot]) {
-                    const icon = await getItems(profile.backpack_icons[slot].data, customTextures, packs, options.cacheOnly)
-                    const items = await getItems(profile.backpack_contents[slot].data, customTextures, packs, options.cacheOnly)
+                if (
+                    profile.backpack_contents[slot] &&
+                    profile.backpack_icons[slot]
+                ) {
+                    const icon = await getItems(
+                        profile.backpack_icons[slot].data,
+                        customTextures,
+                        packs,
+                        options.cacheOnly
+                    )
+                    const items = await getItems(
+                        profile.backpack_contents[slot].data,
+                        customTextures,
+                        packs,
+                        options.cacheOnly
+                    )
 
                     const storage_unit = icon[0]
                     storage_unit.containsItems = items
