@@ -1043,7 +1043,11 @@ module.exports = {
         let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data, customTextures, packs, options.cacheOnly) : [];
         let personal_vault = 'personal_vault_contents' in profile ? await getItems(profile.personal_vault_contents.data, customTextures, packs, options.cacheOnly) : [];
 
+        const storage_size = Math.max(18, Object.keys(profile.backpack_contents || {}).length)
         let storage = []
+        for (let i = 0; i < storage_size; i++) {
+            storage.push({})
+        }
         for (const [slot, slot_data] of Object.entries(profile.backpack_contents || {})) {
             const icon = await getItems(profile.backpack_icons[slot].data, customTextures, packs, options.cacheOnly)
             const items = await getItems(slot_data.data, customTextures, packs, options.cacheOnly)
@@ -1051,7 +1055,7 @@ module.exports = {
             const storage_unit = icon[0]
             storage_unit.containsItems = items
 
-            storage.push(storage_unit)
+            storage[slot] = storage_unit
         }
 
         const wardrobeColumns = wardrobe_inventory.length / 4;
