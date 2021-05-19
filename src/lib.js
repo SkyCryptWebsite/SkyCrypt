@@ -1093,6 +1093,12 @@ module.exports = {
                         options.cacheOnly
                     )
 
+                    for (const [index, item] of items.entries()) {
+                        item.isInactive = true
+                        item.inBackpack = true
+                        item.item_index = index
+                    }
+
                     const storage_unit = icon[0]
                     storage_unit.containsItems = items
                     storage[slot] = storage_unit
