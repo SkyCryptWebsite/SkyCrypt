@@ -320,6 +320,11 @@ module.exports = {
             tag: 'MOD'
         },
 
+        'GAME_MASTER': {
+            color: '2',
+            tag: 'GM'
+        },
+
         'HELPER': {
             color: '9',
             tag: 'HELPER'

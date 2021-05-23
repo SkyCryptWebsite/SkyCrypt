@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function(){
         skinViewer = new skinview3d.SkinViewer({
     		width: playerModel.offsetWidth,
     		height: playerModel.offsetHeight,
+            model: calculated.skin_data.model,
     		skin: "/texture/" + calculated.skin_data.skinurl.split("/").pop(),
     		cape: 'capeurl' in calculated.skin_data ? "/texture/" + calculated.skin_data.capeurl.split("/").pop() : "/cape/" + calculated.display_name
         });
@@ -151,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
-    const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.personal_vault, items.wardrobe_inventory);
+    const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.personal_vault, items.wardrobe_inventory, items.storage);
 
     let dimmer = document.querySelector("#dimmer");
 

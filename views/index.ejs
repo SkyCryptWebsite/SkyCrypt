@@ -43,9 +43,9 @@
                 <div class="external-app-icon" style="background-image: url(/resources/img/icons/discord.svg?v2)"></div>
                 <div class="external-app-name"><span class="grey-text">SkyCrypt's</span> Discord</div>
                 <div class="external-app-description">A simple way to get informed about current undergoings in SkyCrypt with suggestions, bug reports and support.</div>
-                <% 
+                <%
                     let lessPlayedGames = [
-                        'Smash Hereos',
+                        'Smash Heroes',
                         'Turbo Kart Racers',
                         'Quakecraft',
                         'Warlords'
@@ -131,7 +131,6 @@
             <% } %>
         </main>
         <%- include('../includes/footer'); %>
-        <script src="/resources/js/js.cookie.min.js"></script>
         <script>
             <% if(error){ %>
                 console.log("An error occured with message: \"<%= error %>\"");
