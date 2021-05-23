@@ -423,7 +423,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                 item.Damage = 17;
 
         // Set print display name (contains HTML)
-        item.display_name_print = item.display_name
+        if (item.display_name) {
+            item.display_name_print = item.display_name
+        }
 
         if (item.tag?.ExtraAttributes?.dungeon_item_level > 0) {
             const dungeonItemLevel = item.tag.ExtraAttributes.dungeon_item_level
