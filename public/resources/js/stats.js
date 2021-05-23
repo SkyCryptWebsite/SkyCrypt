@@ -381,10 +381,10 @@ document.addEventListener('DOMContentLoaded', function(){
             statsContent.setAttribute("data-backpack-item-index", element.getAttribute('data-pet-index'));
 
         itemName.className = `item-name piece-${item.rarity || 'common'}-bg nice-colors-dark`;
-        itemNameContent.innerHTML = item.display_name || 'null';
+        itemNameContent.innerHTML = item.display_name_print || item.display_name || 'null';
 
         if(element.hasAttribute('data-pet-index'))
-            itemNameContent.innerHTML = `[Lvl ${item.level.level}] ${item.display_name}`;
+            itemNameContent.innerHTML = `[Lvl ${item.level.level}] ${item.display_name_print || item.display_name}`;
 
         if(item.texture_path){
             itemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
@@ -633,7 +633,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 element.parentNode.classList.add("piece-selected");
 
                 activeWeaponElement.className = 'stat-value stat-active-weapon piece-' + item.rarity + '-fg';
-                activeWeaponElement.innerHTML = item.display_name;
+                activeWeaponElement.innerHTML = item.display_name_print || item.display_name;
 
                 stats = weaponStats;
             }
@@ -690,7 +690,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 element.parentNode.classList.add("piece-selected");
 
                 activeRodElement.className = 'stat-value stat-active-rod piece-' + item.rarity + '-fg';
-                activeRodElement.innerHTML = item.display_name;
+                activeRodElement.innerHTML = item.display_name_print || item.display_name;
 
                 stats = weaponStats;
             }

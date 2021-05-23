@@ -1,4 +1,5 @@
 @use "./stripes";
+@use "./fonts";
 
 :root {
     /* Icon Green (used for Skill Icons, Underlines etc.) */
@@ -4041,4 +4042,20 @@ body {
     .piece-icon {
         transform: translate(-50%, -50%) scale(0.35);
     }
+}
+
+.icomoon {
+    font-family: 'icomoon' !important;
+    speak: never;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+
+.icomoon-dungeon-stars {
+    font-size: 0.8em;
+    letter-spacing: 3px;
 }
