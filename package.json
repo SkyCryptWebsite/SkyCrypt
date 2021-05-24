@@ -69,6 +69,6 @@
   "devDependencies": {
     "node-watch": "^0.7.1",
     "nodemon": "^2.0.7",
-    "sass": "^1.32.13"
+    "sass": "^1.34.0"
   }
 }
