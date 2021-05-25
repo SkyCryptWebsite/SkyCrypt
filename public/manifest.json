@@ -102,8 +102,129 @@
   ],
   "screenshots" : [
     {
-      "src": "/resources/img/screenshot.jpg",
-      "sizes": "3840x2160",
+      "src": "/resources/img/screenshots/android-0.jpg",
+      "sizes": "1080x2280",
+      "platform": "android",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/android-1.jpg",
+      "sizes": "1080x2280",
+      "platform": "android",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/android-2.jpg",
+      "sizes": "1080x2280",
+      "platform": "android",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/android-3.jpg",
+      "sizes": "1080x2280",
+      "platform": "android",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/android-4.jpg",
+      "sizes": "1080x2280",
+      "platform": "android",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/android-5.jpg",
+      "sizes": "1080x2280",
+      "platform": "android",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/android-6.jpg",
+      "sizes": "1080x2280",
+      "platform": "android",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/windows-0.jpg",
+      "sizes": "1920x1080",
+      "platform": "windows",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/windows-1.jpg",
+      "sizes": "1920x1080",
+      "platform": "windows",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/windows-2.jpg",
+      "sizes": "1920x1080",
+      "platform": "windows",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/windows-3.jpg",
+      "sizes": "1920x1080",
+      "platform": "windows",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/windows-4.jpg",
+      "sizes": "1920x1080",
+      "platform": "windows",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/windows-5.jpg",
+      "sizes": "1920x1080",
+      "platform": "windows",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/windows-6.jpg",
+      "sizes": "1920x1080",
+      "platform": "windows",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/ios-0.jpg",
+      "sizes": "828x1792",
+      "platform": "ios",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/ios-1.jpg",
+      "sizes": "828x1792",
+      "platform": "ios",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/ios-2.jpg",
+      "sizes": "828x1792",
+      "platform": "ios",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/ios-3.jpg",
+      "sizes": "828x1792",
+      "platform": "ios",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/ios-4.jpg",
+      "sizes": "828x1792",
+      "platform": "ios",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/ios-5.jpg",
+      "sizes": "828x1792",
+      "platform": "ios",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/resources/img/screenshots/ios-6.jpg",
+      "sizes": "828x1792",
+      "platform": "ios",
       "type": "image/jpeg"
     }
   ]

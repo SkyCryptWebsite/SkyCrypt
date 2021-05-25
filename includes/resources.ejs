@@ -48,7 +48,7 @@
         const extra = JSON.parse(`<%- JSON.stringify(extra).replace(/\\/g, '\\\\') %>`);
 
         function formatNumber(number, floor, rounding = 10) {
-            let roundFunc = floor ? Math.floor : Math.ceil;
+            const roundFunc = floor ? Math.floor : Math.ceil;
             if (number < 1000)
                 return Math.floor(number);
             else if (number < 10000)
@@ -111,49 +111,69 @@
             loadTheme(localStorage.getItem('currentTheme'));
 
         function convertHex(code) {
-            let hex = code.substring(1, 7);
+            const hex = code.substring(1, 7);
             return `${parseInt(hex.substring(0, 2), 16)}, ${parseInt(hex.substring(2, 4), 16)}, ${parseInt(hex.substring(4, 6), 16)}`;
         }
 
         function loadTheme(currentTheme) {
-            if (!extra.themes[currentTheme])
+            if (!extra.themes[currentTheme]) {
                 return console.error(`${currentTheme} isn't a valid theme.`);
+            }
 
-            let theme = extra.themes[currentTheme];
+            const theme = extra.themes[currentTheme];
 
-            let element = document.documentElement;
-            let colors = theme.colors;
+            const element = document.documentElement;
+            
+            element.classList.toggle("light", !!theme.light);
 
-            for (color in colors) {
-                let value = colors[color];
+            document.querySelector('meta[name="theme-color"]').content = theme.light ? '#dbdbdb' : '#282828';
 
-                switch (color) {
-                    case 'icon':
-                    case 'line':
-                    case 'link':
-                        element.style.setProperty(`--${color}-rgb`, convertHex(value));
-                    default:
-                        element.style.setProperty(`--${color}-hex`, value);
+            element.style = ''
+
+            for (color in theme.colors) {
+                const value = theme.colors[color];
+                
+                element.style.setProperty(`--${color}-hex`, value);
+                
+                if(['icon','link','text','background','header','grey_background'].includes(color)){
+                    element.style.setProperty(`--${color}-rgb`, convertHex(value));
                 }
             }
 
-            const resource_link = "/resources/";
-
-            let bgs = theme.backgrounds;
-            for (bg in bgs)
-                for (img in bgs[bg])
-                    element.style.setProperty(`--${bg}-${img}`, `url(${bgs[bg][img].replace("../", resource_link)})`);
-
-            if (theme.logo) {
-                const logoURL = theme.logo.replace("../", resource_link)
-                element.style.setProperty('--logo-square', `url(${logoURL})`);
-                document.querySelectorAll('link[rel="icon"]').forEach(favicon => {
-                    if (favicon.href.match('logo_square')) {
-                        favicon.href = logoURL;
-                    }
-                });
-
+            for (img in theme.images) {
+                element.style.setProperty(`--${img}`, `url(${theme.images[img]})`);
             }
+            
+            for (key in theme.backgrounds) {
+                const background = theme.backgrounds[key]
+                let value
+                switch (background.type) {
+                    case "color":
+                        value = background.color
+                        break
+                    case "stripes":
+                        value = `repeating-linear-gradient( ${background.angle}, ${
+                            background.colors.flatMap((color, i) => {
+                                return [
+                                    `${color} ${i * background.width}px`,
+                                    `${color} ${(i + 1) * background.width}px`
+                                ]
+                            }).join(', ')
+                        })`
+                        break
+
+                }
+                element.style.setProperty(`--${key}`, value);
+            }
+            
+            
+            const logoURL = '/resources/img/logo_square.svg' + (theme.colors?.logo?.replace('#', '?color=') ?? '');
+            element.style.setProperty(`--logo`, `url(${logoURL})`);
+            document.querySelectorAll('link[rel="icon"]').forEach(favicon => {
+                if (favicon.href.match('logo_square')) {
+                    favicon.href = logoURL;
+                }
+            });
 
             console.log(`Loaded theme: ${currentTheme}`);
         }

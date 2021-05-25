@@ -93,7 +93,7 @@
     <script type="text/javascript">
         const errorText = document.getElementById('error-message');
         if (navigator.onLine) {
-            errorText.innerText = 'It looks like the server is down for maintenance try again in a few minutes.'
+            errorText.innerText = 'It looks like the server is down for maintenance! Try again in a few minutes.'
         } else {
             errorText.innerText = 'Please connect to the internet and try again.'
             window.addEventListener('online', () => window.location.reload());

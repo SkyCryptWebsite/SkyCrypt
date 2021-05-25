@@ -40,7 +40,7 @@ module.exports = (app, db) => {
     });
 
     app.use('/api/v2/*', async (req, res, next) => {
-        req.cacheOnly = true;
+        req.apiKey = false;
 
         if (req.query.key) {
             const doc = await db
@@ -48,11 +48,21 @@ module.exports = (app, db) => {
                 .findOne({ key: req.query.key });
 
             if (doc != null)
-                req.cacheOnly = false;
+                req.apiKey = true;
         }
 
+        req.cacheOnly = req.apiKey;
         next();
     });
+
+    app.all('/api/v2/packs', cors(), async (req, res) => {
+        if(req.apiKey){
+            let customResources = require('./custom-resources');
+            res.json(customResources.completePacks);
+        }else
+            res.status(404).json({ error: "This endpoint isn't available to the public." });
+    });
+
 
     app.all('/api/v2/leaderboards', cors(), async (req, res) => {
         res.json(await lib.getLeaderboards({ categorized: req.query.categorized || false }));
@@ -169,7 +179,7 @@ module.exports = (app, db) => {
             for (const singleProfile of allProfiles) {
                 const userProfile = singleProfile.members[profile.uuid];
 
-                const items = await lib.getItems(userProfile, req.query.pack, { debugId });
+                const items = await lib.getItems(userProfile, false, "", { debugId });
                 const data = await lib.getStats(db, singleProfile, allProfiles, items, { debugId });
 
                 output.profiles[singleProfile.profile_id] = {
@@ -205,7 +215,7 @@ module.exports = (app, db) => {
                 if (cute_name.toLowerCase() != req.params.profile.toLowerCase())
                     continue;
 
-                const items = await lib.getItems(singleProfile.members[profile.uuid], req.query.pack, { debugId });
+                const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", { debugId });
                 const data = await lib.getStats(db, singleProfile, allProfiles, items, { debugId });
 
                 output = {
@@ -233,7 +243,7 @@ module.exports = (app, db) => {
 
                 const cute_name = singleProfile.cute_name;
 
-                const items = await lib.getItems(singleProfile.members[profile.uuid], req.query.pack, { debugId });
+                const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", { debugId });
                 const data = await lib.getStats(db, singleProfile, allProfiles, items, { debugId });
 
                 output.profiles[singleProfile.profile_id] = {
@@ -266,7 +276,7 @@ module.exports = (app, db) => {
                 if (cute_name.toLowerCase() != req.params.profile.toLowerCase())
                     continue;
 
-                const items = await lib.getItems(singleProfile.members[profile.uuid], req.query.pack, { debugId });
+                const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", { debugId });
                 const talismans = items.talismans;
 
                 output = {
@@ -292,7 +302,7 @@ module.exports = (app, db) => {
             for (const singleProfile of allProfiles) {
                 const userProfile = singleProfile.members[profile.uuid];
 
-                const items = await lib.getItems(userProfile, req.query.pack, { debugId });
+                const items = await lib.getItems(userProfile, false, "", { debugId });
                 const talismans = items.talismans;
 
                 output.profiles[singleProfile.profile_id] = {
@@ -325,7 +335,7 @@ module.exports = (app, db) => {
                     continue;
 
 
-                const items = await lib.getItems(singleProfile.members[profile.uuid], req.query.pack, { debugId });
+                const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", { debugId });
                 const data = await lib.getStats(db, singleProfile, allProfiles, items, { debugId });
 
                 output = {
@@ -354,7 +364,7 @@ module.exports = (app, db) => {
             for (const singleProfile of allProfiles) {
                 const userProfile = singleProfile.members[profile.uuid];
 
-                const items = await lib.getItems(userProfile, req.query.pack, { debugId });
+                const items = await lib.getItems(userProfile, false, "", { debugId });
                 const data = await lib.getStats(db, singleProfile, allProfiles, items, { debugId });
 
                 output.profiles[singleProfile.profile_id] = {

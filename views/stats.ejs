@@ -3,7 +3,7 @@ const rarityOrder = ['special', 'supreme', 'mythic', 'legendary', 'epic', 'rare'
 const slayerOrder = ['zombie', 'spider', 'wolf'];
 const badgeOrder = ['gold', 'silver', 'bronze'];
 
-const allItems = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory);
+const allItems = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory, items.storage);
 
 const UNIQUE_ACCESSORIES = calculated.talismanCount;
 
@@ -877,7 +877,7 @@ const getReforges = (accessories) => {
 
     accessories.forEach(acc => {
         const rarity = acc.rarity
-        const reforge = acc.reforge || 'no_reforge'
+        const reforge = acc.reforge || 'missing_reforge!'
 
         if (!rarityReforgeCounts[rarity]) {
             rarityReforgeCounts[rarity] = {}
@@ -901,6 +901,59 @@ const getReforges = (accessories) => {
         if (rarity !== Object.keys(rarityReforgeCounts).pop()) {
             %><span class="bonus-divider" role="separator"> // </span><%
         }
+    }
+}
+
+const formatEnrichment = (string) => {
+    let enrichment = string.split('_').join(' ').trim()
+    enrichment = enrichment.charAt(0).toUpperCase() + enrichment.slice(1)
+    return enrichment
+}
+
+const enrichmentToStatName = (enrichment) => {
+    switch (enrichment.toLowerCase()) {
+        case 'walk_speed':
+            return 'speed'
+            break;
+
+        default:
+            return enrichment.toLowerCase()
+            break;
+    }
+}
+
+const getEnrichments = (accessories) => {
+    const enrichmentCounts = {}
+    const filteredAccessories = accessories
+        .filter(acc => ['legendary', 'mythic'].includes(acc.rarity.toLowerCase()))
+
+    if (filteredAccessories.length > 0) {
+        filteredAccessories.forEach(acc => {
+            const enrichment = acc.enrichment || 'missing_enrichment!'
+
+            if (!enrichmentCounts[enrichment]) {
+                enrichmentCounts[enrichment] = 0
+            }
+            enrichmentCounts[enrichment] += 1
+        })
+
+        %>
+        <span class="stat-name">Enrichments: </span>
+        <%
+        for (const [enrichment, amount] of Object.entries(enrichmentCounts)) {
+            const stat = enrichmentToStatName(enrichment)
+            %>
+            <span class="stat-value color-<%= stat.replace(/\_/g, "-") %>">
+                <%= amount %>× <%= formatEnrichment(enrichment.toLowerCase()) %>
+            </span>
+            <%
+            if (enrichment !== Object.keys(enrichmentCounts).pop()) {
+                %><span class="bonus-divider" role="separator"> // </span><%
+            }
+        }
+        %>
+        <br>
+        <%
     }
 }
 
@@ -956,7 +1009,7 @@ const skill_component = (skill, icon, level, extra = {}) => { %>
         </div>
         <div class="skill-name"><%= skill %> <span class="skill-level"><%= level.level >= 0 ? level.level : '?' %></span></div>
         <div class="skill-bar" data-skill="<%= skill %>">
-            <div class="skill-progress-bar" style="width: <%= level.level == level.levelCap ? 100 : level.progress * 100 %>%"></div>
+            <div class="skill-progress-bar" style="--progress: <%= level.level == level.levelCap ? 1 : level.progress %>"></div>
             <% if('runecrafting' in calculated.levels){ %>
                 <div class="skill-progress-text" data-hover-text="<%= level.xpCurrent.toLocaleString() %><% if(level.xpForNext != Infinity){ %> / <%= level.xpForNext.toLocaleString() %><% } %> XP">
                     <%= helper.formatNumber(level.xpCurrent, true) %><% if(level.xpForNext != Infinity){ %> / <%= helper.formatNumber(level.xpForNext) %><% } %> XP
@@ -1235,7 +1288,7 @@ const getRarityUpgradeClass = item => {
                 </button>
                 <% if(calculated.guild){ %><button class="additional-player-stat interactive-tooltip" data-tippy-content="
                 <% if(calculated.guild.rank){ %><span class='stat-name'>Rank: </span><span class='stat-value'><%= calculated.guild.rank %></span><br><br><% } %>
-                <span class='stat-name'>Guild Master: </span><a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %></a><br>
+                <span class='stat-name'>Guild Master: </span><% if(calculated.guild.gm) {%> <a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %><%} else { %>None<% } %></a><br>
                 <% if(calculated.guild.tag){ %><span class='stat-name'>Tag: </span><span class='stat-value'><%- helper.renderLore('§f'+calculated.guild.tag) %></span><br><% } %>
                 <% if(calculated.guild.members){ %><span class='stat-name'>Members: </span><span class='stat-value'><%= calculated.guild.members %></span><br><% } %>
                 <% if(calculated.guild.level){ %><span class='stat-name'>Level: </span><span class='stat-value'><%= calculated.guild.level %></span><br><% } %>
@@ -1460,7 +1513,7 @@ const getRarityUpgradeClass = item => {
             const notAvailable = [];
 
             if(items.no_inventory)
-                notAvailable.push('Weapons', 'Accessories', 'Inventory');
+                notAvailable.push('Weapons', 'Accessories', 'Inventory', 'Storage');
 
             if(items.no_personal_vault)
                 notAvailable.push('Personal Vault');
@@ -1548,7 +1601,7 @@ const getRarityUpgradeClass = item => {
                     <% }else{ %>
                         <% if(items.highest_rarity_sword){ %>
                         <p class="stat-raw-values">
-                            <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%= items.highest_rarity_sword.display_name %></span>
+                            <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%- items.highest_rarity_sword.display_name_print || items.highest_rarity_sword.display_name %></span>
                         </p>
                         <% }else if(items.weapons.length > 0){ %>
                         <p class="stat-raw-values">
@@ -1618,7 +1671,10 @@ const getRarityUpgradeClass = item => {
                                         <% itemIcon(item, ['piece-icon']); %>
                                     </div>
                                 <% }) %>
-                                <p><%- getReforges(items.talismans.filter(a => a.isUnique && !a.isInactive)) %></p>
+                                <p>
+                                    <%- getEnrichments(items.talismans.filter(a => a.isUnique && !a.isInactive)) %>
+                                    <%- getReforges(items.talismans.filter(a => a.isUnique && !a.isInactive)) %>
+                                </p>
                                 <p><%- getBonus(getStats(items.talismans.filter(a => a.isUnique && !a.isInactive))) %></p>
                             </div>
                         <% } %>
@@ -1637,18 +1693,27 @@ const getRarityUpgradeClass = item => {
                                 <% }) %>
                             </div>
                         <% } %>
-                        <% if(calculated.missingTalismans.length > 0){ %>
+                        <% if(calculated.missingTalismans.missing.length > 0 || calculated.missingTalismans.upgrades.length > 0){ %>
                             <% if(items.talismans.length == 1){ %>
                                 <br>
                             <% } %>
-                            <button class="stat-sub-header extender" aria-controls="missing-accessories" aria-expanded="false">Missing Talismans</button>
+                            <button class="stat-sub-header extender" aria-controls="missing-accessories" aria-expanded="false">Missing Accessories</button>
                             <div class="pieces extendable" id="missing-accessories">
-                            <% for(const [index, talisman] of calculated.missingTalismans.entries()){ %>
-                                <div tabindex="0" data-missing-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
-                                    <div class="piece-hover-area"></div>
-                                    <div style='background-image: url("<%= talisman.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
-                                </div>
-                            <% } %>
+                                <br>
+                                <p class="stat-sub-header">Missing Accessories<span data-tippy-content='Missing accessories that are <b>not</b> upgrades of another talisman.'></span></p>
+                                <% for(const [index, talisman] of calculated.missingTalismans.missing.entries()){ %>
+                                    <div tabindex="0" data-missing-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
+                                        <div class="piece-hover-area"></div>
+                                        <div style='background-image: url("<%= talisman.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                                    </div>
+                                <% } %>
+                                <p class="stat-sub-header">Missing Accessory Upgrades<span data-tippy-content='Missing accessories that are upgrades of a lower tier talisman.'></span></p>
+                                <% for(const [index, talisman] of calculated.missingTalismans.upgrades.entries()){ %>
+                                    <div tabindex="0" data-upgrade-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
+                                        <div class="piece-hover-area"></div>
+                                        <div style='background-image: url("<%= talisman.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                                    </div>
+                                <% } %>
                             </div>
                         <% } %>
                     <% } %>
@@ -1727,7 +1792,7 @@ const getRarityUpgradeClass = item => {
                                 <div style='background-image: url("<%= activePet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                             </div>
                             <div class="active-pet-info">
-                                <div class="pet-name piece-<%= activePet.rarity %>-fg"><%= activePet.rarity %> <%= activePet.display_name %></div>
+                                <div class="pet-name piece-<%= activePet.rarity %>-fg"><%= activePet.rarity %> <%- activePet.display_name_print || activePet.display_name %></div>
                                 <div class="pet-level">Level <%= activePet.level.level %></div>
                             </div>
                         </div>
@@ -1787,51 +1852,63 @@ const getRarityUpgradeClass = item => {
                             <div id="inventory_header">
                                 <div class="inventory-header-line"></div>
                                 <div class="inventory-tabs-container">
-                                    <button class="inventory-tab active-inventory" data-inventory-type="inventory">
-                                        <div class="inventory-tab-icon item-icon icon-54_0"></div>
-                                        <div class="inventory-tab-name">Inventory</div>
-                                    </button>
                                     <%
+                                        const inventoryIconUrl = `https://crafatar.com/renders/head/${extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : calculated.uuid }?size=32&overlay`
+                                    %>
+                                    <button class="inventory-tab active-inventory" data-inventory-type="inventory">
+                                        <div
+                                            class="inventory-tab-icon item-icon custom-icon"
+                                            style="background-image: url('<%= inventoryIconUrl %>')"
+                                        ></div>
+                                        <div class="inventory-tab-name"><abbr title="Inventory">Inv</abbr></div>
+                                    </button>
 
-                                    if(items.enderchest.length > 0){ %>
+                                    <% if(items.storage.length > 0){ %>
+                                        <button class="inventory-tab" data-inventory-type="storage">
+                                            <div class="inventory-tab-icon item-icon icon-54_0"></div>
+                                            <div class="inventory-tab-name">Storage</div>
+                                        </button>
+                                    <% } %>
+
+                                    <% if(items.enderchest.length > 0){ %>
                                         <button class="inventory-tab" data-inventory-type="enderchest">
                                             <div class="inventory-tab-icon item-icon icon-130_0"></div>
-                                            <div class="inventory-tab-name">Ender</div>
+                                            <div class="inventory-tab-name"><abbr title="Enderchest">Ender</abbr></div>
                                         </button>
-                                    <% }
+                                    <% } %>
 
-                                    if(items.talisman_bag.length > 0){ %>
+                                    <% if(items.personal_vault.length > 0){ %>
+                                        <button class="inventory-tab" data-inventory-type="personal_vault">
+                                            <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/f7aadff9ddc546fdcec6ed5919cc39dfa8d0c07ff4bc613a19f2e6d7f2593)"></div>
+                                            <div class="inventory-tab-name"><abbr title="Personal Vault">Vault</abbr></div>
+                                        </button>
+                                    <% } %>
+
+                                    <% if(items.talisman_bag.length > 0){ %>
                                         <button class="inventory-tab" data-inventory-type="talisman_bag">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/961a918c0c49ba8d053e522cb91abc74689367b4d8aa06bfc1ba9154730985ff)"></div>
-                                            <div class="inventory-tab-name"><abbr title="Accessories">Accs</abbr></div>
+                                            <div class="inventory-tab-name"><abbr title="Accessory Bag">Accs</abbr></div>
                                         </button>
-                                    <% }
+                                    <% } %>
 
-                                    if(items.potion_bag.length > 0){ %>
+                                    <% if(items.potion_bag.length > 0){ %>
                                         <button class="inventory-tab" data-inventory-type="potion_bag">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/9f8b82427b260d0a61e6483fc3b2c35a585851e08a9a9df372548b4168cc817c)"></div>
-                                            <div class="inventory-tab-name"><abbr title="Potions">Pots</abbr></div>
+                                            <div class="inventory-tab-name"><abbr title="Potion Bag">Pots</abbr></div>
                                         </button>
-                                    <% }
+                                    <% } %>
 
-                                    if(items.fishing_bag.length > 0){ %>
+                                    <% if(items.fishing_bag.length > 0){ %>
                                         <button class="inventory-tab" data-inventory-type="fishing_bag">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/eb8e297df6b8dffcf135dba84ec792d420ad8ecb458d144288572a84603b1631)"></div>
-                                            <div class="inventory-tab-name">Fish</div>
+                                            <div class="inventory-tab-name"><abbr title="Fishing Bag">Fish</abbr></div>
                                         </button>
-                                    <% }
+                                    <% } %>
 
-                                    if(items.quiver.length > 0){ %>
+                                    <% if(items.quiver.length > 0){ %>
                                         <button class="inventory-tab" data-inventory-type="quiver">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/4cb3acdc11ca747bf710e59f4c8e9b3d949fdd364c6869831ca878f0763d1787)"></div>
                                             <div class="inventory-tab-name">Quiver</div>
-                                        </button>
-                                    <% }
-
-                                    if(items.personal_vault.length > 0){ %>
-                                        <button class="inventory-tab" data-inventory-type="personal_vault">
-                                            <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/f7aadff9ddc546fdcec6ed5919cc39dfa8d0c07ff4bc613a19f2e6d7f2593)"></div>
-                                            <div class="inventory-tab-name">Vault</div>
                                         </button>
                                     <% } %>
                                 </div>
@@ -1874,7 +1951,7 @@ const getRarityUpgradeClass = item => {
                         <p class="stat-sub-header">Mining Pickaxes</p>
                         <% if(items.highest_rarity_pickaxe){ %>
                             <p class="stat-raw-values">
-                                <span class="stat-name">Active Pickaxe: </span><span class="stat-active-pickaxe stat-value piece-<%= items.highest_rarity_pickaxe.rarity %>-fg"><%= items.highest_rarity_pickaxe.display_name %></span>
+                                <span class="stat-name">Active Pickaxe: </span><span class="stat-active-pickaxe stat-value piece-<%= items.highest_rarity_pickaxe.rarity %>-fg"><%- items.highest_rarity_pickaxe.display_name_print || items.highest_rarity_pickaxe.display_name %></span>
                             </p>
                         <% }else{ %>
                             <p class="stat-raw-values">
@@ -1929,7 +2006,7 @@ const getRarityUpgradeClass = item => {
                         <p class="stat-sub-header">Farming Hoes</p>
                         <% if(items.highest_rarity_hoe){ %>
                             <p class="stat-raw-values">
-                                <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_hoe.rarity %>-fg"><%= items.highest_rarity_hoe.display_name %></span>
+                                <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_hoe.rarity %>-fg"><%- items.highest_rarity_hoe.display_name_print || items.highest_rarity_hoe.display_name %></span>
                             </p>
                         <% }else{ %>
                             <p class="stat-raw-values">
@@ -2026,7 +2103,7 @@ const getRarityUpgradeClass = item => {
                         <p class="stat-sub-header">Fishing Rods</p>
                         <% if(items.highest_rarity_rod){ %>
                         <p class="stat-raw-values">
-                            <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_rod.rarity %>-fg"><%= items.highest_rarity_rod.display_name %></span>
+                            <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_rod.rarity %>-fg"><%- items.highest_rarity_rod.display_name_print || items.highest_rarity_rod.display_name %></span>
                         </p>
                         <% }else if(items.rods.length > 0){ %>
                         <p class="stat-raw-values">
@@ -2211,7 +2288,7 @@ const getRarityUpgradeClass = item => {
                                 <% if(floor.best_runs) { %>
                                     <button class="stat-sub-header extender" aria-controls="runs-<%= id %>" aria-expanded="false">Best Run</button>
                                     <div class="pieces extendable" id="runs-<%= id %>">
-                                        <span class="stat-name">Grade</span>
+                                        <span class="stat-name">Grade:</span>
                                         <span class="stat-value"><%= helper.calcDungeonGrade(floor.best_runs[floor.best_runs.length - 1]) %></span>
                                         <br>
                                     <% for (let [stat, value] of Object.entries(floor.best_runs[floor.best_runs.length - 1])) {
@@ -2274,7 +2351,7 @@ const getRarityUpgradeClass = item => {
                                 <% if(floor.best_runs) { %>
                                     <button class="stat-sub-header extender" aria-controls="runs-<%= id %>" aria-expanded="false">Best Run</button>
                                     <div class="pieces extendable" id="runs-<%= id %>">
-                                        <span class="stat-name">Grade</span>
+                                        <span class="stat-name">Grade:</span>
                                         <span class="stat-value"><%= helper.calcDungeonGrade(floor.best_runs[floor.best_runs.length - 1]) %></span>
                                         <br>
                                     <% for (let [stat, value] of Object.entries(floor.best_runs[floor.best_runs.length - 1])) {
@@ -2456,7 +2533,7 @@ const getRarityUpgradeClass = item => {
                                 <div class="slayer-unclaimed"><%= slayer.level.unclaimed ? 'unclaimed slayer rewards!' : '' %></div>
                             <% } %>
                             <div class="slayer-bar <%= slayer.level.currentLevel == slayer.level.maxLevel ? 'maxed-slayer' : ''%>">
-                                <div class="skill-progress-bar slayer-progress-bar" style="width: <%= slayer.level.currentLevel == slayer.level.maxLevel ? 100 : slayer.level.progress * 100 %>%"></div>
+                                <div class="skill-progress-bar slayer-progress-bar" style="--progress: <%= slayer.level.currentLevel == slayer.level.maxLevel ? 1 : slayer.level.progress %>"></div>
                                 <div class="skill-progress-text slayer-progress-text">
                                     <%= slayer.level.xp.toLocaleString() %><% if(slayer.level.xpForNext != 0){ %> / <%= slayer.level.xpForNext.toLocaleString() %><% } %> XP
                                 </div>
