@@ -3,7 +3,7 @@ const rarityOrder = ['special', 'supreme', 'mythic', 'legendary', 'epic', 'rare'
 const slayerOrder = ['zombie', 'spider', 'wolf'];
 const badgeOrder = ['gold', 'silver', 'bronze'];
 
-const allItems = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory);
+const allItems = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory, items.storage);
 
 const UNIQUE_ACCESSORIES = calculated.talismanCount;
 
@@ -1204,7 +1204,7 @@ const getRarityUpgradeClass = item => {
 <body class="page-stats">
     <%- include('../includes/header') %>
     <div id="dimmer">
-        <video id="enable_api" loop>
+        <video preload="none" id="enable_api" loop>
             <source type="video/webm" src="/resources/video/enable_api.webm"></source>
             <source type="video/mp4" src="/resources/video/enable_api.mp4"></source>
         </video>
@@ -1513,7 +1513,7 @@ const getRarityUpgradeClass = item => {
             const notAvailable = [];
 
             if(items.no_inventory)
-                notAvailable.push('Weapons', 'Accessories', 'Inventory');
+                notAvailable.push('Weapons', 'Accessories', 'Inventory', 'Storage');
 
             if(items.no_personal_vault)
                 notAvailable.push('Personal Vault');
@@ -1601,7 +1601,7 @@ const getRarityUpgradeClass = item => {
                     <% }else{ %>
                         <% if(items.highest_rarity_sword){ %>
                         <p class="stat-raw-values">
-                            <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%= items.highest_rarity_sword.display_name %></span>
+                            <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%- items.highest_rarity_sword.display_name_print || items.highest_rarity_sword.display_name %></span>
                         </p>
                         <% }else if(items.weapons.length > 0){ %>
                         <p class="stat-raw-values">
@@ -1792,7 +1792,7 @@ const getRarityUpgradeClass = item => {
                                 <div style='background-image: url("<%= activePet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                             </div>
                             <div class="active-pet-info">
-                                <div class="pet-name piece-<%= activePet.rarity %>-fg"><%= activePet.rarity %> <%= activePet.display_name %></div>
+                                <div class="pet-name piece-<%= activePet.rarity %>-fg"><%= activePet.rarity %> <%- activePet.display_name_print || activePet.display_name %></div>
                                 <div class="pet-level">Level <%= activePet.level.level %></div>
                             </div>
                         </div>
@@ -1852,51 +1852,63 @@ const getRarityUpgradeClass = item => {
                             <div id="inventory_header">
                                 <div class="inventory-header-line"></div>
                                 <div class="inventory-tabs-container">
-                                    <button class="inventory-tab active-inventory" data-inventory-type="inventory">
-                                        <div class="inventory-tab-icon item-icon icon-54_0"></div>
-                                        <div class="inventory-tab-name">Inventory</div>
-                                    </button>
                                     <%
+                                        const inventoryIconUrl = `https://crafatar.com/renders/head/${extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : calculated.uuid }?size=32&overlay`
+                                    %>
+                                    <button class="inventory-tab active-inventory" data-inventory-type="inventory">
+                                        <div
+                                            class="inventory-tab-icon item-icon custom-icon"
+                                            style="background-image: url('<%= inventoryIconUrl %>')"
+                                        ></div>
+                                        <div class="inventory-tab-name"><abbr title="Inventory">Inv</abbr></div>
+                                    </button>
 
-                                    if(items.enderchest.length > 0){ %>
+                                    <% if(items.storage.length > 0){ %>
+                                        <button class="inventory-tab" data-inventory-type="storage">
+                                            <div class="inventory-tab-icon item-icon icon-54_0"></div>
+                                            <div class="inventory-tab-name">Storage</div>
+                                        </button>
+                                    <% } %>
+
+                                    <% if(items.enderchest.length > 0){ %>
                                         <button class="inventory-tab" data-inventory-type="enderchest">
                                             <div class="inventory-tab-icon item-icon icon-130_0"></div>
-                                            <div class="inventory-tab-name">Ender</div>
+                                            <div class="inventory-tab-name"><abbr title="Enderchest">Ender</abbr></div>
                                         </button>
-                                    <% }
+                                    <% } %>
 
-                                    if(items.talisman_bag.length > 0){ %>
+                                    <% if(items.personal_vault.length > 0){ %>
+                                        <button class="inventory-tab" data-inventory-type="personal_vault">
+                                            <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/f7aadff9ddc546fdcec6ed5919cc39dfa8d0c07ff4bc613a19f2e6d7f2593)"></div>
+                                            <div class="inventory-tab-name"><abbr title="Personal Vault">Vault</abbr></div>
+                                        </button>
+                                    <% } %>
+
+                                    <% if(items.talisman_bag.length > 0){ %>
                                         <button class="inventory-tab" data-inventory-type="talisman_bag">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/961a918c0c49ba8d053e522cb91abc74689367b4d8aa06bfc1ba9154730985ff)"></div>
-                                            <div class="inventory-tab-name"><abbr title="Accessories">Accs</abbr></div>
+                                            <div class="inventory-tab-name"><abbr title="Accessory Bag">Accs</abbr></div>
                                         </button>
-                                    <% }
+                                    <% } %>
 
-                                    if(items.potion_bag.length > 0){ %>
+                                    <% if(items.potion_bag.length > 0){ %>
                                         <button class="inventory-tab" data-inventory-type="potion_bag">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/9f8b82427b260d0a61e6483fc3b2c35a585851e08a9a9df372548b4168cc817c)"></div>
-                                            <div class="inventory-tab-name"><abbr title="Potions">Pots</abbr></div>
+                                            <div class="inventory-tab-name"><abbr title="Potion Bag">Pots</abbr></div>
                                         </button>
-                                    <% }
+                                    <% } %>
 
-                                    if(items.fishing_bag.length > 0){ %>
+                                    <% if(items.fishing_bag.length > 0){ %>
                                         <button class="inventory-tab" data-inventory-type="fishing_bag">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/eb8e297df6b8dffcf135dba84ec792d420ad8ecb458d144288572a84603b1631)"></div>
-                                            <div class="inventory-tab-name">Fish</div>
+                                            <div class="inventory-tab-name"><abbr title="Fishing Bag">Fish</abbr></div>
                                         </button>
-                                    <% }
+                                    <% } %>
 
-                                    if(items.quiver.length > 0){ %>
+                                    <% if(items.quiver.length > 0){ %>
                                         <button class="inventory-tab" data-inventory-type="quiver">
                                             <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/4cb3acdc11ca747bf710e59f4c8e9b3d949fdd364c6869831ca878f0763d1787)"></div>
                                             <div class="inventory-tab-name">Quiver</div>
-                                        </button>
-                                    <% }
-
-                                    if(items.personal_vault.length > 0){ %>
-                                        <button class="inventory-tab" data-inventory-type="personal_vault">
-                                            <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/f7aadff9ddc546fdcec6ed5919cc39dfa8d0c07ff4bc613a19f2e6d7f2593)"></div>
-                                            <div class="inventory-tab-name">Vault</div>
                                         </button>
                                     <% } %>
                                 </div>
@@ -1939,7 +1951,7 @@ const getRarityUpgradeClass = item => {
                         <p class="stat-sub-header">Mining Pickaxes</p>
                         <% if(items.highest_rarity_pickaxe){ %>
                             <p class="stat-raw-values">
-                                <span class="stat-name">Active Pickaxe: </span><span class="stat-active-pickaxe stat-value piece-<%= items.highest_rarity_pickaxe.rarity %>-fg"><%= items.highest_rarity_pickaxe.display_name %></span>
+                                <span class="stat-name">Active Pickaxe: </span><span class="stat-active-pickaxe stat-value piece-<%= items.highest_rarity_pickaxe.rarity %>-fg"><%- items.highest_rarity_pickaxe.display_name_print || items.highest_rarity_pickaxe.display_name %></span>
                             </p>
                         <% }else{ %>
                             <p class="stat-raw-values">
@@ -1994,7 +2006,7 @@ const getRarityUpgradeClass = item => {
                         <p class="stat-sub-header">Farming Hoes</p>
                         <% if(items.highest_rarity_hoe){ %>
                             <p class="stat-raw-values">
-                                <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_hoe.rarity %>-fg"><%= items.highest_rarity_hoe.display_name %></span>
+                                <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_hoe.rarity %>-fg"><%- items.highest_rarity_hoe.display_name_print || items.highest_rarity_hoe.display_name %></span>
                             </p>
                         <% }else{ %>
                             <p class="stat-raw-values">
@@ -2091,7 +2103,7 @@ const getRarityUpgradeClass = item => {
                         <p class="stat-sub-header">Fishing Rods</p>
                         <% if(items.highest_rarity_rod){ %>
                         <p class="stat-raw-values">
-                            <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_rod.rarity %>-fg"><%= items.highest_rarity_rod.display_name %></span>
+                            <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_rod.rarity %>-fg"><%- items.highest_rarity_rod.display_name_print || items.highest_rarity_rod.display_name %></span>
                         </p>
                         <% }else if(items.rods.length > 0){ %>
                         <p class="stat-raw-values">

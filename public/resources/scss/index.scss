@@ -1,4 +1,5 @@
 @use "./stripes";
+@use "./fonts";
 
 :root {
     /* Icon Green (used for Skill Icons, Underlines etc.) */
@@ -1316,10 +1317,6 @@ input[type="search"]::-webkit-search-cancel-button {
     padding: 0;
     margin: 0;
 
-    html.no-clip-path & {
-        transition: none !important;
-    }
-
     :focus-within > &,
     :hover > & {
         clip-path: ellipse(200% 200% at 0% 0%);
@@ -1700,7 +1697,7 @@ a.additional-player-stat:hover {
 }
 
 .bonus-divider {
-    color: rgb(255 255 255 / 60%);
+    color: rgba(var(--text-rgb),.6);
     font-weight: bold;
 }
 
@@ -2415,6 +2412,14 @@ a.additional-player-stat:hover {
 
                 &:first-child {
                     margin-left: 10px;
+                }
+
+                &:last-child {
+                    padding-right: 0;
+                }
+
+                @media (min-width: 1200px) {
+                    padding-right: 0;
                 }
 
                 &::after {
@@ -4037,4 +4042,20 @@ body {
     .piece-icon {
         transform: translate(-50%, -50%) scale(0.35);
     }
+}
+
+.icomoon {
+    font-family: 'icomoon' !important;
+    speak: never;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+
+.icomoon-dungeon-stars {
+    font-size: 0.8em;
+    letter-spacing: 3px;
 }
