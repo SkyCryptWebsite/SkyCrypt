@@ -26,7 +26,9 @@ module.exports = {
         "uncommon": "§a",
         "rare": "§9",
         "epic": "§5",
-        "legendary": "§6"
+        "legendary": "§6",
+        "mythic": "§d",
+        "supreme": "§4"
     },
 
     rarity_colors: {
@@ -36,6 +38,7 @@ module.exports = {
         "5": "epic",
         "6": "legendary",
         "d": "mythic",
+        "4": "supreme",
         "c": "special"
     },
 
@@ -144,6 +147,8 @@ module.exports = {
         'Lethality VI',
         'Compact 10',
         'Compact X',
+        'Cultivating 10',
+        'Cultivating X',
         'First Strike 5',
         'First Strike V',
         'Execute 6',
@@ -154,6 +159,8 @@ module.exports = {
         'Venomous VI',
         'Cleave 6',
         'Cleave VI',
+        'Harvesting 6',
+        'Harvesting VI',
     ],
 
     // Number of kills required for each level of expertise
@@ -313,6 +320,11 @@ module.exports = {
             tag: 'MOD'
         },
 
+        'GAME_MASTER': {
+            color: '2',
+            tag: 'GM'
+        },
+
         'HELPER': {
             color: '9',
             tag: 'HELPER'
@@ -331,13 +343,15 @@ module.exports = {
         'SUPERSTAR': {
             color: '6',
             tag: 'MVP',
-            plus: '++'
+            plus: '++',
+            plusColor: 'c'
         },
 
         'MVP_PLUS': {
             color: 'b',
             tag: 'MVP',
-            plus: '+'
+            plus: '+',
+            plusColor: 'c'
         },
 
         'MVP': {
@@ -349,6 +363,7 @@ module.exports = {
             color: 'a',
             tag: 'VIP',
             plus: '+',
+            plusColor: '6'
         },
 
         'VIP': {
@@ -359,7 +374,18 @@ module.exports = {
         'PIG+++': {
             color: 'd',
             tag: 'PIG',
-            plus: '+++'
+            plus: '+++',
+            plusColor: 'b'
+        },
+
+        'MAYOR': {
+            color: 'd',
+            tag: 'MAYOR',
+        },
+
+        'MINISTER': {
+            color: 'c',
+            tag: 'MINISTER',
         },
 
         'NONE': null
@@ -443,6 +469,12 @@ module.exports = {
         ]
     },
 
-    max_favorites: 5
+    max_favorites: 5,
 
+    increase_most_stats_exclude: [
+        'mining_speed',
+        'mining_fortune',
+        'farming_fortune',
+        'foraging_fortune'
+    ],
 };

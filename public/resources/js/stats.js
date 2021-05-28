@@ -1,3 +1,34 @@
+class LocalTimeElement extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+        this.timeElement = document.createElement('time');
+        this.shadowRoot.appendChild(this.timeElement);
+    }
+
+    static get observedAttributes() {
+        return ['timestamp'];
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (name === 'timestamp') {
+            if (newValue != undefined) {
+                if (!isNaN(newValue)) {
+                    newValue = parseInt(newValue);
+                }
+                const date = new Date(newValue);
+                this.timeElement.setAttribute('datetime', date.toISOString())
+                this.timeElement.innerHTML = date.toLocaleString(undefined, { dateStyle: "long", timeStyle: "short" });
+            } else {
+                console.error('local-time must have a timestamp')
+            }
+        }
+    }
+}
+
+window.customElements.define('local-time', LocalTimeElement);
+
+
 document.addEventListener('DOMContentLoaded', function(){
 
     const favoriteElement = document.querySelector('.favorite');
@@ -61,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function(){
         skinViewer = new skinview3d.SkinViewer({
     		width: playerModel.offsetWidth,
     		height: playerModel.offsetHeight,
+            model: calculated.skin_data.model,
     		skin: "/texture/" + calculated.skin_data.skinurl.split("/").pop(),
     		cape: 'capeurl' in calculated.skin_data ? "/texture/" + calculated.skin_data.capeurl.split("/").pop() : "/cape/" + calculated.display_name
         });
@@ -120,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
-    const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.personal_vault, items.wardrobe_inventory);
+    const all_items = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.personal_vault, items.wardrobe_inventory, items.storage);
 
     let dimmer = document.querySelector("#dimmer");
 
@@ -332,7 +364,9 @@ document.addEventListener('DOMContentLoaded', function(){
         else if(element.hasAttribute('data-missing-pet-index'))
             item = [calculated.missingPets[parseInt(element.getAttribute('data-missing-pet-index'))]];
         else if(element.hasAttribute('data-missing-talisman-index'))
-            item = [calculated.missingTalismans[parseInt(element.getAttribute('data-missing-talisman-index'))]];
+            item = [calculated.missingTalismans.missing[parseInt(element.getAttribute('data-missing-talisman-index'))]];
+        else if(element.hasAttribute('data-upgrade-talisman-index'))
+            item = [calculated.missingTalismans.upgrades[parseInt(element.getAttribute('data-upgrade-talisman-index'))]];
 
         if(item.length == 0)
             return;
@@ -346,11 +380,11 @@ document.addEventListener('DOMContentLoaded', function(){
         else if(element.hasAttribute('data-pet-index'))
             statsContent.setAttribute("data-backpack-item-index", element.getAttribute('data-pet-index'));
 
-        itemName.className = 'item-name ' + 'piece-' + (item.rarity || 'common') + '-bg';
-        itemNameContent.innerHTML = item.display_name || 'null';
+        itemName.className = `item-name piece-${item.rarity || 'common'}-bg nice-colors-dark`;
+        itemNameContent.innerHTML = item.display_name_print || item.display_name || 'null';
 
         if(element.hasAttribute('data-pet-index'))
-            itemNameContent.innerHTML = `[Lvl ${item.level.level}] ${item.display_name}`;
+            itemNameContent.innerHTML = `[Lvl ${item.level.level}] ${item.display_name_print || item.display_name}`;
 
         if(item.texture_path){
             itemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
@@ -373,10 +407,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 throw null;
 
             item.tag.display.Lore.forEach(function(line, index){
-                itemLore.innerHTML += renderLore(line);
-
-                if(index + 1 < item.tag.display.Lore.length)
-                    itemLore.innerHTML += '<br>';
+                itemLore.innerHTML += '<span class="lore-row">' + renderLore(line) + '</span>';
             });
         }catch(e){
 
@@ -406,8 +437,6 @@ document.addEventListener('DOMContentLoaded', function(){
             packContent.appendChild(packIcon);
             packContent.appendChild(packName);
             packContent.appendChild(packAuthor);
-
-            itemLore.appendChild(document.createElement('br'));
 
             itemLore.appendChild(packContent);
         }
@@ -604,7 +633,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 element.parentNode.classList.add("piece-selected");
 
                 activeWeaponElement.className = 'stat-value stat-active-weapon piece-' + item.rarity + '-fg';
-                activeWeaponElement.innerHTML = item.display_name;
+                activeWeaponElement.innerHTML = item.display_name_print || item.display_name;
 
                 stats = weaponStats;
             }
@@ -661,7 +690,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 element.parentNode.classList.add("piece-selected");
 
                 activeRodElement.className = 'stat-value stat-active-rod piece-' + item.rarity + '-fg';
-                activeRodElement.innerHTML = item.display_name;
+                activeRodElement.innerHTML = item.display_name_print || item.display_name;
 
                 stats = weaponStats;
             }
@@ -1009,7 +1038,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 } else {
                     window.removeEventListener('scroll', this._onScroll);
                     scrollToTab();
-                }   
+                }
             }
         }
 
@@ -1023,7 +1052,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     const scrollMemory = new ScrollMemory();
 
-    const intersectingElements = new Map();    
+    const intersectingElements = new Map();
 
     const sectionObserver = new IntersectionObserver((entries, observer) => {
         for (const entry of entries) {
@@ -1041,7 +1070,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 for (const link of navBarLinks) {
                     if (link.hash === newHash) {
                         link.setAttribute('aria-current', true);
-                        
+
                         if (!scrollMemory.isSmoothScrolling) {
                             scrollToTab(true, link);
                         }

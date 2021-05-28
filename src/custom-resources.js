@@ -1,3 +1,4 @@
+const cluster = require('cluster');
 const fs = require('fs-extra');
 const path = require('path');
 const helper = require('./helper');
@@ -49,8 +50,8 @@ function getFrame(src, frame){
 let resourcePacks = [];
 
 async function init(){
-    console.log("Custom Resources loading started.");
-    console.time("custom_resources");
+    console.log(`Custom Resources loading started on ${helper.getClusterId(true)}.`);
+    console.time(`custom_resources_${helper.getClusterId()}`);
 
     for(const pack of await fs.readdir(RESOURCE_PACK_FOLDER)){
         const basePath = path.resolve(RESOURCE_PACK_FOLDER, pack);
@@ -67,7 +68,7 @@ async function init(){
         }
     }
 
-    resourcePacks = resourcePacks.sort((a, b) => b.config.priority - a.config.priority);
+    resourcePacks = resourcePacks.sort((a, b) => a.config.priority - b.config.priority);
 
     for(let pack of resourcePacks){
         pack.files = await getFiles(path.resolve(pack.basePath, 'assets', 'minecraft', 'mcpatcher', 'cit'));
@@ -95,7 +96,12 @@ async function init(){
             if(properties.type != 'item')
                 continue;
 
-            let texture = {weight: 0, animated: false, file: path.basename(file), match: []};
+            let texture = {
+                weight: 0, 
+                animated: false, 
+                file: path.basename(file), 
+                match: []
+            };
 
             let textureFile = 'texture' in properties
             ? path.resolve(path.dirname(file), properties.texture)
@@ -363,9 +369,12 @@ async function init(){
         }
     }
 
-    console.log("Custom Resources loading done.");
-    console.timeEnd("custom_resources");
+    console.log(`Custom Resources loading done. (${helper.getClusterId(true)})`);
+    console.timeEnd(`custom_resources_${helper.getClusterId()}`);
 }
+
+if(!cluster.isWorker)
+    return;
 
 const outputPacks = [];
 const readyPromise = init();
@@ -382,6 +391,7 @@ readyPromise.then(() => {
 module.exports = {
     ready: false,
     packs: outputPacks,
+    completePacks: resourcePacks,
     getTexture: async (item, ignoreId = false, packIds) => {
         if(!module.exports.ready)
             await readyPromise;
@@ -439,7 +449,7 @@ module.exports = {
                     if(texture.weight == outputTexture.weight && texture.file < outputTexture.file)
                         continue;
 
-                    outputTexture = Object.assign({ pack }, texture);
+                    outputTexture = Object.assign({ pack: { basePath: pack.basePath, config: pack.config } }, texture);
                 }
             }
         }
@@ -491,6 +501,7 @@ module.exports = {
         }*/
 
         outputTexture.path = path.relative(path.resolve(__dirname, '..', 'public'), outputTexture.path).replace(/[\\]/g, '/');
+        process.send({type: "used_pack", id: outputTexture?.pack.config.id});
 
         return outputTexture;
     }

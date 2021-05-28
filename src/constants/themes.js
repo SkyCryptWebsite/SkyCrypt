@@ -6,51 +6,55 @@ module.exports = {
         "default": {
             name: "Default Theme",
             author: "SkyCrypt Team",
+            official: true
+        },
+        "light": {
+            name: "Default Light Theme",
+            author: "SkyCrypt Team",
             official: true,
-            logo: "../img/logo_square.svg",
+            light: true,
+            images: {
+                bg: "/resources/img/themes/light/bg.webp",
+                bg_blur: "/resources/img/themes/light/bg_blur.webp"
+            },
             backgrounds: {
-                "bg": {
-                    "png": "../img/bg.png?v3",
-                    "webp": "../img/bg.webp?v3"
+                skillbar: {
+                    type: "color",
+                    color: "#56d34d"
                 },
-                "bg_blur": {
-                    "webp": "../img/bg_blur.webp?v3"
+                maxedbar: {
+                    type: "color",
+                    color: "#fdbb3c"
                 }
             },
             colors: {
-                icon: "#0BCA51",
-                line: "#0BDA51",
-                link: "#0BEA51",
-                hover: "#09EF70",
+                logo: "#08a53d",
+                icon: "#00b52f",
+                link: "#05d245",
+                hover: "#0bea51",
                 maxed: "#DD980E",
-                gold: "#FDBB3C",
-                skillbar: "#0BAA51",
-                maxedbar: "#CE8F12"
+                gold: "#c58000"
             }
         },
         "skylea": {
             name: "sky.lea.moe",
             author: "LeaPhant",
             official: true,
-            logo: "../img/themes/skylea/logo_square.svg",
+            images: {
+                bg: "/resources/img/themes/skylea/bg.webp",
+                bg_blur: "/resources/img/themes/skylea/bg_blur.webp"
+            },
             backgrounds: {
-                "bg": {
-                    "png": "../img/themes/skylea/bg.png",
-                    "webp": "../img/themes/skylea/bg.webp"
-                },
-                "bg_blur": {
-                    "webp": "../img/themes/skylea/bg_blur.webp"
+                skillbar: {
+                    type: "color",
+                    color: "#850F4A"
                 }
             },
             colors: {
+                logo: "#f03c96",
                 icon: "#A6145D",
-                line: "#A6145D",
                 link: "#F94EA3",
-                hover: "#F78DC2",
-                maxed: "#DD980E",
-                gold: "#FDBB3C",
-                skillbar: "#850F4A",
-                maxedbar: "#CE8F12"
+                hover: "#F78DC2"
             }
         },
 
@@ -60,66 +64,121 @@ module.exports = {
             name: "Night Blue Theme",
             author: "8KCoffeeWizard",
             community: true,
-            logo: "../img/themes/nightblue/logo_square.svg",
+            images: {
+                bg: "/resources/img/themes/nightblue/bg.webp",
+                bg_blur: "/resources/img/themes/nightblue/bg_blur.webp"
+            },
             backgrounds: {
-                "bg": {
-                    "png": "../img/themes/nightblue/bg.png",
-                    "webp": "../img/themes/nightblue/bg.webp"
-                },
-                "bg_blur": {
-                    "webp": "../img/themes/nightblue/bg_blur.webp"
+                skillbar: {
+                    type: "color",
+                    color: "#3BB9FF"
                 }
             },
             colors: {
+                logo: "#0b8ada",
                 icon: "#3BB9FF",
-                line: "#0E8DCA",
                 link: "#00FFFB",
-                hover: "#0BAFCA",
-                skillbar: "#3BB9FF"
+                hover: "#0BAFCA"
             }
         },
         "sunrise": {
             name: "Sunrise Orange Theme",
             author: "rainbowcraft2",
             community: true,
-            logo: "../img/themes/sunrise/logo_square.svg",
+            images: {
+                bg: "/resources/img/themes/sunrise/bg.webp",
+                bg_blur: "/resources/img/themes/sunrise/bg_blur.webp"
+            },
             backgrounds: {
-                "bg": {
-                    "png": "../img/themes/sunrise/bg.png",
-                    "webp": "../img/themes/sunrise/bg.webp"
-                },
-                "bg_blur": {
-                    "webp": "../img/themes/sunrise/bg_blur.webp"
+                skillbar: {
+                    type: "color",
+                    color: "#f2694e"
                 }
             },
             colors: {
-                line: "#f2694e",
+                logo: "#f5694c",
                 link: "#F2694E",
                 icon: "#F2694E",
-                hover: "#ff9d57",
-                skillbar: "#f2694e"
+                hover: "#ff9d57"
             }
         },
         "draconic": {
             name: "Draconic Purple Theme",
             author: "rainbowcraft2",
             community: true,
-            logo: "../img/themes/draconic/logo_square.svg",
+            images: {
+                bg: "/resources/img/themes/draconic/bg.webp",
+                bg_blur: "/resources/img/themes/draconic/bg_blur.webp"
+            },
             backgrounds: {
-                "bg": {
-                    "png": "../img/themes/draconic/bg.png",
-                    "webp": "../img/themes/draconic/bg.webp"
-                },
-                "bg_blur": {
-                    "webp": "../img/themes/draconic/bg_blur.webp"
+                skillbar: {
+                    type: "color",
+                    color: "#ba5fde"
                 }
             },
             colors: {
-                line: "#7652b1",
+                logo: "#a956c8",
                 link: "#7652b1",
                 icon: "#ba5fde",
-                hover: "#ba5fde",
-                skillbar: "#ba5fde"
+                hover: "#ba5fde"
+            }
+        },
+        "candycane": {
+            name: "Candy Cane Theme",
+            author: "Cookie_Wookie_7",
+            community: true,
+            light: true,
+            images: {
+                bg: "/resources/img/themes/candycane/bg.webp",
+                bg_blur: "/resources/img/themes/candycane/bg_blur.webp"
+            },
+            backgrounds: {
+                skillbar: {
+                    type: "stripes",
+                    angle: "45deg",
+                    colors: ["#ff5555", "#ffffff"],
+                    width: 10
+                },
+                maxedbar: {
+                    type: "stripes",
+                    angle: "45deg",
+                    colors: ["#ff4e2a", "#fdbb3c"],
+                    width: 10
+                }
+            },
+            colors: {
+                logo: "#cc0000",
+                icon: "#CA0000",
+                link: "#ce0000",
+                hover: "#EB0000",
+                maxed: "#DD980E",
+                gold: "#c58000"
+            }
+        },
+
+        /* Hidden Themes */
+
+        /* I have no idea if this theme is mentally sane so lmao */
+        "warpwing": {
+            name: "Forest Walk",
+            author: "WarpWing",
+            community: true,
+            hidden: true,
+            images: {
+                bg: "https://cdn.discordapp.com/attachments/713278398830477353/744929704611676221/farming_2.png",
+                bg_blur: "https://cdn.discordapp.com/attachments/713278398830477353/744929704611676221/farming_2.png"
+            },
+            backgrounds: {
+                skillbar: {
+                    type: "color",
+                    color: "#00aabb"
+                }
+            },
+            colors: {
+                logo: "#117d87",
+                icon: "#00aabb",
+                link: "#00aabb",
+                hover: "#00aabb"
             }
         }
     }

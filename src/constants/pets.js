@@ -10,7 +10,8 @@ const symbols = {
 	magic_find: "✯",
 	pet_luck: "♣",
 	attack_speed: "⚔️",
-	true_defense: "❂"
+	true_defense: "❂",
+	ferocity: "⫽",
 }
 
 module.exports = {
@@ -391,12 +392,25 @@ module.exports = {
             type: "combat",
             emoji: "👵"
         },
+        "RAT": {
+            head: "/head/a8abb471db0ab78703011979dc8b40798a941f3a4dec3ec61cbeec2af8cffe8",
+            type: "combat",
+            emoji: "🐀"
+        }
     },
 
     /*
         Animted skins created at ezgif.com/apng-maker with the following settings:
-        - Delay time: 500
-        - Enable crossfade frames: delay = 3, count = 10
+        - Skins that change based on time of day
+            - Delay time: 500
+            - Enable crossfade frames: delay = 3, count = 10
+        - Skins that are always animated
+            - Delay time: 20 (but do what looks best)
+            - No crossfade
+            - Don't stack frames (unless needed)
+        Animation object:
+        a) day and night for skins that change based on time of day
+        b) progressive timings (in ms) since the first frame to the next occurrence of the first frame to close the cycle
     */
     pet_skins: {
         "ENDERMAN": {
@@ -429,6 +443,16 @@ module.exports = {
                 name: "Pretty",
                 head: "/head/a34631d940fddb689ddef6a3b352c50220c460dba05cd18dc83192b59dc647f8",
                 release: 1560284720000,
+            },
+            "RABBIT_AQUAMARINE": {
+                name: "Aquamarine",
+                head: "/head/35a2119d122961852c010c1007ab2aff95b4bbeb74407463f6d2e1ff0792c812",
+                release: new Date('2021-04-15 18:00:00 GMT+1').getTime(),
+            },
+            "RABBIT_ROSE": {
+                name: "Rose",
+                head: "/head/d7cddf5b20cb50d6600e5333c6bb3fb15b4741f17e3675fc2bfc09c2cd09e619",
+                release: new Date('2021-04-15 18:00:00 GMT+1').getTime(),
             },
         },
         "WITHER_SKELETON": {
@@ -600,6 +624,22 @@ module.exports = {
                 head: "/head/e9281c4d87d68526b0749d4361e6ef786c8a35717aa053da704b1d53410d37a6",
                 release: 1610557200000,
             },
+            "MONKEY_GORILLA": {
+                name: "Gorilla",
+                head: "/resources/img/items/monkey_gorilla.png",
+                release: new Date('2021-05-13 18:00:00 GMT+1').getTime(),
+                animation: {
+                    0: "/head/ac75d405235a58c68bddadad082e895e84feadfffd9f69c00a2194498732d48",
+                    1000: "/head/2a8be837b3361464b5ca555029658f0fdc9432cb351f088996f6da7210e1fc75",
+                    1200: "/head/75c6a5d6361a7b847fa6bbf6905c381f764a84f1c820d8e82c76e7db0feb9ee7",
+                    1500: "/head/e6227de20348cf220bb15a6c5d1c7d5405b0bbd9f759cecf891c3991f07f4f9f",
+                    1800: "/head/20cbac153bc024d35a6d7df3d57b6ee814ae01e643bcd2f77a2aaae0acd771d2",
+                    3600: "/head/e6227de20348cf220bb15a6c5d1c7d5405b0bbd9f759cecf891c3991f07f4f9f",
+                    3800: "/head/75c6a5d6361a7b847fa6bbf6905c381f764a84f1c820d8e82c76e7db0feb9ee7",
+                    4100: "/head/2a8be837b3361464b5ca555029658f0fdc9432cb351f088996f6da7210e1fc75",
+                    4300: "/head/ac75d405235a58c68bddadad082e895e84feadfffd9f69c00a2194498732d48",
+                }
+            },
         },
         "SKELETON_HORSE": {
             "HORSE_ZOMBIE": {
@@ -630,6 +670,25 @@ module.exports = {
                 name: "Orca",
                 head: "/head/b008ca9c00cecf499685030e8ef0c230a32908619ce9dc10690b69111591faa1",
                 release: new Date('2021-03-09 18:00:00 GMT+1').getTime(),
+            },
+        },
+        "CHICKEN": {
+            "CHICKEN_BABY_CHICK": {
+                name: "Baby Chick",
+                head: "/head/1bde55ed54cb5c87661b86c349186a9d5baffb3cb934b449a2d329e399d34bf",
+                release: new Date('2021-04-05 18:00:00 GMT+1').getTime(),
+            },
+        },
+        "BLACK_CAT": {
+            "BLACK_CAT_IVORY": {
+                name: "Ivory",
+                head: "/head/f51b17d7ded6c7e8f3b2dac12378a6fc4e9228b911986f64c8af45837ae6d9e1",
+                release: new Date('2021-04-26 18:00:00 GMT+1').getTime(),
+            },
+            "BLACK_CAT_ONYX": {
+                name: "Onyx",
+                head: "/head/be924115d3a8bbacfd4fafb6cc70f99a2f7580e4583a50fa9b9c285a98ac0c56",
+                release: new Date('2021-04-26 18:00:00 GMT+1').getTime(),
             },
         },
     },
@@ -937,6 +996,16 @@ module.exports = {
             name: "Jerry 3D Glasses",
             tier: "LEGENDARY",
             description: "§7Upgrades a Jerry pet from §6Legendary §7to §dMythic §7and granting it a new perk!"
+        },
+        REAPER_GEM: {
+            name: "Reaper Gem",
+            tier: "LEGENDARY",
+            description: `§7Gain §c8${symbols.ferocity} Ferocity §7for 5s on kill`
+        },
+        PET_ITEM_FLYING_PIG: {
+            name: "Flying Pig",
+            tier: "UNCOMMON",
+            description: `§7Grants your pig pet the ability to fly while on your private island! You also don't need to hold a carrot on a stick to control your pig.`
         },
     }
 }

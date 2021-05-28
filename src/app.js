@@ -5,7 +5,7 @@ const { getFileHashes, getFileHash, hashedDirectories } = require('./hashes');
 async function main(){
     const express = require('express');
     const session = require('express-session');
-    const MongoStore = require('connect-mongo')(session);
+    const MongoStore = require('connect-mongo');
     const bodyParser = require('body-parser');
     const cors = require('cors');
 
@@ -88,7 +88,7 @@ async function main(){
         secret: credentials.session_secret,
         resave: false,
         saveUninitialized: false,
-        store: new MongoStore({
+        store: MongoStore.create({
             client: mongo
         })
     }));
@@ -107,44 +107,46 @@ async function main(){
     async function getFavoritesFormUUIDs(uuids) {
         favorites = [];
         for (const uuid of uuids) {
-            if (uuid != null) {
-                const cache = await db
-                .collection('favoriteCache')
+            if (uuid == null) continue;
+
+            const cache = await db
+            .collection('favoriteCache')
+            .find( { uuid } )
+            .toArray();
+
+            if (cache[0]) {
+                favorites.push(cache[0]);
+                continue;
+            } else {
+                let output_cache = { uuid };
+                
+                const user = await db
+                .collection('usernames')
                 .find( { uuid } )
                 .toArray();
 
-                if (cache[0]) {
-                    favorites.push(cache[0]);
-                } else {
-                    let output_cache = { uuid };
-                    
-                    const user = await db
-                    .collection('usernames')
+                if (user[0]) {
+                    output_cache = user[0];
+
+                    let profiles = await db
+                    .collection('profileStore')
                     .find( { uuid } )
                     .toArray();
-    
-                    if (user[0]) {
-                        output_cache = user[0];
-    
-                        let profiles = await db
-                        .collection('profileStore')
-                        .find( { uuid } )
-                        .toArray();
-    
-                        if (profiles[0]) {
-                            const profile = profiles[0];
-                            output_cache.last_updated = profile.last_save;
-                        } else {
-                            output_cache.error = "Profile doesn't exist.";
-                        }
+
+                    if (profiles[0]) {
+                        const profile = profiles[0];
+                        output_cache.last_updated = profile.last_save;
                     } else {
-                        output_cache.error = "User doesn't exist.";
+                        output_cache.error = "Profile doesn't exist.";
                     }
-                    
-                    await db.collection('favoriteCache').insertOne(output_cache);
-                    favorites.push(output_cache);
+                } else {
+                    output_cache.error = "User doesn't exist.";
                 }
+                
+                await db.collection('favoriteCache').insertOne(output_cache);
+                favorites.push(output_cache);
             }
+        
         }
         return favorites;
     }
@@ -195,6 +197,11 @@ async function main(){
     }
 
     app.all('/stats/:player/:profile?', async (req, res, next) => {
+        const debugId = helper.generateDebugId('stats');
+        const timeStarted = new Date().getTime();
+
+        console.debug(`${debugId}: stats page was called.`);
+
         let paramPlayer = req.params.player.toLowerCase().replace(/[ +]/g, '_').replace(/[^a-z\d\-\_:]/g, '');
         let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
 
@@ -204,28 +211,42 @@ async function main(){
         
         const favorites = parseFavorites(req.cookies.favorite);
         try{
-            const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, { updateArea: true, cacheOnly });
+            const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, { updateArea: true, cacheOnly, debugId });
 
-            const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack);
-            const calculated = await lib.getStats(db, profile, allProfiles, items);
+            const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack, { cacheOnly, debugId });
+            const calculated = await lib.getStats(db, profile, allProfiles, items, { cacheOnly, debugId });
 
             if (isFoolsDay) {
                 calculated.skin_data.skinurl = "http://textures.minecraft.net/texture/b4bd832813ac38e68648938d7a32f6ba29801aaf317404367f214b78b4d4754c";
             }
 
-            res.render('stats', { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), fileHashes, page: 'stats' });
+            console.debug(`${debugId}: starting page render.`);
+            const renderStart = new Date().getTime();
+
+            if(req.cookies.pack)
+                process.send({type: "selected_pack", id: req.cookies.pack});
+
+            res.render('stats', 
+                { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), fileHashes, page: 'stats' },
+                (err, html) => {
+                    console.debug(`${debugId}: page succesfully rendered. (${new Date().getTime() - renderStart}ms)`);
+                    res.set('X-Debug-ID', `${debugId}`);
+                    res.set('X-Process-Time', `${new Date().getTime() - timeStarted}`);
+                    res.send(html);
+                }
+            );
         }catch(e){
+            console.debug(`${debugId}: an error has occured.`);
             console.error(e);
 
-            res.render('index', {
-                req,
-                error: e,
-                player: playerUsername,
-                extra: await getExtra('index', favorites),
-                fileHashes,
-                helper,
-                page: 'index'
-            });
+            res.render('index', 
+                { req, error: e, player: playerUsername, extra: await getExtra('index', favorites), fileHashes, helper, page: 'index' },
+                (err, html) => {
+                    res.set('X-Debug-ID', `${debugId}`);
+                    res.set('X-Process-Time', `${new Date().getTime() - timeStarted}`);
+                    res.send(html);
+                }
+            );
 
             return false;
         }
@@ -235,6 +256,7 @@ async function main(){
         const { uuid } = req.params;
 
         const filename = `texture_${uuid}.png`;
+        res.set('X-Cluster-ID', `${helper.getClusterId()}`);
 
         try{
             file = await fs.readFile(path.resolve(cachePath, filename));
@@ -263,6 +285,7 @@ async function main(){
         const { username } = req.params;
 
         const filename = `cape_${username}.png`;
+        res.set('X-Cluster-ID', `${helper.getClusterId()}`);
 
         try{
             file = await fs.readFile(path.resolve(cachePath, filename));
@@ -313,6 +336,8 @@ async function main(){
             });
         }
 
+        res.set('X-Cluster-ID', `${helper.getClusterId()}`);
+
         res.setHeader('Cache-Control', `public, max-age=${CACHE_DURATION}`);
         res.contentType('image/png');
         res.send(file);
@@ -321,6 +346,8 @@ async function main(){
     app.all('/item(.gif)?/:skyblockId?', cors(), async (req, res) => {
         const skyblockId = req.params.skyblockId || null;
         const item = await renderer.renderItem(skyblockId, req.query, db);
+
+        res.set('X-Cluster-ID', `${helper.getClusterId()}`);
 
         if(item.error){
             res.status(500);
@@ -384,12 +411,12 @@ Disallow: /item /head /leather /resources
             const smStream = new SitemapStream({ hostname: 'https://sky.shiiyu.moe/' });
             const pipeline = smStream.pipe(createGzip());
 
-            const cursor = await db.collection('viewsLeaderboard').find().limit(10000);
+            const cursor = await db.collection('topViews').find();
 
             while(await cursor.hasNext()){
                 const doc = await cursor.next();
 
-                smStream.write({ url: `/stats/${doc.userInfo.username}` });
+                smStream.write({ url: `/stats/${doc.username}` });
             }
 
             smStream.end();
@@ -398,8 +425,8 @@ Disallow: /item /head /leather /resources
 
             pipeline.pipe(res).on('error', (e) => {throw e});
         }catch(e){
-            console.error(e)
-            res.status(500).end()
+            console.error(e);
+            res.status(500).end();
         }
     });
 
@@ -412,6 +439,33 @@ Disallow: /item /head /leather /resources
         ]).next();*/
 
         res.redirect(`/stats/20934ef9488c465180a78f861586b4cf/bf7c14fb018946899d944d56e65222d2`);
+    });
+
+    app.all('/resources/img/logo_square.svg', async (req, res, next) => {
+        let color = '0bda51';
+        if (typeof req.query.color === 'string' && req.query.color.match(/^[0-9a-fA-F]{6}$/)) {
+            color = req.query.color;
+        }
+        let background;
+        let foreground;
+        if ('invert' in req.query) {
+            background = 'ffffff';
+            foreground = color;
+        } else {
+            background = color;
+            foreground = 'ffffff'
+        }
+        res.type('svg').send(/*xml*/`
+            <svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+                <title>SkyCrypt Logo</title>
+                <rect rx="16" height="120" width="120" y="0" x="0" fill="#${background}"/>
+                <g fill="#${foreground}">
+                    <rect rx="4" height="28" width="19" y="69" x="22"/>
+                    <rect rx="4" height="75" width="19" y="22" x="50"/>
+                    <rect rx="4" height="47" width="19" y="50" x="79"/>
+                </g>
+            </svg>
+        `);
     });
 
     app.all('/manifest.webmanifest', async (req, res) => {
@@ -429,7 +483,11 @@ Disallow: /item /head /leather /resources
     });
 
     app.all('/api', async (req, res, next) => {
-        res.render('api', { error: null, player: null, extra: await getExtra('api'), fileHashes, helper, page: 'api' });
+        res.render('api', { error: null, player: null, extra: await getExtra('api'), fileHashes, helper, page: 'api' },
+        (err, html) => {
+            res.set('X-Cluster-ID', `${helper.getClusterId()}`);
+            res.send(html);
+        });
     });
 
     app.all('/:player/:profile?', async (req, res, next) => {
@@ -437,8 +495,17 @@ Disallow: /item /head /leather /resources
     });
 
     app.all('/', async (req, res, next) => {
+        const timeStarted = new Date().getTime();
         const favorites = parseFavorites(req.cookies.favorite);
-        res.render('index', { req, error: null, player: null, extra: await getExtra('index', favorites), fileHashes, helper, page: 'index' });
+
+        res.render('index', 
+            { req, error: null, player: null, extra: await getExtra('index', favorites), fileHashes, helper, page: 'index' },
+            (err, html) => {
+                res.set('X-Cluster-ID', `${helper.getClusterId()}`);
+                res.set('X-Process-Time', `${new Date().getTime() - timeStarted}`);
+                res.send(html);
+            }
+        );
     });
 
     app.all('*', async (req, res, next) => {
@@ -448,17 +515,18 @@ Disallow: /item /head /leather /resources
         .send('Not found')
     });
 
-    app.listen(port, () => console.log(`SkyBlock Stats running on http://localhost:${port}`));
+    app.listen(port, () => console.log(`SkyBlock Stats running on http://localhost:${port} (${helper.getClusterId()})`));
 }
 
 if(cluster.isMaster){
-    const cpus = Math.min(4, require('os').cpus().length);
+    const totalCpus = require('os').cpus().length;
+    const cpus = Math.min(process.env?.NODE_ENV != 'development' ? 8 : 2, totalCpus);
 
     for(let i = 0; i < cpus; i += 1){
         cluster.fork();
     }
 
-    console.log('Running SkyBlock Stats on %i cores', cpus);
+    console.log(`Running SkyBlock Stats on ${cpus} cores`);
 }else{
     main();
 }
