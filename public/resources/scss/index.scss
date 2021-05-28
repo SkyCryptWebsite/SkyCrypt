@@ -1697,7 +1697,7 @@ a.additional-player-stat:hover {
 }
 
 .bonus-divider {
-    color: rgb(255 255 255 / 60%);
+    color: rgba(var(--text-rgb),.6);
     font-weight: bold;
 }
 
