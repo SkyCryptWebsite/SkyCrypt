@@ -187,7 +187,7 @@ module.exports = {
 
                     if(module.exports.hasPath(data.textures, 'skin')){
                         skin_data.skinurl = data.textures.skin.url;
-                        skin_data.model = data.textures.slim ? 'slim' : 'regular';
+                        skin_data.model = data.textures.slim ? 'slim' : 'default';
                     }
 
                     if(module.exports.hasPath(data.textures, 'cape'))
@@ -238,7 +238,7 @@ module.exports = {
                     return null;
 
                 guildObject.level = module.exports.getGuildLevel(guildObject.exp);
-                guildObject.gmUser = await module.exports.resolveUsernameOrUuid(guildObject.gm, db, cacheOnly);
+                guildObject.gmUser = guildObject.gm ? await module.exports.resolveUsernameOrUuid(guildObject.gm, db, cacheOnly) : "None";
                 guildObject.rank = guildMember.rank;
 
                 return guildObject;

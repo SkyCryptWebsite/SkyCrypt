@@ -5,7 +5,7 @@ const { getFileHashes, getFileHash, hashedDirectories } = require('./hashes');
 async function main(){
     const express = require('express');
     const session = require('express-session');
-    const MongoStore = require('connect-mongo')(session);
+    const MongoStore = require('connect-mongo');
     const bodyParser = require('body-parser');
     const cors = require('cors');
 
@@ -88,7 +88,7 @@ async function main(){
         secret: credentials.session_secret,
         resave: false,
         saveUninitialized: false,
-        store: new MongoStore({
+        store: MongoStore.create({
             client: mongo
         })
     }));
@@ -107,44 +107,46 @@ async function main(){
     async function getFavoritesFormUUIDs(uuids) {
         favorites = [];
         for (const uuid of uuids) {
-            if (uuid != null) {
-                const cache = await db
-                .collection('favoriteCache')
+            if (uuid == null) continue;
+
+            const cache = await db
+            .collection('favoriteCache')
+            .find( { uuid } )
+            .toArray();
+
+            if (cache[0]) {
+                favorites.push(cache[0]);
+                continue;
+            } else {
+                let output_cache = { uuid };
+                
+                const user = await db
+                .collection('usernames')
                 .find( { uuid } )
                 .toArray();
 
-                if (cache[0]) {
-                    favorites.push(cache[0]);
-                } else {
-                    let output_cache = { uuid };
-                    
-                    const user = await db
-                    .collection('usernames')
+                if (user[0]) {
+                    output_cache = user[0];
+
+                    let profiles = await db
+                    .collection('profileStore')
                     .find( { uuid } )
                     .toArray();
-    
-                    if (user[0]) {
-                        output_cache = user[0];
-    
-                        let profiles = await db
-                        .collection('profileStore')
-                        .find( { uuid } )
-                        .toArray();
-    
-                        if (profiles[0]) {
-                            const profile = profiles[0];
-                            output_cache.last_updated = profile.last_save;
-                        } else {
-                            output_cache.error = "Profile doesn't exist.";
-                        }
+
+                    if (profiles[0]) {
+                        const profile = profiles[0];
+                        output_cache.last_updated = profile.last_save;
                     } else {
-                        output_cache.error = "User doesn't exist.";
+                        output_cache.error = "Profile doesn't exist.";
                     }
-                    
-                    await db.collection('favoriteCache').insertOne(output_cache);
-                    favorites.push(output_cache);
+                } else {
+                    output_cache.error = "User doesn't exist.";
                 }
+                
+                await db.collection('favoriteCache').insertOne(output_cache);
+                favorites.push(output_cache);
             }
+        
         }
         return favorites;
     }
@@ -220,6 +222,9 @@ async function main(){
 
             console.debug(`${debugId}: starting page render.`);
             const renderStart = new Date().getTime();
+
+            if(req.cookies.pack)
+                process.send({type: "selected_pack", id: req.cookies.pack});
 
             res.render('stats', 
                 { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), fileHashes, page: 'stats' },
@@ -436,6 +441,33 @@ Disallow: /item /head /leather /resources
         res.redirect(`/stats/20934ef9488c465180a78f861586b4cf/bf7c14fb018946899d944d56e65222d2`);
     });
 
+    app.all('/resources/img/logo_square.svg', async (req, res, next) => {
+        let color = '0bda51';
+        if (typeof req.query.color === 'string' && req.query.color.match(/^[0-9a-fA-F]{6}$/)) {
+            color = req.query.color;
+        }
+        let background;
+        let foreground;
+        if ('invert' in req.query) {
+            background = 'ffffff';
+            foreground = color;
+        } else {
+            background = color;
+            foreground = 'ffffff'
+        }
+        res.type('svg').send(/*xml*/`
+            <svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+                <title>SkyCrypt Logo</title>
+                <rect rx="16" height="120" width="120" y="0" x="0" fill="#${background}"/>
+                <g fill="#${foreground}">
+                    <rect rx="4" height="28" width="19" y="69" x="22"/>
+                    <rect rx="4" height="75" width="19" y="22" x="50"/>
+                    <rect rx="4" height="47" width="19" y="50" x="79"/>
+                </g>
+            </svg>
+        `);
+    });
+
     app.all('/manifest.webmanifest', async (req, res) => {
         const favorites = await getFavoritesFormUUIDs(parseFavorites(req.cookies.favorite))
         const shortcuts = favorites.map(favorite => ({
@@ -488,7 +520,7 @@ Disallow: /item /head /leather /resources
 
 if(cluster.isMaster){
     const totalCpus = require('os').cpus().length;
-    const cpus = Math.min(4, /* Math.round(totalCpus-(totalCpus/4)) */ totalCpus);
+    const cpus = Math.min(process.env?.NODE_ENV != 'development' ? 8 : 2, totalCpus);
 
     for(let i = 0; i < cpus; i += 1){
         cluster.fork();

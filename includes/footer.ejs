@@ -2,7 +2,6 @@
 <script src="https://unpkg.com/tippy.js@5"></script>
 <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
 <script src="/resources/js/skinview3d.bundle.js?<%- fileHashes.js['skinview3d.bundle.js'] %>"></script>
-<script src="/resources/js/modernizr.js"></script>
 
 <script>
     function setCookie(name,value,days) {
@@ -94,21 +93,6 @@
     }
     
     setCheckedTheme(localStorage.getItem('currentTheme'));
-
-    Modernizr.on('webp', function(result){
-        if(!Modernizr.webp.lossless){
-            [].forEach.call(document.querySelectorAll('.item-icon'), function(element){
-                document.documentElement.classList.add('no-webp');
-            });
-
-            [].forEach.call(document.querySelectorAll('.sea-creature-image'), function(element){
-                element.style.backgroundImage = element.style.backgroundImage.replace(".webp", ".png");
-            });
-        }
-    });
-
-    if(!Modernizr.testAllProps('clip-path', 'ellipse(10px 10px at 10px 10px)'))
-        document.documentElement.classList.add('no-clip-path');
 
     tippy('*[data-tippy-content]', {
         boundary: 'window'

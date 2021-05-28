@@ -1,8 +1,8 @@
 module.exports = {
-    /* 
-    
+    /*
+
         All weight calculations are provided by Senither(https://github.com/Senither/)
-    
+
     */
     skillWeight: {
         // Maxes out mining at 1,750 points at 60.
@@ -29,7 +29,7 @@ module.exports = {
             divider: 220689,
             maxLevel: 60,
         },
-        // Maxes out combat at 800 points at level 50.
+        // Maxes out combat at 1,500 points at level 60.
         combat: {
             exponent: 1.15797687265,
             divider: 275862,
@@ -70,8 +70,17 @@ module.exports = {
         tank: 0.0000045254834,
     },
     slayerWeight: {
-        zombie: 2208,
-        spider: 2118,
-        wolf: 1962
+        zombie: {
+            divider: 2208,
+            modifier: 0.15,
+        },
+        spider: {
+            divider: 2118,
+            modifier: 0.08,
+        },
+        wolf: {
+            divider: 1962,
+            modifier: 0.015,
+        },
     }
 }
