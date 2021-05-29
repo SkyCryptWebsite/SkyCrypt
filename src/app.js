@@ -45,6 +45,7 @@ async function main(){
     require('moment-duration-format')(moment);
 
     const { MongoClient } = require('mongodb');
+    const sanitize = require('mongo-sanitize');
     const helper = require('./helper');
     const constants = require('./constants');
     const manifest = require('../public/manifest.json');
@@ -106,8 +107,9 @@ async function main(){
 
     async function getFavoritesFormUUIDs(uuids) {
         favorites = [];
-        for (const uuid of uuids) {
+        for (let uuid of uuids) {
             if (uuid == null) continue;
+            uuid = sanitize(uuid);
 
             const cache = await db
             .collection('favoriteCache')

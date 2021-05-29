@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const nbt = require('prismarine-nbt');
 const util = require('util');
+const sanitize = require('mongo-sanitize');
 const mcData = require("minecraft-data")("1.8.9");
 const _ = require('lodash');
 const constants = require('./constants');
@@ -3355,7 +3356,7 @@ module.exports = {
 
         let profileObject = await db
         .collection('profileStore')
-        .findOne({ uuid: paramPlayer });
+        .findOne({ uuid: sanitize(paramPlayer) });
 
         let lastCachedSave = 0;
 
@@ -3574,7 +3575,7 @@ module.exports = {
             db
             .collection('profileStore')
             .updateOne(
-                { uuid: paramPlayer },
+                { uuid: sanitize(paramPlayer) },
                 { $set: insertProfileStore },
                 { upsert: true }
             ).catch(console.error);
