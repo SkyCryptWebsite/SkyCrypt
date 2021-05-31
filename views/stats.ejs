@@ -1119,8 +1119,10 @@ if(calculated.slayer_coins_spent.total > 0){
     description += '🤺 Slayer: ';
 
     for(const slayer of slayerOrder){
-        const slayerInfo = calculated.slayers[slayer];
+        if(!calculated.slayers[slayer])
+            continue;
 
+        const slayerInfo = calculated.slayers[slayer];
         description += `${slayerEmojis[slayer]} ${slayerInfo.level.currentLevel}  `;
     }
 
