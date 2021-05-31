@@ -253,7 +253,7 @@ function getSlayerLevel(slayer, slayerName){
         progress = 1;
     }
 
-    let weight = calcSlayerWeight(slayerName, xp);
+    let weight = calcSlayerWeight(slayerName, slayerName === "enderman" ? null : xp);
 
     return { currentLevel, xp, maxLevel, progress, xpForNext, weight };
 }
@@ -886,7 +886,7 @@ function calcSkillWeight(skillGroup, level, experience){
 }
 
 function calcSlayerWeight(type, experience) {
-    const slayerWeight = constants.slayerWeight[type]
+    const slayerWeight = constants.slayerWeight[type];
 
     if (!experience || experience <= 1000000) {
         return {

@@ -1,6 +1,6 @@
 <%
 const rarityOrder = ['special', 'supreme', 'mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
-const slayerOrder = ['zombie', 'spider', 'wolf'];
+const slayerOrder = ['zombie', 'spider', 'wolf', 'enderman'];
 const badgeOrder = ['gold', 'silver', 'bronze'];
 
 const allItems = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory, items.storage);
@@ -186,6 +186,11 @@ const slayerInfo = {
                 damage: 0
             }
         ]
+    },
+    enderman: {
+        boss: 'Voidgloom Seraph',
+        head: '/head/908fc34531f652f5be7f27e4b27429986256ac422a8fb59f6d405b5c85c76f7',
+        drops: []
     }
 };
 
@@ -1078,7 +1083,8 @@ const skillEmojis = {
 const slayerEmojis = {
     zombie: "🧟",
     spider: "🕸️",
-    wolf: "🐺"
+    wolf: "🐺",
+    enderman: "?"
 };
 
 if('levels' in calculated){
@@ -2422,7 +2428,7 @@ const getRarityUpgradeClass = item => {
                 <% }else{ %>
                     <p class="stat-raw-values">
                         <span data-tippy-content="
-                        <span class='stat-name'>Total spent: </span><span class='stat-value'><%= calculated.slayer_coins_spent.total.toLocaleString() %> Coins</span><br><br>
+                        <span class='stat-name'>Approximate coins spent: </span><br><span class='stat-value'><%= calculated.slayer_coins_spent.total.toLocaleString() %> Coins</span><br><br>
                         <%
                         for(const slayerName of Object.keys(calculated.slayers).sort((a, b) => slayerOrder.indexOf(a) - slayerOrder.indexOf(b))){
                             if(!(slayerName in calculated.slayer_coins_spent))
@@ -2448,6 +2454,10 @@ const getRarityUpgradeClass = item => {
                     }
 
                     for(const slayerName of Object.keys(calculated.slayers).sort((a, b) => slayerOrder.indexOf(a) - slayerOrder.indexOf(b))){
+
+                        // Disabled the Enderman slayer tab because Nate needs to look at this CSS.
+                        if(slayerName === "enderman")
+                            continue;
 
                         const slayer = calculated.slayers[slayerName];
 
