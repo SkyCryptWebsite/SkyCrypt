@@ -214,6 +214,21 @@ module.exports = {
             7: 100000,
             8: 400000,
             9: 1000000
+        },
+
+        // Needs more research,
+        // please let us know 
+        // when you know the values.
+        enderman: {
+            1: 10,
+            2: 30,
+            3: 250,
+            4: 1500,
+            5: 5000,
+            6: 20000,
+            7: 100000,
+            8: 400000,
+            9: 1000000
         }
     },
 
