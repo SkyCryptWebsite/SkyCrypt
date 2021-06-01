@@ -231,7 +231,9 @@ async function main(){
             res.render('stats', 
                 { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), fileHashes, page: 'stats' },
                 (err, html) => {
-                    console.debug(`${debugId}: page succesfully rendered. (${new Date().getTime() - renderStart}ms)`);
+                    if(err) console.error(err);
+                    else console.debug(`${debugId}: page succesfully rendered. (${new Date().getTime() - renderStart}ms)`);
+
                     res.set('X-Debug-ID', `${debugId}`);
                     res.set('X-Process-Time', `${new Date().getTime() - timeStarted}`);
                     res.send(html);
