@@ -2612,7 +2612,8 @@ a.additional-player-stat:hover {
 
 .narrow-info-container {
     position: relative;
-    min-width: 330px;
+    box-sizing: border-box;
+    min-width: min(330px, 100vw);
     padding: 20px;
     padding-top: 50px;
     background-color: rgba(var(--background-rgb), 0.3);
@@ -2621,11 +2622,10 @@ a.additional-player-stat:hover {
 }
 
 .race-containers .narrow-info-container {
-    min-width: 230px;
+    min-width: 270px;
 }
 
 .stat-slayer .narrow-info-container {
-    min-width: 290px;
     padding-bottom: 30px;
 }
 
@@ -3720,10 +3720,6 @@ body {
 }
 
 @media (max-width: 800px) {
-    .stat-misc .kills-deaths-container .narrow-info-container {
-        min-width: auto;
-        width: 100%;
-    }
 
     .stat-header {
         padding-left: 0;
