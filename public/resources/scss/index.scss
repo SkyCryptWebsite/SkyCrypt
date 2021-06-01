@@ -2633,10 +2633,11 @@ a.additional-player-stat:hover {
     padding-bottom: 30px;
 }
 
-.slayer-containers {
-    content-visibility: auto;
-    contain-intrinsic-size: 230px 424px;
-}
+// TODO do this after Average Drops is or isn't removed
+// .slayer-containers .narrow-info-container {
+//     content-visibility: auto;
+//     contain-intrinsic-size: ;
+// }
 
 .slayer-header {
     text-align: center;
