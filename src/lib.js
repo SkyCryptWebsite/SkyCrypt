@@ -1791,14 +1791,13 @@ module.exports = {
                 for(const slayerName in userProfile.slayer_bosses){
                     const slayer = userProfile.slayer_bosses[slayerName];
 
-                    slayers[slayerName] = {};
-
                     if(!helper.hasPath(slayer, 'claimed_levels'))
                         continue;
 
-                    slayers[slayerName].level = getSlayerLevel(slayer, slayerName);
-
-                    slayers[slayerName].kills = {};
+                    slayers[slayerName] = {
+                        level: getSlayerLevel(slayer, slayerName),
+                        kills: {}
+                    };
 
                     for(const property in slayer){
                         slayers[slayerName][property] = slayer[property];
