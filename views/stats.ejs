@@ -189,7 +189,7 @@ const slayerInfo = {
     },
     enderman: {
         boss: 'Voidgloom Seraph',
-        head: '/head/908fc34531f652f5be7f27e4b27429986256ac422a8fb59f6d405b5c85c76f7',
+        head: '/head/1b09a3752510e914b0bdc9096b392bb359f7a8e8a9566a02e7f66faff8d6f89e',
         drops: []
     }
 };
@@ -1084,7 +1084,7 @@ const slayerEmojis = {
     zombie: "🧟",
     spider: "🕸️",
     wolf: "🐺",
-    enderman: "?"
+    enderman: "🔮"
 };
 
 if('levels' in calculated){
@@ -2172,7 +2172,7 @@ const getRarityUpgradeClass = item => {
 
                     <% const enchanting = calculated.enchanting; %>
                     <button class="stat-sub-header extender" aria-controls="Experiments" aria-expanded="false">Experiments</button>
-                    <div class="stat-experiments floor-containers extendable" id="Experiments">
+                    <div class="stat-experiments extendable narrow-info-container-wrapper" id="Experiments">
                         <% for(let game in enchanting.experiments){
                         const game_data = enchanting.experiments[game]; %>
                         <div class="narrow-info-container">
@@ -2267,7 +2267,7 @@ const getRarityUpgradeClass = item => {
                         </span>
                     </p>
 
-                    <div class="floor-containers">
+                    <div class="floor-containers narrow-info-container-wrapper">
                         <% for (let [id, floor] of Object.entries(calculated.dungeons.catacombs.floors)) { %>
                         <div class="narrow-info-container">
                             <div class="narrow-info-header">
@@ -2330,7 +2330,7 @@ const getRarityUpgradeClass = item => {
                         <span class="stat-name">Highest Floor Beaten: </span><span class="stat-value"><%= helper.titleCase(calculated.dungeons.master_catacombs.highest_floor.replace("_", " ")) %></span><br>
                     </p>
 
-                    <div class="floor-containers">
+                    <div class="floor-containers narrow-info-container-wrapper">
                         <% for (let [id, floor] of Object.entries(calculated.dungeons.master_catacombs.floors)) { %>
                         <div class="narrow-info-container">
                             <div class="narrow-info-header">
@@ -2440,7 +2440,7 @@ const getRarityUpgradeClass = item => {
                         <% } %>
                         "><span class="stat-name">Total Slayer XP: </span><span class="stat-value"><%= calculated.slayer_xp.toLocaleString() %></span></span>
                     </p>
-                    <div class="slayer-containers">
+                    <div class="slayer-containers narrow-info-container-wrapper">
                     <%
                     let maxSlayerLevel = 0;
                     let unclaimedRewards = false;
@@ -2456,10 +2456,6 @@ const getRarityUpgradeClass = item => {
                     }
 
                     for(const slayerName of Object.keys(calculated.slayers).sort((a, b) => slayerOrder.indexOf(a) - slayerOrder.indexOf(b))){
-
-                        // Disabled the Enderman slayer tab because Nate needs to look at this CSS.
-                        if(slayerName === "enderman")
-                            continue;
 
                         const slayer = calculated.slayers[slayerName];
 
@@ -2726,7 +2722,7 @@ const getRarityUpgradeClass = item => {
                         <span class="stat-name">Total Kills: </span><span class="stat-value"><%= calculated.kills.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span><br>
                         <span class="stat-name">Total Deaths: </span><span class="stat-value"><%= calculated.deaths.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span><br>
 
-                        <div class="kills-deaths-container">
+                        <div class="kills-deaths-container narrow-info-container-wrapper">
                             <div class="narrow-info-container top-kills">
                                 <div class="narrow-info-header">Kills</div>
                                 <div class="narrow-info-content">
@@ -2783,7 +2779,7 @@ const getRarityUpgradeClass = item => {
                             <span class="stat-name"><%= raceName %>: </span><span class="stat-value"><%= raceDuration %></span><br>
                             <% } %>
                         </p>
-                        <div class="race-containers">
+                        <div class="race-containers narrow-info-container-wrapper">
                             <%
                             const races = [
                                 { id: "dungeon_hub_crystal_core", name: "Crystal Core", icon: '399_0' },

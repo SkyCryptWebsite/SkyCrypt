@@ -2604,46 +2604,40 @@ a.additional-player-stat:hover {
     background-image: url(/resources/img/icons/google-sheets.svg);
 }
 
+.narrow-info-container-wrapper {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
 .narrow-info-container {
     position: relative;
-    min-width: 330px;
+    box-sizing: border-box;
+    min-width: min(330px, 100vw);
     padding: 20px;
     padding-top: 50px;
-    display: inline-block;
     background-color: rgba(var(--background-rgb), 0.3);
-    vertical-align: top;
     border-radius: 10px;
     overflow: hidden;
-
-    &:not(:last-of-type) {
-        margin-inline-end: 20px;
-    }
 }
 
 .race-containers .narrow-info-container {
-    min-width: 230px;
+    min-width: 270px;
 }
 
 .stat-slayer .narrow-info-container {
-    min-width: 290px;
     padding-bottom: 30px;
 }
 
 .stat-dungeons .narrow-info-container {
-    min-width: 270px;
     padding-bottom: 30px;
-    margin: 10px;
 }
 
-.narrow-info-container.top-deaths {
-    margin-bottom: 15px;
-}
-
-.slayer-containers {
-    white-space: nowrap;
-    content-visibility: auto;
-    contain-intrinsic-size: 230px 424px;
-}
+// TODO do this after Average Drops is or isn't removed
+// .slayer-containers .narrow-info-container {
+//     content-visibility: auto;
+//     contain-intrinsic-size: ;
+// }
 
 .slayer-header {
     text-align: center;
@@ -3701,10 +3695,8 @@ body {
         width: calc(100vw / 3 - 85px);
     }
 
-    .slayer-containers,
-    .race-containers,
-    .floor-containers {
-        white-space: nowrap;
+    .narrow-info-container-wrapper {
+        flex-wrap: nowrap;
         overflow-x: auto;
         margin-left: calc(-1 * var(--padding));
         margin-right: calc(-1 * var(--padding));
@@ -3716,14 +3708,19 @@ body {
         > :last-child {
             margin-inline-end: var(--padding);
         }
+        // because margin-inline-end gets eaten by the scroll container sometimes
+        &::after {
+            content: "";
+            position: relative;
+            flex-shrink: 0;
+            height: 1px;
+            width: 1px;
+            right: 21px; // compensate for the width and the gap
+        }
     }
 }
 
 @media (max-width: 800px) {
-    .stat-misc .kills-deaths-container .narrow-info-container {
-        min-width: auto;
-        width: 100%;
-    }
 
     .stat-header {
         padding-left: 0;
@@ -3770,16 +3767,6 @@ body {
 
     .sea-creature-name {
         white-space: break-spaces;
-    }
-
-    .top-deaths {
-        margin-left: 0;
-        margin-top: 25px;
-    }
-
-    .stat-misc .kills-deaths-container .narrow-info-container {
-        width: calc(100vw - 60px);
-        margin-left: 0 !important;
     }
 
     .social-button.patreon {
@@ -3908,9 +3895,7 @@ body {
         transform: translate(-50%, -50%) scale(0.25);
     }
 
-    .slayer-containers,
-    .race-containers,
-    .floor-containers {
+    .narrow-info-container-wrapper {
         scroll-snap-type: x proximity;
 
         > * {
@@ -4002,14 +3987,11 @@ body {
         min-height: 100vh;
     }
 
-    .slayer-containers,
-    .race-containers,
-    .floor-containers {
+    .narrow-info-container-wrapper {
         scroll-snap-type: x mandatory;
     }
 
-    .slayer-containers > *,
-    .race-containers > * {
+    .narrow-info-container-wrapper:not(.floor-containers) > * {
         scroll-snap-stop: always;
     }
 }
