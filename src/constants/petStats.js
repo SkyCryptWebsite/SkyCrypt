@@ -850,6 +850,8 @@ class Enderman extends Pet {
 			list.push(this.second);
 		if (this.rarity > 3)
 			list.push(this.third);
+		if (this.rarity > 4)
+			list.push(this.fourth);
 		return list;
 	}
 
@@ -874,6 +876,14 @@ class Enderman extends Pet {
 		return {
 			name: "§6Zealot Madness",
 			desc: [`§7Increases your odds to find a special Zealot by §a${round(this.level * mult, 1)}%.`]
+		};
+	}
+
+	get fourth() {
+		let mult = 0.4;
+		return {
+			name: "§6Enderman Slayer",
+			desc: [`§7Gain +§a${round(this.level * mult, 1)}% §7more combat xp from endermen`]
 		};
 	}
 }
