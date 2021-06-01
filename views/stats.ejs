@@ -2457,10 +2457,6 @@ const getRarityUpgradeClass = item => {
 
                     for(const slayerName of Object.keys(calculated.slayers).sort((a, b) => slayerOrder.indexOf(a) - slayerOrder.indexOf(b))){
 
-                        // Disabled the Enderman slayer tab because Nate needs to look at this CSS.
-                        if(slayerName === "enderman")
-                            continue;
-
                         const slayer = calculated.slayers[slayerName];
 
                         if(slayer.xp === undefined || slayer.xp == 0)
