@@ -876,6 +876,14 @@ class Enderman extends Pet {
 			desc: [`§7Increases your odds to find a special Zealot by §a${round(this.level * mult, 1)}%.`]
 		};
 	}
+
+	get fourth() {
+		let mult = 0.4;
+		return {
+			name: "§6Enderman Slayer",
+			desc: [`§7Gain +§a${round(this.level * mult, 1)}% §7more combat xp from endermen`]
+		};
+	}
 }
 
 class Ghoul extends Pet {
