@@ -850,6 +850,8 @@ class Enderman extends Pet {
 			list.push(this.second);
 		if (this.rarity > 3)
 			list.push(this.third);
+		if (this.rarity > 4)
+			list.push(this.fourth);
 		return list;
 	}
 
