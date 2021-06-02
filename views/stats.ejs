@@ -83,114 +83,18 @@ const slayerInfo = {
     zombie: {
         boss: 'Revenant Horror',
         head: '/head/1fc0184473fe882d2895ce7cbc8197bd40ff70bf10d3745de97b6c2a9c5fc78f',
-        drops: [
-            {
-                chance: {
-                    4: 42 / 13000
-                },
-                levelReq: 6,
-                name: 'Snake Rune',
-                icon: '/head/2c4a65c689b2d36409100a60c2ab8d3d0a67ce94eea3c1f7ac974fd893568b5d'
-            },
-            {
-                chance: {
-                    4: 21 / 13000
-                },
-                levelReq: 5,
-                name: 'Beheaded Horror',
-                icon: '/head/dbad99ed3c820b7978190ad08a934a68dfa90d9986825da1c97f6f21f49ad626'
-            },
-            {
-                chance: {
-                    4: 7 / 13000
-                },
-                levelReq: 7,
-                name: 'Scythe Blade',
-                id: 264,
-                damage: 0
-            }
-        ]
     },
     spider: {
         boss: 'Tarantula Broodfather',
         head: '/head/9d7e3b19ac4f3dee9c5677c135333b9d35a7f568b63d1ef4ada4b068b5a25',
-        drops: [
-            {
-                chance: {
-                    3: 42 / 130000,
-                    4: 42 / 13000
-                },
-                levelReq: 5,
-                name: 'Fly Swatter',
-                id: 284,
-                damage: 0
-            },
-            {
-                chance: {
-                    3: 21 / 130000,
-                    4: 21 / 13000
-                },
-                levelReq: 6,
-                name: 'Tarantula Talisman',
-                icon: '/head/442cf8ce487b78fa203d56cf01491434b4c33e5d236802c6d69146a51435b03d'
-            },
-            {
-                chance: {
-                    4: 7 / 13000
-                },
-                levelReq: 7,
-                name: 'Digested Mosquitoe',
-                id: 367,
-                damage: 0
-            }
-        ]
     },
     wolf: {
         boss: 'Sven Packmaster',
         head: '/head/f83a2aa9d3734b919ac24c9659e5e0f86ecafbf64d4788cfa433bbec189e8',
-        drops: [
-            {
-                chance: {
-                    4: 42 / 13000
-                },
-                levelReq: 6,
-                name: 'Couture Rune',
-                icon: '/head/734fb3203233efbae82628bd4fca7348cd071e5b7b52407f1d1d2794e31799ff'
-            },
-            {
-                chance: {
-                    3: 15 / 130000,
-                    4: 15 / 13000
-                },
-                levelReq: 5,
-                name: 'Red Claw Egg',
-                id: 383,
-                damage: "0_18"
-            },
-            {
-                chance: {
-                    4: 7 / 13000
-                },
-                levelReq: 7,
-                name: 'Grizzly Bait',
-                id: 349,
-                damage: 1
-            },
-            {
-                chance: {
-                    4: 5 / 13000
-                },
-                levelReq: 7,
-                name: 'Overflux Capacitor',
-                id: 406,
-                damage: 0
-            }
-        ]
     },
     enderman: {
         boss: 'Voidgloom Seraph',
         head: '/head/1b09a3752510e914b0bdc9096b392bb359f7a8e8a9566a02e7f66faff8d6f89e',
-        drops: []
     }
 };
 
@@ -2485,56 +2389,6 @@ const getRarityUpgradeClass = item => {
                                         <div class="slayer-kill"><div class="tier-name">Tier <%= romanize(tier) %></div><div class="tier-kills"><%= slayer.kills[tier].toLocaleString() %></div></div>
                                     <% } %>
                                 </div>
-                            </div>
-                            <div class="slayer-section-header"><span data-tippy-content="Average drops based on Slayer boss kills. The number ranges from 0% Magic Find to 100% Magic Find.">Average Drops</span></div>
-                            <div class="slayer-section slayer-drops">
-                                <%
-                                for(const drop of slayerInfo[slayerName].drops){
-                                    let dropsMin = 0;
-                                    let dropsMax = 0;
-
-                                    if(slayer.level.currentLevel >= drop.levelReq){
-                                        const slayerKills = Object.assign({}, slayer.kills);
-                                        let xpToLevel = constants.slayer_xp[slayerName][drop.levelReq];
-
-                                        for(const tier of Object.keys(slayer.kills).sort((a, b) => a - b)){
-                                            for(let i = slayer.kills[tier]; i > 0; i--){
-                                                xpToLevel -= constants.slayer_boss_xp[tier];
-                                                slayerKills[tier] -= 1;
-
-                                                if(xpToLevel <= 0)
-                                                    break;
-                                            }
-                                        }
-
-                                        for(const tier in drop.chance){
-                                            dropsMin += slayerKills[tier] * drop.chance[tier];
-                                            dropsMax += slayerKills[tier] * drop.chance[tier] * MAX_MAGIC_FIND
-                                        }
-                                    }
-
-                                    if(isNaN(dropsMin))
-                                        dropsMin = 0;
-
-                                    if(isNaN(dropsMax))
-                                        dropsMax = 0;
-
-                                    let dropsText = "";
-
-                                    if(dropsMin == 0)
-                                        dropsText = dropsMin
-                                    else
-                                        dropsText = `${dropsMin.toFixed(2)} - ${dropsMax.toFixed(2)}`;
-                                %>
-                                    <div class="slayer-drop">
-                                        <div class="slayer-drop-icon item-icon
-                                        <% if('icon' in drop){ %>custom-icon<% } %>
-                                        <% if('id' in drop){ %>icon-<%= drop.id %>_<%= drop.damage %><% } %>"
-                                        <% if('icon' in drop){ %> style="background-image: url(<%= drop.icon %>)"<% } %>>
-                                        </div>
-                                        <span class="stat-name"><%= drop.name %>s: </span><span class="stat-value"><%= dropsText %></span>
-                                    </div>
-                                <% } %>
                             </div>
                             <% max = slayer.level.currentLevel == slayer.level.maxLevel ? 'golden-text' : '' %><div class="slayer-section-header <%= max %>"><%= slayerName %> Level <span class="white-text <%= max %>"><%= slayer.level.currentLevel %></span></div>
                             <% if(unclaimedRewards){ %>

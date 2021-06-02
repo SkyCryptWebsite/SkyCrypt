@@ -2675,11 +2675,8 @@ a.additional-player-stat:hover {
     vertical-align: middle;
 }
 
-.slayer-section-header:not(:nth-child(2)) {
-    margin-top: 25px;
-}
-
 .slayer-section-header {
+    margin-top: 25px;
     text-align: center;
     font-weight: 600;
     text-transform: capitalize;
@@ -2724,37 +2721,6 @@ a.additional-player-stat:hover {
 
 .tier-kills {
     font-weight: 600;
-}
-
-.slayer-drops {
-    margin-top: 10px;
-    height: 160px;
-    display: flex;
-    flex-direction: column;
-}
-
-.slayer-drop {
-    position: relative;
-    padding-left: 36px;
-    box-sizing: border-box;
-    line-height: 2.5;
-    height: 40px;
-
-    .stat-value {
-        display: inline-block;
-        vertical-align: middle;
-        margin-left: 5px;
-    }
-}
-
-.slayer-drop-icon {
-    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
-    transform: scale(0.25) translateY(-50%);
-    transform-origin: top left;
-    display: inline-block;
-    position: absolute;
-    left: 0;
-    top: 50%;
 }
 
 .slayer-bar {
@@ -3481,16 +3447,6 @@ body {
 
     #skin_display_mobile {
         display: initial;
-    }
-
-    .slayer-drop .stat-name {
-        max-width: calc(100% - 95px);
-        display: inline-block;
-        overflow: hidden;
-        overflow: clip;
-        vertical-align: middle;
-        text-overflow: ellipsis;
-        white-space: nowrap;
     }
 }
 
