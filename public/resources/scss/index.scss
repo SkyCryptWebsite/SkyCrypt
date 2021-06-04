@@ -1675,8 +1675,7 @@ a.additional-player-stat:hover {
     color: var(--gold-hex) !important;
 }
 
-.stat-name.golden-text,
-.slayer-section-header.golden-text {
+.stat-name.golden-text {
     color: var(--maxed-hex) !important;
 }
 
@@ -2639,13 +2638,12 @@ a.additional-player-stat:hover {
 //     contain-intrinsic-size: ;
 // }
 
-.slayer-header {
-    text-align: center;
-    vertical-align: middle;
-    position: relative;
-    height: 32px;
-    font-weight: 600;
-    margin-bottom: 15px;
+.slayer {
+    display: flex;
+    flex-direction: column;
+    * {
+        flex: 0 0;
+    }
 }
 
 .slayer-icon {
@@ -2675,14 +2673,6 @@ a.additional-player-stat:hover {
     vertical-align: middle;
 }
 
-.slayer-section-header {
-    margin-top: 25px;
-    text-align: center;
-    font-weight: 600;
-    text-transform: capitalize;
-    color: rgba(var(--text-rgb), 0.8);
-}
-
 .narrow-info-section-header {
     font-weight: 700;
     text-transform: capitalize;
@@ -2693,6 +2683,7 @@ a.additional-player-stat:hover {
 
 .slayer-kills {
     display: flex;
+    margin-bottom: 1em;
 }
 
 .slayer-kill {
@@ -2710,6 +2701,12 @@ a.additional-player-stat:hover {
     margin-top: 5px;
     height: 20px;
     line-height: 20px;
+
+
+    margin-top: auto;
+    & + .slayer-level {
+        margin-top: 0;
+    }
 }
 
 .tier-name {
@@ -2721,6 +2718,11 @@ a.additional-player-stat:hover {
 
 .tier-kills {
     font-weight: 600;
+}
+
+.slayer-level {
+    align-self: center;
+    margin-top: auto;
 }
 
 .slayer-bar {

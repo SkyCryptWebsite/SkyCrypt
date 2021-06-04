@@ -1746,15 +1746,12 @@ const getRarityUpgradeClass = item => {
                     <div class="slayer-containers narrow-info-container-wrapper">
                     <%
                     let maxSlayerLevel = 0;
-                    let unclaimedRewards = false;
 
                     for(const slayerName in calculated.slayers){
                         const slayer = calculated.slayers[slayerName];
 
                         if(slayer.level.progress >= 1 && slayer.level.currentLevel < slayer.level.maxLevel){
                             slayer.level.unclaimed = true;
-
-                            unclaimedRewards = true;
                         }
                     }
 
@@ -1776,23 +1773,21 @@ const getRarityUpgradeClass = item => {
                             totalKills += slayer.kills[tier];
 
                         %>
-                        <div class="narrow-info-container slayer-<%= slayerName %>">
-                            <div class="narrow-info-header"><%= slayerName %></div>
-                            <div class="slayer-section">
-                                <div class="slayer-header">
-                                    <div class="slayer-icon" style="background-image:url(<%= slayerInfo[slayerName].head %>)"></div>
-                                    <span><%= slayerInfo[slayerName].boss %> <span class="grey-text">x<%= totalKills %></span>
-                                </div>
-                                <div class="slayer-kills">
-                                    <% for(const [index, tier] of Object.keys(slayer.kills).entries()){ %>
-                                        <div class="slayer-kill"><div class="tier-name">Tier <%= romanize(tier) %></div><div class="tier-kills"><%= slayer.kills[tier].toLocaleString() %></div></div>
-                                    <% } %>
-                                </div>
+                        <div class="narrow-info-container slayer">
+                            <div class="narrow-info-header">
+                                <div class="floor-icon" style="background-image: url(<%= slayerInfo[slayerName].head %>)"></div>
+                                <span><%= slayerInfo[slayerName].boss %></span>
                             </div>
-                            <% max = slayer.level.currentLevel == slayer.level.maxLevel ? 'golden-text' : '' %><div class="slayer-section-header <%= max %>"><%= slayerName %> Level <span class="white-text <%= max %>"><%= slayer.level.currentLevel %></span></div>
-                            <% if(unclaimedRewards){ %>
-                                <div class="slayer-unclaimed"><%= slayer.level.unclaimed ? 'unclaimed slayer rewards!' : '' %></div>
+                            <div class="slayer-kills">
+                                <% for(const [index, tier] of Object.keys(slayer.kills).entries()){ %>
+                                    <div class="slayer-kill"><div class="tier-name">Tier <%= romanize(tier) %></div><div class="tier-kills"><%= slayer.kills[tier].toLocaleString() %></div></div>
+                                <% } %>
+                                <div class="slayer-kill"><div class="tier-name">Total</div><div class="tier-kills"><%= totalKills.toLocaleString() %></div></div>
+                            </div>
+                            <% if(slayer.level.unclaimed){ %>
+                                <div class="slayer-unclaimed">unclaimed slayer rewards!</div>
                             <% } %>
+                            <% max = slayer.level.currentLevel == slayer.level.maxLevel ? 'golden-text' : '' %><span class="<%= max %> stat-name slayer-level"><%= slayerName %> level <span class="stat-value <%= max %>"><%= slayer.level.currentLevel %></span></span>
                             <div class="slayer-bar <%= slayer.level.currentLevel == slayer.level.maxLevel ? 'maxed-slayer' : ''%>">
                                 <div class="skill-progress-bar slayer-progress-bar" style="--progress: <%= slayer.level.currentLevel == slayer.level.maxLevel ? 1 : slayer.level.progress %>"></div>
                                 <div class="skill-progress-text slayer-progress-text">
