@@ -2682,14 +2682,13 @@ a.additional-player-stat:hover {
 }
 
 .slayer-kills {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat( auto-fit, 64px );
+    justify-content: center;
+    gap: 10px;
     margin-bottom: 1em;
-}
-
-.slayer-kill {
-    flex-grow: 1;
-    flex-basis: 0;
     text-align: center;
+
 }
 
 .slayer-unclaimed {
