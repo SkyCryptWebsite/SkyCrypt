@@ -419,6 +419,11 @@ module.exports = {
                 head: "/head/ea84cc8818c293484fdaafc8fa2f0bf39e55733a247d68023df2c6c6b9b671d0",
                 release: 1560284720000,
             },
+            "ENDERMAN_SLAYER": {
+                name: "Void Conqueror",
+                head: "/head/8fff41e1afc597b14f77b8e44e2a134dabe161a1526ade80e6290f2df331dc11",
+                release: new Date('2021-06-01 00:00:00 GMT+1').getTime(),
+            },
         },
         "GUARDIAN": {
             "GUARDIAN": {
