@@ -32,7 +32,7 @@ module.exports = {
         650: 26,
     },
 
-    minions_max_uniques: 609,
+    minions_max_uniques: 620,
     minions_max_slots: 25, // From unique tiers (excludes community shop upgrades)
 
     minions: {
@@ -276,6 +276,11 @@ module.exports = {
         JUNGLE: {
             type: 'foraging',
             head: '/head/2fe73d981690c1be346a16331819c4e8800859fcdc3e5153718c6ad45861924c'
-        }
+        },
+        VOIDLING: {
+            name: 'Voidling',
+            type: 'combat',
+            head: '/head/3a851ed2ce5c2c0523af772d206d9555e2e1383ec87946e6ff4c51186e29ef7f',
+        },
     }
 };
