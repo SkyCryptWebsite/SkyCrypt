@@ -32,7 +32,7 @@ module.exports = {
         650: 26,
     },
 
-    minions_max_uniques: 621,
+    minions_max_uniques: 620,
     minions_max_slots: 25, // From unique tiers (excludes community shop upgrades)
 
     minions: {
@@ -281,7 +281,6 @@ module.exports = {
             name: 'Voidling',
             type: 'combat',
             head: '/head/3a851ed2ce5c2c0523af772d206d9555e2e1383ec87946e6ff4c51186e29ef7f',
-            tiers: 12,
         },
     }
 };
