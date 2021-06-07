@@ -1,6 +1,6 @@
 const cluster = require('cluster');
 
-async function main(){
+async function main() {
     const { MongoClient } = require('mongodb');
 
     const credentials = require('./../../credentials.json');
@@ -29,7 +29,7 @@ async function main(){
         FantasmicGalaxy: {
             position: 4,
             type: "MAINTAINER",
-            message: "ember armor on top"
+            message: "ember armor no longer on top :(("
         },
         Shiiyu: {
             position: 5,
@@ -53,13 +53,13 @@ async function main(){
         },
     };
 
-    async function updateTopProfiles(){
+    async function updateTopProfiles() {
         await db.collection('topViews').deleteMany({});
 
         for (let name in featured) {
             const user = await db
                 .collection('usernames')
-                .find( { username: name } )
+                .find({ username: name })
                 .toArray();
 
             if (user[0]) {
