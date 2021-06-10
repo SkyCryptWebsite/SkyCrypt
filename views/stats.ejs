@@ -517,8 +517,8 @@ const getRarityUpgradeClass = item => {
     <%- include('../includes/header') %>
     <div id="dimmer">
         <video preload="none" id="enable_api" loop>
-            <source type="video/webm" src="/resources/video/enable_api.webm"></source>
-            <source type="video/mp4" src="/resources/video/enable_api.mp4"></source>
+            <source type="video/webm" src="/resources/video/enable-api.webm"></source>
+            <source type="video/mp4" src="/resources/video/enable-api.mp4"></source>
         </video>
     </div>
     <div id="stats_content">
@@ -794,12 +794,12 @@ const getRarityUpgradeClass = item => {
                             <%= skill_component('Carpentry', 'icon-58_0', calculated.levels.carpentry) %>
                             <%= skill_component('Runecrafting', 'icon-378_0', calculated.levels.runecrafting) %>
                         <% }else{ %>
-                            <div class="no-access">Skills from achievements across profiles. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">Enable Skills API</a> for more accurate data.</div>
+                            <div class="no-access">Skills from achievements across profiles. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">Enable Skills API</a> for more accurate data.</div>
                         <% } %>
                     </div>
                     <button id="show_skills">Show skills</button>
                 <% }else{ %>
-                    <div class="no-access"><%= calculated.display_name %> doesn't have skills access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
+                    <div class="no-access"><%= calculated.display_name %> doesn't have skills access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.</div>
                 <% } %>
             </div>
         </div>
@@ -840,7 +840,7 @@ const getRarityUpgradeClass = item => {
                 <div class="info-container">
                     <div class="info-header">Notice</div>
                     <% if(notAvailable.length > 0){ %>
-                        <%= notAvailable.join(', ') %> not available for <%= calculated.display_name %> due to limited API access.<br><span><a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</span>
+                        <%= notAvailable.join(', ') %> not available for <%= calculated.display_name %> due to limited API access.<br><span><a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.</span>
                     <% } %>
                     <% if(localizedItems){ %>
                         <% if(notAvailable.length > 0){ %><br><br><% } %>
@@ -950,7 +950,7 @@ const getRarityUpgradeClass = item => {
                 <h2 class="stat-header">Accessories</h2>
                 <div class="stat-content">
                     <% if(items.no_inventory){ %>
-                        <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
+                        <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.</div>
                     <% }else if(items.talismans.length == 0){ %>
                         <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
                     <% }else{ %>
@@ -1158,7 +1158,7 @@ const getRarityUpgradeClass = item => {
                 <h2 class="stat-header">Inventory</h2>
                 <div class="stat-content">
                     <% if(items.no_inventory){ %>
-                        <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable_api.webm">See here</a> how to enable full API access.</div>
+                        <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.</div>
                     <% }else{ %>
                         <div id="inventory_container">
                             <div id="inventory_header">
