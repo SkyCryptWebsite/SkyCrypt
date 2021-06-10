@@ -252,6 +252,7 @@ module.exports = {
     },
 
     mob_names: {
+        pond_squid: "Squid",
         unburried_zombie: "Crypt Ghoul",
         zealot_enderman: "Zealot",
         invisible_creeper: "Sneaky Creeper",

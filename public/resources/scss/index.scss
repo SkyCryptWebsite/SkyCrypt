@@ -1675,8 +1675,7 @@ a.additional-player-stat:hover {
     color: var(--gold-hex) !important;
 }
 
-.stat-name.golden-text,
-.slayer-section-header.golden-text {
+.stat-name.golden-text {
     color: var(--maxed-hex) !important;
 }
 
@@ -2639,13 +2638,12 @@ a.additional-player-stat:hover {
 //     contain-intrinsic-size: ;
 // }
 
-.slayer-header {
-    text-align: center;
-    vertical-align: middle;
-    position: relative;
-    height: 32px;
-    font-weight: 600;
-    margin-bottom: 15px;
+.slayer {
+    display: flex;
+    flex-direction: column;
+    * {
+        flex: 0 0;
+    }
 }
 
 .slayer-icon {
@@ -2675,17 +2673,6 @@ a.additional-player-stat:hover {
     vertical-align: middle;
 }
 
-.slayer-section-header:not(:nth-child(2)) {
-    margin-top: 25px;
-}
-
-.slayer-section-header {
-    text-align: center;
-    font-weight: 600;
-    text-transform: capitalize;
-    color: rgba(var(--text-rgb), 0.8);
-}
-
 .narrow-info-section-header {
     font-weight: 700;
     text-transform: capitalize;
@@ -2695,13 +2682,13 @@ a.additional-player-stat:hover {
 }
 
 .slayer-kills {
-    display: flex;
-}
-
-.slayer-kill {
-    flex-grow: 1;
-    flex-basis: 0;
+    display: grid;
+    grid-template-columns: repeat( auto-fit, 64px );
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 1em;
     text-align: center;
+
 }
 
 .slayer-unclaimed {
@@ -2713,6 +2700,12 @@ a.additional-player-stat:hover {
     margin-top: 5px;
     height: 20px;
     line-height: 20px;
+
+
+    margin-top: auto;
+    & + .slayer-level {
+        margin-top: 0;
+    }
 }
 
 .tier-name {
@@ -2726,35 +2719,9 @@ a.additional-player-stat:hover {
     font-weight: 600;
 }
 
-.slayer-drops {
-    margin-top: 10px;
-    height: 160px;
-    display: flex;
-    flex-direction: column;
-}
-
-.slayer-drop {
-    position: relative;
-    padding-left: 36px;
-    box-sizing: border-box;
-    line-height: 2.5;
-    height: 40px;
-
-    .stat-value {
-        display: inline-block;
-        vertical-align: middle;
-        margin-left: 5px;
-    }
-}
-
-.slayer-drop-icon {
-    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
-    transform: scale(0.25) translateY(-50%);
-    transform-origin: top left;
-    display: inline-block;
-    position: absolute;
-    left: 0;
-    top: 50%;
+.slayer-level {
+    align-self: center;
+    margin-top: auto;
 }
 
 .slayer-bar {
@@ -3481,16 +3448,6 @@ body {
 
     #skin_display_mobile {
         display: initial;
-    }
-
-    .slayer-drop .stat-name {
-        max-width: calc(100% - 95px);
-        display: inline-block;
-        overflow: hidden;
-        overflow: clip;
-        vertical-align: middle;
-        text-overflow: ellipsis;
-        white-space: nowrap;
     }
 }
 
