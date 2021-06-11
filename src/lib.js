@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const nbt = require('prismarine-nbt');
 const util = require('util');
+const sanitize = require('mongo-sanitize');
 const mcData = require("minecraft-data")("1.8.9");
 const _ = require('lodash');
 const constants = require('./constants');
@@ -252,7 +253,7 @@ function getSlayerLevel(slayer, slayerName){
         progress = 1;
     }
 
-    let weight = calcSlayerWeight(slayerName, xp);
+    let weight = calcSlayerWeight(slayerName, slayerName === "enderman" ? null : xp);
 
     return { currentLevel, xp, maxLevel, progress, xpForNext, weight };
 }
@@ -372,9 +373,14 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
     // Check backpack contents and add them to the list of items
     for(const [index, item] of items.entries()){
-        if(helper.hasPath(item, 'tag', 'display', 'Name') && helper.hasPath(item, 'tag', 'ExtraAttributes', 'id')
-          && (item.tag.display.Name.includes('Backpack')
-            || ['NEW_YEAR_CAKE_BAG', 'BUILDERS_WAND', 'BASKET_OF_SEEDS'].includes(item.tag.ExtraAttributes.id))){
+        if(
+            helper.hasPath(item, 'tag', 'display', 'Name') &&
+            helper.hasPath(item, 'tag', 'ExtraAttributes', 'id') &&
+            (
+                item.tag.display.Name.includes('Backpack') ||
+                ['NEW_YEAR_CAKE_BAG', 'BUILDERS_WAND', 'BASKET_OF_SEEDS'].includes(item.tag.ExtraAttributes.id)
+            )
+        ) {
             let backpackData;
 
             for(const key of Object.keys(item.tag.ExtraAttributes))
@@ -396,7 +402,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
     let index = 0;
 
-    for(const item of items){
+    for (const item of items) {
         // Set custom texture for colored leather armor
         if(helper.hasPath(item, 'id') && item.id >= 298 && item.id <= 301){
             let color = [149, 94, 59];
@@ -417,19 +423,47 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             if(item.display_name == 'Water Bottle')
                 item.Damage = 17;
 
+        // Set print display name (contains HTML)
+        if (item.display_name) {
+            item.display_name_print = item.display_name
+        }
+
+        if (item.tag?.ExtraAttributes?.dungeon_item_level > 0) {
+            const dungeonItemLevel = item.tag.ExtraAttributes.dungeon_item_level
+            let newStars = null
+
+            switch (true) {
+                case dungeonItemLevel <= 5:
+                    newStars = '✪'.repeat(dungeonItemLevel)
+                    break
+                case dungeonItemLevel <= 10:
+                    newStars = '⍟'.repeat(dungeonItemLevel - 5) + '✪'.repeat(5 - (dungeonItemLevel - 5))
+                    break
+                default:
+                    newStars = '✪'.repeat(dungeonItemLevel)
+                    break
+            }
+
+            item.display_name_print = item.display_name_print.replace(
+                /(✪+)/,
+                `<i class="icomoon icomoon-dungeon-stars">${newStars}</i>`
+            )
+        }
+
+
         // Resolve skull textures to their image path
-        if(helper.hasPath(item, 'tag', 'SkullOwner', 'Properties', 'textures')
-        && Array.isArray(item.tag.SkullOwner.Properties.textures)
-        && item.tag.SkullOwner.Properties.textures.length > 0){
-            try{
+        if(
+            helper.hasPath(item, 'tag', 'SkullOwner', 'Properties', 'textures') &&
+            Array.isArray(item.tag.SkullOwner.Properties.textures) &&
+            item.tag.SkullOwner.Properties.textures.length > 0
+        ) {
+            try {
                 const json = JSON.parse(Buffer.from(item.tag.SkullOwner.Properties.textures[0].Value, 'base64').toString());
                 const url = json.textures.SKIN.url;
                 const uuid = url.split("/").pop();
 
                 item.texture_path = `/head/${uuid}?v6`;
-            }catch(e){
-
-            }
+            } catch(e) {}
         }
 
         // Uses animated skin texture, if present
@@ -441,10 +475,13 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             }
         }
 
-        if(customTextures){
+        if (
+            !helper.hasPath(item, 'tag', 'ExtraAttributes', 'skin') &&
+            customTextures
+        ) {
             const customTexture = await customResources.getTexture(item, false, packs);
 
-            if(customTexture){
+            if (customTexture) {
                 item.animated = customTexture.animated;
                 item.texture_path = '/' + customTexture.path;
                 item.texture_pack = customTexture.pack.config;
@@ -615,14 +652,34 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             if(item.type == 'hatccessory')
                 item.type = 'accessory';
 
-            if(item.type == 'accessory')
-                item.equipmentType = 'accessory';
-            else if (item.type == 'helmet' || item.type == 'chestplate' || item.type == 'leggings' || item.type == 'boots')
-                item.equipmentType = 'armor';
-            else if (item.type == 'sword' || item.type == 'bow' || item.type == 'fishing weapon' || item.type == 'fishing rod')
-                item.equipmentType = 'weapon';
-            else
-                item.equipmentType = 'none';
+            switch (item.type) {
+                case 'accessory':
+                    item.equipmentType = 'accessory'
+                    break
+                case 'helmet':
+                case 'chestplate':
+                case 'leggings':
+                case 'boots':
+                case 'dungeon helmet':
+                case 'dungeon chestplate':
+                case 'dungeon leggings':
+                case 'dungeon boots':
+                    item.equipmentType = 'armor'
+                    break
+                case 'sword':
+                case 'bow':
+                case 'fishing weapon':
+                case 'fishing rod':
+                case 'dungeon sword':
+                case 'dungeon bow':
+                case 'dungeon fishing weapon':
+                case 'dungeon fishing rod':
+                    item.equipmentType = 'weapon'
+                    break
+                default:
+                    item.equipmentType = 'none'
+                    break
+            }
 
             if(item.type != null && item.type.startsWith('dungeon'))
                 item.Damage = 0;
@@ -722,42 +779,49 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
         }
 
         // Workaround for detecting item types if another language is set by the player on Hypixel
-        if(getId(item) != 'ENCHANTED_BOOK'
-        && !constants.item_types.includes(item.type)){
-            if('sharpness' in enchantments
-            || 'crticial' in enchantments
-            || 'ender_slayer' in enchantments
-            || 'execute' in enchantments
-            || 'first_strike' in enchantments
-            || 'giant_killer' in enchantments
-            || 'lethality' in enchantments
-            || 'life_steal' in enchantments
-            || 'looting' in enchantments
-            || 'luck' in enchantments
-            || 'scavenger' in enchantments
-            || 'vampirism' in enchantments
-            || 'bane_of_arthropods' in enchantments
-            || 'smite' in enchantments)
-                item.type = 'sword';
+        if (
+            getId(item) != 'ENCHANTED_BOOK' &&
+            !constants.item_types.includes(item.type)
+        ) {
+            if (
+                'sharpness' in enchantments ||
+                'crticial' in enchantments ||
+                'ender_slayer' in enchantments ||
+                'execute' in enchantments ||
+                'first_strike' in enchantments ||
+                'giant_killer' in enchantments ||
+                'lethality' in enchantments ||
+                'life_steal' in enchantments ||
+                'luck' in enchantments ||
+                'scavenger' in enchantments ||
+                'vampirism' in enchantments ||
+                'bane_of_arthropods' in enchantments ||
+                'smite' in enchantments
+            )
+                item.type = 'sword'
 
-            if('power' in enchantments
-            || 'aiming' in enchantments
-            || 'infinite_quiver' in enchantments
-            || 'power' in enchantments
-            || 'snipe' in enchantments
-            || 'punch' in enchantments
-            || 'flame' in enchantments
-            || 'piercing' in enchantments)
-                item.type = 'bow';
+            if (
+                'power' in enchantments ||
+                'aiming' in enchantments ||
+                'infinite_quiver' in enchantments ||
+                'power' in enchantments ||
+                'snipe' in enchantments ||
+                'punch' in enchantments ||
+                'flame' in enchantments ||
+                'piercing' in enchantments
+            )
+                item.type = 'bow'
 
-            if('angler' in enchantments
-            || 'blessing' in enchantments
-            || 'caster' in enchantments
-            || 'frail' in enchantments
-            || 'luck_of_the_sea' in enchantments
-            || 'lure' in enchantments
-            || 'magnet' in enchantments)
-                item.type = 'fishing rod';
+            if (
+                'angler' in enchantments ||
+                'blessing' in enchantments ||
+                'caster' in enchantments ||
+                'frail' in enchantments ||
+                'luck_of_the_sea' in enchantments ||
+                'lure' in enchantments ||
+                'magnet' in enchantments
+            )
+                item.type = 'fishing rod'
         }
 
         if(!helper.hasPath(item, 'display_name') && helper.hasPath(item, 'id')){
@@ -822,7 +886,7 @@ function calcSkillWeight(skillGroup, level, experience){
 }
 
 function calcSlayerWeight(type, experience) {
-    const slayerWeight = constants.slayerWeight[type]
+    const slayerWeight = constants.slayerWeight[type];
 
     if (!experience || experience <= 1000000) {
         return {
@@ -1035,6 +1099,42 @@ module.exports = {
         let candy_bag = 'candy_inventory_contents' in profile ? await getItems(profile.candy_inventory_contents.data, customTextures, packs, options.cacheOnly) : [];
         let personal_vault = 'personal_vault_contents' in profile ? await getItems(profile.personal_vault_contents.data, customTextures, packs, options.cacheOnly) : [];
 
+        let storage = []
+        if (profile.backpack_contents) {
+            const storage_size = Math.max(18, Object.keys(profile.backpack_contents).length)
+            for (let slot = 0; slot < storage_size; slot++) {
+                storage.push({})
+
+                if (
+                    profile.backpack_contents[slot] &&
+                    profile.backpack_icons[slot]
+                ) {
+                    const icon = await getItems(
+                        profile.backpack_icons[slot].data,
+                        customTextures,
+                        packs,
+                        options.cacheOnly
+                    )
+                    const items = await getItems(
+                        profile.backpack_contents[slot].data,
+                        customTextures,
+                        packs,
+                        options.cacheOnly
+                    )
+
+                    for (const [index, item] of items.entries()) {
+                        item.isInactive = true
+                        item.inBackpack = true
+                        item.item_index = index
+                    }
+
+                    const storage_unit = icon[0]
+                    storage_unit.containsItems = items
+                    storage[slot] = storage_unit
+                }
+            }
+        }
+
         const wardrobeColumns = wardrobe_inventory.length / 4;
 
         let wardrobe = [];
@@ -1067,19 +1167,35 @@ module.exports = {
         output.quiver = quiver;
         output.potion_bag = potion_bag;
         output.personal_vault = personal_vault;
+        output.storage = storage;
 
-        const all_items = armor.concat(inventory, enderchest, talisman_bag, fishing_bag, quiver, potion_bag, personal_vault, wardrobe_inventory);
+        const all_items = armor.concat(
+            inventory,
+            enderchest,
+            talisman_bag,
+            fishing_bag,
+            quiver,
+            potion_bag,
+            personal_vault,
+            wardrobe_inventory,
+            storage,
+        )
 
         for(const [index, item] of all_items.entries()){
             item.item_index = index;
             item.itemId = v4('itemId');
 
-            if('containsItems' in item && Array.isArray(item.containsItems))
-                item.containsItems.forEach(a => { a.backpackIndex = item.item_index; a.itemId = v4('itemId'); });
+            if ('containsItems' in item && Array.isArray(item.containsItems)) {
+                item.containsItems.forEach((a, idx) => {
+                    a.backpackIndex = item.item_index
+                    a.itemId = v4('itemId')
+                })
+            }
         }
 
         // All items not in the inventory or accessory bag should be inactive so they don't contribute to the total stats
         enderchest = enderchest.map(a => Object.assign({ isInactive: true}, a) );
+        storage = storage.map(a => Object.assign({ isInactive: true}, a) );
 
         // Add candy bag contents as backpack contents to candy bag
         for(let item of all_items){
@@ -1091,7 +1207,7 @@ module.exports = {
         const talisman_ids = [];
 
         // Modify talismans on armor and add
-        for(const talisman of armor.filter(a => a.type == 'accessory')){
+        for(const talisman of armor.filter(a => a.type == 'accessory' || a.type == 'dungeon accessory')){
             const id = getId(talisman);
 
             if(id === "")
@@ -1148,13 +1264,13 @@ module.exports = {
         }
 
         // Add inactive talismans from enderchest and backpacks
-        for(const item of inventory.concat(enderchest)){
+        for(const item of inventory.concat(enderchest, storage)) {
             let items = [item];
 
             if(item.type != 'accessory' && 'containsItems' in item && Array.isArray(item.containsItems))
                 items = item.containsItems.slice(0);
 
-            for(const talisman of items.filter(a => a.type == 'accessory')){
+            for(const talisman of items.filter(a => a.type == 'accessory' || a.type == 'dungeon accessory')){
                 const id = getId(talisman);
 
                 const insertTalisman = Object.assign({ isUnique: true, isInactive: true }, talisman);
@@ -1233,12 +1349,16 @@ module.exports = {
         }
 
 
-        for(const talisman of talismans){
+        for (const talisman of talismans) {
             talisman.base_name = talisman.display_name;
 
-            if(helper.hasPath(talisman, 'tag', 'ExtraAttributes', 'modifier')){
-                talisman.base_name = talisman.display_name.split(" ").slice(1).join(" ");
+            if (helper.hasPath(talisman, 'tag', 'ExtraAttributes', 'modifier')) {
+                talisman.base_name = talisman.display_name.split(" ").slice(1).join(" ")
                 talisman.reforge = talisman.tag.ExtraAttributes.modifier
+            }
+
+            if (helper.hasPath(talisman, 'tag', 'ExtraAttributes', 'talisman_enrichment')) {
+                talisman.enrichment = talisman.tag.ExtraAttributes.talisman_enrichment
             }
         }
 
@@ -1380,8 +1500,8 @@ module.exports = {
             return rarityOrder;
         });
 
-        let swords = output.weapons.filter(a => a.type == 'sword');
-        let bows = output.weapons.filter(a => a.type == 'bow');
+        let swords = output.weapons.filter(a => a.type == 'sword' || a.type == 'dungeon sword');
+        let bows = output.weapons.filter(a => a.type == 'bow' || a.type == 'dungeon bow');
 
         let swordsInventory = swords.filter(a => a.backpackIndex === undefined);
         let bowsInventory = bows.filter(a => a.backpackIndex === undefined);
@@ -1671,14 +1791,13 @@ module.exports = {
                 for(const slayerName in userProfile.slayer_bosses){
                     const slayer = userProfile.slayer_bosses[slayerName];
 
-                    slayers[slayerName] = {};
-
                     if(!helper.hasPath(slayer, 'claimed_levels'))
                         continue;
 
-                    slayers[slayerName].level = getSlayerLevel(slayer, slayerName);
-
-                    slayers[slayerName].kills = {};
+                    slayers[slayerName] = {
+                        level: getSlayerLevel(slayer, slayerName),
+                        kills: {}
+                    };
 
                     for(const property in slayer){
                         slayers[slayerName][property] = slayer[property];
@@ -1776,19 +1895,19 @@ module.exports = {
         // Apply pet bonus to armor
         if(activePet) {
             activePet.ref.modifyArmor(
-                items.armor.find(a => a.type === 'helmet'),
-                getId(items.armor.find(a => a.type === 'helmet')),
-                items.armor.find(a => a.type === 'chestplate'),
-                getId(items.armor.find(a => a.type === 'chestplate')),
-                items.armor.find(a => a.type === 'leggings'),
-                getId(items.armor.find(a => a.type === 'leggings')),
-                items.armor.find(a => a.type === 'boots'),
-                getId(items.armor.find(a => a.type === 'boots'))
+                items.armor.find(a => a.type === 'helmet' || a.type === 'dungeon helmet'),
+                getId(items.armor.find(a => a.type === 'helmet' || a.type === 'dungeon helmet')),
+                items.armor.find(a => a.type === 'chestplate' || a.type === 'dungeon chestplate'),
+                getId(items.armor.find(a => a.type === 'chestplate' || a.type === 'dungeon chestplate')),
+                items.armor.find(a => a.type === 'leggings' || a.type === 'dungeon leggings'),
+                getId(items.armor.find(a => a.type === 'leggings' || a.type === 'dungeon leggings')),
+                items.armor.find(a => a.type === 'boots' || a.type === 'dungeon boots'),
+                getId(items.armor.find(a => a.type === 'boots' || a.type === 'dungeon boots'))
             )
-            loreGenerator.makeLore(items.armor.find(a => a.type === 'helmet'))
-            loreGenerator.makeLore(items.armor.find(a => a.type === 'chestplate'))
-            loreGenerator.makeLore(items.armor.find(a => a.type === 'leggings'))
-            loreGenerator.makeLore(items.armor.find(a => a.type === 'boots'))
+            loreGenerator.makeLore(items.armor.find(a => a.type === 'helmet' || a.type === 'dungeon helmet'))
+            loreGenerator.makeLore(items.armor.find(a => a.type === 'chestplate' || a.type === 'dungeon chestplate'))
+            loreGenerator.makeLore(items.armor.find(a => a.type === 'leggings' || a.type === 'dungeon leggings'))
+            loreGenerator.makeLore(items.armor.find(a => a.type === 'boots' || a.type === 'dungeon boots'))
         }
 
         // Apply Lapis Armor full set bonus of +60 HP
@@ -1819,7 +1938,7 @@ module.exports = {
 
         // Apply basic armor stats
         for(const item of items.armor){
-            if(item.isInactive || item.type == 'accessory'){
+            if(item.isInactive || item.type == 'accessory' || item.type == 'dungeon accessory'){
                 item.stats = {};
 
                 if(getId(item) != 'PARTY_HAT_CRAB')
@@ -2684,8 +2803,10 @@ module.exports = {
                 // now we push the lore of the held items
                 if(heldItemObj) {
                     lore.push('', `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
-                } else {
+                } else if (heldItem in constants.pet_items) {
                     lore.push('', `§6Held Item: §${constants.tier_colors[constants.pet_items[heldItem].tier.toLowerCase()]}${constants.pet_items[heldItem].name}`);
+                } else {
+                    lore.push('', `§6Held Item: §fUnknown item (${heldItem})`);
                 }
 
                 if(heldItem in constants.pet_items){
@@ -2743,10 +2864,7 @@ module.exports = {
             pet.lore = '';
 
             for(const [index, line] of lore.entries()){
-                pet.lore += helper.renderLore(line);
-
-                if(index < lore.length)
-                    pet.lore += '<br>';
+                pet.lore += '<span class="lore-row wrap">' + helper.renderLore(line) + '</span>';
             }
 
             pet.display_name = `${petName}${petSkin ? ' ✦' : ''}`;
@@ -2856,7 +2974,8 @@ module.exports = {
             }
         });
 
-        const output = [];
+        const upgrades = [];
+        const other = [];
         missing.forEach(async talisman => {
             let object = {
                 display_name: null,
@@ -2886,10 +3005,23 @@ module.exports = {
                 }
             }
 
-            output.push(object);
+            let includes = false;
+
+            for(const array of Object.values(constants.talisman_upgrades)){
+                if(array.includes(talisman))
+                    includes = true;
+            }
+            if(includes){
+                upgrades.push(object)
+            }else{
+                other.push(object);
+            }
         });
 
-        return output;
+        return {
+            missing: other,
+            upgrades: upgrades
+        };
     },
 
     getTalismanCount: () => {
@@ -3223,7 +3355,7 @@ module.exports = {
 
         let profileObject = await db
         .collection('profileStore')
-        .findOne({ uuid: paramPlayer });
+        .findOne({ uuid: sanitize(paramPlayer) });
 
         let lastCachedSave = 0;
 
@@ -3442,7 +3574,7 @@ module.exports = {
             db
             .collection('profileStore')
             .updateOne(
-                { uuid: paramPlayer },
+                { uuid: sanitize(paramPlayer) },
                 { $set: insertProfileStore },
                 { upsert: true }
             ).catch(console.error);
@@ -3611,7 +3743,7 @@ module.exports = {
     },
 
     getPacks: () => {
-        return customResources.packs;
+        return customResources.packs.sort((a, b) => b.priority - a.priority);
     }
 }
 

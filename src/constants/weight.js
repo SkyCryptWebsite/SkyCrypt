@@ -81,6 +81,6 @@ module.exports = {
         wolf: {
             divider: 1962,
             modifier: 0.015,
-        },
+        }
     }
 }

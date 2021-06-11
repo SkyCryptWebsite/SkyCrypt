@@ -401,8 +401,16 @@ module.exports = {
 
     /*
         Animted skins created at ezgif.com/apng-maker with the following settings:
-        - Delay time: 500
-        - Enable crossfade frames: delay = 3, count = 10
+        - Skins that change based on time of day
+            - Delay time: 500
+            - Enable crossfade frames: delay = 3, count = 10
+        - Skins that are always animated
+            - Delay time: 20 (but do what looks best)
+            - No crossfade
+            - Don't stack frames (unless needed)
+        Animation object:
+        a) day and night for skins that change based on time of day
+        b) progressive timings (in ms) since the first frame to the next occurrence of the first frame to close the cycle
     */
     pet_skins: {
         "ENDERMAN": {
@@ -410,6 +418,11 @@ module.exports = {
                 name: "Spooky",
                 head: "/head/ea84cc8818c293484fdaafc8fa2f0bf39e55733a247d68023df2c6c6b9b671d0",
                 release: 1560284720000,
+            },
+            "ENDERMAN_SLAYER": {
+                name: "Void Conqueror",
+                head: "/head/8fff41e1afc597b14f77b8e44e2a134dabe161a1526ade80e6290f2df331dc11",
+                release: new Date('2021-06-01 00:00:00 GMT+1').getTime(),
             },
         },
         "GUARDIAN": {
@@ -616,6 +629,22 @@ module.exports = {
                 head: "/head/e9281c4d87d68526b0749d4361e6ef786c8a35717aa053da704b1d53410d37a6",
                 release: 1610557200000,
             },
+            "MONKEY_GORILLA": {
+                name: "Gorilla",
+                head: "/resources/img/items/monkey_gorilla.png",
+                release: new Date('2021-05-13 18:00:00 GMT+1').getTime(),
+                animation: {
+                    0: "/head/ac75d405235a58c68bddadad082e895e84feadfffd9f69c00a2194498732d48",
+                    1000: "/head/2a8be837b3361464b5ca555029658f0fdc9432cb351f088996f6da7210e1fc75",
+                    1200: "/head/75c6a5d6361a7b847fa6bbf6905c381f764a84f1c820d8e82c76e7db0feb9ee7",
+                    1500: "/head/e6227de20348cf220bb15a6c5d1c7d5405b0bbd9f759cecf891c3991f07f4f9f",
+                    1800: "/head/20cbac153bc024d35a6d7df3d57b6ee814ae01e643bcd2f77a2aaae0acd771d2",
+                    3600: "/head/e6227de20348cf220bb15a6c5d1c7d5405b0bbd9f759cecf891c3991f07f4f9f",
+                    3800: "/head/75c6a5d6361a7b847fa6bbf6905c381f764a84f1c820d8e82c76e7db0feb9ee7",
+                    4100: "/head/2a8be837b3361464b5ca555029658f0fdc9432cb351f088996f6da7210e1fc75",
+                    4300: "/head/ac75d405235a58c68bddadad082e895e84feadfffd9f69c00a2194498732d48",
+                }
+            },
         },
         "SKELETON_HORSE": {
             "HORSE_ZOMBIE": {
@@ -666,6 +695,45 @@ module.exports = {
                 head: "/head/be924115d3a8bbacfd4fafb6cc70f99a2f7580e4583a50fa9b9c285a98ac0c56",
                 release: new Date('2021-04-26 18:00:00 GMT+1').getTime(),
             },
+        },
+        "ENDERMITE": {
+            "ENDERMITE_RADIANT": {
+                name: "Radiant",
+                head: "/resources/img/items/endermite_radiant.png",
+                release: new Date('2021-06-02 18:00:00 GMT+1').getTime(),
+                animation: {
+                    0: "/head/3840ad985c0b08811ab0a137ca736119d079dbf2143462145eb62b6ecbd2d7cc",
+                    250: "/head/7019bf6fa4602458a9b20ad09cca45ef5ccc6257081ae323f9bbfca0cbc947e9",
+                    400: "/head/b2e7419ad458452240b03d8e32016218c70a694a97b9973f4d8ba974056248bd",
+                    500: "/head/116743eb37c69387615fe4816bc9727ba269f64d1f0bf83b788e3e32c6b06147",
+                    700: "/head/2fc4a7542b754420b1b19f9a28ea00040555a9e876052b97f65840308a93348d",
+                    950: "/head/116743eb37c69387615fe4816bc9727ba269f64d1f0bf83b788e3e32c6b06147",
+                    1150: "/head/b2e7419ad458452240b03d8e32016218c70a694a97b9973f4d8ba974056248bd",
+                    1300: "/head/7019bf6fa4602458a9b20ad09cca45ef5ccc6257081ae323f9bbfca0cbc947e9",
+                    1600: "/head/3840ad985c0b08811ab0a137ca736119d079dbf2143462145eb62b6ecbd2d7cc",
+                    1650: "/head/b8705a24c728644bfec2195f315e5d354060638e2bd9bf8df73d84146c8d1406",
+                    1900: "/head/4d671df85ea9ee52885d7d774f0c9462c8e8bf048e77aa06160c1cc5f45273be",
+                    2050: "/head/adb8259926a17a493a85669387f6e3d77876dac3c838b6c7d6f919ebc53217a5",
+                    2200: "/head/a028ac35c7c7e98f2a6bcd1d1b17b94e79510c6e239f7195717232dcbc7f1e0c",
+                    2500: "/head/adb8259926a17a493a85669387f6e3d77876dac3c838b6c7d6f919ebc53217a5",
+                    2650: "/head/4d671df85ea9ee52885d7d774f0c9462c8e8bf048e77aa06160c1cc5f45273be",
+                    2800: "/head/b8705a24c728644bfec2195f315e5d354060638e2bd9bf8df73d84146c8d1406",
+                    3000: "/head/3840ad985c0b08811ab0a137ca736119d079dbf2143462145eb62b6ecbd2d7cc",
+                    3650: "/head/b2e7419ad458452240b03d8e32016218c70a694a97b9973f4d8ba974056248bd",
+                    3950: "/head/2fc4a7542b754420b1b19f9a28ea00040555a9e876052b97f65840308a93348d",
+                    4200: "/head/116743eb37c69387615fe4816bc9727ba269f64d1f0bf83b788e3e32c6b06147",
+                    4350: "/head/b2e7419ad458452240b03d8e32016218c70a694a97b9973f4d8ba974056248bd",
+                    4500: "/head/7019bf6fa4602458a9b20ad09cca45ef5ccc6257081ae323f9bbfca0cbc947e9",
+                    4800: "/head/3840ad985c0b08811ab0a137ca736119d079dbf2143462145eb62b6ecbd2d7cc",
+                    4950: "/head/b8705a24c728644bfec2195f315e5d354060638e2bd9bf8df73d84146c8d1406",
+                    5100: "/head/4d671df85ea9ee52885d7d774f0c9462c8e8bf048e77aa06160c1cc5f45273be",
+                    5250: "/head/adb8259926a17a493a85669387f6e3d77876dac3c838b6c7d6f919ebc53217a5",
+                    5450: "/head/a028ac35c7c7e98f2a6bcd1d1b17b94e79510c6e239f7195717232dcbc7f1e0c",
+                    5700: "/head/adb8259926a17a493a85669387f6e3d77876dac3c838b6c7d6f919ebc53217a5",
+                    5850: "/head/4d671df85ea9ee52885d7d774f0c9462c8e8bf048e77aa06160c1cc5f45273be",
+                    6000: "/head/b8705a24c728644bfec2195f315e5d354060638e2bd9bf8df73d84146c8d1406"
+                }
+            }
         },
     },
 
@@ -977,6 +1045,11 @@ module.exports = {
             name: "Reaper Gem",
             tier: "LEGENDARY",
             description: `§7Gain §c8${symbols.ferocity} Ferocity §7for 5s on kill`
+        },
+        PET_ITEM_FLYING_PIG: {
+            name: "Flying Pig",
+            tier: "UNCOMMON",
+            description: `§7Grants your pig pet the ability to fly while on your private island! You also don't need to hold a carrot on a stick to control your pig.`
         },
     }
 }

@@ -1,5 +1,6 @@
 const cluster = require('cluster');
 const axios = require('axios');
+const sanitize = require('mongo-sanitize');
 require('axios-debug-log');
 
 const retry = require('async-retry');
@@ -89,11 +90,11 @@ module.exports = {
         if(isUuid){
             user = await db
             .collection('usernames')
-            .findOne({ uuid });
+            .findOne({ uuid: sanitize(uuid) });
         }else{
             const playerObjects = await db
             .collection('usernames')
-            .find({ $text: { $search: uuid } })
+            .find({ $text: { $search: sanitize(uuid) } })
             .toArray();
 
             for(const doc of playerObjects)
@@ -187,7 +188,7 @@ module.exports = {
 
                     if(module.exports.hasPath(data.textures, 'skin')){
                         skin_data.skinurl = data.textures.skin.url;
-                        skin_data.model = data.textures.slim ? 'slim' : 'regular';
+                        skin_data.model = data.textures.slim ? 'slim' : 'default';
                     }
 
                     if(module.exports.hasPath(data.textures, 'cape'))
@@ -214,9 +215,10 @@ module.exports = {
     },
 
     getGuild: async (uuid, db, cacheOnly = false) => {
+        uuid = sanitize(uuid);
         const guildMember = await db
         .collection('guildMembers')
-        .findOne({ uuid: uuid });
+        .findOne({ uuid });
 
         let guildObject = null;
 
@@ -226,19 +228,19 @@ module.exports = {
         if(guildMember !== null && guildMember.gid !== null)
             guildObject = await db
             .collection('guilds')
-            .findOne({ gid: guildMember.gid });
+            .findOne({ gid: sanitize(guildMember.gid) });
 
         if(cacheOnly || (guildMember !== null && guildMember.gid !== null && (guildObject === null || (Date.now() - guildMember.last_updated) < 7200 * 1000))){
             if(guildMember.gid !== null){
                 const guildObject = await db
                 .collection('guilds')
-                .findOne({ gid: guildMember.gid });
+                .findOne({ gid: sanitize(guildMember.gid) });
 
                 if(guildObject === null)
                     return null;
 
                 guildObject.level = module.exports.getGuildLevel(guildObject.exp);
-                guildObject.gmUser = await module.exports.resolveUsernameOrUuid(guildObject.gm, db, cacheOnly);
+                guildObject.gmUser = guildObject.gm ? await module.exports.resolveUsernameOrUuid(guildObject.gm, db, cacheOnly) : "None";
                 guildObject.rank = guildMember.rank;
 
                 return guildObject;
@@ -606,7 +608,7 @@ module.exports = {
         await db
         .collection('hypixelPlayers')
         .updateOne(
-            { uuid },
+            { uuid: sanitize(uuid) },
             { $set: rank },
             { upsert: true }
         );
@@ -615,6 +617,8 @@ module.exports = {
     },
 
     getRank: async (uuid, db, cacheOnly = false) => {
+        uuid = sanitize(uuid);
+
         let hypixelPlayer = await db
         .collection('hypixelPlayers')
         .findOne({ uuid });
@@ -636,7 +640,8 @@ module.exports = {
 
     fetchMembers: async (profileId, db, returnUuid = false) => {
         let output = [];
-
+        profileId = sanitize(profileId);
+        
         const members = await db
         .collection('members')
         .find({ profile_id: profileId })

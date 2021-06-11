@@ -255,6 +255,49 @@ module.exports = {
         BAIT_RING: [
             'SPIKED_ATROCITY',
         ],
+        MASTER_SKULL_TIER_1: [
+            'MASTER_SKULL_TIER_2',
+            'MASTER_SKULL_TIER_3',
+            'MASTER_SKULL_TIER_4',
+            'MASTER_SKULL_TIER_5',
+            'MASTER_SKULL_TIER_6',
+            'MASTER_SKULL_TIER_7'
+        ],
+        MASTER_SKULL_TIER_2: [
+            'MASTER_SKULL_TIER_3',
+            'MASTER_SKULL_TIER_4',
+            'MASTER_SKULL_TIER_5',
+            'MASTER_SKULL_TIER_6',
+            'MASTER_SKULL_TIER_7'
+        ],
+        MASTER_SKULL_TIER_3: [
+            'MASTER_SKULL_TIER_4',
+            'MASTER_SKULL_TIER_5',
+            'MASTER_SKULL_TIER_6',
+            'MASTER_SKULL_TIER_7'
+        ],
+        MASTER_SKULL_TIER_4: [
+            'MASTER_SKULL_TIER_5',
+            'MASTER_SKULL_TIER_6',
+            'MASTER_SKULL_TIER_7'
+        ],
+        MASTER_SKULL_TIER_5: [
+            'MASTER_SKULL_TIER_6',
+            'MASTER_SKULL_TIER_7'
+        ],
+        MASTER_SKULL_TIER_6: [
+            'MASTER_SKULL_TIER_7'
+        ],
+        SOULFLOW_PILE: [
+            'SOULFLOW_BATTERY',
+            'SOULFLOW_SUPERCELL',
+        ],
+        SOULFLOW_BATTERY: [
+            'SOULFLOW_SUPERCELL',
+        ],
+        ENDER_ARTIFACT: [
+            'ENDER_RELIC'
+        ],
     },
 
     talisman_duplicates: {
@@ -305,7 +348,7 @@ module.exports = {
             'CAMPFIRE_TALISMAN_27',
             'CAMPFIRE_TALISMAN_28',
             'CAMPFIRE_TALISMAN_29'
-        ]
+        ],
     },
 
     talismans: {
@@ -732,5 +775,70 @@ module.exports = {
             rarity: "common",
             texture: "/head/5b8b51eaefe0e3a10ad7fa1627801d2ce4412b4e432685906192f83283708233"
         },
+        "MASTER_SKULL_TIER_1": {
+            name: "Master Skull - Tier 1",
+            rarity: "common",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
+        },
+        "MASTER_SKULL_TIER_2": {
+            name: "Master Skull - Tier 2",
+            rarity: "common",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
+        },
+        "MASTER_SKULL_TIER_3": {
+            name: "Master Skull - Tier 3",
+            rarity: "uncommon",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
+        },
+        "MASTER_SKULL_TIER_4": {
+            name: "Master Skull - Tier 4",
+            rarity: "uncommon",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
+        },
+        "MASTER_SKULL_TIER_5": {
+            name: "Master Skull - Tier 5",
+            rarity: "rare",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
+        },
+        "MASTER_SKULL_TIER_6": {
+            name: "Master Skull - Tier 6",
+            rarity: "epic",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
+        },
+        "MASTER_SKULL_TIER_7": {
+            name: "Master Skull - Tier 7",
+            rarity: "legendary",
+            texture: "/head/d48935509b5dee1e0daa28f51a3cc741b2b2e18b4efa1aab5883a5378623"
+        },
+        "SOULFLOW_PILE": {
+            name: "Soulflow Pile",
+            rarity: "uncommon",
+            texture: "/head/468c1fa4a21ba4f27dcb30ab3bfab0dc22a1e4fcf9ed12c1d7a70feb07f8d7ae"
+        },
+        "SOULFLOW_BATTERY": {
+            name: "Soulflow Battery",
+            rarity: "rare",
+            texture: "/head/468c1fa4a21ba4f27dcb30ab3bfab0dc22a1e4fcf9ed12c1d7a70feb07f8d7ae"
+        },
+        "SOULFLOW_SUPERCELL": {
+            name: "Soulflow Supercell",
+            rarity: "epic",
+            texture: "/head/468c1fa4a21ba4f27dcb30ab3bfab0dc22a1e4fcf9ed12c1d7a70feb07f8d7ae"
+        },
+        "POCKET_ESPRESSO_MACHINE": {
+            name: "Pocket Espresso Machine",
+            rarity: "common",
+            texture: "/head/666070ce03a545ee4d263bcf27f36338d249d7cb7a2376f92c1673ae134e04b6"
+        },
+        "HANDY_BLOOD_CHALICE": {
+            name: "Handy Blood Chalice",
+            rarity: "common",
+            texture: "/head/431cd7ed4e4bf07c3dfd9ba498708e730e69d807335affabc12d87ff542f6a88"
+        },
+        "ENDER_RELIC": {
+            name: "Ender Relic",
+            rarity: "legendary",
+            texture: "/head/969da4e7b8d558af02e80e2e1669ceb6084898db55907ef3e66d9a329329e941"
+        }
     }
 }

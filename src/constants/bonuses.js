@@ -164,6 +164,8 @@ module.exports = {
             }
         },
 
+        enderman_slayer: {},
+
         enchantments: {
             sharpness: {
                 1: {

@@ -233,9 +233,9 @@ module.exports = {
     },
 
     slayer_cost: {
-        1: 100,
-        2: 2000,
-        3: 10000,
+        1: 2000,
+        2: 7500,
+        3: 20000,
         4: 50000,
         5: 100000
     },
@@ -252,6 +252,7 @@ module.exports = {
     },
 
     mob_names: {
+        pond_squid: "Squid",
         unburried_zombie: "Crypt Ghoul",
         zealot_enderman: "Zealot",
         invisible_creeper: "Sneaky Creeper",
@@ -318,6 +319,11 @@ module.exports = {
         'MODERATOR': {
             color: '2',
             tag: 'MOD'
+        },
+
+        'GAME_MASTER': {
+            color: '2',
+            tag: 'GM'
         },
 
         'HELPER': {

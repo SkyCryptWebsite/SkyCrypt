@@ -23,7 +23,7 @@ Before contributing to SkyCrypt, make sure you install the development environme
     ```
     git clone https://github.com/SkyCryptWebsite/SkyCrypt.git
      ```
-    Alternatively, you can use a git GUI like GitKraken to clone it.
+    Alternatively, you can use a git GUI like GitHub Desktop to clone it.
 
 2. Run `npm i` in the project directory to install the necessary dependencies.
     - Some operating systems may require extra dependencies, such as [node-canvas](https://github.com/Automattic/node-canvas/wiki)

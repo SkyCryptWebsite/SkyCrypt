@@ -68,7 +68,7 @@ async function init(){
         }
     }
 
-    resourcePacks = resourcePacks.sort((a, b) => b.config.priority - a.config.priority);
+    resourcePacks = resourcePacks.sort((a, b) => a.config.priority - b.config.priority);
 
     for(let pack of resourcePacks){
         pack.files = await getFiles(path.resolve(pack.basePath, 'assets', 'minecraft', 'mcpatcher', 'cit'));
@@ -96,7 +96,12 @@ async function init(){
             if(properties.type != 'item')
                 continue;
 
-            let texture = {weight: 0, animated: false, file: path.basename(file), match: []};
+            let texture = {
+                weight: 0, 
+                animated: false, 
+                file: path.basename(file), 
+                match: []
+            };
 
             let textureFile = 'texture' in properties
             ? path.resolve(path.dirname(file), properties.texture)
@@ -386,6 +391,7 @@ readyPromise.then(() => {
 module.exports = {
     ready: false,
     packs: outputPacks,
+    completePacks: resourcePacks,
     getTexture: async (item, ignoreId = false, packIds) => {
         if(!module.exports.ready)
             await readyPromise;

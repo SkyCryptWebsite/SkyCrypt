@@ -8,6 +8,7 @@ const css = require('css');
 const helper = require('./helper');
 const path = require('path');
 const customResources = require('./custom-resources');
+const sanitize = require('mongo-sanitize');
 const fs = require('fs-extra');
 
 const skew_a = 26 / 45;
@@ -265,6 +266,7 @@ module.exports = {
 
         if(skyblockId){
             skyblockId = skyblockId.replace(".gif", "");
+            skyblockId = sanitize(skyblockId);
 
             if(skyblockId.includes(':')){
                 const split = skyblockId.split(":");
