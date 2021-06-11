@@ -1,5 +1,5 @@
-# This CI Workflow was deployed and configured by WarpWing
-name: SkyCrypt Docker CI Workflow
+# This CI Workflow was deployed and configured by WarpWing.
+name: SkyCrypt CI Workflow
 
 on:
  push:
@@ -12,6 +12,7 @@ jobs:
         node-version: [14.x]
         redis-version: [6]
         mongodb-version: [4.4]
+        language: [ 'javascript' ]
     steps:
     - name: Git checkout
       uses: actions/checkout@v1
@@ -41,4 +42,5 @@ jobs:
        repository: warpwing/skycrypt-javelin
        tag_with_ref: true
 
+  
 
