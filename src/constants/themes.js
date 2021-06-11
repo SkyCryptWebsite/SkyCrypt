@@ -154,6 +154,32 @@ module.exports = {
         gold: "#c58000",
       },
     },
+    windows: {
+      name: "Windows",
+      author: "Microsoft",
+      community: true,
+      images: {
+        bg: "https://i.imgur.com/bnfpU59.jpeg",
+      },
+      backgrounds: {
+        skillbar: {
+          type: "color",
+          color: "#0b61a8",
+        },
+        maxedbar: {
+          type: "color",
+          color: "#dcbc18",
+        },
+      },
+      colors: {
+        logo: "#0073d1",
+        icon: "#0078d7",
+        link: "#0b86ea",
+        hover: "#1992f5",
+        maxed: "#ddba0e",
+        gold: "#fddd3a",
+      },
+    },
 
     /* Hidden Themes */
 
