@@ -32,15 +32,6 @@ jobs:
       with:
         mongodb-version: ${{ matrix.mongodb-version }}
         
-    - name: Check out the repo
-      uses: actions/checkout@v2
-    - name: Push to Docker Hub
-      uses: docker/build-push-action@v1
-      with:
-       username: warpwing
-       password: ${{ secrets.DOCKER_PASSWORD }}
-       repository: warpwing/skycrypt-javelin
-       tag_with_ref: true
-
+   
   
 
