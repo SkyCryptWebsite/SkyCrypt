@@ -12,7 +12,6 @@ jobs:
         node-version: [14.x]
         redis-version: [6]
         mongodb-version: [4.4]
-        language: [ 'javascript' ]
     steps:
     - name: Git checkout
       uses: actions/checkout@v1
@@ -32,6 +31,8 @@ jobs:
       with:
         mongodb-version: ${{ matrix.mongodb-version }}
         
-   
+    - name: Run NPM Build Process
+      run: npm ci
+      run: npm run build --if-present
   
 
