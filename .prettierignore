@@ -5,6 +5,7 @@
 
 # resourcepacks
 /public/resourcepacks/*/assets/**
+*.mcmeta
 
 # compiled css dependencies
 /public/resources/scss/*.bundle.css
