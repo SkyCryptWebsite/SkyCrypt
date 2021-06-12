@@ -1,16 +1,12 @@
 const cluster = require('cluster');
 const axios = require('axios');
+const sanitize = require('mongo-sanitize');
 require('axios-debug-log');
 
 const retry = require('async-retry');
 
-const _ = require('lodash');
-
 const constants = require('./constants');
 const credentials = require('./../credentials.json');
-
-const Redis = require("ioredis");
-const redisClient = new Redis();
 
 const Hypixel = axios.create({
     baseURL: 'https://api.hypixel.net/'
@@ -89,11 +85,11 @@ module.exports = {
         if(isUuid){
             user = await db
             .collection('usernames')
-            .findOne({ uuid });
+            .findOne({ uuid: sanitize(uuid) });
         }else{
             const playerObjects = await db
             .collection('usernames')
-            .find({ $text: { $search: uuid } })
+            .find({ $text: { $search: sanitize(uuid) } })
             .toArray();
 
             for(const doc of playerObjects)
@@ -214,9 +210,10 @@ module.exports = {
     },
 
     getGuild: async (uuid, db, cacheOnly = false) => {
+        uuid = sanitize(uuid);
         const guildMember = await db
         .collection('guildMembers')
-        .findOne({ uuid: uuid });
+        .findOne({ uuid });
 
         let guildObject = null;
 
@@ -226,13 +223,13 @@ module.exports = {
         if(guildMember !== null && guildMember.gid !== null)
             guildObject = await db
             .collection('guilds')
-            .findOne({ gid: guildMember.gid });
+            .findOne({ gid: sanitize(guildMember.gid) });
 
         if(cacheOnly || (guildMember !== null && guildMember.gid !== null && (guildObject === null || (Date.now() - guildMember.last_updated) < 7200 * 1000))){
             if(guildMember.gid !== null){
                 const guildObject = await db
                 .collection('guilds')
-                .findOne({ gid: guildMember.gid });
+                .findOne({ gid: sanitize(guildMember.gid) });
 
                 if(guildObject === null)
                     return null;
@@ -392,13 +389,7 @@ module.exports = {
 
     // Get Minecraft lore without the color and formatting codes
     getRawLore: text => {
-        let output = "";
-        let parts = text.split("§");
-
-        for(const [index, part] of parts.entries())
-            output += part.substring(Math.min(index, 1));
-
-        return output;
+        return text.replace(/§[0-9a-fk-or]/g, '');
     },
 
     capitalizeFirstLetter: word => {
@@ -606,7 +597,7 @@ module.exports = {
         await db
         .collection('hypixelPlayers')
         .updateOne(
-            { uuid },
+            { uuid: sanitize(uuid) },
             { $set: rank },
             { upsert: true }
         );
@@ -615,6 +606,8 @@ module.exports = {
     },
 
     getRank: async (uuid, db, cacheOnly = false) => {
+        uuid = sanitize(uuid);
+
         let hypixelPlayer = await db
         .collection('hypixelPlayers')
         .findOne({ uuid });
@@ -636,7 +629,8 @@ module.exports = {
 
     fetchMembers: async (profileId, db, returnUuid = false) => {
         let output = [];
-
+        profileId = sanitize(profileId);
+        
         const members = await db
         .collection('members')
         .find({ profile_id: profileId })

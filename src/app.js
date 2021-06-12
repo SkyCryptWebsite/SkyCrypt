@@ -9,18 +9,12 @@ async function main(){
     const bodyParser = require('body-parser');
     const cors = require('cors');
 
-    const Redis = require("ioredis");
-    const redisClient = new Redis();
-
     const axios = require('axios');
     require('axios-debug-log');
-
-    const retry = require('async-retry');
 
     const fs = require('fs-extra');
 
     const path = require('path');
-    const util = require('util');
     const renderer = require('./renderer');
 
     await renderer.init();
@@ -45,6 +39,7 @@ async function main(){
     require('moment-duration-format')(moment);
 
     const { MongoClient } = require('mongodb');
+    const sanitize = require('mongo-sanitize');
     const helper = require('./helper');
     const constants = require('./constants');
     const manifest = require('../public/manifest.json');
@@ -106,8 +101,9 @@ async function main(){
 
     async function getFavoritesFormUUIDs(uuids) {
         favorites = [];
-        for (const uuid of uuids) {
+        for (let uuid of uuids) {
             if (uuid == null) continue;
+            uuid = sanitize(uuid);
 
             const cache = await db
             .collection('favoriteCache')
@@ -229,7 +225,9 @@ async function main(){
             res.render('stats', 
                 { req, items, calculated, _, constants, helper, extra: await getExtra('stats', favorites), fileHashes, page: 'stats' },
                 (err, html) => {
-                    console.debug(`${debugId}: page succesfully rendered. (${new Date().getTime() - renderStart}ms)`);
+                    if(err) console.error(err);
+                    else console.debug(`${debugId}: page succesfully rendered. (${new Date().getTime() - renderStart}ms)`);
+
                     res.set('X-Debug-ID', `${debugId}`);
                     res.set('X-Process-Time', `${new Date().getTime() - timeStarted}`);
                     res.send(html);
@@ -289,8 +287,6 @@ async function main(){
 
         try{
             file = await fs.readFile(path.resolve(cachePath, filename));
-
-            const fileStats = await fs.stat(path.resolve(cachePath, filename));
 
             if(Date.now() - stats.mtime > 10 * 1000){
                 const optifineCape = await axios.head(`https://optifine.net/capes/${username}.png`);

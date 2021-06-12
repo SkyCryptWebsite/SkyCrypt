@@ -1,6 +1,7 @@
 const helper = require('./helper');
 const lib = require('./lib');
 const cors = require('cors');
+const sanitize = require('mongo-sanitize');
 const constants = require('./constants');
 
 const Redis = require("ioredis");
@@ -58,7 +59,7 @@ module.exports = (app, db) => {
         if (req.query.key) {
             const doc = await db
                 .collection('apiKeys')
-                .findOne({ key: req.query.key });
+                .findOne({ key: sanitize(req.query.key) });
 
             if (doc != null)
                 req.apiKey = true;

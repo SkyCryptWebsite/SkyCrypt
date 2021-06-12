@@ -130,7 +130,7 @@
 
             element.style = ''
 
-            for (color in theme.colors) {
+            for (const color in theme.colors) {
                 const value = theme.colors[color];
                 
                 element.style.setProperty(`--${color}-hex`, value);
@@ -140,11 +140,11 @@
                 }
             }
 
-            for (img in theme.images) {
+            for (const img in theme.images) {
                 element.style.setProperty(`--${img}`, `url(${theme.images[img]})`);
             }
             
-            for (key in theme.backgrounds) {
+            for (const key in theme.backgrounds) {
                 const background = theme.backgrounds[key]
                 let value
                 switch (background.type) {
