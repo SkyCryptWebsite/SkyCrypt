@@ -2,13 +2,10 @@ const cluster = require('cluster');
 
 async function main(){
     const { MongoClient } = require('mongodb');
-    const _ = require('lodash');
 
     const Redis = require("ioredis");
     const redisClient = new Redis();
 
-    const helper = require('./../helper');
-    const lib = require('./../lib');
     const constants = require('./../constants');
     const credentials = require('./../../credentials.json');
 

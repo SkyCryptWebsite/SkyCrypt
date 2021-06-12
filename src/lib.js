@@ -1,5 +1,4 @@
 const cluster = require('cluster');
-const fs = require('fs');
 const path = require('path');
 const nbt = require('prismarine-nbt');
 const util = require('util');
@@ -33,10 +32,8 @@ const Redis = require("ioredis");
 const redisClient = new Redis();
 
 const customResources = require('./custom-resources');
-const { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } = require('constants');
 const loreGenerator = require('./loreGenerator');
 const randomEmoji = require('./constants/randomEmoji');
-const { outputJSON } = require('fs-extra');
 
 const parseNbt = util.promisify(nbt.parse);
 
@@ -48,10 +45,6 @@ const MAX_SOULS = 227;
 let TALISMAN_COUNT;
 const level50SkillExp = 55172425;
 const level60SkillExp = 111672425;
-
-function replaceAll(target, search, replacement){
-    return target.split(search).join(replacement);
-}
 
 function getMinMax(profiles, min, ...path){
     let output = null;
@@ -400,8 +393,6 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
         }
     }
 
-    let index = 0;
-
     for (const item of items) {
         // Set custom texture for colored leather armor
         if(helper.hasPath(item, 'id') && item.id >= 298 && item.id <= 301){
@@ -410,7 +401,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'color'))
                 color = item.tag.ExtraAttributes.color.split(":");
 
-            const type = ["leather_helmet", "leather_chestplate", "leather_leggings", "leather_boots"][item.id - 298].replace('_', '/');
+            const type = ["leather/helmet", "leather/chestplate", "leather/leggings", "leather/boots"][item.id - 298];
 
             item.texture_path = `/${type}/${color.join(',')}`;
         }
@@ -1615,7 +1606,6 @@ module.exports = {
         let totalSkillXp = 0;
         let average_level = 0;
         let weight = 0;
-        let overflowWeight = 0;
 
         // Apply skill bonuses
         if(helper.hasPath(userProfile, 'experience_skill_taming')
@@ -3475,7 +3465,6 @@ module.exports = {
             throw "No data returned by Hypixel API, please try again!";
 
         let highest = 0;
-        let profileId;
         let profile;
 
         const storeProfiles = {};
@@ -3525,7 +3514,6 @@ module.exports = {
             if(helper.hasPath(userProfile, 'last_save') && userProfile.last_save > highest){
                 profile = _profile;
                 highest = userProfile.last_save;
-                profileId = _profile.profile_id;
             }
         }
 

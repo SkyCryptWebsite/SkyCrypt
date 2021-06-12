@@ -4,7 +4,6 @@ async function main(){
     const { MongoClient } = require('mongodb');
     const _ = require('lodash');
 
-    const helper = require('./../helper');
     const lib = require('./../lib');
     const constants = require('./../constants');
     const credentials = require('./../../credentials.json');

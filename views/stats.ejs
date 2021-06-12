@@ -2245,8 +2245,8 @@ const getRarityUpgradeClass = item => {
     </main>
     <%- include('../includes/footer'); %>
     <script>
-        let items = JSON.parse(`<%- JSON.stringify(items).replace(/\\/g, '\\\\') %>`);
-        let calculated = JSON.parse(`<%- JSON.stringify(calculated).replace(/\\/g, '\\\\') %>`);
+        const items = JSON.parse(`<%- JSON.stringify(items).replace(/\\/g, '\\\\') %>`);
+        const calculated = JSON.parse(`<%- JSON.stringify(calculated).replace(/\\/g, '\\\\') %>`);
         <%
             const clientConstants = {
                 special_enchants: constants.special_enchants,
