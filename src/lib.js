@@ -1,8 +1,8 @@
 const cluster = require('cluster');
-const fs = require('fs');
 const path = require('path');
 const nbt = require('prismarine-nbt');
 const util = require('util');
+const sanitize = require('mongo-sanitize');
 const mcData = require("minecraft-data")("1.8.9");
 const _ = require('lodash');
 const constants = require('./constants');
@@ -32,10 +32,8 @@ const Redis = require("ioredis");
 const redisClient = new Redis();
 
 const customResources = require('./custom-resources');
-const { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } = require('constants');
 const loreGenerator = require('./loreGenerator');
 const randomEmoji = require('./constants/randomEmoji');
-const { outputJSON } = require('fs-extra');
 
 const parseNbt = util.promisify(nbt.parse);
 
@@ -47,10 +45,6 @@ const MAX_SOULS = 227;
 let TALISMAN_COUNT;
 const level50SkillExp = 55172425;
 const level60SkillExp = 111672425;
-
-function replaceAll(target, search, replacement){
-    return target.split(search).join(replacement);
-}
 
 function getMinMax(profiles, min, ...path){
     let output = null;
@@ -252,7 +246,7 @@ function getSlayerLevel(slayer, slayerName){
         progress = 1;
     }
 
-    let weight = calcSlayerWeight(slayerName, xp);
+    let weight = calcSlayerWeight(slayerName, slayerName === "enderman" ? null : xp);
 
     return { currentLevel, xp, maxLevel, progress, xpForNext, weight };
 }
@@ -399,8 +393,6 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
         }
     }
 
-    let index = 0;
-
     for (const item of items) {
         // Set custom texture for colored leather armor
         if(helper.hasPath(item, 'id') && item.id >= 298 && item.id <= 301){
@@ -409,7 +401,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             if(helper.hasPath(item, 'tag', 'ExtraAttributes', 'color'))
                 color = item.tag.ExtraAttributes.color.split(":");
 
-            const type = ["leather_helmet", "leather_chestplate", "leather_leggings", "leather_boots"][item.id - 298].replace('_', '/');
+            const type = ["leather/helmet", "leather/chestplate", "leather/leggings", "leather/boots"][item.id - 298];
 
             item.texture_path = `/${type}/${color.join(',')}`;
         }
@@ -885,7 +877,7 @@ function calcSkillWeight(skillGroup, level, experience){
 }
 
 function calcSlayerWeight(type, experience) {
-    const slayerWeight = constants.slayerWeight[type]
+    const slayerWeight = constants.slayerWeight[type];
 
     if (!experience || experience <= 1000000) {
         return {
@@ -1614,7 +1606,6 @@ module.exports = {
         let totalSkillXp = 0;
         let average_level = 0;
         let weight = 0;
-        let overflowWeight = 0;
 
         // Apply skill bonuses
         if(helper.hasPath(userProfile, 'experience_skill_taming')
@@ -1790,14 +1781,13 @@ module.exports = {
                 for(const slayerName in userProfile.slayer_bosses){
                     const slayer = userProfile.slayer_bosses[slayerName];
 
-                    slayers[slayerName] = {};
-
                     if(!helper.hasPath(slayer, 'claimed_levels'))
                         continue;
 
-                    slayers[slayerName].level = getSlayerLevel(slayer, slayerName);
-
-                    slayers[slayerName].kills = {};
+                    slayers[slayerName] = {
+                        level: getSlayerLevel(slayer, slayerName),
+                        kills: {}
+                    };
 
                     for(const property in slayer){
                         slayers[slayerName][property] = slayer[property];
@@ -3355,7 +3345,7 @@ module.exports = {
 
         let profileObject = await db
         .collection('profileStore')
-        .findOne({ uuid: paramPlayer });
+        .findOne({ uuid: sanitize(paramPlayer) });
 
         let lastCachedSave = 0;
 
@@ -3475,7 +3465,6 @@ module.exports = {
             throw "No data returned by Hypixel API, please try again!";
 
         let highest = 0;
-        let profileId;
         let profile;
 
         const storeProfiles = {};
@@ -3525,7 +3514,6 @@ module.exports = {
             if(helper.hasPath(userProfile, 'last_save') && userProfile.last_save > highest){
                 profile = _profile;
                 highest = userProfile.last_save;
-                profileId = _profile.profile_id;
             }
         }
 
@@ -3574,7 +3562,7 @@ module.exports = {
             db
             .collection('profileStore')
             .updateOne(
-                { uuid: paramPlayer },
+                { uuid: sanitize(paramPlayer) },
                 { $set: insertProfileStore },
                 { upsert: true }
             ).catch(console.error);
