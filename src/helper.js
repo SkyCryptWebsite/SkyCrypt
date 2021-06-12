@@ -394,13 +394,7 @@ module.exports = {
 
     // Get Minecraft lore without the color and formatting codes
     getRawLore: text => {
-        let output = "";
-        let parts = text.split("§");
-
-        for(const [index, part] of parts.entries())
-            output += part.substring(Math.min(index, 1));
-
-        return output;
+        return text.replace(/§[0-9a-fk-or]/g, '');
     },
 
     capitalizeFirstLetter: word => {
