@@ -1,7 +1,6 @@
 const collections = require('./collections');
 const leveling = require('./leveling');
 const moment = require('moment');
-const { getLevelByXp } = require('../lib');
 require('moment-duration-format')(moment);
 
 const defaultOptions = {
