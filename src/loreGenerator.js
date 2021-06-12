@@ -1,8 +1,4 @@
-const constants = require('./constants');
 const helper = require('./helper');
-const { SitemapItemStream } = require('sitemap');
-const { getId } = helper;
-const moment = require('moment');
 
 module.exports = {
     makeLore: function(item) {
@@ -76,9 +72,6 @@ module.exports = {
                     break;
             }
         }
-
-        const enchantments = helper.getPath(item, 'tag', 'ExtraAttributes', 'enchantments') || {};
-        const hasEnchantments = Object.keys(enchantments).length > 0;
 
         // Set HTML lore to be displayed on the website
         if(helper.hasPath(item, 'tag', 'display', 'Lore'))

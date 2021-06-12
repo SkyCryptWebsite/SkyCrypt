@@ -9,18 +9,12 @@ async function main(){
     const bodyParser = require('body-parser');
     const cors = require('cors');
 
-    const Redis = require("ioredis");
-    const redisClient = new Redis();
-
     const axios = require('axios');
     require('axios-debug-log');
-
-    const retry = require('async-retry');
 
     const fs = require('fs-extra');
 
     const path = require('path');
-    const util = require('util');
     const renderer = require('./renderer');
 
     await renderer.init();
@@ -293,8 +287,6 @@ async function main(){
 
         try{
             file = await fs.readFile(path.resolve(cachePath, filename));
-
-            const fileStats = await fs.stat(path.resolve(cachePath, filename));
 
             if(Date.now() - stats.mtime > 10 * 1000){
                 const optifineCape = await axios.head(`https://optifine.net/capes/${username}.png`);
