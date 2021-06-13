@@ -487,7 +487,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
         const uuid = url.split("/").pop();
 
         item.texture_path = `/head/${uuid}?v6`;
-      } catch (e) {}
+      } catch (e) {
+        console.error(e);
+      }
     }
 
     // Uses animated skin texture, if present
