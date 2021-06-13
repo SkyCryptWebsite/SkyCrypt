@@ -103,7 +103,7 @@ async function main() {
   }
 
   async function getFavoritesFormUUIDs(uuids) {
-    favorites = [];
+    let favorites = [];
     for (let uuid of uuids) {
       if (uuid == null) continue;
       uuid = sanitize(uuid);
@@ -188,7 +188,7 @@ async function main() {
     let paramPlayer = req.params.player
       .toLowerCase()
       .replace(/[ +]/g, "_")
-      .replace(/[^a-z\d\-\_:]/g, "");
+      .replace(/[^a-z\d\-_:]/g, "");
     let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
 
     const cacheOnly = req.query.cache === "true";
@@ -273,6 +273,8 @@ async function main() {
     const filename = `texture_${uuid}.png`;
     res.set("X-Cluster-ID", `${helper.getClusterId()}`);
 
+    let file;
+
     try {
       file = await fs.readFile(path.resolve(cachePath, filename));
     } catch (e) {
@@ -304,14 +306,18 @@ async function main() {
     const filename = `cape_${username}.png`;
     res.set("X-Cluster-ID", `${helper.getClusterId()}`);
 
+    let file;
+
     try {
       file = await fs.readFile(path.resolve(cachePath, filename));
 
-      if (Date.now() - stats.mtime > 10 * 1000) {
+      const fileStats = await fs.stat(path.resolve(cachePath, filename));
+
+      if (Date.now() - fileStats.mtime > 10 * 1000) {
         const optifineCape = await axios.head(`https://optifine.net/capes/${username}.png`);
         const lastUpdated = moment(optifineCape.headers["last-modified"]);
 
-        if (lastUpdated.unix() > stats.mtime) {
+        if (lastUpdated.unix() > fileStats.mtime) {
           throw "optifine cape changed";
         }
       }
@@ -341,6 +347,8 @@ async function main() {
     const { uuid } = req.params;
 
     const filename = `head_${uuid}.png`;
+
+    let file;
 
     try {
       file = await fs.readFile(path.resolve(cachePath, filename));

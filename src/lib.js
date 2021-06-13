@@ -72,9 +72,10 @@ function getMax(profiles, ...path) {
   return getMinMax(profiles, false, ...path);
 }
 
-function getMin(profiles, ...path) {
-  return getMinMax(profiles, true, ...path);
-}
+// Commented out because it is never used
+// function getMin(profiles, ...path) {
+//   return getMinMax(profiles, true, ...path);
+// }
 
 function getAllKeys(profiles, ...path) {
   return _.uniq([].concat(...profiles.map((a) => _.keys(helper.getPath(a, ...path)))));
@@ -486,7 +487,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
         const uuid = url.split("/").pop();
 
         item.texture_path = `/head/${uuid}?v6`;
-      } catch (e) {}
+      } catch (e) {
+        console.error(e);
+      }
     }
 
     // Uses animated skin texture, if present
@@ -563,7 +566,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
     }
 
     if (helper.hasPath(item, "tag", "ExtraAttributes", "spawnedFor")) {
-      item.extra.spawned_for = item.tag.ExtraAttributes.spawnedFor.replace(/\-/g, "");
+      item.extra.spawned_for = item.tag.ExtraAttributes.spawnedFor.replace(/-/g, "");
     }
 
     if (helper.hasPath(item, "tag", "ExtraAttributes", "baseStatBoostPercentage")) {
@@ -1689,7 +1692,7 @@ module.exports = {
       let reforgeName;
 
       armor.forEach((armorPiece) => {
-        let name = armorPiece.display_name.replace(/\✪/g, "").trim();
+        let name = armorPiece.display_name.replace(/✪/g, "").trim();
 
         if (helper.hasPath(armorPiece, "tag", "ExtraAttributes", "modifier")) {
           name = name.split(" ").slice(1).join(" ");
@@ -2059,6 +2062,7 @@ module.exports = {
 
     output.pet_bonus = {};
 
+    // eslint-disable-next-line no-unused-vars
     for (const [index, score] of petScoreRequired.entries()) {
       if (parseInt(score) > output.petScore) {
         continue;
@@ -2993,7 +2997,7 @@ module.exports = {
 
       lore.push("");
 
-      const petName = helper.titleCase(pet.type.replace(/\_/g, " "));
+      const petName = helper.titleCase(pet.type.replace(/_/g, " "));
       const searchName = petName in constants.petStats ? petName : "???";
 
       if (searchName in constants.petStats) {
@@ -3033,7 +3037,7 @@ module.exports = {
       if (pet.heldItem) {
         const { heldItem } = pet;
 
-        const heldItemObj = await db.collection("items").findOne({ id: heldItem });
+        let heldItemObj = await db.collection("items").findOne({ id: heldItem });
 
         if (heldItem in constants.pet_items) {
           if ("stats" in constants.pet_items[heldItem]) {
@@ -3070,18 +3074,10 @@ module.exports = {
           });
         });
         // now we push the lore of the held items
-        if (heldItemObj) {
-          lore.push("", `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
-        } else if (heldItem in constants.pet_items) {
-          lore.push(
-            "",
-            `§6Held Item: §${constants.tier_colors[constants.pet_items[heldItem].tier.toLowerCase()]}${
-              constants.pet_items[heldItem].name
-            }`
-          );
-        } else {
-          lore.push("", `§6Held Item: §fUnknown item (${heldItem})`);
+        if (!heldItemObj) {
+          heldItemObj = constants.pet_items[heldItem];
         }
+        lore.push("", `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
 
         if (heldItem in constants.pet_items) {
           lore.push(constants.pet_items[heldItem].description);
@@ -3143,6 +3139,7 @@ module.exports = {
 
       pet.lore = "";
 
+      // eslint-disable-next-line no-unused-vars
       for (const [index, line] of lore.entries()) {
         pet.lore += '<span class="lore-row wrap">' + helper.renderLore(line) + "</span>";
       }
@@ -3199,7 +3196,7 @@ module.exports = {
       const pet = Object.assign({}, constants.pet_data[petType]);
 
       pet.texture_path = pet.head;
-      pet.display_name = helper.titleCase(petType.replace(/\_/g, " "));
+      pet.display_name = helper.titleCase(petType.replace(/_/g, " "));
       pet.rarity = "legendary";
 
       let lore = [`§8${helper.capitalizeFirstLetter(pet.type)} Pet`];
@@ -3346,7 +3343,7 @@ module.exports = {
       const amounts = [];
       let totalAmount = 0;
 
-      for (member in profile.members) {
+      for (const member in profile.members) {
         const memberProfile = profile.members[member];
 
         if ("collection" in memberProfile) {
@@ -3488,7 +3485,7 @@ module.exports = {
     const boss_data = dungeons_data.bosses;
     let collections = {};
 
-    for (i in output.catacombs.floors) {
+    for (const i in output.catacombs.floors) {
       let floor_id = `catacombs_${i}`;
       if (!Object.keys(collection_data).includes(floor_id)) continue;
 
@@ -3510,7 +3507,7 @@ module.exports = {
         };
       }
 
-      for (reward_id in coll.rewards) {
+      for (const reward_id in coll.rewards) {
         let reward = coll.rewards[reward_id];
         if (collections[floor_id].killed >= reward.required) {
           collections[floor_id].tier = reward.tier;
@@ -3526,7 +3523,7 @@ module.exports = {
     }
 
     const tasks = userProfile.tutorial;
-    for (i in tasks) {
+    for (const i in tasks) {
       if (!tasks[i].startsWith("boss_collection_claimed")) continue;
       let task = tasks[i].split("_").splice(3);
 
@@ -3562,7 +3559,7 @@ module.exports = {
       journal_entries: [],
     };
 
-    for (entry_id in journal_entries) {
+    for (const entry_id in journal_entries) {
       let entry = {
         name: journal_constants[entry_id] ? journal_constants[entry_id].name : entry_id,
         pages_collected: journal_entries[entry_id].length || 0,
@@ -3579,7 +3576,7 @@ module.exports = {
       journals.journal_entries.push(entry);
     }
 
-    for (entry_id in journal_constants) {
+    for (const entry_id in journal_constants) {
       journals.total_pages += journal_constants[entry_id].pages || 0;
     }
 
@@ -3620,7 +3617,7 @@ module.exports = {
 
         let level_bonus = level_stats[level_step];
 
-        for (bonus in level_bonus) {
+        for (const bonus in level_bonus) {
           switch (name) {
             case "dungeon_catacombs":
               output.catacombs.bonuses[bonus] += level_bonus[bonus];
@@ -3792,6 +3789,7 @@ module.exports = {
 
     const profiles = [];
 
+    // eslint-disable-next-line no-unused-vars
     for (const [index, profile] of skyBlockProfiles.entries()) {
       let memberCount = 0;
 
@@ -3857,6 +3855,7 @@ module.exports = {
       }
     }
 
+    // eslint-disable-next-line no-unused-vars
     for (const [index, _profile] of profiles.entries()) {
       if (_profile === undefined || _profile === null) {
         return;
@@ -3908,7 +3907,7 @@ module.exports = {
           const areaData = statusResponse.data.session;
 
           if (areaData.online && areaData.gameType == "SKYBLOCK") {
-            const areaName = constants.area_names[areaData.mode] || helper.titleCase(areaData.mode.replace(/\_/g, " "));
+            const areaName = constants.area_names[areaData.mode] || helper.titleCase(areaData.mode.replace(/_/g, " "));
 
             userProfile.current_area = areaName;
             insertProfileStore.current_area = areaName;
@@ -3951,7 +3950,7 @@ module.exports = {
 
       userProfile.slayer_xp = 0;
 
-      if (userProfile.hasOwnProperty("slayer_bosses")) {
+      if (userProfile.slayer_bosses != undefined) {
         for (const slayer in userProfile.slayer_bosses) {
           totalSlayerXp += userProfile.slayer_bosses[slayer].xp || 0;
         }

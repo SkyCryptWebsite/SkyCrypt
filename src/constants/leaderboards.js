@@ -79,7 +79,7 @@ module.exports = {
     options["key"] = lbName;
     options["name"] = titleCase(lbName.split("_").join(" "));
 
-    if (overrides.hasOwnProperty(lbName)) {
+    if (typeof overrides[lbName] == "object") {
       for (const key in overrides[lbName]) {
         options[key] = overrides[lbName][key];
       }

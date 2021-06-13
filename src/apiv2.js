@@ -19,7 +19,7 @@ module.exports = (app, db) => {
   const productInfo = {};
   const leaderboards = [];
 
-  const init = new Promise(async (resolve, reject) => {
+  async function initializer() {
     const bazaarProducts = await db.collection("bazaar").find().toArray();
 
     const itemInfo = await db
@@ -48,9 +48,9 @@ module.exports = (app, db) => {
     leaderboards.sort((a, b) => {
       return a.key.localeCompare(b.key);
     });
+  }
 
-    resolve();
-  });
+  const init = initializer();
 
   app.use("/api/v2/*", async (req, res, next) => {
     req.apiKey = false;
