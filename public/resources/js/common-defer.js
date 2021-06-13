@@ -59,3 +59,22 @@ function handleSubmit(submitEvent) {
 document.querySelectorAll(".lookup-player").forEach((form) => {
   form.addEventListener("submit", handleSubmit);
 });
+
+const prideFlag = document.querySelector(".pride-flag");
+const prideFlags = ["rainbow", "trans", "lesbian", "bi", "pan", "nb", "ace", "genderfluid", "logo"];
+
+let currentFlag = prideFlags.length - 1;
+
+if (localStorage.getItem("currentFlag")) {
+  currentFlag = parseInt(localStorage.getItem("currentFlag"));
+  prideFlag.className = "pride-flag " + prideFlags[currentFlag];
+}
+
+prideFlag.addEventListener("click", function () {
+  currentFlag++;
+
+  if (currentFlag > prideFlags.length - 1) currentFlag = 0;
+
+  localStorage.setItem("currentFlag", currentFlag);
+  prideFlag.className = "pride-flag " + prideFlags[currentFlag];
+});
