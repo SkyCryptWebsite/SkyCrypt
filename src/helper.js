@@ -64,7 +64,7 @@ module.exports = {
     let loc = obj || {};
 
     for (i = 0; i < keys.length - 1; i++) {
-      if (!loc.hasOwnProperty(keys[i])) {
+      if (loc[keys[i]] == undefined) {
         loc[keys[i]] = {};
       }
 
@@ -85,7 +85,7 @@ module.exports = {
   resolveUsernameOrUuid: async (uuid, db, cacheOnly = false) => {
     let user = null;
 
-    uuid = uuid.replace(/\-/g, "");
+    uuid = uuid.replace(/-/g, "");
 
     const isUuid = uuid.length == 32;
 
@@ -127,7 +127,7 @@ module.exports = {
           try {
             const { data } = response;
 
-            data.id = data.uuid.replace(/\-/g, "");
+            data.id = data.uuid.replace(/-/g, "");
 
             let updateDoc = {
               username: data.username,
@@ -176,7 +176,7 @@ module.exports = {
         try {
           let { data } = await profileRequest;
 
-          data.id = data.uuid.replace(/\-/g, "");
+          data.id = data.uuid.replace(/-/g, "");
 
           if (module.exports.hasPath(data.textures, "skin")) {
             skin_data.skinurl = data.textures.skin.url;
@@ -329,19 +329,16 @@ module.exports = {
   getGuildLevel: (xp) => {
     let level = 0;
 
-    for (let i = 0; ; i++) {
-      const xpNeeded = constants.guild_xp[Math.min(constants.guild_xp.length - 1, i)];
+    while (true) {
+      const xpNeeded = constants.guild_xp[Math.min(constants.guild_xp.length - 1, level)];
 
-      xp -= xpNeeded;
-
-      if (xp < 0) {
+      if (xp > xpNeeded) {
+        xp -= xpNeeded;
+        level++;
+      } else {
         return level;
       }
-
-      level++;
     }
-
-    return level;
   },
 
   // Convert Minecraft lore to HTML
@@ -620,7 +617,7 @@ module.exports = {
         scorpius_bribe_120: "Scorpius Bribe (Year 120)",
       };
 
-      for (item in claimable) {
+      for (const item in claimable) {
         if (module.exports.hasPath(player, item)) {
           rank.claimed_items[claimable[item]] = player[item];
         }
@@ -714,8 +711,14 @@ module.exports = {
   },
 
   generateDebugId: (endpointName = "unknown") => {
-    return `${module.exports.getClusterId()}/${endpointName}_${new Date().getTime()}.${Math.floor(
-      Math.random() * 9000 + 1000
-    )}`;
+    return (
+      module.exports.getClusterId() +
+      "/" +
+      endpointName +
+      "_" +
+      new Date().getTime() +
+      "." +
+      Math.floor(Math.random() * 9000 + 1000)
+    );
   },
 };
