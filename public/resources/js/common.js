@@ -92,3 +92,11 @@ function checkScrollbarStyle() {
 }
 
 window.setTimeout(checkScrollbarStyle);
+
+const iOS = ["iPad Simulator", "iPhone Simulator", "iPod Simulator", "iPad", "iPhone", "iPod"].includes(
+  navigator.platform
+);
+
+if (iOS) {
+  document.body.prepend(/*html*/ `<div id="status-bar"></div>`);
+}
