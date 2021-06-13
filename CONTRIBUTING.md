@@ -2,7 +2,7 @@
 
 Before contributing to SkyCrypt, make sure you install the development environment first.
 
-### Prerequisites
+### Prerequisite Software
 
 - [Node.js](https://nodejs.org) (at least v14, as some of the features we use require it)
 - [MongoDB](https://docs.mongodb.com/manual/administration/install-community/), alternatively you can use the free online version (more instructions below)
