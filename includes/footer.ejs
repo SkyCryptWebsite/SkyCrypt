@@ -5,18 +5,6 @@
 <script async src="https://arc.io/widget.min.js#oNMq8LVU"></script>
 
 <script>
-    if (sessionStorage.getItem("open packs")) {
-        sessionStorage.removeItem("open packs");
-        document.querySelector("#packs-button").setAttribute("aria-expanded", true);
-        const packsBox = document.querySelector("#packs-box");
-        packsBox.style.transition = "none";
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                packsBox.style.transition = null;
-            });
-        });
-    }
-
     window.addEventListener('load', (event) => {
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js', {scope: '/'})
