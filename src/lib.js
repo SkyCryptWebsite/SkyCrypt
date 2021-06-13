@@ -3139,6 +3139,7 @@ module.exports = {
 
       pet.lore = "";
 
+      // eslint-disable-next-line no-unused-vars
       for (const [index, line] of lore.entries()) {
         pet.lore += '<span class="lore-row wrap">' + helper.renderLore(line) + "</span>";
       }
