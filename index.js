@@ -62,7 +62,7 @@ if (cluster.isMaster) {
 
   // console.log(apiRequests);
 
-  function msgHandler(msg) {
+  const msgHandler = function (msg) {
     if (msg?.type == null) return;
 
     switch (msg.type) {
@@ -81,7 +81,7 @@ if (cluster.isMaster) {
         else packUsage[msg.id]++;
         return;
     }
-  }
+  };
 
   for (const id in cluster.workers) {
     cluster.workers[id].on("message", msgHandler);
