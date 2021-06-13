@@ -1,4 +1,4 @@
-# This CI Workflow was deployed and configured by WarpWing.
+# This CI Workflow was deployed and configured by WarpWing and Nate.
 name: CI
 
 on:
