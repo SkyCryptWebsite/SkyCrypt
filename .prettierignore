@@ -16,3 +16,6 @@
 
 # ejs
 **/*.ejs
+
+# icomoon font config
+/public/resources/fonts/icomoon/selection.json
