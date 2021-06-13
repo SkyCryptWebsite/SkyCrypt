@@ -44,6 +44,11 @@
         });
     </script>
 
+    <% if(page == 'stats'){ %>
+        <script async module src="/resources/js/localTimeElement.mjs?<%- fileHashes.js['localTimeElement.mjs'] %>"></script>
+        <script defer src="/resources/js/stats.js?<%- fileHashes.js['stats.js'] %>"></script>
+    <% } %>
+
     <script>
         const extra = JSON.parse(`<%- JSON.stringify(extra).replace(/\\/g, '\\\\') %>`);
 
