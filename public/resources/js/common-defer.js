@@ -1,4 +1,4 @@
-/* global tippy:readonly */
+/* global tippy:readonly, loadTheme:readonly, page:readonly */
 
 /**
  * @param {string} url a url to be validated
@@ -58,6 +58,92 @@ function handleSubmit(submitEvent) {
 
 document.querySelectorAll(".lookup-player").forEach((form) => {
   form.addEventListener("submit", handleSubmit);
+});
+
+function setCookie(name, value, days) {
+  var expires = "";
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + (value || "") + expires + "; SameSite=Lax; path=/";
+}
+
+function eraseCookie(name) {
+  document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+}
+
+const expanders = document.querySelectorAll(".expander");
+for (const expander of expanders) {
+  expander.addEventListener("click", () => {
+    for (const otherExpander of expanders) {
+      if (otherExpander != expander) {
+        otherExpander.setAttribute("aria-expanded", false);
+      }
+    }
+    expander.setAttribute("aria-expanded", expander.getAttribute("aria-expanded") != "true");
+  });
+  const focusOutHandler = () => {
+    setTimeout(() => {
+      if (
+        document.activeElement != document.body &&
+        document.activeElement != expander &&
+        !expander.nextElementSibling.contains(document.activeElement)
+      ) {
+        expander.setAttribute("aria-expanded", false);
+      }
+    });
+  };
+  expander.addEventListener("focusout", focusOutHandler);
+  expander.nextElementSibling.addEventListener("focusout", focusOutHandler);
+}
+
+document.querySelectorAll('#packs-box button[name="pack"]').forEach((element) => {
+  element.addEventListener("click", (event) => {
+    const newPack = event.target.value;
+    if (newPack) {
+      setCookie("pack", newPack, 365);
+    } else {
+      eraseCookie("pack");
+    }
+
+    const oldElement = document.querySelector(`#packs-box button[name="pack"][aria-selected]`);
+    oldElement.removeAttribute("disabled");
+    oldElement.removeAttribute("aria-selected");
+
+    if (page == "stats") {
+      event.target.classList.add("loading");
+      sessionStorage.setItem("open packs", true);
+      window.location.reload();
+    } else {
+      event.target.setAttribute("aria-selected", "");
+      event.target.setAttribute("disabled", "");
+    }
+  });
+});
+
+document.querySelector("#themes-box").addEventListener("change", (event) => {
+  const newTheme = event.target.value;
+  localStorage.setItem("currentTheme", newTheme);
+  loadTheme(newTheme);
+});
+
+window.addEventListener("storage", (event) => {
+  if (event.key === "currentTheme") {
+    setCheckedTheme(event.newValue);
+    loadTheme(event.newValue);
+  }
+});
+
+function setCheckedTheme(theme) {
+  document.querySelector(`#themes-box input[value="${theme}"]`).checked = true;
+}
+
+setCheckedTheme(localStorage.getItem("currentTheme"));
+
+tippy("*[data-tippy-content]", {
+  boundary: "window",
 });
 
 const prideFlag = document.querySelector(".pride-flag");
