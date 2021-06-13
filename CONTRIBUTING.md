@@ -33,3 +33,34 @@ Before contributing to SkyCrypt, make sure you install the development environme
 4. Open `credentials.json` and input your Hypixel API key into the `hypixel_api_key` field.
 5. In the `dbUrl` field, input your MongoDB url. In the `dbName` field, input the name of the database you would like to use.
 6. Making sure your Mongo and Redis instances are running, run `npm start` in the project directory. You should now be able to access the site at http://localhost:32464/
+
+### VS-Code
+
+if your not sure what code editor to use VS-Code is a great option. Here are some recommendations for using VS-Code to work on SkyCrypt.
+
+#### Recommended Extensions
+
+- [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [EJS language support](https://marketplace.visualstudio.com/items?itemName=digitalbrainstem.javascript-ejs-support)
+- [Comment tagged templates](https://marketplace.visualstudio.com/items?itemName=bierner.comment-tagged-templates)
+
+#### Recommended Settings
+
+| Setting                       | Recommended Value         |
+| ----------------------------- | ------------------------- |
+| Editor: Default Formatter     | Prettier - Code formatter |
+| Editor: Format On Save        | checked                   |
+| JavaScript › Validate: Enable | unchecked                 |
+| Files: Eol                    | \n                        |
+
+you can also apply all these settings by creating a file called `setting.json` inside `.vscode` and copying the following into it:
+
+```json
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "javascript.validate.enable": false,
+  "editor.formatOnSave": true,
+  "files.eol": "\n"
+}
+```
