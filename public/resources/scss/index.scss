@@ -2099,7 +2099,8 @@ a.additional-player-stat:hover {
   }
 }
 
-.item-icon.is-enchanted {
+// selects enchanted items that are not heads
+.item-icon.is-enchanted:not(.icon-397_0):not(.icon-397_3) {
   filter: url(#enchanted-glint);
   &.piece-icon {
     filter: url(#enchanted-glint) drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
