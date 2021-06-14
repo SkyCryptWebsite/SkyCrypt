@@ -296,8 +296,6 @@ function renderInventory(inventory, type) {
 
   inventoryContainer.appendChild(inventoryView);
 
-  [].forEach.call(inventoryView.querySelectorAll(".item-icon.is-enchanted"), handleEnchanted);
-
   const rect = document.querySelector("#inventory_container").getBoundingClientRect();
 
   if (rect.top > 100 && rect.bottom > window.innerHeight) {
@@ -380,12 +378,6 @@ function fillLore(element) {
     itemIcon.classList.remove("custom-icon");
     itemIcon.className = "stats-piece-icon item-icon icon-" + item.id + "_" + item.Damage;
   }
-
-  /* broken sometimes
-  if (isEnchanted(item)) {
-    handleEnchanted(itemIcon);
-  }
-  */
 
   itemLore.innerHTML = item.lore || "";
 
@@ -470,8 +462,6 @@ function fillLore(element) {
 
       backpackContents.appendChild(document.createTextNode(" "));
     });
-
-    [].forEach.call(document.querySelectorAll(".contains-backpack .item-icon.is-enchanted"), handleEnchanted);
 
     let viewBackpack = document.createElement("div");
     viewBackpack.classList = "view-backpack";
@@ -731,54 +721,6 @@ function getPart(src, x, y, width, height) {
   ctx.drawImage(src, x, y, width, height, 0, 0, (width - src.width) / 2 + width, (height - src.height) / 2 + height);
   return dst;
 }
-
-function handleEnchanted(element) {
-  let size = 128;
-
-  let canvas = document.createElement("canvas");
-  canvas.width = size;
-  canvas.height = size;
-
-  let ctx = canvas.getContext("2d");
-
-  let src = window.getComputedStyle(element).backgroundImage.split('("').pop().split('")')[0];
-  let image = new Image(128, src.includes("/head/") ? 118 : 128);
-
-  if (src.endsWith(".gif")) {
-    return false;
-  }
-
-  image.onload = function () {
-    if (!element.classList.contains("custom-icon")) {
-      let position = window.getComputedStyle(element).backgroundPosition.split(" ");
-      let x = Math.abs(parseInt(position[0]));
-      let y = Math.abs(parseInt(position[1]));
-      image = getPart(image, x, y, size, size);
-    }
-
-    ctx.globalAlpha = 1;
-
-    ctx.drawImage(image, 0, 128 / 2 - image.height / 2);
-
-    ctx.globalAlpha = 0.5;
-    ctx.globalCompositeOperation = "source-atop";
-
-    ctx.drawImage(enchantedGlint, 0, 0, canvas.width, canvas.height);
-
-    element.style.backgroundImage = "url(" + canvas.toDataURL("image/png") + ")";
-    element.classList.add("custom-icon");
-  };
-
-  image.src = src;
-}
-
-let enchantedGlint = new Image(128, 128);
-
-enchantedGlint.onload = function () {
-  [].forEach.call(document.querySelectorAll(".item-icon.is-enchanted"), handleEnchanted);
-};
-
-enchantedGlint.src = "/resources/img/glint.png";
 
 [].forEach.call(document.querySelectorAll(".inventory-tab"), function (element) {
   let type = element.getAttribute("data-inventory-type");
