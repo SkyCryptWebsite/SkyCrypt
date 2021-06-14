@@ -505,9 +505,6 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
         case "SNOW_SNOWGLOBE":
           item.texture_path = `/resources/img/items/skin_snowglobe.png?v6`;
           break;
-        case "SINFUL_DICE":
-          item.texture_path = `/resources/img/items/sinful_dice.png?v6`;
-          break;
       }
     }
 
