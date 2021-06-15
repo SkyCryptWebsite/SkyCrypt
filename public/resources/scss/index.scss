@@ -2099,10 +2099,14 @@ a.additional-player-stat:hover {
   }
 }
 
-.item-icon.is-enchanted {
-  filter: url(#enchanted-glint);
-  &.piece-icon {
-    filter: url(#enchanted-glint) drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
+.item-icon {
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  &.is-enchanted {
+    filter: url(#enchanted-glint);
+    &.piece-icon {
+      filter: url(#enchanted-glint) drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
+    }
   }
 }
 
