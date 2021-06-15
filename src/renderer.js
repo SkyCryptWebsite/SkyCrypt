@@ -271,7 +271,7 @@ module.exports = {
     const armorBase = await loadImage(path.resolve(textureDir, `leather_${type}.png`));
     const armorOverlay = await loadImage(path.resolve(textureDir, `leather_${type}_overlay.png`));
 
-    return await renderColoredItem(`rgb(${color.join(",")})`, armorBase, armorOverlay);
+    return await renderColoredItem("#" + color, armorBase, armorOverlay);
   },
 
   renderItem: async (skyblockId, query, db) => {

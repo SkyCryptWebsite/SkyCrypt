@@ -425,16 +425,12 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
   for (const item of items) {
     // Set custom texture for colored leather armor
-    if (helper.hasPath(item, "id") && item.id >= 298 && item.id <= 301) {
-      let color = [149, 94, 59];
+    if (typeof item.id === "number" && item.id >= 298 && item.id <= 301) {
+      const color = item.tag?.display?.color?.toString(16).padStart(6, "0") ?? "955e3b";
 
-      if (helper.hasPath(item, "tag", "ExtraAttributes", "color")) {
-        color = item.tag.ExtraAttributes.color.split(":");
-      }
+      const type = ["helmet", "chestplate", "leggings", "boots"][item.id - 298];
 
-      const type = ["leather/helmet", "leather/chestplate", "leather/leggings", "leather/boots"][item.id - 298];
-
-      item.texture_path = `/${type}/${color.join(",")}`;
+      item.texture_path = `/leather/${type}/${color}`;
     }
 
     // Set raw display name without color and formatting codes

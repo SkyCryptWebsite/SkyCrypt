@@ -387,21 +387,19 @@ async function main() {
   });
 
   app.all("/leather/:type/:color", cors(), async (req, res) => {
-    let file;
+    const { type, color } = req.params;
 
-    if (!["boots", "leggings", "chestplate", "helmet"].includes(req.params.type)) {
+    if (!["boots", "leggings", "chestplate", "helmet"].includes(type)) {
       throw new Error("invalid armor type");
     }
 
-    const { type } = req.params;
-
-    const color = req.params.color.split(",");
-
-    if (color.length < 3) {
-      throw new Error("invalid color");
+    if (!/^[0-9a-fA-Z]{6}$/.test(color)) {
+      throw new Error("invalid color " + color);
     }
 
-    const filename = `leather_${type}_${color.join("_")}.png`;
+    const filename = `leather_${type}_${color}.png`;
+
+    let file;
 
     try {
       file = await fs.readFile(path.resolve(cachePath, filename));
