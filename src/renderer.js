@@ -254,23 +254,20 @@ module.exports = {
       path.resolve(__dirname, "..", "public", "resources", "img", "textures", "item", `leather_${type}_overlay.png`)
     );
 
-    ctx.drawImage(armorBase, 0, 0, 16, 16, 0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = `rgb(${color.join(",")})`;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = "multiply";
 
-    for (let i = 0; i < imageData.data.length; i += 4) {
-      let r = imageData.data[i];
-      let alpha = r / 255;
+    ctx.drawImage(armorBase, 0, 0);
 
-      imageData.data[i] = color[0] * alpha;
-      imageData.data[i + 1] = color[1] * alpha;
-      imageData.data[i + 2] = color[2] * alpha;
-    }
+    ctx.globalCompositeOperation = "destination-in";
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.putImageData(imageData, 0, 0);
+    ctx.drawImage(armorBase, 0, 0);
 
-    ctx.drawImage(armorOverlay, 0, 0, 16, 16, 0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = "source-over";
+
+    ctx.drawImage(armorOverlay, 0, 0);
 
     return await canvas.toBuffer("image/png");
   },
