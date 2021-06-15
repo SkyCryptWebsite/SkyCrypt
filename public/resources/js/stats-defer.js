@@ -145,17 +145,8 @@ if (calculated.profile.cute_name == "Deleted") {
 history.replaceState({}, document.title, url);
 
 function isEnchanted(item) {
-  if (item.animated) {
-    return false;
-  }
-
   if (item.id == 399) {
     return true;
-  }
-
-  if ("texture_path" in item && item.texture_path.endsWith(".gif")) {
-    // disable enchanted overlay for gifs cause laggy
-    return false;
   }
 
   if ("id" in item && [403, 384].includes(item.id)) {
