@@ -390,11 +390,11 @@ async function main() {
     const { type, color } = req.params;
 
     if (!["boots", "leggings", "chestplate", "helmet"].includes(type)) {
-      throw new Error("invalid armor type");
+      throw new Error("invalid armor type: " + type);
     }
 
     if (!/^[0-9a-fA-F]{6}$/.test(color)) {
-      throw new Error("invalid color " + color);
+      throw new Error("invalid color: #" + color);
     }
 
     const filename = `leather_${type}_${color}.png`;
@@ -422,7 +422,7 @@ async function main() {
     const { type, color } = req.params;
 
     if (!/^[0-9a-fA-F]{6}$/.test(color)) {
-      throw new Error("invalid color " + color);
+      throw new Error("invalid color: #" + color);
     }
 
     const filename = `potion_${type}_${color}.png`;
