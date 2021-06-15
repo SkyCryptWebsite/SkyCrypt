@@ -83,6 +83,30 @@ const TALISMANS = [
 
 let itemsSheet, itemsCss;
 
+async function renderColoredItem(color, baseImage, OverlayImage) {
+  const canvas = createCanvas(16, 16);
+  const ctx = canvas.getContext("2d");
+
+  ctx.imageSmoothingEnabled = false;
+
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.globalCompositeOperation = "multiply";
+
+  ctx.drawImage(baseImage, 0, 0);
+
+  ctx.globalCompositeOperation = "destination-in";
+
+  ctx.drawImage(baseImage, 0, 0);
+
+  ctx.globalCompositeOperation = "source-over";
+
+  ctx.drawImage(OverlayImage, 0, 0);
+
+  return await canvas.toBuffer("image/png");
+}
+
 module.exports = {
   renderHead: async (url, scale) => {
     let hat_factor = 0.94;
@@ -241,12 +265,7 @@ module.exports = {
     return await canvas.toBuffer("image/png");
   },
 
-  renderArmor: async (type, color) => {
-    let canvas = createCanvas(16, 16);
-    let ctx = canvas.getContext("2d");
-
-    ctx.imageSmoothingEnabled = false;
-
+  async renderArmor(type, color) {
     const armorBase = await loadImage(
       path.resolve(__dirname, "..", "public", "resources", "img", "textures", "item", `leather_${type}.png`)
     );
@@ -254,22 +273,7 @@ module.exports = {
       path.resolve(__dirname, "..", "public", "resources", "img", "textures", "item", `leather_${type}_overlay.png`)
     );
 
-    ctx.fillStyle = `rgb(${color.join(",")})`;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.globalCompositeOperation = "multiply";
-
-    ctx.drawImage(armorBase, 0, 0);
-
-    ctx.globalCompositeOperation = "destination-in";
-
-    ctx.drawImage(armorBase, 0, 0);
-
-    ctx.globalCompositeOperation = "source-over";
-
-    ctx.drawImage(armorOverlay, 0, 0);
-
-    return await canvas.toBuffer("image/png");
+    return await renderColoredItem(`rgb(${color.join(",")})`, armorBase, armorOverlay);
   },
 
   renderItem: async (skyblockId, query, db) => {
