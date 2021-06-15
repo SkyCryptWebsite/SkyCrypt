@@ -85,7 +85,7 @@ let itemsSheet, itemsCss;
 
 const textureDir = path.resolve(__dirname, "..", "public", "resources", "img", "textures", "item");
 
-async function renderColoredItem(color, baseImage, OverlayImage) {
+async function renderColoredItem(color, baseImage, overlayImage) {
   const canvas = createCanvas(16, 16);
   const ctx = canvas.getContext("2d");
 
@@ -104,7 +104,7 @@ async function renderColoredItem(color, baseImage, OverlayImage) {
 
   ctx.globalCompositeOperation = "source-over";
 
-  ctx.drawImage(OverlayImage, 0, 0);
+  ctx.drawImage(overlayImage, 0, 0);
 
   return await canvas.toBuffer("image/png");
 }
