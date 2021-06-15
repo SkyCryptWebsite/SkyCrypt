@@ -506,6 +506,9 @@ const getRarityUpgradeClass = item => {
     <meta property="og:description" content="<%= description %>">
     <meta property="og:profile:username" content="<%= calculated.display_name %>">
     <meta name="twitter:card" content="summary"></meta>
+<%- include('../includes/resources') %>
+</head>
+<body class="page-stats">
     <svg xmlns="http://www.w3.org/2000/svg" height="0" width="0">
       <filter id="enchanted-glint">
         <feImage href="/resources/img/enchanted-glint.png" />
@@ -513,9 +516,6 @@ const getRarityUpgradeClass = item => {
         <feBlend in="SourceGraphic" mode="screen" />
       </filter>
     </svg>
-<%- include('../includes/resources') %>
-</head>
-<body class="page-stats">
     <%- include('../includes/header') %>
     <div id="dimmer">
         <video preload="none" id="enable_api" loop>
