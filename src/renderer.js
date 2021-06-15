@@ -242,7 +242,7 @@ module.exports = {
   },
 
   renderArmor: async (type, color) => {
-    let canvas = createCanvas(128, 128);
+    let canvas = createCanvas(16, 16);
     let ctx = canvas.getContext("2d");
 
     ctx.imageSmoothingEnabled = false;
