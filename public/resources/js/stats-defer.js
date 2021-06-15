@@ -155,7 +155,7 @@ function isEnchanted(item) {
     return true;
   }
 
-  //potions and splash potions with actual effects (not water bottles)
+  //potions with actual effects (not water bottles)
   if (item.id === 373 && item.Damage !== 0) {
     return true;
   }
