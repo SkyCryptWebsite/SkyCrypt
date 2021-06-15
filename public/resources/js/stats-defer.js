@@ -153,6 +153,10 @@ function isEnchanted(item) {
     return true;
   }
 
+  if (item.id === 373 && item.Damage !== 0) {
+    return true;
+  }
+
   if ("tag" in item && Array.isArray(item.tag.ench)) {
     return true;
   }
