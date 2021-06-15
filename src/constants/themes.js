@@ -39,6 +39,7 @@ module.exports = {
       name: "sky.lea.moe",
       author: "LeaPhant",
       official: true,
+      enchanted_glint: "/resources/img/enchanted-glint-legacy.png",
       images: {
         bg: "/resources/img/themes/skylea/bg.webp",
         bg_blur: "/resources/img/themes/skylea/bg_blur.webp",
