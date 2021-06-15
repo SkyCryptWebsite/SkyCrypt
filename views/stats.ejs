@@ -268,7 +268,7 @@ const getEnrichments = (accessories) => {
 
 const isEnchanted = item => {
 
-    if('id' in item && [403, 384, 399].includes(item.id))
+    if([403, 384, 399].includes(item.id))
         return true;
 
     if('tag' in item && Array.isArray(item.tag.ench))
