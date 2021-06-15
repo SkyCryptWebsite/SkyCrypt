@@ -145,11 +145,7 @@ if (calculated.profile.cute_name == "Deleted") {
 history.replaceState({}, document.title, url);
 
 function isEnchanted(item) {
-  if (item.id == 399) {
-    return true;
-  }
-
-  if ("id" in item && [403, 384].includes(item.id)) {
+  if ("id" in item && [403, 384, 399].includes(item.id)) {
     return true;
   }
 
