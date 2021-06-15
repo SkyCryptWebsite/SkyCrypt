@@ -438,12 +438,6 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
       item.display_name = helper.getRawLore(item.tag.display.Name);
     }
 
-    if (helper.hasPath(item, "display_name")) {
-      if (item.display_name == "Water Bottle") {
-        item.Damage = 17;
-      }
-    }
-
     // Set print display name (contains HTML)
     if (item.display_name) {
       item.display_name_print = item.display_name;
