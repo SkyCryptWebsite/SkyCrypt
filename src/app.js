@@ -393,7 +393,7 @@ async function main() {
       throw new Error("invalid armor type");
     }
 
-    if (!/^[0-9a-fA-Z]{6}$/.test(color)) {
+    if (!/^[0-9a-fA-F]{6}$/.test(color)) {
       throw new Error("invalid color " + color);
     }
 
@@ -421,7 +421,7 @@ async function main() {
   app.all("/potion/:type/:color", cors(), async (req, res) => {
     const { type, color } = req.params;
 
-    if (!/^[0-9a-fA-Z]{6}$/.test(color)) {
+    if (!/^[0-9a-fA-F]{6}$/.test(color)) {
       throw new Error("invalid color " + color);
     }
 
