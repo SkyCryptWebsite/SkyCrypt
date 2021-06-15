@@ -83,6 +83,8 @@ const TALISMANS = [
 
 let itemsSheet, itemsCss;
 
+const textureDir = path.resolve(__dirname, "..", "public", "resources", "img", "textures", "item");
+
 async function renderColoredItem(color, baseImage, OverlayImage) {
   const canvas = createCanvas(16, 16);
   const ctx = canvas.getContext("2d");
@@ -266,12 +268,8 @@ module.exports = {
   },
 
   async renderArmor(type, color) {
-    const armorBase = await loadImage(
-      path.resolve(__dirname, "..", "public", "resources", "img", "textures", "item", `leather_${type}.png`)
-    );
-    const armorOverlay = await loadImage(
-      path.resolve(__dirname, "..", "public", "resources", "img", "textures", "item", `leather_${type}_overlay.png`)
-    );
+    const armorBase = await loadImage(path.resolve(textureDir, `leather_${type}.png`));
+    const armorOverlay = await loadImage(path.resolve(textureDir, `leather_${type}_overlay.png`));
 
     return await renderColoredItem(`rgb(${color.join(",")})`, armorBase, armorOverlay);
   },
