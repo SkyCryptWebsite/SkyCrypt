@@ -708,20 +708,6 @@ function updateStat(stat, newValue) {
   }
 }
 
-function getPart(src, x, y, width, height) {
-  let dst = document.createElement("canvas");
-  dst.width = width;
-  dst.height = height;
-
-  let ctx = dst.getContext("2d");
-
-  // don't blur on resize
-  ctx.imageSmoothingEnabled = false;
-
-  ctx.drawImage(src, x, y, width, height, 0, 0, (width - src.width) / 2 + width, (height - src.height) / 2 + height);
-  return dst;
-}
-
 [].forEach.call(document.querySelectorAll(".inventory-tab"), function (element) {
   let type = element.getAttribute("data-inventory-type");
 
