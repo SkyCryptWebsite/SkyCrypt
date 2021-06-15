@@ -418,6 +418,34 @@ async function main() {
     res.send(file);
   });
 
+  app.all("/potion/:type/:color", cors(), async (req, res) => {
+    const { type, color } = req.params;
+
+    if (!/^[0-9a-fA-Z]{6}$/.test(color)) {
+      throw new Error("invalid color " + color);
+    }
+
+    const filename = `potion_${type}_${color}.png`;
+
+    let file;
+
+    try {
+      file = await fs.readFile(path.resolve(cachePath, filename));
+    } catch (e) {
+      file = await renderer.renderPotion(type, color);
+
+      fs.writeFile(path.resolve(cachePath, filename), file, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    res.setHeader("Cache-Control", `public, max-age=${CACHE_DURATION}`);
+    res.contentType("image/png");
+    res.send(file);
+  });
+
   app.all("/robots.txt", async (req, res, next) => {
     res.type("text").send(`User-agent: *\nDisallow: /item /head /leather /resources`);
   });

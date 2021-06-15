@@ -274,6 +274,15 @@ module.exports = {
     return await renderColoredItem("#" + color, armorBase, armorOverlay);
   },
 
+  async renderPotion(type, color) {
+    const potionLiquid = await loadImage(path.resolve(textureDir, "potion_overlay.png"));
+    const potionBottlle = await loadImage(
+      path.resolve(textureDir, type === "splash" ? "splash_potion.png" : "potion.png")
+    );
+
+    return await renderColoredItem("#" + color, potionLiquid, potionBottlle);
+  },
+
   renderItem: async (skyblockId, query, db) => {
     let item = { Damage: 0, id: -1 };
 
