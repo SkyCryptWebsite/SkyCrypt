@@ -421,6 +421,10 @@ async function main() {
   app.all("/potion/:type/:color", cors(), async (req, res) => {
     const { type, color } = req.params;
 
+    if (!["normal", "splash"].includes(type)) {
+      throw new Error("invalid armor type: " + type);
+    }
+
     if (!/^[0-9a-fA-F]{6}$/.test(color)) {
       throw new Error("invalid color: #" + color);
     }
