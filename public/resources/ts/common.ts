@@ -1,11 +1,23 @@
-
-if (!localStorage.getItem("currentTheme") || !extra.themes[localStorage.getItem("currentTheme")]) {
-  localStorage.setItem("currentTheme", "default");
+{
+  const currentTheme = localStorage.getItem("currentTheme");
+  if (!currentTheme || !extra.themes[currentTheme]) {
+    localStorage.setItem("currentTheme", "default");
+  }
 }
 
-if (localStorage.getItem("currentTheme") != "default") loadTheme(localStorage.getItem("currentTheme"));
+{
+  const currentTheme = localStorage.getItem("currentTheme");
+  if (currentTheme && currentTheme !== "default") loadTheme(currentTheme);
+}
 
-function convertHex(code) {
+/**
+ * converts a hex color to it's rgb components
+ * @param code a hex color string
+ * @example
+ * // "returns 256, 0, 256"
+ * convertHex("#FF00FF");
+ */
+function convertHex(code: string) {
   const hex = code.substring(1, 7);
   return `${parseInt(hex.substring(0, 2), 16)}, ${parseInt(hex.substring(2, 4), 16)}, ${parseInt(
     hex.substring(4, 6),
@@ -13,7 +25,7 @@ function convertHex(code) {
   )}`;
 }
 
-function loadTheme(currentTheme) {
+function loadTheme(currentTheme: string) {
   if (!extra.themes[currentTheme]) {
     return console.error(`${currentTheme} isn't a valid theme.`);
   }
@@ -24,9 +36,9 @@ function loadTheme(currentTheme) {
 
   element.classList.toggle("light", !!theme.light);
 
-  document.querySelector('meta[name="theme-color"]').content = theme.light ? "#dbdbdb" : "#282828";
+  (document.querySelector('meta[name="theme-color"]') as HTMLMetaElement).content = theme.light ? "#dbdbdb" : "#282828";
 
-  element.style = "";
+  element.setAttribute("style", "");
 
   for (const color in theme.colors) {
     const value = theme.colors[color];
@@ -62,7 +74,7 @@ function loadTheme(currentTheme) {
 
   const logoURL = "/resources/img/logo_square.svg" + (theme.colors?.logo?.replace("#", "?color=") ?? "");
   element.style.setProperty(`--logo`, `url(${logoURL})`);
-  document.querySelectorAll('link[rel="icon"]').forEach((favicon) => {
+  document.querySelectorAll<HTMLLinkElement>('link[rel="icon"]').forEach((favicon) => {
     if (favicon.href.match("logo_square")) {
       favicon.href = logoURL;
     }
