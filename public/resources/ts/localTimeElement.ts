@@ -8,19 +8,23 @@ export class LocalTimeElement extends HTMLElement {
     this.shadowRoot?.appendChild(this.timeElement);
   }
 
-  static get observedAttributes() {
+  static get observedAttributes(): string[] {
     return ["timestamp"];
   }
 
-  attributeChangedCallback(name: string, oldValue: any, newValue: any) {
+  attributeChangedCallback(name: string, oldValue: unknown, newValue: unknown): void {
     if (name === "timestamp") {
-      if (newValue != undefined) {
-        if (!isNaN(newValue)) {
-          newValue = parseInt(newValue);
+      if (typeof newValue === "string") {
+        const number = parseInt(newValue);
+        if (!isNaN(number)) {
+          newValue = number;
         }
+      }
+      if (typeof newValue === "number" || typeof newValue === "string") {
         const date = new Date(newValue);
         this.timeElement.setAttribute("datetime", date.toISOString());
-        // @ts-ignore because typescript doesn't suport dateStyle and timeStyle yet https://github.com/microsoft/TypeScript/issues/44632
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore because typescript doesn't support dateStyle and timeStyle yet https://github.com/microsoft/TypeScript/issues/44632
         this.timeElement.innerHTML = date.toLocaleString(undefined, { dateStyle: "long", timeStyle: "short" });
       } else {
         console.error("local-time must have a timestamp");

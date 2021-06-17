@@ -76,9 +76,9 @@ function loadTheme(currentTheme) {
  * checks if the scrollbar has a width and sets the style-scrollbar class accordingly
  */
 function checkScrollbarStyle() {
-  let outerDiv = document.createElement("div");
+  const outerDiv = document.createElement("div");
   outerDiv.style.position = "fixed";
-  let innerDiv = document.createElement("div");
+  const innerDiv = document.createElement("div");
   innerDiv.style.overflowY = "scroll";
   outerDiv.appendChild(innerDiv);
   document.body.appendChild(outerDiv);
