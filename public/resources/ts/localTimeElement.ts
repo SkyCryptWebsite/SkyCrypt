@@ -1,4 +1,4 @@
-class LocalTimeElement extends HTMLElement {
+export class LocalTimeElement extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });

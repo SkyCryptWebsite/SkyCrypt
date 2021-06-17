@@ -11,9 +11,11 @@
     "lint:fix": "npx eslint . --fix",
     "prettier": "npx prettier --check .",
     "prettier:fix": "npx prettier --write .",
-    "prestart": "npm run buildscss",
+    "prestart": "npm run buildscss && npm run buildts",
     "buildscss": "sass public/resources/scss:public/resources/css --style=compressed",
     "watchscss": "sass --watch public/resources/scss:public/resources/css",
+    "buildts": "npx tsc -p public/resources/ts",
+    "watchts": "npx tsc -p public/resources/ts -w",
     "dev": "node init && nodemon index"
   },
   "repository": {
