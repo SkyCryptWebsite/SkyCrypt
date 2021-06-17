@@ -3,8 +3,8 @@
   "compilerOptions": {
     "module": "es2015",
     "moduleResolution": "node",
-    "target": "es2017",
-    "lib": ["dom", "dom.iterable", "ESNext.String"],
+    "target": "es2020",
+    "lib": ["ES2020", "dom", "dom.iterable", "ESNext.String"],
     "outDir": "../js"
   },
   "include": [".", "common-defer.js"]
