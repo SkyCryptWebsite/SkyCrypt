@@ -1,6 +1,5 @@
 interface Window {
   tippy: any;
-  page: string;
 }
 
 function validateURL(url: string) {

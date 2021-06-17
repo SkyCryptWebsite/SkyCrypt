@@ -1,4 +1,3 @@
-/* global extra:readonly */
 
 if (!localStorage.getItem("currentTheme") || !extra.themes[localStorage.getItem("currentTheme")]) {
   localStorage.setItem("currentTheme", "default");
