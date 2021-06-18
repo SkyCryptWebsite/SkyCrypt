@@ -48,13 +48,13 @@
   --bg-hex: #121212;
 
   /* Header Logo */
-  --logo: url(https://sky.shiiyu.moe/resources/img/logo_square.svg);
+  --logo: url(/resources/img/logo_square.svg);
 
   /* Normal Background */
-  --bg: url(https://sky.shiiyu.moe/resources/img/bg.webp?v3);
+  --bg: url(/resources/img/bg.webp);
 
   /* Blurred Background */
-  --bg_blur: url(https://sky.shiiyu.moe/resources/img/bg_blur.webp?v3);
+  --bg_blur: url(/resources/img/bg_blur.webp);
 
   &.light {
     --text-hex: black;
@@ -167,6 +167,10 @@ html {
   overflow-x: hidden;
   scroll-behavior: smooth;
 
+  &.cache-only {
+    background-blend-mode: luminosity;
+  }
+
   @supports (-webkit-touch-callout: none) {
     background-image: none;
     &:before {
@@ -178,6 +182,9 @@ html {
       left: 0;
       background: var(--bg) no-repeat center center;
       background-size: cover;
+    }
+    &.cache-only:before {
+      filter: grayscale(1);
     }
   }
 }
@@ -622,11 +629,47 @@ input[type="search"]::-webkit-search-cancel-button {
     .light &::before {
       background-color: rgb(235, 235, 235);
     }
+    .cache-only &::before {
+      background-blend-mode: luminosity;
+    }
   }
 
   .light & {
     -webkit-backdrop-filter: blur(16px) contrast(40%) brightness(1.5);
     backdrop-filter: blur(16px) contrast(40%) brightness(1.5);
+  }
+}
+
+.banner {
+  margin: 0;
+  margin-left: calc(-1 * var(--padding));
+  margin-right: calc(-1 * var(--padding));
+  padding: var(--padding);
+  background: var(--icon-hex);
+  color: white;
+
+  &.error,
+  .light &.error {
+    background: #b00020;
+  }
+
+  figcaption {
+    font-weight: 700;
+    font-size: 36px;
+  }
+
+  p {
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  a {
+    color: white;
+  }
+
+  .grid & {
+    grid-column: 1/-1;
+    padding: 25px;
   }
 }
 
@@ -2099,6 +2142,13 @@ a.additional-player-stat:hover {
   }
 }
 
+.item-icon.is-enchanted {
+  filter: url(#enchanted-glint);
+  &.piece-icon {
+    filter: url(#enchanted-glint) drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
+  }
+}
+
 .piece-icon {
   position: absolute;
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
@@ -3047,6 +3097,16 @@ main.grid {
       background-color: rgba(255, 255, 255, 0.5);
     }
 
+    @supports not ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+      .cache-only &:not(.banner.error) {
+        background-blend-mode: luminosity;
+        background-color: black;
+      }
+      .cache-only.light &:not(.banner.error) {
+        background-color: white;
+      }
+    }
+
     @supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
       background: none;
       -webkit-backdrop-filter: blur(16px) brightness(0.5);
@@ -3861,6 +3921,10 @@ body {
     display: none;
   }
 
+  .grid .banner figcaption {
+    font-size: 7vw;
+  }
+
   #show_skills {
     display: block;
   }
@@ -3932,6 +3996,10 @@ body {
 }
 
 @media (max-width: 400px) {
+  .banner figcaption {
+    font-size: 8vw;
+  }
+
   .piece-icon {
     transform: translate(-50%, -50%) scale(0.4);
   }

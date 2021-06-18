@@ -21,6 +21,15 @@
                 <button type="submit" class="big-green-button">Show me</button>
                 <%# <p>or take me to a <a href="/random/stats">random profile</a>.</p> %>
             </form>
+            <% if(extra.cacheOnly) { %>
+                <figure class="banner error">
+                      <figcaption>Cache Only Mode!</figcaption>
+                      <p>
+                          SkyCrypt is showing the last know state of user's profiles which may be outdated.<br>
+                          For more info about Hypixel outages visit the official <a href="https://status.hypixel.net/" target="_blank" rel="noreferrer"> Hypixel Status Website</a>.
+                      </p>
+                </figure>
+            <% } %>
             <div id="error_box_wrapper" <% if(error){ %>class="show-error"<% } %>>
                 <div id="error_box">
                     <div id="error_top">

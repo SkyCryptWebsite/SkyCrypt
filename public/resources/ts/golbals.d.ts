@@ -3,6 +3,7 @@ declare const page: string;
 declare namespace extra {
   const favoriteUUIDs: string[];
   const isFoolsDay: boolean;
+  const cacheOnly: boolean;
   const packs: Pack[];
   const themes: {
     [key: string]: Theme;
@@ -22,6 +23,7 @@ interface Theme {
   official?: true;
   community?: true;
   light?: true;
+  enchanted_glint?: string;
   images?: {
     [key: string]: string;
   };
