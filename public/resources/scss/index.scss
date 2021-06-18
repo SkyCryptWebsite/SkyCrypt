@@ -167,6 +167,10 @@ html {
   overflow-x: hidden;
   scroll-behavior: smooth;
 
+  &.cache-only {
+    background-blend-mode: luminosity;
+  }
+
   @supports (-webkit-touch-callout: none) {
     background-image: none;
     &:before {
