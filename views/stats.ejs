@@ -531,6 +531,15 @@ const getRarityUpgradeClass = item => {
         <div id="player_model"></div>
     </div>
     <main id="wrapper" data-sticky-container>
+        <% if(extra.cacheOnly) { %>
+            <figure class="banner error">
+                <figcaption>Cache Only Mode!</figcaption>
+                <p>
+                    SkyCrypt is showing the last know state of this profile which may be outdated.<br>
+                    For more info about Hypixel outages visit the official <a href="https://status.hypixel.net/" target="_blank" rel="noreferrer"> Hypixel Status Website</a>.
+                </p>
+            </figure>
+        <% } %>
         <div id="player_profile"><span class="text-stats-for">Stats for</span>
             <span tabindex="0" id="stats_for_player">
                 <%- jerriefy(calculated.rank_prefix) %>

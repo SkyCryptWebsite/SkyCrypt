@@ -634,6 +634,39 @@ input[type="search"]::-webkit-search-cancel-button {
   }
 }
 
+.banner {
+  margin: 0;
+  margin-left: calc(-1 * var(--padding));
+  margin-right: calc(-1 * var(--padding));
+  padding: var(--padding);
+  background-color: var(--icon-hex);
+  color: white;
+
+  &.error,
+  .light &.error {
+    background-color: #b00020;
+  }
+
+  figcaption {
+    font-weight: 700;
+    font-size: 36px;
+  }
+
+  p {
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  a {
+    color: white;
+  }
+
+  .grid & {
+    grid-column: 1/-1;
+    padding: 25px;
+  }
+}
+
 #base_stats_container {
   grid-area: base;
 }
@@ -3865,6 +3898,10 @@ body {
     display: none;
   }
 
+  .grid .banner figcaption {
+    font-size: 7vw;
+  }
+
   #show_skills {
     display: block;
   }
@@ -3936,6 +3973,10 @@ body {
 }
 
 @media (max-width: 400px) {
+  .banner figcaption {
+    font-size: 8vw;
+  }
+
   .piece-icon {
     transform: translate(-50%, -50%) scale(0.4);
   }
