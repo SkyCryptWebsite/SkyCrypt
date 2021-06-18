@@ -50,12 +50,12 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "fs-extra": "^10.0.0",
-    "ioredis": "^4.27.5",
+    "ioredis": "^4.27.6",
     "just-safe-get": "^2.1.2",
     "lodash": "^4.17.20",
     "lodash.escaperegexp": "^4.1.2",
     "micromatch": "^4.0.4",
-    "minecraft-data": "^2.84.0",
+    "minecraft-data": "^2.85.1",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
     "moment-timezone": "^0.5.31",
@@ -78,6 +78,6 @@
     "node-watch": "^0.7.1",
     "nodemon": "^2.0.7",
     "prettier": "2.3.1",
-    "sass": "^1.34.1"
+    "sass": "^1.35.1"
   }
 }

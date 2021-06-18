@@ -69,6 +69,10 @@ function loadTheme(currentTheme) {
     }
   });
 
+  document
+    .querySelector("#enchanted-glint feImage")
+    ?.setAttribute("href", theme.enchanted_glint ?? "/resources/img/enchanted-glint.png");
+
   console.log(`Loaded theme: ${currentTheme}`);
 }
 
