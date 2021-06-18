@@ -645,7 +645,7 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-left: calc(-1 * var(--padding));
   margin-right: calc(-1 * var(--padding));
   padding: var(--padding);
-  background-color: var(--icon-hex);
+  background: var(--icon-hex);
   color: white;
 
   &.error,
