@@ -102,7 +102,9 @@ const iOS = ["iPad Simulator", "iPhone Simulator", "iPod Simulator", "iPad", "iP
 );
 
 if (iOS) {
-  document.body.prepend(/*html*/ `<div id="status-bar"></div>`);
+  const div = document.createElement("div");
+  div.id = "status-bar";
+  document.body.prepend(div);
 }
 
 if (extra.cacheOnly) {
