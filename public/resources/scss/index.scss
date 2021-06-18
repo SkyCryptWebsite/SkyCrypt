@@ -48,13 +48,13 @@
   --bg-hex: #121212;
 
   /* Header Logo */
-  --logo: url(https://sky.shiiyu.moe/resources/img/logo_square.svg);
+  --logo: url(/resources/img/logo_square.svg);
 
   /* Normal Background */
-  --bg: url(https://sky.shiiyu.moe/resources/img/bg.webp?v3);
+  --bg: url(/resources/img/bg.webp);
 
   /* Blurred Background */
-  --bg_blur: url(https://sky.shiiyu.moe/resources/img/bg_blur.webp?v3);
+  --bg_blur: url(/resources/img/bg_blur.webp);
 
   &.light {
     --text-hex: black;
