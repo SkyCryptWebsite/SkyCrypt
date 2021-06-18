@@ -629,6 +629,9 @@ input[type="search"]::-webkit-search-cancel-button {
     .light &::before {
       background-color: rgb(235, 235, 235);
     }
+    .cache-only &::before {
+      background-blend-mode: luminosity;
+    }
   }
 
   .light & {
@@ -647,7 +650,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
   &.error,
   .light &.error {
-    background-color: #b00020;
+    background: #b00020;
   }
 
   figcaption {
@@ -3092,6 +3095,16 @@ main.grid {
 
     .light & {
       background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    @supports not ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+      .cache-only &:not(.banner.error) {
+        background-blend-mode: luminosity;
+        background-color: black;
+      }
+      .cache-only.light &:not(.banner.error) {
+        background-color: white;
+      }
     }
 
     @supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
