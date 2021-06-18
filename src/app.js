@@ -1,6 +1,7 @@
 const cluster = require("cluster");
 const lib = require("./lib");
 const { getFileHashes, getFileHash, hashedDirectories } = require("./hashes");
+const fetch = require("node-fetch");
 
 async function main() {
   const express = require("express");
@@ -67,6 +68,23 @@ async function main() {
   }
   updateIsFoolsDay();
   setInterval(updateIsFoolsDay, 60_000);
+
+  let forceCacheOnly;
+  const badStatuses = ["under_maintenance"];
+  async function updateCacheOnly() {
+    const response = await fetch("https://status.hypixel.net/api/v2/components.json");
+    const data = await response.json();
+    for (const component of data.components) {
+      if (component.name === "Public API") {
+        forceCacheOnly = badStatuses.includes(component.status);
+        if (forceCacheOnly) {
+          console.log("forcing cache only mode");
+        }
+      }
+    }
+  }
+  updateCacheOnly();
+  setInterval(updateCacheOnly, 60_000);
 
   const app = express();
   const port = 32464;
@@ -140,7 +158,7 @@ async function main() {
     return favorites;
   }
 
-  async function getExtra(page = null, favoriteUUIDs = []) {
+  async function getExtra(page = null, favoriteUUIDs = [], cacheOnly) {
     const output = {};
 
     output.twemoji = twemoji;
@@ -150,6 +168,7 @@ async function main() {
     output.packs = lib.getPacks();
 
     output.isFoolsDay = isFoolsDay;
+    output.cacheOnly = cacheOnly;
 
     if ("recaptcha_site_key" in credentials) {
       output.recaptcha_site_key = credentials.recaptcha_site_key;
@@ -191,7 +210,7 @@ async function main() {
       .replace(/[^a-z\d\-_:]/g, "");
     let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
 
-    const cacheOnly = req.query.cache === "true";
+    const cacheOnly = req.query.cache === "true" || forceCacheOnly;
 
     const playerUsername =
       paramPlayer.length == 32 ? await helper.resolveUsernameOrUuid(paramPlayer, db).display_name : paramPlayer;
@@ -228,7 +247,7 @@ async function main() {
           _,
           constants,
           helper,
-          extra: await getExtra("stats", favorites),
+          extra: await getExtra("stats", favorites, cacheOnly),
           fileHashes,
           page: "stats",
         },
@@ -251,7 +270,7 @@ async function main() {
           req,
           error: e,
           player: playerUsername,
-          extra: await getExtra("index", favorites),
+          extra: await getExtra("index", favorites, cacheOnly),
           fileHashes,
           helper,
           page: "index",
@@ -526,10 +545,19 @@ async function main() {
   app.all("/", async (req, res, next) => {
     const timeStarted = new Date().getTime();
     const favorites = parseFavorites(req.cookies.favorite);
+    const cacheOnly = req.query.cache === "true" || forceCacheOnly;
 
     res.render(
       "index",
-      { req, error: null, player: null, extra: await getExtra("index", favorites), fileHashes, helper, page: "index" },
+      {
+        req,
+        error: null,
+        player: null,
+        extra: await getExtra("index", favorites, cacheOnly),
+        fileHashes,
+        helper,
+        page: "index",
+      },
       (err, html) => {
         res.set("X-Cluster-ID", `${helper.getClusterId()}`);
         res.set("X-Process-Time", `${new Date().getTime() - timeStarted}`);
