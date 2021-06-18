@@ -492,6 +492,13 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
       }
     }
 
+    // Gives animated texture on certain items, will be overwritten by custom textures
+    switch (getId(item)) {
+      case "SINFUL_DICE":
+        item.texture_path = `/resources/img/items/sinful_dice.png?v6`;
+        break;
+    }
+
     // Uses animated skin texture, if present
     if (helper.hasPath(item, "tag", "ExtraAttributes", "skin")) {
       switch (item.tag.ExtraAttributes.skin) {
