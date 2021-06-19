@@ -906,7 +906,7 @@ const getRarityUpgradeClass = item => {
         <% } %>
         <% if(items.wardrobe.length > 0){ %>
           <p class="stat-sub-header">Wardrobe</p>
-          <div class="pieces">
+          <div class="pieces wardrobe">
           <% for(const set of items.wardrobe){ %>
             <div class="wardrobe-set">
               <% for(const [index, item] of set.filter(a => a !== null).entries()){

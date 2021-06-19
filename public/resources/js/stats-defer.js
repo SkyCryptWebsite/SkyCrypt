@@ -506,12 +506,6 @@ function closeLore() {
 
     statsContent.classList.remove("sticky-stats", "show-stats");
   }
-
-  const openedWardrobe = document.querySelector(".wardrobe-opened");
-
-  if (openedWardrobe) {
-    openedWardrobe.classList.remove("wardrobe-opened");
-  }
 }
 
 let oldWidth = null;
@@ -733,31 +727,9 @@ const itemNameContent = itemName.querySelector("span");
 const itemLore = statsContent.querySelector(".item-lore");
 const backpackContents = statsContent.querySelector(".backpack-contents");
 
-const touchDevice = window.matchMedia("(pointer: coarse)").matches;
-
-function bindWardrobeEvents(element) {
-  element.addEventListener("click", function (e) {
-    const currentWardrobe = document.querySelector(".wardrobe-opened");
-
-    if (currentWardrobe) {
-      currentWardrobe.classList.remove("wardrobe-opened");
-    }
-
-    element.classList.add("wardrobe-opened");
-  });
-}
-
 function bindLoreEvents(element) {
   element.addEventListener("mouseenter", function (e) {
     fillLore(element.parentNode, false);
-
-    if (
-      touchDevice &&
-      element.parentNode.classList.contains("wardrobe-piece") &&
-      !element.parentNode.parentNode.classList.contains("wardrobe-opened")
-    ) {
-      return;
-    }
 
     statsContent.classList.add("show-stats");
   });
@@ -807,19 +779,6 @@ function bindLoreEvents(element) {
   }
 
   element.addEventListener("click", function (e) {
-    if (
-      touchDevice &&
-      element.parentNode.classList.contains("wardrobe-piece") &&
-      !element.parentNode.parentNode.classList.contains("wardrobe-opened")
-    ) {
-      element.parentNode.blur();
-      return;
-    }
-
-    if (element.parentNode.parentNode.classList.contains("wardrobe-set")) {
-      element.parentNode.parentNode.classList.add("wardrobe-opened");
-    }
-
     if (e.ctrlKey && item && Array.isArray(item.containsItems)) {
       showBackpack(item);
       closeLore();
@@ -835,10 +794,6 @@ function bindLoreEvents(element) {
       }
     }
   });
-}
-
-if (touchDevice) {
-  [].forEach.call(document.querySelectorAll(".wardrobe-set"), bindWardrobeEvents);
 }
 
 [].forEach.call(document.querySelectorAll(".rich-item .piece-hover-area"), bindLoreEvents);

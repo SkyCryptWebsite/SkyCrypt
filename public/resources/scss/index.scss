@@ -1985,18 +1985,37 @@ a.additional-player-stat:hover {
   font-size: 19px;
 }
 
+@media (hover: none) {
+  .wardrobe {
+    white-space: nowrap;
+    overflow-x: auto;
+    margin-left: calc(-1 * var(--padding));
+    margin-right: calc(-1 * var(--padding));
+    content-visibility: auto;
+
+    > :first-child {
+      margin-inline-start: var(--padding);
+    }
+    > :last-child {
+      margin-inline-end: var(--padding);
+    }
+  }
+}
+
 .wardrobe-set {
   vertical-align: top;
   display: inline-block;
-  max-height: 90px;
-  overflow: hidden;
-  overflow: clip;
-  transition: max-height 0.2s;
 
-  &:hover,
-  &:focus-within,
-  &.wardrobe-opened {
-    max-height: 360px;
+  @media (hover: hover) {
+    max-height: 90px;
+    overflow: hidden;
+    overflow: clip;
+    transition: max-height 0.2s;
+
+    &:hover,
+    &:focus-within {
+      max-height: 360px;
+    }
   }
 
   .piece {
@@ -3955,11 +3974,13 @@ body {
   }
 
   .wardrobe-set {
-    max-height: calc((100vw - 50px) / 4);
+    @media (hover: hover) {
+      max-height: calc((100vw - 50px) / 4);
 
-    &:hover,
-    &.wardrobe-opened {
-      max-height: calc(100vw - 50px);
+      &:hover,
+      &:focus-within {
+        max-height: calc(100vw - 50px);
+      }
     }
   }
 
