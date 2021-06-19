@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node init && node index",
+    "dev": "concurrently -r \"npm run watchscss\" \"npm run \" \"npm run watchts\"",
     "postinstall": "node init",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint .",
@@ -16,7 +17,7 @@
     "watchscss": "sass --watch public/resources/scss:public/resources/css",
     "buildts": "npx tsc -p public/resources/ts",
     "watchts": "npx tsc -p public/resources/ts -w",
-    "dev": "node init && nodemon index"
+    "nodemon": "node init && nodemon index"
   },
   "repository": {
     "type": "git",
@@ -77,6 +78,7 @@
     "@typescript-eslint/eslint-plugin": "^4.27.0",
     "@typescript-eslint/parser": "^4.27.0",
     "babel-eslint": "^10.1.0",
+    "concurrently": "^6.2.0",
     "eslint": "^7.26.0",
     "eslint-config-prettier": "^8.3.0",
     "node-watch": "^0.7.1",
