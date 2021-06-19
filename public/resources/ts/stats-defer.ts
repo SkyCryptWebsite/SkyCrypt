@@ -570,7 +570,7 @@ function flashForUpdate(element) {
   });
 }
 
-[].forEach.call(document.querySelectorAll(".stat-weapons .select-weapon"), function (element) {
+for (const element of document.querySelectorAll(".stat-weapons .select-weapon")) {
   let itemId = element.parentNode.getAttribute("data-item-id");
   let filterItems;
 
@@ -580,7 +580,7 @@ function flashForUpdate(element) {
     );
 
     if (backpack.length == 0) {
-      return;
+      break;
     }
 
     filterItems = backpack[0].containsItems;
@@ -608,9 +608,9 @@ function flashForUpdate(element) {
       activeWeaponElement.className = "stat-value stat-active-weapon piece-common-fg";
       activeWeaponElement.innerHTML = "None";
     } else {
-      [].forEach.call(document.querySelectorAll(".stat-weapons .piece"), function (_element) {
+      for (const _element of document.querySelectorAll(".stat-weapons .piece")) {
         _element.classList.remove("piece-selected");
-      });
+      }
 
       element.parentNode.classList.add("piece-selected");
 
@@ -628,9 +628,9 @@ function flashForUpdate(element) {
       }
     }
   });
-});
+}
 
-[].forEach.call(document.querySelectorAll(".stat-fishing .select-rod"), function (element) {
+for (const element of document.querySelectorAll(".stat-fishing .select-rod")) {
   let itemId = element.parentNode.getAttribute("data-item-id");
   let filterItems;
 
@@ -640,7 +640,7 @@ function flashForUpdate(element) {
     );
 
     if (backpack.length == 0) {
-      return;
+      break;
     }
 
     filterItems = backpack[0].containsItems;
@@ -668,9 +668,9 @@ function flashForUpdate(element) {
       activeRodElement.className = "stat-value stat-active-rod piece-common-fg";
       activeRodElement.innerHTML = "None";
     } else {
-      [].forEach.call(document.querySelectorAll(".stat-fishing .piece"), function (_element) {
+      for (const _element of document.querySelectorAll(".stat-fishing .piece")) {
         _element.classList.remove("piece-selected");
-      });
+      }
 
       element.parentNode.classList.add("piece-selected");
 
@@ -684,7 +684,7 @@ function flashForUpdate(element) {
 
     updateStat("sea_creature_chance", stats.sea_creature_chance);
   });
-});
+}
 
 function updateStat(stat, newValue) {
   const elements = document.querySelectorAll(".basic-stat[data-stat=" + stat + "] .stat-value");
@@ -699,7 +699,7 @@ function updateStat(stat, newValue) {
   }
 }
 
-[].forEach.call(document.querySelectorAll(".inventory-tab"), function (element) {
+for (const element of document.querySelectorAll(".inventory-tab")) {
   let type = element.getAttribute("data-inventory-type");
 
   element.addEventListener("click", function () {
@@ -717,7 +717,7 @@ function updateStat(stat, newValue) {
 
     renderInventory(items[type], type);
   });
-});
+}
 
 const statsContent = document.querySelector("#stats_content");
 const itemName = statsContent.querySelector(".item-name");
@@ -831,14 +831,18 @@ function bindLoreEvents(element) {
 }
 
 if (touchDevice) {
-  [].forEach.call(document.querySelectorAll(".wardrobe-set"), bindWardrobeEvents);
+  for (const element of document.querySelectorAll(".wardrobe-set")) {
+    bindWardrobeEvents(element);
+  }
 }
 
-[].forEach.call(document.querySelectorAll(".rich-item .piece-hover-area"), bindLoreEvents);
+for (const element of document.querySelectorAll(".rich-item .piece-hover-area")) {
+  bindLoreEvents(element);
+}
 
 let enableApiPlayer = document.querySelector("#enable_api");
 
-[].forEach.call(document.querySelectorAll(".enable-api"), function (element) {
+for (const element of document.querySelectorAll(".enable-api")) {
   element.addEventListener("click", function (e) {
     e.preventDefault();
     dimmer.classList.add("show-dimmer");
@@ -847,7 +851,7 @@ let enableApiPlayer = document.querySelector("#enable_api");
     enableApiPlayer.currentTime = 0;
     enableApiPlayer.play();
   });
-});
+}
 
 enableApiPlayer.addEventListener("click", function (event) {
   event.stopPropagation();
@@ -865,13 +869,11 @@ dimmer.addEventListener("click", function (e) {
   closeLore();
 });
 
-[].forEach.call(document.querySelectorAll(".close-lore"), function (element) {
+for (const element of document.querySelectorAll(".close-lore")) {
   element.addEventListener("click", closeLore);
-});
+}
 
-[].forEach.call(document.querySelectorAll(".copy-text"), function (e) {
-  let element = e;
-
+for (const element of document.querySelectorAll(".copy-text")) {
   let copyNotification = tippy(element, {
     content: "Copied to clipboard!",
     trigger: "manual",
@@ -889,7 +891,7 @@ dimmer.addEventListener("click", function (e) {
       function () {}
     );
   });
-});
+}
 
 function parseFavorites(cookie) {
   return cookie?.split(",").filter((uuid) => /^[0-9a-f]{32}$/.test(uuid)) || [];
@@ -1068,11 +1070,11 @@ if (showSkills != null) {
   });
 }
 
-[].forEach.call(document.querySelectorAll(".xp-skill"), function (element) {
+for (const element of document.querySelectorAll(".xp-skill")) {
   let skillProgressText = element.querySelector(".skill-progress-text");
 
   if (skillProgressText === null) {
-    return;
+    break;
   }
 
   let originalText = skillProgressText.innerHTML;
@@ -1084,9 +1086,9 @@ if (showSkills != null) {
   element.addEventListener("mouseleave", function () {
     skillProgressText.innerHTML = originalText;
   });
-});
+}
 
-[].forEach.call(document.querySelectorAll(".kills-deaths-container .show-all.enabled"), function (element) {
+for (const element of document.querySelectorAll(".kills-deaths-container .show-all.enabled")) {
   let parent = element.parentNode;
   let kills = calculated[element.getAttribute("data-type")];
 
@@ -1121,7 +1123,7 @@ if (showSkills != null) {
       parent.appendChild(killElement);
     });
   });
-});
+}
 
 window.addEventListener("keydown", function (e) {
   let selectedPiece = document.querySelector(".rich-item:focus");
