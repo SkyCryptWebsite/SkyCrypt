@@ -470,7 +470,11 @@ async function main() {
   });
 
   app.all("/robots.txt", async (req, res, next) => {
-    res.type("text").send(`User-agent: *\nDisallow: /item /head /leather /resources`);
+    res
+      .type("text")
+      .send(
+        `User-agent: *\nDisallow: /item /cape /head /leather /potion /resources\nSitemap: https://sky.shiiyu.moe/sitemap.xml`
+      );
   });
 
   app.all("/sitemap.xml", async (req, res, next) => {
