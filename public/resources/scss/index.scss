@@ -2042,11 +2042,6 @@ a.additional-player-stat:hover {
       overflow: clip;
       transition: max-height 0.2s;
 
-      .piece {
-        transform: translateY(-85px);
-        transition: transform 0.2s;
-      }
-
       &:hover,
       &:focus-within {
         max-height: 360px;
@@ -4035,9 +4030,6 @@ body {
       &:hover,
       &:focus-within {
         max-height: calc(100vw - 50px);
-      }
-      .piece {
-        transform: translateY(calc((100vw - 50px) / -4 + 2px));
       }
     }
   }
