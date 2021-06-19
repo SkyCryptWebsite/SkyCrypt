@@ -2037,16 +2037,19 @@ a.additional-player-stat:hover {
     }
 
     @media (hover: hover) {
-      max-height: 75px;
+      max-height: 360px;
       overflow: hidden;
       overflow: clip;
-      transition: max-height 0.2s;
+      transition: max-height 0.2s, gap 0.2s;
+      .armor-placeholder {
+        transition: height 0.2s;
+      }
 
-      &:hover,
-      &:focus-within {
-        max-height: 360px;
-        .piece {
-          transform: translateY(0);
+      &:not(:hover):not(:focus-within) {
+        max-height: 75px;
+        gap: 0;
+        .armor-placeholder {
+          height: 0;
         }
       }
     }
@@ -4025,11 +4028,10 @@ body {
 
   .wardrobe .wardrobe-set {
     @media (hover: hover) {
-      max-height: calc((100vw - 50px) / 4 - 14px);
+      max-height: calc(100vw - 50px);
 
-      &:hover,
-      &:focus-within {
-        max-height: calc(100vw - 50px);
+      &:not(:hover):not(:focus-within) {
+        max-height: calc((100vw - 50px) / 4 - 14px);
       }
     }
   }
