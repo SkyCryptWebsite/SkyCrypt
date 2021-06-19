@@ -268,16 +268,27 @@ const getEnrichments = (accessories) => {
 
 const isEnchanted = item => {
 
-    if([397].includes(item.id))
+    // heads
+    if ([397].includes(item.id)) {
         return false;
+    }
 
-    if([403, 384, 399].includes(item.id))
+    // enchanted book, bottle o' enchanting, nether star
+    if ([403, 384, 399].includes(item.id)) {
         return true;
+    }
 
-    if('tag' in item && Array.isArray(item.tag.ench))
+    //potions potions with actual effects (not water bottles)
+    if (item.id === 373 && item.Damage !== 0) {
         return true;
+    }
+
+    if ("tag" in item && Array.isArray(item.tag.ench)) {
+        return true;
+    }
 
     return false;
+
 };
 
 const itemIcon = (item, classes) => { %>
