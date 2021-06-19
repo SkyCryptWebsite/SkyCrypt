@@ -285,6 +285,7 @@ module.exports = {
 
   renderItem: async (skyblockId, query, db) => {
     let item = { Damage: 0, id: -1 };
+    query = sanitize(query);
 
     if (skyblockId) {
       skyblockId = skyblockId.replace(".gif", "");
@@ -367,6 +368,7 @@ module.exports = {
         outputTexture.mime = "image/gif";
       }
 
+      outputTexture.path = customTexture.path;
       outputTexture.image = await fs.readFile(path.resolve(__dirname, "..", "public", customTexture.path));
     }
 

@@ -400,6 +400,10 @@ async function main() {
       return;
     }
 
+    if (item.path) {
+      res.set("X-Texture-Path", `${item.path}`);
+    }
+
     res.setHeader("Cache-Control", `public, max-age=${CACHE_DURATION}`);
     res.contentType(item.mime);
     res.send(item.image);
