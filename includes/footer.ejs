@@ -5,34 +5,34 @@
 <script async src="https://arc.io/widget.min.js#oNMq8LVU"></script>
 
 <script>
-    window.addEventListener('load', (event) => {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js', {scope: '/'})
-            .then((reg) => {
-                // registration worked
-                console.log('Registration succeeded. Scope is ' + reg.scope);
-            }).catch((error) => {
-                // registration failed
-                console.log('Registration failed with ' + error);
-            });
-        }
-    });
+  window.addEventListener('load', (event) => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js', {scope: '/'})
+      .then((reg) => {
+        // registration worked
+        console.log('Registration succeeded. Scope is ' + reg.scope);
+      }).catch((error) => {
+        // registration failed
+        console.log('Registration failed with ' + error);
+      });
+    }
+  });
 </script>
 
 <% if (extra.isFoolsDay) { %>
-    <style>
-        #player_model {
-            transform: scaleY(-1);
-        }
-        .profile-avatar {
-            transition: transform 0.2s ease-in-out;
-        }
-        :hover > .profile-avatar {
-            transform: rotate(180deg);
-        }
-    </style>
+  <style>
+    #player_model {
+      transform: scaleY(-1);
+    }
+    .profile-avatar {
+      transition: transform 0.2s ease-in-out;
+    }
+    :hover > .profile-avatar {
+      transform: rotate(180deg);
+    }
+  </style>
 <% } %>
 
 <% if(page == 'api'){ %>
-    <link rel="stylesheet" href="/resources/css/api.css?<%- fileHashes.css['api.css'] %>">
+  <link rel="stylesheet" href="/resources/css/api.css?<%- fileHashes.css['api.css'] %>">
 <% } %>
