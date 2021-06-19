@@ -406,26 +406,56 @@ async function main() {
   });
 
   app.all("/leather/:type/:color", cors(), async (req, res) => {
+    const { type, color } = req.params;
+
+    if (!["boots", "leggings", "chestplate", "helmet"].includes(type)) {
+      throw new Error("invalid armor type: " + type);
+    }
+
+    if (!/^[0-9a-fA-F]{6}$/.test(color)) {
+      throw new Error("invalid color: #" + color);
+    }
+
+    const filename = `leather_${type}_${color}.png`;
+
     let file;
-
-    if (!["boots", "leggings", "chestplate", "helmet"].includes(req.params.type)) {
-      throw new Error("invalid armor type");
-    }
-
-    const { type } = req.params;
-
-    const color = req.params.color.split(",");
-
-    if (color.length < 3) {
-      throw new Error("invalid color");
-    }
-
-    const filename = `leather_${type}_${color.join("_")}.png`;
 
     try {
       file = await fs.readFile(path.resolve(cachePath, filename));
     } catch (e) {
       file = await renderer.renderArmor(type, color);
+
+      fs.writeFile(path.resolve(cachePath, filename), file, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    res.setHeader("Cache-Control", `public, max-age=${CACHE_DURATION}`);
+    res.contentType("image/png");
+    res.send(file);
+  });
+
+  app.all("/potion/:type/:color", cors(), async (req, res) => {
+    const { type, color } = req.params;
+
+    if (!["normal", "splash"].includes(type)) {
+      throw new Error("invalid armor type: " + type);
+    }
+
+    if (!/^[0-9a-fA-F]{6}$/.test(color)) {
+      throw new Error("invalid color: #" + color);
+    }
+
+    const filename = `potion_${type}_${color}.png`;
+
+    let file;
+
+    try {
+      file = await fs.readFile(path.resolve(cachePath, filename));
+    } catch (e) {
+      file = await renderer.renderPotion(type, color);
 
       fs.writeFile(path.resolve(cachePath, filename), file, (err) => {
         if (err) {

@@ -145,11 +145,18 @@ if (calculated.profile.cute_name == "Deleted") {
 history.replaceState({}, document.title, url);
 
 function isEnchanted(item) {
+  // heads
   if ([397].includes(item.id)) {
     return false;
   }
 
+  // enchanted book, bottle o' enchanting, nether star
   if ([403, 384, 399].includes(item.id)) {
+    return true;
+  }
+
+  //potions with actual effects (not water bottles)
+  if (item.id === 373 && item.Damage !== 0) {
     return true;
   }
 
