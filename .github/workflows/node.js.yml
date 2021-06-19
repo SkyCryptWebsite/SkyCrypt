@@ -62,7 +62,7 @@ jobs:
         run: npm ci
 
       - name: build ts
-        run: npm run buildts
+        run: npm run ts
 
   buildscss:
     name: build scss
@@ -80,7 +80,7 @@ jobs:
         run: npm ci
 
       - name: build scss
-        run: npm run buildscss
+        run: npm run scss
 
   build:
     if: github.ref == 'refs/heads/master'
