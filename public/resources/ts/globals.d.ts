@@ -65,7 +65,13 @@ type StatName =
   | "speed"
   | "strength";
 
-interface Item {
+interface DisplayItem {
+  display_name: string;
+  rarity: string;
+  texture_path?: string;
+}
+
+interface Item extends DisplayItem {
   Count: number;
   Damage: number;
   animated: boolean;
@@ -77,7 +83,6 @@ interface Item {
   };
   tag: any;
   texture_pack: Pack;
-  texture_path?: string;
 }
 
 interface Backpack extends Item {
@@ -457,11 +462,8 @@ declare const calculated: SkyCryptPlayer & {
   };
   missingPets: PetBase[];
   missingTalismans: {
-    display_name: string;
-    name: string;
-    rarity: string;
-    texture_path: string;
-  }[];
+    [key in "missing" | "upgrades"]: DisplayItem[];
+  };
   petScore: number;
   pet_bonus: {
     [key in StatName]?: number;
@@ -559,13 +561,10 @@ interface SkyCryptPlayer {
   uuid: string;
 }
 
-interface PetBase {
-  display_name: string;
+interface PetBase extends DisplayItem {
   emoji: string;
   head: string;
   lore: string;
-  rarity: string;
-  texture_path: string;
   type: string;
 }
 
