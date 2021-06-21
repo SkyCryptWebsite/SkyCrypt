@@ -69,18 +69,23 @@ async function main() {
   updateIsFoolsDay();
   setInterval(updateIsFoolsDay, 60_000);
 
-  let forceCacheOnly;
+  let forceCacheOnly = false;
   const badStatuses = ["under_maintenance"];
   async function updateCacheOnly() {
-    const response = await fetch("https://status.hypixel.net/api/v2/components.json");
-    const data = await response.json();
-    for (const component of data.components) {
-      if (component.name === "Public API") {
-        forceCacheOnly = badStatuses.includes(component.status);
-        if (forceCacheOnly) {
-          console.log("forcing cache only mode");
+    try {
+      const response = await fetch("https://status.hypixel.net/api/v2/components.json");
+      const data = await response.json();
+      forceCacheOnly = false;
+      for (const component of data.components) {
+        if (component.name === "Public API") {
+          if (badStatuses.includes(component.status)) {
+            forceCacheOnly = true;
+            console.log("forcing cache only mode");
+          }
         }
       }
+    } catch (error) {
+      forceCacheOnly = false;
     }
   }
   updateCacheOnly();
