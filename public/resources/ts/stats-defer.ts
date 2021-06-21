@@ -1,6 +1,9 @@
-/* global calculated:readonly, items:writable, constants:readonly, tippy:readonly, skinview3d:readonly, setCookie:readonly */
+interface Window {
+  tippy: any;
+  skinview3d: any;
+}
 
-const favoriteElement = document.querySelector(".favorite");
+const favoriteElement = document.querySelector(".favorite") as HTMLButtonElement;
 
 if ("share" in navigator) {
   const shareIcon = navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)
@@ -17,7 +20,7 @@ if ("share" in navigator) {
       </button>
     `
   );
-  favoriteElement.nextElementSibling.addEventListener("click", () => {
+  favoriteElement.nextElementSibling?.addEventListener("click", () => {
     navigator.share({
       text: `Check out ${calculated.display_name} on SkyCrypt`,
       url: location.href.split("#")[0],
@@ -25,7 +28,7 @@ if ("share" in navigator) {
   });
 }
 
-function getCookie(c_name) {
+function getCookie(c_name: string) {
   if (document.cookie.length > 0) {
     let c_start = document.cookie.indexOf(c_name + "=");
     if (c_start != -1) {
@@ -40,22 +43,22 @@ function getCookie(c_name) {
   return "";
 }
 
-tippy("*[data-tippy-content]:not(.interactive-tooltip)", {
+window.tippy("*[data-tippy-content]:not(.interactive-tooltip)", {
   trigger: "mouseenter click",
 });
 
 const playerModel = document.getElementById("player_model");
 
-let skinViewer;
+let skinViewer: any;
 
 if (playerModel && calculated.skin_data) {
-  skinViewer = new skinview3d.SkinViewer({
+  skinViewer = new window.skinview3d.SkinViewer({
     width: playerModel.offsetWidth,
     height: playerModel.offsetHeight,
     model: calculated.skin_data.model,
     skin: "/texture/" + calculated.skin_data.skinurl.split("/").pop(),
     cape:
-      "capeurl" in calculated.skin_data
+      calculated.skin_data.capeurl != undefined
         ? "/texture/" + calculated.skin_data.capeurl.split("/").pop()
         : "/cape/" + calculated.display_name,
   });
@@ -64,7 +67,7 @@ if (playerModel && calculated.skin_data) {
 
   skinViewer.camera.position.set(-18, -3, 58);
 
-  const controls = new skinview3d.createOrbitControls(skinViewer);
+  const controls = new window.skinview3d.createOrbitControls(skinViewer);
 
   skinViewer.canvas.removeAttribute("tabindex");
 
@@ -82,7 +85,7 @@ if (playerModel && calculated.skin_data) {
   const basicCapeRotationX = Math.PI * 0.06;
 
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    skinViewer.animations.add((player, time) => {
+    skinViewer.animations.add((player: any, time: number) => {
       // Multiply by animation's natural speed
       time *= 2;
 
@@ -101,11 +104,11 @@ if (playerModel && calculated.skin_data) {
   }
 }
 
-tippy(".interactive-tooltip", {
+window.tippy(".interactive-tooltip", {
   trigger: "mouseenter click",
   interactive: true,
   appendTo: () => document.body,
-  onTrigger(instance, event) {
+  onTrigger(instance: any, event: Event) {
     if (event.type == "click") {
       dimmer.classList.add("show-dimmer");
     }
@@ -127,11 +130,11 @@ const all_items = items.armor.concat(
   items.storage
 );
 
-let dimmer = document.querySelector("#dimmer");
+const dimmer = document.querySelector("#dimmer") as HTMLElement;
 
-let inventoryContainer = document.querySelector("#inventory_container");
+const inventoryContainer = document.querySelector("#inventory_container") as HTMLElement;
 
-const url = new URL(location);
+const url = new URL(location.href);
 
 url.searchParams.delete("__cf_chl_jschl_tk__");
 url.searchParams.delete("__cf_chl_captcha_tk__");
@@ -142,9 +145,9 @@ if (calculated.profile.cute_name == "Deleted") {
   url.pathname = `/stats/${calculated.display_name}/${calculated.profile.cute_name}`;
 }
 
-history.replaceState({}, document.title, url);
+history.replaceState({}, document.title, url.href);
 
-function isEnchanted(item) {
+function isEnchanted(item: Item) {
   // heads
   if ([397].includes(item.id)) {
     return false;
@@ -167,20 +170,23 @@ function isEnchanted(item) {
   return false;
 }
 
-function renderLore(text) {
+type colorCode = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "0" | "a" | "b" | "c" | "d" | "e" | "f";
+type formatCode = "k" | "l" | "m" | "n" | "o";
+
+function renderLore(text: string) {
   let output = "";
 
-  let color = null;
-  let formats = new Set();
+  let color: colorCode | null = null;
+  const formats = new Set<formatCode>();
 
-  for (let part of text.match(/(§[0-9a-fk-or])*[^§]*/g)) {
+  for (let part of text.match(/(§[0-9a-fk-or])*[^§]*/g) ?? []) {
     while (part.charAt(0) === "§") {
       const code = part.charAt(1);
 
       if (/[0-9a-f]/.test(code)) {
-        color = code;
+        color = code as colorCode;
       } else if (/[k-o]/.test(code)) {
-        formats.add(code);
+        formats.add(code as formatCode);
       } else if (code === "r") {
         color = null;
         formats.clear();
@@ -216,16 +222,16 @@ function renderLore(text) {
   return output;
 }
 
-let currentBackpack;
+let currentBackpack: Item;
 
-function renderInventory(inventory, type) {
-  let visibleInventory = document.querySelector(".stat-inventory .inventory-view");
+function renderInventory(inventory: Item[], type: string) {
+  const visibleInventory = document.querySelector(".stat-inventory .inventory-view");
 
   if (visibleInventory) {
-    document.querySelector("#inventory_container").removeChild(visibleInventory);
+    document.querySelector("#inventory_container")?.removeChild(visibleInventory);
   }
 
-  let inventoryView = document.createElement("div");
+  const inventoryView = document.createElement("div");
   inventoryView.className = "inventory-view processed";
   inventoryView.setAttribute("data-inventory-type", type);
 
@@ -239,12 +245,12 @@ function renderInventory(inventory, type) {
   }
 
   inventory.forEach(function (item, index) {
-    let inventorySlot = document.createElement("div");
+    const inventorySlot = document.createElement("div");
     inventorySlot.className = "inventory-slot";
 
     if (item.id) {
-      let inventoryItemIcon = document.createElement("div");
-      let inventoryItemCount = document.createElement("div");
+      const inventoryItemIcon = document.createElement("div");
+      const inventoryItemCount = document.createElement("div");
 
       inventoryItemIcon.className = "piece-icon item-icon icon-" + item.id + "_" + item.Damage;
 
@@ -258,19 +264,19 @@ function renderInventory(inventory, type) {
       }
 
       inventoryItemCount.className = "item-count";
-      inventoryItemCount.innerHTML = item.Count;
+      inventoryItemCount.innerHTML = item.Count.toString();
 
-      let inventoryItem = document.createElement("div");
+      const inventoryItem = document.createElement("div");
 
-      let pieceHoverArea = document.createElement("div");
+      const pieceHoverArea = document.createElement("div");
       pieceHoverArea.className = "piece-hover-area";
 
       inventoryItem.className = "rich-item inventory-item";
 
       if (type === "backpack") {
-        inventoryItem.setAttribute("data-backpack-item-index", index);
+        inventoryItem.setAttribute("data-backpack-item-index", index.toString());
       } else {
-        inventoryItem.setAttribute("data-item-index", item.item_index);
+        inventoryItem.setAttribute("data-item-index", item.item_index.toString());
       }
 
       inventoryItem.appendChild(inventoryItemIcon);
@@ -294,7 +300,7 @@ function renderInventory(inventory, type) {
 
   inventoryContainer.appendChild(inventoryView);
 
-  const rect = document.querySelector("#inventory_container").getBoundingClientRect();
+  const rect = (document.querySelector("#inventory_container") as HTMLElement).getBoundingClientRect();
 
   if (rect.top > 100 && rect.bottom > window.innerHeight) {
     let top;
@@ -308,8 +314,8 @@ function renderInventory(inventory, type) {
   }
 }
 
-function showBackpack(item) {
-  let activeInventory = document.querySelector(".inventory-tab.active-inventory");
+function showBackpack(item: Backpack) {
+  const activeInventory = document.querySelector(".inventory-tab.active-inventory");
 
   if (activeInventory) {
     activeInventory.classList.remove("active-inventory");
@@ -320,7 +326,7 @@ function showBackpack(item) {
   currentBackpack = item;
 }
 
-function fillLore(element) {
+function fillLore(element: HTMLElement) {
   let item = [];
 
   if (element.hasAttribute("data-backpack-index")) {
@@ -481,7 +487,7 @@ function fillLore(element) {
   }
 }
 
-function showLore(element, _resize) {
+function showLore(element: HTMLElement, _resize?: boolean) {
   statsContent.classList.add("sticky-stats");
   element.classList.add("sticky-stats");
   dimmer.classList.add("show-dimmer");
@@ -492,12 +498,12 @@ function showLore(element, _resize) {
 }
 
 function closeLore() {
-  let shownLore = document.querySelector("#stats_content.show-stats, #stats_content.sticky-stats");
+  const shownLore = document.querySelector<HTMLElement>("#stats_content.show-stats, #stats_content.sticky-stats");
 
   if (shownLore != null) {
     dimmer.classList.remove("show-dimmer");
 
-    let stickyStatsPiece = document.querySelector(".rich-item.sticky-stats");
+    const stickyStatsPiece = document.querySelector<HTMLElement>(".rich-item.sticky-stats");
 
     if (stickyStatsPiece != null) {
       stickyStatsPiece.blur();
@@ -514,24 +520,24 @@ function closeLore() {
   }
 }
 
-let oldWidth = null;
+let oldWidth: number | null = null;
 
-const navBar = document.querySelector("#nav_bar");
-const navBarLinks = navBar.querySelectorAll(".nav-item");
-let navBarHeight;
+const navBar = document.querySelector("#nav_bar") as HTMLElement;
+const navBarLinks = navBar.querySelectorAll<HTMLAnchorElement>(".nav-item");
+let navBarHeight: number;
 
 function resize() {
   if (playerModel) {
     if (window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570)) {
-      document.getElementById("skin_display_mobile").appendChild(playerModel);
+      document.getElementById("skin_display_mobile")?.appendChild(playerModel);
     }
 
     if (window.innerWidth > 1570 && oldWidth <= 1570) {
-      document.getElementById("skin_display").appendChild(playerModel);
+      document.getElementById("skin_display")?.appendChild(playerModel);
     }
   }
 
-  tippy("*[data-tippy-content]");
+  window.tippy("*[data-tippy-content]");
 
   if (playerModel && skinViewer) {
     if (playerModel.offsetWidth / playerModel.offsetHeight < 0.6) {
@@ -543,14 +549,14 @@ function resize() {
 
   navBarHeight = parseFloat(getComputedStyle(navBar).top);
 
-  let element = document.querySelector(".rich-item.sticky-stats");
+  const element = document.querySelector<HTMLElement>(".rich-item.sticky-stats");
 
   if (element == null) {
     return;
   }
 
-  let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
-  let rect = element.getBoundingClientRect();
+  const maxTop = window.innerHeight - statsContent.offsetHeight - 20;
+  const rect = element.getBoundingClientRect();
 
   if (rect.x) {
     statsContent.style.left = rect.x - statsContent.offsetWidth - 10 + "px";
@@ -566,25 +572,24 @@ function resize() {
 
 document.querySelectorAll(".extender").forEach((element) => {
   element.addEventListener("click", () =>
-    element.setAttribute("aria-expanded", element.getAttribute("aria-expanded") != "true")
+    element.setAttribute("aria-expanded", (element.getAttribute("aria-expanded") != "true").toString())
   );
 });
 
-function flashForUpdate(element) {
+function flashForUpdate(element: HTMLElement) {
   element.classList.add("updated");
   element.addEventListener("animationend", () => {
     element.classList.remove("updated");
   });
 }
 
-for (const element of document.querySelectorAll(".stat-weapons .select-weapon")) {
-  let itemId = element.parentNode.getAttribute("data-item-id");
+for (const element of document.querySelectorAll<HTMLElement>(".stat-weapons .select-weapon")) {
+  const parent = element.parentElement as HTMLElement;
+  const itemId = parent.getAttribute("data-item-id");
   let filterItems;
 
-  if (element.parentNode.hasAttribute("data-backpack-index")) {
-    let backpack = all_items.filter(
-      (a) => a.item_index == Number(element.parentNode.getAttribute("data-backpack-index"))
-    );
+  if (parent.hasAttribute("data-backpack-index")) {
+    let backpack = all_items.filter((a) => a.item_index == Number(parent.getAttribute("data-backpack-index")));
 
     if (backpack.length == 0) {
       break;
@@ -604,11 +609,11 @@ for (const element of document.querySelectorAll(".stat-weapons .select-weapon"))
     e.preventDefault();
   });
 
-  const activeWeaponElement = document.querySelector(".stat-active-weapon");
+  const activeWeaponElement = document.querySelector(".stat-active-weapon") as HTMLElement;
 
   element.addEventListener("click", function (e) {
-    if (element.parentNode.classList.contains("piece-selected")) {
-      element.parentNode.classList.remove("piece-selected");
+    if (parent.classList.contains("piece-selected")) {
+      parent.classList.remove("piece-selected");
 
       stats = calculated.stats;
 
@@ -619,7 +624,7 @@ for (const element of document.querySelectorAll(".stat-weapons .select-weapon"))
         _element.classList.remove("piece-selected");
       }
 
-      element.parentNode.classList.add("piece-selected");
+      parent.classList.add("piece-selected");
 
       activeWeaponElement.className = "stat-value stat-active-weapon piece-" + item.rarity + "-fg";
       activeWeaponElement.innerHTML = item.display_name_print || item.display_name;
@@ -637,14 +642,13 @@ for (const element of document.querySelectorAll(".stat-weapons .select-weapon"))
   });
 }
 
-for (const element of document.querySelectorAll(".stat-fishing .select-rod")) {
-  let itemId = element.parentNode.getAttribute("data-item-id");
+for (const element of document.querySelectorAll<HTMLElement>(".stat-fishing .select-rod")) {
+  const parent = element.parentElement as HTMLElement;
+  const itemId = parent.getAttribute("data-item-id");
   let filterItems;
 
-  if (element.parentNode.hasAttribute("data-backpack-index")) {
-    let backpack = all_items.filter(
-      (a) => a.item_index == Number(element.parentNode.getAttribute("data-backpack-index"))
-    );
+  if (parent.hasAttribute("data-backpack-index")) {
+    const backpack = all_items.filter((a) => a.item_index == Number(parent.getAttribute("data-backpack-index")));
 
     if (backpack.length == 0) {
       break;
@@ -655,7 +659,7 @@ for (const element of document.querySelectorAll(".stat-fishing .select-rod")) {
     filterItems = items.rods.filter((a) => !("backpackIndex" in a));
   }
 
-  let item = filterItems.filter((a) => a.itemId == itemId)[0];
+  const item = filterItems.filter((a) => a.itemId == itemId)[0];
 
   let weaponStats = calculated.weapon_stats[itemId];
   let stats;
@@ -664,11 +668,11 @@ for (const element of document.querySelectorAll(".stat-fishing .select-rod")) {
     e.preventDefault();
   });
 
-  const activeRodElement = document.querySelector(".stat-active-rod");
+  const activeRodElement = document.querySelector(".stat-active-rod") as HTMLElement;
 
   element.addEventListener("click", function (e) {
-    if (element.parentNode.classList.contains("piece-selected")) {
-      element.parentNode.classList.remove("piece-selected");
+    if (parent.classList.contains("piece-selected")) {
+      parent.classList.remove("piece-selected");
 
       stats = calculated.stats;
 
@@ -679,7 +683,7 @@ for (const element of document.querySelectorAll(".stat-fishing .select-rod")) {
         _element.classList.remove("piece-selected");
       }
 
-      element.parentNode.classList.add("piece-selected");
+      parent.classList.add("piece-selected");
 
       activeRodElement.className = "stat-value stat-active-rod piece-" + item.rarity + "-fg";
       activeRodElement.innerHTML = item.display_name_print || item.display_name;
@@ -726,16 +730,16 @@ for (const element of document.querySelectorAll(".inventory-tab")) {
   });
 }
 
-const statsContent = document.querySelector("#stats_content");
-const itemName = statsContent.querySelector(".item-name");
-const itemIcon = itemName.querySelector("div:first-child");
-const itemNameContent = itemName.querySelector("span");
-const itemLore = statsContent.querySelector(".item-lore");
-const backpackContents = statsContent.querySelector(".backpack-contents");
+const statsContent = document.querySelector("#stats_content") as HTMLElement;
+const itemName = statsContent.querySelector(".item-name") as HTMLElement;
+const itemIcon = itemName.querySelector("div:first-child") as HTMLDivElement;
+const itemNameContent = itemName.querySelector("span") as HTMLSpanElement;
+const itemLore = statsContent.querySelector(".item-lore") as HTMLElement;
+const backpackContents = statsContent.querySelector(".backpack-contents") as HTMLElement;
 
 const touchDevice = window.matchMedia("(pointer: coarse)").matches;
 
-function bindWardrobeEvents(element) {
+function bindWardrobeEvents(element: HTMLElement) {
   element.addEventListener("click", function (e) {
     const currentWardrobe = document.querySelector(".wardrobe-opened");
 
@@ -747,14 +751,15 @@ function bindWardrobeEvents(element) {
   });
 }
 
-function bindLoreEvents(element) {
+function bindLoreEvents(element: HTMLElement) {
+  const parent = element.parentElement as HTMLElement;
   element.addEventListener("mouseenter", function (e) {
-    fillLore(element.parentNode, false);
+    fillLore(parent);
 
     if (
       touchDevice &&
-      element.parentNode.classList.contains("wardrobe-piece") &&
-      !element.parentNode.parentNode.classList.contains("wardrobe-opened")
+      parent.classList.contains("wardrobe-piece") &&
+      !parent.parentElement?.classList.contains("wardrobe-opened")
     ) {
       return;
     }
@@ -772,8 +777,8 @@ function bindLoreEvents(element) {
       return;
     }
 
-    let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
-    let rect = element.getBoundingClientRect();
+    const maxTop = window.innerHeight - statsContent.offsetHeight - 20;
+    const rect = element.getBoundingClientRect();
 
     let left = rect.x - statsContent.offsetWidth - 10;
 
@@ -785,12 +790,12 @@ function bindLoreEvents(element) {
       statsContent.style.left = left + "px";
     }
 
-    let top = Math.max(70, Math.min(maxTop, e.clientY - statsContent.offsetHeight / 2));
+    const top = Math.max(70, Math.min(maxTop, e.clientY - statsContent.offsetHeight / 2));
 
     statsContent.style.top = top + "px";
   });
 
-  const itemIndex = Number(element.parentNode.getAttribute("data-item-index"));
+  const itemIndex = Number(parent.getAttribute("data-item-index"));
   let item = all_items.filter((a) => a.item_index == itemIndex);
 
   if (item.length > 0) {
@@ -798,7 +803,7 @@ function bindLoreEvents(element) {
   }
 
   if (item && Array.isArray(item.containsItems)) {
-    element.parentNode.addEventListener("contextmenu", function (e) {
+    parent.addEventListener("contextmenu", function (e) {
       e.preventDefault();
 
       showBackpack(item);
@@ -809,15 +814,15 @@ function bindLoreEvents(element) {
   element.addEventListener("click", function (e) {
     if (
       touchDevice &&
-      element.parentNode.classList.contains("wardrobe-piece") &&
-      !element.parentNode.parentNode.classList.contains("wardrobe-opened")
+      parent.classList.contains("wardrobe-piece") &&
+      !parent.parentElement?.classList.contains("wardrobe-opened")
     ) {
-      element.parentNode.blur();
+      parent.blur();
       return;
     }
 
-    if (element.parentNode.parentNode.classList.contains("wardrobe-set")) {
-      element.parentNode.parentNode.classList.add("wardrobe-opened");
+    if (parent.parentElement?.classList.contains("wardrobe-set")) {
+      parent.parentElement.classList.add("wardrobe-opened");
     }
 
     if (e.ctrlKey && item && Array.isArray(item.containsItems)) {
@@ -827,10 +832,10 @@ function bindLoreEvents(element) {
       if (statsContent.classList.contains("sticky-stats")) {
         closeLore();
       } else {
-        showLore(element.parentNode, false);
+        showLore(parent, false);
 
         if (Number(statsContent.getAttribute("data-item-index")) != itemIndex) {
-          fillLore(element.parentNode);
+          fillLore(parent);
         }
       }
     }
@@ -838,16 +843,16 @@ function bindLoreEvents(element) {
 }
 
 if (touchDevice) {
-  for (const element of document.querySelectorAll(".wardrobe-set")) {
+  for (const element of document.querySelectorAll<HTMLElement>(".wardrobe-set")) {
     bindWardrobeEvents(element);
   }
 }
 
-for (const element of document.querySelectorAll(".rich-item .piece-hover-area")) {
+for (const element of document.querySelectorAll<HTMLElement>(".rich-item .piece-hover-area")) {
   bindLoreEvents(element);
 }
 
-let enableApiPlayer = document.querySelector("#enable_api");
+const enableApiPlayer = document.querySelector("#enable_api") as HTMLVideoElement;
 
 for (const element of document.querySelectorAll(".enable-api")) {
   element.addEventListener("click", function (e) {
@@ -876,50 +881,52 @@ dimmer.addEventListener("click", function (e) {
   closeLore();
 });
 
-for (const element of document.querySelectorAll(".close-lore")) {
+for (const element of document.querySelectorAll<HTMLElement>(".close-lore")) {
   element.addEventListener("click", closeLore);
 }
 
-for (const element of document.querySelectorAll(".copy-text")) {
-  let copyNotification = tippy(element, {
+for (const element of document.querySelectorAll<HTMLElement>(".copy-text")) {
+  const copyNotification = window.tippy(element, {
     content: "Copied to clipboard!",
     trigger: "manual",
   });
 
-  element.addEventListener("click", function () {
-    navigator.clipboard.writeText(element.getAttribute("data-copy-text")).then(
-      function () {
+  element.addEventListener("click", () => {
+    const text = element.getAttribute("data-copy-text");
+    if (text != null) {
+      navigator.clipboard.writeText(text).then(() => {
         copyNotification.show();
 
         setTimeout(function () {
           copyNotification.hide();
         }, 1500);
-      },
-      function () {}
-    );
+      });
+    }
   });
 }
 
-function parseFavorites(cookie) {
+function parseFavorites(cookie: string) {
   return cookie?.split(",").filter((uuid) => /^[0-9a-f]{32}$/.test(uuid)) || [];
 }
 
 function checkFavorite() {
-  const favorited = parseFavorites(getCookie("favorite")).includes(favoriteElement.getAttribute("data-username"));
-  favoriteElement.setAttribute("aria-checked", favorited);
+  const favorited = parseFavorites(getCookie("favorite")).includes(
+    favoriteElement.getAttribute("data-username") as string
+  );
+  favoriteElement.setAttribute("aria-checked", favorited.toString());
   return favorited;
 }
 
-let favoriteNotification = tippy(favoriteElement, {
+const favoriteNotification = window.tippy(favoriteElement, {
   trigger: "manual",
 });
 
 favoriteElement.addEventListener("click", function () {
-  let uuid = favoriteElement.getAttribute("data-username");
+  const uuid = favoriteElement.getAttribute("data-username") as string;
   if (uuid == "0c0b857f415943248f772164bf76795c") {
     favoriteNotification.setContent("No");
   } else {
-    let cookieArray = parseFavorites(getCookie("favorite"));
+    const cookieArray = parseFavorites(getCookie("favorite"));
     if (cookieArray.includes(uuid)) {
       cookieArray.splice(cookieArray.indexOf(uuid), 1);
 
@@ -942,18 +949,19 @@ favoriteElement.addEventListener("click", function () {
 });
 
 let socialsShown = false;
-let revealSocials = document.querySelector("#reveal_socials");
+const revealSocials = document.querySelector("#reveal_socials") as HTMLElement;
+const additionalSocials = document.querySelector("#additional_socials") as HTMLElement;
 
 if (revealSocials) {
   revealSocials.addEventListener("click", function () {
     if (socialsShown) {
       socialsShown = false;
-      document.querySelector("#additional_socials").classList.remove("socials-shown");
-      document.querySelector("#reveal_socials").classList.remove("socials-shown");
+      additionalSocials.classList.remove("socials-shown");
+      revealSocials.classList.remove("socials-shown");
     } else {
       socialsShown = true;
-      document.querySelector("#additional_socials").classList.add("socials-shown");
-      document.querySelector("#reveal_socials").classList.add("socials-shown");
+      additionalSocials.classList.add("socials-shown");
+      revealSocials.classList.add("socials-shown");
     }
   });
 }
@@ -1002,7 +1010,7 @@ class ScrollMemory {
 
   _onScroll = () => {
     clearTimeout(this._scrollTimeout);
-    this._scrollTimeout = setTimeout(() => {
+    this._scrollTimeout = window.setTimeout(() => {
       this.isSmoothScrolling = false;
     }, 500);
   };
@@ -1028,7 +1036,7 @@ const sectionObserver = new IntersectionObserver(
         }
         for (const link of navBarLinks) {
           if (link.hash === newHash) {
-            link.setAttribute("aria-current", true);
+            link.setAttribute("aria-current", "true");
 
             if (!scrollMemory.isSmoothScrolling) {
               scrollToTab(true, link);
@@ -1044,17 +1052,22 @@ const sectionObserver = new IntersectionObserver(
   { rootMargin: "-100px 0px -25% 0px" }
 );
 
-function scrollToTab(smooth = true, element) {
-  const link = element ?? document.querySelector(`[href="${location.hash}"]`);
+function scrollToTab(smooth = true, element?: HTMLElement) {
+  const link = element ?? document.querySelector<HTMLAnchorElement>(`[href="${location.hash}"]`);
+  if (link == null) {
+    throw new Error("could not find tab to scroll to");
+  }
   const behavior = smooth ? "smooth" : "auto";
   const left =
-    link.offsetLeft + link.getBoundingClientRect().width / 2 - link.parentElement.getBoundingClientRect().width / 2;
-  link.parentElement.scrollTo({ left, behavior });
+    link.offsetLeft +
+    link.getBoundingClientRect().width / 2 -
+    (link.parentElement as HTMLElement).getBoundingClientRect().width / 2;
+  (link.parentElement as HTMLElement).scrollTo({ left, behavior });
 }
 
 scrollToTab(false);
 
-const playerProfileElement = document.querySelector("#player_profile");
+const playerProfileElement = document.querySelector("#player_profile") as HTMLElement;
 
 sectionObserver.observe(playerProfileElement);
 
@@ -1062,32 +1075,32 @@ document.querySelectorAll(".stat-header").forEach((element) => {
   sectionObserver.observe(element);
 });
 
-let otherSkills = document.querySelector("#other_skills");
-let showSkills = document.querySelector("#show_skills");
+const otherSkills = document.querySelector<HTMLElement>("#other_skills");
+const showSkills = document.querySelector<HTMLElement>("#show_skills");
 
 if (showSkills != null) {
-  showSkills.addEventListener("click", function () {
-    if (otherSkills.classList.contains("show-skills")) {
-      otherSkills.classList.remove("show-skills");
-      showSkills.innerHTML = "Show Skills";
+  showSkills.addEventListener("click", () => {
+    if ((otherSkills as HTMLElement).classList.contains("show-skills")) {
+      (otherSkills as HTMLElement).classList.remove("show-skills");
+      (showSkills as HTMLElement).innerHTML = "Show Skills";
     } else {
-      otherSkills.classList.add("show-skills");
-      showSkills.innerHTML = "Hide Skills";
+      (otherSkills as HTMLElement).classList.add("show-skills");
+      (showSkills as HTMLElement).innerHTML = "Hide Skills";
     }
   });
 }
 
 for (const element of document.querySelectorAll(".xp-skill")) {
-  let skillProgressText = element.querySelector(".skill-progress-text");
+  const skillProgressText = element.querySelector<HTMLElement>(".skill-progress-text");
 
   if (skillProgressText === null) {
     break;
   }
 
-  let originalText = skillProgressText.innerHTML;
+  const originalText = skillProgressText.innerHTML;
 
   element.addEventListener("mouseenter", function () {
-    skillProgressText.innerHTML = skillProgressText.getAttribute("data-hover-text");
+    skillProgressText.innerHTML = skillProgressText.getAttribute("data-hover-text") as string;
   });
 
   element.addEventListener("mouseleave", function () {
@@ -1096,20 +1109,20 @@ for (const element of document.querySelectorAll(".xp-skill")) {
 }
 
 for (const element of document.querySelectorAll(".kills-deaths-container .show-all.enabled")) {
-  let parent = element.parentNode;
-  let kills = calculated[element.getAttribute("data-type")];
+  const parent = element.parentElement as HTMLElement;
+  const kills = calculated[element.getAttribute("data-type") as "kills" | "deaths"];
 
   element.addEventListener("click", function () {
     parent.style.maxHeight = parent.offsetHeight + "px";
     parent.classList.add("all-shown");
     element.remove();
 
-    kills.slice(10).forEach(function (kill, index) {
-      let killElement = document.createElement("div");
-      let killRank = document.createElement("div");
-      let killEntity = document.createElement("div");
-      let killAmount = document.createElement("div");
-      let statSeparator = document.createElement("div");
+    kills.slice(10).forEach((kill, index) => {
+      const killElement = document.createElement("div");
+      const killRank = document.createElement("div");
+      const killEntity = document.createElement("div");
+      const killAmount = document.createElement("div");
+      const statSeparator = document.createElement("div");
 
       killElement.className = "kill-stat";
       killRank.className = "kill-rank";
@@ -1133,7 +1146,7 @@ for (const element of document.querySelectorAll(".kills-deaths-container .show-a
 }
 
 window.addEventListener("keydown", function (e) {
-  let selectedPiece = document.querySelector(".rich-item:focus");
+  const selectedPiece = document.querySelector<HTMLElement>(".rich-item:focus");
 
   if (selectedPiece !== null && e.key === "Enter") {
     fillLore(selectedPiece);
