@@ -359,14 +359,6 @@ function fillLore(element: HTMLElement) {
 
   item = item[0];
 
-  if (element.hasAttribute("data-item-index")) {
-    statsContent.setAttribute("data-item-index", item.item_index);
-  } else if (element.hasAttribute("data-backpack-item-index")) {
-    statsContent.setAttribute("data-backpack-item-index", element.getAttribute("data-backpack-item-index"));
-  } else if (element.hasAttribute("data-pet-index")) {
-    statsContent.setAttribute("data-backpack-item-index", element.getAttribute("data-pet-index"));
-  }
-
   itemName.className = `item-name piece-${item.rarity || "common"}-bg nice-colors-dark`;
   itemNameContent.innerHTML = item.display_name_print || item.display_name || "null";
 
