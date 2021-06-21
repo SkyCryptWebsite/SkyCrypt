@@ -106,7 +106,7 @@ document.querySelectorAll<HTMLButtonElement>('#packs-box button[name="pack"]').f
     oldElement?.removeAttribute("disabled");
     oldElement?.removeAttribute("aria-selected");
 
-    if (window.page == "stats") {
+    if (page == "stats") {
       clickedButton.classList.add("loading");
       sessionStorage.setItem("open packs", "true");
       window.location.reload();
