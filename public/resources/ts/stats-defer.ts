@@ -222,7 +222,7 @@ function renderLore(text: string) {
   return output;
 }
 
-let currentBackpack: Item;
+let currentBackpack: Backpack;
 
 function renderInventory(inventory: Item[], type: string) {
   const visibleInventory = document.querySelector(".stat-inventory .inventory-view");
@@ -314,6 +314,10 @@ function renderInventory(inventory: Item[], type: string) {
   }
 }
 
+function isBackpack(item: DisplayItem): item is Backpack {
+  return "containsItems" in item;
+}
+
 function showBackpack(item: Backpack) {
   const activeInventory = document.querySelector(".inventory-tab.active-inventory");
 
@@ -327,43 +331,44 @@ function showBackpack(item: Backpack) {
 }
 
 function fillLore(element: HTMLElement) {
-  let item = [];
+  let item: DisplayItem | Item | Pet | undefined = undefined;
 
   if (element.hasAttribute("data-backpack-index")) {
-    let backpack = all_items.filter((a) => a.item_index == Number(element.getAttribute("data-backpack-index")));
+    const backpack = all_items.find(
+      (a) => a.item_index == parseInt(element.getAttribute("data-backpack-index") as string)
+    );
 
-    if (backpack.length == 0) {
+    if (!backpack || !isBackpack(backpack)) {
       return;
     }
 
-    backpack = backpack[0];
-
-    item = backpack.containsItems.filter((a) => a.item_index == Number(element.getAttribute("data-item-index")));
+    item = backpack?.containsItems?.find(
+      (a) => a.item_index == parseInt(element.getAttribute("data-item-index") as string)
+    );
   } else if (element.hasAttribute("data-item-index")) {
-    item = all_items.filter((a) => a.item_index == Number(element.getAttribute("data-item-index")));
+    item = all_items.find((a) => a.item_index == parseInt(element.getAttribute("data-item-index") as string));
   } else if (element.hasAttribute("data-backpack-item-index")) {
-    item = [currentBackpack.containsItems[Number(element.getAttribute("data-backpack-item-index"))]];
+    item = currentBackpack.containsItems[parseInt(element.getAttribute("data-backpack-item-index") as string)];
   } else if (element.hasAttribute("data-pet-index")) {
-    item = [calculated.pets[parseInt(element.getAttribute("data-pet-index"))]];
+    item = calculated.pets[parseInt(element.getAttribute("data-pet-index") as string)];
   } else if (element.hasAttribute("data-missing-pet-index")) {
-    item = [calculated.missingPets[parseInt(element.getAttribute("data-missing-pet-index"))]];
+    item = calculated.missingPets[parseInt(element.getAttribute("data-missing-pet-index") as string)];
   } else if (element.hasAttribute("data-missing-talisman-index")) {
-    item = [calculated.missingTalismans.missing[parseInt(element.getAttribute("data-missing-talisman-index"))]];
+    item = calculated.missingTalismans.missing[parseInt(element.getAttribute("data-missing-talisman-index") as string)];
   } else if (element.hasAttribute("data-upgrade-talisman-index")) {
-    item = [calculated.missingTalismans.upgrades[parseInt(element.getAttribute("data-upgrade-talisman-index"))]];
+    item =
+      calculated.missingTalismans.upgrades[parseInt(element.getAttribute("data-upgrade-talisman-index") as string)];
   }
 
-  if (item.length == 0) {
+  if (item == undefined) {
     return;
   }
-
-  item = item[0];
 
   itemName.className = `item-name piece-${item.rarity || "common"}-bg nice-colors-dark`;
   itemNameContent.innerHTML = item.display_name_print || item.display_name || "null";
 
   if (element.hasAttribute("data-pet-index")) {
-    itemNameContent.innerHTML = `[Lvl ${item.level.level}] ${item.display_name_print || item.display_name}`;
+    itemNameContent.innerHTML = `[Lvl ${(item as Pet).level.level}] ${item.display_name_print || item.display_name}`;
   }
 
   if (item.texture_path) {
@@ -375,21 +380,17 @@ function fillLore(element: HTMLElement) {
     itemIcon.className = "stats-piece-icon item-icon icon-" + item.id + "_" + item.Damage;
   }
 
-  itemLore.innerHTML = item.lore || "";
-
-  try {
-    if (item.lore != null) {
-      throw null;
-    }
-
-    item.tag.display.Lore.forEach(function (line, index) {
-      itemLore.innerHTML += '<span class="lore-row">' + renderLore(line) + "</span>";
-    });
-  } catch (e) {
-    console.error(e);
+  if ("lore" in item) {
+    itemLore.innerHTML = item.lore;
+  } else if ("tag" in item && Array.isArray(item.tag.display?.Lore)) {
+    itemLore.innerHTML = item.tag.display.Lore.map(
+      (line: string) => '<span class="lore-row">' + renderLore(line) + "</span>"
+    ).join("");
+  } else {
+    itemLore.innerHTML = "";
   }
 
-  if (item.texture_pack) {
+  if ("texture_pack" in item && item.texture_pack != undefined) {
     const packContent = document.createElement("a");
     packContent.setAttribute("href", item.texture_pack.url);
     packContent.setAttribute("target", "_blank");
@@ -417,18 +418,18 @@ function fillLore(element: HTMLElement) {
 
   backpackContents.innerHTML = "";
 
-  if (Array.isArray(item.containsItems)) {
+  if (isBackpack(item)) {
     backpackContents.classList.add("contains-backpack");
 
     item.containsItems.forEach((backpackItem, index) => {
-      let inventorySlot = document.createElement("div");
+      const inventorySlot = document.createElement("div");
       inventorySlot.className = "inventory-slot";
 
       if (backpackItem.id) {
-        let inventoryItemIcon = document.createElement("div");
-        let inventoryItemCount = document.createElement("div");
+        const inventoryItemIcon = document.createElement("div");
+        const inventoryItemCount = document.createElement("div");
 
-        let enchantedClass = isEnchanted(backpackItem) ? "is-enchanted" : "";
+        const enchantedClass = isEnchanted(backpackItem) ? "is-enchanted" : "";
 
         inventoryItemIcon.className =
           "piece-icon item-icon " + enchantedClass + " icon-" + backpackItem.id + "_" + backpackItem.Damage;
@@ -439,9 +440,9 @@ function fillLore(element: HTMLElement) {
         }
 
         inventoryItemCount.className = "item-count";
-        inventoryItemCount.innerHTML = backpackItem.Count;
+        inventoryItemCount.innerHTML = backpackItem.Count.toString();
 
-        let inventoryItem = document.createElement("div");
+        const inventoryItem = document.createElement("div");
 
         inventoryItem.className = "inventory-item";
 
@@ -459,17 +460,17 @@ function fillLore(element: HTMLElement) {
       backpackContents.appendChild(document.createTextNode(" "));
     });
 
-    let viewBackpack = document.createElement("div");
-    viewBackpack.classList = "view-backpack";
+    const viewBackpack = document.createElement("div");
+    viewBackpack.classList.add("view-backpack");
 
-    let viewBackpackText = document.createElement("div");
+    const viewBackpackText = document.createElement("div");
     viewBackpackText.innerHTML =
       "<span>View Backpack</span><br><span>(Right click backpack to immediately open)</span>";
 
     viewBackpack.appendChild(viewBackpackText);
 
     viewBackpack.addEventListener("click", function () {
-      showBackpack(item);
+      showBackpack(item as Backpack);
       closeLore();
     });
 

@@ -9,6 +9,7 @@ declare namespace extra {
 }
 
 interface Pack {
+  base_path: string;
   id: string;
   name: string;
   author: string;
@@ -69,20 +70,20 @@ interface DisplayItem {
   display_name: string;
   rarity: string;
   texture_path?: string;
+  display_name_print?: string;
 }
 
 interface Item extends DisplayItem {
   Count: number;
   Damage: number;
   animated: boolean;
-  containsItems?: Item[];
   id: number;
   item_index: number;
   stats: {
     [key in StatName]: number;
   };
   tag: any;
-  texture_pack: Pack;
+  texture_pack?: Pack;
 }
 
 interface Backpack extends Item {
@@ -580,6 +581,7 @@ interface Pet extends PetBase {
     progress: number;
     xpMaxLevel: number;
   };
+  lore: string;
   ref: {
     rarity: number;
     level: number;
