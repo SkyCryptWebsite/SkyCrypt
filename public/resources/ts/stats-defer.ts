@@ -224,7 +224,7 @@ function renderLore(text: string) {
 
 let currentBackpack: Backpack;
 
-function renderInventory(inventory: Item[], type: string) {
+function renderInventory(inventory: ItemSlot[], type: string) {
   const visibleInventory = document.querySelector(".stat-inventory .inventory-view");
 
   if (visibleInventory) {
@@ -244,17 +244,17 @@ function renderInventory(inventory: Item[], type: string) {
     pagesize = 6 * 9;
   }
 
-  inventory.forEach(function (item, index) {
+  inventory.forEach(function (item: Item | ItemSlot, index) {
     const inventorySlot = document.createElement("div");
     inventorySlot.className = "inventory-slot";
 
-    if (item.id) {
+    if ("id" in item) {
       const inventoryItemIcon = document.createElement("div");
       const inventoryItemCount = document.createElement("div");
 
       inventoryItemIcon.className = "piece-icon item-icon icon-" + item.id + "_" + item.Damage;
 
-      if (item.texture_path) {
+      if ("texture_path" in item) {
         inventoryItemIcon.className += " custom-icon";
         inventoryItemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
       }
@@ -374,10 +374,12 @@ function fillLore(element: HTMLElement) {
   if (item.texture_path) {
     itemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
     itemIcon.className = "stats-piece-icon item-icon custom-icon";
-  } else {
+  } else if ("id" in item) {
     itemIcon.removeAttribute("style");
     itemIcon.classList.remove("custom-icon");
     itemIcon.className = "stats-piece-icon item-icon icon-" + item.id + "_" + item.Damage;
+  } else {
+    throw new Error("item mush have either an id and a damage or a texture_path");
   }
 
   if ("lore" in item) {
@@ -625,7 +627,7 @@ for (const element of document.querySelectorAll<HTMLElement>(".stat-weapons .sel
 
     for (const stat in stats) {
       if (stat != "sea_creature_chance") {
-        updateStat(stat, stats[stat]);
+        updateStat(stat as StatName, stats[stat as StatName]);
       }
     }
   });
@@ -686,8 +688,8 @@ for (const element of document.querySelectorAll<HTMLElement>(".stat-fishing .sel
   });
 }
 
-function updateStat(stat, newValue) {
-  const elements = document.querySelectorAll(".basic-stat[data-stat=" + stat + "] .stat-value");
+function updateStat(stat: StatName, newValue: number) {
+  const elements = document.querySelectorAll<HTMLElement>(".basic-stat[data-stat=" + stat + "] .stat-value");
 
   for (const element of elements) {
     const currentValue = parseFloat(element.innerHTML.replaceAll(",", ""));
@@ -700,14 +702,14 @@ function updateStat(stat, newValue) {
 }
 
 for (const element of document.querySelectorAll(".inventory-tab")) {
-  let type = element.getAttribute("data-inventory-type");
+  const type = element.getAttribute("data-inventory-type") as string;
 
   element.addEventListener("click", function () {
     if (element.classList.contains("active-inventory")) {
       return;
     }
 
-    let activeInventory = document.querySelector(".inventory-tab.active-inventory");
+    const activeInventory = document.querySelector<HTMLElement>(".inventory-tab.active-inventory");
 
     if (activeInventory) {
       activeInventory.classList.remove("active-inventory");
@@ -785,13 +787,9 @@ function bindLoreEvents(element: HTMLElement) {
   });
 
   const itemIndex = Number(parent.getAttribute("data-item-index"));
-  let item = all_items.filter((a) => a.item_index == itemIndex);
+  const item = all_items.find((a) => a.item_index == itemIndex);
 
-  if (item.length > 0) {
-    item = item[0];
-  }
-
-  if (item && Array.isArray(item.containsItems)) {
+  if (item && "containsItems" in item) {
     parent.addEventListener("contextmenu", function (e) {
       e.preventDefault();
 
@@ -814,7 +812,7 @@ function bindLoreEvents(element: HTMLElement) {
       parent.parentElement.classList.add("wardrobe-opened");
     }
 
-    if (e.ctrlKey && item && Array.isArray(item.containsItems)) {
+    if (e.ctrlKey && item && "containsItems" in item) {
       showBackpack(item);
       closeLore();
     } else {
