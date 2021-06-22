@@ -224,7 +224,7 @@ function renderLore(text: string) {
 
 let currentBackpack: Backpack;
 
-function renderInventory(inventory: ItemSlot[], type: string) {
+function renderInventory(inventory: Item[], type: string) {
   const visibleInventory = document.querySelector(".stat-inventory .inventory-view");
 
   if (visibleInventory) {
@@ -244,17 +244,17 @@ function renderInventory(inventory: ItemSlot[], type: string) {
     pagesize = 6 * 9;
   }
 
-  inventory.forEach(function (item: Item | ItemSlot, index) {
+  inventory.forEach(function (item, index) {
     const inventorySlot = document.createElement("div");
     inventorySlot.className = "inventory-slot";
 
-    if ("id" in item) {
+    if (item.id) {
       const inventoryItemIcon = document.createElement("div");
       const inventoryItemCount = document.createElement("div");
 
       inventoryItemIcon.className = "piece-icon item-icon icon-" + item.id + "_" + item.Damage;
 
-      if ("texture_path" in item) {
+      if (item.texture_path) {
         inventoryItemIcon.className += " custom-icon";
         inventoryItemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
       }
@@ -333,10 +333,20 @@ function showBackpack(item: Backpack) {
 function fillLore(element: HTMLElement) {
   let item: DisplayItem | Item | Pet | undefined = undefined;
 
-  if (element.hasAttribute("data-item-index")) {
-    item = all_items.find((a) => a.item_index == parseInt(element.getAttribute("data-item-index") as string)) as
-      | Item
-      | undefined;
+  if (element.hasAttribute("data-backpack-index")) {
+    const backpack = all_items.find(
+      (a) => a.item_index == parseInt(element.getAttribute("data-backpack-index") as string)
+    );
+
+    if (!backpack || !isBackpack(backpack)) {
+      return;
+    }
+
+    item = backpack?.containsItems?.find(
+      (a) => a.item_index == parseInt(element.getAttribute("data-item-index") as string)
+    );
+  } else if (element.hasAttribute("data-item-index")) {
+    item = all_items.find((a) => a.item_index == parseInt(element.getAttribute("data-item-index") as string));
   } else if (element.hasAttribute("data-backpack-item-index")) {
     item = currentBackpack.containsItems[parseInt(element.getAttribute("data-backpack-item-index") as string)];
   } else if (element.hasAttribute("data-pet-index")) {
@@ -364,12 +374,10 @@ function fillLore(element: HTMLElement) {
   if (item.texture_path) {
     itemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
     itemIcon.className = "stats-piece-icon item-icon custom-icon";
-  } else if ("id" in item) {
+  } else {
     itemIcon.removeAttribute("style");
     itemIcon.classList.remove("custom-icon");
     itemIcon.className = "stats-piece-icon item-icon icon-" + item.id + "_" + item.Damage;
-  } else {
-    throw new Error("item mush have either an id and a damage or a texture_path");
   }
 
   if ("lore" in item) {
@@ -566,11 +574,24 @@ function flashForUpdate(element: HTMLElement) {
 
 for (const element of document.querySelectorAll<HTMLElement>(".stat-weapons .select-weapon")) {
   const parent = element.parentElement as HTMLElement;
-  const itemId = parent.getAttribute("data-item-id") as string;
+  const itemId = parent.getAttribute("data-item-id");
+  let filterItems;
 
-  const item = all_items.find((a) => a.itemId == itemId) as Item;
+  if (parent.hasAttribute("data-backpack-index")) {
+    let backpack = all_items.filter((a) => a.item_index == Number(parent.getAttribute("data-backpack-index")));
 
-  const weaponStats = calculated.weapon_stats[itemId];
+    if (backpack.length == 0) {
+      break;
+    }
+
+    filterItems = backpack[0].containsItems;
+  } else {
+    filterItems = items.weapons.filter((a) => !("backpackIndex" in a));
+  }
+
+  let item = filterItems.filter((a) => a.itemId == itemId)[0];
+
+  let weaponStats = calculated.weapon_stats[itemId];
   let stats;
 
   element.addEventListener("mousedown", function (e) {
@@ -604,7 +625,7 @@ for (const element of document.querySelectorAll<HTMLElement>(".stat-weapons .sel
 
     for (const stat in stats) {
       if (stat != "sea_creature_chance") {
-        updateStat(stat as StatName, stats[stat as StatName]);
+        updateStat(stat, stats[stat]);
       }
     }
   });
@@ -612,11 +633,24 @@ for (const element of document.querySelectorAll<HTMLElement>(".stat-weapons .sel
 
 for (const element of document.querySelectorAll<HTMLElement>(".stat-fishing .select-rod")) {
   const parent = element.parentElement as HTMLElement;
-  const itemId = parent.getAttribute("data-item-id") as string;
+  const itemId = parent.getAttribute("data-item-id");
+  let filterItems;
 
-  const item = all_items.find((a) => a.itemId == itemId) as Item;
+  if (parent.hasAttribute("data-backpack-index")) {
+    const backpack = all_items.filter((a) => a.item_index == Number(parent.getAttribute("data-backpack-index")));
 
-  const weaponStats = calculated.weapon_stats[itemId];
+    if (backpack.length == 0) {
+      break;
+    }
+
+    filterItems = backpack[0].containsItems;
+  } else {
+    filterItems = items.rods.filter((a) => !("backpackIndex" in a));
+  }
+
+  const item = filterItems.filter((a) => a.itemId == itemId)[0];
+
+  let weaponStats = calculated.weapon_stats[itemId];
   let stats;
 
   element.addEventListener("mousedown", function (e) {
@@ -652,8 +686,8 @@ for (const element of document.querySelectorAll<HTMLElement>(".stat-fishing .sel
   });
 }
 
-function updateStat(stat: StatName, newValue: number) {
-  const elements = document.querySelectorAll<HTMLElement>(".basic-stat[data-stat=" + stat + "] .stat-value");
+function updateStat(stat, newValue) {
+  const elements = document.querySelectorAll(".basic-stat[data-stat=" + stat + "] .stat-value");
 
   for (const element of elements) {
     const currentValue = parseFloat(element.innerHTML.replaceAll(",", ""));
@@ -666,14 +700,14 @@ function updateStat(stat: StatName, newValue: number) {
 }
 
 for (const element of document.querySelectorAll(".inventory-tab")) {
-  const type = element.getAttribute("data-inventory-type") as string;
+  let type = element.getAttribute("data-inventory-type");
 
   element.addEventListener("click", function () {
     if (element.classList.contains("active-inventory")) {
       return;
     }
 
-    const activeInventory = document.querySelector<HTMLElement>(".inventory-tab.active-inventory");
+    let activeInventory = document.querySelector(".inventory-tab.active-inventory");
 
     if (activeInventory) {
       activeInventory.classList.remove("active-inventory");
@@ -751,9 +785,13 @@ function bindLoreEvents(element: HTMLElement) {
   });
 
   const itemIndex = Number(parent.getAttribute("data-item-index"));
-  const item = all_items.find((a) => a.item_index == itemIndex);
+  let item = all_items.filter((a) => a.item_index == itemIndex);
 
-  if (item && "containsItems" in item) {
+  if (item.length > 0) {
+    item = item[0];
+  }
+
+  if (item && Array.isArray(item.containsItems)) {
     parent.addEventListener("contextmenu", function (e) {
       e.preventDefault();
 
@@ -776,7 +814,7 @@ function bindLoreEvents(element: HTMLElement) {
       parent.parentElement.classList.add("wardrobe-opened");
     }
 
-    if (e.ctrlKey && item && "containsItems" in item) {
+    if (e.ctrlKey && item && Array.isArray(item.containsItems)) {
       showBackpack(item);
       closeLore();
     } else {

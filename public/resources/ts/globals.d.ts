@@ -42,7 +42,7 @@ interface Theme {
   colors?: { [key: string]: string };
 }
 
-declare const items: { [key: string]: (ItemSlot | Item | Backpack)[] };
+declare const items: { [key: string]: Item[] };
 
 type StatName =
   | "ability_damage"
@@ -73,16 +73,12 @@ interface DisplayItem {
   display_name_print?: string;
 }
 
-interface ItemSlot {
-  itemId: string;
-  item_index: number;
-}
-
-interface Item extends DisplayItem, ItemSlot {
+interface Item extends DisplayItem {
   Count: number;
   Damage: number;
   animated: boolean;
   id: number;
+  item_index: number;
   stats: {
     [key in StatName]: number;
   };
