@@ -1,7 +1,7 @@
 import { loadTheme } from "./common.js";
 
-interface Window {
-  tippy: any;
+declare global {
+  function tippy(targets: string | Element | Element[], optionalProps: Record<string, unknown>): any;
 }
 
 function validateURL(url: string) {
@@ -40,7 +40,7 @@ document.querySelectorAll<HTMLFormElement>(".lookup-player").forEach((form) => {
     try {
       window.location.href = validateURL(formData.get("ign") as string);
     } catch (error) {
-      const errorTip = window.tippy(form.querySelector("input") as HTMLInputElement, {
+      const errorTip = tippy(form.querySelector("input") as HTMLInputElement, {
         trigger: "manual",
         content: error || "please enter a valid Minecraft username or UUID",
       });
@@ -142,7 +142,7 @@ function setCheckedTheme(theme: string) {
 
 setCheckedTheme(localStorage.getItem("currentTheme") ?? "default");
 
-window.tippy("*[data-tippy-content]", {
+tippy("*[data-tippy-content]", {
   boundary: "window",
 });
 

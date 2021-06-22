@@ -1,8 +1,8 @@
 import { setCookie } from "./common-defer.js";
 
-interface Window {
-  tippy: any;
-  skinview3d: any;
+declare global {
+  function tippy(targets: string | Element | Element[], optionalProps?: Record<string, unknown>): any;
+  const skinview3d: any;
 }
 
 const favoriteElement = document.querySelector(".favorite") as HTMLButtonElement;
@@ -45,7 +45,7 @@ function getCookie(c_name: string) {
   return "";
 }
 
-window.tippy("*[data-tippy-content]:not(.interactive-tooltip)", {
+tippy("*[data-tippy-content]:not(.interactive-tooltip)", {
   trigger: "mouseenter click",
 });
 
@@ -54,7 +54,7 @@ const playerModel = document.getElementById("player_model") as HTMLElement;
 let skinViewer: any;
 
 if (calculated.skin_data) {
-  skinViewer = new window.skinview3d.SkinViewer({
+  skinViewer = new skinview3d.SkinViewer({
     width: playerModel.offsetWidth,
     height: playerModel.offsetHeight,
     model: calculated.skin_data.model,
@@ -69,7 +69,7 @@ if (calculated.skin_data) {
 
   skinViewer.camera.position.set(-18, -3, 58);
 
-  const controls = new window.skinview3d.createOrbitControls(skinViewer);
+  const controls = new skinview3d.createOrbitControls(skinViewer);
 
   skinViewer.canvas.removeAttribute("tabindex");
 
@@ -106,7 +106,7 @@ if (calculated.skin_data) {
   }
 }
 
-window.tippy(".interactive-tooltip", {
+tippy(".interactive-tooltip", {
   trigger: "mouseenter click",
   interactive: true,
   appendTo: () => document.body,
@@ -532,7 +532,7 @@ function resize() {
     document.getElementById("skin_display")?.appendChild(playerModel);
   }
 
-  window.tippy("*[data-tippy-content]");
+  tippy("*[data-tippy-content]");
 
   if (playerModel && skinViewer) {
     if (playerModel.offsetWidth / playerModel.offsetHeight < 0.6) {
@@ -880,7 +880,7 @@ for (const element of document.querySelectorAll<HTMLElement>(".close-lore")) {
 }
 
 for (const element of document.querySelectorAll<HTMLElement>(".copy-text")) {
-  const copyNotification = window.tippy(element, {
+  const copyNotification = tippy(element, {
     content: "Copied to clipboard!",
     trigger: "manual",
   });
@@ -911,7 +911,7 @@ function checkFavorite() {
   return favorited;
 }
 
-const favoriteNotification = window.tippy(favoriteElement, {
+const favoriteNotification = tippy(favoriteElement, {
   trigger: "manual",
 });
 
