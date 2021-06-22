@@ -1,0 +1,10 @@
+{
+  "extends": ["../.eslintrc"],
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "worker": true,
+    "commonjs": false,
+    "node": false
+  }
+}
