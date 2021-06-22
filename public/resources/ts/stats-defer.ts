@@ -47,11 +47,11 @@ window.tippy("*[data-tippy-content]:not(.interactive-tooltip)", {
   trigger: "mouseenter click",
 });
 
-const playerModel = document.getElementById("player_model");
+const playerModel = document.getElementById("player_model") as HTMLElement;
 
 let skinViewer: any;
 
-if (playerModel && calculated.skin_data) {
+if (calculated.skin_data) {
   skinViewer = new window.skinview3d.SkinViewer({
     width: playerModel.offsetWidth,
     height: playerModel.offsetHeight,
@@ -513,21 +513,19 @@ function closeLore() {
   }
 }
 
-let oldWidth: number | null = null;
+let playerModelIsMobile = false;
 
 const navBar = document.querySelector("#nav_bar") as HTMLElement;
 const navBarLinks = navBar.querySelectorAll<HTMLAnchorElement>(".nav-item");
 let navBarHeight: number;
 
 function resize() {
-  if (playerModel) {
-    if (window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570)) {
-      document.getElementById("skin_display_mobile")?.appendChild(playerModel);
-    }
-
-    if (window.innerWidth > 1570 && oldWidth <= 1570) {
-      document.getElementById("skin_display")?.appendChild(playerModel);
-    }
+  if (window.innerWidth <= 1570 && !playerModelIsMobile) {
+    playerModelIsMobile = true;
+    document.getElementById("skin_display_mobile")?.appendChild(playerModel);
+  } else if (window.innerWidth > 1570 && playerModelIsMobile) {
+    playerModelIsMobile = false;
+    document.getElementById("skin_display")?.appendChild(playerModel);
   }
 
   window.tippy("*[data-tippy-content]");
@@ -559,8 +557,6 @@ function resize() {
     statsContent.style.top =
       Math.max(70, Math.min(maxTop, rect.y + element.offsetHeight / 2 - statsContent.offsetHeight / 2)) + "px";
   }
-
-  oldWidth = window.innerWidth;
 }
 
 document.querySelectorAll(".extender").forEach((element) => {
