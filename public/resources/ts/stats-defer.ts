@@ -520,10 +520,10 @@ const navBarLinks = navBar.querySelectorAll<HTMLAnchorElement>(".nav-item");
 let navBarHeight: number;
 
 function resize() {
-  if (window.innerWidth <= 1570 && !playerModelIsMobile) {
+  if (window.innerWidth <= 1590 && !playerModelIsMobile) {
     playerModelIsMobile = true;
     document.getElementById("skin_display_mobile")?.appendChild(playerModel);
-  } else if (window.innerWidth > 1570 && playerModelIsMobile) {
+  } else if (window.innerWidth > 1590 && playerModelIsMobile) {
     playerModelIsMobile = false;
     document.getElementById("skin_display")?.appendChild(playerModel);
   }
