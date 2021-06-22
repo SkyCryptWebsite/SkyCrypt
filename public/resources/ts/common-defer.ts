@@ -1,3 +1,5 @@
+import { loadTheme } from "./common.js";
+
 interface Window {
   tippy: any;
 }
@@ -53,7 +55,7 @@ document.querySelectorAll<HTMLFormElement>(".lookup-player").forEach((form) => {
   });
 });
 
-function setCookie(name: string, value: string, days?: number) {
+export function setCookie(name: string, value: string, days?: number): void {
   let expires = "";
   if (days) {
     const date = new Date();

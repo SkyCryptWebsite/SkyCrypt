@@ -1,3 +1,5 @@
+import { setCookie } from "./common-defer.js";
+
 interface Window {
   tippy: any;
   skinview3d: any;

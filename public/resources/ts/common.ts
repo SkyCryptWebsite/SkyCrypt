@@ -25,7 +25,7 @@ function convertHex(code: string) {
   )}`;
 }
 
-function loadTheme(currentTheme: string) {
+export function loadTheme(currentTheme: string): void {
   if (!extra.themes[currentTheme]) {
     return console.error(`${currentTheme} isn't a valid theme.`);
   }
@@ -108,7 +108,7 @@ function checkScrollbarStyle() {
 
 window.setTimeout(checkScrollbarStyle);
 
-const iOS = ["iPad Simulator", "iPhone Simulator", "iPod Simulator", "iPad", "iPhone", "iPod"].includes(
+export const iOS = ["iPad Simulator", "iPhone Simulator", "iPod Simulator", "iPad", "iPhone", "iPod"].includes(
   navigator.platform
 );
 
