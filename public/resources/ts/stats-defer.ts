@@ -244,7 +244,7 @@ function renderInventory(inventory: ItemSlot[], type: string) {
     pagesize = 6 * 9;
   }
 
-  inventory.forEach(function (item: Item | ItemSlot, index) {
+  inventory.forEach((item: Item | ItemSlot, index) => {
     const inventorySlot = document.createElement("div");
     inventorySlot.className = "inventory-slot";
 
@@ -423,7 +423,7 @@ function fillLore(element: HTMLElement) {
   if (isBackpack(item)) {
     backpackContents.classList.add("contains-backpack");
 
-    item.containsItems.forEach((backpackItem, index) => {
+    item.containsItems.forEach((backpackItem) => {
       const inventorySlot = document.createElement("div");
       inventorySlot.className = "inventory-slot";
 
@@ -471,7 +471,7 @@ function fillLore(element: HTMLElement) {
 
     viewBackpack.appendChild(viewBackpackText);
 
-    viewBackpack.addEventListener("click", function () {
+    viewBackpack.addEventListener("click", () => {
       showBackpack(item as Backpack);
       closeLore();
     });
@@ -598,13 +598,13 @@ for (const element of document.querySelectorAll<HTMLElement>(".stat-weapons .sel
   const weaponStats = calculated.weapon_stats[itemId];
   let stats;
 
-  element.addEventListener("mousedown", function (e) {
+  element.addEventListener("mousedown", (e) => {
     e.preventDefault();
   });
 
   const activeWeaponElement = document.querySelector(".stat-active-weapon") as HTMLElement;
 
-  element.addEventListener("click", function (e) {
+  element.addEventListener("click", () => {
     if (parent.classList.contains("piece-selected")) {
       parent.classList.remove("piece-selected");
 
@@ -660,13 +660,13 @@ for (const element of document.querySelectorAll<HTMLElement>(".stat-fishing .sel
   const weaponStats = calculated.weapon_stats[itemId];
   let stats;
 
-  element.addEventListener("mousedown", function (e) {
+  element.addEventListener("mousedown", (e) => {
     e.preventDefault();
   });
 
   const activeRodElement = document.querySelector(".stat-active-rod") as HTMLElement;
 
-  element.addEventListener("click", function (e) {
+  element.addEventListener("click", () => {
     if (parent.classList.contains("piece-selected")) {
       parent.classList.remove("piece-selected");
 
@@ -709,7 +709,7 @@ function updateStat(stat: StatName, newValue: number) {
 for (const element of document.querySelectorAll(".inventory-tab")) {
   const type = element.getAttribute("data-inventory-type") as string;
 
-  element.addEventListener("click", function () {
+  element.addEventListener("click", () => {
     if (element.classList.contains("active-inventory")) {
       return;
     }
@@ -736,7 +736,7 @@ const backpackContents = statsContent.querySelector(".backpack-contents") as HTM
 const touchDevice = window.matchMedia("(pointer: coarse)").matches;
 
 function bindWardrobeEvents(element: HTMLElement) {
-  element.addEventListener("click", function (e) {
+  element.addEventListener("click", () => {
     const currentWardrobe = document.querySelector(".wardrobe-opened");
 
     if (currentWardrobe) {
@@ -749,7 +749,7 @@ function bindWardrobeEvents(element: HTMLElement) {
 
 function bindLoreEvents(element: HTMLElement) {
   const parent = element.parentElement as HTMLElement;
-  element.addEventListener("mouseenter", function (e) {
+  element.addEventListener("mouseenter", () => {
     fillLore(parent);
 
     if (
@@ -763,12 +763,12 @@ function bindLoreEvents(element: HTMLElement) {
     statsContent.classList.add("show-stats");
   });
 
-  element.addEventListener("mouseleave", function (e) {
+  element.addEventListener("mouseleave", () => {
     statsContent.classList.remove("show-stats");
     element.classList.remove("piece-hovered");
   });
 
-  element.addEventListener("mousemove", function (e) {
+  element.addEventListener("mousemove", (e) => {
     if (statsContent.classList.contains("sticky-stats")) {
       return;
     }
@@ -795,7 +795,7 @@ function bindLoreEvents(element: HTMLElement) {
   const item = all_items.find((a) => a.item_index == itemIndex);
 
   if (item && "containsItems" in item) {
-    parent.addEventListener("contextmenu", function (e) {
+    parent.addEventListener("contextmenu", (e) => {
       e.preventDefault();
 
       showBackpack(item);
@@ -803,7 +803,7 @@ function bindLoreEvents(element: HTMLElement) {
     });
   }
 
-  element.addEventListener("click", function (e) {
+  element.addEventListener("click", (e) => {
     if (
       touchDevice &&
       parent.classList.contains("wardrobe-piece") &&
@@ -847,7 +847,7 @@ for (const element of document.querySelectorAll<HTMLElement>(".rich-item .piece-
 const enableApiPlayer = document.querySelector("#enable_api") as HTMLVideoElement;
 
 for (const element of document.querySelectorAll(".enable-api")) {
-  element.addEventListener("click", function (e) {
+  element.addEventListener("click", (e) => {
     e.preventDefault();
     dimmer.classList.add("show-dimmer");
     enableApiPlayer.classList.add("show");
@@ -857,7 +857,7 @@ for (const element of document.querySelectorAll(".enable-api")) {
   });
 }
 
-enableApiPlayer.addEventListener("click", function (event) {
+enableApiPlayer.addEventListener("click", (event) => {
   event.stopPropagation();
   if (enableApiPlayer.paused) {
     enableApiPlayer.play();
@@ -866,7 +866,7 @@ enableApiPlayer.addEventListener("click", function (event) {
   }
 });
 
-dimmer.addEventListener("click", function (e) {
+dimmer.addEventListener("click", () => {
   dimmer.classList.remove("show-dimmer");
   enableApiPlayer.classList.remove("show");
 
@@ -889,7 +889,7 @@ for (const element of document.querySelectorAll<HTMLElement>(".copy-text")) {
       navigator.clipboard.writeText(text).then(() => {
         copyNotification.show();
 
-        setTimeout(function () {
+        setTimeout(() => {
           copyNotification.hide();
         }, 1500);
       });
@@ -913,7 +913,7 @@ const favoriteNotification = window.tippy(favoriteElement, {
   trigger: "manual",
 });
 
-favoriteElement.addEventListener("click", function () {
+favoriteElement.addEventListener("click", () => {
   const uuid = favoriteElement.getAttribute("data-username") as string;
   if (uuid == "0c0b857f415943248f772164bf76795c") {
     favoriteNotification.setContent("No");
@@ -935,7 +935,7 @@ favoriteElement.addEventListener("click", function () {
   }
   favoriteNotification.show();
 
-  setTimeout(function () {
+  setTimeout(() => {
     favoriteNotification.hide();
   }, 1500);
 });
@@ -945,7 +945,7 @@ const revealSocials = document.querySelector("#reveal_socials") as HTMLElement;
 const additionalSocials = document.querySelector("#additional_socials") as HTMLElement;
 
 if (revealSocials) {
-  revealSocials.addEventListener("click", function () {
+  revealSocials.addEventListener("click", () => {
     if (socialsShown) {
       socialsShown = false;
       additionalSocials.classList.remove("socials-shown");
@@ -1091,11 +1091,11 @@ for (const element of document.querySelectorAll(".xp-skill")) {
 
   const originalText = skillProgressText.innerHTML;
 
-  element.addEventListener("mouseenter", function () {
+  element.addEventListener("mouseenter", () => {
     skillProgressText.innerHTML = skillProgressText.getAttribute("data-hover-text") as string;
   });
 
-  element.addEventListener("mouseleave", function () {
+  element.addEventListener("mouseleave", () => {
     skillProgressText.innerHTML = originalText;
   });
 }
@@ -1104,7 +1104,7 @@ for (const element of document.querySelectorAll(".kills-deaths-container .show-a
   const parent = element.parentElement as HTMLElement;
   const kills = calculated[element.getAttribute("data-type") as "kills" | "deaths"];
 
-  element.addEventListener("click", function () {
+  element.addEventListener("click", () => {
     parent.style.maxHeight = parent.offsetHeight + "px";
     parent.classList.add("all-shown");
     element.remove();
@@ -1137,7 +1137,7 @@ for (const element of document.querySelectorAll(".kills-deaths-container .show-a
   });
 }
 
-window.addEventListener("keydown", function (e) {
+window.addEventListener("keydown", (e) => {
   const selectedPiece = document.querySelector<HTMLElement>(".rich-item:focus");
 
   if (selectedPiece !== null && e.key === "Enter") {
