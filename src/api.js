@@ -25,10 +25,10 @@ module.exports = (app, db) => {
       .toArray();
 
     for (const product of bazaarProducts) {
-      const info = itemInfo.filter((a) => a.id == product.productId);
+      const info = itemInfo.find((a) => a.id == product.productId);
 
-      if (info.length > 0) {
-        productInfo[product.productId] = info[0];
+      if (info != undefined) {
+        productInfo[product.productId] = info;
       }
     }
   }
@@ -127,11 +127,11 @@ module.exports = (app, db) => {
 
           const minionLevel = parseInt(minion.split("_").pop());
 
-          if (minions.filter((a) => a.minion == minionName).length == 0) {
+          if (minions.find((a) => a.minion == minionName) == undefined) {
             minions.push({ minion: minionName, level: minionLevel });
           }
 
-          let minionObject = minions.filter((a) => a.minion == minionName)[0];
+          let minionObject = minions.find((a) => a.minion == minionName);
 
           if (minionObject.level < minionLevel) {
             minionObject.level = minionLevel;
@@ -185,7 +185,7 @@ module.exports = (app, db) => {
       const collections = await lib.getCollections(uuid, profile);
 
       for (const collection in collections) {
-        collections[collection].name = constants.collection_data.filter((a) => a.skyblockId == collection)[0].name;
+        collections[collection].name = constants.collection_data.find((a) => a.skyblockId == collection).name;
       }
 
       if ("html" in req.query) {
