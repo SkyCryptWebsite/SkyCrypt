@@ -70,22 +70,21 @@ async function main() {
   setInterval(updateIsFoolsDay, 60_000);
 
   let forceCacheOnly = false;
-  const badStatuses = ["under_maintenance"];
+  const hypixelUUID = "f7c77d999f154a66a87dc4a51ef30d19";
   async function updateCacheOnly() {
     try {
-      const response = await fetch("https://status.hypixel.net/api/v2/components.json");
-      const data = await response.json();
+      const response = await fetch(
+        `https://api.hypixel.net/skyblock/profiles?uuid=${hypixelUUID}&key=${credentials.hypixel_api_key}`
+      );
       forceCacheOnly = false;
-      for (const component of data.components) {
-        if (component.name === "Public API") {
-          if (badStatuses.includes(component.status)) {
-            forceCacheOnly = true;
-            console.log("forcing cache only mode");
-          }
-        }
+      // 429 = key throttle
+      if (!response.ok && response.status != 429) {
+        forceCacheOnly = true;
+        console.log(`forcing cache only mode because: hypixel responded with ${response.status}`);
       }
     } catch (error) {
-      forceCacheOnly = false;
+      forceCacheOnly = true;
+      console.log("forcing cache only mode because:", error);
     }
   }
   updateCacheOnly();
