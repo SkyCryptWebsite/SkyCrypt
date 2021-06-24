@@ -9,6 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
+    "lint:ejs": "ejslint **/*.ejs",
     "prettier": "npx prettier --check .",
     "prettier:fix": "npx prettier --write .",
     "prestart": "npm run buildscss",
@@ -73,6 +74,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
+    "ejs-lint": "^1.2.0",
     "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
     "node-watch": "^0.7.1",
