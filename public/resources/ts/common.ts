@@ -1,7 +1,7 @@
 /**
  * checks if the scrollbar has a width and sets the style-scrollbar class accordingly
  */
-function checkScrollbarStyle() {
+window.setTimeout(() => {
   const outerDiv = document.createElement("div");
   outerDiv.style.position = "fixed";
   const innerDiv = document.createElement("div");
@@ -15,9 +15,7 @@ function checkScrollbarStyle() {
     // mobile style scrollbars
     document.documentElement.classList.remove("style-scrollbar");
   }
-}
-
-window.setTimeout(checkScrollbarStyle);
+});
 
 const iOS = ["iPad Simulator", "iPhone Simulator", "iPod Simulator", "iPad", "iPhone", "iPod"].includes(
   navigator.platform
