@@ -149,8 +149,6 @@ tippy("*[data-tippy-content]", {
 const prideFlag = document.querySelector(".pride-flag") as HTMLElement;
 const prideFlags = ["rainbow", "trans", "lesbian", "bi", "pan", "nb", "ace", "genderfluid", "logo"];
 
-prideFlag.classList.add(localStorage.getItem("currentFlag") ?? "logo");
-
 prideFlag.addEventListener("click", function () {
   const oldFlag = prideFlag.classList[1];
   const newFlag = prideFlags[(prideFlags.indexOf(oldFlag) + 1) % prideFlags.length];
