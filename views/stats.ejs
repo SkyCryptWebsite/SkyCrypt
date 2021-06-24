@@ -418,7 +418,7 @@ if('levels' in calculated){
 }
 
 if(calculated.pets.filter(a => a.active).length >= 1){
-  const activePet = calculated.pets.filter(a => a.active)[0];
+  const activePet = calculated.pets.find(a => a.active);
 
   description += `${activePet.emoji} ${helper.titleCase(activePet.rarity)} ${activePet.display_name} (Lvl ${activePet.level.level})\n`;
 }
@@ -638,7 +638,6 @@ const getRarityUpgradeClass = item => {
           <% if('YOUTUBE' in calculated.social){ %><a data-tippy-content="YouTube" href="<%= calculated.social.YOUTUBE %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-youtube"></a><% } %>
           <% if('INSTAGRAM' in calculated.social){ %><a data-tippy-content="Instagram" href="<%= calculated.social.INSTAGRAM %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-instagram"></a><% } %>
           <% if('TWITCH' in calculated.social){ %><a data-tippy-content="Twitch" href="<%= calculated.social.TWITCH %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitch"></a><% } %>
-          <% if('MIXER' in calculated.social){ %><a data-tippy-content="Mixer" href="<%= calculated.social.MIXER %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-mixer"></a><% } %>
           <% if('HYPIXEL' in calculated.social){ %><a data-tippy-content="Hypixel Forums" href="<%= calculated.social.HYPIXEL %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-hypixel"></a><% } %>
           <button class="additional-player-stat" id="reveal_socials" aria-label="reveal socials"></button>
         </div>
@@ -908,18 +907,23 @@ const getRarityUpgradeClass = item => {
         <% } %>
         <% if(items.wardrobe.length > 0){ %>
           <p class="stat-sub-header">Wardrobe</p>
-          <div class="pieces">
+          <div class="pieces wardrobe">
           <% for(const set of items.wardrobe){ %>
             <div class="wardrobe-set">
-              <% for(const [index, item] of set.filter(a => a !== null).entries()){
-                 %>
-                <div tabindex="0" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item <%= index == 0 ? 'wardrobe-piece' : '' %> piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
-                  <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
-                    <div class="piece-shine"></div>
-                  <% } %>
-                  <div class="piece-hover-area"></div>
-                  <% itemIcon(item, ['piece-icon']); %>
-                </div>
+              <% for(const [index, item] of set.entries()) { %>
+                <% if (item) { %>
+                  <div tabindex="0" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %> index-<%= index %>">
+                    <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
+                      <div class="piece-shine"></div>
+                    <% } %>
+                    <div class="piece-hover-area"></div>
+                    <% itemIcon(item, ['piece-icon']); %>
+                  </div>
+                <% } else { %>
+                  <div class="piece armor-placeholder index-<%= index %>">
+                    <div class="piece-icon item-icon custom-icon"></div>
+                  </div>
+                <% } %>
               <% } %>
             </div>
           <% } %>
@@ -993,7 +997,7 @@ const getRarityUpgradeClass = item => {
               <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
               <span class="stat-value <%= maxRecombTalis %>"><%= items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= UNIQUE_ACCESSORIES %></span>
             </p>
-            <% if(items.talismans.filter(a => !a.isInactive).length > 0){ %>
+            <% if(items.talismans.find(a => !a.isInactive) != undefined) { %>
               <div class="accessory-list">
                 <p class="stat-sub-header" style="margin-bottom: 5px">Active Accessories</p>
                 <% items.talismans.filter(a => !a.isInactive).forEach(item => {
@@ -1014,7 +1018,7 @@ const getRarityUpgradeClass = item => {
                 <p><%- getBonus(getStats(items.talismans.filter(a => a.isUnique && !a.isInactive))) %></p>
               </div>
             <% } %>
-            <% if(items.talismans.filter(a => a.isUnique && a.isInactive).length > 0){ %>
+            <% if(items.talismans.find(a => a.isUnique && a.isInactive) != undefined){ %>
               <div class="accessory-list">
                 <p class="stat-sub-header">Inactive Accessories</p>
                 <% items.talismans.filter(a => a.isUnique && a.isInactive).forEach(item => { %>
@@ -1074,9 +1078,9 @@ const getRarityUpgradeClass = item => {
               for (const [skin, skinData] of Object.entries(petSkins)) {
                 if (skinData.release < Date.now()) {
                   totalSkins[`${petType}/${skin}`] =
-                    calculated.pets.filter(
+                    calculated.pets.find(
                       (pet) => pet.type === petType && pet.skin === skin
-                    ).length > 0
+                    ) != undefined;
                 }
               }
             }

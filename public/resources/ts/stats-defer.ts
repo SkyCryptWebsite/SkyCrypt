@@ -511,12 +511,6 @@ function closeLore() {
 
     statsContent.classList.remove("sticky-stats", "show-stats");
   }
-
-  const openedWardrobe = document.querySelector(".wardrobe-opened");
-
-  if (openedWardrobe) {
-    openedWardrobe.classList.remove("wardrobe-opened");
-  }
 }
 
 let playerModelIsMobile = false;
@@ -737,32 +731,10 @@ const itemNameContent = itemName.querySelector("span") as HTMLSpanElement;
 const itemLore = statsContent.querySelector(".item-lore") as HTMLElement;
 const backpackContents = statsContent.querySelector(".backpack-contents") as HTMLElement;
 
-const touchDevice = window.matchMedia("(pointer: coarse)").matches;
-
-function bindWardrobeEvents(element: HTMLElement) {
-  element.addEventListener("click", () => {
-    const currentWardrobe = document.querySelector(".wardrobe-opened");
-
-    if (currentWardrobe) {
-      currentWardrobe.classList.remove("wardrobe-opened");
-    }
-
-    element.classList.add("wardrobe-opened");
-  });
-}
-
 function bindLoreEvents(element: HTMLElement) {
   const parent = element.parentElement as HTMLElement;
   element.addEventListener("mouseenter", () => {
     fillLore(parent);
-
-    if (
-      touchDevice &&
-      parent.classList.contains("wardrobe-piece") &&
-      !parent.parentElement?.classList.contains("wardrobe-opened")
-    ) {
-      return;
-    }
 
     statsContent.classList.add("show-stats");
   });
@@ -808,19 +780,6 @@ function bindLoreEvents(element: HTMLElement) {
   }
 
   element.addEventListener("click", (event) => {
-    if (
-      touchDevice &&
-      parent.classList.contains("wardrobe-piece") &&
-      !parent.parentElement?.classList.contains("wardrobe-opened")
-    ) {
-      parent.blur();
-      return;
-    }
-
-    if (parent.parentElement?.classList.contains("wardrobe-set")) {
-      parent.parentElement.classList.add("wardrobe-opened");
-    }
-
     if (event.ctrlKey && item && "containsItems" in item) {
       showBackpack(item);
       closeLore();
@@ -836,12 +795,6 @@ function bindLoreEvents(element: HTMLElement) {
       }
     }
   });
-}
-
-if (touchDevice) {
-  for (const element of document.querySelectorAll<HTMLElement>(".wardrobe-set")) {
-    bindWardrobeEvents(element);
-  }
 }
 
 for (const element of document.querySelectorAll<HTMLElement>(".rich-item .piece-hover-area")) {
