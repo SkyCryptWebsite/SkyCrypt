@@ -382,6 +382,10 @@ function fillLore(element: HTMLElement) {
     throw new Error("item mush have either an id and a damage or a texture_path");
   }
 
+  if ("id" in item && isEnchanted(item)) {
+    itemIcon.classList.add("is-enchanted");
+  }
+
   if ("lore" in item) {
     itemLore.innerHTML = item.lore;
   } else if ("tag" in item && Array.isArray(item.tag.display?.Lore)) {
