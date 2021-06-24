@@ -631,6 +631,7 @@ const getRarityUpgradeClass = item => {
         ">Guild: <%= calculated.guild.name %></button><% } %>
         <a href="https://auctions.craftlink.xyz/players/<%= calculated.uuid %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">HyAuctions</a>
         <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">Plancke</a>
+        <a href="https://sky.coflnet.com/player/<%= calculated.uuid %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">AH history</a>
         <div id="additional_socials">
           <button data-copy-text="<%= calculated.uuid %>" class="copy-text additional-player-stat">Copy UUID</button>
           <% if('DISCORD' in calculated.social){ %><button data-copy-text="<%= calculated.social.DISCORD %>" class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></button><% } %>
