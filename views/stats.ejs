@@ -418,7 +418,7 @@ if('levels' in calculated){
 }
 
 if(calculated.pets.filter(a => a.active).length >= 1){
-  const activePet = calculated.pets.filter(a => a.active)[0];
+  const activePet = calculated.pets.find(a => a.active);
 
   description += `${activePet.emoji} ${helper.titleCase(activePet.rarity)} ${activePet.display_name} (Lvl ${activePet.level.level})\n`;
 }
@@ -997,7 +997,7 @@ const getRarityUpgradeClass = item => {
               <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
               <span class="stat-value <%= maxRecombTalis %>"><%= items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= UNIQUE_ACCESSORIES %></span>
             </p>
-            <% if(items.talismans.filter(a => !a.isInactive).length > 0){ %>
+            <% if(items.talismans.find(a => !a.isInactive) != undefined{ %>
               <div class="accessory-list">
                 <p class="stat-sub-header" style="margin-bottom: 5px">Active Accessories</p>
                 <% items.talismans.filter(a => !a.isInactive).forEach(item => {
@@ -1018,7 +1018,7 @@ const getRarityUpgradeClass = item => {
                 <p><%- getBonus(getStats(items.talismans.filter(a => a.isUnique && !a.isInactive))) %></p>
               </div>
             <% } %>
-            <% if(items.talismans.filter(a => a.isUnique && a.isInactive).length > 0){ %>
+            <% if(items.talismans.find(a => a.isUnique && a.isInactive) != undefined){ %>
               <div class="accessory-list">
                 <p class="stat-sub-header">Inactive Accessories</p>
                 <% items.talismans.filter(a => a.isUnique && a.isInactive).forEach(item => { %>
@@ -1078,9 +1078,9 @@ const getRarityUpgradeClass = item => {
               for (const [skin, skinData] of Object.entries(petSkins)) {
                 if (skinData.release < Date.now()) {
                   totalSkins[`${petType}/${skin}`] =
-                    calculated.pets.filter(
+                    calculated.pets.find(
                       (pet) => pet.type === petType && pet.skin === skin
-                    ).length > 0
+                    ) != undefined;
                 }
               }
             }
