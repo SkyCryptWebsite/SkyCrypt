@@ -149,19 +149,11 @@ tippy("*[data-tippy-content]", {
 const prideFlag = document.querySelector(".pride-flag") as HTMLElement;
 const prideFlags = ["rainbow", "trans", "lesbian", "bi", "pan", "nb", "ace", "genderfluid", "logo"];
 
-let currentFlag = prideFlags.length - 1;
-
-const currentFlagString = localStorage.getItem("currentFlag");
-if (currentFlagString) {
-  currentFlag = parseInt(currentFlagString);
-  prideFlag.className = "pride-flag " + prideFlags[currentFlag];
-}
+prideFlag.classList.add(localStorage.getItem("currentFlag") ?? "logo");
 
 prideFlag.addEventListener("click", function () {
-  currentFlag++;
-
-  if (currentFlag > prideFlags.length - 1) currentFlag = 0;
-
-  localStorage.setItem("currentFlag", currentFlag.toString());
-  prideFlag.className = "pride-flag " + prideFlags[currentFlag];
+  const oldFlag = prideFlag.classList[1];
+  const newFlag = prideFlags[(prideFlags.indexOf(oldFlag) + 1) % prideFlags.length];
+  localStorage.setItem("currentFlag", newFlag);
+  prideFlag.className = "pride-flag " + newFlag;
 });
