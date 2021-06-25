@@ -654,6 +654,11 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
         }
       }
 
+      if (item.tag?.display?.color) {
+        const hex = item.tag.display.color.toString(16).padStart(6, "0");
+        itemLore.push("", `§7Color: #${hex.toUpperCase()}`);
+      }
+
       if (item.extra?.timestamp) {
         itemLore.push("", `§7Obtained: §c<local-time timestamp="${item.extra.timestamp}"></local-time>`);
       }
