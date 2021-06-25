@@ -1,7 +1,7 @@
 {
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
-    "module": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
     "target": "es2020",
     "lib": ["ES2020", "dom", "dom.iterable", "ESNext.String"],
