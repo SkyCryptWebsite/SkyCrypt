@@ -1,8 +1,8 @@
 import { setCookie } from "./common-defer";
+import { SkinViewer, createOrbitControls } from "skinview3d";
 
 declare global {
   function tippy(targets: string | Element | Element[], optionalProps?: Record<string, unknown>): any;
-  const skinview3d: any;
 }
 
 const favoriteElement = document.querySelector(".favorite") as HTMLButtonElement;
@@ -54,7 +54,7 @@ const playerModel = document.getElementById("player_model") as HTMLElement;
 let skinViewer: any;
 
 if (calculated.skin_data) {
-  skinViewer = new skinview3d.SkinViewer({
+  skinViewer = new SkinViewer({
     width: playerModel.offsetWidth,
     height: playerModel.offsetHeight,
     model: calculated.skin_data.model,
@@ -69,7 +69,7 @@ if (calculated.skin_data) {
 
   skinViewer.camera.position.set(-18, -3, 58);
 
-  const controls = new skinview3d.createOrbitControls(skinViewer);
+  const controls = createOrbitControls(skinViewer);
 
   skinViewer.canvas.removeAttribute("tabindex");
 
