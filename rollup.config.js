@@ -3,6 +3,7 @@ import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
 import nameMap from "./lib/rollup-plugin-name-map.js";
+import del from "rollup-plugin-delete";
 
 // `npm run start` -> `production` is true
 // `npm run dev` -> `production` is false
@@ -27,6 +28,7 @@ const config = {
     chunkFileNames: "[name].[hash].js",
   },
   plugins: [
+    del({ targets: "public/resources/js/*" }),
     typescript({ tsconfig: "public/resources/ts/tsconfig.json" }), // converts TypeScript modules to JavaScript
     resolve(), // tells Rollup how to stuff in node_modules
     commonjs(), // converts Node modules to ES modules
