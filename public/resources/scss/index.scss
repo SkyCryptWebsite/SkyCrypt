@@ -2043,6 +2043,9 @@ a.additional-player-stat:hover {
       transition: max-height 0.2s, gap 0.2s;
       .armor-placeholder {
         transition: height 0.2s;
+        .piece-icon {
+          transition: mask-size 0.2s, -webkit-mask-size 0.2s;
+        }
       }
 
       &:not(:hover):not(:focus-within) {
@@ -2050,6 +2053,10 @@ a.additional-player-stat:hover {
         gap: 0;
         .armor-placeholder {
           height: 0;
+          .piece-icon {
+            mask-size: 128px 0px;
+            -webkit-mask-size: 128px 0px;
+          }
         }
       }
     }
