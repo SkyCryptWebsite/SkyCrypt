@@ -559,7 +559,7 @@ interface SkyCryptPlayer {
   display_name: string;
   display_emoji?: string;
   skin_data: {
-    model: "regular" | "slim";
+    model: "default" | "slim";
     skinurl: string;
     capeurl?: string;
   };
