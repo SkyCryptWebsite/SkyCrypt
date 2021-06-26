@@ -1,4 +1,4 @@
-import { setCookie } from "./common-defer.js";
+import { setCookie } from "./common-defer";
 
 declare global {
   function tippy(targets: string | Element | Element[], optionalProps?: Record<string, unknown>): any;

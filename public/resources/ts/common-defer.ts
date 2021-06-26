@@ -1,4 +1,4 @@
-import { loadTheme } from "./themes.js";
+import { loadTheme } from "./themes";
 
 declare global {
   function tippy(targets: string | Element | Element[], optionalProps: Record<string, unknown>): any;
