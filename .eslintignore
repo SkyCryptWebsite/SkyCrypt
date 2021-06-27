@@ -1,4 +1,2 @@
 # compiled dependencies
-/public/resources/js/*.min.js
-/public/resources/js/*.bundle.js
-/public/resources/js/modernizr.js
+/public/resources/js/**

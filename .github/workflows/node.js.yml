@@ -12,7 +12,7 @@ env:
   MONGODB_VERSION: "4.4"
 
 jobs:
-  lint:
+  es-lint:
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
@@ -28,6 +28,23 @@ jobs:
 
       - name: es-lint
         run: npm run lint
+
+  ejs-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v1
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: ejs-lint
+        run: npm run lint:ejs
 
   prettier:
     runs-on: ubuntu-latest
@@ -45,6 +62,42 @@ jobs:
 
       - name: prettier
         run: npm run prettier
+
+  buildts:
+    name: build ts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v1
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: build ts
+        run: npm run ts
+
+  buildscss:
+    name: build scss
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v1
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: build scss
+        run: npm run scss
 
   build:
     if: github.ref == 'refs/heads/master'

@@ -997,7 +997,7 @@ const getRarityUpgradeClass = item => {
               <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
               <span class="stat-value <%= maxRecombTalis %>"><%= items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= UNIQUE_ACCESSORIES %></span>
             </p>
-            <% if(items.talismans.find(a => !a.isInactive) != undefined ){ %>
+            <% if(items.talismans.find(a => !a.isInactive) != undefined){ %>
               <div class="accessory-list">
                 <p class="stat-sub-header" style="margin-bottom: 5px">Active Accessories</p>
                 <% items.talismans.filter(a => !a.isInactive).forEach(item => {
