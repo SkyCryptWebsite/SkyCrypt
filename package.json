@@ -5,16 +5,20 @@
   "main": "index.js",
   "scripts": {
     "start": "node init && node index",
+    "dev": "concurrently -r \"npm run nodemon\" \"npm run scss:watch\" \"npm run ts:watch\"",
     "postinstall": "node init",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
+    "lint:ejs": "ejslint **/*.ejs",
     "prettier": "npx prettier --check .",
     "prettier:fix": "npx prettier --write .",
-    "prestart": "npm run buildscss",
-    "buildscss": "sass public/resources/scss:public/resources/css --style=compressed",
-    "watchscss": "sass --watch public/resources/scss:public/resources/css",
-    "dev": "node init && nodemon index"
+    "prestart": "npm run scss && npm run ts",
+    "scss": "sass public/resources/scss:public/resources/css --style=compressed",
+    "scss:watch": "sass --watch public/resources/scss:public/resources/css",
+    "ts": "npx tsc -p public/resources/ts",
+    "ts:watch": "npx tsc -p public/resources/ts -w",
+    "nodemon": "node init && nodemon index"
   },
   "repository": {
     "type": "git",
@@ -55,7 +59,7 @@
     "lodash": "^4.17.20",
     "lodash.escaperegexp": "^4.1.2",
     "micromatch": "^4.0.4",
-    "minecraft-data": "^2.85.1",
+    "minecraft-data": "^2.86.0",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
     "moment-timezone": "^0.5.31",
@@ -72,12 +76,17 @@
     "uuid": "^8.3.1"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.27.0",
+    "@typescript-eslint/parser": "^4.27.0",
     "babel-eslint": "^10.1.0",
+    "concurrently": "^6.2.0",
+    "ejs-lint": "^1.2.0",
     "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
     "node-watch": "^0.7.1",
     "nodemon": "^2.0.7",
     "prettier": "2.3.1",
-    "sass": "^1.35.1"
+    "sass": "^1.35.1",
+    "typescript": "^4.3.3"
   }
 }
