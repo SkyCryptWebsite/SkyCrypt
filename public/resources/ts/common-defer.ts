@@ -1,13 +1,8 @@
-/* global tippy:readonly, loadTheme:readonly, page:readonly */
+interface Window {
+  tippy: any;
+}
 
-/**
- * @param {string} url a url to be validated
- *
- * @throws {string} an error message
- *
- * @returns {string} a valid url
- */
-function validateURL(url) {
+function validateURL(url: string) {
   const urlSegments = url.trim().split("/");
   if (urlSegments.length < 1) {
     throw "please enter a Minecraft username or UUID";
@@ -36,41 +31,39 @@ function validateURL(url) {
   }
 }
 
-function handleSubmit(submitEvent) {
-  submitEvent.preventDefault();
-  const formData = new FormData(submitEvent.srcElement);
-  try {
-    window.location.href = validateURL(formData.get("ign"));
-  } catch (error) {
-    let errorTip = tippy(submitEvent.srcElement.querySelector("input"), {
-      trigger: "manual",
-      content: error || "please enter a valid Minecraft username or UUID",
-    });
-    errorTip.show();
-    setTimeout(() => {
-      errorTip.hide();
+document.querySelectorAll<HTMLFormElement>(".lookup-player").forEach((form) => {
+  form.addEventListener("submit", (submitEvent: Event) => {
+    submitEvent.preventDefault();
+    const formData = new FormData(form);
+    try {
+      window.location.href = validateURL(formData.get("ign") as string);
+    } catch (error) {
+      const errorTip = window.tippy(form.querySelector("input") as HTMLInputElement, {
+        trigger: "manual",
+        content: error || "please enter a valid Minecraft username or UUID",
+      });
+      errorTip.show();
       setTimeout(() => {
-        errorTip.destroy();
-      }, 500);
-    }, 1500);
-  }
-}
-
-document.querySelectorAll(".lookup-player").forEach((form) => {
-  form.addEventListener("submit", handleSubmit);
+        errorTip.hide();
+        setTimeout(() => {
+          errorTip.destroy();
+        }, 500);
+      }, 1500);
+    }
+  });
 });
 
-function setCookie(name, value, days) {
-  var expires = "";
+function setCookie(name: string, value: string, days?: number) {
+  let expires = "";
   if (days) {
-    var date = new Date();
+    const date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
     expires = "; expires=" + date.toUTCString();
   }
   document.cookie = name + "=" + (value || "") + expires + "; SameSite=Lax; path=/";
 }
 
-function eraseCookie(name) {
+function eraseCookie(name: string) {
   document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 }
 
@@ -79,80 +72,86 @@ for (const expander of expanders) {
   expander.addEventListener("click", () => {
     for (const otherExpander of expanders) {
       if (otherExpander != expander) {
-        otherExpander.setAttribute("aria-expanded", false);
+        otherExpander.setAttribute("aria-expanded", "false");
       }
     }
-    expander.setAttribute("aria-expanded", expander.getAttribute("aria-expanded") != "true");
+    expander.setAttribute("aria-expanded", (expander.getAttribute("aria-expanded") != "true").toString());
   });
   const focusOutHandler = () => {
     setTimeout(() => {
       if (
         document.activeElement != document.body &&
         document.activeElement != expander &&
-        !expander.nextElementSibling.contains(document.activeElement)
+        !expander.nextElementSibling?.contains(document.activeElement)
       ) {
-        expander.setAttribute("aria-expanded", false);
+        expander.setAttribute("aria-expanded", "false");
       }
     });
   };
   expander.addEventListener("focusout", focusOutHandler);
-  expander.nextElementSibling.addEventListener("focusout", focusOutHandler);
+  expander.nextElementSibling?.addEventListener("focusout", focusOutHandler);
 }
 
-document.querySelectorAll('#packs-box button[name="pack"]').forEach((element) => {
+document.querySelectorAll<HTMLButtonElement>('#packs-box button[name="pack"]').forEach((element) => {
   element.addEventListener("click", (event) => {
-    const newPack = event.target.value;
+    const clickedButton = event.target as HTMLButtonElement;
+    const newPack = clickedButton.value;
     if (newPack) {
       setCookie("pack", newPack, 365);
     } else {
       eraseCookie("pack");
     }
 
-    const oldElement = document.querySelector(`#packs-box button[name="pack"][aria-selected]`);
-    oldElement.removeAttribute("disabled");
-    oldElement.removeAttribute("aria-selected");
+    const oldElement = document.querySelector<HTMLButtonElement>(`#packs-box button[name="pack"][aria-selected]`);
+    oldElement?.removeAttribute("disabled");
+    oldElement?.removeAttribute("aria-selected");
 
     if (page == "stats") {
-      event.target.classList.add("loading");
-      sessionStorage.setItem("open packs", true);
+      clickedButton.classList.add("loading");
+      sessionStorage.setItem("open packs", "true");
       window.location.reload();
     } else {
-      event.target.setAttribute("aria-selected", "");
-      event.target.setAttribute("disabled", "");
+      clickedButton.setAttribute("aria-selected", "");
+      clickedButton.setAttribute("disabled", "");
     }
   });
 });
 
-document.querySelector("#themes-box").addEventListener("change", (event) => {
-  const newTheme = event.target.value;
+document.querySelector("#themes-box")?.addEventListener("change", (event) => {
+  const newTheme = (event.target as HTMLInputElement).value;
   localStorage.setItem("currentTheme", newTheme);
   loadTheme(newTheme);
 });
 
 window.addEventListener("storage", (event) => {
-  if (event.key === "currentTheme") {
+  if (event.key === "currentTheme" && event.newValue != null) {
     setCheckedTheme(event.newValue);
     loadTheme(event.newValue);
   }
 });
 
-function setCheckedTheme(theme) {
-  document.querySelector(`#themes-box input[value="${theme}"]`).checked = true;
+function setCheckedTheme(theme: string) {
+  const checkbox = document.querySelector<HTMLInputElement>(`#themes-box input[value="${theme}"]`);
+  if (checkbox == null) {
+    throw new Error("no checkbox for theme : " + theme);
+  }
+  checkbox.checked = true;
 }
 
-setCheckedTheme(localStorage.getItem("currentTheme"));
+setCheckedTheme(localStorage.getItem("currentTheme") ?? "default");
 
-tippy("*[data-tippy-content]", {
+window.tippy("*[data-tippy-content]", {
   boundary: "window",
 });
 
-const prideFlag = document.querySelector(".pride-flag");
+const prideFlag = document.querySelector(".pride-flag") as HTMLElement;
 const prideFlags = ["rainbow", "trans", "lesbian", "bi", "pan", "nb", "ace", "genderfluid", "logo"];
 
 let currentFlag = prideFlags.length - 1;
 
-if (localStorage.getItem("currentFlag")) {
-  currentFlag = parseInt(localStorage.getItem("currentFlag"));
+const currentFlagString = localStorage.getItem("currentFlag");
+if (currentFlagString) {
+  currentFlag = parseInt(currentFlagString);
   prideFlag.className = "pride-flag " + prideFlags[currentFlag];
 }
 
@@ -161,6 +160,6 @@ prideFlag.addEventListener("click", function () {
 
   if (currentFlag > prideFlags.length - 1) currentFlag = 0;
 
-  localStorage.setItem("currentFlag", currentFlag);
+  localStorage.setItem("currentFlag", currentFlag.toString());
   prideFlag.className = "pride-flag " + prideFlags[currentFlag];
 });
