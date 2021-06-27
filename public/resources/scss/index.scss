@@ -1556,10 +1556,6 @@ a.additional-player-stat:hover {
   background-image: url(../img/icons/instagram.png);
 }
 
-.additional-player-stat.external-mixer::after {
-  background-image: url(../img/icons/mixer.png);
-}
-
 .additional-player-stat.external-discord::after {
   background-image: url(../img/icons/discord.png);
 }
@@ -1989,22 +1985,89 @@ a.additional-player-stat:hover {
   font-size: 19px;
 }
 
-.wardrobe-set {
-  vertical-align: top;
-  display: inline-block;
-  max-height: 90px;
-  overflow: hidden;
-  overflow: clip;
-  transition: max-height 0.2s;
+.wardrobe {
+  margin-top: 12px !important; // override .pieces
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  .wardrobe-set {
+    flex-shrink: 0;
+    display: grid;
+    gap: inherit;
+    grid-template-areas: "helmet" "chestplate" "leggings" "boots";
 
-  &:hover,
-  &:focus-within,
-  &.wardrobe-opened {
-    max-height: 360px;
+    .piece {
+      margin: 0;
+
+      &.armor-placeholder {
+        background-color: rgba(var(--background-rgb), 0.3);
+        .piece-icon {
+          background: rgba(var(--text-rgb), 0.8);
+        }
+      }
+
+      &.index-0 {
+        grid-area: helmet;
+        &.armor-placeholder .piece-icon {
+          mask-image: url("/resources/img/textures/item/empty_armor_slot_helmet.png");
+          -webkit-mask-image: url("/resources/img/textures/item/empty_armor_slot_helmet.png");
+        }
+      }
+      &.index-1 {
+        grid-area: chestplate;
+        &.armor-placeholder .piece-icon {
+          mask-image: url("/resources/img/textures/item/empty_armor_slot_chestplate.png");
+          -webkit-mask-image: url("/resources/img/textures/item/empty_armor_slot_chestplate.png");
+        }
+      }
+      &.index-2 {
+        grid-area: leggings;
+        &.armor-placeholder .piece-icon {
+          mask-image: url("/resources/img/textures/item/empty_armor_slot_leggings.png");
+          -webkit-mask-image: url("/resources/img/textures/item/empty_armor_slot_leggings.png");
+        }
+      }
+      &.index-3 {
+        grid-area: boots;
+        &.armor-placeholder .piece-icon {
+          mask-image: url("/resources/img/textures/item/empty_armor_slot_boots.png");
+          -webkit-mask-image: url("/resources/img/textures/item/empty_armor_slot_boots.png");
+        }
+      }
+    }
+
+    @media (hover: hover) {
+      max-height: 360px;
+      overflow: hidden;
+      overflow: clip;
+      transition: max-height 0.2s, gap 0.2s;
+      .armor-placeholder {
+        transition: height 0.2s;
+      }
+
+      &:not(:hover):not(:focus-within) {
+        max-height: 75px;
+        gap: 0;
+        .armor-placeholder {
+          height: 0;
+        }
+      }
+    }
   }
+  @media (hover: none) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-left: calc(-1 * var(--padding));
+    margin-right: calc(-1 * var(--padding));
+    content-visibility: auto;
+    contain-intrinsic-size: 75px 330px;
 
-  .piece {
-    display: block;
+    > :first-child {
+      margin-inline-start: var(--padding);
+    }
+    > :last-child {
+      margin-inline-end: var(--padding);
+    }
   }
 }
 
@@ -2021,7 +2084,6 @@ a.additional-player-stat:hover {
   user-select: none;
   cursor: context-menu;
   transition: box-shadow 0.2s ease-in-out;
-  background-color: var(--§8);
   box-shadow: rgba(var(--text-rgb), 0) 0 0 0 0px inset;
   content-visibility: auto;
 
@@ -2172,6 +2234,12 @@ a.additional-player-stat:hover {
   background-size: 128px auto;
   background-repeat: no-repeat;
   background-position: center center !important;
+  mask-size: 128px 128px;
+  mask-repeat: no-repeat;
+  mask-position: center center;
+  -webkit-mask-size: 128px 128px;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center center;
 }
 
 .piece-supreme-bg,
@@ -3958,12 +4026,13 @@ body {
     margin: 0;
   }
 
-  .wardrobe-set {
-    max-height: calc((100vw - 50px) / 4);
-
-    &:hover,
-    &.wardrobe-opened {
+  .wardrobe .wardrobe-set {
+    @media (hover: hover) {
       max-height: calc(100vw - 50px);
+
+      &:not(:hover):not(:focus-within) {
+        max-height: calc((100vw - 50px) / 4 - 14px);
+      }
     }
   }
 

@@ -143,8 +143,8 @@ async function init() {
         try {
           const leatherProperties = Object.keys(properties).filter((a) => a.includes("texture.leather_"));
 
-          let leatherBase = properties[leatherProperties.filter((a) => !a.includes("_overlay"))[0]];
-          let leatherOverlay = properties[leatherProperties.filter((a) => a.includes("_overlay"))[0]];
+          let leatherBase = properties[leatherProperties.find((a) => !a.includes("_overlay"))];
+          let leatherOverlay = properties[leatherProperties.find((a) => a.includes("_overlay"))];
 
           if (!leatherBase.endsWith(".png")) {
             leatherBase += ".png";
@@ -184,9 +184,9 @@ async function init() {
       } else if (
         Object.keys(properties).filter((a) => a.includes("texture.leather_") && a.includes("_overlay")).length == 1
       ) {
-        const leatherProperties = Object.keys(properties).filter(
+        const leatherProperties = Object.keys(properties).find(
           (a) => a.includes("texture.leather_") && a.includes("_overlay")
-        )[0];
+        );
 
         textureFile = path.resolve(path.dirname(file), properties[leatherProperties]);
       }
