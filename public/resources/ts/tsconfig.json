@@ -7,5 +7,5 @@
     "lib": ["ES2020", "dom", "dom.iterable", "ESNext.String"],
     "outDir": "../js"
   },
-  "include": [".", "common-defer.js"]
+  "include": ["."]
 }
