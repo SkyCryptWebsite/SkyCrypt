@@ -267,7 +267,7 @@ function getSlayerLevel(slayer, slayerName) {
     progress = 1;
   }
 
-  let weight = calcSlayerWeight(slayerName, slayerName === "enderman" ? null : xp);
+  let weight = calcSlayerWeight(slayerName, xp);
 
   return { currentLevel, xp, maxLevel, progress, xpForNext, weight };
 }
