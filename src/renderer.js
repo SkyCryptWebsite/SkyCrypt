@@ -83,6 +83,32 @@ const TALISMANS = [
 
 let itemsSheet, itemsCss;
 
+const textureDir = path.resolve(__dirname, "..", "public", "resources", "img", "textures", "item");
+
+async function renderColoredItem(color, baseImage, overlayImage) {
+  const canvas = createCanvas(16, 16);
+  const ctx = canvas.getContext("2d");
+
+  ctx.imageSmoothingEnabled = false;
+
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.globalCompositeOperation = "multiply";
+
+  ctx.drawImage(baseImage, 0, 0);
+
+  ctx.globalCompositeOperation = "destination-in";
+
+  ctx.drawImage(baseImage, 0, 0);
+
+  ctx.globalCompositeOperation = "source-over";
+
+  ctx.drawImage(overlayImage, 0, 0);
+
+  return await canvas.toBuffer("image/png");
+}
+
 module.exports = {
   renderHead: async (url, scale) => {
     let hat_factor = 0.94;
@@ -241,42 +267,25 @@ module.exports = {
     return await canvas.toBuffer("image/png");
   },
 
-  renderArmor: async (type, color) => {
-    let canvas = createCanvas(128, 128);
-    let ctx = canvas.getContext("2d");
+  async renderArmor(type, color) {
+    const armorBase = await loadImage(path.resolve(textureDir, `leather_${type}.png`));
+    const armorOverlay = await loadImage(path.resolve(textureDir, `leather_${type}_overlay.png`));
 
-    ctx.imageSmoothingEnabled = false;
+    return await renderColoredItem("#" + color, armorBase, armorOverlay);
+  },
 
-    const armorBase = await loadImage(
-      path.resolve(__dirname, "..", "public", "resources", "img", "textures", "item", `leather_${type}.png`)
+  async renderPotion(type, color) {
+    const potionLiquid = await loadImage(path.resolve(textureDir, "potion_overlay.png"));
+    const potionBottlle = await loadImage(
+      path.resolve(textureDir, type === "splash" ? "splash_potion.png" : "potion.png")
     );
-    const armorOverlay = await loadImage(
-      path.resolve(__dirname, "..", "public", "resources", "img", "textures", "item", `leather_${type}_overlay.png`)
-    );
 
-    ctx.drawImage(armorBase, 0, 0, 16, 16, 0, 0, canvas.width, canvas.height);
-
-    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-    for (let i = 0; i < imageData.data.length; i += 4) {
-      let r = imageData.data[i];
-      let alpha = r / 255;
-
-      imageData.data[i] = color[0] * alpha;
-      imageData.data[i + 1] = color[1] * alpha;
-      imageData.data[i + 2] = color[2] * alpha;
-    }
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.putImageData(imageData, 0, 0);
-
-    ctx.drawImage(armorOverlay, 0, 0, 16, 16, 0, 0, canvas.width, canvas.height);
-
-    return await canvas.toBuffer("image/png");
+    return await renderColoredItem("#" + color, potionLiquid, potionBottlle);
   },
 
   renderItem: async (skyblockId, query, db) => {
     let item = { Damage: 0, id: -1 };
+    query = sanitize(query);
 
     if (skyblockId) {
       skyblockId = skyblockId.replace(".gif", "");
@@ -359,6 +368,7 @@ module.exports = {
         outputTexture.mime = "image/gif";
       }
 
+      outputTexture.path = customTexture.path;
       outputTexture.image = await fs.readFile(path.resolve(__dirname, "..", "public", customTexture.path));
     }
 

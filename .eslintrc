@@ -1,12 +1,10 @@
 {
+  "extends": ["eslint:recommended", "prettier"],
   "env": {
-    "browser": true,
     "commonjs": true,
     "es2021": true,
-    "node": true,
-    "worker": true
+    "node": true
   },
-  "extends": ["eslint:recommended", "prettier"],
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 12

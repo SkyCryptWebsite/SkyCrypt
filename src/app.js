@@ -1,6 +1,7 @@
 const cluster = require("cluster");
 const lib = require("./lib");
 const { getFileHashes, getFileHash, hashedDirectories } = require("./hashes");
+const fetch = require("node-fetch");
 
 async function main() {
   const express = require("express");
@@ -67,6 +68,23 @@ async function main() {
   }
   updateIsFoolsDay();
   setInterval(updateIsFoolsDay, 60_000);
+
+  let forceCacheOnly;
+  const badStatuses = ["under_maintenance"];
+  async function updateCacheOnly() {
+    const response = await fetch("https://status.hypixel.net/api/v2/components.json");
+    const data = await response.json();
+    for (const component of data.components) {
+      if (component.name === "Public API") {
+        forceCacheOnly = badStatuses.includes(component.status);
+        if (forceCacheOnly) {
+          console.log("forcing cache only mode");
+        }
+      }
+    }
+  }
+  updateCacheOnly();
+  setInterval(updateCacheOnly, 60_000);
 
   const app = express();
   const port = 32464;
@@ -140,7 +158,7 @@ async function main() {
     return favorites;
   }
 
-  async function getExtra(page = null, favoriteUUIDs = []) {
+  async function getExtra(page = null, favoriteUUIDs = [], cacheOnly) {
     const output = {};
 
     output.twemoji = twemoji;
@@ -150,6 +168,7 @@ async function main() {
     output.packs = lib.getPacks();
 
     output.isFoolsDay = isFoolsDay;
+    output.cacheOnly = cacheOnly;
 
     if ("recaptcha_site_key" in credentials) {
       output.recaptcha_site_key = credentials.recaptcha_site_key;
@@ -191,7 +210,7 @@ async function main() {
       .replace(/[^a-z\d\-_:]/g, "");
     let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
 
-    const cacheOnly = req.query.cache === "true";
+    const cacheOnly = req.query.cache === "true" || forceCacheOnly;
 
     const playerUsername =
       paramPlayer.length == 32 ? await helper.resolveUsernameOrUuid(paramPlayer, db).display_name : paramPlayer;
@@ -228,7 +247,7 @@ async function main() {
           _,
           constants,
           helper,
-          extra: await getExtra("stats", favorites),
+          extra: await getExtra("stats", favorites, cacheOnly),
           fileHashes,
           page: "stats",
         },
@@ -251,7 +270,7 @@ async function main() {
           req,
           error: e,
           player: playerUsername,
-          extra: await getExtra("index", favorites),
+          extra: await getExtra("index", favorites, cacheOnly),
           fileHashes,
           helper,
           page: "index",
@@ -381,27 +400,29 @@ async function main() {
       return;
     }
 
+    if (item.path) {
+      res.set("X-Texture-Path", `${item.path}`);
+    }
+
     res.setHeader("Cache-Control", `public, max-age=${CACHE_DURATION}`);
     res.contentType(item.mime);
     res.send(item.image);
   });
 
   app.all("/leather/:type/:color", cors(), async (req, res) => {
+    const { type, color } = req.params;
+
+    if (!["boots", "leggings", "chestplate", "helmet"].includes(type)) {
+      throw new Error("invalid armor type: " + type);
+    }
+
+    if (!/^[0-9a-fA-F]{6}$/.test(color)) {
+      throw new Error("invalid color: #" + color);
+    }
+
+    const filename = `leather_${type}_${color}.png`;
+
     let file;
-
-    if (!["boots", "leggings", "chestplate", "helmet"].includes(req.params.type)) {
-      throw new Error("invalid armor type");
-    }
-
-    const { type } = req.params;
-
-    const color = req.params.color.split(",");
-
-    if (color.length < 3) {
-      throw new Error("invalid color");
-    }
-
-    const filename = `leather_${type}_${color.join("_")}.png`;
 
     try {
       file = await fs.readFile(path.resolve(cachePath, filename));
@@ -420,8 +441,44 @@ async function main() {
     res.send(file);
   });
 
+  app.all("/potion/:type/:color", cors(), async (req, res) => {
+    const { type, color } = req.params;
+
+    if (!["normal", "splash"].includes(type)) {
+      throw new Error("invalid armor type: " + type);
+    }
+
+    if (!/^[0-9a-fA-F]{6}$/.test(color)) {
+      throw new Error("invalid color: #" + color);
+    }
+
+    const filename = `potion_${type}_${color}.png`;
+
+    let file;
+
+    try {
+      file = await fs.readFile(path.resolve(cachePath, filename));
+    } catch (e) {
+      file = await renderer.renderPotion(type, color);
+
+      fs.writeFile(path.resolve(cachePath, filename), file, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    res.setHeader("Cache-Control", `public, max-age=${CACHE_DURATION}`);
+    res.contentType("image/png");
+    res.send(file);
+  });
+
   app.all("/robots.txt", async (req, res, next) => {
-    res.type("text").send(`User-agent: *\nDisallow: /item /head /leather /resources`);
+    res
+      .type("text")
+      .send(
+        `User-agent: *\nDisallow: /item /cape /head /leather /potion /resources\nSitemap: https://sky.shiiyu.moe/sitemap.xml`
+      );
   });
 
   app.all("/sitemap.xml", async (req, res, next) => {
@@ -526,10 +583,19 @@ async function main() {
   app.all("/", async (req, res, next) => {
     const timeStarted = new Date().getTime();
     const favorites = parseFavorites(req.cookies.favorite);
+    const cacheOnly = req.query.cache === "true" || forceCacheOnly;
 
     res.render(
       "index",
-      { req, error: null, player: null, extra: await getExtra("index", favorites), fileHashes, helper, page: "index" },
+      {
+        req,
+        error: null,
+        player: null,
+        extra: await getExtra("index", favorites, cacheOnly),
+        fileHashes,
+        helper,
+        page: "index",
+      },
       (err, html) => {
         res.set("X-Cluster-ID", `${helper.getClusterId()}`);
         res.set("X-Process-Time", `${new Date().getTime() - timeStarted}`);

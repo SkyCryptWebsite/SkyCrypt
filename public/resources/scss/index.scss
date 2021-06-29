@@ -48,13 +48,13 @@
   --bg-hex: #121212;
 
   /* Header Logo */
-  --logo: url(https://sky.shiiyu.moe/resources/img/logo_square.svg);
+  --logo: url(/resources/img/logo_square.svg);
 
   /* Normal Background */
-  --bg: url(https://sky.shiiyu.moe/resources/img/bg.webp?v3);
+  --bg: url(/resources/img/bg.webp);
 
   /* Blurred Background */
-  --bg_blur: url(https://sky.shiiyu.moe/resources/img/bg_blur.webp?v3);
+  --bg_blur: url(/resources/img/bg_blur.webp);
 
   &.light {
     --text-hex: black;
@@ -167,6 +167,10 @@ html {
   overflow-x: hidden;
   scroll-behavior: smooth;
 
+  &.cache-only {
+    background-blend-mode: luminosity;
+  }
+
   @supports (-webkit-touch-callout: none) {
     background-image: none;
     &:before {
@@ -178,6 +182,9 @@ html {
       left: 0;
       background: var(--bg) no-repeat center center;
       background-size: cover;
+    }
+    &.cache-only:before {
+      filter: grayscale(1);
     }
   }
 }
@@ -622,11 +629,51 @@ input[type="search"]::-webkit-search-cancel-button {
     .light &::before {
       background-color: rgb(235, 235, 235);
     }
+    .cache-only &::before {
+      background-blend-mode: luminosity;
+    }
   }
 
   .light & {
     -webkit-backdrop-filter: blur(16px) contrast(40%) brightness(1.5);
     backdrop-filter: blur(16px) contrast(40%) brightness(1.5);
+  }
+}
+
+.banner {
+  margin: 0;
+  margin-left: calc(-1 * var(--padding));
+  margin-right: calc(-1 * var(--padding));
+  padding: var(--padding);
+  color: white;
+
+  &:not(.error),
+  .light &:not(.error) {
+    background: var(--icon-hex);
+  }
+
+  &.error,
+  .light &.error {
+    background: #b00020;
+  }
+
+  figcaption {
+    font-weight: 700;
+    font-size: 36px;
+  }
+
+  p {
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  a {
+    color: white;
+  }
+
+  .grid & {
+    grid-column: 1/-1;
+    padding: 25px;
   }
 }
 
@@ -1509,10 +1556,6 @@ a.additional-player-stat:hover {
   background-image: url(../img/icons/instagram.png);
 }
 
-.additional-player-stat.external-mixer::after {
-  background-image: url(../img/icons/mixer.png);
-}
-
 .additional-player-stat.external-discord::after {
   background-image: url(../img/icons/discord.png);
 }
@@ -1942,22 +1985,96 @@ a.additional-player-stat:hover {
   font-size: 19px;
 }
 
-.wardrobe-set {
-  vertical-align: top;
-  display: inline-block;
-  max-height: 90px;
-  overflow: hidden;
-  overflow: clip;
-  transition: max-height 0.2s;
+.wardrobe {
+  margin-top: 12px !important; // override .pieces
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  .wardrobe-set {
+    flex-shrink: 0;
+    display: grid;
+    gap: inherit;
+    grid-template-areas: "helmet" "chestplate" "leggings" "boots";
 
-  &:hover,
-  &:focus-within,
-  &.wardrobe-opened {
-    max-height: 360px;
+    .piece {
+      margin: 0;
+
+      &.armor-placeholder {
+        background-color: rgba(var(--background-rgb), 0.3);
+        .piece-icon {
+          background: rgba(var(--text-rgb), 0.8);
+        }
+      }
+
+      &.index-0 {
+        grid-area: helmet;
+        &.armor-placeholder .piece-icon {
+          mask-image: url("/resources/img/textures/item/empty_armor_slot_helmet.png");
+          -webkit-mask-image: url("/resources/img/textures/item/empty_armor_slot_helmet.png");
+        }
+      }
+      &.index-1 {
+        grid-area: chestplate;
+        &.armor-placeholder .piece-icon {
+          mask-image: url("/resources/img/textures/item/empty_armor_slot_chestplate.png");
+          -webkit-mask-image: url("/resources/img/textures/item/empty_armor_slot_chestplate.png");
+        }
+      }
+      &.index-2 {
+        grid-area: leggings;
+        &.armor-placeholder .piece-icon {
+          mask-image: url("/resources/img/textures/item/empty_armor_slot_leggings.png");
+          -webkit-mask-image: url("/resources/img/textures/item/empty_armor_slot_leggings.png");
+        }
+      }
+      &.index-3 {
+        grid-area: boots;
+        &.armor-placeholder .piece-icon {
+          mask-image: url("/resources/img/textures/item/empty_armor_slot_boots.png");
+          -webkit-mask-image: url("/resources/img/textures/item/empty_armor_slot_boots.png");
+        }
+      }
+    }
+
+    @media (hover: hover) {
+      max-height: 360px;
+      overflow: hidden;
+      overflow: clip;
+      transition: max-height 0.2s, gap 0.2s;
+      .armor-placeholder {
+        transition: height 0.2s;
+        .piece-icon {
+          transition: mask-size 0.2s, -webkit-mask-size 0.2s;
+        }
+      }
+
+      &:not(:hover):not(:focus-within) {
+        max-height: 75px;
+        gap: 0;
+        .armor-placeholder {
+          height: 0;
+          .piece-icon {
+            mask-size: 128px 0px;
+            -webkit-mask-size: 128px 0px;
+          }
+        }
+      }
+    }
   }
+  @media (hover: none) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-left: calc(-1 * var(--padding));
+    margin-right: calc(-1 * var(--padding));
+    content-visibility: auto;
+    contain-intrinsic-size: 75px 330px;
 
-  .piece {
-    display: block;
+    > :first-child {
+      margin-inline-start: var(--padding);
+    }
+    > :last-child {
+      margin-inline-end: var(--padding);
+    }
   }
 }
 
@@ -1974,7 +2091,6 @@ a.additional-player-stat:hover {
   user-select: none;
   cursor: context-menu;
   transition: box-shadow 0.2s ease-in-out;
-  background-color: var(--§8);
   box-shadow: rgba(var(--text-rgb), 0) 0 0 0 0px inset;
   content-visibility: auto;
 
@@ -2099,6 +2215,18 @@ a.additional-player-stat:hover {
   }
 }
 
+.item-icon {
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  &.is-enchanted {
+    filter: url(#enchanted-glint);
+    #stats_content &.stats-piece-icon,
+    &.piece-icon {
+      filter: url(#enchanted-glint) drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
+    }
+  }
+}
+
 .piece-icon {
   position: absolute;
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
@@ -2111,8 +2239,15 @@ a.additional-player-stat:hover {
 }
 
 .custom-icon {
+  background-size: 128px auto;
   background-repeat: no-repeat;
   background-position: center center !important;
+  mask-size: 128px 128px;
+  mask-repeat: no-repeat;
+  mask-position: center center;
+  -webkit-mask-size: 128px 128px;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center center;
 }
 
 .piece-supreme-bg,
@@ -3047,6 +3182,16 @@ main.grid {
       background-color: rgba(255, 255, 255, 0.5);
     }
 
+    @supports not ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+      .cache-only &:not(.banner) {
+        background-blend-mode: luminosity;
+        background-color: black;
+      }
+      .cache-only.light &:not(.banner) {
+        background-color: white;
+      }
+    }
+
     @supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
       background: none;
       -webkit-backdrop-filter: blur(16px) brightness(0.5);
@@ -3861,6 +4006,10 @@ body {
     display: none;
   }
 
+  .grid .banner figcaption {
+    font-size: 7vw;
+  }
+
   #show_skills {
     display: block;
   }
@@ -3885,12 +4034,13 @@ body {
     margin: 0;
   }
 
-  .wardrobe-set {
-    max-height: calc((100vw - 50px) / 4);
-
-    &:hover,
-    &.wardrobe-opened {
+  .wardrobe .wardrobe-set {
+    @media (hover: hover) {
       max-height: calc(100vw - 50px);
+
+      &:not(:hover):not(:focus-within) {
+        max-height: calc((100vw - 50px) / 4 - 14px);
+      }
     }
   }
 
@@ -3932,6 +4082,10 @@ body {
 }
 
 @media (max-width: 400px) {
+  .banner figcaption {
+    font-size: 8vw;
+  }
+
   .piece-icon {
     transform: translate(-50%, -50%) scale(0.4);
   }

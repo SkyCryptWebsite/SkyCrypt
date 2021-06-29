@@ -267,7 +267,7 @@ function getSlayerLevel(slayer, slayerName) {
     progress = 1;
   }
 
-  let weight = calcSlayerWeight(slayerName, slayerName === "enderman" ? null : xp);
+  let weight = calcSlayerWeight(slayerName, xp);
 
   return { currentLevel, xp, maxLevel, progress, xpForNext, weight };
 }
@@ -383,6 +383,25 @@ async function getBackpackContents(arraybuf) {
   return items;
 }
 
+const potionColors = {
+  0: "375cc4", // None
+  1: "cb5ba9", // Regeneration
+  2: "420a09", // Speed
+  3: "e19839", // Poison
+  4: "4d9130", // Fire Resistance
+  5: "f52423", // Instant Health
+  6: "1f1f9e", // Night Vision
+  7: "22fc4b", // Jump Boost
+  8: "474c47", // Weakness
+  9: "912423", // Strength
+  10: "5c6e83", // Slowness
+  11: "f500f5", // Uncraftable
+  12: "420a09", // Instant Damage
+  13: "2f549c", // Water Breathing
+  14: "818595", // Invisibility
+  15: "f500f5", // Uncraftable
+};
+
 // Process items returned by API
 async function getItems(base64, customTextures = false, packs, cacheOnly = false) {
   // API stores data as base64 encoded gzipped Minecraft NBT data
@@ -425,27 +444,26 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
 
   for (const item of items) {
     // Set custom texture for colored leather armor
-    if (helper.hasPath(item, "id") && item.id >= 298 && item.id <= 301) {
-      let color = [149, 94, 59];
+    if (typeof item.id === "number" && item.id >= 298 && item.id <= 301) {
+      const color = item.tag?.display?.color?.toString(16).padStart(6, "0") ?? "955e3b";
 
-      if (helper.hasPath(item, "tag", "ExtraAttributes", "color")) {
-        color = item.tag.ExtraAttributes.color.split(":");
-      }
+      const type = ["helmet", "chestplate", "leggings", "boots"][item.id - 298];
 
-      const type = ["leather/helmet", "leather/chestplate", "leather/leggings", "leather/boots"][item.id - 298];
+      item.texture_path = `/leather/${type}/${color}`;
+    }
 
-      item.texture_path = `/${type}/${color.join(",")}`;
+    // Set custom texture for colored potions
+    if (item.id == 373) {
+      const color = potionColors[item.Damage % 16];
+
+      const type = item.Damage & 16384 ? "splash" : "normal";
+
+      item.texture_path = `/potion/${type}/${color}`;
     }
 
     // Set raw display name without color and formatting codes
     if (helper.hasPath(item, "tag", "display", "Name")) {
       item.display_name = helper.getRawLore(item.tag.display.Name);
-    }
-
-    if (helper.hasPath(item, "display_name")) {
-      if (item.display_name == "Water Bottle") {
-        item.Damage = 17;
-      }
     }
 
     // Set print display name (contains HTML)
@@ -490,6 +508,13 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
       } catch (e) {
         console.error(e);
       }
+    }
+
+    // Gives animated texture on certain items, will be overwritten by custom textures
+    switch (getId(item)) {
+      case "SINFUL_DICE":
+        item.texture_path = `/resources/img/items/sinful_dice.png?v6`;
+        break;
     }
 
     // Uses animated skin texture, if present
@@ -627,6 +652,11 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             itemLore.push(`§8${toNextLevel} kills to tier up!`);
           }
         }
+      }
+
+      if (item.tag?.display?.color) {
+        const hex = item.tag.display.color.toString(16).padStart(6, "0");
+        itemLore.push("", `§7Color: #${hex.toUpperCase()}`);
       }
 
       if (item.extra?.timestamp) {
@@ -1103,19 +1133,19 @@ module.exports = {
       const minionLevel = parseInt(split.pop());
       const minionName = split.join("_");
 
-      const minion = minions.filter((a) => a.id == minionName);
+      const minion = minions.find((a) => a.id == minionName);
 
-      if (minion.length == 0) {
+      if (minion == undefined) {
         minions.push(
           Object.assign({ id: minionName, maxLevel: 0, levels: [minionLevel] }, constants.minions[minionName])
         );
       } else {
-        minion[0].levels.push(minionLevel);
+        minion.levels.push(minionLevel);
       }
     }
 
     for (const minion in constants.minions) {
-      if (minions.filter((a) => a.id == minion).length == 0) {
+      if (minions.find((a) => a.id == minion) == undefined) {
         minions.push(Object.assign({ id: minion, levels: [], maxLevel: 0 }, constants.minions[minion]));
       }
     }
@@ -1246,7 +1276,7 @@ module.exports = {
         }
       }
 
-      if (wardrobeSlot.filter((a) => a !== null).length > 0) {
+      if (wardrobeSlot.find((a) => a !== null) != undefined) {
         wardrobe.push(wardrobeSlot);
       }
     }
@@ -1311,11 +1341,11 @@ module.exports = {
 
       const insertTalisman = Object.assign({ isUnique: true, isInactive: false }, talisman);
 
-      if (talismans.filter((a) => !a.isInactive && getId(a) == id).length > 0) {
+      if (talismans.find((a) => !a.isInactive && getId(a) == id) != undefined) {
         insertTalisman.isInactive = true;
       }
 
-      if (talismans.filter((a) => getId(a) == id).length > 0) {
+      if (talismans.find((a) => getId(a) == id) != undefined) {
         insertTalisman.isUnique = false;
       }
 
@@ -1333,11 +1363,11 @@ module.exports = {
 
       const insertTalisman = Object.assign({ isUnique: true, isInactive: false }, talisman);
 
-      if (talismans.filter((a) => !a.isInactive && getId(a) == id).length > 0) {
+      if (talismans.find((a) => !a.isInactive && getId(a) == id) != undefined) {
         insertTalisman.isInactive = true;
       }
 
-      if (talismans.filter((a) => getId(a) == id).length > 0) {
+      if (talismans.find((a) => getId(a) == id) != undefined) {
         insertTalisman.isUnique = false;
       }
 
@@ -1355,11 +1385,11 @@ module.exports = {
 
       const insertTalisman = Object.assign({ isUnique: true, isInactive: false }, talisman);
 
-      if (talismans.filter((a) => !a.isInactive && getId(a) == id).length > 0) {
+      if (talismans.find((a) => !a.isInactive && getId(a) == id) != undefined) {
         insertTalisman.isInactive = true;
       }
 
-      if (talismans.filter((a) => getId(a) == id).length > 0) {
+      if (talismans.find((a) => getId(a) == id) != undefined) {
         insertTalisman.isUnique = false;
       }
 
@@ -1380,7 +1410,7 @@ module.exports = {
 
         const insertTalisman = Object.assign({ isUnique: true, isInactive: true }, talisman);
 
-        if (talismans.filter((a) => getId(a) == id).length > 0) {
+        if (talismans.find((a) => getId(a) == id) != undefined) {
           insertTalisman.isUnique = false;
         }
 
@@ -1426,11 +1456,11 @@ module.exports = {
       if (id in constants.talisman_upgrades) {
         const talismanUpgrades = constants.talisman_upgrades[id];
 
-        if (talismans.filter((a) => !a.isInactive && talismanUpgrades.includes(getId(a))).length > 0) {
+        if (talismans.find((a) => !a.isInactive && talismanUpgrades.includes(getId(a))) != undefined) {
           talisman.isInactive = true;
         }
 
-        if (talismans.filter((a) => talismanUpgrades.includes(getId(a))).length > 0) {
+        if (talismans.find((a) => talismanUpgrades.includes(getId(a))) != undefined) {
           talisman.isUnique = false;
         }
       }
@@ -1438,7 +1468,7 @@ module.exports = {
       if (id in constants.talisman_duplicates) {
         const talismanDuplicates = constants.talisman_duplicates[id];
 
-        if (talismans.filter((a) => talismanDuplicates.includes(getId(a))).length > 0) {
+        if (talismans.find((a) => talismanDuplicates.includes(getId(a))) != undefined) {
           talisman.isUnique = false;
         }
       }
@@ -1681,7 +1711,7 @@ module.exports = {
     }
 
     if (armor.filter((a) => Object.keys(a).length > 2).length == 1) {
-      const armorPiece = armor.filter((a) => Object.keys(a).length > 2)[0];
+      const armorPiece = armor.find((a) => Object.keys(a).length > 2);
 
       output.armor_set = armorPiece.display_name;
       output.armor_set_rarity = armorPiece.rarity;
@@ -2198,7 +2228,7 @@ module.exports = {
       output.stats.defense += 5;
       output.stats.strength += 5;
 
-      const dayCrystal = items.talismans.filter((a) => getId(a) == "DAY_CRYSTAL")[0];
+      const dayCrystal = items.talismans.find((a) => getId(a) == "DAY_CRYSTAL");
 
       dayCrystal.stats.defense = (dayCrystal.stats.defense || 0) + 5;
       dayCrystal.stats.strength = (dayCrystal.stats.strength || 0) + 5;
@@ -3105,24 +3135,12 @@ module.exports = {
       if (pet.level.level < 100) {
         lore.push(`§7Progress to Level ${pet.level.level + 1}: §e${(pet.level.progress * 100).toFixed(1)}%`);
 
-        let levelBar = "";
+        const progress = Math.ceil(pet.level.progress * 20);
 
-        for (let i = 0; i < 20; i++) {
-          if (pet.level.progress > i / 20) {
-            levelBar += "§2";
-          } else {
-            levelBar += "§f";
-          }
-          levelBar += "-";
-        }
+        const numerator = pet.level.xpCurrent.toLocaleString();
+        const denominator = helper.formatNumber(pet.level.xpForNext, false, 10);
 
-        levelBar += ` §e${pet.level.xpCurrent.toLocaleString()} §6/ §e${helper.formatNumber(
-          pet.level.xpForNext,
-          false,
-          10
-        )}`;
-
-        lore.push(levelBar);
+        lore.push(`§2${"-".repeat(progress)}§f${"-".repeat(20 - progress)} §e${numerator} §6/ §e${denominator}`);
       } else {
         lore.push("§bMAX LEVEL");
       }
@@ -3359,7 +3377,7 @@ module.exports = {
         output[type] = { tier, amount, totalAmount, amounts };
       }
 
-      const collectionData = constants.collection_data.filter((a) => a.skyblockId == type)[0];
+      const collectionData = constants.collection_data.find((a) => a.skyblockId == type);
 
       if ("tiers" in collectionData) {
         for (const tier of collectionData.tiers) {
@@ -4140,7 +4158,7 @@ async function init() {
     for (const itemType in response.data.collections[type].items) {
       const item = response.data.collections[type].items[itemType];
       try {
-        const collectionData = constants.collection_data.filter((a) => a.skyblockId == itemType)[0];
+        const collectionData = constants.collection_data.find((a) => a.skyblockId == itemType);
 
         collectionData.maxTier = item.maxTiers;
         collectionData.tiers = item.tiers;
