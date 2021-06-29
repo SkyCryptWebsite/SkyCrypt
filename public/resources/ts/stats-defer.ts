@@ -1,6 +1,9 @@
-/* global calculated:readonly, items:writable, constants:readonly, tippy:readonly, skinview3d:readonly, setCookie:readonly */
+interface Window {
+  tippy: any;
+  skinview3d: any;
+}
 
-const favoriteElement = document.querySelector(".favorite");
+const favoriteElement = document.querySelector(".favorite") as HTMLButtonElement;
 
 if ("share" in navigator) {
   const shareIcon = navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)
@@ -17,7 +20,7 @@ if ("share" in navigator) {
       </button>
     `
   );
-  favoriteElement.nextElementSibling.addEventListener("click", () => {
+  favoriteElement.nextElementSibling?.addEventListener("click", () => {
     navigator.share({
       text: `Check out ${calculated.display_name} on SkyCrypt`,
       url: location.href.split("#")[0],
@@ -25,7 +28,7 @@ if ("share" in navigator) {
   });
 }
 
-function getCookie(c_name) {
+function getCookie(c_name: string) {
   if (document.cookie.length > 0) {
     let c_start = document.cookie.indexOf(c_name + "=");
     if (c_start != -1) {
@@ -40,22 +43,22 @@ function getCookie(c_name) {
   return "";
 }
 
-tippy("*[data-tippy-content]:not(.interactive-tooltip)", {
+window.tippy("*[data-tippy-content]:not(.interactive-tooltip)", {
   trigger: "mouseenter click",
 });
 
-const playerModel = document.getElementById("player_model");
+const playerModel = document.getElementById("player_model") as HTMLElement;
 
-let skinViewer;
+let skinViewer: any;
 
-if (playerModel && calculated.skin_data) {
-  skinViewer = new skinview3d.SkinViewer({
+if (calculated.skin_data) {
+  skinViewer = new window.skinview3d.SkinViewer({
     width: playerModel.offsetWidth,
     height: playerModel.offsetHeight,
     model: calculated.skin_data.model,
     skin: "/texture/" + calculated.skin_data.skinurl.split("/").pop(),
     cape:
-      "capeurl" in calculated.skin_data
+      calculated.skin_data.capeurl != undefined
         ? "/texture/" + calculated.skin_data.capeurl.split("/").pop()
         : "/cape/" + calculated.display_name,
   });
@@ -64,7 +67,7 @@ if (playerModel && calculated.skin_data) {
 
   skinViewer.camera.position.set(-18, -3, 58);
 
-  const controls = new skinview3d.createOrbitControls(skinViewer);
+  const controls = new window.skinview3d.createOrbitControls(skinViewer);
 
   skinViewer.canvas.removeAttribute("tabindex");
 
@@ -82,7 +85,7 @@ if (playerModel && calculated.skin_data) {
   const basicCapeRotationX = Math.PI * 0.06;
 
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    skinViewer.animations.add((player, time) => {
+    skinViewer.animations.add((player: any, time: number) => {
       // Multiply by animation's natural speed
       time *= 2;
 
@@ -101,11 +104,11 @@ if (playerModel && calculated.skin_data) {
   }
 }
 
-tippy(".interactive-tooltip", {
+window.tippy(".interactive-tooltip", {
   trigger: "mouseenter click",
   interactive: true,
   appendTo: () => document.body,
-  onTrigger(instance, event) {
+  onTrigger(instance: any, event: Event) {
     if (event.type == "click") {
       dimmer.classList.add("show-dimmer");
     }
@@ -127,11 +130,11 @@ const all_items = items.armor.concat(
   items.storage
 );
 
-let dimmer = document.querySelector("#dimmer");
+const dimmer = document.querySelector("#dimmer") as HTMLElement;
 
-let inventoryContainer = document.querySelector("#inventory_container");
+const inventoryContainer = document.querySelector("#inventory_container") as HTMLElement;
 
-const url = new URL(location);
+const url = new URL(location.href);
 
 url.searchParams.delete("__cf_chl_jschl_tk__");
 url.searchParams.delete("__cf_chl_captcha_tk__");
@@ -142,23 +145,21 @@ if (calculated.profile.cute_name == "Deleted") {
   url.pathname = `/stats/${calculated.display_name}/${calculated.profile.cute_name}`;
 }
 
-history.replaceState({}, document.title, url);
+history.replaceState({}, document.title, url.href);
 
-function isEnchanted(item) {
-  if (item.animated) {
+function isEnchanted(item: Item) {
+  // heads
+  if ([397].includes(item.id)) {
     return false;
   }
 
-  if (item.id == 399) {
+  // enchanted book, bottle o' enchanting, nether star
+  if ([403, 384, 399].includes(item.id)) {
     return true;
   }
 
-  if ("texture_path" in item && item.texture_path.endsWith(".gif")) {
-    // disable enchanted overlay for gifs cause laggy
-    return false;
-  }
-
-  if ("id" in item && [403, 384].includes(item.id)) {
+  //potions with actual effects (not water bottles)
+  if (item.id === 373 && item.Damage !== 0) {
     return true;
   }
 
@@ -169,20 +170,23 @@ function isEnchanted(item) {
   return false;
 }
 
-function renderLore(text) {
+type colorCode = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "0" | "a" | "b" | "c" | "d" | "e" | "f";
+type formatCode = "k" | "l" | "m" | "n" | "o";
+
+function renderLore(text: string) {
   let output = "";
 
-  let color = null;
-  let formats = new Set();
+  let color: colorCode | null = null;
+  const formats = new Set<formatCode>();
 
-  for (let part of text.match(/(§[0-9a-fk-or])*[^§]*/g)) {
+  for (let part of text.match(/(§[0-9a-fk-or])*[^§]*/g) ?? []) {
     while (part.charAt(0) === "§") {
       const code = part.charAt(1);
 
       if (/[0-9a-f]/.test(code)) {
-        color = code;
+        color = code as colorCode;
       } else if (/[k-o]/.test(code)) {
-        formats.add(code);
+        formats.add(code as formatCode);
       } else if (code === "r") {
         color = null;
         formats.clear();
@@ -218,16 +222,16 @@ function renderLore(text) {
   return output;
 }
 
-let currentBackpack;
+let currentBackpack: Backpack;
 
-function renderInventory(inventory, type) {
-  let visibleInventory = document.querySelector(".stat-inventory .inventory-view");
+function renderInventory(inventory: ItemSlot[], type: string) {
+  const visibleInventory = document.querySelector(".stat-inventory .inventory-view");
 
   if (visibleInventory) {
-    document.querySelector("#inventory_container").removeChild(visibleInventory);
+    document.querySelector("#inventory_container")?.removeChild(visibleInventory);
   }
 
-  let inventoryView = document.createElement("div");
+  const inventoryView = document.createElement("div");
   inventoryView.className = "inventory-view processed";
   inventoryView.setAttribute("data-inventory-type", type);
 
@@ -240,17 +244,17 @@ function renderInventory(inventory, type) {
     pagesize = 6 * 9;
   }
 
-  inventory.forEach(function (item, index) {
-    let inventorySlot = document.createElement("div");
+  inventory.forEach((item: Item | ItemSlot, index) => {
+    const inventorySlot = document.createElement("div");
     inventorySlot.className = "inventory-slot";
 
-    if (item.id) {
-      let inventoryItemIcon = document.createElement("div");
-      let inventoryItemCount = document.createElement("div");
+    if ("id" in item) {
+      const inventoryItemIcon = document.createElement("div");
+      const inventoryItemCount = document.createElement("div");
 
       inventoryItemIcon.className = "piece-icon item-icon icon-" + item.id + "_" + item.Damage;
 
-      if (item.texture_path) {
+      if ("texture_path" in item) {
         inventoryItemIcon.className += " custom-icon";
         inventoryItemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
       }
@@ -260,19 +264,19 @@ function renderInventory(inventory, type) {
       }
 
       inventoryItemCount.className = "item-count";
-      inventoryItemCount.innerHTML = item.Count;
+      inventoryItemCount.innerHTML = item.Count.toString();
 
-      let inventoryItem = document.createElement("div");
+      const inventoryItem = document.createElement("div");
 
-      let pieceHoverArea = document.createElement("div");
+      const pieceHoverArea = document.createElement("div");
       pieceHoverArea.className = "piece-hover-area";
 
       inventoryItem.className = "rich-item inventory-item";
 
       if (type === "backpack") {
-        inventoryItem.setAttribute("data-backpack-item-index", index);
+        inventoryItem.setAttribute("data-backpack-item-index", index.toString());
       } else {
-        inventoryItem.setAttribute("data-item-index", item.item_index);
+        inventoryItem.setAttribute("data-item-index", item.item_index.toString());
       }
 
       inventoryItem.appendChild(inventoryItemIcon);
@@ -296,9 +300,7 @@ function renderInventory(inventory, type) {
 
   inventoryContainer.appendChild(inventoryView);
 
-  [].forEach.call(inventoryView.querySelectorAll(".item-icon.is-enchanted"), handleEnchanted);
-
-  const rect = document.querySelector("#inventory_container").getBoundingClientRect();
+  const rect = (document.querySelector("#inventory_container") as HTMLElement).getBoundingClientRect();
 
   if (rect.top > 100 && rect.bottom > window.innerHeight) {
     let top;
@@ -312,8 +314,12 @@ function renderInventory(inventory, type) {
   }
 }
 
-function showBackpack(item) {
-  let activeInventory = document.querySelector(".inventory-tab.active-inventory");
+function isBackpack(item: DisplayItem): item is Backpack {
+  return "containsItems" in item;
+}
+
+function showBackpack(item: Backpack) {
+  const activeInventory = document.querySelector(".inventory-tab.active-inventory");
 
   if (activeInventory) {
     activeInventory.classList.remove("active-inventory");
@@ -324,84 +330,73 @@ function showBackpack(item) {
   currentBackpack = item;
 }
 
-function fillLore(element) {
-  let item = [];
+function fillLore(element: HTMLElement) {
+  let item: DisplayItem | Item | Pet | undefined = undefined;
 
   if (element.hasAttribute("data-backpack-index")) {
-    let backpack = all_items.filter((a) => a.item_index == Number(element.getAttribute("data-backpack-index")));
+    const backpack = all_items.find(
+      (a) => a.item_index == parseInt(element.getAttribute("data-backpack-index") as string)
+    ) as Backpack | undefined;
 
-    if (backpack.length == 0) {
+    if (backpack == undefined) {
       return;
     }
 
-    backpack = backpack[0];
-
-    item = backpack.containsItems.filter((a) => a.item_index == Number(element.getAttribute("data-item-index")));
+    item = backpack?.containsItems?.find(
+      (a) => a.item_index == parseInt(element.getAttribute("data-item-index") as string)
+    );
   } else if (element.hasAttribute("data-item-index")) {
-    item = all_items.filter((a) => a.item_index == Number(element.getAttribute("data-item-index")));
+    item = all_items.find((a) => a.item_index == parseInt(element.getAttribute("data-item-index") as string)) as Item;
   } else if (element.hasAttribute("data-backpack-item-index")) {
-    item = [currentBackpack.containsItems[Number(element.getAttribute("data-backpack-item-index"))]];
+    item = currentBackpack.containsItems[parseInt(element.getAttribute("data-backpack-item-index") as string)];
   } else if (element.hasAttribute("data-pet-index")) {
-    item = [calculated.pets[parseInt(element.getAttribute("data-pet-index"))]];
+    item = calculated.pets[parseInt(element.getAttribute("data-pet-index") as string)];
   } else if (element.hasAttribute("data-missing-pet-index")) {
-    item = [calculated.missingPets[parseInt(element.getAttribute("data-missing-pet-index"))]];
+    item = calculated.missingPets[parseInt(element.getAttribute("data-missing-pet-index") as string)];
   } else if (element.hasAttribute("data-missing-talisman-index")) {
-    item = [calculated.missingTalismans.missing[parseInt(element.getAttribute("data-missing-talisman-index"))]];
+    item = calculated.missingTalismans.missing[parseInt(element.getAttribute("data-missing-talisman-index") as string)];
   } else if (element.hasAttribute("data-upgrade-talisman-index")) {
-    item = [calculated.missingTalismans.upgrades[parseInt(element.getAttribute("data-upgrade-talisman-index"))]];
+    item =
+      calculated.missingTalismans.upgrades[parseInt(element.getAttribute("data-upgrade-talisman-index") as string)];
   }
 
-  if (item.length == 0) {
+  if (item == undefined) {
     return;
-  }
-
-  item = item[0];
-
-  if (element.hasAttribute("data-item-index")) {
-    statsContent.setAttribute("data-item-index", item.item_index);
-  } else if (element.hasAttribute("data-backpack-item-index")) {
-    statsContent.setAttribute("data-backpack-item-index", element.getAttribute("data-backpack-item-index"));
-  } else if (element.hasAttribute("data-pet-index")) {
-    statsContent.setAttribute("data-backpack-item-index", element.getAttribute("data-pet-index"));
   }
 
   itemName.className = `item-name piece-${item.rarity || "common"}-bg nice-colors-dark`;
   itemNameContent.innerHTML = item.display_name_print || item.display_name || "null";
 
   if (element.hasAttribute("data-pet-index")) {
-    itemNameContent.innerHTML = `[Lvl ${item.level.level}] ${item.display_name_print || item.display_name}`;
+    itemNameContent.innerHTML = `[Lvl ${(item as Pet).level.level}] ${item.display_name_print || item.display_name}`;
   }
 
   if (item.texture_path) {
     itemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
     itemIcon.className = "stats-piece-icon item-icon custom-icon";
-  } else {
+  } else if ("id" in item) {
     itemIcon.removeAttribute("style");
     itemIcon.classList.remove("custom-icon");
     itemIcon.className = "stats-piece-icon item-icon icon-" + item.id + "_" + item.Damage;
+  } else {
+    throw new Error("item mush have either an id and a damage or a texture_path");
   }
 
-  /* broken sometimes
-  if (isEnchanted(item)) {
-    handleEnchanted(itemIcon);
-  }
-  */
-
-  itemLore.innerHTML = item.lore || "";
-
-  try {
-    if (item.lore != null) {
-      throw null;
-    }
-
-    item.tag.display.Lore.forEach(function (line, index) {
-      itemLore.innerHTML += '<span class="lore-row">' + renderLore(line) + "</span>";
-    });
-  } catch (e) {
-    console.error(e);
+  if ("id" in item && isEnchanted(item)) {
+    itemIcon.classList.add("is-enchanted");
   }
 
-  if (item.texture_pack) {
+  if ("lore" in item) {
+    itemLore.innerHTML = item.lore;
+  } else if ("tag" in item && Array.isArray(item.tag.display?.Lore)) {
+    itemLore.innerHTML = item.tag.display.Lore.map(
+      (line: string) => '<span class="lore-row">' + renderLore(line) + "</span>"
+    ).join("");
+  } else {
+    itemLore.innerHTML = "";
+  }
+
+  if ("texture_pack" in item && item.texture_pack != undefined) {
     const packContent = document.createElement("a");
     packContent.setAttribute("href", item.texture_pack.url);
     packContent.setAttribute("target", "_blank");
@@ -429,18 +424,18 @@ function fillLore(element) {
 
   backpackContents.innerHTML = "";
 
-  if (Array.isArray(item.containsItems)) {
+  if (isBackpack(item)) {
     backpackContents.classList.add("contains-backpack");
 
-    item.containsItems.forEach((backpackItem, index) => {
-      let inventorySlot = document.createElement("div");
+    item.containsItems.forEach((backpackItem) => {
+      const inventorySlot = document.createElement("div");
       inventorySlot.className = "inventory-slot";
 
       if (backpackItem.id) {
-        let inventoryItemIcon = document.createElement("div");
-        let inventoryItemCount = document.createElement("div");
+        const inventoryItemIcon = document.createElement("div");
+        const inventoryItemCount = document.createElement("div");
 
-        let enchantedClass = isEnchanted(backpackItem) ? "is-enchanted" : "";
+        const enchantedClass = isEnchanted(backpackItem) ? "is-enchanted" : "";
 
         inventoryItemIcon.className =
           "piece-icon item-icon " + enchantedClass + " icon-" + backpackItem.id + "_" + backpackItem.Damage;
@@ -451,9 +446,9 @@ function fillLore(element) {
         }
 
         inventoryItemCount.className = "item-count";
-        inventoryItemCount.innerHTML = backpackItem.Count;
+        inventoryItemCount.innerHTML = backpackItem.Count.toString();
 
-        let inventoryItem = document.createElement("div");
+        const inventoryItem = document.createElement("div");
 
         inventoryItem.className = "inventory-item";
 
@@ -471,19 +466,17 @@ function fillLore(element) {
       backpackContents.appendChild(document.createTextNode(" "));
     });
 
-    [].forEach.call(document.querySelectorAll(".contains-backpack .item-icon.is-enchanted"), handleEnchanted);
+    const viewBackpack = document.createElement("div");
+    viewBackpack.classList.add("view-backpack");
 
-    let viewBackpack = document.createElement("div");
-    viewBackpack.classList = "view-backpack";
-
-    let viewBackpackText = document.createElement("div");
+    const viewBackpackText = document.createElement("div");
     viewBackpackText.innerHTML =
       "<span>View Backpack</span><br><span>(Right click backpack to immediately open)</span>";
 
     viewBackpack.appendChild(viewBackpackText);
 
-    viewBackpack.addEventListener("click", function () {
-      showBackpack(item);
+    viewBackpack.addEventListener("click", () => {
+      showBackpack(item as Backpack);
       closeLore();
     });
 
@@ -493,7 +486,7 @@ function fillLore(element) {
   }
 }
 
-function showLore(element, _resize) {
+function showLore(element: HTMLElement, _resize?: boolean) {
   statsContent.classList.add("sticky-stats");
   element.classList.add("sticky-stats");
   dimmer.classList.add("show-dimmer");
@@ -504,12 +497,12 @@ function showLore(element, _resize) {
 }
 
 function closeLore() {
-  let shownLore = document.querySelector("#stats_content.show-stats, #stats_content.sticky-stats");
+  const shownLore = document.querySelector<HTMLElement>("#stats_content.show-stats, #stats_content.sticky-stats");
 
   if (shownLore != null) {
     dimmer.classList.remove("show-dimmer");
 
-    let stickyStatsPiece = document.querySelector(".rich-item.sticky-stats");
+    const stickyStatsPiece = document.querySelector<HTMLElement>(".rich-item.sticky-stats");
 
     if (stickyStatsPiece != null) {
       stickyStatsPiece.blur();
@@ -518,32 +511,24 @@ function closeLore() {
 
     statsContent.classList.remove("sticky-stats", "show-stats");
   }
-
-  const openedWardrobe = document.querySelector(".wardrobe-opened");
-
-  if (openedWardrobe) {
-    openedWardrobe.classList.remove("wardrobe-opened");
-  }
 }
 
-let oldWidth = null;
+let playerModelIsMobile = false;
 
-const navBar = document.querySelector("#nav_bar");
-const navBarLinks = navBar.querySelectorAll(".nav-item");
-let navBarHeight;
+const navBar = document.querySelector("#nav_bar") as HTMLElement;
+const navBarLinks = navBar.querySelectorAll<HTMLAnchorElement>(".nav-item");
+let navBarHeight: number;
 
 function resize() {
-  if (playerModel) {
-    if (window.innerWidth <= 1570 && (oldWidth === null || oldWidth > 1570)) {
-      document.getElementById("skin_display_mobile").appendChild(playerModel);
-    }
-
-    if (window.innerWidth > 1570 && oldWidth <= 1570) {
-      document.getElementById("skin_display").appendChild(playerModel);
-    }
+  if (window.innerWidth <= 1590 && !playerModelIsMobile) {
+    playerModelIsMobile = true;
+    document.getElementById("skin_display_mobile")?.appendChild(playerModel);
+  } else if (window.innerWidth > 1590 && playerModelIsMobile) {
+    playerModelIsMobile = false;
+    document.getElementById("skin_display")?.appendChild(playerModel);
   }
 
-  tippy("*[data-tippy-content]");
+  window.tippy("*[data-tippy-content]");
 
   if (playerModel && skinViewer) {
     if (playerModel.offsetWidth / playerModel.offsetHeight < 0.6) {
@@ -555,14 +540,14 @@ function resize() {
 
   navBarHeight = parseFloat(getComputedStyle(navBar).top);
 
-  let element = document.querySelector(".rich-item.sticky-stats");
+  const element = document.querySelector<HTMLElement>(".rich-item.sticky-stats");
 
   if (element == null) {
     return;
   }
 
-  let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
-  let rect = element.getBoundingClientRect();
+  const maxTop = window.innerHeight - statsContent.offsetHeight - 20;
+  const rect = element.getBoundingClientRect();
 
   if (rect.x) {
     statsContent.style.left = rect.x - statsContent.offsetWidth - 10 + "px";
@@ -572,66 +557,65 @@ function resize() {
     statsContent.style.top =
       Math.max(70, Math.min(maxTop, rect.y + element.offsetHeight / 2 - statsContent.offsetHeight / 2)) + "px";
   }
-
-  oldWidth = window.innerWidth;
 }
 
 document.querySelectorAll(".extender").forEach((element) => {
   element.addEventListener("click", () =>
-    element.setAttribute("aria-expanded", element.getAttribute("aria-expanded") != "true")
+    element.setAttribute("aria-expanded", (element.getAttribute("aria-expanded") != "true").toString())
   );
 });
 
-function flashForUpdate(element) {
+function flashForUpdate(element: HTMLElement) {
   element.classList.add("updated");
   element.addEventListener("animationend", () => {
     element.classList.remove("updated");
   });
 }
 
-[].forEach.call(document.querySelectorAll(".stat-weapons .select-weapon"), function (element) {
-  let itemId = element.parentNode.getAttribute("data-item-id");
+for (const element of document.querySelectorAll<HTMLElement>(".stat-weapons .select-weapon")) {
+  const parent = element.parentElement as HTMLElement;
+  const itemId = parent.getAttribute("data-item-id") as string;
   let filterItems;
 
-  if (element.parentNode.hasAttribute("data-backpack-index")) {
-    let backpack = all_items.filter(
-      (a) => a.item_index == Number(element.parentNode.getAttribute("data-backpack-index"))
-    );
+  if (parent.hasAttribute("data-backpack-index")) {
+    const backpack = all_items.find((a) => a.item_index == Number(parent.getAttribute("data-backpack-index"))) as
+      | Backpack
+      | undefined;
 
-    if (backpack.length == 0) {
-      return;
+    if (backpack == undefined) {
+      break;
     }
 
-    filterItems = backpack[0].containsItems;
+    filterItems = backpack.containsItems;
   } else {
     filterItems = items.weapons.filter((a) => !("backpackIndex" in a));
   }
 
-  let item = filterItems.filter((a) => a.itemId == itemId)[0];
+  const item = filterItems.find((a) => a.itemId == itemId) as Item;
 
-  let weaponStats = calculated.weapon_stats[itemId];
+  const weaponStats = calculated.weapon_stats[itemId];
   let stats;
 
-  element.addEventListener("mousedown", function (e) {
-    e.preventDefault();
+  element.addEventListener("mousedown", (event) => {
+    event.preventDefault();
   });
 
-  const activeWeaponElement = document.querySelector(".stat-active-weapon");
+  const activeWeaponElement = document.querySelector(".stat-active-weapon") as HTMLElement;
 
-  element.addEventListener("click", function (e) {
-    if (element.parentNode.classList.contains("piece-selected")) {
-      element.parentNode.classList.remove("piece-selected");
+  element.addEventListener("click", () => {
+    if (parent.classList.contains("piece-selected")) {
+      parent.classList.remove("piece-selected");
 
       stats = calculated.stats;
 
       activeWeaponElement.className = "stat-value stat-active-weapon piece-common-fg";
       activeWeaponElement.innerHTML = "None";
     } else {
-      [].forEach.call(document.querySelectorAll(".stat-weapons .piece"), function (_element) {
+      for (const _element of document.querySelectorAll(".stat-weapons .piece")) {
         _element.classList.remove("piece-selected");
-      });
+      }
 
-      element.parentNode.classList.add("piece-selected");
+      parent.classList.add("piece-selected");
 
       activeWeaponElement.className = "stat-value stat-active-weapon piece-" + item.rarity + "-fg";
       activeWeaponElement.innerHTML = item.display_name_print || item.display_name;
@@ -643,55 +627,57 @@ function flashForUpdate(element) {
 
     for (const stat in stats) {
       if (stat != "sea_creature_chance") {
-        updateStat(stat, stats[stat]);
+        updateStat(stat as StatName, stats[stat as StatName]);
       }
     }
   });
-});
+}
 
-[].forEach.call(document.querySelectorAll(".stat-fishing .select-rod"), function (element) {
-  let itemId = element.parentNode.getAttribute("data-item-id");
+for (const element of document.querySelectorAll<HTMLElement>(".stat-fishing .select-rod")) {
+  const parent = element.parentElement as HTMLElement;
+  const itemId = parent.getAttribute("data-item-id") as string;
   let filterItems;
 
-  if (element.parentNode.hasAttribute("data-backpack-index")) {
-    let backpack = all_items.filter(
-      (a) => a.item_index == Number(element.parentNode.getAttribute("data-backpack-index"))
-    );
+  if (parent.hasAttribute("data-backpack-index")) {
+    const backpack = all_items.find((a) => a.item_index == Number(parent.getAttribute("data-backpack-index"))) as
+      | Backpack
+      | undefined;
 
-    if (backpack.length == 0) {
-      return;
+    if (backpack == undefined) {
+      break;
     }
 
-    filterItems = backpack[0].containsItems;
+    filterItems = backpack.containsItems;
   } else {
     filterItems = items.rods.filter((a) => !("backpackIndex" in a));
   }
 
-  let item = filterItems.filter((a) => a.itemId == itemId)[0];
+  const item = filterItems.find((a) => a.itemId == itemId) as Item;
 
-  let weaponStats = calculated.weapon_stats[itemId];
+  //TODO find out why weapon stats is used in fishing rods section
+  const weaponStats = calculated.weapon_stats[itemId];
   let stats;
 
-  element.addEventListener("mousedown", function (e) {
-    e.preventDefault();
+  element.addEventListener("mousedown", (event) => {
+    event.preventDefault();
   });
 
-  const activeRodElement = document.querySelector(".stat-active-rod");
+  const activeRodElement = document.querySelector(".stat-active-rod") as HTMLElement;
 
-  element.addEventListener("click", function (e) {
-    if (element.parentNode.classList.contains("piece-selected")) {
-      element.parentNode.classList.remove("piece-selected");
+  element.addEventListener("click", () => {
+    if (parent.classList.contains("piece-selected")) {
+      parent.classList.remove("piece-selected");
 
       stats = calculated.stats;
 
       activeRodElement.className = "stat-value stat-active-rod piece-common-fg";
       activeRodElement.innerHTML = "None";
     } else {
-      [].forEach.call(document.querySelectorAll(".stat-fishing .piece"), function (_element) {
+      for (const _element of document.querySelectorAll(".stat-fishing .piece")) {
         _element.classList.remove("piece-selected");
-      });
+      }
 
-      element.parentNode.classList.add("piece-selected");
+      parent.classList.add("piece-selected");
 
       activeRodElement.className = "stat-value stat-active-rod piece-" + item.rarity + "-fg";
       activeRodElement.innerHTML = item.display_name_print || item.display_name;
@@ -703,10 +689,10 @@ function flashForUpdate(element) {
 
     updateStat("sea_creature_chance", stats.sea_creature_chance);
   });
-});
+}
 
-function updateStat(stat, newValue) {
-  const elements = document.querySelectorAll(".basic-stat[data-stat=" + stat + "] .stat-value");
+function updateStat(stat: StatName, newValue: number) {
+  const elements = document.querySelectorAll<HTMLElement>(".basic-stat[data-stat=" + stat + "] .stat-value");
 
   for (const element of elements) {
     const currentValue = parseFloat(element.innerHTML.replaceAll(",", ""));
@@ -718,77 +704,15 @@ function updateStat(stat, newValue) {
   }
 }
 
-function getPart(src, x, y, width, height) {
-  let dst = document.createElement("canvas");
-  dst.width = width;
-  dst.height = height;
+for (const element of document.querySelectorAll(".inventory-tab")) {
+  const type = element.getAttribute("data-inventory-type") as string;
 
-  let ctx = dst.getContext("2d");
-
-  // don't blur on resize
-  ctx.imageSmoothingEnabled = false;
-
-  ctx.drawImage(src, x, y, width, height, 0, 0, (width - src.width) / 2 + width, (height - src.height) / 2 + height);
-  return dst;
-}
-
-function handleEnchanted(element) {
-  let size = 128;
-
-  let canvas = document.createElement("canvas");
-  canvas.width = size;
-  canvas.height = size;
-
-  let ctx = canvas.getContext("2d");
-
-  let src = window.getComputedStyle(element).backgroundImage.split('("').pop().split('")')[0];
-  let image = new Image(128, src.includes("/head/") ? 118 : 128);
-
-  if (src.endsWith(".gif")) {
-    return false;
-  }
-
-  image.onload = function () {
-    if (!element.classList.contains("custom-icon")) {
-      let position = window.getComputedStyle(element).backgroundPosition.split(" ");
-      let x = Math.abs(parseInt(position[0]));
-      let y = Math.abs(parseInt(position[1]));
-      image = getPart(image, x, y, size, size);
-    }
-
-    ctx.globalAlpha = 1;
-
-    ctx.drawImage(image, 0, 128 / 2 - image.height / 2);
-
-    ctx.globalAlpha = 0.5;
-    ctx.globalCompositeOperation = "source-atop";
-
-    ctx.drawImage(enchantedGlint, 0, 0, canvas.width, canvas.height);
-
-    element.style.backgroundImage = "url(" + canvas.toDataURL("image/png") + ")";
-    element.classList.add("custom-icon");
-  };
-
-  image.src = src;
-}
-
-let enchantedGlint = new Image(128, 128);
-
-enchantedGlint.onload = function () {
-  [].forEach.call(document.querySelectorAll(".item-icon.is-enchanted"), handleEnchanted);
-};
-
-enchantedGlint.src = "/resources/img/glint.png";
-
-[].forEach.call(document.querySelectorAll(".inventory-tab"), function (element) {
-  let type = element.getAttribute("data-inventory-type");
-
-  element.addEventListener("click", function () {
+  element.addEventListener("click", () => {
     if (element.classList.contains("active-inventory")) {
       return;
     }
 
-    let activeInventory = document.querySelector(".inventory-tab.active-inventory");
+    const activeInventory = document.querySelector<HTMLElement>(".inventory-tab.active-inventory");
 
     if (activeInventory) {
       activeInventory.classList.remove("active-inventory");
@@ -798,56 +722,35 @@ enchantedGlint.src = "/resources/img/glint.png";
 
     renderInventory(items[type], type);
   });
-});
-
-const statsContent = document.querySelector("#stats_content");
-const itemName = statsContent.querySelector(".item-name");
-const itemIcon = itemName.querySelector("div:first-child");
-const itemNameContent = itemName.querySelector("span");
-const itemLore = statsContent.querySelector(".item-lore");
-const backpackContents = statsContent.querySelector(".backpack-contents");
-
-const touchDevice = window.matchMedia("(pointer: coarse)").matches;
-
-function bindWardrobeEvents(element) {
-  element.addEventListener("click", function (e) {
-    const currentWardrobe = document.querySelector(".wardrobe-opened");
-
-    if (currentWardrobe) {
-      currentWardrobe.classList.remove("wardrobe-opened");
-    }
-
-    element.classList.add("wardrobe-opened");
-  });
 }
 
-function bindLoreEvents(element) {
-  element.addEventListener("mouseenter", function (e) {
-    fillLore(element.parentNode, false);
+const statsContent = document.querySelector("#stats_content") as HTMLElement;
+const itemName = statsContent.querySelector(".item-name") as HTMLElement;
+const itemIcon = itemName.querySelector("div:first-child") as HTMLDivElement;
+const itemNameContent = itemName.querySelector("span") as HTMLSpanElement;
+const itemLore = statsContent.querySelector(".item-lore") as HTMLElement;
+const backpackContents = statsContent.querySelector(".backpack-contents") as HTMLElement;
 
-    if (
-      touchDevice &&
-      element.parentNode.classList.contains("wardrobe-piece") &&
-      !element.parentNode.parentNode.classList.contains("wardrobe-opened")
-    ) {
-      return;
-    }
+function bindLoreEvents(element: HTMLElement) {
+  const parent = element.parentElement as HTMLElement;
+  element.addEventListener("mouseenter", () => {
+    fillLore(parent);
 
     statsContent.classList.add("show-stats");
   });
 
-  element.addEventListener("mouseleave", function (e) {
+  element.addEventListener("mouseleave", () => {
     statsContent.classList.remove("show-stats");
     element.classList.remove("piece-hovered");
   });
 
-  element.addEventListener("mousemove", function (e) {
+  element.addEventListener("mousemove", (event) => {
     if (statsContent.classList.contains("sticky-stats")) {
       return;
     }
 
-    let maxTop = window.innerHeight - statsContent.offsetHeight - 20;
-    let rect = element.getBoundingClientRect();
+    const maxTop = window.innerHeight - statsContent.offsetHeight - 20;
+    const rect = element.getBoundingClientRect();
 
     let left = rect.x - statsContent.offsetWidth - 10;
 
@@ -859,78 +762,59 @@ function bindLoreEvents(element) {
       statsContent.style.left = left + "px";
     }
 
-    let top = Math.max(70, Math.min(maxTop, e.clientY - statsContent.offsetHeight / 2));
+    const top = Math.max(70, Math.min(maxTop, event.clientY - statsContent.offsetHeight / 2));
 
     statsContent.style.top = top + "px";
   });
 
-  const itemIndex = Number(element.parentNode.getAttribute("data-item-index"));
-  let item = all_items.filter((a) => a.item_index == itemIndex);
+  const itemIndex = Number(parent.getAttribute("data-item-index"));
+  const item = all_items.find((a) => a.item_index == itemIndex);
 
-  if (item.length > 0) {
-    item = item[0];
-  }
-
-  if (item && Array.isArray(item.containsItems)) {
-    element.parentNode.addEventListener("contextmenu", function (e) {
-      e.preventDefault();
+  if (item && "containsItems" in item) {
+    parent.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
 
       showBackpack(item);
       closeLore();
     });
   }
 
-  element.addEventListener("click", function (e) {
-    if (
-      touchDevice &&
-      element.parentNode.classList.contains("wardrobe-piece") &&
-      !element.parentNode.parentNode.classList.contains("wardrobe-opened")
-    ) {
-      element.parentNode.blur();
-      return;
-    }
-
-    if (element.parentNode.parentNode.classList.contains("wardrobe-set")) {
-      element.parentNode.parentNode.classList.add("wardrobe-opened");
-    }
-
-    if (e.ctrlKey && item && Array.isArray(item.containsItems)) {
+  element.addEventListener("click", (event) => {
+    if (event.ctrlKey && item && "containsItems" in item) {
       showBackpack(item);
       closeLore();
     } else {
       if (statsContent.classList.contains("sticky-stats")) {
         closeLore();
       } else {
-        showLore(element.parentNode, false);
+        showLore(parent, false);
 
         if (Number(statsContent.getAttribute("data-item-index")) != itemIndex) {
-          fillLore(element.parentNode);
+          fillLore(parent);
         }
       }
     }
   });
 }
 
-if (touchDevice) {
-  [].forEach.call(document.querySelectorAll(".wardrobe-set"), bindWardrobeEvents);
+for (const element of document.querySelectorAll<HTMLElement>(".rich-item .piece-hover-area")) {
+  bindLoreEvents(element);
 }
 
-[].forEach.call(document.querySelectorAll(".rich-item .piece-hover-area"), bindLoreEvents);
+const enableApiPlayer = document.querySelector("#enable_api") as HTMLVideoElement;
 
-let enableApiPlayer = document.querySelector("#enable_api");
-
-[].forEach.call(document.querySelectorAll(".enable-api"), function (element) {
-  element.addEventListener("click", function (e) {
-    e.preventDefault();
+for (const element of document.querySelectorAll(".enable-api")) {
+  element.addEventListener("click", (event) => {
+    event.preventDefault();
     dimmer.classList.add("show-dimmer");
     enableApiPlayer.classList.add("show");
 
     enableApiPlayer.currentTime = 0;
     enableApiPlayer.play();
   });
-});
+}
 
-enableApiPlayer.addEventListener("click", function (event) {
+enableApiPlayer.addEventListener("click", (event) => {
   event.stopPropagation();
   if (enableApiPlayer.paused) {
     enableApiPlayer.play();
@@ -939,59 +823,59 @@ enableApiPlayer.addEventListener("click", function (event) {
   }
 });
 
-dimmer.addEventListener("click", function (e) {
+dimmer.addEventListener("click", () => {
   dimmer.classList.remove("show-dimmer");
   enableApiPlayer.classList.remove("show");
 
   closeLore();
 });
 
-[].forEach.call(document.querySelectorAll(".close-lore"), function (element) {
+for (const element of document.querySelectorAll<HTMLElement>(".close-lore")) {
   element.addEventListener("click", closeLore);
-});
+}
 
-[].forEach.call(document.querySelectorAll(".copy-text"), function (e) {
-  let element = e;
-
-  let copyNotification = tippy(element, {
+for (const element of document.querySelectorAll<HTMLElement>(".copy-text")) {
+  const copyNotification = window.tippy(element, {
     content: "Copied to clipboard!",
     trigger: "manual",
   });
 
-  element.addEventListener("click", function () {
-    navigator.clipboard.writeText(element.getAttribute("data-copy-text")).then(
-      function () {
+  element.addEventListener("click", () => {
+    const text = element.getAttribute("data-copy-text");
+    if (text != null) {
+      navigator.clipboard.writeText(text).then(() => {
         copyNotification.show();
 
-        setTimeout(function () {
+        setTimeout(() => {
           copyNotification.hide();
         }, 1500);
-      },
-      function () {}
-    );
+      });
+    }
   });
-});
+}
 
-function parseFavorites(cookie) {
+function parseFavorites(cookie: string) {
   return cookie?.split(",").filter((uuid) => /^[0-9a-f]{32}$/.test(uuid)) || [];
 }
 
 function checkFavorite() {
-  const favorited = parseFavorites(getCookie("favorite")).includes(favoriteElement.getAttribute("data-username"));
-  favoriteElement.setAttribute("aria-checked", favorited);
+  const favorited = parseFavorites(getCookie("favorite")).includes(
+    favoriteElement.getAttribute("data-username") as string
+  );
+  favoriteElement.setAttribute("aria-checked", favorited.toString());
   return favorited;
 }
 
-let favoriteNotification = tippy(favoriteElement, {
+const favoriteNotification = window.tippy(favoriteElement, {
   trigger: "manual",
 });
 
-favoriteElement.addEventListener("click", function () {
-  let uuid = favoriteElement.getAttribute("data-username");
+favoriteElement.addEventListener("click", () => {
+  const uuid = favoriteElement.getAttribute("data-username") as string;
   if (uuid == "0c0b857f415943248f772164bf76795c") {
     favoriteNotification.setContent("No");
   } else {
-    let cookieArray = parseFavorites(getCookie("favorite"));
+    const cookieArray = parseFavorites(getCookie("favorite"));
     if (cookieArray.includes(uuid)) {
       cookieArray.splice(cookieArray.indexOf(uuid), 1);
 
@@ -1008,24 +892,25 @@ favoriteElement.addEventListener("click", function () {
   }
   favoriteNotification.show();
 
-  setTimeout(function () {
+  setTimeout(() => {
     favoriteNotification.hide();
   }, 1500);
 });
 
 let socialsShown = false;
-let revealSocials = document.querySelector("#reveal_socials");
+const revealSocials = document.querySelector("#reveal_socials") as HTMLElement;
+const additionalSocials = document.querySelector("#additional_socials") as HTMLElement;
 
 if (revealSocials) {
-  revealSocials.addEventListener("click", function () {
+  revealSocials.addEventListener("click", () => {
     if (socialsShown) {
       socialsShown = false;
-      document.querySelector("#additional_socials").classList.remove("socials-shown");
-      document.querySelector("#reveal_socials").classList.remove("socials-shown");
+      additionalSocials.classList.remove("socials-shown");
+      revealSocials.classList.remove("socials-shown");
     } else {
       socialsShown = true;
-      document.querySelector("#additional_socials").classList.add("socials-shown");
-      document.querySelector("#reveal_socials").classList.add("socials-shown");
+      additionalSocials.classList.add("socials-shown");
+      revealSocials.classList.add("socials-shown");
     }
   });
 }
@@ -1074,7 +959,7 @@ class ScrollMemory {
 
   _onScroll = () => {
     clearTimeout(this._scrollTimeout);
-    this._scrollTimeout = setTimeout(() => {
+    this._scrollTimeout = window.setTimeout(() => {
       this.isSmoothScrolling = false;
     }, 500);
   };
@@ -1100,7 +985,7 @@ const sectionObserver = new IntersectionObserver(
         }
         for (const link of navBarLinks) {
           if (link.hash === newHash) {
-            link.setAttribute("aria-current", true);
+            link.setAttribute("aria-current", "true");
 
             if (!scrollMemory.isSmoothScrolling) {
               scrollToTab(true, link);
@@ -1116,17 +1001,22 @@ const sectionObserver = new IntersectionObserver(
   { rootMargin: "-100px 0px -25% 0px" }
 );
 
-function scrollToTab(smooth = true, element) {
-  const link = element ?? document.querySelector(`[href="${location.hash}"]`);
+function scrollToTab(smooth = true, element?: HTMLElement) {
+  const link = element ?? document.querySelector<HTMLAnchorElement>(`[href="${location.hash}"]`);
+  if (link == null) {
+    throw new Error("could not find tab to scroll to");
+  }
   const behavior = smooth ? "smooth" : "auto";
   const left =
-    link.offsetLeft + link.getBoundingClientRect().width / 2 - link.parentElement.getBoundingClientRect().width / 2;
-  link.parentElement.scrollTo({ left, behavior });
+    link.offsetLeft +
+    link.getBoundingClientRect().width / 2 -
+    (link.parentElement as HTMLElement).getBoundingClientRect().width / 2;
+  (link.parentElement as HTMLElement).scrollTo({ left, behavior });
 }
 
 scrollToTab(false);
 
-const playerProfileElement = document.querySelector("#player_profile");
+const playerProfileElement = document.querySelector("#player_profile") as HTMLElement;
 
 sectionObserver.observe(playerProfileElement);
 
@@ -1134,54 +1024,54 @@ document.querySelectorAll(".stat-header").forEach((element) => {
   sectionObserver.observe(element);
 });
 
-let otherSkills = document.querySelector("#other_skills");
-let showSkills = document.querySelector("#show_skills");
+const otherSkills = document.querySelector<HTMLElement>("#other_skills");
+const showSkills = document.querySelector<HTMLElement>("#show_skills");
 
 if (showSkills != null) {
-  showSkills.addEventListener("click", function () {
-    if (otherSkills.classList.contains("show-skills")) {
-      otherSkills.classList.remove("show-skills");
-      showSkills.innerHTML = "Show Skills";
+  showSkills.addEventListener("click", () => {
+    if ((otherSkills as HTMLElement).classList.contains("show-skills")) {
+      (otherSkills as HTMLElement).classList.remove("show-skills");
+      (showSkills as HTMLElement).innerHTML = "Show Skills";
     } else {
-      otherSkills.classList.add("show-skills");
-      showSkills.innerHTML = "Hide Skills";
+      (otherSkills as HTMLElement).classList.add("show-skills");
+      (showSkills as HTMLElement).innerHTML = "Hide Skills";
     }
   });
 }
 
-[].forEach.call(document.querySelectorAll(".xp-skill"), function (element) {
-  let skillProgressText = element.querySelector(".skill-progress-text");
+for (const element of document.querySelectorAll(".xp-skill")) {
+  const skillProgressText = element.querySelector<HTMLElement>(".skill-progress-text");
 
   if (skillProgressText === null) {
-    return;
+    break;
   }
 
-  let originalText = skillProgressText.innerHTML;
+  const originalText = skillProgressText.innerHTML;
 
-  element.addEventListener("mouseenter", function () {
-    skillProgressText.innerHTML = skillProgressText.getAttribute("data-hover-text");
+  element.addEventListener("mouseenter", () => {
+    skillProgressText.innerHTML = skillProgressText.getAttribute("data-hover-text") as string;
   });
 
-  element.addEventListener("mouseleave", function () {
+  element.addEventListener("mouseleave", () => {
     skillProgressText.innerHTML = originalText;
   });
-});
+}
 
-[].forEach.call(document.querySelectorAll(".kills-deaths-container .show-all.enabled"), function (element) {
-  let parent = element.parentNode;
-  let kills = calculated[element.getAttribute("data-type")];
+for (const element of document.querySelectorAll(".kills-deaths-container .show-all.enabled")) {
+  const parent = element.parentElement as HTMLElement;
+  const kills = calculated[element.getAttribute("data-type") as "kills" | "deaths"];
 
-  element.addEventListener("click", function () {
+  element.addEventListener("click", () => {
     parent.style.maxHeight = parent.offsetHeight + "px";
     parent.classList.add("all-shown");
     element.remove();
 
-    kills.slice(10).forEach(function (kill, index) {
-      let killElement = document.createElement("div");
-      let killRank = document.createElement("div");
-      let killEntity = document.createElement("div");
-      let killAmount = document.createElement("div");
-      let statSeparator = document.createElement("div");
+    kills.slice(10).forEach((kill, index) => {
+      const killElement = document.createElement("div");
+      const killRank = document.createElement("div");
+      const killEntity = document.createElement("div");
+      const killAmount = document.createElement("div");
+      const statSeparator = document.createElement("div");
 
       killElement.className = "kill-stat";
       killRank.className = "kill-rank";
@@ -1202,17 +1092,17 @@ if (showSkills != null) {
       parent.appendChild(killElement);
     });
   });
-});
+}
 
-window.addEventListener("keydown", function (e) {
-  let selectedPiece = document.querySelector(".rich-item:focus");
+window.addEventListener("keydown", (event) => {
+  const selectedPiece = document.querySelector<HTMLElement>(".rich-item:focus");
 
-  if (selectedPiece !== null && e.key === "Enter") {
+  if (selectedPiece !== null && event.key === "Enter") {
     fillLore(selectedPiece);
     showLore(selectedPiece);
   }
 
-  if (e.key === "Escape") {
+  if (event.key === "Escape") {
     dimmer.classList.remove("show-dimmer");
     enableApiPlayer.classList.remove("show");
     if (document.querySelector("#stats_content.sticky-stats") != null) {
@@ -1220,8 +1110,8 @@ window.addEventListener("keydown", function (e) {
     }
   }
 
-  if (document.querySelector(".rich-item.sticky-stats") != null && e.key === "Tab") {
-    e.preventDefault();
+  if (document.querySelector(".rich-item.sticky-stats") != null && event.key === "Tab") {
+    event.preventDefault();
   }
 });
 
