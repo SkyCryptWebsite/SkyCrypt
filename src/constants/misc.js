@@ -459,7 +459,7 @@ module.exports = {
     ],
   },
 
-  max_favorites: 5,
+  max_favorites: 10,
 
   increase_most_stats_exclude: ["mining_speed", "mining_fortune", "farming_fortune", "foraging_fortune"],
 };

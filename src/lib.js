@@ -267,7 +267,7 @@ function getSlayerLevel(slayer, slayerName) {
     progress = 1;
   }
 
-  let weight = calcSlayerWeight(slayerName, slayerName === "enderman" ? null : xp);
+  let weight = calcSlayerWeight(slayerName, xp);
 
   return { currentLevel, xp, maxLevel, progress, xpForNext, weight };
 }
@@ -652,6 +652,11 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
             itemLore.push(`§8${toNextLevel} kills to tier up!`);
           }
         }
+      }
+
+      if (item.tag?.display?.color) {
+        const hex = item.tag.display.color.toString(16).padStart(6, "0");
+        itemLore.push("", `§7Color: #${hex.toUpperCase()}`);
       }
 
       if (item.extra?.timestamp) {
@@ -3130,24 +3135,12 @@ module.exports = {
       if (pet.level.level < 100) {
         lore.push(`§7Progress to Level ${pet.level.level + 1}: §e${(pet.level.progress * 100).toFixed(1)}%`);
 
-        let levelBar = "";
+        const progress = Math.ceil(pet.level.progress * 20);
 
-        for (let i = 0; i < 20; i++) {
-          if (pet.level.progress > i / 20) {
-            levelBar += "§2";
-          } else {
-            levelBar += "§f";
-          }
-          levelBar += "-";
-        }
+        const numerator = pet.level.xpCurrent.toLocaleString();
+        const denominator = helper.formatNumber(pet.level.xpForNext, false, 10);
 
-        levelBar += ` §e${pet.level.xpCurrent.toLocaleString()} §6/ §e${helper.formatNumber(
-          pet.level.xpForNext,
-          false,
-          10
-        )}`;
-
-        lore.push(levelBar);
+        lore.push(`§2${"-".repeat(progress)}§f${"-".repeat(20 - progress)} §e${numerator} §6/ §e${denominator}`);
       } else {
         lore.push("§bMAX LEVEL");
       }
