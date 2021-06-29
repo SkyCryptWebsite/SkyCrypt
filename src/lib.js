@@ -3130,24 +3130,12 @@ module.exports = {
       if (pet.level.level < 100) {
         lore.push(`§7Progress to Level ${pet.level.level + 1}: §e${(pet.level.progress * 100).toFixed(1)}%`);
 
-        let levelBar = "";
+        const progress = Math.ceil(pet.level.progress * 20);
 
-        for (let i = 0; i < 20; i++) {
-          if (pet.level.progress > i / 20) {
-            levelBar += "§2";
-          } else {
-            levelBar += "§f";
-          }
-          levelBar += "-";
-        }
+        const numerator = pet.level.xpCurrent.toLocaleString();
+        const denominator = helper.formatNumber(pet.level.xpForNext, false, 10);
 
-        levelBar += ` §e${pet.level.xpCurrent.toLocaleString()} §6/ §e${helper.formatNumber(
-          pet.level.xpForNext,
-          false,
-          10
-        )}`;
-
-        lore.push(levelBar);
+        lore.push(`§2${"-".repeat(progress)}§f${"-".repeat(20 - progress)} §e${numerator} §6/ §e${denominator}`);
       } else {
         lore.push("§bMAX LEVEL");
       }
