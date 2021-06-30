@@ -84,7 +84,7 @@ async function main() {
     }
   }
   updateCacheOnly();
-  setInterval(updateCacheOnly, 60_000);
+  setInterval(updateCacheOnly, 60_000*5);
 
   const app = express();
   const port = 32464;
