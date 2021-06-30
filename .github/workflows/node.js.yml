@@ -63,8 +63,8 @@ jobs:
       - name: prettier
         run: npm run prettier
 
-  buildts:
-    name: build ts
+  checkts:
+    name: check typescript
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
@@ -78,8 +78,26 @@ jobs:
       - name: Install node dependencies
         run: npm ci
 
-      - name: build ts
-        run: npm run ts
+      - name: tsc
+        run: npx tsc -p public/resources/ts --noEmit
+
+  rollup:
+    name: rollup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v1
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: rollup
+        run: npm run rollup
 
   buildscss:
     name: build scss

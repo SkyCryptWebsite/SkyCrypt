@@ -22,14 +22,20 @@ async function main() {
 
   const fileHashes = await getFileHashes();
 
+  let fileNameMap = JSON.parse(fs.readFileSync("public/resources/js/file-name-map.json"));
+
   if (process.env.NODE_ENV == "development") {
     const { default: watch } = await import("node-watch");
 
-    watch("public/resources", { recursive: true }, async (evt, name) => {
+    watch("public/resources/css", { recursive: true }, async (evt, name) => {
       const [, , directory, fileName] = name.split(/\/|\\/);
       if (hashedDirectories.includes(directory)) {
         fileHashes[directory][fileName] = await getFileHash(name);
       }
+    });
+
+    watch("public/resources/js/file-name-map.json", {}, async (evt, name) => {
+      fileNameMap = JSON.parse(fs.readFileSync("public/resources/js/file-name-map.json"));
     });
   }
 
@@ -249,6 +255,7 @@ async function main() {
           helper,
           extra: await getExtra("stats", favorites, cacheOnly),
           fileHashes,
+          fileNameMap,
           page: "stats",
         },
         (err, html) => {
@@ -272,6 +279,7 @@ async function main() {
           player: playerUsername,
           extra: await getExtra("index", favorites, cacheOnly),
           fileHashes,
+          fileNameMap,
           helper,
           page: "index",
         },
@@ -568,7 +576,7 @@ async function main() {
   app.all("/api", async (req, res, next) => {
     res.render(
       "api",
-      { error: null, player: null, extra: await getExtra("api"), fileHashes, helper, page: "api" },
+      { error: null, player: null, extra: await getExtra("api"), fileHashes, fileNameMap, helper, page: "api" },
       (err, html) => {
         res.set("X-Cluster-ID", `${helper.getClusterId()}`);
         res.send(html);
@@ -593,6 +601,7 @@ async function main() {
         player: null,
         extra: await getExtra("index", favorites, cacheOnly),
         fileHashes,
+        fileNameMap,
         helper,
         page: "index",
       },
