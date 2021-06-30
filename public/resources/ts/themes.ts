@@ -1,12 +1,23 @@
-/* global extra:readonly */
-
-if (!localStorage.getItem("currentTheme") || !extra.themes[localStorage.getItem("currentTheme")]) {
-  localStorage.setItem("currentTheme", "default");
+{
+  const currentTheme = localStorage.getItem("currentTheme");
+  if (!currentTheme || !extra.themes[currentTheme]) {
+    localStorage.setItem("currentTheme", "default");
+  }
 }
 
-if (localStorage.getItem("currentTheme") != "default") loadTheme(localStorage.getItem("currentTheme"));
+{
+  const currentTheme = localStorage.getItem("currentTheme");
+  if (currentTheme && currentTheme !== "default") loadTheme(currentTheme);
+}
 
-function convertHex(code) {
+/**
+ * converts a hex color to it's rgb components
+ * @param code a hex color string
+ * @example
+ * // "returns 256, 0, 256"
+ * convertHex("#FF00FF");
+ */
+function convertHex(code: string) {
   const hex = code.substring(1, 7);
   return `${parseInt(hex.substring(0, 2), 16)}, ${parseInt(hex.substring(2, 4), 16)}, ${parseInt(
     hex.substring(4, 6),
@@ -14,7 +25,7 @@ function convertHex(code) {
   )}`;
 }
 
-function loadTheme(currentTheme) {
+export function loadTheme(currentTheme: string): void {
   if (!extra.themes[currentTheme]) {
     return console.error(`${currentTheme} isn't a valid theme.`);
   }
@@ -25,9 +36,9 @@ function loadTheme(currentTheme) {
 
   element.classList.toggle("light", !!theme.light);
 
-  document.querySelector('meta[name="theme-color"]').content = theme.light ? "#dbdbdb" : "#282828";
+  (document.querySelector('meta[name="theme-color"]') as HTMLMetaElement).content = theme.light ? "#dbdbdb" : "#282828";
 
-  element.style = "";
+  element.setAttribute("style", "");
 
   for (const color in theme.colors) {
     const value = theme.colors[color];
@@ -63,7 +74,7 @@ function loadTheme(currentTheme) {
 
   const logoURL = "/resources/img/logo_square.svg" + (theme.colors?.logo?.replace("#", "?color=") ?? "");
   element.style.setProperty(`--logo`, `url(${logoURL})`);
-  document.querySelectorAll('link[rel="icon"]').forEach((favicon) => {
+  document.querySelectorAll<HTMLLinkElement>('link[rel="icon"]').forEach((favicon) => {
     if (favicon.href.match("logo_square")) {
       favicon.href = logoURL;
     }
@@ -74,39 +85,4 @@ function loadTheme(currentTheme) {
     ?.setAttribute("href", theme.enchanted_glint ?? "/resources/img/enchanted-glint.png");
 
   console.log(`Loaded theme: ${currentTheme}`);
-}
-
-/**
- * checks if the scrollbar has a width and sets the style-scrollbar class accordingly
- */
-function checkScrollbarStyle() {
-  let outerDiv = document.createElement("div");
-  outerDiv.style.position = "fixed";
-  let innerDiv = document.createElement("div");
-  innerDiv.style.overflowY = "scroll";
-  outerDiv.appendChild(innerDiv);
-  document.body.appendChild(outerDiv);
-  if (outerDiv.clientWidth > 0) {
-    // desktop style scrollbars
-    document.documentElement.classList.add("style-scrollbar");
-  } else {
-    // mobile style scrollbars
-    document.documentElement.classList.remove("style-scrollbar");
-  }
-}
-
-window.setTimeout(checkScrollbarStyle);
-
-const iOS = ["iPad Simulator", "iPhone Simulator", "iPod Simulator", "iPad", "iPhone", "iPod"].includes(
-  navigator.platform
-);
-
-if (iOS) {
-  const div = document.createElement("div");
-  div.id = "status-bar";
-  document.body.prepend(div);
-}
-
-if (extra.cacheOnly) {
-  document.documentElement.classList.add("cache-only");
 }

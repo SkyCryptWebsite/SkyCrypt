@@ -136,7 +136,7 @@ module.exports = {
 
             if (module.exports.hasPath(data.textures, "skin")) {
               skin_data.skinurl = data.textures.skin.url;
-              skin_data.model = data.textures.slim ? "slim" : "regular";
+              skin_data.model = data.textures.slim ? "slim" : "default";
             }
 
             if (module.exports.hasPath(data.textures, "cape")) {
@@ -265,7 +265,7 @@ module.exports = {
             }
 
             for (const member of guild.members) {
-              if (!gm && guild.ranks.filter((a) => a.name.toLowerCase() == member.rank.toLowerCase()).length == 0) {
+              if (!gm && guild.ranks.find((a) => a.name.toLowerCase() == member.rank.toLowerCase()) == undefined) {
                 gm = member.uuid;
               }
 
@@ -281,7 +281,7 @@ module.exports = {
             const guildMembers = await db.collection("guildMembers").find({ gid: guild._id }).toArray();
 
             for (const member of guildMembers) {
-              if (guild.members.filter((a) => a.uuid == member.uuid).length == 0) {
+              if (guild.members.find((a) => a.uuid == member.uuid) == undefined) {
                 await db
                   .collection("guildMembers")
                   .updateOne({ uuid: member.uuid }, { $set: { gid: null, last_updated: new Date() } });
@@ -306,7 +306,7 @@ module.exports = {
 
             guildObject.value.level = module.exports.getGuildLevel(guildObject.value.exp);
             guildObject.value.gmUser = await module.exports.resolveUsernameOrUuid(guildObject.value.gm, db);
-            guildObject.value.rank = guild.members.filter((a) => a.uuid == uuid)[0].rank;
+            guildObject.value.rank = guild.members.find((a) => a.uuid == uuid).rank;
 
             return guildObject.value;
           } else {
@@ -615,6 +615,7 @@ module.exports = {
         skyblock_free_cookie: "Free Booster Cookie",
         scorpius_bribe_96: "Scorpius Bribe (Year 96)",
         scorpius_bribe_120: "Scorpius Bribe (Year 120)",
+        scorpius_bribe_144: "Scorpius Bribe (Year 144)",
       };
 
       for (const item in claimable) {
