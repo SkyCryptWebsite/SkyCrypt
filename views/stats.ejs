@@ -602,19 +602,6 @@ const getRarityUpgradeClass = item => {
         </ul>
       </span>
       <div id="additional_player_stats">
-        <% /*
-
-        - Hide Views for now due to abuse -
-
-        %>
-        <div class="additional-player-stat" data-tippy-content="
-        <span class='stat-name'>Views: </span><span class='stat-value'><%= calculated.views.total.toLocaleString() %></span>
-        <div class='tippy-explanation'>Amount of total unique people who have accessed this profile.</div>
-        <% if('rank' in calculated.views){ %><span class='stat-name'>Rank: </span><span class='stat-value'>#<%= calculated.views.rank.toLocaleString() %></span>
-        <div class='tippy-explanation'>Rank among the most viewed profiles. Updates once per hour.</div><% } %>
-        ">Views: <%= helper.formatNumber(calculated.views.total, true) %></div>
-
-        <% */ %>
         <button class="additional-player-stat svg-icon favorite" data-username="<%= calculated.uuid %>" role="checkbox" aria-checked="<%= extra.favoriteUUIDs.includes(calculated.uuid) %>">
           <svg viewBox="0 0 24 24">
             <title>star</title>

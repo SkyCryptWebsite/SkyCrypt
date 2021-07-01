@@ -123,9 +123,6 @@ async function main() {
   require("./apiv2")(app, db);
   require("./donations/kofi")(app, db);
 
-  let FEATURED_PROFILES;
-  let FEATURED_LAST_UPDATED = 0;
-
   function parseFavorites(cookie) {
     return cookie?.split(",").filter((uuid) => /^[0-9a-f]{32}$/.test(uuid)) || [];
   }
@@ -191,13 +188,6 @@ async function main() {
     }
 
     if (page === "index") {
-      if (FEATURED_PROFILES == null || Date.now() - FEATURED_LAST_UPDATED < 900 * 1000) {
-        FEATURED_LAST_UPDATED = Date.now();
-        FEATURED_PROFILES = await db.collection("topViews").find().sort({ position: 1 }).toArray();
-      }
-
-      output.devs = FEATURED_PROFILES;
-
       output.favorites = await getFavoritesFormUUIDs(favoriteUUIDs);
 
       output.devs = await db.collection("topViews").find().sort({ position: 1 }).toArray();
