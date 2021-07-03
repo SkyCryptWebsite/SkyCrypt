@@ -1,5 +1,7 @@
-interface Window {
-  tippy: any;
+import { loadTheme } from "./themes";
+
+declare global {
+  function tippy(targets: string | Element | Element[], optionalProps: Record<string, unknown>): any;
 }
 
 function validateURL(url: string) {
@@ -38,7 +40,7 @@ document.querySelectorAll<HTMLFormElement>(".lookup-player").forEach((form) => {
     try {
       window.location.href = validateURL(formData.get("ign") as string);
     } catch (error) {
-      const errorTip = window.tippy(form.querySelector("input") as HTMLInputElement, {
+      const errorTip = tippy(form.querySelector("input") as HTMLInputElement, {
         trigger: "manual",
         content: error || "please enter a valid Minecraft username or UUID",
       });
@@ -53,7 +55,7 @@ document.querySelectorAll<HTMLFormElement>(".lookup-player").forEach((form) => {
   });
 });
 
-function setCookie(name: string, value: string, days?: number) {
+export function setCookie(name: string, value: string, days?: number): void {
   let expires = "";
   if (days) {
     const date = new Date();
@@ -140,26 +142,21 @@ function setCheckedTheme(theme: string) {
 
 setCheckedTheme(localStorage.getItem("currentTheme") ?? "default");
 
-window.tippy("*[data-tippy-content]", {
+tippy("*[data-tippy-content]", {
   boundary: "window",
 });
 
 const prideFlag = document.querySelector(".pride-flag") as HTMLElement;
 const prideFlags = ["rainbow", "trans", "lesbian", "bi", "pan", "nb", "ace", "genderfluid", "logo"];
 
-let currentFlag = prideFlags.length - 1;
-
-const currentFlagString = localStorage.getItem("currentFlag");
-if (currentFlagString) {
-  currentFlag = parseInt(currentFlagString);
-  prideFlag.className = "pride-flag " + prideFlags[currentFlag];
+if (!prideFlags.includes(prideFlag.classList[1])) {
+  prideFlag.className = "pride-flag logo";
+  localStorage.removeItem("currentFlag");
 }
 
 prideFlag.addEventListener("click", function () {
-  currentFlag++;
-
-  if (currentFlag > prideFlags.length - 1) currentFlag = 0;
-
-  localStorage.setItem("currentFlag", currentFlag.toString());
-  prideFlag.className = "pride-flag " + prideFlags[currentFlag];
+  const oldFlag = prideFlag.classList[1];
+  const newFlag = prideFlags[(prideFlags.indexOf(oldFlag) + 1) % prideFlags.length];
+  localStorage.setItem("currentFlag", newFlag);
+  prideFlag.className = "pride-flag " + newFlag;
 });
