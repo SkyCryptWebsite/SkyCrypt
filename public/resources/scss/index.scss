@@ -2878,6 +2878,10 @@ a.additional-player-stat:hover {
   }
 }
 
+.stat-experiments .narrow-info-container hr {
+  border: none;
+}
+
 .sea-creature-image {
   position: absolute;
   top: 70px;
@@ -3768,13 +3772,18 @@ body {
 
     &.sea-creatures {
       contain-intrinsic-size: 140px 230px;
+      &::after {
+        width: 15px; //15px = --padding - gap
+      }
     }
 
-    > :first-child {
-      margin-inline-start: var(--padding);
-    }
-    > :last-child {
-      margin-inline-end: var(--padding);
+    padding-inline-start: var(--padding);
+    // because padding-inline-end gets eaten by the scroll container
+    &::after {
+      content: "";
+      display: block;
+      width: 22px; //22px = --padding - gap
+      flex-shrink: 0;
     }
   }
 
