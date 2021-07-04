@@ -328,38 +328,27 @@ async function main() {
       return;
     }
 
-    const filename = `cape_${username}.png`;
+    const filename = path.resolve(cachePath, `cape_${username}.png`);
     res.set("X-Cluster-ID", `${helper.getClusterId()}`);
 
     let file;
 
     try {
-      const fileStats = await fs.stat(path.resolve(cachePath, filename));
+      const fileStats = await fs.stat(filename);
 
-      if (Date.now() - fileStats.mtime > 60 * 60 * 1000) {
-        const optifineCape = await axios.head(`https://optifine.net/capes/${username}.png`);
-        const lastUpdated = moment(optifineCape.headers["last-modified"]);
+      const optifineCape = await axios.head(`https://optifine.net/capes/${username}.png`);
+      const lastUpdated = moment(optifineCape.headers["last-modified"]);
 
-        if (lastUpdated.unix() > fileStats.mtime) {
-          throw "optifine cape changed";
-        } else {
-          // update the file mtime
-          const time = new Date();
-          try {
-            fs.utimesSync(filename, time, time);
-          } catch (err) {
-            fs.closeSync(fs.openSync(filename, "w"));
-          }
-          return fs.readFile(filename);
-        }
+      if (lastUpdated.unix() > fileStats.mtime) {
+        throw "optifine cape changed";
+      } else {
+        file = await fs.readFile(filename);
       }
-
-      file = await fs.readFile(path.resolve(cachePath, filename));
     } catch (e) {
       try {
         file = (await axios.get(`https://optifine.net/capes/${username}.png`, { responseType: "arraybuffer" })).data;
 
-        fs.writeFile(path.resolve(cachePath, filename), file, (err) => {
+        fs.writeFile(filename, file, (err) => {
           if (err) {
             console.error(err);
           }
