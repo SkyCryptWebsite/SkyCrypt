@@ -344,6 +344,15 @@ async function main() {
 
         if (lastUpdated.unix() > fileStats.mtime) {
           throw "optifine cape changed";
+        } else {
+          // update the file mtime
+          const time = new Date();
+          try {
+            fs.utimesSync(filename, time, time);
+          } catch (err) {
+            fs.closeSync(fs.openSync(filename, "w"));
+          }
+          return fs.readFile(filename);
         }
       }
     } catch (e) {
