@@ -320,6 +320,8 @@ async function main() {
   });
 
   app.all("/cape/:username", cors(), async (req, res) => {
+    res.set("X-Cluster-ID", `${helper.getClusterId()}`);
+
     const { username } = req.params;
 
     if (!/^[0-9a-zA-Z_]{1,16}$/.test(username)) {
@@ -329,7 +331,6 @@ async function main() {
     }
 
     const filename = path.resolve(cachePath, `cape_${username}.png`);
-    res.set("X-Cluster-ID", `${helper.getClusterId()}`);
 
     let file;
 
