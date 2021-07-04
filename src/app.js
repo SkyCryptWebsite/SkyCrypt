@@ -332,7 +332,7 @@ async function main() {
 
       const fileStats = await fs.stat(path.resolve(cachePath, filename));
 
-      if (Date.now() - fileStats.mtime > 10 * 1000) {
+      if (Date.now() - fileStats.mtime > 60 * 60 * 1000) {
         const optifineCape = await axios.head(`https://optifine.net/capes/${username}.png`);
         const lastUpdated = moment(optifineCape.headers["last-modified"]);
 
@@ -357,7 +357,7 @@ async function main() {
       }
     }
 
-    res.setHeader("Cache-Control", `public, max-age=${CACHE_DURATION}`);
+    res.setHeader("Cache-Control", `public, max-age=${60 * 60 * 1000}`);
     res.contentType("image/png");
     res.send(file);
   });
