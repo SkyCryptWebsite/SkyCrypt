@@ -350,7 +350,7 @@ async function main() {
           }
         });
       } catch (e) {
-        res.status(404);
+        res.status(204);
         res.send("no cape for user");
 
         return;
