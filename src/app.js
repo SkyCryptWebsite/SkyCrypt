@@ -334,8 +334,6 @@ async function main() {
     let file;
 
     try {
-      file = await fs.readFile(path.resolve(cachePath, filename));
-
       const fileStats = await fs.stat(path.resolve(cachePath, filename));
 
       if (Date.now() - fileStats.mtime > 60 * 60 * 1000) {
@@ -355,6 +353,8 @@ async function main() {
           return fs.readFile(filename);
         }
       }
+
+      file = await fs.readFile(path.resolve(cachePath, filename));
     } catch (e) {
       try {
         file = (await axios.get(`https://optifine.net/capes/${username}.png`, { responseType: "arraybuffer" })).data;
