@@ -322,6 +322,12 @@ async function main() {
   app.all("/cape/:username", cors(), async (req, res) => {
     const { username } = req.params;
 
+    if (!/^[0-9a-zA-Z_]{1,16}$/.test(username)) {
+      res.status(400);
+      res.send("invalid username");
+      return;
+    }
+
     const filename = `cape_${username}.png`;
     res.set("X-Cluster-ID", `${helper.getClusterId()}`);
 
