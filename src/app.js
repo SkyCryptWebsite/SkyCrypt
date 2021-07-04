@@ -372,7 +372,7 @@ async function main() {
       }
     }
 
-    res.setHeader("Cache-Control", `public, max-age=${60 * 60 * 1000}`);
+    res.setHeader("Cache-Control", `public, max-age=${12 * 60 * 60 * 1000}`);
     res.contentType("image/png");
     res.send(file);
   });
