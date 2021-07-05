@@ -2100,20 +2100,25 @@ a.additional-player-stat:hover {
   }
 }
 
-.piece-hover-area {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 20;
-  transition: background-color 0.2s;
-  border-radius: 5px;
-}
-
-.piece-hover-area:hover,
-.sticky-stats .piece-hover-area {
-  background-color: rgba(255, 255, 255, 0.2);
+.inventory-item,
+.piece {
+  @media (hover: hover) {
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 20;
+      transition: background-color 0.2s;
+      border-radius: 5px;
+    }
+    &.sticky-stats::after,
+    &:hover::after {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
 }
 
 .pieces {
