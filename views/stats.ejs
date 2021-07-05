@@ -215,7 +215,7 @@ const getReforges = (accessories) => {
 
 const formatEnrichment = (string) => {
   let enrichment = string.split('_').join(' ').trim()
-  enrichment = enrichment.charAt(0).toUpperCase() + enrichment.slice(1)
+  enrichment = helper.titleCase(enrichment)
   return enrichment
 }
 
