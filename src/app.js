@@ -335,6 +335,7 @@ async function main() {
     let file;
 
     try {
+      // try to use file from disk
       const fileStats = await fs.stat(filename);
 
       const optifineCape = await axios.head(`https://optifine.net/capes/${username}.png`);
@@ -346,6 +347,7 @@ async function main() {
         file = await fs.readFile(filename);
       }
     } catch (e) {
+      // file on disk could not be used so try to get from network
       try {
         file = (await axios.get(`https://optifine.net/capes/${username}.png`, { responseType: "arraybuffer" })).data;
 
