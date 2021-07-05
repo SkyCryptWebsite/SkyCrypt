@@ -2113,6 +2113,7 @@ a.additional-player-stat:hover {
       z-index: 20;
       transition: background-color 0.2s;
       border-radius: 5px;
+      pointer-events: none;
     }
     &.sticky-stats::after,
     &:hover::after {
