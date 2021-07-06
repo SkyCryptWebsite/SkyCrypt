@@ -155,6 +155,27 @@ module.exports = {
         gold: "#c58000",
       },
     },
+    bloodyscorpion: {
+      name: "Bloody Scorpion Theme",
+      author: "Gozuk12",
+      community: true,
+      images: {
+        bg: "https://sky.tihub.pl/bg/bg.webp",
+        bg_blur: "https://sky.tihub.pl/bg/bg_blur.png",
+      },
+      backgrounds: {
+        skillbar: {
+          type: "color",
+          color: "#EF325C",
+        },
+      },
+      colors: {
+        logo: "#ed1444",
+        icon: "#ed1444",
+        link: "#38ef7d",
+        hover: "#ed1444",
+      },
+    },
 
     /* Hidden Themes */
 
