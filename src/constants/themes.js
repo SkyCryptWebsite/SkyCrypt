@@ -160,8 +160,8 @@ module.exports = {
       author: "Gozuk12",
       community: true,
       images: {
-        bg: "https://sky.tihub.pl/bg/bg.webp",
-        bg_blur: "https://sky.tihub.pl/bg/bg_blur.png",
+        bg: "/resources/img/themes/bloodyscorpion/bg.webp",
+        bg_blur: "/resources/img/themes/bloodyscorpion/bg_blur.webp",
       },
       backgrounds: {
         skillbar: {
