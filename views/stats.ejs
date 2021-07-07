@@ -306,7 +306,6 @@ const inventorySlot = item => { %>
   <div class="inventory-slot">
     <% if(Object.keys(item).length > 2){ %>
     <div class="rich-item inventory-item" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>">
-      <div class="piece-hover-area"></div>
       <% itemIcon(item, ['piece-icon']); %>
       <% if(item.Count != 1){ %><div class="item-count"><%= item.Count %></div><% } %>
     </div>
@@ -526,9 +525,9 @@ const getRarityUpgradeClass = item => {
 <body class="page-stats">
   <svg xmlns="http://www.w3.org/2000/svg" height="0" width="0" style="position: fixed;">
     <filter id="enchanted-glint">
-    <feImage href="/resources/img/enchanted-glint.png" />
-    <feComposite in2="SourceGraphic" operator="in" />
-    <feBlend in="SourceGraphic" mode="screen" />
+      <feImage href="/resources/img/enchanted-glint.png" />
+      <feComposite in2="SourceGraphic" operator="in" />
+      <feBlend in="SourceGraphic" mode="screen" />
     </filter>
   </svg>
   <%- include('../includes/header') %>
@@ -900,7 +899,6 @@ const getRarityUpgradeClass = item => {
                 <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                   <div class="piece-shine"></div>
                 <% } %>
-                <div class="piece-hover-area"></div>
                 <% itemIcon(item, ['piece-icon']); %>
               </div>
             <% } %>
@@ -920,7 +918,6 @@ const getRarityUpgradeClass = item => {
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
-                    <div class="piece-hover-area"></div>
                     <% itemIcon(item, ['piece-icon']); %>
                   </div>
                 <% } else { %>
@@ -966,7 +963,6 @@ const getRarityUpgradeClass = item => {
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
-                    <div class="piece-hover-area"></div>
                     <div class="select-weapon"></div>
                     <% itemIcon(item, ['piece-icon']); %>
                   </div>
@@ -1011,7 +1007,6 @@ const getRarityUpgradeClass = item => {
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
-                    <div class="piece-hover-area"></div>
                     <% itemIcon(item, ['piece-icon']); %>
                   </div>
                 <% }) %>
@@ -1031,7 +1026,6 @@ const getRarityUpgradeClass = item => {
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
-                    <div class="piece-hover-area"></div>
                     <% itemIcon(item, ['piece-icon']); %>
                   </div>
                 <% }) %>
@@ -1047,14 +1041,12 @@ const getRarityUpgradeClass = item => {
                 <p class="stat-sub-header">Missing Accessories<span data-tippy-content='Missing accessories that are <strong>not</strong> upgrades of another talisman.'></span></p>
                 <% for(const [index, talisman] of calculated.missingTalismans.missing.entries()){ %>
                   <div tabindex="0" data-missing-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
-                    <div class="piece-hover-area"></div>
                     <div style='background-image: url("<%= talisman.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                   </div>
                 <% } %>
                 <p class="stat-sub-header">Missing Accessory Upgrades<span data-tippy-content='Missing accessories that are upgrades of a lower tier talisman.'></span></p>
                 <% for(const [index, talisman] of calculated.missingTalismans.upgrades.entries()){ %>
                   <div tabindex="0" data-upgrade-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
-                    <div class="piece-hover-area"></div>
                     <div style='background-image: url("<%= talisman.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                   </div>
                 <% } %>
@@ -1132,7 +1124,6 @@ const getRarityUpgradeClass = item => {
                 <% if (rarityOrder.indexOf(activePet.rarity) < 3) { %>
                   <div class="piece-shine"></div>
                 <% } %>
-                <div class="piece-hover-area"></div>
                 <div style='background-image: url("<%= activePet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
               </div>
               <div class="active-pet-info">
@@ -1160,7 +1151,6 @@ const getRarityUpgradeClass = item => {
                   <% if(rarityOrder.indexOf(pet.rarity) < 3) { %>
                     <div class="piece-shine"></div>
                   <% } %>
-                  <div class="piece-hover-area"></div>
                   <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                   <div class="other-pet-level"><abbr title="Level">Lvl</abbr> <%= pet.level.level %></div>
                 </div>
@@ -1175,7 +1165,6 @@ const getRarityUpgradeClass = item => {
             <div class="pieces extendable" id="missing-pets">
               <% for(const [index, pet] of calculated.missingPets.entries()) { %>
                 <div tabindex="0" data-missing-pet-index="<%= index %>" class="rich-item piece piece-<%= pet.rarity %>-bg missing-pet">
-                  <div class="piece-hover-area"></div>
                   <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                 </div>
               <% } %>
@@ -1308,7 +1297,6 @@ const getRarityUpgradeClass = item => {
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
-                    <div class="piece-hover-area"></div>
                     <% itemIcon(item, ['piece-icon']); %>
                   </div>
               <% }); %>
@@ -1363,7 +1351,6 @@ const getRarityUpgradeClass = item => {
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
-                    <div class="piece-hover-area"></div>
                     <% itemIcon(item, ['piece-icon']); %>
                   </div>
               <% }); %>
@@ -1468,7 +1455,6 @@ const getRarityUpgradeClass = item => {
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
-                    <div class="piece-hover-area"></div>
                     <div class="select-rod"></div>
                     <% itemIcon(item, ['piece-icon']); %>
                   </div>
