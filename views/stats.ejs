@@ -215,7 +215,7 @@ const getReforges = (accessories) => {
 
 const formatEnrichment = (string) => {
   let enrichment = string.split('_').join(' ').trim()
-  enrichment = enrichment.charAt(0).toUpperCase() + enrichment.slice(1)
+  enrichment = helper.titleCase(enrichment)
   return enrichment
 }
 
@@ -223,11 +223,15 @@ const enrichmentToStatName = (enrichment) => {
   switch (enrichment.toLowerCase()) {
     case 'walk_speed':
       return 'speed'
-      break;
+
+    case 'critical_chance':
+      return 'crit_chance'
+
+    case 'critical_damage':
+      return 'crit_damage'
 
     default:
       return enrichment.toLowerCase()
-      break;
   }
 }
 
