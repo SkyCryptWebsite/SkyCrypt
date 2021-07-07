@@ -316,7 +316,7 @@ const skill_component = (skill, icon, level, extra = {}) => { %>
       data-tippy-content="<span class='stat-name'>Rank: </span><span class='stat-value'></span>#<%= level.rank %></span>"
     <% } %>>
       <% if(icon.startsWith('head-')){ %>
-        <div class="head-icon" style="background-image:url(/head/<%= icon.substring(5) %>)"></div>
+        <div class="item-icon custom-icon" style="background-image:url(/head/<%= icon.substring(5) %>)"></div>
       <% }else{ %>
         <div class="item-icon <%= icon %>"></div>
       <% } %>
@@ -1385,9 +1385,9 @@ const getRarityUpgradeClass = item => {
                     <span class="stat-value">${crop.badges[badge].toLocaleString()}</span><br>
                   `;
               %>
-              <div class="collection" data-tippy-content="<%= amountsTooltip %>">
-                <div class="collection-icon"><div class="item-icon icon-<%= crop.icon %>"></div></div>
-                <div class="collection-stats">
+              <div class="chip" data-tippy-content="<%= amountsTooltip %>">
+                <div class="chip-icon-wrapper"><div class="item-icon icon-<%= crop.icon %>"></div></div>
+                <div class="chip-text">
                   <div class="collection-name <%= crop.unique_gold ? 'max-minion' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
                   <div class="collection-amount">
                     <small class="stat-name">Personal Best: </small><small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small><br>
@@ -1525,9 +1525,9 @@ const getRarityUpgradeClass = item => {
                   const tier_data = game_data.tiers[tier];
                 %>
                 <hr>
-                <div class="collection">
-                  <div class="collection-icon"><div class="item-icon icon-<%= tier_data.icon.replace(':', '_'); %>"></div></div>
-                  <div class="collection-stats">
+                <div class="chip">
+                  <div class="chip-icon-wrapper"><div class="item-icon icon-<%= tier_data.icon.replace(':', '_'); %>"></div></div>
+                  <div class="chip-text">
                     <div class="collection-name"><span class="stat-name"><%= tier_data.name %></span></div>
                     <div class="collection-amount">
                       <%
@@ -1720,7 +1720,7 @@ const getRarityUpgradeClass = item => {
         <% if (calculated.dungeons.unlocked_collections) { %>
           <p class="stat-sub-header">Boss Collections</p>
 
-          <div class="boss-collections">
+          <div class="collections">
           <%
           for(let boss in calculated.dungeons.boss_collections){
             let collection = calculated.dungeons.boss_collections[boss];
@@ -1737,9 +1737,9 @@ const getRarityUpgradeClass = item => {
             if (collection.unclaimed > 0)
               claimedTooltip += `<span class="stat-name">Unclaimed items: </span><span class="stat-value">${collection.unclaimed}</span>`;
           %>
-          <div class="boss-collection" <% if (claimedTooltip != "") { %>data-tippy-content="<%= claimedTooltip %>"<% } %>>
-            <div class="boss-collection-icon" style="background-image:url(/head/<%= collection.texture %>)"></div>
-            <div class="collection-stats">
+          <div class="chip" <% if (claimedTooltip != "") { %>data-tippy-content="<%= claimedTooltip %>"<% } %>>
+            <div class="chip-icon-wrapper"><div style="background-image:url(/head/<%= collection.texture %>)" class="item-icon custom-icon"></div></div>
+            <div class="chip-text">
               <div class="collection-name <%= collection.maxed ? 'max-stat' : '' %>"><span class="stat-name"><%= collection.name %> </span><% if (collection.tier > 0) { %><span class="stat-value"><%= collection.tier %></span><% } %></div>
               <div class="collection-amount"><span class="stat-name">Bosses killed: </span><span class="stat-value"><%= collection.killed.toLocaleString() %></span></div>
             </div>
@@ -1897,13 +1897,15 @@ const getRarityUpgradeClass = item => {
               <% for(let i = 1; i <= minion.tiers; i++){ %>
               <div class='minion-variant <% if(minion.levels.includes(i)){ %>minion-crafted<% } %>'><%= romanize(i) %></div>
               <% } %>
-              " class="minion
+              " class="chip
               <%= minion.maxLevel == 0 ? 'no-minion' : '' %>
               <%= minion.maxLevel == minion.tiers ? 'max-stat' : '' %>
               <%= minion.maxLevel != minion.levels.length ? 'skipped-minion' : '' %>
               ">
-                <div class="minion-icon" style="background-image: url(<%= minion.head %>)"></div>
-                <span class="stat-name"><%= minion.name %> </span><span class="stat-value"><%= minion.maxLevel %></span>
+                <div class="chip-icon-wrapper"><div style="background-image: url(<%= minion.head %>)" class="item-icon custom-icon"></div></div>
+                <div class="chip-text">
+                  <span class="stat-name"><%= minion.name %> </span><span class="stat-value"><%= minion.maxLevel %></span>
+                </div>
               </div>
             <% } %>
           </div>
@@ -1968,9 +1970,9 @@ const getRarityUpgradeClass = item => {
 
                 amountsTooltip += `<br><span class="stat-name">Total: </span><span class="stat-value">${collection.totalAmount.toLocaleString()}</span>`;
               %>
-                <div class="collection" data-tippy-content="<%= amountsTooltip %>">
-                  <div class="collection-icon"><div class="item-icon icon-<%= collection.id %>_<%= collection.damage %>"></div></div>
-                  <div class="collection-stats">
+                <div class="chip" data-tippy-content="<%= amountsTooltip %>">
+                  <div class="chip-icon-wrapper"><div class="item-icon icon-<%= collection.id %>_<%= collection.damage %>"></div></div>
+                  <div class="chip-text">
                     <div class="collection-name <%= collection.tier >= collection.maxTier ? 'max-stat' : '' %>"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
                     <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= collection.amount.toLocaleString() %></span></div>
                   </div>
