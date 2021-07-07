@@ -155,6 +155,35 @@ module.exports = {
         gold: "#c58000",
       },
     },
+    bloodyscorpion: {
+      name: "Bloody Scorpion Theme",
+      author: "Gozuk12",
+      community: true,
+      images: {
+        bg: "/resources/img/themes/bloodyscorpion/bg.webp",
+        bg_blur: "/resources/img/themes/bloodyscorpion/bg_blur.webp",
+      },
+      backgrounds: {
+        skillbar: {
+          type: "color",
+          color: "#EF325C",
+        },
+        maxedbar: {
+          type: "linear-gradient",
+          angle: "90deg",
+          colors: ["#89216B", "#DA4453"],
+          width: 10,
+        },
+      },
+      colors: {
+        logo: "#ED1444",
+        icon: "#ED1444",
+        link: "#38ef7d",
+        hover: "#ED1444",
+        maxed: "#89216B",
+        gold: "#db68ba",
+      },
+    },
 
     /* Hidden Themes */
 
