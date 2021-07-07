@@ -1366,11 +1366,11 @@ const getRarityUpgradeClass = item => {
             </div>
           <% } %>
 
-          <% if(farming.crops.length > 0){ %>
+          <% if(Object.keys(calculated.farming.crops).length > 0){ %>
             <button class="stat-sub-header extender" aria-controls="farming-crops" aria-expanded="false">Farming Crops</button>
             <div class="stat-farming-crops extendable" id="farming-crops">
               <%
-              const crops = Object.values(farming.crops).sort((a, b) => {
+              const crops = Object.values(calculated.farming.crops).sort((a, b) => {
                 return b.contests - a.contests;
               });
 
