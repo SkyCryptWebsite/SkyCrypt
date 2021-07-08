@@ -2216,8 +2216,6 @@ a.additional-player-stat:hover {
 }
 
 .item-icon {
-  image-rendering: crisp-edges;
-  image-rendering: pixelated;
   &.is-enchanted {
     filter: url(#enchanted-glint);
     #stats_content &.stats-piece-icon,
@@ -2236,6 +2234,8 @@ a.additional-player-stat:hover {
   left: 50%;
   transform: translate(-50%, -50%) scale(0.5);
   transform-origin: center center;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .custom-icon {
