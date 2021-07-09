@@ -68,6 +68,9 @@ export function loadTheme(currentTheme: string): void {
           })
           .join(", ")})`;
         break;
+      case "linear-gradient":
+        value = 'linear-gradient(${background.angle} 0%, ${background.colors} ${background.end})';
+        break;
     }
     element.style.setProperty(`--${key}`, value);
   }
