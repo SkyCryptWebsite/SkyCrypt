@@ -171,6 +171,7 @@ module.exports = {
         maxedbar: {
           type: "linear-gradient",
           angle: "90deg",
+          end: "100%",
           colors: ["#fdbb3c", "#F09819"],
         },
       },
