@@ -155,6 +155,37 @@ module.exports = {
         gold: "#c58000",
       },
     },
+    desertscorpion: {
+      name: "Desert Scorpion Theme",
+      author: "Gozuk12",
+      community: true,
+      images: {
+        bg: "/resources/img/themes/desertscorpion/bg.webp",
+        bg_blur: "/resources/img/themes/desertscorpion/bg_blur.webp",
+      },
+      backgrounds: {
+        skillbar: {
+          type: "linear-gradient",
+          angle: "90deg",
+          end: "80%",
+          colors: ["#2c9254", "#799F0C"],
+        },
+        maxedbar: {
+          type: "linear-gradient",
+          angle: "90deg",
+          end: "80%",
+          colors: ["#f79d00", "#799F0C"],
+        },
+      },
+      colors: {
+        logo: "#237543",
+        icon: "#2c9254",
+        link: "#368858",
+        hover: "#237543",
+        maxed: "#f79d00",
+        gold: "#f8b500",
+      },
+    },
 
     /* Hidden Themes */
 
