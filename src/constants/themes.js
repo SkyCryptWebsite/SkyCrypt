@@ -178,8 +178,8 @@ module.exports = {
       colors: {
         logo: "#ED1444",
         icon: "#ED1444",
-        link: "#38ef7d",
-        hover: "#ED1444",
+        link: "#EF325C",
+        hover: "#F15275",
         maxed: "#DD980E",
         gold: "#f8b500",
       },
