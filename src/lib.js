@@ -3503,39 +3503,58 @@ module.exports = {
     const boss_data = dungeons_data.bosses;
     let collections = {};
 
-    for (const i in output.catacombs.floors) {
-      let floor_id = `catacombs_${i}`;
-      if (!Object.keys(collection_data).includes(floor_id)) continue;
-
-      let data = output.catacombs.floors[i];
-      if (data.stats.tier_completions == null || data.stats.tier_completions <= 0) continue;
-
-      let coll = collection_data[floor_id];
+    for (const coll_id in collection_data) {
+      let coll = collection_data[coll_id];
       let boss = boss_data[coll.boss];
 
-      if (!collections[floor_id]) {
-        collections[floor_id] = {
-          name: boss.name,
-          texture: boss.texture,
-          tier: 0,
-          maxed: false,
-          killed: data.stats.tier_completions || 0,
-          unclaimed: 0,
-          claimed: [],
-        };
+      for (const floor_id of boss.floors) {
+        // This can be done much better. But I didn't want to deal with it.
+        let a = floor_id.split("_");
+        let dung_floor = a.pop();
+        let dung_name = a.join("_");
+
+        // I can't put these two into a single if. Welp, doesn't seem like a problem.
+        if (output[dung_name] == null || !output[dung_name]?.visited) continue;
+        if (output[dung_name].floors[dung_floor] == null) continue;
+
+        let data = output[dung_name].floors[dung_floor];
+        let num = data.stats.tier_completions || 0;
+
+        if (num <= 0) continue;
+
+        if (!collections[coll_id]) {
+          collections[coll_id] = {
+            name: boss.name,
+            texture: boss.texture,
+            tier: 0,
+            maxed: false,
+            killed: num,
+            floors: {},
+            unclaimed: 0,
+            claimed: [],
+          };
+        } else {
+          collections[coll_id].killed += num;
+        }
+
+        collections[coll_id].floors[floor_id] = num;
+      }
+
+      if (!collections[coll_id]) {
+        continue;
       }
 
       for (const reward_id in coll.rewards) {
         let reward = coll.rewards[reward_id];
-        if (collections[floor_id].killed >= reward.required) {
-          collections[floor_id].tier = reward.tier;
-          if (reward_id != "coming_soon") collections[floor_id].unclaimed++;
+        if (collections[coll_id].killed >= reward.required) {
+          collections[coll_id].tier = reward.tier;
+          if (reward_id != "coming_soon") collections[coll_id].unclaimed++;
         } else {
           break;
         }
 
-        if (collections[floor_id].tier == coll.max_tiers) {
-          collections[floor_id].maxed = true;
+        if (collections[coll_id].tier == coll.max_tiers) {
+          collections[coll_id].maxed = true;
         }
       }
     }
@@ -3548,14 +3567,14 @@ module.exports = {
       if (!Object.keys(boss_data).includes(task[0])) continue;
       let boss = boss_data[task[0]];
 
-      if (!Object.keys(collection_data).includes(boss.floor)) continue;
-      let coll = collection_data[boss.floor];
+      if (!Object.keys(collection_data).includes(boss.collection)) continue;
+      let coll = collection_data[boss.collection];
 
       let item = coll.rewards[task.splice(1).join("_")];
 
       if (item == null || boss == null) continue;
-      collections[boss.floor].claimed.push(item.name);
-      collections[boss.floor].unclaimed--;
+      collections[boss.collection].claimed.push(item.name);
+      collections[boss.collection].unclaimed--;
     }
 
     if (Object.keys(collections).length === 0) {

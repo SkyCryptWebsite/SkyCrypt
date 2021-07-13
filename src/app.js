@@ -22,14 +22,20 @@ async function main() {
 
   const fileHashes = await getFileHashes();
 
+  let fileNameMap = JSON.parse(fs.readFileSync("public/resources/js/file-name-map.json"));
+
   if (process.env.NODE_ENV == "development") {
     const { default: watch } = await import("node-watch");
 
-    watch("public/resources", { recursive: true }, async (evt, name) => {
+    watch("public/resources/css", { recursive: true }, async (evt, name) => {
       const [, , directory, fileName] = name.split(/\/|\\/);
       if (hashedDirectories.includes(directory)) {
         fileHashes[directory][fileName] = await getFileHash(name);
       }
+    });
+
+    watch("public/resources/js/file-name-map.json", {}, async (evt, name) => {
+      fileNameMap = JSON.parse(fs.readFileSync("public/resources/js/file-name-map.json"));
     });
   }
 
@@ -69,22 +75,26 @@ async function main() {
   updateIsFoolsDay();
   setInterval(updateIsFoolsDay, 60_000);
 
-  let forceCacheOnly;
-  const badStatuses = ["under_maintenance"];
+  let forceCacheOnly = false;
+  const hypixelUUID = "f7c77d999f154a66a87dc4a51ef30d19";
   async function updateCacheOnly() {
-    const response = await fetch("https://status.hypixel.net/api/v2/components.json");
-    const data = await response.json();
-    for (const component of data.components) {
-      if (component.name === "Public API") {
-        forceCacheOnly = badStatuses.includes(component.status);
-        if (forceCacheOnly) {
-          console.log("forcing cache only mode");
-        }
+    try {
+      const response = await fetch(
+        `https://api.hypixel.net/skyblock/profiles?uuid=${hypixelUUID}&key=${credentials.hypixel_api_key}`
+      );
+      forceCacheOnly = false;
+      // 429 = key throttle
+      if (!response.ok && response.status != 429) {
+        forceCacheOnly = true;
+        console.log(`forcing cache only mode because: hypixel responded with ${response.status}`);
       }
+    } catch (error) {
+      forceCacheOnly = true;
+      console.log("forcing cache only mode because:", error);
     }
   }
   updateCacheOnly();
-  setInterval(updateCacheOnly, 60_000);
+  setInterval(updateCacheOnly, 60_000 * 5);
 
   const app = express();
   const port = 32464;
@@ -249,6 +259,7 @@ async function main() {
           helper,
           extra: await getExtra("stats", favorites, cacheOnly),
           fileHashes,
+          fileNameMap,
           page: "stats",
         },
         (err, html) => {
@@ -272,6 +283,7 @@ async function main() {
           player: playerUsername,
           extra: await getExtra("index", favorites, cacheOnly),
           fileHashes,
+          fileNameMap,
           helper,
           page: "index",
         },
@@ -568,7 +580,7 @@ async function main() {
   app.all("/api", async (req, res, next) => {
     res.render(
       "api",
-      { error: null, player: null, extra: await getExtra("api"), fileHashes, helper, page: "api" },
+      { error: null, player: null, extra: await getExtra("api"), fileHashes, fileNameMap, helper, page: "api" },
       (err, html) => {
         res.set("X-Cluster-ID", `${helper.getClusterId()}`);
         res.send(html);
@@ -593,6 +605,7 @@ async function main() {
         player: null,
         extra: await getExtra("index", favorites, cacheOnly),
         fileHashes,
+        fileNameMap,
         helper,
         page: "index",
       },

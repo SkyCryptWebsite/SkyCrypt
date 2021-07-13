@@ -136,7 +136,7 @@ module.exports = {
 
             if (module.exports.hasPath(data.textures, "skin")) {
               skin_data.skinurl = data.textures.skin.url;
-              skin_data.model = data.textures.slim ? "slim" : "regular";
+              skin_data.model = data.textures.slim ? "slim" : "default";
             }
 
             if (module.exports.hasPath(data.textures, "cape")) {

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node init && node index",
-    "dev": "concurrently -r \"npm run nodemon\" \"npm run scss:watch\" \"npm run ts:watch\"",
+    "dev": "concurrently -r \"npm run nodemon\" \"npm run scss:watch\" \"npm run rollup:watch\"",
     "postinstall": "node init",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint .",
@@ -13,11 +13,11 @@
     "lint:ejs": "ejslint **/*.ejs",
     "prettier": "npx prettier --check .",
     "prettier:fix": "npx prettier --write .",
-    "prestart": "npm run scss && npm run ts",
+    "prestart": "npm run scss && npm run rollup",
     "scss": "sass public/resources/scss:public/resources/css --style=compressed",
     "scss:watch": "sass --watch public/resources/scss:public/resources/css",
-    "ts": "npx tsc -p public/resources/ts",
-    "ts:watch": "npx tsc -p public/resources/ts -w",
+    "rollup": "npx rollup -c",
+    "rollup:watch": "npx rollup -c -w",
     "nodemon": "node init && nodemon index"
   },
   "repository": {
@@ -71,11 +71,15 @@
     "remove": "^0.1.5",
     "sharp": "^0.28.3",
     "sitemap": "^7.0.0",
+    "skinview3d": "^2.0.1",
     "twemoji": "^13.1.0",
     "upng-js": "^2.1.0",
     "uuid": "^8.3.1"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-typescript": "^8.2.1",
     "@typescript-eslint/eslint-plugin": "^4.28.1",
     "@typescript-eslint/parser": "^4.28.1",
     "babel-eslint": "^10.1.0",
@@ -84,9 +88,12 @@
     "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
     "node-watch": "^0.7.1",
-    "nodemon": "^2.0.7",
+    "nodemon": "^2.0.9",
     "prettier": "2.3.2",
+    "rollup": "^2.52.4",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-terser": "^7.0.2",
     "sass": "^1.35.1",
-    "typescript": "^4.3.3"
+    "typescript": "^4.3.5"
   }
 }
