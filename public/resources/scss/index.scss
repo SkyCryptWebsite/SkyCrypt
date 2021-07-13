@@ -748,8 +748,7 @@ input[type="search"]::-webkit-search-cancel-button {
         content: none;
       }
 
-      .item-icon,
-      .head-icon {
+      .item-icon {
         position: absolute;
         top: 5px;
         left: 5px;
@@ -759,11 +758,6 @@ input[type="search"]::-webkit-search-cancel-button {
         transform: scale(0.2);
         transform-origin: top left;
         filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
-      }
-
-      .head-icon {
-        top: 6px;
-        background-repeat: no-repeat;
       }
     }
 
@@ -2100,20 +2094,26 @@ a.additional-player-stat:hover {
   }
 }
 
-.piece-hover-area {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 20;
-  transition: background-color 0.2s;
-  border-radius: 5px;
-}
-
-.piece-hover-area:hover,
-.sticky-stats .piece-hover-area {
-  background-color: rgba(255, 255, 255, 0.2);
+.inventory-item,
+.piece {
+  @media (hover: hover) {
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 20;
+      transition: background-color 0.2s;
+      border-radius: 5px;
+      pointer-events: none;
+    }
+    &.sticky-stats::after,
+    &:hover::after {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
 }
 
 .pieces {
@@ -2853,14 +2853,12 @@ a.additional-player-stat:hover {
 }
 
 .sea-creature {
-  display: inline-block;
-  width: 140px;
   position: relative;
-  margin-right: 15px;
-  margin-bottom: 15px;
   background-color: rgba(var(--background-rgb), 0.3);
   border-radius: 10px;
+  width: 140px;
   height: 230px;
+  flex-shrink: 0;
 }
 
 .sea-creature-name {
@@ -2886,6 +2884,10 @@ a.additional-player-stat:hover {
   }
 }
 
+.stat-experiments .narrow-info-container hr {
+  border: none;
+}
+
 .sea-creature-image {
   position: absolute;
   top: 70px;
@@ -2900,7 +2902,6 @@ a.additional-player-stat:hover {
 .sea-creature-kills {
   position: absolute;
   top: 195px;
-  height: 40px;
   left: 0;
   right: 0;
   text-align: center;
@@ -2940,37 +2941,6 @@ a.additional-player-stat:hover {
   }
 }
 
-.minion,
-.collection {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 8px;
-  margin-left: 5px;
-  background-color: rgba(var(--background-rgb), 0.3);
-  border-radius: 5px;
-}
-
-.minion {
-  padding: 10px;
-  padding-left: 60px;
-  line-height: 40px;
-
-  &:not(.skipped-minion)::after {
-    content: "";
-  }
-}
-
-.minion-icon {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 40px;
-  height: 40px;
-  background-size: auto 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
 .max-stat .stat-name {
   color: var(--maxed-hex);
 }
@@ -2992,35 +2962,51 @@ a.additional-player-stat:hover {
   }
 }
 
-.collection {
-  padding: 7px;
-  padding-right: 15px;
+.collections,
+.minions,
+.stat-farming-crops,
+.sea-creatures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  &.sea-creatures {
+    gap: 15px;
+  }
+}
+
+.chip {
+  display: grid;
+  grid-template-columns: 48px max-content;
+  align-items: center;
+  padding: 8px;
+  background-color: rgba(var(--background-rgb), 0.3);
+  border-radius: 8px;
 
   &::after {
-    content: "";
+    content: none;
   }
-}
 
-.collection-icon {
-  width: 42px;
-  height: 42px;
-  display: inline-block;
-  position: relative;
-  vertical-align: middle;
+  .chip-icon-wrapper {
+    position: relative;
+    aspect-ratio: 1;
 
-  .item-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.328125);
-    transform-origin: center center;
+    @supports not (aspect-ratio: 1) {
+      padding-bottom: 100%;
+    }
+
+    .item-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.375);
+      transform-origin: center center;
+    }
   }
-}
 
-.collection-stats {
-  margin-left: 5px;
-  display: inline-block;
-  vertical-align: middle;
+  .chip-text {
+    padding: 0 8px;
+  }
 }
 
 .collection-name {
@@ -3029,33 +3015,6 @@ a.additional-player-stat:hover {
 
 .collection-amount {
   font-size: 14px;
-}
-
-.boss-collection {
-  position: relative;
-  display: inline-block;
-  padding: 7px;
-  padding-right: 15px;
-  margin-left: 5px;
-  margin-bottom: 8px;
-  background-color: rgba(var(--background-rgb), 0.3);
-  border-radius: 5px;
-
-  &::after {
-    content: "";
-  }
-}
-
-.boss-collection-icon {
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
-  width: 40px;
-  height: 40px;
-  margin-left: 5px;
-  background-size: auto 100%;
-  background-position: center;
-  background-repeat: no-repeat;
 }
 
 .narrow-info-header {
@@ -3799,23 +3758,29 @@ body {
 
   .collections,
   .minions,
+  .stat-farming-crops,
   .sea-creatures {
-    white-space: nowrap;
+    flex-wrap: nowrap;
     overflow-x: auto;
     margin-left: calc(-1 * var(--padding));
     margin-right: calc(-1 * var(--padding));
     content-visibility: auto;
-    contain-intrinsic-size: 200px 70px;
+    contain-intrinsic-size: 200px 64px;
 
-    &.sea-creature {
-      contain-intrinsic-size: 155px 245px;
+    &.sea-creatures {
+      contain-intrinsic-size: 140px 230px;
+      &::after {
+        width: 15px; //15px = --padding - gap
+      }
     }
 
-    > :first-child {
-      margin-inline-start: var(--padding);
-    }
-    > :last-child {
-      margin-inline-end: var(--padding);
+    padding-inline-start: var(--padding);
+    // because padding-inline-end gets eaten by the scroll container
+    &::after {
+      content: "";
+      display: block;
+      width: 22px; //22px = --padding - gap
+      flex-shrink: 0;
     }
   }
 
