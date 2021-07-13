@@ -42,8 +42,6 @@ async function main() {
 
   await db.collection("members").createIndex({ uuid: 1, profile_id: 1 }, { unique: true });
 
-  await db.collection("profileViews").createIndex({ daily: -1 });
-
   await db.collection("guilds").createIndex({ gid: 1 }, { unique: true });
 
   await db.collection("guildMembers").createIndex({ uuid: 1 }, { unique: true });
@@ -67,27 +65,6 @@ async function main() {
   await db.collection("topViews").createIndex({ total: -1 });
 
   await db.collection("topViews").deleteMany({});
-
-  for await (const doc of db.collection("viewsLeaderboard").aggregate([
-    {
-      $lookup: {
-        from: "profileStore",
-        localField: "uuid",
-        foreignField: "uuid",
-        as: "profileInfo",
-      },
-    },
-    {
-      $unwind: {
-        path: "$profileInfo",
-      },
-    },
-    {
-      $limit: 20,
-    },
-  ])) {
-    await db.collection("topViews").insertOne(doc);
-  }
 
   mongo.close();
   process.exit(0);
