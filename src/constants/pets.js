@@ -558,6 +558,11 @@ module.exports = {
         head: "/head/e05c9b4f4218677c5b4bcc9c7d9e29e18d1684a536781fede1280fc5e6961538",
         release: 1612803600000,
       },
+      DRAGON_PASTEL: {
+        name: "Pastel",
+        head: "/head/4a62ec4e019fe0fed059663ae59daa0d91729517bf33ae7f7d7e722913602df4",
+        release: new Date("2021-06-30 18:00:00 GMT+1").getTime(),
+      },
     },
     BLUE_WHALE: {
       WHALE_ORCA: {

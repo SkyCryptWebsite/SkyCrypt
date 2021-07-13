@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const util = require("util");
 
-const hashedDirectories = ["js", "css"];
+const hashedDirectories = ["css"];
 
 function getFileHash(filename) {
   return new Promise((resolve, reject) => {
