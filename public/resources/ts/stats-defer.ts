@@ -1,6 +1,8 @@
-interface Window {
-  tippy: any;
-  skinview3d: any;
+import { setCookie } from "./common-defer";
+import { SkinViewer, createOrbitControls } from "skinview3d";
+
+declare global {
+  function tippy(targets: string | Element | Element[], optionalProps?: Record<string, unknown>): any;
 }
 
 const favoriteElement = document.querySelector(".favorite") as HTMLButtonElement;
@@ -43,7 +45,7 @@ function getCookie(c_name: string) {
   return "";
 }
 
-window.tippy("*[data-tippy-content]:not(.interactive-tooltip)", {
+tippy("*[data-tippy-content]:not(.interactive-tooltip)", {
   trigger: "mouseenter click",
 });
 
@@ -52,7 +54,7 @@ const playerModel = document.getElementById("player_model") as HTMLElement;
 let skinViewer: any;
 
 if (calculated.skin_data) {
-  skinViewer = new window.skinview3d.SkinViewer({
+  skinViewer = new SkinViewer({
     width: playerModel.offsetWidth,
     height: playerModel.offsetHeight,
     model: calculated.skin_data.model,
@@ -67,7 +69,7 @@ if (calculated.skin_data) {
 
   skinViewer.camera.position.set(-18, -3, 58);
 
-  const controls = new window.skinview3d.createOrbitControls(skinViewer);
+  const controls = createOrbitControls(skinViewer);
 
   skinViewer.canvas.removeAttribute("tabindex");
 
@@ -104,7 +106,7 @@ if (calculated.skin_data) {
   }
 }
 
-window.tippy(".interactive-tooltip", {
+tippy(".interactive-tooltip", {
   trigger: "mouseenter click",
   interactive: true,
   appendTo: () => document.body,
@@ -268,9 +270,6 @@ function renderInventory(inventory: ItemSlot[], type: string) {
 
       const inventoryItem = document.createElement("div");
 
-      const pieceHoverArea = document.createElement("div");
-      pieceHoverArea.className = "piece-hover-area";
-
       inventoryItem.className = "rich-item inventory-item";
 
       if (type === "backpack") {
@@ -280,7 +279,6 @@ function renderInventory(inventory: ItemSlot[], type: string) {
       }
 
       inventoryItem.appendChild(inventoryItemIcon);
-      inventoryItem.appendChild(pieceHoverArea);
 
       if (item.Count != 1) {
         inventoryItem.appendChild(inventoryItemCount);
@@ -288,7 +286,7 @@ function renderInventory(inventory: ItemSlot[], type: string) {
 
       inventorySlot.appendChild(inventoryItem);
 
-      bindLoreEvents(pieceHoverArea);
+      bindLoreEvents(inventoryItem);
     }
 
     if (index % pagesize === 0 && index !== 0) {
@@ -528,7 +526,7 @@ function resize() {
     document.getElementById("skin_display")?.appendChild(playerModel);
   }
 
-  window.tippy("*[data-tippy-content]");
+  tippy("*[data-tippy-content]");
 
   if (playerModel && skinViewer) {
     if (playerModel.offsetWidth / playerModel.offsetHeight < 0.6) {
@@ -732,9 +730,8 @@ const itemLore = statsContent.querySelector(".item-lore") as HTMLElement;
 const backpackContents = statsContent.querySelector(".backpack-contents") as HTMLElement;
 
 function bindLoreEvents(element: HTMLElement) {
-  const parent = element.parentElement as HTMLElement;
   element.addEventListener("mouseenter", () => {
-    fillLore(parent);
+    fillLore(element);
 
     statsContent.classList.add("show-stats");
   });
@@ -767,11 +764,11 @@ function bindLoreEvents(element: HTMLElement) {
     statsContent.style.top = top + "px";
   });
 
-  const itemIndex = Number(parent.getAttribute("data-item-index"));
+  const itemIndex = Number(element.getAttribute("data-item-index"));
   const item = all_items.find((a) => a.item_index == itemIndex);
 
   if (item && "containsItems" in item) {
-    parent.addEventListener("contextmenu", (event) => {
+    element.addEventListener("contextmenu", (event) => {
       event.preventDefault();
 
       showBackpack(item);
@@ -787,17 +784,17 @@ function bindLoreEvents(element: HTMLElement) {
       if (statsContent.classList.contains("sticky-stats")) {
         closeLore();
       } else {
-        showLore(parent, false);
+        showLore(element, false);
 
         if (Number(statsContent.getAttribute("data-item-index")) != itemIndex) {
-          fillLore(parent);
+          fillLore(element);
         }
       }
     }
   });
 }
 
-for (const element of document.querySelectorAll<HTMLElement>(".rich-item .piece-hover-area")) {
+for (const element of document.querySelectorAll<HTMLElement>(".rich-item")) {
   bindLoreEvents(element);
 }
 
@@ -835,7 +832,7 @@ for (const element of document.querySelectorAll<HTMLElement>(".close-lore")) {
 }
 
 for (const element of document.querySelectorAll<HTMLElement>(".copy-text")) {
-  const copyNotification = window.tippy(element, {
+  const copyNotification = tippy(element, {
     content: "Copied to clipboard!",
     trigger: "manual",
   });
@@ -866,7 +863,7 @@ function checkFavorite() {
   return favorited;
 }
 
-const favoriteNotification = window.tippy(favoriteElement, {
+const favoriteNotification = tippy(favoriteElement, {
   trigger: "manual",
 });
 
