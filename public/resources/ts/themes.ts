@@ -62,6 +62,6 @@ export function loadTheme(currentTheme: string): void {
   processedTheme.styles[`--logo`] = `url(${processedTheme.logoURL})`;
 
   applyProcessedTheme(processedTheme);
-  
+
   localStorage.setItem("processedTheme", JSON.stringify(processedTheme));
 }
