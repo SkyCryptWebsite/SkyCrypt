@@ -69,7 +69,7 @@ export function loadTheme(currentTheme: string): void {
           .join(", ")})`;
         break;
       case "linear-gradient":
-        value = 'linear-gradient(${background.angle}, ${background.color1} ${background.end1}, ${background.color2} ${background.end2})';
+        value = 'linear-gradient(${background.angle}, ${background.color1} ${background.start}, ${background.color2} ${background.end})';
         break;
     }
     element.style.setProperty(`--${key}`, value);
