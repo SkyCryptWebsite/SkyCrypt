@@ -128,7 +128,8 @@ document.querySelector("#themes-box")?.addEventListener("change", (event) => {
 window.addEventListener("storage", (event) => {
   if (event.key === "currentTheme" && event.newValue != null) {
     setCheckedTheme(event.newValue);
-    loadTheme(event.newValue);
+  } else if (event.key === "processedTheme" && event.newValue != null) {
+    applyProcessedTheme(JSON.parse(event.newValue));
   }
 });
 

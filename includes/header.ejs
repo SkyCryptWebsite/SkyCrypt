@@ -1,3 +1,26 @@
+<script>
+  function applyProcessedTheme(processedTheme) {
+    const element = document.documentElement;
+    element.classList.toggle("light", processedTheme.light);
+    document.querySelector('meta[name="theme-color"]').content = processedTheme.light ? "#dbdbdb" : "#282828";
+    element.setAttribute("style", "");
+    for (const key in processedTheme.styles) {
+      element.style.setProperty(key, processedTheme.styles[key]);
+    }
+    document.querySelectorAll('link[rel="icon"]').forEach((favicon) => {
+      if (favicon.href.match("logo_square")) {
+        favicon.href = processedTheme.logoURL;
+      }
+    });
+    document.querySelector("#enchanted-glint feImage")?.setAttribute("href", processedTheme.enchantedGlint);
+  }
+  {
+    const processedTheme = localStorage.getItem("processedTheme");
+    if (processedTheme) {
+      applyProcessedTheme(JSON.parse(processedTheme));
+    }
+  }
+</script>
 <script type="module" src="/resources/js/<%- fileNameMap['themes'] %>"></script>
 <header>
   <div data-tippy-content="Supporting LGBTQ+ rights all around the year! ❤️<br><br>Click for a surprise. :)" class="pride-flag"></div>

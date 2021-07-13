@@ -42,6 +42,17 @@ interface Theme {
   colors?: { [key: string]: string };
 }
 
+interface ProcessedTheme {
+  light: boolean;
+  styles: {
+    [key: string]: string;
+  };
+  logoURL: string;
+  enchantedGlint: string;
+}
+
+declare function applyProcessedTheme(processedTheme: ProcessedTheme): void;
+
 declare const items: { [key: string]: (ItemSlot | Item | Backpack)[] };
 
 type StatName =
