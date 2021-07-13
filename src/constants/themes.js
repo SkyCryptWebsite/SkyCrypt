@@ -167,14 +167,18 @@ module.exports = {
         skillbar: {
           type: "linear-gradient",
           angle: "90deg",
+          start: "0%",
           end: "80%",
-          colors: ["#2c9254", "#799F0C"],
+          color1: "#2c9254",
+          color2: "#799F0C",
         },
         maxedbar: {
           type: "linear-gradient",
           angle: "90deg",
+          start: "0%",
           end: "80%",
-          colors: ["#f79d00", "#799F0C"],
+          color1: "#f79d00",
+          color2: "#799F0C",
         },
       },
       colors: {
