@@ -238,10 +238,10 @@ const itemIconTemplate = (item: Item, classes: { [name: string]: boolean } = {})
   classes["is-enchanted"] = isEnchanted(item);
   if (item.texture_path) {
     classes["custom-icon"] = true;
-    return html` <div style='background-image: url("${item.texture_path}")' class="${classMap(classes)}"></div> `;
+    return html`<div style='background-image: url("${item.texture_path}")' class="${classMap(classes)}"></div>`;
   } else {
     classes[`icon-${item.id}_${item.Damage}`] = true;
-    return html` <div class="${classMap(classes)}"></div> `;
+    return html`<div class="${classMap(classes)}"></div>`;
   }
 };
 
