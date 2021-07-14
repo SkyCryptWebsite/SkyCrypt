@@ -122,7 +122,8 @@ tippy(".interactive-tooltip", {
   },
 });
 
-const all_items = items.armor.concat(
+const all_items = [
+  items.armor,
   items.inventory,
   items.enderchest,
   items.talisman_bag,
@@ -131,8 +132,8 @@ const all_items = items.armor.concat(
   items.potion_bag,
   items.personal_vault,
   items.wardrobe_inventory,
-  items.storage
-);
+  items.storage,
+].flat();
 
 const dimmer = document.querySelector("#dimmer") as HTMLElement;
 
