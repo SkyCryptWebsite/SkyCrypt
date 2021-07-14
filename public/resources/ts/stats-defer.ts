@@ -687,71 +687,80 @@ const itemNameContent = itemName.querySelector("span") as HTMLSpanElement;
 const itemLore = statsContent.querySelector(".item-lore") as HTMLElement;
 const backpackContents = statsContent.querySelector(".backpack-contents") as HTMLElement;
 
-function bindLoreEvents(element: HTMLElement) {
-  element.addEventListener("mouseenter", () => {
-    fillLore(element);
+function mouseenterLoreListener(this: HTMLElement) {
+  fillLore(this);
 
-    statsContent.classList.add("show-stats");
-  });
+  statsContent.classList.add("show-stats");
+}
 
-  element.addEventListener("mouseleave", () => {
-    statsContent.classList.remove("show-stats");
-    element.classList.remove("piece-hovered");
-  });
+function mouseleaveLoreListener(this: HTMLElement) {
+  statsContent.classList.remove("show-stats");
+}
 
-  element.addEventListener("mousemove", (event) => {
-    if (statsContent.classList.contains("sticky-stats")) {
-      return;
-    }
+function mousemoveLoreListener(this: HTMLElement, event: MouseEvent) {
+  if (statsContent.classList.contains("sticky-stats")) {
+    return;
+  }
 
-    const maxTop = window.innerHeight - statsContent.offsetHeight - 20;
-    const rect = element.getBoundingClientRect();
+  const maxTop = window.innerHeight - statsContent.offsetHeight - 20;
+  const rect = this.getBoundingClientRect();
 
-    let left = rect.x - statsContent.offsetWidth - 10;
+  let left = rect.x - statsContent.offsetWidth - 10;
 
-    if (left < 10) {
-      left = rect.x + 90;
-    }
+  if (left < 10) {
+    left = rect.x + 90;
+  }
 
-    if (rect.x) {
-      statsContent.style.left = left + "px";
-    }
+  if (rect.x) {
+    statsContent.style.left = left + "px";
+  }
 
-    const top = Math.max(70, Math.min(maxTop, event.clientY - statsContent.offsetHeight / 2));
+  const top = Math.max(70, Math.min(maxTop, event.clientY - statsContent.offsetHeight / 2));
 
-    statsContent.style.top = top + "px";
-  });
+  statsContent.style.top = top + "px";
+}
 
-  const itemId = element.getAttribute("data-item-id") as string;
-  const item = all_items.find((a) => a.itemId == itemId);
-
-  if (item && "containsItems" in item) {
-    element.addEventListener("contextmenu", (event) => {
+function getContextmenuLoreListener(item: Item | Backpack) {
+  return function (this: HTMLElement, event: MouseEvent) {
+    if (item && "containsItems" in item) {
       event.preventDefault();
 
       showBackpack(item);
-    });
-  }
+    }
+  };
+}
 
-  element.addEventListener("click", (event) => {
+function getClickLoreListener(item: Item | Backpack) {
+  return function (this: HTMLElement, event: MouseEvent) {
     if (event.ctrlKey && item && "containsItems" in item) {
       showBackpack(item);
     } else {
       if (statsContent.classList.contains("sticky-stats")) {
         closeLore();
       } else {
-        showLore(element, false);
+        showLore(this, false);
 
-        if (element.getAttribute("data-item-id") != itemId) {
-          fillLore(element);
+        if (this.getAttribute("data-item-id") != item.itemId) {
+          fillLore(this);
         }
       }
     }
-  });
+  };
 }
 
 for (const element of document.querySelectorAll<HTMLElement>(".rich-item")) {
-  bindLoreEvents(element);
+  element.addEventListener("mouseenter", mouseenterLoreListener);
+
+  element.addEventListener("mouseleave", mouseleaveLoreListener);
+
+  element.addEventListener("mousemove", mousemoveLoreListener);
+
+  const itemId = element.getAttribute("data-item-id") as string;
+  const item = all_items.find((a) => a.itemId == itemId) as Item;
+
+  element.addEventListener("contextmenu", getContextmenuLoreListener(item));
+
+  element.addEventListener("click", getClickLoreListener(item));
 }
 
 const enableApiPlayer = document.querySelector("#enable_api") as HTMLVideoElement;
