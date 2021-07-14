@@ -165,28 +165,20 @@ module.exports = {
       },
       backgrounds: {
         skillbar: {
-          type: "linear-gradient",
-          angle: "90deg",
-          start: "0%",
-          end: "80%",
-          color1: "#2c9254",
-          color2: "#799F0C",
+          type: "color",
+          color: "#0baa51"
         },
         maxedbar: {
-          type: "linear-gradient",
-          angle: "90deg",
-          start: "0%",
-          end: "80%",
-          color1: "#f79d00",
-          color2: "#799F0C",
+          type: "color",
+          color: "#f1a230"
         },
       },
       colors: {
-        logo: "#237543",
+        logo: "#2c9254",
         icon: "#2c9254",
-        link: "#237543",
-        hover: "#368858",
-        maxed: "#f79d00",
+        link: "#368858",
+        hover: "#237543",
+        maxed: "#DD980E",
         gold: "#f8b500",
       },
     },
