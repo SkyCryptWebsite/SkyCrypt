@@ -3379,11 +3379,9 @@ module.exports = {
 
       const collectionData = constants.collection_data.find((a) => a.skyblockId == type);
 
-      if ("tiers" in collectionData) {
-        for (const tier of collectionData.tiers) {
-          if (totalAmount >= tier.amountRequired) {
-            output[type].tier = Math.max(tier.tier, output[type].tier);
-          }
+      for (const tier of collectionData?.tiers ?? []) {
+        if (totalAmount >= tier.amountRequired) {
+          output[type].tier = Math.max(tier.tier, output[type].tier);
         }
       }
     }
