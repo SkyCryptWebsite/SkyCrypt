@@ -326,6 +326,8 @@ function showBackpack(item: Backpack) {
   renderInventory(item.containsItems, "backpack");
 
   currentBackpack = item;
+
+  closeLore();
 }
 
 function fillLore(element: HTMLElement) {
@@ -462,7 +464,6 @@ function fillLore(element: HTMLElement) {
 
     viewBackpack.addEventListener("click", () => {
       showBackpack(item as Backpack);
-      closeLore();
     });
 
     backpackContents.appendChild(viewBackpack);
@@ -729,14 +730,12 @@ function bindLoreEvents(element: HTMLElement) {
       event.preventDefault();
 
       showBackpack(item);
-      closeLore();
     });
   }
 
   element.addEventListener("click", (event) => {
     if (event.ctrlKey && item && "containsItems" in item) {
       showBackpack(item);
-      closeLore();
     } else {
       if (statsContent.classList.contains("sticky-stats")) {
         closeLore();
