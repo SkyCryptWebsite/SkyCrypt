@@ -122,18 +122,22 @@ tippy(".interactive-tooltip", {
   },
 });
 
-const all_items = [
-  items.armor,
-  items.inventory,
-  items.enderchest,
-  items.talisman_bag,
-  items.fishing_bag,
-  items.quiver,
-  items.potion_bag,
-  items.personal_vault,
-  items.wardrobe_inventory,
-  items.storage,
-].flat();
+const allItems = new Map(
+  [
+    items.armor,
+    items.inventory,
+    items.enderchest,
+    items.talisman_bag,
+    items.fishing_bag,
+    items.quiver,
+    items.potion_bag,
+    items.personal_vault,
+    items.wardrobe_inventory,
+    items.storage,
+  ]
+    .flat()
+    .map((item) => [item.itemId, item])
+);
 
 const dimmer = document.querySelector("#dimmer") as HTMLElement;
 
@@ -339,7 +343,7 @@ function fillLore(element: HTMLElement) {
 
   if (element.hasAttribute("data-item-id")) {
     const itemId = element.getAttribute("data-item-id") as string;
-    item = all_items.find((a) => a.itemId == itemId) as Item;
+    item = allItems.get(itemId) as Item;
   } else if (element.hasAttribute("data-pet-index")) {
     item = calculated.pets[parseInt(element.getAttribute("data-pet-index") as string)];
   } else if (element.hasAttribute("data-missing-pet-index")) {
@@ -566,7 +570,7 @@ for (const element of document.querySelectorAll<HTMLElement>(".stat-weapons .sel
   const parent = element.parentElement as HTMLElement;
   const itemId = parent.getAttribute("data-item-id") as string;
 
-  const item = all_items.find((a) => a.itemId == itemId) as Item;
+  const item = allItems.get(itemId) as Item;
 
   const weaponStats = calculated.weapon_stats[itemId];
   let stats;
@@ -612,7 +616,7 @@ for (const element of document.querySelectorAll<HTMLElement>(".stat-fishing .sel
   const parent = element.parentElement as HTMLElement;
   const itemId = parent.getAttribute("data-item-id") as string;
 
-  const item = all_items.find((a) => a.itemId == itemId) as Item;
+  const item = allItems.get(itemId) as Item;
 
   //TODO find out why weapon stats is used in fishing rods section
   const weaponStats = calculated.weapon_stats[itemId];
@@ -760,7 +764,7 @@ for (const element of document.querySelectorAll<HTMLElement>(".rich-item")) {
   element.addEventListener("mousemove", mousemoveLoreListener);
 
   const itemId = element.getAttribute("data-item-id") as string;
-  const item = all_items.find((a) => a.itemId == itemId) as Item;
+  const item = allItems.get(itemId) as Item;
 
   element.addEventListener("contextmenu", getContextmenuLoreListener(item));
 
