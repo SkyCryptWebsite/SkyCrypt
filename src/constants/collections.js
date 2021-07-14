@@ -275,6 +275,22 @@ module.exports = {
       damage: 0,
       maxTier: 9,
     },
+    {
+      type: "mining",
+      skyblockId: "HARD_STONE",
+      name: "Hard Stone",
+      id: 1,
+      damage: 0,
+      maxTier: 7,
+    },
+    {
+      type: "mining",
+      skyblockId: "GEMSTONE_COLLECTION",
+      name: "Gemstone",
+      id: 35,
+      damage: 14,
+      maxTier: 11,
+    },
 
     {
       type: "combat",
