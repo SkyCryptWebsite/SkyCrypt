@@ -1,5 +1,7 @@
 import { setCookie } from "./common-defer";
 import { SkinViewer, createOrbitControls } from "skinview3d";
+import { render, html, TemplateResult } from "lit";
+import { ClassInfo, classMap } from "lit/directives/class-map.js";
 
 declare global {
   function tippy(targets: string | Element | Element[], optionalProps?: Record<string, unknown>): any;
@@ -226,15 +228,52 @@ function renderLore(text: string) {
 
 let currentBackpack: Backpack;
 
-function renderInventory(inventory: ItemSlot[], type: string) {
-  const visibleInventory = document.querySelector(".stat-inventory .inventory-view");
+const itemIconTemplate = (item: Item, classes: { [name: string]: boolean } = {}) => {
+  classes["item-icon"] = true;
+  classes["is-enchanted"] = isEnchanted(item);
+  if (item.texture_path) {
+    classes["custom-icon"] = true;
+    return html` <div style='background-image: url("${item.texture_path}")' class="${classMap(classes)}"></div> `;
+  } else {
+    classes[`icon-${item.id}_${item.Damage}`] = true;
+    return html` <div class="${classMap(classes)}"></div> `;
+  }
+};
 
-  if (visibleInventory) {
-    document.querySelector("#inventory_container")?.removeChild(visibleInventory);
+function isSlotItem(item: ItemSlot): item is Item {
+  return "id" in item;
+}
+
+const inventorySlotTemplate = (item: ItemSlot) => {
+  let itemTemplate: TemplateResult | undefined;
+  console.log(item);
+
+  if (isSlotItem(item)) {
+    itemTemplate = html`
+      <div
+        class="rich-item inventory-item"
+        data-item-id="${item.itemId}"
+        @mouseenter="${mouseenterLoreListener}"
+        @mouseleave="${mouseleaveLoreListener}"
+        @mousemove="${mousemoveLoreListener}"
+        @contextmenu="${getContextmenuLoreListener(item)}"
+        @click="${getClickLoreListener(item)}"
+      >
+        ${itemIconTemplate(item, { "piece-icon": true })}
+        ${item.Count != 1 ? html`<div class="item-count">${item.Count}</div>` : undefined}
+      </div>
+    `;
+  }
+  return html`<div class="inventory-slot">${itemTemplate}</div>`;
+};
+
+function renderInventory(inventory: ItemSlot[], type: string, shouldScroll = true) {
+  const inventoryView = document.querySelector<HTMLElement>(".stat-inventory .inventory-view");
+
+  if (!inventoryView) {
+    return;
   }
 
-  const inventoryView = document.createElement("div");
-  inventoryView.className = "inventory-view processed";
   inventoryView.setAttribute("data-inventory-type", type);
 
   let pagesize = 5 * 9;
@@ -246,71 +285,35 @@ function renderInventory(inventory: ItemSlot[], type: string) {
     pagesize = 6 * 9;
   }
 
-  inventory.forEach((item: Item | ItemSlot, index) => {
-    const inventorySlot = document.createElement("div");
-    inventorySlot.className = "inventory-slot";
+  const itemTemplateResults: TemplateResult[] = [];
 
-    if ("id" in item) {
-      const inventoryItemIcon = document.createElement("div");
-      const inventoryItemCount = document.createElement("div");
-
-      inventoryItemIcon.className = "piece-icon item-icon icon-" + item.id + "_" + item.Damage;
-
-      if ("texture_path" in item) {
-        inventoryItemIcon.className += " custom-icon";
-        inventoryItemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
-      }
-
-      if (isEnchanted(item)) {
-        inventoryItemIcon.classList.add("is-enchanted");
-      }
-
-      inventoryItemCount.className = "item-count";
-      inventoryItemCount.innerHTML = item.Count.toString();
-
-      const inventoryItem = document.createElement("div");
-
-      inventoryItem.className = "rich-item inventory-item";
-
-      if (type === "backpack") {
-        inventoryItem.setAttribute("data-backpack-item-index", index.toString());
-      } else {
-        inventoryItem.setAttribute("data-item-index", item.item_index.toString());
-      }
-
-      inventoryItem.appendChild(inventoryItemIcon);
-
-      if (item.Count != 1) {
-        inventoryItem.appendChild(inventoryItemCount);
-      }
-
-      inventorySlot.appendChild(inventoryItem);
-
-      bindLoreEvents(inventoryItem);
-    }
-
+  inventory.forEach((item, index) => {
     if (index % pagesize === 0 && index !== 0) {
-      inventoryView.appendChild(document.createElement("hr"));
+      itemTemplateResults.push(html`<hr />`);
     }
 
-    inventoryView.appendChild(inventorySlot);
+    itemTemplateResults.push(inventorySlotTemplate(item));
   });
 
-  inventoryContainer.appendChild(inventoryView);
+  render(itemTemplateResults, inventoryView);
 
-  const rect = (document.querySelector("#inventory_container") as HTMLElement).getBoundingClientRect();
+  if (shouldScroll) {
+    const rect = (document.querySelector("#inventory_container") as HTMLElement).getBoundingClientRect();
 
-  if (rect.top > 100 && rect.bottom > window.innerHeight) {
-    let top;
-    if (rect.height > window.innerHeight - 100) {
-      top = rect.top - 100;
-    } else {
-      top = rect.bottom - window.innerHeight;
+    if (rect.top > 100 && rect.bottom > window.innerHeight) {
+      let top;
+      if (rect.height > window.innerHeight - 100) {
+        top = rect.top - 100;
+      } else {
+        top = rect.bottom - window.innerHeight;
+      }
+      window.scrollBy({ top, behavior: "smooth" });
+      scrollMemory.isSmoothScrolling = true;
     }
-    window.scrollBy({ top, behavior: "smooth" });
-    scrollMemory.isSmoothScrolling = true;
   }
 }
+
+renderInventory(items.inventory, "inventory", false);
 
 function isBackpack(item: DisplayItem): item is Backpack {
   return "containsItems" in item;
