@@ -895,7 +895,7 @@ const getRarityUpgradeClass = item => {
           <% } %>
           <div class="pieces">
             <% for(const item of items.armor.slice().reverse()){ %>
-              <div tabindex="0" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
+              <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                 <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                   <div class="piece-shine"></div>
                 <% } %>
@@ -914,7 +914,7 @@ const getRarityUpgradeClass = item => {
             <div class="wardrobe-set">
               <% for(const [index, item] of set.entries()) { %>
                 <% if (item) { %>
-                  <div tabindex="0" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %> index-<%= index %>">
+                  <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %> index-<%= index %>">
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
@@ -957,7 +957,7 @@ const getRarityUpgradeClass = item => {
                   sword = [items.highest_rarity_sword];
 
                 items.weapons.filter(a => !a.hidden).forEach(item => { %>
-                  <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece
+                  <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece
                     <% if(sword.length > 0 && item.backpackIndex === undefined && item.item_index == sword[0].item_index){ %>piece-selected<% } %>
                     piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
@@ -1002,7 +1002,7 @@ const getRarityUpgradeClass = item => {
                 <p class="stat-sub-header" style="margin-bottom: 5px">Active Accessories</p>
                 <% items.talismans.filter(a => !a.isInactive).forEach(item => {
                   %>
-                  <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>"
+                  <div tabindex="0" data-item-id="<%= item.itemId %>"
                   class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
@@ -1021,7 +1021,7 @@ const getRarityUpgradeClass = item => {
               <div class="accessory-list">
                 <p class="stat-sub-header">Inactive Accessories</p>
                 <% items.talismans.filter(a => a.isUnique && a.isInactive).forEach(item => { %>
-                  <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>"
+                  <div tabindex="0" data-item-id="<%= item.itemId %>"
                   class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
@@ -1247,16 +1247,6 @@ const getRarityUpgradeClass = item => {
                 </div>
               </div>
               <div class="inventory-view" data-inventory-type="inventory">
-                <% for(let i = 9; i < items.inventory.length; i++){ %>
-                  <% let item = items.inventory[i]; %>
-                  <%= inventorySlot(item); %>
-
-                <% } %>
-                <hr>
-                <% for(let i = 0; i < 9; i++){ %>
-                  <% let item = items.inventory[i]; %>
-                  <%= inventorySlot(item); %>
-                <% } %>
               </div>
             </div>
           <% } %>
@@ -1293,7 +1283,7 @@ const getRarityUpgradeClass = item => {
             <% } %>
             <div class="pieces">
               <%  items.pickaxes.filter(a => !a.hidden).forEach(item => { %>
-                  <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
+                  <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
@@ -1347,7 +1337,7 @@ const getRarityUpgradeClass = item => {
             <% } %>
             <div class="pieces">
               <%  items.hoes.filter(a => !a.hidden).forEach(item => { %>
-                  <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
+                  <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
@@ -1449,7 +1439,7 @@ const getRarityUpgradeClass = item => {
                   rod = [items.highest_rarity_rod];
 
                 items.rods.filter(a => !a.hidden).forEach(item => { %>
-                  <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece
+                  <div tabindex="0" data-item-id="<%= item.itemId %>"  class="rich-item piece
                     <% if(rod.length > 0 && item.backpackIndex === undefined && item.item_index == rod[0].item_index){ %>piece-selected<% } %>
                     piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>

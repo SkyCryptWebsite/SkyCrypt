@@ -331,22 +331,9 @@ function showBackpack(item: Backpack) {
 function fillLore(element: HTMLElement) {
   let item: DisplayItem | Item | Pet | undefined = undefined;
 
-  if (element.hasAttribute("data-backpack-index")) {
-    const backpack = all_items.find(
-      (a) => a.item_index == parseInt(element.getAttribute("data-backpack-index") as string)
-    ) as Backpack | undefined;
-
-    if (backpack == undefined) {
-      return;
-    }
-
-    item = backpack?.containsItems?.find(
-      (a) => a.item_index == parseInt(element.getAttribute("data-item-index") as string)
-    );
-  } else if (element.hasAttribute("data-item-index")) {
-    item = all_items.find((a) => a.item_index == parseInt(element.getAttribute("data-item-index") as string)) as Item;
-  } else if (element.hasAttribute("data-backpack-item-index")) {
-    item = currentBackpack.containsItems[parseInt(element.getAttribute("data-backpack-item-index") as string)];
+  if (element.hasAttribute("data-item-id")) {
+    const itemId = element.getAttribute("data-item-id") as string;
+    item = all_items.find((a) => a.itemId == itemId) as Item;
   } else if (element.hasAttribute("data-pet-index")) {
     item = calculated.pets[parseInt(element.getAttribute("data-pet-index") as string)];
   } else if (element.hasAttribute("data-missing-pet-index")) {
@@ -573,23 +560,8 @@ function flashForUpdate(element: HTMLElement) {
 for (const element of document.querySelectorAll<HTMLElement>(".stat-weapons .select-weapon")) {
   const parent = element.parentElement as HTMLElement;
   const itemId = parent.getAttribute("data-item-id") as string;
-  let filterItems;
 
-  if (parent.hasAttribute("data-backpack-index")) {
-    const backpack = all_items.find((a) => a.item_index == Number(parent.getAttribute("data-backpack-index"))) as
-      | Backpack
-      | undefined;
-
-    if (backpack == undefined) {
-      break;
-    }
-
-    filterItems = backpack.containsItems;
-  } else {
-    filterItems = items.weapons.filter((a) => !("backpackIndex" in a));
-  }
-
-  const item = filterItems.find((a) => a.itemId == itemId) as Item;
+  const item = all_items.find((a) => a.itemId == itemId) as Item;
 
   const weaponStats = calculated.weapon_stats[itemId];
   let stats;
@@ -634,23 +606,8 @@ for (const element of document.querySelectorAll<HTMLElement>(".stat-weapons .sel
 for (const element of document.querySelectorAll<HTMLElement>(".stat-fishing .select-rod")) {
   const parent = element.parentElement as HTMLElement;
   const itemId = parent.getAttribute("data-item-id") as string;
-  let filterItems;
 
-  if (parent.hasAttribute("data-backpack-index")) {
-    const backpack = all_items.find((a) => a.item_index == Number(parent.getAttribute("data-backpack-index"))) as
-      | Backpack
-      | undefined;
-
-    if (backpack == undefined) {
-      break;
-    }
-
-    filterItems = backpack.containsItems;
-  } else {
-    filterItems = items.rods.filter((a) => !("backpackIndex" in a));
-  }
-
-  const item = filterItems.find((a) => a.itemId == itemId) as Item;
+  const item = all_items.find((a) => a.itemId == itemId) as Item;
 
   //TODO find out why weapon stats is used in fishing rods section
   const weaponStats = calculated.weapon_stats[itemId];
@@ -764,8 +721,8 @@ function bindLoreEvents(element: HTMLElement) {
     statsContent.style.top = top + "px";
   });
 
-  const itemIndex = Number(element.getAttribute("data-item-index"));
-  const item = all_items.find((a) => a.item_index == itemIndex);
+  const itemId = element.getAttribute("data-item-id") as string;
+  const item = all_items.find((a) => a.itemId == itemId);
 
   if (item && "containsItems" in item) {
     element.addEventListener("contextmenu", (event) => {
@@ -786,7 +743,7 @@ function bindLoreEvents(element: HTMLElement) {
       } else {
         showLore(element, false);
 
-        if (Number(statsContent.getAttribute("data-item-index")) != itemIndex) {
+        if (element.getAttribute("data-item-id") != itemId) {
           fillLore(element);
         }
       }
