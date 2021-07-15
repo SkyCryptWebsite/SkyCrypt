@@ -2026,6 +2026,50 @@ class Zombie extends Pet {
   }
 }
 
+class Bal extends Pet {
+  get stats() {
+    return {
+      ferocity: this.level * 0.25,
+      strength: this.level * 0.1,
+    };
+  }
+
+  get abilities() {
+    let list = [this.first];
+    if (this.rarity > 1) {
+      list.push(this.second);
+    }
+    if (this.rarity > 3) {
+      list.push(this.third);
+    }
+    return list;
+  }
+
+  get first() {
+    let mult = 0;
+    return {
+      name: "§6Protective Skin",
+      desc: [`§7§7Gives §cheat immunity.`],
+    };
+  }
+
+  get second() {
+    let mult = 0.1;
+    return {
+      name: "§6Fire Whip",
+      desc: [`§7Every §a5s §7while in combat the Balrog will strike nearby enemies with his fire whip dealing §c${round(this.level * mult, 1)}% §7of your damage as §ftrue damage.`],
+    };
+  }
+
+  get third() {
+    let mult = 0.15;
+    return {
+      name: "§6Made of Lava",
+      desc: [`§7Gain §a${round(this.level * mult, 1)} §7on ALL stats when inside the §cMagma Fields.`],
+    };
+  }
+}
+
 /*
 
 Foraging Pets
@@ -2908,6 +2952,7 @@ module.exports = {
     Turtle: Turtle,
     Wolf: Wolf,
     Zombie: Zombie,
+    Bal: Bal,
     //Foraging
     Giraffe: Giraffe,
     Lion: Lion,
