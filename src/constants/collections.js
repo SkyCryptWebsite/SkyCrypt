@@ -287,8 +287,7 @@ module.exports = {
       type: "mining",
       skyblockId: "GEMSTONE_COLLECTION",
       name: "Gemstone",
-      id: 35,
-      damage: 14,
+      texture: "23d064ec150172d05844c11a18619c1421bbfb2ddd1dbb87cdc10e22252b773b",
       maxTier: 11,
     },
     {
