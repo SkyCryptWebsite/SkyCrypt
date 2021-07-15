@@ -2046,7 +2046,6 @@ class Bal extends Pet {
   }
 
   get first() {
-    let mult = 0;
     return {
       name: "§6Protective Skin",
       desc: [`§7§7Gives §cheat immunity.`],
