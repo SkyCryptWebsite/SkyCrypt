@@ -286,11 +286,6 @@ module.exports = {
       type: "combat",
       emoji: "🐀",
     },
-    BAL: {
-      head: "/head/c469ba2047122e0a2de3c7437ad3dd5d31f1ac2d27abde9f8841e1d92a8c5b75",
-      type: "combat",
-      emoji: "🧨",
-    },
   },
 
   /*
