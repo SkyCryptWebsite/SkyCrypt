@@ -170,7 +170,7 @@ module.exports = {
         },
         maxedbar: {
           type: "color",
-          color: "#f1a230"
+          color: "#f1a230",
         },
       },
       colors: {
