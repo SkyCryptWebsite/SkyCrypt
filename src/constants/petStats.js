@@ -2931,6 +2931,7 @@ module.exports = {
     Silverfish: Silverfish,
     "Wither Skeleton": WitherSkeleton,
     //Combat
+    Bal: Bal,
     "Black Cat": BlackCat,
     Blaze: Blaze,
     "Ender Dragon": EnderDragon,
@@ -2956,7 +2957,6 @@ module.exports = {
     Turtle: Turtle,
     Wolf: Wolf,
     Zombie: Zombie,
-    Bal: Bal,
     //Foraging
     Giraffe: Giraffe,
     Lion: Lion,
