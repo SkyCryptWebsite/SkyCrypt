@@ -2056,7 +2056,12 @@ class Bal extends Pet {
     let mult = 0.1;
     return {
       name: "§6Fire Whip",
-      desc: [`§7Every §a5s §7while in combat the Balrog will strike nearby enemies with his fire whip dealing §c${round(this.level * mult, 1)}% §7of your damage as §ftrue damage.`],
+      desc: [
+        `§7Every §a5s §7while in combat the Balrog will strike nearby enemies with his fire whip dealing §c${round(
+          this.level * mult,
+          1
+        )}% §7of your damage as §ftrue damage.`,
+      ],
     };
   }
 
