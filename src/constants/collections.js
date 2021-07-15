@@ -291,7 +291,6 @@ module.exports = {
       damage: 14,
       maxTier: 11,
     },
-
     {
       type: "combat",
       skyblockId: "ROTTEN_FLESH",
