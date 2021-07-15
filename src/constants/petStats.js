@@ -270,8 +270,7 @@ class Elephant extends Pet {
     return {
       name: "§6Trunk Efficiency",
       desc: [
-        `§7Grants §a+${round(this.level * mult, 1)} §6${
-          symbols.fortune
+        `§7Grants §a+${round(this.level * mult, 1)} §6${symbols.fortune
         } Farming Fortune§7, which increases your chance for multiple drops`,
       ],
     };
@@ -877,8 +876,7 @@ class EnderDragon extends Pet {
     return {
       name: "§6One With The Dragon",
       desc: [
-        `§7Buffs the Aspect of the Dragons sword by §a${round(this.level * 0.5, 1)} §c${
-          symbols.strength
+        `§7Buffs the Aspect of the Dragons sword by §a${round(this.level * 0.5, 1)} §c${symbols.strength
         } Damage and §a${round(this.level * 0.3, 1)} §c${symbols.strength} Strength`,
       ],
     };
@@ -1055,8 +1053,7 @@ class Golem extends Pet {
     return {
       name: "§6Toss",
       desc: [
-        `§7Every 5 hits, throw the enemy up into the air and deal ${
-          200 + round(this.level * mult, 1)
+        `§7Every 5 hits, throw the enemy up into the air and deal ${200 + round(this.level * mult, 1)
         }% damage (10s cooldown)`,
       ],
     };
@@ -1152,8 +1149,7 @@ class Guardian extends Pet {
     return {
       name: "§6Lazerbeam",
       desc: [
-        `§7Zap your enemies for §b${round(this.level * mult, 1)}x §7your §b${
-          symbols.intelligence
+        `§7Zap your enemies for §b${round(this.level * mult, 1)}x §7your §b${symbols.intelligence
         } Intelligence §7every §a3s`,
       ],
     };
@@ -1367,8 +1363,7 @@ class Phoenix extends Pet {
     return {
       name: "§6Rekindle",
       desc: [
-        `§7Before death, become §eimmune §7and gain §c${start_strength + round(this.level * mult_strength, 1)} ${
-          symbols.strength
+        `§7Before death, become §eimmune §7and gain §c${start_strength + round(this.level * mult_strength, 1)} ${symbols.strength
         } Strength §7for ${2 + round(this.level * mult_time, 1)} §7seconds`,
         `§73 minutes cooldown`,
       ],
@@ -1381,8 +1376,7 @@ class Phoenix extends Pet {
     return {
       name: "§6Fourth Flare",
       desc: [
-        `§7On 4th melee strike, §6ignite §7mobs, dealing §c${1 + round(this.level * mult_damage, 1)}x §7your §9${
-          symbols.crit_damage
+        `§7On 4th melee strike, §6ignite §7mobs, dealing §c${1 + round(this.level * mult_damage, 1)}x §7your §9${symbols.crit_damage
         } Crit Damage §7each second for §a${2 + floor(this.level * mult_time, 0)} §7seconds`,
       ],
     };
@@ -1437,8 +1431,7 @@ class Pigman extends Pet {
     return {
       name: "§6Pork Master",
       desc: [
-        `§7Buffs the Pigman sword by §a${round(this.level * mult_damage, 1)} §c${
-          symbols.strength
+        `§7Buffs the Pigman sword by §a${round(this.level * mult_damage, 1)} §c${symbols.strength
         } Damage and §7§a${round(this.level * mult_strength, 1)} §c${symbols.strength} Strength`,
       ],
     };
@@ -1493,8 +1486,7 @@ class Rat extends Pet {
     return {
       name: "§6Rat's Blessing",
       desc: [
-        `§7Has a chance to grant a random player §b+${floor(2 + this.level * mult_mf, 1)}${
-          symbols.magic_find
+        `§7Has a chance to grant a random player §b+${floor(2 + this.level * mult_mf, 1)}${symbols.magic_find
         } Magic Find §7for §a${round(
           20 + this.level * mult_time,
           0
@@ -1925,8 +1917,7 @@ class Wolf extends Pet {
     return {
       name: "§6Pack Leader",
       desc: [
-        `§7Gain §a${round(this.level * mult, 1)} §9 ${
-          symbols.crit_damage
+        `§7Gain §a${round(this.level * mult, 1)} §9 ${symbols.crit_damage
         } Crit Damage §7for every nearby wolf monsters`,
         `§8Max 10 wolves`,
       ],
@@ -2199,8 +2190,7 @@ class Monkey extends Pet {
     return {
       name: "§6Treeborn",
       desc: [
-        `§7Grants §a+${round(this.level * mult, 1)} §6${
-          symbols.fortune
+        `§7Grants §a+${round(this.level * mult, 1)} §6${symbols.fortune
         } Foraging Fortune§7, which increases your chance at double logs`,
       ],
     };
@@ -2301,8 +2291,7 @@ class BabyYeti extends Pet {
     return {
       name: "§6Cold Breeze",
       desc: [
-        `§7Gives §a${round(this.level * mult, 1)} §c${symbols.strength} Strength §7and §9${
-          symbols.crit_damage
+        `§7Gives §a${round(this.level * mult, 1)} §c${symbols.strength} Strength §7and §9${symbols.crit_damage
         } Crit Damage §7when near snow`,
       ],
     };
@@ -2321,8 +2310,7 @@ class BabyYeti extends Pet {
     return {
       name: "§6Yeti Fury",
       desc: [
-        `§7Buff the Yeti sword by §a${round(this.level * mult, 1)} §c${symbols.strength} Damage §7and §9${
-          symbols.intelligence
+        `§7Buff the Yeti sword by §a${round(this.level * mult, 1)} §c${symbols.strength} Damage §7and §9${symbols.intelligence
         } Intelligence`,
       ],
     };
@@ -2368,8 +2356,7 @@ class BlueWhale extends Pet {
     return {
       name: "§6Bulk",
       desc: [
-        `§7Gain §a${round(this.level * mult, 1)} ${symbols.defense} Defense §7per §c${health} Max ${
-          symbols.health
+        `§7Gain §a${round(this.level * mult, 1)} ${symbols.defense} Defense §7per §c${health} Max ${symbols.health
         } Health`,
       ],
     };
@@ -2484,8 +2471,7 @@ class FlyingFish extends Pet {
     return {
       name: "§6Water Bender",
       desc: [
-        `§7Gives §a${round(this.level * mult, 1)} §c${symbols.strength} Strength §7and §a${
-          symbols.defense
+        `§7Gives §a${round(this.level * mult, 1)} §c${symbols.strength} Strength §7and §a${symbols.defense
         } Defense §7when near water`,
       ],
     };
@@ -2551,8 +2537,7 @@ class Megalodon extends Pet {
     return {
       name: "§6Blood Scent",
       desc: [
-        `§7Deal up to §c+${round(mult * this.level, 1)}% ${
-          symbols.strength
+        `§7Deal up to §c+${round(mult * this.level, 1)}% ${symbols.strength
         } §7Damage based on the enemy's missing health`,
       ],
     };
@@ -2571,8 +2556,7 @@ class Megalodon extends Pet {
     return {
       name: "§6Feeding frenzy",
       desc: [
-        `§7On kill gain §c${round(mult * this.level, 1)}${symbols.strength} Damage §7and §f${
-          symbols.speed
+        `§7On kill gain §c${round(mult * this.level, 1)}${symbols.strength} Damage §7and §f${symbols.speed
         } Speed §7for 5 seconds`,
       ],
     };
