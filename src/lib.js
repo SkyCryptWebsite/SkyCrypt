@@ -3013,7 +3013,7 @@ module.exports = {
         petSkin = constants.pet_skins[pet.type][pet.skin].name;
       }
 
-      const isMount = ["HORSE", "SKELETON_HORSE", "PIG", "ROCK"].indexOf(pet.type) != -1;
+      const isMount = ["HORSE", "SKELETON_HORSE", "PIG", "ROCK", "ARMADILLO"].indexOf(pet.type) != -1;
       const isMorph = ["RAT"].indexOf(pet.type) != -1;
 
       let loreFirstRow = [
