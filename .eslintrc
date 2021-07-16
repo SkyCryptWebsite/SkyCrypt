@@ -1,0 +1,17 @@
+{
+  "extends": ["eslint:recommended", "prettier"],
+  "env": {
+    "commonjs": true,
+    "es2021": true,
+    "node": true
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 12
+  },
+  "rules": {
+    "curly": ["warn", "multi-line", "consistent"],
+    "no-unused-vars": ["error", { "args": "none" }],
+    "no-constant-condition": ["error", { "checkLoops": false }]
+  }
+}

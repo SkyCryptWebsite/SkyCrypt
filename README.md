@@ -5,7 +5,8 @@ The SkyCrypt Project, which is based on LeaPhant's [sky.lea.moe](https://sky.lea
 
 **Website**: https://sky.shiiyu.moe
 
-![Node.JS CI](https://github.com/SkyCryptWebsite/SkyCrypt/workflows/Node.js%20CI/badge.svg)  
+[![CI](https://github.com/SkyCryptWebsite/SkyCrypt/actions/workflows/node.js.yml/badge.svg)](https://github.com/SkyCryptWebsite/SkyCrypt/actions/workflows/node.js.yml)
+
 <h2 align="center">Screenshot</h1>
 
 ![Screenshot](public/resources/img/screenshots/windows-0.jpg)
@@ -22,7 +23,6 @@ You are free to report bugs or contribute to this project. Just open <a href="..
 - <a href="https://api.hypixel.net/">Hypixel API Key</a>
 - <a href="https://www.nginx.com/">Nginx</a> (Optional but an ideal choice for full deployment)
 
-
 <h3>Installation</h3>
 A more explanatory guide can be found in <a href="/CONTRIBUTING.md">CONTRIBUTING.md</a>
 
@@ -36,11 +36,8 @@ You can now run `npm start` to start it. You will be able to access the site on 
 
 <h2 align="center">Credits</h2>
 
-- **Animated Custom Weapons and Armors**: <a href="https://hypixel.net/threads/2138599/">FurfSky+</a> by Furf__
+- **Animated Custom Weapons and Armors**: <a href="https://hypixel.net/threads/2138599/">FurfSky+</a> by Furf\_\_
 - **Additional Custom Textures**: <a href="https://hypixel.net/threads/2147652/">Vanilla+</a> by TBlazeWarriorT
 - **Default Textures**: <a href="https://www.minecraft.net/">Minecraft</a> by Mojang
-- **Player Heads**: <a href="https://hypixel.net/forums/skyblock.157/">SkyBlock</a> by Hypixel. 
+- **Player Heads**: <a href="https://hypixel.net/forums/skyblock.157/">SkyBlock</a> by Hypixel.
 - **Original Site**: <a href="https://sky.lea.moe/">sky.lea.moe</a> by LeaPhant
-
-
-
