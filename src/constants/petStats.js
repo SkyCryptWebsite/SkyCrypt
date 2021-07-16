@@ -397,7 +397,7 @@ Mining Pets
 class Armadillo extends Pet {
   get stats() {
     return {
-      defense: this.level * 2
+      defense: this.level * 2,
     };
   }
 
@@ -422,9 +422,7 @@ class Armadillo extends Pet {
   get second() {
     return {
       name: "§6Tunneler",
-      desc: [
-        `§7The Armadillo breaks all stone or ore in it's path while you are riding it in the §3Crystal Hollows`,
-      ],
+      desc: [`§7The Armadillo breaks all stone or ore in it's path while you are riding it in the §3Crystal Hollows`],
     };
   }
 
@@ -439,7 +437,7 @@ class Armadillo extends Pet {
     let mult = this.rarity > 2 ? 0.3 : 0.2;
     return {
       name: "§6Rolling Miner",
-      desc: [`§7Every §a${round(60 - (this.level * mult), 1)} §7seconds, the next gemstone you mine gives 2x drops.`],
+      desc: [`§7Every §a${round(60 - this.level * mult, 1)} §7seconds, the next gemstone you mine gives 2x drops.`],
     };
   }
 
@@ -447,8 +445,12 @@ class Armadillo extends Pet {
     let mult = 0.5;
     return {
       name: "§6Mobile Tank",
-      desc: [`§7For every §a${round(100 - (this.level * mult), 1)} §7Defense, gain §f+1${symbols.speed}Speed §7and §6+1${symbols.mining_speed}Mining Speed`]
-    }
+      desc: [
+        `§7For every §a${round(100 - this.level * mult, 1)} §7Defense, gain §f+1${symbols.speed}Speed §7and §6+1${
+          symbols.mining_speed
+        }Mining Speed`,
+      ],
+    };
   }
 }
 
