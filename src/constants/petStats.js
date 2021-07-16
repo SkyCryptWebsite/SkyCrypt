@@ -34,7 +34,9 @@ const symbols = {
   ferocity: "⫽",
   ability_damage: "✹",
   mining_speed: "⸕",
-  fortune: "☘",
+  mining_fortune: "☘",
+  farming_fortune: "☘",
+  foraging_fortune: "☘",
 };
 
 class Pet {
@@ -271,7 +273,7 @@ class Elephant extends Pet {
       name: "§6Trunk Efficiency",
       desc: [
         `§7Grants §a+${round(this.level * mult, 1)} §6${
-          symbols.fortune
+          symbols.farming_fortune
         } Farming Fortune§7, which increases your chance for multiple drops`,
       ],
     };
@@ -653,6 +655,54 @@ class Rock extends Pet {
     return {
       name: "§6Steady Ground",
       desc: [`§7While sitting on your rock, gain +§a${round(this.level * mult, 1)}§7% damage`],
+    };
+  }
+}
+
+class Scatha extends Pet {
+  get stats() {
+    return {
+      defense: this.level * 1,
+      mining_speed: this.level * 1,
+    };
+  }
+
+  get abilities() {
+    let list = [this.first, this.second];
+    if (this.rarity > 1) {
+      list.push(this.third);
+    }
+    if (this.rarity > 3) {
+      list.push(this.fourth);
+    }
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6Grounded",
+      desc: [`§7Gain §6+${this.level}${symbols.mining_fortune} Mining Fortune§7`],
+    };
+  }
+
+  get second() {
+    return {
+      name: "§6Burrowing",
+      desc: [`§7When mining, there is a §a??? §7chance to mine up a treasure burrow`],
+    };
+  }
+
+  get third() {
+    return {
+      name: "§6???",
+      desc: [`§7???`],
+    };
+  }
+
+  get fourth() {
+    return {
+      name: "§6???",
+      desc: [`§7???`],
     };
   }
 }
@@ -2264,7 +2314,7 @@ class Monkey extends Pet {
       name: "§6Treeborn",
       desc: [
         `§7Grants §a+${round(this.level * mult, 1)} §6${
-          symbols.fortune
+          symbols.foraging_fortune
         } Foraging Fortune§7, which increases your chance at double logs`,
       ],
     };
@@ -2989,6 +3039,7 @@ module.exports = {
     Endermite: Endermite,
     "Mithril Golem": MithrilGolem,
     Rock: Rock,
+    Scatha: Scatha,
     Silverfish: Silverfish,
     "Wither Skeleton": WitherSkeleton,
     //Combat

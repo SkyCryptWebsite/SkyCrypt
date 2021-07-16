@@ -296,6 +296,11 @@ module.exports = {
       type: "combat",
       emoji: "🧨",
     },
+    SCATHA: {
+      head: "/head/df03ad96092f3f789902436709cdf69de6b727c121b3c2daef9ffa1ccaed186c",
+      type: "mining",
+      emoji: "🐾",
+    },
   },
 
   /*
