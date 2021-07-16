@@ -33,7 +33,7 @@ const symbols = {
   true_defense: "❂",
   ferocity: "⫽",
   ability_damage: "✹",
-  mining_speed: "↑",
+  mining_speed: "⸕",
   fortune: "☘",
 };
 
