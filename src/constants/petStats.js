@@ -446,9 +446,9 @@ class Armadillo extends Pet {
     return {
       name: "§6Mobile Tank",
       desc: [
-        `§7For every §a${round(100 - this.level * mult, 1)} §7Defense, gain §f+1${symbols.speed}Speed §7and §6+1${
+        `§7For every §a${round(100 - this.level * mult, 1)} §7Defense, gain §f+1${symbols.speed} Speed §7and §6+1${
           symbols.mining_speed
-        }Mining Speed`,
+        } Mining Speed`,
       ],
     };
   }
