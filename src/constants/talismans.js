@@ -629,5 +629,10 @@ module.exports = {
       rarity: "legendary",
       texture: "/head/969da4e7b8d558af02e80e2e1669ceb6084898db55907ef3e66d9a329329e941",
     },
+    JUNGLE_AMULET: {
+      name: "Jungle Amulet",
+      rarity: "uncommon",
+      texture: "/head/1bff65479fb7029decfe6779382762a08fc7c8eceff5448de263d9d375066f7a"
+    }
   },
 };
