@@ -394,6 +394,64 @@ Mining Pets
 
 */
 
+class Armadillo extends Pet {
+  get stats() {
+    return {
+      defense: this.level * 2
+    };
+  }
+
+  get abilities() {
+    let list = [this.first, this.second, this.third];
+    if (this.rarity > 1) {
+      list.push(this.fourth);
+    }
+    if (this.rarity > 3) {
+      list.push(this.fifth);
+    }
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6Rideable",
+      desc: [`§7Right-click on your summoned pet to ride it!`],
+    };
+  }
+
+  get second() {
+    return {
+      name: "§6Tunneler",
+      desc: [
+        `§7The Armadillo breaks all stone or ore in it's path while you are riding it in the §3Crystal Hollows`,
+      ],
+    };
+  }
+
+  get third() {
+    return {
+      name: "§6Earth Surfer",
+      desc: [`§7The Armadillo moves faster based on your §fSpeed.`],
+    };
+  }
+
+  get fourth() {
+    let mult = this.rarity > 2 ? 0.3 : 0.2;
+    return {
+      name: "§6Rolling Miner",
+      desc: [`§7Every §a${round(60 - (this.level * mult), 1)} §7seconds, the next gemstone you mine gives 2x drops.`],
+    };
+  }
+
+  get fifth() {
+    let mult = 0.5;
+    return {
+      name: "§6Mobile Tank",
+      desc: [`§7For every §a${round(100 - (this.level * mult), 1)} §7Defense, gain §f+1${symbols.speed}Speed §7and §6+1${symbols.mining_speed}Mining Speed`]
+    }
+  }
+}
+
 class Bat extends Pet {
   get stats() {
     let stats = {
@@ -2924,6 +2982,7 @@ module.exports = {
     Pig: Pig,
     Rabbit: Rabbit,
     //Mining
+    Armadillo: Armadillo,
     Bat: Bat,
     Endermite: Endermite,
     "Mithril Golem": MithrilGolem,
