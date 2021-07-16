@@ -84,7 +84,7 @@
     "@typescript-eslint/parser": "^4.28.3",
     "babel-eslint": "^10.1.0",
     "concurrently": "^6.2.0",
-    "ejs-lint": "^1.2.0",
+    "ejs-lint": "^1.2.1",
     "eslint": "^7.30.0",
     "eslint-config-prettier": "^8.3.0",
     "node-watch": "^0.7.1",
@@ -93,7 +93,7 @@
     "rollup": "^2.52.4",
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-terser": "^7.0.2",
-    "sass": "^1.35.1",
+    "sass": "^1.35.2",
     "typescript": "^4.3.5"
   }
 }
