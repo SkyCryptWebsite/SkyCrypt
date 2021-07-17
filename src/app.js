@@ -35,7 +35,9 @@ async function main() {
     });
 
     watch("public/resources/js/file-name-map.json", {}, async (evt, name) => {
-      fileNameMap = JSON.parse(fs.readFileSync("public/resources/js/file-name-map.json"));
+      if (evt != "remove") {
+        fileNameMap = JSON.parse(fs.readFileSync("public/resources/js/file-name-map.json"));
+      }
     });
   }
 
