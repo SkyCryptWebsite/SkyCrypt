@@ -674,20 +674,21 @@ class Scatha extends Pet {
   }
 
   get abilities() {
-    let list = [this.first, this.second];
-    if (this.rarity > 1) {
-      list.push(this.third);
+    let list = [this.first];
+    if (this.rarity > 2) {
+      list.push(this.second);
     }
     if (this.rarity > 3) {
-      list.push(this.fourth);
+      list.push(this.third);
     }
     return list;
   }
 
   get first() {
+    const mult = this.rarity > 3 ? 1.2 : 1;
     return {
       name: "§6Grounded",
-      desc: [`§7Gain §6+${this.level}${symbols.mining_fortune} Mining Fortune§7`],
+      desc: [`§7Gain §6+${this.level * mult}${symbols.mining_fortune} Mining Fortune§7`],
     };
   }
 
@@ -700,15 +701,8 @@ class Scatha extends Pet {
 
   get third() {
     return {
-      name: "§6???",
-      desc: [`§7???`],
-    };
-  }
-
-  get fourth() {
-    return {
-      name: "§6???",
-      desc: [`§7???`],
+      name: "§6Wormhole",
+      desc: [`§7Gives a §a???% to mine 2 adjacent stone or hard stone`],
     };
   }
 }
