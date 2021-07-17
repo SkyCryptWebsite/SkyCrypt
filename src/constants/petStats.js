@@ -97,6 +97,12 @@ class Pet {
         case "ferocity":
           list.push(`§7Ferocity: ${formatStat(newStats[stat])}`);
           break;
+        case "mining_speed":
+          list.push(`§7Mining Speed: ${formatStat(newStats[stat])}`);
+          break;
+        default:
+          list.push(`§cUNKNOWN: ${stat}`);
+          break;
       }
     }
     return list;
