@@ -685,7 +685,7 @@ class Scatha extends Pet {
   }
 
   get first() {
-    const mult = this.rarity > 3 ? 1.2 : 1;
+    const mult = this.rarity > 3 ? 1.25 : 1;
     return {
       name: "§6Grounded",
       desc: [`§7Gain §6+${this.level * mult}${symbols.mining_fortune} Mining Fortune§7`],
@@ -693,16 +693,18 @@ class Scatha extends Pet {
   }
 
   get second() {
+    const mult = 0.03;
     return {
       name: "§6Burrowing",
-      desc: [`§7When mining, there is a §a??? §7chance to mine up a treasure burrow`],
+      desc: [`§7When mining, there is a §a${this.level * mult}% §7chance to mine up a treasure burrow`],
     };
   }
 
   get third() {
+    const mult = 1;
     return {
       name: "§6Wormhole",
-      desc: [`§7Gives a §a???% to mine 2 adjacent stone or hard stone`],
+      desc: [`§7Gives a §a${this.level * mult}% to mine 2 adjacent stone or hard stone`],
     };
   }
 }
