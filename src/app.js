@@ -24,6 +24,11 @@ async function main() {
 
   const fileNameMapFileName = "public/resources/js/file-name-map.json";
 
+  while (!fs.existsSync(fileNameMapFileName)) {
+    console.log(`waiting for: "${fileNameMapFileName}" make sure you ran rollup`);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+
   let fileNameMap = JSON.parse(fs.readFileSync(fileNameMapFileName));
 
   if (process.env.NODE_ENV == "development") {
