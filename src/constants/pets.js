@@ -36,6 +36,11 @@ module.exports = {
   ],
 
   pet_data: {
+    ARMADILLO: {
+      head: "/head/c1eb6df4736ae24dd12a3d00f91e6e3aa7ade6bbefb0978afef2f0f92461018f",
+      type: "mining",
+      emoji: "🦔",
+    },
     BAT: {
       head: "/head/382fc3f71b41769376a9e92fe3adbaac3772b999b219c9d6b4680ba9983e527",
       type: "mining",
@@ -64,7 +69,7 @@ module.exports = {
     OCELOT: {
       head: "/head/5657cd5c2989ff97570fec4ddcdc6926a68a3393250c1be1f0b114a1db1",
       type: "foraging",
-      emoji: "🐈",
+      emoji: "🐆",
     },
     PIGMAN: {
       head: "/head/63d9cb6513f2072e5d4e426d70a5557bc398554c880d4e7b7ec8ef4945eb02f2",
@@ -74,17 +79,17 @@ module.exports = {
     RABBIT: {
       head: "/head/117bffc1972acd7f3b4a8f43b5b6c7534695b8fd62677e0306b2831574b",
       type: "farming",
-      emoji: "🐇",
+      emoji: "🐰",
     },
     SHEEP: {
       head: "/head/64e22a46047d272e89a1cfa13e9734b7e12827e235c2012c1a95962874da0",
       type: "alchemy",
-      emoji: "🐑",
+      emoji: "🐏",
     },
     SILVERFISH: {
       head: "/head/da91dab8391af5fda54acd2c0b18fbd819b865e1a8f1d623813fa761e924540",
       type: "mining",
-      emoji: "🐛",
+      emoji: "🪳",
     },
     WITHER_SKELETON: {
       head: "/head/f5ec964645a8efac76be2f160d7c9956362f32b6517390c59c3085034f050cff",
@@ -94,7 +99,7 @@ module.exports = {
     SKELETON_HORSE: {
       head: "/head/47effce35132c86ff72bcae77dfbb1d22587e94df3cbc2570ed17cf8973a",
       type: "combat",
-      emoji: "🐴",
+      emoji: "🦓",
     },
     WOLF: {
       head: "/head/dc3dd984bb659849bd52994046964c22725f717e986b12d548fd169367d494",
@@ -184,7 +189,7 @@ module.exports = {
     MONKEY: {
       head: "/head/13cf8db84807c471d7c6922302261ac1b5a179f96d1191156ecf3e1b1d3ca",
       type: "foraging",
-      emoji: "🐒",
+      emoji: "🐵",
     },
     SPIDER: {
       head: "/head/cd541541daaff50896cd258bdbdd4cf80c3ba816735726078bfe393927e57f1",
@@ -194,7 +199,7 @@ module.exports = {
     ENDERMITE: {
       head: "/head/5a1a0831aa03afb4212adcbb24e5dfaa7f476a1173fce259ef75a85855",
       type: "mining",
-      emoji: "🐛",
+      emoji: "🐜",
     },
     GHOUL: {
       head: "/head/87934565bf522f6f4726cdfe127137be11d37c310db34d8c70253392b5ff5b",
@@ -214,7 +219,7 @@ module.exports = {
     ROCK: {
       head: "/head/cb2b5d48e57577563aca31735519cb622219bc058b1f34648b67b8e71bc0fa",
       type: "mining",
-      emoji: "🗿",
+      emoji: "🪨",
     },
     SKELETON: {
       head: "/head/fca445749251bdd898fb83f667844e38a1dff79a1529f79a42447a0599310ea4",
@@ -259,7 +264,7 @@ module.exports = {
     BLACK_CAT: {
       head: "/head/e4b45cbaa19fe3d68c856cd3846c03b5f59de81a480eec921ab4fa3cd81317",
       type: "combat",
-      emoji: "🐱",
+      emoji: "🐈‍⬛",
     },
     SPIRIT: {
       head: "/head/8d9ccc670677d0cebaad4058d6aaf9acfab09abea5d86379a059902f2fe22655",
@@ -285,6 +290,11 @@ module.exports = {
       head: "/head/a8abb471db0ab78703011979dc8b40798a941f3a4dec3ec61cbeec2af8cffe8",
       type: "combat",
       emoji: "🐀",
+    },
+    BAL: {
+      head: "/head/c469ba2047122e0a2de3c7437ad3dd5d31f1ac2d27abde9f8841e1d92a8c5b75",
+      type: "combat",
+      emoji: "🧨",
     },
   },
 

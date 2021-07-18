@@ -35,7 +35,9 @@ async function main() {
     });
 
     watch("public/resources/js/file-name-map.json", {}, async (evt, name) => {
-      fileNameMap = JSON.parse(fs.readFileSync("public/resources/js/file-name-map.json"));
+      if (evt != "remove") {
+        fileNameMap = JSON.parse(fs.readFileSync("public/resources/js/file-name-map.json"));
+      }
     });
   }
 
@@ -123,9 +125,6 @@ async function main() {
   require("./apiv2")(app, db);
   require("./donations/kofi")(app, db);
 
-  let FEATURED_PROFILES;
-  let FEATURED_LAST_UPDATED = 0;
-
   function parseFavorites(cookie) {
     return cookie?.split(",").filter((uuid) => /^[0-9a-f]{32}$/.test(uuid)) || [];
   }
@@ -191,13 +190,6 @@ async function main() {
     }
 
     if (page === "index") {
-      if (FEATURED_PROFILES == null || Date.now() - FEATURED_LAST_UPDATED < 900 * 1000) {
-        FEATURED_LAST_UPDATED = Date.now();
-        FEATURED_PROFILES = await db.collection("topViews").find().sort({ position: 1 }).toArray();
-      }
-
-      output.devs = FEATURED_PROFILES;
-
       output.favorites = await getFavoritesFormUUIDs(favoriteUUIDs);
 
       output.devs = await db.collection("topViews").find().sort({ position: 1 }).toArray();
@@ -332,44 +324,51 @@ async function main() {
   });
 
   app.all("/cape/:username", cors(), async (req, res) => {
+    res.set("X-Cluster-ID", `${helper.getClusterId()}`);
+
     const { username } = req.params;
 
-    const filename = `cape_${username}.png`;
-    res.set("X-Cluster-ID", `${helper.getClusterId()}`);
+    if (!/^[0-9a-zA-Z_]{1,16}$/.test(username)) {
+      res.status(400);
+      res.send("invalid username");
+      return;
+    }
+
+    const filename = path.resolve(cachePath, `cape_${username}.png`);
 
     let file;
 
     try {
-      file = await fs.readFile(path.resolve(cachePath, filename));
+      // try to use file from disk
+      const fileStats = await fs.stat(filename);
 
-      const fileStats = await fs.stat(path.resolve(cachePath, filename));
+      const optifineCape = await axios.head(`https://optifine.net/capes/${username}.png`);
+      const lastUpdated = moment(optifineCape.headers["last-modified"]);
 
-      if (Date.now() - fileStats.mtime > 10 * 1000) {
-        const optifineCape = await axios.head(`https://optifine.net/capes/${username}.png`);
-        const lastUpdated = moment(optifineCape.headers["last-modified"]);
-
-        if (lastUpdated.unix() > fileStats.mtime) {
-          throw "optifine cape changed";
-        }
+      if (lastUpdated.unix() > fileStats.mtime) {
+        throw "optifine cape changed";
+      } else {
+        file = await fs.readFile(filename);
       }
     } catch (e) {
+      // file on disk could not be used so try to get from network
       try {
         file = (await axios.get(`https://optifine.net/capes/${username}.png`, { responseType: "arraybuffer" })).data;
 
-        fs.writeFile(path.resolve(cachePath, filename), file, (err) => {
+        fs.writeFile(filename, file, (err) => {
           if (err) {
             console.error(err);
           }
         });
       } catch (e) {
-        res.status(404);
+        res.status(204);
         res.send("no cape for user");
 
         return;
       }
     }
 
-    res.setHeader("Cache-Control", `public, max-age=${CACHE_DURATION}`);
+    res.setHeader("Cache-Control", `public, max-age=${12 * 60 * 60 * 1000}`);
     res.contentType("image/png");
     res.send(file);
   });

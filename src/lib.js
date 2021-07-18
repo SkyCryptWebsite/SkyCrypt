@@ -3013,7 +3013,7 @@ module.exports = {
         petSkin = constants.pet_skins[pet.type][pet.skin].name;
       }
 
-      const isMount = ["HORSE", "SKELETON_HORSE", "PIG", "ROCK"].indexOf(pet.type) != -1;
+      const isMount = ["HORSE", "SKELETON_HORSE", "PIG", "ROCK", "ARMADILLO"].indexOf(pet.type) != -1;
       const isMorph = ["RAT"].indexOf(pet.type) != -1;
 
       let loreFirstRow = [
@@ -3379,11 +3379,9 @@ module.exports = {
 
       const collectionData = constants.collection_data.find((a) => a.skyblockId == type);
 
-      if ("tiers" in collectionData) {
-        for (const tier of collectionData.tiers) {
-          if (totalAmount >= tier.amountRequired) {
-            output[type].tier = Math.max(tier.tier, output[type].tier);
-          }
+      for (const tier of collectionData?.tiers ?? []) {
+        if (totalAmount >= tier.amountRequired) {
+          output[type].tier = Math.max(tier.tier, output[type].tier);
         }
       }
     }
