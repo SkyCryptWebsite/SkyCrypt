@@ -1017,6 +1017,80 @@ class EnderDragon extends Pet {
   }
 }
 
+class GoldenDragon extends Pet {
+  get stats() {
+    let stats = {};
+    if (this.level >= 100) {
+      stats.bonus_attack_speed = Math.max(0, this.level - 100) * 0.5;
+      stats.strength = Math.max(0, this.level - 100) * 0.5;
+    }
+    return stats;
+  }
+
+  get abilities() {
+    let list = [];
+    if (this.level < 100) {
+      list.push(this.hatching_first);
+      list.push(this.hatching_second);
+    } else {
+      list.push(this.first);
+      list.push(this.second);
+      list.push(this.third);
+      list.push(this.fourth);
+    }
+    return list;
+  }
+
+  get hatching_first() {
+    return {
+      name: "§7Perks",
+      desc: [`§c§l???`],
+    };
+  }
+
+  get hatching_second() {
+    return {
+      name: "§7Hatches at level §b100",
+      desc: [""],
+    };
+  }
+
+  get first() {
+    const value = Math.max(0, this.level - 100);
+    return {
+      name: "§6Gold's Power",
+      desc: [`§7Adds §c+${value}${symbols.strength} Strength §7to all §6golden §7weapons`],
+    };
+  }
+
+  get second() {
+    const value_str = Math.max(0, this.level - 100) * 0.1;
+    const value_mf = Math.max(0, this.level - 100) * 0.02;
+    return {
+      name: "§6Shining Scales",
+      desc: [
+        `§7For each digit in your §6gold collection §7gain §c+${value_str}${symbols.strength} Strength §7and §b+${value_mf}${symbols.magic_find} Magic Find`,
+      ],
+    };
+  }
+
+  get third() {
+    const value = Math.max(0, this.level - 100) * 0.4;
+    return {
+      name: "§6Dragon's Greed",
+      desc: [`§7Gain §a${value}% §7of your §b${symbols.magic_find} Magic Find §7as §c${symbols.strength} Strength`],
+    };
+  }
+
+  get fourth() {
+    const value = Math.round((0.1 + Math.max(0, this.level - 100) * 0.001) * 10) / 10;
+    return {
+      name: "§6Legendary Treasure",
+      desc: [`§7Gain §c${value}% §7damage for every milion coins in your bank`],
+    };
+  }
+}
+
 class Enderman extends Pet {
   get stats() {
     return {
@@ -2996,6 +3070,7 @@ module.exports = {
     "Black Cat": BlackCat,
     Blaze: Blaze,
     "Ender Dragon": EnderDragon,
+    "Golden Dragon": GoldenDragon,
     Enderman: Enderman,
     Ghoul: Ghoul,
     Golem: Golem,
