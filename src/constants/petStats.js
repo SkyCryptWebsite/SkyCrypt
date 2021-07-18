@@ -675,7 +675,7 @@ class Scatha extends Pet {
 
   get abilities() {
     let list = [this.first];
-    if (this.rarity > 2) {
+    if (this.rarity > 1) {
       list.push(this.second);
     }
     if (this.rarity > 3) {
@@ -693,7 +693,7 @@ class Scatha extends Pet {
   }
 
   get second() {
-    const mult = 0.03;
+    const mult = this.rarity > 3 ? 0.03 : 0.025;
     return {
       name: "§6Burrowing",
       desc: [`§7When mining, there is a §a${this.level * mult}% §7chance to mine up a treasure burrow`],
