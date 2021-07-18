@@ -22,7 +22,9 @@ async function main() {
 
   const fileHashes = await getFileHashes();
 
-  let fileNameMap = JSON.parse(fs.readFileSync("public/resources/js/file-name-map.json"));
+  const fileNameMapFileName = "public/resources/js/file-name-map.json";
+
+  let fileNameMap = JSON.parse(fs.readFileSync(fileNameMapFileName));
 
   if (process.env.NODE_ENV == "development") {
     const { default: watch } = await import("node-watch");
@@ -34,9 +36,9 @@ async function main() {
       }
     });
 
-    watch("public/resources/js/file-name-map.json", {}, async (evt, name) => {
+    watch(fileNameMapFileName, {}, async (evt, name) => {
       if (evt != "remove") {
-        fileNameMap = JSON.parse(fs.readFileSync("public/resources/js/file-name-map.json"));
+        fileNameMap = JSON.parse(fs.readFileSync(fileNameMapFileName));
       }
     });
   }
