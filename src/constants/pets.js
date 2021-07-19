@@ -301,6 +301,11 @@ module.exports = {
       type: "mining",
       emoji: "🐾",
     },
+    GOLDEN_DRAGON: {
+      head: "/head/2e9f9b1fc014166cb46a093e5349b2bf6edd201b680d62e48dbf3af9b0459116",
+      type: "combat",
+      emoji: "🐉",
+    },
   },
 
   /*
