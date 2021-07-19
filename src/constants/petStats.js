@@ -34,7 +34,9 @@ const symbols = {
   ferocity: "⫽",
   ability_damage: "✹",
   mining_speed: "⸕",
-  fortune: "☘",
+  mining_fortune: "☘",
+  farming_fortune: "☘",
+  foraging_fortune: "☘",
 };
 
 class Pet {
@@ -94,6 +96,12 @@ class Pet {
           break;
         case "ferocity":
           list.push(`§7Ferocity: ${formatStat(newStats[stat])}`);
+          break;
+        case "mining_speed":
+          list.push(`§7Mining Speed: ${formatStat(newStats[stat])}`);
+          break;
+        default:
+          list.push(`§cUNKNOWN: ${stat}`);
           break;
       }
     }
@@ -271,7 +279,7 @@ class Elephant extends Pet {
       name: "§6Trunk Efficiency",
       desc: [
         `§7Grants §a+${round(this.level * mult, 1)} §6${
-          symbols.fortune
+          symbols.farming_fortune
         } Farming Fortune§7, which increases your chance for multiple drops`,
       ],
     };
@@ -653,6 +661,50 @@ class Rock extends Pet {
     return {
       name: "§6Steady Ground",
       desc: [`§7While sitting on your rock, gain +§a${round(this.level * mult, 1)}§7% damage`],
+    };
+  }
+}
+
+class Scatha extends Pet {
+  get stats() {
+    return {
+      defense: this.level * 1,
+      mining_speed: this.level * 1,
+    };
+  }
+
+  get abilities() {
+    let list = [this.first];
+    if (this.rarity > 1) {
+      list.push(this.second);
+    }
+    if (this.rarity > 3) {
+      list.push(this.third);
+    }
+    return list;
+  }
+
+  get first() {
+    const mult = this.rarity > 3 ? 1.25 : 1;
+    return {
+      name: "§6Grounded",
+      desc: [`§7Gain §6+${this.level * mult}${symbols.mining_fortune} Mining Fortune§7`],
+    };
+  }
+
+  get second() {
+    const mult = this.rarity > 3 ? 0.03 : 0.025;
+    return {
+      name: "§6Burrowing",
+      desc: [`§7When mining, there is a §a${this.level * mult}% §7chance to mine up a treasure burrow`],
+    };
+  }
+
+  get third() {
+    const mult = 1;
+    return {
+      name: "§6Wormhole",
+      desc: [`§7Gives a §a${this.level * mult}% to mine 2 adjacent stone or hard stone`],
     };
   }
 }
@@ -2338,7 +2390,7 @@ class Monkey extends Pet {
       name: "§6Treeborn",
       desc: [
         `§7Grants §a+${round(this.level * mult, 1)} §6${
-          symbols.fortune
+          symbols.foraging_fortune
         } Foraging Fortune§7, which increases your chance at double logs`,
       ],
     };
@@ -3063,6 +3115,7 @@ module.exports = {
     Endermite: Endermite,
     "Mithril Golem": MithrilGolem,
     Rock: Rock,
+    Scatha: Scatha,
     Silverfish: Silverfish,
     "Wither Skeleton": WitherSkeleton,
     //Combat

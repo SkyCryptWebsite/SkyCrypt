@@ -296,6 +296,11 @@ module.exports = {
       type: "combat",
       emoji: "🧨",
     },
+    SCATHA: {
+      head: "/head/df03ad96092f3f789902436709cdf69de6b727c121b3c2daef9ffa1ccaed186c",
+      type: "mining",
+      emoji: "🐾",
+    },
     GOLDEN_DRAGON: {
       head: "/head/2e9f9b1fc014166cb46a093e5349b2bf6edd201b680d62e48dbf3af9b0459116",
       type: "combat",
