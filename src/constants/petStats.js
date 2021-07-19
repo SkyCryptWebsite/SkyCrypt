@@ -694,9 +694,10 @@ class Scatha extends Pet {
 
   get second() {
     const mult = this.rarity > 3 ? 0.03 : 0.025;
+    const value = Math.round(this.level * mult * 10) / 10;
     return {
       name: "§6Burrowing",
-      desc: [`§7When mining, there is a §a${this.level * mult}% §7chance to mine up a treasure burrow`],
+      desc: [`§7When mining, there is a §a${value}% §7chance to mine up a treasure burrow`],
     };
   }
 
