@@ -119,7 +119,7 @@ module.exports = {
       }
     }
 
-    if (cacheOnly === false && (!user || +new Date() - user.date > 7200 * 1000)) {
+    if (cacheOnly === false && (user == undefined || +new Date() - user.date > 7200 * 1000)) {
       let profileRequest = axios(`https://api.ashcon.app/mojang/v1/user/${uuid}`, { timeout: 5000 });
 
       profileRequest
@@ -215,22 +215,24 @@ module.exports = {
 
     let guildObject = null;
 
-    if (cacheOnly && !guildMember) {
+    if (cacheOnly && guildMember == undefined) {
       return null;
     }
 
-    if (guildMember && guildMember.gid !== null) {
+    if (guildMember != undefined && guildMember.gid !== null) {
       guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildMember.gid) });
     }
 
     if (
       cacheOnly ||
-      (guildMember && guildMember.gid !== null && (!guildObject || Date.now() - guildMember.last_updated < 7200 * 1000))
+      (guildMember != undefined &&
+        guildMember.gid !== null &&
+        (guildObject == undefined || Date.now() - guildMember.last_updated < 7200 * 1000))
     ) {
       if (guildMember.gid !== null) {
         const guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildMember.gid) });
 
-        if (!guildObject) {
+        if (guildObject == undefined) {
           return null;
         }
 
@@ -245,7 +247,7 @@ module.exports = {
 
       return null;
     } else {
-      if (!guildMember || Date.now() - guildMember.last_updated > 7200 * 1000) {
+      if (guildMember == undefined || Date.now() - guildMember.last_updated > 7200 * 1000) {
         try {
           const guildResponse = await Hypixel.get("guild", {
             params: { player: uuid, key: credentials.hypixel_api_key },
@@ -639,15 +641,15 @@ module.exports = {
 
     let updateRank;
 
-    if (cacheOnly === false && (!hypixelPlayer || +new Date() - hypixelPlayer.last_updated > 3600 * 1000)) {
+    if (cacheOnly === false && (hypixelPlayer == undefined || +new Date() - hypixelPlayer.last_updated > 3600 * 1000)) {
       updateRank = module.exports.updateRank(uuid, db);
     }
 
-    if (cacheOnly === false && !hypixelPlayer) {
+    if (cacheOnly === false && hypixelPlayer == undefined) {
       hypixelPlayer = await updateRank;
     }
 
-    if (!hypixelPlayer) {
+    if (hypixelPlayer == undefined) {
       hypixelPlayer = { achievements: {} };
     }
 
