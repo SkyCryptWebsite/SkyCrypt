@@ -3495,6 +3495,7 @@ body {
   top: 0;
   bottom: 0;
   background-color: #121212d4;
+  backdrop-filter: blur(3px);
 
   .update-popup {
     position: absolute;
