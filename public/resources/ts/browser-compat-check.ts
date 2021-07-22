@@ -67,6 +67,8 @@ function generatePopup(name: string) {
     update.href = browser.help;
     update.innerHTML = "show me how";
   }
+  update.target = "_blank";
+  update.rel = "noreferrer";
   popup.appendChild(update);
   popup.appendChild(close);
   wrapper.appendChild(popup);
