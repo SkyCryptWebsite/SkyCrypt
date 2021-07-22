@@ -19,10 +19,6 @@ const browsers: {
     help: "https://support.google.com/chrome/answer/95414",
     androidPackage: "com.android.chrome",
   },
-  chromium: {
-    version: "90",
-    help: "https://support.google.com/chrome/answer/95414",
-  },
   edge: {
     version: "90",
     help: "https://support.microsoft.com/en-us/topic/microsoft-edge-update-settings-af8aaca2-1b69-4870-94fe-18822dbb7ef1",
