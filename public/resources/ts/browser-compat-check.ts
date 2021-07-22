@@ -15,17 +15,17 @@ const browsers: {
     help: "https://support.apple.com/en-us/HT204416",
   },
   chrome: {
-    version: "90",
+    version: "84",
     help: "https://support.google.com/chrome/answer/95414",
     androidPackage: "com.android.chrome",
   },
   edge: {
-    version: "90",
+    version: "84",
     help: "https://support.microsoft.com/en-us/topic/microsoft-edge-update-settings-af8aaca2-1b69-4870-94fe-18822dbb7ef1",
     androidPackage: "com.microsoft.emmx",
   },
   firefox: {
-    version: "89",
+    version: "85",
     help: "https://support.mozilla.org/kb/update-firefox-latest-release",
     androidPackage: "org.mozilla.firefox",
   },
