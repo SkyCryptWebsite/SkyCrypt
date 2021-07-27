@@ -1073,8 +1073,8 @@ class GoldenDragon extends Pet {
   get stats() {
     let stats = {};
     if (this.level >= 100) {
-      stats.bonus_attack_speed = Math.max(0, this.level - 100) * 0.25 + 25 - 0.01;
-      stats.strength = Math.max(0, this.level - 100) * 0.25 + 25 - 0.01;
+      stats.bonus_attack_speed = round(Math.max(0, this.level - 100) * 0.25 + 25 - 0.01, 0);
+      stats.strength = round(Math.max(0, this.level - 100) * 0.25 + 25 - 0.01, 0);
     }
     return stats;
   }
