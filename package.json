@@ -65,7 +65,7 @@
     "moment-duration-format": "^2.3.2",
     "moment-timezone": "^0.5.31",
     "mongo-sanitize": "^1.1.0",
-    "mongodb": "^4.0.0",
+    "mongodb": "^4.0.1",
     "prismarine-nbt": "^1.6.0",
     "progress": "^2.0.3",
     "relaxed-json": "^1.0.3",
@@ -94,7 +94,7 @@
     "rollup": "^2.53.2",
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-terser": "^7.0.2",
-    "sass": "^1.35.2",
+    "sass": "^1.36.0",
     "typescript": "^4.3.5"
   }
 }
