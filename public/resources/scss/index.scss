@@ -3487,6 +3487,49 @@ body {
   }
 }
 
+.update-popup-wrapper {
+  z-index: 1000;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #121212d4;
+  backdrop-filter: blur(3px);
+
+  .update-popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: fit-content;
+    padding: 25px;
+    border-radius: 25px;
+    background-color: #282828;
+    background-color: var(--header-hex);
+
+    h2 {
+      margin-top: 0;
+    }
+
+    a,
+    button {
+      float: right;
+      margin-left: 15px;
+      border: none;
+      border-radius: 1000px;
+      padding: 10px 20px;
+      color: white;
+      background-color: #0bca51;
+      background-color: var(--icon-hex);
+      text-transform: uppercase;
+      text-decoration: none;
+      font: inherit;
+      font-weight: bold;
+    }
+  }
+}
+
 @media (max-width: 1590px) {
   #info_box_content {
     max-height: calc(1120px - 100px);

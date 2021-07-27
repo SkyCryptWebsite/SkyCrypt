@@ -45,6 +45,7 @@
     "axios-cache-adapter": "^2.5.0",
     "axios-debug-log": "^0.8.3",
     "body-parser": "^1.19.0",
+    "bowser": "^2.11.0",
     "canvas": "^2.8.0",
     "connect-mongo": "^4.4.1",
     "cookie-parser": "^1.4.5",
