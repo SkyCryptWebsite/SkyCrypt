@@ -437,7 +437,7 @@ class Armadillo extends Pet {
   get third() {
     return {
       name: "§6Earth Surfer",
-      desc: [`§7The Armadillo moves faster based on your §fSpeed.`],
+      desc: [`§7The Armadillo moves faster based on your §fSpeed`],
     };
   }
 
@@ -688,7 +688,7 @@ class Scatha extends Pet {
     const mult = this.rarity > 3 ? 1.25 : 1;
     return {
       name: "§6Grounded",
-      desc: [`§7Gain §6+${this.level * mult}${symbols.mining_fortune} Mining Fortune§7`],
+      desc: [`§7Gain §6+${round(this.level * mult - 0.01, 1)}${symbols.mining_fortune} Mining Fortune§7`],
     };
   }
 
@@ -696,7 +696,7 @@ class Scatha extends Pet {
     const mult = this.rarity > 3 ? 0.03 : 0.025;
     return {
       name: "§6Burrowing",
-      desc: [`§7When mining, there is a §a${this.level * mult}% §7chance to mine up a treasure burrow`],
+      desc: [`§7When mining, there is a §a${round(this.level * mult, 1)}% §7chance to mine up a treasure burrow`],
     };
   }
 
@@ -704,7 +704,7 @@ class Scatha extends Pet {
     const mult = 1;
     return {
       name: "§6Wormhole",
-      desc: [`§7Gives a §a${this.level * mult}% to mine 2 adjacent stone or hard stone`],
+      desc: [`§7Gives a §a${round(this.level * mult, 1)}% §7to mine 2 adjacent stone or hard stone`],
     };
   }
 }
@@ -1073,8 +1073,8 @@ class GoldenDragon extends Pet {
   get stats() {
     let stats = {};
     if (this.level >= 100) {
-      stats.bonus_attack_speed = Math.max(0, this.level - 100) * 0.5;
-      stats.strength = Math.max(0, this.level - 100) * 0.5;
+      stats.bonus_attack_speed = round(Math.max(0, this.level - 100) * 0.25 + 25 - 0.01, 0);
+      stats.strength = round(Math.max(0, this.level - 100) * 0.25 + 25 - 0.01, 0);
     }
     return stats;
   }
@@ -1108,37 +1108,37 @@ class GoldenDragon extends Pet {
   }
 
   get first() {
-    const value = Math.max(0, this.level - 100);
+    const value = Math.max(0, this.level - 100) * 0.5 + 50;
     return {
       name: "§6Gold's Power",
-      desc: [`§7Adds §c+${value}${symbols.strength} Strength §7to all §6golden §7weapons`],
+      desc: [`§7Adds §c+${round(value, 1)}${symbols.strength} Strength §7to all §6golden §7weapons`],
     };
   }
 
   get second() {
-    const value_str = Math.max(0, this.level - 100) * 0.1;
-    const value_mf = Math.max(0, this.level - 100) * 0.02;
     return {
       name: "§6Shining Scales",
       desc: [
-        `§7For each digit in your §6gold collection §7gain §c+${value_str}${symbols.strength} Strength §7and §b+${value_mf}${symbols.magic_find} Magic Find`,
+        `§7For each digit in your §6gold collection §7gain §c+10${symbols.strength} Strength §7and §b+2${symbols.magic_find} Magic Find`,
       ],
     };
   }
 
   get third() {
-    const value = Math.max(0, this.level - 100) * 0.4;
+    const value = Math.max(0, this.level - 100) * 0.2 + 20;
     return {
       name: "§6Dragon's Greed",
-      desc: [`§7Gain §a${value}% §7of your §b${symbols.magic_find} Magic Find §7as §c${symbols.strength} Strength`],
+      desc: [
+        `§7Gain §a${round(value, 1)}% §7of your §b${symbols.magic_find} Magic Find §7as §c${symbols.strength} Strength`,
+      ],
     };
   }
 
   get fourth() {
-    const value = Math.round((0.1 + Math.max(0, this.level - 100) * 0.001) * 10) / 10;
+    const value = Math.max(0, this.level - 100) * 0.00071 + 0.1;
     return {
       name: "§6Legendary Treasure",
-      desc: [`§7Gain §c${value}% §7damage for every milion coins in your bank`],
+      desc: [`§7Gain §c${round(value, 1)}% §7damage for every milion coins in your bank`],
     };
   }
 }
