@@ -3205,35 +3205,28 @@ module.exports = {
   },
 
   getMissingPets: async (pets) => {
-    const output = [];
+    const profile = {
+      pets: [],
+    };
 
     for (const petType in constants.pet_data) {
       if (pets.map((a) => a.type).includes(petType)) {
         continue;
       }
 
-      const pet = Object.assign({}, constants.pet_data[petType]);
-
-      pet.texture_path = pet.head;
-      pet.display_name = helper.titleCase(petType.replace(/_/g, " "));
-      pet.rarity = "legendary";
-
-      let lore = [`§8${helper.capitalizeFirstLetter(pet.type)} Pet`];
-
-      pet.lore = "";
-
-      lore.forEach((line, index) => {
-        pet.lore += helper.renderLore(line);
-
-        if (index + 1 <= lore.length) {
-          pet.lore += "<br>";
-        }
+      profile.pets.push({
+        type: petType,
+        active: false,
+        exp: constants.pet_data[petType].maxLevel === 200 ? 210249831 : 25353230,
+        tier: constants.pet_data[petType].maxTier,
+        candyUsed: 0,
+        heldItem: null,
+        skin: null,
+        uuid: helper.generateUUID(),
       });
-
-      output.push(pet);
     }
 
-    return output;
+    return module.exports.getPets(profile);
   },
 
   getPetScore: async (pets) => {
