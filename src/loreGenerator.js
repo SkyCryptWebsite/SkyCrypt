@@ -1,6 +1,6 @@
 module.exports = {
   makeLore: function (item) {
-    const lore_raw = item.tag?.display?.Lore;
+    const lore_raw = item?.tag?.display?.Lore;
 
     if (lore_raw == undefined) {
       return;
