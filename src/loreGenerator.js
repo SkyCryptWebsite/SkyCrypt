@@ -1,3 +1,16 @@
+/**
+ * adds a "+" to the beginning of positive numbers
+ * @param {number} num
+ * @returns {string}
+ */
+function addSign(num) {
+  if (num >= 0) {
+    return "+" + num;
+  } else {
+    return String(num);
+  }
+}
+
 /** @type {{[key: string]: string}} */
 const statNames = {
   Damage: "damage",
@@ -45,7 +58,7 @@ module.exports = {
 
       const statName = statType.substring(2);
 
-      const statValue = split[1].substring(0, 3) + item.stats[statNames[statName]];
+      const statValue = split[1].substring(0, 2) + addSign(item.stats[statNames[statName]]);
 
       if (statName === "Health" && item.equipmentType == "armor" && item.extra?.hpbs > 0) {
         const hpbString = `HP §e(+${item.extra.hpbs * 4} HP)`;
