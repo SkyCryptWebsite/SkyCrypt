@@ -1,4 +1,9 @@
 module.exports = {
+  /**
+   * update item Lore to match item stats
+   * @param {{tag?:{display?:{Lore?:string}},stats:{[key:string]:number},extra?:{hpbs?:number}}} item
+   * @returns {void}
+   */
   makeLore: function (item) {
     const lore_raw = item?.tag?.display?.Lore;
 
