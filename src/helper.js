@@ -391,7 +391,11 @@ module.exports = {
     return output;
   },
 
-  // Get Minecraft lore without the color and formatting codes
+  /**
+   * Get Minecraft lore without the color and formatting codes
+   * @param {string} text lore with color codes
+   * @returns {string} lore without color codes
+   */
   getRawLore: (text) => {
     return text.replace(/§[0-9a-fk-or]/g, "");
   },
