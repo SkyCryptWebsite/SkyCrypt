@@ -1,3 +1,5 @@
+const { statNames } = require("./lib");
+
 /**
  * adds a "+" to the beginning of positive numbers
  * @param {number} num
@@ -10,25 +12,6 @@ function addSign(num) {
     return String(num);
   }
 }
-
-/** @type {{[key: string]: string}} */
-const statNames = {
-  Damage: "damage",
-  Health: "health",
-  Defense: "defense",
-  Strength: "strength",
-  Drunkenness: "strength",
-  Speed: "speed",
-  "Pegleg Boost": "speed",
-  "Crit Chance": "crit_chance",
-  "Crit Damage": "",
-  "Bonus Attack Speed": "bonus_attack_speed",
-  Intelligence: "intelligence",
-  "Magic Find": "magic_find",
-  "Pet Luck": "pet_luck",
-  Ferocity: "ferocity",
-  "Ability Damage": "ability_damage",
-};
 
 module.exports = {
   /**
