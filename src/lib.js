@@ -816,54 +816,8 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
         const statType = split[0];
         const statValue = parseFloat(split[1].trim().replace(/,/g, ""));
 
-        switch (statType) {
-          case "Damage":
-            item.stats.damage = statValue;
-            break;
-          case "Health":
-            item.stats.health = statValue;
-            break;
-          case "Defense":
-            item.stats.defense = statValue;
-            break;
-          case "Strength":
-          case "Drunkenness":
-            item.stats.strength = statValue;
-            break;
-          case "Speed":
-          case "Pegleg Boost":
-            item.stats.speed = statValue;
-            break;
-          case "Crit Chance":
-            item.stats.crit_chance = statValue;
-            break;
-          case "Crit Damage":
-            item.stats.crit_damage = statValue;
-            break;
-          case "Bonus Attack Speed":
-            item.stats.bonus_attack_speed = statValue;
-            break;
-          case "Intelligence":
-            item.stats.intelligence = statValue;
-            break;
-          case "Sea Creature Chance":
-            item.stats.sea_creature_chance = statValue;
-            break;
-          case "Magic Find":
-            item.stats.magic_find = statValue;
-            break;
-          case "Pet Luck":
-            item.stats.pet_luck = statValue;
-            break;
-          case "Ferocity":
-            item.stats.ferocity = statValue;
-            break;
-          case "Ability Damage":
-            item.stats.ability_damage = statValue;
-            break;
-          case "Mining Speed":
-            item.stats.mining_speed = statValue;
-            break;
+        if (statType in statNames) {
+          item.stats[statNames[statType]] = statValue;
         }
       });
 
