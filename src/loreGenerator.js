@@ -41,19 +41,21 @@ module.exports = {
 
       const statName = statType.substring(2);
 
-      const statValue = split[1].substring(0, 2) + addSign(item.stats[statNames[statName]]);
+      if (statName in statNames) {
+        const statValue = split[1].substring(0, 2) + addSign(item.stats[statNames[statName]]);
 
-      if (statName === "Health" && item.equipmentType == "armor" && item.extra?.hpbs > 0) {
-        const hpbString = `HP §e(+${item.extra.hpbs * 4} HP)`;
-        lore_raw[i] = statType + ": " + statValue + " " + hpbString + " " + split.slice(5).join(" ");
-        break;
-      } else if (statName === "Defense" && item.equipmentType == "armor" && item.extra?.hpbs > 0) {
-        const hpbString = `§e(+${item.extra.hpbs * 2})`;
-        lore_raw[i] = statType + ": " + statValue + " " + hpbString + " " + split.slice(3).join(" ");
-        break;
-      } else if (statName in statNames) {
-        lore_raw[i] = statType + ": " + statValue + " " + split.slice(2).join(" ");
-        break;
+        if (statName === "Health" && item.equipmentType == "armor" && item.extra?.hpbs > 0) {
+          const hpbString = `HP §e(+${item.extra.hpbs * 4} HP)`;
+          lore_raw[i] = statType + ": " + statValue + " " + hpbString + " " + split.slice(5).join(" ");
+          break;
+        } else if (statName === "Defense" && item.equipmentType == "armor" && item.extra?.hpbs > 0) {
+          const hpbString = `§e(+${item.extra.hpbs * 2})`;
+          lore_raw[i] = statType + ": " + statValue + " " + hpbString + " " + split.slice(3).join(" ");
+          break;
+        } else {
+          lore_raw[i] = statType + ": " + statValue + " " + split.slice(2).join(" ");
+          break;
+        }
       }
     }
   },
