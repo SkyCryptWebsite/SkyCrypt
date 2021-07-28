@@ -807,7 +807,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
       // Get item stats from lore
       // we need to use lore_raw so we can get the hpbs (since what part is hpbs depend on color)
       lore_raw.forEach((line) => {
-        let split = helper.getRawLore(line).split(":");
+        const split = helper.getRawLore(line).split(":");
 
         if (split.length < 2) {
           return;
