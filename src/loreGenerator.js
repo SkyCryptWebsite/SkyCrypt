@@ -1,4 +1,4 @@
-const { statNames } = require("./lib");
+const { statNames } = require("./constants/misc");
 
 /**
  * adds a "+" to the beginning of positive numbers

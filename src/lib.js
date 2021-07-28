@@ -402,25 +402,6 @@ const potionColors = {
   15: "f500f5", // Uncraftable
 };
 
-/** @type {{[key: string]: string}} */
-const statNames = {
-  Damage: "damage",
-  Health: "health",
-  Defense: "defense",
-  Strength: "strength",
-  Drunkenness: "strength",
-  Speed: "speed",
-  "Pegleg Boost": "speed",
-  "Crit Chance": "crit_chance",
-  "Crit Damage": "",
-  "Bonus Attack Speed": "bonus_attack_speed",
-  Intelligence: "intelligence",
-  "Magic Find": "magic_find",
-  "Pet Luck": "pet_luck",
-  Ferocity: "ferocity",
-  "Ability Damage": "ability_damage",
-};
-
 // Process items returned by API
 async function getItems(base64, customTextures = false, packs, cacheOnly = false) {
   // API stores data as base64 encoded gzipped Minecraft NBT data
@@ -816,8 +797,8 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
         const statType = split[0];
         const statValue = parseFloat(split[1].trim().replace(/,/g, ""));
 
-        if (statType in statNames) {
-          item.stats[statNames[statType]] = statValue;
+        if (statType in constants.statNames) {
+          item.stats[constants.statNames[statType]] = statValue;
         }
       });
 
@@ -1022,8 +1003,6 @@ function calcDungeonsWeight(type, level, experience) {
 }
 
 module.exports = {
-  statNames,
-
   splitWithTail: (string, delimiter, count) => {
     let parts = string.split(delimiter);
     let tail = parts.slice(count).join(delimiter);
