@@ -22,8 +22,6 @@ module.exports = {
   makeLore: function (item) {
     const lore_raw = item?.tag?.display?.Lore;
 
-    console.log(lore_raw);
-
     if (lore_raw == undefined) {
       return;
     }
