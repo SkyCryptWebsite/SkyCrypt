@@ -529,6 +529,11 @@ module.exports = {
     };
   },
 
+  /**
+   * @param {number} number the number to be formatted
+   * @param {boolean} floor rounds down if true up if false
+   * @param {number} rounding //TODO figure out what this does
+   */
   formatNumber: (number, floor, rounding = 10) => {
     if (number < 1000) {
       return Math.floor(number);
