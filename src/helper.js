@@ -368,11 +368,22 @@ module.exports = {
     }
   },
 
-  // Convert Minecraft lore to HTML
+  /**
+   * Convert Minecraft lore to HTML
+   * @param {string} text minecraft lore with color and formatting codes
+   * @returns {string} HTML
+   */
   renderLore: (text) => {
     let output = "";
 
+    /**
+     * @typedef {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"a"|"b"|"c"|"d"|"e"|"f"} ColorCode
+     * @typedef {"k"|"l"|"m"|"n"|"o"} FormatCode
+     */
+
+    /** @type {ColorCode|null} */
     let color = null;
+    /** @type {Set<FormatCode>} */
     let formats = new Set();
 
     for (let part of text.match(/(§[0-9a-fk-or])*[^§]*/g)) {
