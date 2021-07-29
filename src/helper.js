@@ -12,6 +12,11 @@ const Hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
 
+/**
+ * converts a string to a number if it can be converted
+ * @param {string} key
+ * @returns {string|number}
+ */
 function getKey(key) {
   const intKey = new Number(key);
 
@@ -23,6 +28,13 @@ function getKey(key) {
 }
 
 module.exports = {
+  /**
+   * @deprecated use optional chaining instead
+   *
+   * @param {any} obj an object
+   * @param  {...(string|number)} keys a path
+   * @returns {boolean} if the path exists on the object
+   */
   hasPath: (obj, ...keys) => {
     if (obj == null) {
       return false;
@@ -41,6 +53,13 @@ module.exports = {
     return true;
   },
 
+  /**
+   * @deprecated use optional chaining instead
+   *
+   * @param {any} obj an object
+   * @param  {...(string|number)} keys a path
+   * @returns {any} the value at the path on the object
+   */
   getPath: (obj, ...keys) => {
     if (obj == null) {
       return undefined;
@@ -59,6 +78,14 @@ module.exports = {
     return loc;
   },
 
+  /**
+   * @deprecated because it's inefficient
+   *
+   * sets value at path on object
+   * @param {any} obj an object
+   * @param {any} value a value
+   * @param  {...(string|number)} keys a path
+   */
   setPath: (obj, value, ...keys) => {
     let i;
     let loc = obj || {};
