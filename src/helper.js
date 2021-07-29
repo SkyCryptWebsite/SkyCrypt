@@ -438,10 +438,24 @@ module.exports = {
     return text.replace(/§[0-9a-fk-or]/g, "");
   },
 
+  /**
+   * @param {string} word
+   * @returns {string}
+   * @example
+   * // returns "Hello world"
+   * capitalizeFirstLetter("hello world");
+   */
   capitalizeFirstLetter: (word) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
   },
 
+  /**
+   * @param {string} word
+   * @returns {string}
+   * @example
+   * // returns "Hello World"
+   * capitalizeFirstLetter("hello world");
+   */
   titleCase: (string) => {
     let split = string.toLowerCase().split(" ");
 
@@ -452,10 +466,26 @@ module.exports = {
     return split.join(" ");
   },
 
+  /**
+   * checks whether a string should be proceeded by a or by an
+   * @param {string} string
+   * @returns {"a"|"an"}
+   * @example
+   * // returns "a"
+   * aOrAn("cat");
+   * @example
+   * // returns "an"
+   * aOrAn("egg");
+   */
   aOrAn: (string) => {
     return ["a", "e", "i", "o", "u"].includes(string.charAt(0).toLowerCase()) ? "an" : "a";
   },
 
+  /**
+   * returns a object with they key sorted
+   * @param {object} obj
+   * @returns {object}
+   */
   sortObject: (obj) => {
     return Object.keys(obj)
       .sort()
