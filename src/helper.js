@@ -570,6 +570,11 @@ module.exports = {
     }
   },
 
+  /**
+   * calculates the letter grade of a dungeon Run
+   * @param {{score_exploration:number,score_speed:number,score_skill:number,score_bonus:number}} data dungeon run
+   * @returns {"S+"|"S"|"A"|"B"|"C"|"D"} letter grade
+   */
   calcDungeonGrade: (data) => {
     let total_score = data["score_exploration"] + data["score_speed"] + data["score_skill"] + data["score_bonus"];
     var result;
