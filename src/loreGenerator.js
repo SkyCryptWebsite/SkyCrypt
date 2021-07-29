@@ -22,6 +22,8 @@ module.exports = {
   makeLore: function (item) {
     const lore_raw = item?.tag?.display?.Lore;
 
+    console.log(lore_raw);
+
     if (lore_raw == undefined) {
       return;
     }
@@ -47,14 +49,11 @@ module.exports = {
         if (statName === "Health" && item.equipmentType == "armor" && item.extra?.hpbs > 0) {
           const hpbString = `HP §e(+${item.extra.hpbs * 4} HP)`;
           lore_raw[i] = statType + ": " + statValue + " " + hpbString + " " + split.slice(5).join(" ");
-          break;
         } else if (statName === "Defense" && item.equipmentType == "armor" && item.extra?.hpbs > 0) {
           const hpbString = `§e(+${item.extra.hpbs * 2})`;
           lore_raw[i] = statType + ": " + statValue + " " + hpbString + " " + split.slice(3).join(" ");
-          break;
         } else {
           lore_raw[i] = statType + ": " + statValue + " " + split.slice(2).join(" ");
-          break;
         }
       }
     }
