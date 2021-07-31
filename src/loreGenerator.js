@@ -1,10 +1,9 @@
-const helper = require("./helper");
-
 module.exports = {
   makeLore: function (item) {
-    let lore_raw = [];
-    if (helper.hasPath(item, "tag", "display", "Lore")) {
-      lore_raw = item.tag.display.Lore;
+    const lore_raw = item?.tag?.display?.Lore;
+
+    if (lore_raw == undefined) {
+      return;
     }
 
     for (let i = 0; i < lore_raw.length; ++i) {
@@ -95,11 +94,6 @@ module.exports = {
             statType + ": " + split[1].substring(0, 3) + item.stats.ability_damage + " " + split.slice(2).join(" ");
           break;
       }
-    }
-
-    // Set HTML lore to be displayed on the website
-    if (helper.hasPath(item, "tag", "display", "Lore")) {
-      item.tag.display.lore = lore_raw;
     }
   },
 };

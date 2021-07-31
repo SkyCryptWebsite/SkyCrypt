@@ -103,6 +103,8 @@ module.exports = {
     SOULFLOW_PILE: ["SOULFLOW_BATTERY", "SOULFLOW_SUPERCELL"],
     SOULFLOW_BATTERY: ["SOULFLOW_SUPERCELL"],
     ENDER_ARTIFACT: ["ENDER_RELIC"],
+    POWER_TALISMAN: ["POWER_RING", "POWER_ARTIFACT"],
+    POWER_RING: ["POWER_ARTIFACT"],
   },
 
   talisman_duplicates: {
@@ -499,25 +501,25 @@ module.exports = {
       rarity: "legendary",
       texture: "/head/5dff8dbbab15bfbb11e23b1f50b34ef548ad9832c0bd7f5a13791adad0057e1b",
     },
-    JERRY_TALISMAN_GOLDEN: {
-      name: "Golden Jerry Artifact",
-      rarity: "legendary",
-      texture: "/head/29251e18657e7304eaceac5f8d446d248ea46af2eab145f8185cece779f1648",
-    },
-    JERRY_TALISMAN_PURPLE: {
-      name: "Purple Jerry Talisman",
-      rarity: "epic",
-      texture: "/head/ff8bd61b60a425d2e0deb1df9665327750ceba822a0be85e2f4a3a722e20f7d6",
+    JERRY_TALISMAN_GREEN: {
+      name: "Green Jerry Talisman",
+      rarity: "uncommon",
+      texture: "/head/2567251d71b6f3a4dc03fa01e441de7edf9354794e74aec16c04f141ddf31c70",
     },
     JERRY_TALISMAN_BLUE: {
       name: "Blue Jerry Talisman",
       rarity: "rare",
       texture: "/head/d3b919f040922eb17733b42d216b7cdefeaea366be14c1ae6993ca7e5909e0f0",
     },
-    JERRY_TALISMAN_GREEN: {
-      name: "Green Jerry Talisman",
-      rarity: "uncommon",
-      texture: "/head/2567251d71b6f3a4dc03fa01e441de7edf9354794e74aec16c04f141ddf31c70",
+    JERRY_TALISMAN_PURPLE: {
+      name: "Purple Jerry Talisman",
+      rarity: "epic",
+      texture: "/head/ff8bd61b60a425d2e0deb1df9665327750ceba822a0be85e2f4a3a722e20f7d6",
+    },
+    JERRY_TALISMAN_GOLDEN: {
+      name: "Golden Jerry Artifact",
+      rarity: "legendary",
+      texture: "/head/29251e18657e7304eaceac5f8d446d248ea46af2eab145f8185cece779f1648",
     },
     KING_TALISMAN: {
       name: "King Talisman",
@@ -628,6 +630,26 @@ module.exports = {
       name: "Ender Relic",
       rarity: "legendary",
       texture: "/head/969da4e7b8d558af02e80e2e1669ceb6084898db55907ef3e66d9a329329e941",
+    },
+    JUNGLE_AMULET: {
+      name: "Jungle Amulet",
+      rarity: "uncommon",
+      texture: "/head/1bff65479fb7029decfe6779382762a08fc7c8eceff5448de263d9d375066f7a",
+    },
+    POWER_TALISMAN: {
+      name: "Talisman of Power",
+      rarity: "common",
+      texture: "/head/c6736fd95d3a6a4aaac46709a07aec7f1c38f0a3aae573e6f483388819412b65",
+    },
+    POWER_RING: {
+      name: "Ring of Power",
+      rarity: "uncommon",
+      texture: "/head/4528fe5dbe02e1d8d12186e2af98be1334ca7d596b7021ef7f978c7088b235fc",
+    },
+    POWER_ARTIFACT: {
+      name: "Artifact of Power",
+      rarity: "rare",
+      texture: "/head/2b15c8645bbabc42352350b1c9d84af71966c4c56a86d03acd079ed57f3ead3f",
     },
   },
 };

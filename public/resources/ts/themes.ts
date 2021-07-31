@@ -1,15 +1,3 @@
-{
-  const currentTheme = localStorage.getItem("currentTheme");
-  if (!currentTheme || !extra.themes[currentTheme]) {
-    localStorage.setItem("currentTheme", "default");
-  }
-}
-
-{
-  const currentTheme = localStorage.getItem("currentTheme");
-  if (currentTheme && currentTheme !== "default") loadTheme(currentTheme);
-}
-
 /**
  * converts a hex color to it's rgb components
  * @param code a hex color string
@@ -32,26 +20,25 @@ export function loadTheme(currentTheme: string): void {
 
   const theme = extra.themes[currentTheme];
 
-  const element = document.documentElement;
-
-  element.classList.toggle("light", !!theme.light);
-
-  (document.querySelector('meta[name="theme-color"]') as HTMLMetaElement).content = theme.light ? "#dbdbdb" : "#282828";
-
-  element.setAttribute("style", "");
+  const processedTheme: ProcessedTheme = {
+    light: !!theme.light,
+    styles: {},
+    logoURL: "/resources/img/logo_square.svg" + (theme.colors?.logo?.replace("#", "?color=") ?? ""),
+    enchantedGlint: theme.enchanted_glint ?? "/resources/img/enchanted-glint.png",
+  };
 
   for (const color in theme.colors) {
     const value = theme.colors[color];
 
-    element.style.setProperty(`--${color}-hex`, value);
+    processedTheme.styles[`--${color}-hex`] = value;
 
     if (["icon", "link", "text", "background", "header", "grey_background"].includes(color)) {
-      element.style.setProperty(`--${color}-rgb`, convertHex(value));
+      processedTheme.styles[`--${color}-rgb`] = convertHex(value);
     }
   }
 
   for (const img in theme.images) {
-    element.style.setProperty(`--${img}`, `url(${theme.images[img]})`);
+    processedTheme.styles[`--${img}`] = `url(${theme.images[img]})`;
   }
 
   for (const key in theme.backgrounds) {
@@ -69,20 +56,12 @@ export function loadTheme(currentTheme: string): void {
           .join(", ")})`;
         break;
     }
-    element.style.setProperty(`--${key}`, value);
+    processedTheme.styles[`--${key}`] = value;
   }
 
-  const logoURL = "/resources/img/logo_square.svg" + (theme.colors?.logo?.replace("#", "?color=") ?? "");
-  element.style.setProperty(`--logo`, `url(${logoURL})`);
-  document.querySelectorAll<HTMLLinkElement>('link[rel="icon"]').forEach((favicon) => {
-    if (favicon.href.match("logo_square")) {
-      favicon.href = logoURL;
-    }
-  });
+  processedTheme.styles[`--logo`] = `url(${processedTheme.logoURL})`;
 
-  document
-    .querySelector("#enchanted-glint feImage")
-    ?.setAttribute("href", theme.enchanted_glint ?? "/resources/img/enchanted-glint.png");
+  applyProcessedTheme(processedTheme);
 
-  console.log(`Loaded theme: ${currentTheme}`);
+  localStorage.setItem("processedTheme", JSON.stringify(processedTheme));
 }
