@@ -136,6 +136,13 @@ const allItems = new Map(
     items.storage,
   ]
     .flat()
+    .flatMap((item) => {
+      if ("containsItems" in item) {
+        return [item, ...item.containsItems];
+      } else {
+        return item;
+      }
+    })
     .map((item) => [item.itemId, item])
 );
 
