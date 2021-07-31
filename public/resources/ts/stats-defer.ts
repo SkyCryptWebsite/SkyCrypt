@@ -251,7 +251,6 @@ function isSlotItem(item: ItemSlot): item is Item {
 
 const inventorySlotTemplate = (item: ItemSlot) => {
   let itemTemplate: TemplateResult | undefined;
-  console.log(item);
 
   if (isSlotItem(item)) {
     itemTemplate = html`
