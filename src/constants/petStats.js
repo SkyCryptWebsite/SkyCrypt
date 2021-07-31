@@ -34,7 +34,9 @@ const symbols = {
   ferocity: "⫽",
   ability_damage: "✹",
   mining_speed: "⸕",
-  fortune: "☘",
+  mining_fortune: "☘",
+  farming_fortune: "☘",
+  foraging_fortune: "☘",
 };
 
 class Pet {
@@ -94,6 +96,12 @@ class Pet {
           break;
         case "ferocity":
           list.push(`§7Ferocity: ${formatStat(newStats[stat])}`);
+          break;
+        case "mining_speed":
+          list.push(`§7Mining Speed: ${formatStat(newStats[stat])}`);
+          break;
+        default:
+          list.push(`§cUNKNOWN: ${stat}`);
           break;
       }
     }
@@ -271,7 +279,7 @@ class Elephant extends Pet {
       name: "§6Trunk Efficiency",
       desc: [
         `§7Grants §a+${round(this.level * mult, 1)} §6${
-          symbols.fortune
+          symbols.farming_fortune
         } Farming Fortune§7, which increases your chance for multiple drops`,
       ],
     };
@@ -429,7 +437,7 @@ class Armadillo extends Pet {
   get third() {
     return {
       name: "§6Earth Surfer",
-      desc: [`§7The Armadillo moves faster based on your §fSpeed.`],
+      desc: [`§7The Armadillo moves faster based on your §fSpeed`],
     };
   }
 
@@ -653,6 +661,50 @@ class Rock extends Pet {
     return {
       name: "§6Steady Ground",
       desc: [`§7While sitting on your rock, gain +§a${round(this.level * mult, 1)}§7% damage`],
+    };
+  }
+}
+
+class Scatha extends Pet {
+  get stats() {
+    return {
+      defense: this.level * 1,
+      mining_speed: this.level * 1,
+    };
+  }
+
+  get abilities() {
+    let list = [this.first];
+    if (this.rarity > 1) {
+      list.push(this.second);
+    }
+    if (this.rarity > 3) {
+      list.push(this.third);
+    }
+    return list;
+  }
+
+  get first() {
+    const mult = this.rarity > 3 ? 1.25 : 1;
+    return {
+      name: "§6Grounded",
+      desc: [`§7Gain §6+${round(this.level * mult - 0.01, 1)}${symbols.mining_fortune} Mining Fortune§7`],
+    };
+  }
+
+  get second() {
+    const mult = this.rarity > 3 ? 0.03 : 0.025;
+    return {
+      name: "§6Burrowing",
+      desc: [`§7When mining, there is a §a${round(this.level * mult, 1)}% §7chance to mine up a treasure burrow`],
+    };
+  }
+
+  get third() {
+    const mult = 1;
+    return {
+      name: "§6Wormhole",
+      desc: [`§7Gives a §a${round(this.level * mult, 1)}% §7to mine 2 adjacent stone or hard stone`],
     };
   }
 }
@@ -1014,6 +1066,80 @@ class EnderDragon extends Pet {
       weapon.stats["damage"] += round(this.level * 0.5, 1);
       weapon.stats["strength"] += round(this.level * 0.3, 1);
     }
+  }
+}
+
+class GoldenDragon extends Pet {
+  get stats() {
+    let stats = {};
+    if (this.level >= 100) {
+      stats.bonus_attack_speed = round(Math.max(0, this.level - 100) * 0.25 + 25 - 0.01, 0);
+      stats.strength = round(Math.max(0, this.level - 100) * 0.25 + 25 - 0.01, 0);
+    }
+    return stats;
+  }
+
+  get abilities() {
+    let list = [];
+    if (this.level < 100) {
+      list.push(this.hatching_first);
+      list.push(this.hatching_second);
+    } else {
+      list.push(this.first);
+      list.push(this.second);
+      list.push(this.third);
+      list.push(this.fourth);
+    }
+    return list;
+  }
+
+  get hatching_first() {
+    return {
+      name: "§7Perks",
+      desc: [`§c§l???`],
+    };
+  }
+
+  get hatching_second() {
+    return {
+      name: "§7Hatches at level §b100",
+      desc: [""],
+    };
+  }
+
+  get first() {
+    const value = Math.max(0, this.level - 100) * 0.5 + 50;
+    return {
+      name: "§6Gold's Power",
+      desc: [`§7Adds §c+${round(value, 1)}${symbols.strength} Strength §7to all §6golden §7weapons`],
+    };
+  }
+
+  get second() {
+    return {
+      name: "§6Shining Scales",
+      desc: [
+        `§7For each digit in your §6gold collection §7gain §c+10${symbols.strength} Strength §7and §b+2${symbols.magic_find} Magic Find`,
+      ],
+    };
+  }
+
+  get third() {
+    const value = Math.max(0, this.level - 100) * 0.2 + 20;
+    return {
+      name: "§6Dragon's Greed",
+      desc: [
+        `§7Gain §a${round(value, 1)}% §7of your §b${symbols.magic_find} Magic Find §7as §c${symbols.strength} Strength`,
+      ],
+    };
+  }
+
+  get fourth() {
+    const value = Math.max(0, this.level - 100) * 0.00071 + 0.1;
+    return {
+      name: "§6Legendary Treasure",
+      desc: [`§7Gain §c${round(value, 1)}% §7damage for every milion coins in your bank`],
+    };
   }
 }
 
@@ -2264,7 +2390,7 @@ class Monkey extends Pet {
       name: "§6Treeborn",
       desc: [
         `§7Grants §a+${round(this.level * mult, 1)} §6${
-          symbols.fortune
+          symbols.foraging_fortune
         } Foraging Fortune§7, which increases your chance at double logs`,
       ],
     };
@@ -2989,6 +3115,7 @@ module.exports = {
     Endermite: Endermite,
     "Mithril Golem": MithrilGolem,
     Rock: Rock,
+    Scatha: Scatha,
     Silverfish: Silverfish,
     "Wither Skeleton": WitherSkeleton,
     //Combat
@@ -2996,6 +3123,7 @@ module.exports = {
     "Black Cat": BlackCat,
     Blaze: Blaze,
     "Ender Dragon": EnderDragon,
+    "Golden Dragon": GoldenDragon,
     Enderman: Enderman,
     Ghoul: Ghoul,
     Golem: Golem,
