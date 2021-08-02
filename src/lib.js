@@ -2959,69 +2959,57 @@ module.exports = {
       pet.level = getPetLevel(pet, petData.maxLevel);
       pet.stats = {};
 
-      pet.texture_path = petData.head;
+      pet.texture_path = petData.hatching?.level > pet.level.level ? petData.hatching.head : petData.head;
 
       let petSkin = null;
-
       if (pet.skin && constants.pet_skins?.[pet.type]?.[pet.skin]) {
         pet.texture_path = constants.pet_skins[pet.type][pet.skin].head;
         petSkin = constants.pet_skins[pet.type][pet.skin].name;
       }
 
-      const isMount = ["HORSE", "SKELETON_HORSE", "PIG", "ROCK", "ARMADILLO"].indexOf(pet.type) != -1;
-      const isMorph = ["RAT"].indexOf(pet.type) != -1;
-
       let loreFirstRow = [
         "§8",
         `${helper.capitalizeFirstLetter(petData.type)} `,
-        isMount ? "Mount" : isMorph ? "Morph" : "Pet",
+        petData.category ?? "Pet",
         petSkin ? `, ${petSkin} Skin` : "",
       ];
 
-      let lore = [loreFirstRow.join("")];
+      let lore = [loreFirstRow.join(""), ""];
 
-      lore.push("");
+      const petName =
+        petData.hatching?.level > pet.level.level
+          ? petData.hatching.name
+          : helper.titleCase(pet.type.replace(/_/g, " "));
 
-      const petName = helper.titleCase(pet.type.replace(/_/g, " "));
-      const searchName = petName in constants.petStats ? petName : "???";
-
-      if (searchName in constants.petStats) {
-        let rarity;
-        switch (pet.rarity) {
-          case "common":
-            rarity = 0;
-            break;
-          case "uncommon":
-            rarity = 1;
-            break;
-          case "rare":
-            rarity = 2;
-            break;
-          case "epic":
-            rarity = 3;
-            break;
-          case "legendary":
-            rarity = 4;
-            break;
-          case "mythic":
-            rarity = 5;
-            break;
-        }
-
-        const petInstance = new constants.petStats[searchName](rarity, pet.level.level);
-        // we need to push stats later :o
-
-        // make pet.stats actually hold pet stats
-        pet.stats = Object.assign({}, petInstance.stats);
-
-        pet.ref = petInstance;
-
-        // we also need to push abilites after stats :O
+      let rarity;
+      switch (pet.rarity) {
+        case "common":
+          rarity = 0;
+          break;
+        case "uncommon":
+          rarity = 1;
+          break;
+        case "rare":
+          rarity = 2;
+          break;
+        case "epic":
+          rarity = 3;
+          break;
+        case "legendary":
+          rarity = 4;
+          break;
+        case "mythic":
+          rarity = 5;
+          break;
       }
+
+      const searchName = pet.type in constants.petStats ? pet.type : "???";
+      const petInstance = new constants.petStats[searchName](rarity, pet.level.level);
+      pet.stats = Object.assign({}, petInstance.stats);
+      pet.ref = petInstance;
 
       if (pet.heldItem) {
         const { heldItem } = pet;
-
         let heldItemObj = await db.collection("items").findOne({ id: heldItem });
 
         if (heldItem in constants.pet_items) {
@@ -3058,6 +3046,7 @@ module.exports = {
             lore.push(line);
           });
         });
+
         // now we push the lore of the held items
         if (!heldItemObj) {
           heldItemObj = constants.pet_items[heldItem];
@@ -3083,6 +3072,7 @@ module.exports = {
             lore.push(line);
           });
         });
+
         // extra line
         lore.push(" ");
       }
@@ -3091,7 +3081,6 @@ module.exports = {
         lore.push(`§7Progress to Level ${pet.level.level + 1}: §e${(pet.level.progress * 100).toFixed(1)}%`);
 
         const progress = Math.ceil(pet.level.progress * 20);
-
         const numerator = pet.level.xpCurrent.toLocaleString();
         const denominator = helper.formatNumber(pet.level.xpForNext, false, 10);
 
