@@ -37,8 +37,6 @@ const randomEmoji = require("./constants/randomEmoji");
 
 const parseNbt = util.promisify(nbt.parse);
 
-const rarity_order = ["special", "mythic", "legendary", "epic", "rare", "uncommon", "common"];
-
 const MAX_SOULS = 227;
 let TALISMAN_COUNT;
 const level50SkillExp = 55172425;
