@@ -222,6 +222,25 @@ module.exports = {
     foraging_fortune: 0,
   },
 
+  /** @type {{[key: string]: string}} */
+  statNames: {
+    Damage: "damage",
+    Health: "health",
+    Defense: "defense",
+    Strength: "strength",
+    Drunkenness: "strength",
+    Speed: "speed",
+    "Pegleg Boost": "speed",
+    "Crit Chance": "crit_chance",
+    "Crit Damage": "",
+    "Bonus Attack Speed": "bonus_attack_speed",
+    Intelligence: "intelligence",
+    "Magic Find": "magic_find",
+    "Pet Luck": "pet_luck",
+    Ferocity: "ferocity",
+    "Ability Damage": "ability_damage",
+  },
+
   slayer_cost: {
     1: 2000,
     2: 7500,
