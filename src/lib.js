@@ -622,6 +622,10 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
       item.tag.ExtraAttributes.petInfo = JSON.parse(item.tag.ExtraAttributes.petInfo);
     }
 
+    if (helper.hasPath(item, "tag", "ExtraAttributes", "gems")) {
+      item.extra.gems = item.tag.ExtraAttributes.gems;
+    }
+
     // Lore stuff
     let itemLore = helper.getPath(item, "tag", "display", "Lore") || [];
     let lore_raw = [...itemLore];
@@ -632,6 +636,14 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
     if (itemLore.length > 0) {
       if (item.extra?.recombobulated) {
         itemLore.push("§8(Recombobulated)");
+      }
+
+      if (item.extra?.gems) {
+        itemLore.push(
+          "",
+          "§7Applied Gemstones:",
+          ...helper.parseItemGems(item.extra.gems).map((gem) => `§7 - ${gem.lore}`)
+        );
       }
 
       if (item.extra?.expertise_kills) {
