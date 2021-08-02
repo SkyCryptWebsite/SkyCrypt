@@ -576,23 +576,20 @@ module.exports = {
    * @returns {"S+"|"S"|"A"|"B"|"C"|"D"} letter grade
    */
   calcDungeonGrade: (data) => {
-    let total_score = data["score_exploration"] + data["score_speed"] + data["score_skill"] + data["score_bonus"];
-    var result;
+    const total_score = data.score_exploration + data.score_speed + data.score_skill + data.score_bonus;
     if (total_score <= 99) {
-      result = "D";
+      return "D";
     } else if (total_score <= 159) {
-      result = "C";
+      return "C";
     } else if (total_score <= 229) {
-      result = "B";
+      return "B";
     } else if (total_score <= 269) {
-      result = "A";
+      return "A";
     } else if (total_score <= 299) {
-      result = "S";
+      return "S";
     } else {
-      result = "S+";
+      return "S+";
     }
-
-    return result;
   },
 
   parseRank: (player) => {
