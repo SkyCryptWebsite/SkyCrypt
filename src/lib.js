@@ -1536,54 +1536,29 @@ module.exports = {
       output.no_personal_vault = true;
     }
 
+    const itemSorter = (a, b) => {
+      if (a.rarity !== b.rarity) {
+        return constants.rarities.indexOf(b.rarity) - constants.rarities.indexOf(a.rarity);
+      }
+
+      if (b.inBackpack && !a.inBackpack) {
+        return -1;
+      }
+      if (a.inBackpack && !b.inBackpack) {
+        return 1;
+      }
+
+      return a.item_index - b.item_index;
+    };
+
     // Sort talismans, weapons and rods by rarity
-    output.weapons = output.weapons.sort((a, b) => {
-      if (a.rarity == b.rarity) {
-        if (b.inBackpack) {
-          return -1;
-        }
+    output.weapons = output.weapons.sort(itemSorter);
 
-        return a.item_index > b.item_index ? 1 : -1;
-      }
+    output.rods = output.rods.sort(itemSorter);
 
-      return rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);
-    });
+    output.hoes = output.hoes.sort(itemSorter);
 
-    output.rods = output.rods.sort((a, b) => {
-      if (a.rarity == b.rarity) {
-        if (b.inBackpack) {
-          return -1;
-        }
-
-        return a.item_index > b.item_index ? 1 : -1;
-      }
-
-      return rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);
-    });
-
-    output.hoes = output.hoes.sort((a, b) => {
-      if (a.rarity == b.rarity) {
-        if (b.inBackpack) {
-          return -1;
-        }
-
-        return a.item_index > b.item_index ? 1 : -1;
-      }
-
-      return rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);
-    });
-
-    output.pickaxes = output.pickaxes.sort((a, b) => {
-      if (a.breaking_power == b.breaking_power) {
-        if (b.inBackpack) {
-          return -1;
-        }
-
-        return rarity_order.indexOf(a.rarity) > rarity_order.indexOf(b.rarity) ? 1 : -1;
-      }
-
-      return b.breaking_power - a.breaking_power;
-    });
+    output.pickaxes = output.pickaxes.sort(itemSorter);
 
     const countsOfId = {};
 
@@ -1611,15 +1586,7 @@ module.exports = {
       }
     }
 
-    output.talismans = output.talismans.sort((a, b) => {
-      const rarityOrder = rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);
-
-      if (rarityOrder == 0) {
-        return a.isInactive === b.isInactive ? 0 : a.isInactive ? 1 : -1;
-      }
-
-      return rarityOrder;
-    });
+    output.talismans = output.talismans.sort(itemSorter);
 
     let swords = output.weapons.filter((a) => a.type == "sword" || a.type == "dungeon sword");
     let bows = output.weapons.filter((a) => a.type == "bow" || a.type == "dungeon bow");
@@ -3115,7 +3082,7 @@ module.exports = {
             }
           }
         } else {
-          return rarity_order.indexOf(a.rarity) > rarity_order.indexOf(b.rarity) ? 1 : -1;
+          return constants.rarities.indexOf(a.rarity) < constants.rarities.indexOf(b.rarity) ? 1 : -1;
         }
       }
 
