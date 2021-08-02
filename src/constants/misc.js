@@ -21,6 +21,11 @@ module.exports = {
     "boots",
   ],
 
+  /** @typedef {"common"|"uncommon"|"rare"|"epic"|"legendary"|"mythic"|"supreme"|"special"|"very special"} Rarity */
+
+  /** @typedef {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"a"|"b"|"c"|"d"|"e"|"f"} ColorCode */
+
+  /** @type {{[key:Rarity]:ColorCode}} */
   rarityColors: {
     common: "f",
     uncommon: "a",
