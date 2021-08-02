@@ -814,7 +814,9 @@ module.exports = {
     return u;
   },
 
-  // Parses item.ExtraAttributes.gems object into a more usuable form
+  /**
+   * @param  {object} gems item.ExtraAttributes.gems
+   */
   parseItemGems: (gems) => {
     let parsed = [];
     for (const [key, value] of Object.entries(gems)) {
@@ -845,6 +847,10 @@ module.exports = {
     return parsed;
   },
 
+  /**
+   * @param  {string} type gem name, ex: RUBY
+   * @param  {string} tier gem tier, ex: PERFECT
+   */
   generateGemLore: (type, tier) => {
     let color;
     switch (type.toUpperCase()) {
