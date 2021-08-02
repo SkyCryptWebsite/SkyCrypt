@@ -715,11 +715,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
       }
 
       let loreRarity = rarity.toLowerCase();
-      let colorRarity = loreRarity;
-
-      if (rarity_type_color in constants.rarity_colors) {
-        colorRarity = constants.rarity_colors[rarity_type_color];
-      }
+      let colorRarity =
+        Object.keys(constants.rarityColors).find((key) => constants.rarityColors[key] === rarity_type_color) ??
+        loreRarity;
 
       item.rarity = colorRarity;
 
@@ -3051,7 +3049,7 @@ module.exports = {
         if (!heldItemObj) {
           heldItemObj = constants.pet_items[heldItem];
         }
-        lore.push("", `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
+        lore.push("", `§6Held Item: §${constants.rarityColors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
 
         if (heldItem in constants.pet_items) {
           lore.push(constants.pet_items[heldItem].description);
