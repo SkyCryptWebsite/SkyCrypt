@@ -816,6 +816,8 @@ module.exports = {
 
   /**
    * @param  {object} gems item.ExtraAttributes.gems
+   *
+   * @returns {array} of gem objects
    */
   parseItemGems: (gems) => {
     let parsed = [];
@@ -850,6 +852,8 @@ module.exports = {
   /**
    * @param  {string} type gem name, ex: RUBY
    * @param  {string} tier gem tier, ex: PERFECT
+   *
+   * @returns {string} formatted gem string
    */
   generateGemLore: (type, tier) => {
     let color;
