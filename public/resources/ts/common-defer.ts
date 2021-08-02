@@ -136,7 +136,7 @@ window.addEventListener("storage", (event) => {
 function setCheckedTheme(theme: string) {
   const checkbox = document.querySelector<HTMLInputElement>(`#themes-box input[value="${theme}"]`);
   if (checkbox == null) {
-    throw new Error("no checkbox for theme : " + theme);
+    throw new Error("no checkbox for theme: " + theme);
   }
   checkbox.checked = true;
 }
