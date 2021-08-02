@@ -39,8 +39,6 @@ const parseNbt = util.promisify(nbt.parse);
 
 const rarity_order = ["special", "mythic", "legendary", "epic", "rare", "uncommon", "common"];
 
-const petTiers = ["common", "uncommon", "rare", "epic", "legendary", "mythic"];
-
 const MAX_SOULS = 227;
 let TALISMAN_COUNT;
 const level50SkillExp = 55172425;
@@ -2946,12 +2944,14 @@ module.exports = {
 
       pet.rarity = pet.tier.toLowerCase();
 
-      if (
-        pet.heldItem == "PET_ITEM_TIER_BOOST" ||
-        pet.heldItem == "PET_ITEM_VAMPIRE_FANG" ||
-        pet.heldItem == "PET_ITEM_TOY_JERRY"
-      ) {
-        pet.rarity = petTiers[Math.min(petTiers.length - 1, petTiers.indexOf(pet.rarity) + 1)];
+      if (pet.heldItem == "PET_ITEM_TIER_BOOST") {
+        pet.rarity = constants.rarities[Math.min(4, constants.rarities.indexOf(pet.rarity) + 1)];
+      }
+
+      if (pet.heldItem == "PET_ITEM_VAMPIRE_FANG" || pet.heldItem == "PET_ITEM_TOY_JERRY") {
+        if (constants.rarities.indexOf(pet.rarity) === constants.rarities.indexOf(petData.maxTier.toLowerCase()) - 1) {
+          pet.rarity = petData.maxTier.toLowerCase();
+        }
       }
 
       pet.level = getPetLevel(pet, petData.maxLevel);
@@ -2979,27 +2979,7 @@ module.exports = {
           ? petData.hatching.name
           : helper.titleCase(pet.type.replace(/_/g, " "));
 
-      let rarity;
-      switch (pet.rarity) {
-        case "common":
-          rarity = 0;
-          break;
-        case "uncommon":
-          rarity = 1;
-          break;
-        case "rare":
-          rarity = 2;
-          break;
-        case "epic":
-          rarity = 3;
-          break;
-        case "legendary":
-          rarity = 4;
-          break;
-        case "mythic":
-          rarity = 5;
-          break;
-      }
+      const rarity = constants.rarities.indexOf(pet.rarity);
 
       const searchName = pet.type in constants.petStats ? pet.type : "???";
       const petInstance = new constants.petStats[searchName](rarity, pet.level.level);
