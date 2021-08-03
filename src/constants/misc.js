@@ -21,25 +21,24 @@ module.exports = {
     "boots",
   ],
 
-  tier_colors: {
-    common: "§f",
-    uncommon: "§a",
-    rare: "§9",
-    epic: "§5",
-    legendary: "§6",
-    mythic: "§d",
-    supreme: "§4",
-  },
+  /** @typedef {"common"|"uncommon"|"rare"|"epic"|"legendary"|"mythic"|"supreme"|"special"|"very special"} Rarity */
 
-  rarity_colors: {
-    f: "common",
-    a: "uncommon",
-    9: "rare",
-    5: "epic",
-    6: "legendary",
-    d: "mythic",
-    4: "supreme",
-    c: "special",
+  /** @type {Rarity[]} */
+  rarities: ["common", "uncommon", "rare", "epic", "legendary", "mythic", "supreme", "special", "very special"],
+
+  /** @typedef {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"a"|"b"|"c"|"d"|"e"|"f"} ColorCode */
+
+  /** @type {{[key:Rarity]:ColorCode}} */
+  rarityColors: {
+    common: "f",
+    uncommon: "a",
+    rare: "9",
+    epic: "5",
+    legendary: "6",
+    mythic: "d",
+    supreme: "4",
+    special: "c",
+    "very special": "c",
   },
 
   special_enchants: [

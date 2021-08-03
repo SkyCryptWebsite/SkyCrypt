@@ -37,10 +37,6 @@ const randomEmoji = require("./constants/randomEmoji");
 
 const parseNbt = util.promisify(nbt.parse);
 
-const rarity_order = ["special", "mythic", "legendary", "epic", "rare", "uncommon", "common"];
-
-const petTiers = ["common", "uncommon", "rare", "epic", "legendary", "mythic"];
-
 const MAX_SOULS = 227;
 let TALISMAN_COUNT;
 const level50SkillExp = 55172425;
@@ -727,11 +723,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
       }
 
       let loreRarity = rarity.toLowerCase();
-      let colorRarity = loreRarity;
-
-      if (rarity_type_color in constants.rarity_colors) {
-        colorRarity = constants.rarity_colors[rarity_type_color];
-      }
+      let colorRarity =
+        Object.keys(constants.rarityColors).find((key) => constants.rarityColors[key] === rarity_type_color) ??
+        loreRarity;
 
       item.rarity = colorRarity;
 
@@ -1552,54 +1546,29 @@ module.exports = {
       output.no_personal_vault = true;
     }
 
+    const itemSorter = (a, b) => {
+      if (a.rarity !== b.rarity) {
+        return constants.rarities.indexOf(b.rarity) - constants.rarities.indexOf(a.rarity);
+      }
+
+      if (b.inBackpack && !a.inBackpack) {
+        return -1;
+      }
+      if (a.inBackpack && !b.inBackpack) {
+        return 1;
+      }
+
+      return a.item_index - b.item_index;
+    };
+
     // Sort talismans, weapons and rods by rarity
-    output.weapons = output.weapons.sort((a, b) => {
-      if (a.rarity == b.rarity) {
-        if (b.inBackpack) {
-          return -1;
-        }
+    output.weapons = output.weapons.sort(itemSorter);
 
-        return a.item_index > b.item_index ? 1 : -1;
-      }
+    output.rods = output.rods.sort(itemSorter);
 
-      return rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);
-    });
+    output.hoes = output.hoes.sort(itemSorter);
 
-    output.rods = output.rods.sort((a, b) => {
-      if (a.rarity == b.rarity) {
-        if (b.inBackpack) {
-          return -1;
-        }
-
-        return a.item_index > b.item_index ? 1 : -1;
-      }
-
-      return rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);
-    });
-
-    output.hoes = output.hoes.sort((a, b) => {
-      if (a.rarity == b.rarity) {
-        if (b.inBackpack) {
-          return -1;
-        }
-
-        return a.item_index > b.item_index ? 1 : -1;
-      }
-
-      return rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);
-    });
-
-    output.pickaxes = output.pickaxes.sort((a, b) => {
-      if (a.breaking_power == b.breaking_power) {
-        if (b.inBackpack) {
-          return -1;
-        }
-
-        return rarity_order.indexOf(a.rarity) > rarity_order.indexOf(b.rarity) ? 1 : -1;
-      }
-
-      return b.breaking_power - a.breaking_power;
-    });
+    output.pickaxes = output.pickaxes.sort(itemSorter);
 
     const countsOfId = {};
 
@@ -1627,15 +1596,7 @@ module.exports = {
       }
     }
 
-    output.talismans = output.talismans.sort((a, b) => {
-      const rarityOrder = rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);
-
-      if (rarityOrder == 0) {
-        return a.isInactive === b.isInactive ? 0 : a.isInactive ? 1 : -1;
-      }
-
-      return rarityOrder;
-    });
+    output.talismans = output.talismans.sort(itemSorter);
 
     let swords = output.weapons.filter((a) => a.type == "sword" || a.type == "dungeon sword");
     let bows = output.weapons.filter((a) => a.type == "bow" || a.type == "dungeon bow");
@@ -2960,12 +2921,14 @@ module.exports = {
 
       pet.rarity = pet.tier.toLowerCase();
 
-      if (
-        pet.heldItem == "PET_ITEM_TIER_BOOST" ||
-        pet.heldItem == "PET_ITEM_VAMPIRE_FANG" ||
-        pet.heldItem == "PET_ITEM_TOY_JERRY"
-      ) {
-        pet.rarity = petTiers[Math.min(petTiers.length - 1, petTiers.indexOf(pet.rarity) + 1)];
+      if (pet.heldItem == "PET_ITEM_TIER_BOOST") {
+        pet.rarity = constants.rarities[Math.min(4, constants.rarities.indexOf(pet.rarity) + 1)];
+      }
+
+      if (pet.heldItem == "PET_ITEM_VAMPIRE_FANG" || pet.heldItem == "PET_ITEM_TOY_JERRY") {
+        if (constants.rarities.indexOf(pet.rarity) === constants.rarities.indexOf(petData.maxTier.toLowerCase()) - 1) {
+          pet.rarity = petData.maxTier.toLowerCase();
+        }
       }
 
       pet.level = getPetLevel(pet, petData.maxLevel);
@@ -2993,27 +2956,7 @@ module.exports = {
           ? petData.hatching.name
           : helper.titleCase(pet.type.replace(/_/g, " "));
 
-      let rarity;
-      switch (pet.rarity) {
-        case "common":
-          rarity = 0;
-          break;
-        case "uncommon":
-          rarity = 1;
-          break;
-        case "rare":
-          rarity = 2;
-          break;
-        case "epic":
-          rarity = 3;
-          break;
-        case "legendary":
-          rarity = 4;
-          break;
-        case "mythic":
-          rarity = 5;
-          break;
-      }
+      const rarity = constants.rarities.indexOf(pet.rarity);
 
       const searchName = pet.type in constants.petStats ? pet.type : "???";
       const petInstance = new constants.petStats[searchName](rarity, pet.level.level);
@@ -3063,7 +3006,7 @@ module.exports = {
         if (!heldItemObj) {
           heldItemObj = constants.pet_items[heldItem];
         }
-        lore.push("", `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
+        lore.push("", `§6Held Item: §${constants.rarityColors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
 
         if (heldItem in constants.pet_items) {
           lore.push(constants.pet_items[heldItem].description);
@@ -3149,7 +3092,7 @@ module.exports = {
             }
           }
         } else {
-          return rarity_order.indexOf(a.rarity) > rarity_order.indexOf(b.rarity) ? 1 : -1;
+          return constants.rarities.indexOf(a.rarity) < constants.rarities.indexOf(b.rarity) ? 1 : -1;
         }
       }
 
