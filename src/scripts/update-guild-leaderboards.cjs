@@ -6,7 +6,7 @@ async function main() {
   const Redis = require("ioredis");
   const redisClient = new Redis();
 
-  const constants = require("./../constants");
+  const constants = require("./../constants.cjs");
   const credentials = require("./../../credentials.json");
 
   const ProgressBar = require("progress");

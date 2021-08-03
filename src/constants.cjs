@@ -4,7 +4,7 @@ const path = require("path");
 const constants = {};
 
 for (const file of fs.readdirSync(path.resolve(__dirname, "constants"))) {
-  if (path.extname(file) != ".js") {
+  if (path.extname(file) != ".cjs") {
     continue;
   }
 

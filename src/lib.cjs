@@ -5,8 +5,8 @@ const util = require("util");
 const sanitize = require("mongo-sanitize");
 const mcData = require("minecraft-data")("1.8.9");
 const _ = require("lodash");
-const constants = require("./constants");
-const helper = require("./helper");
+const constants = require("./constants.cjs");
+const helper = require("./helper.cjs");
 const { getId } = helper;
 const axios = require("axios");
 const moment = require("moment");
@@ -31,9 +31,9 @@ const Hypixel = axios.create({
 const Redis = require("ioredis");
 const redisClient = new Redis();
 
-const customResources = require("./custom-resources");
-const loreGenerator = require("./loreGenerator");
-const randomEmoji = require("./constants/randomEmoji");
+const customResources = require("./custom-resources.cjs");
+const loreGenerator = require("./loreGenerator.cjs");
+const randomEmoji = require("./constants/randomEmoji.cjs");
 
 const parseNbt = util.promisify(nbt.parse);
 

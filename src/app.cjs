@@ -1,6 +1,6 @@
 const cluster = require("cluster");
-const lib = require("./lib");
-const { getFileHashes, getFileHash, hashedDirectories } = require("./hashes");
+const lib = require("./lib.cjs");
+const { getFileHashes, getFileHash, hashedDirectories } = require("./hashes.cjs");
 const fetch = require("node-fetch");
 
 async function main() {
@@ -16,7 +16,7 @@ async function main() {
   const fs = require("fs-extra");
 
   const path = require("path");
-  const renderer = require("./renderer");
+  const renderer = require("./renderer.cjs");
 
   await renderer.init();
 
@@ -56,8 +56,8 @@ async function main() {
 
   const { MongoClient } = require("mongodb");
   const sanitize = require("mongo-sanitize");
-  const helper = require("./helper");
-  const constants = require("./constants");
+  const helper = require("./helper.cjs");
+  const constants = require("./constants.cjs");
   const manifest = require("../public/manifest.json");
   const { SitemapStream, streamToPromise } = require("sitemap");
   const { createGzip } = require("zlib");
@@ -128,9 +128,9 @@ async function main() {
     })
   );
 
-  require("./api")(app, db);
-  require("./apiv2")(app, db);
-  require("./donations/kofi")(app, db);
+  require("./api.cjs")(app, db);
+  require("./apiv2.cjs")(app, db);
+  require("./donations/kofi.cjs")(app, db);
 
   function parseFavorites(cookie) {
     return cookie?.split(",").filter((uuid) => /^[0-9a-f]{32}$/.test(uuid)) || [];

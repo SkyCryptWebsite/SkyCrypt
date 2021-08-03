@@ -1,8 +1,8 @@
-const helper = require("./helper");
-const lib = require("./lib");
+const helper = require("./helper.cjs");
+const lib = require("./lib.cjs");
 const cors = require("cors");
 const sanitize = require("mongo-sanitize");
-const constants = require("./constants");
+const constants = require("./constants.cjs");
 
 const Redis = require("ioredis");
 const redisClient = new Redis();
@@ -69,7 +69,7 @@ module.exports = (app, db) => {
 
   app.all("/api/v2/packs", cors(), async (req, res) => {
     if (req.apiKey) {
-      let customResources = require("./custom-resources");
+      let customResources = require("./custom-resources.cjs");
       res.json(customResources.completePacks);
     } else {
       res.status(404).json({ error: "This endpoint isn't available to the public." });

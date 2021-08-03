@@ -1,7 +1,7 @@
 const cluster = require("cluster");
 
 async function main() {
-  const constants = require("./../constants");
+  const constants = require("./../constants.cjs");
 
   const Redis = require("ioredis");
   const redisClient = new Redis();

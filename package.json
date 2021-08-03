@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Player stats for Hypixel SkyBlock",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node init && node index",
     "dev": "concurrently -r \"npm run nodemon\" \"npm run scss:watch\" \"npm run rollup:watch\"",

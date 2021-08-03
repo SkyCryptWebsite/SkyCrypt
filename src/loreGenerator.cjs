@@ -1,4 +1,4 @@
-const { statNames } = require("./constants/misc");
+const { statNames } = require("./constants/misc.cjs");
 
 /**
  * adds a "+" to the beginning of positive numbers

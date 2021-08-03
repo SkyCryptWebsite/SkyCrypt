@@ -1,10 +1,10 @@
 const tableify = require("@tillhub/tableify");
-const helper = require("./helper");
+const helper = require("./helper.cjs");
 const { getId } = helper;
-const lib = require("./lib");
-const constants = require("./constants");
+const lib = require("./lib.cjs");
+const constants = require("./constants.cjs");
 const cors = require("cors");
-const { hasPath } = require("./helper");
+const { hasPath } = require("./helper.cjs");
 
 function handleError(e, res) {
   console.error(e);

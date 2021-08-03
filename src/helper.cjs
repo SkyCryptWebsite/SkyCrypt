@@ -5,7 +5,7 @@ require("axios-debug-log");
 
 const retry = require("async-retry");
 
-const constants = require("./constants");
+const constants = require("./constants.cjs");
 const credentials = require("./../credentials.json");
 
 const Hypixel = axios.create({

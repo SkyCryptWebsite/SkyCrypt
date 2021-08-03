@@ -1,4 +1,4 @@
-const collections = require("./collections");
+const collections = require("./collections.cjs");
 const moment = require("moment");
 require("moment-duration-format")(moment);
 
@@ -21,31 +21,31 @@ const raceFormat = (x) => {
 };
 
 const skillFormat = (xp) => {
-  const { getLevelByXp } = require("../lib");
+  const { getLevelByXp } = require("../lib.cjs");
   let levelObj = getLevelByXp(xp);
   return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
 };
 
 const skillFormatFarming = (xp) => {
-  const { getLevelByXp } = require("../lib");
+  const { getLevelByXp } = require("../lib.cjs");
   let levelObj = getLevelByXp(xp, { skill: "farming" });
   return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
 };
 
 const skillFormatEnchanting = (xp) => {
-  const { getLevelByXp } = require("../lib");
+  const { getLevelByXp } = require("../lib.cjs");
   let levelObj = getLevelByXp(xp, { skill: "enchanting" });
   return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
 };
 
 const skillFormatRunecrafting = (xp) => {
-  const { getLevelByXp } = require("../lib");
+  const { getLevelByXp } = require("../lib.cjs");
   let levelObj = getLevelByXp(xp, { type: "runecrafting" });
   return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
 };
 
 const skillFormatDungeoneering = (xp) => {
-  const { getLevelByXp } = require("../lib");
+  const { getLevelByXp } = require("../lib.cjs");
   let levelObj = getLevelByXp(xp, { type: "dungeoneering" });
   return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
 };

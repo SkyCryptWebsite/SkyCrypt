@@ -5,9 +5,9 @@ Hat layers, transparency and shading added by me
 
 const { createCanvas, loadImage } = require("canvas");
 const css = require("css");
-const helper = require("./helper");
+const helper = require("./helper.cjs");
 const path = require("path");
-const customResources = require("./custom-resources");
+const customResources = require("./custom-resources.cjs");
 const sanitize = require("mongo-sanitize");
 const fs = require("fs-extra");
 
