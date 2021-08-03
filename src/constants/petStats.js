@@ -3151,6 +3151,7 @@ class QuestionMark extends Pet {
 module.exports = {
   petStats: {
     "???": QuestionMark,
+    AMMONITE: Ammonite,
     ARMADILLO: Armadillo,
     BABY_YETI: BabyYeti,
     BAL: Bal,
