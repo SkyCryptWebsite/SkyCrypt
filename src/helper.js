@@ -813,4 +813,78 @@ module.exports = {
     }
     return u;
   },
+
+  /**
+   * @param  {object} gems item.ExtraAttributes.gems
+   *
+   * @returns {array} of gem objects
+   */
+  parseItemGems: (gems) => {
+    let parsed = [];
+    for (const [key, value] of Object.entries(gems)) {
+      if (key.startsWith("UNIVERSAL_")) {
+        if (key.endsWith("_gem")) {
+          continue;
+        }
+        parsed.push({
+          slot_type: "UNIVERSAL",
+          slot_number: +key.split("_")[1],
+          gem_type: gems[`${key}_gem`],
+          gem_tier: value,
+        });
+      } else {
+        parsed.push({
+          slot_type: key.split("_")[0],
+          slot_number: +key.split("_")[1],
+          gem_type: key.split("_")[0],
+          gem_tier: value,
+        });
+      }
+    }
+
+    parsed.forEach((gem) => {
+      gem.lore = module.exports.generateGemLore(gem.gem_type, gem.gem_tier);
+    });
+
+    return parsed;
+  },
+
+  /**
+   * @param  {string} type gem name, ex: RUBY
+   * @param  {string} tier gem tier, ex: PERFECT
+   *
+   * @returns {string} formatted gem string
+   */
+  generateGemLore: (type, tier) => {
+    let color;
+    switch (type.toUpperCase()) {
+      case "JADE":
+        color = "§a";
+        break;
+      case "AMBER":
+        color = "§6";
+        break;
+      case "TOPAZ":
+        color = "§e";
+        break;
+      case "SAPPHIRE":
+        color = "§b";
+        break;
+      case "AMETHYST":
+        color = "§5";
+        break;
+      case "JASPER":
+        color = "§d";
+        break;
+      case "RUBY":
+        color = "§c";
+        break;
+
+      default:
+        color = "§7";
+        break;
+    }
+
+    return `${color}${module.exports.titleCase(tier)} ${module.exports.titleCase(type)}`;
+  },
 };
