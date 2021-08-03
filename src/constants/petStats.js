@@ -2586,6 +2586,53 @@ class BlueWhale extends Pet {
   }
 }
 
+class Ammonite extends Pet {
+  get stats() {
+    return {
+      sea_creature_chance: this.level * 0,
+    };
+  }
+
+  get abilities() {
+    let list = [this.first];
+    if (this.rarity > 1) {
+      list.push(this.second);
+    }
+    if (this.rarity > 3) {
+      list.push(this.third);
+    }
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6Heart of the Sea",
+      desc: [`§7Each Heart of the Mountain level grants §3+???${symbols.sea_creature_chance} Sea Creature Chance`],
+    };
+  }
+
+  get second() {
+    return {
+      name: "§6???",
+      desc: [`§7???`],
+    };
+  }
+
+  get third() {
+    return {
+      name: "§6???",
+      desc: [`§7???`],
+    };
+  }
+
+  modifyStats(stats) {
+    if (this.rarity > 1) {
+      let mult = this.rarity > 2 ? 0.1 : 0.07;
+      stats["sea creature chance"] *= 1 + round((this.level * mult) / 100, 1);
+    }
+  }
+}
+
 class Dolphin extends Pet {
   get stats() {
     return {
