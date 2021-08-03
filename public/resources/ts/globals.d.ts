@@ -73,6 +73,7 @@ type StatName =
   | "mining_fortune"
   | "mining_speed"
   | "pet_luck"
+  | "pristine"
   | "sea_creature_chance"
   | "speed"
   | "strength";

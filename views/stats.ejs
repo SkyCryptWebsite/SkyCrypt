@@ -8,36 +8,51 @@ const allItems = items.armor.concat(items.inventory, items.enderchest, items.tal
 const UNIQUE_ACCESSORIES = calculated.talismanCount;
 
 const statSuffix = {
-  health: '',
-  defense: '',
-  effective_health: '',
-  strength: '',
-  speed: '%',
+  ability_damage: '',
+  bonus_attack_speed: '%',
   crit_chance: '%',
   crit_damage: '%',
+  damage_increase: '',
+  damage: '',
+  defense: '',
+  effective_health: '',
+  farming_fortune: '',
+  ferocity: '',
+  foraging_fortune: '',
+  health: '',
   intelligence: '',
-  sea_creature_chance: '%',
   magic_find: '',
+  mining_fortune: '',
+  mining_speed: '',
   pet_luck: '',
-  bonus_attack_speed: '%'
+  pristine: '',
+  sea_creature_chance: '%',
+  speed: '%',
+  strength: '',
 };
 
 const statShort = {
-  health: 'HP',
-  defense: 'Def',
-  effective_health: 'EHP',
-  strength: 'Str',
-  speed: 'Spd',
+  ability_damage: 'AD',
+  bonus_attack_speed: 'Atk',
   crit_chance: 'CC',
   crit_damage: 'CD',
-  intelligence: 'Int',
-  sea_creature_chance: 'ScC',
-  magic_find: 'MF',
-  pet_luck: 'PL',
-  bonus_attack_speed: 'Atk',
+  damage_increase: 'DmgInc',
+  damage: 'Dmg',
+  defense: 'Def',
+  effective_health: 'EHP',
+  farming_fortune: 'FrmFrt',
   ferocity: 'Frc',
-  ability_damage: 'AD',
-  mining_speed: "MngSpd"
+  foraging_fortune: 'FrgFrt',
+  health: 'HP',
+  intelligence: 'Int',
+  magic_find: 'MF',
+  mining_fortune: 'MngFrt',
+  mining_speed: 'MngSpd',
+  pet_luck: 'PL',
+  pristine: 'Prs',
+  sea_creature_chance: 'ScC',
+  speed: 'Spd',
+  strength: 'Str',
 };
 
 function getPrettyName(statName, shorten = false) {
@@ -748,11 +763,32 @@ const getRarityUpgradeClass = item => {
           percent: true,
           baseExplanation: "Increased by leveling your Enchanting Skill."
         }); %>
-        <!--<div data-stat="fairy_souls" class="basic-stat stat-fairy-souls">
-          <span data-tippy-content="
-            Collect Fairy Souls to gain Health, Defense, Strength and Speed.</div>
-          "><span class="stat-name">Fairy Souls </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span></span>
-        </div>-->
+
+        <%- stat_component({
+            name: 'mining_speed',
+            baseExplanation: "Increase the speed of breaking mining blocks."
+        }); %>
+
+        <%- stat_component({
+            name: 'mining_fortune',
+            baseExplanation: "Mining Fortune is the chance to gain double drops from ores, with a chance for triple drops at values greater than 100."
+        }); %>
+
+        <%- stat_component({
+            name: 'farming_fortune',
+            baseExplanation: "Farming Fortune is the chance to gain double drops from crops, with a chance for triple drops at values greater than 100."
+        }); %>
+
+        <%- stat_component({
+            name: 'foraging_fortune',
+            baseExplanation: "Foraging Fortune is the chance to gain double drops from logs, with a chance for triple drops at values greater than 100."
+        }); %>
+
+        <%- stat_component({
+            name: 'pristine',
+            baseExplanation: "Pristine is the chance to increase the quality of a Gemstone when it's dropped."
+        }); %>
+
       </div>
 
       <div id="additional_stats_container">
