@@ -825,7 +825,7 @@ module.exports = {
    */
   parseItemGems: (gems) => {
     /** @type {Gem[]} */
-    let parsed = [];
+    const parsed = [];
     for (const [key, value] of Object.entries(gems)) {
       if (key.startsWith("UNIVERSAL_")) {
         if (key.endsWith("_gem")) {
