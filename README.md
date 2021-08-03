@@ -5,7 +5,7 @@ The SkyCrypt Project, which is based on LeaPhant's [sky.lea.moe](https://sky.lea
 
 **Website**: https://sky.shiiyu.moe
 
-![Node.JS CI](https://github.com/SkyCryptWebsite/SkyCrypt/workflows/Node.js%20CI/badge.svg)
+[![CI](https://github.com/SkyCryptWebsite/SkyCrypt/actions/workflows/node.js.yml/badge.svg)](https://github.com/SkyCryptWebsite/SkyCrypt/actions/workflows/node.js.yml)
 
 <h2 align="center">Screenshot</h1>
 

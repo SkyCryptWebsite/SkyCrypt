@@ -600,7 +600,9 @@ for (const element of document.querySelectorAll<HTMLElement>(".stat-weapons .sel
 
   const activeWeaponElement = document.querySelector(".stat-active-weapon") as HTMLElement;
 
-  element.addEventListener("click", () => {
+  element.addEventListener("click", (event) => {
+    event.stopPropagation();
+
     if (parent.classList.contains("piece-selected")) {
       parent.classList.remove("piece-selected");
 
@@ -662,7 +664,9 @@ for (const element of document.querySelectorAll<HTMLElement>(".stat-fishing .sel
 
   const activeRodElement = document.querySelector(".stat-active-rod") as HTMLElement;
 
-  element.addEventListener("click", () => {
+  element.addEventListener("click", (event) => {
+    event.stopPropagation();
+
     if (parent.classList.contains("piece-selected")) {
       parent.classList.remove("piece-selected");
 

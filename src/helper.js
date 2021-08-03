@@ -12,6 +12,11 @@ const Hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
 
+/**
+ * converts a string to a number if it can be converted
+ * @param {string} key
+ * @returns {string|number}
+ */
 function getKey(key) {
   const intKey = new Number(key);
 
@@ -23,6 +28,13 @@ function getKey(key) {
 }
 
 module.exports = {
+  /**
+   * @deprecated use optional chaining instead
+   *
+   * @param {any} obj an object
+   * @param  {...(string|number)} keys a path
+   * @returns {boolean} if the path exists on the object
+   */
   hasPath: (obj, ...keys) => {
     if (obj == null) {
       return false;
@@ -41,6 +53,13 @@ module.exports = {
     return true;
   },
 
+  /**
+   * @deprecated use optional chaining instead
+   *
+   * @param {any} obj an object
+   * @param  {...(string|number)} keys a path
+   * @returns {any} the value at the path on the object
+   */
   getPath: (obj, ...keys) => {
     if (obj == null) {
       return undefined;
@@ -59,6 +78,14 @@ module.exports = {
     return loc;
   },
 
+  /**
+   * @deprecated because it's inefficient
+   *
+   * sets value at path on object
+   * @param {any} obj an object
+   * @param {any} value a value
+   * @param  {...(string|number)} keys a path
+   */
   setPath: (obj, value, ...keys) => {
     let i;
     let loc = obj || {};
@@ -119,7 +146,7 @@ module.exports = {
       }
     }
 
-    if (cacheOnly === false && (user === null || +new Date() - user.date > 7200 * 1000)) {
+    if (cacheOnly === false && (user == undefined || +new Date() - user.date > 7200 * 1000)) {
       let profileRequest = axios(`https://api.ashcon.app/mojang/v1/user/${uuid}`, { timeout: 5000 });
 
       profileRequest
@@ -215,24 +242,24 @@ module.exports = {
 
     let guildObject = null;
 
-    if (cacheOnly && guildMember === null) {
+    if (cacheOnly && guildMember == undefined) {
       return null;
     }
 
-    if (guildMember !== null && guildMember.gid !== null) {
+    if (guildMember != undefined && guildMember.gid !== null) {
       guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildMember.gid) });
     }
 
     if (
       cacheOnly ||
-      (guildMember !== null &&
+      (guildMember != undefined &&
         guildMember.gid !== null &&
-        (guildObject === null || Date.now() - guildMember.last_updated < 7200 * 1000))
+        (guildObject == undefined || Date.now() - guildMember.last_updated < 7200 * 1000))
     ) {
       if (guildMember.gid !== null) {
         const guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildMember.gid) });
 
-        if (guildObject === null) {
+        if (guildObject == undefined) {
           return null;
         }
 
@@ -247,7 +274,7 @@ module.exports = {
 
       return null;
     } else {
-      if (guildMember === null || Date.now() - guildMember.last_updated > 7200 * 1000) {
+      if (guildMember == undefined || Date.now() - guildMember.last_updated > 7200 * 1000) {
         try {
           const guildResponse = await Hypixel.get("guild", {
             params: { player: uuid, key: credentials.hypixel_api_key },
@@ -341,11 +368,22 @@ module.exports = {
     }
   },
 
-  // Convert Minecraft lore to HTML
+  /**
+   * Convert Minecraft lore to HTML
+   * @param {string} text minecraft lore with color and formatting codes
+   * @returns {string} HTML
+   */
   renderLore: (text) => {
     let output = "";
 
+    /**
+     * @typedef {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"a"|"b"|"c"|"d"|"e"|"f"} ColorCode
+     * @typedef {"k"|"l"|"m"|"n"|"o"} FormatCode
+     */
+
+    /** @type {ColorCode|null} */
     let color = null;
+    /** @type {Set<FormatCode>} */
     let formats = new Set();
 
     for (let part of text.match(/(§[0-9a-fk-or])*[^§]*/g)) {
@@ -391,15 +429,33 @@ module.exports = {
     return output;
   },
 
-  // Get Minecraft lore without the color and formatting codes
+  /**
+   * Get Minecraft lore without the color and formatting codes
+   * @param {string} text lore with color codes
+   * @returns {string} lore without color codes
+   */
   getRawLore: (text) => {
     return text.replace(/§[0-9a-fk-or]/g, "");
   },
 
+  /**
+   * @param {string} word
+   * @returns {string}
+   * @example
+   * // returns "Hello world"
+   * capitalizeFirstLetter("hello world");
+   */
   capitalizeFirstLetter: (word) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
   },
 
+  /**
+   * @param {string} word
+   * @returns {string}
+   * @example
+   * // returns "Hello World"
+   * capitalizeFirstLetter("hello world");
+   */
   titleCase: (string) => {
     let split = string.toLowerCase().split(" ");
 
@@ -410,10 +466,26 @@ module.exports = {
     return split.join(" ");
   },
 
+  /**
+   * checks whether a string should be proceeded by a or by an
+   * @param {string} string
+   * @returns {"a"|"an"}
+   * @example
+   * // returns "a"
+   * aOrAn("cat");
+   * @example
+   * // returns "an"
+   * aOrAn("egg");
+   */
   aOrAn: (string) => {
     return ["a", "e", "i", "o", "u"].includes(string.charAt(0).toLowerCase()) ? "an" : "a";
   },
 
+  /**
+   * returns a object with they key sorted
+   * @param {object} obj
+   * @returns {object}
+   */
   sortObject: (obj) => {
     return Object.keys(obj)
       .sort()
@@ -457,6 +529,11 @@ module.exports = {
     };
   },
 
+  /**
+   * @param {number} number the number to be formatted
+   * @param {boolean} floor rounds down if true up if false
+   * @param {number} rounding //TODO figure out what this does
+   */
   formatNumber: (number, floor, rounding = 10) => {
     if (number < 1000) {
       return Math.floor(number);
@@ -493,24 +570,26 @@ module.exports = {
     }
   },
 
+  /**
+   * calculates the letter grade of a dungeon Run
+   * @param {{score_exploration:number,score_speed:number,score_skill:number,score_bonus:number}} data dungeon run
+   * @returns {"S+"|"S"|"A"|"B"|"C"|"D"} letter grade
+   */
   calcDungeonGrade: (data) => {
-    let total_score = data["score_exploration"] + data["score_speed"] + data["score_skill"] + data["score_bonus"];
-    var result;
+    const total_score = data.score_exploration + data.score_speed + data.score_skill + data.score_bonus;
     if (total_score <= 99) {
-      result = "D";
+      return "D";
     } else if (total_score <= 159) {
-      result = "C";
+      return "C";
     } else if (total_score <= 229) {
-      result = "B";
+      return "B";
     } else if (total_score <= 269) {
-      result = "A";
+      return "A";
     } else if (total_score <= 299) {
-      result = "S";
+      return "S";
     } else {
-      result = "S+";
+      return "S+";
     }
-
-    return result;
   },
 
   parseRank: (player) => {
@@ -641,15 +720,15 @@ module.exports = {
 
     let updateRank;
 
-    if (cacheOnly === false && (hypixelPlayer === null || +new Date() - hypixelPlayer.last_updated > 3600 * 1000)) {
+    if (cacheOnly === false && (hypixelPlayer == undefined || +new Date() - hypixelPlayer.last_updated > 3600 * 1000)) {
       updateRank = module.exports.updateRank(uuid, db);
     }
 
-    if (cacheOnly === false && hypixelPlayer === null) {
+    if (cacheOnly === false && hypixelPlayer == undefined) {
       hypixelPlayer = await updateRank;
     }
 
-    if (hypixelPlayer === null) {
+    if (hypixelPlayer == undefined) {
       hypixelPlayer = { achievements: {} };
     }
 
@@ -721,5 +800,17 @@ module.exports = {
       "." +
       Math.floor(Math.random() * 9000 + 1000)
     );
+  },
+
+  generateUUID: () => {
+    let u = "",
+      i = 0;
+    while (i++ < 36) {
+      let c = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"[i - 1],
+        r = (Math.random() * 16) | 0,
+        v = c == "x" ? r : (r & 0x3) | 0x8;
+      u += c == "-" || c == "4" ? c : v.toString(16);
+    }
+    return u;
   },
 };

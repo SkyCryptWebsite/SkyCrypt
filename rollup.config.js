@@ -14,6 +14,7 @@ const production = !process.env.ROLLUP_WATCH;
  */
 const config = {
   input: [
+    "public/resources/ts/browser-compat-check.ts",
     "public/resources/ts/common-defer.ts",
     "public/resources/ts/common.ts",
     "public/resources/ts/localTimeElement.ts",

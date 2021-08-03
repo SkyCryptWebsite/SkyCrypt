@@ -128,14 +128,15 @@ document.querySelector("#themes-box")?.addEventListener("change", (event) => {
 window.addEventListener("storage", (event) => {
   if (event.key === "currentTheme" && event.newValue != null) {
     setCheckedTheme(event.newValue);
-    loadTheme(event.newValue);
+  } else if (event.key === "processedTheme" && event.newValue != null) {
+    applyProcessedTheme(JSON.parse(event.newValue));
   }
 });
 
 function setCheckedTheme(theme: string) {
   const checkbox = document.querySelector<HTMLInputElement>(`#themes-box input[value="${theme}"]`);
   if (checkbox == null) {
-    throw new Error("no checkbox for theme : " + theme);
+    throw new Error("no checkbox for theme: " + theme);
   }
   checkbox.checked = true;
 }

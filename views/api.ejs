@@ -18,7 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
     <script>
       function redocInit() {
-        const themeColors = extra.themes[localStorage.getItem("currentTheme")].colors;
+        const themeColors = extra.themes[localStorage.getItem("currentTheme")]?.colors;
         Redoc.init(
           'resources/api/api_docs.json',
           {

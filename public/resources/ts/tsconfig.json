@@ -3,6 +3,7 @@
   "compilerOptions": {
     "module": "esnext",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "target": "es2020",
     "lib": ["ES2020", "dom", "dom.iterable", "ESNext.String"],
     "outDir": "../js"
