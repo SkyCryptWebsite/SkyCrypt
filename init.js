@@ -1,5 +1,8 @@
-const fs = require("fs-extra");
-const { randomBytes } = require("crypto");
+import * as fs from "fs";
+import * as fsExtra from "fs-extra";
+import { randomBytes } from "crypto";
+import * as constants from "./src/constants.cjs";
+import { MongoClient } from "mongodb";
 
 const credentialsDefault = {
   hypixel_api_key: "",
@@ -9,7 +12,9 @@ const credentialsDefault = {
   dbName: "sbstats",
 };
 
-const credentials = fs.existsSync("./credentials.json") ? require("./credentials.json") : credentialsDefault;
+const credentials = fs.existsSync("./credentials.json")
+  ? JSON.parse(fs.readFileSync("./credentials.json"))
+  : credentialsDefault;
 
 if (!("session_secret" in credentials)) {
   credentials.session_secret = randomBytes(32).toString("hex");
@@ -17,12 +22,9 @@ if (!("session_secret" in credentials)) {
 
 fs.writeFileSync("./credentials.json", JSON.stringify(credentials, null, 2) + "\n");
 
-fs.ensureDirSync("cache");
+fsExtra.ensureDirSync("cache");
 
 async function main() {
-  const constants = require("./src/constants.cjs");
-
-  const { MongoClient } = require("mongodb");
   const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
   await mongo.connect();
 

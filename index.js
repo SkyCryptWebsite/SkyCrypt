@@ -1,21 +1,24 @@
-require("./src/app.cjs");
-require("./src/donations/patreon.cjs");
-require("./src/scripts/cap-leaderboards.cjs");
-require("./src/scripts/clear-favorite-cache.cjs");
-require("./src/scripts/update-bazaar.cjs");
-require("./src/scripts/update-items.cjs");
-require("./src/scripts/update-top-profiles.cjs");
+import "./src/app.cjs";
+import "./src/donations/patreon.cjs";
+import "./src/scripts/cap-leaderboards.cjs";
+import "./src/scripts/clear-favorite-cache.cjs";
+import "./src/scripts/update-bazaar.cjs";
+import "./src/scripts/update-items.cjs";
+import "./src/scripts/update-top-profiles.cjs";
 
-const cluster = require("cluster");
+import * as cluster from "cluster";
+
 const developEnv = process.env?.NODE_ENV == "development";
-// const io = require('@pm2/io');
+// import * as io from '@pm2/io';
 
 let requests = [];
 
 let packSelect = {};
 let packUsage = {};
 
-require("axios-debug-log")({
+import axiosDebugLog from "axios-debug-log";
+
+axiosDebugLog({
   request: (debug, config) => {
     let requestURL = config.baseURL ? config.baseURL + config.url : config.url;
     if (developEnv) {
