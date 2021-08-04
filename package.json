@@ -55,7 +55,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "fs-extra": "^10.0.0",
-    "ioredis": "^4.27.6",
+    "ioredis": "^4.27.7",
     "just-safe-get": "^2.1.2",
     "lodash": "^4.17.20",
     "lodash.escaperegexp": "^4.1.2",
