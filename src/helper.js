@@ -815,12 +815,17 @@ module.exports = {
   },
 
   /**
-   * @param  {object} gems item.ExtraAttributes.gems
+   * @typedef {{slot_type:string,slot_number:number,gem_type:string,gem_tier:string,lore:string}} Gem
+   */
+
+  /**
+   * @param  {{[key:string]:string}} gems item.ExtraAttributes.gems
    *
-   * @returns {array} of gem objects
+   * @returns {Gem[]} array of gem objects
    */
   parseItemGems: (gems) => {
-    let parsed = [];
+    /** @type {Gem[]} */
+    const parsed = [];
     for (const [key, value] of Object.entries(gems)) {
       if (key.startsWith("UNIVERSAL_")) {
         if (key.endsWith("_gem")) {
@@ -854,6 +859,10 @@ module.exports = {
    * @param  {string} tier gem tier, ex: PERFECT
    *
    * @returns {string} formatted gem string
+   *
+   * @example
+   * // returns "§cPerfect Ruby"
+   * generateGemLore("RUBY", "PERFECT");
    */
   generateGemLore: (type, tier) => {
     let color;
