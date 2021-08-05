@@ -233,7 +233,7 @@ module.exports = {
     Speed: "speed",
     "Pegleg Boost": "speed",
     "Crit Chance": "crit_chance",
-    "Crit Damage": "",
+    "Crit Damage": "crit_damage",
     "Bonus Attack Speed": "bonus_attack_speed",
     Intelligence: "intelligence",
     "Magic Find": "magic_find",
