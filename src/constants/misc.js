@@ -482,4 +482,154 @@ module.exports = {
   max_favorites: 10,
 
   increase_most_stats_exclude: ["mining_speed", "mining_fortune", "farming_fortune", "foraging_fortune", "pristine"],
+
+  gemstones: {
+    JADE: {
+      name: "Jade",
+      color: "a",
+      stats: {
+        ROUGH: {
+          mining_fortune: [null, 4, null, 8, 10, 12],
+        },
+        FLAWED: {
+          mining_fortune: [null, 5, null, 10, 14, 18],
+        },
+        FINE: {
+          mining_fortune: [null, 7, null, 15, 20, 25],
+        },
+        FLAWLESS: {
+          mining_fortune: [null, 10, null, 20, 27, 35],
+        },
+        PERFECT: {
+          mining_fortune: [null, 14, null, 30, 40, 50],
+        },
+      },
+    },
+    AMBER: {
+      name: "Amber",
+      color: "6",
+      stats: {
+        ROUGH: {
+          mining_speed: [4, 8, 12, 16, 20, 24],
+        },
+        FLAWED: {
+          mining_speed: [6, 10, 14, 18, 24, 30],
+        },
+        FINE: {
+          mining_speed: [10, 7, 20, 28, 36, 45],
+        },
+        FLAWLESS: {
+          mining_speed: [14, 20, 30, 44, 58, 75],
+        },
+        PERFECT: {
+          mining_speed: [10, 14, 20, 60, 80, 100], // verified
+        },
+      },
+    },
+    TOPAZ: {
+      name: "Topaz",
+      color: "e",
+      stats: {
+        ROUGH: {
+          pristine: [0.4, 0.4, 0.4, 0.4, 0.4, 0.4],
+        },
+        FLAWED: {
+          pristine: [0.8, 0.8, 0.8, 0.8, 0.8, 0.8],
+        },
+        FINE: {
+          pristine: [1.2, 1.2, 1.2, 1.2, 1.2, 1.2],
+        },
+        FLAWLESS: {
+          pristine: [1.6, 1.6, 1.6, 1.6, 1.6, 1.6],
+        },
+        PERFECT: {
+          pristine: [2, 2, 2, 2, 2, 2],
+        },
+      },
+    },
+    SAPPHIRE: {
+      name: "Sapphire",
+      color: "b",
+      stats: {
+        ROUGH: {
+          intelligence: [null, null, 1, 2, 2, 3],
+        },
+        FLAWED: {
+          intelligence: [null, null, 2, 3, 3, 4],
+        },
+        FINE: {
+          intelligence: [null, null, 3, 4, 4, 5],
+        },
+        FLAWLESS: {
+          intelligence: [null, null, 5, 6, 7, 8],
+        },
+        PERFECT: {
+          intelligence: [null, null, 7, 9, 10, 12],
+        },
+      },
+    },
+    AMETHYST: {
+      name: "Amethyst",
+      color: "5",
+      stats: {
+        ROUGH: {
+          defense: [null, 2, 3, 4, 5, 6],
+        },
+        FLAWED: {
+          defense: [null, 4, 4, 5, 6, 8],
+        },
+        FINE: {
+          defense: [null, 4, 5, 6, 8, 10],
+        },
+        FLAWLESS: {
+          defense: [null, 5, 8, 11, 14, 18],
+        },
+        PERFECT: {
+          defense: [null, 7, 10, 15, 20, 25],
+        },
+      },
+    },
+    JASPER: {
+      name: "Jasper",
+      color: "d",
+      stats: {
+        ROUGH: {
+          strength: [null, null, 1, 2, 2, 3],
+        },
+        FLAWED: {
+          strength: [null, null, 2, 3, 3, 4],
+        },
+        FINE: {
+          strength: [null, null, 3, 4, 4, 5],
+        },
+        FLAWLESS: {
+          strength: [null, null, 5, 6, 7, 8],
+        },
+        PERFECT: {
+          strength: [null, null, 7, 9, 10, 12],
+        },
+      },
+    },
+    RUBY: {
+      name: "Ruby",
+      color: "c",
+      stats: {
+        ROUGH: {
+          health: [1, 2, 3, 4, 5, 6],
+        },
+        FLAWED: {
+          health: [2, 4, 4, 5, 6, 8],
+        },
+        FINE: {
+          health: [3, 4, 5, 6, 8, 10],
+        },
+        FLAWLESS: {
+          health: [2, null, 4, 11, 14, 18], // verified
+        },
+        PERFECT: {
+          health: [null, 7, 10, 15, 20, 25],
+        },
+      },
+    },
+  },
 };
