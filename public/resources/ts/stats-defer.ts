@@ -254,7 +254,7 @@ function renderInventory(inventory: ItemSlot[], type: string) {
       const inventoryItemIcon = document.createElement("div");
       const inventoryItemCount = document.createElement("div");
 
-      const idClass = `icon-${item.id}_${item.Damage}` + " " + (item.Damage != 0 ? `icon-${item.id}_0` : "false");
+      const idClass = `icon-${item.id}_${item.Damage}` + " " + (item.Damage != 0 ? `icon-${item.id}_0` : "");
       inventoryItemIcon.className = "piece-icon item-icon " + idClass;
 
       if ("texture_path" in item) {
@@ -376,7 +376,7 @@ function fillLore(element: HTMLElement) {
   } else if ("id" in item) {
     itemIcon.removeAttribute("style");
     itemIcon.classList.remove("custom-icon");
-    const idClass = `icon-${item.id}_${item.Damage}` + " " + (item.Damage != 0 ? `icon-${item.id}_0` : "false");
+    const idClass = `icon-${item.id}_${item.Damage}` + " " + (item.Damage != 0 ? `icon-${item.id}_0` : "");
     itemIcon.className = "stats-piece-icon item-icon " + idClass;
   } else {
     throw new Error("item mush have either an id and a damage or a texture_path");
