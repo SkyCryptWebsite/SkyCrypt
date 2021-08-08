@@ -770,10 +770,6 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
           break;
       }
 
-      if (item.type != null && item.type.startsWith("dungeon")) {
-        item.Damage = 0;
-      }
-
       // Get breaking power for Pickaxes
       if (item.type == "pickaxe" || item.type == "drill") {
         if (lore[0].startsWith("Breaking Power")) {
