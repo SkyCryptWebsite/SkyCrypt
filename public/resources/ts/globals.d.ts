@@ -1,7 +1,6 @@
 declare const page: string;
 
 declare namespace extra {
-  const favoriteUUIDs: string[];
   const isFoolsDay: boolean;
   const cacheOnly: boolean;
   const packs: Pack[];
