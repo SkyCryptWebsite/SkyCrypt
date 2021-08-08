@@ -866,6 +866,7 @@ function checkFavorite() {
   favoriteElement.setAttribute("aria-checked", favorited.toString());
   return favorited;
 }
+checkFavorite();
 
 const favoriteNotification = tippy(favoriteElement, {
   trigger: "manual",
