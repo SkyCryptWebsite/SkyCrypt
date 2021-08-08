@@ -200,8 +200,6 @@ async function main() {
       output.favorites = await getFavoritesFormUUIDs(favoriteUUIDs);
 
       output.devs = await db.collection("topViews").find().sort({ position: 1 }).toArray();
-    } else if (page === "stats") {
-      output.favoriteUUIDs = favoriteUUIDs;
     }
 
     return output;
@@ -256,7 +254,7 @@ async function main() {
           _,
           constants,
           helper,
-          extra: await getExtra("stats", favorites, cacheOnly),
+          extra: await getExtra("stats", undefined, cacheOnly),
           fileHashes,
           fileNameMap,
           page: "stats",
