@@ -839,7 +839,7 @@ class Bal extends Pet {
     let mult = 0.15;
     return {
       name: "§6Made of Lava",
-      desc: [`§7Gain §a${round(this.level * mult, 1)} §7on ALL stats when inside the §cMagma Fields.`],
+      desc: [`§7Gain §a${round(this.level * mult, 1)}% §7on ALL stats when inside the §cMagma Fields.`],
     };
   }
 }
