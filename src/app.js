@@ -222,7 +222,6 @@ async function main() {
     const playerUsername =
       paramPlayer.length == 32 ? await helper.resolveUsernameOrUuid(paramPlayer, db).display_name : paramPlayer;
 
-    const favorites = parseFavorites(req.cookies.favorite);
     try {
       const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, {
         updateArea: true,
@@ -269,6 +268,8 @@ async function main() {
         }
       );
     } catch (e) {
+      const favorites = parseFavorites(req.cookies.favorite);
+
       console.debug(`${debugId}: an error has occured.`);
       console.error(e);
 
