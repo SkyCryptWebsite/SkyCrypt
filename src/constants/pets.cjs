@@ -434,6 +434,13 @@ module.exports = {
         head: "/head/113bdf2d2b00605606826df76e211ea288aa050edc9d71cb09986c488ca0411c",
       },
     },
+    AMMONITE: {
+      head: "/head/a074a7bd976fe6aba1624161793be547d54c835cf422243a851ba09d1e650553",
+      type: "fishing",
+      maxTier: "LEGENDARY",
+      maxLevel: 100,
+      emoji: "🐾",
+    },
   },
 
   /*

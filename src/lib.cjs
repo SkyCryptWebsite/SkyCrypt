@@ -618,6 +618,10 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
       item.tag.ExtraAttributes.petInfo = JSON.parse(item.tag.ExtraAttributes.petInfo);
     }
 
+    if (helper.hasPath(item, "tag", "ExtraAttributes", "gems")) {
+      item.extra.gems = item.tag.ExtraAttributes.gems;
+    }
+
     // Lore stuff
     let itemLore = helper.getPath(item, "tag", "display", "Lore") || [];
     let lore_raw = [...itemLore];
@@ -628,6 +632,14 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
     if (itemLore.length > 0) {
       if (item.extra?.recombobulated) {
         itemLore.push("§8(Recombobulated)");
+      }
+
+      if (item.extra?.gems) {
+        itemLore.push(
+          "",
+          "§7Applied Gemstones:",
+          ...helper.parseItemGems(item.extra.gems).map((gem) => `§7 - ${gem.lore}`)
+        );
       }
 
       if (item.extra?.expertise_kills) {
@@ -756,10 +768,6 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
         default:
           item.equipmentType = "none";
           break;
-      }
-
-      if (item.type != null && item.type.startsWith("dungeon")) {
-        item.Damage = 0;
       }
 
       // Get breaking power for Pickaxes
@@ -3338,6 +3346,7 @@ module.exports = {
             : `floor_${highest_floor}`,
         floors: floors,
       };
+
       let dungeonLevelWithProgress = calcDungeonsClassLevelWithProgress(dungeon.experience);
       let dungeonsWeight = calcDungeonsWeight(type, dungeonLevelWithProgress, dungeon.experience);
       output.dungeonsWeight += dungeonsWeight.weight;
@@ -3351,6 +3360,11 @@ module.exports = {
     let current_class = dungeons.selected_dungeon_class || "none";
     for (const className of Object.keys(dungeons.player_classes)) {
       let data = dungeons.player_classes[className];
+
+      if (!data.experience) {
+        data.experience = 0;
+      }
+
       output.classes[className] = {
         experience: getLevelByXp(data.experience, { type: "dungeoneering" }),
         current: false,
