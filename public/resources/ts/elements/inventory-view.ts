@@ -1,6 +1,6 @@
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { allItems, inventorySlotTemplate, isBackpack, isItem } from "../stats-defer";
+import { allItems, inventorySlotTemplate, isBackpack, isItem, showBackpack } from "../stats-defer";
 
 @customElement("inventory-view")
 export class InventoryView extends LitElement {
@@ -10,10 +10,15 @@ export class InventoryView extends LitElement {
   @property({ attribute: "backpack-id" })
   backpackID: string | undefined = undefined;
 
+  @property({ attribute: "preview", type: Boolean })
+  preview = false;
+
   render(): TemplateResult[] {
     let inventory = items[this.inventoryType] ?? [];
 
     let pagesize = 5 * 9;
+
+    const itemTemplateResults: TemplateResult[] = [];
 
     if (this.inventoryType === "inventory") {
       inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
@@ -28,9 +33,16 @@ export class InventoryView extends LitElement {
       }
       inventory = backpack.containsItems;
       pagesize = 6 * 9;
-    }
 
-    const itemTemplateResults: TemplateResult[] = [];
+      if (this.preview) {
+        itemTemplateResults.push(
+          html`<div class="view-backpack" @click="${() => showBackpack(backpack)}">
+            <span>View Backpack</span>
+            <small>(Right click backpack to immediately open)</small>
+          </div>`
+        );
+      }
+    }
 
     inventory.forEach((item, index) => {
       if (index % pagesize === 0 && index !== 0) {

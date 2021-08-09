@@ -319,7 +319,7 @@ export function isBackpack(item: DisplayItem): item is Backpack {
   return "containsItems" in item;
 }
 
-function showBackpack(item: Backpack) {
+export function showBackpack(item: Backpack): void {
   const activeInventory = document.querySelector(".inventory-tab.active-inventory");
 
   if (activeInventory) {
@@ -351,8 +351,6 @@ function fillLore(element: HTMLElement) {
   if (item == undefined) {
     return;
   }
-
-  console.log(item);
 
   itemName.className = `item-name piece-${item.rarity || "common"}-bg nice-colors-dark`;
   itemNameContent.innerHTML = item.display_name_print || item.display_name || "null";
@@ -413,64 +411,11 @@ function fillLore(element: HTMLElement) {
     itemLore.appendChild(packContent);
   }
 
-  backpackContents.innerHTML = "";
-
   if (isBackpack(item)) {
     backpackContents.classList.add("contains-backpack");
 
-    item.containsItems.forEach((backpackItem) => {
-      const inventorySlot = document.createElement("div");
-      inventorySlot.className = "inventory-slot";
-
-      if (backpackItem.id) {
-        const inventoryItemIcon = document.createElement("div");
-        const inventoryItemCount = document.createElement("div");
-
-        const enchantedClass = isEnchanted(backpackItem) ? "is-enchanted" : "";
-
-        inventoryItemIcon.className =
-          "piece-icon item-icon " + enchantedClass + " icon-" + backpackItem.id + "_" + backpackItem.Damage;
-
-        if (backpackItem.texture_path) {
-          inventoryItemIcon.className += " custom-icon";
-          inventoryItemIcon.style.backgroundImage = 'url("' + backpackItem.texture_path + '")';
-        }
-
-        inventoryItemCount.className = "item-count";
-        inventoryItemCount.innerHTML = backpackItem.Count.toString();
-
-        const inventoryItem = document.createElement("div");
-
-        inventoryItem.className = "inventory-item";
-
-        inventoryItem.appendChild(inventoryItemIcon);
-
-        if (backpackItem.Count > 1) {
-          inventoryItem.appendChild(inventoryItemCount);
-        }
-
-        inventorySlot.appendChild(inventoryItem);
-      }
-
-      backpackContents.appendChild(inventorySlot);
-
-      backpackContents.appendChild(document.createTextNode(" "));
-    });
-
-    const viewBackpack = document.createElement("div");
-    viewBackpack.classList.add("view-backpack");
-
-    const viewBackpackText = document.createElement("div");
-    viewBackpackText.innerHTML =
-      "<span>View Backpack</span><br><span>(Right click backpack to immediately open)</span>";
-
-    viewBackpack.appendChild(viewBackpackText);
-
-    viewBackpack.addEventListener("click", () => {
-      showBackpack(item as Backpack);
-    });
-
-    backpackContents.appendChild(viewBackpack);
+    backpackContents.setAttribute("backpack-id", item.itemId);
+    backpackContents.setAttribute("inventory-type", "backpack");
   } else {
     backpackContents.classList.remove("contains-backpack");
   }
