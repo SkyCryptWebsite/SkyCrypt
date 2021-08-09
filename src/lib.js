@@ -29,7 +29,7 @@ const Hypixel = axios.create({
 });
 
 const Redis = require("ioredis");
-const redisClient = new Redis(credentials.redisUrl ?? credentials.redisUrl);
+const redisClient = new Redis(credentials.redisUrl);
 
 const customResources = require("./custom-resources");
 const loreGenerator = require("./loreGenerator");

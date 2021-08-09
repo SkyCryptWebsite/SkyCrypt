@@ -6,7 +6,7 @@ const constants = require("./constants");
 const credentials = require("./../credentials.json");
 
 const Redis = require("ioredis");
-const redisClient = new Redis(credentials.redisUrl ?? credentials.redisUrl);
+const redisClient = new Redis(credentials.redisUrl);
 
 function handleError(e, res) {
   console.error(e);
