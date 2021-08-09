@@ -2145,8 +2145,7 @@ a.additional-player-stat:hover {
   }
 }
 
-.inventory-item,
-.piece {
+.rich-item {
   @media (hover: hover) {
     &::after {
       content: "";
@@ -2648,21 +2647,15 @@ inventory-view {
       padding-bottom: 100%;
     }
 
-    .inventory-item {
-      width: 100%;
-      height: 100%;
+    .item-count {
       position: absolute;
-
-      .item-count {
-        position: absolute;
-        z-index: 16;
-        bottom: calc(var(--inventory-width) * 0.0025);
-        right: calc(var(--inventory-width) * 0.0025);
-        font-size: calc(var(--inventory-width) * 0.03333);
-        color: white;
-        text-shadow: 0.1em 0.1em 0.1em black;
-        font-weight: 600;
-      }
+      z-index: 16;
+      bottom: calc(var(--inventory-width) * 0.0025);
+      right: calc(var(--inventory-width) * 0.0025);
+      font-size: calc(var(--inventory-width) * 0.03333);
+      color: white;
+      text-shadow: 0.1em 0.1em 0.1em black;
+      font-weight: 600;
     }
   }
 

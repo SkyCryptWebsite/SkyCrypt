@@ -260,12 +260,10 @@ function isSlotItem(item: ItemSlot): item is Item {
 }
 
 export const inventorySlotTemplate = (item: ItemSlot): TemplateResult => {
-  let itemTemplate: TemplateResult | undefined;
-
   if (isSlotItem(item)) {
-    itemTemplate = html`
+    return html`
       <div
-        class="rich-item inventory-item"
+        class="rich-item inventory-slot"
         data-item-id="${item.itemId}"
         @mouseenter="${mouseenterLoreListener}"
         @mouseleave="${mouseleaveLoreListener}"
@@ -277,8 +275,9 @@ export const inventorySlotTemplate = (item: ItemSlot): TemplateResult => {
         ${item.Count != 1 ? html`<div class="item-count">${item.Count}</div>` : undefined}
       </div>
     `;
+  } else {
+    return html`<div class="inventory-slot"></div>`;
   }
-  return html`<div class="inventory-slot">${itemTemplate}</div>`;
 };
 
 function switchInventory(type: string, backpack?: Backpack) {
