@@ -1,11 +1,8 @@
-// const helper = require('./../helper');
-// const loreGenerator = require('./../loreGenerator.js');
-
-function round(num, decimals) {
+function round(num, decimals = 0) {
   return Math.round(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
 }
 
-function floor(num, decimals) {
+function floor(num, decimals = 0) {
   return Math.floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
 }
 
@@ -19,24 +16,25 @@ function formatStat(stat) {
 }
 
 const symbols = {
-  health: "❤",
-  defense: "❈",
-  strength: "❁",
+  ability_damage: "๑",
+  attack_speed: "⚔",
   crit_chance: "☣",
   crit_damage: "☠",
-  intelligence: "✎",
-  speed: "✦",
-  sea_creature_chance: "α",
-  magic_find: "✯",
-  pet_luck: "♣",
-  attack_speed: "⚔️",
-  true_defense: "❂",
-  ferocity: "⫽",
-  ability_damage: "✹",
-  mining_speed: "⸕",
-  mining_fortune: "☘",
+  defense: "❈",
   farming_fortune: "☘",
+  ferocity: "⫽",
   foraging_fortune: "☘",
+  health: "❤",
+  intelligence: "✎",
+  magic_find: "✯",
+  mining_fortune: "☘",
+  mining_speed: "⸕",
+  pet_luck: "♣",
+  pristine: "✧",
+  sea_creature_chance: "α",
+  speed: "✦",
+  strength: "❁",
+  true_defense: "❂",
 };
 
 class Pet {
@@ -77,7 +75,7 @@ class Pet {
           list.push(`§7Bonus Attack Speed: ${formatStat(newStats[stat])}`);
           break;
         case "sea_creature_chance":
-          list.push(`§7Sea Creature Chance: ${formatStat(newStats[stat])}`);
+          list.push(`§7Sea Creature Chance: ${formatStat(newStats[stat])}%`);
           break;
         case "magic_find":
           list.push(`§7Magic Find: ${formatStat(newStats[stat])}`);
@@ -120,12 +118,6 @@ class Pet {
     // no-op
   }
 }
-
-/*
-
-Farming Pets
-
-*/
 
 class Bee extends Pet {
   // todo: finish hive
@@ -395,12 +387,6 @@ class Rabbit extends Pet {
     };
   }
 }
-
-/*
-
-Mining Pets
-
-*/
 
 class Armadillo extends Pet {
   get stats() {
@@ -810,12 +796,6 @@ class WitherSkeleton extends Pet {
   }
 }
 
-/*
-
-Combat Pets
-
-*/
-
 class Bal extends Pet {
   get stats() {
     return {
@@ -859,7 +839,7 @@ class Bal extends Pet {
     let mult = 0.15;
     return {
       name: "§6Made of Lava",
-      desc: [`§7Gain §a${round(this.level * mult, 1)} §7on ALL stats when inside the §cMagma Fields.`],
+      desc: [`§7Gain §a${round(this.level * mult, 1)}% §7on ALL stats when inside the §cMagma Fields.`],
     };
   }
 }
@@ -2260,12 +2240,6 @@ class Zombie extends Pet {
   }
 }
 
-/*
-
-Foraging Pets
-
-*/
-
 class Giraffe extends Pet {
   get stats() {
     return {
@@ -2464,12 +2438,6 @@ class Ocelot extends Pet {
   }
 }
 
-/*
-
-Fishing Pets
-
-*/
-
 class BabyYeti extends Pet {
   get stats() {
     return {
@@ -2583,6 +2551,54 @@ class BlueWhale extends Pet {
       let mult = 0.2;
       stats["health"] *= 1 + round((this.level * mult) / 100, 1);
     }
+  }
+}
+
+class Ammonite extends Pet {
+  get stats() {
+    return {
+      sea_creature_chance: this.level * 0.07,
+    };
+  }
+
+  get abilities() {
+    let list = [this.first];
+    if (this.rarity > 1) {
+      list.push(this.second);
+    }
+    if (this.rarity > 3) {
+      list.push(this.third);
+    }
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6Heart of the Sea",
+      desc: [
+        `§7Each Heart of the Mountain level grants §3+${round(this.level * 0.01)}${
+          symbols.sea_creature_chance
+        } Sea Creature Chance`,
+      ],
+    };
+  }
+
+  get second() {
+    return {
+      name: "§6Not a Snail",
+      desc: [
+        `§7Each fishing and mining level grants §f+${round(this.level * 0.02, 1)}${
+          symbols.speed
+        } Speed §7and §a+${round(this.level * 0.02, 1)}${symbols.defense} Defense`,
+      ],
+    };
+  }
+
+  get third() {
+    return {
+      name: "§6Gift of the Ammonite",
+      desc: [`§7Increases your fishing speed by §a${round(this.level * 0.006, 1)}% §7for each mining level`],
+    };
   }
 }
 
@@ -2845,12 +2861,6 @@ class Squid extends Pet {
   }
 }
 
-/*
-
-Alchemy Pets
-
-*/
-
 class Jellyfish extends Pet {
   get stats() {
     return {
@@ -3009,10 +3019,6 @@ class Sheep extends Pet {
   }
 }
 
-/*
-Other Pets/Todo
-*/
-
 class Jerry extends Pet {
   get stats() {
     return {
@@ -3103,68 +3109,61 @@ class QuestionMark extends Pet {
 
 module.exports = {
   petStats: {
-    //Farming
-    Bee: Bee,
-    Chicken: Chicken,
-    Elephant: Elephant,
-    Pig: Pig,
-    Rabbit: Rabbit,
-    //Mining
-    Armadillo: Armadillo,
-    Bat: Bat,
-    Endermite: Endermite,
-    "Mithril Golem": MithrilGolem,
-    Rock: Rock,
-    Scatha: Scatha,
-    Silverfish: Silverfish,
-    "Wither Skeleton": WitherSkeleton,
-    //Combat
-    Bal: Bal,
-    "Black Cat": BlackCat,
-    Blaze: Blaze,
-    "Ender Dragon": EnderDragon,
-    "Golden Dragon": GoldenDragon,
-    Enderman: Enderman,
-    Ghoul: Ghoul,
-    Golem: Golem,
-    "Grandma Wolf": GrandmaWolf,
-    Griffin: Griffin,
-    Horse: Horse,
-    Hound: Hound,
-    Jerry: Jerry,
-    "Magma Cube": MagmaCube,
-    Phoenix: Phoenix,
-    Pigman: Pigman,
-    Rat: Rat,
-    "Skeleton Horse": SkeletonHorse,
-    Skeleton: Skeleton,
-    Snowman: Snowman,
-    Spider: Spider,
-    Spirit: Spirit,
-    Tarantula: Tarantula,
-    Tiger: Tiger,
-    Turtle: Turtle,
-    Wolf: Wolf,
-    Zombie: Zombie,
-    //Foraging
-    Giraffe: Giraffe,
-    Lion: Lion,
-    Monkey: Monkey,
-    Ocelot: Ocelot,
-    //Fishing
-    "Baby Yeti": BabyYeti,
-    "Blue Whale": BlueWhale,
-    Dolphin: Dolphin,
-    "Flying Fish": FlyingFish,
-    Megalodon: Megalodon,
-    Squid: Squid,
-    //Alchemy
-    Jellyfish: Jellyfish,
-    Parrot: Parrot,
-    Sheep: Sheep,
-    //Enchanting
-    Guardian: Guardian,
-    //Other
     "???": QuestionMark,
+    AMMONITE: Ammonite,
+    ARMADILLO: Armadillo,
+    BABY_YETI: BabyYeti,
+    BAL: Bal,
+    BAT: Bat,
+    BEE: Bee,
+    BLACK_CAT: BlackCat,
+    BLAZE: Blaze,
+    BLUE_WHALE: BlueWhale,
+    CHICKEN: Chicken,
+    DOLPHIN: Dolphin,
+    ELEPHANT: Elephant,
+    ENDER_DRAGON: EnderDragon,
+    ENDERMAN: Enderman,
+    ENDERMITE: Endermite,
+    FLYING_FISH: FlyingFish,
+    GHOUL: Ghoul,
+    GIRAFFE: Giraffe,
+    GOLDEN_DRAGON: GoldenDragon,
+    GOLEM: Golem,
+    GRANDMA_WOLF: GrandmaWolf,
+    GRIFFIN: Griffin,
+    GUARDIAN: Guardian,
+    HORSE: Horse,
+    HOUND: Hound,
+    JELLYFISH: Jellyfish,
+    JERRY: Jerry,
+    LION: Lion,
+    MAGMA_CUBE: MagmaCube,
+    MEGALODON: Megalodon,
+    MITHRIL_GOLEM: MithrilGolem,
+    MONKEY: Monkey,
+    OCELOT: Ocelot,
+    PARROT: Parrot,
+    PHOENIX: Phoenix,
+    PIG: Pig,
+    PIGMAN: Pigman,
+    RABBIT: Rabbit,
+    RAT: Rat,
+    ROCK: Rock,
+    SCATHA: Scatha,
+    SHEEP: Sheep,
+    SILVERFISH: Silverfish,
+    SKELETON_HORSE: SkeletonHorse,
+    SKELETON: Skeleton,
+    SNOWMAN: Snowman,
+    SPIDER: Spider,
+    SPIRIT: Spirit,
+    SQUID: Squid,
+    TARANTULA: Tarantula,
+    TIGER: Tiger,
+    TURTLE: Turtle,
+    WITHER_SKELETON: WitherSkeleton,
+    WOLF: Wolf,
+    ZOMBIE: Zombie,
   },
 };

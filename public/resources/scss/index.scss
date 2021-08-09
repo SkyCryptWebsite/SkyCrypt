@@ -1865,12 +1865,63 @@ a.additional-player-stat:hover {
 }
 
 .stat-ability-damage::before {
-  -webkit-mask-image: url(../img/icons/decagram.svg);
-  mask-image: url(../img/icons/decagram.svg);
+  -webkit-mask-image: url(../img/icons/ability_damage.svg);
+  mask-image: url(../img/icons/ability_damage.svg);
 }
 
+.stat-ability-damage,
+.color-ability-damage {
+  color: var(--§c);
+}
+
+.stat-mining-speed::before {
+  -webkit-mask-image: url(../img/icons/mining_speed.svg);
+  mask-image: url(../img/icons/mining_speed.svg);
+}
+
+.stat-mining-speed,
 .color-mining-speed {
   color: var(--§6);
+}
+
+.stat-mining-fortune::before {
+  -webkit-mask-image: url(../img/icons/fortune.svg);
+  mask-image: url(../img/icons/fortune.svg);
+}
+
+.stat-mining-fortune,
+.color-mining-fortune {
+  color: var(--§6);
+}
+
+.stat-farming-fortune::before {
+  -webkit-mask-image: url(../img/icons/fortune.svg);
+  mask-image: url(../img/icons/fortune.svg);
+}
+
+.stat-farming-fortune,
+.color-farming-fortune {
+  color: var(--§6);
+}
+
+.stat-foraging-fortune::before {
+  -webkit-mask-image: url(../img/icons/fortune.svg);
+  mask-image: url(../img/icons/fortune.svg);
+}
+
+.stat-foraging-fortune,
+.color-foraging-fortune {
+  color: var(--§6);
+}
+
+.stat-pristine::before {
+  -webkit-mask-image: url(../img/icons/pristine.svg);
+  mask-image: url(../img/icons/pristine.svg);
+}
+
+.stat-pristine,
+.color-pristine {
+  color: var(--§5);
 }
 
 .stat-container {
@@ -4126,4 +4177,8 @@ body {
 .icomoon-dungeon-stars {
   font-size: 0.8em;
   letter-spacing: 3px;
+}
+
+.stat-error {
+  color: var(--§4);
 }

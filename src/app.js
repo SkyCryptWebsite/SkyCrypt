@@ -200,8 +200,6 @@ async function main() {
       output.favorites = await getFavoritesFormUUIDs(favoriteUUIDs);
 
       output.devs = await db.collection("topViews").find().sort({ position: 1 }).toArray();
-    } else if (page === "stats") {
-      output.favoriteUUIDs = favoriteUUIDs;
     }
 
     return output;
@@ -224,7 +222,6 @@ async function main() {
     const playerUsername =
       paramPlayer.length == 32 ? await helper.resolveUsernameOrUuid(paramPlayer, db).display_name : paramPlayer;
 
-    const favorites = parseFavorites(req.cookies.favorite);
     try {
       const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, {
         updateArea: true,
@@ -256,7 +253,7 @@ async function main() {
           _,
           constants,
           helper,
-          extra: await getExtra("stats", favorites, cacheOnly),
+          extra: await getExtra("stats", undefined, cacheOnly),
           fileHashes,
           fileNameMap,
           page: "stats",
@@ -271,6 +268,8 @@ async function main() {
         }
       );
     } catch (e) {
+      const favorites = parseFavorites(req.cookies.favorite);
+
       console.debug(`${debugId}: an error has occured.`);
       console.error(e);
 

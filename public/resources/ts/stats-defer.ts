@@ -247,6 +247,9 @@ const itemIconTemplate = (item: Item, classes: { [name: string]: boolean } = {})
     classes["custom-icon"] = true;
     return html`<div style='background-image: url("${item.texture_path}")' class="${classMap(classes)}"></div>`;
   } else {
+    if (item.Damage != 0) {
+      classes[`icon-${item.id}_0`] = true;
+    }
     classes[`icon-${item.id}_${item.Damage}`] = true;
     return html`<div class="${classMap(classes)}"></div>`;
   }
@@ -378,7 +381,8 @@ function fillLore(element: HTMLElement) {
   } else if ("id" in item) {
     itemIcon.removeAttribute("style");
     itemIcon.classList.remove("custom-icon");
-    itemIcon.className = "stats-piece-icon item-icon icon-" + item.id + "_" + item.Damage;
+    const idClass = `icon-${item.id}_${item.Damage}` + " " + (item.Damage != 0 ? `icon-${item.id}_0` : "");
+    itemIcon.className = "stats-piece-icon item-icon " + idClass;
   } else {
     throw new Error("item mush have either an id and a damage or a texture_path");
   }
@@ -845,6 +849,7 @@ function checkFavorite() {
   favoriteElement.setAttribute("aria-checked", favorited.toString());
   return favorited;
 }
+checkFavorite();
 
 const favoriteNotification = tippy(favoriteElement, {
   trigger: "manual",
