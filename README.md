@@ -1,7 +1,7 @@
 <p align="center"><img src="https://i.imgur.com/Ij5J9G9.png"></p>
 <h1 align="center">SkyCrypt: A Hypixel Skyblock Profile Viewer</h1>
 
-The SkyCrypt Project, which is based on LeaPhant's [sky.lea.moe](https://sky.lea.moe), allows you to share your <a href="https://hypixel.net/">Hypixel</a> SkyBlock profile with other players with a quick overview of your Stats, Skills, Armor, Weapons and Accessories.
+The SkyCrypt Project, which is based on [LeaPhant's skyblock-stats](https://github.com/LeaPhant/skyblock-stats), allows you to share your <a href="https://hypixel.net/">Hypixel</a> SkyBlock profile with other players with a quick overview of your Stats, Skills, Armor, Weapons and Accessories.
 
 **Website**: https://sky.shiiyu.moe
 

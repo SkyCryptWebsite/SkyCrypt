@@ -51,6 +51,7 @@ module.exports = {
       maxTier: "LEGENDARY",
       maxLevel: 100,
       emoji: "🦔",
+      category: "Mount",
     },
     BAT: {
       head: "/head/382fc3f71b41769376a9e92fe3adbaac3772b999b219c9d6b4680ba9983e527",
@@ -79,6 +80,7 @@ module.exports = {
       maxTier: "LEGENDARY",
       maxLevel: 100,
       emoji: "🐴",
+      category: "Mount",
     },
     JERRY: {
       head: "/head/822d8e751c8f2fd4c8942c44bdb2f5ca4d8ae8e575ed3eb34c18a86e93b",
@@ -135,6 +137,7 @@ module.exports = {
       maxTier: "LEGENDARY",
       maxLevel: 100,
       emoji: "🦓",
+      category: "Mount",
     },
     WOLF: {
       head: "/head/dc3dd984bb659849bd52994046964c22725f717e986b12d548fd169367d494",
@@ -296,6 +299,7 @@ module.exports = {
       maxTier: "LEGENDARY",
       maxLevel: 100,
       emoji: "🐷",
+      category: "Mount",
     },
     ROCK: {
       head: "/head/cb2b5d48e57577563aca31735519cb622219bc058b1f34648b67b8e71bc0fa",
@@ -303,6 +307,7 @@ module.exports = {
       maxTier: "LEGENDARY",
       maxLevel: 100,
       emoji: "🪨",
+      category: "Mount",
     },
     SKELETON: {
       head: "/head/fca445749251bdd898fb83f667844e38a1dff79a1529f79a42447a0599310ea4",
@@ -401,6 +406,7 @@ module.exports = {
       maxTier: "LEGENDARY",
       maxLevel: 100,
       emoji: "🐀",
+      category: "Morph",
     },
     BAL: {
       head: "/head/c469ba2047122e0a2de3c7437ad3dd5d31f1ac2d27abde9f8841e1d92a8c5b75",
@@ -422,6 +428,18 @@ module.exports = {
       maxTier: "LEGENDARY",
       maxLevel: 200,
       emoji: "🐉",
+      hatching: {
+        level: 100,
+        name: "Golden Dragon Egg",
+        head: "/head/113bdf2d2b00605606826df76e211ea288aa050edc9d71cb09986c488ca0411c",
+      },
+    },
+    AMMONITE: {
+      head: "/head/a074a7bd976fe6aba1624161793be547d54c835cf422243a851ba09d1e650553",
+      type: "fishing",
+      maxTier: "LEGENDARY",
+      maxLevel: 100,
+      emoji: "🐾",
     },
   },
 

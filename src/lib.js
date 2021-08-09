@@ -37,10 +37,6 @@ const randomEmoji = require("./constants/randomEmoji");
 
 const parseNbt = util.promisify(nbt.parse);
 
-const rarity_order = ["special", "mythic", "legendary", "epic", "rare", "uncommon", "common"];
-
-const petTiers = ["common", "uncommon", "rare", "epic", "legendary", "mythic"];
-
 const MAX_SOULS = 227;
 let TALISMAN_COUNT;
 const level50SkillExp = 55172425;
@@ -622,6 +618,10 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
       item.tag.ExtraAttributes.petInfo = JSON.parse(item.tag.ExtraAttributes.petInfo);
     }
 
+    if (helper.hasPath(item, "tag", "ExtraAttributes", "gems")) {
+      item.extra.gems = item.tag.ExtraAttributes.gems;
+    }
+
     // Lore stuff
     let itemLore = helper.getPath(item, "tag", "display", "Lore") || [];
     let lore_raw = [...itemLore];
@@ -632,6 +632,14 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
     if (itemLore.length > 0) {
       if (item.extra?.recombobulated) {
         itemLore.push("§8(Recombobulated)");
+      }
+
+      if (item.extra?.gems) {
+        itemLore.push(
+          "",
+          "§7Applied Gemstones:",
+          ...helper.parseItemGems(item.extra.gems).map((gem) => `§7 - ${gem.lore}`)
+        );
       }
 
       if (item.extra?.expertise_kills) {
@@ -715,11 +723,9 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
       }
 
       let loreRarity = rarity.toLowerCase();
-      let colorRarity = loreRarity;
-
-      if (rarity_type_color in constants.rarity_colors) {
-        colorRarity = constants.rarity_colors[rarity_type_color];
-      }
+      let colorRarity =
+        Object.keys(constants.rarityColors).find((key) => constants.rarityColors[key] === rarity_type_color) ??
+        loreRarity;
 
       item.rarity = colorRarity;
 
@@ -764,10 +770,6 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
           break;
       }
 
-      if (item.type != null && item.type.startsWith("dungeon")) {
-        item.Damage = 0;
-      }
-
       // Get breaking power for Pickaxes
       if (item.type == "pickaxe" || item.type == "drill") {
         if (lore[0].startsWith("Breaking Power")) {
@@ -788,7 +790,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
       // Get item stats from lore
       // we need to use lore_raw so we can get the hpbs (since what part is hpbs depend on color)
       lore_raw.forEach((line) => {
-        let split = helper.getRawLore(line).split(":");
+        const split = helper.getRawLore(line).split(":");
 
         if (split.length < 2) {
           return;
@@ -797,54 +799,8 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
         const statType = split[0];
         const statValue = parseFloat(split[1].trim().replace(/,/g, ""));
 
-        switch (statType) {
-          case "Damage":
-            item.stats.damage = statValue;
-            break;
-          case "Health":
-            item.stats.health = statValue;
-            break;
-          case "Defense":
-            item.stats.defense = statValue;
-            break;
-          case "Strength":
-          case "Drunkenness":
-            item.stats.strength = statValue;
-            break;
-          case "Speed":
-          case "Pegleg Boost":
-            item.stats.speed = statValue;
-            break;
-          case "Crit Chance":
-            item.stats.crit_chance = statValue;
-            break;
-          case "Crit Damage":
-            item.stats.crit_damage = statValue;
-            break;
-          case "Bonus Attack Speed":
-            item.stats.bonus_attack_speed = statValue;
-            break;
-          case "Intelligence":
-            item.stats.intelligence = statValue;
-            break;
-          case "Sea Creature Chance":
-            item.stats.sea_creature_chance = statValue;
-            break;
-          case "Magic Find":
-            item.stats.magic_find = statValue;
-            break;
-          case "Pet Luck":
-            item.stats.pet_luck = statValue;
-            break;
-          case "Ferocity":
-            item.stats.ferocity = statValue;
-            break;
-          case "Ability Damage":
-            item.stats.ability_damage = statValue;
-            break;
-          case "Mining Speed":
-            item.stats.mining_speed = statValue;
-            break;
+        if (statType in constants.statNames) {
+          item.stats[constants.statNames[statType]] = statValue;
         }
       });
 
@@ -1586,54 +1542,29 @@ module.exports = {
       output.no_personal_vault = true;
     }
 
+    const itemSorter = (a, b) => {
+      if (a.rarity !== b.rarity) {
+        return constants.rarities.indexOf(b.rarity) - constants.rarities.indexOf(a.rarity);
+      }
+
+      if (b.inBackpack && !a.inBackpack) {
+        return -1;
+      }
+      if (a.inBackpack && !b.inBackpack) {
+        return 1;
+      }
+
+      return a.item_index - b.item_index;
+    };
+
     // Sort talismans, weapons and rods by rarity
-    output.weapons = output.weapons.sort((a, b) => {
-      if (a.rarity == b.rarity) {
-        if (b.inBackpack) {
-          return -1;
-        }
+    output.weapons = output.weapons.sort(itemSorter);
 
-        return a.item_index > b.item_index ? 1 : -1;
-      }
+    output.rods = output.rods.sort(itemSorter);
 
-      return rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);
-    });
+    output.hoes = output.hoes.sort(itemSorter);
 
-    output.rods = output.rods.sort((a, b) => {
-      if (a.rarity == b.rarity) {
-        if (b.inBackpack) {
-          return -1;
-        }
-
-        return a.item_index > b.item_index ? 1 : -1;
-      }
-
-      return rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);
-    });
-
-    output.hoes = output.hoes.sort((a, b) => {
-      if (a.rarity == b.rarity) {
-        if (b.inBackpack) {
-          return -1;
-        }
-
-        return a.item_index > b.item_index ? 1 : -1;
-      }
-
-      return rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);
-    });
-
-    output.pickaxes = output.pickaxes.sort((a, b) => {
-      if (a.breaking_power == b.breaking_power) {
-        if (b.inBackpack) {
-          return -1;
-        }
-
-        return rarity_order.indexOf(a.rarity) > rarity_order.indexOf(b.rarity) ? 1 : -1;
-      }
-
-      return b.breaking_power - a.breaking_power;
-    });
+    output.pickaxes = output.pickaxes.sort(itemSorter);
 
     const countsOfId = {};
 
@@ -1661,15 +1592,7 @@ module.exports = {
       }
     }
 
-    output.talismans = output.talismans.sort((a, b) => {
-      const rarityOrder = rarity_order.indexOf(a.rarity) - rarity_order.indexOf(b.rarity);
-
-      if (rarityOrder == 0) {
-        return a.isInactive === b.isInactive ? 0 : a.isInactive ? 1 : -1;
-      }
-
-      return rarityOrder;
-    });
+    output.talismans = output.talismans.sort(itemSorter);
 
     let swords = output.weapons.filter((a) => a.type == "sword" || a.type == "dungeon sword");
     let bows = output.weapons.filter((a) => a.type == "bow" || a.type == "dungeon bow");
@@ -2994,80 +2917,50 @@ module.exports = {
 
       pet.rarity = pet.tier.toLowerCase();
 
-      if (
-        pet.heldItem == "PET_ITEM_TIER_BOOST" ||
-        pet.heldItem == "PET_ITEM_VAMPIRE_FANG" ||
-        pet.heldItem == "PET_ITEM_TOY_JERRY"
-      ) {
-        pet.rarity = petTiers[Math.min(petTiers.length - 1, petTiers.indexOf(pet.rarity) + 1)];
+      if (pet.heldItem == "PET_ITEM_TIER_BOOST") {
+        pet.rarity = constants.rarities[Math.min(4, constants.rarities.indexOf(pet.rarity) + 1)];
+      }
+
+      if (pet.heldItem == "PET_ITEM_VAMPIRE_FANG" || pet.heldItem == "PET_ITEM_TOY_JERRY") {
+        if (constants.rarities.indexOf(pet.rarity) === constants.rarities.indexOf(petData.maxTier.toLowerCase()) - 1) {
+          pet.rarity = petData.maxTier.toLowerCase();
+        }
       }
 
       pet.level = getPetLevel(pet, petData.maxLevel);
       pet.stats = {};
 
-      pet.texture_path = petData.head;
+      pet.texture_path = petData.hatching?.level > pet.level.level ? petData.hatching.head : petData.head;
 
       let petSkin = null;
-
       if (pet.skin && constants.pet_skins?.[pet.type]?.[pet.skin]) {
         pet.texture_path = constants.pet_skins[pet.type][pet.skin].head;
         petSkin = constants.pet_skins[pet.type][pet.skin].name;
       }
 
-      const isMount = ["HORSE", "SKELETON_HORSE", "PIG", "ROCK", "ARMADILLO"].indexOf(pet.type) != -1;
-      const isMorph = ["RAT"].indexOf(pet.type) != -1;
-
       let loreFirstRow = [
         "§8",
         `${helper.capitalizeFirstLetter(petData.type)} `,
-        isMount ? "Mount" : isMorph ? "Morph" : "Pet",
+        petData.category ?? "Pet",
         petSkin ? `, ${petSkin} Skin` : "",
       ];
 
-      let lore = [loreFirstRow.join("")];
+      let lore = [loreFirstRow.join(""), ""];
 
-      lore.push("");
+      const petName =
+        petData.hatching?.level > pet.level.level
+          ? petData.hatching.name
+          : helper.titleCase(pet.type.replace(/_/g, " "));
 
-      const petName = helper.titleCase(pet.type.replace(/_/g, " "));
-      const searchName = petName in constants.petStats ? petName : "???";
+      const rarity = constants.rarities.indexOf(pet.rarity);
 
-      if (searchName in constants.petStats) {
-        let rarity;
-        switch (pet.rarity) {
-          case "common":
-            rarity = 0;
-            break;
-          case "uncommon":
-            rarity = 1;
-            break;
-          case "rare":
-            rarity = 2;
-            break;
-          case "epic":
-            rarity = 3;
-            break;
-          case "legendary":
-            rarity = 4;
-            break;
-          case "mythic":
-            rarity = 5;
-            break;
-        }
-
-        const petInstance = new constants.petStats[searchName](rarity, pet.level.level);
-        // we need to push stats later :o
-
-        // make pet.stats actually hold pet stats
-        pet.stats = Object.assign({}, petInstance.stats);
-
-        pet.ref = petInstance;
-
-        // we also need to push abilites after stats :O
-      }
+      const searchName = pet.type in constants.petStats ? pet.type : "???";
+      const petInstance = new constants.petStats[searchName](rarity, pet.level.level);
+      pet.stats = Object.assign({}, petInstance.stats);
+      pet.ref = petInstance;
 
       if (pet.heldItem) {
         const { heldItem } = pet;
-
         let heldItemObj = await db.collection("items").findOne({ id: heldItem });
 
         if (heldItem in constants.pet_items) {
@@ -3104,11 +2997,12 @@ module.exports = {
             lore.push(line);
           });
         });
+
         // now we push the lore of the held items
         if (!heldItemObj) {
           heldItemObj = constants.pet_items[heldItem];
         }
-        lore.push("", `§6Held Item: §${constants.tier_colors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
+        lore.push("", `§6Held Item: §${constants.rarityColors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
 
         if (heldItem in constants.pet_items) {
           lore.push(constants.pet_items[heldItem].description);
@@ -3129,6 +3023,7 @@ module.exports = {
             lore.push(line);
           });
         });
+
         // extra line
         lore.push(" ");
       }
@@ -3137,7 +3032,6 @@ module.exports = {
         lore.push(`§7Progress to Level ${pet.level.level + 1}: §e${(pet.level.progress * 100).toFixed(1)}%`);
 
         const progress = Math.ceil(pet.level.progress * 20);
-
         const numerator = pet.level.xpCurrent.toLocaleString();
         const denominator = helper.formatNumber(pet.level.xpForNext, false, 10);
 
@@ -3194,7 +3088,7 @@ module.exports = {
             }
           }
         } else {
-          return rarity_order.indexOf(a.rarity) > rarity_order.indexOf(b.rarity) ? 1 : -1;
+          return constants.rarities.indexOf(a.rarity) < constants.rarities.indexOf(b.rarity) ? 1 : -1;
         }
       }
 
@@ -3452,6 +3346,7 @@ module.exports = {
             : `floor_${highest_floor}`,
         floors: floors,
       };
+
       let dungeonLevelWithProgress = calcDungeonsClassLevelWithProgress(dungeon.experience);
       let dungeonsWeight = calcDungeonsWeight(type, dungeonLevelWithProgress, dungeon.experience);
       output.dungeonsWeight += dungeonsWeight.weight;
@@ -3465,6 +3360,11 @@ module.exports = {
     let current_class = dungeons.selected_dungeon_class || "none";
     for (const className of Object.keys(dungeons.player_classes)) {
       let data = dungeons.player_classes[className];
+
+      if (!data.experience) {
+        data.experience = 0;
+      }
+
       output.classes[className] = {
         experience: getLevelByXp(data.experience, { type: "dungeoneering" }),
         current: false,

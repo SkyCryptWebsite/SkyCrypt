@@ -1,7 +1,6 @@
 declare const page: string;
 
 declare namespace extra {
-  const favoriteUUIDs: string[];
   const isFoolsDay: boolean;
   const cacheOnly: boolean;
   const packs: Pack[];
@@ -73,6 +72,7 @@ type StatName =
   | "mining_fortune"
   | "mining_speed"
   | "pet_luck"
+  | "pristine"
   | "sea_creature_chance"
   | "speed"
   | "strength";
