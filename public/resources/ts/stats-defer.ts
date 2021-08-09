@@ -263,6 +263,7 @@ export const inventorySlotTemplate = (item: ItemSlot): TemplateResult => {
   if (isSlotItem(item)) {
     return html`
       <div
+        tabindex="0"
         class="rich-item inventory-slot"
         data-item-id="${item.itemId}"
         @mouseenter="${mouseenterLoreListener}"
