@@ -16,7 +16,7 @@ async function main() {
   const db = mongo.db(credentials.dbName);
 
   const Redis = require("ioredis");
-  const redisClient = new Redis();
+  const redisClient = new Redis(credentials.redisUrl ?? credentials.redisUrl);
 
   async function updateLeaderboards() {
     const keys = await redisClient.keys("lb_*");

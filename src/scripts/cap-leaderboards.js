@@ -2,9 +2,10 @@ const cluster = require("cluster");
 
 async function main() {
   const constants = require("./../constants");
+  const credentials = require("./../../credentials.json");
 
   const Redis = require("ioredis");
-  const redisClient = new Redis();
+  const redisClient = new Redis(credentials.redisUrl ?? credentials.redisUrl);
 
   async function capLeaderboards() {
     const keys = await redisClient.keys("lb_*");

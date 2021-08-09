@@ -32,6 +32,9 @@ Now open `credentials.json` and enter a valid Hypixel API Key. You can obtain on
 
 `mongod` needs to be running as a service in the background and the `redis-server` needs to be started.
 
+`redis` can be configured when adding a `redisUrl` property in the `credentials.json` file.
+See `https://github.com/luin/ioredis#connect-to-redis` for configuration details.
+
 You can now run `npm start` to start it. You will be able to access the site on <a href="http://localhost:32464">http://localhost:32464</a> if you leave the default port.
 
 <h2 align="center">Credits</h2>
