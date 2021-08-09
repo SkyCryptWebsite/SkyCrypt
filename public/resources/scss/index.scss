@@ -2630,7 +2630,7 @@ a.additional-player-stat:hover {
   }
 }
 
-.inventory-view {
+inventory-view {
   display: grid;
   place-content: center center;
   --inventory-width: clamp(300px, calc(100vw - 40px), 700px);

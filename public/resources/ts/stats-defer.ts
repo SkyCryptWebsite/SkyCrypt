@@ -3,6 +3,8 @@ import { SkinViewer, createOrbitControls } from "skinview3d";
 import { render, html, TemplateResult } from "lit";
 import { ClassInfo, classMap } from "lit/directives/class-map.js";
 
+import("./elements/inventory-view");
+
 declare global {
   function tippy(targets: string | Element | Element[], optionalProps?: Record<string, unknown>): any;
 }
@@ -122,7 +124,7 @@ tippy(".interactive-tooltip", {
   },
 });
 
-const allItems = new Map(
+export const allItems = new Map(
   [
     items.armor,
     items.inventory,
@@ -238,8 +240,6 @@ function renderLore(text: string) {
   return output;
 }
 
-let currentBackpack: Backpack;
-
 const itemIconTemplate = (item: Item, classes: { [name: string]: boolean } = {}) => {
   classes["item-icon"] = true;
   classes["is-enchanted"] = isEnchanted(item);
@@ -259,7 +259,7 @@ function isSlotItem(item: ItemSlot): item is Item {
   return "id" in item;
 }
 
-const inventorySlotTemplate = (item: ItemSlot) => {
+export const inventorySlotTemplate = (item: ItemSlot): TemplateResult => {
   let itemTemplate: TemplateResult | undefined;
 
   if (isSlotItem(item)) {
@@ -281,37 +281,21 @@ const inventorySlotTemplate = (item: ItemSlot) => {
   return html`<div class="inventory-slot">${itemTemplate}</div>`;
 };
 
-function renderInventory(inventory: ItemSlot[], type: string, shouldScroll = true) {
-  const inventoryView = document.querySelector<HTMLElement>(".stat-inventory .inventory-view");
+function switchInventory(type: string, backpack?: Backpack) {
+  backpack;
+  const inventoryView = document.querySelector<HTMLElement>(".stat-inventory inventory-view");
 
   if (!inventoryView) {
     return;
   }
 
-  inventoryView.setAttribute("data-inventory-type", type);
+  inventoryView.setAttribute("inventory-type", type);
 
-  let pagesize = 5 * 9;
-
-  if (type === "inventory") {
-    inventory = inventory.slice(9, 36).concat(inventory.slice(0, 9));
-    pagesize = 3 * 9;
-  } else if (type === "backpack") {
-    pagesize = 6 * 9;
+  if (type === "backpack" && backpack) {
+    inventoryView.setAttribute("backpack-id", backpack.itemId);
   }
 
-  const itemTemplateResults: TemplateResult[] = [];
-
-  inventory.forEach((item, index) => {
-    if (index % pagesize === 0 && index !== 0) {
-      itemTemplateResults.push(html`<hr />`);
-    }
-
-    itemTemplateResults.push(inventorySlotTemplate(item));
-  });
-
-  render(itemTemplateResults, inventoryView);
-
-  if (shouldScroll) {
+  setTimeout(() => {
     const rect = (document.querySelector("#inventory_container") as HTMLElement).getBoundingClientRect();
 
     if (rect.top > 100 && rect.bottom > window.innerHeight) {
@@ -324,12 +308,14 @@ function renderInventory(inventory: ItemSlot[], type: string, shouldScroll = tru
       window.scrollBy({ top, behavior: "smooth" });
       scrollMemory.isSmoothScrolling = true;
     }
-  }
+  });
 }
 
-renderInventory(items.inventory, "inventory", false);
+export function isItem(item: ItemSlot | DisplayItem): item is Item {
+  return "Count" in item && "Damage" in item && "id" in item;
+}
 
-function isBackpack(item: DisplayItem): item is Backpack {
+export function isBackpack(item: DisplayItem): item is Backpack {
   return "containsItems" in item;
 }
 
@@ -340,9 +326,7 @@ function showBackpack(item: Backpack) {
     activeInventory.classList.remove("active-inventory");
   }
 
-  renderInventory(item.containsItems, "backpack");
-
-  currentBackpack = item;
+  switchInventory("backpack", item);
 
   closeLore();
 }
@@ -367,6 +351,8 @@ function fillLore(element: HTMLElement) {
   if (item == undefined) {
     return;
   }
+
+  console.log(item);
 
   itemName.className = `item-name piece-${item.rarity || "common"}-bg nice-colors-dark`;
   itemNameContent.innerHTML = item.display_name_print || item.display_name || "null";
@@ -698,7 +684,7 @@ for (const element of document.querySelectorAll(".inventory-tab")) {
 
     element.classList.add("active-inventory");
 
-    renderInventory(items[type], type);
+    switchInventory(type);
   });
 }
 
@@ -709,23 +695,26 @@ const itemNameContent = itemName.querySelector("span") as HTMLSpanElement;
 const itemLore = statsContent.querySelector(".item-lore") as HTMLElement;
 const backpackContents = statsContent.querySelector(".backpack-contents") as HTMLElement;
 
-function mouseenterLoreListener(this: HTMLElement) {
-  fillLore(this);
+function mouseenterLoreListener(event: MouseEvent) {
+  const element = event.target as HTMLElement;
+
+  fillLore(element);
 
   statsContent.classList.add("show-stats");
 }
 
-function mouseleaveLoreListener(this: HTMLElement) {
+function mouseleaveLoreListener() {
   statsContent.classList.remove("show-stats");
 }
 
-function mousemoveLoreListener(this: HTMLElement, event: MouseEvent) {
+function mousemoveLoreListener(event: MouseEvent) {
+  const element = event.target as HTMLElement;
   if (statsContent.classList.contains("sticky-stats")) {
     return;
   }
 
   const maxTop = window.innerHeight - statsContent.offsetHeight - 20;
-  const rect = this.getBoundingClientRect();
+  const rect = element.getBoundingClientRect();
 
   let left = rect.x - statsContent.offsetWidth - 10;
 
@@ -743,7 +732,7 @@ function mousemoveLoreListener(this: HTMLElement, event: MouseEvent) {
 }
 
 function getContextmenuLoreListener(item: Item | Backpack) {
-  return function (this: HTMLElement, event: MouseEvent) {
+  return function (event: MouseEvent) {
     if (item && "containsItems" in item) {
       event.preventDefault();
 
@@ -753,17 +742,18 @@ function getContextmenuLoreListener(item: Item | Backpack) {
 }
 
 function getClickLoreListener(item: Item | Backpack) {
-  return function (this: HTMLElement, event: MouseEvent) {
+  return function (event: MouseEvent) {
+    const element = event.target as HTMLElement;
     if (event.ctrlKey && item && "containsItems" in item) {
       showBackpack(item);
     } else {
       if (statsContent.classList.contains("sticky-stats")) {
         closeLore();
       } else {
-        showLore(this, false);
+        showLore(element, false);
 
-        if (this.getAttribute("data-item-id") != item.itemId) {
-          fillLore(this);
+        if (element.getAttribute("data-item-id") != item.itemId) {
+          fillLore(element);
         }
       }
     }
