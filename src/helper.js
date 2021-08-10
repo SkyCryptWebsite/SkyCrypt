@@ -880,10 +880,10 @@ module.exports = {
         Object.keys(gemstone_stats).forEach((stat) => {
           const stat_value = gemstone_stats[stat][module.exports.rarityNameToInt(rarity)];
 
-          if (stat_value === -1) {
-            stats.push("§c§oMISSING VALUE§r");
-          } else if (stat_value) {
+          if (stat_value && stat_value !== -1) {
             stats.push(["§", constants.stats_colors[stat], "+", stat_value, constants.stats_symbols[stat]].join(""));
+          } else {
+            stats.push("§c§oMISSING VALUE§r");
           }
         });
       }
