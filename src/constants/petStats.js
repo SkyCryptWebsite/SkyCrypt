@@ -1,11 +1,8 @@
-// const helper = require('./../helper');
-// const loreGenerator = require('./../loreGenerator.js');
-
-function round(num, decimals) {
+function round(num, decimals = 0) {
   return Math.round(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
 }
 
-function floor(num, decimals) {
+function floor(num, decimals = 0) {
   return Math.floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
 }
 
@@ -78,7 +75,7 @@ class Pet {
           list.push(`§7Bonus Attack Speed: ${formatStat(newStats[stat])}`);
           break;
         case "sea_creature_chance":
-          list.push(`§7Sea Creature Chance: ${formatStat(newStats[stat])}`);
+          list.push(`§7Sea Creature Chance: ${formatStat(newStats[stat])}%`);
           break;
         case "magic_find":
           list.push(`§7Magic Find: ${formatStat(newStats[stat])}`);
@@ -121,12 +118,6 @@ class Pet {
     // no-op
   }
 }
-
-/*
-
-Farming Pets
-
-*/
 
 class Bee extends Pet {
   // todo: finish hive
@@ -396,12 +387,6 @@ class Rabbit extends Pet {
     };
   }
 }
-
-/*
-
-Mining Pets
-
-*/
 
 class Armadillo extends Pet {
   get stats() {
@@ -811,12 +796,6 @@ class WitherSkeleton extends Pet {
   }
 }
 
-/*
-
-Combat Pets
-
-*/
-
 class Bal extends Pet {
   get stats() {
     return {
@@ -860,7 +839,7 @@ class Bal extends Pet {
     let mult = 0.15;
     return {
       name: "§6Made of Lava",
-      desc: [`§7Gain §a${round(this.level * mult, 1)} §7on ALL stats when inside the §cMagma Fields.`],
+      desc: [`§7Gain §a${round(this.level * mult, 1)}% §7on ALL stats when inside the §cMagma Fields.`],
     };
   }
 }
@@ -2261,12 +2240,6 @@ class Zombie extends Pet {
   }
 }
 
-/*
-
-Foraging Pets
-
-*/
-
 class Giraffe extends Pet {
   get stats() {
     return {
@@ -2465,12 +2438,6 @@ class Ocelot extends Pet {
   }
 }
 
-/*
-
-Fishing Pets
-
-*/
-
 class BabyYeti extends Pet {
   get stats() {
     return {
@@ -2590,7 +2557,7 @@ class BlueWhale extends Pet {
 class Ammonite extends Pet {
   get stats() {
     return {
-      sea_creature_chance: this.level * 0,
+      sea_creature_chance: this.level * 0.07,
     };
   }
 
@@ -2608,29 +2575,30 @@ class Ammonite extends Pet {
   get first() {
     return {
       name: "§6Heart of the Sea",
-      desc: [`§7Each Heart of the Mountain level grants §3+???${symbols.sea_creature_chance} Sea Creature Chance`],
+      desc: [
+        `§7Each Heart of the Mountain level grants §3+${round(this.level * 0.01)}${
+          symbols.sea_creature_chance
+        } Sea Creature Chance`,
+      ],
     };
   }
 
   get second() {
     return {
-      name: "§6???",
-      desc: [`§7???`],
+      name: "§6Not a Snail",
+      desc: [
+        `§7Each fishing and mining level grants §f+${round(this.level * 0.02, 1)}${
+          symbols.speed
+        } Speed §7and §a+${round(this.level * 0.02, 1)}${symbols.defense} Defense`,
+      ],
     };
   }
 
   get third() {
     return {
-      name: "§6???",
-      desc: [`§7???`],
+      name: "§6Gift of the Ammonite",
+      desc: [`§7Increases your fishing speed by §a${round(this.level * 0.006, 1)}% §7for each mining level`],
     };
-  }
-
-  modifyStats(stats) {
-    if (this.rarity > 1) {
-      let mult = this.rarity > 2 ? 0.1 : 0.07;
-      stats["sea creature chance"] *= 1 + round((this.level * mult) / 100, 1);
-    }
   }
 }
 
@@ -2893,12 +2861,6 @@ class Squid extends Pet {
   }
 }
 
-/*
-
-Alchemy Pets
-
-*/
-
 class Jellyfish extends Pet {
   get stats() {
     return {
@@ -3056,10 +3018,6 @@ class Sheep extends Pet {
     };
   }
 }
-
-/*
-Other Pets/Todo
-*/
 
 class Jerry extends Pet {
   get stats() {

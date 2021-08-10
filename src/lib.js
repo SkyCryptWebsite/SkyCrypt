@@ -770,10 +770,6 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
           break;
       }
 
-      if (item.type != null && item.type.startsWith("dungeon")) {
-        item.Damage = 0;
-      }
-
       // Get breaking power for Pickaxes
       if (item.type == "pickaxe" || item.type == "drill") {
         if (lore[0].startsWith("Breaking Power")) {
@@ -3350,6 +3346,7 @@ module.exports = {
             : `floor_${highest_floor}`,
         floors: floors,
       };
+
       let dungeonLevelWithProgress = calcDungeonsClassLevelWithProgress(dungeon.experience);
       let dungeonsWeight = calcDungeonsWeight(type, dungeonLevelWithProgress, dungeon.experience);
       output.dungeonsWeight += dungeonsWeight.weight;
@@ -3363,6 +3360,11 @@ module.exports = {
     let current_class = dungeons.selected_dungeon_class || "none";
     for (const className of Object.keys(dungeons.player_classes)) {
       let data = dungeons.player_classes[className];
+
+      if (!data.experience) {
+        data.experience = 0;
+      }
+
       output.classes[className] = {
         experience: getLevelByXp(data.experience, { type: "dungeoneering" }),
         current: false,
