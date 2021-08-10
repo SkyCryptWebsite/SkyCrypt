@@ -1,6 +1,7 @@
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { allItems, inventorySlotTemplate, isBackpack, isItem, showBackpack } from "../stats-defer";
+import { allItems, isSlotItem, isBackpack, isItem, showBackpack } from "../stats-defer";
+import("./rich-item");
 
 @customElement("inventory-view")
 export class InventoryView extends LitElement {
@@ -13,7 +14,7 @@ export class InventoryView extends LitElement {
   @property({ attribute: "preview", type: Boolean })
   preview = false;
 
-  render(): TemplateResult[] {
+  protected render(): TemplateResult[] {
     let inventory = items[this.inventoryType] ?? [];
 
     let pagesize = 5 * 9;
@@ -49,14 +50,20 @@ export class InventoryView extends LitElement {
         itemTemplateResults.push(html`<hr />`);
       }
 
-      itemTemplateResults.push(inventorySlotTemplate(item));
+      if (isSlotItem(item)) {
+        itemTemplateResults.push(
+          html`<rich-item tabindex="0" class="inventory-slot rich-item" data-item-id="${item.itemId}"></rich-item>`
+        );
+      } else {
+        itemTemplateResults.push(html`<div class="inventory-slot"></div>`);
+      }
     });
 
     return itemTemplateResults;
   }
 
   // disable shadow root
-  createRenderRoot(): Element | ShadowRoot {
+  protected createRenderRoot(): Element | ShadowRoot {
     return this;
   }
 }

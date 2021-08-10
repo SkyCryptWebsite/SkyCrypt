@@ -2164,6 +2164,17 @@ a.additional-player-stat:hover {
       background-color: rgba(255, 255, 255, 0.2);
     }
   }
+
+  .item-count {
+    position: absolute;
+    z-index: 16;
+    bottom: calc(var(--inventory-width) * 0.0025);
+    right: calc(var(--inventory-width) * 0.0025);
+    font-size: calc(var(--inventory-width) * 0.03333);
+    color: white;
+    text-shadow: 0.1em 0.1em 0.1em black;
+    font-weight: 600;
+  }
 }
 
 .pieces {
@@ -2645,17 +2656,6 @@ inventory-view {
 
     @supports not (aspect-ratio: 1) {
       padding-bottom: 100%;
-    }
-
-    .item-count {
-      position: absolute;
-      z-index: 16;
-      bottom: calc(var(--inventory-width) * 0.0025);
-      right: calc(var(--inventory-width) * 0.0025);
-      font-size: calc(var(--inventory-width) * 0.03333);
-      color: white;
-      text-shadow: 0.1em 0.1em 0.1em black;
-      font-weight: 600;
     }
   }
 

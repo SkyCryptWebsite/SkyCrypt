@@ -1,7 +1,5 @@
 import { setCookie } from "./common-defer";
 import { SkinViewer, createOrbitControls } from "skinview3d";
-import { render, html, TemplateResult } from "lit";
-import { ClassInfo, classMap } from "lit/directives/class-map.js";
 
 import("./elements/inventory-view");
 
@@ -165,7 +163,7 @@ if (calculated.profile.cute_name == "Deleted") {
 
 history.replaceState({}, document.title, url.href);
 
-function isEnchanted(item: Item) {
+export function isEnchanted(item: Item): boolean {
   // heads
   if ([397].includes(item.id)) {
     return false;
@@ -240,46 +238,9 @@ function renderLore(text: string) {
   return output;
 }
 
-const itemIconTemplate = (item: Item, classes: { [name: string]: boolean } = {}) => {
-  classes["item-icon"] = true;
-  classes["is-enchanted"] = isEnchanted(item);
-  if (item.texture_path) {
-    classes["custom-icon"] = true;
-    return html`<div style='background-image: url("${item.texture_path}")' class="${classMap(classes)}"></div>`;
-  } else {
-    if (item.Damage != 0) {
-      classes[`icon-${item.id}_0`] = true;
-    }
-    classes[`icon-${item.id}_${item.Damage}`] = true;
-    return html`<div class="${classMap(classes)}"></div>`;
-  }
-};
-
-function isSlotItem(item: ItemSlot): item is Item {
+export function isSlotItem(item: ItemSlot): item is Item {
   return "id" in item;
 }
-
-export const inventorySlotTemplate = (item: ItemSlot): TemplateResult => {
-  if (isSlotItem(item)) {
-    return html`
-      <div
-        tabindex="0"
-        class="rich-item inventory-slot"
-        data-item-id="${item.itemId}"
-        @mouseenter="${mouseenterLoreListener}"
-        @mouseleave="${mouseleaveLoreListener}"
-        @mousemove="${mousemoveLoreListener}"
-        @contextmenu="${getContextmenuLoreListener(item)}"
-        @click="${getClickLoreListener(item)}"
-      >
-        ${itemIconTemplate(item, { "piece-icon": true })}
-        ${item.Count != 1 ? html`<div class="item-count">${item.Count}</div>` : undefined}
-      </div>
-    `;
-  } else {
-    return html`<div class="inventory-slot"></div>`;
-  }
-};
 
 function switchInventory(type: string, backpack?: Backpack) {
   backpack;
@@ -640,7 +601,7 @@ const itemNameContent = itemName.querySelector("span") as HTMLSpanElement;
 const itemLore = statsContent.querySelector(".item-lore") as HTMLElement;
 const backpackContents = statsContent.querySelector(".backpack-contents") as HTMLElement;
 
-function mouseenterLoreListener(event: MouseEvent) {
+export function mouseenterLoreListener(event: MouseEvent): void {
   const element = event.target as HTMLElement;
 
   fillLore(element);
@@ -648,11 +609,11 @@ function mouseenterLoreListener(event: MouseEvent) {
   statsContent.classList.add("show-stats");
 }
 
-function mouseleaveLoreListener() {
+export function mouseleaveLoreListener(): void {
   statsContent.classList.remove("show-stats");
 }
 
-function mousemoveLoreListener(event: MouseEvent) {
+export function mousemoveLoreListener(event: MouseEvent): void {
   const element = event.target as HTMLElement;
   if (statsContent.classList.contains("sticky-stats")) {
     return;
@@ -676,33 +637,14 @@ function mousemoveLoreListener(event: MouseEvent) {
   statsContent.style.top = top + "px";
 }
 
-function getContextmenuLoreListener(item: Item | Backpack) {
-  return function (event: MouseEvent) {
-    if (item && "containsItems" in item) {
-      event.preventDefault();
+export function clickLoreListener(event: MouseEvent): void {
+  const element = event.target as HTMLElement;
 
-      showBackpack(item);
-    }
-  };
-}
-
-function getClickLoreListener(item: Item | Backpack) {
-  return function (event: MouseEvent) {
-    const element = event.target as HTMLElement;
-    if (event.ctrlKey && item && "containsItems" in item) {
-      showBackpack(item);
-    } else {
-      if (statsContent.classList.contains("sticky-stats")) {
-        closeLore();
-      } else {
-        showLore(element, false);
-
-        if (element.getAttribute("data-item-id") != item.itemId) {
-          fillLore(element);
-        }
-      }
-    }
-  };
+  if (statsContent.classList.contains("sticky-stats")) {
+    closeLore();
+  } else {
+    showLore(element, false);
+  }
 }
 
 for (const element of document.querySelectorAll<HTMLElement>(".rich-item")) {
@@ -712,12 +654,7 @@ for (const element of document.querySelectorAll<HTMLElement>(".rich-item")) {
 
   element.addEventListener("mousemove", mousemoveLoreListener);
 
-  const itemId = element.getAttribute("data-item-id") as string;
-  const item = allItems.get(itemId) as Item;
-
-  element.addEventListener("contextmenu", getContextmenuLoreListener(item));
-
-  element.addEventListener("click", getClickLoreListener(item));
+  element.addEventListener("click", clickLoreListener);
 }
 
 const enableApiPlayer = document.querySelector("#enable_api") as HTMLVideoElement;

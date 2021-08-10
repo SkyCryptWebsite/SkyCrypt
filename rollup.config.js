@@ -20,6 +20,7 @@ const config = {
     "public/resources/ts/stats-defer.ts",
     "public/resources/ts/themes.ts",
     "public/resources/ts/elements/local-time.ts",
+    "public/resources/ts/elements/rich-item.ts",
   ],
   output: {
     dir: "public/resources/js",
