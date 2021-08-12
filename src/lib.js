@@ -1504,11 +1504,16 @@ module.exports = {
       }
 
       output.weapons.push(
-        ...item.containsItems.filter((a) => a.type != null && (a.type.endsWith("sword") || a.type.endsWith("bow")))
+        ...item.containsItems.filter(
+          (a) => a.type != null && (a.type.endsWith("sword") || a.type.endsWith("bow") || a.type.endsWith("gauntlet"))
+        )
       );
       output.hoes.push(...item.containsItems.filter((a) => a.type != null && a.type.endsWith("hoe")));
       output.pickaxes.push(
-        ...item.containsItems.filter((a) => a.type != null && (a.type.endsWith("pickaxe") || a.type.endsWith("drill")))
+        ...item.containsItems.filter(
+          (a) =>
+            a.type != null && (a.type.endsWith("pickaxe") || a.type.endsWith("drill") || a.type.endsWith("gauntlet"))
+        )
       );
       output.rods.push(
         ...item.containsItems.filter(
