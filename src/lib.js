@@ -685,7 +685,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
                 break;
               }
             }
-            itemLore.push(`§8${toNextLevel} steps to tier up!`);
+            itemLore.push(`§8Walk ${toNextLevel} blocks to tier up!`);
           }
         }
       }
