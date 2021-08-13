@@ -125,7 +125,7 @@ module.exports = {
           strength: [null, null, 1.5, 4, 4, 5],
         },
         FLAWLESS: {
-          strength: [null, null, -1, -1, -1, -1],
+          strength: [null, null, 2.5, 6, 7, 8],
         },
         PERFECT: {
           strength: [null, null, -1, -1, -1, -1],
