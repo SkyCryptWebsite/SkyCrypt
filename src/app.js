@@ -580,6 +580,7 @@ async function main() {
       background = color;
       foreground = "ffffff";
     }
+    res.setHeader("Cache-Control", `public, max-age=${cacheMaxAge}`);
     res.type("svg").send(/*xml*/ `
       <svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
         <title>SkyCrypt Logo</title>
