@@ -23,7 +23,7 @@ module.exports = {
           mining_fortune: [null, 5, 7.5, 20, 27, 35],
         },
         PERFECT: {
-          mining_fortune: [null, -1, -1, -1, -1, -1],
+          mining_fortune: [null, 7, 10, 30, 40, 50],
         },
       },
     },
