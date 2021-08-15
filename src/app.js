@@ -68,7 +68,30 @@ async function main() {
   await mongo.connect();
   const db = mongo.db(credentials.dbName);
 
-  const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
+  /**
+   * the largest number of second that `max-age` in `Cache-Control` will allow
+   * @example
+   * // this is static and never changes so it should be cached forever
+   * res.setHeader("Cache-Control", `max-age=${maxMaxAge}`);
+   */
+  const maxMaxAge = 31536000;
+
+  /**
+   * the number of seconds that mostly static resources should be cached for
+   * @example
+   * // this is only changes when a Dev updates it manually which doesn't happen very much so it should be cached for a long time
+   * res.setHeader("Cache-Control", `max-age=${cacheMaxAge}`);
+   */
+  const cacheMaxAge = 30 * 24 * 60 * 60; // 30 days should be cached for
+
+  /**
+   * the number of seconds that frequently changing resources should be cached for
+   * @example
+   * // this is could change at any time but it is not important that that updates goes to the user right away
+   * res.setHeader("Cache-Control", `max-age=${volatileCacheMaxAge}`);
+   */
+  const volatileCacheMaxAge = 12 * 60 * 60; // 12 hours
+
   const cachePath = path.resolve(__dirname, "../cache");
   await fs.ensureDir(cachePath);
 
@@ -114,7 +137,9 @@ async function main() {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.set("view engine", "ejs");
   express.static.mime.define({ "application/opensearchdescription+xml": ["osd"] });
-  app.use(express.static("public", { maxAge: CACHE_DURATION }));
+  app.use("/resources/js", express.static("public/resources/js", { maxAge: maxMaxAge * 1000 }));
+  app.use("/resources/css", express.static("public/resources/css", { maxAge: maxMaxAge * 1000 }));
+  app.use(express.static("public", { maxAge: cacheMaxAge * 1000 }));
   app.use(cookieParser());
 
   app.use(
@@ -324,7 +349,7 @@ async function main() {
       }
     }
 
-    res.setHeader("Cache-Control", `public, max-age=${CACHE_DURATION}`);
+    res.setHeader("Cache-Control", `public, max-age=${maxMaxAge}`);
     res.contentType("image/png");
     res.send(file);
   });
@@ -374,7 +399,7 @@ async function main() {
       }
     }
 
-    res.setHeader("Cache-Control", `public, max-age=${12 * 60 * 60 * 1000}`);
+    res.setHeader("Cache-Control", `public, max-age=${volatileCacheMaxAge}`);
     res.contentType("image/png");
     res.send(file);
   });
@@ -400,7 +425,7 @@ async function main() {
 
     res.set("X-Cluster-ID", `${helper.getClusterId()}`);
 
-    res.setHeader("Cache-Control", `public, max-age=${CACHE_DURATION}`);
+    res.setHeader("Cache-Control", `public, max-age=${cacheMaxAge}`);
     res.contentType("image/png");
     res.send(file);
   });
@@ -421,7 +446,7 @@ async function main() {
       res.set("X-Texture-Path", `${item.path}`);
     }
 
-    res.setHeader("Cache-Control", `public, max-age=${CACHE_DURATION}`);
+    res.setHeader("Cache-Control", `public, max-age=${cacheMaxAge}`);
     res.contentType(item.mime);
     res.send(item.image);
   });
@@ -453,7 +478,7 @@ async function main() {
       });
     }
 
-    res.setHeader("Cache-Control", `public, max-age=${CACHE_DURATION}`);
+    res.setHeader("Cache-Control", `public, max-age=${cacheMaxAge}`);
     res.contentType("image/png");
     res.send(file);
   });
@@ -485,7 +510,7 @@ async function main() {
       });
     }
 
-    res.setHeader("Cache-Control", `public, max-age=${CACHE_DURATION}`);
+    res.setHeader("Cache-Control", `public, max-age=${cacheMaxAge}`);
     res.contentType("image/png");
     res.send(file);
   });
