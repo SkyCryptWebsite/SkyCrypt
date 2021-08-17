@@ -706,7 +706,6 @@ input[type="search"]::-webkit-search-cancel-button {
     transform: scale(0.85);
   }
   @media (max-width: 1200px) {
-    padding: var(--padding);
     box-sizing: border-box;
     position: relative;
     padding-left: 0;
@@ -719,7 +718,6 @@ input[type="search"]::-webkit-search-cancel-button {
   display: none;
   border: none;
   width: 100%;
-  margin-top: 10px;
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
@@ -1599,31 +1597,15 @@ a.additional-player-stat:hover {
   margin-right: calc(-1 * var(--padding));
   background-color: rgba(var(--background-rgb), 0.3);
   @media (max-width: 1590px) {
-    grid-template-areas: "skill skill" "skin additional" "base base";
+    grid-template-areas: "skill skill" "base base" "skin additional";
     grid-template-columns: repeat(2, 1fr);
   }
-  // @media (max-width: 1590px) {
-  //   grid-template-areas:
-  //     "skin base skill"
-  //     "skin base additional";
-  //   grid-template-columns: 150px 260px auto;
-  // }
-  // @media (max-width: 1200px) {
-  //   grid-template-areas:
-  //     "skin base"
-  //     "skin additional"
-  //     ". ."
-  //     "skill skill ";
-  //   grid-template-columns: minmax(100px, 250px) minmax(225px, 1fr);
-  //   grid-template-rows: auto auto 30px auto;
-  //   padding: 0;
-  //   background-color: transparent;
-
-  //   > * {
-  //     text-align: center;
-  //     background-color: rgba(var(--background-rgb), 0.3);
-  //   }
-  // }
+  @media (max-width: 480px) {
+    grid-template-areas: "skill skill" "skin additional" "base base";
+  }
+  @media (max-width: 430px) {
+    grid-template-columns: 3fr 7fr;
+  }
 }
 
 #additional_stats_container {
@@ -3754,7 +3736,6 @@ body {
   }
 
   #skill_levels_container {
-    padding: var(--padding);
     box-sizing: border-box;
     padding-bottom: 15px;
 
@@ -4095,6 +4076,7 @@ body {
 
     &.show-stats {
       max-height: 500px;
+      margin-bottom: 14px;
     }
   }
 
