@@ -715,7 +715,7 @@ input[type="search"]::-webkit-search-cancel-button {
   }
 }
 
-#show_skills {
+#show_stats {
   display: none;
   border: none;
   width: 100%;
@@ -4079,7 +4079,7 @@ body {
     font-size: 7vw;
   }
 
-  #show_skills {
+  #show_stats {
     display: block;
   }
 
@@ -4087,13 +4087,13 @@ body {
     grid-template-columns: 1fr;
   }
 
-  #other_skills {
+  #other_stats {
     max-height: 0;
     overflow: hidden;
     overflow: clip;
     transition: max-height 0.2s ease-in-out;
 
-    &.show-skills {
+    &.show-stats {
       max-height: 500px;
     }
   }

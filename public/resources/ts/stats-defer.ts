@@ -1028,17 +1028,17 @@ document.querySelectorAll(".stat-header").forEach((element) => {
   sectionObserver.observe(element);
 });
 
-const otherSkills = document.querySelector<HTMLElement>("#other_skills");
-const showSkills = document.querySelector<HTMLElement>("#show_skills");
+const otherStats = document.querySelector<HTMLElement>("#other_stats");
+const showStats = document.querySelector<HTMLElement>("#show_stats");
 
-if (showSkills != null) {
-  showSkills.addEventListener("click", () => {
-    if ((otherSkills as HTMLElement).classList.contains("show-skills")) {
-      (otherSkills as HTMLElement).classList.remove("show-skills");
-      (showSkills as HTMLElement).innerHTML = "Show Skills";
+if (showStats != null) {
+  showStats.addEventListener("click", () => {
+    if ((otherStats as HTMLElement).classList.contains("show-stats")) {
+      (otherStats as HTMLElement).classList.remove("show-stats");
+      (showStats as HTMLElement).innerHTML = "Show Stats";
     } else {
-      (otherSkills as HTMLElement).classList.add("show-skills");
-      (showSkills as HTMLElement).innerHTML = "Hide Skills";
+      (otherStats as HTMLElement).classList.add("show-stats");
+      (showStats as HTMLElement).innerHTML = "Hide Stats";
     }
   });
 }
