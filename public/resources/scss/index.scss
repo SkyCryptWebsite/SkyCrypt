@@ -1615,7 +1615,7 @@ a.additional-player-stat:hover {
     grid-template-columns: 1fr 1fr;
   }
   @media (max-width: 480px) {
-    grid-template-areas: "skill skill" "skin additional" "base base";
+    grid-template-areas: "skin additional" "skill skill" "base base";
     grid-template-columns: 90px 1fr;
     grid-gap: 24px 12px;
   }
