@@ -679,6 +679,40 @@ input[type="search"]::-webkit-search-cancel-button {
 
 #base_stats_container {
   grid-area: base;
+  columns: 6;
+  @media (max-width: 1900px) {
+    columns: 5;
+  }
+  @media (max-width: 1590px) {
+    columns: 4;
+  }
+  @media (max-width: 950px) {
+    columns: 3;
+  }
+  @media (max-width: 700px) {
+    columns: 2;
+  }
+  @media (max-width: 480px) {
+    columns: 1;
+  }
+  .basic-stat {
+    margin-top: 0;
+  }
+  .stat-name,
+  .stat-value {
+    font-size: 14px;
+  }
+  .basic-stat::before {
+    transform: scale(0.85);
+  }
+  @media (max-width: 1200px) {
+    padding: var(--padding);
+    box-sizing: border-box;
+    position: relative;
+    padding-left: 0;
+    padding-right: 0;
+    text-align: left;
+  }
 }
 
 #show_skills {
@@ -719,7 +753,6 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .skill-bars {
-  max-width: 1200px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4px 24px;
@@ -1248,7 +1281,6 @@ input[type="search"]::-webkit-search-cancel-button {
 #player_profile {
   font-size: 36px;
   margin-top: 50px;
-  margin-left: 20px;
   margin-bottom: 20px;
 }
 
@@ -1560,22 +1592,44 @@ a.additional-player-stat:hover {
 
 #basic_stats {
   display: grid;
-  grid-template-areas:
-    "base skill"
-    "base additional";
-  grid-template-columns: 260px auto;
+  grid-template-areas: "skill" "base" "additional";
+  grid-gap: 1.5rem;
   padding: var(--padding);
   margin-left: calc(-1 * var(--padding));
   margin-right: calc(-1 * var(--padding));
-  box-sizing: border-box;
   background-color: rgba(var(--background-rgb), 0.3);
+  @media (max-width: 1590px) {
+    grid-template-areas: "skill skill" "skin additional" "base base";
+    grid-template-columns: repeat(2, 1fr);
+  }
+  // @media (max-width: 1590px) {
+  //   grid-template-areas:
+  //     "skin base skill"
+  //     "skin base additional";
+  //   grid-template-columns: 150px 260px auto;
+  // }
+  // @media (max-width: 1200px) {
+  //   grid-template-areas:
+  //     "skin base"
+  //     "skin additional"
+  //     ". ."
+  //     "skill skill ";
+  //   grid-template-columns: minmax(100px, 250px) minmax(225px, 1fr);
+  //   grid-template-rows: auto auto 30px auto;
+  //   padding: 0;
+  //   background-color: transparent;
+
+  //   > * {
+  //     text-align: center;
+  //     background-color: rgba(var(--background-rgb), 0.3);
+  //   }
+  // }
 }
 
 #additional_stats_container {
   grid-area: additional;
   font-size: 12px;
   font-weight: 600;
-  padding-bottom: 5ex;
   line-height: 1.75;
 }
 
@@ -3591,13 +3645,6 @@ body {
     white-space: normal;
   }
 
-  #basic_stats {
-    grid-template-areas:
-      "skin base skill"
-      "skin base additional";
-    grid-template-columns: 150px 260px auto;
-  }
-
   #skill_levels_container .no-access {
     font-size: 14px;
   }
@@ -3702,34 +3749,8 @@ body {
     padding-left: 20px;
   }
 
-  #basic_stats {
-    grid-template-areas:
-      "skin base"
-      "skin additional"
-      ". ."
-      "skill skill ";
-    grid-template-columns: minmax(100px, 250px) minmax(225px, 1fr);
-    grid-template-rows: auto auto 30px auto;
-    padding: 0;
-    background-color: transparent;
-
-    > * {
-      text-align: center;
-      background-color: rgba(var(--background-rgb), 0.3);
-    }
-  }
-
-  #additional_stats_container,
-  #base_stats_container {
+  #additional_stats_container {
     text-align: left;
-  }
-
-  #base_stats_container {
-    padding: var(--padding);
-    box-sizing: border-box;
-    position: relative;
-    padding-left: 0;
-    padding-right: 0;
   }
 
   #skill_levels_container {
