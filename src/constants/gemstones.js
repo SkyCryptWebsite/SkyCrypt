@@ -86,7 +86,7 @@ module.exports = {
           intelligence: [null, null, 5, 6, 7, 8],
         },
         PERFECT: {
-          intelligence: [null, null, -1, -1, -1, -1],
+          intelligence: [null, null, 7, 9, 10, 12],
         },
       },
     },
