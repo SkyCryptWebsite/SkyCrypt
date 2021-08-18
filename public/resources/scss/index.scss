@@ -682,22 +682,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 #base_stats_container {
-  columns: 6;
-  @media (max-width: 1900px) {
-    columns: 5;
-  }
-  @media (max-width: 1590px) {
-    columns: 4;
-  }
-  @media (max-width: 1060px) {
-    columns: 3;
-  }
-  @media (max-width: 850px) {
-    columns: 2;
-  }
-  @media (max-width: 480px) {
-    columns: 1;
-  }
+  columns: 190px auto;
   .basic-stat {
     margin-top: 0;
   }
@@ -4074,6 +4059,7 @@ body {
   }
 
   #base_stats_container {
+    columns: 1;
     max-height: 0;
     overflow: hidden;
     overflow: clip;
