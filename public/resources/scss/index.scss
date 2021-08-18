@@ -677,8 +677,11 @@ input[type="search"]::-webkit-search-cancel-button {
   }
 }
 
-#base_stats_container {
+#base_stats_wrapper {
   grid-area: base;
+}
+
+#base_stats_container {
   columns: 6;
   @media (max-width: 1900px) {
     columns: 5;
@@ -4070,7 +4073,7 @@ body {
     grid-template-columns: 1fr;
   }
 
-  #other_stats {
+  #base_stats_container {
     max-height: 0;
     overflow: hidden;
     overflow: clip;

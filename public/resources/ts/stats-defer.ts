@@ -1028,16 +1028,16 @@ document.querySelectorAll(".stat-header").forEach((element) => {
   sectionObserver.observe(element);
 });
 
-const otherStats = document.querySelector<HTMLElement>("#other_stats");
+const statsContainer = document.querySelector<HTMLElement>("#base_stats_container");
 const showStats = document.querySelector<HTMLElement>("#show_stats");
 
 if (showStats != null) {
   showStats.addEventListener("click", () => {
-    if ((otherStats as HTMLElement).classList.contains("show-stats")) {
-      (otherStats as HTMLElement).classList.remove("show-stats");
+    if ((statsContainer as HTMLElement).classList.contains("show-stats")) {
+      (statsContainer as HTMLElement).classList.remove("show-stats");
       (showStats as HTMLElement).innerHTML = "Show Stats";
     } else {
-      (otherStats as HTMLElement).classList.add("show-stats");
+      (statsContainer as HTMLElement).classList.add("show-stats");
       (showStats as HTMLElement).innerHTML = "Hide Stats";
     }
   });
