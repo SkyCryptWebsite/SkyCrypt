@@ -574,6 +574,14 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
       }
     }
 
+    if (helper.hasPath(item, "tag", "ExtraAttributes", "blocks_walked")) {
+      let { blocks_walked } = item.tag.ExtraAttributes;
+
+      if (blocks_walked > 0) {
+        item.extra.blocks_walked = blocks_walked;
+      }
+    }
+
     if (helper.hasPath(item, "tag", "ExtraAttributes", "timestamp")) {
       let timestamp = item.tag.ExtraAttributes.timestamp;
 
@@ -627,7 +635,6 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
     let lore_raw = [...itemLore];
 
     let lore = lore_raw != null ? lore_raw.map((a) => (a = helper.getRawLore(a))) : [];
-
     let rarity, item_type;
 
     if (lore.length > 0) {
@@ -783,6 +790,26 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
               }
             }
             itemLore.push(`§8${toNextLevel} kills to tier up!`);
+          }
+        }
+      }
+      
+      if (item.extra?.blocks_walked) {
+        let blocks_walked = item.extra.blocks_walked;
+
+        if (lore_raw) {
+          itemLore.push("", `§7Blocks Walked: §c${blocks_walked}`);
+          if (blocks_walked >= 100000) {
+            itemLore.push(`§8MAXED OUT!`);
+          } else {
+            let toNextLevel = 0;
+            for (const e of constants.prehistoric_egg_blocks_walked_ladder) {
+              if (blocks_walked < e) {
+                toNextLevel = e - blocks_walked;
+                break;
+              }
+            }
+            itemLore.push(`§8Walk ${toNextLevel} blocks to tier up!`);
           }
         }
       }
