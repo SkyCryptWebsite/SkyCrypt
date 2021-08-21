@@ -107,7 +107,7 @@ module.exports = {
           defense: [null, 5, 8, 11, 14, 18],
         },
         PERFECT: {
-          defense: [null, -1, -1, -1, -1, -1],
+          defense: [null, 6, 10, 15, 20, 25],
         },
       },
     },
