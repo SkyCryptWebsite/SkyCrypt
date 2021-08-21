@@ -1577,7 +1577,7 @@ a.additional-player-stat:hover {
     "skill"
     "base"
     "additional";
-  grid-gap: 24px;
+  gap: 24px;
   padding: var(--padding);
   margin-left: calc(-1 * var(--padding));
   margin-right: calc(-1 * var(--padding));
@@ -1602,7 +1602,7 @@ a.additional-player-stat:hover {
       "skill skill"
       "base base";
     grid-template-columns: 90px 1fr;
-    grid-gap: 24px 12px;
+    gap: 24px 12px;
   }
 }
 
