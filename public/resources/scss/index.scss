@@ -695,13 +695,6 @@ input[type="search"]::-webkit-search-cancel-button {
     width: 20px;
     height: 20px;
   }
-  @media (max-width: 1200px) {
-    box-sizing: border-box;
-    position: relative;
-    padding-left: 0;
-    padding-right: 0;
-    text-align: left;
-  }
 }
 
 #show_stats {
