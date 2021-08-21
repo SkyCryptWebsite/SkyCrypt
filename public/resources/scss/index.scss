@@ -838,6 +838,10 @@ input[type="search"]::-webkit-search-cancel-button {
   left: 0;
   width: 30vw;
   bottom: 5vh;
+
+  @media (max-width: 1590px) {
+    display: none;
+  }
 }
 
 #skin_display_mobile {
@@ -3633,10 +3637,6 @@ body {
     width: 1120px;
     margin-right: auto;
     margin-left: auto;
-  }
-
-  #skin_display {
-    display: none;
   }
 }
 
