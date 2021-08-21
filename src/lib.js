@@ -793,7 +793,7 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
           }
         }
       }
-      
+
       if (item.extra?.blocks_walked) {
         let blocks_walked = item.extra.blocks_walked;
 
