@@ -856,14 +856,6 @@ input[type="search"]::-webkit-search-cancel-button {
   @media (max-width: 1590px) {
     display: initial;
   }
-
-  #player_model {
-    right: 20%;
-
-    @media (max-width: 1590px) {
-      right: 0;
-    }
-  }
 }
 
 #player_model {
