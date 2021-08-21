@@ -1573,22 +1573,34 @@ a.additional-player-stat:hover {
 
 #basic_stats {
   display: grid;
-  grid-template-areas: "skill" "base" "additional";
+  grid-template-areas:
+    "skill"
+    "base"
+    "additional";
   grid-gap: 24px;
   padding: var(--padding);
   margin-left: calc(-1 * var(--padding));
   margin-right: calc(-1 * var(--padding));
   background-color: rgba(var(--background-rgb), 0.3);
   @media (max-width: 1590px) {
-    grid-template-areas: "skill skill" "skin base" "skin additional";
+    grid-template-areas:
+      "skill skill"
+      "skin base"
+      "skin additional";
     grid-template-columns: 160px 1fr;
   }
   @media (max-width: 650px) {
-    grid-template-areas: "skill skill" "base base" "skin additional";
+    grid-template-areas:
+      "skill skill"
+      "base base"
+      "skin additional";
     grid-template-columns: 1fr 1fr;
   }
   @media (max-width: 480px) {
-    grid-template-areas: "skin additional" "skill skill" "base base";
+    grid-template-areas:
+      "skin additional"
+      "skill skill"
+      "base base";
     grid-template-columns: 90px 1fr;
     grid-gap: 24px 12px;
   }
