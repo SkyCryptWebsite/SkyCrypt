@@ -1612,13 +1612,6 @@ a.additional-player-stat:hover {
   font-weight: 600;
   line-height: 1.75;
 
-  @media (max-width: 1590px) {
-    white-space: normal;
-  }
-  @media (max-width: 1200px) {
-    text-align: left;
-  }
-
   .additional-stat {
     display: inline-block;
     margin-right: 6px;
