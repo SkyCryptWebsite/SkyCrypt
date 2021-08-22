@@ -6,7 +6,7 @@ import Redis from "ioredis";
 const redisClient = new Redis();
 
 import leaderboard from "../leaderboards.js";
-import credentials from "./../credentials.js";
+import credentials from "../credentials.js";
 
 import ProgressBar from "progress";
 

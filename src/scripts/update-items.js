@@ -5,7 +5,7 @@ import axios from "axios";
 
 import "axios-debug-log";
 
-import credentials from "./../credentials.js";
+import credentials from "../credentials.js";
 
 async function main() {
   const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });

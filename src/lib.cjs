@@ -13,7 +13,7 @@ const moment = require("moment");
 const { v4 } = require("uuid");
 const retry = require("async-retry");
 
-const credentials = require("./../credentials.json");
+const credentials = require("../credentials.json");
 
 const { MongoClient } = require("mongodb");
 let db;

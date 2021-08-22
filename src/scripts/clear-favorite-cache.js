@@ -1,7 +1,7 @@
 import cluster from "cluster";
 
 import { MongoClient } from "mongodb";
-import credentials from "./../credentials.js";
+import credentials from "../credentials.js";
 
 async function main() {
   const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
