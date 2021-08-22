@@ -1,10 +1,10 @@
 import "./src/app.js";
 import "./src/donations/patreon.js";
-import "./src/scripts/cap-leaderboards.cjs";
-import "./src/scripts/clear-favorite-cache.cjs";
-import "./src/scripts/update-bazaar.cjs";
-import "./src/scripts/update-items.cjs";
-import "./src/scripts/update-top-profiles.cjs";
+import "./src/scripts/cap-leaderboards.js";
+import "./src/scripts/clear-favorite-cache.js";
+import "./src/scripts/update-bazaar.js";
+import "./src/scripts/update-items.js";
+import "./src/scripts/update-top-profiles.js";
 
 import * as cluster from "cluster";
 

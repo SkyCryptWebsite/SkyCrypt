@@ -1,10 +1,9 @@
-const cluster = require("cluster");
+import cluster from "cluster";
+
+import { MongoClient } from "mongodb";
+import credentials from "./../credentials.js";
 
 async function main() {
-  const { MongoClient } = require("mongodb");
-
-  const credentials = require("./../../credentials.json");
-
   const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
   await mongo.connect();
 

@@ -1,16 +1,16 @@
-const cluster = require("cluster");
+import cluster from "cluster";
+
+import { MongoClient } from "mongodb";
+
+import Redis from "ioredis";
+const redisClient = new Redis();
+
+import leaderboard from "./../leaderboards.cjs";
+import credentials from "./../credentials.js";
+
+import ProgressBar from "progress";
 
 async function main() {
-  const { MongoClient } = require("mongodb");
-
-  const Redis = require("ioredis");
-  const redisClient = new Redis();
-
-  const leaderboard = require("./../leaderboards.cjs");
-  const credentials = require("./../../credentials.json");
-
-  const ProgressBar = require("progress");
-
   const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
   await mongo.connect();
 

@@ -1,9 +1,9 @@
-const cluster = require("cluster");
+import cluster from "cluster";
+
+import leaderboard from "./../leaderboards.cjs";
+import Redis from "ioredis";
 
 async function main() {
-  const leaderboard = require("./../leaderboards.cjs");
-
-  const Redis = require("ioredis");
   const redisClient = new Redis();
 
   async function capLeaderboards() {

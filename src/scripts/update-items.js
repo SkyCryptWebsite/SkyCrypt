@@ -1,12 +1,13 @@
-const cluster = require("cluster");
+import cluster from "cluster";
+
+import { MongoClient } from "mongodb";
+import axios from "axios";
+
+import "axios-debug-log";
+
+import credentials from "./../credentials.js";
 
 async function main() {
-  const { MongoClient } = require("mongodb");
-  const axios = require("axios");
-  require("axios-debug-log");
-
-  const credentials = require("./../../credentials.json");
-
   const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
   await mongo.connect();
 
