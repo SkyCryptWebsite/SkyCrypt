@@ -6,7 +6,7 @@ async function main() {
   const Redis = require("ioredis");
   const redisClient = new Redis();
 
-  const constants = require("./../constants.cjs");
+  const leaderboard = require("./../leaderboards.cjs");
   const credentials = require("./../../credentials.json");
 
   const ProgressBar = require("progress");
@@ -47,7 +47,7 @@ async function main() {
       const multi = redisClient.pipeline();
 
       for (const key of keys) {
-        const options = constants.leaderboard(key);
+        const options = leaderboard(key);
 
         if (options.mappedBy != "uuid") {
           continue;

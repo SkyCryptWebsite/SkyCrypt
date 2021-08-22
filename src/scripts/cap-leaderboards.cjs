@@ -1,7 +1,7 @@
 const cluster = require("cluster");
 
 async function main() {
-  const constants = require("./../constants.cjs");
+  const leaderboard = require("./../leaderboards.cjs");
 
   const Redis = require("ioredis");
   const redisClient = new Redis();
@@ -12,7 +12,7 @@ async function main() {
     const multi = redisClient.pipeline();
 
     for (const key of keys) {
-      const lb = constants.leaderboard(key);
+      const lb = leaderboard(key);
       let lbLimit = 10000;
 
       if (key.endsWith("xp") || key.endsWith("completions")) {

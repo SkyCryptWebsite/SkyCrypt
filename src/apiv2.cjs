@@ -2,7 +2,7 @@ const helper = require("./helper.cjs");
 const lib = require("./lib.cjs");
 const cors = require("cors");
 const sanitize = require("mongo-sanitize");
-const constants = require("./constants.cjs");
+const leaderboard = require("./leaderboards.cjs");
 
 const Redis = require("ioredis");
 const redisClient = new Redis();
@@ -38,7 +38,7 @@ module.exports = (app, db) => {
     const keys = await redisClient.keys("lb_*");
 
     for (const key of keys) {
-      const lb = constants.leaderboard(key);
+      const lb = leaderboard(key);
 
       if (lb.mappedBy == "uuid" && !lb.key.startsWith("collection_enchanted")) {
         leaderboards.push(lb);
@@ -85,7 +85,7 @@ module.exports = (app, db) => {
 
     let page, startIndex, endIndex;
 
-    const lb = constants.leaderboard(`lb_${req.params.lbName}`);
+    const lb = leaderboard(`lb_${req.params.lbName}`);
 
     const lbCount = await redisClient.zcount(`lb_${lb.key}`, "-Infinity", "+Infinity");
 

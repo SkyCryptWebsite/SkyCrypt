@@ -5,7 +5,7 @@ async function main() {
   const _ = require("lodash");
 
   const lib = require("./../lib.cjs");
-  const constants = require("./../constants.cjs");
+  const leaderboard = require("./../leaderboards.cjs");
   const credentials = require("./../../credentials.json");
 
   const ProgressBar = require("progress");
@@ -24,7 +24,7 @@ async function main() {
     const multi = redisClient.pipeline();
 
     for (const key of keys) {
-      const lb = constants.leaderboard(key);
+      const lb = leaderboard(key);
 
       if (lb.sortedBy < 0) {
         multi.zrevrange(key, 0, 49);
