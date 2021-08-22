@@ -828,7 +828,7 @@ const getRarityUpgradeClass = item => {
             <br/>
             <div class='tippy-explanation'>Weight calculations provided by Senither</div>
           ">
-          <span class="stat-name">Weight: </span>
+          <span class="stat-name">Senither Weight: </span>
           <span class="stat-value">
             <%= parseFloat(calculated.weight.toFixed(2)).toLocaleString() %>
           </span>
@@ -1840,6 +1840,25 @@ const getRarityUpgradeClass = item => {
                 <div class="skill-progress-bar slayer-progress-bar" style="--progress: <%= slayer.level.currentLevel == slayer.level.maxLevel ? 1 : slayer.level.progress %>"></div>
                 <div class="skill-progress-text slayer-progress-text">
                   <%= slayer.level.xp.toLocaleString() %><% if(slayer.level.xpForNext != 0){ %> / <%= slayer.level.xpForNext.toLocaleString() %><% } %> XP
+                </div>
+              </div>
+            </div>
+          <% } %>
+          <% if(calculated.display_name == "metalcupcake5"){ %>
+            <div class="narrow-info-container slayer">
+              <div class="narrow-info-header">
+                <div class="floor-icon" style="background-image: url(/head/bb13133a8fb4ef00b71ef9bab639a66fbc7d5cffcc190c1df74bf2161dfd3ec7)"></div>
+                <span>Congealed Monstrosity</span>
+              </div>
+              <div class="slayer-kills">
+                  <div class="slayer-kill"><div class="tier-name">Tier I</div><div class="tier-kills">39283</div></div>
+                <div class="slayer-kill"><div class="tier-name">Total</div><div class="tier-kills">39283</div></div>
+              </div>
+              <span class="stat-name slayer-level">Slime level <span class="stat-value">-3</span></span>
+              <div class="slayer-bar ">
+                <div class="skill-progress-bar slayer-progress-bar" style="--progress: 1.3"></div>
+                <div class="skill-progress-text slayer-progress-text">
+                  69420 / 1.4b XP
                 </div>
               </div>
             </div>

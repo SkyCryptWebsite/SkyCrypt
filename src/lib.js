@@ -574,6 +574,14 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
       }
     }
 
+    if (helper.hasPath(item, "tag", "ExtraAttributes", "blocks_walked")) {
+      let { blocks_walked } = item.tag.ExtraAttributes;
+
+      if (blocks_walked > 0) {
+        item.extra.blocks_walked = blocks_walked;
+      }
+    }
+
     if (helper.hasPath(item, "tag", "ExtraAttributes", "timestamp")) {
       let timestamp = item.tag.ExtraAttributes.timestamp;
 
@@ -627,77 +635,6 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
     let lore_raw = [...itemLore];
 
     let lore = lore_raw != null ? lore_raw.map((a) => (a = helper.getRawLore(a))) : [];
-
-    // Set HTML lore to be displayed on the website
-    if (itemLore.length > 0) {
-      if (item.extra?.recombobulated) {
-        itemLore.push("§8(Recombobulated)");
-      }
-
-      if (item.extra?.gems) {
-        itemLore.push(
-          "",
-          "§7Applied Gemstones:",
-          ...helper.parseItemGems(item.extra.gems).map((gem) => `§7 - ${gem.lore}`)
-        );
-      }
-
-      if (item.extra?.expertise_kills) {
-        let expertise_kills = item.extra.expertise_kills;
-
-        if (lore_raw) {
-          itemLore.push("", `§7Expertise Kills: §c${expertise_kills}`);
-          if (expertise_kills >= 15000) {
-            itemLore.push(`§8MAXED OUT!`);
-          } else {
-            let toNextLevel = 0;
-            for (const e of constants.expertise_kills_ladder) {
-              if (expertise_kills < e) {
-                toNextLevel = e - expertise_kills;
-                break;
-              }
-            }
-            itemLore.push(`§8${toNextLevel} kills to tier up!`);
-          }
-        }
-      }
-
-      if (item.tag?.display?.color) {
-        const hex = item.tag.display.color.toString(16).padStart(6, "0");
-        itemLore.push("", `§7Color: #${hex.toUpperCase()}`);
-      }
-
-      if (item.extra?.timestamp) {
-        itemLore.push("", `§7Obtained: §c<local-time timestamp="${item.extra.timestamp}"></local-time>`);
-      }
-
-      if (item.extra?.spawned_for) {
-        if (!item.extra.timestamp) {
-          itemLore.push("");
-        }
-
-        const spawnedFor = item.extra.spawned_for;
-        const spawnedForUser = await helper.resolveUsernameOrUuid(spawnedFor, db, cacheOnly);
-
-        itemLore.push(`§7By: §c<a href="/stats/${spawnedFor}">${spawnedForUser.display_name}</a>`);
-      }
-
-      if (item.extra?.base_stat_boost) {
-        itemLore.push(
-          "",
-          `§7Dungeon Item Quality: ${item.extra.base_stat_boost == 50 ? "§6" : "§c"}${item.extra.base_stat_boost}/50%`
-        );
-      }
-
-      if (item.extra?.floor) {
-        itemLore.push(`§7Obtained From: §bFloor ${item.extra.floor}`);
-      }
-
-      if (item.extra?.price_paid) {
-        itemLore.push(`§7Price Paid at Dark Auction: §b${item.extra.price_paid.toLocaleString()} coins`);
-      }
-    }
-
     let rarity, item_type;
 
     if (lore.length > 0) {
@@ -820,6 +757,96 @@ async function getItems(base64, customTextures = false, packs, cacheOnly = false
       // Apply Frozen Chicken bonus
       if (getId(item) == "FROZEN_CHICKEN") {
         item.stats.speed = 1;
+      }
+    }
+
+    // Set HTML lore to be displayed on the website
+    if (itemLore.length > 0) {
+      if (item.extra?.recombobulated) {
+        itemLore.push("§8(Recombobulated)");
+      }
+
+      if (item.extra?.gems) {
+        itemLore.push(
+          "",
+          "§7Applied Gemstones:",
+          ...helper.parseItemGems(item.extra.gems, item.rarity).map((gem) => `§7 - ${gem.lore}`)
+        );
+      }
+
+      if (item.extra?.expertise_kills) {
+        let expertise_kills = item.extra.expertise_kills;
+
+        if (lore_raw) {
+          itemLore.push("", `§7Expertise Kills: §c${expertise_kills}`);
+          if (expertise_kills >= 15000) {
+            itemLore.push(`§8MAXED OUT!`);
+          } else {
+            let toNextLevel = 0;
+            for (const e of constants.expertise_kills_ladder) {
+              if (expertise_kills < e) {
+                toNextLevel = e - expertise_kills;
+                break;
+              }
+            }
+            itemLore.push(`§8${toNextLevel} kills to tier up!`);
+          }
+        }
+      }
+
+      if (item.extra?.blocks_walked) {
+        let blocks_walked = item.extra.blocks_walked;
+
+        if (lore_raw) {
+          itemLore.push("", `§7Blocks Walked: §c${blocks_walked}`);
+          if (blocks_walked >= 100000) {
+            itemLore.push(`§8MAXED OUT!`);
+          } else {
+            let toNextLevel = 0;
+            for (const e of constants.prehistoric_egg_blocks_walked_ladder) {
+              if (blocks_walked < e) {
+                toNextLevel = e - blocks_walked;
+                break;
+              }
+            }
+            itemLore.push(`§8Walk ${toNextLevel} blocks to tier up!`);
+          }
+        }
+      }
+
+      if (item.tag?.display?.color) {
+        const hex = item.tag.display.color.toString(16).padStart(6, "0");
+        itemLore.push("", `§7Color: #${hex.toUpperCase()}`);
+      }
+
+      if (item.extra?.timestamp) {
+        itemLore.push("", `§7Obtained: §c<local-time timestamp="${item.extra.timestamp}"></local-time>`);
+      }
+
+      if (item.extra?.spawned_for) {
+        if (!item.extra.timestamp) {
+          itemLore.push("");
+        }
+
+        const spawnedFor = item.extra.spawned_for;
+        const spawnedForUser = await helper.resolveUsernameOrUuid(spawnedFor, db, cacheOnly);
+
+        itemLore.push(`§7By: §c<a href="/stats/${spawnedFor}">${spawnedForUser.display_name}</a>`);
+      }
+
+      if (item.extra?.base_stat_boost) {
+        itemLore.push(
+          "",
+          `§7Dungeon Item Quality: ${item.extra.base_stat_boost == 50 ? "§6" : "§c"}${item.extra.base_stat_boost}/50%`
+        );
+      }
+
+      if (item.extra?.floor) {
+        itemLore.push(`§7Obtained From: §bFloor ${item.extra.floor}`);
+      }
+
+      if (item.extra?.price_paid) {
+        itemLore.push(`§7Price Paid at Dark Auction: §b${item.extra.price_paid.toLocaleString()} coins`);
       }
     }
 
@@ -1504,11 +1531,16 @@ module.exports = {
       }
 
       output.weapons.push(
-        ...item.containsItems.filter((a) => a.type != null && (a.type.endsWith("sword") || a.type.endsWith("bow")))
+        ...item.containsItems.filter(
+          (a) => a.type != null && (a.type.endsWith("sword") || a.type.endsWith("bow") || a.type.endsWith("gauntlet"))
+        )
       );
       output.hoes.push(...item.containsItems.filter((a) => a.type != null && a.type.endsWith("hoe")));
       output.pickaxes.push(
-        ...item.containsItems.filter((a) => a.type != null && (a.type.endsWith("pickaxe") || a.type.endsWith("drill")))
+        ...item.containsItems.filter(
+          (a) =>
+            a.type != null && (a.type.endsWith("pickaxe") || a.type.endsWith("drill") || a.type.endsWith("gauntlet"))
+        )
       );
       output.rods.push(
         ...item.containsItems.filter(
