@@ -1,4 +1,3 @@
-const cluster = require("cluster");
 const path = require("path");
 const nbt = require("prismarine-nbt");
 const util = require("util");
@@ -4117,6 +4116,4 @@ async function init() {
   }
 }
 
-if (cluster.isWorker) {
-  init();
-}
+init();

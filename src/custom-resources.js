@@ -1,4 +1,3 @@
-const cluster = require("cluster");
 const fs = require("fs-extra");
 const path = require("path");
 const helper = require("./helper");
@@ -394,10 +393,6 @@ async function init() {
 
   console.log(`Custom Resources loading done. (${helper.getClusterId(true)})`);
   console.timeEnd(`custom_resources_${helper.getClusterId()}`);
-}
-
-if (!cluster.isWorker) {
-  return;
 }
 
 const outputPacks = [];
