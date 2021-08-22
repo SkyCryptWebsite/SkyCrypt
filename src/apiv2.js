@@ -1,10 +1,12 @@
-const helper = require("./helper.cjs");
-const lib = require("./lib.cjs");
-const cors = require("cors");
-const sanitize = require("mongo-sanitize");
-const leaderboard = require("./leaderboards.cjs");
+import helper from "./helper.cjs";
+import lib from "./lib.cjs";
+import cors from "cors";
+import sanitize from "mongo-sanitize";
+import leaderboard from "./leaderboards.cjs";
 
-const Redis = require("ioredis");
+import customResources from "./custom-resources.cjs";
+
+import Redis from "ioredis";
 const redisClient = new Redis();
 
 function handleError(e, res) {
@@ -15,7 +17,7 @@ function handleError(e, res) {
   });
 }
 
-module.exports = (app, db) => {
+export default (app, db) => {
   const productInfo = {};
   const leaderboards = [];
 
@@ -69,7 +71,6 @@ module.exports = (app, db) => {
 
   app.all("/api/v2/packs", cors(), async (req, res) => {
     if (req.apiKey) {
-      let customResources = require("./custom-resources.cjs");
       res.json(customResources.completePacks);
     } else {
       res.status(404).json({ error: "This endpoint isn't available to the public." });

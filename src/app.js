@@ -35,7 +35,7 @@ import twemoji from "twemoji";
 import cookieParser from "cookie-parser";
 
 import api from "./api.js";
-import apiv2 from "./apiv2.cjs";
+import apiv2 from "./apiv2.js";
 import kofi from "./donations/kofi.cjs";
 
 import os from "os";
