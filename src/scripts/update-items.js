@@ -1,5 +1,3 @@
-const cluster = require("cluster");
-
 async function main() {
   const { MongoClient } = require("mongodb");
   const axios = require("axios");
@@ -42,6 +40,4 @@ async function main() {
   updateItems();
 }
 
-if (cluster.isMaster) {
-  main();
-}
+main();

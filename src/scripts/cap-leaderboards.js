@@ -1,5 +1,3 @@
-const cluster = require("cluster");
-
 async function main() {
   const constants = require("./../constants");
 
@@ -37,6 +35,4 @@ async function main() {
   capLeaderboards();
 }
 
-if (cluster.isMaster) {
-  main();
-}
+main();

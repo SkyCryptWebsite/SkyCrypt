@@ -1,5 +1,3 @@
-const cluster = require("cluster");
-
 async function main() {
   const { MongoClient } = require("mongodb");
   const _ = require("lodash");
@@ -61,6 +59,4 @@ async function main() {
   updateLeaderboards();
 }
 
-if (cluster.isMaster) {
-  main();
-}
+main();
