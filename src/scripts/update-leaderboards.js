@@ -4,7 +4,7 @@ import { MongoClient } from "mongodb";
 import _ from "lodash";
 
 import lib from "./../lib.cjs";
-import leaderboard from "./../leaderboards.cjs";
+import leaderboard from "../leaderboards.js";
 import credentials from "./../credentials.js";
 
 import ProgressBar from "progress";

@@ -1,6 +1,6 @@
 import cluster from "cluster";
 
-import leaderboard from "./../leaderboards.cjs";
+import leaderboard from "../leaderboards.js";
 import Redis from "ioredis";
 
 async function main() {

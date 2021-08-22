@@ -2,7 +2,7 @@ import helper from "./helper.cjs";
 import lib from "./lib.cjs";
 import cors from "cors";
 import sanitize from "mongo-sanitize";
-import leaderboard from "./leaderboards.cjs";
+import leaderboard from "./leaderboards.js";
 
 import customResources from "./custom-resources.cjs";
 

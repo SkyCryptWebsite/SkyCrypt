@@ -5,7 +5,7 @@ import { MongoClient } from "mongodb";
 import Redis from "ioredis";
 const redisClient = new Redis();
 
-import leaderboard from "./../leaderboards.cjs";
+import leaderboard from "../leaderboards.js";
 import credentials from "./../credentials.js";
 
 import ProgressBar from "progress";
