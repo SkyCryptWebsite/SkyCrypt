@@ -1,28 +1,55 @@
-const cluster = require("cluster");
-const lib = require("./lib.cjs");
-const { getFileHashes, getFileHash, hashedDirectories } = require("./hashes.cjs");
-const fetch = require("node-fetch");
+import cluster from "cluster";
+import lib from "./lib.cjs";
+import { getFileHashes, getFileHash, hashedDirectories } from "./hashes.js";
+import fetch from "node-fetch";
+
+import express from "express";
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import bodyParser from "body-parser";
+import cors from "cors";
+
+import axios from "axios";
+import "axios-debug-log";
+
+import fs from "fs-extra";
+
+import path from "path";
+import { fileURLToPath } from "url";
+import renderer from "./renderer.cjs";
+
+import credentials from "./credentials.js";
+
+import _ from "lodash";
+import moment from "moment-timezone";
+import momentDurationFormat from "moment-duration-format";
+momentDurationFormat(moment);
+
+import { MongoClient } from "mongodb";
+import sanitize from "mongo-sanitize";
+import helper from "./helper.cjs";
+import constants from "./constants.cjs";
+import { SitemapStream, streamToPromise } from "sitemap";
+import { createGzip } from "zlib";
+import twemoji from "twemoji";
+import cookieParser from "cookie-parser";
+
+import api from "./api.cjs";
+import apiv2 from "./apiv2.cjs";
+import kofi from "./donations/kofi.cjs";
+
+import os from "os";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, "../public/manifest.json")));
 
 async function main() {
-  const express = require("express");
-  const session = require("express-session");
-  const MongoStore = require("connect-mongo");
-  const bodyParser = require("body-parser");
-  const cors = require("cors");
-
-  const axios = require("axios");
-  require("axios-debug-log");
-
-  const fs = require("fs-extra");
-
-  const path = require("path");
-  const renderer = require("./renderer.cjs");
-
   await renderer.init();
 
   const fileHashes = await getFileHashes();
 
-  const fileNameMapFileName = "public/resources/js/file-name-map.json";
+  const fileNameMapFileName = path.join(__dirname, "../public/resources/js/file-name-map.json");
 
   while (!fs.existsSync(fileNameMapFileName)) {
     console.log(`waiting for: "${fileNameMapFileName}" make sure you ran rollup`);
@@ -47,22 +74,6 @@ async function main() {
       }
     });
   }
-
-  const credentials = require(path.resolve(__dirname, "../credentials.json"));
-
-  const _ = require("lodash");
-  const moment = require("moment-timezone");
-  require("moment-duration-format")(moment);
-
-  const { MongoClient } = require("mongodb");
-  const sanitize = require("mongo-sanitize");
-  const helper = require("./helper.cjs");
-  const constants = require("./constants.cjs");
-  const manifest = require("../public/manifest.json");
-  const { SitemapStream, streamToPromise } = require("sitemap");
-  const { createGzip } = require("zlib");
-  const twemoji = require("twemoji");
-  const cookieParser = require("cookie-parser");
 
   const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
   await mongo.connect();
@@ -153,9 +164,9 @@ async function main() {
     })
   );
 
-  require("./api.cjs")(app, db);
-  require("./apiv2.cjs")(app, db);
-  require("./donations/kofi.cjs")(app, db);
+  api(app, db);
+  apiv2(app, db);
+  kofi(app, db);
 
   function parseFavorites(cookie) {
     return cookie?.split(",").filter((uuid) => /^[0-9a-f]{32}$/.test(uuid)) || [];
@@ -656,7 +667,7 @@ async function main() {
 }
 
 if (cluster.isMaster) {
-  const totalCpus = require("os").cpus().length;
+  const totalCpus = os.cpus().length;
   const cpus = Math.min(process.env?.NODE_ENV != "development" ? 8 : 2, totalCpus);
 
   for (let i = 0; i < cpus; i += 1) {

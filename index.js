@@ -1,4 +1,4 @@
-import "./src/app.cjs";
+import "./src/app.js";
 import "./src/donations/patreon.js";
 import "./src/scripts/cap-leaderboards.cjs";
 import "./src/scripts/clear-favorite-cache.cjs";
