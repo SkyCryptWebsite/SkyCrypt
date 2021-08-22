@@ -1,10 +1,9 @@
-const tableify = require("@tillhub/tableify");
-const helper = require("./helper.cjs");
-const { getId } = helper;
-const lib = require("./lib.cjs");
-const constants = require("./constants.cjs");
-const cors = require("cors");
-const { hasPath } = require("./helper.cjs");
+import tableify from "@tillhub/tableify";
+import helper from "./helper.cjs";
+const { hasPath, getId } = helper;
+import lib from "./lib.cjs";
+import constants from "./constants.cjs";
+import cors from "cors";
 
 function handleError(e, res) {
   console.error(e);
@@ -13,7 +12,7 @@ function handleError(e, res) {
   res.status(500).send("Something went wrong");
 }
 
-module.exports = (app, db) => {
+export default (app, db) => {
   const productInfo = {};
 
   async function init() {

@@ -34,7 +34,7 @@ import { createGzip } from "zlib";
 import twemoji from "twemoji";
 import cookieParser from "cookie-parser";
 
-import api from "./api.cjs";
+import api from "./api.js";
 import apiv2 from "./apiv2.cjs";
 import kofi from "./donations/kofi.cjs";
 
