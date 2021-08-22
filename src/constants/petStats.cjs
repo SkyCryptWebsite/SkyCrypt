@@ -1,4 +1,4 @@
-const symbols = require("./stats.js").stats_symbols;
+const symbols = require("./stats.cjs").stats_symbols;
 
 function round(num, decimals = 0) {
   return Math.round(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
