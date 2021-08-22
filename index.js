@@ -1,5 +1,5 @@
 import "./src/app.cjs";
-import "./src/donations/patreon.cjs";
+import "./src/donations/patreon.js";
 import "./src/scripts/cap-leaderboards.cjs";
 import "./src/scripts/clear-favorite-cache.cjs";
 import "./src/scripts/update-bazaar.cjs";
