@@ -45,6 +45,7 @@ function generatePopup(name: string) {
   const browser: { help: string; androidPackage?: string } = name == "iOS" ? { help: iOSHelpPage } : browsers[name];
   const wrapper = document.createElement("div");
   wrapper.className = "update-popup-wrapper";
+
   const popup = document.createElement("div");
   popup.className = "update-popup";
   const header = document.createElement("h2");
@@ -53,12 +54,18 @@ function generatePopup(name: string) {
   const message = document.createElement("p");
   message.innerHTML = (name == "iOS" ? "Update iOS" : "Update your browser") + " for the best SkyCrypt experience.";
   popup.appendChild(message);
+
+  const buttonRow = document.createElement("div");
+  buttonRow.className = "button-row";
+
   const close = document.createElement("button");
   close.innerHTML = "close";
   close.onclick = function () {
     sessionStorage.setItem("hide update warning", "true");
     wrapper.remove();
   };
+  buttonRow.appendChild(close);
+
   const update = document.createElement("a");
   if (bowser.is("android") && browser.androidPackage) {
     update.href = "https://play.google.com/store/apps/details?id=" + browser.androidPackage;
@@ -69,9 +76,12 @@ function generatePopup(name: string) {
   }
   update.target = "_blank";
   update.rel = "noreferrer";
-  popup.appendChild(update);
-  popup.appendChild(close);
+  buttonRow.appendChild(update);
+
+  popup.appendChild(buttonRow);
+
   wrapper.appendChild(popup);
+
   document.body.appendChild(wrapper);
   update.focus();
 }
