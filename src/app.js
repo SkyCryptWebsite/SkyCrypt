@@ -16,7 +16,7 @@ import fs from "fs-extra";
 
 import path from "path";
 import { fileURLToPath } from "url";
-import renderer from "./renderer.cjs";
+import * as renderer from "./renderer.js";
 
 import credentials from "./credentials.js";
 
