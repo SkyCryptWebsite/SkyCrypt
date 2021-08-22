@@ -1,4 +1,3 @@
-const cluster = require("cluster");
 const lib = require("./lib");
 const { getFileHashes, getFileHash, hashedDirectories } = require("./hashes");
 const fetch = require("node-fetch");
@@ -655,15 +654,4 @@ async function main() {
   app.listen(port, () => console.log(`SkyBlock Stats running on http://localhost:${port} (${helper.getClusterId()})`));
 }
 
-if (cluster.isMaster) {
-  const totalCpus = require("os").cpus().length;
-  const cpus = Math.min(process.env?.NODE_ENV != "development" ? 8 : 2, totalCpus);
-
-  for (let i = 0; i < cpus; i += 1) {
-    cluster.fork();
-  }
-
-  console.log(`Running SkyBlock Stats on ${cpus} cores`);
-} else {
-  main();
-}
+main();

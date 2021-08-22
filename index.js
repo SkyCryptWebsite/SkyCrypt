@@ -1,4 +1,4 @@
-require("./src/app");
+require("./src/main");
 require("./src/donations/patreon");
 require("./src/scripts/cap-leaderboards");
 require("./src/scripts/clear-favorite-cache");
