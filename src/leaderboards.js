@@ -3,7 +3,7 @@ import moment from "moment";
 import momentDurationFormat from "moment-duration-format";
 momentDurationFormat(moment);
 
-import lib from "./lib.cjs";
+import * as lib from "./lib.js";
 const { getLevelByXp } = lib; //TODO use named exports
 
 const defaultOptions = {

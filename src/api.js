@@ -1,7 +1,7 @@
 import tableify from "@tillhub/tableify";
 import helper from "./helper.cjs";
 const { hasPath, getId } = helper;
-import lib from "./lib.cjs";
+import * as lib from "./lib.js";
 import constants from "./constants.cjs";
 import cors from "cors";
 

@@ -3,7 +3,7 @@ import cluster from "cluster";
 import { MongoClient } from "mongodb";
 import _ from "lodash";
 
-import lib from "../lib.cjs";
+import * as lib from "../lib.js";
 import leaderboard from "../leaderboards.js";
 import credentials from "../credentials.js";
 

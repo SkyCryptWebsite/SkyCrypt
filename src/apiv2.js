@@ -1,5 +1,5 @@
 import helper from "./helper.cjs";
-import lib from "./lib.cjs";
+import * as lib from "./lib.js";
 import cors from "cors";
 import sanitize from "mongo-sanitize";
 import leaderboard from "./leaderboards.js";

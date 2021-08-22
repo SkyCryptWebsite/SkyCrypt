@@ -1,5 +1,5 @@
 import cluster from "cluster";
-import lib from "./lib.cjs";
+import * as lib from "./lib.js";
 import { getFileHashes, getFileHash, hashedDirectories } from "./hashes.js";
 import fetch from "node-fetch";
 
