@@ -1,26 +1,7 @@
-import * as fs from "fs";
 import * as fsExtra from "fs-extra";
-import { randomBytes } from "crypto";
 import * as constants from "./src/constants.cjs";
 import { MongoClient } from "mongodb";
-
-const credentialsDefault = {
-  hypixel_api_key: "",
-  recaptcha_site_key: "",
-  recaptcha_secret_key: "",
-  dbUrl: "mongodb://localhost:27017",
-  dbName: "sbstats",
-};
-
-const credentials = fs.existsSync("./credentials.json")
-  ? JSON.parse(fs.readFileSync("./credentials.json"))
-  : credentialsDefault;
-
-if (!("session_secret" in credentials)) {
-  credentials.session_secret = randomBytes(32).toString("hex");
-}
-
-fs.writeFileSync("./credentials.json", JSON.stringify(credentials, null, 2) + "\n");
+import credentials from "./src/credentials.js";
 
 fsExtra.ensureDirSync("cache");
 
