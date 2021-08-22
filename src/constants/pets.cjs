@@ -784,6 +784,13 @@ module.exports = {
         },
       },
     },
+    WOLF: {
+      WOLF: {
+        name: "Dark Wolf",
+        head: "/head/c8e414e762e1024c799e70b7a527c22fb95648f141d660b10c512cc124334218",
+        release: new Date("2021-08-10 18:00:00 GMT+1").getTime(),
+      },
+    },
   },
 
   pet_value: {

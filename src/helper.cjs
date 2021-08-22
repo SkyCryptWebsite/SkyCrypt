@@ -820,10 +820,11 @@ module.exports = {
 
   /**
    * @param  {{[key:string]:string}} gems item.ExtraAttributes.gems
+   * @param  {string} [rarity] item rarity, ex: MYTHIC
    *
    * @returns {Gem[]} array of gem objects
    */
-  parseItemGems: (gems) => {
+  parseItemGems: (gems, rarity) => {
     /** @type {Gem[]} */
     const parsed = [];
     for (const [key, value] of Object.entries(gems)) {
@@ -848,7 +849,7 @@ module.exports = {
     }
 
     parsed.forEach((gem) => {
-      gem.lore = module.exports.generateGemLore(gem.gem_type, gem.gem_tier);
+      gem.lore = module.exports.generateGemLore(gem.gem_type, gem.gem_tier, rarity);
     });
 
     return parsed;
@@ -857,43 +858,48 @@ module.exports = {
   /**
    * @param  {string} type gem name, ex: RUBY
    * @param  {string} tier gem tier, ex: PERFECT
+   * @param  {string} [rarity] item rarity, ex: MYTHIC
    *
    * @returns {string} formatted gem string
    *
    * @example
-   * // returns "§cPerfect Ruby"
-   * generateGemLore("RUBY", "PERFECT");
+   * // returns "§cPerfect Ruby §7(§c+25❤§7)"
+   * generateGemLore("RUBY", "PERFECT", "MYTHIC");
    */
-  generateGemLore: (type, tier) => {
-    let color;
-    switch (type.toUpperCase()) {
-      case "JADE":
-        color = "§a";
-        break;
-      case "AMBER":
-        color = "§6";
-        break;
-      case "TOPAZ":
-        color = "§e";
-        break;
-      case "SAPPHIRE":
-        color = "§b";
-        break;
-      case "AMETHYST":
-        color = "§5";
-        break;
-      case "JASPER":
-        color = "§d";
-        break;
-      case "RUBY":
-        color = "§c";
-        break;
+  generateGemLore: (type, tier, rarity) => {
+    const lore = [];
+    const stats = [];
 
-      default:
-        color = "§7";
-        break;
+    // Gem color
+    const color = `§${constants.gemstones[type.toUpperCase()].color}`;
+
+    // Gem stats
+    if (rarity) {
+      const gemstone_stats = constants.gemstones[type.toUpperCase()]?.stats?.[tier.toUpperCase()];
+      if (gemstone_stats) {
+        Object.keys(gemstone_stats).forEach((stat) => {
+          const stat_value = gemstone_stats[stat][module.exports.rarityNameToInt(rarity)];
+
+          if (stat_value && stat_value !== -1) {
+            stats.push(["§", constants.stats_colors[stat], "+", stat_value, constants.stats_symbols[stat]].join(""));
+          } else {
+            stats.push("§c§oMISSING VALUE§r");
+          }
+        });
+      }
     }
 
-    return `${color}${module.exports.titleCase(tier)} ${module.exports.titleCase(type)}`;
+    // Final lore
+    lore.push(color, module.exports.titleCase(tier), " ", module.exports.titleCase(type));
+
+    if (stats.length) {
+      lore.push("§7 (", stats.join("§7, "), "§7)");
+    }
+
+    return lore.join("");
+  },
+
+  rarityNameToInt: (string) => {
+    return constants.rarities.indexOf(string.toLowerCase());
   },
 };
