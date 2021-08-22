@@ -1,3 +1,5 @@
+const symbols = require("./stats.js").stats_symbols;
+
 function round(num, decimals = 0) {
   return Math.round(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
 }
@@ -14,28 +16,6 @@ function formatStat(stat) {
     return `§a${statFloored}`;
   }
 }
-
-const symbols = {
-  ability_damage: "๑",
-  attack_speed: "⚔",
-  crit_chance: "☣",
-  crit_damage: "☠",
-  defense: "❈",
-  farming_fortune: "☘",
-  ferocity: "⫽",
-  foraging_fortune: "☘",
-  health: "❤",
-  intelligence: "✎",
-  magic_find: "✯",
-  mining_fortune: "☘",
-  mining_speed: "⸕",
-  pet_luck: "♣",
-  pristine: "✧",
-  sea_creature_chance: "α",
-  speed: "✦",
-  strength: "❁",
-  true_defense: "❂",
-};
 
 class Pet {
   constructor(rarity, level) {

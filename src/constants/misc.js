@@ -165,6 +165,9 @@ module.exports = {
   // Number of kills required for each level of expertise
   expertise_kills_ladder: [50, 100, 250, 500, 1000, 2500, 5500, 10000, 15000],
 
+  // Walking distance required for each rarity level of the prehistoric egg
+  prehistoric_egg_blocks_walked_ladder: [4000, 10000, 20000, 40000, 100000],
+
   // api names and their max value from the profile upgrades
   profile_upgrades: {
     island_size: 10,
