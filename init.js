@@ -7,6 +7,7 @@ const credentialsDefault = {
   recaptcha_secret_key: "",
   dbUrl: "mongodb://localhost:27017",
   dbName: "sbstats",
+  redisUrl: "",
 };
 
 const credentials = fs.existsSync("./credentials.json") ? require("./credentials.json") : credentialsDefault;
