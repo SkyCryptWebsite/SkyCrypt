@@ -26,7 +26,7 @@ const Hypixel = axios.create({
 
 import { redisClient } from "./redis.js";
 
-import customResources from "./custom-resources.cjs";
+import * as customResources from "./custom-resources.js";
 import loreGenerator from "./loreGenerator.cjs";
 import randomEmoji from "./constants/randomEmoji.cjs";
 

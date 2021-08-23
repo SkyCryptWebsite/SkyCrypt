@@ -9,7 +9,7 @@ import css from "css";
 import helper from "./helper.cjs";
 import path from "path";
 import { fileURLToPath } from "url";
-import customResources from "./custom-resources.cjs";
+import * as customResources from "./custom-resources.js";
 import sanitize from "mongo-sanitize";
 import fs from "fs-extra";
 

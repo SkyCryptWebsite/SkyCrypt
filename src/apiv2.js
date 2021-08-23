@@ -4,7 +4,7 @@ import cors from "cors";
 import sanitize from "mongo-sanitize";
 import leaderboard from "./leaderboards.js";
 
-import customResources from "./custom-resources.cjs";
+import * as customResources from "./custom-resources.js";
 
 import { redisClient } from "./redis.js";
 

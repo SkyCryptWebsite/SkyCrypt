@@ -1,20 +1,25 @@
-const fs = require("fs-extra");
-const path = require("path");
-const helper = require("./helper.cjs");
-const mm = require("micromatch");
-const util = require("util");
-const apng2gif = require("apng2gif-bin");
-const escapeRegExp = require("lodash.escaperegexp");
-const sharp = require("sharp");
-const { createCanvas, loadImage } = require("canvas");
-const mcData = require("minecraft-data")("1.8.9");
-const UPNG = require("upng-js");
-const RJSON = require("relaxed-json");
+import fs from "fs-extra";
+import path from "path";
+import { fileURLToPath } from "url";
+import helper from "./helper.cjs";
+import mm from "micromatch";
+import util from "util";
+import apng2gif from "apng2gif-bin";
+import escapeRegExp from "lodash.escaperegexp";
+import sharp from "sharp";
+import canvasModule from "canvas";
+const { createCanvas, loadImage } = canvasModule;
+import minecraftData from "minecraft-data";
+const mcData = minecraftData("1.8.9");
+import UPNG from "upng-js";
+import RJSON from "relaxed-json";
 
-const child_process = require("child_process");
+import child_process from "child_process";
 const execFile = util.promisify(child_process.execFile);
 
 const NORMALIZED_SIZE = 128;
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const RESOURCE_PACK_FOLDER = path.resolve(__dirname, "..", "public", "resourcepacks");
 
@@ -57,7 +62,7 @@ async function init() {
     const basePath = path.resolve(RESOURCE_PACK_FOLDER, pack);
 
     try {
-      const config = require(path.resolve(basePath, "config.json"));
+      const config = JSON.parse(fs.readFileSync(path.resolve(basePath, "config.json")));
 
       resourcePacks.push({
         basePath,
@@ -399,7 +404,7 @@ const outputPacks = [];
 const readyPromise = init();
 
 readyPromise.then(() => {
-  module.exports.ready = true;
+  ready = true;
 
   for (const pack of resourcePacks) {
     outputPacks.push(
@@ -413,138 +418,134 @@ readyPromise.then(() => {
   }
 });
 
-module.exports = {
-  ready: false,
-  packs: outputPacks,
-  completePacks: resourcePacks,
-  getTexture: async (item, ignoreId = false, packIds) => {
-    if (!module.exports.ready) {
-      await readyPromise;
+export let ready = false;
+export const packs = outputPacks;
+export const completePacks = resourcePacks;
+export const getTexture = async (item, ignoreId = false, packIds) => {
+  if (!ready) {
+    await readyPromise;
+  }
+
+  let outputTexture = { weight: -9999 };
+
+  let _resourcePacks = resourcePacks;
+
+  packIds = packIds !== undefined ? packIds.split(",") : [];
+
+  if (packIds.length > 0) {
+    _resourcePacks = _resourcePacks.filter((a) => packIds.includes(a.config.id));
+  }
+
+  _resourcePacks = _resourcePacks.sort((a, b) => packIds.indexOf(a) - packIds.indexOf(b));
+
+  for (const pack of _resourcePacks) {
+    if ("weight" in outputTexture) {
+      outputTexture.weight = -9999;
     }
 
-    let outputTexture = { weight: -9999 };
-
-    let _resourcePacks = resourcePacks;
-
-    packIds = packIds !== undefined ? packIds.split(",") : [];
-
-    if (packIds.length > 0) {
-      _resourcePacks = _resourcePacks.filter((a) => packIds.includes(a.config.id));
-    }
-
-    _resourcePacks = _resourcePacks.sort((a, b) => packIds.indexOf(a) - packIds.indexOf(b));
-
-    for (const pack of _resourcePacks) {
-      if ("weight" in outputTexture) {
-        outputTexture.weight = -9999;
+    for (const texture of pack.textures) {
+      if (ignoreId === false && texture.id != item.id) {
+        continue;
       }
 
-      for (const texture of pack.textures) {
-        if (ignoreId === false && texture.id != item.id) {
+      if (ignoreId === false && "damage" in texture && texture.damage != item.Damage) {
+        continue;
+      }
+
+      let matches = 0;
+
+      for (const match of texture.match) {
+        let { value, regex } = match;
+
+        if (value.endsWith(".*")) {
+          value = value.substring(0, value.length - 2);
+        }
+
+        if (!helper.hasPath(item, "tag", ...value.split("."))) {
           continue;
         }
 
-        if (ignoreId === false && "damage" in texture && texture.damage != item.Damage) {
+        let matchValues = helper.getPath(item, "tag", ...value.split("."));
+
+        if (!Array.isArray(matchValues)) {
+          matchValues = [matchValues];
+        }
+
+        for (const matchValue of matchValues) {
+          if (!regex.test(matchValue.toString().replace(removeFormatting, ""))) {
+            continue;
+          }
+
+          matches++;
+        }
+      }
+
+      if (matches == texture.match.length) {
+        if (texture.weight < outputTexture.weight) {
           continue;
         }
 
-        let matches = 0;
-
-        for (const match of texture.match) {
-          let { value, regex } = match;
-
-          if (value.endsWith(".*")) {
-            value = value.substring(0, value.length - 2);
-          }
-
-          if (!helper.hasPath(item, "tag", ...value.split("."))) {
-            continue;
-          }
-
-          let matchValues = helper.getPath(item, "tag", ...value.split("."));
-
-          if (!Array.isArray(matchValues)) {
-            matchValues = [matchValues];
-          }
-
-          for (const matchValue of matchValues) {
-            if (!regex.test(matchValue.toString().replace(removeFormatting, ""))) {
-              continue;
-            }
-
-            matches++;
-          }
+        if (texture.weight == outputTexture.weight && texture.file < outputTexture.file) {
+          continue;
         }
 
-        if (matches == texture.match.length) {
-          if (texture.weight < outputTexture.weight) {
-            continue;
-          }
-
-          if (texture.weight == outputTexture.weight && texture.file < outputTexture.file) {
-            continue;
-          }
-
-          outputTexture = Object.assign({ pack: { basePath: pack.basePath, config: pack.config } }, texture);
-        }
+        outputTexture = Object.assign({ pack: { basePath: pack.basePath, config: pack.config } }, texture);
       }
     }
+  }
 
-    if (!("path" in outputTexture)) {
-      return null;
-    }
+  if (!("path" in outputTexture)) {
+    return null;
+  }
 
-    // TODO: fix
-    // if ("leather" in outputTexture && helper.hasPath(item, "tag", "ExtraAttributes", "color")) {
-    //   const color = item.tag.ExtraAttributes.color.split(":");
+  // TODO: fix
+  // if ("leather" in outputTexture && helper.hasPath(item, "tag", "ExtraAttributes", "color")) {
+  //   const color = item.tag.ExtraAttributes.color.split(":");
 
-    //   const leatherBasePath = path.resolve(path.dirname(outputTexture.path), "leatherCache");
-    //   const leatherPath = path.resolve(
-    //     leatherBasePath,
-    //     path.basename(outputTexture.path, ".png") + "_" + color.join("_") + ".png"
-    //   );
+  //   const leatherBasePath = path.resolve(path.dirname(outputTexture.path), "leatherCache");
+  //   const leatherPath = path.resolve(
+  //     leatherBasePath,
+  //     path.basename(outputTexture.path, ".png") + "_" + color.join("_") + ".png"
+  //   );
 
-    //   await fs.ensureDir(leatherBasePath);
+  //   await fs.ensureDir(leatherBasePath);
 
-    //   try {
-    //     await fs.access(leatherPath, fs.F_OK);
-    //     throw "";
-    //   } catch (e) {
-    //     const canvas = createCanvas(128, 128);
-    //     const ctx = canvas.getContext("2d");
+  //   try {
+  //     await fs.access(leatherPath, fs.F_OK);
+  //     throw "";
+  //   } catch (e) {
+  //     const canvas = createCanvas(128, 128);
+  //     const ctx = canvas.getContext("2d");
 
-    //     const armorBase = await loadImage(outputTexture.leather.base);
-    //     const armorOverlay = await loadImage(outputTexture.leather.overlay);
+  //     const armorBase = await loadImage(outputTexture.leather.base);
+  //     const armorOverlay = await loadImage(outputTexture.leather.overlay);
 
-    //     ctx.drawImage(armorBase, 0, 0);
+  //     ctx.drawImage(armorBase, 0, 0);
 
-    //     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  //     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-    //     for (let i = 0; i < imageData.data.length; i += 4) {
-    //       const r = imageData.data[i];
-    //       const alpha = r / 255;
+  //     for (let i = 0; i < imageData.data.length; i += 4) {
+  //       const r = imageData.data[i];
+  //       const alpha = r / 255;
 
-    //       imageData.data[i] = color[0] * alpha;
-    //       imageData.data[i + 1] = color[1] * alpha;
-    //       imageData.data[i + 2] = color[2] * alpha;
-    //     }
+  //       imageData.data[i] = color[0] * alpha;
+  //       imageData.data[i + 1] = color[1] * alpha;
+  //       imageData.data[i + 2] = color[2] * alpha;
+  //     }
 
-    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //     ctx.putImageData(imageData, 0, 0);
+  //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+  //     ctx.putImageData(imageData, 0, 0);
 
-    //     ctx.drawImage(armorOverlay, 0, 0);
+  //     ctx.drawImage(armorOverlay, 0, 0);
 
-    //     await fs.writeFile(leatherPath, canvas.toBuffer("image/png"));
-    //   }
+  //     await fs.writeFile(leatherPath, canvas.toBuffer("image/png"));
+  //   }
 
-    //   outputTexture.path = leatherPath;
-    // }
+  //   outputTexture.path = leatherPath;
+  // }
 
-    outputTexture.path = path
-      .relative(path.resolve(__dirname, "..", "public"), outputTexture.path)
-      .replace(/[\\]/g, "/");
-    process.send({ type: "used_pack", id: outputTexture?.pack.config.id });
+  outputTexture.path = path.relative(path.resolve(__dirname, "..", "public"), outputTexture.path).replace(/[\\]/g, "/");
+  process.send({ type: "used_pack", id: outputTexture?.pack.config.id });
 
-    return outputTexture;
-  },
+  return outputTexture;
 };
