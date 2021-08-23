@@ -1,12 +1,5 @@
 async function main() {
-  const { MongoClient } = require("mongodb");
-
-  const credentials = require("./../../credentials.json");
-
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-
-  const db = mongo.db(credentials.dbName);
+  const { db } = await require("../db.js");
 
   async function clearFavoriteCache() {
     // Clear cache for favorite

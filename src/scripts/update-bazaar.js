@@ -1,15 +1,10 @@
 async function main() {
-  const { MongoClient } = require("mongodb");
   const axios = require("axios");
   require("axios-debug-log");
 
   const helper = require("./../helper");
-  const credentials = require("./../../credentials.json");
 
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-
-  const db = mongo.db(credentials.dbName);
+  const { db } = await require("../db.js");
 
   const Hypixel = axios.create({
     baseURL: "https://api.hypixel.net/",

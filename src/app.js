@@ -54,7 +54,6 @@ async function main() {
   const moment = require("moment-timezone");
   require("moment-duration-format")(moment);
 
-  const { MongoClient } = require("mongodb");
   const sanitize = require("mongo-sanitize");
   const helper = require("./helper");
   const constants = require("./constants");
@@ -64,9 +63,7 @@ async function main() {
   const twemoji = require("twemoji");
   const cookieParser = require("cookie-parser");
 
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-  const db = mongo.db(credentials.dbName);
+  const { mongo, db } = await require("./db.js");
 
   /**
    * the largest number of second that `max-age` in `Cache-Control` will allow

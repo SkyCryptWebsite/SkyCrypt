@@ -14,13 +14,10 @@ const retry = require("async-retry");
 
 const credentials = require("./../credentials.json");
 
-const { MongoClient } = require("mongodb");
 let db;
 
-const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-
-mongo.connect().then(() => {
-  db = mongo.db(credentials.dbName);
+require("./db.js").then(({ db: database }) => {
+  db = database;
 });
 
 const Hypixel = axios.create({

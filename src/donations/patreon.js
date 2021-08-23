@@ -1,11 +1,8 @@
 async function main() {
-  const { MongoClient } = require("mongodb");
   const axios = require("axios");
   const credentials = require("../../credentials.json");
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
 
-  const db = mongo.db(credentials.dbName);
+  const { db } = await require("../db.js");
 
   async function updatePatreon() {
     const patreonEntry = await db.collection("donations").find({ type: "patreon" }).next();

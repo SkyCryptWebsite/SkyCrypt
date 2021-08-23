@@ -22,11 +22,7 @@ fs.ensureDirSync("cache");
 async function main() {
   const constants = require("./src/constants");
 
-  const { MongoClient } = require("mongodb");
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-
-  const db = mongo.db(credentials.dbName);
+  const { mongo, db } = await require("./src/db.js");
 
   await db.collection("apiKeys").createIndex({ key: 1 }, { unique: true });
 

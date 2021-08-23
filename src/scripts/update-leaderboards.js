@@ -1,17 +1,12 @@
 async function main() {
-  const { MongoClient } = require("mongodb");
   const _ = require("lodash");
 
   const lib = require("./../lib");
   const constants = require("./../constants");
-  const credentials = require("./../../credentials.json");
 
   const ProgressBar = require("progress");
 
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-
-  const db = mongo.db(credentials.dbName);
+  const { db } = await require("../db.js");
 
   const Redis = require("ioredis");
   const redisClient = new Redis();
