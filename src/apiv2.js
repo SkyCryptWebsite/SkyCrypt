@@ -4,8 +4,7 @@ const cors = require("cors");
 const sanitize = require("mongo-sanitize");
 const constants = require("./constants");
 
-const Redis = require("ioredis");
-const redisClient = new Redis();
+const { redisClient } = require("./redis.js");
 
 function handleError(e, res) {
   console.error(e);

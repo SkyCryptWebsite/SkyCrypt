@@ -1,6 +1,5 @@
 async function main() {
-  const Redis = require("ioredis");
-  const redisClient = new Redis();
+  const { redisClient } = require("../redis.js");
 
   const constants = require("./../constants");
 

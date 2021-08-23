@@ -24,8 +24,7 @@ const Hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
 
-const Redis = require("ioredis");
-const redisClient = new Redis();
+const { redisClient } = require("./redis.js");
 
 const customResources = require("./custom-resources");
 const loreGenerator = require("./loreGenerator");

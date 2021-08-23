@@ -8,8 +8,7 @@ async function main() {
 
   const { db } = await require("../mongo.js");
 
-  const Redis = require("ioredis");
-  const redisClient = new Redis();
+  const { redisClient } = require("../redis.js");
 
   async function updateLeaderboards() {
     const keys = await redisClient.keys("lb_*");
