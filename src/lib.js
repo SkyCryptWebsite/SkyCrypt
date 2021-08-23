@@ -27,7 +27,7 @@ const Hypixel = axios.create({
 import { redisClient } from "./redis.js";
 
 import * as customResources from "./custom-resources.js";
-import loreGenerator from "./loreGenerator.cjs";
+import { makeLore } from "./lore-generator.js";
 import randomEmoji from "./constants/randomEmoji.cjs";
 
 const parseNbt = util.promisify(nbt.parse);
@@ -2025,10 +2025,10 @@ export const getStats = async (
       items.armor.find((a) => a.type === "boots" || a.type === "dungeon boots"),
       getId(items.armor.find((a) => a.type === "boots" || a.type === "dungeon boots"))
     );
-    loreGenerator.makeLore(items.armor.find((a) => a.type === "helmet" || a.type === "dungeon helmet"));
-    loreGenerator.makeLore(items.armor.find((a) => a.type === "chestplate" || a.type === "dungeon chestplate"));
-    loreGenerator.makeLore(items.armor.find((a) => a.type === "leggings" || a.type === "dungeon leggings"));
-    loreGenerator.makeLore(items.armor.find((a) => a.type === "boots" || a.type === "dungeon boots"));
+    makeLore(items.armor.find((a) => a.type === "helmet" || a.type === "dungeon helmet"));
+    makeLore(items.armor.find((a) => a.type === "chestplate" || a.type === "dungeon chestplate"));
+    makeLore(items.armor.find((a) => a.type === "leggings" || a.type === "dungeon leggings"));
+    makeLore(items.armor.find((a) => a.type === "boots" || a.type === "dungeon boots"));
   }
 
   // Apply Lapis Armor full set bonus of +60 HP
