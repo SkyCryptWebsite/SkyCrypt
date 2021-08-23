@@ -1,4 +1,4 @@
-import constants from "./constants/misc.cjs";
+import * as constants from "./constants/misc.js";
 const { statNames } = constants; // TODO use named exports
 
 /**

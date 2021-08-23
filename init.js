@@ -1,5 +1,5 @@
 import * as fsExtra from "fs-extra";
-import * as constants from "./src/constants.cjs";
+import * as constants from "./src/constants.js";
 import { mongo, db } from "./src/mongo.js";
 
 fsExtra.ensureDirSync("cache");

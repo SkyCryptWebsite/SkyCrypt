@@ -5,7 +5,7 @@ import "axios-debug-log";
 
 import retry from "async-retry";
 
-import constants from "./constants.cjs";
+import * as constants from "./constants.js";
 import credentials from "./credentials.js";
 
 const Hypixel = axios.create({

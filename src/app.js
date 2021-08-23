@@ -28,7 +28,7 @@ momentDurationFormat(moment);
 import { mongo, db } from "./mongo.js";
 import sanitize from "mongo-sanitize";
 import * as helper from "./helper.js";
-import constants from "./constants.cjs";
+import * as constants from "./constants.js";
 import { SitemapStream, streamToPromise } from "sitemap";
 import { createGzip } from "zlib";
 import twemoji from "twemoji";

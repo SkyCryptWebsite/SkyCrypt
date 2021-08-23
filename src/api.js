@@ -2,7 +2,7 @@ import tableify from "@tillhub/tableify";
 import * as helper from "./helper.js";
 const { hasPath, getId } = helper;
 import * as lib from "./lib.js";
-import constants from "./constants.cjs";
+import * as constants from "./constants.js";
 import cors from "cors";
 
 function handleError(e, res) {

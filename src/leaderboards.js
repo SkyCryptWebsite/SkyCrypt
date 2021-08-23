@@ -1,4 +1,4 @@
-import collections from "./constants/collections.cjs";
+import * as collections from "./constants/collections.js";
 import moment from "moment";
 import momentDurationFormat from "moment-duration-format";
 momentDurationFormat(moment);

@@ -6,7 +6,7 @@ import sanitize from "mongo-sanitize";
 import minecraftData from "minecraft-data";
 const mcData = minecraftData("1.8.9");
 import _ from "lodash";
-import constants from "./constants.cjs";
+import * as constants from "./constants.js";
 import * as helper from "./helper.js";
 const { getId } = helper; // TODO use named exports
 import axios from "axios";
@@ -28,7 +28,6 @@ import { redisClient } from "./redis.js";
 
 import * as customResources from "./custom-resources.js";
 import { makeLore } from "./lore-generator.js";
-import randomEmoji from "./constants/randomEmoji.cjs";
 
 const parseNbt = util.promisify(nbt.parse);
 
@@ -2391,7 +2390,7 @@ export const getStats = async (
       output.display_emoji_img = userInfo.emojiImg;
     }
     if (userInfo.username == "jjww2") {
-      output.display_emoji = randomEmoji();
+      output.display_emoji = constants.randomEmoji();
     }
   }
 
