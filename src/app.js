@@ -1,4 +1,4 @@
-import cluster from "cluster";
+// this file never run on the master thread
 import * as lib from "./lib.js";
 import { getFileHashes, getFileHash, hashedDirectories } from "./hashes.js";
 import fetch from "node-fetch";
@@ -25,7 +25,7 @@ import moment from "moment-timezone";
 import momentDurationFormat from "moment-duration-format";
 momentDurationFormat(moment);
 
-import { MongoClient } from "mongodb";
+import { mongo, db } from "./mongo.js";
 import sanitize from "mongo-sanitize";
 import helper from "./helper.cjs";
 import constants from "./constants.cjs";
@@ -37,8 +37,6 @@ import cookieParser from "cookie-parser";
 import api from "./api.js";
 import apiv2 from "./apiv2.js";
 import kofi from "./donations/kofi.js";
-
-import os from "os";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -74,10 +72,6 @@ async function main() {
       }
     });
   }
-
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-  const db = mongo.db(credentials.dbName);
 
   /**
    * the largest number of second that `max-age` in `Cache-Control` will allow
@@ -666,15 +660,4 @@ async function main() {
   app.listen(port, () => console.log(`SkyBlock Stats running on http://localhost:${port} (${helper.getClusterId()})`));
 }
 
-if (cluster.isMaster) {
-  const totalCpus = os.cpus().length;
-  const cpus = Math.min(process.env?.NODE_ENV != "development" ? 8 : 2, totalCpus);
-
-  for (let i = 0; i < cpus; i += 1) {
-    cluster.fork();
-  }
-
-  console.log(`Running SkyBlock Stats on ${cpus} cores`);
-} else {
-  main();
-}
+main();

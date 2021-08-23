@@ -1,16 +1,10 @@
 import * as fsExtra from "fs-extra";
 import * as constants from "./src/constants.cjs";
-import { MongoClient } from "mongodb";
-import credentials from "./src/credentials.js";
+import { mongo, db } from "./src/mongo.js";
 
 fsExtra.ensureDirSync("cache");
 
 async function main() {
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-
-  const db = mongo.db(credentials.dbName);
-
   await db.collection("apiKeys").createIndex({ key: 1 }, { unique: true });
 
   await db.collection("profileStore").createIndex({ uuid: 1 }, { unique: true });

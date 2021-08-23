@@ -1,15 +1,6 @@
-import cluster from "cluster";
-
-import { MongoClient } from "mongodb";
-
-import credentials from "../credentials.js";
+import { db } from "../mongo.js";
 
 async function main() {
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-
-  const db = mongo.db(credentials.dbName);
-
   let featured = {
     metalcupcake5: {
       position: 1,
@@ -74,6 +65,4 @@ async function main() {
   updateTopProfiles();
 }
 
-if (cluster.isMaster) {
-  main();
-}
+main();

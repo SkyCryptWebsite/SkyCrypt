@@ -1,21 +1,13 @@
-import cluster from "cluster";
-
-import { MongoClient } from "mongodb";
+import { db } from "../mongo.js";
 
 import Redis from "ioredis";
 const redisClient = new Redis();
 
 import leaderboard from "../leaderboards.js";
-import credentials from "../credentials.js";
 
 import ProgressBar from "progress";
 
 async function main() {
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-
-  const db = mongo.db(credentials.dbName);
-
   function getAverage(scores) {
     return scores.reduce((a, b) => a + b, 0) / scores.length;
   }
@@ -105,6 +97,4 @@ async function main() {
   updateGuildLeaderboards();
 }
 
-if (cluster.isMaster) {
-  main();
-}
+main();

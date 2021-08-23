@@ -1,23 +1,13 @@
-import cluster from "cluster";
-
-import { MongoClient } from "mongodb";
+import { db } from "../mongo.js";
 import _ from "lodash";
 
 import * as lib from "../lib.js";
 import leaderboard from "../leaderboards.js";
-import credentials from "../credentials.js";
 
 import ProgressBar from "progress";
-import Redis from "ioredis";
+import { redisClient } from "../redis.js";
 
 async function main() {
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-
-  const db = mongo.db(credentials.dbName);
-
-  const redisClient = new Redis();
-
   async function updateLeaderboards() {
     const keys = await redisClient.keys("lb_*");
 
@@ -61,6 +51,4 @@ async function main() {
   updateLeaderboards();
 }
 
-if (cluster.isMaster) {
-  main();
-}
+main();

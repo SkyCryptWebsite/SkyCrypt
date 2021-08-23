@@ -6,8 +6,7 @@ import leaderboard from "./leaderboards.js";
 
 import customResources from "./custom-resources.cjs";
 
-import Redis from "ioredis";
-const redisClient = new Redis();
+import { redisClient } from "./redis.js";
 
 function handleError(e, res) {
   console.error(e);

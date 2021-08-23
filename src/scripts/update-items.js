@@ -1,18 +1,9 @@
-import cluster from "cluster";
-
-import { MongoClient } from "mongodb";
+import { db } from "../mongo.js";
 import axios from "axios";
 
 import "axios-debug-log";
 
-import credentials from "../credentials.js";
-
 async function main() {
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-
-  const db = mongo.db(credentials.dbName);
-
   async function updateItems() {
     try {
       const items = [];
@@ -43,6 +34,4 @@ async function main() {
   updateItems();
 }
 
-if (cluster.isMaster) {
-  main();
-}
+main();

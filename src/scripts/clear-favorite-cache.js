@@ -1,14 +1,6 @@
-import cluster from "cluster";
-
-import { MongoClient } from "mongodb";
-import credentials from "../credentials.js";
+import { db } from "../mongo.js";
 
 async function main() {
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-
-  const db = mongo.db(credentials.dbName);
-
   async function clearFavoriteCache() {
     // Clear cache for favorite
     await db.collection("favoriteCache").deleteMany({});
@@ -19,6 +11,4 @@ async function main() {
   clearFavoriteCache();
 }
 
-if (cluster.isMaster) {
-  main();
-}
+main();

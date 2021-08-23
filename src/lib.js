@@ -1,4 +1,3 @@
-import cluster from "cluster";
 import path from "path";
 import { fileURLToPath } from "url";
 import nbt from "prismarine-nbt";
@@ -19,21 +18,13 @@ import credentials from "./credentials.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-import { MongoClient } from "mongodb";
-let db;
-
-const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-
-mongo.connect().then(() => {
-  db = mongo.db(credentials.dbName);
-});
+import { db } from "./mongo.js";
 
 const Hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
 
-import Redis from "ioredis";
-const redisClient = new Redis();
+import { redisClient } from "./redis.js";
 
 import customResources from "./custom-resources.cjs";
 import loreGenerator from "./loreGenerator.cjs";
@@ -4041,6 +4032,4 @@ async function init() {
   }
 }
 
-if (cluster.isWorker) {
-  init();
-}
+init();

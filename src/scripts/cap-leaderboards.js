@@ -1,11 +1,7 @@
-import cluster from "cluster";
-
 import leaderboard from "../leaderboards.js";
-import Redis from "ioredis";
+import { redisClient } from "../redis.js";
 
 async function main() {
-  const redisClient = new Redis();
-
   async function capLeaderboards() {
     const keys = await redisClient.keys("lb_*");
 
@@ -37,6 +33,4 @@ async function main() {
   capLeaderboards();
 }
 
-if (cluster.isMaster) {
-  main();
-}
+main();

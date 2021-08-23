@@ -17,6 +17,7 @@ const defaultCredentials = {
   recaptcha_secret_key: "",
   dbUrl: "mongodb://localhost:27017",
   dbName: "sbstats",
+  redisUrl: "",
   get session_secret() {
     return randomBytes(32).toString("hex");
   },

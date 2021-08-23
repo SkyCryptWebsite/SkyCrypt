@@ -1,10 +1,4 @@
-import "./src/app.js";
-import "./src/donations/patreon.js";
-import "./src/scripts/cap-leaderboards.js";
-import "./src/scripts/clear-favorite-cache.js";
-import "./src/scripts/update-bazaar.js";
-import "./src/scripts/update-items.js";
-import "./src/scripts/update-top-profiles.js";
+import "./src/main.js";
 
 import * as cluster from "cluster";
 

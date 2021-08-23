@@ -1,18 +1,10 @@
-import cluster from "cluster";
-
-import { MongoClient } from "mongodb";
+import { db } from "../mongo.js";
 import axios from "axios";
 import "axios-debug-log";
 
 import helper from "../helper.cjs";
-import credentials from "../credentials.js";
 
 async function main() {
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-
-  const db = mongo.db(credentials.dbName);
-
   const Hypixel = axios.create({
     baseURL: "https://api.hypixel.net/",
   });
@@ -46,6 +38,4 @@ async function main() {
   updateBazaar();
 }
 
-if (cluster.isMaster) {
-  main();
-}
+main();

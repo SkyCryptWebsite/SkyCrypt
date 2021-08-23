@@ -1,15 +1,10 @@
-import * as cluster from "cluster";
-import { MongoClient } from "mongodb";
 import axios from "axios";
 
 import credentials from "../credentials.js";
 
+import { db } from "../mongo.js";
+
 async function main() {
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-
-  const db = mongo.db(credentials.dbName);
-
   async function updatePatreon() {
     const patreonEntry = await db.collection("donations").find({ type: "patreon" }).next();
 
@@ -40,6 +35,4 @@ async function main() {
   }
 }
 
-if (cluster.isMaster) {
-  main();
-}
+main();
