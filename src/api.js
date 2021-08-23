@@ -1,5 +1,5 @@
 import tableify from "@tillhub/tableify";
-import helper from "./helper.cjs";
+import * as helper from "./helper.js";
 const { hasPath, getId } = helper;
 import * as lib from "./lib.js";
 import constants from "./constants.cjs";

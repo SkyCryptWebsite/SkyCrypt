@@ -1,4 +1,4 @@
-import helper from "./helper.cjs";
+import * as helper from "./helper.js";
 import * as lib from "./lib.js";
 import cors from "cors";
 import sanitize from "mongo-sanitize";

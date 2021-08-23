@@ -6,7 +6,7 @@ Hat layers, transparency and shading added by me
 import canvasModule from "canvas";
 const { createCanvas, loadImage } = canvasModule;
 import css from "css";
-import helper from "./helper.cjs";
+import * as helper from "./helper.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import * as customResources from "./custom-resources.js";

@@ -2,7 +2,7 @@ import { db } from "../mongo.js";
 import axios from "axios";
 import "axios-debug-log";
 
-import helper from "../helper.cjs";
+import * as helper from "../helper.js";
 
 const Hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",

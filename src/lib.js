@@ -7,7 +7,7 @@ import minecraftData from "minecraft-data";
 const mcData = minecraftData("1.8.9");
 import _ from "lodash";
 import constants from "./constants.cjs";
-import helper from "./helper.cjs";
+import * as helper from "./helper.js";
 const { getId } = helper; // TODO use named exports
 import axios from "axios";
 import moment from "moment";
