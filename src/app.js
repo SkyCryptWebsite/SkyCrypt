@@ -63,7 +63,7 @@ async function main() {
   const twemoji = require("twemoji");
   const cookieParser = require("cookie-parser");
 
-  const { mongo, db } = await require("./db.js");
+  const { mongo, db } = await require("./mongo.js");
 
   /**
    * the largest number of second that `max-age` in `Cache-Control` will allow

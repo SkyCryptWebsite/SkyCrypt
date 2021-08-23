@@ -1,5 +1,5 @@
 async function main() {
-  const { db } = await require("../db.js");
+  const { db } = await require("../mongo.js");
 
   async function clearFavoriteCache() {
     // Clear cache for favorite

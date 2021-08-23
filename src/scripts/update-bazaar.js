@@ -4,7 +4,7 @@ async function main() {
 
   const helper = require("./../helper");
 
-  const { db } = await require("../db.js");
+  const { db } = await require("../mongo.js");
 
   const Hypixel = axios.create({
     baseURL: "https://api.hypixel.net/",

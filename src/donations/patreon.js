@@ -2,7 +2,7 @@ async function main() {
   const axios = require("axios");
   const credentials = require("../../credentials.json");
 
-  const { db } = await require("../db.js");
+  const { db } = await require("../mongo.js");
 
   async function updatePatreon() {
     const patreonEntry = await db.collection("donations").find({ type: "patreon" }).next();

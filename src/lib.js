@@ -16,7 +16,7 @@ const credentials = require("./../credentials.json");
 
 let db;
 
-require("./db.js").then(({ db: database }) => {
+require("./mongo.js").then(({ db: database }) => {
   db = database;
 });
 

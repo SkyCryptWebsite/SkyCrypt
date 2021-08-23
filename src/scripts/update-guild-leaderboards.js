@@ -6,7 +6,7 @@ async function main() {
 
   const ProgressBar = require("progress");
 
-  const { db } = await require("../db.js");
+  const { db } = await require("../mongo.js");
 
   function getAverage(scores) {
     return scores.reduce((a, b) => a + b, 0) / scores.length;

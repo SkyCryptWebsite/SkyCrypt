@@ -6,7 +6,7 @@ async function main() {
 
   const ProgressBar = require("progress");
 
-  const { db } = await require("../db.js");
+  const { db } = await require("../mongo.js");
 
   const Redis = require("ioredis");
   const redisClient = new Redis();

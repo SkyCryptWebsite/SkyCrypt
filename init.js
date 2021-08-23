@@ -22,7 +22,7 @@ fs.ensureDirSync("cache");
 async function main() {
   const constants = require("./src/constants");
 
-  const { mongo, db } = await require("./src/db.js");
+  const { mongo, db } = await require("./src/mongo.js");
 
   await db.collection("apiKeys").createIndex({ key: 1 }, { unique: true });
 

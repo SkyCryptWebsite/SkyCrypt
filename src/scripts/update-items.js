@@ -2,7 +2,7 @@ async function main() {
   const axios = require("axios");
   require("axios-debug-log");
 
-  const { db } = await require("../db.js");
+  const { db } = await require("../mongo.js");
 
   async function updateItems() {
     try {
