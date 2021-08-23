@@ -36,7 +36,7 @@ import cookieParser from "cookie-parser";
 
 import api from "./api.js";
 import apiv2 from "./apiv2.js";
-import kofi from "./donations/kofi.cjs";
+import kofi from "./donations/kofi.js";
 
 import os from "os";
 
