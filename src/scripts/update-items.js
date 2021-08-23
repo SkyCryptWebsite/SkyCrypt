@@ -3,35 +3,31 @@ import axios from "axios";
 
 import "axios-debug-log";
 
-async function main() {
-  async function updateItems() {
-    try {
-      const items = [];
-      const { data } = await axios("https://api.slothpixel.me/api/skyblock/items");
+async function updateItems() {
+  try {
+    const items = [];
+    const { data } = await axios("https://api.slothpixel.me/api/skyblock/items");
 
-      for (const skyblockId in data) {
-        const skyblockItem = data[skyblockId];
+    for (const skyblockId in data) {
+      const skyblockItem = data[skyblockId];
 
-        const item = {
-          id: skyblockId,
-          damage: 0,
-        };
+      const item = {
+        id: skyblockId,
+        damage: 0,
+      };
 
-        Object.assign(item, skyblockItem);
-        items.push(item);
-      }
-
-      items.forEach(async (item) => {
-        await db.collection("items").updateOne({ id: item.id }, { $set: item }, { upsert: true });
-      });
-    } catch (e) {
-      console.error(e);
+      Object.assign(item, skyblockItem);
+      items.push(item);
     }
 
-    setTimeout(updateItems, 1000 * 60 * 60 * 12);
+    items.forEach(async (item) => {
+      await db.collection("items").updateOne({ id: item.id }, { $set: item }, { upsert: true });
+    });
+  } catch (e) {
+    console.error(e);
   }
 
-  updateItems();
+  setTimeout(updateItems, 1000 * 60 * 60 * 12);
 }
 
-main();
+updateItems();
