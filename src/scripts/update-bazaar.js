@@ -2,7 +2,7 @@ import { db } from "../mongo.js";
 import axios from "axios";
 import "axios-debug-log";
 
-import * as helper from "../helper.js";
+import { getPrices } from "../helper.js";
 
 const Hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
@@ -17,7 +17,7 @@ async function updateBazaar() {
     for (const productId in products) {
       const product = products[productId];
 
-      const { buyPrice, sellPrice } = helper.getPrices(product);
+      const { buyPrice, sellPrice } = getPrices(product);
 
       const { buyVolume, sellVolume } = product.quick_status;
 

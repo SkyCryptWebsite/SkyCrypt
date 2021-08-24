@@ -1,7 +1,7 @@
 import { db } from "../mongo.js";
 import _ from "lodash";
 
-import * as lib from "../lib.js";
+import { getProfile } from "../lib.js";
 import leaderboard from "../leaderboards.js";
 
 import ProgressBar from "progress";
@@ -34,8 +34,7 @@ async function updateLeaderboards() {
   });
 
   for (const uuid of updateUsers) {
-    lib
-      .getProfile(db, uuid)
+    getProfile(db, uuid)
       .then(() => {
         bar.tick();
       })

@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import path from "path";
 import { fileURLToPath } from "url";
-import * as helper from "./helper.js";
+import { getClusterId, hasPath, getPath } from "./helper.js";
 import mm from "micromatch";
 import util from "util";
 import apng2gif from "apng2gif-bin";
@@ -55,8 +55,8 @@ function getFrame(src, frame) {
 let resourcePacks = [];
 
 async function init() {
-  console.log(`Custom Resources loading started on ${helper.getClusterId(true)}.`);
-  console.time(`custom_resources_${helper.getClusterId()}`);
+  console.log(`Custom Resources loading started on ${getClusterId(true)}.`);
+  console.time(`custom_resources_${getClusterId()}`);
 
   for (const pack of await fs.readdir(RESOURCE_PACK_FOLDER)) {
     const basePath = path.resolve(RESOURCE_PACK_FOLDER, pack);
@@ -396,8 +396,8 @@ async function init() {
     }
   }
 
-  console.log(`Custom Resources loading done. (${helper.getClusterId(true)})`);
-  console.timeEnd(`custom_resources_${helper.getClusterId()}`);
+  console.log(`Custom Resources loading done. (${getClusterId(true)})`);
+  console.timeEnd(`custom_resources_${getClusterId()}`);
 }
 
 const outputPacks = [];
@@ -461,11 +461,11 @@ export const getTexture = async (item, ignoreId = false, packIds) => {
           value = value.substring(0, value.length - 2);
         }
 
-        if (!helper.hasPath(item, "tag", ...value.split("."))) {
+        if (!hasPath(item, "tag", ...value.split("."))) {
           continue;
         }
 
-        let matchValues = helper.getPath(item, "tag", ...value.split("."));
+        let matchValues = getPath(item, "tag", ...value.split("."));
 
         if (!Array.isArray(matchValues)) {
           matchValues = [matchValues];
@@ -499,7 +499,7 @@ export const getTexture = async (item, ignoreId = false, packIds) => {
   }
 
   // TODO: fix
-  // if ("leather" in outputTexture && helper.hasPath(item, "tag", "ExtraAttributes", "color")) {
+  // if ("leather" in outputTexture && hasPath(item, "tag", "ExtraAttributes", "color")) {
   //   const color = item.tag.ExtraAttributes.color.split(":");
 
   //   const leatherBasePath = path.resolve(path.dirname(outputTexture.path), "leatherCache");

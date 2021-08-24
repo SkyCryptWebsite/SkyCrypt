@@ -1,8 +1,8 @@
-import * as crypto from "crypto";
+import { createHash } from "crypto";
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
-import * as util from "util";
+import { promisify } from "util";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -10,7 +10,7 @@ export const hashedDirectories = ["css"];
 
 export function getFileHash(filename) {
   return new Promise((resolve, reject) => {
-    const md5sum = crypto.createHash("md5");
+    const md5sum = createHash("md5");
 
     const s = fs.createReadStream(filename);
 
@@ -27,7 +27,7 @@ export function getFileHash(filename) {
 
 export function getFileHashes() {
   const directoryPromises = hashedDirectories.map(async (directory) => {
-    const readdirPromise = util.promisify(fs.readdir);
+    const readdirPromise = promisify(fs.readdir);
 
     const fileNames = await readdirPromise(path.join(__dirname, "../public/resources", directory));
 

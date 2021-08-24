@@ -4,7 +4,7 @@ import cors from "cors";
 import sanitize from "mongo-sanitize";
 import leaderboard from "./leaderboards.js";
 
-import * as customResources from "./custom-resources.js";
+import { completePacks } from "./custom-resources.js";
 
 import { redisClient } from "./redis.js";
 
@@ -70,7 +70,7 @@ export default (app, db) => {
 
   app.all("/api/v2/packs", cors(), async (req, res) => {
     if (req.apiKey) {
-      res.json(customResources.completePacks);
+      res.json(completePacks);
     } else {
       res.status(404).json({ error: "This endpoint isn't available to the public." });
     }

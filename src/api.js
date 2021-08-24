@@ -1,8 +1,7 @@
 import tableify from "@tillhub/tableify";
 import * as helper from "./helper.js";
-const { hasPath, getId } = helper;
 import * as lib from "./lib.js";
-import * as constants from "./constants.js";
+import { collection_data } from "./constants.js";
 import cors from "cors";
 
 function handleError(e, res) {
@@ -184,7 +183,7 @@ export default (app, db) => {
       const collections = await lib.getCollections(uuid, profile);
 
       for (const collection in collections) {
-        collections[collection].name = constants.collection_data.find((a) => a.skyblockId == collection).name;
+        collections[collection].name = collection_data.find((a) => a.skyblockId == collection).name;
       }
 
       if ("html" in req.query) {
@@ -313,8 +312,8 @@ export default (app, db) => {
         res.send(
           tableify(
             allItems
-              .filter((a) => getId(a).length > 0)
-              .map((a) => [getId(a), a.Count, a.display_name, a.rarity, a.type]),
+              .filter((a) => helper.getId(a).length > 0)
+              .map((a) => [helper.getId(a), a.Count, a.display_name, a.rarity, a.type]),
             { showHeaders: false }
           )
         );
@@ -345,7 +344,7 @@ export default (app, db) => {
         const extra = weapon.extra;
         let extraOutput = weapon.extra;
 
-        if (hasPath(weapon, "tag", "ExtraAttributes")) {
+        if (helper.hasPath(weapon, "tag", "ExtraAttributes")) {
           if ("html" in req.query) {
             if (enchantments !== undefined) {
               enchantmentsOutput = [];
@@ -380,7 +379,7 @@ export default (app, db) => {
         }
 
         output.push({
-          id: getId(weapon),
+          id: helper.getId(weapon),
           name: weapon.display_name,
           rarity: weapon.rarity,
           enchantments: enchantmentsOutput,
@@ -436,7 +435,7 @@ export default (app, db) => {
         }
 
         output.push({
-          id: getId(armor),
+          id: helper.getId(armor),
           name: armor.display_name,
           rarity: armor.rarity,
           enchantments: enchantmentsOutput,
@@ -497,7 +496,7 @@ export default (app, db) => {
           }
 
           output.push({
-            id: getId(armor),
+            id: helper.getId(armor),
             name: armor.display_name,
             rarity: armor.rarity,
             enchantments: enchantmentsOutput,

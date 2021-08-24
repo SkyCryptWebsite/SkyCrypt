@@ -1,5 +1,4 @@
-import * as constants from "./constants/misc.js";
-const { statNames } = constants; // TODO use named exports
+import { statNames } from "./constants/misc.js";
 
 /**
  * adds a "+" to the beginning of positive numbers

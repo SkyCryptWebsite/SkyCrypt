@@ -1,10 +1,9 @@
-import * as collections from "./constants/collections.js";
+import { collection_data } from "./constants/collections.js";
 import moment from "moment";
 import momentDurationFormat from "moment-duration-format";
 momentDurationFormat(moment);
 
-import * as lib from "./lib.js";
-const { getLevelByXp } = lib; //TODO use named exports
+import { getLevelByXp } from "./lib.js";
 
 const defaultOptions = {
   mappedBy: "uuid",
@@ -85,7 +84,7 @@ export default (name) => {
 
   if (lbName.startsWith("collection_")) {
     const collectionName = lbName.split("_").slice(1).join("_").toUpperCase();
-    const collectionData = collections.collection_data.filter((a) => a.skyblockId == collectionName);
+    const collectionData = collection_data.filter((a) => a.skyblockId == collectionName);
 
     if (collectionData.length > 0) {
       options["name"] = collectionData[0].name + " Collection";

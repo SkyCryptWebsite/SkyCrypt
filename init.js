@@ -1,5 +1,5 @@
 import * as fsExtra from "fs-extra";
-import * as constants from "./src/constants.js";
+import { item_tags } from "./src/constants.js";
 import { mongo, db } from "./src/mongo.js";
 
 fsExtra.ensureDirSync("cache");
@@ -28,8 +28,8 @@ await db.collection("items").createIndex({ id: 1 }, { unique: true });
 
 await db.collection("items").createIndex({ name: "text", tag: "text" });
 
-for (const id in constants.item_tags) {
-  await db.collection("items").updateOne({ id }, { $set: { tag: constants.item_tags[id] } });
+for (const id in item_tags) {
+  await db.collection("items").updateOne({ id }, { $set: { tag: item_tags[id] } });
 }
 
 await db.collection("bazaar").createIndex({ productId: 1 }, { unique: true });

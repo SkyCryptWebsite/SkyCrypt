@@ -8,7 +8,7 @@ const mcData = minecraftData("1.8.9");
 import _ from "lodash";
 import * as constants from "./constants.js";
 import * as helper from "./helper.js";
-const { getId } = helper; // TODO use named exports
+const getId = helper.getId;
 import axios from "axios";
 import moment from "moment";
 import { v4 } from "uuid";
@@ -26,7 +26,7 @@ const Hypixel = axios.create({
 
 import { redisClient } from "./redis.js";
 
-import * as customResources from "./custom-resources.js";
+import { getTexture, packs } from "./custom-resources.js";
 import { makeLore } from "./lore-generator.js";
 
 const parseNbt = util.promisify(nbt.parse);
@@ -517,7 +517,7 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
     }
 
     if (!helper.hasPath(item, "tag", "ExtraAttributes", "skin") && customTextures) {
-      const customTexture = await customResources.getTexture(item, false, packs);
+      const customTexture = await getTexture(item, false, packs);
 
       if (customTexture) {
         item.animated = customTexture.animated;
@@ -4001,7 +4001,7 @@ export const getThemes = () => {
 };
 
 export const getPacks = () => {
-  return customResources.packs.sort((a, b) => b.priority - a.priority);
+  return packs.sort((a, b) => b.priority - a.priority);
 };
 
 async function init() {
