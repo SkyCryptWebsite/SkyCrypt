@@ -1,5 +1,6 @@
 import * as fsExtra from "fs-extra";
 import { item_tags } from "./src/constants.js";
+import "./src/credentials.js";
 
 fsExtra.ensureDirSync("cache");
 
