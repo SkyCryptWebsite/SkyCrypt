@@ -421,7 +421,7 @@ readyPromise.then(() => {
 export let ready = false;
 export const packs = outputPacks;
 export const completePacks = resourcePacks;
-export const getTexture = async (item, ignoreId = false, packIds) => {
+export async function getTexture(item, ignoreId = false, packIds) {
   if (!ready) {
     await readyPromise;
   }
@@ -548,4 +548,4 @@ export const getTexture = async (item, ignoreId = false, packIds) => {
   process.send({ type: "used_pack", id: outputTexture?.pack.config.id });
 
   return outputTexture;
-};
+}

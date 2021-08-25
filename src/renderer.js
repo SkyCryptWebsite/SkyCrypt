@@ -113,7 +113,7 @@ async function renderColoredItem(color, baseImage, overlayImage) {
   return await canvas.toBuffer("image/png");
 }
 
-export const renderHead = async (url, scale) => {
+export async function renderHead(url, scale) {
   let hat_factor = 0.94;
 
   let canvas = createCanvas(scale * 20, scale * 18.5);
@@ -268,7 +268,7 @@ export const renderHead = async (url, scale) => {
   ctx.drawImage(hat_canvas, 0, 0);
 
   return await canvas.toBuffer("image/png");
-};
+}
 
 export async function renderArmor(type, color) {
   const armorBase = await loadImage(path.resolve(textureDir, `leather_${type}.png`));
@@ -286,7 +286,7 @@ export async function renderPotion(type, color) {
   return await renderColoredItem("#" + color, potionLiquid, potionBottlle);
 }
 
-export const renderItem = async (skyblockId, query, db) => {
+export async function renderItem(skyblockId, query, db) {
   let item = { Damage: 0, id: -1 };
   query = sanitize(query);
 
@@ -380,11 +380,11 @@ export const renderItem = async (skyblockId, query, db) => {
   }
 
   return outputTexture;
-};
+}
 
-export const init = async () => {
+export async function init() {
   itemsSheet = await loadImage(path.resolve(__dirname, "..", "public", "resources", "img", "inventory", `items.png`));
   itemsCss = css.parse(
     await fs.readFile(path.resolve(__dirname, "..", "public", "resources", "css", `inventory.css`), "utf8")
   );
-};
+}

@@ -34,7 +34,7 @@ function getKey(key) {
  * @param  {...(string|number)} keys a path
  * @returns {boolean} if the path exists on the object
  */
-export const hasPath = (obj, ...keys) => {
+export function hasPath(obj, ...keys) {
   if (obj == null) {
     return false;
   }
@@ -50,7 +50,7 @@ export const hasPath = (obj, ...keys) => {
   }
 
   return true;
-};
+}
 
 /**
  * @deprecated use optional chaining instead
@@ -59,7 +59,7 @@ export const hasPath = (obj, ...keys) => {
  * @param  {...(string|number)} keys a path
  * @returns {any} the value at the path on the object
  */
-export const getPath = (obj, ...keys) => {
+export function getPath(obj, ...keys) {
   if (obj == null) {
     return undefined;
   }
@@ -75,7 +75,7 @@ export const getPath = (obj, ...keys) => {
   }
 
   return loc;
-};
+}
 
 /**
  * @deprecated because it's inefficient
@@ -85,7 +85,7 @@ export const getPath = (obj, ...keys) => {
  * @param {any} value a value
  * @param  {...(string|number)} keys a path
  */
-export const setPath = (obj, value, ...keys) => {
+export function setPath(obj, value, ...keys) {
   let i;
   let loc = obj || {};
 
@@ -98,17 +98,17 @@ export const setPath = (obj, value, ...keys) => {
   }
 
   loc[keys[i]] = value;
-};
+}
 
-export const getId = (item) => {
+export function getId(item) {
   if (hasPath(item, "tag", "ExtraAttributes", "id")) {
     return item.tag.ExtraAttributes.id;
   }
 
   return "";
-};
+}
 
-export const resolveUsernameOrUuid = async (uuid, db, cacheOnly = false) => {
+export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
   let user = null;
 
   uuid = uuid.replace(/-/g, "");
@@ -232,9 +232,9 @@ export const resolveUsernameOrUuid = async (uuid, db, cacheOnly = false) => {
   } else {
     return { uuid, display_name: uuid, skin_data };
   }
-};
+}
 
-export const getGuild = async (uuid, db, cacheOnly = false) => {
+export async function getGuild(uuid, db, cacheOnly = false) {
   uuid = sanitize(uuid);
   const guildMember = await db.collection("guildMembers").findOne({ uuid });
 
@@ -347,9 +347,9 @@ export const getGuild = async (uuid, db, cacheOnly = false) => {
       return null;
     }
   }
-};
+}
 
-export const getGuildLevel = (xp) => {
+export function getGuildLevel(xp) {
   let level = 0;
 
   while (true) {
@@ -362,14 +362,14 @@ export const getGuildLevel = (xp) => {
       return level;
     }
   }
-};
+}
 
 /**
  * Convert Minecraft lore to HTML
  * @param {string} text minecraft lore with color and formatting codes
  * @returns {string} HTML
  */
-export const renderLore = (text) => {
+export function renderLore(text) {
   let output = "";
 
   /**
@@ -423,16 +423,16 @@ export const renderLore = (text) => {
   }
 
   return output;
-};
+}
 
 /**
  * Get Minecraft lore without the color and formatting codes
  * @param {string} text lore with color codes
  * @returns {string} lore without color codes
  */
-export const getRawLore = (text) => {
+export function getRawLore(text) {
   return text.replace(/§[0-9a-fk-or]/g, "");
-};
+}
 
 /**
  * @param {string} word
@@ -441,9 +441,9 @@ export const getRawLore = (text) => {
  * // returns "Hello world"
  * capitalizeFirstLetter("hello world");
  */
-export const capitalizeFirstLetter = (word) => {
+export function capitalizeFirstLetter(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
-};
+}
 
 /**
  * @param {string} word
@@ -452,7 +452,7 @@ export const capitalizeFirstLetter = (word) => {
  * // returns "Hello World"
  * capitalizeFirstLetter("hello world");
  */
-export const titleCase = (string) => {
+export function titleCase(string) {
   let split = string.toLowerCase().split(" ");
 
   for (let i = 0; i < split.length; i++) {
@@ -460,7 +460,7 @@ export const titleCase = (string) => {
   }
 
   return split.join(" ");
-};
+}
 
 /**
  * checks whether a string should be proceeded by a or by an
@@ -473,25 +473,25 @@ export const titleCase = (string) => {
  * // returns "an"
  * aOrAn("egg");
  */
-export const aOrAn = (string) => {
+export function aOrAn(string) {
   return ["a", "e", "i", "o", "u"].includes(string.charAt(0).toLowerCase()) ? "an" : "a";
-};
+}
 
 /**
  * returns a object with they key sorted
  * @param {object} obj
  * @returns {object}
  */
-export const sortObject = (obj) => {
+export function sortObject(obj) {
   return Object.keys(obj)
     .sort()
     .reduce(function (res, key) {
       res[key] = obj[key];
       return res;
     }, {});
-};
+}
 
-export const getPrice = (orderSummary) => {
+export function getPrice(orderSummary) {
   orderSummary = orderSummary.slice(0, Math.ceil(orderSummary.length / 2));
 
   const orders = [];
@@ -516,14 +516,14 @@ export const getPrice = (orderSummary) => {
   const totalWeight = orders.reduce((sum, value) => sum + value[1], 0);
 
   return orders.reduce((mean, value) => mean + (value[0] * value[1]) / totalWeight, 0);
-};
+}
 
-export const getPrices = (product) => {
+export function getPrices(product) {
   return {
     buyPrice: getPrice(product.buy_summary),
     sellPrice: getPrice(product.sell_summary),
   };
-};
+}
 
 /**
  * @param {number} number the number to be formatted
@@ -570,7 +570,7 @@ export const formatNumber = (number, floor, rounding = 10) => {
  * @param {{score_exploration:number,score_speed:number,score_skill:number,score_bonus:number}} data dungeon run
  * @returns {"S+"|"S"|"A"|"B"|"C"|"D"} letter grade
  */
-export const calcDungeonGrade = (data) => {
+export function calcDungeonGrade(data) {
   const total_score = data.score_exploration + data.score_speed + data.score_skill + data.score_bonus;
   if (total_score <= 99) {
     return "D";
@@ -585,9 +585,9 @@ export const calcDungeonGrade = (data) => {
   } else {
     return "S+";
   }
-};
+}
 
-export const parseRank = (player) => {
+export function parseRank(player) {
   const output = {
     rankText: null,
     rankColor: null,
@@ -629,7 +629,7 @@ export const parseRank = (player) => {
   }
 
   return output;
-};
+}
 
 export const renderRank = ({ rankText, rankColor, plusText, plusColor }) => {
   if (rankText === null) {
@@ -648,7 +648,7 @@ export const renderRank = ({ rankText, rankColor, plusText, plusColor }) => {
   }
 };
 
-export const updateRank = async (uuid, db) => {
+export async function updateRank(uuid, db) {
   let rank = {
     rankText: null,
     rankColor: null,
@@ -706,9 +706,9 @@ export const updateRank = async (uuid, db) => {
   await db.collection("hypixelPlayers").updateOne({ uuid: sanitize(uuid) }, { $set: rank }, { upsert: true });
 
   return rank;
-};
+}
 
-export const getRank = async (uuid, db, cacheOnly = false) => {
+export async function getRank(uuid, db, cacheOnly = false) {
   uuid = sanitize(uuid);
 
   let hypixelPlayer = await db.collection("hypixelPlayers").findOne({ uuid });
@@ -728,9 +728,9 @@ export const getRank = async (uuid, db, cacheOnly = false) => {
   }
 
   return hypixelPlayer;
-};
+}
 
-export const fetchMembers = async (profileId, db, returnUuid = false) => {
+export async function fetchMembers(profileId, db, returnUuid = false) {
   let output = [];
   profileId = sanitize(profileId);
 
@@ -775,15 +775,15 @@ export const fetchMembers = async (profileId, db, returnUuid = false) => {
   }
 
   return output;
-};
+}
 
-export const getClusterId = (fullName = false) => {
+export function getClusterId(fullName = false) {
   if (fullName) {
     return cluster.isWorker ? `worker${cluster.worker.id}` : "master";
   }
 
   return cluster.isWorker ? `w${cluster.worker.id}` : "m";
-};
+}
 
 export const generateDebugId = (endpointName = "unknown") => {
   return (
@@ -791,7 +791,7 @@ export const generateDebugId = (endpointName = "unknown") => {
   );
 };
 
-export const generateUUID = () => {
+export function generateUUID() {
   let u = "",
     i = 0;
   while (i++ < 36) {
@@ -801,7 +801,7 @@ export const generateUUID = () => {
     u += c == "-" || c == "4" ? c : v.toString(16);
   }
   return u;
-};
+}
 
 /**
  * @typedef {{slot_type:string,slot_number:number,gem_type:string,gem_tier:string,lore:string}} Gem
@@ -813,7 +813,7 @@ export const generateUUID = () => {
  *
  * @returns {Gem[]} array of gem objects
  */
-export const parseItemGems = (gems, rarity) => {
+export function parseItemGems(gems, rarity) {
   /** @type {Gem[]} */
   const parsed = [];
   for (const [key, value] of Object.entries(gems)) {
@@ -842,7 +842,7 @@ export const parseItemGems = (gems, rarity) => {
   });
 
   return parsed;
-};
+}
 
 /**
  * @param  {string} type gem name, ex: RUBY
@@ -855,7 +855,7 @@ export const parseItemGems = (gems, rarity) => {
  * // returns "§cPerfect Ruby §7(§c+25❤§7)"
  * generateGemLore("RUBY", "PERFECT", "MYTHIC");
  */
-export const generateGemLore = (type, tier, rarity) => {
+export function generateGemLore(type, tier, rarity) {
   const lore = [];
   const stats = [];
 
@@ -886,8 +886,8 @@ export const generateGemLore = (type, tier, rarity) => {
   }
 
   return lore.join("");
-};
+}
 
-export const rarityNameToInt = (string) => {
+export function rarityNameToInt(string) {
   return constants.rarities.indexOf(string.toLowerCase());
-};
+}

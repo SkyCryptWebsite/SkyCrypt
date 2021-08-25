@@ -1025,16 +1025,16 @@ function calcDungeonsWeight(type, level, experience) {
   };
 }
 
-export const splitWithTail = (string, delimiter, count) => {
+export function splitWithTail(string, delimiter, count) {
   let parts = string.split(delimiter);
   let tail = parts.slice(count).join(delimiter);
   let result = parts.slice(0, count);
   result.push(tail);
 
   return result;
-};
+}
 
-export const getMinions = (coopMembers) => {
+export function getMinions(coopMembers) {
   const minions = [];
 
   const craftedGenerators = [];
@@ -1081,8 +1081,8 @@ export const getMinions = (coopMembers) => {
   }
 
   return minions;
-};
-export const getMinionSlots = (minions) => {
+}
+export function getMinionSlots(minions) {
   let uniqueMinions = 0;
 
   for (const minion of minions) {
@@ -1104,7 +1104,7 @@ export const getMinionSlots = (minions) => {
   }
 
   return output;
-};
+}
 
 export const getItems = async (
   profile,
@@ -1690,7 +1690,7 @@ export const getItems = async (
   return output;
 };
 
-export const getLevels = async (userProfile, hypixelProfile, levelCaps) => {
+export async function getLevels(userProfile, hypixelProfile, levelCaps) {
   let output = {};
 
   let skillLevels;
@@ -1813,7 +1813,7 @@ export const getLevels = async (userProfile, hypixelProfile, levelCaps) => {
   output.average_level_rank = await redisClient.zcount([`lb_average_level`, output.average_level, "+inf"]);
 
   return output;
-};
+}
 
 export const getStats = async (
   db,
@@ -2851,7 +2851,7 @@ export const getStats = async (
   return output;
 };
 
-export const getPets = async (profile) => {
+export async function getPets(profile) {
   let output = [];
 
   if (!helper.hasPath(profile, "pets")) {
@@ -3049,9 +3049,9 @@ export const getPets = async (profile) => {
   });
 
   return output;
-};
+}
 
-export const getMissingPets = async (pets) => {
+export async function getMissingPets(pets) {
   const profile = {
     pets: [],
   };
@@ -3074,9 +3074,9 @@ export const getMissingPets = async (pets) => {
   }
 
   return getPets(profile);
-};
+}
 
-export const getPetScore = async (pets) => {
+export async function getPetScore(pets) {
   const highestRarity = {};
 
   for (const pet of pets) {
@@ -3086,9 +3086,9 @@ export const getPetScore = async (pets) => {
   }
 
   return Object.values(highestRarity).reduce((a, b) => a + b, 0);
-};
+}
 
-export const getMissingTalismans = async (talismans) => {
+export async function getMissingTalismans(talismans) {
   let unique = Object.keys(constants.talismans);
   unique.forEach((name) => {
     if (name in constants.talisman_duplicates) {
@@ -3163,9 +3163,9 @@ export const getMissingTalismans = async (talismans) => {
     missing: other,
     upgrades: upgrades,
   };
-};
+}
 
-export const getTalismanCount = () => {
+export function getTalismanCount() {
   if (TALISMAN_COUNT != null) return TALISMAN_COUNT;
   let talismanArray = Object.keys(constants.talismans);
 
@@ -3177,9 +3177,9 @@ export const getTalismanCount = () => {
 
   TALISMAN_COUNT = talismanArray.length;
   return talismanArray.length;
-};
+}
 
-export const getCollections = async (uuid, profile, cacheOnly = false) => {
+export async function getCollections(uuid, profile, cacheOnly = false) {
   const output = {};
 
   const userProfile = profile.members[uuid];
@@ -3228,9 +3228,9 @@ export const getCollections = async (uuid, profile, cacheOnly = false) => {
   }
 
   return output;
-};
+}
 
-export const getDungeons = async (userProfile, hypixelProfile) => {
+export async function getDungeons(userProfile, hypixelProfile) {
   let output = {};
 
   output.dungeonsWeight = 0;
@@ -3509,9 +3509,9 @@ export const getDungeons = async (userProfile, hypixelProfile) => {
   }
 
   return output;
-};
+}
 
-export const getProfileUpgrades = async (profile) => {
+export async function getProfileUpgrades(profile) {
   const output = {};
   for (const upgrade in constants.profile_upgrades) {
     output[upgrade] = 0;
@@ -3522,7 +3522,7 @@ export const getProfileUpgrades = async (profile) => {
     }
   }
   return output;
-};
+}
 
 export const getProfile = async (
   db,
@@ -3810,7 +3810,7 @@ export const getProfile = async (
   return { profile: profile, allProfiles: allSkyBlockProfiles, uuid: paramPlayer };
 };
 
-export const updateLeaderboardPositions = async (db, uuid, allProfiles) => {
+export async function updateLeaderboardPositions(db, uuid, allProfiles) {
   if (constants.blocked_players.includes(uuid)) {
     return;
   }
@@ -3994,15 +3994,15 @@ export const updateLeaderboardPositions = async (db, uuid, allProfiles) => {
   } catch (e) {
     console.error(e);
   }
-};
+}
 
-export const getThemes = () => {
+export function getThemes() {
   return constants.themes;
-};
+}
 
-export const getPacks = () => {
+export function getPacks() {
   return packs.sort((a, b) => b.priority - a.priority);
-};
+}
 
 async function init() {
   const response = await axios("https://api.hypixel.net/resources/skyblock/collections");
