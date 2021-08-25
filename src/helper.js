@@ -130,8 +130,12 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
     }
   }
 
-  let skin_data = {
-    skinurl: "https://textures.minecraft.net/texture/3b60a1f6d562f52aaebbf1434f1de147933a3affe0e764fa49ea057536623cd3",
+  const defaultAlexSkin =
+    "https://textures.minecraft.net/texture/3b60a1f6d562f52aaebbf1434f1de147933a3affe0e764fa49ea057536623cd3";
+
+  /** @type {{model:"default"|"slim"; skinurl:string; capeurl?:string;}} */
+  const skin_data = {
+    skinurl: defaultAlexSkin,
     model: "slim",
   };
 
