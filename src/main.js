@@ -1,7 +1,7 @@
 import cluster from "cluster";
 
 if (cluster.isMaster) {
-  import("./master.js");
+  await import("./master.js");
 
   const os = await import("os");
 
