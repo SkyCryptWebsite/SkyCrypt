@@ -280,6 +280,10 @@ export const mob_names = {
   sadan_statue: "Terracotta",
   diamond_guy: "Angry Archaeologist",
   tentaclees: "Fels",
+  master_diamond_guy: "Master Angry Archaeologist",
+  master_sadan_statue: "Master Terracotta",
+  master_tentaclees: "Master Fels",
+  maxor: "Necron",
 };
 
 export const area_names = {
