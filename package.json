@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node init && node index",
+    "start": "node index",
     "dev": "concurrently -r \"npm run nodemon\" \"npm run scss:watch\" \"npm run rollup:watch\"",
-    "postinstall": "node init",
+    "postinstall": "node src/credentials.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
@@ -19,7 +19,7 @@
     "scss:watch": "sass --watch public/resources/scss:public/resources/css",
     "rollup": "npx rollup -c",
     "rollup:watch": "npx rollup -c -w",
-    "nodemon": "node init && nodemon index"
+    "nodemon": "nodemon index"
   },
   "repository": {
     "type": "git",
