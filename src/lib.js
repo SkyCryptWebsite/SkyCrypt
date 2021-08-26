@@ -405,10 +405,8 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
   // Check backpack contents and add them to the list of items
   for (const [index, item] of items.entries()) {
     if (
-      helper.hasPath(item, "tag", "display", "Name") &&
-      helper.hasPath(item, "tag", "ExtraAttributes", "id") &&
-      (item.tag.display.Name.includes("Backpack") ||
-        ["NEW_YEAR_CAKE_BAG", "BUILDERS_WAND", "BASKET_OF_SEEDS"].includes(item.tag.ExtraAttributes.id))
+      item.tag?.display?.Name.includes("Backpack") ||
+      ["NEW_YEAR_CAKE_BAG", "BUILDERS_WAND", "BASKET_OF_SEEDS"].includes(item.tag?.ExtraAttributes?.id)
     ) {
       let backpackData;
 
@@ -452,7 +450,7 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
     }
 
     // Set raw display name without color and formatting codes
-    if (helper.hasPath(item, "tag", "display", "Name")) {
+    if (item.tag?.display?.Name != undefined) {
       item.display_name = helper.getRawLore(item.tag.display.Name);
     }
 
@@ -485,8 +483,7 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
 
     // Resolve skull textures to their image path
     if (
-      helper.hasPath(item, "tag", "SkullOwner", "Properties", "textures") &&
-      Array.isArray(item.tag.SkullOwner.Properties.textures) &&
+      Array.isArray(item.tag?.SkullOwner?.Properties?.textures) &&
       item.tag.SkullOwner.Properties.textures.length > 0
     ) {
       try {
@@ -508,7 +505,7 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
     }
 
     // Uses animated skin texture, if present
-    if (helper.hasPath(item, "tag", "ExtraAttributes", "skin")) {
+    if (item.tag?.ExtraAttributes?.skin != undefined) {
       switch (item.tag.ExtraAttributes.skin) {
         case "SNOW_SNOWGLOBE":
           item.texture_path = `/resources/img/items/skin_snowglobe.png?v6`;
@@ -516,7 +513,7 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
       }
     }
 
-    if (!helper.hasPath(item, "tag", "ExtraAttributes", "skin") && customTextures) {
+    if (item.tag?.ExtraAttributes?.skin == undefined && customTextures) {
       const customTexture = await getTexture(item, false, packs);
 
       if (customTexture) {
@@ -531,14 +528,14 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
     const enchantments = helper.getPath(item, "tag", "ExtraAttributes", "enchantments") || {};
 
     // Get extra info about certain things
-    if (helper.hasPath(item, "tag", "ExtraAttributes")) {
+    if (item.tag?.ExtraAttributes != undefined) {
       item.extra = {
         hpbs: 0,
         anvil_uses: 0,
       };
     }
 
-    if (helper.hasPath(item, "tag", "ExtraAttributes", "rarity_upgrades")) {
+    if (item.tag?.ExtraAttributes?.rarity_upgrades != undefined) {
       const { rarity_upgrades } = item.tag.ExtraAttributes;
 
       if (rarity_upgrades > 0) {
@@ -546,11 +543,11 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
       }
     }
 
-    if (helper.hasPath(item, "tag", "ExtraAttributes", "hot_potato_count")) {
+    if (item.tag?.ExtraAttributes?.hot_potato_count != undefined) {
       item.extra.hpbs = item.tag.ExtraAttributes.hot_potato_count;
     }
 
-    if (helper.hasPath(item, "tag", "ExtraAttributes", "anvil_uses")) {
+    if (item.tag?.ExtraAttributes?.anvil_uses != undefined) {
       let { anvil_uses } = item.tag.ExtraAttributes;
 
       anvil_uses -= item.extra.hpbs;
@@ -560,7 +557,7 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
       }
     }
 
-    if (helper.hasPath(item, "tag", "ExtraAttributes", "expertise_kills")) {
+    if (item.tag?.ExtraAttributes?.expertise_kills != undefined) {
       let { expertise_kills } = item.tag.ExtraAttributes;
 
       if (expertise_kills > 0) {
@@ -568,7 +565,7 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
       }
     }
 
-    if (helper.hasPath(item, "tag", "ExtraAttributes", "blocks_walked")) {
+    if (item.tag?.ExtraAttributes?.blocks_walked != undefined) {
       let { blocks_walked } = item.tag.ExtraAttributes;
 
       if (blocks_walked > 0) {
@@ -576,7 +573,7 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
       }
     }
 
-    if (helper.hasPath(item, "tag", "ExtraAttributes", "timestamp")) {
+    if (item.tag?.ExtraAttributes?.timestamp != undefined) {
       let timestamp = item.tag.ExtraAttributes.timestamp;
 
       if (!isNaN(timestamp)) {
@@ -588,39 +585,39 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
       item.extra.timestamp;
     }
 
-    if (helper.hasPath(item, "tag", "ExtraAttributes", "spawnedFor")) {
+    if (item.tag?.ExtraAttributes?.spawnedFor != undefined) {
       item.extra.spawned_for = item.tag.ExtraAttributes.spawnedFor.replace(/-/g, "");
     }
 
-    if (helper.hasPath(item, "tag", "ExtraAttributes", "baseStatBoostPercentage")) {
+    if (item.tag?.ExtraAttributes?.baseStatBoostPercentage != undefined) {
       item.extra.base_stat_boost = item.tag.ExtraAttributes.baseStatBoostPercentage;
     }
 
-    if (helper.hasPath(item, "tag", "ExtraAttributes", "item_tier")) {
+    if (item.tag?.ExtraAttributes?.item_tier != undefined) {
       item.extra.floor = item.tag.ExtraAttributes.item_tier;
     }
 
-    if (helper.hasPath(item, "tag", "ExtraAttributes", "winning_bid")) {
+    if (item.tag?.ExtraAttributes?.winning_bid != undefined) {
       item.extra.price_paid = item.tag.ExtraAttributes.winning_bid;
     }
 
-    if (helper.hasPath(item, "tag", "ExtraAttributes", "modifier")) {
+    if (item.tag?.ExtraAttributes?.modifier != undefined) {
       item.extra.reforge = item.tag.ExtraAttributes.modifier;
     }
 
-    if (helper.hasPath(item, "tag", "ExtraAttributes", "ability_scroll")) {
+    if (item.tag?.ExtraAttributes?.ability_scroll != undefined) {
       item.extra.ability_scroll = item.tag.ExtraAttributes.ability_scroll;
     }
 
-    if (helper.hasPath(item, "tag", "ExtraAttributes", "mined_crops")) {
+    if (item.tag?.ExtraAttributes?.mined_crops != undefined) {
       item.extra.crop_counter = item.tag.ExtraAttributes.mined_crops;
     }
 
-    if (helper.hasPath(item, "tag", "ExtraAttributes", "petInfo")) {
+    if (item.tag?.ExtraAttributes?.petInfo != undefined) {
       item.tag.ExtraAttributes.petInfo = JSON.parse(item.tag.ExtraAttributes.petInfo);
     }
 
-    if (helper.hasPath(item, "tag", "ExtraAttributes", "gems")) {
+    if (item.tag?.ExtraAttributes?.gems != undefined) {
       item.extra.gems = item.tag.ExtraAttributes.gems;
     }
 
@@ -890,10 +887,10 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
       }
     }
 
-    if (!helper.hasPath(item, "display_name") && helper.hasPath(item, "id")) {
+    if (!("display_name" in item) && "id" in item) {
       const vanillaItem = mcData.items[item.id];
 
-      if (helper.hasPath(vanillaItem, "displayName")) {
+      if ("displayName" in vanillaItem) {
         item.display_name = vanillaItem.displayName;
       }
     }
@@ -1396,16 +1393,12 @@ export const getItems = async (
     let id = getId(talisman);
     let cakes = [];
 
-    if (
-      id == "NEW_YEAR_CAKE_BAG" &&
-      helper.hasPath(talisman, "containsItems") &&
-      Array.isArray(talisman.containsItems)
-    ) {
+    if (id == "NEW_YEAR_CAKE_BAG" && Array.isArray(talisman?.containsItems)) {
       talisman.stats.health = 0;
 
       for (const item of talisman.containsItems) {
         if (
-          helper.hasPath(item, "tag", "ExtraAttributes", "new_years_cake") &&
+          item.tag?.ExtraAttributes?.new_years_cake != undefined &&
           !cakes.includes(item.tag.ExtraAttributes.new_years_cake)
         ) {
           talisman.stats.health++;
@@ -1418,12 +1411,12 @@ export const getItems = async (
   for (const talisman of talismans) {
     talisman.base_name = talisman.display_name;
 
-    if (helper.hasPath(talisman, "tag", "ExtraAttributes", "modifier")) {
+    if (talisman.tag?.ExtraAttributes?.modifier != undefined) {
       talisman.base_name = talisman.display_name.split(" ").slice(1).join(" ");
       talisman.reforge = talisman.tag.ExtraAttributes.modifier;
     }
 
-    if (helper.hasPath(talisman, "tag", "ExtraAttributes", "talisman_enrichment")) {
+    if (talisman.tag?.ExtraAttributes?.talisman_enrichment != undefined) {
       talisman.enrichment = talisman.tag.ExtraAttributes.talisman_enrichment;
     }
   }
@@ -1610,20 +1603,14 @@ export const getItems = async (
     armor.forEach((armorPiece) => {
       let name = armorPiece.display_name.replace(/✪/g, "").trim();
 
-      if (helper.hasPath(armorPiece, "tag", "ExtraAttributes", "modifier")) {
+      if (armorPiece.tag?.ExtraAttributes?.modifier != undefined) {
         name = name.split(" ").slice(1).join(" ");
       }
 
       armorPiece.armor_name = name;
     });
 
-    if (
-      armor.filter(
-        (a) =>
-          helper.hasPath(a, "tag", "ExtraAttributes", "modifier") &&
-          a.tag.ExtraAttributes.modifier == armor[0].tag.ExtraAttributes.modifier
-      ).length == 4
-    ) {
+    if (armor.filter((a) => a.tag?.ExtraAttributes?.modifier == armor[0].tag.ExtraAttributes.modifier).length == 4) {
       reforgeName = armor[0].display_name.split(" ")[0];
     }
 
@@ -1700,16 +1687,16 @@ export async function getLevels(userProfile, hypixelProfile, levelCaps) {
 
   // Apply skill bonuses
   if (
-    helper.hasPath(userProfile, "experience_skill_taming") ||
-    helper.hasPath(userProfile, "experience_skill_farming") ||
-    helper.hasPath(userProfile, "experience_skill_mining") ||
-    helper.hasPath(userProfile, "experience_skill_combat") ||
-    helper.hasPath(userProfile, "experience_skill_foraging") ||
-    helper.hasPath(userProfile, "experience_skill_fishing") ||
-    helper.hasPath(userProfile, "experience_skill_enchanting") ||
-    helper.hasPath(userProfile, "experience_skill_alchemy") ||
-    helper.hasPath(userProfile, "experience_skill_carpentry") ||
-    helper.hasPath(userProfile, "experience_skill_runecrafting")
+    "experience_skill_taming" in userProfile ||
+    "experience_skill_farming" in userProfile ||
+    "experience_skill_mining" in userProfile ||
+    "experience_skill_combat" in userProfile ||
+    "experience_skill_foraging" in userProfile ||
+    "experience_skill_fishing" in userProfile ||
+    "experience_skill_enchanting" in userProfile ||
+    "experience_skill_alchemy" in userProfile ||
+    "experience_skill_carpentry" in userProfile ||
+    "experience_skill_runecrafting" in userProfile
   ) {
     let average_level_no_progress = 0;
 
@@ -1895,11 +1882,11 @@ export const getStats = async (
 
     let slayers = {};
 
-    if (helper.hasPath(userProfile, "slayer_bosses")) {
+    if ("slayer_bosses" in userProfile) {
       for (const slayerName in userProfile.slayer_bosses) {
         const slayer = userProfile.slayer_bosses[slayerName];
 
-        if (!helper.hasPath(slayer, "claimed_levels")) {
+        if (!("claimed_levels" in slayer)) {
           continue;
         }
 
@@ -1936,7 +1923,7 @@ export const getStats = async (
     output.slayer_xp = 0;
 
     for (const slayer in slayers) {
-      if (!helper.hasPath(slayers[slayer], "level", "currentLevel")) {
+      if (slayers[slayer]?.level?.currentLevel == undefined) {
         continue;
       }
 
@@ -2037,8 +2024,7 @@ export const getStats = async (
 
   // Apply Emerald Armor full set bonus of +1 HP and +1 Defense per 3000 emeralds in collection with a maximum of 300
   if (
-    helper.hasPath(userProfile, "collection", "EMERALD") &&
-    !isNaN(userProfile.collection.EMERALD) &&
+    !isNaN(userProfile.collection?.EMERALD) &&
     items.armor.filter((a) => getId(a).startsWith("EMERALD_ARMOR_")).length == 4
   ) {
     let emerald_bonus = Math.min(350, Math.floor(userProfile.collection.EMERALD / 3000));
@@ -2258,7 +2244,7 @@ export const getStats = async (
     }
   }
 
-  if (items.armor[0] != null && helper.hasPath(items.armor[0], "stats")) {
+  if (items.armor[0]?.stats != undefined) {
     for (const stat in renownedBonus) {
       if (!(stat in items.armor[0].stats)) {
         items.armor[0].stats[stat] = 0;
@@ -2395,7 +2381,7 @@ export const getStats = async (
   }
 
   for (const member of members) {
-    if (!helper.hasPath(profile, "members", member.uuid, "last_save")) {
+    if (profile?.members?.[member.uuid]?.last_save == undefined) {
       continue;
     }
 
@@ -2410,7 +2396,7 @@ export const getStats = async (
     };
   }
 
-  if (helper.hasPath(profile, "banking", "balance")) {
+  if (profile.banking?.balance != undefined) {
     output.bank = profile.banking.balance;
   }
 
@@ -2425,7 +2411,7 @@ export const getStats = async (
   output.profiles = {};
 
   for (const sbProfile of allProfiles.filter((a) => a.profile_id != profile.profile_id)) {
-    if (!helper.hasPath(sbProfile, "members", profile.uuid, "last_save")) {
+    if (sbProfile?.members?.[profile.uuid]?.last_save == undefined) {
       continue;
     }
 
@@ -2854,7 +2840,7 @@ export const getStats = async (
 export async function getPets(profile) {
   let output = [];
 
-  if (!helper.hasPath(profile, "pets")) {
+  if (!("pets" in profile)) {
     return output;
   }
 
@@ -3516,7 +3502,7 @@ export async function getProfileUpgrades(profile) {
   for (const upgrade in constants.profile_upgrades) {
     output[upgrade] = 0;
   }
-  if (helper.hasPath(profile, "community_upgrades", "upgrade_states")) {
+  if (profile.community_upgrades?.upgrade_states != undefined) {
     for (const u of profile.community_upgrades.upgrade_states) {
       output[u.upgrade] = Math.max(output[u.upgrade] || 0, u.tier);
     }
@@ -3565,7 +3551,7 @@ export const getProfile = async (
       .find({ profile_id: { $in: Object.keys(profileObject.profiles) } });
 
     for await (const doc of profileData) {
-      if (!helper.hasPath(doc, "members", paramPlayer)) {
+      if (doc.members?.[paramPlayer] == undefined) {
         continue;
       }
 
@@ -3608,7 +3594,7 @@ export const getProfile = async (
 
       allSkyBlockProfiles = data.profiles;
     } catch (e) {
-      if (helper.hasPath(e, "response", "data", "cause")) {
+      if (e?.response?.data?.cause != undefined) {
         throw `Hypixel API Error: ${e.response.data.cause}.`;
       }
 
@@ -3622,7 +3608,7 @@ export const getProfile = async (
 
   for (const profile of allSkyBlockProfiles) {
     for (const member in profile.members) {
-      if (!helper.hasPath(profile.members[member], "last_save")) {
+      if (profile.members[member]?.last_save == undefined) {
         delete profile.members[member];
       }
     }
@@ -3676,7 +3662,7 @@ export const getProfile = async (
     let memberCount = 0;
 
     for (const member in profile.members) {
-      if (helper.hasPath(profile.members[member], "last_save")) {
+      if (profile.members[member]?.last_save != undefined) {
         memberCount++;
       }
     }
@@ -3714,11 +3700,11 @@ export const getProfile = async (
         members: _profile.members,
       };
 
-      if (helper.hasPath(_profile, "banking")) {
+      if ("banking" in _profile) {
         insertCache.banking = _profile.banking;
       }
 
-      if (helper.hasPath(_profile, "community_upgrades")) {
+      if ("community_upgrades" in _profile) {
         insertCache.community_upgrades = _profile.community_upgrades;
       }
 
@@ -3727,7 +3713,7 @@ export const getProfile = async (
         .catch(console.error);
     }
 
-    if (helper.hasPath(userProfile, "last_save")) {
+    if ("last_save" in userProfile) {
       storeProfiles[_profile.profile_id] = {
         profile_id: _profile.profile_id,
         cute_name: _profile.cute_name,
@@ -3745,7 +3731,7 @@ export const getProfile = async (
 
     let userProfile = _profile.members[paramPlayer];
 
-    if (helper.hasPath(userProfile, "last_save") && userProfile.last_save > highest) {
+    if (userProfile?.last_save > highest) {
       profile = _profile;
       highest = userProfile.last_save;
     }
@@ -3757,7 +3743,7 @@ export const getProfile = async (
 
   const userProfile = profile.members[paramPlayer];
 
-  if (profileObject && helper.hasPath(profileObject, "current_area")) {
+  if (profileObject && "current_area" in profileObject) {
     userProfile.current_area = profileObject.current_area;
   }
 
@@ -3767,9 +3753,9 @@ export const getProfile = async (
 
   if (response && response.request.fromCache !== true) {
     const apisEnabled =
-      helper.hasPath(userProfile, "inv_contents") &&
+      "inv_contents" in userProfile &&
       Object.keys(userProfile).filter((a) => a.startsWith("experience_skill_")).length > 0 &&
-      helper.hasPath(userProfile, "collection");
+      "collection" in userProfile;
 
     const insertProfileStore = {
       last_update: new Date(),
@@ -3858,10 +3844,9 @@ export async function updateLeaderboardPositions(db, uuid, allProfiles) {
     userProfile.pet_score = 0;
 
     const maxPetRarity = {};
-
     if (Array.isArray(userProfile.pets)) {
       for (const pet of userProfile.pets) {
-        if (!helper.hasPath(pet, "tier")) {
+        if (!("tier" in pet)) {
           continue;
         }
 
@@ -3972,9 +3957,8 @@ export async function updateLeaderboardPositions(db, uuid, allProfiles) {
 
     multi.zadd(`lb_${key}`, values[key], uuid);
   }
-
   for (const singleProfile of allProfiles) {
-    if (helper.hasPath(singleProfile, "banking", "balance")) {
+    if (singleProfile.banking?.balance != undefined) {
       multi.zadd(`lb_bank`, singleProfile.banking.balance, singleProfile.profile_id);
     }
 
