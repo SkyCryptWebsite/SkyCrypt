@@ -525,7 +525,7 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
       }
     }
 
-    const enchantments = helper.getPath(item, "tag", "ExtraAttributes", "enchantments") || {};
+    const enchantments = item.tag?.ExtraAttributes?.enchantments ?? {};
 
     // Get extra info about certain things
     if (item.tag?.ExtraAttributes != undefined) {
@@ -622,7 +622,7 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
     }
 
     // Lore stuff
-    let itemLore = helper.getPath(item, "tag", "display", "Lore") || [];
+    let itemLore = item?.tag?.display?.Lore ?? [];
     let lore_raw = [...itemLore];
 
     let lore = lore_raw != null ? lore_raw.map((a) => (a = helper.getRawLore(a))) : [];
@@ -2158,11 +2158,7 @@ export const getStats = async (
     }
 
     // Apply Renowened bonus (whoever made this please comment)
-    for (
-      let i = 0;
-      i < items.armor.filter((a) => helper.getPath(a, "tag", "ExtraAttributes", "modifier") == "renowned").length;
-      i++
-    ) {
+    for (let i = 0; i < items.armor.filter((a) => a?.tag?.ExtraAttributes?.modifier == "renowned").length; i++) {
       for (const stat in stats) {
         if (constants.increase_most_stats_exclude.includes(stat)) {
           continue;
@@ -2172,11 +2168,7 @@ export const getStats = async (
     }
 
     // Apply Loving reforge bonus
-    for (
-      let i = 0;
-      i < items.armor.filter((a) => helper.getPath(a, "tag", "ExtraAttributes", "modifier") == "loving").length;
-      i++
-    ) {
+    for (let i = 0; i < items.armor.filter((a) => a.tag?.ExtraAttributes?.modifier == "loving").length; i++) {
       stats["ability_damage"] += 5;
     }
 
@@ -2233,7 +2225,7 @@ export const getStats = async (
   const renownedBonus = Object.assign({}, constants.stat_template);
 
   for (const item of items.armor) {
-    if (helper.getPath(item, "tag", "ExtraAttributes", "modifier") == "renowned") {
+    if (item.tag?.ExtraAttributes?.modifier == "renowned") {
       for (const stat in output.stats) {
         if (constants.increase_most_stats_exclude.includes(stat)) {
           continue;
@@ -3759,9 +3751,7 @@ export const getProfile = async (
 
     const insertProfileStore = {
       last_update: new Date(),
-      last_save: Math.max(
-        ...allSkyBlockProfiles.map((a) => helper.getPath(a, "members", paramPlayer, "last_save") || 0)
-      ),
+      last_save: Math.max(...allSkyBlockProfiles.map((a) => a.members?.[paramPlayer]?.last_save ?? 0)),
       apis: apisEnabled,
       profiles: storeProfiles,
     };
