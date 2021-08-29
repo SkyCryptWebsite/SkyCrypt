@@ -2511,7 +2511,7 @@ a.additional-player-stat:hover {
   transition: filter 0.2s;
 
   &:hover,
-  &:focus-visible,
+  &:focus,
   &.sticky-stats {
     filter: grayscale(0);
   }
