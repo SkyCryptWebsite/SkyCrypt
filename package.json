@@ -60,7 +60,7 @@
     "lodash": "^4.17.20",
     "lodash.escaperegexp": "^4.1.2",
     "micromatch": "^4.0.4",
-    "minecraft-data": "^2.91.1",
+    "minecraft-data": "^2.93.0",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
     "moment-timezone": "^0.5.31",
@@ -72,7 +72,7 @@
     "remove": "^0.1.5",
     "sharp": "^0.29.0",
     "sitemap": "^7.0.0",
-    "skinview3d": "^2.0.1",
+    "skinview3d": "^2.0.2",
     "twemoji": "^13.1.0",
     "upng-js": "^2.1.0",
     "uuid": "^8.3.1"
