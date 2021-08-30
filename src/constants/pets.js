@@ -791,6 +791,13 @@ module.exports = {
         release: new Date("2021-08-10 18:00:00 GMT+1").getTime(),
       },
     },
+    HOUND: {
+      HOUND_BEAGLE: {
+        name: "Beagle",
+        head: "/head/877364e0ce27f0239b7754706b93022d0cf945854015d6096f9cf43d24a38269",
+        release: new Date("2021-08-24 18:00:00 GMT+1").getTime(),
+      },
+    },
   },
 
   pet_value: {

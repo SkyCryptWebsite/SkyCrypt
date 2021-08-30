@@ -28,8 +28,7 @@ self.addEventListener("fetch", (event) => {
     fetch(event.request).catch(() => {
       return caches.match(event.request).then((response) => {
         if (!response) {
-          const url = new URL(event.request.url);
-          if (url.pathname === "/" || url.pathname.substring(0, 7) === "/stats/") {
+          if (event.request.mode === "navigate") {
             return caches.match("/resources/html/offline.html");
           }
         }
