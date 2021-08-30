@@ -1,4 +1,4 @@
-// this file never run on the master thread
+// this file never runs on the master thread
 import * as lib from "./lib.js";
 import { getFileHashes, getFileHash, hashedDirectories } from "./hashes.js";
 import fetch from "node-fetch";

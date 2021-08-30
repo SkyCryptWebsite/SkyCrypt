@@ -1,6 +1,6 @@
 /*
 Minecraft Head Rendering base provided by Crafatar: https://github.com/crafatar/crafatar
-Hat layers, transparency and shading added by me
+Hat layers, transparency and shading added by @LeaPhant
 */
 
 import canvasModule from "canvas";
