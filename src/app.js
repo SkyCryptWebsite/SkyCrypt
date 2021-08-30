@@ -1,4 +1,4 @@
-// this file never run on the master thread
+// this file never runs on the master thread
 const lib = require("./lib");
 const { getFileHashes, getFileHash, hashedDirectories } = require("./hashes");
 const fetch = require("node-fetch");
