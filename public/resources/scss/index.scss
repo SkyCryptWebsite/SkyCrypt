@@ -677,15 +677,30 @@ input[type="search"]::-webkit-search-cancel-button {
   }
 }
 
-#base_stats_container {
+#base_stats_wrapper {
   grid-area: base;
 }
 
-#show_skills {
+#base_stats_container {
+  columns: 190px auto;
+  .basic-stat {
+    margin-top: 0;
+  }
+  .stat-name,
+  .stat-value {
+    font-size: 14px;
+  }
+  .basic-stat::before {
+    // transform: scale(0.85);
+    width: 20px;
+    height: 20px;
+  }
+}
+
+#show_stats {
   display: none;
   border: none;
   width: 100%;
-  margin-top: 10px;
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
@@ -719,7 +734,6 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .skill-bars {
-  max-width: 1200px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4px 24px;
@@ -824,6 +838,10 @@ input[type="search"]::-webkit-search-cancel-button {
   left: 0;
   width: 30vw;
   bottom: 5vh;
+
+  @media (max-width: 1590px) {
+    display: none;
+  }
 }
 
 #skin_display_mobile {
@@ -832,8 +850,8 @@ input[type="search"]::-webkit-search-cancel-button {
   width: 100%;
   display: none;
 
-  #player_model {
-    right: 20%;
+  @media (max-width: 1590px) {
+    display: initial;
   }
 }
 
@@ -1173,9 +1191,13 @@ input[type="search"]::-webkit-search-cancel-button {
     text-transform: uppercase;
     font-weight: 600;
     color: white;
-    background-color: var(--header-hex); // fallback for rarity color
     text-shadow: 0px 0px 7px rgba(0, 0, 0, 0.3);
     box-sizing: border-box;
+
+    // please remove `@at-root` and `#{}` when https://github.com/sass/sass/issues/3130 is fixed
+    @at-root :where(#{&}) {
+      background-color: var(--header-hex); // fallback for rarity color
+    }
   }
 
   .item-lore {
@@ -1249,7 +1271,6 @@ input[type="search"]::-webkit-search-cancel-button {
 #player_profile {
   font-size: 36px;
   margin-top: 50px;
-  margin-left: 20px;
   margin-bottom: 20px;
 }
 
@@ -1562,27 +1583,52 @@ a.additional-player-stat:hover {
 #basic_stats {
   display: grid;
   grid-template-areas:
-    "base skill"
-    "base additional";
-  grid-template-columns: 260px auto;
+    "skill"
+    "base"
+    "additional";
+  gap: 24px;
   padding: var(--padding);
   margin-left: calc(-1 * var(--padding));
   margin-right: calc(-1 * var(--padding));
-  box-sizing: border-box;
   background-color: rgba(var(--background-rgb), 0.3);
+  @media (max-width: 1590px) {
+    grid-template-areas:
+      "skill skill"
+      "skin base"
+      "skin additional";
+    grid-template-columns: 160px 1fr;
+  }
+  @media (max-width: 650px) {
+    grid-template-areas:
+      "skill skill"
+      "base base"
+      "skin additional";
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (max-width: 480px) {
+    grid-template-areas:
+      "skin additional"
+      "skill skill"
+      "base base";
+    grid-template-columns: 90px 1fr;
+    gap: 24px 12px;
+  }
 }
 
 #additional_stats_container {
   grid-area: additional;
   font-size: 12px;
   font-weight: 600;
-  padding-bottom: 5ex;
   line-height: 1.75;
-}
 
-.additional-stat {
-  display: inline-block;
-  margin-right: 6px;
+  .additional-stat {
+    display: inline-block;
+    margin-right: 6px;
+
+    @media (max-width: 650px) {
+      display: block;
+    }
+  }
 }
 
 .stat-name,
@@ -2507,11 +2553,11 @@ a.additional-player-stat:hover {
 
 .missing-pet,
 .missing-talisman {
-  filter: grayscale(1);
+  filter: grayscale(0.8);
   transition: filter 0.2s;
 
   &:hover,
-  &:focus-visible,
+  &:focus,
   &.sticky-stats {
     filter: grayscale(0);
   }
@@ -3612,17 +3658,6 @@ body {
     overflow-y: auto;
   }
 
-  #additional_stats_container {
-    white-space: normal;
-  }
-
-  #basic_stats {
-    grid-template-areas:
-      "skin base skill"
-      "skin base additional";
-    grid-template-columns: 150px 260px auto;
-  }
-
   #skill_levels_container .no-access {
     font-size: 14px;
   }
@@ -3631,14 +3666,6 @@ body {
     width: 1120px;
     margin-right: auto;
     margin-left: auto;
-  }
-
-  #skin_display {
-    display: none;
-  }
-
-  #skin_display_mobile {
-    display: initial;
   }
 }
 
@@ -3727,50 +3754,13 @@ body {
     padding-left: 20px;
   }
 
-  #basic_stats {
-    grid-template-areas:
-      "skin base"
-      "skin additional"
-      ". ."
-      "skill skill ";
-    grid-template-columns: minmax(100px, 250px) minmax(225px, 1fr);
-    grid-template-rows: auto auto 30px auto;
-    padding: 0;
-    background-color: transparent;
-
-    > * {
-      text-align: center;
-      background-color: rgba(var(--background-rgb), 0.3);
-    }
-  }
-
-  #additional_stats_container,
-  #base_stats_container {
-    text-align: left;
-  }
-
-  #base_stats_container {
-    padding: var(--padding);
-    box-sizing: border-box;
-    position: relative;
-    padding-left: 0;
-    padding-right: 0;
-  }
-
   #skill_levels_container {
-    padding: var(--padding);
     box-sizing: border-box;
-    padding-bottom: 15px;
 
     .no-access {
       text-align: left;
       white-space: normal;
     }
-  }
-
-  #skin_display_mobile #player_model {
-    left: 10%;
-    right: 10%;
   }
 
   .info-container-wrapper {
@@ -3780,10 +3770,6 @@ body {
   .stat-header::before,
   .stat-header::after {
     display: none;
-  }
-
-  .additional-stat {
-    display: block;
   }
 
   #stats_content {
@@ -4083,7 +4069,7 @@ body {
     font-size: 7vw;
   }
 
-  #show_skills {
+  #show_stats {
     display: block;
   }
 
@@ -4091,14 +4077,16 @@ body {
     grid-template-columns: 1fr;
   }
 
-  #other_skills {
+  #base_stats_container {
+    columns: 1;
     max-height: 0;
     overflow: hidden;
     overflow: clip;
     transition: max-height 0.2s ease-in-out;
 
-    &.show-skills {
+    &.show-stats {
       max-height: 500px;
+      margin-bottom: 14px;
     }
   }
 
