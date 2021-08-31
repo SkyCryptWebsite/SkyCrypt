@@ -1,42 +1,37 @@
-async function main() {
-  const axios = require("axios");
-  require("axios-debug-log");
+import { db } from "../mongo.js";
+import axios from "axios";
+import "axios-debug-log";
 
-  const helper = require("./../helper");
+import { getPrices } from "../helper.js";
 
-  const { db } = await require("../mongo.js");
+const Hypixel = axios.create({
+  baseURL: "https://api.hypixel.net/",
+});
 
-  const Hypixel = axios.create({
-    baseURL: "https://api.hypixel.net/",
-  });
+async function updateBazaar() {
+  try {
+    const response = await Hypixel.get("skyblock/bazaar" /*, { params: { key: credentials.hypixel_api_key }}*/);
 
-  async function updateBazaar() {
-    try {
-      const response = await Hypixel.get("skyblock/bazaar" /*, { params: { key: credentials.hypixel_api_key }}*/);
+    const { products } = response.data;
 
-      const { products } = response.data;
+    for (const productId in products) {
+      const product = products[productId];
 
-      for (const productId in products) {
-        const product = products[productId];
+      const { buyPrice, sellPrice } = getPrices(product);
 
-        const { buyPrice, sellPrice } = helper.getPrices(product);
+      const { buyVolume, sellVolume } = product.quick_status;
 
-        const { buyVolume, sellVolume } = product.quick_status;
+      await db
+        .collection("bazaar")
+        .updateOne({ productId }, { $set: { buyPrice, sellPrice, buyVolume, sellVolume } }, { upsert: true });
 
-        await db
-          .collection("bazaar")
-          .updateOne({ productId }, { $set: { buyPrice, sellPrice, buyVolume, sellVolume } }, { upsert: true });
-
-        await db.collection("items").updateOne({ id: productId }, { $set: { bazaar: true } });
-      }
-    } catch (e) {
-      console.error(e);
+      await db.collection("items").updateOne({ id: productId }, { $set: { bazaar: true } });
     }
-
-    setTimeout(updateBazaar, 1000 * 120);
+  } catch (e) {
+    console.error(e);
   }
 
-  updateBazaar();
+  setTimeout(updateBazaar, 1000 * 120);
 }
 
-main();
+updateBazaar();

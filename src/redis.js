@@ -1,6 +1,4 @@
-const Redis = require("ioredis");
-const credentials = require("./../credentials.json");
+import Redis from "ioredis";
+import credentials from "./credentials.js";
 
-const redisClient = new Redis(credentials.redisUrl);
-
-module.exports = { redisClient };
+export const redisClient = new Redis(credentials.redisUrl);

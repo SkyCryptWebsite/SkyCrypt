@@ -1,5 +1,5 @@
 {
-  "extends": ["eslint:recommended", "prettier"],
+  "extends": ["eslint:recommended", "plugin:import/recommended", "prettier"],
   "plugins": ["deprecation"],
   "env": {
     "commonjs": true,
@@ -15,6 +15,7 @@
     "curly": ["warn", "multi-line", "consistent"],
     "no-unused-vars": ["error", { "args": "none" }],
     "no-constant-condition": ["error", { "checkLoops": false }],
+    "import/extensions": ["warn", "always", { "ts": "never" }],
     "deprecation/deprecation": "warn"
   }
 }

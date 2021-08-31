@@ -1,15 +1,18 @@
-require("./src/main");
+import "./src/main.js";
 
-const cluster = require("cluster");
+import * as cluster from "cluster";
+
 const developEnv = process.env?.NODE_ENV == "development";
-// const io = require('@pm2/io');
+// import * as io from '@pm2/io';
 
 let requests = [];
 
 let packSelect = {};
 let packUsage = {};
 
-require("axios-debug-log")({
+import axiosDebugLog from "axios-debug-log";
+
+axiosDebugLog({
   request: (debug, config) => {
     let requestURL = config.baseURL ? config.baseURL + config.url : config.url;
     if (developEnv) {

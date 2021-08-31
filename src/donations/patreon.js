@@ -1,37 +1,34 @@
-async function main() {
-  const axios = require("axios");
-  const credentials = require("../../credentials.json");
+import axios from "axios";
 
-  const { db } = await require("../mongo.js");
+import credentials from "../credentials.js";
 
-  async function updatePatreon() {
-    const patreonEntry = await db.collection("donations").find({ type: "patreon" }).next();
+import { db } from "../mongo.js";
 
-    if (patreonEntry == null) {
-      return;
-    }
+async function updatePatreon() {
+  const patreonEntry = await db.collection("donations").find({ type: "patreon" }).next();
 
-    const response = await axios.get("https://www.patreon.com/api/oauth2/api/current_user/campaigns", {
-      headers: {
-        authorization: `Bearer ${credentials.patreon_key}`,
-      },
-    });
-
-    const { data } = response;
-
-    await db
-      .collection("donations")
-      .replaceOne(
-        { type: "patreon" },
-        { type: "patreon", amount: data.data[0].attributes.patron_count },
-        { upsert: true }
-      );
+  if (patreonEntry == null) {
+    return;
   }
 
-  if ("patreon_key" in credentials) {
-    updatePatreon();
-    setInterval(updatePatreon, 60 * 1000);
-  }
+  const response = await axios.get("https://www.patreon.com/api/oauth2/api/current_user/campaigns", {
+    headers: {
+      authorization: `Bearer ${credentials.patreon_key}`,
+    },
+  });
+
+  const { data } = response;
+
+  await db
+    .collection("donations")
+    .replaceOne(
+      { type: "patreon" },
+      { type: "patreon", amount: data.data[0].attributes.patron_count },
+      { upsert: true }
+    );
 }
 
-main();
+if ("patreon_key" in credentials) {
+  updatePatreon();
+  setInterval(updatePatreon, 60 * 1000);
+}

@@ -1,10 +1,12 @@
-const helper = require("./helper");
-const lib = require("./lib");
-const cors = require("cors");
-const sanitize = require("mongo-sanitize");
-const constants = require("./constants");
+import * as helper from "./helper.js";
+import * as lib from "./lib.js";
+import cors from "cors";
+import sanitize from "mongo-sanitize";
+import leaderboard from "./leaderboards.js";
 
-const { redisClient } = require("./redis.js");
+import { completePacks } from "./custom-resources.js";
+
+import { redisClient } from "./redis.js";
 
 function handleError(e, res) {
   console.error(e);
@@ -14,7 +16,7 @@ function handleError(e, res) {
   });
 }
 
-module.exports = (app, db) => {
+export default (app, db) => {
   const productInfo = {};
   const leaderboards = [];
 
@@ -37,7 +39,7 @@ module.exports = (app, db) => {
     const keys = await redisClient.keys("lb_*");
 
     for (const key of keys) {
-      const lb = constants.leaderboard(key);
+      const lb = leaderboard(key);
 
       if (lb.mappedBy == "uuid" && !lb.key.startsWith("collection_enchanted")) {
         leaderboards.push(lb);
@@ -68,8 +70,7 @@ module.exports = (app, db) => {
 
   app.all("/api/v2/packs", cors(), async (req, res) => {
     if (req.apiKey) {
-      let customResources = require("./custom-resources");
-      res.json(customResources.completePacks);
+      res.json(completePacks);
     } else {
       res.status(404).json({ error: "This endpoint isn't available to the public." });
     }
@@ -84,7 +85,7 @@ module.exports = (app, db) => {
 
     let page, startIndex, endIndex;
 
-    const lb = constants.leaderboard(`lb_${req.params.lbName}`);
+    const lb = leaderboard(`lb_${req.params.lbName}`);
 
     const lbCount = await redisClient.zcount(`lb_${lb.key}`, "-Infinity", "+Infinity");
 
