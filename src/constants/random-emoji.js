@@ -1,5 +1,5 @@
 const emojis = ["🥕", "🍣", "🍦", "🧁", "🌈", "🎵", "✨", "🎈"];
 
-module.exports = function () {
+export function randomEmoji() {
   return emojis[Math.floor(Math.random() * emojis.length)];
-};
+}
