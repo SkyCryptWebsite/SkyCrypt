@@ -2549,11 +2549,11 @@ a.additional-player-stat:hover {
 
 .missing-pet,
 .missing-talisman {
-  filter: grayscale(1);
+  filter: grayscale(0.8);
   transition: filter 0.2s;
 
   &:hover,
-  &:focus-visible,
+  &:focus,
   &.sticky-stats {
     filter: grayscale(0);
   }
