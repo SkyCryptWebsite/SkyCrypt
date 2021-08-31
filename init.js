@@ -7,6 +7,7 @@ const credentialsDefault = {
   recaptcha_secret_key: "",
   dbUrl: "mongodb://localhost:27017",
   dbName: "sbstats",
+  redisUrl: "",
 };
 
 const credentials = fs.existsSync("./credentials.json") ? require("./credentials.json") : credentialsDefault;
@@ -22,11 +23,7 @@ fs.ensureDirSync("cache");
 async function main() {
   const constants = require("./src/constants");
 
-  const { MongoClient } = require("mongodb");
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-
-  const db = mongo.db(credentials.dbName);
+  const { mongo, db } = await require("./src/mongo.js");
 
   await db.collection("apiKeys").createIndex({ key: 1 }, { unique: true });
 

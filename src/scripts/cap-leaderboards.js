@@ -1,10 +1,7 @@
-const cluster = require("cluster");
-
 async function main() {
   const constants = require("./../constants");
 
-  const Redis = require("ioredis");
-  const redisClient = new Redis();
+  const { redisClient } = require("../redis.js");
 
   async function capLeaderboards() {
     const keys = await redisClient.keys("lb_*");
@@ -37,6 +34,4 @@ async function main() {
   capLeaderboards();
 }
 
-if (cluster.isMaster) {
-  main();
-}
+main();

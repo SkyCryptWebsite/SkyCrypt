@@ -1,4 +1,3 @@
-const cluster = require("cluster");
 const path = require("path");
 const nbt = require("prismarine-nbt");
 const util = require("util");
@@ -15,21 +14,17 @@ const retry = require("async-retry");
 
 const credentials = require("./../credentials.json");
 
-const { MongoClient } = require("mongodb");
 let db;
 
-const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-
-mongo.connect().then(() => {
-  db = mongo.db(credentials.dbName);
+require("./mongo.js").then(({ db: database }) => {
+  db = database;
 });
 
 const Hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
 
-const Redis = require("ioredis");
-const redisClient = new Redis();
+const { redisClient } = require("./redis.js");
 
 const customResources = require("./custom-resources");
 const loreGenerator = require("./loreGenerator");
@@ -4117,6 +4112,4 @@ async function init() {
   }
 }
 
-if (cluster.isWorker) {
-  init();
-}
+init();

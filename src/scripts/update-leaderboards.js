@@ -1,22 +1,14 @@
-const cluster = require("cluster");
-
 async function main() {
-  const { MongoClient } = require("mongodb");
   const _ = require("lodash");
 
   const lib = require("./../lib");
   const constants = require("./../constants");
-  const credentials = require("./../../credentials.json");
 
   const ProgressBar = require("progress");
 
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
+  const { db } = await require("../mongo.js");
 
-  const db = mongo.db(credentials.dbName);
-
-  const Redis = require("ioredis");
-  const redisClient = new Redis();
+  const { redisClient } = require("../redis.js");
 
   async function updateLeaderboards() {
     const keys = await redisClient.keys("lb_*");
@@ -61,6 +53,4 @@ async function main() {
   updateLeaderboards();
 }
 
-if (cluster.isMaster) {
-  main();
-}
+main();

@@ -1,20 +1,11 @@
-const cluster = require("cluster");
-
 async function main() {
-  const { MongoClient } = require("mongodb");
-
-  const Redis = require("ioredis");
-  const redisClient = new Redis();
+  const { redisClient } = require("../redis.js");
 
   const constants = require("./../constants");
-  const credentials = require("./../../credentials.json");
 
   const ProgressBar = require("progress");
 
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-
-  const db = mongo.db(credentials.dbName);
+  const { db } = await require("../mongo.js");
 
   function getAverage(scores) {
     return scores.reduce((a, b) => a + b, 0) / scores.length;
@@ -105,6 +96,4 @@ async function main() {
   updateGuildLeaderboards();
 }
 
-if (cluster.isMaster) {
-  main();
-}
+main();

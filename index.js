@@ -1,10 +1,4 @@
-require("./src/app");
-require("./src/donations/patreon");
-require("./src/scripts/cap-leaderboards");
-require("./src/scripts/clear-favorite-cache");
-require("./src/scripts/update-bazaar");
-require("./src/scripts/update-items");
-require("./src/scripts/update-top-profiles");
+require("./src/main");
 
 const cluster = require("cluster");
 const developEnv = process.env?.NODE_ENV == "development";

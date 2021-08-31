@@ -1,4 +1,4 @@
-const cluster = require("cluster");
+// this file never runs on the master thread
 const lib = require("./lib");
 const { getFileHashes, getFileHash, hashedDirectories } = require("./hashes");
 const fetch = require("node-fetch");
@@ -54,7 +54,6 @@ async function main() {
   const moment = require("moment-timezone");
   require("moment-duration-format")(moment);
 
-  const { MongoClient } = require("mongodb");
   const sanitize = require("mongo-sanitize");
   const helper = require("./helper");
   const constants = require("./constants");
@@ -64,9 +63,7 @@ async function main() {
   const twemoji = require("twemoji");
   const cookieParser = require("cookie-parser");
 
-  const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-  await mongo.connect();
-  const db = mongo.db(credentials.dbName);
+  const { mongo, db } = await require("./mongo.js");
 
   /**
    * the largest number of second that `max-age` in `Cache-Control` will allow
@@ -655,15 +652,4 @@ async function main() {
   app.listen(port, () => console.log(`SkyBlock Stats running on http://localhost:${port} (${helper.getClusterId()})`));
 }
 
-if (cluster.isMaster) {
-  const totalCpus = require("os").cpus().length;
-  const cpus = Math.min(process.env?.NODE_ENV != "development" ? 8 : 2, totalCpus);
-
-  for (let i = 0; i < cpus; i += 1) {
-    cluster.fork();
-  }
-
-  console.log(`Running SkyBlock Stats on ${cpus} cores`);
-} else {
-  main();
-}
+main();
