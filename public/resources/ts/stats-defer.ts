@@ -51,7 +51,7 @@ tippy("*[data-tippy-content]:not(.interactive-tooltip)", {
 
 const playerModel = document.getElementById("player_model") as HTMLElement;
 
-let skinViewer: SkinViewer;
+let skinViewer: SkinViewer | undefined;
 
 if (calculated.skin_data) {
   skinViewer = new SkinViewer({
