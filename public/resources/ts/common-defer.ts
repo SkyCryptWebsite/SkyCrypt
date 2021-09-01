@@ -1,6 +1,8 @@
 import { loadTheme } from "./themes";
 import tippy from "tippy.js";
 
+tippy.setDefaultProps({ allowHTML: true });
+
 function validateURL(url: string) {
   const urlSegments = url.trim().split("/");
   if (urlSegments.length < 1) {
@@ -140,9 +142,7 @@ function setCheckedTheme(theme: string) {
 
 setCheckedTheme(localStorage.getItem("currentTheme") ?? "default");
 
-tippy("*[data-tippy-content]", {
-  boundary: "window",
-});
+tippy("*[data-tippy-content]");
 
 const prideFlag = document.querySelector(".pride-flag") as HTMLElement;
 const prideFlags = ["rainbow", "trans", "lesbian", "bi", "pan", "nb", "ace", "genderfluid", "logo"];
