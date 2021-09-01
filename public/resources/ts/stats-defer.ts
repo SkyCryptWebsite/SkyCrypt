@@ -1,9 +1,6 @@
 import { setCookie } from "./common-defer";
 import { SkinViewer, createOrbitControls } from "skinview3d";
-
-declare global {
-  function tippy(targets: string | Element | Element[], optionalProps?: Record<string, unknown>): any;
-}
+import tippy from "tippy.js";
 
 const favoriteElement = document.querySelector(".favorite") as HTMLButtonElement;
 

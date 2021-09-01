@@ -1,8 +1,5 @@
 import { loadTheme } from "./themes";
-
-declare global {
-  function tippy(targets: string | Element | Element[], optionalProps: Record<string, unknown>): any;
-}
+import tippy from "tippy.js";
 
 function validateURL(url: string) {
   const urlSegments = url.trim().split("/");

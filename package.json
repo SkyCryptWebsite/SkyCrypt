@@ -74,6 +74,7 @@
     "sharp": "^0.29.0",
     "sitemap": "^7.0.0",
     "skinview3d": "^2.0.2",
+    "tippy.js": "5",
     "twemoji": "^13.1.0",
     "upng-js": "^2.1.0",
     "uuid": "^8.3.1"
@@ -81,6 +82,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
+    "@rollup/plugin-replace": "^3.0.0",
     "@rollup/plugin-typescript": "^8.2.5",
     "@typescript-eslint/eslint-plugin": "^4.30.0",
     "@typescript-eslint/parser": "^4.29.3",
@@ -88,8 +90,8 @@
     "ejs-lint": "^1.2.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.24.1",
     "eslint-plugin-deprecation": "^1.2.1",
+    "eslint-plugin-import": "^2.24.1",
     "node-watch": "^0.7.1",
     "nodemon": "^2.0.12",
     "prettier": "2.3.2",
