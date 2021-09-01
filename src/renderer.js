@@ -6,7 +6,6 @@ Hat layers, transparency and shading added by @LeaPhant
 import canvasModule from "canvas";
 const { createCanvas, loadImage } = canvasModule;
 import css from "css";
-import * as helper from "./helper.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import * as customResources from "./custom-resources.js";
@@ -339,9 +338,7 @@ export async function renderItem(skyblockId, query, db) {
   }
 
   if ("name" in item) {
-    item.tag = {};
-
-    helper.setPath(item, item.name, "tag", "display", "Name");
+    item.tag = { display: { Name: item.name } };
   }
 
   if ("texture" in item) {

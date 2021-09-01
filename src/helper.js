@@ -101,11 +101,7 @@ export function setPath(obj, value, ...keys) {
 }
 
 export function getId(item) {
-  if (hasPath(item, "tag", "ExtraAttributes", "id")) {
-    return item.tag.ExtraAttributes.id;
-  }
-
-  return "";
+  return item?.tag?.ExtraAttributes?.id ?? "";
 }
 
 export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
@@ -130,16 +126,20 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
     }
   }
 
-  let skin_data = {
-    skinurl: "https://textures.minecraft.net/texture/3b60a1f6d562f52aaebbf1434f1de147933a3affe0e764fa49ea057536623cd3",
+  const defaultAlexSkin =
+    "https://textures.minecraft.net/texture/3b60a1f6d562f52aaebbf1434f1de147933a3affe0e764fa49ea057536623cd3";
+
+  /** @type {{model:"default"|"slim"; skinurl:string; capeurl?:string;}} */
+  const skin_data = {
+    skinurl: defaultAlexSkin,
     model: "slim",
   };
 
-  if (user && hasPath(user, "skinurl")) {
+  if (user?.skinurl != undefined) {
     skin_data.skinurl = user.skinurl;
     skin_data.model = user.model;
 
-    if (hasPath(user, "capeurl")) {
+    if (user?.capeurl != undefined) {
       skin_data.capeurl = user.capeurl;
     }
   }
@@ -159,12 +159,12 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
             date: +new Date(),
           };
 
-          if (hasPath(data.textures, "skin")) {
+          if (data.textures?.skin != undefined) {
             skin_data.skinurl = data.textures.skin.url;
             skin_data.model = data.textures.slim ? "slim" : "default";
           }
 
-          if (hasPath(data.textures, "cape")) {
+          if (data.textures?.cape != undefined) {
             skin_data.capeurl = data.textures.cape.url;
           }
 
@@ -203,12 +203,12 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
 
         data.id = data.uuid.replace(/-/g, "");
 
-        if (hasPath(data.textures, "skin")) {
+        if (data.textures?.skin != undefined) {
           skin_data.skinurl = data.textures.skin.url;
           skin_data.model = data.textures.slim ? "slim" : "default";
         }
 
-        if (hasPath(data.textures, "cape")) {
+        if (data.textures?.cape != undefined) {
           skin_data.capeurl = data.textures.cape.url;
         }
 
@@ -217,11 +217,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
         if (isUuid) {
           return { uuid, display_name: uuid, skin_data };
         } else {
-          if (hasPath(e, "response", "data", "reason")) {
-            throw e.response.data.reason;
-          } else {
-            throw "Failed resolving username.";
-          }
+          throw e?.response?.data?.reason ?? "Failed resolving username.";
         }
       }
     }
@@ -673,11 +669,11 @@ export async function updateRank(uuid, db) {
 
     rank = Object.assign(rank, parseRank(player));
 
-    if (hasPath(player, "socialMedia", "links")) {
+    if (player?.socialMedia?.links != undefined) {
       rank.socials = player.socialMedia.links;
     }
 
-    if (hasPath(player, "achievements")) {
+    if (player?.achievements != undefined) {
       rank.achievements = player.achievements;
     }
 
@@ -693,7 +689,7 @@ export async function updateRank(uuid, db) {
     };
 
     for (const item in claimable) {
-      if (hasPath(player, item)) {
+      if (player?.[item]) {
         rank.claimed_items[claimable[item]] = player[item];
       }
     }
