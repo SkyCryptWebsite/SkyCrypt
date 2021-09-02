@@ -691,9 +691,7 @@ input[type="search"]::-webkit-search-cancel-button {
     font-size: 14px;
   }
   .basic-stat::before {
-    // transform: scale(0.85);
-    width: 20px;
-    height: 20px;
+    transform: scale(0.95);
   }
 }
 
