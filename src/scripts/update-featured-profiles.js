@@ -51,7 +51,7 @@ const featuredProfiles = [
   },
 ];
 
-await db.collection("topViews").deleteMany({});
+await db.collection("featuredProfiles").deleteMany({});
 
 await Promise.all(
   featuredProfiles.map(async (featuredProfile) => {
@@ -62,7 +62,9 @@ await Promise.all(
         userDocument[data] = featuredProfile[data];
       }
 
-      await db.collection("topViews").updateOne({ _id: userDocument._id }, { $set: userDocument }, { upsert: true });
+      await db
+        .collection("featuredProfiles")
+        .updateOne({ _id: userDocument._id }, { $set: userDocument }, { upsert: true });
     }
   })
 );

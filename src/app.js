@@ -228,7 +228,7 @@ async function getExtra(page = null, favoriteUUIDs = [], cacheOnly) {
   if (page === "index") {
     output.favorites = await getFavoritesFormUUIDs(favoriteUUIDs);
 
-    output.devs = await db.collection("topViews").find().sort({ position: 1 }).toArray();
+    output.devs = await db.collection("featuredProfiles").find().sort({ position: 1 }).toArray();
   }
 
   return output;
@@ -539,7 +539,7 @@ app.all("/sitemap.xml", async (req, res, next) => {
     const smStream = new SitemapStream({ hostname: "https://sky.shiiyu.moe/" });
     const pipeline = smStream.pipe(createGzip());
 
-    const cursor = await db.collection("topViews").find();
+    const cursor = await db.collection("featuredProfiles").find();
 
     while (await cursor.hasNext()) {
       const doc = await cursor.next();
