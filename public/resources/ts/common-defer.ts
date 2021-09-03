@@ -41,7 +41,7 @@ document.querySelectorAll<HTMLFormElement>(".lookup-player").forEach((form) => {
     } catch (error) {
       const errorTip = tippy(form.querySelector("input") as HTMLInputElement, {
         trigger: "manual",
-        content: error || "please enter a valid Minecraft username or UUID",
+        content: (error as string | undefined) ?? "please enter a valid Minecraft username or UUID",
       });
       errorTip.show();
       setTimeout(() => {
