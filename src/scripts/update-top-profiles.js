@@ -1,64 +1,68 @@
 import { db } from "../mongo.js";
 
-let featured = {
-  metalcupcake5: {
+const featuredProfiles = [
+  {
+    username: "metalcupcake5",
     position: 1,
     type: "MAINTAINER",
     message: "a dev or something idk",
   },
-  MartinNemi03: {
+  {
+    username: "MartinNemi03",
     position: 2,
     type: "MAINTAINER",
     message: '"lazy dev" &nbsp; <b>(ﾉ´･ω･)ﾉ ﾐ ┸━┸</b>',
   },
-  jjww2: {
+  {
+    username: "jjww2",
     position: 3,
     type: "MAINTAINER",
     message: "bob",
   },
-  FantasmicGalaxy: {
+  {
+    username: "FantasmicGalaxy",
     position: 4,
     type: "MAINTAINER",
     message: "ember armor no longer on top :((",
   },
-  Shiiyu: {
+  {
+    username: "Shiiyu",
     position: 5,
     type: "HOST",
     message: '<span class="stat-name">Last online: </span><span class="stat-value">January 1st, 1970</span>',
   },
-  LeaPhant: {
+  {
+    username: "LeaPhant",
     position: 6,
     type: "CONTRIBUTOR",
     message: "lea plant",
   },
-  Cookie_Wookie_7: {
+  {
+    username: "Cookie_Wookie_7",
     position: 7,
     type: "CONTRIBUTOR",
     message: "Nate: CSS Wizard",
   },
-  dukioooo: {
+  {
+    username: "dukioooo",
     position: 8,
     type: "CONTRIBUTOR",
     message: "¯\\_(ツ)_/¯",
   },
-};
+];
 
-async function updateTopProfiles() {
-  await db.collection("topViews").deleteMany({});
+await db.collection("topViews").deleteMany({});
 
-  for (let name in featured) {
-    const user = await db.collection("usernames").find({ username: name }).toArray();
+await Promise.all(
+  featuredProfiles.map(async (featuredProfile) => {
+    const userDocument = await db.collection("usernames").findOne({ username: featuredProfile.username });
 
-    if (user[0]) {
-      const output = user[0];
-
-      for (let data in featured[name]) {
-        output[data] = featured[name][data];
+    if (userDocument) {
+      for (let data in featuredProfile) {
+        userDocument[data] = featuredProfile[data];
       }
 
-      await db.collection("topViews").updateOne({ _id: output._id }, { $set: output }, { upsert: true });
+      await db.collection("topViews").updateOne({ _id: userDocument._id }, { $set: userDocument }, { upsert: true });
     }
-  }
-}
-
-updateTopProfiles();
+  })
+);
