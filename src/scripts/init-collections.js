@@ -36,5 +36,3 @@ await db.collection("hypixelPlayers").createIndex({ uuid: 1 }, { unique: true })
 await db.collection("profileCache").createIndex({ profile_id: 1 }, { unique: true });
 
 await db.collection("topViews").createIndex({ total: -1 });
-
-await db.collection("topViews").deleteMany({});
