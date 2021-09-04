@@ -25,9 +25,9 @@ await db.collection("items").createIndex({ id: 1 }, { unique: true });
 
 await db.collection("items").createIndex({ name: "text", tag: "text" });
 
-for (const id in item_tags) {
-  await db.collection("items").updateOne({ id }, { $set: { tag: item_tags[id] } });
-}
+await Promise.all(
+  Object.entries(item_tags).map(([id, item]) => db.collection("items").updateOne({ id }, { $set: { tag: item } }))
+);
 
 await db.collection("bazaar").createIndex({ productId: 1 }, { unique: true });
 
