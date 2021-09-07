@@ -42,7 +42,7 @@
     "@tillhub/tableify": "^1.1.1",
     "apng2gif-bin": "^1.7.1",
     "async-retry": "^1.3.3",
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "axios-cache-adapter": "^2.5.0",
     "axios-debug-log": "^0.8.4",
     "body-parser": "^1.19.0",
