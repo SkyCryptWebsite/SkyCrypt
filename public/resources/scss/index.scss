@@ -1,5 +1,6 @@
 @use "./stripes";
 @use "./fonts";
+@use "../../../node_modules/tippy.js/dist/tippy.css";
 
 :root {
   /* Icon Green (used for Skill Icons, Underlines etc.) */
@@ -225,16 +226,14 @@ a.no-underline {
   text-decoration: none;
 }
 
-.tippy-tooltip {
+.tippy-box {
   font-weight: 500;
-  background-color: transparent;
-  border-radius: 0;
+  background-color: var(--grey_background-hex);
+  border-radius: 5px;
   user-select: text;
   color: var(--text-hex);
 
-  .tippy-content {
-    border-radius: 5px;
-    background-color: var(--grey_background-hex);
+  > .tippy-content {
     padding: 15px;
 
     .stat-name {
@@ -243,11 +242,11 @@ a.no-underline {
     }
   }
 
-  &[data-placement^="top"] > .tippy-arrow {
+  &[data-placement^="top"] > .tippy-arrow::before {
     border-top-color: var(--icon-hex);
   }
 
-  &[data-placement^="bottom"] > .tippy-arrow {
+  &[data-placement^="bottom"] > .tippy-arrow::before {
     border-bottom-color: var(--icon-hex);
   }
 }
