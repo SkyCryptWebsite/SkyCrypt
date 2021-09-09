@@ -180,66 +180,6 @@
             mainUsernameInput.focus({ preventScroll: true });
           }
         }
-
-        <%#
-
-        - Hide Views for now due to abuse -
-
-        let scrollLock = false;
-        let currentOffset = 10;
-        let limit = 20;
-
-        let reachedEnd = false;
-
-        if(window.innerHeight + window.scrollY > document.documentElement.offsetHeight - 100 && !scrollLock && !reachedEnd){
-          scrollLock = true;
-
-          let topRequest = new XMLHttpRequest();
-
-          topRequest.onload = function(){
-            let json = JSON.parse(this.responseText);
-
-            if(json.length == 0)
-              reachedEnd = true;
-
-            json.forEach(function(profile, index){
-              let profileElement = document.createElement('a');
-              let profileAvatar = document.createElement('img');
-              let profileName = document.createElement('div');
-              let profileViews = document.createElement('div');
-              let profileRank = document.createElement('div');
-
-              profileAvatar.src = 'https://crafatar.com/avatars/' + profile.uuid + '?size=128&overlay';
-              profileName.innerHTML = profile.userInfo.username;
-              profileViews.innerHTML = 'Views: ' + formatNumber(profile.total, true);
-              profileRank.innerHTML = '#' + (currentOffset + index + 1);
-
-              profileAvatar.className = 'profile-avatar';
-              profileName.className = 'profile-name';
-              profileViews.className = 'profile-views';
-              profileRank.className = 'profile-rank';
-
-              profileElement.className = 'top-profile';
-
-              profileElement.appendChild(profileAvatar);
-              profileElement.appendChild(profileName);
-              profileElement.appendChild(profileViews);
-              profileElement.appendChild(profileRank);
-
-              profileElement.href = '/stats/' + profile.uuid;
-
-              document.querySelector('#top_profiles_box_wrapper').appendChild(profileElement);
-            });
-
-            scrollLock = false;
-            currentOffset += limit;
-          }
-
-          topRequest.open("GET", '/api/topViews?offset=' + currentOffset + '&limit=' + limit);
-          topRequest.send();
-        }
-
-        %>
       }
     </script>
   </body>
