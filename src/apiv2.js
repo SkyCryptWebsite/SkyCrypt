@@ -415,7 +415,7 @@ export default (app, db) => {
         }
 
         const userProfile = singleProfile.members[profile.uuid];
-        const hypixelProfile = await helper.getRank(profile.uuid, db);
+        const hypixelProfile = await helper.getRank(profile.uuid, db, req.cacheOnly);
 
         const dungeonData = await lib.getDungeons(userProfile, hypixelProfile);
 
@@ -441,7 +441,7 @@ export default (app, db) => {
 
       for (const singleProfile of allProfiles) {
         const userProfile = singleProfile.members[profile.uuid];
-        const hypixelProfile = await helper.getRank(profile.uuid, db);
+        const hypixelProfile = await helper.getRank(profile.uuid, db, req.cacheOnly);
 
         const dungeonData = await lib.getDungeons(userProfile, hypixelProfile);
 
