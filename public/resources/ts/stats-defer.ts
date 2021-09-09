@@ -51,7 +51,7 @@ tippy("*[data-tippy-content]:not(.interactive-tooltip)", {
 
 const playerModel = document.getElementById("player_model") as HTMLElement;
 
-let skinViewer: any;
+let skinViewer: SkinViewer | undefined;
 
 if (calculated.skin_data) {
   skinViewer = new SkinViewer({
@@ -87,7 +87,7 @@ if (calculated.skin_data) {
   const basicCapeRotationX = Math.PI * 0.06;
 
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    skinViewer.animations.add((player: any, time: number) => {
+    skinViewer.animations.add((player, time) => {
       // Multiply by animation's natural speed
       time *= 2;
 
