@@ -64,7 +64,7 @@ export default (app, db) => {
       }
     }
 
-    req.cacheOnly = req.apiKey;
+    req.cacheOnly = !req.apiKey;
     next();
   });
 
