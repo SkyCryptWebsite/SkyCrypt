@@ -65,6 +65,10 @@ export default (app, db) => {
     }
 
     req.cacheOnly = !req.apiKey;
+    req.options = {
+      cacheOnly: req.cacheOnly,
+    };
+
     next();
   });
 
@@ -184,19 +188,16 @@ export default (app, db) => {
 
   app.all("/api/v2/profile/:player", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/profile");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/profile");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       const output = { profiles: {} };
 
       for (const singleProfile of allProfiles) {
         const userProfile = singleProfile.members[profile.uuid];
 
-        const items = await lib.getItems(userProfile, false, "", { debugId });
-        const data = await lib.getStats(db, singleProfile, allProfiles, items, { debugId });
+        const items = await lib.getItems(userProfile, false, "", req.options);
+        const data = await lib.getStats(db, singleProfile, allProfiles, items, req.options);
 
         output.profiles[singleProfile.profile_id] = {
           profile_id: singleProfile.profile_id,
@@ -217,11 +218,8 @@ export default (app, db) => {
 
   app.all("/api/v2/coins/:player/:profile", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/coins");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/coins");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       let output = {
         error: "Invalid Profile Name!",
@@ -234,8 +232,8 @@ export default (app, db) => {
           continue;
         }
 
-        const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", { debugId });
-        const data = await lib.getStats(db, singleProfile, allProfiles, items, { debugId });
+        const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", req.options);
+        const data = await lib.getStats(db, singleProfile, allProfiles, items, req.options);
 
         output = {
           profile_id: singleProfile.profile_id,
@@ -253,19 +251,16 @@ export default (app, db) => {
 
   app.all("/api/v2/coins/:player", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/coins");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/coins");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       const output = { profiles: {} };
 
       for (const singleProfile of allProfiles) {
         const cute_name = singleProfile.cute_name;
 
-        const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", { debugId });
-        const data = await lib.getStats(db, singleProfile, allProfiles, items, { debugId });
+        const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", req.options);
+        const data = await lib.getStats(db, singleProfile, allProfiles, items, req.options);
 
         output.profiles[singleProfile.profile_id] = {
           profile_id: singleProfile.profile_id,
@@ -283,11 +278,8 @@ export default (app, db) => {
 
   app.all("/api/v2/talismans/:player/:profile", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/talismans");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/talismans");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       let output = {
         error: "Invalid Profile Name!",
@@ -300,7 +292,7 @@ export default (app, db) => {
           continue;
         }
 
-        const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", { debugId });
+        const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", req.options);
         const talismans = items.talismans;
 
         output = {
@@ -318,18 +310,15 @@ export default (app, db) => {
 
   app.all("/api/v2/talismans/:player", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/talismans");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/talismans");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       const output = { profiles: {} };
 
       for (const singleProfile of allProfiles) {
         const userProfile = singleProfile.members[profile.uuid];
 
-        const items = await lib.getItems(userProfile, false, "", { debugId });
+        const items = await lib.getItems(userProfile, false, "", req.options);
         const talismans = items.talismans;
 
         output.profiles[singleProfile.profile_id] = {
@@ -347,11 +336,8 @@ export default (app, db) => {
 
   app.all("/api/v2/slayers/:player/:profile", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/slayers");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/slayers");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       let output = {
         error: "Invalid Profile Name!",
@@ -364,8 +350,8 @@ export default (app, db) => {
           continue;
         }
 
-        const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", { debugId });
-        const data = await lib.getStats(db, singleProfile, allProfiles, items, { debugId });
+        const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", req.options);
+        const data = await lib.getStats(db, singleProfile, allProfiles, items, req.options);
 
         output = {
           profile_id: singleProfile.profile_id,
@@ -385,19 +371,16 @@ export default (app, db) => {
 
   app.all("/api/v2/slayers/:player", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/slayers");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/slayers");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       const output = { profiles: {} };
 
       for (const singleProfile of allProfiles) {
         const userProfile = singleProfile.members[profile.uuid];
 
-        const items = await lib.getItems(userProfile, false, "", { debugId });
-        const data = await lib.getStats(db, singleProfile, allProfiles, items, { debugId });
+        const items = await lib.getItems(userProfile, false, "", req.options);
+        const data = await lib.getStats(db, singleProfile, allProfiles, items, req.options);
 
         output.profiles[singleProfile.profile_id] = {
           profile_id: singleProfile.profile_id,
@@ -417,11 +400,8 @@ export default (app, db) => {
 
   app.all("/api/v2/dungeons/:player/:profile", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/dungeons");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/dungeons");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       let output = {
         error: "Invalid Profile Name!",
@@ -435,7 +415,7 @@ export default (app, db) => {
         }
 
         const userProfile = singleProfile.members[profile.uuid];
-        const hypixelProfile = await helper.getRank(profile.uuid, db);
+        const hypixelProfile = await helper.getRank(profile.uuid, db, req.cacheOnly);
 
         const dungeonData = await lib.getDungeons(userProfile, hypixelProfile);
 
@@ -454,17 +434,14 @@ export default (app, db) => {
 
   app.all("/api/v2/dungeons/:player", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/dungeons");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/dungeons");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       const output = { profiles: {} };
 
       for (const singleProfile of allProfiles) {
         const userProfile = singleProfile.members[profile.uuid];
-        const hypixelProfile = await helper.getRank(profile.uuid, db);
+        const hypixelProfile = await helper.getRank(profile.uuid, db, req.cacheOnly);
 
         const dungeonData = await lib.getDungeons(userProfile, hypixelProfile);
 
