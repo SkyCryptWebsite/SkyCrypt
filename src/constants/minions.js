@@ -285,7 +285,7 @@ export const minions = {
 let total_unique_minions = 0;
 
 for (const minion in minions) {
-  total_unique_minions += minions[minion].tiers || 11;
+  total_unique_minions += minions[minion].tiers ?? 11;
 }
 
 export const minions_max_uniques = total_unique_minions;
