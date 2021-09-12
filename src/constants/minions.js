@@ -25,7 +25,7 @@ export const minion_slots = {
   650: 26,
 };
 
-export const minions_max_uniques = 631;
+export let minions_max_uniques = 0;
 export const minions_max_slots = 25; // From unique tiers (excludes community shop upgrades)
 
 export const minions = {
@@ -274,6 +274,7 @@ export const minions = {
     name: "Voidling",
     type: "combat",
     head: "/head/3a851ed2ce5c2c0523af772d206d9555e2e1383ec87946e6ff4c51186e29ef7f",
+    tiers: 12,
   },
   HARD_STONE: {
     name: "Hard Stone",
@@ -282,3 +283,7 @@ export const minions = {
     tiers: 12,
   },
 };
+
+for(const minion in minions){
+  minions_max_uniques += minions[minion].tiers || 11;
+}
