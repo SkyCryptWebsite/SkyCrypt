@@ -284,6 +284,6 @@ export const minions = {
   },
 };
 
-for(const minion in minions){
+for (const minion in minions) {
   minions_max_uniques += minions[minion].tiers || 11;
 }
