@@ -1920,25 +1920,25 @@ export const getStats = async (
       output.slayer_coins_spent.total = output.slayer_coins_spent.total || 0;
     }
 
-    if(profile.uuid == "b44d2d5272dc49c28185b2d6a158d80a"){
+    if (profile.uuid == "b44d2d5272dc49c28185b2d6a158d80a") {
       slayers.slime = {
         level: {
           currentLevel: -3,
           xp: 69420,
           progress: 0.83,
-          xpForNext: 1_400_000_000
+          xpForNext: 1_400_000_000,
         },
         kills: {
-          '1': 39283
+          1: 39283,
         },
-        xp: 69420
-      }
+        xp: 69420,
+      };
     }
 
     output.slayer_xp = 0;
 
     for (const slayer in slayers) {
-      if(slayer == "slime"){
+      if (slayer == "slime") {
         continue;
       }
       if (!slayers[slayer]?.level?.currentLevel) {
