@@ -1941,7 +1941,7 @@ export const getStats = async (
       if(slayer == "slime"){
         continue;
       }
-      if (!helper.hasPath(slayers[slayer], "level", "currentLevel")) {
+      if (!slayers[slayer]?.level?.currentLevel) {
         continue;
       }
 
