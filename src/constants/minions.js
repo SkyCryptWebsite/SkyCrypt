@@ -274,7 +274,6 @@ export const minions = {
     name: "Voidling",
     type: "combat",
     head: "/head/3a851ed2ce5c2c0523af772d206d9555e2e1383ec87946e6ff4c51186e29ef7f",
-    tiers: 12,
   },
   HARD_STONE: {
     name: "Hard Stone",
