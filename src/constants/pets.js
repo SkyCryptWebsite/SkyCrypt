@@ -796,6 +796,14 @@ export const pet_skins = {
       release: new Date("2021-08-24 18:00:00 GMT+1").getTime(),
     },
   },
+  SQUID: {
+    SQUID_GLOW: {
+      // Skin is animated, animation data missing
+      name: "Glow",
+      head: "/head/fca9982520eee4066bab0ae697f3b3656084b6639ba89113bd8e23ab7288563d",
+      release: new Date("2021-09-14 18:00:00 GMT+1").getTime(),
+    },
+  },
 };
 
 export const pet_value = {
