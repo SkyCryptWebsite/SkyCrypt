@@ -1,8 +1,7 @@
 import { loadTheme } from "./themes";
+import tippy from "tippy.js";
 
-declare global {
-  function tippy(targets: string | Element | Element[], optionalProps: Record<string, unknown>): any;
-}
+tippy.setDefaultProps({ allowHTML: true });
 
 function validateURL(url: string) {
   const urlSegments = url.trim().split("/");
@@ -42,7 +41,7 @@ document.querySelectorAll<HTMLFormElement>(".lookup-player").forEach((form) => {
     } catch (error) {
       const errorTip = tippy(form.querySelector("input") as HTMLInputElement, {
         trigger: "manual",
-        content: error || "please enter a valid Minecraft username or UUID",
+        content: (error as string | undefined) ?? "please enter a valid Minecraft username or UUID",
       });
       errorTip.show();
       setTimeout(() => {
@@ -143,9 +142,7 @@ function setCheckedTheme(theme: string) {
 
 setCheckedTheme(localStorage.getItem("currentTheme") ?? "default");
 
-tippy("*[data-tippy-content]", {
-  boundary: "window",
-});
+tippy("*[data-tippy-content]");
 
 const prideFlag = document.querySelector(".pride-flag") as HTMLElement;
 const prideFlags = ["rainbow", "trans", "lesbian", "bi", "pan", "nb", "ace", "genderfluid", "logo"];

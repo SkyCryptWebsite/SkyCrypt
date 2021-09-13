@@ -823,6 +823,36 @@ export function parseItemGems(gems, rarity) {
         gem_type: gems[`${key}_gem`],
         gem_tier: value,
       });
+    } else if (key.startsWith("DEFENSIVE_")) {
+      if (key.endsWith("_gem")) {
+        continue;
+      }
+      parsed.push({
+        slot_type: "DEFENSIVE",
+        slot_number: +key.split("_")[1],
+        gem_type: gems[`${key}_gem`],
+        gem_tier: value,
+      });
+    } else if (key.startsWith("COMBAT_")) {
+      if (key.endsWith("_gem")) {
+        continue;
+      }
+      parsed.push({
+        slot_type: "COMBAT",
+        slot_number: +key.split("_")[1],
+        gem_type: gems[`${key}_gem`],
+        gem_tier: value,
+      });
+    } else if (key.startsWith("MINING_")) {
+      if (key.endsWith("_gem")) {
+        continue;
+      }
+      parsed.push({
+        slot_type: "MINING",
+        slot_number: +key.split("_")[1],
+        gem_type: gems[`${key}_gem`],
+        gem_tier: value,
+      });
     } else {
       parsed.push({
         slot_type: key.split("_")[0],
@@ -865,7 +895,7 @@ export function generateGemLore(type, tier, rarity) {
       Object.keys(gemstone_stats).forEach((stat) => {
         const stat_value = gemstone_stats[stat][rarityNameToInt(rarity)];
 
-        if (stat_value && stat_value !== -1) {
+        if (stat_value) {
           stats.push(["§", constants.stats_colors[stat], "+", stat_value, constants.stats_symbols[stat]].join(""));
         } else {
           stats.push("§c§oMISSING VALUE§r");

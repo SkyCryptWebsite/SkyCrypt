@@ -171,6 +171,10 @@ export const special_enchants = [
   "Cleave VI",
   "Harvesting 6",
   "Harvesting VI",
+  "Fortune 4",
+  "Fortune IV",
+  "Pristine 5",
+  "Pristine V",
 ];
 
 // Number of kills required for each level of expertise

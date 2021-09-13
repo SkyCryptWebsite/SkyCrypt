@@ -1,8 +1,7 @@
 /*
  * gemstone stats values:
- * - int: exact value tested by dukioooo on 9 august 2021
+ * - int: exact value
  * - null: value doesn't exist, gem can't be applied to any item of that rarity
- * - "-1": missing value
  */
 export const gemstones = {
   JADE: {
@@ -73,19 +72,19 @@ export const gemstones = {
     color: "b",
     stats: {
       ROUGH: {
-        intelligence: [null, null, 1, 2, 2, 3],
+        intelligence: [2, 2, 3, 4, 5, 6],
       },
       FLAWED: {
-        intelligence: [null, null, 2, 3, 3, 4],
+        intelligence: [4, 4, 5, 6, 7, 8],
       },
       FINE: {
-        intelligence: [null, null, 3, 4, 4, 5],
+        intelligence: [6, 6, 7, 8, 9, 10],
       },
       FLAWLESS: {
-        intelligence: [null, null, 5, 6, 7, 8],
+        intelligence: [8, 9, 10, 12, 14, 16],
       },
       PERFECT: {
-        intelligence: [null, null, 7, 9, 10, 12],
+        intelligence: [10, 12, 14, 17, 20, 25],
       },
     },
   },
@@ -94,19 +93,19 @@ export const gemstones = {
     color: "5",
     stats: {
       ROUGH: {
-        defense: [null, 2, 3, 4, 5, 6],
+        defense: [1, 2, 3, 4, 5, 7],
       },
       FLAWED: {
-        defense: [null, 3, 4, 5, 6, 8],
+        defense: [3, 4, 5, 6, 8, 10],
       },
       FINE: {
-        defense: [null, 4, 5, 6, 8, 10],
+        defense: [4, 5, 6, 8, 10, 14],
       },
       FLAWLESS: {
-        defense: [null, 5, 8, 11, 14, 18],
+        defense: [5, 7, 10, 14, 18, 22],
       },
       PERFECT: {
-        defense: [null, 6, 10, 15, 20, 25],
+        defense: [6, 9, 13, 18, 24, 30],
       },
     },
   },
@@ -136,19 +135,19 @@ export const gemstones = {
     color: "c",
     stats: {
       ROUGH: {
-        health: [1, 2, 3, 4, 5, 6],
+        health: [1, 2, 3, 4, 5, 7],
       },
       FLAWED: {
-        health: [2, 3, 4, 5, 6, 8],
-      },
-      FINE: {
         health: [3, 4, 5, 6, 8, 10],
       },
+      FINE: {
+        health: [4, 5, 6, 8, 10, 14],
+      },
       FLAWLESS: {
-        health: [4, 5, 8, 11, 14, 18],
+        health: [5, 7, 10, 14, 18, 22],
       },
       PERFECT: {
-        health: [5, 7, 10, 15, 20, 25],
+        health: [6, 9, 13, 18, 24, 30],
       },
     },
   },

@@ -788,12 +788,20 @@ export const pet_skins = {
       head: "/head/c8e414e762e1024c799e70b7a527c22fb95648f141d660b10c512cc124334218",
       release: new Date("2021-08-10 18:00:00 GMT+1").getTime(),
     },
-    HOUND: {
-      HOUND_BEAGLE: {
-        name: "Beagle",
-        head: "/head/877364e0ce27f0239b7754706b93022d0cf945854015d6096f9cf43d24a38269",
-        release: new Date("2021-08-24 18:00:00 GMT+1").getTime(),
-      },
+  },
+  HOUND: {
+    HOUND_BEAGLE: {
+      name: "Beagle",
+      head: "/head/877364e0ce27f0239b7754706b93022d0cf945854015d6096f9cf43d24a38269",
+      release: new Date("2021-08-24 18:00:00 GMT+1").getTime(),
+    },
+  },
+  SQUID: {
+    SQUID_GLOW: {
+      // Skin is animated, animation data missing
+      name: "Glow",
+      head: "/head/fca9982520eee4066bab0ae697f3b3656084b6639ba89113bd8e23ab7288563d",
+      release: new Date("2021-09-14 18:00:00 GMT+1").getTime(),
     },
   },
 };
