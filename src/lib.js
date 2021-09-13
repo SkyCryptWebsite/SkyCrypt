@@ -699,7 +699,7 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
       }
 
       // Get breaking power for Pickaxes
-      if (item.type == "pickaxe" || item.type == "drill") {
+      if (item.type == "pickaxe" || item.type == "drill" || item.type == "gauntlet") {
         if (lore[0].startsWith("Breaking Power")) {
           item.breaking_power = lore[0].substring(15);
         } else {
@@ -1432,7 +1432,9 @@ export const getItems = async (
   );
 
   output.hoes = all_items.filter((a) => a.type != null && a.type.endsWith("hoe"));
-  output.pickaxes = all_items.filter((a) => a.type != null && (a.type.endsWith("pickaxe") || a.type.endsWith("drill")));
+  output.pickaxes = all_items.filter(
+    (a) => a.type != null && (a.type.endsWith("pickaxe") || a.type.endsWith("drill") || a.type.endsWith("gauntlet"))
+  );
   output.rods = all_items.filter(
     (a) => a.type != null && (a.type.endsWith("fishing rod") || a.type.endsWith("fishing weapon"))
   );
