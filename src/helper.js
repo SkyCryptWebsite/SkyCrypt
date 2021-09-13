@@ -823,6 +823,36 @@ export function parseItemGems(gems, rarity) {
         gem_type: gems[`${key}_gem`],
         gem_tier: value,
       });
+    } else if (key.startsWith("DEFENSIVE_")) {
+      if (key.endsWith("_gem")) {
+        continue;
+      }
+      parsed.push({
+        slot_type: "DEFENSIVE",
+        slot_number: +key.split("_")[1],
+        gem_type: gems[`${key}_gem`],
+        gem_tier: value,
+      });
+    } else if (key.startsWith("COMBAT_")) {
+      if (key.endsWith("_gem")) {
+        continue;
+      }
+      parsed.push({
+        slot_type: "COMBAT",
+        slot_number: +key.split("_")[1],
+        gem_type: gems[`${key}_gem`],
+        gem_tier: value,
+      });
+    } else if (key.startsWith("MINING_")) {
+      if (key.endsWith("_gem")) {
+        continue;
+      }
+      parsed.push({
+        slot_type: "MINING",
+        slot_number: +key.split("_")[1],
+        gem_type: gems[`${key}_gem`],
+        gem_tier: value,
+      });
     } else {
       parsed.push({
         slot_type: key.split("_")[0],
