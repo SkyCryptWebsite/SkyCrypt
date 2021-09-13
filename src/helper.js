@@ -865,7 +865,7 @@ export function generateGemLore(type, tier, rarity) {
       Object.keys(gemstone_stats).forEach((stat) => {
         const stat_value = gemstone_stats[stat][rarityNameToInt(rarity)];
 
-        if (stat_value && stat_value !== -1) {
+        if (stat_value) {
           stats.push(["§", constants.stats_colors[stat], "+", stat_value, constants.stats_symbols[stat]].join(""));
         } else {
           stats.push("§c§oMISSING VALUE§r");
