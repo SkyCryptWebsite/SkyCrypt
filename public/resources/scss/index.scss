@@ -2367,6 +2367,17 @@ a.additional-player-stat:hover {
   color: var(--§c) !important;
 }
 
+.piece-divine-bg,
+.style-scrollbar .piece-divine-bg + .item-lore::-webkit-scrollbar-thumb {
+  background-color: var(--§b);
+}
+.piece-divine-bg + .item-lore {
+  scrollbar-color: var(--§b) transparent;
+}
+.piece-divine-fg {
+  color: var(--§b) !important;
+}
+
 .piece-mythic-bg,
 .style-scrollbar .piece-mythic-bg + .item-lore::-webkit-scrollbar-thumb {
   background-color: var(--§d);
@@ -2444,6 +2455,9 @@ a.additional-player-stat:hover {
     --upgraded-from: var(--§4);
   }
   &.piece-supreme-bg {
+    --upgraded-from: var(--§b);
+  }
+  &.piece-divine-bg {
     --upgraded-from: var(--§d);
   }
   &.piece-mythic-bg {
