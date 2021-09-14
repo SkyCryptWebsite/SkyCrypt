@@ -811,55 +811,37 @@ export function generateUUID() {
  */
 export function parseItemGems(gems, rarity) {
   /** @type {Gem[]} */
+
+  const slots = {
+    normal: Object.keys(constants.gemstones),
+    special: ["UNIVERSAL", "COMBAT", "OFFENSIVE", "DEFENSIVE", "MINING"],
+    ignore: ["unlocked_slots"],
+  };
+
   const parsed = [];
   for (const [key, value] of Object.entries(gems)) {
-    if (key.startsWith("UNIVERSAL_")) {
-      if (key.endsWith("_gem")) {
-        continue;
-      }
+    const slot_type = key.split("_")[0];
+
+    if (slots.ignore.includes(key) || (slots.special.includes(slot_type) && key.endsWith("_gem"))) {
+      continue;
+    }
+
+    if (slots.special.includes(slot_type)) {
       parsed.push({
-        slot_type: "UNIVERSAL",
+        slot_type,
         slot_number: +key.split("_")[1],
         gem_type: gems[`${key}_gem`],
         gem_tier: value,
       });
-    } else if (key.startsWith("DEFENSIVE_")) {
-      if (key.endsWith("_gem")) {
-        continue;
-      }
+    } else if (slots.normal.includes(slot_type)) {
       parsed.push({
-        slot_type: "DEFENSIVE",
-        slot_number: +key.split("_")[1],
-        gem_type: gems[`${key}_gem`],
-        gem_tier: value,
-      });
-    } else if (key.startsWith("COMBAT_")) {
-      if (key.endsWith("_gem")) {
-        continue;
-      }
-      parsed.push({
-        slot_type: "COMBAT",
-        slot_number: +key.split("_")[1],
-        gem_type: gems[`${key}_gem`],
-        gem_tier: value,
-      });
-    } else if (key.startsWith("MINING_")) {
-      if (key.endsWith("_gem")) {
-        continue;
-      }
-      parsed.push({
-        slot_type: "MINING",
-        slot_number: +key.split("_")[1],
-        gem_type: gems[`${key}_gem`],
-        gem_tier: value,
-      });
-    } else {
-      parsed.push({
-        slot_type: key.split("_")[0],
+        slot_type,
         slot_number: +key.split("_")[1],
         gem_type: key.split("_")[0],
         gem_tier: value,
       });
+    } else {
+      throw `Error! Unknwon gemstone slot key: ${key}`;
     }
   }
 
