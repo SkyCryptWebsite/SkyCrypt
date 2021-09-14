@@ -78,6 +78,9 @@ class Pet {
         case "mining_speed":
           list.push(`§7Mining Speed: ${formatStat(newStats[stat])}`);
           break;
+        case "mining_fortune":
+          list.push(`§7Mining Fortune: ${formatStat(newStats[stat])}`);
+          break;
         default:
           list.push(`§cUNKNOWN: ${stat}`);
           break;

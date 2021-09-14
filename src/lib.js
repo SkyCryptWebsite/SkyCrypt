@@ -2902,6 +2902,12 @@ export async function getPets(profile) {
             pet.stats[stat] = (pet.stats[stat] || 0) + constants.pet_items[heldItem].stats[stat];
           }
         }
+        if ("statsPerLevel" in constants.pet_items[heldItem]) {
+          for (const stat in constants.pet_items[heldItem].statsPerLevel) {
+            pet.stats[stat] =
+              (pet.stats[stat] || 0) + constants.pet_items[heldItem].statsPerLevel[stat] * pet.level.level;
+          }
+        }
         if ("multStats" in constants.pet_items[heldItem]) {
           for (const stat in constants.pet_items[heldItem].multStats) {
             if (pet.stats[stat]) {
