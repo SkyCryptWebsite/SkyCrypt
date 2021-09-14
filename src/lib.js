@@ -2897,22 +2897,16 @@ export async function getPets(profile) {
       let heldItemObj = await db.collection("items").findOne({ id: heldItem });
 
       if (heldItem in constants.pet_items) {
-        if ("stats" in constants.pet_items[heldItem]) {
-          for (const stat in constants.pet_items[heldItem].stats) {
-            pet.stats[stat] = (pet.stats[stat] || 0) + constants.pet_items[heldItem].stats[stat];
-          }
+        for (const stat in constants.pet_items[heldItem]?.stats) {
+          pet.stats[stat] = (pet.stats[stat] || 0) + constants.pet_items[heldItem].stats[stat];
         }
-        if ("statsPerLevel" in constants.pet_items[heldItem]) {
-          for (const stat in constants.pet_items[heldItem].statsPerLevel) {
-            pet.stats[stat] =
-              (pet.stats[stat] || 0) + constants.pet_items[heldItem].statsPerLevel[stat] * pet.level.level;
-          }
+        for (const stat in constants.pet_items[heldItem]?.statsPerLevel) {
+          pet.stats[stat] =
+            (pet.stats[stat] || 0) + constants.pet_items[heldItem].statsPerLevel[stat] * pet.level.level;
         }
-        if ("multStats" in constants.pet_items[heldItem]) {
-          for (const stat in constants.pet_items[heldItem].multStats) {
-            if (pet.stats[stat]) {
-              pet.stats[stat] = (pet.stats[stat] || 0) * constants.pet_items[heldItem].multStats[stat];
-            }
+        for (const stat in constants.pet_items[heldItem]?.multStats) {
+          if (pet.stats[stat]) {
+            pet.stats[stat] = (pet.stats[stat] || 0) * constants.pet_items[heldItem].multStats[stat];
           }
         }
         if ("multAllStats" in constants.pet_items[heldItem]) {
