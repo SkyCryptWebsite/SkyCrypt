@@ -835,7 +835,7 @@ export function parseItemGems(gems, rarity) {
       });
     } else if (slots.normal.includes(slot_type)) {
       parsed.push({
-        slot_type: key.split("_")[0],
+        slot_type,
         slot_number: +key.split("_")[1],
         gem_type: key.split("_")[0],
         gem_tier: value,
