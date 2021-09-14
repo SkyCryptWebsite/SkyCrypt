@@ -1,18 +1,4 @@
-const symbols = {
-  health: "❤",
-  defense: "❈",
-  strength: "❁",
-  crit_chance: "☣",
-  crit_damage: "☠",
-  intelligence: "✎",
-  speed: "✦",
-  sea_creature_chance: "α",
-  magic_find: "✯",
-  pet_luck: "♣",
-  attack_speed: "⚔️",
-  true_defense: "❂",
-  ferocity: "⫽",
-};
+import { stats_symbols as symbols } from "./stats.js";
 
 export const pet_rarity_offset = {
   common: 0,
@@ -842,6 +828,17 @@ export const pet_rewards = {
   },
 };
 
+/*
+  PET_ITEM_ID = {
+    name: string,
+    tier: string (uppercase),
+    description: string,
+    stats?: {stat: value},
+    statsPerLevel?: {stat: value},
+    multStats?: {stat: value},
+    multAllStats?: {stat: value},
+  }
+*/
 export const pet_items = {
   PET_ITEM_ALL_SKILLS_BOOST_COMMON: {
     name: "All Skills Exp Boost",
@@ -1018,7 +1015,6 @@ export const pet_items = {
     tier: "EPIC",
     description: "§7Gives +§a50% §7pet exp for Farming",
   },
-  // new pet items from 0.9 update yay
   REINFORCED_SCALES: {
     name: "Reinforced Scales",
     tier: "RARE",
@@ -1120,5 +1116,14 @@ export const pet_items = {
     name: "Flying Pig",
     tier: "UNCOMMON",
     description: `§7Grants your pig pet the ability to fly while on your private island! You also don't need to hold a carrot on a stick to control your pig.`,
+  },
+  PET_ITEM_QUICK_CLAW: {
+    name: "Quick Claw",
+    tier: "RARE",
+    description: `§7Every 2 pet level you gain §6+1 ${symbols.mining_speed} Mining Speed §7and §6+1 §6${symbols.mining_fortune} Mining Fortune§7.`,
+    statsPerLevel: {
+      mining_speed: 1,
+      mining_fortune: 1,
+    },
   },
 };
