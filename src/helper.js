@@ -875,7 +875,13 @@ export function generateGemLore(type, tier, rarity) {
     const gemstone_stats = constants.gemstones[type.toUpperCase()]?.stats?.[tier.toUpperCase()];
     if (gemstone_stats) {
       Object.keys(gemstone_stats).forEach((stat) => {
-        const stat_value = gemstone_stats[stat][rarityNameToInt(rarity)];
+        let stat_value = gemstone_stats[stat][rarityNameToInt(rarity)];
+
+        // Fallback since skyblock devs didn't code all gemstone stats for divine rarity yet
+        // ...they didn't expect people to own divine tier items other than divan's drill
+        if (rarity.toUpperCase() === "DIVINE" && stat_value === null) {
+          stat_value = gemstone_stats[stat][rarityNameToInt("MYTHIC")];
+        }
 
         if (stat_value) {
           stats.push(["§", constants.stats_colors[stat], "+", stat_value, constants.stats_symbols[stat]].join(""));
