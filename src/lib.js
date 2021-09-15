@@ -1923,7 +1923,7 @@ export const getStats = async (
     output.slayer_xp = 0;
 
     for (const slayer in slayers) {
-      if (!slayers[slayer]?.level?.currentLevel) {
+      if (slayers[slayer]?.level?.currentLevel == undefined) {
         continue;
       }
 
