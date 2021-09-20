@@ -71,7 +71,7 @@
     "progress": "^2.0.3",
     "relaxed-json": "^1.0.3",
     "remove": "^0.1.5",
-    "sharp": "^0.29.0",
+    "sharp": "^0.29.1",
     "sitemap": "^7.0.0",
     "skinview3d": "^2.0.3",
     "tippy.js": "^6.3.1",
