@@ -3505,6 +3505,17 @@ export async function getForge(userProfile, hypixelProfile) {
         slot: item.slot,
         timeFinished: 0,
       }
+
+      if(item.id in constants.forge_times){
+        let forgeTime = constants.forge_times[item.id] * 60 * 1000; // convert minutes to milliseconds
+        // no better way to do this for now until hotm function is made
+        const quickForge = userProfile.mining_core?.nodes?.forge_time;
+        if(quickForge != null){
+            forgeTime *= constants.quick_forge_multiplier[quickForge];
+        }
+
+        forgeItem.timeFinished = item.startTime + forgeTime;
+      }
       processes.push(forgeItem);
     }
     output.processes = processes;
