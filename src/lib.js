@@ -3498,7 +3498,16 @@ export async function getForge(userProfile, hypixelProfile) {
 
   if(userProfile?.forge?.forge_processes?.forge_1){
     const forge = Object.values(userProfile.forge.forge_processes.forge_1);
-    output.processes = forge;
+    const processes = [];
+    for(const item of forge){
+      let forgeItem = {
+        id: item.id,
+        slot: item.slot,
+        timeFinished: 0,
+      }
+      processes.push(forgeItem);
+    }
+    output.processes = processes;
 
     return output;
   }
