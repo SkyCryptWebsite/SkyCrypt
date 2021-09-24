@@ -51,27 +51,20 @@
           </div>
         </div>
       </div>
-      <a href="https://www.gofundme.com/f/ag4y4-hellcastle-better-life-fund?utm_campaign=p_cf+share-flow-1&amp;utm_medium=copy_link&amp;utm_source=customer" target="_blank" rel="noreferrer" class="external-app form-banner">
-        <div class="external-app-icon" style="background-image: url(/resources/img/hellcastle-profile-photo.png)"></div>
-        <div class="external-app-name">Hellcastle's GoFundMe</div>
-        <div class="external-app-description">Hellcastle has done a lot for the community, and it looks like he could use some help from us now. If you aren't able to donate, sending a few kind messages goes a long way <span style="color: #F7000D;">❤</span></div>
+      <a href="https://discord.gg/cNgADv2kEQ" target="_blank" rel="noreferrer" class="external-app form-banner">
+        <div class="external-app-icon" style="background-image: url(/resources/img/icons/discord.svg?v2)"></div>
+        <div class="external-app-name"><span class="grey-text">SkyCrypt's</span> Discord</div>
+        <div class="external-app-description">A simple way to get informed about current undergoings in SkyCrypt with suggestions, bug reports and support.</div>
+        <%
+          const lessPlayedGames = [
+            'Smash Heroes',
+            'Turbo Kart Racers',
+            'Quakecraft',
+            'Warlords'
+          ]
+        %>
+        <div class="external-app-description" style="opacity:0.6">Also try out <%= lessPlayedGames[Math.floor(Math.random() * lessPlayedGames.length)] %>, is a fun game!</div>
       </a>
-      <!--
-        <a href="https://discord.gg/cNgADv2kEQ" target="_blank" rel="noreferrer" class="external-app form-banner">
-          <div class="external-app-icon" style="background-image: url(/resources/img/icons/discord.svg?v2)"></div>
-          <div class="external-app-name"><span class="grey-text">SkyCrypt's</span> Discord</div>
-          <div class="external-app-description">A simple way to get informed about current undergoings in SkyCrypt with suggestions, bug reports and support.</div>
-          <%
-            const lessPlayedGames = [
-              'Smash Heroes',
-              'Turbo Kart Racers',
-              'Quakecraft',
-              'Warlords'
-            ]
-          %>
-          <div class="external-app-description" style="opacity:0.6">Also try out <%= lessPlayedGames[Math.floor(Math.random() * lessPlayedGames.length)] %>, is a fun game!</div>
-        </a>
-      -->
       <% if(extra.favorites?.length){
       for(let profile of extra.favorites){
       if(profile.error) continue;
