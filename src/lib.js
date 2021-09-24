@@ -2639,6 +2639,8 @@ export const getStats = async (
     }
   }
 
+  mining.forge = await getForge(userProfile, hypixelProfile);
+
   output.mining = mining;
 
   // TODO: Mining stuff
@@ -3488,6 +3490,19 @@ export async function getDungeons(userProfile, hypixelProfile) {
     }
   }
 
+  return output;
+}
+
+export async function getForge(userProfile, hypixelProfile) {
+  let output = {};
+
+  if(userProfile?.forge?.forge_processes?.forge_1){
+    const forge = Object.values(userProfile.forge.forge_processes.forge_1);
+    output.processes = forge;
+
+    return output;
+  }
+  
   return output;
 }
 
