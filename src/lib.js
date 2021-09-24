@@ -1618,10 +1618,16 @@ export const getItems = async (
         name = name.split(" ").slice(1).join(" ");
       }
 
-      // Replacing piece name with 'Armor' and removing potential 'Armor Armor'
-      // (Ex: Emerald Armor Boots -> Emerald Armor Armor)
-      name = name.replace("Armor", "").replace("  ", " ").trim();
-      name = name.replace(/(Helmet|Chestplate|Leggings|Boots)/g, "Armor");
+      // Converting armor_name to generic name
+      // Ex: Superior Dragon Helmet -> Superior Dragon Armor
+      if (/^Armor .*? (Helmet|Chestplate|Leggings|Boots)$/g.test(name)) {
+        // name starts with Armor and ends with piece name, remove piece name
+        name = name.replace(/(Helmet|Chestplate|Leggings|Boots)/g, "").trim();
+      } else {
+        // removing old 'Armor' and replacing the piece name with 'Armor'
+        name = name.replace("Armor", "").replace("  ", " ").trim();
+        name = name.replace(/(Helmet|Chestplate|Leggings|Boots)/g, "Armor").trim();
+      }
 
       armorPiece.armor_name = name;
     });
