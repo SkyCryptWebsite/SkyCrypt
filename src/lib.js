@@ -3513,7 +3513,9 @@ export async function getForge(userProfile, hypixelProfile) {
         if(quickForge != null){
             forgeTime *= constants.quick_forge_multiplier[quickForge];
         }
-
+        const dbObject = await db.collection("items").findOne({ id: item.id });
+        
+        forgeItem.name = dbObject ? dbObject.name : item.id == "PET" ? "[Lvl 1] Ammonite" : item.id;
         forgeItem.timeFinished = item.startTime + forgeTime;
       }
       processes.push(forgeItem);
