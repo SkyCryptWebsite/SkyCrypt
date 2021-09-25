@@ -1,11 +1,12 @@
-const helper = require("./helper");
-const lib = require("./lib");
-const cors = require("cors");
-const sanitize = require("mongo-sanitize");
-const constants = require("./constants");
+import * as helper from "./helper.js";
+import * as lib from "./lib.js";
+import cors from "cors";
+import sanitize from "mongo-sanitize";
+import leaderboard from "./leaderboards.js";
 
-const Redis = require("ioredis");
-const redisClient = new Redis();
+import { completePacks } from "./custom-resources.js";
+
+import { redisClient } from "./redis.js";
 
 function handleError(e, res) {
   console.error(e);
@@ -15,7 +16,7 @@ function handleError(e, res) {
   });
 }
 
-module.exports = (app, db) => {
+export default (app, db) => {
   const productInfo = {};
   const leaderboards = [];
 
@@ -38,7 +39,7 @@ module.exports = (app, db) => {
     const keys = await redisClient.keys("lb_*");
 
     for (const key of keys) {
-      const lb = constants.leaderboard(key);
+      const lb = leaderboard(key);
 
       if (lb.mappedBy == "uuid" && !lb.key.startsWith("collection_enchanted")) {
         leaderboards.push(lb);
@@ -63,14 +64,17 @@ module.exports = (app, db) => {
       }
     }
 
-    req.cacheOnly = req.apiKey;
+    req.cacheOnly = !req.apiKey;
+    req.options = {
+      cacheOnly: req.cacheOnly,
+    };
+
     next();
   });
 
   app.all("/api/v2/packs", cors(), async (req, res) => {
     if (req.apiKey) {
-      let customResources = require("./custom-resources");
-      res.json(customResources.completePacks);
+      res.json(completePacks);
     } else {
       res.status(404).json({ error: "This endpoint isn't available to the public." });
     }
@@ -85,7 +89,7 @@ module.exports = (app, db) => {
 
     let page, startIndex, endIndex;
 
-    const lb = constants.leaderboard(`lb_${req.params.lbName}`);
+    const lb = leaderboard(`lb_${req.params.lbName}`);
 
     const lbCount = await redisClient.zcount(`lb_${lb.key}`, "-Infinity", "+Infinity");
 
@@ -171,7 +175,7 @@ module.exports = (app, db) => {
           sellPrice: product.sellPrice,
           buyVolume: product.buyVolume,
           sellVolume: product.sellVolume,
-          tag: helper.hasPath(itemInfo, "tag") ? itemInfo.tag : null,
+          tag: itemInfo?.tag ?? null,
           price: (product.buyPrice + product.sellPrice) / 2,
         };
       }
@@ -184,19 +188,16 @@ module.exports = (app, db) => {
 
   app.all("/api/v2/profile/:player", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/profile");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/profile");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       const output = { profiles: {} };
 
       for (const singleProfile of allProfiles) {
         const userProfile = singleProfile.members[profile.uuid];
 
-        const items = await lib.getItems(userProfile, false, "", { debugId });
-        const data = await lib.getStats(db, singleProfile, allProfiles, items, { debugId });
+        const items = await lib.getItems(userProfile, false, "", req.options);
+        const data = await lib.getStats(db, singleProfile, allProfiles, items, req.options);
 
         output.profiles[singleProfile.profile_id] = {
           profile_id: singleProfile.profile_id,
@@ -217,11 +218,8 @@ module.exports = (app, db) => {
 
   app.all("/api/v2/coins/:player/:profile", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/coins");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/coins");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       let output = {
         error: "Invalid Profile Name!",
@@ -234,8 +232,8 @@ module.exports = (app, db) => {
           continue;
         }
 
-        const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", { debugId });
-        const data = await lib.getStats(db, singleProfile, allProfiles, items, { debugId });
+        const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", req.options);
+        const data = await lib.getStats(db, singleProfile, allProfiles, items, req.options);
 
         output = {
           profile_id: singleProfile.profile_id,
@@ -253,19 +251,16 @@ module.exports = (app, db) => {
 
   app.all("/api/v2/coins/:player", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/coins");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/coins");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       const output = { profiles: {} };
 
       for (const singleProfile of allProfiles) {
         const cute_name = singleProfile.cute_name;
 
-        const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", { debugId });
-        const data = await lib.getStats(db, singleProfile, allProfiles, items, { debugId });
+        const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", req.options);
+        const data = await lib.getStats(db, singleProfile, allProfiles, items, req.options);
 
         output.profiles[singleProfile.profile_id] = {
           profile_id: singleProfile.profile_id,
@@ -283,11 +278,8 @@ module.exports = (app, db) => {
 
   app.all("/api/v2/talismans/:player/:profile", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/talismans");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/talismans");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       let output = {
         error: "Invalid Profile Name!",
@@ -300,7 +292,7 @@ module.exports = (app, db) => {
           continue;
         }
 
-        const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", { debugId });
+        const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", req.options);
         const talismans = items.talismans;
 
         output = {
@@ -318,18 +310,15 @@ module.exports = (app, db) => {
 
   app.all("/api/v2/talismans/:player", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/talismans");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/talismans");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       const output = { profiles: {} };
 
       for (const singleProfile of allProfiles) {
         const userProfile = singleProfile.members[profile.uuid];
 
-        const items = await lib.getItems(userProfile, false, "", { debugId });
+        const items = await lib.getItems(userProfile, false, "", req.options);
         const talismans = items.talismans;
 
         output.profiles[singleProfile.profile_id] = {
@@ -347,11 +336,8 @@ module.exports = (app, db) => {
 
   app.all("/api/v2/slayers/:player/:profile", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/slayers");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/slayers");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       let output = {
         error: "Invalid Profile Name!",
@@ -364,8 +350,8 @@ module.exports = (app, db) => {
           continue;
         }
 
-        const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", { debugId });
-        const data = await lib.getStats(db, singleProfile, allProfiles, items, { debugId });
+        const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", req.options);
+        const data = await lib.getStats(db, singleProfile, allProfiles, items, req.options);
 
         output = {
           profile_id: singleProfile.profile_id,
@@ -385,19 +371,16 @@ module.exports = (app, db) => {
 
   app.all("/api/v2/slayers/:player", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/slayers");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/slayers");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       const output = { profiles: {} };
 
       for (const singleProfile of allProfiles) {
         const userProfile = singleProfile.members[profile.uuid];
 
-        const items = await lib.getItems(userProfile, false, "", { debugId });
-        const data = await lib.getStats(db, singleProfile, allProfiles, items, { debugId });
+        const items = await lib.getItems(userProfile, false, "", req.options);
+        const data = await lib.getStats(db, singleProfile, allProfiles, items, req.options);
 
         output.profiles[singleProfile.profile_id] = {
           profile_id: singleProfile.profile_id,
@@ -417,11 +400,8 @@ module.exports = (app, db) => {
 
   app.all("/api/v2/dungeons/:player/:profile", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/dungeons");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/dungeons");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       let output = {
         error: "Invalid Profile Name!",
@@ -435,7 +415,7 @@ module.exports = (app, db) => {
         }
 
         const userProfile = singleProfile.members[profile.uuid];
-        const hypixelProfile = await helper.getRank(profile.uuid, db);
+        const hypixelProfile = await helper.getRank(profile.uuid, db, req.cacheOnly);
 
         const dungeonData = await lib.getDungeons(userProfile, hypixelProfile);
 
@@ -454,17 +434,14 @@ module.exports = (app, db) => {
 
   app.all("/api/v2/dungeons/:player", cors(), async (req, res) => {
     try {
-      const debugId = helper.generateDebugId("api/v2/dungeons");
-      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, {
-        cacheOnly: req.cacheOnly,
-        debugId,
-      });
+      req.options.debugId = helper.generateDebugId("api/v2/dungeons");
+      const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
       const output = { profiles: {} };
 
       for (const singleProfile of allProfiles) {
         const userProfile = singleProfile.members[profile.uuid];
-        const hypixelProfile = await helper.getRank(profile.uuid, db);
+        const hypixelProfile = await helper.getRank(profile.uuid, db, req.cacheOnly);
 
         const dungeonData = await lib.getDungeons(userProfile, hypixelProfile);
 

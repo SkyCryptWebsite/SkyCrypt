@@ -1,6 +1,3 @@
-// add arc.io
-importScripts("https://arc.io/arc-sw-core.js");
-
 const cacheName = "offline-v1";
 
 const offlineResources = ["/resources/html/offline.html", "/resources/img/bg.webp", "/resources/img/logo_square.svg"];
@@ -28,8 +25,7 @@ self.addEventListener("fetch", (event) => {
     fetch(event.request).catch(() => {
       return caches.match(event.request).then((response) => {
         if (!response) {
-          const url = new URL(event.request.url);
-          if (url.pathname === "/" || url.pathname.substring(0, 7) === "/stats/") {
+          if (event.request.mode === "navigate") {
             return caches.match("/resources/html/offline.html");
           }
         }

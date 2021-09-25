@@ -1,16 +1,15 @@
-const fs = require("fs");
-const path = require("path");
-
-const constants = {};
-
-for (const file of fs.readdirSync(path.resolve(__dirname, "constants"))) {
-  if (path.extname(file) != ".js") {
-    continue;
-  }
-
-  const module = require(path.resolve(__dirname, "constants", file));
-
-  Object.assign(constants, module);
-}
-
-module.exports = constants;
+export * from "./constants/bonuses.js";
+export * from "./constants/collections.js";
+export * from "./constants/dungeons.js";
+export * from "./constants/gemstones.js";
+export * from "./constants/leveling.js";
+export * from "./constants/minions.js";
+export * from "./constants/misc.js";
+export * from "./constants/pets.js";
+export * from "./constants/pet-stats.js";
+export * from "./constants/random-emoji.js";
+export * from "./constants/stats.js";
+export * from "./constants/tags.js";
+export * from "./constants/talismans.js";
+export * from "./constants/themes.js";
+export * from "./constants/weight.js";

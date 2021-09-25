@@ -1,17 +1,21 @@
 {
-  "extends": ["eslint:recommended", "prettier"],
+  "extends": ["eslint:recommended", "plugin:import/recommended", "prettier"],
+  "plugins": ["deprecation"],
   "env": {
     "commonjs": true,
     "es2021": true,
     "node": true
   },
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 12
+    "ecmaVersion": 12,
+    "project": "./tsconfig.json"
   },
   "rules": {
     "curly": ["warn", "multi-line", "consistent"],
     "no-unused-vars": ["error", { "args": "none" }],
-    "no-constant-condition": ["error", { "checkLoops": false }]
+    "no-constant-condition": ["error", { "checkLoops": false }],
+    "import/extensions": ["warn", "always", { "ts": "never" }],
+    "deprecation/deprecation": "warn"
   }
 }

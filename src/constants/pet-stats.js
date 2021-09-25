@@ -1,4 +1,4 @@
-const symbols = require("./stats.js").stats_symbols;
+import { stats_symbols as symbols } from "./stats.js";
 
 function round(num, decimals = 0) {
   return Math.round(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
@@ -77,6 +77,9 @@ class Pet {
           break;
         case "mining_speed":
           list.push(`§7Mining Speed: ${formatStat(newStats[stat])}`);
+          break;
+        case "mining_fortune":
+          list.push(`§7Mining Fortune: ${formatStat(newStats[stat])}`);
           break;
         default:
           list.push(`§cUNKNOWN: ${stat}`);
@@ -651,7 +654,7 @@ class Scatha extends Pet {
   }
 
   get first() {
-    const mult = this.rarity > 3 ? 1.25 : 1;
+    const mult = this.rarity > 2 ? 1.25 : 1;
     return {
       name: "§6Grounded",
       desc: [`§7Gain §6+${round(this.level * mult - 0.01, 1)}${symbols.mining_fortune} Mining Fortune§7`],
@@ -659,10 +662,10 @@ class Scatha extends Pet {
   }
 
   get second() {
-    const mult = this.rarity > 3 ? 0.03 : 0.025;
+    const mult = this.rarity > 2 ? 0.03 : 0.025;
     return {
       name: "§6Burrowing",
-      desc: [`§7When mining, there is a §a${round(this.level * mult, 1)}% §7chance to mine up a treasure burrow`],
+      desc: [`§7Grants a §a+${round(this.level * mult, 1)}% §7chance to find treasure while mining`],
     };
   }
 
@@ -3087,63 +3090,61 @@ class QuestionMark extends Pet {
   }
 }
 
-module.exports = {
-  petStats: {
-    "???": QuestionMark,
-    AMMONITE: Ammonite,
-    ARMADILLO: Armadillo,
-    BABY_YETI: BabyYeti,
-    BAL: Bal,
-    BAT: Bat,
-    BEE: Bee,
-    BLACK_CAT: BlackCat,
-    BLAZE: Blaze,
-    BLUE_WHALE: BlueWhale,
-    CHICKEN: Chicken,
-    DOLPHIN: Dolphin,
-    ELEPHANT: Elephant,
-    ENDER_DRAGON: EnderDragon,
-    ENDERMAN: Enderman,
-    ENDERMITE: Endermite,
-    FLYING_FISH: FlyingFish,
-    GHOUL: Ghoul,
-    GIRAFFE: Giraffe,
-    GOLDEN_DRAGON: GoldenDragon,
-    GOLEM: Golem,
-    GRANDMA_WOLF: GrandmaWolf,
-    GRIFFIN: Griffin,
-    GUARDIAN: Guardian,
-    HORSE: Horse,
-    HOUND: Hound,
-    JELLYFISH: Jellyfish,
-    JERRY: Jerry,
-    LION: Lion,
-    MAGMA_CUBE: MagmaCube,
-    MEGALODON: Megalodon,
-    MITHRIL_GOLEM: MithrilGolem,
-    MONKEY: Monkey,
-    OCELOT: Ocelot,
-    PARROT: Parrot,
-    PHOENIX: Phoenix,
-    PIG: Pig,
-    PIGMAN: Pigman,
-    RABBIT: Rabbit,
-    RAT: Rat,
-    ROCK: Rock,
-    SCATHA: Scatha,
-    SHEEP: Sheep,
-    SILVERFISH: Silverfish,
-    SKELETON_HORSE: SkeletonHorse,
-    SKELETON: Skeleton,
-    SNOWMAN: Snowman,
-    SPIDER: Spider,
-    SPIRIT: Spirit,
-    SQUID: Squid,
-    TARANTULA: Tarantula,
-    TIGER: Tiger,
-    TURTLE: Turtle,
-    WITHER_SKELETON: WitherSkeleton,
-    WOLF: Wolf,
-    ZOMBIE: Zombie,
-  },
+export const petStats = {
+  "???": QuestionMark,
+  AMMONITE: Ammonite,
+  ARMADILLO: Armadillo,
+  BABY_YETI: BabyYeti,
+  BAL: Bal,
+  BAT: Bat,
+  BEE: Bee,
+  BLACK_CAT: BlackCat,
+  BLAZE: Blaze,
+  BLUE_WHALE: BlueWhale,
+  CHICKEN: Chicken,
+  DOLPHIN: Dolphin,
+  ELEPHANT: Elephant,
+  ENDER_DRAGON: EnderDragon,
+  ENDERMAN: Enderman,
+  ENDERMITE: Endermite,
+  FLYING_FISH: FlyingFish,
+  GHOUL: Ghoul,
+  GIRAFFE: Giraffe,
+  GOLDEN_DRAGON: GoldenDragon,
+  GOLEM: Golem,
+  GRANDMA_WOLF: GrandmaWolf,
+  GRIFFIN: Griffin,
+  GUARDIAN: Guardian,
+  HORSE: Horse,
+  HOUND: Hound,
+  JELLYFISH: Jellyfish,
+  JERRY: Jerry,
+  LION: Lion,
+  MAGMA_CUBE: MagmaCube,
+  MEGALODON: Megalodon,
+  MITHRIL_GOLEM: MithrilGolem,
+  MONKEY: Monkey,
+  OCELOT: Ocelot,
+  PARROT: Parrot,
+  PHOENIX: Phoenix,
+  PIG: Pig,
+  PIGMAN: Pigman,
+  RABBIT: Rabbit,
+  RAT: Rat,
+  ROCK: Rock,
+  SCATHA: Scatha,
+  SHEEP: Sheep,
+  SILVERFISH: Silverfish,
+  SKELETON_HORSE: SkeletonHorse,
+  SKELETON: Skeleton,
+  SNOWMAN: Snowman,
+  SPIDER: Spider,
+  SPIRIT: Spirit,
+  SQUID: Squid,
+  TARANTULA: Tarantula,
+  TIGER: Tiger,
+  TURTLE: Turtle,
+  WITHER_SKELETON: WitherSkeleton,
+  WOLF: Wolf,
+  ZOMBIE: Zombie,
 };

@@ -15,12 +15,12 @@ const browsers: {
     help: "https://support.apple.com/en-us/HT204416",
   },
   chrome: {
-    version: "84",
+    version: "88",
     help: "https://support.google.com/chrome/answer/95414",
     androidPackage: "com.android.chrome",
   },
   edge: {
-    version: "84",
+    version: "88",
     help: "https://support.microsoft.com/en-us/topic/microsoft-edge-update-settings-af8aaca2-1b69-4870-94fe-18822dbb7ef1",
     androidPackage: "com.microsoft.emmx",
   },
