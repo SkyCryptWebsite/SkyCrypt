@@ -1,6 +1,7 @@
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 import {
   allItems,
   clickLoreListener,
@@ -44,17 +45,18 @@ export class InventoryView extends LitElement {
       "item-icon": true,
       "is-enchanted": isEnchanted(this.item),
     };
+    let style: string | undefined = undefined;
     if (this.item.texture_path) {
       classes["custom-icon"] = true;
-      return html`
-        <div style='background-image: url("${this.item.texture_path}")' class="${classMap(classes)}"></div>
-        ${this.item.Count != 1 ? html`<div class="item-count">${this.item.Count}</div>` : undefined}
-      `;
+      style = `background-image: url("${this.item.texture_path}")`;
     } else {
       classes[`icon-${this.item.id}_0`] = this.item.Damage != 0;
       classes[`icon-${this.item.id}_${this.item.Damage}`] = true;
-      return html`<div class="${classMap(classes)}"></div>`;
     }
+    return html`
+      <div style="${ifDefined(style)}" class="${classMap(classes)}"></div>
+      ${this.item.Count != 1 ? html`<div class="item-count">${this.item.Count}</div>` : undefined}
+    `;
   }
 
   private handleMouseEnter(event: MouseEvent) {
