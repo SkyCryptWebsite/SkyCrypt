@@ -1,0 +1,238 @@
+main.grid {
+  box-sizing: border-box;
+  min-height: calc(100vh - 48px);
+  display: grid;
+  grid-template-columns: 350px 350px 350px;
+  justify-items: stretch;
+  place-content: center;
+  gap: 20px;
+  margin-top: calc(48px + env(safe-area-inset-top));
+  padding-top: 20px;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 350px 350px;
+  }
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr;
+  }
+
+  > * {
+    background: var(--bg_blur) no-repeat center center fixed;
+    background-color: rgba(10, 10, 10, 0.5);
+    background-size: cover;
+    border-radius: 10px;
+
+    .light & {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    @supports not ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+      .cache-only &:not(.banner) {
+        background-blend-mode: luminosity;
+        background-color: black;
+      }
+      .cache-only.light &:not(.banner) {
+        background-color: white;
+      }
+    }
+
+    @supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+      background: none;
+      -webkit-backdrop-filter: blur(16px) brightness(0.5);
+      backdrop-filter: blur(16px) brightness(0.5);
+
+      .light & {
+        -webkit-backdrop-filter: blur(16px) contrast(40%) brightness(1.5);
+        backdrop-filter: blur(16px) contrast(40%) brightness(1.5);
+      }
+    }
+  }
+
+  .lookup-player {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 25px;
+    padding: 25px 0;
+    font-size: 30px;
+
+    p {
+      width: 100%;
+      text-align: center;
+      font-weight: 600;
+      margin: 5px;
+
+      // //this is for random player
+      // &:last-child {
+      //     font-size: 16px;
+      //     color: var(--text-rgb);
+      //     margin: 0;
+      // }
+    }
+
+    input {
+      position: relative;
+      width: 100%;
+      height: 2.25em;
+      text-align: center;
+      font-size: inherit;
+      font-weight: 600;
+      box-sizing: border-box;
+      background-color: rgba(var(--text-rgb), 0.1);
+      border: 0;
+      color: var(--text-hex);
+      font-weight: normal;
+      -webkit-appearance: none;
+      border-radius: 0;
+
+      &::-webkit-search-cancel-button {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        height: unset;
+        right: 0.5em;
+      }
+    }
+
+    .big-green-button {
+      display: flex;
+      height: 48px;
+      border-radius: 24px;
+      padding: 0 24px;
+      align-items: center;
+      border: none;
+      -webkit-appearance: none;
+      appearance: none;
+      background-color: var(--icon-hex);
+      color: white;
+      text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+      text-transform: uppercase;
+      font-weight: 700;
+      font-size: 16px;
+      transform: scale(1);
+      transition: transform 0.15s ease-in-out, background-color 0.15s;
+      will-change: transform;
+
+      &:hover,
+      &:focus {
+        background-color: var(--link-hex);
+        transform: scale(1.015);
+      }
+    }
+  }
+}
+
+main.grid > a,
+.external-app {
+  :not(img) {
+    opacity: 0.85;
+    transition: opacity 0.15s ease-in-out;
+  }
+
+  &:hover :not(img),
+  &:focus :not(img) {
+    opacity: 1;
+  }
+
+  @supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+    main.grid > a,
+    .external-app {
+      transform: scale(1);
+      transition: transform 0.15s ease-in-out;
+    }
+
+    &:hover,
+    &:focus {
+      transform: scale(1.01);
+    }
+  }
+}
+
+#error_box_wrapper {
+  position: relative;
+  grid-column: 1 / -1;
+  overflow: hidden;
+  overflow: clip;
+  min-height: 70px;
+  max-height: 500px;
+
+  &:not(.show-error) {
+    display: none;
+  }
+}
+
+.form-banner {
+  position: relative;
+  grid-column: 1 / -1;
+  padding: 20px 20px 20px 90px;
+  text-decoration: none;
+  margin: 0;
+  max-width: unset;
+
+  .external-app-icon {
+    width: 90px;
+  }
+
+  .try-also {
+    color: rgba(var(--text-rgb), 0.6);
+
+    // the width where the discord description starts to wrap
+    @media (max-width: 737.5px) {
+      display: none;
+    }
+  }
+}
+
+.top-profile {
+  position: relative;
+  display: inline-block;
+  padding: 20px;
+  text-decoration: none;
+}
+
+.profile-avatar {
+  display: block;
+  width: 64px;
+  height: 64px;
+  border-radius: 5px;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
+
+.profile-name {
+  position: absolute;
+  left: 100px;
+  top: 32px;
+  color: var(--text-hex);
+  font-weight: 600;
+  font-size: 18px;
+
+  .emoji {
+    vertical-align: middle;
+    height: 22px;
+    margin-left: 5px;
+    margin-top: -4px;
+  }
+}
+
+.profile-last-online {
+  position: absolute;
+  left: 100px;
+  top: 58px;
+  font-weight: 500;
+  font-size: 14px;
+  color: rgba(var(--text-rgb), 0.8);
+}
+
+.profile-rank {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  height: 20px;
+  width: 20px;
+  color: rgba(var(--text-rgb), 0.6);
+}
