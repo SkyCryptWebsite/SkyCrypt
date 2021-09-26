@@ -1079,6 +1079,7 @@ export function getMinions(coopMembers) {
 
   return minions;
 }
+
 export function getMinionSlots(minions) {
   let uniqueMinions = 0;
 
@@ -2642,6 +2643,21 @@ export const getStats = async (
   output.mining = mining;
 
   // TODO: Mining stuff
+
+  // HEART OF THE MOUNTAIN
+
+  const hotm = {
+    mining_core: userProfile.mining_core, // only for development
+    tree: [],
+  };
+
+  function generateHotmPerk(node) {
+    const perk = {};
+  }
+
+  output.hotm = hotm;
+
+  // MISC
 
   const misc = {};
 
