@@ -25,7 +25,7 @@
 
   AnimationObject: either day/night (for animations that change based on the time of the day)
     or progressive timings in ms (for cyclic animations). If null the information about the
-    animation are missing.
+    animation is missing.
   {
     day: string,
     night: string,
