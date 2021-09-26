@@ -457,19 +457,19 @@ const animations = [
   },
 ];
 
-export const pet_skins = {};
-export const item_skins = {};
-export const animated_items = {};
+const gen_pet_skins = {};
+const gen_item_skins = {};
+const gen_animated_items = {};
 
 skins.forEach((skin) => {
   if (skin.id.startsWith("PET_SKIN_")) {
-    pet_skins[skin.id] = {
+    gen_pet_skins[skin.id] = {
       name: skin.name,
       texture: skin.texture,
       release: skin.release,
     };
   } else {
-    item_skins[skin.id] = {
+    gen_item_skins[skin.id] = {
       name: skin.name,
       texture: skin.texture,
     };
@@ -478,18 +478,22 @@ skins.forEach((skin) => {
 
 animations.forEach((anim) => {
   // Update texture in pet_skins
-  if (pet_skins[anim.id]) {
-    pet_skins[anim.id].texture = anim.texture;
+  if (gen_pet_skins[anim.id]) {
+    gen_pet_skins[anim.id].texture = anim.texture;
   }
 
   // Update texture in item_skins
-  if (item_skins[anim.id]) {
-    item_skins[anim.id].texture = anim.texture;
+  if (gen_item_skins[anim.id]) {
+    gen_item_skins[anim.id].texture = anim.texture;
   }
 
   // Push the item in animated_items (skins too!)
-  if (!animated_items[anim.id]) {
-    animated_items[anim.id] = {};
+  if (!gen_animated_items[anim.id]) {
+    gen_animated_items[anim.id] = {};
   }
-  animated_items[anim.id].texture = anim.texture;
+  gen_animated_items[anim.id].texture = anim.texture;
 });
+
+export const pet_skins = gen_pet_skins;
+export const item_skins = gen_item_skins;
+export const animated_items = gen_animated_items;
