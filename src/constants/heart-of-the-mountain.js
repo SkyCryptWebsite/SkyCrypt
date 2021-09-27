@@ -58,7 +58,7 @@ export const hotm_nodes = [
     name: "Fortunate",
     position: 12,
     max_level: 20,
-    upgrade_type: "unknown",
+    upgrade_type: "mithril_powder", // double check this!
   },
   {
     id: "great_explorer",
