@@ -3500,6 +3500,19 @@ export async function getHeartOfTheMountain(userProfile) {
     tree: [],
   };
 
+  for (const [nodeId, level] of Object.entries(userProfile.mining_core.nodes)) {
+    const node = constants.hotm_nodes.find((x) => x.id === nodeId);
+
+    if (!node) {
+      throw "HOTM: Unknown node identifier";
+    }
+
+    node.description = node.getDescription ? node.getDescription(level) : null;
+    node.upgradeCost = node.getUpgradeCost ? node.getUpgradeCost(level) : null;
+
+    output.tree.push(node);
+  }
+
   return output;
 }
 

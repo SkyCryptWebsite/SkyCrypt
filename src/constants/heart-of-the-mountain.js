@@ -3,7 +3,7 @@ export const hotm_tree_size = {
   rows: 7,
 };
 
-export const nodes = [
+export const hotm_nodes = [
   {
     id: "mining_speed_2",
     name: "Mining Speed II",
@@ -13,9 +13,10 @@ export const nodes = [
   },
   {
     id: "powder_buff",
-    name: "Powder Buff", // FIX: to be confirmed!
+    name: "Powder Buff",
     position: 4,
     max_level: 50,
+    upgrade_type: "gemstone_powder",
   },
   {
     id: "mining_fortune_2",
@@ -25,8 +26,8 @@ export const nodes = [
     upgrade_type: "gemstone_powder",
   },
   {
-    id: "vein_seeker",
-    name: "Vein Seeker", // FIX: to be confirmed!
+    id: "vein_seeker", // FIX: to be confirmed!
+    name: "Vein Seeker",
     position: 8,
     max_level: 1,
     upgrade_type: null,
@@ -68,14 +69,14 @@ export const nodes = [
   },
   {
     id: "maniac_miner",
-    name: "Maniac Miner", // FIX: to be confirmed!
+    name: "Maniac Miner",
     position: 14,
     max_level: 1,
     upgrade_type: null,
   },
   {
-    id: "goblin_killer",
-    name: "Goblin Killer", // FIX: to be confirmed!
+    id: "goblin_killer", // FIX: to be confirmed!
+    name: "Goblin Killer",
     position: 16,
     max_level: 1,
     upgrade_type: null,
@@ -89,14 +90,14 @@ export const nodes = [
   },
   {
     id: "star_powder",
-    name: "Star Powder", // FIX: to be confirmed!
+    name: "Star Powder",
     position: 20,
     max_level: 1,
     upgrade_type: null,
   },
   {
-    id: "sky_mall",
-    name: "Sky Mall", // FIX: to be confirmed!
+    id: "sky_mall", // FIX: to be confirmed!
+    name: "Sky Mall",
     position: 22,
     max_level: 1,
     upgrade_type: null,
@@ -123,30 +124,32 @@ export const nodes = [
     upgrade_type: "mithril_powder",
   },
   {
-    id: "orbiter",
-    name: "Orbiter", // FIX: to be confirmed!
+    id: "experience_orbs",
+    name: "Orbiter",
     position: 26,
     max_level: 80,
+    upgrade_type: "mithril_powder",
   },
   {
     id: "front_loaded",
-    name: "Front Loaded", // FIX: to be confirmed!
+    name: "Front Loaded",
     position: 27,
     max_level: 1,
     upgrade_type: null,
   },
   {
     id: "precision_mining",
-    name: "Precision Mining", // FIX: to be confirmed!
+    name: "Precision Mining",
     position: 28,
     max_level: 1,
     upgrade_type: null,
   },
   {
-    id: "luck_of_the_cave",
-    name: "Luck Of The Cave", // FIX: to be confirmed!
+    id: "luck_of_the_cave", // FIX: to be confirmed!
+    name: "Luck Of The Cave",
     position: 30,
     max_level: 45,
+    upgrade_type: "mithril_powder", // FIX: upgrade_type to be confirmed
   },
   {
     id: "daily_powder",
@@ -156,10 +159,11 @@ export const nodes = [
     upgrade_type: "mithril_powder",
   },
   {
-    id: "crystallized",
-    name: "Crystallized", // FIX: to be confirmed!
+    id: "fallen_star_bonus",
+    name: "Crystallized",
     position: 34,
     max_level: 30,
+    upgrade_type: "mithril_powder",
   },
   {
     id: "mining_speed_boost",
@@ -183,15 +187,15 @@ export const nodes = [
     upgrade_type: "mithril_powder",
   },
   {
-    id: "quick_forge",
-    name: "Quick Forge", // FIX: to be confirmed!
+    id: "forge_time",
+    name: "Quick Forge",
     position: 40,
     max_level: 20,
     upgrade_type: "mithril_powder",
   },
   {
-    id: "pickobulus",
-    name: "Pickobulus", // FIX: to be confirmed!
+    id: "pickaxe_toss",
+    name: "Pickobulus",
     position: 41,
     max_level: 1,
     upgrade_type: null,
@@ -202,10 +206,10 @@ export const nodes = [
     position: 46,
     max_level: 50,
     upgrade_type: "mithril_powder",
-    upgradeCost(level) {
+    getUpgradeCost(level) {
       return Math.floor(Math.pow(level + 1, 3));
     },
-    description(level) {
+    getDescription(level) {
       return [`Grants +${level * 20} ⸕ Mining Speed.`];
     },
   },
