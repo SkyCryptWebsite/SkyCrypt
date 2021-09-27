@@ -351,6 +351,12 @@ const skins = [
     texture: "/head/13229f8525726684fb0227dad7621f05f0b8b5d58a8693fd0ea0688349f1d53c",
     release: new Date("2020-12-25 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_TIGER_SABER_TOOTH",
+    name: "Saber-Tooth",
+    texture: "/head/e92dba2fbd699d541b2fa0fbcaff640ad8c311987ade59a13b2a65d0ce319316",
+    release: new Date("2021-09-28 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 const animations = [
