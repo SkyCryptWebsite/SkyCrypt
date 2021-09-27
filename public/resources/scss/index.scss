@@ -123,6 +123,10 @@ main.grid {
         transform: scale(1.015);
       }
     }
+
+    @media (max-width: 520px) {
+      font-size: 20px;
+    }
   }
 }
 
