@@ -124,7 +124,7 @@ main.grid {
       }
     }
 
-    @media (max-width: 520px) {
+    @media (max-width: 520px), (max-height: 550px) {
       gap: 15px;
       padding: 15px 0;
       font-size: 20px;
@@ -189,7 +189,7 @@ main.grid > a,
     width: 90px;
   }
 
-  @media (max-width: 520px) {
+  @media (max-width: 520px), (max-height: 550px) {
     .external-app-description {
       font-size: 14px;
     }
