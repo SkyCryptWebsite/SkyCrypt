@@ -3507,8 +3507,12 @@ export async function getHeartOfTheMountain(userProfile) {
       throw "HOTM: Unknown node identifier";
     }
 
-    node.description = node.getDescription ? node.getDescription(level) : null;
-    node.upgradeCost = node.getUpgradeCost ? node.getUpgradeCost(level) : null;
+    const perk = node.getPerk ? node.getPerk(level) : null;
+    const upgradeCost = node.getUpgradeCost ? node.getUpgradeCost(level) : null;
+
+    // Generating the lore of the node
+    // TODO: Handle when node has max 1 level, upgrade to next line etc...
+    node.description = [`Level ${level}/${node.max_level}`, "", perk, upgradeCost];
 
     output.tree.push(node);
   }

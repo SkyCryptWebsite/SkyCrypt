@@ -3,6 +3,17 @@ export const hotm_tree_size = {
   rows: 7,
 };
 
+/*
+  {
+    id: the node id found in mining_core.nodes (key)
+    name: in game name of the node
+    position: position inside the hotm tree (count starts from top left of the tree)
+    max_level: max level of the node
+    upgrade_type: mithril_powder | gemstone_powder | null (has no upgrades, level 1 is the max)
+    getUpgradeCost(level): returns the upgrade cost to the specified level
+    getPerk(level): returns the lore of the perk at a certain level
+  }
+*/
 export const hotm_nodes = [
   {
     id: "mining_speed_2",
@@ -209,7 +220,7 @@ export const hotm_nodes = [
     getUpgradeCost(level) {
       return Math.floor(Math.pow(level + 1, 3));
     },
-    getDescription(level) {
+    getPerk(level) {
       return [`Grants +${level * 20} ⸕ Mining Speed.`];
     },
   },
