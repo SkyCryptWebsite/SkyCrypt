@@ -3504,6 +3504,7 @@ export async function getForge(userProfile, hypixelProfile) {
         id: item.id,
         slot: item.slot,
         timeFinished: 0,
+        timeFinishedText: "",
       }
 
       if(item.id in constants.forge_times){
@@ -3516,7 +3517,9 @@ export async function getForge(userProfile, hypixelProfile) {
         const dbObject = await db.collection("items").findOne({ id: item.id });
         
         forgeItem.name = item.id == "PET" ? "[Lvl 1] Ammonite" : dbObject ? dbObject.name : item.id;
-        forgeItem.timeFinished = item.startTime + forgeTime;
+        const timeFinished = item.startTime + forgeTime; 
+        forgeItem.timeFinished = timeFinished
+        forgeItem.timeFinishedText = moment(timeFinished).fromNow();
       }
       processes.push(forgeItem);
     }
