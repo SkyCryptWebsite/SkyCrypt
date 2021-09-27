@@ -2640,22 +2640,9 @@ export const getStats = async (
     }
   }
 
+  mining.hotm = await getHeartOfTheMountain(userProfile);
+
   output.mining = mining;
-
-  // TODO: Mining stuff
-
-  // HEART OF THE MOUNTAIN
-
-  const hotm = {
-    mining_core: userProfile.mining_core, // only for development
-    tree: [],
-  };
-
-  function generateHotmPerk(node) {
-    const perk = {};
-  }
-
-  output.hotm = hotm;
 
   // MISC
 
@@ -3503,6 +3490,15 @@ export async function getDungeons(userProfile, hypixelProfile) {
       }
     }
   }
+
+  return output;
+}
+
+export async function getHeartOfTheMountain(userProfile) {
+  const output = {
+    mining_core: userProfile.mining_core,
+    tree: [],
+  };
 
   return output;
 }
