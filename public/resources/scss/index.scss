@@ -125,7 +125,15 @@ main.grid {
     }
 
     @media (max-width: 520px) {
+      gap: 15px;
+      padding: 15px 0;
       font-size: 20px;
+
+      .big-green-button {
+        height: 32px;
+        padding: 0 16px;
+        font-size: 12px;
+      }
     }
   }
 }
@@ -179,6 +187,12 @@ main.grid > a,
 
   .external-app-icon {
     width: 90px;
+  }
+
+  @media (max-width: 520px) {
+    .external-app-description {
+      font-size: 14px;
+    }
   }
 
   .try-also {
