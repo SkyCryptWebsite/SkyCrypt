@@ -3501,20 +3501,27 @@ export async function getHeartOfTheMountain(userProfile) {
   };
 
   for (const [nodeId, level] of Object.entries(userProfile.mining_core.nodes)) {
-    const node = constants.hotm_nodes.find((x) => x.id === nodeId);
-
-    if (!node) {
-      throw "HOTM: Unknown node identifier";
+    // Ignoring toggle_nodeId, they are not real nodes
+    if (nodeId.startsWith("toggle_")) {
+      continue;
     }
 
-    const perk = node.getPerk ? node.getPerk(level) : null;
-    const upgradeCost = node.getUpgradeCost ? node.getUpgradeCost(level) : null;
+    // Error if we are missing the class for the nodeId
+    if (!constants.hotm_node_list[nodeId]) {
+      throw `Missing Heart of the Mountain node: ${nodeId}`;
+    }
 
-    // Generating the lore of the node
-    // TODO: Handle when node has max 1 level, upgrade to next line etc...
-    node.description = [`Level ${level}/${node.max_level}`, "", perk, upgradeCost];
+    // Processing the node
+    const nodeEnabled = userProfile.mining_core.nodes[`toggle_${nodeId}`] ?? true;
+    const node = new constants.hotm_node_list[nodeId](level, nodeEnabled);
 
-    output.tree.push(node);
+    output.tree.push({
+      node: nodeId,
+      enabled: nodeEnabled,
+      level,
+      lore: node.lore.join("\n"),
+      ref: node,
+    });
   }
 
   return output;
