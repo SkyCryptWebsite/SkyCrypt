@@ -357,6 +357,12 @@ const skins = [
     texture: "/head/e92dba2fbd699d541b2fa0fbcaff640ad8c311987ade59a13b2a65d0ce319316",
     release: new Date("2021-09-28 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "REAPER_SPIRIT",
+    name: "Spirit",
+    texture: "/head/724d2072918054a95a4f4bbc931bf3929d01cb012368bc4c78d0a3acc9cdbeea",
+    release: new Date("2020-09-19 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 const animations = [
@@ -460,6 +466,14 @@ const animations = [
     id: "SNOW_SNOWGLOBE",
     texture: "/resources/img/items/skin_snowglobe.png",
     animation: null,
+  },
+  {
+    id: "REAPER_SPIRIT",
+    texture: "/resources/img/items/reaper_spirit.png",
+    animation: {
+      day: "/head/724d2072918054a95a4f4bbc931bf3929d01cb012368bc4c78d0a3acc9cdbeea",
+      night: "/head/c1d178e0da8a4ef28ade6b8f76b73611bf835e08fd8da9d0960d4b6dc18857f3",
+    },
   },
 ];
 
