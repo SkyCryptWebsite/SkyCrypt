@@ -416,7 +416,7 @@ const skins = [
 const animations = [
   {
     id: "PET_SKIN_TIGER_TWILIGHT",
-    texture: "/resources/img/items/tiger_twilight.png",
+    texture: "/resources/img/items/pet_skin_tiger_twilight.png",
     animation: {
       day: "/head/896211dc599368dbd9056c0116ab61063991db793be93066a858eb4e9ce56438",
       night: "/head/25afc37dc1909ee0a3eb8d0404271fc47660cff1153495412d6e9896632eaa8e",
@@ -424,7 +424,7 @@ const animations = [
   },
   {
     id: "PET_SKIN_ELEPHANT_MONOCHROME",
-    texture: "/resources/img/items/elephant_monochrome.png",
+    texture: "/resources/img/items/pet_skin_elephant_monochrome.png",
     animation: {
       day: "/head/4bdf0f628c05e86cabdee2f5858dd5def7f8b8d940cbf25f9937e2ffb53432f4",
       night: "/head/176e8db6cd2db2fd11747c750d24040f3435b3301d91949f33f9615d16dab060",
@@ -432,7 +432,7 @@ const animations = [
   },
   {
     id: "PET_SKIN_MONKEY_GORILLA",
-    texture: "/resources/img/items/monkey_gorilla.png",
+    texture: "/resources/img/items/pet_skin_monkey_gorilla.png",
     animation: {
       0: "/head/ac75d405235a58c68bddadad082e895e84feadfffd9f69c00a2194498732d48",
       1000: "/head/2a8be837b3361464b5ca555029658f0fdc9432cb351f088996f6da7210e1fc75",
@@ -447,7 +447,7 @@ const animations = [
   },
   {
     id: "PET_SKIN_ENDERMITE_RADIANT",
-    texture: "/resources/img/items/endermite_radiant.png",
+    texture: "/resources/img/items/pet_skin_endermite_radiant.png",
     animation: {
       0: "/head/3840ad985c0b08811ab0a137ca736119d079dbf2143462145eb62b6ecbd2d7cc",
       250: "/head/7019bf6fa4602458a9b20ad09cca45ef5ccc6257081ae323f9bbfca0cbc947e9",
@@ -483,7 +483,7 @@ const animations = [
   },
   {
     id: "PET_SKIN_SQUID_GLOW",
-    texture: "/resources/img/items/squid_glow.png",
+    texture: "/resources/img/items/pet_skin_squid_glow.png",
     animation: {
       0: "/head/162eba7072c3054e310daf2e6970cc65a4346a9c4118399f4d68a2d7e66612b7",
       50: "/head/f2ff4c824c39727c6bb8a126379a5ded2ba9aed24b59879f6b3af461e44df84a",
@@ -512,7 +512,7 @@ const animations = [
   },
   {
     id: "SNOW_SNOWGLOBE",
-    texture: "/resources/img/items/skin_snowglobe.png",
+    texture: "/resources/img/items/snow_snowglobe.png",
     animation: {
       0: "/head/16d9b6791ffb7395fe5b44dd0b8f6b8d4c5bf3b90ddc92a10d3b8c83ec2efd20",
       60: "/head/13229f8525726684fb0227dad7621f05f0b8b5d58a8693fd0ea0688349f1d53c",
