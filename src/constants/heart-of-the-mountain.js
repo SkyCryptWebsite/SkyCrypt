@@ -5,7 +5,7 @@ function round(num, decimals = 0) {
 }
 
 function floor(num, decimals = 0) {
-  return floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
+  return Math.floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
 }
 
 const upgrade_types = {
@@ -33,18 +33,24 @@ class Node {
     let output = [];
 
     // Name
-    output.push(`§${this.level === this.max_level ? "a" : "e"}§l${this.name}`);
+    const nameColor = this.level === 0 ? "c" : this.level === this.max_level ? "a" : "e";
+    output.push(`§${nameColor}§l${this.name}`);
 
     // Level
     if (this.max_level > 1) {
-      output.push(`§7Level ${this.level}§8/${this.max_level}`, "");
+      if (this.level !== this.max_level) {
+        output.push(`§7Level ${Math.max(1, this.level)}§8/${this.max_level}`);
+      } else {
+        output.push(`§7Level ${Math.max(1, this.level)}`);
+      }
     }
+    output.push("");
 
     // Perk
-    output.push(...this.perk(this.level));
+    output.push(...this.perk(Math.max(1, this.level)));
 
     // Upgradeable
-    if (this.level < this.max_level) {
+    if (this.level > 0 && this.level < this.max_level) {
       // header
       output.push("", "§a=====[ §a§lUPGRADE §a] =====");
 
@@ -60,7 +66,9 @@ class Node {
     }
 
     // Status
-    output.push("", this.enabled ? "§aENABLED" : "§cDISABLED");
+    if (this.level > 0) {
+      output.push("", this.enabled ? "§aENABLED" : "§cDISABLED");
+    }
 
     return output.map((x) => "§r" + x);
   }
@@ -90,7 +98,8 @@ class MiningSpeed2 extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const val = level * 40;
+    return [`§7Grants §a+${val} §6⸕ Mining Speed§7.`];
   }
 }
 
@@ -131,7 +140,8 @@ class MiningFortune2 extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const val = level * 5;
+    return [`§7Grants §a+${val} §6☘ Mining Fortune§7.`];
   }
 }
 
@@ -151,9 +161,9 @@ class VeinSeeker extends Node {
 
   perk(level) {
     return [
-      "§6Pickaxe Ability: MISSING_DATA",
-      "§7Throw your pickaxe to create an explosion on impact, mining all ores within a §a2§7 block radius.",
-      "§8Cooldown: §a110s",
+      "§6Pickaxe Ability: Vein Seeker",
+      "§7Points in the direction of the nearest vein and grants §a+3 §6Mining Spread §7for §a14s§7.",
+      "§8Cooldown: §a60s",
       "",
       "§8Pickaxe Abilities apply to all of your pickaxes. You can select a Pickaxe Ability from your Heart of the Mountain.",
       "",
@@ -178,7 +188,10 @@ class LonesomeMiner extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const val = round(5 + (level - 1) * 0.5);
+    return [
+      `§7Increases §c❁ Strength, §9☣ Crit Chance, §9☠ Crit Damage, §a❈ Defense, and §c❤ Health §7statistics gain by §a${val}% §7while in the Crystal Hollows.`,
+    ];
   }
 }
 
@@ -198,7 +211,8 @@ class Professional extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const val = 50 + level * 5;
+    return [`§7Gain §a+${val}§7 §6⸕ Mining Speed§7 when mining Gemstones.`];
   }
 }
 
@@ -331,7 +345,9 @@ class GoblinKiller extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    return [
+      `§7Killing a §6Golden Goblin §7gives §2200 §7extra §2Mithril Powder§7, while killing other Goblins gives some based on their wits.`,
+    ];
   }
 }
 
@@ -395,7 +411,7 @@ class StarPowder extends Node {
 class SkyMall extends Node {
   constructor(level, enabled) {
     super(level, enabled);
-    this.id = "sky_mall";
+    this.id = "daily_effect";
     this.name = "Sky Mall";
     this.position = 22;
     this.max_level = 1;
@@ -407,7 +423,17 @@ class SkyMall extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    return [
+      "§7Every SkyBlock day, you receive a random buff in the §2Dwarven Mines§7.",
+      "",
+      "§7Possible Buffs",
+      "§8 ■ §7Gain §a+100 §6⸕ Mining Speed.",
+      "§8 ■ §7Gain §a+50 §6☘ Mining Fortune.",
+      "§8 ■ §7Gain §a+15% §7chance to gain extra Powder while mining.",
+      "§8 ■ §7Reduce Pickaxe Ability cooldown by §a20%",
+      "§8 ■ §7§a10x §7chance to find Goblins while mining.",
+      "§8 ■ §7Gain §a5x §9Titanium §7drops.",
+    ];
   }
 }
 
@@ -426,7 +452,7 @@ class MiningMadness extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    return [`§7Grants §a+50 §6⸕ Mining Speed §7and §6☘ Mining Fortune§7.`];
   }
 }
 
@@ -446,7 +472,8 @@ class SeasonedMineman extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const val = round(5 + level * 0.1, 1);
+    return [`§7Increases your Mining experience gain by §a${val}%§7.`];
   }
 }
 
@@ -538,7 +565,7 @@ class PrecisionMining extends Node {
 class LuckOfTheCave extends Node {
   constructor(level, enabled) {
     super(level, enabled);
-    this.id = "luck_of_the_cave";
+    this.id = "random_event";
     this.name = "Luck Of The Cave";
     this.position = 30;
     this.max_level = 45;
@@ -551,7 +578,8 @@ class LuckOfTheCave extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const val = 5 + level * 1;
+    return [`§7Increases the chance for you to trigger rare occurrences in §2Dwarven Mines §7by §a${val}%§7.`];
   }
 }
 
@@ -571,7 +599,8 @@ class DailyPowder extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const val = 400 + (level - 1) * 36;
+    return [`§7Gain §a${val} Powder §7from the first ore you mine every day. Works for all Powder types.`];
   }
 }
 
@@ -614,9 +643,9 @@ class MiningSpeedBoost extends Node {
 
   perk(level) {
     return [
-      "§6Pickaxe Ability: MISSING_DATA",
-      "§7Throw your pickaxe to create an explosion on impact, mining all ores within a §a2§7 block radius.",
-      "§8Cooldown: §a110s",
+      "§6Pickaxe Ability: Mining Speed Boost",
+      "§7Grants §a+300% §6⸕ Mining Speed §7for §a20s§7.",
+      "§8Cooldown: §a120s",
       "",
       "§8Pickaxe Abilities apply to all of your pickaxes. You can select a Pickaxe Ability from your Heart of the Mountain.",
       "",
@@ -641,7 +670,8 @@ class TitaniumInsanium extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const val = round(2 + level * 0.1, 1);
+    return [`§7When mining Mithril Ore, you have a §a${val}%§7 chance to convert the block into Titanium Ore.`];
   }
 }
 
@@ -744,24 +774,24 @@ export const hotm = {
     mining_speed_2: MiningSpeed2,
     powder_buff: PowderBuff,
     mining_fortune_2: MiningFortune2,
-    vein_seeker: VeinSeeker, // FIX! to be confirmed!
+    vein_seeker: VeinSeeker,
     lonesome_miner: LonesomeMiner,
     professional: Professional,
     mole: Mole,
     fortunate: Fortunate,
     great_explorer: GreatExplorer,
     maniac_miner: ManiacMiner,
-    goblin_killer: GoblinKiller, // FIX! to be confirmed!
+    goblin_killer: GoblinKiller,
     special_0: PeakOfTheMountain,
     star_powder: StarPowder,
-    sky_mall: SkyMall, // FIX! to be confirmed!
+    daily_effect: SkyMall,
     mining_madness: MiningMadness,
     mining_experience: SeasonedMineman,
     efficient_miner: EfficientMiner,
     experience_orbs: Orbiter,
     front_loaded: FrontLoaded,
     precision_mining: PrecisionMining,
-    luck_of_the_cave: LuckOfTheCave, // FIX! to be confirmed! (upgrade type too)
+    random_event: LuckOfTheCave,
     daily_powder: DailyPowder,
     fallen_star_bonus: Crystallized,
     mining_speed_boost: MiningSpeedBoost,

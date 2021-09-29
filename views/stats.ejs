@@ -940,7 +940,9 @@ const getRarityUpgradeClass = item => {
 
               <div
                 class="hotm-node"
-                data-has-content="<%= node.name ? 'true' : 'false' %>"
+                data-empty-slot="<%= !node.name %>"
+                data-unlocked="<%= node.level > 0 %>"
+                data-enabled="<%= node.enabled %>"
                 <% if (node.lore) { %>
                   data-tippy-content="<%- helper.renderLore('§f'+node.lore.split('\n').join('<br>')) %>"
                 <% } %>

@@ -3509,24 +3509,14 @@ export async function getHeartOfTheMountain(userProfile) {
   }
 
   // Processing nodes
-  for (const [nodeId, level] of Object.entries(userProfile.mining_core.nodes)) {
-    // Ignoring toggle_nodeId, they are not real nodes
-    if (nodeId.startsWith("toggle_")) {
-      continue;
-    }
-
-    // Error if we are missing the class for the nodeId
-    if (!constants.hotm.nodes[nodeId]) {
-      throw `Missing Heart of the Mountain node: ${nodeId}`;
-    }
-
-    // Processing the node
-    const nodeEnabled = userProfile.mining_core.nodes[`toggle_${nodeId}`] ?? true;
-    const node = new constants.hotm.nodes[nodeId](level, nodeEnabled);
+  for (const nodeId in constants.hotm.nodes) {
+    const enabled = userProfile.mining_core.nodes[`toggle_${nodeId}`] ?? true;
+    const level = userProfile.mining_core.nodes[nodeId] ?? 0;
+    const node = new constants.hotm.nodes[nodeId](level, enabled);
 
     output.tree[node.position - 1] = Object.assign(output.tree[node.position - 1], {
       node: nodeId,
-      enabled: nodeEnabled,
+      enabled,
       level,
       name: node.name,
       lore: node.lore.join("\n"),
@@ -3534,7 +3524,12 @@ export async function getHeartOfTheMountain(userProfile) {
     });
   }
 
-  // Fixing
+  // TEMP: check for missing node classes
+  for (const nodeId in userProfile.mining_core.nodes) {
+    if (!nodeId.startsWith("toggle_") && constants.hotm.nodes[nodeId] == undefined) {
+      throw `Missing Heart of the Mountain node: ${nodeId}`;
+    }
+  }
 
   return output;
 }
