@@ -5,7 +5,7 @@ function round(num, decimals = 0) {
 }
 
 function floor(num, decimals = 0) {
-  return Math.floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
+  return floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
 }
 
 const upgrade_types = {
@@ -86,7 +86,7 @@ class MiningSpeed2 extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(Math.pow(nextLevel + 1, 3.2));
+    return floor(Math.pow(nextLevel + 1, 3.2));
   }
 
   perk(level) {
@@ -106,7 +106,7 @@ class PowderBuff extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(Math.pow(nextLevel + 1, 3.2));
+    return floor(Math.pow(nextLevel + 1, 3.2));
   }
 
   perk(level) {
@@ -127,7 +127,7 @@ class MiningFortune2 extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(Math.pow(nextLevel + 1, 3.2));
+    return floor(Math.pow(nextLevel + 1, 3.2));
   }
 
   perk(level) {
@@ -174,7 +174,7 @@ class LonesomeMiner extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(Math.pow(nextLevel + 1, 3.07));
+    return floor(Math.pow(nextLevel + 1, 3.07));
   }
 
   perk(level) {
@@ -194,7 +194,7 @@ class Professional extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(Math.pow(nextLevel + 1, 2.3));
+    return floor(Math.pow(nextLevel + 1, 2.3));
   }
 
   perk(level) {
@@ -214,13 +214,13 @@ class Mole extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(Math.pow(nextLevel + 1, 2.2));
+    return floor(Math.pow(nextLevel + 1, 2.2));
   }
 
   perk(level) {
     const chance = 50 + (level - 1) * 5;
-    let blocks = 1 + Math.floor(chance / 100);
-    let percent = chance - Math.floor(chance / 100) * 100;
+    let blocks = 1 + floor(chance / 100);
+    let percent = chance - floor(chance / 100) * 100;
     if (percent === 0) {
       blocks -= 1;
       percent = 100;
@@ -259,7 +259,7 @@ class Fortunate extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(Math.pow(nextLevel + 1, 3.05));
+    return floor(Math.pow(nextLevel + 1, 3.05));
   }
 
   perk(level) {
@@ -280,7 +280,7 @@ class GreatExplorer extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(Math.pow(nextLevel + 1, 4));
+    return floor(Math.pow(nextLevel + 1, 4));
   }
 
   perk(level) {
@@ -347,7 +347,7 @@ class PeakOfTheMountain extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(25000 * nextLevel);
+    return floor(25000 * nextLevel);
   }
 
   perk(level) {
@@ -442,7 +442,7 @@ class SeasonedMineman extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(Math.pow(nextLevel + 1, 2.3));
+    return floor(Math.pow(nextLevel + 1, 2.3));
   }
 
   perk(level) {
@@ -462,12 +462,12 @@ class EfficientMiner extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(Math.pow(nextLevel + 1, 2.6));
+    return floor(Math.pow(nextLevel + 1, 2.6));
   }
 
   perk(level) {
     const val1 = round(10 + level * 0.4, 1);
-    const val2 = Math.floor(level * 0.1);
+    const val2 = floor(level * 0.1);
     return [`§7When mining ores, you have a §a${val1}%§7 chance to mine §a${val2} §7adjacent ores.`];
   }
 }
@@ -484,7 +484,7 @@ class Orbiter extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(70 * nextLevel);
+    return floor(70 * nextLevel);
   }
 
   perk(level) {
@@ -547,7 +547,7 @@ class LuckOfTheCave extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(Math.pow(nextLevel + 1, 3.07));
+    return floor(Math.pow(nextLevel + 1, 3.07));
   }
 
   perk(level) {
@@ -567,7 +567,7 @@ class DailyPowder extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(182 + 18 * nextLevel);
+    return floor(182 + 18 * nextLevel);
   }
 
   perk(level) {
@@ -587,7 +587,7 @@ class Crystallized extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(Math.pow(nextLevel + 1, 3.4));
+    return floor(Math.pow(nextLevel + 1, 3.4));
   }
 
   perk(level) {
@@ -637,7 +637,7 @@ class TitaniumInsanium extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(Math.pow(nextLevel + 1, 3.1));
+    return floor(Math.pow(nextLevel + 1, 3.1));
   }
 
   perk(level) {
@@ -657,7 +657,7 @@ class MiningFortune extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(Math.pow(nextLevel + 1, 3.05));
+    return floor(Math.pow(nextLevel + 1, 3.05));
   }
 
   perk(level) {
@@ -678,7 +678,7 @@ class QuickForge extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(Math.pow(nextLevel + 1, 4));
+    return floor(Math.pow(nextLevel + 1, 4));
   }
 
   perk(level) {
@@ -726,7 +726,7 @@ class MiningSpeed extends Node {
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return Math.floor(Math.pow(nextLevel + 1, 3));
+    return floor(Math.pow(nextLevel + 1, 3));
   }
 
   perk(level) {
