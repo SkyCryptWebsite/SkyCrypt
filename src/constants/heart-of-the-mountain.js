@@ -1,5 +1,13 @@
 import { stats_symbols as symbols } from "./stats.js";
 
+function round(num, decimals = 0) {
+  return Math.round(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
+}
+
+function floor(num, decimals = 0) {
+  return Math.floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
+}
+
 const upgrade_types = {
   mithril_powder: {
     name: "Mithril Powder",
@@ -102,7 +110,8 @@ class PowderBuff extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const val = level * 1;
+    return [`§7Gain §a${val}% §7more Mithril Powder and Gemstone Powder.`];
   }
 }
 
@@ -141,7 +150,15 @@ class VeinSeeker extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    return [
+      "§6Pickaxe Ability: MISSING_DATA",
+      "§7Throw your pickaxe to create an explosion on impact, mining all ores within a §a2§7 block radius.",
+      "§8Cooldown: §a110s",
+      "",
+      "§8Pickaxe Abilities apply to all of your pickaxes. You can select a Pickaxe Ability from your Heart of the Mountain.",
+      "",
+      "§8Upgrade your Pickaxe Abilities by unlocking §cPeak of the Mountain §8in this menu!",
+    ];
   }
 }
 
@@ -201,7 +218,32 @@ class Mole extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const chance = 50 + (level - 1) * 5;
+    let blocks = 1 + Math.floor(chance / 100);
+    let percent = chance - Math.floor(chance / 100) * 100;
+    if (percent === 0) {
+      blocks -= 1;
+      percent = 100;
+    }
+
+    switch (blocks) {
+      case 1:
+        blocks = "1";
+        break;
+      case 2:
+        blocks = "a 2nd";
+        break;
+      case 3:
+        blocks = "a 3rd";
+        break;
+      default:
+        blocks = `a ${blocks}th`;
+        break;
+    }
+
+    return [
+      `§7When mining hard stone, you have a §a${percent}%§7 chance to mine §a${blocks}§7 adjacent hard stone block.`,
+    ];
   }
 }
 
@@ -221,7 +263,8 @@ class Fortunate extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const val = level * 5;
+    return [`§7Grants §a+${val}§7 §6☘ Mining Fortune§7 when mining Gemstone.`];
   }
 }
 
@@ -241,7 +284,8 @@ class GreatExplorer extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const val = 20 + (level - 1) * 4;
+    return [`§7Grants §a+${val}%§7 §7chance to find treasure.`];
   }
 }
 
@@ -260,7 +304,15 @@ class ManiacMiner extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    return [
+      "§6Pickaxe Ability: Maniac Miner",
+      "§7Spends all your Mana and grants §a+1 §6⸕ Mining Speed §7for every 10 Mana spent, for §a15s§7.",
+      "§8Cooldown: §a110s",
+      "",
+      "§8Pickaxe Abilities apply to all of your pickaxes. You can select a Pickaxe Ability from your Heart of the Mountain.",
+      "",
+      "§8Upgrade your Pickaxe Abilities by unlocking §cPeak of the Mountain §8in this menu!",
+    ];
   }
 }
 
@@ -299,7 +351,25 @@ class PeakOfTheMountain extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const output = [];
+
+    if (level >= 1) {
+      output.push("§8+§c1 Pickaxe Ability Level", "§8+§51 Token of the Mountain");
+    }
+    if (level >= 2) {
+      output.push("§8+§a1 Forge Slot");
+    }
+    if (level >= 3) {
+      output.push("§8+§a1 Commission Slot");
+    }
+    if (level >= 4) {
+      output.push("§8+§21 Mithril Powder §7when mining §fMithril");
+    }
+    if (level >= 5) {
+      output.push("§8+§51 Token of the Mountain");
+    }
+
+    return output;
   }
 }
 
@@ -318,7 +388,7 @@ class StarPowder extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    return [`§7Mining Mithril Ore near §5Fallen Crystals §7gives §a+3 §7extra Mithril Powder.`];
   }
 }
 
@@ -396,7 +466,9 @@ class EfficientMiner extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const val1 = round(10 + level * 0.4, 1);
+    const val2 = Math.floor(level * 0.1);
+    return [`§7When mining ores, you have a §a${val1}%§7 chance to mine §a${val2} §7adjacent ores.`];
   }
 }
 
@@ -416,7 +488,8 @@ class Orbiter extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const val = round(0.2 + level * 0.01, 2);
+    return [`§7When mining ores, you have a §a${val}%§7 chance to get a random amount of experience orbs.`];
   }
 }
 
@@ -435,7 +508,9 @@ class FrontLoaded extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    return [
+      `§7Grants §a+100 §6⸕ Mining Speed §7and §6☘ Mining Fortune §7for the first §e2,500 §7ores you mine in a day.`,
+    ];
   }
 }
 
@@ -454,7 +529,9 @@ class PrecisionMining extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    return [
+      `§7When mining ore, a particle target appears on the block that increases your §6⸕ Mining Speed §7by §a30% §7when aiming at it.`,
+    ];
   }
 }
 
@@ -514,7 +591,10 @@ class Crystallized extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const val = 20 + (level - 1) * 6;
+    return [
+      `§7Grants §a+${val} §6⸕ Mining Speed §7and a §a${val}% §7chance to deal §a+1 §7extra damage near §5Fallen Stars§7.`,
+    ];
   }
 }
 
@@ -533,7 +613,15 @@ class MiningSpeedBoost extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    return [
+      "§6Pickaxe Ability: MISSING_DATA",
+      "§7Throw your pickaxe to create an explosion on impact, mining all ores within a §a2§7 block radius.",
+      "§8Cooldown: §a110s",
+      "",
+      "§8Pickaxe Abilities apply to all of your pickaxes. You can select a Pickaxe Ability from your Heart of the Mountain.",
+      "",
+      "§8Upgrade your Pickaxe Abilities by unlocking §cPeak of the Mountain §8in this menu!",
+    ];
   }
 }
 
@@ -573,7 +661,8 @@ class MiningFortune extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const val = level * 5;
+    return [`§7Grants §a+${val}§7 §6☘ Mining Fortune§7.`];
   }
 }
 
@@ -593,7 +682,8 @@ class QuickForge extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    const val = round(10 + 0.5 * level, 1);
+    return [`§7Decreases the time it takes to forge by §a${val}%§7.`];
   }
 }
 
@@ -612,7 +702,15 @@ class Pickobulus extends Node {
   }
 
   perk(level) {
-    return [`MISSING_DATA`];
+    return [
+      "§6Pickaxe Ability: Pickobulus",
+      "§7Throw your pickaxe to create an explosion on impact, mining all ores within a §a2§7 block radius.",
+      "§8Cooldown: §a110s",
+      "",
+      "§8Pickaxe Abilities apply to all of your pickaxes. You can select a Pickaxe Ability from your Heart of the Mountain.",
+      "",
+      "§8Upgrade your Pickaxe Abilities by unlocking §cPeak of the Mountain §8in this menu!",
+    ];
   }
 }
 
@@ -632,7 +730,8 @@ class MiningSpeed extends Node {
   }
 
   perk(level) {
-    return [`§7Grants §a+${level * 20} §6${symbols.mining_speed} Mining Speed§7.`];
+    const val = level * 20;
+    return [`§7Grants §a+${val} §6${symbols.mining_speed} Mining Speed§7.`];
   }
 }
 
