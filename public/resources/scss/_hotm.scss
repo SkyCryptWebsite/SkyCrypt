@@ -1,0 +1,24 @@
+.hotm-tree {
+  display: grid;
+  grid-template-columns: repeat(7, 75px);
+  grid-template-rows: repeat(7, 75px);
+  grid-gap: 12px;
+}
+
+.hotm-node {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  text-align: center;
+  font-size: 10px;
+  padding: 10px;
+
+  &[data-has-content="false"] {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+}

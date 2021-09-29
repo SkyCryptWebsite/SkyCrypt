@@ -3500,6 +3500,15 @@ export async function getHeartOfTheMountain(userProfile) {
     tree: [],
   };
 
+  // Filling the tree with empty items
+  for (let index = 0; index < constants.hotm.tree_size.rows * constants.hotm.tree_size.columns; index++) {
+    output.tree.push({
+      item_index: index + 10000, // TEMP: This should be something else, maybe a string? "hotm123"
+      itemId: v4("itemId"),
+    });
+  }
+
+  // Processing nodes
   for (const [nodeId, level] of Object.entries(userProfile.mining_core.nodes)) {
     // Ignoring toggle_nodeId, they are not real nodes
     if (nodeId.startsWith("toggle_")) {
@@ -3507,22 +3516,25 @@ export async function getHeartOfTheMountain(userProfile) {
     }
 
     // Error if we are missing the class for the nodeId
-    if (!constants.hotm_node_list[nodeId]) {
+    if (!constants.hotm.nodes[nodeId]) {
       throw `Missing Heart of the Mountain node: ${nodeId}`;
     }
 
     // Processing the node
     const nodeEnabled = userProfile.mining_core.nodes[`toggle_${nodeId}`] ?? true;
-    const node = new constants.hotm_node_list[nodeId](level, nodeEnabled);
+    const node = new constants.hotm.nodes[nodeId](level, nodeEnabled);
 
-    output.tree.push({
+    output.tree[node.position - 1] = Object.assign(output.tree[node.position - 1], {
       node: nodeId,
       enabled: nodeEnabled,
       level,
+      name: node.name,
       lore: node.lore.join("\n"),
-      ref: node,
+      ref: node, // TEMP: for development
     });
   }
+
+  // Fixing
 
   return output;
 }
