@@ -80,6 +80,9 @@ function getXpByLevel(level, extra = {}) {
     case "dungeoneering":
       xp_table = constants.dungeoneering_xp;
       break;
+    case "hotm":
+      xp_table = constants.hotm_xp;
+      break;
     default:
       xp_table = constants.leveling_xp;
   }
@@ -142,6 +145,9 @@ export function getLevelByXp(xp, extra = {}) {
       break;
     case "dungeoneering":
       xp_table = constants.dungeoneering_xp;
+      break;
+    case "hotm":
+      xp_table = constants.hotm_xp;
       break;
     default:
       xp_table = constants.leveling_xp;
@@ -3496,9 +3502,28 @@ export async function getDungeons(userProfile, hypixelProfile) {
 
 export async function getHeartOfTheMountain(userProfile) {
   const output = {
-    mining_core: userProfile.mining_core,
+    mining_core: userProfile.mining_core, // DEV
     tree: [],
   };
+
+  const hotmTier = userProfile.mining_core?.experience
+    ? getLevelByXp(userProfile.mining_core.experience, { type: "hotm" })
+    : 0;
+  const selectedPickaxeAbility = userProfile.mining_core?.selected_pickaxe_ability;
+  const nodes = userProfile.mining_core?.nodes
+    ? Object.fromEntries(
+        Object.entries(userProfile.mining_core.nodes).filter(([key, value]) => !key.startsWith("toggle_"))
+      )
+    : {};
+  const toggles = userProfile.mining_core?.nodes
+    ? Object.fromEntries(
+        Object.entries(userProfile.mining_core.nodes).filter(([key, value]) => key.startsWith("toggle_"))
+      )
+    : {};
+
+  output.hotmTier = hotmTier; // DEV
+  output.nodes = nodes; // DEV
+  output.toggles = toggles; // DEV
 
   // Filling the tree with empty items
   for (let index = 0; index < constants.hotm.tree_size.rows * constants.hotm.tree_size.columns; index++) {
@@ -3510,9 +3535,15 @@ export async function getHeartOfTheMountain(userProfile) {
 
   // Processing nodes
   for (const nodeId in constants.hotm.nodes) {
-    const enabled = userProfile.mining_core.nodes[`toggle_${nodeId}`] ?? true;
-    const level = userProfile.mining_core.nodes[nodeId] ?? 0;
-    const node = new constants.hotm.nodes[nodeId](level, enabled);
+    const enabled = toggles[`toggle_${nodeId}`] ?? true;
+    const level = nodes[nodeId] ?? 0;
+    const node = new constants.hotm.nodes[nodeId]({
+      level,
+      enabled,
+      nodes,
+      hotmTier,
+      selectedPickaxeAbility
+    });
 
     output.tree[node.position - 1] = Object.assign(output.tree[node.position - 1], {
       node: nodeId,
@@ -3525,8 +3556,8 @@ export async function getHeartOfTheMountain(userProfile) {
   }
 
   // TEMP: check for missing node classes
-  for (const nodeId in userProfile.mining_core.nodes) {
-    if (!nodeId.startsWith("toggle_") && constants.hotm.nodes[nodeId] == undefined) {
+  for (const nodeId in nodes) {
+    if (constants.hotm.nodes[nodeId] == undefined) {
       throw `Missing Heart of the Mountain node: ${nodeId}`;
     }
   }

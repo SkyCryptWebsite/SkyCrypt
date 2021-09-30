@@ -21,20 +21,28 @@ const upgrade_types = {
     name: "Token of the Mountain",
     color: "5",
   },
+  free: {
+    name: "FREE",
+    color: "a",
+  },
 };
 
 class Node {
-  constructor(level, enabled) {
-    this.level = level;
-    this.enabled = enabled;
+  constructor(data) {
+    this.nodeType = "normal";
+    this.level = data.level;
+    this.enabled = data.enabled;
+    this.nodes = data.nodes;
+    this.hotmTier = data.hotmTier.level;
+    this.potmLevel = data.nodes.special_0;
+    this.selectedPickaxeAbility = data.selectedPickaxeAbility;
   }
 
   get lore() {
     let output = [];
 
     // Name
-    const nameColor = this.level === 0 ? "c" : this.level === this.max_level ? "a" : "e";
-    output.push(`§${nameColor}§l${this.name}`);
+    output.push(this.displayName);
 
     // Level
     if (this.max_level > 1) {
@@ -66,30 +74,74 @@ class Node {
     }
 
     // Maxed perk
-    if (this.maxed) {
+    if (this.maxed && this.type !== "pickaxe_ability") {
       output.push("", "§aUNLOCKED");
     }
 
-    // Unlock cost & requirements
+    // Unlock cost
     if (this.level === 0) {
-      output.push(
-        "",
-        "§7Cost",
-        `§${upgrade_types.token_of_the_mountain.color}1 ${upgrade_types.token_of_the_mountain.name}`
-      );
+      output.push("", "§7Cost");
+      for (const [upgradeId, upgradeQty] of Object.entries(this.unlockCost)) {
+        output.push(
+          `§${upgrade_types[upgradeId].color}${upgradeQty > 0 ? `${upgradeQty} ` : ""}${upgrade_types[upgradeId].name}`
+        );
+      }
+    }
 
-      if (this.requires.length > 0) {
+    // Requirements
+    if (this.level === 0) {
+      if (this.requires.length > 0 && !this.requires.some((x) => Object.keys(this.nodes).includes(x))) {
         const reqs = this.requires.map((x) => hotm.names[x]);
-        output.push("", `§cRequires ${reqs.slice(0, -1).join(", ") + " or " + reqs.slice(-1)}.`);
+        const reqsFriendly = reqs.length > 1 ? reqs.slice(0, -1).join(", ") + " or " + reqs.slice(-1) : reqs[0];
+        output.push("", `§cRequires ${reqsFriendly}.`);
+      }
+
+      if (this.requiredHotmTier > this.hotmTier) {
+        output.push("", `§cRequires HOTM Tier ${this.requiredHotmTier}.`);
       }
     }
 
     // Status
-    if (this.level > 0) {
+    if (this.level > 0 && this.type !== "pickaxe_ability") {
       output.push("", this.enabled ? "§aENABLED" : "§cDISABLED");
     }
 
+    // Selected Pickaxe Ability
+    if (this.level > 0 && this.type === "pickaxe_ability") {
+      if (this.selectedPickaxeAbility === this.id) {
+        output.push("", "§aSELECTED");
+      } else {
+        output.push("", "§eClick to select!");
+      }
+    }
+
     return output.map((x) => "§r" + x);
+  }
+
+  get pickaxeAbilityLevel() {
+    // Blue Omelette gives +1 level, impossible to account for in here
+    let level = 1;
+
+    if (this.potmLevel >= 1) {
+      level += 1;
+    }
+
+    return level;
+  }
+
+  get requiredHotmTier() {
+    return Math.abs(Math.ceil(this.position / 7) - 7) + 1;
+  }
+
+  get unlockCost() {
+    return {
+      token_of_the_mountain: 1,
+    };
+  }
+
+  get displayName() {
+    const nameColor = this.level === 0 ? "c" : this.level === this.max_level ? "a" : "e";
+    return `§${nameColor}§l${this.name}`;
   }
 
   get maxed() {
@@ -106,8 +158,8 @@ class Node {
 }
 
 class MiningSpeed2 extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "mining_speed_2";
     this.name = hotm.names[this.id];
     this.position = 2;
@@ -128,8 +180,8 @@ class MiningSpeed2 extends Node {
 }
 
 class PowderBuff extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "powder_buff";
     this.name = hotm.names[this.id];
     this.position = 4;
@@ -150,8 +202,8 @@ class PowderBuff extends Node {
 }
 
 class MiningFortune2 extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "mining_fortune_2";
     this.name = hotm.names[this.id];
     this.position = 6;
@@ -172,14 +224,15 @@ class MiningFortune2 extends Node {
 }
 
 class VeinSeeker extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "vein_seeker";
     this.name = hotm.names[this.id];
     this.position = 8;
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["lonesome_miner"];
+    this.type = "pickaxe_ability";
   }
 
   get upgradeCost() {
@@ -187,10 +240,13 @@ class VeinSeeker extends Node {
   }
 
   perk(level) {
+    const spread = [2, 3, 4][this.pickaxeAbilityLevel - 1];
+    const duration = [12, 14, 16][this.pickaxeAbilityLevel - 1];
+    const cooldown = [60, 60, 60][this.pickaxeAbilityLevel - 1];
     return [
       "§6Pickaxe Ability: Vein Seeker",
-      "§7Points in the direction of the nearest vein and grants §a+3 §6Mining Spread §7for §a14s§7.",
-      "§8Cooldown: §a60s",
+      `§7Points in the direction of the nearest vein and grants §a+${spread} §6Mining Spread §7for §a${duration}s§7.`,
+      `§8Cooldown: §a${cooldown}s`,
       "",
       "§8Pickaxe Abilities apply to all of your pickaxes. You can select a Pickaxe Ability from your Heart of the Mountain.",
       "",
@@ -200,8 +256,8 @@ class VeinSeeker extends Node {
 }
 
 class LonesomeMiner extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "lonesome_miner";
     this.name = hotm.names[this.id];
     this.position = 9;
@@ -224,8 +280,8 @@ class LonesomeMiner extends Node {
 }
 
 class Professional extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "professional";
     this.name = hotm.names[this.id];
     this.position = 10;
@@ -246,14 +302,14 @@ class Professional extends Node {
 }
 
 class Mole extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "mole";
     this.name = hotm.names[this.id];
     this.position = 11;
     this.max_level = 190;
     this.upgrade_type = "gemstone_powder";
-    this.requires = ["efficient_miner"];
+    this.requires = ["efficient_miner", "professional", "fortunate"];
   }
 
   get upgradeCost() {
@@ -292,8 +348,8 @@ class Mole extends Node {
 }
 
 class Fortunate extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "fortunate";
     this.name = hotm.names[this.id];
     this.position = 12;
@@ -314,8 +370,8 @@ class Fortunate extends Node {
 }
 
 class GreatExplorer extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "great_explorer";
     this.name = hotm.names[this.id];
     this.position = 13;
@@ -336,14 +392,15 @@ class GreatExplorer extends Node {
 }
 
 class ManiacMiner extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "maniac_miner";
     this.name = hotm.names[this.id];
     this.position = 14;
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["great_explorer"];
+    this.type = "pickaxe_ability";
   }
 
   get upgradeCost() {
@@ -351,10 +408,13 @@ class ManiacMiner extends Node {
   }
 
   perk(level) {
+    const speed = [1, 1, 1][this.pickaxeAbilityLevel - 1];
+    const duration = [10, 15, 20][this.pickaxeAbilityLevel - 1];
+    const cooldown = [60, 59, 59][this.pickaxeAbilityLevel - 1];
     return [
       "§6Pickaxe Ability: Maniac Miner",
-      `§7Spends all your Mana and grants §a+1 §6${symbols.mining_speed} Mining Speed §7for every 10 Mana spent, for §a15s§7.`,
-      "§8Cooldown: §a110s",
+      `§7Spends all your Mana and grants §a+${speed} §6${symbols.mining_speed} Mining Speed §7for every 10 Mana spent, for §a${duration}s§7.`,
+      `§8Cooldown: §a${cooldown}s`,
       "",
       "§8Pickaxe Abilities apply to all of your pickaxes. You can select a Pickaxe Ability from your Heart of the Mountain.",
       "",
@@ -364,8 +424,8 @@ class ManiacMiner extends Node {
 }
 
 class GoblinKiller extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "goblin_killer";
     this.name = hotm.names[this.id];
     this.position = 16;
@@ -386,8 +446,8 @@ class GoblinKiller extends Node {
 }
 
 class PeakOfTheMountain extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "special_0";
     this.name = hotm.names[this.id];
     this.position = 18;
@@ -422,11 +482,17 @@ class PeakOfTheMountain extends Node {
 
     return output;
   }
+
+  get unlockCost() {
+    return {
+      free: 0,
+    };
+  }
 }
 
 class StarPowder extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "star_powder";
     this.name = hotm.names[this.id];
     this.position = 20;
@@ -445,8 +511,8 @@ class StarPowder extends Node {
 }
 
 class SkyMall extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "daily_effect";
     this.name = hotm.names[this.id];
     this.position = 22;
@@ -475,8 +541,8 @@ class SkyMall extends Node {
 }
 
 class MiningMadness extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "mining_madness";
     this.name = hotm.names[this.id];
     this.position = 23;
@@ -497,8 +563,8 @@ class MiningMadness extends Node {
 }
 
 class SeasonedMineman extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "mining_experience";
     this.name = hotm.names[this.id];
     this.position = 24;
@@ -519,8 +585,8 @@ class SeasonedMineman extends Node {
 }
 
 class EfficientMiner extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "efficient_miner";
     this.name = hotm.names[this.id];
     this.position = 25;
@@ -542,8 +608,8 @@ class EfficientMiner extends Node {
 }
 
 class Orbiter extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "experience_orbs";
     this.name = hotm.names[this.id];
     this.position = 26;
@@ -564,8 +630,8 @@ class Orbiter extends Node {
 }
 
 class FrontLoaded extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "front_loaded";
     this.name = hotm.names[this.id];
     this.position = 27;
@@ -586,14 +652,14 @@ class FrontLoaded extends Node {
 }
 
 class PrecisionMining extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "precision_mining";
     this.name = hotm.names[this.id];
     this.position = 28;
     this.max_level = 1;
     this.upgrade_type = null;
-    this.requires = [];
+    this.requires = ["front_loaded"];
   }
 
   get upgradeCost() {
@@ -608,8 +674,8 @@ class PrecisionMining extends Node {
 }
 
 class LuckOfTheCave extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "random_event";
     this.name = hotm.names[this.id];
     this.position = 30;
@@ -630,8 +696,8 @@ class LuckOfTheCave extends Node {
 }
 
 class DailyPowder extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "daily_powder";
     this.name = hotm.names[this.id];
     this.position = 32;
@@ -652,8 +718,8 @@ class DailyPowder extends Node {
 }
 
 class Crystallized extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "fallen_star_bonus";
     this.name = hotm.names[this.id];
     this.position = 34;
@@ -676,14 +742,15 @@ class Crystallized extends Node {
 }
 
 class MiningSpeedBoost extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "mining_speed_boost";
     this.name = hotm.names[this.id];
     this.position = 37;
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["titanium_insanium", "random_event"];
+    this.type = "pickaxe_ability";
   }
 
   get upgradeCost() {
@@ -691,10 +758,13 @@ class MiningSpeedBoost extends Node {
   }
 
   perk(level) {
+    const effect = [200, 300, 400][this.pickaxeAbilityLevel - 1];
+    const duration = [15, 20, 25][this.pickaxeAbilityLevel - 1];
+    const cooldown = [120, 120, 120][this.pickaxeAbilityLevel - 1];
     return [
       "§6Pickaxe Ability: Mining Speed Boost",
-      "§7Grants §a+300% §6${symbols.mining_speed} Mining Speed §7for §a20s§7.",
-      "§8Cooldown: §a120s",
+      `§7Grants §a+${effect}% §6${symbols.mining_speed} Mining Speed §7for §a${duration}s§7.`,
+      `§8Cooldown: §a${cooldown}s`,
       "",
       "§8Pickaxe Abilities apply to all of your pickaxes. You can select a Pickaxe Ability from your Heart of the Mountain.",
       "",
@@ -704,8 +774,8 @@ class MiningSpeedBoost extends Node {
 }
 
 class TitaniumInsanium extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "titanium_insanium";
     this.name = hotm.names[this.id];
     this.position = 38;
@@ -726,8 +796,8 @@ class TitaniumInsanium extends Node {
 }
 
 class MiningFortune extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "mining_fortune";
     this.name = hotm.names[this.id];
     this.position = 39;
@@ -748,8 +818,8 @@ class MiningFortune extends Node {
 }
 
 class QuickForge extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "forge_time";
     this.name = hotm.names[this.id];
     this.position = 40;
@@ -770,14 +840,15 @@ class QuickForge extends Node {
 }
 
 class Pickobulus extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "pickaxe_toss";
     this.name = hotm.names[this.id];
     this.position = 41;
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["forge_time", "fallen_star_bonus"];
+    this.type = "pickaxe_ability";
   }
 
   get upgradeCost() {
@@ -785,10 +856,12 @@ class Pickobulus extends Node {
   }
 
   perk(level) {
+    const radius = [2, 2, 3][this.pickaxeAbilityLevel - 1];
+    const cooldown = [120, 120, 120][this.pickaxeAbilityLevel - 1];
     return [
       "§6Pickaxe Ability: Pickobulus",
-      "§7Throw your pickaxe to create an explosion on impact, mining all ores within a §a2§7 block radius.",
-      "§8Cooldown: §a110s",
+      `§7Throw your pickaxe to create an explosion on impact, mining all ores within a §a${radius}§7 block radius.`,
+      `§8Cooldown: §a${cooldown}s`,
       "",
       "§8Pickaxe Abilities apply to all of your pickaxes. You can select a Pickaxe Ability from your Heart of the Mountain.",
       "",
@@ -798,8 +871,8 @@ class Pickobulus extends Node {
 }
 
 class MiningSpeed extends Node {
-  constructor(level, enabled) {
-    super(level, enabled);
+  constructor(data) {
+    super(data);
     this.id = "mining_speed";
     this.name = hotm.names[this.id];
     this.position = 46;

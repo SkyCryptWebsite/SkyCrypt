@@ -930,31 +930,27 @@ const getRarityUpgradeClass = item => {
       </div>
     <% } %>
 
-    <div class="stat-container">
-      <h2 class="stat-header">Heart of the Mountain</h2>
-      <div class="stat-content">
-        <div class="hotm-tree">
-          <%
-            calculated.mining.hotm.tree.forEach(node => {
-              %>
 
-              <div
-                class="hotm-node"
-                data-empty-slot="<%= !node.name %>"
-                data-unlocked="<%= node.level > 0 %>"
-                data-enabled="<%= node.enabled %>"
-                <% if (node.lore) { %>
-                  data-tippy-content="<%- helper.renderLore('§f'+node.lore.split('\n').join('<br>')) %>"
-                <% } %>
-              >
-                <%= node.name ?? '' %>
-              </div>
-
-              <%
-            })
+    <div class="hotm-tree">
+      <%
+        calculated.mining.hotm.tree.forEach(node => {
           %>
-        </div>
-      </div>
+
+          <div
+            class="hotm-node"
+            data-empty-slot="<%= !node.name %>"
+            data-unlocked="<%= node.level > 0 %>"
+            data-enabled="<%= node.enabled %>"
+            <% if (node.lore) { %>
+              data-tippy-content="<%- helper.renderLore('§f'+node.lore.split('\n').join('<br>')) %>"
+            <% } %>
+          >
+            <%= node.name ?? '' %>
+          </div>
+
+          <%
+        })
+      %>
     </div>
 
     <div class="stat-container stat-armor">
