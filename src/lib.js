@@ -3542,7 +3542,7 @@ export async function getHeartOfTheMountain(userProfile) {
       enabled,
       nodes,
       hotmTier,
-      selectedPickaxeAbility
+      selectedPickaxeAbility,
     });
 
     output.tree[node.position - 1] = Object.assign(output.tree[node.position - 1], {
