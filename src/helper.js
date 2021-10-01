@@ -905,3 +905,11 @@ export function generateGemLore(type, tier, rarity) {
 export function rarityNameToInt(string) {
   return constants.rarities.indexOf(string.toLowerCase());
 }
+
+export function round(num, decimals = 0) {
+  return Math.round(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
+}
+
+export function floor(num, decimals = 0) {
+  return Math.floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
+}
