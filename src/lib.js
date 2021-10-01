@@ -3505,6 +3505,38 @@ export async function getHeartOfTheMountain(userProfile) {
     mining_core: userProfile.mining_core, // DEV
     tiers: [],
     tree: [],
+    test: [
+      helper.generateItem(),
+      {
+        id: 388,
+        Count: 1,
+        tag: {
+          display: {
+            Lore: [
+              "§7View your available trades.",
+              "§7These trades are always",
+              "§7available and accessible through",
+              "§7the SkyBlock Menu.",
+              "",
+              "§7Trades Unlocked: §a100%",
+              "§2-------------------- §e26§6/§e26",
+              "",
+              "§eClick to view!",
+            ],
+            Name: "§aTrades",
+          },
+        },
+        Damage: 0,
+        display_name: "Trades",
+        display_name_print: "Trades",
+        rarity: "click",
+        type: "to view!",
+        equipmentType: "none",
+        stats: {},
+        item_index: 789789789,
+        itemId: "7571ce99-ef56-4f01-8522-292de1c77a86",
+      },
+    ],
   };
 
   const hotmLevelData = userProfile.mining_core?.experience

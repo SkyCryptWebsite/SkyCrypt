@@ -972,6 +972,21 @@ const getRarityUpgradeClass = item => {
         })
       %>
       </div>
+      <div class="pieces">
+        <% for(const item of calculated.mining.hotm.test) { %>
+          <div
+            tabindex="0"
+            data-item-id="<%= item.itemId %>"
+            data-item-index="<%= item.item_index %>"
+            class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>"
+          >
+            <% if(rarityOrder.indexOf(item.rarity) < 3) { %>
+              <div class="piece-shine"></div>
+            <% } %>
+            <% itemIcon(item, ['piece-icon']); %>
+          </div>
+        <% } %>
+      </div>
     </div>
 
     <div class="stat-container stat-armor">

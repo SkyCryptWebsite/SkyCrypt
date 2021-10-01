@@ -2,7 +2,7 @@ import cluster from "cluster";
 import axios from "axios";
 import sanitize from "mongo-sanitize";
 import "axios-debug-log";
-
+import { v4 } from "uuid";
 import retry from "async-retry";
 
 import * as constants from "./constants.js";
@@ -912,4 +912,29 @@ export function round(num, decimals = 0) {
 
 export function floor(num, decimals = 0) {
   return Math.floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
+}
+
+export function generateItem(data) {
+  const default_data = {
+    Count: 1,
+    Damage: 0,
+    display_name: "Generated Item",
+    display_name_print: "Generated Item",
+    equipmentType: "none",
+    id: 145,
+    itemid: v4("itemid"),
+    item_index: Date.now(),
+    rarity: "common",
+    tag: {
+      display: {
+        Name: "§fGenerated Item",
+        Lore: ["§7Line 1", "§7Line 2"],
+      },
+    },
+    type: "misc",
+  };
+
+  const item = Object.assign(default_data, data);
+
+  return item;
 }

@@ -4,6 +4,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   gap: 1rem;
+  margin: 10rem 0;
 }
 
 .hotm-tiers {
@@ -11,7 +12,6 @@
   grid-template-columns: 75px;
   grid-template-rows: repeat(7, 75px);
   grid-gap: 12px;
-  margin: 10rem 0;
   .hotm-tier {
     background-color: rgba(0, 0, 0, 0.75);
     border-radius: 4px;
@@ -40,7 +40,6 @@
   grid-template-columns: repeat(7, 75px);
   grid-template-rows: repeat(7, 75px);
   grid-gap: 12px;
-  margin: 10rem 0;
   .hotm-node {
     background-color: rgba(0, 0, 0, 0.75);
     border-radius: 4px;
