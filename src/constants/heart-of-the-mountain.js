@@ -1,4 +1,5 @@
 import { stats_symbols as symbols } from "./stats.js";
+import { formatNumber } from "../helper.js";
 
 function round(num, decimals = 0) {
   return Math.round(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
@@ -27,13 +28,155 @@ const upgrade_types = {
   },
 };
 
+const hotm_rewards = {
+  rewards: {
+    token_of_the_mountain: {
+      formatted: "§5Token of the Mountain",
+      qtyColor: "5",
+    },
+    access_to_forge: {
+      formatted: "§eAccess to the Forge",
+      qtyColor: "e",
+    },
+    new_forgeable_items: {
+      formatted: "§eNew Forgeable Items",
+      qtyColor: "e",
+    },
+    forge_slot: {
+      formatted: "§aForge Slot",
+      qtyColor: "a",
+    },
+    access_crystal_hollows: {
+      formatted: "§dAccess to the §5Crystal Hollows",
+      qtyColor: "d",
+    },
+    emissary_braum_crystal_hollows: {
+      formatted: "§eEmissary Braum §f- §bCrystal Hollows",
+      qtyColor: "e",
+    },
+  },
+  tiers: {
+    1: {
+      token_of_the_mountain: 1,
+    },
+    2: {
+      token_of_the_mountain: 2,
+      access_to_forge: 0,
+      new_forgeable_items: 0,
+    },
+    3: {
+      token_of_the_mountain: 2,
+      forge_slot: 1,
+      new_forgeable_items: 0,
+      access_crystal_hollows: 0,
+      emissary_braum_crystal_hollows: 0,
+    },
+    4: {
+      token_of_the_mountain: 2,
+      forge_slot: 1,
+      new_forgeable_items: 0,
+    },
+    5: {
+      token_of_the_mountain: 2,
+      new_forgeable_items: 0,
+    },
+    6: {
+      token_of_the_mountain: 2,
+      new_forgeable_items: 0,
+    },
+    7: {
+      token_of_the_mountain: 2,
+      new_forgeable_items: 0,
+    },
+  },
+};
+
+class HotM {
+  constructor(tier, level) {
+    this.tier = tier;
+    this.level = level.level;
+    this.progress = level.progress;
+    this.levelWithProgress = level.levelWithProgress;
+    this.xp = level.xp;
+    this.xpCurrent = level.xpCurrent;
+    this.xpForNext = level.xpForNext;
+  }
+
+  get lore() {
+    const output = [];
+
+    // name
+    output.push(this.displayName, "");
+
+    // main
+    if (this.status === "unlocked") {
+      output.push(
+        "§7You have unlocked this tier. All perks and abilities on this tier are available for unlocking with §5Token of the Mountain§7.",
+        ""
+      );
+    } else {
+      output.push(
+        "§7Progress through your Heart of the Mountain by gaining §5HotM Exp§7, which is earned through completing §aCommissions§7.",
+        "",
+        "Commissions are tasks given by the §e§lKing§r§7 in the §bRoyal Palace§7. Complete them to earn bountiful rewards!",
+        ""
+      );
+    }
+
+    // progress
+    if (this.status === "next") {
+      const progress = round(this.progress * 100);
+      const greenBars = Math.ceil(progress / 5);
+      const whiteBars = 20 - greenBars;
+      output.push(
+        `§7Progress: §e${progress}%`,
+        `${"§2-".repeat(greenBars)}${"§f-".repeat(
+          whiteBars
+        )} §e${this.xpCurrent.toLocaleString()} §6/ §e${this.xpForNext.toLocaleString()}`,
+        ""
+      );
+    }
+
+    // rewards
+    output.push("§7Rewards");
+    for (const [reward, qty] of Object.entries(hotm_rewards.tiers[this.tier])) {
+      const quantity = qty > 0 ? `§${hotm_rewards.rewards[reward].qtyColor}${qty} ` : "";
+      const name = hotm_rewards.rewards[reward].formatted;
+      output.push(`§8+ ${quantity}${name}`);
+    }
+    output.push("");
+
+    // status
+    output.push(this.status === "unlocked" ? "§aUNLOCKED" : "§cLOCKED");
+
+    return output;
+  }
+
+  get displayName() {
+    const color = this.status === "unlocked" ? "a" : this.status === "next" ? "e" : "c";
+    return `§${color}Tier ${this.tier}`;
+  }
+
+  get status() {
+    if (this.tier <= this.level) {
+      return "unlocked";
+    }
+
+    if (this.tier === Math.ceil(this.levelWithProgress)) {
+      return "next";
+    }
+
+    return "locked";
+  }
+}
+
 class Node {
   constructor(data) {
     this.nodeType = "normal";
     this.level = data.level;
     this.enabled = data.enabled;
     this.nodes = data.nodes;
-    this.hotmTier = data.hotmTier.level;
+    this.hotmTier = data.hotmLevelData.level;
     this.potmLevel = data.nodes.special_0;
     this.selectedPickaxeAbility = data.selectedPickaxeAbility;
   }
@@ -97,7 +240,7 @@ class Node {
       }
 
       if (this.requiredHotmTier > this.hotmTier) {
-        output.push("", `§cRequires HOTM Tier ${this.requiredHotmTier}.`);
+        output.push("", `§cRequires HotM Tier ${this.requiredHotmTier}.`);
       }
     }
 
@@ -893,6 +1036,8 @@ class MiningSpeed extends Node {
 }
 
 export const hotm = {
+  hotm: HotM,
+  tiers: Object.keys(hotm_rewards.tiers).length,
   tree_size: {
     columns: 7,
     rows: 7,

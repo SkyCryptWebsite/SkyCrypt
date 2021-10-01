@@ -931,7 +931,27 @@ const getRarityUpgradeClass = item => {
     <% } %>
 
 
-    <div class="hotm-tree">
+    <div class="hotm">
+      <div class="hotm-tiers">
+      <%
+        calculated.mining.hotm.tiers.reverse().forEach(tier => {
+          %>
+
+          <div
+            class="hotm-tier"
+            data-status="<%= tier.status %>"
+            <% if (tier.lore) { %>
+              data-tippy-content="<%- helper.renderLore('§f'+tier.lore.split('\n').join('<br>')) %>"
+            <% } %>
+          >
+            <%= tier.name ?? '' %>
+          </div>
+
+          <%
+        })
+      %>
+      </div>
+      <div class="hotm-tree">
       <%
         calculated.mining.hotm.tree.forEach(node => {
           %>
@@ -951,6 +971,7 @@ const getRarityUpgradeClass = item => {
           <%
         })
       %>
+      </div>
     </div>
 
     <div class="stat-container stat-armor">

@@ -1,35 +1,70 @@
+.hotm {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.hotm-tiers {
+  display: grid;
+  grid-template-columns: 75px;
+  grid-template-rows: repeat(7, 75px);
+  grid-gap: 12px;
+  margin: 10rem 0;
+  .hotm-tier {
+    background-color: rgba(0, 0, 0, 0.75);
+    border-radius: 4px;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-align: center;
+    font-size: 10px;
+    padding: 10px;
+    &[data-status="unlocked"] {
+      background-color: transparentize(green, 0.6);
+    }
+    &[data-status="next"] {
+      background-color: transparentize(gold, 0.6);
+    }
+    &[data-status="locked"] {
+      background-color: transparentize(crimson, 0.6);
+    }
+  }
+}
+
 .hotm-tree {
   display: grid;
   grid-template-columns: repeat(7, 75px);
   grid-template-rows: repeat(7, 75px);
   grid-gap: 12px;
   margin: 10rem 0;
-}
+  .hotm-node {
+    background-color: rgba(0, 0, 0, 0.75);
+    border-radius: 4px;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-align: center;
+    font-size: 10px;
+    padding: 10px;
 
-.hotm-node {
-  background-color: rgba(0, 0, 0, 0.75);
-  border-radius: 4px;
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-
-  text-align: center;
-  font-size: 10px;
-  padding: 10px;
-
-  &[data-empty-slot="true"] {
-    background-color: rgba(0, 0, 0, 0.1) !important;
-  }
-  &[data-unlocked="false"] {
-    background-color: rgba(0, 0, 0, 0.5);
-    color: #666 !important;
-  }
-  &[data-enabled="true"] {
-    color: green;
-  }
-  &[data-enabled="false"] {
-    color: crimson;
+    &[data-empty-slot="true"] {
+      background-color: rgba(0, 0, 0, 0.1) !important;
+    }
+    &[data-unlocked="false"] {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #666 !important;
+    }
+    &[data-enabled="true"] {
+      color: green;
+    }
+    &[data-enabled="false"] {
+      color: crimson;
+    }
   }
 }

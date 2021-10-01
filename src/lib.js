@@ -3503,10 +3503,11 @@ export async function getDungeons(userProfile, hypixelProfile) {
 export async function getHeartOfTheMountain(userProfile) {
   const output = {
     mining_core: userProfile.mining_core, // DEV
+    tiers: [],
     tree: [],
   };
 
-  const hotmTier = userProfile.mining_core?.experience
+  const hotmLevelData = userProfile.mining_core?.experience
     ? getLevelByXp(userProfile.mining_core.experience, { type: "hotm" })
     : 0;
   const selectedPickaxeAbility = userProfile.mining_core?.selected_pickaxe_ability;
@@ -3521,7 +3522,7 @@ export async function getHeartOfTheMountain(userProfile) {
       )
     : {};
 
-  output.hotmTier = hotmTier; // DEV
+  output.hotmLevelData = hotmLevelData; // DEV
   output.nodes = nodes; // DEV
   output.toggles = toggles; // DEV
 
@@ -3541,7 +3542,7 @@ export async function getHeartOfTheMountain(userProfile) {
       level,
       enabled,
       nodes,
-      hotmTier,
+      hotmLevelData,
       selectedPickaxeAbility,
     });
 
@@ -3560,6 +3561,18 @@ export async function getHeartOfTheMountain(userProfile) {
     if (constants.hotm.nodes[nodeId] == undefined) {
       throw `Missing Heart of the Mountain node: ${nodeId}`;
     }
+  }
+
+  // Processing HotM tiers
+  for (let tier = 1; tier <= constants.hotm.tiers; tier++) {
+    const hotm = new constants.hotm.hotm(tier, hotmLevelData);
+
+    output.tiers.push({
+      name: `Tier ${tier}`,
+      lore: hotm.lore.join("\n"),
+      status: hotm.status,
+      ref: hotm, // DEV
+    });
   }
 
   return output;
