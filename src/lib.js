@@ -437,102 +437,6 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
   }
 
   for (const item of items) {
-    // Set custom texture for colored leather armor
-    if (typeof item.id === "number" && item.id >= 298 && item.id <= 301) {
-      const color = item.tag?.display?.color?.toString(16).padStart(6, "0") ?? "955e3b";
-
-      const type = ["helmet", "chestplate", "leggings", "boots"][item.id - 298];
-
-      item.texture_path = `/leather/${type}/${color}`;
-    }
-
-    // Set custom texture for colored potions
-    if (item.id == 373) {
-      const color = potionColors[item.Damage % 16];
-
-      const type = item.Damage & 16384 ? "splash" : "normal";
-
-      item.texture_path = `/potion/${type}/${color}`;
-    }
-
-    // Set raw display name without color and formatting codes
-    if (item.tag?.display?.Name != undefined) {
-      item.display_name = helper.getRawLore(item.tag.display.Name);
-    }
-
-    // Set print display name (contains HTML)
-    if (item.display_name) {
-      item.display_name_print = item.display_name;
-    }
-
-    if (item.tag?.ExtraAttributes?.dungeon_item_level > 0) {
-      const dungeonItemLevel = item.tag.ExtraAttributes.dungeon_item_level;
-      let newStars = null;
-
-      switch (true) {
-        case dungeonItemLevel <= 5:
-          newStars = "✪".repeat(dungeonItemLevel);
-          break;
-        case dungeonItemLevel <= 10:
-          newStars = "⍟".repeat(dungeonItemLevel - 5) + "✪".repeat(5 - (dungeonItemLevel - 5));
-          break;
-        default:
-          newStars = "✪".repeat(dungeonItemLevel);
-          break;
-      }
-
-      item.display_name_print = item.display_name_print.replace(
-        /(✪+)/,
-        `<i class="icomoon icomoon-dungeon-stars">${newStars}</i>`
-      );
-    }
-
-    // Resolve skull textures to their image path
-    if (
-      Array.isArray(item.tag?.SkullOwner?.Properties?.textures) &&
-      item.tag.SkullOwner.Properties.textures.length > 0
-    ) {
-      try {
-        const json = JSON.parse(Buffer.from(item.tag.SkullOwner.Properties.textures[0].Value, "base64").toString());
-        const url = json.textures.SKIN.url;
-        const uuid = url.split("/").pop();
-
-        item.texture_path = `/head/${uuid}?v6`;
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    // Gives animated texture on certain items, will be overwritten by custom textures
-    switch (getId(item)) {
-      case "SINFUL_DICE":
-        item.texture_path = `/resources/img/items/sinful_dice.png?v6`;
-        break;
-    }
-
-    // Uses animated skin texture, if present
-    if (item.tag?.ExtraAttributes?.skin != undefined) {
-      switch (item.tag.ExtraAttributes.skin) {
-        case "SNOW_SNOWGLOBE":
-          item.texture_path = `/resources/img/items/skin_snowglobe.png?v6`;
-          break;
-      }
-    }
-
-    if (item.tag?.ExtraAttributes?.skin == undefined && customTextures) {
-      const customTexture = await getTexture(item, false, packs);
-
-      if (customTexture) {
-        item.animated = customTexture.animated;
-        item.texture_path = "/" + customTexture.path;
-        item.texture_pack = customTexture.pack.config;
-        item.texture_pack.base_path =
-          "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.basePath);
-      }
-    }
-
-    const enchantments = item.tag?.ExtraAttributes?.enchantments ?? {};
-
     // Get extra info about certain things
     if (item.tag?.ExtraAttributes != undefined) {
       item.extra = {
@@ -626,6 +530,104 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
     if (item.tag?.ExtraAttributes?.gems != undefined) {
       item.extra.gems = item.tag.ExtraAttributes.gems;
     }
+
+    if (item.tag?.ExtraAttributes?.skin != undefined) {
+      item.extra.skin = item.tag.ExtraAttributes.skin;
+    }
+
+    if (item.tag?.ExtraAttributes?.petInfo?.skin != undefined) {
+      item.extra.skin = `PET_SKIN_${item.tag.ExtraAttributes.petInfo.skin}`;
+    }
+
+    // Set custom texture for colored leather armor
+    if (typeof item.id === "number" && item.id >= 298 && item.id <= 301) {
+      const color = item.tag?.display?.color?.toString(16).padStart(6, "0") ?? "955e3b";
+
+      const type = ["helmet", "chestplate", "leggings", "boots"][item.id - 298];
+
+      item.texture_path = `/leather/${type}/${color}`;
+    }
+
+    // Set custom texture for colored potions
+    if (item.id == 373) {
+      const color = potionColors[item.Damage % 16];
+
+      const type = item.Damage & 16384 ? "splash" : "normal";
+
+      item.texture_path = `/potion/${type}/${color}`;
+    }
+
+    // Set raw display name without color and formatting codes
+    if (item.tag?.display?.Name != undefined) {
+      item.display_name = helper.getRawLore(item.tag.display.Name);
+    }
+
+    // Set print display name (contains HTML)
+    if (item.display_name) {
+      item.display_name_print = item.display_name;
+    }
+
+    if (item.tag?.ExtraAttributes?.dungeon_item_level > 0) {
+      const dungeonItemLevel = item.tag.ExtraAttributes.dungeon_item_level;
+      let newStars = null;
+
+      switch (true) {
+        case dungeonItemLevel <= 5:
+          newStars = "✪".repeat(dungeonItemLevel);
+          break;
+        case dungeonItemLevel <= 10:
+          newStars = "⍟".repeat(dungeonItemLevel - 5) + "✪".repeat(5 - (dungeonItemLevel - 5));
+          break;
+        default:
+          newStars = "✪".repeat(dungeonItemLevel);
+          break;
+      }
+
+      item.display_name_print = item.display_name_print.replace(
+        /(✪+)/,
+        `<i class="icomoon icomoon-dungeon-stars">${newStars}</i>`
+      );
+    }
+
+    // Resolve skull textures to their image path
+    if (
+      Array.isArray(item.tag?.SkullOwner?.Properties?.textures) &&
+      item.tag.SkullOwner.Properties.textures.length > 0
+    ) {
+      try {
+        const json = JSON.parse(Buffer.from(item.tag.SkullOwner.Properties.textures[0].Value, "base64").toString());
+        const url = json.textures.SKIN.url;
+        const uuid = url.split("/").pop();
+
+        item.texture_path = `/head/${uuid}?v6`;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Gives animated texture on certain items, will be overwritten by custom textures
+    if (constants.animated_items?.[getId(item)]) {
+      item.texture_path = constants.animated_items[getId(item)].texture;
+    }
+
+    // Uses animated skin texture
+    if (item?.extra?.skin != undefined && constants.animated_items?.[item.extra.skin]) {
+      item.texture_path = constants.animated_items[item.extra.skin].texture;
+    }
+
+    if (item.tag?.ExtraAttributes?.skin == undefined && customTextures) {
+      const customTexture = await getTexture(item, false, packs);
+
+      if (customTexture) {
+        item.animated = customTexture.animated;
+        item.texture_path = "/" + customTexture.path;
+        item.texture_pack = customTexture.pack.config;
+        item.texture_pack.base_path =
+          "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.basePath);
+      }
+    }
+
+    const enchantments = item.tag?.ExtraAttributes?.enchantments ?? {};
 
     // Lore stuff
     let itemLore = item?.tag?.display?.Lore ?? [];
@@ -1605,81 +1607,70 @@ export const getItems = async (
     output.armor_set_rarity = armorPiece.rarity;
   }
 
+  // Full armor set (4 pieces)
   if (armor.filter((a) => Object.keys(a).length > 2).length == 4) {
-    let output_name = "";
+    let output_name;
     let reforgeName;
 
+    // Getting armor_name
     armor.forEach((armorPiece) => {
-      let name = armorPiece.display_name.replace(/✪/g, "").trim();
+      let name = armorPiece.display_name;
 
+      // Removing stars
+      name = name.replace(/✪|⍟/g, "").trim();
+
+      // Removing skin
+      name = name.replace(/✦/g, "").trim();
+
+      // Removing modifier
       if (armorPiece.tag?.ExtraAttributes?.modifier != undefined) {
         name = name.split(" ").slice(1).join(" ");
+      }
+
+      // Converting armor_name to generic name
+      // Ex: Superior Dragon Helmet -> Superior Dragon Armor
+      if (/^Armor .*? (Helmet|Chestplate|Leggings|Boots)$/g.test(name)) {
+        // name starts with Armor and ends with piece name, remove piece name
+        name = name.replace(/(Helmet|Chestplate|Leggings|Boots)/g, "").trim();
+      } else {
+        // removing old 'Armor' and replacing the piece name with 'Armor'
+        name = name.replace("Armor", "").replace("  ", " ").trim();
+        name = name.replace(/(Helmet|Chestplate|Leggings|Boots)/g, "Armor").trim();
       }
 
       armorPiece.armor_name = name;
     });
 
-    if (armor.filter((a) => a.tag?.ExtraAttributes?.modifier == armor[0].tag.ExtraAttributes.modifier).length == 4) {
+    // Getting full armor reforge (same reforge on all pieces)
+    if (
+      armor.filter(
+        (a) =>
+          a.tag?.ExtraAttributes?.modifier != undefined &&
+          a.tag?.ExtraAttributes?.modifier == armor[0].tag.ExtraAttributes.modifier
+      ).length == 4
+    ) {
       reforgeName = armor[0].display_name.split(" ")[0];
     }
 
-    const isMonsterSet =
-      armor.filter((a) =>
-        ["SKELETON_HELMET", "GUARDIAN_CHESTPLATE", "CREEPER_LEGGINGS", "SPIDER_BOOTS", "TARANTULA_BOOTS"].includes(
-          getId(a)
-        )
-      ).length == 4;
-
-    const isPerfectSet = armor.filter((a) => getId(a).startsWith("PERFECT_")).length == 4;
-
-    const isSpongeSet = armor.filter((a) => getId(a).startsWith("SPONGE_")).length == 4;
-
-    if (
-      armor.filter((a) => a.armor_name.split(" ")[0] == armor[0].armor_name.split(" ")[0]).length == 4 ||
-      isMonsterSet
-    ) {
-      let base_name = armor[0].armor_name.split(" ");
-      base_name.pop();
-
-      output_name += base_name.join(" ");
-
-      if (!output_name.endsWith("Armor") && !output_name.startsWith("Armor")) {
-        output_name += " Armor";
-      }
-
-      output.armor_set = output_name;
-      output.armor_set_rarity = armor[0].rarity;
-
-      if (isMonsterSet) {
-        output.armor_set_rarity = "rare";
-
-        if (getId(armor[0]) == "SPIDER_BOOTS") {
-          output.armor_set = "Monster Hunter Armor";
-        }
-
-        if (getId(armor[0]) == "TARANTULA_BOOTS") {
-          output.armor_set = "Monster Raider Armor";
-        }
-      }
-
-      if (isPerfectSet) {
-        const sameTier = armor.filter((a) => getId(a).split("_").pop() == getId(armor[0]).split("_").pop()).length == 4;
-
-        if (sameTier) {
-          output.armor_set = "Perfect Armor - Tier " + getId(armor[0]).split("_").pop();
-        } else {
-          output.armor_set = "Perfect Armor";
-        }
-      }
-
-      if (isSpongeSet) {
-        output.armor_set = "Sponge Armor";
-      }
-
-      if (reforgeName) {
-        output.armor_set = reforgeName + " " + output.armor_set;
-      }
+    // Handling normal sets of armor
+    if (armor.filter((a) => a.armor_name == armor[0].armor_name).length == 4) {
+      output_name = armor[0].armor_name;
     }
+
+    // Handling special sets of armor (where pieces aren't named the same)
+    constants.special_sets.forEach((set) => {
+      if (armor.filter((a) => set.pieces.includes(getId(a))).length == 4) {
+        output_name = set.name;
+      }
+    });
+
+    // Finalizing the output
+    if (reforgeName && output_name) {
+      output_name = reforgeName + " " + output_name;
+    }
+
+    output.armor_set = output_name;
+    output.armor_set_rarity = constants.rarities[Math.max(...armor.map((a) => helper.rarityNameToInt(a.rarity)))];
   }
 
   console.debug(`${options.debugId}: getItems returned. (${new Date().getTime() - timeStarted}ms)`);
@@ -2877,9 +2868,9 @@ export async function getPets(profile) {
     pet.texture_path = petData.hatching?.level > pet.level.level ? petData.hatching.head : petData.head;
 
     let petSkin = null;
-    if (pet.skin && constants.pet_skins?.[pet.type]?.[pet.skin]) {
-      pet.texture_path = constants.pet_skins[pet.type][pet.skin].head;
-      petSkin = constants.pet_skins[pet.type][pet.skin].name;
+    if (pet.skin && constants.pet_skins?.[`PET_SKIN_${pet.skin}`]) {
+      pet.texture_path = constants.pet_skins[`PET_SKIN_${pet.skin}`].texture;
+      petSkin = constants.pet_skins[`PET_SKIN_${pet.skin}`].name;
     }
 
     let loreFirstRow = [

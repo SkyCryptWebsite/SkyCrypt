@@ -18,7 +18,7 @@ export const gemstones = {
         mining_fortune: [null, 7, 10, 15, 20, 25, null],
       },
       FLAWLESS: {
-        mining_fortune: [null, 10, 15, 20, 27, 35, null],
+        mining_fortune: [null, 10, 15, 20, 27, 35, 44],
       },
       PERFECT: {
         mining_fortune: [null, 14, 20, 30, 40, 50, 60],
@@ -39,7 +39,7 @@ export const gemstones = {
         mining_speed: [10, 14, 20, 28, 36, 45, null],
       },
       FLAWLESS: {
-        mining_speed: [14, 20, 30, 44, 58, 75, null],
+        mining_speed: [14, 20, 30, 44, 58, 75, 92],
       },
       PERFECT: {
         mining_speed: [20, 28, 40, 60, 80, 100, 120],
