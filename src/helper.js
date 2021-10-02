@@ -811,25 +811,37 @@ export function generateUUID() {
  */
 export function parseItemGems(gems, rarity) {
   /** @type {Gem[]} */
+
+  const slots = {
+    normal: Object.keys(constants.gemstones),
+    special: ["UNIVERSAL", "COMBAT", "OFFENSIVE", "DEFENSIVE", "MINING"],
+    ignore: ["unlocked_slots"],
+  };
+
   const parsed = [];
   for (const [key, value] of Object.entries(gems)) {
-    if (key.startsWith("UNIVERSAL_")) {
-      if (key.endsWith("_gem")) {
-        continue;
-      }
+    const slot_type = key.split("_")[0];
+
+    if (slots.ignore.includes(key) || (slots.special.includes(slot_type) && key.endsWith("_gem"))) {
+      continue;
+    }
+
+    if (slots.special.includes(slot_type)) {
       parsed.push({
-        slot_type: "UNIVERSAL",
+        slot_type,
         slot_number: +key.split("_")[1],
         gem_type: gems[`${key}_gem`],
         gem_tier: value,
       });
-    } else {
+    } else if (slots.normal.includes(slot_type)) {
       parsed.push({
-        slot_type: key.split("_")[0],
+        slot_type,
         slot_number: +key.split("_")[1],
         gem_type: key.split("_")[0],
         gem_tier: value,
       });
+    } else {
+      throw `Error! Unknwon gemstone slot key: ${key}`;
     }
   }
 
@@ -863,9 +875,15 @@ export function generateGemLore(type, tier, rarity) {
     const gemstone_stats = constants.gemstones[type.toUpperCase()]?.stats?.[tier.toUpperCase()];
     if (gemstone_stats) {
       Object.keys(gemstone_stats).forEach((stat) => {
-        const stat_value = gemstone_stats[stat][rarityNameToInt(rarity)];
+        let stat_value = gemstone_stats[stat][rarityNameToInt(rarity)];
 
-        if (stat_value && stat_value !== -1) {
+        // Fallback since skyblock devs didn't code all gemstone stats for divine rarity yet
+        // ...they didn't expect people to own divine tier items other than divan's drill
+        if (rarity.toUpperCase() === "DIVINE" && stat_value === null) {
+          stat_value = gemstone_stats[stat][rarityNameToInt("MYTHIC")];
+        }
+
+        if (stat_value) {
           stats.push(["§", constants.stats_colors[stat], "+", stat_value, constants.stats_symbols[stat]].join(""));
         } else {
           stats.push("§c§oMISSING VALUE§r");

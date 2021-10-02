@@ -699,7 +699,7 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
       }
 
       // Get breaking power for Pickaxes
-      if (item.type == "pickaxe" || item.type == "drill") {
+      if (item.type == "pickaxe" || item.type == "drill" || item.type == "gauntlet") {
         if (lore[0].startsWith("Breaking Power")) {
           item.breaking_power = lore[0].substring(15);
         } else {
@@ -1432,7 +1432,9 @@ export const getItems = async (
   );
 
   output.hoes = all_items.filter((a) => a.type != null && a.type.endsWith("hoe"));
-  output.pickaxes = all_items.filter((a) => a.type != null && (a.type.endsWith("pickaxe") || a.type.endsWith("drill")));
+  output.pickaxes = all_items.filter(
+    (a) => a.type != null && (a.type.endsWith("pickaxe") || a.type.endsWith("drill") || a.type.endsWith("gauntlet"))
+  );
   output.rods = all_items.filter(
     (a) => a.type != null && (a.type.endsWith("fishing rod") || a.type.endsWith("fishing weapon"))
   );
@@ -2895,16 +2897,16 @@ export async function getPets(profile) {
       let heldItemObj = await db.collection("items").findOne({ id: heldItem });
 
       if (heldItem in constants.pet_items) {
-        if ("stats" in constants.pet_items[heldItem]) {
-          for (const stat in constants.pet_items[heldItem].stats) {
-            pet.stats[stat] = (pet.stats[stat] || 0) + constants.pet_items[heldItem].stats[stat];
-          }
+        for (const stat in constants.pet_items[heldItem]?.stats) {
+          pet.stats[stat] = (pet.stats[stat] || 0) + constants.pet_items[heldItem].stats[stat];
         }
-        if ("multStats" in constants.pet_items[heldItem]) {
-          for (const stat in constants.pet_items[heldItem].multStats) {
-            if (pet.stats[stat]) {
-              pet.stats[stat] = (pet.stats[stat] || 0) * constants.pet_items[heldItem].multStats[stat];
-            }
+        for (const stat in constants.pet_items[heldItem]?.statsPerLevel) {
+          pet.stats[stat] =
+            (pet.stats[stat] || 0) + constants.pet_items[heldItem].statsPerLevel[stat] * pet.level.level;
+        }
+        for (const stat in constants.pet_items[heldItem]?.multStats) {
+          if (pet.stats[stat]) {
+            pet.stats[stat] = (pet.stats[stat] || 0) * constants.pet_items[heldItem].multStats[stat];
           }
         }
         if ("multAllStats" in constants.pet_items[heldItem]) {

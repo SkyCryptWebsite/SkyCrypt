@@ -78,6 +78,9 @@ class Pet {
         case "mining_speed":
           list.push(`§7Mining Speed: ${formatStat(newStats[stat])}`);
           break;
+        case "mining_fortune":
+          list.push(`§7Mining Fortune: ${formatStat(newStats[stat])}`);
+          break;
         default:
           list.push(`§cUNKNOWN: ${stat}`);
           break;
@@ -651,7 +654,7 @@ class Scatha extends Pet {
   }
 
   get first() {
-    const mult = this.rarity > 3 ? 1.25 : 1;
+    const mult = this.rarity > 2 ? 1.25 : 1;
     return {
       name: "§6Grounded",
       desc: [`§7Gain §6+${round(this.level * mult - 0.01, 1)}${symbols.mining_fortune} Mining Fortune§7`],
@@ -659,10 +662,10 @@ class Scatha extends Pet {
   }
 
   get second() {
-    const mult = this.rarity > 3 ? 0.03 : 0.025;
+    const mult = this.rarity > 2 ? 0.03 : 0.025;
     return {
       name: "§6Burrowing",
-      desc: [`§7When mining, there is a §a${round(this.level * mult, 1)}% §7chance to mine up a treasure burrow`],
+      desc: [`§7Grants a §a+${round(this.level * mult, 1)}% §7chance to find treasure while mining`],
     };
   }
 

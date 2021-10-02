@@ -20,7 +20,7 @@ export const item_types = [
   "boots",
 ];
 
-/** @typedef {"common"|"uncommon"|"rare"|"epic"|"legendary"|"mythic"|"supreme"|"special"|"very special"} Rarity */
+/** @typedef {"common"|"uncommon"|"rare"|"epic"|"legendary"|"mythic"|"divine"|"supreme"|"special"|"very special"} Rarity */
 
 /** @type {Rarity[]} */
 export const rarities = [
@@ -30,6 +30,7 @@ export const rarities = [
   "epic",
   "legendary",
   "mythic",
+  "divine",
   "supreme",
   "special",
   "very special",
@@ -45,6 +46,7 @@ export const rarityColors = {
   epic: "5",
   legendary: "6",
   mythic: "d",
+  divine: "b",
   supreme: "4",
   special: "c",
   "very special": "c",
@@ -169,6 +171,10 @@ export const special_enchants = [
   "Cleave VI",
   "Harvesting 6",
   "Harvesting VI",
+  "Fortune 4",
+  "Fortune IV",
+  "Pristine 5",
+  "Pristine V",
 ];
 
 // Number of kills required for each level of expertise

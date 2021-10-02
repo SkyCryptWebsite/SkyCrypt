@@ -25,7 +25,6 @@ export const minion_slots = {
   650: 26,
 };
 
-export const minions_max_uniques = 631;
 export const minions_max_slots = 25; // From unique tiers (excludes community shop upgrades)
 
 export const minions = {
@@ -282,3 +281,11 @@ export const minions = {
     tiers: 12,
   },
 };
+
+let total_unique_minions = 0;
+
+for (const minion in minions) {
+  total_unique_minions += minions[minion].tiers ?? 11;
+}
+
+export const minions_max_uniques = total_unique_minions;

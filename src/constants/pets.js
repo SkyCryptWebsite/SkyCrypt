@@ -1,18 +1,4 @@
-const symbols = {
-  health: "❤",
-  defense: "❈",
-  strength: "❁",
-  crit_chance: "☣",
-  crit_damage: "☠",
-  intelligence: "✎",
-  speed: "✦",
-  sea_creature_chance: "α",
-  magic_find: "✯",
-  pet_luck: "♣",
-  attack_speed: "⚔️",
-  true_defense: "❂",
-  ferocity: "⫽",
-};
+import { stats_symbols as symbols } from "./stats.js";
 
 export const pet_rarity_offset = {
   common: 0,
@@ -788,11 +774,31 @@ export const pet_skins = {
       head: "/head/c8e414e762e1024c799e70b7a527c22fb95648f141d660b10c512cc124334218",
       release: new Date("2021-08-10 18:00:00 GMT+1").getTime(),
     },
-    HOUND: {
-      HOUND_BEAGLE: {
-        name: "Beagle",
-        head: "/head/877364e0ce27f0239b7754706b93022d0cf945854015d6096f9cf43d24a38269",
-        release: new Date("2021-08-24 18:00:00 GMT+1").getTime(),
+  },
+  HOUND: {
+    HOUND_BEAGLE: {
+      name: "Beagle",
+      head: "/head/877364e0ce27f0239b7754706b93022d0cf945854015d6096f9cf43d24a38269",
+      release: new Date("2021-08-24 18:00:00 GMT+1").getTime(),
+    },
+  },
+  SQUID: {
+    SQUID_GLOW: {
+      name: "Glow",
+      head: "/resources/img/items/squid_glow.png",
+      release: new Date("2021-09-14 18:00:00 GMT+1").getTime(),
+      animation: {
+        0: "/head/162eba7072c3054e310daf2e6970cc65a4346a9c4118399f4d68a2d7e66612b7",
+        50: "/head/f2ff4c824c39727c6bb8a126379a5ded2ba9aed24b59879f6b3af461e44df84a",
+        290: "/head/a1309033f08a444dea956d0d8099e5d132b14509617ee00ce0c4687879900546",
+        800: "/head/65d43d64e8e3e43f4de13ed1e2ca0ead1e88c4017ca466b8d057408029a80d19",
+        1040: "/head/8e0785c6f4a4d84a7a5289f2f435d10a5a7a4c4debc41d3cf95665ae658ba181",
+        1290: "/head/3d1ca6068e4b8cce378e554618034c014ff6219dc37bf0b0635848fa3cebbec",
+        1560: "/head/cfad4bbfc7a9ce14877e99ca5ca16b8d9d9ec3d0c065829e42766bcdbd4a0191",
+        1780: "/head/4167e70f8470d5d69aedb2a98c916f4b5a77d7ca8d051fbf70fb1b80ba7f9802",
+        2040: "/head/fca9982520eee4066bab0ae697f3b3656084b6639ba89113bd8e23ab7288563d",
+        2300: "/head/727581cfcf9905729b336dcf13784eac227bcdd709c4e92e018d45c4896ae29b",
+        2550: "/head/e0f95d0e5c64f46851b3c5d5d75cc0b7a9e09a1121740cd00e3cf25fa362306a",
       },
     },
   },
@@ -834,6 +840,17 @@ export const pet_rewards = {
   },
 };
 
+/*
+  PET_ITEM_ID = {
+    name: string,
+    tier: string (uppercase),
+    description: string,
+    stats?: {stat: value},
+    statsPerLevel?: {stat: value},
+    multStats?: {stat: value},
+    multAllStats?: {stat: value},
+  }
+*/
 export const pet_items = {
   PET_ITEM_ALL_SKILLS_BOOST_COMMON: {
     name: "All Skills Exp Boost",
@@ -1010,7 +1027,6 @@ export const pet_items = {
     tier: "EPIC",
     description: "§7Gives +§a50% §7pet exp for Farming",
   },
-  // new pet items from 0.9 update yay
   REINFORCED_SCALES: {
     name: "Reinforced Scales",
     tier: "RARE",
@@ -1112,5 +1128,14 @@ export const pet_items = {
     name: "Flying Pig",
     tier: "UNCOMMON",
     description: `§7Grants your pig pet the ability to fly while on your private island! You also don't need to hold a carrot on a stick to control your pig.`,
+  },
+  PET_ITEM_QUICK_CLAW: {
+    name: "Quick Claw",
+    tier: "RARE",
+    description: `§7Every 2 pet level you gain §6+1 ${symbols.mining_speed} Mining Speed §7and §6+1 §6${symbols.mining_fortune} Mining Fortune§7.`,
+    statsPerLevel: {
+      mining_speed: 1,
+      mining_fortune: 1,
+    },
   },
 };

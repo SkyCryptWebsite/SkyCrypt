@@ -1,5 +1,6 @@
 @use "./stripes";
 @use "./fonts";
+@use "../../../node_modules/tippy.js/dist/tippy.css";
 
 :root {
   /* Icon Green (used for Skill Icons, Underlines etc.) */
@@ -225,16 +226,14 @@ a.no-underline {
   text-decoration: none;
 }
 
-.tippy-tooltip {
+.tippy-box {
   font-weight: 500;
-  background-color: transparent;
-  border-radius: 0;
+  background-color: var(--grey_background-hex);
+  border-radius: 5px;
   user-select: text;
   color: var(--text-hex);
 
-  .tippy-content {
-    border-radius: 5px;
-    background-color: var(--grey_background-hex);
+  > .tippy-content {
     padding: 15px;
 
     .stat-name {
@@ -243,11 +242,11 @@ a.no-underline {
     }
   }
 
-  &[data-placement^="top"] > .tippy-arrow {
+  &[data-placement^="top"] > .tippy-arrow::before {
     border-top-color: var(--icon-hex);
   }
 
-  &[data-placement^="bottom"] > .tippy-arrow {
+  &[data-placement^="bottom"] > .tippy-arrow::before {
     border-bottom-color: var(--icon-hex);
   }
 }
@@ -1799,8 +1798,8 @@ a.additional-player-stat:hover {
 }
 
 .stat-health::before {
-  -webkit-mask-image: url(../img/icons/heart.svg);
-  mask-image: url(../img/icons/heart.svg);
+  -webkit-mask-image: url(../img/icons/heart.svg?v2);
+  mask-image: url(../img/icons/heart.svg?v2);
 }
 
 .stat-health,
@@ -1815,8 +1814,8 @@ a.additional-player-stat:hover {
 }
 
 .stat-defense::before {
-  -webkit-mask-image: url(../img/icons/shield.svg);
-  mask-image: url(../img/icons/shield.svg);
+  -webkit-mask-image: url(../img/icons/shield.svg?v2);
+  mask-image: url(../img/icons/shield.svg?v2);
 }
 
 .stat-defense,
@@ -1825,13 +1824,13 @@ a.additional-player-stat:hover {
 }
 
 .stat-strength::before {
-  -webkit-mask-image: url(../img/icons/flower-poppy.svg);
-  mask-image: url(../img/icons/flower-poppy.svg);
+  -webkit-mask-image: url(../img/icons/flower-poppy.svg?v2);
+  mask-image: url(../img/icons/flower-poppy.svg?v2);
 }
 
 .stat-speed::before {
-  -webkit-mask-image: url(../img/icons/star-four-points.svg);
-  mask-image: url(../img/icons/star-four-points.svg);
+  -webkit-mask-image: url(../img/icons/star-four-points.svg?v2);
+  mask-image: url(../img/icons/star-four-points.svg?v2);
 }
 
 .stat-speed,
@@ -1840,13 +1839,13 @@ a.additional-player-stat:hover {
 }
 
 .stat-crit-chance::before {
-  -webkit-mask-image: url(../img/icons/atom.svg);
-  mask-image: url(../img/icons/atom.svg);
+  -webkit-mask-image: url(../img/icons/atom.svg?v2);
+  mask-image: url(../img/icons/atom.svg?v2);
 }
 
 .stat-crit-damage::before {
-  -webkit-mask-image: url(../img/icons/skull-crossbones.svg);
-  mask-image: url(../img/icons/skull-crossbones.svg);
+  -webkit-mask-image: url(../img/icons/skull-crossbones.svg?v2);
+  mask-image: url(../img/icons/skull-crossbones.svg?v2);
 }
 
 .stat-crit-chance,
@@ -1857,8 +1856,8 @@ a.additional-player-stat:hover {
 }
 
 .stat-bonus-attack-speed::before {
-  -webkit-mask-image: url(../img/icons/sword-cross.svg);
-  mask-image: url(../img/icons/sword-cross.svg);
+  -webkit-mask-image: url(../img/icons/sword-cross.svg?v2);
+  mask-image: url(../img/icons/sword-cross.svg?v2);
 }
 
 .stat-bonus-attack-speed,
@@ -1867,8 +1866,8 @@ a.additional-player-stat:hover {
 }
 
 .stat-intelligence::before {
-  -webkit-mask-image: url(../img/icons/lead-pencil.svg);
-  mask-image: url(../img/icons/lead-pencil.svg);
+  -webkit-mask-image: url(../img/icons/lead-pencil.svg?v2);
+  mask-image: url(../img/icons/lead-pencil.svg?v2);
 }
 
 .stat-intelligence,
@@ -1877,8 +1876,8 @@ a.additional-player-stat:hover {
 }
 
 .stat-sea-creature-chance::before {
-  -webkit-mask-image: url(../img/icons/fish.svg);
-  mask-image: url(../img/icons/fish.svg);
+  -webkit-mask-image: url(../img/icons/fish.svg?v2);
+  mask-image: url(../img/icons/fish.svg?v2);
 }
 
 .stat-sea-creature-chance,
@@ -1887,8 +1886,8 @@ a.additional-player-stat:hover {
 }
 
 .stat-magic-find::before {
-  -webkit-mask-image: url(../img/icons/star.svg);
-  mask-image: url(../img/icons/star.svg);
+  -webkit-mask-image: url(../img/icons/star.svg?v2);
+  mask-image: url(../img/icons/star.svg?v2);
 }
 
 .stat-magic-find,
@@ -1897,8 +1896,8 @@ a.additional-player-stat:hover {
 }
 
 .stat-pet-luck::before {
-  -webkit-mask-image: url(../img/icons/cards-club.svg);
-  mask-image: url(../img/icons/cards-club.svg);
+  -webkit-mask-image: url(../img/icons/cards-club.svg?v2);
+  mask-image: url(../img/icons/cards-club.svg?v2);
 }
 
 .stat-pet-luck,
@@ -1907,13 +1906,13 @@ a.additional-player-stat:hover {
 }
 
 .stat-ferocity::before {
-  -webkit-mask-image: url(../img/icons/ferocity.svg);
-  mask-image: url(../img/icons/ferocity.svg);
+  -webkit-mask-image: url(../img/icons/ferocity.svg?v2);
+  mask-image: url(../img/icons/ferocity.svg?v2);
 }
 
 .stat-ability-damage::before {
-  -webkit-mask-image: url(../img/icons/ability_damage.svg);
-  mask-image: url(../img/icons/ability_damage.svg);
+  -webkit-mask-image: url(../img/icons/ability_damage.svg?v2);
+  mask-image: url(../img/icons/ability_damage.svg?v2);
 }
 
 .stat-ability-damage,
@@ -1922,8 +1921,8 @@ a.additional-player-stat:hover {
 }
 
 .stat-mining-speed::before {
-  -webkit-mask-image: url(../img/icons/mining_speed.svg);
-  mask-image: url(../img/icons/mining_speed.svg);
+  -webkit-mask-image: url(../img/icons/mining_speed.svg?v2);
+  mask-image: url(../img/icons/mining_speed.svg?v2);
 }
 
 .stat-mining-speed,
@@ -1932,8 +1931,8 @@ a.additional-player-stat:hover {
 }
 
 .stat-mining-fortune::before {
-  -webkit-mask-image: url(../img/icons/fortune.svg);
-  mask-image: url(../img/icons/fortune.svg);
+  -webkit-mask-image: url(../img/icons/fortune.svg?v2);
+  mask-image: url(../img/icons/fortune.svg?v2);
 }
 
 .stat-mining-fortune,
@@ -1942,8 +1941,8 @@ a.additional-player-stat:hover {
 }
 
 .stat-farming-fortune::before {
-  -webkit-mask-image: url(../img/icons/fortune.svg);
-  mask-image: url(../img/icons/fortune.svg);
+  -webkit-mask-image: url(../img/icons/fortune.svg?v2);
+  mask-image: url(../img/icons/fortune.svg?v2);
 }
 
 .stat-farming-fortune,
@@ -1952,8 +1951,8 @@ a.additional-player-stat:hover {
 }
 
 .stat-foraging-fortune::before {
-  -webkit-mask-image: url(../img/icons/fortune.svg);
-  mask-image: url(../img/icons/fortune.svg);
+  -webkit-mask-image: url(../img/icons/fortune.svg?v2);
+  mask-image: url(../img/icons/fortune.svg?v2);
 }
 
 .stat-foraging-fortune,
@@ -1962,8 +1961,8 @@ a.additional-player-stat:hover {
 }
 
 .stat-pristine::before {
-  -webkit-mask-image: url(../img/icons/pristine.svg);
-  mask-image: url(../img/icons/pristine.svg);
+  -webkit-mask-image: url(../img/icons/pristine.svg?v2);
+  mask-image: url(../img/icons/pristine.svg?v2);
 }
 
 .stat-pristine,
@@ -2368,6 +2367,17 @@ a.additional-player-stat:hover {
   color: var(--§c) !important;
 }
 
+.piece-divine-bg,
+.style-scrollbar .piece-divine-bg + .item-lore::-webkit-scrollbar-thumb {
+  background-color: var(--§b);
+}
+.piece-divine-bg + .item-lore {
+  scrollbar-color: var(--§b) transparent;
+}
+.piece-divine-fg {
+  color: var(--§b) !important;
+}
+
 .piece-mythic-bg,
 .style-scrollbar .piece-mythic-bg + .item-lore::-webkit-scrollbar-thumb {
   background-color: var(--§d);
@@ -2445,6 +2455,9 @@ a.additional-player-stat:hover {
     --upgraded-from: var(--§4);
   }
   &.piece-supreme-bg {
+    --upgraded-from: var(--§b);
+  }
+  &.piece-divine-bg {
     --upgraded-from: var(--§d);
   }
   &.piece-mythic-bg {
