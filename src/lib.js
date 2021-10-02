@@ -431,102 +431,6 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
   }
 
   for (const item of items) {
-    // Set custom texture for colored leather armor
-    if (typeof item.id === "number" && item.id >= 298 && item.id <= 301) {
-      const color = item.tag?.display?.color?.toString(16).padStart(6, "0") ?? "955e3b";
-
-      const type = ["helmet", "chestplate", "leggings", "boots"][item.id - 298];
-
-      item.texture_path = `/leather/${type}/${color}`;
-    }
-
-    // Set custom texture for colored potions
-    if (item.id == 373) {
-      const color = potionColors[item.Damage % 16];
-
-      const type = item.Damage & 16384 ? "splash" : "normal";
-
-      item.texture_path = `/potion/${type}/${color}`;
-    }
-
-    // Set raw display name without color and formatting codes
-    if (item.tag?.display?.Name != undefined) {
-      item.display_name = helper.getRawLore(item.tag.display.Name);
-    }
-
-    // Set print display name (contains HTML)
-    if (item.display_name) {
-      item.display_name_print = item.display_name;
-    }
-
-    if (item.tag?.ExtraAttributes?.dungeon_item_level > 0) {
-      const dungeonItemLevel = item.tag.ExtraAttributes.dungeon_item_level;
-      let newStars = null;
-
-      switch (true) {
-        case dungeonItemLevel <= 5:
-          newStars = "✪".repeat(dungeonItemLevel);
-          break;
-        case dungeonItemLevel <= 10:
-          newStars = "⍟".repeat(dungeonItemLevel - 5) + "✪".repeat(5 - (dungeonItemLevel - 5));
-          break;
-        default:
-          newStars = "✪".repeat(dungeonItemLevel);
-          break;
-      }
-
-      item.display_name_print = item.display_name_print.replace(
-        /(✪+)/,
-        `<i class="icomoon icomoon-dungeon-stars">${newStars}</i>`
-      );
-    }
-
-    // Resolve skull textures to their image path
-    if (
-      Array.isArray(item.tag?.SkullOwner?.Properties?.textures) &&
-      item.tag.SkullOwner.Properties.textures.length > 0
-    ) {
-      try {
-        const json = JSON.parse(Buffer.from(item.tag.SkullOwner.Properties.textures[0].Value, "base64").toString());
-        const url = json.textures.SKIN.url;
-        const uuid = url.split("/").pop();
-
-        item.texture_path = `/head/${uuid}?v6`;
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    // Gives animated texture on certain items, will be overwritten by custom textures
-    switch (getId(item)) {
-      case "SINFUL_DICE":
-        item.texture_path = `/resources/img/items/sinful_dice.png?v6`;
-        break;
-    }
-
-    // Uses animated skin texture, if present
-    if (item.tag?.ExtraAttributes?.skin != undefined) {
-      switch (item.tag.ExtraAttributes.skin) {
-        case "SNOW_SNOWGLOBE":
-          item.texture_path = `/resources/img/items/skin_snowglobe.png?v6`;
-          break;
-      }
-    }
-
-    if (item.tag?.ExtraAttributes?.skin == undefined && customTextures) {
-      const customTexture = await getTexture(item, false, packs);
-
-      if (customTexture) {
-        item.animated = customTexture.animated;
-        item.texture_path = "/" + customTexture.path;
-        item.texture_pack = customTexture.pack.config;
-        item.texture_pack.base_path =
-          "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.basePath);
-      }
-    }
-
-    const enchantments = item.tag?.ExtraAttributes?.enchantments ?? {};
-
     // Get extra info about certain things
     if (item.tag?.ExtraAttributes != undefined) {
       item.extra = {
@@ -620,6 +524,104 @@ async function _getItems(base64, customTextures = false, packs, cacheOnly = fals
     if (item.tag?.ExtraAttributes?.gems != undefined) {
       item.extra.gems = item.tag.ExtraAttributes.gems;
     }
+
+    if (item.tag?.ExtraAttributes?.skin != undefined) {
+      item.extra.skin = item.tag.ExtraAttributes.skin;
+    }
+
+    if (item.tag?.ExtraAttributes?.petInfo?.skin != undefined) {
+      item.extra.skin = `PET_SKIN_${item.tag.ExtraAttributes.petInfo.skin}`;
+    }
+
+    // Set custom texture for colored leather armor
+    if (typeof item.id === "number" && item.id >= 298 && item.id <= 301) {
+      const color = item.tag?.display?.color?.toString(16).padStart(6, "0") ?? "955e3b";
+
+      const type = ["helmet", "chestplate", "leggings", "boots"][item.id - 298];
+
+      item.texture_path = `/leather/${type}/${color}`;
+    }
+
+    // Set custom texture for colored potions
+    if (item.id == 373) {
+      const color = potionColors[item.Damage % 16];
+
+      const type = item.Damage & 16384 ? "splash" : "normal";
+
+      item.texture_path = `/potion/${type}/${color}`;
+    }
+
+    // Set raw display name without color and formatting codes
+    if (item.tag?.display?.Name != undefined) {
+      item.display_name = helper.getRawLore(item.tag.display.Name);
+    }
+
+    // Set print display name (contains HTML)
+    if (item.display_name) {
+      item.display_name_print = item.display_name;
+    }
+
+    if (item.tag?.ExtraAttributes?.dungeon_item_level > 0) {
+      const dungeonItemLevel = item.tag.ExtraAttributes.dungeon_item_level;
+      let newStars = null;
+
+      switch (true) {
+        case dungeonItemLevel <= 5:
+          newStars = "✪".repeat(dungeonItemLevel);
+          break;
+        case dungeonItemLevel <= 10:
+          newStars = "⍟".repeat(dungeonItemLevel - 5) + "✪".repeat(5 - (dungeonItemLevel - 5));
+          break;
+        default:
+          newStars = "✪".repeat(dungeonItemLevel);
+          break;
+      }
+
+      item.display_name_print = item.display_name_print.replace(
+        /(✪+)/,
+        `<i class="icomoon icomoon-dungeon-stars">${newStars}</i>`
+      );
+    }
+
+    // Resolve skull textures to their image path
+    if (
+      Array.isArray(item.tag?.SkullOwner?.Properties?.textures) &&
+      item.tag.SkullOwner.Properties.textures.length > 0
+    ) {
+      try {
+        const json = JSON.parse(Buffer.from(item.tag.SkullOwner.Properties.textures[0].Value, "base64").toString());
+        const url = json.textures.SKIN.url;
+        const uuid = url.split("/").pop();
+
+        item.texture_path = `/head/${uuid}?v6`;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Gives animated texture on certain items, will be overwritten by custom textures
+    if (constants.animated_items?.[getId(item)]) {
+      item.texture_path = constants.animated_items[getId(item)].texture;
+    }
+
+    // Uses animated skin texture
+    if (item?.extra?.skin != undefined && constants.animated_items?.[item.extra.skin]) {
+      item.texture_path = constants.animated_items[item.extra.skin].texture;
+    }
+
+    if (item.tag?.ExtraAttributes?.skin == undefined && customTextures) {
+      const customTexture = await getTexture(item, false, packs);
+
+      if (customTexture) {
+        item.animated = customTexture.animated;
+        item.texture_path = "/" + customTexture.path;
+        item.texture_pack = customTexture.pack.config;
+        item.texture_pack.base_path =
+          "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.basePath);
+      }
+    }
+
+    const enchantments = item.tag?.ExtraAttributes?.enchantments ?? {};
 
     // Lore stuff
     let itemLore = item?.tag?.display?.Lore ?? [];
@@ -2857,9 +2859,9 @@ export async function getPets(profile) {
     pet.texture_path = petData.hatching?.level > pet.level.level ? petData.hatching.head : petData.head;
 
     let petSkin = null;
-    if (pet.skin && constants.pet_skins?.[pet.type]?.[pet.skin]) {
-      pet.texture_path = constants.pet_skins[pet.type][pet.skin].head;
-      petSkin = constants.pet_skins[pet.type][pet.skin].name;
+    if (pet.skin && constants.pet_skins?.[`PET_SKIN_${pet.skin}`]) {
+      pet.texture_path = constants.pet_skins[`PET_SKIN_${pet.skin}`].texture;
+      petSkin = constants.pet_skins[`PET_SKIN_${pet.skin}`].name;
     }
 
     let loreFirstRow = [
