@@ -131,6 +131,7 @@ export const allItems = new Map(
     items.personal_vault,
     items.wardrobe_inventory,
     items.storage,
+    items.hotm,
   ]
     .flat()
     .flatMap((item) => {

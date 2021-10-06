@@ -1204,6 +1204,8 @@ export const getItems = async (
     }
   }
 
+  let hotm = "mining_core" in profile ? await getHeartOfTheMountainItems(profile) : [];
+
   output.armor = armor.filter((a) => Object.keys(a).length != 0);
   output.wardrobe = wardrobe;
   output.wardrobe_inventory = wardrobe_inventory;
@@ -1215,6 +1217,7 @@ export const getItems = async (
   output.potion_bag = potion_bag;
   output.personal_vault = personal_vault;
   output.storage = storage;
+  output.hotm = hotm;
 
   const all_items = armor.concat(
     inventory,
@@ -1225,7 +1228,8 @@ export const getItems = async (
     potion_bag,
     personal_vault,
     wardrobe_inventory,
-    storage
+    storage,
+    hotm
   );
 
   for (const [index, item] of all_items.entries()) {
@@ -1243,6 +1247,7 @@ export const getItems = async (
   // All items not in the inventory or accessory bag should be inactive so they don't contribute to the total stats
   enderchest = enderchest.map((a) => Object.assign({ isInactive: true }, a));
   storage = storage.map((a) => Object.assign({ isInactive: true }, a));
+  hotm = hotm.map((a) => Object.assign({ isInactive: true }, a)); // TODO: Required?
 
   // Add candy bag contents as backpack contents to candy bag
   for (let item of all_items) {
@@ -3489,6 +3494,41 @@ export async function getDungeons(userProfile, hypixelProfile) {
   }
 
   return output;
+}
+
+export async function getHeartOfTheMountainItems(userProfile) {
+  return [
+    helper.generateItem(),
+    {
+      id: 388,
+      Count: 1,
+      tag: {
+        display: {
+          Lore: [
+            "§7View your available trades.",
+            "§7These trades are always",
+            "§7available and accessible through",
+            "§7the SkyBlock Menu.",
+            "",
+            "§7Trades Unlocked: §a100%",
+            "§2-------------------- §e26§6/§e26",
+            "",
+            "§eClick to view!",
+          ],
+          Name: "§aTrades",
+        },
+      },
+      Damage: 0,
+      display_name: "Trades",
+      display_name_print: "Trades",
+      rarity: "click",
+      type: "to view!",
+      equipmentType: "none",
+      stats: {},
+      item_index: 789789789,
+      itemId: "7571ce99-ef56-4f01-8522-292de1c77a86",
+    },
+  ];
 }
 
 export async function getHeartOfTheMountain(userProfile) {
