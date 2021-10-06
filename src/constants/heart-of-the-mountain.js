@@ -160,6 +160,24 @@ class HotM {
 
     return "locked";
   }
+
+  get itemData() {
+    const data = {
+      locked: "160:14",
+      next: "160:4",
+      unlocked: "160:5",
+    };
+
+    return {
+      id: data[this.status].split(":")[0],
+      Damage: data[this.status].split(":")[1],
+      glowing: false,
+    };
+  }
+
+  get position7x9() {
+    return 9 * (hotm.tiers - this.tier) + 1;
+  }
 }
 
 class Node {
@@ -171,6 +189,36 @@ class Node {
     this.hotmTier = data.hotmLevelData.level;
     this.potmLevel = data.nodes.special_0;
     this.selectedPickaxeAbility = data.selectedPickaxeAbility;
+  }
+
+  get position7x9() {
+    return this.position + 1 + (Math.ceil(this.position / hotm.tiers) - 1) * 2;
+  }
+
+  get itemData() {
+    const data = {
+      normal: {
+        locked: "263:0",
+        unlocked: "388:0",
+        maxed: "264:0",
+      },
+      pickaxe_ability: {
+        locked: "173:0",
+        unlocked: "133:0",
+        maxed: "133:0",
+      },
+      special: {
+        locked: "7:0",
+        unlocked: "152:0",
+        maxed: "152:0",
+      },
+    };
+
+    return {
+      id: data[this.nodeType][this.status].split(":")[0],
+      Damage: data[this.nodeType][this.status].split(":")[1],
+      glowing: this.selectedPickaxeAbility === this.id,
+    };
   }
 
   get lore() {
@@ -209,7 +257,7 @@ class Node {
     }
 
     // Maxed perk
-    if (this.maxed && this.type !== "pickaxe_ability") {
+    if (this.maxed && this.nodeType !== "pickaxe_ability") {
       output.push("", "§aUNLOCKED");
     }
 
@@ -237,12 +285,12 @@ class Node {
     }
 
     // Status
-    if (this.level > 0 && this.type !== "pickaxe_ability") {
+    if (this.level > 0 && this.nodeType !== "pickaxe_ability") {
       output.push("", this.enabled ? "§aENABLED" : "§cDISABLED");
     }
 
     // Selected Pickaxe Ability
-    if (this.level > 0 && this.type === "pickaxe_ability") {
+    if (this.level > 0 && this.nodeType === "pickaxe_ability") {
       if (this.selectedPickaxeAbility === this.id) {
         output.push("", "§aSELECTED");
       } else {
@@ -275,8 +323,20 @@ class Node {
   }
 
   get displayName() {
-    const nameColor = this.level === 0 ? "c" : this.level === this.max_level ? "a" : "e";
+    const nameColor = this.status === "maxed" ? "a" : this.status === "unlocked" ? "e" : "c";
     return `§${nameColor}§l${this.name}`;
+  }
+
+  get status() {
+    if (this.level === this.max_level) {
+      return "maxed";
+    }
+
+    if (this.level === 0) {
+      return "locked";
+    }
+
+    return "unlocked";
   }
 
   get maxed() {
@@ -367,7 +427,7 @@ class VeinSeeker extends Node {
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["lonesome_miner"];
-    this.type = "pickaxe_ability";
+    this.nodeType = "pickaxe_ability";
   }
 
   get upgradeCost() {
@@ -535,7 +595,7 @@ class ManiacMiner extends Node {
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["great_explorer"];
-    this.type = "pickaxe_ability";
+    this.nodeType = "pickaxe_ability";
   }
 
   get upgradeCost() {
@@ -589,6 +649,7 @@ class PeakOfTheMountain extends Node {
     this.max_level = 5;
     this.upgrade_type = "mithril_powder";
     this.requires = ["efficient_miner"];
+    this.nodeType = "special";
   }
 
   get upgradeCost() {
@@ -885,7 +946,7 @@ class MiningSpeedBoost extends Node {
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["titanium_insanium", "random_event"];
-    this.type = "pickaxe_ability";
+    this.nodeType = "pickaxe_ability";
   }
 
   get upgradeCost() {
@@ -983,7 +1044,7 @@ class Pickobulus extends Node {
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["forge_time", "fallen_star_bonus"];
-    this.type = "pickaxe_ability";
+    this.nodeType = "pickaxe_ability";
   }
 
   get upgradeCost() {
@@ -1030,10 +1091,6 @@ class MiningSpeed extends Node {
 export const hotm = {
   hotm: HotM,
   tiers: Object.keys(hotm_rewards.tiers).length,
-  tree_size: {
-    columns: 7,
-    rows: 7,
-  },
   names: {
     mining_speed_2: "Mining Speed II",
     powder_buff: "Powder Buff",

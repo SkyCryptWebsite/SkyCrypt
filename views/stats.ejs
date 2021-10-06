@@ -919,65 +919,6 @@ const getRarityUpgradeClass = item => {
       </div>
     <% } %>
 
-
-    <div class="hotm">
-      <div class="hotm-tiers">
-      <%
-        calculated.mining.hotm.tiers.reverse().forEach(tier => {
-          %>
-
-          <div
-            class="hotm-tier"
-            data-status="<%= tier.status %>"
-            <% if (tier.lore) { %>
-              data-tippy-content="<%- helper.renderLore('§f'+tier.lore.split('\n').join('<br>')) %>"
-            <% } %>
-          >
-            <%= tier.name ?? '' %>
-          </div>
-
-          <%
-        })
-      %>
-      </div>
-      <div class="hotm-tree">
-      <%
-        calculated.mining.hotm.tree.forEach(node => {
-          %>
-
-          <div
-            class="hotm-node"
-            data-empty-slot="<%= !node.name %>"
-            data-unlocked="<%= node.level > 0 %>"
-            data-enabled="<%= node.enabled %>"
-            <% if (node.lore) { %>
-              data-tippy-content="<%- helper.renderLore('§f'+node.lore.split('\n').join('<br>')) %>"
-            <% } %>
-          >
-            <%= node.name ?? '' %>
-          </div>
-
-          <%
-        })
-      %>
-      </div>
-      <div class="pieces">
-        <% for(const item of items.hotm) { %>
-          <div
-            tabindex="0"
-            data-item-id="<%= item.itemId %>"
-            data-item-index="<%= item.item_index %>"
-            class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>"
-          >
-            <% if(rarityOrder.indexOf(item.rarity) < 3) { %>
-              <div class="piece-shine"></div>
-            <% } %>
-            <% itemIcon(item, ['piece-icon']); %>
-          </div>
-        <% } %>
-      </div>
-    </div>
-
     <div class="stat-container stat-armor">
       <a class="stat-anchor" id="Armor"></a>
       <h2 class="stat-header">Armor</h2>
@@ -1357,10 +1298,6 @@ const getRarityUpgradeClass = item => {
           </div>
 
           <% const mining = calculated.mining; %>
-          <p class="stat-raw-values">
-            <% max = mining.commissions.milestone == 5 ? 'golden-text' : '' %>
-            <span class="stat-name <%= max %>">Commissions Milestone: </span><span class="stat-value <%= max %>"><%= mining.commissions.milestone.toLocaleString() %></span><br>
-          </p>
 
           <% if(items.pickaxes.length > 0){ %>
             <p class="stat-sub-header">Mining Pickaxes</p>
@@ -1382,6 +1319,42 @@ const getRarityUpgradeClass = item => {
                     <% itemIcon(item, ['piece-icon']); %>
                   </div>
               <% }); %>
+            </div>
+          <% } %>
+
+          <p class="stat-sub-header">Dwarven Mines & Crystal Hollows</p>
+          <% max = mining.commissions.milestone == 5 ? 'golden-text' : '' %>
+          <p class="stat-raw-values">
+            <span class="stat-name <%= max %>">Commissions Milestone:</span>
+            <span class="stat-value <%= max %>"><%= mining.commissions.milestone.toLocaleString() %></span>
+            <br>
+            <span class="stat-name">Mithril Powder:</span>
+            <span class="stat-value" data-tippy-content="
+              <span class='stat-name'>Total:</span> <span class='stat-value'>2,000,000</span><br>
+              <span class='stat-name'>Used:</span> <span class='stat-value'>1,500,000</span><br>
+              <span class='stat-name'>Available:</span> <span class='stat-value'>500,000</span>
+            ">2,000,000</span>
+            <br>
+            <span class="stat-name">Gemstone Powder:</span>
+            <span class="stat-value" data-tippy-content="
+              <span class='stat-name'>Total:</span> <span class='stat-value'>2,000,000</span><br>
+              <span class='stat-name'>Used:</span> <span class='stat-value'>1,500,000</span><br>
+              <span class='stat-name'>Available:</span> <span class='stat-value'>500,000</span>
+            ">2,000,000</span>
+            <br>
+          </p>
+
+          <% if (items.hotm.length > 0) { %>
+            <p class="stat-sub-header">Heart of the Mountain</p>
+            <p class="stat-raw-values">
+              <span class="stat-name">Tier:</span> <span class="stat-value">7</span><br>
+              <span class="stat-name">Active Pickaxe Ability:</span> <span class="stat-value">Maniac Miner</span><br>
+              <span class="stat-name">Tokens of the mountain used:</span> <span class="stat-value">15/15</span><br>
+              <span class="stat-name">Maxed perks:</span> <span class="stat-value">8/15</span><br>
+            </p>
+
+            <div id="inventory_container">
+              <inventory-view inventory-type="hotm"></inventory-view>
             </div>
           <% } %>
         </div>

@@ -915,26 +915,50 @@ export function floor(num, decimals = 0) {
 }
 
 export function generateItem(data) {
+  if (!data) {
+    return {
+      itemId: v4("itemid"),
+      item_index: Date.now(),
+    };
+  }
+
   const default_data = {
-    Count: 1,
+    id: 389,
     Damage: 0,
-    display_name: "Generated Item",
-    display_name_print: "Generated Item",
+    Count: 1,
+    display_name: "",
+    display_name_print: "",
+    rarity: null,
     equipmentType: "none",
-    id: 145,
-    itemid: v4("itemid"),
-    item_index: Date.now(),
-    rarity: "common",
+    type: "misc",
     tag: {
       display: {
-        Name: "§fGenerated Item",
-        Lore: ["§7Line 1", "§7Line 2"],
+        Name: "",
+        Lore: [""],
       },
     },
-    type: "misc",
+    itemId: v4("itemid"),
+    item_index: Date.now(),
   };
 
-  const item = Object.assign(default_data, data);
+  // Making sure rarity is lowercase
+  if (data.rarity) {
+    data.rarity = data.rarity.toLowerCase();
+  }
 
-  return item;
+  // Setting display_name_print = display_name if not specified
+  if (data.display_name && !data.display_name_print) {
+    data.display_name_print = data.display_name;
+  }
+
+  // Setting tag.display.Name using display_name if not specified
+  if (data.display_name && !data.tag.display.Name) {
+    data.tag = data.tag ?? {};
+    data.tag.display = data.tag.display ?? {};
+    const rarityColor = data.rarity ? `§${constants.rarityColors[data.rarity ?? "common"]}` : "";
+    data.tag.display.Name = `${rarityColor}${data.display_name}`;
+  }
+
+  // Creating final item
+  return Object.assign(default_data, data);
 }

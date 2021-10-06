@@ -181,6 +181,10 @@ export function isEnchanted(item: Item): boolean {
     return true;
   }
 
+  if (item.glowing) {
+    return true;
+  }
+
   return false;
 }
 

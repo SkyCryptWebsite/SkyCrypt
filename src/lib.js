@@ -1204,7 +1204,7 @@ export const getItems = async (
     }
   }
 
-  let hotm = "mining_core" in profile ? await getHeartOfTheMountainItems(profile) : [];
+  let hotm = "mining_core" in profile ? await getHotmItems(profile, packs) : [];
 
   output.armor = armor.filter((a) => Object.keys(a).length != 0);
   output.wardrobe = wardrobe;
@@ -2642,7 +2642,7 @@ export const getStats = async (
     }
   }
 
-  mining.hotm = await getHeartOfTheMountain(userProfile);
+  mining.hotm = await getHotmData(userProfile);
 
   output.mining = mining;
 
@@ -3496,84 +3496,13 @@ export async function getDungeons(userProfile, hypixelProfile) {
   return output;
 }
 
-export async function getHeartOfTheMountainItems(userProfile) {
-  return [
-    helper.generateItem(),
-    {
-      id: 388,
-      Count: 1,
-      tag: {
-        display: {
-          Lore: [
-            "§7View your available trades.",
-            "§7These trades are always",
-            "§7available and accessible through",
-            "§7the SkyBlock Menu.",
-            "",
-            "§7Trades Unlocked: §a100%",
-            "§2-------------------- §e26§6/§e26",
-            "",
-            "§eClick to view!",
-          ],
-          Name: "§aTrades",
-        },
-      },
-      Damage: 0,
-      display_name: "Trades",
-      display_name_print: "Trades",
-      rarity: "click",
-      type: "to view!",
-      equipmentType: "none",
-      stats: {},
-      item_index: 789789789,
-      itemId: "7571ce99-ef56-4f01-8522-292de1c77a86",
-    },
-  ];
-}
+export async function getHotmItems(userProfile, packs) {
+  const output = [];
 
-export async function getHeartOfTheMountain(userProfile) {
-  const output = {
-    mining_core: userProfile.mining_core, // DEV
-    tiers: [],
-    tree: [],
-    test: [
-      helper.generateItem(),
-      {
-        id: 388,
-        Count: 1,
-        tag: {
-          display: {
-            Lore: [
-              "§7View your available trades.",
-              "§7These trades are always",
-              "§7available and accessible through",
-              "§7the SkyBlock Menu.",
-              "",
-              "§7Trades Unlocked: §a100%",
-              "§2-------------------- §e26§6/§e26",
-              "",
-              "§eClick to view!",
-            ],
-            Name: "§aTrades",
-          },
-        },
-        Damage: 0,
-        display_name: "Trades",
-        display_name_print: "Trades",
-        rarity: "click",
-        type: "to view!",
-        equipmentType: "none",
-        stats: {},
-        item_index: 789789789,
-        itemId: "7571ce99-ef56-4f01-8522-292de1c77a86",
-      },
-    ],
-  };
-
+  const selectedPickaxeAbility = userProfile.mining_core?.selected_pickaxe_ability;
   const hotmLevelData = userProfile.mining_core?.experience
     ? getLevelByXp(userProfile.mining_core.experience, { type: "hotm" })
     : 0;
-  const selectedPickaxeAbility = userProfile.mining_core?.selected_pickaxe_ability;
   const nodes = userProfile.mining_core?.nodes
     ? Object.fromEntries(
         Object.entries(userProfile.mining_core.nodes).filter(([key, value]) => !key.startsWith("toggle_"))
@@ -3585,16 +3514,16 @@ export async function getHeartOfTheMountain(userProfile) {
       )
     : {};
 
-  output.hotmLevelData = hotmLevelData; // DEV
-  output.nodes = nodes; // DEV
-  output.toggles = toggles; // DEV
+  // Check for missing node classes
+  for (const nodeId in nodes) {
+    if (constants.hotm.nodes[nodeId] == undefined) {
+      throw `Missing Heart of the Mountain node: ${nodeId}`;
+    }
+  }
 
-  // Filling the tree with empty items
-  for (let index = 0; index < constants.hotm.tree_size.rows * constants.hotm.tree_size.columns; index++) {
-    output.tree.push({
-      item_index: index + 10000, // TEMP: This should be something else, maybe a string? "hotm123"
-      itemId: v4("itemId"),
-    });
+  // Filling the space with empty items
+  for (let index = 0; index < 7 * 9; index++) {
+    output.push(helper.generateItem());
   }
 
   // Processing nodes
@@ -3609,34 +3538,65 @@ export async function getHeartOfTheMountain(userProfile) {
       selectedPickaxeAbility,
     });
 
-    output.tree[node.position - 1] = Object.assign(output.tree[node.position - 1], {
-      node: nodeId,
-      enabled,
-      level,
-      name: node.name,
-      lore: node.lore.join("\n"),
-      ref: node, // TEMP: for development
+    output[node.position7x9 - 1] = helper.generateItem({
+      display_name: node.name,
+      id: node.itemData.id,
+      Damage: node.itemData.Damage,
+      glowing: node.itemData.glowing,
+      tag: {
+        display: {
+          Name: node.displayName,
+          Lore: node.lore,
+        },
+      },
+      position: node.position7x9,
     });
-  }
-
-  // TEMP: check for missing node classes
-  for (const nodeId in nodes) {
-    if (constants.hotm.nodes[nodeId] == undefined) {
-      throw `Missing Heart of the Mountain node: ${nodeId}`;
-    }
   }
 
   // Processing HotM tiers
   for (let tier = 1; tier <= constants.hotm.tiers; tier++) {
     const hotm = new constants.hotm.hotm(tier, hotmLevelData);
 
-    output.tiers.push({
-      name: `Tier ${tier}`,
-      lore: hotm.lore.join("\n"),
-      status: hotm.status,
-      ref: hotm, // DEV
+    output[hotm.position7x9 - 1] = helper.generateItem({
+      display_name: `Tier ${tier}`,
+      id: hotm.itemData.id,
+      Damage: hotm.itemData.Damage,
+      glowing: hotm.itemData.glowing,
+      tag: {
+        display: {
+          Name: hotm.displayName,
+          Lore: hotm.lore,
+        },
+      },
+      position: hotm.position7x9,
     });
   }
+
+  output.forEach(async (item) => {
+    const customTexture = await getTexture(item, false, packs);
+
+    if (customTexture) {
+      item.animated = customTexture.animated;
+      item.texture_path = "/" + customTexture.path;
+      item.texture_pack = customTexture.pack.config;
+      item.texture_pack.base_path =
+        "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.basePath);
+    }
+  });
+
+  return output;
+}
+
+export async function getHotmData(userProfile) {
+  const output = {
+    mining_core: userProfile.mining_core, // DEV
+  };
+
+  const hotmLevelData = userProfile.mining_core?.experience
+    ? getLevelByXp(userProfile.mining_core.experience, { type: "hotm" })
+    : 0;
+
+  output.hotmLevelData = hotmLevelData; // DEV
 
   return output;
 }
