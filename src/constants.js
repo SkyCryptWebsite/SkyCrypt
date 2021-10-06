@@ -2,7 +2,7 @@ export * from "./constants/armor.js";
 export * from "./constants/bonuses.js";
 export * from "./constants/collections.js";
 export * from "./constants/dungeons.js";
-export * from "./constants/heart-of-the-mountain.js";
+export * from "./constants/hotm.js";
 export * from "./constants/gemstones.js";
 export * from "./constants/leveling.js";
 export * from "./constants/minions.js";
