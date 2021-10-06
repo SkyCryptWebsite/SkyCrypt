@@ -951,7 +951,7 @@ input[type="search"]::-webkit-search-cancel-button {
     left: 0;
     width: 21px;
     height: 100%;
-    background-size: auto 100%;
+    background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;
 
@@ -981,7 +981,7 @@ input[type="search"]::-webkit-search-cancel-button {
   }
 
   &.link-discord::before {
-    background-image: url(/resources/img/icons/discord.png);
+    background-image: url(/resources/img/icons/discord.svg?v3);
   }
 }
 
@@ -1572,7 +1572,7 @@ a.additional-player-stat:hover {
 }
 
 .additional-player-stat.external-discord::after {
-  background-image: url(../img/icons/discord.png);
+  background-image: url(../img/icons/discord.svg?v3);
 }
 
 .additional-player-stat.external-hypixel::after {
@@ -2817,6 +2817,10 @@ inventory-view {
   top: 0;
   left: 0;
   bottom: 0;
+
+  .light &.monochrome {
+    filter: invert(1);
+  }
 }
 
 .icon-google-sheets {

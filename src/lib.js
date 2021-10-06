@@ -399,7 +399,7 @@ const potionColors = {
 };
 
 // Process items returned by API
-async function _getItems(base64, customTextures = false, packs, cacheOnly = false) {
+async function processItems(base64, customTextures = false, packs, cacheOnly = false) {
   // API stores data as base64 encoded gzipped Minecraft NBT data
   let buf = Buffer.from(base64, "base64");
 
@@ -1125,36 +1125,40 @@ export const getItems = async (
 
   // Process inventories returned by API
   let armor =
-    "inv_armor" in profile ? await _getItems(profile.inv_armor.data, customTextures, packs, options.cacheOnly) : [];
+    "inv_armor" in profile ? await processItems(profile.inv_armor.data, customTextures, packs, options.cacheOnly) : [];
   let inventory =
     "inv_contents" in profile
-      ? await _getItems(profile.inv_contents.data, customTextures, packs, options.cacheOnly)
+      ? await processItems(profile.inv_contents.data, customTextures, packs, options.cacheOnly)
       : [];
   let wardrobe_inventory =
     "wardrobe_contents" in profile
-      ? await _getItems(profile.wardrobe_contents.data, customTextures, packs, options.cacheOnly)
+      ? await processItems(profile.wardrobe_contents.data, customTextures, packs, options.cacheOnly)
       : [];
   let enderchest =
     "ender_chest_contents" in profile
-      ? await _getItems(profile.ender_chest_contents.data, customTextures, packs, options.cacheOnly)
+      ? await processItems(profile.ender_chest_contents.data, customTextures, packs, options.cacheOnly)
       : [];
   let talisman_bag =
     "talisman_bag" in profile
-      ? await _getItems(profile.talisman_bag.data, customTextures, packs, options.cacheOnly)
+      ? await processItems(profile.talisman_bag.data, customTextures, packs, options.cacheOnly)
       : [];
   let fishing_bag =
-    "fishing_bag" in profile ? await _getItems(profile.fishing_bag.data, customTextures, packs, options.cacheOnly) : [];
+    "fishing_bag" in profile
+      ? await processItems(profile.fishing_bag.data, customTextures, packs, options.cacheOnly)
+      : [];
   let quiver =
-    "quiver" in profile ? await _getItems(profile.quiver.data, customTextures, packs, options.cacheOnly) : [];
+    "quiver" in profile ? await processItems(profile.quiver.data, customTextures, packs, options.cacheOnly) : [];
   let potion_bag =
-    "potion_bag" in profile ? await _getItems(profile.potion_bag.data, customTextures, packs, options.cacheOnly) : [];
+    "potion_bag" in profile
+      ? await processItems(profile.potion_bag.data, customTextures, packs, options.cacheOnly)
+      : [];
   let candy_bag =
     "candy_inventory_contents" in profile
-      ? await _getItems(profile.candy_inventory_contents.data, customTextures, packs, options.cacheOnly)
+      ? await processItems(profile.candy_inventory_contents.data, customTextures, packs, options.cacheOnly)
       : [];
   let personal_vault =
     "personal_vault_contents" in profile
-      ? await _getItems(profile.personal_vault_contents.data, customTextures, packs, options.cacheOnly)
+      ? await processItems(profile.personal_vault_contents.data, customTextures, packs, options.cacheOnly)
       : [];
 
   let storage = [];
@@ -1164,8 +1168,13 @@ export const getItems = async (
       storage.push({});
 
       if (profile.backpack_contents[slot] && profile.backpack_icons[slot]) {
-        const icon = await _getItems(profile.backpack_icons[slot].data, customTextures, packs, options.cacheOnly);
-        const items = await _getItems(profile.backpack_contents[slot].data, customTextures, packs, options.cacheOnly);
+        const icon = await processItems(profile.backpack_icons[slot].data, customTextures, packs, options.cacheOnly);
+        const items = await processItems(
+          profile.backpack_contents[slot].data,
+          customTextures,
+          packs,
+          options.cacheOnly
+        );
 
         for (const [index, item] of items.entries()) {
           item.isInactive = true;
