@@ -645,4 +645,9 @@ export const talismans = {
     rarity: "rare",
     texture: "/head/2b15c8645bbabc42352350b1c9d84af71966c4c56a86d03acd079ed57f3ead3f",
   },
+  NETHER_ARTIFACT: {
+    name: "Nether Artifact",
+    rarity: "epic",
+    texture: "/head/d83571ff589f1a59bb02b80800fc736116e27c3dcf9efebede8cf1fdde",
+  },
 };
