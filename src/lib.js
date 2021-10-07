@@ -2639,7 +2639,7 @@ export const getStats = async (
     }
   }
 
-  mining.forge = await getForge(userProfile, hypixelProfile);
+  mining.forge = await getForge(userProfile);
 
   output.mining = mining;
 
@@ -3493,7 +3493,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
   return output;
 }
 
-export async function getForge(userProfile, hypixelProfile) {
+export async function getForge(userProfile) {
   let output = {};
 
   if (userProfile?.forge?.forge_processes?.forge_1) {
@@ -3524,8 +3524,6 @@ export async function getForge(userProfile, hypixelProfile) {
       processes.push(forgeItem);
     }
     output.processes = processes;
-
-    return output;
   }
 
   return output;
