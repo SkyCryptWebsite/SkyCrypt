@@ -962,3 +962,17 @@ export function generateItem(data) {
   // Creating final item
   return Object.assign(default_data, data);
 }
+
+export const calcHotmTokens = (hotmTier, potmTier) => {
+  let tokens = 0;
+
+  for (let tier = 1; tier <= hotmTier; tier++) {
+    tokens += constants.hotm.rewards.hotm[tier]?.token_of_the_mountain || 0;
+  }
+
+  for (let tier = 1; tier <= potmTier; tier++) {
+    tokens += constants.hotm.rewards.potm[tier]?.token_of_the_mountain || 0;
+  }
+
+  return tokens;
+};

@@ -2651,7 +2651,7 @@ export const getStats = async (
     }
   }
 
-  mining.hotm = await getHotmData(userProfile);
+  mining.core = await getMiningCoreData(userProfile);
 
   output.mining = mining;
 
@@ -3596,16 +3596,75 @@ export async function getHotmItems(userProfile, packs) {
   return output;
 }
 
-export async function getHotmData(userProfile) {
-  const output = {
-    mining_core: userProfile.mining_core, // DEV
+export async function getMiningCoreData(userProfile) {
+  const output = {};
+  const data = userProfile.mining_core;
+
+  if (!data) {
+    return null;
+  }
+
+  output.tier = getLevelByXp(data.experience, { type: "hotm" });
+
+  const totalTokens = helper.calcHotmTokens(output.tier.level, data.nodes.special_0);
+  output.tokens = {
+    total: totalTokens,
+    spent: data.tokens_spent || 0,
+    available: totalTokens - (data.tokens_spent || 0),
   };
 
-  const hotmLevelData = userProfile.mining_core?.experience
-    ? getLevelByXp(userProfile.mining_core.experience, { type: "hotm" })
-    : 0;
+  output.selected_pickaxe_ability = data.selected_pickaxe_ability
+    ? constants.hotm.names[data.selected_pickaxe_ability]
+    : null;
 
-  output.hotmLevelData = hotmLevelData; // DEV
+  output.powder = {
+    mithril: {
+      total: (data.powder_mithril || 0) + (data.powder_spent_mithril || 0),
+      spent: data.powder_spent_mithril || 0,
+      available: data.powder_mithril || 0,
+    },
+    gemstone: {
+      total: (data.powder_gemstone || 0) + (data.powder_spent_gemstone || 0),
+      spent: data.powder_spent_gemstone || 0,
+      available: data.powder_gemstone || 0,
+    },
+  };
+
+  const crystals_completed = data.crystals
+    ? Object.values(data.crystals)
+        .filter((x) => x.total_placed)
+        .map((x) => x.total_placed)
+    : [];
+  output.crystal_nucleus = {
+    times_completed: crystals_completed.length > 0 ? Math.min(...crystals_completed) : 0,
+    crystals: data.crystals || {},
+    goblin: data.biomes?.goblin ?? null,
+    precursor: data.biomes?.precursor ?? null,
+  };
+
+  output.daily_ores = {
+    mined: data.daily_ores_mined,
+    day: data.daily_ores_mined_day,
+    ores: {
+      mithril: {
+        day: data.daily_ores_mined_day_mithril_ore,
+        count: data.daily_ores_mined_mithril_ore,
+      },
+      gemstone: {
+        day: data.daily_ores_mined_day_gemstone,
+        count: data.daily_ores_mined_gemstone,
+      },
+    },
+  };
+
+  output.hotm_last_reset = data.last_reset || 0;
+
+  output.crystal_hollows_last_access = data.greater_mines_last_access || 0;
+
+  output.daily_effect = {
+    effect: data.current_daily_effect || null,
+    last_changed: data.current_daily_effect_last_changed || null,
+  };
 
   return output;
 }

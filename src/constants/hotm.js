@@ -20,34 +20,8 @@ const upgrade_types = {
   },
 };
 
-const hotm_rewards = {
-  rewards: {
-    token_of_the_mountain: {
-      formatted: "§5Token of the Mountain",
-      qtyColor: "5",
-    },
-    access_to_forge: {
-      formatted: "§eAccess to the Forge",
-      qtyColor: "e",
-    },
-    new_forgeable_items: {
-      formatted: "§eNew Forgeable Items",
-      qtyColor: "e",
-    },
-    forge_slot: {
-      formatted: "§aForge Slot",
-      qtyColor: "a",
-    },
-    access_crystal_hollows: {
-      formatted: "§dAccess to the §5Crystal Hollows",
-      qtyColor: "d",
-    },
-    emissary_braum_crystal_hollows: {
-      formatted: "§eEmissary Braum §f- §bCrystal Hollows",
-      qtyColor: "e",
-    },
-  },
-  tiers: {
+const rewards = {
+  hotm: {
     1: {
       token_of_the_mountain: 1,
     },
@@ -79,6 +53,62 @@ const hotm_rewards = {
     7: {
       token_of_the_mountain: 2,
       new_forgeable_items: 0,
+    },
+  },
+  potm: {
+    1: {
+      pickaxe_ability_level: 1,
+      token_of_the_mountain: 1,
+    },
+    2: {
+      forge_slot: 1,
+    },
+    3: {
+      commission_slot: 1,
+    },
+    4: {
+      mithril_powder_when_mining_mithril: 1,
+    },
+    5: {
+      token_of_the_mountain: 1,
+    },
+  },
+  rewards: {
+    token_of_the_mountain: {
+      formatted: "§5Token of the Mountain",
+      qtyColor: "5",
+    },
+    access_to_forge: {
+      formatted: "§eAccess to the Forge",
+      qtyColor: "e",
+    },
+    new_forgeable_items: {
+      formatted: "§eNew Forgeable Items",
+      qtyColor: "e",
+    },
+    forge_slot: {
+      formatted: "§aForge Slot",
+      qtyColor: "a",
+    },
+    access_crystal_hollows: {
+      formatted: "§dAccess to the §5Crystal Hollows",
+      qtyColor: "d",
+    },
+    emissary_braum_crystal_hollows: {
+      formatted: "§eEmissary Braum §f- §bCrystal Hollows",
+      qtyColor: "e",
+    },
+    pickaxe_ability_level: {
+      formatted: "§cPickaxe Ability Level",
+      qtyColor: "c",
+    },
+    commission_slot: {
+      formatted: "§aCommission Slot",
+      qtyColor: "a",
+    },
+    mithril_powder_when_mining_mithril: {
+      formatted: "§2Mithril Powder §7when mining §fMithril",
+      qtyColor: "2",
     },
   },
 };
@@ -131,9 +161,9 @@ class HotM {
 
     // rewards
     output.push("§7Rewards");
-    for (const [reward, qty] of Object.entries(hotm_rewards.tiers[this.tier])) {
-      const quantity = qty > 0 ? `§${hotm_rewards.rewards[reward].qtyColor}${qty} ` : "";
-      const name = hotm_rewards.rewards[reward].formatted;
+    for (const [reward, qty] of Object.entries(rewards.hotm[this.tier])) {
+      const quantity = qty > 0 ? `§${rewards.rewards[reward].qtyColor}${qty} ` : "";
+      const name = rewards.rewards[reward].formatted;
       output.push(`§8+ ${quantity}${name}`);
     }
     output.push("");
@@ -285,7 +315,7 @@ class Node {
     }
 
     // Status
-    if (this.level > 0 && this.nodeType !== "pickaxe_ability") {
+    if (this.level > 0 && this.nodeType === "normal") {
       output.push("", this.enabled ? "§aENABLED" : "§cDISABLED");
     }
 
@@ -660,20 +690,12 @@ class PeakOfTheMountain extends Node {
   perk(level) {
     const output = [];
 
-    if (level >= 1) {
-      output.push("§8+§c1 Pickaxe Ability Level", "§8+§51 Token of the Mountain");
-    }
-    if (level >= 2) {
-      output.push("§8+§a1 Forge Slot");
-    }
-    if (level >= 3) {
-      output.push("§8+§a1 Commission Slot");
-    }
-    if (level >= 4) {
-      output.push("§8+§21 Mithril Powder §7when mining §fMithril");
-    }
-    if (level >= 5) {
-      output.push("§8+§51 Token of the Mountain");
+    for (let tier = 1; tier <= level; tier++) {
+      for (const [reward, qty] of Object.entries(rewards.potm[tier])) {
+        const qtyColor = rewards.rewards[reward].qtyColor;
+        const formatted = rewards.rewards[reward].formatted;
+        output.push(`§8+ §${qtyColor}${qty} ${formatted}`);
+      }
     }
 
     return output;
@@ -1090,7 +1112,8 @@ class MiningSpeed extends Node {
 
 export const hotm = {
   hotm: HotM,
-  tiers: Object.keys(hotm_rewards.tiers).length,
+  tiers: Object.keys(rewards.hotm).length,
+  rewards: rewards,
   names: {
     mining_speed_2: "Mining Speed II",
     powder_buff: "Powder Buff",
@@ -1153,4 +1176,13 @@ export const hotm = {
     pickaxe_toss: Pickobulus,
     mining_speed: MiningSpeed,
   },
+};
+
+export const precursor_parts = {
+  ELECTRON_TRANSMITTER: "Electron Transmitter",
+  FTX_3070: "FTX 3070",
+  ROBOTRON_REFLECTOR: "Robotron Reflector",
+  SUPERLITE_MOTOR: "Superlite Motor",
+  CONTROL_SWITCH: "Control Switch",
+  SYNTHETIC_HEART: "Synthetic Heart",
 };
