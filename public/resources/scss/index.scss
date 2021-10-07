@@ -4208,3 +4208,13 @@ body {
 .stat-error {
   color: var(--§4);
 }
+
+.forge-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.forge-slot {
+  margin: 0;
+}
