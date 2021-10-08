@@ -32,7 +32,8 @@ Before contributing to SkyCrypt, make sure you install the development environme
 3. On minecraft, log into `mc.hypixel.net`. Run the command `/api`, and copy the result.
 4. Open `credentials.json` and input your Hypixel API key into the `hypixel_api_key` field.
 5. In the `dbUrl` field, input your MongoDB url. In the `dbName` field, input the name of the database you would like to use.
-6. Making sure your Mongo and Redis instances are running, run `npm start` in the project directory. You should now be able to access the site at http://localhost:32464/
+6. (optional) If you are not using the default Redis port or you are using Redis remotely, you can configure the Redis URL with the `redisUrl` field in `credentials.json`
+7. Making sure your Mongo and Redis instances are running, run `npm start` in the project directory. You should now be able to access the site at http://localhost:32464/
 
 ### VS-Code
 
@@ -44,6 +45,7 @@ if your not sure what code editor to use VS-Code is a great option. Here are som
 - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 - [EJS language support](https://marketplace.visualstudio.com/items?itemName=digitalbrainstem.javascript-ejs-support)
 - [Comment tagged templates](https://marketplace.visualstudio.com/items?itemName=bierner.comment-tagged-templates)
+- [lit-plugin](https://marketplace.visualstudio.com/items?itemName=runem.lit-plugin)
 
 #### Recommended Settings
 

@@ -1,4 +1,13 @@
-limit_req_zone $binary_remote_addr zone=limit_api:150m rate=150r/m;
+proxy_cache_path /data/nginx/cache keys_zone=cache_main:2000m max_size=16g inactive=1h;
+
+limit_req_zone $binary_remote_addr zone=limit_api:500m rate=150r/m;
+limit_req_zone $binary_remote_addr zone=limit_stats:250m rate=20r/m;
+
+limit_conn_zone $binary_remote_addr zone=limit_main:250m;
+
+upstream sky {
+    server 127.0.0.1:32464 weight=5;
+}
 
 server {
     listen 443 ssl;
@@ -6,24 +15,68 @@ server {
 
     server_name sky.shiiyu.moe;
 
+    gzip on;
+    gzip_vary on;
+
     ssl_certificate /etc/ssl/certs/cert.pem;
     ssl_certificate_key /etc/ssl/private/key.pem;
 
-    location /api {
+    location =/ {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header Host $host;
-        proxy_pass http://127.0.0.1:32464;
-        limit_req zone=limit_api burst=30 nodelay;
+        proxy_pass http://sky;
+
+        limit_conn limit_main 6;
     }
 
-    gzip on;
-    gzip_vary on;
+    location /api {
+       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+       proxy_set_header Host $host;
+       proxy_pass http://sky;
+
+       proxy_cache cache_main;
+       proxy_cache_valid 200 3m;
+
+       limit_req zone=limit_api burst=150 nodelay;
+    }
+
+    location /stats {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_pass http://sky;
+
+        proxy_cache cache_main;
+        proxy_cache_key $scheme$proxy_host$request_uri$cookie_pack;
+        proxy_cache_valid 200 30s;
+
+        limit_req zone=limit_stats burst=5;
+    }
+
+    location ~* ^\/(cape|head|item|leather|potion|resources|resourcepacks) {
+       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+       proxy_set_header Host $host;
+       proxy_pass http://sky;
+
+       proxy_cache cache_main;
+       proxy_cache_valid 200 360m;
+    }
 
     location / {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header Host $host;
-        proxy_pass http://127.0.0.1:32464/;
+        proxy_pass http://sky;
+
+        limit_conn limit_main 6;
     }
+
+    client_body_timeout 5s;
+    client_header_timeout 5s;
+    client_body_buffer_size 200k;
+    client_header_buffer_size 2k;
+    client_max_body_size 200k;
+
+    large_client_header_buffers 3 1k;
+
 }
 
 server {
@@ -33,13 +86,4 @@ server {
     server_name sky.shiiyu.moe;
 
     return 301 https://$host$request_uri;
-}
-
-server {
-    listen 80;
-    listen [::]:80;
-
-    server_name shiiyu.moe;
-
-    return 301 https://shiiyu.moe/$request_uri;
 }

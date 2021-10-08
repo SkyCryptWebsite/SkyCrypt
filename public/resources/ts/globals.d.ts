@@ -1,7 +1,6 @@
 declare const page: string;
 
 declare namespace extra {
-  const favoriteUUIDs: string[];
   const isFoolsDay: boolean;
   const cacheOnly: boolean;
   const packs: Pack[];
@@ -42,6 +41,17 @@ interface Theme {
   colors?: { [key: string]: string };
 }
 
+interface ProcessedTheme {
+  light: boolean;
+  styles: {
+    [key: string]: string;
+  };
+  logoURL: string;
+  enchantedGlint: string;
+}
+
+declare function applyProcessedTheme(processedTheme: ProcessedTheme): void;
+
 declare const items: { [key: string]: (ItemSlot | Item | Backpack)[] };
 
 type StatName =
@@ -62,6 +72,7 @@ type StatName =
   | "mining_fortune"
   | "mining_speed"
   | "pet_luck"
+  | "pristine"
   | "sea_creature_chance"
   | "speed"
   | "strength";

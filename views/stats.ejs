@@ -1,5 +1,5 @@
 <%
-const rarityOrder = ['special', 'supreme', 'mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
+const rarityOrder = ['special', 'supreme', 'divine', 'mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 const slayerOrder = ['zombie', 'spider', 'wolf', 'enderman'];
 const badgeOrder = ['gold', 'silver', 'bronze'];
 
@@ -8,36 +8,51 @@ const allItems = items.armor.concat(items.inventory, items.enderchest, items.tal
 const UNIQUE_ACCESSORIES = calculated.talismanCount;
 
 const statSuffix = {
-  health: '',
-  defense: '',
-  effective_health: '',
-  strength: '',
-  speed: '%',
+  ability_damage: '',
+  bonus_attack_speed: '%',
   crit_chance: '%',
   crit_damage: '%',
+  damage_increase: '',
+  damage: '',
+  defense: '',
+  effective_health: '',
+  farming_fortune: '',
+  ferocity: '',
+  foraging_fortune: '',
+  health: '',
   intelligence: '',
-  sea_creature_chance: '%',
   magic_find: '',
+  mining_fortune: '',
+  mining_speed: '',
   pet_luck: '',
-  bonus_attack_speed: '%'
+  pristine: '',
+  sea_creature_chance: '%',
+  speed: '%',
+  strength: '',
 };
 
 const statShort = {
-  health: 'HP',
-  defense: 'Def',
-  effective_health: 'EHP',
-  strength: 'Str',
-  speed: 'Spd',
+  ability_damage: 'AD',
+  bonus_attack_speed: 'Atk',
   crit_chance: 'CC',
   crit_damage: 'CD',
-  intelligence: 'Int',
-  sea_creature_chance: 'ScC',
-  magic_find: 'MF',
-  pet_luck: 'PL',
-  bonus_attack_speed: 'Atk',
+  damage_increase: 'DmgInc',
+  damage: 'Dmg',
+  defense: 'Def',
+  effective_health: 'EHP',
+  farming_fortune: 'FrmFrt',
   ferocity: 'Frc',
-  ability_damage: 'AD',
-  mining_speed: "MngSpd"
+  foraging_fortune: 'FrgFrt',
+  health: 'HP',
+  intelligence: 'Int',
+  magic_find: 'MF',
+  mining_fortune: 'MngFrt',
+  mining_speed: 'MngSpd',
+  pet_luck: 'PL',
+  pristine: 'Prs',
+  sea_creature_chance: 'ScC',
+  speed: 'Spd',
+  strength: 'Str',
 };
 
 function getPrettyName(statName, shorten = false) {
@@ -95,7 +110,7 @@ const slayerInfo = {
   enderman: {
     boss: 'Voidgloom Seraph',
     head: '/head/1b09a3752510e914b0bdc9096b392bb359f7a8e8a9566a02e7f66faff8d6f89e',
-  }
+  },
 };
 
 const seaCreatures = [
@@ -298,18 +313,15 @@ const isEnchanted = item => {
 const itemIcon = (item, classes) => { %>
   <div
     <% if(item.texture_path){ %> style='background-image: url("<%= item.texture_path %>")' <% } %>
-    class="<%= classes.join(" ") %> item-icon <% if(isEnchanted(item)){ %>is-enchanted <% } %> <% if(item.texture_path){ %>custom-icon<% } %> icon-<%= item.id %>_<%= item.Damage %>">
-  </div>
-<% };
-
-const inventorySlot = item => { %>
-  <div class="inventory-slot">
-    <% if(Object.keys(item).length > 2){ %>
-    <div class="rich-item inventory-item" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>">
-      <% itemIcon(item, ['piece-icon']); %>
-      <% if(item.Count != 1){ %><div class="item-count"><%= item.Count %></div><% } %>
-    </div>
-    <% } %>
+    class="
+      <%= classes.join(" ") %>
+      item-icon
+      <% if(isEnchanted(item)){ %>is-enchanted <% } %>
+      <% if(item.texture_path){ %>custom-icon<% } %>
+      <% if(item.Damage != 0){ %>icon-<%= item.id %>_0<% } %>
+      icon-<%= item.id %>_<%= item.Damage %>
+    "
+  >
   </div>
 <% };
 
@@ -541,7 +553,7 @@ const getRarityUpgradeClass = item => {
     <div class="item-name">
       <div></div><span></span><button class="close-lore" aria-label="Close"></button></div>
     <div class="item-lore"></div>
-    <div class="backpack-contents inventory-view"></div>
+    <inventory-view class="backpack-contents" preview></inventory-view>
   </div>
   <div id="skin_display">
     <div id="player_model"></div>
@@ -605,20 +617,7 @@ const getRarityUpgradeClass = item => {
         </ul>
       </span>
       <div id="additional_player_stats">
-        <% /*
-
-        - Hide Views for now due to abuse -
-
-        %>
-        <div class="additional-player-stat" data-tippy-content="
-        <span class='stat-name'>Views: </span><span class='stat-value'><%= calculated.views.total.toLocaleString() %></span>
-        <div class='tippy-explanation'>Amount of total unique people who have accessed this profile.</div>
-        <% if('rank' in calculated.views){ %><span class='stat-name'>Rank: </span><span class='stat-value'>#<%= calculated.views.rank.toLocaleString() %></span>
-        <div class='tippy-explanation'>Rank among the most viewed profiles. Updates once per hour.</div><% } %>
-        ">Views: <%= helper.formatNumber(calculated.views.total, true) %></div>
-
-        <% */ %>
-        <button class="additional-player-stat svg-icon favorite" data-username="<%= calculated.uuid %>" role="checkbox" aria-checked="<%= extra.favoriteUUIDs.includes(calculated.uuid) %>">
+        <button class="additional-player-stat svg-icon favorite" data-username="<%= calculated.uuid %>" role="checkbox">
           <svg viewBox="0 0 24 24">
             <title>star</title>
             <path class="solid" fill="white" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
@@ -667,105 +666,129 @@ const getRarityUpgradeClass = item => {
 
       <div id="skin_display_mobile"></div>
 
-      <div id="base_stats_container">
-        <%- stat_component({
-          name: 'health',
-          baseExplanation: "Increased by collecting Fairy Souls, leveling your Farming and Fishing skills and leveling up in Zombie or Wolf Slayer.",
-        }); %>
+      <div id="base_stats_wrapper">
+        <div id="base_stats_container">
+          <%- stat_component({
+            name: 'health',
+            baseExplanation: "Increased by collecting Fairy Souls, leveling your Farming and Fishing skills and leveling up in Zombie or Wolf Slayer.",
+          }); %>
 
-        <%- stat_component({
-          name: 'defense',
-          baseExplanation: "Increased by collecting Fairy Souls and leveling your Mining skill.",
-          extraStats: [
-            {
-              stat: 'Damage Reduction',
-              value: (stats.defense / (stats.defense + 100) * 100).toFixed(1),
-              percent: true
-            },
-            {
-              stat: 'Effective Health',
-              value: stats.effective_health,
-              explanation: 'Effective Health based on Health + Defense.<br>→ Formula: Health * (1 + Defense / 100)'
-            }
-          ]
-        }); %>
+          <%- stat_component({
+            name: 'defense',
+            baseExplanation: "Increased by collecting Fairy Souls and leveling your Mining skill.",
+            extraStats: [
+              {
+                stat: 'Damage Reduction',
+                value: (stats.defense / (stats.defense + 100) * 100).toFixed(1),
+                percent: true
+              },
+              {
+                stat: 'Effective Health',
+                value: stats.effective_health,
+                explanation: 'Effective Health based on Health + Defense.<br>→ Formula: Health * (1 + Defense / 100)'
+              }
+            ]
+          }); %>
 
-        <%- stat_component({
-          name: 'strength',
-          baseExplanation: "Increased by collecting Fairy Souls and leveling your Foraging skill."
-        }); %>
+          <%- stat_component({
+            name: 'strength',
+            baseExplanation: "Increased by collecting Fairy Souls and leveling your Foraging skill."
+          }); %>
 
-        <%- stat_component({
-          name: 'speed',
-          percent: true,
-          baseExplanation: "Increased by collecting Fairy Souls and leveling up in Wolf Slayer."
-        }); %>
+          <%- stat_component({
+            name: 'speed',
+            percent: true,
+            baseExplanation: "Increased by collecting Fairy Souls and leveling up in Wolf Slayer."
+          }); %>
 
-        <%- stat_component({
-          name: 'crit_chance',
-          percent: true,
-          baseExplanation: "Increased by leveling your Combat skill and leveling up in Spider Slayer."
-        }); %>
+          <%- stat_component({
+            name: 'crit_chance',
+            percent: true,
+            baseExplanation: "Increased by leveling your Combat skill and leveling up in Spider Slayer."
+          }); %>
 
-        <%- stat_component({
-          name: 'crit_damage',
-          percent: true,
-          baseExplanation: "Increased by leveling up in Spider or Wolf Slayer."
-        }); %>
+          <%- stat_component({
+            name: 'crit_damage',
+            percent: true,
+            baseExplanation: "Increased by leveling up in Spider or Wolf Slayer."
+          }); %>
 
-        <%- stat_component({
-          name: 'bonus_attack_speed',
-          percent: true,
-          baseExplanation: null
-        }); %>
+          <%- stat_component({
+            name: 'bonus_attack_speed',
+            percent: true,
+            baseExplanation: null
+          }); %>
 
-        <%- stat_component({
-          name: 'intelligence',
-          baseExplanation: "Increased by leveling your Enchanting and Alchemy skills and completing songs on Melody's Harp."
-        }); %>
+          <%- stat_component({
+            name: 'intelligence',
+            baseExplanation: "Increased by leveling your Enchanting and Alchemy skills and completing songs on Melody's Harp."
+          }); %>
 
-        <%- stat_component({
-          name: 'sea_creature_chance',
-          percent: true,
-          baseExplanation: null
-        }); %>
+          <%- stat_component({
+            name: 'sea_creature_chance',
+            percent: true,
+            baseExplanation: null
+          }); %>
 
-        <%- stat_component({
-          name: 'magic_find',
-          baseExplanation: "Increased by collecting unique pets with high rarities."
-        }); %>
+          <%- stat_component({
+            name: 'magic_find',
+            baseExplanation: "Increased by collecting unique pets with high rarities."
+          }); %>
 
-        <%- stat_component({
-          name: 'pet_luck',
-          baseExplanation: "Increased by leveling your Taming Skill."
-        }); %>
+          <%- stat_component({
+            name: 'pet_luck',
+            baseExplanation: "Increased by leveling your Taming Skill."
+          }); %>
 
-        <%- stat_component({
-          name: 'ferocity',
-          baseExplanation: null,
-          extraStats: [
-            {
-              stat: 'Base Extra Strikes',
-              value: (stats.ferocity / 100).toFixed(0),
-            },
-            {
-              stat: 'Chance for 1 more',
-              value: stats.ferocity % 100,
-              percent: true
-            }
-          ]
-        }); %>
+          <%- stat_component({
+            name: 'ferocity',
+            baseExplanation: null,
+            extraStats: [
+              {
+                stat: 'Base Extra Strikes',
+                value: (stats.ferocity / 100).toFixed(0),
+              },
+              {
+                stat: 'Chance for 1 more',
+                value: stats.ferocity % 100,
+                percent: true
+              }
+            ]
+          }); %>
 
-        <%- stat_component({
-          name: 'ability_damage',
-          percent: true,
-          baseExplanation: "Increased by leveling your Enchanting Skill."
-        }); %>
-        <!--<div data-stat="fairy_souls" class="basic-stat stat-fairy-souls">
-          <span data-tippy-content="
-            Collect Fairy Souls to gain Health, Defense, Strength and Speed.</div>
-          "><span class="stat-name">Fairy Souls </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span></span>
-        </div>-->
+          <%- stat_component({
+            name: 'ability_damage',
+            percent: true,
+            baseExplanation: "Increased by leveling your Enchanting Skill."
+          }); %>
+
+          <%- stat_component({
+              name: 'mining_speed',
+              baseExplanation: "Increase the speed of breaking mining blocks."
+          }); %>
+
+          <%- stat_component({
+              name: 'mining_fortune',
+              baseExplanation: "Mining Fortune is the chance to gain double drops from ores, with a chance for triple drops at values greater than 100."
+          }); %>
+
+          <%- stat_component({
+              name: 'farming_fortune',
+              baseExplanation: "Farming Fortune is the chance to gain double drops from crops, with a chance for triple drops at values greater than 100."
+          }); %>
+
+          <%- stat_component({
+              name: 'foraging_fortune',
+              baseExplanation: "Foraging Fortune is the chance to gain double drops from logs, with a chance for triple drops at values greater than 100."
+          }); %>
+
+          <%- stat_component({
+              name: 'pristine',
+              baseExplanation: "Pristine is the chance to increase the quality of a Gemstone when it's dropped."
+          }); %>
+
+        </div>
+        <button id="show_stats">Show Stats</button>
       </div>
 
       <div id="additional_stats_container">
@@ -793,13 +816,28 @@ const getRarityUpgradeClass = item => {
         </div>
         <div class="additional-stat">
           <span data-tippy-content="
-          <span class='stat-name'>Skill Weight: </span><span class='stat-value'><%= calculated.skillWeight >= 0 ? parseFloat(calculated.skillWeight.toFixed(2)).toLocaleString() : 'Error' %></span><br/>
-          <span class='stat-name'>Slayer Weight: </span><span class='stat-value'><%= calculated.slayerWeight >= 0 ? parseFloat(calculated.slayerWeight.toFixed(2)).toLocaleString() : 'Error'  %></span><br/>
-          <span class='stat-name'>Dungeon Weight: </span><span class='stat-value'><%= calculated.dungeonsWeight >= 0 ? parseFloat(calculated.dungeonsWeight.toFixed(2)).toLocaleString() : 'Error'  %></span><br/>
-          <br/>
-          <div class='tippy-explanation'>Weight calculations provided by Senither</div>
+            <span class='stat-name'>Skill Weight: </span>
+            <span class='stat-value'>
+              <%= calculated.skillWeight >= 0 ? parseFloat(calculated.skillWeight.toFixed(2)).toLocaleString() : 'Error' %>
+            </span><br/>
+            <span class='stat-name'>Slayer Weight: </span>
+            <span class='stat-value'>
+              <%= calculated.slayerWeight >= 0 ? parseFloat(calculated.slayerWeight.toFixed(2)).toLocaleString() : 'Error'  %>
+            </span><br/>
+            <span class='stat-name'>Dungeon Weight: </span>
+            <span class='stat-value'>
+              <%= calculated.dungeonsWeight >= 0 ? parseFloat(calculated.dungeonsWeight.toFixed(2)).toLocaleString() : 'Error'  %>
+            </span><br/>
+            <br/>
+            <div class='tippy-explanation'>Weight calculations provided by Senither</div>
           ">
-          <span class="stat-name">Weight: </span><span class="stat-value"><%= parseFloat(calculated.weight.toFixed(2)).toLocaleString() %></span></span>
+          <span class="stat-name">Senither Weight: </span>
+          <span class="stat-value">
+            <%= parseFloat(calculated.weight.toFixed(2)).toLocaleString() %>
+          </span>
+          <span class="stat-value stat-error">
+            <%= (!calculated.skillWeight || !calculated.slayerWeight || !calculated.dungeonsWeight) ? '!' : '' %>
+          </span>
         </div>
       </div>
 
@@ -807,8 +845,8 @@ const getRarityUpgradeClass = item => {
         <%
           if('levels' in calculated){
         %>
-          <div id="other_skills" class="skill-bars" data-api-enabled="<%= 'runecrafting' in calculated.levels %>">
-            <%= skill_component('Taming', 'icon-383_0_12', calculated.levels.taming) %>
+          <div class="skill-bars" data-api-enabled="<%= 'runecrafting' in calculated.levels %>">
+            <%= skill_component('Taming', 'icon-383_0', calculated.levels.taming) %>
             <%= skill_component('Farming', 'icon-294_0', calculated.levels.farming) %>
             <%= skill_component('Mining', 'icon-274_0', calculated.levels.mining) %>
             <%= skill_component('Combat', 'icon-272_0', calculated.levels.combat) %>
@@ -823,7 +861,6 @@ const getRarityUpgradeClass = item => {
               <div class="no-access">Skills from achievements across profiles. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">Enable Skills API</a> for more accurate data.</div>
             <% } %>
           </div>
-          <button id="show_skills">Show skills</button>
         <% }else{ %>
           <div class="no-access"><%= calculated.display_name %> doesn't have skills access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.</div>
         <% } %>
@@ -895,7 +932,7 @@ const getRarityUpgradeClass = item => {
           <% } %>
           <div class="pieces">
             <% for(const item of items.armor.slice().reverse()){ %>
-              <div tabindex="0" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
+              <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                 <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                   <div class="piece-shine"></div>
                 <% } %>
@@ -914,7 +951,7 @@ const getRarityUpgradeClass = item => {
             <div class="wardrobe-set">
               <% for(const [index, item] of set.entries()) { %>
                 <% if (item) { %>
-                  <div tabindex="0" data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %> index-<%= index %>">
+                  <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %> index-<%= index %>">
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
@@ -957,7 +994,7 @@ const getRarityUpgradeClass = item => {
                   sword = [items.highest_rarity_sword];
 
                 items.weapons.filter(a => !a.hidden).forEach(item => { %>
-                  <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece
+                  <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece
                     <% if(sword.length > 0 && item.backpackIndex === undefined && item.item_index == sword[0].item_index){ %>piece-selected<% } %>
                     piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
@@ -1002,7 +1039,7 @@ const getRarityUpgradeClass = item => {
                 <p class="stat-sub-header" style="margin-bottom: 5px">Active Accessories</p>
                 <% items.talismans.filter(a => !a.isInactive).forEach(item => {
                   %>
-                  <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>"
+                  <div tabindex="0" data-item-id="<%= item.itemId %>"
                   class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
@@ -1021,7 +1058,7 @@ const getRarityUpgradeClass = item => {
               <div class="accessory-list">
                 <p class="stat-sub-header">Inactive Accessories</p>
                 <% items.talismans.filter(a => a.isUnique && a.isInactive).forEach(item => { %>
-                  <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>"
+                  <div tabindex="0" data-item-id="<%= item.itemId %>"
                   class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
@@ -1070,14 +1107,10 @@ const getRarityUpgradeClass = item => {
             }
 
             let totalSkins = {}
-            for (const [petType, petSkins] of Object.entries(constants.pet_skins)) {
-              for (const [skin, skinData] of Object.entries(petSkins)) {
-                if (skinData.release < Date.now()) {
-                  totalSkins[`${petType}/${skin}`] =
-                    calculated.pets.find(
-                      (pet) => pet.type === petType && pet.skin === skin
-                    ) != undefined;
-                }
+            let badSkins = {}
+            for (const [skin, skinData] of Object.entries(constants.pet_skins)) {
+              if (skinData.release < Date.now()) {
+                totalSkins[skin] = calculated.pets.find((pet) => `PET_SKIN_${pet.skin}` === skin) != undefined;
               }
             }
             let userUniqueSkins = Object.values(totalSkins).filter(skin => skin).length
@@ -1246,18 +1279,7 @@ const getRarityUpgradeClass = item => {
                   <% } %>
                 </div>
               </div>
-              <div class="inventory-view" data-inventory-type="inventory">
-                <% for(let i = 9; i < items.inventory.length; i++){ %>
-                  <% let item = items.inventory[i]; %>
-                  <%= inventorySlot(item); %>
-
-                <% } %>
-                <hr>
-                <% for(let i = 0; i < 9; i++){ %>
-                  <% let item = items.inventory[i]; %>
-                  <%= inventorySlot(item); %>
-                <% } %>
-              </div>
+              <inventory-view></inventory-view>
             </div>
           <% } %>
         </div>
@@ -1293,7 +1315,7 @@ const getRarityUpgradeClass = item => {
             <% } %>
             <div class="pieces">
               <%  items.pickaxes.filter(a => !a.hidden).forEach(item => { %>
-                  <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
+                  <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
@@ -1347,7 +1369,7 @@ const getRarityUpgradeClass = item => {
             <% } %>
             <div class="pieces">
               <%  items.hoes.filter(a => !a.hidden).forEach(item => { %>
-                  <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
+                  <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
                     <% } %>
@@ -1449,7 +1471,7 @@ const getRarityUpgradeClass = item => {
                   rod = [items.highest_rarity_rod];
 
                 items.rods.filter(a => !a.hidden).forEach(item => { %>
-                  <div tabindex="0" <% if('backpackIndex' in item){ %>data-backpack-index="<%= item.backpackIndex %>" <% } %> data-item-id="<%= item.itemId %>" data-item-index="<%= item.item_index %>" class="rich-item piece
+                  <div tabindex="0" data-item-id="<%= item.itemId %>"  class="rich-item piece
                     <% if(rod.length > 0 && item.backpackIndex === undefined && item.item_index == rod[0].item_index){ %>piece-selected<% } %>
                     piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
@@ -2282,7 +2304,7 @@ const getRarityUpgradeClass = item => {
     <%
       const clientConstants = {
         special_enchants: constants.special_enchants,
-        max_favorites: constants.max_favorites
+        max_favorites: constants.max_favorites,
       }
     %>
     const constants = JSON.parse(`<%- JSON.stringify(clientConstants).replace(/\\/g, '\\\\') %>`);

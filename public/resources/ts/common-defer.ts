@@ -1,8 +1,7 @@
 import { loadTheme } from "./themes";
+import tippy from "tippy.js";
 
-declare global {
-  function tippy(targets: string | Element | Element[], optionalProps: Record<string, unknown>): any;
-}
+tippy.setDefaultProps({ allowHTML: true });
 
 function validateURL(url: string) {
   const urlSegments = url.trim().split("/");
@@ -42,7 +41,7 @@ document.querySelectorAll<HTMLFormElement>(".lookup-player").forEach((form) => {
     } catch (error) {
       const errorTip = tippy(form.querySelector("input") as HTMLInputElement, {
         trigger: "manual",
-        content: error || "please enter a valid Minecraft username or UUID",
+        content: (error as string | undefined) ?? "please enter a valid Minecraft username or UUID",
       });
       errorTip.show();
       setTimeout(() => {
@@ -128,23 +127,22 @@ document.querySelector("#themes-box")?.addEventListener("change", (event) => {
 window.addEventListener("storage", (event) => {
   if (event.key === "currentTheme" && event.newValue != null) {
     setCheckedTheme(event.newValue);
-    loadTheme(event.newValue);
+  } else if (event.key === "processedTheme" && event.newValue != null) {
+    applyProcessedTheme(JSON.parse(event.newValue));
   }
 });
 
 function setCheckedTheme(theme: string) {
   const checkbox = document.querySelector<HTMLInputElement>(`#themes-box input[value="${theme}"]`);
   if (checkbox == null) {
-    throw new Error("no checkbox for theme : " + theme);
+    throw new Error("no checkbox for theme: " + theme);
   }
   checkbox.checked = true;
 }
 
 setCheckedTheme(localStorage.getItem("currentTheme") ?? "default");
 
-tippy("*[data-tippy-content]", {
-  boundary: "window",
-});
+tippy("*[data-tippy-content]");
 
 const prideFlag = document.querySelector(".pride-flag") as HTMLElement;
 const prideFlags = ["rainbow", "trans", "lesbian", "bi", "pan", "nb", "ace", "genderfluid", "logo"];
