@@ -85,7 +85,7 @@
     "@rollup/plugin-node-resolve": "^13.0.5",
     "@rollup/plugin-replace": "^3.0.0",
     "@rollup/plugin-typescript": "^8.2.5",
-    "@typescript-eslint/eslint-plugin": "^4.32.0",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.32.0",
     "concurrently": "^6.3.0",
     "ejs-lint": "^1.2.1",
