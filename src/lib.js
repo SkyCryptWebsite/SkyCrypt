@@ -3505,34 +3505,33 @@ export async function getDungeons(userProfile, hypixelProfile) {
   return output;
 }
 
-export async function getHotmItems(userProfile, packs) {
+export function getHotmItems(userProfile, packs) {
+  const data = userProfile.mining_core;
   const output = [];
 
-  const selectedPickaxeAbility = userProfile.mining_core?.selected_pickaxe_ability;
-  const hotmLevelData = userProfile.mining_core?.experience
-    ? getLevelByXp(userProfile.mining_core.experience, { type: "hotm" })
-    : 0;
-  const nodes = userProfile.mining_core?.nodes
-    ? Object.fromEntries(
-        Object.entries(userProfile.mining_core.nodes).filter(([key, value]) => !key.startsWith("toggle_"))
-      )
+  // Filling the space with empty items
+  for (let index = 0; index < 7 * 9; index++) {
+    output.push(helper.generateItem());
+  }
+
+  if (!data) {
+    return output;
+  }
+
+  const hotmLevelData = data.experience ? getLevelByXp(data.experience, { type: "hotm" }) : 0;
+  const nodes = data.nodes
+    ? Object.fromEntries(Object.entries(data.nodes).filter(([key, value]) => !key.startsWith("toggle_")))
     : {};
-  const toggles = userProfile.mining_core?.nodes
-    ? Object.fromEntries(
-        Object.entries(userProfile.mining_core.nodes).filter(([key, value]) => key.startsWith("toggle_"))
-      )
+  const toggles = data.nodes
+    ? Object.fromEntries(Object.entries(data.nodes).filter(([key, value]) => key.startsWith("toggle_")))
     : {};
+  const mcdata = getMiningCoreData(userProfile);
 
   // Check for missing node classes
   for (const nodeId in nodes) {
     if (constants.hotm.nodes[nodeId] == undefined) {
       throw `Missing Heart of the Mountain node: ${nodeId}`;
     }
-  }
-
-  // Filling the space with empty items
-  for (let index = 0; index < 7 * 9; index++) {
-    output.push(helper.generateItem());
   }
 
   // Processing nodes
@@ -3544,7 +3543,7 @@ export async function getHotmItems(userProfile, packs) {
       enabled,
       nodes,
       hotmLevelData,
-      selectedPickaxeAbility,
+      selectedPickaxeAbility: data.selected_pickaxe_ability,
     });
 
     output[node.position7x9 - 1] = helper.generateItem({
@@ -3581,6 +3580,35 @@ export async function getHotmItems(userProfile, packs) {
     });
   }
 
+  // Processing HotM items (stats, hc crystals, reset)
+  for (const itemClass of constants.hotm.items) {
+    const item = new itemClass({
+      resources: {
+        token_of_the_mountain: mcdata.tokens,
+        mithril_powder: mcdata.powder.mithril,
+        gemstone_powder: mcdata.powder.gemstone,
+      },
+      crystals: mcdata.crystal_nucleus.crystals,
+      last_reset: mcdata.hotm_last_reset,
+    });
+
+    output[item.position7x9 - 1] = helper.generateItem({
+      display_name: helper.removeFormatting(item.displayName),
+      id: item.itemData.id,
+      Damage: item.itemData.Damage,
+      glowing: item.itemData.glowing,
+      texture_path: item.itemData?.texture_path,
+      tag: {
+        display: {
+          Name: item.displayName,
+          Lore: item.lore,
+        },
+      },
+      position: item.position7x9,
+    });
+  }
+
+  // Processing textures
   output.forEach(async (item) => {
     const customTexture = await getTexture(item, false, packs);
 
@@ -3596,7 +3624,7 @@ export async function getHotmItems(userProfile, packs) {
   return output;
 }
 
-export async function getMiningCoreData(userProfile) {
+export function getMiningCoreData(userProfile) {
   const output = {};
   const data = userProfile.mining_core;
 

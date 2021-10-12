@@ -976,3 +976,33 @@ export const calcHotmTokens = (hotmTier, potmTier) => {
 
   return tokens;
 };
+
+export const removeFormatting = (string) => {
+  const regex = new RegExp("§[0-9a-z]{1}", "g");
+
+  return string.replace(regex, "");
+};
+
+export const convertHMS = (seconds, format = "clock", alwaysTwoDigits = false) => {
+  seconds = parseInt(seconds, 10);
+
+  let hh = Math.floor(seconds / 3600);
+  let mm = Math.floor((seconds - hh * 3600) / 60);
+  let ss = seconds - hh * 3600 - mm * 60;
+
+  if (alwaysTwoDigits) {
+    hh = hh < 10 ? `0${hh}` : hh;
+    mm = mm < 10 ? `0${mm}` : mm;
+    ss = ss < 10 ? `0${ss}` : ss;
+  }
+
+  switch (format) {
+    case "friendly":
+      return `${hh} hours, ${mm} minutes and ${ss} seconds`;
+    case "friendlyhhmm":
+      return `${hh} hours and ${mm} minutes`;
+    // clock
+    default:
+      return `${hh}:${mm}:${ss}`;
+  }
+};

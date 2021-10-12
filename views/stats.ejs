@@ -55,15 +55,15 @@ const statShort = {
   strength: 'Str',
 };
 
-const formatNucleusCrystal = (string) => {
-  if (!string) {
-    string = 'NOT_FOUND'
+const formatNucleusCrystal = (crystal, state) => {
+  if (!state) {
+    state = 'NOT_FOUND'
   }
-  let formatted = string.split('_').join(' ').trim()
+  let formatted = state.split('_').join(' ').trim()
   formatted = helper.titleCase(formatted)
 
   let color = 'f';
-  switch (string) {
+  switch (state) {
     case 'NOT_FOUND':
       color = 'c'
       break;
@@ -73,6 +73,11 @@ const formatNucleusCrystal = (string) => {
     case 'PLACED':
       color = 'a'
       break;
+  }
+
+  // Jasper and Ruby do not have a PLACED state
+  if (['jasper', 'ruby'].includes(crystal) && state === 'FOUND') {
+    color = 'a'
   }
 
   return `<span style='color: var(--§${color});'>${formatted}</span>`
@@ -1388,28 +1393,28 @@ const getRarityUpgradeClass = item => {
                 <span class='stat-name'>Crystals:</span>
                 <br>
                 <span class='stat-name'>- Jade:</span>
-                <span class='stat-value'><%= formatNucleusCrystal(mining.core.crystal_nucleus.crystals?.jade_crystal?.state) %></span>
+                <span class='stat-value'><%= formatNucleusCrystal('jade', mining.core.crystal_nucleus.crystals?.jade_crystal?.state) %></span>
                 <br>
                 <span class='stat-name'>- Amber:</span>
-                <span class='stat-value'><%= formatNucleusCrystal(mining.core.crystal_nucleus.crystals?.amber_crystal?.state) %></span>
+                <span class='stat-value'><%= formatNucleusCrystal('amber', mining.core.crystal_nucleus.crystals?.amber_crystal?.state) %></span>
                 <br>
                 <span class='stat-name'>- Amethyst:</span>
-                <span class='stat-value'><%= formatNucleusCrystal(mining.core.crystal_nucleus.crystals?.amethyst_crystal?.state) %></span>
+                <span class='stat-value'><%= formatNucleusCrystal('amethyst', mining.core.crystal_nucleus.crystals?.amethyst_crystal?.state) %></span>
                 <br>
                 <span class='stat-name'>- Sapphire:</span>
-                <span class='stat-value'><%= formatNucleusCrystal(mining.core.crystal_nucleus.crystals?.sapphire_crystal?.state) %></span>
+                <span class='stat-value'><%= formatNucleusCrystal('sapphire', mining.core.crystal_nucleus.crystals?.sapphire_crystal?.state) %></span>
                 <br>
                 <span class='stat-name'>- Topaz:</span>
-                <span class='stat-value'><%= formatNucleusCrystal(mining.core.crystal_nucleus.crystals?.topaz_crystal?.state) %></span>
+                <span class='stat-value'><%= formatNucleusCrystal('topaz', mining.core.crystal_nucleus.crystals?.topaz_crystal?.state) %></span>
                 <br>
                 <br>
                 <span class='stat-name'>Other Crystals:</span>
                 <br>
                 <span class='stat-name'>- Ruby:</span>
-                <span class='stat-value'><%= formatNucleusCrystal(mining.core.crystal_nucleus.crystals?.ruby_crystal?.state) %></span>
+                <span class='stat-value'><%= formatNucleusCrystal('ruby', mining.core.crystal_nucleus.crystals?.ruby_crystal?.state) %></span>
                 <br>
                 <span class='stat-name'>- Jasper:</span>
-                <span class='stat-value'><%= formatNucleusCrystal(mining.core.crystal_nucleus.crystals?.jasper_crystal?.state) %></span>
+                <span class='stat-value'><%= formatNucleusCrystal('jasper', mining.core.crystal_nucleus.crystals?.jasper_crystal?.state) %></span>
                 <% if ((mining.core.crystal_nucleus.crystals?.sapphire_crystal?.state || 'NOT_FOUND') === 'NOT_FOUND') { %>
                 <br>
                 <br>

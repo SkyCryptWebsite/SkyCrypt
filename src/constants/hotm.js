@@ -1,5 +1,5 @@
 import { stats_symbols as symbols } from "./stats.js";
-import { round, floor } from "../helper.js";
+import { round, floor, convertHMS, titleCase } from "../helper.js";
 
 const upgrade_types = {
   mithril_powder: {
@@ -113,6 +113,16 @@ const rewards = {
   },
 };
 
+/*
+.##.....##..#######..########.##.....##
+.##.....##.##.....##....##....###...###
+.##.....##.##.....##....##....####.####
+.#########.##.....##....##....##.###.##
+.##.....##.##.....##....##....##.....##
+.##.....##.##.....##....##....##.....##
+.##.....##..#######.....##....##.....##
+*/
+
 class HotM {
   constructor(tier, level) {
     this.tier = tier;
@@ -209,6 +219,16 @@ class HotM {
     return 9 * (hotm.tiers - this.tier) + 1;
   }
 }
+
+/*
+.##....##..#######..########..########..######.
+.###...##.##.....##.##.....##.##.......##....##
+.####..##.##.....##.##.....##.##.......##......
+.##.##.##.##.....##.##.....##.######....######.
+.##..####.##.....##.##.....##.##.............##
+.##...###.##.....##.##.....##.##.......##....##
+.##....##..#######..########..########..######.
+*/
 
 class Node {
   constructor(data) {
@@ -1110,8 +1130,186 @@ class MiningSpeed extends Node {
   }
 }
 
+/*
+.####.########.########.##.....##..######.
+..##.....##....##.......###...###.##....##
+..##.....##....##.......####.####.##......
+..##.....##....######...##.###.##..######.
+..##.....##....##.......##.....##.......##
+..##.....##....##.......##.....##.##....##
+.####....##....########.##.....##..######.
+*/
+
+class HotmItem {
+  get position7x9() {
+    return 9 * (hotm.tiers - this.position) + 9;
+  }
+}
+
+class HotmStats extends HotmItem {
+  constructor(data) {
+    super();
+    this.displayName = "§5Heart of the Mountain";
+    this.position = 1;
+    this.itemData = {
+      id: 397,
+      Damage: 3,
+      glowing: false,
+      texture_path: "/head/86f06eaa3004aeed09b3d5b45d976de584e691c0e9cade133635de93d23b9edb",
+    };
+    this.resources = {
+      token_of_the_mountain: data.resources.token_of_the_mountain.available || 0,
+      mithril_powder: data.resources.mithril_powder.available || 0,
+      gemstone_powder: data.resources.gemstone_powder.available || 0,
+    };
+  }
+
+  get lore() {
+    return [
+      `§7Token of the Mountain: §5${this.resources.token_of_the_mountain.toLocaleString()}`,
+      "",
+      "§7§8Use §5Token of the Mountain §8to unlock perks and abilities above!",
+      "",
+      `§9${symbols.powder} Powder`,
+      "§9Powders §8are dropped from mining ores in the §2Dwarven Mines §8and are used to upgrade the perks you've unlocked!",
+      "",
+      `§7Mithril Powder: §2${this.resources.mithril_powder.toLocaleString()}`,
+      `§7Gemstone Powder: §d${this.resources.gemstone_powder.toLocaleString()}`,
+      "",
+      "§8Increase your chance to gain extra Powder by unlocking perks, equipping the §2Mithril Golem Pet§8, and more!",
+    ];
+  }
+}
+
+class CrystalHollowsCrystals extends HotmItem {
+  constructor(data) {
+    super();
+    this.displayName = "§5Crystal Hollows Crystals";
+    this.position = 2;
+    this.itemData = {
+      id: 397,
+      Damage: 3,
+      glowing: false,
+      texture_path: "/head/ef7835fc9e6daf632160e9b7ff378788a408064cc75ebf9f5158e615bdd59603",
+    };
+    this.crystals = data.crystals;
+  }
+
+  get lore() {
+    return [
+      "§7§8Crystals are used to forge",
+      "§8Gems into §dPerfect §8Gems. They can be found hidden within the §5Crystal Hollows§8.",
+      "",
+      "§7§8Find and place the full set of §55 §8Crystals in the §5Crystal Nucleus §8to unlock §6rare loot chests§8!",
+      "",
+      "§dYour §5Crystal Nucleus",
+      `§8- §aJade ${this.formatCrystal("jade", this.crystals.jade_crystal?.state)}`,
+      `§8- §6Amber ${this.formatCrystal("amber", this.crystals.amber_crystal?.state)}`,
+      `§8- §5Amethyst ${this.formatCrystal("amethyst", this.crystals.amethyst_crystal?.state)}`,
+      `§8- §bSapphire ${this.formatCrystal("sapphire", this.crystals.sapphire_crystal?.state)}`,
+      `§8- §eTopaz ${this.formatCrystal("topaz", this.crystals.topaz_crystal?.state)}`,
+      "",
+      "§dYour Other Crystals",
+      `§8- §dJasper ${this.formatCrystal("jasper", this.crystals.jasper_crystal?.state)}`,
+      `§8- §cRuby ${this.formatCrystal("ruby", this.crystals.ruby_crystal?.state)}`,
+    ];
+  }
+
+  formatCrystal(crystal, state) {
+    if (!state) {
+      state = "NOT_FOUND";
+    }
+    let formatted = state.split("_").join(" ").trim();
+    formatted = titleCase(formatted);
+
+    let color = "r";
+    let symbol = "";
+    switch (state) {
+      case "NOT_FOUND":
+        color = "c";
+        symbol = "✖";
+        break;
+      case "FOUND":
+        color = "e";
+        symbol = "✖";
+        break;
+      case "PLACED":
+        color = "a";
+        symbol = "✔";
+        break;
+    }
+
+    // Jasper and Ruby do not have a PLACED state
+    if (["jasper", "ruby"].includes(crystal) && state === "FOUND") {
+      color = "a";
+      symbol = "✔";
+    }
+
+    return `§${color}${symbol} ${formatted}`;
+  }
+}
+
+class HotmReset extends HotmItem {
+  constructor(data) {
+    super();
+    this.displayName = "§cReset Heart of the Mountain";
+    this.position = 3;
+    this.itemData = {
+      id: 397,
+      Damage: 3,
+      glowing: false,
+      texture_path: "/head/6448e275313532f54c4ba21894809a23dce52af01ddd1e89fc7689481fab737e",
+    };
+    this.last_reset = data.last_reset;
+    this.resources = {
+      token_of_the_mountain: data.resources.token_of_the_mountain.spent || 0,
+      mithril_powder: data.resources.mithril_powder.spent || 0,
+      gemstone_powder: data.resources.gemstone_powder.spent || 0,
+    };
+  }
+
+  get lore() {
+    const output = [
+      "§7Resets the Perks and Abilities of your §5Heart of the Mountain§7, locking them and resetting their levels.",
+      "",
+      "§7You will be reimbursed with:",
+      `§8- §5${this.resources.token_of_the_mountain.toLocaleString()} Token of the Mountain`,
+      `§8- §2${this.resources.mithril_powder.toLocaleString()} Mithril Powder`,
+      `§8- §d${this.resources.gemstone_powder.toLocaleString()} Gemstone Powder`,
+      "",
+      "§7You will §akeep §7any Tiers and §cPeak of the Mountain §7that you have unlocked.",
+      "",
+      "§7Cost",
+      "§6100,000 Coins",
+    ];
+
+    // cooldown or warning
+    if (Date.now() - this.last_reset > 24 * 60 * 60 * 1000) {
+      output.push(
+        "",
+        "§7§c§lWARNING: This is permanent.",
+        "§c§lYou can not go back after resetting your Heart of the Mountain!"
+      );
+    } else {
+      const timeLeft = Math.abs(Date.now() - (this.last_reset + 24 * 60 * 60 * 1000)); // ms
+      output.push("", `§c§lYou can reset again in ${convertHMS(timeLeft / 1000, "friendlyhhmm")}`);
+    }
+
+    return output;
+  }
+}
+
+/*
+.########.##.....##.########...#######..########..########..######.
+.##........##...##..##.....##.##.....##.##.....##....##....##....##
+.##.........##.##...##.....##.##.....##.##.....##....##....##......
+.######......###....########..##.....##.########.....##.....######.
+.##.........##.##...##........##.....##.##...##......##..........##
+.##........##...##..##........##.....##.##....##.....##....##....##
+.########.##.....##.##.........#######..##.....##....##.....######.
+*/
+
 export const hotm = {
-  hotm: HotM,
   tiers: Object.keys(rewards.hotm).length,
   rewards: rewards,
   names: {
@@ -1145,6 +1343,7 @@ export const hotm = {
     pickaxe_toss: "Pickobulus",
     mining_speed: "Mining Speed",
   },
+  hotm: HotM,
   nodes: {
     mining_speed_2: MiningSpeed2,
     powder_buff: PowderBuff,
@@ -1176,6 +1375,7 @@ export const hotm = {
     pickaxe_toss: Pickobulus,
     mining_speed: MiningSpeed,
   },
+  items: [HotmStats, CrystalHollowsCrystals, HotmReset],
 };
 
 export const precursor_parts = {
