@@ -4212,9 +4212,13 @@ body {
 .forge-item {
   display: flex;
   gap: 8px;
-  align-items: center;
+  align-items: flex-start;
+  & + & {
+    margin-top: 4px;
+  }
 }
 
 .forge-slot {
   margin: 0;
+  white-space: nowrap;
 }
