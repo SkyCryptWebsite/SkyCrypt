@@ -1197,10 +1197,9 @@ class CrystalHollowsCrystals extends HotmItem {
 
   get lore() {
     return [
-      "§7§8Crystals are used to forge",
-      "§8Gems into §dPerfect §8Gems. They can be found hidden within the §5Crystal Hollows§8.",
+      "§8Crystals are used to forge Gems into §dPerfect §8Gems. They can be found hidden within the §5Crystal Hollows§8.",
       "",
-      "§7§8Find and place the full set of §55 §8Crystals in the §5Crystal Nucleus §8to unlock §6rare loot chests§8!",
+      "§8Find and place the full set of §55 §8Crystals in the §5Crystal Nucleus §8to unlock §6rare loot chests§8!",
       "",
       "§dYour §5Crystal Nucleus",
       `§8- §aJade ${this.formatCrystal("jade", this.crystals.jade_crystal?.state)}`,
