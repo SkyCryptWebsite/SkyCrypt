@@ -254,17 +254,3 @@ main.grid > a,
   width: 20px;
   color: rgba(var(--text-rgb), 0.6);
 }
-
-.forge-item {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  & + & {
-    margin-top: 4px;
-  }
-}
-
-.forge-slot {
-  margin: 0;
-  white-space: nowrap;
-}
