@@ -411,6 +411,12 @@ const skins = [
     texture: "/head/c96696eb13cced8f5c521892d90fe8e2b129469520ade8d1d9f87225e7179761",
     release: new Date("2020-07-21 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_PARROT_GOLD_MACAW",
+    name: "Gold Macaw",
+    texture: "/head/5dad34650f8d1c6afbfd979b38d7e1412e636215b8f85240e06d998278879b8b",
+    release: new Date("2021-10-20 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 const animations = [
@@ -661,6 +667,26 @@ const animations = [
       3060: "/head/4e5ebceed5165cc33301e769e12603cd5de352e90c2c3ce2403c1e0fc889d123",
       3190: "/head/923fc9abad079f4382ecd48a7b7428c19082e0f5e2afb8d71c4599627dff25fd",
     },
+  },
+  {
+    id: "FAIRY_HELMET",
+    texture: "/resources/img/items/fairy_helmet.png",
+    animation: null,
+  },
+  {
+    id: "FAIRY_CHESTPLATE",
+    texture: "/resources/img/items/fairy_chestplate.png",
+    animation: null,
+  },
+  {
+    id: "FAIRY_LEGGINGS",
+    texture: "/resources/img/items/fairy_leggings.png",
+    animation: null,
+  },
+  {
+    id: "FAIRY_BOOTS",
+    texture: "/resources/img/items/fairy_boots.png",
+    animation: null,
   },
 ];
 

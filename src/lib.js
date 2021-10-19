@@ -2651,6 +2651,7 @@ export const getStats = async (
     }
   }
 
+  mining.forge = await getForge(userProfile);
   mining.core = await getMiningCoreData(userProfile);
 
   output.mining = mining;
@@ -3693,6 +3694,41 @@ export function getMiningCoreData(userProfile) {
     effect: data.current_daily_effect || null,
     last_changed: data.current_daily_effect_last_changed || null,
   };
+
+  return output;
+}
+
+export async function getForge(userProfile) {
+  let output = {};
+
+  if (userProfile?.forge?.forge_processes?.forge_1) {
+    const forge = Object.values(userProfile.forge.forge_processes.forge_1);
+    const processes = [];
+    for (const item of forge) {
+      let forgeItem = {
+        id: item.id,
+        slot: item.slot,
+        timeFinished: 0,
+        timeFinishedText: "",
+      };
+
+      if (item.id in constants.forge_times) {
+        let forgeTime = constants.forge_times[item.id] * 60 * 1000; // convert minutes to milliseconds
+        const quickForge = userProfile.mining_core?.nodes?.forge_time;
+        if (quickForge != null) {
+          forgeTime *= constants.quick_forge_multiplier[quickForge];
+        }
+        const dbObject = await db.collection("items").findOne({ id: item.id });
+
+        forgeItem.name = item.id == "PET" ? "[Lvl 1] Ammonite" : dbObject ? dbObject.name : item.id;
+        const timeFinished = item.startTime + forgeTime;
+        forgeItem.timeFinished = timeFinished;
+        forgeItem.timeFinishedText = moment(timeFinished).fromNow();
+      }
+      processes.push(forgeItem);
+    }
+    output.processes = processes;
+  }
 
   return output;
 }
