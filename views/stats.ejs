@@ -1324,6 +1324,17 @@ const getRarityUpgradeClass = item => {
               <% }); %>
             </div>
           <% } %>
+          <p class="stat-sub-header">Forge</p>
+          <% if(mining.forge.processes.length > 0){
+          mining.forge.processes.forEach(process => { %>
+            <div class="forge-item">
+              <p class="stat-name forge-slot">Slot <%= process.slot %>:</p>
+              <span data-tippy-content='<local-time timestamp="<%= process.timeFinished %>"></local-time>'><span class="stat-raw-values"><%= process.name %> - <%= process.timeFinished < Date.now() ? "ended" : `ending ${process.timeFinishedText}`%></span></span>
+            </div>    
+          <% });
+        } else { %>
+            <p class="stat-raw-values">No items currently forging!</p>
+          <% } %>
         </div>
 
         <% if(calculated.farming.talked){ %>
