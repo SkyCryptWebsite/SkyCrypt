@@ -415,7 +415,7 @@ const skins = [
     id: "PET_SKIN_PARROT_GOLD_MACAW",
     name: "Gold Macaw",
     texture: "/head/5dad34650f8d1c6afbfd979b38d7e1412e636215b8f85240e06d998278879b8b",
-    release: new Date("2020-10-20 18:00:00 GMT+1").getTime(),
+    release: new Date("2021-10-20 18:00:00 GMT+1").getTime(),
   },
 ];
 
