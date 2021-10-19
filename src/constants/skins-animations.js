@@ -662,6 +662,26 @@ const animations = [
       3190: "/head/923fc9abad079f4382ecd48a7b7428c19082e0f5e2afb8d71c4599627dff25fd",
     },
   },
+  {
+    id: "FAIRY_HELMET",
+    texture: "/resources/img/items/fairy_helmet.png",
+    animation: null,
+  },
+  {
+    id: "FAIRY_CHESTPLATE",
+    texture: "/resources/img/items/fairy_chestplate.png",
+    animation: null,
+  },
+  {
+    id: "FAIRY_LEGGINGS",
+    texture: "/resources/img/items/fairy_leggings.png",
+    animation: null,
+  },
+  {
+    id: "FAIRY_BOOTS",
+    texture: "/resources/img/items/fairy_boots.png",
+    animation: null,
+  },
 ];
 
 const gen_pet_skins = {};
