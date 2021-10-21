@@ -34,6 +34,7 @@ const redisClient = new Redis();
 const customResources = require("./custom-resources");
 const loreGenerator = require("./loreGenerator");
 const randomEmoji = require("./constants/randomEmoji");
+const lilyWeight = require("./weight/lilyWeight");
 
 const parseNbt = util.promisify(nbt.parse);
 
@@ -2781,8 +2782,10 @@ module.exports = {
       .reduce((total, value) => total + value);
     */
 
+    const lily = await lilyWeight.calculateWeight(profile.uuid);
     output.weight = {
       senither: require("./weight/senitherWeight").calculateWeight(output),
+      lily: lily,
     };
 
     console.debug(`${options.debugId}: getStats returned. (${new Date().getTime() - timeStarted}ms)`);
