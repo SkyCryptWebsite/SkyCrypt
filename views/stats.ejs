@@ -572,7 +572,7 @@ function getDescription() {
 
 	// Slayers
 	if (calculated.slayer_coins_spent.total > 0) {
-		description.push('🤺 Slayer: ', '\n')
+		description.push('🤺 Slayer: ')
 
 		for (const slayer of slayerOrder) {
 			if (!calculated.slayers[slayer]) {
