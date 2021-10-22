@@ -1000,9 +1000,7 @@ export function calcHotmTokens(hotmTier, potmTier) {
  * @returns {string}
  */
 export function removeFormatting(string) {
-  const regex = new RegExp("§[0-9a-z]{1}", "g");
-
-  return string.replace(regex, "");
+  return string.replace(/§[0-9a-z]/g, "");
 }
 
 /**
