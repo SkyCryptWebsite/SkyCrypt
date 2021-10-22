@@ -963,7 +963,7 @@ export function generateItem(data) {
   return Object.assign(default_data, data);
 }
 
-export const calcHotmTokens = (hotmTier, potmTier) => {
+export function calcHotmTokens(hotmTier, potmTier) {
   let tokens = 0;
 
   for (let tier = 1; tier <= hotmTier; tier++) {
@@ -975,15 +975,15 @@ export const calcHotmTokens = (hotmTier, potmTier) => {
   }
 
   return tokens;
-};
+}
 
-export const removeFormatting = (string) => {
+export function removeFormatting(string) {
   const regex = new RegExp("§[0-9a-z]{1}", "g");
 
   return string.replace(regex, "");
-};
+}
 
-export const convertHMS = (seconds, format = "clock", alwaysTwoDigits = false) => {
+export function convertHMS(seconds, format = "clock", alwaysTwoDigits = false) {
   seconds = parseInt(seconds, 10);
 
   let hh = Math.floor(seconds / 3600);
@@ -1005,4 +1005,4 @@ export const convertHMS = (seconds, format = "clock", alwaysTwoDigits = false) =
     default:
       return `${hh}:${mm}:${ss}`;
   }
-};
+}
