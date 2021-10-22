@@ -27,7 +27,7 @@ Before contributing to SkyCrypt, make sure you install the development environme
 
    Alternatively, you can use a git GUI like GitHub Desktop to clone it.
 
-2. Run `npm i` in the project directory to install the necessary dependencies.
+2. Run `npm ci` in the project directory to install the necessary dependencies.
    - Some operating systems may require extra dependencies, such as [node-canvas](https://github.com/Automattic/node-canvas/wiki)
 3. On minecraft, log into `mc.hypixel.net`. Run the command `/api`, and copy the result.
 4. Open `credentials.json` and input your Hypixel API key into the `hypixel_api_key` field.
