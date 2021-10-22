@@ -906,10 +906,22 @@ export function rarityNameToInt(string) {
   return constants.rarities.indexOf(string.toLowerCase());
 }
 
+/**
+ * rounds a number to a certain number of decimal places
+ * @param {number} num the number to be rounded
+ * @param {number} decimals the number of decimal places to round to
+ * @returns {number} the rounded number
+ */
 export function round(num, decimals = 0) {
   return Math.round(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
 }
 
+/**
+ * floors a number to a certain number of decimal places
+ * @param {number} num the number to be floored
+ * @param {number} decimals the number of decimal places to floor to
+ * @returns {number} the floored number
+ */
 export function floor(num, decimals = 0) {
   return Math.floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
 }
@@ -963,6 +975,11 @@ export function generateItem(data) {
   return Object.assign(default_data, data);
 }
 
+/**
+ * @param {number} hotmTier
+ * @param {number} potmTier
+ * @returns {number}
+ */
 export function calcHotmTokens(hotmTier, potmTier) {
   let tokens = 0;
 
@@ -977,12 +994,22 @@ export function calcHotmTokens(hotmTier, potmTier) {
   return tokens;
 }
 
+/**
+ * removes Minecraft formatting codes from a string
+ * @param {string} string
+ * @returns {string}
+ */
 export function removeFormatting(string) {
-  const regex = new RegExp("§[0-9a-z]{1}", "g");
-
-  return string.replace(regex, "");
+  return string.replace(/§[0-9a-z]/g, "");
 }
 
+/**
+ * convert an amount of seconds into seconds minutes and hours
+ * @param {string} seconds
+ * @param {"friendly"|"friendlyhhmm"|"clock"} format
+ * @param {boolean} alwaysTwoDigits
+ * @returns {string}
+ */
 export function convertHMS(seconds, format = "clock", alwaysTwoDigits = false) {
   seconds = parseInt(seconds, 10);
 

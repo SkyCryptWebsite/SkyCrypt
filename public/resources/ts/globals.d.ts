@@ -90,7 +90,7 @@ interface ItemSlot {
 }
 
 interface Item extends DisplayItem, ItemSlot {
-  glowing: boolean;
+  glowing?: boolean;
   Count: number;
   Damage: number;
   animated: boolean;
