@@ -1468,7 +1468,7 @@ const getRarityUpgradeClass = item => {
 
           <p class="stat-sub-header">Forge</p>
           <%
-            if (mining.forge.processes.length > 0) {
+            if (mining.forge?.processes?.length > 0) {
               mining.forge.processes.forEach(process => {
           %>
             <div class="forge-item">
