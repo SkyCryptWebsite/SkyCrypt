@@ -9,9 +9,9 @@
 .##....##.##.....##.##...###.##....##....##....##.....##.##...###....##....##....##
 ..######...#######..##....##..######.....##....##.....##.##....##....##.....######.
 */
-const rarityOrder = ['special', 'supreme', 'divine', 'mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
-const slayerOrder = ['zombie', 'spider', 'wolf', 'enderman'];
-const badgeOrder = ['gold', 'silver', 'bronze'];
+const rarityOrder = ["special", "supreme", "divine", "mythic", "legendary", "epic", "rare", "uncommon", "common"];
+const slayerOrder = ["zombie", "spider", "wolf", "enderman"];
+const badgeOrder = ["gold", "silver", "bronze"];
 
 const localizedItems = [
   ...items.armor,
@@ -22,143 +22,143 @@ const localizedItems = [
   ...items.quiver,
   ...items.potion_bag,
   ...items.wardrobe_inventory,
-  ...items.storage
-].some(a => a.localized === true);
+  ...items.storage,
+].some((a) => a.localized === true);
 
 const statSuffix = {
-  ability_damage: '',
-  bonus_attack_speed: '%',
-  crit_chance: '%',
-  crit_damage: '%',
-  damage_increase: '',
-  damage: '',
-  defense: '',
-  effective_health: '',
-  farming_fortune: '',
-  ferocity: '',
-  foraging_fortune: '',
-  health: '',
-  intelligence: '',
-  magic_find: '',
-  mining_fortune: '',
-  mining_speed: '',
-  pet_luck: '',
-  pristine: '',
-  sea_creature_chance: '%',
-  speed: '%',
-  strength: '',
+  ability_damage: "",
+  bonus_attack_speed: "%",
+  crit_chance: "%",
+  crit_damage: "%",
+  damage_increase: "",
+  damage: "",
+  defense: "",
+  effective_health: "",
+  farming_fortune: "",
+  ferocity: "",
+  foraging_fortune: "",
+  health: "",
+  intelligence: "",
+  magic_find: "",
+  mining_fortune: "",
+  mining_speed: "",
+  pet_luck: "",
+  pristine: "",
+  sea_creature_chance: "%",
+  speed: "%",
+  strength: "",
 };
 
 const statShort = {
-  ability_damage: 'AD',
-  bonus_attack_speed: 'Atk',
-  crit_chance: 'CC',
-  crit_damage: 'CD',
-  damage_increase: 'DmgInc',
-  damage: 'Dmg',
-  defense: 'Def',
-  effective_health: 'EHP',
-  farming_fortune: 'FrmFrt',
-  ferocity: 'Frc',
-  foraging_fortune: 'FrgFrt',
-  health: 'HP',
-  intelligence: 'Int',
-  magic_find: 'MF',
-  mining_fortune: 'MngFrt',
-  mining_speed: 'MngSpd',
-  pet_luck: 'PL',
-  pristine: 'Prs',
-  sea_creature_chance: 'ScC',
-  speed: 'Spd',
-  strength: 'Str',
+  ability_damage: "AD",
+  bonus_attack_speed: "Atk",
+  crit_chance: "CC",
+  crit_damage: "CD",
+  damage_increase: "DmgInc",
+  damage: "Dmg",
+  defense: "Def",
+  effective_health: "EHP",
+  farming_fortune: "FrmFrt",
+  ferocity: "Frc",
+  foraging_fortune: "FrgFrt",
+  health: "HP",
+  intelligence: "Int",
+  magic_find: "MF",
+  mining_fortune: "MngFrt",
+  mining_speed: "MngSpd",
+  pet_luck: "PL",
+  pristine: "Prs",
+  sea_creature_chance: "ScC",
+  speed: "Spd",
+  strength: "Str",
 };
 
 const skillItems = {
-  farming: 'icon-294_0',
-  mining: 'icon-274_0',
-  combat: 'icon-272_0',
-  foraging: 'icon-6_3',
-  fishing: 'icon-346_0',
-  enchanting: 'icon-116_0',
-  alchemy: 'icon-379_0',
-  carpentry: 'icon-58_0',
-  runecrafting: 'icon-378_0'
+  farming: "icon-294_0",
+  mining: "icon-274_0",
+  combat: "icon-272_0",
+  foraging: "icon-6_3",
+  fishing: "icon-346_0",
+  enchanting: "icon-116_0",
+  alchemy: "icon-379_0",
+  carpentry: "icon-58_0",
+  runecrafting: "icon-378_0",
 };
 
 const slayerInfo = {
   zombie: {
-    boss: 'Revenant Horror',
-    head: '/head/1fc0184473fe882d2895ce7cbc8197bd40ff70bf10d3745de97b6c2a9c5fc78f',
+    boss: "Revenant Horror",
+    head: "/head/1fc0184473fe882d2895ce7cbc8197bd40ff70bf10d3745de97b6c2a9c5fc78f",
   },
   spider: {
-    boss: 'Tarantula Broodfather',
-    head: '/head/9d7e3b19ac4f3dee9c5677c135333b9d35a7f568b63d1ef4ada4b068b5a25',
+    boss: "Tarantula Broodfather",
+    head: "/head/9d7e3b19ac4f3dee9c5677c135333b9d35a7f568b63d1ef4ada4b068b5a25",
   },
   wolf: {
-    boss: 'Sven Packmaster',
-    head: '/head/f83a2aa9d3734b919ac24c9659e5e0f86ecafbf64d4788cfa433bbec189e8',
+    boss: "Sven Packmaster",
+    head: "/head/f83a2aa9d3734b919ac24c9659e5e0f86ecafbf64d4788cfa433bbec189e8",
   },
   enderman: {
-    boss: 'Voidgloom Seraph',
-    head: '/head/1b09a3752510e914b0bdc9096b392bb359f7a8e8a9566a02e7f66faff8d6f89e',
+    boss: "Voidgloom Seraph",
+    head: "/head/1b09a3752510e914b0bdc9096b392bb359f7a8e8a9566a02e7f66faff8d6f89e",
   },
 };
 
 const seaCreatures = [
-  'pond_squid',
-  'sea_walker',
-  'night_squid',
-  'frozen_steve',
-  'nurse_shark',
-  'sea_guardian',
-  'frosty_the_snowman',
-  'sea_witch',
-  'scarecrow',
-  'sea_archer',
-  'blue_shark',
-  'monster_of_the_deep',
-  'grinch',
-  'catfish',
-  'nightmare',
-  'carrot_king',
-  'sea_leech',
-  'werewolf',
-  'guardian_defender',
-  'deep_sea_protector',
-  'tiger_shark',
-  'water_hydra',
-  'sea_emperor',
-  'phantom_fisherman',
-  'great_white_shark',
-  'yeti',
-  'grim_reaper',
+  "pond_squid",
+  "sea_walker",
+  "night_squid",
+  "frozen_steve",
+  "nurse_shark",
+  "sea_guardian",
+  "frosty_the_snowman",
+  "sea_witch",
+  "scarecrow",
+  "sea_archer",
+  "blue_shark",
+  "monster_of_the_deep",
+  "grinch",
+  "catfish",
+  "nightmare",
+  "carrot_king",
+  "sea_leech",
+  "werewolf",
+  "guardian_defender",
+  "deep_sea_protector",
+  "tiger_shark",
+  "water_hydra",
+  "sea_emperor",
+  "phantom_fisherman",
+  "great_white_shark",
+  "yeti",
+  "grim_reaper",
 ];
 
-const milestone_rarities = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
+const milestone_rarities = ["common", "uncommon", "rare", "epic", "legendary"];
 
 const pet_milestones = {
-  'sea_creatures_killed': [250, 1000, 2500, 5000, 10000],
-  'ores_mined': [2500, 7500, 20000, 100000, 250000]
+  sea_creatures_killed: [250, 1000, 2500, 5000, 10000],
+  ores_mined: [2500, 7500, 20000, 100000, 250000],
 };
 
 const skillEmojis = {
-  "alchemy": "⚗️",
-  "carpentry": "🪑",
-  "combat": "⚔️",
-  "enchanting": "🔮",
-  "farming": "🌾",
-  "fishing": "🎣",
-  "foraging": "🌳",
-  "mining": "⛏️",
-  "runecrafting": "✨",
-  "taming": "🦴"
+  alchemy: "⚗️",
+  carpentry: "🪑",
+  combat: "⚔️",
+  enchanting: "🔮",
+  farming: "🌾",
+  fishing: "🎣",
+  foraging: "🌳",
+  mining: "⛏️",
+  runecrafting: "✨",
+  taming: "🦴",
 };
 
 const slayerEmojis = {
   zombie: "🧟",
   spider: "🕸️",
   wolf: "🐺",
-  enderman: "🔮"
+  enderman: "🔮",
 };
 
 /*
@@ -216,7 +216,7 @@ function getStats(items) {
   return stats;
 }
 
-const getBonus = (stats, prefix) => {
+function getBonus(stats, prefix) {
   const statsNotZero = Object.keys(stats).filter(a => stats[a] > 0 && a != 'effective_health');
 
   if(statsNotZero.length == 0)
