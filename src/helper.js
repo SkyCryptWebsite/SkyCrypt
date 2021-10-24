@@ -28,8 +28,6 @@ function getKey(key) {
 }
 
 /**
- * @deprecated use optional chaining instead
- *
  * @param {any} obj an object
  * @param  {...(string|number)} keys a path
  * @returns {boolean} if the path exists on the object
@@ -53,8 +51,6 @@ export function hasPath(obj, ...keys) {
 }
 
 /**
- * @deprecated use optional chaining instead
- *
  * @param {any} obj an object
  * @param  {...(string|number)} keys a path
  * @returns {any} the value at the path on the object
