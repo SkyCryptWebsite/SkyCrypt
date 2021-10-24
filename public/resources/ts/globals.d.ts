@@ -98,8 +98,53 @@ interface Item extends DisplayItem, ItemSlot {
   stats: {
     [key in StatName]: number;
   };
-  tag: any;
+  tag: ItemTag;
   texture_pack?: Pack;
+}
+
+interface ItemTag {
+  display?: ItemTagDisplay;
+  ench?: ItemTagEnch[];
+  CustomPotionEffects?: ItemTagCustomPotionEffects[];
+  ExtraAttributes?: ItemTagExtraAttributes;
+  HideFlags?: number[];
+  SkullOwner?: ItemTagSkullOwner[];
+  Unbreakable?: number;
+  [key: string]: unknown;
+}
+
+interface ItemTagExtraAttributes {
+  [key: string]: unknown;
+}
+
+interface ItemTagSkullOwner {
+  Id: string;
+  Properties: ItemTagSkullOwnerProperties;
+}
+
+interface ItemTagSkullOwnerProperties {
+  textures: ItemTagSkullOwnerPropertiesTextures[];
+}
+
+interface ItemTagSkullOwnerPropertiesTextures {
+  Value: string;
+}
+
+interface ItemTagCustomPotionEffects {
+  Ambient: number;
+  Duration: number;
+  Id: number;
+  Amplifier: number;
+}
+
+interface ItemTagEnch {
+  lvl: number;
+  id: number;
+}
+
+interface ItemTagDisplay {
+  Lore?: string[];
+  Name?: string;
 }
 
 interface Backpack extends Item {
