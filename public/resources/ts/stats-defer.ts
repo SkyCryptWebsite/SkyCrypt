@@ -110,7 +110,7 @@ tippy(".interactive-tooltip", {
   trigger: "mouseenter click",
   interactive: true,
   appendTo: () => document.body,
-  onTrigger(instance: any, event: Event) {
+  onTrigger(instance: unknown, event: Event) {
     if (event.type == "click") {
       dimmer.classList.add("show-dimmer");
     }
