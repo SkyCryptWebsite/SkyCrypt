@@ -80,6 +80,9 @@ function getXpByLevel(level, extra = {}) {
     case "dungeoneering":
       xp_table = constants.dungeoneering_xp;
       break;
+    case "hotm":
+      xp_table = constants.hotm_xp;
+      break;
     default:
       xp_table = constants.leveling_xp;
   }
@@ -142,6 +145,9 @@ export function getLevelByXp(xp, extra = {}) {
       break;
     case "dungeoneering":
       xp_table = constants.dungeoneering_xp;
+      break;
+    case "hotm":
+      xp_table = constants.hotm_xp;
       break;
     default:
       xp_table = constants.leveling_xp;
@@ -1081,6 +1087,7 @@ export function getMinions(coopMembers) {
 
   return minions;
 }
+
 export function getMinionSlots(minions) {
   let uniqueMinions = 0;
 
@@ -1206,6 +1213,8 @@ export const getItems = async (
     }
   }
 
+  let hotm = "mining_core" in profile ? await getHotmItems(profile, packs) : [];
+
   output.armor = armor.filter((a) => Object.keys(a).length != 0);
   output.wardrobe = wardrobe;
   output.wardrobe_inventory = wardrobe_inventory;
@@ -1217,6 +1226,7 @@ export const getItems = async (
   output.potion_bag = potion_bag;
   output.personal_vault = personal_vault;
   output.storage = storage;
+  output.hotm = hotm;
 
   const all_items = armor.concat(
     inventory,
@@ -1227,7 +1237,8 @@ export const getItems = async (
     potion_bag,
     personal_vault,
     wardrobe_inventory,
-    storage
+    storage,
+    hotm
   );
 
   for (const [index, item] of all_items.entries()) {
@@ -1245,6 +1256,7 @@ export const getItems = async (
   // All items not in the inventory or accessory bag should be inactive so they don't contribute to the total stats
   enderchest = enderchest.map((a) => Object.assign({ isInactive: true }, a));
   storage = storage.map((a) => Object.assign({ isInactive: true }, a));
+  hotm = hotm.map((a) => Object.assign({ isInactive: true }, a)); // TODO: Required?
 
   // Add candy bag contents as backpack contents to candy bag
   for (let item of all_items) {
@@ -2640,10 +2652,11 @@ export const getStats = async (
   }
 
   mining.forge = await getForge(userProfile);
+  mining.core = await getMiningCoreData(userProfile);
 
   output.mining = mining;
 
-  // TODO: Mining stuff
+  // MISC
 
   const misc = {};
 
@@ -3489,6 +3502,198 @@ export async function getDungeons(userProfile, hypixelProfile) {
       }
     }
   }
+
+  return output;
+}
+
+export function getHotmItems(userProfile, packs) {
+  const data = userProfile.mining_core;
+  const output = [];
+
+  // Filling the space with empty items
+  for (let index = 0; index < 7 * 9; index++) {
+    output.push(helper.generateItem());
+  }
+
+  if (!data) {
+    return output;
+  }
+
+  const hotmLevelData = data.experience ? getLevelByXp(data.experience, { type: "hotm" }) : 0;
+  const nodes = data.nodes
+    ? Object.fromEntries(Object.entries(data.nodes).filter(([key, value]) => !key.startsWith("toggle_")))
+    : {};
+  const toggles = data.nodes
+    ? Object.fromEntries(Object.entries(data.nodes).filter(([key, value]) => key.startsWith("toggle_")))
+    : {};
+  const mcdata = getMiningCoreData(userProfile);
+
+  // Check for missing node classes
+  for (const nodeId in nodes) {
+    if (constants.hotm.nodes[nodeId] == undefined) {
+      throw `Missing Heart of the Mountain node: ${nodeId}`;
+    }
+  }
+
+  // Processing nodes
+  for (const nodeId in constants.hotm.nodes) {
+    const enabled = toggles[`toggle_${nodeId}`] ?? true;
+    const level = nodes[nodeId] ?? 0;
+    const node = new constants.hotm.nodes[nodeId]({
+      level,
+      enabled,
+      nodes,
+      hotmLevelData,
+      selectedPickaxeAbility: data.selected_pickaxe_ability,
+    });
+
+    output[node.position7x9 - 1] = helper.generateItem({
+      display_name: node.name,
+      id: node.itemData.id,
+      Damage: node.itemData.Damage,
+      glowing: node.itemData.glowing,
+      tag: {
+        display: {
+          Name: node.displayName,
+          Lore: node.lore,
+        },
+      },
+      position: node.position7x9,
+    });
+  }
+
+  // Processing HotM tiers
+  for (let tier = 1; tier <= constants.hotm.tiers; tier++) {
+    const hotm = new constants.hotm.hotm(tier, hotmLevelData);
+
+    output[hotm.position7x9 - 1] = helper.generateItem({
+      display_name: `Tier ${tier}`,
+      id: hotm.itemData.id,
+      Damage: hotm.itemData.Damage,
+      glowing: hotm.itemData.glowing,
+      tag: {
+        display: {
+          Name: hotm.displayName,
+          Lore: hotm.lore,
+        },
+      },
+      position: hotm.position7x9,
+    });
+  }
+
+  // Processing HotM items (stats, hc crystals, reset)
+  for (const itemClass of constants.hotm.items) {
+    const item = new itemClass({
+      resources: {
+        token_of_the_mountain: mcdata.tokens,
+        mithril_powder: mcdata.powder.mithril,
+        gemstone_powder: mcdata.powder.gemstone,
+      },
+      crystals: mcdata.crystal_nucleus.crystals,
+      last_reset: mcdata.hotm_last_reset,
+    });
+
+    output[item.position7x9 - 1] = helper.generateItem({
+      display_name: helper.removeFormatting(item.displayName),
+      id: item.itemData.id,
+      Damage: item.itemData.Damage,
+      glowing: item.itemData.glowing,
+      texture_path: item.itemData?.texture_path,
+      tag: {
+        display: {
+          Name: item.displayName,
+          Lore: item.lore,
+        },
+      },
+      position: item.position7x9,
+    });
+  }
+
+  // Processing textures
+  output.forEach(async (item) => {
+    const customTexture = await getTexture(item, false, packs);
+
+    if (customTexture) {
+      item.animated = customTexture.animated;
+      item.texture_path = "/" + customTexture.path;
+      item.texture_pack = customTexture.pack.config;
+      item.texture_pack.base_path =
+        "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.basePath);
+    }
+  });
+
+  return output;
+}
+
+export function getMiningCoreData(userProfile) {
+  const output = {};
+  const data = userProfile.mining_core;
+
+  if (!data) {
+    return null;
+  }
+
+  output.tier = getLevelByXp(data.experience, { type: "hotm" });
+
+  const totalTokens = helper.calcHotmTokens(output.tier.level, data.nodes.special_0);
+  output.tokens = {
+    total: totalTokens,
+    spent: data.tokens_spent || 0,
+    available: totalTokens - (data.tokens_spent || 0),
+  };
+
+  output.selected_pickaxe_ability = data.selected_pickaxe_ability
+    ? constants.hotm.names[data.selected_pickaxe_ability]
+    : null;
+
+  output.powder = {
+    mithril: {
+      total: (data.powder_mithril || 0) + (data.powder_spent_mithril || 0),
+      spent: data.powder_spent_mithril || 0,
+      available: data.powder_mithril || 0,
+    },
+    gemstone: {
+      total: (data.powder_gemstone || 0) + (data.powder_spent_gemstone || 0),
+      spent: data.powder_spent_gemstone || 0,
+      available: data.powder_gemstone || 0,
+    },
+  };
+
+  const crystals_completed = data.crystals
+    ? Object.values(data.crystals)
+        .filter((x) => x.total_placed)
+        .map((x) => x.total_placed)
+    : [];
+  output.crystal_nucleus = {
+    times_completed: crystals_completed.length > 0 ? Math.min(...crystals_completed) : 0,
+    crystals: data.crystals || {},
+    goblin: data.biomes?.goblin ?? null,
+    precursor: data.biomes?.precursor ?? null,
+  };
+
+  output.daily_ores = {
+    mined: data.daily_ores_mined,
+    day: data.daily_ores_mined_day,
+    ores: {
+      mithril: {
+        day: data.daily_ores_mined_day_mithril_ore,
+        count: data.daily_ores_mined_mithril_ore,
+      },
+      gemstone: {
+        day: data.daily_ores_mined_day_gemstone,
+        count: data.daily_ores_mined_gemstone,
+      },
+    },
+  };
+
+  output.hotm_last_reset = data.last_reset || 0;
+
+  output.crystal_hollows_last_access = data.greater_mines_last_access || 0;
+
+  output.daily_effect = {
+    effect: data.current_daily_effect || null,
+    last_changed: data.current_daily_effect_last_changed || null,
+  };
 
   return output;
 }

@@ -131,6 +131,7 @@ export const allItems = new Map(
     items.personal_vault,
     items.wardrobe_inventory,
     items.storage,
+    items.hotm,
   ]
     .flat()
     .flatMap((item) => {
@@ -177,6 +178,10 @@ export function isEnchanted(item: Item): boolean {
   }
 
   if ("tag" in item && Array.isArray(item.tag.ench)) {
+    return true;
+  }
+
+  if (item.glowing) {
     return true;
   }
 

@@ -2,7 +2,7 @@ import cluster from "cluster";
 import axios from "axios";
 import sanitize from "mongo-sanitize";
 import "axios-debug-log";
-
+import { v4 } from "uuid";
 import retry from "async-retry";
 
 import * as constants from "./constants.js";
@@ -904,4 +904,132 @@ export function generateGemLore(type, tier, rarity) {
 
 export function rarityNameToInt(string) {
   return constants.rarities.indexOf(string.toLowerCase());
+}
+
+/**
+ * rounds a number to a certain number of decimal places
+ * @param {number} num the number to be rounded
+ * @param {number} decimals the number of decimal places to round to
+ * @returns {number} the rounded number
+ */
+export function round(num, decimals = 0) {
+  return Math.round(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
+}
+
+/**
+ * floors a number to a certain number of decimal places
+ * @param {number} num the number to be floored
+ * @param {number} decimals the number of decimal places to floor to
+ * @returns {number} the floored number
+ */
+export function floor(num, decimals = 0) {
+  return Math.floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
+}
+
+export function generateItem(data) {
+  if (!data) {
+    return {
+      itemId: v4("itemid"),
+      item_index: Date.now(),
+    };
+  }
+
+  const default_data = {
+    id: 389,
+    Damage: 0,
+    Count: 1,
+    display_name: "",
+    display_name_print: "",
+    rarity: null,
+    equipmentType: "none",
+    type: "misc",
+    tag: {
+      display: {
+        Name: "",
+        Lore: [""],
+      },
+    },
+    itemId: v4("itemid"),
+    item_index: Date.now(),
+  };
+
+  // Making sure rarity is lowercase
+  if (data.rarity) {
+    data.rarity = data.rarity.toLowerCase();
+  }
+
+  // Setting display_name_print = display_name if not specified
+  if (data.display_name && !data.display_name_print) {
+    data.display_name_print = data.display_name;
+  }
+
+  // Setting tag.display.Name using display_name if not specified
+  if (data.display_name && !data.tag.display.Name) {
+    data.tag = data.tag ?? {};
+    data.tag.display = data.tag.display ?? {};
+    const rarityColor = data.rarity ? `§${constants.rarityColors[data.rarity ?? "common"]}` : "";
+    data.tag.display.Name = `${rarityColor}${data.display_name}`;
+  }
+
+  // Creating final item
+  return Object.assign(default_data, data);
+}
+
+/**
+ * @param {number} hotmTier
+ * @param {number} potmTier
+ * @returns {number}
+ */
+export function calcHotmTokens(hotmTier, potmTier) {
+  let tokens = 0;
+
+  for (let tier = 1; tier <= hotmTier; tier++) {
+    tokens += constants.hotm.rewards.hotm[tier]?.token_of_the_mountain || 0;
+  }
+
+  for (let tier = 1; tier <= potmTier; tier++) {
+    tokens += constants.hotm.rewards.potm[tier]?.token_of_the_mountain || 0;
+  }
+
+  return tokens;
+}
+
+/**
+ * removes Minecraft formatting codes from a string
+ * @param {string} string
+ * @returns {string}
+ */
+export function removeFormatting(string) {
+  return string.replace(/§[0-9a-z]/g, "");
+}
+
+/**
+ * convert an amount of seconds into seconds minutes and hours
+ * @param {string} seconds
+ * @param {"friendly"|"friendlyhhmm"|"clock"} format
+ * @param {boolean} alwaysTwoDigits
+ * @returns {string}
+ */
+export function convertHMS(seconds, format = "clock", alwaysTwoDigits = false) {
+  seconds = parseInt(seconds, 10);
+
+  let hh = Math.floor(seconds / 3600);
+  let mm = Math.floor((seconds - hh * 3600) / 60);
+  let ss = seconds - hh * 3600 - mm * 60;
+
+  if (alwaysTwoDigits) {
+    hh = hh < 10 ? `0${hh}` : hh;
+    mm = mm < 10 ? `0${mm}` : mm;
+    ss = ss < 10 ? `0${ss}` : ss;
+  }
+
+  switch (format) {
+    case "friendly":
+      return `${hh} hours, ${mm} minutes and ${ss} seconds`;
+    case "friendlyhhmm":
+      return `${hh} hours and ${mm} minutes`;
+    // clock
+    default:
+      return `${hh}:${mm}:${ss}`;
+  }
 }
