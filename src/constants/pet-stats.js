@@ -1,12 +1,5 @@
 import { stats_symbols as symbols } from "./stats.js";
-
-function round(num, decimals = 0) {
-  return Math.round(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
-}
-
-function floor(num, decimals = 0) {
-  return Math.floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
-}
+import { round, floor } from "../helper.js";
 
 function formatStat(stat) {
   let statFloored = Math.floor(stat);

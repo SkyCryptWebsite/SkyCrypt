@@ -6,6 +6,8 @@
 html {
   background: white;
 
+  scroll-behavior: initial;
+
   &:before {
     content: none;
   }

@@ -43,6 +43,8 @@ export class InventoryView extends LitElement {
           </div>`
         );
       }
+    } else if (this.inventoryType === "hotm") {
+      pagesize = 7 * 9;
     }
 
     inventory.forEach((item, index) => {
