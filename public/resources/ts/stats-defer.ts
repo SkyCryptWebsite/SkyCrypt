@@ -147,8 +147,6 @@ export const allItems = new Map(
 
 const dimmer = document.querySelector("#dimmer") as HTMLElement;
 
-const inventoryContainer = document.querySelector("#inventory_container") as HTMLElement;
-
 const url = new URL(location.href);
 
 url.searchParams.delete("__cf_chl_jschl_tk__");
