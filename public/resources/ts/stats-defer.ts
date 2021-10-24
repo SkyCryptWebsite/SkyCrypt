@@ -830,7 +830,7 @@ const scrollMemory = new ScrollMemory();
 const intersectingElements = new Map();
 
 const sectionObserver = new IntersectionObserver(
-  (entries, observer) => {
+  (entries) => {
     for (const entry of entries) {
       intersectingElements.set(entry.target, entry.isIntersecting);
     }
