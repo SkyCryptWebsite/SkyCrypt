@@ -339,7 +339,7 @@ function fillLore(element: HTMLElement) {
 
   if ("lore" in item) {
     itemLore.innerHTML = item.lore;
-  } else if ("tag" in item && item.tag.display && Array.isArray(item.tag.display?.Lore)) {
+  } else if ("tag" in item && Array.isArray(item.tag.display?.Lore)) {
     itemLore.innerHTML = item.tag.display.Lore.map(
       (line: string) => '<span class="lore-row">' + renderLore(line) + "</span>"
     ).join("");

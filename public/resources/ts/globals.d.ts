@@ -103,7 +103,7 @@ interface Item extends DisplayItem, ItemSlot {
 }
 
 interface ItemTag {
-  display?: ItemTagDisplay;
+  display: ItemTagDisplay;
   ench?: ItemTagEnch[];
   CustomPotionEffects?: ItemTagCustomPotionEffects[];
   ExtraAttributes?: ItemTagExtraAttributes;
