@@ -58,7 +58,6 @@
     "ioredis": "^4.28.0",
     "lit": "^2.0.2",
     "lodash": "^4.17.20",
-    "lodash.escaperegexp": "^4.1.2",
     "micromatch": "^4.0.4",
     "minecraft-data": "^2.95.0",
     "moment": "^2.29.1",
