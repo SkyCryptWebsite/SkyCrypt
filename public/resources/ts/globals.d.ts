@@ -119,15 +119,11 @@ interface ItemTagExtraAttributes {
 
 interface ItemTagSkullOwner {
   Id: string;
-  Properties: ItemTagSkullOwnerProperties;
-}
-
-interface ItemTagSkullOwnerProperties {
-  textures: ItemTagSkullOwnerPropertiesTextures[];
-}
-
-interface ItemTagSkullOwnerPropertiesTextures {
-  Value: string;
+  Properties: {
+    textures: {
+      Value: string;
+    }[];
+  };
 }
 
 interface ItemTagCustomPotionEffects {
