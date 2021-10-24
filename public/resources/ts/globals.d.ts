@@ -617,3 +617,28 @@ interface Profile {
 }
 
 type slayerName = "enderman" | "spider" | "wolf" | "zombie";
+
+interface Navigator {
+  userAgentData: NavigatorUAData;
+}
+
+interface NavigatorUAData {
+  brands?: NavigatorUABrandVersion[];
+  uaList?: NavigatorUABrandVersion[];
+  mobile: boolean;
+  getHighEntropyValues<T extends keyof UADataValues>(hints: T[]): Promise<{ [key in T]: UADataValues[T] }>;
+  platform?: string;
+}
+
+interface NavigatorUABrandVersion {
+  brand: string;
+  version: string;
+}
+
+interface UADataValues {
+  platform: string;
+  platformVersion: string;
+  architecture: string;
+  model: string;
+  uaFullVersion: string;
+}
