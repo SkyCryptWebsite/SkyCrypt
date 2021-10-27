@@ -1,9 +1,9 @@
-const credentials = require("../../credentials.json");
-const lilyWeight = require("lilyweight")(credentials.hypixel_api_key);
+import credentials from "../credentials.js";
+import lilyWeight from "lilyweight";
+const lily = lilyWeight(credentials.hypixel_api_key);
 
-module.exports = {
-  calculateWeight: async (uuid) => {
-    const weight = await lilyWeight.getWeight(uuid);
-    return weight;
-  },
-};
+
+export async function calculateLilyWeight(uuid) {
+  const weight = await lily.getWeight(uuid);
+  return weight;
+}

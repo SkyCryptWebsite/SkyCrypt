@@ -1,4 +1,4 @@
-const constants = require("../constants");
+import * as constants from "constants";
 
 const level50SkillExp = 55172425;
 const level60SkillExp = 111672425;
@@ -195,73 +195,70 @@ function calcSlayerWeight(type, experience) {
     weight_overflow: overflow,
   };
 }
-
-module.exports = {
   /*
     All weight calculations are provided by Senither (https://github.com/Senither/)
   */
 
-  calculateWeight: (profile) => {
-    let output = {
-      overall: 0,
-      dungeon: {
-        total: 0,
-        dungeons: {},
-        classes: {},
-      },
-      skill: {
-        total: 0,
-        skills: {},
-      },
-      slayer: {
-        total: 0,
-        slayers: {},
-      },
-    };
+export function calculateSenitherWeight(profile) {
+  let output = {
+    overall: 0,
+    dungeon: {
+      total: 0,
+      dungeons: {},
+      classes: {},
+    },
+    skill: {
+      total: 0,
+      skills: {},
+    },
+    slayer: {
+      total: 0,
+      slayers: {},
+    },
+  };
 
-    for (let skillName in profile.levels) {
-      let data = profile.levels[skillName];
+  for (let skillName in profile.levels) {
+    let data = profile.levels[skillName];
 
-      let sw = calcSkillWeight(skillWeight[skillName], data.levelWithProgress, data.xp);
+    let sw = calcSkillWeight(skillWeight[skillName], data.levelWithProgress, data.xp);
 
-      output.skill.skills[skillName] = sw.weight + sw.weight_overflow;
-      output.skill.total += output.skill.skills[skillName];
-    }
+    output.skill.skills[skillName] = sw.weight + sw.weight_overflow;
+    output.skill.total += output.skill.skills[skillName];
+  }
 
-    /*
-      //dungeon dungeons
+  /*
+    //dungeon dungeons
 
-      let dungeonLevelWithProgress = calcDungeonsClassLevelWithProgress(dungeon.experience);
+    let dungeonLevelWithProgress = calcDungeonsClassLevelWithProgress(dungeon.experience);
 
-      let dungeonsWeight = calcDungeonsWeight(type, dungeonLevelWithProgress, dungeon.experience);
-      output.dungeonsWeight += dungeonsWeight.weight;
-      output.dungeonsWeight += dungeonsWeight.weight_overflow;
+    let dungeonsWeight = calcDungeonsWeight(type, dungeonLevelWithProgress, dungeon.experience);
+    output.dungeonsWeight += dungeonsWeight.weight;
+    output.dungeonsWeight += dungeonsWeight.weight_overflow;
 
-      //dungeon classes
+    //dungeon classes
 
-      let levelWithProgress = calcDungeonsClassLevelWithProgress(data.experience);
+    let levelWithProgress = calcDungeonsClassLevelWithProgress(data.experience);
 
-      let classWeight = calcDungeonsWeight(className, levelWithProgress, data.experience);
-      output.dungeonsWeight += classWeight.weight;
-      output.dungeonsWeight += classWeight.weight_overflow;
+    let classWeight = calcDungeonsWeight(className, levelWithProgress, data.experience);
+    output.dungeonsWeight += classWeight.weight;
+    output.dungeonsWeight += classWeight.weight_overflow;
 
-      output.dungeonsWeight = output.dungeons.dungeonsWeight ?? -1;
+    output.dungeonsWeight = output.dungeons.dungeonsWeight ?? -1;
 
-    */
+  */
 
-    for (let slayerName in profile.slayers) {
-      let data = profile.slayers[slayerName];
-      let sw = calcSlayerWeight(slayerName, data.level);
+  for (let slayerName in profile.slayers) {
+    let data = profile.slayers[slayerName];
+    let sw = calcSlayerWeight(slayerName, data.level);
 
-      output.slayer.slayers[slayerName] = sw.weight + sw.weight_overflow;
-      output.slayer.total += output.slayer.slayers[slayerName];
-    }
+    output.slayer.slayers[slayerName] = sw.weight + sw.weight_overflow;
+    output.slayer.total += output.slayer.slayers[slayerName];
+  }
 
-    output.overall = [output.dungeon.total, output.skill.total, output.slayer.total]
-      .filter((x) => x >= 0)
-      .reduce((total, value) => total + value);
+  output.overall = [output.dungeon.total, output.skill.total, output.slayer.total]
+    .filter((x) => x >= 0)
+    .reduce((total, value) => total + value);
 
-    console.log(output);
-    return output;
-  },
-};
+  console.log(output);
+  return output;
+}
