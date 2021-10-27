@@ -1,15 +1,18 @@
 /*
 Minecraft Head Rendering base provided by Crafatar: https://github.com/crafatar/crafatar
-Hat layers, transparency and shading added by me
+Hat layers, transparency and shading added by @LeaPhant
 */
 
-const { createCanvas, loadImage } = require("canvas");
-const css = require("css");
-const helper = require("./helper");
-const path = require("path");
-const customResources = require("./custom-resources");
-const sanitize = require("mongo-sanitize");
-const fs = require("fs-extra");
+import canvasModule from "canvas";
+const { createCanvas, loadImage } = canvasModule;
+import css from "css";
+import path from "path";
+import { fileURLToPath } from "url";
+import * as customResources from "./custom-resources.js";
+import sanitize from "mongo-sanitize";
+import fs from "fs-extra";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const skew_a = 26 / 45;
 const skew_b = skew_a * 2;
@@ -109,280 +112,276 @@ async function renderColoredItem(color, baseImage, overlayImage) {
   return await canvas.toBuffer("image/png");
 }
 
-module.exports = {
-  renderHead: async (url, scale) => {
-    let hat_factor = 0.94;
+export async function renderHead(url, scale) {
+  let hat_factor = 0.94;
 
-    let canvas = createCanvas(scale * 20, scale * 18.5);
-    let hat_canvas = createCanvas(scale * 20, scale * 18.5);
-    let hat_bg_canvas = createCanvas(scale * 20, scale * 18.5);
-    let head_canvas = createCanvas(scale * 20 * hat_factor, scale * 18.5);
+  let canvas = createCanvas(scale * 20, scale * 18.5);
+  let hat_canvas = createCanvas(scale * 20, scale * 18.5);
+  let hat_bg_canvas = createCanvas(scale * 20, scale * 18.5);
+  let head_canvas = createCanvas(scale * 20 * hat_factor, scale * 18.5);
 
-    let ctx = canvas.getContext("2d");
-    let hat = hat_canvas.getContext("2d");
-    let hat_bg = hat_bg_canvas.getContext("2d");
-    let head = head_canvas.getContext("2d");
+  let ctx = canvas.getContext("2d");
+  let hat = hat_canvas.getContext("2d");
+  let hat_bg = hat_bg_canvas.getContext("2d");
+  let head = head_canvas.getContext("2d");
 
-    let skin = await loadImage(url);
+  let skin = await loadImage(url);
 
-    let head_bottom = resize(getPart(skin, 16, 0, 8, 8, 1), scale * (hat_factor + 0.01));
-    let head_top = resize(getPart(skin, 8, 0, 8, 8, 1), scale * (hat_factor + 0.01));
-    let head_back = flipX(resize(getPart(skin, 24, 8, 8, 8, 1), scale * (hat_factor + 0.01)));
-    let head_front = resize(getPart(skin, 8, 8, 8, 8, 1), scale * (hat_factor + 0.01));
-    let head_left = flipX(resize(getPart(skin, 16, 8, 8, 8, 1), scale * (hat_factor + 0.01)));
-    let head_right = resize(getPart(skin, 0, 8, 8, 8, 1), scale * (hat_factor + 0.01));
+  let head_bottom = resize(getPart(skin, 16, 0, 8, 8, 1), scale * (hat_factor + 0.01));
+  let head_top = resize(getPart(skin, 8, 0, 8, 8, 1), scale * (hat_factor + 0.01));
+  let head_back = flipX(resize(getPart(skin, 24, 8, 8, 8, 1), scale * (hat_factor + 0.01)));
+  let head_front = resize(getPart(skin, 8, 8, 8, 8, 1), scale * (hat_factor + 0.01));
+  let head_left = flipX(resize(getPart(skin, 16, 8, 8, 8, 1), scale * (hat_factor + 0.01)));
+  let head_right = resize(getPart(skin, 0, 8, 8, 8, 1), scale * (hat_factor + 0.01));
 
-    head_right = darken(head_right, 0.15);
-    head_front = darken(head_front, 0.25);
-    head_bottom = darken(head_bottom, 0.3);
-    head_back = darken(head_back, 0.3);
+  head_right = darken(head_right, 0.15);
+  head_front = darken(head_front, 0.25);
+  head_bottom = darken(head_bottom, 0.3);
+  head_back = darken(head_back, 0.3);
 
-    let head_top_overlay,
-      head_front_overlay,
-      head_right_overlay,
-      head_back_overlay,
-      head_bottom_overlay,
-      head_left_overlay;
+  let head_top_overlay,
+    head_front_overlay,
+    head_right_overlay,
+    head_back_overlay,
+    head_bottom_overlay,
+    head_left_overlay;
 
-    if (hasTransparency(getPart(skin, 32, 0, 32, 32, 1))) {
-      // render head overlay
-      head_top_overlay = resize(getPart(skin, 40, 0, 8, 8, 1), scale);
-      head_front_overlay = resize(getPart(skin, 40, 8, 8, 8, 1), scale);
-      head_right_overlay = resize(getPart(skin, 32, 8, 8, 8, 1), scale);
-      head_back_overlay = flipX(resize(getPart(skin, 56, 8, 8, 8, 1), scale));
-      head_bottom_overlay = resize(getPart(skin, 48, 0, 8, 8, 1), scale);
-      head_left_overlay = flipX(resize(getPart(skin, 48, 8, 8, 8, 1), scale));
+  if (hasTransparency(getPart(skin, 32, 0, 32, 32, 1))) {
+    // render head overlay
+    head_top_overlay = resize(getPart(skin, 40, 0, 8, 8, 1), scale);
+    head_front_overlay = resize(getPart(skin, 40, 8, 8, 8, 1), scale);
+    head_right_overlay = resize(getPart(skin, 32, 8, 8, 8, 1), scale);
+    head_back_overlay = flipX(resize(getPart(skin, 56, 8, 8, 8, 1), scale));
+    head_bottom_overlay = resize(getPart(skin, 48, 0, 8, 8, 1), scale);
+    head_left_overlay = flipX(resize(getPart(skin, 48, 8, 8, 8, 1), scale));
 
-      head_right_overlay = darken(head_right_overlay, 0.15);
-      head_front_overlay = darken(head_front_overlay, 0.25);
-      head_bottom_overlay = darken(head_bottom_overlay, 0.3);
-      head_back_overlay = darken(head_back_overlay, 0.3);
-    }
+    head_right_overlay = darken(head_right_overlay, 0.15);
+    head_front_overlay = darken(head_front_overlay, 0.25);
+    head_bottom_overlay = darken(head_bottom_overlay, 0.3);
+    head_back_overlay = darken(head_back_overlay, 0.3);
+  }
 
-    let x = 0;
-    let y = 0;
-    let z = 0;
+  let x = 0;
+  let y = 0;
+  let z = 0;
 
-    let z_offset = scale * 3;
-    let x_offset = scale * 2;
+  let z_offset = scale * 3;
+  let x_offset = scale * 2;
 
-    if (head_top_overlay) {
-      // hat left
-      x = x_offset + 8 * scale;
-      y = 0;
-      z = z_offset - 8 * scale;
-      hat_bg.setTransform(1, skew_a, 0, skew_b, 0, 0);
-      hat_bg.drawImage(head_left_overlay, x + y, z - y, head_left_overlay.width, head_left_overlay.height);
-
-      if (!TALISMANS.includes(url)) {
-        // hat back
-        x = x_offset;
-        y = 0;
-        z = z_offset - 0.5;
-        hat_bg.setTransform(1, -skew_a, 0, skew_b, 0, skew_a);
-        hat_bg.drawImage(head_back_overlay, y + x, x + z, head_back_overlay.width, head_back_overlay.height);
-      }
-
-      // hat bottom
-      x = x_offset;
-      y = 0;
-      z = z_offset + 8 * scale;
-      hat_bg.setTransform(1, -skew_a, 1, skew_a, 0, 0);
-      hat_bg.drawImage(head_bottom_overlay, y - z, x + z, head_bottom_overlay.width, head_bottom_overlay.height);
-
-      // hat top
-      x = x_offset;
-      y = 0;
-      z = z_offset;
-      hat.setTransform(1, -skew_a, 1, skew_a, 0, 0);
-      hat.drawImage(head_top_overlay, y - z, x + z, head_top_overlay.width, head_top_overlay.height + 1);
-
-      // hat front
-      x = x_offset + 8 * scale;
-      y = 0;
-      z = z_offset - 0.5;
-      hat.setTransform(1, -skew_a, 0, skew_b, 0, skew_a);
-      hat.drawImage(head_front_overlay, y + x, x + z, head_front_overlay.width, head_front_overlay.height);
-
-      // hat right
-      x = x_offset;
-      y = 0;
-      z = z_offset;
-      hat.setTransform(1, skew_a, 0, skew_b, 0, 0);
-      hat.drawImage(head_right_overlay, x + y, z - y, head_right_overlay.width, head_right_overlay.height);
-    }
-
-    scale *= hat_factor;
-
-    // head bottom
-    x = x_offset;
-    y = 0;
-    z = z_offset + 8 * scale;
-    head.setTransform(1, -skew_a, 1, skew_a, 0, 0);
-    head.drawImage(head_bottom, y - z, x + z, head_bottom.width, head_bottom.height);
-
-    // head left
+  if (head_top_overlay) {
+    // hat left
     x = x_offset + 8 * scale;
     y = 0;
     z = z_offset - 8 * scale;
-    head.setTransform(1, skew_a, 0, skew_b, 0, 0);
-    head.drawImage(head_left, x + y, z - y, head_left.width, head_left.height);
+    hat_bg.setTransform(1, skew_a, 0, skew_b, 0, 0);
+    hat_bg.drawImage(head_left_overlay, x + y, z - y, head_left_overlay.width, head_left_overlay.height);
 
-    // head back
+    if (!TALISMANS.includes(url)) {
+      // hat back
+      x = x_offset;
+      y = 0;
+      z = z_offset - 0.5;
+      hat_bg.setTransform(1, -skew_a, 0, skew_b, 0, skew_a);
+      hat_bg.drawImage(head_back_overlay, y + x, x + z, head_back_overlay.width, head_back_overlay.height);
+    }
+
+    // hat bottom
+    x = x_offset;
+    y = 0;
+    z = z_offset + 8 * scale;
+    hat_bg.setTransform(1, -skew_a, 1, skew_a, 0, 0);
+    hat_bg.drawImage(head_bottom_overlay, y - z, x + z, head_bottom_overlay.width, head_bottom_overlay.height);
+
+    // hat top
     x = x_offset;
     y = 0;
     z = z_offset;
-    head.setTransform(1, -skew_a, 0, skew_b, 0, skew_a);
-    head.drawImage(head_back, y + x, x + z, head_back.width, head_back.height);
+    hat.setTransform(1, -skew_a, 1, skew_a, 0, 0);
+    hat.drawImage(head_top_overlay, y - z, x + z, head_top_overlay.width, head_top_overlay.height + 1);
 
-    // head top
-    x = x_offset;
-    y = 0;
-    z = z_offset;
-    head.setTransform(1, -skew_a, 1, skew_a, 0, 0);
-    head.drawImage(head_top, y - z, x + z, head_top.width, head_top.height);
-
-    // head front
+    // hat front
     x = x_offset + 8 * scale;
     y = 0;
-    z = z_offset;
-    head.setTransform(1, -skew_a, 0, skew_b, 0, skew_a);
-    head.drawImage(head_front, y + x, x + z, head_front.width, head_front.height);
+    z = z_offset - 0.5;
+    hat.setTransform(1, -skew_a, 0, skew_b, 0, skew_a);
+    hat.drawImage(head_front_overlay, y + x, x + z, head_front_overlay.width, head_front_overlay.height);
 
-    // head right
+    // hat right
     x = x_offset;
     y = 0;
     z = z_offset;
-    head.setTransform(1, skew_a, 0, skew_b, 0, 0);
-    head.drawImage(head_right, x + y, z - y, head_right.width, head_right.height);
+    hat.setTransform(1, skew_a, 0, skew_b, 0, 0);
+    hat.drawImage(head_right_overlay, x + y, z - y, head_right_overlay.width, head_right_overlay.height);
+  }
 
-    ctx.drawImage(hat_bg_canvas, 0, 0);
-    ctx.drawImage(
-      head_canvas,
-      (scale * 20 - scale * 20 * hat_factor) / 2,
-      (scale * 18.5 - scale * 18.5 * hat_factor) / 2
-    );
-    ctx.drawImage(hat_canvas, 0, 0);
+  scale *= hat_factor;
 
-    return await canvas.toBuffer("image/png");
-  },
+  // head bottom
+  x = x_offset;
+  y = 0;
+  z = z_offset + 8 * scale;
+  head.setTransform(1, -skew_a, 1, skew_a, 0, 0);
+  head.drawImage(head_bottom, y - z, x + z, head_bottom.width, head_bottom.height);
 
-  async renderArmor(type, color) {
-    const armorBase = await loadImage(path.resolve(textureDir, `leather_${type}.png`));
-    const armorOverlay = await loadImage(path.resolve(textureDir, `leather_${type}_overlay.png`));
+  // head left
+  x = x_offset + 8 * scale;
+  y = 0;
+  z = z_offset - 8 * scale;
+  head.setTransform(1, skew_a, 0, skew_b, 0, 0);
+  head.drawImage(head_left, x + y, z - y, head_left.width, head_left.height);
 
-    return await renderColoredItem("#" + color, armorBase, armorOverlay);
-  },
+  // head back
+  x = x_offset;
+  y = 0;
+  z = z_offset;
+  head.setTransform(1, -skew_a, 0, skew_b, 0, skew_a);
+  head.drawImage(head_back, y + x, x + z, head_back.width, head_back.height);
 
-  async renderPotion(type, color) {
-    const potionLiquid = await loadImage(path.resolve(textureDir, "potion_overlay.png"));
-    const potionBottlle = await loadImage(
-      path.resolve(textureDir, type === "splash" ? "splash_potion.png" : "potion.png")
-    );
+  // head top
+  x = x_offset;
+  y = 0;
+  z = z_offset;
+  head.setTransform(1, -skew_a, 1, skew_a, 0, 0);
+  head.drawImage(head_top, y - z, x + z, head_top.width, head_top.height);
 
-    return await renderColoredItem("#" + color, potionLiquid, potionBottlle);
-  },
+  // head front
+  x = x_offset + 8 * scale;
+  y = 0;
+  z = z_offset;
+  head.setTransform(1, -skew_a, 0, skew_b, 0, skew_a);
+  head.drawImage(head_front, y + x, x + z, head_front.width, head_front.height);
 
-  renderItem: async (skyblockId, query, db) => {
-    let item = { Damage: 0, id: -1 };
-    query = sanitize(query);
+  // head right
+  x = x_offset;
+  y = 0;
+  z = z_offset;
+  head.setTransform(1, skew_a, 0, skew_b, 0, 0);
+  head.drawImage(head_right, x + y, z - y, head_right.width, head_right.height);
 
-    if (skyblockId) {
-      skyblockId = skyblockId.replace(".gif", "");
-      skyblockId = sanitize(skyblockId);
+  ctx.drawImage(hat_bg_canvas, 0, 0);
+  ctx.drawImage(
+    head_canvas,
+    (scale * 20 - scale * 20 * hat_factor) / 2,
+    (scale * 18.5 - scale * 18.5 * hat_factor) / 2
+  );
+  ctx.drawImage(hat_canvas, 0, 0);
 
-      if (skyblockId.includes(":")) {
-        const split = skyblockId.split(":");
+  return await canvas.toBuffer("image/png");
+}
 
-        skyblockId = split[0];
-        query.damage = new Number(split[1]);
-      }
+export async function renderArmor(type, color) {
+  const armorBase = await loadImage(path.resolve(textureDir, `leather_${type}.png`));
+  const armorOverlay = await loadImage(path.resolve(textureDir, `leather_${type}_overlay.png`));
 
-      item = Object.assign(item, await db.collection("items").findOne({ id: skyblockId }));
+  return await renderColoredItem("#" + color, armorBase, armorOverlay);
+}
+
+export async function renderPotion(type, color) {
+  const potionLiquid = await loadImage(path.resolve(textureDir, "potion_overlay.png"));
+  const potionBottlle = await loadImage(
+    path.resolve(textureDir, type === "splash" ? "splash_potion.png" : "potion.png")
+  );
+
+  return await renderColoredItem("#" + color, potionLiquid, potionBottlle);
+}
+
+export async function renderItem(skyblockId, query, db) {
+  let item = { Damage: 0, id: -1 };
+  query = sanitize(query);
+
+  if (skyblockId) {
+    skyblockId = skyblockId.replace(".gif", "");
+    skyblockId = sanitize(skyblockId);
+
+    if (skyblockId.includes(":")) {
+      const split = skyblockId.split(":");
+
+      skyblockId = split[0];
+      query.damage = new Number(split[1]);
     }
 
-    if (query.name) {
-      const results = await db
-        .collection("items")
-        .find({ $text: { $search: query.name } })
-        .toArray();
+    item = Object.assign(item, await db.collection("items").findOne({ id: skyblockId }));
+  }
 
-      const filteredResults = results.filter((a) => a.name.toLowerCase() == query.name.toLowerCase());
+  if (query.name) {
+    const results = await db
+      .collection("items")
+      .find({ $text: { $search: query.name } })
+      .toArray();
 
-      if (filteredResults.length > 0) {
-        item = Object.assign(item, filteredResults[0]);
-      }
+    const filteredResults = results.filter((a) => a.name.toLowerCase() == query.name.toLowerCase());
+
+    if (filteredResults.length > 0) {
+      item = Object.assign(item, filteredResults[0]);
+    }
+  }
+
+  if (query.id) {
+    item.id = query.id;
+  }
+
+  if (query.damage) {
+    item.damage = query.damage;
+  }
+
+  if (query.name) {
+    item.name = query.name;
+  }
+
+  if ("damage" in item) {
+    item.Damage = item.damage;
+    delete item.damage;
+  }
+
+  if ("item_id" in item) {
+    item.id = item.item_id;
+  }
+
+  if ("name" in item) {
+    item.tag = { display: { Name: item.name } };
+  }
+
+  if ("texture" in item) {
+    return {
+      mime: "image/png",
+      image: await renderHead(`http://textures.minecraft.net/texture/${item.texture}`, 6.4),
+    };
+  }
+
+  const outputTexture = { mime: "image/png" };
+
+  for (const rule of itemsCss.stylesheet.rules) {
+    if (!rule.selectors?.includes(`.icon-${item.id}_${item.Damage}`)) {
+      continue;
     }
 
-    if (query.id) {
-      item.id = query.id;
+    const coords = rule.declarations[0].value.split(" ").map((a) => Math.abs(parseInt(a)));
+
+    outputTexture.image = await getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer("image/png");
+  }
+
+  const customTexture = await customResources.getTexture(item, "name" in query, query.pack);
+
+  if (customTexture) {
+    if (customTexture.animated) {
+      customTexture.path = customTexture.path.replace(".png", ".gif");
+      outputTexture.mime = "image/gif";
     }
 
-    if (query.damage) {
-      item.damage = query.damage;
-    }
+    outputTexture.path = customTexture.path;
+    outputTexture.image = await fs.readFile(path.resolve(__dirname, "..", "public", customTexture.path));
+  }
 
-    if (query.name) {
-      item.name = query.name;
-    }
+  if (!("image" in outputTexture)) {
+    outputTexture.error = "item not found";
+  }
 
-    if ("damage" in item) {
-      item.Damage = item.damage;
-      delete item.damage;
-    }
+  return outputTexture;
+}
 
-    if ("item_id" in item) {
-      item.id = item.item_id;
-    }
-
-    if ("name" in item) {
-      item.tag = {};
-
-      helper.setPath(item, item.name, "tag", "display", "Name");
-    }
-
-    if ("texture" in item) {
-      return {
-        mime: "image/png",
-        image: await module.exports.renderHead(`http://textures.minecraft.net/texture/${item.texture}`, 6.4),
-      };
-    }
-
-    const outputTexture = { mime: "image/png" };
-
-    for (const rule of itemsCss.stylesheet.rules) {
-      if (!rule.selectors?.includes(`.icon-${item.id}_${item.Damage}`)) {
-        continue;
-      }
-
-      const coords = rule.declarations[0].value.split(" ").map((a) => Math.abs(parseInt(a)));
-
-      outputTexture.image = await getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer("image/png");
-    }
-
-    const customTexture = await customResources.getTexture(item, "name" in query, query.pack);
-
-    if (customTexture) {
-      if (customTexture.animated) {
-        customTexture.path = customTexture.path.replace(".png", ".gif");
-        outputTexture.mime = "image/gif";
-      }
-
-      outputTexture.path = customTexture.path;
-      outputTexture.image = await fs.readFile(path.resolve(__dirname, "..", "public", customTexture.path));
-    }
-
-    if (!("image" in outputTexture)) {
-      outputTexture.error = "item not found";
-    }
-
-    return outputTexture;
-  },
-
-  init: async () => {
-    itemsSheet = await loadImage(path.resolve(__dirname, "..", "public", "resources", "img", "inventory", `items.png`));
-    itemsCss = css.parse(
-      await fs.readFile(path.resolve(__dirname, "..", "public", "resources", "css", `inventory.css`), "utf8")
-    );
-  },
-};
+export async function init() {
+  itemsSheet = await loadImage(path.resolve(__dirname, "..", "public", "resources", "img", "inventory", `items.png`));
+  itemsCss = css.parse(
+    await fs.readFile(path.resolve(__dirname, "..", "public", "resources", "css", `inventory.css`), "utf8")
+  );
+}

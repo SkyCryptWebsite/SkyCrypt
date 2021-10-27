@@ -15,12 +15,12 @@ const browsers: {
     help: "https://support.apple.com/en-us/HT204416",
   },
   chrome: {
-    version: "84",
+    version: "88",
     help: "https://support.google.com/chrome/answer/95414",
     androidPackage: "com.android.chrome",
   },
   edge: {
-    version: "84",
+    version: "88",
     help: "https://support.microsoft.com/en-us/topic/microsoft-edge-update-settings-af8aaca2-1b69-4870-94fe-18822dbb7ef1",
     androidPackage: "com.microsoft.emmx",
   },
@@ -45,6 +45,7 @@ function generatePopup(name: string) {
   const browser: { help: string; androidPackage?: string } = name == "iOS" ? { help: iOSHelpPage } : browsers[name];
   const wrapper = document.createElement("div");
   wrapper.className = "update-popup-wrapper";
+
   const popup = document.createElement("div");
   popup.className = "update-popup";
   const header = document.createElement("h2");
@@ -53,12 +54,18 @@ function generatePopup(name: string) {
   const message = document.createElement("p");
   message.innerHTML = (name == "iOS" ? "Update iOS" : "Update your browser") + " for the best SkyCrypt experience.";
   popup.appendChild(message);
+
+  const buttonRow = document.createElement("div");
+  buttonRow.className = "button-row";
+
   const close = document.createElement("button");
   close.innerHTML = "close";
   close.onclick = function () {
     sessionStorage.setItem("hide update warning", "true");
     wrapper.remove();
   };
+  buttonRow.appendChild(close);
+
   const update = document.createElement("a");
   if (bowser.is("android") && browser.androidPackage) {
     update.href = "https://play.google.com/store/apps/details?id=" + browser.androidPackage;
@@ -69,9 +76,12 @@ function generatePopup(name: string) {
   }
   update.target = "_blank";
   update.rel = "noreferrer";
-  popup.appendChild(update);
-  popup.appendChild(close);
+  buttonRow.appendChild(update);
+
+  popup.appendChild(buttonRow);
+
   wrapper.appendChild(popup);
+
   document.body.appendChild(wrapper);
   update.focus();
 }

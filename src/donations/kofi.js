@@ -1,6 +1,6 @@
-const credentials = require("../../credentials.json");
+import credentials from "../credentials.js";
 
-module.exports = async (app, db) => {
+export default async (app, db) => {
   if (!("kofi_key" in credentials)) {
     return;
   }

@@ -18,7 +18,10 @@
   <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone8Plus.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)">
   <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone8.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
   <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
-  <link rel="stylesheet" href="/resources/css/index.css?<%- fileHashes.css['index.css'] %> ">
+  <% if(page == 'index'){ %>
+    <link rel="stylesheet" href="/resources/css/index.css?<%- fileHashes.css['index.css'] %> ">
+  <% } %>
+  <link rel="stylesheet" href="/resources/css/shared.css?<%- fileHashes.css['shared.css'] %> ">
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-185827357-1"></script>
@@ -33,8 +36,10 @@
 
   <% if(page == 'stats'){ %>
     <link rel="preload" href="/resources/css/inventory.css?<%- fileHashes.css['inventory.css'] %>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <script async type="module" src="/resources/js/<%- fileNameMap['localTimeElement'] %>"></script>
+    <script async type="module" src="/resources/js/<%- fileNameMap['local-time'] %>"></script>
     <script defer type="module" src="/resources/js/<%- fileNameMap['stats-defer'] %>"></script>
+    <script defer type="module" src="/resources/js/<%- fileNameMap['rich-item'] %>"></script>
+    <link rel="preload" href="/resources/js/<%- fileNameMap['inventory-view'] %>" as="script">
   <% } %>
 
   <script defer type="module" src="/resources/js/<%- fileNameMap['common-defer'] %>"></script>
