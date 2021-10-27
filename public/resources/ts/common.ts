@@ -17,7 +17,8 @@ window.setTimeout(() => {
   }
 });
 
-const platform = navigator.userAgentData?.platform || "unknown";
+// eslint-disable-next-line deprecation/deprecation
+const platform = navigator.platform ?? navigator.userAgentData?.platform ?? "unknown";
 const iOS = ["iPad Simulator", "iPhone Simulator", "iPod Simulator", "iPad", "iPhone", "iPod"].includes(platform);
 
 if (iOS) {
