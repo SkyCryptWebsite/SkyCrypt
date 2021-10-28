@@ -526,8 +526,8 @@ export function getPrices(product) {
  * @param {boolean} floor rounds down if true, up if false
  * @param {number} rounding power of ten of the number of digits you want after the comma
  *
- * @example formatNumber(123456798, true, 10) = 123.4M
- * @example formatNumber(123456798, true, 100) = 123.45M
+ * @example formatNumber(123456798, true, 10) = "123.4M"
+ * @example formatNumber(123456798, true, 100) = "123.45M"
  */
 export const formatNumber = (number, floor, rounding = 10) => {
   if (number < 1000) {
