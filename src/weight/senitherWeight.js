@@ -259,6 +259,5 @@ export function calculateSenitherWeight(profile) {
     .filter((x) => x >= 0)
     .reduce((total, value) => total + value);
 
-  console.log(output);
   return output;
 }
