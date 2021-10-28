@@ -19,7 +19,8 @@
     "scss:watch": "sass --watch public/resources/scss:public/resources/css",
     "rollup": "npx rollup -c",
     "rollup:watch": "npx rollup -c -w",
-    "nodemon": "nodemon index"
+    "nodemon": "nodemon index",
+    "update": "git pull && pm2 restart SkyCryptProd"
   },
   "repository": {
     "type": "git",
