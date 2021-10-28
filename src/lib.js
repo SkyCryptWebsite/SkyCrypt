@@ -1745,8 +1745,11 @@ export const getStats = async (
     farming: constants.default_skill_caps.farming + (userProfile.jacob2?.perks?.farming_level_cap || 0),
   };
 
-  const { levels, average_level, average_level_no_progress, total_skill_xp, average_level_rank } =
-    await getLevels(userProfile, hypixelProfile, levelCaps);
+  const { levels, average_level, average_level_no_progress, total_skill_xp, average_level_rank } = await getLevels(
+    userProfile,
+    hypixelProfile,
+    levelCaps
+  );
 
   output.levels = levels;
   output.average_level = average_level;
@@ -2714,7 +2717,7 @@ export const getStats = async (
 
     */
 
-    /*
+  /*
     output.dungeonsWeight = output.dungeons.dungeonsWeight ?? -1;
     output.skillWeight = skillWeight ?? -1;
     output.slayerWeight = slayerWeight ?? -1;
@@ -2724,12 +2727,12 @@ export const getStats = async (
       .reduce((total, value) => total + value);
     */
 
-    const lily = await calculateLilyWeight(profile.uuid);
-    const senither = calculateSenitherWeight(output);
-    output.weight = {
-      senither: senither,
-      lily: lily,
-    };
+  const lily = await calculateLilyWeight(profile.uuid);
+  const senither = calculateSenitherWeight(output);
+  output.weight = {
+    senither: senither,
+    lily: lily,
+  };
 
   console.debug(`${options.debugId}: getStats returned. (${new Date().getTime() - timeStarted}ms)`);
   return output;
