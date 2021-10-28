@@ -1,4 +1,4 @@
-import * as constants from "constants";
+import * as constants from "../constants.js";
 
 const level50SkillExp = 55172425;
 const level60SkillExp = 111672425;
