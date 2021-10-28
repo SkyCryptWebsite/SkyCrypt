@@ -1256,7 +1256,7 @@ export const getItems = async (
   // All items not in the inventory or accessory bag should be inactive so they don't contribute to the total stats
   enderchest = enderchest.map((a) => Object.assign({ isInactive: true }, a));
   storage = storage.map((a) => Object.assign({ isInactive: true }, a));
-  hotm = hotm.map((a) => Object.assign({ isInactive: true }, a)); // TODO: Required?
+  hotm = hotm.map((a) => Object.assign({ isInactive: true }, a));
 
   // Add candy bag contents as backpack contents to candy bag
   for (let item of all_items) {
