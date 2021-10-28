@@ -226,26 +226,28 @@ export function calculateSenitherWeight(profile) {
     output.skill.total += output.skill.skills[skillName];
   }
 
-  /*
-    //dungeon dungeons
+  //dungeon weight
+  const dungeons = profile.dungeons;
 
-    let dungeonLevelWithProgress = calcDungeonsClassLevelWithProgress(dungeon.experience);
+  //let dungeonLevelWithProgress = calcDungeonsClassLevelWithProgress(profile.dungeons.experience);
 
-    let dungeonsWeight = calcDungeonsWeight(type, dungeonLevelWithProgress, dungeon.experience);
-    output.dungeonsWeight += dungeonsWeight.weight;
-    output.dungeonsWeight += dungeonsWeight.weight_overflow;
+  //let dungeonsWeight = calcDungeonsWeight(type, dungeonLevelWithProgress, dungeon.experience);
+  //output.dungeonsWeight += dungeonsWeight.weight;
+  //output.dungeonsWeight += dungeonsWeight.weight_overflow;
 
-    //dungeon classes
+  //dungeon classes
+  for (const className of Object.keys(dungeons.classes)) {
+    const dungeonClass = dungeons.classes[className];
+    const xp = dungeonClass.experience.xp;
 
-    let levelWithProgress = calcDungeonsClassLevelWithProgress(data.experience);
+    let levelWithProgress = calcDungeonsClassLevelWithProgress(xp);
 
-    let classWeight = calcDungeonsWeight(className, levelWithProgress, data.experience);
+    let classWeight = calcDungeonsWeight(className, levelWithProgress, xp);
     output.dungeonsWeight += classWeight.weight;
     output.dungeonsWeight += classWeight.weight_overflow;
 
-    output.dungeonsWeight = output.dungeons.dungeonsWeight ?? -1;
-
-  */
+    output.dungeonsWeight = output.dungeonsWeight ?? -1;
+  }
 
   for (let slayerName in profile.slayers) {
     let data = profile.slayers[slayerName];
