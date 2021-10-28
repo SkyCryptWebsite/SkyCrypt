@@ -195,7 +195,7 @@ function calcSlayerWeight(type, experience) {
     weight_overflow: overflow,
   };
 }
-  /*
+/*
     All weight calculations are provided by Senither (https://github.com/Senither/)
   */
 
@@ -229,7 +229,7 @@ export function calculateSenitherWeight(profile) {
   //dungeon weight
   const dungeons = profile.dungeons;
 
-  if(dungeons.catacombs){
+  if (dungeons.catacombs) {
     const xp = dungeons.catacombs.level;
     let dungeonLevelWithProgress = calcDungeonsClassLevelWithProgress(xp.experience);
 
@@ -238,24 +238,21 @@ export function calculateSenitherWeight(profile) {
     output.dungeonsWeight += dungeonsWeight.weight_overflow;
   }
 
-  
-
   //dungeon classes
-  if(dungeons.classes){
+  if (dungeons.classes) {
     for (const className of Object.keys(dungeons.classes)) {
       const dungeonClass = dungeons.classes[className];
       const xp = dungeonClass.experience.xp;
-  
+
       let levelWithProgress = calcDungeonsClassLevelWithProgress(xp);
-  
+
       let classWeight = calcDungeonsWeight(className, levelWithProgress, xp);
       output.dungeonsWeight += classWeight.weight;
       output.dungeonsWeight += classWeight.weight_overflow;
-  
+
       output.dungeonsWeight = output.dungeonsWeight ?? -1;
     }
   }
-  
 
   for (let slayerName in profile.slayers) {
     let data = profile.slayers[slayerName];
