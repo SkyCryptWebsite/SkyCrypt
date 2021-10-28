@@ -263,9 +263,7 @@ function getSlayerLevel(slayer, slayerName) {
     progress = 1;
   }
 
-  let weight = 0; // calcSlayerWeight(slayerName, xp);
-
-  return { currentLevel, xp, maxLevel, progress, xpForNext, weight };
+  return { currentLevel, xp, maxLevel, progress, xpForNext };
 }
 
 function getPetLevel(pet, maxLevel) {
@@ -927,107 +925,6 @@ function getLevelWithProgress(experience, maxLevel, experienceGroup) {
   }
 
   return Math.min(level, maxLevel);
-}
-
-function calcSkillWeight(skillGroup, level, experience) {
-  if (skillGroup.exponent == undefined || skillGroup.divider == undefined) {
-    return {
-      weight: 0,
-      weight_overflow: 0,
-    };
-  }
-
-  let maxSkillLevelXP = skillGroup.maxLevel == 60 ? level60SkillExp : level50SkillExp;
-
-  let base = Math.pow(level * 10, 0.5 + skillGroup.exponent + level / 100) / 1250;
-  if (experience > maxSkillLevelXP) {
-    base = Math.round(base);
-  }
-
-  if (experience <= maxSkillLevelXP) {
-    return {
-      weight: base,
-      weight_overflow: 0,
-    };
-  }
-
-  return {
-    weight: base,
-    weight_overflow: Math.pow((experience - maxSkillLevelXP) / skillGroup.divider, 0.968),
-  };
-}
-
-function calcSlayerWeight(type, experience) {
-  const slayerWeight = constants.slayerWeight[type];
-
-  if (!experience || experience <= 1000000) {
-    return {
-      weight: !experience ? 0 : experience / slayerWeight.divider, // for some reason experience can be undefined
-      weight_overflow: 0,
-    };
-  }
-
-  let base = 1000000 / slayerWeight.divider;
-  let remaining = experience - 1000000;
-
-  let modifier = slayerWeight.modifier;
-  let overflow = 0;
-
-  while (remaining > 0) {
-    let left = Math.min(remaining, 1000000);
-
-    overflow += Math.pow(left / (slayerWeight.divider * (1.5 + modifier)), 0.942);
-    modifier += slayerWeight.modifier;
-    remaining -= left;
-  }
-
-  return {
-    weight: base,
-    weight_overflow: overflow,
-  };
-}
-
-function calcDungeonsClassLevelWithProgress(experience) {
-  let level = 0;
-
-  for (let toRemove of Object.values(constants.dungeoneering_xp)) {
-    experience -= toRemove;
-    if (experience < 0) {
-      return level + (1 - (experience * -1) / toRemove);
-    }
-    level++;
-  }
-
-  return Math.min(level, 50);
-}
-
-function calcDungeonsWeight(type, level, experience) {
-  if (type.startsWith("master_")) {
-    return {
-      weight: 0,
-      weight_overflow: 0,
-    };
-  }
-
-  let percentageModifier = constants.dungeonsWeight[type];
-  let level50Experience = 569809640;
-
-  let base = Math.pow(level, 4.5) * percentageModifier;
-
-  if (experience <= level50Experience) {
-    return {
-      weight: base,
-      weight_overflow: 0,
-    };
-  }
-
-  let remaining = experience - level50Experience;
-  let splitter = (4 * level50Experience) / base;
-
-  return {
-    weight: Math.floor(base),
-    weight_overflow: Math.pow(remaining / splitter, 0.968),
-  };
 }
 
 export function splitWithTail(string, delimiter, count) {
@@ -1848,7 +1745,7 @@ export const getStats = async (
     farming: constants.default_skill_caps.farming + (userProfile.jacob2?.perks?.farming_level_cap || 0),
   };
 
-  const { levels, average_level, average_level_no_progress, total_skill_xp, average_level_rank, skillWeight } =
+  const { levels, average_level, average_level_no_progress, total_skill_xp, average_level_rank } =
     await getLevels(userProfile, hypixelProfile, levelCaps);
 
   output.levels = levels;
@@ -1875,8 +1772,6 @@ export const getStats = async (
   }
 
   output.slayer_coins_spent = {};
-
-  let slayerWeight = 0;
 
   // Apply slayer bonuses
   if ("slayer_bosses" in userProfile) {
@@ -1909,9 +1804,6 @@ export const getStats = async (
               (output.slayer_coins_spent[slayerName] || 0) + slayer[property] * constants.slayer_cost[tier];
           }
         }
-
-        slayerWeight += slayers[slayerName].level.weight.weight;
-        slayerWeight += slayers[slayerName].level.weight.weight_overflow;
       }
 
       for (const slayerName in output.slayer_coins_spent) {
@@ -3224,8 +3116,6 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
 export async function getDungeons(userProfile, hypixelProfile) {
   let output = {};
 
-  output.dungeonsWeight = 0;
-
   const dungeons = userProfile.dungeons;
   if (dungeons == null || Object.keys(dungeons).length === 0) return output;
 
@@ -3290,11 +3180,6 @@ export async function getDungeons(userProfile, hypixelProfile) {
           : `floor_${highest_floor}`,
       floors: floors,
     };
-
-    let dungeonLevelWithProgress = calcDungeonsClassLevelWithProgress(dungeon.experience);
-    let dungeonsWeight = calcDungeonsWeight(type, dungeonLevelWithProgress, dungeon.experience);
-    output.dungeonsWeight += dungeonsWeight.weight;
-    output.dungeonsWeight += dungeonsWeight.weight_overflow;
   }
 
   // Classes
@@ -3320,11 +3205,6 @@ export async function getDungeons(userProfile, hypixelProfile) {
     if (className == current_class) {
       output.classes[className].current = true;
     }
-
-    let levelWithProgress = calcDungeonsClassLevelWithProgress(data.experience);
-    let classWeight = calcDungeonsWeight(className, levelWithProgress, data.experience);
-    output.dungeonsWeight += classWeight.weight;
-    output.dungeonsWeight += classWeight.weight_overflow;
   }
 
   output.used_classes = used_classes;
