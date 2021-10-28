@@ -229,26 +229,31 @@ export function calculateSenitherWeight(profile) {
   //dungeon weight
   const dungeons = profile.dungeons;
 
-  //let dungeonLevelWithProgress = calcDungeonsClassLevelWithProgress(profile.dungeons.experience);
+  if(dungeons.catacombs){
+    const xp = dungeons.catacombs.level;
+    let dungeonLevelWithProgress = calcDungeonsClassLevelWithProgress(xp);
 
-  //let dungeonsWeight = calcDungeonsWeight(type, dungeonLevelWithProgress, dungeon.experience);
-  //output.dungeonsWeight += dungeonsWeight.weight;
-  //output.dungeonsWeight += dungeonsWeight.weight_overflow;
+    let dungeonsWeight = calcDungeonsWeight("catacombs", dungeonLevelWithProgress, dungeon.experience);
+    output.dungeonsWeight += dungeonsWeight.weight;
+    output.dungeonsWeight += dungeonsWeight.weight_overflow;
+  }
+
+  
 
   //dungeon classes
   if(dungeons.classes){
-  for (const className of Object.keys(dungeons.classes)) {
-    const dungeonClass = dungeons.classes[className];
-    const xp = dungeonClass.experience.xp;
-
-    let levelWithProgress = calcDungeonsClassLevelWithProgress(xp);
-
-    let classWeight = calcDungeonsWeight(className, levelWithProgress, xp);
-    output.dungeonsWeight += classWeight.weight;
-    output.dungeonsWeight += classWeight.weight_overflow;
-
-    output.dungeonsWeight = output.dungeonsWeight ?? -1;
-  }
+    for (const className of Object.keys(dungeons.classes)) {
+      const dungeonClass = dungeons.classes[className];
+      const xp = dungeonClass.experience.xp;
+  
+      let levelWithProgress = calcDungeonsClassLevelWithProgress(xp);
+  
+      let classWeight = calcDungeonsWeight(className, levelWithProgress, xp);
+      output.dungeonsWeight += classWeight.weight;
+      output.dungeonsWeight += classWeight.weight_overflow;
+  
+      output.dungeonsWeight = output.dungeonsWeight ?? -1;
+    }
   }
   
 
