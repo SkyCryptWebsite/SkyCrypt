@@ -238,8 +238,6 @@ export function calculateSenitherWeight(profile) {
     output.dungeon.dungeons.catacombs = dungeonsWeight;
   }
 
-  console.log(output.dungeon);
-
   //dungeon classes
   if (dungeons.classes) {
     for (const className of Object.keys(dungeons.classes)) {
@@ -251,12 +249,9 @@ export function calculateSenitherWeight(profile) {
       let classWeight = calcDungeonsWeight(className, levelWithProgress, xp.xp);
       output.dungeon.total += classWeight.weight + classWeight.weight_overflow ?? 0;
 
-      //console.log(output.dungeonsWeight);
       output.dungeon.classes[className] = classWeight;
     }
   }
-
-  console.log(output.dungeon);
 
   for (let slayerName in profile.slayers) {
     let data = profile.slayers[slayerName];
