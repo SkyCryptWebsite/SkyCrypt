@@ -2717,16 +2717,6 @@ export const getStats = async (
 
     */
 
-  /*
-    output.dungeonsWeight = output.dungeons.dungeonsWeight ?? -1;
-    output.skillWeight = skillWeight ?? -1;
-    output.slayerWeight = slayerWeight ?? -1;
-
-    output.weight = [output.dungeonsWeight, skillWeight, slayerWeight]
-      .filter((x) => x >= 0)
-      .reduce((total, value) => total + value);
-    */
-
   const lily = await calculateLilyWeight(profile.uuid);
   const senither = calculateSenitherWeight(output);
   output.weight = {
