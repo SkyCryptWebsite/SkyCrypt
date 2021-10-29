@@ -256,7 +256,7 @@ export function calculateSenitherWeight(profile) {
 
   for (let slayerName in profile.slayers) {
     let data = profile.slayers[slayerName];
-    let sw = calcSlayerWeight(slayerName, data.level);
+    let sw = calcSlayerWeight(slayerName, data.level.xp);
 
     output.slayer.slayers[slayerName] = sw.weight + sw.weight_overflow;
     output.slayer.total += output.slayer.slayers[slayerName];
