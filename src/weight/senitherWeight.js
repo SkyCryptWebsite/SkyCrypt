@@ -131,20 +131,6 @@ function calcDungeonsWeight(type, level, experience) {
   };
 }
 
-function calcDungeonsClassLevelWithProgress(experience) {
-  let level = 0;
-
-  for (let toRemove of Object.values(constants.dungeoneering_xp)) {
-    experience -= toRemove;
-    if (experience < 0) {
-      return level + (1 - (experience * -1) / toRemove);
-    }
-    level++;
-  }
-
-  return Math.min(level, 50);
-}
-
 // Slayer Weight
 
 const slayerWeight = {
