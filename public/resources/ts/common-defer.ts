@@ -119,28 +119,35 @@ document.querySelectorAll<HTMLButtonElement>('#packs-box button[name="pack"]').f
 });
 
 document.querySelector("#themes-box")?.addEventListener("change", (event) => {
-  const newTheme = (event.target as HTMLInputElement).value;
-  localStorage.setItem("currentTheme", newTheme);
-  loadTheme(newTheme);
+  const newThemeUrl = (event.target as HTMLInputElement).value;
+  localStorage.setItem("currentThemeURL", newThemeUrl);
+  loadTheme(newThemeUrl);
 });
 
 window.addEventListener("storage", (event) => {
-  if (event.key === "currentTheme" && event.newValue != null) {
+  if (event.key === "currentThemeURL" && event.newValue != null) {
     setCheckedTheme(event.newValue);
   } else if (event.key === "processedTheme" && event.newValue != null) {
     applyProcessedTheme(JSON.parse(event.newValue));
   }
 });
 
-function setCheckedTheme(theme: string) {
-  const checkbox = document.querySelector<HTMLInputElement>(`#themes-box input[value="${theme}"]`);
+function setCheckedTheme(themeUrl: string) {
+  const checkbox = document.querySelector<HTMLInputElement>(`#themes-box input[value="${themeUrl}"]`);
   if (checkbox == null) {
-    throw new Error("no checkbox for theme: " + theme);
+    throw new Error("no checkbox for theme: " + themeUrl);
   }
   checkbox.checked = true;
 }
 
-setCheckedTheme(localStorage.getItem("currentTheme") ?? "default");
+// TODO remove this once users are migrated to currentThemeURL
+const OldTheme = localStorage.getItem("currentTheme");
+if (OldTheme) {
+  localStorage.setItem("currentThemeURL", `/resources/themes/${OldTheme}.json`);
+  localStorage.removeItem("currentTheme");
+}
+
+setCheckedTheme(localStorage.getItem("currentThemeUrl") ?? "/resources/themes/default.json");
 
 tippy("*[data-tippy-content]");
 

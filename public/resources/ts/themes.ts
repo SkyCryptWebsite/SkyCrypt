@@ -13,12 +13,11 @@ function convertHex(code: string) {
   )}`;
 }
 
-export function loadTheme(currentTheme: string): void {
-  if (!extra.themes[currentTheme]) {
-    return console.error(`${currentTheme} isn't a valid theme.`);
-  }
+export async function loadTheme(themeUrl: string): Promise<void> {
+  const response = await fetch(themeUrl);
+  const theme: Theme = await response.json();
 
-  const theme = extra.themes[currentTheme];
+  // TODO validate json
 
   const processedTheme: ProcessedTheme = {
     light: !!theme.light,
@@ -64,4 +63,8 @@ export function loadTheme(currentTheme: string): void {
   applyProcessedTheme(processedTheme);
 
   localStorage.setItem("processedTheme", JSON.stringify(processedTheme));
+
+  if (typeof redocInit == "function") {
+    redocInit(theme.colors?.icon);
+  }
 }

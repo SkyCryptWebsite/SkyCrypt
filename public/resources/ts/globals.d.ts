@@ -683,3 +683,5 @@ interface UADataValues {
   model: string;
   uaFullVersion: string;
 }
+
+declare const redocInit: ((color?: string) => void) | undefined;
