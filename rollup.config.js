@@ -2,6 +2,7 @@ import typescript from "@rollup/plugin-typescript";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
+import minifyHTML from "rollup-plugin-minify-html-literals";
 import nameMap from "./lib/rollup-plugin-name-map.js";
 import del from "rollup-plugin-delete";
 import replace from "@rollup/plugin-replace";
@@ -37,6 +38,14 @@ const config = {
     resolve(), // tells Rollup how to stuff in node_modules
     commonjs(), // converts Node modules to ES modules
     production && terser(), // minify, but only in production
+    production && // minify html strings inside javascript (aka lit-html)
+      minifyHTML({
+        options: {
+          minifyOptions: {
+            conservativeCollapse: true,
+          },
+        },
+      }),
     nameMap("public/resources/js/file-name-map.json"),
   ],
 };
