@@ -1280,10 +1280,15 @@ class HotmReset extends HotmItem {
       `§8- §d${this.resources.gemstone_powder.toLocaleString()} Gemstone Powder`,
       "",
       "§7You will §akeep §7any Tiers and §cPeak of the Mountain §7that you have unlocked.",
-      "",
-      "§7Cost",
-      "§6100,000 Coins",
     ];
+
+    // cost
+    output.push("", "§7Cost");
+    if (this.last_reset === 0) {
+      output.push("§aFREE §7for your first reset.");
+    } else {
+      output.push("§6100,000 Coins");
+    }
 
     // cooldown or warning
     if (Date.now() - this.last_reset > 24 * 60 * 60 * 1000) {
