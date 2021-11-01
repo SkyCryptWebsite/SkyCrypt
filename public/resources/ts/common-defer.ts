@@ -136,11 +136,19 @@ window.addEventListener("storage", (event) => {
   }
 });
 
-// TODO remove this once users are migrated to currentThemeUrl
-const OldTheme = localStorage.getItem("currentTheme");
-if (OldTheme) {
-  localStorage.setItem("currentThemeUrl", `/resources/themes/${OldTheme}.json`);
-  localStorage.removeItem("currentTheme");
+// Load the theme from localStorage if it exists
+{
+  // TODO remove this once users are migrated to currentThemeUrl
+  const OldTheme = localStorage.getItem("currentTheme");
+  if (OldTheme) {
+    localStorage.setItem("currentThemeUrl", `/resources/themes/${OldTheme}.json`);
+    localStorage.removeItem("currentTheme");
+  }
+
+  const themeUrl = localStorage.getItem("currentThemeUrl");
+  if (themeUrl != null) {
+    loadTheme(themeUrl);
+  }
 }
 
 tippy("*[data-tippy-content]");
