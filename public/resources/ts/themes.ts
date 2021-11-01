@@ -13,13 +13,118 @@ function convertHex(code: string) {
   )}`;
 }
 
-export async function fetchTheme(url: string): Promise<Theme> {
-  const response = await fetch(url);
-  const theme: Theme = await response.json();
+function isObject(x: unknown): x is { [key: string]: unknown } {
+  return x !== null && typeof x === "object";
+}
 
-  // TODO validate json
+function isColor(x: unknown): x is string {
+  return typeof x === "string" && /^#[0-9A-F]{6}$/i.test(x);
+}
 
-  return theme;
+export async function fetchTheme(urlString: string): Promise<Theme> {
+  const url = new URL(urlString, document.location.href);
+  url.searchParams.append("schema", "2");
+  const response = await fetch(url.href);
+  const theme: unknown = await response.json();
+
+  if (!isObject(theme)) {
+    throw new Error("Invalid theme: Theme must be an object");
+  }
+
+  switch (theme.schema) {
+    case 2:
+      if (!("name" in theme) || typeof theme.name !== "string") {
+        throw new Error("Invalid theme: name must be a string");
+      }
+
+      if (!("author" in theme) || typeof theme.author !== "string") {
+        throw new Error("Invalid theme: author must be a string");
+      }
+
+      if ("light" in theme && typeof theme.light !== "boolean") {
+        throw new Error("Invalid theme: light must be a boolean");
+      }
+
+      if ("enchanted_glint" in theme && typeof theme.enchanted_glint !== "string") {
+        throw new Error("Invalid theme: enchanted_glint must be a string");
+      }
+
+      if ("images" in theme) {
+        if (!isObject(theme.images)) {
+          throw new Error("Invalid theme: images must be an object");
+        }
+
+        for (const image of Object.values(theme.images)) {
+          if (typeof image != "string") {
+            throw new Error("Invalid theme: images must be an object of strings");
+          }
+        }
+      }
+
+      if ("backgrounds" in theme) {
+        if (!isObject(theme.backgrounds)) {
+          throw new Error("Invalid theme: backgrounds must be an object");
+        }
+
+        for (const background of Object.values(theme.backgrounds)) {
+          if (!isObject(background)) {
+            throw new Error("Invalid theme: backgrounds must be an object of objects");
+          }
+
+          if (!("type" in background)) {
+            throw new Error("Invalid theme: backgrounds must be an object of objects with a type property");
+          } else if (background.type === "color") {
+            if (!("color" in background) || !isColor(background.color)) {
+              throw new Error("Invalid theme: backgrounds of type color must have a valid color property");
+            }
+          } else if (background.type === "stripes") {
+            if (!("angle" in background) || typeof background.angle !== "string") {
+              throw new Error("Invalid theme: backgrounds of type stripes must have an angle property of type string");
+            }
+
+            if (!("colors" in background) || !Array.isArray(background.colors)) {
+              throw new Error("Invalid theme: backgrounds of type stripes must have a colors property of type array");
+            }
+
+            if (background.colors.length < 2) {
+              throw new Error("Invalid theme: backgrounds of type stripes must have at least 2 colors");
+            }
+
+            for (const color of background.colors) {
+              if (!isColor(color)) {
+                throw new Error("Invalid theme: stripe colors must be valid");
+              }
+            }
+
+            if (!("width" in background) || typeof background.width !== "number") {
+              throw new Error("Invalid theme: backgrounds of type stripes must have a width property of type number");
+            }
+          } else {
+            throw new Error(
+              "Invalid theme: backgrounds must be an object of objects with a type property of either color or stripes"
+            );
+          }
+        }
+      }
+
+      if ("colors" in theme) {
+        if (!isObject(theme.colors)) {
+          throw new Error("Invalid theme: colors must be an object");
+        }
+
+        for (const color of Object.values(theme.colors)) {
+          if (!isColor(color)) {
+            throw new Error("Invalid theme: colors must be an object of color strings");
+          }
+        }
+      }
+      break;
+
+    default:
+      throw new Error(`Unsupported theme schema: ${theme.schema}`);
+  }
+
+  return theme as unknown as Theme;
 }
 
 export async function loadTheme(themeUrl: string): Promise<void> {
