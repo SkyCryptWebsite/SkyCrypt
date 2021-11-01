@@ -19,7 +19,7 @@ interface Theme {
   name: string;
   author: string;
   schema: number;
-  light?: true;
+  light?: boolean;
   enchanted_glint?: string;
   images?: {
     [key: string]: string;
