@@ -13,11 +13,17 @@ function convertHex(code: string) {
   )}`;
 }
 
-export async function loadTheme(themeUrl: string): Promise<void> {
-  const response = await fetch(themeUrl);
+export async function fetchTheme(url: string): Promise<Theme> {
+  const response = await fetch(url);
   const theme: Theme = await response.json();
 
   // TODO validate json
+
+  return theme;
+}
+
+export async function loadTheme(themeUrl: string): Promise<void> {
+  const theme = await fetchTheme(themeUrl);
 
   const processedTheme: ProcessedTheme = {
     light: !!theme.light,

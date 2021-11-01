@@ -1,5 +1,6 @@
 import { loadTheme } from "./themes";
 import tippy from "tippy.js";
+import type { ThemeList } from "./elements/theme-list";
 
 tippy.setDefaultProps({ allowHTML: true });
 
@@ -71,6 +72,7 @@ function eraseCookie(name: string) {
 const expanders = document.querySelectorAll(".expander");
 for (const expander of expanders) {
   expander.addEventListener("click", () => {
+    import("./elements/theme-list");
     for (const otherExpander of expanders) {
       if (otherExpander != expander) {
         otherExpander.setAttribute("aria-expanded", "false");
@@ -118,36 +120,28 @@ document.querySelectorAll<HTMLButtonElement>('#packs-box button[name="pack"]').f
   });
 });
 
-document.querySelector("#themes-box")?.addEventListener("change", (event) => {
+const themesBox = document.querySelector("#themes-box") as ThemeList;
+
+themesBox.addEventListener("change", (event) => {
   const newThemeUrl = (event.target as HTMLInputElement).value;
-  localStorage.setItem("currentThemeURL", newThemeUrl);
+  localStorage.setItem("currentThemeUrl", newThemeUrl);
   loadTheme(newThemeUrl);
 });
 
 window.addEventListener("storage", (event) => {
-  if (event.key === "currentThemeURL" && event.newValue != null) {
-    setCheckedTheme(event.newValue);
+  if (event.key === "currentThemeUrl" && event.newValue != null) {
+    themesBox.selected = event.newValue;
   } else if (event.key === "processedTheme" && event.newValue != null) {
     applyProcessedTheme(JSON.parse(event.newValue));
   }
 });
 
-function setCheckedTheme(themeUrl: string) {
-  const checkbox = document.querySelector<HTMLInputElement>(`#themes-box input[value="${themeUrl}"]`);
-  if (checkbox == null) {
-    throw new Error("no checkbox for theme: " + themeUrl);
-  }
-  checkbox.checked = true;
-}
-
-// TODO remove this once users are migrated to currentThemeURL
+// TODO remove this once users are migrated to currentThemeUrl
 const OldTheme = localStorage.getItem("currentTheme");
 if (OldTheme) {
-  localStorage.setItem("currentThemeURL", `/resources/themes/${OldTheme}.json`);
+  localStorage.setItem("currentThemeUrl", `/resources/themes/${OldTheme}.json`);
   localStorage.removeItem("currentTheme");
 }
-
-setCheckedTheme(localStorage.getItem("currentThemeUrl") ?? "/resources/themes/default.json");
 
 tippy("*[data-tippy-content]");
 
