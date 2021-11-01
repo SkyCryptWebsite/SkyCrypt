@@ -208,8 +208,6 @@ async function getExtra(page = null, favoriteUUIDs = [], cacheOnly) {
 
   output.twemoji = twemoji;
 
-  output.themes = lib.getThemes();
-
   output.packs = lib.getPacks();
 
   output.isFoolsDay = isFoolsDay;
