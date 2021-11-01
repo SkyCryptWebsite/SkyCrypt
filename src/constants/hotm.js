@@ -1072,7 +1072,10 @@ class QuickForge extends Node {
   }
 
   perk(level) {
-    const val = round(10 + 0.5 * level, 1);
+    let val = round(10 + 0.5 * level, 1);
+    if (level === this.max_level) {
+      val = 30;
+    }
     return [`§7Decreases the time it takes to forge by §a${val}%§7.`];
   }
 }
