@@ -1,6 +1,7 @@
 {
   "name": "Sunrise Orange Theme",
   "author": "rainbowcraft2",
+  "schema": 2,
   "community": true,
   "images": {
     "bg": "/resources/img/themes/sunrise/bg.webp",

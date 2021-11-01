@@ -1,6 +1,7 @@
 {
   "name": "sky.lea.moe",
   "author": "LeaPhant",
+  "schema": 2,
   "official": true,
   "enchanted_glint": "/resources/img/enchanted-glint-legacy.png",
   "images": {

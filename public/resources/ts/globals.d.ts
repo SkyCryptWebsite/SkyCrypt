@@ -18,6 +18,7 @@ interface Pack {
 interface Theme {
   name: string;
   author: string;
+  schema: number;
   official?: true;
   community?: true;
   light?: true;
