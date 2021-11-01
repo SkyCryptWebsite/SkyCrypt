@@ -302,7 +302,9 @@ class Node {
       output.push(
         "",
         "§7Cost",
-        `§${upgrade_types[this.upgrade_type].color}${this.upgradeCost} ${upgrade_types[this.upgrade_type].name}`
+        `§${upgrade_types[this.upgrade_type].color}${this.upgradeCost.toLocaleString()} ${
+          upgrade_types[this.upgrade_type].name
+        }`
       );
     }
 
