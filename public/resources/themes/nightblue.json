@@ -2,7 +2,6 @@
   "name": "Night Blue Theme",
   "author": "8KCoffeeWizard",
   "schema": 2,
-  "community": true,
   "images": {
     "bg": "/resources/img/themes/nightblue/bg.webp",
     "bg_blur": "/resources/img/themes/nightblue/bg_blur.webp"

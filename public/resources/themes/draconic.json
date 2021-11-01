@@ -2,7 +2,6 @@
   "name": "Draconic Purple Theme",
   "author": "rainbowcraft2",
   "schema": 2,
-  "community": true,
   "images": {
     "bg": "/resources/img/themes/draconic/bg.webp",
     "bg_blur": "/resources/img/themes/draconic/bg_blur.webp"

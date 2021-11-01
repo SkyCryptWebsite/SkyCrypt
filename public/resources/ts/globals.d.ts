@@ -19,8 +19,6 @@ interface Theme {
   name: string;
   author: string;
   schema: number;
-  official?: true;
-  community?: true;
   light?: true;
   enchanted_glint?: string;
   images?: {

@@ -2,7 +2,6 @@
   "name": "Default Light Theme",
   "author": "SkyCrypt Team",
   "schema": 2,
-  "official": true,
   "light": true,
   "images": {
     "bg": "/resources/img/themes/light/bg.webp",
