@@ -2717,7 +2717,7 @@ export const getStats = async (
 
     */
 
-  const lily = await calculateLilyWeight(profile.uuid);
+  const lily = calculateLilyWeight(profile.uuid);
   const senither = calculateSenitherWeight(output);
   output.weight = {
     senither: senither,
