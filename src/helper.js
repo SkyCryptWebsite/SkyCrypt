@@ -524,7 +524,7 @@ export function getPrices(product) {
 /**
  * @param {number} number the number to be formatted
  * @param {boolean} floor rounds down if true, up if false
- * @param {number} rounding power of ten of the number of digits you want after the comma
+ * @param {number} rounding power of ten of the number of digits you want after the decimal point
  *
  * @example formatNumber(123456798, true, 10) = "123.4M"
  * @example formatNumber(123456798, true, 100) = "123.45M"
