@@ -23,7 +23,5 @@ export function calculateLilyWeight(profile) {
 
   const slayerXP = slayerOrder.map((key) => profile.slayers?.[key]?.level.xp ?? 0);
 
-  const weight = lily.getWeightRaw(skillLevels, skillXP, cataCompletions, masterCataCompletions, cataXP, slayerXP);
-
-  return weight;
+  return lily.getWeightRaw(skillLevels, skillXP, cataCompletions, masterCataCompletions, cataXP, slayerXP);
 }
