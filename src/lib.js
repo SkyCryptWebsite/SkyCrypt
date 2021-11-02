@@ -2715,7 +2715,7 @@ export const getStats = async (
 
     WEIGHT
 
-    */
+  */
 
   output.weight = {
     senither: calculateSenitherWeight(output),
