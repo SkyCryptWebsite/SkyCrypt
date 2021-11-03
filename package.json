@@ -58,7 +58,7 @@
     "fs-extra": "^10.0.0",
     "ioredis": "^4.28.0",
     "just-safe-get": "^2.1.2",
-    "lilyweight": "^1.3.1",
+    "lilyweight": "^2.0.0",
     "lit": "^2.0.2",
     "lodash": "^4.17.20",
     "lodash.escaperegexp": "^4.1.2",
