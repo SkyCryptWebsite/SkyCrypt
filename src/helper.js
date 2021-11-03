@@ -926,6 +926,16 @@ export function floor(num, decimals = 0) {
   return Math.floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
 }
 
+/**
+ * ceils a number to a certain number of decimal places
+ * @param {number} num the number to be ceiled
+ * @param {number} decimals the number of decimal places to ceil to
+ * @returns {number} the ceiled number
+ */
+export function ceil(num, decimals = 0) {
+  return Math.ceil(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
+}
+
 export function generateItem(data) {
   if (!data) {
     return {
