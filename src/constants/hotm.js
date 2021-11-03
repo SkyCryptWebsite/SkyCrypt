@@ -1,5 +1,5 @@
 import { stats_symbols as symbols } from "./stats.js";
-import { round, floor, convertHMS, titleCase } from "../helper.js";
+import { round, floor, ceil, convertHMS, titleCase } from "../helper.js";
 
 const upgrade_types = {
   mithril_powder: {
@@ -158,7 +158,7 @@ class HotM {
     // progress
     if (this.status === "next") {
       const progress = round(this.progress * 100);
-      const greenBars = Math.ceil(progress / 5);
+      const greenBars = ceil(progress / 5);
       const whiteBars = 20 - greenBars;
       output.push(
         `§7Progress: §e${progress}%`,
@@ -194,7 +194,7 @@ class HotM {
       return "unlocked";
     }
 
-    if (this.tier === Math.ceil(this.levelWithProgress)) {
+    if (this.tier === ceil(this.levelWithProgress)) {
       return "next";
     }
 
@@ -242,7 +242,7 @@ class Node {
   }
 
   get position7x9() {
-    return this.position + 1 + (Math.ceil(this.position / hotm.tiers) - 1) * 2;
+    return this.position + 1 + (ceil(this.position / hotm.tiers) - 1) * 2;
   }
 
   get itemData() {
@@ -365,7 +365,7 @@ class Node {
   }
 
   get requiredHotmTier() {
-    return Math.abs(Math.ceil(this.position / 7) - 7) + 1;
+    return Math.abs(ceil(this.position / 7) - 7) + 1;
   }
 
   get unlockCost() {
@@ -842,7 +842,7 @@ class EfficientMiner extends Node {
 
   perk(level) {
     const val1 = round(10 + level * 0.4, 1);
-    const val2 = floor(level * 0.1);
+    const val2 = ceil((level + 1) / 20);
     return [`§7When mining ores, you have a §a${val1}%§7 chance to mine §a${val2} §7adjacent ores.`];
   }
 }
