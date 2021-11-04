@@ -1,12 +1,5 @@
 import { stats_symbols as symbols } from "./stats.js";
-
-function round(num, decimals = 0) {
-  return Math.round(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
-}
-
-function floor(num, decimals = 0) {
-  return Math.floor(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
-}
+import { round, floor } from "../helper.js";
 
 function formatStat(stat) {
   let statFloored = Math.floor(stat);
@@ -1098,7 +1091,8 @@ class GoldenDragon extends Pet {
   }
 
   get fourth() {
-    const value = Math.max(0, this.level - 100) * 0.00071 + 0.1;
+    const value = this.level * 0.001;
+
     return {
       name: "§6Legendary Treasure",
       desc: [`§7Gain §c${round(value, 1)}% §7damage for every milion coins in your bank`],

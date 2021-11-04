@@ -165,6 +165,7 @@ export const minions = {
   FLOWER: {
     type: "foraging",
     head: "/head/baa7c59b2f792d8d091aecacf47a19f8ab93f3fd3c48f6930b1c2baeb09e0f9b",
+    tiers: 12,
   },
   FISHING: {
     type: "fishing",

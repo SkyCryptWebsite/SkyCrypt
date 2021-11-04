@@ -90,6 +90,7 @@ interface ItemSlot {
 }
 
 interface Item extends DisplayItem, ItemSlot {
+  glowing?: boolean;
   Count: number;
   Damage: number;
   animated: boolean;
@@ -97,8 +98,49 @@ interface Item extends DisplayItem, ItemSlot {
   stats: {
     [key in StatName]: number;
   };
-  tag: any;
+  tag: ItemTag;
   texture_pack?: Pack;
+}
+
+interface ItemTag {
+  display: ItemTagDisplay;
+  ench?: ItemTagEnch[];
+  CustomPotionEffects?: ItemTagCustomPotionEffects[];
+  ExtraAttributes?: ItemTagExtraAttributes;
+  HideFlags?: number[];
+  SkullOwner?: ItemTagSkullOwner[];
+  Unbreakable?: number;
+  [key: string]: unknown;
+}
+
+interface ItemTagExtraAttributes {
+  [key: string]: unknown;
+}
+
+interface ItemTagSkullOwner {
+  Id: string;
+  Properties: {
+    textures: {
+      Value: string;
+    }[];
+  };
+}
+
+interface ItemTagCustomPotionEffects {
+  Ambient: number;
+  Duration: number;
+  Id: number;
+  Amplifier: number;
+}
+
+interface ItemTagEnch {
+  lvl: number;
+  id: number;
+}
+
+interface ItemTagDisplay {
+  Lore?: string[];
+  Name?: string;
 }
 
 interface Backpack extends Item {
@@ -616,3 +658,28 @@ interface Profile {
 }
 
 type slayerName = "enderman" | "spider" | "wolf" | "zombie";
+
+interface Navigator {
+  userAgentData: NavigatorUAData;
+}
+
+interface NavigatorUAData {
+  brands?: NavigatorUABrandVersion[];
+  uaList?: NavigatorUABrandVersion[];
+  mobile: boolean;
+  getHighEntropyValues<T extends keyof UADataValues>(hints: T[]): Promise<{ [key in T]: UADataValues[T] }>;
+  platform?: string;
+}
+
+interface NavigatorUABrandVersion {
+  brand: string;
+  version: string;
+}
+
+interface UADataValues {
+  platform: string;
+  platformVersion: string;
+  architecture: string;
+  model: string;
+  uaFullVersion: string;
+}

@@ -1,59 +1,202 @@
 <%
-const rarityOrder = ['special', 'supreme', 'divine', 'mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
-const slayerOrder = ['zombie', 'spider', 'wolf', 'enderman'];
-const badgeOrder = ['gold', 'silver', 'bronze'];
 
-const allItems = items.armor.concat(items.inventory, items.enderchest, items.talisman_bag, items.fishing_bag, items.quiver, items.potion_bag, items.wardrobe_inventory, items.storage);
+/*
+..######...#######..##....##..######..########....###....##....##.########..######.
+.##....##.##.....##.###...##.##....##....##......##.##...###...##....##....##....##
+.##.......##.....##.####..##.##..........##.....##...##..####..##....##....##......
+.##.......##.....##.##.##.##..######.....##....##.....##.##.##.##....##.....######.
+.##.......##.....##.##..####.......##....##....#########.##..####....##..........##
+.##....##.##.....##.##...###.##....##....##....##.....##.##...###....##....##....##
+..######...#######..##....##..######.....##....##.....##.##....##....##.....######.
+*/
+const rarityOrder = ["special", "supreme", "divine", "mythic", "legendary", "epic", "rare", "uncommon", "common"];
+const slayerOrder = ["zombie", "spider", "wolf", "enderman"];
+const badgeOrder = ["gold", "silver", "bronze"];
 
-const UNIQUE_ACCESSORIES = calculated.talismanCount;
+const localizedItems = [
+  ...items.armor,
+  ...items.inventory,
+  ...items.enderchest,
+  ...items.talisman_bag,
+  ...items.fishing_bag,
+  ...items.quiver,
+  ...items.potion_bag,
+  ...items.wardrobe_inventory,
+  ...items.storage,
+].some((a) => a.localized === true);
 
 const statSuffix = {
-  ability_damage: '',
-  bonus_attack_speed: '%',
-  crit_chance: '%',
-  crit_damage: '%',
-  damage_increase: '',
-  damage: '',
-  defense: '',
-  effective_health: '',
-  farming_fortune: '',
-  ferocity: '',
-  foraging_fortune: '',
-  health: '',
-  intelligence: '',
-  magic_find: '',
-  mining_fortune: '',
-  mining_speed: '',
-  pet_luck: '',
-  pristine: '',
-  sea_creature_chance: '%',
-  speed: '%',
-  strength: '',
+  ability_damage: "",
+  bonus_attack_speed: "%",
+  crit_chance: "%",
+  crit_damage: "%",
+  damage_increase: "",
+  damage: "",
+  defense: "",
+  effective_health: "",
+  farming_fortune: "",
+  ferocity: "",
+  foraging_fortune: "",
+  health: "",
+  intelligence: "",
+  magic_find: "",
+  mining_fortune: "",
+  mining_speed: "",
+  pet_luck: "",
+  pristine: "",
+  sea_creature_chance: "%",
+  speed: "%",
+  strength: "",
 };
 
 const statShort = {
-  ability_damage: 'AD',
-  bonus_attack_speed: 'Atk',
-  crit_chance: 'CC',
-  crit_damage: 'CD',
-  damage_increase: 'DmgInc',
-  damage: 'Dmg',
-  defense: 'Def',
-  effective_health: 'EHP',
-  farming_fortune: 'FrmFrt',
-  ferocity: 'Frc',
-  foraging_fortune: 'FrgFrt',
-  health: 'HP',
-  intelligence: 'Int',
-  magic_find: 'MF',
-  mining_fortune: 'MngFrt',
-  mining_speed: 'MngSpd',
-  pet_luck: 'PL',
-  pristine: 'Prs',
-  sea_creature_chance: 'ScC',
-  speed: 'Spd',
-  strength: 'Str',
+  ability_damage: "AD",
+  bonus_attack_speed: "Atk",
+  crit_chance: "CC",
+  crit_damage: "CD",
+  damage_increase: "DmgInc",
+  damage: "Dmg",
+  defense: "Def",
+  effective_health: "EHP",
+  farming_fortune: "FrmFrt",
+  ferocity: "Frc",
+  foraging_fortune: "FrgFrt",
+  health: "HP",
+  intelligence: "Int",
+  magic_find: "MF",
+  mining_fortune: "MngFrt",
+  mining_speed: "MngSpd",
+  pet_luck: "PL",
+  pristine: "Prs",
+  sea_creature_chance: "ScC",
+  speed: "Spd",
+  strength: "Str",
 };
+
+const skillItems = {
+  farming: "icon-294_0",
+  mining: "icon-274_0",
+  combat: "icon-272_0",
+  foraging: "icon-6_3",
+  fishing: "icon-346_0",
+  enchanting: "icon-116_0",
+  alchemy: "icon-379_0",
+  carpentry: "icon-58_0",
+  runecrafting: "icon-378_0",
+};
+
+const slayerInfo = {
+  zombie: {
+    boss: "Revenant Horror",
+    head: "/head/1fc0184473fe882d2895ce7cbc8197bd40ff70bf10d3745de97b6c2a9c5fc78f",
+  },
+  spider: {
+    boss: "Tarantula Broodfather",
+    head: "/head/9d7e3b19ac4f3dee9c5677c135333b9d35a7f568b63d1ef4ada4b068b5a25",
+  },
+  wolf: {
+    boss: "Sven Packmaster",
+    head: "/head/f83a2aa9d3734b919ac24c9659e5e0f86ecafbf64d4788cfa433bbec189e8",
+  },
+  enderman: {
+    boss: "Voidgloom Seraph",
+    head: "/head/1b09a3752510e914b0bdc9096b392bb359f7a8e8a9566a02e7f66faff8d6f89e",
+  },
+};
+
+const seaCreatures = [
+  "pond_squid",
+  "sea_walker",
+  "night_squid",
+  "frozen_steve",
+  "nurse_shark",
+  "sea_guardian",
+  "frosty_the_snowman",
+  "sea_witch",
+  "scarecrow",
+  "sea_archer",
+  "blue_shark",
+  "monster_of_the_deep",
+  "grinch",
+  "catfish",
+  "nightmare",
+  "carrot_king",
+  "sea_leech",
+  "werewolf",
+  "guardian_defender",
+  "deep_sea_protector",
+  "tiger_shark",
+  "water_hydra",
+  "sea_emperor",
+  "phantom_fisherman",
+  "great_white_shark",
+  "yeti",
+  "grim_reaper",
+];
+
+const milestone_rarities = ["common", "uncommon", "rare", "epic", "legendary"];
+
+const pet_milestones = {
+  sea_creatures_killed: [250, 1000, 2500, 5000, 10000],
+  ores_mined: [2500, 7500, 20000, 100000, 250000],
+};
+
+const skillEmojis = {
+  alchemy: "⚗️",
+  carpentry: "🪑",
+  combat: "⚔️",
+  enchanting: "🔮",
+  farming: "🌾",
+  fishing: "🎣",
+  foraging: "🌳",
+  mining: "⛏️",
+  runecrafting: "✨",
+  taming: "🦴",
+};
+
+const slayerEmojis = {
+  zombie: "🧟",
+  spider: "🕸️",
+  wolf: "🐺",
+  enderman: "🔮",
+};
+
+/*
+.########.##.....##.##....##..######..########.####..#######..##....##..######.
+.##.......##.....##.###...##.##....##....##.....##..##.....##.###...##.##....##
+.##.......##.....##.####..##.##..........##.....##..##.....##.####..##.##......
+.######...##.....##.##.##.##.##..........##.....##..##.....##.##.##.##..######.
+.##.......##.....##.##..####.##..........##.....##..##.....##.##..####.......##
+.##.......##.....##.##...###.##....##....##.....##..##.....##.##...###.##....##
+.##........#######..##....##..######.....##....####..#######..##....##..######.
+*/
+function formatNucleusCrystal(crystal, state) {
+  if (!state) {
+    state = 'NOT_FOUND'
+  }
+  let formatted = state.split('_').join(' ').trim()
+  formatted = helper.titleCase(formatted)
+
+  let color = 'f';
+  switch (state) {
+    case 'NOT_FOUND':
+      color = 'c'
+      break;
+    case 'FOUND':
+      color = 'e'
+      break;
+    case 'PLACED':
+      color = 'a'
+      break;
+  }
+
+  // Jasper and Ruby do not have a PLACED state
+  if (['jasper', 'ruby'].includes(crystal) && state === 'FOUND') {
+    color = 'a'
+  }
+
+  return `<span style='color: var(--§${color});'>${formatted}</span>`
+}
 
 function getPrettyName(statName, shorten = false) {
   switch (statName) {
@@ -66,21 +209,7 @@ function getPrettyName(statName, shorten = false) {
   }
 }
 
-const skillItems = {
-  farming: 'icon-294_0',
-  mining: 'icon-274_0',
-  combat: 'icon-272_0',
-  foraging: 'icon-6_3',
-  fishing: 'icon-346_0',
-  enchanting: 'icon-116_0',
-  alchemy: 'icon-379_0',
-  carpentry: 'icon-58_0',
-  runecrafting: 'icon-378_0'
-};
-
-const MAX_MAGIC_FIND = 2.00;
-
-const romanize = num => {
+function romanize(num) {
 	if (!+num)
 		return false;
 	var	digits = String(+num).split(""),
@@ -94,62 +223,7 @@ const romanize = num => {
 	return Array(+digits.join("") + 1).join("M") + roman;
 };
 
-const slayerInfo = {
-  zombie: {
-    boss: 'Revenant Horror',
-    head: '/head/1fc0184473fe882d2895ce7cbc8197bd40ff70bf10d3745de97b6c2a9c5fc78f',
-  },
-  spider: {
-    boss: 'Tarantula Broodfather',
-    head: '/head/9d7e3b19ac4f3dee9c5677c135333b9d35a7f568b63d1ef4ada4b068b5a25',
-  },
-  wolf: {
-    boss: 'Sven Packmaster',
-    head: '/head/f83a2aa9d3734b919ac24c9659e5e0f86ecafbf64d4788cfa433bbec189e8',
-  },
-  enderman: {
-    boss: 'Voidgloom Seraph',
-    head: '/head/1b09a3752510e914b0bdc9096b392bb359f7a8e8a9566a02e7f66faff8d6f89e',
-  },
-};
-
-const seaCreatures = [
-  'pond_squid',
-  'sea_walker',
-  'night_squid',
-  'frozen_steve',
-  'nurse_shark',
-  'sea_guardian',
-  'frosty_the_snowman',
-  'sea_witch',
-  'scarecrow',
-  'sea_archer',
-  'blue_shark',
-  'monster_of_the_deep',
-  'grinch',
-  'catfish',
-  'nightmare',
-  'carrot_king',
-  'sea_leech',
-  'werewolf',
-  'guardian_defender',
-  'deep_sea_protector',
-  'tiger_shark',
-  'water_hydra',
-  'sea_emperor',
-  'phantom_fisherman',
-  'great_white_shark',
-  'yeti',
-  'grim_reaper',
-];
-
-const milestone_rarities = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
-const pet_milestones = {
-  'sea_creatures_killed': [ 250, 1000, 2500, 5000, 10000],
-  'ores_mined': [2500, 7500, 20000, 100000, 250000]
-};
-
-getStats = items => {
+function getStats(items) {
   const stats = Object.assign({}, constants.stat_template);
 
   for(const item of items){
@@ -170,7 +244,7 @@ getStats = items => {
   return stats;
 }
 
-const getBonus = (stats, prefix) => {
+function getBonus(stats, prefix) {
   const statsNotZero = Object.keys(stats).filter(a => stats[a] > 0 && a != 'effective_health');
 
   if(statsNotZero.length == 0)
@@ -190,13 +264,13 @@ const getBonus = (stats, prefix) => {
   <% }
 }
 
-const formatReforge = (string) => {
+function formatReforge(string) {
   let reforge = string.split('_').join(' ').trim()
   reforge = reforge.charAt(0).toUpperCase() + reforge.slice(1)
   return reforge
 }
 
-const getReforges = (accessories) => {
+function getReforges(accessories) {
   const rarityReforgeCounts = {}
 
   accessories.forEach(acc => {
@@ -228,13 +302,13 @@ const getReforges = (accessories) => {
   }
 }
 
-const formatEnrichment = (string) => {
+function formatEnrichment(string) {
   let enrichment = string.split('_').join(' ').trim()
   enrichment = helper.titleCase(enrichment)
   return enrichment
 }
 
-const enrichmentToStatName = (enrichment) => {
+function enrichmentToStatName(enrichment) {
   switch (enrichment.toLowerCase()) {
     case 'walk_speed':
       return 'speed'
@@ -250,7 +324,7 @@ const enrichmentToStatName = (enrichment) => {
   }
 }
 
-const getEnrichments = (accessories) => {
+function getEnrichments(accessories) {
   const enrichmentCounts = {}
   const filteredAccessories = accessories
     .filter(acc => ['legendary', 'mythic'].includes(acc.rarity.toLowerCase()))
@@ -285,8 +359,7 @@ const getEnrichments = (accessories) => {
   }
 }
 
-const isEnchanted = item => {
-
+function isEnchanted(item) {
   // heads
   if ([397].includes(item.id)) {
     return false;
@@ -297,7 +370,7 @@ const isEnchanted = item => {
     return true;
   }
 
-  //potions potions with actual effects (not water bottles)
+  // potions potions with actual effects (not water bottles)
   if (item.id === 373 && item.Damage !== 0) {
     return true;
   }
@@ -306,11 +379,15 @@ const isEnchanted = item => {
     return true;
   }
 
+  if (item.glowing) {
+    return true;
+  }
+
   return false;
+}
 
-};
-
-const itemIcon = (item, classes) => { %>
+function itemIcon(item, classes) {
+  %>
   <div
     <% if(item.texture_path){ %> style='background-image: url("<%= item.texture_path %>")' <% } %>
     class="
@@ -323,9 +400,11 @@ const itemIcon = (item, classes) => { %>
     "
   >
   </div>
-<% };
+  <%
+}
 
-const skill_component = (skill, icon, level, extra = {}) => { %>
+function skill_component(skill, icon, level, extra = {}) {
+  %>
   <div class="skill xp-skill<%= level.level == level.maxLevel ? ' maxed-skill' : ''%>">
     <div class="skill-icon" <% if(level.rank && level.rank < 50000){ %>
       data-tippy-content="<span class='stat-name'>Rank: </span><span class='stat-value'></span>#<%= level.rank %></span>"
@@ -347,9 +426,10 @@ const skill_component = (skill, icon, level, extra = {}) => { %>
       <% } %>
     </div>
   </div>
-<% };
+  <%
+}
 
-const stat_component = (stat) => {
+function stat_component(stat) {
   const bonusStats = stats[stat.name] - calculated.base_stats[stat.name]
   %>
   <div data-stat="<%= stat.name %>" class="basic-stat stat-<%= stat.name.replace(/\_/g, "-") %>">
@@ -364,135 +444,7 @@ const stat_component = (stat) => {
     <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= extraStat.explanation %><% } %></div>
     <% }} %>
     "><span class="stat-name"><%- getPrettyName(stat.name, true) %> </span><span class="stat-value<%= stat.percent ? ' percent' : ''%>"><%= stats[stat.name].toLocaleString() %></span></span></div>
-<% };
-
-let description = "";
-
-if('levels' in calculated){
-  let stats = calculated.stats;
-
-  if(items.highest_rarity_sword)
-    stats = calculated.weapon_stats[items.highest_rarity_sword.itemId];
-
-  description += `❤️ ${stats.health} 🛡️ ${stats.defense} 💪 ${stats.strength} 🌀 ${stats.crit_chance}% ☠️ ${stats.crit_damage}%\n\n`;
-}
-
-description += `🧚 ${calculated.fairy_souls.collected}/${calculated.fairy_souls.total} Fairy Souls\n`;
-
-if(items.armor_set)
-  description += `🛡️ ${items.armor_set}\n`;
-
-let highestRaritySword;
-
-if(items.highest_rarity_sword){
-  highestRaritySword = items.highest_rarity_sword.display_name;
-  if(items.highest_rarity_sword.tag.ExtraAttributes.id == 'MIDAS_SWORD')
-    highestRaritySword = highestRaritySword.replace("Midas", `${helper.formatNumber(items.highest_rarity_sword.tag.ExtraAttributes.winning_bid, true, 1)} Midas`);
-
-  description += `🗡️ ${highestRaritySword}\n`;
- }
-
-const skillEmojis = {
-  "alchemy": "⚗️",
-  "carpentry": "🪑",
-  "combat": "⚔️",
-  "enchanting": "🔮",
-  "farming": "🌾",
-  "fishing": "🎣",
-  "foraging": "🌳",
-  "mining": "⛏️",
-  "runecrafting": "✨",
-  "taming": "🦴"
-};
-
-const slayerEmojis = {
-  zombie: "🧟",
-  spider: "🕸️",
-  wolf: "🐺",
-  enderman: "🔮"
-};
-
-if('levels' in calculated){
-  let { levels } = calculated;
-
-  let skillsSorted = Object.keys(levels).sort((a, b) =>
-    (levels[b].level + levels[b].progress) - (levels[a].level + levels[a].progress)
-  );
-
-  const skillAmount = calculated.pets.filter(a => a.active).length >= 1 ? 1 : 2;
-
-  for(let i = 0; i < skillAmount; i++){
-    const skill = skillsSorted[i];
-    const skillName = skill.charAt(0).toUpperCase() + skill.slice(1);
-
-    if(levels[skill].level == 0)
-      break;
-
-    description += `${skillEmojis[skill]} ${skillName} ${levels[skill].level}\n`;
-  }
-}
-
-if(calculated.pets.filter(a => a.active).length >= 1){
-  const activePet = calculated.pets.find(a => a.active);
-
-  description += `${activePet.emoji} ${helper.titleCase(activePet.rarity)} ${activePet.display_name} (Lvl ${activePet.level.level})\n`;
-}
-
-description += '\n';
-
-if(calculated.slayer_coins_spent.total > 0){
-  description += '🤺 Slayer: ';
-
-  for(const slayer of slayerOrder){
-    if(!calculated.slayers[slayer])
-      continue;
-
-    const slayerInfo = calculated.slayers[slayer];
-    description += `${slayerEmojis[slayer]} ${slayerInfo.level.currentLevel}  `;
-  }
-
-  description += '\n\n';
-}
-
-if(calculated.average_level)
-  description += `⚒ Avg Skill Level: ${Math.floor(calculated.average_level * 10) / 10} `;
-
-if(calculated.weight)
-  description += `💪 Weight: ${Math.floor(calculated.weight * 10) / 10} `;
-
-description += `💰 Purse: ${helper.formatNumber(calculated.purse, true)} Coins `;
-
-if(calculated.bank)
-  description += `\n🏦 Bank Account: ${helper.formatNumber(calculated.bank, true)} Coin${Math.floor(calculated.bank) == 1 ? '': 's'}`;
-
-let metaDescription = `${calculated.display_name} has been playing SkyBlock for ${moment(calculated.first_join.unix).fromNow(true)}`;
-
-if(items.armor_set){
-  if(highestRaritySword)
-    metaDescription += `, is wearing ${items.armor_set}`;
-  else
-    metaDescription += ` and is wearing ${items.armor_set}`;
-}
-
-if(highestRaritySword){
-  if(items.armor_set)
-    metaDescription += ` and fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
-  else
-    metaDescription += ` and is fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
-}
-
-metaDescription += '.';
-
-let metaTitle = calculated.display_name;
-
-if(calculated.display_emoji){
-  metaTitle += calculated.display_emoji;
-}
-
-if(calculated.profile.game_mode == 'ironman'){
-  metaTitle += ` (${calculated.profile.cute_name}♻️)`;
-} else {
-  metaTitle +=  ` (${calculated.profile.cute_name})`;
+  <%
 }
 
 function jerriefy(rank) {
@@ -508,7 +460,7 @@ function jerriefy(rank) {
   return rank;
 }
 
-const getRarityUpgradeClass = item => {
+function getRarityUpgradeClass(item) {
   let upgrades = 0
 
   upgrades += item.extra?.recombobulated ? 1 : 0
@@ -518,6 +470,222 @@ const getRarityUpgradeClass = item => {
 
   return `piece-rarity-upgrade-${upgrades}`
 }
+
+function getMetaTitle() {
+	let metaTitle = calculated.display_name
+
+	if (calculated.display_emoji) {
+		metaTitle += calculated.display_emoji
+	}
+
+	if (calculated.profile.game_mode == 'ironman') {
+		metaTitle += ` (${calculated.profile.cute_name}♻️)`
+	} else {
+		metaTitle += ` (${calculated.profile.cute_name})`
+	}
+
+	return metaTitle
+}
+
+function getMetaDescription() {
+	const description = []
+	const highestRaritySword = getHighestRaritySword()
+
+	// Base
+	description.push(
+		`${calculated.display_name} has been playing SkyBlock for ${moment(
+			calculated.first_join.unix
+		).fromNow(true)}`
+	)
+
+	// Armor set
+	if (items.armor_set) {
+		description.push(
+			highestRaritySword
+				? `, is wearing ${items.armor_set}`
+				: ` and is wearing ${items.armor_set}`
+		)
+	}
+
+	// Sword
+	if (highestRaritySword) {
+		description.push(
+			items.armor_set
+				? ` and fighting with ${helper.aOrAn(
+						highestRaritySword
+				  )} ${highestRaritySword}`
+				: ` and is fighting with ${helper.aOrAn(
+						highestRaritySword
+				  )} ${highestRaritySword}`
+		)
+	}
+
+	description.push('.')
+
+	return description.join('')
+}
+
+function getDescription() {
+	const description = []
+
+	// Stats
+	if ('levels' in calculated) {
+		const stats = items.highest_rarity_sword
+			? calculated.weapon_stats[items.highest_rarity_sword.itemId]
+			: calculated.stats
+
+		description.push(
+			`❤️ ${stats.health} 🛡️ ${stats.defense} 💪 ${stats.strength} 🌀 ${stats.crit_chance}% ☠️ ${stats.crit_damage}%`,
+			'\n',
+			'\n'
+		)
+	}
+
+	// Fairy souls
+	description.push(
+		`🧚 ${calculated.fairy_souls.collected}/${calculated.fairy_souls.total} Fairy Souls`,
+		'\n'
+	)
+
+	// Armor
+	if (items.armor_set) {
+		description.push(`🛡️ ${items.armor_set}`, '\n')
+	}
+
+	// Sword
+	const highestRaritySword = getHighestRaritySword()
+	if (highestRaritySword) {
+		description.push(`🗡️ ${highestRaritySword}`, '\n')
+	}
+
+	// Skills
+	if ('levels' in calculated) {
+		let { levels } = calculated
+
+		let skillsSorted = Object.keys(levels).sort(
+			(a, b) =>
+				levels[b].level +
+				levels[b].progress -
+				(levels[a].level + levels[a].progress)
+		)
+
+		const skillAmount =
+			calculated.pets.filter((a) => a.active).length >= 1 ? 1 : 2
+
+		for (let i = 0; i < skillAmount; i++) {
+			const skill = skillsSorted[i]
+			const skillName = skill.charAt(0).toUpperCase() + skill.slice(1)
+
+			if (levels[skill].level == 0) {
+				break
+			}
+
+			description.push(
+				`${skillEmojis[skill]} ${skillName} ${levels[skill].level}`,
+				'\n'
+			)
+		}
+	}
+
+	// Pet
+	if (calculated.pets.filter((a) => a.active).length >= 1) {
+		const activePet = calculated.pets.find((a) => a.active)
+
+		description.push(
+			`${activePet.emoji} ${helper.titleCase(activePet.rarity)} ${
+				activePet.display_name
+			} (Lvl ${activePet.level.level})`,
+			'\n'
+		)
+	}
+
+	// Line break
+	description.push('\n')
+
+	// Slayers
+	if (calculated.slayer_coins_spent.total > 0) {
+		description.push('🤺 Slayer: ')
+
+		for (const slayer of slayerOrder) {
+			if (!calculated.slayers[slayer]) {
+				continue
+			}
+
+			const slayerInfo = calculated.slayers[slayer]
+			description.push(
+				`${slayerEmojis[slayer]} ${slayerInfo.level.currentLevel}  `
+			)
+		}
+		description.push('\n', '\n')
+	}
+
+	// Avg. skill, weight, purse
+	if (calculated.average_level) {
+		description.push(
+			`⚒ Avg Skill Level: ${
+				Math.floor(calculated.average_level * 10) / 10
+			} `
+		)
+	}
+	if (calculated.weight) {
+		description.push(
+			`💪 Weight: ${Math.floor(calculated.weight * 10) / 10} `
+		)
+	}
+	description.push(
+		`💰 Purse: ${helper.formatNumber(calculated.purse, true)} Coins `
+	)
+	description.push('\n')
+
+	// Bank
+	if (calculated.bank) {
+		description.push(
+			`🏦 Bank Account: ${helper.formatNumber(
+				calculated.bank,
+				true
+			)} Coin${Math.floor(calculated.bank) == 1 ? '' : 's'}`
+		)
+	}
+
+	// Done!
+	return description.join('')
+}
+
+function getHighestRaritySword() {
+	let highestRaritySword
+
+	if (!items.highest_rarity_sword) {
+		return highestRaritySword
+	}
+
+	highestRaritySword = items.highest_rarity_sword.display_name
+
+	if (items.highest_rarity_sword?.tag?.ExtraAttributes?.id == 'MIDAS_SWORD') {
+		highestRaritySword = highestRaritySword.replace(
+			'Midas',
+			`${helper.formatNumber(
+				items.highest_rarity_sword.tag.ExtraAttributes.winning_bid,
+				true,
+				1
+			)} Midas`
+		)
+	}
+
+	return highestRaritySword
+}
+
+/*
+..######...########.##....##.########.########.....###....########.########.########.
+.##....##..##.......###...##.##.......##.....##...##.##......##....##.......##.....##
+.##........##.......####..##.##.......##.....##..##...##.....##....##.......##.....##
+.##...####.######...##.##.##.######...########..##.....##....##....######...##.....##
+.##....##..##.......##..####.##.......##...##...#########....##....##.......##.....##
+.##....##..##.......##...###.##.......##....##..##.....##....##....##.......##.....##
+..######...########.##....##.########.##.....##.##.....##....##....########.########.
+*/
+const metaTitle = getMetaTitle()
+const description = getDescription()
+const metaDescription = getMetaDescription()
 
 %>
 <!DOCTYPE html>
@@ -895,8 +1063,6 @@ const getRarityUpgradeClass = item => {
 
       if(Object.keys(calculated.collections).length == 0)
         notAvailable.push('Collections');
-
-      const localizedItems = allItems.some(a => a.localized === true);
     %>
     <% if(notAvailable.length > 0 || localizedItems || calculated.profile.game_mode == 'ironman'){ %>
       <div class="stat-container info-container-wrapper">
@@ -918,6 +1084,7 @@ const getRarityUpgradeClass = item => {
         </div>
       </div>
     <% } %>
+
     <div class="stat-container stat-armor">
       <a class="stat-anchor" id="Armor"></a>
       <h2 class="stat-header">Armor</h2>
@@ -1021,18 +1188,18 @@ const getRarityUpgradeClass = item => {
           <% }else{ %>
             <p class="stat-raw-values">
               <%
-                const maxTalis = items.talismans.filter(a => a.isUnique).length >= UNIQUE_ACCESSORIES ? 'golden-text': ''
-                const maxRecombTalis = items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length >= UNIQUE_ACCESSORIES ? 'golden-text': ''
+                const maxTalis = items.talismans.filter(a => a.isUnique).length >= calculated.talismanCount ? 'golden-text': ''
+                const maxRecombTalis = items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length >= calculated.talismanCount ? 'golden-text': ''
               %>
 
               <span class="stat-name <%= maxTalis %>">Unique Accessories: </span>
-              <span class="stat-value <%= maxTalis %>"><%= items.talismans.filter(a => a.isUnique).length %> / <%= UNIQUE_ACCESSORIES %></span>
+              <span class="stat-value <%= maxTalis %>"><%= items.talismans.filter(a => a.isUnique).length %> / <%= calculated.talismanCount %></span>
               <br>
               <span class="stat-name <%= maxTalis %>">Completion: </span>
-              <span class="stat-value percent <%= maxTalis %>"><%= Math.round(items.talismans.filter(a => a.isUnique).length / UNIQUE_ACCESSORIES * 100) %></span>
+              <span class="stat-value percent <%= maxTalis %>"><%= Math.round(items.talismans.filter(a => a.isUnique).length / calculated.talismanCount * 100) %></span>
               <br>
               <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
-              <span class="stat-value <%= maxRecombTalis %>"><%= items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= UNIQUE_ACCESSORIES %></span>
+              <span class="stat-value <%= maxRecombTalis %>"><%= items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= calculated.talismanCount %></span>
             </p>
             <% if(items.talismans.find(a => !a.isInactive) != undefined){ %>
               <div class="accessory-list">
@@ -1297,10 +1464,6 @@ const getRarityUpgradeClass = item => {
           </div>
 
           <% const mining = calculated.mining; %>
-          <p class="stat-raw-values">
-            <% max = mining.commissions.milestone == 5 ? 'golden-text' : '' %>
-            <span class="stat-name <%= max %>">Commissions Milestone: </span><span class="stat-value <%= max %>"><%= mining.commissions.milestone.toLocaleString() %></span><br>
-          </p>
 
           <% if(items.pickaxes.length > 0){ %>
             <p class="stat-sub-header">Mining Pickaxes</p>
@@ -1324,15 +1487,132 @@ const getRarityUpgradeClass = item => {
               <% }); %>
             </div>
           <% } %>
+
+          <% if (!mining.core) { %>
+            <p class="no-access"><%= calculated.display_name %> hasn't visited Dwarven Mines or Crystal Hollows yet.</p>
+          <% } else { %>
+            <p class="stat-sub-header">Dwarven Mines & Crystal Hollows</p>
+            <p class="stat-raw-values">
+              <!-- Commissions Milestone -->
+              <% max = mining.commissions.milestone == 5 ? 'golden-text' : '' %>
+              <span class="stat-name <%= max %>">Commissions Milestone:</span>
+              <span class="stat-value <%= max %>"><%= mining.commissions.milestone.toLocaleString() %></span>
+              <br>
+              <!-- Crystal Hollows Pass -->
+              <% const chpass = mining.core.crystal_hollows_last_access > Date.now() - 2*60*60*1000 %>
+              <% max = chpass ? 'golden-text' : '' %>
+              <span class="stat-name <%= max %>">Crystal Hollows Pass:</span>
+              <span class="stat-value <%= max %>" data-tippy-content="
+                <span class='stat-name'>Last purchased:</span>
+                <span class='stat-value'>
+                <%=
+                  mining.core.crystal_hollows_last_access > 0
+                    ? `<local-time timestamp='${mining.core.crystal_hollows_last_access}'></local-time>`
+                    : "Never"
+                %>
+                </span>
+              "><%= chpass ? 'Purchased' : 'Expired' %></span>
+              <br>
+              <!-- Crystal Nucleus -->
+              <%
+                const delivered_parts = mining.core.crystal_nucleus?.precursor?.parts_delivered || []
+                const precursor_parts = {}
+
+                for (const [partId, partName] of Object.entries(constants.precursor_parts)) {
+                  precursor_parts[partName] = delivered_parts.indexOf(partId) > -1
+                }
+              %>
+              <span class="stat-name">Crystal Nucleus:</span>
+              <span class="stat-value" data-tippy-content="
+                <span class='stat-name'>Crystals:</span>
+                <br>
+                <span class='stat-name'>- Jade:</span>
+                <span class='stat-value'><%= formatNucleusCrystal('jade', mining.core.crystal_nucleus.crystals?.jade_crystal?.state) %></span>
+                <br>
+                <span class='stat-name'>- Amber:</span>
+                <span class='stat-value'><%= formatNucleusCrystal('amber', mining.core.crystal_nucleus.crystals?.amber_crystal?.state) %></span>
+                <br>
+                <span class='stat-name'>- Amethyst:</span>
+                <span class='stat-value'><%= formatNucleusCrystal('amethyst', mining.core.crystal_nucleus.crystals?.amethyst_crystal?.state) %></span>
+                <br>
+                <span class='stat-name'>- Sapphire:</span>
+                <span class='stat-value'><%= formatNucleusCrystal('sapphire', mining.core.crystal_nucleus.crystals?.sapphire_crystal?.state) %></span>
+                <br>
+                <span class='stat-name'>- Topaz:</span>
+                <span class='stat-value'><%= formatNucleusCrystal('topaz', mining.core.crystal_nucleus.crystals?.topaz_crystal?.state) %></span>
+                <br>
+                <br>
+                <span class='stat-name'>Other Crystals:</span>
+                <br>
+                <span class='stat-name'>- Ruby:</span>
+                <span class='stat-value'><%= formatNucleusCrystal('ruby', mining.core.crystal_nucleus.crystals?.ruby_crystal?.state) %></span>
+                <br>
+                <span class='stat-name'>- Jasper:</span>
+                <span class='stat-value'><%= formatNucleusCrystal('jasper', mining.core.crystal_nucleus.crystals?.jasper_crystal?.state) %></span>
+                <% if ((mining.core.crystal_nucleus.crystals?.sapphire_crystal?.state || 'NOT_FOUND') === 'NOT_FOUND') { %>
+                <br>
+                <br>
+                <span class='stat-name'>Precursor parts delivered:</span>
+                <br>
+                <% for (const [part, delivered] of Object.entries(precursor_parts)) { %>
+                  <span class='stat-value' style='color: var(--§<%= delivered ? 'a' : 'c' %>)'><%= delivered ? '✔' : '✖' %> <%= part %></span><br>
+                <% } %>
+                <% } %>
+              ">Completed <%= mining.core.crystal_nucleus.times_completed.toLocaleString() %> times</span>
+              <br>
+            </p>
+
+            <p class="stat-sub-header">Heart of the Mountain</p>
+            <p class="stat-raw-values">
+              <!-- Tier -->
+              <% max = mining.core.tier.level === constants.hotm.tiers ? 'golden-text' : '' %>
+              <span class="stat-name <%= max %>">Tier:</span>
+              <span class="stat-value <%= max %>"><%= mining.core.tier.level %></span>
+              <br>
+              <!-- Token of the Mountain -->
+              <% max = mining.core.tokens.spent === mining.core.tokens.total ? 'golden-text' : '' %>
+              <span class="stat-name <%= max %>">Token of the Mountain:</span>
+              <span class="stat-value <%= max %>"><%= mining.core.tokens.spent %>/<%= mining.core.tokens.total %></span>
+              <br>
+              <!-- Mithril Powder -->
+              <span class="stat-name">Mithril Powder:</span>
+              <span class="stat-value" data-tippy-content="
+                <span class='stat-name'>Total:</span> <span class='stat-value'><%= mining.core.powder.mithril.total.toLocaleString() %></span><br>
+                <span class='stat-name'>Spent:</span> <span class='stat-value'><%= mining.core.powder.mithril.spent.toLocaleString() %></span><br>
+                <span class='stat-name'>Available:</span> <span class='stat-value'><%= mining.core.powder.mithril.available.toLocaleString() %></span>
+              "><%= mining.core.powder.mithril.total.toLocaleString() %></span>
+              <br>
+              <!-- Gemstone Powder -->
+              <span class="stat-name">Gemstone Powder:</span>
+              <span class="stat-value" data-tippy-content="
+                <span class='stat-name'>Total:</span> <span class='stat-value'><%= mining.core.powder.gemstone.total.toLocaleString() %></span><br>
+                <span class='stat-name'>Spent:</span> <span class='stat-value'><%= mining.core.powder.gemstone.spent.toLocaleString() %></span><br>
+                <span class='stat-name'>Available:</span> <span class='stat-value'><%= mining.core.powder.gemstone.available.toLocaleString() %></span>
+              "><%= mining.core.powder.gemstone.total.toLocaleString() %></span>
+              <br>
+              <!-- Pickaxe Ability -->
+              <span class="stat-name">Pickaxe Ability:</span>
+              <span class="stat-value"><%= mining.core.selected_pickaxe_ability || 'None' %></span>
+            </p>
+
+            <div id="inventory_container">
+              <inventory-view inventory-type="hotm"></inventory-view>
+            </div>
+          <% } %>
+
           <p class="stat-sub-header">Forge</p>
-          <% if(mining.forge.processes.length > 0){
-          mining.forge.processes.forEach(process => { %>
+          <%
+            if (mining.forge?.processes?.length > 0) {
+              mining.forge.processes.forEach(process => {
+          %>
             <div class="forge-item">
               <p class="stat-name forge-slot">Slot <%= process.slot %>:</p>
               <span data-tippy-content='<local-time timestamp="<%= process.timeFinished %>"></local-time>'><span class="stat-raw-values"><%= process.name %> - <%= process.timeFinished < Date.now() ? "ended" : `ending ${process.timeFinishedText}`%></span></span>
-            </div>    
-          <% });
-        } else { %>
+            </div>
+          <%
+              });
+            } else {
+          %>
             <p class="stat-raw-values">No items currently forging!</p>
           <% } %>
         </div>

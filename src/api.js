@@ -310,7 +310,7 @@ export default (app, db) => {
         let cakes = [];
 
         for (const item of cakeBag.containsItems) {
-          if (helper.hasPath(item, "tag", "ExtraAttributes", "new_years_cake")) {
+          if (item.tag?.ExtraAttributes?.new_years_cake) {
             cakes.push({ cake: item.tag.ExtraAttributes.new_years_cake });
           }
         }
@@ -374,7 +374,7 @@ export default (app, db) => {
         const extra = weapon.extra;
         let extraOutput = weapon.extra;
 
-        if (helper.hasPath(weapon, "tag", "ExtraAttributes")) {
+        if (weapon.tag?.ExtraAttributes) {
           if ("html" in req.query) {
             if (enchantments !== undefined) {
               enchantmentsOutput = [];
@@ -563,7 +563,7 @@ export default (app, db) => {
           sellPrice: product.sellPrice,
           buyVolume: product.buyVolume,
           sellVolume: product.sellVolume,
-          tag: helper.hasPath(itemInfo, "tag") ? itemInfo.tag : null,
+          tag: itemInfo.tag ?? null,
           price: (product.buyPrice + product.sellPrice) / 2,
         });
       }
