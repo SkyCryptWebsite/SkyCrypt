@@ -524,7 +524,6 @@ for (const element of document.querySelectorAll<HTMLElement>(".stat-fishing .sel
 
   const item = allItems.get(itemId) as Item;
 
-  //TODO find out why weapon stats is used in fishing rods section
   const weaponStats = calculated.weapon_stats[itemId];
   let stats;
 
