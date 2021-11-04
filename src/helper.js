@@ -28,8 +28,6 @@ function getKey(key) {
 }
 
 /**
- * @deprecated use optional chaining instead
- *
  * @param {any} obj an object
  * @param  {...(string|number)} keys a path
  * @returns {boolean} if the path exists on the object
@@ -53,8 +51,6 @@ export function hasPath(obj, ...keys) {
 }
 
 /**
- * @deprecated use optional chaining instead
- *
  * @param {any} obj an object
  * @param  {...(string|number)} keys a path
  * @returns {any} the value at the path on the object
@@ -523,8 +519,11 @@ export function getPrices(product) {
 
 /**
  * @param {number} number the number to be formatted
- * @param {boolean} floor rounds down if true up if false
- * @param {number} rounding //TODO figure out what this does
+ * @param {boolean} floor rounds down if true, up if false
+ * @param {number} rounding power of ten of the number of digits you want after the decimal point
+ *
+ * @example formatNumber(123456798, true, 10) = "123.4M"
+ * @example formatNumber(123456798, true, 100) = "123.45M"
  */
 export const formatNumber = (number, floor, rounding = 10) => {
   if (number < 1000) {
