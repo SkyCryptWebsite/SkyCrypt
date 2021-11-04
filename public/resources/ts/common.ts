@@ -17,9 +17,9 @@ window.setTimeout(() => {
   }
 });
 
-const iOS = ["iPad Simulator", "iPhone Simulator", "iPod Simulator", "iPad", "iPhone", "iPod"].includes(
-  navigator.platform
-);
+// eslint-disable-next-line deprecation/deprecation
+const platform = navigator.platform ?? navigator.userAgentData?.platform ?? "unknown";
+const iOS = ["iPad Simulator", "iPhone Simulator", "iPod Simulator", "iPad", "iPhone", "iPod"].includes(platform);
 
 if (iOS) {
   const div = document.createElement("div");
