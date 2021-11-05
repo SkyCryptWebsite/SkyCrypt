@@ -59,6 +59,9 @@ export const skillWeight = {
   runecrafting: {
     maxLevel: 25,
   },
+  social: {
+    maxLevel: 25,
+  },
 };
 
 export const dungeonsWeight = {
