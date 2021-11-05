@@ -142,7 +142,13 @@ function setCheckedTheme(theme: string) {
 
 setCheckedTheme(localStorage.getItem("currentTheme") ?? "default");
 
-tippy("*[data-tippy-content]");
+tippy("*[data-tippy-content]", {
+  onShow(instance) {
+    if (instance.props.content == "") {
+      return false;
+    }
+  },
+});
 
 const prideFlag = document.querySelector(".pride-flag") as HTMLElement;
 const prideFlags = ["rainbow", "trans", "lesbian", "bi", "pan", "nb", "ace", "genderfluid", "logo"];

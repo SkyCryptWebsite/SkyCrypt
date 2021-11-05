@@ -251,7 +251,7 @@ a.no-underline {
   }
 }
 
-*[data-tippy-content]::after {
+*[data-tippy-content]:not([data-tippy-content=""])::after {
   content: "*";
   color: rgba(var(--text-rgb), 0.6);
   transition: color 0.2s;

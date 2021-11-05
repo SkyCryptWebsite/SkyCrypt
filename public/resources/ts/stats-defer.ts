@@ -3,6 +3,7 @@ import { SkinViewer, createOrbitControls } from "skinview3d";
 import tippy from "tippy.js";
 
 import("./elements/inventory-view");
+import("./elements/skill-component");
 
 const favoriteElement = document.querySelector(".favorite") as HTMLButtonElement;
 
@@ -426,7 +427,13 @@ function resize() {
     document.getElementById("skin_display")?.appendChild(playerModel);
   }
 
-  tippy("*[data-tippy-content]");
+  tippy("*[data-tippy-content]", {
+    onShow(instance) {
+      if (instance.props.content == "") {
+        return false;
+      }
+    },
+  });
 
   if (playerModel && skinViewer) {
     if (playerModel.offsetWidth / playerModel.offsetHeight < 0.6) {
@@ -988,3 +995,46 @@ onScroll();
 window.addEventListener("scroll", onScroll);
 
 setTimeout(resize, 1000);
+
+/**
+ * @param {number} number the number to be formatted
+ * @param {boolean} floor rounds down if true, up if false
+ * @param {number} rounding power of ten of the number of digits you want after the decimal point
+ *
+ * @example formatNumber(123456798, true, 10) = "123.4M"
+ * @example formatNumber(123456798, true, 100) = "123.45M"
+ */
+export function formatNumber(number: number, floor: boolean, rounding = 10): string {
+  if (number < 1000) {
+    return "" + Math.floor(number);
+  } else if (number < 10000) {
+    if (floor) {
+      return (Math.floor((number / 1000) * rounding) / rounding).toFixed(rounding.toString().length - 1) + "K";
+    } else {
+      return (Math.ceil((number / 1000) * rounding) / rounding).toFixed(rounding.toString().length - 1) + "K";
+    }
+  } else if (number < 1000000) {
+    if (floor) {
+      return Math.floor(number / 1000) + "K";
+    } else {
+      return Math.ceil(number / 1000) + "K";
+    }
+  } else if (number < 1000000000) {
+    if (floor) {
+      return (Math.floor((number / 1000 / 1000) * rounding) / rounding).toFixed(rounding.toString().length - 1) + "M";
+    } else {
+      return (Math.ceil((number / 1000 / 1000) * rounding) / rounding).toFixed(rounding.toString().length - 1) + "M";
+    }
+  } else if (floor) {
+    return (
+      (Math.floor((number / 1000 / 1000 / 1000) * rounding * 10) / (rounding * 10)).toFixed(
+        rounding.toString().length
+      ) + "B"
+    );
+  } else {
+    return (
+      (Math.ceil((number / 1000 / 1000 / 1000) * rounding * 10) / (rounding * 10)).toFixed(rounding.toString().length) +
+      "B"
+    );
+  }
+}

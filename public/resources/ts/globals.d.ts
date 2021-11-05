@@ -230,33 +230,13 @@ declare const calculated: SkyCryptPlayer & {
       }[];
       highest_floor: string;
       id: string;
-      level: {
-        level: number;
-        levelCap: number;
-        levelWithProgress: number;
-        maxLevel: number;
-        progress: number;
-        uncappedLevel: number;
-        xp: number;
-        xpCurrent: number;
-        xpForNext: number;
-      };
+      level: Levels;
       visited: boolean;
     };
     classes: {
       [key: string]: {
         current: boolean;
-        experience: {
-          level: number;
-          levelCap: number;
-          levelWithProgress: number;
-          maxLevel: number;
-          progress: number;
-          uncappedLevel: 32;
-          xp: number;
-          xpCurrent: number;
-          xpForNext: number;
-        };
+        experience: Levels;
       };
     };
     dungeonsWeight: number;
@@ -682,4 +662,17 @@ interface UADataValues {
   architecture: string;
   model: string;
   uaFullVersion: string;
+}
+
+interface Levels {
+  level: number;
+  levelCap: number;
+  levelWithProgress: number;
+  maxLevel: number;
+  progress: number;
+  rank: number;
+  uncappedLevel: number;
+  xp: number;
+  xpCurrent: number;
+  xpForNext: number | null;
 }
