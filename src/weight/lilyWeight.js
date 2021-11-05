@@ -1,5 +1,4 @@
-import lilyWeight from "lilyweight";
-const lily = lilyWeight();
+import LilyWeight from "lilyweight";
 
 const skillOrder = ["enchanting", "taming", "alchemy", "mining", "farming", "foraging", "combat", "fishing"];
 const slayerOrder = ["zombie", "spider", "wolf", "enderman"];
@@ -23,5 +22,5 @@ export function calculateLilyWeight(profile) {
 
   const slayerXP = slayerOrder.map((key) => profile.slayers?.[key]?.level.xp ?? 0);
 
-  return lily.getWeightRaw(skillLevels, skillXP, cataCompletions, masterCataCompletions, cataXP, slayerXP);
+  return LilyWeight.getWeightRaw(skillLevels, skillXP, cataCompletions, masterCataCompletions, cataXP, slayerXP);
 }
