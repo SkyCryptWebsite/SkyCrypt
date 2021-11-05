@@ -1,8 +1,41 @@
-import tableify from "@tillhub/tableify";
 import * as helper from "./helper.js";
 import * as lib from "./lib.js";
 import { collection_data } from "./constants.js";
 import cors from "cors";
+
+/**
+ * converts an array of objects to a table
+ *
+ * based on github.com/tillhub/tableify
+ *
+ * @param items {Iterable}
+ */
+export function tableify(items) {
+  const keys = new Set();
+
+  // get unique keys of all objects
+  for (const item of items) {
+    for (const key in item) {
+      keys.add(key);
+    }
+  }
+
+  let html = "<table><tbody>";
+
+  for (const item of items) {
+    html += "<tr>";
+    for (const key of keys) {
+      html += "<td>";
+      html += item[key] || "";
+      html += "</td>";
+    }
+    html += "</tr>";
+  }
+
+  html += "</tbody></table>";
+
+  return html;
+}
 
 function handleError(e, res) {
   console.error(e);
@@ -52,7 +85,7 @@ export default (app, db) => {
       }
 
       if ("html" in req.query) {
-        res.send(tableify(profiles, { showHeaders: false }));
+        res.send(tableify(profiles));
       } else {
         res.status(403).send("Old JSON API has been disabled.");
       }
@@ -95,8 +128,7 @@ export default (app, db) => {
               a.xpForNext,
               a.progress,
               a.xpMaxLevel,
-            ]),
-            { showHeaders: false }
+            ])
           )
         );
       } else {
@@ -138,7 +170,7 @@ export default (app, db) => {
       }
 
       if ("html" in req.query) {
-        res.send(tableify(minions, { showHeaders: false }));
+        res.send(tableify(minions));
       } else {
         res.status(403).send("Old JSON API has been disabled.");
       }
@@ -167,7 +199,7 @@ export default (app, db) => {
         });
 
       if ("html" in req.query) {
-        res.send(tableify(talismans, { showHeaders: false }));
+        res.send(tableify(talismans));
       } else {
         res.status(403);
       }
@@ -195,8 +227,7 @@ export default (app, db) => {
               collections[a].tier,
               collections[a].amount,
               collections[a].totalAmount,
-            ]),
-            { showHeaders: false }
+            ])
           )
         );
       } else {
@@ -250,7 +281,7 @@ export default (app, db) => {
 
         response.push(["Fairy Souls", calculated.fairy_souls.collected.toString()]);
 
-        res.send(tableify(response, { showHeaders: false }));
+        res.send(tableify(response));
       } else {
         res.status(403).send("Old JSON API has been disabled.");
       }
@@ -286,7 +317,7 @@ export default (app, db) => {
 
         cakes = cakes.sort((a, b) => a.cake - b.cake);
 
-        res.send(tableify(cakes, { showHeaders: false }));
+        res.send(tableify(cakes));
       }
     } catch (e) {
       handleError(e, res);
@@ -313,8 +344,7 @@ export default (app, db) => {
           tableify(
             allItems
               .filter((a) => helper.getId(a).length > 0)
-              .map((a) => [helper.getId(a), a.Count, a.display_name, a.rarity, a.type]),
-            { showHeaders: false }
+              .map((a) => [helper.getId(a), a.Count, a.display_name, a.rarity, a.type])
           )
         );
       } else {
@@ -389,7 +419,7 @@ export default (app, db) => {
       }
 
       if ("html" in req.query) {
-        res.send(tableify(output, { showHeaders: false }));
+        res.send(tableify(output));
       } else {
         res.status(403).send("Old JSON API has been disabled.");
       }
@@ -444,7 +474,7 @@ export default (app, db) => {
       }
 
       if ("html" in req.query) {
-        res.send(tableify(output, { showHeaders: false }));
+        res.send(tableify(output));
       } else {
         res.status(403).send("Old JSON API has been disabled.");
       }
@@ -506,7 +536,7 @@ export default (app, db) => {
       }
 
       if ("html" in req.query) {
-        res.send(tableify(output, { showHeaders: false }));
+        res.send(tableify(output));
       } else {
         res.status(403).send("Old JSON API has been disabled.");
       }
@@ -539,12 +569,7 @@ export default (app, db) => {
       }
 
       if ("html" in req.query) {
-        res.send(
-          tableify(
-            output.map((a) => [a.name, +a.price.toFixed(3)]),
-            { showHeaders: false }
-          )
-        );
+        res.send(tableify(output.map((a) => [a.name, +a.price.toFixed(3)])));
       } else {
         res.json(output);
       }
