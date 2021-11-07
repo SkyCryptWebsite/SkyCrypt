@@ -7,10 +7,10 @@ import { formatNumber } from "../stats-defer";
 @customElement("skill-component")
 export class SkillComponent extends LitElement {
   @property({ attribute: "skill" })
-  skill: string | undefined = undefined;
+  skill?: string;
 
   @property({ attribute: "type" })
-  type: "skill" | "dungeon" | "dungeon_class" | undefined = undefined;
+  type?: "skill" | "dungeon" | "dungeon_class";
 
   @property({ attribute: "icon" })
   icon = "icon-166_0";
