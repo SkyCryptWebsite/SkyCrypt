@@ -3,7 +3,6 @@ import { SkinViewer, createOrbitControls } from "skinview3d";
 import tippy from "tippy.js";
 
 import("./elements/inventory-view");
-import("./elements/skill-component");
 
 const favoriteElement = document.querySelector(".favorite") as HTMLButtonElement;
 
