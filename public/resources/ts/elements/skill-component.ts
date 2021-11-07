@@ -15,6 +15,9 @@ export class SkillComponent extends LitElement {
   @property({ attribute: "icon" })
   icon = "icon-166_0";
 
+  @property({ attribute: "maxed", type: Boolean, reflect: true })
+  maxed!: boolean;
+
   protected render(): TemplateResult | undefined {
     if (this.skill == null || this.type == null) {
       return;
@@ -40,7 +43,9 @@ export class SkillComponent extends LitElement {
         return;
     }
 
-    return html`<div class="skill xp-skill ${level.level == level.maxLevel ? "maxed-skill" : undefined}">
+    this.maxed = level.level == level.maxLevel;
+
+    return html`
       ${skillIconTemplate(this.skill, level, this.icon)}
       <div class="skill-name">
         ${skillName} <span class="skill-level">${level.level >= 0 ? level.level : "?"}</span>
@@ -49,7 +54,7 @@ export class SkillComponent extends LitElement {
         <div class="skill-progress-bar" style="--progress: ${level.level == level.levelCap ? 1 : level.progress}"></div>
         ${skillProgressTemplate(this.skill, level)}
       </div>
-    </div>`;
+    `;
   }
 
   // disable shadow root
