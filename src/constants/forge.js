@@ -63,6 +63,8 @@ export const forge_times = {
   BOOTS_OF_DIVAN: 23 * 60,
   DIVAN_DRILL: 2 * 24 * 60 + 12 * 60,
   PET: 12 * 24 * 60,
+  FORGE_TRAVEL_SCROLL: 5 * 60,
+  CRYSTAL_HOLLOWS_TRAVEL_SCROLL: 10 * 60,
 };
 
 export const quick_forge_multiplier = {
