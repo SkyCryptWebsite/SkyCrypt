@@ -213,8 +213,9 @@ export function calculateSenitherWeight(profile) {
   //dungeon weight
   const dungeons = profile.dungeons;
 
-  if (dungeons.catacombs) {
+  if (dungeons.catacombs.visited) {
     const xp = dungeons.catacombs.level;
+    console.log(dungeons.catacombs);
     let dungeonLevelWithProgress = xp.levelWithProgress;
 
     let dungeonsWeight = calcDungeonsWeight("catacombs", dungeonLevelWithProgress, xp.xp);
