@@ -1,5 +1,5 @@
 import { stats_symbols as symbols } from "./stats.js";
-import { round, floor, convertHMS, titleCase } from "../helper.js";
+import { round, floor, ceil, convertHMS, titleCase } from "../helper.js";
 
 const upgrade_types = {
   mithril_powder: {
@@ -150,7 +150,7 @@ class HotM {
       output.push(
         "§7Progress through your Heart of the Mountain by gaining §5HotM Exp§7, which is earned through completing §aCommissions§7.",
         "",
-        "Commissions are tasks given by the §e§lKing§r§7 in the §bRoyal Palace§7. Complete them to earn bountiful rewards!",
+        "§7Commissions are tasks given by the §e§lKing§r§7 in the §bRoyal Palace§7. Complete them to earn bountiful rewards!",
         ""
       );
     }
@@ -158,7 +158,7 @@ class HotM {
     // progress
     if (this.status === "next") {
       const progress = round(this.progress * 100);
-      const greenBars = Math.ceil(progress / 5);
+      const greenBars = ceil(progress / 5);
       const whiteBars = 20 - greenBars;
       output.push(
         `§7Progress: §e${progress}%`,
@@ -194,7 +194,7 @@ class HotM {
       return "unlocked";
     }
 
-    if (this.tier === Math.ceil(this.levelWithProgress)) {
+    if (this.tier === ceil(this.levelWithProgress)) {
       return "next";
     }
 
@@ -242,7 +242,7 @@ class Node {
   }
 
   get position7x9() {
-    return this.position + 1 + (Math.ceil(this.position / hotm.tiers) - 1) * 2;
+    return this.position + 1 + (ceil(this.position / hotm.tiers) - 1) * 2;
   }
 
   get itemData() {
@@ -302,7 +302,9 @@ class Node {
       output.push(
         "",
         "§7Cost",
-        `§${upgrade_types[this.upgrade_type].color}${this.upgradeCost} ${upgrade_types[this.upgrade_type].name}`
+        `§${upgrade_types[this.upgrade_type].color}${this.upgradeCost.toLocaleString()} ${
+          upgrade_types[this.upgrade_type].name
+        }`
       );
     }
 
@@ -363,7 +365,7 @@ class Node {
   }
 
   get requiredHotmTier() {
-    return Math.abs(Math.ceil(this.position / 7) - 7) + 1;
+    return Math.abs(ceil(this.position / 7) - 7) + 1;
   }
 
   get unlockCost() {
@@ -840,7 +842,7 @@ class EfficientMiner extends Node {
 
   perk(level) {
     const val1 = round(10 + level * 0.4, 1);
-    const val2 = floor(level * 0.1);
+    const val2 = ceil((level + 1) / 20);
     return [`§7When mining ores, you have a §a${val1}%§7 chance to mine §a${val2} §7adjacent ores.`];
   }
 }
@@ -1072,7 +1074,10 @@ class QuickForge extends Node {
   }
 
   perk(level) {
-    const val = round(10 + 0.5 * level, 1);
+    let val = round(10 + 0.5 * level, 1);
+    if (level === this.max_level) {
+      val = 30;
+    }
     return [`§7Decreases the time it takes to forge by §a${val}%§7.`];
   }
 }
@@ -1277,10 +1282,15 @@ class HotmReset extends HotmItem {
       `§8- §d${this.resources.gemstone_powder.toLocaleString()} Gemstone Powder`,
       "",
       "§7You will §akeep §7any Tiers and §cPeak of the Mountain §7that you have unlocked.",
-      "",
-      "§7Cost",
-      "§6100,000 Coins",
     ];
+
+    // cost
+    output.push("", "§7Cost");
+    if (this.last_reset === 0) {
+      output.push("§aFREE §7for your first reset.");
+    } else {
+      output.push("§6100,000 Coins");
+    }
 
     // cooldown or warning
     if (Date.now() - this.last_reset > 24 * 60 * 60 * 1000) {

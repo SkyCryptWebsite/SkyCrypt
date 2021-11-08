@@ -757,8 +757,8 @@ export const pet_items = {
     tier: "RARE",
     description: `§7Every 2 pet level you gain §6+1 ${symbols.mining_speed} Mining Speed §7and §6+1 §6${symbols.mining_fortune} Mining Fortune§7.`,
     statsPerLevel: {
-      mining_speed: 1,
-      mining_fortune: 1,
+      mining_speed: 0.5,
+      mining_fortune: 0.5,
     },
   },
 };
