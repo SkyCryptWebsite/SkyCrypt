@@ -499,7 +499,7 @@ export async function getTexture(item, ignoreId = false, packIds) {
   }
 
   // TODO: fix
-  // if ("leather" in outputTexture && hasPath(item, "tag", "ExtraAttributes", "color")) {
+  // if ("leather" in outputTexture && item.tag?.ExtraAttributes?.color) {
   //   const color = item.tag.ExtraAttributes.color.split(":");
 
   //   const leatherBasePath = path.resolve(path.dirname(outputTexture.path), "leatherCache");
