@@ -257,7 +257,7 @@ async function init() {
         } else if (regex.startsWith("regex:")) {
           regex = new RegExp(regex.substring(6));
         } else {
-          regex = new RegExp(escapeRegExp(regex));
+          regex = new RegExp(`^${escapeRegExp(regex)}$`);
         }
 
         texture.match.push({
