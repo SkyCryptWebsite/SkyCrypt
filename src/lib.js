@@ -441,7 +441,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     if (item.tag?.ExtraAttributes != undefined) {
       item.extra = {
         hpbs: 0,
-        anvil_uses: 0,
       };
     }
 
@@ -455,16 +454,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 
     if (item.tag?.ExtraAttributes?.hot_potato_count != undefined) {
       item.extra.hpbs = item.tag.ExtraAttributes.hot_potato_count;
-    }
-
-    if (item.tag?.ExtraAttributes?.anvil_uses != undefined) {
-      let { anvil_uses } = item.tag.ExtraAttributes;
-
-      anvil_uses -= item.extra.hpbs;
-
-      if (anvil_uses > 0) {
-        item.extra.anvil_uses = anvil_uses;
-      }
     }
 
     if (item.tag?.ExtraAttributes?.expertise_kills != undefined) {
