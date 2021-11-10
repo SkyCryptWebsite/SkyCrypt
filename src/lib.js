@@ -26,8 +26,8 @@ const Hypixel = axios.create({
 
 import { redisClient } from "./redis.js";
 
-import { calculateLilyWeight } from "./weight/lilyWeight.js";
-import { calculateSenitherWeight } from "./weight/senitherWeight.js";
+import { calculateLilyWeight } from "./weight/lily-weight.js";
+import { calculateSenitherWeight } from "./weight/senither-weight.js";
 import { getTexture, packs } from "./custom-resources.js";
 import { makeLore } from "./lore-generator.js";
 
