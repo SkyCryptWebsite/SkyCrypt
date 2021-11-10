@@ -426,13 +426,7 @@ function resize() {
     document.getElementById("skin_display")?.appendChild(playerModel);
   }
 
-  tippy("*[data-tippy-content]", {
-    onShow(instance) {
-      if (instance.props.content == "") {
-        return false;
-      }
-    },
-  });
+  tippy("*[data-tippy-content]");
 
   if (playerModel && skinViewer) {
     if (playerModel.offsetWidth / playerModel.offsetHeight < 0.6) {
