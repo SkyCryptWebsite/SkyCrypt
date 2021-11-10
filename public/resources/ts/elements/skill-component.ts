@@ -7,19 +7,20 @@ import { formatNumber } from "../stats-defer";
 @customElement("skill-component")
 export class SkillComponent extends LitElement {
   @property({ attribute: "skill" })
-  skill: string | undefined = undefined;
+  skill?: string;
 
   @property({ attribute: "type" })
-  type: "skill" | "dungeon" | "dungeon_class" | undefined = undefined;
+  type?: "skill" | "dungeon" | "dungeon_class";
 
   @property({ attribute: "icon" })
   icon = "icon-166_0";
 
-  protected render(): TemplateResult[] {
-    const result: TemplateResult[] = [];
+  @property({ attribute: "maxed", type: Boolean, reflect: true })
+  maxed!: boolean;
 
+  protected render(): TemplateResult | undefined {
     if (this.skill == null || this.type == null) {
-      return result;
+      return;
     }
 
     const skillName = this.skill[0].toUpperCase() + this.skill.substring(1);
@@ -39,26 +40,21 @@ export class SkillComponent extends LitElement {
         break;
 
       default:
-        return result;
+        return;
     }
 
-    result.push(
-      html`<div class="skill xp-skill ${level.level == level.maxLevel ? "maxed-skill" : undefined}">
-        ${skillIconTemplate(this.skill, level, this.icon)}
-        <div class="skill-name">
-          ${skillName} <span class="skill-level">${level.level >= 0 ? level.level : "?"}</span>
-        </div>
-        <div class="skill-bar" data-skill="${skillName}">
-          <div
-            class="skill-progress-bar"
-            style="--progress: ${level.level == level.levelCap ? 1 : level.progress}"
-          ></div>
-          ${skillProgressTemplate(this.skill, level)}
-        </div>
-      </div>`
-    );
+    this.maxed = level.level == level.maxLevel;
 
-    return result;
+    return html`
+      ${skillIconTemplate(this.skill, level, this.icon)}
+      <div class="skill-name">
+        ${skillName} <span class="skill-level">${level.level >= 0 ? level.level : "?"}</span>
+      </div>
+      <div class="skill-bar" data-skill="${skillName}">
+        <div class="skill-progress-bar" style="--progress: ${level.level == level.levelCap ? 1 : level.progress}"></div>
+        ${skillProgressTemplate(this.skill, level)}
+      </div>
+    `;
   }
 
   // disable shadow root
