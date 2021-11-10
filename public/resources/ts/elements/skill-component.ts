@@ -52,7 +52,7 @@ export class SkillComponent extends LitElement {
       </div>
       <div class="skill-bar" data-skill="${skillName}">
         <div class="skill-progress-bar" style="--progress: ${level.level == level.levelCap ? 1 : level.progress}"></div>
-        ${skillProgressTemplate(this.skill, level)}
+        ${skillProgressTemplate(...generateSkillTexts(level))}
       </div>
     `;
   }
@@ -85,22 +85,10 @@ function skillIconTemplate(skill: string, level: Levels, icon: string) {
   </div>`;
 }
 
-function skillProgressTemplate(skill: string, level: Levels) {
+function skillProgressTemplate(mainText: string, hoverText: string) {
   if (!("runecrafting" in calculated.levels)) {
     return html``;
   }
-
-  let hoverText = level.xpCurrent.toLocaleString();
-  if (level.xpForNext && level.xpForNext != Infinity) {
-    hoverText += ` / ${level.xpForNext.toLocaleString()}`;
-  }
-  hoverText += " XP";
-
-  let mainText = formatNumber(level.xpCurrent, true);
-  if (level.xpForNext && level.xpForNext != Infinity) {
-    mainText += ` / ${formatNumber(level.xpForNext, true)}`;
-  }
-  mainText += " XP";
 
   return html`<div
     class="skill-progress-text"
@@ -113,4 +101,20 @@ function skillProgressTemplate(skill: string, level: Levels) {
   >
     ${mainText}
   </div>`;
+}
+
+function generateSkillTexts(level: Levels): [string, string] {
+  let hoverText = level.xpCurrent.toLocaleString();
+  if (level.xpForNext && level.xpForNext != Infinity) {
+    hoverText += ` / ${level.xpForNext.toLocaleString()}`;
+  }
+  hoverText += " XP";
+
+  let mainText = formatNumber(level.xpCurrent, true);
+  if (level.xpForNext && level.xpForNext != Infinity) {
+    mainText += ` / ${formatNumber(level.xpForNext, true)}`;
+  }
+  mainText += " XP";
+
+  return [mainText, hoverText];
 }
