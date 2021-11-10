@@ -897,24 +897,6 @@ if (showStats != null) {
   });
 }
 
-for (const element of document.querySelectorAll(".xp-skill")) {
-  const skillProgressText = element.querySelector<HTMLElement>(".skill-progress-text");
-
-  if (skillProgressText === null) {
-    break;
-  }
-
-  const originalText = skillProgressText.innerHTML;
-
-  element.addEventListener("mouseenter", () => {
-    skillProgressText.innerHTML = skillProgressText.getAttribute("data-hover-text") as string;
-  });
-
-  element.addEventListener("mouseleave", () => {
-    skillProgressText.innerHTML = originalText;
-  });
-}
-
 for (const element of document.querySelectorAll(".kills-deaths-container .show-all.enabled")) {
   const parent = element.parentElement as HTMLElement;
   const kills = calculated[element.getAttribute("data-type") as "kills" | "deaths"];
