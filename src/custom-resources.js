@@ -84,11 +84,16 @@ async function init() {
         continue;
       }
 
-      let lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
-      let properties = {};
+      const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
+      const properties = {};
 
-      for (let line of lines) {
-        let split = line.split("=");
+      for (const line of lines) {
+        // Skipping comments
+        if (line.startsWith("#")) {
+          continue;
+        }
+
+        const split = line.split("=");
 
         if (split.length < 2) {
           continue;
@@ -97,15 +102,17 @@ async function init() {
         properties[split[0]] = split.slice(1).join("=");
       }
 
-      if (!("type" in properties)) {
+      // Empty properties, probably whole file contaiend only comments
+      if (Object.keys(properties).length === 0) {
         continue;
       }
 
-      if (properties.type != "item") {
+      // Processing only type=item (item is the default value if type is missing)
+      if (properties.type !== "item") {
         continue;
       }
 
-      let texture = {
+      const texture = {
         weight: 0,
         animated: false,
         file: path.basename(file),
