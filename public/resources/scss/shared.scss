@@ -3978,3 +3978,23 @@ body {
   margin: 0;
   white-space: nowrap;
 }
+
+#info-box {
+  h4 {
+    margin: 22px 0 14px 0;
+  }
+  .info-box__resources {
+    padding-left: 20px;
+    > li {
+      &:not(:last-child) {
+        margin-bottom: 8px;
+      }
+      > ul {
+        padding-left: 20px;
+        > li:first-child {
+          margin-top: 4px;
+        }
+      }
+    }
+  }
+}
