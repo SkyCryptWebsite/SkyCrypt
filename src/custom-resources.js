@@ -107,8 +107,8 @@ async function init() {
         continue;
       }
 
-      // Processing only type=item (item is the default value if type is missing)
-      if (properties.type !== "item") {
+      // Ignoring when type is set and is not "item"
+      if ("type" in properties && properties.type !== "item") {
         continue;
       }
 
