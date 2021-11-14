@@ -238,7 +238,7 @@ async function init() {
         }
 
         if (property == "items" || property == "matchItems") {
-          let item = mcData.findItemOrBlockByName(properties[property].replace("minecraft:", ""));
+          const item = mcData.findItemOrBlockByName(properties[property].replace("minecraft:", ""));
 
           if (item) {
             texture.id = item.id;
@@ -287,7 +287,7 @@ async function init() {
         try {
           metaProperties = RJSON.parse(mcMeta);
         } catch (e) {
-          //
+          // ...
         }
       }
 
@@ -338,7 +338,7 @@ async function init() {
 
             const frameTimeInterpolated = (2 / 20) * 1000;
 
-            let frameCountInterpolated = totalLength / frameTimeInterpolated;
+            const frameCountInterpolated = totalLength / frameTimeInterpolated;
 
             for (let i = 0; i < frameCountInterpolated; i++) {
               let frameCur, frameNext;
@@ -446,10 +446,6 @@ export async function getTexture(item, ignoreId = false, packIds) {
   _resourcePacks = _resourcePacks.sort((a, b) => packIds.indexOf(a) - packIds.indexOf(b));
 
   for (const pack of _resourcePacks) {
-    if ("weight" in outputTexture) {
-      outputTexture.weight = -9999;
-    }
-
     for (const texture of pack.textures) {
       if (ignoreId === false && texture.id != item.id) {
         continue;
