@@ -88,6 +88,7 @@ const skillItems = {
   mage: 'icon-369_0',
   mining: "icon-274_0",
   runecrafting: "icon-378_0",
+  social: "icon-388_0",
   taming: "icon-383_0",
   tank: 'icon-299_0',
 };
@@ -158,6 +159,7 @@ const skillEmojis = {
   foraging: "🌳",
   mining: "⛏️",
   runecrafting: "✨",
+  social: "💬",
   taming: "🦴",
 };
 
@@ -1004,6 +1006,7 @@ const metaDescription = getMetaDescription()
             <% if ('runecrafting' in calculated.levels) { %>
               <skill-component skill="carpentry" type="skill" icon="<%= skillItems.carpentry %>"></skill-component>
               <skill-component skill="runecrafting" type="skill" icon="<%= skillItems.runecrafting %>"></skill-component>
+              <!--<skill-component skill="social" type="skill" icon="<%= skillItems.social %>"></skill-component>-->
             <% } else { %>
               <div class="no-access">Skills from achievements across profiles. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">Enable Skills API</a> for more accurate data.</div>
             <% } %>
