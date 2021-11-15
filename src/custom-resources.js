@@ -5,7 +5,7 @@ import { getClusterId, hasPath, getPath } from "./helper.js";
 import mm from "micromatch";
 import util from "util";
 import apng2gif from "apng2gif-bin";
-import escapeRegExp from "lodash.escaperegexp";
+import _ from "lodash";
 import sharp from "sharp";
 import canvasModule from "canvas";
 const { createCanvas, loadImage } = canvasModule;
@@ -257,7 +257,7 @@ async function init() {
         } else if (regex.startsWith("regex:")) {
           regex = new RegExp(regex.substring(6));
         } else {
-          regex = new RegExp(escapeRegExp(regex));
+          regex = new RegExp(_.escapeRegExp(regex));
         }
 
         texture.match.push({
