@@ -3732,6 +3732,8 @@ export async function getForge(userProfile) {
         const timeFinished = item.startTime + forgeTime;
         forgeItem.timeFinished = timeFinished;
         forgeItem.timeFinishedText = moment(timeFinished).fromNow();
+      } else {
+        forgeItem.id = "UNKNOWN";
       }
       processes.push(forgeItem);
     }

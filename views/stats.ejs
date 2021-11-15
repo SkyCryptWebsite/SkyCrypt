@@ -1609,7 +1609,11 @@ const metaDescription = getMetaDescription()
           %>
             <div class="forge-item">
               <p class="stat-name forge-slot">Slot <%= process.slot %>:</p>
-              <span data-tippy-content='<local-time timestamp="<%= process.timeFinished %>"></local-time>'><span class="stat-raw-values"><%= process.name %> - <%= process.timeFinished < Date.now() ? "ended" : `ending ${process.timeFinishedText}`%></span></span>
+              <% if (process.id !== "UNKNOWN") { %>
+                <span data-tippy-content="<local-time timestamp='<%= process.timeFinished %>'></local-time>" class="stat-value"><%= process.name %> - <%= process.timeFinished < Date.now() ? "ended" : `ending ${process.timeFinishedText}`%></span>
+              <% } else { %>
+                <span data-tippy-content="Unknown end time" class="stat-value">Unknown item</span>
+              <% } %>
             </div>
           <%
               });
