@@ -18,43 +18,113 @@ export class SkillComponent extends LitElement {
   @property({ attribute: "maxed", type: Boolean, reflect: true })
   maxed!: boolean;
 
+  @property({ type: String })
+  progressText = "Loading...";
+
+  constructor() {
+    super();
+    this.addEventListener("mouseover", () => {
+      const hoverText = this.getProgressTexts()[1];
+      this._updateProgressText(hoverText);
+    });
+    this.addEventListener("mouseleave", () => {
+      const mainText = this.getProgressTexts()[0];
+      this._updateProgressText(mainText);
+    });
+  }
+
   protected render(): TemplateResult | undefined {
-    if (this.skill == null || this.type == null) {
+    const level = this.getLevel();
+    if (this.skill == undefined || this.type == undefined || level == undefined) {
       return;
     }
 
     const skillName = this.skill[0].toUpperCase() + this.skill.substring(1);
+    this.maxed = level.level === level.maxLevel;
 
-    let level: Levels;
+    return html`
+      <div
+        class="skill-icon"
+        data-tippy-content="${ifDefined(
+          level.rank && level.rank < 50000
+            ? `<span class='stat-name'>Rank: </span><span class='stat-value'>#${level.rank}</span>`
+            : undefined
+        )}"
+      >
+        ${this.icon.startsWith("head-")
+          ? html`<div
+              class="item-icon custom-icon"
+              style="background-image:url(/head/${this.icon.substring(5)})"
+            ></div>`
+          : html`<div class="item-icon ${this.icon}"></div>`}
+        ${level.level == level.maxLevel ? html`<div class="piece-shine"></div>` : undefined}
+      </div>
+      <div class="skill-name">
+        ${skillName} <span class="skill-level">${level.level >= 0 ? level.level : "?"}</span>
+      </div>
+      <div class="skill-bar" data-skill="${skillName}">
+        <div class="skill-progress-bar" style="--progress: ${level.level == level.levelCap ? 1 : level.progress}"></div>
+        ${"runecrafting" in calculated.levels
+          ? html`<div class="skill-progress-text">
+              ${this.progressText === "Loading..." ? this.getProgressTexts()[0] : this.progressText}
+            </div>`
+          : undefined}
+      </div>
+    `;
+  }
+
+  private _updateProgressText(string: string) {
+    this.progressText = string;
+  }
+
+  private getLevel() {
+    if (this.skill == undefined) {
+      return undefined;
+    }
+
+    let level: Levels | undefined;
     switch (this.type) {
       case "skill":
         level = calculated.levels[this.skill];
         break;
 
       case "dungeon":
-        level = calculated.dungeons.catacombs.level;
+        if (this.skill === "catacombs") {
+          level = calculated.dungeons[this.skill].level;
+        }
         break;
 
       case "dungeon_class":
         level = calculated.dungeons.classes[this.skill].experience;
         break;
-
-      default:
-        return;
     }
 
-    this.maxed = level.level == level.maxLevel;
+    return level;
+  }
 
-    return html`
-      ${skillIconTemplate(this.skill, level, this.icon)}
-      <div class="skill-name">
-        ${skillName} <span class="skill-level">${level.level >= 0 ? level.level : "?"}</span>
-      </div>
-      <div class="skill-bar" data-skill="${skillName}">
-        <div class="skill-progress-bar" style="--progress: ${level.level == level.levelCap ? 1 : level.progress}"></div>
-        ${skillProgressTemplate(...generateSkillTexts(level))}
-      </div>
-    `;
+  private getProgressTexts(): [string, string] {
+    let mainText = "";
+    let hoverText = "";
+
+    const level = this.getLevel();
+
+    if (level == undefined) {
+      return [mainText, hoverText];
+    }
+
+    hoverText = level.xpCurrent.toLocaleString();
+    if (level.xpForNext && level.xpForNext != Infinity) {
+      hoverText += ` / ${level.xpForNext.toLocaleString()}`;
+    }
+    hoverText += " XP";
+
+    mainText = formatNumber(level.xpCurrent, true);
+    if (level.xpForNext && level.xpForNext != Infinity) {
+      mainText += ` / ${formatNumber(level.xpForNext, true)}`;
+    }
+    mainText += " XP";
+
+    return [mainText, hoverText];
   }
 
   // disable shadow root
@@ -67,54 +137,4 @@ declare global {
   interface HTMLElementTagNameMap {
     "skill-component": SkillComponent;
   }
-}
-
-function skillIconTemplate(skill: string, level: Levels, icon: string) {
-  return html`<div
-    class="skill-icon"
-    data-tippy-content="${ifDefined(
-      level.rank && level.rank < 50000
-        ? `<span class='stat-name'>Rank: </span><span class='stat-value'>#${level.rank}</span>`
-        : undefined
-    )}"
-  >
-    ${icon.startsWith("head-")
-      ? html`<div class="item-icon custom-icon" style="background-image:url(/head/${icon.substring(5)})"></div>`
-      : html`<div class="item-icon ${icon}"></div>`}
-    ${level.level == level.maxLevel ? html`<div class="piece-shine"></div>` : undefined}
-  </div>`;
-}
-
-function skillProgressTemplate(mainText: string, hoverText: string) {
-  if (!("runecrafting" in calculated.levels)) {
-    return html``;
-  }
-
-  return html`<div
-    class="skill-progress-text"
-    @mouseover="${(e: MouseEvent) => {
-      (e.target as HTMLElement).textContent = hoverText;
-    }}"
-    @mouseleave="${(e: MouseEvent) => {
-      (e.target as HTMLElement).textContent = mainText;
-    }}"
-  >
-    ${mainText}
-  </div>`;
-}
-
-function generateSkillTexts(level: Levels): [string, string] {
-  let hoverText = level.xpCurrent.toLocaleString();
-  if (level.xpForNext && level.xpForNext != Infinity) {
-    hoverText += ` / ${level.xpForNext.toLocaleString()}`;
-  }
-  hoverText += " XP";
-
-  let mainText = formatNumber(level.xpCurrent, true);
-  if (level.xpForNext && level.xpForNext != Infinity) {
-    mainText += ` / ${formatNumber(level.xpForNext, true)}`;
-  }
-  mainText += " XP";
-
-  return [mainText, hoverText];
 }
