@@ -74,15 +74,17 @@ const statShort = {
 };
 
 const skillItems = {
-  farming: "icon-294_0",
-  mining: "icon-274_0",
-  combat: "icon-272_0",
-  foraging: "icon-6_3",
-  fishing: "icon-346_0",
-  enchanting: "icon-116_0",
   alchemy: "icon-379_0",
   carpentry: "icon-58_0",
+  combat: "icon-272_0",
+  enchanting: "icon-116_0",
+  farming: "icon-294_0",
+  fishing: "icon-346_0",
+  foraging: "icon-6_3",
+  mining: "icon-274_0",
   runecrafting: "icon-378_0",
+  social: "icon-388_0",
+  taming: "icon-383_0",
 };
 
 const slayerInfo = {
@@ -151,6 +153,7 @@ const skillEmojis = {
   foraging: "🌳",
   mining: "⛏️",
   runecrafting: "✨",
+  social: "💬",
   taming: "🦴",
 };
 
@@ -1010,26 +1013,25 @@ const metaDescription = getMetaDescription()
       </div>
 
       <div id="skill_levels_container">
-        <%
-          if('levels' in calculated){
-        %>
+        <% if ('levels' in calculated) { %>
           <div class="skill-bars" data-api-enabled="<%= 'runecrafting' in calculated.levels %>">
-            <%= skill_component('Taming', 'icon-383_0', calculated.levels.taming) %>
-            <%= skill_component('Farming', 'icon-294_0', calculated.levels.farming) %>
-            <%= skill_component('Mining', 'icon-274_0', calculated.levels.mining) %>
-            <%= skill_component('Combat', 'icon-272_0', calculated.levels.combat) %>
-            <%= skill_component('Foraging', 'icon-6_3', calculated.levels.foraging) %>
-            <%= skill_component('Fishing', 'icon-346_0', calculated.levels.fishing) %>
-            <%= skill_component('Enchanting', 'icon-116_0', calculated.levels.enchanting) %>
-            <%= skill_component('Alchemy', 'icon-379_0', calculated.levels.alchemy) %>
-            <% if('runecrafting' in calculated.levels){ %>
-              <%= skill_component('Carpentry', 'icon-58_0', calculated.levels.carpentry) %>
-              <%= skill_component('Runecrafting', 'icon-378_0', calculated.levels.runecrafting) %>
-            <% }else{ %>
+            <%= skill_component('Taming', skillItems.taming, calculated.levels.taming) %>
+            <%= skill_component('Farming', skillItems.farming, calculated.levels.farming) %>
+            <%= skill_component('Mining', skillItems.mining, calculated.levels.mining) %>
+            <%= skill_component('Combat', skillItems.combat, calculated.levels.combat) %>
+            <%= skill_component('Foraging', skillItems.foraging, calculated.levels.foraging) %>
+            <%= skill_component('Fishing', skillItems.fishing, calculated.levels.fishing) %>
+            <%= skill_component('Enchanting', skillItems.enchanting, calculated.levels.enchanting) %>
+            <%= skill_component('Alchemy', skillItems.alchemy, calculated.levels.alchemy) %>
+            <% if ('runecrafting' in calculated.levels) { %>
+              <%= skill_component('Carpentry', skillItems.carpentry, calculated.levels.carpentry) %>
+              <%= skill_component('Runecrafting', skillItems.runecrafting, calculated.levels.runecrafting) %>
+              <!--<%= skill_component('Social', skillItems.social, calculated.levels.social) %>-->
+            <% } else { %>
               <div class="no-access">Skills from achievements across profiles. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">Enable Skills API</a> for more accurate data.</div>
             <% } %>
           </div>
-        <% }else{ %>
+        <% } else { %>
           <div class="no-access"><%= calculated.display_name %> doesn't have skills access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.</div>
         <% } %>
       </div>

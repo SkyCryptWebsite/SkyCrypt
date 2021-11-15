@@ -143,6 +143,9 @@ export function getLevelByXp(xp, extra = {}) {
     case "runecrafting":
       xp_table = constants.runecrafting_xp;
       break;
+    case "social":
+      xp_table = constants.social_xp;
+      break;
     case "dungeoneering":
       xp_table = constants.dungeoneering_xp;
       break;
@@ -1710,7 +1713,8 @@ export async function getLevels(userProfile, hypixelProfile, levelCaps) {
     "experience_skill_enchanting" in userProfile ||
     "experience_skill_alchemy" in userProfile ||
     "experience_skill_carpentry" in userProfile ||
-    "experience_skill_runecrafting" in userProfile
+    "experience_skill_runecrafting" in userProfile ||
+    "experience_skill_social" in userProfile
   ) {
     let average_level_no_progress = 0;
 
@@ -1731,10 +1735,14 @@ export async function getLevels(userProfile, hypixelProfile, levelCaps) {
         skill: "runecrafting",
         type: "runecrafting",
       }),
+      social: getLevelByXp(userProfile.experience_skill_social || 0, {
+        skill: "social",
+        type: "social",
+      }),
     };
 
     for (let skill in skillLevels) {
-      if (skill != "runecrafting" && skill != "carpentry" && skill != "social") {
+      if (!["runecrafting", "carpentry", "social"].includes(skill)) {
         average_level += skillLevels[skill].level + skillLevels[skill].progress;
         average_level_no_progress += skillLevels[skill].level;
 

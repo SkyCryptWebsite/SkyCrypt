@@ -87,6 +87,9 @@ export const bonus_stats = {
   runecrafting_skill: {
     1: {},
   },
+  social_skill: {
+    1: {},
+  },
   zombie_slayer: {
     1: {
       health: 2,
