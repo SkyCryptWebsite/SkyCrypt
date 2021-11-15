@@ -1,0 +1,19 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "mcpatcher/cit/armor/glacite_armor/helmet/glacite_helm_top",
+        "front": "mcpatcher/cit/armor/glacite_armor/helmet/glacite_helm_front",
+        "side": "mcpatcher/cit/armor/glacite_armor/helmet/glacite_helm_side"
+    },
+    "display": {
+        "thirdperson": {
+            "rotation": [ 10, -45, 170 ],
+            "translation": [ 0, 1.5, -2.75 ],
+            "scale": [ 0.375, 0.375, 0.375 ]
+        },
+        "gui": {
+            "rotation": [ 0, 0, 0 ],
+            "scale": [ 0.7, 0.7, 0.7 ]
+        }
+    }
+}
