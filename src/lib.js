@@ -1742,7 +1742,7 @@ export async function getLevels(userProfile, hypixelProfile, levelCaps) {
     };
 
     for (let skill in skillLevels) {
-      if (!["runecrafting", "carpentry", "social"].includes(skill)) {
+      if (!constants.cosmetic_skills.includes(skill)) {
         average_level += skillLevels[skill].level + skillLevels[skill].progress;
         average_level_no_progress += skillLevels[skill].level;
 
@@ -1759,8 +1759,10 @@ export async function getLevels(userProfile, hypixelProfile, levelCaps) {
       }
     }
 
-    output.average_level = average_level / (Object.keys(skillLevels).length - 2);
-    output.average_level_no_progress = average_level_no_progress / (Object.keys(skillLevels).length - 2);
+    output.average_level =
+      average_level / (Object.keys(skillLevels).length - Object.keys(constants.cosmetic_skills).length);
+    output.average_level_no_progress =
+      average_level_no_progress / (Object.keys(skillLevels).length - Object.keys(constants.cosmetic_skills).length);
     output.total_skill_xp = totalSkillXp;
     output.skillWeight = weight;
 
