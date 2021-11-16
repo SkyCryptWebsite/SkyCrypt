@@ -261,11 +261,11 @@ export const statNames = {
 };
 
 export const slayer_cost = {
-  1: 2000,
-  2: 7500,
-  3: 20000,
-  4: 50000,
-  5: 100000,
+  1: 1000,
+  2: 3750,
+  3: 10000,
+  4: 25000,
+  5: 50000,
 };
 
 export const mob_mounts = {
