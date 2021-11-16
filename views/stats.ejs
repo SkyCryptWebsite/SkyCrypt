@@ -678,7 +678,7 @@ function getHighestRaritySword() {
 }
 
 function formatSlayerCoinsSpent(coins) {
-  return `${helper.formatNumber(coins / 2, true)} ➞ ${helper.formatNumber(coins, true)}`
+  return `${helper.formatNumber(coins / 2, true)} – ${helper.formatNumber(coins, true)}`
 }
 
 /*
@@ -2081,7 +2081,7 @@ const metaDescription = getMetaDescription()
           <p class="stat-raw-values">
             <span data-tippy-content="
               <span class='stat-name'>Approximate coins spent</span><br>
-              <span class='stat-raw-value'><i>Estimate of how many coins player has spent to start slayer quests.<br>Unfortunately the precise value can't be calculated due to multiple factors such as: Aatrox Mayor slashed pricing perk, Community Project discount and update 0.11.5 (enderman slayer) which changed slayer quests prices.</i></span><br>
+              <span class='stat-info'>Estimate of how many coins this player has spent on slayer quests. Precise values cannot be calculated due to a variety of factors, most obviously Mayor Aatrox's &quot;Slashed Pricing&quot; perk and slayer pricing changes after the Voidgloom Seraph update.</span><br>
               <br>
               <%
                 for (const slayerName of Object.keys(calculated.slayers).sort((a, b) => slayerOrder.indexOf(a) - slayerOrder.indexOf(b))) {
