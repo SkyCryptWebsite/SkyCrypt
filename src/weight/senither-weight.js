@@ -59,6 +59,9 @@ const skillWeight = {
   runecrafting: {
     maxLevel: 25,
   },
+  social: {
+    maxLevel: 25,
+  }
 };
 
 function calcSkillWeight(skillGroup, level, experience) {

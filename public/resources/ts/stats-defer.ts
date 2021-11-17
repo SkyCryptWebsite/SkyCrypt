@@ -806,7 +806,7 @@ class ScrollMemory {
     if (this._isSmoothScrolling !== value) {
       this._isSmoothScrolling = value;
       if (value) {
-        window.addEventListener("scroll", this._onScroll);
+        window.addEventListener("scroll", this._onScroll, { passive: true });
         this._onScroll();
       } else {
         window.removeEventListener("scroll", this._onScroll);
@@ -985,6 +985,6 @@ function onScroll() {
   }
 }
 onScroll();
-window.addEventListener("scroll", onScroll);
+window.addEventListener("scroll", onScroll, { passive: true });
 
 setTimeout(resize, 1000);
