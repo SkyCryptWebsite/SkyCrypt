@@ -61,7 +61,7 @@ const skillWeight = {
   },
   social: {
     maxLevel: 25,
-  }
+  },
 };
 
 function calcSkillWeight(skillGroup, level, experience) {
