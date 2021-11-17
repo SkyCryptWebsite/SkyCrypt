@@ -988,36 +988,6 @@ const metaDescription = getMetaDescription()
         <% const weight = calculated.weight; %>
         <div class="additional-stat">
           <%
-          const lilySkillWeight = weight.lily.skill.base + weight.lily.skill.overflow;
-          const lilyDungeonWeight = weight.lily.catacombs.experience + weight.lily.catacombs.completion.base + weight.lily.catacombs.completion.master;
-          const lilySlayerWeight = weight.lily.slayer;
-          const lilyWeight = weight.lily.total; %>
-          <span data-tippy-content="
-            <span class='stat-name'>Skill Weight: </span>
-            <span class='stat-value'>
-              <%= lilySkillWeight >= 0 ? parseFloat(lilySkillWeight.toFixed(2)).toLocaleString() : 'Error' %>
-            </span><br/>
-            <span class='stat-name'>Slayer Weight: </span>
-            <span class='stat-value'>
-              <%= lilySlayerWeight >= 0 ? parseFloat(lilySlayerWeight.toFixed(2)).toLocaleString() : 'Error'  %>
-            </span><br/>
-            <span class='stat-name'>Dungeon Weight: </span>
-            <span class='stat-value'>
-              <%= lilyDungeonWeight >= 0 ? parseFloat(lilyDungeonWeight.toFixed(2)).toLocaleString() : 'Error'  %>
-            </span><br/>
-            <br/>
-            <div class='tippy-explanation'>Weight calculations provided by LappySheep</div>
-          ">
-          <span class="stat-name">Lily Weight: </span>
-          <span class="stat-value">
-            <%= parseFloat(lilyWeight.toFixed(2)).toLocaleString() %>
-          </span>
-          <span class="stat-value stat-error">
-            <%= (!lilySkillWeight || !lilySlayerWeight || !lilyDungeonWeight) ? '!' : '' %>
-          </span>
-        </div>
-        <div class="additional-stat">
-          <%
           const senitherSkillWeight = weight.senither.skill.total + weight.lily.skill.overflow;
           const senitherDungeonWeight = weight.senither.dungeon.total;
           const senitherSlayerWeight = weight.senither.slayer.total;
@@ -1044,6 +1014,36 @@ const metaDescription = getMetaDescription()
           </span>
           <span class="stat-value stat-error">
             <%= (!senitherSkillWeight || !senitherSlayerWeight || !senitherDungeonWeight) ? '!' : '' %>
+          </span>
+        </div>
+        <div class="additional-stat">
+          <%
+          const lilySkillWeight = weight.lily.skill.base + weight.lily.skill.overflow;
+          const lilyDungeonWeight = weight.lily.catacombs.experience + weight.lily.catacombs.completion.base + weight.lily.catacombs.completion.master;
+          const lilySlayerWeight = weight.lily.slayer;
+          const lilyWeight = weight.lily.total; %>
+          <span data-tippy-content="
+            <span class='stat-name'>Skill Weight: </span>
+            <span class='stat-value'>
+              <%= lilySkillWeight >= 0 ? parseFloat(lilySkillWeight.toFixed(2)).toLocaleString() : 'Error' %>
+            </span><br/>
+            <span class='stat-name'>Slayer Weight: </span>
+            <span class='stat-value'>
+              <%= lilySlayerWeight >= 0 ? parseFloat(lilySlayerWeight.toFixed(2)).toLocaleString() : 'Error'  %>
+            </span><br/>
+            <span class='stat-name'>Dungeon Weight: </span>
+            <span class='stat-value'>
+              <%= lilyDungeonWeight >= 0 ? parseFloat(lilyDungeonWeight.toFixed(2)).toLocaleString() : 'Error'  %>
+            </span><br/>
+            <br/>
+            <div class='tippy-explanation'>Weight calculations provided by LappySheep</div>
+          ">
+          <span class="stat-name">Lily Weight: </span>
+          <span class="stat-value">
+            <%= parseFloat(lilyWeight.toFixed(2)).toLocaleString() %>
+          </span>
+          <span class="stat-value stat-error">
+            <%= (!lilySkillWeight || !lilySlayerWeight || !lilyDungeonWeight) ? '!' : '' %>
           </span>
         </div>
       </div>
