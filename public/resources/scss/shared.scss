@@ -240,6 +240,11 @@ a.no-underline {
       color: rgba(var(--text-rgb), 0.85);
       text-transform: none;
     }
+    .stat-info {
+      color: rgba(var(--text-rgb), 0.5);
+      text-transform: none;
+      font-style: italic;
+    }
   }
 
   &[data-placement^="top"] > .tippy-arrow::before {
