@@ -16,11 +16,11 @@ export function calculateLilyWeight(profile) {
   const skillLevels = skillOrder.map((key) => profile.levels[key].level);
   const skillXP = skillOrder.map((key) => profile.levels[key].xp);
 
-  const cataCompletions = getTierCompletions(profile.dungeons.catacombs.floors);
-  const masterCataCompletions = getTierCompletions(profile.dungeons.master_catacombs.floors);
-  const cataXP = profile.dungeons?.catacombs?.level.xp ?? 0;
+  const cataCompletions = getTierCompletions(profile.dungeons?.catacombs?.floors ?? {});
+  const masterCataCompletions = getTierCompletions(profile.dungeons?.master_catacombs?.floors ?? {});
+  const cataXP = profile.dungeons?.catacombs?.level?.xp ?? 0;
 
-  const slayerXP = slayerOrder.map((key) => profile.slayers?.[key]?.level.xp ?? 0);
+  const slayerXP = slayerOrder.map((key) => profile.slayers?.[key]?.level?.xp ?? 0);
 
   return LilyWeight.getWeightRaw(skillLevels, skillXP, cataCompletions, masterCataCompletions, cataXP, slayerXP);
 }
