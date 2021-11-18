@@ -2022,6 +2022,8 @@ export const getStats = async (
       items.armor.find((a) => a.type === "boots" || a.type === "dungeon boots"),
       getId(items.armor.find((a) => a.type === "boots" || a.type === "dungeon boots"))
     );
+
+    // Updates items lore after modifyArmor() changed their stats/extra (hpb)
     makeLore(items.armor.find((a) => a.type === "helmet" || a.type === "dungeon helmet"));
     makeLore(items.armor.find((a) => a.type === "chestplate" || a.type === "dungeon chestplate"));
     makeLore(items.armor.find((a) => a.type === "leggings" || a.type === "dungeon leggings"));
