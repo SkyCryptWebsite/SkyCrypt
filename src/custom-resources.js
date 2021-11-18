@@ -501,52 +501,6 @@ export async function getTexture(item, ignoreId = false, packIds) {
     return null;
   }
 
-  // TODO: fix
-  // if ("leather" in outputTexture && item.tag?.ExtraAttributes?.color) {
-  //   const color = item.tag.ExtraAttributes.color.split(":");
-
-  //   const leatherBasePath = path.resolve(path.dirname(outputTexture.path), "leatherCache");
-  //   const leatherPath = path.resolve(
-  //     leatherBasePath,
-  //     path.basename(outputTexture.path, ".png") + "_" + color.join("_") + ".png"
-  //   );
-
-  //   await fs.ensureDir(leatherBasePath);
-
-  //   try {
-  //     await fs.access(leatherPath, fs.F_OK);
-  //     throw "";
-  //   } catch (e) {
-  //     const canvas = createCanvas(128, 128);
-  //     const ctx = canvas.getContext("2d");
-
-  //     const armorBase = await loadImage(outputTexture.leather.base);
-  //     const armorOverlay = await loadImage(outputTexture.leather.overlay);
-
-  //     ctx.drawImage(armorBase, 0, 0);
-
-  //     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-  //     for (let i = 0; i < imageData.data.length; i += 4) {
-  //       const r = imageData.data[i];
-  //       const alpha = r / 255;
-
-  //       imageData.data[i] = color[0] * alpha;
-  //       imageData.data[i + 1] = color[1] * alpha;
-  //       imageData.data[i + 2] = color[2] * alpha;
-  //     }
-
-  //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-  //     ctx.putImageData(imageData, 0, 0);
-
-  //     ctx.drawImage(armorOverlay, 0, 0);
-
-  //     await fs.writeFile(leatherPath, canvas.toBuffer("image/png"));
-  //   }
-
-  //   outputTexture.path = leatherPath;
-  // }
-
   outputTexture.path = path.relative(path.resolve(__dirname, "..", "public"), outputTexture.path).replace(/[\\]/g, "/");
   process.send({ type: "used_pack", id: outputTexture?.pack.config.id });
 
