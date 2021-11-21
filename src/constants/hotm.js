@@ -209,8 +209,8 @@ class HotM {
     };
 
     return {
-      id: data[this.status].split(":")[0],
-      Damage: data[this.status].split(":")[1],
+      id: parseInt(data[this.status].split(":")[0], 10),
+      Damage: parseInt(data[this.status].split(":")[1], 10),
       glowing: false,
     };
   }
@@ -265,8 +265,8 @@ class Node {
     };
 
     return {
-      id: data[this.nodeType][this.status].split(":")[0],
-      Damage: data[this.nodeType][this.status].split(":")[1],
+      id: parseInt(data[this.nodeType][this.status].split(":")[0], 10),
+      Damage: parseInt(data[this.nodeType][this.status].split(":")[1], 10),
       glowing: this.selectedPickaxeAbility === this.id,
     };
   }

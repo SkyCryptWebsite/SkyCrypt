@@ -444,7 +444,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     if (item.tag?.ExtraAttributes != undefined) {
       item.extra = {
         hpbs: 0,
-        anvil_uses: 0,
       };
     }
 
@@ -458,16 +457,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 
     if (item.tag?.ExtraAttributes?.hot_potato_count != undefined) {
       item.extra.hpbs = item.tag.ExtraAttributes.hot_potato_count;
-    }
-
-    if (item.tag?.ExtraAttributes?.anvil_uses != undefined) {
-      let { anvil_uses } = item.tag.ExtraAttributes;
-
-      anvil_uses -= item.extra.hpbs;
-
-      if (anvil_uses > 0) {
-        item.extra.anvil_uses = anvil_uses;
-      }
     }
 
     if (item.tag?.ExtraAttributes?.expertise_kills != undefined) {
@@ -1742,7 +1731,7 @@ export async function getLevels(userProfile, hypixelProfile, levelCaps) {
     };
 
     for (let skill in skillLevels) {
-      if (!["runecrafting", "carpentry", "social"].includes(skill)) {
+      if (!constants.cosmetic_skills.includes(skill)) {
         average_level += skillLevels[skill].level + skillLevels[skill].progress;
         average_level_no_progress += skillLevels[skill].level;
 
@@ -1759,8 +1748,10 @@ export async function getLevels(userProfile, hypixelProfile, levelCaps) {
       }
     }
 
-    output.average_level = average_level / (Object.keys(skillLevels).length - 2);
-    output.average_level_no_progress = average_level_no_progress / (Object.keys(skillLevels).length - 2);
+    output.average_level =
+      average_level / (Object.keys(skillLevels).length - Object.keys(constants.cosmetic_skills).length);
+    output.average_level_no_progress =
+      average_level_no_progress / (Object.keys(skillLevels).length - Object.keys(constants.cosmetic_skills).length);
     output.total_skill_xp = totalSkillXp;
     output.skillWeight = weight;
 
@@ -2033,6 +2024,8 @@ export const getStats = async (
       items.armor.find((a) => a.type === "boots" || a.type === "dungeon boots"),
       getId(items.armor.find((a) => a.type === "boots" || a.type === "dungeon boots"))
     );
+
+    // Updates items lore after modifyArmor() changed their stats/extra (hpb)
     makeLore(items.armor.find((a) => a.type === "helmet" || a.type === "dungeon helmet"));
     makeLore(items.armor.find((a) => a.type === "chestplate" || a.type === "dungeon chestplate"));
     makeLore(items.armor.find((a) => a.type === "leggings" || a.type === "dungeon leggings"));
