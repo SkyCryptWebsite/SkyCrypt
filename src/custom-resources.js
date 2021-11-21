@@ -58,7 +58,12 @@ async function init() {
   console.log(`Custom Resources loading started on ${getClusterId(true)}.`);
   console.time(`custom_resources_${getClusterId()}`);
 
-  for (const pack of await fs.readdir(RESOURCE_PACK_FOLDER)) {
+  for (const packOrFile of await fs.readdir(RESOURCE_PACK_FOLDER, { withFileTypes: true })) {
+    if (!packOrFile.isDirectory()) {
+      continue;
+    }
+
+    const pack = packOrFile.name;
     const basePath = path.resolve(RESOURCE_PACK_FOLDER, pack);
 
     try {
