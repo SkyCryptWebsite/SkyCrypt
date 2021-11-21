@@ -15,29 +15,28 @@ console.log(
 );
 
 // Alt+Click on any .rich-item to console.log the item object
-for (const element of document.querySelectorAll<HTMLElement>(".rich-item")) {
-  element.addEventListener("click", (e) => {
-    if (!e.altKey) {
-      return;
-    }
+document.addEventListener("click", (e) => {
+  const element = e.target as HTMLElement;
 
-    let item: DisplayItem | Item | Pet | undefined = undefined;
+  if (!e.altKey || !element.classList.contains("rich-item")) {
+    return;
+  }
 
-    if (element.hasAttribute("data-item-id")) {
-      const itemId = element.getAttribute("data-item-id") as string;
-      item = allItems.get(itemId) as Item;
-    } else if (element.hasAttribute("data-pet-index")) {
-      item = calculated.pets[parseInt(element.getAttribute("data-pet-index") as string)];
-    } else if (element.hasAttribute("data-missing-pet-index")) {
-      item = calculated.missingPets[parseInt(element.getAttribute("data-missing-pet-index") as string)];
-    } else if (element.hasAttribute("data-missing-talisman-index")) {
-      item =
-        calculated.missingTalismans.missing[parseInt(element.getAttribute("data-missing-talisman-index") as string)];
-    } else if (element.hasAttribute("data-upgrade-talisman-index")) {
-      item =
-        calculated.missingTalismans.upgrades[parseInt(element.getAttribute("data-upgrade-talisman-index") as string)];
-    }
+  let item: DisplayItem | Item | Pet | undefined = undefined;
 
-    console.log(item);
-  });
-}
+  if (element.hasAttribute("data-item-id")) {
+    const itemId = element.getAttribute("data-item-id") as string;
+    item = allItems.get(itemId) as Item;
+  } else if (element.hasAttribute("data-pet-index")) {
+    item = calculated.pets[parseInt(element.getAttribute("data-pet-index") as string)];
+  } else if (element.hasAttribute("data-missing-pet-index")) {
+    item = calculated.missingPets[parseInt(element.getAttribute("data-missing-pet-index") as string)];
+  } else if (element.hasAttribute("data-missing-talisman-index")) {
+    item = calculated.missingTalismans.missing[parseInt(element.getAttribute("data-missing-talisman-index") as string)];
+  } else if (element.hasAttribute("data-upgrade-talisman-index")) {
+    item =
+      calculated.missingTalismans.upgrades[parseInt(element.getAttribute("data-upgrade-talisman-index") as string)];
+  }
+
+  console.log(item);
+});
