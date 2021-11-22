@@ -3726,7 +3726,7 @@ export async function getForge(userProfile) {
         forgeItem.timeFinished = timeFinished;
         forgeItem.timeFinishedText = moment(timeFinished).fromNow();
       } else {
-        forgeItem.id = "UNKNOWN";
+        forgeItem.id = `UNKNOWN-${item.id}`;
       }
       processes.push(forgeItem);
     }
