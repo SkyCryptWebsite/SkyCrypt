@@ -1505,7 +1505,7 @@ const metaDescription = getMetaDescription()
               <span class="stat-value <%= max %>"><%= mining.commissions.milestone.toLocaleString() %></span>
               <br>
               <!-- Crystal Hollows Pass -->
-              <% const chpass = mining.core.crystal_hollows_last_access > Date.now() - 2*60*60*1000 %>
+              <% const chpass = mining.core.crystal_hollows_last_access > Date.now() - 5*60*60*1000 %>
               <% max = chpass ? 'golden-text' : '' %>
               <span class="stat-name <%= max %>">Crystal Hollows Pass:</span>
               <span class="stat-value <%= max %>" data-tippy-content="
