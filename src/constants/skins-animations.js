@@ -433,6 +433,12 @@ const skins = [
     texture: "/head/473af69ed9bf67e2f5403dd7d28bbe32034749bbfb635ac1789a412053cdcbf0",
     release: new Date("2021-10-31 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_PHOENIX_ICE",
+    name: "Ice",
+    texture: "/head/12582057e52d0f7fffd1a1f93acf196db5f09b76f1ba3ede28476cc4cd82da97",
+    release: new Date("2021-11-25 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
