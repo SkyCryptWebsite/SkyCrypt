@@ -61,7 +61,7 @@
     "minecraft-data": "^2.96.0",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
-    "moment-timezone": "^0.5.31",
+    "moment-timezone": "^0.5.34",
     "mongo-sanitize": "^1.1.0",
     "mongodb": "^4.2.0",
     "prismarine-nbt": "^2.0.0",
