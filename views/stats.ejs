@@ -992,69 +992,66 @@ const metaDescription = getMetaDescription()
         <div class="additional-stat">
           <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
         </div>
-        <% const weight = calculated.weight; %>
-        <div class="additional-stat">
-          <%
-          const senitherSkillWeight = weight.senither.skill.total + weight.lily.skill.overflow;
-          const senitherDungeonWeight = weight.senither.dungeon.total;
-          const senitherSlayerWeight = weight.senither.slayer.total;
-          const senitherTotalWeight = weight.senither.overall; %>
-          <span data-tippy-content="
-            <span class='stat-name'>Senither Weight</span><br>
-            <span class='stat-info'>Weight calculations provided by Senither</span>
-            <br/><br/>
-            <span class='stat-name'>Skill: </span>
-            <span class='stat-value'>
-              <%= senitherSkillWeight >= 0 ? parseFloat(senitherSkillWeight.toFixed(2)).toLocaleString() : 'Error' %>
-            </span><br/>
-            <span class='stat-name'>Slayer: </span>
-            <span class='stat-value'>
-              <%= senitherSlayerWeight >= 0 ? parseFloat(senitherSlayerWeight.toFixed(2)).toLocaleString() : 'Error'  %>
-            </span><br/>
-            <span class='stat-name'>Dungeon: </span>
-            <span class='stat-value'>
-              <%= senitherDungeonWeight >= 0 ? parseFloat(senitherDungeonWeight.toFixed(2)).toLocaleString() : 'Error'  %>
-            </span><br/><br/>
-            <span class='stat-name'>Total: </span>
-            <span class='stat-value'>
-              <%= parseFloat(senitherTotalWeight.toFixed(2)).toLocaleString()  %>
-            </span>
-          ">
-          <span class="stat-name">Senither Weight: </span>
-          <span class="stat-value"><%= parseFloat(Math.floor(senitherTotalWeight)).toLocaleString() %></span>
-          <span class="stat-value stat-error"><%= (!senitherSkillWeight || !senitherSlayerWeight || !senitherDungeonWeight) ? '!' : '' %></span>
-        </div>
-        <div class="additional-stat">
-          <%
-          const lilySkillWeight = weight.lily.skill.base + weight.lily.skill.overflow;
-          const lilyDungeonWeight = weight.lily.catacombs.experience + weight.lily.catacombs.completion.base + weight.lily.catacombs.completion.master;
-          const lilySlayerWeight = weight.lily.slayer;
-          const lilyWeight = weight.lily.total; %>
-          <span data-tippy-content="
-            <span class='stat-name'>Lily Weight</span><br>
-            <span class='stat-info'>Weight calculations provided by LappySheep</span>
-            <br/><br/>
-            <span class='stat-name'>Skill: </span>
-            <span class='stat-value'>
-              <%= lilySkillWeight >= 0 ? parseFloat(lilySkillWeight.toFixed(2)).toLocaleString() : 'Error' %>
-            </span><br/>
-            <span class='stat-name'>Slayer: </span>
-            <span class='stat-value'>
-              <%= lilySlayerWeight >= 0 ? parseFloat(lilySlayerWeight.toFixed(2)).toLocaleString() : 'Error'  %>
-            </span><br/>
-            <span class='stat-name'>Dungeon: </span>
-            <span class='stat-value'>
-              <%= lilyDungeonWeight >= 0 ? parseFloat(lilyDungeonWeight.toFixed(2)).toLocaleString() : 'Error'  %>
-            </span><br/><br/>
-            <span class='stat-name'>Total: </span>
-            <span class='stat-value'>
-              <%= parseFloat(lilyWeight.toFixed(2)).toLocaleString()  %>
-            </span>
-          ">
-          <span class="stat-name">Lily Weight: </span>
-          <span class="stat-value"><%= parseFloat(Math.floor(lilyWeight)).toLocaleString() %></span>
-          <span class="stat-value stat-error"><%= (!lilySkillWeight || !lilySlayerWeight || !lilyDungeonWeight) ? '!' : '' %></span>
-        </div>
+        <%
+          const weightSystems = [
+            {
+              name: "Senither Weight",
+              author: "Senither",
+              skill: calculated.weight.senither.skill.total + calculated.weight.lily.skill.overflow,
+              slayer: calculated.weight.senither.slayer.total,
+              dungeon: calculated.weight.senither.dungeon.total,
+              total: calculated.weight.senither.overall,
+            },
+            {
+              name: "Lily Weight",
+              author: "LappySheep",
+              skill: calculated.weight.lily.skill.base + calculated.weight.lily.skill.overflow,
+              slayer: calculated.weight.lily.slayer,
+              dungeon: calculated.weight.lily.catacombs.experience + calculated.weight.lily.catacombs.completion.base + calculated.weight.lily.catacombs.completion.master,
+              total: calculated.weight.lily.total,
+            },
+          ];
+
+          for (weight of weightSystems) {
+            weight.skillError = !(weight.skill > 0);
+            weight.slayerError = !(weight.slayer > 0);
+            weight.dungeonError = !(weight.dungeon > 0);
+
+            %>
+              <div class="additional-stat">
+                <span data-tippy-content="
+                  <span class='stat-name'><%= weight.name %></span><br>
+                  <span class='stat-info'>Weight calculations by <%= weight.author %></span>
+                  <br/><br/>
+                  <span class='stat-name'>Skill: </span>
+                  <span class='stat-value'>
+                    <%= weight.skillError ? "Error" : parseFloat(weight.skill.toFixed(2)).toLocaleString() %>
+                  </span><br/>
+                  <span class='stat-name'>Slayer: </span>
+                  <span class='stat-value'>
+                    <%= weight.slayerError ? "Error" : parseFloat(weight.slayer.toFixed(2)).toLocaleString() %>
+                  </span><br/>
+                  <span class='stat-name'>Dungeon: </span>
+                  <span class='stat-value'>
+                    <%= weight.dungeonError ? "Error" : parseFloat(weight.dungeon.toFixed(2)).toLocaleString() %>
+                  </span><br/><br/>
+                  <span class='stat-name'>Total: </span>
+                  <span class='stat-value'>
+                    <%= parseFloat(weight.total.toFixed(2)).toLocaleString()  %>
+                  </span>
+                ">
+                  <span class="stat-name"><%= weight.name %>: </span>
+                  <span class="stat-value">
+                    <%= parseFloat(Math.round(weight.total)).toLocaleString() %><%
+                      if(weight.skillError || weight.dungeonError || weight.slayerError){
+                      %><span class="stat-error">!</span><%
+                      }
+                  %></span
+                ></span>
+              </div>
+            <%
+          }
+        %>
       </div>
 
       <div id="skill_levels_container">
