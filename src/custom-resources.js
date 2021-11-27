@@ -479,11 +479,7 @@ export async function getTexture(item, ignoreId = false, packIds) {
           matchValues = [matchValues];
         }
 
-        for (const matchValue of matchValues) {
-          if (!regex.test(matchValue.toString().replace(removeFormatting, ""))) {
-            continue;
-          }
-
+        if (matchValues.some((matchValue) => regex.test(matchValue.toString().replace(removeFormatting, "")))) {
           matches++;
         }
       }
