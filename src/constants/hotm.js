@@ -1100,7 +1100,7 @@ class Pickobulus extends Node {
 
   perk(level) {
     const radius = [2, 2, 3][this.pickaxeAbilityLevel - 1];
-    const cooldown = [120, 120, 120][this.pickaxeAbilityLevel - 1];
+    const cooldown = [120, 110, 110][this.pickaxeAbilityLevel - 1];
     return [
       "§6Pickaxe Ability: Pickobulus",
       `§7Throw your pickaxe to create an explosion on impact, mining all ores within a §a${radius}§7 block radius.`,
