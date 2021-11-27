@@ -41,6 +41,7 @@ You can now run `npm run start` to start it. You will be able to access the site
   - [RNBW+](https://hypixel.net/threads/3470904) by rainbowcraft2
   - [Hypixel Skyblock Pack](https://hypixel.net/threads/2103515) by Packs HQ
   - [Vanilla+](https://hypixel.net/threads/2147652) by TBlazeWarriorT
+  - [Worlds and Beyond](https://hypixel.net/threads/3597207) by Skeletony\_
   - [Default Minecraft Textures](https://www.minecraft.net/) by Mojang
 - **Player Heads**: [SkyBlock](https://hypixel.net/forums/skyblock.157/) by Hypixel.
 - **Original Site**: [sky.lea.moe](https://sky.lea.moe/) by LeaPhant
