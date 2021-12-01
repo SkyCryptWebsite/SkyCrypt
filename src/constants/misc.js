@@ -145,6 +145,8 @@ export const special_enchants = [
   "Dragon Hunter V",
   "Feather Falling 10",
   "Feather Falling X",
+  "Feather Falling 20",
+  "Feather Falling XX",
   "Infinite Quiver 10",
   "Infinite Quiver X",
   "Thorns 6",
