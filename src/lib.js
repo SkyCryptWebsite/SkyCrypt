@@ -1443,7 +1443,8 @@ export const getItems = async (
       a.type != null &&
       (a.type.endsWith("sword") ||
         a.type.endsWith("cutlass") || // Pirate English
-        a.type.endsWith("bow"))
+        a.type.endsWith("bow") ||
+        a.type.endsWith("gauntlet"))
   );
 
   output.hoes = all_items.filter((a) => a.type != null && a.type.endsWith("hoe"));

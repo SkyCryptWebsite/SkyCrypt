@@ -18,6 +18,7 @@ export const item_types = [
   "chestplate",
   "leggings",
   "boots",
+  "gauntlet",
 ];
 
 /** @typedef {"common"|"uncommon"|"rare"|"epic"|"legendary"|"mythic"|"divine"|"supreme"|"special"|"very special"} Rarity */
