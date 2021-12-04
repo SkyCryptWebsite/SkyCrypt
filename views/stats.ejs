@@ -481,11 +481,19 @@ function getMetaTitle() {
 		metaTitle += calculated.display_emoji
 	}
 
-	if (calculated.profile.game_mode == 'ironman') {
-		metaTitle += ` (${calculated.profile.cute_name}♻️)`
-	} else {
-		metaTitle += ` (${calculated.profile.cute_name})`
-	}
+  switch (calculated.profile.game_mode) {
+    case 'ironman':
+      metaTitle += ` (${calculated.profile.cute_name}♻️)`
+      break;
+
+    case 'bingo':
+      metaTitle += ` (${calculated.profile.cute_name}🎲)`
+      break;
+
+    default:
+		  metaTitle += ` (${calculated.profile.cute_name})`
+      break;
+  }
 
 	return metaTitle
 }
@@ -773,8 +781,11 @@ const metaDescription = getMetaDescription()
       <span class="text-on"> on </span>
       <span tabindex="0" id="stats_for_profile">
         <%= calculated.profile.cute_name %>
-        <% if(calculated.profile.game_mode == 'ironman'){ %>
+        <% if (calculated.profile.game_mode == 'ironman') { %>
           <img src="/resources/img/icons/ironman.png" class="emoji" alt="ironman">
+        <% } %>
+        <% if (calculated.profile.game_mode == 'bingo') { %>
+          <img src="/resources/img/icons/bingo.png" class="emoji" alt="bingo">
         <% } %>
         <ul id="other_profiles">
           <% for(let profile_id in calculated.profiles){ %>
@@ -782,8 +793,11 @@ const metaDescription = getMetaDescription()
             <li>
               <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>">
                 <%= _profile.cute_name %>
-                <% if(_profile.game_mode == 'ironman'){ %>
+                <% if (_profile.game_mode == 'ironman') { %>
                   <img src="/resources/img/icons/ironman.png" class="emoji">
+                <% } %>
+                <% if (_profile.game_mode == 'bingo') { %>
+                  <img src="/resources/img/icons/bingo.png" class="emoji">
                 <% } %>
                 <span class="goto-last-played"><%= 'last_updated' in _profile ? _profile.last_updated.text : '' %></span>
               </a>
@@ -1070,7 +1084,7 @@ const metaDescription = getMetaDescription()
       if(Object.keys(calculated.collections).length == 0)
         notAvailable.push('Collections');
     %>
-    <% if(notAvailable.length > 0 || localizedItems || calculated.profile.game_mode == 'ironman'){ %>
+    <% if (notAvailable.length > 0 || localizedItems || calculated.profile.game_mode == 'ironman') { %>
       <div class="stat-container info-container-wrapper">
         <div class="info-container">
           <div class="info-header">Notice</div>
@@ -1085,7 +1099,11 @@ const metaDescription = getMetaDescription()
           <% } %>
           <% if(calculated.profile.game_mode == 'ironman'){ %>
             <% if(notAvailable.length > 0){ %><br><br><% } %>
-            This is an <strong>Ironman</strong> profile. The player cannot use the Auction House, Bazaar, Trades, or pick up drops from other players.
+            This is an <strong>Ironman</strong> profile. The player cannot use the auction house, bazaar, trade or pick up drops from other players.
+          <% } %>
+          <% if(calculated.profile.game_mode == 'bingo'){ %>
+            <% if(notAvailable.length > 0){ %><br><br><% } %>
+            This is a <strong>Bingo</strong> profile. The player cannot spend gems, use the auction house, bazaar, trade or pick up drops from other players.
           <% } %>
         </div>
       </div>
