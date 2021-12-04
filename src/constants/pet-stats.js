@@ -775,8 +775,8 @@ class WitherSkeleton extends Pet {
 class Bal extends Pet {
   get stats() {
     return {
-      ferocity: this.level * 0.25,
-      strength: this.level * 0.1,
+      ferocity: this.level * 0.1,
+      strength: this.level * 0.25,
     };
   }
 
