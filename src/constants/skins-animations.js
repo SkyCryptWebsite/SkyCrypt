@@ -439,6 +439,12 @@ const skins = [
     texture: "/head/12582057e52d0f7fffd1a1f93acf196db5f09b76f1ba3ede28476cc4cd82da97",
     release: new Date("2021-11-25 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_OCELOT_SNOW_TIGER",
+    name: "Snow Tiger",
+    texture: "/head/496499b99c88314b1459fc5b515c477b069bf2229a2833abb2e1ff20b5f29457",
+    release: new Date("2021-12-14 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
