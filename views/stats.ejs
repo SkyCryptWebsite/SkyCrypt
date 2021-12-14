@@ -546,7 +546,11 @@ function getDescription() {
 			: calculated.stats
 
 		description.push(
-			`❤️ ${stats.health} 🛡️ ${stats.defense} 💪 ${stats.strength} 🌀 ${stats.crit_chance}% ☠️ ${stats.crit_damage}%`,
+			`❤️ ${stats.health} `,
+			`🛡️ ${stats.defense} `,
+			`💪 ${stats.strength} `,
+			`🌀 ${stats.crit_chance}% `,
+			`☠️ ${stats.crit_damage}%`,
 			'\n',
 			'\n'
 		)
@@ -630,33 +634,36 @@ function getDescription() {
 		description.push('\n', '\n')
 	}
 
-	// Avg. skill, weight, purse
+	// Avg. skill
 	if (calculated.average_level) {
 		description.push(
-			`⚒ Avg Skill Level: ${
+			`📚 Avg Skill Level: ${
 				Math.floor(calculated.average_level * 10) / 10
 			} `
 		)
+		description.push('\n')
 	}
+
+	// Weights
 	if (calculated.weight) {
 		description.push(
-			`💪 Weight: ${Math.floor(calculated.weight * 10) / 10} `
+			`💪 Senither Weight: ${Math.floor(
+				calculated.weight.senither.overall
+			).toLocaleString()} `,
+			`💪 Lily Weight: ${Math.floor(
+				calculated.weight.lily.total
+			).toLocaleString()}`
 		)
+		description.push('\n')
 	}
-	description.push(
-		`💰 Purse: ${helper.formatNumber(calculated.purse, true)} Coins `
-	)
-	description.push('\n')
 
-	// Bank
+	// Bank & purse
 	if (calculated.bank) {
 		description.push(
-			`🏦 Bank Account: ${helper.formatNumber(
-				calculated.bank,
-				true
-			)} Coin${Math.floor(calculated.bank) == 1 ? '' : 's'}`
+			`🏦 Bank: ${helper.formatNumber(calculated.bank, true)} `
 		)
 	}
+	description.push(`💰 Purse: ${helper.formatNumber(calculated.purse, true)}`)
 
 	// Done!
 	return description.join('')
@@ -1003,31 +1010,57 @@ const metaDescription = getMetaDescription()
         <div class="additional-stat">
           <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
         </div>
-        <div class="additional-stat">
-          <span data-tippy-content="
-            <span class='stat-name'>Skill Weight: </span>
-            <span class='stat-value'>
-              <%= calculated.skillWeight >= 0 ? parseFloat(calculated.skillWeight.toFixed(2)).toLocaleString() : 'Error' %>
-            </span><br/>
-            <span class='stat-name'>Slayer Weight: </span>
-            <span class='stat-value'>
-              <%= calculated.slayerWeight >= 0 ? parseFloat(calculated.slayerWeight.toFixed(2)).toLocaleString() : 'Error'  %>
-            </span><br/>
-            <span class='stat-name'>Dungeon Weight: </span>
-            <span class='stat-value'>
-              <%= calculated.dungeonsWeight >= 0 ? parseFloat(calculated.dungeonsWeight.toFixed(2)).toLocaleString() : 'Error'  %>
-            </span><br/>
-            <br/>
-            <div class='tippy-explanation'>Weight calculations provided by Senither</div>
-          ">
-          <span class="stat-name">Senither Weight: </span>
-          <span class="stat-value">
-            <%= parseFloat(calculated.weight.toFixed(2)).toLocaleString() %>
-          </span>
-          <span class="stat-value stat-error">
-            <%= (!calculated.skillWeight || !calculated.slayerWeight || !calculated.dungeonsWeight) ? '!' : '' %>
-          </span>
-        </div>
+        <%
+          const weightSystems = [
+            {
+              name: "Senither Weight",
+              author: "Senither",
+              skill: calculated.weight.senither.skill.total,
+              slayer: calculated.weight.senither.slayer.total,
+              dungeon: calculated.weight.senither.dungeon.total,
+              total: calculated.weight.senither.overall,
+            },
+            {
+              name: "Lily Weight",
+              author: "LappySheep",
+              skill: calculated.weight.lily.skill.base + calculated.weight.lily.skill.overflow,
+              slayer: calculated.weight.lily.slayer,
+              dungeon: calculated.weight.lily.catacombs.experience + calculated.weight.lily.catacombs.completion.base + calculated.weight.lily.catacombs.completion.master,
+              total: calculated.weight.lily.total,
+            },
+          ];
+
+          for (weight of weightSystems) {
+            %>
+              <div class="additional-stat">
+                <span data-tippy-content="
+                  <span class='stat-name'><%= weight.name %></span><br>
+                  <span class='stat-info'>Weight calculations by <%= weight.author %></span>
+                  <br/><br/>
+                  <span class='stat-name'>Skill: </span>
+                  <span class='stat-value'>
+                    <%= parseFloat(weight.skill.toFixed(2)).toLocaleString() %>
+                  </span><br/>
+                  <span class='stat-name'>Slayer: </span>
+                  <span class='stat-value'>
+                    <%= parseFloat(weight.slayer.toFixed(2)).toLocaleString() %>
+                  </span><br/>
+                  <span class='stat-name'>Dungeon: </span>
+                  <span class='stat-value'>
+                    <%= parseFloat(weight.dungeon.toFixed(2)).toLocaleString() %>
+                  </span><br/><br/>
+                  <span class='stat-name'>Total: </span>
+                  <span class='stat-value'>
+                    <%= parseFloat(weight.total.toFixed(2)).toLocaleString() %>
+                  </span>
+                ">
+                  <span class="stat-name"><%= weight.name %>: </span>
+                  <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span
+                ></span>
+              </div>
+            <%
+          }
+        %>
       </div>
 
       <div id="skill_levels_container">
