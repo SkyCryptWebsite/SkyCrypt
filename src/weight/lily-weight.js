@@ -1,4 +1,5 @@
 import LilyWeight from "lilyweight";
+import { getLevelByXp } from "../lib.js";
 
 const skillOrder = ["enchanting", "taming", "alchemy", "mining", "farming", "foraging", "combat", "fishing"];
 const slayerOrder = ["zombie", "spider", "wolf", "enderman"];
@@ -13,7 +14,7 @@ function getTierCompletions(floors = {}) {
 }
 
 export function calculateLilyWeight(profile) {
-  const skillLevels = skillOrder.map((key) => profile.levels[key].uncappedLevel);
+  const skillLevels = skillOrder.map((key) => getLevelByXp(profile.levels[key].xp, {}, 60).uncappedLevel);
   const skillXP = skillOrder.map((key) => profile.levels[key].xp);
 
   const cataCompletions = getTierCompletions(profile.dungeons?.catacombs?.floors ?? {});

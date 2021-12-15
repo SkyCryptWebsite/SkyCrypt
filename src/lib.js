@@ -137,7 +137,7 @@ function getXpByLevel(level, extra = {}) {
   return output;
 }
 
-export function getLevelByXp(xp, extra = {}) {
+export function getLevelByXp(xp, extra = {}, forceMaxLevel = false) {
   let xp_table;
   switch (extra.type) {
     case "runecrafting":
@@ -200,7 +200,11 @@ export function getLevelByXp(xp, extra = {}) {
     maxLevel = levelCap;
   }
 
-  for (let x = 1; x <= Object.keys(xp_table).length; x++) {
+  if (forceMaxLevel) {
+    maxLevel = forceMaxLevel;
+  }
+
+  for (let x = 1; x <= maxLevel; x++) {
     xpTotal += xp_table[x];
 
     if (xpTotal > xp) {
