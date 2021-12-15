@@ -200,7 +200,7 @@ export function getLevelByXp(xp, extra = {}) {
     maxLevel = levelCap;
   }
 
-  for (let x = 1; x <= maxLevel; x++) {
+  for (let x = 1; x <= Object.keys(xp_table).length; x++) {
     xpTotal += xp_table[x];
 
     if (xpTotal > xp) {

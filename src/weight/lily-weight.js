@@ -13,7 +13,7 @@ function getTierCompletions(floors = {}) {
 }
 
 export function calculateLilyWeight(profile) {
-  const skillLevels = skillOrder.map((key) => profile.levels[key].level);
+  const skillLevels = skillOrder.map((key) => profile.levels[key].uncappedLevel);
   const skillXP = skillOrder.map((key) => profile.levels[key].xp);
 
   const cataCompletions = getTierCompletions(profile.dungeons?.catacombs?.floors ?? {});

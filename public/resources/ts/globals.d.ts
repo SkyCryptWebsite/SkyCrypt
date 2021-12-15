@@ -252,7 +252,7 @@ declare const calculated: SkyCryptPlayer & {
           levelWithProgress: number;
           maxLevel: number;
           progress: number;
-          uncappedLevel: 32;
+          uncappedLevel: number;
           xp: number;
           xpCurrent: number;
           xpForNext: number;
