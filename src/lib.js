@@ -156,16 +156,8 @@ export function getLevelByXp(xp, extra = {}) {
       xp_table = constants.leveling_xp;
   }
 
-  if (isNaN(xp)) {
-    return {
-      xp: 0,
-      level: 0,
-      xpCurrent: 0,
-      xpForNext: xp_table[1],
-      progress: 0,
-      level_cap: 0,
-      uncapped_level: 0,
-    };
+  if (typeof xp !== "number" || isNaN(xp)) {
+    xp = 0;
   }
 
   let xpTotal = 0;
@@ -1605,23 +1597,23 @@ export async function getLevels(userProfile, hypixelProfile, levelCaps) {
     let average_level_no_progress = 0;
 
     skillLevels = {
-      taming: getLevelByXp(userProfile.experience_skill_taming || 0, { skill: "taming" }),
-      farming: getLevelByXp(userProfile.experience_skill_farming || 0, {
+      taming: getLevelByXp(userProfile.experience_skill_taming, { skill: "taming" }),
+      farming: getLevelByXp(userProfile.experience_skill_farming, {
         skill: "farming",
         cap: levelCaps?.farming || constants.default_skill_caps.farming,
       }),
-      mining: getLevelByXp(userProfile.experience_skill_mining || 0, { skill: "mining" }),
-      combat: getLevelByXp(userProfile.experience_skill_combat || 0, { skill: "combat" }),
-      foraging: getLevelByXp(userProfile.experience_skill_foraging || 0, { skill: "foraging" }),
-      fishing: getLevelByXp(userProfile.experience_skill_fishing || 0, { skill: "fishing" }),
-      enchanting: getLevelByXp(userProfile.experience_skill_enchanting || 0, { skill: "enchanting" }),
-      alchemy: getLevelByXp(userProfile.experience_skill_alchemy || 0, { skill: "alchemy" }),
-      carpentry: getLevelByXp(userProfile.experience_skill_carpentry || 0, { skill: "carpentry" }),
-      runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting || 0, {
+      mining: getLevelByXp(userProfile.experience_skill_mining, { skill: "mining" }),
+      combat: getLevelByXp(userProfile.experience_skill_combat, { skill: "combat" }),
+      foraging: getLevelByXp(userProfile.experience_skill_foraging, { skill: "foraging" }),
+      fishing: getLevelByXp(userProfile.experience_skill_fishing, { skill: "fishing" }),
+      enchanting: getLevelByXp(userProfile.experience_skill_enchanting, { skill: "enchanting" }),
+      alchemy: getLevelByXp(userProfile.experience_skill_alchemy, { skill: "alchemy" }),
+      carpentry: getLevelByXp(userProfile.experience_skill_carpentry, { skill: "carpentry" }),
+      runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting, {
         skill: "runecrafting",
         type: "runecrafting",
       }),
-      social: getLevelByXp(userProfile.experience_skill_social || 0, {
+      social: getLevelByXp(userProfile.experience_skill_social, {
         skill: "social",
         type: "social",
       }),
