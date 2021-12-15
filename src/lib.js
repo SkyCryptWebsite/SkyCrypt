@@ -137,6 +137,11 @@ function getXpByLevel(level, extra = {}) {
   return output;
 }
 
+/**
+ * gets the level and some other information from an xp amount
+ * @param {number} xp
+ * @param {{type?: string, cap?: number, skill?: string}} extra
+ */
 export function getLevelByXp(xp, extra = {}) {
   let xp_table;
   switch (extra.type) {
@@ -160,13 +165,19 @@ export function getLevelByXp(xp, extra = {}) {
     xp = 0;
   }
 
+  /** the sum of the xp required for all the levels already completed */
   let xpTotal = 0;
+  /** the level as displayed by in game UI */
   let level = 0;
+  /** the level ignoring the cap and using only the table*/
   let uncappedLevel = 0;
 
+  /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
   let xpForNext = Infinity;
 
+  /** the level that this player is caped at */
   let levelCap = 1;
+  /** the maximum level that any player can achieve (used for gold progress bars) */
   let maxLevel = 1;
 
   if (extra.cap) {
@@ -204,14 +215,17 @@ export function getLevelByXp(xp, extra = {}) {
     }
   }
 
+  /** the amount of xp over the amount required for the level (used for calculation progress to next level) */
   let xpCurrent = Math.floor(xp - xpTotal);
 
   if (level < levelCap) {
     xpForNext = Math.ceil(xp_table[level + 1]);
   }
 
+  /** the fraction of the way toward the next level */
   let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
+  /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
   let levelWithProgress = getLevelWithProgress(xp, maxLevel, Object.values(xp_table));
 
   return {
