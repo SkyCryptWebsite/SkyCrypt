@@ -141,6 +141,9 @@ function getXpByLevel(level, extra = {}) {
  * gets the level and some other information from an xp amount
  * @param {number} xp
  * @param {{type?: string, cap?: number, skill?: string}} extra
+ * @param type the type of levels (used to determine which xp table to use)
+ * @param cap override the cap highest level the player can reach
+ * @param skill override the skill name the key of default_skill_caps
  */
 export function getLevelByXp(xp, extra = {}) {
   let xp_table;
