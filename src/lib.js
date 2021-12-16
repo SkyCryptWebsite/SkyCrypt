@@ -146,22 +146,22 @@ function getXpByLevel(level, extra = {}) {
  * @param skill override the skill name the key of default_skill_caps
  */
 export function getLevelByXp(xp, extra = {}) {
-  let xp_table;
+  let xpTable;
   switch (extra.type) {
     case "runecrafting":
-      xp_table = constants.runecrafting_xp;
+      xpTable = constants.runecrafting_xp;
       break;
     case "social":
-      xp_table = constants.social_xp;
+      xpTable = constants.social_xp;
       break;
     case "dungeoneering":
-      xp_table = constants.dungeoneering_xp;
+      xpTable = constants.dungeoneering_xp;
       break;
     case "hotm":
-      xp_table = constants.hotm_xp;
+      xpTable = constants.hotm_xp;
       break;
     default:
-      xp_table = constants.leveling_xp;
+      xpTable = constants.leveling_xp;
   }
 
   if (typeof xp !== "number" || isNaN(xp)) {
@@ -179,7 +179,7 @@ export function getLevelByXp(xp, extra = {}) {
   const levelCap =
     extra.cap ??
     constants.default_skill_caps[extra.skill] ??
-    Object.keys(xp_table)
+    Object.keys(xpTable)
       .sort((a, b) => Number(a) - Number(b))
       .map((a) => Number(a))
       .pop();
@@ -187,11 +187,11 @@ export function getLevelByXp(xp, extra = {}) {
   /** the maximum level that any player can achieve (used for gold progress bars) */
   const maxLevel = constants.maxed_skill_caps[extra.skill] ?? levelCap;
 
-  for (let x = 1; x <= Object.keys(xp_table).length; x++) {
-    xpTotal += xp_table[x];
+  for (let x = 1; x <= Object.keys(xpTable).length; x++) {
+    xpTotal += xpTable[x];
 
     if (xpTotal > xp) {
-      xpTotal -= xp_table[x];
+      xpTotal -= xpTable[x];
       break;
     } else {
       if (x <= levelCap) level = x;
@@ -203,7 +203,7 @@ export function getLevelByXp(xp, extra = {}) {
   const xpCurrent = Math.floor(xp - xpTotal);
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
-  const xpForNext = level < levelCap ? Math.ceil(xp_table[level + 1]) : Infinity;
+  const xpForNext = level < levelCap ? Math.ceil(xpTable[level + 1]) : Infinity;
 
   /** the fraction of the way toward the next level */
   const progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
