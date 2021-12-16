@@ -127,10 +127,10 @@ function getXpByLevel(uncappedLevel, extra = {}) {
   const level = Math.min(levelCap, uncappedLevel);
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
-  const xpForNext = level < levelCap ? Math.ceil(xpTable[level + 1]) : Infinity;
+  const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
   /** the fraction of the way toward the next level */
-  const progress = level < levelCap ? 0.05 : 0;
+  const progress = level < maxLevel ? 0.05 : 0;
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
   const levelWithProgress = level + progress;
@@ -194,7 +194,7 @@ export function getLevelByXp(xp, extra = {}) {
   const level = Math.min(levelCap, uncappedLevel);
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
-  const xpForNext = level < levelCap ? Math.ceil(xpTable[level + 1]) : Infinity;
+  const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
   /** the fraction of the way toward the next level */
   const progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
