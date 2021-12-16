@@ -119,7 +119,7 @@ function getXpByLevel(uncappedLevel, extra = {}) {
   /** the sum of all levels including level */
   let xp = 0;
 
-  for (let x = 1; x <= level; x++) {
+  for (let x = 1; x <= uncappedLevel; x++) {
     xp += xpTable[x];
   }
 
