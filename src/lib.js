@@ -72,6 +72,25 @@ function getAllKeys(profiles, ...path) {
 }
 
 /**
+ * gets the xp table for the given type
+ * @param {string} type
+ */
+function getXpTable(type) {
+  switch (type) {
+    case "runecrafting":
+      return constants.runecrafting_xp;
+    case "social":
+      return constants.social_xp;
+    case "dungeoneering":
+      return constants.dungeoneering_xp;
+    case "hotm":
+      return constants.hotm_xp;
+    default:
+      return constants.leveling_xp;
+  }
+}
+
+/**
  * estimates the xp based on the level
  * @param {number} uncappedLevel
  * @param {{type?: string, cap?: number, skill?: string}} extra
@@ -80,23 +99,7 @@ function getAllKeys(profiles, ...path) {
  * @param skill the key of default_skill_caps
  */
 function getXpByLevel(uncappedLevel, extra = {}) {
-  let xpTable;
-  switch (extra.type) {
-    case "runecrafting":
-      xpTable = constants.runecrafting_xp;
-      break;
-    case "social":
-      xpTable = constants.social_xp;
-      break;
-    case "dungeoneering":
-      xpTable = constants.dungeoneering_xp;
-      break;
-    case "hotm":
-      xpTable = constants.hotm_xp;
-      break;
-    default:
-      xpTable = constants.leveling_xp;
-  }
+  const xpTable = getXpTable(extra.type);
 
   if (typeof uncappedLevel !== "number" || isNaN(uncappedLevel)) {
     uncappedLevel = 0;
@@ -153,23 +156,7 @@ function getXpByLevel(uncappedLevel, extra = {}) {
  * @param skill the key of default_skill_caps
  */
 export function getLevelByXp(xp, extra = {}) {
-  let xpTable;
-  switch (extra.type) {
-    case "runecrafting":
-      xpTable = constants.runecrafting_xp;
-      break;
-    case "social":
-      xpTable = constants.social_xp;
-      break;
-    case "dungeoneering":
-      xpTable = constants.dungeoneering_xp;
-      break;
-    case "hotm":
-      xpTable = constants.hotm_xp;
-      break;
-    default:
-      xpTable = constants.leveling_xp;
-  }
+  const xpTable = getXpTable(extra.type);
 
   if (typeof xp !== "number" || isNaN(xp)) {
     xp = 0;
