@@ -168,13 +168,6 @@ export function getLevelByXp(xp, extra = {}) {
     xp = 0;
   }
 
-  /** the sum of the xp required for all the levels already completed */
-  let xpTotal = 0;
-  /** the level as displayed by in game UI */
-  let level = 0;
-  /** the level ignoring the cap and using only the table*/
-  let uncappedLevel = 0;
-
   /** the level that this player is caped at */
   const levelCap =
     extra.cap ??
@@ -187,20 +180,28 @@ export function getLevelByXp(xp, extra = {}) {
   /** the maximum level that any player can achieve (used for gold progress bars) */
   const maxLevel = constants.maxed_skill_caps[extra.skill] ?? levelCap;
 
-  for (let x = 1; x <= Object.keys(xpTable).length; x++) {
-    xpTotal += xpTable[x];
+  /** the level ignoring the cap and using only the table*/
+  let uncappedLevel = 0;
 
-    if (xpTotal > xp) {
-      xpTotal -= xpTable[x];
-      break;
-    } else {
-      if (x <= levelCap) level = x;
-      uncappedLevel = x;
+  /** the amount of xp over the amount required for the level (used for calculation progress to next level) */
+  let xpCurrent = xp;
+
+  /** like xpCurrent but ignores cap */
+  let xpRemaining = xp;
+
+  while (xpTable[uncappedLevel + 1] <= xpRemaining) {
+    uncappedLevel++;
+    xpRemaining -= xpTable[uncappedLevel];
+    if (uncappedLevel <= levelCap) {
+      xpCurrent = xpRemaining;
     }
   }
 
-  /** the amount of xp over the amount required for the level (used for calculation progress to next level) */
-  const xpCurrent = Math.floor(xp - xpTotal);
+  // not sure why this is floored but I'm leaving it in for now
+  xpCurrent = Math.floor(xpCurrent);
+
+  /** the level as displayed by in game UI */
+  const level = Math.min(levelCap, uncappedLevel);
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
   const xpForNext = level < levelCap ? Math.ceil(xpTable[level + 1]) : Infinity;
