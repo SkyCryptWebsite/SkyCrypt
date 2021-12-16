@@ -74,6 +74,7 @@ function getAllKeys(profiles, ...path) {
 /**
  * gets the xp table for the given type
  * @param {string} type
+ * @returns {{[key: number]: number}}
  */
 function getXpTable(type) {
   switch (type) {
