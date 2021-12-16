@@ -170,12 +170,7 @@ export function getLevelByXp(xp, extra = {}) {
 
   /** the level that this player is caped at */
   const levelCap =
-    extra.cap ??
-    constants.default_skill_caps[extra.skill] ??
-    Object.keys(xpTable)
-      .sort((a, b) => Number(a) - Number(b))
-      .map((a) => Number(a))
-      .pop();
+    extra.cap ?? constants.default_skill_caps[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
 
   /** the maximum level that any player can achieve (used for gold progress bars) */
   const maxLevel = constants.maxed_skill_caps[extra.skill] ?? levelCap;
