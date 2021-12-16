@@ -226,7 +226,7 @@ export function getLevelByXp(xp, extra = {}) {
   let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
-  let levelWithProgress = getLevelWithProgress(xp, maxLevel, Object.values(xp_table));
+  let levelWithProgress = level + progress;
 
   return {
     xp,
@@ -909,20 +909,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
   items = items.filter((a) => !a.inBackpack);
 
   return items;
-}
-
-function getLevelWithProgress(experience, maxLevel, experienceGroup) {
-  let level = 0;
-
-  for (let toRemove of experienceGroup) {
-    experience -= toRemove;
-    if (experience < 0) {
-      return Math.min(level + (1 - (experience * -1) / toRemove), maxLevel);
-    }
-    level++;
-  }
-
-  return Math.min(level, maxLevel);
 }
 
 export function splitWithTail(string, delimiter, count) {
