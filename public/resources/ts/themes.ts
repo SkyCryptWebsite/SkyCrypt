@@ -219,6 +219,39 @@ window.addEventListener("storage", (event) => {
   }
 });
 
+const trustedOrigins: string[] = JSON.parse(localStorage.getItem("trustedOrigins") ?? "[]");
+
+window.addEventListener(
+  "message",
+  (event) => {
+    if (isObject(event.data) && event.data.type === "setTheme") {
+      if (!trustedOrigins.includes(event.origin)) {
+        // TODO replace "confirm" with a modal
+        if (confirm(`would you like to allow ${event.origin} to temporarily change your theme?`)) {
+          trustedOrigins.push(event.origin);
+          if (confirm("always this origin?")) {
+            const fromLocalhost = JSON.parse(localStorage.getItem("trustedOrigins") ?? "[]");
+            fromLocalhost.push(event.origin);
+            localStorage.setItem("trustedOrigins", JSON.stringify(fromLocalhost));
+          }
+        } else {
+          return;
+        }
+      }
+
+      const source = event.source as WindowProxy;
+
+      try {
+        applyProcessedTheme(processTheme(sanitizeTheme(event.data.theme)));
+        source.postMessage({ success: true }, event.origin);
+      } catch (error) {
+        source.postMessage({ success: false, error: String(error) }, event.origin);
+      }
+    }
+  },
+  { capture: false, passive: true }
+);
+
 // Load the theme from localStorage if it exists
 {
   // TODO remove this once users are migrated to currentThemeUrl
