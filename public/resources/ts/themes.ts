@@ -149,9 +149,7 @@ export function sanitizeTheme(theme: unknown): Theme {
   return theme as unknown as Theme;
 }
 
-export async function loadTheme(themeUrl: string): Promise<void> {
-  const theme = await getTheme(themeUrl);
-
+function processTheme(theme: Theme): ProcessedTheme {
   const processedTheme: ProcessedTheme = {
     light: !!theme.light,
     styles: {},
@@ -193,11 +191,20 @@ export async function loadTheme(themeUrl: string): Promise<void> {
 
   processedTheme.styles[`--logo`] = `url(${processedTheme.logoURL})`;
 
-  applyProcessedTheme(processedTheme);
+  return processedTheme;
+}
 
-  localStorage.setItem("processedTheme", JSON.stringify(processedTheme));
+export async function loadTheme(themeUrl: string): Promise<void> {
+  const theme = await getTheme(themeUrl);
+
+  const processedTheme = processTheme(theme);
+
+  applyProcessedTheme(processedTheme);
 
   if (typeof redocInit == "function") {
     redocInit(theme.colors?.icon);
   }
+
+  localStorage.setItem("currentThemeUrl", themeUrl);
+  localStorage.setItem("processedTheme", JSON.stringify(processedTheme));
 }
