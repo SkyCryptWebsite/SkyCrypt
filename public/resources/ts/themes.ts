@@ -26,7 +26,17 @@ export async function fetchTheme(urlString: string): Promise<Theme> {
   url.searchParams.append("schema", "2");
   const response = await fetch(url.href);
   const theme: unknown = await response.json();
+  return sanitizeTheme(theme);
+}
 
+/**
+ * validates a theme
+ *
+ * @param theme a theme from an external source
+ * @returns the theme if it is valid
+ * @throws an error if the theme is invalid
+ */
+export function sanitizeTheme(theme: unknown): Theme {
   if (!isObject(theme)) {
     throw new Error("Invalid theme: Theme must be an object");
   }
