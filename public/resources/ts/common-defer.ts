@@ -1,6 +1,4 @@
-import { loadTheme } from "./themes";
 import tippy from "tippy.js";
-import type { ThemeList } from "./elements/theme-list";
 
 tippy.setDefaultProps({ allowHTML: true });
 
@@ -119,37 +117,6 @@ document.querySelectorAll<HTMLButtonElement>('#packs-box button[name="pack"]').f
     }
   });
 });
-
-const themesBox = document.querySelector("#themes-box") as ThemeList;
-
-themesBox.addEventListener("change", (event) => {
-  const newThemeUrl = (event.target as HTMLInputElement).value;
-  localStorage.setItem("currentThemeUrl", newThemeUrl);
-  loadTheme(newThemeUrl);
-});
-
-window.addEventListener("storage", (event) => {
-  if (event.key === "currentThemeUrl" && event.newValue != null) {
-    themesBox.selected = event.newValue;
-  } else if (event.key === "processedTheme" && event.newValue != null) {
-    applyProcessedTheme(JSON.parse(event.newValue));
-  }
-});
-
-// Load the theme from localStorage if it exists
-{
-  // TODO remove this once users are migrated to currentThemeUrl
-  const OldTheme = localStorage.getItem("currentTheme");
-  if (OldTheme) {
-    localStorage.setItem("currentThemeUrl", `/resources/themes/${OldTheme}.json`);
-    localStorage.removeItem("currentTheme");
-  }
-
-  const themeUrl = localStorage.getItem("currentThemeUrl");
-  if (themeUrl != null) {
-    loadTheme(themeUrl);
-  }
-}
 
 tippy("*[data-tippy-content]");
 

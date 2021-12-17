@@ -1,7 +1,7 @@
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { until } from "lit/directives/until.js";
-import { getTheme } from "../themes";
+import { loadTheme, getTheme } from "../themes";
 
 const themeURLs = ["default", "light", "skylea", "nightblue", "sunrise", "draconic", "candycane"].map(
   (name) => `/resources/themes/${name}.json`
@@ -14,6 +14,11 @@ export class ThemeList extends LitElement {
   @property()
   public selected: string = localStorage.getItem("currentThemeUrl") ?? themeURLs[0];
 
+  select(url: string): void {
+    this.selected = url;
+    loadTheme(url);
+  }
+
   private async getListItem(url: string): Promise<TemplateResult> {
     try {
       const theme = await getTheme(url);
@@ -22,7 +27,7 @@ export class ThemeList extends LitElement {
         (theme.colors?.logo?.replace("#", "?color=") ?? "") +
         (theme.light ? "&invert" : "");
       return html`
-        <label class="list-item">
+        <label class="list-item" @change="${() => this.select(url)}">
           <img class="icon" src="${icon}" alt="" />
           <span class="name">${theme.name}</span>
           <div class="author">by <span>${theme.author}</span></div>
@@ -40,6 +45,17 @@ export class ThemeList extends LitElement {
     }
   }
 
+  private handleLocalStorage = (event: StorageEvent) => {
+    if (event.key === "currentThemeUrl" && event.newValue != null) {
+      this.selected = event.newValue;
+    }
+  };
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    addEventListener("storage", this.handleLocalStorage);
+  }
+
   protected render(): unknown[] {
     return themeURLs.map((url) => {
       return until(
@@ -52,6 +68,11 @@ export class ThemeList extends LitElement {
         </label>`
       );
     });
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    window.removeEventListener("storage", this.handleLocalStorage);
   }
 
   // disable shadow root

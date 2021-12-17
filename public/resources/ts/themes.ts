@@ -208,3 +208,24 @@ export async function loadTheme(themeUrl: string): Promise<void> {
   localStorage.setItem("currentThemeUrl", themeUrl);
   localStorage.setItem("processedTheme", JSON.stringify(processedTheme));
 }
+
+window.addEventListener("storage", (event) => {
+  if (event.key === "processedTheme" && event.newValue != null) {
+    applyProcessedTheme(JSON.parse(event.newValue));
+  }
+});
+
+// Load the theme from localStorage if it exists
+{
+  // TODO remove this once users are migrated to currentThemeUrl
+  const OldTheme = localStorage.getItem("currentTheme");
+  if (OldTheme) {
+    localStorage.setItem("currentThemeUrl", `/resources/themes/${OldTheme}.json`);
+    localStorage.removeItem("currentTheme");
+  }
+
+  const themeUrl = localStorage.getItem("currentThemeUrl");
+  if (themeUrl != null) {
+    loadTheme(themeUrl);
+  }
+}
