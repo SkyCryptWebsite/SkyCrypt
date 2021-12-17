@@ -4,8 +4,7 @@ export const themes = new Map<string, Promise<Theme>>();
  * converts a hex color to it's rgb components
  * @param code a hex color string
  * @example
- * // "returns 256, 0, 256"
- * convertHex("#FF00FF");
+ * convertHex("#FF00FF"); // returns "256, 0, 256"
  */
 function convertHex(code: string) {
   const hex = code.substring(1, 7);
