@@ -210,7 +210,11 @@ export async function loadTheme(themeUrl: string): Promise<void> {
 }
 
 window.addEventListener("storage", (event) => {
-  if (event.key === "processedTheme" && event.newValue != null) {
+  if (event.key === "currentThemeUrl" && event.newValue != null) {
+    for (const element of document.querySelectorAll("theme-list")) {
+      element.selected = event.newValue;
+    }
+  } else if (event.key === "processedTheme" && event.newValue != null) {
     applyProcessedTheme(JSON.parse(event.newValue));
   }
 });

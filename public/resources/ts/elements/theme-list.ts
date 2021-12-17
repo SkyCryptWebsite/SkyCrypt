@@ -45,17 +45,6 @@ export class ThemeList extends LitElement {
     }
   }
 
-  private handleLocalStorage = (event: StorageEvent) => {
-    if (event.key === "currentThemeUrl" && event.newValue != null) {
-      this.selected = event.newValue;
-    }
-  };
-
-  connectedCallback(): void {
-    super.connectedCallback();
-    addEventListener("storage", this.handleLocalStorage);
-  }
-
   protected render(): unknown[] {
     return themeURLs.map((url) => {
       return until(
@@ -68,11 +57,6 @@ export class ThemeList extends LitElement {
         </label>`
       );
     });
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback();
-    window.removeEventListener("storage", this.handleLocalStorage);
   }
 
   // disable shadow root
