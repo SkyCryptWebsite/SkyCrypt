@@ -1,7 +1,7 @@
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { until } from "lit/directives/until.js";
-import { fetchTheme } from "../themes";
+import { getTheme } from "../themes";
 
 const themeURLs = ["default", "light", "skylea", "nightblue", "sunrise", "draconic", "candycane"].map(
   (name) => `/resources/themes/${name}.json`
@@ -16,7 +16,7 @@ export class ThemeList extends LitElement {
 
   private async getListItem(url: string): Promise<TemplateResult> {
     try {
-      const theme = await fetchTheme(url);
+      const theme = await getTheme(url);
       const icon =
         "/resources/img/logo_square.svg" +
         (theme.colors?.logo?.replace("#", "?color=") ?? "") +

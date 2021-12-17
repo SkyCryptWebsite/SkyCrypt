@@ -1,3 +1,5 @@
+export const themes = new Map<string, Promise<Theme>>();
+
 /**
  * converts a hex color to it's rgb components
  * @param code a hex color string
@@ -21,12 +23,23 @@ function isColor(x: unknown): x is string {
   return typeof x === "string" && /^#[0-9A-F]{6}$/i.test(x);
 }
 
-export async function fetchTheme(urlString: string): Promise<Theme> {
+async function fetchTheme(urlString: string): Promise<Theme> {
   const url = new URL(urlString, document.location.href);
   url.searchParams.append("schema", "2");
   const response = await fetch(url.href);
   const theme: unknown = await response.json();
   return sanitizeTheme(theme);
+}
+
+export function getTheme(urlString: string): Promise<Theme> {
+  const themeFromMap = themes.get(urlString);
+  if (themeFromMap !== undefined) {
+    return themeFromMap;
+  } else {
+    const themeFromFetch = fetchTheme(urlString);
+    themes.set(urlString, themeFromFetch);
+    return themeFromFetch;
+  }
 }
 
 /**
@@ -138,7 +151,7 @@ export function sanitizeTheme(theme: unknown): Theme {
 }
 
 export async function loadTheme(themeUrl: string): Promise<void> {
-  const theme = await fetchTheme(themeUrl);
+  const theme = await getTheme(themeUrl);
 
   const processedTheme: ProcessedTheme = {
     light: !!theme.light,
