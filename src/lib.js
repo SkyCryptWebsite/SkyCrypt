@@ -2614,23 +2614,12 @@ export const getStats = async (
     if (key.includes("complete_the_")) {
       const isCompleted = userProfile.objectives[key].status == "COMPLETE";
       const tierNumber = parseInt("" + key.charAt(key.length - 1)) || 0;
-
-      const raceName = key
-        .replace("complete_the_", "")
-        .substring(
-          0,
-          key.length - 15 - (key.includes("chicken") || key.includes("end") || key.includes("woods") ? 0 : 5)
-        );
-      const newKeyName =
-        (raceName.endsWith("_return") ? "dungeon_hub_" : "") +
-        raceName.replace("woods", "foraging") +
-        "_best_time" +
-        (key.includes("_chicken") ? "_2" : "");
+      const raceName = constants.raceObjectiveToStatName[key.substring(0, key.length - 2)];
 
       if (tierNumber == 1 && !isCompleted) {
-        misc.objectives.completedRaces[newKeyName] = 0;
-      } else if (isCompleted && tierNumber > (misc.objectives.completedRaces[newKeyName] || 0)) {
-        misc.objectives.completedRaces[newKeyName] = tierNumber;
+        misc.objectives.completedRaces[raceName] = 0;
+      } else if (isCompleted && tierNumber > (misc.objectives.completedRaces[raceName] || 0)) {
+        misc.objectives.completedRaces[raceName] = tierNumber;
       }
     }
   }
