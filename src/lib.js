@@ -71,156 +71,136 @@ function getAllKeys(profiles, ...path) {
   return _.uniq([].concat(...profiles.map((a) => _.keys(helper.getPath(a, ...path)))));
 }
 
-function getXpByLevel(level, extra = {}) {
-  let xp_table;
-  switch (extra.type) {
+/**
+ * gets the xp table for the given type
+ * @param {string} type
+ * @returns {{[key: number]: number}}
+ */
+function getXpTable(type) {
+  switch (type) {
     case "runecrafting":
-      xp_table = constants.runecrafting_xp;
-      break;
+      return constants.runecrafting_xp;
+    case "social":
+      return constants.social_xp;
     case "dungeoneering":
-      xp_table = constants.dungeoneering_xp;
-      break;
+      return constants.dungeoneering_xp;
     case "hotm":
-      xp_table = constants.hotm_xp;
-      break;
+      return constants.hotm_xp;
     default:
-      xp_table = constants.leveling_xp;
+      return constants.leveling_xp;
   }
-
-  let levelCap = 1;
-  let maxLevel = 1;
-
-  if (extra.skill) {
-    if (constants.default_skill_caps[extra.skill] && constants.default_skill_caps[extra.skill] > levelCap) {
-      levelCap = constants.default_skill_caps[extra.skill];
-    }
-
-    if (constants.maxed_skill_caps[extra.skill]) {
-      maxLevel = constants.maxed_skill_caps[extra.skill];
-    }
-  } else {
-    levelCap = Object.keys(xp_table)
-      .sort((a, b) => Number(a) - Number(b))
-      .map((a) => Number(a))
-      .pop();
-  }
-
-  if (levelCap > maxLevel) {
-    maxLevel = levelCap;
-  }
-
-  const output = {
-    level: Math.min(level, maxLevel),
-    xpCurrent: 0,
-    xpForNext: null,
-    progress: 0.05,
-  };
-
-  if (isNaN(level)) {
-    return 0;
-  }
-
-  let xpTotal = 0;
-
-  for (let x = 1; x <= level; x++) {
-    xpTotal += xp_table[x];
-  }
-
-  output.xp = xpTotal;
-
-  if (level >= maxLevel) {
-    output.progress = 1;
-  } else {
-    output.xpForNext = xp_table[level + 1];
-  }
-
-  return output;
 }
 
+/**
+ * estimates the xp based on the level
+ * @param {number} uncappedLevel
+ * @param {{type?: string, cap?: number, skill?: string}} extra
+ * @param type the type of levels (used to determine which xp table to use)
+ * @param cap override the cap highest level the player can reach
+ * @param skill the key of default_skill_caps
+ */
+function getXpByLevel(uncappedLevel, extra = {}) {
+  const xpTable = getXpTable(extra.type);
+
+  if (typeof uncappedLevel !== "number" || isNaN(uncappedLevel)) {
+    uncappedLevel = 0;
+  }
+
+  /** the level that this player is caped at */
+  const levelCap =
+    extra.cap ?? constants.default_skill_caps[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
+
+  /** the maximum level that any player can achieve (used for gold progress bars) */
+  const maxLevel = constants.maxed_skill_caps[extra.skill] ?? levelCap;
+
+  /** the amount of xp over the amount required for the level (used for calculation progress to next level) */
+  const xpCurrent = 0;
+
+  /** the sum of all levels including level */
+  let xp = 0;
+
+  for (let x = 1; x <= uncappedLevel; x++) {
+    xp += xpTable[x];
+  }
+
+  /** the level as displayed by in game UI */
+  const level = Math.min(levelCap, uncappedLevel);
+
+  /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
+  const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
+
+  /** the fraction of the way toward the next level */
+  const progress = level < maxLevel ? 0.05 : 0;
+
+  /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
+  const levelWithProgress = level + progress;
+
+  return {
+    xp,
+    level,
+    maxLevel,
+    xpCurrent,
+    xpForNext,
+    progress,
+    levelCap,
+    uncappedLevel,
+    levelWithProgress,
+  };
+}
+
+/**
+ * gets the level and some other information from an xp amount
+ * @param {number} xp
+ * @param {{type?: string, cap?: number, skill?: string}} extra
+ * @param type the type of levels (used to determine which xp table to use)
+ * @param cap override the cap highest level the player can reach
+ * @param skill the key of default_skill_caps
+ */
 export function getLevelByXp(xp, extra = {}) {
-  let xp_table;
-  switch (extra.type) {
-    case "runecrafting":
-      xp_table = constants.runecrafting_xp;
-      break;
-    case "social":
-      xp_table = constants.social_xp;
-      break;
-    case "dungeoneering":
-      xp_table = constants.dungeoneering_xp;
-      break;
-    case "hotm":
-      xp_table = constants.hotm_xp;
-      break;
-    default:
-      xp_table = constants.leveling_xp;
+  const xpTable = getXpTable(extra.type);
+
+  if (typeof xp !== "number" || isNaN(xp)) {
+    xp = 0;
   }
 
-  if (isNaN(xp)) {
-    return {
-      xp: 0,
-      level: 0,
-      xpCurrent: 0,
-      xpForNext: xp_table[1],
-      progress: 0,
-      level_cap: 0,
-      uncapped_level: 0,
-    };
-  }
+  /** the level that this player is caped at */
+  const levelCap =
+    extra.cap ?? constants.default_skill_caps[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
 
-  let xpTotal = 0;
-  let level = 0;
+  /** the maximum level that any player can achieve (used for gold progress bars) */
+  const maxLevel = constants.maxed_skill_caps[extra.skill] ?? levelCap;
+
+  /** the level ignoring the cap and using only the table*/
   let uncappedLevel = 0;
 
-  let xpForNext = Infinity;
+  /** the amount of xp over the amount required for the level (used for calculation progress to next level) */
+  let xpCurrent = xp;
 
-  let levelCap = 1;
-  let maxLevel = 1;
+  /** like xpCurrent but ignores cap */
+  let xpRemaining = xp;
 
-  if (extra.cap) {
-    levelCap = extra.cap;
-  }
-
-  if (extra.skill) {
-    if (constants.default_skill_caps[extra.skill] && constants.default_skill_caps[extra.skill] > levelCap) {
-      levelCap = constants.default_skill_caps[extra.skill];
-    }
-
-    if (constants.maxed_skill_caps[extra.skill]) {
-      maxLevel = constants.maxed_skill_caps[extra.skill];
-    }
-  } else {
-    levelCap = Object.keys(xp_table)
-      .sort((a, b) => Number(a) - Number(b))
-      .map((a) => Number(a))
-      .pop();
-  }
-
-  if (levelCap > maxLevel) {
-    maxLevel = levelCap;
-  }
-
-  for (let x = 1; x <= Object.keys(xp_table).length; x++) {
-    xpTotal += xp_table[x];
-
-    if (xpTotal > xp) {
-      xpTotal -= xp_table[x];
-      break;
-    } else {
-      if (x <= levelCap) level = x;
-      uncappedLevel = x;
+  while (xpTable[uncappedLevel + 1] <= xpRemaining) {
+    uncappedLevel++;
+    xpRemaining -= xpTable[uncappedLevel];
+    if (uncappedLevel <= levelCap) {
+      xpCurrent = xpRemaining;
     }
   }
 
-  let xpCurrent = Math.floor(xp - xpTotal);
+  // not sure why this is floored but I'm leaving it in for now
+  xpCurrent = Math.floor(xpCurrent);
 
-  if (level < levelCap) {
-    xpForNext = Math.ceil(xp_table[level + 1]);
-  }
+  /** the level as displayed by in game UI */
+  const level = Math.min(levelCap, uncappedLevel);
 
-  let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+  /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
+  const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
-  let levelWithProgress = getLevelWithProgress(xp, maxLevel, Object.values(xp_table));
+  /** the fraction of the way toward the next level */
+  const progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+
+  /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
+  const levelWithProgress = level + progress;
 
   return {
     xp,
@@ -903,20 +883,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
   items = items.filter((a) => !a.inBackpack);
 
   return items;
-}
-
-function getLevelWithProgress(experience, maxLevel, experienceGroup) {
-  let level = 0;
-
-  for (let toRemove of experienceGroup) {
-    experience -= toRemove;
-    if (experience < 0) {
-      return Math.min(level + (1 - (experience * -1) / toRemove), maxLevel);
-    }
-    level++;
-  }
-
-  return Math.min(level, maxLevel);
 }
 
 export function splitWithTail(string, delimiter, count) {
@@ -1605,23 +1571,23 @@ export async function getLevels(userProfile, hypixelProfile, levelCaps) {
     let average_level_no_progress = 0;
 
     skillLevels = {
-      taming: getLevelByXp(userProfile.experience_skill_taming || 0, { skill: "taming" }),
-      farming: getLevelByXp(userProfile.experience_skill_farming || 0, {
+      taming: getLevelByXp(userProfile.experience_skill_taming, { skill: "taming" }),
+      farming: getLevelByXp(userProfile.experience_skill_farming, {
         skill: "farming",
-        cap: levelCaps?.farming || constants.default_skill_caps.farming,
+        cap: levelCaps?.farming,
       }),
-      mining: getLevelByXp(userProfile.experience_skill_mining || 0, { skill: "mining" }),
-      combat: getLevelByXp(userProfile.experience_skill_combat || 0, { skill: "combat" }),
-      foraging: getLevelByXp(userProfile.experience_skill_foraging || 0, { skill: "foraging" }),
-      fishing: getLevelByXp(userProfile.experience_skill_fishing || 0, { skill: "fishing" }),
-      enchanting: getLevelByXp(userProfile.experience_skill_enchanting || 0, { skill: "enchanting" }),
-      alchemy: getLevelByXp(userProfile.experience_skill_alchemy || 0, { skill: "alchemy" }),
-      carpentry: getLevelByXp(userProfile.experience_skill_carpentry || 0, { skill: "carpentry" }),
-      runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting || 0, {
+      mining: getLevelByXp(userProfile.experience_skill_mining, { skill: "mining" }),
+      combat: getLevelByXp(userProfile.experience_skill_combat, { skill: "combat" }),
+      foraging: getLevelByXp(userProfile.experience_skill_foraging, { skill: "foraging" }),
+      fishing: getLevelByXp(userProfile.experience_skill_fishing, { skill: "fishing" }),
+      enchanting: getLevelByXp(userProfile.experience_skill_enchanting, { skill: "enchanting" }),
+      alchemy: getLevelByXp(userProfile.experience_skill_alchemy, { skill: "alchemy" }),
+      carpentry: getLevelByXp(userProfile.experience_skill_carpentry, { skill: "carpentry" }),
+      runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting, {
         skill: "runecrafting",
         type: "runecrafting",
       }),
-      social: getLevelByXp(userProfile.experience_skill_social || 0, {
+      social: getLevelByXp(userProfile.experience_skill_social, {
         skill: "social",
         type: "social",
       }),
