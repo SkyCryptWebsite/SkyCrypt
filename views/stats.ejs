@@ -2432,13 +2432,20 @@ const metaDescription = getMetaDescription()
                 if(key.startsWith('dungeon_hub'))
                   continue;
 
-                const raceName = helper.capitalizeFirstLetter(key.split("_").join(" "));
+                const raceName = helper.capitalizeFirstLetter(key.replace("_best_time", "").split("_").join(" "));
                 let raceDuration = moment.duration(calculated.misc.races[key], "milliseconds").format("m:ss.SSS");
-
+                const raceTier = calculated.misc.objectives.completedRaces[key] || 0;
+                
                 if(calculated.misc.races[key] < 1000)
                   raceDuration = '0.' + raceDuration;
               %>
-              <span class="stat-name"><%= raceName %>: </span><span class="stat-value"><%= raceDuration %></span><br>
+              <div>
+                <span class="stat-name">[</span>
+                <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
+                <span class="stat-name">]</span>
+                <span class="stat-name"> <%= raceName %>: </span>
+                <span class="stat-value"><%= raceDuration %> </span>
+              </div>
               <% } %>
             </p>
             <div class="race-containers narrow-info-container-wrapper">
@@ -2468,8 +2475,10 @@ const metaDescription = getMetaDescription()
                     <% }
 
                     for(const type of types){
-                      const duration = calculated.misc.races[`${race.id}_${type}_no_return_best_time`] || 0;
-
+                      const key = `${race.id}_${type}_no_return_best_time`;
+                      const duration = calculated.misc.races[key] || 0;
+                      const raceTier = calculated.misc.objectives.completedRaces[key] || 0;
+                      
                       if(duration == 0)
                         continue;
 
@@ -2478,7 +2487,11 @@ const metaDescription = getMetaDescription()
                       if(duration < 1000)
                         raceDuration = '0.' + raceDuration;
                       %>
-                      <div><span class="stat-name"><%= helper.titleCase(type.replace("_", " ")) %>: </span><span class="stat-value"><%= raceDuration %></span></div>
+                      <div>
+                        <span class="stat-name"><%= helper.titleCase(type.split("_").join(" ")) %>: </span>
+                        <span class="stat-value"><%= raceDuration %></span>
+                        <span class="stat-value" style="float:right"><%= helper.renderRaceTier(raceTier) %></span>
+                      </div>
                     <% }
 
                     if(races_with_return.length > 0){ %>
@@ -2486,8 +2499,10 @@ const metaDescription = getMetaDescription()
                     <% }
 
                     for(const type of types){
-                      const duration = calculated.misc.races[`${race.id}_${type}_with_return_best_time`] || 0;
-
+                      const key = `${race.id}_${type}_with_return_best_time`;
+                      const duration = calculated.misc.races[key] || 0;
+                      const raceTier = calculated.misc.objectives.completedRaces[key] || 0;
+                      
                       if(duration == 0)
                         continue;
 
@@ -2496,7 +2511,11 @@ const metaDescription = getMetaDescription()
                       if(duration < 1000)
                         raceDuration = '0.' + raceDuration;
                       %>
-                      <div><span class="stat-name"><%= helper.titleCase(type.replace("_", " ")) %>: </span><span class="stat-value"><%= raceDuration %></span></div>
+                      <div>
+                        <span class="stat-name"><%= helper.titleCase(type.split("_").join(" ")) %>: </span>
+                        <span class="stat-value"><%= raceDuration %></span>
+                        <span class="stat-value" style="float:right"><%= helper.renderRaceTier(raceTier) %></span>
+                      </div>
                     <% } %>
                   </div>
                 </div>

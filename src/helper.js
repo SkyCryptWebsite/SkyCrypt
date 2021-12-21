@@ -454,6 +454,17 @@ export function titleCase(string) {
   return split.join(" ");
 }
 
+export function renderRaceTier(tierNumber) {
+  let res = "";
+  for (let i = 0; i < tierNumber; i++) {
+    res += "●";
+  }
+  for (let i = 0; i < 4 - tierNumber; i++) {
+    res += "○";
+  }
+  return res;
+}
+
 /**
  * checks whether a string should be proceeded by a or by an
  * @param {string} string

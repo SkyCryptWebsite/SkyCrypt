@@ -2546,6 +2546,7 @@ export const getStats = async (
   const misc = {};
 
   misc.milestones = {};
+  misc.objectives = {};
   misc.races = {};
   misc.gifts = {};
   misc.winter = {};
@@ -2604,6 +2605,33 @@ export const getStats = async (
   for (const key of auctions_buy) {
     if (key in userProfile.stats) {
       misc.auctions_buy[key.replace("auctions_", "")] = userProfile.stats[key];
+    }
+  }
+
+  misc.objectives.completedRaces = [];
+
+  for (const key in userProfile.objectives) {
+    if (key.includes("complete_the_")) {
+      const isCompleted = userProfile.objectives[key].status == "COMPLETE";
+      const tierNumber = parseInt("" + key.charAt(key.length - 1)) || 0;
+
+      const raceName = key
+        .replace("complete_the_", "")
+        .substring(
+          0,
+          key.length - 15 - (key.includes("chicken") || key.includes("end") || key.includes("woods") ? 0 : 5)
+        );
+      const newKeyName =
+        (raceName.endsWith("_return") ? "dungeon_hub_" : "") +
+        raceName.replace("woods", "foraging") +
+        "_best_time" +
+        (key.includes("_chicken") ? "_2" : "");
+
+      if (tierNumber == 1 && !isCompleted) {
+        misc.objectives.completedRaces[newKeyName] = 0;
+      } else if (isCompleted && tierNumber > (misc.objectives.completedRaces[newKeyName] || 0)) {
+        misc.objectives.completedRaces[newKeyName] = tierNumber;
+      }
     }
   }
 
