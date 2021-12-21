@@ -2442,8 +2442,7 @@ const metaDescription = getMetaDescription()
               <div>
                 <span class="stat-name">[</span>
                 <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
-                <span class="stat-name">]</span>
-                <span class="stat-name"> <%= raceName %>: </span>
+                <span class="stat-name">] <%= raceName %>: </span>
                 <span class="stat-value"><%= raceDuration %> </span>
               </div>
               <% } %>
@@ -2488,9 +2487,10 @@ const metaDescription = getMetaDescription()
                         raceDuration = '0.' + raceDuration;
                       %>
                       <div>
-                        <span class="stat-name"><%= helper.titleCase(type.split("_").join(" ")) %>: </span>
-                        <span class="stat-value"><%= raceDuration %></span>
-                        <span class="stat-value" style="float:right"><%= helper.renderRaceTier(raceTier) %></span>
+                        <span class="stat-name">[</span>
+                        <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
+                        <span class="stat-name">] <%= helper.titleCase(type.split("_").join(" ")) %>: </span>
+                        <span class="stat-value"><%= raceDuration %> </span>
                       </div>
                     <% }
 
@@ -2512,9 +2512,10 @@ const metaDescription = getMetaDescription()
                         raceDuration = '0.' + raceDuration;
                       %>
                       <div>
-                        <span class="stat-name"><%= helper.titleCase(type.split("_").join(" ")) %>: </span>
-                        <span class="stat-value"><%= raceDuration %></span>
-                        <span class="stat-value" style="float:right"><%= helper.renderRaceTier(raceTier) %></span>
+                        <span class="stat-name">[</span>
+                        <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
+                        <span class="stat-name">] <%= helper.titleCase(type.split("_").join(" ")) %>: </span>
+                        <span class="stat-value"><%= raceDuration %> </span>
                       </div>
                     <% } %>
                   </div>
