@@ -303,7 +303,7 @@ export const raceObjectiveToStatName = {
   complete_the_giant_mushroom_no_pearls_with_return_race: "dungeon_hub_giant_mushroom_no_pearls_with_return_best_time",
   complete_the_giant_mushroom_no_abilities_with_return_race:
     "dungeon_hub_giant_mushroom_no_abilities_with_return_best_time",
-  complete_the_giant_mushroom_nothing_with_return_race_: "dungeon_hub_giant_mushroom_nothing_with_return_best_time",
+  complete_the_giant_mushroom_nothing_with_return_race: "dungeon_hub_giant_mushroom_nothing_with_return_best_time",
   complete_the_precursor_ruins_anything_with_return_race: "dungeon_hub_precursor_ruins_anything_with_return_best_time",
   complete_the_precursor_ruins_no_pearls_with_return_race:
     "dungeon_hub_precursor_ruins_no_pearls_with_return_best_time",
