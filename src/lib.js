@@ -33,7 +33,7 @@ import { makeLore } from "./lore-generator.js";
 
 const parseNbt = util.promisify(nbt.parse);
 
-const MAX_SOULS = 227;
+const MAX_SOULS = 228;
 let TALISMAN_COUNT;
 
 function getMinMax(profiles, min, ...path) {
