@@ -24,7 +24,9 @@ function isColor(x: unknown): x is string {
 
 async function fetchTheme(urlString: string): Promise<Theme> {
   const url = new URL(urlString, document.location.href);
-  url.searchParams.append("schema", "2");
+  if (url.protocol === "http:" || url.protocol === "https:") {
+    url.searchParams.append("schema", "2");
+  }
   const response = await fetch(url.href);
   const theme: unknown = await response.json();
   return sanitizeTheme(theme);
