@@ -3346,8 +3346,8 @@ export async function getDungeons(userProfile, hypixelProfile) {
     undead: userProfile?.essence_undead ?? 0,
     diamond: userProfile?.essence_diamond ?? 0,
     dragon: userProfile?.essence_dragon ?? 0,
-    gold: userProfile?.essence_gold ?? 0
-  }
+    gold: userProfile?.essence_gold ?? 0,
+  };
 
   if (!output.catacombs.visited) return output;
 
