@@ -454,8 +454,9 @@ export function titleCase(string) {
   return split.join(" ");
 }
 
-export function renderRaceTier(tierNumber) {
-  return "●".repeat(tierNumber) + "○".repeat(4 - tierNumber);
+export function renderRaceTier(completeTiers) {
+  const incompleteTiers = Math.max(0, 4 - completeTiers);
+  return "●".repeat(completeTiers) + "○".repeat(incompleteTiers);
 }
 
 /**
