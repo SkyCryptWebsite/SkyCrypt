@@ -2613,12 +2613,12 @@ export const getStats = async (
   for (const key in userProfile.objectives) {
     if (key.includes("complete_the_")) {
       const isCompleted = userProfile.objectives[key].status == "COMPLETE";
-      const tierNumber = parseInt("" + key.charAt(key.length - 1)) || 0;
+      const tierNumber = parseInt("" + key.charAt(key.length - 1)) ?? 0;
       const raceName = constants.raceObjectiveToStatName[key.substring(0, key.length - 2)];
 
       if (tierNumber == 1 && !isCompleted) {
         misc.objectives.completedRaces[raceName] = 0;
-      } else if (isCompleted && tierNumber > (misc.objectives.completedRaces[raceName] || 0)) {
+      } else if (isCompleted && tierNumber > (misc.objectives.completedRaces[raceName] ?? 0)) {
         misc.objectives.completedRaces[raceName] = tierNumber;
       }
     }
