@@ -455,14 +455,7 @@ export function titleCase(string) {
 }
 
 export function renderRaceTier(tierNumber) {
-  let res = "";
-  for (let i = 0; i < tierNumber; i++) {
-    res += "●";
-  }
-  for (let i = 0; i < 4 - tierNumber; i++) {
-    res += "○";
-  }
-  return res;
+  return "●".repeat(tierNumber) + "○".repeat(4 - tierNumber);
 }
 
 /**
