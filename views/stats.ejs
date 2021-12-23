@@ -2427,27 +2427,7 @@ const metaDescription = getMetaDescription()
 
           <% if('races' in calculated.misc){ %>
             <div class="category-header"><div class="category-icon"><div class="item-icon icon-317_0"></div></div><span>races</span></div>
-            <p class="stat-raw-values">
-              <% for(const key in calculated.misc.races){
-                if(key.startsWith('dungeon_hub'))
-                  continue;
 
-                const raceName = helper.capitalizeFirstLetter(key.replace("_best_time", "").split("_").join(" "));
-                let raceDuration = moment.duration(calculated.misc.races[key], "milliseconds").format("m:ss.SSS");
-                const raceTier = calculated.misc.objectives.completedRaces[key] || 0;
-                
-                if(calculated.misc.races[key] < 1000)
-                  raceDuration = '0.' + raceDuration;
-              %>
-              <div>
-                <span class="stat-name">[</span>
-                <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
-                <span class="stat-name">]</span>
-                <span class="stat-name"> <%= raceName %>: </span>
-                <span class="stat-value"><%= raceDuration %> </span>
-              </div>
-              <% } %>
-            </p>
             <div class="race-containers narrow-info-container-wrapper">
               <%
               const races = [
@@ -2523,6 +2503,28 @@ const metaDescription = getMetaDescription()
                 }
               }
               %>
+              <div class="narrow-info-container">
+                  <div class="narrow-info-header">Other Races</div>
+                  <div class="narrow-info-content">
+                    <% for(const key in calculated.misc.races){
+                      if(key.startsWith('dungeon_hub'))
+                        continue;
+
+                      const raceName = helper.capitalizeFirstLetter(key.replace(/_race_best_time.*/, "").split("_").join(" "));
+                      let raceDuration = moment.duration(calculated.misc.races[key], "milliseconds").format("m:ss.SSS");
+                      const raceTier = calculated.misc.objectives.completedRaces[key] || 0;
+
+                      if(calculated.misc.races[key] < 1000)
+                        raceDuration = '0.' + raceDuration;
+                    %>
+                    <div >
+                      <span class="stat-name"> <%= raceName %>: </span>
+                      <span class="stat-value"><%= raceDuration %> </span>
+                      <span class="stat-value tier-completion"><%= helper.renderRaceTier(raceTier) %></span>
+                    </div>
+                    <% } %>
+                  </div>
+              </div>
             </div>
           <% } %>
           <% if('gifts' in calculated.misc){ %>
