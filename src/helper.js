@@ -454,8 +454,14 @@ export function titleCase(string) {
   return split.join(" ");
 }
 
-export function renderRaceTier(tierNumber) {
-  return "●".repeat(tierNumber) + "○".repeat(4 - tierNumber);
+/**
+ * returns a string with 4 dots "●" for completed tiers and "○" for incomplete tiers
+ * @param {number} completeTiers
+ * @returns {string} 4 dots
+ */
+export function renderRaceTier(completeTiers) {
+  const incompleteTiers = Math.max(0, 4 - completeTiers);
+  return "●".repeat(completeTiers) + "○".repeat(incompleteTiers);
 }
 
 /**

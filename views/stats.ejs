@@ -2456,8 +2456,8 @@ const metaDescription = getMetaDescription()
 
                     for(const type of types){
                       const key = `${race.id}_${type}_no_return_best_time`;
-                      const duration = calculated.misc.races[key] || 0;
-                      const raceTier = calculated.misc.objectives.completedRaces[key] || 0;
+                      const duration = calculated.misc.races[key] ?? 0;
+                      const raceTier = calculated.misc.objectives.completedRaces[key] ?? 0;
 
                       if(duration == 0)
                         continue;
@@ -2480,8 +2480,8 @@ const metaDescription = getMetaDescription()
 
                     for(const type of types){
                       const key = `${race.id}_${type}_with_return_best_time`;
-                      const duration = calculated.misc.races[key] || 0;
-                      const raceTier = calculated.misc.objectives.completedRaces[key] || 0;
+                      const duration = calculated.misc.races[key] ?? 0;
+                      const raceTier = calculated.misc.objectives.completedRaces[key] ?? 0;
 
                       if(duration == 0)
                         continue;
@@ -2512,7 +2512,7 @@ const metaDescription = getMetaDescription()
 
                       const raceName = helper.capitalizeFirstLetter(key.replace(/_race_best_time.*/, "").split("_").join(" "));
                       let raceDuration = moment.duration(calculated.misc.races[key], "milliseconds").format("m:ss.SSS");
-                      const raceTier = calculated.misc.objectives.completedRaces[key] || 0;
+                      const raceTier = calculated.misc.objectives.completedRaces[key] ?? 0;
 
                       if(calculated.misc.races[key] < 1000)
                         raceDuration = '0.' + raceDuration;
