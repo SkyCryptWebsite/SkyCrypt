@@ -1798,6 +1798,19 @@ a.additional-player-stat:hover {
   }
 }
 
+.stat-raw-values {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.max-stat .stat-name {
+  color: var(--maxed-hex);
+}
+
+.max-stat .stat-value {
+  color: var(--gold-hex);
+}
+
 .stat-health::before {
   -webkit-mask-image: url(../img/icons/heart.svg?v2);
   mask-image: url(../img/icons/heart.svg?v2);
@@ -2520,11 +2533,6 @@ a.additional-player-stat:hover {
   }
 }
 
-.stat-raw-values {
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-
 .active-pet-info {
   display: inline-block;
   margin-top: 20px;
@@ -3023,14 +3031,6 @@ inventory-view {
     transform: scale(0.25);
     transform-origin: top left;
   }
-}
-
-.max-stat .stat-name {
-  color: var(--maxed-hex);
-}
-
-.max-stat .stat-value {
-  color: var(--gold-hex);
 }
 
 .minion-variant {
