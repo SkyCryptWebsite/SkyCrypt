@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const credentialsFilePath = path.resolve(__dirname, "../credentials.json");
 
 /**
- * @typedef {{ hypixel_api_key:string, dbUrl:string, dbName:string }} Credentials
+ * @typedef {{ hypixel_api_key:string, dbUrl:string, dbName:string, redisUrl:string, session_secret:string }} Credentials
  */
 
 /** @type {Credentials} */
