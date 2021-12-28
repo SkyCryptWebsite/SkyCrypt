@@ -1803,12 +1803,14 @@ a.additional-player-stat:hover {
   margin-bottom: 20px;
 }
 
-.max-stat .stat-name {
-  color: var(--maxed-hex);
-}
+.max-stat {
+  .stat-name {
+    color: var(--maxed-hex);
+  }
 
-.max-stat .stat-value {
-  color: var(--gold-hex);
+  .stat-value {
+    color: var(--gold-hex);
+  }
 }
 
 .stat-health::before {
