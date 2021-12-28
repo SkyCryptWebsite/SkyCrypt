@@ -2401,6 +2401,36 @@ inventory-view {
   }
 }
 
+.icomoon {
+  font-family: "icomoon" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+.icomoon-dungeon-stars {
+  font-size: 0.8em;
+  letter-spacing: 3px;
+}
+
+.forge-item {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  & + & {
+    margin-top: 4px;
+  }
+}
+
+.forge-slot {
+  margin: 0;
+  white-space: nowrap;
+}
+
 @media (max-width: 800px) {
   .stat-header {
     padding-left: 0;
@@ -2604,34 +2634,4 @@ inventory-view {
   .piece-icon {
     transform: translate(-50%, -50%) scale(0.35);
   }
-}
-
-.icomoon {
-  font-family: "icomoon" !important;
-  speak: never;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-}
-
-.icomoon-dungeon-stars {
-  font-size: 0.8em;
-  letter-spacing: 3px;
-}
-
-.forge-item {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  & + & {
-    margin-top: 4px;
-  }
-}
-
-.forge-slot {
-  margin: 0;
-  white-space: nowrap;
 }
