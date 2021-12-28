@@ -7,14 +7,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const credentialsFilePath = path.resolve(__dirname, "../credentials.json");
 
 /**
- * @typedef {{ hypixel_api_key:string, recaptcha_site_key:string, recaptcha_secret_key:string, dbUrl:string, dbName:string }} Credentials
+ * @typedef {{ hypixel_api_key:string, dbUrl:string, dbName:string }} Credentials
  */
 
 /** @type {Credentials} */
 const defaultCredentials = {
   hypixel_api_key: "",
-  recaptcha_site_key: "",
-  recaptcha_secret_key: "",
   dbUrl: "mongodb://localhost:27017",
   dbName: "sbstats",
   redisUrl: "",
