@@ -400,6 +400,11 @@
   font-size: 36px;
   margin-top: 50px;
   margin-bottom: 20px;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 8px;
+  align-items: center;
 }
 
 #stats_for_player,
@@ -530,8 +535,8 @@
 
 #additional_player_stats {
   font-size: 15px;
-  margin-top: 10px;
   position: relative;
+  width: 100%;
 }
 
 .additional-player-stat {
@@ -2511,15 +2516,6 @@ inventory-view {
     height: 24px;
     margin-top: -3px;
     margin-left: -3px;
-  }
-
-  #stats_for_profile {
-    margin-top: 10px;
-  }
-
-  .text-on::after {
-    content: "\A"; // TODO fix this jank
-    white-space: pre;
   }
 
   .rank-tag {
