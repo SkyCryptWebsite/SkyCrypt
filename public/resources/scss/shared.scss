@@ -1997,25 +1997,6 @@ a.additional-player-stat:hover {
   margin-top: 25px;
 }
 
-.accessory-stats {
-  margin-bottom: 10px;
-}
-
-.accessory-rarity {
-  font-weight: 700;
-  text-transform: uppercase;
-  padding-right: 10px;
-}
-
-.inactive-accessory {
-  opacity: 0.3;
-  transition: opacity 0.1s;
-
-  &:hover {
-    opacity: 1;
-  }
-}
-
 .stat-anchor {
   display: block;
   position: relative;
