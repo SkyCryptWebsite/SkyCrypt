@@ -65,6 +65,7 @@ export const forge_times = {
   PET: 12 * 24 * 60,
   FORGE_TRAVEL_SCROLL: 5 * 60,
   CRYSTAL_HOLLOWS_TRAVEL_SCROLL: 10 * 60,
+  DIAMONITE: 6 * 60,
 };
 
 export const quick_forge_multiplier = {
