@@ -170,7 +170,7 @@ export function getLevelByXp(xp, extra = {}) {
   /** the maximum level that any player can achieve (used for gold progress bars) */
   const maxLevel = constants.maxed_skill_caps[extra.skill] ?? levelCap;
 
-  /** the level ignoring the cap and using only the table*/
+  /** the level ignoring the cap and using only the table */
   let uncappedLevel = 0;
 
   /** the amount of xp over the amount required for the level (used for calculation progress to next level) */
@@ -202,6 +202,9 @@ export function getLevelByXp(xp, extra = {}) {
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
   const levelWithProgress = level + progress;
 
+  /** a floating point value representing the current level ignoring the in-game unlockable caps for example if you are half way to level 5 it would be 4.5 */
+  const unlockableLevelWithProgress = extra.cap ? Math.min(uncappedLevel + progress, maxLevel) : levelWithProgress;
+
   return {
     xp,
     level,
@@ -212,6 +215,7 @@ export function getLevelByXp(xp, extra = {}) {
     levelCap,
     uncappedLevel,
     levelWithProgress,
+    unlockableLevelWithProgress,
   };
 }
 
