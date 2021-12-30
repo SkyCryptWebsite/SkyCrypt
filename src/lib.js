@@ -3339,15 +3339,11 @@ export async function getDungeons(userProfile, hypixelProfile) {
   output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
 
   // Essence
-  output.essence = {
-    ice: userProfile?.essence_ice ?? 0,
-    wither: userProfile?.essence_wither ?? 0,
-    spider: userProfile?.essence_spider ?? 0,
-    undead: userProfile?.essence_undead ?? 0,
-    diamond: userProfile?.essence_diamond ?? 0,
-    dragon: userProfile?.essence_dragon ?? 0,
-    gold: userProfile?.essence_gold ?? 0,
-  };
+  output.essence = {};
+
+  for (const essence in constants.dungeons.essence) {
+    output.essence[essence] = userProfile?.[`essence_${essence}`] ?? 0;
+  }
 
   if (!output.catacombs.visited) return output;
 
