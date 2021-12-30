@@ -685,6 +685,7 @@ export async function updateRank(uuid, db) {
       scorpius_bribe_96: "Scorpius Bribe (Year 96)",
       scorpius_bribe_120: "Scorpius Bribe (Year 120)",
       scorpius_bribe_144: "Scorpius Bribe (Year 144)",
+      scorpius_bribe_168: "Scorpius Bribe (Year 168)",
     };
 
     for (const item in claimable) {

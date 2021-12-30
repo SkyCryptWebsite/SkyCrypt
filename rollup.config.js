@@ -20,6 +20,7 @@ const config = {
     "public/resources/ts/common-defer.ts",
     "public/resources/ts/common.ts",
     "public/resources/ts/stats-defer.ts",
+    "public/resources/ts/development-defer.ts",
     "public/resources/ts/themes.ts",
     "public/resources/ts/elements/local-time.ts",
     "public/resources/ts/elements/rich-item.ts",

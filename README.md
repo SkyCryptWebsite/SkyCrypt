@@ -36,8 +36,12 @@ You can now run `npm run start` to start it. You will be able to access the site
 
 <h2 align="center">Credits</h2>
 
-- **Animated Custom Weapons and Armors**: <a href="https://hypixel.net/threads/2138599/">FurfSky+</a> by Furf\_\_
-- **Additional Custom Textures**: <a href="https://hypixel.net/threads/2147652/">Vanilla+</a> by TBlazeWarriorT
-- **Default Textures**: <a href="https://www.minecraft.net/">Minecraft</a> by Mojang
-- **Player Heads**: <a href="https://hypixel.net/forums/skyblock.157/">SkyBlock</a> by Hypixel.
-- **Original Site**: <a href="https://sky.lea.moe/">sky.lea.moe</a> by LeaPhant
+- **Custom Textures**:
+  - [FurfSky Reborn](https://hypixel.net/threads/4101579) by The Reborn Team
+  - [RNBW+](https://hypixel.net/threads/3470904) by rainbowcraft2
+  - [Hypixel Skyblock Pack](https://hypixel.net/threads/2103515) by Packs HQ
+  - [Vanilla+](https://hypixel.net/threads/2147652) by TBlazeWarriorT
+  - [Worlds and Beyond](https://hypixel.net/threads/3597207) by Skeletony\_
+  - [Default Minecraft Textures](https://www.minecraft.net/) by Mojang
+- **Player Heads**: [SkyBlock](https://hypixel.net/forums/skyblock.157/) by Hypixel.
+- **Original Site**: [sky.lea.moe](https://sky.lea.moe/) by LeaPhant

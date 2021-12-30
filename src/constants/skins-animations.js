@@ -433,6 +433,24 @@ const skins = [
     texture: "/head/473af69ed9bf67e2f5403dd7d28bbe32034749bbfb635ac1789a412053cdcbf0",
     release: new Date("2021-10-31 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_PHOENIX_ICE",
+    name: "Ice",
+    texture: "/head/12582057e52d0f7fffd1a1f93acf196db5f09b76f1ba3ede28476cc4cd82da97",
+    release: new Date("2021-11-25 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_OCELOT_SNOW_TIGER",
+    name: "Snow Tiger",
+    texture: "/head/496499b99c88314b1459fc5b515c477b069bf2229a2833abb2e1ff20b5f29457",
+    release: new Date("2021-12-14 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_BLAZE_FROZEN",
+    name: "Frozen",
+    texture: "/head/9617a34c8ff467fdb45be3ff17863fcff7e8424c8dd9b99666edd13b44b32e8c",
+    release: new Date("2021-12-24 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
@@ -736,6 +754,18 @@ const animations = [
       1680: "/head/a349d2ea1872ed47a387c89894e0265187a00219ee4da63b75b907016d3cd6aa",
       1790: "/head/af254f20be3680f2b042a4289ae63089e08ae26e137f74dc5318cc57a67a42df",
       1870: "/head/9fe39e362f74f05186818eb9f69fce89325c70f55d1b85214155fbc82bd67863",
+    },
+  },
+  {
+    id: "PET_SKIN_BLAZE_FROZEN",
+    texture: "/resources/img/items/pet_skin_blaze_frozen.png",
+    animation: {
+      0: "/head/47b78c3ff3e695dd5b2606fe266e19e628299815548dd2eb72ea864b7b8dfb18",
+      230: "/head/6ba8927cac02e5e49142c141790ee695e7f5b2e3e44c528aa23db0c138b8996b",
+      340: "/head/ad8dd3d82074f8ee731ed28b5cb4c53416ee9977ac965e53916070f0d07b3980",
+      410: "/head/314d2152f639dff120b1246a67970f9e688606017e354db15638a900616ef795",
+      510: "/head/486a3c5719d0b46d2f20d510d4acedefd994163c2800c702da01181e9c91c57e",
+      640: "/head/4b0c880ffc254cb2fb44039125e49c67ff3116e5514bd8ffe42a24c98982bae8",
     },
   },
 ];

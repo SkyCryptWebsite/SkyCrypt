@@ -209,8 +209,8 @@ class HotM {
     };
 
     return {
-      id: data[this.status].split(":")[0],
-      Damage: data[this.status].split(":")[1],
+      id: parseInt(data[this.status].split(":")[0], 10),
+      Damage: parseInt(data[this.status].split(":")[1], 10),
       glowing: false,
     };
   }
@@ -265,8 +265,8 @@ class Node {
     };
 
     return {
-      id: data[this.nodeType][this.status].split(":")[0],
-      Damage: data[this.nodeType][this.status].split(":")[1],
+      id: parseInt(data[this.nodeType][this.status].split(":")[0], 10),
+      Damage: parseInt(data[this.nodeType][this.status].split(":")[1], 10),
       glowing: this.selectedPickaxeAbility === this.id,
     };
   }
@@ -1100,7 +1100,7 @@ class Pickobulus extends Node {
 
   perk(level) {
     const radius = [2, 2, 3][this.pickaxeAbilityLevel - 1];
-    const cooldown = [120, 120, 120][this.pickaxeAbilityLevel - 1];
+    const cooldown = [120, 110, 110][this.pickaxeAbilityLevel - 1];
     return [
       "§6Pickaxe Ability: Pickobulus",
       `§7Throw your pickaxe to create an explosion on impact, mining all ores within a §a${radius}§7 block radius.`,

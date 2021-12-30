@@ -18,6 +18,7 @@ export const item_types = [
   "chestplate",
   "leggings",
   "boots",
+  "gauntlet",
 ];
 
 /** @typedef {"common"|"uncommon"|"rare"|"epic"|"legendary"|"mythic"|"divine"|"supreme"|"special"|"very special"} Rarity */
@@ -145,6 +146,8 @@ export const special_enchants = [
   "Dragon Hunter V",
   "Feather Falling 10",
   "Feather Falling X",
+  "Feather Falling 20",
+  "Feather Falling XX",
   "Infinite Quiver 10",
   "Infinite Quiver X",
   "Thorns 6",

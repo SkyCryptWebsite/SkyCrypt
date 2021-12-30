@@ -15,6 +15,8 @@ function addSign(num) {
 
 /**
  * update item Lore to match item stats
+ * item stats get changed or updated after Pet modifyArmor() function runs
+ * this function tries to update the Lore of the item to match the new stats
  * @param {{tag?:{display?:{Lore?:string}},stats:{[key:string]:number},extra?:{hpbs?:number}}} item
  * @returns {void}
  */
@@ -44,8 +46,8 @@ export function makeLore(item) {
       const statValue = split[1].substring(0, 2) + addSign(item.stats[statNames[statName]]);
 
       if (statName === "Health" && item.equipmentType == "armor" && item.extra?.hpbs > 0) {
-        const hpbString = `HP §e(+${item.extra.hpbs * 4} HP)`;
-        lore_raw[i] = statType + ": " + statValue + " " + hpbString + " " + split.slice(5).join(" ");
+        const hpbString = `§e(+${item.extra.hpbs * 4})`;
+        lore_raw[i] = statType + ": " + statValue + " " + hpbString + " " + split.slice(3).join(" ");
       } else if (statName === "Defense" && item.equipmentType == "armor" && item.extra?.hpbs > 0) {
         const hpbString = `§e(+${item.extra.hpbs * 2})`;
         lore_raw[i] = statType + ": " + statValue + " " + hpbString + " " + split.slice(3).join(" ");

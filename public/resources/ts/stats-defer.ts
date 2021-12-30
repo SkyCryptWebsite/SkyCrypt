@@ -40,7 +40,7 @@ function getCookie(c_name: string) {
       if (c_end == -1) {
         c_end = document.cookie.length;
       }
-      return unescape(document.cookie.substring(c_start, c_end));
+      return decodeURIComponent(document.cookie.substring(c_start, c_end));
     }
   }
   return "";
@@ -806,7 +806,7 @@ class ScrollMemory {
     if (this._isSmoothScrolling !== value) {
       this._isSmoothScrolling = value;
       if (value) {
-        window.addEventListener("scroll", this._onScroll);
+        window.addEventListener("scroll", this._onScroll, { passive: true });
         this._onScroll();
       } else {
         window.removeEventListener("scroll", this._onScroll);
@@ -967,7 +967,7 @@ function onScroll() {
   }
 }
 onScroll();
-window.addEventListener("scroll", onScroll);
+window.addEventListener("scroll", onScroll, { passive: true });
 
 setTimeout(resize, 1000);
 

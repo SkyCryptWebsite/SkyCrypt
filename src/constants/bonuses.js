@@ -149,7 +149,35 @@ export const bonus_stats = {
       speed: 1,
     },
   },
-  enderman_slayer: {},
+  enderman_slayer: {
+    1: {
+      health: 1,
+    },
+    2: {
+      intelligence: 1,
+    },
+    3: {
+      health: 2,
+    },
+    4: {
+      intelligence: 2,
+    },
+    5: {
+      health: 3,
+    },
+    6: {
+      intelligence: 3,
+    },
+    7: {
+      health: 4,
+    },
+    8: {
+      intelligence: 4,
+    },
+    9: {
+      health: 5,
+    },
+  },
   enchantments: {
     sharpness: {
       1: {

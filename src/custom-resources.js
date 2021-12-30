@@ -5,7 +5,7 @@ import { getClusterId, hasPath, getPath } from "./helper.js";
 import mm from "micromatch";
 import util from "util";
 import apng2gif from "apng2gif-bin";
-import escapeRegExp from "lodash.escaperegexp";
+import _ from "lodash";
 import sharp from "sharp";
 import canvasModule from "canvas";
 const { createCanvas, loadImage } = canvasModule;
@@ -58,7 +58,12 @@ async function init() {
   console.log(`Custom Resources loading started on ${getClusterId(true)}.`);
   console.time(`custom_resources_${getClusterId()}`);
 
-  for (const pack of await fs.readdir(RESOURCE_PACK_FOLDER)) {
+  for (const packOrFile of await fs.readdir(RESOURCE_PACK_FOLDER, { withFileTypes: true })) {
+    if (!packOrFile.isDirectory()) {
+      continue;
+    }
+
+    const pack = packOrFile.name;
     const basePath = path.resolve(RESOURCE_PACK_FOLDER, pack);
 
     try {
@@ -84,11 +89,16 @@ async function init() {
         continue;
       }
 
-      let lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
-      let properties = {};
+      const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
+      const properties = {};
 
-      for (let line of lines) {
-        let split = line.split("=");
+      for (const line of lines) {
+        // Skipping comments
+        if (line.startsWith("#")) {
+          continue;
+        }
+
+        const split = line.split("=");
 
         if (split.length < 2) {
           continue;
@@ -97,15 +107,17 @@ async function init() {
         properties[split[0]] = split.slice(1).join("=");
       }
 
-      if (!("type" in properties)) {
+      // Empty properties, probably whole file contaiend only comments
+      if (Object.keys(properties).length === 0) {
         continue;
       }
 
-      if (properties.type != "item") {
+      // Ignoring when type is set and is not "item"
+      if ("type" in properties && properties.type !== "item") {
         continue;
       }
 
-      let texture = {
+      const texture = {
         weight: 0,
         animated: false,
         file: path.basename(file),
@@ -231,7 +243,7 @@ async function init() {
         }
 
         if (property == "items" || property == "matchItems") {
-          let item = mcData.findItemOrBlockByName(properties[property].replace("minecraft:", ""));
+          const item = mcData.findItemOrBlockByName(properties[property].replace("minecraft:", ""));
 
           if (item) {
             texture.id = item.id;
@@ -257,7 +269,7 @@ async function init() {
         } else if (regex.startsWith("regex:")) {
           regex = new RegExp(regex.substring(6));
         } else {
-          regex = new RegExp(escapeRegExp(regex));
+          regex = new RegExp(`^${_.escapeRegExp(regex)}$`);
         }
 
         texture.match.push({
@@ -280,7 +292,7 @@ async function init() {
         try {
           metaProperties = RJSON.parse(mcMeta);
         } catch (e) {
-          //
+          // ...
         }
       }
 
@@ -331,7 +343,7 @@ async function init() {
 
             const frameTimeInterpolated = (2 / 20) * 1000;
 
-            let frameCountInterpolated = totalLength / frameTimeInterpolated;
+            const frameCountInterpolated = totalLength / frameTimeInterpolated;
 
             for (let i = 0; i < frameCountInterpolated; i++) {
               let frameCur, frameNext;
@@ -439,10 +451,6 @@ export async function getTexture(item, ignoreId = false, packIds) {
   _resourcePacks = _resourcePacks.sort((a, b) => packIds.indexOf(a) - packIds.indexOf(b));
 
   for (const pack of _resourcePacks) {
-    if ("weight" in outputTexture) {
-      outputTexture.weight = -9999;
-    }
-
     for (const texture of pack.textures) {
       if (ignoreId === false && texture.id != item.id) {
         continue;
@@ -471,11 +479,7 @@ export async function getTexture(item, ignoreId = false, packIds) {
           matchValues = [matchValues];
         }
 
-        for (const matchValue of matchValues) {
-          if (!regex.test(matchValue.toString().replace(removeFormatting, ""))) {
-            continue;
-          }
-
+        if (matchValues.some((matchValue) => regex.test(matchValue.toString().replace(removeFormatting, "")))) {
           matches++;
         }
       }
@@ -497,52 +501,6 @@ export async function getTexture(item, ignoreId = false, packIds) {
   if (!("path" in outputTexture)) {
     return null;
   }
-
-  // TODO: fix
-  // if ("leather" in outputTexture && item.tag?.ExtraAttributes?.color) {
-  //   const color = item.tag.ExtraAttributes.color.split(":");
-
-  //   const leatherBasePath = path.resolve(path.dirname(outputTexture.path), "leatherCache");
-  //   const leatherPath = path.resolve(
-  //     leatherBasePath,
-  //     path.basename(outputTexture.path, ".png") + "_" + color.join("_") + ".png"
-  //   );
-
-  //   await fs.ensureDir(leatherBasePath);
-
-  //   try {
-  //     await fs.access(leatherPath, fs.F_OK);
-  //     throw "";
-  //   } catch (e) {
-  //     const canvas = createCanvas(128, 128);
-  //     const ctx = canvas.getContext("2d");
-
-  //     const armorBase = await loadImage(outputTexture.leather.base);
-  //     const armorOverlay = await loadImage(outputTexture.leather.overlay);
-
-  //     ctx.drawImage(armorBase, 0, 0);
-
-  //     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-  //     for (let i = 0; i < imageData.data.length; i += 4) {
-  //       const r = imageData.data[i];
-  //       const alpha = r / 255;
-
-  //       imageData.data[i] = color[0] * alpha;
-  //       imageData.data[i + 1] = color[1] * alpha;
-  //       imageData.data[i + 2] = color[2] * alpha;
-  //     }
-
-  //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-  //     ctx.putImageData(imageData, 0, 0);
-
-  //     ctx.drawImage(armorOverlay, 0, 0);
-
-  //     await fs.writeFile(leatherPath, canvas.toBuffer("image/png"));
-  //   }
-
-  //   outputTexture.path = leatherPath;
-  // }
 
   outputTexture.path = path.relative(path.resolve(__dirname, "..", "public"), outputTexture.path).replace(/[\\]/g, "/");
   process.send({ type: "used_pack", id: outputTexture?.pack.config.id });
