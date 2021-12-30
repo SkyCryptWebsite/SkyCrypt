@@ -2467,10 +2467,14 @@ const metaDescription = getMetaDescription()
                       if(duration < 1000)
                         raceDuration = '0.' + raceDuration;
                       %>
-                      <div>
-                        <span class="stat-name"><%= helper.titleCase(type.split("_").join(" ")) %>: </span>
-                        <span class="stat-value"><%= raceDuration %></span>
-                        <span class="stat-value tier-completion"><%= helper.renderRaceTier(raceTier) %></span>
+                      <div class="narrow-info-flexsb">
+                        <div>
+                          <span class="stat-name"><%= helper.titleCase(type.split("_").join(" ")) %>: </span>
+                          <span class="stat-value"><%= raceDuration %></span>
+                        </div>
+                        <div>
+                          <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
+                        </div>
                       </div>
                     <% }
 
@@ -2491,10 +2495,14 @@ const metaDescription = getMetaDescription()
                       if(duration < 1000)
                         raceDuration = '0.' + raceDuration;
                       %>
-                      <div>
-                        <span class="stat-name"><%= helper.titleCase(type.split("_").join(" ")) %>: </span>
-                        <span class="stat-value"><%= raceDuration %></span>
-                        <span class="stat-value tier-completion"><%= helper.renderRaceTier(raceTier) %></span>
+                      <div class="narrow-info-flexsb">
+                        <div>
+                          <span class="stat-name"><%= helper.titleCase(type.split("_").join(" ")) %>: </span>
+                          <span class="stat-value"><%= raceDuration %></span>
+                        </div>
+                        <div>
+                          <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
+                        </div>
                       </div>
                     <% } %>
                   </div>
@@ -2517,10 +2525,14 @@ const metaDescription = getMetaDescription()
                       if(calculated.misc.races[key] < 1000)
                         raceDuration = '0.' + raceDuration;
                     %>
-                    <div >
-                      <span class="stat-name"> <%= raceName %>: </span>
-                      <span class="stat-value"><%= raceDuration %> </span>
-                      <span class="stat-value tier-completion"><%= helper.renderRaceTier(raceTier) %></span>
+                    <div class="narrow-info-flexsb">
+                      <div>
+                        <span class="stat-name"><%= raceName %>: </span>
+                        <span class="stat-value"><%= raceDuration %></span>
+                      </div>
+                      <div>
+                        <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
+                      </div>
                     </div>
                     <% } %>
                   </div>

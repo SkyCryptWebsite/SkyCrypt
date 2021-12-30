@@ -2861,8 +2861,11 @@ inventory-view {
   padding-bottom: 30px;
 }
 
-.tier-completion {
-  float: right;
+.narrow-info-container .narrow-info-flexsb {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  justify-content: space-between;
 }
 
 .slayer {
