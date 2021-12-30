@@ -40,7 +40,7 @@ function getCookie(c_name: string) {
       if (c_end == -1) {
         c_end = document.cookie.length;
       }
-      return unescape(document.cookie.substring(c_start, c_end));
+      return decodeURIComponent(document.cookie.substring(c_start, c_end));
     }
   }
   return "";
