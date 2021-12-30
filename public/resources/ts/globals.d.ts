@@ -147,6 +147,19 @@ interface Backpack extends Item {
   containsItems: Item[];
 }
 
+interface Level {
+  xp: number;
+  level: number;
+  maxLevel: number;
+  xpCurrent: number;
+  xpForNext: number;
+  progress: number;
+  levelCap: number;
+  uncappedLevel: number;
+  levelWithProgress: number;
+  rank: number;
+}
+
 declare namespace constants {
   const max_favorites: number;
   const special_enchants: string[];
@@ -230,13 +243,13 @@ declare const calculated: SkyCryptPlayer & {
       }[];
       highest_floor: string;
       id: string;
-      level: Levels;
+      level: Level;
       visited: boolean;
     };
     classes: {
       [key: string]: {
         current: boolean;
-        experience: Levels;
+        experience: Level;
       };
     };
     dungeonsWeight: number;
@@ -288,15 +301,7 @@ declare const calculated: SkyCryptPlayer & {
       }[];
       highest_floor: string;
       id: string;
-      level: {
-        level: number;
-        level_cap: number;
-        progress: number;
-        uncapped_level: number;
-        xp: number;
-        xpCurrent: number;
-        xpForNext: number;
-      };
+      level: Level;
       visited: boolean;
     };
     secrets_found: number;
@@ -402,18 +407,7 @@ declare const calculated: SkyCryptPlayer & {
     [key: string]: number;
   };
   levels: {
-    [key: string]: {
-      level: number;
-      levelCap: number;
-      levelWithProgress: number;
-      maxLevel: number;
-      progress: number;
-      rank: number;
-      uncappedLevel: number;
-      xp: number;
-      xpCurrent: number;
-      xpForNext: number | null;
-    };
+    [key: string]: Level;
   };
   members: SkyCryptPlayer[];
   mining: {
@@ -662,17 +656,4 @@ interface UADataValues {
   architecture: string;
   model: string;
   uaFullVersion: string;
-}
-
-interface Levels {
-  level: number;
-  levelCap: number;
-  levelWithProgress: number;
-  maxLevel: number;
-  progress: number;
-  rank: number;
-  uncappedLevel: number;
-  xp: number;
-  xpCurrent: number;
-  xpForNext: number | null;
 }

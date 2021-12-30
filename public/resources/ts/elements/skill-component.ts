@@ -82,7 +82,7 @@ export class SkillComponent extends LitElement {
       return undefined;
     }
 
-    let level: Levels | undefined;
+    let level: Level | undefined;
     switch (this.type) {
       case "skill":
         level = calculated.levels[this.skill];
