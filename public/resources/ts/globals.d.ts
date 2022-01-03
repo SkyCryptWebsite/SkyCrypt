@@ -157,7 +157,7 @@ interface Level {
   levelCap: number;
   uncappedLevel: number;
   levelWithProgress: number;
-  rank: number;
+  rank?: number;
 }
 
 declare namespace constants {
