@@ -17,4 +17,3 @@ export * from "./constants/stats.js";
 export * from "./constants/tags.js";
 export * from "./constants/talismans.js";
 export * from "./constants/themes.js";
-export * from "./constants/weight.js";

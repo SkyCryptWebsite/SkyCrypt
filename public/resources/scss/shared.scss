@@ -2861,6 +2861,13 @@ inventory-view {
   padding-bottom: 30px;
 }
 
+.narrow-info-container .narrow-info-flexsb {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
 .slayer {
   display: flex;
   flex-direction: column;
@@ -3964,10 +3971,6 @@ body {
 .icomoon-dungeon-stars {
   font-size: 0.8em;
   letter-spacing: 3px;
-}
-
-.stat-error {
-  color: var(--§4);
 }
 
 .forge-item {

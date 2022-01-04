@@ -104,6 +104,7 @@ export const talisman_upgrades = {
   ENDER_ARTIFACT: ["ENDER_RELIC"],
   POWER_TALISMAN: ["POWER_RING", "POWER_ARTIFACT"],
   POWER_RING: ["POWER_ARTIFACT"],
+  BINGO_TALISMAN: ["BINGO_RING"],
 };
 
 export const talisman_duplicates = {
@@ -649,5 +650,15 @@ export const talismans = {
     name: "Nether Artifact",
     rarity: "epic",
     texture: "/head/d83571ff589f1a59bb02b80800fc736116e27c3dcf9efebede8cf1fdde",
+  },
+  BINGO_TALISMAN: {
+    name: "Bingo Talisman",
+    rarity: "common",
+    texture: "/head/2f25944b7465ff4586a341f881f488b6f9d4b3ffc100f50a77087075b3ceb1b",
+  },
+  BINGO_RING: {
+    name: "Bingo Ring",
+    rarity: "uncommon",
+    texture: "/head/22f2499ab4cfc97e65f0fa9fe63cc606707a4ae96af407846b1b5354f3fad99",
   },
 };

@@ -146,6 +146,8 @@ export const special_enchants = [
   "Dragon Hunter V",
   "Feather Falling 10",
   "Feather Falling X",
+  "Feather Falling 20",
+  "Feather Falling XX",
   "Infinite Quiver 10",
   "Infinite Quiver X",
   "Thorns 6",
@@ -291,6 +293,42 @@ export const mob_names = {
   master_sadan_statue: "Master Terracotta",
   master_tentaclees: "Master Fels",
   maxor: "Necron",
+};
+
+export const raceObjectiveToStatName = {
+  complete_the_end_race: "end_race_best_time",
+  complete_the_woods_race: "foraging_race_best_time",
+  complete_the_chicken_race: "chicken_race_best_time_2",
+  complete_the_giant_mushroom_anything_with_return_race: "dungeon_hub_giant_mushroom_anything_with_return_best_time",
+  complete_the_giant_mushroom_no_pearls_with_return_race: "dungeon_hub_giant_mushroom_no_pearls_with_return_best_time",
+  complete_the_giant_mushroom_no_abilities_with_return_race:
+    "dungeon_hub_giant_mushroom_no_abilities_with_return_best_time",
+  complete_the_giant_mushroom_nothing_with_return_race: "dungeon_hub_giant_mushroom_nothing_with_return_best_time",
+  complete_the_precursor_ruins_anything_with_return_race: "dungeon_hub_precursor_ruins_anything_with_return_best_time",
+  complete_the_precursor_ruins_no_pearls_with_return_race:
+    "dungeon_hub_precursor_ruins_no_pearls_with_return_best_time",
+  complete_the_precursor_ruins_no_abilities_with_return_race:
+    "dungeon_hub_precursor_ruins_no_abilities_with_return_best_time",
+  complete_the_precursor_ruins_nothing_with_return_race: "dungeon_hub_precursor_ruins_nothing_with_return_best_time",
+  complete_the_crystal_core_anything_with_return_race: "dungeon_hub_crystal_core_anything_with_return_best_time",
+  complete_the_crystal_core_no_pearls_with_return_race: "dungeon_hub_crystal_core_no_pearls_with_return_best_time",
+  complete_the_crystal_core_no_abilities_with_return_race:
+    "dungeon_hub_crystal_core_no_abilities_with_return_best_time",
+  complete_the_crystal_core_nothing_with_return_race: "dungeon_hub_crystal_core_nothing_with_return_best_time",
+  complete_the_giant_mushroom_anything_no_return_race: "dungeon_hub_giant_mushroom_anything_no_return_best_time",
+  complete_the_giant_mushroom_no_pearls_no_return_race: "dungeon_hub_giant_mushroom_no_pearls_no_return_best_time",
+  complete_the_giant_mushroom_no_abilities_no_return_race:
+    "dungeon_hub_giant_mushroom_no_abilities_no_return_best_time",
+  complete_the_giant_mushroom_nothing_no_return_race: "dungeon_hub_giant_mushroom_nothing_no_return_best_time",
+  complete_the_precursor_ruins_anything_no_return_race: "dungeon_hub_precursor_ruins_anything_no_return_best_time",
+  complete_the_precursor_ruins_no_pearls_no_return_race: "dungeon_hub_precursor_ruins_no_pearls_no_return_best_time",
+  complete_the_precursor_ruins_no_abilities_no_return_race:
+    "dungeon_hub_precursor_ruins_no_abilities_no_return_best_time",
+  complete_the_precursor_ruins_nothing_no_return_race: "dungeon_hub_precursor_ruins_nothing_no_return_best_time",
+  complete_the_crystal_core_anything_no_return_race: "dungeon_hub_crystal_core_anything_no_return_best_time",
+  complete_the_crystal_core_no_pearls_no_return_race: "dungeon_hub_crystal_core_no_pearls_no_return_best_time",
+  complete_the_crystal_core_no_abilities_no_return_race: "dungeon_hub_crystal_core_no_abilities_no_return_best_time",
+  complete_the_crystal_core_nothing_no_return_race: "dungeon_hub_crystal_core_nothing_no_return_best_time",
 };
 
 export const area_names = {

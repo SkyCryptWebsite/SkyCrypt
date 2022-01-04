@@ -147,6 +147,18 @@ interface Backpack extends Item {
   containsItems: Item[];
 }
 
+interface Level {
+  xp: number;
+  level: number;
+  maxLevel: number;
+  xpCurrent: number;
+  xpForNext: number;
+  progress: number;
+  levelCap: number;
+  uncappedLevel: number;
+  levelWithProgress: number;
+}
+
 declare namespace constants {
   const max_favorites: number;
   const special_enchants: string[];
@@ -230,33 +242,13 @@ declare const calculated: SkyCryptPlayer & {
       }[];
       highest_floor: string;
       id: string;
-      level: {
-        level: number;
-        levelCap: number;
-        levelWithProgress: number;
-        maxLevel: number;
-        progress: number;
-        uncappedLevel: number;
-        xp: number;
-        xpCurrent: number;
-        xpForNext: number;
-      };
+      level: Level;
       visited: boolean;
     };
     classes: {
       [key: string]: {
         current: boolean;
-        experience: {
-          level: number;
-          levelCap: number;
-          levelWithProgress: number;
-          maxLevel: number;
-          progress: number;
-          uncappedLevel: 32;
-          xp: number;
-          xpCurrent: number;
-          xpForNext: number;
-        };
+        experience: Level;
       };
     };
     dungeonsWeight: number;
@@ -308,15 +300,7 @@ declare const calculated: SkyCryptPlayer & {
       }[];
       highest_floor: string;
       id: string;
-      level: {
-        level: number;
-        level_cap: number;
-        progress: number;
-        uncapped_level: number;
-        xp: number;
-        xpCurrent: number;
-        xpForNext: number;
-      };
+      level: Level;
       visited: boolean;
     };
     secrets_found: number;
@@ -422,18 +406,7 @@ declare const calculated: SkyCryptPlayer & {
     [key: string]: number;
   };
   levels: {
-    [key: string]: {
-      level: number;
-      levelCap: number;
-      levelWithProgress: number;
-      maxLevel: number;
-      progress: number;
-      rank: number;
-      uncappedLevel: number;
-      xp: number;
-      xpCurrent: number;
-      xpForNext: number | null;
-    };
+    [key: string]: Level;
   };
   members: SkyCryptPlayer[];
   mining: {
