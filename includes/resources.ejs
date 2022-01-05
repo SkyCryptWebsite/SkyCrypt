@@ -49,7 +49,7 @@
   <script defer type="module" src="/resources/js/<%- fileNameMap['common-defer'] %>"></script>
 
   <script> const page = "<%- page %>"; </script>
-  <script> const extra = JSON.parse(`<%- JSON.stringify(extra).replace(/\\/g, '\\\\') %>`); </script>
+  <script> const extra = JSON.parse(`<%- JSON.stringify(extra).replaceAll('\\', '\\\\') %>`); </script>
 
   <script src="/resources/js/<%- fileNameMap['common'] %>"></script>
 

@@ -502,7 +502,7 @@ export async function getTexture(item, ignoreId = false, packIds) {
     return null;
   }
 
-  outputTexture.path = path.relative(path.resolve(__dirname, "..", "public"), outputTexture.path).replace(/[\\]/g, "/");
+  outputTexture.path = path.relative(path.resolve(__dirname, "..", "public"), outputTexture.path).replaceAll("\\", "/");
   process.send({ type: "used_pack", id: outputTexture?.pack.config.id });
 
   return outputTexture;
