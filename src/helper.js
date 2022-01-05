@@ -86,9 +86,7 @@ export function setPath(obj, value, ...keys) {
   let loc = obj || {};
 
   for (i = 0; i < keys.length - 1; i++) {
-    if (loc[keys[i]] == undefined) {
-      loc[keys[i]] = {};
-    }
+    loc[keys[i]] ??= {};
 
     loc = loc[keys[i]];
   }
@@ -729,9 +727,7 @@ export async function getRank(uuid, db, cacheOnly = false) {
     hypixelPlayer = await _updateRank;
   }
 
-  if (hypixelPlayer == undefined) {
-    hypixelPlayer = { achievements: {} };
-  }
+  hypixelPlayer ??= { achievements: {} };
 
   return hypixelPlayer;
 }

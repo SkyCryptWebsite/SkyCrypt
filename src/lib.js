@@ -2986,9 +2986,7 @@ export async function getMissingTalismans(talismans) {
       texture_path: null,
     };
 
-    if (object.name == null) {
-      object.name = talisman;
-    }
+    object.name ??= talisman;
 
     // MAIN TALISMANS
     if (constants.talismans[talisman] != null) {
