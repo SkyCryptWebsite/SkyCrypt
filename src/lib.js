@@ -170,7 +170,7 @@ export function getLevelByXp(xp, extra = {}) {
   /** the maximum level that any player can achieve (used for gold progress bars) */
   const maxLevel = constants.maxed_skill_caps[extra.skill] ?? levelCap;
 
-  /** the level ignoring the cap and using only the table*/
+  /** the level ignoring the cap and using only the table */
   let uncappedLevel = 0;
 
   /** the amount of xp over the amount required for the level (used for calculation progress to next level) */
@@ -202,6 +202,9 @@ export function getLevelByXp(xp, extra = {}) {
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
   const levelWithProgress = level + progress;
 
+  /** a floating point value representing the current level ignoring the in-game unlockable caps for example if you are half way to level 5 it would be 4.5 */
+  const unlockableLevelWithProgress = extra.cap ? Math.min(uncappedLevel + progress, maxLevel) : levelWithProgress;
+
   return {
     xp,
     level,
@@ -212,6 +215,7 @@ export function getLevelByXp(xp, extra = {}) {
     levelCap,
     uncappedLevel,
     levelWithProgress,
+    unlockableLevelWithProgress,
   };
 }
 
@@ -2512,6 +2516,7 @@ export const getStats = async (
   const misc = {};
 
   misc.milestones = {};
+  misc.objectives = {};
   misc.races = {};
   misc.gifts = {};
   misc.winter = {};
@@ -2570,6 +2575,22 @@ export const getStats = async (
   for (const key of auctions_buy) {
     if (key in userProfile.stats) {
       misc.auctions_buy[key.replace("auctions_", "")] = userProfile.stats[key];
+    }
+  }
+
+  misc.objectives.completedRaces = [];
+
+  for (const key in userProfile.objectives) {
+    if (key.includes("complete_the_")) {
+      const isCompleted = userProfile.objectives[key].status == "COMPLETE";
+      const tierNumber = parseInt("" + key.charAt(key.length - 1)) ?? 0;
+      const raceName = constants.raceObjectiveToStatName[key.substring(0, key.length - 2)];
+
+      if (tierNumber == 1 && !isCompleted) {
+        misc.objectives.completedRaces[raceName] = 0;
+      } else if (isCompleted && tierNumber > (misc.objectives.completedRaces[raceName] ?? 0)) {
+        misc.objectives.completedRaces[raceName] = tierNumber;
+      }
     }
   }
 
