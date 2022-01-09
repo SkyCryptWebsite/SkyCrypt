@@ -217,7 +217,7 @@ export const dungeons = {
           required: 500,
           tier: 5,
         },
-        shadow_assasin_chestplate: {
+        shadow_chestplate: {
           name: "Shadow Assasin Chestplate",
           required: 750,
           tier: 6,
