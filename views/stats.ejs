@@ -2126,18 +2126,22 @@ const metaDescription = getMetaDescription()
           <% } %>
           </div>
         <% } %>
+
+        <% if (calculated.dungeons.essence) { %>
+          <p class="stat-sub-header">Essence</p>
+          <div class="collections">
+          <% for (const [key, value] of Object.entries(calculated.dungeons.essence)) { %>
+            <div class="chip">
+              <div class="chip-icon-wrapper"><div style="background-image:url(<%= constants.dungeons.essence[key].head %>)" class="item-icon custom-icon"></div></div>
+              <div class="chip-text">
+                <div class="collection-name"><span class="stat-name"><%= constants.dungeons.essence[key].name %></span></div>
+                <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= value.toLocaleString() %></span></div>
+              </div>
+            </div>
+          <% } %>
+          </div>
+        <% } %>
       <% } %>
-      </div>
-      <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/1e5574a4ef94ef4ca300d02f644d98be07dbfba7df78808e8a9a021b067d996d)"></div></div><span>essence</span></div>
-          <p class="stat-raw-values stat-essence">
-            <div class="floor-icon" style="background-image: url(/head/c4db4adfa9bf48ff5d41707ae34ea78bd2371659fcd8cd8934749af4cce9b)"></div> <span class="stat-name">Wither: </span><span class="stat-value"><%= calculated.dungeons.essence.wither %></span><br>
-            <div class="floor-icon" style="background-image: url(/head/16617131250e578333a441fdf4a5b8c62163640a9d06cd67db89031d03accf6)"></div> <span class="stat-name">Spider: </span><span class="stat-value"><%= calculated.dungeons.essence.spider %></span><br>
-            <div class="floor-icon" style="background-image: url(/head/71d7c816fc8c636d7f50a93a0ba7aaeff06c96a561645e9eb1bef391655c531)"></div> <span class="stat-name">Undead: </span><span class="stat-value"><%= calculated.dungeons.essence.undead%></span><br>
-            <div class="floor-icon" style="background-image: url(/head/33ff416aa8bec1665b92701fbe68a4effff3d06ed9147454fa77712dd6079b33)"></div> <span class="stat-name">Dragon: </span><span class="stat-value"><%= calculated.dungeons.essence.dragon %></span><br>
-            <div class="floor-icon" style="background-image: url(/head/8816606260779b23ed15f87c56c932240db745f86f683d1f4deb83a4a125fa7b)"></div> <span class="stat-name">Gold: </span><span class="stat-value"><%= calculated.dungeons.essence.gold %></span><br>
-            <div class="floor-icon" style="background-image: url(/head/964f25cfff754f287a9838d8efe03998073c22df7a9d3025c425e3ed7ff52c20)"></div> <span class="stat-name">Diamond: </span><span class="stat-value"><%= calculated.dungeons.essence.diamond %></span><br>
-            <div class="floor-icon" style="background-image: url(/head/ddba642efffa13ec3730eafc5914ab68115c1f998803f74452e2e0cd26af0b8)"></div> <span class="stat-name">Ice: </span><span class="stat-value"><%= calculated.dungeons.essence.ice %></span><br>
-          </p>
       </div>
     </div>
     <div class="stat-container stat-slayer">
