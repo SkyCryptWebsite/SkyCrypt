@@ -1857,6 +1857,13 @@ inventory-view {
   padding-bottom: 30px;
 }
 
+.narrow-info-container .narrow-info-flexsb {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
 .slayer {
   display: flex;
   flex-direction: column;

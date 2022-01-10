@@ -455,6 +455,16 @@ export function titleCase(string) {
 }
 
 /**
+ * returns a string with 4 dots "●" for completed tiers and "○" for incomplete tiers
+ * @param {number} completeTiers
+ * @returns {string} 4 dots
+ */
+export function renderRaceTier(completeTiers) {
+  const incompleteTiers = Math.max(0, 4 - completeTiers);
+  return "●".repeat(completeTiers) + "○".repeat(incompleteTiers);
+}
+
+/**
  * checks whether a string should be proceeded by a or by an
  * @param {string} string
  * @returns {"a"|"an"}
