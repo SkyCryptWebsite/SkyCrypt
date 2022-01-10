@@ -100,7 +100,7 @@ const cachePath = path.resolve(__dirname, "../cache");
 await fs.ensureDir(cachePath);
 
 if (credentials.hypixel_api_key.length == 0) {
-  throw "Please enter a valid Hypixel API Key. Join mc.hypixel.net and enter /api to obtain one.";
+  throw new Error("Please enter a valid Hypixel API Key. Join mc.hypixel.net and enter /api to obtain one.");
 }
 
 let isFoolsDay;
@@ -380,7 +380,7 @@ app.all("/cape/:username", cors(), async (req, res) => {
     const lastUpdated = moment(optifineCape.headers["last-modified"]);
 
     if (lastUpdated.unix() > fileStats.mtime) {
-      throw "optifine cape changed";
+      throw new Error("optifine cape changed");
     } else {
       file = await fs.readFile(filename);
     }
