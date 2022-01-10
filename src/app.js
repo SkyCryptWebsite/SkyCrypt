@@ -215,10 +215,6 @@ async function getExtra(page = null, favoriteUUIDs = [], cacheOnly) {
   output.isFoolsDay = isFoolsDay;
   output.cacheOnly = cacheOnly;
 
-  if ("recaptcha_site_key" in credentials) {
-    output.recaptcha_site_key = credentials.recaptcha_site_key;
-  }
-
   const patreonEntry = await db.collection("donations").findOne({ type: "patreon" });
 
   if (patreonEntry != null) {
