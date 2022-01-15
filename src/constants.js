@@ -10,6 +10,7 @@ export * from "./constants/minions.js";
 export * from "./constants/misc.js";
 export * from "./constants/pet-stats.js";
 export * from "./constants/pets.js";
+export * from "./constants/promotions.js";
 export * from "./constants/random-emoji.js";
 export * from "./constants/skills.js";
 export * from "./constants/skins-animations.js";

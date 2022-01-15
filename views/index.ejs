@@ -51,19 +51,10 @@
           </div>
         </div>
       </div>
-      <a href="https://discord.gg/cNgADv2kEQ" target="_blank" rel="noreferrer" class="external-app form-banner">
-        <div class="external-app-icon monochrome" style="background-image: url(/resources/img/icons/discord.svg?v3)"></div>
-        <div class="external-app-name"><span class="grey-text">SkyCrypt's</span> Discord</div>
-        <div class="external-app-description">Announcements, Community, Bug Reports, Feature Requests, Support</div>
-        <%
-          const lessPlayedGames = [
-            'Smash Heroes',
-            'Turbo Kart Racers',
-            'Quakecraft',
-            'Warlords'
-          ]
-        %>
-        <div class="external-app-description try-also">Also try out <%= lessPlayedGames[Math.floor(Math.random() * lessPlayedGames.length)] %>, is a fun game!</div>
+      <a href="<%= promotion.url %>" target="_blank" rel="noreferrer" class="external-app form-banner">
+        <div class="external-app-icon monochrome" style="background-image: url(<%= promotion.image %>)"></div>
+        <div class="external-app-name"><%- promotion.title %></div>
+        <div class="external-app-description"><%- promotion.description %></div>
       </a>
       <% if(extra.favorites?.length){
       for(let profile of extra.favorites){
