@@ -1,5 +1,5 @@
 /**
- * @type {{title:string, description:string, image:string, url: string}[]}
+ * @type {{title: string, description: string, image: string, url: string}[]}
  */
 export const promotions = [
   {
