@@ -2,7 +2,6 @@
 await import("./scripts/init-collections.js");
 
 await Promise.all([
-  import("./donations/patreon.js"),
   import("./scripts/cap-leaderboards.js"),
   import("./scripts/clear-favorite-cache.js"),
   import("./scripts/update-bazaar.js"),

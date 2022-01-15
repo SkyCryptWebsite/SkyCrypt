@@ -36,7 +36,6 @@ import cookieParser from "cookie-parser";
 
 import api from "./api.js";
 import apiv2 from "./apiv2.js";
-import kofi from "./donations/kofi.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -159,7 +158,6 @@ app.use(
 
 api(app, db);
 apiv2(app, db);
-kofi(app, db);
 
 function parseFavorites(cookie) {
   return cookie?.split(",").filter((uuid) => /^[0-9a-f]{32}$/.test(uuid)) || [];
@@ -217,12 +215,6 @@ async function getExtra(page = null, favoriteUUIDs = [], cacheOnly) {
 
   if ("recaptcha_site_key" in credentials) {
     output.recaptcha_site_key = credentials.recaptcha_site_key;
-  }
-
-  const patreonEntry = await db.collection("donations").findOne({ type: "patreon" });
-
-  if (patreonEntry != null) {
-    output.donations = { patreon: patreonEntry.amount || 0 };
   }
 
   if (page === "index") {
