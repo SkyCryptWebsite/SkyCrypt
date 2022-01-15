@@ -423,41 +423,6 @@ header > * {
   }
 }
 
-.social-button.patreon,
-.social-button.ko-fi {
-  padding-left: 31px;
-  background-color: rgba(var(--background-rgb), 0.2);
-  color: rgba(var(--text-rgb), 0.9);
-  background-size: 26px 26px;
-  text-decoration: none;
-  text-transform: none;
-  font-weight: 600;
-  &:hover {
-    background-color: rgba(var(--background-rgb), 0.1);
-  }
-}
-
-.social-button .social-icon {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 26px;
-  height: 26px;
-  background-color: rgba(var(--background-rgb), 0.15);
-  border-radius: 50%;
-  background-size: 18px 18px;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.social-button.patreon .social-icon {
-  background-image: url(/resources/img/icons/patreon.png);
-}
-
-.social-button.ko-fi .social-icon {
-  background-image: url(/resources/img/icons/kofi.png);
-}
-
 header .lookup-player {
   position: relative;
   flex-grow: 1;
@@ -3695,15 +3660,6 @@ body {
 
   .sea-creature-name {
     white-space: break-spaces;
-  }
-
-  .social-button.patreon {
-    padding-left: 26px;
-    padding-right: 0;
-
-    span {
-      display: none;
-    }
   }
 }
 
