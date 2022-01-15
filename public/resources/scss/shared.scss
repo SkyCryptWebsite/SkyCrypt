@@ -893,8 +893,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
 #info-box {
   left: max(20px, env(safe-area-inset-left, 0));
-  width: calc(30vw - 40px);
-  min-width: 440px;
+  width: 480px;
   padding: 14px 30px;
   line-height: initial;
   --clip-center: 120px 0;
