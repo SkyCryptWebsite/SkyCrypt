@@ -14,7 +14,7 @@ Post your error log, either in a code block or with a paste service.
 
 **Developer Tools**
 
-- Node.js version: [e.g. v14, node v15]
+- Node.js version: [e.g. v16, node v18]
 - OS: [e.g. Windows, Raspberry Pi OS]
 
 **Additional context**

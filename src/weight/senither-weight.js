@@ -204,16 +204,17 @@ export function calculateSenitherWeight(profile) {
     },
   };
 
+  // skill
   for (let skillName in profile.levels) {
     let data = profile.levels[skillName];
 
-    let sw = calcSkillWeight(skillWeight[skillName], data.levelWithProgress, data.xp);
+    let sw = calcSkillWeight(skillWeight[skillName], data.unlockableLevelWithProgress, data.xp);
 
     output.skill.skills[skillName] = sw.weight + sw.weight_overflow;
     output.skill.total += output.skill.skills[skillName];
   }
 
-  //dungeon weight
+  // dungeon weight
   const dungeons = profile.dungeons;
 
   if (dungeons?.catacombs?.visited) {
@@ -225,7 +226,7 @@ export function calculateSenitherWeight(profile) {
     output.dungeon.dungeons.catacombs = dungeonsWeight;
   }
 
-  //dungeon classes
+  // dungeon classes
   if (dungeons.classes) {
     for (const className of Object.keys(dungeons.classes)) {
       const dungeonClass = dungeons.classes[className];
@@ -240,6 +241,7 @@ export function calculateSenitherWeight(profile) {
     }
   }
 
+  // slayer
   for (let slayerName in profile.slayers) {
     let data = profile.slayers[slayerName];
     let sw = calcSlayerWeight(slayerName, data.level.xp);
@@ -252,6 +254,5 @@ export function calculateSenitherWeight(profile) {
     .filter((x) => x >= 0)
     .reduce((total, value) => total + value);
 
-  //console.log(output);
   return output;
 }

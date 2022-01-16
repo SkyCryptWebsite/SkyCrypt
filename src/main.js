@@ -1,6 +1,6 @@
 import cluster from "cluster";
 
-if (cluster.isMaster) {
+if (cluster.isPrimary) {
   await import("./master.js");
 
   const os = await import("os");

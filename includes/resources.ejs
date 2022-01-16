@@ -18,10 +18,8 @@
   <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone8Plus.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)">
   <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone8.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
   <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
-  <% if(page == 'index'){ %>
-    <link rel="stylesheet" href="/resources/css/index.css?<%- fileHashes.css['index.css'] %> ">
-  <% } %>
   <link rel="stylesheet" href="/resources/css/shared.css?<%- fileHashes.css['shared.css'] %> ">
+  <link rel="stylesheet" href="/resources/css/<%- page + ".css?" + fileHashes.css[page + ".css"] %> ">
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-185827357-1"></script>
@@ -49,7 +47,7 @@
   <script defer type="module" src="/resources/js/<%- fileNameMap['common-defer'] %>"></script>
 
   <script> const page = "<%- page %>"; </script>
-  <script> const extra = JSON.parse(`<%- JSON.stringify(extra).replace(/\\/g, '\\\\') %>`); </script>
+  <script> const extra = JSON.parse(`<%- JSON.stringify(extra).replaceAll('\\', '\\\\') %>`); </script>
 
   <script src="/resources/js/<%- fileNameMap['common'] %>"></script>
 

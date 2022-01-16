@@ -166,7 +166,7 @@ export default (app, db) => {
       for await (const product of db.collection("bazaar").find()) {
         const itemInfo = productInfo[product.productId];
 
-        const productName = itemInfo ? itemInfo.name : helper.titleCase(product.productId.replace(/(_+)/g, " "));
+        const productName = itemInfo ? itemInfo.name : helper.titleCase(product.productId.replaceAll(/(_+)/g, " "));
 
         output[product.productId] = {
           id: product.productId,

@@ -216,7 +216,7 @@ function getPrettyName(statName, shorten = false) {
     case 'sea_creature_chance':
       return shorten ? '<abbr title="Sea Creature">SC</abbr> Chance' : 'Sea Creature Chance';
     default:
-      return helper.titleCase(statName.replace(/\_/g, " "));
+      return helper.titleCase(statName.replaceAll("_", " "));
   }
 }
 
@@ -270,7 +270,7 @@ function getBonus(stats, prefix) {
     if(stats[stat] == 0)
       continue;
     %>
-    <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replace(/\_/g, "-") %>"><%= stats[stat].toLocaleString() %><%= statSuffix[stat] %> <abbr title="<%= getPrettyName(stat) %>"><%= statShort[stat] %></abbr></span>
+    <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replaceAll("_", "-") %>"><%= stats[stat].toLocaleString() %><%= statSuffix[stat] %> <abbr title="<%= getPrettyName(stat) %>"><%= statShort[stat] %></abbr></span>
     <% if(index < statsNotZero.length - 1){ %><span class="bonus-divider" role="separator">//</span><% } %>
   <% }
 }
@@ -356,7 +356,7 @@ function getEnrichments(accessories) {
     for (const [enrichment, amount] of Object.entries(enrichmentCounts)) {
       const stat = enrichmentToStatName(enrichment)
       %>
-      <span class="stat-value color-<%= stat.replace(/\_/g, "-") %>">
+      <span class="stat-value color-<%= stat.replaceAll("_", "-") %>">
         <%= amount %>× <%= formatEnrichment(enrichment.toLowerCase()) %>
       </span>
       <%
@@ -443,7 +443,7 @@ function skill_component(skill, icon, level, extra = {}) {
 function stat_component(stat) {
   const bonusStats = stats[stat.name] - calculated.base_stats[stat.name]
   %>
-  <div data-stat="<%= stat.name %>" class="basic-stat stat-<%= stat.name.replace(/\_/g, "-") %>">
+  <div data-stat="<%= stat.name %>" class="basic-stat stat-<%= stat.name.replaceAll("_", "-") %>">
     <span data-tippy-content="
     <span class='stat-name'>Base <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= calculated.base_stats[stat.name].toLocaleString() %></span>
     <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= stat.baseExplanation %><% } %></div><br>
@@ -2715,15 +2715,15 @@ const metaDescription = getMetaDescription()
   </main>
   <%- include('../includes/footer'); %>
   <script>
-    const items = JSON.parse(`<%- JSON.stringify(items).replace(/\\/g, '\\\\') %>`);
-    const calculated = JSON.parse(`<%- JSON.stringify(calculated).replace(/\\/g, '\\\\') %>`);
+    const items = JSON.parse(`<%- JSON.stringify(items).replaceAll('\\', '\\\\') %>`);
+    const calculated = JSON.parse(`<%- JSON.stringify(calculated).replaceAll('\\', '\\\\') %>`);
     <%
       const clientConstants = {
         special_enchants: constants.special_enchants,
         max_favorites: constants.max_favorites,
       }
     %>
-    const constants = JSON.parse(`<%- JSON.stringify(clientConstants).replace(/\\/g, '\\\\') %>`);
+    const constants = JSON.parse(`<%- JSON.stringify(clientConstants).replaceAll('\\', '\\\\') %>`);
   </script>
 </body>
 </html>
