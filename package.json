@@ -69,7 +69,7 @@
     "moment-timezone": "^0.5.34",
     "mongo-sanitize": "^1.1.0",
     "mongodb": "^4.3.0",
-    "prismarine-nbt": "^2.0.0",
+    "prismarine-nbt": "^2.1.0",
     "progress": "^2.0.3",
     "relaxed-json": "^1.0.3",
     "sharp": "^0.29.3",
