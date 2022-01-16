@@ -11,7 +11,7 @@ export const promotions = [
   {
     title: '<span class="grey-text">SkyCrypt\'s</span> Patreon',
     description: "Help keep SkyCrypt ad free by donating",
-    image: "/resources/img/icons/patreon.png",
+    image: "/resources/img/icons/patreon.webp",
     url: "https://www.patreon.com/shiiyu",
   },
 ];
