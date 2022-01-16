@@ -453,12 +453,18 @@ app.all("/item(.gif)?/:skyblockId?", cors(), async (req, res) => {
 app.all("/leather/:type/:color", cors(), async (req, res) => {
   const { type, color } = req.params;
 
-  if (!["boots", "leggings", "chestplate", "helmet"].includes(type)) {
-    throw new Error("invalid armor type: " + type);
-  }
+  try {
+    if (!["boots", "leggings", "chestplate", "helmet"].includes(type)) {
+      throw new Error("invalid armor type: " + type);
+    }
 
-  if (!/^[0-9a-fA-F]{6}$/.test(color)) {
-    throw new Error("invalid color: #" + color);
+    if (!/^[0-9a-fA-F]{6}$/.test(color)) {
+      throw new Error("invalid color: #" + color);
+    }
+  } catch (error) {
+    res.status(400);
+    res.send(error.message);
+    return;
   }
 
   const filename = `leather_${type}_${color}.png`;
@@ -485,12 +491,18 @@ app.all("/leather/:type/:color", cors(), async (req, res) => {
 app.all("/potion/:type/:color", cors(), async (req, res) => {
   const { type, color } = req.params;
 
-  if (!["normal", "splash"].includes(type)) {
-    throw new Error("invalid armor type: " + type);
-  }
+  try {
+    if (!["normal", "splash"].includes(type)) {
+      throw new Error("invalid armor type: " + type);
+    }
 
-  if (!/^[0-9a-fA-F]{6}$/.test(color)) {
-    throw new Error("invalid color: #" + color);
+    if (!/^[0-9a-fA-F]{6}$/.test(color)) {
+      throw new Error("invalid color: #" + color);
+    }
+  } catch (error) {
+    res.status(400);
+    res.send(error.message);
+    return;
   }
 
   const filename = `potion_${type}_${color}.png`;
