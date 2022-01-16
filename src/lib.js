@@ -3388,7 +3388,7 @@ export function getHotmItems(userProfile, packs) {
   // Check for missing node classes
   for (const nodeId in nodes) {
     if (constants.hotm.nodes[nodeId] == undefined) {
-      throw `Missing Heart of the Mountain node: ${nodeId}`;
+      throw new Error(`Missing Heart of the Mountain node: ${nodeId}`);
     }
   }
 
@@ -3680,17 +3680,17 @@ export const getProfile = async (
       const { data } = response;
 
       if (!data.success) {
-        throw "Request to Hypixel API failed. Please try again!";
+        throw new Error("Request to Hypixel API failed. Please try again!");
       }
 
       if (data.profiles == null) {
-        throw "Player has no SkyBlock profiles.";
+        throw new Error("Player has no SkyBlock profiles.");
       }
 
       allSkyBlockProfiles = data.profiles;
     } catch (e) {
       if (e?.response?.data?.cause != undefined) {
-        throw `Hypixel API Error: ${e.response.data.cause}.`;
+        throw new Error(`Hypixel API Error: ${e.response.data.cause}.`);
       }
 
       throw e;
@@ -3698,7 +3698,7 @@ export const getProfile = async (
   }
 
   if (allSkyBlockProfiles.length == 0) {
-    throw "Player has no SkyBlock profiles.";
+    throw new Error("Player has no SkyBlock profiles.");
   }
 
   for (const profile of allSkyBlockProfiles) {
@@ -3730,7 +3730,7 @@ export const getProfile = async (
           );
 
           if (!response.data.success) {
-            throw "api request failed";
+            throw new Error("api request failed");
           }
 
           return response.data.profile;
@@ -3764,7 +3764,7 @@ export const getProfile = async (
 
     if (memberCount == 0) {
       if (paramProfile) {
-        throw "Uh oh, this SkyBlock profile has no players.";
+        throw new Error("Uh oh, this SkyBlock profile has no players.");
       }
 
       continue;
@@ -3774,7 +3774,7 @@ export const getProfile = async (
   }
 
   if (profiles.length == 0) {
-    throw "No data returned by Hypixel API, please try again!";
+    throw new Error("No data returned by Hypixel API, please try again!");
   }
 
   let highest = 0;
@@ -3833,7 +3833,7 @@ export const getProfile = async (
   }
 
   if (!profile) {
-    throw "User not found in selected profile. This is probably due to a declined co-op invite.";
+    throw new Error("User not found in selected profile. This is probably due to a declined co-op invite.");
   }
 
   const userProfile = profile.members[paramPlayer];

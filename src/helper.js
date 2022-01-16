@@ -213,7 +213,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
         if (isUuid) {
           return { uuid, display_name: uuid, skin_data };
         } else {
-          throw e?.response?.data?.reason ?? "Failed resolving username.";
+          throw new Error(e?.response?.data?.reason ?? "Failed resolving username.");
         }
       }
     }
@@ -851,7 +851,7 @@ export function parseItemGems(gems, rarity) {
         gem_tier: value,
       });
     } else {
-      throw `Error! Unknwon gemstone slot key: ${key}`;
+      throw new Error(`Error! Unknown gemstone slot key: ${key}`);
     }
   }
 
