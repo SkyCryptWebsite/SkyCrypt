@@ -26,7 +26,7 @@
   <div data-tippy-content="Supporting LGBTQ+ rights all around the year! ❤️<br><br>Click for a surprise. :)" class="pride-flag"></div>
   <script>document.querySelector(".pride-flag").classList.add(localStorage.getItem("currentFlag") ?? "logo");</script>
   <a href="/" id="site_name">SkyCrypt</a>
-  <button class="social-button expander" id="info-button" aria-expanded="false">
+  <button class="header-button expander" id="info-button" aria-expanded="false">
     About
   </button>
   <div id="info-box" class="expandable">
@@ -72,7 +72,7 @@
     </div>
   </div>
 
-  <a href="/api" style="text-decoration: none;" class="social-button" id="api_button">API</a>
+  <a href="/api" style="text-decoration: none;" class="header-button" id="api_button">API</a>
   <form class="lookup-player">
     <input name="ign" type="search" enterkeyhint="go" placeholder="Enter username" aria-label="username" required>
     <button type="submit">
