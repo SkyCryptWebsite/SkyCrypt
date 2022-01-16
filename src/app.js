@@ -238,8 +238,8 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
 
   let paramPlayer = req.params.player
     .toLowerCase()
-    .replace(/[ +]/g, "_")
-    .replace(/[^a-z\d\-_:]/g, "");
+    .replaceAll(/[ +]/g, "_")
+    .replaceAll(/[^a-z\d\-_:]/g, "");
   let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
 
   const cacheOnly = req.query.cache === "true" || forceCacheOnly;

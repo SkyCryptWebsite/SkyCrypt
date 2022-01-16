@@ -86,9 +86,7 @@ export function setPath(obj, value, ...keys) {
   let loc = obj || {};
 
   for (i = 0; i < keys.length - 1; i++) {
-    if (loc[keys[i]] == undefined) {
-      loc[keys[i]] = {};
-    }
+    loc[keys[i]] ??= {};
 
     loc = loc[keys[i]];
   }
@@ -103,7 +101,7 @@ export function getId(item) {
 export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
   let user = null;
 
-  uuid = uuid.replace(/-/g, "");
+  uuid = uuid.replaceAll("-", "");
 
   const isUuid = uuid.length == 32;
 
@@ -148,7 +146,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
         try {
           const { data } = response;
 
-          data.id = data.uuid.replace(/-/g, "");
+          data.id = data.uuid.replaceAll("-", "");
 
           let updateDoc = {
             username: data.username,
@@ -197,7 +195,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
       try {
         let { data } = await profileRequest;
 
-        data.id = data.uuid.replace(/-/g, "");
+        data.id = data.uuid.replaceAll("-", "");
 
         if (data.textures?.skin != undefined) {
           skin_data.skinurl = data.textures.skin.url;
@@ -423,7 +421,7 @@ export function renderLore(text) {
  * @returns {string} lore without color codes
  */
 export function getRawLore(text) {
-  return text.replace(/§[0-9a-fk-or]/g, "");
+  return text.replaceAll(/§[0-9a-fk-or]/g, "");
 }
 
 /**
@@ -601,7 +599,7 @@ export function parseRank(player) {
   };
 
   const rankName = player.prefix
-    ? getRawLore(player.prefix).replace(/\[|\]/g, "")
+    ? getRawLore(player.prefix).replaceAll(/\[|\]/g, "")
     : player.rank && player.rank != "NORMAL"
     ? player.rank
     : player.monthlyPackageRank && player.monthlyPackageRank != "NONE"
@@ -729,9 +727,7 @@ export async function getRank(uuid, db, cacheOnly = false) {
     hypixelPlayer = await _updateRank;
   }
 
-  if (hypixelPlayer == undefined) {
-    hypixelPlayer = { achievements: {} };
-  }
+  hypixelPlayer ??= { achievements: {} };
 
   return hypixelPlayer;
 }
@@ -1020,7 +1016,7 @@ export function calcHotmTokens(hotmTier, potmTier) {
  * @returns {string}
  */
 export function removeFormatting(string) {
-  return string.replace(/§[0-9a-z]/g, "");
+  return string.replaceAll(/§[0-9a-z]/g, "");
 }
 
 /**

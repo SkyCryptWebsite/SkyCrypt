@@ -470,7 +470,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     }
 
     if (item.tag?.ExtraAttributes?.spawnedFor != undefined) {
-      item.extra.spawned_for = item.tag.ExtraAttributes.spawnedFor.replace(/-/g, "");
+      item.extra.spawned_for = item.tag.ExtraAttributes.spawnedFor.replaceAll("-", "");
     }
 
     if (item.tag?.ExtraAttributes?.baseStatBoostPercentage != undefined) {
@@ -707,7 +707,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
         }
 
         const statType = split[0];
-        const statValue = parseFloat(split[1].trim().replace(/,/g, ""));
+        const statValue = parseFloat(split[1].trim().replaceAll(",", ""));
 
         if (statType in constants.statNames) {
           item.stats[constants.statNames[statType]] = statValue;
@@ -1491,10 +1491,10 @@ export const getItems = async (
       let name = armorPiece.display_name;
 
       // Removing stars
-      name = name.replace(/✪|⍟/g, "").trim();
+      name = name.replaceAll(/✪|⍟/g, "").trim();
 
       // Removing skin
-      name = name.replace(/✦/g, "").trim();
+      name = name.replaceAll("✦", "").trim();
 
       // Removing modifier
       if (armorPiece.tag?.ExtraAttributes?.modifier != undefined) {
@@ -1505,11 +1505,11 @@ export const getItems = async (
       // Ex: Superior Dragon Helmet -> Superior Dragon Armor
       if (/^Armor .*? (Helmet|Chestplate|Leggings|Boots)$/g.test(name)) {
         // name starts with Armor and ends with piece name, remove piece name
-        name = name.replace(/(Helmet|Chestplate|Leggings|Boots)/g, "").trim();
+        name = name.replaceAll(/(Helmet|Chestplate|Leggings|Boots)/g, "").trim();
       } else {
         // removing old 'Armor' and replacing the piece name with 'Armor'
         name = name.replace("Armor", "").replace("  ", " ").trim();
-        name = name.replace(/(Helmet|Chestplate|Leggings|Boots)/g, "Armor").trim();
+        name = name.replaceAll(/(Helmet|Chestplate|Leggings|Boots)/g, "Armor").trim();
       }
 
       armorPiece.armor_name = name;
@@ -2767,7 +2767,9 @@ export async function getPets(profile) {
     let lore = [loreFirstRow.join(""), ""];
 
     const petName =
-      petData.hatching?.level > pet.level.level ? petData.hatching.name : helper.titleCase(pet.type.replace(/_/g, " "));
+      petData.hatching?.level > pet.level.level
+        ? petData.hatching.name
+        : helper.titleCase(pet.type.replaceAll("_", " "));
 
     const rarity = constants.rarities.indexOf(pet.rarity);
 
@@ -2988,9 +2990,7 @@ export async function getMissingTalismans(talismans) {
       texture_path: null,
     };
 
-    if (object.name == null) {
-      object.name = talisman;
-    }
+    object.name ??= talisman;
 
     // MAIN TALISMANS
     if (constants.talismans[talisman] != null) {
@@ -3868,7 +3868,7 @@ export const getProfile = async (
         const areaData = statusResponse.data.session;
 
         if (areaData.online && areaData.gameType == "SKYBLOCK") {
-          const areaName = constants.area_names[areaData.mode] || helper.titleCase(areaData.mode.replace(/_/g, " "));
+          const areaName = constants.area_names[areaData.mode] || helper.titleCase(areaData.mode.replaceAll("_", " "));
 
           userProfile.current_area = areaName;
           insertProfileStore.current_area = areaName;
