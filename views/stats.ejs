@@ -2126,6 +2126,21 @@ const metaDescription = getMetaDescription()
           <% } %>
           </div>
         <% } %>
+
+        <% if (calculated.dungeons.essence) { %>
+          <p class="stat-sub-header">Essence</p>
+          <div class="collections">
+          <% for (const [key, value] of Object.entries(calculated.dungeons.essence)) { %>
+            <div class="chip">
+              <div class="chip-icon-wrapper"><div style="background-image:url(<%= constants.dungeons.essence[key].head %>)" class="item-icon custom-icon"></div></div>
+              <div class="chip-text">
+                <div class="collection-name"><span class="stat-name"><%= constants.dungeons.essence[key].name %></span></div>
+                <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= value.toLocaleString() %></span></div>
+              </div>
+            </div>
+          <% } %>
+          </div>
+        <% } %>
       <% } %>
       </div>
     </div>
