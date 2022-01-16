@@ -941,14 +941,6 @@ input[type="search"]::-webkit-search-cancel-button {
     background-image: url(/resources/img/icons/patreon.webp);
   }
 
-  &.link-kofi::before {
-    background-image: url(/resources/img/icons/kofi.png);
-  }
-
-  &.link-paypal::before {
-    background-image: url(/resources/img/icons/paypal.png);
-  }
-
   &.link-discord::before {
     background-image: url(/resources/img/icons/discord.svg?v3);
   }
