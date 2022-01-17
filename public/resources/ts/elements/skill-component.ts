@@ -24,11 +24,11 @@ export class SkillComponent extends LitElement {
   constructor() {
     super();
     this.addEventListener("mouseover", () => {
-      const hoverText = this.getProgressTexts()[1];
+      const hoverText = this.getHoverText();
       this._updateProgressText(hoverText);
     });
     this.addEventListener("mouseleave", () => {
-      const mainText = this.getProgressTexts()[0];
+      const mainText = this.getMainText();
       this._updateProgressText(mainText);
     });
   }
@@ -66,7 +66,7 @@ export class SkillComponent extends LitElement {
         <div class="skill-progress-bar" style="--progress: ${level.level == level.levelCap ? 1 : level.progress}"></div>
         ${"runecrafting" in calculated.levels
           ? html`<div class="skill-progress-text">
-              ${this.progressText === "Loading..." ? this.getProgressTexts()[0] : this.progressText}
+              ${this.progressText === "Loading..." ? this.getMainText() : this.progressText}
             </div>`
           : undefined}
       </div>
@@ -102,29 +102,42 @@ export class SkillComponent extends LitElement {
     return level;
   }
 
-  private getProgressTexts(): [string, string] {
-    let mainText = "";
-    let hoverText = "";
-
+  /**
+   * @returns the text to be displayed when the user is not hovering
+   */
+  private getMainText(): string {
     const level = this.getLevel();
 
     if (level == undefined) {
-      return [mainText, hoverText];
+      return "";
     }
 
-    hoverText = level.xpCurrent.toLocaleString();
-    if (level.xpForNext && level.xpForNext != Infinity) {
-      hoverText += ` / ${level.xpForNext.toLocaleString()}`;
-    }
-    hoverText += " XP";
-
-    mainText = formatNumber(level.xpCurrent, true);
+    let mainText = formatNumber(level.xpCurrent, true);
     if (level.xpForNext && level.xpForNext != Infinity) {
       mainText += ` / ${formatNumber(level.xpForNext, true)}`;
     }
     mainText += " XP";
 
-    return [mainText, hoverText];
+    return mainText;
+  }
+
+  /**
+   * @returns the text to be displayed when the user is hovering
+   */
+  private getHoverText(): string {
+    const level = this.getLevel();
+
+    if (level == undefined) {
+      return "";
+    }
+
+    let hoverText = level.xpCurrent.toLocaleString();
+    if (level.xpForNext && level.xpForNext != Infinity) {
+      hoverText += ` / ${level.xpForNext.toLocaleString()}`;
+    }
+    hoverText += " XP";
+
+    return hoverText;
   }
 
   // disable shadow root
