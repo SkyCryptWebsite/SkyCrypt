@@ -1,5 +1,5 @@
 import { html, LitElement, TemplateResult } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { formatNumber } from "../stats-defer";
@@ -18,18 +18,16 @@ export class SkillComponent extends LitElement {
   @property({ attribute: "maxed", type: Boolean, reflect: true })
   maxed!: boolean;
 
-  @property({ type: String })
-  progressText = "Loading...";
+  @state()
+  private hovering = false;
 
   constructor() {
     super();
     this.addEventListener("mouseover", () => {
-      const hoverText = this.getHoverText();
-      this._updateProgressText(hoverText);
+      this.hovering = true;
     });
     this.addEventListener("mouseleave", () => {
-      const mainText = this.getMainText();
-      this._updateProgressText(mainText);
+      this.hovering = false;
     });
   }
 
@@ -65,16 +63,10 @@ export class SkillComponent extends LitElement {
       <div class="skill-bar" data-skill="${skillName}">
         <div class="skill-progress-bar" style="--progress: ${level.level == level.levelCap ? 1 : level.progress}"></div>
         ${"runecrafting" in calculated.levels
-          ? html`<div class="skill-progress-text">
-              ${this.progressText === "Loading..." ? this.getMainText() : this.progressText}
-            </div>`
+          ? html`<div class="skill-progress-text">${this.hovering ? this.getHoverText() : this.getMainText()}</div>`
           : undefined}
       </div>
     `;
-  }
-
-  private _updateProgressText(string: string) {
-    this.progressText = string;
   }
 
   private getLevel() {
