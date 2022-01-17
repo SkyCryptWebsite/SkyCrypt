@@ -177,6 +177,57 @@ main.grid > a,
   }
 }
 
+#error_title {
+  font-weight: 600;
+  background-color: var(--icon-hex);
+  color: white;
+  text-transform: uppercase;
+  height: 70px;
+  line-height: 70px;
+  width: 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+}
+
+#error_text {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: calc(100% - 100px);
+  height: 70px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 18px;
+  padding-left: 20px;
+  padding-right: 20px;
+  box-sizing: border-box;
+}
+
+#error_subtext {
+  display: block;
+  top: 70px;
+  right: 0;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 16px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#error_top {
+  height: 70px;
+}
+
+#error_bottom {
+  background-color: rgba(var(--text-rgb), 0.1);
+}
+
 .form-banner {
   position: relative;
   grid-column: 1 / -1;

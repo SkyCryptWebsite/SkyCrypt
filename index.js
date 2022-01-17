@@ -19,7 +19,7 @@ axiosDebugLog({
       console.log(`Sent request to ${requestURL} on ${cluster.isWorker ? "worker" + cluster.worker.id : "master"}.`);
     }
     if (requestURL.startsWith("https://api.hypixel.net/") && config?.params?.key) {
-      if (cluster.isMaster) {
+      if (cluster.isPrimary) {
         requests.push(getTime());
       } else {
         process.send({ type: "hypixel_request", time: getTime() });
@@ -48,7 +48,7 @@ async function init() {
   }, 1000 * 60);
 }
 
-if (cluster.isMaster) {
+if (cluster.isPrimary) {
   // const apiRequests = io.metric({
   //   name: "API Requests",
   //   unit: "reqs/min",
