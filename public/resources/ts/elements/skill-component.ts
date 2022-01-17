@@ -63,7 +63,9 @@ export class SkillComponent extends LitElement {
       <div class="skill-bar" data-skill="${skillName}">
         <div class="skill-progress-bar" style="--progress: ${level.level == level.levelCap ? 1 : level.progress}"></div>
         ${"runecrafting" in calculated.levels
-          ? html`<div class="skill-progress-text">${this.hovering ? this.getHoverText() : this.getMainText()}</div>`
+          ? html`<div class="skill-progress-text">
+              ${this.hovering ? this.getHoverText(level) : this.getMainText(level)}
+            </div>`
           : undefined}
       </div>
     `;
@@ -97,13 +99,7 @@ export class SkillComponent extends LitElement {
   /**
    * @returns the text to be displayed when the user is not hovering
    */
-  private getMainText(): string {
-    const level = this.getLevel();
-
-    if (level == undefined) {
-      return "";
-    }
-
+  private getMainText(level: Level): string {
     let mainText = formatNumber(level.xpCurrent, true);
     if (level.xpForNext && level.xpForNext != Infinity) {
       mainText += ` / ${formatNumber(level.xpForNext, true)}`;
@@ -116,13 +112,7 @@ export class SkillComponent extends LitElement {
   /**
    * @returns the text to be displayed when the user is hovering
    */
-  private getHoverText(): string {
-    const level = this.getLevel();
-
-    if (level == undefined) {
-      return "";
-    }
-
+  private getHoverText(level: Level): string {
     let hoverText = level.xpCurrent.toLocaleString();
     if (level.xpForNext && level.xpForNext != Infinity) {
       hoverText += ` / ${level.xpForNext.toLocaleString()}`;
