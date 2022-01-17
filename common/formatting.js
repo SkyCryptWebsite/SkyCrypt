@@ -1,4 +1,4 @@
-import { specialEnchants } from "./constants.js";
+import { maxEnchants } from "./constants.js";
 
 /**
  * Convert Minecraft lore to HTML
@@ -39,7 +39,7 @@ export function renderLore(text) {
     output += "<span";
 
     if (color !== null) {
-      if (color == "9" && specialEnchants.has(part)) {
+      if (color == "9" && maxEnchants.has(part)) {
         output += ` style='color: var(--§6)'`;
       } else {
         output += ` style='color: var(--§${color});'`;
