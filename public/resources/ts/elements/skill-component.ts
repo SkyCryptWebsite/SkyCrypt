@@ -71,29 +71,28 @@ export class SkillComponent extends LitElement {
     `;
   }
 
-  private getLevel() {
+  private getLevel(): Level | undefined {
     if (this.skill == undefined) {
       return undefined;
     }
 
-    let level: Level | undefined;
     switch (this.type) {
       case "skill":
-        level = calculated.levels[this.skill];
-        break;
+        return calculated.levels[this.skill];
 
       case "dungeon":
         if (this.skill === "catacombs") {
-          level = calculated.dungeons[this.skill].level;
+          return calculated.dungeons[this.skill].level;
+        } else {
+          return undefined;
         }
-        break;
 
       case "dungeon_class":
-        level = calculated.dungeons.classes[this.skill].experience;
-        break;
-    }
+        return calculated.dungeons.classes[this.skill].experience;
 
-    return level;
+      default:
+        return undefined;
+    }
   }
 
   /**
