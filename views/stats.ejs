@@ -117,20 +117,28 @@ const seaCreatures = [
   "sea_witch",
   "scarecrow",
   "sea_archer",
+  "oasis_rabbit",
+  "oasis_sheep",
   "blue_shark",
   "monster_of_the_deep",
   "grinch",
   "catfish",
   "nightmare",
   "carrot_king",
+  "water_worm",
   "sea_leech",
+  "poisoned_water_worm",
+  "flaming_worm",
   "werewolf",
   "guardian_defender",
   "deep_sea_protector",
+  "lava_blaze",
+  "lava_pigman",
   "tiger_shark",
   "water_hydra",
   "sea_emperor",
   "phantom_fisherman",
+  "zombie_miner",
   "great_white_shark",
   "yeti",
   "grim_reaper",
@@ -208,7 +216,7 @@ function getPrettyName(statName, shorten = false) {
     case 'sea_creature_chance':
       return shorten ? '<abbr title="Sea Creature">SC</abbr> Chance' : 'Sea Creature Chance';
     default:
-      return helper.titleCase(statName.replace(/\_/g, " "));
+      return helper.titleCase(statName.replaceAll("_", " "));
   }
 }
 
@@ -262,7 +270,7 @@ function getBonus(stats, prefix) {
     if(stats[stat] == 0)
       continue;
     %>
-    <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replace(/\_/g, "-") %>"><%= stats[stat].toLocaleString() %><%= statSuffix[stat] %> <abbr title="<%= getPrettyName(stat) %>"><%= statShort[stat] %></abbr></span>
+    <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replaceAll("_", "-") %>"><%= stats[stat].toLocaleString() %><%= statSuffix[stat] %> <abbr title="<%= getPrettyName(stat) %>"><%= statShort[stat] %></abbr></span>
     <% if(index < statsNotZero.length - 1){ %><span class="bonus-divider" role="separator">//</span><% } %>
   <% }
 }
@@ -348,7 +356,7 @@ function getEnrichments(accessories) {
     for (const [enrichment, amount] of Object.entries(enrichmentCounts)) {
       const stat = enrichmentToStatName(enrichment)
       %>
-      <span class="stat-value color-<%= stat.replace(/\_/g, "-") %>">
+      <span class="stat-value color-<%= stat.replaceAll("_", "-") %>">
         <%= amount %>× <%= formatEnrichment(enrichment.toLowerCase()) %>
       </span>
       <%
@@ -435,7 +443,7 @@ function skill_component(skill, icon, level, extra = {}) {
 function stat_component(stat) {
   const bonusStats = stats[stat.name] - calculated.base_stats[stat.name]
   %>
-  <div data-stat="<%= stat.name %>" class="basic-stat stat-<%= stat.name.replace(/\_/g, "-") %>">
+  <div data-stat="<%= stat.name %>" class="basic-stat stat-<%= stat.name.replaceAll("_", "-") %>">
     <span data-tippy-content="
     <span class='stat-name'>Base <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= calculated.base_stats[stat.name].toLocaleString() %></span>
     <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= stat.baseExplanation %><% } %></div><br>
@@ -2118,6 +2126,21 @@ const metaDescription = getMetaDescription()
           <% } %>
           </div>
         <% } %>
+
+        <% if (calculated.dungeons.essence) { %>
+          <p class="stat-sub-header">Essence</p>
+          <div class="collections">
+          <% for (const [key, value] of Object.entries(calculated.dungeons.essence)) { %>
+            <div class="chip">
+              <div class="chip-icon-wrapper"><div style="background-image:url(<%= constants.dungeons.essence[key].head %>)" class="item-icon custom-icon"></div></div>
+              <div class="chip-text">
+                <div class="collection-name"><span class="stat-name"><%= constants.dungeons.essence[key].name %></span></div>
+                <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= value.toLocaleString() %></span></div>
+              </div>
+            </div>
+          <% } %>
+          </div>
+        <% } %>
       <% } %>
       </div>
     </div>
@@ -2427,20 +2450,7 @@ const metaDescription = getMetaDescription()
 
           <% if('races' in calculated.misc){ %>
             <div class="category-header"><div class="category-icon"><div class="item-icon icon-317_0"></div></div><span>races</span></div>
-            <p class="stat-raw-values">
-              <% for(const key in calculated.misc.races){
-                if(key.startsWith('dungeon_hub'))
-                  continue;
 
-                const raceName = helper.capitalizeFirstLetter(key.split("_").join(" "));
-                let raceDuration = moment.duration(calculated.misc.races[key], "milliseconds").format("m:ss.SSS");
-
-                if(calculated.misc.races[key] < 1000)
-                  raceDuration = '0.' + raceDuration;
-              %>
-              <span class="stat-name"><%= raceName %>: </span><span class="stat-value"><%= raceDuration %></span><br>
-              <% } %>
-            </p>
             <div class="race-containers narrow-info-container-wrapper">
               <%
               const races = [
@@ -2468,7 +2478,9 @@ const metaDescription = getMetaDescription()
                     <% }
 
                     for(const type of types){
-                      const duration = calculated.misc.races[`${race.id}_${type}_no_return_best_time`] || 0;
+                      const key = `${race.id}_${type}_no_return_best_time`;
+                      const duration = calculated.misc.races[key] ?? 0;
+                      const raceTier = calculated.misc.objectives.completedRaces[key] ?? 0;
 
                       if(duration == 0)
                         continue;
@@ -2478,7 +2490,15 @@ const metaDescription = getMetaDescription()
                       if(duration < 1000)
                         raceDuration = '0.' + raceDuration;
                       %>
-                      <div><span class="stat-name"><%= helper.titleCase(type.replace("_", " ")) %>: </span><span class="stat-value"><%= raceDuration %></span></div>
+                      <div class="narrow-info-flexsb">
+                        <div>
+                          <span class="stat-name"><%= helper.titleCase(type.split("_").join(" ")) %>: </span>
+                          <span class="stat-value"><%= raceDuration %></span>
+                        </div>
+                        <div>
+                          <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
+                        </div>
+                      </div>
                     <% }
 
                     if(races_with_return.length > 0){ %>
@@ -2486,7 +2506,9 @@ const metaDescription = getMetaDescription()
                     <% }
 
                     for(const type of types){
-                      const duration = calculated.misc.races[`${race.id}_${type}_with_return_best_time`] || 0;
+                      const key = `${race.id}_${type}_with_return_best_time`;
+                      const duration = calculated.misc.races[key] ?? 0;
+                      const raceTier = calculated.misc.objectives.completedRaces[key] ?? 0;
 
                       if(duration == 0)
                         continue;
@@ -2496,7 +2518,15 @@ const metaDescription = getMetaDescription()
                       if(duration < 1000)
                         raceDuration = '0.' + raceDuration;
                       %>
-                      <div><span class="stat-name"><%= helper.titleCase(type.replace("_", " ")) %>: </span><span class="stat-value"><%= raceDuration %></span></div>
+                      <div class="narrow-info-flexsb">
+                        <div>
+                          <span class="stat-name"><%= helper.titleCase(type.split("_").join(" ")) %>: </span>
+                          <span class="stat-value"><%= raceDuration %></span>
+                        </div>
+                        <div>
+                          <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
+                        </div>
+                      </div>
                     <% } %>
                   </div>
                 </div>
@@ -2504,6 +2534,32 @@ const metaDescription = getMetaDescription()
                 }
               }
               %>
+              <div class="narrow-info-container">
+                  <div class="narrow-info-header">Other Races</div>
+                  <div class="narrow-info-content">
+                    <% for(const key in calculated.misc.races){
+                      if(key.startsWith('dungeon_hub'))
+                        continue;
+
+                      const raceName = helper.capitalizeFirstLetter(key.replace(/_race_best_time.*/, "").split("_").join(" "));
+                      let raceDuration = moment.duration(calculated.misc.races[key], "milliseconds").format("m:ss.SSS");
+                      const raceTier = calculated.misc.objectives.completedRaces[key] ?? 0;
+
+                      if(calculated.misc.races[key] < 1000)
+                        raceDuration = '0.' + raceDuration;
+                    %>
+                    <div class="narrow-info-flexsb">
+                      <div>
+                        <span class="stat-name"><%= raceName %>: </span>
+                        <span class="stat-value"><%= raceDuration %></span>
+                      </div>
+                      <div>
+                        <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
+                      </div>
+                    </div>
+                    <% } %>
+                  </div>
+              </div>
             </div>
           <% } %>
           <% if('gifts' in calculated.misc){ %>
@@ -2659,15 +2715,15 @@ const metaDescription = getMetaDescription()
   </main>
   <%- include('../includes/footer'); %>
   <script>
-    const items = JSON.parse(`<%- JSON.stringify(items).replace(/\\/g, '\\\\') %>`);
-    const calculated = JSON.parse(`<%- JSON.stringify(calculated).replace(/\\/g, '\\\\') %>`);
+    const items = JSON.parse(`<%- JSON.stringify(items).replaceAll('\\', '\\\\') %>`);
+    const calculated = JSON.parse(`<%- JSON.stringify(calculated).replaceAll('\\', '\\\\') %>`);
     <%
       const clientConstants = {
         special_enchants: constants.special_enchants,
         max_favorites: constants.max_favorites,
       }
     %>
-    const constants = JSON.parse(`<%- JSON.stringify(clientConstants).replace(/\\/g, '\\\\') %>`);
+    const constants = JSON.parse(`<%- JSON.stringify(clientConstants).replaceAll('\\', '\\\\') %>`);
   </script>
 </body>
 </html>

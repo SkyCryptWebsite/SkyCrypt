@@ -5,15 +5,15 @@ tippy.setDefaultProps({ allowHTML: true });
 function validateURL(url: string) {
   const urlSegments = url.trim().split("/");
   if (urlSegments.length < 1) {
-    throw "please enter a Minecraft username or UUID";
+    throw new Error("please enter a Minecraft username or UUID");
   } else if (urlSegments.length > 2) {
-    throw `"${url}" has too many "/"`;
+    throw new Error(`"${url}" has too many "/"`);
   } else {
     if (urlSegments.length === 2) {
       if (urlSegments[1].match(/^[A-Za-z]+/)) {
-        urlSegments[1] = urlSegments[1].charAt(0).toUpperCase() + urlSegments[1].substr(1).toLowerCase();
+        urlSegments[1] = urlSegments[1].charAt(0).toUpperCase() + urlSegments[1].substring(1).toLowerCase();
       } else if (!urlSegments[1].match(/^([0-9a-fA-F]{32})$/)) {
-        throw `"${urlSegments[1]}" is not a valid profile name or ID`;
+        throw new Error(`"${urlSegments[1]}" is not a valid profile name or ID`);
       }
     }
     if (
@@ -25,7 +25,7 @@ function validateURL(url: string) {
     } else if (urlSegments[0].match(/^[\w ]{1,16}$/)) {
       urlSegments[0] = urlSegments[0].replace(" ", "_");
     } else {
-      throw `"${urlSegments[0]}" is not a valid username or UUID`;
+      throw new Error(`"${urlSegments[0]}" is not a valid username or UUID`);
     }
     return "/stats/" + urlSegments.join("/");
   }
@@ -40,7 +40,8 @@ document.querySelectorAll<HTMLFormElement>(".lookup-player").forEach((form) => {
     } catch (error) {
       const errorTip = tippy(form.querySelector("input") as HTMLInputElement, {
         trigger: "manual",
-        content: (error as string | undefined) ?? "please enter a valid Minecraft username or UUID",
+        content:
+          error instanceof Error ? error.message : String(error ?? "please enter a valid Minecraft username or UUID"),
       });
       errorTip.show();
       setTimeout(() => {

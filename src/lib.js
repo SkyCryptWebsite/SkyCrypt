@@ -33,7 +33,7 @@ import { makeLore } from "./lore-generator.js";
 
 const parseNbt = util.promisify(nbt.parse);
 
-const MAX_SOULS = 227;
+const MAX_SOULS = 228;
 let TALISMAN_COUNT;
 
 function getMinMax(profiles, min, ...path) {
@@ -71,156 +71,69 @@ function getAllKeys(profiles, ...path) {
   return _.uniq([].concat(...profiles.map((a) => _.keys(helper.getPath(a, ...path)))));
 }
 
-function getXpByLevel(level, extra = {}) {
-  let xp_table;
-  switch (extra.type) {
+/**
+ * gets the xp table for the given type
+ * @param {string} type
+ * @returns {{[key: number]: number}}
+ */
+function getXpTable(type) {
+  switch (type) {
     case "runecrafting":
-      xp_table = constants.runecrafting_xp;
-      break;
+      return constants.runecrafting_xp;
+    case "social":
+      return constants.social_xp;
     case "dungeoneering":
-      xp_table = constants.dungeoneering_xp;
-      break;
+      return constants.dungeoneering_xp;
     case "hotm":
-      xp_table = constants.hotm_xp;
-      break;
+      return constants.hotm_xp;
     default:
-      xp_table = constants.leveling_xp;
+      return constants.leveling_xp;
   }
-
-  let levelCap = 1;
-  let maxLevel = 1;
-
-  if (extra.skill) {
-    if (constants.default_skill_caps[extra.skill] && constants.default_skill_caps[extra.skill] > levelCap) {
-      levelCap = constants.default_skill_caps[extra.skill];
-    }
-
-    if (constants.maxed_skill_caps[extra.skill]) {
-      maxLevel = constants.maxed_skill_caps[extra.skill];
-    }
-  } else {
-    levelCap = Object.keys(xp_table)
-      .sort((a, b) => Number(a) - Number(b))
-      .map((a) => Number(a))
-      .pop();
-  }
-
-  if (levelCap > maxLevel) {
-    maxLevel = levelCap;
-  }
-
-  const output = {
-    level: Math.min(level, maxLevel),
-    xpCurrent: 0,
-    xpForNext: null,
-    progress: 0.05,
-  };
-
-  if (isNaN(level)) {
-    return 0;
-  }
-
-  let xpTotal = 0;
-
-  for (let x = 1; x <= level; x++) {
-    xpTotal += xp_table[x];
-  }
-
-  output.xp = xpTotal;
-
-  if (level >= maxLevel) {
-    output.progress = 1;
-  } else {
-    output.xpForNext = xp_table[level + 1];
-  }
-
-  return output;
 }
 
-export function getLevelByXp(xp, extra = {}) {
-  let xp_table;
-  switch (extra.type) {
-    case "runecrafting":
-      xp_table = constants.runecrafting_xp;
-      break;
-    case "social":
-      xp_table = constants.social_xp;
-      break;
-    case "dungeoneering":
-      xp_table = constants.dungeoneering_xp;
-      break;
-    case "hotm":
-      xp_table = constants.hotm_xp;
-      break;
-    default:
-      xp_table = constants.leveling_xp;
+/**
+ * estimates the xp based on the level
+ * @param {number} uncappedLevel
+ * @param {{type?: string, cap?: number, skill?: string}} extra
+ * @param type the type of levels (used to determine which xp table to use)
+ * @param cap override the cap highest level the player can reach
+ * @param skill the key of default_skill_caps
+ */
+function getXpByLevel(uncappedLevel, extra = {}) {
+  const xpTable = getXpTable(extra.type);
+
+  if (typeof uncappedLevel !== "number" || isNaN(uncappedLevel)) {
+    uncappedLevel = 0;
   }
 
-  if (isNaN(xp)) {
-    return {
-      xp: 0,
-      level: 0,
-      xpCurrent: 0,
-      xpForNext: xp_table[1],
-      progress: 0,
-      level_cap: 0,
-      uncapped_level: 0,
-    };
+  /** the level that this player is caped at */
+  const levelCap =
+    extra.cap ?? constants.default_skill_caps[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
+
+  /** the maximum level that any player can achieve (used for gold progress bars) */
+  const maxLevel = constants.maxed_skill_caps[extra.skill] ?? levelCap;
+
+  /** the amount of xp over the amount required for the level (used for calculation progress to next level) */
+  const xpCurrent = 0;
+
+  /** the sum of all levels including level */
+  let xp = 0;
+
+  for (let x = 1; x <= uncappedLevel; x++) {
+    xp += xpTable[x];
   }
 
-  let xpTotal = 0;
-  let level = 0;
-  let uncappedLevel = 0;
+  /** the level as displayed by in game UI */
+  const level = Math.min(levelCap, uncappedLevel);
 
-  let xpForNext = Infinity;
+  /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
+  const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
-  let levelCap = 1;
-  let maxLevel = 1;
+  /** the fraction of the way toward the next level */
+  const progress = level < maxLevel ? 0.05 : 0;
 
-  if (extra.cap) {
-    levelCap = extra.cap;
-  }
-
-  if (extra.skill) {
-    if (constants.default_skill_caps[extra.skill] && constants.default_skill_caps[extra.skill] > levelCap) {
-      levelCap = constants.default_skill_caps[extra.skill];
-    }
-
-    if (constants.maxed_skill_caps[extra.skill]) {
-      maxLevel = constants.maxed_skill_caps[extra.skill];
-    }
-  } else {
-    levelCap = Object.keys(xp_table)
-      .sort((a, b) => Number(a) - Number(b))
-      .map((a) => Number(a))
-      .pop();
-  }
-
-  if (levelCap > maxLevel) {
-    maxLevel = levelCap;
-  }
-
-  for (let x = 1; x <= Object.keys(xp_table).length; x++) {
-    xpTotal += xp_table[x];
-
-    if (xpTotal > xp) {
-      xpTotal -= xp_table[x];
-      break;
-    } else {
-      if (x <= levelCap) level = x;
-      uncappedLevel = x;
-    }
-  }
-
-  let xpCurrent = Math.floor(xp - xpTotal);
-
-  if (level < levelCap) {
-    xpForNext = Math.ceil(xp_table[level + 1]);
-  }
-
-  let progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
-
-  let levelWithProgress = getLevelWithProgress(xp, maxLevel, Object.values(xp_table));
+  /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
+  const levelWithProgress = level + progress;
 
   return {
     xp,
@@ -232,6 +145,77 @@ export function getLevelByXp(xp, extra = {}) {
     levelCap,
     uncappedLevel,
     levelWithProgress,
+  };
+}
+
+/**
+ * gets the level and some other information from an xp amount
+ * @param {number} xp
+ * @param {{type?: string, cap?: number, skill?: string}} extra
+ * @param type the type of levels (used to determine which xp table to use)
+ * @param cap override the cap highest level the player can reach
+ * @param skill the key of default_skill_caps
+ */
+export function getLevelByXp(xp, extra = {}) {
+  const xpTable = getXpTable(extra.type);
+
+  if (typeof xp !== "number" || isNaN(xp)) {
+    xp = 0;
+  }
+
+  /** the level that this player is caped at */
+  const levelCap =
+    extra.cap ?? constants.default_skill_caps[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
+
+  /** the maximum level that any player can achieve (used for gold progress bars) */
+  const maxLevel = constants.maxed_skill_caps[extra.skill] ?? levelCap;
+
+  /** the level ignoring the cap and using only the table */
+  let uncappedLevel = 0;
+
+  /** the amount of xp over the amount required for the level (used for calculation progress to next level) */
+  let xpCurrent = xp;
+
+  /** like xpCurrent but ignores cap */
+  let xpRemaining = xp;
+
+  while (xpTable[uncappedLevel + 1] <= xpRemaining) {
+    uncappedLevel++;
+    xpRemaining -= xpTable[uncappedLevel];
+    if (uncappedLevel <= levelCap) {
+      xpCurrent = xpRemaining;
+    }
+  }
+
+  // not sure why this is floored but I'm leaving it in for now
+  xpCurrent = Math.floor(xpCurrent);
+
+  /** the level as displayed by in game UI */
+  const level = Math.min(levelCap, uncappedLevel);
+
+  /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
+  const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
+
+  /** the fraction of the way toward the next level */
+  const progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+
+  /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
+  const levelWithProgress = level + progress;
+
+  /** a floating point value representing the current level ignoring the in-game unlockable caps for example if you are half way to level 5 it would be 4.5 */
+  const unlockableLevelWithProgress = extra.cap ? Math.min(uncappedLevel + progress, maxLevel) : levelWithProgress;
+
+  return {
+    xp,
+    level,
+    maxLevel,
+    xpCurrent,
+    xpForNext,
+    progress,
+    levelCap,
+    uncappedLevel,
+    levelWithProgress,
+    unlockableLevelWithProgress,
   };
 }
 
@@ -486,7 +470,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     }
 
     if (item.tag?.ExtraAttributes?.spawnedFor != undefined) {
-      item.extra.spawned_for = item.tag.ExtraAttributes.spawnedFor.replace(/-/g, "");
+      item.extra.spawned_for = item.tag.ExtraAttributes.spawnedFor.replaceAll("-", "");
     }
 
     if (item.tag?.ExtraAttributes?.baseStatBoostPercentage != undefined) {
@@ -723,7 +707,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
         }
 
         const statType = split[0];
-        const statValue = parseFloat(split[1].trim().replace(/,/g, ""));
+        const statValue = parseFloat(split[1].trim().replaceAll(",", ""));
 
         if (statType in constants.statNames) {
           item.stats[constants.statNames[statType]] = statValue;
@@ -903,20 +887,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
   items = items.filter((a) => !a.inBackpack);
 
   return items;
-}
-
-function getLevelWithProgress(experience, maxLevel, experienceGroup) {
-  let level = 0;
-
-  for (let toRemove of experienceGroup) {
-    experience -= toRemove;
-    if (experience < 0) {
-      return Math.min(level + (1 - (experience * -1) / toRemove), maxLevel);
-    }
-    level++;
-  }
-
-  return Math.min(level, maxLevel);
 }
 
 export function splitWithTail(string, delimiter, count) {
@@ -1521,10 +1491,10 @@ export const getItems = async (
       let name = armorPiece.display_name;
 
       // Removing stars
-      name = name.replace(/✪|⍟/g, "").trim();
+      name = name.replaceAll(/✪|⍟/g, "").trim();
 
       // Removing skin
-      name = name.replace(/✦/g, "").trim();
+      name = name.replaceAll("✦", "").trim();
 
       // Removing modifier
       if (armorPiece.tag?.ExtraAttributes?.modifier != undefined) {
@@ -1535,11 +1505,11 @@ export const getItems = async (
       // Ex: Superior Dragon Helmet -> Superior Dragon Armor
       if (/^Armor .*? (Helmet|Chestplate|Leggings|Boots)$/g.test(name)) {
         // name starts with Armor and ends with piece name, remove piece name
-        name = name.replace(/(Helmet|Chestplate|Leggings|Boots)/g, "").trim();
+        name = name.replaceAll(/(Helmet|Chestplate|Leggings|Boots)/g, "").trim();
       } else {
         // removing old 'Armor' and replacing the piece name with 'Armor'
         name = name.replace("Armor", "").replace("  ", " ").trim();
-        name = name.replace(/(Helmet|Chestplate|Leggings|Boots)/g, "Armor").trim();
+        name = name.replaceAll(/(Helmet|Chestplate|Leggings|Boots)/g, "Armor").trim();
       }
 
       armorPiece.armor_name = name;
@@ -1605,23 +1575,23 @@ export async function getLevels(userProfile, hypixelProfile, levelCaps) {
     let average_level_no_progress = 0;
 
     skillLevels = {
-      taming: getLevelByXp(userProfile.experience_skill_taming || 0, { skill: "taming" }),
-      farming: getLevelByXp(userProfile.experience_skill_farming || 0, {
+      taming: getLevelByXp(userProfile.experience_skill_taming, { skill: "taming" }),
+      farming: getLevelByXp(userProfile.experience_skill_farming, {
         skill: "farming",
-        cap: levelCaps?.farming || constants.default_skill_caps.farming,
+        cap: levelCaps?.farming,
       }),
-      mining: getLevelByXp(userProfile.experience_skill_mining || 0, { skill: "mining" }),
-      combat: getLevelByXp(userProfile.experience_skill_combat || 0, { skill: "combat" }),
-      foraging: getLevelByXp(userProfile.experience_skill_foraging || 0, { skill: "foraging" }),
-      fishing: getLevelByXp(userProfile.experience_skill_fishing || 0, { skill: "fishing" }),
-      enchanting: getLevelByXp(userProfile.experience_skill_enchanting || 0, { skill: "enchanting" }),
-      alchemy: getLevelByXp(userProfile.experience_skill_alchemy || 0, { skill: "alchemy" }),
-      carpentry: getLevelByXp(userProfile.experience_skill_carpentry || 0, { skill: "carpentry" }),
-      runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting || 0, {
+      mining: getLevelByXp(userProfile.experience_skill_mining, { skill: "mining" }),
+      combat: getLevelByXp(userProfile.experience_skill_combat, { skill: "combat" }),
+      foraging: getLevelByXp(userProfile.experience_skill_foraging, { skill: "foraging" }),
+      fishing: getLevelByXp(userProfile.experience_skill_fishing, { skill: "fishing" }),
+      enchanting: getLevelByXp(userProfile.experience_skill_enchanting, { skill: "enchanting" }),
+      alchemy: getLevelByXp(userProfile.experience_skill_alchemy, { skill: "alchemy" }),
+      carpentry: getLevelByXp(userProfile.experience_skill_carpentry, { skill: "carpentry" }),
+      runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting, {
         skill: "runecrafting",
         type: "runecrafting",
       }),
-      social: getLevelByXp(userProfile.experience_skill_social || 0, {
+      social: getLevelByXp(userProfile.experience_skill_social, {
         skill: "social",
         type: "social",
       }),
@@ -2546,6 +2516,7 @@ export const getStats = async (
   const misc = {};
 
   misc.milestones = {};
+  misc.objectives = {};
   misc.races = {};
   misc.gifts = {};
   misc.winter = {};
@@ -2604,6 +2575,22 @@ export const getStats = async (
   for (const key of auctions_buy) {
     if (key in userProfile.stats) {
       misc.auctions_buy[key.replace("auctions_", "")] = userProfile.stats[key];
+    }
+  }
+
+  misc.objectives.completedRaces = [];
+
+  for (const key in userProfile.objectives) {
+    if (key.includes("complete_the_")) {
+      const isCompleted = userProfile.objectives[key].status == "COMPLETE";
+      const tierNumber = parseInt("" + key.charAt(key.length - 1)) ?? 0;
+      const raceName = constants.raceObjectiveToStatName[key.substring(0, key.length - 2)];
+
+      if (tierNumber == 1 && !isCompleted) {
+        misc.objectives.completedRaces[raceName] = 0;
+      } else if (isCompleted && tierNumber > (misc.objectives.completedRaces[raceName] ?? 0)) {
+        misc.objectives.completedRaces[raceName] = tierNumber;
+      }
     }
   }
 
@@ -2780,7 +2767,9 @@ export async function getPets(profile) {
     let lore = [loreFirstRow.join(""), ""];
 
     const petName =
-      petData.hatching?.level > pet.level.level ? petData.hatching.name : helper.titleCase(pet.type.replace(/_/g, " "));
+      petData.hatching?.level > pet.level.level
+        ? petData.hatching.name
+        : helper.titleCase(pet.type.replaceAll("_", " "));
 
     const rarity = constants.rarities.indexOf(pet.rarity);
 
@@ -3001,9 +2990,7 @@ export async function getMissingTalismans(talismans) {
       texture_path: null,
     };
 
-    if (object.name == null) {
-      object.name = talisman;
-    }
+    object.name ??= talisman;
 
     // MAIN TALISMANS
     if (constants.talismans[talisman] != null) {
@@ -3206,6 +3193,13 @@ export async function getDungeons(userProfile, hypixelProfile) {
   output.selected_class = current_class;
   output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
 
+  // Essence
+  output.essence = {};
+
+  for (const essence in constants.dungeons.essence) {
+    output.essence[essence] = userProfile?.[`essence_${essence}`] ?? 0;
+  }
+
   if (!output.catacombs.visited) return output;
 
   // Boss Collections
@@ -3401,7 +3395,7 @@ export function getHotmItems(userProfile, packs) {
   // Check for missing node classes
   for (const nodeId in nodes) {
     if (constants.hotm.nodes[nodeId] == undefined) {
-      throw `Missing Heart of the Mountain node: ${nodeId}`;
+      throw new Error(`Missing Heart of the Mountain node: ${nodeId}`);
     }
   }
 
@@ -3693,17 +3687,17 @@ export const getProfile = async (
       const { data } = response;
 
       if (!data.success) {
-        throw "Request to Hypixel API failed. Please try again!";
+        throw new Error("Request to Hypixel API failed. Please try again!");
       }
 
       if (data.profiles == null) {
-        throw "Player has no SkyBlock profiles.";
+        throw new Error("Player has no SkyBlock profiles.");
       }
 
       allSkyBlockProfiles = data.profiles;
     } catch (e) {
       if (e?.response?.data?.cause != undefined) {
-        throw `Hypixel API Error: ${e.response.data.cause}.`;
+        throw new Error(`Hypixel API Error: ${e.response.data.cause}.`);
       }
 
       throw e;
@@ -3711,7 +3705,7 @@ export const getProfile = async (
   }
 
   if (allSkyBlockProfiles.length == 0) {
-    throw "Player has no SkyBlock profiles.";
+    throw new Error("Player has no SkyBlock profiles.");
   }
 
   for (const profile of allSkyBlockProfiles) {
@@ -3743,7 +3737,7 @@ export const getProfile = async (
           );
 
           if (!response.data.success) {
-            throw "api request failed";
+            throw new Error("api request failed");
           }
 
           return response.data.profile;
@@ -3777,7 +3771,7 @@ export const getProfile = async (
 
     if (memberCount == 0) {
       if (paramProfile) {
-        throw "Uh oh, this SkyBlock profile has no players.";
+        throw new Error("Uh oh, this SkyBlock profile has no players.");
       }
 
       continue;
@@ -3787,7 +3781,7 @@ export const getProfile = async (
   }
 
   if (profiles.length == 0) {
-    throw "No data returned by Hypixel API, please try again!";
+    throw new Error("No data returned by Hypixel API, please try again!");
   }
 
   let highest = 0;
@@ -3846,7 +3840,7 @@ export const getProfile = async (
   }
 
   if (!profile) {
-    throw "User not found in selected profile. This is probably due to a declined co-op invite.";
+    throw new Error("User not found in selected profile. This is probably due to a declined co-op invite.");
   }
 
   const userProfile = profile.members[paramPlayer];
@@ -3881,7 +3875,7 @@ export const getProfile = async (
         const areaData = statusResponse.data.session;
 
         if (areaData.online && areaData.gameType == "SKYBLOCK") {
-          const areaName = constants.area_names[areaData.mode] || helper.titleCase(areaData.mode.replace(/_/g, " "));
+          const areaName = constants.area_names[areaData.mode] || helper.titleCase(areaData.mode.replaceAll("_", " "));
 
           userProfile.current_area = areaName;
           insertProfileStore.current_area = areaName;
