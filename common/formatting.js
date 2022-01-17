@@ -38,7 +38,9 @@ export function renderLore(text) {
 
     output += "<span";
 
-    if (color !== null) {
+    if (specialEnchants.has(part)) {
+      output += ` style='color: var(--§6)'`;
+    } else if (color !== null) {
       output += ` style='color: var(--§${color});'`;
     }
 
@@ -47,15 +49,6 @@ export function renderLore(text) {
     }
 
     output += `>${part}</span>`;
-  }
-
-  const matchingEnchants = specialEnchants.filter((a) => output.includes(a));
-
-  for (const enchantment of matchingEnchants) {
-    if (enchantment == "Power 6" || (enchantment == "Power 7" && text.startsWith("§8Breaking"))) {
-      continue;
-    }
-    output = output.replace(enchantment, `<span style='color: var(--§6)'>${enchantment}</span>`);
   }
 
   return output;

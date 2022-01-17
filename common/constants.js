@@ -1,4 +1,4 @@
-export const specialEnchants = [
+export const specialEnchants = new Set([
   "Sharpness 7",
   "Sharpness VII",
   "Sharpness 6",
@@ -123,4 +123,4 @@ export const specialEnchants = [
   "Fortune IV",
   "Pristine 5",
   "Pristine V",
-];
+]);
