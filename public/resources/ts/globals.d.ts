@@ -162,7 +162,6 @@ interface Level {
 
 declare namespace constants {
   const max_favorites: number;
-  const special_enchants: string[];
 }
 
 declare const calculated: SkyCryptPlayer & {

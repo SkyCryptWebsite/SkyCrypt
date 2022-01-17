@@ -2,6 +2,8 @@ import { setCookie } from "./common-defer";
 import { SkinViewer, createOrbitControls } from "skinview3d";
 import tippy from "tippy.js";
 
+import { renderLore } from "../../../common/formatting.js";
+
 import("./elements/inventory-view");
 
 const favoriteElement = document.querySelector(".favorite") as HTMLButtonElement;
@@ -186,58 +188,6 @@ export function isEnchanted(item: Item): boolean {
   }
 
   return false;
-}
-
-type colorCode = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "0" | "a" | "b" | "c" | "d" | "e" | "f";
-type formatCode = "k" | "l" | "m" | "n" | "o";
-
-function renderLore(text: string) {
-  let output = "";
-
-  let color: colorCode | null = null;
-  const formats = new Set<formatCode>();
-
-  for (let part of text.match(/(§[0-9a-fk-or])*[^§]*/g) ?? []) {
-    while (part.charAt(0) === "§") {
-      const code = part.charAt(1);
-
-      if (/[0-9a-f]/.test(code)) {
-        color = code as colorCode;
-      } else if (/[k-o]/.test(code)) {
-        formats.add(code as formatCode);
-      } else if (code === "r") {
-        color = null;
-        formats.clear();
-      }
-
-      part = part.substring(2);
-    }
-
-    if (part.length === 0) continue;
-
-    output += "<span";
-
-    if (color !== null) {
-      output += ` style='color: var(--§${color});'`;
-    }
-
-    if (formats.size > 0) {
-      output += ` class='${Array.from(formats, (x) => "§" + x).join(" ")}'`;
-    }
-
-    output += `>${part}</span>`;
-  }
-
-  const matchingEnchants = constants.special_enchants.filter((a) => output.includes(a));
-
-  for (const enchantment of matchingEnchants) {
-    if (enchantment == "Power 6" || (enchantment == "Power 7" && text.startsWith("§8Breaking"))) {
-      continue;
-    }
-    output = output.replace(enchantment, `<span style='color: var(--§6)'>${enchantment}</span>`);
-  }
-
-  return output;
 }
 
 export function isSlotItem(item: ItemSlot): item is Item {
