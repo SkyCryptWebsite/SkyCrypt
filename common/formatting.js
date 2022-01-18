@@ -86,7 +86,7 @@ export function renderLore(text) {
  */
 export const formatNumber = (number, floor, rounding = 10) => {
   if (number < 1000) {
-    return Math.floor(number);
+    return String(Math.floor(number));
   } else if (number < 10000) {
     if (floor) {
       return (Math.floor((number / 1000) * rounding) / rounding).toFixed(rounding.toString().length - 1) + "K";
