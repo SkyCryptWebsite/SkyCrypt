@@ -804,10 +804,10 @@ const metaDescription = getMetaDescription()
           <img src="/resources/img/icons/ironman.png" class="emoji" alt="ironman">
         <% } %>
         <% if (calculated.profile.game_mode == 'bingo') { %>
-          <img src="/resources/img/icons/bingo.png" class="emoji" alt="bingo">
+          <%- extra.twemoji.parse("🎲") %>
         <% } %>
         <% if (calculated.profile.game_mode == 'island') { %>
-          <img src="/resources/img/icons/stranded.png" class="emoji" alt="stranded">
+          <%- extra.twemoji.parse("🌴") %>
         <% } %>
         <ul id="other_profiles">
           <% for(let profile_id in calculated.profiles){ %>
@@ -819,10 +819,10 @@ const metaDescription = getMetaDescription()
                   <img src="/resources/img/icons/ironman.png" class="emoji">
                 <% } %>
                 <% if (_profile.game_mode == 'bingo') { %>
-                  <img src="/resources/img/icons/bingo.png" class="emoji">
+                  <%- extra.twemoji.parse("🎲") %>
                 <% } %>
                 <% if (_profile.game_mode == 'island') { %>
-                  <img src="/resources/img/icons/stranded.png" class="emoji">
+                  <%- extra.twemoji.parse("🌴") %>
                 <% } %>
                 <span class="goto-last-played"><%= 'last_updated' in _profile ? _profile.last_updated.text : '' %></span>
               </a>
