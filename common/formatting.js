@@ -1,17 +1,35 @@
 import { maxEnchants } from "./constants.js";
 
 /**
+ * @typedef {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"a"|"b"|"c"|"d"|"e"|"f"} ColorCode
+ * @typedef {"k"|"l"|"m"|"n"|"o"} FormatCode
+ */
+
+/**
+ * checks if char is a color code
+ * @param {string} code
+ * @returns {code is ColorCode}
+ */
+function isColorCode(code) {
+  return /[0-9a-f]/.test(code);
+}
+
+/**
+ * checks if char is a format code
+ * @param {string} code
+ * @returns {code is FormatCode}
+ */
+function isFormatCode(code) {
+  return /[k-o]/.test(code);
+}
+
+/**
  * Convert Minecraft lore to HTML
  * @param {string} text minecraft lore with color and formatting codes
  * @returns {string} HTML
  */
 export function renderLore(text) {
   let output = "";
-
-  /**
-   * @typedef {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"a"|"b"|"c"|"d"|"e"|"f"} ColorCode
-   * @typedef {"k"|"l"|"m"|"n"|"o"} FormatCode
-   */
 
   /** @type {ColorCode|null} */
   let color = null;
@@ -22,9 +40,9 @@ export function renderLore(text) {
     while (part.charAt(0) === "§") {
       const code = part.charAt(1);
 
-      if (/[0-9a-f]/.test(code)) {
+      if (isColorCode(code)) {
         color = code;
-      } else if (/[k-o]/.test(code)) {
+      } else if (isFormatCode(code)) {
         formats.add(code);
       } else if (code === "r") {
         color = null;
