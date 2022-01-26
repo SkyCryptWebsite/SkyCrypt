@@ -63,7 +63,7 @@
     "lit": "^2.1.1",
     "lodash": "^4.17.20",
     "micromatch": "^4.0.4",
-    "minecraft-data": "^2.106.0",
+    "minecraft-data": "^2.111.0",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
     "moment-timezone": "^0.5.34",
