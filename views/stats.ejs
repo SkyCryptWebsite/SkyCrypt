@@ -478,6 +478,10 @@ function getMetaTitle() {
       metaTitle += ` (${calculated.profile.cute_name}🎲)`
       break;
 
+    case 'island':
+      metaTitle += ` (${calculated.profile.cute_name}🌴)`
+      break;
+
     default:
 		  metaTitle += ` (${calculated.profile.cute_name})`
       break;
@@ -780,7 +784,10 @@ const metaDescription = getMetaDescription()
           <img src="/resources/img/icons/ironman.png" class="emoji" alt="ironman">
         <% } %>
         <% if (calculated.profile.game_mode == 'bingo') { %>
-          <img src="/resources/img/icons/bingo.png" class="emoji" alt="bingo">
+          <%- extra.twemoji.parse("🎲") %>
+        <% } %>
+        <% if (calculated.profile.game_mode == 'island') { %>
+          <%- extra.twemoji.parse("🌴") %>
         <% } %>
         <ul id="other_profiles">
           <% for(let profile_id in calculated.profiles){ %>
@@ -792,7 +799,10 @@ const metaDescription = getMetaDescription()
                   <img src="/resources/img/icons/ironman.png" class="emoji">
                 <% } %>
                 <% if (_profile.game_mode == 'bingo') { %>
-                  <img src="/resources/img/icons/bingo.png" class="emoji">
+                  <%- extra.twemoji.parse("🎲") %>
+                <% } %>
+                <% if (_profile.game_mode == 'island') { %>
+                  <%- extra.twemoji.parse("🌴") %>
                 <% } %>
                 <span class="goto-last-played"><%= 'last_updated' in _profile ? _profile.last_updated.text : '' %></span>
               </a>
@@ -1120,11 +1130,15 @@ const metaDescription = getMetaDescription()
           <% } %>
           <% if(calculated.profile.game_mode == 'ironman'){ %>
             <% if(notAvailable.length > 0){ %><br><br><% } %>
-            This is an <strong>Ironman</strong> profile. The player cannot use the auction house, bazaar, trade or pick up drops from other players.
+            This is an <strong>Ironman</strong> profile. The player cannot use the auction house, bazaar, trade, or pick up drops from other players.
           <% } %>
           <% if(calculated.profile.game_mode == 'bingo'){ %>
             <% if(notAvailable.length > 0){ %><br><br><% } %>
-            This is a <strong>Bingo</strong> profile. The player cannot spend gems, use the auction house, bazaar, trade or pick up drops from other players.
+            This is a <strong>Bingo</strong> profile. The player cannot spend gems, use the auction house, bazaar, trade, or pick up drops from other players.
+          <% } %>
+          <% if(calculated.profile.game_mode == 'island'){ %>
+            <% if(notAvailable.length > 0){ %><br><br><% } %>
+            This is a <strong>Stranded</strong> profile. The player cannot leave their skyblock island or trade with other players.
           <% } %>
         </div>
       </div>
