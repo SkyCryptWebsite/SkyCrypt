@@ -36,7 +36,6 @@ import cookieParser from "cookie-parser";
 
 import api from "./api.js";
 import apiv2 from "./apiv2.js";
-import kofi from "./donations/kofi.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -159,7 +158,6 @@ app.use(
 
 api(app, db);
 apiv2(app, db);
-kofi(app, db);
 
 function parseFavorites(cookie) {
   return cookie?.split(",").filter((uuid) => /^[0-9a-f]{32}$/.test(uuid)) || [];
@@ -212,12 +210,6 @@ async function getExtra(page = null, favoriteUUIDs = [], cacheOnly) {
 
   output.isFoolsDay = isFoolsDay;
   output.cacheOnly = cacheOnly;
-
-  const patreonEntry = await db.collection("donations").findOne({ type: "patreon" });
-
-  if (patreonEntry != null) {
-    output.donations = { patreon: patreonEntry.amount || 0 };
-  }
 
   if (page === "index") {
     output.favorites = await getFavoritesFormUUIDs(favoriteUUIDs);
@@ -303,6 +295,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
         error: e,
         player: playerUsername,
         extra: await getExtra("index", favorites, cacheOnly),
+        promotion: constants.promotions[Math.floor(Math.random() * constants.promotions.length)],
         fileHashes,
         fileNameMap,
         helper,
@@ -644,6 +637,7 @@ app.all("/", async (req, res, next) => {
       error: null,
       player: null,
       extra: await getExtra("index", favorites, cacheOnly),
+      promotion: constants.promotions[Math.floor(Math.random() * constants.promotions.length)],
       fileHashes,
       fileNameMap,
       helper,
