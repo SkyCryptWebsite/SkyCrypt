@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <title>SkyCrypt</title>
-  <% if(error){ %> <meta name="robots" content="noindex" /> <% } %>
+  <% if (error) { %> <meta name="robots" content="noindex" /> <% } %>
   <% const description = "A beautiful site for sharing your SkyBlock profile 🍣" %>
   <meta name="description" content="<%= description %>">
   <link rel="icon" href="/resources/img/logo_square.svg" sizes="any" type="image/svg+xml">
@@ -33,16 +33,16 @@
             </p>
         </figure>
       <% } %>
-      <div id="error_box_wrapper" <% if(error){ %>class="show-error"<% } %>>
+      <div id="error_box_wrapper" <% if (error) { %>class="show-error"<% } %>>
         <div id="error_box">
           <div id="error_top">
             <div id="error_title">Error</div>
             <div id="error_text">
-              <%= error %><br>
+              <%= error instanceof Error ? error.message : String(error) %><br>
             </div>
           </div>
           <div id="error_bottom">
-            <% if(typeof error === 'string' && error.includes("Key throttle.")){ %>
+            <% if (error instanceof Error && error.message.includes("Key throttle.")) { %>
             <div id="error_subtext">
               This happens when the site reaches the Hypixel API limit.<br>
               Please try again in a minute.
@@ -51,19 +51,10 @@
           </div>
         </div>
       </div>
-      <a href="https://discord.gg/cNgADv2kEQ" target="_blank" rel="noreferrer" class="external-app form-banner">
-        <div class="external-app-icon monochrome" style="background-image: url(/resources/img/icons/discord.svg?v3)"></div>
-        <div class="external-app-name"><span class="grey-text">SkyCrypt's</span> Discord</div>
-        <div class="external-app-description">Announcements, Community, Bug Reports, Feature Requests, Support</div>
-        <%
-          const lessPlayedGames = [
-            'Smash Heroes',
-            'Turbo Kart Racers',
-            'Quakecraft',
-            'Warlords'
-          ]
-        %>
-        <div class="external-app-description try-also">Also try out <%= lessPlayedGames[Math.floor(Math.random() * lessPlayedGames.length)] %>, is a fun game!</div>
+      <a href="<%= promotion.url %>" target="_blank" rel="noreferrer" class="external-app form-banner">
+        <div class="external-app-icon monochrome" style="background-image: url(<%= promotion.image %>)"></div>
+        <div class="external-app-name"><%- promotion.title %></div>
+        <div class="external-app-description"><%- promotion.description %></div>
       </a>
       <% if(extra.favorites?.length){
       for(let profile of extra.favorites){
@@ -144,8 +135,8 @@
     </main>
     <%- include('../includes/footer'); %>
     <script>
-      <% if(error){ %>
-        console.log("An error occured with message: \"<%= error %>\"");
+      <% if (error) { %>
+        console.error(`An error occurred with message: "<%= error instanceof Error ? error.message : String(error) %>"`);
       <% } %>
 
       const mainUsernameInput = document.querySelector('main .lookup-player input');

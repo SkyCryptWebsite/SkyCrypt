@@ -153,7 +153,7 @@ export default (app, db) => {
         }
 
         for (const minion of coopMembers[member].crafted_generators) {
-          const minionName = minion.replace(/(_[0-9]+)/g, "");
+          const minionName = minion.replaceAll(/(_[0-9]+)/g, "");
 
           const minionLevel = parseInt(minion.split("_").pop());
 
@@ -554,7 +554,7 @@ export default (app, db) => {
       for await (const product of db.collection("bazaar").find()) {
         const itemInfo = productInfo[product.productId];
 
-        const productName = itemInfo ? itemInfo.name : helper.titleCase(product.productId.replace(/(_+)/g, " "));
+        const productName = itemInfo ? itemInfo.name : helper.titleCase(product.productId.replaceAll(/(_+)/g, " "));
 
         output.push({
           id: product.productId,

@@ -1,5 +1,5 @@
 import { html, LitElement, TemplateResult } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { formatNumber } from "../stats-defer";
@@ -18,18 +18,16 @@ export class SkillComponent extends LitElement {
   @property({ attribute: "maxed", type: Boolean, reflect: true })
   maxed!: boolean;
 
-  @property({ type: String })
-  progressText = "Loading...";
+  @state()
+  private hovering = false;
 
   constructor() {
     super();
     this.addEventListener("mouseover", () => {
-      const hoverText = this.getProgressTexts()[1];
-      this._updateProgressText(hoverText);
+      this.hovering = true;
     });
     this.addEventListener("mouseleave", () => {
-      const mainText = this.getProgressTexts()[0];
-      this._updateProgressText(mainText);
+      this.hovering = false;
     });
   }
 
@@ -66,65 +64,61 @@ export class SkillComponent extends LitElement {
         <div class="skill-progress-bar" style="--progress: ${level.level == level.levelCap ? 1 : level.progress}"></div>
         ${"runecrafting" in calculated.levels
           ? html`<div class="skill-progress-text">
-              ${this.progressText === "Loading..." ? this.getProgressTexts()[0] : this.progressText}
+              ${this.hovering ? this.getHoverText(level) : this.getMainText(level)}
             </div>`
           : undefined}
       </div>
     `;
   }
 
-  private _updateProgressText(string: string) {
-    this.progressText = string;
-  }
-
-  private getLevel() {
+  private getLevel(): Level | undefined {
     if (this.skill == undefined) {
       return undefined;
     }
 
-    let level: Level | undefined;
     switch (this.type) {
       case "skill":
-        level = calculated.levels[this.skill];
-        break;
+        return calculated.levels[this.skill];
 
       case "dungeon":
         if (this.skill === "catacombs") {
-          level = calculated.dungeons[this.skill].level;
+          return calculated.dungeons[this.skill].level;
+        } else {
+          return undefined;
         }
-        break;
 
       case "dungeon_class":
-        level = calculated.dungeons.classes[this.skill].experience;
-        break;
-    }
+        return calculated.dungeons.classes[this.skill].experience;
 
-    return level;
+      default:
+        return undefined;
+    }
   }
 
-  private getProgressTexts(): [string, string] {
-    let mainText = "";
-    let hoverText = "";
-
-    const level = this.getLevel();
-
-    if (level == undefined) {
-      return [mainText, hoverText];
-    }
-
-    hoverText = level.xpCurrent.toLocaleString();
-    if (level.xpForNext && level.xpForNext != Infinity) {
-      hoverText += ` / ${level.xpForNext.toLocaleString()}`;
-    }
-    hoverText += " XP";
-
-    mainText = formatNumber(level.xpCurrent, true);
+  /**
+   * @returns the text to be displayed when the user is not hovering
+   */
+  private getMainText(level: Level): string {
+    let mainText = formatNumber(level.xpCurrent, true);
     if (level.xpForNext && level.xpForNext != Infinity) {
       mainText += ` / ${formatNumber(level.xpForNext, true)}`;
     }
     mainText += " XP";
 
-    return [mainText, hoverText];
+    return mainText;
+  }
+
+  /**
+   * @returns the text to be displayed when the user is hovering
+   */
+  private getHoverText(level: Level): string {
+    let hoverText = level.xpCurrent.toLocaleString();
+    if (level.xpForNext && level.xpForNext != Infinity) {
+      hoverText += ` / ${level.xpForNext.toLocaleString()}`;
+    }
+    hoverText += " XP";
+
+    return hoverText;
   }
 
   // disable shadow root

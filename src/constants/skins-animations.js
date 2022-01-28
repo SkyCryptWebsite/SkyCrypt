@@ -451,6 +451,30 @@ const skins = [
     texture: "/head/9617a34c8ff467fdb45be3ff17863fcff7e8424c8dd9b99666edd13b44b32e8c",
     release: new Date("2021-12-24 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_DOLPHIN_SNUBNOSE_GREEN",
+    name: "Green Snubfin",
+    texture: "/head/5f2879bd8b0bafdd71dbd3fc5850afc6c53da60d4252182cfc80737a00d72408",
+    release: new Date("2022-01-19 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_DOLPHIN_SNUBNOSE_RED",
+    name: "Red Snubfin",
+    texture: "/head/779df5b4da325c0d740251b4204a0cd22d9fdb88cecb6eff6176ef4f2ecedb1e",
+    release: new Date("2022-01-19 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_DOLPHIN_SNUBNOSE_PURPLE",
+    name: "Purple Snubfin",
+    texture: "/head/fd0b213c15dd7b8c67512bc18bf14d32dc4b57b9c305d1c7514aa3e2609a78a4",
+    release: new Date("2022-01-19 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_DOLPHIN_SNUBFIN",
+    name: "Snubfin",
+    texture: "/head/279413c788c7f450234bdab0cf0d0291c57f730e380c6d4c7746fde15928381",
+    release: new Date("2022-01-19 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
@@ -766,6 +790,22 @@ const animations = [
       410: "/head/314d2152f639dff120b1246a67970f9e688606017e354db15638a900616ef795",
       510: "/head/486a3c5719d0b46d2f20d510d4acedefd994163c2800c702da01181e9c91c57e",
       640: "/head/4b0c880ffc254cb2fb44039125e49c67ff3116e5514bd8ffe42a24c98982bae8",
+    },
+  },
+  {
+    id: "PET_SKIN_DOLPHIN_SNUBFIN",
+    texture: "/resources/img/items/pet_skin_dolphin_snubfin.png",
+    animation: {
+      0: "/head/e7df31c808b3e0e8907943e4cadf37f6bfd0af177913ba81d96115c6139d98b9",
+      90: "/head/60098af339abd2fdd2b0046c6a5ca5ae351e429d0198e9711da42f78780bb5db",
+      220: "/head/39f759bda7792e9810c4524d6d3f4463cd306c32a61f27077b58396dea89d551",
+      380: "/head/78ebcc36ec0984c48721eaf8a662b94c4702823432e478046c65f641030b5b13",
+      530: "/head/229bde70c7ab11489220ae2e15f0c68caba0b8ceeb726fc1bce518d37a900632",
+      670: "/head/70271de0b78de131253e5723df01e3f3a89204658c5a1a77ded86e9d4d48337",
+      820: "/head/a5ccc6f0a9b69bd1583f030400dc2d2997e9a1731b5f961c0eab2df9d653a583",
+      1000: "/head/81ecf02070175e5704d7d82e727f552796343bcb2e75855e78c58a6161223ca0",
+      1280: "/head/cd5cad5afe1ba4b7a4e303dce968c97ae06988702ed5dbd553035d936abd5159",
+      1420: "/head/279413c788c7f450234bdab0cf0d0291c57f730e380c6d4c7746fde15928381",
     },
   },
 ];

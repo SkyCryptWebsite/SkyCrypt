@@ -26,14 +26,15 @@
   <div data-tippy-content="Supporting LGBTQ+ rights all around the year! ❤️<br><br>Click for a surprise. :)" class="pride-flag"></div>
   <script>document.querySelector(".pride-flag").classList.add(localStorage.getItem("currentFlag") ?? "logo");</script>
   <a href="/" id="site_name">SkyCrypt</a>
-  <button class="social-button expander" id="info-button" aria-expanded="false">
+  <button class="header-button expander" id="info-button" aria-expanded="false">
     About
   </button>
   <div id="info-box" class="expandable">
     <div id="info_box_content">
-      <p>The SkyCrypt project is maintained by boblovespi, FantasmicGalaxy, MartinNemi03, metalcupcake5 and Shiiyu. It is an open-source project. </p>
+      <p>SkyCrypt is a free open-source stats viewer for Hypixel SkyBlock.</p>
       <p>You can report bugs, suggest features, or contribute to the code on <a class="link link-github" href="https://github.com/SkyCryptWebsite/SkyCrypt" target="_blank" rel="noreferrer">GitHub</a>. It would be much appreciated!</p>
-      <p>Chat: <a class="link link-discord" href="https://discord.gg/cNgADv2kEQ">discord.gg/cNgADv2kEQ</a></p>
+      <p>Join our community on <a class="link link-discord" href="https://discord.gg/cNgADv2kEQ">Discord</a></p>
+      <p>Help keep SkyCrypt ad free by donating on <a class="link link-patreon" href="https://www.patreon.com/shiiyu">Patreon</a></p>
       <p>The original project, <a href="https://sky.lea.moe">sky.lea.moe</a>, was orginally created by <a class="link link-twitter" href="https://twitter.com/LeaPhant" target="_blank" rel="noreferrer">LeaPhant</a>. Thanks for all of what you've done Lea!</p>
       <h4>Used Resources:</h4>
       <ul class="info-box__resources">
@@ -71,10 +72,7 @@
     </div>
   </div>
 
-  <a href="/api" style="text-decoration: none;" class="social-button" id="api_button">API</a>
-  <% if('donations' in extra){ %>
-    <a title="Patreon" target="_blank" rel="noreferrer" href="https://patreon.com/shiiyu" class="social-button patreon"><span><%= extra.donations.patreon %> Patrons</span><div class="social-icon"></div></a>
-  <% } %>
+  <a href="/api" style="text-decoration: none;" class="header-button" id="api_button">API</a>
   <form class="lookup-player">
     <input name="ign" type="search" enterkeyhint="go" placeholder="Enter username" aria-label="username" required>
     <button type="submit">
@@ -91,19 +89,7 @@
     </svg>
     <span>Themes</span>
   </button>
-  <div id="themes-box" class="expandable list">
-    <% for(const theme_id in extra.themes){
-      const theme = extra.themes[theme_id];
-      if(theme.hidden) continue; %>
-    <label class="list-item">
-      <% const icon = '/resources/img/logo_square.svg' + (theme.colors?.logo?.replace('#', '?color=') ?? '') + (theme.light ? '&invert' : ''); %>
-      <img class="icon" src="<%= icon %>" alt="" loading="lazy">
-      <span class="name"><%= theme.name %></span>
-      <div class="author">by <span><%= theme.author %></span></div>
-      <input type="radio" name="theme" value="<%= theme_id %>">
-    </label>
-    <% } %>
-  </div>
+  <theme-list id="themes-box" class="expandable list"></theme-list>
   <% if (page != 'api') { %>
     <button id="packs-button" class="expander" aria-expanded="false">
       <svg viewBox="0 0 24 24">

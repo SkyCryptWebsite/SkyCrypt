@@ -36,7 +36,6 @@ import cookieParser from "cookie-parser";
 
 import api from "./api.js";
 import apiv2 from "./apiv2.js";
-import kofi from "./donations/kofi.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -100,7 +99,7 @@ const cachePath = path.resolve(__dirname, "../cache");
 await fs.ensureDir(cachePath);
 
 if (credentials.hypixel_api_key.length == 0) {
-  throw "Please enter a valid Hypixel API Key. Join mc.hypixel.net and enter /api to obtain one.";
+  throw new Error("Please enter a valid Hypixel API Key. Join mc.hypixel.net and enter /api to obtain one.");
 }
 
 let isFoolsDay;
@@ -159,7 +158,6 @@ app.use(
 
 api(app, db);
 apiv2(app, db);
-kofi(app, db);
 
 function parseFavorites(cookie) {
   return cookie?.split(",").filter((uuid) => /^[0-9a-f]{32}$/.test(uuid)) || [];
@@ -208,22 +206,10 @@ async function getExtra(page = null, favoriteUUIDs = [], cacheOnly) {
 
   output.twemoji = twemoji;
 
-  output.themes = lib.getThemes();
-
   output.packs = lib.getPacks();
 
   output.isFoolsDay = isFoolsDay;
   output.cacheOnly = cacheOnly;
-
-  if ("recaptcha_site_key" in credentials) {
-    output.recaptcha_site_key = credentials.recaptcha_site_key;
-  }
-
-  const patreonEntry = await db.collection("donations").findOne({ type: "patreon" });
-
-  if (patreonEntry != null) {
-    output.donations = { patreon: patreonEntry.amount || 0 };
-  }
 
   if (page === "index") {
     output.favorites = await getFavoritesFormUUIDs(favoriteUUIDs);
@@ -242,8 +228,8 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
 
   let paramPlayer = req.params.player
     .toLowerCase()
-    .replace(/[ +]/g, "_")
-    .replace(/[^a-z\d\-_:]/g, "");
+    .replaceAll(/[ +]/g, "_")
+    .replaceAll(/[^a-z\d\-_:]/g, "");
   let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
 
   const cacheOnly = req.query.cache === "true" || forceCacheOnly;
@@ -309,6 +295,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
         error: e,
         player: playerUsername,
         extra: await getExtra("index", favorites, cacheOnly),
+        promotion: constants.promotions[Math.floor(Math.random() * constants.promotions.length)],
         fileHashes,
         fileNameMap,
         helper,
@@ -380,7 +367,7 @@ app.all("/cape/:username", cors(), async (req, res) => {
     const lastUpdated = moment(optifineCape.headers["last-modified"]);
 
     if (lastUpdated.unix() > fileStats.mtime) {
-      throw "optifine cape changed";
+      throw new Error("optifine cape changed");
     } else {
       file = await fs.readFile(filename);
     }
@@ -457,12 +444,18 @@ app.all("/item(.gif)?/:skyblockId?", cors(), async (req, res) => {
 app.all("/leather/:type/:color", cors(), async (req, res) => {
   const { type, color } = req.params;
 
-  if (!["boots", "leggings", "chestplate", "helmet"].includes(type)) {
-    throw new Error("invalid armor type: " + type);
-  }
+  try {
+    if (!["boots", "leggings", "chestplate", "helmet"].includes(type)) {
+      throw new Error("invalid armor type: " + type);
+    }
 
-  if (!/^[0-9a-fA-F]{6}$/.test(color)) {
-    throw new Error("invalid color: #" + color);
+    if (!/^[0-9a-fA-F]{6}$/.test(color)) {
+      throw new Error("invalid color: #" + color);
+    }
+  } catch (error) {
+    res.status(400);
+    res.send(error.message);
+    return;
   }
 
   const filename = `leather_${type}_${color}.png`;
@@ -489,12 +482,18 @@ app.all("/leather/:type/:color", cors(), async (req, res) => {
 app.all("/potion/:type/:color", cors(), async (req, res) => {
   const { type, color } = req.params;
 
-  if (!["normal", "splash"].includes(type)) {
-    throw new Error("invalid armor type: " + type);
-  }
+  try {
+    if (!["normal", "splash"].includes(type)) {
+      throw new Error("invalid armor type: " + type);
+    }
 
-  if (!/^[0-9a-fA-F]{6}$/.test(color)) {
-    throw new Error("invalid color: #" + color);
+    if (!/^[0-9a-fA-F]{6}$/.test(color)) {
+      throw new Error("invalid color: #" + color);
+    }
+  } catch (error) {
+    res.status(400);
+    res.send(error.message);
+    return;
   }
 
   const filename = `potion_${type}_${color}.png`;
@@ -638,6 +637,7 @@ app.all("/", async (req, res, next) => {
       error: null,
       player: null,
       extra: await getExtra("index", favorites, cacheOnly),
+      promotion: constants.promotions[Math.floor(Math.random() * constants.promotions.length)],
       fileHashes,
       fileNameMap,
       helper,

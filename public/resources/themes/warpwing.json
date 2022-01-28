@@ -1,0 +1,18 @@
+{
+  "name": "Forest Walk",
+  "author": "WarpWing",
+  "schema": 2,
+  "images": {
+    "bg": "https://cdn.discordapp.com/attachments/713278398830477353/744929704611676221/farming_2.png",
+    "bg_blur": "https://cdn.discordapp.com/attachments/713278398830477353/744929704611676221/farming_2.png"
+  },
+  "backgrounds": {
+    "skillbar": { "type": "color", "color": "#00aabb" }
+  },
+  "colors": {
+    "logo": "#117d87",
+    "icon": "#00aabb",
+    "link": "#00aabb",
+    "hover": "#00aabb"
+  }
+}
