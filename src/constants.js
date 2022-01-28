@@ -16,4 +16,3 @@ export * from "./constants/skins-animations.js";
 export * from "./constants/stats.js";
 export * from "./constants/tags.js";
 export * from "./constants/talismans.js";
-export * from "./constants/themes.js";

@@ -18,9 +18,8 @@ interface Pack {
 interface Theme {
   name: string;
   author: string;
-  official?: true;
-  community?: true;
-  light?: true;
+  schema: number;
+  light?: boolean;
   enchanted_glint?: string;
   images?: {
     [key: string]: string;
@@ -657,3 +656,5 @@ interface UADataValues {
   model: string;
   uaFullVersion: string;
 }
+
+declare const redocInit: ((color?: string) => void) | undefined;

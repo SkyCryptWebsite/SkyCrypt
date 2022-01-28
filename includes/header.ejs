@@ -91,19 +91,7 @@
     </svg>
     <span>Themes</span>
   </button>
-  <div id="themes-box" class="expandable list">
-    <% for(const theme_id in extra.themes){
-      const theme = extra.themes[theme_id];
-      if(theme.hidden) continue; %>
-    <label class="list-item">
-      <% const icon = '/resources/img/logo_square.svg' + (theme.colors?.logo?.replace('#', '?color=') ?? '') + (theme.light ? '&invert' : ''); %>
-      <img class="icon" src="<%= icon %>" alt="" loading="lazy">
-      <span class="name"><%= theme.name %></span>
-      <div class="author">by <span><%= theme.author %></span></div>
-      <input type="radio" name="theme" value="<%= theme_id %>">
-    </label>
-    <% } %>
-  </div>
+  <theme-list id="themes-box" class="expandable list"></theme-list>
   <% if (page != 'api') { %>
     <button id="packs-button" class="expander" aria-expanded="false">
       <svg viewBox="0 0 24 24">
