@@ -17,8 +17,7 @@
     <redoc id="docs"></redoc>
     <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
     <script>
-      function redocInit() {
-        const themeColors = extra.themes[localStorage.getItem("currentTheme")]?.colors;
+      function redocInit(color) {
         Redoc.init(
           'resources/api/api_docs.json',
           {
@@ -26,7 +25,7 @@
             theme: {
               colors: {
                 primary: {
-                  main: themeColors?.icon ?? '#0bda51',
+                  main: color ?? "#0bda51",
                 }
               }
             }
@@ -34,8 +33,7 @@
           document.getElementById('docs')
         );
       }
-      redocInit();
-      document.querySelector('#themes-box').addEventListener("change", () => setTimeout(redocInit));
+      redocInit(JSON.parse(localStorage.getItem("processedTheme"))?.styles?.["--icon-hex"]);
     </script>
 
     <%- include('../includes/footer'); %>

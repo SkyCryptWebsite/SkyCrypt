@@ -5,9 +5,10 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "experimentalDecorators": true,
+    "allowJs": true,
+    "checkJs": true,
     "target": "es2021",
     "lib": ["es2021", "dom", "dom.iterable"],
-    "outDir": "../js",
     "plugins": [{ "name": "ts-lit-plugin", "strict": true }]
   },
   "include": ["."]

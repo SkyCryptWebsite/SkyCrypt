@@ -1,4 +1,3 @@
-import { loadTheme } from "./themes";
 import tippy from "tippy.js";
 
 tippy.setDefaultProps({ allowHTML: true });
@@ -72,6 +71,7 @@ function eraseCookie(name: string) {
 const expanders = document.querySelectorAll(".expander");
 for (const expander of expanders) {
   expander.addEventListener("click", () => {
+    import("./elements/theme-list");
     for (const otherExpander of expanders) {
       if (otherExpander != expander) {
         otherExpander.setAttribute("aria-expanded", "false");
@@ -118,30 +118,6 @@ document.querySelectorAll<HTMLButtonElement>('#packs-box button[name="pack"]').f
     }
   });
 });
-
-document.querySelector("#themes-box")?.addEventListener("change", (event) => {
-  const newTheme = (event.target as HTMLInputElement).value;
-  localStorage.setItem("currentTheme", newTheme);
-  loadTheme(newTheme);
-});
-
-window.addEventListener("storage", (event) => {
-  if (event.key === "currentTheme" && event.newValue != null) {
-    setCheckedTheme(event.newValue);
-  } else if (event.key === "processedTheme" && event.newValue != null) {
-    applyProcessedTheme(JSON.parse(event.newValue));
-  }
-});
-
-function setCheckedTheme(theme: string) {
-  const checkbox = document.querySelector<HTMLInputElement>(`#themes-box input[value="${theme}"]`);
-  if (checkbox == null) {
-    throw new Error("no checkbox for theme: " + theme);
-  }
-  checkbox.checked = true;
-}
-
-setCheckedTheme(localStorage.getItem("currentTheme") ?? "default");
 
 tippy("*[data-tippy-content]");
 

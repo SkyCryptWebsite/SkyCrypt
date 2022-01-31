@@ -4080,10 +4080,6 @@ export async function updateLeaderboardPositions(db, uuid, allProfiles) {
   }
 }
 
-export function getThemes() {
-  return constants.themes;
-}
-
 export function getPacks() {
   return packs.sort((a, b) => b.priority - a.priority);
 }
