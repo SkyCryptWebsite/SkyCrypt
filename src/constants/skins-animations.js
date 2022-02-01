@@ -475,6 +475,12 @@ const skins = [
     texture: "/head/279413c788c7f450234bdab0cf0d0291c57f730e380c6d4c7746fde15928381",
     release: new Date("2022-01-19 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_TIGER_GOLDEN",
+    name: "Golden",
+    texture: "/head/c85f8db6e5b826d3dd5847cd8d7279f4d4dd50bc955ca7968c7c49b496ed7a3b",
+    release: new Date("2022-02-01 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
@@ -806,6 +812,27 @@ const animations = [
       1000: "/head/81ecf02070175e5704d7d82e727f552796343bcb2e75855e78c58a6161223ca0",
       1280: "/head/cd5cad5afe1ba4b7a4e303dce968c97ae06988702ed5dbd553035d936abd5159",
       1420: "/head/279413c788c7f450234bdab0cf0d0291c57f730e380c6d4c7746fde15928381",
+    },
+  },
+  {
+    id: "PET_SKIN_TIGER_GOLDEN",
+    texture: "/resources/img/items/pet_skin_tiger_golden.png",
+    animation: {
+      0: "/head/c85f8db6e5b826d3dd5847cd8d7279f4d4dd50bc955ca7968c7c49b496ed7a3b",
+      200: "/head/930b0cafdcfd0fbd86e9c44d405dea2f9910c79e4aa3c276d512eeb491a61cff",
+      380: "/head/787e301cbe921605958c598223a226a029820759b3516a47f1d5000262f22c17",
+      510: "/head/1714532202ac9f522f87f88d12931930dacea8f954f069cf59623cf33fbbf0a5",
+      620: "/head/9d12e1bed0e66537d7db32db6fc53d209d7fb863b3c5c9e86edf3c27d3b9a796",
+      820: "/head/95d950e1d7e55839e669a267e874b1eb6e501c71955a4e12b521db358102ad98",
+      950: "/head/b7bfdc6a4d26ee1964baab7898c1709753c07365804171250ac1ce2d44121d61",
+      1120: "/head/a7af11dbd2384865ea6dbab0058404f638e75f646ec49af84afd290e267550b",
+      1260: "/head/afc3f0d6946ff010c9bb1aa99c66f75110bef5b1572cbcd47b969c5903b6b217",
+      1350: "/head/3478f6cebf3ae0138f5c911ac5152b8f7a10c532db6ec13e24dfe35e5ddd6451",
+      1500: "/head/5dd7f6cc8e60c94f379ee5c7883d971491d952a7d585993d2955a53fdcbd64e6",
+      1730: "/head/d8de69ec4e6a12816e12782d7919a661caeaf6855a3a4acfdc0d0169bc08e2d9",
+      1850: "/head/d44e2408796c0e45c0abd5544b8bc1b9dcf7c53a75aba8a67b29bea09bf62bf0",
+      2010: "/head/3e12619952e22eab5ab29417a0be1b9c14037804854c298357762279599a48a5",
+      2200: "/head/577c388aa2a20441497af7f99b87f152e9a7618d1d9f9fb650d3b1c27f931054",
     },
   },
 ];
