@@ -12,6 +12,15 @@ if (cluster.isPrimary) {
     cluster.fork();
   }
 
+  cluster.on("exit", (w, c, s) => {
+    console.log(
+      `${Date.now()}: Worker ${w.id} died with code ${c} ${s ? `and signal ${s}` : ""} (pid:${w.process.pid})`
+    );
+
+    let fw = cluster.fork();
+    console.log(`${Date.now()}: Worker respawned with id ${fw.id} (pid:${fw.process.pid})`);
+  });
+
   console.log(`Running SkyBlock Stats on ${cpus} cores`);
 } else {
   import("./app.js");
