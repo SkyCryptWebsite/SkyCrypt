@@ -156,6 +156,7 @@ interface Level {
   levelCap: number;
   uncappedLevel: number;
   levelWithProgress: number;
+  rank?: number;
   unlockableLevelWithProgress: number;
 }
 

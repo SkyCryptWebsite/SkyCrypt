@@ -24,6 +24,7 @@ const config = {
     "public/resources/ts/themes.ts",
     "public/resources/ts/elements/local-time.ts",
     "public/resources/ts/elements/rich-item.ts",
+    "public/resources/ts/elements/skill-component.ts",
   ],
   output: {
     dir: "public/resources/js",

@@ -82,7 +82,7 @@
   grid-area: skill;
 
   .skill-bars[data-api-enabled="false"] {
-    .xp-skill {
+    skill-component {
       filter: grayscale(1) opacity(0.5);
     }
   }
@@ -102,11 +102,11 @@
   grid-template-columns: 1fr 1fr;
   gap: 4px 24px;
 
-  .skill {
+  skill-component {
     position: relative;
     height: 36px;
 
-    &.maxed-skill {
+    &[maxed] {
       --icon-hex: var(--maxed-hex);
       --skillbar: var(--maxedbar);
     }
@@ -2574,7 +2574,7 @@ inventory-view {
     }
   }
 
-  #skill_levels_container .skill {
+  #skill_levels_container skill-component {
     width: 100%;
     margin: 0;
   }

@@ -75,16 +75,22 @@ const statShort = {
 
 const skillItems = {
   alchemy: "icon-379_0",
+  archer: 'icon-261_0',
+  berserk: 'icon-267_0',
   carpentry: "icon-58_0",
+  catacombs: 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793',
   combat: "icon-272_0",
   enchanting: "icon-116_0",
   farming: "icon-294_0",
   fishing: "icon-346_0",
   foraging: "icon-6_3",
+  healer: 'icon-373_0',
+  mage: 'icon-369_0',
   mining: "icon-274_0",
   runecrafting: "icon-378_0",
   social: "icon-388_0",
   taming: "icon-383_0",
+  tank: 'icon-299_0',
 };
 
 const slayerInfo = {
@@ -410,32 +416,6 @@ function itemIcon(item, classes) {
       icon-<%= item.id %>_<%= item.Damage %>
     "
   >
-  </div>
-  <%
-}
-
-function skill_component(skill, icon, level, extra = {}) {
-  %>
-  <div class="skill xp-skill<%= level.level == level.maxLevel ? ' maxed-skill' : ''%>">
-    <div class="skill-icon" <% if(level.rank && level.rank < 50000){ %>
-      data-tippy-content="<span class='stat-name'>Rank: </span><span class='stat-value'></span>#<%= level.rank %></span>"
-    <% } %>>
-      <% if(icon.startsWith('head-')){ %>
-        <div class="item-icon custom-icon" style="background-image:url(/head/<%= icon.substring(5) %>)"></div>
-      <% }else{ %>
-        <div class="item-icon <%= icon %>"></div>
-      <% } %>
-      <% if(level.level == level.maxLevel){ %><div class="piece-shine"></div><% } %>
-    </div>
-    <div class="skill-name"><%= skill %> <span class="skill-level"><%= level.level >= 0 ? level.level : '?' %></span></div>
-    <div class="skill-bar" data-skill="<%= skill %>">
-      <div class="skill-progress-bar" style="--progress: <%= level.level == level.levelCap ? 1 : level.progress %>"></div>
-      <% if('runecrafting' in calculated.levels){ %>
-        <div class="skill-progress-text" data-hover-text="<%= level.xpCurrent.toLocaleString() %><% if(level.xpForNext != Infinity){ %> / <%= level.xpForNext.toLocaleString() %><% } %> XP">
-          <%= helper.formatNumber(level.xpCurrent, true) %><% if(level.xpForNext != Infinity){ %> / <%= helper.formatNumber(level.xpForNext) %><% } %> XP
-        </div>
-      <% } %>
-    </div>
   </div>
   <%
 }
@@ -1084,18 +1064,18 @@ const metaDescription = getMetaDescription()
       <div id="skill_levels_container">
         <% if ('levels' in calculated) { %>
           <div class="skill-bars" data-api-enabled="<%= 'runecrafting' in calculated.levels %>">
-            <%= skill_component('Taming', skillItems.taming, calculated.levels.taming) %>
-            <%= skill_component('Farming', skillItems.farming, calculated.levels.farming) %>
-            <%= skill_component('Mining', skillItems.mining, calculated.levels.mining) %>
-            <%= skill_component('Combat', skillItems.combat, calculated.levels.combat) %>
-            <%= skill_component('Foraging', skillItems.foraging, calculated.levels.foraging) %>
-            <%= skill_component('Fishing', skillItems.fishing, calculated.levels.fishing) %>
-            <%= skill_component('Enchanting', skillItems.enchanting, calculated.levels.enchanting) %>
-            <%= skill_component('Alchemy', skillItems.alchemy, calculated.levels.alchemy) %>
+            <skill-component skill="taming" type="skill" icon="<%= skillItems.taming %>"></skill-component>
+            <skill-component skill="farming" type="skill" icon="<%= skillItems.farming %>"></skill-component>
+            <skill-component skill="mining" type="skill" icon="<%= skillItems.mining %>"></skill-component>
+            <skill-component skill="combat" type="skill" icon="<%= skillItems.combat %>"></skill-component>
+            <skill-component skill="foraging" type="skill" icon="<%= skillItems.foraging %>"></skill-component>
+            <skill-component skill="fishing" type="skill" icon="<%= skillItems.fishing %>"></skill-component>
+            <skill-component skill="enchanting" type="skill" icon="<%= skillItems.enchanting %>"></skill-component>
+            <skill-component skill="alchemy" type="skill" icon="<%= skillItems.alchemy %>"></skill-component>
             <% if ('runecrafting' in calculated.levels) { %>
-              <%= skill_component('Carpentry', skillItems.carpentry, calculated.levels.carpentry) %>
-              <%= skill_component('Runecrafting', skillItems.runecrafting, calculated.levels.runecrafting) %>
-              <!--<%= skill_component('Social', skillItems.social, calculated.levels.social) %>-->
+              <skill-component skill="carpentry" type="skill" icon="<%= skillItems.carpentry %>"></skill-component>
+              <skill-component skill="runecrafting" type="skill" icon="<%= skillItems.runecrafting %>"></skill-component>
+              <!--<skill-component skill="social" type="skill" icon="<%= skillItems.social %>"></skill-component>-->
             <% } else { %>
               <div class="no-access">Skills from achievements across profiles. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">Enable Skills API</a> for more accurate data.</div>
             <% } %>
@@ -1956,11 +1936,11 @@ const metaDescription = getMetaDescription()
         <span class="stat-name">Selected Class: </span>
         <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span>
         <div class="skill-bars">
-          <%= skill_component('Healer', 'icon-373_0', calculated.dungeons.classes.healer.experience) %>
-          <%= skill_component('Mage', 'icon-369_0', calculated.dungeons.classes.mage.experience) %>
-          <%= skill_component('Berserk', 'icon-267_0', calculated.dungeons.classes.berserk.experience) %>
-          <%= skill_component('Archer', 'icon-261_0', calculated.dungeons.classes.archer.experience) %>
-          <%= skill_component('Tank', 'icon-299_0', calculated.dungeons.classes.tank.experience) %>
+          <skill-component skill="healer" type="dungeon_class" icon="<%= skillItems.healer %>"></skill-component>
+          <skill-component skill="mage" type="dungeon_class" icon="<%= skillItems.mage %>"></skill-component>
+          <skill-component skill="berserk" type="dungeon_class" icon="<%= skillItems.berserk %>"></skill-component>
+          <skill-component skill="archer" type="dungeon_class" icon="<%= skillItems.archer %>"></skill-component>
+          <skill-component skill="tank" type="dungeon_class" icon="<%= skillItems.tank %>"></skill-component>
         </div>
         <% } %>
 
@@ -1969,7 +1949,7 @@ const metaDescription = getMetaDescription()
 
           <p class="stat-raw-values">
             <div class="skill-bars">
-              <%= skill_component('Catacombs', 'head-964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793', calculated.dungeons.catacombs.level) %>
+              <skill-component skill="catacombs" type="dungeon" icon="<%= skillItems.catacombs %>"></skill-component>
             </div>
             <span class="stat-name">Dungeon Item Boost: </span><span class="stat-value percent"><%= calculated.dungeons.catacombs.bonuses.item_boost %></span>
           </p>
