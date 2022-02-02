@@ -742,7 +742,7 @@ class WitherSkeleton extends Pet {
   }
 
   get first() {
-    let mult = this.rarity > 2 ? 0.3 : this.rarity > 1 ? 0.1 : 0.05;
+    const mult = this.rarity > 2 ? 0.3 : this.rarity > 1 ? 0.1 : 0.05;
     return {
       name: "§6Stronger Bones",
       desc: [`§7Take §a${round(this.level * mult, 1)}% §7less damage from skeletons`],
@@ -750,7 +750,7 @@ class WitherSkeleton extends Pet {
   }
 
   get second() {
-    let mult = this.rarity > 2 ? 0.5 : 0.3;
+    const mult = 0.25;
     return {
       name: "§6Wither Blood",
       desc: [`§7Deal §a${round(this.level * mult, 1)}% §7more damage to wither mobs`],
@@ -758,7 +758,7 @@ class WitherSkeleton extends Pet {
   }
 
   get third() {
-    let mult = 2;
+    const mult = 2;
     return {
       name: "§6Death's Touch",
       desc: [
@@ -890,7 +890,7 @@ class Blaze extends Pet {
   }
 
   get first() {
-    let mult = this.rarity > 2 ? 0.2 : this.rarity > 1 ? 0.1 : 0.05;
+    const mult = 0.1;
     return {
       name: "§6Nether Embodiment",
       desc: [`§7Increases all stats by §a${round(this.level * mult, 1)}% §7while on the Blazing Fortress`],
@@ -898,7 +898,7 @@ class Blaze extends Pet {
   }
 
   get second() {
-    let mult = this.rarity > 2 ? 0.4 : 0.3;
+    const mult = 0.4;
     return {
       name: "§6Bling Armor",
       desc: [`§7Upgrades §cBlaze Armor §7stats and ability by §a${round(this.level * mult, 1)}%`],
@@ -939,7 +939,7 @@ class Blaze extends Pet {
     }
 
     // Fixing blaze + frozen blaze armors bonus stats
-    const mult = 1 + round(this.level * (this.rarity > 2 ? 0.4 : 0.3), 1) / 100;
+    const mult = 1 + round(this.level * 0.4, 1) / 100;
 
     if (hName.includes("BLAZE_HELMET")) {
       for (const stat in helmet.stats) {
@@ -2000,7 +2000,7 @@ class Tiger extends Pet {
   }
 
   get first() {
-    let mult = this.rarity > 2 ? 0.5 : this.rarity > 0 ? 0.33 : 0.15;
+    const mult = this.rarity > 2 ? 0.3 : this.rarity > 0 ? 0.2 : 0.1;
     return {
       name: "§6Merciless Swipe",
       desc: [`§7Gain 	§c+${round(this.level * mult, 1)}% ${symbols.ferocity} Ferocity.`],
@@ -2026,7 +2026,7 @@ class Tiger extends Pet {
   }
 
   modifyStats(stats) {
-    let mult = this.rarity > 2 ? 1 : this.rarity > 0 ? 0.5 : 0.2;
+    const mult = this.rarity > 2 ? 0.3 : this.rarity > 0 ? 0.2 : 0.1;
     stats.ferocity += round(this.level * mult, 1);
   }
 }
@@ -2046,12 +2046,13 @@ class Turtle extends Pet {
     }
     if (this.rarity > 3) {
       list.push(this.third);
+      list.push(this.fourth);
     }
     return list;
   }
 
   get first() {
-    let mult = 0.2;
+    const mult = 0.3;
     return {
       name: "§6Turtle Tactics",
       desc: [`§7Gain §a+${round(this.level * mult, 1)}% ${symbols.defense} Defense`],
@@ -2059,16 +2060,10 @@ class Turtle extends Pet {
   }
 
   get second() {
-    let mult_defense = this.rarity > 3 ? 0.45 : 0.35;
-    let mult_health = this.rarity > 3 ? 0.25 : 0.2;
+    const defense = this.rarity > 3 ? 5 + 0.25 * this.level : 4.95 + 0.15 * this.level;
     return {
       name: "§6Genius Amniote",
-      desc: [
-        `§7Gain §a+${round(this.level * mult_defense, 1)} ${symbols.defense} Defense §7and regen §c+${round(
-          this.level * mult_health,
-          1
-        )}${symbols.health} §7per second when near or in water`,
-      ],
+      desc: [`§7Grants §a+${defense}${symbols.defense} Defense §7for every player around you, up to 4 nearby players.`],
     };
   }
 
@@ -2079,8 +2074,16 @@ class Turtle extends Pet {
     };
   }
 
+  get fourth() {
+    const bonus = this.level * 0.25;
+    return {
+      name: "§6Turtle Shell",
+      desc: [`§7When under §c33% §7maximum HP, you take §a${bonus}% §7less damage.`],
+    };
+  }
+
   modifyStats(stats) {
-    let mult = 0.2;
+    const mult = 0.3;
     stats["defense"] *= round(this.level * mult, 1) / 100;
   }
 }
@@ -2435,7 +2438,7 @@ class BabyYeti extends Pet {
   }
 
   get first() {
-    let mult = 0.5;
+    const mult = 0.5;
     return {
       name: "§6Cold Breeze",
       desc: [
@@ -2447,15 +2450,15 @@ class BabyYeti extends Pet {
   }
 
   get second() {
-    let mult = 1;
+    const mult = this.rarity > 3 ? 0.75 : 0.5;
     return {
       name: "§6Ice Shields",
-      desc: [`§7Gain §a${round(this.level * mult, 1)}% §7of your strength as §a${symbols.defense} Defense`],
+      desc: [`§7Gain §a${floor(this.level * mult, 1)}% §7of your strength as §a${symbols.defense} Defense`],
     };
   }
 
   get third() {
-    let mult = 1;
+    const mult = 1;
     return {
       name: "§6Yeti Fury",
       desc: [
@@ -2468,7 +2471,7 @@ class BabyYeti extends Pet {
 
   modifyStats(stats) {
     if (this.rarity > 2) {
-      let mult = 1;
+      const mult = 1;
       stats["defense"] += (round(this.level * mult, 1) / 100) * stats["strength"];
     }
   }
@@ -2493,7 +2496,7 @@ class BlueWhale extends Pet {
   }
 
   get first() {
-    let mult = this.rarity > 3 ? 2.5 : this.rarity > 2 ? 2 : this.rarity > 1 ? 1.5 : this.rarity > 0 ? 1 : 0.5;
+    const mult = this.rarity > 3 ? 2.5 : this.rarity > 2 ? 2 : this.rarity > 1 ? 1.5 : this.rarity > 0 ? 1 : 0.5;
     return {
       name: "§6Ingest",
       desc: [`§7All potions heal §c+${round(this.level * mult, 1)}${symbols.health}`],
@@ -2501,8 +2504,8 @@ class BlueWhale extends Pet {
   }
 
   get second() {
-    let mult = 0.03;
-    let health = this.rarity > 3 ? "20.0" : this.rarity > 2 ? "25.0" : "30.0";
+    const mult = 0.01;
+    const health = this.rarity > 3 ? "20.0" : this.rarity > 2 ? "25.0" : "30.0";
     return {
       name: "§6Bulk",
       desc: [
@@ -2514,7 +2517,7 @@ class BlueWhale extends Pet {
   }
 
   get third() {
-    let mult = 0.2;
+    const mult = 0.2;
     return {
       name: "§6Archimedes",
       desc: [`§7Gain §c+${round(this.level * mult, 1)}% Max ${symbols.health} Health`],
@@ -2523,12 +2526,12 @@ class BlueWhale extends Pet {
 
   modifyStats(stats) {
     if (this.rarity > 1) {
-      let mult = 0.03;
-      let health = this.rarity > 3 ? 20 : this.rarity > 2 ? 25 : 30;
+      const mult = 0.01;
+      const health = this.rarity > 3 ? 20 : this.rarity > 2 ? 25 : 30;
       stats["defense"] += round((this.level * mult * stats["health"]) / health, 1);
     }
     if (this.rarity > 3) {
-      let mult = 0.2;
+      const mult = 0.2;
       stats["health"] *= 1 + round((this.level * mult) / 100, 1);
     }
   }
@@ -2860,37 +2863,31 @@ class Jellyfish extends Pet {
   }
 
   get first() {
-    let mult = 1;
+    const healthRegen = round(this.level, 1);
+    const manaCost = round(this.level * 0.5, 1);
     return {
       name: "§6Radiant Regeneration",
       desc: [
-        `§7While in dungeons, increase your base health regen by §a${round(
-          this.level * mult,
-          1
-        )}% §7and heals players within 8 blocks by up to 10hp/s`,
+        `§7While in dungeons, increase your base health regen by §a${healthRegen}% §7and reduces the mana cost of Power Orbs by §a${manaCost}%§7.`,
       ],
     };
   }
 
   get second() {
+    const time = round(this.level * 0.01, 2);
     return {
-      name: "§6Hungry Healer",
+      name: "§6Stored Energy",
       desc: [
-        `§7While in dungeons, for every 1000 you heal teammates apply the §aenchanted golden apple §7effect to all players within 10 blocks (10s cooldown)`,
+        `§7While in dungeons, for every §c2,000 HP §7you heal teammates the cooldown of §aWish §7is reduced by §a${time}s§7, up to §a30s§7.`,
       ],
     };
   }
 
   get third() {
-    let mult = 0.5;
+    const percent = round(this.level * 0.5, 1);
     return {
       name: "§6Powerful Potions",
-      desc: [
-        `§7While in dungeons, increase the effectiveness of Instant Health and Mana splash potions by §a${round(
-          this.level * mult,
-          1
-        )}%`,
-      ],
+      desc: [`§7While in dungeons, increase the effectiveness of Dungeon Potions by §a${percent}%`],
     };
   }
 }
