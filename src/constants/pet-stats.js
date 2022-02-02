@@ -2061,7 +2061,7 @@ class Turtle extends Pet {
   }
 
   get second() {
-    const defense = this.rarity > 3 ? 5 + 0.25 * this.level : 4.95 + 0.15 * this.level;
+    const defense = this.rarity > 3 ? round(5 + this.level * 0.25, 1) : round(4.95 + this.level * 0.15, 1);
     return {
       name: "§6Genius Amniote",
       desc: [`§7Grants §a+${defense}${symbols.defense} Defense §7for every player around you, up to 4 nearby players.`],
