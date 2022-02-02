@@ -1032,8 +1032,9 @@ class GoldenDragon extends Pet {
   get stats() {
     let stats = {};
     if (this.level >= 100) {
-      stats.bonus_attack_speed = round(Math.max(0, this.level - 100) * 0.25 + 25 - 0.01, 0);
       stats.strength = round(Math.max(0, this.level - 100) * 0.25 + 25 - 0.01, 0);
+      stats.magic_find = round(floor(this.level / 10) * 0.5);
+      stats.bonus_attack_speed = round(Math.max(0, this.level - 100) * 0.25 + 25 - 0.01, 0);
     }
     return stats;
   }
@@ -1094,11 +1095,11 @@ class GoldenDragon extends Pet {
   }
 
   get fourth() {
-    const value = this.level * 0.001;
+    const value = this.level * 0.00125;
 
     return {
       name: "§6Legendary Treasure",
-      desc: [`§7Gain §c${round(value, 1)}% §7damage for every milion coins in your bank`],
+      desc: [`§7Gain §c${round(value, 4)}% §7damage for every milion coins in your bank`],
     };
   }
 }
