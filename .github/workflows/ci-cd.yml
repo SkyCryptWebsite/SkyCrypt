@@ -116,6 +116,7 @@ jobs:
         run: npm run scss
 
   deploy-production:
+    name: deploy production
     if: github.ref == 'refs/heads/production' && github.repository_owner == 'SkyCryptWebsite'
     needs: [ejs-lint, check-ts, rollup, build-scss]
     runs-on: ubuntu-latest
@@ -130,6 +131,7 @@ jobs:
           script: ~/deploy-production.sh
 
   deploy-development:
+    name: deploy development
     if: github.ref == 'refs/heads/development' && github.repository_owner == 'SkyCryptWebsite'
     needs: [ejs-lint, check-ts, rollup, build-scss]
     runs-on: ubuntu-latest
