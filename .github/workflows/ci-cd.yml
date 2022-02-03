@@ -115,28 +115,28 @@ jobs:
       - name: build scss
         run: npm run scss
 
-  deploy-prod:
+  deploy-production:
     if: github.ref == 'refs/heads/production' && github.repository_owner == 'SkyCryptWebsite'
     runs-on: ubuntu-latest
     steps:
-      - name: SSH and deploy-prod
+      - name: SSH and deploy-production
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_KEY }}
           port: ${{ secrets.VPS_PORT }}
-          script: ~/deploy-prod.sh
+          script: ~/deploy-production.sh
 
-  deploy-dev:
+  deploy-development:
     if: github.ref == 'refs/heads/development' && github.repository_owner == 'SkyCryptWebsite'
     runs-on: ubuntu-latest
     steps:
-      - name: SSH and deploy-dev
+      - name: SSH and deploy-development
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_KEY }}
           port: ${{ secrets.VPS_PORT }}
-          script: ~/deploy-dev.sh
+          script: ~/deploy-development.sh
