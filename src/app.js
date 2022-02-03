@@ -132,7 +132,7 @@ updateCacheOnly();
 setInterval(updateCacheOnly, 60_000 * 5);
 
 const app = express();
-const port = 32464;
+const port = process.env.SKYCRYPT_PORT ?? 32464;
 
 let sitemap;
 
