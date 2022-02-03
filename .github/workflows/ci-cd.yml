@@ -1,5 +1,5 @@
 # This CI Workflow was deployed and configured by WarpWing and Nate.
-name: CI
+name: CI/CD
 
 on:
   push:
