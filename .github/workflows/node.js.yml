@@ -63,7 +63,7 @@ jobs:
       - name: prettier
         run: npm run prettier
 
-  checkts:
+  check-ts:
     name: check typescript
     runs-on: ubuntu-latest
     steps:
@@ -99,7 +99,7 @@ jobs:
       - name: rollup
         run: npm run rollup
 
-  buildscss:
+  build-scss:
     name: build scss
     runs-on: ubuntu-latest
     steps:
