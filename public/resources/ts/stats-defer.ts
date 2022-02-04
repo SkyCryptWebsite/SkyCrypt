@@ -811,9 +811,12 @@ const sectionObserver = new IntersectionObserver(
 
 function scrollToTab(smooth = true, element?: HTMLElement) {
   const link = element ?? document.querySelector<HTMLAnchorElement>(`[href="${location.hash}"]`);
+
   if (link == null) {
-    throw new Error("could not find tab to scroll to");
+    console.warn(`could not scroll to ${location.hash} tab because it does not exist`);
+    return;
   }
+
   const behavior = smooth ? "smooth" : "auto";
   const left =
     link.offsetLeft +
