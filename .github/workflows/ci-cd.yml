@@ -131,6 +131,7 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_KEY }}
+          script_stop: true
           script: ~/deploy-production.sh
 
   deploy-development:
@@ -149,4 +150,5 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_KEY }}
+          script_stop: true
           script: ~/deploy-development.sh
