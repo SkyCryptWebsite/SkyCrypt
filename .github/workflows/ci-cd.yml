@@ -128,9 +128,9 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
+          port: ${{ secrets.VPS_PORT }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_KEY }}
-          port: ${{ secrets.VPS_PORT }}
           script: ~/deploy-production.sh
 
   deploy-development:
@@ -146,7 +146,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
+          port: ${{ secrets.VPS_PORT }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_KEY }}
-          port: ${{ secrets.VPS_PORT }}
           script: ~/deploy-development.sh
