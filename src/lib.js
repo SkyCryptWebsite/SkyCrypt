@@ -3501,9 +3501,12 @@ export function getMiningCoreData(userProfile) {
 
   const totalTokens = helper.calcHotmTokens(output.tier.level, data.nodes.special_0);
   output.tokens = {
-    total: totalTokens,
+    total: Math.max(totalTokens, (data.tokens_spent || 0) + (data.tokens || 0)),
     spent: data.tokens_spent || 0,
-    available: totalTokens - (data.tokens_spent || 0),
+    available: Math.max(totalTokens - (data.tokens_spent || 0), data.tokens || 0),
+    bugged: (data.tokens_spent || 0) > totalTokens ? true : false,
+    // We're still waiting for bugged HotM tokens to be fixed, but in the meantime we have to do this I guess.
+    // I really love when we have to do this, but we should've expected problems like this tbh.
   };
 
   output.selected_pickaxe_ability = data.selected_pickaxe_ability
