@@ -550,7 +550,7 @@ function getDescription() {
 
 	// Fairy souls
 	description.push(
-		`🧚 ${calculated.fairy_souls.collected}/${calculated.profile.game_mode === 'island' ? '3' : calculated.fairy_souls.total} Fairy Souls`,
+		`🧚 ${calculated.fairy_souls.collected}/${calculated.fairy_souls.total} Fairy Souls`,
 		'\n'
 	)
 
@@ -1006,7 +1006,7 @@ const metaDescription = getMetaDescription()
           "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level.toFixed(2) %></span></span></div>
         <% } %>
         <div class="additional-stat">
-          <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= (calculated.profile.game_mode === 'island' ? '3' : calculated.fairy_souls.total) %></span>
+          <span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
         </div>
         <%
           const weightSystems = [

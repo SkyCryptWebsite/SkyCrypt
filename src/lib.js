@@ -33,7 +33,6 @@ import { makeLore } from "./lore-generator.js";
 
 const parseNbt = util.promisify(nbt.parse);
 
-const MAX_SOULS = 228;
 let TALISMAN_COUNT;
 
 function getMinMax(profiles, min, ...path) {
@@ -1704,11 +1703,12 @@ export const getStats = async (
       output.stats[stat] += fairyBonus[stat];
     }
   }
+  const totalSouls = profile.game_mode === "island" ? 3 : constants.MAX_SOULS;
 
   output.fairy_souls = {
     collected: userProfile.fairy_souls_collected,
-    total: MAX_SOULS,
-    progress: Math.min(userProfile.fairy_souls_collected / MAX_SOULS, 1),
+    total: totalSouls,
+    progress: Math.min(userProfile.fairy_souls_collected / totalSouls, 1),
   };
 
   const levelCaps = {

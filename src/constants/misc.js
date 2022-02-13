@@ -422,3 +422,5 @@ export const increase_most_stats_exclude = [
   "foraging_fortune",
   "pristine",
 ];
+
+export const MAX_SOULS = 228;
