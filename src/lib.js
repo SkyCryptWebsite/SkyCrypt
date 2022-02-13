@@ -1710,7 +1710,7 @@ export const getStats = async (
   output.fairy_souls = {
     collected: userProfile.fairy_souls_collected,
     total: totalSouls,
-    progress: (userProfile.fairy_souls_collected / totalSouls).toFixed(2),
+    progress: (userProfile.fairy_souls_collected / totalSouls),
   };
 
   const levelCaps = {
