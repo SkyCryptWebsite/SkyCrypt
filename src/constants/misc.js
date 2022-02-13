@@ -254,24 +254,9 @@ export const ranks = {
     tag: "BUILD TEAM",
   },
 
-  MODERATOR: {
-    color: "2",
-    tag: "MOD",
-  },
-
   GAME_MASTER: {
     color: "2",
     tag: "GM",
-  },
-
-  HELPER: {
-    color: "9",
-    tag: "HELPER",
-  },
-
-  "JR HELPER": {
-    color: "9",
-    tag: "JR HELPER",
   },
 
   YOUTUBER: {
