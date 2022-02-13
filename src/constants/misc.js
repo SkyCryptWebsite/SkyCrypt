@@ -423,4 +423,7 @@ export const increase_most_stats_exclude = [
   "pristine",
 ];
 
-export const MAX_SOULS = 228;
+export const MAX_SOULS = {
+  normal: 228,
+  stranded: 3
+};

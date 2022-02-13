@@ -1703,7 +1703,9 @@ export const getStats = async (
       output.stats[stat] += fairyBonus[stat];
     }
   }
-  const totalSouls = profile.game_mode === "island" ? 3 : constants.MAX_SOULS;
+  const totalSouls = profile.game_mode === "island"
+    ? constants.MAX_SOULS.stranded
+    : constants.MAX_SOULS.normal;
 
   output.fairy_souls = {
     collected: userProfile.fairy_souls_collected,
