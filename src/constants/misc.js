@@ -410,5 +410,5 @@ export const increase_most_stats_exclude = [
 
 export const MAX_SOULS = {
   normal: 228,
-  stranded: 3
+  stranded: 3,
 };
