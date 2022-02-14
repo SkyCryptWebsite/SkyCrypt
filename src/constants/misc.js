@@ -254,24 +254,9 @@ export const ranks = {
     tag: "BUILD TEAM",
   },
 
-  MODERATOR: {
-    color: "2",
-    tag: "MOD",
-  },
-
   GAME_MASTER: {
     color: "2",
     tag: "GM",
-  },
-
-  HELPER: {
-    color: "9",
-    tag: "HELPER",
-  },
-
-  "JR HELPER": {
-    color: "9",
-    tag: "JR HELPER",
   },
 
   YOUTUBER: {
@@ -422,3 +407,8 @@ export const increase_most_stats_exclude = [
   "foraging_fortune",
   "pristine",
 ];
+
+export const MAX_SOULS = {
+  normal: 228,
+  stranded: 3,
+};
