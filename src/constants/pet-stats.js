@@ -2560,7 +2560,7 @@ class Ammonite extends Pet {
     return {
       name: "§6Heart of the Sea",
       desc: [
-        `§7Each Heart of the Mountain level grants §3+${round(this.level * 0.01)}${
+        `§7Each Heart of the Mountain level grants §3+${round(this.level * 0.01, 1)}${
           symbols.sea_creature_chance
         } Sea Creature Chance`,
       ],
