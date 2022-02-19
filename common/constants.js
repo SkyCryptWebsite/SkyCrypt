@@ -74,7 +74,7 @@ export const maxEnchants = new Set([
   "Thunderbolt VI",
   "Thunderlord VI",
   "Titan Killer VII",
-  "Triple Strike V",
+  "Triple-Strike V",
   "True Protection I",
   "Turbo-Cacti V",
   "Turbo-Cane V",
