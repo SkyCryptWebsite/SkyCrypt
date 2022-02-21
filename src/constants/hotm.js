@@ -113,6 +113,38 @@ const rewards = {
   },
 };
 
+const nodeNames = {
+  mining_speed_2: "Mining Speed II",
+  powder_buff: "Powder Buff",
+  mining_fortune_2: "Mining Fortune II",
+  vein_seeker: "Vein Seeker",
+  lonesome_miner: "Lonesome Miner",
+  professional: "Professional",
+  mole: "Mole",
+  fortunate: "Fortunate",
+  great_explorer: "Great Explorer",
+  maniac_miner: "Maniac Miner",
+  goblin_killer: "Goblin Killer",
+  special_0: "Peak of the Mountain",
+  star_powder: "Star Powder",
+  daily_effect: "Sky Mall",
+  mining_madness: "Mining Madness",
+  mining_experience: "Seasoned Mineman",
+  efficient_miner: "Efficient Miner",
+  experience_orbs: "Orbiter",
+  front_loaded: "Front Loaded",
+  precision_mining: "Precision Mining",
+  random_event: "Luck of the Cave",
+  daily_powder: "Daily Powder",
+  fallen_star_bonus: "Crystallized",
+  mining_speed_boost: "Mining Speed Boost",
+  titanium_insanium: "Titanium Insanium",
+  mining_fortune: "Mining Fortune",
+  forge_time: "Quick Forge",
+  pickaxe_toss: "Pickobulus",
+  mining_speed: "Mining Speed",
+};
+
 /*
 .##.....##..#######..########.##.....##
 .##.....##.##.....##....##....###...###
@@ -326,7 +358,7 @@ class Node {
     // Requirements
     if (this.level === 0) {
       if (this.requires.length > 0 && !this.requires.some((x) => Object.keys(this.nodes).includes(x))) {
-        const reqs = this.requires.map((x) => hotm.names[x]);
+        const reqs = this.requires.map((x) => nodeNames[x]);
         const reqsFriendly = reqs.length > 1 ? reqs.slice(0, -1).join(", ") + " or " + reqs.slice(-1) : reqs[0];
         output.push("", `§cRequires ${reqsFriendly}.`);
       }
@@ -402,13 +434,27 @@ class Node {
   perk(level) {
     return ["Missing perk description."];
   }
+
+  get totalUpgradeCost() {
+    let total = 0;
+    const originalLevel = this.level;
+
+    for (let level = 1; level < this.max_level; level++) {
+      this.level = level;
+      total += this.upgradeCost;
+    }
+
+    this.level = originalLevel;
+
+    return total;
+  }
 }
 
 class MiningSpeed2 extends Node {
   constructor(data) {
     super(data);
     this.id = "mining_speed_2";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 2;
     this.max_level = 50;
     this.upgrade_type = "gemstone_powder";
@@ -430,7 +476,7 @@ class PowderBuff extends Node {
   constructor(data) {
     super(data);
     this.id = "powder_buff";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 4;
     this.max_level = 50;
     this.upgrade_type = "gemstone_powder";
@@ -452,7 +498,7 @@ class MiningFortune2 extends Node {
   constructor(data) {
     super(data);
     this.id = "mining_fortune_2";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 6;
     this.max_level = 50;
     this.upgrade_type = "gemstone_powder";
@@ -474,7 +520,7 @@ class VeinSeeker extends Node {
   constructor(data) {
     super(data);
     this.id = "vein_seeker";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 8;
     this.max_level = 1;
     this.upgrade_type = null;
@@ -506,7 +552,7 @@ class LonesomeMiner extends Node {
   constructor(data) {
     super(data);
     this.id = "lonesome_miner";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 9;
     this.max_level = 45;
     this.upgrade_type = "gemstone_powder";
@@ -530,7 +576,7 @@ class Professional extends Node {
   constructor(data) {
     super(data);
     this.id = "professional";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 10;
     this.max_level = 140;
     this.upgrade_type = "gemstone_powder";
@@ -552,7 +598,7 @@ class Mole extends Node {
   constructor(data) {
     super(data);
     this.id = "mole";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 11;
     this.max_level = 190;
     this.upgrade_type = "gemstone_powder";
@@ -598,7 +644,7 @@ class Fortunate extends Node {
   constructor(data) {
     super(data);
     this.id = "fortunate";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 12;
     this.max_level = 20;
     this.upgrade_type = "mithril_powder";
@@ -620,7 +666,7 @@ class GreatExplorer extends Node {
   constructor(data) {
     super(data);
     this.id = "great_explorer";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 13;
     this.max_level = 20;
     this.upgrade_type = "gemstone_powder";
@@ -642,7 +688,7 @@ class ManiacMiner extends Node {
   constructor(data) {
     super(data);
     this.id = "maniac_miner";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 14;
     this.max_level = 1;
     this.upgrade_type = null;
@@ -674,7 +720,7 @@ class GoblinKiller extends Node {
   constructor(data) {
     super(data);
     this.id = "goblin_killer";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 16;
     this.max_level = 1;
     this.upgrade_type = null;
@@ -696,7 +742,7 @@ class PeakOfTheMountain extends Node {
   constructor(data) {
     super(data);
     this.id = "special_0";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 18;
     this.max_level = 5;
     this.upgrade_type = "mithril_powder";
@@ -734,7 +780,7 @@ class StarPowder extends Node {
   constructor(data) {
     super(data);
     this.id = "star_powder";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 20;
     this.max_level = 1;
     this.upgrade_type = null;
@@ -754,7 +800,7 @@ class SkyMall extends Node {
   constructor(data) {
     super(data);
     this.id = "daily_effect";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 22;
     this.max_level = 1;
     this.upgrade_type = null;
@@ -784,7 +830,7 @@ class MiningMadness extends Node {
   constructor(data) {
     super(data);
     this.id = "mining_madness";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 23;
     this.max_level = 1;
     this.upgrade_type = null;
@@ -806,7 +852,7 @@ class SeasonedMineman extends Node {
   constructor(data) {
     super(data);
     this.id = "mining_experience";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 24;
     this.max_level = 100;
     this.upgrade_type = "mithril_powder";
@@ -828,7 +874,7 @@ class EfficientMiner extends Node {
   constructor(data) {
     super(data);
     this.id = "efficient_miner";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 25;
     this.max_level = 100;
     this.upgrade_type = "mithril_powder";
@@ -851,7 +897,7 @@ class Orbiter extends Node {
   constructor(data) {
     super(data);
     this.id = "experience_orbs";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 26;
     this.max_level = 80;
     this.upgrade_type = "mithril_powder";
@@ -873,7 +919,7 @@ class FrontLoaded extends Node {
   constructor(data) {
     super(data);
     this.id = "front_loaded";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 27;
     this.max_level = 1;
     this.upgrade_type = null;
@@ -895,7 +941,7 @@ class PrecisionMining extends Node {
   constructor(data) {
     super(data);
     this.id = "precision_mining";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 28;
     this.max_level = 1;
     this.upgrade_type = null;
@@ -917,7 +963,7 @@ class LuckOfTheCave extends Node {
   constructor(data) {
     super(data);
     this.id = "random_event";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 30;
     this.max_level = 45;
     this.upgrade_type = "mithril_powder";
@@ -939,7 +985,7 @@ class DailyPowder extends Node {
   constructor(data) {
     super(data);
     this.id = "daily_powder";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 32;
     this.max_level = 100;
     this.upgrade_type = "mithril_powder";
@@ -961,7 +1007,7 @@ class Crystallized extends Node {
   constructor(data) {
     super(data);
     this.id = "fallen_star_bonus";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 34;
     this.max_level = 30;
     this.upgrade_type = "mithril_powder";
@@ -985,7 +1031,7 @@ class MiningSpeedBoost extends Node {
   constructor(data) {
     super(data);
     this.id = "mining_speed_boost";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 37;
     this.max_level = 1;
     this.upgrade_type = null;
@@ -1017,7 +1063,7 @@ class TitaniumInsanium extends Node {
   constructor(data) {
     super(data);
     this.id = "titanium_insanium";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 38;
     this.max_level = 50;
     this.upgrade_type = "mithril_powder";
@@ -1039,7 +1085,7 @@ class MiningFortune extends Node {
   constructor(data) {
     super(data);
     this.id = "mining_fortune";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 39;
     this.max_level = 50;
     this.upgrade_type = "mithril_powder";
@@ -1061,7 +1107,7 @@ class QuickForge extends Node {
   constructor(data) {
     super(data);
     this.id = "forge_time";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 40;
     this.max_level = 20;
     this.upgrade_type = "mithril_powder";
@@ -1086,7 +1132,7 @@ class Pickobulus extends Node {
   constructor(data) {
     super(data);
     this.id = "pickaxe_toss";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 41;
     this.max_level = 1;
     this.upgrade_type = null;
@@ -1117,7 +1163,7 @@ class MiningSpeed extends Node {
   constructor(data) {
     super(data);
     this.id = "mining_speed";
-    this.name = hotm.names[this.id];
+    this.name = nodeNames[this.id];
     this.position = 46;
     this.max_level = 50;
     this.upgrade_type = "mithril_powder";
@@ -1318,73 +1364,63 @@ class HotmReset extends HotmItem {
 .########.##.....##.##.........#######..##.....##....##.....######.
 */
 
+const nodeClasses = {
+  mining_speed_2: MiningSpeed2,
+  powder_buff: PowderBuff,
+  mining_fortune_2: MiningFortune2,
+  vein_seeker: VeinSeeker,
+  lonesome_miner: LonesomeMiner,
+  professional: Professional,
+  mole: Mole,
+  fortunate: Fortunate,
+  great_explorer: GreatExplorer,
+  maniac_miner: ManiacMiner,
+  goblin_killer: GoblinKiller,
+  special_0: PeakOfTheMountain,
+  star_powder: StarPowder,
+  daily_effect: SkyMall,
+  mining_madness: MiningMadness,
+  mining_experience: SeasonedMineman,
+  efficient_miner: EfficientMiner,
+  experience_orbs: Orbiter,
+  front_loaded: FrontLoaded,
+  precision_mining: PrecisionMining,
+  random_event: LuckOfTheCave,
+  daily_powder: DailyPowder,
+  fallen_star_bonus: Crystallized,
+  mining_speed_boost: MiningSpeedBoost,
+  titanium_insanium: TitaniumInsanium,
+  mining_fortune: MiningFortune,
+  forge_time: QuickForge,
+  pickaxe_toss: Pickobulus,
+  mining_speed: MiningSpeed,
+};
+
+const powderForMaxTree = {};
+for (const nodeClass of Object.values(nodeClasses)) {
+  const node = new nodeClass({
+    level: 0,
+    enabled: true,
+    nodes: [],
+    hotmLevelData: {
+      level: Object.keys(rewards.hotm).length,
+    },
+  });
+
+  if (node.nodeType === "normal" && node.upgrade_type !== null) {
+    powderForMaxTree[node.upgrade_type] ??= 0;
+    powderForMaxTree[node.upgrade_type] += node.totalUpgradeCost;
+  }
+}
+
 export const hotm = {
   tiers: Object.keys(rewards.hotm).length,
   rewards: rewards,
-  names: {
-    mining_speed_2: "Mining Speed II",
-    powder_buff: "Powder Buff",
-    mining_fortune_2: "Mining Fortune II",
-    vein_seeker: "Vein Seeker",
-    lonesome_miner: "Lonesome Miner",
-    professional: "Professional",
-    mole: "Mole",
-    fortunate: "Fortunate",
-    great_explorer: "Great Explorer",
-    maniac_miner: "Maniac Miner",
-    goblin_killer: "Goblin Killer",
-    special_0: "Peak of the Mountain",
-    star_powder: "Star Powder",
-    daily_effect: "Sky Mall",
-    mining_madness: "Mining Madness",
-    mining_experience: "Seasoned Mineman",
-    efficient_miner: "Efficient Miner",
-    experience_orbs: "Orbiter",
-    front_loaded: "Front Loaded",
-    precision_mining: "Precision Mining",
-    random_event: "Luck of the Cave",
-    daily_powder: "Daily Powder",
-    fallen_star_bonus: "Crystallized",
-    mining_speed_boost: "Mining Speed Boost",
-    titanium_insanium: "Titanium Insanium",
-    mining_fortune: "Mining Fortune",
-    forge_time: "Quick Forge",
-    pickaxe_toss: "Pickobulus",
-    mining_speed: "Mining Speed",
-  },
+  names: nodeNames,
   hotm: HotM,
-  nodes: {
-    mining_speed_2: MiningSpeed2,
-    powder_buff: PowderBuff,
-    mining_fortune_2: MiningFortune2,
-    vein_seeker: VeinSeeker,
-    lonesome_miner: LonesomeMiner,
-    professional: Professional,
-    mole: Mole,
-    fortunate: Fortunate,
-    great_explorer: GreatExplorer,
-    maniac_miner: ManiacMiner,
-    goblin_killer: GoblinKiller,
-    special_0: PeakOfTheMountain,
-    star_powder: StarPowder,
-    daily_effect: SkyMall,
-    mining_madness: MiningMadness,
-    mining_experience: SeasonedMineman,
-    efficient_miner: EfficientMiner,
-    experience_orbs: Orbiter,
-    front_loaded: FrontLoaded,
-    precision_mining: PrecisionMining,
-    random_event: LuckOfTheCave,
-    daily_powder: DailyPowder,
-    fallen_star_bonus: Crystallized,
-    mining_speed_boost: MiningSpeedBoost,
-    titanium_insanium: TitaniumInsanium,
-    mining_fortune: MiningFortune,
-    forge_time: QuickForge,
-    pickaxe_toss: Pickobulus,
-    mining_speed: MiningSpeed,
-  },
+  nodes: nodeClasses,
   items: [HotmStats, CrystalHollowsCrystals, HotmReset],
+  powder_for_max_tree: powderForMaxTree,
 };
 
 export const precursor_parts = {
