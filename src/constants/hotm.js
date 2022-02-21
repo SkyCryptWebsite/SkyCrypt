@@ -1396,7 +1396,7 @@ const nodeClasses = {
   mining_speed: MiningSpeed,
 };
 
-const powderForMaxTree = {};
+const powderForMaxNodes = {};
 for (const nodeClass of Object.values(nodeClasses)) {
   const node = new nodeClass({
     level: 0,
@@ -1408,8 +1408,8 @@ for (const nodeClass of Object.values(nodeClasses)) {
   });
 
   if (node.nodeType === "normal" && node.upgrade_type !== null) {
-    powderForMaxTree[node.upgrade_type] ??= 0;
-    powderForMaxTree[node.upgrade_type] += node.totalUpgradeCost;
+    powderForMaxNodes[node.upgrade_type] ??= 0;
+    powderForMaxNodes[node.upgrade_type] += node.totalUpgradeCost;
   }
 }
 
@@ -1420,7 +1420,7 @@ export const hotm = {
   hotm: HotM,
   nodes: nodeClasses,
   items: [HotmStats, CrystalHollowsCrystals, HotmReset],
-  powder_for_max_tree: powderForMaxTree,
+  powder_for_max_nodes: powderForMaxNodes,
 };
 
 export const precursor_parts = {
