@@ -22,5 +22,8 @@ export function calculateLilyWeight(profile) {
 
   const slayerXP = slayerOrder.map((key) => profile.slayers?.[key]?.level?.xp ?? 0);
 
+  // todo: remove this when lilyweight updates, fixing M7 breaking the completions weight
+  delete masterCataCompletions["7"];
+
   return LilyWeight.getWeightRaw(skillLevels, skillXP, cataCompletions, masterCataCompletions, cataXP, slayerXP);
 }
