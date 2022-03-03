@@ -642,9 +642,9 @@ function getDescription() {
 			`💪 Senither Weight: ${Math.floor(
 				calculated.weight.senither.overall
 			).toLocaleString()} `,
-			`💪 Lily Weight: ${Math.floor(
-				calculated.weight.lily.total
-			).toLocaleString()}`
+			// `💪 Lily Weight: ${Math.floor(
+			// 	calculated.weight.lily.total
+			// ).toLocaleString()}`
 		)
 		description.push('\n')
 	}
@@ -1018,14 +1018,14 @@ const metaDescription = getMetaDescription()
               dungeon: calculated.weight.senither.dungeon.total,
               total: calculated.weight.senither.overall,
             },
-            {
-              name: "Lily Weight",
-              author: "LappySheep",
-              skill: calculated.weight.lily.skill.base + calculated.weight.lily.skill.overflow,
-              slayer: calculated.weight.lily.slayer,
-              dungeon: calculated.weight.lily.catacombs.experience + calculated.weight.lily.catacombs.completion.base + calculated.weight.lily.catacombs.completion.master,
-              total: calculated.weight.lily.total,
-            },
+            // {
+            //   name: "Lily Weight",
+            //   author: "LappySheep",
+            //   skill: calculated.weight.lily.skill.base + calculated.weight.lily.skill.overflow,
+            //   slayer: calculated.weight.lily.slayer,
+            //   dungeon: calculated.weight.lily.catacombs.experience + calculated.weight.lily.catacombs.completion.base + calculated.weight.lily.catacombs.completion.master,
+            //   total: calculated.weight.lily.total,
+            // },
           ];
 
           for (weight of weightSystems) {
