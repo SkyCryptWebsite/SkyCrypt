@@ -1634,16 +1634,18 @@ const metaDescription = getMetaDescription()
               <span class="stat-value <%= max %>"><%= mining.core.tokens.spent %>/<%= mining.core.tokens.total %></span>
               <br>
               <!-- Mithril Powder -->
+              <% max = mining.core.powder.mithril.total >= constants.hotm.powder_for_max_nodes.mithril_powder ? 'golden-text' : '' %>
               <span class="stat-name">Mithril Powder:</span>
-              <span class="stat-value" data-tippy-content="
+              <span class="stat-value <%= max %>" data-tippy-content="
                 <span class='stat-name'>Total:</span> <span class='stat-value'><%= mining.core.powder.mithril.total.toLocaleString() %></span><br>
                 <span class='stat-name'>Spent:</span> <span class='stat-value'><%= mining.core.powder.mithril.spent.toLocaleString() %></span><br>
                 <span class='stat-name'>Available:</span> <span class='stat-value'><%= mining.core.powder.mithril.available.toLocaleString() %></span>
               "><%= mining.core.powder.mithril.total.toLocaleString() %></span>
               <br>
               <!-- Gemstone Powder -->
+              <% max = mining.core.powder.gemstone.total >= constants.hotm.powder_for_max_nodes.gemstone_powder ? 'golden-text' : '' %>
               <span class="stat-name">Gemstone Powder:</span>
-              <span class="stat-value" data-tippy-content="
+              <span class="stat-value <%= max %>" data-tippy-content="
                 <span class='stat-name'>Total:</span> <span class='stat-value'><%= mining.core.powder.gemstone.total.toLocaleString() %></span><br>
                 <span class='stat-name'>Spent:</span> <span class='stat-value'><%= mining.core.powder.gemstone.spent.toLocaleString() %></span><br>
                 <span class='stat-name'>Available:</span> <span class='stat-value'><%= mining.core.powder.gemstone.available.toLocaleString() %></span>
