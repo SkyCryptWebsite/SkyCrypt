@@ -597,10 +597,8 @@ export async function updateRank(uuid, db) {
     }
 
     // Scorpius Bribe
-    for (const key of Object.keys(player)) {
-      if (key.startsWith("scorpius_bribe_")) {
-        rank.claimed_items[`Scorpius Bribe (Year ${key.split("_").pop()})`] = player[key];
-      }
+    for (const key of Object.keys(player).filter((key) => key.match(/^scorpius_bribe_\d+$/))) {
+      rank.claimed_items[`Scorpius Bribe (Year ${key.split("_").pop()})`] = player[key];
     }
   } catch (e) {
     console.error(e);
