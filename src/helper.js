@@ -588,16 +588,17 @@ export async function updateRank(uuid, db) {
       claim_potato_war_silver_medal: "Silver Medal (Potato War)",
       claim_potato_war_crown: "Crown (Potato War)",
       skyblock_free_cookie: "Free Booster Cookie",
-      scorpius_bribe_96: "Scorpius Bribe (Year 96)",
-      scorpius_bribe_120: "Scorpius Bribe (Year 120)",
-      scorpius_bribe_144: "Scorpius Bribe (Year 144)",
-      scorpius_bribe_168: "Scorpius Bribe (Year 168)",
     };
 
     for (const item in claimable) {
       if (player?.[item]) {
         rank.claimed_items[claimable[item]] = player[item];
       }
+    }
+
+    // Scorpius Bribe
+    for (const key of Object.keys(player).filter((key) => key.match(/^scorpius_bribe_\d+$/))) {
+      rank.claimed_items[`Scorpius Bribe (Year ${key.split("_").pop()})`] = player[key];
     }
   } catch (e) {
     console.error(e);
