@@ -621,15 +621,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
         item.type = itemType.type;
       }
 
-      // Get breaking power for Pickaxes
-      if (item.type == "pickaxe" || item.type == "drill" || item.type == "gauntlet") {
-        if (lore[0].startsWith("Breaking Power")) {
-          item.breaking_power = lore[0].substring(15);
-        } else {
-          item.breaking_power = 0;
-        }
-      }
-
       // fix custom maps texture
       if (item.id == 358) {
         item.id = 395;
