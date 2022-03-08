@@ -618,28 +618,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       if (item._itemType.type) {
         item.type = item._itemType.type;
       }
-      switch (item._itemType.type) {
-        case "hatccessory":
-        case "accessory":
-          item.equipmentType = "accessory";
-          item.type = "accessory";
-          break;
-        case "helmet":
-        case "chestplate":
-        case "leggings":
-        case "boots":
-          item.equipmentType = "armor";
-          break;
-        case "sword":
-        case "bow":
-        case "fishing weapon":
-        case "fishing rod":
-          item.equipmentType = "weapon";
-          break;
-        default:
-          item.equipmentType = "none";
-          break;
-      }
 
       // Get breaking power for Pickaxes
       if (item.type == "pickaxe" || item.type == "drill" || item.type == "gauntlet") {
