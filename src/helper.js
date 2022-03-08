@@ -985,6 +985,7 @@ export function parseItemTypeFromLore(lore) {
 }
 
 function getCategoriesFromType(type) {
+  // todo: move these type to constants
   switch (type) {
     case "helmet":
     case "chestplate":
@@ -1025,6 +1026,7 @@ function getCategoriesFromType(type) {
       return [type];
   }
 
+  // todo: remove and finda better way to awknowledge new item types
   console.log("\x1b[31m%s\x1b[0m", "Unknown item type:", type);
   return [];
 }
