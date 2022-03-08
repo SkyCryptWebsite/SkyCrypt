@@ -645,24 +645,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
           item.stats[constants.statNames[statType]] = statValue;
         }
       });
-
-      // Apply Speed Talisman speed bonuses
-      if (getId(item) == "SPEED_TALISMAN") {
-        item.stats.speed = 1;
-      }
-
-      if (getId(item) == "SPEED_RING") {
-        item.stats.speed = 3;
-      }
-
-      if (getId(item) == "SPEED_ARTIFACT") {
-        item.stats.speed = 5;
-      }
-
-      // Apply Frozen Chicken bonus
-      if (getId(item) == "FROZEN_CHICKEN") {
-        item.stats.speed = 1;
-      }
     }
 
     // Set HTML lore to be displayed on the website
