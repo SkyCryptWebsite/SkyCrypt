@@ -609,14 +609,18 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     let lore = lore_raw != null ? lore_raw.map((a) => (a = helper.getRawLore(a))) : [];
 
     if (lore.length > 0) {
-      // todo: support `item.localized = boolean` when hypixel skyblock actually supports multilanguage
-      item._itemType = helper.parseItemTypeFromLore(lore);
+      // todo: support `item.localized = boolean` when skyblock will support multilanguage
 
-      item.rarity = item._itemType.rarity;
+      // item rarity, type (soon to be deprecated) and categories
+      const itemType = helper.parseItemTypeFromLore(lore);
+      item._itemType = itemType; // ! temp: while debugging
 
-      // ! temp fallbacks
-      if (item._itemType.type) {
-        item.type = item._itemType.type;
+      item.rarity = itemType.rarity;
+      item.categories = itemType.categories;
+
+      // ! temp: will be replaced by item.categories
+      if (itemType.type) {
+        item.type = itemType.type;
       }
 
       // Get breaking power for Pickaxes
