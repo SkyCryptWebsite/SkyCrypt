@@ -564,7 +564,6 @@ declare const calculated: SkyCryptPlayer & {
   stats: {
     [key in StatName]: number;
   };
-  talismanCount: number;
   total_skill_xp: number;
   uuid: string;
   wardrobe_equipped_slot: number;

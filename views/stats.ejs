@@ -1247,18 +1247,18 @@ const metaDescription = getMetaDescription()
           <% }else{ %>
             <p class="stat-raw-values">
               <%
-                const maxTalis = items.talismans.filter(a => a.isUnique).length >= calculated.talismanCount ? 'golden-text': ''
-                const maxRecombTalis = items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length >= calculated.talismanCount ? 'golden-text': ''
+                const maxTalis = items.talismans.filter(a => a.isUnique).length >= constants.unique_accessories_count ? 'golden-text': ''
+                const maxRecombTalis = items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length >= constants.unique_accessories_count ? 'golden-text': ''
               %>
 
               <span class="stat-name <%= maxTalis %>">Unique Accessories: </span>
-              <span class="stat-value <%= maxTalis %>"><%= items.talismans.filter(a => a.isUnique).length %> / <%= calculated.talismanCount %></span>
+              <span class="stat-value <%= maxTalis %>"><%= items.talismans.filter(a => a.isUnique).length %> / <%= constants.unique_accessories_count %></span>
               <br>
               <span class="stat-name <%= maxTalis %>">Completion: </span>
-              <span class="stat-value percent <%= maxTalis %>"><%= Math.round(items.talismans.filter(a => a.isUnique).length / calculated.talismanCount * 100) %></span>
+              <span class="stat-value percent <%= maxTalis %>"><%= Math.round(items.talismans.filter(a => a.isUnique).length / constants.unique_accessories_count * 100) %></span>
               <br>
               <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
-              <span class="stat-value <%= maxRecombTalis %>"><%= items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= calculated.talismanCount %></span>
+              <span class="stat-value <%= maxRecombTalis %>"><%= items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= constants.unique_accessories_count %></span>
             </p>
             <% if(items.talismans.find(a => !a.isInactive) != undefined){ %>
               <div class="accessory-list">
