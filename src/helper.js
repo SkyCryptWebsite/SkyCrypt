@@ -948,3 +948,84 @@ export function convertHMS(seconds, format = "clock", alwaysTwoDigits = false) {
       return `${hh}:${mm}:${ss}`;
   }
 }
+
+export function parseItemTypeFromLore(lore) {
+  const regex = new RegExp(
+    `^(?<recomb>a )?(?<shiny>SHINY )?(?:(?<rarity>${constants.rarities
+      .map((x) => x.toUpperCase())
+      .join("|")}) ?)(?<dungeon>DUNGEON )?(?<type>[A-Z ]+)?(?<recomb2>a)?$`
+  );
+
+  // Executing the regex on every lore line and storing the matching lines
+  const results = [];
+  for (const line of lore) {
+    const match = regex.exec(line);
+    if (match) {
+      results.push(match);
+    }
+  }
+
+  // If the results count is anything but 1, something is wrong
+  if (results.length !== 1) {
+    return {
+      rarity: null,
+      categories: [],
+    };
+  }
+
+  // Passing stuff
+  const r = results[0].groups;
+  return {
+    recombobulated: r.recomb && r.recomb2,
+    rarity: r.rarity.toLowerCase(),
+    shiny: !!r.shiny,
+    dungeon: !!r.dungeon,
+    type: r.type ? r.type.trim().toLowerCase() : null,
+    categories: r.type ? getCategoriesFromType(r.type.trim().toLowerCase()) : [],
+  };
+}
+
+function getCategoriesFromType(type) {
+  switch (type) {
+    case "helmet":
+    case "chestplate":
+    case "leggings":
+    case "boots":
+      return ["armor", type];
+    case "sword":
+    case "bow":
+    case "longsword":
+    case "wand":
+      return ["weapon", type];
+    case "hatccessory":
+      return ["armor", "helmet", "accessory", "hatccessory"];
+    case "gauntlet":
+      return ["weapon", "minig_tool", "tool", "gauntlet"];
+    case "pickaxe":
+      return ["minig_tool", "tool", "pickaxe"];
+    case "drill":
+      return ["minig_tool", "tool", "drill"];
+    case "axe":
+      return ["foraging_tool", "tool", "axe"];
+    case "hoe":
+      return ["farming_tool", "tool", "hoe"];
+    case "shovel":
+    case "shears":
+    case "fishing rod":
+      return ["tool", type];
+    case "fishing weapon":
+      return ["weapon", "fishing_tool", "tool"];
+    case "bait":
+    case "item":
+    case "accessory":
+    case "arrow":
+    case "reforge stone":
+    case "cosmetic":
+    case "pet item":
+    case "travel scroll":
+      return [type];
+  }
+
+  console.log("\x1b[31m%s\x1b[0m", "Unknown item type:", type);
+  return [];
+}

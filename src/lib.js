@@ -607,71 +607,33 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     let lore_raw = [...itemLore];
 
     let lore = lore_raw != null ? lore_raw.map((a) => (a = helper.getRawLore(a))) : [];
-    let rarity, item_type;
 
     if (lore.length > 0) {
-      // Get item type (like "bow") and rarity (like "legendary") from last line of lore
-      let rarity_type = lore[lore.length - 1];
+      // todo: support `item.localized = boolean` when hypixel skyblock actually supports multilanguage
+      item._itemType = helper.parseItemTypeFromLore(lore);
 
-      let rarity_type_color = lore_raw[lore_raw.length - 1].charAt(1);
+      item.rarity = item._itemType.rarity;
 
-      if (rarity_type.startsWith("a ")) {
-        rarity_type = rarity_type.substring(2).substring(0, rarity_type.length - 4);
+      // ! temp fallbacks
+      if (item._itemType.type) {
+        item.type = item._itemType.type;
       }
-
-      if (rarity_type.startsWith("VERY")) {
-        rarity_type = rarity_type.substring(5);
-      }
-
-      rarity_type = splitWithTail(rarity_type, " ", 1);
-
-      rarity = rarity_type[0];
-
-      if (rarity_type.length > 1) {
-        item_type = rarity_type[1].trim();
-      }
-
-      let loreRarity = rarity.toLowerCase();
-      let colorRarity =
-        Object.keys(constants.rarityColors).find((key) => constants.rarityColors[key] === rarity_type_color) ??
-        loreRarity;
-
-      item.rarity = colorRarity;
-
-      if (loreRarity != colorRarity) {
-        item.localized = true;
-      }
-
-      if (item_type) {
-        item.type = item_type.toLowerCase();
-      }
-
-      if (item.type == "hatccessory") {
-        item.type = "accessory";
-      }
-
-      switch (item.type) {
+      switch (item._itemType.type) {
+        case "hatccessory":
         case "accessory":
           item.equipmentType = "accessory";
+          item.type = "accessory";
           break;
         case "helmet":
         case "chestplate":
         case "leggings":
         case "boots":
-        case "dungeon helmet":
-        case "dungeon chestplate":
-        case "dungeon leggings":
-        case "dungeon boots":
           item.equipmentType = "armor";
           break;
         case "sword":
         case "bow":
         case "fishing weapon":
         case "fishing rod":
-        case "dungeon sword":
-        case "dungeon bow":
-        case "dungeon fishing weapon":
-        case "dungeon fishing rod":
           item.equipmentType = "weapon";
           break;
         default:
