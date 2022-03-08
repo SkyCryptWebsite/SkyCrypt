@@ -600,8 +600,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       }
     }
 
-    const enchantments = item.tag?.ExtraAttributes?.enchantments ?? {};
-
     // Lore stuff
     let itemLore = item?.tag?.display?.Lore ?? [];
     let lore_raw = [...itemLore];
@@ -763,52 +761,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 
       if (item.extra?.price_paid) {
         itemLore.push(`§7Price Paid at Dark Auction: §b${item.extra.price_paid.toLocaleString()} coins`);
-      }
-    }
-
-    // Workaround for detecting item types if another language is set by the player on Hypixel
-    if (getId(item) != "ENCHANTED_BOOK" && !constants.item_types.includes(item.type)) {
-      if (
-        "sharpness" in enchantments ||
-        "crticial" in enchantments ||
-        "ender_slayer" in enchantments ||
-        "execute" in enchantments ||
-        "first_strike" in enchantments ||
-        "giant_killer" in enchantments ||
-        "lethality" in enchantments ||
-        "life_steal" in enchantments ||
-        "luck" in enchantments ||
-        "scavenger" in enchantments ||
-        "vampirism" in enchantments ||
-        "bane_of_arthropods" in enchantments ||
-        "smite" in enchantments
-      ) {
-        item.type = "sword";
-      }
-
-      if (
-        "power" in enchantments ||
-        "aiming" in enchantments ||
-        "infinite_quiver" in enchantments ||
-        "power" in enchantments ||
-        "snipe" in enchantments ||
-        "punch" in enchantments ||
-        "flame" in enchantments ||
-        "piercing" in enchantments
-      ) {
-        item.type = "bow";
-      }
-
-      if (
-        "angler" in enchantments ||
-        "blessing" in enchantments ||
-        "caster" in enchantments ||
-        "frail" in enchantments ||
-        "luck_of_the_sea" in enchantments ||
-        "lure" in enchantments ||
-        "magnet" in enchantments
-      ) {
-        item.type = "fishing rod";
       }
     }
 
