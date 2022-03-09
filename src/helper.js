@@ -956,17 +956,19 @@ export function parseItemTypeFromLore(lore) {
       .join("|")}) ?)(?<dungeon>DUNGEON )?(?<type>[A-Z ]+)?(?<recomb2>a)?$`
   );
 
-  // Executing the regex on every lore line and storing the matching lines
-  const results = [];
-  for (const line of lore) {
-    const match = regex.exec(line);
+  // Executing the regex on every lore line
+  // Reverse array and breaks after first find to optimize speed
+  let match = null;
+  for (const line of lore.reverse()) {
+    match = regex.exec(line);
+
     if (match) {
-      results.push(match);
+      break;
     }
   }
 
-  // If the results count is anything but 1, something is wrong
-  if (results.length !== 1) {
+  // No match found (glitched items, like /sbmenu gui items)
+  if (match == null) {
     return {
       categories: [],
       rarity: null,
@@ -976,8 +978,8 @@ export function parseItemTypeFromLore(lore) {
     };
   }
 
-  // Passing stuff
-  const r = results[0].groups;
+  // Parsing the match and returning data
+  const r = match.groups;
   return {
     categories: r.type ? getCategoriesFromType(r.type.trim().toLowerCase()) : [],
     rarity: r.rarity.replaceAll(" ", "_").toLowerCase(),
