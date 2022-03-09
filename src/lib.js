@@ -931,7 +931,7 @@ export const getItems = async (
 
   let hotm = "mining_core" in profile ? await getHotmItems(profile, packs) : [];
 
-  output.armor = armor.filter((a) => Object.keys(a).length != 0);
+  output.armor = armor.filter((x) => x.rarity);
   output.wardrobe = wardrobe;
   output.wardrobe_inventory = wardrobe_inventory;
   output.inventory = inventory;
@@ -1309,15 +1309,15 @@ export const getItems = async (
       .sort((a, b) => a.item_index - b.item_index)[0];
   }
 
-  if (armor.filter((a) => Object.keys(a).length > 2).length == 1) {
-    const armorPiece = armor.find((a) => Object.keys(a).length > 2);
+  if (armor.filter((x) => x.rarity).length === 1) {
+    const armorPiece = armor.find((x) => x.rarity);
 
     output.armor_set = armorPiece.display_name;
     output.armor_set_rarity = armorPiece.rarity;
   }
 
   // Full armor set (4 pieces)
-  if (armor.filter((a) => Object.keys(a).length > 2).length == 4) {
+  if (armor.filter((x) => x.rarity).length === 4) {
     let output_name;
     let reforgeName;
 
