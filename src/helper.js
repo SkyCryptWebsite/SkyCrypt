@@ -988,53 +988,9 @@ export function parseItemTypeFromLore(lore) {
 }
 
 function getCategoriesFromType(type) {
-  // todo: move these type to constants
-  switch (type) {
-    case "helmet":
-    case "chestplate":
-    case "leggings":
-    case "boots":
-      return ["armor", type];
-    case "sword":
-    case "bow":
-    case "longsword":
-    case "wand":
-      return ["weapon", type];
-    case "hatccessory":
-      return ["armor", "helmet", "accessory", "hatccessory"];
-    case "gauntlet":
-      return ["weapon", "mining_tool", "tool", "gauntlet"];
-    case "pickaxe":
-      return ["mining_tool", "tool", "pickaxe"];
-    case "drill":
-      return ["mining_tool", "tool", "drill"];
-    case "axe":
-      return ["foraging_tool", "tool", "axe"];
-    case "hoe":
-      return ["farming_tool", "tool", "hoe"];
-    case "shovel":
-    case "shears":
-      return ["tool", type];
-    case "fishing rod":
-      return ["fishing_tool", "tool"];
-    case "fishing weapon":
-      return ["weapon", "fishing_tool", "tool"];
-    case "bait":
-    case "item":
-    case "accessory":
-    case "arrow":
-    case "reforge stone":
-    case "cosmetic":
-    case "pet item":
-    case "travel scroll":
-    case "belt":
-    case "cloak":
-    case "necklace":
-    case "gloves":
-      return [type];
+  if (type in constants.typeToCategories) {
+    return constants.typeToCategories[type];
   }
 
-  // todo: remove and finda better way to awknowledge new item types
-  console.log("\x1b[31m%s\x1b[0m", "Unknown item type:", type);
   return ["unknown"];
 }
