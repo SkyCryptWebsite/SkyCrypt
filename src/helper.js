@@ -968,20 +968,22 @@ export function parseItemTypeFromLore(lore) {
   // If the results count is anything but 1, something is wrong
   if (results.length !== 1) {
     return {
-      rarity: null,
       categories: [],
+      rarity: null,
+      recombobulated: null,
+      dungeon: null,
+      shiny: null,
     };
   }
 
   // Passing stuff
   const r = results[0].groups;
   return {
-    recombobulated: r.recomb && r.recomb2,
-    rarity: r.rarity.toLowerCase(),
-    shiny: !!r.shiny,
-    dungeon: !!r.dungeon,
-    type: r.type ? r.type.trim().toLowerCase() : null,
     categories: r.type ? getCategoriesFromType(r.type.trim().toLowerCase()) : [],
+    rarity: r.rarity.toLowerCase(),
+    recombobulated: !!r.recomb && !!r.recomb2,
+    dungeon: !!r.dungeon,
+    shiny: !!r.shiny,
   };
 }
 

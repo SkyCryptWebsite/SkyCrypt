@@ -612,15 +612,13 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     if (lore.length > 0) {
       // todo: support `item.localized = boolean` when skyblock will support multilanguage
 
-      // item rarity, type (soon to be deprecated) and categories
+      // item categories, rarity, recombobulated, dungeon, shiny
       const itemType = helper.parseItemTypeFromLore(lore);
       item._itemType = itemType; // ! temp: while debugging
 
-      item.rarity = itemType.rarity;
-      item.categories = itemType.categories;
-      item.recombobulated = itemType.recombobulated;
-      item.shiny = itemType.shiny;
-      item.dungeon = itemType.dungeon;
+      for (const key in itemType) {
+        item[key] = itemType[key];
+      }
 
       // fix custom maps texture
       if (item.id == 358) {
