@@ -952,7 +952,7 @@ export function convertHMS(seconds, format = "clock", alwaysTwoDigits = false) {
 export function parseItemTypeFromLore(lore) {
   const regex = new RegExp(
     `^(?<recomb>a )?(?<shiny>SHINY )?(?:(?<rarity>${constants.rarities
-      .map((x) => x.toUpperCase())
+      .map((x) => x.replaceAll("_", " ").toUpperCase())
       .join("|")}) ?)(?<dungeon>DUNGEON )?(?<type>[A-Z ]+)?(?<recomb2>a)?$`
   );
 
@@ -980,7 +980,7 @@ export function parseItemTypeFromLore(lore) {
   const r = results[0].groups;
   return {
     categories: r.type ? getCategoriesFromType(r.type.trim().toLowerCase()) : [],
-    rarity: r.rarity.toLowerCase(),
+    rarity: r.rarity.replaceAll(" ", "_").toLowerCase(),
     recombobulated: !!r.recomb && !!r.recomb2,
     dungeon: !!r.dungeon,
     shiny: !!r.shiny,
