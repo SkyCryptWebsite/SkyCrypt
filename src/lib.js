@@ -1234,12 +1234,10 @@ export const getItems = async (
 
   // Sort talismans, weapons and rods by rarity
   output.weapons = output.weapons.sort(itemSorter);
-
   output.rods = output.rods.sort(itemSorter);
-
   output.hoes = output.hoes.sort(itemSorter);
-
   output.pickaxes = output.pickaxes.sort(itemSorter);
+  output.talismans = output.talismans.sort(itemSorter);
 
   const countsOfId = {};
 
@@ -1266,8 +1264,6 @@ export const getItems = async (
       rod.hidden = true;
     }
   }
-
-  output.talismans = output.talismans.sort(itemSorter);
 
   let swords = output.weapons.filter((a) => a.categories.includes("sword"));
   let bows = output.weapons.filter((a) => a.categories.includes("bow"));

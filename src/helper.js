@@ -1003,11 +1003,11 @@ function getCategoriesFromType(type) {
     case "hatccessory":
       return ["armor", "helmet", "accessory", "hatccessory"];
     case "gauntlet":
-      return ["weapon", "minig_tool", "tool", "gauntlet"];
+      return ["weapon", "mining_tool", "tool", "gauntlet"];
     case "pickaxe":
-      return ["minig_tool", "tool", "pickaxe"];
+      return ["mining_tool", "tool", "pickaxe"];
     case "drill":
-      return ["minig_tool", "tool", "drill"];
+      return ["mining_tool", "tool", "drill"];
     case "axe":
       return ["foraging_tool", "tool", "axe"];
     case "hoe":
