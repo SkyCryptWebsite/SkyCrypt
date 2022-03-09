@@ -1052,6 +1052,11 @@ export const getItems = async (
 
   // Add inactive talismans from enderchest and backpacks
   for (const item of inventory.concat(enderchest, storage)) {
+    // filter out filler or empty slots (such as empty storage slot)
+    if (!("categories" in item)) {
+      continue;
+    }
+
     let items = [item];
 
     if (!item.categories.includes("accessory") && "containsItems" in item && Array.isArray(item.containsItems)) {
