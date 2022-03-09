@@ -856,6 +856,7 @@ export function generateItem(data) {
     display_name: "",
     display_name_print: "",
     rarity: null,
+    categories: [],
     type: "misc",
     tag: {
       display: {

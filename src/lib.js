@@ -606,6 +606,9 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 
     let lore = lore_raw != null ? lore_raw.map((a) => (a = helper.getRawLore(a))) : [];
 
+    item.rarity = null;
+    item.categories = [];
+
     if (lore.length > 0) {
       // todo: support `item.localized = boolean` when skyblock will support multilanguage
 
@@ -615,11 +618,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 
       item.rarity = itemType.rarity;
       item.categories = itemType.categories;
-
-      // ! temp: will be replaced by item.categories
-      if (itemType.type) {
-        item.type = itemType.type;
-      }
 
       // fix custom maps texture
       if (item.id == 358) {
@@ -996,7 +994,7 @@ export const getItems = async (
   const talisman_ids = [];
 
   // Modify talismans on armor and add
-  for (const talisman of armor.filter((a) => a.type == "accessory" || a.type == "dungeon accessory")) {
+  for (const talisman of armor.filter((a) => a.categories.includes("accessory"))) {
     const id = getId(talisman);
 
     if (id === "") {
@@ -1018,7 +1016,7 @@ export const getItems = async (
   }
 
   // Add talismans from inventory
-  for (const talisman of inventory.filter((a) => a.type == "accessory" || a.type == "dungeon accessory")) {
+  for (const talisman of inventory.filter((a) => a.categories.includes("accessory"))) {
     const id = getId(talisman);
 
     if (id === "") {
@@ -1065,11 +1063,11 @@ export const getItems = async (
   for (const item of inventory.concat(enderchest, storage)) {
     let items = [item];
 
-    if (item.type != "accessory" && "containsItems" in item && Array.isArray(item.containsItems)) {
+    if (!item.categories.includes("accessory") && "containsItems" in item && Array.isArray(item.containsItems)) {
       items = item.containsItems.slice(0);
     }
 
-    for (const talisman of items.filter((a) => a.type == "accessory" || a.type == "dungeon accessory")) {
+    for (const talisman of items.filter((a) => a.categories.includes("accessory"))) {
       const id = getId(talisman);
 
       const insertTalisman = Object.assign({ isUnique: true, isInactive: true }, talisman);
@@ -1173,22 +1171,11 @@ export const getItems = async (
 
   output.talismans = talismans;
   output.talisman_ids = talisman_ids;
-  output.weapons = all_items.filter(
-    (a) =>
-      a.type != null &&
-      (a.type.endsWith("sword") ||
-        a.type.endsWith("cutlass") || // Pirate English
-        a.type.endsWith("bow") ||
-        a.type.endsWith("gauntlet"))
-  );
 
-  output.hoes = all_items.filter((a) => a.type != null && a.type.endsWith("hoe"));
-  output.pickaxes = all_items.filter(
-    (a) => a.type != null && (a.type.endsWith("pickaxe") || a.type.endsWith("drill") || a.type.endsWith("gauntlet"))
-  );
-  output.rods = all_items.filter(
-    (a) => a.type != null && (a.type.endsWith("fishing rod") || a.type.endsWith("fishing weapon"))
-  );
+  output.weapons = all_items.filter((a) => a.categories?.includes("weapon"));
+  output.hoes = all_items.filter((a) => a.categories?.includes("farming_tool"));
+  output.pickaxes = all_items.filter((a) => a.categories?.includes("mining_tool"));
+  output.rods = all_items.filter((a) => a.categories?.includes("fishing_tool"));
 
   output.pets = all_items
     .filter((a) => a.tag?.ExtraAttributes?.petInfo)
@@ -1208,22 +1195,10 @@ export const getItems = async (
       continue;
     }
 
-    output.weapons.push(
-      ...item.containsItems.filter(
-        (a) => a.type != null && (a.type.endsWith("sword") || a.type.endsWith("bow") || a.type.endsWith("gauntlet"))
-      )
-    );
-    output.hoes.push(...item.containsItems.filter((a) => a.type != null && a.type.endsWith("hoe")));
-    output.pickaxes.push(
-      ...item.containsItems.filter(
-        (a) => a.type != null && (a.type.endsWith("pickaxe") || a.type.endsWith("drill") || a.type.endsWith("gauntlet"))
-      )
-    );
-    output.rods.push(
-      ...item.containsItems.filter(
-        (a) => a.type != null && (a.type.endsWith("fishing rod") || a.type.endsWith("fishing weapon"))
-      )
-    );
+    output.weapons.push(...item.containsItems.filter((a) => a.categories.includes("weapon")));
+    output.hoes.push(...item.containsItems.filter((a) => a.categories.includes("farming_tool")));
+    output.pickaxes.push(...item.containsItems.filter((a) => a.categories.includes("mining_tool")));
+    output.rods.push(...item.containsItems.filter((a) => a.categories.includes("fishing_tool")));
 
     output.pets.push(
       ...item.containsItems
@@ -1303,8 +1278,8 @@ export const getItems = async (
 
   output.talismans = output.talismans.sort(itemSorter);
 
-  let swords = output.weapons.filter((a) => a.type == "sword" || a.type == "dungeon sword");
-  let bows = output.weapons.filter((a) => a.type == "bow" || a.type == "dungeon bow");
+  let swords = output.weapons.filter((a) => a.categories.includes("sword"));
+  let bows = output.weapons.filter((a) => a.categories.includes("bow"));
 
   let swordsInventory = swords.filter((a) => a.backpackIndex === undefined);
   let bowsInventory = bows.filter((a) => a.backpackIndex === undefined);
@@ -1738,21 +1713,21 @@ export const getStats = async (
   // Apply pet bonus to armor
   if (activePet) {
     activePet.ref.modifyArmor(
-      items.armor.find((a) => a.type === "helmet" || a.type === "dungeon helmet"),
-      getId(items.armor.find((a) => a.type === "helmet" || a.type === "dungeon helmet")),
-      items.armor.find((a) => a.type === "chestplate" || a.type === "dungeon chestplate"),
-      getId(items.armor.find((a) => a.type === "chestplate" || a.type === "dungeon chestplate")),
-      items.armor.find((a) => a.type === "leggings" || a.type === "dungeon leggings"),
-      getId(items.armor.find((a) => a.type === "leggings" || a.type === "dungeon leggings")),
-      items.armor.find((a) => a.type === "boots" || a.type === "dungeon boots"),
-      getId(items.armor.find((a) => a.type === "boots" || a.type === "dungeon boots"))
+      items.armor.find((a) => a.categories.includes("helmet")),
+      getId(items.armor.find((a) => a.categories.includes("helmet"))),
+      items.armor.find((a) => a.categories.includes("chestplate")),
+      getId(items.armor.find((a) => a.categories.includes("chestplate"))),
+      items.armor.find((a) => a.categories.includes("leggings")),
+      getId(items.armor.find((a) => a.categories.includes("leggings"))),
+      items.armor.find((a) => a.categories.includes("boots")),
+      getId(items.armor.find((a) => a.categories.includes("boots")))
     );
 
     // Updates items lore after modifyArmor() changed their stats/extra (hpb)
-    makeLore(items.armor.find((a) => a.type === "helmet" || a.type === "dungeon helmet"));
-    makeLore(items.armor.find((a) => a.type === "chestplate" || a.type === "dungeon chestplate"));
-    makeLore(items.armor.find((a) => a.type === "leggings" || a.type === "dungeon leggings"));
-    makeLore(items.armor.find((a) => a.type === "boots" || a.type === "dungeon boots"));
+    makeLore(items.armor.find((a) => a.categories.includes("helmet")));
+    makeLore(items.armor.find((a) => a.categories.includes("chestplate")));
+    makeLore(items.armor.find((a) => a.categories.includes("leggings")));
+    makeLore(items.armor.find((a) => a.categories.includes("boots")));
   }
 
   // Apply Lapis Armor full set bonus of +60 HP
@@ -1788,7 +1763,7 @@ export const getStats = async (
 
   // Apply basic armor stats
   for (const item of items.armor) {
-    if (item.isInactive || item.type == "accessory" || item.type == "dungeon accessory") {
+    if (item.isInactive || item.categories.includes("accessory")) {
       item.stats = {};
 
       if (getId(item) != "PARTY_HAT_CRAB") {

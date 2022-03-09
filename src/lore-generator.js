@@ -45,12 +45,10 @@ export function makeLore(item) {
     if (statName in statNames) {
       const statValue = split[1].substring(0, 2) + addSign(item.stats[statNames[statName]]);
 
-      const isArmor = ["helmet", "chestplate", "leggings", "boots"].includes(item.type);
-
-      if (statName === "Health" && isArmor && item.extra?.hpbs > 0) {
+      if (statName === "Health" && item.categories.includes("armor") && item.extra?.hpbs > 0) {
         const hpbString = `§e(+${item.extra.hpbs * 4})`;
         lore_raw[i] = statType + ": " + statValue + " " + hpbString + " " + split.slice(3).join(" ");
-      } else if (statName === "Defense" && isArmor && item.extra?.hpbs > 0) {
+      } else if (statName === "Defense" && item.categories.includes("armor") && item.extra?.hpbs > 0) {
         const hpbString = `§e(+${item.extra.hpbs * 2})`;
         lore_raw[i] = statType + ": " + statValue + " " + hpbString + " " + split.slice(3).join(" ");
       } else {
