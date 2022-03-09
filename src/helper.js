@@ -1014,8 +1014,9 @@ function getCategoriesFromType(type) {
       return ["farming_tool", "tool", "hoe"];
     case "shovel":
     case "shears":
-    case "fishing rod":
       return ["tool", type];
+    case "fishing rod":
+      return ["fishing_tool", "tool"];
     case "fishing weapon":
       return ["weapon", "fishing_tool", "tool"];
     case "bait":
@@ -1026,10 +1027,14 @@ function getCategoriesFromType(type) {
     case "cosmetic":
     case "pet item":
     case "travel scroll":
+    case "belt":
+    case "cloak":
+    case "necklace":
+    case "gloves":
       return [type];
   }
 
   // todo: remove and finda better way to awknowledge new item types
   console.log("\x1b[31m%s\x1b[0m", "Unknown item type:", type);
-  return [];
+  return ["unknown"];
 }

@@ -1164,9 +1164,9 @@ export const getItems = async (
   output.talisman_ids = talisman_ids;
 
   output.weapons = all_items.filter((a) => a.categories?.includes("weapon"));
-  output.hoes = all_items.filter((a) => a.categories?.includes("farming_tool"));
-  output.pickaxes = all_items.filter((a) => a.categories?.includes("mining_tool"));
-  output.rods = all_items.filter((a) => a.categories?.includes("fishing_tool"));
+  output.farming_tools = all_items.filter((a) => a.categories?.includes("farming_tool"));
+  output.mining_tools = all_items.filter((a) => a.categories?.includes("mining_tool"));
+  output.fishing_tools = all_items.filter((a) => a.categories?.includes("fishing_tool"));
 
   output.pets = all_items
     .filter((a) => a.tag?.ExtraAttributes?.petInfo)
@@ -1187,9 +1187,9 @@ export const getItems = async (
     }
 
     output.weapons.push(...item.containsItems.filter((a) => a.categories.includes("weapon")));
-    output.hoes.push(...item.containsItems.filter((a) => a.categories.includes("farming_tool")));
-    output.pickaxes.push(...item.containsItems.filter((a) => a.categories.includes("mining_tool")));
-    output.rods.push(...item.containsItems.filter((a) => a.categories.includes("fishing_tool")));
+    output.farming_tools.push(...item.containsItems.filter((a) => a.categories.includes("farming_tool")));
+    output.mining_tools.push(...item.containsItems.filter((a) => a.categories.includes("mining_tool")));
+    output.fishing_tools.push(...item.containsItems.filter((a) => a.categories.includes("fishing_tool")));
 
     output.pets.push(
       ...item.containsItems
@@ -1234,9 +1234,9 @@ export const getItems = async (
 
   // Sort talismans, weapons and rods by rarity
   output.weapons = output.weapons.sort(itemSorter);
-  output.rods = output.rods.sort(itemSorter);
-  output.hoes = output.hoes.sort(itemSorter);
-  output.pickaxes = output.pickaxes.sort(itemSorter);
+  output.fishing_tools = output.fishing_tools.sort(itemSorter);
+  output.farming_tools = output.farming_tools.sort(itemSorter);
+  output.mining_tools = output.mining_tools.sort(itemSorter);
   output.talismans = output.talismans.sort(itemSorter);
 
   const countsOfId = {};
@@ -1255,13 +1255,13 @@ export const getItems = async (
     }
   }
 
-  for (const rod of output.rods) {
-    const id = getId(rod);
+  for (const item of output.fishing_tools) {
+    const id = getId(item);
 
     countsOfId[id] = (countsOfId[id] || 0) + 1;
 
     if (countsOfId[id] > 2) {
-      rod.hidden = true;
+      item.hidden = true;
     }
   }
 
@@ -1270,9 +1270,9 @@ export const getItems = async (
 
   let swordsInventory = swords.filter((a) => a.backpackIndex === undefined);
   let bowsInventory = bows.filter((a) => a.backpackIndex === undefined);
-  let rodsInventory = output.rods.filter((a) => a.backpackIndex === undefined);
-  let hoesInventory = output.hoes.filter((a) => a.backpackIndex === undefined);
-  let pickaxesInventory = output.pickaxes.filter((a) => a.backpackIndex === undefined);
+  let fishingtoolsInventory = output.fishing_tools.filter((a) => a.backpackIndex === undefined);
+  let farmingtoolsInventory = output.farming_tools.filter((a) => a.backpackIndex === undefined);
+  let miningtoolsInventory = output.mining_tools.filter((a) => a.backpackIndex === undefined);
 
   if (swords.length > 0) {
     output.highest_rarity_sword = swordsInventory
@@ -1286,21 +1286,21 @@ export const getItems = async (
       .sort((a, b) => a.item_index - b.item_index)[0];
   }
 
-  if (output.rods.length > 0) {
-    output.highest_rarity_rod = rodsInventory
-      .filter((a) => a.rarity == rodsInventory[0].rarity)
+  if (output.fishing_tools.length > 0) {
+    output.highest_rarity_fishing_tool = fishingtoolsInventory
+      .filter((a) => a.rarity == fishingtoolsInventory[0].rarity)
       .sort((a, b) => a.item_index - b.item_index)[0];
   }
 
-  if (output.hoes.length > 0) {
-    output.highest_rarity_hoe = hoesInventory
-      .filter((a) => a.rarity == hoesInventory[0].rarity)
+  if (output.farming_tools.length > 0) {
+    output.highest_rarity_farming_tool = farmingtoolsInventory
+      .filter((a) => a.rarity == farmingtoolsInventory[0].rarity)
       .sort((a, b) => a.item_index - b.item_index)[0];
   }
 
-  if (output.pickaxes.length > 0) {
-    output.highest_rarity_pickaxe = pickaxesInventory
-      .filter((a) => a.rarity == pickaxesInventory[0].rarity)
+  if (output.mining_tools.length > 0) {
+    output.highest_rarity_mining_tool = miningtoolsInventory
+      .filter((a) => a.rarity == miningtoolsInventory[0].rarity)
       .sort((a, b) => a.item_index - b.item_index)[0];
   }
 
@@ -1829,7 +1829,7 @@ export const getStats = async (
     /*{itemId:"NONE",stats:{}}*/
   ]
     .concat(items.weapons)
-    .concat(items.rods)) {
+    .concat(items.fishing_tools)) {
     let stats = Object.assign({}, output.stats);
 
     // Modify weapon based on pet
