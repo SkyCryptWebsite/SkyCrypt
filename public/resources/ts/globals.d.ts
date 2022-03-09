@@ -99,6 +99,13 @@ interface Item extends DisplayItem, ItemSlot {
   };
   tag: ItemTag;
   texture_pack?: Pack;
+  _itemType: {
+    categories: string[];
+    rarity: string | null;
+    recombobulated: boolean | null;
+    dungeon: boolean | null;
+    shiny: boolean | null;
+  };
 }
 
 interface ItemTag {

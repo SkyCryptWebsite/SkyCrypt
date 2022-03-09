@@ -265,7 +265,7 @@ function fillLore(element: HTMLElement) {
     return;
   }
 
-  itemName.className = `item-name piece-${item.rarity || "common"}-bg nice-colors-dark`;
+  itemName.className = `item-name piece-${item._itemType.rarity || "common"}-bg nice-colors-dark`;
   itemNameContent.innerHTML = item.display_name_print || item.display_name || "null";
 
   if (element.hasAttribute("data-pet-index")) {
@@ -452,7 +452,7 @@ for (const element of document.querySelectorAll<HTMLElement>(".stat-weapons .sel
 
       parent.classList.add("piece-selected");
 
-      activeWeaponElement.className = "stat-value stat-active-weapon piece-" + item.rarity + "-fg";
+      activeWeaponElement.className = "stat-value stat-active-weapon piece-" + item._itemType.rarity + "-fg";
       activeWeaponElement.innerHTML = item.display_name_print || item.display_name;
 
       stats = weaponStats;
@@ -500,7 +500,7 @@ for (const element of document.querySelectorAll<HTMLElement>(".stat-fishing .sel
 
       parent.classList.add("piece-selected");
 
-      activeRodElement.className = "stat-value stat-active-rod piece-" + item.rarity + "-fg";
+      activeRodElement.className = "stat-value stat-active-rod piece-" + item._itemType.rarity + "-fg";
       activeRodElement.innerHTML = item.display_name_print || item.display_name;
 
       stats = weaponStats;

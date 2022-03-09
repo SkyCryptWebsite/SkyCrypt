@@ -1395,6 +1395,17 @@ a.additional-player-stat:hover {
   color: var(--§4) !important;
 }
 
+.piece-very-special-bg,
+.style-scrollbar .piece-very-special-bg + .item-lore::-webkit-scrollbar-thumb {
+  background-color: var(--§c);
+}
+.piece-very-special-bg + .item-lore {
+  scrollbar-color: var(--§c) transparent;
+}
+.piece-very-special-fg {
+  color: var(--§c) !important;
+}
+
 .piece-special-bg,
 .style-scrollbar .piece-special-bg + .item-lore::-webkit-scrollbar-thumb {
   background-color: var(--§c);

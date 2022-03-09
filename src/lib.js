@@ -616,6 +616,8 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       const itemType = helper.parseItemTypeFromLore(lore);
       item._itemType = itemType; // ! temp: while debugging
 
+      item._itemType.rarity = itemType.rarity?.replaceAll(" ", "-");
+
       for (const key in itemType) {
         item[key] = itemType[key];
       }
