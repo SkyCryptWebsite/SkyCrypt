@@ -59,7 +59,7 @@
     "express-session": "^1.17.2",
     "fs-extra": "^10.0.1",
     "ioredis": "^4.28.5",
-    "lilyweight": "^2.3.0",
+    "lilyweight": "^2.4.0",
     "lit": "^2.2.0",
     "lodash": "^4.17.20",
     "micromatch": "^4.0.4",
