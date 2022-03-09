@@ -618,6 +618,9 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 
       item.rarity = itemType.rarity;
       item.categories = itemType.categories;
+      item.recombobulated = itemType.recombobulated;
+      item.shiny = itemType.shiny;
+      item.dungeon = itemType.dungeon;
 
       // fix custom maps texture
       if (item.id == 358) {
@@ -753,15 +756,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
   items = items.filter((a) => !a.inBackpack);
 
   return items;
-}
-
-export function splitWithTail(string, delimiter, count) {
-  let parts = string.split(delimiter);
-  let tail = parts.slice(count).join(delimiter);
-  let result = parts.slice(0, count);
-  result.push(tail);
-
-  return result;
 }
 
 export function getMinions(coopMembers) {
