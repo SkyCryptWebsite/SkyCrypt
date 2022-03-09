@@ -512,7 +512,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       item.extra.skin = `PET_SKIN_${item.tag.ExtraAttributes.petInfo.skin}`;
     }
 
-    if(item.tag?.ExtraAttributes?.dye_item != undefined) {
+    if (item.tag?.ExtraAttributes?.dye_item != undefined) {
       item.extra.dye = item.tag.ExtraAttributes.dye_item;
     }
 
