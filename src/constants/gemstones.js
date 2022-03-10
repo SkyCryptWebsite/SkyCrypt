@@ -9,13 +9,13 @@ export const gemstones = {
     color: "a",
     stats: {
       ROUGH: {
-        mining_fortune: [null, 4, 6, 8, 10, 12, null],
+        mining_fortune: [null, 4, 6, 8, 10, 12, 14],
       },
       FLAWED: {
-        mining_fortune: [null, 5, 7, 10, 14, 18, null],
+        mining_fortune: [null, 5, 7, 10, 14, 18, 22],
       },
       FINE: {
-        mining_fortune: [null, 7, 10, 15, 20, 25, null],
+        mining_fortune: [null, 7, 10, 15, 20, 25, 30],
       },
       FLAWLESS: {
         mining_fortune: [null, 10, 15, 20, 27, 35, 44],
@@ -30,13 +30,13 @@ export const gemstones = {
     color: "6",
     stats: {
       ROUGH: {
-        mining_speed: [4, 8, 12, 16, 20, 24, null],
+        mining_speed: [4, 8, 12, 16, 20, 24, 28],
       },
       FLAWED: {
-        mining_speed: [6, 10, 14, 18, 24, 30, null],
+        mining_speed: [6, 10, 14, 18, 24, 30, 36],
       },
       FINE: {
-        mining_speed: [10, 14, 20, 28, 36, 45, null],
+        mining_speed: [10, 14, 20, 28, 36, 45, 54],
       },
       FLAWLESS: {
         mining_speed: [14, 20, 30, 44, 58, 75, 92],
@@ -51,16 +51,16 @@ export const gemstones = {
     color: "e",
     stats: {
       ROUGH: {
-        pristine: [null, null, 0.4, 0.4, 0.4, 0.4, null],
+        pristine: [null, null, 0.4, 0.4, 0.4, 0.4, 0.5],
       },
       FLAWED: {
-        pristine: [null, null, 0.8, 0.8, 0.8, 0.8, null],
+        pristine: [null, null, 0.8, 0.8, 0.8, 0.8, 0.9],
       },
       FINE: {
-        pristine: [null, null, 1.2, 1.2, 1.2, 1.2, null],
+        pristine: [null, null, 1.2, 1.2, 1.2, 1.2, 1.3],
       },
       FLAWLESS: {
-        pristine: [null, null, 1.6, 1.6, 1.6, 1.6, null],
+        pristine: [null, null, 1.6, 1.6, 1.6, 1.6, 1.8],
       },
       PERFECT: {
         pristine: [null, null, 2, 2, 2, 2, 2.2],
