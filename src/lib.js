@@ -33,8 +33,6 @@ import { makeLore } from "./lore-generator.js";
 
 const parseNbt = util.promisify(nbt.parse);
 
-let TALISMAN_COUNT;
-
 function getMinMax(profiles, min, ...path) {
   let output = null;
 
@@ -1810,7 +1808,6 @@ export const getStats = async (
 
   if (!items.no_inventory) {
     output.missingTalismans = await getMissingTalismans(items.talisman_ids);
-    output.talismanCount = await getTalismanCount();
   }
 
   if (!userProfile.pets) {
@@ -3027,20 +3024,6 @@ export async function getMissingTalismans(talismans) {
     missing: other,
     upgrades: upgrades,
   };
-}
-
-export function getTalismanCount() {
-  if (TALISMAN_COUNT != null) return TALISMAN_COUNT;
-  let talismanArray = Object.keys(constants.talismans);
-
-  for (const talisman in constants.talisman_upgrades) {
-    if (talismanArray.includes(talisman)) {
-      talismanArray = talismanArray.filter((name) => name !== talisman);
-    }
-  }
-
-  TALISMAN_COUNT = talismanArray.length;
-  return talismanArray.length;
 }
 
 export async function getCollections(uuid, profile, cacheOnly = false) {

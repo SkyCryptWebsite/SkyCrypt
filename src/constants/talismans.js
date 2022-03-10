@@ -163,7 +163,6 @@ export const talismans = {
     rarity: "legendary",
     texture: "/head/8fb265c8cc6136063b4eb15450fe1fe1ab7738b0bf54d265490e1ef49da60b7c",
   },
-
   CAMPFIRE_TALISMAN_1: {
     name: "Campfire Initiate Badge",
     rarity: "common",
@@ -189,7 +188,6 @@ export const talismans = {
     rarity: "legendary",
     texture: "/head/4080bbefca87dc0f36536b6508425cfc4b95ba6e8f5e6a46ff9e9cb488a9ed",
   },
-
   FARMING_TALISMAN: null,
   VACCINE_TALISMAN: {
     name: "Vaccine Talisman",
@@ -662,3 +660,14 @@ export const talismans = {
     texture: "/head/22f2499ab4cfc97e65f0fa9fe63cc606707a4ae96af407846b1b5354f3fad99",
   },
 };
+
+// Getting Unique Accessories Count
+const unique_accessories = { ...talismans };
+
+for (const upgrade in talisman_upgrades) {
+  if (upgrade in unique_accessories) {
+    delete unique_accessories[upgrade];
+  }
+}
+
+export const unique_accessories_count = Object.keys(unique_accessories).length;
