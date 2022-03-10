@@ -1,5 +1,5 @@
+// forge times, value in minutes
 export const forge_times = {
-  // forge times in minutes
   REFINED_DIAMOND: 8 * 60,
   REFINED_MITHRIL: 6 * 60,
   REFINED_TITANIUM: 12 * 60,
