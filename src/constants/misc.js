@@ -408,7 +408,9 @@ export const increase_most_stats_exclude = [
   "pristine",
 ];
 
-export const MAX_SOULS = {
-  normal: 228,
-  stranded: 3,
+export const fairy_souls = {
+  max: {
+    normal: 228,
+    stranded: 3,
+  },
 };
