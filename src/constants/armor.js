@@ -1,4 +1,3 @@
-// Object with skill, slayer bonuses and enchantment bonuses
 export const special_sets = [
   {
     pieces: ["SKELETON_HELMET", "GUARDIAN_CHESTPLATE", "CREEPER_LEGGINGS", "SPIDER_BOOTS"],

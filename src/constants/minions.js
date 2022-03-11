@@ -25,7 +25,8 @@ export const minion_slots = {
   650: 26,
 };
 
-export const minions_max_slots = 25; // From unique tiers (excludes community shop upgrades)
+// From unique tiers (excludes community shop upgrades)
+export const minions_max_slots = 25;
 
 export const minions = {
   COBBLESTONE: {

@@ -1,4 +1,3 @@
-// XP required for each level of a skill
 export const leveling_xp = {
   1: 50,
   2: 125,
@@ -80,7 +79,6 @@ export const maxed_skill_caps = {
   farming: 60,
 };
 
-// XP required for each level of Runecrafting
 export const runecrafting_xp = {
   1: 50,
   2: 100,
@@ -195,7 +193,6 @@ export const guild_xp = [
   2500000, 3000000,
 ];
 
-// total XP required for level of Slayer
 export const slayer_xp = {
   zombie: {
     1: 5,
@@ -230,10 +227,6 @@ export const slayer_xp = {
     8: 400000,
     9: 1000000,
   },
-
-  // Needs more research,
-  // please let us know
-  // when you know the values.
   enderman: {
     1: 10,
     2: 30,
@@ -245,14 +238,6 @@ export const slayer_xp = {
     8: 400000,
     9: 1000000,
   },
-};
-
-export const slayer_boss_xp = {
-  1: 5,
-  2: 25,
-  3: 100,
-  4: 500,
-  5: 1500,
 };
 
 export const hotm_xp = {
