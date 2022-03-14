@@ -1,11 +1,48 @@
 @font-face {
   font-family: "icomoon";
-  src: url("/resources/fonts/icomoon/icomoon.eot?fgf09i");
-  src: url("/resources/fonts/icomoon/icomoon.eot?fgf09i#iefix") format("embedded-opentype"),
-    url("/resources/fonts/icomoon/icomoon.ttf?fgf09i") format("truetype"),
-    url("/resources/fonts/icomoon/icomoon.woff?fgf09i") format("woff"),
-    url("/resources/fonts/icomoon/icomoon.svg?fgf09i#icomoon") format("svg");
+  src: url("/resources/fonts/icomoon/icomoon.eot?v2");
+  src: url("/resources/fonts/icomoon/icomoon.eot?v2#iefix") format("embedded-opentype"),
+    url("/resources/fonts/icomoon/icomoon.ttf?v2") format("truetype"),
+    url("/resources/fonts/icomoon/icomoon.woff?v2") format("woff"),
+    url("/resources/fonts/icomoon/icomoon.svg?v2#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
+  unicode-range:
+    // ✪ dungeon-star
+    U+272A,
+    // ⍟ dungeon-master-star
+    U+235F,
+    // ⚔ attack-speed
+    U+2694,
+    // ☣ critical-chance
+    U+2623,
+    // ☠ critical-damage
+    U+2620,
+    // ❈ defense
+    U+2748,
+    // ☘ fortune
+    U+2618,
+    // ⫽ ferocity
+    U+2AFD,
+    // ❤ health
+    U+2764,
+    // ✎ intelligence
+    U+270E,
+    // ✯ magic-find
+    U+272F,
+    // ⸕ mining-speed
+    U+2E15,
+    // ♣ pet-luck
+    U+2663,
+    // ✧ pristine
+    U+2727,
+    // α sea-creature-chance
+    U+03B1,
+    // ✦ speed
+    U+2726,
+    // ❁ strength
+    U+2741,
+    // ๑ ability-damage
+    U+0E51;
 }

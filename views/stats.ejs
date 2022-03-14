@@ -425,16 +425,22 @@ function stat_component(stat) {
   %>
   <div data-stat="<%= stat.name %>" class="basic-stat stat-<%= stat.name.replaceAll("_", "-") %>">
     <span data-tippy-content="
-    <span class='stat-name'>Base <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= calculated.base_stats[stat.name].toLocaleString() %></span>
-    <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= stat.baseExplanation %><% } %></div><br>
-    <span class='stat-name'>Bonus <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %></span>
-    <div class='tippy-explanation'>Additional bonuses from Armor, held items, Accessories and active Pets.</div>
-    <% if(Array.isArray(stat.extraStats)){
-      for(const extraStat of stat.extraStats){ %>
-    <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value<%= extraStat.percent ? ' percent' : ''%>'><%= extraStat.value.toLocaleString() %></span>
-    <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= extraStat.explanation %><% } %></div>
-    <% }} %>
-    "><span class="stat-name"><%- getPrettyName(stat.name, true) %> </span><span class="stat-value<%= stat.percent ? ' percent' : ''%>"><%= stats[stat.name].toLocaleString() %></span></span></div>
+      <span class='stat-name'>Base <%= getPrettyName(stat.name) %>: </span><span class='stat-value <%= stat.percent ? 'percent' : ''%>'><%= calculated.base_stats[stat.name].toLocaleString() %></span>
+      <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= stat.baseExplanation %><% } %></div><br>
+      <span class='stat-name'>Bonus <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %></span>
+      <div class='tippy-explanation'>Additional bonuses from Armor, held items, Accessories and active Pets.</div>
+      <% if (Array.isArray(stat.extraStats)) {
+        for (const extraStat of stat.extraStats) { %>
+          <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value<%= extraStat.percent ? ' percent' : ''%>'><%= extraStat.value.toLocaleString() %></span>
+        <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= extraStat.explanation %><% } %></div>
+        <% } %>
+      <% } %>
+    ">
+      <span class="stat-icon"><%= constants.stats_symbols[stat.name] %></span>
+      <span class="stat-name"><%- getPrettyName(stat.name, true) %></span>
+      <span class="stat-value<%= stat.percent ? ' percent' : ''%>"><%= stats[stat.name].toLocaleString() %></span>
+    </span>
+  </div>
   <%
 }
 

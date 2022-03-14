@@ -554,10 +554,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
           break;
       }
 
-      item.display_name_print = item.display_name_print.replace(
-        /(✪+)/,
-        `<i class="icomoon icomoon-dungeon-stars">${newStars}</i>`
-      );
+      item.display_name_print = item.display_name_print.replace(/(✪+)/, newStars);
     }
 
     // Resolve skull textures to their image path

@@ -49,15 +49,23 @@
   columns: 190px auto;
   .basic-stat {
     margin-top: 0;
+    &::before {
+      width: 20px;
+      height: 20px;
+      display: none;
+    }
+  }
+  .stat-icon {
+    font-size: 16px;
+    line-height: 1;
+    vertical-align: text-bottom;
+    -webkit-font-smoothing: antialiased;
+    margin-right: 2px;
+    display: inline-block;
   }
   .stat-name,
   .stat-value {
     font-size: 14px;
-  }
-  .basic-stat::before {
-    // transform: scale(0.85);
-    width: 20px;
-    height: 20px;
   }
 }
 
@@ -2398,22 +2406,6 @@ inventory-view {
       right: 21px; // compensate for the width and the gap
     }
   }
-}
-
-.icomoon {
-  font-family: "icomoon" !important;
-  speak: never;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-}
-
-.icomoon-dungeon-stars {
-  font-size: 0.8em;
-  letter-spacing: 3px;
 }
 
 .forge-item {
