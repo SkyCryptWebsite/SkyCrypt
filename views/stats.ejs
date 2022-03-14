@@ -1211,7 +1211,7 @@ const metaDescription = getMetaDescription()
           <% }else{ %>
             <% if(items.highest_rarity_sword){ %>
             <p class="stat-raw-values">
-              <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%- items.highest_rarity_sword.display_name_print || items.highest_rarity_sword.display_name %></span>
+              <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%- items.highest_rarity_sword.display_name %></span>
             </p>
             <% }else if(items.weapons.length > 0){ %>
             <p class="stat-raw-values">
@@ -1392,7 +1392,7 @@ const metaDescription = getMetaDescription()
                 <div style='background-image: url("<%= activePet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
               </div>
               <div class="active-pet-info">
-                <div class="pet-name piece-<%= activePet.rarity %>-fg"><%= activePet.rarity %> <%- activePet.display_name_print || activePet.display_name %></div>
+                <div class="pet-name piece-<%= activePet.rarity %>-fg"><%= activePet.rarity %> <%- activePet.display_name %></div>
                 <div class="pet-level">Level <%= activePet.level.level %></div>
               </div>
             </div>
@@ -1534,7 +1534,7 @@ const metaDescription = getMetaDescription()
             <p class="stat-sub-header">Mining Pickaxes</p>
             <% if(items.highest_rarity_pickaxe){ %>
               <p class="stat-raw-values">
-                <span class="stat-name">Active Pickaxe: </span><span class="stat-active-pickaxe stat-value piece-<%= items.highest_rarity_pickaxe.rarity %>-fg"><%- items.highest_rarity_pickaxe.display_name_print || items.highest_rarity_pickaxe.display_name %></span>
+                <span class="stat-name">Active Pickaxe: </span><span class="stat-active-pickaxe stat-value piece-<%= items.highest_rarity_pickaxe.rarity %>-fg"><%- items.highest_rarity_pickaxe.display_name %></span>
               </p>
             <% }else{ %>
               <p class="stat-raw-values">
@@ -1723,7 +1723,7 @@ const metaDescription = getMetaDescription()
             <p class="stat-sub-header">Farming Hoes</p>
             <% if(items.highest_rarity_hoe){ %>
               <p class="stat-raw-values">
-                <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_hoe.rarity %>-fg"><%- items.highest_rarity_hoe.display_name_print || items.highest_rarity_hoe.display_name %></span>
+                <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_hoe.rarity %>-fg"><%- items.highest_rarity_hoe.display_name %></span>
               </p>
             <% }else{ %>
               <p class="stat-raw-values">
@@ -1819,7 +1819,7 @@ const metaDescription = getMetaDescription()
             <p class="stat-sub-header">Fishing Rods</p>
             <% if(items.highest_rarity_rod){ %>
             <p class="stat-raw-values">
-              <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_rod.rarity %>-fg"><%- items.highest_rarity_rod.display_name_print || items.highest_rarity_rod.display_name %></span>
+              <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_rod.rarity %>-fg"><%- items.highest_rarity_rod.display_name %></span>
             </p>
             <% }else if(items.rods.length > 0){ %>
             <p class="stat-raw-values">

@@ -80,7 +80,6 @@ interface DisplayItem {
   display_name: string;
   rarity: string;
   texture_path?: string;
-  display_name_print?: string;
 }
 
 interface ItemSlot {
