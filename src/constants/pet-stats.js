@@ -1454,7 +1454,7 @@ class Hound extends Pet {
     let mult = 0.1;
     return {
       name: "§6Fury Claws",
-      desc: [`§7Grants ${round(this.level * mult, 1)}	§e${symbols.attack_speed} Bonus Attack Speed`],
+      desc: [`§7Grants ${round(this.level * mult, 1)}	§e${symbols.bonus_attack_speed} Bonus Attack Speed`],
     };
   }
 

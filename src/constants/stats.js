@@ -1,6 +1,5 @@
 export const stats_symbols = {
   ability_damage: "๑",
-  attack_speed: "⚔",
   bonus_attack_speed: "⚔",
   crit_chance: "☣",
   crit_damage: "☠",
@@ -24,7 +23,6 @@ export const stats_symbols = {
 
 export const stats_colors = {
   ability_damage: "c",
-  attack_speed: "e",
   bonus_attack_speed: "e",
   crit_chance: "9",
   crit_damage: "9",
