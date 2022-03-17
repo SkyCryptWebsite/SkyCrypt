@@ -2728,6 +2728,7 @@ export async function getPets(profile) {
     const petData = constants.pet_data[pet.type] || {
       head: "/head/bc8ea1f51f253ff5142ca11ae45193a4ad8c3ab5e9c6eec8ba7a4fcb7bac40",
       type: "???",
+      maxTier: "LEGENDARY",
       maxLevel: 100,
       emoji: "❓",
     };
@@ -2735,7 +2736,13 @@ export async function getPets(profile) {
     pet.rarity = pet.tier.toLowerCase();
 
     if (pet.heldItem == "PET_ITEM_TIER_BOOST") {
-      pet.rarity = constants.rarities[Math.min(4, constants.rarities.indexOf(pet.rarity) + 1)];
+      pet.rarity =
+        constants.rarities[
+          Math.min(
+            constants.rarities.indexOf(petData.maxTier.toLowerCase()),
+            constants.rarities.indexOf(pet.rarity) + 1
+          )
+        ];
     }
 
     if (pet.heldItem == "PET_ITEM_VAMPIRE_FANG" || pet.heldItem == "PET_ITEM_TOY_JERRY") {
