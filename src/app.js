@@ -220,6 +220,19 @@ async function getExtra(page = null, favoriteUUIDs = [], cacheOnly) {
   return output;
 }
 
+function weightedRandom(array) {
+  let i = 0;
+  let weights = [];
+
+  for (i = 0; i < array.length; i++) weights[i] = array[i].weight + (weights[i - 1] || 0);
+
+  let random = Math.random() * weights[weights.length - 1];
+
+  for (i = 0; i < weights.length; i++) if (weights[i] > random) break;
+
+  return array[i];
+}
+
 app.all("/stats/:player/:profile?", async (req, res, next) => {
   const debugId = helper.generateDebugId("stats");
   const timeStarted = new Date().getTime();
@@ -295,7 +308,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
         error: e,
         player: playerUsername,
         extra: await getExtra("index", favorites, cacheOnly),
-        promotion: constants.promotions[Math.floor(Math.random() * constants.promotions.length)],
+        promotion: weightedRandom(constants.promotions),
         fileHashes,
         fileNameMap,
         helper,
@@ -637,7 +650,7 @@ app.all("/", async (req, res, next) => {
       error: null,
       player: null,
       extra: await getExtra("index", favorites, cacheOnly),
-      promotion: constants.promotions[Math.floor(Math.random() * constants.promotions.length)],
+      promotion: weightedRandom(constants.promotions),
       fileHashes,
       fileNameMap,
       helper,
