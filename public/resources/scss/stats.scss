@@ -1226,6 +1226,7 @@ a.additional-player-stat:hover {
   transition: box-shadow 0.2s ease-in-out;
   box-shadow: rgba(var(--text-rgb), 0) 0 0 0 0px inset;
   content-visibility: auto;
+  contain: paint;
 
   &.sticky-stats,
   &:focus {
