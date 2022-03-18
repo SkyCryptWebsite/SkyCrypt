@@ -293,6 +293,18 @@ function getPetLevel(pet, maxLevel) {
   };
 }
 
+/**
+ * @param  {string} rarity
+ * @param  {number} level
+ * @returns number
+ * @description takes rarity and level and returns the required pet exp to reach the level
+ */
+function getPetExp(rarity, level) {
+  const rarityOffset = constants.pet_rarity_offset[rarity.toLowerCase()];
+
+  return constants.pet_levels.slice(rarityOffset, rarityOffset + level - 1).reduce((prev, curr) => prev + curr, 0);
+}
+
 function getFairyBonus(fairyExchanges) {
   const bonus = Object.assign({}, constants.stat_template);
 
@@ -2928,7 +2940,7 @@ export async function getMissingPets(pets) {
     profile.pets.push({
       type: petType,
       active: false,
-      exp: constants.pet_data[petType].maxLevel === 200 ? 210249831 : 25353230,
+      exp: getPetExp(constants.pet_data[petType].maxTier, constants.pet_data[petType].maxLevel),
       tier: constants.pet_data[petType].maxTier,
       candyUsed: 0,
       heldItem: null,
