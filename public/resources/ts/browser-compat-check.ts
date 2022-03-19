@@ -1,6 +1,6 @@
 import Bowser from "bowser";
 
-const supportedIOSVersionNumber = 15.4;
+const supportedIOSVersionNumber = 14.5;
 const iOSHelpPage = "https://support.apple.com/en-us/HT204204";
 
 const browsers: {
@@ -11,7 +11,7 @@ const browsers: {
   };
 } = {
   safari: {
-    version: "15.4",
+    version: "14.1",
     help: "https://support.apple.com/en-us/HT204416",
   },
   chrome: {
