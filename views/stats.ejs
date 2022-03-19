@@ -843,13 +843,13 @@ const metaDescription = getMetaDescription()
       <%
         let stats = Object.assign({}, calculated.stats);
         let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
-        let rod = items.rods.slice().sort((a, b) => a.item_index - b.item_index);
+        let rod = items.fishing_tools.slice().sort((a, b) => a.item_index - b.item_index);
 
         if(items.highest_rarity_sword)
           sword = [items.highest_rarity_sword];
 
-        if(items.highest_rarity_rod)
-          rod = [items.highest_rarity_rod];
+        if(items.highest_rarity_fishing_tool)
+          rod = [items.highest_rarity_fishing_tool];
 
         if(sword.length > 0)
           stats = calculated.weapon_stats[sword[0].itemId];
@@ -1524,19 +1524,19 @@ const metaDescription = getMetaDescription()
 
           <% const mining = calculated.mining; %>
 
-          <% if(items.pickaxes.length > 0){ %>
-            <p class="stat-sub-header">Mining Pickaxes</p>
-            <% if(items.highest_rarity_pickaxe){ %>
+          <% if(items.mining_tools.length > 0){ %>
+            <p class="stat-sub-header">Mining Tools</p>
+            <% if(items.highest_rarity_mining_tool){ %>
               <p class="stat-raw-values">
-                <span class="stat-name">Active Pickaxe: </span><span class="stat-active-pickaxe stat-value piece-<%= items.highest_rarity_pickaxe.rarity %>-fg"><%- items.highest_rarity_pickaxe.display_name_print || items.highest_rarity_pickaxe.display_name %></span>
+                <span class="stat-name">Active Tool: </span><span class="stat-active-pickaxe stat-value piece-<%= items.highest_rarity_mining_tool.rarity %>-fg"><%- items.highest_rarity_mining_tool.display_name_print || items.highest_rarity_mining_tool.display_name %></span>
               </p>
             <% }else{ %>
               <p class="stat-raw-values">
-                <span class="stat-name">Active Pickaxe: </span><span class="stat-active-pickaxe stat-value piece-common-fg">None</span>
+                <span class="stat-name">Active Tool: </span><span class="stat-active-pickaxe stat-value piece-common-fg">None</span>
               </p>
             <% } %>
             <div class="pieces">
-              <%  items.pickaxes.filter(a => !a.hidden).forEach(item => { %>
+              <%  items.mining_tools.filter(a => !a.hidden).forEach(item => { %>
                   <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
@@ -1713,19 +1713,19 @@ const metaDescription = getMetaDescription()
             </p>
           <% } %>
 
-          <% if(items.hoes.length > 0){ %>
-            <p class="stat-sub-header">Farming Hoes</p>
-            <% if(items.highest_rarity_hoe){ %>
+          <% if(items.farming_tools.length > 0){ %>
+            <p class="stat-sub-header">Farming Tools</p>
+            <% if(items.highest_rarity_farming_tool){ %>
               <p class="stat-raw-values">
-                <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_hoe.rarity %>-fg"><%- items.highest_rarity_hoe.display_name_print || items.highest_rarity_hoe.display_name %></span>
+                <span class="stat-name">Active Tool: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_farming_tool.rarity %>-fg"><%- items.highest_rarity_farming_tool.display_name_print || items.highest_rarity_farming_tool.display_name %></span>
               </p>
             <% }else{ %>
               <p class="stat-raw-values">
-                <span class="stat-name">Active Hoe: </span><span class="stat-active-hoe stat-value piece-common-fg">None</span>
+                <span class="stat-name">Active Tool: </span><span class="stat-active-hoe stat-value piece-common-fg">None</span>
               </p>
             <% } %>
             <div class="pieces">
-              <%  items.hoes.filter(a => !a.hidden).forEach(item => { %>
+              <%  items.farming_tools.filter(a => !a.hidden).forEach(item => { %>
                   <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                     <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
                       <div class="piece-shine"></div>
@@ -1803,7 +1803,7 @@ const metaDescription = getMetaDescription()
             <% } %>
           </p>
 
-          <% if(items.rods.length > 0){ %>
+          <% if(items.fishing_tools.length > 0){ %>
             <%- stat_component({
               name: 'sea_creature_chance',
               percent: true,
@@ -1811,23 +1811,23 @@ const metaDescription = getMetaDescription()
             }); %>
 
             <p class="stat-sub-header">Fishing Rods</p>
-            <% if(items.highest_rarity_rod){ %>
+            <% if(items.highest_rarity_fishing_tool){ %>
             <p class="stat-raw-values">
-              <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_rod.rarity %>-fg"><%- items.highest_rarity_rod.display_name_print || items.highest_rarity_rod.display_name %></span>
+              <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_fishing_tool.rarity %>-fg"><%- items.highest_rarity_fishing_tool.display_name_print || items.highest_rarity_fishing_tool.display_name %></span>
             </p>
-            <% }else if(items.rods.length > 0){ %>
+            <% }else if(items.fishing_tools.length > 0){ %>
             <p class="stat-raw-values">
               <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-common-fg">None</span>
             </p>
             <% } %>
             <div class="pieces">
               <%
-                let rod = items.rods.slice().sort((a, b) => a.item_index - b.item_index);
+                let rod = items.fishing_tools.slice().sort((a, b) => a.item_index - b.item_index);
 
-                if(items.highest_rarity_rod)
-                  rod = [items.highest_rarity_rod];
+                if(items.highest_rarity_fishing_tool)
+                  rod = [items.highest_rarity_fishing_tool];
 
-                items.rods.filter(a => !a.hidden).forEach(item => { %>
+                items.fishing_tools.filter(a => !a.hidden).forEach(item => { %>
                   <div tabindex="0" data-item-id="<%= item.itemId %>"  class="rich-item piece
                     <% if(rod.length > 0 && item.backpackIndex === undefined && item.item_index == rod[0].item_index){ %>piece-selected<% } %>
                     piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">

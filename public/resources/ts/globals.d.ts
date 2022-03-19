@@ -78,9 +78,13 @@ type StatName =
 
 interface DisplayItem {
   display_name: string;
-  rarity: string;
-  texture_path?: string;
   display_name_print?: string;
+  texture_path?: string;
+  categories: string[];
+  rarity: string | null;
+  recombobulated: boolean | null;
+  dungeon: boolean | null;
+  shiny: boolean | null;
 }
 
 interface ItemSlot {

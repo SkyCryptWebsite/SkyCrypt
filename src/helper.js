@@ -856,7 +856,7 @@ export function generateItem(data) {
     display_name: "",
     display_name_print: "",
     rarity: null,
-    equipmentType: "none",
+    categories: [],
     type: "misc",
     tag: {
       display: {
@@ -947,4 +947,52 @@ export function convertHMS(seconds, format = "clock", alwaysTwoDigits = false) {
     default:
       return `${hh}:${mm}:${ss}`;
   }
+}
+
+export function parseItemTypeFromLore(lore) {
+  const regex = new RegExp(
+    `^(?<recomb>a )?(?<shiny>SHINY )?(?:(?<rarity>${constants.rarities
+      .map((x) => x.replaceAll("_", " ").toUpperCase())
+      .join("|")}) ?)(?<dungeon>DUNGEON )?(?<type>[A-Z ]+)?(?<recomb2>a)?$`
+  );
+
+  // Executing the regex on every lore line
+  // Reverse array and breaks after first find to optimize speed
+  let match = null;
+  for (const line of lore.reverse()) {
+    match = regex.exec(line);
+
+    if (match) {
+      break;
+    }
+  }
+
+  // No match found (glitched items, like /sbmenu gui items)
+  if (match == null) {
+    return {
+      categories: [],
+      rarity: null,
+      recombobulated: null,
+      dungeon: null,
+      shiny: null,
+    };
+  }
+
+  // Parsing the match and returning data
+  const r = match.groups;
+  return {
+    categories: r.type ? getCategoriesFromType(r.type.trim().toLowerCase()) : [],
+    rarity: r.rarity.replaceAll(" ", "_").toLowerCase(),
+    recombobulated: !!r.recomb && !!r.recomb2,
+    dungeon: !!r.dungeon,
+    shiny: !!r.shiny,
+  };
+}
+
+function getCategoriesFromType(type) {
+  if (type in constants.typeToCategories) {
+    return constants.typeToCategories[type];
+  }
+
+  return ["unknown"];
 }
