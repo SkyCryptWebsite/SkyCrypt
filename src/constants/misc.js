@@ -4,55 +4,6 @@ export const blocked_players = [
   "f025c1c7f55a4ea0b8d93f47d17dfe0f", // Plancke (Admin)
 ];
 
-export const item_types = [
-  "sword",
-  "bow",
-  "fishing rod",
-  "wand",
-  "axe",
-  "hoe",
-  "shovel",
-  "pickaxe",
-  "accessory",
-  "helmet",
-  "chestplate",
-  "leggings",
-  "boots",
-  "gauntlet",
-];
-
-/** @typedef {"common"|"uncommon"|"rare"|"epic"|"legendary"|"mythic"|"divine"|"supreme"|"special"|"very special"} Rarity */
-
-/** @type {Rarity[]} */
-export const rarities = [
-  "common",
-  "uncommon",
-  "rare",
-  "epic",
-  "legendary",
-  "mythic",
-  "divine",
-  "supreme",
-  "special",
-  "very special",
-];
-
-/** @typedef {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"a"|"b"|"c"|"d"|"e"|"f"} ColorCode */
-
-/** @type {{[key:Rarity]:ColorCode}} */
-export const rarityColors = {
-  common: "f",
-  uncommon: "a",
-  rare: "9",
-  epic: "5",
-  legendary: "6",
-  mythic: "d",
-  divine: "b",
-  supreme: "4",
-  special: "c",
-  "very special": "c",
-};
-
 // Number of kills required for each level of expertise
 export const expertise_kills_ladder = [50, 100, 250, 500, 1000, 2500, 5500, 10000, 15000];
 

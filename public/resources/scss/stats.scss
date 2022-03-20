@@ -1139,6 +1139,7 @@ a.additional-player-stat:hover {
   transition: box-shadow 0.2s ease-in-out;
   box-shadow: rgba(var(--text-rgb), 0) 0 0 0 0px inset;
   content-visibility: auto;
+  contain: paint;
 
   &.sticky-stats,
   &:focus {
@@ -1308,6 +1309,17 @@ a.additional-player-stat:hover {
   color: var(--§4) !important;
 }
 
+.piece-very_special-bg,
+.style-scrollbar .piece-very_special-bg + .item-lore::-webkit-scrollbar-thumb {
+  background-color: var(--§c);
+}
+.piece-very_special-bg + .item-lore {
+  scrollbar-color: var(--§c) transparent;
+}
+.piece-very_special-fg {
+  color: var(--§c) !important;
+}
+
 .piece-special-bg,
 .style-scrollbar .piece-special-bg + .item-lore::-webkit-scrollbar-thumb {
   background-color: var(--§c);
@@ -1400,7 +1412,7 @@ a.additional-player-stat:hover {
   --upgraded-from: #000;
   background-image: linear-gradient(to top right, transparent 0 90%, var(--upgraded-from) 90% 100%);
 
-  &.piece-very-special-bg {
+  &.piece-very_special-bg {
     --upgraded-from: var(--§c);
   }
   &.piece-special-bg {
