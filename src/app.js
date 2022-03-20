@@ -221,16 +221,13 @@ async function getExtra(page = null, favoriteUUIDs = [], cacheOnly) {
 }
 
 function weightedRandom(array) {
-  let i = 0;
   let weights = [];
 
-  for (i = 0; i < array.length; i++) weights[i] = array[i].weight + (weights[i - 1] || 0);
+  for (let i = 0; i < array.length; i++) weights[i] = array[i].weight + (weights[i - 1] || 0);
 
-  let random = Math.random() * weights[weights.length - 1];
+  const random = Math.random() * weights[weights.length - 1];
 
-  for (i = 0; i < weights.length; i++) if (weights[i] > random) break;
-
-  return array[i];
+  for (let i = 0; i < weights.length; i++) if (weights[i] > random) return array[i];
 }
 
 app.all("/stats/:player/:profile?", async (req, res, next) => {
