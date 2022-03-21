@@ -78,7 +78,6 @@ type StatName =
 
 interface DisplayItem {
   display_name: string;
-  display_name_print?: string;
   texture_path?: string;
   categories: string[];
   rarity: string | null;

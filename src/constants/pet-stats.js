@@ -96,7 +96,6 @@ class Pet {
 }
 
 class Bee extends Pet {
-  // todo: finish hive
   get stats() {
     return {
       strength: 5 + this.level * 0.25,
@@ -124,10 +123,10 @@ class Bee extends Pet {
     return {
       name: "§6Hive",
       desc: [
-        `§7Gain §b+${round(this.level * intMult + 1, 1)}${symbols.intelligence} Intelligence §7and §c+${round(
+        `§7Gain §b+${round(this.level * intMult + 1, 1)} ${symbols.intelligence} Intelligence §7and §c+${round(
           this.level * strMult + 1,
           1
-        )}${symbols.strength} Strength §7for each nearby bee.`,
+        )} ${symbols.strength} Strength §7for each nearby bee.`,
         `§8Max 15 bees`,
       ],
     };
@@ -416,7 +415,7 @@ class Armadillo extends Pet {
     return {
       name: "§6Mobile Tank",
       desc: [
-        `§7For every §a${round(100 - this.level * mult, 1)} §7Defense, gain §f+1${symbols.speed} Speed §7and §6+1${
+        `§7For every §a${round(100 - this.level * mult, 1)} §7Defense, gain §f+1 ${symbols.speed} Speed §7and §6+1 ${
           symbols.mining_speed
         } Mining Speed`,
       ],
@@ -1071,7 +1070,7 @@ class GoldenDragon extends Pet {
     const value = Math.max(0, this.level - 100) * 0.5 + 50;
     return {
       name: "§6Gold's Power",
-      desc: [`§7Adds §c+${round(value, 1)}${symbols.strength} Strength §7to all §6golden §7weapons`],
+      desc: [`§7Adds §c+${round(value, 1)} ${symbols.strength} Strength §7to all §6golden §7weapons`],
     };
   }
 
@@ -1079,7 +1078,7 @@ class GoldenDragon extends Pet {
     return {
       name: "§6Shining Scales",
       desc: [
-        `§7For each digit in your §6gold collection §7gain §c+10${symbols.strength} Strength §7and §b+2${symbols.magic_find} Magic Find`,
+        `§7For each digit in your §6gold collection §7gain §c+10 ${symbols.strength} Strength §7and §b+2 ${symbols.magic_find} Magic Find`,
       ],
     };
   }
@@ -1454,7 +1453,7 @@ class Hound extends Pet {
     let mult = 0.1;
     return {
       name: "§6Fury Claws",
-      desc: [`§7Grants ${round(this.level * mult, 1)}	§e${symbols.attack_speed} Bonus Attack Speed`],
+      desc: [`§7Grants ${round(this.level * mult, 1)}	§e${symbols.bonus_attack_speed} Bonus Attack Speed`],
     };
   }
 
@@ -1688,7 +1687,7 @@ class Rat extends Pet {
     return {
       name: "§6Rat's Blessing",
       desc: [
-        `§7Has a chance to grant a random player §b+${floor(2 + this.level * mult_mf, 1)}${
+        `§7Has a chance to grant a random player §b+${floor(2 + this.level * mult_mf, 1)} ${
           symbols.magic_find
         } Magic Find §7for §a${round(
           20 + this.level * mult_time,
@@ -2064,7 +2063,9 @@ class Turtle extends Pet {
     const defense = this.rarity > 3 ? round(5 + this.level * 0.25, 1) : round(4.95 + this.level * 0.15, 1);
     return {
       name: "§6Genius Amniote",
-      desc: [`§7Grants §a+${defense}${symbols.defense} Defense §7for every player around you, up to 4 nearby players.`],
+      desc: [
+        `§7Grants §a+${defense} ${symbols.defense} Defense §7for every player around you, up to 4 nearby players.`,
+      ],
     };
   }
 
@@ -2298,7 +2299,7 @@ class Lion extends Pet {
     let mult = this.rarity > 3 ? 0.2 : this.rarity > 2 ? 0.15 : this.rarity > 1 ? 0.1 : this.rarity > 0 ? 0.05 : 0.025;
     return {
       name: "§6Primal Force",
-      desc: [`§7Adds §c+${round(this.level * mult, 1)}${symbols.strength} Damage §7to your weapons`],
+      desc: [`§7Adds §c+${round(this.level * mult, 1)} ${symbols.strength} Damage §7to your weapons`],
     };
   }
 
@@ -2500,7 +2501,7 @@ class BlueWhale extends Pet {
     const mult = this.rarity > 3 ? 2.5 : this.rarity > 2 ? 2 : this.rarity > 1 ? 1.5 : this.rarity > 0 ? 1 : 0.5;
     return {
       name: "§6Ingest",
-      desc: [`§7All potions heal §c+${round(this.level * mult, 1)}${symbols.health}`],
+      desc: [`§7All potions heal §c+${round(this.level * mult, 1)} ${symbols.health}`],
     };
   }
 
@@ -2560,7 +2561,7 @@ class Ammonite extends Pet {
     return {
       name: "§6Heart of the Sea",
       desc: [
-        `§7Each Heart of the Mountain level grants §3+${round(this.level * 0.01, 1)}${
+        `§7Each Heart of the Mountain level grants §3+${round(this.level * 0.01, 1)} ${
           symbols.sea_creature_chance
         } Sea Creature Chance`,
       ],
@@ -2571,9 +2572,9 @@ class Ammonite extends Pet {
     return {
       name: "§6Not a Snail",
       desc: [
-        `§7Each fishing and mining level grants §f+${round(this.level * 0.02, 1)}${
+        `§7Each fishing and mining level grants §f+${round(this.level * 0.02, 1)} ${
           symbols.speed
-        } Speed §7and §a+${round(this.level * 0.02, 1)}${symbols.defense} Defense`,
+        } Speed §7and §a+${round(this.level * 0.02, 1)} ${symbols.defense} Defense`,
       ],
     };
   }
@@ -2761,7 +2762,7 @@ class Megalodon extends Pet {
     return {
       name: "§6Feeding frenzy",
       desc: [
-        `§7On kill gain §c${round(mult * this.level, 1)}${symbols.strength} Damage §7and §f${
+        `§7On kill gain §c${round(mult * this.level, 1)} ${symbols.strength} Damage §7and §f${
           symbols.speed
         } Speed §7for 5 seconds`,
       ],
@@ -2934,7 +2935,7 @@ class Parrot extends Pet {
     return {
       name: "§6Bird Discourse",
       desc: [
-        `§7Gives §c+${symbols.strength}${round(5 + this.level * mult, 1)} Strength §7to players within §a20 §7blocks`,
+        `§7Gives §c+${round(5 + this.level * mult, 1)} ${symbols.strength} Strength §7to players within §a20 §7blocks`,
         `§7Doesn't stack`,
       ],
     };

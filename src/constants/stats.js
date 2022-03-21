@@ -1,6 +1,6 @@
 export const stats_symbols = {
   ability_damage: "๑",
-  attack_speed: "⚔",
+  bonus_attack_speed: "⚔",
   crit_chance: "☣",
   crit_damage: "☠",
   defense: "❈",
@@ -13,17 +13,17 @@ export const stats_symbols = {
   mining_fortune: "☘",
   mining_speed: "⸕",
   pet_luck: "♣",
-  powder: "᠅",
+  powder: "᠅", // todo: missing icon in icomoon font
   pristine: "✧",
   sea_creature_chance: "α",
   speed: "✦",
   strength: "❁",
-  true_defense: "❂",
+  true_defense: "❂", // todo: missing icon in icomoon font
 };
 
 export const stats_colors = {
   ability_damage: "c",
-  attack_speed: "e",
+  bonus_attack_speed: "e",
   crit_chance: "9",
   crit_damage: "9",
   defense: "a",
