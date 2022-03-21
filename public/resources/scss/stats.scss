@@ -1139,7 +1139,6 @@ a.additional-player-stat:hover {
   transition: box-shadow 0.2s ease-in-out;
   box-shadow: rgba(var(--text-rgb), 0) 0 0 0 0px inset;
   content-visibility: auto;
-  contain: paint;
 
   &.sticky-stats,
   &:focus {
@@ -1239,16 +1238,29 @@ a.additional-player-stat:hover {
   left: 0;
   bottom: 0;
   right: 0;
-  transform: translateY(-100%);
-  background: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.5) 50%,
-    rgba(128, 186, 232, 0) 99%,
-    rgba(125, 185, 232, 0) 100%
-  );
-  z-index: 8;
-  animation: shine 4s infinite;
+  overflow: hidden;
+  @supports (contain: paint) {
+    overflow: initial;
+    contain: paint;
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    transform: translateY(-100%);
+    background: linear-gradient(
+      to top,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(128, 186, 232, 0) 99%,
+      rgba(125, 185, 232, 0) 100%
+    );
+    z-index: 8;
+    animation: shine 4s infinite;
+  }
 }
 
 @keyframes shine {

@@ -9,7 +9,7 @@
 .##....##.##.....##.##...###.##....##....##....##.....##.##...###....##....##....##
 ..######...#######..##....##..######.....##....##.....##.##....##....##.....######.
 */
-const rarityOrder = ["special", "supreme", "divine", "mythic", "legendary", "epic", "rare", "uncommon", "common"];
+const rarityOrder = ["very_special", "special", "supreme", "divine", "mythic", "legendary", "epic", "rare", "uncommon", "common"];
 const slayerOrder = ["zombie", "spider", "wolf", "enderman"];
 const badgeOrder = ["gold", "silver", "bronze"];
 
@@ -1165,7 +1165,7 @@ const metaDescription = getMetaDescription()
           <div class="pieces">
             <% for(const item of items.armor.slice().reverse()){ %>
               <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
-                <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
+                <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
                   <div class="piece-shine"></div>
                 <% } %>
                 <% itemIcon(item, ['piece-icon']); %>
@@ -1184,7 +1184,7 @@ const metaDescription = getMetaDescription()
               <% for(const [index, item] of set.entries()) { %>
                 <% if (item) { %>
                   <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %> index-<%= index %>">
-                    <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
+                    <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
                       <div class="piece-shine"></div>
                     <% } %>
                     <% itemIcon(item, ['piece-icon']); %>
@@ -1206,30 +1206,40 @@ const metaDescription = getMetaDescription()
         <a class="stat-anchor" id="Weapons"></a>
         <h2 class="stat-header">Weapons</h2>
         <div class="stat-content">
-          <% if(items.weapons.length == 0){ %>
+          <% if (items.weapons.length == 0) { %>
             <div class="no-access"><%= calculated.display_name %> doesn't have any weapons.</div>
-          <% }else{ %>
-            <% if(items.highest_rarity_sword){ %>
-            <p class="stat-raw-values">
-              <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%- items.highest_rarity_sword.display_name %></span>
-            </p>
-            <% }else if(items.weapons.length > 0){ %>
-            <p class="stat-raw-values">
-              <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-common-fg">None</span>
-            </p>
+          <% } else { %>
+            <% if (items.highest_rarity_sword) { %>
+              <p class="stat-raw-values">
+                <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%- items.highest_rarity_sword.display_name %></span>
+              </p>
+            <% } else if (items.weapons.length > 0) { %>
+              <p class="stat-raw-values">
+                <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-common-fg">None</span>
+              </p>
             <% } %>
             <div class="pieces">
               <%
+                // sword: the default piece-selected sword
                 let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
-
-                if(items.highest_rarity_sword)
+                if (items.highest_rarity_sword) {
                   sword = [items.highest_rarity_sword];
+                }
 
-                items.weapons.filter(a => !a.hidden).forEach(item => { %>
-                  <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece
-                    <% if(sword.length > 0 && item.backpackIndex === undefined && item.item_index == sword[0].item_index){ %>piece-selected<% } %>
-                    piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
-                    <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
+                items.weapons.filter(a => !a.hidden).forEach(item => {
+              %>
+                  <div
+                    tabindex="0"
+                    data-item-id="<%= item.itemId %>"
+                    class="
+                      rich-item
+                      piece
+                      <% if(sword.length > 0 && item.backpackIndex === undefined && item.item_index == sword[0].item_index){ %>piece-selected<% } %>
+                      piece-<%= item.rarity %>-bg
+                      <%= getRarityUpgradeClass(item) %>
+                    "
+                  >
+                    <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
                       <div class="piece-shine"></div>
                     <% } %>
                     <div class="select-weapon"></div>
@@ -1273,7 +1283,7 @@ const metaDescription = getMetaDescription()
                   %>
                   <div tabindex="0" data-item-id="<%= item.itemId %>"
                   class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
-                    <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
+                    <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
                       <div class="piece-shine"></div>
                     <% } %>
                     <% itemIcon(item, ['piece-icon']); %>
@@ -1292,7 +1302,7 @@ const metaDescription = getMetaDescription()
                 <% items.talismans.filter(a => a.isUnique && a.isInactive).forEach(item => { %>
                   <div tabindex="0" data-item-id="<%= item.itemId %>"
                   class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
-                    <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
+                    <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
                       <div class="piece-shine"></div>
                     <% } %>
                     <% itemIcon(item, ['piece-icon']); %>
@@ -1386,7 +1396,7 @@ const metaDescription = getMetaDescription()
             <p class="stat-sub-header">Active Pet</p>
             <div class="pieces">
               <div tabindex="0" data-pet-index="0" class="active-pet rich-item piece piece-<%= activePet.rarity %>-bg <%= getRarityUpgradeClass(activePet) %>">
-                <% if (rarityOrder.indexOf(activePet.rarity) < 3) { %>
+                <% if (rarityOrder.indexOf(activePet.rarity) <= 4) { %>
                   <div class="piece-shine"></div>
                 <% } %>
                 <div style='background-image: url("<%= activePet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
@@ -1413,7 +1423,7 @@ const metaDescription = getMetaDescription()
                 <% } %>
 
                 <div tabindex="0" data-pet-index="<%= activePet ? index + 1 : index %>" class="other-pet rich-item piece piece-<%= pet.rarity %>-bg <%= getRarityUpgradeClass(pet) %>">
-                  <% if(rarityOrder.indexOf(pet.rarity) < 3) { %>
+                  <% if(rarityOrder.indexOf(pet.rarity) <= 4) { %>
                     <div class="piece-shine"></div>
                   <% } %>
                   <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
@@ -1544,7 +1554,7 @@ const metaDescription = getMetaDescription()
             <div class="pieces">
               <%  items.mining_tools.filter(a => !a.hidden).forEach(item => { %>
                   <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
-                    <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
+                    <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
                       <div class="piece-shine"></div>
                     <% } %>
                     <% itemIcon(item, ['piece-icon']); %>
@@ -1733,7 +1743,7 @@ const metaDescription = getMetaDescription()
             <div class="pieces">
               <%  items.farming_tools.filter(a => !a.hidden).forEach(item => { %>
                   <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
-                    <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
+                    <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
                       <div class="piece-shine"></div>
                     <% } %>
                     <% itemIcon(item, ['piece-icon']); %>
@@ -1837,7 +1847,7 @@ const metaDescription = getMetaDescription()
                   <div tabindex="0" data-item-id="<%= item.itemId %>"  class="rich-item piece
                     <% if(rod.length > 0 && item.backpackIndex === undefined && item.item_index == rod[0].item_index){ %>piece-selected<% } %>
                     piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
-                    <% if(rarityOrder.indexOf(item.rarity) < 3){ %>
+                    <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
                       <div class="piece-shine"></div>
                     <% } %>
                     <div class="select-rod"></div>
