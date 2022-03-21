@@ -854,7 +854,6 @@ export function generateItem(data) {
     Damage: 0,
     Count: 1,
     display_name: "",
-    display_name_print: "",
     rarity: null,
     categories: [],
     type: "misc",
@@ -871,11 +870,6 @@ export function generateItem(data) {
   // Making sure rarity is lowercase
   if (data.rarity) {
     data.rarity = data.rarity.toLowerCase();
-  }
-
-  // Setting display_name_print = display_name if not specified
-  if (data.display_name && !data.display_name_print) {
-    data.display_name_print = data.display_name;
   }
 
   // Setting tag.display.Name using display_name if not specified

@@ -545,11 +545,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       item.display_name = helper.getRawLore(item.tag.display.Name);
     }
 
-    // Set print display name (contains HTML)
-    if (item.display_name) {
-      item.display_name_print = item.display_name;
-    }
-
     if (item.tag?.ExtraAttributes?.dungeon_item_level > 0) {
       const dungeonItemLevel = item.tag.ExtraAttributes.dungeon_item_level;
       let newStars = null;
@@ -566,10 +561,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
           break;
       }
 
-      item.display_name_print = item.display_name_print.replace(
-        /(✪+)/,
-        `<i class="icomoon icomoon-dungeon-stars">${newStars}</i>`
-      );
+      item.display_name = item.display_name.replace(/(✪+)/, newStars);
     }
 
     // Resolve skull textures to their image path

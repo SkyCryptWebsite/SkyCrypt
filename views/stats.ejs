@@ -425,16 +425,22 @@ function stat_component(stat) {
   %>
   <div data-stat="<%= stat.name %>" class="basic-stat stat-<%= stat.name.replaceAll("_", "-") %>">
     <span data-tippy-content="
-    <span class='stat-name'>Base <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= calculated.base_stats[stat.name].toLocaleString() %></span>
-    <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= stat.baseExplanation %><% } %></div><br>
-    <span class='stat-name'>Bonus <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %></span>
-    <div class='tippy-explanation'>Additional bonuses from Armor, held items, Accessories and active Pets.</div>
-    <% if(Array.isArray(stat.extraStats)){
-      for(const extraStat of stat.extraStats){ %>
-    <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value<%= extraStat.percent ? ' percent' : ''%>'><%= extraStat.value.toLocaleString() %></span>
-    <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= extraStat.explanation %><% } %></div>
-    <% }} %>
-    "><span class="stat-name"><%- getPrettyName(stat.name, true) %> </span><span class="stat-value<%= stat.percent ? ' percent' : ''%>"><%= stats[stat.name].toLocaleString() %></span></span></div>
+      <span class='stat-name'>Base <%= getPrettyName(stat.name) %>: </span><span class='stat-value <%= stat.percent ? 'percent' : ''%>'><%= calculated.base_stats[stat.name].toLocaleString() %></span>
+      <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= stat.baseExplanation %><% } %></div><br>
+      <span class='stat-name'>Bonus <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %></span>
+      <div class='tippy-explanation'>Additional bonuses from Armor, held items, Accessories and active Pets.</div>
+      <% if (Array.isArray(stat.extraStats)) {
+        for (const extraStat of stat.extraStats) { %>
+          <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value<%= extraStat.percent ? ' percent' : ''%>'><%= extraStat.value.toLocaleString() %></span>
+        <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= extraStat.explanation %><% } %></div>
+        <% } %>
+      <% } %>
+    ">
+      <span class="stat-icon"><%= constants.stats_symbols[stat.name] %></span>
+      <span class="stat-name"><%- getPrettyName(stat.name, true) %></span>
+      <span class="stat-value<%= stat.percent ? ' percent' : ''%>"><%= stats[stat.name].toLocaleString() %></span>
+    </span>
+  </div>
   <%
 }
 
@@ -1205,7 +1211,7 @@ const metaDescription = getMetaDescription()
           <% } else { %>
             <% if (items.highest_rarity_sword) { %>
               <p class="stat-raw-values">
-                <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%- items.highest_rarity_sword.display_name_print || items.highest_rarity_sword.display_name %></span>
+                <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-<%= items.highest_rarity_sword.rarity %>-fg"><%- items.highest_rarity_sword.display_name %></span>
               </p>
             <% } else if (items.weapons.length > 0) { %>
               <p class="stat-raw-values">
@@ -1396,7 +1402,7 @@ const metaDescription = getMetaDescription()
                 <div style='background-image: url("<%= activePet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
               </div>
               <div class="active-pet-info">
-                <div class="pet-name piece-<%= activePet.rarity %>-fg"><%= activePet.rarity %> <%- activePet.display_name_print || activePet.display_name %></div>
+                <div class="pet-name piece-<%= activePet.rarity %>-fg"><%= activePet.rarity %> <%- activePet.display_name %></div>
                 <div class="pet-level">Level <%= activePet.level.level %></div>
               </div>
             </div>
@@ -1538,7 +1544,7 @@ const metaDescription = getMetaDescription()
             <p class="stat-sub-header">Mining Tools</p>
             <% if(items.highest_rarity_mining_tool){ %>
               <p class="stat-raw-values">
-                <span class="stat-name">Active Tool: </span><span class="stat-active-pickaxe stat-value piece-<%= items.highest_rarity_mining_tool.rarity %>-fg"><%- items.highest_rarity_mining_tool.display_name_print || items.highest_rarity_mining_tool.display_name %></span>
+                <span class="stat-name">Active Tool: </span><span class="stat-active-pickaxe stat-value piece-<%= items.highest_rarity_mining_tool.rarity %>-fg"><%- items.highest_rarity_mining_tool.display_name %></span>
               </p>
             <% }else{ %>
               <p class="stat-raw-values">
@@ -1727,7 +1733,7 @@ const metaDescription = getMetaDescription()
             <p class="stat-sub-header">Farming Tools</p>
             <% if(items.highest_rarity_farming_tool){ %>
               <p class="stat-raw-values">
-                <span class="stat-name">Active Tool: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_farming_tool.rarity %>-fg"><%- items.highest_rarity_farming_tool.display_name_print || items.highest_rarity_farming_tool.display_name %></span>
+                <span class="stat-name">Active Tool: </span><span class="stat-active-hoe stat-value piece-<%= items.highest_rarity_farming_tool.rarity %>-fg"><%- items.highest_rarity_farming_tool.display_name %></span>
               </p>
             <% }else{ %>
               <p class="stat-raw-values">
@@ -1823,7 +1829,7 @@ const metaDescription = getMetaDescription()
             <p class="stat-sub-header">Fishing Rods</p>
             <% if(items.highest_rarity_fishing_tool){ %>
             <p class="stat-raw-values">
-              <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_fishing_tool.rarity %>-fg"><%- items.highest_rarity_fishing_tool.display_name_print || items.highest_rarity_fishing_tool.display_name %></span>
+              <span class="stat-name">Active Rod: </span><span class="stat-active-rod stat-value piece-<%= items.highest_rarity_fishing_tool.rarity %>-fg"><%- items.highest_rarity_fishing_tool.display_name %></span>
             </p>
             <% }else if(items.fishing_tools.length > 0){ %>
             <p class="stat-raw-values">
