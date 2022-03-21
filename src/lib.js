@@ -511,7 +511,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     if (item.tag?.ExtraAttributes?.petInfo?.skin != undefined) {
       item.extra.skin = `PET_SKIN_${item.tag.ExtraAttributes.petInfo.skin}`;
     }
-
+    
     // Set custom texture for colored leather armor
     if (typeof item.id === "number" && item.id >= 298 && item.id <= 301) {
       const color = item.tag?.display?.color?.toString(16).padStart(6, "0") ?? "955e3b";
