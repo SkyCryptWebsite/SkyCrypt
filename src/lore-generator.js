@@ -1,4 +1,4 @@
-import { statNames } from "./constants/misc.js";
+import { statNames } from "../common/constants.js";
 
 /**
  * adds a "+" to the beginning of positive numbers

@@ -1,3 +1,5 @@
+export * from "../common/constants.js";
+
 export * from "./constants/armor.js";
 export * from "./constants/bonuses.js";
 export * from "./constants/collections.js";

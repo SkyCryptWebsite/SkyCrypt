@@ -3,6 +3,9 @@ import { SkinViewer, createOrbitControls } from "skinview3d";
 import tippy from "tippy.js";
 
 import { renderLore } from "../../../common/formatting.js";
+import { statNames } from "../../../common/constants.js";
+
+import "./_player-stats";
 
 import("./elements/inventory-view");
 
@@ -966,90 +969,3 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
     );
   }
 }
-
-// Stats
-(() => {
-  const stats: Stats = {};
-
-  // Armor stats
-  for (const piece of items.armor) {
-    const pieceStats = getStats(piece as Item);
-
-    for (const [name, value] of Object.entries(pieceStats as { [key: string]: number })) {
-      stats[name] ??= {};
-      stats[name].armor ??= 0;
-      stats[name].armor += value;
-    }
-  }
-
-  console.log(stats);
-
-  // Shit to make all this work:
-  interface Stats {
-    [key: string]: {
-      base?: number;
-      fairy_souls?: number;
-      skill?: number;
-      slayers?: number;
-      armor?: number;
-      held_item?: number;
-      accessories?: number;
-      pet?: number;
-    };
-  }
-
-  function getStats(piece: Item) {
-    const statNames = {
-      Health: "health",
-      Defense: "defense",
-      Strength: "strength",
-      Speed: "speed",
-      "Crit Chance": "crit_chance",
-      "Crit Damage": "crit_damage",
-      "Bonus Attack Speed": "bonus_attack_speed",
-      Intelligence: "intelligence",
-      "Sea Creature Chance": "sea_creature_chance",
-      "Magic Find": "magic_find",
-      "Pet Luck": "pet_luck",
-      Ferocity: "ferocity",
-      "Ability Damage": "ability_damage",
-      "Mining Speed": "mining_speed",
-      "Mining Fortune": "mining_fortune",
-      "Farming Fortune": "farming_fortune",
-      "Foraging Fortune": "foraging_fortune",
-      Pristine: "pristine",
-    };
-
-    const regex = /^([A-Za-z ]+): ([+|-]\d+)/;
-    const stats: { [key: string]: number } = {};
-
-    const lore = (piece.tag.display.Lore || []).map((line) => removeFormatting(line));
-
-    for (const line of lore) {
-      // Breaking after the first empty line for performance (stats are in the first block only)
-      if (line === "") {
-        break;
-      }
-
-      const match = regex.exec(line);
-
-      if (match == null) {
-        return;
-      }
-
-      const statName = statNames[match[1]];
-      const statValue = parseInt(match[2]);
-
-      if (statName) {
-        stats[statName] ??= 0;
-        stats[statName] += statValue;
-      }
-    }
-
-    return stats;
-  }
-
-  function removeFormatting(string: string) {
-    return string.replaceAll(/§[0-9a-z]/g, "");
-  }
-})();

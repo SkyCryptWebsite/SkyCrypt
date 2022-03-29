@@ -90,3 +90,24 @@ export const maxEnchants = new Set([
   "Venomous VI",
   "Vicious V",
 ]);
+
+export const statNames = {
+  Health: "health",
+  Defense: "defense",
+  Strength: "strength",
+  Speed: "speed",
+  "Crit Chance": "crit_chance",
+  "Crit Damage": "crit_damage",
+  "Bonus Attack Speed": "bonus_attack_speed",
+  Intelligence: "intelligence",
+  "Sea Creature Chance": "sea_creature_chance",
+  "Magic Find": "magic_find",
+  "Pet Luck": "pet_luck",
+  Ferocity: "ferocity",
+  "Ability Damage": "ability_damage",
+  "Mining Speed": "mining_speed",
+  "Mining Fortune": "mining_fortune",
+  "Farming Fortune": "farming_fortune",
+  "Foraging Fortune": "foraging_fortune",
+  Pristine: "pristine",
+};

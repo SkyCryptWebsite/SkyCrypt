@@ -6,6 +6,7 @@ import { v4 } from "uuid";
 import retry from "async-retry";
 
 export { renderLore, formatNumber } from "../common/formatting.js";
+export * from "../common/helper.js";
 
 import * as constants from "./constants.js";
 import credentials from "./credentials.js";
@@ -901,15 +902,6 @@ export function calcHotmTokens(hotmTier, potmTier) {
   }
 
   return tokens;
-}
-
-/**
- * removes Minecraft formatting codes from a string
- * @param {string} string
- * @returns {string}
- */
-export function removeFormatting(string) {
-  return string.replaceAll(/§[0-9a-z]/g, "");
 }
 
 /**

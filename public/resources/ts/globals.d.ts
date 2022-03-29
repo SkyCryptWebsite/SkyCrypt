@@ -659,4 +659,17 @@ interface UADataValues {
   uaFullVersion: string;
 }
 
+interface PlayerStats {
+  [key: string]: {
+    base?: number;
+    fairy_souls?: number;
+    skill?: number;
+    slayers?: number;
+    armor?: number;
+    held_item?: number;
+    accessories?: number;
+    pet?: number;
+  };
+}
+
 declare const redocInit: ((color?: string) => void) | undefined;
