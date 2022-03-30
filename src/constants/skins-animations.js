@@ -493,6 +493,12 @@ const skins = [
     texture: "/head/d0c72b0db2ecbdaf153c563593d17d546b302b278b1b81d3e063963b5b0e5bc4",
     release: new Date("2022-02-16 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_JERRY_HANDSOME",
+    name: "Handsome",
+    texture: "/head/11be7e0da38de93dba068a40011808ecc39bb757d3fdee8fb25128e2a06dde86",
+    release: new Date("2022-04-01 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
