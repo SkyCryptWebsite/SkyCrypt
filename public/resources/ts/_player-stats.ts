@@ -3,7 +3,7 @@ import * as constants from "../../../common/constants.js";
 
 const stats: PlayerStats = {};
 
-// Armor stats
+// Active armor stats
 for (const piece of items.armor) {
   const pieceStats = helper.getStatsFromItem(piece as Item);
 
