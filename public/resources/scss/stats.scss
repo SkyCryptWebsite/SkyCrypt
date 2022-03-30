@@ -7,7 +7,6 @@
   padding-bottom: calc(var(--padding) + env(safe-area-inset-bottom));
   min-height: 100%;
   box-sizing: border-box;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
   user-select: none;
@@ -123,7 +122,9 @@
       z-index: 10;
       filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
       overflow: hidden;
-      overflow: clip;
+      @supports (overflow: clip) {
+        overflow: clip;
+      }
 
       &::after {
         content: none;
@@ -196,7 +197,7 @@
   font-weight: 600;
   font-size: 12px;
   line-height: 14px;
-  text-shadow: 0px 0px 3px rgba(var(--background-rgb), 0.5);
+  text-shadow: 0 0 3px rgba(var(--background-rgb), 0.5);
 }
 
 #skin_display {
@@ -257,17 +258,19 @@
   visibility: hidden;
   border-radius: 10px;
   overflow: hidden;
-  overflow: clip;
+  @supports (overflow: clip) {
+    overflow: clip;
+  }
 
   &.show-stats {
     opacity: 1;
-    transform: translateX(0px);
+    transform: translateX(0);
     visibility: visible;
   }
 
   &.sticky-stats {
     opacity: 1;
-    transform: translateX(0px);
+    transform: translateX(0);
     visibility: visible;
     pointer-events: auto;
     user-select: text;
@@ -322,7 +325,7 @@
     text-transform: uppercase;
     font-weight: 600;
     color: white;
-    text-shadow: 0px 0px 7px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
     box-sizing: border-box;
 
     // please remove `@at-root` and `#{}` when https://github.com/sass/sass/issues/3130 is fixed
@@ -337,8 +340,10 @@
 
     .lore-row {
       display: block;
-      min-height: calc(1em * 1.2); // fallback for lh
-      min-height: 1lh;
+      min-height: calc(1em * 1.2);
+      @supports (min-height: 1lh) {
+        min-height: 1lh;
+      }
 
       &.wrap {
         max-width: 300px;
@@ -368,11 +373,13 @@
     .icon {
       width: 32px;
       height: 32px;
-      image-rendering: crisp-edges;
-      image-rendering: pixelated;
       position: absolute;
       top: 12px;
       left: 10px;
+      image-rendering: crisp-edges;
+      @supports (image-rendering: pixelated) {
+        image-rendering: pixelated;
+      }
     }
 
     .author {
@@ -446,12 +453,14 @@
   line-height: 34px;
   margin-top: 10px;
   margin-left: -5px;
-  overflow: hidden;
-  overflow: clip;
   border-radius: 100px;
   vertical-align: top;
   font-weight: 700;
   color: white;
+  overflow: hidden;
+  @supports (overflow: clip) {
+    overflow: clip;
+  }
 
   .rank-name {
     padding: 0 15px;
@@ -492,10 +501,12 @@
   transition: clip-path 0.3s, visibility 0.3s;
   visibility: hidden;
   border-radius: 17px;
-  overflow: hidden;
-  overflow: clip;
   padding: 0;
   margin: 0;
+  overflow: hidden;
+  @supports (overflow: clip) {
+    overflow: clip;
+  }
 
   :focus-within > &,
   :hover > & {
@@ -546,7 +557,7 @@
   -webkit-appearance: none;
   appearance: none;
   position: relative;
-  padding: 0px 12px;
+  padding: 0 12px;
   border: none;
   margin-right: 7px;
   margin-top: 15px;
@@ -562,7 +573,7 @@
   font-weight: 600;
   transition: background-color 0.1s;
   vertical-align: top;
-  text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 
   &:hover::after {
     color: rgba(255, 255, 255, 0.9);
@@ -628,7 +639,7 @@ a.additional-player-stat:hover {
   right: 8px;
   width: 20px;
   background-image: url(../img/icons/open-in-new.png);
-  background-position: 0px center;
+  background-position: 0 center;
   background-size: 18px 18px;
   background-repeat: no-repeat;
 }
@@ -661,7 +672,7 @@ a.additional-player-stat:hover {
   left: 8px;
   right: auto;
   width: 20px;
-  background-position: 0px center;
+  background-position: 0 center;
 }
 
 .additional-player-stat.copy-text {
@@ -984,7 +995,7 @@ a.additional-player-stat:hover {
   font-weight: 600;
   text-align: left;
   font-size: 24px;
-  text-shadow: 0px 0px 7px rgba(var(--background-rgb), 0.3);
+  text-shadow: 0 0 7px rgba(var(--background-rgb), 0.3);
   position: relative;
   padding-left: 5px;
   margin-bottom: 15px;
@@ -994,7 +1005,7 @@ a.additional-player-stat:hover {
 
 .info-container {
   background-color: rgba(var(--background-rgb), 0.3);
-  margin-bottom: 0px;
+  margin-bottom: 0;
   padding: 20px;
   padding-top: 55px;
   position: relative;
@@ -1002,9 +1013,11 @@ a.additional-player-stat:hover {
   text-align: center;
   max-width: 500px;
   border-radius: 10px;
-  overflow: hidden;
-  overflow: clip;
   font-weight: 500;
+  overflow: hidden;
+  @supports (overflow: clip) {
+    overflow: clip;
+  }
 
   span {
     display: inline-block;
@@ -1022,7 +1035,6 @@ a.additional-player-stat:hover {
   right: 0;
   height: 35px;
   line-height: 35px;
-  text-align: center;
   background-color: var(--icon-hex);
   color: white;
   text-transform: uppercase;
@@ -1100,8 +1112,8 @@ a.additional-player-stat:hover {
         .armor-placeholder {
           height: 0;
           .piece-icon {
-            mask-size: 128px 0px;
-            -webkit-mask-size: 128px 0px;
+            mask-size: 128px 0;
+            -webkit-mask-size: 128px 0;
           }
         }
       }
@@ -1137,7 +1149,7 @@ a.additional-player-stat:hover {
   user-select: none;
   cursor: context-menu;
   transition: box-shadow 0.2s ease-in-out;
-  box-shadow: rgba(var(--text-rgb), 0) 0 0 0 0px inset;
+  box-shadow: rgba(var(--text-rgb), 0) 0 0 0 0 inset;
   content-visibility: auto;
 
   &.sticky-stats,
@@ -1295,7 +1307,9 @@ a.additional-player-stat:hover {
   transform: translate(-50%, -50%) scale(0.5);
   transform-origin: center center;
   image-rendering: crisp-edges;
-  image-rendering: pixelated;
+  @supports (image-rendering: pixelated) {
+    image-rendering: pixelated;
+  }
 }
 
 .custom-icon {
@@ -1454,7 +1468,6 @@ a.additional-player-stat:hover {
 }
 
 .stat-sub-header {
-  font-weight: 500;
   font-size: 20px;
   color: rgba(var(--text-rgb), 0.9);
   font-weight: 600;
@@ -1552,10 +1565,12 @@ a.additional-player-stat:hover {
   background-color: rgba(var(--background-rgb), 0.3);
   padding: 20px;
   position: relative;
-  margin-bottom: 0px;
-  overflow: hidden;
-  overflow: clip;
+  margin-bottom: 0;
   border-radius: 10px;
+  overflow: hidden;
+  @supports (overflow: clip) {
+    overflow: clip;
+  }
 
   #inventory_header {
     position: absolute;
@@ -1563,9 +1578,11 @@ a.additional-player-stat:hover {
     left: 5px;
     right: 5px;
     height: 50px;
-    overflow: hidden;
-    overflow: clip;
     margin-top: 5px;
+    overflow: hidden;
+    @supports (overflow: clip) {
+      overflow: clip;
+    }
 
     .inventory-header-line {
       position: absolute;
@@ -1724,7 +1741,7 @@ inventory-view {
   cursor: pointer;
   z-index: 1000;
   font-weight: 500;
-  text-shadow: 0px 0px 5px rgba(var(--background-rgb), 0.6);
+  text-shadow: 0 0 5px rgba(var(--background-rgb), 0.6);
 
   * {
     margin: 0;
@@ -1809,7 +1826,9 @@ inventory-view {
 
 .floor-containers {
   content-visibility: auto;
-  contain-intrinsic-size: 350px 212px;
+  @supports (contain-intrinsic-size: 350px 212px) {
+    contain-intrinsic-size: 350px 212px;
+  }
 }
 
 .floor-icon {
@@ -1846,11 +1865,10 @@ inventory-view {
   font-size: 13px;
   text-transform: uppercase;
   font-weight: 600;
-  margin-top: 5px;
   height: 20px;
   line-height: 20px;
-
   margin-top: auto;
+
   & + .slayer-level {
     margin-top: 0;
   }
@@ -1873,7 +1891,7 @@ inventory-view {
 }
 
 .slayer-bar {
-  --overhang: 0px;
+  --overhang: 0;
   position: absolute;
   bottom: 0;
   left: 0;
@@ -1914,7 +1932,7 @@ inventory-view {
   background-color: rgba(var(--background-rgb), 0.2);
 
   span {
-    text-shadow: 0px 0px 7px rgba(var(--background-rgb), 0.3);
+    text-shadow: 0 0 7px rgba(var(--background-rgb), 0.3);
   }
 }
 
@@ -2053,7 +2071,7 @@ inventory-view {
   text-align: center;
   text-transform: uppercase;
   font-weight: 600;
-  text-shadow: 0px 0px 7px rgba(var(--background-rgb), 0.3);
+  text-shadow: 0 0 7px rgba(var(--background-rgb), 0.3);
   border-bottom: 2px solid var(--icon-hex);
   background-color: rgba(var(--background-rgb), 0.2);
 }
@@ -2365,10 +2383,14 @@ inventory-view {
     margin-left: calc(-1 * var(--padding));
     margin-right: calc(-1 * var(--padding));
     content-visibility: auto;
-    contain-intrinsic-size: 200px 64px;
+    @supports (contain-intrinsic-size: 200px 64px) {
+      contain-intrinsic-size: 200px 64px;
+    }
 
     &.sea-creatures {
-      contain-intrinsic-size: 140px 230px;
+      @supports (contain-intrinsic-size: 140px 230px) {
+        contain-intrinsic-size: 140px 230px;
+      }
       &::after {
         width: 15px; //15px = --padding - gap
       }
@@ -2472,9 +2494,11 @@ inventory-view {
   #base_stats_container {
     columns: 1;
     max-height: 0;
-    overflow: hidden;
-    overflow: clip;
     transition: max-height 0.2s ease-in-out;
+    overflow: hidden;
+    @supports (overflow: clip) {
+      overflow: clip;
+    }
 
     &.show-stats {
       max-height: 500px;
