@@ -607,7 +607,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .expander {
-  cursor: context-menu;
+  cursor: pointer;
 
   &::before {
     content: "";
@@ -1226,4 +1226,9 @@ body {
     line-height: 22px;
     height: 22px;
   }
+}
+
+button[name="pack"],
+input[name="theme"] {
+  cursor: pointer;
 }
