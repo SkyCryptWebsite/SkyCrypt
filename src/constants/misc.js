@@ -200,11 +200,6 @@ export const ranks = {
     tag: "ADMIN",
   },
 
-  "BUILD TEAM": {
-    color: "3",
-    tag: "BUILD TEAM",
-  },
-
   GAME_MASTER: {
     color: "2",
     tag: "GM",
