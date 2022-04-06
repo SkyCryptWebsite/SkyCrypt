@@ -253,16 +253,6 @@ export const ranks = {
     plusColor: "b",
   },
 
-  MAYOR: {
-    color: "d",
-    tag: "MAYOR",
-  },
-
-  MINISTER: {
-    color: "c",
-    tag: "MINISTER",
-  },
-
   NONE: null,
 };
 
