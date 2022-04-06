@@ -1,5 +1,5 @@
 /*
-  Animted skins created at ezgif.com/apng-maker with the following settings:
+  Animated skins created at ezgif.com/apng-maker with the following settings:
   - Skins that change based on time of day
       - Delay time: 500
       - Enable crossfade frames: delay = 3, count = 10 (but adjust these values based on final file size)
