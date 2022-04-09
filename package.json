@@ -62,7 +62,7 @@
     "lilyweight": "^2.5.0",
     "lit": "^2.2.1",
     "lodash": "^4.17.20",
-    "micromatch": "^4.0.4",
+    "micromatch": "^4.0.5",
     "minecraft-data": "^2.220.0",
     "moment": "^2.29.2",
     "moment-duration-format": "^2.3.2",
