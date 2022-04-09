@@ -1,0 +1,6 @@
+{
+	"parent": "item/phq/engine",
+	"textures": {
+		"base": "./sapphire_engine.png"
+	}
+}
