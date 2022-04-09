@@ -3048,6 +3048,65 @@ class Jerry extends Pet {
   }
 }
 
+class Bingo extends Pet {
+  get stats() {
+    const baseHealth = this.rarity > 1 ? 27.5 : 25;
+    const baseStrength = this.rarity > 1 ? 5.5 : 5;
+    const multHealth = this.rarity > 1 ? (140 - 27.5) / 100 : (100 - 25) / 100;
+    const multStrength = this.rarity > 1 ? (25 - 5) / 100 : (35 - 5.5) / 100;
+    return {
+      health: floor(baseHealth + this.level * multHealth),
+      strength: floor(baseStrength + this.level * multStrength),
+    };
+  }
+
+  get abilities() {
+    let list = [this.first];
+    if (this.rarity > 0) {
+      list.push(this.second);
+    }
+    if (this.rarity > 1) {
+      list.push(this.third);
+    }
+    if (this.rarity > 2) {
+      list.push(this.fourth);
+    }
+    return list;
+  }
+
+  get first() {
+    const prc = floor(5 + this.level * 0.2, 1);
+    return {
+      name: "§6Lucky Looting",
+      desc: [`§7Gain §c${prc}% §7more collection items from any source!`],
+    };
+  }
+
+  get second() {
+    const prc = floor(5 + this.level * 0.1, 1);
+    return {
+      name: "§6Fast Learner",
+      desc: [`§7Gain §c${prc}% §7more Skill Experience and §9Slayer §7Experience.`],
+    };
+  }
+
+  get third() {
+    const prc = floor(10 + this.level * 0.3, 1);
+    return {
+      name: "§6Chimera",
+      desc: [`§7Increases your base stats of your active pet by §c${prc}% §7per level.`],
+    };
+  }
+
+  get fourth() {
+    const coins = round(0.1 + this.level * 0.009, 1);
+    return {
+      name: "§6Scavenger",
+      desc: [`§7Gain §c${coins} §7more §l§6Coins §r§7per monster level on kill.`],
+    };
+  }
+}
+
 class QuestionMark extends Pet {
   get stats() {
     return {};
@@ -3094,6 +3153,7 @@ export const petStats = {
   BAL: Bal,
   BAT: Bat,
   BEE: Bee,
+  BINGO: Bingo,
   BLACK_CAT: BlackCat,
   BLAZE: Blaze,
   BLUE_WHALE: BlueWhale,
