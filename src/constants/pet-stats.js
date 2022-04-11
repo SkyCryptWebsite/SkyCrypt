@@ -2158,11 +2158,7 @@ class GrandmaWolf extends Pet {
     return {
       name: "§6Kill Combo",
       desc: [
-        `§7Gain buffs for combo kills.`,
-        `§7Effects stack as you increase`,
-        `§7your combo. This pet does not`,
-        `§7need to be spawned for combos to`,
-        `§7be active!`,
+        `§7Gain buffs for combo kills. Effects stack as you increase your combo.`,
         ``,
         `§a5 Combo §8(lasts §a${Math.floor((8 + this.level * 0.02) * 10) / 10}s§8)`,
         `§8+§b3% §b${symbols.magic_find} Magic Find`,
