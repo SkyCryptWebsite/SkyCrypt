@@ -1674,7 +1674,7 @@ export const getStats = async (
   userProfile.pets.push(...items.pets);
 
   output.pets = await getPets(userProfile);
-  output.missingPets = await getMissingPets(output.pets);
+  output.missingPets = await getMissingPets(output.pets, profile.game_mode);
   output.petScore = await getPetScore(output.pets);
 
   const petScoreRequired = Object.keys(constants.pet_rewards).sort((a, b) => parseInt(b) - parseInt(a));
@@ -2619,14 +2619,18 @@ export async function getPets(profile) {
       petSkin = constants.pet_skins[`PET_SKIN_${pet.skin}`].name;
     }
 
-    let loreFirstRow = [
-      "§8",
-      `${helper.capitalizeFirstLetter(petData.type)} `,
-      petData.category ?? "Pet",
-      petSkin ? `, ${petSkin} Skin` : "",
-    ];
+    const loreFirstRow = ["§8"];
 
-    let lore = [loreFirstRow.join(""), ""];
+    if (petData.type === "all") {
+      loreFirstRow.push("All Skills");
+    } else {
+      loreFirstRow.push(helper.capitalizeFirstLetter(petData.type), " ", petData.category ?? "Pet");
+      if (petSkin) {
+        loreFirstRow.push(`, ${petSkin} Skin`);
+      }
+    }
+
+    const lore = [loreFirstRow.join(""), ""];
 
     const petName =
       petData.hatching?.level > pet.level.level
@@ -2709,6 +2713,11 @@ export async function getPets(profile) {
       lore.push(" ");
     }
 
+    // passive perks text
+    if (petData.passivePerks) {
+      lore.push("§8This pet's perks are active even when the pet is not summoned!", "");
+    }
+
     if (pet.level.level < petData.maxLevel) {
       lore.push(`§7Progress to Level ${pet.level.level + 1}: §e${(pet.level.progress * 100).toFixed(1)}%`);
 
@@ -2779,13 +2788,15 @@ export async function getPets(profile) {
   return output;
 }
 
-export async function getMissingPets(pets) {
+export async function getMissingPets(pets, gameMode) {
   const profile = {
     pets: [],
   };
 
-  for (const petType in constants.pet_data) {
-    if (pets.map((a) => a.type).includes(petType)) {
+  const ownedPetTypes = pets.map((a) => a.type);
+
+  for (const [petType, petData] of Object.entries(constants.pet_data)) {
+    if (ownedPetTypes.includes(petType) || (petData.bingoOnly === true && gameMode !== "bingo")) {
       continue;
     }
 

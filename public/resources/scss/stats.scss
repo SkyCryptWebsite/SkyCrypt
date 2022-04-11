@@ -325,8 +325,7 @@
     text-shadow: 0px 0px 7px rgba(0, 0, 0, 0.3);
     box-sizing: border-box;
 
-    // please remove `@at-root` and `#{}` when https://github.com/sass/sass/issues/3130 is fixed
-    @at-root :where(#{&}) {
+    :where(&) {
       background-color: var(--header-hex); // fallback for rarity color
     }
   }

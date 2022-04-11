@@ -16,11 +16,4 @@ export const promotions = [
     url: "https://www.patreon.com/shiiyu",
     weight: 30,
   },
-  {
-    title: 'QOL Survey <span class="grey-text"> - OPTIONAL</span>',
-    description: "A short survey about your SkyCrypt user experience and Skyblock experience.",
-    image: "/resources/img/icons/google-forms.svg",
-    url: "https://forms.gle/e3ZSdvqw1Z7kJaR39",
-    weight: 40,
-  },
 ];
