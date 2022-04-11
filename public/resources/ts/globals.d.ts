@@ -661,15 +661,21 @@ interface UADataValues {
 
 interface PlayerStats {
   [key: string]: {
-    base?: number;
-    fairy_souls?: number;
-    skill?: number;
-    slayers?: number;
-    armor?: number;
-    held_item?: number;
-    accessories?: number;
-    pet?: number;
+    [key: string]: number;
+    // base: number;
+    // fairy_souls: number;
+    // skill: number;
+    // slayers: number;
+    // armor: number;
+    // held_item: number;
+    // accessories: number;
+    // pet: number;
   };
 }
 
 declare const redocInit: ((color?: string) => void) | undefined;
+
+interface ItemStats {
+  // todo: why does this not work??? [key in StatName]: number;
+  [key: string]: number;
+}

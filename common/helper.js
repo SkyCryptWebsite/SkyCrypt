@@ -10,7 +10,7 @@ export function removeFormatting(string) {
 }
 /**
  * @param  {Item} piece
- * @returns {{[key: string]: number}}
+ * @returns {ItemStats}
  */
 export function getStatsFromItem(piece) {
   const regex = /^([A-Za-z ]+): ([+|-]\d+)/;

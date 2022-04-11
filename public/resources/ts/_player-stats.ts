@@ -5,9 +5,9 @@ const stats: PlayerStats = {};
 
 // Active armor stats
 for (const piece of items.armor) {
-  const pieceStats = helper.getStatsFromItem(piece as Item);
+  const pieceStats: ItemStats = helper.getStatsFromItem(piece as Item);
 
-  for (const [name, value] of Object.entries(pieceStats as { [key: string]: number })) {
+  for (const [name, value] of Object.entries(pieceStats)) {
     stats[name] ??= {};
     stats[name].armor ??= 0;
     stats[name].armor += value;
@@ -18,7 +18,7 @@ for (const piece of items.armor) {
 const activePet = calculated.pets.find((pet) => pet.active);
 
 if (activePet) {
-  for (const [name, value] of Object.entries(activePet.stats as { [key: string]: number })) {
+  for (const [name, value] of Object.entries(activePet.stats)) {
     stats[name] ??= {};
     stats[name].pet ??= 0;
     stats[name].pet += value;
