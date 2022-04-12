@@ -1,3 +1,12 @@
+/*
+ * Missing stuff that would improve stats:
+ * - Century cakes
+ * - Potion effects
+ * - Dungeon shop upgrades
+ * - Cake bag bonus +1hp per cake
+ * - Pet score magic find bonus
+ */
+
 import * as helper from "../../../common/helper.js";
 import * as constants from "../../../common/constants.js";
 
