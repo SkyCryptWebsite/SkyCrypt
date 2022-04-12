@@ -370,17 +370,6 @@ export function getRawLore(text) {
  * @param {string} word
  * @returns {string}
  * @example
- * // returns "Hello world"
- * capitalizeFirstLetter("hello world");
- */
-export function capitalizeFirstLetter(word) {
-  return word.charAt(0).toUpperCase() + word.slice(1);
-}
-
-/**
- * @param {string} word
- * @returns {string}
- * @example
  * // returns "Hello World"
  * capitalizeFirstLetter("hello world");
  */

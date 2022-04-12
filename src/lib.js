@@ -1583,6 +1583,7 @@ export const getStats = async (
   output.total_skill_xp = total_skill_xp;
   output.average_level_rank = average_level_rank;
   output.level_caps = levelCaps;
+  output.fairy_exchanges = userProfile.fairy_exchanges;
 
   output.skill_bonus = {};
 

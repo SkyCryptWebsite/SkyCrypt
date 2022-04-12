@@ -1,26 +1,3 @@
-export const stats_symbols = {
-  ability_damage: "๑",
-  bonus_attack_speed: "⚔",
-  crit_chance: "☣",
-  crit_damage: "☠",
-  defense: "❈",
-  farming_fortune: "☘",
-  ferocity: "⫽",
-  foraging_fortune: "☘",
-  health: "❤",
-  intelligence: "✎",
-  magic_find: "✯",
-  mining_fortune: "☘",
-  mining_speed: "⸕",
-  pet_luck: "♣",
-  powder: "᠅", // todo: missing icon in icomoon font
-  pristine: "✧",
-  sea_creature_chance: "α",
-  speed: "✦",
-  strength: "❁",
-  true_defense: "❂", // todo: missing icon in icomoon font
-};
-
 export const stats_colors = {
   ability_damage: "c",
   bonus_attack_speed: "e",

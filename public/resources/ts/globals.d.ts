@@ -337,6 +337,7 @@ declare const calculated: SkyCryptPlayer & {
   fairy_bonus: {
     [key in StatName]?: number;
   };
+  fairy_exchanges: number;
   fairy_souls: {
     collected: number;
     progress: number;

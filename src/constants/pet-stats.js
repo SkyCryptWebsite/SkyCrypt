@@ -1,4 +1,4 @@
-import { stats_symbols as symbols } from "./stats.js";
+import { stats_symbols as symbols } from "../../common/constants.js";
 import { round, floor } from "../helper.js";
 
 function formatStat(stat) {

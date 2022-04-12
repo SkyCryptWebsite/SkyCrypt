@@ -13,17 +13,12 @@ export function removeFormatting(string) {
  * @returns {ItemStats}
  */
 export function getStatsFromItem(piece) {
-  const regex = /^([A-Za-z ]+): ([+|-]\d+)/;
+  const regex = /^([A-Za-z ]+): ([+-]([0-9]+\.?[0-9]*))/;
   const stats = {};
 
   const lore = (piece.tag.display.Lore || []).map((line) => removeFormatting(line));
 
   for (const line of lore) {
-    // Breaking after the first empty line for performance (stats are in the first block only)
-    if (line === "") {
-      break;
-    }
-
     const match = regex.exec(line);
 
     if (match == null) {
@@ -31,7 +26,7 @@ export function getStatsFromItem(piece) {
     }
 
     const statName = constants.statNames[match[1]];
-    const statValue = parseInt(match[2]);
+    const statValue = parseFloat(match[2]);
 
     if (statName) {
       stats[statName] ??= 0;
@@ -40,4 +35,15 @@ export function getStatsFromItem(piece) {
   }
 
   return stats;
+}
+
+/**
+ * @param {string} word
+ * @returns {string}
+ * @example
+ * // returns "Hello world"
+ * capitalizeFirstLetter("hello world");
+ */
+export function capitalizeFirstLetter(word) {
+  return word.charAt(0).toUpperCase() + word.slice(1);
 }

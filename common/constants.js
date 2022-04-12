@@ -110,4 +110,176 @@ export const statNames = {
   "Farming Fortune": "farming_fortune",
   "Foraging Fortune": "foraging_fortune",
   Pristine: "pristine",
+  "True Defense": "true_defense",
+};
+
+export const statNamesShort = {
+  Health: "health",
+  Defense: "defense",
+  Strength: "strength",
+  Speed: "speed",
+  "Crit Chance": "crit_chance",
+  "Crit Damage": "crit_damage",
+  "Attack Speed": "bonus_attack_speed",
+  Intelligence: "intelligence",
+  "SC Chance": "sea_creature_chance",
+  "Magic Find": "magic_find",
+  "Pet Luck": "pet_luck",
+  Ferocity: "ferocity",
+  "Ability Damage": "ability_damage",
+  "Mining Speed": "mining_speed",
+  "Mining Fortune": "mining_fortune",
+  "Farming Fortune": "farming_fortune",
+  "Foraging Fortune": "foraging_fortune",
+  Pristine: "pristine",
+  "True Defense": "true_defense",
+};
+
+export const stats_symbols = {
+  ability_damage: "๑",
+  bonus_attack_speed: "⚔",
+  crit_chance: "☣",
+  crit_damage: "☠",
+  defense: "❈",
+  farming_fortune: "☘",
+  ferocity: "⫽",
+  foraging_fortune: "☘",
+  health: "❤",
+  intelligence: "✎",
+  magic_find: "✯",
+  mining_fortune: "☘",
+  mining_speed: "⸕",
+  pet_luck: "♣",
+  powder: "᠅", // todo: missing icon in icomoon font
+  pristine: "✧",
+  sea_creature_chance: "α",
+  speed: "✦",
+  strength: "❁",
+  true_defense: "❂", // todo: missing icon in icomoon font
+};
+
+export const statSuffix = {
+  ability_damage: "",
+  bonus_attack_speed: "%",
+  crit_chance: "%",
+  crit_damage: "%",
+  damage_increase: "",
+  damage: "",
+  defense: "",
+  effective_health: "",
+  farming_fortune: "",
+  ferocity: "",
+  foraging_fortune: "",
+  health: "",
+  intelligence: "",
+  magic_find: "",
+  mining_fortune: "",
+  mining_speed: "",
+  pet_luck: "",
+  pristine: "",
+  sea_creature_chance: "%",
+  speed: "%",
+  strength: "",
+  true_defense: "",
+};
+
+export const stats_bonus = {
+  // Skills
+  skill_farming: {
+    1: { health: 2, farming_fortune: 4 },
+    15: { health: 3, farming_fortune: 4 },
+    20: { health: 4, farming_fortune: 4 },
+    26: { health: 5, farming_fortune: 4 },
+  },
+  skill_mining: {
+    1: { defense: 1, mining_fortune: 4 },
+    15: { defense: 2, mining_fortune: 4 },
+  },
+  skill_combat: {
+    1: { crit_chance: 0.5 },
+  },
+  skill_foraging: {
+    1: { strength: 1, foraging_fortune: 4 },
+    15: { strength: 2, foraging_fortune: 4 },
+  },
+  skill_fishing: {
+    1: { health: 2 },
+    15: { health: 3 },
+    20: { health: 4 },
+    26: { health: 5 },
+  },
+  skill_enchanting: {
+    1: { intelligence: 1, ability_damage: 0.5 },
+    15: { intelligence: 2, ability_damage: 0.5 },
+  },
+  skill_alchemy: {
+    1: { intelligence: 1 },
+    15: { intelligence: 2 },
+  },
+  skill_taming: {
+    1: { pet_luck: 1 },
+  },
+  skill_dungeoneering: { 1: { health: 2 } },
+  skill_social: {},
+  skill_carpentry: {},
+  skill_runecrafting: {},
+  // Slayers
+  slayer_zombie: {
+    1: { health: 2 },
+    3: { health: 3 },
+    5: { health: 4 },
+    7: { health: 5 },
+    9: { health: 6 },
+  },
+  slayer_spider: {
+    1: { crit_damage: 1 },
+    5: { crit_damage: 2 },
+    7: { crit_chance: 1 },
+    8: { crit_damage: 3 },
+  },
+  slayer_wolf: {
+    1: { speed: 1 },
+    2: { health: 2 },
+    3: { speed: 1 },
+    4: { health: 2 },
+    5: { crit_damage: 1 },
+    6: { health: 3 },
+    7: { crit_damage: 2 },
+    8: { speed: 1 },
+    9: { health: 5 },
+  },
+  slayer_enderman: {
+    1: { health: 1 },
+    2: { intelligence: 1 },
+    3: { health: 2 },
+    4: { intelligence: 2 },
+    5: { health: 3 },
+    6: { intelligence: 3 },
+    7: { health: 4 },
+    8: { intelligence: 4 },
+    9: { health: 5 },
+  },
+  // todo: check these values (from https://hypixel-skyblock.fandom.com/wiki/Blaze_Slayer) they were obtained while blaze slayer was still in alpha
+  slayer_blaze: {
+    1: { health: 3 },
+    2: { strength: 1 },
+    3: { health: 4 },
+    4: { true_defense: 1 },
+    5: { health: 5 },
+    6: {}, // todo: missing value?
+    7: { health: 6 },
+    8: {}, // todo: missing value?
+    9: { health: 7 },
+  },
+};
+
+export const pet_rewards = {
+  0: { magic_find: 0 },
+  10: { magic_find: 1 },
+  25: { magic_find: 2 },
+  50: { magic_find: 3 },
+  75: { magic_find: 4 },
+  100: { magic_find: 5 },
+  130: { magic_find: 6 },
+  175: { magic_find: 7 },
 };
