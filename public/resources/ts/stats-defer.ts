@@ -3,9 +3,8 @@ import { SkinViewer, createOrbitControls } from "skinview3d";
 import tippy from "tippy.js";
 
 import { renderLore } from "../../../common/formatting.js";
-import { statNames } from "../../../common/constants.js";
 
-import "./_player-stats";
+import { getPlayerStats } from "./calculate-player-stats";
 
 import("./elements/inventory-view");
 
@@ -967,5 +966,32 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
       (Math.ceil((number / 1000 / 1000 / 1000) * rounding * 10) / (rounding * 10)).toFixed(rounding.toString().length) +
       "B"
     );
+  }
+}
+
+// Player stats
+{
+  const stats = getPlayerStats();
+
+  // Print the stats
+  const parent = document.createElement("div");
+  parent.id = "base_stats_container";
+  parent.style.marginTop = "30px";
+
+  document.querySelector("#base_stats_container")?.parentNode?.appendChild(parent);
+
+  for (const stat in stats) {
+    const node = document.createElement("player-stats");
+
+    node.setAttribute("stat", stat);
+    node.setAttribute(
+      "value",
+      Object.values(stats[stat])
+        .reduce((a, b) => a + b, 0)
+        .toString()
+    );
+    node.setAttribute("data", btoa(JSON.stringify(stats[stat])));
+
+    parent?.appendChild(node);
   }
 }

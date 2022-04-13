@@ -102,6 +102,7 @@ interface Item extends DisplayItem, ItemSlot {
   };
   tag: ItemTag;
   texture_pack?: Pack;
+  isInactive?: boolean;
 }
 
 interface ItemTag {
