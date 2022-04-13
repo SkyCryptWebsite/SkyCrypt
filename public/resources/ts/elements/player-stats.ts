@@ -74,18 +74,18 @@ export class PlayerStats extends LitElement {
   }
 
   private getPrettyDataName(key: string): string {
-    switch (key) {
+    let name = key.replaceAll("_", " ");
+
+    switch (name) {
       case "pet":
-        return "Active pet";
-      case "heldItem":
-        return "Held item";
+        name = "Active pet";
+        break;
+      case "held item":
+        name = "Held item";
+        break;
     }
 
-    if (key.startsWith("skill_") || key.startsWith("slayer_")) {
-      return `${helper.capitalizeFirstLetter(key.split("_")[1])} ${key.split("_")[0]}`;
-    }
-
-    return helper.capitalizeFirstLetter(key.replaceAll("_", " "));
+    return helper.titleCase(name);
   }
 
   // disable shadow root

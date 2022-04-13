@@ -7,6 +7,7 @@ import retry from "async-retry";
 
 export { renderLore, formatNumber } from "../common/formatting.js";
 export * from "../common/helper.js";
+import { titleCase } from "../common/helper.js";
 
 import * as constants from "./constants.js";
 import credentials from "./credentials.js";
@@ -364,23 +365,6 @@ export function getGuildLevel(xp) {
  */
 export function getRawLore(text) {
   return text.replaceAll(/§[0-9a-fk-or]/g, "");
-}
-
-/**
- * @param {string} word
- * @returns {string}
- * @example
- * // returns "Hello World"
- * capitalizeFirstLetter("hello world");
- */
-export function titleCase(string) {
-  let split = string.toLowerCase().split(" ");
-
-  for (let i = 0; i < split.length; i++) {
-    split[i] = split[i].charAt(0).toUpperCase() + split[i].substring(1);
-  }
-
-  return split.join(" ");
 }
 
 /**

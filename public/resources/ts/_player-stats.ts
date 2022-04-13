@@ -1,10 +1,13 @@
 /*
  * Missing stuff that would improve stats:
- * - Century cakes
+ * ! Century cakes
  * - Potion effects
  * - Dungeon shop upgrades
  * - Cake bag bonus +1hp per cake
  * - Pet score magic find bonus
+ *
+ * [!] impossible to calculate
+ * [-] can be included in the calculation
  */
 
 import * as helper from "../../../common/helper.js";
@@ -63,8 +66,8 @@ for (const piece of items.armor) {
 
   for (const [name, value] of Object.entries(bonusStats)) {
     stats[name] ??= {};
-    stats[name].heldItem ??= 0;
-    stats[name].heldItem += value;
+    stats[name].held_item ??= 0;
+    stats[name].held_item += value;
   }
 }
 
@@ -125,6 +128,16 @@ for (const [slayer, data] of Object.entries(calculated.slayers)) {
     stats[name] ??= {};
     stats[name].fairy_souls ??= 0;
     stats[name].fairy_souls += value;
+  }
+}
+
+// New year cake bag
+{
+  const cakeBag = items.talisman_bag.find((x) => x.tag.ExtraAttributes.id === "NEW_YEAR_CAKE_BAG");
+
+  if (cakeBag && cakeBag.containsItems.length > 0) {
+    stats.health ??= {};
+    stats.health.new_year_cake_bag = cakeBag.containsItems.length;
   }
 }
 

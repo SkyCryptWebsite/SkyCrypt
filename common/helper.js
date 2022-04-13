@@ -47,3 +47,20 @@ export function getStatsFromItem(piece) {
 export function capitalizeFirstLetter(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
+
+/**
+ * @param {string} word
+ * @returns {string}
+ * @example
+ * // returns "Hello World"
+ * capitalizeFirstLetter("hello world");
+ */
+export function titleCase(string) {
+  let split = string.toLowerCase().split(" ");
+
+  for (let i = 0; i < split.length; i++) {
+    split[i] = split[i].charAt(0).toUpperCase() + split[i].substring(1);
+  }
+
+  return split.join(" ");
+}
