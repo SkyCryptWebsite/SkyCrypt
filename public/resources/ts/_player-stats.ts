@@ -98,8 +98,7 @@ for (const [skill, data] of Object.entries(calculated.levels)) {
   const bonusStats: ItemStats = getBonusStat(
     calculated.dungeons.catacombs.level.level,
     "skill_dungeoneering",
-    calculated.dungeons.catacombs.level.maxLevel,
-    1
+    calculated.dungeons.catacombs.level.maxLevel
   );
 
   for (const [name, value] of Object.entries(bonusStats)) {
@@ -111,7 +110,7 @@ for (const [skill, data] of Object.entries(calculated.levels)) {
 
 // Slayer bonus stats
 for (const [slayer, data] of Object.entries(calculated.slayers)) {
-  const bonusStats: ItemStats = getBonusStat(data.level.currentLevel, `slayer_${slayer}`, data.level.maxLevel, 1);
+  const bonusStats: ItemStats = getBonusStat(data.level.currentLevel, `slayer_${slayer}`, data.level.maxLevel);
 
   for (const [name, value] of Object.entries(bonusStats)) {
     stats[name] ??= {};
@@ -133,9 +132,9 @@ for (const [slayer, data] of Object.entries(calculated.slayers)) {
 
 // New year cake bag
 {
-  const cakeBag = items.talisman_bag.find((x) => x.tag.ExtraAttributes.id === "NEW_YEAR_CAKE_BAG");
+  const cakeBag = items.talisman_bag.find((x) => (x as Item).tag.ExtraAttributes?.id === "NEW_YEAR_CAKE_BAG");
 
-  if (cakeBag && cakeBag.containsItems.length > 0) {
+  if (cakeBag && cakeBag.containsItems?.length > 0) {
     stats.health ??= {};
     stats.health.new_year_cake_bag = cakeBag.containsItems.length;
   }
@@ -165,14 +164,9 @@ for (const stat in stats) {
   parent?.appendChild(node);
 }
 
-// todo: move these somewhere else?
-function getBonusStat(level: number, key: string, max: number, incremention: number) {
-  const stat_template: { [key: string]: number } = {};
-  for (const stat in stats) {
-    stat_template[stat] = 0;
-  }
-  const bonus = Object.assign({}, stat_template);
-
+// Functions
+function getBonusStat(level: number, key: string, max: number) {
+  const bonus: ItemStats = {};
   const skill_stats = constants.stats_bonus[key];
 
   if (!skill_stats) {
@@ -183,31 +177,25 @@ function getBonusStat(level: number, key: string, max: number, incremention: num
     .sort((a, b) => Number(a) - Number(b))
     .map((a) => Number(a));
 
-  for (let x = steps[0]; x <= max; x += incremention) {
+  for (let x = steps[0]; x <= max; x += 1) {
     if (level < x) {
       break;
     }
 
-    const skill_step = steps
+    const step = steps
       .slice()
       .reverse()
       .find((a) => a <= x);
 
-    const skill_bonus = skill_stats[skill_step];
+    const skill_bonus = skill_stats[step];
 
     for (const skill in skill_bonus) {
+      bonus[skill] ??= 0;
       bonus[skill] += skill_bonus[skill];
     }
   }
 
-  const removeZero = (item: { [key: string]: number }) =>
-    Object.keys(item)
-      .filter((key) => item[key] !== 0)
-      .reduce((newObj, key) => {
-        newObj[key] = item[key];
-        return newObj;
-      }, {});
-  return removeZero(bonus);
+  return bonus;
 }
 
 function getFairyBonus(fairyExchanges: number) {
@@ -228,36 +216,3 @@ function getFairyBonus(fairyExchanges: number) {
 
   return bonus;
 }
-
-// function getPetScore(pets) {
-//   const highestRarity = {};
-
-//   // * we can use pet.ref.rarity (number), pet.rarity is string from calculated.pets
-
-//   for (const pet of pets) {
-//     if (!(pet.type in highestRarity) || constants.pet_value[pet.rarity] > highestRarity[pet.type]) {
-//       highestRarity[pet.type] = constants.pet_value[pet.rarity];
-//     }
-//   }
-
-//   return Object.values(highestRarity).reduce((a, b) => a + b, 0);
-// }
-
-// function getPetScoreBonus() {
-//   output.petScore = await getPetScore(output.pets);
-
-//   const petScoreRequired = Object.keys(constants.pet_rewards).sort((a, b) => parseInt(b) - parseInt(a));
-
-//   output.pet_bonus = {};
-
-//   // eslint-disable-next-line no-unused-vars
-//   for (const [index, score] of petScoreRequired.entries()) {
-//     if (parseInt(score) > output.petScore) {
-//       continue;
-//     }
-
-//     output.pet_score_bonus = Object.assign({}, constants.pet_rewards[score]);
-
-//     break;
-//   }
-// }
