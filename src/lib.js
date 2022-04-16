@@ -2384,6 +2384,7 @@ export const getStats = async (
   misc.auctions_sell = {};
   misc.auctions_buy = {};
   misc.claimed_items = {};
+  misc.achievements = {};
 
   if ("ender_crystals_destroyed" in userProfile.stats) {
     misc.dragons["ender_crystals_destroyed"] = userProfile.stats["ender_crystals_destroyed"];
@@ -2395,6 +2396,45 @@ export const getStats = async (
   if (hypixelProfile.claimed_items) {
     misc.claimed_items = hypixelProfile.claimed_items;
   }
+
+  let _tiered = { sum: 0, total: 0, completed: {}, uncompleted: {} };
+  for (const key in constants.tieredAchievements) {
+    const tmp = constants.tieredAchievements[key];
+    _tiered.total += tmp.tierRewards.reduce((a, b) => a + b, 0);
+    let tier = 0;
+    for (const req in tmp.tierLevelRequirements) {
+      if (tmp.tierLevelRequirements[req] <= hypixelProfile.achievements[key]) {
+        tier++;
+        _tiered.sum += Number(tmp.tierRewards[req]);
+      }
+    }
+    let achievement = {
+      name: tmp.name,
+      description: tmp.description,
+      level: hypixelProfile.achievements[key] || 0,
+      tier: tier,
+    };
+    if (tier >= 5) {
+      _tiered.completed[key] = achievement;
+    } else {
+      _tiered.uncompleted[key] = achievement;
+    }
+  }
+  misc.achievements.tiered = _tiered;
+
+  let _oneTime = { sum: 0, total: 0, completed: {}, uncompleted: {} };
+  for (const key in constants.oneTimeAchievements) {
+    const tmp = constants.oneTimeAchievements[key];
+    _oneTime.total += tmp.reward;
+    let achievement = { name: tmp.name, description: tmp.description, reward: tmp.reward };
+    if (hypixelProfile.achievementsOneTime && hypixelProfile.achievementsOneTime.includes(key)) {
+      _oneTime.completed[key] = achievement;
+      _oneTime.sum += Number(tmp.reward);
+    } else {
+      _oneTime.uncompleted[key] = achievement;
+    }
+  }
+  misc.achievements.oneTime = _oneTime;
 
   const burrows = [
     "mythos_burrows_dug_next",

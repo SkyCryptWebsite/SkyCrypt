@@ -557,6 +557,7 @@ export async function updateRank(uuid, db) {
     plusColor: null,
     socials: {},
     achievements: {},
+    achievementsOneTime: {},
     claimed_items: {},
   };
 
@@ -580,6 +581,10 @@ export async function updateRank(uuid, db) {
 
     if (player?.achievements != undefined) {
       rank.achievements = player.achievements;
+    }
+
+    if (player?.achievementsOneTime != undefined) {
+      rank.achievementsOneTime = player.achievementsOneTime;
     }
 
     let claimable = {
@@ -618,6 +623,7 @@ export async function getRank(uuid, db, cacheOnly = false) {
 
   let _updateRank;
 
+  _updateRank = updateRank(uuid, db); // TODO delete this line
   if (cacheOnly === false && (hypixelPlayer == undefined || +new Date() - hypixelPlayer.last_updated > 3600 * 1000)) {
     _updateRank = updateRank(uuid, db);
   }
@@ -626,7 +632,7 @@ export async function getRank(uuid, db, cacheOnly = false) {
     hypixelPlayer = await _updateRank;
   }
 
-  hypixelPlayer ??= { achievements: {} };
+  hypixelPlayer ??= { achievements: {}, achievementsOneTime: {} };
 
   return hypixelPlayer;
 }

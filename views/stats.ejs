@@ -2721,6 +2721,59 @@ const metaDescription = getMetaDescription()
               <% } %>
             </p>
           <% } %>
+          <% if('achievements' in calculated.misc){ %>
+          <% let list = calculated.misc.achievements; %>
+          <div class="category-header"><div class="category-icon"><div class="item-icon icon-267_0"></div></div><span>achievements</span></div>
+          <p class="stat-raw-values stat-achievements">
+            <% if('tiered' in list){ %>
+              <span class="stat-name<%= (list.tiered.sum >= list.tiered.total ?" golden-text":"") %>">Tiered Achievement Points: </span><span class="stat-value<%= (list.tiered.sum >= list.tiered.total ?" golden-text":"") %>"><%= list.tiered.sum %> / <%= list.tiered.total %></span><span class="grey-text"> (<%= Math.floor(list.tiered.sum / list.tiered.total * 100) %>%)</span><br>
+            <% } %>
+            <% if('oneTime' in list){ %>
+              <span class="stat-name<%= (list.oneTime.sum >= list.oneTime.total ?" golden-text":"") %>">One Time Achievement Points: </span><span class="stat-value<%= (list.oneTime.sum >= list.oneTime.total ?" golden-text":"") %>"><%= list.oneTime.sum %> / <%= list.oneTime.total %></span><span class="grey-text"> (<%= Math.floor(list.oneTime.sum / list.oneTime.total * 100) %>%)</span><br>
+            <% } %>
+
+            <div class="achievements-container narrow-info-container-wrapper">
+              <div class="narrow-info-container achievements-tiered">
+                <div class="narrow-info-header">Tiered</div>
+                <div class="narrow-info-content">
+                  <% if('tiered' in list && 'uncompleted' in list.tiered && 'completed' in list.tiered){ %>
+                    <% for(const key in list.tiered.uncompleted){ %>
+                      <div class="narrow-info-flexsb">
+                        <div class="achievements-stat" data-tippy-content='<%= list.tiered.uncompleted[key].description %>'><%= list.tiered.uncompleted[key].name %><span class="grey-text"> (<%= list.tiered.uncompleted[key].level %>)</span></div>
+                        <div><span class="stat-value"><%= helper.renderRaceTier(list.tiered.uncompleted[key].tier) %></span></div>
+                      </div>
+                    <% } %>
+                    <% for(const key in list.tiered.completed){ %>
+                      <div class="narrow-info-flexsb">
+                        <div class="achievements-stat golden-text" data-tippy-content='<%= list.tiered.completed[key].description %>'><%= list.tiered.completed[key].name %><span class="grey-text"> (<%= list.tiered.completed[key].level %>)</span></div>
+                        <div><span class="stat-value"><%= helper.renderRaceTier(list.tiered.completed[key].tier) %></span></div>
+                      </div>
+                    <% } %>
+                  <% } %>
+                </div>
+              </div>
+              <div class="narrow-info-container achievements-oneTime">
+                <div class="narrow-info-header">One Time</div>
+                <div class="narrow-info-content">
+                  <% if('oneTime' in list && 'uncompleted' in list.oneTime && 'completed' in list.oneTime){ %>
+                    <% for(const key in list.oneTime.uncompleted){ %>
+                      <div class="narrow-info-flexsb">
+                        <div class="achievements-stat" data-tippy-content='<%= list.oneTime.uncompleted[key].description %>'><%= list.oneTime.uncompleted[key].name %></div>
+                        <div class="grey-text">&nbsp;<%= list.oneTime.uncompleted[key].reward %></div>
+                      </div>
+                    <% } %>
+                    <% for(const key in list.oneTime.completed){ %>
+                      <div class="narrow-info-flexsb">
+                        <div class="achievements-stat golden-text" data-tippy-content='<%= list.oneTime.completed[key].description %>'><%= list.oneTime.completed[key].name %></div>
+                        <div class="grey-text">&nbsp;<%= list.oneTime.completed[key].reward %></div>
+                      </div>
+                    <% } %>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </p>
+          <% } %>
         </div>
       </div>
     <% } %>
