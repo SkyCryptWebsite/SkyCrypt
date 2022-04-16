@@ -623,7 +623,6 @@ export async function getRank(uuid, db, cacheOnly = false) {
 
   let _updateRank;
 
-  _updateRank = updateRank(uuid, db); // TODO delete this line
   if (cacheOnly === false && (hypixelPlayer == undefined || +new Date() - hypixelPlayer.last_updated > 3600 * 1000)) {
     _updateRank = updateRank(uuid, db);
   }
