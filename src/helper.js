@@ -991,7 +991,7 @@ export function getCacheFilePath(dirPath, type, name) {
     return path.resolve(dirPath, `${type}_${name}.png`);
   }
 
-  let subdirs = [type];
+  const subdirs = [type];
 
   // for texture and head type, we get the first 2 characters to split them further
   if (type == "texture" || type == "head") {
