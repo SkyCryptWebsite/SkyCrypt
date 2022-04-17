@@ -1007,8 +1007,8 @@ export function getCacheFilePath(dirPath, type, name) {
   if (!fs.pathExistsSync(path.resolve(dirPath, subdirs.join("/")))) {
     // check if every subdirectory is available
     for (let i = 1; i <= subdirs.length; i++) {
-      let checkDirs = subdirs.slice(0, i);
-      let checkPath = path.resolve(dirPath, checkDirs.join("/"));
+      const checkDirs = subdirs.slice(0, i);
+      const checkPath = path.resolve(dirPath, checkDirs.join("/"));
 
       if (!fs.pathExistsSync(checkPath)) {
         fs.mkdirSync(checkPath);
