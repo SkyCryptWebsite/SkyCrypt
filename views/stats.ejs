@@ -2740,13 +2740,13 @@ const metaDescription = getMetaDescription()
                     <% for(const key in list.tiered.uncompleted){ %>
                       <div class="narrow-info-flexsb">
                         <div class="achievements-stat" data-tippy-content='<%= list.tiered.uncompleted[key].description %>'><%= list.tiered.uncompleted[key].name %><span class="grey-text"> (<%= list.tiered.uncompleted[key].level %>)</span></div>
-                        <div><span class="stat-value"><%= helper.renderRaceTier(list.tiered.uncompleted[key].tier) %></span></div>
+                        <div><span class="stat-value"><%= helper.renderAchievementTier(list.tiered.uncompleted[key].tier) %></span></div>
                       </div>
                     <% } %>
                     <% for(const key in list.tiered.completed){ %>
                       <div class="narrow-info-flexsb">
                         <div class="achievements-stat golden-text" data-tippy-content='<%= list.tiered.completed[key].description %>'><%= list.tiered.completed[key].name %><span class="grey-text"> (<%= list.tiered.completed[key].level %>)</span></div>
-                        <div><span class="stat-value"><%= helper.renderRaceTier(list.tiered.completed[key].tier) %></span></div>
+                        <div><span class="stat-value"><%= helper.renderAchievementTier(list.tiered.completed[key].tier) %></span></div>
                       </div>
                     <% } %>
                   <% } %>

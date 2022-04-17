@@ -404,6 +404,16 @@ export function renderRaceTier(completeTiers) {
 }
 
 /**
+ * returns a string with 5 dots "●" for completed tiers and "○" for incomplete tiers
+ * @param {number} completeTiers
+ * @returns {string} 5 dots
+ */
+export function renderAchievementTier(completeTiers) {
+  const incompleteTiers = Math.max(0, 5 - completeTiers);
+  return "●".repeat(completeTiers) + "○".repeat(incompleteTiers);
+}
+
+/**
  * checks whether a string should be proceeded by a or by an
  * @param {string} string
  * @returns {"a"|"an"}
