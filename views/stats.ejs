@@ -2723,7 +2723,7 @@ const metaDescription = getMetaDescription()
           <% } %>
           <% if('achievements' in calculated.misc){ %>
           <% let list = calculated.misc.achievements; %>
-          <div class="category-header"><div class="category-icon"><div class="item-icon icon-267_0"></div></div><span>achievements</span></div>
+          <div class="category-header"><div class="category-icon"><div class="item-icon icon-340_0"></div></div><span>achievements</span></div>
           <p class="stat-raw-values stat-achievements">
             <% if('tiered' in list){ %>
               <span class="stat-name<%= (list.tiered.sum >= list.tiered.total ?" golden-text":"") %>">Tiered Achievement Points: </span><span class="stat-value<%= (list.tiered.sum >= list.tiered.total ?" golden-text":"") %>"><%= list.tiered.sum %> / <%= list.tiered.total %></span><span class="grey-text"> (<%= Math.floor(list.tiered.sum / list.tiered.total * 100) %>%)</span><br>
