@@ -2407,7 +2407,7 @@ export const getStats = async (
 
     for (const key in tieredAchievements) {
       const tmp = tieredAchievements[key];
-      _tiered.total += tmp.tiers.reduce((a, b) => a.points + b.points, 0);
+      _tiered.total += tmp.tiers.map((a) => a.points).reduce((a, b) => a + b, 0);
       let tier = 0;
       for (const req in tmp.tiers) {
         if (tmp.tiers[req].amount <= hypixelProfile.achievements["skyblock_" + key.toLowerCase()]) {
