@@ -986,7 +986,7 @@ export function parseItemTypeFromLore(lore) {
 }
 
 export function getCacheFilePath(dirPath, type, name) {
-  // we don't care about folder optimalization when we're developing
+  // we don't care about folder optimization when we're developing
   if (process.env?.NODE_ENV == "development") {
     return path.resolve(dirPath, `${type}_${name}.png`);
   }
