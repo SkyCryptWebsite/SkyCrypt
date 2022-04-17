@@ -74,7 +74,8 @@ type StatName =
   | "pristine"
   | "sea_creature_chance"
   | "speed"
-  | "strength";
+  | "strength"
+  | "true_defense";
 
 interface DisplayItem {
   display_name: string;
@@ -677,7 +678,35 @@ interface PlayerStats {
 
 declare const redocInit: ((color?: string) => void) | undefined;
 
-interface ItemStats {
-  // todo: why does this not work??? [key in StatName]: number;
-  [key: string]: number;
+type ItemStats = {
+  [key in StatName]: number;
+};
+
+type BonusType =
+  | "skill_farming"
+  | "skill_mining"
+  | "skill_combat"
+  | "skill_foraging"
+  | "skill_fishing"
+  | "skill_enchanting"
+  | "skill_alchemy"
+  | "skill_taming"
+  | "skill_dungeoneering"
+  | "skill_social"
+  | "skill_carpentry"
+  | "skill_runecrafting"
+  | "slayer_zombie"
+  | "slayer_spider"
+  | "slayer_wolf"
+  | "slayer_enderman"
+  | "slayer_blaze";
+
+type StatsBonus = {
+  [key in BonusType]: StatBonusType;
+};
+
+interface StatBonusType {
+  [key: string]: {
+    [key in StatName]?: number;
+  };
 }

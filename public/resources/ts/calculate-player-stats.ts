@@ -137,7 +137,7 @@ export function getPlayerStats() {
 
 function getBonusStat(level: number, key: string, max: number) {
   const bonus: ItemStats = {};
-  const skill_stats = constants.stats_bonus[key];
+  const skill_stats: StatBonusType = constants.stats_bonus[key as BonusType];
 
   if (!skill_stats) {
     return bonus;
@@ -157,11 +157,13 @@ function getBonusStat(level: number, key: string, max: number) {
       .reverse()
       .find((a) => a <= x);
 
-    const skill_bonus = skill_stats[step];
+    if (step) {
+      const skill_bonus = skill_stats[step];
 
-    for (const skill in skill_bonus) {
-      bonus[skill] ??= 0;
-      bonus[skill] += skill_bonus[skill];
+      for (const skill in skill_bonus) {
+        bonus[skill] ??= 0;
+        bonus[skill] += skill_bonus[skill];
+      }
     }
   }
 
