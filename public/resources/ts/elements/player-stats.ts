@@ -6,7 +6,7 @@ import * as constants from "../../../../common/constants.js";
 @customElement("player-stats")
 export class PlayerStats extends LitElement {
   @property({ attribute: "stat" })
-  stat?: string;
+  stat?: StatName2;
 
   @property({ attribute: "value" })
   value?: string;
@@ -38,8 +38,19 @@ export class PlayerStats extends LitElement {
     `;
   }
 
-  private getTooltip(data: { [key: string]: number }, name: string, suffix: string, value: number): string[] {
+  private getTooltip(
+    data: { [key: string]: number },
+    name: string | undefined,
+    suffix: string,
+    value: number
+  ): string[] {
+    const tooltip: string[] = [];
     const tooltip_bonus: string[] = [];
+
+    if (!name) {
+      return tooltip;
+    }
+
     for (const [key, val] of Object.entries(data)) {
       if (key === "base") {
         continue;
@@ -52,12 +63,12 @@ export class PlayerStats extends LitElement {
       );
     }
 
-    const tooltip: string[] = [
+    tooltip.push(
       `<span class="stat-name">Base ${name}: </span>`,
       `<span class="stat-value">${data.base.toLocaleString()}${suffix}</span>`,
       "<br/>",
-      "<span class='tippy-explanation'>Base value every player has at the beginning of their SkyBlock adventure!</span>",
-    ];
+      "<span class='tippy-explanation'>Base value every player has at the beginning of their SkyBlock adventure!</span>"
+    );
 
     if (value - data.base > 0) {
       tooltip.push(

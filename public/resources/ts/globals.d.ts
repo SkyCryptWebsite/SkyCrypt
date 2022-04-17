@@ -679,7 +679,7 @@ interface PlayerStats {
 declare const redocInit: ((color?: string) => void) | undefined;
 
 type ItemStats = {
-  [key in StatName]: number;
+  [key in StatName2]: number;
 };
 
 type BonusType =
@@ -707,6 +707,27 @@ type StatsBonus = {
 
 interface StatBonusType {
   [key: string]: {
-    [key in StatName]?: number;
+    [key in StatName2]?: number;
   };
 }
+
+type StatName2 =
+  | "health"
+  | "defense"
+  | "strength"
+  | "speed"
+  | "crit_chance"
+  | "crit_damage"
+  | "bonus_attack_speed"
+  | "intelligence"
+  | "sea_creature_chance"
+  | "magic_find"
+  | "pet_luck"
+  | "ferocity"
+  | "ability_damage"
+  | "mining_speed"
+  | "mining_fortune"
+  | "farming_fortune"
+  | "foraging_fortune"
+  | "pristine"
+  | "true_defense";
