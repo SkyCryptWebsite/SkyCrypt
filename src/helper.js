@@ -993,9 +993,14 @@ export function getCacheFilePath(dirPath, type, name) {
 
   let subdirs = [type];
 
-  // for texture and head type, we want it to be a bit more split between folders
+  // for texture and head type, we get the first 2 characters to split them further
   if (type == "texture" || type == "head") {
     subdirs.push(name.slice(0, 2));
+  }
+
+  // for potion and leather type, we get what variant they are to split them further
+  if (type == "leather" || type == "potion") {
+    subdirs.push(name.split("_")[0]);
   }
 
   // check if the entire folder path is available
