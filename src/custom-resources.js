@@ -243,7 +243,7 @@ async function init() {
         }
 
         if (property == "items" || property == "matchItems") {
-          const item = mcData.findItemOrBlockByName(properties[property].replace("minecraft:", ""));
+          const item = mcData.itemsByName[properties[property].replace("minecraft:", "")];
 
           if (item) {
             texture.id = item.id;
