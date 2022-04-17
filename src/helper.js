@@ -4,6 +4,8 @@ import sanitize from "mongo-sanitize";
 import "axios-debug-log";
 import { v4 } from "uuid";
 import retry from "async-retry";
+import path from "path";
+import fs from "fs-extra";
 
 export { renderLore, formatNumber } from "../common/formatting.js";
 
@@ -981,6 +983,35 @@ export function parseItemTypeFromLore(lore) {
     dungeon: !!r.dungeon,
     shiny: !!r.shiny,
   };
+}
+
+export function getCacheFilePath(dirPath, type, name) {
+  // we don't care about folder optimalization when we're developing
+  if (process.env?.NODE_ENV == "development") {
+    return path.resolve(dirPath, `${type}_${name}.png`);
+  }
+
+  let subdirs = [type];
+
+  // for texture and head type, we want it to be a bit more split between folders
+  if (type == "texture" || type == "head") {
+    subdirs.push(name.slice(0, 2));
+  }
+
+  // check if the entire folder path is available
+  if (!fs.pathExistsSync(path.resolve(dirPath, subdirs.join("/")))) {
+    // check if every subdirectory is available
+    for (let i = 1; i <= subdirs.length; i++) {
+      let checkDirs = subdirs.slice(0, i);
+      let checkPath = path.resolve(dirPath, checkDirs.join("/"));
+
+      if (!fs.pathExistsSync(checkPath)) {
+        fs.mkdirSync(checkPath);
+      }
+    }
+  }
+
+  return path.resolve(dirPath, `${subdirs.join("/")}/${type}_${name}.png`);
 }
 
 function getCategoriesFromType(type) {
