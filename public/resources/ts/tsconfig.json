@@ -6,7 +6,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "allowJs": true,
-    "checkJs": true,
+    "checkJs": false,
     "target": "es2021",
     "lib": ["es2021", "dom", "dom.iterable"],
     "plugins": [{ "name": "ts-lit-plugin", "strict": true }]
