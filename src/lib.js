@@ -1593,6 +1593,7 @@ export const getStats = async (
       continue;
     }
 
+    // todo: when removing backend stats, nuke this and the src/constants/bonuses.js
     const skillBonus = getBonusStat(levels[skill].level || levels[skill], `${skill}_skill`, levels[skill].levelCap, 1);
 
     output.skill_bonus[skill] = Object.assign({}, skillBonus);

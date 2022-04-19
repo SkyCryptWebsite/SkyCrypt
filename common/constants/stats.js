@@ -214,3 +214,5 @@ export const statNames = {
   Pristine: "pristine",
   "True Defense": "true_defense",
 };
+
+// todo: grab these constants from src/constants/misc: base_stats, stat_template
