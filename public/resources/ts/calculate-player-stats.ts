@@ -1,16 +1,20 @@
 /*
- * Missing stuff that would improve stats:
+ * Missing stuff that would improve stats, but not worth the effort:
  * ! Century cakes
  * - Potion effects
  * - Dungeon shop upgrades
  * - Cake bag bonus +1hp per cake
  * - Pet score magic find bonus
+ * - Reforge abilities (renown)
+ * - Armor abilities (superior)
  *
  * [!] impossible to calculate
  * [-] can be included in the calculation
+ *
+ * this list is incomplete, it's only a few things that came up to my mind
  */
 
-import * as helper from "../../../common/helper.js";
+import * as helper from "../../../common/helper.ts";
 import * as constants from "../../../common/constants.js";
 
 export function getPlayerStats() {
