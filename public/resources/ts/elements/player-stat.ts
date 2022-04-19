@@ -1,6 +1,6 @@
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { titleCase } from "../../../../common/helper.js";
+import * as helper from "../../../../common/helper.js";
 import * as constants from "../../../../common/constants.js";
 
 @customElement("player-stat")
@@ -94,7 +94,7 @@ export class PlayerStats extends LitElement {
         break;
     }
 
-    return titleCase(name);
+    return helper.titleCase(name);
   }
 
   // disable shadow root
