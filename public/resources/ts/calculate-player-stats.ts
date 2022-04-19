@@ -14,7 +14,7 @@
  * this list is incomplete, it's only a few things that came up to my mind
  */
 
-import * as helper from "../../../common/helper.ts";
+import { getStatsFromItem } from "../../../common/helper.js";
 import * as constants from "../../../common/constants.js";
 
 export function getPlayerStats() {
@@ -43,7 +43,7 @@ export function getPlayerStats() {
 
   // Active armor stats
   for (const piece of items.armor) {
-    const bonusStats: ItemStats = helper.getStatsFromItem(piece as Item);
+    const bonusStats: ItemStats = getStatsFromItem(piece as Item);
 
     for (const [name, value] of Object.entries(bonusStats)) {
       stats[name].armor ??= 0;
@@ -65,7 +65,7 @@ export function getPlayerStats() {
 
   // Held item stats
   {
-    const bonusStats: ItemStats = helper.getStatsFromItem(items.highest_rarity_sword as unknown as Item);
+    const bonusStats: ItemStats = getStatsFromItem(items.highest_rarity_sword as unknown as Item);
 
     for (const [name, value] of Object.entries(bonusStats)) {
       stats[name].held_item ??= 0;
@@ -75,7 +75,7 @@ export function getPlayerStats() {
 
   // Active accessories stats
   for (const item of items.talismans.filter((item) => !(item as Item).isInactive)) {
-    const bonusStats: ItemStats = helper.getStatsFromItem(item as Item);
+    const bonusStats: ItemStats = getStatsFromItem(item as Item);
 
     for (const [name, value] of Object.entries(bonusStats)) {
       stats[name].accessories ??= 0;
