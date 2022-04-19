@@ -85,7 +85,7 @@ export function getPlayerStats() {
 
   // Skill bonus stats
   for (const [skill, data] of Object.entries(calculated.levels)) {
-    const bonusStats: ItemStats = getBonusStat(data.level, `skill_${skill}`, data.maxLevel, 1);
+    const bonusStats: ItemStats = getBonusStat(data.level, `skill_${skill}` as BonusType, data.maxLevel);
 
     for (const [name, value] of Object.entries(bonusStats)) {
       stats[name][`skill_${skill}`] ??= 0;
@@ -109,7 +109,11 @@ export function getPlayerStats() {
 
   // Slayer bonus stats
   for (const [slayer, data] of Object.entries(calculated.slayers)) {
-    const bonusStats: ItemStats = getBonusStat(data.level.currentLevel, `slayer_${slayer}`, data.level.maxLevel);
+    const bonusStats: ItemStats = getBonusStat(
+      data.level.currentLevel,
+      `slayer_${slayer}` as BonusType,
+      data.level.maxLevel
+    );
 
     for (const [name, value] of Object.entries(bonusStats)) {
       stats[name][`slayer_${slayer}`] ??= 0;
@@ -139,15 +143,15 @@ export function getPlayerStats() {
   return stats;
 }
 
-function getBonusStat(level: number, key: string, max: number) {
+function getBonusStat(level: number, key: BonusType, max: number) {
   const bonus: ItemStats = {};
-  const skill_stats: StatBonusType = constants.stats_bonus[key as BonusType];
+  const ObjOfLevelBonuses: StatBonusType = constants.stats_bonus[key];
 
-  if (!skill_stats) {
+  if (!ObjOfLevelBonuses) {
     return bonus;
   }
 
-  const steps = Object.keys(skill_stats)
+  const steps = Object.keys(ObjOfLevelBonuses)
     .sort((a, b) => Number(a) - Number(b))
     .map((a) => Number(a));
 
@@ -162,11 +166,12 @@ function getBonusStat(level: number, key: string, max: number) {
       .find((a) => a <= x);
 
     if (step) {
-      const skill_bonus = skill_stats[step];
+      const stepBonuses: ItemStats = ObjOfLevelBonuses[step];
 
-      for (const skill in skill_bonus) {
-        bonus[skill] ??= 0;
-        bonus[skill] += skill_bonus[skill];
+      for (const statNameString in stepBonuses) {
+        const statName: StatName2 = statNameString as StatName2;
+        bonus[statName] ??= 0;
+        bonus[statName] = (bonus[statName] || 0) + (stepBonuses?.[statName] ?? 0);
       }
     }
   }
@@ -175,19 +180,17 @@ function getBonusStat(level: number, key: string, max: number) {
 }
 
 function getFairyBonus(fairyExchanges: number) {
-  const bonus: ItemStats = {
-    speed: 0,
-    health: 0,
-    defense: 0,
-    strength: 0,
-  };
+  const bonus: ItemStats = {};
 
   bonus.speed = Math.floor(fairyExchanges / 10);
+  bonus.health = 0;
+  bonus.defense = 0;
+  bonus.strength = 0;
 
   for (let i = 0; i < fairyExchanges; i++) {
-    bonus.strength += (i + 1) % 5 == 0 ? 2 : 1;
-    bonus.defense += (i + 1) % 5 == 0 ? 2 : 1;
     bonus.health += 3 + Math.floor(i / 2);
+    bonus.defense += (i + 1) % 5 == 0 ? 2 : 1;
+    bonus.strength += (i + 1) % 5 == 0 ? 2 : 1;
   }
 
   return bonus;

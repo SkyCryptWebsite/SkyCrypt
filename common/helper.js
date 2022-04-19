@@ -8,6 +8,7 @@ import * as constants from "./constants.js";
 export function removeFormatting(string) {
   return string.replaceAll(/§[0-9a-z]/g, "");
 }
+
 /**
  * @param  {Item} piece
  * @returns {ItemStats}
@@ -38,22 +39,16 @@ export function getStatsFromItem(piece) {
 }
 
 /**
- * @param {string} word
+ * @param {string} string
  * @returns {string}
- * @example
- * // returns "Hello world"
- * capitalizeFirstLetter("hello world");
  */
-export function capitalizeFirstLetter(word) {
-  return word.charAt(0).toUpperCase() + word.slice(1);
+export function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 /**
- * @param {string} word
+ * @param {string} string
  * @returns {string}
- * @example
- * // returns "Hello World"
- * capitalizeFirstLetter("hello world");
  */
 export function titleCase(string) {
   let split = string.toLowerCase().split(" ");

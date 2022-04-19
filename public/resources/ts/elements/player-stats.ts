@@ -21,7 +21,7 @@ export class PlayerStats extends LitElement {
 
     const value = Math.round(+this.value);
     const icon = constants.stats_symbols[this.stat];
-    const name = Object.keys(constants.statNamesShort).find((key) => constants.statNamesShort[key] === this.stat);
+    const name = constants.statNamesShort[this.stat];
     const suffix = constants.statSuffix[this.stat];
     const data = JSON.parse(atob(this.data));
 

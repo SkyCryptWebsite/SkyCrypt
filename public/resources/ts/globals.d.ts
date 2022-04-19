@@ -679,7 +679,7 @@ interface PlayerStats {
 declare const redocInit: ((color?: string) => void) | undefined;
 
 type ItemStats = {
-  [key in StatName2]: number;
+  [key in StatName2]?: number;
 };
 
 type BonusType =
