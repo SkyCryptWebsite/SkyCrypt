@@ -25,54 +25,6 @@ const localizedItems = [
   ...items.storage,
 ].some((a) => a.localized === true);
 
-const statSuffix = {
-  ability_damage: "",
-  bonus_attack_speed: "%",
-  crit_chance: "%",
-  crit_damage: "%",
-  damage_increase: "",
-  damage: "",
-  defense: "",
-  effective_health: "",
-  farming_fortune: "",
-  ferocity: "",
-  foraging_fortune: "",
-  health: "",
-  intelligence: "",
-  magic_find: "",
-  mining_fortune: "",
-  mining_speed: "",
-  pet_luck: "",
-  pristine: "",
-  sea_creature_chance: "%",
-  speed: "%",
-  strength: "",
-};
-
-const statShort = {
-  ability_damage: "AD",
-  bonus_attack_speed: "Atk",
-  crit_chance: "CC",
-  crit_damage: "CD",
-  damage_increase: "DmgInc",
-  damage: "Dmg",
-  defense: "Def",
-  effective_health: "EHP",
-  farming_fortune: "FrmFrt",
-  ferocity: "Frc",
-  foraging_fortune: "FrgFrt",
-  health: "HP",
-  intelligence: "Int",
-  magic_find: "MF",
-  mining_fortune: "MngFrt",
-  mining_speed: "MngSpd",
-  pet_luck: "PL",
-  pristine: "Prs",
-  sea_creature_chance: "ScC",
-  speed: "Spd",
-  strength: "Str",
-};
-
 const skillItems = {
   alchemy: "icon-379_0",
   archer: 'icon-261_0',
@@ -276,7 +228,7 @@ function getBonus(stats, prefix) {
     if(stats[stat] == 0)
       continue;
     %>
-    <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replaceAll("_", "-") %>"><%= stats[stat].toLocaleString() %><%= statSuffix[stat] %> <abbr title="<%= getPrettyName(stat) %>"><%= statShort[stat] %></abbr></span>
+    <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replaceAll("_", "-") %>"><%= stats[stat].toLocaleString() %><%= constants.statsData[stat].suffix %> <abbr title="<%= getPrettyName(stat) %>"><%= constants.statsData[stat].nameTiny %></abbr></span>
     <% if(index < statsNotZero.length - 1){ %><span class="bonus-divider" role="separator">//</span><% } %>
   <% }
 }

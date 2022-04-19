@@ -20,9 +20,9 @@ export class PlayerStats extends LitElement {
     }
 
     const value = Math.round(+this.value);
-    const icon = constants.stats_symbols[this.stat];
-    const name = constants.statNamesShort[this.stat];
-    const suffix = constants.statSuffix[this.stat];
+    const icon = constants.statsData[this.stat].symbol;
+    const name = constants.statsData[this.stat].nameShort;
+    const suffix = constants.statsData[this.stat].suffix;
     const data = JSON.parse(atob(this.data));
 
     const tooltip = this.getTooltip(data, name, suffix, value);

@@ -26,7 +26,7 @@ export function getStatsFromItem(piece) {
       continue;
     }
 
-    const statName = constants.statNames[match[1]];
+    const statName = Object.keys(constants.statsData).find((key) => constants.statsData[key].nameLore === match[1]);
     const statValue = parseFloat(match[2]);
 
     if (statName) {

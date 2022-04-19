@@ -17,6 +17,5 @@ export * from "./constants/promotions.js";
 export * from "./constants/random-emoji.js";
 export * from "./constants/skills.js";
 export * from "./constants/skins-animations.js";
-export * from "./constants/stats.js";
 export * from "./constants/tags.js";
 export * from "./constants/talismans.js";

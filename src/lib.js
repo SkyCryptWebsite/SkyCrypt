@@ -641,6 +641,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
         const statValue = parseFloat(split[1].trim().replaceAll(",", ""));
 
         if (statType in constants.statNames) {
+          // todo: get rid of common/constants/stats "export const statNames" after nuking this
           item.stats[constants.statNames[statType]] = statValue;
         }
       });

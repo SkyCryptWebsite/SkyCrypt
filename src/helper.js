@@ -763,7 +763,9 @@ export function generateGemLore(type, tier, rarity) {
         }
 
         if (stat_value) {
-          stats.push(["§", constants.stats_colors[stat], "+", stat_value, constants.stats_symbols[stat]].join(""));
+          stats.push(
+            ["§", constants.statsData[stat].color, "+", stat_value, " ", constants.statsData[stat].symbol].join("")
+          );
         } else {
           stats.push("§c§oMISSING VALUE§r");
         }

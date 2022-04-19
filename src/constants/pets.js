@@ -1,4 +1,4 @@
-import { stats_symbols as symbols } from "../../common/constants.js";
+import { symbols } from "../../common/constants.js";
 
 export const pet_rarity_offset = {
   common: 0,
