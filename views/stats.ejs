@@ -167,17 +167,6 @@ function formatNucleusCrystal(crystal, state) {
   return `<span style='color: var(--§${color});'>${formatted}</span>`
 }
 
-function getPrettyName(statName, shorten = false) {
-  switch (statName) {
-    case 'bonus_attack_speed':
-      return 'Attack Speed';
-    case 'sea_creature_chance':
-      return shorten ? '<abbr title="Sea Creature">SC</abbr> Chance' : 'Sea Creature Chance';
-    default:
-      return helper.titleCase(statName.replaceAll("_", " "));
-  }
-}
-
 function romanize(num) {
 	if (!+num)
 		return false;
@@ -228,7 +217,7 @@ function getBonus(stats, prefix) {
     if(stats[stat] == 0)
       continue;
     %>
-    <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replaceAll("_", "-") %>"><%= stats[stat].toLocaleString() %><%= constants.statsData[stat].suffix %> <abbr title="<%= getPrettyName(stat) %>"><%= constants.statsData[stat].nameTiny %></abbr></span>
+    <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replaceAll("_", "-") %>"><%= stats[stat].toLocaleString() %><%= constants.statsData[stat].suffix %> <abbr title="<%= constants.statsData[stat].nameShort %>"><%= constants.statsData[stat].nameTiny %></abbr></span>
     <% if(index < statsNotZero.length - 1){ %><span class="bonus-divider" role="separator">//</span><% } %>
   <% }
 }
