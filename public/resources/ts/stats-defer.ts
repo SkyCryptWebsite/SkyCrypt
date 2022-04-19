@@ -974,14 +974,10 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
   const stats = getPlayerStats();
 
   // Print the stats
-  const parent = document.createElement("div");
-  parent.id = "base_stats_container";
-  parent.style.marginTop = "30px";
-
-  document.querySelector("#base_stats_container")?.parentNode?.appendChild(parent);
+  const parent = document.querySelector("#base_stats_container");
 
   for (const stat in stats) {
-    const node = document.createElement("player-stats");
+    const node = document.createElement("player-stat");
 
     node.setAttribute("stat", stat);
     node.setAttribute(

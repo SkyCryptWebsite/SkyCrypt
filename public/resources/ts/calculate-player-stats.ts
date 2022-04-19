@@ -1,5 +1,5 @@
 /*
- * Missing stuff that would improve stats, but not worth the effort:
+ * Missing stuff that would improve stats, but probably not worth the effort:
  * ! Century cakes
  * - Potion effects
  * - Dungeon shop upgrades
@@ -18,7 +18,6 @@ import { getStatsFromItem } from "../../../common/helper.js";
 import * as constants from "../../../common/constants.js";
 
 export function getPlayerStats() {
-  // todo: reorder these based on https://wiki.hypixel.net/Stats#Player_Stats ?
   const stats: PlayerStats = {
     health: { base: 100 },
     defense: { base: 0 },
@@ -26,11 +25,12 @@ export function getPlayerStats() {
     speed: { base: 100 },
     crit_chance: { base: 30 },
     crit_damage: { base: 50 },
-    bonus_attack_speed: { base: 0 },
     intelligence: { base: 0 },
+    bonus_attack_speed: { base: 0 },
     sea_creature_chance: { base: 20 },
     magic_find: { base: 0 },
     pet_luck: { base: 0 },
+    true_defense: { base: 0 },
     ferocity: { base: 0 },
     ability_damage: { base: 0 },
     mining_speed: { base: 0 },
@@ -38,7 +38,6 @@ export function getPlayerStats() {
     farming_fortune: { base: 0 },
     foraging_fortune: { base: 0 },
     pristine: { base: 0 },
-    true_defense: { base: 0 },
   };
 
   // Active armor stats

@@ -74,16 +74,16 @@ export const stats_bonus = {
     8: { intelligence: 4 },
     9: { health: 5 },
   },
-  // todo: check these values (from https://hypixel-skyblock.fandom.com/wiki/Blaze_Slayer) they were obtained while blaze slayer was still in alpha
+  // todo: values below are from AHN, check again upon blaze slayer release
   slayer_blaze: {
     1: { health: 3 },
     2: { strength: 1 },
     3: { health: 4 },
     4: { true_defense: 1 },
     5: { health: 5 },
-    6: {}, // todo: missing value?
+    6: {},
     7: { health: 6 },
-    8: {}, // todo: missing value?
+    8: { true_defense: 2 },
     9: { health: 7 },
   },
 };

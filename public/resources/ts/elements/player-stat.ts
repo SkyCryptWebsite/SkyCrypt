@@ -3,7 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { titleCase } from "../../../../common/helper.js";
 import * as constants from "../../../../common/constants.js";
 
-@customElement("player-stats")
+@customElement("player-stat")
 export class PlayerStats extends LitElement {
   @property({ attribute: "stat" })
   stat?: StatName2;
@@ -29,11 +29,11 @@ export class PlayerStats extends LitElement {
 
     return html`
       <div data-stat="${this.stat}" class="basic-stat stat-${this.stat.replaceAll("_", "-")}">
-        <span data-tippy-content="${tooltip.join("")}">
+        <div data-tippy-content="${tooltip.join("")}">
           <span class="stat-icon">${icon}</span>
           <span class="stat-name">${name}</span>
           <span class="stat-value">${value.toLocaleString()}${suffix}</span>
-        </span>
+        </div>
       </div>
     `;
   }
@@ -57,9 +57,7 @@ export class PlayerStats extends LitElement {
       }
 
       tooltip_bonus.push(
-        `- ${this.getPrettyDataName(key)}: ${(val as number) < 0 ? "" : "+"}${(
-          val as number
-        ).toLocaleString()}${suffix}`
+        `- ${this.getPrettyDataName(key)} ${(val as number) < 0 ? "" : "+"}${(val as number).toLocaleString()}${suffix}`
       );
     }
 
@@ -107,6 +105,6 @@ export class PlayerStats extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "player-stats": PlayerStats;
+    "player-stat": PlayerStats;
   }
 }

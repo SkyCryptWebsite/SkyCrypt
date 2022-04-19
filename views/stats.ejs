@@ -420,30 +420,6 @@ function itemIcon(item, classes) {
   <%
 }
 
-function stat_component(stat) {
-  const bonusStats = stats[stat.name] - calculated.base_stats[stat.name]
-  %>
-  <div data-stat="<%= stat.name %>" class="basic-stat stat-<%= stat.name.replaceAll("_", "-") %>">
-    <span data-tippy-content="
-      <span class='stat-name'>Base <%= getPrettyName(stat.name) %>: </span><span class='stat-value <%= stat.percent ? 'percent' : ''%>'><%= calculated.base_stats[stat.name].toLocaleString() %></span>
-      <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= stat.baseExplanation %><% } %></div><br>
-      <span class='stat-name'>Bonus <%= getPrettyName(stat.name) %>: </span><span class='stat-value<%= stat.percent ? ' percent' : ''%>'><%= bonusStats > 0 ? '+' : '' %><%= bonusStats.toLocaleString() %></span>
-      <div class='tippy-explanation'>Additional bonuses from Armor, held items, Accessories and active Pets.</div>
-      <% if (Array.isArray(stat.extraStats)) {
-        for (const extraStat of stat.extraStats) { %>
-          <br><span class='stat-name'><%= extraStat.stat %>: </span><span class='stat-value<%= extraStat.percent ? ' percent' : ''%>'><%= extraStat.value.toLocaleString() %></span>
-        <div class='tippy-explanation'><% if(stat.baseExplanation){ %><%= extraStat.explanation %><% } %></div>
-        <% } %>
-      <% } %>
-    ">
-      <span class="stat-icon"><%= constants.stats_symbols[stat.name] %></span>
-      <span class="stat-name"><%- getPrettyName(stat.name, true) %></span>
-      <span class="stat-value<%= stat.percent ? ' percent' : ''%>"><%= stats[stat.name].toLocaleString() %></span>
-    </span>
-  </div>
-  <%
-}
-
 function jerriefy(rank) {
   if (extra.isFoolsDay) {
     rank = rank.replace("VIP", "JER");
@@ -867,127 +843,7 @@ const metaDescription = getMetaDescription()
       <div id="skin_display_mobile"></div>
 
       <div id="base_stats_wrapper">
-        <div id="base_stats_container">
-          <%- stat_component({
-            name: 'health',
-            baseExplanation: "Increased by collecting Fairy Souls, leveling your Farming and Fishing skills and leveling up in Zombie or Wolf Slayer.",
-          }); %>
-
-          <%- stat_component({
-            name: 'defense',
-            baseExplanation: "Increased by collecting Fairy Souls and leveling your Mining skill.",
-            extraStats: [
-              {
-                stat: 'Damage Reduction',
-                value: (stats.defense / (stats.defense + 100) * 100).toFixed(1),
-                percent: true
-              },
-              {
-                stat: 'Effective Health',
-                value: stats.effective_health,
-                explanation: 'Effective Health based on Health + Defense.<br>→ Formula: Health * (1 + Defense / 100)'
-              }
-            ]
-          }); %>
-
-          <%- stat_component({
-            name: 'strength',
-            baseExplanation: "Increased by collecting Fairy Souls and leveling your Foraging skill."
-          }); %>
-
-          <%- stat_component({
-            name: 'speed',
-            percent: true,
-            baseExplanation: "Increased by collecting Fairy Souls and leveling up in Wolf Slayer."
-          }); %>
-
-          <%- stat_component({
-            name: 'crit_chance',
-            percent: true,
-            baseExplanation: "Increased by leveling your Combat skill and leveling up in Spider Slayer."
-          }); %>
-
-          <%- stat_component({
-            name: 'crit_damage',
-            percent: true,
-            baseExplanation: "Increased by leveling up in Spider or Wolf Slayer."
-          }); %>
-
-          <%- stat_component({
-            name: 'bonus_attack_speed',
-            percent: true,
-            baseExplanation: null
-          }); %>
-
-          <%- stat_component({
-            name: 'intelligence',
-            baseExplanation: "Increased by leveling your Enchanting and Alchemy skills and completing songs on Melody's Harp."
-          }); %>
-
-          <%- stat_component({
-            name: 'sea_creature_chance',
-            percent: true,
-            baseExplanation: null
-          }); %>
-
-          <%- stat_component({
-            name: 'magic_find',
-            baseExplanation: "Increased by collecting unique pets with high rarities."
-          }); %>
-
-          <%- stat_component({
-            name: 'pet_luck',
-            baseExplanation: "Increased by leveling your Taming Skill."
-          }); %>
-
-          <%- stat_component({
-            name: 'ferocity',
-            baseExplanation: null,
-            extraStats: [
-              {
-                stat: 'Base Extra Strikes',
-                value: (stats.ferocity / 100).toFixed(0),
-              },
-              {
-                stat: 'Chance for 1 more',
-                value: stats.ferocity % 100,
-                percent: true
-              }
-            ]
-          }); %>
-
-          <%- stat_component({
-            name: 'ability_damage',
-            percent: true,
-            baseExplanation: "Increased by leveling your Enchanting Skill."
-          }); %>
-
-          <%- stat_component({
-              name: 'mining_speed',
-              baseExplanation: "Increase the speed of breaking mining blocks."
-          }); %>
-
-          <%- stat_component({
-              name: 'mining_fortune',
-              baseExplanation: "Mining Fortune is the chance to gain double drops from ores, with a chance for triple drops at values greater than 100."
-          }); %>
-
-          <%- stat_component({
-              name: 'farming_fortune',
-              baseExplanation: "Farming Fortune is the chance to gain double drops from crops, with a chance for triple drops at values greater than 100."
-          }); %>
-
-          <%- stat_component({
-              name: 'foraging_fortune',
-              baseExplanation: "Foraging Fortune is the chance to gain double drops from logs, with a chance for triple drops at values greater than 100."
-          }); %>
-
-          <%- stat_component({
-              name: 'pristine',
-              baseExplanation: "Pristine is the chance to increase the quality of a Gemstone when it's dropped."
-          }); %>
-
-        </div>
+        <div id="base_stats_container"></div>
         <button id="show_stats">Show Stats</button>
       </div>
 
@@ -1821,12 +1677,6 @@ const metaDescription = getMetaDescription()
           </p>
 
           <% if(items.fishing_tools.length > 0){ %>
-            <%- stat_component({
-              name: 'sea_creature_chance',
-              percent: true,
-              baseExplanation: null
-            }); %>
-
             <p class="stat-sub-header">Fishing Rods</p>
             <% if(items.highest_rarity_fishing_tool){ %>
             <p class="stat-raw-values">

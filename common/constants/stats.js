@@ -58,6 +58,7 @@ export const stats_symbols = {
   mining_speed: "⸕",
   pet_luck: "♣",
   powder: "᠅", // todo: missing icon in icomoon font
+  soulflow: "⸎", // todo: missing icon in icomoon font
   pristine: "✧",
   sea_creature_chance: "α",
   speed: "✦",
