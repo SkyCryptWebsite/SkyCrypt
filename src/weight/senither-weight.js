@@ -156,6 +156,13 @@ const slayerWeight = {
 function calcSlayerWeight(type, experience) {
   let sw = slayerWeight[type];
 
+  if (!sw) {
+    return {
+      weight: 0,
+      weight_overflow: 0,
+    };
+  }
+
   if (!experience || experience <= 1000000) {
     return {
       weight: !experience ? 0 : experience / sw.divider, // for some reason experience can be undefined

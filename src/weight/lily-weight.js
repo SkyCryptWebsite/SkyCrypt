@@ -1,7 +1,7 @@
 import LilyWeight from "lilyweight";
 
 const skillOrder = ["enchanting", "taming", "alchemy", "mining", "farming", "foraging", "combat", "fishing"];
-const slayerOrder = ["zombie", "spider", "wolf", "enderman"];
+const slayerOrder = ["zombie", "spider", "wolf", "enderman", "blaze"];
 
 /**
  * converts a dungeon floor into a completion map
