@@ -973,7 +973,7 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
 {
   const stats = getPlayerStats();
 
-  // Print the stats
+  // Print the player stats
   const parent = document.querySelector("#base_stats_container");
 
   for (const stat in stats) {
@@ -990,4 +990,30 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
 
     parent?.appendChild(node);
   }
+
+  // Print bonus stats
+  document.querySelectorAll("[data-bonus-stats]").forEach((element) => {
+    const targetraw = (element as HTMLElement).dataset.bonusStats;
+
+    if (!targetraw) {
+      return;
+    }
+
+    const targets = targetraw.split(",");
+    const bonusStats: { [key: string]: number } = {};
+
+    for (const stat in stats) {
+      for (const target of targets) {
+        if (Object.keys(stats[stat]).includes(target)) {
+          bonusStats[stat] ??= 0;
+          bonusStats[stat] += stats[stat][target];
+        }
+      }
+    }
+
+    const node = document.createElement("bonus-stats");
+    node.setAttribute("data", btoa(JSON.stringify(bonusStats)));
+
+    element.appendChild(node);
+  });
 }

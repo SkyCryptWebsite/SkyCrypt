@@ -202,26 +202,6 @@ function getStats(items) {
   return stats;
 }
 
-function getBonus(stats, prefix) {
-  const statsNotZero = Object.keys(stats).filter(a => stats[a] > 0 && a != 'effective_health');
-
-  if(statsNotZero.length == 0)
-    return;
-
-  %>
-  <%- prefix %>
-  <span class="stat-name">Bonus: </span>
-  <%
-
-  for(const [index, stat] of statsNotZero.entries()){
-    if(stats[stat] == 0)
-      continue;
-    %>
-    <span style="margin-left: 2px; margin-right: 2px;" class="stat-name color-<%= stat.replaceAll("_", "-") %>"><%= stats[stat].toLocaleString() %><%= constants.statsData[stat].suffix %> <abbr title="<%= constants.statsData[stat].nameShort %>"><%= constants.statsData[stat].nameTiny %></abbr></span>
-    <% if(index < statsNotZero.length - 1){ %><span class="bonus-divider" role="separator">//</span><% } %>
-  <% }
-}
-
 function formatReforge(string) {
   let reforge = string.split('_').join(' ').trim()
   reforge = reforge.charAt(0).toUpperCase() + reforge.slice(1)
@@ -969,9 +949,7 @@ const metaDescription = getMetaDescription()
               </div>
             <% } %>
           </div>
-          <p>
-            <%- getBonus(getStats(items.armor)) %>
-          </p>
+          <div data-bonus-stats="armor"></div>
         <% } %>
         <% if(items.wardrobe.length > 0){ %>
           <p class="stat-sub-header">Wardrobe</p>
@@ -1090,7 +1068,7 @@ const metaDescription = getMetaDescription()
                   <%- getEnrichments(items.talismans.filter(a => a.isUnique && !a.isInactive)) %>
                   <%- getReforges(items.talismans.filter(a => a.isUnique && !a.isInactive)) %>
                 </p>
-                <p><%- getBonus(getStats(items.talismans.filter(a => a.isUnique && !a.isInactive))) %></p>
+                <div data-bonus-stats="accessories,new_year_cake_bag"></div>
               </div>
             <% } %>
             <% if(items.talismans.find(a => a.isUnique && a.isInactive) != undefined){ %>
@@ -1204,7 +1182,7 @@ const metaDescription = getMetaDescription()
                 <div class="pet-level">Level <%= activePet.level.level %></div>
               </div>
             </div>
-            <%- getBonus(activePet.stats, '<br>') %>
+            <div data-bonus-stats="pet"></div>
           <% } %>
           <% if (otherPets) { %>
             <p class="stat-sub-header"><%= activePet ? 'Other Pets' : '' %></p>
@@ -2039,7 +2017,7 @@ const metaDescription = getMetaDescription()
               for(const stat in calculated.slayer_bonus[slayer])
                 slayerBonus[stat] += calculated.slayer_bonus[slayer][stat];
             %>
-            <%= getBonus(slayerBonus) %>
+            <div data-bonus-stats="slayer_zombie,slayer_spider,slayer_wolf,slayer_enderman"></div>
           </p>
           <% } %>
         <% } %>
