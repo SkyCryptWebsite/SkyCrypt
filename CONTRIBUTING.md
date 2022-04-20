@@ -1,6 +1,6 @@
 ## Contributing to the SkyCrypt
 
-Before contributing to SkyCrypt, make sure you install the development environment first.
+Before contributing to SkyCrypt, make sure you install the development environment first. If you have trouble building SkyCrypt or have any development questions, please don't hesistate to contact us on [Discord](https://discord.gg/cNgADv2kEQ)!
 
 ### Prerequisite Software
 
