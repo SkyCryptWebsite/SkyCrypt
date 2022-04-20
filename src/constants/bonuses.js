@@ -178,6 +178,9 @@ export const bonus_stats = {
       health: 5,
     },
   },
+  blaze_slayer: {
+    // TO BE REDONE ON CLIENTSIDE ANYWAY, so i ain't adding it
+  },
   enchantments: {
     sharpness: {
       1: {
