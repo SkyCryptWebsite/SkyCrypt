@@ -1107,6 +1107,7 @@ const metaDescription = getMetaDescription()
         <% if(!items.no_inventory){ %><a class="nav-item" href="#Inventory">Inventory</a><% } %>
         <a class="nav-item" href="#Skills">Skills</a>
         <a class="nav-item" href="#Dungeons">Dungeons</a>
+        <a class="nav-item" href="#Essence">Essence</a>
         <a class="nav-item" href="#Slayer">Slayer</a>
         <a class="nav-item" href="#Minions">Minions</a>
         <% if(Object.keys(calculated.collections).length > 0){ %><a class="nav-item" href="#Collections">Collections</a><% } %>
@@ -1948,8 +1949,13 @@ const metaDescription = getMetaDescription()
       <a class="stat-anchor" id="Dungeons"></a>
       <h2 class="stat-header">Dungeons</h2>
       <div class="stat-content">
-      <% if (Object.keys(calculated.dungeons).length === 0 ||
-      !(calculated.dungeons.catacombs?.visited || calculated.dungeons.master_catacombs?.visited)) { %>
+      <% if (
+        Object.keys(calculated.dungeons).length === 0 ||
+        !(
+          calculated.dungeons.catacombs?.visited ||
+          calculated.dungeons.master_catacombs?.visited
+        )
+      ) { %>
         <p class="stat-raw-values">
           <%= calculated.display_name %> hasn't entered any dungeon yet.
         </p>
@@ -2144,22 +2150,24 @@ const metaDescription = getMetaDescription()
           <% } %>
           </div>
         <% } %>
-
-        <% if (calculated.dungeons.essence) { %>
-          <p class="stat-sub-header">Essence</p>
-          <div class="collections">
-          <% for (const [key, value] of Object.entries(calculated.dungeons.essence)) { %>
-            <div class="chip">
-              <div class="chip-icon-wrapper"><div style="background-image:url(<%= constants.dungeons.essence[key].head %>)" class="item-icon custom-icon"></div></div>
-              <div class="chip-text">
-                <div class="collection-name"><span class="stat-name"><%= constants.dungeons.essence[key].name %></span></div>
-                <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= value.toLocaleString() %></span></div>
-              </div>
+      <% } %>
+      </div>
+    </div>
+    <div class="stat-container stat-essence">
+      <a class="stat-anchor" id="Essence"></a>
+      <h2 class="stat-header">Essence</h2>
+      <div class="stat-content">
+        <div class="collections">
+        <% for (const [key, value] of Object.entries(calculated.essence)) { %>
+          <div class="chip" data-missing="<%= value === 0 %>">
+            <div class="chip-icon-wrapper"><div style="background-image:url('<%= constants.essence[key].head %>')" class="item-icon custom-icon"></div></div>
+            <div class="chip-text">
+              <div class="collection-name"><span class="stat-name"><%= constants.essence[key].name %></span></div>
+              <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= value.toLocaleString() %></span></div>
             </div>
-          <% } %>
           </div>
         <% } %>
-      <% } %>
+        </div>
       </div>
     </div>
     <div class="stat-container stat-slayer">

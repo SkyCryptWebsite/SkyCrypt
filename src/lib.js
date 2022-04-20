@@ -2151,6 +2151,8 @@ export const getStats = async (
 
   output.dungeons = await getDungeons(userProfile, hypixelProfile);
 
+  output.essence = await getEssence(userProfile, hypixelProfile);
+
   output.fishing = {
     total: userProfile.stats.items_fished || 0,
     treasure: userProfile.stats.items_fished_treasure || 0,
@@ -3053,13 +3055,6 @@ export async function getDungeons(userProfile, hypixelProfile) {
   output.selected_class = current_class;
   output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
 
-  // Essence
-  output.essence = {};
-
-  for (const essence in constants.dungeons.essence) {
-    output.essence[essence] = userProfile?.[`essence_${essence}`] ?? 0;
-  }
-
   if (!output.catacombs.visited) return output;
 
   // Boss Collections
@@ -3225,6 +3220,16 @@ export async function getDungeons(userProfile, hypixelProfile) {
         }
       }
     }
+  }
+
+  return output;
+}
+
+export async function getEssence(userProfile, hypixelProfile) {
+  let output = {};
+
+  for (const essence in constants.essence) {
+    output[essence] = userProfile?.[`essence_${essence}`] ?? 0;
   }
 
   return output;
