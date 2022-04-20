@@ -394,6 +394,6 @@ export const essence = {
   // Nether essences
   crimson: {
     name: "Crimson",
-    head: "/head/950ff371807a6079d591aedc457cbf3f4d18e6bbd9baa0073806f0e466b8e849", // todo: find the real head
+    head: "/head/67c41930f8ff0f2b0430e169ae5f38e984df1244215705c6f173862844543e9d",
   },
 };
