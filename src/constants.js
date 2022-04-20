@@ -5,6 +5,7 @@ export * from "./constants/dungeons.js";
 export * from "./constants/forge.js";
 export * from "./constants/gemstones.js";
 export * from "./constants/hotm.js";
+export * from "./constants/items.js";
 export * from "./constants/leveling.js";
 export * from "./constants/minions.js";
 export * from "./constants/misc.js";

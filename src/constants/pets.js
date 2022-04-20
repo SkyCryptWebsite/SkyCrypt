@@ -361,6 +361,7 @@ export const pet_data = {
     maxTier: "LEGENDARY",
     maxLevel: 100,
     emoji: "👻",
+    passivePerks: true,
   },
   GRIFFIN: {
     head: "/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8",
@@ -382,6 +383,7 @@ export const pet_data = {
     maxTier: "LEGENDARY",
     maxLevel: 100,
     emoji: "👵",
+    passivePerks: true,
   },
   RAT: {
     head: "/head/a8abb471db0ab78703011979dc8b40798a941f3a4dec3ec61cbeec2af8cffe8",
@@ -423,6 +425,15 @@ export const pet_data = {
     maxTier: "LEGENDARY",
     maxLevel: 100,
     emoji: "🐾",
+  },
+  BINGO: {
+    head: "/head/d4cd9c707c7092d4759fe2b2b6a713215b6e39919ec4e7afb1ae2b6f8576674c",
+    type: "all",
+    maxTier: "EPIC",
+    maxLevel: 100,
+    emoji: "🎲",
+    passivePerks: true,
+    bingoOnly: true,
   },
 };
 
@@ -706,7 +717,7 @@ export const pet_items = {
   CROCHET_TIGER_PLUSHIE: {
     name: "Crochet Tiger Plushie",
     tier: "EPIC",
-    description: `§7Increases §e${symbols.attack_speed} Bonus Attack Speed §7by §a35`,
+    description: `§7Increases §e${symbols.bonus_attack_speed} Bonus Attack Speed §7by §a35`,
     stats: {
       bonus_attack_speed: 35,
     },

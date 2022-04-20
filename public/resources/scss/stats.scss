@@ -50,14 +50,17 @@
   .basic-stat {
     margin-top: 0;
   }
+  .stat-icon {
+    font-size: 16px;
+    line-height: 1;
+    vertical-align: text-bottom;
+    -webkit-font-smoothing: antialiased;
+    margin-right: 2px;
+    display: inline-block;
+  }
   .stat-name,
   .stat-value {
     font-size: 14px;
-  }
-  .basic-stat::before {
-    // transform: scale(0.85);
-    width: 20px;
-    height: 20px;
   }
 }
 
@@ -322,8 +325,7 @@
     text-shadow: 0px 0px 7px rgba(0, 0, 0, 0.3);
     box-sizing: border-box;
 
-    // please remove `@at-root` and `#{}` when https://github.com/sass/sass/issues/3130 is fixed
-    @at-root :where(#{&}) {
+    :where(&) {
       background-color: var(--header-hex); // fallback for rarity color
     }
   }
@@ -858,11 +860,6 @@ a.additional-player-stat:hover {
   }
 }
 
-.stat-health::before {
-  -webkit-mask-image: url(../img/icons/heart.svg?v2);
-  mask-image: url(../img/icons/heart.svg?v2);
-}
-
 .stat-health,
 .stat-strength,
 .stat-ferocity,
@@ -874,39 +871,14 @@ a.additional-player-stat:hover {
   color: var(--§c);
 }
 
-.stat-defense::before {
-  -webkit-mask-image: url(../img/icons/shield.svg?v2);
-  mask-image: url(../img/icons/shield.svg?v2);
-}
-
 .stat-defense,
 .color-defense {
   color: var(--§a);
 }
 
-.stat-strength::before {
-  -webkit-mask-image: url(../img/icons/flower-poppy.svg?v2);
-  mask-image: url(../img/icons/flower-poppy.svg?v2);
-}
-
-.stat-speed::before {
-  -webkit-mask-image: url(../img/icons/star-four-points.svg?v2);
-  mask-image: url(../img/icons/star-four-points.svg?v2);
-}
-
 .stat-speed,
 .color-speed {
   color: var(--§f);
-}
-
-.stat-crit-chance::before {
-  -webkit-mask-image: url(../img/icons/atom.svg?v2);
-  mask-image: url(../img/icons/atom.svg?v2);
-}
-
-.stat-crit-damage::before {
-  -webkit-mask-image: url(../img/icons/skull-crossbones.svg?v2);
-  mask-image: url(../img/icons/skull-crossbones.svg?v2);
 }
 
 .stat-crit-chance,
@@ -916,19 +888,9 @@ a.additional-player-stat:hover {
   color: var(--§9);
 }
 
-.stat-bonus-attack-speed::before {
-  -webkit-mask-image: url(../img/icons/sword-cross.svg?v2);
-  mask-image: url(../img/icons/sword-cross.svg?v2);
-}
-
 .stat-bonus-attack-speed,
 .color-bonus-attack-speed {
   color: var(--§e);
-}
-
-.stat-intelligence::before {
-  -webkit-mask-image: url(../img/icons/lead-pencil.svg?v2);
-  mask-image: url(../img/icons/lead-pencil.svg?v2);
 }
 
 .stat-intelligence,
@@ -936,19 +898,9 @@ a.additional-player-stat:hover {
   color: var(--§b);
 }
 
-.stat-sea-creature-chance::before {
-  -webkit-mask-image: url(../img/icons/fish.svg?v2);
-  mask-image: url(../img/icons/fish.svg?v2);
-}
-
 .stat-sea-creature-chance,
 .color-sea-creature-chance {
   color: var(--§3);
-}
-
-.stat-magic-find::before {
-  -webkit-mask-image: url(../img/icons/star.svg?v2);
-  mask-image: url(../img/icons/star.svg?v2);
 }
 
 .stat-magic-find,
@@ -956,24 +908,9 @@ a.additional-player-stat:hover {
   color: var(--§b);
 }
 
-.stat-pet-luck::before {
-  -webkit-mask-image: url(../img/icons/cards-club.svg?v2);
-  mask-image: url(../img/icons/cards-club.svg?v2);
-}
-
 .stat-pet-luck,
 .color-pet-luck {
   color: var(--§d);
-}
-
-.stat-ferocity::before {
-  -webkit-mask-image: url(../img/icons/ferocity.svg?v2);
-  mask-image: url(../img/icons/ferocity.svg?v2);
-}
-
-.stat-ability-damage::before {
-  -webkit-mask-image: url(../img/icons/ability_damage.svg?v2);
-  mask-image: url(../img/icons/ability_damage.svg?v2);
 }
 
 .stat-ability-damage,
@@ -981,19 +918,9 @@ a.additional-player-stat:hover {
   color: var(--§c);
 }
 
-.stat-mining-speed::before {
-  -webkit-mask-image: url(../img/icons/mining_speed.svg?v2);
-  mask-image: url(../img/icons/mining_speed.svg?v2);
-}
-
 .stat-mining-speed,
 .color-mining-speed {
   color: var(--§6);
-}
-
-.stat-mining-fortune::before {
-  -webkit-mask-image: url(../img/icons/fortune.svg?v2);
-  mask-image: url(../img/icons/fortune.svg?v2);
 }
 
 .stat-mining-fortune,
@@ -1001,29 +928,14 @@ a.additional-player-stat:hover {
   color: var(--§6);
 }
 
-.stat-farming-fortune::before {
-  -webkit-mask-image: url(../img/icons/fortune.svg?v2);
-  mask-image: url(../img/icons/fortune.svg?v2);
-}
-
 .stat-farming-fortune,
 .color-farming-fortune {
   color: var(--§6);
 }
 
-.stat-foraging-fortune::before {
-  -webkit-mask-image: url(../img/icons/fortune.svg?v2);
-  mask-image: url(../img/icons/fortune.svg?v2);
-}
-
 .stat-foraging-fortune,
 .color-foraging-fortune {
   color: var(--§6);
-}
-
-.stat-pristine::before {
-  -webkit-mask-image: url(../img/icons/pristine.svg?v2);
-  mask-image: url(../img/icons/pristine.svg?v2);
 }
 
 .stat-pristine,
@@ -1325,16 +1237,29 @@ a.additional-player-stat:hover {
   left: 0;
   bottom: 0;
   right: 0;
-  transform: translateY(-100%);
-  background: linear-gradient(
-    to top,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.5) 50%,
-    rgba(128, 186, 232, 0) 99%,
-    rgba(125, 185, 232, 0) 100%
-  );
-  z-index: 8;
-  animation: shine 4s infinite;
+  overflow: hidden;
+  @supports (contain: paint) {
+    overflow: initial;
+    contain: paint;
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    transform: translateY(-100%);
+    background: linear-gradient(
+      to top,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(128, 186, 232, 0) 99%,
+      rgba(125, 185, 232, 0) 100%
+    );
+    z-index: 8;
+    animation: shine 4s infinite;
+  }
 }
 
 @keyframes shine {
@@ -1393,6 +1318,17 @@ a.additional-player-stat:hover {
 }
 .piece-supreme-fg {
   color: var(--§4) !important;
+}
+
+.piece-very_special-bg,
+.style-scrollbar .piece-very_special-bg + .item-lore::-webkit-scrollbar-thumb {
+  background-color: var(--§c);
+}
+.piece-very_special-bg + .item-lore {
+  scrollbar-color: var(--§c) transparent;
+}
+.piece-very_special-fg {
+  color: var(--§c) !important;
 }
 
 .piece-special-bg,
@@ -1487,7 +1423,7 @@ a.additional-player-stat:hover {
   --upgraded-from: #000;
   background-image: linear-gradient(to top right, transparent 0 90%, var(--upgraded-from) 90% 100%);
 
-  &.piece-very-special-bg {
+  &.piece-very_special-bg {
     --upgraded-from: var(--§c);
   }
   &.piece-special-bg {
@@ -2403,22 +2339,6 @@ inventory-view {
       right: 21px; // compensate for the width and the gap
     }
   }
-}
-
-.icomoon {
-  font-family: "icomoon" !important;
-  speak: never;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-}
-
-.icomoon-dungeon-stars {
-  font-size: 0.8em;
-  letter-spacing: 3px;
 }
 
 .forge-item {

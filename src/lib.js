@@ -293,6 +293,18 @@ function getPetLevel(pet, maxLevel) {
   };
 }
 
+/**
+ * @param  {string} rarity
+ * @param  {number} level
+ * @returns number
+ * @description takes rarity and level and returns the required pet exp to reach the level
+ */
+function getPetExp(rarity, level) {
+  const rarityOffset = constants.pet_rarity_offset[rarity.toLowerCase()];
+
+  return constants.pet_levels.slice(rarityOffset, rarityOffset + level - 1).reduce((prev, curr) => prev + curr, 0);
+}
+
 function getFairyBonus(fairyExchanges) {
   const bonus = Object.assign({}, constants.stat_template);
 
@@ -533,11 +545,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       item.display_name = helper.getRawLore(item.tag.display.Name);
     }
 
-    // Set print display name (contains HTML)
-    if (item.display_name) {
-      item.display_name_print = item.display_name;
-    }
-
     if (item.tag?.ExtraAttributes?.dungeon_item_level > 0) {
       const dungeonItemLevel = item.tag.ExtraAttributes.dungeon_item_level;
       let newStars = null;
@@ -554,10 +561,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
           break;
       }
 
-      item.display_name_print = item.display_name_print.replace(
-        /(✪+)/,
-        `<i class="icomoon icomoon-dungeon-stars">${newStars}</i>`
-      );
+      item.display_name = item.display_name.replace(/(✪+)/, newStars);
     }
 
     // Resolve skull textures to their image path
@@ -598,92 +602,23 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       }
     }
 
-    const enchantments = item.tag?.ExtraAttributes?.enchantments ?? {};
-
     // Lore stuff
     let itemLore = item?.tag?.display?.Lore ?? [];
     let lore_raw = [...itemLore];
 
     let lore = lore_raw != null ? lore_raw.map((a) => (a = helper.getRawLore(a))) : [];
-    let rarity, item_type;
+
+    item.rarity = null;
+    item.categories = [];
 
     if (lore.length > 0) {
-      // Get item type (like "bow") and rarity (like "legendary") from last line of lore
-      let rarity_type = lore[lore.length - 1];
+      // todo: support `item.localized = boolean` when skyblock will support multilanguage
 
-      let rarity_type_color = lore_raw[lore_raw.length - 1].charAt(1);
+      // item categories, rarity, recombobulated, dungeon, shiny
+      const itemType = helper.parseItemTypeFromLore(lore);
 
-      if (rarity_type.startsWith("a ")) {
-        rarity_type = rarity_type.substring(2).substring(0, rarity_type.length - 4);
-      }
-
-      if (rarity_type.startsWith("VERY")) {
-        rarity_type = rarity_type.substring(5);
-      }
-
-      rarity_type = splitWithTail(rarity_type, " ", 1);
-
-      rarity = rarity_type[0];
-
-      if (rarity_type.length > 1) {
-        item_type = rarity_type[1].trim();
-      }
-
-      let loreRarity = rarity.toLowerCase();
-      let colorRarity =
-        Object.keys(constants.rarityColors).find((key) => constants.rarityColors[key] === rarity_type_color) ??
-        loreRarity;
-
-      item.rarity = colorRarity;
-
-      if (loreRarity != colorRarity) {
-        item.localized = true;
-      }
-
-      if (item_type) {
-        item.type = item_type.toLowerCase();
-      }
-
-      if (item.type == "hatccessory") {
-        item.type = "accessory";
-      }
-
-      switch (item.type) {
-        case "accessory":
-          item.equipmentType = "accessory";
-          break;
-        case "helmet":
-        case "chestplate":
-        case "leggings":
-        case "boots":
-        case "dungeon helmet":
-        case "dungeon chestplate":
-        case "dungeon leggings":
-        case "dungeon boots":
-          item.equipmentType = "armor";
-          break;
-        case "sword":
-        case "bow":
-        case "fishing weapon":
-        case "fishing rod":
-        case "dungeon sword":
-        case "dungeon bow":
-        case "dungeon fishing weapon":
-        case "dungeon fishing rod":
-          item.equipmentType = "weapon";
-          break;
-        default:
-          item.equipmentType = "none";
-          break;
-      }
-
-      // Get breaking power for Pickaxes
-      if (item.type == "pickaxe" || item.type == "drill" || item.type == "gauntlet") {
-        if (lore[0].startsWith("Breaking Power")) {
-          item.breaking_power = lore[0].substring(15);
-        } else {
-          item.breaking_power = 0;
-        }
+      for (const key in itemType) {
+        item[key] = itemType[key];
       }
 
       // fix custom maps texture
@@ -820,52 +755,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       }
     }
 
-    // Workaround for detecting item types if another language is set by the player on Hypixel
-    if (getId(item) != "ENCHANTED_BOOK" && !constants.item_types.includes(item.type)) {
-      if (
-        "sharpness" in enchantments ||
-        "crticial" in enchantments ||
-        "ender_slayer" in enchantments ||
-        "execute" in enchantments ||
-        "first_strike" in enchantments ||
-        "giant_killer" in enchantments ||
-        "lethality" in enchantments ||
-        "life_steal" in enchantments ||
-        "luck" in enchantments ||
-        "scavenger" in enchantments ||
-        "vampirism" in enchantments ||
-        "bane_of_arthropods" in enchantments ||
-        "smite" in enchantments
-      ) {
-        item.type = "sword";
-      }
-
-      if (
-        "power" in enchantments ||
-        "aiming" in enchantments ||
-        "infinite_quiver" in enchantments ||
-        "power" in enchantments ||
-        "snipe" in enchantments ||
-        "punch" in enchantments ||
-        "flame" in enchantments ||
-        "piercing" in enchantments
-      ) {
-        item.type = "bow";
-      }
-
-      if (
-        "angler" in enchantments ||
-        "blessing" in enchantments ||
-        "caster" in enchantments ||
-        "frail" in enchantments ||
-        "luck_of_the_sea" in enchantments ||
-        "lure" in enchantments ||
-        "magnet" in enchantments
-      ) {
-        item.type = "fishing rod";
-      }
-    }
-
     if (!("display_name" in item) && "id" in item) {
       const vanillaItem = mcData.items[item.id];
 
@@ -884,15 +773,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
   items = items.filter((a) => !a.inBackpack);
 
   return items;
-}
-
-export function splitWithTail(string, delimiter, count) {
-  let parts = string.split(delimiter);
-  let tail = parts.slice(count).join(delimiter);
-  let result = parts.slice(0, count);
-  result.push(tail);
-
-  return result;
 }
 
 export function getMinions(coopMembers) {
@@ -1071,7 +951,7 @@ export const getItems = async (
 
   let hotm = "mining_core" in profile ? await getHotmItems(profile, packs) : [];
 
-  output.armor = armor.filter((a) => Object.keys(a).length != 0);
+  output.armor = armor.filter((x) => x.rarity);
   output.wardrobe = wardrobe;
   output.wardrobe_inventory = wardrobe_inventory;
   output.inventory = inventory;
@@ -1125,7 +1005,7 @@ export const getItems = async (
   const talisman_ids = [];
 
   // Modify talismans on armor and add
-  for (const talisman of armor.filter((a) => a.type == "accessory" || a.type == "dungeon accessory")) {
+  for (const talisman of armor.filter((a) => a.categories.includes("accessory"))) {
     const id = getId(talisman);
 
     if (id === "") {
@@ -1147,7 +1027,7 @@ export const getItems = async (
   }
 
   // Add talismans from inventory
-  for (const talisman of inventory.filter((a) => a.type == "accessory" || a.type == "dungeon accessory")) {
+  for (const talisman of inventory.filter((a) => a.categories.includes("accessory"))) {
     const id = getId(talisman);
 
     if (id === "") {
@@ -1192,13 +1072,18 @@ export const getItems = async (
 
   // Add inactive talismans from enderchest and backpacks
   for (const item of inventory.concat(enderchest, storage)) {
+    // filter out filler or empty slots (such as empty storage slot)
+    if (!("categories" in item)) {
+      continue;
+    }
+
     let items = [item];
 
-    if (item.type != "accessory" && "containsItems" in item && Array.isArray(item.containsItems)) {
+    if (!item.categories.includes("accessory") && "containsItems" in item && Array.isArray(item.containsItems)) {
       items = item.containsItems.slice(0);
     }
 
-    for (const talisman of items.filter((a) => a.type == "accessory" || a.type == "dungeon accessory")) {
+    for (const talisman of items.filter((a) => a.categories.includes("accessory"))) {
       const id = getId(talisman);
 
       const insertTalisman = Object.assign({ isUnique: true, isInactive: true }, talisman);
@@ -1302,22 +1187,11 @@ export const getItems = async (
 
   output.talismans = talismans;
   output.talisman_ids = talisman_ids;
-  output.weapons = all_items.filter(
-    (a) =>
-      a.type != null &&
-      (a.type.endsWith("sword") ||
-        a.type.endsWith("cutlass") || // Pirate English
-        a.type.endsWith("bow") ||
-        a.type.endsWith("gauntlet"))
-  );
 
-  output.hoes = all_items.filter((a) => a.type != null && a.type.endsWith("hoe"));
-  output.pickaxes = all_items.filter(
-    (a) => a.type != null && (a.type.endsWith("pickaxe") || a.type.endsWith("drill") || a.type.endsWith("gauntlet"))
-  );
-  output.rods = all_items.filter(
-    (a) => a.type != null && (a.type.endsWith("fishing rod") || a.type.endsWith("fishing weapon"))
-  );
+  output.weapons = all_items.filter((a) => a.categories?.includes("weapon"));
+  output.farming_tools = all_items.filter((a) => a.categories?.includes("farming_tool"));
+  output.mining_tools = all_items.filter((a) => a.categories?.includes("mining_tool"));
+  output.fishing_tools = all_items.filter((a) => a.categories?.includes("fishing_tool"));
 
   output.pets = all_items
     .filter((a) => a.tag?.ExtraAttributes?.petInfo)
@@ -1337,22 +1211,10 @@ export const getItems = async (
       continue;
     }
 
-    output.weapons.push(
-      ...item.containsItems.filter(
-        (a) => a.type != null && (a.type.endsWith("sword") || a.type.endsWith("bow") || a.type.endsWith("gauntlet"))
-      )
-    );
-    output.hoes.push(...item.containsItems.filter((a) => a.type != null && a.type.endsWith("hoe")));
-    output.pickaxes.push(
-      ...item.containsItems.filter(
-        (a) => a.type != null && (a.type.endsWith("pickaxe") || a.type.endsWith("drill") || a.type.endsWith("gauntlet"))
-      )
-    );
-    output.rods.push(
-      ...item.containsItems.filter(
-        (a) => a.type != null && (a.type.endsWith("fishing rod") || a.type.endsWith("fishing weapon"))
-      )
-    );
+    output.weapons.push(...item.containsItems.filter((a) => a.categories.includes("weapon")));
+    output.farming_tools.push(...item.containsItems.filter((a) => a.categories.includes("farming_tool")));
+    output.mining_tools.push(...item.containsItems.filter((a) => a.categories.includes("mining_tool")));
+    output.fishing_tools.push(...item.containsItems.filter((a) => a.categories.includes("fishing_tool")));
 
     output.pets.push(
       ...item.containsItems
@@ -1397,12 +1259,10 @@ export const getItems = async (
 
   // Sort talismans, weapons and rods by rarity
   output.weapons = output.weapons.sort(itemSorter);
-
-  output.rods = output.rods.sort(itemSorter);
-
-  output.hoes = output.hoes.sort(itemSorter);
-
-  output.pickaxes = output.pickaxes.sort(itemSorter);
+  output.fishing_tools = output.fishing_tools.sort(itemSorter);
+  output.farming_tools = output.farming_tools.sort(itemSorter);
+  output.mining_tools = output.mining_tools.sort(itemSorter);
+  output.talismans = output.talismans.sort(itemSorter);
 
   const countsOfId = {};
 
@@ -1420,26 +1280,24 @@ export const getItems = async (
     }
   }
 
-  for (const rod of output.rods) {
-    const id = getId(rod);
+  for (const item of output.fishing_tools) {
+    const id = getId(item);
 
     countsOfId[id] = (countsOfId[id] || 0) + 1;
 
     if (countsOfId[id] > 2) {
-      rod.hidden = true;
+      item.hidden = true;
     }
   }
 
-  output.talismans = output.talismans.sort(itemSorter);
-
-  let swords = output.weapons.filter((a) => a.type == "sword" || a.type == "dungeon sword");
-  let bows = output.weapons.filter((a) => a.type == "bow" || a.type == "dungeon bow");
+  let swords = output.weapons.filter((a) => a.categories.includes("sword"));
+  let bows = output.weapons.filter((a) => a.categories.includes("bow"));
 
   let swordsInventory = swords.filter((a) => a.backpackIndex === undefined);
   let bowsInventory = bows.filter((a) => a.backpackIndex === undefined);
-  let rodsInventory = output.rods.filter((a) => a.backpackIndex === undefined);
-  let hoesInventory = output.hoes.filter((a) => a.backpackIndex === undefined);
-  let pickaxesInventory = output.pickaxes.filter((a) => a.backpackIndex === undefined);
+  let fishingtoolsInventory = output.fishing_tools.filter((a) => a.backpackIndex === undefined);
+  let farmingtoolsInventory = output.farming_tools.filter((a) => a.backpackIndex === undefined);
+  let miningtoolsInventory = output.mining_tools.filter((a) => a.backpackIndex === undefined);
 
   if (swords.length > 0) {
     output.highest_rarity_sword = swordsInventory
@@ -1453,33 +1311,33 @@ export const getItems = async (
       .sort((a, b) => a.item_index - b.item_index)[0];
   }
 
-  if (output.rods.length > 0) {
-    output.highest_rarity_rod = rodsInventory
-      .filter((a) => a.rarity == rodsInventory[0].rarity)
+  if (output.fishing_tools.length > 0) {
+    output.highest_rarity_fishing_tool = fishingtoolsInventory
+      .filter((a) => a.rarity == fishingtoolsInventory[0].rarity)
       .sort((a, b) => a.item_index - b.item_index)[0];
   }
 
-  if (output.hoes.length > 0) {
-    output.highest_rarity_hoe = hoesInventory
-      .filter((a) => a.rarity == hoesInventory[0].rarity)
+  if (output.farming_tools.length > 0) {
+    output.highest_rarity_farming_tool = farmingtoolsInventory
+      .filter((a) => a.rarity == farmingtoolsInventory[0].rarity)
       .sort((a, b) => a.item_index - b.item_index)[0];
   }
 
-  if (output.pickaxes.length > 0) {
-    output.highest_rarity_pickaxe = pickaxesInventory
-      .filter((a) => a.rarity == pickaxesInventory[0].rarity)
+  if (output.mining_tools.length > 0) {
+    output.highest_rarity_mining_tool = miningtoolsInventory
+      .filter((a) => a.rarity == miningtoolsInventory[0].rarity)
       .sort((a, b) => a.item_index - b.item_index)[0];
   }
 
-  if (armor.filter((a) => Object.keys(a).length > 2).length == 1) {
-    const armorPiece = armor.find((a) => Object.keys(a).length > 2);
+  if (armor.filter((x) => x.rarity).length === 1) {
+    const armorPiece = armor.find((x) => x.rarity);
 
     output.armor_set = armorPiece.display_name;
     output.armor_set_rarity = armorPiece.rarity;
   }
 
   // Full armor set (4 pieces)
-  if (armor.filter((a) => Object.keys(a).length > 2).length == 4) {
+  if (armor.filter((x) => x.rarity).length === 4) {
     let output_name;
     let reforgeName;
 
@@ -1817,7 +1675,7 @@ export const getStats = async (
   userProfile.pets.push(...items.pets);
 
   output.pets = await getPets(userProfile);
-  output.missingPets = await getMissingPets(output.pets);
+  output.missingPets = await getMissingPets(output.pets, profile.game_mode);
   output.petScore = await getPetScore(output.pets);
 
   const petScoreRequired = Object.keys(constants.pet_rewards).sort((a, b) => parseInt(b) - parseInt(a));
@@ -1867,21 +1725,21 @@ export const getStats = async (
   // Apply pet bonus to armor
   if (activePet) {
     activePet.ref.modifyArmor(
-      items.armor.find((a) => a.type === "helmet" || a.type === "dungeon helmet"),
-      getId(items.armor.find((a) => a.type === "helmet" || a.type === "dungeon helmet")),
-      items.armor.find((a) => a.type === "chestplate" || a.type === "dungeon chestplate"),
-      getId(items.armor.find((a) => a.type === "chestplate" || a.type === "dungeon chestplate")),
-      items.armor.find((a) => a.type === "leggings" || a.type === "dungeon leggings"),
-      getId(items.armor.find((a) => a.type === "leggings" || a.type === "dungeon leggings")),
-      items.armor.find((a) => a.type === "boots" || a.type === "dungeon boots"),
-      getId(items.armor.find((a) => a.type === "boots" || a.type === "dungeon boots"))
+      items.armor.find((a) => a.categories.includes("helmet")),
+      getId(items.armor.find((a) => a.categories.includes("helmet"))),
+      items.armor.find((a) => a.categories.includes("chestplate")),
+      getId(items.armor.find((a) => a.categories.includes("chestplate"))),
+      items.armor.find((a) => a.categories.includes("leggings")),
+      getId(items.armor.find((a) => a.categories.includes("leggings"))),
+      items.armor.find((a) => a.categories.includes("boots")),
+      getId(items.armor.find((a) => a.categories.includes("boots")))
     );
 
     // Updates items lore after modifyArmor() changed their stats/extra (hpb)
-    makeLore(items.armor.find((a) => a.type === "helmet" || a.type === "dungeon helmet"));
-    makeLore(items.armor.find((a) => a.type === "chestplate" || a.type === "dungeon chestplate"));
-    makeLore(items.armor.find((a) => a.type === "leggings" || a.type === "dungeon leggings"));
-    makeLore(items.armor.find((a) => a.type === "boots" || a.type === "dungeon boots"));
+    makeLore(items.armor.find((a) => a.categories.includes("helmet")));
+    makeLore(items.armor.find((a) => a.categories.includes("chestplate")));
+    makeLore(items.armor.find((a) => a.categories.includes("leggings")));
+    makeLore(items.armor.find((a) => a.categories.includes("boots")));
   }
 
   // Apply Lapis Armor full set bonus of +60 HP
@@ -1917,7 +1775,7 @@ export const getStats = async (
 
   // Apply basic armor stats
   for (const item of items.armor) {
-    if (item.isInactive || item.type == "accessory" || item.type == "dungeon accessory") {
+    if (item.isInactive || item.categories.includes("accessory")) {
       item.stats = {};
 
       if (getId(item) != "PARTY_HAT_CRAB") {
@@ -1996,7 +1854,7 @@ export const getStats = async (
     /*{itemId:"NONE",stats:{}}*/
   ]
     .concat(items.weapons)
-    .concat(items.rods)) {
+    .concat(items.fishing_tools)) {
     let stats = Object.assign({}, output.stats);
 
     // Modify weapon based on pet
@@ -2730,6 +2588,7 @@ export async function getPets(profile) {
     const petData = constants.pet_data[pet.type] || {
       head: "/head/bc8ea1f51f253ff5142ca11ae45193a4ad8c3ab5e9c6eec8ba7a4fcb7bac40",
       type: "???",
+      maxTier: "LEGENDARY",
       maxLevel: 100,
       emoji: "❓",
     };
@@ -2737,7 +2596,13 @@ export async function getPets(profile) {
     pet.rarity = pet.tier.toLowerCase();
 
     if (pet.heldItem == "PET_ITEM_TIER_BOOST") {
-      pet.rarity = constants.rarities[Math.min(4, constants.rarities.indexOf(pet.rarity) + 1)];
+      pet.rarity =
+        constants.rarities[
+          Math.min(
+            constants.rarities.indexOf(petData.maxTier.toLowerCase()),
+            constants.rarities.indexOf(pet.rarity) + 1
+          )
+        ];
     }
 
     if (pet.heldItem == "PET_ITEM_VAMPIRE_FANG" || pet.heldItem == "PET_ITEM_TOY_JERRY") {
@@ -2757,14 +2622,18 @@ export async function getPets(profile) {
       petSkin = constants.pet_skins[`PET_SKIN_${pet.skin}`].name;
     }
 
-    let loreFirstRow = [
-      "§8",
-      `${helper.capitalizeFirstLetter(petData.type)} `,
-      petData.category ?? "Pet",
-      petSkin ? `, ${petSkin} Skin` : "",
-    ];
+    const loreFirstRow = ["§8"];
 
-    let lore = [loreFirstRow.join(""), ""];
+    if (petData.type === "all") {
+      loreFirstRow.push("All Skills");
+    } else {
+      loreFirstRow.push(helper.capitalizeFirstLetter(petData.type), " ", petData.category ?? "Pet");
+      if (petSkin) {
+        loreFirstRow.push(`, ${petSkin} Skin`);
+      }
+    }
+
+    const lore = [loreFirstRow.join(""), ""];
 
     const petName =
       petData.hatching?.level > pet.level.level
@@ -2847,6 +2716,11 @@ export async function getPets(profile) {
       lore.push(" ");
     }
 
+    // passive perks text
+    if (petData.passivePerks) {
+      lore.push("§8This pet's perks are active even when the pet is not summoned!", "");
+    }
+
     if (pet.level.level < petData.maxLevel) {
       lore.push(`§7Progress to Level ${pet.level.level + 1}: §e${(pet.level.progress * 100).toFixed(1)}%`);
 
@@ -2917,20 +2791,22 @@ export async function getPets(profile) {
   return output;
 }
 
-export async function getMissingPets(pets) {
+export async function getMissingPets(pets, gameMode) {
   const profile = {
     pets: [],
   };
 
-  for (const petType in constants.pet_data) {
-    if (pets.map((a) => a.type).includes(petType)) {
+  const ownedPetTypes = pets.map((a) => a.type);
+
+  for (const [petType, petData] of Object.entries(constants.pet_data)) {
+    if (ownedPetTypes.includes(petType) || (petData.bingoOnly === true && gameMode !== "bingo")) {
       continue;
     }
 
     profile.pets.push({
       type: petType,
       active: false,
-      exp: constants.pet_data[petType].maxLevel === 200 ? 210249831 : 25353230,
+      exp: getPetExp(constants.pet_data[petType].maxTier, constants.pet_data[petType].maxLevel),
       tier: constants.pet_data[petType].maxTier,
       candyUsed: 0,
       heldItem: null,

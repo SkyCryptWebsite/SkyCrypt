@@ -78,9 +78,12 @@ type StatName =
 
 interface DisplayItem {
   display_name: string;
-  rarity: string;
   texture_path?: string;
-  display_name_print?: string;
+  categories: string[];
+  rarity: string | null;
+  recombobulated: boolean | null;
+  dungeon: boolean | null;
+  shiny: boolean | null;
 }
 
 interface ItemSlot {
@@ -528,6 +531,7 @@ declare const calculated: SkyCryptPlayer & {
     total: number;
     wolf: number;
     zombie: number;
+    blaze: number;
   };
   slayer_xp: number;
   slayers: {
@@ -629,7 +633,7 @@ interface Profile {
   profile_id: string;
 }
 
-type slayerName = "enderman" | "spider" | "wolf" | "zombie";
+type slayerName = "enderman" | "spider" | "wolf" | "zombie" | "blaze";
 
 interface Navigator {
   userAgentData: NavigatorUAData;

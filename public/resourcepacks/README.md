@@ -11,14 +11,14 @@
    - Any other file outside the `cit` folder
 6. Run `npm run start` once, it will generate all the animated textures (gifs) and normalize the other textures sizes
 
-# Things that require manual update or changes
+## Things that require manual update or changes
 
 Some resource packs require some files to be changed in order to resolve some bugs.
 
 - FurfSky Reborn
   - `cit/uielements/skyblock_menu/hotm/complete/fortunate.properties` remove color formatting from "nbt.display.Name" and comment "nbt.display.Lore" line.
 
-# Examples
+## Examples
 
 Example folder structure:
 
