@@ -446,5 +446,8 @@ export const essence = {
     head: "/head/8816606260779b23ed15f87c56c932240db745f86f683d1f4deb83a4a125fa7b",
   },
   // Nether essences
-  // (upcoming crimson essence)
+  crimson: {
+    name: "Crimson",
+    head: "/head/950ff371807a6079d591aedc457cbf3f4d18e6bbd9baa0073806f0e466b8e849", // todo: find the real head
+  },
 };
