@@ -2556,3 +2556,13 @@ bonus-stats {
     margin: 0 2px;
   }
 }
+
+// todo: properly clean up select-weapon in second front-end stats pull request
+.stat-weapons .piece,
+.stat-fishing .piece {
+  margin-bottom: 0;
+  .select-weapon,
+  .select-rod {
+    display: none;
+  }
+}
