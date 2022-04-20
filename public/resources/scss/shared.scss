@@ -308,7 +308,9 @@ header {
   z-index: 1000;
   line-height: 48px;
   overflow: hidden;
-  overflow: clip;
+  @supports (overflow: clip) {
+    overflow: clip;
+  }
 }
 
 header > * {
@@ -452,6 +454,11 @@ header .lookup-player {
       outline: none;
       background-color: rgba(0, 0, 0, 0.2);
     }
+
+    &:-webkit-autofill,
+    &:-webkit-autofill:focus {
+      transition: background-color 600000s 0s, color 600000s 0s;
+    }
   }
 
   button {
@@ -469,6 +476,7 @@ header .lookup-player {
     background-color: rgba(var(--background-rgb), 0.15);
     color: var(--text-hex);
     transition: background-color 0.1s;
+    cursor: pointer;
     &:focus,
     &:hover {
       background-color: rgba(var(--background-rgb), 0.07);
@@ -505,7 +513,7 @@ input[type="search"]::-webkit-search-cancel-button {
   background-size: 100%;
   background-position: center;
   background-repeat: no-repeat;
-
+  cursor: pointer;
   .light & {
     filter: invert(1);
   }
@@ -529,7 +537,6 @@ input[type="search"]::-webkit-search-cancel-button {
   -webkit-appearance: none;
   appearance: none;
   display: flex;
-  box-sizing: unset;
   height: 36px;
   line-height: 36px;
   box-sizing: border-box;
@@ -600,7 +607,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .expander {
-  cursor: context-menu;
+  cursor: pointer;
 
   &::before {
     content: "";
@@ -750,9 +757,11 @@ input[type="search"]::-webkit-search-cancel-button {
       height: 32px;
 
       &.pack-icon {
-        image-rendering: crisp-edges;
-        image-rendering: pixelated;
         border-radius: 5px;
+        image-rendering: crisp-edges;
+        @supports (image-rendering: pixelated) {
+          image-rendering: pixelated;
+        }
       }
     }
 
@@ -1017,8 +1026,7 @@ body {
     max-width: calc(100vw - 75px);
     padding: 25px;
     border-radius: 25px;
-    background-color: #282828;
-    background-color: var(--header-hex);
+    background-color: var(--header-hex, #282828);
 
     h2 {
       margin-top: 0;
@@ -1037,8 +1045,7 @@ body {
         border-radius: 1000px;
         padding: 10px 20px;
         color: white;
-        background-color: #0bca51;
-        background-color: var(--icon-hex);
+        background-color: var(--icon-hex, #0bca51);
         text-transform: uppercase;
         text-decoration: none;
         font: inherit;
@@ -1219,4 +1226,9 @@ body {
     line-height: 22px;
     height: 22px;
   }
+}
+
+button[name="pack"],
+input[name="theme"] {
+  cursor: pointer;
 }
