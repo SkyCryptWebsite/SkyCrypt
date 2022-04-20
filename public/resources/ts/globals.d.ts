@@ -531,6 +531,7 @@ declare const calculated: SkyCryptPlayer & {
     total: number;
     wolf: number;
     zombie: number;
+    blaze: number;
   };
   slayer_xp: number;
   slayers: {
@@ -632,7 +633,7 @@ interface Profile {
   profile_id: string;
 }
 
-type slayerName = "enderman" | "spider" | "wolf" | "zombie";
+type slayerName = "enderman" | "spider" | "wolf" | "zombie" | "blaze";
 
 interface Navigator {
   userAgentData: NavigatorUAData;
