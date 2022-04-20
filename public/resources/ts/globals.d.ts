@@ -54,28 +54,25 @@ declare function applyProcessedTheme(processedTheme: ProcessedTheme): void;
 declare const items: { [key: string]: (ItemSlot | Item | Backpack)[] };
 
 type StatName =
-  | "ability_damage"
-  | "bonus_attack_speed"
+  | "health"
+  | "defense"
+  | "strength"
+  | "speed"
   | "crit_chance"
   | "crit_damage"
-  | "damage"
-  | "damage_increase"
-  | "defense"
-  | "effective_health"
-  | "farming_fortune"
-  | "ferocity"
-  | "foraging_fortune"
-  | "health"
   | "intelligence"
-  | "magic_find"
-  | "mining_fortune"
-  | "mining_speed"
-  | "pet_luck"
-  | "pristine"
+  | "bonus_attack_speed"
   | "sea_creature_chance"
-  | "speed"
-  | "strength"
-  | "true_defense";
+  | "magic_find"
+  | "pet_luck"
+  | "true_defense"
+  | "ferocity"
+  | "ability_damage"
+  | "mining_speed"
+  | "mining_fortune"
+  | "farming_fortune"
+  | "foraging_fortune"
+  | "pristine";
 
 interface DisplayItem {
   display_name: string;
@@ -665,21 +662,13 @@ interface UADataValues {
 interface PlayerStats {
   [key: string]: {
     [key: string]: number;
-    // base: number;
-    // fairy_souls: number;
-    // skill: number;
-    // slayers: number;
-    // armor: number;
-    // held_item: number;
-    // accessories: number;
-    // pet: number;
   };
 }
 
 declare const redocInit: ((color?: string) => void) | undefined;
 
 type ItemStats = {
-  [key in StatName2]?: number;
+  [key in StatName]?: number;
 };
 
 type BonusType =
@@ -707,27 +696,6 @@ type StatsBonus = {
 
 interface StatBonusType {
   [key: string]: {
-    [key in StatName2]?: number;
+    [key in StatName]?: number;
   };
 }
-
-type StatName2 =
-  | "health"
-  | "defense"
-  | "strength"
-  | "speed"
-  | "crit_chance"
-  | "crit_damage"
-  | "bonus_attack_speed"
-  | "intelligence"
-  | "sea_creature_chance"
-  | "magic_find"
-  | "pet_luck"
-  | "ferocity"
-  | "ability_damage"
-  | "mining_speed"
-  | "mining_fortune"
-  | "farming_fortune"
-  | "foraging_fortune"
-  | "pristine"
-  | "true_defense";

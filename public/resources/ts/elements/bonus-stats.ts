@@ -30,9 +30,9 @@ export class BonusStats extends LitElement {
     for (const [stat, value] of Object.entries(data)) {
       result.push(/* html */ `
         <span class="bonus-stat stat-name color-${stat.replaceAll("_", "-")}">
-          ${value.toLocaleString()}${constants.statsData[stat as StatName2].suffix}
-          <abbr title="${constants.statsData[stat as StatName2].name}">
-            ${constants.statsData[stat as StatName2].nameTiny}
+          ${value.toLocaleString()}${constants.statsData[stat as StatName].suffix}
+          <abbr title="${constants.statsData[stat as StatName].name}">
+            ${constants.statsData[stat as StatName].nameTiny}
           </abbr>
         </span>
       `);

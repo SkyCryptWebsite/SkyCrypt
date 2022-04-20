@@ -6,7 +6,7 @@ import * as constants from "../../../../common/constants.js";
 @customElement("player-stat")
 export class PlayerStat extends LitElement {
   @property({ attribute: "stat" })
-  stat?: StatName2;
+  stat?: StatName;
 
   @property({ attribute: "value" })
   value?: string;

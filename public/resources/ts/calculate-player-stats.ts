@@ -168,7 +168,7 @@ function getBonusStat(level: number, key: BonusType, max: number) {
       const stepBonuses: ItemStats = ObjOfLevelBonuses[step];
 
       for (const statNameString in stepBonuses) {
-        const statName: StatName2 = statNameString as StatName2;
+        const statName: StatName = statNameString as StatName;
         bonus[statName] ??= 0;
         bonus[statName] = (bonus[statName] || 0) + (stepBonuses?.[statName] ?? 0);
       }
