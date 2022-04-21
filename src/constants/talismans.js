@@ -712,6 +712,11 @@ export const talismans = {
     rarity: "epic",
     texture: "/head/89cbbbe7ed0356d5846596c4ad1cfa9fa719db1c4568f3f7f0c7979e7a401208",
   },
+  PULSE_RING: {
+    name: "Pulse Ring",
+    rarity: "uncommon",
+    texture: "/head/e5ebf6f14301d3ebd14533587d2a2d48234433b17c9d2f13934b7cab458ee267",
+  },
 };
 
 // Getting Unique Accessories Count
