@@ -105,6 +105,9 @@ export const talisman_upgrades = {
   POWER_TALISMAN: ["POWER_RING", "POWER_ARTIFACT"],
   POWER_RING: ["POWER_ARTIFACT"],
   BINGO_TALISMAN: ["BINGO_RING"],
+  ODGERS_BRONZE_TOOTH: ["ODGERS_GOLD_TOOTH", "ODGERS_DIAMOND_TOOTH", "ODGERS_SILVER_TOOTH"],
+  ODGERS_GOLD_TOOTH: ["ODGERS_DIAMOND_TOOTH", "ODGERS_SILVER_TOOTH"],
+  ODGERS_DIAMOND_TOOTH: ["ODGERS_SILVER_TOOTH"],
 };
 
 export const talisman_duplicates = {
@@ -658,6 +661,31 @@ export const talismans = {
     name: "Bingo Ring",
     rarity: "uncommon",
     texture: "/head/22f2499ab4cfc97e65f0fa9fe63cc606707a4ae96af407846b1b5354f3fad99",
+  },
+  JACOBUS_REGISTER: {
+    name: "Jacobus Register",
+    rarity: "legendary",
+    texture: "/head/3b648b9a44e280bcdf25f4a66a97bd5c33542e5e82415e15b475c6b999b8d635",
+  },
+  ODGERS_BRONZE_TOOTH: {
+    name: "Odgers Bronze Tooth",
+    rarity: "common",
+    texture: "/head/accc4432efe08c88530ac084fea6526641a207d78e637e41f7a4e5dcfdaaa162",
+  },
+  ODGERS_SILVER_TOOTH: {
+    name: "Odger's Silver Tooth",
+    rarity: "uncommon",
+    texture: "/head/c2d41b2279abce5fd626923b61e3ab98dce4972417289ee2b73214c0aaba841e",
+  },
+  ODGERS_GOLD_TOOTH: {
+    name: "Odgers Gold Tooth",
+    rarity: "rare",
+    texture: "/head/42024901024636f1c074e6562285f4cc9fd3da2885d4010cee52cc0696d2f96a",
+  },
+  ODGERS_DIAMOND_TOOTH: {
+    name: "Odger's Diamond Tooth",
+    rarity: "epic",
+    texture: "/head/a2680a28962e9ad2d4872d06fba2cc60824fbb2d0824e42d958575b7563884aa",
   },
 };
 
