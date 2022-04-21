@@ -151,4 +151,25 @@ export const gemstones = {
       },
     },
   },
+  OPAL: {
+    name: "Opal",
+    color: "f",
+    stats: {
+      ROUGH: {
+        true_defense: [null, null, null, null, null, null, null],
+      },
+      FLAWED: {
+        true_defense: [null, null, null, null, null, null, null],
+      },
+      FINE: {
+        true_defense: [null, null, null, null, 4, null, null],
+      },
+      FLAWLESS: {
+        true_defense: [null, null, null, null, null, null, null],
+      },
+      PERFECT: {
+        true_defense: [null, null, null, null, null, null, null],
+      },
+    },
+  },
 };
