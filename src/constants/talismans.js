@@ -702,6 +702,16 @@ export const talismans = {
     rarity: "legendary",
     texture: "/head/ece252963a5188cef8ede9d8523bd91d284a785b418b39eec29a91aea07c61e2",
   },
+  BURSTSTOPPER_TALISMAN: {
+    name: "Burststopper Talisman",
+    rarity: "rare",
+    texture: "/head/5b68ad1a3ac2444d7bddc22eefecd5d61b4d326871179119c52a7740b4d83cc7",
+  },
+  BURSTSTOPPER_ARTIFACT: {
+    name: "Burststopper Artifact",
+    rarity: "epic",
+    texture: "/head/89cbbbe7ed0356d5846596c4ad1cfa9fa719db1c4568f3f7f0c7979e7a401208",
+  },
 };
 
 // Getting Unique Accessories Count
