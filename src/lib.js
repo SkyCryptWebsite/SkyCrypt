@@ -1003,6 +1003,14 @@ export const getItems = async (
 
   const talismans = [];
   const talisman_ids = [];
+  const talisman_rarities = {
+    common: 0,
+    uncommon: 0,
+    rare: 0,
+    epic: 0,
+    legendary: 0,
+    mythic: 0,
+  }
 
   // Modify talismans on armor and add
   for (const talisman of armor.filter((a) => a.categories.includes("accessory"))) {
@@ -1068,6 +1076,7 @@ export const getItems = async (
 
     talismans.push(insertTalisman);
     talisman_ids.push(id);
+    talisman_rarities[insertTalisman.rarity]++;
   }
 
   // Add inactive talismans from enderchest and backpacks
@@ -1187,6 +1196,7 @@ export const getItems = async (
 
   output.talismans = talismans;
   output.talisman_ids = talisman_ids;
+  output.talisman_rarities = talisman_rarities;
 
   output.weapons = all_items.filter((a) => a.categories?.includes("weapon"));
   output.farming_tools = all_items.filter((a) => a.categories?.includes("farming_tool"));
