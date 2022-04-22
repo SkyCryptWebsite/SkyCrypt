@@ -63,7 +63,7 @@ export function getPlayerStats() {
   }
 
   // Held item stats
-  {
+  if (items.highest_rarity_sword) {
     const bonusStats: ItemStats = helper.getStatsFromItem(items.highest_rarity_sword as unknown as Item);
 
     for (const [name, value] of Object.entries(bonusStats)) {
@@ -121,7 +121,7 @@ export function getPlayerStats() {
   }
 
   // Fairy souls
-  {
+  if (calculated.fairy_exchanges) {
     const bonusStats: ItemStats = getFairyBonus(calculated.fairy_exchanges);
 
     for (const [name, value] of Object.entries(bonusStats)) {
@@ -132,7 +132,7 @@ export function getPlayerStats() {
 
   // New year cake bag
   {
-    const cakeBag = items.talisman_bag.find((x) => (x as Item).tag.ExtraAttributes?.id === "NEW_YEAR_CAKE_BAG");
+    const cakeBag = items.talisman_bag.find((x) => (x as Item).tag?.ExtraAttributes?.id === "NEW_YEAR_CAKE_BAG");
 
     if (cakeBag && (cakeBag as Backpack).containsItems?.length > 0) {
       stats.health.new_year_cake_bag = (cakeBag as Backpack).containsItems.length;

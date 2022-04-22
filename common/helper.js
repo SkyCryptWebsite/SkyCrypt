@@ -17,6 +17,10 @@ export function getStatsFromItem(piece) {
   const regex = /^([A-Za-z ]+): ([+-]([0-9]+\.?[0-9]*))/;
   const stats = {};
 
+  if (!piece) {
+    return stats;
+  }
+
   const lore = (piece.tag.display.Lore || []).map((line) => removeFormatting(line));
 
   for (const line of lore) {
