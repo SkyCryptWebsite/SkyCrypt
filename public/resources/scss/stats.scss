@@ -45,7 +45,7 @@
 }
 
 #base_stats_container {
-  columns: 190px auto;
+  columns: 200px auto;
   .basic-stat {
     margin-top: 0;
   }
@@ -952,6 +952,11 @@ a.additional-player-stat:hover {
 .stat-pristine,
 .color-pristine {
   color: var(--§5);
+}
+
+.stat-true-defense,
+.color-true-defense {
+  color: var(--§f);
 }
 
 .stat-container {
@@ -2572,5 +2577,21 @@ inventory-view {
 @media (max-width: 350px) {
   .piece-icon {
     transform: translate(-50%, -50%) scale(0.35);
+  }
+}
+
+bonus-stats {
+  .bonus-stat {
+    margin: 0 2px;
+  }
+}
+
+// todo: properly clean up select-weapon in second front-end stats pull request
+.stat-weapons .piece,
+.stat-fishing .piece {
+  margin-bottom: 0;
+  .select-weapon,
+  .select-rod {
+    display: none;
   }
 }

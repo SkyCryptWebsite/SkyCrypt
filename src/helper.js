@@ -8,6 +8,8 @@ import path from "path";
 import fs from "fs-extra";
 
 export { renderLore, formatNumber } from "../common/formatting.js";
+export * from "../common/helper.js";
+import { titleCase } from "../common/helper.js";
 
 import * as constants from "./constants.js";
 import credentials from "./credentials.js";
@@ -365,34 +367,6 @@ export function getGuildLevel(xp) {
  */
 export function getRawLore(text) {
   return text.replaceAll(/§[0-9a-fk-or]/g, "");
-}
-
-/**
- * @param {string} word
- * @returns {string}
- * @example
- * // returns "Hello world"
- * capitalizeFirstLetter("hello world");
- */
-export function capitalizeFirstLetter(word) {
-  return word.charAt(0).toUpperCase() + word.slice(1);
-}
-
-/**
- * @param {string} word
- * @returns {string}
- * @example
- * // returns "Hello World"
- * capitalizeFirstLetter("hello world");
- */
-export function titleCase(string) {
-  let split = string.toLowerCase().split(" ");
-
-  for (let i = 0; i < split.length; i++) {
-    split[i] = split[i].charAt(0).toUpperCase() + split[i].substring(1);
-  }
-
-  return split.join(" ");
 }
 
 /**
@@ -791,7 +765,9 @@ export function generateGemLore(type, tier, rarity) {
         }
 
         if (stat_value) {
-          stats.push(["§", constants.stats_colors[stat], "+", stat_value, constants.stats_symbols[stat]].join(""));
+          stats.push(
+            ["§", constants.statsData[stat].color, "+", stat_value, " ", constants.statsData[stat].symbol].join("")
+          );
         } else {
           stats.push("§c§oMISSING VALUE§r");
         }
@@ -903,15 +879,6 @@ export function calcHotmTokens(hotmTier, potmTier) {
   }
 
   return tokens;
-}
-
-/**
- * removes Minecraft formatting codes from a string
- * @param {string} string
- * @returns {string}
- */
-export function removeFormatting(string) {
-  return string.replaceAll(/§[0-9a-z]/g, "");
 }
 
 /**

@@ -13,7 +13,6 @@ import axios from "axios";
 import moment from "moment";
 import { v4 } from "uuid";
 import retry from "async-retry";
-
 import credentials from "./credentials.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -642,6 +641,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
         const statValue = parseFloat(split[1].trim().replaceAll(",", ""));
 
         if (statType in constants.statNames) {
+          // todo: get rid of common/constants/stats "export const statNames" after nuking this
           item.stats[constants.statNames[statType]] = statValue;
         }
       });
@@ -1584,6 +1584,7 @@ export const getStats = async (
   output.total_skill_xp = total_skill_xp;
   output.average_level_rank = average_level_rank;
   output.level_caps = levelCaps;
+  output.fairy_exchanges = userProfile.fairy_exchanges;
 
   output.skill_bonus = {};
 
@@ -1592,6 +1593,7 @@ export const getStats = async (
       continue;
     }
 
+    // todo: when removing backend stats, nuke this and the src/constants/bonuses.js
     const skillBonus = getBonusStat(levels[skill].level || levels[skill], `${skill}_skill`, levels[skill].levelCap, 1);
 
     output.skill_bonus[skill] = Object.assign({}, skillBonus);

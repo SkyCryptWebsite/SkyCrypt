@@ -4,6 +4,8 @@ import tippy from "tippy.js";
 
 import { renderLore } from "../../../common/formatting.js";
 
+import { getPlayerStats } from "./calculate-player-stats";
+
 import("./elements/inventory-view");
 
 const favoriteElement = document.querySelector(".favorite") as HTMLButtonElement;
@@ -965,4 +967,53 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
       "B"
     );
   }
+}
+
+// Player stats
+{
+  const stats = getPlayerStats();
+
+  // Print the player stats
+  const parent = document.querySelector("#base_stats_container");
+
+  for (const stat in stats) {
+    const node = document.createElement("player-stat");
+
+    node.setAttribute("stat", stat);
+    node.setAttribute(
+      "value",
+      Object.values(stats[stat])
+        .reduce((a, b) => a + b, 0)
+        .toString()
+    );
+    node.setAttribute("data", btoa(JSON.stringify(stats[stat])));
+
+    parent?.appendChild(node);
+  }
+
+  // Print bonus stats
+  document.querySelectorAll("[data-bonus-stats]").forEach((element) => {
+    const targetraw = (element as HTMLElement).dataset.bonusStats;
+
+    if (!targetraw) {
+      return;
+    }
+
+    const targets = targetraw.split(",");
+    const bonusStats: { [key: string]: number } = {};
+
+    for (const stat in stats) {
+      for (const target of targets) {
+        if (Object.keys(stats[stat]).includes(target)) {
+          bonusStats[stat] ??= 0;
+          bonusStats[stat] += stats[stat][target];
+        }
+      }
+    }
+
+    const node = document.createElement("bonus-stats");
+    node.setAttribute("data", btoa(JSON.stringify(bonusStats)));
+
+    element.appendChild(node);
+  });
 }

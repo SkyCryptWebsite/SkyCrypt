@@ -54,27 +54,25 @@ declare function applyProcessedTheme(processedTheme: ProcessedTheme): void;
 declare const items: { [key: string]: (ItemSlot | Item | Backpack)[] };
 
 type StatName =
-  | "ability_damage"
-  | "bonus_attack_speed"
+  | "health"
+  | "defense"
+  | "strength"
+  | "speed"
   | "crit_chance"
   | "crit_damage"
-  | "damage"
-  | "damage_increase"
-  | "defense"
-  | "effective_health"
-  | "farming_fortune"
-  | "ferocity"
-  | "foraging_fortune"
-  | "health"
   | "intelligence"
-  | "magic_find"
-  | "mining_fortune"
-  | "mining_speed"
-  | "pet_luck"
-  | "pristine"
+  | "bonus_attack_speed"
   | "sea_creature_chance"
-  | "speed"
-  | "strength";
+  | "magic_find"
+  | "pet_luck"
+  | "true_defense"
+  | "ferocity"
+  | "ability_damage"
+  | "mining_speed"
+  | "mining_fortune"
+  | "farming_fortune"
+  | "foraging_fortune"
+  | "pristine";
 
 interface DisplayItem {
   display_name: string;
@@ -102,6 +100,7 @@ interface Item extends DisplayItem, ItemSlot {
   };
   tag: ItemTag;
   texture_pack?: Pack;
+  isInactive?: boolean;
 }
 
 interface ItemTag {
@@ -337,6 +336,7 @@ declare const calculated: SkyCryptPlayer & {
   fairy_bonus: {
     [key in StatName]?: number;
   };
+  fairy_exchanges: number;
   fairy_souls: {
     collected: number;
     progress: number;
@@ -660,4 +660,43 @@ interface UADataValues {
   uaFullVersion: string;
 }
 
+interface PlayerStats {
+  [key: string]: {
+    [key: string]: number;
+  };
+}
+
 declare const redocInit: ((color?: string) => void) | undefined;
+
+type ItemStats = {
+  [key in StatName]?: number;
+};
+
+type BonusType =
+  | "skill_farming"
+  | "skill_mining"
+  | "skill_combat"
+  | "skill_foraging"
+  | "skill_fishing"
+  | "skill_enchanting"
+  | "skill_alchemy"
+  | "skill_taming"
+  | "skill_dungeoneering"
+  | "skill_social"
+  | "skill_carpentry"
+  | "skill_runecrafting"
+  | "slayer_zombie"
+  | "slayer_spider"
+  | "slayer_wolf"
+  | "slayer_enderman"
+  | "slayer_blaze";
+
+type StatsBonus = {
+  [key in BonusType]: StatBonusType;
+};
+
+interface StatBonusType {
+  [key: string]: {
+    [key in StatName]?: number;
+  };
+}

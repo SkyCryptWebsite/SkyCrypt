@@ -1,4 +1,4 @@
-import { stats_symbols as symbols } from "./stats.js";
+import { symbols } from "../../common/constants.js";
 import { round, floor, ceil, convertHMS, titleCase } from "../helper.js";
 
 const upgrade_types = {
