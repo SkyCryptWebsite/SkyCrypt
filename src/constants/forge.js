@@ -16,6 +16,7 @@ export const forge_times = {
   PERFECT_AMBER_GEM: 20 * 60,
   PERFECT_TOPAZ_GEM: 20 * 60,
   PERFECT_AMETHYST_GEM: 20 * 60,
+  PERFECT_OPAL_GEM: 20 * 60,
   BEACON_2: 20 * 60,
   BEACON_3: 30 * 60,
   BEACON_4: 40 * 60,
