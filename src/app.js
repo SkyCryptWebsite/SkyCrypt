@@ -325,18 +325,18 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
 app.all("/texture/:uuid", cors(), async (req, res) => {
   const { uuid } = req.params;
 
-  const filename = `texture_${uuid}.png`;
+  const filePath = helper.getCacheFilePath(cachePath, "texture", uuid);
   res.set("X-Cluster-ID", `${helper.getClusterId()}`);
 
   let file;
 
   try {
-    file = await fs.readFile(path.resolve(cachePath, filename));
+    file = await fs.readFile(filePath);
   } catch (e) {
     try {
       file = (await axios.get(`https://textures.minecraft.net/texture/${uuid}`, { responseType: "arraybuffer" })).data;
 
-      fs.writeFile(path.resolve(cachePath, filename), file, (err) => {
+      fs.writeFile(filePath, file, (err) => {
         if (err) {
           console.error(err);
         }
@@ -365,13 +365,13 @@ app.all("/cape/:username", cors(), async (req, res) => {
     return;
   }
 
-  const filename = path.resolve(cachePath, `cape_${username}.png`);
+  const filePath = helper.getCacheFilePath(cachePath, "cape", username);
 
   let file;
 
   try {
     // try to use file from disk
-    const fileStats = await fs.stat(filename);
+    const fileStats = await fs.stat(filePath);
 
     const optifineCape = await axios.head(`https://optifine.net/capes/${username}.png`);
     const lastUpdated = moment(optifineCape.headers["last-modified"]);
@@ -379,14 +379,14 @@ app.all("/cape/:username", cors(), async (req, res) => {
     if (lastUpdated.unix() > fileStats.mtime) {
       throw new Error("optifine cape changed");
     } else {
-      file = await fs.readFile(filename);
+      file = await fs.readFile(filePath);
     }
   } catch (e) {
     // file on disk could not be used so try to get from network
     try {
       file = (await axios.get(`https://optifine.net/capes/${username}.png`, { responseType: "arraybuffer" })).data;
 
-      fs.writeFile(filename, file, (err) => {
+      fs.writeFile(filePath, file, (err) => {
         if (err) {
           console.error(err);
         }
@@ -407,16 +407,16 @@ app.all("/cape/:username", cors(), async (req, res) => {
 app.all("/head/:uuid", cors(), async (req, res) => {
   const { uuid } = req.params;
 
-  const filename = `head_${uuid}.png`;
+  const filePath = helper.getCacheFilePath(cachePath, "head", uuid);
 
   let file;
 
   try {
-    file = await fs.readFile(path.resolve(cachePath, filename));
+    file = await fs.readFile(filePath);
   } catch (e) {
     file = await renderer.renderHead(`http://textures.minecraft.net/texture/${uuid}`, 6.4);
 
-    fs.writeFile(path.resolve(cachePath, filename), file, (err) => {
+    fs.writeFile(filePath, file, (err) => {
       if (err) {
         console.error(err);
       }
@@ -468,16 +468,15 @@ app.all("/leather/:type/:color", cors(), async (req, res) => {
     return;
   }
 
-  const filename = `leather_${type}_${color}.png`;
-
+  const filePath = helper.getCacheFilePath(cachePath, `leather`, `${type}_${color}`);
   let file;
 
   try {
-    file = await fs.readFile(path.resolve(cachePath, filename));
+    file = await fs.readFile(filePath);
   } catch (e) {
     file = await renderer.renderArmor(type, color);
 
-    fs.writeFile(path.resolve(cachePath, filename), file, (err) => {
+    fs.writeFile(filePath, file, (err) => {
       if (err) {
         console.error(err);
       }
@@ -506,16 +505,15 @@ app.all("/potion/:type/:color", cors(), async (req, res) => {
     return;
   }
 
-  const filename = `potion_${type}_${color}.png`;
-
+  const filePath = helper.getCacheFilePath(cachePath, `potion`, `${type}_${color}`);
   let file;
 
   try {
-    file = await fs.readFile(path.resolve(cachePath, filename));
+    file = await fs.readFile(filePath);
   } catch (e) {
     file = await renderer.renderPotion(type, color);
 
-    fs.writeFile(path.resolve(cachePath, filename), file, (err) => {
+    fs.writeFile(filePath, file, (err) => {
       if (err) {
         console.error(err);
       }
