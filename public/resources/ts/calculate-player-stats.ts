@@ -134,8 +134,12 @@ export function getPlayerStats() {
   {
     const cakeBag = items.talisman_bag.find((x) => (x as Item).tag?.ExtraAttributes?.id === "NEW_YEAR_CAKE_BAG");
 
-    if (cakeBag && (cakeBag as Backpack).containsItems?.length > 0) {
-      stats.health.new_year_cake_bag = (cakeBag as Backpack).containsItems.length;
+    if (cakeBag && (cakeBag as Backpack).containsItems) {
+      const totalCakes = (cakeBag as Backpack).containsItems.filter((x) => x.display_name).length;
+
+      if (totalCakes > 0) {
+        stats.health.new_year_cake_bag = totalCakes;
+      }
     }
   }
 
