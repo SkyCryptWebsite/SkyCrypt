@@ -135,7 +135,8 @@ setInterval(updateCacheOnly, 60_000 * 5);
 function updateCommitHash() {
   return execSync("git rev-parse HEAD", { cwd: path.resolve(__dirname, "../") })
     .toString()
-    .trim();
+    .trim()
+    .slice(0, 10);
 }
 const commitHash = updateCommitHash();
 
