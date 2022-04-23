@@ -52,13 +52,11 @@ export class PlayerStat extends LitElement {
     }
 
     for (const [key, val] of Object.entries(data)) {
-      if (key === "base") {
+      if (key === "base" || typeof val !== "number") {
         continue;
       }
 
-      tooltip_bonus.push(
-        `- ${this.getPrettyDataName(key)} ${(val as number) < 0 ? "" : "+"}${(val as number).toLocaleString()}${suffix}`
-      );
+      tooltip_bonus.push(`- ${this.getPrettyDataName(key)} ${val < 0 ? "" : "+"}${val.toLocaleString()}${suffix}`);
     }
 
     tooltip.push(
