@@ -25,6 +25,8 @@ const config = {
     "public/resources/ts/elements/local-time.ts",
     "public/resources/ts/elements/rich-item.ts",
     "public/resources/ts/elements/skill-component.ts",
+    "public/resources/ts/elements/player-stat.ts",
+    "public/resources/ts/elements/bonus-stats.ts",
   ],
   output: {
     dir: "public/resources/js",

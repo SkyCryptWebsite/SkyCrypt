@@ -1,4 +1,5 @@
-import { statNames } from "./constants/misc.js";
+// todo: get rid of common/constants/stats "export const statNames" after nuking this file
+import { statNames } from "../common/constants.js";
 
 /**
  * adds a "+" to the beginning of positive numbers
@@ -39,7 +40,6 @@ export function makeLore(item) {
     }
 
     const statType = lore_raw[i].split(":")[0];
-
     const statName = statType.substring(2);
 
     if (statName in statNames) {

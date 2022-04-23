@@ -4,8 +4,12 @@ import sanitize from "mongo-sanitize";
 import "axios-debug-log";
 import { v4 } from "uuid";
 import retry from "async-retry";
+import path from "path";
+import fs from "fs-extra";
 
 export { renderLore, formatNumber } from "../common/formatting.js";
+export * from "../common/helper.js";
+import { titleCase } from "../common/helper.js";
 
 import * as constants from "./constants.js";
 import credentials from "./credentials.js";
@@ -363,34 +367,6 @@ export function getGuildLevel(xp) {
  */
 export function getRawLore(text) {
   return text.replaceAll(/§[0-9a-fk-or]/g, "");
-}
-
-/**
- * @param {string} word
- * @returns {string}
- * @example
- * // returns "Hello world"
- * capitalizeFirstLetter("hello world");
- */
-export function capitalizeFirstLetter(word) {
-  return word.charAt(0).toUpperCase() + word.slice(1);
-}
-
-/**
- * @param {string} word
- * @returns {string}
- * @example
- * // returns "Hello World"
- * capitalizeFirstLetter("hello world");
- */
-export function titleCase(string) {
-  let split = string.toLowerCase().split(" ");
-
-  for (let i = 0; i < split.length; i++) {
-    split[i] = split[i].charAt(0).toUpperCase() + split[i].substring(1);
-  }
-
-  return split.join(" ");
 }
 
 /**
@@ -804,7 +780,9 @@ export function generateGemLore(type, tier, rarity) {
         }
 
         if (stat_value) {
-          stats.push(["§", constants.stats_colors[stat], "+", stat_value, constants.stats_symbols[stat]].join(""));
+          stats.push(
+            ["§", constants.statsData[stat].color, "+", stat_value, " ", constants.statsData[stat].symbol].join("")
+          );
         } else {
           stats.push("§c§oMISSING VALUE§r");
         }
@@ -919,15 +897,6 @@ export function calcHotmTokens(hotmTier, potmTier) {
 }
 
 /**
- * removes Minecraft formatting codes from a string
- * @param {string} string
- * @returns {string}
- */
-export function removeFormatting(string) {
-  return string.replaceAll(/§[0-9a-z]/g, "");
-}
-
-/**
  * convert an amount of seconds into seconds minutes and hours
  * @param {string} seconds
  * @param {"friendly"|"friendlyhhmm"|"clock"} format
@@ -996,6 +965,40 @@ export function parseItemTypeFromLore(lore) {
     dungeon: !!r.dungeon,
     shiny: !!r.shiny,
   };
+}
+
+export function getCacheFilePath(dirPath, type, name) {
+  // we don't care about folder optimization when we're developing
+  if (process.env?.NODE_ENV == "development") {
+    return path.resolve(dirPath, `${type}_${name}.png`);
+  }
+
+  const subdirs = [type];
+
+  // for texture and head type, we get the first 2 characters to split them further
+  if (type == "texture" || type == "head") {
+    subdirs.push(name.slice(0, 2));
+  }
+
+  // for potion and leather type, we get what variant they are to split them further
+  if (type == "leather" || type == "potion") {
+    subdirs.push(name.split("_")[0]);
+  }
+
+  // check if the entire folder path is available
+  if (!fs.pathExistsSync(path.resolve(dirPath, subdirs.join("/")))) {
+    // check if every subdirectory is available
+    for (let i = 1; i <= subdirs.length; i++) {
+      const checkDirs = subdirs.slice(0, i);
+      const checkPath = path.resolve(dirPath, checkDirs.join("/"));
+
+      if (!fs.pathExistsSync(checkPath)) {
+        fs.mkdirSync(checkPath);
+      }
+    }
+  }
+
+  return path.resolve(dirPath, `${subdirs.join("/")}/${type}_${name}.png`);
 }
 
 function getCategoriesFromType(type) {

@@ -1,4 +1,4 @@
-import { stats_symbols as symbols } from "./stats.js";
+import { symbols } from "../../common/constants.js";
 
 export const pet_rarity_offset = {
   common: 0,
@@ -444,33 +444,6 @@ export const pet_value = {
   epic: 4,
   legendary: 5,
   mythic: 6,
-};
-
-export const pet_rewards = {
-  0: {
-    magic_find: 0,
-  },
-  10: {
-    magic_find: 1,
-  },
-  25: {
-    magic_find: 2,
-  },
-  50: {
-    magic_find: 3,
-  },
-  75: {
-    magic_find: 4,
-  },
-  100: {
-    magic_find: 5,
-  },
-  130: {
-    magic_find: 6,
-  },
-  175: {
-    magic_find: 7,
-  },
 };
 
 /*

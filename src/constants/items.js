@@ -21,14 +21,17 @@ export const typeToCategories = {
   item: ["item"],
   accessory: ["accessory"],
   arrow: ["arrow"],
-  "reforge stone": ["reforge stone"],
+  "reforge stone": ["reforge_stone"],
   cosmetic: ["cosmetic"],
-  "pet item": ["pet item"],
-  "travel scroll": ["travel scroll"],
+  "pet item": ["pet_item"],
+  "travel scroll": ["travel_scroll"],
   belt: ["belt"],
   cloak: ["cloak"],
   necklace: ["necklace"],
   gloves: ["gloves"],
+  bracelet: ["bracelet"],
+  deployable: ["deployable"],
+  "trophy fish": ["trophy_fish"],
 };
 
 /** @typedef {"common"|"uncommon"|"rare"|"epic"|"legendary"|"mythic"|"divine"|"supreme"|"special"|"very_special"} Rarity */
