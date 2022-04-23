@@ -43,7 +43,7 @@
     <link rel="preload" href="/resources/js/<%- fileNameMap['inventory-view'] %>" as="script">
   <% } %>
 
-  <% if (process.env.NODE_ENV === "development") { %>
+  <% if (page === "stats" && process.env.NODE_ENV === "development") { %>
     <script defer type="module" src="/resources/js/<%- fileNameMap['development-defer'] %>"></script>
   <% } %>
 
