@@ -23,10 +23,11 @@ export const minion_slots = {
   550: 24,
   600: 25,
   650: 26,
+  700: 27, // todo: this is just guessed
 };
 
 // From unique tiers (excludes community shop upgrades)
-export const minions_max_slots = 25;
+export const minions_max_slots = 26;
 
 export const minions = {
   COBBLESTONE: {
@@ -42,6 +43,7 @@ export const minions = {
   GLOWSTONE: {
     type: "mining",
     head: "/head/20f4d7c26b0310990a7d3a3b45948b95dd4ab407a16a4b6d3b7cb4fba031aeed",
+    tiers: 12,
   },
   GRAVEL: {
     type: "mining",
@@ -106,6 +108,7 @@ export const minions = {
   QUARTZ: {
     type: "mining",
     head: "/head/d270093be62dfd3019f908043db570b5dfd366fd5345fccf9da340e75c701a60",
+    tiers: 12,
   },
   ENDER_STONE: {
     name: "End Stone",
@@ -205,10 +208,12 @@ export const minions = {
   BLAZE: {
     type: "combat",
     head: "/head/3208fbd64e97c6e00853d36b3a201e4803cae43dcbd6936a3cece050912e1f20",
+    tiers: 12,
   },
   MAGMA_CUBE: {
     type: "combat",
     head: "/head/18c9a7a24da7e3182e4f62fa62762e21e1680962197c7424144ae1d2c42174f7",
+    tiers: 12,
   },
   ENDERMAN: {
     type: "combat",
@@ -217,6 +222,7 @@ export const minions = {
   GHAST: {
     type: "combat",
     head: "/head/2478547d122ec83a818b46f3b13c5230429559e40c7d144d4ec225f92c1494b3",
+    tiers: 12,
   },
   SLIME: {
     type: "combat",
@@ -280,6 +286,22 @@ export const minions = {
     name: "Hard Stone",
     type: "mining",
     head: "/head/1e8bab9493708beda34255606d5883b8762746bcbe6c94e8ca78a77a408c8ba8",
+    tiers: 12,
+  },
+  RED_SAND: {
+    name: "Red Sand",
+    type: "mining",
+    head: "/head/9d24991435e4e7fb1a9ad23db75c80aec300d003ec0c5963e0ed658634027889",
+    tiers: 12,
+  },
+  MYCELIUM: {
+    type: "mining",
+    head: "/head/fc8ebad72b77df3990e07bc869a99a8f8962d3c19c76e39d99553cae4131cc8",
+    tiers: 12,
+  },
+  INFERNO: {
+    type: "combat",
+    head: "/head/665c54366f88fb3280b1c3fc500ce2b799c8dd327ab6d41c9bc959488f5cfd92",
     tiers: 12,
   },
 };
