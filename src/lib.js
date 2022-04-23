@@ -2401,51 +2401,52 @@ export const getStats = async (
     misc.claimed_items = hypixelProfile.claimed_items;
   }
 
-  const response = await axios("https://api.hypixel.net/resources/achievements");
   let _tiered = { sum: 0, total: 0, completed: {}, uncompleted: {} };
   let _oneTime = { sum: 0, total: 0, completed: {}, uncompleted: {} };
-  if (response?.data?.achievements?.skyblock) {
-    let skyblock_achievements = response.data.achievements.skyblock;
-    let tieredAchievements = skyblock_achievements.tiered;
-    let oneTimeAchievements = skyblock_achievements.one_time;
+  for await (const tmp of db.collection("achievements").find()) {
+    if (tmp?.tiered) {
+      _tiered.total += tmp.achievement.tiers.map((a) => a.points).reduce((a, b) => a + b, 0);
 
-    for (const key in tieredAchievements) {
-      const tmp = tieredAchievements[key];
-      _tiered.total += tmp.tiers.map((a) => a.points).reduce((a, b) => a + b, 0);
       let tier = 0;
-      for (const req in tmp.tiers) {
-        if (tmp.tiers[req].amount <= hypixelProfile.achievements["skyblock_" + key.toLowerCase()]) {
+      for (const req in tmp.achievement.tiers) {
+        if (tmp.achievement.tiers[req].amount <= hypixelProfile.achievements["skyblock_" + tmp.id.toLowerCase()]) {
           tier++;
-          _tiered.sum += Number(tmp.tiers[req].points);
+          _tiered.sum += Number(tmp.achievement.tiers[req].points);
         }
       }
+
       let achievement = {
-        name: tmp.name,
-        description: tmp.description.replaceAll("%s", "x"),
-        level: hypixelProfile.achievements["skyblock_" + key.toLowerCase()] || 0,
+        name: tmp.achievement.name,
+        description: tmp.achievement.description.replaceAll("%s", "x"),
+        level: hypixelProfile.achievements["skyblock_" + tmp.id.toLowerCase()] || 0,
         tier: tier,
       };
+
       if (tier >= 5) {
-        _tiered.completed["skyblock_" + key.toLowerCase()] = achievement;
+        _tiered.completed["skyblock_" + tmp.id.toLowerCase()] = achievement;
       } else {
-        _tiered.uncompleted["skyblock_" + key.toLowerCase()] = achievement;
+        _tiered.uncompleted["skyblock_" + tmp.id.toLowerCase()] = achievement;
       }
-    }
-    for (const key in oneTimeAchievements) {
-      const tmp = oneTimeAchievements[key];
-      _oneTime.total += tmp.points;
-      let achievement = { name: tmp.name, description: tmp.description, reward: tmp.points };
+    } else if (tmp?.one_time) {
+      _oneTime.total += tmp.achievement.points;
+      let achievement = {
+        name: tmp.achievement.name,
+        description: tmp.achievement.description,
+        reward: tmp.achievement.points,
+      };
+
       if (
         hypixelProfile.achievementsOneTime &&
-        hypixelProfile.achievementsOneTime.includes("skyblock_" + key.toLowerCase())
+        hypixelProfile.achievementsOneTime.includes("skyblock_" + tmp.id.toLowerCase())
       ) {
-        _oneTime.completed["skyblock_" + key.toLowerCase()] = achievement;
-        _oneTime.sum += Number(tmp.points);
+        _oneTime.completed["skyblock_" + tmp.id.toLowerCase()] = achievement;
+        _oneTime.sum += Number(tmp.achievement.points);
       } else {
-        _oneTime.uncompleted["skyblock_" + key.toLowerCase()] = achievement;
+        _oneTime.uncompleted["skyblock_" + tmp.id.toLowerCase()] = achievement;
       }
     }
   }
+
   misc.achievements.tiered = _tiered;
   misc.achievements.oneTime = _oneTime;
 
