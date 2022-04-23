@@ -33,6 +33,7 @@ import { SitemapStream, streamToPromise } from "sitemap";
 import { createGzip } from "zlib";
 import twemoji from "twemoji";
 import cookieParser from "cookie-parser";
+import { execSync } from "child_process";
 
 import api from "./api.js";
 import apiv2 from "./apiv2.js";
@@ -131,6 +132,13 @@ async function updateCacheOnly() {
 updateCacheOnly();
 setInterval(updateCacheOnly, 60_000 * 5);
 
+function updateCommitHash() {
+  return execSync("git rev-parse HEAD", { cwd: path.resolve(__dirname, "../") })
+    .toString()
+    .trim();
+}
+const commitHash = updateCommitHash();
+
 const app = express();
 const port = process.env.SKYCRYPT_PORT ?? 32464;
 
@@ -210,6 +218,7 @@ async function getExtra(page = null, favoriteUUIDs = [], cacheOnly) {
 
   output.isFoolsDay = isFoolsDay;
   output.cacheOnly = cacheOnly;
+  output.commit_hash = commitHash;
 
   if (page === "index") {
     output.favorites = await getFavoritesFormUUIDs(favoriteUUIDs);
