@@ -1014,7 +1014,7 @@ export const getItems = async (
       rarity: "legendary",
       exists: false,
     },
-  }
+  };
 
   // Modify talismans on armor and add
   for (const talisman of armor.filter((a) => a.categories.includes("accessory"))) {
@@ -1081,7 +1081,7 @@ export const getItems = async (
     talismans.push(insertTalisman);
     talisman_ids.push(id);
     talisman_rarities[insertTalisman.rarity]++;
-    if(id == "HEGEMONY_ARTIFACT") talisman_rarities.hegemony = {rarity: insertTalisman.rarity, exists: true};
+    if (id == "HEGEMONY_ARTIFACT") talisman_rarities.hegemony = { rarity: insertTalisman.rarity, exists: true };
   }
 
   // Add inactive talismans from enderchest and backpacks
