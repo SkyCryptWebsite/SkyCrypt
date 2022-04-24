@@ -292,38 +292,6 @@ function formatReforge(string) {
   return reforge
 }
 
-function getReforges(accessories) {
-  const rarityReforgeCounts = {}
-
-  accessories.forEach(acc => {
-    const rarity = acc.rarity
-    const reforge = acc.reforge || 'missing_reforge!'
-
-    if (!rarityReforgeCounts[rarity]) {
-      rarityReforgeCounts[rarity] = {}
-    }
-    if (!rarityReforgeCounts[rarity][reforge]) {
-      rarityReforgeCounts[rarity][reforge] = 0
-    }
-    rarityReforgeCounts[rarity][reforge] += 1
-  })
-
-  %>
-  <span class="stat-name">Reforges: </span>
-  <%
-  for (const [rarity, reforges] of Object.entries(rarityReforgeCounts)) {
-    for (const [reforge, amount] of Object.entries(reforges)) {
-      %><span class="stat-value piece-<%= rarity %>-fg"><%= amount %>× <%= formatReforge(reforge) %></span><%
-      if (reforge !== Object.keys(reforges).pop()) {
-        %><span class="bonus-divider">, </span><%
-      }
-    }
-    if (rarity !== Object.keys(rarityReforgeCounts).pop()) {
-      %><span class="bonus-divider" role="separator"> // </span><%
-    }
-  }
-}
-
 function formatEnrichment(string) {
   let enrichment = string.split('_').join(' ').trim()
   enrichment = helper.titleCase(enrichment)
@@ -1328,7 +1296,6 @@ const metaDescription = getMetaDescription()
                 <% }) %>
                 <p>
                   <%- getEnrichments(items.talismans.filter(a => a.isUnique && !a.isInactive)) %>
-                  <%- getReforges(items.talismans.filter(a => a.isUnique && !a.isInactive)) %>
                 </p>
                 <p><%- getBonus(getStats(items.talismans.filter(a => a.isUnique && !a.isInactive))) %></p>
               </div>
