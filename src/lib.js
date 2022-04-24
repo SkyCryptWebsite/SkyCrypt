@@ -1010,6 +1010,10 @@ export const getItems = async (
     epic: 0,
     legendary: 0,
     mythic: 0,
+    hegemony: {
+      rarity: "legendary",
+      exists: false,
+    },
   }
 
   // Modify talismans on armor and add
@@ -1077,6 +1081,7 @@ export const getItems = async (
     talismans.push(insertTalisman);
     talisman_ids.push(id);
     talisman_rarities[insertTalisman.rarity]++;
+    if(id == "HEGEMONY_ARTIFACT") talisman_rarities.hegemony = {rarity: insertTalisman.rarity, exists: true};
   }
 
   // Add inactive talismans from enderchest and backpacks
