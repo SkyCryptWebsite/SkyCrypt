@@ -1305,10 +1305,10 @@ const metaDescription = getMetaDescription()
               <span style='color: var(--§6);' class='grey-text'>12 MP</span> x <span style='color: var(--§5);' class='grey-text'><%= items.talisman_rarities.epic %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= magical_power.epic %> MP</span><br>
               <span style='color: var(--§6);' class='grey-text'>8 MP</span> x <span style='color: var(--§1);' class='grey-text'><%= items.talisman_rarities.rare %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= magical_power.rare %> MP</span><br>
               <span style='color: var(--§6);' class='grey-text'>5 MP</span> x <span style='color: var(--§a);' class='grey-text'><%= items.talisman_rarities.uncommon %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= magical_power.uncommon %> MP</span><br>
-              <span style='color: var(--§6);' class='grey-text'>3 MP</span> x <span style='color: var(--§f);' class='grey-text'><%= items.talisman_rarities.common %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= magical_power.common %> MP</span><br>
+              <span style='color: var(--§6);' class='grey-text'>3 MP</span> x <span style='color: var(--§f);' class='grey-text'><%= items.talisman_rarities.common %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= magical_power.common %> MP</span><br><br>
               <% if(rarities.hegemony.exists) { %>
                 <% if(rarities.hegemony.rarity == "legendary") %>
-                <br><span <% if(rarities.hegemony.rarity == "legendary") { %>style='color: var(--§6);'<% } else { %>style='color: var(--§d);'<% } %> class='grey-text'>Hegemony Artifact</span> = <span style='color: var(--§6);' class='grey-text'>+<% if(rarities.hegemony.rarity == "legendary") { %>16<% } else { %>22<% } %> MP</span>.<br><br>
+                <span <% if(rarities.hegemony.rarity == "legendary") { %>style='color: var(--§6);'<% } else { %>style='color: var(--§d);'<% } %> class='grey-text'>Hegemony Artifact</span> = <span style='color: var(--§6);' class='grey-text'>+<% if(rarities.hegemony.rarity == "legendary") { %>16<% } else { %>22<% } %> MP</span>.<br><br>
               <% } %>
               Total: <span style='color: var(--§6);' class='grey-text'><%= mp_total %> Magical Power</span>
               "><span class="stat-name">Magical Power: </span><span class="stat-value"><%= mp_total %></span></span>
