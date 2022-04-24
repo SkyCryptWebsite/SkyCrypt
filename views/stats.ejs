@@ -2503,16 +2503,17 @@ const metaDescription = getMetaDescription()
               <% } %>
             </p>
           <% } %>
-          <% if('achievements' in calculated.misc){ %>
-          <% let list = calculated.misc.achievements; %>
-          <div class="category-header"><div class="category-icon"><div class="item-icon icon-340_0"></div></div><span>achievements</span></div>
-          <p class="stat-raw-values stat-achievements">
-            <% if('tiered' in list){ %>
-              <span class="stat-name<%= (list.tiered.sum >= list.tiered.total ?" golden-text":"") %>">Tiered Achievement Points: </span><span class="stat-value<%= (list.tiered.sum >= list.tiered.total ?" golden-text":"") %>"><%= list.tiered.sum %> / <%= list.tiered.total %></span><span class="grey-text"> (<%= Math.floor(list.tiered.sum / list.tiered.total * 100) %>%)</span><br>
-            <% } %>
-            <% if('oneTime' in list){ %>
-              <span class="stat-name<%= (list.oneTime.sum >= list.oneTime.total ?" golden-text":"") %>">One Time Achievement Points: </span><span class="stat-value<%= (list.oneTime.sum >= list.oneTime.total ?" golden-text":"") %>"><%= list.oneTime.sum %> / <%= list.oneTime.total %></span><span class="grey-text"> (<%= Math.floor(list.oneTime.sum / list.oneTime.total * 100) %>%)</span><br>
-            <% } %>
+          <% if ('achievements' in calculated.misc) { %>
+            <% const list = calculated.misc.achievements; %>
+            <div class="category-header"><div class="category-icon"><div class="item-icon icon-340_0"></div></div><span>achievements</span></div>
+            <p class="stat-raw-values stat-achievements">
+              <% if('tiered' in list){ %>
+                <span class="stat-name<%= (list.tiered.sum >= list.tiered.total ?" golden-text":"") %>">Tiered <abbr title="Achievement Points">AP</abbr>: </span><span class="stat-value<%= (list.tiered.sum >= list.tiered.total ?" golden-text":"") %>"><%= list.tiered.sum %> / <%= list.tiered.total %></span><span class="grey-text"> (<%= Math.floor(list.tiered.sum / list.tiered.total * 100) %>%)</span><br>
+              <% } %>
+              <% if('oneTime' in list){ %>
+                <span class="stat-name<%= (list.oneTime.sum >= list.oneTime.total ?" golden-text":"") %>">One Time <abbr title="Achievement Points">AP</abbr>: </span><span class="stat-value<%= (list.oneTime.sum >= list.oneTime.total ?" golden-text":"") %>"><%= list.oneTime.sum %> / <%= list.oneTime.total %></span><span class="grey-text"> (<%= Math.floor(list.oneTime.sum / list.oneTime.total * 100) %>%)</span><br>
+              <% } %>
+            </p>
 
             <div class="achievements-container narrow-info-container-wrapper">
               <div class="narrow-info-container achievements-tiered">
@@ -2554,7 +2555,6 @@ const metaDescription = getMetaDescription()
                 </div>
               </div>
             </div>
-          </p>
           <% } %>
         </div>
       </div>

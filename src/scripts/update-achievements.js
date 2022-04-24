@@ -8,7 +8,7 @@ const Hypixel = axios.create({
 
 async function updateAchievements() {
   try {
-    const response = await Hypixel.get("resources/achievements" /*, { params: { key: credentials.hypixel_api_key }}*/);
+    const response = await Hypixel.get("resources/achievements");
 
     const achievements = [];
     const { one_time, tiered } = response.data.achievements.skyblock;
