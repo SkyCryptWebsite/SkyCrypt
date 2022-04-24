@@ -1003,7 +1003,7 @@ export const getItems = async (
 
   const talismans = [];
   const talisman_ids = [];
-  const talisman_rarities = {
+  const accessory_rarities = {
     common: 0,
     uncommon: 0,
     rare: 0,
@@ -1080,8 +1080,8 @@ export const getItems = async (
 
     talismans.push(insertTalisman);
     talisman_ids.push(id);
-    talisman_rarities[insertTalisman.rarity]++;
-    if (id == "HEGEMONY_ARTIFACT") talisman_rarities.hegemony = { rarity: insertTalisman.rarity, exists: true };
+    accessory_rarities[insertTalisman.rarity]++;
+    if (id == "HEGEMONY_ARTIFACT") accessory_rarities.hegemony = { rarity: insertTalisman.rarity, exists: true };
   }
 
   // Add inactive talismans from enderchest and backpacks
@@ -1201,7 +1201,7 @@ export const getItems = async (
 
   output.talismans = talismans;
   output.talisman_ids = talisman_ids;
-  output.talisman_rarities = talisman_rarities;
+  output.accessory_rarities = accessory_rarities;
 
   output.weapons = all_items.filter((a) => a.categories?.includes("weapon"));
   output.farming_tools = all_items.filter((a) => a.categories?.includes("farming_tool"));
