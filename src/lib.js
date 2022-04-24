@@ -2401,8 +2401,8 @@ export const getStats = async (
     misc.claimed_items = hypixelProfile.claimed_items;
   }
 
-  let _tiered = { sum: 0, total: 0, completed: {}, uncompleted: {} };
-  let _oneTime = { sum: 0, total: 0, completed: {}, uncompleted: {} };
+  const _tiered = { sum: 0, total: 0, completed: {}, uncompleted: {} };
+  const _oneTime = { sum: 0, total: 0, completed: {}, uncompleted: {} };
   for await (const tmp of db.collection("achievements").find()) {
     if (tmp?.tiered) {
       _tiered.total += tmp.achievement.tiers.map((a) => a.points).reduce((a, b) => a + b, 0);
@@ -2415,7 +2415,7 @@ export const getStats = async (
         }
       }
 
-      let achievement = {
+      const achievement = {
         name: tmp.achievement.name,
         description: tmp.achievement.description.replaceAll("%s", "x"),
         level: hypixelProfile.achievements["skyblock_" + tmp.id.toLowerCase()] || 0,
@@ -2427,9 +2427,11 @@ export const getStats = async (
       } else {
         _tiered.uncompleted["skyblock_" + tmp.id.toLowerCase()] = achievement;
       }
-    } else if (tmp?.one_time) {
+    }
+
+    if (tmp?.one_time) {
       _oneTime.total += tmp.achievement.points;
-      let achievement = {
+      const achievement = {
         name: tmp.achievement.name,
         description: tmp.achievement.description,
         reward: tmp.achievement.points,
