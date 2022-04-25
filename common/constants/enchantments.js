@@ -76,7 +76,6 @@ export const maxEnchants = new Set([
   "Strong Mana X",
   "Sugar Rush III",
   "Syphon V",
-  "Telekinesis I",
   "Thorns III",
   "Thunderbolt VI",
   "Thunderlord VII",
