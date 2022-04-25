@@ -63,3 +63,13 @@ export function titleCase(string) {
 
   return split.join(" ");
 }
+
+/**
+ * rounds a number to a certain number of decimal places
+ * @param {number} num the number to be rounded
+ * @param {number} decimals the number of decimal places to round to
+ * @returns {number} the rounded number
+ */
+export function round(num, decimals = 0) {
+  return Math.round(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
+}
