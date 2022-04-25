@@ -1272,8 +1272,7 @@ const metaDescription = getMetaDescription()
               <span style='color: var(--§6);' class='grey-text'>5 MP</span> × <span style='color: var(--§a);' class='grey-text'><%= rarities.uncommon %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.uncommon.toLocaleString() %> MP</span><br>
               <span style='color: var(--§6);' class='grey-text'>3 MP</span> × <span style='color: var(--§f);' class='grey-text'><%= rarities.common %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.common.toLocaleString() %> MP</span><br><br>
               <% if(rarities.hegemony) { %>
-                <% if(rarities.hegemony.rarity == "legendary") %>
-                <span style='color: var(--<%= rarities.hegemony.rarity === "legendary" ? "§6" : "§d" %>);' class='grey-text'>Hegemony Artifact</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_hegemony.toLocaleString() %> MP</span><br><br>
+                <span style='color: var(--§<%= constants.rarityColors[rarities.hegemony.rarity] %>);' class='grey-text'>Hegemony Artifact</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_hegemony.toLocaleString() %> MP</span><br><br>
               <% } %>
               Total: <span style='color: var(--§6);' class='grey-text'><%= mp_total.toLocaleString() %> Magical Power</span>
               ">
