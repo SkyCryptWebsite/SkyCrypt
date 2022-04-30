@@ -95,9 +95,9 @@ export function getPlayerStats() {
   // Dungeoneering stats
   {
     const bonusStats: ItemStats = getBonusStat(
-      calculated.dungeons.catacombs.level.level,
+      calculated.dungeons?.catacombs?.level?.level ?? 0,
       "skill_dungeoneering",
-      calculated.dungeons.catacombs.level.maxLevel
+      calculated.dungeons?.catacombs?.level?.maxLevel ?? 50
     );
 
     for (const [name, value] of Object.entries(bonusStats)) {
