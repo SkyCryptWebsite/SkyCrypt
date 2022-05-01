@@ -732,3 +732,12 @@ for (const upgrade in talisman_upgrades) {
 }
 
 export const unique_accessories_count = Object.keys(unique_accessories).length;
+
+export const magical_power = {
+  common: 3,
+  uncommon: 5,
+  rare: 8,
+  epic: 12,
+  legendary: 16,
+  mythic: 22,
+};
