@@ -1,6 +1,6 @@
-import * as helper from "./helper.js";
-import * as lib from "./lib.js";
-import { collection_data } from "./constants.js";
+import * as helper from "../helper.js";
+import * as lib from "../lib.js";
+import { collection_data } from "../constants.js";
 import cors from "cors";
 
 /**

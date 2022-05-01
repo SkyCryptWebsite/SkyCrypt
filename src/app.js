@@ -35,8 +35,8 @@ import twemoji from "twemoji";
 import cookieParser from "cookie-parser";
 import { execSync } from "child_process";
 
-import api from "./api.js";
-import apiv2 from "./apiv2.js";
+import api from "./routes/api.js";
+import { router as apiv2Router, init as apiv2Init } from "./routes/apiv2.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -165,8 +165,10 @@ app.use(
   })
 );
 
+await apiv2Init();
+app.use("/api/v2", apiv2Router);
+
 api(app, db);
-apiv2(app, db);
 
 function parseFavorites(cookie) {
   return cookie?.split(",").filter((uuid) => /^[0-9a-f]{32}$/.test(uuid)) || [];
