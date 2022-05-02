@@ -34,7 +34,10 @@ export const stats_bonus = {
   skill_taming: {
     1: { pet_luck: 1 },
   },
-  skill_dungeoneering: { 1: { health: 2 } },
+  skill_dungeoneering: {
+    1: { health: 2 },
+    51: { health: 0 },
+  },
   skill_social: {},
   skill_carpentry: {},
   skill_runecrafting: {},
