@@ -140,7 +140,7 @@ function updateCommitHash() {
 }
 const commitHash = updateCommitHash();
 
-const featuredProfiles = await fs.readJSONSync(path.resolve("./public/resources/js/featured-profiles.json"));
+const featuredProfiles = fs.readJSONSync(path.resolve("./public/resources/js/featured-profiles.json"));
 
 const app = express();
 const port = process.env.SKYCRYPT_PORT ?? 32464;
