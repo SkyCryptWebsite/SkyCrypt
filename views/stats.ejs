@@ -265,7 +265,6 @@ function getEnrichments(accessories) {
       }
     }
     %>
-    <br>
     <%
   }
 }
@@ -1067,10 +1066,10 @@ const metaDescription = getMetaDescription()
                     <% itemIcon(item, ['piece-icon']); %>
                   </div>
                 <% }) %>
-                <p>
-                  <%- getEnrichments(items.talismans.filter(a => a.isUnique && !a.isInactive)) %>
-                </p>
-                <div data-bonus-stats="accessories,new_year_cake_bag"></div>
+                <div class="accessories-extras">
+                  <div><%- getEnrichments(items.talismans.filter(a => a.isUnique && !a.isInactive)) %></div>
+                  <div data-bonus-stats="accessories,new_year_cake_bag"></div>
+                </div>
               </div>
             <% } %>
             <% if(items.talismans.find(a => a.isUnique && a.isInactive) != undefined){ %>
