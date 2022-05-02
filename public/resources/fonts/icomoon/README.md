@@ -12,7 +12,10 @@ First off find the UNICODE character you want to edit, you can use [this website
 
 Then import the icomoon font in the app and add a new character by dropping an svg in the selection. At this point go to "Generate Font" and make sure to associate your newly imported icon to the correct character.
 
-If you want you can resize the icon; for dungeon stars and dungeon master stars I scaled down 10 times the icons (by using IcoMoon GUI, clicking 10 times the "scale down" button) and then aligned the svg bottom left. For skill icons I kept their original size and centered them middle center.
+If you want you can resize the icon:
+
+- for dungeon stars and dungeon master stars I scaled down 10 times the icons (by using IcoMoon GUI, clicking 10 times the "scale down" button) and then aligned the svg bottom center
+- for skill icons I kept their original size and centered them middle center.
 
 Download the generated SVG font, replace the files in the `/public/resources/fonts/icomoon/` directory:
 
