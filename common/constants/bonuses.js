@@ -74,7 +74,6 @@ export const stats_bonus = {
     8: { intelligence: 4 },
     9: { health: 5 },
   },
-  // todo: values below are from AHN, check again upon blaze slayer release
   slayer_blaze: {
     1: { health: 3 },
     2: { strength: 1 },
