@@ -51,27 +51,29 @@ export class PlayerStat extends LitElement {
       return tooltip;
     }
 
-    for (const [key, val] of Object.entries(data)) {
-      if (key === "base" || typeof val !== "number") {
-        continue;
-      }
-
-      tooltip_bonus.push(`- ${this.getPrettyDataName(key)} ${val < 0 ? "" : "+"}${val.toLocaleString()}${suffix}`);
-    }
-
     tooltip.push(
       `<span class="stat-name">Base ${name}: </span>`,
-      `<span class="stat-value">${data.base.toLocaleString()}${suffix}</span>`,
+      `<span class="stat-value">${helper.round(data.base, 1).toLocaleString()}${suffix}</span>`,
       "<br/>",
       "<span class='tippy-explanation'>Base value every player has at the beginning of their SkyBlock adventure!</span>"
     );
 
     if (value - data.base > 0) {
+      for (const [key, val] of Object.entries(data)) {
+        if (key === "base" || typeof val !== "number") {
+          continue;
+        }
+
+        tooltip_bonus.push(
+          `- ${this.getPrettyDataName(key)} ${val < 0 ? "" : "+"}${helper.round(val, 1).toLocaleString()}${suffix}`
+        );
+      }
+
       tooltip.push(
         "<br/>",
         "<br/>",
         `<span class="stat-name">Bonus ${name}: </span>`,
-        `<span class="stat-value">${(value - data.base).toLocaleString()}${suffix}</span>`,
+        `<span class="stat-value">${helper.round(value - data.base, 1).toLocaleString()}${suffix}</span>`,
         "<br/>",
         `<span class='tippy-explanation'>Bonus value obtain from: <br>${tooltip_bonus.join("<br>")}</span>`
       );

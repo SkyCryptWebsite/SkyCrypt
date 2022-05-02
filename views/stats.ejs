@@ -213,38 +213,6 @@ function formatReforge(string) {
   return reforge
 }
 
-function getReforges(accessories) {
-  const rarityReforgeCounts = {}
-
-  accessories.forEach(acc => {
-    const rarity = acc.rarity
-    const reforge = acc.reforge || 'missing_reforge!'
-
-    if (!rarityReforgeCounts[rarity]) {
-      rarityReforgeCounts[rarity] = {}
-    }
-    if (!rarityReforgeCounts[rarity][reforge]) {
-      rarityReforgeCounts[rarity][reforge] = 0
-    }
-    rarityReforgeCounts[rarity][reforge] += 1
-  })
-
-  %>
-  <span class="stat-name">Reforges: </span>
-  <%
-  for (const [rarity, reforges] of Object.entries(rarityReforgeCounts)) {
-    for (const [reforge, amount] of Object.entries(reforges)) {
-      %><span class="stat-value piece-<%= rarity %>-fg"><%= amount %>× <%= formatReforge(reforge) %></span><%
-      if (reforge !== Object.keys(reforges).pop()) {
-        %><span class="bonus-divider">, </span><%
-      }
-    }
-    if (rarity !== Object.keys(rarityReforgeCounts).pop()) {
-      %><span class="bonus-divider" role="separator"> // </span><%
-    }
-  }
-}
-
 function formatEnrichment(string) {
   let enrichment = string.split('_').join(' ').trim()
   enrichment = helper.titleCase(enrichment)
@@ -1056,6 +1024,35 @@ const metaDescription = getMetaDescription()
               <br>
               <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
               <span class="stat-value <%= maxRecombTalis %>"><%= items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= constants.unique_accessories_count %></span>
+              <br>
+              <%
+                const rarities = items.accessory_rarities;
+                const player_magical_power = {}
+
+                for (const rarity in constants.magical_power) {
+                  player_magical_power[rarity] = 0
+                  player_magical_power[rarity] += rarities[rarity] * constants.magical_power[rarity];
+                }
+
+                const mp_hegemony = rarities.hegemony ? constants.magical_power[rarities.hegemony.rarity] : 0
+                const mp_total = Object.values(player_magical_power).reduce((a, b) => a + b) + mp_hegemony;
+              %>
+              <span data-tippy-content="
+              Accessories Breakdown<br>
+              <span style='color: var(--§8);' class='grey-text'>From your accessory bag</span><br><br>
+              <span style='color: var(--§6);' class='grey-text'>22 MP</span> × <span style='color: var(--§d);' class='grey-text'><%= rarities.mythic %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.mythic.toLocaleString() %> MP</span><br>
+              <span style='color: var(--§6);' class='grey-text'>16 MP</span> × <span style='color: var(--§6);' class='grey-text'><%= rarities.legendary %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.legendary.toLocaleString() %> MP</span><br>
+              <span style='color: var(--§6);' class='grey-text'>12 MP</span> × <span style='color: var(--§5);' class='grey-text'><%= rarities.epic %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.epic.toLocaleString() %> MP</span><br>
+              <span style='color: var(--§6);' class='grey-text'>8 MP</span> × <span style='color: var(--§1);' class='grey-text'><%= rarities.rare %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.rare.toLocaleString() %> MP</span><br>
+              <span style='color: var(--§6);' class='grey-text'>5 MP</span> × <span style='color: var(--§a);' class='grey-text'><%= rarities.uncommon %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.uncommon.toLocaleString() %> MP</span><br>
+              <span style='color: var(--§6);' class='grey-text'>3 MP</span> × <span style='color: var(--§f);' class='grey-text'><%= rarities.common %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.common.toLocaleString() %> MP</span><br><br>
+              <% if(rarities.hegemony) { %>
+                <span style='color: var(--§<%= constants.rarityColors[rarities.hegemony.rarity] %>);' class='grey-text'>Hegemony Artifact</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_hegemony.toLocaleString() %> MP</span><br><br>
+              <% } %>
+              Total: <span style='color: var(--§6);' class='grey-text'><%= mp_total.toLocaleString() %> Magical Power</span>
+              ">
+                <span class="stat-name">Magical Power: </span><span class="stat-value"><%= mp_total.toLocaleString() %></span>
+              </span>
             </p>
             <% if(items.talismans.find(a => !a.isInactive) != undefined){ %>
               <div class="accessory-list">
@@ -1072,7 +1069,6 @@ const metaDescription = getMetaDescription()
                 <% }) %>
                 <p>
                   <%- getEnrichments(items.talismans.filter(a => a.isUnique && !a.isInactive)) %>
-                  <%- getReforges(items.talismans.filter(a => a.isUnique && !a.isInactive)) %>
                 </p>
                 <div data-bonus-stats="accessories,new_year_cake_bag"></div>
               </div>
