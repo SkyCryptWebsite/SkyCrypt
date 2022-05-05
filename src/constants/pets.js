@@ -27,6 +27,21 @@ export const pet_levels = [
   1886700, 1886700, 1886700, 1886700, 1886700, 1886700, 1886700,
 ];
 
+/*
+ * {
+ *   PET_TYPE: {
+ *     head: string | { default: string, rarity?: string },
+ *     type: string,
+ *     maxTier: string,
+ *     maxLevel: number,
+ *     emoji: string,
+ *     category?: "Mount" | "Morph" | string (default "Pet"),
+ *     passivePerks?: boolean (default: false),
+ *     bingoOnly?: boolean (default: false),
+ *     obtainsXp?: "feed" (default: false),
+ *   }
+ * }
+ */
 export const pet_data = {
   ARMADILLO: {
     head: "/head/c1eb6df4736ae24dd12a3d00f91e6e3aa7ade6bbefb0978afef2f0f92461018f",
@@ -151,7 +166,10 @@ export const pet_data = {
     emoji: "🌋",
   },
   FLYING_FISH: {
-    head: "/head/40cd71fbbbbb66c7baf7881f415c64fa84f6504958a57ccdb8589252647ea",
+    head: {
+      default: "/head/40cd71fbbbbb66c7baf7881f415c64fa84f6504958a57ccdb8589252647ea",
+      mythic: "/head/b0e2363c2d41a9d323ba625de8c0637063a36fe85a045de275a7b7739ded6051",
+    },
     type: "fishing",
     maxTier: "LEGENDARY",
     maxLevel: 100,
@@ -435,6 +453,32 @@ export const pet_data = {
     passivePerks: true,
     bingoOnly: true,
   },
+  DROPLET_WISP: {
+    head: {
+      default: "/head/b412e70375ec99ee38ae94b30e9b10752d459662b54794dfe66fe6a183c672d3",
+      rare: "/head/1d8ad9936d758c5ea30b0b7cc7c67c2bfcea829ecf2425c0b50fc92a26ae23d0",
+      epic: "/head/3e2018feebe1a99177b3cb196d4e44521268b4b3eb56e6419cb0253cdbf0456c",
+      legendary: "/head/7a0eb37e58c942eca4d33ab44e26eb1910c783788510b0a53b6f4d18881e237e",
+    },
+    name: {
+      default: "Droplet Wisp",
+      rare: "Frost Wisp",
+      epic: "Glacial Wisp",
+      legendary: "Subzero Wisp",
+    },
+    type: "gabagool",
+    maxTier: "LEGENDARY",
+    maxLevel: 100,
+    emoji: "💦",
+    obtainsXp: "feed",
+  },
+  // DROPLET_WISP: {
+  //   head: "/head/b412e70375ec99ee38ae94b30e9b10752d459662b54794dfe66fe6a183c672d3",
+  //   type: "combat",
+  //   maxTier: "LEGENDARY",
+  //   maxLevel: 100,
+  //   emoji: "💦",
+  // },
 };
 
 export const pet_value = {

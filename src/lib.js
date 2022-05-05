@@ -2596,6 +2596,99 @@ export async function getPets(profile) {
     return output;
   }
 
+  profile.pets = [
+    // {
+    //   type: "FLYING_FISH",
+    //   active: false,
+    //   exp: 1000000000,
+    //   tier: "LEGENDARY",
+    //   candyUsed: 0,
+    //   heldItem: null,
+    //   skin: null,
+    //   uuid: helper.generateUUID(),
+    // },
+    // {
+    //   type: "FLYING_FISH",
+    //   active: false,
+    //   exp: 1000000000,
+    //   tier: "MYTHIC",
+    //   candyUsed: 0,
+    //   heldItem: null,
+    //   skin: null,
+    //   uuid: helper.generateUUID(),
+    // },
+    {
+      type: "DROPLET_WISP",
+      active: false,
+      exp: 1000000000,
+      tier: "UNCOMMON",
+      candyUsed: 0,
+      heldItem: null,
+      skin: null,
+      uuid: helper.generateUUID(),
+    },
+    {
+      type: "DROPLET_WISP",
+      active: false,
+      exp: 1000000000,
+      tier: "RARE",
+      candyUsed: 0,
+      heldItem: null,
+      skin: null,
+      uuid: helper.generateUUID(),
+    },
+    {
+      type: "DROPLET_WISP",
+      active: false,
+      exp: 1000000000,
+      tier: "EPIC",
+      candyUsed: 0,
+      heldItem: null,
+      skin: null,
+      uuid: helper.generateUUID(),
+    },
+    {
+      type: "DROPLET_WISP",
+      active: false,
+      exp: 1000000000,
+      tier: "LEGENDARY",
+      candyUsed: 0,
+      heldItem: null,
+      skin: null,
+      uuid: helper.generateUUID(),
+    },
+    // {
+    //   type: "MOOSHROOM_COW",
+    //   active: false,
+    //   exp: 1000000000,
+    //   tier: "LEGENDARY",
+    //   candyUsed: 0,
+    //   heldItem: null,
+    //   skin: null,
+    //   uuid: helper.generateUUID(),
+    // },
+    // {
+    //   type: "SNAIL",
+    //   active: false,
+    //   exp: 1000000000,
+    //   tier: "LEGENDARY",
+    //   candyUsed: 0,
+    //   heldItem: null,
+    //   skin: null,
+    //   uuid: helper.generateUUID(),
+    // },
+    // {
+    //   type: "KUUDRA",
+    //   active: false,
+    //   exp: 1000000000,
+    //   tier: "LEGENDARY",
+    //   candyUsed: 0,
+    //   heldItem: null,
+    //   skin: null,
+    //   uuid: helper.generateUUID(),
+    // },
+  ];
+
   for (const pet of profile.pets) {
     if (!("tier" in pet)) {
       continue;
@@ -2630,7 +2723,15 @@ export async function getPets(profile) {
     pet.level = getPetLevel(pet, petData.maxLevel);
     pet.stats = {};
 
-    pet.texture_path = petData.hatching?.level > pet.level.level ? petData.hatching.head : petData.head;
+    if (typeof petData.head === "object") {
+      pet.texture_path = petData.head[pet.rarity] ?? petData.head.default;
+    } else {
+      pet.texture_path = petData.head;
+    }
+
+    if (petData.hatching?.level > pet.level.level) {
+      pet.texture_path = petData.hatching.head;
+    }
 
     let petSkin = null;
     if (pet.skin && constants.pet_skins?.[`PET_SKIN_${pet.skin}`]) {
@@ -2644,6 +2745,11 @@ export async function getPets(profile) {
       loreFirstRow.push("All Skills");
     } else {
       loreFirstRow.push(helper.capitalizeFirstLetter(petData.type), " ", petData.category ?? "Pet");
+
+      if (petData.obtainsXp === "feed") {
+        loreFirstRow.push(", feed to gain XP");
+      }
+
       if (petSkin) {
         loreFirstRow.push(`, ${petSkin} Skin`);
       }
@@ -2654,6 +2760,8 @@ export async function getPets(profile) {
     const petName =
       petData.hatching?.level > pet.level.level
         ? petData.hatching.name
+        : petData.name
+        ? petData.name[pet.rarity] ?? petData.name.default
         : helper.titleCase(pet.type.replaceAll("_", " "));
 
     const rarity = constants.rarities.indexOf(pet.rarity);
@@ -2755,9 +2863,12 @@ export async function getPets(profile) {
         pet.level.xpMaxLevel,
         true,
         10
-      )} §6(${Math.floor((pet.exp / pet.level.xpMaxLevel) * 100)}%)`,
-      `§7Candy Used: §e${pet.candyUsed || 0} §6/ §e10`
+      )} §6(${Math.floor((pet.exp / pet.level.xpMaxLevel) * 100)}%)`
     );
+
+    if (petData.obtainsXp !== "feed") {
+      lore.push(`§7Candy Used: §e${pet.candyUsed || 0} §6/ §e10`);
+    }
 
     pet.lore = "";
 

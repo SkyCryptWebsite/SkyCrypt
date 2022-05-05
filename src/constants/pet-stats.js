@@ -2656,11 +2656,14 @@ class FlyingFish extends Pet {
     if (this.rarity > 3) {
       list.push(this.third);
     }
+    if (this.rarity > 4) {
+      list.push(this.fourth);
+    }
     return list;
   }
 
   get first() {
-    const mult = this.rarity > 2 ? 0.4 : 0.3;
+    const mult = this.rarity > 2 ? 0.5 : 0.3;
     return {
       name: "§6Quick Reel",
       desc: [`§7Increases fishing speed by §a${round(this.level * mult, 1)}%`],
@@ -2668,49 +2671,32 @@ class FlyingFish extends Pet {
   }
 
   get second() {
-    const mult = this.rarity > 2 ? 0.5 : 0.4;
+    const mult = this.rarity > 4 ? 1 : this.rarity > 2 ? 0.5 : 0.4;
     return {
-      name: "§6Water Bender",
+      name: this.rarity > 4 ? "§6Lava Bender" : "§6Water Bender",
       desc: [
         `§7Gives §a${round(this.level * mult, 1)} §c${symbols.strength} Strength §7and §a${
           symbols.defense
-        } Defense §7when near water`,
+        } Defense §7when near ${this.rarity > 4 ? "lava" : "water"}`,
       ],
     };
   }
 
   get third() {
-    const mult = 0.3;
+    const mult = 0.2;
+    const prc = round(this.level * mult, 1);
     return {
-      name: "§6Deep Sea Diver",
-      desc: [`§7Increases the stats of Diver Armor by §a${round(this.level * mult, 1)}%`],
+      name: this.rarity > 4 ? "§6Magmatic Diver" : "§6Deep Sea Diver",
+      desc: [`§7Increases the stats of ${this.rarity > 4 ? "Magma Lord armor" : "Diver Armor"} by §a${prc}%`],
     };
   }
 
-  modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
-    if (this.rarity > 3) {
-      const mult = 1 + round(this.level * 0.3, 1) / 100;
-      if (hName.includes("DIVERS")) {
-        for (const stat in helmet.stats) {
-          helmet.stats[stat] = round(helmet.stats[stat] * mult, 1);
-        }
-      }
-      if (cName.includes("DIVERS")) {
-        for (const stat in chest.stats) {
-          chest.stats[stat] = round(chest.stats[stat] * mult, 1);
-        }
-      }
-      if (lName.includes("DIVERS")) {
-        for (const stat in legs.stats) {
-          legs.stats[stat] = round(legs.stats[stat] * mult, 1);
-        }
-      }
-      if (bName.includes("DIVERS")) {
-        for (const stat in boots.stats) {
-          boots.stats[stat] = round(boots.stats[stat] * mult, 1);
-        }
-      }
-    }
+  get fourth() {
+    const mult = 0.5;
+    return {
+      name: "§6Rapid Decay",
+      desc: [`§7Increases the chance to activate Flash Enchantment by §a${round(this.level * mult, 1)}%`],
+    };
   }
 }
 
