@@ -1118,7 +1118,7 @@ const metaDescription = getMetaDescription()
         <div class="stat-content">
           <%
             const uniquePets = _.uniq(calculated.pets.map(a => a.type))
-            const totalPets = Object.values(constants.pet_data).filter(pet => !pet.bingoOnly === true || calculated.profile.game_mode === 'bingo').length
+            const totalPets = Object.values(constants.pet_data).filter(pet => !pet.bingoExclusive === true || calculated.profile.game_mode === 'bingo').length
 
             let totalPetXp = 0
             for (const pet of calculated.pets) {

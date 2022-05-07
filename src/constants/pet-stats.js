@@ -3186,4 +3186,5 @@ export const petStats = {
   WITHER_SKELETON: WitherSkeleton,
   WOLF: Wolf,
   ZOMBIE: Zombie,
+  // DROPLET_WISP: Zombie,
 };
