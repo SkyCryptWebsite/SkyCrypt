@@ -3090,6 +3090,48 @@ class Bingo extends Pet {
   }
 }
 
+class Wisp extends Pet {
+  get stats() {
+    return {
+      true_defense: round(this.level * 0.1, 1),
+      health: round(this.level * 1, 1),
+      intelligence: round(this.level * 0.5, 1),
+    };
+  }
+
+  get abilities() {
+    const list = [this.first];
+    if (this.rarity > 1) {
+      list.push(this.second);
+    }
+    if (this.rarity > 3) {
+      list.push(this.third);
+    }
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6???",
+      desc: [`§7???`],
+    };
+  }
+
+  get second() {
+    return {
+      name: "§6???",
+      desc: [`§7???`],
+    };
+  }
+
+  get third() {
+    return {
+      name: "§6???",
+      desc: [`§7???`],
+    };
+  }
+}
+
 class QuestionMark extends Pet {
   get stats() {
     return {};
@@ -3186,5 +3228,5 @@ export const petStats = {
   WITHER_SKELETON: WitherSkeleton,
   WOLF: Wolf,
   ZOMBIE: Zombie,
-  // DROPLET_WISP: Zombie,
+  DROPLET_WISP: Wisp,
 };

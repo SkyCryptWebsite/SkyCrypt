@@ -2596,7 +2596,7 @@ export async function getPets(profile) {
     return output;
   }
 
-  profile.pets_DISABLED = [
+  profile.pets = [
     // {
     //   type: "FLYING_FISH",
     //   active: false,
