@@ -318,10 +318,15 @@
       color: white;
       text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
       margin: 0;
-      padding: 4px 10px;
-      border-radius: 1rem;
-      background-color: var(--lore_background-hex);
       flex: 1;
+      &[data-multicolor="true"] {
+        background-color: var(--lore_background-hex);
+        border-radius: 1rem;
+        padding: 4px 10px;
+        --§9: #929292;
+        --§8: #929292;
+        --§0: #929292;
+      }
     }
 
     .close-lore {

@@ -268,9 +268,13 @@ function fillLore(element: HTMLElement) {
   }
 
   itemName.className = `item-name piece-${item.rarity || "common"}-bg nice-colors-dark`;
-  itemNameContent.innerHTML = renderLore((item as Item).tag.display.Name ?? item.display_name) || "null";
+  const itemNameHtml = renderLore((item as Item).tag?.display?.Name ?? item.display_name ?? "???");
+  const isMulticolor = (itemNameHtml.match(/<\/span>/g) || []).length > 1;
+  itemNameContent.dataset.multicolor = String(isMulticolor);
+  itemNameContent.innerHTML = isMulticolor ? itemNameHtml : item.display_name ?? "???";
 
   if (element.hasAttribute("data-pet-index")) {
+    itemNameContent.dataset.multicolor = "false";
     itemNameContent.innerHTML = `[Lvl ${(item as Pet).level.level}] ${item.display_name}`;
   }
 
