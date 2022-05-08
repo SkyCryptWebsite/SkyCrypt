@@ -544,25 +544,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       item.display_name = helper.getRawLore(item.tag.display.Name);
     }
 
-    if (item.tag?.ExtraAttributes?.dungeon_item_level > 0) {
-      const dungeonItemLevel = item.tag.ExtraAttributes.dungeon_item_level;
-      let newStars = null;
-
-      switch (true) {
-        case dungeonItemLevel <= 5:
-          newStars = "✪".repeat(dungeonItemLevel);
-          break;
-        case dungeonItemLevel <= 10:
-          newStars = "⍟".repeat(dungeonItemLevel - 5) + "✪".repeat(5 - (dungeonItemLevel - 5));
-          break;
-        default:
-          newStars = "✪".repeat(dungeonItemLevel);
-          break;
-      }
-
-      item.display_name = item.display_name.replace(/(✪+)/, newStars);
-    }
-
     // Resolve skull textures to their image path
     if (
       Array.isArray(item.tag?.SkullOwner?.Properties?.textures) &&

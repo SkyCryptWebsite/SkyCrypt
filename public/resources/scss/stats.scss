@@ -288,48 +288,58 @@
     }
   }
 
-  .stats-piece-icon {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
-    transform: scale(0.25) translateY(-50%);
-    transform-origin: top left;
-  }
-
-  .close-lore {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    width: 44px;
-    background-image: url(/resources/img/icons/close.svg);
-    background-size: 24px 24px;
-    background-position: center center;
-    background-repeat: no-repeat;
-    visibility: hidden;
-    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.1));
-    background-color: rgb(255 255 255 / 0%);
-    clip-path: circle(15px);
-    &:hover,
-    &:focus-visible {
-      background-color: rgb(255 255 255 / 15%);
-    }
-  }
-
   .item-name {
-    position: relative;
-    text-align: center;
-    padding: 20px;
-    padding-left: 60px;
-    text-transform: uppercase;
-    font-weight: 600;
-    color: white;
-    text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
     box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+    .stats-piece-icon__wrapper {
+      width: 32px;
+      height: 32px;
+      overflow: hidden;
+      flex: none;
+      .stats-piece-icon {
+        filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
+        width: 128px;
+        height: 128px;
+        transform: scale(0.25);
+        transform-origin: top left;
+      }
+    }
 
-    :where(&) {
-      background-color: var(--header-hex); // fallback for rarity color
+    .item-name__name {
+      position: relative;
+      text-align: center;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: white;
+      text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+      margin: 0;
+      padding: 4px 10px;
+      border-radius: 1rem;
+      background-color: var(--lore_background-hex);
+      flex: 1;
+    }
+
+    .close-lore {
+      flex: none;
+      display: none;
+      width: 44px;
+      height: 44px;
+      background-image: url(/resources/img/icons/close.svg);
+      background-size: 24px 24px;
+      background-position: center center;
+      background-repeat: no-repeat;
+      filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.1));
+      background-color: rgb(255 255 255 / 0%);
+      clip-path: circle(15px);
+      &:hover,
+      &:focus-visible {
+        background-color: rgb(255 255 255 / 15%);
+      }
     }
   }
 
@@ -2544,12 +2554,11 @@ inventory-view {
     min-width: unset;
     max-width: unset;
     width: calc(100vw - 30px);
-    .close-lore {
-      visibility: visible;
-    }
 
     .item-name {
-      padding-right: 60px;
+      .close-lore {
+        display: block;
+      }
     }
   }
 
