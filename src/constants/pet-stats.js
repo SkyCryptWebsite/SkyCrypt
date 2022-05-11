@@ -3331,38 +3331,70 @@ class Snail extends Pet {
 
 class Kuudra extends Pet {
   get stats() {
-    return {};
+    return {
+      health: round(this.level * 4, 1),
+      strength: round(this.level * 0.4, 1),
+    };
   }
 
   get abilities() {
-    const list = [this.first];
+    const list = [this.first, this.second];
     if (this.rarity >= RARE) {
-      list.push(this.second);
+      list.push(this.third);
+    }
+    if (this.rarity >= EPIC) {
+      list.push(this.fourth);
     }
     if (this.rarity >= LEGENDARY) {
-      list.push(this.third);
+      list.push(this.fifth);
     }
     return list;
   }
 
   get first() {
+    const mult = getValue(this.rarity, 0.1, 0.15, 0.15, 0.2, 0.2);
+    const prc = round(this.level * mult, 1);
+
     return {
-      name: "§6???",
-      desc: [`§7???`],
+      name: "§6Crimson",
+      desc: [`§7Grants §a${prc}% §7extra crimson essence`],
     };
   }
 
   get second() {
+    const mult = getValue(this.rarity, 0.1, 0.15, 0.15, 0.2, 0.2);
+    const prc = round(this.level * mult, 1);
+
     return {
-      name: "§6???",
-      desc: [`§7???`],
+      name: "§6Wither Bait",
+      desc: [`§7Increases the odds of finding a vanquisher by §a${prc}%`],
     };
   }
 
   get third() {
+    const mult = getValue(this.rarity, 0, 0, 0.5, 1, 1);
+    const val = round(this.level * mult, 1);
+
     return {
-      name: "§6???",
-      desc: [`§7???`],
+      name: "§6Kuudra Fortune",
+      desc: [`§7Gain §6+${val} ${symbols.mining_fortune} Mining Fortune §7while on the Crimson Isle`],
+    };
+  }
+
+  get fourth() {
+    const mult = getValue(this.rarity, 0, 0, 0, 0.2, 0.2);
+    const prc = round(this.level * mult, 1);
+
+    return {
+      name: "§6Trophy Bait",
+      desc: [`§7Increases the odds of fishing Trophy Fish by §a${prc}%`],
+    };
+  }
+
+  get fifth() {
+    return {
+      name: "§6Kuudra Specialist",
+      desc: [`§7Increases all damage to Kuudra by §c5%`],
     };
   }
 }

@@ -40,6 +40,7 @@ export const pet_levels = [
     obtainsExp?: "feed" (default: false),
     customLevelExpRarityOffset?: rarity (default: false),
     ignoresTierBoost?: boolean (default: false),
+    alwaysGainsExp?: boolean | string (default: false),
   }
  */
 export const pet_data = {
@@ -492,8 +493,10 @@ export const pet_data = {
     head: "/head/1f0239fb498e5907ede12ab32629ee95f0064574a9ffdff9fc3a1c8e2ec17587",
     type: "combat",
     maxTier: "legendary",
-    maxLevel: 200,
+    maxLevel: 100,
     emoji: "👹",
+    passivePerks: true,
+    alwaysGainsExp: "§cCrimson Isle",
   },
 };
 
