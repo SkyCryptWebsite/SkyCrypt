@@ -216,7 +216,7 @@ export function getLevelByXp(xp, extra = {}) {
 }
 
 function getSlayerLevel(slayer, slayerName) {
-  let { xp, claimed_levels } = slayer;
+  const { xp, claimed_levels } = slayer;
 
   let currentLevel = 0;
   let progress = 0;
@@ -319,26 +319,26 @@ function getFairyBonus(fairyExchanges) {
 }
 
 function getBonusStat(level, skill, max, incremention) {
-  let skill_stats = constants.bonus_stats[skill];
-  let steps = Object.keys(skill_stats)
+  const skill_stats = constants.bonus_stats[skill];
+  const steps = Object.keys(skill_stats)
     .sort((a, b) => Number(a) - Number(b))
     .map((a) => Number(a));
 
-  let bonus = Object.assign({}, constants.stat_template);
+  const bonus = Object.assign({}, constants.stat_template);
 
   for (let x = steps[0]; x <= max; x += incremention) {
     if (level < x) {
       break;
     }
 
-    let skill_step = steps
+    const skill_step = steps
       .slice()
       .reverse()
       .find((a) => a <= x);
 
-    let skill_bonus = skill_stats[skill_step];
+    const skill_bonus = skill_stats[skill_step];
 
-    for (let skill in skill_bonus) {
+    for (const skill in skill_bonus) {
       bonus[skill] += skill_bonus[skill];
     }
   }
@@ -356,12 +356,12 @@ export function getEffectiveHealth(health, defense) {
 }
 
 async function getBackpackContents(arraybuf) {
-  let buf = Buffer.from(arraybuf);
+  const buf = Buffer.from(arraybuf);
 
   let data = await parseNbt(buf);
   data = nbt.simplify(data);
 
-  let items = data.i;
+  const items = data.i;
 
   for (const [index, item] of items.entries()) {
     item.isInactive = true;
@@ -394,7 +394,7 @@ const potionColors = {
 // Process items returned by API
 async function processItems(base64, customTextures = false, packs, cacheOnly = false) {
   // API stores data as base64 encoded gzipped Minecraft NBT data
-  let buf = Buffer.from(base64, "base64");
+  const buf = Buffer.from(base64, "base64");
 
   let data = await parseNbt(buf);
   data = nbt.simplify(data);
@@ -417,7 +417,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
         continue;
       }
 
-      let backpackContents = await getBackpackContents(backpackData);
+      const backpackContents = await getBackpackContents(backpackData);
 
       for (const backpackItem of backpackContents) {
         backpackItem.backpackIndex = index;
@@ -450,7 +450,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     }
 
     if (item.tag?.ExtraAttributes?.expertise_kills != undefined) {
-      let { expertise_kills } = item.tag.ExtraAttributes;
+      const { expertise_kills } = item.tag.ExtraAttributes;
 
       if (expertise_kills > 0) {
         item.extra.expertise_kills = expertise_kills;
@@ -458,7 +458,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     }
 
     if (item.tag?.ExtraAttributes?.blocks_walked != undefined) {
-      let { blocks_walked } = item.tag.ExtraAttributes;
+      const { blocks_walked } = item.tag.ExtraAttributes;
 
       if (blocks_walked > 0) {
         item.extra.blocks_walked = blocks_walked;
@@ -466,7 +466,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     }
 
     if (item.tag?.ExtraAttributes?.timestamp != undefined) {
-      let timestamp = item.tag.ExtraAttributes.timestamp;
+      const timestamp = item.tag.ExtraAttributes.timestamp;
 
       if (!isNaN(timestamp)) {
         item.extra.timestamp = timestamp;
@@ -583,10 +583,10 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     }
 
     // Lore stuff
-    let itemLore = item?.tag?.display?.Lore ?? [];
-    let lore_raw = [...itemLore];
+    const itemLore = item?.tag?.display?.Lore ?? [];
+    const lore_raw = [...itemLore];
 
-    let lore = lore_raw != null ? lore_raw.map((a) => (a = helper.getRawLore(a))) : [];
+    const lore = lore_raw != null ? lore_raw.map((a) => (a = helper.getRawLore(a))) : [];
 
     item.rarity = null;
     item.categories = [];
@@ -661,7 +661,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       }
 
       if (item.extra?.expertise_kills) {
-        let expertise_kills = item.extra.expertise_kills;
+        const expertise_kills = item.extra.expertise_kills;
 
         if (lore_raw) {
           itemLore.push("", `§7Expertise Kills: §c${expertise_kills}`);
@@ -681,7 +681,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       }
 
       if (item.extra?.blocks_walked) {
-        let blocks_walked = item.extra.blocks_walked;
+        const blocks_walked = item.extra.blocks_walked;
 
         if (lore_raw) {
           itemLore.push("", `§7Blocks Walked: §c${blocks_walked}`);
@@ -745,7 +745,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     }
   }
 
-  for (let item of items) {
+  for (const item of items) {
     if (item.inBackpack) {
       items[item.backpackIndex].containsItems.push(Object.assign({}, item));
     }
@@ -841,13 +841,13 @@ export const getItems = async (
   const timeStarted = new Date().getTime();
 
   // Process inventories returned by API
-  let armor =
+  const armor =
     "inv_armor" in profile ? await processItems(profile.inv_armor.data, customTextures, packs, options.cacheOnly) : [];
-  let inventory =
+  const inventory =
     "inv_contents" in profile
       ? await processItems(profile.inv_contents.data, customTextures, packs, options.cacheOnly)
       : [];
-  let wardrobe_inventory =
+  const wardrobe_inventory =
     "wardrobe_contents" in profile
       ? await processItems(profile.wardrobe_contents.data, customTextures, packs, options.cacheOnly)
       : [];
@@ -855,25 +855,25 @@ export const getItems = async (
     "ender_chest_contents" in profile
       ? await processItems(profile.ender_chest_contents.data, customTextures, packs, options.cacheOnly)
       : [];
-  let talisman_bag =
+  const talisman_bag =
     "talisman_bag" in profile
       ? await processItems(profile.talisman_bag.data, customTextures, packs, options.cacheOnly)
       : [];
-  let fishing_bag =
+  const fishing_bag =
     "fishing_bag" in profile
       ? await processItems(profile.fishing_bag.data, customTextures, packs, options.cacheOnly)
       : [];
-  let quiver =
+  const quiver =
     "quiver" in profile ? await processItems(profile.quiver.data, customTextures, packs, options.cacheOnly) : [];
-  let potion_bag =
+  const potion_bag =
     "potion_bag" in profile
       ? await processItems(profile.potion_bag.data, customTextures, packs, options.cacheOnly)
       : [];
-  let candy_bag =
+  const candy_bag =
     "candy_inventory_contents" in profile
       ? await processItems(profile.candy_inventory_contents.data, customTextures, packs, options.cacheOnly)
       : [];
-  let personal_vault =
+  const personal_vault =
     "personal_vault_contents" in profile
       ? await processItems(profile.personal_vault_contents.data, customTextures, packs, options.cacheOnly)
       : [];
@@ -908,15 +908,15 @@ export const getItems = async (
 
   const wardrobeColumns = wardrobe_inventory.length / 4;
 
-  let wardrobe = [];
+  const wardrobe = [];
 
   for (let i = 0; i < wardrobeColumns; i++) {
-    let page = Math.floor(i / 9);
+    const page = Math.floor(i / 9);
 
-    let wardrobeSlot = [];
+    const wardrobeSlot = [];
 
     for (let j = 0; j < 4; j++) {
-      let index = 36 * page + (i % 9) + j * 9;
+      const index = 36 * page + (i % 9) + j * 9;
 
       if (getId(wardrobe_inventory[index]).length > 0) {
         wardrobeSlot.push(wardrobe_inventory[index]);
@@ -976,7 +976,7 @@ export const getItems = async (
   hotm = hotm.map((a) => Object.assign({ isInactive: true }, a));
 
   // Add candy bag contents as backpack contents to candy bag
-  for (let item of all_items) {
+  for (const item of all_items) {
     if (getId(item) == "TRICK_OR_TREAT_BAG") {
       item.containsItems = candy_bag;
     }
@@ -1147,9 +1147,9 @@ export const getItems = async (
   }
 
   // Add New Year Cake Bag health bonus (1 per unique cake)
-  for (let talisman of talismans) {
-    let id = getId(talisman);
-    let cakes = [];
+  for (const talisman of talismans) {
+    const id = getId(talisman);
+    const cakes = [];
 
     if (id == "NEW_YEAR_CAKE_BAG" && Array.isArray(talisman?.containsItems)) {
       talisman.stats.health = 0;
@@ -1285,14 +1285,14 @@ export const getItems = async (
     }
   }
 
-  let swords = output.weapons.filter((a) => a.categories.includes("sword"));
-  let bows = output.weapons.filter((a) => a.categories.includes("bow"));
+  const swords = output.weapons.filter((a) => a.categories.includes("sword"));
+  const bows = output.weapons.filter((a) => a.categories.includes("bow"));
 
-  let swordsInventory = swords.filter((a) => a.backpackIndex === undefined);
-  let bowsInventory = bows.filter((a) => a.backpackIndex === undefined);
-  let fishingtoolsInventory = output.fishing_tools.filter((a) => a.backpackIndex === undefined);
-  let farmingtoolsInventory = output.farming_tools.filter((a) => a.backpackIndex === undefined);
-  let miningtoolsInventory = output.mining_tools.filter((a) => a.backpackIndex === undefined);
+  const swordsInventory = swords.filter((a) => a.backpackIndex === undefined);
+  const bowsInventory = bows.filter((a) => a.backpackIndex === undefined);
+  const fishingtoolsInventory = output.fishing_tools.filter((a) => a.backpackIndex === undefined);
+  const farmingtoolsInventory = output.farming_tools.filter((a) => a.backpackIndex === undefined);
+  const miningtoolsInventory = output.mining_tools.filter((a) => a.backpackIndex === undefined);
 
   if (swords.length > 0) {
     output.highest_rarity_sword = swordsInventory
@@ -1402,7 +1402,7 @@ export const getItems = async (
 };
 
 export async function getLevels(userProfile, hypixelProfile, levelCaps) {
-  let output = {};
+  const output = {};
 
   let skillLevels;
   let totalSkillXp = 0;
@@ -1447,7 +1447,7 @@ export async function getLevels(userProfile, hypixelProfile, levelCaps) {
       }),
     };
 
-    for (let skill in skillLevels) {
+    for (const skill in skillLevels) {
       if (!constants.cosmetic_skills.includes(skill)) {
         average_level += skillLevels[skill].level + skillLevels[skill].progress;
         average_level_no_progress += skillLevels[skill].level;
@@ -1528,7 +1528,7 @@ export const getStats = async (
   items,
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getStats` }
 ) => {
-  let output = {};
+  const output = {};
 
   console.debug(`${options.debugId}: getStats called.`);
   const timeStarted = new Date().getTime();
@@ -1550,7 +1550,7 @@ export const getStats = async (
     output.fairy_bonus = Object.assign({}, fairyBonus);
 
     // Apply fairy soul bonus
-    for (let stat in fairyBonus) {
+    for (const stat in fairyBonus) {
       output.stats[stat] += fairyBonus[stat];
     }
   }
@@ -1583,7 +1583,7 @@ export const getStats = async (
 
   output.skill_bonus = {};
 
-  for (let skill in levels) {
+  for (const skill in levels) {
     if (levels[skill].level == 0) {
       continue;
     }
@@ -1604,7 +1604,7 @@ export const getStats = async (
   if ("slayer_bosses" in userProfile) {
     output.slayer_bonus = {};
 
-    let slayers = {};
+    const slayers = {};
 
     if ("slayer_bosses" in userProfile) {
       for (const slayerName in userProfile.slayer_bosses) {
@@ -1654,7 +1654,7 @@ export const getStats = async (
 
       output.slayer_xp += slayers[slayer].xp || 0;
 
-      for (let stat in slayerBonus) {
+      for (const stat in slayerBonus) {
         output.stats[stat] += slayerBonus[stat];
       }
     }
@@ -1749,7 +1749,7 @@ export const getStats = async (
     !isNaN(userProfile.collection?.EMERALD) &&
     items.armor.filter((a) => getId(a).startsWith("EMERALD_ARMOR_")).length == 4
   ) {
-    let emerald_bonus = Math.min(350, Math.floor(userProfile.collection.EMERALD / 3000));
+    const emerald_bonus = Math.min(350, Math.floor(userProfile.collection.EMERALD / 3000));
 
     items.armor[0].stats.health += emerald_bonus;
     items.armor[0].stats.defense += emerald_bonus;
@@ -1789,7 +1789,7 @@ export const getStats = async (
       }
     }
 
-    for (let stat in item.stats) {
+    for (const stat in item.stats) {
       output.stats[stat] += item.stats[stat];
     }
   }
@@ -1798,7 +1798,7 @@ export const getStats = async (
   items.talismans
     .filter((a) => Object.keys(a).length != 0 && !a.isInactive)
     .forEach((item) => {
-      for (let stat in item.stats) {
+      for (const stat in item.stats) {
         output.stats[stat] += item.stats[stat];
       }
     });
@@ -1824,7 +1824,7 @@ export const getStats = async (
   if (items.armor.filter((a) => getId(a) == "OBSIDIAN_CHESTPLATE").length == 1) {
     let obsidian = 0;
 
-    for (let item of items.inventory) {
+    for (const item of items.inventory) {
       if (item.id == 49) {
         obsidian += item.Count;
       }
@@ -1852,7 +1852,7 @@ export const getStats = async (
   ]
     .concat(items.weapons)
     .concat(items.fishing_tools)) {
-    let stats = Object.assign({}, output.stats);
+    const stats = Object.assign({}, output.stats);
 
     // Modify weapon based on pet
     // if (activePet)
@@ -1860,7 +1860,7 @@ export const getStats = async (
     // apparently we don't actually need this
 
     // Apply held weapon stats
-    for (let stat in item.stats) {
+    for (const stat in item.stats) {
       stats[stat] += item.stats[stat];
     }
 
@@ -1914,7 +1914,7 @@ export const getStats = async (
     output.weapon_stats[item.itemId] = stats;
 
     // Stats shouldn't go into negative
-    for (let stat in stats) {
+    for (const stat in stats) {
       output.weapon_stats[item.itemId][stat] = Math.max(0, Math.round(stats[stat]));
     }
 
@@ -1974,7 +1974,7 @@ export const getStats = async (
   }
 
   // Stats shouldn't go into negative
-  for (let stat in output.stats) {
+  for (const stat in output.stats) {
     output.stats[stat] = Math.max(0, Math.round(output.stats[stat]));
   }
 
@@ -1982,7 +1982,7 @@ export const getStats = async (
 
   let killsDeaths = [];
 
-  for (let stat in userProfile.stats) {
+  for (const stat in userProfile.stats) {
     if (stat.startsWith("kills_") && userProfile.stats[stat] > 0) {
       killsDeaths.push({ type: "kills", entityId: stat.replace("kills_", ""), amount: userProfile.stats[stat] });
     }
@@ -1993,7 +1993,7 @@ export const getStats = async (
   }
 
   for (const stat of killsDeaths) {
-    let { entityId } = stat;
+    const { entityId } = stat;
 
     if (entityId in constants.mob_names) {
       stat.entityName = constants.mob_names[entityId];
@@ -2218,7 +2218,7 @@ export const getStats = async (
     for (const contest_id in userProfile.jacob2.contests) {
       const data = userProfile.jacob2.contests[contest_id];
 
-      let contest_name = contest_id.split(":");
+      const contest_name = contest_id.split(":");
       const date = `${contest_name[1]}_${contest_name[0]}`;
       const crop = contest_name.slice(2).join(":");
 
@@ -2303,7 +2303,7 @@ export const getStats = async (
       for (const key in game_data) {
         if (key.startsWith("attempts") || key.startsWith("claims") || key.startsWith("best_score")) {
           let statKey = key.split("_");
-          let tierValue = statKey.pop();
+          const tierValue = statKey.pop();
 
           statKey = statKey.join("_");
           const tierInfo = _.cloneDeep(constants.experiments.tiers[tierValue]);
@@ -2352,7 +2352,7 @@ export const getStats = async (
 
   for (const key of userProfile.tutorial) {
     if (key.startsWith("commission_milestone_reward_mining_xp_tier_")) {
-      let milestone_tier = key.slice(43);
+      const milestone_tier = key.slice(43);
       if (mining.commissions.milestone < milestone_tier) {
         mining.commissions.milestone = milestone_tier;
       }
@@ -2529,7 +2529,7 @@ export const getStats = async (
   const diff = (+new Date() - last_updated) / 1000;
 
   let last_updated_text = moment(last_updated).fromNow();
-  let first_join_text = moment(first_join).fromNow();
+  const first_join_text = moment(first_join).fromNow();
 
   if ("current_area" in userProfile) {
     output.current_area = userProfile.current_area;
@@ -2828,10 +2828,10 @@ export async function getPetScore(pets) {
 }
 
 export async function getMissingTalismans(talismans) {
-  let unique = Object.keys(constants.talismans);
+  const unique = Object.keys(constants.talismans);
   unique.forEach((name) => {
     if (name in constants.talisman_duplicates) {
-      for (let duplicate of constants.talisman_duplicates[name]) {
+      for (const duplicate of constants.talisman_duplicates[name]) {
         if (talismans.includes(duplicate)) {
           talismans[talismans.indexOf(duplicate)] = name;
           break;
@@ -2844,7 +2844,7 @@ export async function getMissingTalismans(talismans) {
   missing.forEach((name) => {
     if (name in constants.talisman_upgrades) {
       //if the name is in the upgrades list
-      for (let upgrade of constants.talisman_upgrades[name]) {
+      for (const upgrade of constants.talisman_upgrades[name]) {
         if (talismans.includes(upgrade)) {
           //if talisman list includes the upgrade
           missing = missing.filter((item) => item !== name);
@@ -2857,7 +2857,7 @@ export async function getMissingTalismans(talismans) {
   const upgrades = [];
   const other = [];
   missing.forEach(async (talisman) => {
-    let object = {
+    const object = {
       display_name: null,
       rarity: null,
       texture_path: null,
@@ -2954,7 +2954,7 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
 }
 
 export async function getDungeons(userProfile, hypixelProfile) {
-  let output = {};
+  const output = {};
 
   const dungeons = userProfile.dungeons;
   if (dungeons == null || Object.keys(dungeons).length === 0) return output;
@@ -2970,7 +2970,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
       continue;
     }
 
-    let floors = {};
+    const floors = {};
 
     for (const key of Object.keys(dungeon)) {
       if (typeof dungeon[key] != "object") continue;
@@ -2983,7 +2983,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
           };
         }
 
-        let id = `${type}_${floor}`; // Floor ID
+        const id = `${type}_${floor}`; // Floor ID
         if (dungeons_data.floors[id]) {
           if (dungeons_data.floors[id].name) {
             floors[floor].name = dungeons_data.floors[id].name;
@@ -3008,8 +3008,8 @@ export async function getDungeons(userProfile, hypixelProfile) {
       }
     }
 
-    let dungeon_id = `dungeon_${type}`; // Dungeon ID
-    let highest_floor = dungeon.highest_tier_completed || 0;
+    const dungeon_id = `dungeon_${type}`; // Dungeon ID
+    const highest_floor = dungeon.highest_tier_completed || 0;
     output[type] = {
       id: dungeon_id,
       visited: true,
@@ -3026,9 +3026,9 @@ export async function getDungeons(userProfile, hypixelProfile) {
   output.classes = {};
 
   let used_classes = false;
-  let current_class = dungeons.selected_dungeon_class || "none";
+  const current_class = dungeons.selected_dungeon_class || "none";
   for (const className of Object.keys(dungeons.player_classes)) {
-    let data = dungeons.player_classes[className];
+    const data = dungeons.player_classes[className];
 
     if (!data.experience) {
       data.experience = 0;
@@ -3057,24 +3057,24 @@ export async function getDungeons(userProfile, hypixelProfile) {
   // Boss Collections
   const collection_data = dungeons_data.boss_collections;
   const boss_data = dungeons_data.bosses;
-  let collections = {};
+  const collections = {};
 
   for (const coll_id in collection_data) {
-    let coll = collection_data[coll_id];
-    let boss = boss_data[coll.boss];
+    const coll = collection_data[coll_id];
+    const boss = boss_data[coll.boss];
 
     for (const floor_id of boss.floors) {
       // This can be done much better. But I didn't want to deal with it.
-      let a = floor_id.split("_");
-      let dung_floor = a.pop();
-      let dung_name = a.join("_");
+      const a = floor_id.split("_");
+      const dung_floor = a.pop();
+      const dung_name = a.join("_");
 
       // I can't put these two into a single if. Welp, doesn't seem like a problem.
       if (output[dung_name] == null || !output[dung_name]?.visited) continue;
       if (output[dung_name].floors[dung_floor] == null) continue;
 
-      let data = output[dung_name].floors[dung_floor];
-      let num = data.stats.tier_completions || 0;
+      const data = output[dung_name].floors[dung_floor];
+      const num = data.stats.tier_completions || 0;
 
       if (num <= 0) continue;
 
@@ -3101,7 +3101,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
     }
 
     for (const reward_id in coll.rewards) {
-      let reward = coll.rewards[reward_id];
+      const reward = coll.rewards[reward_id];
       if (collections[coll_id].killed >= reward.required) {
         collections[coll_id].tier = reward.tier;
         if (reward_id != "coming_soon") collections[coll_id].unclaimed++;
@@ -3118,15 +3118,15 @@ export async function getDungeons(userProfile, hypixelProfile) {
   const tasks = userProfile.tutorial;
   for (const i in tasks) {
     if (!tasks[i].startsWith("boss_collection_claimed")) continue;
-    let task = tasks[i].split("_").splice(3);
+    const task = tasks[i].split("_").splice(3);
 
     if (!Object.keys(boss_data).includes(task[0])) continue;
-    let boss = boss_data[task[0]];
+    const boss = boss_data[task[0]];
 
     if (!Object.keys(collection_data).includes(boss.collection)) continue;
-    let coll = collection_data[boss.collection];
+    const coll = collection_data[boss.collection];
 
-    let item = coll.rewards[task.splice(1).join("_")];
+    const item = coll.rewards[task.splice(1).join("_")];
 
     if (item == null || boss == null) continue;
     collections[boss.collection].claimed.push(item.name);
@@ -3144,7 +3144,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
   // Journal Entries
   const journal_constants = constants.dungeons.journals;
   const journal_entries = dungeons.dungeon_journal.journal_entries;
-  let journals = {
+  const journals = {
     pages_collected: 0,
     journals_completed: 0,
     total_pages: 0,
@@ -3153,7 +3153,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
   };
 
   for (const entry_id in journal_entries) {
-    let entry = {
+    const entry = {
       name: journal_constants[entry_id] ? journal_constants[entry_id].name : entry_id,
       pages_collected: journal_entries[entry_id].length || 0,
       total_pages: journal_constants[entry_id] ? journal_constants[entry_id].pages : null,
@@ -3180,9 +3180,9 @@ export async function getDungeons(userProfile, hypixelProfile) {
   output.journals = journals;
 
   // Level Bonuses (Only Catacombs Item Boost right now)
-  for (let name in constants.dungeons.level_bonuses) {
-    let level_stats = constants.dungeons.level_bonuses[name];
-    let steps = Object.keys(level_stats)
+  for (const name in constants.dungeons.level_bonuses) {
+    const level_stats = constants.dungeons.level_bonuses[name];
+    const steps = Object.keys(level_stats)
       .sort((a, b) => Number(a) - Number(b))
       .map((a) => Number(a));
 
@@ -3203,12 +3203,12 @@ export async function getDungeons(userProfile, hypixelProfile) {
         break;
       }
 
-      let level_step = steps
+      const level_step = steps
         .slice()
         .reverse()
         .find((a) => a <= x);
 
-      let level_bonus = level_stats[level_step];
+      const level_bonus = level_stats[level_step];
 
       for (const bonus in level_bonus) {
         switch (name) {
@@ -3223,7 +3223,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
 }
 
 export async function getEssence(userProfile, hypixelProfile) {
-  let output = {};
+  const output = {};
 
   for (const essence in constants.essence) {
     output[essence] = userProfile?.[`essence_${essence}`] ?? 0;
@@ -3425,13 +3425,13 @@ export function getMiningCoreData(userProfile) {
 }
 
 export async function getForge(userProfile) {
-  let output = {};
+  const output = {};
 
   if (userProfile?.forge?.forge_processes?.forge_1) {
     const forge = Object.values(userProfile.forge.forge_processes.forge_1);
     const processes = [];
     for (const item of forge) {
-      let forgeItem = {
+      const forgeItem = {
         id: item.id,
         slot: item.slot,
         timeFinished: 0,
@@ -3652,7 +3652,7 @@ export const getProfile = async (
   const storeProfiles = {};
 
   for (const _profile of allSkyBlockProfiles) {
-    let userProfile = _profile.members[paramPlayer];
+    const userProfile = _profile.members[paramPlayer];
 
     if (!userProfile) {
       continue;
@@ -3693,7 +3693,7 @@ export const getProfile = async (
       return;
     }
 
-    let userProfile = _profile.members[paramPlayer];
+    const userProfile = _profile.members[paramPlayer];
 
     if (userProfile?.last_save > highest) {
       profile = _profile;

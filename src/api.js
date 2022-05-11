@@ -161,7 +161,7 @@ export default (app, db) => {
             minions.push({ minion: minionName, level: minionLevel });
           }
 
-          let minionObject = minions.find((a) => a.minion == minionName);
+          const minionObject = minions.find((a) => a.minion == minionName);
 
           if (minionObject.level < minionLevel) {
             minionObject.level = minionLevel;
@@ -362,7 +362,7 @@ export default (app, db) => {
 
       const items = await lib.getItems(userProfile);
 
-      let output = [];
+      const output = [];
 
       for (const weapon of items.weapons) {
         const enchantments = weapon.tag.ExtraAttributes.enchantments;
@@ -435,7 +435,7 @@ export default (app, db) => {
 
       const items = await lib.getItems(userProfile);
 
-      let output = [];
+      const output = [];
 
       for (const armor of items.armor) {
         const enchantments = armor.tag.ExtraAttributes.enchantments;
@@ -490,7 +490,7 @@ export default (app, db) => {
 
       const items = await lib.getItems(userProfile);
 
-      let output = [];
+      const output = [];
 
       for (const wardrobe of items.wardrobe) {
         for (const armor of wardrobe) {

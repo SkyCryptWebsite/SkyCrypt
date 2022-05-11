@@ -18,8 +18,8 @@ const skew_a = 26 / 45;
 const skew_b = skew_a * 2;
 
 function hasTransparency(canvas) {
-  let ctx = canvas.getContext("2d");
-  let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+  const ctx = canvas.getContext("2d");
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
   for (let i = 3; i < imageData.length; i += 4) {
     if (imageData[i] < 255) {
@@ -31,8 +31,8 @@ function hasTransparency(canvas) {
 }
 
 function resize(src, scale) {
-  let dst = createCanvas(scale * src.width, scale * src.height);
-  let ctx = dst.getContext("2d");
+  const dst = createCanvas(scale * src.width, scale * src.height);
+  const ctx = dst.getContext("2d");
 
   // don't blur on resize
   ctx.patternQuality = "fast";
@@ -42,8 +42,8 @@ function resize(src, scale) {
 }
 
 function getPart(src, x, y, width, height, scale) {
-  let dst = createCanvas(scale * width, scale * height);
-  let ctx = dst.getContext("2d");
+  const dst = createCanvas(scale * width, scale * height);
+  const ctx = dst.getContext("2d");
 
   // don't blur on resize
   ctx.patternQuality = "fast";
@@ -53,8 +53,8 @@ function getPart(src, x, y, width, height, scale) {
 }
 
 function flipX(src) {
-  let dst = createCanvas(src.width, src.height);
-  let ctx = dst.getContext("2d");
+  const dst = createCanvas(src.width, src.height);
+  const ctx = dst.getContext("2d");
 
   ctx.translate(src.width, 0);
   ctx.scale(-1, 1);
@@ -64,8 +64,8 @@ function flipX(src) {
 }
 
 function darken(src, factor) {
-  let dst = createCanvas(src.width, src.height);
-  let ctx = dst.getContext("2d");
+  const dst = createCanvas(src.width, src.height);
+  const ctx = dst.getContext("2d");
 
   ctx.drawImage(src, 0, 0);
 
@@ -113,25 +113,25 @@ async function renderColoredItem(color, baseImage, overlayImage) {
 }
 
 export async function renderHead(url, scale) {
-  let hat_factor = 0.94;
+  const hat_factor = 0.94;
 
-  let canvas = createCanvas(scale * 20, scale * 18.5);
-  let hat_canvas = createCanvas(scale * 20, scale * 18.5);
-  let hat_bg_canvas = createCanvas(scale * 20, scale * 18.5);
-  let head_canvas = createCanvas(scale * 20 * hat_factor, scale * 18.5);
+  const canvas = createCanvas(scale * 20, scale * 18.5);
+  const hat_canvas = createCanvas(scale * 20, scale * 18.5);
+  const hat_bg_canvas = createCanvas(scale * 20, scale * 18.5);
+  const head_canvas = createCanvas(scale * 20 * hat_factor, scale * 18.5);
 
-  let ctx = canvas.getContext("2d");
-  let hat = hat_canvas.getContext("2d");
-  let hat_bg = hat_bg_canvas.getContext("2d");
-  let head = head_canvas.getContext("2d");
+  const ctx = canvas.getContext("2d");
+  const hat = hat_canvas.getContext("2d");
+  const hat_bg = hat_bg_canvas.getContext("2d");
+  const head = head_canvas.getContext("2d");
 
-  let skin = await loadImage(url);
+  const skin = await loadImage(url);
 
   let head_bottom = resize(getPart(skin, 16, 0, 8, 8, 1), scale * (hat_factor + 0.01));
-  let head_top = resize(getPart(skin, 8, 0, 8, 8, 1), scale * (hat_factor + 0.01));
+  const head_top = resize(getPart(skin, 8, 0, 8, 8, 1), scale * (hat_factor + 0.01));
   let head_back = flipX(resize(getPart(skin, 24, 8, 8, 8, 1), scale * (hat_factor + 0.01)));
   let head_front = resize(getPart(skin, 8, 8, 8, 8, 1), scale * (hat_factor + 0.01));
-  let head_left = flipX(resize(getPart(skin, 16, 8, 8, 8, 1), scale * (hat_factor + 0.01)));
+  const head_left = flipX(resize(getPart(skin, 16, 8, 8, 8, 1), scale * (hat_factor + 0.01)));
   let head_right = resize(getPart(skin, 0, 8, 8, 8, 1), scale * (hat_factor + 0.01));
 
   head_right = darken(head_right, 0.15);
@@ -165,8 +165,8 @@ export async function renderHead(url, scale) {
   let y = 0;
   let z = 0;
 
-  let z_offset = scale * 3;
-  let x_offset = scale * 2;
+  const z_offset = scale * 3;
+  const x_offset = scale * 2;
 
   if (head_top_overlay) {
     // hat left

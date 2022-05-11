@@ -33,7 +33,7 @@ export function makeLore(item) {
       continue;
     }
 
-    let split = lore_raw[i].split(":")[1].split(" ");
+    const split = lore_raw[i].split(":")[1].split(" ");
 
     if (split.length < 2) {
       continue;
