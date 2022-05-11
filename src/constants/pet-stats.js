@@ -3166,8 +3166,10 @@ class Wisp extends Pet {
       { kills: 200000, defense: 600, true_defense: 60 },
     ];
 
+    const blaze_kills = this.extra?.blaze_kills ?? 0;
+
     let maxTier = false;
-    let bonusIndex = bonuses.findIndex((x) => x.kills > this.extra.blaze_kills);
+    let bonusIndex = bonuses.findIndex((x) => x.kills > blaze_kills);
 
     if (bonusIndex === -1) {
       bonusIndex = bonuses.length;
@@ -3189,7 +3191,7 @@ class Wisp extends Pet {
         !maxTier
           ? `§7Next Upgrade: §a+${next.defense} ${symbols.defense} §7& §f+${next.true_defense} ${
               symbols.true_defense
-            } §7(§a${this.extra.blaze_kills.toLocaleString()}§7/§c${next.kills.toLocaleString()}§7)`
+            } §7(§a${blaze_kills.toLocaleString()}§7/§c${next.kills.toLocaleString()}§7)`
           : "§aMAXED OUT!",
       ],
     };
