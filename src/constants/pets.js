@@ -40,6 +40,7 @@ export const pet_levels = [
  *     bingoExclusive?: boolean (default: false),
  *     obtainsExp?: "feed" (default: false),
  *     customLevelExpRarityOffset?: rarity (default: false),
+ *     ignoresTierBoost?: boolean (default: false),
  *   }
  * }
  */
@@ -473,14 +474,8 @@ export const pet_data = {
     maxLevel: 100,
     emoji: "💦",
     obtainsExp: "feed",
+    ignoresTierBoost: true,
   },
-  // DROPLET_WISP: {
-  //   head: "/head/b412e70375ec99ee38ae94b30e9b10752d459662b54794dfe66fe6a183c672d3",
-  //   type: "combat",
-  //   maxTier: "LEGENDARY",
-  //   maxLevel: 100,
-  //   emoji: "💦",
-  // },
 };
 
 export const pet_value = {

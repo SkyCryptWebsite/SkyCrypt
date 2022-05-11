@@ -330,11 +330,11 @@ function getRarityUpgradeClass(item) {
   let upgrades = 0
 
   upgrades += item.extra?.recombobulated ? 1 : 0
-  upgrades += item.heldItem === 'PET_ITEM_TIER_BOOST' ? 1 : 0
+  upgrades += item.heldItem === 'PET_ITEM_TIER_BOOST' && !item.ignoresTierBoost ? 1 : 0
   upgrades += item.heldItem === 'PET_ITEM_VAMPIRE_FANG' ? 1 : 0
   upgrades += item.heldItem === 'PET_ITEM_TOY_JERRY' ? 1 : 0
 
-  return `piece-rarity-upgrade-${upgrades}`
+  return upgrades > 0 ? `piece-rarity-upgrade-${upgrades}` : ''
 }
 
 function getMetaTitle() {

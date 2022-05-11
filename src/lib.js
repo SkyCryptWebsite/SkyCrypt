@@ -2667,6 +2667,56 @@ export async function getPets(profile) {
       skin: null,
       uuid: helper.generateUUID(),
     },
+    {
+      type: "DROPLET_WISP",
+      active: false,
+      exp: 0,
+      tier: "UNCOMMON",
+      candyUsed: 0,
+      heldItem: null,
+      skin: null,
+      uuid: helper.generateUUID(),
+    },
+    {
+      type: "DROPLET_WISP",
+      active: false,
+      exp: 0,
+      tier: "UNCOMMON",
+      candyUsed: 0,
+      heldItem: "PET_ITEM_TIER_BOOST",
+      skin: null,
+      uuid: helper.generateUUID(),
+    },
+    {
+      type: "DROPLET_WISP",
+      active: false,
+      exp: 0,
+      tier: "RARE",
+      candyUsed: 0,
+      heldItem: null,
+      skin: null,
+      uuid: helper.generateUUID(),
+    },
+    {
+      type: "DROPLET_WISP",
+      active: false,
+      exp: 0,
+      tier: "EPIC",
+      candyUsed: 0,
+      heldItem: null,
+      skin: null,
+      uuid: helper.generateUUID(),
+    },
+    {
+      type: "DROPLET_WISP",
+      active: false,
+      exp: 0,
+      tier: "LEGENDARY",
+      candyUsed: 0,
+      heldItem: null,
+      skin: null,
+      uuid: helper.generateUUID(),
+    },
     // {
     //   type: "MOOSHROOM_COW",
     //   active: false,
@@ -2713,12 +2763,12 @@ export async function getPets(profile) {
     };
 
     pet.rarity = pet.tier.toLowerCase();
-    pet.rarityOriginal = pet.rarity;
     pet.stats = {};
+    pet.ignoresTierBoost = petData.ignoresTierBoost;
     const lore = [];
 
     // Rarity upgrades
-    if (pet.heldItem == "PET_ITEM_TIER_BOOST") {
+    if (pet.heldItem == "PET_ITEM_TIER_BOOST" && !pet.ignoresTierBoost) {
       pet.rarity =
         constants.rarities[
           Math.min(constants.rarities.indexOf(petData.maxTier), constants.rarities.indexOf(pet.rarity) + 1)
@@ -2735,7 +2785,7 @@ export async function getPets(profile) {
 
     // Get texture
     if (typeof petData.head === "object") {
-      pet.texture_path = petData.head[pet.rarityOriginal] ?? petData.head.default;
+      pet.texture_path = petData.head[pet.rarity] ?? petData.head.default;
     } else {
       pet.texture_path = petData.head;
     }
@@ -2774,7 +2824,7 @@ export async function getPets(profile) {
       petData.hatching?.level > pet.level.level
         ? petData.hatching.name
         : petData.name
-        ? petData.name[pet.rarityOriginal] ?? petData.name.default
+        ? petData.name[pet.rarity] ?? petData.name.default
         : helper.titleCase(pet.type.replaceAll("_", " "));
 
     const rarity = constants.rarities.indexOf(pet.rarity);

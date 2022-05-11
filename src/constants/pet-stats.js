@@ -1,5 +1,11 @@
-import { symbols } from "../../common/constants.js";
+import { symbols, rarities } from "../../common/constants.js";
 import { round, floor } from "../helper.js";
+
+const COMMON = rarities.indexOf("common");
+const UNCOMMON = rarities.indexOf("uncommon");
+const RARE = rarities.indexOf("rare");
+const EPIC = rarities.indexOf("epic");
+const LEGENDARY = rarities.indexOf("legendary");
 
 function formatStat(stat) {
   const statFloored = Math.floor(stat);
@@ -7,6 +13,23 @@ function formatStat(stat) {
     return `§a+${statFloored}`;
   } else {
     return `§a${statFloored}`;
+  }
+}
+
+function getValue(rarity, common, uncommon, rare, epic, legendary) {
+  switch (rarity) {
+    case COMMON:
+      return common;
+    case UNCOMMON:
+      return uncommon;
+    case RARE:
+      return rare;
+    case EPIC:
+      return epic;
+    case LEGENDARY:
+      return legendary;
+    default:
+      throw new Error("Unknown rarity");
   }
 }
 
@@ -3100,34 +3123,61 @@ class Wisp extends Pet {
   }
 
   get abilities() {
-    const list = [this.first];
-    if (this.rarity > 1) {
-      list.push(this.second);
+    const list = [this.first, this.second, this.third];
+    if (this.rarity >= RARE) {
+      list.push(this.fourth);
     }
-    if (this.rarity > 3) {
-      list.push(this.third);
+    if (this.rarity >= LEGENDARY) {
+      list.push(this.fifth);
     }
     return list;
   }
 
   get first() {
     return {
-      name: "§6???",
-      desc: [`§7???`],
+      name: "§6Drophammer",
+      desc: [`§7Lets you break fire pillars`],
     };
   }
 
   get second() {
     return {
-      name: "§6???",
-      desc: [`§7???`],
+      name: "§6Bulwark",
+      desc: [
+        `§7Kill Blazes to gain defense against them`,
+        `§7Bonus: §a+30 ${symbols.defense} Defense §7& §f+3 ${symbols.true_defense} True Defense`,
+        `§7Next Upgrade: §a+30 ${symbols.defense} Defense §7& §f+3 ${symbols.true_defense} True Defense §7(§a0§7/§a100§7)`,
+      ],
     };
   }
 
   get third() {
+    const mult = getValue(this.rarity, 0, 0.3, 0.35, 0.4, 0.4);
+    const prc = round(this.level * mult, 1);
+
     return {
-      name: "§6???",
-      desc: [`§7???`],
+      name: "§6Blaze Slayer",
+      desc: [`§7Gain §a+${prc}% §7more combat xp from Blazes`],
+    };
+  }
+
+  get fourth() {
+    const mult1 = getValue(this.rarity, 0, 0, 0.15, 0.2, 0.25);
+    const mult2 = getValue(this.rarity, 0, 0, 0.04, 0.07, 0.1);
+    const val1 = round(this.level * mult1, 1);
+    const val2 = round(this.level * mult2, 1);
+    return {
+      name: "§6Extinguish",
+      desc: [
+        `§7While in combat on the Crimson Isle, spawn a pool every §a8s§7. Bathing in it heals §c${val1}% ${symbols.health} Health §7now and §c${val2}% ${symbols.health} Health§7/s for §a8s`,
+      ],
+    };
+  }
+
+  get fifth() {
+    return {
+      name: "§6Cold Fusion",
+      desc: [`§7Regenerate mana §b${round(this.level * 0.4, 1)}% §7faster`],
     };
   }
 }
