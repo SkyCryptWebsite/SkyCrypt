@@ -3223,6 +3223,120 @@ class Wisp extends Pet {
   }
 }
 
+class MooshroomCow extends Pet {
+  get stats() {
+    return {};
+  }
+
+  get abilities() {
+    const list = [this.first];
+    if (this.rarity > 1) {
+      list.push(this.second);
+    }
+    if (this.rarity > 3) {
+      list.push(this.third);
+    }
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6???",
+      desc: [`§7???`],
+    };
+  }
+
+  get second() {
+    return {
+      name: "§6???",
+      desc: [`§7???`],
+    };
+  }
+
+  get third() {
+    return {
+      name: "§6???",
+      desc: [`§7???`],
+    };
+  }
+}
+
+class Snail extends Pet {
+  get stats() {
+    return {};
+  }
+
+  get abilities() {
+    const list = [this.first];
+    if (this.rarity > 1) {
+      list.push(this.second);
+    }
+    if (this.rarity > 3) {
+      list.push(this.third);
+    }
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6???",
+      desc: [`§7???`],
+    };
+  }
+
+  get second() {
+    return {
+      name: "§6???",
+      desc: [`§7???`],
+    };
+  }
+
+  get third() {
+    return {
+      name: "§6???",
+      desc: [`§7???`],
+    };
+  }
+}
+
+class Kuudra extends Pet {
+  get stats() {
+    return {};
+  }
+
+  get abilities() {
+    const list = [this.first];
+    if (this.rarity > 1) {
+      list.push(this.second);
+    }
+    if (this.rarity > 3) {
+      list.push(this.third);
+    }
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6???",
+      desc: [`§7???`],
+    };
+  }
+
+  get second() {
+    return {
+      name: "§6???",
+      desc: [`§7???`],
+    };
+  }
+
+  get third() {
+    return {
+      name: "§6???",
+      desc: [`§7???`],
+    };
+  }
+}
+
 class QuestionMark extends Pet {
   get stats() {
     return {};
@@ -3275,6 +3389,7 @@ export const petStats = {
   BLUE_WHALE: BlueWhale,
   CHICKEN: Chicken,
   DOLPHIN: Dolphin,
+  DROPLET_WISP: Wisp,
   ELEPHANT: Elephant,
   ENDER_DRAGON: EnderDragon,
   ENDERMAN: Enderman,
@@ -3291,11 +3406,13 @@ export const petStats = {
   HOUND: Hound,
   JELLYFISH: Jellyfish,
   JERRY: Jerry,
+  KUUDRA: Kuudra,
   LION: Lion,
   MAGMA_CUBE: MagmaCube,
   MEGALODON: Megalodon,
   MITHRIL_GOLEM: MithrilGolem,
   MONKEY: Monkey,
+  MOOSHROOM_COW: MooshroomCow,
   OCELOT: Ocelot,
   PARROT: Parrot,
   PHOENIX: Phoenix,
@@ -3309,6 +3426,7 @@ export const petStats = {
   SILVERFISH: Silverfish,
   SKELETON_HORSE: SkeletonHorse,
   SKELETON: Skeleton,
+  SNAIL: Snail,
   SNOWMAN: Snowman,
   SPIDER: Spider,
   SPIRIT: Spirit,
@@ -3319,5 +3437,4 @@ export const petStats = {
   WITHER_SKELETON: WitherSkeleton,
   WOLF: Wolf,
   ZOMBIE: Zombie,
-  DROPLET_WISP: Wisp,
 };

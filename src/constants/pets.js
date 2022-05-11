@@ -28,21 +28,19 @@ export const pet_levels = [
 ];
 
 /*
- * {
- *   PET_TYPE: {
- *     head: string | { default: string, rarity?: string },
- *     type: string,
- *     maxTier: string,
- *     maxLevel: number,
- *     emoji: string,
- *     category?: "Mount" | "Morph" | string (default "Pet"),
- *     passivePerks?: boolean (default: false),
- *     bingoExclusive?: boolean (default: false),
- *     obtainsExp?: "feed" (default: false),
- *     customLevelExpRarityOffset?: rarity (default: false),
- *     ignoresTierBoost?: boolean (default: false),
- *   }
- * }
+  PET_TYPE: {
+    head: string | { default: string, rarity?: string },
+    type: string,
+    maxTier: string,
+    maxLevel: number,
+    emoji: string,
+    category?: "Mount" | "Morph" | string (default "Pet"),
+    passivePerks?: boolean (default: false),
+    bingoExclusive?: boolean (default: false),
+    obtainsExp?: "feed" (default: false),
+    customLevelExpRarityOffset?: rarity (default: false),
+    ignoresTierBoost?: boolean (default: false),
+  }
  */
 export const pet_data = {
   ARMADILLO: {
@@ -475,6 +473,27 @@ export const pet_data = {
     emoji: "💦",
     obtainsExp: "feed",
     ignoresTierBoost: true,
+  },
+  MOOSHROOM_COW: {
+    head: "/head/2b52841f2fd589e0bc84cbabf9e1c27cb70cac98f8d6b3dd065e55a4dcb70d77",
+    type: "farming",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🐮",
+  },
+  SNAIL: {
+    head: "/head/50a9933a3b10489d38f6950c4e628bfcf9f7a27f8d84666f04f14d5374252972",
+    type: "mining",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🐌",
+  },
+  KUUDRA: {
+    head: "/head/1f0239fb498e5907ede12ab32629ee95f0064574a9ffdff9fc3a1c8e2ec17587",
+    type: "combat",
+    maxTier: "legendary",
+    maxLevel: 200,
+    emoji: "👹",
   },
 };
 
