@@ -3278,7 +3278,9 @@ class MooshroomCow extends Pet {
 
 class Snail extends Pet {
   get stats() {
-    return {};
+    return {
+      intelligence: round(this.level * 1),
+    };
   }
 
   get abilities() {
@@ -3293,23 +3295,36 @@ class Snail extends Pet {
   }
 
   get first() {
+    const mult = getValue(this.rarity, 0.1, 0.2, 0.3, 0.3, 0.3);
+    const prc = round(this.level * mult, 1);
+
     return {
-      name: "§6???",
-      desc: [`§7???`],
+      name: "§6Red Sand Enjoyer",
+      desc: [`§7Red Sand minions work §a${prc}% §7faster while on your island`],
     };
   }
 
   get second() {
+    const mult = getValue(this.rarity, 0, 0, 0.3, 0.5, 0.5);
+    const prc = round(this.level * mult, 1);
+
     return {
-      name: "§6???",
-      desc: [`§7???`],
+      name: "§6Slow Moving",
+      desc: [
+        `§7Converts all §f${symbols.speed} Speed §7over 100 into §6${symbols.mining_fortune} Mining Fortune §7for Non-Ores at §a${prc}% §7efficiency`,
+        // `Current bonus: +0 ${symbols.mining_fortune} Mining Fortune`,
+      ],
     };
   }
 
   get third() {
+    const prc = round(this.level * 0.01, 1);
+
     return {
-      name: "§6???",
-      desc: [`§7???`],
+      name: "§6Slow But Efficient",
+      desc: [
+        `§7Reduces the mana cost of §9Utility Abilities §7by §a${prc}% §7for every +15 §f${symbols.speed} Speed §7converted`,
+      ],
     };
   }
 }

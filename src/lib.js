@@ -2718,7 +2718,7 @@ export async function getPets(profile) {
     //   uuid: helper.generateUUID(),
     // },
     {
-      type: "MOOSHROOM_COW",
+      type: "SNAIL",
       active: false,
       exp: 0,
       tier: "COMMON",
@@ -2728,7 +2728,7 @@ export async function getPets(profile) {
       uuid: helper.generateUUID(),
     },
     {
-      type: "MOOSHROOM_COW",
+      type: "SNAIL",
       active: false,
       exp: 1000000000,
       tier: "COMMON",
@@ -2738,7 +2738,7 @@ export async function getPets(profile) {
       uuid: helper.generateUUID(),
     },
     {
-      type: "MOOSHROOM_COW",
+      type: "SNAIL",
       active: false,
       exp: 0,
       tier: "UNCOMMON",
@@ -2748,7 +2748,7 @@ export async function getPets(profile) {
       uuid: helper.generateUUID(),
     },
     {
-      type: "MOOSHROOM_COW",
+      type: "SNAIL",
       active: false,
       exp: 1000000000,
       tier: "UNCOMMON",
@@ -2758,7 +2758,7 @@ export async function getPets(profile) {
       uuid: helper.generateUUID(),
     },
     {
-      type: "MOOSHROOM_COW",
+      type: "SNAIL",
       active: false,
       exp: 0,
       tier: "RARE",
@@ -2768,7 +2768,7 @@ export async function getPets(profile) {
       uuid: helper.generateUUID(),
     },
     {
-      type: "MOOSHROOM_COW",
+      type: "SNAIL",
       active: false,
       exp: 1000000000,
       tier: "RARE",
@@ -2778,7 +2778,7 @@ export async function getPets(profile) {
       uuid: helper.generateUUID(),
     },
     {
-      type: "MOOSHROOM_COW",
+      type: "SNAIL",
       active: false,
       exp: 0,
       tier: "EPIC",
@@ -2788,7 +2788,7 @@ export async function getPets(profile) {
       uuid: helper.generateUUID(),
     },
     {
-      type: "MOOSHROOM_COW",
+      type: "SNAIL",
       active: false,
       exp: 1000000000,
       tier: "EPIC",
@@ -2798,7 +2798,7 @@ export async function getPets(profile) {
       uuid: helper.generateUUID(),
     },
     {
-      type: "MOOSHROOM_COW",
+      type: "SNAIL",
       active: false,
       exp: 0,
       tier: "LEGENDARY",
@@ -2808,7 +2808,7 @@ export async function getPets(profile) {
       uuid: helper.generateUUID(),
     },
     {
-      type: "MOOSHROOM_COW",
+      type: "SNAIL",
       active: false,
       exp: 1000000000,
       tier: "LEGENDARY",
