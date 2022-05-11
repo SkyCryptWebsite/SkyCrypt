@@ -2596,7 +2596,7 @@ export async function getPets(profile) {
     return output;
   }
 
-  profile.pets = [
+  profile.pets2 = [
     // {
     //   type: "FLYING_FISH",
     //   active: false,
@@ -2749,6 +2749,8 @@ export async function getPets(profile) {
     // },
   ];
 
+  profile.pets = profile.pets.filter((x) => x.type === "DROPLET_WISP");
+
   for (const pet of profile.pets) {
     if (!("tier" in pet)) {
       continue;
@@ -2830,7 +2832,7 @@ export async function getPets(profile) {
     const rarity = constants.rarities.indexOf(pet.rarity);
 
     const searchName = pet.type in constants.petStats ? pet.type : "???";
-    const petInstance = new constants.petStats[searchName](rarity, pet.level.level);
+    const petInstance = new constants.petStats[searchName](rarity, pet.level.level, pet.extra);
     pet.stats = Object.assign({}, petInstance.stats);
     pet.ref = petInstance;
 

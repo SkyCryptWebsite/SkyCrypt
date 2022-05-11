@@ -34,9 +34,10 @@ function getValue(rarity, common, uncommon, rare, epic, legendary) {
 }
 
 class Pet {
-  constructor(rarity, level) {
+  constructor(rarity, level, extra) {
     this.rarity = rarity;
     this.level = level;
+    this.extra = extra;
   }
 
   lore(newStats = false) {
@@ -3141,12 +3142,52 @@ class Wisp extends Pet {
   }
 
   get second() {
+    const bonuses = [
+      { kills: 0, defense: 0, true_defense: 0 },
+      { kills: 100, defense: 30, true_defense: 3 },
+      { kills: 200, defense: 60, true_defense: 6 },
+      { kills: 300, defense: 90, true_defense: 9 },
+      { kills: 500, defense: 135, true_defense: 14 },
+      { kills: 800, defense: 180, true_defense: 18 },
+      { kills: 1200, defense: 225, true_defense: 23 },
+      { kills: 1750, defense: 270, true_defense: 27 },
+      { kills: 2500, defense: 315, true_defense: 32 },
+      { kills: 3500, defense: 360, true_defense: 36 },
+      { kills: 5000, defense: 405, true_defense: 41 },
+      { kills: 10000, defense: 465, true_defense: 47 },
+      { kills: 25000, defense: 500, true_defense: 50 },
+      { kills: 50000, defense: 535, true_defense: 53 },
+      { kills: 100000, defense: 570, true_defense: 57 },
+      { kills: 125000, defense: 585, true_defense: 58 },
+      { kills: 150000, defense: 595, true_defense: 59 },
+      { kills: 200000, defense: 600, true_defense: 60 },
+    ];
+
+    let maxTier = false;
+    let bonusIndex = bonuses.findIndex((x) => x.kills > this.extra.blaze_kills);
+
+    if (bonusIndex === -1) {
+      bonusIndex = bonuses.length;
+      maxTier = true;
+    }
+
+    const current = bonuses[bonusIndex - 1];
+
+    let next = null;
+    if (!maxTier) {
+      next = bonuses[bonusIndex];
+    }
+
     return {
       name: "§6Bulwark",
       desc: [
         `§7Kill Blazes to gain defense against them`,
-        `§7Bonus: §a+30 ${symbols.defense} Defense §7& §f+3 ${symbols.true_defense} True Defense`,
-        `§7Next Upgrade: §a+30 ${symbols.defense} Defense §7& §f+3 ${symbols.true_defense} True Defense §7(§a0§7/§a100§7)`,
+        `§7Bonus: §a+${current.defense} ${symbols.defense} §7& §f+${current.true_defense} ${symbols.true_defense}`,
+        !maxTier
+          ? `§7Next Upgrade: §a+${next.defense} ${symbols.defense} §7& §f+${next.true_defense} ${
+              symbols.true_defense
+            } §7(§a${this.extra.blaze_kills.toLocaleString()}§7/§c${next.kills.toLocaleString()}§7)`
+          : "§aMAXED OUT!",
       ],
     };
   }
