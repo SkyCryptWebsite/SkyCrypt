@@ -3229,8 +3229,8 @@ class Wisp extends Pet {
 class MooshroomCow extends Pet {
   get stats() {
     return {
-      farming_fortune: round(10 + this.level * 1),
       health: round(this.level * 1),
+      farming_fortune: round(10 + this.level * 1),
     };
   }
 
@@ -3283,10 +3283,10 @@ class Snail extends Pet {
 
   get abilities() {
     const list = [this.first];
-    if (this.rarity > 1) {
+    if (this.rarity >= RARE) {
       list.push(this.second);
     }
-    if (this.rarity > 3) {
+    if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
     return list;
@@ -3321,10 +3321,10 @@ class Kuudra extends Pet {
 
   get abilities() {
     const list = [this.first];
-    if (this.rarity > 1) {
+    if (this.rarity >= RARE) {
       list.push(this.second);
     }
-    if (this.rarity > 3) {
+    if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
     return list;
@@ -3359,10 +3359,10 @@ class QuestionMark extends Pet {
 
   get abilities() {
     const list = [this.first];
-    if (this.rarity > 1) {
+    if (this.rarity >= RARE) {
       list.push(this.second);
     }
-    if (this.rarity > 3) {
+    if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
     return list;
