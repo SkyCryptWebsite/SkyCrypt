@@ -98,6 +98,9 @@ class Pet {
         case "mining_fortune":
           list.push(`§7Mining Fortune: ${formatStat(newStats[stat])}`);
           break;
+        case "farming_fortune":
+          list.push(`§7Farming Fortune: ${formatStat(newStats[stat])}`);
+          break;
         default:
           list.push(`§cUNKNOWN: ${stat}`);
           break;
@@ -3225,38 +3228,50 @@ class Wisp extends Pet {
 
 class MooshroomCow extends Pet {
   get stats() {
-    return {};
+    return {
+      farming_fortune: round(10 + this.level * 1),
+      health: round(this.level * 1),
+    };
   }
 
   get abilities() {
     const list = [this.first];
-    if (this.rarity > 1) {
+    if (this.rarity >= RARE) {
       list.push(this.second);
     }
-    if (this.rarity > 3) {
+    if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
     return list;
   }
 
   get first() {
+    const mult = getValue(this.rarity, 0.2, 0.2, 0.3, 0.3, 0.3);
+    const prc = round(this.level * mult, 1);
+
     return {
-      name: "§6???",
-      desc: [`§7???`],
+      name: "§6Efficient Mushrooms",
+      desc: [`§7Mushroom and Mycelium minions work §a${prc}% §7faster while on your island`],
     };
   }
 
   get second() {
+    const prc = round(this.level * 0.99 + 1.01, 1);
+
     return {
-      name: "§6???",
-      desc: [`§7???`],
+      name: "§6Mushroom Eater",
+      desc: [`§7When breaking crops, there is a §a${prc}% §7chance that a mushroom will drop`],
     };
   }
 
   get third() {
+    const str = round(40 - this.level * 0.2, 1);
+
     return {
-      name: "§6???",
-      desc: [`§7???`],
+      name: "§6Farming Strength",
+      desc: [
+        `§7Gain §6+1 ${symbols.farming_fortune} Farming Fortune §7per every §c${str} ${symbols.strength} Strength`,
+      ],
     };
   }
 }
