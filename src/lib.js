@@ -2855,7 +2855,7 @@ export async function getMissingPets(pets, gameMode) {
       exp: getPetExp(constants.pet_data[petType].maxTier, constants.pet_data[petType].maxLevel),
       tier: constants.pet_data[petType].maxTier,
       candyUsed: 0,
-      heldItem: "DWARF_TURTLE_SHELMET",
+      heldItem: null,
       skin: null,
       uuid: helper.generateUUID(),
     });
