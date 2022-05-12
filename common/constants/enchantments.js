@@ -28,7 +28,7 @@ export const maxEnchants = new Set([
   "Feather Falling X",
   "Feather Falling XX",
   "Ferocious Mana X",
-  "Fire Aspect II",
+  "Fire Aspect III",
   "Fire Protection VII",
   "First Strike V",
   "Flame I",

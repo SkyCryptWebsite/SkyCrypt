@@ -114,7 +114,7 @@ export const statsData = {
     nameLore: "True Defense",
     nameShort: "True Defense",
     nameTiny: "TD",
-    symbol: "❂", // todo: missing icon in icomoon font
+    symbol: "❂",
     suffix: "",
     color: "f",
   },
@@ -184,8 +184,10 @@ export const statsData = {
 };
 
 const _symbols = {
-  powder: "᠅", // todo: missing icon in icomoon font
-  soulflow: "⸎", // todo: missing icon in icomoon font
+  powder: "᠅",
+  soulflow: "⸎",
+  dungeon_upgrade: "⚚",
+  dye: "✿",
 };
 for (const stat in statsData) {
   _symbols[stat] = statsData[stat].symbol;

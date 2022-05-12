@@ -268,20 +268,24 @@ function fillLore(element: HTMLElement) {
   }
 
   itemName.className = `item-name piece-${item.rarity || "common"}-bg nice-colors-dark`;
-  itemNameContent.innerHTML = item.display_name || "null";
+  const itemNameHtml = renderLore((item as Item).tag?.display?.Name ?? item.display_name ?? "???");
+  const isMulticolor = (itemNameHtml.match(/<\/span>/g) || []).length > 1;
+  itemNameContent.dataset.multicolor = String(isMulticolor);
+  itemNameContent.innerHTML = isMulticolor ? itemNameHtml : item.display_name ?? "???";
 
   if (element.hasAttribute("data-pet-index")) {
+    itemNameContent.dataset.multicolor = "false";
     itemNameContent.innerHTML = `[Lvl ${(item as Pet).level.level}] ${item.display_name}`;
   }
 
   if (item.texture_path) {
     itemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
-    itemIcon.className = "stats-piece-icon item-icon custom-icon";
+    itemIcon.classList.add("item-icon", "custom-icon");
   } else if ("id" in item) {
     itemIcon.removeAttribute("style");
     itemIcon.classList.remove("custom-icon");
     const idClass = `icon-${item.id}_${item.Damage}` + " " + (item.Damage != 0 ? `icon-${item.id}_0` : "");
-    itemIcon.className = "stats-piece-icon item-icon " + idClass;
+    itemIcon.classList.add("item-icon", idClass.trim());
   } else {
     throw new Error("item mush have either an id and a damage or a texture_path");
   }
@@ -549,8 +553,8 @@ for (const element of document.querySelectorAll(".inventory-tab")) {
 
 const statsContent = document.querySelector("#stats_content") as HTMLElement;
 const itemName = statsContent.querySelector(".item-name") as HTMLElement;
-const itemIcon = itemName.querySelector("div:first-child") as HTMLDivElement;
-const itemNameContent = itemName.querySelector("span") as HTMLSpanElement;
+const itemIcon = itemName.querySelector(".stats-piece-icon") as HTMLDivElement;
+const itemNameContent = itemName.querySelector(".item-name__name") as HTMLSpanElement;
 const itemLore = statsContent.querySelector(".item-lore") as HTMLElement;
 const backpackContents = statsContent.querySelector(".backpack-contents") as HTMLElement;
 

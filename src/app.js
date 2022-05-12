@@ -145,6 +145,8 @@ const commitHash = updateCommitHash();
 await apiv2.init();
 await api.init();
 
+const featuredProfiles = fs.readJSONSync(path.resolve("./public/resources/js/featured-profiles.json"));
+
 const app = express();
 const port = process.env.SKYCRYPT_PORT ?? 32464;
 
@@ -225,8 +227,7 @@ async function getExtra(page = null, favoriteUUIDs = [], cacheOnly) {
 
   if (page === "index") {
     output.favorites = await getFavoritesFormUUIDs(favoriteUUIDs);
-
-    output.devs = await db.collection("featuredProfiles").find().sort({ position: 1 }).toArray();
+    output.featured = featuredProfiles;
   }
 
   return output;

@@ -544,25 +544,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       item.display_name = helper.getRawLore(item.tag.display.Name);
     }
 
-    if (item.tag?.ExtraAttributes?.dungeon_item_level > 0) {
-      const dungeonItemLevel = item.tag.ExtraAttributes.dungeon_item_level;
-      let newStars = null;
-
-      switch (true) {
-        case dungeonItemLevel <= 5:
-          newStars = "✪".repeat(dungeonItemLevel);
-          break;
-        case dungeonItemLevel <= 10:
-          newStars = "⍟".repeat(dungeonItemLevel - 5) + "✪".repeat(5 - (dungeonItemLevel - 5));
-          break;
-        default:
-          newStars = "✪".repeat(dungeonItemLevel);
-          break;
-      }
-
-      item.display_name = item.display_name.replace(/(✪+)/, newStars);
-    }
-
     // Resolve skull textures to their image path
     if (
       Array.isArray(item.tag?.SkullOwner?.Properties?.textures) &&
@@ -1003,6 +984,15 @@ export const getItems = async (
 
   const talismans = [];
   const talisman_ids = [];
+  const accessory_rarities = {
+    common: 0,
+    uncommon: 0,
+    rare: 0,
+    epic: 0,
+    legendary: 0,
+    mythic: 0,
+    hegemony: null,
+  };
 
   // Modify talismans on armor and add
   for (const talisman of armor.filter((a) => a.categories.includes("accessory"))) {
@@ -1068,6 +1058,10 @@ export const getItems = async (
 
     talismans.push(insertTalisman);
     talisman_ids.push(id);
+    accessory_rarities[insertTalisman.rarity]++;
+    if (id == "HEGEMONY_ARTIFACT") {
+      accessory_rarities.hegemony = { rarity: insertTalisman.rarity };
+    }
   }
 
   // Add inactive talismans from enderchest and backpacks
@@ -1187,6 +1181,7 @@ export const getItems = async (
 
   output.talismans = talismans;
   output.talisman_ids = talisman_ids;
+  output.accessory_rarities = accessory_rarities;
 
   output.weapons = all_items.filter((a) => a.categories?.includes("weapon"));
   output.farming_tools = all_items.filter((a) => a.categories?.includes("farming_tool"));
