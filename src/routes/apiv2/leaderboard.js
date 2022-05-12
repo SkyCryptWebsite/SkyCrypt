@@ -1,5 +1,4 @@
 import * as helper from "../../helper.js";
-import cors from "cors";
 import express from "express";
 import leaderboard from "../../leaderboards.js";
 

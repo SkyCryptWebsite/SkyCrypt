@@ -1,6 +1,5 @@
 import * as helper from "../../helper.js";
 import * as lib from "../../lib.js";
-import cors from "cors";
 import express from "express";
 
 import { db } from "../../mongo.js";
@@ -12,7 +11,7 @@ router.use((req, res, next) => {
   next();
 });
 
-router.get("/:player/:profile", cors(), async (req, res, next) => {
+router.get("/:player/:profile", async (req, res, next) => {
   try {
     const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 

@@ -1,6 +1,5 @@
 import * as helper from "../../helper.js";
 import * as lib from "../../lib.js";
-import cors from "cors";
 import express from "express";
 
 import { db } from "../../mongo.js";
