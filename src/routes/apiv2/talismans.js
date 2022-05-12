@@ -1,9 +1,9 @@
-import * as helper from "../../../helper.js";
-import * as lib from "../../../lib.js";
-import cors from "cors";
+import * as helper from "../../helper.js";
+import * as lib from "../../lib.js";
 import express from "express";
 
-import { db } from "../../../mongo.js";
+import { db } from "../../mongo.js";
+import { handleError } from "../apiv2.js";
 
 const router = express.Router();
 
@@ -12,14 +12,11 @@ router.use((req, res, next) => {
   next();
 });
 
-router.get("/:player/:profile", cors(), async (req, res, next) => {
+router.get("/:player/:profile", async (req, res, next) => {
   try {
     const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
-    let output = {
-      error: "Invalid Profile Name!",
-    };
-
+    let output;
     for (const singleProfile of allProfiles) {
       const cute_name = singleProfile.cute_name;
 
@@ -37,13 +34,18 @@ router.get("/:player/:profile", cors(), async (req, res, next) => {
       };
     }
 
+    if (!output) {
+      handleError(res, new Error("Profile not found."), 404, false);
+      return;
+    }
+
     res.json(output);
   } catch (e) {
     next(e);
   }
 });
 
-router.get("/:player", cors(), async (req, res, next) => {
+router.get("/:player", async (req, res, next) => {
   try {
     const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 

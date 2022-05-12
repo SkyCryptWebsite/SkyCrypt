@@ -1,11 +1,11 @@
-import * as helper from "../../../helper.js";
+import * as helper from "../../helper.js";
 import cors from "cors";
 import express from "express";
-import leaderboard from "../../../leaderboards.js";
+import leaderboard from "../../leaderboards.js";
 
-import { db } from "../../../mongo.js";
-import { redisClient } from "../../../redis.js";
-import { handleError } from "../../apiv2.js";
+import { db } from "../../mongo.js";
+import { redisClient } from "../../redis.js";
+import { handleError } from "../apiv2.js";
 
 const router = express.Router();
 
@@ -22,7 +22,7 @@ router.use((req, res, next) => {
  *
  * @todo Remake how leaderboards work in their entirety.
  */
-router.get("/:lbName", cors(), async (req, res, next) => {
+router.get("/:lbName", async (req, res, next) => {
   try {
     const count = Math.min(100, req.query.count || 20);
 

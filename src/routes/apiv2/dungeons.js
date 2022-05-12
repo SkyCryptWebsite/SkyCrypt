@@ -1,9 +1,9 @@
-import * as helper from "../../../helper.js";
-import * as lib from "../../../lib.js";
+import * as helper from "../../helper.js";
+import * as lib from "../../lib.js";
 import cors from "cors";
 import express from "express";
 
-import { db } from "../../../mongo.js";
+import { db } from "../../mongo.js";
 
 const router = express.Router();
 
@@ -45,7 +45,7 @@ router.get("/:player/:profile", cors(), async (req, res, next) => {
   }
 });
 
-router.get("/:player", cors(), async (req, res, next) => {
+router.get("/:player", async (req, res, next) => {
   try {
     const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 

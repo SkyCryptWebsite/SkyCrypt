@@ -1,8 +1,8 @@
-import * as helper from "../../../helper.js";
+import * as helper from "../../helper.js";
 import express from "express";
 
-import { db } from "../../../mongo.js";
-import { productInfo } from "../../apiv2.js";
+import { db } from "../../mongo.js";
+import { productInfo } from "../apiv2.js";
 
 const router = express.Router();
 

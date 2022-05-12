@@ -7,21 +7,18 @@ import { completePacks } from "../custom-resources.js";
 import { db } from "../mongo.js";
 import { redisClient } from "../redis.js";
 
-import { router as bazaarRouter } from "./api/v2/bazaar.js";
-import { router as coinsRouter } from "./api/v2/coins.js";
-import { router as dungeonsRouter } from "./api/v2/dungeons.js";
-import { router as leaderboardRouter } from "./api/v2/leaderboard.js";
-import { router as profileRouter } from "./api/v2/profile.js";
-import { router as slayersRouter } from "./api/v2/slayers.js";
-import { router as talismansRouter } from "./api/v2/talismans.js";
+import { router as bazaarRouter } from "./apiv2/bazaar.js";
+import { router as coinsRouter } from "./apiv2/coins.js";
+import { router as dungeonsRouter } from "./apiv2/dungeons.js";
+import { router as leaderboardRouter } from "./apiv2/leaderboard.js";
+import { router as profileRouter } from "./apiv2/profile.js";
+import { router as slayersRouter } from "./apiv2/slayers.js";
+import { router as talismansRouter } from "./apiv2/talismans.js";
 
 const router = express.Router();
 router.use(cors());
 
-/**
- * @description API Key checker for /api/v2 endpoints
- * Checks if an API Key was entered in a query and if so, validates it.
- */
+// Checks if there's an API key and if valid, disables cacheOnly
 router.use(async (req, res, next) => {
   req.apiKey = false;
 
@@ -70,10 +67,8 @@ router.get("/leaderboards", async (req, res) => {
   res.json(leaderboards);
 });
 
-/**
- * Routes for all available endpoints. Duh.
- */
-router.use("/bazaar", bazaarRouter);
+// Routes for all available /api/v2 endpoints. Duh.
+router.get("/bazaar", bazaarRouter);
 router.use("/coins", coinsRouter);
 router.use("/dungeons", dungeonsRouter);
 router.use("/leaderboard", leaderboardRouter);
@@ -81,24 +76,18 @@ router.use("/profile", profileRouter);
 router.use("/slayers", slayersRouter);
 router.use("/talismans", talismansRouter);
 
-/**
- * @description Handler of non-existing endpoints
- */
+// Handler of non-existing endpoints
 router.get("/*", async (req, res) => {
   handleError(res, new Error("Endpoint was not found."), 404, false);
 });
 
-/**
- * @description Handler of unsupported methods
- */
+// Handler of unsupported methods
 router.all("/*", async (req, res) => {
   handleError(res, new Error("API v2 only supports GET requests."), 405, false);
 });
 
-/**
- * @description Error handler for all /api/v2 endpoints
- * Meant to be a safenet if some endpoint returns an error.
- */
+// Error handler for all /api/v2 endpoints
+// Meant to be a safenet if some endpoint returns an error.
 router.use((err, req, res, next) => {
   handleError(res, err);
 });
@@ -159,6 +148,10 @@ async function prepareLeaderboards() {
   }
 }
 
+/**
+ * Initializes prepare functions.
+ * @returns void
+ */
 export async function init() {
   await prepareProductInfo();
   await prepareLeaderboards();

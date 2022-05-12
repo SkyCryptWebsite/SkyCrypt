@@ -35,8 +35,8 @@ import twemoji from "twemoji";
 import cookieParser from "cookie-parser";
 import { execSync } from "child_process";
 
-import api from "./routes/api.js";
-import { router as apiv2Router, init as apiv2Init } from "./routes/apiv2.js";
+import * as api from "./routes/api.js";
+import * as apiv2 from "./routes/apiv2.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -140,6 +140,11 @@ function updateCommitHash() {
 }
 const commitHash = updateCommitHash();
 
+// Wait for APIs to be ready..
+// Maybe these awaits are done wrong or just unnecessary, idk.. -Martin
+await apiv2.init();
+await api.init();
+
 const app = express();
 const port = process.env.SKYCRYPT_PORT ?? 32464;
 
@@ -164,11 +169,6 @@ app.use(
     }),
   })
 );
-
-await apiv2Init();
-app.use("/api/v2", apiv2Router);
-
-api(app, db);
 
 function parseFavorites(cookie) {
   return cookie?.split(",").filter((uuid) => /^[0-9a-f]{32}$/.test(uuid)) || [];
@@ -333,6 +333,20 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
     return false;
   }
 });
+
+app.all("/api", async (req, res, next) => {
+  res.render(
+    "api",
+    { error: null, player: null, extra: await getExtra("api"), fileHashes, fileNameMap, helper, page: "api" },
+    (err, html) => {
+      res.set("X-Cluster-ID", `${helper.getClusterId()}`);
+      res.send(html);
+    }
+  );
+});
+
+app.use("/api/v2", apiv2.router);
+app.use("/api", api.router);
 
 app.all("/texture/:uuid", cors(), async (req, res) => {
   const { uuid } = req.params;
@@ -628,17 +642,6 @@ app.all("/manifest.webmanifest", async (req, res) => {
     })),
   }));
   res.json(Object.assign({ shortcuts }, manifest));
-});
-
-app.all("/api", async (req, res, next) => {
-  res.render(
-    "api",
-    { error: null, player: null, extra: await getExtra("api"), fileHashes, fileNameMap, helper, page: "api" },
-    (err, html) => {
-      res.set("X-Cluster-ID", `${helper.getClusterId()}`);
-      res.send(html);
-    }
-  );
 });
 
 app.all("/:player/:profile?", async (req, res, next) => {
