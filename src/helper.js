@@ -145,7 +145,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
   }
 
   if (cacheOnly === false && (user == undefined || +new Date() - user.date > 7200 * 1000)) {
-    let profileRequest = axios(`https://api.ashcon.app/mojang/v1/user/${uuid}`, { timeout: 5000 });
+    const profileRequest = axios(`https://api.ashcon.app/mojang/v1/user/${uuid}`, { timeout: 5000 });
 
     profileRequest
       .then(async (response) => {
@@ -199,7 +199,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
 
     if (!user) {
       try {
-        let { data } = await profileRequest;
+        const { data } = await profileRequest;
 
         data.id = data.uuid.replaceAll("-", "");
 
@@ -558,7 +558,7 @@ export async function updateRank(uuid, db) {
       rank.achievements = player.achievements;
     }
 
-    let claimable = {
+    const claimable = {
       claimed_potato_talisman: "Potato Talisman",
       claimed_potato_basket: "Potato Basket",
       claim_potato_war_silver_medal: "Silver Medal (Potato War)",
@@ -614,17 +614,17 @@ export async function fetchMembers(profileId, db, returnUuid = false) {
   const members = await db.collection("members").find({ profile_id: profileId }).toArray();
 
   if (members.length == 0) {
-    let profileResponse = await Hypixel.get("skyblock/profile", {
+    const profileResponse = await Hypixel.get("skyblock/profile", {
       params: { key: credentials.hypixel_api_key, profile: profileId },
     });
 
-    let memberPromises = [];
+    const memberPromises = [];
 
     for (const member in profileResponse.data.profile.members) {
       memberPromises.push(resolveUsernameOrUuid(member, db));
     }
 
-    let profileMembers = await Promise.all(memberPromises);
+    const profileMembers = await Promise.all(memberPromises);
 
     for (const profileMember of profileMembers) {
       await db
@@ -672,7 +672,7 @@ export function generateUUID() {
   let u = "",
     i = 0;
   while (i++ < 36) {
-    let c = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"[i - 1],
+    const c = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"[i - 1],
       r = (Math.random() * 16) | 0,
       v = c == "x" ? r : (r & 0x3) | 0x8;
     u += c == "-" || c == "4" ? c : v.toString(16);

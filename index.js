@@ -14,7 +14,7 @@ import axiosDebugLog from "axios-debug-log";
 
 axiosDebugLog({
   request: (debug, config) => {
-    let requestURL = config.baseURL ? config.baseURL + config.url : config.url;
+    const requestURL = config.baseURL ? config.baseURL + config.url : config.url;
     if (developEnv) {
       console.log(`Sent request to ${requestURL} on ${cluster.isWorker ? "worker" + cluster.worker.id : "master"}.`);
     }

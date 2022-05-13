@@ -133,7 +133,7 @@ export default (app, db) => {
     startIndex = (page - 1) * count;
     endIndex = startIndex - 1 + count;
 
-    let results =
+    const results =
       lb.sortedBy > 0
         ? await redisClient.zrange(`lb_${lb.key}`, startIndex, endIndex, "WITHSCORES")
         : await redisClient.zrevrange(`lb_${lb.key}`, startIndex, endIndex, "WITHSCORES");
