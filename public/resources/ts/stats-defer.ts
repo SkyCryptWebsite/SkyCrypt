@@ -990,7 +990,7 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
         .reduce((a, b) => a + b, 0)
         .toString()
     );
-    node.setAttribute("data", window.btoa((JSON.stringify(stats[stat])));
+    node.setAttribute("data", window.btoa(JSON.stringify(stats[stat])));
 
     parent?.appendChild(node);
   }
@@ -1016,7 +1016,7 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
     }
 
     const node = document.createElement("bonus-stats");
-    node.setAttribute("data", window.btoa((JSON.stringify(bonusStats)));
+    node.setAttribute("data", window.btoa(JSON.stringify(bonusStats)));
 
     element.appendChild(node);
   });
