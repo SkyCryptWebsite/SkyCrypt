@@ -1,5 +1,11 @@
-import { symbols } from "../../common/constants.js";
+import { symbols, rarities } from "../../common/constants.js";
 import { round, floor } from "../helper.js";
+
+const COMMON = rarities.indexOf("common");
+const UNCOMMON = rarities.indexOf("uncommon");
+const RARE = rarities.indexOf("rare");
+const EPIC = rarities.indexOf("epic");
+const LEGENDARY = rarities.indexOf("legendary");
 
 function formatStat(stat) {
   const statFloored = Math.floor(stat);
@@ -10,10 +16,28 @@ function formatStat(stat) {
   }
 }
 
+function getValue(rarity, common, uncommon, rare, epic, legendary) {
+  switch (rarity) {
+    case COMMON:
+      return common;
+    case UNCOMMON:
+      return uncommon;
+    case RARE:
+      return rare;
+    case EPIC:
+      return epic;
+    case LEGENDARY:
+      return legendary;
+    default:
+      throw new Error("Unknown rarity");
+  }
+}
+
 class Pet {
-  constructor(rarity, level) {
+  constructor(rarity, level, extra) {
     this.rarity = rarity;
     this.level = level;
+    this.extra = extra;
   }
 
   lore(newStats = false) {
@@ -73,6 +97,9 @@ class Pet {
           break;
         case "mining_fortune":
           list.push(`§7Mining Fortune: ${formatStat(newStats[stat])}`);
+          break;
+        case "farming_fortune":
+          list.push(`§7Farming Fortune: ${formatStat(newStats[stat])}`);
           break;
         default:
           list.push(`§cUNKNOWN: ${stat}`);
@@ -2656,11 +2683,14 @@ class FlyingFish extends Pet {
     if (this.rarity > 3) {
       list.push(this.third);
     }
+    if (this.rarity > 4) {
+      list.push(this.fourth);
+    }
     return list;
   }
 
   get first() {
-    const mult = this.rarity > 2 ? 0.4 : 0.3;
+    const mult = this.rarity > 2 ? 0.5 : 0.3;
     return {
       name: "§6Quick Reel",
       desc: [`§7Increases fishing speed by §a${round(this.level * mult, 1)}%`],
@@ -2668,49 +2698,32 @@ class FlyingFish extends Pet {
   }
 
   get second() {
-    const mult = this.rarity > 2 ? 0.5 : 0.4;
+    const mult = this.rarity > 4 ? 1 : this.rarity > 2 ? 0.5 : 0.4;
     return {
-      name: "§6Water Bender",
+      name: this.rarity > 4 ? "§6Lava Bender" : "§6Water Bender",
       desc: [
         `§7Gives §a${round(this.level * mult, 1)} §c${symbols.strength} Strength §7and §a${
           symbols.defense
-        } Defense §7when near water`,
+        } Defense §7when near ${this.rarity > 4 ? "lava" : "water"}`,
       ],
     };
   }
 
   get third() {
-    const mult = 0.3;
+    const mult = 0.2;
+    const prc = round(this.level * mult, 1);
     return {
-      name: "§6Deep Sea Diver",
-      desc: [`§7Increases the stats of Diver Armor by §a${round(this.level * mult, 1)}%`],
+      name: this.rarity > 4 ? "§6Magmatic Diver" : "§6Deep Sea Diver",
+      desc: [`§7Increases the stats of ${this.rarity > 4 ? "Magma Lord armor" : "Diver Armor"} by §a${prc}%`],
     };
   }
 
-  modifyArmor(helmet, hName, chest, cName, legs, lName, boots, bName) {
-    if (this.rarity > 3) {
-      const mult = 1 + round(this.level * 0.3, 1) / 100;
-      if (hName.includes("DIVERS")) {
-        for (const stat in helmet.stats) {
-          helmet.stats[stat] = round(helmet.stats[stat] * mult, 1);
-        }
-      }
-      if (cName.includes("DIVERS")) {
-        for (const stat in chest.stats) {
-          chest.stats[stat] = round(chest.stats[stat] * mult, 1);
-        }
-      }
-      if (lName.includes("DIVERS")) {
-        for (const stat in legs.stats) {
-          legs.stats[stat] = round(legs.stats[stat] * mult, 1);
-        }
-      }
-      if (bName.includes("DIVERS")) {
-        for (const stat in boots.stats) {
-          boots.stats[stat] = round(boots.stats[stat] * mult, 1);
-        }
-      }
-    }
+  get fourth() {
+    const mult = 0.5;
+    return {
+      name: "§6Rapid Decay",
+      desc: [`§7Increases the chance to activate Flash Enchantment by §a${round(this.level * mult, 1)}%`],
+    };
   }
 }
 
@@ -3104,6 +3117,290 @@ class Bingo extends Pet {
   }
 }
 
+class Wisp extends Pet {
+  get stats() {
+    return {
+      true_defense: round(this.level * 0.1, 1),
+      health: round(this.level * 1, 1),
+      intelligence: round(this.level * 0.5, 1),
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+    if (this.rarity >= RARE) {
+      list.push(this.fourth);
+    }
+    if (this.rarity >= LEGENDARY) {
+      list.push(this.fifth);
+    }
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6Drophammer",
+      desc: [`§7Lets you break fire pillars`],
+    };
+  }
+
+  get second() {
+    const bonuses = [
+      { kills: 0, defense: 0, true_defense: 0 },
+      { kills: 100, defense: 30, true_defense: 3 },
+      { kills: 200, defense: 60, true_defense: 6 },
+      { kills: 300, defense: 90, true_defense: 9 },
+      { kills: 500, defense: 135, true_defense: 14 },
+      { kills: 800, defense: 180, true_defense: 18 },
+      { kills: 1200, defense: 225, true_defense: 23 },
+      { kills: 1750, defense: 270, true_defense: 27 },
+      { kills: 2500, defense: 315, true_defense: 32 },
+      { kills: 3500, defense: 360, true_defense: 36 },
+      { kills: 5000, defense: 405, true_defense: 41 },
+      { kills: 10000, defense: 465, true_defense: 47 },
+      { kills: 25000, defense: 500, true_defense: 50 },
+      { kills: 50000, defense: 535, true_defense: 53 },
+      { kills: 100000, defense: 570, true_defense: 57 },
+      { kills: 125000, defense: 585, true_defense: 58 },
+      { kills: 150000, defense: 595, true_defense: 59 },
+      { kills: 200000, defense: 600, true_defense: 60 },
+    ];
+
+    const blaze_kills = this.extra?.blaze_kills ?? 0;
+
+    let maxTier = false;
+    let bonusIndex = bonuses.findIndex((x) => x.kills > blaze_kills);
+
+    if (bonusIndex === -1) {
+      bonusIndex = bonuses.length;
+      maxTier = true;
+    }
+
+    const current = bonuses[bonusIndex - 1];
+
+    let next = null;
+    if (!maxTier) {
+      next = bonuses[bonusIndex];
+    }
+
+    return {
+      name: "§6Bulwark",
+      desc: [
+        `§7Kill Blazes to gain defense against them`,
+        `§7Bonus: §a+${current.defense} ${symbols.defense} §7& §f+${current.true_defense} ${symbols.true_defense}`,
+        !maxTier
+          ? `§7Next Upgrade: §a+${next.defense} ${symbols.defense} §7& §f+${next.true_defense} ${
+              symbols.true_defense
+            } §7(§a${blaze_kills.toLocaleString()}§7/§c${next.kills.toLocaleString()}§7)`
+          : "§aMAXED OUT!",
+      ],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, 0, 0.3, 0.35, 0.4, 0.4);
+    const prc = round(this.level * mult, 1);
+
+    return {
+      name: "§6Blaze Slayer",
+      desc: [`§7Gain §a+${prc}% §7more combat xp from Blazes`],
+    };
+  }
+
+  get fourth() {
+    const mult1 = getValue(this.rarity, 0, 0, 0.15, 0.2, 0.25);
+    const mult2 = getValue(this.rarity, 0, 0, 0.04, 0.07, 0.1);
+    const val1 = round(this.level * mult1, 1);
+    const val2 = round(this.level * mult2, 1);
+    return {
+      name: "§6Extinguish",
+      desc: [
+        `§7While in combat on the Crimson Isle, spawn a pool every §a8s§7. Bathing in it heals §c${val1}% ${symbols.health} Health §7now and §c${val2}% ${symbols.health} Health§7/s for §a8s`,
+      ],
+    };
+  }
+
+  get fifth() {
+    return {
+      name: "§6Cold Fusion",
+      desc: [`§7Regenerate mana §b${round(this.level * 0.4, 1)}% §7faster`],
+    };
+  }
+}
+
+class MooshroomCow extends Pet {
+  get stats() {
+    return {
+      health: round(this.level * 1),
+      farming_fortune: round(10 + this.level * 1),
+    };
+  }
+
+  get abilities() {
+    const list = [this.first];
+    if (this.rarity >= RARE) {
+      list.push(this.second);
+    }
+    if (this.rarity >= LEGENDARY) {
+      list.push(this.third);
+    }
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, 0.2, 0.2, 0.3, 0.3, 0.3);
+    const prc = round(this.level * mult, 1);
+
+    return {
+      name: "§6Efficient Mushrooms",
+      desc: [`§7Mushroom and Mycelium minions work §a${prc}% §7faster while on your island`],
+    };
+  }
+
+  get second() {
+    const prc = round(this.level * 0.99 + 1.01, 1);
+
+    return {
+      name: "§6Mushroom Eater",
+      desc: [`§7When breaking crops, there is a §a${prc}% §7chance that a mushroom will drop`],
+    };
+  }
+
+  get third() {
+    const str = round(40 - this.level * 0.2, 1);
+
+    return {
+      name: "§6Farming Strength",
+      desc: [
+        `§7Gain §6+1 ${symbols.farming_fortune} Farming Fortune §7per every §c${str} ${symbols.strength} Strength`,
+      ],
+    };
+  }
+}
+
+class Snail extends Pet {
+  get stats() {
+    return {
+      intelligence: round(this.level * 1),
+    };
+  }
+
+  get abilities() {
+    const list = [this.first];
+    if (this.rarity >= RARE) {
+      list.push(this.second);
+    }
+    if (this.rarity >= LEGENDARY) {
+      list.push(this.third);
+    }
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, 0.1, 0.2, 0.3, 0.3, 0.3);
+    const prc = round(this.level * mult, 1);
+
+    return {
+      name: "§6Red Sand Enjoyer",
+      desc: [`§7Red Sand minions work §a${prc}% §7faster while on your island`],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, 0, 0, 0.3, 0.5, 0.5);
+    const prc = round(this.level * mult, 1);
+
+    return {
+      name: "§6Slow Moving",
+      desc: [
+        `§7Converts all §f${symbols.speed} Speed §7over 100 into §6${symbols.mining_fortune} Mining Fortune §7for Non-Ores at §a${prc}% §7efficiency`,
+        // `Current bonus: +0 ${symbols.mining_fortune} Mining Fortune`,
+      ],
+    };
+  }
+
+  get third() {
+    const prc = round(this.level * 0.01, 1);
+
+    return {
+      name: "§6Slow But Efficient",
+      desc: [
+        `§7Reduces the mana cost of §9Utility Abilities §7by §a${prc}% §7for every +15 §f${symbols.speed} Speed §7converted`,
+      ],
+    };
+  }
+}
+
+class Kuudra extends Pet {
+  get stats() {
+    return {
+      health: round(this.level * 4, 1),
+      strength: round(this.level * 0.4, 1),
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second];
+    if (this.rarity >= RARE) {
+      list.push(this.third);
+    }
+    if (this.rarity >= EPIC) {
+      list.push(this.fourth);
+    }
+    if (this.rarity >= LEGENDARY) {
+      list.push(this.fifth);
+    }
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, 0.1, 0.15, 0.15, 0.2, 0.2);
+    const prc = round(this.level * mult, 1);
+
+    return {
+      name: "§6Crimson",
+      desc: [`§7Grants §a${prc}% §7extra crimson essence`],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, 0.1, 0.15, 0.15, 0.2, 0.2);
+    const prc = round(this.level * mult, 1);
+
+    return {
+      name: "§6Wither Bait",
+      desc: [`§7Increases the odds of finding a vanquisher by §a${prc}%`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, 0, 0, 0.5, 1, 1);
+    const val = round(this.level * mult, 1);
+
+    return {
+      name: "§6Kuudra Fortune",
+      desc: [`§7Gain §6+${val} ${symbols.mining_fortune} Mining Fortune §7while on the Crimson Isle`],
+    };
+  }
+
+  get fourth() {
+    const mult = getValue(this.rarity, 0, 0, 0, 0.2, 0.2);
+    const prc = round(this.level * mult, 1);
+
+    return {
+      name: "§6Trophy Bait",
+      desc: [`§7Increases the odds of fishing Trophy Fish by §a${prc}%`],
+    };
+  }
+
+  get fifth() {
+    return {
+      name: "§6Kuudra Specialist",
+      desc: [`§7Increases all damage to Kuudra by §c5%`],
+    };
+  }
+}
+
 class QuestionMark extends Pet {
   get stats() {
     return {};
@@ -3111,10 +3408,10 @@ class QuestionMark extends Pet {
 
   get abilities() {
     const list = [this.first];
-    if (this.rarity > 1) {
+    if (this.rarity >= RARE) {
       list.push(this.second);
     }
-    if (this.rarity > 3) {
+    if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
     return list;
@@ -3156,6 +3453,7 @@ export const petStats = {
   BLUE_WHALE: BlueWhale,
   CHICKEN: Chicken,
   DOLPHIN: Dolphin,
+  DROPLET_WISP: Wisp,
   ELEPHANT: Elephant,
   ENDER_DRAGON: EnderDragon,
   ENDERMAN: Enderman,
@@ -3172,11 +3470,13 @@ export const petStats = {
   HOUND: Hound,
   JELLYFISH: Jellyfish,
   JERRY: Jerry,
+  KUUDRA: Kuudra,
   LION: Lion,
   MAGMA_CUBE: MagmaCube,
   MEGALODON: Megalodon,
   MITHRIL_GOLEM: MithrilGolem,
   MONKEY: Monkey,
+  MOOSHROOM_COW: MooshroomCow,
   OCELOT: Ocelot,
   PARROT: Parrot,
   PHOENIX: Phoenix,
@@ -3190,6 +3490,7 @@ export const petStats = {
   SILVERFISH: Silverfish,
   SKELETON_HORSE: SkeletonHorse,
   SKELETON: Skeleton,
+  SNAIL: Snail,
   SNOWMAN: Snowman,
   SPIDER: Spider,
   SPIRIT: Spirit,

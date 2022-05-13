@@ -249,8 +249,8 @@ function getSlayerLevel(slayer, slayerName) {
   return { currentLevel, xp, maxLevel, progress, xpForNext };
 }
 
-function getPetLevel(pet, maxLevel) {
-  const rarityOffset = constants.pet_rarity_offset[pet.rarity];
+function getPetLevel(petExp, offsetRarity, maxLevel) {
+  const rarityOffset = constants.pet_rarity_offset[offsetRarity];
   const levels = constants.pet_levels.slice(rarityOffset, rarityOffset + maxLevel - 1);
 
   const xpMaxLevel = levels.reduce((a, b) => a + b, 0);
@@ -262,7 +262,7 @@ function getPetLevel(pet, maxLevel) {
   for (let i = 0; i < maxLevel; i++) {
     xpTotal += levels[i];
 
-    if (xpTotal > pet.exp) {
+    if (xpTotal > petExp) {
       xpTotal -= levels[i];
       break;
     } else {
@@ -270,7 +270,7 @@ function getPetLevel(pet, maxLevel) {
     }
   }
 
-  let xpCurrent = Math.floor(pet.exp - xpTotal);
+  let xpCurrent = Math.floor(petExp - xpTotal);
   let progress;
 
   if (level < maxLevel) {
@@ -278,7 +278,7 @@ function getPetLevel(pet, maxLevel) {
     progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
   } else {
     level = maxLevel;
-    xpCurrent = pet.exp - levels[maxLevel - 1];
+    xpCurrent = petExp - levels[maxLevel - 1];
     xpForNext = 0;
     progress = 1;
   }
@@ -2591,27 +2591,36 @@ export async function getPets(profile) {
     };
 
     pet.rarity = pet.tier.toLowerCase();
+    pet.stats = {};
+    pet.ignoresTierBoost = petData.ignoresTierBoost;
+    const lore = [];
 
-    if (pet.heldItem == "PET_ITEM_TIER_BOOST") {
+    // Rarity upgrades
+    if (pet.heldItem == "PET_ITEM_TIER_BOOST" && !pet.ignoresTierBoost) {
       pet.rarity =
         constants.rarities[
-          Math.min(
-            constants.rarities.indexOf(petData.maxTier.toLowerCase()),
-            constants.rarities.indexOf(pet.rarity) + 1
-          )
+          Math.min(constants.rarities.indexOf(petData.maxTier), constants.rarities.indexOf(pet.rarity) + 1)
         ];
     }
 
     if (pet.heldItem == "PET_ITEM_VAMPIRE_FANG" || pet.heldItem == "PET_ITEM_TOY_JERRY") {
-      if (constants.rarities.indexOf(pet.rarity) === constants.rarities.indexOf(petData.maxTier.toLowerCase()) - 1) {
-        pet.rarity = petData.maxTier.toLowerCase();
+      if (constants.rarities.indexOf(pet.rarity) === constants.rarities.indexOf(petData.maxTier) - 1) {
+        pet.rarity = petData.maxTier;
       }
     }
 
-    pet.level = getPetLevel(pet, petData.maxLevel);
-    pet.stats = {};
+    pet.level = getPetLevel(pet.exp, petData.customLevelExpRarityOffset ?? pet.rarity, petData.maxLevel);
 
-    pet.texture_path = petData.hatching?.level > pet.level.level ? petData.hatching.head : petData.head;
+    // Get texture
+    if (typeof petData.head === "object") {
+      pet.texture_path = petData.head[pet.rarity] ?? petData.head.default;
+    } else {
+      pet.texture_path = petData.head;
+    }
+
+    if (petData.hatching?.level > pet.level.level) {
+      pet.texture_path = petData.hatching.head;
+    }
 
     let petSkin = null;
     if (pet.skin && constants.pet_skins?.[`PET_SKIN_${pet.skin}`]) {
@@ -2619,28 +2628,37 @@ export async function getPets(profile) {
       petSkin = constants.pet_skins[`PET_SKIN_${pet.skin}`].name;
     }
 
+    // Get first row of lore
     const loreFirstRow = ["§8"];
 
     if (petData.type === "all") {
       loreFirstRow.push("All Skills");
     } else {
       loreFirstRow.push(helper.capitalizeFirstLetter(petData.type), " ", petData.category ?? "Pet");
+
+      if (petData.obtainsExp === "feed") {
+        loreFirstRow.push(", feed to gain XP");
+      }
+
       if (petSkin) {
         loreFirstRow.push(`, ${petSkin} Skin`);
       }
     }
 
-    const lore = [loreFirstRow.join(""), ""];
+    lore.push(loreFirstRow.join(""), "");
 
+    // Get name
     const petName =
       petData.hatching?.level > pet.level.level
         ? petData.hatching.name
+        : petData.name
+        ? petData.name[pet.rarity] ?? petData.name.default
         : helper.titleCase(pet.type.replaceAll("_", " "));
 
     const rarity = constants.rarities.indexOf(pet.rarity);
 
     const searchName = pet.type in constants.petStats ? pet.type : "???";
-    const petInstance = new constants.petStats[searchName](rarity, pet.level.level);
+    const petInstance = new constants.petStats[searchName](rarity, pet.level.level, pet.extra);
     pet.stats = Object.assign({}, petInstance.stats);
     pet.ref = petInstance;
 
@@ -2718,6 +2736,15 @@ export async function getPets(profile) {
       lore.push("§8This pet's perks are active even when the pet is not summoned!", "");
     }
 
+    // always gains exp text
+    if (petData.alwaysGainsExp) {
+      lore.push("§8This pet gains XP even when not summoned!", "");
+
+      if (typeof petData.alwaysGainsExp === "string") {
+        lore.push(`§8This pet only gains XP on the ${petData.alwaysGainsExp}§8!`, "");
+      }
+    }
+
     if (pet.level.level < petData.maxLevel) {
       lore.push(`§7Progress to Level ${pet.level.level + 1}: §e${(pet.level.progress * 100).toFixed(1)}%`);
 
@@ -2736,9 +2763,12 @@ export async function getPets(profile) {
         pet.level.xpMaxLevel,
         true,
         10
-      )} §6(${Math.floor((pet.exp / pet.level.xpMaxLevel) * 100)}%)`,
-      `§7Candy Used: §e${pet.candyUsed || 0} §6/ §e10`
+      )} §6(${Math.floor((pet.exp / pet.level.xpMaxLevel) * 100)}%)`
     );
+
+    if (petData.obtainsExp !== "feed") {
+      lore.push(`§7Candy Used: §e${pet.candyUsed || 0} §6/ §e10`);
+    }
 
     pet.lore = "";
 
@@ -2796,7 +2826,7 @@ export async function getMissingPets(pets, gameMode) {
   const ownedPetTypes = pets.map((a) => a.type);
 
   for (const [petType, petData] of Object.entries(constants.pet_data)) {
-    if (ownedPetTypes.includes(petType) || (petData.bingoOnly === true && gameMode !== "bingo")) {
+    if (ownedPetTypes.includes(petType) || (petData.bingoExclusive === true && gameMode !== "bingo")) {
       continue;
     }
 
