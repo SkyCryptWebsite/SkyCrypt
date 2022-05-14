@@ -68,7 +68,7 @@ router.get("/leaderboards", async (req, res) => {
 });
 
 // Routes for all available /api/v2 endpoints. Duh.
-router.get("/bazaar", bazaarRouter);
+router.use("/bazaar", bazaarRouter);
 router.use("/coins", coinsRouter);
 router.use("/dungeons", dungeonsRouter);
 router.use("/leaderboard", leaderboardRouter);

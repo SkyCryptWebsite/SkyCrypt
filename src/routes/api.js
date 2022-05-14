@@ -48,15 +48,15 @@ router.get("/:player/profiles", handleParams, profiles.router);
 
 // Endpoints with player and profile parameters
 router.get("/:player/:profile/accessories", handleParams, accessories.router);
-router.all("/:player/:profile/armor", handleParams, armor.router);
+router.get("/:player/:profile/armor", handleParams, armor.router);
 router.get("/:player/:profile/cakebag", handleParams, cakebag.router);
 router.get("/:player/:profile/collections", handleParams, collections.router);
 router.get("/:player/:profile/items", handleParams, items.router);
 router.get("/:player/:profile/minions", handleParams, minions.router);
 router.get("/:player/:profile/pets", handleParams, pets.router);
 router.get("/:player/:profile/skills", handleParams, skills.router);
-router.all("/:player/:profile/wardrobe", handleParams, wardrobe.router);
-router.all("/:player/:profile/weapons", handleParams, weapons.router);
+router.get("/:player/:profile/wardrobe", handleParams, wardrobe.router);
+router.get("/:player/:profile/weapons", handleParams, weapons.router);
 
 // Handler of non-existing endpoints
 router.get("/*", async (req, res) => {
