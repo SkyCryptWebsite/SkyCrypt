@@ -34,7 +34,7 @@ router.use(async (req, res, next) => {
           minions.push({ minion: minionName, level: minionLevel });
         }
 
-        let minionObject = minions.find((a) => a.minion == minionName);
+        const minionObject = minions.find((a) => a.minion == minionName);
 
         if (minionObject.level < minionLevel) {
           minionObject.level = minionLevel;

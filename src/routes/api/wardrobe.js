@@ -19,7 +19,7 @@ router.use(async (req, res, next) => {
 
     const items = await lib.getItems(userProfile, false, undefined, req.options);
 
-    let output = [];
+    const output = [];
 
     for (const wardrobe of items.wardrobe) {
       for (const armor of wardrobe) {
