@@ -172,7 +172,7 @@ export const pet_data = {
       mythic: "/head/b0e2363c2d41a9d323ba625de8c0637063a36fe85a045de275a7b7739ded6051",
     },
     type: "fishing",
-    maxTier: "legendary",
+    maxTier: "mythic",
     maxLevel: 100,
     emoji: "🐟",
   },

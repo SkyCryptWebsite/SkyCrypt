@@ -2539,9 +2539,9 @@ export async function getPets(profile) {
     return output;
   }
 
-  profile.pets = [];
-  for (const rarity of ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC"]) {
-    const type = "BEE";
+  profile.pets = []; // ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC"]
+  for (const rarity of ["COMMON", "UNCOMMON", "RARE", "EPIC"]) {
+    const type = "BINGO";
 
     profile.pets.push(
       {
