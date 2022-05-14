@@ -55,7 +55,7 @@ export function capitalizeFirstLetter(string) {
  * @returns {string}
  */
 export function titleCase(string) {
-  let split = string.toLowerCase().split(" ");
+  const split = string.toLowerCase().split(" ");
 
   for (let i = 0; i < split.length; i++) {
     split[i] = split[i].charAt(0).toUpperCase() + split[i].substring(1);

@@ -330,11 +330,11 @@ function getRarityUpgradeClass(item) {
   let upgrades = 0
 
   upgrades += item.extra?.recombobulated ? 1 : 0
-  upgrades += item.heldItem === 'PET_ITEM_TIER_BOOST' ? 1 : 0
+  upgrades += item.heldItem === 'PET_ITEM_TIER_BOOST' && !item.ignoresTierBoost ? 1 : 0
   upgrades += item.heldItem === 'PET_ITEM_VAMPIRE_FANG' ? 1 : 0
   upgrades += item.heldItem === 'PET_ITEM_TOY_JERRY' ? 1 : 0
 
-  return `piece-rarity-upgrade-${upgrades}`
+  return upgrades > 0 ? `piece-rarity-upgrade-${upgrades}` : ''
 }
 
 function getMetaTitle() {
@@ -1122,7 +1122,7 @@ const metaDescription = getMetaDescription()
         <div class="stat-content">
           <%
             const uniquePets = _.uniq(calculated.pets.map(a => a.type))
-            const totalPets = Object.values(constants.pet_data).filter(pet => !pet.bingoOnly === true || calculated.profile.game_mode === 'bingo').length
+            const totalPets = Object.values(constants.pet_data).filter(pet => !pet.bingoExclusive === true || calculated.profile.game_mode === 'bingo').length
 
             let totalPetXp = 0
             for (const pet of calculated.pets) {
@@ -1709,11 +1709,6 @@ const metaDescription = getMetaDescription()
           </div>
         </div>
         <% } %>
-
-<br>
-        <p class='stat-raw-values'><small><i>
-        Please note that this section is still in the works and many things are now in development. Thanks for your support!
-        </i></small></p>
       </div>
     </div>
     <div class="stat-container stat-dungeons">

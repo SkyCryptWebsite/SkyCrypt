@@ -13,7 +13,7 @@ export class BonusStats extends LitElement {
     if (!this.data) {
       return;
     }
-    const data = JSON.parse(atob(this.data));
+    const data = JSON.parse(window.atob(this.data));
     const stats = this.getStats(data);
 
     return html`

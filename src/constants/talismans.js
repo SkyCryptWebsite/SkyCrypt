@@ -720,6 +720,11 @@ export const talismans = {
     rarity: "uncommon",
     texture: "/head/e5ebf6f14301d3ebd14533587d2a2d48234433b17c9d2f13934b7cab458ee267",
   },
+  NETHERRACK_LOOKING_SUNSHADE: {
+    name: "Netherrack-Looking Sunshade",
+    rarity: "common",
+    texture: "/head/556ca5c679336dd4f3262f4fbc23c1a2ee0d82a7fd81e6e62337e5fd5c7",
+  },
 };
 
 // Getting Unique Accessories Count

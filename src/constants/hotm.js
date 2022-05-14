@@ -304,7 +304,7 @@ class Node {
   }
 
   get lore() {
-    let output = [];
+    const output = [];
 
     // Name
     output.push(this.displayName);
