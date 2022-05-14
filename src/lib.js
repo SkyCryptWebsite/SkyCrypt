@@ -2539,33 +2539,32 @@ export async function getPets(profile) {
     return output;
   }
 
-  profile.pets = []; // ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC"]
-  for (const rarity of ["COMMON", "UNCOMMON", "RARE", "EPIC"]) {
-    const type = "BINGO";
-
-    profile.pets.push(
-      {
-        type: type,
-        active: false,
-        exp: 0,
-        tier: rarity,
-        candyUsed: 0,
-        heldItem: null,
-        skin: null,
-        uuid: helper.generateUUID(),
-      },
-      {
-        type: type,
-        active: false,
-        exp: 1000000000,
-        tier: rarity,
-        candyUsed: 0,
-        heldItem: null,
-        skin: null,
-        uuid: helper.generateUUID(),
-      }
-    );
-  }
+  // profile.pets = []; // ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC"]
+  // for (const rarity of ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY"]) {
+  //   const type = "BINGO";
+  //   profile.pets.push(
+  //     {
+  //       type: type,
+  //       active: false,
+  //       exp: 0,
+  //       tier: rarity,
+  //       candyUsed: 0,
+  //       heldItem: null,
+  //       skin: null,
+  //       uuid: helper.generateUUID(),
+  //     },
+  //     {
+  //       type: type,
+  //       active: false,
+  //       exp: 1000000000,
+  //       tier: rarity,
+  //       candyUsed: 0,
+  //       heldItem: null,
+  //       skin: null,
+  //       uuid: helper.generateUUID(),
+  //     }
+  //   );
+  // }
 
   for (const pet of profile.pets) {
     if (!("tier" in pet)) {

@@ -2856,6 +2856,9 @@ class Bingo extends Pet {
     if (this.rarity >= EPIC) {
       list.push(this.fourth);
     }
+    if (this.rarity >= LEGENDARY) {
+      list.push(this.fifth);
+    }
     return list;
   }
 
@@ -2868,26 +2871,34 @@ class Bingo extends Pet {
   }
 
   get second() {
-    const prc = floor(5 + this.level * 0.1, 1);
+    const mult = getValue2(this.rarity, { uncommon: 0.1 });
     return {
       name: "§6Fast Learner",
-      desc: [`§7Gain §c${prc}% §7more Skill Experience and §9Slayer §7Experience.`],
+      desc: [`§7Gain §c${floor(5 + this.level * mult, 1)}% §7more Skill Experience and §9Slayer §7Experience.`],
     };
   }
 
   get third() {
-    const prc = floor(10 + this.level * 0.3, 1);
+    const mult = getValue2(this.rarity, { rare: 0.3 });
     return {
       name: "§6Chimera",
-      desc: [`§7Increases your base stats of your active pet by §c${prc}% §7per level.`],
+      desc: [`§7Increases your base stats of your active pet by §c${floor(10 + this.level * mult, 1)}% §7per level.`],
     };
   }
 
   get fourth() {
-    const coins = round(0.1 + this.level * 0.009, 1);
+    const mult = getValue2(this.rarity, { epic: 0.009 });
     return {
       name: "§6Scavenger",
-      desc: [`§7Gain §c${coins} §7more §l§6Coins §r§7per monster level on kill.`],
+      desc: [`§7Gain §c${round(0.1 + this.level * mult, 1)} §7more §l§6Coins §r§7per monster level on kill.`],
+    };
+  }
+
+  get fifth() {
+    const mult = getValue2(this.rarity, { legendary: 0.08 });
+    return {
+      name: "§6Scavenger",
+      desc: [`§7Recover §b${round(2 + this.level * mult, 1)} mana §7when using mana.`],
     };
   }
 }
@@ -2973,7 +2984,7 @@ class Wisp extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, 0, 0.3, 0.35, 0.4, 0.4);
+    const mult = getValue2(this.rarity, { uncommon: 0.3, rare: 0.35, epic: 0.4 });
     const prc = round(this.level * mult, 1);
 
     return {
@@ -2983,8 +2994,8 @@ class Wisp extends Pet {
   }
 
   get fourth() {
-    const mult1 = getValue(this.rarity, 0, 0, 0.15, 0.2, 0.25);
-    const mult2 = getValue(this.rarity, 0, 0, 0.04, 0.07, 0.1);
+    const mult1 = getValue2(this.rarity, { rare: 0.15, epic: 0.2, legendary: 0.25 });
+    const mult2 = getValue2(this.rarity, { rare: 0.04, epic: 0.07, legendary: 0.1 });
     const val1 = round(this.level * mult1, 1);
     const val2 = round(this.level * mult2, 1);
     return {
@@ -2996,9 +3007,10 @@ class Wisp extends Pet {
   }
 
   get fifth() {
+    const mult = getValue2(this.rarity, { legendary: 0.4 });
     return {
       name: "§6Cold Fusion",
-      desc: [`§7Regenerate mana §b${round(this.level * 0.4, 1)}% §7faster`],
+      desc: [`§7Regenerate mana §b${round(this.level * mult, 1)}% §7faster`],
     };
   }
 }
@@ -3023,31 +3035,33 @@ class MooshroomCow extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, 0.2, 0.2, 0.3, 0.3, 0.3);
-    const prc = round(this.level * mult, 1);
+    const mult = getValue2(this.rarity, { common: 0.2, rare: 0.3 });
 
     return {
       name: "§6Efficient Mushrooms",
-      desc: [`§7Mushroom and Mycelium minions work §a${prc}% §7faster while on your island`],
+      desc: [`§7Mushroom and Mycelium minions work §a${round(this.level * mult, 1)}% §7faster while on your island`],
     };
   }
 
   get second() {
-    const prc = round(this.level * 0.99 + 1.01, 1);
-
+    const mult = getValue2(this.rarity, { rare: 0.99 });
     return {
       name: "§6Mushroom Eater",
-      desc: [`§7When breaking crops, there is a §a${prc}% §7chance that a mushroom will drop`],
+      desc: [
+        `§7When breaking crops, there is a §a${round(this.level * mult + 1.01, 1)}% §7chance that a mushroom will drop`,
+      ],
     };
   }
 
   get third() {
-    const str = round(40 - this.level * 0.2, 1);
+    const mult = getValue2(this.rarity, { legendary: 0.2 });
 
     return {
       name: "§6Farming Strength",
       desc: [
-        `§7Gain §6+1 ${symbols.farming_fortune} Farming Fortune §7per every §c${str} ${symbols.strength} Strength`,
+        `§7Gain §6+1 ${symbols.farming_fortune} Farming Fortune §7per every §c${round(40 - this.level * mult, 1)} ${
+          symbols.strength
+        } Strength`,
       ],
     };
   }
@@ -3072,35 +3086,37 @@ class Snail extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, 0.1, 0.2, 0.3, 0.3, 0.3);
-    const prc = round(this.level * mult, 1);
+    const mult = getValue2(this.rarity, { common: 0.1, uncommon: 0.2, rare: 0.3 });
 
     return {
       name: "§6Red Sand Enjoyer",
-      desc: [`§7Red Sand minions work §a${prc}% §7faster while on your island`],
+      desc: [`§7Red Sand minions work §a${round(this.level * mult, 1)}% §7faster while on your island`],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, 0, 0, 0.3, 0.5, 0.5);
-    const prc = round(this.level * mult, 1);
+    const mult = getValue2(this.rarity, { rare: 0.3, epic: 0.5 });
 
     return {
       name: "§6Slow Moving",
       desc: [
-        `§7Converts all §f${symbols.speed} Speed §7over 100 into §6${symbols.mining_fortune} Mining Fortune §7for Non-Ores at §a${prc}% §7efficiency`,
+        `§7Converts all §f${symbols.speed} Speed §7over 100 into §6${
+          symbols.mining_fortune
+        } Mining Fortune §7for Non-Ores at §a${round(this.level * mult, 1)}% §7efficiency`,
         // `Current bonus: +0 ${symbols.mining_fortune} Mining Fortune`,
       ],
     };
   }
 
   get third() {
-    const prc = round(this.level * 0.01, 1);
+    const mult = getValue2(this.rarity, { legendary: 0.01 });
 
     return {
       name: "§6Slow But Efficient",
       desc: [
-        `§7Reduces the mana cost of §9Utility Abilities §7by §a${prc}% §7for every +15 §f${symbols.speed} Speed §7converted`,
+        `§7Reduces the mana cost of §9Utility Abilities §7by §a${round(this.level * mult, 1)}% §7for every +15 §f${
+          symbols.speed
+        } Speed §7converted`,
       ],
     };
   }
@@ -3129,42 +3145,40 @@ class Kuudra extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, 0.1, 0.15, 0.15, 0.2, 0.2);
-    const prc = round(this.level * mult, 1);
+    const mult = getValue2(this.rarity, { common: 0.1, uncommon: 0.15, epic: 0.2 });
 
     return {
       name: "§6Crimson",
-      desc: [`§7Grants §a${prc}% §7extra crimson essence`],
+      desc: [`§7Grants §a${round(this.level * mult, 1)}% §7extra crimson essence`],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, 0.1, 0.15, 0.15, 0.2, 0.2);
-    const prc = round(this.level * mult, 1);
+    const mult = getValue2(this.rarity, { common: 0.1, uncommon: 0.15, epic: 0.2 });
 
     return {
       name: "§6Wither Bait",
-      desc: [`§7Increases the odds of finding a vanquisher by §a${prc}%`],
+      desc: [`§7Increases the odds of finding a vanquisher by §a${round(this.level * mult, 1)}%`],
     };
   }
 
   get third() {
-    const mult = getValue(this.rarity, 0, 0, 0.5, 1, 1);
-    const val = round(this.level * mult, 1);
+    const mult = getValue2(this.rarity, { rare: 0.5, epic: 1 });
 
     return {
       name: "§6Kuudra Fortune",
-      desc: [`§7Gain §6+${val} ${symbols.mining_fortune} Mining Fortune §7while on the Crimson Isle`],
+      desc: [
+        `§7Gain §6+${round(this.level * mult, 1)} ${symbols.mining_fortune} Mining Fortune §7while on the Crimson Isle`,
+      ],
     };
   }
 
   get fourth() {
-    const mult = getValue(this.rarity, 0, 0, 0, 0.2, 0.2);
-    const prc = round(this.level * mult, 1);
+    const mult = getValue2(this.rarity, { epic: 0.2 });
 
     return {
       name: "§6Trophy Bait",
-      desc: [`§7Increases the odds of fishing Trophy Fish by §a${prc}%`],
+      desc: [`§7Increases the odds of fishing Trophy Fish by §a${round(this.level * mult, 1)}%`],
     };
   }
 
