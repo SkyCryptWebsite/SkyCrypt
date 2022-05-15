@@ -23,9 +23,7 @@
     animation: object -> AnimationObject
   }
 
-  AnimationObject: either day/night (for animations that change based on the time of the day)
-    or progressive timings in ms (for cyclic animations). If null the information about the
-    animation is missing.
+  AnimationObject: day/night (for animations that change based on the time of the day), progressive timings in ms (for cyclic animations) or strings that represent the animation frame. If null the information about the animation is missing.
   {
     day: string,
     night: string,
@@ -499,6 +497,12 @@ const skins = [
     texture: "/head/11be7e0da38de93dba068a40011808ecc39bb757d3fdee8fb25128e2a06dde86",
     release: new Date("2022-04-01 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_KUUDRA_LOYALTY",
+    name: "Loyalty",
+    texture: "/head/bb7d06ab10c4d15433670ca59ed6ad87d797c24bf7bfc3343730aa1594a4970c",
+    release: new Date("2022-05-13 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
@@ -895,6 +899,14 @@ const animations = [
       1710: "/head/e479115288b3789ed316353878fba4d2c4164de6525d91d280d3e6714e6a5d8c",
       1840: "/head/9f80d8ddb7a689b28ccee283ede060aebea8787dd09220f0afa951b67e4b5e9c",
       1930: "/head/9307cd9ec59e0de34cd85716d8fd4eb4ccd4ace33def1031968912a88b8caf11",
+    },
+  },
+  {
+    id: "PET_SKIN_KUUDRA_LOYALTY",
+    texture: "/resources/img/items/pet_skin_kuudra_loyalty.png",
+    animation: {
+      faction_barbarian: "/head/bb7d06ab10c4d15433670ca59ed6ad87d797c24bf7bfc3343730aa1594a4970c",
+      faction_mage: "/head/6fb7230da4e7a6cba268c4d87269ab66c9e41ae86eb426774d869c5f49fdb914",
     },
   },
 ];
