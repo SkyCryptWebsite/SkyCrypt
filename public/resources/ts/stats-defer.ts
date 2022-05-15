@@ -280,12 +280,12 @@ function fillLore(element: HTMLElement) {
 
   if (item.texture_path) {
     itemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
-    itemIcon.classList.add("item-icon", "custom-icon");
+    itemIcon.className = "stats-piece-icon item-icon custom-icon";
   } else if ("id" in item) {
     itemIcon.removeAttribute("style");
     itemIcon.classList.remove("custom-icon");
     const idClass = `icon-${item.id}_${item.Damage}` + " " + (item.Damage != 0 ? `icon-${item.id}_0` : "");
-    itemIcon.classList.add("item-icon", idClass.trim());
+    itemIcon.className = ("stats-piece-icon item-icon " + idClass).trim();
   } else {
     throw new Error("item mush have either an id and a damage or a texture_path");
   }
