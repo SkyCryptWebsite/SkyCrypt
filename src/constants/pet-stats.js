@@ -124,9 +124,9 @@ class Pet {
 class Bee extends Pet {
   get stats() {
     return {
-      strength: round(5 + this.level * 0.25),
-      intelligence: round(this.level * 0.5),
-      speed: round(this.level * 0.1),
+      strength: 5 + this.level * 0.25,
+      intelligence: this.level * 0.5,
+      speed: this.level * 0.1,
     };
   }
 
@@ -177,7 +177,7 @@ class Bee extends Pet {
 class Chicken extends Pet {
   get stats() {
     return {
-      health: round(this.level * 2),
+      health: this.level * 2,
     };
   }
 
@@ -220,8 +220,8 @@ class Chicken extends Pet {
 class Elephant extends Pet {
   get stats() {
     return {
-      intelligence: round(this.level * 0.75),
-      health: round(this.level * 1),
+      intelligence: this.level * 0.75,
+      health: this.level * 1,
     };
   }
 
@@ -272,7 +272,7 @@ class Elephant extends Pet {
 class Pig extends Pet {
   get stats() {
     return {
-      speed: round(this.level * 0.25),
+      speed: this.level * 0.25,
     };
   }
 
@@ -326,8 +326,8 @@ class Pig extends Pet {
 class Rabbit extends Pet {
   get stats() {
     return {
-      health: round(this.level * 1),
-      speed: round(this.level * 0.2),
+      health: this.level * 1,
+      speed: this.level * 0.2,
     };
   }
 
@@ -370,7 +370,7 @@ class Rabbit extends Pet {
 class Armadillo extends Pet {
   get stats() {
     return {
-      defense: round(this.level * 2),
+      defense: this.level * 2,
     };
   }
 
@@ -430,8 +430,8 @@ class Armadillo extends Pet {
 class Bat extends Pet {
   get stats() {
     const stats = {
-      intelligence: round(this.level * 1),
-      speed: round(this.level * 0.05),
+      intelligence: this.level * 1,
+      speed: this.level * 0.05,
     };
     if (this.rarity >= MYTHIC) {
       stats.sea_creature_chance = this.level * 0.05;
@@ -495,7 +495,7 @@ class Bat extends Pet {
 class Endermite extends Pet {
   get stats() {
     return {
-      intelligence: round(this.level * 1),
+      intelligence: this.level * 1,
     };
   }
 
@@ -543,7 +543,7 @@ class Endermite extends Pet {
 class MithrilGolem extends Pet {
   get stats() {
     return {
-      true_defense: round(this.level * 0.5),
+      true_defense: this.level * 0.5,
     };
   }
 
@@ -586,8 +586,8 @@ class MithrilGolem extends Pet {
 class Rock extends Pet {
   get stats() {
     return {
-      defense: round(this.level * 2),
-      true_defense: round(this.level * 0.1),
+      defense: this.level * 2,
+      true_defense: this.level * 0.1,
     };
   }
 
@@ -636,8 +636,8 @@ class Rock extends Pet {
 class Scatha extends Pet {
   get stats() {
     return {
-      defense: round(this.level * 1),
-      mining_speed: round(this.level * 1),
+      defense: this.level * 1,
+      mining_speed: this.level * 1,
     };
   }
 
@@ -680,8 +680,8 @@ class Scatha extends Pet {
 class Silverfish extends Pet {
   get stats() {
     return {
-      defense: round(this.level * 1),
-      health: round(this.level * 0.2),
+      defense: this.level * 1,
+      health: this.level * 0.2,
     };
   }
 
@@ -723,11 +723,11 @@ class Silverfish extends Pet {
 class WitherSkeleton extends Pet {
   get stats() {
     return {
-      crit_chance: round(this.level * 0.05),
-      intelligence: round(this.level * 0.25),
-      crit_damage: round(this.level * 0.25),
-      defense: round(this.level * 0.25),
-      strength: round(this.level * 0.25),
+      crit_chance: this.level * 0.05,
+      intelligence: this.level * 0.25,
+      crit_damage: this.level * 0.25,
+      defense: this.level * 0.25,
+      strength: this.level * 0.25,
     };
   }
 
@@ -776,8 +776,8 @@ class WitherSkeleton extends Pet {
 class Bal extends Pet {
   get stats() {
     return {
-      ferocity: round(this.level * 0.1),
-      strength: round(this.level * 0.25),
+      ferocity: this.level * 0.1,
+      strength: this.level * 0.25,
     };
   }
 
@@ -824,8 +824,8 @@ class Bal extends Pet {
 class BlackCat extends Pet {
   get stats() {
     return {
-      speed: round(this.level * 0.25),
-      intelligence: round(this.level * 1),
+      speed: this.level * 0.25,
+      intelligence: this.level * 1,
     };
   }
 
@@ -868,8 +868,8 @@ class BlackCat extends Pet {
 class Blaze extends Pet {
   get stats() {
     return {
-      intelligence: round(this.level * 1),
-      defense: round(10 + this.level * 0.2),
+      intelligence: this.level * 1,
+      defense: 10 + this.level * 0.2,
     };
   }
 
@@ -911,9 +911,9 @@ class Blaze extends Pet {
 class EnderDragon extends Pet {
   get stats() {
     return {
-      strength: round(this.level * 0.5),
-      crit_chance: round(this.level * 0.1),
-      crit_damage: round(this.level * 0.5),
+      strength: this.level * 0.5,
+      crit_chance: this.level * 0.1,
+      crit_damage: this.level * 0.5,
     };
   }
 
@@ -1032,7 +1032,7 @@ class GoldenDragon extends Pet {
 class Enderman extends Pet {
   get stats() {
     return {
-      crit_damage: round(this.level * 0.75),
+      crit_damage: this.level * 0.75,
     };
   }
 
@@ -1091,9 +1091,9 @@ class Enderman extends Pet {
 class Ghoul extends Pet {
   get stats() {
     return {
-      intelligence: round(this.level * 0.75),
-      health: round(this.level * 1),
-      ferocity: round(this.level * 0.05),
+      intelligence: this.level * 0.75,
+      health: this.level * 1,
+      ferocity: this.level * 0.05,
     };
   }
 
@@ -1136,8 +1136,8 @@ class Ghoul extends Pet {
 class Golem extends Pet {
   get stats() {
     return {
-      health: round(this.level * 1.5),
-      strength: round(this.level * 0.5),
+      health: this.level * 1.5,
+      strength: this.level * 0.5,
     };
   }
 
@@ -1171,13 +1171,14 @@ class Golem extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 0.3 });
+    const mult = getValue(this.rarity, { legendary: 3 });
     return {
       name: "§6Toss",
       desc: [
-        `§7Every 5 hits, throw the enemy up into the air and deal ${
-          200 + round(this.level * mult, 1)
-        }% damage (10s cooldown)`,
+        `§7Every 5 hits, throw the enemy up into the air and deal §a${round(
+          200 + this.level * mult,
+          1
+        )}% §7damage (10s cooldown)`,
       ],
     };
   }
@@ -1186,11 +1187,11 @@ class Golem extends Pet {
 class Griffin extends Pet {
   get stats() {
     return {
-      strength: round(this.level * 0.25),
-      crit_chance: round(this.level * 0.1),
-      crit_damage: round(this.level * 0.5),
-      intelligence: round(this.level * 0.1),
-      magic_find: round(this.level * 0.1),
+      strength: this.level * 0.25,
+      crit_chance: this.level * 0.1,
+      crit_damage: this.level * 0.5,
+      intelligence: this.level * 0.1,
+      magic_find: this.level * 0.1,
     };
   }
 
@@ -1251,8 +1252,8 @@ class Griffin extends Pet {
 class Guardian extends Pet {
   get stats() {
     return {
-      intelligence: round(this.level * 1),
-      defense: round(this.level * 0.5),
+      intelligence: this.level * 1,
+      defense: this.level * 0.5,
     };
   }
 
@@ -1299,8 +1300,8 @@ class Guardian extends Pet {
 class Horse extends Pet {
   get stats() {
     return {
-      intelligence: round(this.level * 0.5),
-      speed: round(this.level * 0.25),
+      intelligence: this.level * 0.5,
+      speed: this.level * 0.25,
     };
   }
 
@@ -1342,9 +1343,9 @@ class Horse extends Pet {
 class Hound extends Pet {
   get stats() {
     return {
-      strength: round(this.level * 0.4),
-      bonus_attack_speed: round(this.level * 0.15),
-      ferocity: round(this.level * 0.05),
+      strength: this.level * 0.4,
+      bonus_attack_speed: this.level * 0.15,
+      ferocity: this.level * 0.05,
     };
   }
 
@@ -1387,9 +1388,9 @@ class Hound extends Pet {
 class MagmaCube extends Pet {
   get stats() {
     return {
-      health: round(this.level * 0.5),
-      defense: round(this.level * 0.33),
-      strength: round(this.level * 0.2),
+      health: this.level * 0.5,
+      defense: this.level * 0.33,
+      strength: this.level * 0.2,
     };
   }
 
@@ -1432,8 +1433,8 @@ class MagmaCube extends Pet {
 class Phoenix extends Pet {
   get stats() {
     return {
-      strength: round(10 + this.level * 0.5),
-      intelligence: round(50 + this.level * 1),
+      strength: 10 + this.level * 0.5,
+      intelligence: 50 + this.level * 1,
     };
   }
 
@@ -1492,9 +1493,9 @@ class Phoenix extends Pet {
 class Pigman extends Pet {
   get stats() {
     return {
-      strength: round(this.level * 0.5),
-      defense: round(this.level * 0.5),
-      ferocity: round(this.level * 0.05),
+      strength: this.level * 0.5,
+      defense: this.level * 0.5,
+      ferocity: this.level * 0.05,
     };
   }
 
@@ -1539,9 +1540,9 @@ class Pigman extends Pet {
 class Rat extends Pet {
   get stats() {
     return {
-      strength: round(this.level * 0.5),
-      crit_damage: round(this.level * 0.1),
-      health: round(this.level * 1),
+      strength: this.level * 0.5,
+      crit_damage: this.level * 0.1,
+      health: this.level * 1,
     };
   }
 
@@ -1590,8 +1591,8 @@ class Rat extends Pet {
 class SkeletonHorse extends Pet {
   get stats() {
     return {
-      speed: round(this.level * 0.5),
-      intelligence: round(this.level * 1),
+      speed: this.level * 0.5,
+      intelligence: this.level * 1,
     };
   }
 
@@ -1627,8 +1628,8 @@ class SkeletonHorse extends Pet {
 class Skeleton extends Pet {
   get stats() {
     return {
-      crit_chance: round(this.level * 0.15),
-      crit_damage: round(this.level * 0.3),
+      crit_chance: this.level * 0.15,
+      crit_damage: this.level * 0.3,
     };
   }
 
@@ -1677,9 +1678,9 @@ class Skeleton extends Pet {
 class Snowman extends Pet {
   get stats() {
     return {
-      damage: round(this.level * 0.25),
-      strength: round(this.level * 0.25),
-      crit_damage: round(this.level * 0.25),
+      damage: this.level * 0.25,
+      strength: this.level * 0.25,
+      crit_damage: this.level * 0.25,
     };
   }
 
@@ -1722,8 +1723,8 @@ class Snowman extends Pet {
 class Spider extends Pet {
   get stats() {
     return {
-      strength: round(this.level * 0.1),
-      crit_chance: round(this.level * 0.1),
+      strength: this.level * 0.1,
+      crit_chance: this.level * 0.1,
     };
   }
 
@@ -1769,8 +1770,8 @@ class Spider extends Pet {
 class Spirit extends Pet {
   get stats() {
     return {
-      intelligence: round(this.level * 1),
-      speed: round(this.level * 0.3),
+      intelligence: this.level * 1,
+      speed: this.level * 0.3,
     };
   }
 
@@ -1810,9 +1811,9 @@ class Spirit extends Pet {
 class Tarantula extends Pet {
   get stats() {
     return {
-      crit_chance: round(this.level * 0.1),
-      crit_damage: round(this.level * 0.3),
-      strength: round(this.level * 0.1),
+      crit_chance: this.level * 0.1,
+      crit_damage: this.level * 0.3,
+      strength: this.level * 0.1,
     };
   }
 
@@ -1852,10 +1853,10 @@ class Tarantula extends Pet {
 class Tiger extends Pet {
   get stats() {
     return {
-      strength: round(5 + this.level * 0.1),
-      crit_chance: round(this.level * 0.05),
-      crit_damage: round(this.level * 0.5),
-      ferocity: round(this.level * 0.25),
+      strength: 5 + this.level * 0.1,
+      crit_chance: this.level * 0.05,
+      crit_damage: this.level * 0.5,
+      ferocity: this.level * 0.25,
     };
   }
 
@@ -1900,8 +1901,8 @@ class Tiger extends Pet {
 class Turtle extends Pet {
   get stats() {
     return {
-      health: round(this.level * 0.5),
-      defense: round(this.level * 1),
+      health: this.level * 0.5,
+      defense: this.level * 1,
     };
   }
 
@@ -1953,10 +1954,10 @@ class Turtle extends Pet {
 class Wolf extends Pet {
   get stats() {
     return {
-      health: round(this.level * 0.5),
-      crit_damage: round(this.level * 0.1),
-      speed: round(this.level * 0.2),
-      true_defense: round(this.level * 0.1),
+      health: this.level * 0.5,
+      crit_damage: this.level * 0.1,
+      speed: this.level * 0.2,
+      true_defense: this.level * 0.1,
     };
   }
 
@@ -2004,8 +2005,8 @@ class Wolf extends Pet {
 class GrandmaWolf extends Pet {
   get stats() {
     return {
-      health: round(this.level * 1),
-      strength: round(this.level * 0.25),
+      health: this.level * 1,
+      strength: this.level * 0.25,
     };
   }
 
@@ -2040,8 +2041,8 @@ class GrandmaWolf extends Pet {
 class Zombie extends Pet {
   get stats() {
     return {
-      crit_damage: round(this.level * 0.3),
-      health: round(this.level * 1),
+      crit_damage: this.level * 0.3,
+      health: this.level * 1,
     };
   }
 
@@ -2084,8 +2085,8 @@ class Zombie extends Pet {
 class Giraffe extends Pet {
   get stats() {
     return {
-      health: round(this.level * 1),
-      crit_chance: round(this.level * 0.05),
+      health: this.level * 1,
+      crit_chance: this.level * 0.05,
     };
   }
 
@@ -2134,9 +2135,9 @@ class Giraffe extends Pet {
 class Lion extends Pet {
   get stats() {
     return {
-      strength: round(this.level * 0.5),
-      speed: round(this.level * 0.25),
-      ferocity: round(this.level * 0.05),
+      strength: this.level * 0.5,
+      speed: this.level * 0.25,
+      ferocity: this.level * 0.05,
     };
   }
 
@@ -2187,8 +2188,8 @@ class Lion extends Pet {
 class Monkey extends Pet {
   get stats() {
     return {
-      speed: round(this.level * 0.2),
-      intelligence: round(this.level * 0.5),
+      speed: this.level * 0.2,
+      intelligence: this.level * 0.5,
     };
   }
 
@@ -2235,8 +2236,8 @@ class Monkey extends Pet {
 class Ocelot extends Pet {
   get stats() {
     return {
-      speed: round(this.level * 0.5),
-      ferocity: round(this.level * 0.1),
+      speed: this.level * 0.5,
+      ferocity: this.level * 0.1,
     };
   }
 
@@ -2279,8 +2280,8 @@ class Ocelot extends Pet {
 class BabyYeti extends Pet {
   get stats() {
     return {
-      intelligence: round(this.level * 0.75),
-      strength: round(this.level * 0.4),
+      intelligence: this.level * 0.75,
+      strength: this.level * 0.4,
     };
   }
 
@@ -2328,7 +2329,7 @@ class BabyYeti extends Pet {
 class BlueWhale extends Pet {
   get stats() {
     return {
-      health: round(this.level * 2),
+      health: this.level * 2,
     };
   }
 
@@ -2353,7 +2354,7 @@ class BlueWhale extends Pet {
 
   get second() {
     const mult = getValue(this.rarity, { rare: 0.01 });
-    const health = getValue(this.rarity, { rare: 30, epic: 25, legendary: 20 });
+    const health = getValue(this.rarity, { rare: "30.0", epic: "25.0", legendary: "20.0" });
     return {
       name: "§6Bulk",
       desc: [
@@ -2376,7 +2377,7 @@ class BlueWhale extends Pet {
 class Ammonite extends Pet {
   get stats() {
     return {
-      sea_creature_chance: round(this.level * 0.07),
+      sea_creature_chance: this.level * 0.07,
     };
   }
 
@@ -2421,8 +2422,8 @@ class Ammonite extends Pet {
 class Dolphin extends Pet {
   get stats() {
     return {
-      sea_creature_chance: round(this.level * 0.05),
-      intelligence: round(this.level * 1),
+      sea_creature_chance: this.level * 0.05,
+      intelligence: this.level * 1,
     };
   }
 
@@ -2470,8 +2471,8 @@ class Dolphin extends Pet {
 class FlyingFish extends Pet {
   get stats() {
     return {
-      defense: round(this.level * 0.5),
-      strength: round(this.level * 0.5),
+      defense: this.level * 0.5,
+      strength: this.level * 0.5,
     };
   }
 
@@ -2528,9 +2529,9 @@ class FlyingFish extends Pet {
 class Megalodon extends Pet {
   get stats() {
     return {
-      strength: round(this.level * 0.5),
-      magic_find: round(this.level * 0.1),
-      ferocity: round(this.level * 0.05),
+      strength: this.level * 0.5,
+      magic_find: this.level * 0.1,
+      ferocity: this.level * 0.05,
     };
   }
 
@@ -2578,8 +2579,8 @@ class Megalodon extends Pet {
 class Squid extends Pet {
   get stats() {
     return {
-      health: round(this.level * 0.5),
-      intelligence: round(this.level * 0.5),
+      health: this.level * 0.5,
+      intelligence: this.level * 0.5,
     };
   }
 
@@ -2628,7 +2629,7 @@ class Squid extends Pet {
 class Jellyfish extends Pet {
   get stats() {
     return {
-      health: round(this.level * 2),
+      health: this.level * 2,
     };
   }
 
@@ -2679,8 +2680,8 @@ class Jellyfish extends Pet {
 class Parrot extends Pet {
   get stats() {
     return {
-      crit_damage: round(this.level * 0.1),
-      intelligence: round(this.level * 1),
+      crit_damage: this.level * 0.1,
+      intelligence: this.level * 1,
     };
   }
 
@@ -2737,8 +2738,8 @@ class Parrot extends Pet {
 class Sheep extends Pet {
   get stats() {
     return {
-      ability_damage: round(this.level * 0.2),
-      intelligence: round(this.level * 1),
+      ability_damage: this.level * 0.2,
+      intelligence: this.level * 1,
     };
   }
 
@@ -2781,7 +2782,7 @@ class Sheep extends Pet {
 class Jerry extends Pet {
   get stats() {
     return {
-      intelligence: round(this.level * -1),
+      intelligence: this.level * -1,
     };
   }
 
@@ -2829,8 +2830,8 @@ class Jerry extends Pet {
 class Bingo extends Pet {
   get stats() {
     return {
-      health: round(25 + this.level * 0.75),
-      strength: round(5 + this.level * 0.2),
+      health: 25 + this.level * 0.75,
+      strength: 5 + this.level * 0.2,
     };
   }
 
@@ -2895,9 +2896,9 @@ class Bingo extends Pet {
 class Wisp extends Pet {
   get stats() {
     return {
-      true_defense: round(this.level * 0.1, 1),
-      health: round(this.level * 1, 1),
-      intelligence: round(this.level * 0.5, 1),
+      true_defense: this.level * 0.1,
+      health: this.level * 1,
+      intelligence: this.level * 0.5,
     };
   }
 
@@ -3007,8 +3008,8 @@ class Wisp extends Pet {
 class MooshroomCow extends Pet {
   get stats() {
     return {
-      health: round(this.level * 1),
-      farming_fortune: round(10 + this.level * 1),
+      health: this.level * 1,
+      farming_fortune: 10 + this.level * 1,
     };
   }
 
@@ -3059,7 +3060,7 @@ class MooshroomCow extends Pet {
 class Snail extends Pet {
   get stats() {
     return {
-      intelligence: round(this.level * 1),
+      intelligence: this.level * 1,
     };
   }
 
@@ -3114,8 +3115,8 @@ class Snail extends Pet {
 class Kuudra extends Pet {
   get stats() {
     return {
-      health: round(this.level * 4, 1),
-      strength: round(this.level * 0.4, 1),
+      health: this.level * 4,
+      strength: this.level * 0.4,
     };
   }
 

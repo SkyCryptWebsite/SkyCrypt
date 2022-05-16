@@ -291,18 +291,6 @@ function getPetLevel(petExp, offsetRarity, maxLevel) {
   };
 }
 
-/**
- * @param  {string} rarity
- * @param  {number} level
- * @returns number
- * @description takes rarity and level and returns the required pet exp to reach the level
- */
-function getPetExp(rarity, level) {
-  const rarityOffset = constants.pet_rarity_offset[rarity.toLowerCase()];
-
-  return constants.pet_levels.slice(rarityOffset, rarityOffset + level - 1).reduce((prev, curr) => prev + curr, 0);
-}
-
 function getFairyBonus(fairyExchanges) {
   const bonus = Object.assign({}, constants.stat_template);
 
@@ -2539,32 +2527,8 @@ export async function getPets(profile) {
     return output;
   }
 
-  // profile.pets = []; // ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC"]
-  // for (const rarity of ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY"]) {
-  //   const type = "BINGO";
-  //   profile.pets.push(
-  //     {
-  //       type: type,
-  //       active: false,
-  //       exp: 0,
-  //       tier: rarity,
-  //       candyUsed: 0,
-  //       heldItem: null,
-  //       skin: null,
-  //       uuid: helper.generateUUID(),
-  //     },
-  //     {
-  //       type: type,
-  //       active: false,
-  //       exp: 1000000000,
-  //       tier: rarity,
-  //       candyUsed: 0,
-  //       heldItem: null,
-  //       skin: null,
-  //       uuid: helper.generateUUID(),
-  //     }
-  //   );
-  // }
+  // debug pets
+  // profile.pets = helper.generateDebugPets("BINGO");
 
   for (const pet of profile.pets) {
     if (!("tier" in pet)) {
@@ -2822,7 +2786,7 @@ export async function getMissingPets(pets, gameMode) {
     profile.pets.push({
       type: petType,
       active: false,
-      exp: getPetExp(constants.pet_data[petType].maxTier, constants.pet_data[petType].maxLevel),
+      exp: helper.getPetExp(constants.pet_data[petType].maxTier, constants.pet_data[petType].maxLevel),
       tier: constants.pet_data[petType].maxTier,
       candyUsed: 0,
       heldItem: null,
