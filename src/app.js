@@ -245,7 +245,7 @@ function weightedRandom(array) {
 
 app.all("/stats/:player/:profile?", async (req, res, next) => {
   const debugId = helper.generateDebugId("stats");
-  const timeStarted = new Date().getTime();
+  const timeStarted = Date.now();
 
   console.debug(`${debugId}: stats page was called.`);
 
@@ -276,7 +276,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
     }
 
     console.debug(`${debugId}: starting page render.`);
-    const renderStart = new Date().getTime();
+    const renderStart = Date.now();
 
     if (req.cookies.pack) {
       process.send({ type: "selected_pack", id: req.cookies.pack });
@@ -298,10 +298,10 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       },
       (err, html) => {
         if (err) console.error(err);
-        else console.debug(`${debugId}: page succesfully rendered. (${new Date().getTime() - renderStart}ms)`);
+        else console.debug(`${debugId}: page succesfully rendered. (${Date.now() - renderStart}ms)`);
 
         res.set("X-Debug-ID", `${debugId}`);
-        res.set("X-Process-Time", `${new Date().getTime() - timeStarted}`);
+        res.set("X-Process-Time", `${Date.now() - timeStarted}`);
         res.send(html);
       }
     );
@@ -326,7 +326,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       },
       (err, html) => {
         res.set("X-Debug-ID", `${debugId}`);
-        res.set("X-Process-Time", `${new Date().getTime() - timeStarted}`);
+        res.set("X-Process-Time", `${Date.now() - timeStarted}`);
         res.send(html);
       }
     );
@@ -650,7 +650,7 @@ app.all("/:player/:profile?", async (req, res, next) => {
 });
 
 app.all("/", async (req, res, next) => {
-  const timeStarted = new Date().getTime();
+  const timeStarted = Date.now();
   const favorites = parseFavorites(req.cookies.favorite);
   const cacheOnly = req.query.cache === "true" || forceCacheOnly;
 
@@ -669,7 +669,7 @@ app.all("/", async (req, res, next) => {
     },
     (err, html) => {
       res.set("X-Cluster-ID", `${helper.getClusterId()}`);
-      res.set("X-Process-Time", `${new Date().getTime() - timeStarted}`);
+      res.set("X-Process-Time", `${Date.now() - timeStarted}`);
       res.send(html);
     }
   );

@@ -663,9 +663,7 @@ export function getClusterId(fullName = false) {
 }
 
 export const generateDebugId = (endpointName = "unknown") => {
-  return (
-    getClusterId() + "/" + endpointName + "_" + new Date().getTime() + "." + Math.floor(Math.random() * 9000 + 1000)
-  );
+  return `${getClusterId()}/${endpointName}_${Date.now()}.${Math.floor(Math.random() * 9000 + 1000)}`;
 };
 
 export function generateUUID() {
