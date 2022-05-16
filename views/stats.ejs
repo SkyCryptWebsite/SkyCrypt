@@ -125,6 +125,12 @@ const skillEmojis = {
   runecrafting: "✨",
   social: "💬",
   taming: "🦴",
+  dungeons: "💀",
+  archer: "🏹",
+  berserk: "🗡️",
+  healer: "🚑",
+  mage: "🧙🏽",
+  tank: "🛡️",
 };
 
 const slayerEmojis = {
@@ -498,8 +504,27 @@ function getDescription() {
 				`${slayerEmojis[slayer]} ${slayerInfo.level.currentLevel}  `
 			)
 		}
-		description.push('\n', '\n')
+		description.push('\n')
 	}
+
+  // Dungeons
+  if ('dungeons' in calculated && calculated.dungeons.catacombs?.level?.level > 0) {
+    const line = []
+
+    if (calculated.dungeons.catacombs?.level) {
+      line.push(`${skillEmojis["dungeons"]} Catacombs: ${calculated.dungeons.catacombs.level.level}`)
+    }
+
+    if (calculated.dungeons.classes) {
+      const classesLine = []
+      for (const [dclass, data] of Object.entries(calculated.dungeons.classes)) {
+        classesLine.push(`${skillEmojis[dclass]} ${data.experience?.level ?? 0}`)
+      }
+      line.push(`(${classesLine.join('  ')})`)
+    }
+
+    description.push(line.join(' '), '\n', '\n')
+  }
 
 	// Avg. skill
 	if (calculated.average_level) {
@@ -588,8 +613,8 @@ const metaDescription = getMetaDescription()
   <meta property="og:image" content="https://crafatar.com/avatars/<%= calculated.uuid %>?size=512&overlay">
   <meta property="og:description" content="<%= description %>">
   <meta property="og:profile:username" content="<%= calculated.display_name %>">
-  <meta name="twitter:card" content="summary"></meta>
-<%- include('../includes/resources') %>
+  <meta name="twitter:card" content="summary">
+  <%- include('../includes/resources') %>
 </head>
 <body class="page-stats">
   <svg xmlns="http://www.w3.org/2000/svg" height="0" width="0" style="position: fixed;">
