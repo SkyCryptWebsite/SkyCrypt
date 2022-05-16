@@ -725,6 +725,11 @@ export const talismans = {
     rarity: "common",
     texture: "/head/556ca5c679336dd4f3262f4fbc23c1a2ee0d82a7fd81e6e62337e5fd5c7",
   },
+  BLAZE_TALISMAN: {
+    name: "Blaze Talisman",
+    rarity: "rare",
+    texture: "/head/9de3a407d2be387b45bebdd52d3d4d75a6a1b479e2b8c03267d021d4af31e072",
+  },
 };
 
 // Getting Unique Accessories Count
