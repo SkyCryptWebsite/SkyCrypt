@@ -108,8 +108,8 @@ export const talisman_upgrades = {
   ODGERS_BRONZE_TOOTH: ["ODGERS_SILVER_TOOTH", "ODGERS_GOLD_TOOTH", "ODGERS_DIAMOND_TOOTH"],
   ODGERS_SILVER_TOOTH: ["ODGERS_GOLD_TOOTH", "ODGERS_DIAMOND_TOOTH"],
   ODGERS_GOLD_TOOTH: ["ODGERS_DIAMOND_TOOTH"],
-  BURNING_KUUDRA_CORE: ["FIERY_KUUDRA_CORE", "INFERNAL_KUUDRA_CORE"],
-  FIERY_KUUDRA_CORE: ["INFERNAL_KUUDRA_CORE"],
+  // BURNING_KUUDRA_CORE: ["FIERY_KUUDRA_CORE", "INFERNAL_KUUDRA_CORE"],
+  // FIERY_KUUDRA_CORE: ["INFERNAL_KUUDRA_CORE"],
   BURSTSTOPPER_TALISMAN: ["BURSTSTOPPER_ARTIFACT"],
 };
 
@@ -690,21 +690,21 @@ export const talismans = {
     rarity: "epic",
     texture: "/head/a2680a28962e9ad2d4872d06fba2cc60824fbb2d0824e42d958575b7563884aa",
   },
-  BURNING_KUUDRA_CORE: {
-    name: "Burning Kuudra Core",
-    rarity: "rare",
-    texture: "/head/368743497820c08627d2cc5e891c0f9fc3793f75b6e41e140ac9b007d3b505a5",
-  },
-  FIERY_KUUDRA_CORE: {
-    name: "Fiery Kuudra Core",
-    rarity: "epic",
-    texture: "/head/200c16738c372484628ca15cf7b0731b810bd3142e07c1053b5e3da6b6e523ca",
-  },
-  INFERNAL_KUUDRA_CORE: {
-    name: "Infernal Kuudra Core",
-    rarity: "legendary",
-    texture: "/head/ece252963a5188cef8ede9d8523bd91d284a785b418b39eec29a91aea07c61e2",
-  },
+  // BURNING_KUUDRA_CORE: {
+  //   name: "Burning Kuudra Core",
+  //   rarity: "rare",
+  //   texture: "/head/368743497820c08627d2cc5e891c0f9fc3793f75b6e41e140ac9b007d3b505a5",
+  // },
+  // FIERY_KUUDRA_CORE: {
+  //   name: "Fiery Kuudra Core",
+  //   rarity: "epic",
+  //   texture: "/head/200c16738c372484628ca15cf7b0731b810bd3142e07c1053b5e3da6b6e523ca",
+  // },
+  // INFERNAL_KUUDRA_CORE: {
+  //   name: "Infernal Kuudra Core",
+  //   rarity: "legendary",
+  //   texture: "/head/ece252963a5188cef8ede9d8523bd91d284a785b418b39eec29a91aea07c61e2",
+  // },
   BURSTSTOPPER_TALISMAN: {
     name: "Burststopper Talisman",
     rarity: "rare",
