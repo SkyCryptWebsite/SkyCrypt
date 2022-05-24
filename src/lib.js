@@ -1125,8 +1125,8 @@ export const getItems = async (
       talisman_ids.splice(talisman_ids.indexOf(id), 1, `WEDDING_RING_${maxTier}`);
     }
 
-    if (id in constants.talisman_upgrades) {
-      const talismanUpgrades = constants.talisman_upgrades[id];
+    if (id in constants.accessory_upgrades) {
+      const talismanUpgrades = constants.accessory_upgrades[id];
 
       if (talismans.find((a) => !a.isInactive && talismanUpgrades.includes(getId(a))) != undefined) {
         talisman.isInactive = true;
@@ -1137,8 +1137,8 @@ export const getItems = async (
       }
     }
 
-    if (id in constants.talisman_duplicates) {
-      const talismanDuplicates = constants.talisman_duplicates[id];
+    if (id in constants.accessory_duplicates) {
+      const talismanDuplicates = constants.accessory_duplicates[id];
 
       if (talismans.find((a) => talismanDuplicates.includes(getId(a))) != undefined) {
         talisman.isUnique = false;
@@ -2860,8 +2860,8 @@ export async function getPetScore(pets) {
 export async function getMissingTalismans(talismans) {
   const unique = Object.keys(constants.accessories);
   unique.forEach((name) => {
-    if (name in constants.talisman_duplicates) {
-      for (const duplicate of constants.talisman_duplicates[name]) {
+    if (name in constants.accessory_duplicates) {
+      for (const duplicate of constants.accessory_duplicates[name]) {
         if (talismans.includes(duplicate)) {
           talismans[talismans.indexOf(duplicate)] = name;
           break;
@@ -2872,9 +2872,9 @@ export async function getMissingTalismans(talismans) {
 
   let missing = unique.filter((talisman) => !talismans.includes(talisman));
   missing.forEach((name) => {
-    if (name in constants.talisman_upgrades) {
+    if (name in constants.accessory_upgrades) {
       //if the name is in the upgrades list
-      for (const upgrade of constants.talisman_upgrades[name]) {
+      for (const upgrade of constants.accessory_upgrades[name]) {
         if (talismans.includes(upgrade)) {
           //if talisman list includes the upgrade
           missing = missing.filter((item) => item !== name);
@@ -2914,7 +2914,7 @@ export async function getMissingTalismans(talismans) {
 
     let includes = false;
 
-    for (const array of Object.values(constants.talisman_upgrades)) {
+    for (const array of Object.values(constants.accessory_upgrades)) {
       if (array.includes(talisman)) {
         includes = true;
       }

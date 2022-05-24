@@ -1,4 +1,4 @@
-export const talisman_upgrades = {
+export const accessory_upgrades = {
   WOLF_TALISMAN: ["WOLF_RING"],
   RING_POTION_AFFINITY: ["ARTIFACT_POTION_AFFINITY"],
   POTION_AFFINITY_TALISMAN: ["RING_POTION_AFFINITY", "ARTIFACT_POTION_AFFINITY"],
@@ -113,7 +113,7 @@ export const talisman_upgrades = {
   BURSTSTOPPER_TALISMAN: ["BURSTSTOPPER_ARTIFACT"],
 };
 
-export const talisman_duplicates = {
+export const accessory_duplicates = {
   WEDDING_RING_0: ["WEDDING_RING_1"],
   WEDDING_RING_2: ["WEDDING_RING_3"],
   WEDDING_RING_4: ["WEDDING_RING_5", "WEDDING_RING_6"],
@@ -735,7 +735,7 @@ export const accessories = {
 // Getting Unique Accessories Count
 const unique_accessories = { ...accessories };
 
-for (const upgrade in talisman_upgrades) {
+for (const upgrade in accessory_upgrades) {
   if (upgrade in unique_accessories) {
     delete unique_accessories[upgrade];
   }
