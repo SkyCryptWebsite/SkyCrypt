@@ -981,6 +981,8 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
   const parent = document.querySelector("#base_stats_container");
 
   for (const stat in stats) {
+    // Wrapping the player-stat node inside a div is required to fix Chromium v102 css columns bug
+    const nodeWrapper = document.createElement("div");
     const node = document.createElement("player-stat");
 
     node.setAttribute("stat", stat);
@@ -992,7 +994,8 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
     );
     node.setAttribute("data", window.btoa(JSON.stringify(stats[stat])));
 
-    parent?.appendChild(node);
+    nodeWrapper.appendChild(node);
+    parent?.appendChild(nodeWrapper);
   }
 
   // Print bonus stats
