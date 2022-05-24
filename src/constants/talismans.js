@@ -143,7 +143,7 @@ export const talisman_duplicates = {
   ],
 };
 
-export const talismans = {
+export const accessories = {
   WEDDING_RING_0: {
     name: "Shiny Yellow Rock",
     rarity: "common",
@@ -733,7 +733,7 @@ export const talismans = {
 };
 
 // Getting Unique Accessories Count
-const unique_accessories = { ...talismans };
+const unique_accessories = { ...accessories };
 
 for (const upgrade in talisman_upgrades) {
   if (upgrade in unique_accessories) {

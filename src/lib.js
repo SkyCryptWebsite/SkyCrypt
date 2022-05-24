@@ -2858,7 +2858,7 @@ export async function getPetScore(pets) {
 }
 
 export async function getMissingTalismans(talismans) {
-  const unique = Object.keys(constants.talismans);
+  const unique = Object.keys(constants.accessories);
   unique.forEach((name) => {
     if (name in constants.talisman_duplicates) {
       for (const duplicate of constants.talisman_duplicates[name]) {
@@ -2896,8 +2896,8 @@ export async function getMissingTalismans(talismans) {
     object.name ??= talisman;
 
     // MAIN TALISMANS
-    if (constants.talismans[talisman] != null) {
-      const data = constants.talismans[talisman];
+    if (constants.accessories[talisman] != null) {
+      const data = constants.accessories[talisman];
 
       object.texture_path = data.texture || null;
       object.display_name = data.name || null;
