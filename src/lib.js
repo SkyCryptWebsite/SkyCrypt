@@ -982,8 +982,8 @@ export const getItems = async (
     }
   }
 
-  const talismans = [];
-  const talisman_ids = [];
+  const accessories = [];
+  const accessory_ids = [];
   const accessory_rarities = {
     common: 0,
     uncommon: 0,
@@ -995,72 +995,72 @@ export const getItems = async (
   };
 
   // Modify talismans on armor and add
-  for (const talisman of armor.filter((a) => a.categories.includes("accessory"))) {
-    const id = getId(talisman);
+  for (const accessory of armor.filter((a) => a.categories.includes("accessory"))) {
+    const id = getId(accessory);
 
     if (id === "") {
       continue;
     }
 
-    const insertTalisman = Object.assign({ isUnique: true, isInactive: false }, talisman);
+    const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (talismans.find((a) => !a.isInactive && getId(a) == id) != undefined) {
-      insertTalisman.isInactive = true;
+    if (accessories.find((a) => !a.isInactive && getId(a) == id) != undefined) {
+      insertAccessory.isInactive = true;
     }
 
-    if (talismans.find((a) => getId(a) == id) != undefined) {
-      insertTalisman.isUnique = false;
+    if (accessories.find((a) => getId(a) == id) != undefined) {
+      insertAccessory.isUnique = false;
     }
 
-    talismans.push(insertTalisman);
-    talisman_ids.push(id);
+    accessories.push(insertAccessory);
+    accessory_ids.push(id);
   }
 
   // Add talismans from inventory
-  for (const talisman of inventory.filter((a) => a.categories.includes("accessory"))) {
-    const id = getId(talisman);
+  for (const accessory of inventory.filter((a) => a.categories.includes("accessory"))) {
+    const id = getId(accessory);
 
     if (id === "") {
       continue;
     }
 
-    const insertTalisman = Object.assign({ isUnique: true, isInactive: false }, talisman);
+    const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (talismans.find((a) => !a.isInactive && getId(a) == id) != undefined) {
-      insertTalisman.isInactive = true;
+    if (accessories.find((a) => !a.isInactive && getId(a) == id) != undefined) {
+      insertAccessory.isInactive = true;
     }
 
-    if (talismans.find((a) => getId(a) == id) != undefined) {
-      insertTalisman.isUnique = false;
+    if (accessories.find((a) => getId(a) == id) != undefined) {
+      insertAccessory.isUnique = false;
     }
 
-    talismans.push(insertTalisman);
-    talisman_ids.push(id);
+    accessories.push(insertAccessory);
+    accessory_ids.push(id);
   }
 
   // Add talismans from accessory bag if not already in inventory
-  for (const talisman of talisman_bag) {
-    const id = getId(talisman);
+  for (const accessory of talisman_bag) {
+    const id = getId(accessory);
 
     if (id === "") {
       continue;
     }
 
-    const insertTalisman = Object.assign({ isUnique: true, isInactive: false }, talisman);
+    const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (talismans.find((a) => !a.isInactive && getId(a) == id) != undefined) {
-      insertTalisman.isInactive = true;
+    if (accessories.find((a) => !a.isInactive && getId(a) == id) != undefined) {
+      insertAccessory.isInactive = true;
     }
 
-    if (talismans.find((a) => getId(a) == id) != undefined) {
-      insertTalisman.isUnique = false;
+    if (accessories.find((a) => getId(a) == id) != undefined) {
+      insertAccessory.isUnique = false;
     }
 
-    talismans.push(insertTalisman);
-    talisman_ids.push(id);
-    accessory_rarities[insertTalisman.rarity]++;
+    accessories.push(insertAccessory);
+    accessory_ids.push(id);
+    accessory_rarities[insertAccessory.rarity]++;
     if (id == "HEGEMONY_ARTIFACT") {
-      accessory_rarities.hegemony = { rarity: insertTalisman.rarity };
+      accessory_rarities.hegemony = { rarity: insertAccessory.rarity };
     }
   }
 
@@ -1077,110 +1077,110 @@ export const getItems = async (
       items = item.containsItems.slice(0);
     }
 
-    for (const talisman of items.filter((a) => a.categories.includes("accessory"))) {
-      const id = getId(talisman);
+    for (const accessory of items.filter((a) => a.categories.includes("accessory"))) {
+      const id = getId(accessory);
 
-      const insertTalisman = Object.assign({ isUnique: true, isInactive: true }, talisman);
+      const insertAccessory = Object.assign({ isUnique: true, isInactive: true }, accessory);
 
-      if (talismans.find((a) => getId(a) == id) != undefined) {
-        insertTalisman.isUnique = false;
+      if (accessories.find((a) => getId(a) == id) != undefined) {
+        insertAccessory.isUnique = false;
       }
 
-      talismans.push(insertTalisman);
-      talisman_ids.push(id);
+      accessories.push(insertAccessory);
+      accessory_ids.push(id);
     }
   }
 
   // Don't account for lower tier versions of the same talisman
-  for (const talisman of talismans.concat(armor)) {
-    const id = getId(talisman);
+  for (const accessory of accessories.concat(armor)) {
+    const id = getId(accessory);
 
     if (id.startsWith("CAMPFIRE_TALISMAN_")) {
       const tier = parseInt(id.split("_").pop());
 
       const maxTier = Math.max(
-        ...talismans.filter((a) => getId(a).startsWith("CAMPFIRE_TALISMAN_")).map((a) => getId(a).split("_").pop())
+        ...accessories.filter((a) => getId(a).startsWith("CAMPFIRE_TALISMAN_")).map((a) => getId(a).split("_").pop())
       );
 
       if (tier < maxTier) {
-        talisman.isUnique = false;
-        talisman.isInactive = true;
+        accessory.isUnique = false;
+        accessory.isInactive = true;
       }
 
-      talisman_ids.splice(talisman_ids.indexOf(id), 1, `CAMPFIRE_TALISMAN_${maxTier}`);
+      accessory_ids.splice(accessory_ids.indexOf(id), 1, `CAMPFIRE_TALISMAN_${maxTier}`);
     }
 
     if (id.startsWith("WEDDING_RING_")) {
       const tier = parseInt(id.split("_").pop());
 
       const maxTier = Math.max(
-        ...talismans.filter((a) => getId(a).startsWith("WEDDING_RING_")).map((a) => getId(a).split("_").pop())
+        ...accessories.filter((a) => getId(a).startsWith("WEDDING_RING_")).map((a) => getId(a).split("_").pop())
       );
 
       if (tier < maxTier) {
-        talisman.isUnique = false;
-        talisman.isInactive = true;
+        accessory.isUnique = false;
+        accessory.isInactive = true;
       }
 
-      talisman_ids.splice(talisman_ids.indexOf(id), 1, `WEDDING_RING_${maxTier}`);
+      accessory_ids.splice(accessory_ids.indexOf(id), 1, `WEDDING_RING_${maxTier}`);
     }
 
     if (id in constants.accessory_upgrades) {
-      const talismanUpgrades = constants.accessory_upgrades[id];
+      const accessoryUpgrades = constants.accessory_upgrades[id];
 
-      if (talismans.find((a) => !a.isInactive && talismanUpgrades.includes(getId(a))) != undefined) {
-        talisman.isInactive = true;
+      if (accessories.find((a) => !a.isInactive && accessoryUpgrades.includes(getId(a))) != undefined) {
+        accessory.isInactive = true;
       }
 
-      if (talismans.find((a) => talismanUpgrades.includes(getId(a))) != undefined) {
-        talisman.isUnique = false;
+      if (accessories.find((a) => accessoryUpgrades.includes(getId(a))) != undefined) {
+        accessory.isUnique = false;
       }
     }
 
     if (id in constants.accessory_duplicates) {
-      const talismanDuplicates = constants.accessory_duplicates[id];
+      const accessoryDuplicates = constants.accessory_duplicates[id];
 
-      if (talismans.find((a) => talismanDuplicates.includes(getId(a))) != undefined) {
-        talisman.isUnique = false;
+      if (accessories.find((a) => accessoryDuplicates.includes(getId(a))) != undefined) {
+        accessory.isUnique = false;
       }
     }
   }
 
   // Add New Year Cake Bag health bonus (1 per unique cake)
-  for (const talisman of talismans) {
-    const id = getId(talisman);
+  for (const accessory of accessories) {
+    const id = getId(accessory);
     const cakes = [];
 
-    if (id == "NEW_YEAR_CAKE_BAG" && Array.isArray(talisman?.containsItems)) {
-      talisman.stats.health = 0;
+    if (id == "NEW_YEAR_CAKE_BAG" && Array.isArray(accessory?.containsItems)) {
+      accessory.stats.health = 0;
 
-      for (const item of talisman.containsItems) {
+      for (const item of accessory.containsItems) {
         if (
           item.tag?.ExtraAttributes?.new_years_cake != undefined &&
           !cakes.includes(item.tag.ExtraAttributes.new_years_cake)
         ) {
-          talisman.stats.health++;
+          accessory.stats.health++;
           cakes.push(item.tag.ExtraAttributes.new_years_cake);
         }
       }
     }
   }
 
-  for (const talisman of talismans) {
-    talisman.base_name = talisman.display_name;
+  for (const accessory of accessories) {
+    accessory.base_name = accessory.display_name;
 
-    if (talisman.tag?.ExtraAttributes?.modifier != undefined) {
-      talisman.base_name = talisman.display_name.split(" ").slice(1).join(" ");
-      talisman.reforge = talisman.tag.ExtraAttributes.modifier;
+    if (accessory.tag?.ExtraAttributes?.modifier != undefined) {
+      accessory.base_name = accessory.display_name.split(" ").slice(1).join(" ");
+      accessory.reforge = accessory.tag.ExtraAttributes.modifier;
     }
 
-    if (talisman.tag?.ExtraAttributes?.talisman_enrichment != undefined) {
-      talisman.enrichment = talisman.tag.ExtraAttributes.talisman_enrichment;
+    if (accessory.tag?.ExtraAttributes?.accessory_enrichment != undefined) {
+      accessory.enrichment = accessory.tag.ExtraAttributes.accessory_enrichment;
     }
   }
 
-  output.talismans = talismans;
-  output.talisman_ids = talisman_ids;
+  output.talismans = accessories;
+  output.talisman_ids = accessory_ids;
   output.accessory_rarities = accessory_rarities;
 
   output.weapons = all_items.filter((a) => a.categories?.includes("weapon"));
