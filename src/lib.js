@@ -1810,7 +1810,9 @@ export const getStats = async (
   }
 
   // Apply +5 Defense and +5 Strength of Day/Night Crystal only if both are owned as this is required for a permanent bonus
-  if (items.accessories.filter((a) => !a.isInactive && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(getId(a))).length == 2) {
+  if (
+    items.accessories.filter((a) => !a.isInactive && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(getId(a))).length == 2
+  ) {
     output.stats.defense += 5;
     output.stats.strength += 5;
 
