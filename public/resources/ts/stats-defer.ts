@@ -281,12 +281,12 @@ function fillLore(element: HTMLElement) {
 
   if (item.texture_path) {
     itemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
-    itemIcon.classList.add("item-icon", "custom-icon");
+    itemIcon.className = "stats-piece-icon item-icon custom-icon";
   } else if ("id" in item) {
     itemIcon.removeAttribute("style");
     itemIcon.classList.remove("custom-icon");
     const idClass = `icon-${item.id}_${item.Damage}` + " " + (item.Damage != 0 ? `icon-${item.id}_0` : "");
-    itemIcon.classList.add("item-icon", idClass.trim());
+    itemIcon.className = ("stats-piece-icon item-icon " + idClass).trim();
   } else {
     throw new Error("item mush have either an id and a damage or a texture_path");
   }
@@ -982,6 +982,8 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
   const parent = document.querySelector("#base_stats_container");
 
   for (const stat in stats) {
+    // Wrapping the player-stat node inside a div is required to fix Chromium v102 css columns bug
+    const nodeWrapper = document.createElement("div");
     const node = document.createElement("player-stat");
 
     node.setAttribute("stat", stat);
@@ -993,7 +995,8 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
     );
     node.setAttribute("data", window.btoa(JSON.stringify(stats[stat])));
 
-    parent?.appendChild(node);
+    nodeWrapper.appendChild(node);
+    parent?.appendChild(nodeWrapper);
   }
 
   // Print bonus stats
