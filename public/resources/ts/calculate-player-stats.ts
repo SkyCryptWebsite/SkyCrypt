@@ -57,7 +57,7 @@ export function getPlayerStats() {
   }
 
   // Active accessories stats
-  for (const item of items.talismans.filter((item) => !(item as Item).isInactive)) {
+  for (const item of items.accessories.filter((item) => !(item as Item).isInactive)) {
     const bonusStats: ItemStats = helper.getStatsFromItem(item as Item);
 
     for (const [name, value] of Object.entries(bonusStats)) {
@@ -116,7 +116,7 @@ export function getPlayerStats() {
 
   // New year cake bag
   {
-    const cakeBag = items.talisman_bag.find((x) => (x as Item).tag?.ExtraAttributes?.id === "NEW_YEAR_CAKE_BAG");
+    const cakeBag = items.accessory_bag.find((x) => (x as Item).tag?.ExtraAttributes?.id === "NEW_YEAR_CAKE_BAG");
 
     if (cakeBag && (cakeBag as Backpack).containsItems) {
       const totalCakes = (cakeBag as Backpack).containsItems.filter((x) => x.display_name).length;

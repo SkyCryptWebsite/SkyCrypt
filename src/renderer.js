@@ -77,7 +77,7 @@ function darken(src, factor) {
   return dst;
 }
 
-const TALISMANS = [
+const ACCESSORIES = [
   "http://textures.minecraft.net/texture/5c577e7d31e5e04c2ce71e13e3962192d80bd54b55efaacaaea12966fe27bf9",
   "http://textures.minecraft.net/texture/eaa44b170d749ce4099aa78d98945d193651484089efb87ba88892c6fed2af31",
   "http://textures.minecraft.net/texture/651eb16f22dd7505be5dae06671803633a5abf8b2beeb5c60548670df0e59214",
@@ -176,7 +176,7 @@ export async function renderHead(url, scale) {
     hat_bg.setTransform(1, skew_a, 0, skew_b, 0, 0);
     hat_bg.drawImage(head_left_overlay, x + y, z - y, head_left_overlay.width, head_left_overlay.height);
 
-    if (!TALISMANS.includes(url)) {
+    if (!ACCESSORIES.includes(url)) {
       // hat back
       x = x_offset;
       y = 0;

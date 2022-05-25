@@ -130,7 +130,7 @@ export const allItems = new Map(
     items.armor,
     items.inventory,
     items.enderchest,
-    items.talisman_bag,
+    items.accessory_bag,
     items.fishing_bag,
     items.quiver,
     items.potion_bag,
@@ -256,11 +256,11 @@ function fillLore(element: HTMLElement) {
     item = calculated.pets[parseInt(element.getAttribute("data-pet-index") as string)];
   } else if (element.hasAttribute("data-missing-pet-index")) {
     item = calculated.missingPets[parseInt(element.getAttribute("data-missing-pet-index") as string)];
-  } else if (element.hasAttribute("data-missing-talisman-index")) {
-    item = calculated.missingTalismans.missing[parseInt(element.getAttribute("data-missing-talisman-index") as string)];
-  } else if (element.hasAttribute("data-upgrade-talisman-index")) {
+  } else if (element.hasAttribute("data-missing-accessory-index")) {
+    item = calculated.missingAccessories.missing[parseInt(element.getAttribute("data-missing-accessory-index") as string)];
+  } else if (element.hasAttribute("data-upgrade-accessory-index")) {
     item =
-      calculated.missingTalismans.upgrades[parseInt(element.getAttribute("data-upgrade-talisman-index") as string)];
+      calculated.missingAccessories.upgrades[parseInt(element.getAttribute("data-upgrade-accessory-index") as string)];
   }
 
   if (item == undefined) {

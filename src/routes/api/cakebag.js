@@ -19,7 +19,7 @@ router.use(async (req, res, next) => {
 
     const items = await lib.getItems(userProfile, false, undefined, req.options);
 
-    const allItems = items.armor.concat(items.inventory, items.talisman_bag, items.enderchest);
+    const allItems = items.armor.concat(items.inventory, items.accessory_bag, items.enderchest);
 
     const cakeBags = allItems.filter((a) => a?.tag?.ExtraAttributes?.id == "NEW_YEAR_CAKE_BAG");
 

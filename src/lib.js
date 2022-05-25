@@ -855,7 +855,7 @@ export const getItems = async (
     "ender_chest_contents" in profile
       ? await processItems(profile.ender_chest_contents.data, customTextures, packs, options.cacheOnly)
       : [];
-  const talisman_bag =
+  const accessory_bag =
     "talisman_bag" in profile
       ? await processItems(profile.talisman_bag.data, customTextures, packs, options.cacheOnly)
       : [];
@@ -937,7 +937,7 @@ export const getItems = async (
   output.wardrobe_inventory = wardrobe_inventory;
   output.inventory = inventory;
   output.enderchest = enderchest;
-  output.talisman_bag = talisman_bag;
+  output.accessory_bag = accessory_bag;
   output.fishing_bag = fishing_bag;
   output.quiver = quiver;
   output.potion_bag = potion_bag;
@@ -948,7 +948,7 @@ export const getItems = async (
   const all_items = armor.concat(
     inventory,
     enderchest,
-    talisman_bag,
+    accessory_bag,
     fishing_bag,
     quiver,
     potion_bag,
@@ -994,7 +994,7 @@ export const getItems = async (
     hegemony: null,
   };
 
-  // Modify talismans on armor and add
+  // Modify accessories on armor and add
   for (const accessory of armor.filter((a) => a.categories.includes("accessory"))) {
     const id = getId(accessory);
 
@@ -1016,7 +1016,7 @@ export const getItems = async (
     accessory_ids.push(id);
   }
 
-  // Add talismans from inventory
+  // Add accessories from inventory
   for (const accessory of inventory.filter((a) => a.categories.includes("accessory"))) {
     const id = getId(accessory);
 
@@ -1038,8 +1038,8 @@ export const getItems = async (
     accessory_ids.push(id);
   }
 
-  // Add talismans from accessory bag if not already in inventory
-  for (const accessory of talisman_bag) {
+  // Add accessories from accessory bag if not already in inventory
+  for (const accessory of accessory_bag) {
     const id = getId(accessory);
 
     if (id === "") {
@@ -1064,7 +1064,7 @@ export const getItems = async (
     }
   }
 
-  // Add inactive talismans from enderchest and backpacks
+  // Add inactive accessories from enderchest and backpacks
   for (const item of inventory.concat(enderchest, storage)) {
     // filter out filler or empty slots (such as empty storage slot)
     if (!("categories" in item)) {
@@ -1091,7 +1091,7 @@ export const getItems = async (
     }
   }
 
-  // Don't account for lower tier versions of the same talisman
+  // Don't account for lower tier versions of the same accessory
   for (const accessory of accessories.concat(armor)) {
     const id = getId(accessory);
 
@@ -1179,8 +1179,8 @@ export const getItems = async (
     }
   }
 
-  output.talismans = accessories;
-  output.talisman_ids = accessory_ids;
+  output.accessories = accessories;
+  output.accessory_ids = accessory_ids;
   output.accessory_rarities = accessory_rarities;
 
   output.weapons = all_items.filter((a) => a.categories?.includes("weapon"));
@@ -1252,12 +1252,12 @@ export const getItems = async (
     return a.item_index - b.item_index;
   };
 
-  // Sort talismans, weapons and rods by rarity
+  // Sort accessories, weapons and rods by rarity
   output.weapons = output.weapons.sort(itemSorter);
   output.fishing_tools = output.fishing_tools.sort(itemSorter);
   output.farming_tools = output.farming_tools.sort(itemSorter);
   output.mining_tools = output.mining_tools.sort(itemSorter);
-  output.talismans = output.talismans.sort(itemSorter);
+  output.accessories = output.accessories.sort(itemSorter);
 
   const countsOfId = {};
 
@@ -1663,7 +1663,7 @@ export const getStats = async (
   }
 
   if (!items.no_inventory) {
-    output.missingTalismans = await getMissingTalismans(items.talisman_ids);
+    output.missingAccessories = await getMissingAccessories(items.accessory_ids);
   }
 
   if (!userProfile.pets) {
@@ -1703,7 +1703,7 @@ export const getStats = async (
   }
 
   // Apply all harp bonuses when Melody's Hair has been acquired
-  if (items.talismans.filter((a) => getId(a) == "MELODY_HAIR").length == 1) {
+  if (items.accessories.filter((a) => getId(a) == "MELODY_HAIR").length == 1) {
     output.stats.intelligence += 26;
   }
 
@@ -1794,8 +1794,8 @@ export const getStats = async (
     }
   }
 
-  // Apply stats of active talismans
-  items.talismans
+  // Apply stats of active accessories
+  items.accessories
     .filter((a) => Object.keys(a).length != 0 && !a.isInactive)
     .forEach((item) => {
       for (const stat in item.stats) {
@@ -1810,11 +1810,11 @@ export const getStats = async (
   }
 
   // Apply +5 Defense and +5 Strength of Day/Night Crystal only if both are owned as this is required for a permanent bonus
-  if (items.talismans.filter((a) => !a.isInactive && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(getId(a))).length == 2) {
+  if (items.accessories.filter((a) => !a.isInactive && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(getId(a))).length == 2) {
     output.stats.defense += 5;
     output.stats.strength += 5;
 
-    const dayCrystal = items.talismans.find((a) => getId(a) == "DAY_CRYSTAL");
+    const dayCrystal = items.accessories.find((a) => getId(a) == "DAY_CRYSTAL");
 
     dayCrystal.stats.defense = (dayCrystal.stats.defense || 0) + 5;
     dayCrystal.stats.strength = (dayCrystal.stats.strength || 0) + 5;
@@ -2857,26 +2857,26 @@ export async function getPetScore(pets) {
   return Object.values(highestRarity).reduce((a, b) => a + b, 0);
 }
 
-export async function getMissingTalismans(talismans) {
+export async function getMissingAccessories(accessories) {
   const unique = Object.keys(constants.accessories);
   unique.forEach((name) => {
     if (name in constants.accessory_duplicates) {
       for (const duplicate of constants.accessory_duplicates[name]) {
-        if (talismans.includes(duplicate)) {
-          talismans[talismans.indexOf(duplicate)] = name;
+        if (accessories.includes(duplicate)) {
+          accessories[accessories.indexOf(duplicate)] = name;
           break;
         }
       }
     }
   });
 
-  let missing = unique.filter((talisman) => !talismans.includes(talisman));
+  let missing = unique.filter((accessory) => !accessories.includes(accessory));
   missing.forEach((name) => {
     if (name in constants.accessory_upgrades) {
       //if the name is in the upgrades list
       for (const upgrade of constants.accessory_upgrades[name]) {
-        if (talismans.includes(upgrade)) {
-          //if talisman list includes the upgrade
+        if (accessories.includes(upgrade)) {
+          //if accessories list includes the upgrade
           missing = missing.filter((item) => item !== name);
           break;
         }
@@ -2886,27 +2886,27 @@ export async function getMissingTalismans(talismans) {
 
   const upgrades = [];
   const other = [];
-  missing.forEach(async (talisman) => {
+  missing.forEach(async (accessory) => {
     const object = {
       display_name: null,
       rarity: null,
       texture_path: null,
     };
 
-    object.name ??= talisman;
+    object.name ??= accessory;
 
-    // MAIN TALISMANS
-    if (constants.accessories[talisman] != null) {
-      const data = constants.accessories[talisman];
+    // MAIN ACCESSORIES
+    if (constants.accessories[accessory] != null) {
+      const data = constants.accessories[accessory];
 
       object.texture_path = data.texture || null;
       object.display_name = data.name || null;
       object.rarity = data.rarity || null;
     } else {
-      const data = await db.collection("items").findOne({ id: talisman });
+      const data = await db.collection("items").findOne({ id: accessory });
 
       if (data) {
-        object.texture_path = data.texture ? `/head/${data.texture}` : `/item/${talisman}`;
+        object.texture_path = data.texture ? `/head/${data.texture}` : `/item/${accessory}`;
         object.display_name = data.name;
         object.rarity = data.tier.toLowerCase();
       }
@@ -2915,7 +2915,7 @@ export async function getMissingTalismans(talismans) {
     let includes = false;
 
     for (const array of Object.values(constants.accessory_upgrades)) {
-      if (array.includes(talisman)) {
+      if (array.includes(accessory)) {
         includes = true;
       }
     }
