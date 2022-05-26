@@ -983,3 +983,62 @@ function getCategoriesFromType(type) {
 
   return ["unknown"];
 }
+
+export function generateDebugPets(type = "ALL") {
+  const pets = [];
+
+  for (const [petType, petData] of Object.entries(constants.pet_data)) {
+    if (type !== "ALL" && petType !== type) {
+      continue;
+    }
+
+    for (const rarity of ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC"]) {
+      pets.push(
+        {
+          type: petType,
+          active: false,
+          exp: 0,
+          tier: rarity,
+          candyUsed: 0,
+          heldItem: null,
+          skin: null,
+          uuid: generateUUID(),
+        },
+        {
+          type: petType,
+          active: false,
+          exp: getPetExp(petData.maxTier, (petData.maxLevel / 3) * 2),
+          tier: rarity,
+          candyUsed: 0,
+          heldItem: null,
+          skin: null,
+          uuid: generateUUID(),
+        },
+        {
+          type: petType,
+          active: false,
+          exp: 1000000000,
+          tier: rarity,
+          candyUsed: 0,
+          heldItem: null,
+          skin: null,
+          uuid: generateUUID(),
+        }
+      );
+    }
+  }
+
+  return pets;
+}
+
+/**
+ * @param  {string} rarity
+ * @param  {number} level
+ * @returns number
+ * @description takes rarity and level and returns the required pet exp to reach the level
+ */
+export function getPetExp(rarity, level) {
+  const rarityOffset = constants.pet_rarity_offset[rarity.toLowerCase()];
+
+  return constants.pet_levels.slice(rarityOffset, rarityOffset + level - 1).reduce((prev, curr) => prev + curr, 0);
+}

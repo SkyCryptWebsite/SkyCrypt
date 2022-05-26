@@ -28,7 +28,6 @@ import { redisClient } from "./redis.js";
 import { calculateLilyWeight } from "./weight/lily-weight.js";
 import { calculateSenitherWeight } from "./weight/senither-weight.js";
 import { getTexture, packs } from "./custom-resources.js";
-import { makeLore } from "./lore-generator.js";
 
 const parseNbt = util.promisify(nbt.parse);
 
@@ -290,18 +289,6 @@ function getPetLevel(petExp, offsetRarity, maxLevel) {
     progress,
     xpMaxLevel,
   };
-}
-
-/**
- * @param  {string} rarity
- * @param  {number} level
- * @returns number
- * @description takes rarity and level and returns the required pet exp to reach the level
- */
-function getPetExp(rarity, level) {
-  const rarityOffset = constants.pet_rarity_offset[rarity.toLowerCase()];
-
-  return constants.pet_levels.slice(rarityOffset, rarityOffset + level - 1).reduce((prev, curr) => prev + curr, 0);
 }
 
 function getFairyBonus(fairyExchanges) {
@@ -1690,13 +1677,11 @@ export const getStats = async (
     break;
   }
 
-  let activePet = false;
   for (const pet of output.pets) {
     if (!pet.active) {
       continue;
     }
 
-    activePet = pet;
     for (const stat in pet.stats) {
       output.pet_bonus[stat] = (output.pet_bonus[stat] || 0) + pet.stats[stat];
     }
@@ -1717,26 +1702,6 @@ export const getStats = async (
   // Apply stats from pets
   for (const stat in output.pet_bonus) {
     output.stats[stat] += output.pet_bonus[stat];
-  }
-
-  // Apply pet bonus to armor
-  if (activePet) {
-    activePet.ref.modifyArmor(
-      items.armor.find((a) => a.categories.includes("helmet")),
-      getId(items.armor.find((a) => a.categories.includes("helmet"))),
-      items.armor.find((a) => a.categories.includes("chestplate")),
-      getId(items.armor.find((a) => a.categories.includes("chestplate"))),
-      items.armor.find((a) => a.categories.includes("leggings")),
-      getId(items.armor.find((a) => a.categories.includes("leggings"))),
-      items.armor.find((a) => a.categories.includes("boots")),
-      getId(items.armor.find((a) => a.categories.includes("boots")))
-    );
-
-    // Updates items lore after modifyArmor() changed their stats/extra (hpb)
-    makeLore(items.armor.find((a) => a.categories.includes("helmet")));
-    makeLore(items.armor.find((a) => a.categories.includes("chestplate")));
-    makeLore(items.armor.find((a) => a.categories.includes("leggings")));
-    makeLore(items.armor.find((a) => a.categories.includes("boots")));
   }
 
   // Apply Lapis Armor full set bonus of +60 HP
@@ -1854,11 +1819,6 @@ export const getStats = async (
     .concat(items.fishing_tools)) {
     const stats = Object.assign({}, output.stats);
 
-    // Modify weapon based on pet
-    // if (activePet)
-    //     activePet.ref.modifyWeapon(item, getId(item));
-    // apparently we don't actually need this
-
     // Apply held weapon stats
     for (const stat in item.stats) {
       stats[stat] += item.stats[stat];
@@ -1892,11 +1852,6 @@ export const getStats = async (
     // Apply Loving reforge bonus
     for (let i = 0; i < items.armor.filter((a) => a.tag?.ExtraAttributes?.modifier == "loving").length; i++) {
       stats["ability_damage"] += 5;
-    }
-
-    // Modify stats based off of pet ability
-    if (activePet) {
-      activePet.ref.modifyStats(stats);
     }
 
     if (items.armor.filter((a) => getId(a).startsWith("CHEAP_TUXEDO_")).length == 3) {
@@ -1966,11 +1921,6 @@ export const getStats = async (
 
       items.armor[0].stats[stat] += renownedBonus[stat];
     }
-  }
-
-  // Modify stats based off of pet ability (because this one is for when you don't have armor)
-  if (activePet) {
-    activePet.ref.modifyStats(output.stats);
   }
 
   // Stats shouldn't go into negative
@@ -2577,6 +2527,9 @@ export async function getPets(profile) {
     return output;
   }
 
+  // debug pets
+  // profile.pets = helper.generateDebugPets("BINGO");
+
   for (const pet of profile.pets) {
     if (!("tier" in pet)) {
       continue;
@@ -2833,7 +2786,7 @@ export async function getMissingPets(pets, gameMode) {
     profile.pets.push({
       type: petType,
       active: false,
-      exp: getPetExp(constants.pet_data[petType].maxTier, constants.pet_data[petType].maxLevel),
+      exp: helper.getPetExp(constants.pet_data[petType].maxTier, constants.pet_data[petType].maxLevel),
       tier: constants.pet_data[petType].maxTier,
       candyUsed: 0,
       heldItem: null,
