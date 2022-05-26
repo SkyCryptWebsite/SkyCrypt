@@ -825,7 +825,7 @@ export const getItems = async (
   const output = {};
 
   console.debug(`${options.debugId}: getItems called.`);
-  const timeStarted = new Date().getTime();
+  const timeStarted = Date.now();
 
   // Process inventories returned by API
   const armor =
@@ -1384,7 +1384,7 @@ export const getItems = async (
     output.armor_set_rarity = constants.rarities[Math.max(...armor.map((a) => helper.rarityNameToInt(a.rarity)))];
   }
 
-  console.debug(`${options.debugId}: getItems returned. (${new Date().getTime() - timeStarted}ms)`);
+  console.debug(`${options.debugId}: getItems returned. (${Date.now() - timeStarted}ms)`);
   return output;
 };
 
@@ -1518,7 +1518,7 @@ export const getStats = async (
   const output = {};
 
   console.debug(`${options.debugId}: getStats called.`);
-  const timeStarted = new Date().getTime();
+  const timeStarted = Date.now();
 
   const userProfile = profile.members[profile.uuid];
   const hypixelProfile = await helper.getRank(profile.uuid, db, options.cacheOnly);
@@ -2516,7 +2516,7 @@ export const getStats = async (
     lily: calculateLilyWeight(output),
   };
 
-  console.debug(`${options.debugId}: getStats returned. (${new Date().getTime() - timeStarted}ms)`);
+  console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
   return output;
 };
 
@@ -3464,7 +3464,7 @@ export const getProfile = async (
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` }
 ) => {
   console.debug(`${options.debugId}: getProfile called.`);
-  const timeStarted = new Date().getTime();
+  const timeStarted = Date.now();
 
   if (paramPlayer.length != 32) {
     try {
@@ -3737,7 +3737,7 @@ export const getProfile = async (
       .catch(console.error);
   }
 
-  console.debug(`${options.debugId}: getProfile returned. (${new Date().getTime() - timeStarted}ms)`);
+  console.debug(`${options.debugId}: getProfile returned. (${Date.now() - timeStarted}ms)`);
   return { profile: profile, allProfiles: allSkyBlockProfiles, uuid: paramPlayer };
 };
 
