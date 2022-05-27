@@ -1194,7 +1194,7 @@ const metaDescription = getMetaDescription()
           </p>
           <%
             const petsToShow = 100
-            const petsToShowLimit = 250
+            const petsToShowLimit = 1000
             const activePet = calculated.pets.find(pet => pet.active)
             const otherPets = calculated.pets.filter(pet => !pet.active).slice(0, petsToShowLimit)
           %>
