@@ -17,7 +17,7 @@ const localizedItems = [
   ...items.armor,
   ...items.inventory,
   ...items.enderchest,
-  ...items.talisman_bag,
+  ...items.accessory_bag,
   ...items.fishing_bag,
   ...items.quiver,
   ...items.potion_bag,
@@ -1035,23 +1035,23 @@ const metaDescription = getMetaDescription()
         <div class="stat-content">
           <% if(items.no_inventory){ %>
             <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.</div>
-          <% }else if(items.talismans.length == 0){ %>
+          <% }else if(items.accessories.length == 0){ %>
             <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
           <% }else{ %>
             <p class="stat-raw-values">
               <%
-                const maxTalis = items.talismans.filter(a => a.isUnique).length >= constants.unique_accessories_count ? 'golden-text': ''
-                const maxRecombTalis = items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length >= constants.unique_accessories_count ? 'golden-text': ''
+                const maxTalis = items.accessories.filter(a => a.isUnique).length >= constants.unique_accessories_count ? 'golden-text': ''
+                const maxRecombTalis = items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length >= constants.unique_accessories_count ? 'golden-text': ''
               %>
 
               <span class="stat-name <%= maxTalis %>">Unique Accessories: </span>
-              <span class="stat-value <%= maxTalis %>"><%= items.talismans.filter(a => a.isUnique).length %> / <%= constants.unique_accessories_count %></span>
+              <span class="stat-value <%= maxTalis %>"><%= items.accessories.filter(a => a.isUnique).length %> / <%= constants.unique_accessories_count %></span>
               <br>
               <span class="stat-name <%= maxTalis %>">Completion: </span>
-              <span class="stat-value percent <%= maxTalis %>"><%= Math.round(items.talismans.filter(a => a.isUnique).length / constants.unique_accessories_count * 100) %></span>
+              <span class="stat-value percent <%= maxTalis %>"><%= Math.round(items.accessories.filter(a => a.isUnique).length / constants.unique_accessories_count * 100) %></span>
               <br>
               <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
-              <span class="stat-value <%= maxRecombTalis %>"><%= items.talismans.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= constants.unique_accessories_count %></span>
+              <span class="stat-value <%= maxRecombTalis %>"><%= items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= constants.unique_accessories_count %></span>
               <br>
               <%
                 const rarities = items.accessory_rarities;
@@ -1082,10 +1082,10 @@ const metaDescription = getMetaDescription()
                 <span class="stat-name">Magical Power: </span><span class="stat-value"><%= mp_total.toLocaleString() %></span>
               </span>
             </p>
-            <% if(items.talismans.find(a => !a.isInactive) != undefined){ %>
+            <% if(items.accessories.find(a => !a.isInactive) != undefined){ %>
               <div class="accessory-list">
                 <p class="stat-sub-header" style="margin-bottom: 5px">Active Accessories</p>
-                <% items.talismans.filter(a => !a.isInactive).forEach(item => {
+                <% items.accessories.filter(a => !a.isInactive).forEach(item => {
                   %>
                   <div tabindex="0" data-item-id="<%= item.itemId %>"
                   class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
@@ -1096,15 +1096,15 @@ const metaDescription = getMetaDescription()
                   </div>
                 <% }) %>
                 <div class="accessories-extras">
-                  <div><%- getEnrichments(items.talismans.filter(a => a.isUnique && !a.isInactive)) %></div>
+                  <div><%- getEnrichments(items.accessories.filter(a => a.isUnique && !a.isInactive)) %></div>
                   <div data-bonus-stats="accessories,new_year_cake_bag"></div>
                 </div>
               </div>
             <% } %>
-            <% if(items.talismans.find(a => a.isUnique && a.isInactive) != undefined){ %>
+            <% if(items.accessories.find(a => a.isUnique && a.isInactive) != undefined){ %>
               <div class="accessory-list">
                 <p class="stat-sub-header">Inactive Accessories</p>
-                <% items.talismans.filter(a => a.isUnique && a.isInactive).forEach(item => { %>
+                <% items.accessories.filter(a => a.isUnique && a.isInactive).forEach(item => { %>
                   <div tabindex="0" data-item-id="<%= item.itemId %>"
                   class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
                     <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
@@ -1115,23 +1115,23 @@ const metaDescription = getMetaDescription()
                 <% }) %>
               </div>
             <% } %>
-            <% if(calculated.missingTalismans.missing.length > 0 || calculated.missingTalismans.upgrades.length > 0){ %>
-              <% if(items.talismans.length == 1){ %>
+            <% if(calculated.missingAccessories.missing.length > 0 || calculated.missingAccessories.upgrades.length > 0){ %>
+              <% if(items.accessories.length == 1){ %>
                 <br>
               <% } %>
               <button class="stat-sub-header extender" aria-controls="missing-accessories" aria-expanded="false">Missing Accessories</button>
               <div class="pieces extendable" id="missing-accessories">
                 <br>
-                <p class="stat-sub-header">Missing Accessories<span data-tippy-content='Missing accessories that are <strong>not</strong> upgrades of another talisman.'></span></p>
-                <% for(const [index, talisman] of calculated.missingTalismans.missing.entries()){ %>
-                  <div tabindex="0" data-missing-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
-                    <div style='background-image: url("<%= talisman.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                <p class="stat-sub-header">Missing Accessories<span data-tippy-content='Missing accessories that are <strong>not</strong> upgrades of another accessory.'></span></p>
+                <% for(const [index, accessory] of calculated.missingAccessories.missing.entries()){ %>
+                  <div tabindex="0" data-missing-accessory-index="<%= index %>" class="rich-item piece piece-<%= accessory.rarity %>-bg missing-accessory">
+                    <div style='background-image: url("<%= accessory.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                   </div>
                 <% } %>
-                <p class="stat-sub-header">Missing Accessory Upgrades<span data-tippy-content='Missing accessories that are upgrades of a lower tier talisman.'></span></p>
-                <% for(const [index, talisman] of calculated.missingTalismans.upgrades.entries()){ %>
-                  <div tabindex="0" data-upgrade-talisman-index="<%= index %>" class="rich-item piece piece-<%= talisman.rarity %>-bg missing-talisman">
-                    <div style='background-image: url("<%= talisman.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                <p class="stat-sub-header">Missing Accessory Upgrades<span data-tippy-content='Missing accessories that are upgrades of a lower tier accessory.'></span></p>
+                <% for(const [index, accessory] of calculated.missingAccessories.upgrades.entries()){ %>
+                  <div tabindex="0" data-upgrade-accessory-index="<%= index %>" class="rich-item piece piece-<%= accessory.rarity %>-bg missing-accessory">
+                    <div style='background-image: url("<%= accessory.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
                   </div>
                 <% } %>
               </div>
@@ -1298,8 +1298,8 @@ const metaDescription = getMetaDescription()
                     </button>
                   <% } %>
 
-                  <% if(items.talisman_bag.length > 0){ %>
-                    <button class="inventory-tab" data-inventory-type="talisman_bag">
+                  <% if(items.accessory_bag.length > 0){ %>
+                    <button class="inventory-tab" data-inventory-type="accessory_bag">
                       <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/961a918c0c49ba8d053e522cb91abc74689367b4d8aa06bfc1ba9154730985ff)"></div>
                       <div class="inventory-tab-name"><abbr title="Accessory Bag">Accs</abbr></div>
                     </button>

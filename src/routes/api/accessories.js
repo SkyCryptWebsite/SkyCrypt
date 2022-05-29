@@ -19,7 +19,7 @@ router.use(async (req, res, next) => {
 
     const items = await lib.getItems(userProfile, false, undefined, req.options);
 
-    const talismans = items.talismans
+    const accessories = items.accessories
       .filter((a) => a.isUnique)
       .map((a) => {
         return {
@@ -31,7 +31,7 @@ router.use(async (req, res, next) => {
         };
       });
 
-    res.send(tableify(talismans));
+    res.send(tableify(accessories));
   } catch (e) {
     next(e);
   }

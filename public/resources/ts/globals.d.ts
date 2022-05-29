@@ -495,7 +495,7 @@ declare const calculated: SkyCryptPlayer & {
     };
   };
   missingPets: PetBase[];
-  missingTalismans: {
+  missingAccessories: {
     [key in "missing" | "upgrades"]: DisplayItem[];
   };
   petScore: number;

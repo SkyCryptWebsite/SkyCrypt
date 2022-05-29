@@ -25,12 +25,12 @@ router.get("/:player/:profile", async (req, res, next) => {
       }
 
       const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", req.options);
-      const talismans = items.talismans;
+      const accessories = items.accessories;
 
       output = {
         profile_id: singleProfile.profile_id,
         cute_name: singleProfile.cute_name,
-        talismans,
+        accessories,
       };
     }
 
@@ -55,12 +55,12 @@ router.get("/:player", async (req, res, next) => {
       const userProfile = singleProfile.members[profile.uuid];
 
       const items = await lib.getItems(userProfile, false, "", req.options);
-      const talismans = items.talismans;
+      const accessories = items.accessories;
 
       output.profiles[singleProfile.profile_id] = {
         profile_id: singleProfile.profile_id,
         cute_name: singleProfile.cute_name,
-        talismans,
+        accessories,
       };
     }
 
