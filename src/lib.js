@@ -2782,16 +2782,19 @@ export async function getMissingPets(pets, gameMode) {
 
   const missingPets = [];
 
-  const ownedPetTypes = pets.map((a) => a.type);
+  const ownedPetTypes = pets.map((pet) => constants.pet_data[pet.type].typeGroup ?? pet.type);
 
   for (const [petType, petData] of Object.entries(constants.pet_data)) {
-    if (ownedPetTypes.includes(petType) || (petData.bingoExclusive === true && gameMode !== "bingo")) {
+    if (
+      ownedPetTypes.includes(petData.typeGroup ?? petType) ||
+      (petData.bingoExclusive === true && gameMode !== "bingo")
+    ) {
       continue;
     }
 
     const key = petData.typeGroup ?? petType;
-    missingPets[key] ??= [];
 
+    missingPets[key] ??= [];
     missingPets[key].push({
       type: petType,
       active: false,

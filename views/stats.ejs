@@ -1146,8 +1146,20 @@ const metaDescription = getMetaDescription()
         <h2 class="stat-header">Pets</h2>
         <div class="stat-content">
           <%
-            const uniquePets = _.uniq(calculated.pets.map(a => a.type))
-            const totalPets = Object.values(constants.pet_data).filter(pet => !pet.bingoExclusive === true || calculated.profile.game_mode === 'bingo').length
+            const uniquePets = _.uniq(
+              calculated.pets
+                .filter(pet => !constants.pet_data[pet.type].bingoExclusive === true || calculated.profile.game_mode === 'bingo')
+                .map((pet) => constants.pet_data[pet.type].typeGroup ?? pet.type)
+            )
+            const totalPets = _.uniq(
+              Object.entries(
+                Object.fromEntries(
+                  Object.entries(constants.pet_data)
+                    .filter(pet => !pet[1].bingoExclusive === true || calculated.profile.game_mode === 'bingo')
+                )
+              )
+                .map(arr => arr[1].typeGroup || arr[0])
+            ).length
 
             let totalPetXp = 0
             for (const pet of calculated.pets) {
