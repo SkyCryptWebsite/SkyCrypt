@@ -168,7 +168,7 @@ export const gemstones = {
         true_defense: [null, null, null, null, null, null, null],
       },
       PERFECT: {
-        true_defense: [null, null, null, null, null, null, null],
+        true_defense: [null, null, null, null, 11, null, null],
       },
     },
   },
