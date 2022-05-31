@@ -9,19 +9,19 @@ export const gemstones = {
     color: "a",
     stats: {
       ROUGH: {
-        mining_fortune: [null, 4, 6, 8, 10, 12, 14],
+        mining_fortune: [2, 4, 6, 8, 10, 12, 14],
       },
       FLAWED: {
-        mining_fortune: [null, 5, 7, 10, 14, 18, 22],
+        mining_fortune: [3, 5, 7, 10, 14, 18, 22],
       },
       FINE: {
-        mining_fortune: [null, 7, 10, 15, 20, 25, 30],
+        mining_fortune: [5, 7, 10, 15, 20, 25, 30],
       },
       FLAWLESS: {
-        mining_fortune: [null, 10, 15, 20, 27, 35, 44],
+        mining_fortune: [7, 10, 15, 20, 27, 35, 44],
       },
       PERFECT: {
-        mining_fortune: [null, 14, 20, 30, 40, 50, 60],
+        mining_fortune: [10, 14, 20, 30, 40, 50, 60],
       },
     },
   },
@@ -51,19 +51,19 @@ export const gemstones = {
     color: "e",
     stats: {
       ROUGH: {
-        pristine: [null, null, 0.4, 0.4, 0.4, 0.4, 0.5],
+        pristine: [0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.5],
       },
       FLAWED: {
-        pristine: [null, null, 0.8, 0.8, 0.8, 0.8, 0.9],
+        pristine: [0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.9],
       },
       FINE: {
-        pristine: [null, null, 1.2, 1.2, 1.2, 1.2, 1.3],
+        pristine: [1.2, 1.2, 1.2, 1.2, 1.2, 1.2, 1.3],
       },
       FLAWLESS: {
-        pristine: [null, null, 1.6, 1.6, 1.6, 1.6, 1.8],
+        pristine: [1.6, 1.6, 1.6, 1.6, 1.6, 1.6, 1.8],
       },
       PERFECT: {
-        pristine: [null, null, 2, 2, 2, 2, 2.2],
+        pristine: [2, 2, 2, 2, 2, 2, 2.2],
       },
     },
   },
@@ -72,19 +72,19 @@ export const gemstones = {
     color: "b",
     stats: {
       ROUGH: {
-        intelligence: [2, 2, 3, 4, 5, 6, null],
+        intelligence: [2, 3, 4, 5, 6, 7, null],
       },
       FLAWED: {
-        intelligence: [4, 4, 5, 6, 7, 8, null],
+        intelligence: [5, 5, 6, 7, 8, 10, null],
       },
       FINE: {
-        intelligence: [6, 6, 7, 8, 9, 10, null],
+        intelligence: [7, 8, 9, 10, 11, 12, null],
       },
       FLAWLESS: {
-        intelligence: [8, 9, 10, 12, 14, 16, null],
+        intelligence: [10, 11, 12, 14, 17, 20, null],
       },
       PERFECT: {
-        intelligence: [10, 12, 14, 17, 20, 25, null],
+        intelligence: [12, 14, 17, 20, 24, 30, null],
       },
     },
   },
@@ -114,19 +114,19 @@ export const gemstones = {
     color: "d",
     stats: {
       ROUGH: {
-        strength: [null, null, 1, 2, 2, 3, null],
+        strength: [1, 1, 1, 2, 3, 4, null],
       },
       FLAWED: {
-        strength: [null, null, 2, 3, 3, 4, null],
+        strength: [2, 2, 3, 4, 4, 5, null],
       },
       FINE: {
-        strength: [null, null, 3, 4, 4, 5, null],
+        strength: [3, 3, 4, 5, 6, 7, null],
       },
       FLAWLESS: {
-        strength: [null, null, 5, 6, 7, 8, null],
+        strength: [5, 6, 7, 8, 10, 12, null],
       },
       PERFECT: {
-        strength: [null, null, 7, 9, 10, 12, null],
+        strength: [6, 7, 9, 11, 13, 16, null],
       },
     },
   },
@@ -156,19 +156,19 @@ export const gemstones = {
     color: "f",
     stats: {
       ROUGH: {
-        true_defense: [null, null, null, 2, 2, 3, null],
+        true_defense: [1, 1, 1, 2, 2, 3, null],
       },
       FLAWED: {
-        true_defense: [null, null, null, 3, 3, 4, null],
+        true_defense: [2, 2, 2, 3, 3, 4, null],
       },
       FINE: {
-        true_defense: [null, null, null, 4, 4, 5, null],
+        true_defense: [3, 3, 3, 4, 4, 5, null],
       },
       FLAWLESS: {
-        true_defense: [null, null, null, 6, 8, 9, null],
+        true_defense: [4, 4, 5, 6, 8, 9, null],
       },
       PERFECT: {
-        true_defense: [null, null, null, null, 11, 13, null],
+        true_defense: [5, 6, 7, 9, 11, 13, null],
       },
     },
   },
