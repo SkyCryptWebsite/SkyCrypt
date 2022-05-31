@@ -156,19 +156,19 @@ export const gemstones = {
     color: "f",
     stats: {
       ROUGH: {
-        true_defense: [null, null, null, null, null, null, null],
+        true_defense: [null, null, null, 2, 2, 3, null],
       },
       FLAWED: {
-        true_defense: [null, null, null, null, null, null, null],
+        true_defense: [null, null, null, 3, 3, 4, null],
       },
       FINE: {
-        true_defense: [null, null, null, null, 4, null, null],
+        true_defense: [null, null, null, 4, 4, 5, null],
       },
       FLAWLESS: {
-        true_defense: [null, null, null, null, null, null, null],
+        true_defense: [null, null, null, 6, 8, 9, null],
       },
       PERFECT: {
-        true_defense: [null, null, null, null, 11, null, null],
+        true_defense: [null, null, null, null, 11, 13, null],
       },
     },
   },
