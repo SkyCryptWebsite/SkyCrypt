@@ -503,6 +503,12 @@ const skins = [
     texture: "/head/bb7d06ab10c4d15433670ca59ed6ad87d797c24bf7bfc3343730aa1594a4970c",
     release: new Date("2022-05-13 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "TRUE_WARDEN",
+    name: "True Warden",
+    texture: "/head/1cafe848fd755d998a06a58321912244cf76eef1ce78a51228fdd1020ab73a68",
+    release: new Date("2022-05-27 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
@@ -907,6 +913,32 @@ const animations = [
     animation: {
       faction_barbarian: "/head/bb7d06ab10c4d15433670ca59ed6ad87d797c24bf7bfc3343730aa1594a4970c",
       faction_mage: "/head/6fb7230da4e7a6cba268c4d87269ab66c9e41ae86eb426774d869c5f49fdb914",
+    },
+  },
+  {
+    id: "TRUE_WARDEN",
+    texture: "/resources/img/items/true_warden.png",
+    animation: {
+      0: "/head/a97e2b2a93d43ecfd6fce41c3bd506bf7087798fcf1b125cc7d141df23f3dc5b",
+      290: "/head/557f03bf45409bdef5d0f50d97174e6d56650cf73f3de6acb2cb4ee5b9611bf6",
+      430: "/head/e3c81310c69cce747c4c5b56a61b6c5631f196777773a44c5ae48e5ce4b3855a",
+      570: "/head/42070586ce0e6da4d924c8afffc6e2dbfdb71b2b7ca29e6d3b159c113abc2dd1",
+      770: "/head/1fe919630e157d27506322286c8cf4e0162025791f6f98f9e40219056e7de366",
+      950: "/head/95019e706680d5e663d44b0fbee34b18d9c0af636ad04fb20b3477bdf0b144b9",
+      1090: "/head/4a5edf24f46e7c6f2c316542e4032ed5bbe56fc1a90ff59c5f11cf87a0f46db1",
+      1250: "/head/b3e8da3cc6d4cd1ce4085e0bf384881d4c2677b9db642cfabdda9e3eb09d8520",
+      1390: "/head/e70847819d052ff9e6d496217d87e75ffca710a9d2565ac64382683ffc46cdde",
+      1550: "/head/30a0588c528d084508e795eb9881a4ad28e2f52ed03401b2b345f72fcf9632e5",
+      1690: "/head/1cafe848fd755d998a06a58321912244cf76eef1ce78a51228fdd1020ab73a68",
+      1990: "/head/30a0588c528d084508e795eb9881a4ad28e2f52ed03401b2b345f72fcf9632e5",
+      2150: "/head/e70847819d052ff9e6d496217d87e75ffca710a9d2565ac64382683ffc46cdde",
+      2290: "/head/b3e8da3cc6d4cd1ce4085e0bf384881d4c2677b9db642cfabdda9e3eb09d8520",
+      2440: "/head/4a5edf24f46e7c6f2c316542e4032ed5bbe56fc1a90ff59c5f11cf87a0f46db1",
+      2600: "/head/95019e706680d5e663d44b0fbee34b18d9c0af636ad04fb20b3477bdf0b144b9",
+      2720: "/head/1fe919630e157d27506322286c8cf4e0162025791f6f98f9e40219056e7de366",
+      2890: "/head/42070586ce0e6da4d924c8afffc6e2dbfdb71b2b7ca29e6d3b159c113abc2dd1",
+      3040: "/head/e3c81310c69cce747c4c5b56a61b6c5631f196777773a44c5ae48e5ce4b3855a",
+      3190: "/head/557f03bf45409bdef5d0f50d97174e6d56650cf73f3de6acb2cb4ee5b9611bf6",
     },
   },
 ];
