@@ -104,7 +104,8 @@ export const accessory_upgrades = {
   ENDER_ARTIFACT: ["ENDER_RELIC"],
   POWER_TALISMAN: ["POWER_RING", "POWER_ARTIFACT"],
   POWER_RING: ["POWER_ARTIFACT"],
-  BINGO_TALISMAN: ["BINGO_RING"],
+  BINGO_TALISMAN: ["BINGO_RING", "BINGO_ARTIFACT"],
+  BINGO_RING: ["BINGO_ARTIFACT"],
   ODGERS_BRONZE_TOOTH: ["ODGERS_SILVER_TOOTH", "ODGERS_GOLD_TOOTH", "ODGERS_DIAMOND_TOOTH"],
   ODGERS_SILVER_TOOTH: ["ODGERS_GOLD_TOOTH", "ODGERS_DIAMOND_TOOTH"],
   ODGERS_GOLD_TOOTH: ["ODGERS_DIAMOND_TOOTH"],
@@ -664,6 +665,11 @@ export const accessories = {
     name: "Bingo Ring",
     rarity: "uncommon",
     texture: "/head/22f2499ab4cfc97e65f0fa9fe63cc606707a4ae96af407846b1b5354f3fad99",
+  },
+  BINGO_ARTIFACT: {
+    name: "Bingo Artifact",
+    rarity: "rare",
+    texture: "/head/d2dad868f8d865baa32d6158672d1b134db61ea56d33efa0c09f6ba6f276ff2",
   },
   JACOBUS_REGISTER: {
     name: "Jacobus Register",
