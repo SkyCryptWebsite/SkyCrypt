@@ -65,5 +65,8 @@ public/resources/css/**
 # compiled ts
 public/resources/js/**
 
+# processed profiler logs
+profiler
+
 Caretaker/checkstat.sh
 package-lock.json
