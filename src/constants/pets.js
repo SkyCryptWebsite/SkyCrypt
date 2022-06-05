@@ -30,6 +30,7 @@ export const pet_levels = [
 /*
   PET_TYPE: {
     head: string | { default: string, rarity?: string },
+    name?: { default: string, rarity?: string } (default: obtained from PET_TYPE),
     type: string,
     maxTier: string,
     maxLevel: number,
@@ -41,6 +42,7 @@ export const pet_levels = [
     customLevelExpRarityOffset?: rarity (default: false),
     ignoresTierBoost?: boolean (default: false),
     alwaysGainsExp?: boolean | string (default: false),
+    typeGroup?: string (default: equal to PET_TYPE),
   }
  */
 export const pet_data = {
@@ -388,6 +390,7 @@ export const pet_data = {
     maxTier: "legendary",
     maxLevel: 100,
     emoji: "🦅",
+    ignoresTierBoost: true,
   },
   MITHRIL_GOLEM: {
     head: "/head/c1b2dfe8ed5dffc5b1687bc1c249c39de2d8a6c3d90305c95f6d1a1a330a0b1",
@@ -455,26 +458,6 @@ export const pet_data = {
     bingoExclusive: true,
     customLevelExpRarityOffset: "common",
   },
-  DROPLET_WISP: {
-    head: {
-      default: "/head/b412e70375ec99ee38ae94b30e9b10752d459662b54794dfe66fe6a183c672d3",
-      rare: "/head/1d8ad9936d758c5ea30b0b7cc7c67c2bfcea829ecf2425c0b50fc92a26ae23d0",
-      epic: "/head/3e2018feebe1a99177b3cb196d4e44521268b4b3eb56e6419cb0253cdbf0456c",
-      legendary: "/head/7a0eb37e58c942eca4d33ab44e26eb1910c783788510b0a53b6f4d18881e237e",
-    },
-    name: {
-      default: "Droplet Wisp",
-      rare: "Frost Wisp",
-      epic: "Glacial Wisp",
-      legendary: "Subzero Wisp",
-    },
-    type: "gabagool",
-    maxTier: "legendary",
-    maxLevel: 100,
-    emoji: "💦",
-    obtainsExp: "feed",
-    ignoresTierBoost: true,
-  },
   MOOSHROOM_COW: {
     head: "/head/2b52841f2fd589e0bc84cbabf9e1c27cb70cac98f8d6b3dd065e55a4dcb70d77",
     type: "farming",
@@ -497,6 +480,46 @@ export const pet_data = {
     emoji: "👹",
     passivePerks: true,
     alwaysGainsExp: "§cCrimson Isle",
+  },
+  DROPLET_WISP: {
+    head: "/head/b412e70375ec99ee38ae94b30e9b10752d459662b54794dfe66fe6a183c672d3",
+    type: "gabagool",
+    maxTier: "uncommon",
+    maxLevel: 100,
+    emoji: "💦",
+    obtainsExp: "feed",
+    ignoresTierBoost: true,
+    typeGroup: "WISP",
+  },
+  FROST_WISP: {
+    head: "/head/1d8ad9936d758c5ea30b0b7cc7c67c2bfcea829ecf2425c0b50fc92a26ae23d0",
+    type: "gabagool",
+    maxTier: "rare",
+    maxLevel: 100,
+    emoji: "💦",
+    obtainsExp: "feed",
+    ignoresTierBoost: true,
+    typeGroup: "WISP",
+  },
+  GLACIAL_WISP: {
+    head: "/head/3e2018feebe1a99177b3cb196d4e44521268b4b3eb56e6419cb0253cdbf0456c",
+    type: "gabagool",
+    maxTier: "epic",
+    maxLevel: 100,
+    emoji: "💦",
+    obtainsExp: "feed",
+    ignoresTierBoost: true,
+    typeGroup: "WISP",
+  },
+  SUBZERO_WISP: {
+    head: "/head/7a0eb37e58c942eca4d33ab44e26eb1910c783788510b0a53b6f4d18881e237e",
+    type: "gabagool",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "💦",
+    obtainsExp: "feed",
+    ignoresTierBoost: true,
+    typeGroup: "WISP",
   },
 };
 

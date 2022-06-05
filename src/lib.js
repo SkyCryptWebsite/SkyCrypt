@@ -2545,6 +2545,8 @@ export async function getPets(profile) {
       emoji: "❓",
     };
 
+    petData.typeGroup = petData.typeGroup ?? pet.type;
+
     pet.rarity = pet.tier.toLowerCase();
     pet.stats = {};
     pet.ignoresTierBoost = petData.ignoresTierBoost;
@@ -2778,14 +2780,22 @@ export async function getMissingPets(pets, gameMode) {
     pets: [],
   };
 
-  const ownedPetTypes = pets.map((a) => a.type);
+  const missingPets = [];
+
+  const ownedPetTypes = pets.map((pet) => constants.pet_data[pet.type].typeGroup ?? pet.type);
 
   for (const [petType, petData] of Object.entries(constants.pet_data)) {
-    if (ownedPetTypes.includes(petType) || (petData.bingoExclusive === true && gameMode !== "bingo")) {
+    if (
+      ownedPetTypes.includes(petData.typeGroup ?? petType) ||
+      (petData.bingoExclusive === true && gameMode !== "bingo")
+    ) {
       continue;
     }
 
-    profile.pets.push({
+    const key = petData.typeGroup ?? petType;
+
+    missingPets[key] ??= [];
+    missingPets[key].push({
       type: petType,
       active: false,
       exp: helper.getPetExp(constants.pet_data[petType].maxTier, constants.pet_data[petType].maxLevel),
@@ -2795,6 +2805,16 @@ export async function getMissingPets(pets, gameMode) {
       skin: null,
       uuid: helper.generateUUID(),
     });
+  }
+
+  for (const pets of Object.values(missingPets)) {
+    if (pets.length > 1) {
+      // using exp to find the highest tier
+      profile.pets.push(pets.sort((a, b) => b.exp - a.exp)[0]);
+      continue;
+    }
+
+    profile.pets.push(pets[0]);
   }
 
   return getPets(profile);
