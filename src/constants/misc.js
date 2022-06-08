@@ -373,9 +373,8 @@ export const essence = {
     head: "/head/8816606260779b23ed15f87c56c932240db745f86f683d1f4deb83a4a125fa7b",
   },
   // Nether essences
-  // ? disabled while not in API
-  // crimson: {
-  //   name: "Crimson",
-  //   head: "/head/67c41930f8ff0f2b0430e169ae5f38e984df1244215705c6f173862844543e9d",
-  // },
+  crimson: {
+    name: "Crimson",
+    head: "/head/67c41930f8ff0f2b0430e169ae5f38e984df1244215705c6f173862844543e9d",
+  },
 };
