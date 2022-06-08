@@ -2392,7 +2392,7 @@ const metaDescription = getMetaDescription()
             </div>
           <% } %>
           <% if('gifts' in calculated.misc){ %>
-            <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/b73a2114136b8ee4926caa51785414036a2b76e4f1668cb89d99716c421)"></div></div><span>gifts</span></div>
+            <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/b73a2114136b8ee4926caa51785414036a2b76e4f1668cb89d99716c421)"></div></div><span>Gifts</span></div>
             <p class="stat-raw-values">
               <% for(const key in calculated.misc.gifts){ %>
               <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.gifts[key].toLocaleString() %></span><br>
@@ -2400,7 +2400,7 @@ const metaDescription = getMetaDescription()
             </p>
           <% } %>
           <% if('winter' in calculated.misc){ %>
-            <div class="category-header"><div class="category-icon"><div class="item-icon icon-332_0"></div></div><span>season of jerry</span></div>
+            <div class="category-header"><div class="category-icon"><div class="item-icon icon-332_0"></div></div><span>Season of jerry</span></div>
             <p class="stat-raw-values">
               <% for(const key in calculated.misc.winter){ %>
               <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.winter[key].toLocaleString() %></span><br>
@@ -2408,7 +2408,7 @@ const metaDescription = getMetaDescription()
             </p>
           <% } %>
           <% if('dragons' in calculated.misc){ %>
-            <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/aec3ff563290b13ff3bcc36898af7eaa988b6cc18dc254147f58374afe9b21b9)"></div></div><span>dragons</span></div>
+            <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/aec3ff563290b13ff3bcc36898af7eaa988b6cc18dc254147f58374afe9b21b9)"></div></div><span>Dragons</span></div>
             <p class="stat-raw-values">
               <% for(const key in calculated.misc.dragons){
                 let tooltip = "";
@@ -2426,7 +2426,7 @@ const metaDescription = getMetaDescription()
           </p>
           <% } %>
           <% if('protector' in calculated.misc){ %>
-            <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/89091d79ea0f59ef7ef94d7bba6e5f17f2f7d4572c44f90f76c4819a714)"></div></div><span>Endstone Protectors</span></div>
+            <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/89091d79ea0f59ef7ef94d7bba6e5f17f2f7d4572c44f90f76c4819a714)"></div></div><span>Endstone protectors</span></div>
             <p class="stat-raw-values">
               <% for(const key in calculated.misc.protector){ %>
               <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.protector[key].toLocaleString() %></span><br>
@@ -2434,7 +2434,7 @@ const metaDescription = getMetaDescription()
           </p>
           <% } %>
           <% if('damage' in calculated.misc){ %>
-            <div class="category-header"><div class="category-icon"><div class="item-icon icon-267_0"></div></div><span>damage</span></div>
+            <div class="category-header"><div class="category-icon"><div class="item-icon icon-267_0"></div></div><span>Damage</span></div>
             <p class="stat-raw-values">
               <% for(const key in calculated.misc.damage){ %>
               <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= Math.floor(calculated.misc.damage[key]).toLocaleString() %></span><br>
@@ -2442,7 +2442,7 @@ const metaDescription = getMetaDescription()
             </p>
           <% } %>
           <% if('milestones' in calculated.misc){ %>
-            <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/93c8aa3fde295fa9f9c27f734bdbab11d33a2e43e855accd7465352377413b)"></div></div><span>pet milestones</span></div>
+            <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/93c8aa3fde295fa9f9c27f734bdbab11d33a2e43e855accd7465352377413b)"></div></div><span>Pet milestones</span></div>
             <p class="stat-raw-values">
               <% for(const key in calculated.misc.milestones){
                 let progress = {
@@ -2474,7 +2474,7 @@ const metaDescription = getMetaDescription()
             </p>
           <% } %>
           <% if('burrows' in calculated.misc){ %>
-            <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8)"></div></div><span>griffin burrows</span></div>
+            <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8)"></div></div><span>Griffin burrows</span></div>
             <p class="stat-raw-values">
               <%  let burrow_naming = {"dug_next": "dug_arrows", "dug_combat": "dug_monsters"}
               for(const key in calculated.misc.burrows){
@@ -2490,7 +2490,7 @@ const metaDescription = getMetaDescription()
             </p>
           <% } %>
           <% if('profile_upgrades' in calculated.misc){ %>
-            <div class="category-header"><div class="category-icon"><div class="item-icon icon-154_0"></div></div><span>profile upgrades</span></div>
+            <div class="category-header"><div class="category-icon"><div class="item-icon icon-154_0"></div></div><span>Profile upgrades</span></div>
             <p class="stat-raw-values">
               <% for(const upgrade in constants.profile_upgrades){ %>
               <% max = calculated.misc.profile_upgrades[upgrade] == constants.profile_upgrades[upgrade] ? 'golden-text' : '' %><span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(upgrade.split("_").join(" ")); %>: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades[upgrade] %> / <%= constants.profile_upgrades[upgrade] %></span><br>
@@ -2498,7 +2498,7 @@ const metaDescription = getMetaDescription()
             </p>
           <% } %>
           <% if('auctions_sell' in calculated.misc){ %>
-            <div class="category-header"><div class="category-icon"><div class="item-icon icon-266_0"></div></div><span>auctions sold</span></div>
+            <div class="category-header"><div class="category-icon"><div class="item-icon icon-266_0"></div></div><span>Auctions sold</span></div>
             <p class="stat-raw-values">
               <% for(const key in calculated.misc.auctions_sell){
                 let tooltip = "";
@@ -2512,7 +2512,7 @@ const metaDescription = getMetaDescription()
             </p>
           <% } %>
           <% if('auctions_buy' in calculated.misc){ %>
-            <div class="category-header"><div class="category-icon"><div class="item-icon icon-264_0"></div></div><span>auctions bought</span></div>
+            <div class="category-header"><div class="category-icon"><div class="item-icon icon-264_0"></div></div><span>Auctions bought</span></div>
             <p class="stat-raw-values">
               <% for(const key in calculated.misc.auctions_buy){
                 let tooltip = "";
@@ -2527,13 +2527,23 @@ const metaDescription = getMetaDescription()
           <% } %>
 
           <% if('claimed_items' in calculated.misc){ %>
-            <div class="category-header"><div class="category-icon"><div class="item-icon icon-339_0"></div></div><span>claimed items</span></div>
+            <div class="category-header"><div class="category-icon"><div class="item-icon icon-339_0"></div></div><span>Claimed items</span></div>
             <p class="stat-raw-values">
               <% for(const key in calculated.misc.claimed_items){
                 let timestamp = calculated.misc.claimed_items[key];
               %>
               <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
               <span class="stat-value" data-tippy-content='Claimed on <local-time timestamp="<%= timestamp %>"></local-time>'><%= moment(timestamp).fromNow() %></span><br>
+              <% } %>
+            </p>
+          <% } %>
+
+          <% if ('uncategorized' in calculated.misc && Object.keys(calculated.misc.uncategorized).length > 0) { %>
+            <div class="category-header"><div class="category-icon"><div class="item-icon icon-421_0"></div></div><span>Uncategorized</span></div>
+            <p class="stat-raw-values">
+              <% for (const [key, value] of Object.entries(calculated.misc.uncategorized)) { %>
+              <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
+              <span class="stat-value"><%= value.formatted %></span><br>
               <% } %>
             </p>
           <% } %>

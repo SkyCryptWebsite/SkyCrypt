@@ -2471,6 +2471,43 @@ export const getStats = async (
     misc.auctions_sell["items_sold"] = (misc.auctions_sell["items_sold"] || 0) + auctions_sold[key];
   }
 
+  misc.uncategorized = {};
+
+  if ("soulflow" in userProfile) {
+    misc.uncategorized.soulflow = {
+      raw: userProfile.soulflow,
+      formatted: helper.formatNumber(userProfile.soulflow),
+    };
+  }
+
+  if ("fastest_target_practice" in userProfile) {
+    misc.uncategorized.fastest_target_practice = {
+      raw: userProfile.fastest_target_practice,
+      formatted: `${helper.formatNumber(userProfile.fastest_target_practice)}s`,
+    };
+  }
+
+  if ("favorite_arrow" in userProfile) {
+    misc.uncategorized.favorite_arrow = {
+      raw: userProfile.favorite_arrow,
+      formatted: `${helper.capitalizeFirstLetter(userProfile.favorite_arrow.replaceAll("_", " ").toLowerCase())}`,
+    };
+  }
+
+  if ("teleporter_pill_consumed" in userProfile) {
+    misc.uncategorized.teleporter_pill_consumed = {
+      raw: userProfile.teleporter_pill_consumed,
+      formatted: userProfile.teleporter_pill_consumed ? "Yes" : "No",
+    };
+  }
+
+  if ("reaper_peppers_eaten" in userProfile) {
+    misc.uncategorized.reaper_peppers_eaten = {
+      raw: userProfile.reaper_peppers_eaten,
+      formatted: helper.formatNumber(userProfile.reaper_peppers_eaten),
+    };
+  }
+
   output.misc = misc;
   output.auctions_bought = auctions_bought;
   output.auctions_sold = auctions_sold;
