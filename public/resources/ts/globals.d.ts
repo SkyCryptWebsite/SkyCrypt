@@ -577,6 +577,7 @@ declare const calculated: SkyCryptPlayer & {
     };
   };
   weight: number;
+  reaper_peppers_eaten: number;
 };
 
 interface SkyCryptRelativeTime {

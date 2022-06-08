@@ -127,6 +127,11 @@ export function getPlayerStats() {
     }
   }
 
+  // Reaper peppers
+  if (calculated.reaper_peppers_eaten > 0) {
+    stats.health.reaper_peppers = calculated.reaper_peppers_eaten;
+  }
+
   return stats;
 }
 
