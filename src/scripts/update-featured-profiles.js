@@ -50,7 +50,7 @@ const featuredProfiles = [
     // dukioooo
     uuid: "5435b597612f4554a3c651fd1c3ee96a",
     type: "CONTRIBUTOR",
-    message: "¯\\_(ツ)_/¯",
+    message: "/visit dukioooo",
   },
 ];
 
