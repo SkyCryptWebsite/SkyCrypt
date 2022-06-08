@@ -13,18 +13,6 @@ const rarityOrder = ["very_special", "special", "supreme", "divine", "mythic", "
 const slayerOrder = ["zombie", "spider", "wolf", "enderman", "blaze"];
 const badgeOrder = ["gold", "silver", "bronze"];
 
-const localizedItems = [
-  ...items.armor,
-  ...items.inventory,
-  ...items.enderchest,
-  ...items.accessory_bag,
-  ...items.fishing_bag,
-  ...items.quiver,
-  ...items.potion_bag,
-  ...items.wardrobe_inventory,
-  ...items.storage,
-].some((a) => a.localized === true);
-
 const skillItems = {
   alchemy: "icon-379_0",
   archer: 'icon-261_0',
@@ -899,18 +887,12 @@ const metaDescription = getMetaDescription()
       if(Object.keys(calculated.collections).length == 0)
         notAvailable.push('Collections');
     %>
-    <% if (notAvailable.length > 0 || localizedItems || calculated.profile.game_mode == 'ironman') { %>
+    <% if (notAvailable.length > 0 || ['ironman', 'bingo', 'island'].includes(calculated.profile.game_mode)) { %>
       <div class="stat-container info-container-wrapper">
         <div class="info-container">
           <div class="info-header">Notice</div>
           <% if(notAvailable.length > 0){ %>
             <%= notAvailable.join(', ') %> not available for <%= calculated.display_name %> due to limited API access.<br><span><a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.</span>
-          <% } %>
-          <% if(localizedItems){ %>
-            <% if(notAvailable.length > 0){ %><br><br><% } %>
-            This profile has non-english item data caused by the player's Hypixel language settings. Localization is not supported and some features of the site might not be working correctly.<br><br>
-            This can be fixed by changing the language back to English in your ingame player settings, alternatively wait for Hypixel to change API behavior (<a target="_blank" href="https://github.com/HypixelDev/PublicAPI/issues/290">Related GitHub Issue</a>).<br><br>
-            Please don't report bugs until this is resolved.
           <% } %>
           <% if(calculated.profile.game_mode == 'ironman'){ %>
             <% if(notAvailable.length > 0){ %><br><br><% } %>
