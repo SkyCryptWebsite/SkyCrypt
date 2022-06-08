@@ -46,16 +46,6 @@ export function getPlayerStats() {
     }
   }
 
-  // Held item stats
-  if (items.highest_rarity_sword) {
-    const bonusStats: ItemStats = helper.getStatsFromItem(items.highest_rarity_sword as unknown as Item);
-
-    for (const [name, value] of Object.entries(bonusStats)) {
-      stats[name].held_item ??= 0;
-      stats[name].held_item += value;
-    }
-  }
-
   // Active accessories stats
   for (const item of items.accessories.filter((item) => !(item as Item).isInactive)) {
     const bonusStats: ItemStats = helper.getStatsFromItem(item as Item);
