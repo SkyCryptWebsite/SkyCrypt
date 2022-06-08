@@ -577,6 +577,10 @@ declare const calculated: SkyCryptPlayer & {
     };
   };
   weight: number;
+  cakes: {
+    stat: string;
+    amount: number;
+  }[];
 };
 
 interface SkyCryptRelativeTime {

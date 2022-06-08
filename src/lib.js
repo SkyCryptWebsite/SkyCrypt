@@ -2516,6 +2516,22 @@ export const getStats = async (
     lily: calculateLilyWeight(output),
   };
 
+  /*
+
+    century cake effects
+
+  */
+  const cakes = [];
+  //console.log(userProfile.temp_stat_buffs);
+  for (const cake of userProfile.temp_stat_buffs) {
+    const stat = cake.key.substring(cake.key.indexOf("_") + 1, cake.key.length);
+    cakes.push({
+      stat: stat == "walk_speed" ? "speed" : stat,
+      amount: cake.amount,
+    });
+  }
+  output.cakes = cakes;
+
   console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
   return output;
 };

@@ -127,6 +127,18 @@ export function getPlayerStats() {
     }
   }
 
+  
+  {
+    if (calculated.cakes) {
+      for(const cake of calculated.cakes) {
+        if(stats[cake.stat]) {
+          stats[cake.stat].cakes ??= 0
+          stats[cake.stat].cakes += cake.amount;
+        }
+      }
+    }
+
+  }
   return stats;
 }
 
