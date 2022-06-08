@@ -1407,7 +1407,7 @@ export async function getLevels(userProfile, hypixelProfile, levelCaps) {
     "experience_skill_alchemy" in userProfile ||
     "experience_skill_carpentry" in userProfile ||
     "experience_skill_runecrafting" in userProfile ||
-    "experience_skill_social" in userProfile
+    "experience_skill_social2" in userProfile
   ) {
     let average_level_no_progress = 0;
 
@@ -1428,7 +1428,7 @@ export async function getLevels(userProfile, hypixelProfile, levelCaps) {
         skill: "runecrafting",
         type: "runecrafting",
       }),
-      social: getLevelByXp(userProfile.experience_skill_social, {
+      social: getLevelByXp(userProfile.experience_skill_social2, {
         skill: "social",
         type: "social",
       }),
