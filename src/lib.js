@@ -2570,7 +2570,7 @@ export const getStats = async (
     });
   }
   output.century_cakes = century_cakes;
-  
+
   output.reaper_peppers_eaten = userProfile.reaper_peppers_eaten ?? 0;
 
   console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
