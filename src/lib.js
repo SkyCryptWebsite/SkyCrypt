@@ -2523,7 +2523,7 @@ export const getStats = async (
   */
   const century_cakes = [];
   for (const cake of userProfile.temp_stat_buffs) {
-    if(!cake.key.startsWith("cake_")) continue;
+    if (!cake.key.startsWith("cake_")) continue;
     const stat = cake.key.replace("cake_", "");
     century_cakes.push({
       stat: stat == "walk_speed" ? "speed" : stat,
