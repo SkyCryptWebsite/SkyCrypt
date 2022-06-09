@@ -127,8 +127,8 @@ export function getPlayerStats() {
     }
   }
 
-  if (calculated.cakes) {
-    for (const century_cake of calculated.cakes) {
+  if (calculated.century_cakes) {
+    for (const century_cake of calculated.century_cakes) {
       if (stats[century_cake.stat]) {
         stats[century_cake.stat].cakes ??= 0;
         stats[century_cake.stat].cakes += century_cake.amount;

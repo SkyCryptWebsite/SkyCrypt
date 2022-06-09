@@ -577,7 +577,7 @@ declare const calculated: SkyCryptPlayer & {
     };
   };
   weight: number;
-  cakes: {
+  century_cakes: {
     stat: string;
     amount: number;
   }[];
