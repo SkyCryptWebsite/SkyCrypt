@@ -2522,7 +2522,6 @@ export const getStats = async (
 
   */
   const cakes = [];
-  //console.log(userProfile.temp_stat_buffs);
   for (const cake of userProfile.temp_stat_buffs) {
     const stat = cake.key.substring(cake.key.indexOf("_") + 1, cake.key.length);
     cakes.push({
