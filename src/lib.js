@@ -2518,6 +2518,8 @@ export const getStats = async (
     lily: calculateLilyWeight(output),
   };
 
+  output.reaper_peppers_eaten = userProfile.reaper_peppers_eaten ?? 0;
+
   console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
   return output;
 };
