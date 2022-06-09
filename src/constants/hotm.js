@@ -657,7 +657,7 @@ class Fortunate extends Node {
   }
 
   perk(level) {
-    const val = level * 5;
+    const val = 20 + level * 4;
     return [`§7Grants §a+${val}§7 §6${symbols.mining_fortune} Mining Fortune§7 when mining Gemstone.`];
   }
 }

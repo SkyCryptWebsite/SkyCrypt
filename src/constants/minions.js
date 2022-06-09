@@ -302,7 +302,6 @@ export const minions = {
   INFERNO: {
     type: "combat",
     head: "/head/665c54366f88fb3280b1c3fc500ce2b799c8dd327ab6d41c9bc959488f5cfd92",
-    tiers: 12,
   },
 };
 
