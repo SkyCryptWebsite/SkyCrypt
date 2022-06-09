@@ -127,16 +127,15 @@ export function getPlayerStats() {
     }
   }
 
-  {
-    if (calculated.cakes) {
-      for (const cake of calculated.cakes) {
-        if (stats[cake.stat]) {
-          stats[cake.stat].cakes ??= 0;
-          stats[cake.stat].cakes += cake.amount;
-        }
+  if (calculated.cakes) {
+    for (const century_cake of calculated.cakes) {
+      if (stats[century_cake.stat]) {
+        stats[century_cake.stat].cakes ??= 0;
+        stats[century_cake.stat].cakes += century_cake.amount;
       }
     }
   }
+
   return stats;
 }
 

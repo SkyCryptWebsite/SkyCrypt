@@ -2521,15 +2521,15 @@ export const getStats = async (
     century cake effects
 
   */
-  const cakes = [];
+  const century_cakes = [];
   for (const cake of userProfile.temp_stat_buffs) {
-    const stat = cake.key.substring(cake.key.indexOf("_") + 1, cake.key.length);
-    cakes.push({
+    const stat = cake.key.replace("cake_", "");
+    century_cakes.push({
       stat: stat == "walk_speed" ? "speed" : stat,
       amount: cake.amount,
     });
   }
-  output.cakes = cakes;
+  output.century_cakes = century_cakes;
 
   console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
   return output;
