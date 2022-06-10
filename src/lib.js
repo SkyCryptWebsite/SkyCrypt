@@ -2564,7 +2564,7 @@ export const getStats = async (
   for (const cake of userProfile.temp_stat_buffs) {
     if (!cake.key.startsWith("cake_")) continue;
     let stat = cake.key.replace("cake_", "");
-    if(Object.keys(constants.stat_mappings).includes(stat)){
+    if (Object.keys(constants.stat_mappings).includes(stat)) {
       stat = constants.stat_mappings[stat];
     }
     century_cakes.push({
