@@ -23,7 +23,7 @@ export const minion_slots = {
   550: 24,
   600: 25,
   650: 26,
-  700: 27, // todo: this is just guessed
+  700: 27,
 };
 
 // From unique tiers (excludes community shop upgrades)

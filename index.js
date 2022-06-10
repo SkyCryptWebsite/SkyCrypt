@@ -41,7 +41,7 @@ async function init() {
   }, 1000);
 
   setInterval(() => {
-    // TODO: Do some actual output for these stats
+    // todo: do some actual output for these stats
 
     packSelect = {};
     packUsage = {};
