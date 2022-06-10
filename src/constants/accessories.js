@@ -756,4 +756,6 @@ export const magical_power = {
   epic: 12,
   legendary: 16,
   mythic: 22,
+  special: 3,
+  very_special: 5,
 };

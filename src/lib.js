@@ -976,6 +976,8 @@ export const getItems = async (
     epic: 0,
     legendary: 0,
     mythic: 0,
+    special: 0,
+    very_special: 0,
     hegemony: null,
   };
 
