@@ -232,7 +232,7 @@ function enrichmentToStatName(enrichment) {
 function getEnrichments(accessories) {
   const enrichmentCounts = {}
   const filteredAccessories = accessories
-    .filter(acc => ['legendary', 'mythic'].includes(acc.rarity.toLowerCase()))
+    .filter(acc => ['legendary', 'mythic', 'divine', 'special', 'very_special'].includes(acc.rarity.toLowerCase()))
 
   if (filteredAccessories.length > 0) {
     filteredAccessories.forEach(acc => {
