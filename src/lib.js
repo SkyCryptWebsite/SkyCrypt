@@ -2555,6 +2555,25 @@ export const getStats = async (
     lily: calculateLilyWeight(output),
   };
 
+  /*
+
+    century cake effects
+
+  */
+  const century_cakes = [];
+  for (const cake of userProfile.temp_stat_buffs) {
+    if (!cake.key.startsWith("cake_")) continue;
+    let stat = cake.key.replace("cake_", "");
+    if (Object.keys(constants.stat_mappings).includes(stat)) {
+      stat = constants.stat_mappings[stat];
+    }
+    century_cakes.push({
+      stat: stat == "walk_speed" ? "speed" : stat,
+      amount: cake.amount,
+    });
+  }
+  output.century_cakes = century_cakes;
+
   output.reaper_peppers_eaten = userProfile.reaper_peppers_eaten ?? 0;
 
   console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);

@@ -117,6 +117,15 @@ export function getPlayerStats() {
     }
   }
 
+  if (calculated.century_cakes) {
+    for (const century_cake of calculated.century_cakes) {
+      if (stats[century_cake.stat]) {
+        stats[century_cake.stat].cakes ??= 0;
+        stats[century_cake.stat].cakes += century_cake.amount;
+      }
+    }
+  }
+
   // Reaper peppers
   if (calculated.reaper_peppers_eaten > 0) {
     stats.health.reaper_peppers = calculated.reaper_peppers_eaten;

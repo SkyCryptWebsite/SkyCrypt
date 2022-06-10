@@ -378,3 +378,7 @@ export const essence = {
     head: "/head/67c41930f8ff0f2b0430e169ae5f38e984df1244215705c6f173862844543e9d",
   },
 };
+
+export const stat_mappings = {
+  walk_speed: "speed",
+};
