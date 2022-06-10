@@ -509,6 +509,18 @@ const skins = [
     texture: "/head/1cafe848fd755d998a06a58321912244cf76eef1ce78a51228fdd1020ab73a68",
     release: new Date("2022-05-27 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_ENDERMAN_NEON",
+    name: "Neon",
+    texture: "/head/6f9020c07d875bad1440337adb55a08c15db06b994646a691795f4cd293fe3de",
+    release: new Date("2022-06-10 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_ENDERMAN_XENON",
+    name: "Xenon",
+    texture: "/head/92defbe3cde326d4511bb53339d777afa703f3ec4daa697d61a4402744cbb0cd",
+    release: new Date("2022-06-10 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
