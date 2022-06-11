@@ -1217,35 +1217,6 @@ a.additional-player-stat:hover {
   margin-bottom: -10px;
 }
 
-.stat-weapons .piece,
-.stat-fishing .piece {
-  margin-bottom: 50px;
-  content-visibility: visible;
-}
-
-.piece .select-weapon,
-.piece .select-rod {
-  top: calc(100% + 15px);
-  position: absolute;
-  left: 50%;
-  margin-left: -11px;
-  width: 22px;
-  height: 22px;
-  border: 3px solid var(--text-hex);
-  border-radius: 3px;
-  box-sizing: border-box;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: rgba(var(--text-rgb), 0.1);
-  }
-}
-
-.piece-selected .select-weapon,
-.piece-selected .select-rod {
-  background-color: var(--text-hex) !important;
-}
-
 @keyframes flash {
   from {
     background-color: rgb(255, 255, 255, 1);
@@ -2597,16 +2568,6 @@ inventory-view {
 bonus-stats {
   .bonus-stat {
     margin: 0 2px;
-  }
-}
-
-// todo: properly clean up select-weapon in second front-end stats pull request
-.stat-weapons .piece,
-.stat-fishing .piece {
-  margin-bottom: 0;
-  .select-weapon,
-  .select-rod {
-    display: none;
   }
 }
 
