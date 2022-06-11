@@ -4,32 +4,44 @@ import nbt from "prismarine-nbt";
 import util from "util";
 import sanitize from "mongo-sanitize";
 import minecraftData from "minecraft-data";
-const mcData = minecraftData("1.8.9");
 import _ from "lodash";
 import * as constants from "./constants.js";
 import * as helper from "./helper.js";
-const getId = helper.getId;
 import axios from "axios";
 import moment from "moment";
 import { v4 } from "uuid";
 import retry from "async-retry";
 import credentials from "./credentials.js";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 import { db } from "./mongo.js";
-
-const Hypixel = axios.create({
-  baseURL: "https://api.hypixel.net/",
-});
-
 import { redisClient } from "./redis.js";
-
 import { calculateLilyWeight } from "./weight/lily-weight.js";
 import { calculateSenitherWeight } from "./weight/senither-weight.js";
 import { getTexture, packs } from "./custom-resources.js";
 
+const mcData = minecraftData("1.8.9");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const Hypixel = axios.create({
+  baseURL: "https://api.hypixel.net/",
+});
 const parseNbt = util.promisify(nbt.parse);
+const potionColors = {
+  0: "375cc4", // None
+  1: "cb5ba9", // Regeneration
+  2: "420a09", // Speed
+  3: "e19839", // Poison
+  4: "4d9130", // Fire Resistance
+  5: "f52423", // Instant Health
+  6: "1f1f9e", // Night Vision
+  7: "22fc4b", // Jump Boost
+  8: "474c47", // Weakness
+  9: "912423", // Strength
+  10: "5c6e83", // Slowness
+  11: "f500f5", // Uncraftable
+  12: "420a09", // Instant Damage
+  13: "2f549c", // Water Breathing
+  14: "818595", // Invisibility
+  15: "f500f5", // Uncraftable
+};
 
 function getMinMax(profiles, min, ...path) {
   let output = null;
@@ -56,11 +68,6 @@ function getMinMax(profiles, min, ...path) {
 function getMax(profiles, ...path) {
   return getMinMax(profiles, false, ...path);
 }
-
-// Commented out because it is never used
-// function getMin(profiles, ...path) {
-//   return getMinMax(profiles, true, ...path);
-// }
 
 function getAllKeys(profiles, ...path) {
   return _.uniq([].concat(...profiles.map((a) => _.keys(helper.getPath(a, ...path)))));
@@ -291,20 +298,6 @@ function getPetLevel(petExp, offsetRarity, maxLevel) {
   };
 }
 
-function getFairyBonus(fairyExchanges) {
-  const bonus = Object.assign({}, constants.stat_template);
-
-  bonus.speed = Math.floor(fairyExchanges / 10);
-
-  for (let i = 0; i < fairyExchanges; i++) {
-    bonus.strength += (i + 1) % 5 == 0 ? 2 : 1;
-    bonus.defense += (i + 1) % 5 == 0 ? 2 : 1;
-    bonus.health += 3 + Math.floor(i / 2);
-  }
-
-  return bonus;
-}
-
 function getBonusStat(level, skill, max, incremention) {
   const skill_stats = constants.bonus_stats[skill];
   const steps = Object.keys(skill_stats)
@@ -358,25 +351,6 @@ async function getBackpackContents(arraybuf) {
 
   return items;
 }
-
-const potionColors = {
-  0: "375cc4", // None
-  1: "cb5ba9", // Regeneration
-  2: "420a09", // Speed
-  3: "e19839", // Poison
-  4: "4d9130", // Fire Resistance
-  5: "f52423", // Instant Health
-  6: "1f1f9e", // Night Vision
-  7: "22fc4b", // Jump Boost
-  8: "474c47", // Weakness
-  9: "912423", // Strength
-  10: "5c6e83", // Slowness
-  11: "f500f5", // Uncraftable
-  12: "420a09", // Instant Damage
-  13: "2f549c", // Water Breathing
-  14: "818595", // Invisibility
-  15: "f500f5", // Uncraftable
-};
 
 // Process items returned by API
 async function processItems(base64, customTextures = false, packs, cacheOnly = false) {
@@ -548,8 +522,8 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     }
 
     // Gives animated texture on certain items, will be overwritten by custom textures
-    if (constants.animated_items?.[getId(item)]) {
-      item.texture_path = constants.animated_items[getId(item)].texture;
+    if (constants.animated_items?.[helper.getId(item)]) {
+      item.texture_path = constants.animated_items[helper.getId(item)].texture;
     }
 
     // Uses animated skin texture
@@ -613,20 +587,20 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       });
 
       // Apply Speed Talisman speed bonuses
-      if (getId(item) == "SPEED_TALISMAN") {
+      if (helper.getId(item) == "SPEED_TALISMAN") {
         item.stats.speed = 1;
       }
 
-      if (getId(item) == "SPEED_RING") {
+      if (helper.getId(item) == "SPEED_RING") {
         item.stats.speed = 3;
       }
 
-      if (getId(item) == "SPEED_ARTIFACT") {
+      if (helper.getId(item) == "SPEED_ARTIFACT") {
         item.stats.speed = 5;
       }
 
       // Apply Frozen Chicken bonus
-      if (getId(item) == "FROZEN_CHICKEN") {
+      if (helper.getId(item) == "FROZEN_CHICKEN") {
         item.stats.speed = 1;
       }
     }
@@ -903,7 +877,7 @@ export const getItems = async (
     for (let j = 0; j < 4; j++) {
       const index = 36 * page + (i % 9) + j * 9;
 
-      if (getId(wardrobe_inventory[index]).length > 0) {
+      if (helper.getId(wardrobe_inventory[index]).length > 0) {
         wardrobeSlot.push(wardrobe_inventory[index]);
       } else {
         wardrobeSlot.push(null);
@@ -962,7 +936,7 @@ export const getItems = async (
 
   // Add candy bag contents as backpack contents to candy bag
   for (const item of all_items) {
-    if (getId(item) == "TRICK_OR_TREAT_BAG") {
+    if (helper.getId(item) == "TRICK_OR_TREAT_BAG") {
       item.containsItems = candy_bag;
     }
   }
@@ -983,7 +957,7 @@ export const getItems = async (
 
   // Modify accessories on armor and add
   for (const accessory of armor.filter((a) => a.categories.includes("accessory"))) {
-    const id = getId(accessory);
+    const id = helper.getId(accessory);
 
     if (id === "") {
       continue;
@@ -991,11 +965,11 @@ export const getItems = async (
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && getId(a) == id) != undefined) {
+    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
       insertAccessory.isInactive = true;
     }
 
-    if (accessories.find((a) => getId(a) == id) != undefined) {
+    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
       insertAccessory.isUnique = false;
     }
 
@@ -1005,7 +979,7 @@ export const getItems = async (
 
   // Add accessories from inventory
   for (const accessory of inventory.filter((a) => a.categories.includes("accessory"))) {
-    const id = getId(accessory);
+    const id = helper.getId(accessory);
 
     if (id === "") {
       continue;
@@ -1013,11 +987,11 @@ export const getItems = async (
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && getId(a) == id) != undefined) {
+    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
       insertAccessory.isInactive = true;
     }
 
-    if (accessories.find((a) => getId(a) == id) != undefined) {
+    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
       insertAccessory.isUnique = false;
     }
 
@@ -1027,7 +1001,7 @@ export const getItems = async (
 
   // Add accessories from accessory bag if not already in inventory
   for (const accessory of accessory_bag) {
-    const id = getId(accessory);
+    const id = helper.getId(accessory);
 
     if (id === "") {
       continue;
@@ -1035,11 +1009,11 @@ export const getItems = async (
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && getId(a) == id) != undefined) {
+    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
       insertAccessory.isInactive = true;
     }
 
-    if (accessories.find((a) => getId(a) == id) != undefined) {
+    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
       insertAccessory.isUnique = false;
     }
 
@@ -1065,11 +1039,11 @@ export const getItems = async (
     }
 
     for (const accessory of items.filter((a) => a.categories.includes("accessory"))) {
-      const id = getId(accessory);
+      const id = helper.getId(accessory);
 
       const insertAccessory = Object.assign({ isUnique: true, isInactive: true }, accessory);
 
-      if (accessories.find((a) => getId(a) == id) != undefined) {
+      if (accessories.find((a) => helper.getId(a) == id) != undefined) {
         insertAccessory.isUnique = false;
       }
 
@@ -1080,13 +1054,15 @@ export const getItems = async (
 
   // Don't account for lower tier versions of the same accessory
   for (const accessory of accessories.concat(armor)) {
-    const id = getId(accessory);
+    const id = helper.getId(accessory);
 
     if (id.startsWith("CAMPFIRE_TALISMAN_")) {
       const tier = parseInt(id.split("_").pop());
 
       const maxTier = Math.max(
-        ...accessories.filter((a) => getId(a).startsWith("CAMPFIRE_TALISMAN_")).map((a) => getId(a).split("_").pop())
+        ...accessories
+          .filter((a) => helper.getId(a).startsWith("CAMPFIRE_TALISMAN_"))
+          .map((a) => helper.getId(a).split("_").pop())
       );
 
       if (tier < maxTier) {
@@ -1101,7 +1077,9 @@ export const getItems = async (
       const tier = parseInt(id.split("_").pop());
 
       const maxTier = Math.max(
-        ...accessories.filter((a) => getId(a).startsWith("WEDDING_RING_")).map((a) => getId(a).split("_").pop())
+        ...accessories
+          .filter((a) => helper.getId(a).startsWith("WEDDING_RING_"))
+          .map((a) => helper.getId(a).split("_").pop())
       );
 
       if (tier < maxTier) {
@@ -1115,11 +1093,11 @@ export const getItems = async (
     if (id in constants.accessory_upgrades) {
       const accessoryUpgrades = constants.accessory_upgrades[id];
 
-      if (accessories.find((a) => !a.isInactive && accessoryUpgrades.includes(getId(a))) != undefined) {
+      if (accessories.find((a) => !a.isInactive && accessoryUpgrades.includes(helper.getId(a))) != undefined) {
         accessory.isInactive = true;
       }
 
-      if (accessories.find((a) => accessoryUpgrades.includes(getId(a))) != undefined) {
+      if (accessories.find((a) => accessoryUpgrades.includes(helper.getId(a))) != undefined) {
         accessory.isUnique = false;
       }
     }
@@ -1127,7 +1105,7 @@ export const getItems = async (
     if (id in constants.accessory_duplicates) {
       const accessoryDuplicates = constants.accessory_duplicates[id];
 
-      if (accessories.find((a) => accessoryDuplicates.includes(getId(a))) != undefined) {
+      if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a))) != undefined) {
         accessory.isUnique = false;
       }
     }
@@ -1135,7 +1113,7 @@ export const getItems = async (
 
   // Add New Year Cake Bag health bonus (1 per unique cake)
   for (const accessory of accessories) {
-    const id = getId(accessory);
+    const id = helper.getId(accessory);
     const cakes = [];
 
     if (id == "NEW_YEAR_CAKE_BAG" && Array.isArray(accessory?.containsItems)) {
@@ -1249,7 +1227,7 @@ export const getItems = async (
   const countsOfId = {};
 
   for (const weapon of output.weapons) {
-    const id = getId(weapon);
+    const id = helper.getId(weapon);
 
     countsOfId[id] = (countsOfId[id] || 0) + 1;
 
@@ -1263,7 +1241,7 @@ export const getItems = async (
   }
 
   for (const item of output.fishing_tools) {
-    const id = getId(item);
+    const id = helper.getId(item);
 
     countsOfId[id] = (countsOfId[id] || 0) + 1;
 
@@ -1370,7 +1348,7 @@ export const getItems = async (
 
     // Handling special sets of armor (where pieces aren't named the same)
     constants.special_sets.forEach((set) => {
-      if (armor.filter((a) => set.pieces.includes(getId(a))).length == 4) {
+      if (armor.filter((a) => set.pieces.includes(helper.getId(a))).length == 4) {
         output_name = set.name;
       }
     });
@@ -1525,22 +1503,11 @@ export const getStats = async (
 
   output.stats = Object.assign({}, constants.base_stats);
 
+  // fairy souls
   if (isNaN(userProfile.fairy_souls_collected)) {
     userProfile.fairy_souls_collected = 0;
   }
 
-  output.fairy_bonus = {};
-
-  if (userProfile.fairy_exchanges > 0) {
-    const fairyBonus = getFairyBonus(userProfile.fairy_exchanges);
-
-    output.fairy_bonus = Object.assign({}, fairyBonus);
-
-    // Apply fairy soul bonus
-    for (const stat in fairyBonus) {
-      output.stats[stat] += fairyBonus[stat];
-    }
-  }
   const totalSouls =
     profile.game_mode === "island" ? constants.fairy_souls.max.stranded : constants.fairy_souls.max.normal;
 
@@ -1688,7 +1655,7 @@ export const getStats = async (
   }
 
   // Apply all harp bonuses when Melody's Hair has been acquired
-  if (items.accessories.filter((a) => getId(a) == "MELODY_HAIR").length == 1) {
+  if (items.accessories.filter((a) => helper.getId(a) == "MELODY_HAIR").length == 1) {
     output.stats.intelligence += 26;
   }
 
@@ -1705,14 +1672,14 @@ export const getStats = async (
   }
 
   // Apply Lapis Armor full set bonus of +60 HP
-  if (items.armor.filter((a) => getId(a).startsWith("LAPIS_ARMOR_")).length == 4) {
+  if (items.armor.filter((a) => helper.getId(a).startsWith("LAPIS_ARMOR_")).length == 4) {
     items.armor[0].stats.health = (items.armor[0].stats.health || 0) + 60;
   }
 
   // Apply Emerald Armor full set bonus of +1 HP and +1 Defense per 3000 emeralds in collection with a maximum of 300
   if (
     !isNaN(userProfile.collection?.EMERALD) &&
-    items.armor.filter((a) => getId(a).startsWith("EMERALD_ARMOR_")).length == 4
+    items.armor.filter((a) => helper.getId(a).startsWith("EMERALD_ARMOR_")).length == 4
   ) {
     const emerald_bonus = Math.min(350, Math.floor(userProfile.collection.EMERALD / 3000));
 
@@ -1721,17 +1688,17 @@ export const getStats = async (
   }
 
   // Apply Fairy Armor full set bonus of +10 Speed
-  if (items.armor.filter((a) => getId(a).startsWith("FAIRY_")).length == 4) {
+  if (items.armor.filter((a) => helper.getId(a).startsWith("FAIRY_")).length == 4) {
     items.armor[0].stats.speed += 10;
   }
 
   // Apply Speedster Armor full set bonus of +20 Speed
-  if (items.armor.filter((a) => getId(a).startsWith("SPEEDSTER_")).length == 4) {
+  if (items.armor.filter((a) => helper.getId(a).startsWith("SPEEDSTER_")).length == 4) {
     items.armor[0].stats.speed += 20;
   }
 
   // Apply Young Dragon Armor full set bonus of +70 Speed
-  if (items.armor.filter((a) => getId(a).startsWith("YOUNG_DRAGON_")).length == 4) {
+  if (items.armor.filter((a) => helper.getId(a).startsWith("YOUNG_DRAGON_")).length == 4) {
     items.armor[0].stats.speed += 70;
   }
 
@@ -1740,7 +1707,7 @@ export const getStats = async (
     if (item.isInactive || item.categories.includes("accessory")) {
       item.stats = {};
 
-      if (getId(item) != "PARTY_HAT_CRAB") {
+      if (helper.getId(item) != "PARTY_HAT_CRAB") {
         continue;
       }
 
@@ -1769,26 +1736,27 @@ export const getStats = async (
     });
 
   // Apply Mastiff Armor full set bonus of +50 HP per 1% Crit Damage
-  if (items.armor.filter((a) => getId(a).startsWith("MASTIFF_")).length == 4) {
+  if (items.armor.filter((a) => helper.getId(a).startsWith("MASTIFF_")).length == 4) {
     output.stats.health += 50 * output.stats.crit_damage;
     items.armor[0].stats.health += 50 * output.stats.crit_damage;
   }
 
   // Apply +5 Defense and +5 Strength of Day/Night Crystal only if both are owned as this is required for a permanent bonus
   if (
-    items.accessories.filter((a) => !a.isInactive && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(getId(a))).length == 2
+    items.accessories.filter((a) => !a.isInactive && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(helper.getId(a)))
+      .length == 2
   ) {
     output.stats.defense += 5;
     output.stats.strength += 5;
 
-    const dayCrystal = items.accessories.find((a) => getId(a) == "DAY_CRYSTAL");
+    const dayCrystal = items.accessories.find((a) => helper.getId(a) == "DAY_CRYSTAL");
 
     dayCrystal.stats.defense = (dayCrystal.stats.defense || 0) + 5;
     dayCrystal.stats.strength = (dayCrystal.stats.strength || 0) + 5;
   }
 
   // Apply Obsidian Chestplate bonus of +1 Speed per 20 Obsidian in inventory
-  if (items.armor.filter((a) => getId(a) == "OBSIDIAN_CHESTPLATE").length == 1) {
+  if (items.armor.filter((a) => helper.getId(a) == "OBSIDIAN_CHESTPLATE").length == 1) {
     let obsidian = 0;
 
     for (const item of items.inventory) {
@@ -1800,15 +1768,15 @@ export const getStats = async (
     output.stats.speed += Math.floor(obsidian / 20);
   }
 
-  if (items.armor.filter((a) => getId(a).startsWith("CHEAP_TUXEDO_")).length == 3) {
+  if (items.armor.filter((a) => helper.getId(a).startsWith("CHEAP_TUXEDO_")).length == 3) {
     output.stats["health"] = 75;
   }
 
-  if (items.armor.filter((a) => getId(a).startsWith("FANCY_TUXEDO_")).length == 3) {
+  if (items.armor.filter((a) => helper.getId(a).startsWith("FANCY_TUXEDO_")).length == 3) {
     output.stats["health"] = 150;
   }
 
-  if (items.armor.filter((a) => getId(a).startsWith("ELEGANT_TUXEDO_")).length == 3) {
+  if (items.armor.filter((a) => helper.getId(a).startsWith("ELEGANT_TUXEDO_")).length == 3) {
     output.stats["health"] = 250;
   }
 
@@ -1827,12 +1795,12 @@ export const getStats = async (
     }
 
     // Add crit damage from held weapon to Mastiff Armor full set bonus
-    if (item.stats.crit_damage > 0 && items.armor.filter((a) => getId(a).startsWith("MASTIFF_")).length == 4) {
+    if (item.stats.crit_damage > 0 && items.armor.filter((a) => helper.getId(a).startsWith("MASTIFF_")).length == 4) {
       stats.health += 50 * item.stats.crit_damage;
     }
 
     // Apply Superior Dragon Armor full set bonus of 5% stat increase
-    if (items.armor.filter((a) => getId(a).startsWith("SUPERIOR_DRAGON_")).length == 4) {
+    if (items.armor.filter((a) => helper.getId(a).startsWith("SUPERIOR_DRAGON_")).length == 4) {
       for (const stat in stats) {
         if (constants.increase_most_stats_exclude.includes(stat)) {
           continue;
@@ -1856,15 +1824,15 @@ export const getStats = async (
       stats["ability_damage"] += 5;
     }
 
-    if (items.armor.filter((a) => getId(a).startsWith("CHEAP_TUXEDO_")).length == 3) {
+    if (items.armor.filter((a) => helper.getId(a).startsWith("CHEAP_TUXEDO_")).length == 3) {
       stats["health"] = 75;
     }
 
-    if (items.armor.filter((a) => getId(a).startsWith("FANCY_TUXEDO_")).length == 3) {
+    if (items.armor.filter((a) => helper.getId(a).startsWith("FANCY_TUXEDO_")).length == 3) {
       stats["health"] = 150;
     }
 
-    if (items.armor.filter((a) => getId(a).startsWith("ELEGANT_TUXEDO_")).length == 3) {
+    if (items.armor.filter((a) => helper.getId(a).startsWith("ELEGANT_TUXEDO_")).length == 3) {
       stats["health"] = 250;
     }
 
@@ -1881,7 +1849,7 @@ export const getStats = async (
   const superiorBonus = Object.assign({}, constants.stat_template);
 
   // Apply Superior Dragon Armor full set bonus of 5% stat increase
-  if (items.armor.filter((a) => getId(a).startsWith("SUPERIOR_DRAGON_")).length == 4) {
+  if (items.armor.filter((a) => helper.getId(a).startsWith("SUPERIOR_DRAGON_")).length == 4) {
     for (const stat in output.stats) {
       if (constants.increase_most_stats_exclude.includes(stat)) {
         continue;
