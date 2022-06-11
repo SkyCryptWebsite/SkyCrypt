@@ -293,6 +293,7 @@ export const accessories = {
   HUNTER_TALISMAN: null,
   HUNTER_RING: null,
   PARTY_HAT_CRAB: null,
+  PARTY_HAT_CRAB_ANIMATED: null,
   POTATO_TALISMAN: null,
   EMERALD_RING: {
     name: "Emerald Ring",
