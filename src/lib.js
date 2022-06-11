@@ -298,15 +298,6 @@ function getPetLevel(petExp, offsetRarity, maxLevel) {
   };
 }
 
-// Calculate total health with defense
-export function getEffectiveHealth(health, defense) {
-  if (defense <= 0) {
-    return health;
-  }
-
-  return Math.round(health * (1 + defense / 100));
-}
-
 async function getBackpackContents(arraybuf) {
   const buf = Buffer.from(arraybuf);
 
@@ -649,7 +640,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
   return items;
 }
 
-export function getMinions(coopMembers) {
+function getMinions(coopMembers) {
   const minions = [];
 
   const craftedGenerators = [];
@@ -698,7 +689,7 @@ export function getMinions(coopMembers) {
   return minions;
 }
 
-export function getMinionSlots(minions) {
+function getMinionSlots(minions) {
   let uniqueMinions = 0;
 
   for (const minion of minions) {
@@ -1280,7 +1271,7 @@ export const getItems = async (
   return output;
 };
 
-export async function getLevels(userProfile, hypixelProfile, levelCaps) {
+async function getLevels(userProfile, hypixelProfile, levelCaps) {
   const output = {};
 
   let skillLevels;
@@ -2457,7 +2448,7 @@ export async function getPets(profile) {
   return output;
 }
 
-export async function getMissingPets(pets, gameMode) {
+async function getMissingPets(pets, gameMode) {
   const profile = {
     pets: [],
   };
@@ -2502,7 +2493,7 @@ export async function getMissingPets(pets, gameMode) {
   return getPets(profile);
 }
 
-export async function getPetScore(pets) {
+async function getPetScore(pets) {
   const highestRarity = {};
 
   for (const pet of pets) {
@@ -2514,7 +2505,7 @@ export async function getPetScore(pets) {
   return Object.values(highestRarity).reduce((a, b) => a + b, 0);
 }
 
-export async function getMissingAccessories(accessories) {
+async function getMissingAccessories(accessories) {
   const unique = Object.keys(constants.accessories);
   unique.forEach((name) => {
     if (name in constants.accessory_duplicates) {
@@ -2909,7 +2900,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
   return output;
 }
 
-export async function getEssence(userProfile, hypixelProfile) {
+async function getEssence(userProfile, hypixelProfile) {
   const output = {};
 
   for (const essence in constants.essence) {
@@ -2919,7 +2910,7 @@ export async function getEssence(userProfile, hypixelProfile) {
   return output;
 }
 
-export function getHotmItems(userProfile, packs) {
+function getHotmItems(userProfile, packs) {
   const data = userProfile.mining_core;
   const output = [];
 
@@ -3038,7 +3029,7 @@ export function getHotmItems(userProfile, packs) {
   return output;
 }
 
-export function getMiningCoreData(userProfile) {
+function getMiningCoreData(userProfile) {
   const output = {};
   const data = userProfile.mining_core;
 
@@ -3111,7 +3102,7 @@ export function getMiningCoreData(userProfile) {
   return output;
 }
 
-export async function getForge(userProfile) {
+async function getForge(userProfile) {
   const output = {};
 
   if (userProfile?.forge?.forge_processes?.forge_1) {
@@ -3148,7 +3139,7 @@ export async function getForge(userProfile) {
   return output;
 }
 
-export async function getProfileUpgrades(profile) {
+async function getProfileUpgrades(profile) {
   const output = {};
   for (const upgrade in constants.profile_upgrades) {
     output[upgrade] = 0;
@@ -3445,7 +3436,7 @@ export const getProfile = async (
   return { profile: profile, allProfiles: allSkyBlockProfiles, uuid: paramPlayer };
 };
 
-export async function updateLeaderboardPositions(db, uuid, allProfiles) {
+async function updateLeaderboardPositions(db, uuid, allProfiles) {
   if (constants.blocked_players.includes(uuid)) {
     return;
   }
