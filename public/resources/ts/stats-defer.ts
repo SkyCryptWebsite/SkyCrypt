@@ -995,6 +995,36 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
     );
     node.setAttribute("data", window.btoa(JSON.stringify(stats[stat])));
 
+    // Special additions for some stats
+    const totalHealth = Object.values(stats.health).reduce((a, b) => a + b, 0);
+    const totalDefense = Object.values(stats.defense).reduce((a, b) => a + b, 0);
+    const totalTrueDefense = Object.values(stats.true_defense).reduce((a, b) => a + b, 0);
+
+    switch (stat) {
+      case "defense":
+        node.setAttribute(
+          "special",
+          window.btoa(
+            JSON.stringify({
+              "Damage Reduction": `${Math.round((totalDefense / (totalDefense + 100)) * 100)}%`,
+              "Effective Health": `${Math.round(totalHealth * (1 + totalDefense / 100)).toLocaleString()}`,
+            })
+          )
+        );
+        break;
+
+      case "true_defense":
+        node.setAttribute(
+          "special",
+          window.btoa(
+            JSON.stringify({
+              "True Damage Reduction": `${Math.round((totalTrueDefense / (totalTrueDefense + 100)) * 100)}%`,
+            })
+          )
+        );
+        break;
+    }
+
     nodeWrapper.appendChild(node);
     parent?.appendChild(nodeWrapper);
   }

@@ -14,6 +14,9 @@ export class PlayerStat extends LitElement {
   @property({ attribute: "data" })
   data?: string;
 
+  @property({ attribute: "special" })
+  special?: string;
+
   protected render(): TemplateResult | undefined {
     if (!this.stat || !this.value || !this.data) {
       return;
@@ -24,8 +27,9 @@ export class PlayerStat extends LitElement {
     const name = constants.statsData[this.stat].nameShort;
     const suffix = constants.statsData[this.stat].suffix;
     const data = JSON.parse(window.atob(this.data));
+    const special = this.special ? JSON.parse(window.atob(this.special)) : undefined;
 
-    const tooltip = this.getTooltip(data, name, suffix, value);
+    const tooltip = this.getTooltip(data, name, suffix, value, special);
 
     return html`
       <div data-stat="${this.stat}" class="basic-stat stat-${this.stat.replaceAll("_", "-")}">
@@ -42,7 +46,8 @@ export class PlayerStat extends LitElement {
     data: { [key: string]: number },
     name: string | undefined,
     suffix: string,
-    value: number
+    value: number,
+    special: { [key: string]: number } | undefined
   ): string[] {
     const tooltip: string[] = [];
     const tooltip_bonus: string[] = [];
@@ -77,6 +82,13 @@ export class PlayerStat extends LitElement {
         "<br/>",
         `<span class='tippy-explanation'>Bonus value obtain from: <br>${tooltip_bonus.join("<br>")}</span>`
       );
+    }
+
+    if (special && Object.keys(special).length > 0) {
+      tooltip.push("<br/>");
+      for (const [key, val] of Object.entries(special)) {
+        tooltip.push("<br/>", `<span class="stat-name">${key}: </span>`, `<span class="stat-value">${val}</span>`);
+      }
     }
 
     return tooltip;
