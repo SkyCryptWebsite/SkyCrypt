@@ -537,44 +537,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
         item.id = 395;
         item.Damage = 0;
       }
-
-      item.stats = {};
-
-      // Get item stats from lore
-      // we need to use lore_raw so we can get the hpbs (since what part is hpbs depend on color)
-      lore_raw.forEach((line) => {
-        const split = helper.getRawLore(line).split(":");
-
-        if (split.length < 2) {
-          return;
-        }
-
-        const statType = split[0];
-        const statValue = parseFloat(split[1].trim().replaceAll(",", ""));
-
-        if (statType in constants.statNames) {
-          // todo: get rid of common/constants/stats "export const statNames" after nuking this
-          item.stats[constants.statNames[statType]] = statValue;
-        }
-      });
-
-      // Apply Speed Talisman speed bonuses
-      if (helper.getId(item) == "SPEED_TALISMAN") {
-        item.stats.speed = 1;
-      }
-
-      if (helper.getId(item) == "SPEED_RING") {
-        item.stats.speed = 3;
-      }
-
-      if (helper.getId(item) == "SPEED_ARTIFACT") {
-        item.stats.speed = 5;
-      }
-
-      // Apply Frozen Chicken bonus
-      if (helper.getId(item) == "FROZEN_CHICKEN") {
-        item.stats.speed = 1;
-      }
     }
 
     // Set HTML lore to be displayed on the website
