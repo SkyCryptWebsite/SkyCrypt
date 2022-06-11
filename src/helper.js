@@ -1040,3 +1040,25 @@ export function getPetExp(rarity, level) {
 
   return constants.pet_levels.slice(rarityOffset, rarityOffset + level - 1).reduce((prev, curr) => prev + curr, 0);
 }
+
+export function getAnimatedTexture(item) {
+  const results = constants.animated_items_arr.filter((x) => x.id === getId(item));
+
+  if (results.length === 0) {
+    return false;
+  }
+
+  if (results.length === 1) {
+    return results[0];
+  }
+
+  const deepResults = results.filter((x) => {
+    if (!x.tags) {
+      return false;
+    }
+
+    return Object.entries(x.tags).every(([key, value]) => item.tag?.ExtraAttributes?.[key] === value);
+  });
+
+  return deepResults[0] ?? false;
+}

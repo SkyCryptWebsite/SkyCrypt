@@ -1221,3 +1221,4 @@ animations.forEach((anim) => {
 export const pet_skins = gen_pet_skins;
 export const item_skins = gen_item_skins;
 export const animated_items = gen_animated_items;
+export const animated_items_arr = animations;

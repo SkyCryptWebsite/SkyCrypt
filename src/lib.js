@@ -547,9 +547,11 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       }
     }
 
+    const animatedTexture = helper.getAnimatedTexture(item);
+
     // Gives animated texture on certain items, will be overwritten by custom textures
-    if (constants.animated_items?.[getId(item)]) {
-      item.texture_path = constants.animated_items[getId(item)].texture;
+    if (animatedTexture) {
+      item.texture_path = animatedTexture.texture;
     }
 
     // Uses animated skin texture
