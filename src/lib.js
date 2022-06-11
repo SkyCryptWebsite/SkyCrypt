@@ -1083,26 +1083,6 @@ export const getItems = async (
     }
   }
 
-  // Add New Year Cake Bag health bonus (1 per unique cake)
-  for (const accessory of accessories) {
-    const id = helper.getId(accessory);
-    const cakes = [];
-
-    if (id == "NEW_YEAR_CAKE_BAG" && Array.isArray(accessory?.containsItems)) {
-      accessory.stats.health = 0;
-
-      for (const item of accessory.containsItems) {
-        if (
-          item.tag?.ExtraAttributes?.new_years_cake != undefined &&
-          !cakes.includes(item.tag.ExtraAttributes.new_years_cake)
-        ) {
-          accessory.stats.health++;
-          cakes.push(item.tag.ExtraAttributes.new_years_cake);
-        }
-      }
-    }
-  }
-
   for (const accessory of accessories) {
     accessory.base_name = accessory.display_name;
 
