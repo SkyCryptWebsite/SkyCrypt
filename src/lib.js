@@ -298,34 +298,6 @@ function getPetLevel(petExp, offsetRarity, maxLevel) {
   };
 }
 
-function getBonusStat(level, skill, max, incremention) {
-  const skill_stats = constants.bonus_stats[skill];
-  const steps = Object.keys(skill_stats)
-    .sort((a, b) => Number(a) - Number(b))
-    .map((a) => Number(a));
-
-  const bonus = Object.assign({}, constants.stat_template);
-
-  for (let x = steps[0]; x <= max; x += incremention) {
-    if (level < x) {
-      break;
-    }
-
-    const skill_step = steps
-      .slice()
-      .reverse()
-      .find((a) => a <= x);
-
-    const skill_bonus = skill_stats[skill_step];
-
-    for (const skill in skill_bonus) {
-      bonus[skill] += skill_bonus[skill];
-    }
-  }
-
-  return bonus;
-}
-
 // Calculate total health with defense
 export function getEffectiveHealth(health, defense) {
   if (defense <= 0) {
@@ -1516,7 +1488,9 @@ export const getStats = async (
     total: totalSouls,
     progress: userProfile.fairy_souls_collected / totalSouls,
   };
+  output.fairy_exchanges = userProfile.fairy_exchanges;
 
+  // levels
   const levelCaps = {
     farming: constants.default_skill_caps.farming + (userProfile.jacob2?.perks?.farming_level_cap || 0),
   };
@@ -1533,24 +1507,6 @@ export const getStats = async (
   output.total_skill_xp = total_skill_xp;
   output.average_level_rank = average_level_rank;
   output.level_caps = levelCaps;
-  output.fairy_exchanges = userProfile.fairy_exchanges;
-
-  output.skill_bonus = {};
-
-  for (const skill in levels) {
-    if (levels[skill].level == 0) {
-      continue;
-    }
-
-    // todo: when removing backend stats, nuke this and the src/constants/bonuses.js
-    const skillBonus = getBonusStat(levels[skill].level || levels[skill], `${skill}_skill`, levels[skill].levelCap, 1);
-
-    output.skill_bonus[skill] = Object.assign({}, skillBonus);
-
-    for (const stat in skillBonus) {
-      output.stats[stat] += skillBonus[stat];
-    }
-  }
 
   output.slayer_coins_spent = {};
 
