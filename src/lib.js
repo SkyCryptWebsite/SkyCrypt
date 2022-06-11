@@ -1600,11 +1600,6 @@ export const getStats = async (
     }
   }
 
-  // Apply all harp bonuses when Melody's Hair has been acquired
-  if (items.accessories.filter((a) => helper.getId(a) == "MELODY_HAIR").length == 1) {
-    output.stats.intelligence += 26;
-  }
-
   // Apply pet score bonus
   for (const stat in output.pet_score_bonus) {
     output.stats[stat] += output.pet_score_bonus[stat];
