@@ -180,27 +180,6 @@ function romanize(num) {
 	return Array(+digits.join("") + 1).join("M") + roman;
 };
 
-function getStats(items) {
-  const stats = Object.assign({}, constants.stat_template);
-
-  for(const item of items){
-    if(!('stats') in item)
-      continue;
-
-    for(const stat in item.stats){
-      if(!(stat in stats))
-        continue;
-
-      stats[stat] += item.stats[stat];
-    }
-  }
-
-  for(const stat in stats)
-    stats[stat] = Math.round(stats[stat]);
-
-  return stats;
-}
-
 function formatReforge(string) {
   let reforge = string.split('_').join(' ').trim()
   reforge = reforge.charAt(0).toUpperCase() + reforge.slice(1)
