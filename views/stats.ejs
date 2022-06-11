@@ -2020,16 +2020,7 @@ const metaDescription = getMetaDescription()
           <% } %>
           </div>
           <% if(maxSlayerLevel > 0){ %>
-          <p>
-            <%
-            const slayerBonus = Object.assign({}, constants.stat_template);
-
-            for(const slayer in calculated.slayer_bonus)
-              for(const stat in calculated.slayer_bonus[slayer])
-                slayerBonus[stat] += calculated.slayer_bonus[slayer][stat];
-            %>
             <div data-bonus-stats="slayer_zombie,slayer_spider,slayer_wolf,slayer_enderman"></div>
-          </p>
           <% } %>
         <% } %>
       </div>

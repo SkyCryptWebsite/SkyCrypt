@@ -512,17 +512,7 @@ declare const calculated: SkyCryptPlayer & {
   purse: number;
   rank_prefix: string;
   skillWeight: number;
-  skill_bonus: {
-    [key: string]: {
-      [key in StatName]: number;
-    };
-  };
   slayerWeight: number;
-  slayer_bonus: {
-    [key in slayerName]: {
-      [key in StatName]: number;
-    };
-  };
   slayer_coins_spent: {
     spider: number;
     total: number;

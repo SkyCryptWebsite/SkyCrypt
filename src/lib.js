@@ -1556,8 +1556,6 @@ export const getStats = async (
 
   // Apply slayer bonuses
   if ("slayer_bosses" in userProfile) {
-    output.slayer_bonus = {};
-
     const slayers = {};
 
     if ("slayer_bosses" in userProfile) {
@@ -1602,15 +1600,7 @@ export const getStats = async (
         continue;
       }
 
-      const slayerBonus = getBonusStat(slayers[slayer].level.currentLevel, `${slayer}_slayer`, 9, 1);
-
-      output.slayer_bonus[slayer] = Object.assign({}, slayerBonus);
-
       output.slayer_xp += slayers[slayer].xp || 0;
-
-      for (const stat in slayerBonus) {
-        output.stats[stat] += slayerBonus[stat];
-      }
     }
 
     output.slayers = Object.assign({}, slayers);
