@@ -60,7 +60,7 @@
     "fs-extra": "^10.1.0",
     "ioredis": "^5.0.6",
     "lilyweight": "^2.6.2",
-    "lit": "^2.2.5",
+    "lit": "^2.2.6",
     "lodash": "^4.17.20",
     "micromatch": "^4.0.5",
     "minecraft-data": "^3.4.0",
