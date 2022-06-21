@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:current-slim
 RUN mkdir -p /usr/src/main
 WORKDIR '/usr/src/main'
 COPY . /usr/src/main
