@@ -180,27 +180,6 @@ function romanize(num) {
 	return Array(+digits.join("") + 1).join("M") + roman;
 };
 
-function getStats(items) {
-  const stats = Object.assign({}, constants.stat_template);
-
-  for(const item of items){
-    if(!('stats') in item)
-      continue;
-
-    for(const stat in item.stats){
-      if(!(stat in stats))
-        continue;
-
-      stats[stat] += item.stats[stat];
-    }
-  }
-
-  for(const stat in stats)
-    stats[stat] = Math.round(stats[stat]);
-
-  return stats;
-}
-
 function formatReforge(string) {
   let reforge = string.split('_').join(' ').trim()
   reforge = reforge.charAt(0).toUpperCase() + reforge.slice(1)
@@ -399,23 +378,6 @@ function getMetaDescription() {
 
 function getDescription() {
 	const description = []
-
-	// Stats
-	if ('levels' in calculated) {
-		const stats = items.highest_rarity_sword
-			? calculated.weapon_stats[items.highest_rarity_sword.itemId]
-			: calculated.stats
-
-		description.push(
-			`❤️ ${stats.health} `,
-			`🛡️ ${stats.defense} `,
-			`💪 ${stats.strength} `,
-			`🌀 ${stats.crit_chance}% `,
-			`☠️ ${stats.crit_damage}%`,
-			'\n',
-			'\n'
-		)
-	}
 
 	// Fairy souls
 	description.push(
@@ -732,21 +694,16 @@ const metaDescription = getMetaDescription()
     </div>
     <div id="basic_stats">
       <%
-        let stats = Object.assign({}, calculated.stats);
         let sword = items.weapons.slice().sort((a, b) => a.item_index - b.item_index);
         let rod = items.fishing_tools.slice().sort((a, b) => a.item_index - b.item_index);
 
-        if(items.highest_rarity_sword)
+        if (items.highest_rarity_sword) {
           sword = [items.highest_rarity_sword];
+        }
 
-        if(items.highest_rarity_fishing_tool)
+        if (items.highest_rarity_fishing_tool) {
           rod = [items.highest_rarity_fishing_tool];
-
-        if(sword.length > 0)
-          stats = calculated.weapon_stats[sword[0].itemId];
-
-        if(rod.length > 0)
-          stats['sea_creature_chance'] = calculated.weapon_stats[rod[0].itemId]['sea_creature_chance'];
+        }
       %>
 
       <div id="skin_display_mobile"></div>
@@ -2041,16 +1998,7 @@ const metaDescription = getMetaDescription()
           <% } %>
           </div>
           <% if(maxSlayerLevel > 0){ %>
-          <p>
-            <%
-            const slayerBonus = Object.assign({}, constants.stat_template);
-
-            for(const slayer in calculated.slayer_bonus)
-              for(const stat in calculated.slayer_bonus[slayer])
-                slayerBonus[stat] += calculated.slayer_bonus[slayer][stat];
-            %>
             <div data-bonus-stats="slayer_zombie,slayer_spider,slayer_wolf,slayer_enderman"></div>
-          </p>
           <% } %>
         <% } %>
       </div>

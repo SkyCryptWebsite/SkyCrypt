@@ -34,7 +34,6 @@ router.get("/:player/:profile", async (req, res, next) => {
         cute_name: singleProfile.cute_name,
         slayer_xp: data.slayer_xp,
         slayers: data.slayers,
-        slayer_bonus: data.slayer_bonus,
         slayer_coins_spent: data.slayer_coins_spent,
       };
     }
@@ -62,7 +61,6 @@ router.get("/:player", async (req, res, next) => {
         cute_name: singleProfile.cute_name,
         slayer_xp: data.slayer_xp,
         slayers: data.slayers,
-        slayer_bonus: data.slayer_bonus,
         slayer_coins_spent: data.slayer_coins_spent,
       };
     }

@@ -1,34 +1,29 @@
-import path from "path";
-import { fileURLToPath } from "url";
-import nbt from "prismarine-nbt";
-import util from "util";
-import sanitize from "mongo-sanitize";
-import minecraftData from "minecraft-data";
-const mcData = minecraftData("1.8.9");
-import _ from "lodash";
-import * as constants from "./constants.js";
-import * as helper from "./helper.js";
-const getId = helper.getId;
-import axios from "axios";
-import moment from "moment";
-import { v4 } from "uuid";
 import retry from "async-retry";
+import axios from "axios";
+import _ from "lodash";
+import minecraftData from "minecraft-data";
+import moment from "moment";
+import sanitize from "mongo-sanitize";
+import path from "path";
+import nbt from "prismarine-nbt";
+import { fileURLToPath } from "url";
+import util from "util";
+import { v4 } from "uuid";
+
+import * as constants from "./constants.js";
 import credentials from "./credentials.js";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
+import { getTexture, packs } from "./custom-resources.js";
+import * as helper from "./helper.js";
 import { db } from "./mongo.js";
+import { redisClient } from "./redis.js";
+import { calculateLilyWeight } from "./weight/lily-weight.js";
+import { calculateSenitherWeight } from "./weight/senither-weight.js";
 
+const mcData = minecraftData("1.8.9");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const Hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
-
-import { redisClient } from "./redis.js";
-
-import { calculateLilyWeight } from "./weight/lily-weight.js";
-import { calculateSenitherWeight } from "./weight/senither-weight.js";
-import { getTexture, packs } from "./custom-resources.js";
-
 const parseNbt = util.promisify(nbt.parse);
 
 function getMinMax(profiles, min, ...path) {
@@ -56,11 +51,6 @@ function getMinMax(profiles, min, ...path) {
 function getMax(profiles, ...path) {
   return getMinMax(profiles, false, ...path);
 }
-
-// Commented out because it is never used
-// function getMin(profiles, ...path) {
-//   return getMinMax(profiles, true, ...path);
-// }
 
 function getAllKeys(profiles, ...path) {
   return _.uniq([].concat(...profiles.map((a) => _.keys(helper.getPath(a, ...path)))));
@@ -291,57 +281,6 @@ function getPetLevel(petExp, offsetRarity, maxLevel) {
   };
 }
 
-function getFairyBonus(fairyExchanges) {
-  const bonus = Object.assign({}, constants.stat_template);
-
-  bonus.speed = Math.floor(fairyExchanges / 10);
-
-  for (let i = 0; i < fairyExchanges; i++) {
-    bonus.strength += (i + 1) % 5 == 0 ? 2 : 1;
-    bonus.defense += (i + 1) % 5 == 0 ? 2 : 1;
-    bonus.health += 3 + Math.floor(i / 2);
-  }
-
-  return bonus;
-}
-
-function getBonusStat(level, skill, max, incremention) {
-  const skill_stats = constants.bonus_stats[skill];
-  const steps = Object.keys(skill_stats)
-    .sort((a, b) => Number(a) - Number(b))
-    .map((a) => Number(a));
-
-  const bonus = Object.assign({}, constants.stat_template);
-
-  for (let x = steps[0]; x <= max; x += incremention) {
-    if (level < x) {
-      break;
-    }
-
-    const skill_step = steps
-      .slice()
-      .reverse()
-      .find((a) => a <= x);
-
-    const skill_bonus = skill_stats[skill_step];
-
-    for (const skill in skill_bonus) {
-      bonus[skill] += skill_bonus[skill];
-    }
-  }
-
-  return bonus;
-}
-
-// Calculate total health with defense
-export function getEffectiveHealth(health, defense) {
-  if (defense <= 0) {
-    return health;
-  }
-
-  return Math.round(health * (1 + defense / 100));
-}
-
 async function getBackpackContents(arraybuf) {
   const buf = Buffer.from(arraybuf);
 
@@ -358,25 +297,6 @@ async function getBackpackContents(arraybuf) {
 
   return items;
 }
-
-const potionColors = {
-  0: "375cc4", // None
-  1: "cb5ba9", // Regeneration
-  2: "420a09", // Speed
-  3: "e19839", // Poison
-  4: "4d9130", // Fire Resistance
-  5: "f52423", // Instant Health
-  6: "1f1f9e", // Night Vision
-  7: "22fc4b", // Jump Boost
-  8: "474c47", // Weakness
-  9: "912423", // Strength
-  10: "5c6e83", // Slowness
-  11: "f500f5", // Uncraftable
-  12: "420a09", // Instant Damage
-  13: "2f549c", // Water Breathing
-  14: "818595", // Invisibility
-  15: "f500f5", // Uncraftable
-};
 
 // Process items returned by API
 async function processItems(base64, customTextures = false, packs, cacheOnly = false) {
@@ -519,7 +439,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 
     // Set custom texture for colored potions
     if (item.id == 373) {
-      const color = potionColors[item.Damage % 16];
+      const color = constants.potionColors[item.Damage % 16];
 
       const type = item.Damage & 16384 ? "splash" : "normal";
 
@@ -592,44 +512,6 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       if (item.id == 358) {
         item.id = 395;
         item.Damage = 0;
-      }
-
-      item.stats = {};
-
-      // Get item stats from lore
-      // we need to use lore_raw so we can get the hpbs (since what part is hpbs depend on color)
-      lore_raw.forEach((line) => {
-        const split = helper.getRawLore(line).split(":");
-
-        if (split.length < 2) {
-          return;
-        }
-
-        const statType = split[0];
-        const statValue = parseFloat(split[1].trim().replaceAll(",", ""));
-
-        if (statType in constants.statNames) {
-          // todo: get rid of common/constants/stats "export const statNames" after nuking this
-          item.stats[constants.statNames[statType]] = statValue;
-        }
-      });
-
-      // Apply Speed Talisman speed bonuses
-      if (getId(item) == "SPEED_TALISMAN") {
-        item.stats.speed = 1;
-      }
-
-      if (getId(item) == "SPEED_RING") {
-        item.stats.speed = 3;
-      }
-
-      if (getId(item) == "SPEED_ARTIFACT") {
-        item.stats.speed = 5;
-      }
-
-      // Apply Frozen Chicken bonus
-      if (getId(item) == "FROZEN_CHICKEN") {
-        item.stats.speed = 1;
       }
     }
 
@@ -743,7 +625,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
   return items;
 }
 
-export function getMinions(coopMembers) {
+function getMinions(coopMembers) {
   const minions = [];
 
   const craftedGenerators = [];
@@ -792,7 +674,7 @@ export function getMinions(coopMembers) {
   return minions;
 }
 
-export function getMinionSlots(minions) {
+function getMinionSlots(minions) {
   let uniqueMinions = 0;
 
   for (const minion of minions) {
@@ -905,7 +787,7 @@ export const getItems = async (
     for (let j = 0; j < 4; j++) {
       const index = 36 * page + (i % 9) + j * 9;
 
-      if (getId(wardrobe_inventory[index]).length > 0) {
+      if (helper.getId(wardrobe_inventory[index]).length > 0) {
         wardrobeSlot.push(wardrobe_inventory[index]);
       } else {
         wardrobeSlot.push(null);
@@ -964,7 +846,7 @@ export const getItems = async (
 
   // Add candy bag contents as backpack contents to candy bag
   for (const item of all_items) {
-    if (getId(item) == "TRICK_OR_TREAT_BAG") {
+    if (helper.getId(item) == "TRICK_OR_TREAT_BAG") {
       item.containsItems = candy_bag;
     }
   }
@@ -985,7 +867,7 @@ export const getItems = async (
 
   // Modify accessories on armor and add
   for (const accessory of armor.filter((a) => a.categories.includes("accessory"))) {
-    const id = getId(accessory);
+    const id = helper.getId(accessory);
 
     if (id === "") {
       continue;
@@ -993,11 +875,11 @@ export const getItems = async (
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && getId(a) == id) != undefined) {
+    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
       insertAccessory.isInactive = true;
     }
 
-    if (accessories.find((a) => getId(a) == id) != undefined) {
+    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
       insertAccessory.isUnique = false;
     }
 
@@ -1007,7 +889,7 @@ export const getItems = async (
 
   // Add accessories from inventory
   for (const accessory of inventory.filter((a) => a.categories.includes("accessory"))) {
-    const id = getId(accessory);
+    const id = helper.getId(accessory);
 
     if (id === "") {
       continue;
@@ -1015,11 +897,11 @@ export const getItems = async (
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && getId(a) == id) != undefined) {
+    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
       insertAccessory.isInactive = true;
     }
 
-    if (accessories.find((a) => getId(a) == id) != undefined) {
+    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
       insertAccessory.isUnique = false;
     }
 
@@ -1029,7 +911,7 @@ export const getItems = async (
 
   // Add accessories from accessory bag if not already in inventory
   for (const accessory of accessory_bag) {
-    const id = getId(accessory);
+    const id = helper.getId(accessory);
 
     if (id === "") {
       continue;
@@ -1037,11 +919,11 @@ export const getItems = async (
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && getId(a) == id) != undefined) {
+    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
       insertAccessory.isInactive = true;
     }
 
-    if (accessories.find((a) => getId(a) == id) != undefined) {
+    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
       insertAccessory.isUnique = false;
     }
 
@@ -1067,11 +949,11 @@ export const getItems = async (
     }
 
     for (const accessory of items.filter((a) => a.categories.includes("accessory"))) {
-      const id = getId(accessory);
+      const id = helper.getId(accessory);
 
       const insertAccessory = Object.assign({ isUnique: true, isInactive: true }, accessory);
 
-      if (accessories.find((a) => getId(a) == id) != undefined) {
+      if (accessories.find((a) => helper.getId(a) == id) != undefined) {
         insertAccessory.isUnique = false;
       }
 
@@ -1082,13 +964,15 @@ export const getItems = async (
 
   // Don't account for lower tier versions of the same accessory
   for (const accessory of accessories.concat(armor)) {
-    const id = getId(accessory);
+    const id = helper.getId(accessory);
 
     if (id.startsWith("CAMPFIRE_TALISMAN_")) {
       const tier = parseInt(id.split("_").pop());
 
       const maxTier = Math.max(
-        ...accessories.filter((a) => getId(a).startsWith("CAMPFIRE_TALISMAN_")).map((a) => getId(a).split("_").pop())
+        ...accessories
+          .filter((a) => helper.getId(a).startsWith("CAMPFIRE_TALISMAN_"))
+          .map((a) => helper.getId(a).split("_").pop())
       );
 
       if (tier < maxTier) {
@@ -1103,7 +987,9 @@ export const getItems = async (
       const tier = parseInt(id.split("_").pop());
 
       const maxTier = Math.max(
-        ...accessories.filter((a) => getId(a).startsWith("WEDDING_RING_")).map((a) => getId(a).split("_").pop())
+        ...accessories
+          .filter((a) => helper.getId(a).startsWith("WEDDING_RING_"))
+          .map((a) => helper.getId(a).split("_").pop())
       );
 
       if (tier < maxTier) {
@@ -1117,11 +1003,11 @@ export const getItems = async (
     if (id in constants.accessory_upgrades) {
       const accessoryUpgrades = constants.accessory_upgrades[id];
 
-      if (accessories.find((a) => !a.isInactive && accessoryUpgrades.includes(getId(a))) != undefined) {
+      if (accessories.find((a) => !a.isInactive && accessoryUpgrades.includes(helper.getId(a))) != undefined) {
         accessory.isInactive = true;
       }
 
-      if (accessories.find((a) => accessoryUpgrades.includes(getId(a))) != undefined) {
+      if (accessories.find((a) => accessoryUpgrades.includes(helper.getId(a))) != undefined) {
         accessory.isUnique = false;
       }
     }
@@ -1129,28 +1015,8 @@ export const getItems = async (
     if (id in constants.accessory_duplicates) {
       const accessoryDuplicates = constants.accessory_duplicates[id];
 
-      if (accessories.find((a) => accessoryDuplicates.includes(getId(a))) != undefined) {
+      if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a))) != undefined) {
         accessory.isUnique = false;
-      }
-    }
-  }
-
-  // Add New Year Cake Bag health bonus (1 per unique cake)
-  for (const accessory of accessories) {
-    const id = getId(accessory);
-    const cakes = [];
-
-    if (id == "NEW_YEAR_CAKE_BAG" && Array.isArray(accessory?.containsItems)) {
-      accessory.stats.health = 0;
-
-      for (const item of accessory.containsItems) {
-        if (
-          item.tag?.ExtraAttributes?.new_years_cake != undefined &&
-          !cakes.includes(item.tag.ExtraAttributes.new_years_cake)
-        ) {
-          accessory.stats.health++;
-          cakes.push(item.tag.ExtraAttributes.new_years_cake);
-        }
       }
     }
   }
@@ -1251,7 +1117,7 @@ export const getItems = async (
   const countsOfId = {};
 
   for (const weapon of output.weapons) {
-    const id = getId(weapon);
+    const id = helper.getId(weapon);
 
     countsOfId[id] = (countsOfId[id] || 0) + 1;
 
@@ -1265,7 +1131,7 @@ export const getItems = async (
   }
 
   for (const item of output.fishing_tools) {
-    const id = getId(item);
+    const id = helper.getId(item);
 
     countsOfId[id] = (countsOfId[id] || 0) + 1;
 
@@ -1372,7 +1238,7 @@ export const getItems = async (
 
     // Handling special sets of armor (where pieces aren't named the same)
     constants.special_sets.forEach((set) => {
-      if (armor.filter((a) => set.pieces.includes(getId(a))).length == 4) {
+      if (armor.filter((a) => set.pieces.includes(helper.getId(a))).length == 4) {
         output_name = set.name;
       }
     });
@@ -1390,7 +1256,7 @@ export const getItems = async (
   return output;
 };
 
-export async function getLevels(userProfile, hypixelProfile, levelCaps) {
+async function getLevels(userProfile, hypixelProfile, levelCaps) {
   const output = {};
 
   let skillLevels;
@@ -1527,22 +1393,11 @@ export const getStats = async (
 
   output.stats = Object.assign({}, constants.base_stats);
 
+  // fairy souls
   if (isNaN(userProfile.fairy_souls_collected)) {
     userProfile.fairy_souls_collected = 0;
   }
 
-  output.fairy_bonus = {};
-
-  if (userProfile.fairy_exchanges > 0) {
-    const fairyBonus = getFairyBonus(userProfile.fairy_exchanges);
-
-    output.fairy_bonus = Object.assign({}, fairyBonus);
-
-    // Apply fairy soul bonus
-    for (const stat in fairyBonus) {
-      output.stats[stat] += fairyBonus[stat];
-    }
-  }
   const totalSouls =
     profile.game_mode === "island" ? constants.fairy_souls.max.stranded : constants.fairy_souls.max.normal;
 
@@ -1551,7 +1406,9 @@ export const getStats = async (
     total: totalSouls,
     progress: userProfile.fairy_souls_collected / totalSouls,
   };
+  output.fairy_exchanges = userProfile.fairy_exchanges;
 
+  // levels
   const levelCaps = {
     farming: constants.default_skill_caps.farming + (userProfile.jacob2?.perks?.farming_level_cap || 0),
   };
@@ -1568,31 +1425,11 @@ export const getStats = async (
   output.total_skill_xp = total_skill_xp;
   output.average_level_rank = average_level_rank;
   output.level_caps = levelCaps;
-  output.fairy_exchanges = userProfile.fairy_exchanges;
-
-  output.skill_bonus = {};
-
-  for (const skill in levels) {
-    if (levels[skill].level == 0) {
-      continue;
-    }
-
-    // todo: when removing backend stats, nuke this and the src/constants/bonuses.js
-    const skillBonus = getBonusStat(levels[skill].level || levels[skill], `${skill}_skill`, levels[skill].levelCap, 1);
-
-    output.skill_bonus[skill] = Object.assign({}, skillBonus);
-
-    for (const stat in skillBonus) {
-      output.stats[stat] += skillBonus[stat];
-    }
-  }
 
   output.slayer_coins_spent = {};
 
   // Apply slayer bonuses
   if ("slayer_bosses" in userProfile) {
-    output.slayer_bonus = {};
-
     const slayers = {};
 
     if ("slayer_bosses" in userProfile) {
@@ -1637,15 +1474,7 @@ export const getStats = async (
         continue;
       }
 
-      const slayerBonus = getBonusStat(slayers[slayer].level.currentLevel, `${slayer}_slayer`, 9, 1);
-
-      output.slayer_bonus[slayer] = Object.assign({}, slayerBonus);
-
       output.slayer_xp += slayers[slayer].xp || 0;
-
-      for (const stat in slayerBonus) {
-        output.stats[stat] += slayerBonus[stat];
-      }
     }
 
     output.slayers = Object.assign({}, slayers);
@@ -1689,11 +1518,6 @@ export const getStats = async (
     }
   }
 
-  // Apply all harp bonuses when Melody's Hair has been acquired
-  if (items.accessories.filter((a) => getId(a) == "MELODY_HAIR").length == 1) {
-    output.stats.intelligence += 26;
-  }
-
   // Apply pet score bonus
   for (const stat in output.pet_score_bonus) {
     output.stats[stat] += output.pet_score_bonus[stat];
@@ -1701,238 +1525,7 @@ export const getStats = async (
 
   output.base_stats = Object.assign({}, output.stats);
 
-  // Apply stats from pets
-  for (const stat in output.pet_bonus) {
-    output.stats[stat] += output.pet_bonus[stat];
-  }
-
-  // Apply Lapis Armor full set bonus of +60 HP
-  if (items.armor.filter((a) => getId(a).startsWith("LAPIS_ARMOR_")).length == 4) {
-    items.armor[0].stats.health = (items.armor[0].stats.health || 0) + 60;
-  }
-
-  // Apply Emerald Armor full set bonus of +1 HP and +1 Defense per 3000 emeralds in collection with a maximum of 300
-  if (
-    !isNaN(userProfile.collection?.EMERALD) &&
-    items.armor.filter((a) => getId(a).startsWith("EMERALD_ARMOR_")).length == 4
-  ) {
-    const emerald_bonus = Math.min(350, Math.floor(userProfile.collection.EMERALD / 3000));
-
-    items.armor[0].stats.health += emerald_bonus;
-    items.armor[0].stats.defense += emerald_bonus;
-  }
-
-  // Apply Fairy Armor full set bonus of +10 Speed
-  if (items.armor.filter((a) => getId(a).startsWith("FAIRY_")).length == 4) {
-    items.armor[0].stats.speed += 10;
-  }
-
-  // Apply Speedster Armor full set bonus of +20 Speed
-  if (items.armor.filter((a) => getId(a).startsWith("SPEEDSTER_")).length == 4) {
-    items.armor[0].stats.speed += 20;
-  }
-
-  // Apply Young Dragon Armor full set bonus of +70 Speed
-  if (items.armor.filter((a) => getId(a).startsWith("YOUNG_DRAGON_")).length == 4) {
-    items.armor[0].stats.speed += 70;
-  }
-
-  // Apply basic armor stats
-  for (const item of items.armor) {
-    if (item.isInactive || item.categories.includes("accessory")) {
-      item.stats = {};
-
-      if (getId(item) != "PARTY_HAT_CRAB") {
-        continue;
-      }
-
-      for (const lore of item.tag.display.Lore) {
-        const line = helper.getRawLore(lore);
-
-        if (line.startsWith("Your bonus: ")) {
-          item.stats.intelligence = parseInt(line.split(" ")[2].substring(1));
-          break;
-        }
-      }
-    }
-
-    for (const stat in item.stats) {
-      output.stats[stat] += item.stats[stat];
-    }
-  }
-
-  // Apply stats of active accessories
-  items.accessories
-    .filter((a) => Object.keys(a).length != 0 && !a.isInactive)
-    .forEach((item) => {
-      for (const stat in item.stats) {
-        output.stats[stat] += item.stats[stat];
-      }
-    });
-
-  // Apply Mastiff Armor full set bonus of +50 HP per 1% Crit Damage
-  if (items.armor.filter((a) => getId(a).startsWith("MASTIFF_")).length == 4) {
-    output.stats.health += 50 * output.stats.crit_damage;
-    items.armor[0].stats.health += 50 * output.stats.crit_damage;
-  }
-
-  // Apply +5 Defense and +5 Strength of Day/Night Crystal only if both are owned as this is required for a permanent bonus
-  if (
-    items.accessories.filter((a) => !a.isInactive && ["DAY_CRYSTAL", "NIGHT_CRYSTAL"].includes(getId(a))).length == 2
-  ) {
-    output.stats.defense += 5;
-    output.stats.strength += 5;
-
-    const dayCrystal = items.accessories.find((a) => getId(a) == "DAY_CRYSTAL");
-
-    dayCrystal.stats.defense = (dayCrystal.stats.defense || 0) + 5;
-    dayCrystal.stats.strength = (dayCrystal.stats.strength || 0) + 5;
-  }
-
-  // Apply Obsidian Chestplate bonus of +1 Speed per 20 Obsidian in inventory
-  if (items.armor.filter((a) => getId(a) == "OBSIDIAN_CHESTPLATE").length == 1) {
-    let obsidian = 0;
-
-    for (const item of items.inventory) {
-      if (item.id == 49) {
-        obsidian += item.Count;
-      }
-    }
-
-    output.stats.speed += Math.floor(obsidian / 20);
-  }
-
-  if (items.armor.filter((a) => getId(a).startsWith("CHEAP_TUXEDO_")).length == 3) {
-    output.stats["health"] = 75;
-  }
-
-  if (items.armor.filter((a) => getId(a).startsWith("FANCY_TUXEDO_")).length == 3) {
-    output.stats["health"] = 150;
-  }
-
-  if (items.armor.filter((a) => getId(a).startsWith("ELEGANT_TUXEDO_")).length == 3) {
-    output.stats["health"] = 250;
-  }
-
   output.weapon_stats = {};
-
-  for (const item of [
-    /*{itemId:"NONE",stats:{}}*/
-  ]
-    .concat(items.weapons)
-    .concat(items.fishing_tools)) {
-    const stats = Object.assign({}, output.stats);
-
-    // Apply held weapon stats
-    for (const stat in item.stats) {
-      stats[stat] += item.stats[stat];
-    }
-
-    // Add crit damage from held weapon to Mastiff Armor full set bonus
-    if (item.stats.crit_damage > 0 && items.armor.filter((a) => getId(a).startsWith("MASTIFF_")).length == 4) {
-      stats.health += 50 * item.stats.crit_damage;
-    }
-
-    // Apply Superior Dragon Armor full set bonus of 5% stat increase
-    if (items.armor.filter((a) => getId(a).startsWith("SUPERIOR_DRAGON_")).length == 4) {
-      for (const stat in stats) {
-        if (constants.increase_most_stats_exclude.includes(stat)) {
-          continue;
-        }
-        stats[stat] *= 1.05;
-      }
-    }
-
-    // Apply Renowened bonus (whoever made this please comment)
-    for (let i = 0; i < items.armor.filter((a) => a?.tag?.ExtraAttributes?.modifier == "renowned").length; i++) {
-      for (const stat in stats) {
-        if (constants.increase_most_stats_exclude.includes(stat)) {
-          continue;
-        }
-        stats[stat] *= 1.01;
-      }
-    }
-
-    // Apply Loving reforge bonus
-    for (let i = 0; i < items.armor.filter((a) => a.tag?.ExtraAttributes?.modifier == "loving").length; i++) {
-      stats["ability_damage"] += 5;
-    }
-
-    if (items.armor.filter((a) => getId(a).startsWith("CHEAP_TUXEDO_")).length == 3) {
-      stats["health"] = 75;
-    }
-
-    if (items.armor.filter((a) => getId(a).startsWith("FANCY_TUXEDO_")).length == 3) {
-      stats["health"] = 150;
-    }
-
-    if (items.armor.filter((a) => getId(a).startsWith("ELEGANT_TUXEDO_")).length == 3) {
-      stats["health"] = 250;
-    }
-
-    output.weapon_stats[item.itemId] = stats;
-
-    // Stats shouldn't go into negative
-    for (const stat in stats) {
-      output.weapon_stats[item.itemId][stat] = Math.max(0, Math.round(stats[stat]));
-    }
-
-    stats.effective_health = getEffectiveHealth(stats.health, stats.defense);
-  }
-
-  const superiorBonus = Object.assign({}, constants.stat_template);
-
-  // Apply Superior Dragon Armor full set bonus of 5% stat increase
-  if (items.armor.filter((a) => getId(a).startsWith("SUPERIOR_DRAGON_")).length == 4) {
-    for (const stat in output.stats) {
-      if (constants.increase_most_stats_exclude.includes(stat)) {
-        continue;
-      }
-      superiorBonus[stat] = output.stats[stat] * 0.05;
-    }
-
-    for (const stat in superiorBonus) {
-      output.stats[stat] += superiorBonus[stat];
-
-      if (!(stat in items.armor[0].stats)) {
-        items.armor[0].stats[stat] = 0;
-      }
-
-      items.armor[0].stats[stat] += superiorBonus[stat];
-    }
-  }
-
-  // Same thing as Superior armor but for Renowned armor
-  const renownedBonus = Object.assign({}, constants.stat_template);
-
-  for (const item of items.armor) {
-    if (item.tag?.ExtraAttributes?.modifier == "renowned") {
-      for (const stat in output.stats) {
-        if (constants.increase_most_stats_exclude.includes(stat)) {
-          continue;
-        }
-        renownedBonus[stat] += output.stats[stat] * 0.01;
-        output.stats[stat] *= 1.01;
-      }
-    }
-  }
-
-  if (items.armor[0]?.stats != undefined) {
-    for (const stat in renownedBonus) {
-      if (!(stat in items.armor[0].stats)) {
-        items.armor[0].stats[stat] = 0;
-      }
-
-      items.armor[0].stats[stat] += renownedBonus[stat];
-    }
-  }
-
-  // Stats shouldn't go into negative
-  for (const stat in output.stats) {
-    output.stats[stat] = Math.max(0, Math.round(output.stats[stat]));
-  }
-
-  output.stats.effective_health = getEffectiveHealth(output.stats.health, output.stats.defense);
 
   let killsDeaths = [];
 
@@ -2043,6 +1636,7 @@ export const getStats = async (
     if ("emojiImg" in userInfo) {
       output.display_emoji_img = userInfo.emojiImg;
     }
+
     if (userInfo.username == "jjww2") {
       output.display_emoji = constants.randomEmoji();
     }
@@ -2839,7 +2433,7 @@ export async function getPets(profile) {
   return output;
 }
 
-export async function getMissingPets(pets, gameMode) {
+async function getMissingPets(pets, gameMode) {
   const profile = {
     pets: [],
   };
@@ -2884,7 +2478,7 @@ export async function getMissingPets(pets, gameMode) {
   return getPets(profile);
 }
 
-export async function getPetScore(pets) {
+async function getPetScore(pets) {
   const highestRarity = {};
 
   for (const pet of pets) {
@@ -2896,7 +2490,7 @@ export async function getPetScore(pets) {
   return Object.values(highestRarity).reduce((a, b) => a + b, 0);
 }
 
-export async function getMissingAccessories(accessories) {
+async function getMissingAccessories(accessories) {
   const unique = Object.keys(constants.accessories);
   unique.forEach((name) => {
     if (name in constants.accessory_duplicates) {
@@ -3291,7 +2885,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
   return output;
 }
 
-export async function getEssence(userProfile, hypixelProfile) {
+async function getEssence(userProfile, hypixelProfile) {
   const output = {};
 
   for (const essence in constants.essence) {
@@ -3301,7 +2895,7 @@ export async function getEssence(userProfile, hypixelProfile) {
   return output;
 }
 
-export function getHotmItems(userProfile, packs) {
+function getHotmItems(userProfile, packs) {
   const data = userProfile.mining_core;
   const output = [];
 
@@ -3420,7 +3014,7 @@ export function getHotmItems(userProfile, packs) {
   return output;
 }
 
-export function getMiningCoreData(userProfile) {
+function getMiningCoreData(userProfile) {
   const output = {};
   const data = userProfile.mining_core;
 
@@ -3493,7 +3087,7 @@ export function getMiningCoreData(userProfile) {
   return output;
 }
 
-export async function getForge(userProfile) {
+async function getForge(userProfile) {
   const output = {};
 
   if (userProfile?.forge?.forge_processes?.forge_1) {
@@ -3530,7 +3124,7 @@ export async function getForge(userProfile) {
   return output;
 }
 
-export async function getProfileUpgrades(profile) {
+async function getProfileUpgrades(profile) {
   const output = {};
   for (const upgrade in constants.profile_upgrades) {
     output[upgrade] = 0;
@@ -3827,7 +3421,7 @@ export const getProfile = async (
   return { profile: profile, allProfiles: allSkyBlockProfiles, uuid: paramPlayer };
 };
 
-export async function updateLeaderboardPositions(db, uuid, allProfiles) {
+async function updateLeaderboardPositions(db, uuid, allProfiles) {
   if (constants.blocked_players.includes(uuid)) {
     return;
   }
