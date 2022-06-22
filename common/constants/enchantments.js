@@ -4,7 +4,7 @@ export const maxEnchants = new Set([
   "Bane of Arthropods VII",
   "Big Brain V",
   "Blast Protection VII",
-  "Blessing V",
+  "Blessing VI",
   "Caster VI",
   "Chance V",
   "Charm V",
