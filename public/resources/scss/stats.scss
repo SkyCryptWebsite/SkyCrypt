@@ -1269,6 +1269,7 @@ a.additional-player-stat:hover {
   left: 0;
   bottom: 0;
   right: 0;
+  pointer-events: none;
   overflow: hidden;
   @supports (contain: paint) {
     overflow: initial;
