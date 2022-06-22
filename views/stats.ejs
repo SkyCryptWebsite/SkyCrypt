@@ -203,6 +203,9 @@ function enrichmentToStatName(enrichment) {
     case 'critical_damage':
       return 'crit_damage'
 
+    case 'attack_speed':
+      return 'bonus_attack_speed'
+
     default:
       return enrichment.toLowerCase()
   }
