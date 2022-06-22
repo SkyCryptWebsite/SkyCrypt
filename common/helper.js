@@ -14,7 +14,7 @@ export function removeFormatting(string) {
  * @returns {ItemStats}
  */
 export function getStatsFromItem(piece) {
-  const regex = /^([A-Za-z ]+): ([+-]([0-9]+\.?[0-9]*))/;
+  const regex = /^([A-Za-z ]+): ([+-]([0-9]+(?:,[0-9]{3})*(?:\.[0-9]{0,2})?))/;
   const stats = {};
 
   if (!piece) {
@@ -31,7 +31,7 @@ export function getStatsFromItem(piece) {
     }
 
     const statName = Object.keys(constants.statsData).find((key) => constants.statsData[key].nameLore === match[1]);
-    const statValue = parseFloat(match[2]);
+    const statValue = parseFloat(match[2].replace(/,/g, ""));
 
     if (statName) {
       stats[statName] ??= 0;
