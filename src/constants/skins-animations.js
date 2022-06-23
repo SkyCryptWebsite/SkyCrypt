@@ -521,6 +521,12 @@ const skins = [
     texture: "/head/92defbe3cde326d4511bb53339d777afa703f3ec4daa697d61a4402744cbb0cd",
     release: new Date("2022-06-10 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_BAL_INFERNO",
+    name: "Inferno",
+    texture: "/head/15ae6e347c2c828020b22f6faed62baf27548fad1656447af007b802d6f556e4",
+    release: new Date("2022-06-24 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
@@ -1168,6 +1174,27 @@ const animations = [
       1980: "/head/9c432867d0e7dc684c82af579025331b4042f66fd1c504ed9c1ea367bb4ba6ae",
       2130: "/head/7faad4b84247ff5535d976c7bbf2d0223d4cdc9e510b182371e6bb81b71a0ff5",
       2270: "/head/8f149b0675823a06a0ad10bb3e33ecd70c53e2b170fb3a7494f106f5de4fd86e",
+    },
+  },
+  {
+    id: "PET_SKIN_BAL_INFERNO",
+    texture: "/resources/img/items/pet_skin_bal_inferno.png",
+    animation: {
+      0: "/head/15ae6e347c2c828020b22f6faed62baf27548fad1656447af007b802d6f556e4",
+      150: "/head/2f0ae52577d106c7179a902f3f3f183811994b9645debb83c8d61106c00193a0",
+      280: "/head/9800062213c9e2a6660358794357187b6a5e36b3407b62d05524ce3748b722a9",
+      470: "/head/c38f85e9a9408af4aeec9f518c0269afd23af3eccd0d914c4866bdef29cb023",
+      580: "/head/d6336dda701bf64439195661b8aa41581c5036bc95b34180abc4a75092f73c8e",
+      750: "/head/224563526e1c9c05ab80f3f4dc637331b5620b267d86d1abc1909668cab93537",
+      920: "/head/9fa282189c27bbf2fbfd0b9545695c521aad22e29d5dc1de15f95ca01fda56c2",
+      1030: "/head/c33c2e1c37a5f89cdea38782fd29cffb6df356d2ec04c23e3668e8a42060f0e3",
+      1170: "/head/a8298cd12b75fe1c06c7b1e28547cc5690f9af0afc8a0a69a03665d736e1008c",
+      1360: "/head/e58c17eb68e09d1571d79a37b25c82f3f5bf5831c4701c29a33b2dbbc4c0e295",
+      1510: "/head/6137c0bdd7d8a2042edd5cd21177a8d20153c3fefb178fd78ee90e81eb5657be",
+      1650: "/head/da87b231c23d2443ec70e8d80ae45dac99edb53845ab1b8709f31ae905fbe88c",
+      1950: "/head/97fe96ddb4c1a56c6da1a4f851109d82d33dd50bcfcc20635a88008e0f246102",
+      2080: "/head/cbf98cac365592d56ae74f3184d7600313ab05b4c8879806636504bc42425832",
+      2260: "/head/e90b568791677a42e655f1ef895cde7870c3bae969fb280087f523f96b377b3b",
     },
   },
 ];
