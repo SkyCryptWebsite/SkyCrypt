@@ -49,7 +49,7 @@
     "axios-debug-log": "^0.8.4",
     "body-parser": "^1.20.0",
     "bowser": "^2.11.0",
-    "canvas": "^2.9.1",
+    "canvas": "^2.9.2",
     "connect-mongo": "^4.6.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
