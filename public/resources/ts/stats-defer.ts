@@ -894,8 +894,13 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
           "special",
           window.btoa(
             JSON.stringify({
-              "Damage Reduction": `${Math.round((totalDefense / (totalDefense + 100)) * 100)}%`,
-              "Effective Health": `${Math.round(totalHealth * (1 + totalDefense / 100)).toLocaleString()}`,
+              "Damage Reduction": {
+                value: Math.round((totalDefense / (totalDefense + 100)) * 100),
+                suffix: "%",
+              },
+              "Effective Health": {
+                value: Math.round(totalHealth * (1 + totalDefense / 100)),
+              },
             })
           )
         );
@@ -906,7 +911,10 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
           "special",
           window.btoa(
             JSON.stringify({
-              "True Damage Reduction": `${Math.round((totalTrueDefense / (totalTrueDefense + 100)) * 100)}%`,
+              "True Damage Reduction": {
+                value: Math.round((totalTrueDefense / (totalTrueDefense + 100)) * 100),
+                suffix: "%",
+              },
             })
           )
         );

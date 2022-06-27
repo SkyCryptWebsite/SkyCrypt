@@ -47,7 +47,7 @@ export class PlayerStat extends LitElement {
     name: string | undefined,
     suffix: string,
     value: number,
-    special: { [key: string]: number } | undefined
+    special: { [key: string]: { value: number; suffix?: string } } | undefined
   ): string[] {
     const tooltip: string[] = [];
     const tooltip_bonus: string[] = [];
@@ -87,7 +87,11 @@ export class PlayerStat extends LitElement {
     if (special && Object.keys(special).length > 0) {
       tooltip.push("<br/>");
       for (const [key, val] of Object.entries(special)) {
-        tooltip.push("<br/>", `<span class="stat-name">${key}: </span>`, `<span class="stat-value">${val}</span>`);
+        tooltip.push(
+          "<br/>",
+          `<span class="stat-name">${key}: </span>`,
+          `<span class="stat-value">${val.value.toLocaleString()}${val.suffix ?? ""}</span>`
+        );
       }
     }
 
