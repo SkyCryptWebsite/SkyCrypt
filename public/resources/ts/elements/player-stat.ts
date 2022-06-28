@@ -11,14 +11,14 @@ export class PlayerStat extends LitElement {
   @property({ attribute: "value" })
   value?: string;
 
-  @property({ attribute: "data" })
-  data?: string;
+  @property({ attribute: false })
+  data = {};
 
-  @property({ attribute: "special" })
-  special?: string;
+  @property({ attribute: false })
+  special = {};
 
   protected render(): TemplateResult | undefined {
-    if (!this.stat || !this.value || !this.data) {
+    if (!this.stat || !this.value) {
       return;
     }
 
@@ -26,10 +26,8 @@ export class PlayerStat extends LitElement {
     const icon = constants.statsData[this.stat].symbol;
     const name = constants.statsData[this.stat].nameShort;
     const suffix = constants.statsData[this.stat].suffix;
-    const data = JSON.parse(window.atob(this.data));
-    const special = this.special ? JSON.parse(window.atob(this.special)) : undefined;
 
-    const tooltip = this.getTooltip(data, name, suffix, value, special);
+    const tooltip = this.getTooltip(this.data, name, suffix, value, this.special);
 
     return html`
       <div data-stat="${this.stat}" class="basic-stat stat-${this.stat.replaceAll("_", "-")}">

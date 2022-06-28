@@ -881,7 +881,8 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
         .reduce((a, b) => a + b, 0)
         .toString()
     );
-    node.setAttribute("data", window.btoa(JSON.stringify(stats[stat])));
+
+    node.data = stats[stat];
 
     // Special additions for some stats
     const totalHealth = Object.values(stats.health).reduce((a, b) => a + b, 0);
@@ -890,26 +891,16 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
 
     switch (stat) {
       case "defense":
-        node.setAttribute(
-          "special",
-          window.btoa(
-            JSON.stringify({
-              "Damage Reduction": `${Math.round((totalDefense / (totalDefense + 100)) * 100)}%`,
-              "Effective Health": `${Math.round(totalHealth * (1 + totalDefense / 100)).toLocaleString()}`,
-            })
-          )
-        );
+        node.special = {
+          "Damage Reduction": `${Math.round((totalDefense / (totalDefense + 100)) * 100)}%`,
+          "Effective Health": `${Math.round(totalHealth * (1 + totalDefense / 100)).toLocaleString()}`,
+        };
         break;
 
       case "true_defense":
-        node.setAttribute(
-          "special",
-          window.btoa(
-            JSON.stringify({
-              "True Damage Reduction": `${Math.round((totalTrueDefense / (totalTrueDefense + 100)) * 100)}%`,
-            })
-          )
-        );
+        node.special = {
+          "True Damage Reduction": `${Math.round((totalTrueDefense / (totalTrueDefense + 100)) * 100)}%`,
+        };
         break;
     }
 
@@ -938,7 +929,7 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
     }
 
     const node = document.createElement("bonus-stats");
-    node.setAttribute("data", window.btoa(JSON.stringify(bonusStats)));
+    node.data = bonusStats;
 
     element.appendChild(node);
   });
