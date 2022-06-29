@@ -24,11 +24,17 @@ export function getPlayerStats() {
     pristine: { base: 0 },
   };
 
+  const allowedStats = Object.keys(stats);
+
   // Active armor stats
   for (const piece of items.armor) {
     const bonusStats: ItemStats = helper.getStatsFromItem(piece as Item);
 
     for (const [name, value] of Object.entries(bonusStats)) {
+      if (!allowedStats.includes(name)) {
+        continue;
+      }
+
       stats[name].armor ??= 0;
       stats[name].armor += value;
     }
@@ -40,6 +46,10 @@ export function getPlayerStats() {
 
     if (activePet) {
       for (const [name, value] of Object.entries(activePet.stats)) {
+        if (!allowedStats.includes(name)) {
+          continue;
+        }
+
         stats[name].pet ??= 0;
         stats[name].pet += value;
       }
@@ -51,6 +61,10 @@ export function getPlayerStats() {
     const bonusStats: ItemStats = helper.getStatsFromItem(item as Item);
 
     for (const [name, value] of Object.entries(bonusStats)) {
+      if (!allowedStats.includes(name)) {
+        continue;
+      }
+
       stats[name].accessories ??= 0;
       stats[name].accessories += value;
     }
@@ -61,6 +75,10 @@ export function getPlayerStats() {
     const bonusStats: ItemStats = getBonusStat(data.level, `skill_${skill}` as BonusType, data.maxLevel);
 
     for (const [name, value] of Object.entries(bonusStats)) {
+      if (!allowedStats.includes(name)) {
+        continue;
+      }
+
       stats[name][`skill_${skill}`] ??= 0;
       stats[name][`skill_${skill}`] += value;
     }
@@ -75,8 +93,12 @@ export function getPlayerStats() {
     );
 
     for (const [name, value] of Object.entries(bonusStats)) {
-      stats[name]["skill_dungeoneering"] ??= 0;
-      stats[name]["skill_dungeoneering"] += value;
+      if (!allowedStats.includes(name)) {
+        continue;
+      }
+
+      stats[name].skill_dungeoneering ??= 0;
+      stats[name].skill_dungeoneering += value;
     }
   }
 
@@ -89,6 +111,10 @@ export function getPlayerStats() {
     );
 
     for (const [name, value] of Object.entries(bonusStats)) {
+      if (!allowedStats.includes(name)) {
+        continue;
+      }
+
       stats[name][`slayer_${slayer}`] ??= 0;
       stats[name][`slayer_${slayer}`] += value;
     }
@@ -99,6 +125,10 @@ export function getPlayerStats() {
     const bonusStats: ItemStats = getFairyBonus(calculated.fairy_exchanges);
 
     for (const [name, value] of Object.entries(bonusStats)) {
+      if (!allowedStats.includes(name)) {
+        continue;
+      }
+
       stats[name].fairy_souls ??= 0;
       stats[name].fairy_souls += value;
     }
@@ -119,10 +149,12 @@ export function getPlayerStats() {
 
   if (calculated.century_cakes) {
     for (const century_cake of calculated.century_cakes) {
-      if (stats[century_cake.stat]) {
-        stats[century_cake.stat].cakes ??= 0;
-        stats[century_cake.stat].cakes += century_cake.amount;
+      if (!allowedStats.includes(century_cake.stat)) {
+        continue;
       }
+
+      stats[century_cake.stat].cakes ??= 0;
+      stats[century_cake.stat].cakes += century_cake.amount;
     }
   }
 
