@@ -4,8 +4,7 @@
   "schema": 2,
   "light": true,
   "images": {
-    "bg": "/resources/img/themes/light/bg.webp",
-    "bg_blur": "/resources/img/themes/light/bg_blur.webp"
+    "bg": "/resources/img/themes/light/bg.webp"
   },
   "backgrounds": {
     "skillbar": { "type": "color", "color": "#56d34d" },
