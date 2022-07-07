@@ -2,6 +2,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
   <meta property="og:site_name" content="SkyCrypt">
   <link rel="sitemap" href="/sitemap.xml">
+  <%
+    let canonicalUrl = "https://sky.shiiyu.moe/"
+    if (page === "api") {
+      canonicalUrl += "api"
+    } else if (page === "stats") {
+      canonicalUrl += `stats/${calculated.uuid}/${calculated.profile.profile_id}`
+    }
+  %>
+  <link rel="canonical" href="<%= canonicalUrl %>" />
   <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
   <link rel="search" type="application/opensearchdescription+xml" title="SkyCrypt" href="/search.osd">
   <meta name="theme-color" content="#282828">
