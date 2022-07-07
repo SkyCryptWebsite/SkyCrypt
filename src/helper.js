@@ -710,14 +710,14 @@ export function parseItemGems(gems, rarity) {
         slot_type,
         slot_number: +key.split("_")[1],
         gem_type: gems[`${key}_gem`],
-        gem_tier: value,
+        gem_tier: value?.quality || value,
       });
     } else if (slots.normal.includes(slot_type)) {
       parsed.push({
         slot_type,
         slot_number: +key.split("_")[1],
         gem_type: key.split("_")[0],
-        gem_tier: value,
+        gem_tier: value?.quality || value,
       });
     } else {
       throw new Error(`Error! Unknown gemstone slot key: ${key}`);
