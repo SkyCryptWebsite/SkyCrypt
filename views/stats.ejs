@@ -834,7 +834,6 @@ const metaDescription = getMetaDescription()
         <% if(!items.no_inventory){ %><a class="nav-item" href="#Inventory">Inventory</a><% } %>
         <a class="nav-item" href="#Skills">Skills</a>
         <a class="nav-item" href="#Dungeons">Dungeons</a>
-        <a class="nav-item" href="#Essence">Essence</a>
         <a class="nav-item" href="#Slayer">Slayer</a>
         <a class="nav-item" href="#Minions">Minions</a>
         <% if(Object.keys(calculated.collections).length > 0){ %><a class="nav-item" href="#Collections">Collections</a><% } %>
@@ -1902,23 +1901,6 @@ const metaDescription = getMetaDescription()
       <% } %>
       </div>
     </div>
-    <div class="stat-container stat-essence">
-      <a class="stat-anchor" id="Essence"></a>
-      <h2 class="stat-header">Essence</h2>
-      <div class="stat-content">
-        <div class="collections">
-        <% for (const [key, value] of Object.entries(calculated.essence)) { %>
-          <div class="chip" data-missing="<%= value === 0 %>">
-            <div class="chip-icon-wrapper"><div style="background-image:url('<%= constants.essence[key].head %>')" class="item-icon custom-icon"></div></div>
-            <div class="chip-text">
-              <div class="collection-name"><span class="stat-name"><%= constants.essence[key].name %></span></div>
-              <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= value.toLocaleString() %></span></div>
-            </div>
-          </div>
-        <% } %>
-        </div>
-      </div>
-    </div>
     <div class="stat-container stat-slayer">
       <a class="stat-anchor" id="Slayer"></a>
       <h2 class="stat-header">Slayer</h2>
@@ -2161,6 +2143,28 @@ const metaDescription = getMetaDescription()
         <a class="stat-anchor" id="Misc"></a>
         <h2 class="stat-header">Miscellaneous</h2>
         <div class="stat-content">
+
+          <div class="category-header">
+            <div class="category-icon">
+              <div
+                class="item-icon custom-icon"
+                style="background-image: url(/head/1e5574a4ef94ef4ca300d02f644d98be07dbfba7df78808e8a9a021b067d996d)"
+              ></div>
+            </div>
+            <span>Essence</span>
+          </div>
+          <div class="collections">
+            <% for (const [key, value] of Object.entries(calculated.essence)) { %>
+              <div class="chip" data-missing="<%= value === 0 %>">
+                <div class="chip-icon-wrapper"><div style="background-image:url('<%= constants.essence[key].head %>')" class="item-icon custom-icon"></div></div>
+                <div class="chip-text">
+                  <div class="collection-name"><span class="stat-name"><%= constants.essence[key].name %></span></div>
+                  <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= value.toLocaleString() %></span></div>
+                </div>
+              </div>
+            <% } %>
+          </div>
+
         <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){
           let totalKills = calculated.kills.length;
           let totalDeaths = calculated.deaths.length;
