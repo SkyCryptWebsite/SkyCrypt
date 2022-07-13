@@ -642,7 +642,7 @@ class ScrollMemory {
     });
   }
 
-  /** wether the document currently has a smooth scroll taking place */
+  /** whether the document currently has a smooth scroll taking place */
   get isSmoothScrolling() {
     return this._isSmoothScrolling || !this._loaded;
   }
