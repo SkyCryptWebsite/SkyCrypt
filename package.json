@@ -58,7 +58,7 @@
     "express": "^4.18.1",
     "express-session": "^1.17.3",
     "fs-extra": "^10.1.0",
-    "ioredis": "^5.1.0",
+    "ioredis": "^5.2.1",
     "lilyweight": "^2.6.3",
     "lit": "^2.2.7",
     "lodash": "^4.17.20",
