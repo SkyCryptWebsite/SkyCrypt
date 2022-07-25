@@ -527,6 +527,12 @@ const skins = [
     texture: "/head/15ae6e347c2c828020b22f6faed62baf27548fad1656447af007b802d6f556e4",
     release: new Date("2022-06-24 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_MEGALODON_BABY",
+    name: "Baby",
+    texture: "/head/7cdb1ff8c967c831eb685e09e5dea586ed291472395acf7a25e9d5bb41d6c082",
+    release: new Date("2022-07-08 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
