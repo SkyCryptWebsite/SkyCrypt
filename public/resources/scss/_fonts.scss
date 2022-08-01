@@ -1,17 +1,17 @@
 @font-face {
   font-family: "icomoon";
-  src: url("/resources/fonts/icomoon/icomoon.eot?v2");
-  src: url("/resources/fonts/icomoon/icomoon.eot?v2#iefix") format("embedded-opentype"),
-    url("/resources/fonts/icomoon/icomoon.ttf?v2") format("truetype"),
-    url("/resources/fonts/icomoon/icomoon.woff?v2") format("woff"),
-    url("/resources/fonts/icomoon/icomoon.svg?v2#icomoon") format("svg");
+  src: url("/resources/fonts/icomoon/icomoon.eot?v3");
+  src: url("/resources/fonts/icomoon/icomoon.eot?v3#iefix") format("embedded-opentype"),
+    url("/resources/fonts/icomoon/icomoon.ttf?v3") format("truetype"),
+    url("/resources/fonts/icomoon/icomoon.woff?v3") format("woff"),
+    url("/resources/fonts/icomoon/icomoon.svg?v3#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
   unicode-range:
     // ✪ dungeon-star
     U+272A,
-    // ⍟ dungeon-master-star
+    // ⍟ dungeon-master-star (no longer used)
     U+235F,
     // ⚔ attack-speed
     U+2694,
@@ -44,5 +44,25 @@
     // ❁ strength
     U+2741,
     // ๑ ability-damage
-    U+0E51;
+    U+0E51,
+    // ➊ 1-dungeon-star
+    U+278A,
+    // ➋ 2-dungeon-star
+    U+278B,
+    // ➌ 3-dungeon-star
+    U+278C,
+    // ➍ 4-dungeon-star
+    U+278D,
+    // ➎ 5-dungeon-star
+    U+278E,
+    // ❂ true-defense,
+    U+2742,
+    // ⸎ soulflow
+    U+2E0E,
+    // ᠅ powder,
+    U+1805,
+    // ✿ dye,
+    U+273F,
+    // ⚚ dungeon-upgrade,
+    U+269A;
 }

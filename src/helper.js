@@ -145,7 +145,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
   }
 
   if (cacheOnly === false && (user == undefined || +new Date() - user.date > 7200 * 1000)) {
-    let profileRequest = axios(`https://api.ashcon.app/mojang/v1/user/${uuid}`, { timeout: 5000 });
+    const profileRequest = axios(`https://api.ashcon.app/mojang/v1/user/${uuid}`, { timeout: 5000 });
 
     profileRequest
       .then(async (response) => {
@@ -199,7 +199,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
 
     if (!user) {
       try {
-        let { data } = await profileRequest;
+        const { data } = await profileRequest;
 
         data.id = data.uuid.replaceAll("-", "");
 
@@ -572,8 +572,8 @@ export async function updateRank(uuid, db) {
     if (player?.achievementsOneTime != undefined) {
       rank.achievementsOneTime = player.achievementsOneTime;
     }
-
-    let claimable = {
+    
+    const claimable = {
       claimed_potato_talisman: "Potato Talisman",
       claimed_potato_basket: "Potato Basket",
       claim_potato_war_silver_medal: "Silver Medal (Potato War)",
@@ -629,17 +629,17 @@ export async function fetchMembers(profileId, db, returnUuid = false) {
   const members = await db.collection("members").find({ profile_id: profileId }).toArray();
 
   if (members.length == 0) {
-    let profileResponse = await Hypixel.get("skyblock/profile", {
+    const profileResponse = await Hypixel.get("skyblock/profile", {
       params: { key: credentials.hypixel_api_key, profile: profileId },
     });
 
-    let memberPromises = [];
+    const memberPromises = [];
 
     for (const member in profileResponse.data.profile.members) {
       memberPromises.push(resolveUsernameOrUuid(member, db));
     }
 
-    let profileMembers = await Promise.all(memberPromises);
+    const profileMembers = await Promise.all(memberPromises);
 
     for (const profileMember of profileMembers) {
       await db
@@ -678,16 +678,14 @@ export function getClusterId(fullName = false) {
 }
 
 export const generateDebugId = (endpointName = "unknown") => {
-  return (
-    getClusterId() + "/" + endpointName + "_" + new Date().getTime() + "." + Math.floor(Math.random() * 9000 + 1000)
-  );
+  return `${getClusterId()}/${endpointName}_${Date.now()}.${Math.floor(Math.random() * 9000 + 1000)}`;
 };
 
 export function generateUUID() {
   let u = "",
     i = 0;
   while (i++ < 36) {
-    let c = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"[i - 1],
+    const c = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"[i - 1],
       r = (Math.random() * 16) | 0,
       v = c == "x" ? r : (r & 0x3) | 0x8;
     u += c == "-" || c == "4" ? c : v.toString(16);
@@ -727,14 +725,14 @@ export function parseItemGems(gems, rarity) {
         slot_type,
         slot_number: +key.split("_")[1],
         gem_type: gems[`${key}_gem`],
-        gem_tier: value,
+        gem_tier: value?.quality || value,
       });
     } else if (slots.normal.includes(slot_type)) {
       parsed.push({
         slot_type,
         slot_number: +key.split("_")[1],
         gem_type: key.split("_")[0],
-        gem_tier: value,
+        gem_tier: value?.quality || value,
       });
     } else {
       throw new Error(`Error! Unknown gemstone slot key: ${key}`);
@@ -802,16 +800,6 @@ export function generateGemLore(type, tier, rarity) {
 
 export function rarityNameToInt(string) {
   return constants.rarities.indexOf(string.toLowerCase());
-}
-
-/**
- * rounds a number to a certain number of decimal places
- * @param {number} num the number to be rounded
- * @param {number} decimals the number of decimal places to round to
- * @returns {number} the rounded number
- */
-export function round(num, decimals = 0) {
-  return Math.round(Math.pow(10, decimals) * num) / Math.pow(10, decimals);
 }
 
 /**
@@ -1007,4 +995,85 @@ function getCategoriesFromType(type) {
   }
 
   return ["unknown"];
+}
+
+export function generateDebugPets(type = "ALL") {
+  const pets = [];
+
+  for (const [petType, petData] of Object.entries(constants.pet_data)) {
+    if (type !== "ALL" && petType !== type) {
+      continue;
+    }
+
+    for (const rarity of ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC"]) {
+      pets.push(
+        {
+          type: petType,
+          active: false,
+          exp: 0,
+          tier: rarity,
+          candyUsed: 0,
+          heldItem: null,
+          skin: null,
+          uuid: generateUUID(),
+        },
+        {
+          type: petType,
+          active: false,
+          exp: getPetExp(petData.maxTier, (petData.maxLevel / 3) * 2),
+          tier: rarity,
+          candyUsed: 0,
+          heldItem: null,
+          skin: null,
+          uuid: generateUUID(),
+        },
+        {
+          type: petType,
+          active: false,
+          exp: 1000000000,
+          tier: rarity,
+          candyUsed: 0,
+          heldItem: null,
+          skin: null,
+          uuid: generateUUID(),
+        }
+      );
+    }
+  }
+
+  return pets;
+}
+
+/**
+ * @param  {string} rarity
+ * @param  {number} level
+ * @returns number
+ * @description takes rarity and level and returns the required pet exp to reach the level
+ */
+export function getPetExp(rarity, level) {
+  const rarityOffset = constants.pet_rarity_offset[rarity.toLowerCase()];
+
+  return constants.pet_levels.slice(rarityOffset, rarityOffset + level - 1).reduce((prev, curr) => prev + curr, 0);
+}
+
+export function getAnimatedTexture(item) {
+  const results = constants.animated_items_arr.filter((x) => x.id === getId(item));
+
+  if (results.length === 0) {
+    return false;
+  }
+
+  if (results.length === 1) {
+    return results[0];
+  }
+
+  const deepResults = results.filter((x) => {
+    if (!x.tags) {
+      return false;
+    }
+
+    return Object.entries(x.tags).every(([key, value]) => item.tag?.ExtraAttributes?.[key] === value);
+  });
+
+  return deepResults[0] ?? false;
 }

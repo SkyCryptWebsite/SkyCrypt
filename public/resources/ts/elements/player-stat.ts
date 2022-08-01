@@ -11,11 +11,14 @@ export class PlayerStat extends LitElement {
   @property({ attribute: "value" })
   value?: string;
 
-  @property({ attribute: "data" })
-  data?: string;
+  @property({ attribute: false })
+  data = {};
+
+  @property({ attribute: false })
+  special = {};
 
   protected render(): TemplateResult | undefined {
-    if (!this.stat || !this.value || !this.data) {
+    if (!this.stat || !this.value) {
       return;
     }
 
@@ -23,9 +26,8 @@ export class PlayerStat extends LitElement {
     const icon = constants.statsData[this.stat].symbol;
     const name = constants.statsData[this.stat].nameShort;
     const suffix = constants.statsData[this.stat].suffix;
-    const data = JSON.parse(atob(this.data));
 
-    const tooltip = this.getTooltip(data, name, suffix, value);
+    const tooltip = this.getTooltip(this.data, name, suffix, value, this.special);
 
     return html`
       <div data-stat="${this.stat}" class="basic-stat stat-${this.stat.replaceAll("_", "-")}">
@@ -42,7 +44,8 @@ export class PlayerStat extends LitElement {
     data: { [key: string]: number },
     name: string | undefined,
     suffix: string,
-    value: number
+    value: number,
+    special: { [key: string]: number } | undefined
   ): string[] {
     const tooltip: string[] = [];
     const tooltip_bonus: string[] = [];
@@ -51,30 +54,39 @@ export class PlayerStat extends LitElement {
       return tooltip;
     }
 
-    for (const [key, val] of Object.entries(data)) {
-      if (key === "base" || typeof val !== "number") {
-        continue;
-      }
-
-      tooltip_bonus.push(`- ${this.getPrettyDataName(key)} ${val < 0 ? "" : "+"}${val.toLocaleString()}${suffix}`);
-    }
-
     tooltip.push(
       `<span class="stat-name">Base ${name}: </span>`,
-      `<span class="stat-value">${data.base.toLocaleString()}${suffix}</span>`,
+      `<span class="stat-value">${helper.round(data.base, 1).toLocaleString()}${suffix}</span>`,
       "<br/>",
       "<span class='tippy-explanation'>Base value every player has at the beginning of their SkyBlock adventure!</span>"
     );
 
     if (value - data.base > 0) {
+      for (const [key, val] of Object.entries(data)) {
+        if (key === "base" || typeof val !== "number") {
+          continue;
+        }
+
+        tooltip_bonus.push(
+          `- ${this.getPrettyDataName(key)} ${val < 0 ? "" : "+"}${helper.round(val, 1).toLocaleString()}${suffix}`
+        );
+      }
+
       tooltip.push(
         "<br/>",
         "<br/>",
         `<span class="stat-name">Bonus ${name}: </span>`,
-        `<span class="stat-value">${(value - data.base).toLocaleString()}${suffix}</span>`,
+        `<span class="stat-value">${helper.round(value - data.base, 1).toLocaleString()}${suffix}</span>`,
         "<br/>",
         `<span class='tippy-explanation'>Bonus value obtain from: <br>${tooltip_bonus.join("<br>")}</span>`
       );
+    }
+
+    if (special && Object.keys(special).length > 0) {
+      tooltip.push("<br/>");
+      for (const [key, val] of Object.entries(special)) {
+        tooltip.push("<br/>", `<span class="stat-name">${key}: </span>`, `<span class="stat-value">${val}</span>`);
+      }
     }
 
     return tooltip;

@@ -23,7 +23,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const RESOURCE_PACK_FOLDER = path.resolve(__dirname, "..", "public", "resourcepacks");
 
-let removeFormatting = new RegExp("§[0-9a-z]{1}", "g");
+const removeFormatting = new RegExp("§[0-9a-z]{1}", "g");
 
 async function getFiles(dir, fileList) {
   const files = await fs.readdir(dir);
@@ -31,7 +31,7 @@ async function getFiles(dir, fileList) {
   fileList = fileList || [];
 
   for (const file of files) {
-    let fileStat = await fs.stat(path.resolve(dir, file));
+    const fileStat = await fs.stat(path.resolve(dir, file));
 
     if (await fileStat.isDirectory()) {
       fileList = await getFiles(path.resolve(dir, file), fileList);
@@ -80,7 +80,7 @@ async function init() {
 
   resourcePacks = resourcePacks.sort((a, b) => a.config.priority - b.config.priority);
 
-  for (let pack of resourcePacks) {
+  for (const pack of resourcePacks) {
     pack.files = await getFiles(path.resolve(pack.basePath, "assets", "minecraft", "mcpatcher", "cit"));
     pack.textures = [];
 
@@ -237,7 +237,7 @@ async function init() {
         texture.animated = true;
       }
 
-      for (let property in properties) {
+      for (const property in properties) {
         if (property == "weight") {
           texture.weight = parseInt(properties[property]);
         }
@@ -347,7 +347,7 @@ async function init() {
 
             for (let i = 0; i < frameCountInterpolated; i++) {
               let frameCur, frameNext;
-              let currentTime = (i / frameCountInterpolated) * totalLength;
+              const currentTime = (i / frameCountInterpolated) * totalLength;
 
               for (const [index, frame] of animation.frames.entries()) {
                 if (frame.totalTime + frame.time > currentTime) {

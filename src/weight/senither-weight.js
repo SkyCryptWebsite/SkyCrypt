@@ -72,7 +72,7 @@ function calcSkillWeight(skillGroup, level, experience) {
     };
   }
 
-  let maxSkillLevelXP = skillGroup.maxLevel == 60 ? level60SkillExp : level50SkillExp;
+  const maxSkillLevelXP = skillGroup.maxLevel == 60 ? level60SkillExp : level50SkillExp;
 
   let base = Math.pow(level * 10, 0.5 + skillGroup.exponent + level / 100) / 1250;
   if (experience > maxSkillLevelXP) {
@@ -111,10 +111,10 @@ function calcDungeonsWeight(type, level, experience) {
     };
   }
 
-  let percentageModifier = dungeonsWeight[type];
-  let level50Experience = 569809640;
+  const percentageModifier = dungeonsWeight[type];
+  const level50Experience = 569809640;
 
-  let base = Math.pow(level, 4.5) * percentageModifier;
+  const base = Math.pow(level, 4.5) * percentageModifier;
 
   if (experience <= level50Experience) {
     return {
@@ -123,8 +123,8 @@ function calcDungeonsWeight(type, level, experience) {
     };
   }
 
-  let remaining = experience - level50Experience;
-  let splitter = (4 * level50Experience) / base;
+  const remaining = experience - level50Experience;
+  const splitter = (4 * level50Experience) / base;
 
   return {
     weight: Math.floor(base),
@@ -154,7 +154,7 @@ const slayerWeight = {
 };
 
 function calcSlayerWeight(type, experience) {
-  let sw = slayerWeight[type];
+  const sw = slayerWeight[type];
 
   if (!sw) {
     return {
@@ -170,14 +170,14 @@ function calcSlayerWeight(type, experience) {
     };
   }
 
-  let base = 1000000 / sw.divider;
+  const base = 1000000 / sw.divider;
   let remaining = experience - 1000000;
 
   let modifier = sw.modifier;
   let overflow = 0;
 
   while (remaining > 0) {
-    let left = Math.min(remaining, 1000000);
+    const left = Math.min(remaining, 1000000);
 
     overflow += Math.pow(left / (sw.divider * (1.5 + modifier)), 0.942);
     modifier += sw.modifier;
@@ -194,7 +194,7 @@ function calcSlayerWeight(type, experience) {
   */
 
 export function calculateSenitherWeight(profile) {
-  let output = {
+  const output = {
     overall: 0,
     dungeon: {
       total: 0,
@@ -212,10 +212,10 @@ export function calculateSenitherWeight(profile) {
   };
 
   // skill
-  for (let skillName in profile.levels) {
-    let data = profile.levels[skillName];
+  for (const skillName in profile.levels) {
+    const data = profile.levels[skillName];
 
-    let sw = calcSkillWeight(skillWeight[skillName], data.unlockableLevelWithProgress, data.xp);
+    const sw = calcSkillWeight(skillWeight[skillName], data.unlockableLevelWithProgress, data.xp);
 
     output.skill.skills[skillName] = sw.weight + sw.weight_overflow;
     output.skill.total += output.skill.skills[skillName];
@@ -226,9 +226,9 @@ export function calculateSenitherWeight(profile) {
 
   if (dungeons?.catacombs?.visited) {
     const xp = dungeons.catacombs.level;
-    let dungeonLevelWithProgress = xp.levelWithProgress;
+    const dungeonLevelWithProgress = xp.levelWithProgress;
 
-    let dungeonsWeight = calcDungeonsWeight("catacombs", dungeonLevelWithProgress, xp.xp);
+    const dungeonsWeight = calcDungeonsWeight("catacombs", dungeonLevelWithProgress, xp.xp);
     output.dungeon.total += dungeonsWeight.weight + dungeonsWeight.weight_overflow ?? 0;
     output.dungeon.dungeons.catacombs = dungeonsWeight;
   }
@@ -239,9 +239,9 @@ export function calculateSenitherWeight(profile) {
       const dungeonClass = dungeons.classes[className];
       const xp = dungeonClass.experience;
 
-      let levelWithProgress = xp.levelWithProgress;
+      const levelWithProgress = xp.levelWithProgress;
 
-      let classWeight = calcDungeonsWeight(className, levelWithProgress, xp.xp);
+      const classWeight = calcDungeonsWeight(className, levelWithProgress, xp.xp);
       output.dungeon.total += classWeight.weight + classWeight.weight_overflow ?? 0;
 
       output.dungeon.classes[className] = classWeight;
@@ -249,9 +249,9 @@ export function calculateSenitherWeight(profile) {
   }
 
   // slayer
-  for (let slayerName in profile.slayers) {
-    let data = profile.slayers[slayerName];
-    let sw = calcSlayerWeight(slayerName, data.level.xp);
+  for (const slayerName in profile.slayers) {
+    const data = profile.slayers[slayerName];
+    const sw = calcSlayerWeight(slayerName, data.level.xp);
 
     output.slayer.slayers[slayerName] = sw.weight + sw.weight_overflow;
     output.slayer.total += output.slayer.slayers[slayerName];

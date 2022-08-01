@@ -34,7 +34,7 @@ export function renderLore(text) {
   /** @type {ColorCode|null} */
   let color = null;
   /** @type {Set<FormatCode>} */
-  let formats = new Set();
+  const formats = new Set();
 
   // @ts-ignore - this regex always matches so we don't need to check for null
   for (let part of text.match(/(§[0-9a-fk-or])*[^§]*/g)) {
