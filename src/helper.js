@@ -572,7 +572,7 @@ export async function updateRank(uuid, db) {
     if (player?.achievementsOneTime != undefined) {
       rank.achievementsOneTime = player.achievementsOneTime;
     }
-    
+
     const claimable = {
       claimed_potato_talisman: "Potato Talisman",
       claimed_potato_basket: "Potato Basket",
