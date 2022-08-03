@@ -333,9 +333,6 @@ declare const calculated: SkyCryptPlayer & {
       };
     };
   };
-  fairy_bonus: {
-    [key in StatName]?: number;
-  };
   fairy_exchanges: number;
   fairy_souls: {
     collected: number;
@@ -495,7 +492,7 @@ declare const calculated: SkyCryptPlayer & {
     };
   };
   missingPets: PetBase[];
-  missingTalismans: {
+  missingAccessories: {
     [key in "missing" | "upgrades"]: DisplayItem[];
   };
   petScore: number;
@@ -515,17 +512,7 @@ declare const calculated: SkyCryptPlayer & {
   purse: number;
   rank_prefix: string;
   skillWeight: number;
-  skill_bonus: {
-    [key: string]: {
-      [key in StatName]: number;
-    };
-  };
   slayerWeight: number;
-  slayer_bonus: {
-    [key in slayerName]: {
-      [key in StatName]: number;
-    };
-  };
   slayer_coins_spent: {
     spider: number;
     total: number;
@@ -577,6 +564,11 @@ declare const calculated: SkyCryptPlayer & {
     };
   };
   weight: number;
+  century_cakes: {
+    stat: string;
+    amount: number;
+  }[];
+  reaper_peppers_eaten: number;
 };
 
 interface SkyCryptRelativeTime {

@@ -24,27 +24,27 @@ const raceFormat = (x) => {
 };
 
 const skillFormat = (xp) => {
-  let levelObj = getLevelByXp(xp);
+  const levelObj = getLevelByXp(xp);
   return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
 };
 
 const skillFormatFarming = (xp) => {
-  let levelObj = getLevelByXp(xp, { skill: "farming" });
+  const levelObj = getLevelByXp(xp, { skill: "farming" });
   return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
 };
 
 const skillFormatEnchanting = (xp) => {
-  let levelObj = getLevelByXp(xp, { skill: "enchanting" });
+  const levelObj = getLevelByXp(xp, { skill: "enchanting" });
   return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
 };
 
 const skillFormatRunecrafting = (xp) => {
-  let levelObj = getLevelByXp(xp, { type: "runecrafting" });
+  const levelObj = getLevelByXp(xp, { type: "runecrafting" });
   return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
 };
 
 const skillFormatDungeoneering = (xp) => {
-  let levelObj = getLevelByXp(xp, { type: "dungeoneering" });
+  const levelObj = getLevelByXp(xp, { type: "dungeoneering" });
   return `Level ${levelObj.level} + ${levelObj.xpCurrent.toLocaleString()} XP`;
 };
 
@@ -59,7 +59,7 @@ const overrides = {
 };
 
 const titleCase = (string) => {
-  let split = string.toLowerCase().split(" ");
+  const split = string.toLowerCase().split(" ");
 
   for (let i = 0; i < split.length; i++) {
     split[i] = split[i].charAt(0).toUpperCase() + split[i].substring(1);

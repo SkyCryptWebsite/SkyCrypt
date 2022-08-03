@@ -34,7 +34,10 @@ export const stats_bonus = {
   skill_taming: {
     1: { pet_luck: 1 },
   },
-  skill_dungeoneering: { 1: { health: 2 } },
+  skill_dungeoneering: {
+    1: { health: 2 },
+    51: { health: 0 },
+  },
   skill_social: {},
   skill_carpentry: {},
   skill_runecrafting: {},
@@ -74,7 +77,6 @@ export const stats_bonus = {
     8: { intelligence: 4 },
     9: { health: 5 },
   },
-  // todo: values below are from AHN, check again upon blaze slayer release
   slayer_blaze: {
     1: { health: 3 },
     2: { strength: 1 },

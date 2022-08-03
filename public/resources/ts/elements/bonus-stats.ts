@@ -6,15 +6,11 @@ import * as constants from "../../../../common/constants.js";
 
 @customElement("bonus-stats")
 export class BonusStats extends LitElement {
-  @property({ attribute: "data" })
-  data?: string;
+  @property({ attribute: false })
+  data = {};
 
   protected render(): TemplateResult | undefined {
-    if (!this.data) {
-      return;
-    }
-    const data = JSON.parse(atob(this.data));
-    const stats = this.getStats(data);
+    const stats = this.getStats(this.data);
 
     return html`
       <p>
