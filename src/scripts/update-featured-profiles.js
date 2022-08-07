@@ -5,13 +5,6 @@ import * as helper from "../helper.js";
 
 const featuredProfiles = [
   {
-    // Technoblade
-    uuid: "b876ec32e396476ba1158438d83c67d4",
-    type: "TECHNOBLADE",
-    message: "<i>Long live the Potato King!</i>",
-  },
-  /* Removed until July 4th, 2022
-  {
     // metalcupcake5
     uuid: "b44d2d5272dc49c28185b2d6a158d80a",
     type: "MAINTAINER",
@@ -59,7 +52,12 @@ const featuredProfiles = [
     type: "CONTRIBUTOR",
     message: "/visit dukioooo",
   },
-  */
+  {
+    // Technoblade
+    uuid: "b876ec32e396476ba1158438d83c67d4",
+    type: "TECHNOBLADE",
+    message: "<i>Long live the Potato King!</i>",
+  },
 ];
 
 {
