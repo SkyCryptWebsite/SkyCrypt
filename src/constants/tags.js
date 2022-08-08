@@ -1,4 +1,4 @@
-export const itemTags = {
+export const ITEM_TAGS = {
   SUPER_COMPACTOR_3000: "sc3000 sc3k",
   ENCHANTED_LAPIS_LAZULI: "elapis",
   ENCHANTED_IRON_INGOT: "eiron",

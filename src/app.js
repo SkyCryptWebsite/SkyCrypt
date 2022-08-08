@@ -298,7 +298,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       },
       (err, html) => {
         if (err) console.error(err);
-        else console.debug(`${debugId}: page succesfully rendered. (${Date.now() - renderStart}ms)`);
+        else console.debug(`${debugId}: page successfully rendered. (${Date.now() - renderStart}ms)`);
 
         res.set("X-Debug-ID", `${debugId}`);
         res.set("X-Process-Time", `${Date.now() - timeStarted}`);
@@ -308,7 +308,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
   } catch (e) {
     const favorites = parseFavorites(req.cookies.favorite);
 
-    console.debug(`${debugId}: an error has occured.`);
+    console.debug(`${debugId}: an error has occurred.`);
     console.error(e);
 
     res.render(
@@ -318,7 +318,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
         error: e,
         player: playerUsername,
         extra: await getExtra("index", favorites, cacheOnly),
-        promotion: weightedRandom(constants.promotions),
+        promotion: weightedRandom(constants.PROMOTIONS),
         fileHashes,
         fileNameMap,
         helper,
@@ -661,7 +661,7 @@ app.all("/", async (req, res, next) => {
       error: null,
       player: null,
       extra: await getExtra("index", favorites, cacheOnly),
-      promotion: weightedRandom(constants.promotions),
+      promotion: weightedRandom(constants.PROMOTIONS),
       fileHashes,
       fileNameMap,
       helper,

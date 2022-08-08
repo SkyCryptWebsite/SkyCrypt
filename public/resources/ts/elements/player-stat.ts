@@ -1,7 +1,7 @@
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import * as helper from "../../../../common/helper.js";
-import * as constants from "../../../../common/constants.js";
+import { STATS_DATA } from "../../../../common/constants.js";
 
 @customElement("player-stat")
 export class PlayerStat extends LitElement {
@@ -23,9 +23,9 @@ export class PlayerStat extends LitElement {
     }
 
     const value = Math.round(+this.value);
-    const icon = constants.statsData[this.stat].symbol;
-    const name = constants.statsData[this.stat].nameShort;
-    const suffix = constants.statsData[this.stat].suffix;
+    const icon = STATS_DATA[this.stat].symbol;
+    const name = STATS_DATA[this.stat].nameShort;
+    const suffix = STATS_DATA[this.stat].suffix;
 
     const tooltip = this.getTooltip(this.data, name, suffix, value, this.special);
 

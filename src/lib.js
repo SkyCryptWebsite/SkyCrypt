@@ -439,7 +439,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 
     // Set custom texture for colored potions
     if (item.id == 373) {
-      const color = constants.potionColors[item.Damage % 16];
+      const color = constants.POTION_COLORS[item.Damage % 16];
 
       const type = item.Damage & 16384 ? "splash" : "normal";
 
@@ -1094,7 +1094,7 @@ export const getItems = async (
 
   const itemSorter = (a, b) => {
     if (a.rarity !== b.rarity) {
-      return constants.rarities.indexOf(b.rarity) - constants.rarities.indexOf(a.rarity);
+      return constants.RARITIES.indexOf(b.rarity) - constants.RARITIES.indexOf(a.rarity);
     }
 
     if (b.inBackpack && !a.inBackpack) {
@@ -1249,7 +1249,7 @@ export const getItems = async (
     }
 
     output.armor_set = output_name;
-    output.armor_set_rarity = constants.rarities[Math.max(...armor.map((a) => helper.rarityNameToInt(a.rarity)))];
+    output.armor_set_rarity = constants.RARITIES[Math.max(...armor.map((a) => helper.rarityNameToInt(a.rarity)))];
   }
 
   console.debug(`${options.debugId}: getItems returned. (${Date.now() - timeStarted}ms)`);
@@ -1493,7 +1493,7 @@ export async function getStats(
   output.missingPets = await getMissingPets(output.pets, profile.game_mode);
   output.petScore = await getPetScore(output.pets);
 
-  const petScoreRequired = Object.keys(constants.pet_rewards).sort((a, b) => parseInt(b) - parseInt(a));
+  const petScoreRequired = Object.keys(constants.PET_REWARDS).sort((a, b) => parseInt(b) - parseInt(a));
 
   output.pet_bonus = {};
 
@@ -1503,7 +1503,7 @@ export async function getStats(
       continue;
     }
 
-    output.pet_score_bonus = Object.assign({}, constants.pet_rewards[score]);
+    output.pet_score_bonus = Object.assign({}, constants.PET_REWARDS[score]);
 
     break;
   }
@@ -2211,13 +2211,13 @@ export async function getPets(profile) {
     // Rarity upgrades
     if (pet.heldItem == "PET_ITEM_TIER_BOOST" && !pet.ignoresTierBoost) {
       pet.rarity =
-        constants.rarities[
-          Math.min(constants.rarities.indexOf(petData.maxTier), constants.rarities.indexOf(pet.rarity) + 1)
+        constants.RARITIES[
+          Math.min(constants.RARITIES.indexOf(petData.maxTier), constants.RARITIES.indexOf(pet.rarity) + 1)
         ];
     }
 
     if (pet.heldItem == "PET_ITEM_VAMPIRE_FANG" || pet.heldItem == "PET_ITEM_TOY_JERRY") {
-      if (constants.rarities.indexOf(pet.rarity) === constants.rarities.indexOf(petData.maxTier) - 1) {
+      if (constants.RARITIES.indexOf(pet.rarity) === constants.RARITIES.indexOf(petData.maxTier) - 1) {
         pet.rarity = petData.maxTier;
       }
     }
@@ -2268,7 +2268,7 @@ export async function getPets(profile) {
         ? petData.name[pet.rarity] ?? petData.name.default
         : helper.titleCase(pet.type.replaceAll("_", " "));
 
-    const rarity = constants.rarities.indexOf(pet.rarity);
+    const rarity = constants.RARITIES.indexOf(pet.rarity);
 
     const searchName = pet.type in constants.PET_STATS ? pet.type : "???";
     const petInstance = new constants.PET_STATS[searchName](rarity, pet.level.level, pet.extra);
@@ -2318,7 +2318,7 @@ export async function getPets(profile) {
       if (!heldItemObj) {
         heldItemObj = constants.PET_ITEMS[heldItem];
       }
-      lore.push("", `§6Held Item: §${constants.rarityColors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
+      lore.push("", `§6Held Item: §${constants.RARITY_COLORS[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
 
       if (heldItem in constants.PET_ITEMS) {
         lore.push(constants.PET_ITEMS[heldItem].description);
@@ -2421,7 +2421,7 @@ export async function getPets(profile) {
           }
         }
       } else {
-        return constants.rarities.indexOf(a.rarity) < constants.rarities.indexOf(b.rarity) ? 1 : -1;
+        return constants.RARITIES.indexOf(a.rarity) < constants.RARITIES.indexOf(b.rarity) ? 1 : -1;
       }
     }
 

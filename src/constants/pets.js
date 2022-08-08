@@ -1,4 +1,4 @@
-import { symbols } from "../../common/constants.js";
+import { SYMBOLS } from "../../common/constants.js";
 
 export const PET_RARITY_OFFSET = {
   common: 0,
@@ -552,7 +552,7 @@ export const PET_ITEMS = {
   PET_ITEM_BIG_TEETH_COMMON: {
     name: "Big Teeth",
     tier: "COMMON",
-    description: `§7Increases §9${symbols.crit_chance} Crit Chance §7by §a5`,
+    description: `§7Increases §9${SYMBOLS.crit_chance} Crit Chance §7by §a5`,
     stats: {
       crit_chance: 5,
     },
@@ -560,7 +560,7 @@ export const PET_ITEMS = {
   PET_ITEM_IRON_CLAWS_COMMON: {
     name: "Iron Claws",
     tier: "COMMON",
-    description: `§7Increases the pet's §9${symbols.crit_damage} Crit Damage §7by §a40% §7and §9${symbols.crit_chance} Crit Chance §7by §a40%`,
+    description: `§7Increases the pet's §9${SYMBOLS.crit_damage} Crit Damage §7by §a40% §7and §9${SYMBOLS.crit_chance} Crit Chance §7by §a40%`,
     multStats: {
       crit_chance: 1.4,
       crit_damage: 1.4,
@@ -569,7 +569,7 @@ export const PET_ITEMS = {
   PET_ITEM_SHARPENED_CLAWS_UNCOMMON: {
     name: "Sharpened Claws",
     tier: "UNCOMMON",
-    description: `§7Increases §9${symbols.crit_damage} Crit Damage §7by §a15`,
+    description: `§7Increases §9${SYMBOLS.crit_damage} Crit Damage §7by §a15`,
     stats: {
       crit_damage: 15,
     },
@@ -577,7 +577,7 @@ export const PET_ITEMS = {
   PET_ITEM_HARDENED_SCALES_UNCOMMON: {
     name: "Hardened Scales",
     tier: "UNCOMMON",
-    description: `§7Increases §a${symbols.defense} Defense §7by §a25`,
+    description: `§7Increases §a${SYMBOLS.defense} Defense §7by §a25`,
     stats: {
       defense: 25,
     },
@@ -590,7 +590,7 @@ export const PET_ITEMS = {
   PET_ITEM_LUCKY_CLOVER: {
     name: "Lucky Clover",
     tier: "EPIC",
-    description: `§7Increases §b${symbols.magic_find} Magic Find §7by §a7`,
+    description: `§7Increases §b${SYMBOLS.magic_find} Magic Find §7by §a7`,
     stats: {
       magic_find: 7,
     },
@@ -598,7 +598,7 @@ export const PET_ITEMS = {
   PET_ITEM_TEXTBOOK: {
     name: "Textbook",
     tier: "LEGENDARY",
-    description: `§7Increases the pet's §b${symbols.intelligence} Intelligence §7by §a100%`,
+    description: `§7Increases the pet's §b${SYMBOLS.intelligence} Intelligence §7by §a100%`,
     multStats: {
       intelligence: 2,
     },
@@ -722,7 +722,7 @@ export const PET_ITEMS = {
   REINFORCED_SCALES: {
     name: "Reinforced Scales",
     tier: "RARE",
-    description: `§7Increases §a${symbols.defense} Defense §7by §a40`,
+    description: `§7Increases §a${SYMBOLS.defense} Defense §7by §a40`,
     stats: {
       defense: 40,
     },
@@ -730,7 +730,7 @@ export const PET_ITEMS = {
   GOLD_CLAWS: {
     name: "Gold Claws",
     tier: "UNCOMMON",
-    description: `§7Increases the pet's §9${symbols.crit_damage} Crit Damage §7by §a50% §7and §9${symbols.crit_chance} Crit Chance §7by §a50%`,
+    description: `§7Increases the pet's §9${SYMBOLS.crit_damage} Crit Damage §7by §a50% §7and §9${SYMBOLS.crit_chance} Crit Chance §7by §a50%`,
     multStats: {
       crit_chance: 1.5,
       crit_damage: 1.5,
@@ -744,7 +744,7 @@ export const PET_ITEMS = {
   BIGGER_TEETH: {
     name: "Bigger Teeth",
     tier: "UNCOMMON",
-    description: `§7Increases §9${symbols.crit_chance} Crit Chance §7by §a10`,
+    description: `§7Increases §9${SYMBOLS.crit_chance} Crit Chance §7by §a10`,
     stats: {
       crit_chance: 10,
     },
@@ -752,7 +752,7 @@ export const PET_ITEMS = {
   SERRATED_CLAWS: {
     name: "Serrated Claws",
     tier: "RARE",
-    description: `§7Increases §9${symbols.crit_damage} Crit Damage §7by §a25`,
+    description: `§7Increases §9${SYMBOLS.crit_damage} Crit Damage §7by §a25`,
     stats: {
       crit_damage: 25,
     },
@@ -760,7 +760,7 @@ export const PET_ITEMS = {
   WASHED_UP_SOUVENIR: {
     name: "Washed-up Souvenir",
     tier: "LEGENDARY",
-    description: `§7Increases §3${symbols.sea_creature_chance} Sea Creature Chance §7by §a5`,
+    description: `§7Increases §3${SYMBOLS.sea_creature_chance} Sea Creature Chance §7by §a5`,
     stats: {
       sea_creature_chance: 5,
     },
@@ -768,7 +768,7 @@ export const PET_ITEMS = {
   ANTIQUE_REMEDIES: {
     name: "Antique Remedies",
     tier: "EPIC",
-    description: `§7Increases the pet's §c${symbols.strength} Strength §7by §a80%`,
+    description: `§7Increases the pet's §c${SYMBOLS.strength} Strength §7by §a80%`,
     multStats: {
       strength: 1.8,
     },
@@ -776,7 +776,7 @@ export const PET_ITEMS = {
   CROCHET_TIGER_PLUSHIE: {
     name: "Crochet Tiger Plushie",
     tier: "EPIC",
-    description: `§7Increases §e${symbols.bonus_attack_speed} Bonus Attack Speed §7by §a35`,
+    description: `§7Increases §e${SYMBOLS.bonus_attack_speed} Bonus Attack Speed §7by §a35`,
     stats: {
       bonus_attack_speed: 35,
     },
@@ -794,7 +794,7 @@ export const PET_ITEMS = {
   PET_ITEM_SPOOKY_CUPCAKE: {
     name: "Spooky Cupcake",
     tier: "UNCOMMON",
-    description: `§7Increases §c${symbols.strength} Strength §7by §a30 §7and §f${symbols.speed} Speed §7by §a20`,
+    description: `§7Increases §c${SYMBOLS.strength} Strength §7by §a30 §7and §f${SYMBOLS.speed} Speed §7by §a20`,
     stats: {
       strength: 30,
       speed: 20,
@@ -814,7 +814,7 @@ export const PET_ITEMS = {
   REAPER_GEM: {
     name: "Reaper Gem",
     tier: "LEGENDARY",
-    description: `§7Gain §c8${symbols.ferocity} Ferocity §7for 5s on kill`,
+    description: `§7Gain §c8${SYMBOLS.ferocity} Ferocity §7for 5s on kill`,
   },
   PET_ITEM_FLYING_PIG: {
     name: "Flying Pig",
@@ -824,7 +824,7 @@ export const PET_ITEMS = {
   PET_ITEM_QUICK_CLAW: {
     name: "Quick Claw",
     tier: "RARE",
-    description: `§7Every 2 pet level you gain §6+1 ${symbols.mining_speed} Mining Speed §7and §6+1 §6${symbols.mining_fortune} Mining Fortune§7.`,
+    description: `§7Every 2 pet level you gain §6+1 ${SYMBOLS.mining_speed} Mining Speed §7and §6+1 §6${SYMBOLS.mining_fortune} Mining Fortune§7.`,
     statsPerLevel: {
       mining_speed: 0.5,
       mining_fortune: 0.5,

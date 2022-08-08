@@ -1,4 +1,4 @@
-export const maxEnchants = new Set([
+export const MAX_ENCHANTS = new Set([
   "Angler VI",
   "Aqua Affinity I",
   "Bane of Arthropods VII",

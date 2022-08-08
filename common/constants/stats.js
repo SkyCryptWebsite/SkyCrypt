@@ -9,7 +9,7 @@
  *   color: string
  * }
  */
-export const statsData = {
+export const STATS_DATA = {
   health: {
     name: "Health",
     nameLore: "Health",
@@ -183,15 +183,15 @@ export const statsData = {
   },
 };
 
-const _symbols = {
+const symbols = {
   powder: "᠅",
   soulflow: "⸎",
   dungeon_upgrade: "⚚",
   dye: "✿",
 };
-for (const stat in statsData) {
-  _symbols[stat] = statsData[stat].symbol;
+for (const stat in STATS_DATA) {
+  symbols[stat] = STATS_DATA[stat].symbol;
 }
-export const symbols = _symbols;
+export const SYMBOLS = symbols;
 
 // todo: grab these constants from src/constants/misc: base_stats, stat_template

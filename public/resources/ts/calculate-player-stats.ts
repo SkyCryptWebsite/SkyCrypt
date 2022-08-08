@@ -1,5 +1,5 @@
 import * as helper from "../../../common/helper.js";
-import * as constants from "../../../common/constants.js";
+import { STATS_BONUS } from "../../../common/constants.js";
 
 export function getPlayerStats() {
   const stats: PlayerStats = {
@@ -168,7 +168,7 @@ export function getPlayerStats() {
 
 function getBonusStat(level: number, key: BonusType, max: number) {
   const bonus: ItemStats = {};
-  const objOfLevelBonuses: StatBonusType = constants.stats_bonus[key];
+  const objOfLevelBonuses: StatBonusType = STATS_BONUS[key];
 
   if (!objOfLevelBonuses) {
     return bonus;

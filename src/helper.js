@@ -11,7 +11,22 @@ export { renderLore, formatNumber } from "../common/formatting.js";
 export * from "../common/helper.js";
 import { titleCase } from "../common/helper.js";
 
-import * as constants from "./constants.js";
+import {
+  GUILD_XP,
+  COLOR_NAMES,
+  RANKS,
+  GEMSTONES,
+  STATS_DATA,
+  RARITIES,
+  RARITY_COLORS,
+  HOTM,
+  TYPE_TO_CATEGORIES,
+  PET_DATA,
+  PET_RARITY_OFFSET,
+  PET_LEVELS,
+  ITEM_ANIMATIONS,
+} from "./constants.js";
+
 import credentials from "./credentials.js";
 
 const hypixel = axios.create({
@@ -349,7 +364,7 @@ export function getGuildLevel(xp) {
   let level = 0;
 
   while (true) {
-    const xpNeeded = constants.GUILD_XP[Math.min(constants.GUILD_XP.length - 1, level)];
+    const xpNeeded = GUILD_XP[Math.min(GUILD_XP.length - 1, level)];
 
     if (xp > xpNeeded) {
       xp -= xpNeeded;
@@ -484,12 +499,12 @@ export function parseRank(player) {
     ? player.packageRank
     : "NONE";
 
-  if (constants.RANKS[rankName]) {
-    const { tag, color, plus, plusColor } = constants.RANKS[rankName];
+  if (RANKS[rankName]) {
+    const { tag, color, plus, plusColor } = RANKS[rankName];
     output.rankText = tag;
 
     if (rankName == "SUPERSTAR") {
-      output.rankColor = constants.COLOR_NAMES[player.monthlyRankColor] ?? color;
+      output.rankColor = COLOR_NAMES[player.monthlyRankColor] ?? color;
     } else {
       output.rankColor = color;
     }
@@ -498,7 +513,7 @@ export function parseRank(player) {
       output.plusText = plus;
 
       if (rankName == "SUPERSTAR" || rankName == "MVP_PLUS") {
-        output.plusColor = constants.COLOR_NAMES[player.rankPlusColor] ?? plusColor;
+        output.plusColor = COLOR_NAMES[player.rankPlusColor] ?? plusColor;
       } else {
         output.plusColor = plusColor;
       }
@@ -692,7 +707,7 @@ export function parseItemGems(gems, rarity) {
   /** @type {Gem[]} */
 
   const slots = {
-    normal: Object.keys(constants.GEMSTONES),
+    normal: Object.keys(GEMSTONES),
     special: ["UNIVERSAL", "COMBAT", "OFFENSIVE", "DEFENSIVE", "MINING"],
     ignore: ["unlocked_slots"],
   };
@@ -747,11 +762,11 @@ export function generateGemLore(type, tier, rarity) {
   const stats = [];
 
   // Gem color
-  const color = `§${constants.GEMSTONES[type.toUpperCase()].color}`;
+  const color = `§${GEMSTONES[type.toUpperCase()].color}`;
 
   // Gem stats
   if (rarity) {
-    const gemstone_stats = constants.GEMSTONES[type.toUpperCase()]?.stats?.[tier.toUpperCase()];
+    const gemstone_stats = GEMSTONES[type.toUpperCase()]?.stats?.[tier.toUpperCase()];
     if (gemstone_stats) {
       Object.keys(gemstone_stats).forEach((stat) => {
         let stat_value = gemstone_stats[stat][rarityNameToInt(rarity)];
@@ -763,9 +778,7 @@ export function generateGemLore(type, tier, rarity) {
         }
 
         if (stat_value) {
-          stats.push(
-            ["§", constants.statsData[stat].color, "+", stat_value, " ", constants.statsData[stat].symbol].join("")
-          );
+          stats.push(["§", STATS_DATA[stat].color, "+", stat_value, " ", STATS_DATA[stat].symbol].join(""));
         } else {
           stats.push("§c§oMISSING VALUE§r");
         }
@@ -784,7 +797,7 @@ export function generateGemLore(type, tier, rarity) {
 }
 
 export function rarityNameToInt(string) {
-  return constants.rarities.indexOf(string.toLowerCase());
+  return RARITIES.indexOf(string.toLowerCase());
 }
 
 /**
@@ -842,7 +855,7 @@ export function generateItem(data) {
   if (data.display_name && !data.tag.display.Name) {
     data.tag = data.tag ?? {};
     data.tag.display = data.tag.display ?? {};
-    const rarityColor = data.rarity ? `§${constants.rarityColors[data.rarity ?? "common"]}` : "";
+    const rarityColor = data.rarity ? `§${RARITY_COLORS[data.rarity ?? "common"]}` : "";
     data.tag.display.Name = `${rarityColor}${data.display_name}`;
   }
 
@@ -859,11 +872,11 @@ export function calcHotmTokens(hotmTier, potmTier) {
   let tokens = 0;
 
   for (let tier = 1; tier <= hotmTier; tier++) {
-    tokens += constants.HOTM.rewards.hotm[tier]?.token_of_the_mountain || 0;
+    tokens += HOTM.rewards.hotm[tier]?.token_of_the_mountain || 0;
   }
 
   for (let tier = 1; tier <= potmTier; tier++) {
-    tokens += constants.HOTM.rewards.potm[tier]?.token_of_the_mountain || 0;
+    tokens += HOTM.rewards.potm[tier]?.token_of_the_mountain || 0;
   }
 
   return tokens;
@@ -902,9 +915,9 @@ export function convertHMS(seconds, format = "clock", alwaysTwoDigits = false) {
 
 export function parseItemTypeFromLore(lore) {
   const regex = new RegExp(
-    `^(?<recomb>a )?(?<shiny>SHINY )?(?:(?<rarity>${constants.rarities
-      .map((x) => x.replaceAll("_", " ").toUpperCase())
-      .join("|")}) ?)(?<dungeon>DUNGEON )?(?<type>[A-Z ]+)?(?<recomb2>a)?$`
+    `^(?<recomb>a )?(?<shiny>SHINY )?(?:(?<rarity>${RARITIES.map((x) => x.replaceAll("_", " ").toUpperCase()).join(
+      "|"
+    )}) ?)(?<dungeon>DUNGEON )?(?<type>[A-Z ]+)?(?<recomb2>a)?$`
   );
 
   // Executing the regex on every lore line
@@ -975,17 +988,13 @@ export function getCacheFilePath(dirPath, type, name) {
 }
 
 function getCategoriesFromType(type) {
-  if (type in constants.TYPE_TO_CATEGORIES) {
-    return constants.TYPE_TO_CATEGORIES[type];
-  }
-
-  return ["unknown"];
+  return TYPE_TO_CATEGORIES[type] ?? ["unknown"];
 }
 
 export function generateDebugPets(type = "ALL") {
   const pets = [];
 
-  for (const [petType, petData] of Object.entries(constants.PET_DATA)) {
+  for (const [petType, petData] of Object.entries(PET_DATA)) {
     if (type !== "ALL" && petType !== type) {
       continue;
     }
@@ -1036,13 +1045,13 @@ export function generateDebugPets(type = "ALL") {
  * @description takes rarity and level and returns the required pet exp to reach the level
  */
 export function getPetExp(rarity, level) {
-  const rarityOffset = constants.PET_RARITY_OFFSET[rarity.toLowerCase()];
+  const rarityOffset = PET_RARITY_OFFSET[rarity.toLowerCase()];
 
-  return constants.PET_LEVELS.slice(rarityOffset, rarityOffset + level - 1).reduce((prev, curr) => prev + curr, 0);
+  return PET_LEVELS.slice(rarityOffset, rarityOffset + level - 1).reduce((prev, curr) => prev + curr, 0);
 }
 
 export function getAnimatedTexture(item) {
-  const results = constants.ITEM_ANIMATIONS.filter((x) => x.id === getId(item));
+  const results = ITEM_ANIMATIONS.filter((x) => x.id === getId(item));
 
   if (results.length === 0) {
     return false;
