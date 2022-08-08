@@ -1,4 +1,4 @@
-export const leveling_xp = {
+export const LEVELING_XP = {
   1: 50,
   2: 125,
   3: 200,
@@ -61,7 +61,7 @@ export const leveling_xp = {
   60: 7000000,
 };
 
-export const default_skill_caps = {
+export const DEFAULT_SKILL_CAPS = {
   farming: 50,
   mining: 60,
   combat: 60,
@@ -75,11 +75,11 @@ export const default_skill_caps = {
   social: 25,
 };
 
-export const maxed_skill_caps = {
+export const MAXED_SKILL_CAPS = {
   farming: 60,
 };
 
-export const runecrafting_xp = {
+export const RUNECRAFTING_XP = {
   1: 50,
   2: 100,
   3: 125,
@@ -107,7 +107,7 @@ export const runecrafting_xp = {
   25: 19050,
 };
 
-export const social_xp = {
+export const SOCIAL_XP = {
   1: 50,
   2: 100,
   3: 150,
@@ -135,7 +135,7 @@ export const social_xp = {
   25: 50000,
 };
 
-export const dungeoneering_xp = {
+export const DUNGEONEERING_XP = {
   1: 50,
   2: 75,
   3: 110,
@@ -188,12 +188,12 @@ export const dungeoneering_xp = {
   50: 116250000,
 };
 
-export const guild_xp = [
+export const GUILD_XP = [
   100000, 150000, 250000, 500000, 750000, 1000000, 1250000, 1500000, 2000000, 2500000, 2500000, 2500000, 2500000,
   2500000, 3000000,
 ];
 
-export const slayer_xp = {
+export const SLAYER_XP = {
   zombie: {
     1: 5,
     2: 15,
@@ -251,7 +251,7 @@ export const slayer_xp = {
   },
 };
 
-export const hotm_xp = {
+export const HOTM_XP = {
   1: 0,
   2: 3000,
   3: 9000,

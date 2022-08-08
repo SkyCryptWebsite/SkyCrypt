@@ -1,7 +1,7 @@
 import { symbols } from "../../common/constants.js";
 import { round, floor, ceil, convertHMS, titleCase } from "../helper.js";
 
-const upgrade_types = {
+const UPGRADE_TYPES = {
   mithril_powder: {
     name: "Mithril Powder",
     color: "2",
@@ -248,7 +248,7 @@ class HotM {
   }
 
   get position7x9() {
-    return 9 * (hotm.tiers - this.tier) + 1;
+    return 9 * (HOTM.tiers - this.tier) + 1;
   }
 }
 
@@ -274,7 +274,7 @@ class Node {
   }
 
   get position7x9() {
-    return this.position + 1 + (ceil(this.position / hotm.tiers) - 1) * 2;
+    return this.position + 1 + (ceil(this.position / HOTM.tiers) - 1) * 2;
   }
 
   get itemData() {
@@ -334,8 +334,8 @@ class Node {
       output.push(
         "",
         "§7Cost",
-        `§${upgrade_types[this.upgrade_type].color}${this.upgradeCost.toLocaleString()} ${
-          upgrade_types[this.upgrade_type].name
+        `§${UPGRADE_TYPES[this.upgrade_type].color}${this.upgradeCost.toLocaleString()} ${
+          UPGRADE_TYPES[this.upgrade_type].name
         }`
       );
     }
@@ -350,7 +350,7 @@ class Node {
       output.push("", "§7Cost");
       for (const [upgradeId, upgradeQty] of Object.entries(this.unlockCost)) {
         output.push(
-          `§${upgrade_types[upgradeId].color}${upgradeQty > 0 ? `${upgradeQty} ` : ""}${upgrade_types[upgradeId].name}`
+          `§${UPGRADE_TYPES[upgradeId].color}${upgradeQty > 0 ? `${upgradeQty} ` : ""}${UPGRADE_TYPES[upgradeId].name}`
         );
       }
     }
@@ -1193,7 +1193,7 @@ class MiningSpeed extends Node {
 
 class HotmItem {
   get position7x9() {
-    return 9 * (hotm.tiers - this.position) + 9;
+    return 9 * (HOTM.tiers - this.position) + 9;
   }
 }
 
@@ -1413,7 +1413,7 @@ for (const nodeClass of Object.values(nodeClasses)) {
   }
 }
 
-export const hotm = {
+export const HOTM = {
   tiers: Object.keys(rewards.hotm).length,
   rewards: rewards,
   names: nodeNames,
@@ -1423,7 +1423,7 @@ export const hotm = {
   powder_for_max_nodes: powderForMaxNodes,
 };
 
-export const precursor_parts = {
+export const PRECURSOR_PARTS = {
   ELECTRON_TRANSMITTER: "Electron Transmitter",
   FTX_3070: "FTX 3070",
   ROBOTRON_REFLECTOR: "Robotron Reflector",

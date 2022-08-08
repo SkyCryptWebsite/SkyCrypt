@@ -1,4 +1,4 @@
-export const accessory_upgrades = {
+export const ACCESSORY_UPGRADES = {
   WOLF_TALISMAN: ["WOLF_RING"],
   RING_POTION_AFFINITY: ["ARTIFACT_POTION_AFFINITY"],
   POTION_AFFINITY_TALISMAN: ["RING_POTION_AFFINITY", "ARTIFACT_POTION_AFFINITY"],
@@ -114,7 +114,7 @@ export const accessory_upgrades = {
   BURSTSTOPPER_TALISMAN: ["BURSTSTOPPER_ARTIFACT"],
 };
 
-export const accessory_duplicates = {
+export const ACCESSORY_DUPLICATES = {
   WEDDING_RING_0: ["WEDDING_RING_1"],
   WEDDING_RING_2: ["WEDDING_RING_3"],
   WEDDING_RING_4: ["WEDDING_RING_5", "WEDDING_RING_6"],
@@ -144,7 +144,7 @@ export const accessory_duplicates = {
   ],
 };
 
-export const accessories = {
+export const ACCESSORIES = {
   WEDDING_RING_0: {
     name: "Shiny Yellow Rock",
     rarity: "common",
@@ -740,17 +740,17 @@ export const accessories = {
 };
 
 // Getting Unique Accessories Count
-const unique_accessories = { ...accessories };
+const uniqueAccessories = { ...ACCESSORIES };
 
-for (const upgrade in accessory_upgrades) {
-  if (upgrade in unique_accessories) {
-    delete unique_accessories[upgrade];
+for (const upgrade in ACCESSORY_UPGRADES) {
+  if (upgrade in uniqueAccessories) {
+    delete uniqueAccessories[upgrade];
   }
 }
 
-export const unique_accessories_count = Object.keys(unique_accessories).length;
+export const UNIQUE_ACCESSORIES_COUNT = Object.keys(uniqueAccessories).length;
 
-export const magical_power = {
+export const MAGICAL_POWER = {
   common: 3,
   uncommon: 5,
   rare: 8,

@@ -1,6 +1,6 @@
 import { symbols } from "../../common/constants.js";
 
-export const pet_rarity_offset = {
+export const PET_RARITY_OFFSET = {
   common: 0,
   uncommon: 6,
   rare: 11,
@@ -9,7 +9,7 @@ export const pet_rarity_offset = {
   mythic: 20,
 };
 
-export const pet_levels = [
+export const PET_LEVELS = [
   100, 110, 120, 130, 145, 160, 175, 190, 210, 230, 250, 275, 300, 330, 360, 400, 440, 490, 540, 600, 660, 730, 800,
   880, 960, 1050, 1150, 1260, 1380, 1510, 1650, 1800, 1960, 2130, 2310, 2500, 2700, 2920, 3160, 3420, 3700, 4000, 4350,
   4750, 5200, 5700, 6300, 7000, 7800, 8700, 9700, 10800, 12000, 13300, 14700, 16200, 17800, 19500, 21300, 23200, 25200,
@@ -45,7 +45,7 @@ export const pet_levels = [
     typeGroup?: string (default: equal to PET_TYPE),
   }
  */
-export const pet_data = {
+export const PET_DATA = {
   ARMADILLO: {
     head: "/head/c1eb6df4736ae24dd12a3d00f91e6e3aa7ade6bbefb0978afef2f0f92461018f",
     type: "mining",
@@ -523,7 +523,7 @@ export const pet_data = {
   },
 };
 
-export const pet_value = {
+export const PET_VALUE = {
   common: 1,
   uncommon: 2,
   rare: 3,
@@ -543,7 +543,7 @@ export const pet_value = {
     multAllStats?: {stat: value},
   }
 */
-export const pet_items = {
+export const PET_ITEMS = {
   PET_ITEM_ALL_SKILLS_BOOST_COMMON: {
     name: "All Skills Exp Boost",
     tier: "COMMON",

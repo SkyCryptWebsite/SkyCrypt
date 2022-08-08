@@ -3,7 +3,7 @@ import path from "path";
 import { db } from "../mongo.js";
 import * as helper from "../helper.js";
 
-const featuredProfiles = [
+const FEATURED_PROFILES = [
   {
     // metalcupcake5
     uuid: "b44d2d5272dc49c28185b2d6a158d80a",
@@ -62,15 +62,15 @@ const featuredProfiles = [
 
 {
   await Promise.all(
-    featuredProfiles.map(async (featuredProfile, index) => {
+    FEATURED_PROFILES.map(async (featuredProfile, index) => {
       const profile = await helper.resolveUsernameOrUuid(featuredProfile.uuid, db);
 
-      featuredProfiles[index].username = profile.display_name;
-      featuredProfiles[index].emoji = profile?.emoji;
+      FEATURED_PROFILES[index].username = profile.display_name;
+      FEATURED_PROFILES[index].emoji = profile?.emoji;
     })
   );
 
-  await fs.writeJson(path.resolve("./public/resources/js/featured-profiles.json"), featuredProfiles);
+  await fs.writeJson(path.resolve("./public/resources/js/featured-profiles.json"), FEATURED_PROFILES);
 
   console.log("Featured profiles updated!");
 }

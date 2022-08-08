@@ -46,7 +46,7 @@
 ..######..##....##.####.##....##..######.
 */
 
-const skins = [
+const SKINS = [
   {
     id: "PET_SKIN_ENDERMAN",
     name: "Spooky",
@@ -545,7 +545,7 @@ const skins = [
 .##.....##.##....##.####.##.....##.##.....##....##....####..#######..##....##..######.
 */
 
-const animations = [
+export const ITEM_ANIMATIONS = [
   {
     id: "PET_SKIN_TIGER_TWILIGHT",
     texture: "/resources/img/items/pet_skin_tiger_twilight.png",
@@ -1215,44 +1215,43 @@ const animations = [
 ..######...########.##....##....########.##.....##.##.........#######..##.....##....##.....######.
 */
 
-const gen_pet_skins = {};
-const gen_item_skins = {};
-const gen_animated_items = {};
+const petSkins = {};
+const itemSkins = {};
+const animatedItems = {};
 
-skins.forEach((skin) => {
+SKINS.forEach((skin) => {
   if (skin.id.startsWith("PET_SKIN_")) {
-    gen_pet_skins[skin.id] = {
+    petSkins[skin.id] = {
       name: skin.name,
       texture: skin.texture,
       release: skin.release,
     };
   } else {
-    gen_item_skins[skin.id] = {
+    itemSkins[skin.id] = {
       name: skin.name,
       texture: skin.texture,
     };
   }
 });
 
-animations.forEach((anim) => {
+ITEM_ANIMATIONS.forEach((anim) => {
   // Update texture in pet_skins
-  if (gen_pet_skins[anim.id]) {
-    gen_pet_skins[anim.id].texture = anim.texture;
+  if (petSkins[anim.id]) {
+    petSkins[anim.id].texture = anim.texture;
   }
 
   // Update texture in item_skins
-  if (gen_item_skins[anim.id]) {
-    gen_item_skins[anim.id].texture = anim.texture;
+  if (itemSkins[anim.id]) {
+    itemSkins[anim.id].texture = anim.texture;
   }
 
   // Push the item in animated_items (skins too!)
-  if (!gen_animated_items[anim.id]) {
-    gen_animated_items[anim.id] = {};
+  if (!animatedItems[anim.id]) {
+    animatedItems[anim.id] = {};
   }
-  gen_animated_items[anim.id].texture = anim.texture;
+  animatedItems[anim.id].texture = anim.texture;
 });
 
-export const pet_skins = gen_pet_skins;
-export const item_skins = gen_item_skins;
-export const animated_items = gen_animated_items;
-export const animated_items_arr = animations;
+export const PET_SKINS = petSkins;
+export const ITEM_SKINS = itemSkins;
+export const ANIMATED_ITEMS = animatedItems;

@@ -2499,7 +2499,7 @@ const metaDescription = getMetaDescription()
     const calculated = JSON.parse(`<%- JSON.stringify(calculated).replaceAll('\\', '\\\\') %>`);
     <%
       const clientConstants = {
-        max_favorites: constants.max_favorites,
+        MAX_FAVORITES: constants.MAX_FAVORITES,
       }
     %>
     const constants = JSON.parse(`<%- JSON.stringify(clientConstants).replaceAll('\\', '\\\\') %>`);

@@ -168,13 +168,13 @@ export function getPlayerStats() {
 
 function getBonusStat(level: number, key: BonusType, max: number) {
   const bonus: ItemStats = {};
-  const ObjOfLevelBonuses: StatBonusType = constants.stats_bonus[key];
+  const objOfLevelBonuses: StatBonusType = constants.stats_bonus[key];
 
-  if (!ObjOfLevelBonuses) {
+  if (!objOfLevelBonuses) {
     return bonus;
   }
 
-  const steps = Object.keys(ObjOfLevelBonuses)
+  const steps = Object.keys(objOfLevelBonuses)
     .sort((a, b) => Number(a) - Number(b))
     .map((a) => Number(a));
 
@@ -189,7 +189,7 @@ function getBonusStat(level: number, key: BonusType, max: number) {
       .find((a) => a <= x);
 
     if (step) {
-      const stepBonuses: ItemStats = ObjOfLevelBonuses[step];
+      const stepBonuses: ItemStats = objOfLevelBonuses[step];
 
       for (const statNameString in stepBonuses) {
         const statName: StatName = statNameString as StatName;

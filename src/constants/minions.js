@@ -1,6 +1,6 @@
-export const minion_types = ["farming", "mining", "combat", "foraging", "fishing"];
+export const MINION_TYPES = ["farming", "mining", "combat", "foraging", "fishing"];
 
-export const minion_slots = {
+export const MINION_SLOTS = {
   0: 5,
   5: 6,
   15: 7,
@@ -27,9 +27,9 @@ export const minion_slots = {
 };
 
 // From unique tiers (excludes community shop upgrades)
-export const minions_max_slots = 26;
+export const MINIONS_MAX_SLOTS = 26;
 
-export const minions = {
+export const MINIONS = {
   COBBLESTONE: {
     type: "mining",
     head: "/head/2f93289a82bd2a06cbbe61b733cfdc1f1bd93c4340f7a90abd9bdda774109071",
@@ -305,10 +305,10 @@ export const minions = {
   },
 };
 
-let total_unique_minions = 0;
+let totalUniqueMinions = 0;
 
-for (const minion in minions) {
-  total_unique_minions += minions[minion].tiers ?? 11;
+for (const minion in MINIONS) {
+  totalUniqueMinions += MINIONS[minion].tiers ?? 11;
 }
 
-export const minions_max_uniques = total_unique_minions;
+export const MINIONS_MAX_UNIQUES = totalUniqueMinions;

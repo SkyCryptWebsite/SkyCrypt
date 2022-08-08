@@ -4,13 +4,13 @@ import "axios-debug-log";
 
 import { getPrices } from "../helper.js";
 
-const Hypixel = axios.create({
+const hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
 
 async function updateBazaar() {
   try {
-    const response = await Hypixel.get("skyblock/bazaar" /*, { params: { key: credentials.hypixel_api_key }}*/);
+    const response = await hypixel.get("skyblock/bazaar" /*, { params: { key: credentials.hypixel_api_key }}*/);
 
     const { products } = response.data;
 
