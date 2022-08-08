@@ -14,7 +14,7 @@ const production = !process.env.ROLLUP_WATCH;
 /**
  * @type {import('rollup').RollupOptions}
  */
-const config = {
+const CONFIG = {
   input: [
     "public/resources/ts/browser-compat-check.ts",
     "public/resources/ts/common-defer.ts",
@@ -54,4 +54,4 @@ const config = {
   ],
 };
 
-export default config;
+export default CONFIG;

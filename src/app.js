@@ -177,7 +177,7 @@ function parseFavorites(cookie) {
 }
 
 async function getFavoritesFormUUIDs(uuids) {
-  let favorites = [];
+  const favorites = [];
   for (let uuid of uuids) {
     if (uuid == null) continue;
     uuid = sanitize(uuid);
@@ -188,27 +188,27 @@ async function getFavoritesFormUUIDs(uuids) {
       favorites.push(cache[0]);
       continue;
     } else {
-      let output_cache = { uuid };
+      let outputCache = { uuid };
 
       const user = await db.collection("usernames").find({ uuid }).toArray();
 
       if (user[0]) {
-        output_cache = user[0];
+        outputCache = user[0];
 
-        let profiles = await db.collection("profileStore").find({ uuid }).toArray();
+        const profiles = await db.collection("profileStore").find({ uuid }).toArray();
 
         if (profiles[0]) {
           const profile = profiles[0];
-          output_cache.last_updated = profile.last_save;
+          outputCache.last_updated = profile.last_save;
         } else {
-          output_cache.error = "Profile doesn't exist.";
+          outputCache.error = "Profile doesn't exist.";
         }
       } else {
-        output_cache.error = "User doesn't exist.";
+        outputCache.error = "User doesn't exist.";
       }
 
-      await db.collection("favoriteCache").insertOne(output_cache);
-      favorites.push(output_cache);
+      await db.collection("favoriteCache").insertOne(outputCache);
+      favorites.push(outputCache);
     }
   }
   return favorites;
@@ -234,7 +234,7 @@ async function getExtra(page = null, favoriteUUIDs = [], cacheOnly) {
 }
 
 function weightedRandom(array) {
-  let weights = [];
+  const weights = [];
 
   for (let i = 0; i < array.length; i++) weights[i] = array[i].weight + (weights[i - 1] || 0);
 
@@ -249,11 +249,11 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
 
   console.debug(`${debugId}: stats page was called.`);
 
-  let paramPlayer = req.params.player
+  const paramPlayer = req.params.player
     .toLowerCase()
     .replaceAll(/[ +]/g, "_")
     .replaceAll(/[^a-z\d\-_:]/g, "");
-  let paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
+  const paramProfile = req.params.profile ? req.params.profile.toLowerCase() : null;
 
   const cacheOnly = req.query.cache === "true" || forceCacheOnly;
 

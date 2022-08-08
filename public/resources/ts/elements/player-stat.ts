@@ -48,7 +48,7 @@ export class PlayerStat extends LitElement {
     special: { [key: string]: number } | undefined
   ): string[] {
     const tooltip: string[] = [];
-    const tooltip_bonus: string[] = [];
+    const tooltipBonus: string[] = [];
 
     if (!name) {
       return tooltip;
@@ -67,7 +67,7 @@ export class PlayerStat extends LitElement {
           continue;
         }
 
-        tooltip_bonus.push(
+        tooltipBonus.push(
           `- ${this.getPrettyDataName(key)} ${val < 0 ? "" : "+"}${helper.round(val, 1).toLocaleString()}${suffix}`
         );
       }
@@ -78,7 +78,7 @@ export class PlayerStat extends LitElement {
         `<span class="stat-name">Bonus ${name}: </span>`,
         `<span class="stat-value">${helper.round(value - data.base, 1).toLocaleString()}${suffix}</span>`,
         "<br/>",
-        `<span class='tippy-explanation'>Bonus value obtain from: <br>${tooltip_bonus.join("<br>")}</span>`
+        `<span class='tippy-explanation'>Bonus value obtain from: <br>${tooltipBonus.join("<br>")}</span>`
       );
     }
 
