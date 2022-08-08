@@ -31,7 +31,7 @@ export const maxEnchants = new Set([
   "Fire Aspect III",
   "Fire Protection VII",
   "First Strike V",
-  "Flame I",
+  "Flame II",
   "Fortune IV",
   "Frail VI",
   "Frost Walker II",
