@@ -1481,7 +1481,7 @@ export async function getStats(
   }
 
   if (!items.no_inventory) {
-    output.missingAccessories = await getMissingAccessories(items.accessory_ids);
+    output.missingAccessories = getMissingAccessories(items.accessory_ids);
   }
 
   if (!userProfile.pets) {
@@ -1490,15 +1490,14 @@ export async function getStats(
   userProfile.pets.push(...items.pets);
 
   output.pets = await getPets(userProfile);
-  output.missingPets = await getMissingPets(output.pets, profile.game_mode);
-  output.petScore = await getPetScore(output.pets);
+  output.missingPets = getMissingPets(output.pets, profile.game_mode);
+  output.petScore = getPetScore(output.pets);
 
   const petScoreRequired = Object.keys(constants.PET_REWARDS).sort((a, b) => parseInt(b) - parseInt(a));
 
   output.pet_bonus = {};
 
-  // eslint-disable-next-line no-unused-vars
-  for (const [index, score] of petScoreRequired.entries()) {
+  for (const score of petScoreRequired) {
     if (parseInt(score) > output.petScore) {
       continue;
     }
@@ -1692,9 +1691,9 @@ export async function getStats(
   output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
   output.social = hypixelProfile.socials;
 
-  output.dungeons = await getDungeons(userProfile, hypixelProfile);
+  output.dungeons = getDungeons(userProfile, hypixelProfile);
 
-  output.essence = await getEssence(userProfile, hypixelProfile);
+  output.essence = getEssence(userProfile, hypixelProfile);
 
   output.fishing = {
     total: userProfile.stats.items_fished || 0,
@@ -1959,7 +1958,7 @@ export async function getStats(
     }
   }
 
-  misc.profile_upgrades = await getProfileUpgrades(profile);
+  misc.profile_upgrades = getProfileUpgrades(profile);
 
   const auctions_buy = ["auctions_bids", "auctions_highest_bid", "auctions_won", "auctions_gold_spent"];
   const auctions_sell = ["auctions_fees", "auctions_gold_earned"];
@@ -2206,6 +2205,7 @@ export async function getPets(profile) {
     pet.rarity = pet.tier.toLowerCase();
     pet.stats = {};
     pet.ignoresTierBoost = petData.ignoresTierBoost;
+    /** @type {string[]} */
     const lore = [];
 
     // Rarity upgrades
@@ -2385,8 +2385,7 @@ export async function getPets(profile) {
 
     pet.lore = "";
 
-    // eslint-disable-next-line no-unused-vars
-    for (const [index, line] of lore.entries()) {
+    for (const line of lore) {
       pet.lore += '<span class="lore-row wrap">' + helper.renderLore(line) + "</span>";
     }
 
@@ -2431,7 +2430,7 @@ export async function getPets(profile) {
   return output;
 }
 
-async function getMissingPets(pets, gameMode) {
+function getMissingPets(pets, gameMode) {
   const profile = {
     pets: [],
   };
@@ -2476,7 +2475,7 @@ async function getMissingPets(pets, gameMode) {
   return getPets(profile);
 }
 
-async function getPetScore(pets) {
+function getPetScore(pets) {
   const highestRarity = {};
 
   for (const pet of pets) {
@@ -2488,7 +2487,7 @@ async function getPetScore(pets) {
   return Object.values(highestRarity).reduce((a, b) => a + b, 0);
 }
 
-async function getMissingAccessories(accessories) {
+function getMissingAccessories(accessories) {
   const unique = Object.keys(constants.ACCESSORIES);
   unique.forEach((name) => {
     if (name in constants.ACCESSORY_DUPLICATES) {
@@ -2614,7 +2613,7 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
   return output;
 }
 
-export async function getDungeons(userProfile, hypixelProfile) {
+export function getDungeons(userProfile, hypixelProfile) {
   const output = {};
 
   const dungeons = userProfile.dungeons;
@@ -2761,11 +2760,11 @@ export async function getDungeons(userProfile, hypixelProfile) {
       continue;
     }
 
-    for (const reward_id in coll.rewards) {
-      const reward = coll.rewards[reward_id];
+    for (const rewardId in coll.rewards) {
+      const reward = coll.rewards[rewardId];
       if (collections[coll_id].killed >= reward.required) {
         collections[coll_id].tier = reward.tier;
-        if (reward_id != "coming_soon") collections[coll_id].unclaimed++;
+        if (rewardId != "coming_soon") collections[coll_id].unclaimed++;
       } else {
         break;
       }
@@ -2883,7 +2882,8 @@ export async function getDungeons(userProfile, hypixelProfile) {
   return output;
 }
 
-async function getEssence(userProfile, hypixelProfile) {
+function getEssence(userProfile, hypixelProfile) {
+  /** @type {{[key:string]: number}} */
   const output = {};
 
   for (const essence in constants.ESSENCE) {
@@ -3122,7 +3122,7 @@ async function getForge(userProfile) {
   return output;
 }
 
-async function getProfileUpgrades(profile) {
+function getProfileUpgrades(profile) {
   const output = {};
   for (const upgrade in constants.PROFILE_UPGRADES) {
     output[upgrade] = 0;
@@ -3135,12 +3135,12 @@ async function getProfileUpgrades(profile) {
   return output;
 }
 
-export const getProfile = async (
+export async function getProfile(
   db,
   paramPlayer,
   paramProfile,
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` }
-) => {
+) {
   console.debug(`${options.debugId}: getProfile called.`);
   const timeStarted = Date.now();
 
@@ -3282,8 +3282,7 @@ export const getProfile = async (
 
   const profiles = [];
 
-  // eslint-disable-next-line no-unused-vars
-  for (const [index, profile] of skyBlockProfiles.entries()) {
+  for (const profile of skyBlockProfiles) {
     let memberCount = 0;
 
     for (const member in profile.members) {
@@ -3348,8 +3347,7 @@ export const getProfile = async (
     }
   }
 
-  // eslint-disable-next-line no-unused-vars
-  for (const [index, _profile] of profiles.entries()) {
+  for (const _profile of profiles) {
     if (_profile === undefined || _profile === null) {
       return;
     }
@@ -3417,7 +3415,7 @@ export const getProfile = async (
 
   console.debug(`${options.debugId}: getProfile returned. (${Date.now() - timeStarted}ms)`);
   return { profile: profile, allProfiles: allSkyBlockProfiles, uuid: paramPlayer };
-};
+}
 
 async function updateLeaderboardPositions(db, uuid, allProfiles) {
   if (constants.BLOCKED_PLAYERS.includes(uuid)) {
@@ -3541,11 +3539,11 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
         break;
       default:
         for (const floor of getAllKeys(memberProfiles, "data", "dungeons", "dungeon_types", "catacombs", stat)) {
-          const floor_id = `catacombs_${floor}`;
-          if (!constants.DUNGEONS.floors[floor_id] || !constants.DUNGEONS.floors[floor_id].name) continue;
+          const floorId = `catacombs_${floor}`;
+          if (!constants.DUNGEONS.floors[floorId] || !constants.DUNGEONS.floors[floorId].name) continue;
 
-          const floor_name = constants.DUNGEONS.floors[floor_id].name;
-          values[`dungeons_catacombs_${floor_name}_${stat}`] = getMax(
+          const floorName = constants.DUNGEONS.floors[floorId].name;
+          values[`dungeons_catacombs_${floorName}_${stat}`] = getMax(
             memberProfiles,
             "data",
             "dungeons",
@@ -3558,13 +3556,13 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
     }
   }
 
-  for (const dungeon_class of getAllKeys(memberProfiles, "data", "dungeons", "player_classes")) {
-    values[`dungeons_class_${dungeon_class}_xp`] = getMax(
+  for (const dungeonClass of getAllKeys(memberProfiles, "data", "dungeons", "player_classes")) {
+    values[`dungeons_class_${dungeonClass}_xp`] = getMax(
       memberProfiles,
       "data",
       "dungeons",
       "player_classes",
-      dungeon_class,
+      dungeonClass,
       "experience"
     );
   }
