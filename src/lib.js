@@ -1923,6 +1923,7 @@ export const getStats = async (
   misc.races = {};
   misc.gifts = {};
   misc.winter = {};
+  misc.isles = {};
   misc.dragons = {};
   misc.protector = {};
   misc.damage = {};
@@ -2067,6 +2068,29 @@ export const getStats = async (
     misc.auctions_sell["items_sold"] = (misc.auctions_sell["items_sold"] || 0) + auctions_sold[key];
   }
 
+  misc.isles = {};
+  
+  if ("selected_faction" in userProfile.nether_island_player_data) {
+    misc.isles.faction = {
+      raw: userProfile.nether_island_player_data.selected_faction,
+      formatted: `${helper.capitalizeFirstLetter(userProfile.nether_island_player_data.selected_faction.toLowerCase())}`,
+    };
+  }
+
+  if ("mages_reputation" in userProfile.nether_island_player_data) {
+    misc.isles.mage_reputation = {
+      raw: userProfile.nether_island_player_data.mages_reputation,
+      formatted: helper.formatNumber(userProfile.nether_island_player_data.mages_reputation),
+    };
+  }
+  
+  if ("barbarians_reputation" in userProfile.nether_island_player_data) {
+    misc.isles.barbarian_reputation = {
+      raw: userProfile.nether_island_player_data.barbarians_reputation,
+      formatted: helper.formatNumber(userProfile.nether_island_player_data.barbarians_reputation),
+    };
+  }
+
   misc.uncategorized = {};
 
   if ("soulflow" in userProfile) {
@@ -2101,6 +2125,13 @@ export const getStats = async (
     misc.uncategorized.reaper_peppers_eaten = {
       raw: userProfile.reaper_peppers_eaten,
       formatted: helper.formatNumber(userProfile.reaper_peppers_eaten),
+    };
+  }
+
+  if ("selected_power" in userProfile.accessory_bag_storage) {
+    misc.uncategorized.selected_accessory_power = {
+      raw: userProfile.accessory_bag_storage.selected_power,
+      formatted: `${helper.capitalizeFirstLetter(userProfile.accessory_bag_storage.selected_power.toLowerCase())}`,
     };
   }
 

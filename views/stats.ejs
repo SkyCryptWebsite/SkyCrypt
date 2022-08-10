@@ -2348,6 +2348,15 @@ const metaDescription = getMetaDescription()
               <% } %>
             </p>
           <% } %>
+          <% if ('isles' in calculated.misc && Object.keys(calculated.misc.isles).length > 0) { %>
+            <div class="category-header"><div class="category-icon"><div class="item-icon icon-369_0"></div></div><span>Crimson isles</span></div>
+            <p class="stat-raw-values">
+              <% for (const [key, value] of Object.entries(calculated.misc.isles)) { %>
+              <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
+              <span class="stat-value"><%= value.formatted %></span><br>
+              <% } %>
+            </p>
+          <% } %>
           <% if('dragons' in calculated.misc){ %>
             <div class="category-header"><div class="category-icon"><div class="item-icon custom-icon" style="background-image: url(/head/aec3ff563290b13ff3bcc36898af7eaa988b6cc18dc254147f58374afe9b21b9)"></div></div><span>Dragons</span></div>
             <p class="stat-raw-values">
