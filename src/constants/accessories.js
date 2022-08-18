@@ -747,6 +747,11 @@ export const accessories = {
     rarity: "common",
     texture: "/head/fe246925cbd4c05279b9c8dcf7c2fdfc9baf9b1424aa35e501533ebb98e00522",
   },
+  SHENS_REGALIA: {
+    name: "Shen's Regalia",
+    rarity: "legendary",
+    texture: "/head/9c7fb6f414ff0eb6bf5797acb3b3af354ca3af95ceb8f3418125f6b805419f39"
+  }
 };
 
 // Getting Unique Accessories Count
