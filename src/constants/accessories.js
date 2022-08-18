@@ -742,6 +742,11 @@ export const accessories = {
     rarity: "legendary",
     texture: "/head/31f748a43f3b3ada04f44d5d290a8b9bf583d93e1c83ab93c60c4dec1fde1c5c",
   },
+  PANDORAS_BOX: {
+    name: "Pandora's Box",
+    rarity: "common",
+    texture: "/head/fe246925cbd4c05279b9c8dcf7c2fdfc9baf9b1424aa35e501533ebb98e00522",
+  },
 };
 
 // Getting Unique Accessories Count
