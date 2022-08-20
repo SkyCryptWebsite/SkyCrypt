@@ -926,7 +926,7 @@ class EnderDragon extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { epic: 0.25 });
+    const mult = getValue(this.rarity, { epic: 2 });
     return {
       name: "§6End Strike",
       desc: [`§7Deal §a${round(this.level * mult, 1)}% §7more damage to end mobs`],
@@ -948,7 +948,7 @@ class EnderDragon extends Pet {
     const mult = getValue(this.rarity, { legendary: 0.1 });
     return {
       name: "§6Superior",
-      desc: [`§7Increases all stats by §a${round(this.level * mult, 1)}%`],
+      desc: [`§7Increases most stats by §a${round(this.level * mult, 1)}%`],
     };
   }
 }
