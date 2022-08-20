@@ -2450,16 +2450,16 @@ class Dolphin extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { common: 0.03, uncommon: 0.04, epic: 0.05 });
-    const max = getValue(this.rarity, { common: 15, uncommon: 20, epic: 25 });
+    const mult = getValue(this.rarity, { common: 0.07, uncommon: 0.08, epic: 0.009 });
     return {
       name: "§6Pod Tactics",
       desc: [
-        `§7Increases your fishing speed by §a${round(
+        `§7Grants §b+${round(
           this.level * mult,
-          1
-        )}% §7for each nearby player within 10 blocks up to §a${max}%`,
+          2
+        )}☂ Fishing Speed §7for each player within §a10 §7blocks, up to §a5 §7players.`,
       ],
+      //TODO: add fishing speed icon to symbols list
     };
   }
 
@@ -2467,7 +2467,7 @@ class Dolphin extends Pet {
     const mult = this.rarity >= EPIC ? 0.1 : 0.07;
     return {
       name: "§6Echolocation",
-      desc: [`§7Increases sea creatures catch chance by §a${round(this.level * mult, 1)}%`],
+      desc: [`§7Grants §3+${round(this.level * mult, 2)}${symbols.sea_creature_chance} Sea Creature Chance§7.`],
     };
   }
 
