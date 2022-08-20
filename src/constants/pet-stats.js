@@ -2388,7 +2388,7 @@ class BlueWhale extends Pet {
 class Ammonite extends Pet {
   get stats() {
     return {
-      sea_creature_chance: this.level * 0.07,
+      sea_creature_chance: this.level * 0.05,
     };
   }
 
@@ -2402,9 +2402,9 @@ class Ammonite extends Pet {
     return {
       name: "§6Heart of the Sea",
       desc: [
-        `§7Each Heart of the Mountain level grants §3+${round(this.level * mult, 1)} ${
+        `§7Grants §3+${round(this.level * mult, 2)}${
           symbols.sea_creature_chance
-        } Sea Creature Chance`,
+        } Sea Creature Chance §7to your pet for each §5Heart of the Mountain §7level.`,
       ],
     };
   }
@@ -2414,18 +2414,19 @@ class Ammonite extends Pet {
     return {
       name: "§6Not a Snail",
       desc: [
-        `§7Each fishing and mining level grants §f+${round(this.level * mult, 1)} ${
+        `§7Each fishing and mining level grants §f+${round(this.level * mult, 2)} ${
           symbols.speed
-        } Speed §7and §a+${round(this.level * mult, 1)} ${symbols.defense} Defense`,
+        } Speed §7and §a+${round(this.level * mult, 2)} ${symbols.defense} Defense.`,
       ],
     };
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 0.006 });
+    const mult = getValue(this.rarity, { legendary: 0.009 });
     return {
       name: "§6Gift of the Ammonite",
-      desc: [`§7Increases your fishing speed by §a${round(this.level * mult, 1)}% §7for each mining level`],
+      desc: [`§7Grants §b+${round(this.level * mult, 2)}☂ Fishing Speed §7per Mining level.`],
+      //TODO: add fishing speed icon to symbols list
     };
   }
 }
