@@ -646,8 +646,11 @@ class Scatha extends Pet {
     if (this.rarity >= RARE) {
       list.push(this.second);
     }
-    if (this.rarity >= LEGENDARY) {
+    if (this.rarity >= EPIC) {
       list.push(this.third);
+    }
+    if (this.rarity >= LEGENDARY) {
+      list.push(this.fourth);
     }
     return list;
   }
@@ -673,6 +676,14 @@ class Scatha extends Pet {
     return {
       name: "§6Wormhole",
       desc: [`§7Gives a §a${round(this.level * mult, 1)}% §7to mine 2 adjacent stone or hard stone`],
+    };
+  }
+
+  get fourth() {
+    const mult = getValue(this.rarity, { legendary: 0.2 });
+    return {
+      name: "§6Gemstone Power",
+      desc: [`§7Gain §a+${round(this.level * mult, 1)}% §7more Gemstone Powder from all sources.`],
     };
   }
 }
