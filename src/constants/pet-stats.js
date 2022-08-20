@@ -2502,7 +2502,7 @@ class FlyingFish extends Pet {
     const mult = getValue(this.rarity, { rare: 0.6, epic: 0.75 });
     return {
       name: "§6Quick Reel",
-      desc: [`§7§7Grants §b+${round(this.level * mult, 2)}☂ Fishing Speed§7.`],
+      desc: [`§7Grants §b+${round(this.level * mult, 2)}☂ Fishing Speed§7.`],
       //TODO: add fishing speed icon to symbols list
     };
   }
