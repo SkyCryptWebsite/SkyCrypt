@@ -7,7 +7,7 @@ function validateURL(url: string) {
   if (urlSegments.length < 1) {
     throw new Error("please enter a Minecraft username or UUID");
   } else if (urlSegments.length > 2) {
-    throw new Error(`"${url}" has too many "/"`);
+    throw new Error(`Url has too many "/"`);
   } else {
     if (urlSegments.length === 2) {
       if (urlSegments[1].match(/^[A-Za-z]+/)) {
