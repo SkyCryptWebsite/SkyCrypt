@@ -570,7 +570,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 
         if (lore_raw) {
           itemLore.push("", `§7Hecatomb Runs: §c${hecatomb_s_runs.toLocaleString()}`);
-          if (hecatomb_s_runs >= 15000) {
+          if (hecatomb_s_runs >= 100) {
             itemLore.push(`§8MAXED OUT!`);
           } else {
             let toNextLevel = 0;
@@ -590,7 +590,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 
         if (lore_raw) {
           itemLore.push("", `§7Champion XP: §c${champion_combat_xp.toLocaleString()}`);
-          if (champion_combat_xp >= 15000) {
+          if (champion_combat_xp >= 3000000) {
             itemLore.push(`§8MAXED OUT!`);
           } else {
             let toNextLevel = 0;
