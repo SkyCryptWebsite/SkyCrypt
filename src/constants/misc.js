@@ -13,6 +13,10 @@ export const prehistoric_egg_blocks_walked_ladder = [4000, 10000, 20000, 40000, 
 // Number of S runs required for each level of hecatomb
 export const hecatomb_s_runs_ladder = [2, 5, 10, 20, 30, 40, 60, 80, 100];
 
+// xp required for each level of champion
+export const champion_xp_ladder = [50000, 100000, 250000, 500000, 1000000, 1500000, 2000000, 2500000, 3000000];
+
+
 // api names and their max value from the profile upgrades
 export const profile_upgrades = {
   island_size: 10,

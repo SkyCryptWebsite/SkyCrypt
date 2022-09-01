@@ -372,6 +372,14 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       }
     }
 
+    if (item.tag?.ExtraAttributes?.champion_combat_xp != undefined) {
+      const { champion_combat_xp } = item.tag.ExtraAttributes;
+
+      if (champion_combat_xp > 0) {
+        item.extra.champion_combat_xp = champion_combat_xp;
+      }
+    }
+
     if (item.tag?.ExtraAttributes?.blocks_walked != undefined) {
       const { blocks_walked } = item.tag.ExtraAttributes;
 
@@ -573,6 +581,26 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
               }
             }
             itemLore.push(`§8${toNextLevel} runs to tier up!`);
+          }
+        }
+      }
+
+      if (item.extra?.champion_combat_xp) {
+        const champion_combat_xp = Math.floor(item.extra.champion_combat_xp);
+
+        if (lore_raw) {
+          itemLore.push("", `§7Champion XP: §c${champion_combat_xp.toLocaleString()}`);
+          if (champion_combat_xp >= 15000) {
+            itemLore.push(`§8MAXED OUT!`);
+          } else {
+            let toNextLevel = 0;
+            for (const e of constants.champion_xp_ladder) {
+              if (champion_combat_xp < e) {
+                toNextLevel = Math.floor(e - champion_combat_xp);
+                break;
+              }
+            }
+            itemLore.push(`§8${toNextLevel.toLocaleString()} xp to tier up!`);
           }
         }
       }
