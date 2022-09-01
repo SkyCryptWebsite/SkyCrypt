@@ -364,6 +364,14 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       }
     }
 
+    if (item.tag?.ExtraAttributes?.hecatomb_s_runs != undefined) {
+      const { hecatomb_s_runs } = item.tag.ExtraAttributes;
+
+      if (hecatomb_s_runs > 0) {
+        item.extra.hecatomb_s_runs = hecatomb_s_runs;
+      }
+    }
+
     if (item.tag?.ExtraAttributes?.blocks_walked != undefined) {
       const { blocks_walked } = item.tag.ExtraAttributes;
 
@@ -545,6 +553,26 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
               }
             }
             itemLore.push(`§8${toNextLevel} kills to tier up!`);
+          }
+        }
+      }
+
+      if (item.extra?.hecatomb_s_runs) {
+        const hecatomb_s_runs = item.extra.hecatomb_s_runs;
+
+        if (lore_raw) {
+          itemLore.push("", `§7Hecatomb Runs: §c${hecatomb_s_runs}`);
+          if (hecatomb_s_runs >= 15000) {
+            itemLore.push(`§8MAXED OUT!`);
+          } else {
+            let toNextLevel = 0;
+            for (const e of constants.hecatomb_s_runs_ladder) {
+              if (hecatomb_s_runs < e) {
+                toNextLevel = e - hecatomb_s_runs;
+                break;
+              }
+            }
+            itemLore.push(`§8${toNextLevel} runs to tier up!`);
           }
         }
       }

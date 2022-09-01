@@ -10,6 +10,9 @@ export const expertise_kills_ladder = [50, 100, 250, 500, 1000, 2500, 5500, 1000
 // Walking distance required for each rarity level of the prehistoric egg
 export const prehistoric_egg_blocks_walked_ladder = [4000, 10000, 20000, 40000, 100000];
 
+// Number of S runs required for each level of hecatomb
+export const hecatomb_s_runs_ladder = [2, 5, 10, 20, 30, 40, 60, 80, 100];
+
 // api names and their max value from the profile upgrades
 export const profile_upgrades = {
   island_size: 10,
