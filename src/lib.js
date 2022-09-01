@@ -549,7 +549,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
         const expertise_kills = item.extra.expertise_kills;
 
         if (lore_raw) {
-          itemLore.push("", `§7Expertise Kills: §c${expertise_kills}`);
+          itemLore.push("", `§7Expertise Kills: §c${expertise_kills.toLocaleString()}`);
           if (expertise_kills >= 15000) {
             itemLore.push(`§8MAXED OUT!`);
           } else {
@@ -560,7 +560,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
                 break;
               }
             }
-            itemLore.push(`§8${toNextLevel} kills to tier up!`);
+            itemLore.push(`§8${toNextLevel.toLocaleString()} kills to tier up!`);
           }
         }
       }
@@ -569,7 +569,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
         const hecatomb_s_runs = item.extra.hecatomb_s_runs;
 
         if (lore_raw) {
-          itemLore.push("", `§7Hecatomb Runs: §c${hecatomb_s_runs}`);
+          itemLore.push("", `§7Hecatomb Runs: §c${hecatomb_s_runs.toLocaleString()}`);
           if (hecatomb_s_runs >= 15000) {
             itemLore.push(`§8MAXED OUT!`);
           } else {
@@ -580,7 +580,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
                 break;
               }
             }
-            itemLore.push(`§8${toNextLevel} runs to tier up!`);
+            itemLore.push(`§8${toNextLevel.toLocaleString()} runs to tier up!`);
           }
         }
       }
@@ -609,7 +609,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
         const blocks_walked = item.extra.blocks_walked;
 
         if (lore_raw) {
-          itemLore.push("", `§7Blocks Walked: §c${blocks_walked}`);
+          itemLore.push("", `§7Blocks Walked: §c${blocks_walked.toLocaleString()}`);
           if (blocks_walked >= 100000) {
             itemLore.push(`§8MAXED OUT!`);
           } else {
@@ -620,7 +620,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
                 break;
               }
             }
-            itemLore.push(`§8Walk ${toNextLevel} blocks to tier up!`);
+            itemLore.push(`§8Walk ${toNextLevel.toLocaleString()} blocks to tier up!`);
           }
         }
       }
