@@ -109,6 +109,7 @@ export const statsData = {
     suffix: "",
     color: "d",
   },
+
   true_defense: {
     name: "True Defense",
     nameLore: "True Defense",
@@ -189,7 +190,16 @@ export const statsData = {
     symbol: "☂",
     suffix: "",
     color: "b"
-  }
+  },
+  wisdom: {
+    name: "Wisdom",
+    nameLore: "Wisdom",
+    nameShort: "Wisdom",
+    nameTiny: "W",
+    symbol: "☯",
+    suffix: "",
+    color: "3",
+  },
 };
 
 const _symbols = {
