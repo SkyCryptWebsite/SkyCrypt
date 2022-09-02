@@ -190,6 +190,42 @@ export const statsData = {
     suffix: "",
     color: "b"
   },
+  breaking_power: {
+    name: "Breaking Power",
+    nameLore: "Breaking Power",
+    nameShort: "Breaking Power",
+    nameTiny: "BP",
+    symbol: "Ⓟ",
+    suffix: "",
+    color: "2",
+  },
+  health_regen: {
+    name: "Health Regen",
+    nameLore: "Health Regen",
+    nameShort: "Health Regen",
+    nameTiny: "HPR",
+    symbol: "❣",
+    suffix: "",
+    color: "c",
+  },
+  vitality: {
+    name: "Vitality",
+    nameLore: "Vitality",
+    nameShort: "Vitality",
+    nameTiny: "Vit",
+    symbol: "♨",
+    suffix: "",
+    color: "5",
+  },
+  mending: {
+    name: "Mending",
+    nameLore: "Mending",
+    nameShort: "Mending",
+    nameTiny: "Mend",
+    symbol: "☄",
+    suffix: "",
+    color: "a",
+  },
   wisdom: {
     name: "Wisdom",
     nameLore: "Wisdom",
@@ -199,6 +235,24 @@ export const statsData = {
     suffix: "",
     color: "3",
   },
+  rift_time: {
+    name: "Rift Time",
+    nameLore: "Rift Time",
+    nameShort: "Rift Time",
+    nameTiny: "RT",
+    symbol: "ф",
+    suffix: "",
+    color: "a",    
+  },
+  fear: {
+    name: "Fear",
+    nameLore: "Fear",
+    nameShort: "Fear",
+    nameTiny: "Fr",
+    symbol: "☠",
+    suffix: "",
+    color: "a",  
+  }
 };
 
 const _symbols = {
