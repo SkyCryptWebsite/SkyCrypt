@@ -737,6 +737,21 @@ export const accessories = {
     rarity: "rare",
     texture: "/head/9de3a407d2be387b45bebdd52d3d4d75a6a1b479e2b8c03267d021d4af31e072",
   },
+  SHENS_REGALIA: {
+    name: "Shen's Regalia",
+    rarity: "legendary",
+    texture: "/head/9c7fb6f414ff0eb6bf5797acb3b3af354ca3af95ceb8f3418125f6b805419f39"
+  },
+  PANDORAS_BOX: {
+    name: "Pandora's Box",
+    rarity: "common",
+    texture: "/head/fe246925cbd4c05279b9c8dcf7c2fdfc9baf9b1424aa35e501533ebb98e00522",
+  },
+  ARTIFACT_OF_CONTROL: {
+    name: "Artifact of Control",
+    rarity: "legendary",
+    texture: "/head/31f748a43f3b3ada04f44d5d290a8b9bf583d93e1c83ab93c60c4dec1fde1c5c",
+  },
 };
 
 // Getting Unique Accessories Count
