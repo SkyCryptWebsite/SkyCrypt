@@ -380,6 +380,14 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       }
     }
 
+    if (item.tag?.ExtraAttributes?.farmed_cultivating != undefined) {
+      const { farmed_cultivating } = item.tag.ExtraAttributes;
+
+      if (farmed_cultivating > 0) {
+        item.extra.farmed_cultivating = farmed_cultivating;
+      }
+    }
+
     if (item.tag?.ExtraAttributes?.blocks_walked != undefined) {
       const { blocks_walked } = item.tag.ExtraAttributes;
 
@@ -601,6 +609,26 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
               }
             }
             itemLore.push(`§8${toNextLevel.toLocaleString()} xp to tier up!`);
+          }
+        }
+      }
+
+      if (item.extra?.farmed_cultivating) {
+        const farmed_cultivating = Math.floor(item.extra.farmed_cultivating);
+
+        if (lore_raw) {
+          itemLore.push("", `§7Cultivating Crops: §c${farmed_cultivating.toLocaleString()}`);
+          if (farmed_cultivating >= 100000000) {
+            itemLore.push(`§8MAXED OUT!`);
+          } else {
+            let toNextLevel = 0;
+            for (const e of constants.cultivating_crops_ladder) {
+              if (farmed_cultivating < e) {
+                toNextLevel = Math.floor(e - farmed_cultivating);
+                break;
+              }
+            }
+            itemLore.push(`§8${toNextLevel.toLocaleString()} crops to tier up!`);
           }
         }
       }
