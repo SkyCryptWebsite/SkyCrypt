@@ -109,7 +109,6 @@ export const statsData = {
     suffix: "",
     color: "d",
   },
-
   true_defense: {
     name: "True Defense",
     nameLore: "True Defense",
