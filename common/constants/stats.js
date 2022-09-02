@@ -181,6 +181,15 @@ export const statsData = {
     suffix: "",
     color: "5",
   },
+  fishing_speed: {
+    name: "Fishing Speed",
+    nameLore: "Fishing Speed",
+    nameShort: "Fishing Speed",
+    nameTiny: "FS",
+    symbol: "☂",
+    suffix: "",
+    color: "b"
+  }
 };
 
 const _symbols = {
