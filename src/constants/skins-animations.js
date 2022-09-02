@@ -538,7 +538,7 @@ const skins = [
     name: "RGBee",
     texture: "/head/99c6da45da5a46614c05d5f8d7b3dfefb025e82ca4cdb4f0db64ced1315df659",
     release: new Date("2022-08-26 18:00:00 GMT+1").getTime(),
-  }
+  },
 ];
 
 /*
