@@ -3,8 +3,7 @@
   "author": "rainbowcraft2",
   "schema": 2,
   "images": {
-    "bg": "/resources/img/themes/sunrise/bg.webp",
-    "bg_blur": "/resources/img/themes/sunrise/bg_blur.webp"
+    "bg": "/resources/img/themes/sunrise/bg.webp"
   },
   "backgrounds": {
     "skillbar": { "type": "color", "color": "#f2694e" }

@@ -25,7 +25,7 @@ const browsers: {
     androidPackage: "com.microsoft.emmx",
   },
   firefox: {
-    version: "85",
+    version: "103",
     help: "https://support.mozilla.org/kb/update-firefox-latest-release",
     androidPackage: "org.mozilla.firefox",
   },
