@@ -1195,11 +1195,8 @@ export const getItems = async (
     armor.forEach((armorPiece) => {
       let name = armorPiece.display_name;
 
-      // Removing stars
-      name = name.replaceAll(/✪|⍟/g, "").trim();
-
-      // Removing skin
-      name = name.replaceAll("✦", "").trim();
+      // Removing skin and stars / Whitelisting a-z and 0-9
+      name = name.replace(/[^A-Za-z0-9 -']/g, "").trim();
 
       // Removing modifier
       if (armorPiece.tag?.ExtraAttributes?.modifier != undefined) {
