@@ -21,7 +21,7 @@ import { calculateSenitherWeight } from "./weight/senither-weight.js";
 
 const mcData = minecraftData("1.8.9");
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const Hypixel = axios.create({
+const hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
 const parseNbt = util.promisify(nbt.parse);
@@ -64,15 +64,15 @@ function getAllKeys(profiles, ...path) {
 function getXpTable(type) {
   switch (type) {
     case "runecrafting":
-      return constants.runecrafting_xp;
+      return constants.RUNECRAFTING_XP;
     case "social":
-      return constants.social_xp;
+      return constants.SOCIAL_XP;
     case "dungeoneering":
-      return constants.dungeoneering_xp;
+      return constants.DUNGEONEERING_XP;
     case "hotm":
-      return constants.hotm_xp;
+      return constants.HOTM_XP;
     default:
-      return constants.leveling_xp;
+      return constants.LEVELING_XP;
   }
 }
 
@@ -93,10 +93,10 @@ function getXpByLevel(uncappedLevel, extra = {}) {
 
   /** the level that this player is caped at */
   const levelCap =
-    extra.cap ?? constants.default_skill_caps[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
+    extra.cap ?? constants.DEFAULT_SKILL_CAPS[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
 
   /** the maximum level that any player can achieve (used for gold progress bars) */
-  const maxLevel = constants.maxed_skill_caps[extra.skill] ?? levelCap;
+  const maxLevel = constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
 
   /** the amount of xp over the amount required for the level (used for calculation progress to next level) */
   const xpCurrent = 0;
@@ -150,10 +150,10 @@ export function getLevelByXp(xp, extra = {}) {
 
   /** the level that this player is caped at */
   const levelCap =
-    extra.cap ?? constants.default_skill_caps[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
+    extra.cap ?? constants.DEFAULT_SKILL_CAPS[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
 
   /** the maximum level that any player can achieve (used for gold progress bars) */
-  const maxLevel = constants.maxed_skill_caps[extra.skill] ?? levelCap;
+  const maxLevel = constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
 
   /** the level ignoring the cap and using only the table */
   let uncappedLevel = 0;
@@ -211,7 +211,7 @@ function getSlayerLevel(slayer, slayerName) {
   let progress = 0;
   let xpForNext = 0;
 
-  const maxLevel = Math.max(...Object.keys(constants.slayer_xp[slayerName]));
+  const maxLevel = Math.max(...Object.keys(constants.SLAYER_XP[slayerName]));
 
   for (const level_name in claimed_levels) {
     // Ignoring legacy levels for zombie
@@ -227,7 +227,7 @@ function getSlayerLevel(slayer, slayerName) {
   }
 
   if (currentLevel < maxLevel) {
-    const nextLevel = constants.slayer_xp[slayerName][currentLevel + 1];
+    const nextLevel = constants.SLAYER_XP[slayerName][currentLevel + 1];
 
     progress = xp / nextLevel;
     xpForNext = nextLevel;
@@ -239,8 +239,8 @@ function getSlayerLevel(slayer, slayerName) {
 }
 
 function getPetLevel(petExp, offsetRarity, maxLevel) {
-  const rarityOffset = constants.pet_rarity_offset[offsetRarity];
-  const levels = constants.pet_levels.slice(rarityOffset, rarityOffset + maxLevel - 1);
+  const rarityOffset = constants.PET_RARITY_OFFSET[offsetRarity];
+  const levels = constants.PET_LEVELS.slice(rarityOffset, rarityOffset + maxLevel - 1);
 
   const xpMaxLevel = levels.reduce((a, b) => a + b, 0);
   let xpTotal = 0;
@@ -439,7 +439,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 
     // Set custom texture for colored potions
     if (item.id == 373) {
-      const color = constants.potionColors[item.Damage % 16];
+      const color = constants.POTION_COLORS[item.Damage % 16];
 
       const type = item.Damage & 16384 ? "splash" : "normal";
 
@@ -475,8 +475,8 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     }
 
     // Uses animated skin texture
-    if (item?.extra?.skin != undefined && constants.animated_items?.[item.extra.skin]) {
-      item.texture_path = constants.animated_items[item.extra.skin].texture;
+    if (item?.extra?.skin != undefined && constants.ANIMATED_ITEMS?.[item.extra.skin]) {
+      item.texture_path = constants.ANIMATED_ITEMS[item.extra.skin].texture;
     }
 
     if (item.tag?.ExtraAttributes?.skin == undefined && customTextures) {
@@ -538,7 +538,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
             itemLore.push(`§8MAXED OUT!`);
           } else {
             let toNextLevel = 0;
-            for (const e of constants.expertise_kills_ladder) {
+            for (const e of constants.EXPERTISE_KILLS_LADDER) {
               if (expertise_kills < e) {
                 toNextLevel = e - expertise_kills;
                 break;
@@ -558,7 +558,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
             itemLore.push(`§8MAXED OUT!`);
           } else {
             let toNextLevel = 0;
-            for (const e of constants.prehistoric_egg_blocks_walked_ladder) {
+            for (const e of constants.PREHISTORIC_EGG_BLOCKS_WALKED_LADDER) {
               if (blocks_walked < e) {
                 toNextLevel = e - blocks_walked;
                 break;
@@ -648,16 +648,16 @@ function getMinions(coopMembers) {
 
     if (minion == undefined) {
       minions.push(
-        Object.assign({ id: minionName, maxLevel: 0, levels: [minionLevel] }, constants.minions[minionName])
+        Object.assign({ id: minionName, maxLevel: 0, levels: [minionLevel] }, constants.MINIONS[minionName])
       );
     } else {
       minion.levels.push(minionLevel);
     }
   }
 
-  for (const minion in constants.minions) {
+  for (const minion in constants.MINIONS) {
     if (minions.find((a) => a.id == minion) == undefined) {
-      minions.push(Object.assign({ id: minion, levels: [], maxLevel: 0 }, constants.minions[minion]));
+      minions.push(Object.assign({ id: minion, levels: [], maxLevel: 0 }, constants.MINIONS[minion]));
     }
   }
 
@@ -683,14 +683,14 @@ function getMinionSlots(minions) {
 
   const output = { currentSlots: 5, toNext: 5 };
 
-  const uniquesRequired = Object.keys(constants.minion_slots).sort((a, b) => parseInt(a) - parseInt(b));
+  const uniquesRequired = Object.keys(constants.MINION_SLOTS).sort((a, b) => parseInt(a) - parseInt(b));
 
   for (const [index, uniques] of uniquesRequired.entries()) {
     if (parseInt(uniques) <= uniqueMinions) {
       continue;
     }
 
-    output.currentSlots = constants.minion_slots[uniquesRequired[index - 1]];
+    output.currentSlots = constants.MINION_SLOTS[uniquesRequired[index - 1]];
     output.toNextSlot = uniquesRequired[index] - uniqueMinions;
     break;
   }
@@ -749,8 +749,8 @@ export const getItems = async (
 
   let storage = [];
   if (profile.backpack_contents) {
-    const storage_size = Math.max(18, Object.keys(profile.backpack_contents).length);
-    for (let slot = 0; slot < storage_size; slot++) {
+    const storageSize = Math.max(18, Object.keys(profile.backpack_contents).length);
+    for (let slot = 0; slot < storageSize; slot++) {
       storage.push({});
 
       if (profile.backpack_contents[slot] && profile.backpack_icons[slot]) {
@@ -768,9 +768,9 @@ export const getItems = async (
           item.item_index = index;
         }
 
-        const storage_unit = icon[0];
-        storage_unit.containsItems = items;
-        storage[slot] = storage_unit;
+        const storageUnit = icon[0];
+        storageUnit.containsItems = items;
+        storage[slot] = storageUnit;
       }
     }
   }
@@ -814,7 +814,7 @@ export const getItems = async (
   output.storage = storage;
   output.hotm = hotm;
 
-  const all_items = armor.concat(
+  const allItems = armor.concat(
     inventory,
     enderchest,
     accessory_bag,
@@ -827,7 +827,7 @@ export const getItems = async (
     hotm
   );
 
-  for (const [index, item] of all_items.entries()) {
+  for (const [index, item] of allItems.entries()) {
     item.item_index = index;
     item.itemId = v4("itemId");
 
@@ -845,15 +845,15 @@ export const getItems = async (
   hotm = hotm.map((a) => Object.assign({ isInactive: true }, a));
 
   // Add candy bag contents as backpack contents to candy bag
-  for (const item of all_items) {
+  for (const item of allItems) {
     if (helper.getId(item) == "TRICK_OR_TREAT_BAG") {
       item.containsItems = candy_bag;
     }
   }
 
   const accessories = [];
-  const accessory_ids = [];
-  const accessory_rarities = {
+  const accessoryIds = [];
+  const accessoryRarities = {
     common: 0,
     uncommon: 0,
     rare: 0,
@@ -884,7 +884,7 @@ export const getItems = async (
     }
 
     accessories.push(insertAccessory);
-    accessory_ids.push(id);
+    accessoryIds.push(id);
   }
 
   // Add accessories from inventory
@@ -906,7 +906,7 @@ export const getItems = async (
     }
 
     accessories.push(insertAccessory);
-    accessory_ids.push(id);
+    accessoryIds.push(id);
   }
 
   // Add accessories from accessory bag if not already in inventory
@@ -928,10 +928,10 @@ export const getItems = async (
     }
 
     accessories.push(insertAccessory);
-    accessory_ids.push(id);
-    accessory_rarities[insertAccessory.rarity]++;
+    accessoryIds.push(id);
+    accessoryRarities[insertAccessory.rarity]++;
     if (id == "HEGEMONY_ARTIFACT") {
-      accessory_rarities.hegemony = { rarity: insertAccessory.rarity };
+      accessoryRarities.hegemony = { rarity: insertAccessory.rarity };
     }
   }
 
@@ -958,7 +958,7 @@ export const getItems = async (
       }
 
       accessories.push(insertAccessory);
-      accessory_ids.push(id);
+      accessoryIds.push(id);
     }
   }
 
@@ -980,7 +980,7 @@ export const getItems = async (
         accessory.isInactive = true;
       }
 
-      accessory_ids.splice(accessory_ids.indexOf(id), 1, `CAMPFIRE_TALISMAN_${maxTier}`);
+      accessoryIds.splice(accessoryIds.indexOf(id), 1, `CAMPFIRE_TALISMAN_${maxTier}`);
     }
 
     if (id.startsWith("WEDDING_RING_")) {
@@ -997,11 +997,11 @@ export const getItems = async (
         accessory.isInactive = true;
       }
 
-      accessory_ids.splice(accessory_ids.indexOf(id), 1, `WEDDING_RING_${maxTier}`);
+      accessoryIds.splice(accessoryIds.indexOf(id), 1, `WEDDING_RING_${maxTier}`);
     }
 
-    if (id in constants.accessory_upgrades) {
-      const accessoryUpgrades = constants.accessory_upgrades[id];
+    if (id in constants.ACCESSORY_UPGRADES) {
+      const accessoryUpgrades = constants.ACCESSORY_UPGRADES[id];
 
       if (accessories.find((a) => !a.isInactive && accessoryUpgrades.includes(helper.getId(a))) != undefined) {
         accessory.isInactive = true;
@@ -1012,8 +1012,8 @@ export const getItems = async (
       }
     }
 
-    if (id in constants.accessory_duplicates) {
-      const accessoryDuplicates = constants.accessory_duplicates[id];
+    if (id in constants.ACCESSORY_DUPLICATES) {
+      const accessoryDuplicates = constants.ACCESSORY_DUPLICATES[id];
 
       if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a))) != undefined) {
         accessory.isUnique = false;
@@ -1035,15 +1035,15 @@ export const getItems = async (
   }
 
   output.accessories = accessories;
-  output.accessory_ids = accessory_ids;
-  output.accessory_rarities = accessory_rarities;
+  output.accessory_ids = accessoryIds;
+  output.accessory_rarities = accessoryRarities;
 
-  output.weapons = all_items.filter((a) => a.categories?.includes("weapon"));
-  output.farming_tools = all_items.filter((a) => a.categories?.includes("farming_tool"));
-  output.mining_tools = all_items.filter((a) => a.categories?.includes("mining_tool"));
-  output.fishing_tools = all_items.filter((a) => a.categories?.includes("fishing_tool"));
+  output.weapons = allItems.filter((a) => a.categories?.includes("weapon"));
+  output.farming_tools = allItems.filter((a) => a.categories?.includes("farming_tool"));
+  output.mining_tools = allItems.filter((a) => a.categories?.includes("mining_tool"));
+  output.fishing_tools = allItems.filter((a) => a.categories?.includes("fishing_tool"));
 
-  output.pets = all_items
+  output.pets = allItems
     .filter((a) => a.tag?.ExtraAttributes?.petInfo)
     .map((a) => ({
       uuid: a.tag.ExtraAttributes.uuid,
@@ -1056,7 +1056,7 @@ export const getItems = async (
       skin: a.tag.ExtraAttributes.petInfo.skin || null,
     }));
 
-  for (const item of all_items) {
+  for (const item of allItems) {
     if (!Array.isArray(item.containsItems)) {
       continue;
     }
@@ -1094,7 +1094,7 @@ export const getItems = async (
 
   const itemSorter = (a, b) => {
     if (a.rarity !== b.rarity) {
-      return constants.rarities.indexOf(b.rarity) - constants.rarities.indexOf(a.rarity);
+      return constants.RARITIES.indexOf(b.rarity) - constants.RARITIES.indexOf(a.rarity);
     }
 
     if (b.inBackpack && !a.inBackpack) {
@@ -1237,7 +1237,7 @@ export const getItems = async (
     }
 
     // Handling special sets of armor (where pieces aren't named the same)
-    constants.special_sets.forEach((set) => {
+    constants.SPECIAL_SETS.forEach((set) => {
       if (armor.filter((a) => set.pieces.includes(helper.getId(a))).length == 4) {
         output_name = set.name;
       }
@@ -1249,7 +1249,7 @@ export const getItems = async (
     }
 
     output.armor_set = output_name;
-    output.armor_set_rarity = constants.rarities[Math.max(...armor.map((a) => helper.rarityNameToInt(a.rarity)))];
+    output.armor_set_rarity = constants.RARITIES[Math.max(...armor.map((a) => helper.rarityNameToInt(a.rarity)))];
   }
 
   console.debug(`${options.debugId}: getItems returned. (${Date.now() - timeStarted}ms)`);
@@ -1303,7 +1303,7 @@ async function getLevels(userProfile, hypixelProfile, levelCaps) {
     };
 
     for (const skill in skillLevels) {
-      if (!constants.cosmetic_skills.includes(skill)) {
+      if (!constants.COSMETIC_SKILLS.includes(skill)) {
         average_level += skillLevels[skill].level + skillLevels[skill].progress;
         average_level_no_progress += skillLevels[skill].level;
 
@@ -1312,9 +1312,9 @@ async function getLevels(userProfile, hypixelProfile, levelCaps) {
     }
 
     output.average_level =
-      average_level / (Object.keys(skillLevels).length - Object.keys(constants.cosmetic_skills).length);
+      average_level / (Object.keys(skillLevels).length - Object.keys(constants.COSMETIC_SKILLS).length);
     output.average_level_no_progress =
-      average_level_no_progress / (Object.keys(skillLevels).length - Object.keys(constants.cosmetic_skills).length);
+      average_level_no_progress / (Object.keys(skillLevels).length - Object.keys(constants.COSMETIC_SKILLS).length);
     output.total_skill_xp = totalSkillXp;
 
     output.levels = Object.assign({}, skillLevels);
@@ -1376,13 +1376,13 @@ async function getLevels(userProfile, hypixelProfile, levelCaps) {
   return output;
 }
 
-export const getStats = async (
+export async function getStats(
   db,
   profile,
   allProfiles,
   items,
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getStats` }
-) => {
+) {
   const output = {};
 
   console.debug(`${options.debugId}: getStats called.`);
@@ -1391,7 +1391,7 @@ export const getStats = async (
   const userProfile = profile.members[profile.uuid];
   const hypixelProfile = await helper.getRank(profile.uuid, db, options.cacheOnly);
 
-  output.stats = Object.assign({}, constants.base_stats);
+  output.stats = Object.assign({}, constants.BASE_STATS);
 
   // fairy souls
   if (isNaN(userProfile.fairy_souls_collected)) {
@@ -1399,7 +1399,7 @@ export const getStats = async (
   }
 
   const totalSouls =
-    profile.game_mode === "island" ? constants.fairy_souls.max.stranded : constants.fairy_souls.max.normal;
+    profile.game_mode === "island" ? constants.FAIRY_SOULS.max.stranded : constants.FAIRY_SOULS.max.normal;
 
   output.fairy_souls = {
     collected: userProfile.fairy_souls_collected,
@@ -1410,7 +1410,7 @@ export const getStats = async (
 
   // levels
   const levelCaps = {
-    farming: constants.default_skill_caps.farming + (userProfile.jacob2?.perks?.farming_level_cap || 0),
+    farming: constants.DEFAULT_SKILL_CAPS.farming + (userProfile.jacob2?.perks?.farming_level_cap || 0),
   };
 
   const { levels, average_level, average_level_no_progress, total_skill_xp, average_level_rank } = await getLevels(
@@ -1454,7 +1454,7 @@ export const getStats = async (
             slayers[slayerName].kills[tier] = slayer[property];
 
             output.slayer_coins_spent[slayerName] =
-              (output.slayer_coins_spent[slayerName] || 0) + slayer[property] * constants.slayer_cost[tier];
+              (output.slayer_coins_spent[slayerName] || 0) + slayer[property] * constants.SLAYER_COST[tier];
           }
         }
       }
@@ -1481,7 +1481,7 @@ export const getStats = async (
   }
 
   if (!items.no_inventory) {
-    output.missingAccessories = await getMissingAccessories(items.accessory_ids);
+    output.missingAccessories = getMissingAccessories(items.accessory_ids);
   }
 
   if (!userProfile.pets) {
@@ -1490,20 +1490,19 @@ export const getStats = async (
   userProfile.pets.push(...items.pets);
 
   output.pets = await getPets(userProfile);
-  output.missingPets = await getMissingPets(output.pets, profile.game_mode);
-  output.petScore = await getPetScore(output.pets);
+  output.missingPets = getMissingPets(output.pets, profile.game_mode);
+  output.petScore = getPetScore(output.pets);
 
-  const petScoreRequired = Object.keys(constants.pet_rewards).sort((a, b) => parseInt(b) - parseInt(a));
+  const petScoreRequired = Object.keys(constants.PET_REWARDS).sort((a, b) => parseInt(b) - parseInt(a));
 
   output.pet_bonus = {};
 
-  // eslint-disable-next-line no-unused-vars
-  for (const [index, score] of petScoreRequired.entries()) {
+  for (const score of petScoreRequired) {
     if (parseInt(score) > output.petScore) {
       continue;
     }
 
-    output.pet_score_bonus = Object.assign({}, constants.pet_rewards[score]);
+    output.pet_score_bonus = Object.assign({}, constants.PET_REWARDS[score]);
 
     break;
   }
@@ -1542,8 +1541,8 @@ export const getStats = async (
   for (const stat of killsDeaths) {
     const { entityId } = stat;
 
-    if (entityId in constants.mob_names) {
-      stat.entityName = constants.mob_names[entityId];
+    if (entityId in constants.MOB_NAMES) {
+      stat.entityName = constants.MOB_NAMES[entityId];
       continue;
     }
 
@@ -1647,14 +1646,12 @@ export const getStats = async (
       continue;
     }
 
-    const last_updated = profile.members[member.uuid].last_save;
+    const lastUpdated = profile.members[member.uuid].last_save;
 
     member.last_updated = {
-      unix: last_updated,
+      unix: lastUpdated,
       text:
-        Date.now() - last_updated < 7 * 60 * 1000
-          ? "currently online"
-          : `last played ${moment(last_updated).fromNow()}`,
+        Date.now() - lastUpdated < 7 * 60 * 1000 ? "currently online" : `last played ${moment(lastUpdated).fromNow()}`,
     };
   }
 
@@ -1694,9 +1691,9 @@ export const getStats = async (
   output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
   output.social = hypixelProfile.socials;
 
-  output.dungeons = await getDungeons(userProfile, hypixelProfile);
+  output.dungeons = getDungeons(userProfile, hypixelProfile);
 
-  output.essence = await getEssence(userProfile, hypixelProfile);
+  output.essence = getEssence(userProfile, hypixelProfile);
 
   output.fishing = {
     total: userProfile.stats.items_fished || 0,
@@ -1741,8 +1738,8 @@ export const getStats = async (
     // Things about individual crops
     farming.crops = {};
 
-    for (const crop in constants.farming_crops) {
-      farming.crops[crop] = constants.farming_crops[crop];
+    for (const crop in constants.FARMING_CROPS) {
+      farming.crops[crop] = constants.FARMING_CROPS[crop];
 
       Object.assign(farming.crops[crop], {
         attended: false,
@@ -1763,12 +1760,12 @@ export const getStats = async (
       all_contests: [],
     };
 
-    for (const contest_id in userProfile.jacob2.contests) {
-      const data = userProfile.jacob2.contests[contest_id];
+    for (const contestId in userProfile.jacob2.contests) {
+      const data = userProfile.jacob2.contests[contestId];
 
-      const contest_name = contest_id.split(":");
-      const date = `${contest_name[1]}_${contest_name[0]}`;
-      const crop = contest_name.slice(2).join(":");
+      const contestName = contestId.split(":");
+      const date = `${contestName[1]}_${contestName[0]}`;
+      const crop = contestName.slice(2).join(":");
 
       farming.crops[crop].contests++;
       farming.crops[crop].attended = true;
@@ -1831,56 +1828,56 @@ export const getStats = async (
   };
 
   if (enchanting.experimented) {
-    const enchanting_data = userProfile.experimentation;
+    const enchantingData = userProfile.experimentation;
 
-    for (const game in constants.experiments.games) {
-      if (enchanting_data[game] == null) continue;
-      if (!Object.keys(enchanting_data[game]).length >= 1) {
+    for (const game in constants.EXPERIMENTS.games) {
+      if (enchantingData[game] == null) continue;
+      if (!Object.keys(enchantingData[game]).length >= 1) {
         continue;
       }
 
-      const game_data = enchanting_data[game];
-      const game_constants = constants.experiments.games[game];
+      const gameData = enchantingData[game];
+      const gameConstants = constants.EXPERIMENTS.games[game];
 
-      const game_output = {
-        name: game_constants.name,
+      const gameOutput = {
+        name: gameConstants.name,
         stats: {},
         tiers: {},
       };
 
-      for (const key in game_data) {
+      for (const key in gameData) {
         if (key.startsWith("attempts") || key.startsWith("claims") || key.startsWith("best_score")) {
           let statKey = key.split("_");
           const tierValue = statKey.pop();
 
           statKey = statKey.join("_");
-          const tierInfo = _.cloneDeep(constants.experiments.tiers[tierValue]);
+          const tierInfo = _.cloneDeep(constants.EXPERIMENTS.tiers[tierValue]);
 
-          if (!game_output.tiers[tierValue]) {
-            game_output.tiers[tierValue] = tierInfo;
+          if (!gameOutput.tiers[tierValue]) {
+            gameOutput.tiers[tierValue] = tierInfo;
           }
 
-          Object.assign(game_output.tiers[tierValue], {
-            [statKey]: game_data[key],
+          Object.assign(gameOutput.tiers[tierValue], {
+            [statKey]: gameData[key],
           });
           continue;
         }
 
         if (key == "last_attempt" || key == "last_claimed") {
-          if (game_data[key] <= 0) continue;
-          const last_time = {
-            unix: game_data[key],
-            text: moment(game_data[key]).fromNow(),
+          if (gameData[key] <= 0) continue;
+          const lastTime = {
+            unix: gameData[key],
+            text: moment(gameData[key]).fromNow(),
           };
 
-          game_output.stats[key] = last_time;
+          gameOutput.stats[key] = lastTime;
           continue;
         }
 
-        game_output.stats[key] = game_data[key];
+        gameOutput.stats[key] = gameData[key];
       }
 
-      enchanting.experiments[game] = game_output;
+      enchanting.experiments[game] = gameOutput;
     }
 
     if (!Object.keys(enchanting.experiments).length >= 1) {
@@ -1900,9 +1897,9 @@ export const getStats = async (
 
   for (const key of userProfile.tutorial) {
     if (key.startsWith("commission_milestone_reward_mining_xp_tier_")) {
-      const milestone_tier = key.slice(43);
-      if (mining.commissions.milestone < milestone_tier) {
-        mining.commissions.milestone = milestone_tier;
+      const milestoneTier = key.slice(43);
+      if (mining.commissions.milestone < milestoneTier) {
+        mining.commissions.milestone = milestoneTier;
       }
     } else {
       continue;
@@ -1961,7 +1958,7 @@ export const getStats = async (
     }
   }
 
-  misc.profile_upgrades = await getProfileUpgrades(profile);
+  misc.profile_upgrades = getProfileUpgrades(profile);
 
   const auctions_buy = ["auctions_bids", "auctions_highest_bid", "auctions_won", "auctions_gold_spent"];
   const auctions_sell = ["auctions_fees", "auctions_gold_earned"];
@@ -1987,7 +1984,7 @@ export const getStats = async (
     if (key.includes("complete_the_")) {
       const isCompleted = userProfile.objectives[key].status == "COMPLETE";
       const tierNumber = parseInt("" + key.charAt(key.length - 1)) ?? 0;
-      const raceName = constants.raceObjectiveToStatName[key.substring(0, key.length - 2)];
+      const raceName = constants.RACE_OBJECTIVE_TO_STAT_NAME[key.substring(0, key.length - 2)];
 
       if (tierNumber == 1 && !isCompleted) {
         misc.objectives.completedRaces[raceName] = 0;
@@ -2108,13 +2105,13 @@ export const getStats = async (
   output.auctions_bought = auctions_bought;
   output.auctions_sold = auctions_sold;
 
-  const last_updated = userProfile.last_save;
-  const first_join = userProfile.first_join;
+  const lastUpdated = userProfile.last_save;
+  const firstJoin = userProfile.first_join;
 
-  const diff = (+new Date() - last_updated) / 1000;
+  const diff = (+new Date() - lastUpdated) / 1000;
 
-  let last_updated_text = moment(last_updated).fromNow();
-  const first_join_text = moment(first_join).fromNow();
+  let lastUpdatedText = moment(lastUpdated).fromNow();
+  const firstJoinText = moment(firstJoin).fromNow();
 
   if ("current_area" in userProfile) {
     output.current_area = userProfile.current_area;
@@ -2125,19 +2122,19 @@ export const getStats = async (
   }
 
   if (diff < 3) {
-    last_updated_text = `Right now`;
+    lastUpdatedText = `Right now`;
   } else if (diff < 60) {
-    last_updated_text = `${Math.floor(diff)} seconds ago`;
+    lastUpdatedText = `${Math.floor(diff)} seconds ago`;
   }
 
   output.last_updated = {
-    unix: last_updated,
-    text: last_updated_text,
+    unix: lastUpdated,
+    text: lastUpdatedText,
   };
 
   output.first_join = {
-    unix: first_join,
-    text: first_join_text,
+    unix: firstJoin,
+    text: firstJoinText,
   };
 
   /*
@@ -2156,29 +2153,29 @@ export const getStats = async (
     century cake effects
 
   */
-  const century_cakes = [];
+  const centuryCakes = [];
 
   if (userProfile.temp_stat_buffs) {
     for (const cake of userProfile.temp_stat_buffs) {
       if (!cake.key.startsWith("cake_")) continue;
       let stat = cake.key.replace("cake_", "");
-      if (Object.keys(constants.stat_mappings).includes(stat)) {
-        stat = constants.stat_mappings[stat];
+      if (Object.keys(constants.STAT_MAPPINGS).includes(stat)) {
+        stat = constants.STAT_MAPPINGS[stat];
       }
-      century_cakes.push({
+      centuryCakes.push({
         stat: stat == "walk_speed" ? "speed" : stat,
         amount: cake.amount,
       });
     }
   }
 
-  output.century_cakes = century_cakes;
+  output.century_cakes = centuryCakes;
 
   output.reaper_peppers_eaten = userProfile.reaper_peppers_eaten ?? 0;
 
   console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
   return output;
-};
+}
 
 export async function getPets(profile) {
   let output = [];
@@ -2195,7 +2192,7 @@ export async function getPets(profile) {
       continue;
     }
 
-    const petData = constants.pet_data[pet.type] || {
+    const petData = constants.PET_DATA[pet.type] ?? {
       head: "/head/bc8ea1f51f253ff5142ca11ae45193a4ad8c3ab5e9c6eec8ba7a4fcb7bac40",
       type: "???",
       maxTier: "LEGENDARY",
@@ -2208,18 +2205,19 @@ export async function getPets(profile) {
     pet.rarity = pet.tier.toLowerCase();
     pet.stats = {};
     pet.ignoresTierBoost = petData.ignoresTierBoost;
+    /** @type {string[]} */
     const lore = [];
 
     // Rarity upgrades
     if (pet.heldItem == "PET_ITEM_TIER_BOOST" && !pet.ignoresTierBoost) {
       pet.rarity =
-        constants.rarities[
-          Math.min(constants.rarities.indexOf(petData.maxTier), constants.rarities.indexOf(pet.rarity) + 1)
+        constants.RARITIES[
+          Math.min(constants.RARITIES.indexOf(petData.maxTier), constants.RARITIES.indexOf(pet.rarity) + 1)
         ];
     }
 
     if (pet.heldItem == "PET_ITEM_VAMPIRE_FANG" || pet.heldItem == "PET_ITEM_TOY_JERRY") {
-      if (constants.rarities.indexOf(pet.rarity) === constants.rarities.indexOf(petData.maxTier) - 1) {
+      if (constants.RARITIES.indexOf(pet.rarity) === constants.RARITIES.indexOf(petData.maxTier) - 1) {
         pet.rarity = petData.maxTier;
       }
     }
@@ -2238,9 +2236,9 @@ export async function getPets(profile) {
     }
 
     let petSkin = null;
-    if (pet.skin && constants.pet_skins?.[`PET_SKIN_${pet.skin}`]) {
-      pet.texture_path = constants.pet_skins[`PET_SKIN_${pet.skin}`].texture;
-      petSkin = constants.pet_skins[`PET_SKIN_${pet.skin}`].name;
+    if (pet.skin && constants.PET_SKINS?.[`PET_SKIN_${pet.skin}`]) {
+      pet.texture_path = constants.PET_SKINS[`PET_SKIN_${pet.skin}`].texture;
+      petSkin = constants.PET_SKINS[`PET_SKIN_${pet.skin}`].name;
     }
 
     // Get first row of lore
@@ -2270,10 +2268,10 @@ export async function getPets(profile) {
         ? petData.name[pet.rarity] ?? petData.name.default
         : helper.titleCase(pet.type.replaceAll("_", " "));
 
-    const rarity = constants.rarities.indexOf(pet.rarity);
+    const rarity = constants.RARITIES.indexOf(pet.rarity);
 
-    const searchName = pet.type in constants.petStats ? pet.type : "???";
-    const petInstance = new constants.petStats[searchName](rarity, pet.level.level, pet.extra);
+    const searchName = pet.type in constants.PET_STATS ? pet.type : "???";
+    const petInstance = new constants.PET_STATS[searchName](rarity, pet.level.level, pet.extra);
     pet.stats = Object.assign({}, petInstance.stats);
     pet.ref = petInstance;
 
@@ -2281,22 +2279,22 @@ export async function getPets(profile) {
       const { heldItem } = pet;
       let heldItemObj = await db.collection("items").findOne({ id: heldItem });
 
-      if (heldItem in constants.pet_items) {
-        for (const stat in constants.pet_items[heldItem]?.stats) {
-          pet.stats[stat] = (pet.stats[stat] || 0) + constants.pet_items[heldItem].stats[stat];
+      if (heldItem in constants.PET_ITEMS) {
+        for (const stat in constants.PET_ITEMS[heldItem]?.stats) {
+          pet.stats[stat] = (pet.stats[stat] || 0) + constants.PET_ITEMS[heldItem].stats[stat];
         }
-        for (const stat in constants.pet_items[heldItem]?.statsPerLevel) {
+        for (const stat in constants.PET_ITEMS[heldItem]?.statsPerLevel) {
           pet.stats[stat] =
-            (pet.stats[stat] || 0) + constants.pet_items[heldItem].statsPerLevel[stat] * pet.level.level;
+            (pet.stats[stat] || 0) + constants.PET_ITEMS[heldItem].statsPerLevel[stat] * pet.level.level;
         }
-        for (const stat in constants.pet_items[heldItem]?.multStats) {
+        for (const stat in constants.PET_ITEMS[heldItem]?.multStats) {
           if (pet.stats[stat]) {
-            pet.stats[stat] = (pet.stats[stat] || 0) * constants.pet_items[heldItem].multStats[stat];
+            pet.stats[stat] = (pet.stats[stat] || 0) * constants.PET_ITEMS[heldItem].multStats[stat];
           }
         }
-        if ("multAllStats" in constants.pet_items[heldItem]) {
+        if ("multAllStats" in constants.PET_ITEMS[heldItem]) {
           for (const stat in pet.stats) {
-            pet.stats[stat] *= constants.pet_items[heldItem].multAllStats;
+            pet.stats[stat] *= constants.PET_ITEMS[heldItem].multAllStats;
           }
         }
       }
@@ -2318,12 +2316,12 @@ export async function getPets(profile) {
 
       // now we push the lore of the held items
       if (!heldItemObj) {
-        heldItemObj = constants.pet_items[heldItem];
+        heldItemObj = constants.PET_ITEMS[heldItem];
       }
-      lore.push("", `§6Held Item: §${constants.rarityColors[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
+      lore.push("", `§6Held Item: §${constants.RARITY_COLORS[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
 
-      if (heldItem in constants.pet_items) {
-        lore.push(constants.pet_items[heldItem].description);
+      if (heldItem in constants.PET_ITEMS) {
+        lore.push(constants.PET_ITEMS[heldItem].description);
       }
       // extra line
       lore.push(" ");
@@ -2387,8 +2385,7 @@ export async function getPets(profile) {
 
     pet.lore = "";
 
-    // eslint-disable-next-line no-unused-vars
-    for (const [index, line] of lore.entries()) {
+    for (const line of lore) {
       pet.lore += '<span class="lore-row wrap">' + helper.renderLore(line) + "</span>";
     }
 
@@ -2423,7 +2420,7 @@ export async function getPets(profile) {
           }
         }
       } else {
-        return constants.rarities.indexOf(a.rarity) < constants.rarities.indexOf(b.rarity) ? 1 : -1;
+        return constants.RARITIES.indexOf(a.rarity) < constants.RARITIES.indexOf(b.rarity) ? 1 : -1;
       }
     }
 
@@ -2433,16 +2430,16 @@ export async function getPets(profile) {
   return output;
 }
 
-async function getMissingPets(pets, gameMode) {
+function getMissingPets(pets, gameMode) {
   const profile = {
     pets: [],
   };
 
   const missingPets = [];
 
-  const ownedPetTypes = pets.map((pet) => constants.pet_data[pet.type].typeGroup ?? pet.type);
+  const ownedPetTypes = pets.map((pet) => constants.PET_DATA[pet.type].typeGroup ?? pet.type);
 
-  for (const [petType, petData] of Object.entries(constants.pet_data)) {
+  for (const [petType, petData] of Object.entries(constants.PET_DATA)) {
     if (
       ownedPetTypes.includes(petData.typeGroup ?? petType) ||
       (petData.bingoExclusive === true && gameMode !== "bingo")
@@ -2456,8 +2453,8 @@ async function getMissingPets(pets, gameMode) {
     missingPets[key].push({
       type: petType,
       active: false,
-      exp: helper.getPetExp(constants.pet_data[petType].maxTier, constants.pet_data[petType].maxLevel),
-      tier: constants.pet_data[petType].maxTier,
+      exp: helper.getPetExp(constants.PET_DATA[petType].maxTier, constants.PET_DATA[petType].maxLevel),
+      tier: constants.PET_DATA[petType].maxTier,
       candyUsed: 0,
       heldItem: null,
       skin: null,
@@ -2478,23 +2475,23 @@ async function getMissingPets(pets, gameMode) {
   return getPets(profile);
 }
 
-async function getPetScore(pets) {
+function getPetScore(pets) {
   const highestRarity = {};
 
   for (const pet of pets) {
-    if (!(pet.type in highestRarity) || constants.pet_value[pet.rarity] > highestRarity[pet.type]) {
-      highestRarity[pet.type] = constants.pet_value[pet.rarity];
+    if (!(pet.type in highestRarity) || constants.PET_VALUE[pet.rarity] > highestRarity[pet.type]) {
+      highestRarity[pet.type] = constants.PET_VALUE[pet.rarity];
     }
   }
 
   return Object.values(highestRarity).reduce((a, b) => a + b, 0);
 }
 
-async function getMissingAccessories(accessories) {
-  const unique = Object.keys(constants.accessories);
+function getMissingAccessories(accessories) {
+  const unique = Object.keys(constants.ACCESSORIES);
   unique.forEach((name) => {
-    if (name in constants.accessory_duplicates) {
-      for (const duplicate of constants.accessory_duplicates[name]) {
+    if (name in constants.ACCESSORY_DUPLICATES) {
+      for (const duplicate of constants.ACCESSORY_DUPLICATES[name]) {
         if (accessories.includes(duplicate)) {
           accessories[accessories.indexOf(duplicate)] = name;
           break;
@@ -2505,9 +2502,9 @@ async function getMissingAccessories(accessories) {
 
   let missing = unique.filter((accessory) => !accessories.includes(accessory));
   missing.forEach((name) => {
-    if (name in constants.accessory_upgrades) {
+    if (name in constants.ACCESSORY_UPGRADES) {
       //if the name is in the upgrades list
-      for (const upgrade of constants.accessory_upgrades[name]) {
+      for (const upgrade of constants.ACCESSORY_UPGRADES[name]) {
         if (accessories.includes(upgrade)) {
           //if accessories list includes the upgrade
           missing = missing.filter((item) => item !== name);
@@ -2529,8 +2526,8 @@ async function getMissingAccessories(accessories) {
     object.name ??= accessory;
 
     // MAIN ACCESSORIES
-    if (constants.accessories[accessory] != null) {
-      const data = constants.accessories[accessory];
+    if (constants.ACCESSORIES[accessory] != null) {
+      const data = constants.ACCESSORIES[accessory];
 
       object.texture_path = data.texture || null;
       object.display_name = data.name || null;
@@ -2547,7 +2544,7 @@ async function getMissingAccessories(accessories) {
 
     let includes = false;
 
-    for (const array of Object.values(constants.accessory_upgrades)) {
+    for (const array of Object.values(constants.ACCESSORY_UPGRADES)) {
       if (array.includes(accessory)) {
         includes = true;
       }
@@ -2604,7 +2601,7 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
       output[type] = { tier, amount, totalAmount, amounts };
     }
 
-    const collectionData = constants.collection_data.find((a) => a.skyblockId == type);
+    const collectionData = constants.COLLECTION_DATA.find((a) => a.skyblockId == type);
 
     for (const tier of collectionData?.tiers ?? []) {
       if (totalAmount >= tier.amountRequired) {
@@ -2616,13 +2613,13 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
   return output;
 }
 
-export async function getDungeons(userProfile, hypixelProfile) {
+export function getDungeons(userProfile, hypixelProfile) {
   const output = {};
 
   const dungeons = userProfile.dungeons;
   if (dungeons == null || Object.keys(dungeons).length === 0) return output;
 
-  const dungeons_data = constants.dungeons;
+  const dungeons_data = constants.DUNGEONS;
   if (dungeons.dungeon_types == null || Object.keys(dungeons.dungeon_types).length === 0) return output;
 
   // Main Dungeons Data
@@ -2763,11 +2760,11 @@ export async function getDungeons(userProfile, hypixelProfile) {
       continue;
     }
 
-    for (const reward_id in coll.rewards) {
-      const reward = coll.rewards[reward_id];
+    for (const rewardId in coll.rewards) {
+      const reward = coll.rewards[rewardId];
       if (collections[coll_id].killed >= reward.required) {
         collections[coll_id].tier = reward.tier;
-        if (reward_id != "coming_soon") collections[coll_id].unclaimed++;
+        if (rewardId != "coming_soon") collections[coll_id].unclaimed++;
       } else {
         break;
       }
@@ -2805,7 +2802,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
   output.boss_collections = collections;
 
   // Journal Entries
-  const journal_constants = constants.dungeons.journals;
+  const journal_constants = constants.DUNGEONS.journals;
   const journal_entries = dungeons.dungeon_journal.journal_entries;
   const journals = {
     pages_collected: 0,
@@ -2843,8 +2840,8 @@ export async function getDungeons(userProfile, hypixelProfile) {
   output.journals = journals;
 
   // Level Bonuses (Only Catacombs Item Boost right now)
-  for (const name in constants.dungeons.level_bonuses) {
-    const level_stats = constants.dungeons.level_bonuses[name];
+  for (const name in constants.DUNGEONS.level_bonuses) {
+    const level_stats = constants.DUNGEONS.level_bonuses[name];
     const steps = Object.keys(level_stats)
       .sort((a, b) => Number(a) - Number(b))
       .map((a) => Number(a));
@@ -2885,10 +2882,11 @@ export async function getDungeons(userProfile, hypixelProfile) {
   return output;
 }
 
-async function getEssence(userProfile, hypixelProfile) {
+function getEssence(userProfile, hypixelProfile) {
+  /** @type {{[key:string]: number}} */
   const output = {};
 
-  for (const essence in constants.essence) {
+  for (const essence in constants.ESSENCE) {
     output[essence] = userProfile?.[`essence_${essence}`] ?? 0;
   }
 
@@ -2919,16 +2917,16 @@ function getHotmItems(userProfile, packs) {
 
   // Check for missing node classes
   for (const nodeId in nodes) {
-    if (constants.hotm.nodes[nodeId] == undefined) {
+    if (constants.HOTM.nodes[nodeId] == undefined) {
       throw new Error(`Missing Heart of the Mountain node: ${nodeId}`);
     }
   }
 
   // Processing nodes
-  for (const nodeId in constants.hotm.nodes) {
+  for (const nodeId in constants.HOTM.nodes) {
     const enabled = toggles[`toggle_${nodeId}`] ?? true;
     const level = nodes[nodeId] ?? 0;
-    const node = new constants.hotm.nodes[nodeId]({
+    const node = new constants.HOTM.nodes[nodeId]({
       level,
       enabled,
       nodes,
@@ -2952,8 +2950,8 @@ function getHotmItems(userProfile, packs) {
   }
 
   // Processing HotM tiers
-  for (let tier = 1; tier <= constants.hotm.tiers; tier++) {
-    const hotm = new constants.hotm.hotm(tier, hotmLevelData);
+  for (let tier = 1; tier <= constants.HOTM.tiers; tier++) {
+    const hotm = new constants.HOTM.hotm(tier, hotmLevelData);
 
     output[hotm.position7x9 - 1] = helper.generateItem({
       display_name: `Tier ${tier}`,
@@ -2971,7 +2969,7 @@ function getHotmItems(userProfile, packs) {
   }
 
   // Processing HotM items (stats, hc crystals, reset)
-  for (const itemClass of constants.hotm.items) {
+  for (const itemClass of constants.HOTM.items) {
     const item = new itemClass({
       resources: {
         token_of_the_mountain: mcdata.tokens,
@@ -3032,7 +3030,7 @@ function getMiningCoreData(userProfile) {
   };
 
   output.selected_pickaxe_ability = data.selected_pickaxe_ability
-    ? constants.hotm.names[data.selected_pickaxe_ability]
+    ? constants.HOTM.names[data.selected_pickaxe_ability]
     : null;
 
   output.powder = {
@@ -3101,11 +3099,11 @@ async function getForge(userProfile) {
         timeFinishedText: "",
       };
 
-      if (item.id in constants.forge_times) {
-        let forgeTime = constants.forge_times[item.id] * 60 * 1000; // convert minutes to milliseconds
+      if (item.id in constants.FORGE_TIMES) {
+        let forgeTime = constants.FORGE_TIMES[item.id] * 60 * 1000; // convert minutes to milliseconds
         const quickForge = userProfile.mining_core?.nodes?.forge_time;
         if (quickForge != null) {
-          forgeTime *= constants.quick_forge_multiplier[quickForge];
+          forgeTime *= constants.QUICK_FORGE_MULTIPLIER[quickForge];
         }
         const dbObject = await db.collection("items").findOne({ id: item.id });
 
@@ -3124,9 +3122,9 @@ async function getForge(userProfile) {
   return output;
 }
 
-async function getProfileUpgrades(profile) {
+function getProfileUpgrades(profile) {
   const output = {};
-  for (const upgrade in constants.profile_upgrades) {
+  for (const upgrade in constants.PROFILE_UPGRADES) {
     output[upgrade] = 0;
   }
   if (profile.community_upgrades?.upgrade_states != undefined) {
@@ -3137,12 +3135,12 @@ async function getProfileUpgrades(profile) {
   return output;
 }
 
-export const getProfile = async (
+export async function getProfile(
   db,
   paramPlayer,
   paramProfile,
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` }
-) => {
+) {
   console.debug(`${options.debugId}: getProfile called.`);
   const timeStarted = Date.now();
 
@@ -3202,7 +3200,7 @@ export const getProfile = async (
     try {
       response = await retry(
         async () => {
-          return await Hypixel.get("skyblock/profiles", {
+          return await hypixel.get("skyblock/profiles", {
             params,
           });
         },
@@ -3253,7 +3251,7 @@ export const getProfile = async (
         skyBlockProfiles = filteredProfiles;
       } else {
         const profileResponse = await retry(async () => {
-          const response = await Hypixel.get(
+          const response = await hypixel.get(
             "skyblock/profile",
             {
               params: { key: credentials.hypixel_api_key, profile: paramProfile },
@@ -3284,8 +3282,7 @@ export const getProfile = async (
 
   const profiles = [];
 
-  // eslint-disable-next-line no-unused-vars
-  for (const [index, profile] of skyBlockProfiles.entries()) {
+  for (const profile of skyBlockProfiles) {
     let memberCount = 0;
 
     for (const member in profile.members) {
@@ -3350,8 +3347,7 @@ export const getProfile = async (
     }
   }
 
-  // eslint-disable-next-line no-unused-vars
-  for (const [index, _profile] of profiles.entries()) {
+  for (const _profile of profiles) {
     if (_profile === undefined || _profile === null) {
       return;
     }
@@ -3393,14 +3389,14 @@ export const getProfile = async (
 
     if (options.updateArea && Date.now() - userProfile.last_save < 5 * 60 * 1000) {
       try {
-        const statusResponse = await Hypixel.get("status", {
+        const statusResponse = await hypixel.get("status", {
           params: { uuid: paramPlayer, key: credentials.hypixel_api_key },
         });
 
         const areaData = statusResponse.data.session;
 
         if (areaData.online && areaData.gameType == "SKYBLOCK") {
-          const areaName = constants.area_names[areaData.mode] || helper.titleCase(areaData.mode.replaceAll("_", " "));
+          const areaName = constants.AREA_NAMES[areaData.mode] || helper.titleCase(areaData.mode.replaceAll("_", " "));
 
           userProfile.current_area = areaName;
           insertProfileStore.current_area = areaName;
@@ -3419,10 +3415,10 @@ export const getProfile = async (
 
   console.debug(`${options.debugId}: getProfile returned. (${Date.now() - timeStarted}ms)`);
   return { profile: profile, allProfiles: allSkyBlockProfiles, uuid: paramPlayer };
-};
+}
 
 async function updateLeaderboardPositions(db, uuid, allProfiles) {
-  if (constants.blocked_players.includes(uuid)) {
+  if (constants.BLOCKED_PLAYERS.includes(uuid)) {
     return;
   }
 
@@ -3450,8 +3446,8 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
 
       userProfile.slayer_xp = totalSlayerXp;
 
-      for (const mountMob in constants.mob_mounts) {
-        const mounts = constants.mob_mounts[mountMob];
+      for (const mountMob in constants.MOB_MOUNTS) {
+        const mounts = constants.MOB_MOUNTS[mountMob];
 
         userProfile.stats[`kills_${mountMob}`] = 0;
         userProfile.stats[`deaths_${mountMob}`] = 0;
@@ -3475,7 +3471,7 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
           continue;
         }
 
-        maxPetRarity[pet.type] = Math.max(maxPetRarity[pet.type] || 0, constants.pet_value[pet.tier.toLowerCase()]);
+        maxPetRarity[pet.type] = Math.max(maxPetRarity[pet.type] || 0, constants.PET_VALUE[pet.tier.toLowerCase()]);
       }
 
       for (const key in maxPetRarity) {
@@ -3543,11 +3539,11 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
         break;
       default:
         for (const floor of getAllKeys(memberProfiles, "data", "dungeons", "dungeon_types", "catacombs", stat)) {
-          const floor_id = `catacombs_${floor}`;
-          if (!constants.dungeons.floors[floor_id] || !constants.dungeons.floors[floor_id].name) continue;
+          const floorId = `catacombs_${floor}`;
+          if (!constants.DUNGEONS.floors[floorId] || !constants.DUNGEONS.floors[floorId].name) continue;
 
-          const floor_name = constants.dungeons.floors[floor_id].name;
-          values[`dungeons_catacombs_${floor_name}_${stat}`] = getMax(
+          const floorName = constants.DUNGEONS.floors[floorId].name;
+          values[`dungeons_catacombs_${floorName}_${stat}`] = getMax(
             memberProfiles,
             "data",
             "dungeons",
@@ -3560,13 +3556,13 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
     }
   }
 
-  for (const dungeon_class of getAllKeys(memberProfiles, "data", "dungeons", "player_classes")) {
-    values[`dungeons_class_${dungeon_class}_xp`] = getMax(
+  for (const dungeonClass of getAllKeys(memberProfiles, "data", "dungeons", "player_classes")) {
+    values[`dungeons_class_${dungeonClass}_xp`] = getMax(
       memberProfiles,
       "data",
       "dungeons",
       "player_classes",
-      dungeon_class,
+      dungeonClass,
       "experience"
     );
   }
@@ -3620,7 +3616,7 @@ async function init() {
     for (const itemType in response.data.collections[type].items) {
       const item = response.data.collections[type].items[itemType];
       try {
-        const collectionData = constants.collection_data.find((a) => a.skyblockId == itemType);
+        const collectionData = constants.COLLECTION_DATA.find((a) => a.skyblockId == itemType);
 
         collectionData.maxTier = item.maxTiers;
         collectionData.tiers = item.tiers;

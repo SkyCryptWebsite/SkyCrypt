@@ -2,7 +2,7 @@ import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import * as helper from "../../../../common/helper.js";
-import * as constants from "../../../../common/constants.js";
+import { STATS_DATA } from "../../../../common/constants.js";
 
 @customElement("bonus-stats")
 export class BonusStats extends LitElement {
@@ -26,9 +26,9 @@ export class BonusStats extends LitElement {
     for (const [stat, value] of Object.entries(data)) {
       result.push(/* html */ `
         <span class="bonus-stat stat-name color-${stat.replaceAll("_", "-")}">
-          ${helper.round(value, 1).toLocaleString()}${constants.statsData[stat as StatName].suffix}
-          <abbr title="${constants.statsData[stat as StatName].name}">
-            ${constants.statsData[stat as StatName].nameTiny}
+          ${helper.round(value, 1).toLocaleString()}${STATS_DATA[stat as StatName].suffix}
+          <abbr title="${STATS_DATA[stat as StatName].name}">
+            ${STATS_DATA[stat as StatName].nameTiny}
           </abbr>
         </span>
       `);

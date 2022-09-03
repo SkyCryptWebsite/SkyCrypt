@@ -1,5 +1,5 @@
 import { db } from "../mongo.js";
-import { item_tags } from "../constants.js";
+import { ITEM_TAGS } from "../constants.js";
 
 await Promise.all([
   db.collection("apiKeys").createIndex({ key: 1 }, { unique: true }),
@@ -27,7 +27,7 @@ await Promise.all([
   db.collection("items").createIndex({ name: "text", tag: "text" }),
 
   Promise.all(
-    Object.entries(item_tags).map(([id, item]) => db.collection("items").updateOne({ id }, { $set: { tag: item } }))
+    Object.entries(ITEM_TAGS).map(([id, item]) => db.collection("items").updateOne({ id }, { $set: { tag: item } }))
   ),
 
   db.collection("bazaar").createIndex({ productId: 1 }, { unique: true }),

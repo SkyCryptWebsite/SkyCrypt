@@ -1,5 +1,5 @@
 // forge times, value in minutes
-export const forge_times = {
+export const FORGE_TIMES = {
   REFINED_DIAMOND: 8 * 60,
   REFINED_MITHRIL: 6 * 60,
   REFINED_TITANIUM: 12 * 60,
@@ -69,7 +69,7 @@ export const forge_times = {
   DIAMONITE: 6 * 60,
 };
 
-export const quick_forge_multiplier = {
+export const QUICK_FORGE_MULTIPLIER = {
   1: 0.895,
   2: 0.89,
   3: 0.885,

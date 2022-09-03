@@ -1,4 +1,4 @@
-import * as constants from "./constants.js";
+import { STATS_DATA } from "./constants.js";
 
 /**
  * removes Minecraft formatting codes from a string
@@ -30,7 +30,7 @@ export function getStatsFromItem(piece) {
       continue;
     }
 
-    const statName = Object.keys(constants.statsData).find((key) => constants.statsData[key].nameLore === match[1]);
+    const statName = Object.keys(STATS_DATA).find((key) => STATS_DATA[key].nameLore === match[1]);
     const statValue = parseFloat(match[2].replace(/,/g, ""));
 
     if (statName) {

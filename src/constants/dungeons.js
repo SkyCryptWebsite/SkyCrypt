@@ -1,4 +1,4 @@
-export const dungeons = {
+export const DUNGEONS = {
   bosses: {
     bonzo: {
       name: "Bonzo",

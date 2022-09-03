@@ -1,4 +1,4 @@
-import { collection_data } from "./constants/collections.js";
+import { COLLECTION_DATA } from "./constants/collections.js";
 import moment from "moment";
 import momentDurationFormat from "moment-duration-format";
 momentDurationFormat(moment);
@@ -84,7 +84,7 @@ export default (name) => {
 
   if (lbName.startsWith("collection_")) {
     const collectionName = lbName.split("_").slice(1).join("_").toUpperCase();
-    const collectionData = collection_data.filter((a) => a.skyblockId == collectionName);
+    const collectionData = COLLECTION_DATA.filter((a) => a.skyblockId == collectionName);
 
     if (collectionData.length > 0) {
       options["name"] = collectionData[0].name + " Collection";

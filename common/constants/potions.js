@@ -1,4 +1,4 @@
-export const potionColors = {
+export const POTION_COLORS = {
   0: "375cc4", // None
   1: "cb5ba9", // Regeneration
   2: "420a09", // Speed

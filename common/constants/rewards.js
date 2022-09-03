@@ -1,4 +1,4 @@
-export const pet_rewards = {
+export const PET_REWARDS = {
   0: { magic_find: 0 },
   10: { magic_find: 1 },
   25: { magic_find: 2 },

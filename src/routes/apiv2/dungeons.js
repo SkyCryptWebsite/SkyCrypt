@@ -20,16 +20,16 @@ router.get("/:player/:profile", async (req, res, next) => {
     };
 
     for (const singleProfile of allProfiles) {
-      const cute_name = singleProfile.cute_name;
+      const cuteName = singleProfile.cute_name;
 
-      if (cute_name.toLowerCase() != req.params.profile.toLowerCase()) {
+      if (cuteName.toLowerCase() != req.params.profile.toLowerCase()) {
         continue;
       }
 
       const userProfile = singleProfile.members[profile.uuid];
       const hypixelProfile = await helper.getRank(profile.uuid, db, req.cacheOnly);
 
-      const dungeonData = await lib.getDungeons(userProfile, hypixelProfile);
+      const dungeonData = lib.getDungeons(userProfile, hypixelProfile);
 
       output = {
         profile_id: singleProfile.profile_id,
@@ -54,7 +54,7 @@ router.get("/:player", async (req, res, next) => {
       const userProfile = singleProfile.members[profile.uuid];
       const hypixelProfile = await helper.getRank(profile.uuid, db, req.cacheOnly);
 
-      const dungeonData = await lib.getDungeons(userProfile, hypixelProfile);
+      const dungeonData = lib.getDungeons(userProfile, hypixelProfile);
 
       output.profiles[singleProfile.profile_id] = {
         profile_id: singleProfile.profile_id,

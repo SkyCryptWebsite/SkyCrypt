@@ -1,4 +1,4 @@
-export const stats_bonus = {
+export const STATS_BONUS = {
   // Skills
   skill_farming: {
     1: { health: 2, farming_fortune: 4 },

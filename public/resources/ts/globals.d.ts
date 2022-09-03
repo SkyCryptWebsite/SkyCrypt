@@ -163,7 +163,7 @@ interface Level {
 }
 
 declare namespace constants {
-  const max_favorites: number;
+  const MAX_FAVORITES: number;
 }
 
 declare const calculated: SkyCryptPlayer & {
@@ -522,7 +522,7 @@ declare const calculated: SkyCryptPlayer & {
   };
   slayer_xp: number;
   slayers: {
-    [key in slayerName]: {
+    [key in SlayerName]: {
       boss_kills_tier_0?: number;
       boss_kills_tier_1?: number;
       boss_kills_tier_2?: number;
@@ -625,7 +625,7 @@ interface Profile {
   profile_id: string;
 }
 
-type slayerName = "enderman" | "spider" | "wolf" | "zombie" | "blaze";
+type SlayerName = "enderman" | "spider" | "wolf" | "zombie" | "blaze";
 
 interface Navigator {
   userAgentData: NavigatorUAData;
