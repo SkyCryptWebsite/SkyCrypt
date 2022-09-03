@@ -3232,7 +3232,7 @@ class QuestionMark extends Pet {
   }
 }
 
-export const petStats = {
+export const PET_STATS = {
   "???": QuestionMark,
   AMMONITE: Ammonite,
   ARMADILLO: Armadillo,
