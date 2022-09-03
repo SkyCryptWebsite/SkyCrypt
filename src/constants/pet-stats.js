@@ -2935,7 +2935,7 @@ class Wisp extends Pet {
   }
 
   get second() {
-    const bonuses = [
+    const BONUSES = [
       { kills: 0, defense: 0, true_defense: 0 },
       { kills: 100, defense: 30, true_defense: 3 },
       { kills: 200, defense: 60, true_defense: 6 },
@@ -2956,21 +2956,21 @@ class Wisp extends Pet {
       { kills: 200000, defense: 600, true_defense: 60 },
     ];
 
-    const blaze_kills = this.extra?.blaze_kills ?? 0;
+    const blazeKills = this.extra?.blazeKills ?? 0;
 
     let maxTier = false;
-    let bonusIndex = bonuses.findIndex((x) => x.kills > blaze_kills);
+    let bonusIndex = BONUSES.findIndex((x) => x.kills > blazeKills);
 
     if (bonusIndex === -1) {
-      bonusIndex = bonuses.length;
+      bonusIndex = BONUSES.length;
       maxTier = true;
     }
 
-    const current = bonuses[bonusIndex - 1];
+    const current = BONUSES[bonusIndex - 1];
 
     let next = null;
     if (!maxTier) {
-      next = bonuses[bonusIndex];
+      next = BONUSES[bonusIndex];
     }
 
     return {
@@ -2981,7 +2981,7 @@ class Wisp extends Pet {
         !maxTier
           ? `§7Next Upgrade: §a+${next.defense} ${SYMBOLS.defense} §7& §f+${next.true_defense} ${
               SYMBOLS.true_defense
-            } §7(§a${blaze_kills.toLocaleString()}§7/§c${next.kills.toLocaleString()}§7)`
+            } §7(§a${blazeKills.toLocaleString()}§7/§c${next.kills.toLocaleString()}§7)`
           : "§aMAXED OUT!",
       ],
     };
