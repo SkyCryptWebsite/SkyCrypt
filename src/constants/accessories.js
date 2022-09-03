@@ -740,7 +740,7 @@ export const accessories = {
   SHENS_REGALIA: {
     name: "Shen's Regalia",
     rarity: "legendary",
-    texture: "/head/9c7fb6f414ff0eb6bf5797acb3b3af354ca3af95ceb8f3418125f6b805419f39"
+    texture: "/head/9c7fb6f414ff0eb6bf5797acb3b3af354ca3af95ceb8f3418125f6b805419f39",
   },
   PANDORAS_BOX: {
     name: "Pandora's Box",

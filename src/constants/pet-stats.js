@@ -515,7 +515,10 @@ class Endermite extends Pet {
     return {
       name: "§6More Stonks",
       desc: [
-        `§7Gain more exp orbs for breaking end stone and gain a +§a${round(this.level * mult, 1)}% §7chance to get an extra block dropped.`,
+        `§7Gain more exp orbs for breaking end stone and gain a +§a${round(
+          this.level * mult,
+          1
+        )}% §7chance to get an extra block dropped.`,
       ],
     };
   }
@@ -524,14 +527,25 @@ class Endermite extends Pet {
     const mult = getValue(this.rarity, { rare: 0.03, epic: 0.05 });
     return {
       name: "§6Pearl Muncher",
-      desc: [`&7Ender Pearls dropped from slain enemies are consumed and converted into &6${5 + round(this.level * mult, 1)} coins&7.`],
+      desc: [
+        `&7Ender Pearls dropped from slain enemies are consumed and converted into &6${
+          5 + round(this.level * mult, 1)
+        } coins&7.`,
+      ],
     };
   }
 
   get third() {
     return {
       name: "§6Pearl Powered",
-      desc: [`§7Upon munching Ender Pearls, gain +&fa${round(this.level * 0.05, 1)} ${symbols.speed} Speed&7, &c+${round(this.level * 0.3, 1)} ${symbols.strength} Strength &7and &b${round(this.level * 0.1, 1)} ${symbols.magic_find} Magic Find &7for 10 seconds`],
+      desc: [
+        `§7Upon munching Ender Pearls, gain +&fa${round(this.level * 0.05, 1)} ${symbols.speed} Speed&7, &c+${round(
+          this.level * 0.3,
+          1
+        )} ${symbols.strength} Strength &7and &b${round(this.level * 0.1, 1)} ${
+          symbols.magic_find
+        } Magic Find &7for 10 seconds`,
+      ],
     };
   }
 }
@@ -965,7 +979,7 @@ class GoldenDragon extends Pet {
     if (this.level >= 100) {
       stats.strength = round(Math.max(0, this.level - 100) * 0.25 + 25 - 0.01, 0);
       stats.bonus_attack_speed = round(Math.max(0, this.level - 100) * 0.25 + 25 - 0.01, 0);
-      stats.magic_find = round((floor(this.level / 10) * 0.5), 2);
+      stats.magic_find = round(floor(this.level / 10) * 0.5, 2);
     }
     return stats;
   }
@@ -1018,9 +1032,7 @@ class GoldenDragon extends Pet {
   get third() {
     return {
       name: "§6Dragon's Greed",
-      desc: [
-        `&7Gain &c0.5% ${symbols.strength} Strength &7per &b5 ${symbols.magic_find} Magic Find&7.`
-      ],
+      desc: [`&7Gain &c0.5% ${symbols.strength} Strength &7per &b5 ${symbols.magic_find} Magic Find&7.`],
     };
   }
 
@@ -1028,9 +1040,7 @@ class GoldenDragon extends Pet {
     const value = this.level * 0.00125;
     return {
       name: "§6Legendary Treasure",
-      desc: [
-        `Gain &c${round(value, 4)}% damage &7for every million coins in your bank.`,
-      ]
+      desc: [`Gain &c${round(value, 4)}% damage &7for every million coins in your bank.`],
     };
   }
 }
@@ -2449,10 +2459,9 @@ class Dolphin extends Pet {
     return {
       name: "§6Pod Tactics",
       desc: [
-        `§7Grants §b+${round(
-          this.level * mult,
-          2
-        )}${symbols.fishing_speed} Fishing Speed §7for each player within §a10 §7blocks, up to §a5 §7players.`,
+        `§7Grants §b+${round(this.level * mult, 2)}${
+          symbols.fishing_speed
+        } Fishing Speed §7for each player within §a10 §7blocks, up to §a5 §7players.`,
       ],
     };
   }

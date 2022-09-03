@@ -188,7 +188,7 @@ export const statsData = {
     nameTiny: "FS",
     symbol: "☂",
     suffix: "",
-    color: "b"
+    color: "b",
   },
   breaking_power: {
     name: "Breaking Power",
@@ -242,7 +242,7 @@ export const statsData = {
     nameTiny: "RT",
     symbol: "ф",
     suffix: "",
-    color: "a",    
+    color: "a",
   },
   fear: {
     name: "Fear",
@@ -251,8 +251,8 @@ export const statsData = {
     nameTiny: "Fr",
     symbol: "☠",
     suffix: "",
-    color: "a",  
-  }
+    color: "a",
+  },
 };
 
 const _symbols = {
