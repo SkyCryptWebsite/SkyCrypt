@@ -1,6 +1,6 @@
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { allItems, isSlotItem, isBackpack, isItem, showBackpack } from "../stats-defer";
+import { ALL_ITEMS, isSlotItem, isBackpack, isItem, showBackpack } from "../stats-defer";
 import("./rich-item");
 
 @customElement("inventory-view")
@@ -28,7 +28,7 @@ export class InventoryView extends LitElement {
       if (!this.backpackID) {
         throw new Error("backpack id is required when inventory type is backpack");
       }
-      const backpack = allItems.get(this.backpackID);
+      const backpack = ALL_ITEMS.get(this.backpackID);
       if (!backpack || !isItem(backpack) || !isBackpack(backpack)) {
         throw new Error("backpack id must be the id of a backpack");
       }

@@ -20,9 +20,9 @@ router.get("/:player/:profile", async (req, res, next) => {
     };
 
     for (const singleProfile of allProfiles) {
-      const cute_name = singleProfile.cute_name;
+      const cuteName = singleProfile.cute_name;
 
-      if (cute_name.toLowerCase() != req.params.profile.toLowerCase()) {
+      if (cuteName.toLowerCase() != req.params.profile.toLowerCase()) {
         continue;
       }
 

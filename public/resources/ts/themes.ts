@@ -257,9 +257,9 @@ window.addEventListener(
 // Load the theme from localStorage if it exists
 {
   // TODO remove this once users are migrated to currentThemeUrl
-  const OldTheme = localStorage.getItem("currentTheme");
-  if (OldTheme) {
-    localStorage.setItem("currentThemeUrl", `/resources/themes/${OldTheme}.json`);
+  const oldTheme = localStorage.getItem("currentTheme");
+  if (oldTheme) {
+    localStorage.setItem("currentThemeUrl", `/resources/themes/${oldTheme}.json`);
     localStorage.removeItem("currentTheme");
   }
 

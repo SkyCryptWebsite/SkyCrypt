@@ -1,7 +1,7 @@
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import * as helper from "../../../../common/helper.js";
-import * as constants from "../../../../common/constants.js";
+import { STATS_DATA } from "../../../../common/constants.js";
 
 @customElement("player-stat")
 export class PlayerStat extends LitElement {
@@ -23,9 +23,9 @@ export class PlayerStat extends LitElement {
     }
 
     const value = Math.round(+this.value);
-    const icon = constants.statsData[this.stat].symbol;
-    const name = constants.statsData[this.stat].nameShort;
-    const suffix = constants.statsData[this.stat].suffix;
+    const icon = STATS_DATA[this.stat].symbol;
+    const name = STATS_DATA[this.stat].nameShort;
+    const suffix = STATS_DATA[this.stat].suffix;
 
     const tooltip = this.getTooltip(this.data, name, suffix, value, this.special);
 
@@ -48,7 +48,7 @@ export class PlayerStat extends LitElement {
     special: { [key: string]: number } | undefined
   ): string[] {
     const tooltip: string[] = [];
-    const tooltip_bonus: string[] = [];
+    const tooltipBonus: string[] = [];
 
     if (!name) {
       return tooltip;
@@ -67,7 +67,7 @@ export class PlayerStat extends LitElement {
           continue;
         }
 
-        tooltip_bonus.push(
+        tooltipBonus.push(
           `- ${this.getPrettyDataName(key)} ${val < 0 ? "" : "+"}${helper.round(val, 1).toLocaleString()}${suffix}`
         );
       }
@@ -78,7 +78,7 @@ export class PlayerStat extends LitElement {
         `<span class="stat-name">Bonus ${name}: </span>`,
         `<span class="stat-value">${helper.round(value - data.base, 1).toLocaleString()}${suffix}</span>`,
         "<br/>",
-        `<span class='tippy-explanation'>Bonus value obtain from: <br>${tooltip_bonus.join("<br>")}</span>`
+        `<span class='tippy-explanation'>Bonus value obtain from: <br>${tooltipBonus.join("<br>")}</span>`
       );
     }
 

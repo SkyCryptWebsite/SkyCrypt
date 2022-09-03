@@ -1,4 +1,4 @@
-import { maxEnchants } from "./constants.js";
+import { MAX_ENCHANTS } from "./constants.js";
 
 /**
  * @typedef {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"a"|"b"|"c"|"d"|"e"|"f"} ColorCode
@@ -58,7 +58,7 @@ export function renderLore(text) {
     output += "<span";
 
     if (color !== null) {
-      if (color == "9" && maxEnchants.has(part)) {
+      if (color == "9" && MAX_ENCHANTS.has(part)) {
         output += ` style='color: var(--§6)'`;
       } else {
         output += ` style='color: var(--§${color});'`;
@@ -85,7 +85,7 @@ export function renderLore(text) {
  * @example formatNumber(123456798, true, 10) = "123.4M"
  * @example formatNumber(123456798, true, 100) = "123.45M"
  */
-export const formatNumber = (number, floor, rounding = 10) => {
+export function formatNumber(number, floor, rounding = 10) {
   if (number < 1000) {
     return String(Math.floor(number));
   } else if (number < 10000) {
@@ -118,4 +118,4 @@ export const formatNumber = (number, floor, rounding = 10) => {
       "B"
     );
   }
-};
+}

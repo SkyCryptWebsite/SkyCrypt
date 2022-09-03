@@ -13,27 +13,6 @@
   -webkit-backdrop-filter: blur(16px) brightness(0.5);
   backdrop-filter: blur(16px) brightness(0.5);
 
-  @supports not ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
-    &::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: -1;
-      background: var(--bg_blur) no-repeat center center fixed;
-      background-color: rgb(20, 20, 20);
-      background-size: cover;
-    }
-    .light &::before {
-      background-color: rgb(235, 235, 235);
-    }
-    .cache-only &::before {
-      background-blend-mode: luminosity;
-    }
-  }
-
   .light & {
     -webkit-backdrop-filter: blur(16px) contrast(40%) brightness(1.5);
     backdrop-filter: blur(16px) contrast(40%) brightness(1.5);

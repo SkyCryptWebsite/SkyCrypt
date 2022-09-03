@@ -980,29 +980,29 @@ const metaDescription = getMetaDescription()
           <% }else{ %>
             <p class="stat-raw-values">
               <%
-                const maxTalis = items.accessories.filter(a => a.isUnique).length >= constants.unique_accessories_count ? 'golden-text': ''
-                const maxRecombTalis = items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length >= constants.unique_accessories_count ? 'golden-text': ''
+                const maxTalis = items.accessories.filter(a => a.isUnique).length >= constants.UNIQUE_ACCESSORIES_COUNT ? 'golden-text': ''
+                const maxRecombTalis = items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length >= constants.UNIQUE_ACCESSORIES_COUNT ? 'golden-text': ''
               %>
 
               <span class="stat-name <%= maxTalis %>">Unique Accessories: </span>
-              <span class="stat-value <%= maxTalis %>"><%= items.accessories.filter(a => a.isUnique).length %> / <%= constants.unique_accessories_count %></span>
+              <span class="stat-value <%= maxTalis %>"><%= items.accessories.filter(a => a.isUnique).length %> / <%= constants.UNIQUE_ACCESSORIES_COUNT %></span>
               <br>
               <span class="stat-name <%= maxTalis %>">Completion: </span>
-              <span class="stat-value percent <%= maxTalis %>"><%= Math.round(items.accessories.filter(a => a.isUnique).length / constants.unique_accessories_count * 100) %></span>
+              <span class="stat-value percent <%= maxTalis %>"><%= Math.round(items.accessories.filter(a => a.isUnique).length / constants.UNIQUE_ACCESSORIES_COUNT * 100) %></span>
               <br>
               <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
-              <span class="stat-value <%= maxRecombTalis %>"><%= items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= constants.unique_accessories_count %></span>
+              <span class="stat-value <%= maxRecombTalis %>"><%= items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= constants.UNIQUE_ACCESSORIES_COUNT %></span>
               <br>
               <%
                 const rarities = items.accessory_rarities;
                 const player_magical_power = {}
 
-                for (const rarity in constants.magical_power) {
+                for (const rarity in constants.MAGICAL_POWER) {
                   player_magical_power[rarity] = 0
-                  player_magical_power[rarity] += rarities[rarity] * constants.magical_power[rarity];
+                  player_magical_power[rarity] += rarities[rarity] * constants.MAGICAL_POWER[rarity];
                 }
 
-                const mp_hegemony = rarities.hegemony ? constants.magical_power[rarities.hegemony.rarity] : 0
+                const mp_hegemony = rarities.hegemony ? constants.MAGICAL_POWER[rarities.hegemony.rarity] : 0
                 const mp_total = Object.values(player_magical_power).reduce((a, b) => a + b) + mp_hegemony;
               %>
               <span data-tippy-content="
@@ -1018,7 +1018,7 @@ const metaDescription = getMetaDescription()
               <span style='color: var(--§6);' class='grey-text'>5 MP</span> × <span style='color: var(--§c);' class='grey-text'><%= rarities.very_special %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.very_special.toLocaleString() %> MP</span><br>
               <br>
               <% if(rarities.hegemony) { %>
-                <span style='color: var(--§<%= constants.rarityColors[rarities.hegemony.rarity] %>);' class='grey-text'>Hegemony Artifact</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_hegemony.toLocaleString() %> MP</span><br><br>
+                <span style='color: var(--§<%= constants.RARITY_COLORS[rarities.hegemony.rarity] %>);' class='grey-text'>Hegemony Artifact</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_hegemony.toLocaleString() %> MP</span><br><br>
               <% } %>
               Total: <span style='color: var(--§6);' class='grey-text'><%= mp_total.toLocaleString() %> Magical Power</span>
               ">
@@ -1091,13 +1091,13 @@ const metaDescription = getMetaDescription()
           <%
             const uniquePets = _.uniq(
               calculated.pets
-                .filter(pet => !constants.pet_data[pet.type].bingoExclusive === true || calculated.profile.game_mode === 'bingo')
-                .map((pet) => constants.pet_data[pet.type].typeGroup ?? pet.type)
+                .filter(pet => !constants.PET_DATA[pet.type].bingoExclusive === true || calculated.profile.game_mode === 'bingo')
+                .map((pet) => constants.PET_DATA[pet.type].typeGroup ?? pet.type)
             )
             const totalPets = _.uniq(
               Object.entries(
                 Object.fromEntries(
-                  Object.entries(constants.pet_data)
+                  Object.entries(constants.PET_DATA)
                     .filter(pet => !pet[1].bingoExclusive === true || calculated.profile.game_mode === 'bingo')
                 )
               )
@@ -1111,7 +1111,7 @@ const metaDescription = getMetaDescription()
 
             let totalSkins = {}
             let badSkins = {}
-            for (const [skin, skinData] of Object.entries(constants.pet_skins)) {
+            for (const [skin, skinData] of Object.entries(constants.PET_SKINS)) {
               if (skinData.release < Date.now()) {
                 totalSkins[skin] = calculated.pets.find((pet) => `PET_SKIN_${pet.skin}` === skin) != undefined;
               }
@@ -1128,7 +1128,7 @@ const metaDescription = getMetaDescription()
             <% max = userUniqueSkins >= totalUniqueSkins ? 'golden-text': '' %>
             <span class="stat-name <%= max %>">Unique Pet Skins: </span><span class="stat-value <%= max %>"><%= userUniqueSkins %> / <%= totalUniqueSkins %></span><br>
 
-            <% max = calculated.petScore >= Math.max(...Object.keys(constants.pet_rewards)) ? 'golden-text' : '' %>
+            <% max = calculated.petScore >= Math.max(...Object.keys(constants.PET_REWARDS)) ? 'golden-text' : '' %>
             <span data-tippy-content="
               Increase your pet score by collecting unique pets with a high rarity.<br><br>
               <table>
@@ -1355,7 +1355,7 @@ const metaDescription = getMetaDescription()
                 const delivered_parts = mining.core.crystal_nucleus?.precursor?.parts_delivered || []
                 const precursor_parts = {}
 
-                for (const [partId, partName] of Object.entries(constants.precursor_parts)) {
+                for (const [partId, partName] of Object.entries(constants.PRECURSOR_PARTS)) {
                   precursor_parts[partName] = delivered_parts.indexOf(partId) > -1
                 }
               %>
@@ -1402,7 +1402,7 @@ const metaDescription = getMetaDescription()
             <p class="stat-sub-header">Heart of the Mountain</p>
             <p class="stat-raw-values">
               <!-- Tier -->
-              <% max = mining.core.tier.level === constants.hotm.tiers ? 'golden-text' : '' %>
+              <% max = mining.core.tier.level === constants.HOTM.tiers ? 'golden-text' : '' %>
               <span class="stat-name <%= max %>">Tier:</span>
               <span class="stat-value <%= max %>"><%= mining.core.tier.level %></span>
               <br>
@@ -1412,7 +1412,7 @@ const metaDescription = getMetaDescription()
               <span class="stat-value <%= max %>"><%= mining.core.tokens.spent %>/<%= mining.core.tokens.total %></span>
               <br>
               <!-- Mithril Powder -->
-              <% max = mining.core.powder.mithril.total >= constants.hotm.powder_for_max_nodes.mithril_powder ? 'golden-text' : '' %>
+              <% max = mining.core.powder.mithril.total >= constants.HOTM.powder_for_max_nodes.mithril_powder ? 'golden-text' : '' %>
               <span class="stat-name <%= max %>">Mithril Powder:</span>
               <span class="stat-value <%= max %>" data-tippy-content="
                 <span class='stat-name'>Total:</span> <span class='stat-value'><%= mining.core.powder.mithril.total.toLocaleString() %></span><br>
@@ -1421,7 +1421,7 @@ const metaDescription = getMetaDescription()
               "><%= mining.core.powder.mithril.total.toLocaleString() %></span>
               <br>
               <!-- Gemstone Powder -->
-              <% max = mining.core.powder.gemstone.total >= constants.hotm.powder_for_max_nodes.gemstone_powder ? 'golden-text' : '' %>
+              <% max = mining.core.powder.gemstone.total >= constants.HOTM.powder_for_max_nodes.gemstone_powder ? 'golden-text' : '' %>
               <span class="stat-name <%= max %>">Gemstone Powder:</span>
               <span class="stat-value <%= max %>" data-tippy-content="
                 <span class='stat-name'>Total:</span> <span class='stat-value'><%= mining.core.powder.gemstone.total.toLocaleString() %></span><br>
@@ -2012,19 +2012,19 @@ const metaDescription = getMetaDescription()
           <div class="external-app-description">Check the next cheapest or fastest Minion upgrades and find out which Minions will earn you the most from Bazaar, for free.</div>
         </a>
         <p class="stat-raw-values">
-          <% max = uniqueMinions == constants.minions_max_uniques ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Minions: </span><span class="stat-value <%= max %>"><%= uniqueMinions %> / <%= constants.minions_max_uniques %></span><span class="grey-text"> (<%= Math.floor(uniqueMinions / constants.minions_max_uniques * 100) %>%)</span><br>
-          <% max = calculated.minion_slots.currentSlots == constants.minions_max_slots ? 'golden-text' : '' %><span class="stat-name <%= max %>">Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.minion_slots.currentSlots %></span><span class="grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
-          <% max = calculated.misc.profile_upgrades.minion_slots == 5 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Bonus Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades.minion_slots %> / <%= constants.profile_upgrades['minion_slots'] %></span><br>
-          <% max = maxedMinions == _.size(constants.minions) ? 'golden-text' : '' %><span class="stat-name <%= max %>">Maxed Minions: </span><span class="stat-value <%= max %>"><%= maxedMinions %> / <%= _.size(constants.minions) %></span><br>
+          <% max = uniqueMinions == constants.MINIONS_MAX_UNIQUES ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Minions: </span><span class="stat-value <%= max %>"><%= uniqueMinions %> / <%= constants.MINIONS_MAX_UNIQUES %></span><span class="grey-text"> (<%= Math.floor(uniqueMinions / constants.MINIONS_MAX_UNIQUES * 100) %>%)</span><br>
+          <% max = calculated.minion_slots.currentSlots == constants.MINIONS_MAX_SLOTS ? 'golden-text' : '' %><span class="stat-name <%= max %>">Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.minion_slots.currentSlots %></span><span class="grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
+          <% max = calculated.misc.profile_upgrades.minion_slots == 5 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Bonus Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades.minion_slots %> / <%= constants.PROFILE_UPGRADES['minion_slots'] %></span><br>
+          <% max = maxedMinions == _.size(constants.MINIONS) ? 'golden-text' : '' %><span class="stat-name <%= max %>">Maxed Minions: </span><span class="stat-value <%= max %>"><%= maxedMinions %> / <%= _.size(constants.MINIONS) %></span><br>
           <% if(skippedMinions > 0){ %>
           <span class="stat-name">Skipped Minion Tiers: </span><span class="stat-value"><%= skippedMinions %></span><br>
           <% } %>
         </p>
         <%
-        for(const type of constants.minion_types){
+        for(const type of constants.MINION_TYPES){
           const minions = calculated.minions.filter(a => a.type == type && a.maxLevel > 0).sort((a, b) => b.maxLevel - a.maxLevel);
 
-          const totalOfType = _.size(_.pickBy(constants.minions, a => a.type == type));
+          const totalOfType = _.size(_.pickBy(CONSTANTS.minions, a => a.type == type));
           const maxOfType = minions.filter(a => a.maxLevel == a.tiers).length;
 
           if(minions.length == 0)
@@ -2070,20 +2070,20 @@ const metaDescription = getMetaDescription()
           <p class="stat-raw-values">
             <%
             let maxCollections = 0;
-            for(const collection of constants.collection_data)
+            for(const collection of constants.COLLECTION_DATA)
               if(collection.skyblockId in calculated.collections
               && calculated.collections[collection.skyblockId].tier >= collection.maxTier)
                 maxCollections++;
             %>
-            <% max = maxCollections == constants.collection_data.length ? 'golden-text' : '' %><span class="stat-name <%= max %>">Maxed Collections: </span><span class="stat-value <%= max %>"><%= maxCollections %> / <%= constants.collection_data.length %></span>
+            <% max = maxCollections == constants.COLLECTION_DATA.length ? 'golden-text' : '' %><span class="stat-name <%= max %>">Maxed Collections: </span><span class="stat-value <%= max %>"><%= maxCollections %> / <%= constants.COLLECTION_DATA.length %></span>
           </p>
-          <% for(const type of constants.collection_types){
+          <% for(const type of constants.COLLECTION_TYPES){
             const collections = [];
 
-            const totalOfType = constants.collection_data.filter(a => a.type == type).length;
+            const totalOfType = constants.COLLECTION_DATA.filter(a => a.type == type).length;
             let maxOfType = 0;
 
-            for(const collection of constants.collection_data.filter(a => a.type == type))
+            for(const collection of constants.COLLECTION_DATA.filter(a => a.type == type))
               if(collection.skyblockId in calculated.collections)
                 collections.push(Object.assign(collection, calculated.collections[collection.skyblockId]));
 
@@ -2156,9 +2156,9 @@ const metaDescription = getMetaDescription()
           <div class="collections">
             <% for (const [key, value] of Object.entries(calculated.essence)) { %>
               <div class="chip" data-missing="<%= value === 0 %>">
-                <div class="chip-icon-wrapper"><div style="background-image:url('<%= constants.essence[key].head %>')" class="item-icon custom-icon"></div></div>
+                <div class="chip-icon-wrapper"><div style="background-image:url('<%= constants.ESSENCE[key].head %>')" class="item-icon custom-icon"></div></div>
                 <div class="chip-text">
-                  <div class="collection-name"><span class="stat-name"><%= constants.essence[key].name %></span></div>
+                  <div class="collection-name"><span class="stat-name"><%= constants.ESSENCE[key].name %></span></div>
                   <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= value.toLocaleString() %></span></div>
                 </div>
               </div>
@@ -2433,8 +2433,8 @@ const metaDescription = getMetaDescription()
           <% if('profile_upgrades' in calculated.misc){ %>
             <div class="category-header"><div class="category-icon"><div class="item-icon icon-154_0"></div></div><span>Profile upgrades</span></div>
             <p class="stat-raw-values">
-              <% for(const upgrade in constants.profile_upgrades){ %>
-              <% max = calculated.misc.profile_upgrades[upgrade] == constants.profile_upgrades[upgrade] ? 'golden-text' : '' %><span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(upgrade.split("_").join(" ")); %>: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades[upgrade] %> / <%= constants.profile_upgrades[upgrade] %></span><br>
+              <% for(const upgrade in constants.PROFILE_UPGRADES){ %>
+              <% max = calculated.misc.profile_upgrades[upgrade] == constants.PROFILE_UPGRADES[upgrade] ? 'golden-text' : '' %><span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(upgrade.split("_").join(" ")); %>: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades[upgrade] %> / <%= constants.PROFILE_UPGRADES[upgrade] %></span><br>
               <% } %>
             </p>
           <% } %>
@@ -2499,7 +2499,7 @@ const metaDescription = getMetaDescription()
     const calculated = JSON.parse(`<%- JSON.stringify(calculated).replaceAll('\\', '\\\\') %>`);
     <%
       const clientConstants = {
-        max_favorites: constants.max_favorites,
+        MAX_FAVORITES: constants.MAX_FAVORITES,
       }
     %>
     const constants = JSON.parse(`<%- JSON.stringify(clientConstants).replaceAll('\\', '\\\\') %>`);

@@ -3,7 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import {
-  allItems,
+  ALL_ITEMS,
   clickLoreListener,
   isEnchanted,
   isItem,
@@ -22,7 +22,7 @@ export class InventoryView extends LitElement {
     if (this.itemId == undefined) {
       throw new Error("item id is required");
     }
-    const item = allItems.get(this.itemId);
+    const item = ALL_ITEMS.get(this.itemId);
     if (!item || !isItem(item)) {
       throw new Error("item id must be the id of an item");
     }

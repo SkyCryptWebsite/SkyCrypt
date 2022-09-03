@@ -1,7 +1,7 @@
 /** @typedef {"common"|"uncommon"|"rare"|"epic"|"legendary"|"mythic"|"divine"|"supreme"|"special"|"very_special"} Rarity */
 
 /** @type {Rarity[]} */
-export const rarities = [
+export const RARITIES = [
   "common",
   "uncommon",
   "rare",
@@ -17,7 +17,7 @@ export const rarities = [
 /** @typedef {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"a"|"b"|"c"|"d"|"e"|"f"} ColorCode */
 
 /** @type {{[key:Rarity]:ColorCode}} */
-export const rarityColors = {
+export const RARITY_COLORS = {
   common: "f",
   uncommon: "a",
   rare: "9",
