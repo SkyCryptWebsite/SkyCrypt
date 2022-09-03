@@ -18,7 +18,6 @@ export const champion_xp_ladder = [50000, 100000, 250000, 500000, 1000000, 15000
 
 export const cultivating_crops_ladder = [1000, 5000, 25000, 100000, 300000, 1500000, 5000000, 20000000, 100000000];
 
-
 // api names and their max value from the profile upgrades
 export const profile_upgrades = {
   island_size: 10,
