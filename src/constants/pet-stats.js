@@ -2976,7 +2976,7 @@ class Wisp extends Pet {
     return {
       name: "§6Bulwark",
       desc: [
-        `§7Kill Blazes to gain defense against them`,
+        `§7Kill Blazes to gain defense against them and demons.`,
         `§7Bonus: §a+${current.defense} ${symbols.defense} §7& §f+${current.true_defense} ${symbols.true_defense}`,
         !maxTier
           ? `§7Next Upgrade: §a+${next.defense} ${symbols.defense} §7& §f+${next.true_defense} ${
@@ -2993,7 +2993,7 @@ class Wisp extends Pet {
 
     return {
       name: "§6Blaze Slayer",
-      desc: [`§7Gain §a+${prc}% §7more combat xp from Blazes`],
+      desc: [`§7Grants §a+${prc}% &3${symbols.wisdom} Combat Wisdom &7from &aBlazes&7.`],
     };
   }
 
