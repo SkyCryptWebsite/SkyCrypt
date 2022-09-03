@@ -2910,7 +2910,7 @@ class Bingo extends Pet {
 class Wisp extends Pet {
   get stats() {
     return {
-      true_defense: this.level * 0.1,
+      true_defense: this.level * 0.1 + 5,
       health: this.level * 1,
       intelligence: this.level * 0.5,
     };
@@ -2988,7 +2988,7 @@ class Wisp extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { uncommon: 0.3, rare: 0.35, epic: 0.4 });
+    const mult = getValue(this.rarity, { uncommon: 0.3, rare: 0.4, epic: 0.45, legenedary: 50 });
     const prc = round(this.level * mult, 1);
 
     return {
@@ -3003,7 +3003,7 @@ class Wisp extends Pet {
     const val1 = round(this.level * mult1, 1);
     const val2 = round(this.level * mult2, 1);
     return {
-      name: "§6Extinguish",
+      name: "§6Ephemeral Stability",
       desc: [
         `§7While in combat on the Crimson Isle, spawn a pool every §a8s§7. Bathing in it heals §c${val1}% ${symbols.health} Health §7now and §c${val2}% ${symbols.health} Health§7/s for §a8s`,
       ],
