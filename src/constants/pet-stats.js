@@ -462,13 +462,13 @@ class Bat extends Pet {
   }
 
   get second() {
-    const mult_intel = getValue(this.rarity, { rare: 0.2, epic: 0.3 });
-    const mult_speed = getValue(this.rarity, { rare: 0.4, epic: 0.5 });
+    const multIntel = getValue(this.rarity, { rare: 0.2, epic: 0.3 });
+    const multSpeed = getValue(this.rarity, { rare: 0.4, epic: 0.5 });
     return {
       name: "§6Nightmare",
       desc: [
-        `§7During night, gain §a${round(this.level * mult_intel, 1)} §9${SYMBOLS.intelligence} Intelligence, §a${round(
-          this.level * mult_speed,
+        `§7During night, gain §a${round(this.level * multIntel, 1)} §9${SYMBOLS.intelligence} Intelligence, §a${round(
+          this.level * multSpeed,
           1
         )} §f${SYMBOLS.speed} Speed§7, and night vision`,
       ],
@@ -1465,28 +1465,28 @@ class Phoenix extends Pet {
 
   get first() {
     const start_strength = getValue(this.rarity, { epic: 10, legendary: 15 });
-    const mult_strength = getValue(this.rarity, { epic: 0.1, legendary: 0.15 });
-    const mult_time = getValue(this.rarity, { epic: 0.02 });
+    const multStrength = getValue(this.rarity, { epic: 0.1, legendary: 0.15 });
+    const multTime = getValue(this.rarity, { epic: 0.02 });
     return {
       name: "§6Rekindle",
       desc: [
-        `§7Before death, become §eimmune §7and gain §c${start_strength + round(this.level * mult_strength, 1)} ${
+        `§7Before death, become §eimmune §7and gain §c${start_strength + round(this.level * multStrength, 1)} ${
           SYMBOLS.strength
-        } Strength §7for ${2 + round(this.level * mult_time, 1)} §7seconds`,
+        } Strength §7for ${2 + round(this.level * multTime, 1)} §7seconds`,
         `§71m cooldown`,
       ],
     };
   }
 
   get second() {
-    const mult_damage = getValue(this.rarity, { epic: 0.12, legendary: 0.14 });
-    const mult_time = getValue(this.rarity, { epic: 0.04 });
+    const multDamage = getValue(this.rarity, { epic: 0.12, legendary: 0.14 });
+    const multTime = getValue(this.rarity, { epic: 0.04 });
     return {
       name: "§6Fourth Flare",
       desc: [
-        `§7On 4th melee strike, §6ignite §7mobs, dealing §c${1 + round(this.level * mult_damage, 1)}x §7your §9${
+        `§7On 4th melee strike, §6ignite §7mobs, dealing §c${1 + round(this.level * multDamage, 1)}x §7your §9${
           SYMBOLS.crit_damage
-        } Crit Damage §7each second for §a${2 + floor(this.level * mult_time, 0)} §7seconds`,
+        } Crit Damage §7each second for §a${2 + floor(this.level * multTime, 0)} §7seconds`,
       ],
     };
   }
@@ -1532,14 +1532,14 @@ class Pigman extends Pet {
   }
 
   get second() {
-    const mult_damage = getValue(this.rarity, { epic: 0.4 });
-    const mult_strength = getValue(this.rarity, { epic: 0.25 });
+    const multDamage = getValue(this.rarity, { epic: 0.4 });
+    const multStrength = getValue(this.rarity, { epic: 0.25 });
     return {
       name: "§6Pork Master",
       desc: [
-        `§7Buffs the Pigman sword by §a${round(this.level * mult_damage, 1)} §c${
+        `§7Buffs the Pigman sword by §a${round(this.level * multDamage, 1)} §c${
           SYMBOLS.strength
-        } Damage and §7§a${round(this.level * mult_strength, 1)} §c${SYMBOLS.strength} Strength`,
+        } Damage and §7§a${round(this.level * multStrength, 1)} §c${SYMBOLS.strength} Strength`,
       ],
     };
   }
@@ -1588,15 +1588,15 @@ class Rat extends Pet {
   }
 
   get third() {
-    const mult_mf = getValue(this.rarity, { legendary: 0.05 });
-    const mult_time = getValue(this.rarity, { legendary: 0.2 });
+    const multMf = getValue(this.rarity, { legendary: 0.05 });
+    const multTime = getValue(this.rarity, { legendary: 0.2 });
     return {
       name: "§6Rat's Blessing",
       desc: [
-        `§7Has a chance to grant a random player §b+${floor(2 + this.level * mult_mf, 1)} ${
+        `§7Has a chance to grant a random player §b+${floor(2 + this.level * multMf, 1)} ${
           SYMBOLS.magic_find
         } Magic Find §7for §a${round(
-          20 + this.level * mult_time,
+          20 + this.level * multTime,
           0
         )} §7seconds after finding a yummy piece of Cheese! If the player gets a drop during this buff, you have a §a20% §7to get it too.`,
       ],
@@ -2126,13 +2126,13 @@ class Giraffe extends Pet {
   }
 
   get second() {
-    const mult_strength = getValue(this.rarity, { rare: 0.4, epic: 0.5 });
-    const mult_cd = getValue(this.rarity, { rare: 0.1, epic: 0.25, legendary: 0.4 });
+    const multStrength = getValue(this.rarity, { rare: 0.4, epic: 0.5 });
+    const multCd = getValue(this.rarity, { rare: 0.1, epic: 0.25, legendary: 0.4 });
     return {
       name: "§6Higher Ground",
       desc: [
-        `§7Grants §c+${round(this.level * mult_strength, 1)} ${SYMBOLS.strength} Strength §7and §9+${round(
-          this.level * mult_cd + 20,
+        `§7Grants §c+${round(this.level * multStrength, 1)} ${SYMBOLS.strength} Strength §7and §9+${round(
+          this.level * multCd + 20,
           1
         )} ${SYMBOLS.crit_damage} Crit Damage §7when mid air or jumping`,
       ],
@@ -2618,13 +2618,13 @@ class Squid extends Pet {
   }
 
   get second() {
-    const mult_damage = getValue(this.rarity, { rare: 0.3, epic: 0.4 });
-    const mult_strength = getValue(this.rarity, { rare: 0.1, epic: 0.2 });
+    const multDamage = getValue(this.rarity, { rare: 0.3, epic: 0.4 });
+    const multStrength = getValue(this.rarity, { rare: 0.1, epic: 0.2 });
     return {
       name: "§6Ink Specialty",
       desc: [
-        `§7Buffs the Ink Wand by §a${round(this.level * mult_damage, 1)} §c${SYMBOLS.strength} Damage §7and §a${round(
-          this.level * mult_strength,
+        `§7Buffs the Ink Wand by §a${round(this.level * multDamage, 1)} §c${SYMBOLS.strength} Damage §7and §a${round(
+          this.level * multStrength,
           1
         )} §c${SYMBOLS.strength} Strength`,
       ],
@@ -2656,15 +2656,15 @@ class Jellyfish extends Pet {
   }
 
   get first() {
-    const mult_health = getValue(this.rarity, { epic: 1 });
-    const mult_mana = getValue(this.rarity, { epic: 0.5 });
+    const multHealth = getValue(this.rarity, { epic: 1 });
+    const multMana = getValue(this.rarity, { epic: 0.5 });
     return {
       name: "§6Radiant Regeneration",
       desc: [
         `§7While in dungeons, increase your base health regen by §a${round(
-          this.level * mult_health,
+          this.level * multHealth,
           1
-        )}% §7and reduces the mana cost of Power Orbs by §a${round(this.level * mult_mana, 1)}%§7.`,
+        )}% §7and reduces the mana cost of Power Orbs by §a${round(this.level * multMana, 1)}%§7.`,
       ],
     };
   }
