@@ -20,34 +20,13 @@ main.grid {
   }
 
   > * {
-    background: var(--bg_blur) no-repeat center center fixed;
-    background-color: rgba(10, 10, 10, 0.5);
-    background-size: cover;
     border-radius: 10px;
+    -webkit-backdrop-filter: blur(16px) brightness(0.5);
+    backdrop-filter: blur(16px) brightness(0.5);
 
     .light & {
-      background-color: rgba(255, 255, 255, 0.5);
-    }
-
-    @supports not ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
-      .cache-only &:not(.banner) {
-        background-blend-mode: luminosity;
-        background-color: black;
-      }
-      .cache-only.light &:not(.banner) {
-        background-color: white;
-      }
-    }
-
-    @supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
-      background: none;
-      -webkit-backdrop-filter: blur(16px) brightness(0.5);
-      backdrop-filter: blur(16px) brightness(0.5);
-
-      .light & {
-        -webkit-backdrop-filter: blur(16px) contrast(40%) brightness(1.5);
-        backdrop-filter: blur(16px) contrast(40%) brightness(1.5);
-      }
+      -webkit-backdrop-filter: blur(16px) contrast(40%) brightness(1.5);
+      backdrop-filter: blur(16px) contrast(40%) brightness(1.5);
     }
   }
 
@@ -137,6 +116,14 @@ main.grid {
 
 main.grid > a,
 .external-app {
+  transform: scale(1);
+  transition: transform 0.15s ease-in-out;
+
+  &:hover,
+  &:focus {
+    transform: scale(1.01);
+  }
+
   :not(img) {
     opacity: 0.85;
     transition: opacity 0.15s ease-in-out;
@@ -145,19 +132,6 @@ main.grid > a,
   &:hover :not(img),
   &:focus :not(img) {
     opacity: 1;
-  }
-
-  @supports ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
-    main.grid > a,
-    .external-app {
-      transform: scale(1);
-      transition: transform 0.15s ease-in-out;
-    }
-
-    &:hover,
-    &:focus {
-      transform: scale(1.01);
-    }
   }
 }
 

@@ -35,16 +35,16 @@ if ("share" in navigator) {
   });
 }
 
-function getCookie(c_name: string) {
+function getCookie(cookieName: string) {
   if (document.cookie.length > 0) {
-    let c_start = document.cookie.indexOf(c_name + "=");
-    if (c_start != -1) {
-      c_start = c_start + c_name.length + 1;
-      let c_end = document.cookie.indexOf(";", c_start);
-      if (c_end == -1) {
-        c_end = document.cookie.length;
+    let cookieStart = document.cookie.indexOf(cookieName + "=");
+    if (cookieStart != -1) {
+      cookieStart = cookieStart + cookieName.length + 1;
+      let cookieEnd = document.cookie.indexOf(";", cookieStart);
+      if (cookieEnd == -1) {
+        cookieEnd = document.cookie.length;
       }
-      return decodeURIComponent(document.cookie.substring(c_start, c_end));
+      return decodeURIComponent(document.cookie.substring(cookieStart, cookieEnd));
     }
   }
   return "";
@@ -125,7 +125,7 @@ tippy(".interactive-tooltip", {
   },
 });
 
-export const allItems = new Map(
+export const ALL_ITEMS = new Map(
   [
     items.armor,
     items.inventory,
@@ -251,7 +251,7 @@ function fillLore(element: HTMLElement) {
 
   if (element.hasAttribute("data-item-id")) {
     const itemId = element.getAttribute("data-item-id") as string;
-    item = allItems.get(itemId) as Item;
+    item = ALL_ITEMS.get(itemId) as Item;
   } else if (element.hasAttribute("data-pet-index")) {
     item = calculated.pets[parseInt(element.getAttribute("data-pet-index") as string)];
   } else if (element.hasAttribute("data-missing-pet-index")) {
@@ -341,12 +341,12 @@ function fillLore(element: HTMLElement) {
   }
 }
 
-function showLore(element: HTMLElement, _resize?: boolean) {
+function showLore(element: HTMLElement, shouldResize = true) {
   statsContent.classList.add("sticky-stats");
   element.classList.add("sticky-stats");
   dimmer.classList.add("show-dimmer");
 
-  if (_resize != false) {
+  if (shouldResize) {
     resize();
   }
 }
@@ -583,8 +583,8 @@ favoriteElement.addEventListener("click", () => {
       cookieArray.splice(cookieArray.indexOf(uuid), 1);
 
       favoriteNotification.setContent("Removed favorite!");
-    } else if (cookieArray.length >= constants.max_favorites) {
-      favoriteNotification.setContent(`You can only have ${constants.max_favorites} favorites!`);
+    } else if (cookieArray.length >= constants.MAX_FAVORITES) {
+      favoriteNotification.setContent(`You can only have ${constants.MAX_FAVORITES} favorites!`);
     } else {
       cookieArray.push(uuid);
 

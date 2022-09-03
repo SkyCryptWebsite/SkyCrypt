@@ -4,8 +4,7 @@
   "schema": 2,
   "light": true,
   "images": {
-    "bg": "/resources/img/themes/candycane/bg.webp",
-    "bg_blur": "/resources/img/themes/candycane/bg_blur.webp"
+    "bg": "/resources/img/themes/candycane/bg.webp"
   },
   "backgrounds": {
     "skillbar": { "type": "stripes", "angle": "45deg", "colors": ["#ff5555", "#ffffff"], "width": 10 },

@@ -1,17 +1,17 @@
 // prevent specific players from appearing in leaderboards
-export const blocked_players = [
+export const BLOCKED_PLAYERS = [
   "20934ef9488c465180a78f861586b4cf", // Minikloon (Admin)
   "f025c1c7f55a4ea0b8d93f47d17dfe0f", // Plancke (Admin)
 ];
 
 // Number of kills required for each level of expertise
-export const expertise_kills_ladder = [50, 100, 250, 500, 1000, 2500, 5500, 10000, 15000];
+export const EXPERTISE_KILLS_LADDER = [50, 100, 250, 500, 1000, 2500, 5500, 10000, 15000];
 
 // Walking distance required for each rarity level of the prehistoric egg
-export const prehistoric_egg_blocks_walked_ladder = [4000, 10000, 20000, 40000, 100000];
+export const PREHISTORIC_EGG_BLOCKS_WALKED_LADDER = [4000, 10000, 20000, 40000, 100000];
 
 // api names and their max value from the profile upgrades
-export const profile_upgrades = {
+export const PROFILE_UPGRADES = {
   island_size: 10,
   minion_slots: 5,
   guests_count: 5,
@@ -20,7 +20,7 @@ export const profile_upgrades = {
 };
 
 // Player stats on a completely new profile
-export const base_stats = {
+export const BASE_STATS = {
   health: 100,
   defense: 0,
   effective_health: 100,
@@ -44,7 +44,7 @@ export const base_stats = {
   damage_increase: 0,
 };
 
-export const stat_template = {
+export const STAT_TEMPLATE = {
   health: 0,
   defense: 0,
   effective_health: 0,
@@ -68,7 +68,7 @@ export const stat_template = {
   damage_increase: 0,
 };
 
-export const slayer_cost = {
+export const SLAYER_COST = {
   1: 2000,
   2: 7500,
   3: 20000,
@@ -76,12 +76,12 @@ export const slayer_cost = {
   5: 100000,
 };
 
-export const mob_mounts = {
+export const MOB_MOUNTS = {
   sea_emperor: ["guardian_emperor", "skeleton_emperor"],
   monster_of_the_deep: ["zombie_deep", "chicken_deep"],
 };
 
-export const mob_names = {
+export const MOB_NAMES = {
   pond_squid: "Squid",
   unburried_zombie: "Crypt Ghoul",
   zealot_enderman: "Zealot",
@@ -100,7 +100,7 @@ export const mob_names = {
   maxor: "Necron",
 };
 
-export const raceObjectiveToStatName = {
+export const RACE_OBJECTIVE_TO_STAT_NAME = {
   complete_the_end_race: "end_race_best_time",
   complete_the_woods_race: "foraging_race_best_time",
   complete_the_chicken_race: "chicken_race_best_time_2",
@@ -136,7 +136,7 @@ export const raceObjectiveToStatName = {
   complete_the_crystal_core_nothing_no_return_race: "dungeon_hub_crystal_core_nothing_no_return_best_time",
 };
 
-export const area_names = {
+export const AREA_NAMES = {
   dynamic: "Private Island",
   hub: "Hub",
   mining_1: "Gold Mine",
@@ -151,7 +151,7 @@ export const area_names = {
   winter: "Jerry's Workshop",
 };
 
-export const color_names = {
+export const COLOR_NAMES = {
   BLACK: "0",
   DARK_BLUE: "1",
   DARK_GREEN: "2",
@@ -170,7 +170,7 @@ export const color_names = {
   WHITE: "f",
 };
 
-export const ranks = {
+export const RANKS = {
   OWNER: {
     color: "c",
     tag: "OWNER",
@@ -242,7 +242,7 @@ export const ranks = {
   NONE: null,
 };
 
-export const farming_crops = {
+export const FARMING_CROPS = {
   "INK_SACK:3": {
     name: "Cocoa Beans",
     icon: "351_3",
@@ -285,7 +285,7 @@ export const farming_crops = {
   },
 };
 
-export const experiments = {
+export const EXPERIMENTS = {
   games: {
     simon: {
       name: "Chronomatron",
@@ -325,9 +325,9 @@ export const experiments = {
   ],
 };
 
-export const max_favorites = 10;
+export const MAX_FAVORITES = 10;
 
-export const increase_most_stats_exclude = [
+export const INCREASE_MOST_STATS_EXCLUDE = [
   "mining_speed",
   "mining_fortune",
   "farming_fortune",
@@ -335,14 +335,14 @@ export const increase_most_stats_exclude = [
   "pristine",
 ];
 
-export const fairy_souls = {
+export const FAIRY_SOULS = {
   max: {
     normal: 238,
     stranded: 3,
   },
 };
 
-export const essence = {
+export const ESSENCE = {
   // Catacombs essences
   ice: {
     name: "Ice",
@@ -379,6 +379,6 @@ export const essence = {
   },
 };
 
-export const stat_mappings = {
+export const STAT_MAPPINGS = {
   walk_speed: "speed",
 };

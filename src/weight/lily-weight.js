@@ -1,7 +1,7 @@
 import LilyWeight from "lilyweight";
 
-const skillOrder = ["enchanting", "taming", "alchemy", "mining", "farming", "foraging", "combat", "fishing"];
-const slayerOrder = ["zombie", "spider", "wolf", "enderman", "blaze"];
+const SKILL_ORDER = ["enchanting", "taming", "alchemy", "mining", "farming", "foraging", "combat", "fishing"];
+const SLAYER_ORDER = ["zombie", "spider", "wolf", "enderman", "blaze"];
 
 /**
  * converts a dungeon floor into a completion map
@@ -13,14 +13,14 @@ function getTierCompletions(floors = {}) {
 }
 
 export function calculateLilyWeight(profile) {
-  const skillLevels = skillOrder.map((key) => profile.levels[key].uncappedLevel);
-  const skillXP = skillOrder.map((key) => profile.levels[key].xp);
+  const skillLevels = SKILL_ORDER.map((key) => profile.levels[key].uncappedLevel);
+  const skillXP = SKILL_ORDER.map((key) => profile.levels[key].xp);
 
   const cataCompletions = getTierCompletions(profile.dungeons?.catacombs?.floors ?? {});
   const masterCataCompletions = getTierCompletions(profile.dungeons?.master_catacombs?.floors ?? {});
   const cataXP = profile.dungeons?.catacombs?.level?.xp ?? 0;
 
-  const slayerXP = slayerOrder.map((key) => profile.slayers?.[key]?.level?.xp ?? 0);
+  const slayerXP = SLAYER_ORDER.map((key) => profile.slayers?.[key]?.level?.xp ?? 0);
 
   return LilyWeight.getWeightRaw(skillLevels, skillXP, cataCompletions, masterCataCompletions, cataXP, slayerXP);
 }

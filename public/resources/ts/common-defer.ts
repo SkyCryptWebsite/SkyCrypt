@@ -31,6 +31,23 @@ function validateURL(url: string) {
   }
 }
 
+/**
+ * escapes and html to make something safe to put into an HTML string
+ * @param input unsafe string
+ * @returns safe string
+ * @example
+ * escapeHtml("<script>alert('hi');</script>")
+ * // returns "&lt;script&gt;alert(&#39;hi&#39;);&lt;/script&gt;"
+ */
+function escapeHtml(input: string): string {
+  return input
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
 document.querySelectorAll<HTMLFormElement>(".lookup-player").forEach((form) => {
   form.addEventListener("submit", (submitEvent: Event) => {
     submitEvent.preventDefault();
@@ -40,8 +57,9 @@ document.querySelectorAll<HTMLFormElement>(".lookup-player").forEach((form) => {
     } catch (error) {
       const errorTip = tippy(form.querySelector("input") as HTMLInputElement, {
         trigger: "manual",
-        content:
-          error instanceof Error ? error.message : String(error ?? "please enter a valid Minecraft username or UUID"),
+        content: escapeHtml(
+          error instanceof Error ? error.message : String(error ?? "please enter a valid Minecraft username or UUID")
+        ),
       });
       errorTip.show();
       setTimeout(() => {

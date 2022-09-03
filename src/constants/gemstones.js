@@ -3,7 +3,7 @@
  * - int: exact value
  * - null: unknown value
  */
-export const gemstones = {
+export const GEMSTONES = {
   JADE: {
     name: "Jade",
     color: "a",

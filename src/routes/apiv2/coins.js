@@ -20,9 +20,9 @@ router.get("/:player/:profile", async (req, res, next) => {
     };
 
     for (const singleProfile of allProfiles) {
-      const cute_name = singleProfile.cute_name;
+      const cuteName = singleProfile.cute_name;
 
-      if (cute_name.toLowerCase() != req.params.profile.toLowerCase()) {
+      if (cuteName.toLowerCase() != req.params.profile.toLowerCase()) {
         continue;
       }
 
@@ -31,7 +31,7 @@ router.get("/:player/:profile", async (req, res, next) => {
 
       output = {
         profile_id: singleProfile.profile_id,
-        cute_name: cute_name,
+        cute_name: cuteName,
         purse: data.purse,
         bank: data.bank,
       };
@@ -50,14 +50,14 @@ router.get("/:player", async (req, res, next) => {
     const output = { profiles: {} };
 
     for (const singleProfile of allProfiles) {
-      const cute_name = singleProfile.cute_name;
+      const cuteName = singleProfile.cute_name;
 
       const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", req.options);
       const data = await lib.getStats(db, singleProfile, allProfiles, items, req.options);
 
       output.profiles[singleProfile.profile_id] = {
         profile_id: singleProfile.profile_id,
-        cute_name: cute_name,
+        cute_name: cuteName,
         purse: data.purse,
         bank: data.bank,
       };

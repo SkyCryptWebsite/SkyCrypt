@@ -1,4 +1,4 @@
-import { allItems } from "./stats-defer";
+import { ALL_ITEMS } from "./stats-defer";
 
 // Announce dev mode in console
 console.log(
@@ -26,7 +26,7 @@ document.addEventListener("click", (e) => {
 
   if (element.hasAttribute("data-item-id")) {
     const itemId = element.getAttribute("data-item-id") as string;
-    item = allItems.get(itemId) as Item;
+    item = ALL_ITEMS.get(itemId) as Item;
   } else if (element.hasAttribute("data-pet-index")) {
     item = calculated.pets[parseInt(element.getAttribute("data-pet-index") as string)];
   } else if (element.hasAttribute("data-missing-pet-index")) {

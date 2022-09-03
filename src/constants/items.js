@@ -1,4 +1,4 @@
-export const typeToCategories = {
+export const TYPE_TO_CATEGORIES = {
   helmet: ["armor", "helmet"],
   chestplate: ["armor", "chestplate"],
   leggings: ["armor", "leggings"],

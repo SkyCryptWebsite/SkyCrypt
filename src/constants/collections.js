@@ -1,6 +1,6 @@
-export const collection_types = ["farming", "mining", "combat", "foraging", "fishing"];
+export const COLLECTION_TYPES = ["farming", "mining", "combat", "foraging", "fishing"];
 
-export const collection_data = [
+export const COLLECTION_DATA = [
   {
     type: "farming",
     skyblockId: "WHEAT",

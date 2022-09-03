@@ -1,4 +1,4 @@
-export const special_sets = [
+export const SPECIAL_SETS = [
   {
     pieces: ["SKELETON_HELMET", "GUARDIAN_CHESTPLATE", "CREEPER_LEGGINGS", "SPIDER_BOOTS"],
     name: "Monster Hunter Armor",
