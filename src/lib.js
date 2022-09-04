@@ -364,6 +364,30 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       }
     }
 
+    if (item.tag?.ExtraAttributes?.hecatomb_s_runs != undefined) {
+      const { hecatomb_s_runs } = item.tag.ExtraAttributes;
+
+      if (hecatomb_s_runs > 0) {
+        item.extra.hecatomb_s_runs = hecatomb_s_runs;
+      }
+    }
+
+    if (item.tag?.ExtraAttributes?.champion_combat_xp != undefined) {
+      const { champion_combat_xp } = item.tag.ExtraAttributes;
+
+      if (champion_combat_xp > 0) {
+        item.extra.champion_combat_xp = champion_combat_xp;
+      }
+    }
+
+    if (item.tag?.ExtraAttributes?.farmed_cultivating != undefined) {
+      const { farmed_cultivating } = item.tag.ExtraAttributes;
+
+      if (farmed_cultivating > 0) {
+        item.extra.farmed_cultivating = farmed_cultivating;
+      }
+    }
+
     if (item.tag?.ExtraAttributes?.blocks_walked != undefined) {
       const { blocks_walked } = item.tag.ExtraAttributes;
 
@@ -533,7 +557,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
         const expertise_kills = item.extra.expertise_kills;
 
         if (lore_raw) {
-          itemLore.push("", `§7Expertise Kills: §c${expertise_kills}`);
+          itemLore.push("", `§7Expertise Kills: §c${expertise_kills.toLocaleString()}`);
           if (expertise_kills >= 15000) {
             itemLore.push(`§8MAXED OUT!`);
           } else {
@@ -544,7 +568,67 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
                 break;
               }
             }
-            itemLore.push(`§8${toNextLevel} kills to tier up!`);
+            itemLore.push(`§8${toNextLevel.toLocaleString()} kills to tier up!`);
+          }
+        }
+      }
+
+      if (item.extra?.hecatomb_s_runs) {
+        const hecatomb_s_runs = item.extra.hecatomb_s_runs;
+
+        if (lore_raw) {
+          itemLore.push("", `§7Hecatomb Runs: §c${hecatomb_s_runs.toLocaleString()}`);
+          if (hecatomb_s_runs >= 100) {
+            itemLore.push(`§8MAXED OUT!`);
+          } else {
+            let toNextLevel = 0;
+            for (const e of constants.hecatomb_s_runs_ladder) {
+              if (hecatomb_s_runs < e) {
+                toNextLevel = e - hecatomb_s_runs;
+                break;
+              }
+            }
+            itemLore.push(`§8${toNextLevel.toLocaleString()} runs to tier up!`);
+          }
+        }
+      }
+
+      if (item.extra?.champion_combat_xp) {
+        const champion_combat_xp = Math.floor(item.extra.champion_combat_xp);
+
+        if (lore_raw) {
+          itemLore.push("", `§7Champion XP: §c${champion_combat_xp.toLocaleString()}`);
+          if (champion_combat_xp >= 3000000) {
+            itemLore.push(`§8MAXED OUT!`);
+          } else {
+            let toNextLevel = 0;
+            for (const e of constants.champion_xp_ladder) {
+              if (champion_combat_xp < e) {
+                toNextLevel = Math.floor(e - champion_combat_xp);
+                break;
+              }
+            }
+            itemLore.push(`§8${toNextLevel.toLocaleString()} xp to tier up!`);
+          }
+        }
+      }
+
+      if (item.extra?.farmed_cultivating) {
+        const farmed_cultivating = Math.floor(item.extra.farmed_cultivating);
+
+        if (lore_raw) {
+          itemLore.push("", `§7Cultivating Crops: §c${farmed_cultivating.toLocaleString()}`);
+          if (farmed_cultivating >= 100000000) {
+            itemLore.push(`§8MAXED OUT!`);
+          } else {
+            let toNextLevel = 0;
+            for (const e of constants.cultivating_crops_ladder) {
+              if (farmed_cultivating < e) {
+                toNextLevel = Math.floor(e - farmed_cultivating);
+                break;
+              }
+            }
+            itemLore.push(`§8${toNextLevel.toLocaleString()} crops to tier up!`);
           }
         }
       }
@@ -553,7 +637,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
         const blocks_walked = item.extra.blocks_walked;
 
         if (lore_raw) {
-          itemLore.push("", `§7Blocks Walked: §c${blocks_walked}`);
+          itemLore.push("", `§7Blocks Walked: §c${blocks_walked.toLocaleString()}`);
           if (blocks_walked >= 100000) {
             itemLore.push(`§8MAXED OUT!`);
           } else {
@@ -564,7 +648,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
                 break;
               }
             }
-            itemLore.push(`§8Walk ${toNextLevel} blocks to tier up!`);
+            itemLore.push(`§8Walk ${toNextLevel.toLocaleString()} blocks to tier up!`);
           }
         }
       }
