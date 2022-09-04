@@ -2024,7 +2024,7 @@ const metaDescription = getMetaDescription()
         for(const type of constants.MINION_TYPES){
           const minions = calculated.minions.filter(a => a.type == type && a.maxLevel > 0).sort((a, b) => b.maxLevel - a.maxLevel);
 
-          const totalOfType = _.size(_.pickBy(CONSTANTS.minions, a => a.type == type));
+          const totalOfType = _.size(_.pickBy(constants.minions, a => a.type == type));
           const maxOfType = minions.filter(a => a.maxLevel == a.tiers).length;
 
           if(minions.length == 0)
