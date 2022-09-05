@@ -886,7 +886,9 @@ a.additional-player-stat:hover {
 }
 
 .stat-speed,
-.color-speed {
+.stat-true-defense,
+.color-speed,
+.color-true-defense {
   color: var(--§f);
 }
 
@@ -903,7 +905,11 @@ a.additional-player-stat:hover {
 }
 
 .stat-intelligence,
-.color-intelligence {
+.stat-magic-find,
+.stat-fishing-speed,
+.color-intelligence
+.color-magic-find,
+.color-fishing-speed {
   color: var(--§b);
 }
 
@@ -913,39 +919,18 @@ a.additional-player-stat:hover {
   color: var(--§3);
 }
 
-.stat-magic-find,
-.stat-fishing-speed,
-.color-magic-find,
-.color-fishing-speed {
-  color: var(--§b);
-}
-
 .stat-pet-luck,
 .color-pet-luck {
   color: var(--§d);
 }
 
-.stat-ability-damage,
-.color-ability-damage {
-  color: var(--§c);
-}
-
 .stat-mining-speed,
-.color-mining-speed {
-  color: var(--§6);
-}
-
 .stat-mining-fortune,
-.color-mining-fortune {
-  color: var(--§6);
-}
-
 .stat-farming-fortune,
-.color-farming-fortune {
-  color: var(--§6);
-}
-
 .stat-foraging-fortune,
+.color-mining-speed,
+.color-mining-fortune,
+.color-farming-fortune,
 .color-foraging-fortune {
   color: var(--§6);
 }
@@ -953,11 +938,6 @@ a.additional-player-stat:hover {
 .stat-pristine,
 .color-pristine {
   color: var(--§5);
-}
-
-.stat-true-defense,
-.color-true-defense {
-  color: var(--§f);
 }
 
 .stat-vitality,
