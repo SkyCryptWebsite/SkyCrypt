@@ -50,6 +50,20 @@ export const BASE_STATS = {
   pristine: 0,
   damage: 0,
   damage_increase: 0,
+  fishing_speed: 0,
+  health_regen: 100,
+  vitality: 100,
+  mending: 100,
+  combat_wisdom: 0,
+  mining_wisdom: 0,
+  farming_wisdom: 0,
+  foraging_wisdom: 0,
+  fishing_wisdom: 0,
+  enchanting_wisdom: 0,
+  alchemy_wisdom: 0,
+  carpentry_wisdom: 0,
+  runecrafting_wisdom: 0,
+  social_wisdom: 0,
 };
 
 export const STAT_TEMPLATE = {
@@ -74,6 +88,20 @@ export const STAT_TEMPLATE = {
   pristine: 0,
   damage: 0,
   damage_increase: 0,
+  fishing_speed: 0,
+  health_regen: 0,
+  vitality: 0,
+  mending: 100,
+  combat_wisdom: 0,
+  mining_wisdom: 0,
+  farming_wisdom: 0,
+  foraging_wisdom: 0,
+  fishing_wisdom: 0,
+  enchanting_wisdom: 0,
+  alchemy_wisdom: 0,
+  carpentry_wisdom: 0,
+  runecrafting_wisdom: 0,
+  social_wisdom: 0,
 };
 
 export const SLAYER_COST = {
