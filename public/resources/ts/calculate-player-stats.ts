@@ -22,6 +22,20 @@ export function getPlayerStats() {
     farming_fortune: { base: 0 },
     foraging_fortune: { base: 0 },
     pristine: { base: 0 },
+    fishing_speed: { base: 0 },
+    health_regen: { base: 100 },
+    vitality: { base: 100 },
+    mending: { base: 100 },
+    combat_wisdom: { base: 0 },
+    mining_wisdom: { base: 0 },
+    farming_wisdom: { base: 0 },
+    foraging_wisdom: { base: 0 },
+    fishing_wisdom: { base: 0 },
+    enchanting_wisdom: { base: 0 },
+    alchemy_wisdom: { base: 0 },
+    carpentry_wisdom: { base: 0 },
+    runecrafting_wisdom: { base: 0 },
+    social_wisdom: { base: 0 },
   };
 
   const allowedStats = Object.keys(stats);

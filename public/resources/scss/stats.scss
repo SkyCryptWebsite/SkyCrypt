@@ -869,15 +869,19 @@ a.additional-player-stat:hover {
 .stat-strength,
 .stat-ferocity,
 .stat-ability-damage,
+.stat-health-regen,
 .color-health,
 .color-strength,
 .color-ferocity,
-.color-ability-damage {
+.color-ability-damage,
+.color-health-regen {
   color: var(--§c);
 }
 
 .stat-defense,
-.color-defense {
+.stat-mending,
+.color-defense,
+.color-mending {
   color: var(--§a);
 }
 
@@ -904,12 +908,15 @@ a.additional-player-stat:hover {
 }
 
 .stat-sea-creature-chance,
-.color-sea-creature-chance {
+.color-sea-creature-chance,
+[class $= "wisdom"] {
   color: var(--§3);
 }
 
 .stat-magic-find,
-.color-magic-find {
+.stat-fishing-speed,
+.color-magic-find,
+.color-fishing-speed {
   color: var(--§b);
 }
 
@@ -951,6 +958,11 @@ a.additional-player-stat:hover {
 .stat-true-defense,
 .color-true-defense {
   color: var(--§f);
+}
+
+.stat-vitality,
+.color-vitality {
+  color: var(--§4)
 }
 
 .stat-container {
