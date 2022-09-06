@@ -2415,22 +2415,29 @@ class Ammonite extends Pet {
   }
 
   get second() {
-    const mult = getValue(this.rarity, { legendary: 0.02 });
+    const mult = getValue(this.rarity, { legendary: 1 });
     return {
-      name: "§6Not a Snail",
+      name: "§6Expert Cave Fisher",
       desc: [
-        `§7Each fishing and mining level grants §f+${round(this.level * mult, 2)} ${
-          SYMBOLS.speed
-        } Speed §7and §a+${round(this.level * mult, 2)} ${SYMBOLS.defense} Defense.`,
+        `§7The Fishing Speed reduction from being underground is attenuated by §a${round(this.level * mult, 2)}%&7.`,
       ],
     };
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 0.009 });
+    const fSpeed = getValue(this.rarity, { legendary: 0.005 });
+    const speed = getValue(this.rarity, { legendary: 0.02 });
+    const def = getValue(this.rarity, { legendary: 0.02 });
     return {
       name: "§6Gift of the Ammonite",
-      desc: [`§7Grants §b+${round(this.level * mult, 2)}${SYMBOLS.fishing_speed} Fishing Speed §7per Mining level.`],
+      desc: [
+        `§7Each Mining and Fishing level grants §b+${round(this.level * fSpeed, 3)} ${
+          SYMBOLS.fishing_speed
+        } Fishing Speed§7, &f+${round(this.level * speed, 2)} ${SYMBOLS.speed} Speed &7and §a+${round(
+          this.level * def,
+          2
+        )} ${SYMBOLS.defense} Defense&7.`,
+      ],
     };
   }
 }
@@ -2455,13 +2462,13 @@ class Dolphin extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { common: 0.07, uncommon: 0.08, epic: 0.09 });
+    const mult = getValue(this.rarity, { common: 0.07, uncommon: 0.08, epic: 0.1 });
     return {
       name: "§6Pod Tactics",
       desc: [
         `§7Grants §b+${round(this.level * mult, 2)}${
           SYMBOLS.fishing_speed
-        } Fishing Speed §7for each player within §a10 §7blocks, up to §a5 §7players.`,
+        } Fishing Speed §7for each player within §a30 §7blocks, up to §a5 §7players.`,
       ],
     };
   }
@@ -2656,12 +2663,11 @@ class Jellyfish extends Pet {
   }
 
   get first() {
-    const multHealth = getValue(this.rarity, { epic: 1 });
-    const multMana = getValue(this.rarity, { epic: 0.5 });
+    const multHealth = getValue(this.rarity, { epic: 0.5 });
     return {
-      name: "§6Radiant Regeneration",
+      name: "§6Radiant Scyphozoa",
       desc: [
-        `§7While in dungeons, increase your base health regen by §a${round(
+        `§7While in dungeons, reduced mana  §a${round(
           this.level * multHealth,
           1
         )}% §7and reduces the mana cost of Power Orbs by §a${round(this.level * multMana, 1)}%§7.`,
