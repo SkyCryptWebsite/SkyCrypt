@@ -112,6 +112,9 @@ class Pet {
         case "farming_fortune":
           list.push(`§7Farming Fortune: ${formatStat(newStats[stat])}`);
           break;
+        case "health_regen":
+          list.push(`§7Health Regen: ${formatStat(newStats[stat])}`);
+          break;
         default:
           list.push(`§cUNKNOWN: ${stat}`);
           break;
@@ -2651,6 +2654,7 @@ class Jellyfish extends Pet {
   get stats() {
     return {
       health: this.level * 2,
+      health_regen: this.level * 1,
     };
   }
 
