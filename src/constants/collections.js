@@ -393,6 +393,13 @@ export const COLLECTION_DATA = [
     damage: 0,
     maxTier: 9,
   },
+  {
+    type: "combat",
+    skyblockId: "CHILI_PEPPER",
+    name: "Chili Pepper",
+    texture: "f859c8df1109c08a756275f1d2887c2748049fe33877769a7b415d56eda469d8c",
+    maxTier: 9,
+  },
 
   {
     type: "foraging",
