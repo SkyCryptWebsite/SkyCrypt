@@ -125,7 +125,7 @@ tippy(".interactive-tooltip", {
   },
 });
 
-export const ALL_ITEMS = new Map( 
+export const ALL_ITEMS = new Map(
   [
     items.armor,
     items.equipment,
