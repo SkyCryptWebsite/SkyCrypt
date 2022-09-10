@@ -903,7 +903,7 @@ export const getItems = async (
   output.storage = storage;
   output.hotm = hotm;
 
-  const allItems = armor.concat( 
+  const allItems = armor.concat(
     equipment,
     inventory,
     enderchest,
