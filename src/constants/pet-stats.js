@@ -542,7 +542,7 @@ class Endermite extends Pet {
     return {
       name: "§6Pearl Powered",
       desc: [
-        `§7Upon munching Ender Pearls, gain +§fa${round(this.level * 0.05, 1)} ${SYMBOLS.speed} Speed§7, §c+${round(
+        `§7Upon munching Ender Pearls, gain +§f${round(this.level * 0.05, 1)} ${SYMBOLS.speed} Speed§7, §c+${round(
           this.level * 0.3,
           1
         )} ${SYMBOLS.strength} Strength §7and §b${round(this.level * 0.1, 1)} ${
