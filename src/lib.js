@@ -796,6 +796,10 @@ export const getItems = async (
   // Process inventories returned by API
   const armor =
     "inv_armor" in profile ? await processItems(profile.inv_armor.data, customTextures, packs, options.cacheOnly) : [];
+  const equipment =
+    "equippment_contents" in profile
+      ? await processItems(profile.equippment_contents.data, customTextures, packs, options.cacheOnly)
+      : [];
   const inventory =
     "inv_contents" in profile
       ? await processItems(profile.inv_contents.data, customTextures, packs, options.cacheOnly)
@@ -886,6 +890,7 @@ export const getItems = async (
   let hotm = "mining_core" in profile ? await getHotmItems(profile, packs) : [];
 
   output.armor = armor.filter((x) => x.rarity);
+  output.equipment = equipment.filter((x) => x.rarity);
   output.wardrobe = wardrobe;
   output.wardrobe_inventory = wardrobe_inventory;
   output.inventory = inventory;
@@ -898,7 +903,8 @@ export const getItems = async (
   output.storage = storage;
   output.hotm = hotm;
 
-  const allItems = armor.concat(
+  const allItems = armor.concat( 
+    equipment,
     inventory,
     enderchest,
     accessory_bag,
@@ -1270,6 +1276,13 @@ export const getItems = async (
     output.armor_set_rarity = armorPiece.rarity;
   }
 
+  if (equipment.filter((x) => x.rarity).length === 1) {
+    const equipmentPiece = equipment.find((x) => x.rarity);
+
+    output.equipment_set = equipmentPiece.display_name;
+    output.equipment_set_rarity = equipmentPiece.rarity;
+  }
+
   // Full armor set (4 pieces)
   if (armor.filter((x) => x.rarity).length === 4) {
     let output_name;
@@ -1331,6 +1344,51 @@ export const getItems = async (
 
     output.armor_set = output_name;
     output.armor_set_rarity = constants.RARITIES[Math.max(...armor.map((a) => helper.rarityNameToInt(a.rarity)))];
+  }
+
+  // Full equipment set (4 pieces)
+  if (equipment.filter((x) => x.rarity).length === 4) {
+    let output_name;
+    let reforgeName;
+
+    // Getting equipment_name
+    equipment.forEach((equipmentPiece) => {
+      let name = equipmentPiece.display_name;
+
+      // Removing skin and stars / Whitelisting a-z and 0-9
+      name = name.replace(/[^A-Za-z0-9 -']/g, "").trim();
+
+      // Removing modifier
+      if (equipmentPiece.tag?.ExtraAttributes?.modifier != undefined) {
+        name = name.split(" ").slice(1).join(" ");
+      }
+
+      equipmentPiece.equipment_name = name;
+    });
+
+    // Getting full equipment reforge (same reforge on all pieces)
+    if (
+      equipment.filter(
+        (a) =>
+          a.tag?.ExtraAttributes?.modifier != undefined &&
+          a.tag?.ExtraAttributes?.modifier == equipment[0].tag.ExtraAttributes.modifier
+      ).length == 4
+    ) {
+      reforgeName = equipment[0].display_name.split(" ")[0];
+    }
+
+    if (equipment.filter((a) => a.equipment_name == equipment[0].equipment_name).length == 4) {
+      output_name = equipment[0].equipment_name;
+    }
+
+    // Finalizing the output
+    if (reforgeName && output_name) {
+      output_name = reforgeName + " " + output_name;
+    }
+
+    output.equipment_set = output_name;
+    output.equipment_set_rarity =
+      constants.RARITIES[Math.max(...equipment.map((a) => helper.rarityNameToInt(a.rarity)))];
   }
 
   console.debug(`${options.debugId}: getItems returned. (${Date.now() - timeStarted}ms)`);
