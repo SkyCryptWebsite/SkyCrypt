@@ -2667,7 +2667,7 @@ class Jellyfish extends Pet {
   }
 
   get first() {
-    const multHealth = getValue(this.rarity, { epic: 0.5 });
+    const mult_mana = getValue(this.rarity, { epic: 0.5 });
     return {
       name: "§6Radiant Scyphozoa",
       desc: [`§7While in dungeons, reduces the mana cost of Power Orbs by §a${round(this.level * mult_mana, 1)}%§7.`],
