@@ -780,7 +780,7 @@ export const MAGICAL_POWER = {
 const recombableAccessories = uniqueAccessories;
 
 for (const accessory of Object.keys(recombableAccessories)) {
-  if (ACCESSORIES[accessory]?.allowRecomb == false){
+  if (ACCESSORIES[accessory]?.allowRecomb == false) {
     delete recombableAccessories[accessory];
   }
 }
