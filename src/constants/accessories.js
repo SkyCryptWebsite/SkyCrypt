@@ -746,6 +746,7 @@ export const ACCESSORIES = {
     name: "Pandora's Box",
     rarity: "common",
     texture: "/head/fe246925cbd4c05279b9c8dcf7c2fdfc9baf9b1424aa35e501533ebb98e00522",
+    allowRecomb: false,
   },
   SHENS_REGALIA: {
     name: "Shen's Regalia",
@@ -775,3 +776,13 @@ export const MAGICAL_POWER = {
   special: 3,
   very_special: 5,
 };
+
+const recombableAccessories = uniqueAccessories;
+
+for (const accessory of Object.keys(recombableAccessories)) {
+  if (ACCESSORIES[accessory]?.allowRecomb == false){
+    delete recombableAccessories[accessory];
+  }
+}
+
+export const RECOMBABLE_ACCESSORIES_COUNT = Object.keys(recombableAccessories).length;
