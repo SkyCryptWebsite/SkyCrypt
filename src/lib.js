@@ -1409,6 +1409,7 @@ async function getLevels(userProfile, hypixelProfile, levelCaps) {
       enchanting: hypixelProfile.achievements.skyblock_augmentation || 0,
       alchemy: hypixelProfile.achievements.skyblock_concoctor || 0,
       taming: hypixelProfile.achievements.skyblock_domesticator || 0,
+      carpentry: 0,
     };
 
     output.levels = {};
@@ -1571,7 +1572,7 @@ export async function getStats(
   userProfile.pets.push(...items.pets);
 
   output.pets = await getPets(userProfile);
-  output.missingPets = await getMissingPets(output.pets, profile.game_mode);
+  output.missingPets = getMissingPets(output.pets, profile.game_mode);
   output.petScore = getPetScore(output.pets);
 
   const petScoreRequired = Object.keys(constants.PET_REWARDS).sort((a, b) => parseInt(b) - parseInt(a));
@@ -2511,7 +2512,7 @@ export async function getPets(profile) {
   return output;
 }
 
-async function getMissingPets(pets, gameMode) {
+function getMissingPets(pets, gameMode) {
   const profile = {
     pets: [],
   };
@@ -2531,7 +2532,6 @@ async function getMissingPets(pets, gameMode) {
     const key = petData.typeGroup ?? petType;
 
     missingPets[key] ??= [];
-
     missingPets[key].push({
       type: petType,
       active: false,
