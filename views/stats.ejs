@@ -56,22 +56,23 @@ const slayerInfo = {
   },
 };
 
-const seaCreatures = [
+const seaCreatures = [ 
   "pond_squid",
+  "plhlegblast",
   "sea_walker",
   "night_squid",
   "frozen_steve",
-  "nurse_shark",
   "sea_guardian",
   "frosty_the_snowman",
-  "sea_witch",
   "scarecrow",
+  "nurse_shark",
+  "sea_witch",
   "sea_archer",
   "oasis_rabbit",
   "oasis_sheep",
-  "blue_shark",
   "monster_of_the_deep",
   "grinch",
+  "blue_shark",
   "catfish",
   "nightmare",
   "carrot_king",
@@ -79,19 +80,28 @@ const seaCreatures = [
   "sea_leech",
   "poisoned_water_worm",
   "flaming_worm",
-  "werewolf",
+  "magma_slug",
+  "moogma",
+  "lava_leech",
+  "pyroclastic_worm",
+  "lava_flame",
+  "fire_eel",
+  "taurus",
   "guardian_defender",
+  "werewolf",
   "deep_sea_protector",
+  "tiger_shark",
   "lava_blaze",
   "lava_pigman",
-  "tiger_shark",
   "water_hydra",
   "sea_emperor",
   "phantom_fisherman",
-  "zombie_miner",
   "great_white_shark",
+  "zombie_miner",
   "yeti",
   "grim_reaper",
+  "thunder",
+  "lord_jawbus", 
 ];
 
 const milestone_rarities = ["common", "uncommon", "rare", "epic", "legendary"];
@@ -736,9 +746,9 @@ const metaDescription = getMetaDescription()
         <% if('levels' in calculated && 'runecrafting' in calculated.levels){ %>
           <div class="additional-stat"><span data-tippy-content="
           <span class='stat-name'>Total Skill XP: </span><span class='stat-value'><%= Math.round(calculated.total_skill_xp).toLocaleString() %></span>
-          <div class='tippy-explanation'>Total XP gained in all skills except Carpentry and Runecrafting.</div>
+          <div class='tippy-explanation'>Total XP gained in all skills except Social and Runecrafting.</div>
           <span class='stat-name'>Average Level: </span><span class='stat-value'><%= calculated.average_level.toFixed(2) %></span>
-          <div class='tippy-explanation'>Average skill level over all skills except Carpentry and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div>
+          <div class='tippy-explanation'>Average skill level over all skills except Social and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div>
           <% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
           <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
           "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level.toFixed(2) %></span></span></div>
