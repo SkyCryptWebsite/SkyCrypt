@@ -1467,13 +1467,13 @@ class Phoenix extends Pet {
   }
 
   get first() {
-    const start_strength = getValue(this.rarity, { epic: 10, legendary: 15 });
+    const startStrength = getValue(this.rarity, { epic: 10, legendary: 15 });
     const multStrength = getValue(this.rarity, { epic: 0.1, legendary: 0.15 });
     const multTime = getValue(this.rarity, { epic: 0.02 });
     return {
       name: "§6Rekindle",
       desc: [
-        `§7Before death, become §eimmune §7and gain §c${start_strength + round(this.level * multStrength, 1)} ${
+        `§7Before death, become §eimmune §7and gain §c${startStrength + round(this.level * multStrength, 1)} ${
           SYMBOLS.strength
         } Strength §7for ${2 + round(this.level * multTime, 1)} §7seconds`,
         `§71m cooldown`,
@@ -2667,10 +2667,10 @@ class Jellyfish extends Pet {
   }
 
   get first() {
-    const mult_mana = getValue(this.rarity, { epic: 0.5 });
+    const multMana = getValue(this.rarity, { epic: 0.5 });
     return {
       name: "§6Radiant Scyphozoa",
-      desc: [`§7While in dungeons, reduces the mana cost of Power Orbs by §a${round(this.level * mult_mana, 1)}%§7.`],
+      desc: [`§7While in dungeons, reduces the mana cost of Power Orbs by §a${round(this.level * multMana, 1)}%§7.`],
     };
   }
 
