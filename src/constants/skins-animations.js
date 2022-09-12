@@ -534,6 +534,12 @@ const SKINS = [
     release: new Date("2022-07-08 18:00:00 GMT+1").getTime(),
   },
   {
+    id: "PET_SKIN_ENDER_DRAGON_UNDEAD",
+    name: "Undead",
+    texture: "/head/e7232b2d2e618076cd620e352445d4a16382fdb24bcfafba7acceec0c146d2f6",
+    release: new Date("2022-07-22 18:00:00 GMT+1").getTime(),
+  },
+  {
     id: "PET_SKIN_BEE_RGBEE",
     name: "RGBee",
     texture: "/head/99c6da45da5a46614c05d5f8d7b3dfefb025e82ca4cdb4f0db64ced1315df659",
