@@ -185,7 +185,7 @@ export function getLevelByXp(xp, extra = {}) {
   const progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
-  const levelWithProgress = level + progress;  
+  const levelWithProgress = level + progress;
 
   /** a floating point value representing the current level ignoring the in-game unlockable caps for example if you are half way to level 5 it would be 4.5 */
   const unlockableLevelWithProgress = extra.cap ? Math.min(uncappedLevel + progress, maxLevel) : levelWithProgress;
@@ -2531,7 +2531,7 @@ async function getMissingPets(pets, gameMode) {
     const key = petData.typeGroup ?? petType;
 
     missingPets[key] ??= [];
-    
+
     missingPets[key].push({
       type: petType,
       active: false,
