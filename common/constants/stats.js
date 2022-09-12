@@ -235,24 +235,6 @@ export const STATS_DATA = {
     suffix: "",
     color: "3",
   },
-  rift_time: {
-    name: "Rift Time",
-    nameLore: "Rift Time",
-    nameShort: "Rift Time",
-    nameTiny: "RT",
-    symbol: "ф",
-    suffix: "",
-    color: "a",
-  },
-  fear: {
-    name: "Fear",
-    nameLore: "Fear",
-    nameShort: "Fear",
-    nameTiny: "Fr",
-    symbol: "☠",
-    suffix: "",
-    color: "a",
-  },
 };
 
 const symbols = {
