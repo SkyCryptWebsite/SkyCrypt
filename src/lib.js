@@ -758,6 +758,7 @@ function getMinions(coopMembers) {
   return minions;
 }
 
+
 function getMinionSlots(minions) {
   let uniqueMinions = 0;
 
