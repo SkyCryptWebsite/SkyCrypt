@@ -390,3 +390,81 @@ export const ESSENCE = {
 export const STAT_MAPPINGS = {
   walk_speed: "speed",
 };
+
+export const KUUDRA_TIERS = {
+  none: {
+    name: "Basic",
+    head: "1f0239fb498e5907ede12ab32629ee95f0064574a9ffdff9fc3a1c8e2ec17587",
+  },
+  hot: {
+    name: "Hot",
+    head: "1f0239fb498e5907ede12ab32629ee95f0064574a9ffdff9fc3a1c8e2ec17587",
+  },
+  // TODO: Add the rest of the tiers when update comes out (IDs might not be acurrate)
+  /*
+  burning: {
+    name: "Burning",
+    head: "",
+  },
+  fiery: {
+    name: "Fiery",
+    head: "", 
+  },
+  infernal: {
+    name: "Infernal",
+    head: "",
+  },
+  */
+};
+
+export const DOJO = {
+  // "dojo_points_sword_swap": 936,
+  // "dojo_time_sword_swap": 120000,
+  sword_swap: {
+    name: "Discipline",
+    itemId: 276,
+    damage: 0,
+  },
+  // "dojo_points_fireball": 1850,
+  // "dojo_time_fireball": 369550,
+  fireball: {
+    name: "Tenacity",
+    itemId: 385,
+    damage: 0,
+  },
+  // "dojo_points_archer": 1488,
+  // "dojo_time_archer": 120000,
+  archer: {
+    name: "Mastery",
+    itemId: 261,
+    damage: 0,
+  },
+  // "dojo_points_lock_head": 1027,
+  // "dojo_time_lock_head": 166000
+  lock_head: {
+    name: "Control",
+    itemId: 381,
+    damage: 0,
+  },
+  // "dojo_points_snake": 960,
+  // "dojo_time_snake": 80450,
+  snake: {
+    name: "Swiftness",
+    itemId: 420,
+    damage: 0,
+  },
+  // "dojo_points_wall_jump": 1071,
+  // "dojo_time_wall_jump": 180800,
+  wall_jump: {
+    name: "Stamina",
+    itemId: 414,
+    damage: 0,
+  },
+  // "dojo_points_mob_kb": 840,
+  // "dojo_time_mob_kb": 120000,
+  mob_kb: {
+    name: "Force",
+    itemId: 280,
+    damage: 0,
+  },
+};
