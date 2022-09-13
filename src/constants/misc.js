@@ -418,50 +418,36 @@ export const KUUDRA_TIERS = {
 };
 
 export const DOJO = {
-  // "dojo_points_sword_swap": 936,
-  // "dojo_time_sword_swap": 120000,
   sword_swap: {
     name: "Discipline",
     itemId: 276,
     damage: 0,
   },
-  // "dojo_points_fireball": 1850,
-  // "dojo_time_fireball": 369550,
   fireball: {
     name: "Tenacity",
     itemId: 385,
     damage: 0,
   },
-  // "dojo_points_archer": 1488,
-  // "dojo_time_archer": 120000,
   archer: {
     name: "Mastery",
     itemId: 261,
     damage: 0,
   },
-  // "dojo_points_lock_head": 1027,
-  // "dojo_time_lock_head": 166000
   lock_head: {
     name: "Control",
     itemId: 381,
     damage: 0,
   },
-  // "dojo_points_snake": 960,
-  // "dojo_time_snake": 80450,
   snake: {
     name: "Swiftness",
     itemId: 420,
     damage: 0,
   },
-  // "dojo_points_wall_jump": 1071,
-  // "dojo_time_wall_jump": 180800,
   wall_jump: {
     name: "Stamina",
     itemId: 414,
     damage: 0,
   },
-  // "dojo_points_mob_kb": 840,
-  // "dojo_time_mob_kb": 120000,
   mob_kb: {
     name: "Force",
     itemId: 280,
