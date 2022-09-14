@@ -4,6 +4,7 @@
     "dbaeumer.vscode-eslint",
     "digitalbrainstem.javascript-ejs-support",
     "bierner.comment-tagged-templates",
-    "runem.lit-plugin"
+    "runem.lit-plugin",
+    "j69.ejs-beautify"
   ]
 }
