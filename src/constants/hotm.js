@@ -1421,6 +1421,7 @@ export const HOTM = {
   nodes: nodeClasses,
   items: [HotmStats, CrystalHollowsCrystals, HotmReset],
   powder_for_max_nodes: powderForMaxNodes,
+  tokens: 15,
 };
 
 export const PRECURSOR_PARTS = {
