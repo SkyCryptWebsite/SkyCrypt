@@ -1994,7 +1994,7 @@ export async function getStats(
 
   // TROPHY FISH
 
-  output.trophyFish = getTrophyFish(userProfile)
+  output.trophyFish = getTrophyFish(userProfile);
 
   // MISC
 
@@ -2708,7 +2708,12 @@ export function getTrophyFish(userProfile) {
   trophyFish.rewards = userProfile.trophy_fish.rewards;
   trophyFish.total_caught = userProfile.trophy_fish.total_caught;
   Object.keys(userProfile.trophy_fish).forEach((key) => {
-    const type = key.toUpperCase().replaceAll('_BRONZE', '').replaceAll('_SILVER', '').replaceAll('_GOLD', '').replaceAll('_DIAMOND', '');
+    const type = key
+      .toUpperCase()
+      .replaceAll("_BRONZE", "")
+      .replaceAll("_SILVER", "")
+      .replaceAll("_GOLD", "")
+      .replaceAll("_DIAMOND", "");
     if (key == "rewards" || key == "total_caught") return;
 
     trophyFish.fish[key.toUpperCase()] = {
@@ -2717,10 +2722,10 @@ export function getTrophyFish(userProfile) {
       amount: userProfile.trophy_fish[key],
       head: constants.TROPHY_FISH[type].head,
       description: constants.TROPHY_FISH[type].description,
-    }
+    };
   });
 
-  return trophyFish
+  return trophyFish;
 }
 
 export function getDungeons(userProfile, hypixelProfile) {
