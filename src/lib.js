@@ -1992,6 +1992,10 @@ export async function getStats(
 
   output.mining = mining;
 
+  // TROPHY FISH
+
+  output.trophyFish = getTrophyFish(userProfile)
+
   // MISC
 
   const misc = {};
@@ -2693,6 +2697,30 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
   }
 
   return output;
+}
+
+export function getTrophyFish(userProfile) {
+  const trophyFish = {
+    total_caught: 0,
+    rewards: [],
+    fish: [],
+  };
+  trophyFish.rewards = userProfile.trophy_fish.rewards;
+  trophyFish.total_caught = userProfile.trophy_fish.total_caught;
+  Object.keys(userProfile.trophy_fish).forEach((key) => {
+    const type = key.toUpperCase().replaceAll('_BRONZE', '').replaceAll('_SILVER', '').replaceAll('_GOLD', '').replaceAll('_DIAMOND', '');
+    if (key == "rewards" || key == "total_caught") return;
+
+    trophyFish.fish[key.toUpperCase()] = {
+      id: key.toUpperCase(),
+      name: constants.TROPHY_FISH[type].name,
+      amount: userProfile.trophy_fish[key],
+      head: constants.TROPHY_FISH[type].head,
+      description: constants.TROPHY_FISH[type].description,
+    }
+  });
+
+  return trophyFish
 }
 
 export function getDungeons(userProfile, hypixelProfile) {
