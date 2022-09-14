@@ -1,5 +1,5 @@
 export const STATS_BONUS = {
-  // ? Skills
+  // Skills
   skill_farming: {
     1: { health: 2, farming_fortune: 4 },
     15: { health: 3, farming_fortune: 4 },
@@ -44,10 +44,10 @@ export const STATS_BONUS = {
   skill_carpentry: {
     1: { health: 1 },
     // ! Hypixel Admins made a mistake here, Carpentry 50 for some reason doesn't give health either
-    50: { health: 49 },
+    50: { health: 0 },
   },
   skill_runecrafting: {},
-  // ? Slayers
+  // Slayer
   slayer_zombie: {
     1: { health: 2 },
     2: { health: 2 },

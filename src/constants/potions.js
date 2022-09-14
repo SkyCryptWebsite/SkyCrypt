@@ -181,22 +181,26 @@ export const POTION_EFFECTS = {
   stun: {
     1: {
       name: "Stun I Potion",
-      description:"When applied to yourself, your hits have a 10% chance to stun enemies for 1s. When splashed, enemies are stunned for 1s.",
+      description:
+        "When applied to yourself, your hits have a 10% chance to stun enemies for 1s. When splashed, enemies are stunned for 1s.",
       bonus: {},
     },
     2: {
       name: "Stun II Potion",
-      description:"When applied to yourself, your hits have a 20% chance to stun enemies for 1s. When splashed, enemies are stunned for 1.25s.",
+      description:
+        "When applied to yourself, your hits have a 20% chance to stun enemies for 1s. When splashed, enemies are stunned for 1.25s.",
       bonus: {},
     },
     3: {
       name: "Stun III Potion",
-      description:"When applied to yourself, your hits have a 30% chance to stun enemies for 1s. When splashed, enemies are stunned for 1.5s.",
+      description:
+        "When applied to yourself, your hits have a 30% chance to stun enemies for 1s. When splashed, enemies are stunned for 1.5s.",
       bonus: {},
     },
     4: {
       name: "Stun IV Potion",
-      description:"When applied to yourself, your hits have a 40% chance to stun enemies for 1s. When splashed, enemies are stunned for 1.75s.",
+      description:
+        "When applied to yourself, your hits have a 40% chance to stun enemies for 1s. When splashed, enemies are stunned for 1.75s.",
       bonus: {},
     },
   },
@@ -378,7 +382,6 @@ export const POTION_EFFECTS = {
       description: `Grants a chance of not taking drowning damage.`,
       bonus: {},
     },
-    
   },
   combat_xp_boost: {
     1: {
@@ -738,7 +741,6 @@ export const POTION_EFFECTS = {
         speed: 40,
       },
     },
-    
   },
   spelunker: {
     1: {
