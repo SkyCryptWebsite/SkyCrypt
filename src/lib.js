@@ -2236,7 +2236,7 @@ export async function getStats(
 
   */
 
-  output.networth = await getNetworth(userProfile, output.bank, options = { onlyNetworth: true})
+  output.networth = await getNetworth(userProfile, output.bank, (options = { onlyNetworth: true }));
 
   /*
 
