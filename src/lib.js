@@ -2,6 +2,7 @@ import retry from "async-retry";
 import axios from "axios";
 import _ from "lodash";
 import minecraftData from "minecraft-data";
+import { getNetworth } from "skyhelper-networth";
 import moment from "moment";
 import sanitize from "mongo-sanitize";
 import path from "path";
@@ -2228,6 +2229,14 @@ export async function getStats(
     senither: calculateSenitherWeight(output),
     lily: calculateLilyWeight(output),
   };
+
+  /*
+
+    NETWORTH
+
+  */
+
+  output.networth = await getNetworth(userProfile, output.bank, options = { onlyNetworth: true})
 
   /*
 
