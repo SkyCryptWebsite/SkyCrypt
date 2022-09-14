@@ -2582,7 +2582,7 @@ function getMissingAccessories(accessories) {
       }
     }
   });
-  
+
   let missing = unique.filter((accessory) => !accessories.includes(accessory));
   missing.forEach((name) => {
     if (name in constants.ACCESSORY_UPGRADES) {
