@@ -1790,6 +1790,7 @@ export async function getStats(
 
   const farming = {
     talked: userProfile.jacob2?.talked || false,
+    pelts: userProfile.trapper_quest?.pelt_count || 0,
   };
 
   if (farming.talked) {
@@ -2581,7 +2582,7 @@ function getMissingAccessories(accessories) {
       }
     }
   });
-
+  
   let missing = unique.filter((accessory) => !accessories.includes(accessory));
   missing.forEach((name) => {
     if (name in constants.ACCESSORY_UPGRADES) {
