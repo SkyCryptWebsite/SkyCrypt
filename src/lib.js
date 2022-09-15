@@ -2001,29 +2001,31 @@ export async function getStats(
     total_dojo_points: 0,
   };
 
-  crimsonIsles.factions.selected_faction = userProfile.nether_island_player_data?.selected_faction;
-  crimsonIsles.factions.mages_reputation = userProfile.nether_island_player_data?.mages_reputation;
-  crimsonIsles.factions.barbarians_reputation = userProfile.nether_island_player_data?.barbarians_reputation;
+  crimsonIsles.factions.selected_faction = userProfile.nether_island_player_data?.selected_faction ?? "None";
+  crimsonIsles.factions.mages_reputation = userProfile.nether_island_player_data?.mages_reputation ?? 0;
+  crimsonIsles.factions.barbarians_reputation = userProfile.nether_island_player_data?.barbarians_reputation ?? 0;
 
-  Object.keys(userProfile.nether_island_player_data.kuudra_completed_tiers).forEach((key) => {
+  Object.keys(constants.KUUDRA_TIERS).forEach((key) => {
     crimsonIsles.kuudra_completed_tiers[key] = {
       name: constants.KUUDRA_TIERS[key].name,
       head: constants.KUUDRA_TIERS[key].head,
-      completions: userProfile.nether_island_player_data.kuudra_completed_tiers[key],
+      completions: userProfile.nether_island_player_data?.kuudra_completed_tiers[key] ?? 0,
     };
   });
 
-  Object.keys(userProfile.nether_island_player_data.dojo).forEach((key) => {
+  Object.keys(constants.DOJO).forEach((key) => {
     key = key.replaceAll("dojo_points_", "").replaceAll("dojo_time_", "");
-    crimsonIsles.total_dojo_points += userProfile.nether_island_player_data.dojo[`dojo_points_${key}`] / 2;
+    crimsonIsles.total_dojo_points += userProfile.nether_island_player_data?.dojo[`dojo_points_${key}`] / 2 ?? 0;
     crimsonIsles.dojo[key.toUpperCase()] = {
       name: constants.DOJO[key].name,
       id: constants.DOJO[key].itemId,
       damage: constants.DOJO[key].damage,
-      points: userProfile.nether_island_player_data.dojo[`dojo_points_${key}`],
-      time: userProfile.nether_island_player_data.dojo[`dojo_time_${key}`],
+      points: userProfile.nether_island_player_data?.dojo[`dojo_points_${key}`] ?? 0,
+      time: userProfile.nether_island_player_data?.dojo[`dojo_time_${key}`] ?? 0,
     };
   });
+
+  console.log(crimsonIsles);
 
   output.crimsonIsles = crimsonIsles;
 

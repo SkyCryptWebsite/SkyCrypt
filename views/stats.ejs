@@ -2163,7 +2163,7 @@ const metaDescription = getMetaDescription()
       <div class="stat-container stat-collections">
         <a class="stat-anchor" id="Crimson Isle"></a>
         <h2 class="stat-header">Crimson Isle</h2>
-        <% if (Object.keys(calculated.crimsonIsles.factions).length > 0) {  %>
+        <% if (Object.keys(calculated.crimsonIsles.factions).length > 0) { %>
         <p class="stat-raw-values stat-kills">
           <span class="stat-name">Selected Faction: </span><span class="stat-value"><%= calculated.crimsonIsles.factions.selected_faction.replaceAll('mages', 'Mage').replaceAll('barbarians', 'Barbarian') %></span><br>
           <span class="stat-name">Mage Reputation: </span><span class="stat-value"><%= calculated.crimsonIsles.factions.mages_reputation.toLocaleString() %></span><br>
