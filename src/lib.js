@@ -2025,8 +2025,6 @@ export async function getStats(
     };
   });
 
-  console.log(crimsonIsles);
-
   output.crimsonIsles = crimsonIsles;
 
   // MISC
