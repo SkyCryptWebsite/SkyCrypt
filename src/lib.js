@@ -1791,6 +1791,7 @@ export async function getStats(
 
   const farming = {
     talked: userProfile.jacob2?.talked || false,
+    pelts: userProfile.trapper_quest?.pelt_count || 0,
   };
 
   if (farming.talked) {
