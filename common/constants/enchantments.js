@@ -57,6 +57,7 @@ export const MAX_ENCHANTS = new Set([
   "Mana Vampire X",
   "Overload V",
   "Piercing I",
+  "Piscary VI",
   "Power VII",
   "Pristine V",
   "Projectile Protection VII",
