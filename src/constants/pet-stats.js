@@ -3057,7 +3057,7 @@ class MooshroomCow extends Pet {
     return {
       name: "§6Mushroom Eater",
       desc: [
-        `§7When breaking crops, there is a §a${round(this.level * mult, 1)}% §7chance that a mushroom will drop`,
+        `§7When breaking crops, there is a §a${round(this.level * mult + 1.01, 1)}% §7chance that a mushroom will drop`,
       ],
     };
   }
