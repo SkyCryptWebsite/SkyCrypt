@@ -3053,7 +3053,7 @@ class MooshroomCow extends Pet {
   }
 
   get second() {
-    const mult = getValue(this.rarity, { rare: 0.1 });
+    const mult = getValue(this.rarity, { rare: 0.99 });
     return {
       name: "§6Mushroom Eater",
       desc: [
