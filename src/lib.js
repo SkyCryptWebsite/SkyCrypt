@@ -149,7 +149,8 @@ export function getLevelByXp(xp, extra = {}) {
   }
 
   /** the level that this player is caped at */
-  const levelCap = extra.cap ?? constants.DEFAULT_SKILL_CAPS[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
+  const levelCap =
+    extra.cap ?? constants.DEFAULT_SKILL_CAPS[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
 
   /** the level ignoring the cap and using only the table */
   let uncappedLevel = 0;
@@ -168,7 +169,7 @@ export function getLevelByXp(xp, extra = {}) {
     }
   }
 
-  if (extra.type == 'dungeoneering' && !extra.class) {
+  if (extra.type == "dungeoneering" && !extra.class) {
     while (xpCurrent >= 200000000) {
       uncappedLevel++;
       xpCurrent -= 200000000;
@@ -176,19 +177,23 @@ export function getLevelByXp(xp, extra = {}) {
   }
 
   /** the maximum level that any player can achieve (used for gold progress bars) */
-  const maxLevel = extra.type == 'dungeoneering' && uncappedLevel > 50 ? uncappedLevel : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
+  const maxLevel =
+    extra.type == "dungeoneering" && uncappedLevel > 50
+      ? uncappedLevel
+      : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
 
   // not sure why this is floored but I'm leaving it in for now
   xpCurrent = Math.floor(xpCurrent);
 
   /** the level as displayed by in game UI */
-  const level = extra.type != 'dungeoneering' && !extra.class ? Math.min(levelCap, uncappedLevel): uncappedLevel;
+  const level = extra.type != "dungeoneering" && !extra.class ? Math.min(levelCap, uncappedLevel) : uncappedLevel;
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
   const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
   /** the fraction of the way toward the next level */
-  const progress = extra.type == 'dungeoneering' && !extra.class && level > 50 ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+  const progress =
+    extra.type == "dungeoneering" && !extra.class && level > 50 ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
   const levelWithProgress = level + progress;
