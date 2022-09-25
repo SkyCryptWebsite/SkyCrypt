@@ -1494,6 +1494,7 @@ const metaDescription = getMetaDescription()
           <% const farming = calculated.farming;
           if (farming.contests.attended_contests > 0) {%>
           <p class="stat-raw-values">
+            <span class="stat-name">Pelts: </span><span class="stat-value"><%= calculated.farming.pelts.toLocaleString() %></span><br>
             <span class="stat-name">Contests attended: </span><span class="stat-value"><%= farming.contests.attended_contests.toLocaleString() %></span><br>
             <% max = farming.unique_golds == 10 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Golds: </span><span class="stat-value <%= max %>"><%= farming.unique_golds.toLocaleString() %></span></span><br>
           </p>

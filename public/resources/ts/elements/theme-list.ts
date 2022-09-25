@@ -3,9 +3,16 @@ import { customElement, property } from "lit/decorators.js";
 import { until } from "lit/directives/until.js";
 import { loadTheme, getTheme } from "../themes";
 
-const themeURLs = ["default", "light", "skylea", "nightblue", "sunrise", "draconic", "candycane"].map(
-  (name) => `/resources/themes/${name}.json`
-);
+const themeURLs = [
+  "default",
+  "light",
+  "skylea",
+  "nightblue",
+  "sunrise",
+  "draconic",
+  "burning-cinnabar",
+  "candycane",
+].map((name) => `/resources/themes/${name}.json`);
 
 themeURLs.push(...JSON.parse(localStorage.getItem("customThemeUrls") ?? "[]"));
 
