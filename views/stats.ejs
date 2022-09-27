@@ -1105,11 +1105,15 @@ const metaDescription = getMetaDescription()
               totalPetXp += pet.exp
             }
 
+            let unlockedSkins = [];
             let totalSkins = {}
             let badSkins = {}
             for (const [skin, skinData] of Object.entries(constants.PET_SKINS)) {
               if (skinData.release < Date.now()) {
-                totalSkins[skin] = calculated.pets.find((pet) => `PET_SKIN_${pet.skin}` === skin) != undefined;
+                totalSkins[skin] = calculated.pets.find((pet) => `PET_SKIN_${pet.skin}`) != undefined;
+                for (const petData of calculated.pets) {
+                  if (`PET_SKIN_${petData.skin}` == skin) unlockedSkins.push(skin)
+                }
               }
             }
             let userUniqueSkins = Object.values(totalSkins).filter(skin => skin).length
@@ -1202,6 +1206,19 @@ const metaDescription = getMetaDescription()
             <% } %>
           </div>
           <% } %>
+
+          <button class="stat-sub-header extender" aria-controls="missing-pets" aria-expanded="false">Missing Skins</button>
+            <div class="pieces extendable" id="missing-pets">
+              <% let n = 0;
+              for (const [index, pet] of Object.entries(constants.PET_SKINS)) { 
+                n++;
+                if (unlockedSkins.includes(index)) continue;
+                %>
+                <div tabindex="0" data-missing-pet-index="<%= n %>" class="rich-item piece piece-mythic-bg missing-pet">
+                  <div style='background-image: url("<%= pet?.texture %>")' class="piece-icon item-icon custom-icon"></div>
+                </div>
+              <% } %>
+            </div>
         </div>
       </div>
       <% } %>
