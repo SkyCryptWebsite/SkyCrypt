@@ -890,7 +890,7 @@ export const getItems = async (
   let hotm = "mining_core" in profile ? await getHotmItems(profile, packs) : [];
 
   output.armor = armor.filter((x) => x.rarity);
-  output.equipment = equipment.filter((x) => x.rarity);
+  output.equipment = equipment;
   output.wardrobe = wardrobe;
   output.wardrobe_inventory = wardrobe_inventory;
   output.inventory = inventory;

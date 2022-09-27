@@ -830,7 +830,6 @@ const metaDescription = getMetaDescription()
       <div id="nav_bar_background"></div>
       <div id="nav_items_container">
         <a class="nav-item" href="#Armor">Armor</a>
-        <a class="nav-item" href="#Equipment">Equipment</a>
         <% if(!items.no_inventory){ %><a class="nav-item" href="#Weapons">Weapons</a><% } %>
         <% if(!items.no_inventory){ %><a class="nav-item" href="#Accessories">Accessories</a><% } %>
         <% if(calculated.pets.length > 0){ %><a class="nav-item" href="#Pets">Pets</a><% } %>
@@ -900,30 +899,27 @@ const metaDescription = getMetaDescription()
               <% itemIcon(item, ['piece-icon']); %>
             </div>
             <% } %>
+            <div data-bonus-stats="armor"></div>
           </div>
-          <div data-bonus-stats="armor"></div>
           <% } %>
-          <div class="stat-container stat-equipment">
-            <a class="stat-anchor" id="Equipment"></a>
-            <h2 class="stat-header">Equipment</h2>
-            <div class="stat-content">
-              <% if(items.equipment.length == 0){ %>
-              <div class="no-access"><%= calculated.display_name %> doesn't have any equipment equipped.</div>
-              <% }else{ %>
-              <div class="pieces">
-                <% for(const item of items.equipment.slice().reverse()){%>
-                <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
-                  <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
-                  <div class="piece-shine"></div>
-                  <% } %>
-                  <% itemIcon(item, ['piece-icon']); %>
-                </div>
-                <% } %>
-              </div>
-              <div data-bonus-stats="equipment"></div>
+          <p class="stat-sub-header">Equipment</p>
+          <% if(items.equipment.length == 0){ %>
+          <div class="no-access"><%= calculated.display_name %> doesn't have any equipment equipped.</div>
+          <% }else{ %>
+          <div class="pieces">
+            <% for(const item of items.equipment.slice().reverse()){ %>
+            <% if (item?.equipment_name) {%>
+            <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
+              <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
+              <div class="piece-shine"></div>
+              <% } %>
+              <% itemIcon(item, ['piece-icon']); %>
               <% } %>
             </div>
+            <% } %>
+            <div data-bonus-stats="equipment"></div>
           </div>
+          <% } %>
         </div>
       </div>
       <% if(items.wardrobe.length > 0){ %>
