@@ -3279,32 +3279,7 @@ export async function getProfile(
 
   if (paramProfile) {
     if (paramProfile.length == 32) {
-      const filteredProfiles = allSkyBlockProfiles.filter((a) => a.profile_id.toLowerCase() == paramProfile);
-
-      if (filteredProfiles.length > 0) {
-        skyBlockProfiles = filteredProfiles;
-      } else {
-        const profileResponse = await retry(async () => {
-          const response = await hypixel.get(
-            "skyblock/profile",
-            {
-              params: { key: credentials.hypixel_api_key, profile: paramProfile },
-            },
-            { retries: 2 }
-          );
-
-          if (!response.data.success) {
-            throw new Error("api request failed");
-          }
-
-          return response.data.profile;
-        });
-
-        profileResponse.cute_name = "Deleted";
-        profileResponse.uuid = paramPlayer;
-
-        skyBlockProfiles.push(profileResponse);
-      }
+      skyBlockProfiles = allSkyBlockProfiles.filter((a) => a.profile_id.toLowerCase() == paramProfile);
     } else {
       skyBlockProfiles = allSkyBlockProfiles.filter((a) => a.cute_name.toLowerCase() == paramProfile);
     }
@@ -3386,7 +3361,7 @@ export async function getProfile(
 
     const userProfile = _profile.members[paramPlayer];
 
-    if (_profile?.selected) {
+    if (_profile?.selected || _profile.profile_id.toLowerCase() == paramProfile) {
       profile = _profile;
     }
   }
