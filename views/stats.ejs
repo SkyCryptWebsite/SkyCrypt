@@ -630,7 +630,6 @@ const metaDescription = getMetaDescription()
               <% }else if(member.emoji){ %>
               <%- extra.twemoji.parse(member.emoji) %>
               <% } %>
-              <span class="goto-last-played"><%= 'last_updated' in member ? member.last_updated.text : '' %></span>
             </a>
           </li>
           <% }); %>
@@ -663,7 +662,6 @@ const metaDescription = getMetaDescription()
               <% if (_profile.game_mode == 'island') { %>
               <%- extra.twemoji.parse("🌴") %>
               <% } %>
-              <span class="goto-last-played"><%= 'last_updated' in _profile ? _profile.last_updated.text : '' %></span>
             </a>
           </li>
           <% } %>
@@ -730,7 +728,6 @@ const metaDescription = getMetaDescription()
         <% if(calculated.current_area){ %>
         <div class="additional-stat"><span class="stat-name"><%= calculated.current_area_updated ? 'Current' : 'Last' %> Area: </span><span class="stat-value"><%= calculated.current_area %></span></div>
         <% } %>
-        <div class="additional-stat"><span data-tippy-content='Last updated on <local-time timestamp="<%= calculated.last_updated.unix %>"></local-time>'><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></span></div>
         <div class="additional-stat"><span data-tippy-content='Joined on <local-time timestamp="<%= calculated.first_join.unix %>"></local-time>'><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></span></div>
         <div class="additional-stat"><span class="stat-name">Purse: </span><span class="stat-value"><%= helper.formatNumber(calculated.purse, true) %> Coin<%= Math.floor(calculated.purse) == 1 ? '': 's' %></span></div>
         <% if('bank' in calculated){ %>

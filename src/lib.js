@@ -1722,20 +1722,6 @@ export async function getStats(
     }
   }
 
-  for (const member of members) {
-    if (profile?.members?.[member.uuid]?.last_save == undefined) {
-      continue;
-    }
-
-    const lastUpdated = profile.members[member.uuid].last_save;
-
-    member.last_updated = {
-      unix: lastUpdated,
-      text:
-        Date.now() - lastUpdated < 7 * 60 * 1000 ? "currently online" : `last played ${moment(lastUpdated).fromNow()}`,
-    };
-  }
-
   if (profile.banking?.balance != undefined) {
     output.bank = profile.banking.balance;
   }
@@ -1751,18 +1737,10 @@ export async function getStats(
   output.profiles = {};
 
   for (const sbProfile of allProfiles.filter((a) => a.profile_id != profile.profile_id)) {
-    if (sbProfile?.members?.[profile.uuid]?.last_save == undefined) {
-      continue;
-    }
-
     output.profiles[sbProfile.profile_id] = {
       profile_id: sbProfile.profile_id,
       cute_name: sbProfile.cute_name,
       game_mode: sbProfile.game_mode,
-      last_updated: {
-        unix: sbProfile.members[profile.uuid].last_save,
-        text: `last played ${moment(sbProfile.members[profile.uuid].last_save).fromNow()}`,
-      },
     };
   }
 
@@ -2187,12 +2165,8 @@ export async function getStats(
   output.auctions_bought = auctions_bought;
   output.auctions_sold = auctions_sold;
 
-  const lastUpdated = userProfile.last_save;
   const firstJoin = userProfile.first_join;
 
-  const diff = (+new Date() - lastUpdated) / 1000;
-
-  let lastUpdatedText = moment(lastUpdated).fromNow();
   const firstJoinText = moment(firstJoin).fromNow();
 
   if ("current_area" in userProfile) {
@@ -2202,17 +2176,6 @@ export async function getStats(
   if ("current_area_updated" in userProfile) {
     output.current_area_updated = userProfile.current_area_updated;
   }
-
-  if (diff < 3) {
-    lastUpdatedText = `Right now`;
-  } else if (diff < 60) {
-    lastUpdatedText = `${Math.floor(diff)} seconds ago`;
-  }
-
-  output.last_updated = {
-    unix: lastUpdated,
-    text: lastUpdatedText,
-  };
 
   output.first_join = {
     unix: firstJoin,
@@ -3267,7 +3230,7 @@ export async function getProfile(
 
       allSkyBlockProfiles.push(doc);
 
-      lastCachedSave = Math.max(lastCachedSave, doc.members[paramPlayer].last_save || 0);
+      lastCachedSave = Math.max(lastCachedSave, Date.now() || 0);
     }
   } else {
     profileObject = { last_update: 0 };
@@ -3275,52 +3238,42 @@ export async function getProfile(
 
   let response = null;
 
-  if (
-    !options.cacheOnly &&
-    ((Date.now() - lastCachedSave > 190 * 1000 && Date.now() - lastCachedSave < 300 * 1000) ||
-      Date.now() - profileObject.last_update >= 300 * 1000)
-  ) {
-    try {
-      response = await retry(
-        async () => {
-          return await hypixel.get("skyblock/profiles", {
-            params,
-          });
-        },
-        { retries: 2 }
-      );
 
-      const { data } = response;
+  try {
+    response = await retry(
+      async () => {
+        return await hypixel.get("skyblock/profiles", {
+          params,
+        });
+      },
+      { retries: 2 }
+    );
 
-      if (!data.success) {
-        throw new Error("Request to Hypixel API failed. Please try again!");
-      }
+    const { data } = response;
 
-      if (data.profiles == null) {
-        throw new Error("Player has no SkyBlock profiles.");
-      }
-
-      allSkyBlockProfiles = data.profiles;
-    } catch (e) {
-      if (e?.response?.data?.cause != undefined) {
-        throw new Error(`Hypixel API Error: ${e.response.data.cause}.`);
-      }
-
-      throw e;
+    if (!data.success) {
+      throw new Error("Request to Hypixel API failed. Please try again!");
     }
+
+    if (data.profiles == null) {
+      throw new Error("Player has no SkyBlock profiles.");
+    }
+
+    allSkyBlockProfiles = data.profiles;
+  } catch (e) {
+    if (e?.response?.data?.cause != undefined) {
+      throw new Error(`Hypixel API Error: ${e.response.data.cause}.`);
+    }
+
+    throw e;
   }
+  
 
   if (allSkyBlockProfiles.length == 0) {
     throw new Error("Player has no SkyBlock profiles.");
   }
 
   for (const profile of allSkyBlockProfiles) {
-    for (const member in profile.members) {
-      if (profile.members[member]?.last_save == undefined) {
-        delete profile.members[member];
-      }
-    }
-
     profile.uuid = paramPlayer;
   }
 
@@ -3368,10 +3321,8 @@ export async function getProfile(
   for (const profile of skyBlockProfiles) {
     let memberCount = 0;
 
-    for (const member in profile.members) {
-      if (profile.members[member]?.last_save != undefined) {
-        memberCount++;
-      }
+    for (let i = 0; i < Object.keys(profile.members).length; i++) {
+      memberCount++;
     }
 
     if (memberCount == 0) {
@@ -3420,12 +3371,12 @@ export async function getProfile(
         .catch(console.error);
     }
 
-    if ("last_save" in userProfile) {
+    if ("selected" in _profile) {
       storeProfiles[_profile.profile_id] = {
         profile_id: _profile.profile_id,
         cute_name: _profile.cute_name,
         game_mode: _profile.game_mode,
-        last_save: userProfile.last_save,
+        selected: userProfile.selected,
       };
     }
   }
@@ -3437,9 +3388,8 @@ export async function getProfile(
 
     const userProfile = _profile.members[paramPlayer];
 
-    if (userProfile?.last_save > highest) {
+    if (_profile?.selected) {
       profile = _profile;
-      highest = userProfile.last_save;
     }
   }
 
@@ -3453,9 +3403,8 @@ export async function getProfile(
     userProfile.current_area = profileObject.current_area;
   }
 
-  if (Date.now() - userProfile.last_save < 5 * 60 * 1000) {
-    userProfile.current_area_updated = true;
-  }
+  userProfile.current_area_updated = true;
+  
 
   if (response && response.request.fromCache !== true) {
     const apisEnabled =
@@ -3465,29 +3414,28 @@ export async function getProfile(
 
     const insertProfileStore = {
       last_update: new Date(),
-      last_save: Math.max(...allSkyBlockProfiles.map((a) => a.members?.[paramPlayer]?.last_save ?? 0)),
       apis: apisEnabled,
       profiles: storeProfiles,
     };
 
-    if (options.updateArea && Date.now() - userProfile.last_save < 5 * 60 * 1000) {
-      try {
-        const statusResponse = await hypixel.get("status", {
-          params: { uuid: paramPlayer, key: credentials.hypixel_api_key },
-        });
 
-        const areaData = statusResponse.data.session;
+    try {
+      const statusResponse = await hypixel.get("status", {
+        params: { uuid: paramPlayer, key: credentials.hypixel_api_key },
+      });
 
-        if (areaData.online && areaData.gameType == "SKYBLOCK") {
-          const areaName = constants.AREA_NAMES[areaData.mode] || helper.titleCase(areaData.mode.replaceAll("_", " "));
+      const areaData = statusResponse.data.session;
 
-          userProfile.current_area = areaName;
-          insertProfileStore.current_area = areaName;
-        }
-      } catch (e) {
-        console.error(e);
+      if (areaData.online && areaData.gameType == "SKYBLOCK") {
+        const areaName = constants.AREA_NAMES[areaData.mode] || helper.titleCase(areaData.mode.replaceAll("_", " "));
+
+        userProfile.current_area = areaName;
+        insertProfileStore.current_area = areaName;
       }
+    } catch (e) {
+      console.error(e);
     }
+    
 
     updateLeaderboardPositions(db, paramPlayer, allSkyBlockProfiles).catch(console.error);
 
