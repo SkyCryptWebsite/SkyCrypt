@@ -3239,7 +3239,6 @@ export async function getProfile(
 
   let response = null;
 
-
   try {
     response = await retry(
       async () => {
@@ -3268,7 +3267,6 @@ export async function getProfile(
 
     throw e;
   }
-  
 
   if (allSkyBlockProfiles.length == 0) {
     throw new Error("Player has no SkyBlock profiles.");
@@ -3405,7 +3403,6 @@ export async function getProfile(
   }
 
   userProfile.current_area_updated = true;
-  
 
   if (response && response.request.fromCache !== true) {
     const apisEnabled =
@@ -3418,7 +3415,6 @@ export async function getProfile(
       apis: apisEnabled,
       profiles: storeProfiles,
     };
-
 
     try {
       const statusResponse = await hypixel.get("status", {
@@ -3436,7 +3432,6 @@ export async function getProfile(
     } catch (e) {
       console.error(e);
     }
-    
 
     updateLeaderboardPositions(db, paramPlayer, allSkyBlockProfiles).catch(console.error);
 
