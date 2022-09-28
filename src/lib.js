@@ -3320,7 +3320,6 @@ export async function getProfile(
     throw new Error("No data returned by Hypixel API, please try again!");
   }
 
-  let highest = 0;
   let profile;
 
   const storeProfiles = {};
@@ -3363,8 +3362,6 @@ export async function getProfile(
     if (_profile === undefined || _profile === null) {
       return;
     }
-
-    const userProfile = _profile.members[paramPlayer];
 
     if (_profile?.selected || _profile.profile_id.toLowerCase() == paramProfile) {
       profile = _profile;
