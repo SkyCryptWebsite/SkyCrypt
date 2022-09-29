@@ -75,7 +75,7 @@ const rewards = {
     6: {
       token_of_the_mountain: 1,
     },
-    7: {}
+    7: {},
   },
   rewards: {
     token_of_the_mountain: {
