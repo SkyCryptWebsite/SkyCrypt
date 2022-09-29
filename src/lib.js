@@ -3217,11 +3217,11 @@ export async function getProfile(
 
   let lastCachedSave = 0;
 
+  const profileData = [];
   if (profileObject) {
-    const profileData = db
-      .collection("profileCache")
-      .find({ profile_id: { $in: Object.keys(profileObject.profiles) } });
-
+    for (const pId of Object.keys(profileObject.profiles)) {
+      profileData.push(await db.collection("profileCache").findOne({ profile_id: pId }));
+    }
     for await (const doc of profileData) {
       if (doc.members?.[paramPlayer] == undefined) {
         continue;
@@ -3231,7 +3231,6 @@ export async function getProfile(
 
       allSkyBlockProfiles.push(doc);
 
-      lastCachedSave = Math.max(lastCachedSave, Date.now() || 0);
     }
   } else {
     profileObject = { last_update: 0 };
@@ -3239,33 +3238,40 @@ export async function getProfile(
 
   let response = null;
 
-  try {
-    response = await retry(
-      async () => {
-        return await hypixel.get("skyblock/profiles", {
-          params,
-        });
-      },
-      { retries: 2 }
-    );
+  lastCachedSave = Math.max(profileObject.last_update, Date.now() || 0);
 
-    const { data } = response;
+  if (
+    !options.cacheOnly &&
+    ((Date.now() - lastCachedSave > 190 * 1000 && Date.now() - lastCachedSave < 300 * 1000) ||
+      Date.now() - profileObject.last_update >= 300 * 1000)
+  ) {
+    try {
+      profileObject.last_update = Date.now();
+      response = await retry(
+        async () => {
+          return await hypixel.get("skyblock/profiles", { params });
+        },
+        { retries: 2 }
+      );
 
-    if (!data.success) {
-      throw new Error("Request to Hypixel API failed. Please try again!");
+      const { data } = response;
+
+      if (!data.success) {
+        throw new Error("Request to Hypixel API failed. Please try again!");
+      }
+
+      if (data.profiles == null) {
+        throw new Error("Player has no SkyBlock profiles.");
+      }
+
+      allSkyBlockProfiles = data.profiles;
+    } catch (e) {
+      if (e?.response?.data?.cause != undefined) {
+        throw new Error(`Hypixel API Error: ${e.response.data.cause}.`);
+      }
+
+      throw e;
     }
-
-    if (data.profiles == null) {
-      throw new Error("Player has no SkyBlock profiles.");
-    }
-
-    allSkyBlockProfiles = data.profiles;
-  } catch (e) {
-    if (e?.response?.data?.cause != undefined) {
-      throw new Error(`Hypixel API Error: ${e.response.data.cause}.`);
-    }
-
-    throw e;
   }
 
   if (allSkyBlockProfiles.length == 0) {
@@ -3345,14 +3351,12 @@ export async function getProfile(
         .catch(console.error);
     }
 
-    if ("selected" in _profile) {
-      storeProfiles[_profile.profile_id] = {
-        profile_id: _profile.profile_id,
-        cute_name: _profile.cute_name,
-        game_mode: _profile.game_mode,
-        selected: userProfile.selected,
-      };
-    }
+    storeProfiles[_profile.profile_id] = {
+      profile_id: _profile.profile_id,
+      cute_name: _profile.cute_name,
+      game_mode: _profile.game_mode ?? "normal",
+      selected: _profile.selected ?? false,
+    };
   }
 
   for (const _profile of profiles) {
