@@ -1410,6 +1410,7 @@ const metaDescription = getMetaDescription()
               <span class="stat-value <%= max %>"><%= mining.core.tier.level %></span>
               <br>
               <!-- Token of the Mountain -->
+              <% mining.core.tokens.spent > mining.core.tokens.total ? mining.core.tokens.total = mining.core.tokens.spent : null %>
               <% max = mining.core.tokens.spent === mining.core.tokens.total ? 'golden-text' : '' %>
               <span class="stat-name <%= max %>">Token of the Mountain:</span>
               <span class="stat-value <%= max %>"><%= mining.core.tokens.spent %>/<%= mining.core.tokens.total %></span>
