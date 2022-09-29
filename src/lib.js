@@ -1114,7 +1114,7 @@ export const getItems = async (
     }
 
     if (accessory.tag?.ExtraAttributes?.talisman_enrichment != undefined) {
-      accessory.enrichment = accessory.tag.ExtraAttributes.talisman_enrichment;
+      accessory.enrichment = accessory.tag.ExtraAttributes.talisman_enrichment.toLowerCase();
     }
   }
 
