@@ -3230,7 +3230,6 @@ export async function getProfile(
       Object.assign(doc, profileObject.profiles[doc.profile_id]);
 
       allSkyBlockProfiles.push(doc);
-
     }
   } else {
     profileObject = { last_update: 0 };
@@ -3351,8 +3350,8 @@ export async function getProfile(
     }
 
     storeProfiles[_profile.profile_id] = {
-      profile_id: _profile.profile_id,
-      cute_name: _profile.cute_name,
+      profile_id: _profile.profile_id ?? null,
+      cute_name: _profile.cute_name ?? "Unknown",
       game_mode: _profile.game_mode ?? "normal",
       selected: _profile.selected ?? false,
     };
