@@ -752,6 +752,11 @@ export const ACCESSORIES = {
     rarity: "legendary",
     texture: "/head/9c7fb6f414ff0eb6bf5797acb3b3af354ca3af95ceb8f3418125f6b805419f39",
   },
+  CHUMMING_TALISMAN: {
+    name: "Chumming Talisman",
+    rarity: "uncommon",
+    texture: "/head/9b688545e326e4f1fd1c405873d9c5b8bbe69dd26889ce3dea10b4d9e3d7b4db",
+  },
 };
 
 // Getting Unique Accessories Count
