@@ -25,9 +25,11 @@
 
 #base_stats_container {
   columns: 200px auto;
+
   .basic-stat {
     margin-top: 0;
   }
+
   .stat-icon {
     font-size: 16px;
     line-height: 1;
@@ -36,6 +38,7 @@
     margin-right: 2px;
     display: inline-block;
   }
+
   .stat-name,
   .stat-value {
     font-size: 14px;
@@ -53,6 +56,7 @@
   border-radius: 1000px;
   color: inherit;
   background-color: rgba(var(--text-rgb), 0.1);
+
   &:hover,
   &:focus {
     background-color: rgba(var(--text-rgb), 0.15);
@@ -101,6 +105,7 @@
       z-index: 10;
       filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
       overflow: hidden;
+
       @supports (overflow: clip) {
         overflow: clip;
       }
@@ -237,6 +242,7 @@
   visibility: hidden;
   border-radius: 10px;
   overflow: hidden;
+
   @supports (overflow: clip) {
     overflow: clip;
   }
@@ -275,11 +281,13 @@
     align-items: center;
     justify-content: flex-start;
     gap: 16px;
+
     .stats-piece-icon__wrapper {
       width: 32px;
       height: 32px;
       overflow: hidden;
       flex: none;
+
       .stats-piece-icon {
         filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
         width: 128px;
@@ -298,6 +306,7 @@
       text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
       margin: 0;
       flex: 1;
+
       &[data-multicolor="true"] {
         background-color: var(--lore_background-hex);
         border-radius: 1rem;
@@ -320,6 +329,7 @@
       filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.1));
       background-color: rgb(255 255 255 / 0%);
       clip-path: circle(15px);
+
       &:hover,
       &:focus-visible {
         background-color: rgb(255 255 255 / 15%);
@@ -334,6 +344,7 @@
     .lore-row {
       display: block;
       min-height: calc(1em * 1.2);
+
       @supports (min-height: 1lh) {
         min-height: 1lh;
       }
@@ -370,6 +381,7 @@
       top: 12px;
       left: 10px;
       image-rendering: crisp-edges;
+
       @supports (image-rendering: pixelated) {
         image-rendering: pixelated;
       }
@@ -451,6 +463,7 @@
   font-weight: 700;
   color: white;
   overflow: hidden;
+
   @supports (overflow: clip) {
     overflow: clip;
   }
@@ -497,6 +510,7 @@
   padding: 0;
   margin: 0;
   overflow: hidden;
+
   @supports (overflow: clip) {
     overflow: clip;
   }
@@ -731,6 +745,7 @@ a.additional-player-stat:hover {
   margin-left: calc(-1 * var(--padding));
   margin-right: calc(-1 * var(--padding));
   background-color: rgba(var(--background-rgb), 0.3);
+
   @media (max-width: 1590px) {
     grid-template-areas:
       "skill skill"
@@ -738,6 +753,7 @@ a.additional-player-stat:hover {
       "skin additional";
     grid-template-columns: 160px 1fr;
   }
+
   @media (max-width: 650px) {
     grid-template-areas:
       "skill skill"
@@ -745,6 +761,7 @@ a.additional-player-stat:hover {
       "skin additional";
     grid-template-columns: 1fr 1fr;
   }
+
   @media (max-width: 480px) {
     grid-template-areas:
       "skin additional"
@@ -770,6 +787,7 @@ a.additional-player-stat:hover {
     }
   }
 }
+
 #nav_bar {
   position: sticky;
   top: calc(48px + env(safe-area-inset-top, 0));
@@ -800,8 +818,10 @@ a.additional-player-stat:hover {
     bottom: 10px;
     z-index: 1;
   }
+
   &.stuck #nav_bar_background {
     background-color: rgba(20, 20, 20, 0.9);
+
     .light & {
       background-color: rgba(240, 240, 240, 0.92);
     }
@@ -855,6 +875,7 @@ a.additional-player-stat:hover {
         height: 8px;
         top: calc(100% - 3px);
       }
+
       @media (hover: hover) {
         &:hover::after {
           height: 8px;
@@ -869,15 +890,19 @@ a.additional-player-stat:hover {
 .stat-strength,
 .stat-ferocity,
 .stat-ability-damage,
+.stat-health-regen,
 .color-health,
 .color-strength,
 .color-ferocity,
-.color-ability-damage {
+.color-ability-damage,
+.color-health-regen {
   color: var(--§c);
 }
 
 .stat-defense,
-.color-defense {
+.stat-mending,
+.color-defense,
+.color-mending {
   color: var(--§a);
 }
 
@@ -904,12 +929,15 @@ a.additional-player-stat:hover {
 }
 
 .stat-sea-creature-chance,
-.color-sea-creature-chance {
+.color-sea-creature-chance,
+[class$="wisdom"] {
   color: var(--§3);
 }
 
 .stat-magic-find,
-.color-magic-find {
+.stat-fishing-speed,
+.color-magic-find,
+.color-fishing-speed {
   color: var(--§b);
 }
 
@@ -951,6 +979,11 @@ a.additional-player-stat:hover {
 .stat-true-defense,
 .color-true-defense {
   color: var(--§f);
+}
+
+.stat-vitality,
+.color-vitality {
+  color: var(--§4);
 }
 
 .stat-container {
@@ -1013,6 +1046,7 @@ a.additional-player-stat:hover {
   border-radius: 10px;
   font-weight: 500;
   overflow: hidden;
+
   @supports (overflow: clip) {
     overflow: clip;
   }
@@ -1046,6 +1080,7 @@ a.additional-player-stat:hover {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+
   .wardrobe-set {
     flex-shrink: 0;
     display: grid;
@@ -1057,6 +1092,7 @@ a.additional-player-stat:hover {
 
       &.armor-placeholder {
         background-color: rgba(var(--background-rgb), 0.3);
+
         .piece-icon {
           background: rgba(var(--text-rgb), 0.8);
         }
@@ -1064,27 +1100,34 @@ a.additional-player-stat:hover {
 
       &.index-0 {
         grid-area: helmet;
+
         &.armor-placeholder .piece-icon {
           mask-image: url("/resources/img/textures/item/empty_armor_slot_helmet.png");
           -webkit-mask-image: url("/resources/img/textures/item/empty_armor_slot_helmet.png");
         }
       }
+
       &.index-1 {
         grid-area: chestplate;
+
         &.armor-placeholder .piece-icon {
           mask-image: url("/resources/img/textures/item/empty_armor_slot_chestplate.png");
           -webkit-mask-image: url("/resources/img/textures/item/empty_armor_slot_chestplate.png");
         }
       }
+
       &.index-2 {
         grid-area: leggings;
+
         &.armor-placeholder .piece-icon {
           mask-image: url("/resources/img/textures/item/empty_armor_slot_leggings.png");
           -webkit-mask-image: url("/resources/img/textures/item/empty_armor_slot_leggings.png");
         }
       }
+
       &.index-3 {
         grid-area: boots;
+
         &.armor-placeholder .piece-icon {
           mask-image: url("/resources/img/textures/item/empty_armor_slot_boots.png");
           -webkit-mask-image: url("/resources/img/textures/item/empty_armor_slot_boots.png");
@@ -1097,8 +1140,10 @@ a.additional-player-stat:hover {
       overflow: hidden;
       overflow: clip;
       transition: max-height 0.2s, gap 0.2s;
+
       .armor-placeholder {
         transition: height 0.2s;
+
         .piece-icon {
           transition: mask-size 0.2s, -webkit-mask-size 0.2s;
         }
@@ -1107,8 +1152,10 @@ a.additional-player-stat:hover {
       &:not(:hover):not(:focus-within) {
         max-height: 75px;
         gap: 0;
+
         .armor-placeholder {
           height: 0;
+
           .piece-icon {
             mask-size: 128px 0;
             -webkit-mask-size: 128px 0;
@@ -1117,6 +1164,7 @@ a.additional-player-stat:hover {
       }
     }
   }
+
   @media (hover: none) {
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -1128,6 +1176,7 @@ a.additional-player-stat:hover {
     > :first-child {
       margin-inline-start: var(--padding);
     }
+
     > :last-child {
       margin-inline-end: var(--padding);
     }
@@ -1170,6 +1219,7 @@ a.additional-player-stat:hover {
       border-radius: 5px;
       pointer-events: none;
     }
+
     &.sticky-stats::after,
     &:hover::after {
       background-color: rgba(255, 255, 255, 0.2);
@@ -1221,10 +1271,12 @@ a.additional-player-stat:hover {
   right: 0;
   pointer-events: none;
   overflow: hidden;
+
   @supports (contain: paint) {
     overflow: initial;
     contain: paint;
   }
+
   &::before {
     content: "";
     position: absolute;
@@ -1261,6 +1313,7 @@ a.additional-player-stat:hover {
 
 .item-icon.is-enchanted {
   filter: url(#enchanted-glint);
+
   #stats_content &.stats-piece-icon,
   &.piece-icon {
     filter: url(#enchanted-glint) drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
@@ -1277,6 +1330,7 @@ a.additional-player-stat:hover {
   transform: translate(-50%, -50%) scale(0.5);
   transform-origin: center center;
   image-rendering: crisp-edges;
+
   @supports (image-rendering: pixelated) {
     image-rendering: pixelated;
   }
@@ -1298,9 +1352,11 @@ a.additional-player-stat:hover {
 .style-scrollbar .piece-supreme-bg + .item-lore::-webkit-scrollbar-thumb {
   background-color: var(--§4);
 }
+
 .piece-supreme-bg + .item-lore {
   scrollbar-color: var(--§4) transparent;
 }
+
 .piece-supreme-fg {
   color: var(--§4) !important;
 }
@@ -1309,9 +1365,11 @@ a.additional-player-stat:hover {
 .style-scrollbar .piece-very_special-bg + .item-lore::-webkit-scrollbar-thumb {
   background-color: var(--§c);
 }
+
 .piece-very_special-bg + .item-lore {
   scrollbar-color: var(--§c) transparent;
 }
+
 .piece-very_special-fg {
   color: var(--§c) !important;
 }
@@ -1320,9 +1378,11 @@ a.additional-player-stat:hover {
 .style-scrollbar .piece-special-bg + .item-lore::-webkit-scrollbar-thumb {
   background-color: var(--§c);
 }
+
 .piece-special-bg + .item-lore {
   scrollbar-color: var(--§c) transparent;
 }
+
 .piece-special-fg {
   color: var(--§c) !important;
 }
@@ -1331,9 +1391,11 @@ a.additional-player-stat:hover {
 .style-scrollbar .piece-divine-bg + .item-lore::-webkit-scrollbar-thumb {
   background-color: var(--§b);
 }
+
 .piece-divine-bg + .item-lore {
   scrollbar-color: var(--§b) transparent;
 }
+
 .piece-divine-fg {
   color: var(--§b) !important;
 }
@@ -1342,9 +1404,11 @@ a.additional-player-stat:hover {
 .style-scrollbar .piece-mythic-bg + .item-lore::-webkit-scrollbar-thumb {
   background-color: var(--§d);
 }
+
 .piece-mythic-bg + .item-lore {
   scrollbar-color: var(--§d) transparent;
 }
+
 .piece-mythic-fg {
   color: var(--§d) !important;
 }
@@ -1353,9 +1417,11 @@ a.additional-player-stat:hover {
 .style-scrollbar .piece-legendary-bg + .item-lore::-webkit-scrollbar-thumb {
   background-color: var(--§6);
 }
+
 .piece-legendary-bg + .item-lore {
   scrollbar-color: var(--§6) transparent;
 }
+
 .piece-legendary-fg {
   color: var(--§6) !important;
 }
@@ -1364,9 +1430,11 @@ a.additional-player-stat:hover {
 .style-scrollbar .piece-epic-bg + .item-lore::-webkit-scrollbar-thumb {
   background-color: var(--§5);
 }
+
 .piece-epic-bg + .item-lore {
   scrollbar-color: var(--§5) transparent;
 }
+
 .piece-epic-fg {
   color: var(--§5) !important;
 }
@@ -1375,9 +1443,11 @@ a.additional-player-stat:hover {
 .style-scrollbar .piece-rare-bg + .item-lore::-webkit-scrollbar-thumb {
   background-color: var(--§9);
 }
+
 .piece-rare-bg + .item-lore {
   scrollbar-color: var(--§9) transparent;
 }
+
 .piece-rare-fg {
   color: var(--§9) !important;
 }
@@ -1386,9 +1456,11 @@ a.additional-player-stat:hover {
 .style-scrollbar .piece-uncommon-bg + .item-lore::-webkit-scrollbar-thumb {
   background-color: var(--§a);
 }
+
 .piece-uncommon-bg + .item-lore {
   scrollbar-color: var(--§a) transparent;
 }
+
 .piece-uncommon-fg {
   color: var(--§a) !important;
 }
@@ -1397,9 +1469,11 @@ a.additional-player-stat:hover {
 .style-scrollbar .piece-common-bg + .item-lore::-webkit-scrollbar-thumb {
   background-color: var(--§f);
 }
+
 .piece-common-bg + .item-lore {
   scrollbar-color: var(--§f) transparent;
 }
+
 .piece-common-fg {
   color: var(--§f) !important;
 }
@@ -1411,27 +1485,35 @@ a.additional-player-stat:hover {
   &.piece-very_special-bg {
     --upgraded-from: var(--§c);
   }
+
   &.piece-special-bg {
     --upgraded-from: var(--§4);
   }
+
   &.piece-supreme-bg {
     --upgraded-from: var(--§b);
   }
+
   &.piece-divine-bg {
     --upgraded-from: var(--§d);
   }
+
   &.piece-mythic-bg {
     --upgraded-from: var(--§6);
   }
+
   &.piece-legendary-bg {
     --upgraded-from: var(--§5);
   }
+
   &.piece-epic-bg {
     --upgraded-from: var(--§9);
   }
+
   &.piece-rare-bg {
     --upgraded-from: var(--§a);
   }
+
   &.piece-uncommon-bg {
     --upgraded-from: var(--§f);
   }
@@ -1538,6 +1620,7 @@ a.additional-player-stat:hover {
   margin-bottom: 0;
   border-radius: 10px;
   overflow: hidden;
+
   @supports (overflow: clip) {
     overflow: clip;
   }
@@ -1550,6 +1633,7 @@ a.additional-player-stat:hover {
     height: 50px;
     margin-top: 5px;
     overflow: hidden;
+
     @supports (overflow: clip) {
       overflow: clip;
     }
@@ -1778,6 +1862,7 @@ inventory-view {
 .slayer {
   display: flex;
   flex-direction: column;
+
   * {
     flex: 0 0;
   }
@@ -1796,6 +1881,7 @@ inventory-view {
 
 .floor-containers {
   content-visibility: auto;
+
   @supports (contain-intrinsic-size: 350px 212px) {
     contain-intrinsic-size: 350px 212px;
   }
@@ -2315,9 +2401,11 @@ inventory-view {
     > :first-child {
       margin-inline-start: var(--padding);
     }
+
     > :last-child {
       margin-inline-end: var(--padding);
     }
+
     // because margin-inline-end gets eaten by the scroll container sometimes
     &::after {
       content: "";
@@ -2334,6 +2422,7 @@ inventory-view {
   display: flex;
   gap: 8px;
   align-items: flex-start;
+
   & + & {
     margin-top: 4px;
   }
@@ -2358,6 +2447,7 @@ inventory-view {
     margin-left: calc(-1 * var(--padding));
     margin-right: calc(-1 * var(--padding));
     content-visibility: auto;
+
     @supports (contain-intrinsic-size: 200px 64px) {
       contain-intrinsic-size: 200px 64px;
     }
@@ -2366,12 +2456,14 @@ inventory-view {
       @supports (contain-intrinsic-size: 140px 230px) {
         contain-intrinsic-size: 140px 230px;
       }
+
       &::after {
         width: 15px; //15px = --padding - gap
       }
     }
 
     padding-inline-start: var(--padding);
+
     // because padding-inline-end gets eaten by the scroll container
     &::after {
       content: "";
@@ -2471,6 +2563,7 @@ inventory-view {
     max-height: 0;
     transition: max-height 0.2s ease-in-out;
     overflow: hidden;
+
     @supports (overflow: clip) {
       overflow: clip;
     }
@@ -2553,6 +2646,7 @@ bonus-stats {
 
 .accessories-extras {
   margin: 16px 0;
+
   bonus-stats p {
     margin: 0;
   }
