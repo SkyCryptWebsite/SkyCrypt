@@ -25,11 +25,7 @@ const defaultCredentials = {
  * @returns {Credentials | undefined}
  */
 function readFile() {
-  if (fs.existsSync(credentialsFilePath)) {
-    return JSON.parse(fs.readFileSync(credentialsFilePath));
-  } else {
-    return undefined;
-  }
+  return fs.existsSync(credentialsFilePath) ? JSON.parse(fs.readFileSync(credentialsFilePath)) : undefined;
 }
 
 /**
@@ -52,8 +48,6 @@ for (const key in defaultCredentials) {
   }
 }
 
-if (hasBeenModified) {
-  writeFile(credentials);
-}
+if (hasBeenModified) writeFile(credentials);
 
 export default credentials;

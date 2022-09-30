@@ -39,13 +39,7 @@ const hypixel = axios.create({
  * @returns {string|number}
  */
 function getKey(key) {
-  const intKey = new Number(key);
-
-  if (!isNaN(intKey)) {
-    return intKey;
-  }
-
-  return key;
+  return isNaN(new Number(key)) ? key : new Number(key);
 }
 
 /**
@@ -54,18 +48,14 @@ function getKey(key) {
  * @returns {boolean} if the path exists on the object
  */
 export function hasPath(obj, ...keys) {
-  if (obj == null) {
-    return false;
-  }
+  if (!obj) return false;
 
   let loc = obj;
 
   for (let i = 0; i < keys.length; i++) {
     loc = loc[getKey(keys[i])];
 
-    if (loc === undefined) {
-      return false;
-    }
+    if (!loc) return false;
   }
 
   return true;
@@ -77,18 +67,14 @@ export function hasPath(obj, ...keys) {
  * @returns {any} the value at the path on the object
  */
 export function getPath(obj, ...keys) {
-  if (obj == null) {
-    return undefined;
-  }
+  if (!obj) return undefined;
 
   let loc = obj;
 
   for (let i = 0; i < keys.length; i++) {
     loc = loc[getKey(keys[i])];
 
-    if (loc === undefined) {
-      return undefined;
-    }
+    if (!loc) return undefined;
   }
 
   return loc;
@@ -103,10 +89,9 @@ export function getPath(obj, ...keys) {
  * @param  {...(string|number)} keys a path
  */
 export function setPath(obj, value, ...keys) {
-  let i;
   let loc = obj || {};
 
-  for (i = 0; i < keys.length - 1; i++) {
+  for (let i = 0; i < keys.length - 1; i++) {
     loc[keys[i]] ??= {};
 
     loc = loc[keys[i]];
@@ -124,9 +109,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
 
   uuid = uuid.replaceAll("-", "");
 
-  const isUuid = uuid.length == 32;
-
-  if (isUuid) {
+  if (uuid.length == 32) {
     user = await db.collection("usernames").findOne({ uuid: sanitize(uuid) });
   } else {
     const playerObjects = await db
@@ -135,9 +118,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
       .toArray();
 
     for (const doc of playerObjects) {
-      if (doc.username.toLowerCase() == uuid.toLowerCase()) {
-        user = doc;
-      }
+      if (doc.username.toLowerCase() == uuid.toLowerCase()) user = doc;
     }
   }
 
@@ -179,9 +160,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
             skinData.model = data.textures.slim ? "slim" : "default";
           }
 
-          if (data.textures?.cape != undefined) {
-            skinData.capeurl = data.textures.cape.url;
-          }
+          if (data.textures?.cape) skinData.capeurl = data.textures.cape.url;
 
           updateDoc = Object.assign(updateDoc, skinData);
 
@@ -190,9 +169,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
           const playerObjects = await db.collection("usernames").find({ $text: { $search: data.username } });
 
           for await (const doc of playerObjects) {
-            if (doc.uuid == data.id) {
-              continue;
-            }
+            if (doc.uuid == data.id) continue;
 
             if (doc.username.toLowerCase() == data.username.toLowerCase()) {
               await db.collection("usernames").deleteOne({ _id: doc._id });
@@ -205,9 +182,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
         }
       })
       .catch(async (err) => {
-        if (user) {
-          await db.collection("usernames").updateOne({ uuid: user.uuid }, { $set: { date: +new Date() } });
-        }
+        if (user) await db.collection("usernames").updateOne({ uuid: user.uuid }, { $set: { date: +new Date() } });
 
         console.error(err);
       });
@@ -223,13 +198,11 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
           skinData.model = data.textures.slim ? "slim" : "default";
         }
 
-        if (data.textures?.cape != undefined) {
-          skinData.capeurl = data.textures.cape.url;
-        }
+        if (data.textures?.cape != undefined) skinData.capeurl = data.textures.cape.url;
 
         return { uuid: data.id, display_name: data.username, skin_data: skinData };
       } catch (e) {
-        if (isUuid) {
+        if (uuid.length == 32) {
           return { uuid, display_name: uuid, skin_data: skinData };
         } else {
           throw new Error(e?.response?.data?.reason ?? "Failed resolving username.");
@@ -251,13 +224,9 @@ export async function getGuild(uuid, db, cacheOnly = false) {
 
   let guildObject = null;
 
-  if (cacheOnly && guildMember == undefined) {
-    return null;
-  }
-
-  if (guildMember != undefined && guildMember.gid !== null) {
+  if (cacheOnly && !guildMember) return null;
+  if (guildMember && guildMember.gid)
     guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildMember.gid) });
-  }
 
   if (
     cacheOnly ||
@@ -268,9 +237,7 @@ export async function getGuild(uuid, db, cacheOnly = false) {
     if (guildMember.gid !== null) {
       const guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildMember.gid) });
 
-      if (guildObject == undefined) {
-        return null;
-      }
+      if (!guildObject) return null;
 
       guildObject.level = getGuildLevel(guildObject.exp);
       guildObject.gmUser = guildObject.gm ? await resolveUsernameOrUuid(guildObject.gm, db, cacheOnly) : "None";
@@ -293,15 +260,12 @@ export async function getGuild(uuid, db, cacheOnly = false) {
 
         if (guild && guild !== null) {
           for (const member of guild.members) {
-            if (["guild master", "guildmaster"].includes(member.rank.toLowerCase())) {
-              gm = member.uuid;
-            }
+            if (["guild master", "guildmaster"].includes(member.rank.toLowerCase())) gm = member.uuid;
           }
 
           for (const member of guild.members) {
-            if (!gm && guild.ranks.find((a) => a.name.toLowerCase() == member.rank.toLowerCase()) == undefined) {
+            if (!gm && guild.ranks.find((a) => a.name.toLowerCase() == member.rank.toLowerCase()) == undefined)
               gm = member.uuid;
-            }
 
             await db
               .collection("guildMembers")
@@ -315,11 +279,10 @@ export async function getGuild(uuid, db, cacheOnly = false) {
           const guildMembers = await db.collection("guildMembers").find({ gid: guild._id }).toArray();
 
           for (const member of guildMembers) {
-            if (guild.members.find((a) => a.uuid == member.uuid) == undefined) {
+            if (guild.members.find((a) => a.uuid == member.uuid) == undefined)
               await db
                 .collection("guildMembers")
                 .updateOne({ uuid: member.uuid }, { $set: { gid: null, last_updated: new Date() } });
-            }
           }
 
           const guildObject = await db.collection("guilds").findOneAndUpdate(
@@ -390,8 +353,7 @@ export function getRawLore(text) {
  * @returns {string} 4 dots
  */
 export function renderRaceTier(completeTiers) {
-  const incompleteTiers = Math.max(0, 4 - completeTiers);
-  return "●".repeat(completeTiers) + "○".repeat(incompleteTiers);
+  return "●".repeat(completeTiers) + "○".repeat(Math.max(0, 4 - completeTiers));
 }
 
 /**
@@ -440,9 +402,7 @@ export function getPrice(orderSummary) {
 
     volume += cappedAmount;
 
-    if (volume >= volumeTop2) {
-      break;
-    }
+    if (volume >= volumeTop2) break;
   }
 
   const totalWeight = orders.reduce((sum, value) => sum + value[1], 0);
@@ -502,21 +462,15 @@ export function parseRank(player) {
   if (RANKS[rankName]) {
     const { tag, color, plus, plusColor } = RANKS[rankName];
     output.rankText = tag;
-
-    if (rankName == "SUPERSTAR") {
-      output.rankColor = COLOR_NAMES[player.monthlyRankColor] ?? color;
-    } else {
-      output.rankColor = color;
-    }
+    rankName == "SUPERSTAR"
+      ? (output.rankColor = COLOR_NAMES[player.monthlyRankColor] ?? color)
+      : (output.rankColor = color);
 
     if (plus) {
       output.plusText = plus;
-
-      if (rankName == "SUPERSTAR" || rankName == "MVP_PLUS") {
-        output.plusColor = COLOR_NAMES[player.rankPlusColor] ?? plusColor;
-      } else {
-        output.plusColor = plusColor;
-      }
+      rankName == "SUPERSTAR" || rankName == "MVP_PLUS"
+        ? (output.plusColor = COLOR_NAMES[player.rankPlusColor] ?? plusColor)
+        : (output.plusColor = plusColor);
     }
   }
 
@@ -524,20 +478,18 @@ export function parseRank(player) {
 }
 
 export function renderRank({ rankText, rankColor, plusText, plusColor }) {
-  if (rankText === null) {
-    return "";
-  } else {
-    return /*html*/ `
-        <div class="rank-tag nice-colors-dark">
-            <div class="rank-name" style="background-color: var(--§${rankColor})">${rankText}</div>
-            ${
-              plusText
-                ? /*html*/ `<div class="rank-plus" style="background-color: var(--§${plusColor})">${plusText}</div>`
-                : ""
-            }
-        </div>
-      `;
-  }
+  if (!rankText) return "";
+
+  return /*html*/ `
+      <div class="rank-tag nice-colors-dark">
+          <div class="rank-name" style="background-color: var(--§${rankColor})">${rankText}</div>
+          ${
+            plusText
+              ? /*html*/ `<div class="rank-plus" style="background-color: var(--§${plusColor})">${plusText}</div>`
+              : ""
+          }
+      </div>
+    `;
 }
 
 export async function updateRank(uuid, db) {
@@ -565,13 +517,8 @@ export async function updateRank(uuid, db) {
 
     rank = Object.assign(rank, parseRank(player));
 
-    if (player?.socialMedia?.links != undefined) {
-      rank.socials = player.socialMedia.links;
-    }
-
-    if (player?.achievements != undefined) {
-      rank.achievements = player.achievements;
-    }
+    if (player?.socialMedia?.links) rank.socials = player.socialMedia.links;
+    if (player?.achievements) rank.achievements = player.achievements;
 
     const claimable = {
       claimed_potato_talisman: "Potato Talisman",
@@ -609,13 +556,10 @@ export async function getRank(uuid, db, cacheOnly = false) {
 
   let updateRankPromise;
 
-  if (cacheOnly === false && (hypixelPlayer == undefined || +new Date() - hypixelPlayer.last_updated > 3600 * 1000)) {
+  if (!cacheOnly && (!hypixelPlayer || +new Date() - hypixelPlayer.last_updated > 3600 * 1000))
     updateRankPromise = updateRank(uuid, db);
-  }
 
-  if (cacheOnly === false && hypixelPlayer == undefined) {
-    hypixelPlayer = await updateRankPromise;
-  }
+  if (!cacheOnly && !hypixelPlayer) hypixelPlayer = await updateRankPromise;
 
   hypixelPlayer ??= { achievements: {} };
 
@@ -651,11 +595,7 @@ export async function fetchMembers(profileId, db, returnUuid = false) {
         );
     }
 
-    if (returnUuid) {
-      output = profileMembers;
-    } else {
-      output = profileMembers.map((a) => a.display_name);
-    }
+    returnUuid ? (output = profileMembers) : (output = profileMembers.map((a) => a.display_name));
   } else {
     if (returnUuid) {
       output = members.map((a) => {
@@ -670,9 +610,7 @@ export async function fetchMembers(profileId, db, returnUuid = false) {
 }
 
 export function getClusterId(fullName = false) {
-  if (fullName) {
-    return cluster.isWorker ? `worker${cluster.worker.id}` : "master";
-  }
+  if (fullName) return cluster.isWorker ? `worker${cluster.worker.id}` : "master";
 
   return cluster.isWorker ? `w${cluster.worker.id}` : "m";
 }
@@ -716,9 +654,7 @@ export function parseItemGems(gems, rarity) {
   for (const [key, value] of Object.entries(gems)) {
     const slot_type = key.split("_")[0];
 
-    if (slots.ignore.includes(key) || (slots.special.includes(slot_type) && key.endsWith("_gem"))) {
-      continue;
-    }
+    if (slots.ignore.includes(key) || (slots.special.includes(slot_type) && key.endsWith("_gem"))) continue;
 
     if (slots.special.includes(slot_type)) {
       parsed.push({
@@ -773,7 +709,7 @@ export function generateGemLore(type, tier, rarity) {
 
         // Fallback since skyblock devs didn't code all gemstone stats for divine rarity yet
         // ...they didn't expect people to own divine tier items other than divan's drill
-        if (rarity.toUpperCase() === "DIVINE" && stat_value === null) {
+        if (rarity.toUpperCase() === "DIVINE" && !stat_value) {
           stat_value = gemstone_stats[stat][rarityNameToInt("MYTHIC")];
         }
 
@@ -789,9 +725,7 @@ export function generateGemLore(type, tier, rarity) {
   // Final lore
   lore.push(color, titleCase(tier), " ", titleCase(type));
 
-  if (stats.length) {
-    lore.push("§7 (", stats.join("§7, "), "§7)");
-  }
+  if (stats.length) lore.push("§7 (", stats.join("§7, "), "§7)");
 
   return lore.join("");
 }
@@ -847,9 +781,7 @@ export function generateItem(data) {
   };
 
   // Making sure rarity is lowercase
-  if (data.rarity) {
-    data.rarity = data.rarity.toLowerCase();
-  }
+  if (data.rarity) data.rarity = data.rarity.toLowerCase();
 
   // Setting tag.display.Name using display_name if not specified
   if (data.display_name && !data.tag.display.Name) {
@@ -926,9 +858,7 @@ export function parseItemTypeFromLore(lore) {
   for (const line of lore.reverse()) {
     match = regex.exec(line);
 
-    if (match) {
-      break;
-    }
+    if (match) break;
   }
 
   // No match found (glitched items, like /sbmenu gui items)
@@ -955,21 +885,15 @@ export function parseItemTypeFromLore(lore) {
 
 export function getCacheFilePath(dirPath, type, name) {
   // we don't care about folder optimization when we're developing
-  if (process.env?.NODE_ENV == "development") {
-    return path.resolve(dirPath, `${type}_${name}.png`);
-  }
+  if (process.env?.NODE_ENV == "development") return path.resolve(dirPath, `${type}_${name}.png`);
 
   const subdirs = [type];
 
   // for texture and head type, we get the first 2 characters to split them further
-  if (type == "texture" || type == "head") {
-    subdirs.push(name.slice(0, 2));
-  }
+  if (type == "texture" || type == "head") subdirs.push(name.slice(0, 2));
 
   // for potion and leather type, we get what variant they are to split them further
-  if (type == "leather" || type == "potion") {
-    subdirs.push(name.split("_")[0]);
-  }
+  if (type == "leather" || type == "potion") subdirs.push(name.split("_")[0]);
 
   // check if the entire folder path is available
   if (!fs.pathExistsSync(path.resolve(dirPath, subdirs.join("/")))) {
@@ -978,9 +902,7 @@ export function getCacheFilePath(dirPath, type, name) {
       const checkDirs = subdirs.slice(0, i);
       const checkPath = path.resolve(dirPath, checkDirs.join("/"));
 
-      if (!fs.pathExistsSync(checkPath)) {
-        fs.mkdirSync(checkPath);
-      }
+      if (!fs.pathExistsSync(checkPath)) fs.mkdirSync(checkPath);
     }
   }
 
@@ -995,9 +917,7 @@ export function generateDebugPets(type = "ALL") {
   const pets = [];
 
   for (const [petType, petData] of Object.entries(PET_DATA)) {
-    if (type !== "ALL" && petType !== type) {
-      continue;
-    }
+    if (type !== "ALL" && petType !== type) continue;
 
     for (const rarity of ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC"]) {
       pets.push(
@@ -1045,26 +965,20 @@ export function generateDebugPets(type = "ALL") {
  * @description takes rarity and level and returns the required pet exp to reach the level
  */
 export function getPetExp(rarity, level) {
-  const rarityOffset = PET_RARITY_OFFSET[rarity.toLowerCase()];
-
-  return PET_LEVELS.slice(rarityOffset, rarityOffset + level - 1).reduce((prev, curr) => prev + curr, 0);
+  return PET_LEVELS.slice(
+    PET_RARITY_OFFSET[rarity.toLowerCase()],
+    PET_RARITY_OFFSET[rarity.toLowerCase()] + level - 1
+  ).reduce((prev, curr) => prev + curr, 0);
 }
 
 export function getAnimatedTexture(item) {
   const results = ITEM_ANIMATIONS.filter((x) => x.id === getId(item));
 
-  if (results.length === 0) {
-    return false;
-  }
-
-  if (results.length === 1) {
-    return results[0];
-  }
+  if (results.length === 0) return false;
+  if (results.length === 1) return results[0];
 
   const deepResults = results.filter((x) => {
-    if (!x.tags) {
-      return false;
-    }
+    if (!x.tags) return false;
 
     return Object.entries(x.tags).every(([key, value]) => item.tag?.ExtraAttributes?.[key] === value);
   });

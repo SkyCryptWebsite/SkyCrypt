@@ -12,13 +12,9 @@ const defaultOptions = {
 };
 
 const raceFormat = (x) => {
-  x = Number(x);
+  let raceDuration = moment.duration(Number(x), "milliseconds").format("m:ss.SSS");
 
-  let raceDuration = moment.duration(x, "milliseconds").format("m:ss.SSS");
-
-  if (x < 1000) {
-    raceDuration = "0." + raceDuration;
-  }
+  if (Number(x) < 1000) raceDuration = "0." + raceDuration;
 
   return raceDuration;
 };
