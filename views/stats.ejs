@@ -56,23 +56,22 @@ const slayerInfo = {
   },
 };
 
-const seaCreatures = [ 
+const seaCreatures = [
   "pond_squid",
-  "plhlegblast",
   "sea_walker",
   "night_squid",
   "frozen_steve",
+  "nurse_shark",
   "sea_guardian",
   "frosty_the_snowman",
-  "scarecrow",
-  "nurse_shark",
   "sea_witch",
+  "scarecrow",
   "sea_archer",
   "oasis_rabbit",
   "oasis_sheep",
+  "blue_shark",
   "monster_of_the_deep",
   "grinch",
-  "blue_shark",
   "catfish",
   "nightmare",
   "carrot_king",
@@ -80,28 +79,19 @@ const seaCreatures = [
   "sea_leech",
   "poisoned_water_worm",
   "flaming_worm",
-  "magma_slug",
-  "moogma",
-  "lava_leech",
-  "pyroclastic_worm",
-  "lava_flame",
-  "fire_eel",
-  "taurus",
-  "guardian_defender",
   "werewolf",
+  "guardian_defender",
   "deep_sea_protector",
-  "tiger_shark",
   "lava_blaze",
   "lava_pigman",
+  "tiger_shark",
   "water_hydra",
   "sea_emperor",
   "phantom_fisherman",
-  "great_white_shark",
   "zombie_miner",
+  "great_white_shark",
   "yeti",
   "grim_reaper",
-  "thunder",
-  "lord_jawbus", 
 ];
 
 const milestone_rarities = ["common", "uncommon", "rare", "epic", "legendary"];
@@ -748,8 +738,7 @@ const metaDescription = getMetaDescription()
           <span class='stat-name'>Total Skill XP: </span><span class='stat-value'><%= Math.round(calculated.total_skill_xp).toLocaleString() %></span>
           <div class='tippy-explanation'>Total XP gained in all skills except Social and Runecrafting.</div>
           <span class='stat-name'>Average Level: </span><span class='stat-value'><%= calculated.average_level.toFixed(2) %></span>
-          <div class='tippy-explanation'>Average skill level over all skills except Social and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div>
-          <% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
+          <div class='tippy-explanation'>Average skill level over all skills except Social and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div><% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
           <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
           "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level.toFixed(2) %></span></span></div>
         <% } %>
@@ -775,38 +764,37 @@ const metaDescription = getMetaDescription()
               total: calculated.weight.lily.total,
             },
           ];
-          if (!'levels' in calculated) {
-            for (weight of weightSystems) {
-              %>
-        <div class="additional-stat">
-          <span data-tippy-content="
-                    <span class='stat-name'><%= weight.name %></span><br>
-                    <span class='stat-info'>Weight calculations by <%= weight.author %></span>
-                    <br/><br/>
-                    <span class='stat-name'>Skill: </span>
-                    <span class='stat-value'>
-                      <%= parseFloat(weight.skill.toFixed(2)).toLocaleString() %>
-                    </span><br/>
-                    <span class='stat-name'>Slayer: </span>
-                    <span class='stat-value'>
-                      <%= parseFloat(weight.slayer.toFixed(2)).toLocaleString() %>
-                    </span><br/>
-                    <span class='stat-name'>Dungeon: </span>
-                    <span class='stat-value'>
-                      <%= parseFloat(weight.dungeon.toFixed(2)).toLocaleString() %>
-                    </span><br/><br/>
-                    <span class='stat-name'>Total: </span>
-                    <span class='stat-value'>
-                      <%= parseFloat(weight.total.toFixed(2)).toLocaleString() %>
-                    </span>
-                  ">
-            <span class="stat-name"><%= weight.name %>: </span>
-            <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span></span>
-        </div>
-        <%
-            }
-          }
-        %>
+
+        if (!'levels' in calculated) {
+          for (weight of weightSystems) { %>
+            <div class="additional-stat">
+              <span data-tippy-content="
+                <span class='stat-name'><%= weight.name %></span><br>
+                <span class='stat-info'>Weight calculations by <%= weight.author %></span>
+                <br/><br/>
+                <span class='stat-name'>Skill: </span>
+                <span class='stat-value'>
+                  <%= parseFloat(weight.skill.toFixed(2)).toLocaleString() %>
+                </span><br/>
+                <span class='stat-name'>Slayer: </span>
+                <span class='stat-value'>
+                  <%= parseFloat(weight.slayer.toFixed(2)).toLocaleString() %>
+                </span><br/>
+                <span class='stat-name'>Dungeon: </span>
+                <span class='stat-value'>
+                  <%= parseFloat(weight.dungeon.toFixed(2)).toLocaleString() %>
+                </span><br/><br/>
+                <span class='stat-name'>Total: </span>
+                <span class='stat-value'>
+                  <%= parseFloat(weight.total.toFixed(2)).toLocaleString() %>
+                </span>
+              ">
+                <span class="stat-name"><%= weight.name %>: </span>
+                <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span
+              ></span>
+            </div>
+        <%}%>
+      <%}%>
       </div>
 
       <div id="skill_levels_container">
