@@ -1,5 +1,6 @@
 import * as helper from "../../../common/helper.js";
 import { STATS_BONUS } from "../../../common/constants.js";
+import { FORBIDDEN_STATS } from "../../../src/constants";
 
 export function getPlayerStats() {
   const stats: PlayerStats = {
@@ -38,6 +39,29 @@ export function getPlayerStats() {
     social_wisdom: { base: 0 },
   };
   const allowedStats = Object.keys(stats);
+
+  try {
+    // Bestiary Level 
+    if (calculated.bestiary?.bonus) {
+      stats.health.bestiary ??= 0;
+      stats.health.bestiary += calculated.bestiary.bonus;
+    }
+  
+    // Unique Pets
+    if (calculated.pet_score_bonus.magic_find > 0) {
+      stats.magic_find.pet_score ??= 0;
+      stats.magic_find.pet_score += calculated.pet_score_bonus.magic_find;
+    }
+  
+    // Jacob's Farming Shop
+    if (calculated.farming?.perks?.double_drops > 0) {
+      stats.farming_fortune.jacob_double_drops ??= 0;
+      stats.farming_fortune.jacob_double_drops += calculated.farming.perks.double_drops * 2;
+    }
+  
+  } catch (error) {
+    console.error(error);
+  }
 
   // Active armor stats
   for (const piece of items.armor) {
