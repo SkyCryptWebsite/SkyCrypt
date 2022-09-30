@@ -1,59 +1,58 @@
-const crypto = require("crypto");
-const fs = require("fs");
-const path = require("path");
-const util = require('util');
+import { createHash } from "crypto";
+import * as fs from "fs";
+import * as path from "path";
+import { fileURLToPath } from "url";
+import { promisify } from "util";
 
-const hashedDirectories = ['js', 'css'];
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-function getFileHash(filename) {
-    return new Promise((resolve, reject) => {
-        const md5sum = crypto.createHash("md5");
+export const hashedDirectories = ["css"];
 
-        const s = fs.createReadStream(filename);
+export function getFileHash(filename) {
+  return new Promise((resolve, reject) => {
+    const md5sum = createHash("md5");
 
-        s.on('data', function (data) {
-            md5sum.update(data);
-        });
+    const s = fs.createReadStream(filename);
 
-        s.on('end', function () {
-            const hash = md5sum.digest('hex');
-            resolve(hash);
-        });
+    s.on("data", function (data) {
+      md5sum.update(data);
     });
+
+    s.on("end", function () {
+      const hash = md5sum.digest("hex");
+      resolve(hash);
+    });
+  });
 }
 
-function getFileHashes() {
-    const directoryPromises = hashedDirectories.map(async (directory) => {
-        const readdirPromise = util.promisify(fs.readdir);
+export function getFileHashes() {
+  const directoryPromises = hashedDirectories.map(async (directory) => {
+    const readdirPromise = promisify(fs.readdir);
 
-        const fileNames = await readdirPromise(path.join(__dirname, "../public/resources", directory));
+    const fileNames = await readdirPromise(path.join(__dirname, "../public/resources", directory));
 
-        const filePromises = fileNames.map(filename => getFileHash(path.join(__dirname, "../public/resources", directory, filename)));
+    const filePromises = fileNames.map((filename) =>
+      getFileHash(path.join(__dirname, "../public/resources", directory, filename))
+    );
 
-        const fileHashes = await Promise.all(filePromises);
+    const fileHashes = await Promise.all(filePromises);
 
-        const hashesObject = {};
+    const hashesObject = {};
 
-        for (let i = 0; i < fileNames.length; i++) {
-            hashesObject[fileNames[i]] = fileHashes[i];
-        }
+    for (let i = 0; i < fileNames.length; i++) {
+      hashesObject[fileNames[i]] = fileHashes[i];
+    }
 
-        return hashesObject;
-    });
+    return hashesObject;
+  });
 
-    return Promise.all(directoryPromises).then((directories) => {
-        const directoriesObject = {};
+  return Promise.all(directoryPromises).then((directories) => {
+    const directoriesObject = {};
 
-        for (let i = 0; i < hashedDirectories.length; i++) {
-            directoriesObject[hashedDirectories[i]] = directories[i];
-        }
+    for (let i = 0; i < hashedDirectories.length; i++) {
+      directoriesObject[hashedDirectories[i]] = directories[i];
+    }
 
-        return directoriesObject;
-    });
-}
-
-module.exports = {
-    hashedDirectories,
-    getFileHash,
-    getFileHashes
+    return directoriesObject;
+  });
 }

@@ -1,0 +1,17 @@
+{
+  "name": "Sunrise Orange Theme",
+  "author": "rainbowcraft2",
+  "schema": 2,
+  "images": {
+    "bg": "/resources/img/themes/sunrise/bg.webp"
+  },
+  "backgrounds": {
+    "skillbar": { "type": "color", "color": "#f2694e" }
+  },
+  "colors": {
+    "logo": "#f5694c",
+    "link": "#F2694E",
+    "icon": "#F2694E",
+    "hover": "#ff9d57"
+  }
+}

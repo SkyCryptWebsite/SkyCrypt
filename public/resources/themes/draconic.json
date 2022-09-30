@@ -1,0 +1,17 @@
+{
+  "name": "Draconic Purple Theme",
+  "author": "rainbowcraft2",
+  "schema": 2,
+  "images": {
+    "bg": "/resources/img/themes/draconic/bg.webp"
+  },
+  "backgrounds": {
+    "skillbar": { "type": "color", "color": "#ba5fde" }
+  },
+  "colors": {
+    "logo": "#a956c8",
+    "link": "#7652b1",
+    "icon": "#ba5fde",
+    "hover": "#ba5fde"
+  }
+}

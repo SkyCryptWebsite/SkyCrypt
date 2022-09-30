@@ -1,234 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>SkyCrypt</title>
-    <% if(error){ %> <meta name="robots" content="noindex" /> <% } %>
-    <% const description = "A beautiful site for sharing your SkyBlock profile 🍣" %>
-    <meta name="description" content="<%= description %>">
-    <link rel="icon" href="/resources/img/logo_square.svg" sizes="any" type="image/svg+xml">
-    <meta property="og:image" content="/resources/img/logo_square.svg">
-    <meta property="og:title" content="SkyBlock Stats">
-    <meta property="og:description" content="<%= description %>">
-<%- include('../includes/resources') %>
-    <link rel="prefetch" href="/resources/img/inventory/items.webp?v14">
+  <title>SkyCrypt</title>
+  <% if (error) { %>
+  <meta name="robots" content="noindex" /> <% } %>
+  <% const description = "A beautiful site for sharing your SkyBlock profile 🍣" %>
+  <meta name="description" content="<%= description %>">
+  <link rel="icon" href="/resources/img/logo_square.svg" sizes="any" type="image/svg+xml">
+  <meta property="og:image" content="/resources/img/logo_square.svg">
+  <meta property="og:title" content="SkyBlock Stats">
+  <meta property="og:description" content="<%= description %>">
+  <%- include('../includes/resources') %>
+  <link rel="prefetch" href="/resources/img/inventory/items.webp?v14">
+  <link rel="prefetch" href="/resources/css/inventory.css?<%- fileHashes.css['inventory.css'] %>">
 </head>
-    <body class="page-index">
-        <%- include('../includes/header') %>
-        <main class="grid">
-            <form class="lookup-player">
-                <p>Show SkyBlock stats for</p>
-                <input name="ign" <% if(player){ %> value="<%= player %>" <% }%> type="search" enterkeyhint="go" placeholder="Enter username" aria-label="username" autofocus required>
-                <button type="submit" class="big-green-button">Show me</button>
-                <%# <p>or take me to a <a href="/random/stats">random profile</a>.</p> %>
-            </form>
-            <div id="error_box_wrapper" <% if(error){ %>class="show-error"<% } %>>
-                <div id="error_box">
-                    <div id="error_top">
-                        <div id="error_title">Error</div>
-                        <div id="error_text">
-                            <%= error %><br>
-                        </div>
-                    </div>
-                    <div id="error_bottom">
-                        <% if(typeof error === 'string' && error.includes("Key throttle.")){ %>
-                        <div id="error_subtext">
-                            This happens when the site reaches the Hypixel API limit.<br>
-                            Please try again in a minute.
-                        </div>
-                        <% } %>
-                    </div>
-                </div>
-            </div>
-            <a href="https://discord.gg/cNgADv2kEQ" target="_blank" rel="noreferrer" class="external-app form-banner">
-                <div class="external-app-icon" style="background-image: url(/resources/img/icons/discord.svg?v2)"></div>
-                <div class="external-app-name"><span class="grey-text">SkyCrypt's</span> Discord</div>
-                <div class="external-app-description">A simple way to get informed about current undergoings in SkyCrypt with suggestions, bug reports and support.</div>
-                <%
-                    let lessPlayedGames = [
-                        'Smash Heroes',
-                        'Turbo Kart Racers',
-                        'Quakecraft',
-                        'Warlords'
-                    ]
-                %>
-                <div class="external-app-description" style="opacity:0.6">Also try out <%= lessPlayedGames[Math.floor(Math.random() * lessPlayedGames.length)] %>, is a fun game!</div>
-            </a>
-            <% if(extra.favorites?.length){
-            for(let profile of extra.favorites){
-            if(profile.error) continue;
-            const lastUpdated = profile.last_updated;
-            let lastUpdatedText = "";
-            const diff = (+new Date() - lastUpdated) / 1000;
-            if(diff < 10 * 60)
-                lastUpdatedText = `<span class="stat-value">Currently online</span>`;
-            else
-                lastUpdatedText = `<span class="stat-name">Last online: </span><span class="stat-value">${moment(lastUpdated).fromNow()}</span>`;
-            %>
-            <a href="/stats/<%= profile.uuid %>" class="top-profile">
-                <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
-                <div class="profile-name">
-                    <%= profile.username %>
-                    <% if('emojiImg' in profile){ %>
-                        <img class="emoji" draggable="false" src="<%= profile.emojiImg %>" alt="<%= profile.emojiImg.split('/').pop().split('.')[0] %>">
-                    <% }else if('emoji' in profile){ %>
-                        <%-" " + extra.twemoji.parse(profile.emoji) %>
-                    <% } %>
-                </div>
-                <div class="profile-last-online"><%- lastUpdatedText %></div>
-                <svg class="profile-rank" viewBox="0 0 24 24">
-                    <title>Favorited profile</title>
-                    <%# mdi-star %>
-                    <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
-                </svg>
-            </a>
-            <% }}else{ %>
-            <span class="top-profile">
-                <img src="/resources/img/icons/q.png" class="profile-avatar" alt="">
-                <div class="profile-name">No favorites set!</div>
-                <div class="profile-last-online">Why don't you set a favorite?</div>
-            </span>
-            <% } %>
 
-            <%
-                const developerRoles = {
-                    MAINTAINER: {
-                        svgPath: /* mdi-xml */ "M12.89,3L14.85,3.4L11.11,21L9.15,20.6L12.89,3M19.59,12L16,8.41V5.58L22.42,12L16,18.41V15.58L19.59,12M1.58,12L8,5.58V8.41L4.41,12L8,15.58V18.41L1.58,12Z",
-                        title: "SkyCrypt Maintainer"
-                    },
-                    HOST: {
-                        svgPath: /* mdi-dns-outline */ "M19,15V19H5V15H19M20,13H4A1,1 0 0,0 3,14V20A1,1 0 0,0 4,21H20A1,1 0 0,0 21,20V14A1,1 0 0,0 20,13M7,18.5A1.5,1.5 0 0,1 5.5,17A1.5,1.5 0 0,1 7,15.5A1.5,1.5 0 0,1 8.5,17A1.5,1.5 0 0,1 7,18.5M19,5V9H5V5H19M20,3H4A1,1 0 0,0 3,4V10A1,1 0 0,0 4,11H20A1,1 0 0,0 21,10V4A1,1 0 0,0 20,3M7,8.5A1.5,1.5 0 0,1 5.5,7A1.5,1.5 0 0,1 7,5.5A1.5,1.5 0 0,1 8.5,7A1.5,1.5 0 0,1 7,8.5Z",
-                        title: "SkyCrypt Facilitator"
-                    },
-                    CONTRIBUTOR: {
-                        svgPath: /* mdi-source-pull */ "M6,3A3,3 0 0,1 9,6C9,7.31 8.17,8.42 7,8.83V15.17C8.17,15.58 9,16.69 9,18A3,3 0 0,1 6,21A3,3 0 0,1 3,18C3,16.69 3.83,15.58 5,15.17V8.83C3.83,8.42 3,7.31 3,6A3,3 0 0,1 6,3M6,5A1,1 0 0,0 5,6A1,1 0 0,0 6,7A1,1 0 0,0 7,6A1,1 0 0,0 6,5M6,17A1,1 0 0,0 5,18A1,1 0 0,0 6,19A1,1 0 0,0 7,18A1,1 0 0,0 6,17M21,18A3,3 0 0,1 18,21A3,3 0 0,1 15,18C15,16.69 15.83,15.58 17,15.17V7H15V10.25L10.75,6L15,1.75V5H17A2,2 0 0,1 19,7V15.17C20.17,15.58 21,16.69 21,18M18,17A1,1 0 0,0 17,18A1,1 0 0,0 18,19A1,1 0 0,0 19,18A1,1 0 0,0 18,17Z",
-                        title: "SkyCrypt Contributor"
-                    },
-                    ERROR: {
-                        svgPath: /* mdi-alert-circle */ "M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z",
-                        title: "Error"
-                    }
-                }
-            %>
+<body class="page-index">
+  <%- include('../includes/header') %>
+  <main class="grid">
+    <form class="lookup-player">
+      <p>Show SkyBlock stats for</p>
+      <input name="ign" <% if(player){ %> value="<%= player %>" <% }%> type="search" enterkeyhint="go" placeholder="Enter username" aria-label="username" autofocus required>
+      <button type="submit" class="big-green-button">Show me</button>
+      <%# <p>or take me to a <a href="/random/stats">random profile</a>.</p> %>
+    </form>
+    <% if(extra.cacheOnly) { %>
+    <figure class="banner error">
+      <figcaption>Cache Only Mode!</figcaption>
+      <p>
+        SkyCrypt is <strong>only</strong> showing the last known state of users' profiles which may be outdated due to API maintenance.<br>
+        <%# <i>If a profile wasn't viewed/cached before, it can't be viewed.</i><br> %>
+        <br>
+        For more info about Hypixel outages visit the official <a href="https://status.hypixel.net/" target="_blank" rel="noreferrer"> Hypixel Status</a>.
+      </p>
+    </figure>
+    <% } %>
+    <div id="error_box_wrapper" <% if (error) { %>class="show-error" <% } %>>
+      <div id="error_box">
+        <div id="error_top">
+          <div id="error_title">Error</div>
+          <div id="error_text">
+            <%= error instanceof Error ? error.message : String(error) %><br>
+          </div>
+        </div>
+        <div id="error_bottom">
+          <% if (error instanceof Error && error.message.includes("Key throttle.")) { %>
+          <div id="error_subtext">
+            This happens when the site reaches the Hypixel API limit.<br>
+            Please try again in a minute.
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <a href="<%= promotion.url %>" target="_blank" rel="noreferrer" class="external-app form-banner">
+      <div class="external-app-icon monochrome" style="background-image: url(<%= promotion.image %>)"></div>
+      <div class="external-app-name"><%- promotion.title %></div>
+      <div class="external-app-description"><%- promotion.description %></div>
+    </a>
 
-            <% for(const profile of extra.devs){ %>
-                <a href="/stats/<%= profile.uuid %>" class="top-profile">
-                    <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
-                    <div class="profile-name">
-                        <%= profile.username %>
-                        <% if('emojiImg' in profile){ %>
-                            <img class="emoji" draggable="false" src="<%= profile.emojiImg %>" alt="<%= profile.emojiImg.split('/').pop().split('.')[0] %>">
-                        <% }else if('emoji' in profile){ %>
-                            <%- extra.twemoji.parse(profile.emoji) %>
-                        <% } %>
-                    </div>
-                    <div class="profile-last-online"><%- extra.twemoji.parse(profile.message) %></div>
-                    <svg class="profile-rank" viewBox="0 0 24 24">
-                        <title><%= developerRoles[profile.type]?.title || developerRoles.ERROR.title %></title>
-                        <path fill="currentColor" d="<%= developerRoles[profile.type]?.svgPath || developerRoles.ERROR.svgPath %>" />
-                    </svg>
-                </a>
+    <%
+        const developerRoles = {
+          MAINTAINER: {
+            svgPath: /* mdi-xml */ "M12.89,3L14.85,3.4L11.11,21L9.15,20.6L12.89,3M19.59,12L16,8.41V5.58L22.42,12L16,18.41V15.58L19.59,12M1.58,12L8,5.58V8.41L4.41,12L8,15.58V18.41L1.58,12Z",
+            title: "SkyCrypt Maintainer"
+          },
+          HOST: {
+            svgPath: /* mdi-dns-outline */ "M19,15V19H5V15H19M20,13H4A1,1 0 0,0 3,14V20A1,1 0 0,0 4,21H20A1,1 0 0,0 21,20V14A1,1 0 0,0 20,13M7,18.5A1.5,1.5 0 0,1 5.5,17A1.5,1.5 0 0,1 7,15.5A1.5,1.5 0 0,1 8.5,17A1.5,1.5 0 0,1 7,18.5M19,5V9H5V5H19M20,3H4A1,1 0 0,0 3,4V10A1,1 0 0,0 4,11H20A1,1 0 0,0 21,10V4A1,1 0 0,0 20,3M7,8.5A1.5,1.5 0 0,1 5.5,7A1.5,1.5 0 0,1 7,5.5A1.5,1.5 0 0,1 8.5,7A1.5,1.5 0 0,1 7,8.5Z",
+            title: "SkyCrypt Facilitator"
+          },
+          CONTRIBUTOR: {
+            svgPath: /* mdi-source-pull */ "M6,3A3,3 0 0,1 9,6C9,7.31 8.17,8.42 7,8.83V15.17C8.17,15.58 9,16.69 9,18A3,3 0 0,1 6,21A3,3 0 0,1 3,18C3,16.69 3.83,15.58 5,15.17V8.83C3.83,8.42 3,7.31 3,6A3,3 0 0,1 6,3M6,5A1,1 0 0,0 5,6A1,1 0 0,0 6,7A1,1 0 0,0 7,6A1,1 0 0,0 6,5M6,17A1,1 0 0,0 5,18A1,1 0 0,0 6,19A1,1 0 0,0 7,18A1,1 0 0,0 6,17M21,18A3,3 0 0,1 18,21A3,3 0 0,1 15,18C15,16.69 15.83,15.58 17,15.17V7H15V10.25L10.75,6L15,1.75V5H17A2,2 0 0,1 19,7V15.17C20.17,15.58 21,16.69 21,18M18,17A1,1 0 0,0 17,18A1,1 0 0,0 18,19A1,1 0 0,0 19,18A1,1 0 0,0 18,17Z",
+            title: "SkyCrypt Contributor"
+          },
+          ERROR: {
+            svgPath: /* mdi-alert-circle */ "M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z",
+            title: "Error"
+          },
 
-            <% } %>
-        </main>
-        <%- include('../includes/footer'); %>
-        <script>
-            <% if(error){ %>
-                console.log("An error occured with message: \"<%= error %>\"");
-            <% } %>
+          // Special Roles
+          TECHNOBLADE: {
+            svgPath: /* mdi-pig */ "M9.5,9A1.5,1.5 0 0,0 8,10.5A1.5,1.5 0 0,0 9.5,12A1.5,1.5 0 0,0 11,10.5A1.5,1.5 0 0,0 9.5,9M14.5,9A1.5,1.5 0 0,0 13,10.5A1.5,1.5 0 0,0 14.5,12A1.5,1.5 0 0,0 16,10.5A1.5,1.5 0 0,0 14.5,9M12,4L12.68,4.03C13.62,3.24 14.82,2.59 15.72,2.35C17.59,1.85 20.88,2.23 21.31,3.83C21.62,5 20.6,6.45 19.03,7.38C20.26,8.92 21,10.87 21,13A9,9 0 0,1 12,22A9,9 0 0,1 3,13C3,10.87 3.74,8.92 4.97,7.38C3.4,6.45 2.38,5 2.69,3.83C3.12,2.23 6.41,1.85 8.28,2.35C9.18,2.59 10.38,3.24 11.32,4.03L12,4M10,16A1,1 0 0,1 11,17A1,1 0 0,1 10,18A1,1 0 0,1 9,17A1,1 0 0,1 10,16M14,16A1,1 0 0,1 15,17A1,1 0 0,1 14,18A1,1 0 0,1 13,17A1,1 0 0,1 14,16M12,13C9.24,13 7,15.34 7,17C7,18.66 9.24,20 12,20C14.76,20 17,18.66 17,17C17,15.34 14.76,13 12,13M7.76,4.28C7.31,4.16 4.59,4.35 4.59,4.35C4.59,4.35 6.8,6.1 7.24,6.22C7.69,6.34 9.77,6.43 9.91,5.9C10.06,5.36 8.2,4.4 7.76,4.28M16.24,4.28C15.8,4.4 13.94,5.36 14.09,5.9C14.23,6.43 16.31,6.34 16.76,6.22C17.2,6.1 19.41,4.35 19.41,4.35C19.41,4.35 16.69,4.16 16.24,4.28Z",
+            title: "Technoblade"
+          }
+        }
+      %>
 
-            const mainUsernameInput = document.querySelector('main .lookup-player input');
-            const headerUsernameInput = document.querySelector('header .lookup-player input');
-            const headerUsernameForm = document.querySelector('header .lookup-player');
+    <% if(extra.favorites?.length){
+        for(let profile of extra.favorites){
+          if(profile.error) continue;
 
-            mainUsernameInput.addEventListener('input', (e) => {
-                headerUsernameInput.value = mainUsernameInput.value;
-            });
+          const lastUpdated = profile.last_updated;
+          let lastUpdatedText = "";
+          const diff = (+new Date() - lastUpdated) / 1000;
 
-            headerUsernameInput.addEventListener('input', (e) => {
-                mainUsernameInput.value = headerUsernameInput.value;
-            });
+          if(diff < 10 * 60)
+            lastUpdatedText = `<span class="stat-value">Currently online</span>`;
+          else
+            lastUpdatedText = `<span class="stat-name">Last online: </span><span class="stat-value">${moment(lastUpdated).fromNow()}</span>`;
+      %>
+    <a href="/stats/<%= profile.uuid %>" class="top-profile">
+      <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
+      <div class="profile-name">
+        <%= profile.username %>
+        <% if('emojiImg' in profile){ %>
+        <img class="emoji" draggable="false" src="<%= profile.emojiImg %>" alt="<%= profile.emojiImg.split('/').pop().split('.')[0] %>">
+        <% }else if('emoji' in profile){ %>
+        <%-" " + extra.twemoji.parse(profile.emoji) %>
+        <% } %>
+      </div>
+      <div class="profile-last-online"><%- lastUpdatedText %></div>
+      <svg class="profile-rank" viewBox="0 0 24 24">
+        <title>Favorited profile</title>
+        <%# mdi-star %>
+        <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+      </svg>
+    </a>
+    <% }}else{ %>
+    <span class="top-profile">
+      <img src="/resources/img/icons/q.png" class="profile-avatar" alt="">
+      <div class="profile-name">No favorites set!</div>
+      <div class="profile-last-online">Why don't you set a favorite?</div>
+    </span>
+    <% } %>
 
-            let smallUserSearch = false;
+    <% for(const profile of extra.featured){ %>
+    <a href="/stats/<%= profile.uuid %>" class="top-profile">
+      <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
+      <div class="profile-name">
+        <%= profile.username %>
+        <% if('emojiImg' in profile){ %>
+        <img class="emoji" draggable="false" src="<%= profile.emojiImg %>" alt="<%= profile.emojiImg.split('/').pop().split('.')[0] %>">
+        <% }else if('emoji' in profile){ %>
+        <%- extra.twemoji.parse(profile.emoji) %>
+        <% } %>
+      </div>
+      <div class="profile-last-online"><%- extra.twemoji.parse(profile.message) %></div>
+      <svg class="profile-rank" viewBox="0 0 24 24">
+        <title><%= developerRoles[profile.type]?.title || developerRoles.ERROR.title %></title>
+        <path fill="currentColor" d="<%= developerRoles[profile.type]?.svgPath || developerRoles.ERROR.svgPath %>" />
+      </svg>
+    </a>
+    <% } %>
+  </main>
 
-            window.addEventListener('scroll', checkSearchboxOverlap);
-            window.addEventListener('resize', checkSearchboxOverlap);
-            function checkSearchboxOverlap() {
-                if (mainUsernameInput.getBoundingClientRect().bottom < 48 && smallUserSearch === false) {
-                    headerUsernameForm.classList.add('show-user-search');
-                    smallUserSearch = true;
+  <%- include('../includes/footer'); %>
 
-                    if (mainUsernameInput === document.activeElement) {
-                        headerUsernameInput.focus({ preventScroll: true });
-                    }
-                } else if (mainUsernameInput.getBoundingClientRect().top >= 48 && smallUserSearch) {
-                    headerUsernameForm.classList.remove('show-user-search');
-                    smallUserSearch = false;
+  <% if (error) { %>
+  <script>
+    console.error(`An error occurred with message: "<%= error instanceof Error ? error.message : String(error) %>"`);
+  </script>
+  <% } %>
 
-                    if (headerUsernameInput === document.activeElement) {
-                        mainUsernameInput.focus({ preventScroll: true });
-                    }
-                }
+  <script>
+    const mainUsernameInput = document.querySelector('main .lookup-player input');
+    const headerUsernameInput = document.querySelector('header .lookup-player input');
+    const headerUsernameForm = document.querySelector('header .lookup-player');
 
-                <%#
+    mainUsernameInput.addEventListener('input', (e) => {
+      headerUsernameInput.value = mainUsernameInput.value;
+    });
 
-                - Hide Views for now due to abuse -
+    headerUsernameInput.addEventListener('input', (e) => {
+      mainUsernameInput.value = headerUsernameInput.value;
+    });
 
-                let scrollLock = false;
-                let currentOffset = 10;
-                let limit = 20;
+    let smallUserSearch = false;
 
-                let reachedEnd = false;
+    window.addEventListener('scroll', checkSearchboxOverlap);
+    window.addEventListener('resize', checkSearchboxOverlap);
 
-                if(window.innerHeight + window.scrollY > document.documentElement.offsetHeight - 100 && !scrollLock && !reachedEnd){
-                    scrollLock = true;
+    function checkSearchboxOverlap() {
+      if (mainUsernameInput.getBoundingClientRect().bottom < 48 && smallUserSearch === false) {
+        headerUsernameForm.classList.add('show-user-search');
+        smallUserSearch = true;
 
-                    let topRequest = new XMLHttpRequest();
+        if (mainUsernameInput === document.activeElement) {
+          headerUsernameInput.focus({
+            preventScroll: true
+          });
+        }
+      } else if (mainUsernameInput.getBoundingClientRect().top >= 48 && smallUserSearch) {
+        headerUsernameForm.classList.remove('show-user-search');
+        smallUserSearch = false;
 
-                    topRequest.onload = function(){
-                        let json = JSON.parse(this.responseText);
+        if (headerUsernameInput === document.activeElement) {
+          mainUsernameInput.focus({
+            preventScroll: true
+          });
+        }
+      }
+    }
+  </script>
+</body>
 
-                        if(json.length == 0)
-                            reachedEnd = true;
-
-                        json.forEach(function(profile, index){
-                            let profileElement = document.createElement('a');
-                            let profileAvatar = document.createElement('img');
-                            let profileName = document.createElement('div');
-                            let profileViews = document.createElement('div');
-                            let profileRank = document.createElement('div');
-
-                            profileAvatar.src = 'https://crafatar.com/avatars/' + profile.uuid + '?size=128&overlay';
-                            profileName.innerHTML = profile.userInfo.username;
-                            profileViews.innerHTML = 'Views: ' + formatNumber(profile.total, true);
-                            profileRank.innerHTML = '#' + (currentOffset + index + 1);
-
-                            profileAvatar.className = 'profile-avatar';
-                            profileName.className = 'profile-name';
-                            profileViews.className = 'profile-views';
-                            profileRank.className = 'profile-rank';
-
-                            profileElement.className = 'top-profile';
-
-                            profileElement.appendChild(profileAvatar);
-                            profileElement.appendChild(profileName);
-                            profileElement.appendChild(profileViews);
-                            profileElement.appendChild(profileRank);
-
-                            profileElement.href = '/stats/' + profile.uuid;
-
-                            document.querySelector('#top_profiles_box_wrapper').appendChild(profileElement);
-                        });
-
-                        scrollLock = false;
-                        currentOffset += limit;
-                    }
-
-                    topRequest.open("GET", '/api/topViews?offset=' + currentOffset + '&limit=' + limit);
-                    topRequest.send();
-                }
-
-                %>
-            }
-        </script>
-    </body>
 </html>

@@ -57,10 +57,16 @@ Caretaker/checkstat.sh
 public/resourcepacks/**/leatherCache
 
 # IDE files
-.vscode/
+.vscode/settings.json
 
 # compiled sass
 public/resources/css/**
+
+# compiled ts
+public/resources/js/**
+
+# processed profiler logs
+profiler
 
 Caretaker/checkstat.sh
 package-lock.json

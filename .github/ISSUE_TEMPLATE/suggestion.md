@@ -1,14 +1,13 @@
 ---
 name: Suggestion
 about: Suggest a new feature
-title: ''
+title: ""
 labels: enhancement
-assignees: ''
-
+assignees: ""
 ---
 
 **Is your suggestion related to a problem? Please describe in detail.**
-A clear and concise description of what the problem is. 
+A clear and concise description of what the problem is.
 Ex. [...] doesn't work, [...] solves it.
 
 **Describe your suggestion**

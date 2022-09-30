@@ -1,0 +1,10 @@
+{
+  "extends": ["../.eslintrc", "plugin:lit/recommended", "plugin:wc/recommended"],
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "worker": true,
+    "commonjs": false,
+    "node": false
+  }
+}

@@ -1,78 +1,49 @@
-const cluster = require('cluster');
+import { db } from "../mongo.js";
+import _ from "lodash";
 
-async function main(){
-    const { MongoClient } = require('mongodb');
-    const _ = require('lodash');
+import { getProfile } from "../lib.js";
+import leaderboard from "../leaderboards.js";
 
-    const helper = require('./../helper');
-    const lib = require('./../lib');
-    const constants = require('./../constants');
-    const credentials = require('./../../credentials.json');
+import ProgressBar from "progress";
+import { redisClient } from "../redis.js";
 
-    const ProgressBar = require('progress');
+async function updateLeaderboards() {
+  const keys = await redisClient.keys("lb_*");
 
-    const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-    await mongo.connect();
+  const multi = redisClient.pipeline();
 
-    const db = mongo.db(credentials.dbName);
+  for (const key of keys) {
+    const lb = leaderboard(key);
 
-    const Redis = require("ioredis");
-    const redisClient = new Redis();
-
-    async function updateLeaderboards(){
-        await db.collection('leaderboards').deleteMany({});
-
-        const leaderboards = [];
-        const keys = await redisClient.keys('lb_*');
-
-        /* const multi = redisClient.pipeline(); */
-
-        for(const key of keys){
-            const lb = constants.leaderboard(key);
-
-            if (lb.mappedBy == 'uuid' && !lb.key.startsWith('collection_enchanted'))
-                leaderboards.push(lb);
-
-            /* if(lb.sortedBy < 0)
-                multi.zrevrange(key, 0, 49);
-            else
-                multi.zrange(key, 0, 49); */
-        } 
-
-        /* const updateUsers = _.uniq((await multi.exec()).map(a => a[1]).flat());
-
-        console.log('updating', updateUsers.length, 'profiles');
-
-        const bar = new ProgressBar('  generating leaderboards [:bar] :current/:total :rate users/s :percent :etas', {
-            complete: '=',
-            incomplete: ' ',
-            width: 20,
-            total: updateUsers.length
-        });
-
-        for(const uuid of updateUsers){
-            lib.getProfile(db, uuid)
-            .then(() => { bar.tick() })
-            .catch(() => {});
-
-            await new Promise(r => setTimeout(r, 500));
-        } */
-
-        leaderboards.sort((a, b) => {
-            return a.key.localeCompare(b.key);
-        }); 
-
-        await db
-            .collection('leaderboards')
-            .insertMany(leaderboards)
-            .catch(console.error);
-
-        console.log(`Updated list of leaderboards!`);
-        setTimeout(updateLeaderboards, 1000 * 60 * 30);
+    if (lb.sortedBy < 0) {
+      multi.zrevrange(key, 0, 49);
+    } else {
+      multi.zrange(key, 0, 49);
     }
+  }
 
-    updateLeaderboards();
+  const updateUsers = _.uniq((await multi.exec()).map((a) => a[1]).flat());
+
+  console.log("updating", updateUsers.length, "profiles");
+
+  const bar = new ProgressBar("  generating leaderboards [:bar] :current/:total :rate users/s :percent :etas", {
+    complete: "=",
+    incomplete: " ",
+    width: 20,
+    total: updateUsers.length,
+  });
+
+  for (const uuid of updateUsers) {
+    getProfile(db, uuid)
+      .then(() => {
+        bar.tick();
+      })
+      .catch(() => {});
+
+    await new Promise((r) => setTimeout(r, 500));
+  }
+
+  updateLeaderboards();
 }
 
-if(cluster.isMaster)
-    main();
+updateLeaderboards();

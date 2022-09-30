@@ -1,156 +1,30 @@
-<script src="https://unpkg.com/popper.js@1"></script>
-<script src="https://unpkg.com/tippy.js@5"></script>
 <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
-<script src="/resources/js/skinview3d.bundle.js?<%- fileHashes.js['skinview3d.bundle.js'] %>"></script>
-<script async src="https://arc.io/widget.min.js#oNMq8LVU"></script>
 
 <script>
-    function setCookie(name,value,days) {
-        var expires = "";
-        if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days*24*60*60*1000));
-            expires = "; expires=" + date.toUTCString();
-        }
-        document.cookie = name + "=" + (value || "")  + expires + "; SameSite=Lax; path=/";
+  window.addEventListener('load', (event) => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js', {scope: '/'})
+      .then((reg) => {
+        // registration worked
+        console.log('Registration succeeded. Scope is ' + reg.scope);
+      }).catch((error) => {
+        // registration failed
+        console.log('Registration failed with ' + error);
+      });
     }
-
-    function eraseCookie(name) {
-        document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    }
-
-    const expanders = document.querySelectorAll('.expander')
-    for (const expander of expanders) {
-        expander.addEventListener('click', () => {
-            for (const otherExpander of expanders) {
-                if(otherExpander != expander){
-                    otherExpander.setAttribute('aria-expanded', false);
-                }
-            }
-            expander.setAttribute('aria-expanded', expander.getAttribute('aria-expanded') != 'true');
-        });
-        function focusOutHandler() {
-            setTimeout(() => {
-                if (document.activeElement != document.body && document.activeElement != expander && !expander.nextElementSibling.contains(document.activeElement)) {
-                    expander.setAttribute('aria-expanded', false);
-                }
-            });
-        }
-        expander.addEventListener('focusout', focusOutHandler);
-        expander.nextElementSibling.addEventListener('focusout', focusOutHandler);
-    }
-
-    document.querySelectorAll('#packs-box button[name="pack"]').forEach((element) => {
-        element.addEventListener("click", (event) => {
-            const newPack = event.target.value;
-            if (newPack) {
-                setCookie("pack", newPack, 365);
-            } else {
-                eraseCookie("pack");
-            }
-
-            const oldElement = document.querySelector(`#packs-box button[name="pack"][aria-selected]`);
-            oldElement.removeAttribute("disabled");
-            oldElement.removeAttribute("aria-selected");
-
-            <% if (page == 'stats') { %>
-                event.target.classList.add('loading');
-                sessionStorage.setItem("open packs", true);
-                window.location.reload();
-            <% } else { %>
-                event.target.setAttribute("aria-selected", "");
-                event.target.setAttribute("disabled", "");
-            <% } %>
-        });
-    });
-    
-    if (sessionStorage.getItem("open packs")) {
-        sessionStorage.removeItem("open packs");
-        document.querySelector('#packs-button').click();
-        const packsBox = document.querySelector('#packs-box');
-        packsBox.style.transition = 'none';
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                packsBox.style.transition = null;
-            });
-        });
-    }
-
-    document.querySelector('#themes-box').addEventListener("change", (event) => {
-        newTheme = event.target.value;
-        localStorage.setItem("currentTheme", newTheme);
-        loadTheme(newTheme);
-    });
-
-    window.addEventListener('storage', (event) => {
-        if (event.key === 'currentTheme') {
-            setCheckedTheme(event.newValue);
-            loadTheme(event.newValue);
-        }
-    });
-    
-    function setCheckedTheme(theme) {
-        document.querySelector(`#themes-box input[value="${theme}"]`).checked = true;
-    }
-    
-    setCheckedTheme(localStorage.getItem('currentTheme'));
-
-    tippy('*[data-tippy-content]', {
-        boundary: 'window'
-    });
-
-    const prideFlag = document.querySelector('.pride-flag');
-    const prideFlags = ["rainbow", "trans", "lesbian", "bi", "pan", "nb", "ace", "genderfluid", "logo"];
-
-    let currentFlag = prideFlags.length - 1;
-
-    if(localStorage.getItem('currentFlag')){
-        currentFlag = parseInt(localStorage.getItem('currentFlag'));
-        prideFlag.className = 'pride-flag ' + prideFlags[currentFlag];
-    }
-
-    prideFlag.addEventListener('click', function(){
-        currentFlag++;
-
-        if(currentFlag > prideFlags.length - 1)
-            currentFlag = 0;
-
-        localStorage.setItem('currentFlag', currentFlag);
-        prideFlag.className = 'pride-flag ' + prideFlags[currentFlag];
-    });
-
-    window.addEventListener('load', (event) => {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js', {scope: '/'})
-            .then((reg) => {
-                // registration worked
-                console.log('Registration succeeded. Scope is ' + reg.scope);
-            }).catch((error) => {
-                // registration failed
-                console.log('Registration failed with ' + error);
-            });
-        }
-    });
+  });
 </script>
 
 <% if (extra.isFoolsDay) { %>
-    <style>
-        #player_model {
-            transform: scaleY(-1);
-        }
-        .profile-avatar {
-            transition: transform 0.2s ease-in-out;
-        }
-        :hover > .profile-avatar {
-            transform: rotate(180deg);
-        }
-    </style>
-<% } %>
-
-<% if(page == 'stats'){ %>
-    <script src="/resources/js/stats.js?<%- fileHashes.js['stats.js'] %>"></script>
-<% } %>
-
-<% if(page == 'api'){ %>
-    <link rel="stylesheet" href="/resources/css/api.css?<%- fileHashes.css['api.css'] %>">
+  <style>
+    #player_model {
+      transform: scaleY(-1);
+    }
+    .profile-avatar {
+      transition: transform 0.2s ease-in-out;
+    }
+    :hover > .profile-avatar {
+      transform: rotate(180deg);
+    }
+  </style>
 <% } %>

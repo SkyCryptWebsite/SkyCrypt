@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "digitalbrainstem.javascript-ejs-support",
+    "bierner.comment-tagged-templates",
+    "runem.lit-plugin",
+    "j69.ejs-beautify"
+  ]
+}

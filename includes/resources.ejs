@@ -1,203 +1,69 @@
-    
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-    <meta property="og:site_name" content="SkyCrypt">
-    <link rel="sitemap" href="/sitemap.xml">
-    <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
-    <link rel="search" type="application/opensearchdescription+xml" title="SkyCrypt" href="/search.osd">
-    <meta name="theme-color" content="#282828">
-    <meta name="apple-mobile-web-app-title" content="SkyCrypt">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" sizes="180x180" href="/resources/img/app-icons/square-180.png">
-    <link rel="apple-touch-icon" sizes="512x512" href="/resources/img/app-icons/square-512.png">
-    <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone12ProMax.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
-    <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone12.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
-    <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhoneXsMax.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
-    <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhoneXr.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhoneX.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
-    <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone8Plus.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)">
-    <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone8.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
-    <link rel="stylesheet" href="/resources/css/index.css?<%- fileHashes.css['index.css'] %> ">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+  <meta property="og:site_name" content="SkyCrypt">
+  <link rel="sitemap" href="/sitemap.xml">
+  <%
+    let canonicalUrl = "https://sky.shiiyu.moe/"
+    if (page === "index") {
+      // leave canonicalUrl unchanged
+    } else if (page === "api") {
+      canonicalUrl += "api"
+    } else if (page === "stats") {
+      canonicalUrl += `stats/${calculated.uuid}/${calculated.profile.profile_id}`
+    } else {
+      throw new Error(`Unknown page: "${page}"`)
+    }
+  %>
+  <link rel="canonical" href="<%= canonicalUrl %>" />
+  <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
+  <link rel="search" type="application/opensearchdescription+xml" title="SkyCrypt" href="/search.osd">
+  <meta name="theme-color" content="#282828">
+  <meta name="apple-mobile-web-app-title" content="SkyCrypt">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" sizes="180x180" href="/resources/img/app-icons/square-180.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/resources/img/app-icons/square-512.png">
+  <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone12ProMax.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone12.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhoneXsMax.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhoneXr.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
+  <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhoneX.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone8Plus.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="/resources/img/ios-launch-screen/iPhone8.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+  <link rel="stylesheet" href="/resources/css/shared.css?<%- fileHashes.css['shared.css'] %> ">
+  <link rel="stylesheet" href="/resources/css/<%- page + ".css?" + fileHashes.css[page + ".css"] %> ">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-185827357-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-185827357-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-        gtag('config', 'UA-185827357-1');
-    </script>
-    <script data-ad-client="ca-pub-7557628142725978" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    
-    <script>
-        const stylesheets = [
-            "/resources/css/inventory.css?<%- fileHashes.css['inventory.css'] %>",
-            "https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap"
-        ];
+    gtag('config', 'UA-185827357-1');
+  </script>
 
-        stylesheets.forEach(function(sheet){
-            const link = document.createElement('link')
-            link.href = sheet;
-            link.rel = 'stylesheet'
-            document.head.appendChild(link);
-        });
-    </script>
+  <% if (page === "stats") { %>
+    <link rel="preload" href="/resources/css/inventory.css?<%- fileHashes.css['inventory.css'] %>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <script async type="module" src="/resources/js/<%- fileNameMap['local-time'] %>"></script>
+    <script defer type="module" src="/resources/js/<%- fileNameMap['stats-defer'] %>"></script>
+    <script defer type="module" src="/resources/js/<%- fileNameMap['rich-item'] %>"></script>
+    <script defer type="module" src="/resources/js/<%- fileNameMap['skill-component'] %>"></script>
+    <script defer type="module" src="/resources/js/<%- fileNameMap['player-stat'] %>"></script>
+    <script defer type="module" src="/resources/js/<%- fileNameMap['bonus-stats'] %>"></script>
+    <link rel="preload" href="/resources/js/<%- fileNameMap['inventory-view'] %>" as="script">
+  <% } %>
 
-    <script>
-        const extra = JSON.parse(`<%- JSON.stringify(extra).replace(/\\/g, '\\\\') %>`);
+  <% if (page === "stats" && process.env.NODE_ENV === "development") { %>
+    <script defer type="module" src="/resources/js/<%- fileNameMap['development-defer'] %>"></script>
+  <% } %>
 
-        function formatNumber(number, floor, rounding = 10) {
-            const roundFunc = floor ? Math.floor : Math.ceil;
-            if (number < 1000)
-                return Math.floor(number);
-            else if (number < 10000)
-                return (roundFunc(number / 1000 * rounding) / rounding).toFixed(rounding.toString().length - 1) + 'K';
-            else if (number < 1000000)
-                return roundFunc(number / 1000) + 'K';
-            else if (number < 1000000000)
-                return (roundFunc(number / 1000 / 1000 * rounding) / rounding).toFixed(rounding.toString().length - 1) + 'M';
-            else
-                return (roundFunc(number / 1000 / 1000 / 1000 * rounding * 10) / (rounding * 10)).toFixed(rounding.toString().length) + 'B';
-        }
+  <script defer type="module" src="/resources/js/<%- fileNameMap['common-defer'] %>"></script>
 
-        document.addEventListener('DOMContentLoaded', function(){
-            function handleSubmit(submitEvent) {
-                submitEvent.preventDefault();
-                const formData = new FormData(submitEvent.srcElement);
-                const urlSegments =  formData.get('ign').trim().split('/');
-                let error;
-                switch(urlSegments.length) {
-                    case 2:
-                        if (!(urlSegments[1].match(/^([0-9a-fA-F]{32})$/) || urlSegments[1].match(/^[A-Z][a-z]+/))) {
-                            error = `"${urlSegments[1]}" is not a valid profile name or ID`
-                            break;
-                        }
-                    case 1:
-                        if (urlSegments[0].match(/^([0-9a-fA-F]{8})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{12})$/)) {
-                            urlSegments[0] = urlSegments[0].replace(/-/g, '');
-                        } else if(urlSegments[0].match(/^[\w ]{1,16}$/)) {
-                            urlSegments[0] = urlSegments[0].replace(/ /g, '_');
-                        } else {
-                            error = `"${urlSegments[0]}" is not a valid username or UUID`
-                            break;
-                        }
-                        window.location.href = '/stats/' + urlSegments.join('/');
-                        return;
-                }
-                let errorTip = tippy(submitEvent.srcElement.querySelector('input'), {
-                    trigger: 'manual',
-                    content: (error || "please enter a valid Minecraft username or UUID")
-                });
-                errorTip.show();
-                setTimeout(() => {
-                    errorTip.hide();
-                    setTimeout(() => {
-                        errorTip.destroy();
-                    }, 500);
-                }, 1500);
-            }
-            document.querySelectorAll('.lookup-player').forEach(form => {
-                form.addEventListener('submit', handleSubmit);
-            });
-        });
-    </script>
+  <script> const page = "<%- page %>"; </script>
+  <script> const extra = JSON.parse(`<%- JSON.stringify(extra).replaceAll('\\', '\\\\') %>`); </script>
 
-    <script>
-        if (!localStorage.getItem('currentTheme') || !extra.themes[localStorage.getItem('currentTheme')])
-            localStorage.setItem('currentTheme', 'default');
+  <script src="/resources/js/<%- fileNameMap['common'] %>"></script>
 
-        if (localStorage.getItem('currentTheme') != 'default')
-            loadTheme(localStorage.getItem('currentTheme'));
-
-        function convertHex(code) {
-            const hex = code.substring(1, 7);
-            return `${parseInt(hex.substring(0, 2), 16)}, ${parseInt(hex.substring(2, 4), 16)}, ${parseInt(hex.substring(4, 6), 16)}`;
-        }
-
-        function loadTheme(currentTheme) {
-            if (!extra.themes[currentTheme]) {
-                return console.error(`${currentTheme} isn't a valid theme.`);
-            }
-
-            const theme = extra.themes[currentTheme];
-
-            const element = document.documentElement;
-            
-            element.classList.toggle("light", !!theme.light);
-
-            document.querySelector('meta[name="theme-color"]').content = theme.light ? '#dbdbdb' : '#282828';
-
-            element.style = ''
-
-            for (color in theme.colors) {
-                const value = theme.colors[color];
-                
-                element.style.setProperty(`--${color}-hex`, value);
-                
-                if(['icon','link','text','background','header','grey_background'].includes(color)){
-                    element.style.setProperty(`--${color}-rgb`, convertHex(value));
-                }
-            }
-
-            for (img in theme.images) {
-                element.style.setProperty(`--${img}`, `url(${theme.images[img]})`);
-            }
-            
-            for (key in theme.backgrounds) {
-                const background = theme.backgrounds[key]
-                let value
-                switch (background.type) {
-                    case "color":
-                        value = background.color
-                        break
-                    case "stripes":
-                        value = `repeating-linear-gradient( ${background.angle}, ${
-                            background.colors.flatMap((color, i) => {
-                                return [
-                                    `${color} ${i * background.width}px`,
-                                    `${color} ${(i + 1) * background.width}px`
-                                ]
-                            }).join(', ')
-                        })`
-                        break
-
-                }
-                element.style.setProperty(`--${key}`, value);
-            }
-            
-            
-            const logoURL = '/resources/img/logo_square.svg' + (theme.colors?.logo?.replace('#', '?color=') ?? '');
-            element.style.setProperty(`--logo`, `url(${logoURL})`);
-            document.querySelectorAll('link[rel="icon"]').forEach(favicon => {
-                if (favicon.href.match('logo_square')) {
-                    favicon.href = logoURL;
-                }
-            });
-
-            console.log(`Loaded theme: ${currentTheme}`);
-        }
-    </script>
-    <script>
-        /**
-         * checks if the scrollbar has a width and sets the style-scrollbar class accordingly
-         */
-        function checkScrollbarStyle() {
-            outerDiv = document.createElement("div");
-            outerDiv.style.position = 'fixed';
-            innerDiv = document.createElement("div");
-            innerDiv.style.overflowY = 'scroll';
-            outerDiv.appendChild(innerDiv);
-            document.body.appendChild(outerDiv);
-            if (outerDiv.clientWidth > 0) {
-                // desktop style scrollbars
-                document.documentElement.classList.add('style-scrollbar');
-            } else {
-                // mobile style scrollbars
-                document.documentElement.classList.remove('style-scrollbar');
-            }
-            delete outerDiv;
-        }
-
-        window.setTimeout(checkScrollbarStyle);
-    </script>
+  <script async defer type="module" src="/resources/js/<%- fileNameMap['browser-compat-check'] %>"></script>

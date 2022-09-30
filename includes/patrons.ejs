@@ -1,9 +1,0 @@
-<%
-    const patrons = [
-        "Who knows?"
-    ];
-
-    patrons.forEach((patron, index) => { %>
-        <a href="/stats/<%= patron %>"><span class="patron piece-legendary-fg"><%= patron %></span></a><%= index < patrons.length - 1 ? ', ' : '' %>
-    <% });
-%>

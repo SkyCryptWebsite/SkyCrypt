@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "ES2020",
+    "strict": true,
+    "noImplicitAny": true,
+    "sourceMap": true
+  },
+  "exclude": ["node_modules"]
+}

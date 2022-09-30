@@ -1,59 +1,37 @@
-const cluster = require('cluster');
+import { db } from "../mongo.js";
+import axios from "axios";
+import "axios-debug-log";
 
-async function main(){
-    const { MongoClient } = require('mongodb');
-    const axios = require('axios');
-    require('axios-debug-log');
+import { getPrices } from "../helper.js";
 
-    const helper = require('./../helper');
-    const credentials = require('./../../credentials.json');
-    
-    const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-    await mongo.connect();
+const hypixel = axios.create({
+  baseURL: "https://api.hypixel.net/",
+});
 
-    const db = mongo.db(credentials.dbName);
+async function updateBazaar() {
+  try {
+    const response = await hypixel.get("skyblock/bazaar" /*, { params: { key: credentials.hypixel_api_key }}*/);
 
-    const Hypixel = axios.create({
-        baseURL: 'https://api.hypixel.net/'
-    });
+    const { products } = response.data;
 
-    async function updateBazaar(){
-        try{
-            const response = await Hypixel.get('skyblock/bazaar'/*, { params: { key: credentials.hypixel_api_key }}*/);
+    for (const productId in products) {
+      const product = products[productId];
 
-            const { products } = response.data;
+      const { buyPrice, sellPrice } = getPrices(product);
 
-            for(const productId in products){
-                const product = products[productId];
+      const { buyVolume, sellVolume } = product.quick_status;
 
-                const { buyPrice, sellPrice } = helper.getPrices(product);
+      await db
+        .collection("bazaar")
+        .updateOne({ productId }, { $set: { buyPrice, sellPrice, buyVolume, sellVolume } }, { upsert: true });
 
-                const { buyVolume, sellVolume } = product.quick_status;
-
-                await db
-                .collection('bazaar')
-                .updateOne(
-                    { productId },
-                    { $set: { buyPrice, sellPrice, buyVolume, sellVolume }},
-                    { upsert: true }
-                );
-
-                await db
-                .collection('items')
-                .updateOne(
-                    { id: productId },
-                    { $set: { bazaar: true }}
-                );
-            }
-        }catch(e){
-            console.error(e);
-        }
-
-        setTimeout(updateBazaar, 1000 * 120);
+      await db.collection("items").updateOne({ id: productId }, { $set: { bazaar: true } });
     }
+  } catch (e) {
+    console.error(e);
+  }
 
-    updateBazaar();
+  setTimeout(updateBazaar, 1000 * 120);
 }
 
-if(cluster.isMaster)
-    main();
+updateBazaar();

@@ -1,0 +1,21 @@
+{
+  "name": "Default Light Theme",
+  "author": "SkyCrypt Team",
+  "schema": 2,
+  "light": true,
+  "images": {
+    "bg": "/resources/img/themes/light/bg.webp"
+  },
+  "backgrounds": {
+    "skillbar": { "type": "color", "color": "#56d34d" },
+    "maxedbar": { "type": "color", "color": "#fdbb3c" }
+  },
+  "colors": {
+    "logo": "#08a53d",
+    "icon": "#00b52f",
+    "link": "#05d245",
+    "hover": "#0bea51",
+    "maxed": "#DD980E",
+    "gold": "#c58000"
+  }
+}

@@ -1,7 +1,7 @@
 {
-    "id": "VANILLA",
-    "name": "Vanilla",
-    "author": "Mojang",
-    "url": "https://minecraft.net/",
-    "priority": 999
+  "id": "VANILLA",
+  "name": "Vanilla",
+  "author": "Mojang",
+  "url": "https://minecraft.net/",
+  "priority": 999
 }

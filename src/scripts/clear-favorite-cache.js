@@ -1,24 +1,10 @@
-const cluster = require('cluster');
+import { db } from "../mongo.js";
 
-async function main(){
-    const { MongoClient } = require('mongodb');
+async function clearFavoriteCache() {
+  // Clear cache for favorite
+  await db.collection("favoriteCache").deleteMany({});
 
-    const credentials = require('./../../credentials.json');
-
-    const mongo = new MongoClient(credentials.dbUrl, { useUnifiedTopology: true });
-    await mongo.connect();
-
-    const db = mongo.db(credentials.dbName);
-
-    async function clearFavoriteCache(){
-        // Clear cache for favorite
-        await db.collection('favoriteCache').deleteMany({});
-
-        setTimeout(clearFavoriteCache, 15 * 60 * 1000);
-    }
-
-    clearFavoriteCache();
+  setTimeout(clearFavoriteCache, 15 * 60 * 1000);
 }
 
-if(cluster.isMaster)
-    main();
+clearFavoriteCache();

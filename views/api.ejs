@@ -1,43 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>API Documentation | SkyCrypt</title>
-    <meta name="description" content="A beautiful site for sharing your SkyBlock profile 🍣">
-    <link rel="icon" href="/resources/img/logo_square.svg" sizes="any" type="image/svg+xml">
-    <meta property="og:image" content="/resources/img/logo_square.svg">
-    <meta property="og:title" content="SkyCrypt">
-    <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🍣">
+  <title>API Documentation | SkyCrypt</title>
+  <meta name="description" content="A beautiful site for sharing your SkyBlock profile 🍣">
+  <link rel="icon" href="/resources/img/logo_square.svg" sizes="any" type="image/svg+xml">
+  <meta property="og:image" content="/resources/img/logo_square.svg">
+  <meta property="og:title" content="SkyCrypt">
+  <meta property="og:description" content="A beautiful site for sharing your SkyBlock profile 🍣">
 
-    <%- include('../includes/resources') %>
+  <%- include('../includes/resources') %>
 </head>
-    <body>
-        <%- include('../includes/header') %>
 
-        <!-- Redoc Library-->
-        <redoc id="docs"></redoc>
-        <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
-        <script>
-            function redocInit() {
-                const themeColors = extra.themes[localStorage.getItem("currentTheme")].colors;
-                Redoc.init(
-                    'resources/api/api_docs.json',
-                    {
-                        scrollYOffset: 'header',
-                        theme: {
-                            colors: {
-                                primary: {
-                                    main: themeColors?.icon ?? '#0bda51',
-                                }
-                            }
-                        }
-                    },
-                    document.getElementById('docs')
-                );
+<body>
+  <%- include('../includes/header') %>
+
+  <!-- Redoc Library-->
+  <redoc id="docs"></redoc>
+  <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
+  <script>
+    function redocInit(color) {
+      Redoc.init(
+        '/resources/api/api_docs.json', {
+          scrollYOffset: 'header',
+          theme: {
+            colors: {
+              primary: {
+                main: color ?? "#0bda51",
+              }
             }
-            redocInit();
-            document.querySelector('#themes-box').addEventListener("change", () => setTimeout(redocInit));
-        </script>
+          }
+        },
+        document.getElementById('docs')
+      );
+    }
+    redocInit(JSON.parse(localStorage.getItem("processedTheme"))?.styles?.["--icon-hex"]);
+  </script>
 
-        <%- include('../includes/footer'); %>
-    </body>
+  <%- include('../includes/footer'); %>
+</body>
+
 </html>

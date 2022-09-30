@@ -39,9 +39,7 @@
   "paths": {
     "/profile/${playerName}": {
       "get": {
-        "tags": [
-          "profile"
-        ],
+        "tags": ["profile"],
         "summary": "Get a list of a player's profiles, with extensive data.",
         "parameters": [
           {
@@ -105,9 +103,7 @@
     },
     "/talismans/{playerName}": {
       "get": {
-        "tags": [
-          "talismans"
-        ],
+        "tags": ["talismans"],
         "summary": "Get a list of a player's profiles with talisman data.",
         "parameters": [
           {
@@ -136,9 +132,7 @@
     },
     "/talismans/{playerName}/{profileName}": {
       "get": {
-        "tags": [
-          "talismans"
-        ],
+        "tags": ["talismans"],
         "summary": "Get a player's profile with talisman data.",
         "parameters": [
           {
@@ -186,9 +180,7 @@
     },
     "/slayers/{playerName}": {
       "get": {
-        "tags": [
-          "slayers"
-        ],
+        "tags": ["slayers"],
         "summary": "Get a list of a player's profiles with slayer data.",
         "parameters": [
           {
@@ -217,9 +209,7 @@
     },
     "/slayers/{playerName}/{profileName}": {
       "get": {
-        "tags": [
-          "slayers"
-        ],
+        "tags": ["slayers"],
         "summary": "Get a player's profile with slayer data.",
         "parameters": [
           {
@@ -267,9 +257,7 @@
     },
     "/coins/{playerName}": {
       "get": {
-        "tags": [
-          "coins"
-        ],
+        "tags": ["coins"],
         "summary": "Get a list of a player's profiles with bank and purse data.",
         "parameters": [
           {
@@ -298,9 +286,7 @@
     },
     "/coins/{playerName}/{profileName}": {
       "get": {
-        "tags": [
-          "coins"
-        ],
+        "tags": ["coins"],
         "summary": "Get a player's profile with bank and purse data.",
         "parameters": [
           {
@@ -348,9 +334,7 @@
     },
     "/dungeons/{playerName}": {
       "get": {
-        "tags": [
-          "dungeons"
-        ],
+        "tags": ["dungeons"],
         "summary": "Get a list of a player's profiles with dungeon and class data.",
         "parameters": [
           {
@@ -389,9 +373,7 @@
     },
     "/dungeons/{playerName}/{profileName}": {
       "get": {
-        "tags": [
-          "dungeons"
-        ],
+        "tags": ["dungeons"],
         "summary": "Get a player's profile with dungeon and class data.",
         "parameters": [
           {
@@ -429,9 +411,7 @@
     },
     "/bazaar": {
       "get": {
-        "tags": [
-          "bazaar"
-        ],
+        "tags": ["bazaar"],
         "summary": "Get an object of every bazaar item and its data.",
         "responses": {
           "200": {
@@ -763,153 +743,6 @@
                     "type": "integer"
                   },
                   "boss_kills_teir_3": {
-                    "type": "integer"
-                  }
-                }
-              }
-            }
-          },
-          "slayer_bonus": {
-            "type": "object",
-            "description": "Bonus stats from slayer levels.",
-            "properties": {
-              "zombie": {
-                "type": "object",
-                "properties": {
-                  "damage": {
-                    "type": "integer"
-                  },
-                  "health": {
-                    "type": "integer"
-                  },
-                  "defense": {
-                    "type": "integer"
-                  },
-                  "effective_health": {
-                    "type": "integer"
-                  },
-                  "strength": {
-                    "type": "integer"
-                  },
-                  "damage_increase": {
-                    "type": "integer"
-                  },
-                  "speed": {
-                    "type": "integer"
-                  },
-                  "crit_chance": {
-                    "type": "integer"
-                  },
-                  "crit_damage": {
-                    "type": "integer"
-                  },
-                  "bonus_attack_speed": {
-                    "type": "integer"
-                  },
-                  "intelligence": {
-                    "type": "integer"
-                  },
-                  "sea_creature_chance": {
-                    "type": "integer"
-                  },
-                  "magic_find": {
-                    "type": "integer"
-                  },
-                  "pet_luck": {
-                    "type": "integer"
-                  }
-                }
-              },
-              "spider": {
-                "type": "object",
-                "properties": {
-                  "damage": {
-                    "type": "integer"
-                  },
-                  "health": {
-                    "type": "integer"
-                  },
-                  "defense": {
-                    "type": "integer"
-                  },
-                  "effective_health": {
-                    "type": "integer"
-                  },
-                  "strength": {
-                    "type": "integer"
-                  },
-                  "damage_increase": {
-                    "type": "integer"
-                  },
-                  "speed": {
-                    "type": "integer"
-                  },
-                  "crit_chance": {
-                    "type": "integer"
-                  },
-                  "crit_damage": {
-                    "type": "integer"
-                  },
-                  "bonus_attack_speed": {
-                    "type": "integer"
-                  },
-                  "intelligence": {
-                    "type": "integer"
-                  },
-                  "sea_creature_chance": {
-                    "type": "integer"
-                  },
-                  "magic_find": {
-                    "type": "integer"
-                  },
-                  "pet_luck": {
-                    "type": "integer"
-                  }
-                }
-              },
-              "wolf": {
-                "type": "object",
-                "properties": {
-                  "damage": {
-                    "type": "integer"
-                  },
-                  "health": {
-                    "type": "integer"
-                  },
-                  "defense": {
-                    "type": "integer"
-                  },
-                  "effective_health": {
-                    "type": "integer"
-                  },
-                  "strength": {
-                    "type": "integer"
-                  },
-                  "damage_increase": {
-                    "type": "integer"
-                  },
-                  "speed": {
-                    "type": "integer"
-                  },
-                  "crit_chance": {
-                    "type": "integer"
-                  },
-                  "crit_damage": {
-                    "type": "integer"
-                  },
-                  "bonus_attack_speed": {
-                    "type": "integer"
-                  },
-                  "intelligence": {
-                    "type": "integer"
-                  },
-                  "sea_creature_chance": {
-                    "type": "integer"
-                  },
-                  "magic_find": {
-                    "type": "integer"
-                  },
-                  "pet_luck": {
                     "type": "integer"
                   }
                 }

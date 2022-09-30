@@ -1,0 +1,154 @@
+# This CI Workflow was deployed and configured by WarpWing and Nate.
+name: CI/CD
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: "16.x"
+
+jobs:
+  es-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: es-lint
+        run: npm run lint
+
+  ejs-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: ejs-lint
+        run: npm run lint:ejs
+
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: prettier
+        run: npm run prettier
+
+  check-ts:
+    name: check typescript
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: tsc
+        run: npx tsc -p public/resources/ts --noEmit
+
+  rollup:
+    name: rollup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: rollup
+        run: npm run rollup
+
+  build-scss:
+    name: build scss
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: build scss
+        run: npm run scss
+
+  deploy-production:
+    name: deploy production
+    if: |
+      github.ref == 'refs/heads/production'
+      && github.repository_owner == 'SkyCryptWebsite'
+      && github.event_name != 'pull_request'
+    needs: [ejs-lint, check-ts, rollup, build-scss]
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH and deploy-production
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          port: ${{ secrets.VPS_PORT }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_KEY }}
+          script_stop: true
+          script: ~/deploy-production.sh
+
+  deploy-development:
+    name: deploy development
+    if: |
+      github.ref == 'refs/heads/development'
+      && github.repository_owner == 'SkyCryptWebsite'
+      && github.event_name != 'pull_request'
+    needs: [ejs-lint, check-ts, rollup, build-scss]
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH and deploy-development
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          port: ${{ secrets.VPS_PORT }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_KEY }}
+          script_stop: true
+          script: ~/deploy-development.sh
