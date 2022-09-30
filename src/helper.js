@@ -89,7 +89,8 @@ export function getPath(obj, ...keys) {
  * @param  {...(string|number)} keys a path
  */
 export function setPath(obj, value, ...keys) {
-  let loc = obj || {}, i;
+  let loc = obj || {},
+    i;
 
   for (let i = 0; i < keys.length - 1; i++) {
     loc[keys[i]] ??= {};
