@@ -1,6 +1,8 @@
 import * as helper from "../../../common/helper.js";
+import * as bonuses from "../../../common/constants/bonuses.js";
 import { STATS_BONUS } from "../../../common/constants.js";
 import { FORBIDDEN_STATS } from "../../../src/constants";
+import { HARP_QUEST } from "../../../src/constants";
 
 export function getPlayerStats() {
   const stats: PlayerStats = {
@@ -39,6 +41,7 @@ export function getPlayerStats() {
     social_wisdom: { base: 0 },
   };
   const allowedStats = Object.keys(stats);
+  const temp = {};
 
   try {
     // Bestiary Level 
@@ -59,6 +62,49 @@ export function getPlayerStats() {
       stats.farming_fortune.jacob_double_drops += calculated.farming.perks.double_drops * 2;
     }
   
+    // Slayer Completion
+    for (const type of Object.keys(calculated.slayers) || []) {
+      for (const tiers of Object.keys(calculated.slayers[type]?.kills)) {
+        if (parseInt(tiers) <= 3) {
+            temp[type] ??= 0;
+            temp[type] += 1;
+        } else if (parseInt(tiers) == 5) { // Hypixel admins forgot to add tier 5 bosses to Wisdom calculation :/
+            temp[type] ??= 0;
+            temp[type] += 2;
+        }
+      }
+    }
+
+    for (const type of Object.keys(temp)) {
+      stats.combat_wisdom.slayer ??= 0;
+      stats.combat_wisdom.slayer += temp[type];
+    }   
+
+    // ? Doesn't work, not sure why
+    // Harp
+    /*
+    for (const harp in calculated.harp_quest || []) {
+      if (!harp.endsWith('_best_completion')) continue;
+      stats['intelligence'].harp_quest ??= 0;
+      stats['intelligence'].harp_quest += HARP_QUEST[`${harp}`];
+    } 
+    */
+ 
+    // Dungeon Essence Shop
+    /*
+    if (Object.keys(calculated.perks).length > 0) {
+      for (let [name, perkData] of Object.entries(calculated.perks)) {
+        name = name.replaceAll('permanent_', '')
+        if (Object.keys(FORBIDDEN_STATS).includes(name)) {
+          console.log(name, perkData)
+          stats[name].essence_shop_perk ??= 0;
+          stats[name].essence_shop_perk += perkData * FORBIDDEN_STATS[name];
+        }
+      }
+    }
+    */
+
+
   } catch (error) {
     console.error(error);
   }
@@ -94,7 +140,11 @@ export function getPlayerStats() {
   }
 
   // Active accessories stats
+  let accessoryDuplicates = [];
   for (const item of items.accessories.filter((item) => !(item as Item).isInactive)) {
+    if (accessoryDuplicates.includes(item.tag?.ExtraAttributes?.id)) continue;
+    accessoryDuplicates.push(item.tag?.ExtraAttributes?.id)
+
     const bonusStats: ItemStats = helper.getStatsFromItem(item as Item);
 
     for (const [name, value] of Object.entries(bonusStats)) {
@@ -104,6 +154,12 @@ export function getPlayerStats() {
 
       stats[name].accessories ??= 0;
       stats[name].accessories += value;
+
+      if (item.tag?.ExtraAttributes?.id == 'NIGHT_CRYSTAL' || item.tag?.ExtraAttributes?.id == 'DAY_CRYSTAL') {
+        accessoryDuplicates.push(item.tag?.ExtraAttributes?.id);
+        stats.health.accessories += 5;
+        stats.strength.accessories += 5;
+      } 
     }
   }
 

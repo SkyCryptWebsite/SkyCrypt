@@ -1754,6 +1754,7 @@ export async function getStats(
   output.dungeons = getDungeons(userProfile, hypixelProfile);
 
   output.perks = userProfile.perks;
+  output.harp_quest = userProfile.harp_quest;
 
   output.essence = getEssence(userProfile, hypixelProfile);
 
