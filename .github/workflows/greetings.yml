@@ -1,12 +1,15 @@
 name: SkyCryptGreetings
 
-on: [pull_request, issues]
+on: [issues]
 
 jobs:
   greeting:
     runs-on: ubuntu-latest
+    permissions:
+        issues: write
     steps:
       - uses: actions/first-interaction@v1
+        continue-on-error: true
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          issue-message: "Thank you for bringing this issue to our attention. Expect a developer to comment within the first 2-3 days of issue submission "
+          issue-message: "This looks like your first issue on SkyCrypt!\nThank you for bringing this issue to our attention.\nExpect a developer to comment within the first 3-5 business days of issue submission."
