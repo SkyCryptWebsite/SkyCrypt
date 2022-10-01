@@ -344,7 +344,7 @@ export const STATS_DATA = {
     suffix: "",
     color: "",
   },
-    damage: {
+  damage: {
     name: "Damage",
     nameLore: "Damage",
     nameShort: "Damage",

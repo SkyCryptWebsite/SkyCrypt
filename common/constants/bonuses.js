@@ -42,9 +42,9 @@ export const STATS_BONUS = {
   },
   skill_social: {},
   skill_carpentry: {
-    1: { health: 1},
+    1: { health: 1 },
     // ! Hypixel Admins made a mistake here, Carpentry 50 for some reason doesn't give health either
-    50: { health: 49 }
+    50: { health: 49 },
   },
   skill_runecrafting: {},
   // ? Slayers
