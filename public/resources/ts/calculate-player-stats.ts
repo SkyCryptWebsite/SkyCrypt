@@ -770,5 +770,6 @@ function getPetData(stats, pet, calculated) {
     defenseMultiplier: defenseMultiplier,
     strengthMultiplier: strengthMultiplier,
     bonusAttackSpeedMultiplier: bonusAttackSpeedMultiplier,
+    ferocityMultiplier: ferocityMultiplier,
   };
 }
