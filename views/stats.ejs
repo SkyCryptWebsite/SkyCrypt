@@ -765,10 +765,10 @@ const metaDescription = getMetaDescription()
             },
           ];
 
-        if (!'levels' in calculated) {
+        if (calculated.weight) {
           for (weight of weightSystems) { %>
-            <div class="additional-stat">
-              <span data-tippy-content="
+        <div class="additional-stat">
+          <span data-tippy-content="
                 <span class='stat-name'><%= weight.name %></span><br>
                 <span class='stat-info'>Weight calculations by <%= weight.author %></span>
                 <br/><br/>
@@ -789,10 +789,9 @@ const metaDescription = getMetaDescription()
                   <%= parseFloat(weight.total.toFixed(2)).toLocaleString() %>
                 </span>
               ">
-                <span class="stat-name"><%= weight.name %>: </span>
-                <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span
-              ></span>
-            </div>
+            <span class="stat-name"><%= weight.name %>: </span>
+            <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span></span>
+        </div>
         <%}%>
       <%}%>
       </div>
