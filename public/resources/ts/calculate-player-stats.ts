@@ -519,8 +519,8 @@ function getPetData(stats, pet, calculated) {
     defenseMultiplier = 0,
     strengthMultiplier = 0,
     bonusAttackSpeedMultiplier = 0,
-    ferocityMultiplier: 0;
-    
+    ferocityMultiplier = 0;
+
   if (!pet) {
     return {
       stats: stats,
