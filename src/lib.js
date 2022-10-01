@@ -1755,7 +1755,7 @@ export async function getStats(
 
   output.perks = userProfile.perks;
   output.harp_quest = userProfile.harp_quest;
-
+  output.hotm = "mining_core" in userProfile ? await getHotmItems(userProfile) : [];
   output.essence = getEssence(userProfile, hypixelProfile);
 
   output.fishing = {
@@ -3002,7 +3002,7 @@ function getEssence(userProfile, hypixelProfile) {
   return output;
 }
 
-function getHotmItems(userProfile, packs) {
+async function getHotmItems(userProfile, packs) {
   const data = userProfile.mining_core;
   const output = [];
 

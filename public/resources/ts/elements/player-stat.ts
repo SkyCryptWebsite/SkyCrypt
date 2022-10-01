@@ -22,22 +22,24 @@ export class PlayerStat extends LitElement {
       return;
     }
 
-    const value = Math.round(+this.value);
-    const icon = STATS_DATA[this.stat].symbol;
-    const name = STATS_DATA[this.stat].nameShort;
-    const suffix = STATS_DATA[this.stat].suffix;
+    if (!this.stat.includes("_cap")) {
+      const value = Math.round(+this.value);
+      const icon = STATS_DATA[this.stat].symbol;
+      const name = STATS_DATA[this.stat].nameShort;
+      const suffix = STATS_DATA[this.stat].suffix;
 
-    const tooltip = this.getTooltip(this.data, name, suffix, value, this.special);
+      const tooltip = this.getTooltip(this.data, name, suffix, value, this.special);
 
-    return html`
-      <div data-stat="${this.stat}" class="basic-stat stat-${this.stat.replaceAll("_", "-")}">
-        <div data-tippy-content="${tooltip.join("")}">
-          <span class="stat-icon">${icon}</span>
-          <span class="stat-name">${name}</span>
-          <span class="stat-value">${value.toLocaleString()}${suffix}</span>
+      return html`
+        <div data-stat="${this.stat}" class="basic-stat stat-${this.stat.replaceAll("_", "-")}">
+          <div data-tippy-content="${tooltip.join("")}">
+            <span class="stat-icon">${icon}</span>
+            <span class="stat-name">${name}</span>
+            <span class="stat-value">${value.toLocaleString()}${suffix}</span>
+          </div>
         </div>
-      </div>
-    `;
+      `;
+    }
   }
 
   private getTooltip(
