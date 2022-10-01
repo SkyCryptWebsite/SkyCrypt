@@ -47,10 +47,11 @@ export function getPlayerStats() {
   const allowedStats = Object.keys(stats);
   const temp = {};
   let statsMultiplier = 0,
-  healthMultiplier = 0,
-  defenseMultiplier = 0,
-  strengthMultiplier = 0,
-  bonusAttackSpeedMultiplier = 0;
+    healthMultiplier = 0,
+    defenseMultiplier = 0,
+    strengthMultiplier = 0,
+    bonusAttackSpeedMultiplier = 0,
+    ferocityMultiplier = 0;
 
   try {
     // Bestiary Level
@@ -238,6 +239,7 @@ export function getPlayerStats() {
 
     statsMultiplier += petStats.statsMultiplier || 0;
     bonusAttackSpeedMultiplier += petStats.bonusAttackSpeedMultiplier || 0;
+    ferocityMultiplier += petStats.ferocityMultiplier || 0;
     defenseMultiplier += petStats.defenseMultiplier || 0;
     healthMultiplier += petStats.healthMultiplier || 0;
     strengthMultiplier += petStats.strengthMultiplier || 0;
@@ -420,23 +422,28 @@ export function getPlayerStats() {
   }
 
   stats.health ??= 0;
+  stats.ferocity ??= 0;
   stats.defense ??= 0;
   stats.strength ??= 0;
-  stats.bonus_attack_speed ??= 0,
+  stats.bonus_attack_speed ??= 0;
   stats.health = healthMultiplier > 0 ? stats.health + stats.health * healthMultiplier : stats.health;
+  stats.ferocity = ferocityMultiplier > 0 ? stats.ferocity + stats.ferocity * ferocityMultiplier : stats.ferocity;
   stats.defense = defenseMultiplier > 0 ? stats.defense + stats.defense * defenseMultiplier : stats.defense;
   stats.strength = strengthMultiplier > 0 ? stats.strength + stats.strength * strengthMultiplier : stats.strength;
-  stats.bonus_attack_speed = bonusAttackSpeedMultiplier > 0 ? stats.bonus_attack_speed + stats.bonus_attack_speed * bonusAttackSpeedMultiplier : stats.bonus_attack_speed;
+  stats.bonus_attack_speed =
+    bonusAttackSpeedMultiplier > 0
+      ? stats.bonus_attack_speed + stats.bonus_attack_speed * bonusAttackSpeedMultiplier
+      : stats.bonus_attack_speed;
 
   if (statsMultiplier > 0) {
     for (const stat of Object.keys(stats)) {
-        if (stat.includes('fortune' || stat == 'pristine' || stat == 'effective_health')) continue;
-        stats.stat += stats.stat * statsMultiplier;
+      if (stat.includes("fortune" || stat == "pristine" || stat == "effective_health")) continue;
+      stats.stat += stats.stat * statsMultiplier;
     }
   }
 
-  // Speed Cap 
-  stats.speed = stats.speed > stats.speed_cap ? (stats.speed = stats.speed_cap) :stats.speed;
+  // Speed Cap
+  stats.speed = stats.speed > stats.speed_cap ? (stats.speed = stats.speed_cap) : stats.speed;
 
   // Health Cap
   stats.health = stats.health > stats.health_cap ? (stats.health = stats.health_cap) : stats.health;
@@ -511,16 +518,18 @@ function getPetData(stats, pet, calculated) {
     healthMultiplier = 0,
     defenseMultiplier = 0,
     strengthMultiplier = 0,
-    bonusAttackSpeedMultiplier = 0;
+    bonusAttackSpeedMultiplier = 0,
+    ferocityMultiplier: 0;
 
   if (!pet) {
     return {
       stats: stats,
-      statsMultiplier: statsMultiplier,
-      healthMultiplier: healthMultiplier,
-      defenseMultiplier: defenseMultiplier,
-      strengthMultiplier: strengthMultiplier,
-      bonusAttackSpeedMultiplier: bonusAttackSpeedMultiplier,
+      statsMultiplier: 0,
+      healthMultiplier: 0,
+      defenseMultiplier: 0,
+      strengthMultiplier: 0,
+      bonusAttackSpeedMultiplier: 0,
+      ferocityMultiplier: 0,
     };
   }
 
@@ -719,7 +728,7 @@ function getPetData(stats, pet, calculated) {
   if (pet.type == "AMMONITE") {
     if (pet.tier == "LEGENDARY") {
       stats.sea_creature_chance.pet ??= 0;
-      stats.sea_creature_chance.pet += mining.hotM_tree.level ?? 0;
+      stats.sea_creature_chance.pet += calculated.hotm[0].display_name.split(" ")[1];
     }
   }
 
