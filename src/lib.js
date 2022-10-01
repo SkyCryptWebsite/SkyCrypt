@@ -1367,7 +1367,8 @@ export const getItems = async (
       equipmentPiece.equipment_name = name;
     });
 
-    output.equipment_set_rarity = constants.RARITIES[Math.max(...equipment.map((a) => helper.rarityNameToInt(a.rarity)))];
+    output.equipment_set_rarity =
+      constants.RARITIES[Math.max(...equipment.map((a) => helper.rarityNameToInt(a.rarity)))];
   }
 
   console.debug(`${options.debugId}: getItems returned. (${Date.now() - timeStarted}ms)`);
