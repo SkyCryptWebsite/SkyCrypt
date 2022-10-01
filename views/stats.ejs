@@ -630,7 +630,6 @@ const metaDescription = getMetaDescription()
               <% }else if(member.emoji){ %>
               <%- extra.twemoji.parse(member.emoji) %>
               <% } %>
-              <span class="goto-last-played"><%= 'last_updated' in member ? member.last_updated.text : '' %></span>
             </a>
           </li>
           <% }); %>
@@ -663,7 +662,6 @@ const metaDescription = getMetaDescription()
               <% if (_profile.game_mode == 'island') { %>
               <%- extra.twemoji.parse("🌴") %>
               <% } %>
-              <span class="goto-last-played"><%= 'last_updated' in _profile ? _profile.last_updated.text : '' %></span>
             </a>
           </li>
           <% } %>
@@ -730,7 +728,6 @@ const metaDescription = getMetaDescription()
         <% if(calculated.current_area){ %>
         <div class="additional-stat"><span class="stat-name"><%= calculated.current_area_updated ? 'Current' : 'Last' %> Area: </span><span class="stat-value"><%= calculated.current_area %></span></div>
         <% } %>
-        <div class="additional-stat"><span data-tippy-content='Last updated on <local-time timestamp="<%= calculated.last_updated.unix %>"></local-time>'><span class="stat-name">Last Updated: </span><span class="stat-value"><%= calculated.last_updated.text %></span></span></div>
         <div class="additional-stat"><span data-tippy-content='Joined on <local-time timestamp="<%= calculated.first_join.unix %>"></local-time>'><span class="stat-name">Joined: </span><span class="stat-value"><%= calculated.first_join.text %></span></span></div>
         <div class="additional-stat"><span class="stat-name">Purse: </span><span class="stat-value"><%= helper.formatNumber(calculated.purse, true) %> Coin<%= Math.floor(calculated.purse) == 1 ? '': 's' %></span></div>
         <% if('bank' in calculated){ %>
@@ -739,10 +736,9 @@ const metaDescription = getMetaDescription()
         <% if('levels' in calculated && 'runecrafting' in calculated.levels){ %>
         <div class="additional-stat"><span data-tippy-content="
           <span class='stat-name'>Total Skill XP: </span><span class='stat-value'><%= Math.round(calculated.total_skill_xp).toLocaleString() %></span>
-          <div class='tippy-explanation'>Total XP gained in all skills except Carpentry and Runecrafting.</div>
+          <div class='tippy-explanation'>Total XP gained in all skills except Social and Runecrafting.</div>
           <span class='stat-name'>Average Level: </span><span class='stat-value'><%= calculated.average_level.toFixed(2) %></span>
-          <div class='tippy-explanation'>Average skill level over all skills except Carpentry and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div>
-          <% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
+          <div class='tippy-explanation'>Average skill level over all skills except Social and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div><% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
           <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
           "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level.toFixed(2) %></span></span></div>
         <% } %>
@@ -769,36 +765,35 @@ const metaDescription = getMetaDescription()
             },
           ];
 
-          for (weight of weightSystems) {
-            %>
+        if (calculated.weight) {
+          for (weight of weightSystems) { %>
         <div class="additional-stat">
           <span data-tippy-content="
-                  <span class='stat-name'><%= weight.name %></span><br>
-                  <span class='stat-info'>Weight calculations by <%= weight.author %></span>
-                  <br/><br/>
-                  <span class='stat-name'>Skill: </span>
-                  <span class='stat-value'>
-                    <%= parseFloat(weight.skill.toFixed(2)).toLocaleString() %>
-                  </span><br/>
-                  <span class='stat-name'>Slayer: </span>
-                  <span class='stat-value'>
-                    <%= parseFloat(weight.slayer.toFixed(2)).toLocaleString() %>
-                  </span><br/>
-                  <span class='stat-name'>Dungeon: </span>
-                  <span class='stat-value'>
-                    <%= parseFloat(weight.dungeon.toFixed(2)).toLocaleString() %>
-                  </span><br/><br/>
-                  <span class='stat-name'>Total: </span>
-                  <span class='stat-value'>
-                    <%= parseFloat(weight.total.toFixed(2)).toLocaleString() %>
-                  </span>
-                ">
+                <span class='stat-name'><%= weight.name %></span><br>
+                <span class='stat-info'>Weight calculations by <%= weight.author %></span>
+                <br/><br/>
+                <span class='stat-name'>Skill: </span>
+                <span class='stat-value'>
+                  <%= parseFloat(weight.skill.toFixed(2)).toLocaleString() %>
+                </span><br/>
+                <span class='stat-name'>Slayer: </span>
+                <span class='stat-value'>
+                  <%= parseFloat(weight.slayer.toFixed(2)).toLocaleString() %>
+                </span><br/>
+                <span class='stat-name'>Dungeon: </span>
+                <span class='stat-value'>
+                  <%= parseFloat(weight.dungeon.toFixed(2)).toLocaleString() %>
+                </span><br/><br/>
+                <span class='stat-name'>Total: </span>
+                <span class='stat-value'>
+                  <%= parseFloat(weight.total.toFixed(2)).toLocaleString() %>
+                </span>
+              ">
             <span class="stat-name"><%= weight.name %>: </span>
             <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span></span>
         </div>
-        <%
-          }
-        %>
+        <%}%>
+      <%}%>
       </div>
 
       <div id="skill_levels_container">
@@ -1414,22 +1409,24 @@ const metaDescription = getMetaDescription()
             <br>
           </p>
 
-          <p class="stat-sub-header">Heart of the Mountain</p>
-          <p class="stat-raw-values">
-            <!-- Tier -->
-            <% max = mining.core.tier.level === constants.HOTM.tiers ? 'golden-text' : '' %>
-            <span class="stat-name <%= max %>">Tier:</span>
-            <span class="stat-value <%= max %>"><%= mining.core.tier.level %></span>
-            <br>
-            <!-- Token of the Mountain -->
-            <% max = mining.core.tokens.spent === mining.core.tokens.total ? 'golden-text' : '' %>
-            <span class="stat-name <%= max %>">Token of the Mountain:</span>
-            <span class="stat-value <%= max %>"><%= mining.core.tokens.spent %>/<%= mining.core.tokens.total %></span>
-            <br>
-            <!-- Mithril Powder -->
-            <% max = mining.core.powder.mithril.total >= constants.HOTM.powder_for_max_nodes.mithril_powder ? 'golden-text' : '' %>
-            <span class="stat-name <%= max %>">Mithril Powder:</span>
-            <span class="stat-value <%= max %>" data-tippy-content="
+
+            <p class="stat-sub-header">Heart of the Mountain</p>
+            <p class="stat-raw-values">
+              <!-- Tier -->
+              <% max = mining.core.tier.level === constants.HOTM.tiers ? 'golden-text' : '' %>
+              <span class="stat-name <%= max %>">Tier:</span>
+              <span class="stat-value <%= max %>"><%= mining.core.tier.level %></span>
+              <br>
+              <!-- Token of the Mountain -->
+              <% mining.core.tokens.spent > mining.core.tokens.total ? mining.core.tokens.total = mining.core.tokens.spent : null %>
+              <% max = mining.core.tokens.spent === mining.core.tokens.total ? 'golden-text' : '' %>
+              <span class="stat-name <%= max %>">Token of the Mountain:</span>
+              <span class="stat-value <%= max %>"><%= mining.core.tokens.spent %>/<%= mining.core.tokens.total %></span>
+              <br>
+              <!-- Mithril Powder -->
+              <% max = mining.core.powder.mithril.total >= constants.HOTM.powder_for_max_nodes.mithril_powder ? 'golden-text' : '' %>
+              <span class="stat-name <%= max %>">Mithril Powder:</span>
+              <span class="stat-value <%= max %>" data-tippy-content="
                 <span class='stat-name'>Total:</span> <span class='stat-value'><%= mining.core.powder.mithril.total.toLocaleString() %></span><br>
                 <span class='stat-name'>Spent:</span> <span class='stat-value'><%= mining.core.powder.mithril.spent.toLocaleString() %></span><br>
                 <span class='stat-name'>Available:</span> <span class='stat-value'><%= mining.core.powder.mithril.available.toLocaleString() %></span>
