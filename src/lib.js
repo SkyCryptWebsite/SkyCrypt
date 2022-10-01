@@ -1347,10 +1347,11 @@ export const getItems = async (
   }
 
   // Full equipment set (4 pieces)
-  if (equipment.filter((x) => x.rarity).length === 4) {
-    let output_name;
-    let reforgeName;
+  for (const piece of equipment) {
+    if (piece.rarity == null) delete equipment[equipment.indexOf(piece)];
+  }
 
+  if (equipment.filter((x) => x.rarity).length === 4) {
     // Getting equipment_name
     equipment.forEach((equipmentPiece) => {
       let name = equipmentPiece.display_name;
@@ -1366,29 +1367,7 @@ export const getItems = async (
       equipmentPiece.equipment_name = name;
     });
 
-    // Getting full equipment reforge (same reforge on all pieces)
-    if (
-      equipment.filter(
-        (a) =>
-          a.tag?.ExtraAttributes?.modifier != undefined &&
-          a.tag?.ExtraAttributes?.modifier == equipment[0].tag.ExtraAttributes.modifier
-      ).length == 4
-    ) {
-      reforgeName = equipment[0].display_name.split(" ")[0];
-    }
-
-    if (equipment.filter((a) => a.equipment_name == equipment[0].equipment_name).length == 4) {
-      output_name = equipment[0].equipment_name;
-    }
-
-    // Finalizing the output
-    if (reforgeName && output_name) {
-      output_name = reforgeName + " " + output_name;
-    }
-
-    output.equipment_set = output_name;
-    output.equipment_set_rarity =
-      constants.RARITIES[Math.max(...equipment.map((a) => helper.rarityNameToInt(a.rarity)))];
+    output.equipment_set_rarity = constants.RARITIES[Math.max(...equipment.map((a) => helper.rarityNameToInt(a.rarity)))];
   }
 
   console.debug(`${options.debugId}: getItems returned. (${Date.now() - timeStarted}ms)`);
@@ -3311,11 +3290,11 @@ export async function getProfile(
 
   let lastCachedSave = 0;
 
+  const profileData = [];
   if (profileObject) {
-    const profileData = db
-      .collection("profileCache")
-      .find({ profile_id: { $in: Object.keys(profileObject.profiles) } });
-
+    for (const pId of Object.keys(profileObject.profiles)) {
+      profileData.push(await db.collection("profileCache").findOne({ profile_id: pId }));
+    }
     for await (const doc of profileData) {
       if (doc.members?.[paramPlayer] == undefined) {
         continue;
@@ -3324,8 +3303,6 @@ export async function getProfile(
       Object.assign(doc, profileObject.profiles[doc.profile_id]);
 
       allSkyBlockProfiles.push(doc);
-
-      lastCachedSave = Math.max(lastCachedSave, doc.members[paramPlayer].last_save || 0);
     }
   } else {
     profileObject = { last_update: 0 };
@@ -3333,17 +3310,18 @@ export async function getProfile(
 
   let response = null;
 
+  lastCachedSave = Math.max(profileObject.last_update, Date.now() || 0);
+
   if (
     !options.cacheOnly &&
     ((Date.now() - lastCachedSave > 190 * 1000 && Date.now() - lastCachedSave < 300 * 1000) ||
       Date.now() - profileObject.last_update >= 300 * 1000)
   ) {
     try {
+      profileObject.last_update = Date.now();
       response = await retry(
         async () => {
-          return await hypixel.get("skyblock/profiles", {
-            params,
-          });
+          return await hypixel.get("skyblock/profiles", { params });
         },
         { retries: 2 }
       );
@@ -3373,12 +3351,6 @@ export async function getProfile(
   }
 
   for (const profile of allSkyBlockProfiles) {
-    for (const member in profile.members) {
-      if (profile.members[member]?.last_save == undefined) {
-        delete profile.members[member];
-      }
-    }
-
     profile.uuid = paramPlayer;
   }
 
@@ -3386,32 +3358,7 @@ export async function getProfile(
 
   if (paramProfile) {
     if (paramProfile.length == 32) {
-      const filteredProfiles = allSkyBlockProfiles.filter((a) => a.profile_id.toLowerCase() == paramProfile);
-
-      if (filteredProfiles.length > 0) {
-        skyBlockProfiles = filteredProfiles;
-      } else {
-        const profileResponse = await retry(async () => {
-          const response = await hypixel.get(
-            "skyblock/profile",
-            {
-              params: { key: credentials.hypixel_api_key, profile: paramProfile },
-            },
-            { retries: 2 }
-          );
-
-          if (!response.data.success) {
-            throw new Error("api request failed");
-          }
-
-          return response.data.profile;
-        });
-
-        profileResponse.cute_name = "Deleted";
-        profileResponse.uuid = paramPlayer;
-
-        skyBlockProfiles.push(profileResponse);
-      }
+      skyBlockProfiles = allSkyBlockProfiles.filter((a) => a.profile_id.toLowerCase() == paramProfile);
     } else {
       skyBlockProfiles = allSkyBlockProfiles.filter((a) => a.cute_name.toLowerCase() == paramProfile);
     }
@@ -3426,10 +3373,8 @@ export async function getProfile(
   for (const profile of skyBlockProfiles) {
     let memberCount = 0;
 
-    for (const member in profile.members) {
-      if (profile.members[member]?.last_save != undefined) {
-        memberCount++;
-      }
+    for (let i = 0; i < Object.keys(profile.members).length; i++) {
+      memberCount++;
     }
 
     if (memberCount == 0) {
@@ -3447,7 +3392,6 @@ export async function getProfile(
     throw new Error("No data returned by Hypixel API, please try again!");
   }
 
-  let highest = 0;
   let profile;
 
   const storeProfiles = {};
@@ -3478,14 +3422,12 @@ export async function getProfile(
         .catch(console.error);
     }
 
-    if ("last_save" in userProfile) {
-      storeProfiles[_profile.profile_id] = {
-        profile_id: _profile.profile_id,
-        cute_name: _profile.cute_name,
-        game_mode: _profile.game_mode,
-        last_save: userProfile.last_save,
-      };
-    }
+    storeProfiles[_profile.profile_id] = {
+      profile_id: _profile.profile_id ?? null,
+      cute_name: _profile.cute_name ?? "Unknown",
+      game_mode: _profile.game_mode ?? "normal",
+      selected: _profile.selected ?? false,
+    };
   }
 
   for (const _profile of profiles) {
@@ -3493,11 +3435,8 @@ export async function getProfile(
       return;
     }
 
-    const userProfile = _profile.members[paramPlayer];
-
-    if (userProfile?.last_save > highest) {
+    if (_profile?.selected || _profile.profile_id.toLowerCase() == paramProfile) {
       profile = _profile;
-      highest = userProfile.last_save;
     }
   }
 
@@ -3511,9 +3450,7 @@ export async function getProfile(
     userProfile.current_area = profileObject.current_area;
   }
 
-  if (Date.now() - userProfile.last_save < 5 * 60 * 1000) {
-    userProfile.current_area_updated = true;
-  }
+  userProfile.current_area_updated = true;
 
   if (response && response.request.fromCache !== true) {
     const apisEnabled =
@@ -3523,28 +3460,25 @@ export async function getProfile(
 
     const insertProfileStore = {
       last_update: new Date(),
-      last_save: Math.max(...allSkyBlockProfiles.map((a) => a.members?.[paramPlayer]?.last_save ?? 0)),
       apis: apisEnabled,
       profiles: storeProfiles,
     };
 
-    if (options.updateArea && Date.now() - userProfile.last_save < 5 * 60 * 1000) {
-      try {
-        const statusResponse = await hypixel.get("status", {
-          params: { uuid: paramPlayer, key: credentials.hypixel_api_key },
-        });
+    try {
+      const statusResponse = await hypixel.get("status", {
+        params: { uuid: paramPlayer, key: credentials.hypixel_api_key },
+      });
 
-        const areaData = statusResponse.data.session;
+      const areaData = statusResponse.data.session;
 
-        if (areaData.online && areaData.gameType == "SKYBLOCK") {
-          const areaName = constants.AREA_NAMES[areaData.mode] || helper.titleCase(areaData.mode.replaceAll("_", " "));
+      if (areaData.online && areaData.gameType == "SKYBLOCK") {
+        const areaName = constants.AREA_NAMES[areaData.mode] || helper.titleCase(areaData.mode.replaceAll("_", " "));
 
-          userProfile.current_area = areaName;
-          insertProfileStore.current_area = areaName;
-        }
-      } catch (e) {
-        console.error(e);
+        userProfile.current_area = areaName;
+        insertProfileStore.current_area = areaName;
       }
+    } catch (e) {
+      console.error(e);
     }
 
     updateLeaderboardPositions(db, paramPlayer, allSkyBlockProfiles).catch(console.error);

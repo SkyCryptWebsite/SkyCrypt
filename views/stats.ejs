@@ -903,7 +903,7 @@ const metaDescription = getMetaDescription()
           </div>
           <% } %>
           <p class="stat-sub-header">Equipment</p>
-          <% if(items.equipment.length == 0){ %>
+          <% if(Object.keys(items.equipment).length == 0){ %>
           <div class="no-access"><%= calculated.display_name %> doesn't have any equipment equipped.</div>
           <% }else{ %>
           <div class="pieces">
