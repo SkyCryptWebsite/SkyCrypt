@@ -1446,6 +1446,7 @@ async function getLevels(userProfile, hypixelProfile, levelCaps) {
       enchanting: hypixelProfile.achievements.skyblock_augmentation || 0,
       alchemy: hypixelProfile.achievements.skyblock_concoctor || 0,
       taming: hypixelProfile.achievements.skyblock_domesticator || 0,
+      carpentry: 0,
     };
 
     output.levels = {};
@@ -1759,20 +1760,6 @@ export async function getStats(
     }
   }
 
-  for (const member of members) {
-    if (profile?.members?.[member.uuid]?.last_save == undefined) {
-      continue;
-    }
-
-    const lastUpdated = profile.members[member.uuid].last_save;
-
-    member.last_updated = {
-      unix: lastUpdated,
-      text:
-        Date.now() - lastUpdated < 7 * 60 * 1000 ? "currently online" : `last played ${moment(lastUpdated).fromNow()}`,
-    };
-  }
-
   if (profile.banking?.balance != undefined) {
     output.bank = profile.banking.balance;
   }
@@ -1788,18 +1775,10 @@ export async function getStats(
   output.profiles = {};
 
   for (const sbProfile of allProfiles.filter((a) => a.profile_id != profile.profile_id)) {
-    if (sbProfile?.members?.[profile.uuid]?.last_save == undefined) {
-      continue;
-    }
-
     output.profiles[sbProfile.profile_id] = {
       profile_id: sbProfile.profile_id,
       cute_name: sbProfile.cute_name,
       game_mode: sbProfile.game_mode,
-      last_updated: {
-        unix: sbProfile.members[profile.uuid].last_save,
-        text: `last played ${moment(sbProfile.members[profile.uuid].last_save).fromNow()}`,
-      },
     };
   }
 
@@ -2224,12 +2203,8 @@ export async function getStats(
   output.auctions_bought = auctions_bought;
   output.auctions_sold = auctions_sold;
 
-  const lastUpdated = userProfile.last_save;
   const firstJoin = userProfile.first_join;
 
-  const diff = (+new Date() - lastUpdated) / 1000;
-
-  let lastUpdatedText = moment(lastUpdated).fromNow();
   const firstJoinText = moment(firstJoin).fromNow();
 
   if ("current_area" in userProfile) {
@@ -2239,17 +2214,6 @@ export async function getStats(
   if ("current_area_updated" in userProfile) {
     output.current_area_updated = userProfile.current_area_updated;
   }
-
-  if (diff < 3) {
-    lastUpdatedText = `Right now`;
-  } else if (diff < 60) {
-    lastUpdatedText = `${Math.floor(diff)} seconds ago`;
-  }
-
-  output.last_updated = {
-    unix: lastUpdated,
-    text: lastUpdatedText,
-  };
 
   output.first_join = {
     unix: firstJoin,
