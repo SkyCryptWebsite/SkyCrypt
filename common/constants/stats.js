@@ -353,6 +353,24 @@ export const STATS_DATA = {
     suffix: "",
     color: "c",
   },
+  soulflow: {
+    name: "Soulflow",
+    nameLore: "Soulflow",
+    nameShort: "Soulflow",
+    nameTiny: "Sf",
+    symbol: "⸎",
+    suffix: "",
+    color: "3",
+  },
+  overflow_mana: {
+    name: "Overflow Mana",
+    nameLore: "Overflow Mana",
+    nameShort: "Overflow Mana",
+    nameTiny: "OMn",
+    symbol: "ʬ",
+    suffix: "",
+    color: "3",
+  },
 };
 
 const symbols = {
