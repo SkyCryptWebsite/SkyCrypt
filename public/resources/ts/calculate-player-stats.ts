@@ -46,6 +46,11 @@ export function getPlayerStats() {
   };
   const allowedStats = Object.keys(stats);
   const temp = {};
+  let statsMultiplier = 0,
+  healthMultiplier = 0,
+  defenseMultiplier = 0,
+  strengthMultiplier = 0,
+  bonusAttackSpeedMultiplier = 0;
 
   try {
     // Bestiary Level
@@ -228,20 +233,17 @@ export function getPlayerStats() {
       calculated.pets.find((a) => a.active),
       calculated
     );
+
     Object.assign(stats, petStats.stats);
 
-    // Potion Effects
-    for (const effect of calculated.active_effects) {
-      if (!effect.effect || !POTION_EFFECTS[effect.effect][effect.level]?.bonus) continue;
-      for (const [stat, value] of Object.entries(POTION_EFFECTS[effect.effect][effect.level]?.bonus) || []) {
-        stats[stat].potion ??= 0;
-        stats[stat].potion += value;
-      }
-    }
+    statsMultiplier += petStats.statsMultiplier || 0;
+    bonusAttackSpeedMultiplier += petStats.bonusAttackSpeedMultiplier || 0;
+    defenseMultiplier += petStats.defenseMultiplier || 0;
+    healthMultiplier += petStats.healthMultiplier || 0;
+    strengthMultiplier += petStats.strengthMultiplier || 0;
+    statsMultiplier += petStats.statsMultiplier || 0;
 
     // Reforge
-    // REFORGES
-
     const rarities = items.accessory_rarities;
     const player_magical_power = {};
 
@@ -415,6 +417,37 @@ export function getPlayerStats() {
   // Reaper peppers
   if (calculated.reaper_peppers_eaten > 0) {
     stats.health.reaper_peppers = calculated.reaper_peppers_eaten;
+  }
+
+  stats.health ??= 0;
+  stats.defense ??= 0;
+  stats.strength ??= 0;
+  stats.bonus_attack_speed ??= 0,
+  stats.health = healthMultiplier > 0 ? stats.health + stats.health * healthMultiplier : stats.health;
+  stats.defense = defenseMultiplier > 0 ? stats.defense + stats.defense * defenseMultiplier : stats.defense;
+  stats.strength = strengthMultiplier > 0 ? stats.strength + stats.strength * strengthMultiplier : stats.strength;
+  stats.bonus_attack_speed = bonusAttackSpeedMultiplier > 0 ? stats.bonus_attack_speed + stats.bonus_attack_speed * bonusAttackSpeedMultiplier : stats.bonus_attack_speed;
+
+  if (statsMultiplier > 0) {
+    for (const stat of Object.keys(stats)) {
+        if (stat.includes('fortune' || stat == 'pristine' || stat == 'effective_health')) continue;
+        stats.stat += stats.stat * statsMultiplier;
+    }
+  }
+
+  // Speed Cap 
+  stats.speed = stats.speed > stats.speed_cap ? (stats.speed = stats.speed_cap) :stats.speed;
+
+  // Health Cap
+  stats.health = stats.health > stats.health_cap ? (stats.health = stats.health_cap) : stats.health;
+
+  // Potion Effects
+  for (const effect of calculated.active_effects) {
+    if (!effect.effect || !POTION_EFFECTS[effect.effect][effect.level]?.bonus) continue;
+    for (const [stat, value] of Object.entries(POTION_EFFECTS[effect.effect][effect.level]?.bonus) || []) {
+      stats[stat].potion ??= 0;
+      stats[stat].potion += value;
+    }
   }
 
   return stats;
