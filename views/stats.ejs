@@ -736,10 +736,9 @@ const metaDescription = getMetaDescription()
         <% if('levels' in calculated && 'runecrafting' in calculated.levels){ %>
         <div class="additional-stat"><span data-tippy-content="
           <span class='stat-name'>Total Skill XP: </span><span class='stat-value'><%= Math.round(calculated.total_skill_xp).toLocaleString() %></span>
-          <div class='tippy-explanation'>Total XP gained in all skills except Carpentry and Runecrafting.</div>
+          <div class='tippy-explanation'>Total XP gained in all skills except Social and Runecrafting.</div>
           <span class='stat-name'>Average Level: </span><span class='stat-value'><%= calculated.average_level.toFixed(2) %></span>
-          <div class='tippy-explanation'>Average skill level over all skills except Carpentry and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div>
-          <% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
+          <div class='tippy-explanation'>Average skill level over all skills except Social and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div><% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
           <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
           "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level.toFixed(2) %></span></span></div>
         <% } %>
@@ -766,36 +765,35 @@ const metaDescription = getMetaDescription()
             },
           ];
 
-          for (weight of weightSystems) {
-            %>
+        if (calculated.weight) {
+          for (weight of weightSystems) { %>
         <div class="additional-stat">
           <span data-tippy-content="
-                  <span class='stat-name'><%= weight.name %></span><br>
-                  <span class='stat-info'>Weight calculations by <%= weight.author %></span>
-                  <br/><br/>
-                  <span class='stat-name'>Skill: </span>
-                  <span class='stat-value'>
-                    <%= parseFloat(weight.skill.toFixed(2)).toLocaleString() %>
-                  </span><br/>
-                  <span class='stat-name'>Slayer: </span>
-                  <span class='stat-value'>
-                    <%= parseFloat(weight.slayer.toFixed(2)).toLocaleString() %>
-                  </span><br/>
-                  <span class='stat-name'>Dungeon: </span>
-                  <span class='stat-value'>
-                    <%= parseFloat(weight.dungeon.toFixed(2)).toLocaleString() %>
-                  </span><br/><br/>
-                  <span class='stat-name'>Total: </span>
-                  <span class='stat-value'>
-                    <%= parseFloat(weight.total.toFixed(2)).toLocaleString() %>
-                  </span>
-                ">
+                <span class='stat-name'><%= weight.name %></span><br>
+                <span class='stat-info'>Weight calculations by <%= weight.author %></span>
+                <br/><br/>
+                <span class='stat-name'>Skill: </span>
+                <span class='stat-value'>
+                  <%= parseFloat(weight.skill.toFixed(2)).toLocaleString() %>
+                </span><br/>
+                <span class='stat-name'>Slayer: </span>
+                <span class='stat-value'>
+                  <%= parseFloat(weight.slayer.toFixed(2)).toLocaleString() %>
+                </span><br/>
+                <span class='stat-name'>Dungeon: </span>
+                <span class='stat-value'>
+                  <%= parseFloat(weight.dungeon.toFixed(2)).toLocaleString() %>
+                </span><br/><br/>
+                <span class='stat-name'>Total: </span>
+                <span class='stat-value'>
+                  <%= parseFloat(weight.total.toFixed(2)).toLocaleString() %>
+                </span>
+              ">
             <span class="stat-name"><%= weight.name %>: </span>
             <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span></span>
         </div>
-        <%
-          }
-        %>
+        <%}%>
+      <%}%>
       </div>
 
       <div id="skill_levels_container">
@@ -2007,8 +2005,16 @@ const metaDescription = getMetaDescription()
           let uniqueMinions = 0;
           let maxedMinions = 0;
           let skippedMinions = 0;
+          let uniqueMinionsType = {};
+          let minionsType = {};
 
           for(const minion of calculated.minions){
+            if (!uniqueMinionsType[minion.type]) uniqueMinionsType[minion.type] = 0
+            if (!minionsType[minion.type]) minionsType[minion.type] = 0
+
+            minionsType[minion.type] += 1
+            if (minion.tiers == minion.maxLevel) uniqueMinionsType[minion.type] += 1
+            
             uniqueMinions += minion.levels.length;
             skippedMinions += minion.maxLevel - minion.levels.length;
 
@@ -2032,31 +2038,28 @@ const metaDescription = getMetaDescription()
           </p>
           <%
         for(const type of constants.MINION_TYPES){
-          const minions = calculated.minions.filter(a => a.type == type && a.maxLevel > 0).sort((a, b) => b.maxLevel - a.maxLevel);
-
-          const totalOfType = _.size(_.pickBy(constants.minions, a => a.type == type));
-          const maxOfType = minions.filter(a => a.maxLevel == a.tiers).length;
-
-          if(minions.length == 0)
-            continue;
-
+          const minions = calculated.minions.filter(a => a.type == type)         
+          if(minions.length == 0) continue;
           %>
           <div class="category-header">
             <div class="category-icon">
               <div class="item-icon <%= skillItems[type] %>"></div>
             </div>
             <span><%= type %></span>
-            <% if(maxOfType >= totalOfType){ %>
+
+            <% if(uniqueMinionsType[type] >= minionsType[type]){ %>
             <span class="category-header-maxed">max!</span>
             <% }else{ %>
-            <span class="category-header-detail">(<%= maxOfType %> / <%= totalOfType %> max)</span>
+            <span class="category-header-detail">(<%= uniqueMinionsType[type] %> / <%= minionsType[type]  %> max)</span>
             <% } %>
           </div>
           <div class="minions">
             <% for(const minion of minions){ %>
             <div data-tippy-content="Crafted variants:<br><br>
-              <% for(let i = 1; i <= minion.tiers; i++){ %>
-              <div class='minion-variant <% if(minion.levels.includes(i)){ %>minion-crafted<% } %>'><%= romanize(i) %></div>
+
+              <% 
+              for(let i = 1; i <= minion.levels[minion.levels.length-1]; i++){ %>
+                <div class='minion-variant minion-crafted'><%= romanize(i) %></div>
               <% } %>
               " class="chip
               <%= minion.maxLevel == 0 ? 'no-minion' : '' %>
