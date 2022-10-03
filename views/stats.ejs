@@ -894,33 +894,49 @@ const metaDescription = getMetaDescription()
               <% itemIcon(item, ['piece-icon']); %>
             </div>
             <% } %>
+            <div data-bonus-stats="armor"></div>
           </div>
-          <div data-bonus-stats="armor"></div>
           <% } %>
-          <% if(items.wardrobe.length > 0){ %>
-          <p class="stat-sub-header">Wardrobe</p>
-          <div class="pieces wardrobe">
-            <% for(const set of items.wardrobe){ %>
-            <div class="wardrobe-set">
-              <% for(const [index, item] of set.entries()) { %>
-              <% if (item) { %>
-              <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %> index-<%= index %>">
-                <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
-                <div class="piece-shine"></div>
-                <% } %>
-                <% itemIcon(item, ['piece-icon']); %>
-              </div>
-              <% } else { %>
-              <div class="piece armor-placeholder index-<%= index %>">
-                <div class="piece-icon item-icon custom-icon"></div>
-              </div>
+          <p class="stat-sub-header">Equipment</p>
+          <% if(Object.keys(items.equipment).length == 0){ %>
+          <div class="no-access"><%= calculated.display_name %> doesn't have any equipment equipped.</div>
+          <% }else{ %>
+          <div class="pieces">
+            <% for(const item of items.equipment.slice().reverse()){ %>
+            <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
+              <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
+              <div class="piece-shine"></div>
               <% } %>
-              <% } %>
+              <% itemIcon(item, ['piece-icon']); %>
             </div>
             <% } %>
-            <% } %>
+            <div data-bonus-stats="equipment"></div>
           </div>
+          <% } %>
         </div>
+      </div>
+      <% if(items.wardrobe.length > 0){ %>
+      <p class="stat-sub-header">Wardrobe</p>
+      <div class="pieces wardrobe">
+        <% for(const set of items.wardrobe){ %>
+        <div class="wardrobe-set">
+          <% for(const [index, item] of set.entries()) { %>
+          <% if (item) { %>
+          <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %> index-<%= index %>">
+            <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
+            <div class="piece-shine"></div>
+            <% } %>
+            <% itemIcon(item, ['piece-icon']); %>
+          </div>
+          <% } else { %>
+          <div class="piece armor-placeholder index-<%= index %>">
+            <div class="piece-icon item-icon custom-icon"></div>
+          </div>
+          <% } %>
+          <% } %>
+        </div>
+        <% } %>
+        <% } %>
       </div>
       <% if(!items.no_inventory){ %>
       <div class="stat-container stat-weapons">
@@ -2014,7 +2030,7 @@ const metaDescription = getMetaDescription()
 
             minionsType[minion.type] += 1
             if (minion.tiers == minion.maxLevel) uniqueMinionsType[minion.type] += 1
-            
+
             uniqueMinions += minion.levels.length;
             skippedMinions += minion.maxLevel - minion.levels.length;
 
@@ -2038,7 +2054,7 @@ const metaDescription = getMetaDescription()
           </p>
           <%
         for(const type of constants.MINION_TYPES){
-          const minions = calculated.minions.filter(a => a.type == type)         
+          const minions = calculated.minions.filter(a => a.type == type)
           if(minions.length == 0) continue;
           %>
           <div class="category-header">
@@ -2057,7 +2073,7 @@ const metaDescription = getMetaDescription()
             <% for(const minion of minions){ %>
             <div data-tippy-content="Crafted variants:<br><br>
 
-              <% 
+              <%
               for(let i = 1; i <= minion.levels[minion.levels.length-1]; i++){ %>
                 <div class='minion-variant minion-crafted'><%= romanize(i) %></div>
               <% } %>
