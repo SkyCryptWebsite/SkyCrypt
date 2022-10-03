@@ -193,7 +193,7 @@ function formatEnrichment(string) {
 }
 
 function enrichmentToStatName(enrichment) {
-  switch (enrichment.toLowerCase()) {
+  switch (enrichment) {
     case 'walk_speed':
       return 'speed'
 
@@ -207,7 +207,7 @@ function enrichmentToStatName(enrichment) {
       return 'bonus_attack_speed'
 
     default:
-      return enrichment.toLowerCase()
+      return enrichment
   }
 }
 
@@ -233,7 +233,7 @@ function getEnrichments(accessories) {
       const stat = enrichmentToStatName(enrichment)
       %>
 <span class="stat-value color-<%= stat.replaceAll("_", "-") %>">
-  <%= amount %>× <%= formatEnrichment(enrichment.toLowerCase()) %>
+  <%= amount %>× <%= formatEnrichment(enrichment) %>
 </span>
 <%
       if (enrichment !== Object.keys(enrichmentCounts).pop()) {
