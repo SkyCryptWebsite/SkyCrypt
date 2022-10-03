@@ -1016,7 +1016,18 @@ const metaDescription = getMetaDescription()
               Total: <span style='color: var(--§6);' class='grey-text'><%= mp_total.toLocaleString() %> Magical Power</span>
               ">
               <span class="stat-name">Magical Power: </span><span class="stat-value"><%= mp_total.toLocaleString() %></span>
-            </span>
+            </span><br>
+
+            <span data-tippy-content="
+            <span style='color: var(--§8);' class='grey-text'>Unlocked Reforges</span><br><br>
+              <% for (const reforge of calculated.accessory_bag_storage.unlocked_powers || []) { %>
+                <span style='color: var(--§8);' class='grey-text'>● <span> <span style='color: var(--§f);' class='grey-text'> <%= (reforge.charAt(0).toUpperCase() + reforge.slice(1)) %></span><br>
+              <% } %>
+              ">
+              <span class="stat-name">Selected Power: </span><span class="stat-value"><%= calculated.accessory_bag_storage.selected_power ? (calculated.accessory_bag_storage.selected_power.charAt(0).toUpperCase() + calculated.accessory_bag_storage.selected_power.slice(1)) : 'None'%></span>
+            </span><br>
+            <% max = calculated.accessory_bag_storage.bag_upgrades_purchased >= 99 ? 'golden-text' : '' %>
+            <span class="stat-name <%= max %>">Accessory Bag Upgrades: </span><span class="stat-value <%= max %>"><%= calculated.accessory_bag_storage.bag_upgrades_purchased %></span>
           </p>
           <% if(items.accessories.find(a => !a.isInactive) != undefined){ %>
           <div class="accessory-list">
