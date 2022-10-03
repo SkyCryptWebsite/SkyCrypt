@@ -1043,7 +1043,7 @@ class GoldenDragon extends Pet {
     const value = this.level * 0.00125;
     return {
       name: "§6Legendary Treasure",
-      desc: [`Gain §c${round(value, 4)}% damage §7for every million coins in your bank.`],
+      desc: [`§7Gain §c${round(value, 4)}% damage §7for every million coins in your bank.`],
     };
   }
 }

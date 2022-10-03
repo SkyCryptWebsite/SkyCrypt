@@ -1,5 +1,4 @@
 export const REFORGES = {
-  // ! FREE
   lucky: {
     prefix: "Lucky",
     name: null,
@@ -118,7 +117,6 @@ export const REFORGES = {
     },
   },
 
-  // ! PAID
   silky: {
     prefix: "Silky",
     name: "Luxurious Spool",
@@ -137,9 +135,9 @@ export const REFORGES = {
       speed: 5,
     },
     reforge: {
-      speed: 0.048,
-      health: 0.584,
-      defense: 0.416,
+      speed: 12 / 250,
+      health: 146 / 250,
+      defense: 104 / 250,
     },
   },
   bloody: {
@@ -149,9 +147,9 @@ export const REFORGES = {
       bonus_attack_speed: 10,
     },
     reforge: {
-      strength: 0.416,
-      crit_damage: 0.416,
-      intelligence: 0.14,
+      strength: 104 / 250,
+      crit_damage: 104 / 250,
+      intelligence: 35 / 250,
     },
   },
   itchy: {
@@ -175,7 +173,7 @@ export const REFORGES = {
       ability_damage: 3,
     },
     reforge: {
-      intelligence: 1.388,
+      intelligence: 347 / 250,
     },
   },
   adept: {
@@ -186,9 +184,9 @@ export const REFORGES = {
       defense: 50,
     },
     reforge: {
-      health: 0.648,
-      defense: 0.372,
-      intelligence: 0.14,
+      health: 162 / 250,
+      defense: 93 / 250,
+      intelligence: 35 / 250,
     },
   },
   mythical: {
@@ -199,13 +197,13 @@ export const REFORGES = {
       strength: 40,
     },
     reforge: {
-      crit_chance: 0.064,
-      speed: 0.036,
-      crit_damage: 0.156,
-      health: 0.22,
-      defense: 0.156,
-      strength: 0.156,
-      intelligence: 0.236,
+      crit_chance: 16 / 250,
+      speed: 9 / 250,
+      crit_damage: 39 / 250,
+      health: 55 / 250,
+      defense: 39 / 250,
+      strength: 39 / 250,
+      intelligence: 59 / 250,
     },
   },
   forceful: {
@@ -215,9 +213,9 @@ export const REFORGES = {
       ferocity: 4,
     },
     reforge: {
-      crit_damage: 0.184,
-      health: 0.064,
-      strength: 0.696,
+      crit_damage: 46 / 250,
+      health: 16 / 250,
+      strength: 174 / 250,
     },
   },
   shaded: {
@@ -228,9 +226,9 @@ export const REFORGES = {
       ferocity: 3,
     },
     reforge: {
-      speed: 0.024,
-      crit_damage: 0.696,
-      strength: 0.184,
+      speed: 6 / 250,
+      crit_damage: 174 / 250,
+      strength: 46 / 250,
     },
   },
   strong: {
@@ -241,8 +239,8 @@ export const REFORGES = {
       crit_damage: 25,
     },
     reforge: {
-      crit_damage: 0.464,
-      strength: 0.464,
+      crit_damage: 116 / 250,
+      strength: 116 / 250,
     },
   },
   demonic: {
@@ -252,8 +250,8 @@ export const REFORGES = {
       crit_damage: 50,
     },
     reforge: {
-      strenght: 0.212,
-      intelligence: 1.068,
+      strenght: 53 / 250,
+      intelligence: 267 / 250,
     },
   },
   pleasent: {
@@ -261,11 +259,11 @@ export const REFORGES = {
     name: "Precious Pearl",
     power_bonus: {
       health_regen: 10,
-      //vitality: 10,
+      vitality: 10,
     },
     reforge: {
-      health: 0.52,
-      defense: 0.556,
+      health: 130 / 250,
+      defense: 139 / 250,
     },
   },
   hurtful: {
@@ -275,8 +273,8 @@ export const REFORGES = {
       bonus_attack_speed: 15,
     },
     reforge: {
-      crit_damage: 0.74,
-      strength: 0.184,
+      crit_damage: 185 / 250,
+      strength: 46 / 250,
     },
   },
   bizarre: {
@@ -286,9 +284,9 @@ export const REFORGES = {
       ability_damage: 5,
     },
     reforge: {
-      crit_damage: -0.092,
-      strength: -0.092,
-      intelligence: 1.668,
+      crit_damage: -(23 / 250),
+      strength: -(23 / 250),
+      intelligence: 417 / 250,
     },
   },
   healthy: {
@@ -298,7 +296,7 @@ export const REFORGES = {
       health: 200,
     },
     reforge: {
-      health: 1.296,
+      health: 324 / 250,
     },
   },
   slender: {
@@ -325,9 +323,9 @@ export const REFORGES = {
       ferocity: 7,
     },
     reforge: {
-      bonus_attack_speed: 0.068,
-      crit_damage: 0.372,
-      strength: 0.324,
+      bonus_attack_speed: 17 / 250,
+      crit_damage: 93 / 250,
+      strength: 81 / 250,
     },
   },
 };
