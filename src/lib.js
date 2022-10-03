@@ -1123,7 +1123,15 @@ export const getItems = async (
   output.accessory_rarities = accessoryRarities;
 
   output.weapons = allItems.filter((a) => a.categories?.includes("weapon"));
-  output.farming_tools = allItems.filter((a) => a.categories?.includes("farming_tool") || a.tag?.ExtraAttributes?.id == "MELON_DICER" || a.tag?.ExtraAttributes?.id == "PUMPKIN_DICER" || a.tag?.ExtraAttributes?.id == "COCO_CHOPPER" || a?.tag?.ExtraAttributes?.id == "FUNGI_CUTTER" || a?.tag?.ExtraAttributes?.id == "CACTI_KNIFE");
+  output.farming_tools = allItems.filter(
+    (a) =>
+      a.categories?.includes("farming_tool") ||
+      a.tag?.ExtraAttributes?.id == "MELON_DICER" ||
+      a.tag?.ExtraAttributes?.id == "PUMPKIN_DICER" ||
+      a.tag?.ExtraAttributes?.id == "COCO_CHOPPER" ||
+      a?.tag?.ExtraAttributes?.id == "FUNGI_CUTTER" ||
+      a?.tag?.ExtraAttributes?.id == "CACTI_KNIFE"
+  );
   output.mining_tools = allItems.filter((a) => a.categories?.includes("mining_tool"));
   output.fishing_tools = allItems.filter((a) => a.categories?.includes("fishing_tool"));
 
@@ -1750,7 +1758,7 @@ export async function getStats(
   output.minion_slots = getMinionSlots(output.minions);
   output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
   output.social = hypixelProfile.socials;
-  
+
   output.accessory_bag_storage = userProfile.accessory_bag_storage;
 
   output.dungeons = getDungeons(userProfile, hypixelProfile);
