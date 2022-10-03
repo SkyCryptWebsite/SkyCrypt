@@ -3362,7 +3362,11 @@ export async function getProfile(
       return;
     }
 
-    if (_profile?.selected || _profile.profile_id.toLowerCase() == paramProfile) {
+    if (
+      _profile?.selected ||
+      _profile.profile_id.toLowerCase() == paramProfile ||
+      _profile.cute_name.toLowerCase() == paramProfile
+    ) {
       profile = _profile;
     }
   }
