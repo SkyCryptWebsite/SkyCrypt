@@ -1409,6 +1409,7 @@ async function getLevels(userProfile, hypixelProfile, levelCaps) {
       enchanting: hypixelProfile.achievements.skyblock_augmentation || 0,
       alchemy: hypixelProfile.achievements.skyblock_concoctor || 0,
       taming: hypixelProfile.achievements.skyblock_domesticator || 0,
+      carpentry: 0,
     };
 
     output.levels = {};
