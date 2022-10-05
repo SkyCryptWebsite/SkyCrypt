@@ -913,7 +913,7 @@ export function convertHMS(seconds, format = "clock", alwaysTwoDigits = false) {
   }
 }
 
-export function parseItemTypeFromLore(lore) {
+export function parseItemTypeFromLore(lore, itemId) {
   const regex = new RegExp(
     `^(?<recomb>a )?(?<shiny>SHINY )?(?:(?<rarity>${RARITIES.map((x) => x.replaceAll("_", " ").toUpperCase()).join(
       "|"
@@ -944,8 +944,14 @@ export function parseItemTypeFromLore(lore) {
 
   // Parsing the match and returning data
   const r = match.groups;
+  let categories = [];
+  categories = r.type ? getCategoriesFromType(r.type.trim().toLowerCase()) : [];
+  if (itemId === "MELON_DICER" || itemId === "PUMPKIN_DICER" || itemId === "COCOA_CHOPPER") {
+    categories.push("farming_tool");
+  }
+
   return {
-    categories: r.type ? getCategoriesFromType(r.type.trim().toLowerCase()) : [],
+    categories: categories || [],
     rarity: r.rarity.replaceAll(" ", "_").toLowerCase(),
     recombobulated: !!r.recomb && !!r.recomb2,
     dungeon: !!r.dungeon,

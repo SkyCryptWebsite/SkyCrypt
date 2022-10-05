@@ -526,7 +526,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 
     if (lore.length > 0) {
       // item categories, rarity, recombobulated, dungeon, shiny
-      const itemType = helper.parseItemTypeFromLore(lore);
+      const itemType = helper.parseItemTypeFromLore(lore, item.tag?.ExtraAttributes?.id);
 
       for (const key in itemType) {
         item[key] = itemType[key];
@@ -1123,15 +1123,7 @@ export const getItems = async (
   output.accessory_rarities = accessoryRarities;
 
   output.weapons = allItems.filter((a) => a.categories?.includes("weapon"));
-  output.farming_tools = allItems.filter(
-    (a) =>
-      a.categories?.includes("farming_tool") ||
-      a.tag?.ExtraAttributes?.id == "MELON_DICER" ||
-      a.tag?.ExtraAttributes?.id == "PUMPKIN_DICER" ||
-      a.tag?.ExtraAttributes?.id == "COCO_CHOPPER" ||
-      a?.tag?.ExtraAttributes?.id == "FUNGI_CUTTER" ||
-      a?.tag?.ExtraAttributes?.id == "CACTI_KNIFE"
-  );
+  output.farming_tools = allItems.filter((a) => a.categories?.includes("farming_tool"));
   output.mining_tools = allItems.filter((a) => a.categories?.includes("mining_tool"));
   output.fishing_tools = allItems.filter((a) => a.categories?.includes("fishing_tool"));
 

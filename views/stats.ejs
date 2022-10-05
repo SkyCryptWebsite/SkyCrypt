@@ -1026,7 +1026,7 @@ const metaDescription = getMetaDescription()
               ">
               <span class="stat-name">Selected Power: </span><span class="stat-value"><%= calculated.accessory_bag_storage.selected_power ? (calculated.accessory_bag_storage.selected_power.charAt(0).toUpperCase() + calculated.accessory_bag_storage.selected_power.slice(1)) : 'None'%></span>
             </span><br>
-            <% max = calculated.accessory_bag_storage.bag_upgrades_purchased >= 99 ? 'golden-text' : '' %>
+            <% max = calculated.accessory_bag_storage.bag_upgrades_purchased >= constants.ACCESSORY_BAG.MAX_ACCESSORY_BAG_UPGRADES ? 'golden-text' : '' %>
             <span class="stat-name <%= max %>">Accessory Bag Upgrades: </span><span class="stat-value <%= max %>"><%= calculated.accessory_bag_storage.bag_upgrades_purchased %></span>
           </p>
           <% if(items.accessories.find(a => !a.isInactive) != undefined){ %>

@@ -390,3 +390,7 @@ export const ESSENCE = {
 export const STAT_MAPPINGS = {
   walk_speed: "speed",
 };
+
+export const ACCESSORY_BAG = {
+  MAX_ACCESSORY_BAG_UPGRADES: 99,
+};
