@@ -392,20 +392,6 @@ export function getPlayerStats() {
     }
   }
 
-  // Fairy souls
-  if (calculated.fairy_exchanges) {
-    const bonusStats: ItemStats = getFairyBonus(calculated.fairy_exchanges);
-
-    for (const [name, value] of Object.entries(bonusStats)) {
-      if (!allowedStats.includes(name)) {
-        continue;
-      }
-
-      stats[name].fairy_souls ??= 0;
-      stats[name].fairy_souls += value;
-    }
-  }
-
   // New year cake bag
   {
     const cakeBag = items.accessory_bag.find((x) => (x as Item).tag?.ExtraAttributes?.id === "NEW_YEAR_CAKE_BAG");
@@ -505,23 +491,6 @@ function getBonusStat(level: number, key: BonusType, max: number) {
         bonus[statName] = (bonus[statName] || 0) + (stepBonuses?.[statName] ?? 0);
       }
     }
-  }
-
-  return bonus;
-}
-
-function getFairyBonus(fairyExchanges: number) {
-  const bonus: ItemStats = {};
-
-  bonus.speed = Math.floor(fairyExchanges / 10);
-  bonus.health = 0;
-  bonus.defense = 0;
-  bonus.strength = 0;
-
-  for (let i = 0; i < fairyExchanges; i++) {
-    bonus.health += 3 + Math.floor(i / 2);
-    bonus.defense += (i + 1) % 5 == 0 ? 2 : 1;
-    bonus.strength += (i + 1) % 5 == 0 ? 2 : 1;
   }
 
   return bonus;
