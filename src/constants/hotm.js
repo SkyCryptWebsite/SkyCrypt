@@ -73,9 +73,11 @@ const rewards = {
       token_of_the_mountain: 1,
     },
     6: {
+      gemstone_powder_when_mining_gemstones: 2,
+    },
+    7: {
       token_of_the_mountain: 1,
     },
-    7: {},
   },
   rewards: {
     token_of_the_mountain: {
@@ -113,6 +115,10 @@ const rewards = {
     mithril_powder_when_mining_mithril: {
       formatted: "§2Mithril Powder §7when mining §fMithril",
       qtyColor: "2",
+    },
+    gemstone_powder_when_mining_gemstones: {
+      formatted: "§dGemstone Powder §7when mining §dGemstones",
+      qtyColor: "d",
     },
   },
 };
@@ -748,7 +754,7 @@ class PeakOfTheMountain extends Node {
     this.id = "special_0";
     this.name = nodeNames[this.id];
     this.position = 18;
-    this.max_level = 5;
+    this.max_level = 7;
     this.upgrade_type = "mithril_powder";
     this.requires = ["efficient_miner"];
     this.nodeType = "special";
