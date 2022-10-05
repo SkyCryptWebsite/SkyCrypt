@@ -2073,10 +2073,9 @@ const metaDescription = getMetaDescription()
             <% for(const minion of minions){ %>
             <div data-tippy-content="Crafted variants:<br><br>
 
-              <%
-              for(let i = 1; i <= minion.levels[minion.levels.length-1]; i++){ %>
-                <div class='minion-variant minion-crafted'><%= romanize(i) %></div>
-              <% } %>
+              <% for(const i of minion.tiers){ %>
+                <div class='minion-variant <% if(minion.levels.includes(i)){ %>minion-crafted<% } %>'><%= romanize(i) %></div>
+              <%  } %>
               " class="chip
               <%= minion.maxLevel == 0 ? 'no-minion' : '' %>
               <%= minion.maxLevel == minion.tiers ? 'max-stat' : '' %>
