@@ -1228,7 +1228,7 @@ const metaDescription = getMetaDescription()
                   if (unlockedSkins.includes(skin.id)) continue;
               %>
                 <div tabindex="0" data-missing-pet-skin-index="-" class="rich-item piece piece-<%= skin.rarity %>-bg missing-pet-skin">
-                  <div style='background-image: url("<%= skin?.texture %>")' class="piece-icon item-icon custom-icon"></div>
+                  <div style='background-image: url("<%= skin.texture %>")' class="piece-icon item-icon custom-icon"></div>
                 </div>
               <% } %>
             </div>
