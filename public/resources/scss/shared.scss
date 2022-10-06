@@ -54,6 +54,8 @@
   /* Normal Background */
   --bg: url(/resources/img/bg.webp);
 
+  color-scheme: dark;
+
   &.light {
     --text-hex: black;
     --text-rgb: 0, 0, 0;
@@ -65,6 +67,8 @@
     --grey_background-rgb: 226, 226, 226;
     --lore_background-hex: #ffffffee;
     --bg-hex: white;
+
+    color-scheme: light;
   }
 
   .true-colors {

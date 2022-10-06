@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>API Documentation | SkyCrypt</title>
   <meta name="description" content="A beautiful site for sharing your SkyBlock profile 🍣">
@@ -10,32 +11,33 @@
 
   <%- include('../includes/resources') %>
 </head>
-  <body>
-    <%- include('../includes/header') %>
 
-    <!-- Redoc Library-->
-    <redoc id="docs"></redoc>
-    <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
-    <script>
-      function redocInit(color) {
-        Redoc.init(
-          '/resources/api/api_docs.json',
-          {
-            scrollYOffset: 'header',
-            theme: {
-              colors: {
-                primary: {
-                  main: color ?? "#0bda51",
-                }
+<body>
+  <%- include('../includes/header') %>
+
+  <!-- Redoc Library-->
+  <redoc id="docs"></redoc>
+  <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
+  <script>
+    function redocInit(color) {
+      Redoc.init(
+        '/resources/api/api_docs.json', {
+          scrollYOffset: 'header',
+          theme: {
+            colors: {
+              primary: {
+                main: color ?? "#0bda51",
               }
             }
-          },
-          document.getElementById('docs')
-        );
-      }
-      redocInit(JSON.parse(localStorage.getItem("processedTheme"))?.styles?.["--icon-hex"]);
-    </script>
+          }
+        },
+        document.getElementById('docs')
+      );
+    }
+    redocInit(JSON.parse(localStorage.getItem("processedTheme"))?.styles?.["--icon-hex"]);
+  </script>
 
-    <%- include('../includes/footer'); %>
-  </body>
+  <%- include('../includes/footer'); %>
+</body>
+
 </html>
