@@ -837,7 +837,7 @@ const metaDescription = getMetaDescription()
         <a class="nav-item" href="#Slayer">Slayer</a>
         <a class="nav-item" href="#Minions">Minions</a>
         <% if(Object.keys(calculated.collections).length > 0){ %><a class="nav-item" href="#Collections">Collections</a><% } %>
-        <% if(Object.keys(calculated.crimsonIsles.kuudra_completed_tiers).length > 0 || Object.keys(calculated.crimsonIsles.dojo).length > 0){ %><a class="nav-item" href="#Crimson Isle"><abbr title="Crimson Isle">Crimson Isle</abbr></a><% } %>
+        <% if(Object.keys(calculated.crimsonIsles.kuudra_completed_tiers).length > 0 || Object.keys(calculated.crimsonIsles.dojo).length > 0){ %><a class="nav-item" href="#Crimson_Isle">Crimson Isle</a><% } %>
         <% if(Object.keys(calculated.misc).length > 0){ %><a class="nav-item" href="#Misc"><abbr title="Miscellaneous">Misc</abbr></a><% } %>
       </div>
     </div>
@@ -2179,13 +2179,15 @@ const metaDescription = getMetaDescription()
       <% } %>
       <%if (Object.keys(calculated.crimsonIsles.kuudra_completed_tiers).length > 0 || Object.keys(calculated.crimsonIsles.dojo).length > 0) { %>
       <div class="stat-container stat-collections">
-        <a class="stat-anchor" id="Crimson Isle"></a>
+        <a class="stat-anchor" id="Crimson_Isle"></a>
         <h2 class="stat-header">Crimson Isle</h2>
         <% if (Object.keys(calculated.crimsonIsles.factions).length > 0) { %>
         <p class="stat-raw-values stat-kills">
           <span class="stat-name">Selected Faction: </span><span class="stat-value"><%= calculated.crimsonIsles.factions.selected_faction.replaceAll('mages', 'Mage').replaceAll('barbarians', 'Barbarian') %></span><br>
-          <span class="stat-name">Mage Reputation: </span><span class="stat-value"><%= calculated.crimsonIsles.factions.mages_reputation.toLocaleString() %></span><br>
-          <span class="stat-name">Barbarian Reputation: </span><span class="stat-value"><%= calculated.crimsonIsles.factions.barbarians_reputation.toLocaleString() %></span><br>
+          <% max = calculated.crimsonIsles.factions.mages_reputation >= 12000 ? 'golden-text' : '' %>
+          <span class="stat-name <%= max %>">Mage Reputation: </span><span class="stat-value <%= max %>"><%= calculated.crimsonIsles.factions.mages_reputation.toLocaleString() %></span><br>
+          <% max = calculated.crimsonIsles.factions.barbarians_reputation >= 12000 ? 'golden-text' : '' %>
+          <span class="stat-name <%= max %>">Barbarian Reputation: </span><span class="stat-value <%= max %>"><%= calculated.crimsonIsles.factions.barbarians_reputation.toLocaleString() %></span><br>
           <% } %>
 
           <% if (Object.keys(calculated.crimsonIsles.kuudra_completed_tiers).length > 0) { %>
@@ -2215,7 +2217,7 @@ const metaDescription = getMetaDescription()
           }
         if (Object.keys(calculated.crimsonIsles.dojo).length > 0) { %>
         <p class="stat-sub-header">Dojo Completions</p>
-        <% max = calculated.crimsonIsles.total_dojo_points >= 7000 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Total Points: </span><span class="stat-value <%= max %>"><%= calculated.crimsonIsles.total_dojo_points.toLocaleString() %></span><br><br><br>
+        <% max = calculated.crimsonIsles.total_dojo_points >= 7000 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Total Points: </span><span class="stat-value <%= max %>"><%= calculated.crimsonIsles.total_dojo_points.toLocaleString() %></span><br><br>
         <div class="collections">
           <%for (const type of Object.keys(calculated.crimsonIsles.dojo)) {
             const dojo = calculated.crimsonIsles.dojo[type]%>

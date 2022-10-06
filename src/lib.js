@@ -2033,7 +2033,7 @@ export async function getStats(
 
   Object.keys(constants.DOJO).forEach((key) => {
     key = key.replaceAll("dojo_points_", "").replaceAll("dojo_time_", "");
-    crimsonIsles.total_dojo_points += userProfile.nether_island_player_data?.dojo[`dojo_points_${key}`] / 2 ?? 0;
+    crimsonIsles.total_dojo_points += userProfile.nether_island_player_data?.dojo[`dojo_points_${key}`] ?? 0;
     crimsonIsles.dojo[key.toUpperCase()] = {
       name: constants.DOJO[key].name,
       id: constants.DOJO[key].itemId,
