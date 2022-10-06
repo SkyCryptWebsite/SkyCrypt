@@ -1,1 +1,1 @@
-export const COSMETIC_SKILLS = ["runecrafting", "carpentry", "social"];
+export const COSMETIC_SKILLS = ["runecrafting", "social"];
