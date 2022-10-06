@@ -263,6 +263,8 @@ function fillLore(element: HTMLElement) {
   } else if (element.hasAttribute("data-upgrade-accessory-index")) {
     item =
       calculated.missingAccessories.upgrades[parseInt(element.getAttribute("data-upgrade-accessory-index") as string)];
+  } else if (element.hasAttribute("data-missing-pet-skin-index")) {
+    item = undefined;
   }
 
   if (item == undefined) {
