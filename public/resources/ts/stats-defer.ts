@@ -128,6 +128,7 @@ tippy(".interactive-tooltip", {
 export const ALL_ITEMS = new Map(
   [
     items.armor,
+    items.equipment,
     items.inventory,
     items.enderchest,
     items.accessory_bag,
@@ -262,6 +263,8 @@ function fillLore(element: HTMLElement) {
   } else if (element.hasAttribute("data-upgrade-accessory-index")) {
     item =
       calculated.missingAccessories.upgrades[parseInt(element.getAttribute("data-upgrade-accessory-index") as string)];
+  } else if (element.hasAttribute("data-missing-pet-skin-index")) {
+    item = undefined;
   }
 
   if (item == undefined) {
