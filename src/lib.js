@@ -1611,6 +1611,8 @@ export async function getStats(
 
   output.pets = await getPets(userProfile);
   output.missingPets = await getMissingPets(output.pets, profile.game_mode);
+  output.petSkins = getPetSkins(output.pets);
+  output.missingPetSkins = getMissingPetSkins(output.petSkins);
   output.petScore = getPetScore(output.pets);
 
   const petScoreRequired = Object.keys(constants.PET_REWARDS).sort((a, b) => parseInt(b) - parseInt(a));
@@ -2512,6 +2514,33 @@ export async function getPets(profile) {
   });
 
   return output;
+}
+
+function getPetSkins(pets) {
+  const unlockedSkins = [];
+
+  for (const [skin, skinData] of Object.entries(constants.PET_SKINS)) {
+    if (skinData.release < Date.now()) {
+      for (const petData of pets) {
+        if (`PET_SKIN_${petData.skin}` === skin) unlockedSkins.push(skin);
+      }
+    }
+  }
+
+  return unlockedSkins;
+}
+
+function getMissingPetSkins(unlockedSkins) {
+  const missingSkins = [];
+
+  for (const [skin, skinData] of Object.entries(constants.PET_SKINS)) {
+    if (skinData.release < Date.now()) {
+      skinData.pet = skin;
+      if (!unlockedSkins.includes(skin)) missingSkins.push(skinData);
+    }
+  }
+
+  return missingSkins;
 }
 
 async function getMissingPets(pets, gameMode) {

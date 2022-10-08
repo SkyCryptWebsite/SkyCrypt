@@ -1116,27 +1116,14 @@ const metaDescription = getMetaDescription()
               totalPetXp += pet.exp
             }
 
-            const unlockedSkins = [];
-            const totalSkins = {}
-            for (const [skin, skinData] of Object.entries(constants.PET_SKINS)) {
-              if (skinData.release < Date.now()) {
-                totalSkins[skin] = calculated.pets.find((pet) => `PET_SKIN_${pet.skin}`) != undefined;
-                for (const petData of calculated.pets) {
-                  if (`PET_SKIN_${petData.skin}` === skin) unlockedSkins.push(skin)
-                }
-              }
-            }
-            let userUniqueSkins = Object.values(totalSkins).filter(skin => skin).length
-            let totalUniqueSkins = Object.keys(totalSkins).length
-
             let totalCandiesUsed = calculated.pets.reduce((total, pet) => total + pet.candyUsed, 0)
           %>
           <p class="stat-raw-values">
             <% max = uniquePets.length >= totalPets ? 'golden-text': '' %>
             <span class="stat-name <%= max %>">Unique Pets: </span><span class="stat-value <%= max %>"><%= uniquePets.length %> / <%= totalPets %></span><br>
 
-            <% max = userUniqueSkins >= totalUniqueSkins ? 'golden-text': '' %>
-            <span class="stat-name <%= max %>">Unique Pet Skins: </span><span class="stat-value <%= max %>"><%= userUniqueSkins %> / <%= totalUniqueSkins %></span><br>
+            <% max = calculated.petSkins.length >= Object.keys(constants.PET_SKINS).length ? 'golden-text': '' %>
+            <span class="stat-name <%= max %>">Unique Pet Skins: </span><span class="stat-value <%= max %>"><%= calculated.petSkins.length %> / <%= Object.keys(constants.PET_SKINS).length %></span><br>
 
             <% max = calculated.petScore >= Math.max(...Object.keys(constants.PET_REWARDS)) ? 'golden-text' : '' %>
             <span data-tippy-content="
@@ -1209,7 +1196,7 @@ const metaDescription = getMetaDescription()
           <% } %>
           <button class="stat-sub-header extender" aria-controls="missing-pets" aria-expanded="false">Missing Pets</button>
           <div class="pieces extendable" id="missing-pets">
-            <% for(const [index, pet] of calculated.missingPets.entries()) { %>
+            <% for(const [index, pet] of calculated.missingPets.entries()) {%>
             <div tabindex="0" data-missing-pet-index="<%= index %>" class="rich-item piece piece-<%= pet.rarity %>-bg missing-pet">
               <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
             </div>
@@ -1217,21 +1204,19 @@ const metaDescription = getMetaDescription()
           </div>
           <% } %>
 
+          <% if (calculated.missingPetSkins.length > 1) {%>
           <button class="stat-sub-header extender" aria-controls="missing-pet-skins" aria-expanded="false">Missing Skins</button>
-            <div class="pieces extendable" id="missing-pet-skins">
-              <%
-                const sortedPetSkins = Object.entries(constants.PET_SKINS)
-                  .map(x => ({id: x[0], ...x[1]}))
-                  .sort((a,b) => rarityOrder.indexOf(a.rarity) - rarityOrder.indexOf(b.rarity))
+          <div class="pieces extendable" id="missing-pet-skins">
+            <%
 
-                for (const skin of sortedPetSkins) {
-                  if (unlockedSkins.includes(skin.id)) continue;
-              %>
-                <div tabindex="0" data-missing-pet-skin-index="-" class="rich-item piece piece-<%= skin.rarity %>-bg missing-pet-skin">
-                  <div style='background-image: url("<%= skin.texture %>")' class="piece-icon item-icon custom-icon"></div>
-                </div>
-              <% } %>
+              const sortedPetSkins = calculated.missingPetSkins.sort((a, b) => rarityOrder.indexOf(a.rarity) - rarityOrder.indexOf(b.rarity))
+              for (const [index, skin] of Object.entries(sortedPetSkins)) {%>
+            <div tabindex="0" data-missing-pet-skin-index="<%= index %>" class="rich-item piece piece-<%= skin.rarity %>-bg missing-pet-skin">
+              <div style='background-image: url("<%= skin.texture %>")' class="piece-icon item-icon custom-icon"></div>
             </div>
+            <% } %>
+            <% } %>
+          </div>
         </div>
       </div>
       <% } %>

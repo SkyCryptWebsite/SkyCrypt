@@ -249,7 +249,7 @@ export function showBackpack(item: Backpack): void {
 
 function fillLore(element: HTMLElement) {
   let item: DisplayItem | Item | Pet | undefined = undefined;
-
+  console.log(calculated.missingPetSkins[parseInt(element.getAttribute("data-missing-pet-skin-index") as string)]);
   if (element.hasAttribute("data-item-id")) {
     const itemId = element.getAttribute("data-item-id") as string;
     item = ALL_ITEMS.get(itemId) as Item;
@@ -264,7 +264,7 @@ function fillLore(element: HTMLElement) {
     item =
       calculated.missingAccessories.upgrades[parseInt(element.getAttribute("data-upgrade-accessory-index") as string)];
   } else if (element.hasAttribute("data-missing-pet-skin-index")) {
-    item = undefined;
+    item = calculated.missingPetSkins[parseInt(element.getAttribute("data-missing-pet-skin-index") as string)];
   }
 
   if (item == undefined) {
@@ -282,8 +282,16 @@ function fillLore(element: HTMLElement) {
     itemNameContent.innerHTML = `[Lvl ${(item as Pet).level.level}] ${item.display_name}`;
   }
 
+  if (element.hasAttribute("data-missing-pet-skin-index")) {
+    itemNameContent.dataset.multicolor = "false";
+    itemNameContent.innerHTML = item.name;
+  }
+
   if (item.texture_path) {
     itemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
+    itemIcon.className = "stats-piece-icon item-icon custom-icon";
+  } else if (item.texture && element.hasAttribute("data-missing-pet-skin-index")) {
+    itemIcon.style.backgroundImage = 'url("' + item.texture + '")';
     itemIcon.className = "stats-piece-icon item-icon custom-icon";
   } else if ("id" in item) {
     itemIcon.removeAttribute("style");

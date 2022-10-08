@@ -23,7 +23,7 @@ document.addEventListener("click", (e) => {
   }
 
   let item: DisplayItem | Item | Pet | undefined = undefined;
-
+  console.log(calculated);
   if (element.hasAttribute("data-item-id")) {
     const itemId = element.getAttribute("data-item-id") as string;
     item = ALL_ITEMS.get(itemId) as Item;
@@ -31,6 +31,8 @@ document.addEventListener("click", (e) => {
     item = calculated.pets[parseInt(element.getAttribute("data-pet-index") as string)];
   } else if (element.hasAttribute("data-missing-pet-index")) {
     item = calculated.missingPets[parseInt(element.getAttribute("data-missing-pet-index") as string)];
+  } else if (element.hasAttribute("data-missing-pet-skin-index")) {
+    item = calculated.missingPetSkins[parseInt(element.getAttribute("data-missing-pet-skin-index") as string)];
   } else if (element.hasAttribute("data-missing-accessory-index")) {
     item =
       calculated.missingAccessories.missing[parseInt(element.getAttribute("data-missing-accessory-index") as string)];
