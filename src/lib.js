@@ -688,6 +688,10 @@ export const getItems = async (
   // Process inventories returned by API
   const armor =
     "inv_armor" in profile ? await processItems(profile.inv_armor.data, customTextures, packs, options.cacheOnly) : [];
+  const equipment =
+    "equippment_contents" in profile
+      ? await processItems(profile.equippment_contents.data, customTextures, packs, options.cacheOnly)
+      : [];
   const inventory =
     "inv_contents" in profile
       ? await processItems(profile.inv_contents.data, customTextures, packs, options.cacheOnly)
@@ -774,6 +778,7 @@ export const getItems = async (
   let hotm = "mining_core" in profile ? await getHotmItems(profile, packs) : [];
 
   output.armor = armor.filter((x) => x.rarity);
+  output.equipment = equipment.filter((x) => x.rarity);
   output.wardrobe = wardrobe;
   output.wardrobe_inventory = wardrobe_inventory;
   output.inventory = inventory;
@@ -787,6 +792,7 @@ export const getItems = async (
   output.hotm = hotm;
 
   const allItems = armor.concat(
+    equipment,
     inventory,
     enderchest,
     accessory_bag,
@@ -977,8 +983,10 @@ export const getItems = async (
       accessory.reforge = accessory.tag.ExtraAttributes.modifier;
     }
 
-    if (accessory.tag?.ExtraAttributes?.talisman_enrichment != undefined)
-      accessory.enrichment = accessory.tag.ExtraAttributes.talisman_enrichment;
+
+    if (accessory.tag?.ExtraAttributes?.talisman_enrichment != undefined) {
+      accessory.enrichment = accessory.tag.ExtraAttributes.talisman_enrichment.toLowerCase();
+    }
   }
 
   output.accessories = accessories;
@@ -1103,6 +1111,13 @@ export const getItems = async (
     output.armor_set_rarity = armorPiece.rarity;
   }
 
+  if (equipment.filter((x) => x.rarity).length === 1) {
+    const equipmentPiece = equipment.find((x) => x.rarity);
+
+    output.equipment_set = equipmentPiece.display_name;
+    output.equipment_set_rarity = equipmentPiece.rarity;
+  }
+
   // Full armor set (4 pieces)
   if (armor.filter((x) => x.rarity).length === 4) {
     let output_name;
@@ -1155,6 +1170,31 @@ export const getItems = async (
 
     output.armor_set = output_name;
     output.armor_set_rarity = constants.RARITIES[Math.max(...armor.map((a) => helper.rarityNameToInt(a.rarity)))];
+  }
+
+  // Full equipment set (4 pieces)
+  for (const piece of equipment) {
+    if (piece.rarity == null) delete equipment[equipment.indexOf(piece)];
+  }
+
+  if (equipment.filter((x) => x.rarity).length === 4) {
+    // Getting equipment_name
+    equipment.forEach((equipmentPiece) => {
+      let name = equipmentPiece.display_name;
+
+      // Removing skin and stars / Whitelisting a-z and 0-9
+      name = name.replace(/[^A-Za-z0-9 -']/g, "").trim();
+
+      // Removing modifier
+      if (equipmentPiece.tag?.ExtraAttributes?.modifier != undefined) {
+        name = name.split(" ").slice(1).join(" ");
+      }
+
+      equipmentPiece.equipment_name = name;
+    });
+
+    output.equipment_set_rarity =
+      constants.RARITIES[Math.max(...equipment.map((a) => helper.rarityNameToInt(a.rarity)))];
   }
 
   console.debug(`${options.debugId}: getItems returned. (${Date.now() - timeStarted}ms)`);
@@ -2985,7 +3025,11 @@ export async function getProfile(
   for (const _profile of profiles) {
     if (!_profile || !_profile) return;
 
-    if (_profile?.selected || _profile.profile_id.toLowerCase() == profileId) {
+    if (
+      _profile?.selected ||
+      _profile.profile_id.toLowerCase() == paramProfile ||
+      _profile.cute_name.toLowerCase() == paramProfile
+    ) {
       profile = _profile;
       break;
     }
