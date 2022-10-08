@@ -93,7 +93,7 @@
       %>
     <a href="/stats/<%= profile.uuid %>" class="top-profile">
       <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
-      <div class="profile-name">
+      <div class="favorite-profile-name">
         <%= profile.username %>
         <% if('emojiImg' in profile){ %>
         <img class="emoji" draggable="false" src="<%= profile.emojiImg %>" alt="<%= profile.emojiImg.split('/').pop().split('.')[0] %>">
