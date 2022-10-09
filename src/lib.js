@@ -796,6 +796,10 @@ export const getItems = async (
   // Process inventories returned by API
   const armor =
     "inv_armor" in profile ? await processItems(profile.inv_armor.data, customTextures, packs, options.cacheOnly) : [];
+  const equipment =
+    "equippment_contents" in profile
+      ? await processItems(profile.equippment_contents.data, customTextures, packs, options.cacheOnly)
+      : [];
   const inventory =
     "inv_contents" in profile
       ? await processItems(profile.inv_contents.data, customTextures, packs, options.cacheOnly)
@@ -886,6 +890,7 @@ export const getItems = async (
   let hotm = "mining_core" in profile ? await getHotmItems(profile, packs) : [];
 
   output.armor = armor.filter((x) => x.rarity);
+  output.equipment = equipment.filter((x) => x.rarity);
   output.wardrobe = wardrobe;
   output.wardrobe_inventory = wardrobe_inventory;
   output.inventory = inventory;
@@ -899,6 +904,7 @@ export const getItems = async (
   output.hotm = hotm;
 
   const allItems = armor.concat(
+    equipment,
     inventory,
     enderchest,
     accessory_bag,
@@ -1114,7 +1120,7 @@ export const getItems = async (
     }
 
     if (accessory.tag?.ExtraAttributes?.talisman_enrichment != undefined) {
-      accessory.enrichment = accessory.tag.ExtraAttributes.talisman_enrichment;
+      accessory.enrichment = accessory.tag.ExtraAttributes.talisman_enrichment.toLowerCase();
     }
   }
 
@@ -1270,6 +1276,13 @@ export const getItems = async (
     output.armor_set_rarity = armorPiece.rarity;
   }
 
+  if (equipment.filter((x) => x.rarity).length === 1) {
+    const equipmentPiece = equipment.find((x) => x.rarity);
+
+    output.equipment_set = equipmentPiece.display_name;
+    output.equipment_set_rarity = equipmentPiece.rarity;
+  }
+
   // Full armor set (4 pieces)
   if (armor.filter((x) => x.rarity).length === 4) {
     let output_name;
@@ -1331,6 +1344,31 @@ export const getItems = async (
 
     output.armor_set = output_name;
     output.armor_set_rarity = constants.RARITIES[Math.max(...armor.map((a) => helper.rarityNameToInt(a.rarity)))];
+  }
+
+  // Full equipment set (4 pieces)
+  for (const piece of equipment) {
+    if (piece.rarity == null) delete equipment[equipment.indexOf(piece)];
+  }
+
+  if (equipment.filter((x) => x.rarity).length === 4) {
+    // Getting equipment_name
+    equipment.forEach((equipmentPiece) => {
+      let name = equipmentPiece.display_name;
+
+      // Removing skin and stars / Whitelisting a-z and 0-9
+      name = name.replace(/[^A-Za-z0-9 -']/g, "").trim();
+
+      // Removing modifier
+      if (equipmentPiece.tag?.ExtraAttributes?.modifier != undefined) {
+        name = name.split(" ").slice(1).join(" ");
+      }
+
+      equipmentPiece.equipment_name = name;
+    });
+
+    output.equipment_set_rarity =
+      constants.RARITIES[Math.max(...equipment.map((a) => helper.rarityNameToInt(a.rarity)))];
   }
 
   console.debug(`${options.debugId}: getItems returned. (${Date.now() - timeStarted}ms)`);
@@ -1409,6 +1447,7 @@ async function getLevels(userProfile, hypixelProfile, levelCaps) {
       enchanting: hypixelProfile.achievements.skyblock_augmentation || 0,
       alchemy: hypixelProfile.achievements.skyblock_concoctor || 0,
       taming: hypixelProfile.achievements.skyblock_domesticator || 0,
+      carpentry: 0,
     };
 
     output.levels = {};
@@ -1571,7 +1610,7 @@ export async function getStats(
   userProfile.pets.push(...items.pets);
 
   output.pets = await getPets(userProfile);
-  output.missingPets = getMissingPets(output.pets, profile.game_mode);
+  output.missingPets = await getMissingPets(output.pets, profile.game_mode);
   output.petScore = getPetScore(output.pets);
 
   const petScoreRequired = Object.keys(constants.PET_REWARDS).sort((a, b) => parseInt(b) - parseInt(a));
@@ -1722,20 +1761,6 @@ export async function getStats(
     }
   }
 
-  for (const member of members) {
-    if (profile?.members?.[member.uuid]?.last_save == undefined) {
-      continue;
-    }
-
-    const lastUpdated = profile.members[member.uuid].last_save;
-
-    member.last_updated = {
-      unix: lastUpdated,
-      text:
-        Date.now() - lastUpdated < 7 * 60 * 1000 ? "currently online" : `last played ${moment(lastUpdated).fromNow()}`,
-    };
-  }
-
   if (profile.banking?.balance != undefined) {
     output.bank = profile.banking.balance;
   }
@@ -1751,18 +1776,10 @@ export async function getStats(
   output.profiles = {};
 
   for (const sbProfile of allProfiles.filter((a) => a.profile_id != profile.profile_id)) {
-    if (sbProfile?.members?.[profile.uuid]?.last_save == undefined) {
-      continue;
-    }
-
     output.profiles[sbProfile.profile_id] = {
       profile_id: sbProfile.profile_id,
       cute_name: sbProfile.cute_name,
       game_mode: sbProfile.game_mode,
-      last_updated: {
-        unix: sbProfile.members[profile.uuid].last_save,
-        text: `last played ${moment(sbProfile.members[profile.uuid].last_save).fromNow()}`,
-      },
     };
   }
 
@@ -1770,6 +1787,7 @@ export async function getStats(
   output.minions = getMinions(profile.members);
   output.minion_slots = getMinionSlots(output.minions);
   output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
+  output.bestiary = getBestiary(profile.uuid, profile);
   output.social = hypixelProfile.socials;
 
   output.dungeons = getDungeons(userProfile, hypixelProfile);
@@ -1790,6 +1808,7 @@ export async function getStats(
 
   const farming = {
     talked: userProfile.jacob2?.talked || false,
+    pelts: userProfile.trapper_quest?.pelt_count || 0,
   };
 
   if (farming.talked) {
@@ -2186,12 +2205,8 @@ export async function getStats(
   output.auctions_bought = auctions_bought;
   output.auctions_sold = auctions_sold;
 
-  const lastUpdated = userProfile.last_save;
   const firstJoin = userProfile.first_join;
 
-  const diff = (+new Date() - lastUpdated) / 1000;
-
-  let lastUpdatedText = moment(lastUpdated).fromNow();
   const firstJoinText = moment(firstJoin).fromNow();
 
   if ("current_area" in userProfile) {
@@ -2201,17 +2216,6 @@ export async function getStats(
   if ("current_area_updated" in userProfile) {
     output.current_area_updated = userProfile.current_area_updated;
   }
-
-  if (diff < 3) {
-    lastUpdatedText = `Right now`;
-  } else if (diff < 60) {
-    lastUpdatedText = `${Math.floor(diff)} seconds ago`;
-  }
-
-  output.last_updated = {
-    unix: lastUpdated,
-    text: lastUpdatedText,
-  };
 
   output.first_join = {
     unix: firstJoin,
@@ -2511,7 +2515,7 @@ export async function getPets(profile) {
   return output;
 }
 
-function getMissingPets(pets, gameMode) {
+async function getMissingPets(pets, gameMode) {
   const profile = {
     pets: [],
   };
@@ -2531,6 +2535,7 @@ function getMissingPets(pets, gameMode) {
     const key = petData.typeGroup ?? petType;
 
     missingPets[key] ??= [];
+
     missingPets[key].push({
       type: petType,
       active: false,
@@ -2692,6 +2697,65 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
   }
 
   return output;
+}
+
+export function getBestiary(uuid, profile) {
+  const output = {};
+
+  const userProfile = profile.members[uuid];
+
+  if (!("unlocked_coll_tiers" in userProfile) || !("collection" in userProfile)) {
+    return output;
+  }
+
+  const result = {
+    level: 0,
+    categories: {},
+  };
+
+  let totalCollection = 0;
+  const bestiaryFamilies = {};
+  for (const [name, value] of Object.entries(userProfile.bestiary || {})) {
+    if (name.startsWith("kills_family_")) {
+      bestiaryFamilies[name] = value;
+    }
+  }
+
+  for (const family of Object.keys(constants.BESTIARY)) {
+    result.categories[family] = {};
+    for (const mob of constants.BESTIARY[family].mobs) {
+      const mobName = mob.id.substring(13);
+
+      const boss = mob.boss == true ? "boss" : "regular";
+
+      let kills = bestiaryFamilies[mob.id] || 0;
+      let head = mob.head;
+      let itemId = mob.itemId;
+      let damage = mob.damage;
+      let name = mob.name;
+      let maxTier = mob.maxTier ?? 41;
+      let tier =
+        constants.BEASTIARY_KILLS[boss].filter((k) => k <= kills).length > maxTier
+          ? maxTier
+          : constants.BEASTIARY_KILLS[boss].filter((k) => k <= kills).length;
+      totalCollection += tier;
+
+      result.categories[family][mobName] = {
+        head: head,
+        name: name,
+        itemId: itemId,
+        damage: damage,
+        tier: tier,
+        maxTier: maxTier,
+        kills: kills,
+      };
+    }
+  }
+  result.tiersUnlocked = totalCollection;
+  result.level = totalCollection / 10;
+  result.bonus = result.level.toFixed(0) * 2;
+
+  return result;
 }
 
 export function getDungeons(userProfile, hypixelProfile) {
@@ -3251,11 +3315,11 @@ export async function getProfile(
 
   let lastCachedSave = 0;
 
+  const profileData = [];
   if (profileObject) {
-    const profileData = db
-      .collection("profileCache")
-      .find({ profile_id: { $in: Object.keys(profileObject.profiles) } });
-
+    for (const pId of Object.keys(profileObject.profiles)) {
+      profileData.push(await db.collection("profileCache").findOne({ profile_id: pId }));
+    }
     for await (const doc of profileData) {
       if (doc.members?.[paramPlayer] == undefined) {
         continue;
@@ -3264,8 +3328,6 @@ export async function getProfile(
       Object.assign(doc, profileObject.profiles[doc.profile_id]);
 
       allSkyBlockProfiles.push(doc);
-
-      lastCachedSave = Math.max(lastCachedSave, doc.members[paramPlayer].last_save || 0);
     }
   } else {
     profileObject = { last_update: 0 };
@@ -3273,17 +3335,18 @@ export async function getProfile(
 
   let response = null;
 
+  lastCachedSave = Math.max(profileObject.last_update, Date.now() || 0);
+
   if (
     !options.cacheOnly &&
     ((Date.now() - lastCachedSave > 190 * 1000 && Date.now() - lastCachedSave < 300 * 1000) ||
       Date.now() - profileObject.last_update >= 300 * 1000)
   ) {
     try {
+      profileObject.last_update = Date.now();
       response = await retry(
         async () => {
-          return await hypixel.get("skyblock/profiles", {
-            params,
-          });
+          return await hypixel.get("skyblock/profiles", { params });
         },
         { retries: 2 }
       );
@@ -3313,12 +3376,6 @@ export async function getProfile(
   }
 
   for (const profile of allSkyBlockProfiles) {
-    for (const member in profile.members) {
-      if (profile.members[member]?.last_save == undefined) {
-        delete profile.members[member];
-      }
-    }
-
     profile.uuid = paramPlayer;
   }
 
@@ -3326,32 +3383,7 @@ export async function getProfile(
 
   if (paramProfile) {
     if (paramProfile.length == 32) {
-      const filteredProfiles = allSkyBlockProfiles.filter((a) => a.profile_id.toLowerCase() == paramProfile);
-
-      if (filteredProfiles.length > 0) {
-        skyBlockProfiles = filteredProfiles;
-      } else {
-        const profileResponse = await retry(async () => {
-          const response = await hypixel.get(
-            "skyblock/profile",
-            {
-              params: { key: credentials.hypixel_api_key, profile: paramProfile },
-            },
-            { retries: 2 }
-          );
-
-          if (!response.data.success) {
-            throw new Error("api request failed");
-          }
-
-          return response.data.profile;
-        });
-
-        profileResponse.cute_name = "Deleted";
-        profileResponse.uuid = paramPlayer;
-
-        skyBlockProfiles.push(profileResponse);
-      }
+      skyBlockProfiles = allSkyBlockProfiles.filter((a) => a.profile_id.toLowerCase() == paramProfile);
     } else {
       skyBlockProfiles = allSkyBlockProfiles.filter((a) => a.cute_name.toLowerCase() == paramProfile);
     }
@@ -3366,10 +3398,8 @@ export async function getProfile(
   for (const profile of skyBlockProfiles) {
     let memberCount = 0;
 
-    for (const member in profile.members) {
-      if (profile.members[member]?.last_save != undefined) {
-        memberCount++;
-      }
+    for (let i = 0; i < Object.keys(profile.members).length; i++) {
+      memberCount++;
     }
 
     if (memberCount == 0) {
@@ -3387,7 +3417,6 @@ export async function getProfile(
     throw new Error("No data returned by Hypixel API, please try again!");
   }
 
-  let highest = 0;
   let profile;
 
   const storeProfiles = {};
@@ -3418,14 +3447,12 @@ export async function getProfile(
         .catch(console.error);
     }
 
-    if ("last_save" in userProfile) {
-      storeProfiles[_profile.profile_id] = {
-        profile_id: _profile.profile_id,
-        cute_name: _profile.cute_name,
-        game_mode: _profile.game_mode,
-        last_save: userProfile.last_save,
-      };
-    }
+    storeProfiles[_profile.profile_id] = {
+      profile_id: _profile.profile_id ?? null,
+      cute_name: _profile.cute_name ?? "Unknown",
+      game_mode: _profile.game_mode ?? "normal",
+      selected: _profile.selected ?? false,
+    };
   }
 
   for (const _profile of profiles) {
@@ -3433,11 +3460,12 @@ export async function getProfile(
       return;
     }
 
-    const userProfile = _profile.members[paramPlayer];
-
-    if (userProfile?.last_save > highest) {
+    if (
+      _profile?.selected ||
+      _profile.profile_id.toLowerCase() == paramProfile ||
+      _profile.cute_name.toLowerCase() == paramProfile
+    ) {
       profile = _profile;
-      highest = userProfile.last_save;
     }
   }
 
@@ -3451,9 +3479,7 @@ export async function getProfile(
     userProfile.current_area = profileObject.current_area;
   }
 
-  if (Date.now() - userProfile.last_save < 5 * 60 * 1000) {
-    userProfile.current_area_updated = true;
-  }
+  userProfile.current_area_updated = true;
 
   if (response && response.request.fromCache !== true) {
     const apisEnabled =
@@ -3463,28 +3489,25 @@ export async function getProfile(
 
     const insertProfileStore = {
       last_update: new Date(),
-      last_save: Math.max(...allSkyBlockProfiles.map((a) => a.members?.[paramPlayer]?.last_save ?? 0)),
       apis: apisEnabled,
       profiles: storeProfiles,
     };
 
-    if (options.updateArea && Date.now() - userProfile.last_save < 5 * 60 * 1000) {
-      try {
-        const statusResponse = await hypixel.get("status", {
-          params: { uuid: paramPlayer, key: credentials.hypixel_api_key },
-        });
+    try {
+      const statusResponse = await hypixel.get("status", {
+        params: { uuid: paramPlayer, key: credentials.hypixel_api_key },
+      });
 
-        const areaData = statusResponse.data.session;
+      const areaData = statusResponse.data.session;
 
-        if (areaData.online && areaData.gameType == "SKYBLOCK") {
-          const areaName = constants.AREA_NAMES[areaData.mode] || helper.titleCase(areaData.mode.replaceAll("_", " "));
+      if (areaData.online && areaData.gameType == "SKYBLOCK") {
+        const areaName = constants.AREA_NAMES[areaData.mode] || helper.titleCase(areaData.mode.replaceAll("_", " "));
 
-          userProfile.current_area = areaName;
-          insertProfileStore.current_area = areaName;
-        }
-      } catch (e) {
-        console.error(e);
+        userProfile.current_area = areaName;
+        insertProfileStore.current_area = areaName;
       }
+    } catch (e) {
+      console.error(e);
     }
 
     updateLeaderboardPositions(db, paramPlayer, allSkyBlockProfiles).catch(console.error);

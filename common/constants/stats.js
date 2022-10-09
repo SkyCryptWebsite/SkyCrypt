@@ -1,5 +1,6 @@
-/*
- * Ordered object of stats: {
+/**
+ * Ordered object of stats
+ * @type {{[key:string]: {
  *   name: string
  *   nameLore: string // name found in items lore
  *   nameShort: string // up to 16 chars
@@ -7,7 +8,7 @@
  *   symbol: string
  *   suffix: string
  *   color: string
- * }
+ * }}}
  */
 export const STATS_DATA = {
   health: {
@@ -180,6 +181,61 @@ export const STATS_DATA = {
     symbol: "✧",
     suffix: "",
     color: "5",
+  },
+  fishing_speed: {
+    name: "Fishing Speed",
+    nameLore: "Fishing Speed",
+    nameShort: "Fishing Speed",
+    nameTiny: "FS",
+    symbol: "☂",
+    suffix: "",
+    color: "b",
+  },
+  breaking_power: {
+    name: "Breaking Power",
+    nameLore: "Breaking Power",
+    nameShort: "Breaking Power",
+    nameTiny: "BP",
+    symbol: "Ⓟ",
+    suffix: "",
+    color: "2",
+  },
+  health_regen: {
+    name: "Health Regen",
+    nameLore: "Health Regen",
+    nameShort: "Health Regen",
+    nameTiny: "HPR",
+    symbol: "❣",
+    suffix: "",
+    color: "c",
+  },
+  vitality: {
+    name: "Vitality",
+    nameLore: "Vitality",
+    nameShort: "Vitality",
+    nameTiny: "Vit",
+    symbol: "♨",
+    suffix: "",
+    color: "5",
+  },
+  mending: {
+    name: "Mending",
+    nameLore: "Mending",
+    nameShort: "Mending",
+    nameTiny: "Mend",
+    symbol: "☄",
+    suffix: "",
+    color: "a",
+  },
+  // todo: remove this once #1639 is merged and update wisdom values
+  wisdom: {
+    name: "Wisdom",
+    nameLore: "Wisdom",
+    nameShort: "Wisdom",
+    nameTiny: "W",
+    symbol: "☯",
+    suffix: "",
+    color: "3",
   },
 };
 
