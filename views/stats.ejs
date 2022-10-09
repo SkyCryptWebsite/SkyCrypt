@@ -579,10 +579,8 @@ const metaDescription = getMetaDescription()
   <%- include('../includes/header') %>
   <div id="dimmer">
     <video preload="none" id="enable_api" loop>
-      <source type="video/webm" src="/resources/video/enable-api.webm">
-      </source>
-      <source type="video/mp4" src="/resources/video/enable-api.mp4">
-      </source>
+      <source type="video/webm" src="/resources/video/enable-api.webm" />
+      <source type="video/mp4" src="/resources/video/enable-api.mp4" />
     </video>
   </div>
   <div id="stats_content">
@@ -1484,7 +1482,7 @@ const metaDescription = getMetaDescription()
             <p class="stat-raw-values">
               <span class="stat-name">Pelts: </span><span class="stat-value"><%= calculated.farming.pelts.toLocaleString() %></span><br>
               <span class="stat-name">Contests attended: </span><span class="stat-value"><%= farming.contests.attended_contests.toLocaleString() %></span><br>
-              <% max = farming.unique_golds == 10 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Golds: </span><span class="stat-value <%= max %>"><%= farming.unique_golds.toLocaleString() %></span></span><br>
+              <% max = farming.unique_golds == 10 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Golds: </span><span class="stat-value <%= max %>"><%= farming.unique_golds.toLocaleString() %></span><br>
             </p>
 
             <p class="stat-raw-values">
@@ -2045,9 +2043,9 @@ const metaDescription = getMetaDescription()
           </a>
           <p class="stat-raw-values">
             <% max = uniqueMinions == constants.MINIONS_MAX_UNIQUES ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Minions: </span><span class="stat-value <%= max %>"><%= uniqueMinions %> / <%= constants.MINIONS_MAX_UNIQUES %></span><span class="grey-text"> (<%= Math.floor(uniqueMinions / constants.MINIONS_MAX_UNIQUES * 100) %>%)</span><br>
-            <% max = calculated.minion_slots.currentSlots == constants.MINIONS_MAX_SLOTS ? 'golden-text' : '' %><span class="stat-name <%= max %>">Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.minion_slots.currentSlots %></span><span class=" grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
-            <% max = calculated.misc.profile_upgrades.minion_slots == 5 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Bonus Minion Slots: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades.minion_slots %> / <%= constants.PROFILE_UPGRADES['minion_slots'] %></span><br>
-          <% max = maxedMinions == _.size(constants.MINIONS) ? 'golden-text' : '' %><span class=" stat-name <%= max %>">Maxed Minions: </span><span class="stat-value <%= max %>"><%= maxedMinions %> / <%= _.size(constants.MINIONS) %></span><br>
+            <% max = calculated.minion_slots.currentSlots == constants.MINIONS_MAX_SLOTS ? 'golden-text' : '' %><span class="stat-name <%= max %>">Minion Slots: </span><span class="stat-value <%= max %>"><%= calculated.minion_slots.currentSlots %></span><span class=" grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
+            <% max = calculated.misc.profile_upgrades.minion_slots == 5 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Bonus Minion Slots: </span><span class="stat-value <%= max %>"><%= calculated.misc.profile_upgrades.minion_slots %> / <%= constants.PROFILE_UPGRADES['minion_slots'] %></span><br>
+            <% max = maxedMinions == _.size(constants.MINIONS) ? 'golden-text' : '' %><span class=" stat-name <%= max %>">Maxed Minions: </span><span class="stat-value <%= max %>"><%= maxedMinions %> / <%= _.size(constants.MINIONS) %></span><br>
             <% if(skippedMinions > 0){ %>
             <span class="stat-name">Skipped Minion Tiers: </span><span class="stat-value"><%= skippedMinions %></span><br>
             <% } %>
@@ -2213,7 +2211,8 @@ const metaDescription = getMetaDescription()
           </div>
           <p class="stat-raw-values stat-kills">
             <span class="stat-name">Total Kills: </span><span class="stat-value"><%= calculated.kills.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span><br>
-            <span class="stat-name">Total Deaths: </span><span class="stat-value"><%= calculated.deaths.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span><br>
+            <span class="stat-name">Total Deaths: </span><span class="stat-value"><%= calculated.deaths.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span>
+          </p>
 
           <div class="kills-deaths-container narrow-info-container-wrapper">
             <div class="narrow-info-container top-kills">
@@ -2267,7 +2266,6 @@ const metaDescription = getMetaDescription()
               </div>
             </div>
           </div>
-          </p>
           <% } %>
 
           <% if('races' in calculated.misc){ %>
@@ -2522,79 +2520,79 @@ const metaDescription = getMetaDescription()
           </div>
           <p class="stat-raw-values">
             <% for(const upgrade in constants.PROFILE_UPGRADES){ %>
-            <% max = calculated.misc.profile_upgrades[upgrade] == constants.PROFILE_UPGRADES[upgrade] ? 'golden-text' : '' %><span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(upgrade.split("_").join(" ")); %>: </span><span class="stat-value <%= max %>""><%= calculated.misc.profile_upgrades[upgrade] %> / <%= constants.PROFILE_UPGRADES[upgrade] %></span><br>
-              <% } %>
-            </p>
+            <% max = calculated.misc.profile_upgrades[upgrade] == constants.PROFILE_UPGRADES[upgrade] ? 'golden-text' : '' %><span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(upgrade.split("_").join(" ")); %>: </span><span class="stat-value <%= max %>"><%= calculated.misc.profile_upgrades[upgrade] %> / <%= constants.PROFILE_UPGRADES[upgrade] %></span><br>
+            <% } %>
+          </p>
           <% } %>
           <% if('auctions_sell' in calculated.misc){ %>
-            <div class=" category-header">
-              <div class="category-icon">
-                <div class="item-icon icon-266_0"></div>
-              </div><span>Auctions sold</span>
-        </div>
-        <p class="stat-raw-values">
-          <% for(const key in calculated.misc.auctions_sell){
+          <div class=" category-header">
+            <div class="category-icon">
+              <div class="item-icon icon-266_0"></div>
+            </div><span>Auctions sold</span>
+          </div>
+          <p class="stat-raw-values">
+            <% for(const key in calculated.misc.auctions_sell){
                 let tooltip = "";
 
                 if(key == 'items_sold')
                   for(const key of Object.keys(calculated.auctions_sold).sort((a, b) => rarityOrder.indexOf(a) - rarityOrder.indexOf(b)))
                     tooltip += `<span class="stat-name piece-${ key }-fg">${ helper.capitalizeFirstLetter(key) }: </span><span class="stat-value">${ calculated.auctions_sold[key] }</span><br>`;
               %>
-          <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>><span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.auctions_sell[key].toLocaleString() %></span></span><br>
+            <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>><span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.auctions_sell[key].toLocaleString() %></span></span><br>
+            <% } %>
+          </p>
           <% } %>
-        </p>
-        <% } %>
-        <% if('auctions_buy' in calculated.misc){ %>
-        <div class="category-header">
-          <div class="category-icon">
-            <div class="item-icon icon-264_0"></div>
-          </div><span>Auctions bought</span>
-        </div>
-        <p class="stat-raw-values">
-          <% for(const key in calculated.misc.auctions_buy){
+          <% if('auctions_buy' in calculated.misc){ %>
+          <div class="category-header">
+            <div class="category-icon">
+              <div class="item-icon icon-264_0"></div>
+            </div><span>Auctions bought</span>
+          </div>
+          <p class="stat-raw-values">
+            <% for(const key in calculated.misc.auctions_buy){
                 let tooltip = "";
 
                 if(key == 'items_bought')
                   for(const key of Object.keys(calculated.auctions_bought).sort((a, b) => rarityOrder.indexOf(a) - rarityOrder.indexOf(b)))
                     tooltip += `<span class="stat-name piece-${ key }-fg">${ helper.capitalizeFirstLetter(key) }: </span><span class="stat-value">${ calculated.auctions_bought[key] }</span><br>`;
               %>
-          <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>><span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.auctions_buy[key].toLocaleString() %></span></span><br>
+            <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>><span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.auctions_buy[key].toLocaleString() %></span></span><br>
+            <% } %>
+          </p>
           <% } %>
-        </p>
-        <% } %>
 
-        <% if('claimed_items' in calculated.misc){ %>
-        <div class="category-header">
-          <div class="category-icon">
-            <div class="item-icon icon-339_0"></div>
-          </div><span>Claimed items</span>
-        </div>
-        <p class="stat-raw-values">
-          <% for(const key in calculated.misc.claimed_items){
+          <% if('claimed_items' in calculated.misc){ %>
+          <div class="category-header">
+            <div class="category-icon">
+              <div class="item-icon icon-339_0"></div>
+            </div><span>Claimed items</span>
+          </div>
+          <p class="stat-raw-values">
+            <% for(const key in calculated.misc.claimed_items){
                 let timestamp = calculated.misc.claimed_items[key];
               %>
-          <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
-          <span class="stat-value" data-tippy-content='Claimed on <local-time timestamp="<%= timestamp %>"></local-time>'><%= moment(timestamp).fromNow() %></span><br>
+            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
+            <span class="stat-value" data-tippy-content='Claimed on <local-time timestamp="<%= timestamp %>"></local-time>'><%= moment(timestamp).fromNow() %></span><br>
+            <% } %>
+          </p>
           <% } %>
-        </p>
-        <% } %>
 
-        <% if ('uncategorized' in calculated.misc && Object.keys(calculated.misc.uncategorized).length > 0) { %>
-        <div class="category-header">
-          <div class="category-icon">
-            <div class="item-icon icon-421_0"></div>
-          </div><span>Uncategorized</span>
-        </div>
-        <p class="stat-raw-values">
-          <% for (const [key, value] of Object.entries(calculated.misc.uncategorized)) { %>
-          <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
-          <span class="stat-value"><%= value.formatted %></span><br>
+          <% if ('uncategorized' in calculated.misc && Object.keys(calculated.misc.uncategorized).length > 0) { %>
+          <div class="category-header">
+            <div class="category-icon">
+              <div class="item-icon icon-421_0"></div>
+            </div><span>Uncategorized</span>
+          </div>
+          <p class="stat-raw-values">
+            <% for (const [key, value] of Object.entries(calculated.misc.uncategorized)) { %>
+            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
+            <span class="stat-value"><%= value.formatted %></span><br>
+            <% } %>
+          </p>
           <% } %>
-        </p>
-        <% } %>
+        </div>
       </div>
-    </div>
-    <% } %>
+      <% } %>
     </div>
   </main>
   <%- include('../includes/footer'); %>
