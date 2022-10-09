@@ -249,7 +249,7 @@ export function showBackpack(item: Backpack): void {
 
 function fillLore(element: HTMLElement) {
   let item: DisplayItem | Item | Pet | undefined = undefined;
-  console.log(calculated.missingPetSkins[parseInt(element.getAttribute("data-missing-pet-skin-index") as string)]);
+
   if (element.hasAttribute("data-item-id")) {
     const itemId = element.getAttribute("data-item-id") as string;
     item = ALL_ITEMS.get(itemId) as Item;
