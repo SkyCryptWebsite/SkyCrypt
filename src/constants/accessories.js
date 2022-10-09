@@ -144,6 +144,14 @@ export const ACCESSORY_DUPLICATES = {
   ],
 };
 
+/*
+accessory object values:
+  name: accessory display name 
+  rarity: accessory rarity
+  texture: texture path relative to site url
+  allowsRecomb: if the accessory is able to be recombobulated - defaults to true
+*/
+
 export const ACCESSORIES = {
   WEDDING_RING_0: {
     name: "Shiny Yellow Rock",
