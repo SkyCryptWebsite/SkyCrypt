@@ -23,7 +23,6 @@ document.addEventListener("click", (e) => {
   }
 
   let item: DisplayItem | Item | Pet | undefined = undefined;
-  console.log(calculated);
   if (element.hasAttribute("data-item-id")) {
     const itemId = element.getAttribute("data-item-id") as string;
     item = ALL_ITEMS.get(itemId) as Item;
