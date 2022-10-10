@@ -284,7 +284,7 @@ function fillLore(element: HTMLElement) {
 
   if (element.hasAttribute("data-missing-pet-skin-index")) {
     itemNameContent.dataset.multicolor = "false";
-    itemNameContent.innerHTML = item.name;
+    itemNameContent.innerHTML = item.name || "???";
   }
 
   if (item.texture_path) {
