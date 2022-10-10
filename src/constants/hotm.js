@@ -755,14 +755,14 @@ class PeakOfTheMountain extends Node {
     this.name = nodeNames[this.id];
     this.position = 18;
     this.max_level = 7;
-    this.upgrade_type = "mithril_powder";
+    this.upgrade_type = data.level >= 5 ? "gemstone_powder" : "mithril_powder";
     this.requires = ["efficient_miner"];
     this.nodeType = "special";
   }
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return floor(25000 * nextLevel);
+    return nextLevel <= 5 ? floor(25000 * nextLevel) : floor(500000 + 250000 * (nextLevel - 6));
   }
 
   perk(level) {
