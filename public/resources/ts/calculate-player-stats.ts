@@ -1,10 +1,6 @@
 import * as helper from "../../../common/helper.js";
 import { STATS_BONUS } from "../../../common/constants.js";
-import { REFORGES } from "../../../src/constants/reforges.js";
-import { HARP_QUEST, FORBIDDEN_STATS } from "../../../src/constants/misc.js";
-import { MAGICAL_POWER } from "../../../src/constants/accessories.js";
-import { CUSTOM_ARMOR_ABILTIES } from "../../../src/constants/armor.js";
-import { POTION_EFFECTS } from "../../../src/constants/potions.js";
+import * as CONSTANTS from "../../../src/constants.js";
 
 export function getPlayerStats() {
   const stats: PlayerStats = {
@@ -55,15 +51,15 @@ export function getPlayerStats() {
 
   try {
     // Bestiary Level
-    if (calculated.bestiary?.bonus) {
+    if (calculated?.bestiary.bonus > 0) {
       stats.health.bestiary ??= 0;
       stats.health.bestiary += calculated.bestiary.bonus;
     }
 
     // Unique Pets
-    if (calculated.pet_score_bonus.magic_find > 0) {
+    if (calculated.pet_score_bonus.magic_find || 0 > 0) {
       stats.magic_find.pet_score ??= 0;
-      stats.magic_find.pet_score += calculated.pet_score_bonus.magic_find;
+      stats.magic_find.pet_score += calculated.pet_score_bonus.magic_find || 0;
     }
 
     // Jacob's Farming Shop
@@ -92,38 +88,38 @@ export function getPlayerStats() {
     }
 
     // Heart Of The Mountain
-    for (const a of calculated?.hotm || []) {
+    for (const a of calculated.hotm) {
       if (
-        a?.display_name == "Mining Speed I" ||
-        a?.display_name == "Mining Speed II" ||
-        a?.display_name == "Mining Fortune I" ||
-        a?.display_name == "Mining Fortune II" ||
-        a?.display_name == "Mining Madness" ||
-        a?.display_name == "Seasoned Mineman"
+        a.display_name == "Mining Speed I" ||
+        a.display_name == "Mining Speed II" ||
+        a.display_name == "Mining Fortune I" ||
+        a.display_name == "Mining Fortune II" ||
+        a.display_name == "Mining Madness" ||
+        a.display_name == "Seasoned Mineman"
       ) {
         a.level = a.tag.display.Lore[1].split(" ")[1] || 0;
         a.disabled = a.tag.display.Lore[a.tag.display?.Lore.length - 1].includes("ENABLED") ? false : true || false;
-        if (a?.display_name == "Mining Speed I" && a.disabled == false) {
+        if (a.display_name == "Mining Speed I" && a.disabled == false) {
           stats.mining_speed.heart_of_the_mountain ??= 0;
           stats.mining_speed.heart_of_the_mountain += a.level * 20;
         }
-        if (a?.display_name == "Mining Speed II" && a.disabled == false) {
+        if (a.display_name == "Mining Speed II" && a.disabled == false) {
           stats.mining_speed.heart_of_the_mountain ??= 0;
           stats.mining_speed.heart_of_the_mountain += a.level * 40;
         }
-        if (a?.display_name == "Mining Fortune I" && a.disabled == false) {
+        if (a.display_name == "Mining Fortune I" && a.disabled == false) {
           stats.mining_fortune.heart_of_the_mountain ??= 0;
           stats.mining_fortune.heart_of_the_mountain += a.level * 5;
         }
-        if (a?.display_name == "Mining Fortune II" && a.disabled == false) {
+        if (a.display_name == "Mining Fortune II" && a.disabled == false) {
           stats.mining_fortune.heart_of_the_mountain ??= 0;
           stats.mining_fortune.heart_of_the_mountain += a.level * 5;
         }
-        if (a?.display_name == "Seasoned Mineman" && a.disabled == false) {
+        if (a.display_name == "Seasoned Mineman" && a.disabled == false) {
           stats.mining_wisdom.heart_of_the_mountain ??= 0;
           stats.mining_wisdom.heart_of_the_mountain += 5 + a.level.split("/")[1] * 0.1 || 0;
         }
-        if (a?.display_name == "Mining Madness" && a.disabled == false) {
+        if (a.display_name == "Mining Madness" && a.disabled == false) {
           stats.mining_speed.heart_of_the_mountain ??= 0;
           stats.mining_speed.heart_of_the_mountain += 50;
           stats.mining_fortune.heart_of_the_mountain ??= 0;
@@ -136,7 +132,7 @@ export function getPlayerStats() {
     for (const harp in calculated.harp_quest || []) {
       if (harp?.endsWith("_best_completion")) {
         stats.intelligence.harp ??= 0;
-        stats.intelligence.harp += HARP_QUEST[harp];
+        stats.intelligence.harp += CONSTANTS.HARP_QUEST[harp];
       }
     }
 
@@ -144,9 +140,9 @@ export function getPlayerStats() {
     if (Object.keys(calculated.perks).length > 0) {
       for (let [name, perkData] of Object.entries(calculated.perks)) {
         name = name.replaceAll("permanent_", "");
-        if (Object.keys(FORBIDDEN_STATS).includes(name)) {
+        if (Object.keys(CONSTANTS.FORBIDDEN_STATS).includes(name)) {
           stats[name].essence_shop ??= 0;
-          stats[name].essence_shop += perkData * FORBIDDEN_STATS[name];
+          stats[name].essence_shop += perkData * CONSTANTS.FORBIDDEN_STATS[name];
         }
       }
     }
@@ -160,14 +156,14 @@ export function getPlayerStats() {
       if (piece.categories.includes("helmet")) helmet = piece;
     }
 
-    for (const armorSet of Object.keys(CUSTOM_ARMOR_ABILTIES)) {
+    for (const armorSet of Object.keys(CONSTANTS.CUSTOM_ARMOR_ABILTIES)) {
       if (
-        helmet?.tag.ExtraAttributes.id == CUSTOM_ARMOR_ABILTIES[armorSet].helmet &&
-        chestplate?.tag.ExtraAttributes.id == CUSTOM_ARMOR_ABILTIES[armorSet].chestplate &&
-        leggings?.tag.ExtraAttributes.id == CUSTOM_ARMOR_ABILTIES[armorSet].leggings &&
-        boots?.tag.ExtraAttributes.id == CUSTOM_ARMOR_ABILTIES[armorSet].boots
+        helmet?.tag.ExtraAttributes.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].helmet &&
+        chestplate?.tag.ExtraAttributes.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].chestplate &&
+        leggings?.tag.ExtraAttributes.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].leggings &&
+        boots?.tag.ExtraAttributes.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].boots
       ) {
-        for (const [stat, value] of Object.entries(CUSTOM_ARMOR_ABILTIES[armorSet].bonus)) {
+        for (const [stat, value] of Object.entries(CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].bonus)) {
           console.log(armorSet, stat, value);
           stats[stat].armor ??= 0;
           stat.includes("_cap") ? (stats[stat].armor = value) : (stats[armor] += value);
@@ -249,28 +245,29 @@ export function getPlayerStats() {
     const rarities = items.accessory_rarities;
     const player_magical_power = {};
 
-    for (const rarity in MAGICAL_POWER) {
+    for (const rarity in CONSTANTS.MAGICAL_POWER) {
       player_magical_power[rarity] = 0;
-      player_magical_power[rarity] += rarities[rarity] * MAGICAL_POWER[rarity];
+      player_magical_power[rarity] += rarities[rarity] * CONSTANTS.MAGICAL_POWER[rarity];
     }
 
-    const mp_hegemony = rarities.hegemony ? MAGICAL_POWER[rarities.hegemony.rarity] : 0;
+    const mp_hegemony = rarities.hegemony ? CONSTANTS.MAGICAL_POWER[rarities.hegemony.rarity] : 0;
     const mp_total = Object.values(player_magical_power).reduce((a, b) => a + b) + mp_hegemony;
 
     // ? Accessory reforge
-    if (calculated.selected_reforge && REFORGES[calculated.selected_reforge]?.reforge) {
-      for (const [stat, value] of Object.entries(REFORGES[calculated.selected_reforge].reforge)) {
+    if (calculated.selected_reforge && CONSTANTS.REFORGES[calculated.selected_reforge]?.reforge) {
+      for (const [stat, value] of Object.entries(CONSTANTS.REFORGES[calculated.selected_reforge].reforge)) {
         stats[stat].reforge ??= 0;
         stats[stat].reforge += value * mp_total || 0;
       }
 
       // ? Power Bonus from Reforge
-      for (const [stat, value] of Object.entries(REFORGES[calculated.selected_reforge].power_bonus)) {
+      for (const [stat, value] of Object.entries(CONSTANTS.REFORGES[calculated.selected_reforge].power_bonus)) {
         stats[stat].reforge ??= 0;
-        stats[stat].reforge += value || 0;
+        stats[stat].reforge += value;
       }
     }
   } catch (error) {
+    console.log(error);
     console.error(error);
   }
 
@@ -319,7 +316,7 @@ export function getPlayerStats() {
   }
 
   // Active accessories stats
-  let accessoryDuplicates = [];
+  const accessoryDuplicates = [];
   for (const item of items.accessories.filter((item) => !(item as Item).isInactive)) {
     if (accessoryDuplicates.includes(item.tag?.ExtraAttributes?.id)) continue;
     accessoryDuplicates.push(item.tag?.ExtraAttributes?.id);
@@ -450,8 +447,8 @@ export function getPlayerStats() {
 
   // Potion Effects
   for (const effect of calculated.active_effects) {
-    if (!effect.effect || !POTION_EFFECTS[effect.effect][effect.level]?.bonus) continue;
-    for (const [stat, value] of Object.entries(POTION_EFFECTS[effect.effect][effect.level]?.bonus) || []) {
+    if (!effect.effect || !CONSTANTS.POTION_EFFECTS[effect.effect][effect.level]?.bonus) continue;
+    for (const [stat, value] of Object.entries(CONSTANTS.POTION_EFFECTS[effect.effect][effect.level]?.bonus) || []) {
       stats[stat].potion ??= 0;
       stats[stat].potion += value;
     }

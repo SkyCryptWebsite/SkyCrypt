@@ -569,6 +569,25 @@ declare const calculated: SkyCryptPlayer & {
     amount: number;
   }[];
   reaper_peppers_eaten: number;
+  bestiary: {
+    bonus: number;
+  };
+  harp_quest: {
+    [key: string]: number;
+  };
+  perks: {
+    [key: string]: number;
+  };
+  selected_reforge: {
+    [key: string]: number;
+  };
+  hotm: {
+    [key in HOTMNames]: {
+      display_name: string;
+      level: number;
+      disabled: boolean;
+    };
+  };
 };
 
 interface SkyCryptRelativeTime {
@@ -692,3 +711,11 @@ interface StatBonusType {
     [key in StatName]?: number;
   };
 }
+
+type HOTMNames =
+  | "Mining Speed I"
+  | "Mining Speed II"
+  | "Mining Fortune I"
+  | "Mining Fortune II"
+  | "Mining Madness"
+  | "Seasoned Mineman";
