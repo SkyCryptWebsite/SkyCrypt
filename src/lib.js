@@ -983,7 +983,6 @@ export const getItems = async (
       accessory.reforge = accessory.tag.ExtraAttributes.modifier;
     }
 
-
     if (accessory.tag?.ExtraAttributes?.talisman_enrichment != undefined) {
       accessory.enrichment = accessory.tag.ExtraAttributes.talisman_enrichment.toLowerCase();
     }
