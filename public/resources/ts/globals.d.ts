@@ -569,6 +569,7 @@ declare const calculated: SkyCryptPlayer & {
     amount: number;
   }[];
   reaper_peppers_eaten: number;
+  missingPetSkins: missingPetSkins[];
 };
 
 interface SkyCryptRelativeTime {
@@ -592,6 +593,11 @@ interface PetBase extends DisplayItem {
   head: string;
   lore: string;
   type: string;
+}
+
+interface missingPetSkins extends DisplayItem {
+  name: string;
+  texture: string;
 }
 
 interface Pet extends PetBase {
