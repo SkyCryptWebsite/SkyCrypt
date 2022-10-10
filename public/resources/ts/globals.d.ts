@@ -75,8 +75,10 @@ type StatName =
   | "pristine";
 
 interface DisplayItem {
+  name?: string;
   display_name: string;
   texture_path?: string;
+  texture?: string;
   categories: string[];
   rarity: string | null;
   recombobulated: boolean | null;
