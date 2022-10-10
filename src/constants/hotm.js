@@ -768,7 +768,9 @@ class PeakOfTheMountain extends Node {
   perk(level) {
     const output = [];
 
-    for (let tier = 1; tier <= level; tier++) {
+    const baseTier = level > this.level ? level : 1;
+
+    for (let tier = baseTier; tier <= level; tier++) {
       for (const [reward, qty] of Object.entries(rewards.potm[tier])) {
         const qtyColor = rewards.rewards[reward].qtyColor;
         const formatted = rewards.rewards[reward].formatted;
