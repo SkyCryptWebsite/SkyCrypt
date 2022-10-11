@@ -85,7 +85,6 @@ interface DisplayItem {
 }
 
 interface ItemSlot {
-  tag?: any;
   categories: string[];
   itemId: string;
   item_index: number;
@@ -586,7 +585,7 @@ declare const calculated: SkyCryptPlayer & {
     [key: string]: number;
   };
   hotm: {
-    tag: unknown;
+    tag: any;
     display_name: HOTMNames | string;
     level: number;
     disabled: boolean;
