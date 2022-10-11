@@ -85,6 +85,8 @@ interface DisplayItem {
 }
 
 interface ItemSlot {
+  tag?: any;
+  categories: string[];
   itemId: string;
   item_index: number;
 }
@@ -101,6 +103,7 @@ interface Item extends DisplayItem, ItemSlot {
   tag: ItemTag;
   texture_pack?: Pack;
   isInactive?: boolean;
+  hegemony?: boolean;
 }
 
 interface ItemTag {
@@ -164,6 +167,7 @@ interface Level {
 
 declare namespace constants {
   const MAX_FAVORITES: number;
+  const HARP_QUEST: string;
 }
 
 declare const calculated: SkyCryptPlayer & {
@@ -582,9 +586,14 @@ declare const calculated: SkyCryptPlayer & {
     [key: string]: number;
   };
   hotm: {
+    tag: unknown;
     display_name: HOTMNames | string;
     level: number;
     disabled: boolean;
+  }[];
+  active_effects: {
+    effect: string;
+    level: number;
   }[];
 };
 
