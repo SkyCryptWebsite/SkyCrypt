@@ -152,9 +152,6 @@ export function getLevelByXp(xp, extra = {}) {
   const levelCap =
     extra.cap ?? constants.DEFAULT_SKILL_CAPS[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
 
-  /** the maximum level that any player can achieve (used for gold progress bars) */
-  const maxLevel = constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
-
   /** the level ignoring the cap and using only the table */
   let uncappedLevel = 0;
 
@@ -172,17 +169,31 @@ export function getLevelByXp(xp, extra = {}) {
     }
   }
 
+  if (extra.type == "dungeoneering" && !extra.class) {
+    while (xpCurrent >= 200000000) {
+      uncappedLevel++;
+      xpCurrent -= 200000000;
+    }
+  }
+
+  /** the maximum level that any player can achieve (used for gold progress bars) */
+  const maxLevel =
+    extra.type == "dungeoneering" && uncappedLevel > 50
+      ? uncappedLevel
+      : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
+
   // not sure why this is floored but I'm leaving it in for now
   xpCurrent = Math.floor(xpCurrent);
 
   /** the level as displayed by in game UI */
-  const level = Math.min(levelCap, uncappedLevel);
+  const level = extra.type != "dungeoneering" && !extra.class ? Math.min(levelCap, uncappedLevel) : uncappedLevel;
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
   const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
   /** the fraction of the way toward the next level */
-  const progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+  const progress =
+    extra.type == "dungeoneering" && !extra.class && level > 50 ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
   const levelWithProgress = level + progress;
@@ -1787,6 +1798,7 @@ export async function getStats(
   output.minions = getMinions(profile.members);
   output.minion_slots = getMinionSlots(output.minions);
   output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
+  output.bestiary = getBestiary(profile.uuid, profile);
   output.social = hypixelProfile.socials;
 
   output.dungeons = getDungeons(userProfile, hypixelProfile);
@@ -2733,6 +2745,65 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
   return output;
 }
 
+export function getBestiary(uuid, profile) {
+  const output = {};
+
+  const userProfile = profile.members[uuid];
+
+  if (!("unlocked_coll_tiers" in userProfile) || !("collection" in userProfile)) {
+    return output;
+  }
+
+  const result = {
+    level: 0,
+    categories: {},
+  };
+
+  let totalCollection = 0;
+  const bestiaryFamilies = {};
+  for (const [name, value] of Object.entries(userProfile.bestiary || {})) {
+    if (name.startsWith("kills_family_")) {
+      bestiaryFamilies[name] = value;
+    }
+  }
+
+  for (const family of Object.keys(constants.BESTIARY)) {
+    result.categories[family] = {};
+    for (const mob of constants.BESTIARY[family].mobs) {
+      const mobName = mob.id.substring(13);
+
+      const boss = mob.boss == true ? "boss" : "regular";
+
+      let kills = bestiaryFamilies[mob.id] || 0;
+      let head = mob.head;
+      let itemId = mob.itemId;
+      let damage = mob.damage;
+      let name = mob.name;
+      let maxTier = mob.maxTier ?? 41;
+      let tier =
+        constants.BEASTIARY_KILLS[boss].filter((k) => k <= kills).length > maxTier
+          ? maxTier
+          : constants.BEASTIARY_KILLS[boss].filter((k) => k <= kills).length;
+      totalCollection += tier;
+
+      result.categories[family][mobName] = {
+        head: head,
+        name: name,
+        itemId: itemId,
+        damage: damage,
+        tier: tier,
+        maxTier: maxTier,
+        kills: kills,
+      };
+    }
+  }
+  result.tiersUnlocked = totalCollection;
+  result.level = totalCollection / 10;
+  result.bonus = result.level.toFixed(0) * 2;
+
+  return result;
+}
+
 export function getDungeons(userProfile, hypixelProfile) {
   const output = {};
 
@@ -2815,7 +2886,7 @@ export function getDungeons(userProfile, hypixelProfile) {
     }
 
     output.classes[className] = {
-      experience: getLevelByXp(data.experience, { type: "dungeoneering" }),
+      experience: getLevelByXp(data.experience, { type: "dungeoneering", class: className }),
       current: false,
     };
 
