@@ -40,7 +40,7 @@ export function getPlayerStats() {
     health_cap: { base: 0 },
   };
   const allowedStats = Object.keys(stats);
-  const temp: { [key: string]: number; } = {};
+  const temp: { [key: string]: number } = {};
   let statsMultiplier = 0,
     healthMultiplier = 0,
     defenseMultiplier = 0,
@@ -164,7 +164,9 @@ export function getPlayerStats() {
       for (const [stat, value] of Object.entries(CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].bonus)) {
         console.log(armorSet, stat, value);
         stats[stat].armor ??= 0;
-        stat.includes("_cap") ? (stats[stat].armor = value as keyof typeof value) : (stats[stat].armor += value as keyof typeof value);
+        stat.includes("_cap")
+          ? (stats[stat].armor = value as keyof typeof value)
+          : (stats[stat].armor += value as keyof typeof value);
       }
     }
 
@@ -241,7 +243,7 @@ export function getPlayerStats() {
 
   // Reforge
   const rarities = items.accessory_rarities;
-  const playerMagicalPower: { [key: string]: number; } = {};
+  const playerMagicalPower: { [key: string]: number } = {};
 
   for (const rarity in CONSTANTS.MAGICAL_POWER) {
     playerMagicalPower[rarity] = 0;
@@ -255,7 +257,7 @@ export function getPlayerStats() {
   if (calculated.selected_reforge && CONSTANTS.REFORGES[calculated.selected_reforge]?.reforge) {
     for (const [stat, value] of Object.entries(CONSTANTS.REFORGES[calculated.selected_reforge].reforge)) {
       stats[stat].reforge ??= 0;
-      stats[stat].reforge += value as number * mpTotal;
+      stats[stat].reforge += (value as number) * mpTotal;
     }
 
     // ? Power Bonus from Reforge
