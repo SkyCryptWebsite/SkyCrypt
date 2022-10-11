@@ -582,12 +582,10 @@ declare const calculated: SkyCryptPlayer & {
     [key: string]: number;
   };
   hotm: {
-    [key in HOTMNames]: {
-      display_name: string;
-      level: number;
-      disabled: boolean;
-    };
-  };
+    display_name: HOTMNames | string;
+    level: number;
+    disabled: boolean;
+  }[];
 };
 
 interface SkyCryptRelativeTime {

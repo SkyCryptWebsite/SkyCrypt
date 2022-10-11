@@ -379,6 +379,7 @@ const symbols = {
   dungeon_upgrade: "⚚",
   dye: "✿",
 };
+
 for (const stat in STATS_DATA) {
   symbols[stat] = STATS_DATA[stat].symbol;
 }

@@ -769,14 +769,3 @@ for (const upgrade in ACCESSORY_UPGRADES) {
 }
 
 export const UNIQUE_ACCESSORIES_COUNT = Object.keys(uniqueAccessories).length;
-
-export const MAGICAL_POWER = {
-  common: 3,
-  uncommon: 5,
-  rare: 8,
-  epic: 12,
-  legendary: 16,
-  mythic: 22,
-  special: 3,
-  very_special: 5,
-};
