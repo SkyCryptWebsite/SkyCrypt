@@ -22,10 +22,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install node dependencies
-        run: npm ci
+        run: pnpm i
 
       - name: es-lint
-        run: npm run lint
+        run: pnpm lint
 
   ejs-lint:
     runs-on: ubuntu-latest
@@ -39,10 +39,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install node dependencies
-        run: npm ci
+        run: pnpm i
 
       - name: ejs-lint
-        run: npm run lint:ejs
+        run: pnpm lint:ejs
 
   prettier:
     runs-on: ubuntu-latest
@@ -56,10 +56,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install node dependencies
-        run: npm ci
+        run: pnpm i
 
       - name: prettier
-        run: npm run prettier
+        run: pnpm prettier
 
   check-ts:
     name: check typescript
@@ -74,7 +74,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install node dependencies
-        run: npm ci
+        run: pnpm i
 
       - name: tsc
         run: npx tsc -p public/resources/ts --noEmit
@@ -92,10 +92,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install node dependencies
-        run: npm ci
+        run: pnpm i
 
       - name: rollup
-        run: npm run rollup
+        run: pnpm rollup
 
   build-scss:
     name: build scss
@@ -110,10 +110,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install node dependencies
-        run: npm ci
+        run: pnpm i
 
       - name: build scss
-        run: npm run scss
+        run: pnpm scss
 
   deploy-production:
     name: deploy production
