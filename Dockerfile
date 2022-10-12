@@ -4,5 +4,5 @@ LABEL maintainer="SkyCrypt"
 RUN mkdir -p /usr/src/main
 WORKDIR '/usr/src/main'
 COPY . /usr/src/main
-RUN npm ci && npm build
+RUN pnpm ci && pnpm build
 EXPOSE 32464
