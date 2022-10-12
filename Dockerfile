@@ -4,5 +4,6 @@ LABEL maintainer="SkyCrypt"
 RUN mkdir -p /usr/src/main
 WORKDIR '/usr/src/main'
 COPY . /usr/src/main
-RUN pnpm ci && pnpm build
+RUN pnpm install --offline
+RUN pnpm i && pnpm build
 EXPOSE 32464
