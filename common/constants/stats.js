@@ -1,5 +1,6 @@
-/*
- * Ordered object of stats: {
+/**
+ * Ordered object of stats
+ * @type {{[key:string]: {
  *   name: string
  *   nameLore: string // name found in items lore
  *   nameShort: string // up to 16 chars
@@ -7,7 +8,7 @@
  *   symbol: string
  *   suffix: string
  *   color: string
- * }
+ * }}}
  */
 export const STATS_DATA = {
   health: {
