@@ -1419,11 +1419,13 @@ export async function getStats(
 
   if (!items.no_inventory) output.missingAccessories = getMissingAccessories(items.accessory_ids);
 
+  output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
+
   if (!userProfile.pets) userProfile.pets = [];
 
   userProfile.pets.push(...items.pets);
 
-  output.pets = await getPets(userProfile);
+  output.pets = await getPets(userProfile, output.collections);
   output.missingPets = await getMissingPets(output.pets, profile.game_mode);
   output.petScore = getPetScore(output.pets);
 
@@ -1585,7 +1587,6 @@ export async function getStats(
   output.members = members.filter((a) => a.uuid != profile.uuid);
   output.minions = getMinions(profile.members);
   output.minion_slots = getMinionSlots(output.minions);
-  output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
   output.social = hypixelProfile.socials;
 
   output.dungeons = getDungeons(userProfile, hypixelProfile);
@@ -2008,7 +2009,7 @@ export async function getStats(
   return output;
 }
 
-export async function getPets(profile) {
+export async function getPets(profile, collections) {
   let output = [];
 
   if (!("pets" in profile)) return output;
@@ -2091,9 +2092,9 @@ export async function getPets(profile) {
     const rarity = constants.RARITIES.indexOf(pet.rarity);
 
     const searchName = pet.type in constants.PET_STATS ? pet.type : "???";
-    const petInstance = new constants.PET_STATS[searchName](rarity, pet.level.level, pet.extra, profile);
-    pet.stats = Object.assign({}, petInstance.stats);
+    const petInstance = new constants.PET_STATS[searchName](rarity, pet.level.level, pet.extra, collections);
     delete petInstance.profile;
+    pet.stats = Object.assign({}, petInstance.stats);
     pet.ref = petInstance;
 
     if (pet.heldItem) {
@@ -2252,8 +2253,9 @@ async function getMissingPets(pets, gameMode) {
     if (
       ownedPetTypes.includes(petData.typeGroup ?? petType) ||
       (petData.bingoExclusive === true && gameMode !== "bingo")
-    )
+    ) {
       continue;
+    }
 
     missingPets[petData.typeGroup ?? petType] ??= [];
     missingPets[petData.typeGroup ?? petType].push({
@@ -2900,10 +2902,10 @@ function getProfileUpgrades(profile) {
 export async function getProfile(
   db,
   uuid,
-  profileId,
+  paramProfile,
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` }
 ) {
-  console.debug(`${options.debugId}: getProfile(${uuid}${profileId ? `, ${profileId}` : ""}) called.`);
+  console.debug(`${options.debugId}: getProfile called.`);
   const timeStarted = Date.now();
 
   if (uuid.length != 32) {
@@ -2915,7 +2917,7 @@ export async function getProfile(
     }
   }
 
-  if (profileId) profileId = profileId.toLowerCase();
+  if (paramProfile) paramProfile = paramProfile.toLowerCase();
 
   let profileObject = await db.collection("profileStore").findOne({ uuid: sanitize(uuid) });
   const params = { key: credentials.hypixel_api_key, uuid: uuid };
@@ -2972,10 +2974,10 @@ export async function getProfile(
 
   let skyBlockProfiles = [];
 
-  if (profileId)
-    profileId.length == 32
-      ? (skyBlockProfiles = allSkyBlockProfiles.filter((a) => a.profile_id.toLowerCase() == profileId))
-      : (skyBlockProfiles = allSkyBlockProfiles.filter((a) => a.cute_name.toLowerCase() == profileId));
+  if (paramProfile)
+    paramProfile.length == 32
+      ? (skyBlockProfiles = allSkyBlockProfiles.filter((a) => a.profile_id.toLowerCase() == paramProfile))
+      : (skyBlockProfiles = allSkyBlockProfiles.filter((a) => a.cute_name.toLowerCase() == paramProfile));
   if (skyBlockProfiles.length == 0) skyBlockProfiles = allSkyBlockProfiles;
 
   const profiles = [];
@@ -2986,7 +2988,7 @@ export async function getProfile(
       memberCount++;
     }
 
-    if (memberCount == 0 && profileId) throw new Error("Uh oh, this SkyBlock profile has no players.");
+    if (memberCount == 0 && paramProfile) throw new Error("Uh oh, this SkyBlock profile has no players.");
 
     profiles.push(profile);
   }
