@@ -2153,9 +2153,9 @@ export async function getStats(
       auctions_sold[key.replace("auctions_sold_", "")] = userProfile.stats[key];
     } else if (key.includes("auctions_bought_")) {
       auctions_bought[key.replace("auctions_bought_", "")] = userProfile.stats[key];
-    } else if (key.startsWith("kills_") && key.endsWith("_dragon")) {
+    } else if (key.startsWith("kills_") && key.endsWith("_dragon") && key !== "kills_master_wither_king_dragon") {
       misc.dragons["last_hits"] += userProfile.stats[key];
-    } else if (key.startsWith("deaths_") && key.endsWith("_dragon")) {
+    } else if (key.startsWith("deaths_") && key.endsWith("_dragon") && key !== "deaths_master_wither_king_dragon") {
       misc.dragons["deaths"] += userProfile.stats[key];
     } else if (key.includes("kills_corrupted_protector")) {
       misc.protector["last_hits"] = userProfile.stats[key];
@@ -2896,9 +2896,13 @@ export function getDungeons(userProfile, hypixelProfile) {
     if (className == current_class) {
       output.classes[className].current = true;
     }
+
+    output.class_average ??= 0;
+    output.class_average += output.classes[className].experience.level;
   }
 
   output.used_classes = used_classes;
+  output.class_average = output.class_average / Object.keys(output.classes).length;
 
   output.selected_class = current_class;
   output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
