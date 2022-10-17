@@ -112,6 +112,8 @@ export const ACCESSORY_UPGRADES = {
   // BURNING_KUUDRA_CORE: ["FIERY_KUUDRA_CORE", "INFERNAL_KUUDRA_CORE"],
   // FIERY_KUUDRA_CORE: ["INFERNAL_KUUDRA_CORE"],
   BURSTSTOPPER_TALISMAN: ["BURSTSTOPPER_ARTIFACT"],
+  GREAT_SPOOK_TALISMAN: ["GREAT_SPOOK_RING", "GREAT_SPOOK_ARTIFACT"],
+  GREAT_SPOOK_RING: ["GREAT_SPOOK_ARTIFACT"],
 };
 
 export const ACCESSORY_DUPLICATES = {
@@ -756,6 +758,21 @@ export const ACCESSORIES = {
     name: "Chumming Talisman",
     rarity: "uncommon",
     texture: "/head/9b688545e326e4f1fd1c405873d9c5b8bbe69dd26889ce3dea10b4d9e3d7b4db",
+  },
+  GREAT_SPOOK_TALISMAN: {
+    name: "Great Spook Talisman",
+    rarity: "common",
+    texture: "/head/b83adf648d4e97de3b928a4e82d1169c1978d71e18757cbaee36627b9b0d3f2e",
+  },
+  GREAT_SPOOK_RING: {
+    name: "Great Spook Ring",
+    rarity: "uncommon",
+    texture: "/head/8566b0b75f9a173e8155007bdc3a3499874b17327d98645cde6d11a2255750c",
+  },
+  GREAT_SPOOK_ARTIFACT: {
+    name: "Great Spook Artifact",
+    rarity: "rare",
+    texture: "/head/a89cc1ede755709debb7d1fe7ab8129ac8901788d8d8613b03eac157c23cc49c",
   },
 };
 
