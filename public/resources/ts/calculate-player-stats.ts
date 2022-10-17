@@ -146,23 +146,22 @@ export function getPlayerStats() {
   }
 
   // Armor Abiltiies
-  let boots, leggings, chestplate, helmet;
+  let boots: Item | undefined, leggings: Item | undefined, chestplate: Item | undefined, helmet: Item | undefined;
   for (const piece of items.armor) {
-    if (piece.categories.includes("boots")) boots = piece;
-    if (piece.categories.includes("leggings")) leggings = piece;
-    if (piece.categories.includes("chestplate")) chestplate = piece;
-    if (piece.categories.includes("helmet")) helmet = piece;
+    if (piece.categories.includes("boots")) boots = piece as Item;
+    if (piece.categories.includes("leggings")) leggings = piece as Item;
+    if (piece.categories.includes("chestplate")) chestplate = piece as Item;
+    if (piece.categories.includes("helmet")) helmet = piece as Item;
   }
 
   for (const armorSet of Object.keys(CONSTANTS.CUSTOM_ARMOR_ABILTIES)) {
     if (
-      helmet?.tag.ExtraAttributes.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].helmet &&
-      chestplate?.tag.ExtraAttributes.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].chestplate &&
-      leggings?.tag.ExtraAttributes.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].leggings &&
-      boots?.tag.ExtraAttributes.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].boots
+      helmet?.tag?.ExtraAttributes?.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].helmet &&
+      chestplate?.tag?.ExtraAttributes?.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].chestplate &&
+      leggings?.tag?.ExtraAttributes?.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].leggings &&
+      boots?.tag?.ExtraAttributes?.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].boots
     ) {
       for (const [stat, value] of Object.entries(CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].bonus)) {
-        console.log(armorSet, stat, value);
         stats[stat].armor ??= 0;
         stat.includes("_cap")
           ? (stats[stat].armor = value as keyof typeof value)
@@ -173,48 +172,48 @@ export function getPlayerStats() {
     // TODO: Make Special Abilities work with format above
     // ? Mastiff Armor
     if (
-      helmet?.tag.ExtraAttributes.id == "MASTIFF_HELMET" &&
-      chestplate?.tag.ExtraAttributes.id == "MASTIFF_CHESTPLATE" &&
-      leggings?.tag.ExtraAttributes.id == "MASTIFF_LEGGINGS" &&
-      boots?.tag.ExtraAttributes.id == "MASTIFF_BOOTS"
+      helmet?.tag?.ExtraAttributes?.id == "MASTIFF_HELMET" &&
+      chestplate?.tag?.ExtraAttributes?.id == "MASTIFF_CHESTPLATE" &&
+      leggings?.tag?.ExtraAttributes?.id == "MASTIFF_LEGGINGS" &&
+      boots?.tag?.ExtraAttributes?.id == "MASTIFF_BOOTS"
     ) {
-      stats.health.armor += stats.crit_damage * 50;
-      stats.crit_damage.armor = stats["crit_damage"] / 2;
+      stats.health.armor = stats.health.armor + stats.crit_damage * 50;
+      stats.crit_damage.armor = stats.crit_damage / 2;
     }
 
     // ? Obsidian Chestplate
     /*
-    if (chestplate?.tag.ExtraAttributes.id == 'OBSIDIAN_CHESTPLATE') {
+    if (chestplate?.tag?.ExtraAttributes?.id == 'OBSIDIAN_CHESTPLATE') {
       stats.speed.armor += itemCount.OBSIDIAN.armor / 20 ? (itemCount.OBSIDIAN.armor / 20).toFixed(0) : 0;
     }
     */
 
     // ? Glacite Armor
     if (
-      helmet?.tag.ExtraAttributes.id == "GLACITE_HELMET" &&
-      chestplate?.tag.ExtraAttributes.id == "GLACITE_CHESTPLATE" &&
-      leggings?.tag.ExtraAttributes.id == "GLACITE_LEGGINGS" &&
-      boots?.tag.ExtraAttributes.id == "GLACITE_BOOTS"
+      helmet?.tag?.ExtraAttributes?.id == "GLACITE_HELMET" &&
+      chestplate?.tag?.ExtraAttributes?.id == "GLACITE_CHESTPLATE" &&
+      leggings?.tag?.ExtraAttributes?.id == "GLACITE_LEGGINGS" &&
+      boots?.tag?.ExtraAttributes?.id == "GLACITE_BOOTS"
     ) {
       stats.mining_speed.armor += calculated.levels.mining.level * 2;
     }
 
     // ? Fairy Armor
     if (
-      helmet?.tag.ExtraAttributes.id == "FAIRY_HELMET" &&
-      chestplate?.tag.ExtraAttributes.id == "FAIRY_CHESTPLATE" &&
-      leggings?.tag.ExtraAttributes.id == "FAIRY_LEGGINGS" &&
-      boots?.tag.ExtraAttributes.id == "FAIRY_BOOTS"
+      helmet?.tag?.ExtraAttributes?.id == "FAIRY_HELMET" &&
+      chestplate?.tag?.ExtraAttributes?.id == "FAIRY_CHESTPLATE" &&
+      leggings?.tag?.ExtraAttributes?.id == "FAIRY_LEGGINGS" &&
+      boots?.tag?.ExtraAttributes?.id == "FAIRY_BOOTS"
     ) {
       stats.health.armor += calculated.fairy_souls.collected || 0;
     }
 
     // ? Emerald Armor
     if (
-      helmet?.tag.ExtraAttributes.id == "EMERALD_ARMOR_HELMET" &&
-      chestplate?.tag.ExtraAttributes.id == "EMERALD_ARMOR_CHESTPLATE" &&
-      leggings?.tag.ExtraAttributes.id == "EMERALD_ARMOR_LEGGINGS" &&
-      boots?.tag.ExtraAttributes.id == "EMERALD_ARMOR_BOOTS"
+      helmet?.tag?.ExtraAttributes?.id == "EMERALD_ARMOR_HELMET" &&
+      chestplate?.tag?.ExtraAttributes?.id == "EMERALD_ARMOR_CHESTPLATE" &&
+      leggings?.tag?.ExtraAttributes?.id == "EMERALD_ARMOR_LEGGINGS" &&
+      boots?.tag?.ExtraAttributes?.id == "EMERALD_ARMOR_BOOTS"
     ) {
       const amount: number = calculated.collections.EMERALD.amount;
       stats.health.armor ??= 0;

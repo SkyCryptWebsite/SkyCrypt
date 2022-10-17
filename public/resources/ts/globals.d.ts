@@ -72,7 +72,23 @@ type StatName =
   | "mining_fortune"
   | "farming_fortune"
   | "foraging_fortune"
-  | "pristine";
+  | "pristine"
+  | "fishing_speed"
+  | "health_regen"
+  | "vitality"
+  | "mending"
+  | "combat_wisdom"
+  | "mining_wisdom"
+  | "farming_wisdom"
+  | "foraging_wisdom"
+  | "fishing_wisdom"
+  | "enchanting_wisdom"
+  | "alchemy_wisdom"
+  | "carpentry_wisdom"
+  | "runecrafting_wisdom"
+  | "social_wisdom"
+  | "speed_cap"
+  | "health_cap";
 
 interface DisplayItem {
   display_name: string;
@@ -102,7 +118,9 @@ interface Item extends DisplayItem, ItemSlot {
   tag: ItemTag;
   texture_pack?: Pack;
   isInactive?: boolean;
-  hegemony?: boolean;
+  hegemony?: {
+    [key: string]: string;
+  };
 }
 
 interface ItemTag {
@@ -582,7 +600,10 @@ declare const calculated: SkyCryptPlayer & {
     [key: string]: number;
   };
   selected_reforge: {
-    [key: string]: number;
+    power_bonus: {
+      [key: string]: number;
+    }
+    refoge: string;
   };
   hotm: {
     tag: any;
