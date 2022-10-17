@@ -152,9 +152,6 @@ export function getLevelByXp(xp, extra = {}) {
   const levelCap =
     extra.cap ?? constants.DEFAULT_SKILL_CAPS[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
 
-  /** the maximum level that any player can achieve (used for gold progress bars) */
-  const maxLevel = constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
-
   /** the level ignoring the cap and using only the table */
   let uncappedLevel = 0;
 
@@ -172,17 +169,31 @@ export function getLevelByXp(xp, extra = {}) {
     }
   }
 
+  if (extra.type == "dungeoneering" && !extra.class) {
+    while (xpCurrent >= 200000000) {
+      uncappedLevel++;
+      xpCurrent -= 200000000;
+    }
+  }
+
+  /** the maximum level that any player can achieve (used for gold progress bars) */
+  const maxLevel =
+    extra.type == "dungeoneering" && uncappedLevel > 50
+      ? uncappedLevel
+      : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
+
   // not sure why this is floored but I'm leaving it in for now
   xpCurrent = Math.floor(xpCurrent);
 
   /** the level as displayed by in game UI */
-  const level = Math.min(levelCap, uncappedLevel);
+  const level = extra.type != "dungeoneering" && !extra.class ? Math.min(levelCap, uncappedLevel) : uncappedLevel;
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
   const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
   /** the fraction of the way toward the next level */
-  const progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+  const progress =
+    extra.type == "dungeoneering" && !extra.class && level > 50 ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
   const levelWithProgress = level + progress;
@@ -1788,9 +1799,12 @@ export async function getStats(
   output.minion_slots = getMinionSlots(output.minions);
   output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
   output.bestiary = getBestiary(profile.uuid, profile);
+<<<<<<< HEAD
   output.trophyFish = getTrophyFish(userProfile);
   console.log(output.trophyFish);
 
+=======
+>>>>>>> 18be0970e1fc5511ce4b55c8be69de7c130ac439
   output.social = hypixelProfile.socials;
 
   output.dungeons = getDungeons(userProfile, hypixelProfile);
@@ -2010,10 +2024,48 @@ export async function getStats(
   }
 
   mining.forge = await getForge(userProfile);
-  mining.core = await getMiningCoreData(userProfile);
+  mining.core = getMiningCoreData(userProfile);
 
   output.mining = mining;
 
+  // CRIMSON ISLES
+
+  const crimsonIsles = {
+    kuudra_completed_tiers: {},
+    dojo: {},
+    factions: {},
+    total_dojo_points: 0,
+  };
+
+  crimsonIsles.factions.selected_faction = userProfile.nether_island_player_data?.selected_faction ?? "None";
+  crimsonIsles.factions.mages_reputation = userProfile.nether_island_player_data?.mages_reputation ?? 0;
+  crimsonIsles.factions.barbarians_reputation = userProfile.nether_island_player_data?.barbarians_reputation ?? 0;
+
+  Object.keys(constants.KUUDRA_TIERS).forEach((key) => {
+    crimsonIsles.kuudra_completed_tiers[key] = {
+      name: constants.KUUDRA_TIERS[key].name,
+      head: constants.KUUDRA_TIERS[key].head,
+      completions: userProfile.nether_island_player_data?.kuudra_completed_tiers[key] ?? 0,
+    };
+  });
+
+  Object.keys(constants.DOJO).forEach((key) => {
+    key = key.replaceAll("dojo_points_", "").replaceAll("dojo_time_", "");
+    crimsonIsles.total_dojo_points += userProfile.nether_island_player_data?.dojo[`dojo_points_${key}`] ?? 0;
+    crimsonIsles.dojo[key.toUpperCase()] = {
+      name: constants.DOJO[key].name,
+      id: constants.DOJO[key].itemId,
+      damage: constants.DOJO[key].damage,
+      points: userProfile.nether_island_player_data?.dojo[`dojo_points_${key}`] ?? 0,
+      time: userProfile.nether_island_player_data?.dojo[`dojo_time_${key}`] ?? 0,
+    };
+  });
+
+  output.crimsonIsles = crimsonIsles;
+
+  // TROPHY FISH
+  output.trophyFish = getTrophyFish(userProfile);
+  
   // MISC
 
   const misc = {};
@@ -2702,6 +2754,7 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
   return output;
 }
 
+<<<<<<< HEAD
 export function getTrophyFish(userProfile) {
   const trophyFish = {
     total_caught: 0,
@@ -2731,6 +2784,8 @@ export function getTrophyFish(userProfile) {
   return trophyFish;
 }
 
+=======
+>>>>>>> 18be0970e1fc5511ce4b55c8be69de7c130ac439
 export function getBestiary(uuid, profile) {
   const output = {};
 
@@ -2790,6 +2845,38 @@ export function getBestiary(uuid, profile) {
   return result;
 }
 
+<<<<<<< HEAD
+=======
+export function getTrophyFish(userProfile) {
+  const trophyFish = {
+    total_caught: 0,
+    rewards: [],
+    fish: [],
+  };
+  trophyFish.rewards = userProfile.trophy_fish.rewards;
+  trophyFish.total_caught = userProfile.trophy_fish.total_caught;
+  Object.keys(userProfile.trophy_fish).forEach((key) => {
+    const type = key
+      .toUpperCase()
+      .replaceAll("_BRONZE", "")
+      .replaceAll("_SILVER", "")
+      .replaceAll("_GOLD", "")
+      .replaceAll("_DIAMOND", "");
+    if (key == "rewards" || key == "total_caught") return;
+
+    trophyFish.fish[key.toUpperCase()] = {
+      id: key.toUpperCase(),
+      name: constants.TROPHY_FISH[type].name,
+      amount: userProfile.trophy_fish[key],
+      head: constants.TROPHY_FISH[type].head,
+      description: constants.TROPHY_FISH[type].description,
+    };
+  });
+
+  return trophyFish;
+}
+
+>>>>>>> 18be0970e1fc5511ce4b55c8be69de7c130ac439
 export function getDungeons(userProfile, hypixelProfile) {
   const output = {};
 
@@ -2872,7 +2959,7 @@ export function getDungeons(userProfile, hypixelProfile) {
     }
 
     output.classes[className] = {
-      experience: getLevelByXp(data.experience, { type: "dungeoneering" }),
+      experience: getLevelByXp(data.experience, { type: "dungeoneering", class: className }),
       current: false,
     };
 

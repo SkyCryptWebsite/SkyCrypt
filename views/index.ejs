@@ -1,63 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>SkyCrypt</title>
-  <% if (error) { %> <meta name="robots" content="noindex" /> <% } %>
+  <% if (error) { %>
+  <meta name="robots" content="noindex" /> <% } %>
   <% const description = "A beautiful site for sharing your SkyBlock profile 🍣" %>
   <meta name="description" content="<%= description %>">
   <link rel="icon" href="/resources/img/logo_square.svg" sizes="any" type="image/svg+xml">
   <meta property="og:image" content="/resources/img/logo_square.svg">
   <meta property="og:title" content="SkyBlock Stats">
   <meta property="og:description" content="<%= description %>">
-<%- include('../includes/resources') %>
+  <%- include('../includes/resources') %>
   <link rel="prefetch" href="/resources/img/inventory/items.webp?v14">
   <link rel="prefetch" href="/resources/css/inventory.css?<%- fileHashes.css['inventory.css'] %>">
 </head>
-  <body class="page-index">
-    <%- include('../includes/header') %>
-    <main class="grid">
-      <form class="lookup-player">
-        <p>Show SkyBlock stats for</p>
-        <input name="ign" <% if(player){ %> value="<%= player %>" <% }%> type="search" enterkeyhint="go" placeholder="Enter username" aria-label="username" autofocus required>
-        <button type="submit" class="big-green-button">Show me</button>
-        <%# <p>or take me to a <a href="/random/stats">random profile</a>.</p> %>
-      </form>
-      <% if(extra.cacheOnly) { %>
-        <figure class="banner error">
-            <figcaption>Cache Only Mode!</figcaption>
-            <p>
-              SkyCrypt is <strong>only</strong> showing the last known state of users' profiles which may be outdated due to API maintenance.<br>
-              <%# <i>If a profile wasn't viewed/cached before, it can't be viewed.</i><br> %>
-              <br>
-              For more info about Hypixel outages visit the official <a href="https://status.hypixel.net/" target="_blank" rel="noreferrer"> Hypixel Status</a>.
-            </p>
-        </figure>
-      <% } %>
-      <div id="error_box_wrapper" <% if (error) { %>class="show-error"<% } %>>
-        <div id="error_box">
-          <div id="error_top">
-            <div id="error_title">Error</div>
-            <div id="error_text">
-              <%= error instanceof Error ? error.message : String(error) %><br>
-            </div>
-          </div>
-          <div id="error_bottom">
-            <% if (error instanceof Error && error.message.includes("Key throttle.")) { %>
-            <div id="error_subtext">
-              This happens when the site reaches the Hypixel API limit.<br>
-              Please try again in a minute.
-            </div>
-            <% } %>
+
+<body class="page-index">
+  <%- include('../includes/header') %>
+  <main class="grid">
+    <form class="lookup-player">
+      <p>Show SkyBlock stats for</p>
+      <input name="ign" <% if(player){ %> value="<%= player %>" <% }%> type="search" enterkeyhint="go" placeholder="Enter username" aria-label="username" autofocus required>
+      <button type="submit" class="big-green-button">Show me</button>
+      <%# <p>or take me to a <a href="/random/stats">random profile</a>.</p> %>
+    </form>
+    <% if(extra.cacheOnly) { %>
+    <figure class="banner error">
+      <figcaption>Cache Only Mode!</figcaption>
+      <p>
+        SkyCrypt is <strong>only</strong> showing the last known state of users' profiles which may be outdated due to API maintenance.<br>
+        <%# <i>If a profile wasn't viewed/cached before, it can't be viewed.</i><br> %>
+        <br>
+        For more info about Hypixel outages visit the official <a href="https://status.hypixel.net/" target="_blank" rel="noreferrer"> Hypixel Status</a>.
+      </p>
+    </figure>
+    <% } %>
+    <div id="error_box_wrapper" <% if (error) { %>class="show-error" <% } %>>
+      <div id="error_box">
+        <div id="error_top">
+          <div id="error_title">Error</div>
+          <div id="error_text">
+            <%= error instanceof Error ? error.message : String(error) %><br>
           </div>
         </div>
+        <div id="error_bottom">
+          <% if (error instanceof Error && error.message.includes("Key throttle.")) { %>
+          <div id="error_subtext">
+            This happens when the site reaches the Hypixel API limit.<br>
+            Please try again in a minute.
+          </div>
+          <% } %>
+        </div>
       </div>
-      <a href="<%= promotion.url %>" target="_blank" rel="noreferrer" class="external-app form-banner">
-        <div class="external-app-icon monochrome" style="background-image: url(<%= promotion.image %>)"></div>
-        <div class="external-app-name"><%- promotion.title %></div>
-        <div class="external-app-description"><%- promotion.description %></div>
-      </a>
+    </div>
+    <a href="<%= promotion.url %>" target="_blank" rel="noreferrer" class="external-app form-banner">
+      <div class="external-app-icon monochrome" style="background-image: url(<%= promotion.image %>)"></div>
+      <div class="external-app-name"><%- promotion.title %></div>
+      <div class="external-app-description"><%- promotion.description %></div>
+    </a>
 
-      <%
+    <%
         const developerRoles = {
           MAINTAINER: {
             svgPath: /* mdi-xml */ "M12.89,3L14.85,3.4L11.11,21L9.15,20.6L12.89,3M19.59,12L16,8.41V5.58L22.42,12L16,18.41V15.58L19.59,12M1.58,12L8,5.58V8.41L4.41,12L8,15.58V18.41L1.58,12Z",
@@ -84,102 +87,102 @@
         }
       %>
 
-      <% if(extra.favorites?.length){
+    <% if(extra.favorites?.length){
         for(let profile of extra.favorites){
           if(profile.error) continue;
-
-          const lastUpdated = profile.last_updated;
-          let lastUpdatedText = "";
-          const diff = (+new Date() - lastUpdated) / 1000;
-
-          if(diff < 10 * 60)
-            lastUpdatedText = `<span class="stat-value">Currently online</span>`;
-          else
-            lastUpdatedText = `<span class="stat-name">Last online: </span><span class="stat-value">${moment(lastUpdated).fromNow()}</span>`;
       %>
-      <a href="/stats/<%= profile.uuid %>" class="top-profile">
-        <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
-        <div class="profile-name">
-          <%= profile.username %>
-          <% if('emojiImg' in profile){ %>
-            <img class="emoji" draggable="false" src="<%= profile.emojiImg %>" alt="<%= profile.emojiImg.split('/').pop().split('.')[0] %>">
-          <% }else if('emoji' in profile){ %>
-            <%-" " + extra.twemoji.parse(profile.emoji) %>
-          <% } %>
-        </div>
-        <div class="profile-last-online"><%- lastUpdatedText %></div>
-        <svg class="profile-rank" viewBox="0 0 24 24">
-          <title>Favorited profile</title>
-          <%# mdi-star %>
-          <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
-        </svg>
-      </a>
-      <% }}else{ %>
-      <span class="top-profile">
-        <img src="/resources/img/icons/q.png" class="profile-avatar" alt="">
-        <div class="profile-name">No favorites set!</div>
-        <div class="profile-last-online">Why don't you set a favorite?</div>
-      </span>
-      <% } %>
+    <a href="/stats/<%= profile.uuid %>" class="top-profile">
+      <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
+      <div class="favorite-profile-name">
+        <%= profile.username %>
+        <% if('emojiImg' in profile){ %>
+        <img class="emoji" draggable="false" src="<%= profile.emojiImg %>" alt="<%= profile.emojiImg.split('/').pop().split('.')[0] %>">
+        <% }else if('emoji' in profile){ %>
+        <%-" " + extra.twemoji.parse(profile.emoji) %>
+        <% } %>
+      </div>
+      <svg class="profile-rank" viewBox="0 0 24 24">
+        <title>Favorited profile</title>
+        <%# mdi-star %>
+        <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+      </svg>
+    </a>
+    <% }}else{ %>
+    <span class="top-profile">
+      <img src="/resources/img/icons/q.png" class="profile-avatar" alt="">
+      <div class="profile-name">No favorites set!</div>
+      <div class="profile-last-online">Why don't you set a favorite?</div>
+    </span>
+    <% } %>
 
-      <% for(const profile of extra.featured){ %>
-        <a href="/stats/<%= profile.uuid %>" class="top-profile">
-          <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
-          <div class="profile-name">
-            <%= profile.username %>
-            <% if('emojiImg' in profile){ %>
-              <img class="emoji" draggable="false" src="<%= profile.emojiImg %>" alt="<%= profile.emojiImg.split('/').pop().split('.')[0] %>">
-            <% }else if('emoji' in profile){ %>
-              <%- extra.twemoji.parse(profile.emoji) %>
-            <% } %>
-          </div>
-          <div class="profile-last-online"><%- extra.twemoji.parse(profile.message) %></div>
-          <svg class="profile-rank" viewBox="0 0 24 24">
-            <title><%= developerRoles[profile.type]?.title || developerRoles.ERROR.title %></title>
-            <path fill="currentColor" d="<%= developerRoles[profile.type]?.svgPath || developerRoles.ERROR.svgPath %>" />
-          </svg>
-        </a>
-      <% } %>
-    </main>
-    <%- include('../includes/footer'); %>
-    <script>
-      <% if (error) { %>
-        console.error(`An error occurred with message: "<%= error instanceof Error ? error.message : String(error) %>"`);
-      <% } %>
+    <% for(const profile of extra.featured){ %>
+    <a href="/stats/<%= profile.uuid %>" class="top-profile">
+      <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
+      <div class="profile-name">
+        <%= profile.username %>
+        <% if('emojiImg' in profile){ %>
+        <img class="emoji" draggable="false" src="<%= profile.emojiImg %>" alt="<%= profile.emojiImg.split('/').pop().split('.')[0] %>">
+        <% }else if('emoji' in profile){ %>
+        <%- extra.twemoji.parse(profile.emoji) %>
+        <% } %>
+      </div>
+      <div class="profile-last-online"><%- extra.twemoji.parse(profile.message) %></div>
+      <svg class="profile-rank" viewBox="0 0 24 24">
+        <title><%= developerRoles[profile.type]?.title || developerRoles.ERROR.title %></title>
+        <path fill="currentColor" d="<%= developerRoles[profile.type]?.svgPath || developerRoles.ERROR.svgPath %>" />
+      </svg>
+    </a>
+    <% } %>
+  </main>
 
-      const mainUsernameInput = document.querySelector('main .lookup-player input');
-      const headerUsernameInput = document.querySelector('header .lookup-player input');
-      const headerUsernameForm = document.querySelector('header .lookup-player');
+  <%- include('../includes/footer'); %>
 
-      mainUsernameInput.addEventListener('input', (e) => {
-        headerUsernameInput.value = mainUsernameInput.value;
-      });
+  <% if (error) { %>
+  <script>
+    console.error(`An error occurred with message: "<%= error instanceof Error ? error.message : String(error) %>"`);
+  </script>
+  <% } %>
 
-      headerUsernameInput.addEventListener('input', (e) => {
-        mainUsernameInput.value = headerUsernameInput.value;
-      });
+  <script>
+    const mainUsernameInput = document.querySelector('main .lookup-player input');
+    const headerUsernameInput = document.querySelector('header .lookup-player input');
+    const headerUsernameForm = document.querySelector('header .lookup-player');
 
-      let smallUserSearch = false;
+    mainUsernameInput.addEventListener('input', (e) => {
+      headerUsernameInput.value = mainUsernameInput.value;
+    });
 
-      window.addEventListener('scroll', checkSearchboxOverlap);
-      window.addEventListener('resize', checkSearchboxOverlap);
-      function checkSearchboxOverlap() {
-        if (mainUsernameInput.getBoundingClientRect().bottom < 48 && smallUserSearch === false) {
-          headerUsernameForm.classList.add('show-user-search');
-          smallUserSearch = true;
+    headerUsernameInput.addEventListener('input', (e) => {
+      mainUsernameInput.value = headerUsernameInput.value;
+    });
 
-          if (mainUsernameInput === document.activeElement) {
-            headerUsernameInput.focus({ preventScroll: true });
-          }
-        } else if (mainUsernameInput.getBoundingClientRect().top >= 48 && smallUserSearch) {
-          headerUsernameForm.classList.remove('show-user-search');
-          smallUserSearch = false;
+    let smallUserSearch = false;
 
-          if (headerUsernameInput === document.activeElement) {
-            mainUsernameInput.focus({ preventScroll: true });
-          }
+    window.addEventListener('scroll', checkSearchboxOverlap);
+    window.addEventListener('resize', checkSearchboxOverlap);
+
+    function checkSearchboxOverlap() {
+      if (mainUsernameInput.getBoundingClientRect().bottom < 48 && smallUserSearch === false) {
+        headerUsernameForm.classList.add('show-user-search');
+        smallUserSearch = true;
+
+        if (mainUsernameInput === document.activeElement) {
+          headerUsernameInput.focus({
+            preventScroll: true
+          });
+        }
+      } else if (mainUsernameInput.getBoundingClientRect().top >= 48 && smallUserSearch) {
+        headerUsernameForm.classList.remove('show-user-search');
+        smallUserSearch = false;
+
+        if (headerUsernameInput === document.activeElement) {
+          mainUsernameInput.focus({
+            preventScroll: true
+          });
         }
       }
-    </script>
-  </body>
+    }
+  </script>
+</body>
+
 </html>
