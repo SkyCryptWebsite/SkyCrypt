@@ -393,8 +393,6 @@ export const STAT_MAPPINGS = {
   walk_speed: "speed",
 };
 
-<<<<<<< HEAD
-=======
 export const KUUDRA_TIERS = {
   none: {
     name: "Basic",
@@ -459,7 +457,6 @@ export const DOJO = {
   },
 };
 
->>>>>>> 18be0970e1fc5511ce4b55c8be69de7c130ac439
 export const TROPHY_FISH = {
   BLOBFISH: {
     name: "Blobfish",

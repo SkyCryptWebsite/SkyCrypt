@@ -1799,12 +1799,10 @@ export async function getStats(
   output.minion_slots = getMinionSlots(output.minions);
   output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
   output.bestiary = getBestiary(profile.uuid, profile);
-<<<<<<< HEAD
+
   output.trophyFish = getTrophyFish(userProfile);
   console.log(output.trophyFish);
 
-=======
->>>>>>> 18be0970e1fc5511ce4b55c8be69de7c130ac439
   output.social = hypixelProfile.socials;
 
   output.dungeons = getDungeons(userProfile, hypixelProfile);
@@ -2063,9 +2061,6 @@ export async function getStats(
 
   output.crimsonIsles = crimsonIsles;
 
-  // TROPHY FISH
-  output.trophyFish = getTrophyFish(userProfile);
-  
   // MISC
 
   const misc = {};
@@ -2754,7 +2749,6 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
   return output;
 }
 
-<<<<<<< HEAD
 export function getTrophyFish(userProfile) {
   const trophyFish = {
     total_caught: 0,
@@ -2784,8 +2778,6 @@ export function getTrophyFish(userProfile) {
   return trophyFish;
 }
 
-=======
->>>>>>> 18be0970e1fc5511ce4b55c8be69de7c130ac439
 export function getBestiary(uuid, profile) {
   const output = {};
 
@@ -2844,39 +2836,6 @@ export function getBestiary(uuid, profile) {
 
   return result;
 }
-
-<<<<<<< HEAD
-=======
-export function getTrophyFish(userProfile) {
-  const trophyFish = {
-    total_caught: 0,
-    rewards: [],
-    fish: [],
-  };
-  trophyFish.rewards = userProfile.trophy_fish.rewards;
-  trophyFish.total_caught = userProfile.trophy_fish.total_caught;
-  Object.keys(userProfile.trophy_fish).forEach((key) => {
-    const type = key
-      .toUpperCase()
-      .replaceAll("_BRONZE", "")
-      .replaceAll("_SILVER", "")
-      .replaceAll("_GOLD", "")
-      .replaceAll("_DIAMOND", "");
-    if (key == "rewards" || key == "total_caught") return;
-
-    trophyFish.fish[key.toUpperCase()] = {
-      id: key.toUpperCase(),
-      name: constants.TROPHY_FISH[type].name,
-      amount: userProfile.trophy_fish[key],
-      head: constants.TROPHY_FISH[type].head,
-      description: constants.TROPHY_FISH[type].description,
-    };
-  });
-
-  return trophyFish;
-}
-
->>>>>>> 18be0970e1fc5511ce4b55c8be69de7c130ac439
 export function getDungeons(userProfile, hypixelProfile) {
   const output = {};
 
