@@ -569,6 +569,18 @@ declare const calculated: SkyCryptPlayer & {
     amount: number;
   }[];
   reaper_peppers_eaten: number;
+  trophyFish: {
+    total_caught: number;
+    fish: {
+      [key: string]: {
+        id: string;
+        name: string;
+        amount: number;
+        head: string;
+        description: string;
+      };
+    };
+  };
 };
 
 interface SkyCryptRelativeTime {

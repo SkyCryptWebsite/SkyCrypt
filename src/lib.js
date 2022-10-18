@@ -1800,8 +1800,7 @@ export async function getStats(
   output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
   output.bestiary = getBestiary(profile.uuid, profile);
 
-  output.trophyFish = getTrophyFish(userProfile);
-  console.log(output.trophyFish);
+  output.trophy_fish = getTrophyFish(userProfile);
 
   output.social = hypixelProfile.socials;
 
@@ -2753,18 +2752,20 @@ export function getTrophyFish(userProfile) {
   const trophyFish = {
     total_caught: 0,
     rewards: [],
-    fish: [],
+    fish: {},
   };
+
   trophyFish.rewards = userProfile.trophy_fish.rewards;
   trophyFish.total_caught = userProfile.trophy_fish.total_caught;
-  Object.keys(userProfile.trophy_fish).forEach((key) => {
+
+  for (const key of Object.keys(userProfile.trophy_fish)) {
+    if (key == "rewards" || key == "total_caught") continue;
     const type = key
       .toUpperCase()
       .replaceAll("_BRONZE", "")
       .replaceAll("_SILVER", "")
       .replaceAll("_GOLD", "")
       .replaceAll("_DIAMOND", "");
-    if (key == "rewards" || key == "total_caught") return;
 
     trophyFish.fish[key.toUpperCase()] = {
       id: key.toUpperCase(),
@@ -2773,7 +2774,7 @@ export function getTrophyFish(userProfile) {
       head: constants.TROPHY_FISH[type].head,
       description: constants.TROPHY_FISH[type].description,
     };
-  });
+  }
 
   return trophyFish;
 }
