@@ -2760,20 +2760,26 @@ export function getTrophyFish(userProfile) {
 
   for (const key of Object.keys(userProfile.trophy_fish)) {
     if (key == "rewards" || key == "total_caught") continue;
-    const type = key
-      .toUpperCase()
-      .replaceAll("_BRONZE", "")
-      .replaceAll("_SILVER", "")
-      .replaceAll("_GOLD", "")
-      .replaceAll("_DIAMOND", "");
 
-    trophyFish.fish[key.toUpperCase()] = {
-      id: key.toUpperCase(),
-      name: constants.TROPHY_FISH[type].name,
-      amount: userProfile.trophy_fish[key],
-      head: constants.TROPHY_FISH[type].head,
-      description: constants.TROPHY_FISH[type].description,
-    };
+    const arr = key.split("_");
+    const rarity = ["bronze", "silver", "gold", "diamond"].includes(arr[arr.length - 1]) ? arr[arr.length - 1] : false;
+    if (!rarity) {
+      trophyFish.fish[key] = {
+        id: key.toUpperCase(),
+        name: constants.TROPHY_FISH[key.toUpperCase()].name,
+        total: userProfile.trophy_fish[key],
+        amounts: {
+          bronze: 0,
+          silver: 0,
+          gold: 0,
+          diamond: 0,
+        },
+      };
+    } else {
+      arr.pop();
+      const fish = arr.join("_");
+      trophyFish.fish[fish].amounts[rarity] = userProfile.trophy_fish[key];
+    }
   }
 
   return trophyFish;
