@@ -1780,6 +1780,10 @@ const metaDescription = getMetaDescription()
             <span class="stat-name">Selected Class: </span>
             <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span>
             <br>
+            <% max = calculated.dungeons.class_average === 50 ? "golden-text" : "" %>
+            <span class="stat-name <%= max %>">Class Average: </span>
+            <span class="stat-value <%= max %>"><%= calculated.dungeons.class_average.toLocaleString() %></span>
+            <br>
             <% max = calculated.dungeons.catacombs.bonuses.item_boost === 465 ? "golden-text" : "" %>
             <span class="stat-name <%= max %>">Dungeon Item Boost: </span>
             <span class="stat-value percent <%= max %>"><%= calculated.dungeons.catacombs.bonuses.item_boost.toLocaleString() %></span>
@@ -2592,11 +2596,11 @@ const metaDescription = getMetaDescription()
                 let tooltip = "";
 
                 if(key == 'last_hits')
-                  for(const kill of calculated.kills.filter(a => a.entityId.endsWith('_dragon')))
+                  for(const kill of calculated.kills.filter(a => a.entityId.endsWith('_dragon') && a.entityId != 'master_wither_king_dragon'))
                     tooltip += `<span class="stat-name">${ kill.entityName }: </span><span class="stat-value">${ kill.amount }</span> <span class="grey-text">(${ Math.round(kill.amount / calculated.misc.dragons[key] * 100) }%)</span><br>`;
 
                 if(key == 'deaths')
-                  for(const death of calculated.deaths.filter(a => a.entityId.endsWith('_dragon')))
+                  for(const death of calculated.deaths.filter(a => a.entityId.endsWith('_dragon') && a.entityId != 'master_wither_king_dragon'))
                     tooltip += `<span class="stat-name">${ death.entityName }: </span><span class="stat-value">${ death.amount }</span><br>`;
               %>
             <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>><span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.dragons[key].toLocaleString() %></span></span><br>
