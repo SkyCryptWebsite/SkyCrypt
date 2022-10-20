@@ -1695,7 +1695,7 @@ const metaDescription = getMetaDescription()
               <button class="stat-sub-header extender" aria-controls="missing-trophyfish" aria-expanded="false">Trophy Fish</button>
               <div class="collections extendable" id="missing-trophyfish">
                 <% for (const fish of Object.values(calculated.trophy_fish.fish)) { %>
-                <div class="chip" data-missing="<%= fish.total <= 0 %>">
+                <div class="chip trophy-fish" data-missing="<%= fish.total <= 0 %>">
                   <div class="chip-icon-wrapper">
                     <div style="background-image:url('<%= constants.TROPHY_FISH[fish.id].head %>')" class="item-icon custom-icon"></div>
                   </div>

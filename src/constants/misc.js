@@ -1,5 +1,3 @@
-import { SYMBOLS } from "../../common/constants.js";
-
 // prevent specific players from appearing in leaderboards
 export const BLOCKED_PLAYERS = [
   "20934ef9488c465180a78f861586b4cf", // Minikloon (Admin)
