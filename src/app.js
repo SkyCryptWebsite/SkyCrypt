@@ -15,7 +15,6 @@ import "axios-debug-log";
 import fs from "fs-extra";
 
 import path from "path";
-import { fileURLToPath } from "url";
 import * as renderer from "./renderer.js";
 
 import credentials from "./credentials.js";
@@ -38,7 +37,7 @@ import { execSync } from "child_process";
 import * as api from "./routes/api.js";
 import * as apiv2 from "./routes/apiv2.js";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = helper.getFolderPath();
 
 const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, "../public/manifest.json")));
 
@@ -96,7 +95,7 @@ const cacheMaxAge = 30 * 24 * 60 * 60; // 30 days should be cached for
  */
 const volatileCacheMaxAge = 12 * 60 * 60; // 12 hours
 
-const cachePath = path.resolve(__dirname, "../cache");
+const cachePath = helper.getCacheFolderPath(__dirname);
 await fs.ensureDir(cachePath);
 
 if (credentials.hypixel_api_key.length == 0) {
@@ -140,12 +139,12 @@ function updateCommitHash() {
 }
 const commitHash = updateCommitHash();
 
+const featuredProfiles = fs.readJSONSync(helper.getCacheFilePath(cachePath, "json", "featured-profiles", "json"));
+
 // Wait for APIs to be ready..
 // Maybe these awaits are done wrong or just unnecessary, idk.. -Martin
 await apiv2.init();
 await api.init();
-
-const featuredProfiles = fs.readJSONSync(path.resolve("./public/resources/js/featured-profiles.json"));
 
 const app = express();
 const port = process.env.SKYCRYPT_PORT ?? 32464;
