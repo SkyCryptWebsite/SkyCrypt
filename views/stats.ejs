@@ -1690,6 +1690,28 @@ const metaDescription = getMetaDescription()
               } %>
             </div>
             <% } %>
+            
+            <% if (calculated?.trophy_fish?.total_caught > 0) { %>
+              <button class="stat-sub-header extender" aria-controls="missing-trophyfish" aria-expanded="false">Trophy Fish</button>
+              <div class="collections extendable" id="missing-trophyfish">
+                <% for (const fish of Object.values(calculated.trophy_fish.fish)) { %>
+                <div class="chip" data-missing="<%= fish.total <= 0 %>">
+                  <div class="chip-icon-wrapper">
+                    <div style="background-image:url('<%= constants.TROPHY_FISH[fish.id].head %>')" class="item-icon custom-icon"></div>
+                  </div>
+                  <div class="chip-text">
+                    <div class="collection-name"><span class="stat-name"><%= fish.name %></span></div>
+                    <div class="collection-amount">
+                      <div class="collection-amount"><span class="stat-name">Bronze: </span><span class="stat-value"><%= fish.amounts.bronze.toLocaleString() %></span></div>
+                      <div class="collection-amount"><span class="stat-name">Silver: </span><span class="stat-value"><%= fish.amounts.silver.toLocaleString() %></span></div>
+                      <div class="collection-amount"><span class="stat-name">Gold: </span><span class="stat-value"><%= fish.amounts.gold.toLocaleString() %></span></div>
+                      <div class="collection-amount"><span class="stat-name">Diamond: </span><span class="stat-value"><%= fish.amounts.diamond.toLocaleString() %></span></div>
+                    </div>
+                  </div>
+                </div>
+                <% } %>
+              </div>
+            <% } %>
           </div>
 
           <% if(calculated.enchanting.experimented){ %>
