@@ -1032,7 +1032,7 @@ const metaDescription = getMetaDescription()
           <p class="stat-raw-values">
             <%
                 const maxTalis = items.accessories.filter(a => a.isUnique).length >= constants.UNIQUE_ACCESSORIES_COUNT ? 'golden-text': ''
-                const maxRecombTalis = items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length >= constants.UNIQUE_ACCESSORIES_COUNT ? 'golden-text': ''
+                const maxRecombTalis = items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length >= constants.RECOMBABLE_ACCESSORIES_COUNT ? 'golden-text': ''
               %>
 
             <span class="stat-name <%= maxTalis %>">Unique Accessories: </span>
@@ -1042,7 +1042,7 @@ const metaDescription = getMetaDescription()
             <span class="stat-value percent <%= maxTalis %>"><%= Math.round(items.accessories.filter(a => a.isUnique).length / constants.UNIQUE_ACCESSORIES_COUNT * 100) %></span>
             <br>
             <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
-            <span class="stat-value <%= maxRecombTalis %>"><%= items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= constants.UNIQUE_ACCESSORIES_COUNT %></span>
+            <span class="stat-value <%= maxRecombTalis %>"><%= items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= constants.RECOMBABLE_ACCESSORIES_COUNT %></span>
             <br>
             <%
                 const rarities = items.accessory_rarities;

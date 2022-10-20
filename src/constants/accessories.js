@@ -146,6 +146,14 @@ export const ACCESSORY_DUPLICATES = {
   ],
 };
 
+/*
+accessory object values:
+  name: accessory display name 
+  rarity: accessory rarity
+  texture: texture path relative to site url
+  allowsRecomb: if the accessory is able to be recombobulated - defaults to true
+*/
+
 export const ACCESSORIES = {
   WEDDING_RING_0: {
     name: "Shiny Yellow Rock",
@@ -748,6 +756,7 @@ export const ACCESSORIES = {
     name: "Pandora's Box",
     rarity: "common",
     texture: "/head/fe246925cbd4c05279b9c8dcf7c2fdfc9baf9b1424aa35e501533ebb98e00522",
+    allowsRecomb: false,
   },
   SHENS_REGALIA: {
     name: "Shen's Regalia",
@@ -797,3 +806,13 @@ export const MAGICAL_POWER = {
   special: 3,
   very_special: 5,
 };
+
+const recombableAccessories = uniqueAccessories;
+
+for (const accessory of Object.keys(recombableAccessories)) {
+  if (ACCESSORIES[accessory]?.allowsRecomb === false) {
+    delete recombableAccessories[accessory];
+  }
+}
+
+export const RECOMBABLE_ACCESSORIES_COUNT = Object.keys(recombableAccessories).length;
