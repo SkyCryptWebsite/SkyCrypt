@@ -2757,17 +2757,16 @@ export function getTrophyFish(userProfile) {
 
   for (const key of Object.keys(constants.TROPHY_FISH)) {
     trophyFish.fish[key.toLowerCase()] = {
-        id: key,
-        name: constants.TROPHY_FISH[key].name,
-        total: 0,
-        amounts: {
-          bronze: 0,
-          silver: 0,
-          gold: 0,
-          diamond: 0,
-        },
-        head: constants.TROPHY_FISH[key].head,
-    }
+      id: key,
+      name: constants.TROPHY_FISH[key].name,
+      total: 0,
+      amounts: {
+        bronze: 0,
+        silver: 0,
+        gold: 0,
+        diamond: 0,
+      },
+    };
   }
 
   trophyFish.rewards = userProfile.trophy_fish.rewards;

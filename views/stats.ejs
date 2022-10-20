@@ -1697,7 +1697,7 @@ const metaDescription = getMetaDescription()
                 <% for (const fish of Object.values(calculated.trophy_fish.fish)) { %>
                 <div class="chip" data-missing="<%= fish.total <= 0 %>">
                   <div class="chip-icon-wrapper">
-                    <div style="background-image:url('<%= fish.head %>')" class="item-icon custom-icon"></div>
+                    <div style="background-image:url('<%= constants.TROPHY_FISH[fish.id].head %>')" class="item-icon custom-icon"></div>
                   </div>
                   <div class="chip-text">
                     <div class="collection-name"><span class="stat-name"><%= fish.name %></span></div>
