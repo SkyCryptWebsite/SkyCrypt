@@ -58,7 +58,7 @@ async function init() {
   console.log(`Custom Resources loading started on ${getClusterId(true)}.`);
   console.time(`custom_resources_${getClusterId()}`);
 
-  for (const packOrFile of await fs.readdir(RESOURCE_PACK_FOLDER, { withFileTypes: true })) {
+  /*for (const packOrFile of await fs.readdir(RESOURCE_PACK_FOLDER, { withFileTypes: true })) {
     if (!packOrFile.isDirectory()) {
       continue;
     }
@@ -406,7 +406,7 @@ async function init() {
 
       pack.textures.push(texture);
     }
-  }
+  }*/
 
   console.log(`Custom Resources loading done. (${getClusterId(true)})`);
   console.timeEnd(`custom_resources_${getClusterId()}`);

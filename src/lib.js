@@ -2522,7 +2522,12 @@ function getPetSkins(pets) {
   for (const [skin, skinData] of Object.entries(constants.PET_SKINS)) {
     if (skinData.release < Date.now()) {
       for (const petData of pets) {
-        if (`PET_SKIN_${petData.skin}` === skin) unlockedSkins.push(skin);
+        if (`PET_SKIN_${petData.skin}` === skin) {
+          unlockedSkins.push({
+            skin: skin,
+            pet: petData.pet,
+          });
+        }
       }
     }
   }
@@ -2535,8 +2540,11 @@ function getMissingPetSkins(unlockedSkins) {
 
   for (const [skin, skinData] of Object.entries(constants.PET_SKINS)) {
     if (skinData.release < Date.now()) {
-      skinData.pet = skin;
-      if (!unlockedSkins.includes(skin)) missingSkins.push(skinData);
+      skinData.id = skin;
+      skinData.name = `${skinData.name} ${skinData.pet}`;
+      if (!unlockedSkins.includes(skin)) {
+        missingSkins.push(skinData);
+      }
     }
   }
 
