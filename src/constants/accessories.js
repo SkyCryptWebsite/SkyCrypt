@@ -116,7 +116,6 @@ export const ACCESSORY_UPGRADES = {
   GREAT_SPOOK_RING: ["GREAT_SPOOK_ARTIFACT"],
   DRACONIC_TALISMAN: ["DRACONIC_RING", "DRACONIC_ARTIFACT"],
   DRACONIC_RING: ["DRACONIC_ARTIFACT"],
-
 };
 
 export const ACCESSORY_DUPLICATES = {
@@ -785,26 +784,26 @@ export const ACCESSORIES = {
     name: "Great Spook Artifact",
     rarity: "rare",
     texture: "/head/a89cc1ede755709debb7d1fe7ab8129ac8901788d8d8613b03eac157c23cc49c",
-   },
+  },
   DRACONIC_TALISMAN: {
     name: "Draconic Talisman",
     rarity: "uncommon",
-    texture: "/head/11c51b946cb484b9c76b2c5bf5eab0c74c9ced95f35aa81e699bd5d9b57e20f"
+    texture: "/head/11c51b946cb484b9c76b2c5bf5eab0c74c9ced95f35aa81e699bd5d9b57e20f",
   },
   DRACONIC_RING: {
     name: "Draconic Ring",
     rarity: "rare",
-    texture: "/head/fee1e74047277a70661a8eaf9c4c6ebf83554b275a16816ec79bba1bce320434"
+    texture: "/head/fee1e74047277a70661a8eaf9c4c6ebf83554b275a16816ec79bba1bce320434",
   },
   DRACONIC_ARTIFACT: {
     name: "Draconic Artifact",
     rarity: "epic",
-    texture: "/head/ead7dcbe93401b3d3b4e5222ef8097aef4431f48064d0a0531fa0952c211e0e6"
+    texture: "/head/ead7dcbe93401b3d3b4e5222ef8097aef4431f48064d0a0531fa0952c211e0e6",
   },
   ABICASE: {
     name: "Abicase",
     rarity: "rare",
-    texture: "/head/70ce32b90e16419319daf35e6ad01bb715d898548b9ef66dd799a00107e87376"
+    texture: "/head/70ce32b90e16419319daf35e6ad01bb715d898548b9ef66dd799a00107e87376",
   },
 };
 
