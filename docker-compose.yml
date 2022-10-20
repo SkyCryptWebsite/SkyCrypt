@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+  redis:
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./devdata/redis:/data
+    container_name: sc_redis
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: sbstats
+    volumes:
+      - ./devdata/mongo:/data/db
+    command: mongod --quiet --logpath /dev/null
+    container_name: sc_mongo
