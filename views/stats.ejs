@@ -1139,16 +1139,14 @@ const metaDescription = getMetaDescription()
             <span data-tippy-content="
               Increase your pet score by collecting unique pets with a high rarity.<br><br>
               <table>
-              <tr><td>10 Score: </td><td><span class='color-magic-find grey-text'>+1 Magic Find</span></td>
-              <tr><td>25 Score: </td><td><span class='color-magic-find grey-text'>+2 Magic Find</span></td>
-              <tr><td>50 Score: </td><td><span class='color-magic-find grey-text'>+3 Magic Find</span></td>
-              <tr><td>75 Score: </td><td><span class='color-magic-find grey-text'>+4 Magic Find</span></td>
-              <tr><td>100 Score: </td><td><span class='color-magic-find grey-text'>+5 Magic Find</span></td>
-              <tr><td>130 Score: </td><td><span class='color-magic-find grey-text'>+6 Magic Find</span></td>
-              <tr><td>175 Score: </td><td><span class='color-magic-find grey-text'>+7 Magic Find</span></td>
-              <tr><td>225 Score: </td><td><span class='color-magic-find grey-text'>+8 Magic Find</span></td>
-              <tr><td>275 Score: </td><td><span class='color-magic-find grey-text'>+9 Magic Find</span></td>
-              <tr><td>325 Score: </td><td><span class='color-magic-find grey-text'>+10 Magic Find</span></td>
+              <% for (const [score, value] of Object.entries(constants.PET_REWARDS)) { 
+                if (score === Object.keys(constants.PET_REWARDS).reduce((prev, curr) => Math.abs(curr - calculated.petScore) < Math.abs(prev - calculated.petScore) ? curr : prev)) { %>
+                  <tr><td><%= score %> Score: </td><td><span class='color-magic-find grey-text'>+<%= value.magic_find %> Magic Find</span><span style='color: var(--§5);' class='grey-text'> «</span></td>
+                <% } else { %>
+                  <tr><td><%= score %> Score: </td><td><span class='color-magic-find grey-text'>+<%= value.magic_find %> Magic Find</span></td>
+                <% } %>
+              <% } %>
+      
               </table>
             "><span class="stat-name <%= max %>">Pet Score: </span><span class="stat-value <%= max %>"><%= calculated.petScore %></span></span><% if(calculated.pet_score_bonus.magic_find > 0){ %><span class="grey-text color-magic-find"> (+<%= calculated.pet_score_bonus.magic_find %> <abbr title="Magic Find">MF</abbr>)</span><% } %><br>
 
