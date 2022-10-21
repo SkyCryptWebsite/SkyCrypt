@@ -53,6 +53,17 @@ const FEATURED_PROFILES = [
     message: "/visit dukioooo",
   },
   {
+    // DuckySoSkilled
+    uuid: "4855c53ee4fb4100997600a92fc50984",
+    type: "CONTRIBUTOR",
+    message: "Qwack",
+  },
+  {
+    uuid: "0e64442a82894fc8a7b6aaa74938501b",
+    type: "CONTRIBUTOR",
+    message: "Cringe 20 yo who destroys roblox with 9 yos",
+  },
+  {
     // Technoblade
     uuid: "b876ec32e396476ba1158438d83c67d4",
     type: "TECHNOBLADE",

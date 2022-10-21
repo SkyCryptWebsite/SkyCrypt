@@ -390,3 +390,9 @@ export const ESSENCE = {
 export const STAT_MAPPINGS = {
   walk_speed: "speed",
 };
+
+export const SOURCES = {
+  firesale: "§cFiresale",
+  enderman_slayer: "§5Enderman Slayer Pray RNGesus Drop",
+  regalia: "§6Shen's Auction",
+};

@@ -6,8 +6,10 @@ import { v4 } from "uuid";
 import retry from "async-retry";
 import path from "path";
 import fs from "fs-extra";
+import moment from "moment";
 
 export { renderLore, formatNumber } from "../common/formatting.js";
+import { renderLore } from "../common/formatting.js";
 export * from "../common/helper.js";
 import { titleCase } from "../common/helper.js";
 
@@ -25,6 +27,7 @@ import {
   PET_RARITY_OFFSET,
   PET_LEVELS,
   ITEM_ANIMATIONS,
+  SOURCES,
 } from "./constants.js";
 
 import credentials from "./credentials.js";
@@ -851,6 +854,51 @@ export function generateItem(data) {
     data.rarity = data.rarity.toLowerCase();
   }
 
+  if (data.source && data.release) {
+    data.tag ??= {};
+    data.tag.display ??= {};
+    data.tag.display.Lore ??= [];
+    const lore = data.texture.endsWith(".png")
+      ? [
+          "§8Consumed on use",
+          "",
+          "§7Pet skins change the look and",
+          "§7particle trail of your pet but",
+          "§7only one skin can be active at a ",
+          "§7time!",
+          "§7",
+          "§7This skin can only be applied ",
+          `§7to ${data.pet || "Unknown"} pets.`,
+          "§7",
+          "§aThis skin is animated!",
+          "§7",
+          "§eRight click on your pet to apply this skin!",
+          "§7",
+          `§7Released: §c${moment(data.release).format("MMMM Do YYYY")}`,
+          `§7Obtainted Through: ${SOURCES[data.source] || "§fUnknown"}`,
+        ]
+      : [
+          "§8Consumed on use",
+          "",
+          "§7Pet skins change the look and",
+          "§7particle trail of your pet but",
+          "§7only one skin can be active at a ",
+          "§7time!",
+          "§7",
+          "§7This skin can only be applied ",
+          `§7to ${data.pet || "Unknown"} pets.`,
+          "§7",
+          "§eRight click on your pet to apply this skin!",
+          "§7",
+          `§7Released: §c${moment(data.release).format("MMMM Do YYYY")}`,
+          `§7Obtainted Through: ${SOURCES[data.source] || "§fUnknown"}`,
+        ];
+
+    for (const line of lore) {
+      data.tag.display.Lore += '<span class="lore-row wrap">' + renderLore(line) + "</span>";
+    }
+  }
+
   // Setting tag.display.Name using display_name if not specified
   if (data.display_name && !data.tag.display.Name) {
     data.tag = data.tag ?? {};
@@ -860,6 +908,7 @@ export function generateItem(data) {
   }
 
   // Creating final item
+  console.log(Object.assign(default_data, data));
   return Object.assign(default_data, data);
 }
 
