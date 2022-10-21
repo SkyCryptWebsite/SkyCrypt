@@ -909,7 +909,6 @@ export function generateItem(data) {
   }
 
   // Creating final item
-  console.log(Object.assign(default_data, data));
   return Object.assign(default_data, data);
 }
 
