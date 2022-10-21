@@ -2590,7 +2590,7 @@ function getMissingPetSkins(unlockedSkins) {
       skinData.lore = helper.generateItem(skinData).tag?.display?.Lore;
       skinData.id = skin;
       skinData.name = `${skinData.name} ${skinData.pet} Skin`;
-      if (!unlockedSkins.includes(skin)) {
+      if (unlockedSkins.find((x) => x.skin === skin) === undefined) {
         missingSkins.push(skinData);
       }
     }
