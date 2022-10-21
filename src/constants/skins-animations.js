@@ -113,7 +113,7 @@ const SKINS = [
   },
   {
     id: "PET_SKIN_WITHER",
-    name: "Dark Wither",
+    name: "Dark",
     pet: "Wither Skeleton",
     texture: "/head/224c2d14a0219af5ccfcaa36e8a333e271724ed61276611f9529e16c10273a0d",
     rarity: "epic",
@@ -482,7 +482,7 @@ const SKINS = [
   },
   {
     id: "PET_SKIN_WOLF",
-    name: "Henzo Doggo",
+    name: "Dark",
     pet: "Wolf",
     texture: "/head/c8e414e762e1024c799e70b7a527c22fb95648f141d660b10c512cc124334218",
     rarity: "epic",
