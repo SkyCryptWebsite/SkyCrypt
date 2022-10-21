@@ -1209,13 +1209,12 @@ const metaDescription = getMetaDescription()
           <div class="pieces extendable" id="missing-pet-skins">
             <%
             const sortedPetSkins = calculated.missingPetSkins.sort((a, b) => rarityOrder.indexOf(a.rarity) - rarityOrder.indexOf(b.rarity))
-              for (const [index, skin] of Object.entries(sortedPetSkins)) {
-                console.log(index, skin) %>
-                <div tabindex="0" data-missing-pet-skin-index="<%= index %>" class="rich-item piece piece-<%= skin.rarity %>-bg missing-pet-skin">
-                  <div style='background-image: url("<%= skin.texture %>")' class="piece-icon item-icon custom-icon"></div>
-                </div>
+            for (const [index, skin] of Object.entries(sortedPetSkins)) {%>
+            <div tabindex="0" data-missing-pet-skin-index="<%= index %>" class="rich-item piece piece-<%= skin.rarity %>-bg missing-pet-skin">
+              <div style='background-image: url("<%= skin.texture %>")' class="piece-icon item-icon custom-icon"></div>
+            </div>
             <% } %>
-          <% } %>
+            <% } %>
           </div>
         </div>
       </div>

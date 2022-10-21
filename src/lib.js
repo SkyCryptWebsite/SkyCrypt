@@ -2540,8 +2540,9 @@ function getMissingPetSkins(unlockedSkins) {
 
   for (const [skin, skinData] of Object.entries(constants.PET_SKINS)) {
     if (skinData.release < Date.now()) {
+      skinData.lore = helper.generateItem(skinData).tag?.display?.Lore;
       skinData.id = skin;
-      skinData.name = `${skinData.name} ${skinData.pet}`;
+      skinData.name = `${skinData.name} ${skinData.pet} Skin`;
       if (!unlockedSkins.includes(skin)) {
         missingSkins.push(skinData);
       }
