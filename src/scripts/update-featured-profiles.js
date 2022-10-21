@@ -1,4 +1,5 @@
 import fs from "fs-extra";
+import path from "path";
 import { db } from "../mongo.js";
 import * as helper from "../helper.js";
 
@@ -58,11 +59,6 @@ const FEATURED_PROFILES = [
     message: "Qwack",
   },
   {
-    uuid: "0e64442a82894fc8a7b6aaa74938501b",
-    type: "CONTRIBUTOR",
-    message: "Cringe 20 yo who destroys roblox with 9 yos",
-  },
-  {
     // Technoblade
     uuid: "b876ec32e396476ba1158438d83c67d4",
     type: "TECHNOBLADE",
@@ -80,8 +76,7 @@ const FEATURED_PROFILES = [
     })
   );
 
-  const cachePath = helper.getCacheFolderPath(helper.getFolderPath());
-  await fs.writeJson(helper.getCacheFilePath(cachePath, "json", "featured-profiles", "json"), FEATURED_PROFILES);
+  await fs.writeJson(path.resolve("./public/resources/js/featured-profiles.json"), FEATURED_PROFILES);
 
   console.log("Featured profiles updated!");
 }
