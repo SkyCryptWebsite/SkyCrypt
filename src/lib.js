@@ -33,7 +33,7 @@ function getMinMax(profiles, min, ...path) {
 
   if (compareValues.length == 0) return output;
 
-  min ? (output = Math.min(...compareValues)) : (output = Math.max(...compareValues));
+  output = min ? Math.min(...compareValues) : Math.max(...compareValues);
 
   if (isNaN(output)) return null;
 
@@ -222,7 +222,9 @@ function getSlayerLevel(slayer, slayerName) {
 
     const level = parseInt(level_name.split("_")[1]);
 
-    if (level > currentLevel) currentLevel = level;
+    if (level > currentLevel) {
+      currentLevel = level;
+    }
   }
 
   if (currentLevel < maxLevel) {
@@ -343,7 +345,9 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       if (rarity_upgrades > 0) item.extra.recombobulated = true;
     }
 
-    if (item.tag?.ExtraAttributes?.hot_potato_count) item.extra.hpbs = item.tag.ExtraAttributes.hot_potato_count;
+    if (item.tag?.ExtraAttributes?.hot_potato_count) {
+      item.extra.hpbs = item.tag.ExtraAttributes.hot_potato_count;
+    }
 
     if (item.tag?.ExtraAttributes?.expertise_kills) {
       const { expertise_kills } = item.tag.ExtraAttributes;
@@ -381,21 +385,49 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       isNaN(timestamp) ? (item.extra.timestamp = Date.parse(timestamp + " EDT")) : (item.extra.timestamp = timestamp);
     }
 
-    if (item.tag?.ExtraAttributes?.spawnedFor)
+    if (item.tag?.ExtraAttributes?.spawnedFor) {
       item.extra.spawned_for = item.tag.ExtraAttributes.spawnedFor.replaceAll("-", "");
-    if (item.tag?.ExtraAttributes?.baseStatBoostPercentage)
-      item.extra.base_stat_boost = item.tag.ExtraAttributes.baseStatBoostPercentage;
-    if (item.tag?.ExtraAttributes?.item_tier) item.extra.floor = item.tag.ExtraAttributes.item_tier;
-    if (item.tag?.ExtraAttributes?.winning_bid) item.extra.price_paid = item.tag.ExtraAttributes.winning_bid;
-    if (item.tag?.ExtraAttributes?.modifier) item.extra.reforge = item.tag.ExtraAttributes.modifier;
-    if (item.tag?.ExtraAttributes?.ability_scroll) item.extra.ability_scroll = item.tag.ExtraAttributes.ability_scroll;
-    if (item.tag?.ExtraAttributes?.mined_crops) item.extra.crop_counter = item.tag.ExtraAttributes.mined_crops;
-    if (item.tag?.ExtraAttributes?.petInfo)
-      item.tag.ExtraAttributes.petInfo = JSON.parse(item.tag.ExtraAttributes.petInfo);
-    if (item.tag?.ExtraAttributes?.gems) item.extra.gems = item.tag.ExtraAttributes.gems;
+    }
 
-    if (item.tag?.ExtraAttributes?.skin) item.extra.skin = item.tag.ExtraAttributes.skin;
-    if (item.tag?.ExtraAttributes?.petInfo?.skin) item.extra.skin = `PET_SKIN_${item.tag.ExtraAttributes.petInfo.skin}`;
+    if (item.tag?.ExtraAttributes?.baseStatBoostPercentage) {
+      item.extra.base_stat_boost = item.tag.ExtraAttributes.baseStatBoostPercentage;
+    }
+
+    if (item.tag?.ExtraAttributes?.item_tier) {
+      item.extra.floor = item.tag.ExtraAttributes.item_tier;
+    }
+
+    if (item.tag?.ExtraAttributes?.winning_bid) {
+      item.extra.price_paid = item.tag.ExtraAttributes.winning_bid;
+    }
+
+    if (item.tag?.ExtraAttributes?.modifier) {
+      item.extra.reforge = item.tag.ExtraAttributes.modifier;
+    }
+
+    if (item.tag?.ExtraAttributes?.ability_scroll) {
+      item.extra.ability_scroll = item.tag.ExtraAttributes.ability_scroll;
+    }
+
+    if (item.tag?.ExtraAttributes?.mined_crops) {
+      item.extra.crop_counter = item.tag.ExtraAttributes.mined_crops;
+    }
+
+    if (item.tag?.ExtraAttributes?.petInfo) {
+      item.tag.ExtraAttributes.petInfo = JSON.parse(item.tag.ExtraAttributes.petInfo);
+    }
+
+    if (item.tag?.ExtraAttributes?.gems) {
+      item.extra.gems = item.tag.ExtraAttributes.gems;
+    }
+
+    if (item.tag?.ExtraAttributes?.skin) {
+      item.extra.skin = item.tag.ExtraAttributes.skin;
+    }
+
+    if (item.tag?.ExtraAttributes?.petInfo?.skin) {
+      item.extra.skin = `PET_SKIN_${item.tag.ExtraAttributes.petInfo.skin}`;
+    }
 
     // Set custom texture for colored leather armor
     if (typeof item.id === "number" && item.id >= 298 && item.id <= 301) {
@@ -416,7 +448,9 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     }
 
     // Set raw display name without color and formatting codes
-    if (item.tag?.display?.Name != undefined) item.display_name = helper.getRawLore(item.tag.display.Name);
+    if (item.tag?.display?.Name != undefined) {
+      item.display_name = helper.getRawLore(item.tag.display.Name);
+    }
 
     // Resolve skull textures to their image path
     if (
@@ -437,11 +471,14 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     const animatedTexture = helper.getAnimatedTexture(item);
 
     // Gives animated texture on certain items, will be overwritten by custom textures
-    if (animatedTexture) item.texture_path = animatedTexture.texture;
+    if (animatedTexture) {
+      item.texture_path = animatedTexture.texture;
+    }
 
     // Uses animated skin texture
-    if (item?.extra?.skin != undefined && constants.ANIMATED_ITEMS?.[item.extra.skin])
+    if (item?.extra?.skin != undefined && constants.ANIMATED_ITEMS?.[item.extra.skin]) {
       item.texture_path = constants.ANIMATED_ITEMS[item.extra.skin].texture;
+    }
 
     if (item.tag?.ExtraAttributes?.skin == undefined && customTextures) {
       const customTexture = await getTexture(item, false, packs);
@@ -468,7 +505,9 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       // item categories, rarity, recombobulated, dungeon, shiny
       const itemType = helper.parseItemTypeFromLore(lore);
 
-      for (const key in itemType) item[key] = itemType[key];
+      for (const key in itemType) {
+        item[key] = itemType[key];
+      }
 
       // fix custom maps texture
       if (item.id == 358) {
@@ -479,13 +518,17 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 
     // Set HTML lore to be displayed on the website
     if (itemLore.length > 0) {
-      if (item.extra?.recombobulated) itemLore.push("§8(Recombobulated)");
-      if (item.extra?.gems)
+      if (item.extra?.recombobulated) {
+        itemLore.push("§8(Recombobulated)");
+      }
+
+      if (item.extra?.gems) {
         itemLore.push(
           "",
           "§7Applied Gemstones:",
           ...helper.parseItemGems(item.extra.gems, item.rarity).map((gem) => `§7 - ${gem.lore}`)
         );
+      }
 
       if (item.extra?.expertise_kills) {
         const expertise_kills = item.extra.expertise_kills;
@@ -587,13 +630,18 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
         }
       }
 
-      if (item.tag?.display?.color)
+      if (item.tag?.display?.color) {
         itemLore.push("", `§7Color: #${item.tag.display.color.toString(16).padStart(6, "0").toUpperCase()}`);
-      if (item.extra?.timestamp)
+      }
+
+      if (item.extra?.timestamp) {
         itemLore.push("", `§7Obtained: §c<local-time timestamp="${item.extra.timestamp}"></local-time>`);
+      }
 
       if (item.extra?.spawned_for) {
-        if (!item.extra.timestamp) itemLore.push("");
+        if (!item.extra.timestamp) {
+          itemLore.push("");
+        }
 
         const spawnedFor = item.extra.spawned_for;
         const spawnedForUser = await helper.resolveUsernameOrUuid(spawnedFor, db, cacheOnly);
@@ -601,25 +649,32 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
         itemLore.push(`§7By: §c<a href="/stats/${spawnedFor}">${spawnedForUser.display_name}</a>`);
       }
 
-      if (item.extra?.base_stat_boost)
+      if (item.extra?.base_stat_boost) {
         itemLore.push(
           "",
           `§7Dungeon Item Quality: ${item.extra.base_stat_boost == 50 ? "§6" : "§c"}${item.extra.base_stat_boost}/50%`
         );
+      }
+
       if (item.extra?.floor) itemLore.push(`§7Obtained From: §bFloor ${item.extra.floor}`);
-      if (item.extra?.price_paid)
+      if (item.extra?.price_paid) {
         itemLore.push(`§7Price Paid at Dark Auction: §b${item.extra.price_paid.toLocaleString()} coins`);
+      }
     }
 
     if (!("display_name" in item) && "id" in item) {
       const vanillaItem = mcData.items[item.id];
 
-      if ("displayName" in vanillaItem) item.display_name = vanillaItem.displayName;
+      if ("displayName" in vanillaItem) {
+        item.display_name = vanillaItem.displayName;
+      }
     }
   }
 
   for (const item of items) {
-    if (item.inBackpack) items[item.backpackIndex].containsItems.push(Object.assign({}, item));
+    if (item.inBackpack) {
+      items[item.backpackIndex].containsItems.push(Object.assign({}, item));
+    }
   }
 
   items = items.filter((a) => !a.inBackpack);
@@ -654,8 +709,9 @@ function getMinions(coopMembers) {
   }
 
   for (const minion in constants.MINIONS) {
-    if (minions.find((a) => a.id == minion) == undefined)
+    if (minions.find((a) => a.id == minion) == undefined) {
       minions.push(Object.assign({ id: minion, levels: [], maxLevel: 0 }, constants.MINIONS[minion]));
+    }
   }
 
   for (const minion of minions) {
@@ -663,7 +719,9 @@ function getMinions(coopMembers) {
     minion.maxLevel = minion.levels.length > 0 ? Math.max(...minion.levels) : 0;
     minion.tiers = minion.tiers != null ? minion.tiers : 11;
 
-    if (!("name" in minion)) minion.name = _.startCase(_.toLower(minion.id));
+    if (!("name" in minion)) {
+      minion.name = _.startCase(_.toLower(minion.id));
+    }
   }
 
   return minions;
@@ -672,7 +730,9 @@ function getMinions(coopMembers) {
 function getMinionSlots(minions) {
   let uniqueMinions = 0;
 
-  for (const minion of minions) uniqueMinions += minion.levels.length;
+  for (const minion of minions) {
+    uniqueMinions += minion.levels.length;
+  }
 
   const output = { currentSlots: 5, toNext: 5 };
 
@@ -787,7 +847,9 @@ export const getItems = async (
         : wardrobeSlot.push(null);
     }
 
-    if (wardrobeSlot.find((a) => a !== null)) wardrobe.push(wardrobeSlot);
+    if (wardrobeSlot.find((a) => a !== null)) {
+      wardrobe.push(wardrobeSlot);
+    }
   }
 
   let hotm = "mining_core" in profile ? await getHotmItems(profile, packs) : [];
@@ -839,7 +901,9 @@ export const getItems = async (
 
   // Add candy bag contents as backpack contents to candy bag
   for (const item of allItems) {
-    if (helper.getId(item) == "TRICK_OR_TREAT_BAG") item.containsItems = candy_bag;
+    if (helper.getId(item) == "TRICK_OR_TREAT_BAG") {
+      item.containsItems = candy_bag;
+    }
   }
 
   const accessories = [];
@@ -864,8 +928,12 @@ export const getItems = async (
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id)) insertAccessory.isInactive = true;
-    if (accessories.find((a) => helper.getId(a) == id)) insertAccessory.isUnique = false;
+    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id)) {
+      insertAccessory.isInactive = true;
+    }
+    if (accessories.find((a) => helper.getId(a) == id)) {
+      insertAccessory.isUnique = false;
+    }
 
     accessories.push(insertAccessory);
     accessoryIds.push(id);
@@ -879,8 +947,12 @@ export const getItems = async (
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id)) insertAccessory.isInactive = true;
-    if (accessories.find((a) => helper.getId(a) == id)) insertAccessory.isUnique = false;
+    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id)) {
+      insertAccessory.isInactive = true;
+    }
+    if (accessories.find((a) => helper.getId(a) == id)) {
+      insertAccessory.isUnique = false;
+    }
 
     accessories.push(insertAccessory);
     accessoryIds.push(id);
@@ -894,8 +966,12 @@ export const getItems = async (
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id)) insertAccessory.isInactive = true;
-    if (accessories.find((a) => helper.getId(a) == id)) insertAccessory.isUnique = false;
+    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id)) {
+      insertAccessory.isInactive = true;
+    }
+    if (accessories.find((a) => helper.getId(a) == id)) {
+      insertAccessory.isUnique = false;
+    }
 
     accessories.push(insertAccessory);
     accessoryIds.push(id);
@@ -912,15 +988,18 @@ export const getItems = async (
 
     let items = [item];
 
-    if (!item.categories.includes("accessory") && "containsItems" in item && Array.isArray(item.containsItems))
+    if (!item.categories.includes("accessory") && "containsItems" in item && Array.isArray(item.containsItems)) {
       items = item.containsItems.slice(0);
+    }
 
     for (const accessory of items.filter((a) => a.categories.includes("accessory"))) {
       const id = helper.getId(accessory);
 
       const insertAccessory = Object.assign({ isUnique: true, isInactive: true }, accessory);
 
-      if (accessories.find((a) => helper.getId(a) == id) != undefined) insertAccessory.isUnique = false;
+      if (accessories.find((a) => helper.getId(a) == id) != undefined) {
+        insertAccessory.isUnique = false;
+      }
 
       accessories.push(insertAccessory);
       accessoryIds.push(id);
@@ -978,15 +1057,20 @@ export const getItems = async (
     if (id in constants.ACCESSORY_UPGRADES) {
       const accessoryUpgrades = constants.ACCESSORY_UPGRADES[id];
 
-      if (accessories.find((a) => !a.isInactive && accessoryUpgrades.includes(helper.getId(a))))
+      if (accessories.find((a) => !a.isInactive && accessoryUpgrades.includes(helper.getId(a)))) {
         accessory.isInactive = true;
-      if (accessories.find((a) => accessoryUpgrades.includes(helper.getId(a)))) accessory.isUnique = false;
+      }
+      if (accessories.find((a) => accessoryUpgrades.includes(helper.getId(a)))) {
+        accessory.isUnique = false;
+      }
     }
 
     if (id in constants.ACCESSORY_DUPLICATES) {
       const accessoryDuplicates = constants.ACCESSORY_DUPLICATES[id];
 
-      if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a)))) accessory.isUnique = false;
+      if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a)))) {
+        accessory.isUnique = false;
+      }
     }
   }
 
@@ -1050,14 +1134,22 @@ export const getItems = async (
   }
 
   // Check if inventory access disabled by user
-  if (inventory.length == 0) output.no_inventory = true;
+  if (inventory.length == 0) {
+    output.no_inventory = true;
+  }
 
   // Same for personal vault
-  if (personal_vault.length == 0) output.no_personal_vault = true;
+  if (personal_vault.length == 0) {
+    output.no_personal_vault = true;
+  }
 
   const itemSorter = (a, b) => {
-    if (a.rarity !== b.rarity) return constants.RARITIES.indexOf(b.rarity) - constants.RARITIES.indexOf(a.rarity);
+    if (a.rarity !== b.rarity) {
+      return constants.RARITIES.indexOf(b.rarity) - constants.RARITIES.indexOf(a.rarity);
+    }
+
     if (b.inBackpack && !a.inBackpack) return -1;
+
     if (a.inBackpack && !b.inBackpack) return 1;
 
     return a.item_index - b.item_index;
@@ -1077,7 +1169,9 @@ export const getItems = async (
 
     countsOfId[id] = (countsOfId[id] || 0) + 1;
 
-    if (countsOfId[id] > 2) weapon.hidden = true;
+    if (countsOfId[id] > 2) {
+      weapon.hidden = true;
+    }
   }
 
   for (const item of output.fishing_tools) {
@@ -1085,7 +1179,9 @@ export const getItems = async (
 
     countsOfId[id] = (countsOfId[id] || 0) + 1;
 
-    if (countsOfId[id] > 2) item.hidden = true;
+    if (countsOfId[id] > 2) {
+      item.hidden = true;
+    }
   }
 
   const swords = output.weapons.filter((a) => a.categories.includes("sword"));
@@ -1097,26 +1193,35 @@ export const getItems = async (
   const farmingtoolsInventory = output.farming_tools.filter((a) => a.backpackIndex === undefined);
   const miningtoolsInventory = output.mining_tools.filter((a) => a.backpackIndex === undefined);
 
-  if (swords.length > 0)
+  if (swords.length > 0) {
     output.highest_rarity_sword = swordsInventory
       .filter((a) => a.rarity == swordsInventory[0].rarity)
       .sort((a, b) => a.item_index - b.item_index)[0];
-  if (bows.length > 0)
+  }
+
+  if (bows.length > 0) {
     output.highest_rarity_bow = bowsInventory
       .filter((a) => a.rarity == bowsInventory[0].rarity)
       .sort((a, b) => a.item_index - b.item_index)[0];
-  if (output.fishing_tools.length > 0)
+  }
+
+  if (output.fishing_tools.length > 0) {
     output.highest_rarity_fishing_tool = fishingtoolsInventory
       .filter((a) => a.rarity == fishingtoolsInventory[0].rarity)
       .sort((a, b) => a.item_index - b.item_index)[0];
-  if (output.farming_tools.length > 0)
+  }
+
+  if (output.farming_tools.length > 0) {
     output.highest_rarity_farming_tool = farmingtoolsInventory
       .filter((a) => a.rarity == farmingtoolsInventory[0].rarity)
       .sort((a, b) => a.item_index - b.item_index)[0];
-  if (output.mining_tools.length > 0)
+  }
+
+  if (output.mining_tools.length > 0) {
     output.highest_rarity_mining_tool = miningtoolsInventory
       .filter((a) => a.rarity == miningtoolsInventory[0].rarity)
       .sort((a, b) => a.item_index - b.item_index)[0];
+  }
 
   if (armor.filter((x) => x.rarity).length === 1) {
     const armorPiece = armor.find((x) => x.rarity);
@@ -1134,7 +1239,7 @@ export const getItems = async (
 
   // Full armor set (4 pieces)
   if (armor.filter((x) => x.rarity).length === 4) {
-    let output_name;
+    let outputName;
     let reforgeName;
 
     // Getting armor_name
@@ -1145,7 +1250,9 @@ export const getItems = async (
       name = name.replace(/[^A-Za-z0-9 -']/g, "").trim();
 
       // Removing modifier
-      if (armorPiece.tag?.ExtraAttributes?.modifier != undefined) name = name.split(" ").slice(1).join(" ");
+      if (armorPiece.tag?.ExtraAttributes?.modifier != undefined) {
+        name = name.split(" ").slice(1).join(" ");
+      }
 
       // Converting armor_name to generic name
       // Ex: Superior Dragon Helmet -> Superior Dragon Armor
@@ -1168,21 +1275,28 @@ export const getItems = async (
           a.tag?.ExtraAttributes?.modifier != undefined &&
           a.tag?.ExtraAttributes?.modifier == armor[0].tag.ExtraAttributes.modifier
       ).length == 4
-    )
+    ) {
       reforgeName = armor[0].display_name.split(" ")[0];
+    }
 
     // Handling normal sets of armor
-    if (armor.filter((a) => a.armor_name == armor[0].armor_name).length == 4) output_name = armor[0].armor_name;
+    if (armor.filter((a) => a.armor_name == armor[0].armor_name).length == 4) {
+      outputName = armor[0].armor_name;
+    }
 
     // Handling special sets of armor (where pieces aren't named the same)
     constants.SPECIAL_SETS.forEach((set) => {
-      if (armor.filter((a) => set.pieces.includes(helper.getId(a))).length == 4) output_name = set.name;
+      if (armor.filter((a) => set.pieces.includes(helper.getId(a))).length == 4) {
+        outputName = set.name;
+      }
     });
 
     // Finalizing the output
-    if (reforgeName && output_name) output_name = reforgeName + " " + output_name;
+    if (reforgeName && outputName) {
+      outputName = reforgeName + " " + outputName;
+    }
 
-    output.armor_set = output_name;
+    output.armor_set = outputName;
     output.armor_set_rarity = constants.RARITIES[Math.max(...armor.map((a) => helper.rarityNameToInt(a.rarity)))];
   }
 
@@ -1352,7 +1466,9 @@ export async function getStats(
   output.stats = Object.assign({}, constants.BASE_STATS);
 
   // fairy souls
-  if (isNaN(userProfile.fairy_souls_collected)) userProfile.fairy_souls_collected = 0;
+  if (isNaN(userProfile.fairy_souls_collected)) {
+    userProfile.fairy_souls_collected = 0;
+  }
 
   const totalSouls =
     profile.game_mode === "island" ? constants.FAIRY_SOULS.max.stranded : constants.FAIRY_SOULS.max.normal;
@@ -1432,11 +1548,15 @@ export async function getStats(
     output.slayers = Object.assign({}, slayers);
   }
 
-  if (!items.no_inventory) output.missingAccessories = getMissingAccessories(items.accessory_ids);
+  if (!items.no_inventory) {
+    output.missingAccessories = getMissingAccessories(items.accessory_ids);
+  }
 
   output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
 
-  if (!userProfile.pets) userProfile.pets = [];
+  if (!userProfile.pets) {
+    userProfile.pets = [];
+  }
 
   userProfile.pets.push(...items.pets);
 
@@ -1498,7 +1618,9 @@ export async function getStats(
     entityId.split("_").forEach((split, index) => {
       entityName += split.charAt(0).toUpperCase() + split.slice(1);
 
-      if (index < entityId.split("_").length - 1) entityName += " ";
+      if (index < entityId.split("_").length - 1) {
+        entityName += " ";
+      }
     });
 
     stat.entityName = entityName;
@@ -1555,7 +1677,9 @@ export async function getStats(
 
   output.display_name = playerObject.display_name;
 
-  if ("wardrobe_equipped_slot" in userProfile) output.wardrobe_equipped_slot = userProfile.wardrobe_equipped_slot;
+  if ("wardrobe_equipped_slot" in userProfile) {
+    output.wardrobe_equipped_slot = userProfile.wardrobe_equipped_slot;
+  }
 
   const userInfo = await db.collection("usernames").findOne({ uuid: profile.uuid });
 
@@ -1571,15 +1695,22 @@ export async function getStats(
       display_name: userInfo.username,
     });
 
-    if ("emoji" in userInfo) output.display_emoji = userInfo.emoji;
-    if ("emojiImg" in userInfo) output.display_emoji_img = userInfo.emojiImg;
+    if ("emoji" in userInfo) {
+      output.display_emoji = userInfo.emoji;
+    }
+
+    if ("emojiImg" in userInfo) {
+      output.display_emoji_img = userInfo.emojiImg;
+    }
 
     if (userInfo.username == "jjww2") {
       output.display_emoji = constants.randomEmoji();
     }
   }
 
-  if (profile.banking?.balance) output.bank = profile.banking.balance;
+  if (profile.banking?.balance) {
+    output.bank = profile.banking.balance;
+  }
 
   output.guild = await helper.getGuild(profile.uuid, db, options.cacheOnly);
 
@@ -1684,7 +1815,9 @@ export async function getStats(
 
       farming.crops[crop].contests++;
       farming.crops[crop].attended = true;
-      if (farming.crops[crop].personal_best < data.collected) farming.crops[crop].personal_best = data.collected;
+      if (farming.crops[crop].personal_best < data.collected) {
+        farming.crops[crop].personal_best = data.collected;
+      }
 
       const contest = {
         date: date,
@@ -1764,7 +1897,9 @@ export async function getStats(
           statKey = statKey.join("_");
           const tierInfo = _.cloneDeep(constants.EXPERIMENTS.tiers[tierValue]);
 
-          if (!gameOutput.tiers[tierValue]) gameOutput.tiers[tierValue] = tierInfo;
+          if (!gameOutput.tiers[tierValue]) {
+            gameOutput.tiers[tierValue] = tierInfo;
+          }
 
           Object.assign(gameOutput.tiers[tierValue], {
             [statKey]: gameData[key],
@@ -1789,7 +1924,9 @@ export async function getStats(
       enchanting.experiments[game] = gameOutput;
     }
 
-    if (!Object.keys(enchanting.experiments).length >= 1) enchanting.experimented = false;
+    if (!Object.keys(enchanting.experiments).length >= 1) {
+      enchanting.experimented = false;
+    }
   }
 
   output.enchanting = enchanting;
@@ -1869,8 +2006,9 @@ export async function getStats(
   misc.auctions_buy = {};
   misc.claimed_items = {};
 
-  if ("ender_crystals_destroyed" in userProfile.stats)
+  if ("ender_crystals_destroyed" in userProfile.stats) {
     misc.dragons["ender_crystals_destroyed"] = userProfile.stats["ender_crystals_destroyed"];
+  }
 
   misc.dragons["last_hits"] = 0;
   misc.dragons["deaths"] = 0;
@@ -1890,7 +2028,9 @@ export async function getStats(
   const chains_complete = {};
 
   for (const key of burrows) {
-    if (key in userProfile.stats) misc.burrows[key.replace("mythos_burrows_", "")] = { total: userProfile.stats[key] };
+    if (key in userProfile.stats) {
+      misc.burrows[key.replace("mythos_burrows_", "")] = { total: userProfile.stats[key] };
+    }
   }
 
   misc.profile_upgrades = getProfileUpgrades(profile);
@@ -1902,11 +2042,15 @@ export async function getStats(
   const auctions_sold = {};
 
   for (const key of auctions_sell) {
-    if (key in userProfile.stats) misc.auctions_sell[key.replace("auctions_", "")] = userProfile.stats[key];
+    if (key in userProfile.stats) {
+      misc.auctions_sell[key.replace("auctions_", "")] = userProfile.stats[key];
+    }
   }
 
   for (const key of auctions_buy) {
-    if (key in userProfile.stats) misc.auctions_buy[key.replace("auctions_", "")] = userProfile.stats[key];
+    if (key in userProfile.stats) {
+      misc.auctions_buy[key.replace("auctions_", "")] = userProfile.stats[key];
+    }
   }
 
   misc.objectives.completedRaces = [];
@@ -1993,28 +2137,36 @@ export async function getStats(
 
   misc.uncategorized = {};
 
-  if ("soulflow" in userProfile)
+  if ("soulflow" in userProfile) {
     misc.uncategorized.soulflow = { raw: userProfile.soulflow, formatted: helper.formatNumber(userProfile.soulflow) };
-  if ("fastest_target_practice" in userProfile)
+  }
+  if ("fastest_target_practice" in userProfile) {
     misc.uncategorized.fastest_target_practice = {
       raw: userProfile.fastest_target_practice,
       formatted: `${helper.formatNumber(userProfile.fastest_target_practice)}s`,
     };
-  if ("favorite_arrow" in userProfile)
+  }
+
+  if ("favorite_arrow" in userProfile) {
     misc.uncategorized.favorite_arrow = {
       raw: userProfile.favorite_arrow,
       formatted: `${helper.capitalizeFirstLetter(userProfile.favorite_arrow.replaceAll("_", " ").toLowerCase())}`,
     };
-  if ("teleporter_pill_consumed" in userProfile)
+  }
+
+  if ("teleporter_pill_consumed" in userProfile) {
     misc.uncategorized.teleporter_pill_consumed = {
       raw: userProfile.teleporter_pill_consumed,
       formatted: userProfile.teleporter_pill_consumed ? "Yes" : "No",
     };
-  if ("reaper_peppers_eaten" in userProfile)
+  }
+
+  if ("reaper_peppers_eaten" in userProfile) {
     misc.uncategorized.reaper_peppers_eaten = {
       raw: userProfile.reaper_peppers_eaten,
       formatted: helper.formatNumber(userProfile.reaper_peppers_eaten),
     };
+  }
 
   output.misc = misc;
   output.auctions_bought = auctions_bought;
@@ -2044,7 +2196,9 @@ export async function getStats(
     for (const cake of userProfile.temp_stat_buffs) {
       if (!cake.key.startsWith("cake_")) continue;
       let stat = cake.key.replace("cake_", "");
-      if (Object.keys(constants.STAT_MAPPINGS).includes(stat)) stat = constants.STAT_MAPPINGS[stat];
+      if (Object.keys(constants.STAT_MAPPINGS).includes(stat)) {
+        stat = constants.STAT_MAPPINGS[stat];
+      }
       centuryCakes.push({
         stat: stat == "walk_speed" ? "speed" : stat,
         amount: cake.amount,
@@ -2109,7 +2263,9 @@ export async function getPets(profile, collections) {
       pet.texture_path = petData.head;
     }
 
-    if (petData.hatching?.level > pet.level.level) pet.texture_path = petData.hatching.head;
+    if (petData.hatching?.level > pet.level.level) {
+      pet.texture_path = petData.hatching.head;
+    }
 
     let petSkin = null;
     if (pet.skin && constants.PET_SKINS?.[`PET_SKIN_${pet.skin}`]) {
@@ -2125,9 +2281,13 @@ export async function getPets(profile, collections) {
     } else {
       loreFirstRow.push(helper.capitalizeFirstLetter(petData.type), " ", petData.category ?? "Pet");
 
-      if (petData.obtainsExp === "feed") loreFirstRow.push(", feed to gain XP");
+      if (petData.obtainsExp === "feed") {
+        loreFirstRow.push(", feed to gain XP");
+      }
 
-      if (petSkin) loreFirstRow.push(`, ${petSkin} Skin`);
+      if (petSkin) {
+        loreFirstRow.push(`, ${petSkin} Skin`);
+      }
     }
 
     lore.push(loreFirstRow.join(""), "");
@@ -2163,7 +2323,9 @@ export async function getPets(profile, collections) {
         }
 
         for (const stat in constants.PET_ITEMS[heldItem]?.multStats) {
-          if (pet.stats[stat]) pet.stats[stat] = (pet.stats[stat] || 0) * constants.PET_ITEMS[heldItem].multStats[stat];
+          if (pet.stats[stat]) {
+            pet.stats[stat] = (pet.stats[stat] || 0) * constants.PET_ITEMS[heldItem].multStats[stat];
+          }
         }
 
         if ("multAllStats" in constants.PET_ITEMS[heldItem]) {
@@ -2189,11 +2351,15 @@ export async function getPets(profile, collections) {
       });
 
       // now we push the lore of the held items
-      if (!heldItemObj) heldItemObj = constants.PET_ITEMS[heldItem];
+      if (!heldItemObj) {
+        heldItemObj = constants.PET_ITEMS[heldItem];
+      }
 
       lore.push("", `§6Held Item: §${constants.RARITY_COLORS[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
 
-      if (heldItem in constants.PET_ITEMS) lore.push(constants.PET_ITEMS[heldItem].description);
+      if (heldItem in constants.PET_ITEMS) {
+        lore.push(constants.PET_ITEMS[heldItem].description);
+      }
 
       // extra line
       lore.push(" ");
@@ -2217,14 +2383,16 @@ export async function getPets(profile, collections) {
     }
 
     // passive perks text
-    if (petData.passivePerks) lore.push("§8This pet's perks are active even when the pet is not summoned!", "");
-
+    if (petData.passivePerks) {
+      lore.push("§8This pet's perks are active even when the pet is not summoned!", "");
+    }
     // always gains exp text
     if (petData.alwaysGainsExp) {
       lore.push("§8This pet gains XP even when not summoned!", "");
 
-      if (typeof petData.alwaysGainsExp === "string")
+      if (typeof petData.alwaysGainsExp === "string") {
         lore.push(`§8This pet only gains XP on the ${petData.alwaysGainsExp}§8!`, "");
+      }
     }
 
     if (pet.level.level < petData.maxLevel) {
@@ -2248,7 +2416,9 @@ export async function getPets(profile, collections) {
       )} §6(${Math.floor((pet.exp / pet.level.xpMaxLevel) * 100)}%)`
     );
 
-    if (petData.obtainsExp !== "feed") lore.push(`§7Candy Used: §e${pet.candyUsed || 0} §6/ §e10`);
+    if (petData.obtainsExp !== "feed") {
+      lore.push(`§7Candy Used: §e${pet.candyUsed || 0} §6/ §e10`);
+    }
 
     pet.lore = "";
 
@@ -2338,8 +2508,9 @@ function getPetScore(pets) {
   const highestRarity = {};
 
   for (const pet of pets) {
-    if (!(pet.type in highestRarity) || constants.PET_VALUE[pet.rarity] > highestRarity[pet.type])
+    if (!(pet.type in highestRarity) || constants.PET_VALUE[pet.rarity] > highestRarity[pet.type]) {
       highestRarity[pet.type] = constants.PET_VALUE[pet.rarity];
+    }
   }
 
   return Object.values(highestRarity).reduce((a, b) => a + b, 0);
@@ -2403,7 +2574,9 @@ function getMissingAccessories(accessories) {
     let includes = false;
 
     for (const array of Object.values(constants.ACCESSORY_UPGRADES)) {
-      if (array.includes(accessory)) includes = true;
+      if (array.includes(accessory)) {
+        includes = true;
+      }
     }
 
     includes ? upgrades.push(object) : other.push(object);
@@ -2439,20 +2612,25 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
     for (const member in profile.members) {
       const memberProfile = profile.members[member];
 
-      if ("collection" in memberProfile)
+      if ("collection" in memberProfile) {
         amounts.push({ username: members[member], amount: memberProfile.collection[type] || 0 });
+      }
     }
 
     for (const memberAmount of amounts) {
       totalAmount += memberAmount.amount;
     }
 
-    if (!(type in output) || tier > output[type].tier) output[type] = { tier, amount, totalAmount, amounts };
+    if (!(type in output) || tier > output[type].tier) {
+      output[type] = { tier, amount, totalAmount, amounts };
+    }
 
     const collectionData = constants.COLLECTION_DATA.find((a) => a.skyblockId == type);
 
     for (const tier of collectionData?.tiers ?? []) {
-      if (totalAmount >= tier.amountRequired) output[type].tier = Math.max(tier.tier, output[type].tier);
+      if (totalAmount >= tier.amountRequired) {
+        output[type].tier = Math.max(tier.tier, output[type].tier);
+      }
     }
   }
 
@@ -2550,8 +2728,13 @@ export function getDungeons(userProfile, hypixelProfile) {
 
         const id = `${type}_${floor}`; // Floor ID
         if (dungeons_data.floors[id]) {
-          if (dungeons_data.floors[id].name) floors[floor].name = dungeons_data.floors[id].name;
-          if (dungeons_data.floors[id].texture) floors[floor].icon_texture = dungeons_data.floors[id].texture;
+          if (dungeons_data.floors[id].name) {
+            floors[floor].name = dungeons_data.floors[id].name;
+          }
+
+          if (dungeons_data.floors[id].texture) {
+            floors[floor].icon_texture = dungeons_data.floors[id].texture;
+          }
         }
 
         if (key.startsWith("most_damage")) {
@@ -2591,15 +2774,22 @@ export function getDungeons(userProfile, hypixelProfile) {
   for (const className of Object.keys(dungeons.player_classes)) {
     const data = dungeons.player_classes[className];
 
-    if (!data.experience) data.experience = 0;
+    if (!data.experience) {
+      data.experience = 0;
+    }
 
     output.classes[className] = {
       experience: getLevelByXp(data.experience, { type: "dungeoneering", class: className }),
       current: false,
     };
 
-    if (data.experience > 0) used_classes = true;
-    if (className == current_class) output.classes[className].current = true;
+    if (data.experience > 0) {
+      used_classes = true;
+    }
+
+    if (className == current_class) {
+      output.classes[className].current = true;
+    }
   }
 
   output.used_classes = used_classes;
@@ -2662,7 +2852,9 @@ export function getDungeons(userProfile, hypixelProfile) {
         break;
       }
 
-      if (collections[coll_id].tier == coll.max_tiers) collections[coll_id].maxed = true;
+      if (collections[coll_id].tier == coll.max_tiers) {
+        collections[coll_id].maxed = true;
+      }
     }
   }
 
@@ -2708,7 +2900,9 @@ export function getDungeons(userProfile, hypixelProfile) {
 
     journals.pages_collected += entry.pages_collected;
     if (entry.total_pages != null) {
-      if (entry.pages_collected >= entry.total_pages) journals.journals_completed++;
+      if (entry.pages_collected >= entry.total_pages) {
+        journals.journals_completed++;
+      }
     }
 
     journals.journal_entries.push(entry);
@@ -2718,7 +2912,9 @@ export function getDungeons(userProfile, hypixelProfile) {
     journals.total_pages += journal_constants[entry_id].pages || 0;
   }
 
-  if (journals.pages_collected >= journals.total_pages) journals.maxed = true;
+  if (journals.pages_collected >= journals.total_pages) {
+    journals.maxed = true;
+  }
 
   output.journals = journals;
 
@@ -2773,7 +2969,7 @@ function getEssence(userProfile) {
   return output;
 }
 
-function getHotmItems(userProfile, packs) {
+async function getHotmItems(userProfile, packs) {
   const data = userProfile.mining_core;
   const output = [];
 
@@ -2795,7 +2991,9 @@ function getHotmItems(userProfile, packs) {
 
   // Check for missing node classes
   for (const nodeId in nodes) {
-    if (!constants.HOTM.nodes[nodeId]) throw new Error(`Missing Heart of the Mountain node: ${nodeId}`);
+    if (!constants.HOTM.nodes[nodeId]) {
+      throw new Error(`Missing Heart of the Mountain node: ${nodeId}`);
+    }
   }
 
   // Processing nodes
@@ -2975,7 +3173,9 @@ async function getForge(userProfile) {
       if (item.id in constants.FORGE_TIMES) {
         let forgeTime = constants.FORGE_TIMES[item.id] * 60 * 1000; // convert minutes to milliseconds
         const quickForge = userProfile.mining_core?.nodes?.forge_time;
-        if (quickForge) forgeTime *= constants.QUICK_FORGE_MULTIPLIER[quickForge];
+        if (quickForge) {
+          forgeTime *= constants.QUICK_FORGE_MULTIPLIER[quickForge];
+        }
 
         const dbObject = await db.collection("items").findOne({ id: item.id });
 
@@ -3043,6 +3243,7 @@ export async function getProfile(
 
     for await (const doc of profileData) {
       if (!doc.members?.[uuid]) continue;
+
       allSkyBlockProfiles.push(Object.assign(doc, profileObject.profiles[doc.profile_id]));
     }
   } else {
@@ -3066,12 +3267,20 @@ export async function getProfile(
         { retries: 2 }
       );
 
-      if (!response.data.success) throw new Error("Request to Hypixel API failed. Please try again!");
-      if (!response.data.profiles) throw new Error("Player has no SkyBlock profiles.");
+      if (!response.data.success) {
+        throw new Error("Request to Hypixel API failed. Please try again!");
+      }
+
+      if (!response.data.profiles) {
+        throw new Error("Player has no SkyBlock profiles.");
+      }
 
       allSkyBlockProfiles = response.data.profiles;
     } catch (e) {
-      if (e?.response?.data?.cause) throw new Error(`Hypixel API Error: ${e.response.data.cause}.`);
+      if (e?.response?.data?.cause) {
+        throw new Error(`Hypixel API Error: ${e.response.data.cause}.`);
+      }
+
       throw e;
     }
   }
@@ -3084,11 +3293,14 @@ export async function getProfile(
 
   let skyBlockProfiles = [];
 
-  if (paramProfile)
+  if (paramProfile) {
     paramProfile.length == 32
       ? (skyBlockProfiles = allSkyBlockProfiles.filter((a) => a.profile_id.toLowerCase() == paramProfile))
       : (skyBlockProfiles = allSkyBlockProfiles.filter((a) => a.cute_name.toLowerCase() == paramProfile));
-  if (skyBlockProfiles.length == 0) skyBlockProfiles = allSkyBlockProfiles;
+  }
+  if (skyBlockProfiles.length == 0) {
+    skyBlockProfiles = allSkyBlockProfiles;
+  }
 
   const profiles = [];
   let memberCount = 0;
@@ -3098,12 +3310,16 @@ export async function getProfile(
       memberCount++;
     }
 
-    if (memberCount == 0 && paramProfile) throw new Error("Uh oh, this SkyBlock profile has no players.");
+    if (memberCount == 0 && paramProfile) {
+      throw new Error("Uh oh, this SkyBlock profile has no players.");
+    }
 
     profiles.push(profile);
   }
 
-  if (profiles.length == 0) throw new Error("No data returned by Hypixel API, please try again!");
+  if (profiles.length == 0) {
+    throw new Error("No data returned by Hypixel API, please try again!");
+  }
 
   let profile;
   const storeProfiles = {};
@@ -3111,14 +3327,20 @@ export async function getProfile(
   for (const _profile of allSkyBlockProfiles) {
     if (!_profile.members[uuid]) continue;
 
-    if (!response?.request?.fromCache) {
+    if (!response.request?.fromCache) {
       const insertCache = {
         last_update: new Date(),
         members: _profile.members,
       };
 
-      if ("banking" in _profile) insertCache.banking = _profile.banking;
-      if ("community_upgrades" in _profile) insertCache.community_upgrades = _profile.community_upgrades;
+      if ("banking" in _profile) {
+        insertCache.banking = _profile.banking;
+      }
+
+      if ("community_upgrades" in _profile) {
+        insertCache.community_upgrades = _profile.community_upgrades; 
+      } 
+
 
       db.collection("profileCache")
         .updateOne({ profile_id: _profile.profile_id }, { $set: insertCache }, { upsert: true })
@@ -3150,7 +3372,9 @@ export async function getProfile(
 
   const userProfile = profile.members[uuid];
 
-  if (profileObject && "current_area" in profileObject) userProfile.current_area = profileObject.current_area;
+  if (profileObject && "current_area" in profileObject) {
+    userProfile.current_area = profileObject.current_area;
+  }
 
   userProfile.current_area_updated = true;
 
@@ -3346,8 +3570,9 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
     const minionCrafts = [];
 
     for (const member in singleProfile.members) {
-      if (Array.isArray(singleProfile.members[member].crafted_generators))
+      if (Array.isArray(singleProfile.members[member].crafted_generators)) {
         minionCrafts.push(...singleProfile.members[member].crafted_generators);
+      }
     }
 
     multi.zadd(`lb_unique_minions`, _.uniq(minionCrafts).length, singleProfile.profile_id);

@@ -119,7 +119,9 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
       .toArray();
 
     for (const doc of playerObjects) {
-      if (doc.username.toLowerCase() == uuid.toLowerCase()) user = doc;
+      if (doc.username.toLowerCase() == uuid.toLowerCase()) {
+        user = doc;
+      }
     }
   }
 
@@ -161,7 +163,9 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
             skinData.model = data.textures.slim ? "slim" : "default";
           }
 
-          if (data.textures?.cape) skinData.capeurl = data.textures.cape.url;
+          if (data.textures?.cape) {
+            skinData.capeurl = data.textures.cape.url;
+          }
 
           updateDoc = Object.assign(updateDoc, skinData);
 
@@ -183,7 +187,9 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
         }
       })
       .catch(async (err) => {
-        if (user) await db.collection("usernames").updateOne({ uuid: user.uuid }, { $set: { date: +new Date() } });
+        if (user) {
+          await db.collection("usernames").updateOne({ uuid: user.uuid }, { $set: { date: +new Date() } });
+        }
 
         console.error(err);
       });
@@ -226,8 +232,10 @@ export async function getGuild(uuid, db, cacheOnly = false) {
   let guildObject = null;
 
   if (cacheOnly && !guildMember) return null;
-  if (guildMember && guildMember.gid)
+
+  if (guildMember && guildMember.gid) {
     guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildMember.gid) });
+  }
 
   if (
     cacheOnly ||
@@ -265,8 +273,9 @@ export async function getGuild(uuid, db, cacheOnly = false) {
           }
 
           for (const member of guild.members) {
-            if (!gm && guild.ranks.find((a) => a.name.toLowerCase() == member.rank.toLowerCase()) == undefined)
+            if (!gm && guild.ranks.find((a) => a.name.toLowerCase() == member.rank.toLowerCase()) == undefined) {
               gm = member.uuid;
+            }
 
             await db
               .collection("guildMembers")
@@ -280,10 +289,11 @@ export async function getGuild(uuid, db, cacheOnly = false) {
           const guildMembers = await db.collection("guildMembers").find({ gid: guild._id }).toArray();
 
           for (const member of guildMembers) {
-            if (guild.members.find((a) => a.uuid == member.uuid) == undefined)
+            if (guild.members.find((a) => a.uuid == member.uuid) == undefined) {
               await db
                 .collection("guildMembers")
                 .updateOne({ uuid: member.uuid }, { $set: { gid: null, last_updated: new Date() } });
+            }
           }
 
           const guildObject = await db.collection("guilds").findOneAndUpdate(
@@ -518,8 +528,13 @@ export async function updateRank(uuid, db) {
 
     rank = Object.assign(rank, parseRank(player));
 
-    if (player?.socialMedia?.links) rank.socials = player.socialMedia.links;
-    if (player?.achievements) rank.achievements = player.achievements;
+    if (player?.socialMedia?.links) {
+      rank.socials = player.socialMedia.links;
+    }
+
+    if (player?.achievements) {
+      rank.achievements = player.achievements;
+    }
 
     const claimable = {
       claimed_potato_talisman: "Potato Talisman",
@@ -557,8 +572,9 @@ export async function getRank(uuid, db, cacheOnly = false) {
 
   let updateRankPromise;
 
-  if (!cacheOnly && (!hypixelPlayer || +new Date() - hypixelPlayer.last_updated > 3600 * 1000))
+  if (!cacheOnly && (!hypixelPlayer || +new Date() - hypixelPlayer.last_updated > 3600 * 1000)) {
     updateRankPromise = updateRank(uuid, db);
+  }
 
   if (!cacheOnly && !hypixelPlayer) hypixelPlayer = await updateRankPromise;
 
@@ -611,7 +627,9 @@ export async function fetchMembers(profileId, db, returnUuid = false) {
 }
 
 export function getClusterId(fullName = false) {
-  if (fullName) return cluster.isWorker ? `worker${cluster.worker.id}` : "master";
+  if (fullName) {
+    return cluster.isWorker ? `worker${cluster.worker.id}` : "master";
+  }
 
   return cluster.isWorker ? `w${cluster.worker.id}` : "m";
 }
@@ -726,7 +744,9 @@ export function generateGemLore(type, tier, rarity) {
   // Final lore
   lore.push(color, titleCase(tier), " ", titleCase(type));
 
-  if (stats.length) lore.push("§7 (", stats.join("§7, "), "§7)");
+  if (stats.length) {
+    lore.push("§7 (", stats.join("§7, "), "§7)");
+  }
 
   return lore.join("");
 }
@@ -782,7 +802,9 @@ export function generateItem(data) {
   };
 
   // Making sure rarity is lowercase
-  if (data.rarity) data.rarity = data.rarity.toLowerCase();
+  if (data.rarity) {
+    data.rarity = data.rarity.toLowerCase();
+  }
 
   // Setting tag.display.Name using display_name if not specified
   if (data.display_name && !data.tag.display.Name) {
@@ -886,7 +908,9 @@ export function parseItemTypeFromLore(lore) {
 
 export function getCacheFilePath(dirPath, type, name) {
   // we don't care about folder optimization when we're developing
-  if (process.env?.NODE_ENV == "development") return path.resolve(dirPath, `${type}_${name}.png`);
+  if (process.env?.NODE_ENV == "development") {
+    return path.resolve(dirPath, `${type}_${name}.png`);
+  }
 
   const subdirs = [type];
 
@@ -894,7 +918,9 @@ export function getCacheFilePath(dirPath, type, name) {
   if (type == "texture" || type == "head") subdirs.push(name.slice(0, 2));
 
   // for potion and leather type, we get what variant they are to split them further
-  if (type == "leather" || type == "potion") subdirs.push(name.split("_")[0]);
+  if (type == "leather" || type == "potion") {
+    subdirs.push(name.split("_")[0]);
+  }
 
   // check if the entire folder path is available
   if (!fs.pathExistsSync(path.resolve(dirPath, subdirs.join("/")))) {
@@ -903,7 +929,9 @@ export function getCacheFilePath(dirPath, type, name) {
       const checkDirs = subdirs.slice(0, i);
       const checkPath = path.resolve(dirPath, checkDirs.join("/"));
 
-      if (!fs.pathExistsSync(checkPath)) fs.mkdirSync(checkPath);
+      if (!fs.pathExistsSync(checkPath)) {
+        fs.mkdirSync(checkPath);
+      }
     }
   }
 
