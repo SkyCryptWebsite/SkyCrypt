@@ -35,8 +35,7 @@ document.addEventListener("click", (e) => {
     item =
       calculated.missingAccessories.missing[parseInt(element.getAttribute("data-missing-accessory-index") as string)];
   } else if (element.hasAttribute("data-trophy-fish-index")) {
-    item =
-      calculated.trophy_fish.fish[parseInt(element.getAttribute("data-trophy-fish-index") as string)];
+    item = calculated.trophy_fish.fish[parseInt(element.getAttribute("data-trophy-fish-index") as string)];
   } else if (element.hasAttribute("data-upgrade-accessory-index")) {
     item =
       calculated.missingAccessories.upgrades[parseInt(element.getAttribute("data-upgrade-accessory-index") as string)];

@@ -574,7 +574,7 @@ declare const calculated: SkyCryptPlayer & {
     fish: {
       [key: string]: {
         display_name: string;
-        id: string;
+        type: string;
         lore: string;
         texture_path: string;
         rarity: string;
@@ -585,7 +585,7 @@ declare const calculated: SkyCryptPlayer & {
           silver: number;
           gold: number;
           diamond: number;
-        }
+        };
       };
     };
   };
@@ -713,18 +713,19 @@ interface StatBonusType {
   };
 }
 
-interface TrophyFish {
+interface TrophyFish extends Item {
   display_name: string;
-  id: string;
+  type: string;
   lore: string;
   texture_path: string;
-  total?: number;
   rarity: string;
+  amount?: number;
   trophy_fish: boolean;
   amounts: {
-    bronze: number,
-    silver: number,
-    gold: number,
-    diamond: number,
-  },
+    bronze: number;
+    silver: number;
+    gold: number;
+    diamond: number;
+  };
 }
+

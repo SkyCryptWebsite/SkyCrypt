@@ -2758,7 +2758,7 @@ export function getTrophyFish(userProfile) {
   for (const key of Object.keys(constants.TROPHY_FISH)) {
     trophyFish.fish[Object.keys(constants.TROPHY_FISH).indexOf(key)] = {
       display_name: helper.generateItem(constants.TROPHY_FISH[key]).tag.display.Name,
-      id: key,
+      type: key,
       lore: helper.generateItem(constants.TROPHY_FISH[key]).tag.display.Lore,
       texture_path: constants.TROPHY_FISH[key].texture_path,
       total: userProfile.trophy_fish[key.toLowerCase()] || 0,
