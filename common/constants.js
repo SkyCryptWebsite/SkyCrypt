@@ -1,6 +1,5 @@
 export * from "./constants/accessories.js";
 export * from "./constants/armor.js";
-export * from "./constants/bestiary.js";
 export * from "./constants/bonuses.js";
 export * from "./constants/enchantments.js";
 export * from "./constants/items.js";
