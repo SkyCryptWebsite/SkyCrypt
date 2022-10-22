@@ -1386,7 +1386,7 @@ export const getItems = async (
   return output;
 };
 
-async function getLevels(userProfile, hypixelProfile, levelCaps) {
+async function getLevels(userProfile, hypixelProfile, levelCaps, profileMembers) {
   const output = {};
 
   let skillLevels;
@@ -1426,10 +1426,12 @@ async function getLevels(userProfile, hypixelProfile, levelCaps) {
         skill: "runecrafting",
         type: "runecrafting",
       }),
-      social: getLevelByXp(userProfile.experience_skill_social2, {
-        skill: "social",
-        type: "social",
-      }),
+      social: getLevelByXp(
+        Object.keys(profileMembers)
+          .map((member) => profileMembers[member].experience_skill_social2 || 0)
+          .reduce((a, b) => a + b, 0),
+        { skill: "social", type: "social" }
+      ),
     };
 
     for (const skill in skillLevels) {
@@ -1547,7 +1549,8 @@ export async function getStats(
   const { levels, average_level, average_level_no_progress, total_skill_xp, average_level_rank } = await getLevels(
     userProfile,
     hypixelProfile,
-    levelCaps
+    levelCaps,
+    profile.members
   );
 
   output.levels = levels;
