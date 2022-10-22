@@ -569,15 +569,23 @@ declare const calculated: SkyCryptPlayer & {
     amount: number;
   }[];
   reaper_peppers_eaten: number;
-  trophyFish: {
+  trophy_fish: {
     total_caught: number;
     fish: {
       [key: string]: {
+        display_name: string;
         id: string;
-        name: string;
+        lore: string;
+        texture_path: string;
+        rarity: string;
         amount: number;
-        head: string;
-        description: string;
+        trophy_fish: boolean;
+        amounts: {
+          bronze: number;
+          silver: number;
+          gold: number;
+          diamond: number;
+        }
       };
     };
   };
@@ -703,4 +711,20 @@ interface StatBonusType {
   [key: string]: {
     [key in StatName]?: number;
   };
+}
+
+interface TrophyFish {
+  display_name: string;
+  id: string;
+  lore: string;
+  texture_path: string;
+  total?: number;
+  rarity: string;
+  trophy_fish: boolean;
+  amounts: {
+    bronze: number,
+    silver: number,
+    gold: number,
+    diamond: number,
+  },
 }
