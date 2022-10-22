@@ -576,8 +576,10 @@ export async function getRank(uuid, db, cacheOnly = false) {
     updateRankPromise = updateRank(uuid, db);
   }
 
-  if (!cacheOnly && !hypixelPlayer) hypixelPlayer = await updateRankPromise;
-
+  if (!cacheOnly && !hypixelPlayer) {
+    hypixelPlayer = await updateRankPromise;
+  }
+  
   hypixelPlayer ??= { achievements: {} };
 
   return hypixelPlayer;
