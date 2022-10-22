@@ -543,7 +543,7 @@ class Endermite extends Pet {
     return {
       name: "§6Mite Bait",
       desc: [
-        `§7Gain a §a${round(this.level * 0.03, 1)}% §7chance to dig up a bonus §cNest Endermite per §d+1 ${
+        `§7Gain a §a${round(this.level * 0.03, 1)}% §7chance to dig up a bonus §cNest Endermite §7per §d+1 ${
           SYMBOLS.pet_luck
         } Pet Luck §8(Stacks above 100%)`,
       ],
