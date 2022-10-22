@@ -3338,9 +3338,8 @@ export async function getProfile(
       }
 
       if ("community_upgrades" in _profile) {
-        insertCache.community_upgrades = _profile.community_upgrades; 
-      } 
-
+        insertCache.community_upgrades = _profile.community_upgrades;
+      }
 
       db.collection("profileCache")
         .updateOne({ profile_id: _profile.profile_id }, { $set: insertCache }, { upsert: true })
