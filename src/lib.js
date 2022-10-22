@@ -152,9 +152,6 @@ export function getLevelByXp(xp, extra = {}) {
   const levelCap =
     extra.cap ?? constants.DEFAULT_SKILL_CAPS[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
 
-  /** the maximum level that any player can achieve (used for gold progress bars) */
-  const maxLevel = constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
-
   /** the level ignoring the cap and using only the table */
   let uncappedLevel = 0;
 
@@ -172,17 +169,31 @@ export function getLevelByXp(xp, extra = {}) {
     }
   }
 
+  if (extra.type == "dungeoneering" && !extra.class) {
+    while (xpCurrent >= 200000000) {
+      uncappedLevel++;
+      xpCurrent -= 200000000;
+    }
+  }
+
+  /** the maximum level that any player can achieve (used for gold progress bars) */
+  const maxLevel =
+    extra.type == "dungeoneering" && uncappedLevel > 50
+      ? uncappedLevel
+      : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
+
   // not sure why this is floored but I'm leaving it in for now
   xpCurrent = Math.floor(xpCurrent);
 
   /** the level as displayed by in game UI */
-  const level = Math.min(levelCap, uncappedLevel);
+  const level = extra.type != "dungeoneering" && !extra.class ? Math.min(levelCap, uncappedLevel) : uncappedLevel;
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
   const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
   /** the fraction of the way toward the next level */
-  const progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+  const progress =
+    extra.type == "dungeoneering" && !extra.class && level > 50 ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
   const levelWithProgress = level + progress;
@@ -2013,9 +2024,44 @@ export async function getStats(
   }
 
   mining.forge = await getForge(userProfile);
-  mining.core = await getMiningCoreData(userProfile);
+  mining.core = getMiningCoreData(userProfile);
 
   output.mining = mining;
+
+  // CRIMSON ISLES
+
+  const crimsonIsles = {
+    kuudra_completed_tiers: {},
+    dojo: {},
+    factions: {},
+    total_dojo_points: 0,
+  };
+
+  crimsonIsles.factions.selected_faction = userProfile.nether_island_player_data?.selected_faction ?? "None";
+  crimsonIsles.factions.mages_reputation = userProfile.nether_island_player_data?.mages_reputation ?? 0;
+  crimsonIsles.factions.barbarians_reputation = userProfile.nether_island_player_data?.barbarians_reputation ?? 0;
+
+  Object.keys(constants.KUUDRA_TIERS).forEach((key) => {
+    crimsonIsles.kuudra_completed_tiers[key] = {
+      name: constants.KUUDRA_TIERS[key].name,
+      head: constants.KUUDRA_TIERS[key].head,
+      completions: userProfile.nether_island_player_data?.kuudra_completed_tiers[key] ?? 0,
+    };
+  });
+
+  Object.keys(constants.DOJO).forEach((key) => {
+    key = key.replaceAll("dojo_points_", "").replaceAll("dojo_time_", "");
+    crimsonIsles.total_dojo_points += userProfile.nether_island_player_data?.dojo[`dojo_points_${key}`] ?? 0;
+    crimsonIsles.dojo[key.toUpperCase()] = {
+      name: constants.DOJO[key].name,
+      id: constants.DOJO[key].itemId,
+      damage: constants.DOJO[key].damage,
+      points: userProfile.nether_island_player_data?.dojo[`dojo_points_${key}`] ?? 0,
+      time: userProfile.nether_island_player_data?.dojo[`dojo_time_${key}`] ?? 0,
+    };
+  });
+
+  output.crimsonIsles = crimsonIsles;
 
   // MISC
 
@@ -2113,9 +2159,9 @@ export async function getStats(
       auctions_sold[key.replace("auctions_sold_", "")] = userProfile.stats[key];
     } else if (key.includes("auctions_bought_")) {
       auctions_bought[key.replace("auctions_bought_", "")] = userProfile.stats[key];
-    } else if (key.startsWith("kills_") && key.endsWith("_dragon")) {
+    } else if (key.startsWith("kills_") && key.endsWith("_dragon") && key !== "kills_master_wither_king_dragon") {
       misc.dragons["last_hits"] += userProfile.stats[key];
-    } else if (key.startsWith("deaths_") && key.endsWith("_dragon")) {
+    } else if (key.startsWith("deaths_") && key.endsWith("_dragon") && key !== "deaths_master_wither_king_dragon") {
       misc.dragons["deaths"] += userProfile.stats[key];
     } else if (key.includes("kills_corrupted_protector")) {
       misc.protector["last_hits"] = userProfile.stats[key];
@@ -2846,7 +2892,7 @@ export function getDungeons(userProfile, hypixelProfile) {
     }
 
     output.classes[className] = {
-      experience: getLevelByXp(data.experience, { type: "dungeoneering" }),
+      experience: getLevelByXp(data.experience, { type: "dungeoneering", class: className }),
       current: false,
     };
 
@@ -2856,9 +2902,13 @@ export function getDungeons(userProfile, hypixelProfile) {
     if (className == current_class) {
       output.classes[className].current = true;
     }
+
+    output.class_average ??= 0;
+    output.class_average += output.classes[className].experience.level;
   }
 
   output.used_classes = used_classes;
+  output.class_average = output.class_average / Object.keys(output.classes).length;
 
   output.selected_class = current_class;
   output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
