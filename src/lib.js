@@ -3327,7 +3327,7 @@ export async function getProfile(
   for (const _profile of allSkyBlockProfiles) {
     if (!_profile.members[uuid]) continue;
 
-    if (!response.request?.fromCache) {
+    if (!response?.request?.fromCache) {
       const insertCache = {
         last_update: new Date(),
         members: _profile.members,
