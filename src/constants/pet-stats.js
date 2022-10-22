@@ -554,7 +554,7 @@ class Endermite extends Pet {
     return {
       name: "§6Sacrificer",
       desc: [
-        `§7Increases the odds of rolling for bonus items in the §cDraconic Altar by §a${round(this.level * 0.1, 1)}%.`,
+        `§7Increases the odds of rolling for bonus items in the §cDraconic Altar §7by §a${round(this.level * 0.1, 1)}%.`,
       ],
     };
   }
