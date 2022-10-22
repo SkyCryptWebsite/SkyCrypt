@@ -1426,12 +1426,15 @@ async function getLevels(userProfile, hypixelProfile, levelCaps, profileMembers)
         skill: "runecrafting",
         type: "runecrafting",
       }),
-      social: getLevelByXp(
+      social: Object.keys(profileMembers) ? getLevelByXp(
         Object.keys(profileMembers)
           .map((member) => profileMembers[member].experience_skill_social2 || 0)
           .reduce((a, b) => a + b, 0),
         { skill: "social", type: "social" }
-      ),
+      ) : getLevelByXp(userProfile.experience_skill_social2, {
+        skill: "social",
+        type: "social",
+      }),
     };
 
     for (const skill in skillLevels) {
