@@ -728,4 +728,3 @@ interface TrophyFish extends Item {
     diamond: number;
   };
 }
-
