@@ -564,9 +564,7 @@ function getPetData(stats: PlayerStats, pet: Pet, calculated: PlayerStats) {
   if (pet.type == "BABY_YETI") {
     if (pet.tier == "EPIC") {
       stats.defense.pet ??= 0;
-      // add stats.defense.pet += stats.defense / (0.5 * pet.level.level) with typescript checks
       stats.defense.pet += stats.defense / (0.5 * pet.level.level);
-      
     }
     if (pet.tier == "LEGENDARY") {
       stats.defense.pet ??= 0;
