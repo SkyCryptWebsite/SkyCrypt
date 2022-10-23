@@ -950,6 +950,17 @@ export function parseItemTypeFromLore(lore, itemId) {
     categories.push("farming_tool");
   }
 
+  if (categories.includes("farming_tool")) {
+    if (
+      itemId !== "MELON_DICER" &&
+      itemId !== "PUMPKIN_DICER" &&
+      itemId !== "COCOA_CHOPPER" &&
+      !itemId.includes("HOE")
+    ) {
+      categories = categories.filter((x) => x !== "farming_tool");
+    }
+  }
+
   return {
     categories: categories || [],
     rarity: r.rarity.replaceAll(" ", "_").toLowerCase(),
