@@ -184,7 +184,6 @@ interface Level {
 
 declare namespace constants {
   const MAX_FAVORITES: number;
-  const HARP_QUEST: string;
 }
 
 declare const calculated: SkyCryptPlayer & {

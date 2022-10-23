@@ -130,7 +130,7 @@ export function getPlayerStats() {
   for (const harp in calculated.harp_quest || []) {
     if (harp?.endsWith("_best_completion")) {
       stats.intelligence.harp ??= 0;
-      stats.intelligence.harp += CONSTANTS.HARP_QUEST[harp];
+      stats.intelligence.harp += CONSTANTS.HARP_QUEST[harp as keyof typeof CONSTANTS.HARP_QUEST];
     }
   }
 
@@ -140,7 +140,7 @@ export function getPlayerStats() {
       name = name.replaceAll("permanent_", "");
       if (Object.keys(CONSTANTS.FORBIDDEN_STATS).includes(name)) {
         stats[name].essence_shop ??= 0;
-        stats[name].essence_shop += perkData * CONSTANTS.FORBIDDEN_STATS[name];
+        stats[name].essence_shop += perkData * CONSTANTS.FORBIDDEN_STATS[name as keyof typeof CONSTANTS.FORBIDDEN_STATS];
       }
     }
   }
@@ -156,12 +156,12 @@ export function getPlayerStats() {
 
   for (const armorSet of Object.keys(CONSTANTS.CUSTOM_ARMOR_ABILTIES)) {
     if (
-      helmet?.tag?.ExtraAttributes?.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].helmet &&
-      chestplate?.tag?.ExtraAttributes?.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].chestplate &&
-      leggings?.tag?.ExtraAttributes?.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].leggings &&
-      boots?.tag?.ExtraAttributes?.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].boots
+      helmet?.tag?.ExtraAttributes?.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet as keyof typeof CONSTANTS.CUSTOM_ARMOR_ABILTIES].helmet &&
+      chestplate?.tag?.ExtraAttributes?.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet as keyof typeof CONSTANTS.CUSTOM_ARMOR_ABILTIES].chestplate &&
+      leggings?.tag?.ExtraAttributes?.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet as keyof typeof CONSTANTS.CUSTOM_ARMOR_ABILTIES].leggings &&
+      boots?.tag?.ExtraAttributes?.id == CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet as keyof typeof CONSTANTS.CUSTOM_ARMOR_ABILTIES].boots
     ) {
-      for (const [stat, value] of Object.entries(CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet].bonus)) {
+      for (const [stat, value] of Object.entries(CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet as keyof typeof CONSTANTS.CUSTOM_ARMOR_ABILTIES].bonus)) {
         stats[stat].armor ??= 0;
         stat.includes("_cap")
           ? (stats[stat].armor = value as keyof typeof value)
@@ -246,7 +246,7 @@ export function getPlayerStats() {
 
   for (const rarity in CONSTANTS.MAGICAL_POWER) {
     playerMagicalPower[rarity] = 0;
-    playerMagicalPower[rarity] += rarities[rarity] * CONSTANTS.MAGICAL_POWER[rarity];
+    playerMagicalPower[rarity] += rarities[rarity] * CONSTANTS.MAGICAL_POWER[rarity as keyof typeof CONSTANTS.MAGICAL_POWER];
   }
 
   const mpHegemony: number = rarities.hegemony ? CONSTANTS.MAGICAL_POWER[rarities.hegemony.rarity] : 0;
@@ -445,8 +445,8 @@ export function getPlayerStats() {
     if (!effect.effect || !CONSTANTS.POTION_EFFECTS[effect.effect][effect.level]?.bonus) continue;
     for (const [stat, value] of Object.entries(CONSTANTS.POTION_EFFECTS[effect.effect][effect.level]?.bonus) || []) {
       stats[stat].potion ??= 0;
-      stats[stat].potion += value;
-    }
+      stats[stat].potion += value as number;
+    } 
   }
 
   return stats;
@@ -488,7 +488,7 @@ function getBonusStat(level: number, key: BonusType, max: number) {
   return bonus;
 }
 
-function getPetData(stats, pet, calculated) {
+function getPetData(stats: PlayerStats, pet: Pet, calculated: PlayerStats) {
   let statsMultiplier = 0,
     healthMultiplier = 0,
     defenseMultiplier = 0,
@@ -564,7 +564,9 @@ function getPetData(stats, pet, calculated) {
   if (pet.type == "BABY_YETI") {
     if (pet.tier == "EPIC") {
       stats.defense.pet ??= 0;
-      stats.defense.pet += stats.strength / (0.5 * pet.level.level);
+      // add stats.defense.pet += stats.defense / (0.5 * pet.level.level) with typescript checks
+      stats.defense.pet += stats.defense / (0.5 * pet.level.level);
+      
     }
     if (pet.tier == "LEGENDARY") {
       stats.defense.pet ??= 0;
