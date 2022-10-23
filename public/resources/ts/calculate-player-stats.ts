@@ -40,6 +40,20 @@ export function getPlayerStats() {
     }
   }
 
+  // Active equipment stats
+  for (const piece of items.equipment) {
+    const bonusStats: ItemStats = helper.getStatsFromItem(piece as Item);
+
+    for (const [name, value] of Object.entries(bonusStats)) {
+      if (!allowedStats.includes(name)) {
+        continue;
+      }
+
+      stats[name].equipment ??= 0;
+      stats[name].equipment += value;
+    }
+  }
+
   // Active pet stats
   {
     const activePet = calculated.pets.find((pet) => pet.active);
@@ -87,7 +101,7 @@ export function getPlayerStats() {
   // Dungeoneering stats
   if (calculated.dungeons?.catacombs?.level?.level) {
     const bonusStats: ItemStats = getBonusStat(
-      calculated.dungeons.catacombs.level.level,
+      Math.min(calculated.dungeons?.catacombs?.level?.maxLevel, 50),
       "skill_dungeoneering",
       calculated.dungeons.catacombs.level.maxLevel
     );

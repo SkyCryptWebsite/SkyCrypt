@@ -1,5 +1,4 @@
 import fs from "fs-extra";
-import path from "path";
 import { db } from "../mongo.js";
 import * as helper from "../helper.js";
 
@@ -70,7 +69,8 @@ const FEATURED_PROFILES = [
     })
   );
 
-  await fs.writeJson(path.resolve("./public/resources/js/featured-profiles.json"), FEATURED_PROFILES);
+  const cachePath = helper.getCacheFolderPath(helper.getFolderPath());
+  await fs.writeJson(helper.getCacheFilePath(cachePath, "json", "featured-profiles", "json"), FEATURED_PROFILES);
 
   console.log("Featured profiles updated!");
 }
