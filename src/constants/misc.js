@@ -393,7 +393,7 @@ export const STAT_MAPPINGS = {
 
 export const ACCESSORY_BAG = {
   MAX_ACCESSORY_BAG_UPGRADES: 99,
-}
+};
 
 export const KUUDRA_TIERS = {
   none: {
@@ -410,7 +410,7 @@ export const KUUDRA_TIERS = {
   },
   fiery: {
     name: "Fiery",
-    head: "bd854393bbf9444542502582d4b5a23cc73896506e2fc739d545bc35bc7b1c06", 
+    head: "bd854393bbf9444542502582d4b5a23cc73896506e2fc739d545bc35bc7b1c06",
   },
   infernal: {
     name: "Infernal",
