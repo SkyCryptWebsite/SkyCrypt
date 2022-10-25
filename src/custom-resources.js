@@ -92,9 +92,11 @@ async function init() {
       const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
       const properties = {};
 
+      if (!lines.some((line) => line.startsWith("nbt.ExtraAttributes.id"))) continue;
+
       for (const line of lines) {
         // Skipping comments
-        if (!line.startsWith("nbt.ExtraAttributes.id")) continue;
+        if (line.startsWith("#")) continue;
 
         const split = line.split("=");
 
