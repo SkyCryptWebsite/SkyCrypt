@@ -263,6 +263,23 @@ main.grid > a,
   }
 }
 
+.favorite-profile-name {
+  position: absolute;
+  left: 100px;
+  top: 41px;
+
+  color: var(--text-hex);
+  font-weight: 600;
+  font-size: 18px;
+
+  .emoji {
+    vertical-align: middle;
+    height: 22px;
+    margin-left: 5px;
+    margin-top: -4px;
+  }
+}
+
 .profile-last-online {
   position: absolute;
   left: 100px;
