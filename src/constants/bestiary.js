@@ -189,7 +189,7 @@ export const BESTIARY = {
         head: "38957d5023c937c4c41aa2412d43410bda23cf79a9f6ab36b76fef2d7c429",
       },
       {
-        id: "kills_family_magma_cube_boss",
+        id: "kills_family_magma_boss",
         boss: true,
         name: "Magma Cube Boss",
         head: "38957d5023c937c4c41aa2412d43410bda23cf79a9f6ab36b76fef2d7c429",
