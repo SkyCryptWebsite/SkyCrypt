@@ -1,4 +1,5 @@
 export const PET_REWARDS = {
+  0: { magic_find: 0 },
   10: { magic_find: 1 },
   25: { magic_find: 2 },
   50: { magic_find: 3 },
