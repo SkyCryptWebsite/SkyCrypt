@@ -1182,9 +1182,9 @@ const metaDescription = getMetaDescription()
               Increase your pet score by collecting unique pets with a high rarity.<br><br>
               <table>
               <% for (const [score, value] of Object.entries(constants.PET_REWARDS)) { 
-                if (score === Object.keys(constants.PET_REWARDS).reduce((prev, curr) => Math.abs(curr - calculated.petScore) < Math.abs(prev - calculated.petScore) ? curr : prev)) { %>
+                if (value.magic_find != 0 && score === Object.keys(constants.PET_REWARDS).reduce((prev, curr) => Math.abs(curr - calculated.petScore) < Math.abs(prev - calculated.petScore) ? curr : prev)) { %>
                   <tr><td><%= score %> Score: </td><td><span class='color-magic-find grey-text'>+<%= value.magic_find %> Magic Find</span><span style='color: var(--§5);' class='grey-text'> «</span></td>
-                <% } else { %>
+                <% } else if (value.magic_find != 0) { %>
                   <tr><td><%= score %> Score: </td><td><span class='color-magic-find grey-text'>+<%= value.magic_find %> Magic Find</span></td>
                 <% } %>
               <% } %>
