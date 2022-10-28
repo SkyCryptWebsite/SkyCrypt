@@ -1490,15 +1490,15 @@ export const ITEM_ANIMATIONS = [
     texture: "/resources/img/items/pet_skin_sheep_chroma_wooly.png",
     animation: {
       0: "",
-    }
+    },
   },
   {
     id: "PET_SKIN_BLACK_CAT_PURRANORMAL",
     texture: "/resource/img/items/pet_skin_black_cat_purrnormal.png",
     animation: {
       0: "",
-    }
-  }
+    },
+  },
 ];
 
 /*
