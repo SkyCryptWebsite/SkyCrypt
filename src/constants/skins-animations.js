@@ -671,6 +671,62 @@ const SKINS = [
     source: "firesale",
     release: new Date("2022-09-23 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_BLACK_CAT_PURRANORMAL",
+    name: "Purranormal Black Cat",
+    texture: "/head/534a1340f5aa4f013bd49e9d41d8a471d3a044165adcb929c05fe052376e5e4b",
+    source: "tyashoi_alchemist",
+    release: new Date("2022-10-05 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_BEE_ZOMBEE",
+    name: "ZomBee Bee",
+    texture: "/head/f6e1ae93ad5e94a0904a0877ff14a9de56083242a5786ac7dc503e098ae37120",
+    source: "tyashoi_alchemist",
+    release: new Date("2022-10-05 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_RAT_HIDE_AND_SQUEAK",
+    name: "Hide and Squeak Rat",
+    texture: "/head/c484a612ef0b1061478ddd7595abd612fb61de5a3cdc7d0e53c5f6915f0ebb8f",
+    source: "tyashoi_alchemist",
+    release: new Date("2022-10-05 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_SHEEP_CHROMA_WOOLY",
+    name: "Chroma Sheep",
+    texture: "/head/53911510276c27656be97386baabb2d8543c0dffb9e5723ad279438fc2eaa51e",
+    source: "firesale",
+    release: new Date("2022-10-07 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_SHEEP_BLACK_WOOLY",
+    name: "Black Wooly Sheep",
+    texture: "/head/dd7d6f438d16594c46b1fc3c868e4b68c53324ad01bcfe1a22052fc822cb5bb1",
+    source: "firesale",
+    release: new Date("2022-10-07 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_SHEEP_WHITE_WOOLY",
+    name: "White Wooly Sheep",
+    texture: "/head/7b44fb8a08057e4a7278a6c5aa2cb692f2e7cfea960c68fc0d4d2e26e88dd359",
+    source: "firesale",
+    release: new Date("2022-10-07 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_MOOSHROOM_COW_MOOCELIUM",
+    name: "Moocelium Mooshroom Mushroom Cow",
+    texture: "/head/b92d94a5efca94f8739973b44a01bbbdf4a2c0e05dbb45e97342076c950b73a7",
+    source: "firesale",
+    release: new Date("2022-10-21 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_SNOWMAN_ICE_GOLEM",
+    name: "Ice Golem Snowman",
+    texture: "/head/69736cfd666c4237e910892d8974889e199c2d59b7d006dcaa01b6241393fe23",
+    source: "firesale",
+    release: new Date("2022-10-21 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
@@ -1429,6 +1485,20 @@ export const ITEM_ANIMATIONS = [
       3450: "/head/f7c5d623e3ae65f4ee2819345ccbc226b638002a3a0048009242e0792c380635",
     },
   },
+  {
+    id: "PET_SKIN_SHEEP_CHROMA_WOOLY",
+    texture: "/resources/img/items/pet_skin_sheep_chroma_wooly.png",
+    animation: {
+      0: "",
+    }
+  },
+  {
+    id: "PET_SKIN_BLACK_CAT_PURRANORMAL",
+    texture: "/resource/img/items/pet_skin_black_cat_purrnormal.png",
+    animation: {
+      0: "",
+    }
+  }
 ];
 
 /*
