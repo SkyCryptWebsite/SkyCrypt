@@ -76,7 +76,7 @@ const availableSections = {
     "farming": {
       "enabled": true,
       "farming": (calculated.farming.talked === true),
-      "attended_contests": (calculated.farming.contests.attended_contests > 0),
+      "attended_contests": (calculated.farming.contests?.attended_contests > 0),
       "farming_tools": (items.farming_tools !== undefined),
     },
     "fishing": {
@@ -101,7 +101,7 @@ const availableSections = {
   },
   "bestiary": {
     "enabled": true,
-    "bestiary": (calculated.bestiary?.categories !== undefined),
+    "bestiary": (calculated.bestiary.categories !== undefined),
   },
   "collections": {
     "enabled": true,
@@ -854,7 +854,7 @@ const metaDescription = getMetaDescription()
       <% } %>
 
       <!--  BESTIARY -->
-      <% if (availableSections.bestiary.enabled === true) { %>
+      <% if (availableSections.bestiary.enabled === true && availableSections.bestiary.bestiary) { %>
         <%- include('./sections/stats/bestiary.ejs'); %>
       <% } %>
 
