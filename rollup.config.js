@@ -7,8 +7,8 @@ import nameMap from "./lib/rollup-plugin-name-map.js";
 import del from "rollup-plugin-delete";
 import replace from "@rollup/plugin-replace";
 
-// `npm run start` -> `production` is true
-// `npm run dev` -> `production` is false
+// `pnpm start` -> `production` is true
+// `pnpm dev` -> `production` is false
 const production = !process.env.ROLLUP_WATCH;
 
 /**

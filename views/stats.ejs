@@ -1054,7 +1054,7 @@ const metaDescription = getMetaDescription()
                 }
 
                 const mp_hegemony = rarities.hegemony ? constants.MAGICAL_POWER[rarities.hegemony.rarity] : 0
-                const mp_total = Object.values(player_magical_power).reduce((a, b) => a + b) + mp_hegemony;
+                const mp_total = Object.values(player_magical_power).reduce((a, b) => a + b) + mp_hegemony + Math.floor(Object.keys(calculated.abiphone).length / 2);
               %>
             <span data-tippy-content="
               Accessories Breakdown<br>
@@ -1069,8 +1069,12 @@ const metaDescription = getMetaDescription()
               <span style='color: var(--§6);' class='grey-text'>5 MP</span> × <span style='color: var(--§c);' class='grey-text'><%= rarities.very_special %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.very_special.toLocaleString() %> MP</span><br>
               <br>
               <% if(rarities.hegemony) { %>
-                <span style='color: var(--§<%= constants.RARITY_COLORS[rarities.hegemony.rarity] %>);' class='grey-text'>Hegemony Artifact</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_hegemony.toLocaleString() %> MP</span><br><br>
+                <span style='color: var(--§<%= constants.RARITY_COLORS[rarities.hegemony.rarity] %>);' class='grey-text'>Hegemony Artifact</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_hegemony.toLocaleString() %> MP</span><br>
               <% } %>
+              <% if (rarities.abicase && Math.floor(Object.keys(calculated.abiphone).length / 2) > 0) {%>
+                <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Abicase</span> = <span style='color: var(--§6);' class='grey-text'>+<%= Math.floor(Object.keys(calculated.abiphone).length / 2).toLocaleString() %> MP</span><br>
+              <% } %> 
+              <br>
               Total: <span style='color: var(--§6);' class='grey-text'><%= mp_total.toLocaleString() %> Magical Power</span>
               ">
               <span class="stat-name">Magical Power: </span><span class="stat-value"><%= mp_total.toLocaleString() %></span>
@@ -2128,11 +2132,9 @@ const metaDescription = getMetaDescription()
           <div class="minions">
             <% for(const minion of minions){ %>
             <div data-tippy-content="Crafted variants:<br><br>
-
-              <%
-              for(let i = 1; i <= minion.levels[minion.levels.length-1]; i++){ %>
-                <div class='minion-variant minion-crafted'><%= romanize(i) %></div>
-              <% } %>
+              <%for (let i = 1; i <= minion.tiers; i++){ %>
+                <div class='minion-variant <% if(minion.levels.includes(i)){ %>minion-crafted<% } %>'><%= romanize(i) %></div>
+              <%  } %>
               " class="chip
               <%= minion.maxLevel == 0 ? 'no-minion' : '' %>
               <%= minion.maxLevel == minion.tiers ? 'max-stat' : '' %>
@@ -2161,7 +2163,7 @@ const metaDescription = getMetaDescription()
               let maxedBestiaryOnIsland = {}, bestariesOnIsland = {}, totalBestires = 0, totalMaxedBeasteries = 0, mBestiaryOnIsland = {}, maxLevel = 0;
               for(const island of Object.keys(calculated.bestiary.categories)) {
                 for (const family of Object.keys(calculated.bestiary.categories[island])) {
-                  totalBestires += calculated.bestiary.categories[island][family].maxTier;
+                  totalBestires += 1;
                   maxLevel += calculated.bestiary.categories[island][family].maxTier;
                   if (!bestariesOnIsland[island]) bestariesOnIsland[island] = 0;
                   if (!maxedBestiaryOnIsland[island]) maxedBestiaryOnIsland[island] = 0;
@@ -2179,11 +2181,11 @@ const metaDescription = getMetaDescription()
                 }
               }
             %>
-            <% totalBestires = totalBestires / 10 %>
+            <% maxLevel = maxLevel / 10 %>
 
             <p class="stat-raw-values">
               <% totalMaxedBeasteries >= totalBestires ? 'golden-text' : '' %><span class="stat-name <%= totalMaxedBeasteries >= totalBestires %>">Maxed Beasteries: </span><span class="stat-value <%= totalMaxedBeasteries >= totalBestires %>"><%= totalMaxedBeasteries %> / <%= totalBestires%></span><br>
-              <% calculated.bestiary.level >= maxLevel ? 'golden-text' : '' %><span class="stat-name <%= totalMaxedBeasteries >= totalBestires %>">Level: </span><span class="stat-value <%= totalMaxedBeasteries >= totalBestires %>"><%= calculated.bestiary.level.toLocaleString() %> / <%= maxLevel%></span>
+              <% calculated.bestiary.level >= maxLevel ? 'golden-text' : '' %><span class="stat-name <%= totalMaxedBeasteries >= maxLevel %>">Level: </span><span class="stat-value <%= totalMaxedBeasteries >= maxLevel %>"><%= calculated.bestiary.level.toLocaleString() %> / <%= maxLevel%></span>
             </p>
 
             <% for(const island of Object.keys(calculated.bestiary.categories)) { %>

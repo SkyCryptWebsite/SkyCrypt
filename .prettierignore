@@ -19,3 +19,6 @@
 
 # icomoon font config
 /public/resources/fonts/icomoon/selection.json
+
+# pnpm
+pnpm-lock.yaml
