@@ -1,0 +1,225 @@
+<% 
+function formatEnrichment(string) {
+    let enrichment = string.split('_').join(' ').trim()
+    enrichment = helper.titleCase(enrichment)
+    return enrichment
+}
+
+function enrichmentToStatName(enrichment) {
+  switch (enrichment) {
+    case 'walk_speed':
+      return 'speed'
+
+    case 'critical_chance':
+      return 'crit_chance'
+
+    case 'critical_damage':
+      return 'crit_damage'
+
+    case 'attack_speed':
+      return 'bonus_attack_speed'
+
+    default:
+      return enrichment
+  }
+}
+
+function getEnrichments(accessories) {
+    const enrichmentCounts = {}
+    const filteredAccessories = accessories
+      .filter(acc => ['legendary', 'mythic', 'divine', 'special', 'very_special'].includes(acc.rarity.toLowerCase()))
+
+    if (filteredAccessories.length > 0) {
+      filteredAccessories.forEach(acc => {
+        const enrichment = acc.enrichment || 'missing_enrichment!'
+
+        if (!enrichmentCounts[enrichment]) {
+            enrichmentCounts[enrichment] = 0
+        }
+
+        enrichmentCounts[enrichment] += 1
+      })
+
+      %> <span class="stat-name">Enrichments: </span> <%
+      for (const [enrichment, amount] of Object.entries(enrichmentCounts)) {
+        const stat = enrichmentToStatName(enrichment)
+        %> 
+        
+        <span class="stat-value color-<%= stat.replaceAll("_", "-") %>">
+          <%= amount %>× <%= formatEnrichment(enrichment) %>
+        </span>
+
+        <% if (enrichment !== Object.keys(enrichmentCounts).pop()) {  %>
+          <span class="bonus-divider" role="separator"> </span>
+        <% } %>
+      <% }
+    }
+}
+
+// NOTE: importing itemIcon seems to not work
+function itemIcon(item, classes) { %>
+  <div <% if (item.texture_path) { %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
+    <%= classes.join(" ") %>
+    item-icon
+    <% if (isEnchanted(item)) { %>is-enchanted <% } %>
+    <% if (item.texture_path) { %>custom-icon<% } %>
+    <% if (item.Damage != 0) { %>icon-<%= item.id %>_0<% } %>
+    icon-<%= item.id %>_<%= item.Damage %>">
+  </div>
+<% }
+
+function isEnchanted(item) {
+  // heads
+  if ([397].includes(item.id)) {
+    return false;
+  }
+
+  // enchanted book, bottle o' enchanting, nether star
+  if ([403, 384, 399].includes(item.id)) {
+    return true;
+  }
+
+  // potions potions with actual effects (not water bottles)
+  if (item.id === 373 && item.Damage !== 0) {
+    return true;
+  }
+
+  if ("tag" in item && Array.isArray(item.tag.ench)) {
+    return true;
+  }
+
+  if (item.glowing) {
+    return true;
+  }
+
+  return false;
+}
+%>
+
+<div class="stat-container stat-accessories">
+  <a class="stat-anchor" id="Accessories"></a>
+  <h2 class="stat-header">Accessories</h2>
+  <div class="stat-content">
+    <% if (items.no_inventory) { %>
+      <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.</div>
+    <% }else if (items.accessories.length == 0) { %>
+      <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
+    <% } else { %>
+      <p class="stat-raw-values">
+        <%
+        const maxTalis = items.accessories.filter(a => a.isUnique).length >= constants.UNIQUE_ACCESSORIES_COUNT ? 'golden-text': ''
+        const maxRecombTalis = items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length >= constants.RECOMBABLE_ACCESSORIES_COUNT ? 'golden-text': ''
+        %>
+
+        <span class="stat-name <%= maxTalis %>">Unique Accessories: </span>
+        <span class="stat-value <%= maxTalis %>"><%= items.accessories.filter(a => a.isUnique).length %> / <%= constants.UNIQUE_ACCESSORIES_COUNT %></span>
+        <br>
+
+        <span class="stat-name <%= maxTalis %>">Completion: </span>
+        <span class="stat-value percent <%= maxTalis %>"><%= Math.round(items.accessories.filter(a => a.isUnique).length / constants.UNIQUE_ACCESSORIES_COUNT * 100) %></span>
+        <br>
+
+        <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
+        <span class="stat-value <%= maxRecombTalis %>"><%= items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= constants.RECOMBABLE_ACCESSORIES_COUNT %></span>
+        <br>
+
+        <%
+        const rarities = items.accessory_rarities;
+        const player_magical_power = {}
+
+        for (const rarity in constants.MAGICAL_POWER) {
+            player_magical_power[rarity] = 0
+            player_magical_power[rarity] += rarities[rarity] * constants.MAGICAL_POWER[rarity];
+        }
+
+        const mp_hegemony = rarities.hegemony ? constants.MAGICAL_POWER[rarities.hegemony.rarity] : 0
+        const mp_total = Object.values(player_magical_power).reduce((a, b) => a + b) + mp_hegemony + Math.floor(Object.keys(calculated.abiphone).length / 2);
+        %>
+
+        <span data-tippy-content="
+          Accessories Breakdown<br>
+          <span style='color: var(--§8);' class='grey-text'>From your accessory bag</span><br><br>
+          <span style='color: var(--§6);' class='grey-text'>22 MP</span> × <span style='color: var(--§d);' class='grey-text'><%= rarities.mythic %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.mythic.toLocaleString() %> MP</span><br>
+          <span style='color: var(--§6);' class='grey-text'>16 MP</span> × <span style='color: var(--§6);' class='grey-text'><%= rarities.legendary %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.legendary.toLocaleString() %> MP</span><br>
+          <span style='color: var(--§6);' class='grey-text'>12 MP</span> × <span style='color: var(--§5);' class='grey-text'><%= rarities.epic %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.epic.toLocaleString() %> MP</span><br>
+          <span style='color: var(--§6);' class='grey-text'>8 MP</span> × <span style='color: var(--§1);' class='grey-text'><%= rarities.rare %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.rare.toLocaleString() %> MP</span><br>
+          <span style='color: var(--§6);' class='grey-text'>5 MP</span> × <span style='color: var(--§a);' class='grey-text'><%= rarities.uncommon %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.uncommon.toLocaleString() %> MP</span><br>
+          <span style='color: var(--§6);' class='grey-text'>3 MP</span> × <span style='color: var(--§f);' class='grey-text'><%= rarities.common %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.common.toLocaleString() %> MP</span><br>
+          <span style='color: var(--§6);' class='grey-text'>3 MP</span> × <span style='color: var(--§c);' class='grey-text'><%= rarities.special %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.special.toLocaleString() %> MP</span><br>
+          <span style='color: var(--§6);' class='grey-text'>5 MP</span> × <span style='color: var(--§c);' class='grey-text'><%= rarities.very_special %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.very_special.toLocaleString() %> MP</span><br>
+          <br>
+          <% if (rarities.hegemony) { %>
+            <span style='color: var(--§<%= constants.RARITY_COLORS[rarities.hegemony.rarity] %>);' class='grey-text'>Hegemony Artifact</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_hegemony.toLocaleString() %> MP</span><br>
+          <% } %>
+          <% if (rarities.abicase && Math.floor(Object.keys(calculated.abiphone).length / 2) > 0) {%>
+            <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Abicase</span> = <span style='color: var(--§6);' class='grey-text'>+<%= Math.floor(Object.keys(calculated.abiphone).length / 2).toLocaleString() %> MP</span><br>
+          <% } %> 
+          <br>
+
+          Total: <span style='color: var(--§6);' class='grey-text'><%= mp_total.toLocaleString() %> Magical Power</span>
+          ">
+          <span class="stat-name">Magical Power: </span><span class="stat-value"><%= mp_total.toLocaleString() %></span>
+        </span>
+      </p>
+
+      <% if (items.accessories.find(a => !a.isInactive) != undefined) { %>
+        <div class="accessory-list">
+          <p class="stat-sub-header" style="margin-bottom: 5px">Active Accessories</p>
+          <% items.accessories.filter(a => !a.isInactive).forEach(item => { %>
+            <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
+              <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
+                <div class="piece-shine"></div>
+              <% } %>
+
+              <% itemIcon(item, ['piece-icon']); %>
+            </div>
+          <% }) %>
+
+          <div class="accessories-extras">
+            <div><%- getEnrichments(items.accessories.filter(a => a.isUnique && !a.isInactive)) %></div>
+            <div data-bonus-stats="accessories,new_year_cake_bag"></div>
+          </div>
+        </div>
+      <% } %>
+
+      <% if (items.accessories.find(a => a.isUnique && a.isInactive) != undefined) { %>
+        <div class="accessory-list">
+          <p class="stat-sub-header">Inactive Accessories</p>
+          <% items.accessories.filter(a => a.isUnique && a.isInactive).forEach(item => { %>
+          <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
+            <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
+            <div class="piece-shine"></div>
+            <% } %>
+
+            <% itemIcon(item, ['piece-icon']); %>
+          </div>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <% if (calculated.missingAccessories.missing.length > 0 || calculated.missingAccessories.upgrades.length > 0) { %>
+        <% if (items.accessories.length == 1) { %>
+          <br>
+        <% } %>
+
+        <button class="stat-sub-header extender" aria-controls="missing-accessories" aria-expanded="false">Missing Accessories</button>
+        <div class="pieces extendable" id="missing-accessories">
+          <br>
+          <p class="stat-sub-header">Missing Accessories<span data-tippy-content='Missing accessories that are <strong>not</strong> upgrades of another accessory.'></span></p>
+          <% for(const [index, accessory] of calculated.missingAccessories.missing.entries()) { %>
+            <div tabindex="0" data-missing-accessory-index="<%= index %>" class="rich-item piece piece-<%= accessory.rarity %>-bg missing-accessory">
+              <div style='background-image: url("<%= accessory.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+            </div>
+          <% } %>
+
+          <p class="stat-sub-header">Missing Accessory Upgrades<span data-tippy-content='Missing accessories that are upgrades of a lower tier accessory.'></span></p>
+          <% for(const [index, accessory] of calculated.missingAccessories.upgrades.entries()) { %>
+            <div tabindex="0" data-upgrade-accessory-index="<%= index %>" class="rich-item piece piece-<%= accessory.rarity %>-bg missing-accessory">
+              <div style='background-image: url("<%= accessory.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
+    <% } %>
+  </div>
+</div>

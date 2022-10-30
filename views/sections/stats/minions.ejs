@@ -1,0 +1,90 @@
+<div class="stat-container stat-minions">
+    <a class="stat-anchor" id="Minions"></a>
+    <h2 class="stat-header">Minions</h2>
+    <div class="stat-content">
+      <%
+      let uniqueMinions = 0;
+      let maxedMinions = 0;
+      let skippedMinions = 0;
+      let uniqueMinionsType = {};
+      let minionsType = {};
+
+      for(const minion of calculated.minions) {
+        if (!uniqueMinionsType[minion.type]) {
+            uniqueMinionsType[minion.type] = 0
+        }
+        
+        if (!minionsType[minion.type]) {
+            minionsType[minion.type] = 0
+        }
+
+        minionsType[minion.type] += 1
+        if (minion.tiers == minion.maxLevel) {
+            uniqueMinionsType[minion.type] += 1
+        }
+
+        uniqueMinions += minion.levels.length;
+        skippedMinions += minion.maxLevel - minion.levels.length;
+
+        if (minion.maxLevel == minion.tiers) {
+            maxedMinions++;
+        }
+      }%>
+        <!--
+            <a href="https://hypixel.net/threads/2166857/" target="_blank" rel="noreferrer" class="external-app">
+                <div class="external-app-icon icon-google-sheets"></div>
+                <div class="external-app-name">Minions Sheet <span class="grey-text">by TBlazeWarriorT</span></div>
+                <div class="external-app-description">Check the next cheapest or fastest Minion upgrades and find out which Minions will earn you the most from Bazaar, for free.</div>
+            </a>
+        -->
+
+      <p class="stat-raw-values">
+        <% max = uniqueMinions == constants.MINIONS_MAX_UNIQUES ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Minions: </span><span class="stat-value <%= max %>"><%= uniqueMinions %> / <%= constants.MINIONS_MAX_UNIQUES %></span><span class="grey-text"> (<%= Math.floor(uniqueMinions / constants.MINIONS_MAX_UNIQUES * 100) %>%)</span><br>
+        <% max = calculated.minion_slots.currentSlots == constants.MINIONS_MAX_SLOTS ? 'golden-text' : '' %><span class="stat-name <%= max %>">Minion Slots: </span><span class="stat-value <%= max %>"><%= calculated.minion_slots.currentSlots %></span><span class=" grey-text"> (<%= calculated.minion_slots.toNextSlot %> to next slot)</span><br>
+        <% max = calculated.misc.profile_upgrades.minion_slots == 5 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Bonus Minion Slots: </span><span class="stat-value <%= max %>"><%= calculated.misc.profile_upgrades.minion_slots %> / <%= constants.PROFILE_UPGRADES['minion_slots'] %></span><br>
+        <% max = maxedMinions == _.size(constants.MINIONS) ? 'golden-text' : '' %><span class=" stat-name <%= max %>">Maxed Minions: </span><span class="stat-value <%= max %>"><%= maxedMinions %> / <%= _.size(constants.MINIONS) %></span><br>
+        <% if (skippedMinions > 0) { %>
+            <span class="stat-name">Skipped Minion Tiers: </span><span class="stat-value"><%= skippedMinions %></span><br>
+        <% } %>
+      </p>
+
+        <%for(const type of constants.MINION_TYPES) {
+            const minions = calculated.minions.filter(a => a.type == type)
+            if (minions.length == 0) {
+                continue;
+            } %>
+            <div class="category-header">
+                <div class="category-icon">
+                    <div class="item-icon <%= skillItems[type] %>"></div>
+                </div>
+                <span><%= type %></span>
+
+                <% if (uniqueMinionsType[type] >= minionsType[type]) { %>
+                    <span class="category-header-maxed">max!</span>
+                <% }else{ %>
+                    <span class="category-header-detail">(<%= uniqueMinionsType[type] %> / <%= minionsType[type]  %> max)</span>
+                <% } %>
+            </div>
+            <div class="minions">
+                <% for(const minion of minions) { %>
+                    <div data-tippy-content="Crafted variants:<br><br>
+                        <% for (let i = 1; i <= minion.tiers; i++) { %>
+                            <div class='minion-variant <% if (minion.levels.includes(i)) { %>minion-crafted<% } %>'><%= romanize(i) %></div>
+                        <% } %>
+                        " class="chip
+                            <%= minion.maxLevel == 0 ? 'no-minion' : '' %>
+                            <%= minion.maxLevel == minion.tiers ? 'max-stat' : '' %>
+                            <%= minion.maxLevel != minion.levels.length ? 'skipped-minion' : '' %>
+                        ">
+                        <div class="chip-icon-wrapper">
+                            <div style="background-image: url(<%= minion.head %>)" class="item-icon custom-icon"></div>
+                        </div>
+                        <div class="chip-text">
+                            <span class="stat-name"><%= minion.name %> </span><span class="stat-value"><%= minion.maxLevel %></span>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        <%} %>
+    </div>
+</div>

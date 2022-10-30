@@ -1807,6 +1807,7 @@ export async function getStats(
   output.minion_slots = getMinionSlots(output.minions);
   output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
   output.bestiary = getBestiary(profile.uuid, profile);
+  output.visited_zones = helper.getVisitedZones(userProfile.visited_zones);
   output.social = hypixelProfile.socials;
 
   output.dungeons = getDungeons(userProfile, hypixelProfile);
@@ -2063,10 +2064,10 @@ export async function getStats(
     };
   });
 
-  output.crimsonIsles = crimsonIsles;
+  output.crimson_isle = crimsonIsles;
 
   output.abiphone = userProfile.nether_island_player_data?.abiphone?.contact_data;
-
+  
   // MISC
 
   const misc = {};
@@ -2784,13 +2785,13 @@ export function getBestiary(uuid, profile) {
 
       const boss = mob.boss == true ? "boss" : "regular";
 
-      let kills = bestiaryFamilies[mob.id] || 0;
-      let head = mob.head;
-      let itemId = mob.itemId;
-      let damage = mob.damage;
-      let name = mob.name;
-      let maxTier = mob.maxTier ?? 41;
-      let tier =
+      const kills = bestiaryFamilies[mob.id] || 0;
+      const head = mob.head;
+      const itemId = mob.itemId;
+      const damage = mob.damage;
+      const name = mob.name;
+      const maxTier = mob.maxTier ?? 41;
+      const tier =
         constants.BEASTIARY_KILLS[boss].filter((k) => k <= kills).length > maxTier
           ? maxTier
           : constants.BEASTIARY_KILLS[boss].filter((k) => k <= kills).length;

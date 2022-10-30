@@ -1,0 +1,467 @@
+<% 
+const milestone_rarities = ["common", "uncommon", "rare", "epic", "legendary"];
+
+const pet_milestones = {
+  sea_creatures_killed: [250, 1000, 2500, 5000, 10000],
+  ores_mined: [2500, 7500, 20000, 100000, 250000],
+};
+%>
+
+<div class="stat-container stat-misc">
+  <a class="stat-anchor" id="Misc"></a>
+  <h2 class="stat-header">Miscellaneous</h2>
+  <div class="stat-content">
+
+    <div class="category-header">
+      <div class="category-icon">
+        <div class="item-icon custom-icon" style="background-image: url(/head/1e5574a4ef94ef4ca300d02f644d98be07dbfba7df78808e8a9a021b067d996d)"></div>
+      </div>
+      <span>Essence</span>
+    </div>
+    <div class="collections">
+      <% for (const [key, value] of Object.entries(calculated.essence)) { %>
+      <div class="chip" data-missing="<%= value === 0 %>">
+        <div class="chip-icon-wrapper">
+          <div style="background-image:url('<%= constants.ESSENCE[key].head %>')" class="item-icon custom-icon"></div>
+        </div>
+        <div class="chip-text">
+          <div class="collection-name"><span class="stat-name"><%= constants.ESSENCE[key].name %></span></div>
+          <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= value.toLocaleString() %></span></div>
+        </div>
+      </div>
+      <% } %>
+    </div>
+
+    <% if (calculated.kills.length > 0 || calculated.deaths.length > 0) { %>
+    <%
+        let totalKills = calculated.kills.length;
+        let totalDeaths = calculated.deaths.length;
+
+        let rows = Math.min(Math.max(totalKills, totalDeaths), 10);
+        %>
+
+    <div class="category-header">
+      <div class="category-icon">
+        <div class="item-icon icon-267_0"></div>
+      </div><span>kills</span>
+    </div>
+
+    <p class="stat-raw-values stat-kills">
+      <span class="stat-name">Total Kills: </span><span class="stat-value"><%= calculated.kills.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span><br>
+      <span class="stat-name">Total Deaths: </span><span class="stat-value"><%= calculated.deaths.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span>
+    </p>
+
+    <div class="kills-deaths-container narrow-info-container-wrapper">
+      <div class="narrow-info-container top-kills">
+        <div class="narrow-info-header">Kills</div>
+        <div class="narrow-info-content">
+          <% for(let i = 0; i < rows; i++) {
+                const kill = calculated.kills[i];
+
+                if (typeof calculated.kills[i] === 'undefined') { %>
+          <div class="kill-stat">
+            <div class="kill-rank"></div>
+          </div>
+          <% } else { %>
+          <div class="kill-stat">
+            <div class="kill-rank">#<%= i + 1 %>&nbsp;</div>
+            <div class="kill-entity"><%= kill.entityName %></div>
+            <div class="stat-separator">:&nbsp;</div>
+            <div class="kill-amount"><%= kill.amount.toLocaleString() %></div>
+          </div>
+          <% } %>
+          <% } %>
+
+          <% if (calculated.kills.length > 10 || calculated.deaths.length > 10) { %>
+          <button class="kill-stat show-all <%= calculated.kills.length > 10 ? 'enabled' : '' %>" data-type="kills">show all</button>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="narrow-info-container top-deaths">
+        <div class="narrow-info-header">Deaths</div>
+        <div class="narrow-info-content">
+          <% for(let i = 0; i < rows; i++) {
+                const death = calculated.deaths[i];
+
+                if (typeof death === 'undefined') { %>
+          <div class="kill-stat">
+            <div class="kill-rank"></div>
+          </div>
+          <% }else{ %>
+          <div class="kill-stat">
+            <div class="kill-rank">#<%= i + 1 %>&nbsp;</div>
+            <div class="kill-entity"><%= death.entityName %></div>
+            <div class="stat-separator">:&nbsp;</div>
+            <div class="kill-amount"><%= death.amount.toLocaleString() %></div>
+          </div>
+          <% } %>
+          <% } %>
+          <% if (calculated.kills.length > 10 || calculated.deaths.length > 10) { %>
+          <button class="kill-stat show-all <%= calculated.deaths.length > 10 ? 'enabled' : '' %>" data-type="deaths">show all</button>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <% } %>
+
+    <% if ('races' in calculated.misc) { %>
+    <div class="category-header">
+      <div class="category-icon">
+        <div class="item-icon icon-317_0"></div>
+      </div><span>races</span>
+    </div>
+
+    <div class="race-containers narrow-info-container-wrapper">
+      <%
+          const races = [
+            { id: "dungeon_hub_crystal_core", name: "Crystal Core", icon: '399_0' },
+            { id: "dungeon_hub_giant_mushroom", name: "Giant Mushroom", icon: '100_0' },
+            { id: "dungeon_hub_precursor_ruins", name: "Precursor Ruins", icon: '98_1' }
+          ];
+
+          const types = ["anything", "no_pearls", "no_abilities", "nothing"];
+
+          for(const race of races) {
+            const times = Object.keys(calculated.misc.races).filter(a => a.startsWith(race.id));
+
+            if (times.length > 0) { %>
+      <div class="narrow-info-container">
+        <div class="narrow-info-header"><%= race.name %></div>
+        <div class="narrow-info-content">
+          <%
+                  const races_no_return = times.filter(a => a.includes("no_return"));
+                  const races_with_return = times.filter(a => a.includes("with_return"));
+                  %>
+
+          <% if (races_no_return.length > 0) { %>
+          <div class="narrow-info-section-header">No Return:</div>
+          <% } %>
+
+          <%
+                  for(const type of types) {
+                    const key = `${race.id}_${type}_no_return_best_time`;
+                    const duration = calculated.misc.races[key] ?? 0;
+                    const raceTier = calculated.misc.objectives.completedRaces[key] ?? 0;
+
+                    if (duration == 0) {
+                      continue;
+                    }
+
+                    let raceDuration = moment.duration(duration, "milliseconds").format("m:ss.SSS");
+
+                    if (duration < 1000) {
+                      raceDuration = '0.' + raceDuration;
+                    } 
+                    %>
+
+          <div class="narrow-info-flexsb">
+            <div>
+              <span class="stat-name"><%= helper.titleCase(type.split("_").join(" ")) %>: </span>
+              <span class="stat-value"><%= raceDuration %></span>
+            </div>
+            <div>
+              <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
+            </div>
+          </div>
+          <% } %>
+
+          <% if (races_with_return.length > 0) { %>
+          <div class="narrow-info-section-header">With Return:</div>
+          <% } 
+
+                  for(const type of types) {
+                    const key = `${race.id}_${type}_with_return_best_time`;
+                    const duration = calculated.misc.races[key] ?? 0;
+                    const raceTier = calculated.misc.objectives.completedRaces[key] ?? 0;
+
+                    if (duration == 0)
+                      continue;
+
+                    let raceDuration = moment.duration(duration, "milliseconds").format("m:ss.SSS");
+
+                    if (duration < 1000)
+                      raceDuration = '0.' + raceDuration;
+                    %>
+
+          <div class="narrow-info-flexsb">
+            <div>
+              <span class="stat-name"><%= helper.titleCase(type.split("_").join(" ")) %>: </span>
+              <span class="stat-value"><%= raceDuration %></span>
+            </div>
+            <div>
+              <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
+            </div>
+          </div>
+          <% } %>
+        </div>
+      </div>
+      <% } %>
+      <% } %>
+
+      <div class="narrow-info-container">
+        <div class="narrow-info-header">Other Races</div>
+        <div class="narrow-info-content">
+          <% for(const key in calculated.misc.races) {
+                    if (key.startsWith('dungeon_hub'))
+                      continue;
+
+                    const raceName = helper.capitalizeFirstLetter(key.replace(/_race_best_time.*/, "").split("_").join(" "));
+                    let raceDuration = moment.duration(calculated.misc.races[key], "milliseconds").format("m:ss.SSS");
+                    const raceTier = calculated.misc.objectives.completedRaces[key] ?? 0;
+
+                    if (calculated.misc.races[key] < 1000)
+                      raceDuration = '0.' + raceDuration;
+                  %>
+          <div class="narrow-info-flexsb">
+            <div>
+              <span class="stat-name"><%= raceName %>: </span>
+              <span class="stat-value"><%= raceDuration %></span>
+            </div>
+            <div>
+              <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
+            </div>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <% } %>
+
+    <% if ('gifts' in calculated.misc) { %>
+    <div class="category-header">
+      <div class="category-icon">
+        <div class="item-icon custom-icon" style="background-image: url(/head/b73a2114136b8ee4926caa51785414036a2b76e4f1668cb89d99716c421)"></div>
+      </div><span>Gifts</span>
+    </div>
+
+    <p class="stat-raw-values">
+      <% for(const key in calculated.misc.gifts) { %>
+      <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.gifts[key].toLocaleString() %></span><br>
+      <% } %>
+    </p>
+    <% } %>
+
+    <% if ('winter' in calculated.misc) { %>
+    <div class="category-header">
+      <div class="category-icon">
+        <div class="item-icon icon-332_0"></div>
+      </div><span>Season of jerry</span>
+    </div>
+
+    <p class="stat-raw-values">
+      <% for(const key in calculated.misc.winter) { %>
+      <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.winter[key].toLocaleString() %></span><br>
+      <% } %>
+    </p>
+    <% } %>
+
+    <% if ('dragons' in calculated.misc) { %>
+    <div class="category-header">
+      <div class="category-icon">
+        <div class="item-icon custom-icon" style="background-image: url(/head/aec3ff563290b13ff3bcc36898af7eaa988b6cc18dc254147f58374afe9b21b9)"></div>
+      </div><span>Dragons</span>
+    </div>
+
+    <p class="stat-raw-values">
+      <% for(const key in calculated.misc.dragons) {
+            let tooltip = "";
+
+            if (key == 'last_hits') {
+              for(const kill of calculated.kills.filter(a => a.entityId.endsWith('_dragon') && a.entityId != 'master_wither_king_dragon')) {
+                tooltip += `<span class="stat-name">${ kill.entityName }: </span><span class="stat-value">${ kill.amount }</span> <span class="grey-text">(${ Math.round(kill.amount / calculated.misc.dragons[key] * 100) }%)</span><br>`;
+              }
+            }
+
+            if (key == 'deaths') {
+              for(const death of calculated.deaths.filter(a => a.entityId.endsWith('_dragon') && a.entityId != 'master_wither_king_dragon')) {
+                tooltip += `<span class="stat-name">${ death.entityName }: </span><span class="stat-value">${ death.amount }</span><br>`;
+              }
+            } %>
+      <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>><span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.dragons[key].toLocaleString() %></span></span><br>
+      <% } %>
+    </p>
+    <% } %>
+
+    <% if ('protector' in calculated.misc) { %>
+    <div class="category-header">
+      <div class="category-icon">
+        <div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/89091d79ea0f59ef7ef94d7bba6e5f17f2f7d4572c44f90f76c4819a714)"></div>
+      </div><span>Endstone protectors</span>
+    </div>
+
+    <p class="stat-raw-values">
+      <% for(const key in calculated.misc.protector) { %>
+      <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.protector[key].toLocaleString() %></span><br>
+      <% } %>
+    </p>
+    <% } %>
+
+    <% if ('damage' in calculated.misc) { %>
+    <div class="category-header">
+      <div class="category-icon">
+        <div class="item-icon icon-267_0"></div>
+      </div><span>Damage</span>
+    </div>
+
+    <p class="stat-raw-values">
+      <% for(const key in calculated.misc.damage) { %>
+      <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= Math.floor(calculated.misc.damage[key]).toLocaleString() %></span><br>
+      <% } %>
+    </p>
+    <% } %>
+
+    <% if ('milestones' in calculated.misc) { %>
+    <div class="category-header">
+      <div class="category-icon">
+        <div class="item-icon custom-icon" style="background-image: url(/head/93c8aa3fde295fa9f9c27f734bdbab11d33a2e43e855accd7465352377413b)"></div>
+      </div><span>Pet milestones</span>
+    </div>
+
+    <p class="stat-raw-values">
+      <% for(const key in calculated.misc.milestones) {
+            let progress = {
+              rarity: milestone_rarities[pet_milestones[key].length-1],
+              maxed: true
+            };
+            let tooltip = "";
+
+            for(let i = 0; i < pet_milestones[key].length; i++) {
+              if (calculated.misc.milestones[key] < pet_milestones[key][i]) {
+                progress = {
+                  percentage: Math.round(calculated.misc.milestones[key]/pet_milestones[key][i]*100),
+                  rarity: milestone_rarities[i],
+                  maxed: false
+                };
+
+                break;
+              }
+            }
+
+            tooltip += `<span class="stat-name">Rarity: </span><span class="stat-value piece-${ progress.rarity }-fg">${ helper.capitalizeFirstLetter(progress.rarity) }</span><br><span class="stat-name">Progress: </span>`;
+            
+            if (progress.maxed) {
+              tooltip += `<span class="stat-value golden-text">Maxed!</span>`;
+            } else {
+              tooltip += `<span class="stat-value percent">${ progress.percentage.toLocaleString() }</span>`;
+            }
+            %>
+
+      <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>>
+        <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.milestones[key].toLocaleString() %></span></span><br>
+      <% } %>
+    </p>
+    <% } %>
+
+    <% if ('burrows' in calculated.misc) { %>
+    <div class="category-header">
+      <div class="category-icon">
+        <div class="item-icon custom-icon" style="background-image: url(/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8)"></div>
+      </div><span>Griffin burrows</span>
+    </div>
+
+    <p class="stat-raw-values">
+      <% let burrow_naming = {"dug_next": "dug_arrows", "dug_combat": "dug_monsters"}
+          for(const key in calculated.misc.burrows) {
+            let name = burrow_naming[key] || key;
+            let tooltip = "";
+
+            for(const rarity in calculated.misc.burrows[key]) {
+              if (rarity != "total" && rarity != "null") {
+                tooltip += `<span class="stat-name piece-${ rarity }-fg">${ helper.capitalizeFirstLetter(rarity) }: </span><span class="stat-value">${ calculated.misc.burrows[key][rarity] }</span><br>`;
+              }
+            } %>
+
+      <span <%- tooltip ? `data-tippy-content='<span class="stat-name">Rarities used:</span><br>${tooltip}'` : "" %>><span class="stat-name"><%= helper.capitalizeFirstLetter(name.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.burrows[key].total.toLocaleString() %></span></span><br>
+      <% } %>
+    </p>
+    <% } %>
+
+    <% if ('profile_upgrades' in calculated.misc) { %>
+    <div class="category-header">
+      <div class="category-icon">
+        <div class="item-icon icon-154_0"></div>
+      </div><span>Profile upgrades</span>
+    </div>
+
+    <p class="stat-raw-values">
+      <% for(const upgrade in constants.PROFILE_UPGRADES) { %>
+      <% max = calculated.misc.profile_upgrades[upgrade] == constants.PROFILE_UPGRADES[upgrade] ? 'golden-text' : '' %><span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(upgrade.split("_").join(" ")); %>: </span><span class="stat-value <%= max %>"><%= calculated.misc.profile_upgrades[upgrade] %> / <%= constants.PROFILE_UPGRADES[upgrade] %></span><br>
+      <% } %>
+    </p>
+    <% } %>
+
+    <% if ('auctions_sell' in calculated.misc) { %>
+    <div class=" category-header">
+      <div class="category-icon">
+        <div class="item-icon icon-266_0"></div>
+      </div><span>Auctions sold</span>
+    </div>
+
+    <p class="stat-raw-values">
+      <% for(const key in calculated.misc.auctions_sell) {
+            let tooltip = "";
+
+            if (key == 'items_sold') {
+              for(const key of Object.keys(calculated.auctions_sold).sort((a, b) => rarityOrder.indexOf(a) - rarityOrder.indexOf(b))) {
+                tooltip += `<span class="stat-name piece-${ key }-fg">${ helper.capitalizeFirstLetter(key) }: </span><span class="stat-value">${ calculated.auctions_sold[key] }</span><br>`;
+              }
+            }%>
+
+      <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>><span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.auctions_sell[key].toLocaleString() %></span></span><br>
+      <% } %>
+    </p>
+    <% } %>
+
+    <% if ('auctions_buy' in calculated.misc) { %>
+    <div class="category-header">
+      <div class="category-icon">
+        <div class="item-icon icon-264_0"></div>
+      </div><span>Auctions bought</span>
+    </div>
+    <p class="stat-raw-values">
+      <% for(const key in calculated.misc.auctions_buy) {
+            let tooltip = "";
+
+            if (key == 'items_bought') {
+              for(const key of Object.keys(calculated.auctions_bought).sort((a, b) => rarityOrder.indexOf(a) - rarityOrder.indexOf(b))) {
+                tooltip += `<span class="stat-name piece-${ key }-fg">${ helper.capitalizeFirstLetter(key) }: </span><span class="stat-value">${ calculated.auctions_bought[key] }</span><br>`;
+              }
+            } %>
+
+      <span <%- tooltip ? `data-tippy-content='${tooltip}'` : "" %>><span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= calculated.misc.auctions_buy[key].toLocaleString() %></span></span><br>
+      <% } %>
+    </p>
+    <% } %>
+
+    <% if ('claimed_items' in calculated.misc) { %>
+    <div class="category-header">
+      <div class="category-icon">
+        <div class="item-icon icon-339_0"></div>
+      </div><span>Claimed items</span>
+    </div>
+
+    <p class="stat-raw-values">
+      <% for(const key in calculated.misc.claimed_items) {%>
+      <% let timestamp = calculated.misc.claimed_items[key]; %>
+      <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
+      <span class="stat-value" data-tippy-content='Claimed on <local-time timestamp="<%= timestamp %>"></local-time>'><%= moment(timestamp).fromNow() %></span><br>
+      <% } %>
+    </p>
+    <% } %>
+
+    <% if ('uncategorized' in calculated.misc && Object.keys(calculated.misc.uncategorized).length > 0) { %>
+    <div class="category-header">
+      <div class="category-icon">
+        <div class="item-icon icon-421_0"></div>
+      </div><span>Uncategorized</span>
+    </div>
+    <p class="stat-raw-values">
+      <% for (const [key, value] of Object.entries(calculated.misc.uncategorized)) { %>
+      <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
+      <span class="stat-value"><%= value.formatted %></span><br>
+      <% } %>
+    </p>
+    <% } %>
+  </div>
+</div>

@@ -1,0 +1,108 @@
+<% 
+const bestiary = {
+  private: {
+    head: "/head/c9c8881e42915a9d29bb61a16fb26d059913204d265df5b439b3d792acd56",
+    name: "Private Island",
+  },
+  hub: {
+    head: "/head/d7cc6687423d0570d556ac53e0676cb563bbdd9717cd8269bdebed6f6d4e7bf8",
+    name: "Hub",
+  },
+  spiders: {
+    head: "/head/c754318a3376f470e481dfcd6c83a59aa690ad4b4dd7577fdad1c2ef08d8aee6",
+    name: "Spider's Den",
+  },
+  fortress: {
+    head: constants.ISLANDS.nether.icon,
+    name: constants.ISLANDS.nether.name,
+  },
+  end: {
+    head: constants.ISLANDS.end.icon,
+    name: constants.ISLANDS.end.name,
+  },
+  caverns: {
+    head: "/head/569a1f114151b4521373f34bc14c2963a5011cdc25a6554c48c708cd96ebfc",
+    name: "Deep Caverns",
+  },
+  park: {
+    head: "/head/a221f813dacee0fef8c59f76894dbb26415478d9ddfc44c2e708a6d3b7549b",
+    name: "The Park",
+  },
+  spooky: {
+    head: "/head/8db711ff52eedda59c434bb03169763d7c40b5b89127778feacd63aa94dfc",
+    name: "Spooky Festival",
+  },
+  catacombs: {
+    head: "/head/964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793",
+    name: "Catacombs",
+  },
+}
+%> 
+
+<div class="stat-container stat-bestiary">
+    <a class="stat-anchor" id="Bestiary"></a>
+    <h2 class="stat-header">Bestiary</h2>
+    <div class="stat-content">
+        <%
+        let maxedBestiaryOnIsland = {}, bestiariesOnIsland = {}, totalBestiaries = 0, totalMaxedBestiaries = 0, mBestiaryOnIsland = {}, maxLevel = 0;
+        for(const island of Object.keys(calculated.bestiary.categories)) {
+            for (const family of Object.keys(calculated.bestiary.categories[island])) {
+                maxLevel += calculated.bestiary.categories[island][family].maxTier;
+                totalBestiaries += 1;
+                if (!bestiariesOnIsland[island]) bestiariesOnIsland[island] = 0;
+                if (!maxedBestiaryOnIsland[island]) maxedBestiaryOnIsland[island] = 0;
+                if (!mBestiaryOnIsland[island]) mBestiaryOnIsland[island] = false;
+                bestiariesOnIsland[island]++;
+
+                if (calculated.bestiary.categories[island][family].tier >= calculated.bestiary.categories[island][family].maxTier) {
+                    totalMaxedBestiaries++;
+                    maxedBestiaryOnIsland[island]++;
+                }
+
+                if (maxedBestiaryOnIsland[island] >= bestiariesOnIsland[island]) {
+                    mBestiaryOnIsland[island] = true;
+                } else {
+                    mBestiaryOnIsland[island] = false;
+                }
+            }
+        }
+
+        maxLevel = maxLevel / 10 
+        %>
+
+        <p class="stat-raw-values">
+            <% totalMaxedBestiaries >= totalBestiaries ? 'golden-text' : '' %><span class="stat-name <%= totalMaxedBestiaries >= totalBestiaries %>">Maxed Bestiaries: </span><span class="stat-value <%= totalMaxedBestiaries >= totalBestiaries %>"><%= totalMaxedBestiaries %> / <%= totalBestiaries%></span><br>
+            <% calculated.bestiary.level >= maxLevel ? 'golden-text' : '' %><span class="stat-name <%= totalMaxedBestiaries >= maxLevel %>">Level: </span><span class="stat-value <%= totalMaxedBestiaries >= maxLevel %>"><%= calculated.bestiary.level.toLocaleString() %> / <%= maxLevel%></span>
+        </p>
+
+        <% for(const island of Object.keys(calculated.bestiary.categories)) { %>
+            <div class="category-header">
+                <div class="floor-icon" style="background-image: url(<%= bestiary[island].head %>)"></div>
+                <span><%= bestiary[island].name %></span>
+                <% if (mBestiaryOnIsland[island]) {%>
+                    <span class="category-header-maxed">max!</span>
+                <%} else {%>
+                    <span class="category-header-detail">(<%= maxedBestiaryOnIsland[island] %> / <%= bestiariesOnIsland[island] %> max)</span>
+                <%}%>
+            </div>
+            <span class="category-header-detail"></span>
+            <div class="collections">
+                <% for (const family of Object.keys(calculated.bestiary.categories[island])) { %>
+                    <div class="chip" data-missing="<%= calculated.bestiary.categories[island][family].kills%>">
+                        <div class="chip-icon-wrapper">
+                            <% if (calculated.bestiary.categories[island][family].head) { %>
+                                <div style="background-image:url(/head/<%= calculated.bestiary.categories[island][family].head %>)" class="item-icon custom-icon"></div>
+                            <% } else { %>
+                                <div class="item-icon icon-<%= calculated.bestiary.categories[island][family].itemId %>_<%= calculated.bestiary.categories[island][family].damage %>"></div>
+                            <% } %>
+                        </div>
+                        <div class="chip-text">
+                            <div class="collection-name <%= calculated.bestiary.categories[island][family].tier >= calculated.bestiary.categories[island][family].maxTier ? 'max-stat' : '' %>"><span class="stat-name"><%= calculated.bestiary.categories[island][family].name %> </span><span class="stat-value"><%= calculated.bestiary.categories[island][family].tier %></span></div>
+                            <div class="collection-amount"><span class="stat-name">Kills: </span><span class="stat-value"><%= calculated.bestiary.categories[island][family].kills.toLocaleString() %></span></div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        <% } %>
+    </div>
+</div>

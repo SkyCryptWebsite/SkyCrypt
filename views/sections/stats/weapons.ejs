@@ -1,0 +1,72 @@
+<% 
+// NOTE: importing itemIcon seems to not work
+function itemIcon(item, classes) { %>
+<div <% if (item.texture_path) { %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
+    <%= classes.join(" ") %>
+    item-icon
+    <% if (isEnchanted(item)) { %>is-enchanted <% } %>
+    <% if (item.texture_path) { %>custom-icon<% } %>
+    <% if (item.Damage != 0) { %>icon-<%= item.id %>_0<% } %>
+    icon-<%= item.id %>_<%= item.Damage %>">
+</div>
+<% }
+
+function isEnchanted(item) {
+  // heads
+  if ([397].includes(item.id)) {
+    return false;
+  }
+
+  // enchanted book, bottle o' enchanting, nether star
+  if ([403, 384, 399].includes(item.id)) {
+    return true;
+  }
+
+  // potions potions with actual effects (not water bottles)
+  if (item.id === 373 && item.Damage !== 0) {
+    return true;
+  }
+
+  if ("tag" in item && Array.isArray(item.tag.ench)) {
+    return true;
+  }
+
+  if (item.glowing) {
+    return true;
+  }
+
+  return false;
+}
+%>
+
+<div class="stat-container stat-weapons">
+  <a class="stat-anchor" id="Weapons"></a>
+  <h2 class="stat-header">Weapons</h2>
+  <div class="stat-content">
+    <% if (items.weapons.length == 0) { %>
+    <div class="no-access"><%= calculated.display_name %> doesn't have any weapons.</div>
+    <% } else { %>
+    <% if (items.highest_rarity_sword) { %>
+    <p class="stat-raw-values">
+      <span class="stat-name">Active Weapon: </span>
+      <span class="stat-active-weapon stat-value"><%- renderLore(items.highest_rarity_sword.tag.display.Name) %></span>
+    </p>
+    <% } else if (items.weapons.length > 0) { %>
+    <p class="stat-raw-values">
+      <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-common-fg">None</span>
+    </p>
+    <% } %>
+    <div class="pieces">
+      <% items.weapons.filter(a => !a.hidden).forEach(item => { %>
+      <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg<%= getRarityUpgradeClass(item) %>">
+        <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
+        <div class="piece-shine"></div>
+        <% } %>
+
+        <% itemIcon(item, ['piece-icon']); %>
+      </div>
+      <%});%>
+    </div>
+    <% } %>
+  </div>
+</div>

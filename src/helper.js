@@ -26,6 +26,7 @@ import {
   PET_RARITY_OFFSET,
   PET_LEVELS,
   ITEM_ANIMATIONS,
+  ISLANDS,
 } from "./constants.js";
 
 import credentials from "./credentials.js";
@@ -1079,4 +1080,32 @@ export function getAnimatedTexture(item) {
   });
 
   return deepResults[0] ?? false;
+}
+
+export function getAreaName(areaId) {
+  ISLANDS.forEach((island) => {
+    if (island.id === areaId) {
+      return island.name;
+    }
+  });
+}
+
+export function getVisitedZones(visitedZones = []) {
+  const islandZones = [];
+
+  for (const key in ISLANDS) {
+    const island = ISLANDS[key];
+
+    if (!island?.zones) {
+      continue;
+    }
+
+    visitedZones.forEach((zone) => {
+      if (island.zones.includes(zone)) {
+        islandZones.push(zone);
+      }
+    });
+  }
+
+  return islandZones;
 }

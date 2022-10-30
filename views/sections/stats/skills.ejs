@@ -1,0 +1,56 @@
+<% if (availableSections.skills.enabled === true) { %>
+    <div class="stat-container stat-skills">
+        <a class="stat-anchor" id="Skills"></a>
+        <h2 class="stat-header">Skills</h2>
+        <div class="stat-content">
+            <% if (availableSections.skills.mining.enabled === true && availableSections.skills.mining.mining === true) { %>
+                <div class="stat-mining">
+                    <div class="category-header">
+                    <div class="category-icon">
+                        <div class="item-icon icon-274_0"></div>
+                    </div>
+                    <span>mining</span>
+                    </div>
+                    <%- include('./skills/mining.ejs', { mining: calculated.mining, getRarityUpgradeClass: getRarityUpgradeClass, rarityOrder: rarityOrder }); %>
+                </div>
+            <% } %>
+
+            <% if (availableSections.skills.farming.enabled === true && availableSections.skills.farming.farming === true) { %>
+                <div class="stat-farming">
+                    <div class="category-header">
+                        <div class="category-icon" onclick="window.open('https://www.youtube.com/watch?v=pZaY1jV96jI')">
+                        <div class="item-icon icon-294_0"></div>
+                        </div>
+                        <span>farming</span>
+                    </div>
+                    <%- include('./skills/farming.ejs', { farming: calculated.farming }); %>
+                </div>
+            <% } %>
+
+            <% if (availableSections.skills.fishing.enabled === true && availableSections.skills.fishing.fishing === true) { %>
+                <div class="stat-fishing">
+                    <div class="category-header">
+                    <div class="category-icon">
+                        <div class="item-icon icon-346_0"></div>
+                    </div>
+                    <span>fishing</span>
+                    </div>
+                    <%- include('./skills/fishing.ejs'); %>
+                </div>
+            <% } %>
+
+            <% if (availableSections.skills.enchanting.enabled === true && availableSections.skills.enchanting.enchanting === true) { %>
+                <div class="stat-enchanting">
+                    <div class="category-header">
+                    <div class="category-icon">
+                        <div class="item-icon icon-116_0"></div>
+                    </div>
+                    <span>enchanting</span>
+                    </div>
+                    <%- include('./skills/enchanting.ejs', { enchanting: calculated.enchanting }); %>
+                </div>
+            <% } %>
+        </div>
+    </div>
+<% } %>
+

@@ -1,0 +1,82 @@
+<div class="stat-container stat-collections">
+  <a class="stat-anchor" id="Collections"></a>
+  <h2 class="stat-header">Collections</h2>
+  <div class="stat-content">
+    <p class="stat-raw-values">
+      <%
+        let maxCollections = 0;
+        for(const collection of constants.COLLECTION_DATA)
+        if (collection.skyblockId in calculated.collections && calculated.collections[collection.skyblockId].tier >= collection.maxTier) {
+            maxCollections++;
+        }
+        %>
+      <% max = maxCollections == constants.COLLECTION_DATA.length ? 'golden-text' : '' %><span class="stat-name <%= max %>">Maxed Collections: </span><span class="stat-value <%= max %>"><%= maxCollections %> / <%= constants.COLLECTION_DATA.length %></span>
+    </p>
+
+    <% for(const type of constants.COLLECTION_TYPES) {
+        const collections = [];
+
+        const totalOfType = constants.COLLECTION_DATA.filter(a => a.type == type).length;
+        let maxOfType = 0;
+
+        for(const collection of constants.COLLECTION_DATA.filter(a => a.type == type))
+        if (collection.skyblockId in calculated.collections) {
+            collections.push(Object.assign(collection, calculated.collections[collection.skyblockId]));
+        }
+
+        for(const collection of collections) {
+        if (collection.tier >= collection.maxTier) {
+            maxOfType++;
+        }
+        }
+
+        if (collections.length == 0) {
+        continue;
+        }
+        %>
+
+    <div class="category-header">
+      <div class="category-icon">
+        <div class="item-icon <%= skillItems[type] %>"></div>
+      </div>
+      <span><%= type %></span>
+      <% if (maxOfType >= totalOfType) { %>
+      <span class="category-header-maxed">max!</span>
+      <% }else{ %>
+      <span class="category-header-detail">(<%= maxOfType %> / <%= totalOfType %> max)</span>
+      <% } %>
+    </div>
+    <div class="collections">
+      <% 
+        for(const collection of collections) {
+            let amountsTooltip = '';
+
+            for(const [index, amount] of collection.amounts.entries()) {
+                amountsTooltip += `<span class="stat-name">${amount.username}: </span><span class="stat-value">${amount.amount.toLocaleString()}</span>`;
+
+                if (index < collection.amounts.length) {
+                amountsTooltip += '<br>';
+                }
+            }
+
+            amountsTooltip += `<br><span class="stat-name">Total: </span><span class="stat-value">${collection.totalAmount.toLocaleString()}</span>`; 
+            %>
+
+      <div class="chip" data-tippy-content="<%= amountsTooltip %>">
+        <div class="chip-icon-wrapper">
+          <% if ("texture" in collection) { %>
+          <div style="background-image:url(/head/<%= collection.texture %>)" class="item-icon custom-icon"></div>
+          <% } else { %>
+          <div class="item-icon icon-<%= collection.id %>_<%= collection.damage %>"></div>
+          <% } %>
+        </div>
+        <div class="chip-text">
+          <div class="collection-name <%= collection.tier >= collection.maxTier ? 'max-stat' : '' %>"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
+          <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= collection.amount.toLocaleString() %></span></div>
+        </div>
+      </div>
+      <% } %>
+    </div>
+    <% } %>
+  </div>
+</div>
