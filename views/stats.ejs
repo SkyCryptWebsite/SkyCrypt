@@ -2161,7 +2161,7 @@ const metaDescription = getMetaDescription()
               let maxedBestiaryOnIsland = {}, bestariesOnIsland = {}, totalBestires = 0, totalMaxedBeasteries = 0, mBestiaryOnIsland = {}, maxLevel = 0;
               for(const island of Object.keys(calculated.bestiary.categories)) {
                 for (const family of Object.keys(calculated.bestiary.categories[island])) {
-                  totalBestires += calculated.bestiary.categories[island][family].maxTier;
+                  totalBestires += 1;
                   maxLevel += calculated.bestiary.categories[island][family].maxTier;
                   if (!bestariesOnIsland[island]) bestariesOnIsland[island] = 0;
                   if (!maxedBestiaryOnIsland[island]) maxedBestiaryOnIsland[island] = 0;
@@ -2179,11 +2179,11 @@ const metaDescription = getMetaDescription()
                 }
               }
             %>
-            <% totalBestires = totalBestires / 10 %>
+            <% maxLevel = maxLevel / 10 %>
 
             <p class="stat-raw-values">
               <% totalMaxedBeasteries >= totalBestires ? 'golden-text' : '' %><span class="stat-name <%= totalMaxedBeasteries >= totalBestires %>">Maxed Beasteries: </span><span class="stat-value <%= totalMaxedBeasteries >= totalBestires %>"><%= totalMaxedBeasteries %> / <%= totalBestires%></span><br>
-              <% calculated.bestiary.level >= maxLevel ? 'golden-text' : '' %><span class="stat-name <%= totalMaxedBeasteries >= totalBestires %>">Level: </span><span class="stat-value <%= totalMaxedBeasteries >= totalBestires %>"><%= calculated.bestiary.level.toLocaleString() %> / <%= maxLevel%></span>
+              <% calculated.bestiary.level >= maxLevel ? 'golden-text' : '' %><span class="stat-name <%= totalMaxedBeasteries >= maxLevel %>">Level: </span><span class="stat-value <%= totalMaxedBeasteries >= maxLevel %>"><%= calculated.bestiary.level.toLocaleString() %> / <%= maxLevel%></span>
             </p>
 
             <% for(const island of Object.keys(calculated.bestiary.categories)) { %>
