@@ -498,7 +498,7 @@ class Bat extends Pet {
 class Endermite extends Pet {
   get stats() {
     return {
-      intelligence: this.level * 1,
+      intelligence: this.level * 1.5,
       pet_luck: this.level * 0.1,
     };
   }
