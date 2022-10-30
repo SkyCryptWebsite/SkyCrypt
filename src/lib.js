@@ -363,6 +363,10 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       }
     }
 
+    if (item.tag?.ExtraAttributes?.model != undefined) {
+      item.extra.model = item.tag.ExtraAttributes.model;
+    }
+
     if (item.tag?.ExtraAttributes?.hot_potato_count != undefined) {
       item.extra.hpbs = item.tag.ExtraAttributes.hot_potato_count;
     }
@@ -964,6 +968,7 @@ export const getItems = async (
     special: 0,
     very_special: 0,
     hegemony: null,
+    abicase: null,
   };
 
   // Modify accessories on armor and add
@@ -1033,6 +1038,9 @@ export const getItems = async (
     accessoryRarities[insertAccessory.rarity]++;
     if (id == "HEGEMONY_ARTIFACT") {
       accessoryRarities.hegemony = { rarity: insertAccessory.rarity };
+    }
+    if (id === "ABICASE") {
+      accessoryRarities.abicase = { model: insertAccessory.extra?.model };
     }
   }
 
@@ -2056,6 +2064,8 @@ export async function getStats(
   });
 
   output.crimsonIsles = crimsonIsles;
+
+  output.abiphone = userProfile.nether_island_player_data?.abiphone?.contact_data;
 
   // MISC
 
