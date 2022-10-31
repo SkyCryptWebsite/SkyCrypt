@@ -58,7 +58,7 @@ function isEnchanted(item) {
     <% } %>
     <div class="pieces">
       <% items.weapons.filter(a => !a.hidden).forEach(item => { %>
-      <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg<%= getRarityUpgradeClass(item) %>">
+      <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
         <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
         <div class="piece-shine"></div>
         <% } %>
