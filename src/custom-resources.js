@@ -33,7 +33,7 @@ async function getFiles(dir, fileList) {
   for (const file of files) {
     const fileStat = await fs.stat(path.resolve(dir, file));
 
-    if (await fileStat.isDirectory()) {
+    if (fileStat.isDirectory()) {
       fileList = await getFiles(path.resolve(dir, file), fileList);
     } else {
       fileList.push(path.resolve(dir, file));
@@ -58,7 +58,7 @@ async function init() {
   console.log(`Custom Resources loading started on ${getClusterId(true)}.`);
   console.time(`custom_resources_${getClusterId()}`);
 
-  /*for (const packOrFile of await fs.readdir(RESOURCE_PACK_FOLDER, { withFileTypes: true })) {
+  for (const packOrFile of await fs.readdir(RESOURCE_PACK_FOLDER, { withFileTypes: true })) {
     if (!packOrFile.isDirectory()) {
       continue;
     }
@@ -91,6 +91,8 @@ async function init() {
 
       const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
       const properties = {};
+
+      if (!lines.some((line) => line.startsWith("nbt.ExtraAttributes.id"))) continue;
 
       for (const line of lines) {
         // Skipping comments
@@ -406,7 +408,7 @@ async function init() {
 
       pack.textures.push(texture);
     }
-  }*/
+  }
 
   console.log(`Custom Resources loading done. (${getClusterId(true)})`);
   console.timeEnd(`custom_resources_${getClusterId()}`);

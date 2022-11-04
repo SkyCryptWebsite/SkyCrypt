@@ -2622,13 +2622,7 @@ async function getMissingPets(pets, gameMode, userProfile) {
     profile.pets.push(pets[0]);
   }
 
-  if (!userProfile) {
-    throw new Error("User profile not found");
-  }
-
-  if (userProfile) {
-    return getPets(profile, userProfile);
-  }
+  return getPets(profile, userProfile);
 }
 
 function getPetScore(pets) {
