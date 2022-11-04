@@ -499,7 +499,8 @@ class Bat extends Pet {
 class Endermite extends Pet {
   get stats() {
     return {
-      intelligence: this.level * 1,
+      intelligence: this.level * 1.5,
+      pet_luck: this.level * 0.1,
     };
   }
 
@@ -511,11 +512,15 @@ class Endermite extends Pet {
     if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
+
+    if (this.rarity >= MYTHIC) {
+      list.push(this.fourth);
+    }
     return list;
   }
 
   get first() {
-    const mult = getValue(this.rarity, { common: 0.3, uncommon: 0.4, epic: 0.5 });
+    const mult = getValue(this.rarity, { common: 0.5, uncommon: 0.8, epic: 1 });
     return {
       name: "§6More Stonks",
       desc: [
@@ -528,27 +533,32 @@ class Endermite extends Pet {
   }
 
   get second() {
-    const mult = getValue(this.rarity, { rare: 0.03, epic: 0.05 });
+    const mult = getValue(this.rarity, { rare: 0.3, epic: 0.4 });
     return {
-      name: "§6Pearl Muncher",
-      desc: [
-        `§7Ender Pearls dropped from slain enemies are consumed and converted into §6${
-          5 + round(this.level * mult, 1)
-        } coins§7.`,
-      ],
+      name: "§6Daily Commuter",
+      desc: [`§9Transmission Abilities §7cost §a${round(this.level * mult, 1)}% §7less mana.`],
     };
   }
 
   get third() {
     return {
-      name: "§6Pearl Powered",
+      name: "§6Mite Bait",
       desc: [
-        `§7Upon munching Ender Pearls, gain +§f${round(this.level * 0.05, 1)} ${SYMBOLS.speed} Speed§7, §c+${round(
-          this.level * 0.3,
+        `§7Gain a §a${round(this.level * 0.03, 1)}% §7chance to dig up a bonus §cNest Endermite §7per §d+1 ${
+          SYMBOLS.pet_luck
+        } Pet Luck §8(Stacks above 100%)`,
+      ],
+    };
+  }
+
+  get fourth() {
+    return {
+      name: "§6Sacrificer",
+      desc: [
+        `§7Increases the odds of rolling for bonus items in the §cDraconic Altar §7by §a${round(
+          this.level * 0.1,
           1
-        )} ${SYMBOLS.strength} Strength §7and §b${round(this.level * 0.1, 1)} ${
-          SYMBOLS.magic_find
-        } Magic Find §7for 10 seconds`,
+        )}%.`,
       ],
     };
   }
