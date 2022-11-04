@@ -2,7 +2,7 @@
   <a class="stat-anchor" id="Islands"></a>
   <h2 class="stat-header">Islands</h2>
 
-  <% if (availableSections["islands.crimson_isle"]) { %>
+  <% if (sections.check("islands.crimson_isle")) { %>
     <div class="category-header">
       <div class="floor-icon" style="background-image: url(<%= constants.ISLANDS.nether.icon %>)"></div>
       <span><%= constants.ISLANDS.nether.name %></span>

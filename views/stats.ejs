@@ -33,14 +33,6 @@ const skillItems = {
   tank: 'icon-299_0',
 };
 
-const availableSections = {
-  "islands": true,
-  "islands.crimson_isle": (calculated.visited_zones.includes("crimson_isle")),
-  "islands.crimson_isle.factions": (Object.keys(calculated.crimson_isle.factions).length > 0),
-  "islands.crimson_isle.kuudra": (Object.keys(calculated.crimson_isle.kuudra_completed_tiers).length > 0),
-  "islands.crimson_isle.dojo": (Object.keys(calculated.crimson_isle.dojo).length > 0),
-}
-
 const bestiary = {
   private: {
     head: "/head/c9c8881e42915a9d29bb61a16fb26d059913204d265df5b439b3d792acd56",
@@ -588,12 +580,79 @@ function formatSlayerCoinsSpent(coins) {
   return `${helper.formatNumber(coins / 2, true)} – ${helper.formatNumber(coins, true)}`
 }
 
-function getDojoRank(points) {
-  if (points >= 1000) return 'S'
-  if (points >= 800) return 'A'
-  if (points >= 600) return 'C'
-  if (points >= 400) return 'D'
-  return 'F'
+// section stuff, i don't have fancy ascii art for this >w<
+
+const sections = {
+  available: [
+    {
+      id: "islands",
+      dependants: [
+        "islands.crimson_isle"
+      ]
+    },
+    {
+      id: "islands.crimson_isle",
+      conditions: [
+        `profile.visited_zones.includes("crimson_isle")`
+      ],
+    },
+    {
+      id: "islands.crimson_isle.factions",
+      conditions: [
+        `Object.keys(profile.crimson_isle.factions).length > 0`
+      ]
+    },
+    {
+      id: "islands.crimson_isle.kuudra",
+      conditions: [
+        `Object.keys(profile.crimson_isle.kuudra_completed_tiers).length > 0`
+      ]
+    },
+    {
+      id: "islands.crimson_isle.dojo",
+      conditions: [
+        `Object.keys(profile.crimson_isle.dojo).length > 0`
+      ]
+    }
+  ],
+  overrides: {},
+  check: (id, profile = calculated) => {
+    try {
+      // check if there was an override set by something
+      if (Object.hasOwn(sections.overrides, id)) {
+        return sections.overrides[id];
+      }
+
+      // filter all available sections to search for id of the one we're searching for, then grab the first one
+      const section = sections.available.filter((section) => { return (section.id == id); })[0];
+
+      // check conditions for section
+      // all conditions need to be met for section check to pass
+      if (section.hasOwnProperty("conditions")) {
+        section.conditions.forEach(condition => {
+          const conditionResult = new Function('profile', `return (${condition});`)(profile);
+
+          if (!conditionResult) {
+            throw new Error("Section condition wasn't met");
+          }
+        });
+      }
+
+      // check dependants for section
+      // only one dependant's check needs to pass for section check to pass
+      if (section.hasOwnProperty("dependants")) {
+        for (const dependant of section.dependants) {
+          if (sections.check(dependant, profile)) {
+            break;
+          }
+        };
+      }
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }
 
 /*
@@ -886,7 +945,7 @@ const metaDescription = getMetaDescription()
         <% if(calculated.pets.length > 0){ %><a class="nav-item" href="#Pets">Pets</a><% } %>
         <% if(!items.no_inventory){ %><a class="nav-item" href="#Inventory">Inventory</a><% } %>
         <a class="nav-item" href="#Skills">Skills</a>
-        <% if (availableSections.islands) { %><a class="nav-item" href="#Islands">Islands</a><% } %>
+        <% if (sections.check("islands")) { %><a class="nav-item" href="#Islands">Islands</a><% } %>
         <a class="nav-item" href="#Dungeons">Dungeons</a>
         <a class="nav-item" href="#Slayer">Slayer</a>
         <a class="nav-item" href="#Minions">Minions</a>
@@ -1777,8 +1836,8 @@ const metaDescription = getMetaDescription()
         </div>
       </div>
 
-      <% if (availableSections["islands"]) { %>
-        <%- include('./sections/stats/islands.ejs'); %>
+      <% if (sections.check("islands")) { %>
+        <%- include('./sections/stats/islands.ejs', { calculated, constants, sections }); %>
       <% } %>
 
       <div class="stat-container stat-dungeons">

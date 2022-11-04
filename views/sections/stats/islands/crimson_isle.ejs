@@ -1,4 +1,25 @@
-<% if (availableSections["islands.crimson_isle.factions"]) { %>
+<%
+const dojoRanks = {
+  1000: "S",
+  800: "A",
+  600: "B",
+  400: "C",
+  200: "D",
+  0: "F"
+};
+
+const getDojoRank = (points) => {
+  for (const req in dojoRanks) {
+    if (points >= req) {
+      return dojoRanks[req];
+    }
+  }
+
+  throw new Exception(`Invalid number of dojo points (${points})`);
+};
+%>
+
+<% if (sections.check("islands.crimson_isle.factions")) { %>
   <span class="stat-name">Selected Faction: </span><span class="stat-value"><%= calculated.crimson_isle.factions.selected_faction.replaceAll('mages', 'Mage').replaceAll('barbarians', 'Barbarian') %></span><br>
 
   <% max = calculated.crimson_isle.factions.mages_reputation >= 12000 ? 'golden-text' : '' %>
@@ -8,7 +29,7 @@
   <span class="stat-name <%= max %>">Barbarian Reputation: </span><span class="stat-value <%= max %>"><%= calculated.crimson_isle.factions.barbarians_reputation.toLocaleString() %></span><br>
 <% } %>
 
-<% if (availableSections["islands.crimson_isle.kuudra"]) { %>
+<% if (sections.check("islands.crimson_isle.kuudra")) { %>
   <p class="stat-sub-header">Kuudra Completions</p>
   <div class="collections">
     <% for (const tier in calculated.crimson_isle.kuudra_completed_tiers) {
@@ -26,7 +47,7 @@
   </div>
 <% } %>
 
-<% if (availableSections["islands.crimson_isle.dojo"]) { %>
+<% if (sections.check("islands.crimson_isle.dojo")) { %>
   <p class="stat-sub-header">Dojo Completions</p>
   <% max = calculated.crimson_isle.total_dojo_points >= 7000 ? 'golden-text' : '' %>
   <span class="stat-name <%= max %>">Total Points: </span><span class="stat-value <%= max %>"><%= calculated.crimson_isle.total_dojo_points.toLocaleString() %></span>
