@@ -45,11 +45,11 @@ function getValue(rarity, data) {
 }
 
 class Pet {
-  constructor(rarity, level, extra, collections) {
-    this.collections = collections;
+  constructor(rarity, level, extra, profile) {
     this.rarity = rarity;
     this.level = level;
     this.extra = extra;
+    this.profile = profile;
   }
 
   lore(newStats = false) {
@@ -983,11 +983,11 @@ class GoldenDragon extends Pet {
     if (this.level >= 100) {
       stats.strength =
         round(25 + Math.max(0, this.level - 100) * 0.25, 0) +
-        10 * Math.max(Math.floor(Math.log10(Math.abs(this.collections.GOLD_INGOT.totalAmount || 0))), 0);
+        10 * Math.max(Math.floor(Math.log10(Math.abs(this.profile?.collections?.GOLD_INGOT?.totalAmount || 0))), 0);
       stats.bonus_attack_speed = round(25 + Math.max(0, this.level - 100) * 0.25, 0);
       stats.magic_find =
         round(25 + Math.max(0, this.level - 100) * 0.25, 0) +
-        2 * Math.max(Math.floor(Math.log10(Math.abs(this.collections.GOLD_INGOT.totalAmount || 0))), 0);
+        2 * Math.max(Math.floor(Math.log10(Math.abs(this.profile?.collections?.GOLD_INGOT?.totalAmount || 0))), 0);
     }
     return stats;
   }

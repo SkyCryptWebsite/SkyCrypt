@@ -33,7 +33,7 @@ async function getFiles(dir, fileList) {
   for (const file of files) {
     const fileStat = await fs.stat(path.resolve(dir, file));
 
-    if (fileStat.isDirectory()) {
+    if (await fileStat.isDirectory()) {
       fileList = await getFiles(path.resolve(dir, file), fileList);
     } else {
       fileList.push(path.resolve(dir, file));
@@ -58,7 +58,7 @@ async function init() {
   console.log(`Custom Resources loading started on ${getClusterId(true)}.`);
   console.time(`custom_resources_${getClusterId()}`);
 
-  for (const packOrFile of await fs.readdir(RESOURCE_PACK_FOLDER, { withFileTypes: true })) {
+  /*for (const packOrFile of await fs.readdir(RESOURCE_PACK_FOLDER, { withFileTypes: true })) {
     if (!packOrFile.isDirectory()) {
       continue;
     }
@@ -92,24 +92,30 @@ async function init() {
       const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
       const properties = {};
 
-      if (!lines.some((line) => line.startsWith("nbt.ExtraAttributes.id"))) continue;
-
       for (const line of lines) {
         // Skipping comments
-        if (line.startsWith("#")) continue;
+        if (line.startsWith("#")) {
+          continue;
+        }
 
         const split = line.split("=");
 
-        if (split.length < 2) continue;
+        if (split.length < 2) {
+          continue;
+        }
 
         properties[split[0]] = split.slice(1).join("=");
       }
 
       // Empty properties, probably whole file contaiend only comments
-      if (Object.keys(properties).length === 0) continue;
+      if (Object.keys(properties).length === 0) {
+        continue;
+      }
 
       // Ignoring when type is set and is not "item"
-      if ("type" in properties && properties.type !== "item") continue;
+      if ("type" in properties && properties.type !== "item") {
+        continue;
+      }
 
       const texture = {
         weight: 0,
@@ -400,7 +406,7 @@ async function init() {
 
       pack.textures.push(texture);
     }
-  }
+  }*/
 
   console.log(`Custom Resources loading done. (${getClusterId(true)})`);
   console.timeEnd(`custom_resources_${getClusterId()}`);

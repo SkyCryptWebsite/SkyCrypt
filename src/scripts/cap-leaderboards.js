@@ -16,7 +16,11 @@ async function capLeaderboards() {
       lbLimit = 50000;
     }
 
-    lb.sortedBy < 0 ? redisClient.zremrangebyrank(key, 0, -lbLimit) : redisClient.zremrangebyrank(key, lbLimit, -1);
+    if (lb.sortedBy < 0) {
+      redisClient.zremrangebyrank(key, 0, -lbLimit);
+    } else {
+      redisClient.zremrangebyrank(key, lbLimit, -1);
+    }
   }
 
   await multi.exec();
