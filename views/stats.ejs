@@ -834,6 +834,7 @@ const metaDescription = getMetaDescription()
         <%}%>
       <%}%>
         <% if (!calculated.networth.noInventory) {%>
+        <div class="additional-stat">
         <span data-tippy-content="
           <span class='stat-name'><%= 'Networth' %></span><br>
           <span class='stat-info'>Networth calculations by SkyHelper</span>
@@ -896,8 +897,8 @@ const metaDescription = getMetaDescription()
           </span><br/>
         ">
           <span class="stat-name">Networth: </span>
-          <span class="stat-value"><%= helper.formatNumber(parseFloat(Math.round(calculated.networth.networth))) %></span>
-        </span>
+          <span class="stat-value"><%= helper.formatNumber(parseFloat(Math.round(calculated.networth.networth))) %></span></span>
+        </div>
         <% } %>
       </div>
       <div id="skill_levels_container">
@@ -1137,7 +1138,7 @@ const metaDescription = getMetaDescription()
               <% } %>
               <% if (rarities.abicase && Math.floor(Object.keys(calculated.abiphone).length / 2) > 0) {%>
                 <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Abicase</span> = <span style='color: var(--§6);' class='grey-text'>+<%= Math.floor(Object.keys(calculated.abiphone).length / 2).toLocaleString() %> MP</span><br>
-              <% } %> 
+              <% } %>
               <br>
               Total: <span style='color: var(--§6);' class='grey-text'><%= mp_total.toLocaleString() %> Magical Power</span>
               ">

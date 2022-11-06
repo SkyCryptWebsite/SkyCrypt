@@ -27,6 +27,8 @@ const hypixel = axios.create({
 });
 const parseNbt = util.promisify(nbt.parse);
 
+let networthPrices = helper.getNetworthPrices();
+
 function getMinMax(profiles, min, ...path) {
   let output = null;
 
@@ -3824,4 +3826,9 @@ async function init() {
   }
 }
 
+async function updateNetworthPrices() {
+  networthPrices = helper.getNetworthPrices();
+}
+
+setInterval(updateNetworthPrices, 15000);
 init();
