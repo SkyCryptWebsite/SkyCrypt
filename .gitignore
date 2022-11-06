@@ -64,3 +64,6 @@ profiler
 
 Caretaker/checkstat.sh
 package-lock.json
+
+# local dev files
+devdata/*
