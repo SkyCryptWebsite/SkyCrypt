@@ -360,7 +360,10 @@ export async function renderItem(skyblockId, query, db) {
     outputTexture.image = await getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer("image/png");
   }
 
-  const customTexture = await customResources.getTexture(item, "name" in query, query.pack);
+  const customTexture = await customResources.getTexture(item, {
+    ignore_id: "name" in query,
+    pack_ids: query.pack,
+  });
 
   if (customTexture) {
     if (customTexture.animated) {
