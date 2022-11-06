@@ -602,7 +602,7 @@ declare const calculated: SkyCryptPlayer & {
     power_bonus: {
       [key: string]: number;
     };
-    refoge: string;
+    reforge: string;
   };
   hotm: {
     tag: any;

@@ -163,9 +163,12 @@ export function getPlayerStats() {
     ) {
       for (const [stat, value] of Object.entries(CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet as keyof typeof CONSTANTS.CUSTOM_ARMOR_ABILTIES].bonus)) {
         stats[stat].armor ??= 0;
-        stat.includes("_cap")
-          ? (stats[stat].armor = value as keyof typeof value)
-          : (stats[stat].armor += value as keyof typeof value);
+        if (stat.includes("_cap")) {
+          stats[stat].armor = value;
+        } else {
+          stats[stat].armor += value;
+        }
+        
       }
     }
 
@@ -177,8 +180,8 @@ export function getPlayerStats() {
       leggings?.tag?.ExtraAttributes?.id == "MASTIFF_LEGGINGS" &&
       boots?.tag?.ExtraAttributes?.id == "MASTIFF_BOOTS"
     ) {
-      stats.health.armor = stats.health.armor + stats.crit_damage * 50;
-      stats.crit_damage.armor = stats.crit_damage / 2;
+      stats.health.armor = Object.keys(stats.crit_damage).map((key) => stats.crit_damage[key]).reduce((a, b) => a + b, 0) * 50;
+      stats.crit_damage.armor = Object.keys(stats.crit_damage).map((key) => stats.crit_damage[key]).reduce((a, b) => a + b, 0) / 2;
     }
 
     // ? Obsidian Chestplate
@@ -253,8 +256,8 @@ export function getPlayerStats() {
   const mpTotal: number = Object.values(playerMagicalPower).reduce((a, b) => a + b) + mpHegemony;
 
   // ? Accessory reforge
-  if (calculated.selected_reforge && CONSTANTS.REFORGES[calculated.selected_reforge]?.reforge) {
-    for (const [stat, value] of Object.entries(CONSTANTS.REFORGES[calculated.selected_reforge].reforge)) {
+  if (calculated.selected_reforge && CONSTANTS.REFORGES[calculated.selected_reforge.reforge as keyof typeof CONSTANTS.REFORGES]) {
+    for (const [stat, value] of Object.entries(CONSTANTS.REFORGES[calculated.selected_reforge.reforge as keyof typeof CONSTANTS.REFORGES])) {
       stats[stat].reforge ??= 0;
       stats[stat].reforge += (value as number) * mpTotal;
     }
@@ -544,20 +547,20 @@ function getPetData(stats: PlayerStats, pet: Pet, calculated: PlayerStats) {
     if (pet.tier == "RARE") {
       stats.defense.pet ??= 0;
       stats.health.pet ??= 0;
-      stats.defense.pet += (stats.speed / 100) * 0.15 * pet.level.level;
-      stats.health.pet += (stats.defense / 10) * 0.01 * pet.level.level;
+      stats.defense.pet += (Object.keys(stats.speed).map((key) => stats.speed[key]).reduce((a, b) => a + b, 0) / 100) * 0.15 * pet.level.level;
+      stats.health.pet += (Object.keys(stats.defense).map((key) => stats.defense[key]).reduce((a, b) => a + b, 0) / 10) * 0.01 * pet.level.level;
     }
     if (pet.tier == "EPIC") {
       stats.defense.pet ??= 0;
       stats.health.pet ??= 0;
-      stats.defense.pet += (stats.speed / 100) * 0.2 * pet.level.level;
-      stats.health.pet += (stats.defense / 10) * 0.01 * pet.level.level;
+      stats.defense.pet += (Object.keys(stats.speed).map((key) => stats.speed[key]).reduce((a, b) => a + b, 0) / 100) * 0.2 * pet.level.level;
+      stats.health.pet += (Object.keys(stats.defense).map((key) => stats.defense[key]).reduce((a, b) => a + b, 0) / 10) * 0.01 * pet.level.level;
     }
     if (pet.tier == "LEGENDARY") {
       stats.defense.pet ??= 0;
       stats.health.pet ??= 0;
-      stats.defense.pet += (stats.speed / 100) * 0.2 * pet.level.level;
-      stats.health.pet += (stats.defense / 10) * 0.01 * pet.level.level;
+      stats.defense.pet += (Object.keys(stats.speed).map((key) => stats.speed[key]).reduce((a, b) => a + b, 0) / 100) * 0.2 * pet.level.level;
+      stats.health.pet += (Object.keys(stats.defense).map((key) => stats.defense[key]).reduce((a, b) => a + b, 0) / 10) * 0.01 * pet.level.level;
     }
   }
 
