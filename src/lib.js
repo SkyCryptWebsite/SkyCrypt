@@ -12,7 +12,7 @@ import { v4 } from "uuid";
 
 import * as constants from "./constants.js";
 import credentials from "./credentials.js";
-import { getTexture, packs } from "./custom-resources.js";
+import { getTexture } from "./custom-resources.js";
 import * as helper from "./helper.js";
 import { db } from "./mongo.js";
 import { redisClient } from "./redis.js";
@@ -519,7 +519,10 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     }
 
     if (item.tag?.ExtraAttributes?.skin == undefined && customTextures) {
-      const customTexture = await getTexture(item, false, packs);
+      const customTexture = await getTexture(item, {
+        ignore_id: false,
+        pack_ids: packs,
+      });
 
       if (customTexture) {
         item.animated = customTexture.animated;
@@ -2800,13 +2803,13 @@ export function getBestiary(uuid, profile) {
 
       const boss = mob.boss == true ? "boss" : "regular";
 
-      let kills = bestiaryFamilies[mob.id] || 0;
-      let head = mob.head;
-      let itemId = mob.itemId;
-      let damage = mob.damage;
-      let name = mob.name;
-      let maxTier = mob.maxTier ?? 41;
-      let tier =
+      const kills = bestiaryFamilies[mob.id] || 0;
+      const head = mob.head;
+      const itemId = mob.itemId;
+      const damage = mob.damage;
+      const name = mob.name;
+      const maxTier = mob.maxTier ?? 41;
+      const tier =
         constants.BEASTIARY_KILLS[boss].filter((k) => k <= kills).length > maxTier
           ? maxTier
           : constants.BEASTIARY_KILLS[boss].filter((k) => k <= kills).length;
@@ -3219,7 +3222,10 @@ function getHotmItems(userProfile, packs) {
 
   // Processing textures
   output.forEach(async (item) => {
-    const customTexture = await getTexture(item, false, packs);
+    const customTexture = await getTexture(item, {
+      ignore_id: false,
+      pack_ids: packs,
+    });
 
     if (customTexture) {
       item.animated = customTexture.animated;
@@ -3779,10 +3785,6 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
   } catch (e) {
     console.error(e);
   }
-}
-
-export function getPacks() {
-  return packs.sort((a, b) => b.priority - a.priority);
 }
 
 async function init() {
