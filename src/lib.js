@@ -2635,7 +2635,6 @@ function getMissingPetSkins(unlockedSkins) {
   return missingSkins;
 }
 
-
 async function getMissingPets(pets, gameMode, userProfile) {
   const profile = {
     pets: [],

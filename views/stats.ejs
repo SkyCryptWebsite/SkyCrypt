@@ -1161,6 +1161,15 @@ const metaDescription = getMetaDescription()
             for (const pet of calculated.pets) {
               totalPetXp += pet.exp
             }
+            let totalSkins = {}
+            let badSkins = {}
+            for (const [skin, skinData] of Object.entries(constants.PET_SKINS)) {
+              if (skinData.release < Date.now()) {
+                totalSkins[skin] = calculated.pets.find((pet) => `PET_SKIN_${pet.skin}` === skin) != undefined;
+              }
+            }
+            let userUniqueSkins = Object.values(totalSkins).filter(skin => skin).length
+            let totalUniqueSkins = Object.keys(totalSkins).length
 
             let totalCandiesUsed = calculated.pets.reduce((total, pet) => total + pet.candyUsed, 0)
           %>
@@ -1260,16 +1269,16 @@ const metaDescription = getMetaDescription()
           <% } %>
 
           <% if (calculated.missingPetSkins.length > 1) {%>
-          <button class="stat-sub-header extender" aria-controls="missing-pet-skins" aria-expanded="false">Missing Skins</button>
-          <div class="pieces extendable" id="missing-pet-skins">
+            <button class="stat-sub-header extender" aria-controls="missing-pet-skins" aria-expanded="false">Missing Skins</button>
+            <div class="pieces extendable" id="missing-pet-skins">
             <%
             const sortedPetSkins = calculated.missingPetSkins.sort((a, b) => rarityOrder.indexOf(a.rarity) - rarityOrder.indexOf(b.rarity))
             for (const [index, skin] of Object.entries(sortedPetSkins)) {%>
-            <div tabindex="0" data-missing-pet-skin-index="<%= index %>" class="rich-item piece piece-<%= skin.rarity %>-bg missing-pet-skin">
-              <div style='background-image: url("<%= skin.texture %>")' class="piece-icon item-icon custom-icon"></div>
-            </div>
+              <div tabindex="0" data-missing-pet-skin-index="<%= index %>" class="rich-item piece piece-<%= skin.rarity %>-bg missing-pet-skin">
+                <div style='background-image: url("<%= skin.texture %>")' class="piece-icon item-icon custom-icon"></div>
+              </div>
             <% } %>
-            <% } %>
+          <% } %>
           </div>
         </div>
       </div>
