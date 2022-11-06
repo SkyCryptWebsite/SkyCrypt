@@ -13,7 +13,7 @@ import { v4 } from "uuid";
 
 import * as constants from "./constants.js";
 import credentials from "./credentials.js";
-import { getTexture, packs } from "./custom-resources.js";
+import { getTexture } from "./custom-resources.js";
 import * as helper from "./helper.js";
 import { db } from "./mongo.js";
 import { redisClient } from "./redis.js";
@@ -364,6 +364,10 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       }
     }
 
+    if (item.tag?.ExtraAttributes?.model != undefined) {
+      item.extra.model = item.tag.ExtraAttributes.model;
+    }
+
     if (item.tag?.ExtraAttributes?.hot_potato_count != undefined) {
       item.extra.hpbs = item.tag.ExtraAttributes.hot_potato_count;
     }
@@ -516,7 +520,10 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     }
 
     if (item.tag?.ExtraAttributes?.skin == undefined && customTextures) {
-      const customTexture = await getTexture(item, false, packs);
+      const customTexture = await getTexture(item, {
+        ignore_id: false,
+        pack_ids: packs,
+      });
 
       if (customTexture) {
         item.animated = customTexture.animated;
@@ -965,6 +972,7 @@ export const getItems = async (
     special: 0,
     very_special: 0,
     hegemony: null,
+    abicase: null,
   };
 
   // Modify accessories on armor and add
@@ -1035,6 +1043,9 @@ export const getItems = async (
     if (id == "HEGEMONY_ARTIFACT") {
       accessoryRarities.hegemony = { rarity: insertAccessory.rarity };
     }
+    if (id === "ABICASE") {
+      accessoryRarities.abicase = { model: insertAccessory.extra?.model };
+    }
   }
 
   // Add inactive accessories from enderchest and backpacks
@@ -1100,6 +1111,16 @@ export const getItems = async (
       }
 
       accessoryIds.splice(accessoryIds.indexOf(id), 1, `WEDDING_RING_${maxTier}`);
+    }
+
+    if (id.startsWith("PARTY_HAT_CRAB")) {
+      const CRAB_HAT = accessories.find((a) => helper.getId(a) == `${id}`);
+      const CRAB_HAT_ANIMATED = accessories.find((a) => helper.getId(a) == `${id}_ANIMATED`);
+
+      if (CRAB_HAT && CRAB_HAT_ANIMATED) {
+        CRAB_HAT.isUnique = false;
+        CRAB_HAT.isInactive = true;
+      }
     }
 
     if (id in constants.ACCESSORY_UPGRADES) {
@@ -1387,7 +1408,7 @@ export const getItems = async (
   return output;
 };
 
-async function getLevels(userProfile, hypixelProfile, levelCaps) {
+async function getLevels(userProfile, hypixelProfile, levelCaps, profileMembers) {
   const output = {};
 
   let skillLevels;
@@ -1427,10 +1448,17 @@ async function getLevels(userProfile, hypixelProfile, levelCaps) {
         skill: "runecrafting",
         type: "runecrafting",
       }),
-      social: getLevelByXp(userProfile.experience_skill_social2, {
-        skill: "social",
-        type: "social",
-      }),
+      social: Object.keys(profileMembers)
+        ? getLevelByXp(
+            Object.keys(profileMembers)
+              .map((member) => profileMembers[member].experience_skill_social2 || 0)
+              .reduce((a, b) => a + b, 0),
+            { skill: "social", type: "social" }
+          )
+        : getLevelByXp(userProfile.experience_skill_social2, {
+            skill: "social",
+            type: "social",
+          }),
     };
 
     for (const skill in skillLevels) {
@@ -1548,7 +1576,8 @@ export async function getStats(
   const { levels, average_level, average_level_no_progress, total_skill_xp, average_level_rank } = await getLevels(
     userProfile,
     hypixelProfile,
-    levelCaps
+    levelCaps,
+    profile.members
   );
 
   output.levels = levels;
@@ -1614,44 +1643,6 @@ export async function getStats(
 
   if (!items.no_inventory) {
     output.missingAccessories = getMissingAccessories(items.accessory_ids);
-  }
-
-  if (!userProfile.pets) {
-    userProfile.pets = [];
-  }
-  userProfile.pets.push(...items.pets);
-
-  output.pets = await getPets(userProfile);
-  output.missingPets = await getMissingPets(output.pets, profile.game_mode);
-  output.petScore = getPetScore(output.pets);
-
-  const petScoreRequired = Object.keys(constants.PET_REWARDS).sort((a, b) => parseInt(b) - parseInt(a));
-
-  output.pet_bonus = {};
-
-  for (const score of petScoreRequired) {
-    if (parseInt(score) > output.petScore) {
-      continue;
-    }
-
-    output.pet_score_bonus = Object.assign({}, constants.PET_REWARDS[score]);
-
-    break;
-  }
-
-  for (const pet of output.pets) {
-    if (!pet.active) {
-      continue;
-    }
-
-    for (const stat in pet.stats) {
-      output.pet_bonus[stat] = (output.pet_bonus[stat] || 0) + pet.stats[stat];
-    }
-  }
-
-  // Apply pet score bonus
-  for (const stat in output.pet_score_bonus) {
-    output.stats[stat] += output.pet_score_bonus[stat];
   }
 
   output.base_stats = Object.assign({}, output.stats);
@@ -2007,14 +1998,12 @@ export async function getStats(
     },
   };
 
-  for (const key of userProfile.tutorial) {
-    if (key.startsWith("commission_milestone_reward_mining_xp_tier_")) {
-      const milestoneTier = key.slice(43);
-      if (mining.commissions.milestone < milestoneTier) {
-        mining.commissions.milestone = milestoneTier;
+  if (userProfile?.tutorial) {
+    for (const key of userProfile.tutorial) {
+      if (key.startsWith("commission_milestone_reward_mining_xp_tier_")) {
+        const milestoneTier = key.slice(43);
+        if (mining.commissions.milestone < milestoneTier) mining.commissions.milestone = milestoneTier;
       }
-    } else {
-      continue;
     }
   }
 
@@ -2057,6 +2046,8 @@ export async function getStats(
   });
 
   output.crimsonIsles = crimsonIsles;
+
+  output.abiphone = userProfile.nether_island_player_data?.abiphone?.contact_data || {};
 
   // MISC
 
@@ -2154,9 +2145,9 @@ export async function getStats(
       auctions_sold[key.replace("auctions_sold_", "")] = userProfile.stats[key];
     } else if (key.includes("auctions_bought_")) {
       auctions_bought[key.replace("auctions_bought_", "")] = userProfile.stats[key];
-    } else if (key.startsWith("kills_") && key.endsWith("_dragon")) {
+    } else if (key.startsWith("kills_") && key.endsWith("_dragon") && key !== "kills_master_wither_king_dragon") {
       misc.dragons["last_hits"] += userProfile.stats[key];
-    } else if (key.startsWith("deaths_") && key.endsWith("_dragon")) {
+    } else if (key.startsWith("deaths_") && key.endsWith("_dragon") && key !== "deaths_master_wither_king_dragon") {
       misc.dragons["deaths"] += userProfile.stats[key];
     } else if (key.includes("kills_corrupted_protector")) {
       misc.protector["last_hits"] = userProfile.stats[key];
@@ -2314,11 +2305,49 @@ export async function getStats(
 
   output.reaper_peppers_eaten = userProfile.reaper_peppers_eaten ?? 0;
 
+  if (!userProfile.pets) {
+    userProfile.pets = [];
+  }
+  userProfile.pets.push(...items.pets);
+
+  output.pets = await getPets(userProfile, output);
+  output.missingPets = await getMissingPets(output.pets, profile.game_mode, output);
+  output.petScore = getPetScore(output.pets);
+
+  const petScoreRequired = Object.keys(constants.PET_REWARDS).sort((a, b) => parseInt(b) - parseInt(a));
+
+  output.pet_bonus = {};
+
+  for (const score of petScoreRequired) {
+    if (parseInt(score) > output.petScore) {
+      continue;
+    }
+
+    output.pet_score_bonus = Object.assign({}, constants.PET_REWARDS[score]);
+
+    break;
+  }
+
+  for (const pet of output.pets) {
+    if (!pet.active) {
+      continue;
+    }
+
+    for (const stat in pet.stats) {
+      output.pet_bonus[stat] = (output.pet_bonus[stat] || 0) + pet.stats[stat];
+    }
+  }
+
+  // Apply pet score bonus
+  for (const stat in output.pet_score_bonus) {
+    output.stats[stat] += output.pet_score_bonus[stat];
+  }
+
   console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
   return output;
 }
 
-export async function getPets(profile) {
+export async function getPets(profile, userProfile) {
   let output = [];
 
   if (!("pets" in profile)) {
@@ -2356,7 +2385,6 @@ export async function getPets(profile) {
           Math.min(constants.RARITIES.indexOf(petData.maxTier), constants.RARITIES.indexOf(pet.rarity) + 1)
         ];
     }
-
     if (pet.heldItem == "PET_ITEM_VAMPIRE_FANG" || pet.heldItem == "PET_ITEM_TOY_JERRY") {
       if (constants.RARITIES.indexOf(pet.rarity) === constants.RARITIES.indexOf(petData.maxTier) - 1) {
         pet.rarity = petData.maxTier;
@@ -2412,8 +2440,9 @@ export async function getPets(profile) {
     const rarity = constants.RARITIES.indexOf(pet.rarity);
 
     const searchName = pet.type in constants.PET_STATS ? pet.type : "???";
-    const petInstance = new constants.PET_STATS[searchName](rarity, pet.level.level, pet.extra);
+    const petInstance = new constants.PET_STATS[searchName](rarity, pet.level.level, pet.extra, userProfile);
     pet.stats = Object.assign({}, petInstance.stats);
+    petInstance.profile = null;
     pet.ref = petInstance;
 
     if (pet.heldItem) {
@@ -2571,7 +2600,7 @@ export async function getPets(profile) {
   return output;
 }
 
-async function getMissingPets(pets, gameMode) {
+async function getMissingPets(pets, gameMode, userProfile) {
   const profile = {
     pets: [],
   };
@@ -2614,7 +2643,7 @@ async function getMissingPets(pets, gameMode) {
     profile.pets.push(pets[0]);
   }
 
-  return getPets(profile);
+  return getPets(profile, userProfile);
 }
 
 function getPetScore(pets) {
@@ -2784,13 +2813,13 @@ export function getBestiary(uuid, profile) {
 
       const boss = mob.boss == true ? "boss" : "regular";
 
-      let kills = bestiaryFamilies[mob.id] || 0;
-      let head = mob.head;
-      let itemId = mob.itemId;
-      let damage = mob.damage;
-      let name = mob.name;
-      let maxTier = mob.maxTier ?? 41;
-      let tier =
+      const kills = bestiaryFamilies[mob.id] || 0;
+      const head = mob.head;
+      const itemId = mob.itemId;
+      const damage = mob.damage;
+      const name = mob.name;
+      const maxTier = mob.maxTier ?? 41;
+      const tier =
         constants.BEASTIARY_KILLS[boss].filter((k) => k <= kills).length > maxTier
           ? maxTier
           : constants.BEASTIARY_KILLS[boss].filter((k) => k <= kills).length;
@@ -2906,9 +2935,13 @@ export function getDungeons(userProfile, hypixelProfile) {
     if (className == current_class) {
       output.classes[className].current = true;
     }
+
+    output.class_average ??= 0;
+    output.class_average += output.classes[className].experience.level;
   }
 
   output.used_classes = used_classes;
+  output.class_average = output.class_average / Object.keys(output.classes).length;
 
   output.selected_class = current_class;
   output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
@@ -3199,7 +3232,10 @@ function getHotmItems(userProfile, packs) {
 
   // Processing textures
   output.forEach(async (item) => {
-    const customTexture = await getTexture(item, false, packs);
+    const customTexture = await getTexture(item, {
+      ignore_id: false,
+      pack_ids: packs,
+    });
 
     if (customTexture) {
       item.animated = customTexture.animated;
@@ -3759,10 +3795,6 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
   } catch (e) {
     console.error(e);
   }
-}
-
-export function getPacks() {
-  return packs.sort((a, b) => b.priority - a.priority);
 }
 
 async function init() {

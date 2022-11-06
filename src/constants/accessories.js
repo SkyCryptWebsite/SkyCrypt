@@ -109,11 +109,13 @@ export const ACCESSORY_UPGRADES = {
   ODGERS_BRONZE_TOOTH: ["ODGERS_SILVER_TOOTH", "ODGERS_GOLD_TOOTH", "ODGERS_DIAMOND_TOOTH"],
   ODGERS_SILVER_TOOTH: ["ODGERS_GOLD_TOOTH", "ODGERS_DIAMOND_TOOTH"],
   ODGERS_GOLD_TOOTH: ["ODGERS_DIAMOND_TOOTH"],
-  // BURNING_KUUDRA_CORE: ["FIERY_KUUDRA_CORE", "INFERNAL_KUUDRA_CORE"],
-  // FIERY_KUUDRA_CORE: ["INFERNAL_KUUDRA_CORE"],
+  BURNING_KUUDRA_CORE: ["FIERY_KUUDRA_CORE", "INFERNAL_KUUDRA_CORE"],
+  FIERY_KUUDRA_CORE: ["INFERNAL_KUUDRA_CORE"],
   BURSTSTOPPER_TALISMAN: ["BURSTSTOPPER_ARTIFACT"],
   GREAT_SPOOK_TALISMAN: ["GREAT_SPOOK_RING", "GREAT_SPOOK_ARTIFACT"],
   GREAT_SPOOK_RING: ["GREAT_SPOOK_ARTIFACT"],
+  DRACONIC_TALISMAN: ["DRACONIC_RING", "DRACONIC_ARTIFACT"],
+  DRACONIC_RING: ["DRACONIC_ARTIFACT"],
 };
 
 export const ACCESSORY_DUPLICATES = {
@@ -145,6 +147,14 @@ export const ACCESSORY_DUPLICATES = {
     "CAMPFIRE_TALISMAN_29",
   ],
 };
+
+/*
+accessory object values:
+  name: accessory display name 
+  rarity: accessory rarity
+  texture: texture path relative to site url
+  allowsRecomb: if the accessory is able to be recombobulated - defaults to true
+*/
 
 export const ACCESSORIES = {
   WEDDING_RING_0: {
@@ -699,21 +709,21 @@ export const ACCESSORIES = {
     rarity: "epic",
     texture: "/head/a2680a28962e9ad2d4872d06fba2cc60824fbb2d0824e42d958575b7563884aa",
   },
-  // BURNING_KUUDRA_CORE: {
-  //   name: "Burning Kuudra Core",
-  //   rarity: "rare",
-  //   texture: "/head/368743497820c08627d2cc5e891c0f9fc3793f75b6e41e140ac9b007d3b505a5",
-  // },
-  // FIERY_KUUDRA_CORE: {
-  //   name: "Fiery Kuudra Core",
-  //   rarity: "epic",
-  //   texture: "/head/200c16738c372484628ca15cf7b0731b810bd3142e07c1053b5e3da6b6e523ca",
-  // },
-  // INFERNAL_KUUDRA_CORE: {
-  //   name: "Infernal Kuudra Core",
-  //   rarity: "legendary",
-  //   texture: "/head/ece252963a5188cef8ede9d8523bd91d284a785b418b39eec29a91aea07c61e2",
-  // },
+  BURNING_KUUDRA_CORE: {
+    name: "Burning Kuudra Core",
+    rarity: "rare",
+    texture: "/head/368743497820c08627d2cc5e891c0f9fc3793f75b6e41e140ac9b007d3b505a5",
+  },
+  FIERY_KUUDRA_CORE: {
+    name: "Fiery Kuudra Core",
+    rarity: "epic",
+    texture: "/head/200c16738c372484628ca15cf7b0731b810bd3142e07c1053b5e3da6b6e523ca",
+  },
+  INFERNAL_KUUDRA_CORE: {
+    name: "Infernal Kuudra Core",
+    rarity: "legendary",
+    texture: "/head/ece252963a5188cef8ede9d8523bd91d284a785b418b39eec29a91aea07c61e2",
+  },
   BURSTSTOPPER_TALISMAN: {
     name: "Burststopper Talisman",
     rarity: "rare",
@@ -748,6 +758,7 @@ export const ACCESSORIES = {
     name: "Pandora's Box",
     rarity: "common",
     texture: "/head/fe246925cbd4c05279b9c8dcf7c2fdfc9baf9b1424aa35e501533ebb98e00522",
+    allowsRecomb: false,
   },
   SHENS_REGALIA: {
     name: "Shen's Regalia",
@@ -774,6 +785,26 @@ export const ACCESSORIES = {
     rarity: "rare",
     texture: "/head/a89cc1ede755709debb7d1fe7ab8129ac8901788d8d8613b03eac157c23cc49c",
   },
+  DRACONIC_TALISMAN: {
+    name: "Draconic Talisman",
+    rarity: "uncommon",
+    texture: "/head/11c51b946cb484b9c76b2c5bf5eab0c74c9ced95f35aa81e699bd5d9b57e20f",
+  },
+  DRACONIC_RING: {
+    name: "Draconic Ring",
+    rarity: "rare",
+    texture: "/head/fee1e74047277a70661a8eaf9c4c6ebf83554b275a16816ec79bba1bce320434",
+  },
+  DRACONIC_ARTIFACT: {
+    name: "Draconic Artifact",
+    rarity: "epic",
+    texture: "/head/ead7dcbe93401b3d3b4e5222ef8097aef4431f48064d0a0531fa0952c211e0e6",
+  },
+  ABICASE: {
+    name: "Abicase",
+    rarity: "rare",
+    texture: "/head/70ce32b90e16419319daf35e6ad01bb715d898548b9ef66dd799a00107e87376",
+  },
 };
 
 // Getting Unique Accessories Count
@@ -797,3 +828,13 @@ export const MAGICAL_POWER = {
   special: 3,
   very_special: 5,
 };
+
+const recombableAccessories = uniqueAccessories;
+
+for (const accessory of Object.keys(recombableAccessories)) {
+  if (ACCESSORIES[accessory]?.allowsRecomb === false) {
+    delete recombableAccessories[accessory];
+  }
+}
+
+export const RECOMBABLE_ACCESSORIES_COUNT = Object.keys(recombableAccessories).length;

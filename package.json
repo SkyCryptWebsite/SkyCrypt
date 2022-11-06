@@ -5,12 +5,15 @@
   "main": "index.js",
   "type": "module",
   "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=7.0.0"
+    "node": ">=16",
+    "npm": "forbidden, use pnpm",
+    "pnpm": "^7.13.4",
+    "yarn": "forbidden, use pnpm"
   },
+  "packageManager": "pnpm@7.13.4",
   "scripts": {
     "start": "node index",
-    "dev": "concurrently -r \"npm run nodemon\" \"npm run scss:watch\" \"npm run rollup:watch\"",
+    "dev": "pnpm i && concurrently -r \"pnpm nodemon\" \"pnpm scss:watch\" \"pnpm rollup:watch\"",
     "postinstall": "node src/credentials.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint .",
@@ -18,7 +21,7 @@
     "lint:ejs": "ejslint **/*.ejs",
     "prettier": "npx prettier --check .",
     "prettier:fix": "npx prettier --write .",
-    "prestart": "npm run scss && npm run rollup",
+    "prestart": "pnpm scss && pnpm rollup",
     "scss": "sass public/resources/scss:public/resources/css --style=compressed",
     "scss:watch": "sass --watch public/resources/scss:public/resources/css",
     "rollup": "npx rollup -c",
@@ -69,6 +72,7 @@
     "moment-timezone": "^0.5.37",
     "mongo-sanitize": "^1.1.0",
     "mongodb": "^4.9.1",
+    "node-fetch": "^3.2.10",
     "prismarine-nbt": "^2.2.1",
     "progress": "^2.0.3",
     "relaxed-json": "^1.0.3",
