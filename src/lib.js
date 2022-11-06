@@ -1109,6 +1109,16 @@ export const getItems = async (
       accessoryIds.splice(accessoryIds.indexOf(id), 1, `WEDDING_RING_${maxTier}`);
     }
 
+    if (id.startsWith("PARTY_HAT_CRAB")) {
+      const CRAB_HAT = accessories.find((a) => helper.getId(a) == `${id}`);
+      const CRAB_HAT_ANIMATED = accessories.find((a) => helper.getId(a) == `${id}_ANIMATED`);
+
+      if (CRAB_HAT && CRAB_HAT_ANIMATED) {
+        CRAB_HAT.isUnique = false;
+        CRAB_HAT.isInactive = true;
+      }
+    }
+
     if (id in constants.ACCESSORY_UPGRADES) {
       const accessoryUpgrades = constants.ACCESSORY_UPGRADES[id];
 
@@ -1631,44 +1641,6 @@ export async function getStats(
     output.missingAccessories = getMissingAccessories(items.accessory_ids);
   }
 
-  if (!userProfile.pets) {
-    userProfile.pets = [];
-  }
-  userProfile.pets.push(...items.pets);
-
-  output.pets = await getPets(userProfile);
-  output.missingPets = await getMissingPets(output.pets, profile.game_mode);
-  output.petScore = getPetScore(output.pets);
-
-  const petScoreRequired = Object.keys(constants.PET_REWARDS).sort((a, b) => parseInt(b) - parseInt(a));
-
-  output.pet_bonus = {};
-
-  for (const score of petScoreRequired) {
-    if (parseInt(score) > output.petScore) {
-      continue;
-    }
-
-    output.pet_score_bonus = Object.assign({}, constants.PET_REWARDS[score]);
-
-    break;
-  }
-
-  for (const pet of output.pets) {
-    if (!pet.active) {
-      continue;
-    }
-
-    for (const stat in pet.stats) {
-      output.pet_bonus[stat] = (output.pet_bonus[stat] || 0) + pet.stats[stat];
-    }
-  }
-
-  // Apply pet score bonus
-  for (const stat in output.pet_score_bonus) {
-    output.stats[stat] += output.pet_score_bonus[stat];
-  }
-
   output.base_stats = Object.assign({}, output.stats);
 
   output.weapon_stats = {};
@@ -2022,14 +1994,12 @@ export async function getStats(
     },
   };
 
-  for (const key of userProfile.tutorial) {
-    if (key.startsWith("commission_milestone_reward_mining_xp_tier_")) {
-      const milestoneTier = key.slice(43);
-      if (mining.commissions.milestone < milestoneTier) {
-        mining.commissions.milestone = milestoneTier;
+  if (userProfile?.tutorial) {
+    for (const key of userProfile.tutorial) {
+      if (key.startsWith("commission_milestone_reward_mining_xp_tier_")) {
+        const milestoneTier = key.slice(43);
+        if (mining.commissions.milestone < milestoneTier) mining.commissions.milestone = milestoneTier;
       }
-    } else {
-      continue;
     }
   }
 
@@ -2322,11 +2292,49 @@ export async function getStats(
 
   output.reaper_peppers_eaten = userProfile.reaper_peppers_eaten ?? 0;
 
+  if (!userProfile.pets) {
+    userProfile.pets = [];
+  }
+  userProfile.pets.push(...items.pets);
+
+  output.pets = await getPets(userProfile, output);
+  output.missingPets = await getMissingPets(output.pets, profile.game_mode, output);
+  output.petScore = getPetScore(output.pets);
+
+  const petScoreRequired = Object.keys(constants.PET_REWARDS).sort((a, b) => parseInt(b) - parseInt(a));
+
+  output.pet_bonus = {};
+
+  for (const score of petScoreRequired) {
+    if (parseInt(score) > output.petScore) {
+      continue;
+    }
+
+    output.pet_score_bonus = Object.assign({}, constants.PET_REWARDS[score]);
+
+    break;
+  }
+
+  for (const pet of output.pets) {
+    if (!pet.active) {
+      continue;
+    }
+
+    for (const stat in pet.stats) {
+      output.pet_bonus[stat] = (output.pet_bonus[stat] || 0) + pet.stats[stat];
+    }
+  }
+
+  // Apply pet score bonus
+  for (const stat in output.pet_score_bonus) {
+    output.stats[stat] += output.pet_score_bonus[stat];
+  }
+
   console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
   return output;
 }
 
-export async function getPets(profile) {
+export async function getPets(profile, userProfile) {
   let output = [];
 
   if (!("pets" in profile)) {
@@ -2364,7 +2372,6 @@ export async function getPets(profile) {
           Math.min(constants.RARITIES.indexOf(petData.maxTier), constants.RARITIES.indexOf(pet.rarity) + 1)
         ];
     }
-
     if (pet.heldItem == "PET_ITEM_VAMPIRE_FANG" || pet.heldItem == "PET_ITEM_TOY_JERRY") {
       if (constants.RARITIES.indexOf(pet.rarity) === constants.RARITIES.indexOf(petData.maxTier) - 1) {
         pet.rarity = petData.maxTier;
@@ -2420,8 +2427,9 @@ export async function getPets(profile) {
     const rarity = constants.RARITIES.indexOf(pet.rarity);
 
     const searchName = pet.type in constants.PET_STATS ? pet.type : "???";
-    const petInstance = new constants.PET_STATS[searchName](rarity, pet.level.level, pet.extra);
+    const petInstance = new constants.PET_STATS[searchName](rarity, pet.level.level, pet.extra, userProfile);
     pet.stats = Object.assign({}, petInstance.stats);
+    petInstance.profile = null;
     pet.ref = petInstance;
 
     if (pet.heldItem) {
@@ -2579,7 +2587,7 @@ export async function getPets(profile) {
   return output;
 }
 
-async function getMissingPets(pets, gameMode) {
+async function getMissingPets(pets, gameMode, userProfile) {
   const profile = {
     pets: [],
   };
@@ -2622,7 +2630,7 @@ async function getMissingPets(pets, gameMode) {
     profile.pets.push(pets[0]);
   }
 
-  return getPets(profile);
+  return getPets(profile, userProfile);
 }
 
 function getPetScore(pets) {

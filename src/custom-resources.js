@@ -33,7 +33,7 @@ async function getFiles(dir, fileList) {
   for (const file of files) {
     const fileStat = await fs.stat(path.resolve(dir, file));
 
-    if (await fileStat.isDirectory()) {
+    if (fileStat.isDirectory()) {
       fileList = await getFiles(path.resolve(dir, file), fileList);
     } else {
       fileList.push(path.resolve(dir, file));
@@ -91,6 +91,8 @@ async function init() {
 
       const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
       const properties = {};
+
+      if (!lines.some((line) => line.startsWith("nbt.ExtraAttributes.id"))) continue;
 
       for (const line of lines) {
         // Skipping comments
