@@ -2279,9 +2279,7 @@ export async function getStats(
 
   */
 
-  const prices = (await db.collection("networth").findOne({ _id: "prices" })).priceData;
-
-  output.networth = await getNetworth(userProfile, output.bank, { prices, onlyNetworth: true });
+  output.networth = await getNetworth(userProfile, output.bank, { prices: networthPrices, onlyNetworth: true });
 
   /*
     century cake effects
