@@ -2290,7 +2290,7 @@ const metaDescription = getMetaDescription()
               </div>
               <div class="chip-text">
                 <div class="collection-name <%= collection.tier >= collection.maxTier ? 'max-stat' : '' %>"><span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span></div>
-                <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= collection.amount.toLocaleString() %></span></div>
+                <div class="collection-amount"><span class="stat-name">Amount: </span><span class="stat-value"><%= collection.totalAmount.toLocaleString() %></span></div>
               </div>
             </div>
             <% } %>
