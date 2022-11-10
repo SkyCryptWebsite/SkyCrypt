@@ -817,6 +817,16 @@ export const ACCESSORIES = {
     rarity: "rare",
     texture: "/head/c4332067f9fa1695c3d577c3ef264355bee161b5e3a301906a4f443b002b92fa",
   },
+  ARCHAEOLOGIST_COMPASS: {
+    name: "Archaeologist's Compass",
+    rarity: "common",
+    item: "/item/COMPASS",
+  },
+  TRAPPER_CREST: {
+    name: "Trapper Crest",
+    rarity: "common",
+    texture: "/head/3ae0da20c8598e91f322b6e8a7b0ee2c81f1b61e74386c437e75f446ffccc5e",
+  },
 };
 
 // Getting Unique Accessories Count
