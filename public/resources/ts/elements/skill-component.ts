@@ -61,7 +61,7 @@ export class SkillComponent extends LitElement {
         ${skillName} <span class="skill-level">${level.level >= 0 ? level.level : "?"}</span>
       </div>
       <div class="skill-bar" data-skill="${skillName}">
-      <div class="skill-progress-bar" style="--progress: ${level.level == level.levelCap ? 1 : level.progress}"></div>
+        <div class="skill-progress-bar" style="--progress: ${level.level == level.levelCap ? 1 : level.progress}"></div>
         ${"runecrafting" in calculated.levels
           ? html`<div class="skill-progress-text">
               ${this.hovering ? this.getHoverText(level) : this.getMainText(level)}
