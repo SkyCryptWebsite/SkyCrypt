@@ -2,6 +2,7 @@ import retry from "async-retry";
 import axios from "axios";
 import _ from "lodash";
 import minecraftData from "minecraft-data";
+import { getNetworth } from "skyhelper-networth";
 import moment from "moment";
 import sanitize from "mongo-sanitize";
 import path from "path";
@@ -25,6 +26,8 @@ const hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
 const parseNbt = util.promisify(nbt.parse);
+
+let networthPrices = helper.getNetworthPrices();
 
 function getMinMax(profiles, min, ...path) {
   let output = null;
@@ -2272,6 +2275,13 @@ export async function getStats(
 
   /*
 
+    NETWORTH
+
+  */
+
+  output.networth = await getNetworth(userProfile, output.bank, { prices: networthPrices, onlyNetworth: true });
+
+  /*
     century cake effects
 
   */
@@ -3814,4 +3824,9 @@ async function init() {
   }
 }
 
+async function updateNetworthPrices() {
+  networthPrices = helper.getNetworthPrices();
+}
+
+setInterval(updateNetworthPrices, 15000);
 init();

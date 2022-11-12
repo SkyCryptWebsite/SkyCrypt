@@ -958,8 +958,8 @@ export function getFolderPath() {
   return path.dirname(fileURLToPath(import.meta.url));
 }
 
-export function getCacheFolderPath(dirPath) {
-  return path.resolve(dirPath, "../cache");
+export function getCacheFolderPath() {
+  return path.resolve(getFolderPath(), "../cache");
 }
 
 export function getCacheFilePath(dirPath, type, name, format = "png") {
@@ -1079,4 +1079,8 @@ export function getAnimatedTexture(item) {
   });
 
   return deepResults[0] ?? false;
+}
+
+export function getNetworthPrices() {
+  return fs.readJsonSync(getCacheFilePath(getCacheFolderPath(), "json", "networth-prices", "json"));
 }
