@@ -3249,7 +3249,7 @@ function getMiningCoreData(userProfile) {
 
   output.tier = getLevelByXp(data.experience, { type: "hotm" });
 
-  const totalTokens = helper.calcHotmTokens(output.tier.level, data.nodes.special_0);
+  const totalTokens = helper.calcHotmTokens(output.tier.level, data.nodes?.special_0 || 0);
   output.tokens = {
     total: totalTokens,
     spent: data.tokens_spent || 0,
