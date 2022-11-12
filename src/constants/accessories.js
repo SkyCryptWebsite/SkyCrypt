@@ -116,6 +116,8 @@ export const ACCESSORY_UPGRADES = {
   GREAT_SPOOK_RING: ["GREAT_SPOOK_ARTIFACT"],
   DRACONIC_TALISMAN: ["DRACONIC_RING", "DRACONIC_ARTIFACT"],
   DRACONIC_RING: ["DRACONIC_ARTIFACT"],
+  VACCINE_TALISMAN: ["VACCINE_RING", "VACCINE_ARTIFACT"],
+  VACCINE_RING: ["VACCINE_ARTIFACT"],
 };
 
 export const ACCESSORY_DUPLICATES = {
@@ -804,6 +806,26 @@ export const ACCESSORIES = {
     name: "Abicase",
     rarity: "rare",
     texture: "/head/70ce32b90e16419319daf35e6ad01bb715d898548b9ef66dd799a00107e87376",
+  },
+  VACCINE_RING: {
+    name: "Vaccine Ring",
+    rarity: "uncommon",
+    texture: "/head/e48ee92b9ef1dd9f6083dab113fe1708fde4f4039ad2f85f06f317cefe49f3ad",
+  },
+  VACINNE_ARTIFACT: {
+    name: "Vaccine Artifact",
+    rarity: "rare",
+    texture: "/head/c4332067f9fa1695c3d577c3ef264355bee161b5e3a301906a4f443b002b92fa",
+  },
+  ARCHAEOLOGIST_COMPASS: {
+    name: "Archaeologist's Compass",
+    rarity: "common",
+    item: "/item/COMPASS",
+  },
+  TRAPPER_CREST: {
+    name: "Trapper Crest",
+    rarity: "common",
+    texture: "/head/3ae0da20c8598e91f322b6e8a7b0ee2c81f1b61e74386c437e75f446ffccc5e",
   },
 };
 
