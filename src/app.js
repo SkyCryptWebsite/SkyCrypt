@@ -28,6 +28,7 @@ import { mongo, db } from "./mongo.js";
 import sanitize from "mongo-sanitize";
 import * as helper from "./helper.js";
 import * as constants from "./constants.js";
+import * as custom_resources from "./custom-resources.js";
 import { SitemapStream, streamToPromise } from "sitemap";
 import { createGzip } from "zlib";
 import twemoji from "twemoji";
@@ -37,15 +38,16 @@ import { execSync } from "child_process";
 import * as api from "./routes/api.js";
 import * as apiv2 from "./routes/apiv2.js";
 
-const __dirname = helper.getFolderPath();
+const folderPath = helper.getFolderPath();
 
-const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, "../public/manifest.json")));
+const manifest = JSON.parse(fs.readFileSync(path.join(folderPath, "../public/manifest.json")));
 
 await renderer.init();
+await custom_resources.init();
 
 const fileHashes = await getFileHashes();
 
-const fileNameMapFileName = path.join(__dirname, "../public/resources/js/file-name-map.json");
+const fileNameMapFileName = path.join(folderPath, "../public/resources/js/file-name-map.json");
 
 while (!fs.existsSync(fileNameMapFileName)) {
   console.log(`waiting for: "${fileNameMapFileName}" make sure you ran rollup`);
@@ -95,7 +97,7 @@ const cacheMaxAge = 30 * 24 * 60 * 60; // 30 days should be cached for
  */
 const volatileCacheMaxAge = 12 * 60 * 60; // 12 hours
 
-const cachePath = helper.getCacheFolderPath(__dirname);
+const cachePath = helper.getCacheFolderPath(folderPath);
 await fs.ensureDir(cachePath);
 
 if (credentials.hypixel_api_key.length == 0) {
@@ -132,7 +134,7 @@ updateCacheOnly();
 setInterval(updateCacheOnly, 60_000 * 5);
 
 function updateCommitHash() {
-  return execSync("git rev-parse HEAD", { cwd: path.resolve(__dirname, "../") })
+  return execSync("git rev-parse HEAD", { cwd: path.resolve(folderPath, "../") })
     .toString()
     .trim()
     .slice(0, 10);
@@ -218,7 +220,7 @@ async function getExtra(page = null, favoriteUUIDs = [], cacheOnly) {
 
   output.twemoji = twemoji;
 
-  output.packs = lib.getPacks();
+  output.packs = custom_resources.getPacks();
 
   output.isFoolsDay = isFoolsDay;
   output.cacheOnly = cacheOnly;

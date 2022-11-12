@@ -45,10 +45,11 @@ function getValue(rarity, data) {
 }
 
 class Pet {
-  constructor(rarity, level, extra) {
+  constructor(rarity, level, extra, profile) {
     this.rarity = rarity;
     this.level = level;
     this.extra = extra;
+    this.profile = profile;
   }
 
   lore(newStats = false) {
@@ -990,9 +991,13 @@ class GoldenDragon extends Pet {
   get stats() {
     const stats = {};
     if (this.level >= 100) {
-      stats.strength = round(Math.max(0, this.level - 100) * 0.25 + 25 - 0.01, 0);
-      stats.bonus_attack_speed = round(Math.max(0, this.level - 100) * 0.25 + 25 - 0.01, 0);
-      stats.magic_find = round(floor(this.level / 10) * 0.5, 2);
+      stats.strength =
+        round(25 + Math.max(0, this.level - 100) * 0.25, 0) +
+        10 * Math.max(Math.floor(Math.log10(Math.abs(this.profile?.collections?.GOLD_INGOT?.totalAmount || 0))), 0);
+      stats.bonus_attack_speed = round(25 + Math.max(0, this.level - 100) * 0.25, 0);
+      stats.magic_find =
+        round(25 + Math.max(0, this.level - 100) * 0.25, 0) +
+        2 * Math.max(Math.floor(Math.log10(Math.abs(this.profile?.collections?.GOLD_INGOT?.totalAmount || 0))), 0);
     }
     return stats;
   }
@@ -2522,7 +2527,7 @@ class FlyingFish extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { rare: 0.6, epic: 0.75 });
+    const mult = getValue(this.rarity, { rare: 0.6, epic: 0.8 });
     return {
       name: "§6Quick Reel",
       desc: [`§7Grants §b+${round(this.level * mult, 2)}${SYMBOLS.fishing_speed} Fishing Speed§7.`],

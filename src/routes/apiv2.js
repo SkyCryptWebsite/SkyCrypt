@@ -3,7 +3,7 @@ import express from "express";
 import sanitize from "mongo-sanitize";
 import leaderboard from "../leaderboards.js";
 
-import { completePacks } from "../custom-resources.js";
+import { getCompletePacks } from "../custom-resources.js";
 import { db } from "../mongo.js";
 import { redisClient } from "../redis.js";
 
@@ -49,7 +49,7 @@ router.use(async (req, res, next) => {
  */
 router.get("/packs", async (req, res) => {
   if (req.apiKey) {
-    res.json(completePacks);
+    res.json(getCompletePacks());
   } else {
     res.status(404).json({ error: "This endpoint isn't available to the public." });
   }
