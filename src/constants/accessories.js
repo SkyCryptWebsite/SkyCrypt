@@ -812,7 +812,7 @@ export const ACCESSORIES = {
     rarity: "uncommon",
     texture: "/head/e48ee92b9ef1dd9f6083dab113fe1708fde4f4039ad2f85f06f317cefe49f3ad",
   },
-  VACINNE_ARTIFACT: {
+  VACCINE_ARTIFACT: {
     name: "Vaccine Artifact",
     rarity: "rare",
     texture: "/head/c4332067f9fa1695c3d577c3ef264355bee161b5e3a301906a4f443b002b92fa",
