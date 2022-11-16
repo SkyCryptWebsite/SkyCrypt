@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "./mite_gel",
+        "layer1": "./mite_gel2"
+    }
+}

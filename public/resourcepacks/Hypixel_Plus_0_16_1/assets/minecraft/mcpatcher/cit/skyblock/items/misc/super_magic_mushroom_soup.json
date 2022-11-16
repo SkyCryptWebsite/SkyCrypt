@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "items/mushroom_stew",
+        "layer1": "./super_magic_mushroom_soup"
+    }
+}

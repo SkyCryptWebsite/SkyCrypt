@@ -1,0 +1,7 @@
+{
+	"parent": "block/cauldron_level3",
+	"textures": {
+		"side": "./personal_deletor_5000",
+		"water": "blocks/lava_still"
+	}
+}

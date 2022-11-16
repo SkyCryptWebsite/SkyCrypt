@@ -1,0 +1,7 @@
+{
+	"parent": "item/handheld_gauntlet",
+	"textures": {
+		"0": "./dragonfuse_glove_hand",
+		"1": "./dragonfuse_glove"
+	}
+}
