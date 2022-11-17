@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@rollup/plugin-commonjs': ^23.0.0
   '@rollup/plugin-node-resolve': ^13.3.0
-  '@rollup/plugin-replace': ^4.0.0
+  '@rollup/plugin-replace': ^5.0.0
   '@rollup/plugin-typescript': ^8.3.4
   '@typescript-eslint/eslint-plugin': ^5.36.1
   '@typescript-eslint/parser': ^5.33.1
@@ -107,7 +107,7 @@ dependencies:
 devDependencies:
   '@rollup/plugin-commonjs': 23.0.2_rollup@2.79.1
   '@rollup/plugin-node-resolve': 13.3.0_rollup@2.79.1
-  '@rollup/plugin-replace': 4.0.0_rollup@2.79.1
+  '@rollup/plugin-replace': 5.0.1_rollup@2.79.1
   '@rollup/plugin-typescript': 8.5.0_gypgyaqhine6mwjfvh7icfhviq
   '@typescript-eslint/eslint-plugin': 5.40.0_25sstg4uu2sk4pm7xcyzuov7xq
   '@typescript-eslint/parser': 5.40.0_z4bbprzjrhnsfa24uvmcbu7f5q
@@ -331,13 +331,17 @@ packages:
       rollup: 2.79.1
     dev: true
 
-  /@rollup/plugin-replace/4.0.0_rollup@2.79.1:
-    resolution: {integrity: sha512-+rumQFiaNac9y64OHtkHGmdjm7us9bo1PlbgQfdihQtuNxzjpaB064HbRnewUOggLQxVCCyINfStkgmBeQpv1g==}
+  /@rollup/plugin-replace/5.0.1_rollup@2.79.1:
+    resolution: {integrity: sha512-Z3MfsJ4CK17BfGrZgvrcp/l6WXoKb0kokULO+zt/7bmcyayokDaQ2K3eDJcRLCTAlp5FPI4/gz9MHAsosz4Rag==}
+    engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: ^1.20.0 || ^2.0.0
+      rollup: ^1.20.0||^2.0.0||^3.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
     dependencies:
-      '@rollup/pluginutils': 3.1.0_rollup@2.79.1
-      magic-string: 0.25.9
+      '@rollup/pluginutils': 5.0.2_rollup@2.79.1
+      magic-string: 0.26.7
       rollup: 2.79.1
     dev: true
 
