@@ -3224,7 +3224,7 @@ class Raindeer extends Pet {
 
   get abilities() {
     const list = [this.first, this.second, this.third, this.fourth];
-    
+
     return list;
   }
 
@@ -3240,16 +3240,18 @@ class Raindeer extends Pet {
 
     return {
       name: "§6Infused",
-      desc: [`§7Gives +§b${round(this.level * mult, 1)}${SYMBOLS.fishing_speed} Fishing Speed §7while on §cJerry's Workshop.`],
+      desc: [
+        `§7Gives +§b${round(this.level * mult, 1)}${
+          SYMBOLS.fishing_speed
+        } Fishing Speed §7while on §cJerry's Workshop.`,
+      ],
     };
   }
 
   get third() {
     return {
       name: "§6Snow Power",
-      desc: [
-        `§7Grants §a+5% §7bonus gift chance during the §cGift Attack §7event.`,
-      ],
+      desc: [`§7Grants §a+5% §7bonus gift chance during the §cGift Attack §7event.`],
     };
   }
 
