@@ -727,6 +727,20 @@ const SKINS = [
     source: "firesale",
     release: new Date("2022-10-21 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_CHICKEN_TURKEY",
+    name: "Turkey Chicken",
+    texture: "/head/a36c5153d00dd7356eb9aa438e9f1fe668ce3e26498793ed33c13908955b95e4",
+    source: "firesale",
+    release: new Date("2022-11-24 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_TIGER_NEON",
+    name: "Neon Tiger",
+    texture: "/head/805de32806ea868cb6e222656936932f106fb4f44018afdbf78e4566d5e0a34b",
+    source: "firesale",
+    release: new Date("2022-11-04 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
