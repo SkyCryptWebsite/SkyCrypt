@@ -406,7 +406,7 @@ export const KUUDRA_TIERS = {
   },
   fiery: {
     name: "Fiery",
-    head: "bd854393bbf9444542502582d4b5a23cc73896506e2fc739d545bc35bc7b1c06", 
+    head: "bd854393bbf9444542502582d4b5a23cc73896506e2fc739d545bc35bc7b1c06",
   },
   infernal: {
     name: "Infernal",
