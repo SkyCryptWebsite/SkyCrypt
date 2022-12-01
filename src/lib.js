@@ -1953,7 +1953,9 @@ export async function getStats(
       for (const key in gameData) {
         if (key.startsWith("attempts") || key.startsWith("claims") || key.startsWith("best_score")) {
           let statKey = key.split("_");
-          const tierValue = statKey.pop();
+          let tierValue = parseInt(statKey.pop());
+          tierValue =
+            game === "numbers" ? tierValue + 2 : game === "simon" ? (tierValue === 5 ? 5 : tierValue + 1) : tierValue;
 
           statKey = statKey.join("_");
           const tierInfo = _.cloneDeep(constants.EXPERIMENTS.tiers[tierValue]);
