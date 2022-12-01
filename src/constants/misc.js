@@ -454,3 +454,150 @@ export const DOJO = {
     damage: 0,
   },
 };
+
+export const ESSENCE_SHOP = {
+  undead: {
+    catacombs_boss_luck: {
+      name: "Boss Luck",
+      description: "Increases the quality of boss rewards in The Catacombs.",
+      maxLevel: 4,
+    },
+    catacombs_looting: {
+      name: "Looting",
+      description: "Increases the quality of mob loot drops in The Catacombs.",
+      maxLevel: 5,
+    },
+    revive_stone: {
+      name: "Help of the Fairies",
+      description: "Start every run in The Catacombs with an invisible Revive Stone..",
+      maxLevel: 1,
+    },
+    catacombs_health: {
+      name: "Health Essence",
+      description: "Increases your base Health while in The Catacombs.",
+      maxLevel: 5,
+    },
+    catacombs_defense: {
+      name: "Defense Essence",
+      description: "Increases your base Defense while in The Catacombs.",
+      maxLevel: 5,
+    },
+    catacombs_strength: {
+      name: "Strength Essence",
+      description: "Increases your base Strength while in The Catacombs.",
+      maxLevel: 5,
+    },
+    catacombs_intelligence: {
+      name: "Intelligence Essence",
+      description: "Increases your base Intelligence while in The Catacombs.",
+      maxLevel: 5,
+    },
+    catacombs_crit_damage: {
+      name: "Critical Damage Essence",
+      description: "Increases your base Critical Damage while in The Catacombs.",
+      maxLevel: 5,
+    },
+  },
+  wither: {
+    permanent_health: {
+      name: "Forbidden Health",
+      description: "Increases your Health.",
+      maxLevel: 5,
+      bonus: 2,
+    },
+    permanent_defense: {
+      name: "Forbidden Defense",
+      description: "Increases your Defense.",
+      maxLevel: 5,
+      bonus: 1,
+    },
+    permanent_speed: {
+      name: "Forbidden Speed",
+      description: "Increases your Speed.",
+      maxLevel: 2,
+      bonus: 1,
+    },
+    permanent_intelligence: {
+      name: "Forbidden Intelligence",
+      description: "Increases your Intelligence.",
+      maxLevel: 5,
+      bonus: 2,
+    },
+    permanent_strength: {
+      name: "Forbidden Strength",
+      description: "Increases your Strength.",
+      maxLevel: 5,
+      bonus: 1,
+    },
+    forbidden_blessing: {
+      name: "Forbidden Blessing",
+      description: "Blessings are more effective on you.",
+      maxLevel: 10,
+    },
+  },
+  dragon: {
+    inc_zealots_odds: {
+      name: "Zealuck",
+      description: "ncreases the chance to find a special zealot.",
+      maxLevel: 5,
+    },
+    combat_wisdom_in_end: {
+      name: "Ender Training",
+      description: "Gain Combat Wisdom while in The End.",
+      maxLevel: 2,
+    },
+    edrag_cd: {
+      name: "Infused Dragon",
+      description: "Increases the Crit Damage of your Ender Dragon.",
+      maxLevel: 5,
+    },
+    dragon_reforges_buff: {
+      name: "Two-Headed Strike",
+      description: "Renowed and Spiked reforges apply an extra Bonus Attack Speed on your gear.",
+      maxLevel: 4,
+    },
+    fero_vs_dragons: {
+      name: "Rageborn",
+      description: "Gain Ferocity against dragons.",
+      maxLevel: 5,
+    },
+    mana_after_ender_kill: {
+      name: "Recharge",
+      description: "Regain Mana after killing an Enderman or Endermite.",
+      maxLevel: 10,
+    },
+    flat_damage_vs_ender: {
+      name: "One Punch",
+      description: "After all other damage, add extra damage to the first strike against Endermen and Endermites.",
+      maxLevel: 5,
+    },
+    increased_sup_chances: {
+      name: "Dragon Piper",
+      description:
+        "Gain higher chance to spawn a Superior dragon if you placed a summoning eye. This perk only applies once per dragon across players.",
+      maxLevel: 1,
+    },
+  },
+  spider: {
+    empowered_agility: {
+      name: "Empowered Agility",
+      description: "Reduces the mana cost of some movement abilities.",
+      maxLevel: 10,
+    },
+    bane: {
+      name: "Bane",
+      description: "Increases damage dealt to Spiders.",
+      maxLevel: 5,
+    },
+    vermin_control: {
+      name: "Vermin Control",
+      description: "Receive less damage from Spiders.",
+      maxLevel: 5,
+    },
+    spider_training: {
+      name: "Spider Training",
+      description: "Increases your Combat Wisdom while on the Spider's Den.",
+      maxLevel: 3,
+    },
+  },
+};
