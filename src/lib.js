@@ -2607,7 +2607,7 @@ async function getMissingPets(pets, gameMode, userProfile) {
 
   const missingPets = [];
 
-  const ownedPetTypes = pets.map((pet) => constants.PET_DATA[pet.type].typeGroup ?? pet.type);
+  const ownedPetTypes = pets.map((pet) => constants.PET_DATA[pet.type]?.typeGroup || pet.type);
 
   for (const [petType, petData] of Object.entries(constants.PET_DATA)) {
     if (
