@@ -1254,8 +1254,10 @@ const metaDescription = getMetaDescription()
             <span data-tippy-content="
               Increase your pet score by collecting unique pets with a high rarity.<br><br>
               <table>
-              <% const entries = Object.entries(petRewards) %>
-              <% const reduced = Object.keys(petRewards).reduce((prev, curr) => Math.abs(curr - petScore) < Math.abs(prev - petScore) ? curr : prev) %>
+              <%
+              const entries = Object.entries(petRewards)
+              const reduced = entries.reduce((prev, curr) => petScore >= curr[0] ? curr : prev)[0]
+              %>
 
               <% for (let i = 1; i < entries.length; i++) { %>
                 <% const [score, {magic_find}] = entries[i] %>
