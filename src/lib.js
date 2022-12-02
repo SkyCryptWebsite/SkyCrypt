@@ -1796,7 +1796,7 @@ export async function getStats(
   output.social = hypixelProfile.socials;
 
   output.dungeons = getDungeons(userProfile, hypixelProfile);
-
+  
   output.essence = getEssence(userProfile, hypixelProfile);
 
   output.fishing = {
@@ -2068,6 +2068,11 @@ export async function getStats(
   misc.auctions_sell = {};
   misc.auctions_buy = {};
   misc.claimed_items = {};
+  misc.effects = {
+    active: userProfile.active_effects || [],
+    paused: userProfile.paused_effects || [],
+    disabled: userProfile.disabled_potion_effects || [],
+  };
 
   if ("ender_crystals_destroyed" in userProfile.stats) {
     misc.dragons["ender_crystals_destroyed"] = userProfile.stats["ender_crystals_destroyed"];
