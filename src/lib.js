@@ -1796,7 +1796,7 @@ export async function getStats(
   output.social = hypixelProfile.socials;
 
   output.dungeons = getDungeons(userProfile, hypixelProfile);
-  
+
   output.essence = getEssence(userProfile, hypixelProfile);
 
   output.fishing = {

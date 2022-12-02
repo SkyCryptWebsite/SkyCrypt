@@ -1114,5 +1114,5 @@ export const POTION_EFFECTS = {
       description: `Gain +210 ${SYMBOLS.health} Health and +40 ${SYMBOLS.defense} Defense while in The End or Crimson Isle.`,
       bonus: {},
     },
-  }
+  },
 };
