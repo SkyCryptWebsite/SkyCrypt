@@ -1191,8 +1191,10 @@ const metaDescription = getMetaDescription()
               <table>
               <% 
               const entries = Object.entries(petRewards)
-              let reduced = Object.keys(petRewards).reduce((prev, curr) => Math.abs(curr - petScore) < Math.abs(prev - petScore) ? curr : prev)
-              if (petScore < reduced) reduced = entries[Object.keys(petRewards).indexOf(reduced) - 1][0]
+
+              let reduced = entries.reduce((prev, curr) => {
+                return petScore >= curr[0] ? curr : prev
+              })[0]
               %>
 
               <% for (let i = 1; i < entries.length; i++) { %>
