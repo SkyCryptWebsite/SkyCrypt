@@ -2467,9 +2467,10 @@ const metaDescription = getMetaDescription()
                   %> 
 
                   <div class="chip-text">
-                    <% max = calculated.perks[playerPerk] >= essenceShop.maxLevel ? 'golden-text' : '' %>
-                    <span class="stat-name <%= max %>"><%= essenceShop.name %>: </span><span class="stat-value <%= max %>"><%= calculated.perks[playerPerk] || 0 %></span>
-                    <span data-tippy-content="<%= essenceShop.description %>"></span><br>
+                    <span data-tippy-content="<%= essenceShop.description %>">
+                      <% max = calculated.perks[playerPerk] >= essenceShop.maxLevel ? 'golden-text' : '' %>
+                      <span class="stat-name <%= max %>"><%= essenceShop.name %>: </span><span class="stat-value <%= max %>"><%= calculated.perks[playerPerk] || 0 %></span>
+                    </span><br>
                   </div>
                 <% } %>
                 <br>

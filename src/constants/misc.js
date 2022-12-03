@@ -600,4 +600,26 @@ export const ESSENCE_SHOP = {
       maxLevel: 3,
     },
   },
+  ice: {
+    cold_efficiency: {
+      name: "Cold Efficiency",
+      description: "Increases the Mage class experience.",
+      maxLevel: 5,
+    },
+    cooled_forges: {
+      name: "Cooled Forges",
+      description: "Increases the chance to get double essence when salvaging.",
+      maxLevel: 5,
+    },
+    frozen_skin: {
+      name: "Frozen Skin",
+      description: "Increase your Defense while on Jerry's Workshop.",
+      maxLevel: 5,
+    },
+    season_of_joy: {
+      name: "Season of Joy",
+      description: "Gain extra gifts from the Gift Attack event.",
+      maxLevel: 10,
+    }
+  }
 };
