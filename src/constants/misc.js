@@ -620,6 +620,6 @@ export const ESSENCE_SHOP = {
       name: "Season of Joy",
       description: "Gain extra gifts from the Gift Attack event.",
       maxLevel: 10,
-    }
-  }
+    },
+  },
 };
