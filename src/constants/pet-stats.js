@@ -3214,6 +3214,55 @@ class Kuudra extends Pet {
   }
 }
 
+class Raindeer extends Pet {
+  get stats() {
+    return {
+      health: this.level * 1,
+      sea_creature_chance: this.level * 0.05,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third, this.fourth];
+
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6Water Sprint",
+      desc: [`§7Gain §ddouble §7pet §aEXP§7.`],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Infused",
+      desc: [
+        `§7Gives +§b${round(this.level * mult, 1)}${
+          SYMBOLS.fishing_speed
+        } Fishing Speed §7while on §cJerry's Workshop.`,
+      ],
+    };
+  }
+
+  get third() {
+    return {
+      name: "§6Snow Power",
+      desc: [`§7Grants §a+5% §7bonus gift chance during the §cGift Attack §7event.`],
+    };
+  }
+
+  get fourth() {
+    return {
+      name: "§6Icy Wind",
+      desc: [`§7Grants a §a+20% §7chance of getting double §bIce Essence§7.`],
+    };
+  }
+}
+
 class QuestionMark extends Pet {
   get stats() {
     return {};
@@ -3300,6 +3349,7 @@ export const PET_STATS = {
   PIGMAN: Pigman,
   RABBIT: Rabbit,
   RAT: Rat,
+  REINDEER: Raindeer,
   ROCK: Rock,
   SCATHA: Scatha,
   SHEEP: Sheep,
