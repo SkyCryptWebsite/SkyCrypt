@@ -124,6 +124,11 @@ export const ACCESSORY_UPGRADES = {
   PURPLE_GIFT_TALISMAN: ["GOLD_GIFT_TALISMAN"],
   GLACIAL_TALISMAN: ["GLACIAL_RING", "GLACIAL_ARTIFACT"],
   GLACIAL_RING: ["GLACIAL_ARTIFACT"],
+  DOJO_WHITE_BELT: ["DOJO_YELLOW_BELT", "DOJO_GREEN_BELT", "DOJO_BLUE_BELT", "DOJO_BROWN_BELT", "DOJO_BLACK_BELT"],
+  DOJO_YELLOW_BELT: ["DOJO_GREEN_BELT", "DOJO_BLUE_BELT", "DOJO_BROWN_BELT", "DOJO_BLACK_BELT"],
+  DOJO_GREEN_BELT: ["DOJO_BLUE_BELT", "DOJO_BROWN_BELT", "DOJO_BLACK_BELT"],
+  DOJO_BLUE_BELT: ["DOJO_BROWN_BELT", "DOJO_BLACK_BELT"],
+  DOJO_BROWN_BELT: ["DOJO_BLACK_BELT"],
 };
 
 export const ACCESSORY_DUPLICATES = {
@@ -834,44 +839,74 @@ export const ACCESSORIES = {
     texture: "/head/3ae0da20c8598e91f322b6e8a7b0ee2c81f1b61e74386c437e75f446ffccc5e",
   },
   WHITE_GIFT_TALISMAN: {
-    texture: "/head/e47b37e67a89159bf4acc4a44d4328f4efc0181605142288e5eed1ab8aed913c",
     name: "White Gift Talisman",
     rarity: "common",
+    texture: "/head/e47b37e67a89159bf4acc4a44d4328f4efc0181605142288e5eed1ab8aed913c",
   },
   GREEN_GIFT_TALISMAN: {
-    texture: "/head/28dc3c84491c4ff103de6ea01880e2d83432cd4878b84d6b43253cc51fd978e7",
     name: "Green Gift Talisman",
     rarity: "uncommon",
+    texture: "/head/28dc3c84491c4ff103de6ea01880e2d83432cd4878b84d6b43253cc51fd978e7",
   },
   BLUE_GIFT_TALISMAN: {
-    texture: "/head/5b85e29f29ec9a90e482ea5b8391bcb4560bbae0dcd15d7ce1d86016b4356e98",
     name: "Blue Gift Talisman",
     rarity: "rare",
+    texture: "/head/5b85e29f29ec9a90e482ea5b8391bcb4560bbae0dcd15d7ce1d86016b4356e98",
   },
   PURPLE_GIFT_TALISMAN: {
-    texture: "/head/e9e39d91c04c30cc1f530fee798eed279dde60f95c2e1d155c0fdd361d0962ed",
     name: "Purple Gift Talisman",
     rarity: "epic",
+    texture: "/head/e9e39d91c04c30cc1f530fee798eed279dde60f95c2e1d155c0fdd361d0962ed",
   },
   GOLD_GIFT_TALISMAN: {
-    texture: "/head/abd98792dd92d9719894341ac9012a584c4428558fd2c712f78e5f0d4da85470",
     name: "Gold Gift Talisman",
     rarity: "legendary",
+    texture: "/head/abd98792dd92d9719894341ac9012a584c4428558fd2c712f78e5f0d4da85470",
   },
   GLACIAL_TALISMAN: {
-    texture: "/head/b20b62faf12b91f4a8e149a2f9cb5f8d17443f51ec4d7d58f5967ecbbb2958",
     name: "Glacial Talisman",
     rarity: "common",
+    texture: "/head/b20b62faf12b91f4a8e149a2f9cb5f8d17443f51ec4d7d58f5967ecbbb2958",
   },
   GLACIAL_RING: {
-    texture: "/head/9ce1ebc6c31efe5621142779a6c669221a271bae3b3115175bf03c976691",
     name: "Glacial Ring",
     rarity: "uncommon",
+    texture: "/head/9ce1ebc6c31efe5621142779a6c669221a271bae3b3115175bf03c976691",
   },
   GLACIAL_ARTIFACT: {
-    texture: "/head/92c1a6b294aed49dbf11c589520886b9f5d53b32a8955adcd57e2de3b629a31",
     name: "Glacial Artifact",
     rarity: "rare",
+    texture: "/head/92c1a6b294aed49dbf11c589520886b9f5d53b32a8955adcd57e2de3b629a31",
+  },
+  DOJO_WHITE_BELT: {
+    name: "White Belt",
+    rarity: "common",
+    texture: "/head/32d2e3fcf0e39037eaf22384dab3f08522a6b891d27a47b7527916ea81add3c5",
+  },
+  DOJO_YELLOW_BELT: {
+    name: "Yellow Belt",
+    rarity: "uncommon",
+    texture: "/head/436d66ce33005af4ee4e9637386349957902f25b7ea629577166f830fe0c54f6"
+  },
+  DOJO_GREEN_BELT: {
+    name: "Green Belt",
+    rarity: "uncommon",
+    texture: "/head/f7203d2f08a7d2b7c95532865eb2b593e526ddb92fd5cca9e7d7b622bc539906",
+  },
+  DOJO_BLUE_BELT: {
+    name: "Blue Belt",
+    rarity: "rare",
+    texture: "/head/5a4f7e57a4359457ce0e7da27e8513a8b6197f1ca68d071542c66f8a41baf4ed",
+  },
+  DOJO_BROWN_BELT: {
+    name: "Brown Belt",
+    rarity: "epic",
+    texture: "/head/d3a2147c7ef772f9cc40b301512cbd4fb37b5a6885dd5fe24549362584dda467",
+  },
+  DOJO_BLACK_BELT: {
+    name: "Black Belt",
+    rarity: "legendary",
+    texture: "/head/c3b0d9622df69159c20706e9af400d6bb308ebcb7520025f57d977ad034f6b5a",
   },
 };
 
