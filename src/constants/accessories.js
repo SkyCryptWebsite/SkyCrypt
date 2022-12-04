@@ -886,7 +886,7 @@ export const ACCESSORIES = {
   DOJO_YELLOW_BELT: {
     name: "Yellow Belt",
     rarity: "uncommon",
-    texture: "/head/436d66ce33005af4ee4e9637386349957902f25b7ea629577166f830fe0c54f6"
+    texture: "/head/436d66ce33005af4ee4e9637386349957902f25b7ea629577166f830fe0c54f6",
   },
   DOJO_GREEN_BELT: {
     name: "Green Belt",
