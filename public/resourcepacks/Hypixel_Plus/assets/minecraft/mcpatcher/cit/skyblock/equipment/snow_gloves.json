@@ -1,0 +1,7 @@
+{
+	"parent": "item/handheld_gauntlet",
+	"textures": {
+		"0": "./snow_gloves_hand",
+		"1": "./snow_gloves"
+	}
+}
