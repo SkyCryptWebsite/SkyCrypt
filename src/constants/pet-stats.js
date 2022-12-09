@@ -2866,6 +2866,7 @@ class Bingo extends Pet {
     return {
       health: 25 + this.level * 0.75,
       strength: 5 + this.level * 0.2,
+      speed: 25 + this.level * 0.5,
     };
   }
 
@@ -2898,7 +2899,9 @@ class Bingo extends Pet {
     const mult = getValue(this.rarity, { uncommon: 0.1 });
     return {
       name: "§6Fast Learner",
-      desc: [`§7Gain §c${floor(5 + this.level * mult, 1)}% §7more Skill Experience and §9Slayer §7Experience.`],
+      desc: [
+        `§7Gain §c${floor(5 + this.level * mult, 1)}% §7more Skill Experience, HOTM Experience, and Slayer Experience.`,
+      ],
     };
   }
 
@@ -2919,10 +2922,16 @@ class Bingo extends Pet {
   }
 
   get fifth() {
-    const mult = getValue(this.rarity, { legendary: 0.08 });
+    const mult = getValue(this.rarity, { legendary: 0.5 });
+
     return {
-      name: "§6Scavenger",
-      desc: [`§7Recover §b${round(2 + this.level * mult, 1)} mana §7when using mana.`],
+      name: "§6Recovery",
+      desc: [
+        `§7Upon death, your active potion effects will be retained with §c${round(
+          25 + this.level * mult,
+          1
+        )}% §7of their time.`,
+      ],
     };
   }
 }
