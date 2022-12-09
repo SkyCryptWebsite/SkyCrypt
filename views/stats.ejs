@@ -889,11 +889,11 @@ const metaDescription = getMetaDescription()
           </span><br/><br/>
           <span class='stat-name'>Unsoulbound Networth: </span>
           <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.unsoulboundNetworth.toFixed(2))) %>
+          <%= helper.formatNumber(parseFloat(calculated.networth.unsoulboundNetworth.toFixed(2))) %></span>
           </span><br/>
           <span class='stat-name'>Total Networth: </span>
           <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.networth.toFixed(2))) %></span>
+          <%= Math.floor(calculated.networth.networth).toLocaleString() %> (<%= helper.formatNumber(parseFloat(calculated.networth.networth.toFixed(2))) %>)</span>
           </span><br/>
         ">
           <span class="stat-name">Networth: </span>
