@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@rollup/plugin-commonjs': ^23.0.0
-  '@rollup/plugin-node-resolve': ^13.3.0
+  '@rollup/plugin-node-resolve': ^15.0.0
   '@rollup/plugin-replace': ^5.0.0
   '@rollup/plugin-typescript': ^8.3.4
   '@typescript-eslint/eslint-plugin': ^5.36.1
@@ -106,7 +106,7 @@ dependencies:
 
 devDependencies:
   '@rollup/plugin-commonjs': 23.0.2_rollup@2.79.1
-  '@rollup/plugin-node-resolve': 13.3.0_rollup@2.79.1
+  '@rollup/plugin-node-resolve': 15.0.1_rollup@2.79.1
   '@rollup/plugin-replace': 5.0.1_rollup@2.79.1
   '@rollup/plugin-typescript': 8.5.0_gypgyaqhine6mwjfvh7icfhviq
   '@typescript-eslint/eslint-plugin': 5.40.0_25sstg4uu2sk4pm7xcyzuov7xq
@@ -316,14 +316,17 @@ packages:
       rollup: 2.79.1
     dev: true
 
-  /@rollup/plugin-node-resolve/13.3.0_rollup@2.79.1:
-    resolution: {integrity: sha512-Lus8rbUo1eEcnS4yTFKLZrVumLPY+YayBdWXgFSHYhTT2iJbMhoaaBL3xl5NCdeRytErGr8tZ0L71BMRmnlwSw==}
-    engines: {node: '>= 10.0.0'}
+  /@rollup/plugin-node-resolve/15.0.1_rollup@2.79.1:
+    resolution: {integrity: sha512-ReY88T7JhJjeRVbfCyNj+NXAG3IIsVMsX9b5/9jC98dRP8/yxlZdz7mHZbHk5zHr24wZZICS5AcXsFZAXYUQEg==}
+    engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: ^2.42.0
+      rollup: ^2.78.0||^3.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
     dependencies:
-      '@rollup/pluginutils': 3.1.0_rollup@2.79.1
-      '@types/resolve': 1.17.1
+      '@rollup/pluginutils': 5.0.2_rollup@2.79.1
+      '@types/resolve': 1.20.2
       deepmerge: 4.2.2
       is-builtin-module: 3.2.0
       is-module: 1.0.0
@@ -456,10 +459,8 @@ packages:
     resolution: {integrity: sha512-QSvevZ+IRww2ldtfv1QskYsqVVVwCKQf1XbwtcyyoRvLIQzfyPhj/C+3+PKzSDRdiyejaiLgnq//XTkleorpLg==}
     dev: true
 
-  /@types/resolve/1.17.1:
-    resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
-    dependencies:
-      '@types/node': 18.8.4
+  /@types/resolve/1.20.2:
+    resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
     dev: true
 
   /@types/sax/1.2.4:
