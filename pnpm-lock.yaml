@@ -53,7 +53,7 @@ specifiers:
   rollup-plugin-minify-html-literals: ^1.2.6
   rollup-plugin-terser: ^7.0.2
   sass: ^1.54.8
-  sharp: 0.30.7
+  sharp: 0.31.0
   sitemap: ^7.1.1
   skinview3d: ^2.2.1
   skyhelper-networth: 1.8.1
@@ -95,7 +95,7 @@ dependencies:
   prismarine-nbt: 2.2.1
   progress: 2.0.3
   relaxed-json: 1.0.3
-  sharp: 0.30.7
+  sharp: 0.31.0
   sitemap: 7.1.1
   skinview3d: 2.2.1
   skyhelper-networth: 1.8.1
@@ -3975,9 +3975,9 @@ packages:
     resolution: {integrity: sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==}
     dev: false
 
-  /sharp/0.30.7:
-    resolution: {integrity: sha512-G+MY2YW33jgflKPTXXptVO28HvNOo9G3j0MybYAHeEmby+QuD2U98dT6ueht9cv/XDqZspSpIhoSW+BAKJ7Hig==}
-    engines: {node: '>=12.13.0'}
+  /sharp/0.31.0:
+    resolution: {integrity: sha512-ft96f8WzGxavg0rkLpMw90MTPMUZDyf0tHjPPh8Ob59xt6KzX8EqtotcqZGUm7kwqpX2pmYiyYX2LL0IZ/FDEw==}
+    engines: {node: '>=14.15.0'}
     requiresBuild: true
     dependencies:
       color: 4.2.3
