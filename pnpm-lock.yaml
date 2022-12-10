@@ -56,7 +56,7 @@ specifiers:
   sharp: ^0.31.0
   sitemap: ^7.1.1
   skinview3d: ^2.2.1
-  skyhelper-networth: 1.8.1
+  skyhelper-networth: ^1.8.1
   tippy.js: ^6.3.7
   ts-lit-plugin: ^1.2.1
   twemoji: ^14.0.2
