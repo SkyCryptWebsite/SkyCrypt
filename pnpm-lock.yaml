@@ -53,10 +53,10 @@ specifiers:
   rollup-plugin-minify-html-literals: ^1.2.6
   rollup-plugin-terser: ^7.0.2
   sass: ^1.54.8
-  sharp: ^0.31.0
+  sharp: 0.30.7
   sitemap: ^7.1.1
   skinview3d: ^2.2.1
-  skyhelper-networth: ^1.3.0
+  skyhelper-networth: 1.8.1
   tippy.js: ^6.3.7
   ts-lit-plugin: ^1.2.1
   twemoji: ^14.0.2
@@ -95,10 +95,10 @@ dependencies:
   prismarine-nbt: 2.2.1
   progress: 2.0.3
   relaxed-json: 1.0.3
-  sharp: 0.31.2
+  sharp: 0.30.7
   sitemap: 7.1.1
   skinview3d: 2.2.1
-  skyhelper-networth: 1.3.0
+  skyhelper-networth: 1.8.1
   tippy.js: 6.3.7
   twemoji: 14.0.2
   upng-js: 2.1.0
@@ -3975,9 +3975,9 @@ packages:
     resolution: {integrity: sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==}
     dev: false
 
-  /sharp/0.31.2:
-    resolution: {integrity: sha512-DUdNVEXgS5A97cTagSLIIp8dUZ/lZtk78iNVZgHdHbx1qnQR7JAHY0BnXnwwH39Iw+VKhO08CTYhIg0p98vQ5Q==}
-    engines: {node: '>=14.15.0'}
+  /sharp/0.30.7:
+    resolution: {integrity: sha512-G+MY2YW33jgflKPTXXptVO28HvNOo9G3j0MybYAHeEmby+QuD2U98dT6ueht9cv/XDqZspSpIhoSW+BAKJ7Hig==}
+    engines: {node: '>=12.13.0'}
     requiresBuild: true
     dependencies:
       color: 4.2.3
@@ -4075,8 +4075,8 @@ packages:
       three: 0.136.0
     dev: false
 
-  /skyhelper-networth/1.3.0:
-    resolution: {integrity: sha512-NwtLkYzXwFk52i5kOtZkKgR98LVbwmihbm2fw/IIpgNa7vVjHqUIsQjyxg/UuJ9WAX9jgmB5ceW/SVBaoY3Q8w==}
+  /skyhelper-networth/1.8.1:
+    resolution: {integrity: sha512-c8s4diHcJcgF+QY+JmgSCQqEptfqrIt+OhJlcigWeNkwMUv3i+ABQH4pdKlRA5Ot/qWdaDBb5ni+buckwIHSZQ==}
     dependencies:
       axios: 0.27.2
       prismarine-nbt: 2.2.1

@@ -2,7 +2,7 @@ import retry from "async-retry";
 import axios from "axios";
 import _ from "lodash";
 import minecraftData from "minecraft-data";
-import { getNetworth } from "skyhelper-networth";
+import { getPreDecodedNetworth } from "skyhelper-networth";
 import moment from "moment";
 import sanitize from "mongo-sanitize";
 import path from "path";
@@ -26,8 +26,6 @@ const hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
 const parseNbt = util.promisify(nbt.parse);
-
-let networthPrices = helper.getNetworthPrices();
 
 function getMinMax(profiles, min, ...path) {
   let output = null;
@@ -923,6 +921,7 @@ export const getItems = async (
   output.personal_vault = personal_vault;
   output.storage = storage;
   output.hotm = hotm;
+  output.candy_bag = candy_bag;
 
   const allItems = armor.concat(
     equipment,
@@ -2281,7 +2280,24 @@ export async function getStats(
 
   */
 
-  output.networth = await getNetworth(userProfile, output.bank, { prices: networthPrices, onlyNetworth: true });
+  output.networth = await getPreDecodedNetworth(
+    userProfile,
+    {
+      armor: items.armor,
+      equipment: items.equipment,
+      wardrobe: items.wardrobe_inventory,
+      inventory: items.inventory,
+      enderchest: items.enderchest,
+      accessories: items.accessory_bag,
+      personal_vault: items.personal_vault,
+      storage: items.storage.concat(items.storage.map((item) => item.containsItems).flat()),
+      fishing_bag: items.fishing_bag,
+      potion_bag: items.potion_bag,
+      candy_inventory: items.candy_bag,
+    },
+    output.bank,
+    { cache: true, onlyNetworth: true }
+  );
 
   /*
     century cake effects
@@ -3826,9 +3842,4 @@ async function init() {
   }
 }
 
-async function updateNetworthPrices() {
-  networthPrices = helper.getNetworthPrices();
-}
-
-setInterval(updateNetworthPrices, 15000);
 init();
