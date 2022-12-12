@@ -51,7 +51,7 @@ const rewards = {
       new_forgeable_items: 0,
     },
     7: {
-      token_of_the_mountain: 2,
+      token_of_the_mountain: 3,
       new_forgeable_items: 0,
     },
   },
