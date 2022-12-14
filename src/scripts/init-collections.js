@@ -37,4 +37,6 @@ await Promise.all([
   db.collection("profileCache").createIndex({ profile_id: 1 }, { unique: true }),
 
   db.collection("featuredProfiles").createIndex({ total: -1 }),
+
+  db.collection("achievements").createIndex({ id: 1 }, { unique: true }),
 ]);

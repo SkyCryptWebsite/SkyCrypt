@@ -2070,6 +2070,7 @@ export async function getStats(
   misc.auctions_sell = {};
   misc.auctions_buy = {};
   misc.claimed_items = {};
+  misc.achievements = {};
 
   if ("ender_crystals_destroyed" in userProfile.stats) {
     misc.dragons["ender_crystals_destroyed"] = userProfile.stats["ender_crystals_destroyed"];
@@ -2081,6 +2082,57 @@ export async function getStats(
   if (hypixelProfile.claimed_items) {
     misc.claimed_items = hypixelProfile.claimed_items;
   }
+
+  const _tiered = { sum: 0, total: 0, completed: {}, uncompleted: {} };
+  const _oneTime = { sum: 0, total: 0, completed: {}, uncompleted: {} };
+  for await (const tmp of db.collection("achievements").find()) {
+    if (tmp?.tiered) {
+      _tiered.total += tmp.achievement.tiers.map((a) => a.points).reduce((a, b) => a + b, 0);
+
+      let tier = 0;
+      for (const req in tmp.achievement.tiers) {
+        if (tmp.achievement.tiers[req].amount <= hypixelProfile.achievements["skyblock_" + tmp.id.toLowerCase()]) {
+          tier++;
+          _tiered.sum += Number(tmp.achievement.tiers[req].points);
+        }
+      }
+
+      const achievement = {
+        name: tmp.achievement.name,
+        description: tmp.achievement.description.replaceAll("%s", "x"),
+        level: hypixelProfile.achievements["skyblock_" + tmp.id.toLowerCase()] || 0,
+        tier: tier,
+      };
+
+      if (tier >= 5) {
+        _tiered.completed["skyblock_" + tmp.id.toLowerCase()] = achievement;
+      } else {
+        _tiered.uncompleted["skyblock_" + tmp.id.toLowerCase()] = achievement;
+      }
+    }
+
+    if (tmp?.one_time) {
+      _oneTime.total += tmp.achievement.points;
+      const achievement = {
+        name: tmp.achievement.name,
+        description: tmp.achievement.description,
+        reward: tmp.achievement.points,
+      };
+
+      if (
+        hypixelProfile.achievementsOneTime &&
+        hypixelProfile.achievementsOneTime.includes("skyblock_" + tmp.id.toLowerCase())
+      ) {
+        _oneTime.completed["skyblock_" + tmp.id.toLowerCase()] = achievement;
+        _oneTime.sum += Number(tmp.achievement.points);
+      } else {
+        _oneTime.uncompleted["skyblock_" + tmp.id.toLowerCase()] = achievement;
+      }
+    }
+  }
+
+  misc.achievements.tiered = _tiered;
+  misc.achievements.oneTime = _oneTime;
 
   const burrows = [
     "mythos_burrows_dug_next",

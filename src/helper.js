@@ -396,6 +396,16 @@ export function renderRaceTier(completeTiers) {
 }
 
 /**
+ * returns a string with 5 dots "●" for completed tiers and "○" for incomplete tiers
+ * @param {number} completeTiers
+ * @returns {string} 5 dots
+ */
+export function renderAchievementTier(completeTiers) {
+  const incompleteTiers = Math.max(0, 5 - completeTiers);
+  return "●".repeat(completeTiers) + "○".repeat(incompleteTiers);
+}
+
+/**
  * checks whether a string should be proceeded by a or by an
  * @param {string} string
  * @returns {"a"|"an"}
@@ -549,6 +559,7 @@ export async function updateRank(uuid, db) {
     plusColor: null,
     socials: {},
     achievements: {},
+    achievementsOneTime: {},
     claimed_items: {},
   };
 
@@ -572,6 +583,10 @@ export async function updateRank(uuid, db) {
 
     if (player?.achievements != undefined) {
       rank.achievements = player.achievements;
+    }
+
+    if (player?.achievementsOneTime != undefined) {
+      rank.achievementsOneTime = player.achievementsOneTime;
     }
 
     const claimable = {
@@ -618,7 +633,7 @@ export async function getRank(uuid, db, cacheOnly = false) {
     hypixelPlayer = await updateRankPromise;
   }
 
-  hypixelPlayer ??= { achievements: {} };
+  hypixelPlayer ??= { achievements: {}, achievementsOneTime: {} };
 
   return hypixelPlayer;
 }
