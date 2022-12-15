@@ -2225,7 +2225,10 @@ export async function getStats(
   if ("favorite_arrow" in userProfile) {
     misc.uncategorized.favorite_arrow = {
       raw: userProfile.favorite_arrow,
-      formatted: `${userProfile.favorite_arrow.split("_").map((word) => helper.capitalizeFirstLetter(word.toLowerCase())).join(" ")}`,
+      formatted: `${userProfile.favorite_arrow
+        .split("_")
+        .map((word) => helper.capitalizeFirstLetter(word.toLowerCase()))
+        .join(" ")}`,
     };
   }
 
