@@ -451,3 +451,5 @@ export const DOJO = {
     damage: 0,
   },
 };
+
+export const MAX_REAPER_PEPPERS_EATED = 5;
