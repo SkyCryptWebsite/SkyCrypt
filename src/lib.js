@@ -1645,6 +1645,10 @@ export async function getStats(
 
   if (!items.no_inventory) {
     output.missingAccessories = getMissingAccessories(items.accessory_ids);
+
+    const PARTY_HAT_CRAB = items.accessory_ids.some(a => a.startsWith("PARTY_HAT_CRAB"));
+
+    output.missingAccessories.missing = PARTY_HAT_CRAB === true ? output.missingAccessories.missing.filter((accessory) => accessory.tag?.ExtraAttributes?.name?.startsWith("PARTY_HAT_CRAB") === false) : output.missingAccessories.missing.entries();
   }
 
   output.base_stats = Object.assign({}, output.stats);
