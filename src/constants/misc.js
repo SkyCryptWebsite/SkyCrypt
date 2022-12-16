@@ -452,4 +452,4 @@ export const DOJO = {
   },
 };
 
-export const MAX_REAPER_PEPPERS_EATED = 5;
+export const MAX_REAPER_PEPPERS_EATEN = 5;
