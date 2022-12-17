@@ -2866,6 +2866,7 @@ class Bingo extends Pet {
     return {
       health: 25 + this.level * 0.75,
       strength: 5 + this.level * 0.2,
+      speed: 25 + this.level * 0.5,
     };
   }
 
@@ -2898,7 +2899,9 @@ class Bingo extends Pet {
     const mult = getValue(this.rarity, { uncommon: 0.1 });
     return {
       name: "§6Fast Learner",
-      desc: [`§7Gain §c${floor(5 + this.level * mult, 1)}% §7more Skill Experience and §9Slayer §7Experience.`],
+      desc: [
+        `§7Gain §c${floor(5 + this.level * mult, 1)}% §7more Skill Experience, HOTM Experience, and Slayer Experience.`,
+      ],
     };
   }
 
@@ -2919,10 +2922,16 @@ class Bingo extends Pet {
   }
 
   get fifth() {
-    const mult = getValue(this.rarity, { legendary: 0.08 });
+    const mult = getValue(this.rarity, { legendary: 0.5 });
+
     return {
-      name: "§6Scavenger",
-      desc: [`§7Recover §b${round(2 + this.level * mult, 1)} mana §7when using mana.`],
+      name: "§6Recovery",
+      desc: [
+        `§7Upon death, your active potion effects will be retained with §c${round(
+          25 + this.level * mult,
+          1
+        )}% §7of their time.`,
+      ],
     };
   }
 }
@@ -3214,6 +3223,55 @@ class Kuudra extends Pet {
   }
 }
 
+class Raindeer extends Pet {
+  get stats() {
+    return {
+      health: this.level * 1,
+      sea_creature_chance: this.level * 0.05,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third, this.fourth];
+
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6Water Sprint",
+      desc: [`§7Gain §ddouble §7pet §aEXP§7.`],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Infused",
+      desc: [
+        `§7Gives +§b${round(this.level * mult, 1)}${
+          SYMBOLS.fishing_speed
+        } Fishing Speed §7while on §cJerry's Workshop.`,
+      ],
+    };
+  }
+
+  get third() {
+    return {
+      name: "§6Snow Power",
+      desc: [`§7Grants §a+5% §7bonus gift chance during the §cGift Attack §7event.`],
+    };
+  }
+
+  get fourth() {
+    return {
+      name: "§6Icy Wind",
+      desc: [`§7Grants a §a+20% §7chance of getting double §bIce Essence§7.`],
+    };
+  }
+}
+
 class QuestionMark extends Pet {
   get stats() {
     return {};
@@ -3300,6 +3358,7 @@ export const PET_STATS = {
   PIGMAN: Pigman,
   RABBIT: Rabbit,
   RAT: Rat,
+  REINDEER: Raindeer,
   ROCK: Rock,
   SCATHA: Scatha,
   SHEEP: Sheep,

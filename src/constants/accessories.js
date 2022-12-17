@@ -104,8 +104,9 @@ export const ACCESSORY_UPGRADES = {
   ENDER_ARTIFACT: ["ENDER_RELIC"],
   POWER_TALISMAN: ["POWER_RING", "POWER_ARTIFACT"],
   POWER_RING: ["POWER_ARTIFACT"],
-  BINGO_TALISMAN: ["BINGO_RING", "BINGO_ARTIFACT"],
-  BINGO_RING: ["BINGO_ARTIFACT"],
+  BINGO_TALISMAN: ["BINGO_RING", "BINGO_ARTIFACT", "BINGO_RELIC"],
+  BINGO_RING: ["BINGO_ARTIFACT", "BINGO_RELIC"],
+  BINGO_ARTIFACT: ["BINGO_RELIC"],
   ODGERS_BRONZE_TOOTH: ["ODGERS_SILVER_TOOTH", "ODGERS_GOLD_TOOTH", "ODGERS_DIAMOND_TOOTH"],
   ODGERS_SILVER_TOOTH: ["ODGERS_GOLD_TOOTH", "ODGERS_DIAMOND_TOOTH"],
   ODGERS_GOLD_TOOTH: ["ODGERS_DIAMOND_TOOTH"],
@@ -116,6 +117,14 @@ export const ACCESSORY_UPGRADES = {
   GREAT_SPOOK_RING: ["GREAT_SPOOK_ARTIFACT"],
   DRACONIC_TALISMAN: ["DRACONIC_RING", "DRACONIC_ARTIFACT"],
   DRACONIC_RING: ["DRACONIC_ARTIFACT"],
+  VACCINE_TALISMAN: ["VACCINE_RING", "VACCINE_ARTIFACT"],
+  VACCINE_RING: ["VACCINE_ARTIFACT"],
+  WHITE_GIFT_TALISMAN: ["GREEN_GIFT_TALISMAN", "BLUE_GIFT_TALISMAN", "PURPLE_GIFT_TALISMAN", "GOLD_GIFT_TALISMAN"],
+  GREEN_GIFT_TALISMAN: ["BLUE_GIFT_TALISMAN", "PURPLE_GIFT_TALISMAN", "GOLD_GIFT_TALISMAN"],
+  BLUE_GIFT_TALISMAN: ["PURPLE_GIFT_TALISMAN", "GOLD_GIFT_TALISMAN"],
+  PURPLE_GIFT_TALISMAN: ["GOLD_GIFT_TALISMAN"],
+  GLACIAL_TALISMAN: ["GLACIAL_RING", "GLACIAL_ARTIFACT"],
+  GLACIAL_RING: ["GLACIAL_ARTIFACT"],
 };
 
 export const ACCESSORY_DUPLICATES = {
@@ -684,6 +693,11 @@ export const ACCESSORIES = {
     rarity: "rare",
     texture: "/head/d2dad868f8d865baa32d6158672d1b134db61ea56d33efa0c09f6ba6f276ff2",
   },
+  BINGO_RELIC: {
+    name: "Bingo Relic",
+    rarity: "epic",
+    texture: "/head/c515acf4a6ac698736e54def0bc78143c14449978e750afbb8d7ade0adf0ef00",
+  },
   JACOBUS_REGISTER: {
     name: "Jacobus Register",
     rarity: "legendary",
@@ -804,6 +818,66 @@ export const ACCESSORIES = {
     name: "Abicase",
     rarity: "rare",
     texture: "/head/70ce32b90e16419319daf35e6ad01bb715d898548b9ef66dd799a00107e87376",
+  },
+  VACCINE_RING: {
+    name: "Vaccine Ring",
+    rarity: "uncommon",
+    texture: "/head/e48ee92b9ef1dd9f6083dab113fe1708fde4f4039ad2f85f06f317cefe49f3ad",
+  },
+  VACCINE_ARTIFACT: {
+    name: "Vaccine Artifact",
+    rarity: "rare",
+    texture: "/head/c4332067f9fa1695c3d577c3ef264355bee161b5e3a301906a4f443b002b92fa",
+  },
+  ARCHAEOLOGIST_COMPASS: {
+    name: "Archaeologist's Compass",
+    rarity: "common",
+    item: "/item/COMPASS",
+  },
+  TRAPPER_CREST: {
+    name: "Trapper Crest",
+    rarity: "common",
+    texture: "/head/3ae0da20c8598e91f322b6e8a7b0ee2c81f1b61e74386c437e75f446ffccc5e",
+  },
+  WHITE_GIFT_TALISMAN: {
+    texture: "/head/e47b37e67a89159bf4acc4a44d4328f4efc0181605142288e5eed1ab8aed913c",
+    name: "White Gift Talisman",
+    rarity: "common",
+  },
+  GREEN_GIFT_TALISMAN: {
+    texture: "/head/28dc3c84491c4ff103de6ea01880e2d83432cd4878b84d6b43253cc51fd978e7",
+    name: "Green Gift Talisman",
+    rarity: "uncommon",
+  },
+  BLUE_GIFT_TALISMAN: {
+    texture: "/head/5b85e29f29ec9a90e482ea5b8391bcb4560bbae0dcd15d7ce1d86016b4356e98",
+    name: "Blue Gift Talisman",
+    rarity: "rare",
+  },
+  PURPLE_GIFT_TALISMAN: {
+    texture: "/head/e9e39d91c04c30cc1f530fee798eed279dde60f95c2e1d155c0fdd361d0962ed",
+    name: "Purple Gift Talisman",
+    rarity: "epic",
+  },
+  GOLD_GIFT_TALISMAN: {
+    texture: "/head/abd98792dd92d9719894341ac9012a584c4428558fd2c712f78e5f0d4da85470",
+    name: "Gold Gift Talisman",
+    rarity: "legendary",
+  },
+  GLACIAL_TALISMAN: {
+    texture: "/head/b20b62faf12b91f4a8e149a2f9cb5f8d17443f51ec4d7d58f5967ecbbb2958",
+    name: "Glacial Talisman",
+    rarity: "common",
+  },
+  GLACIAL_RING: {
+    texture: "/head/9ce1ebc6c31efe5621142779a6c669221a271bae3b3115175bf03c976691",
+    name: "Glacial Ring",
+    rarity: "uncommon",
+  },
+  GLACIAL_ARTIFACT: {
+    texture: "/head/92c1a6b294aed49dbf11c589520886b9f5d53b32a8955adcd57e2de3b629a31",
+    name: "Glacial Artifact",
+    rarity: "rare",
   },
 };
 

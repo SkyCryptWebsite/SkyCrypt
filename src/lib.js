@@ -2,6 +2,7 @@ import retry from "async-retry";
 import axios from "axios";
 import _ from "lodash";
 import minecraftData from "minecraft-data";
+import { getNetworth } from "skyhelper-networth";
 import moment from "moment";
 import sanitize from "mongo-sanitize";
 import path from "path";
@@ -25,6 +26,8 @@ const hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
 const parseNbt = util.promisify(nbt.parse);
+
+let networthPrices = helper.getNetworthPrices();
 
 function getMinMax(profiles, min, ...path) {
   let output = null;
@@ -1959,7 +1962,9 @@ export async function getStats(
       for (const key in gameData) {
         if (key.startsWith("attempts") || key.startsWith("claims") || key.startsWith("best_score")) {
           let statKey = key.split("_");
-          const tierValue = statKey.pop();
+          let tierValue = parseInt(statKey.pop());
+          tierValue =
+            game === "numbers" ? tierValue + 2 : game === "simon" ? (tierValue === 5 ? 5 : tierValue + 1) : tierValue;
 
           statKey = statKey.join("_");
           const tierInfo = _.cloneDeep(constants.EXPERIMENTS.tiers[tierValue]);
@@ -2281,6 +2286,13 @@ export async function getStats(
 
   /*
 
+    NETWORTH
+
+  */
+
+  output.networth = await getNetworth(userProfile, output.bank, { prices: networthPrices, onlyNetworth: true });
+
+  /*
     century cake effects
 
   */
@@ -2642,7 +2654,7 @@ async function getMissingPets(pets, gameMode, userProfile) {
 
   const missingPets = [];
 
-  const ownedPetTypes = pets.map((pet) => constants.PET_DATA[pet.type].typeGroup ?? pet.type);
+  const ownedPetTypes = pets.map((pet) => constants.PET_DATA[pet.type]?.typeGroup || pet.type);
 
   for (const [petType, petData] of Object.entries(constants.PET_DATA)) {
     if (
@@ -3294,7 +3306,7 @@ function getMiningCoreData(userProfile) {
 
   output.tier = getLevelByXp(data.experience, { type: "hotm" });
 
-  const totalTokens = helper.calcHotmTokens(output.tier.level, data.nodes.special_0);
+  const totalTokens = helper.calcHotmTokens(output.tier.level, data.nodes?.special_0 || 0);
   output.tokens = {
     total: totalTokens,
     spent: data.tokens_spent || 0,
@@ -3859,4 +3871,9 @@ async function init() {
   }
 }
 
+async function updateNetworthPrices() {
+  networthPrices = helper.getNetworthPrices();
+}
+
+setInterval(updateNetworthPrices, 15000);
 init();

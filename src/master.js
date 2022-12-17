@@ -8,4 +8,5 @@ await Promise.all([
   import("./scripts/update-bazaar.js"),
   import("./scripts/update-items.js"),
   import("./scripts/update-featured-profiles.js"),
+  import("./scripts/update-networth-prices.js"),
 ]);

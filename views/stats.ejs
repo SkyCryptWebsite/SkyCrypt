@@ -804,7 +804,6 @@ const metaDescription = getMetaDescription()
               total: calculated.weight.lily.total,
             },
           ];
-
         if (calculated.weight) {
           for (weight of weightSystems) { %>
         <div class="additional-stat">
@@ -834,8 +833,74 @@ const metaDescription = getMetaDescription()
         </div>
         <%}%>
       <%}%>
+        <% if (!calculated.networth.noInventory) {%>
+        <div class="additional-stat">
+        <span data-tippy-content="
+          <span class='stat-name'><%= 'Networth' %></span><br>
+          <span class='stat-info'>Networth calculations by SkyHelper</span>
+          <br/><br/>
+          <span class='stat-name'>Purse: </span>
+          <span class='stat-value'>
+          <%= helper.formatNumber(parseFloat(calculated.networth.purse.toFixed(2))) %>
+          </span><br/>
+          <span class='stat-name'>Bank: </span>
+          <span class='stat-value'>
+          <%= helper.formatNumber(parseFloat(calculated.networth.bank.toFixed(2))) %>
+          </span><br/>
+          <span class='stat-name'>Sacks: </span>
+          <span class='stat-value'>
+          <%= helper.formatNumber(parseFloat(calculated.networth.types.sacks.total.toFixed(2))) %>
+          </span><br/>
+          <span class='stat-name'>Armor: </span>
+          <span class='stat-value'>
+          <%= helper.formatNumber(parseFloat(calculated.networth.types.armor.total.toFixed(2))) %>
+          </span><br/>
+          <span class='stat-name'>Equipment: </span>
+          <span class='stat-value'>
+          <%= helper.formatNumber(parseFloat(calculated.networth.types.equipment.total.toFixed(2))) %>
+          </span><br/>
+          <span class='stat-name'>Wardrobe: </span>
+          <span class='stat-value'>
+          <%= helper.formatNumber(parseFloat(calculated.networth.types.wardrobe.total.toFixed(2))) %>
+          </span><br/>
+          <span class='stat-name'>Inventory: </span>
+          <span class='stat-value'>
+          <%= helper.formatNumber(parseFloat(calculated.networth.types.inventory.total.toFixed(2))) %>
+          </span><br/>
+          <span class='stat-name'>Ender Chest: </span>
+          <span class='stat-value'>
+          <%= helper.formatNumber(parseFloat(calculated.networth.types.enderchest.total.toFixed(2))) %>
+          </span><br/>
+          <span class='stat-name'>Accessories: </span>
+          <span class='stat-value'>
+          <%= helper.formatNumber(parseFloat(calculated.networth.types.accessories.total.toFixed(2))) %>
+          </span><br/>
+          <span class='stat-name'>Personal Vault: </span>
+          <span class='stat-value'>
+          <%= helper.formatNumber(parseFloat(calculated.networth.types.sacks.total.toFixed(2))) %>
+          </span><br/>
+          <span class='stat-name'>Storage: </span>
+          <span class='stat-value'>
+          <%= helper.formatNumber(parseFloat(calculated.networth.types.storage.total.toFixed(2))) %>
+          </span><br/>
+          <span class='stat-name'>Pets: </span>
+          <span class='stat-value'>
+          <%= helper.formatNumber(parseFloat(calculated.networth.types.pets.total.toFixed(2))) %>
+          </span><br/><br/>
+          <span class='stat-name'>Unsoulbound Networth: </span>
+          <span class='stat-value'>
+          <%= helper.formatNumber(parseFloat(calculated.networth.unsoulboundNetworth.toFixed(2))) %></span>
+          </span><br/>
+          <span class='stat-name'>Total Networth: </span>
+          <span class='stat-value'>
+          <%= Math.floor(calculated.networth.networth).toLocaleString() %> (<%= helper.formatNumber(parseFloat(calculated.networth.networth.toFixed(2))) %>)</span>
+          </span><br/>
+        ">
+          <span class="stat-name">Networth: </span>
+          <span class="stat-value"><%= helper.formatNumber(parseFloat(Math.round(calculated.networth.networth))) %></span></span>
+        </div>
+        <% } %>
       </div>
-
       <div id="skill_levels_container">
         <% if ('levels' in calculated) { %>
         <div class="skill-bars" data-api-enabled="<%= 'runecrafting' in calculated.levels %>">
@@ -1073,7 +1138,7 @@ const metaDescription = getMetaDescription()
               <% } %>
               <% if (rarities.abicase && Math.floor(Object.keys(calculated.abiphone).length / 2) > 0) {%>
                 <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Abicase</span> = <span style='color: var(--§6);' class='grey-text'>+<%= Math.floor(Object.keys(calculated.abiphone).length / 2).toLocaleString() %> MP</span><br>
-              <% } %> 
+              <% } %>
               <br>
               Total: <span style='color: var(--§6);' class='grey-text'><%= mp_total.toLocaleString() %> Magical Power</span>
               ">
@@ -1187,8 +1252,10 @@ const metaDescription = getMetaDescription()
             <span data-tippy-content="
               Increase your pet score by collecting unique pets with a high rarity.<br><br>
               <table>
-              <% const entries = Object.entries(petRewards) %>
-              <% const reduced = Object.keys(petRewards).reduce((prev, curr) => Math.abs(curr - petScore) < Math.abs(prev - petScore) ? curr : prev) %>
+              <%
+              const entries = Object.entries(petRewards)
+              const reduced = entries.reduce((prev, curr) => petScore >= curr[0] ? curr : prev)[0]
+              %>
 
               <% for (let i = 1; i < entries.length; i++) { %>
                 <% const [score, {magic_find}] = entries[i] %>
