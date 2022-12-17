@@ -1444,4 +1444,4 @@ export const PRECURSOR_PARTS = {
   SYNTHETIC_HEART: "Synthetic Heart",
 };
 
-export const COMISSIONS_MILESTONE = 6;
+export const COMMISSIONS_MILESTONE = 6;
