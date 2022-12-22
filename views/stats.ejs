@@ -1119,7 +1119,7 @@ const metaDescription = getMetaDescription()
                 }
 
                 const mp_hegemony = rarities.hegemony ? constants.MAGICAL_POWER[rarities.hegemony.rarity] : 0
-                const mp_total = Object.values(player_magical_power).reduce((a, b) => a + b) + mp_hegemony + Math.floor(Object.keys(calculated.abiphone).length / 2);
+                const mp_total = Object.values(player_magical_power).reduce((a, b) => a + b) + mp_hegemony + Math.floor(calculated.abiphone.active / 2);
               %>
             <span data-tippy-content="
               Accessories Breakdown<br>
@@ -1136,8 +1136,8 @@ const metaDescription = getMetaDescription()
               <% if(rarities.hegemony) { %>
                 <span style='color: var(--§<%= constants.RARITY_COLORS[rarities.hegemony.rarity] %>);' class='grey-text'>Hegemony Artifact</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_hegemony.toLocaleString() %> MP</span><br>
               <% } %>
-              <% if (rarities.abicase && Math.floor(Object.keys(calculated.abiphone).length / 2) > 0) {%>
-                <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Abicase</span> = <span style='color: var(--§6);' class='grey-text'>+<%= Math.floor(Object.keys(calculated.abiphone).length / 2).toLocaleString() %> MP</span><br>
+              <% if (rarities.abicase && Math.floor(Math.floor(calculated.abiphone.active / 2)) > 0) {%>
+                <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Abicase</span> = <span style='color: var(--§6);' class='grey-text'>+<%= Math.floor(Math.floor(calculated.abiphone.active / 2)).toLocaleString() %> MP</span><br>
               <% } %>
               <br>
               Total: <span style='color: var(--§6);' class='grey-text'><%= mp_total.toLocaleString() %> Magical Power</span>
