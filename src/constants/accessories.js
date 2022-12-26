@@ -879,6 +879,11 @@ export const ACCESSORIES = {
     name: "Glacial Artifact",
     rarity: "rare",
   },
+  KUUDRA_FOLLOWER_ARTIFACT: {
+    texture: "/head/772011280b5b9ab18c55703943e7f11a19717974bb9541ca4b2723f7a5fab236",
+    name: "Kuudra Follower Artifact",
+    rarity: "epic",
+  },
 };
 
 // Getting Unique Accessories Count
