@@ -1999,6 +1999,7 @@ export async function getStats(
   const mining = {
     commissions: {
       milestone: 0,
+      completions: hypixelProfile?.achievements?.skyblock_hard_working_miner || 0,
     },
   };
 
