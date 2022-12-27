@@ -554,7 +554,7 @@ export const ESSENCE_SHOP = {
     dragon_reforges_buff: {
       name: "Two-Headed Strike",
       description:
-        "Renowed and Spiked Reforges apply an extra 2-10 SkyBlock icons bonus attack speed.pngBonus Attack Speed on your gear.",
+        "Renowed and Spiked Reforges apply an extra 2-10 Bonus Attack Speed on your gear.",
       maxLevel: 4,
     },
     fero_vs_dragons: {
