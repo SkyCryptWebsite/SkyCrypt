@@ -474,27 +474,27 @@ export const ESSENCE_SHOP = {
     },
     catacombs_health: {
       name: "Health Essence",
-      description: "Increases your base Health while in The Catacombs by 25-125..",
+      description: "Increases your base Health while in The Catacombs by 25-125.",
       maxLevel: 5,
     },
     catacombs_defense: {
       name: "Defense Essence",
-      description: "Increases your base Defense while in The Catacombs by 10-50..",
+      description: "Increases your base Defense while in The Catacombs by 10-50.",
       maxLevel: 5,
     },
     catacombs_strength: {
       name: "Strength Essence",
-      description: "Increases your base Strength while in The Catacombs by 10-50..",
+      description: "Increases your base Strength while in The Catacombs by 10-50.",
       maxLevel: 5,
     },
     catacombs_intelligence: {
       name: "Intelligence Essence",
-      description: "Increases your base Intelligence while in The Catacombs by 15-75..",
+      description: "Increases your base Intelligence while in The Catacombs by 15-75.",
       maxLevel: 5,
     },
     catacombs_crit_damage: {
       name: "Critical Damage Essence",
-      description: "Increases your base Critical Damage while in The Catacombs by 10-50..",
+      description: "Increases your base Critical Damage while in The Catacombs by 10-50.",
       maxLevel: 5,
     },
   },
@@ -553,8 +553,7 @@ export const ESSENCE_SHOP = {
     },
     dragon_reforges_buff: {
       name: "Two-Headed Strike",
-      description:
-        "Renowed and Spiked Reforges apply an extra 2-10 Bonus Attack Speed on your gear.",
+      description: "Renowed and Spiked Reforges apply an extra 2-10 Bonus Attack Speed on your gear.",
       maxLevel: 4,
     },
     fero_vs_dragons: {
