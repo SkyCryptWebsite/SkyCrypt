@@ -2057,6 +2057,7 @@ export async function getStats(
 
   const misc = {};
 
+  output.perks = userProfile.perks || {};
   misc.milestones = {};
   misc.objectives = {};
   misc.races = {};
