@@ -839,54 +839,40 @@ const metaDescription = getMetaDescription()
           <span class='stat-name'><%= 'Networth' %></span><br>
           <span class='stat-info'>Networth calculations by SkyHelper</span>
           <br/><br/>
-          <span class='stat-name'>Purse: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.purse.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Bank: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.bank.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Sacks: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.sacks.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Armor: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.armor.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Equipment: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.equipment.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Wardrobe: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.wardrobe.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Inventory: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.inventory.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Ender Chest: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.enderchest.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Accessories: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.accessories.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Personal Vault: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.sacks.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Storage: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.storage.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Pets: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.pets.total.toFixed(2))) %>
-          </span><br/><br/>
+
+          <%
+          const networth_values = {
+            purse: "Purse",
+            bank: "Bank",
+            sacks: "Sacks",
+            armor: "Armor",
+            equipment: "Equipment",
+            wardrobe: "Wardrobe",
+            inventory: "Inventory",
+            enderchest: "Ender Chest",
+            accessories: "Accessories",
+            personal_vault: "Personal Vault",
+            storage: "Storage",
+            pets: "Pets",
+            fishing_bag: "Fishing Bag",
+            potion_bag: "Potion Bag",
+            candy_inventory: "Candy Bag"
+          }
+
+          for (const [key, name] of Object.entries(networth_values)) {
+            let value = key == "sacks" ? parseFloat((calculated.networth.types.sacks?.total + calculated.networth.types.essence?.total).toFixed(2)) : 
+              key == "purse" ? parseFloat((calculated.purse).toFixed(2)) :
+              key == "bank" ? parseFloat((calculated.bank).toFixed(2)) : 
+              parseFloat(calculated.networth.types[key]?.total?.toFixed(2))
+
+            if (value > 0) { %>
+              <span class='stat-name'><%= name %>: </span>
+              <span class='stat-value'>
+              <%= helper.formatNumber(value) %>
+              </span><br/>
+            <% } %>
+          <% } %>
+          <br/>
           <span class='stat-name'>Unsoulbound Networth: </span>
           <span class='stat-value'>
           <%= helper.formatNumber(parseFloat(calculated.networth.unsoulboundNetworth.toFixed(2))) %></span>
