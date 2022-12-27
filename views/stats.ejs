@@ -860,10 +860,10 @@ const metaDescription = getMetaDescription()
           }
 
           for (const [key, name] of Object.entries(networth_values)) {
-            let value = key == "sacks" ? parseFloat((calculated.networth.types.sacks?.total + calculated.networth.types.essence?.total).toFixed(2)) : 
-              key == "purse" ? parseFloat((calculated.purse).toFixed(2)) :
-              key == "bank" ? parseFloat((calculated.bank).toFixed(2)) : 
-              parseFloat(calculated.networth.types[key]?.total?.toFixed(2))
+            let value = key == "sacks" ? parseFloat(((calculated.networth.types.sacks?.total ?? 0) + (calculated.networth.types.essence?.total ?? 0)).toFixed(2)) :
+                        key == "purse" ? parseFloat((calculated.purse ?? 0).toFixed(2)) :
+                        key == "bank" ? parseFloat((calculated.bank ?? 0).toFixed(2)) :
+                        parseFloat((calculated.networth.types[key]?.total ?? 0).toFixed(2));
 
             if (value > 0) { %>
               <span class='stat-name'><%= name %>: </span>
@@ -2452,7 +2452,7 @@ const metaDescription = getMetaDescription()
                 <% for (const perk of Object.keys(constants.ESSENCE_SHOP[essence])) {
                   const essenceShop = constants.ESSENCE_SHOP[essence][perk];
                   const playerPerk = Object.keys(calculated.perks).find(p => p === perk);
-                  %> 
+                  %>
 
                   <div class="chip-text">
                     <span data-tippy-content="<%= essenceShop.description %>">
