@@ -2,7 +2,7 @@ import retry from "async-retry";
 import axios from "axios";
 import _ from "lodash";
 import minecraftData from "minecraft-data";
-import { getPreDecodedNetworth } from "skyhelper-networth";
+import { getItemNetworth, getPreDecodedNetworth } from "skyhelper-networth";
 import moment from "moment";
 import sanitize from "mongo-sanitize";
 import path from "path";
@@ -705,6 +705,14 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 
       if (item.extra?.price_paid) {
         itemLore.push(`§7Price Paid at Dark Auction: §b${item.extra.price_paid.toLocaleString()} coins`);
+      }
+    }
+
+    if (item?.tag || item?.exp) {
+      const ITEM_PRICE = await getItemNetworth(item, { cache: true });
+
+      if (ITEM_PRICE?.price > 0) {
+        itemLore.push("", `§7Item value: §c${ITEM_PRICE.price.toLocaleString()} coins`);
       }
     }
 
