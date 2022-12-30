@@ -2900,8 +2900,9 @@ const metaDescription = getMetaDescription()
           </div>
           <p class="stat-raw-values">
             <% for (const [key, value] of Object.entries(calculated.misc.uncategorized)) { %>
-            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
-            <span class="stat-value"><%= value.formatted %></span><br>
+              <% max = key === "reaper_peppers_eaten" && value.raw === constants.MAX_REAPER_PEPPERS_EATEN ? 'golden-text': '' %>
+              <span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value <%= max %>"><%= value.formatted %> </span>
+              <br>
             <% } %>
           </p>
           <% } %>

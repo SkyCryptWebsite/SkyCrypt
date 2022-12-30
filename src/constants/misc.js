@@ -452,6 +452,8 @@ export const DOJO = {
   },
 };
 
+export const MAX_REAPER_PEPPERS_EATEN = 5;
+
 export const ESSENCE_SHOP = {
   undead: {
     catacombs_boss_luck: {
