@@ -719,7 +719,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       if (ITEM_PRICE?.price > 0) {
         itemLore.push(
           "",
-          `§7Item value: §6${Math.round(ITEM_PRICE.price).toLocaleString()} coins §7(§6${helper.formatNumber(
+          `§7Item Value: §6${Math.round(ITEM_PRICE.price).toLocaleString()} Coins §7(§6${helper.formatNumber(
             ITEM_PRICE.price
           )}§7)`
         );
