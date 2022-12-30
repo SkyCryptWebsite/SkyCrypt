@@ -2061,7 +2061,10 @@ export async function getStats(
 
   output.crimsonIsles = crimsonIsles;
 
-  output.abiphone = userProfile.nether_island_player_data?.abiphone?.contact_data || {};
+  output.abiphone = {
+    contacts: userProfile.nether_island_player_data?.abiphone?.contact_data ?? {},
+    active: userProfile.nether_island_player_data?.abiphone?.active_contacts?.length || 0,
+  };
 
   // MISC
 
