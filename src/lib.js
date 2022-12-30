@@ -2,7 +2,7 @@ import retry from "async-retry";
 import axios from "axios";
 import _ from "lodash";
 import minecraftData from "minecraft-data";
-import { getNetworth } from "skyhelper-networth";
+import { getPreDecodedNetworth } from "skyhelper-networth";
 import moment from "moment";
 import sanitize from "mongo-sanitize";
 import path from "path";
@@ -26,8 +26,6 @@ const hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
 const parseNbt = util.promisify(nbt.parse);
-
-let networthPrices = helper.getNetworthPrices();
 
 function getMinMax(profiles, min, ...path) {
   let output = null;
@@ -923,6 +921,7 @@ export const getItems = async (
   output.personal_vault = personal_vault;
   output.storage = storage;
   output.hotm = hotm;
+  output.candy_bag = candy_bag;
 
   const allItems = armor.concat(
     equipment,
@@ -1450,17 +1449,18 @@ async function getLevels(userProfile, hypixelProfile, levelCaps, profileMembers)
         skill: "runecrafting",
         type: "runecrafting",
       }),
-      social: Object.keys(profileMembers)
-        ? getLevelByXp(
-            Object.keys(profileMembers)
-              .map((member) => profileMembers[member].experience_skill_social2 || 0)
-              .reduce((a, b) => a + b, 0),
-            { skill: "social", type: "social" }
-          )
-        : getLevelByXp(userProfile.experience_skill_social2, {
-            skill: "social",
-            type: "social",
-          }),
+      social:
+        Object.keys(profileMembers || {}).length > 0
+          ? getLevelByXp(
+              Object.keys(profileMembers)
+                .map((member) => profileMembers[member].experience_skill_social2 || 0)
+                .reduce((a, b) => a + b, 0),
+              { skill: "social", type: "social" }
+            )
+          : getLevelByXp(userProfile.experience_skill_social2, {
+              skill: "social",
+              type: "social",
+            }),
     };
 
     for (const skill in skillLevels) {
@@ -1645,6 +1645,15 @@ export async function getStats(
 
   if (!items.no_inventory) {
     output.missingAccessories = getMissingAccessories(items.accessory_ids);
+
+    const PARTY_HAT_CRAB = items.accessory_ids.some((a) => a.startsWith("PARTY_HAT_CRAB"));
+
+    output.missingAccessories.missing =
+      PARTY_HAT_CRAB === true
+        ? output.missingAccessories.missing.filter(
+            (accessory) => accessory.tag?.ExtraAttributes?.name?.startsWith("PARTY_HAT_CRAB") === false
+          )
+        : output.missingAccessories.missing.entries();
   }
 
   output.base_stats = Object.assign({}, output.stats);
@@ -2057,6 +2066,7 @@ export async function getStats(
 
   const misc = {};
 
+  output.perks = userProfile.perks || {};
   misc.milestones = {};
   misc.objectives = {};
   misc.races = {};
@@ -2284,7 +2294,24 @@ export async function getStats(
 
   */
 
-  output.networth = await getNetworth(userProfile, output.bank, { prices: networthPrices, onlyNetworth: true });
+  output.networth = await getPreDecodedNetworth(
+    userProfile,
+    {
+      armor: items.armor,
+      equipment: items.equipment,
+      wardrobe: items.wardrobe_inventory,
+      inventory: items.inventory,
+      enderchest: items.enderchest,
+      accessories: items.accessory_bag,
+      personal_vault: items.personal_vault,
+      storage: items.storage.concat(items.storage.map((item) => item.containsItems).flat()),
+      fishing_bag: items.fishing_bag,
+      potion_bag: items.potion_bag,
+      candy_inventory: items.candy_bag,
+    },
+    output.bank,
+    { cache: true, onlyNetworth: true }
+  );
 
   /*
     century cake effects
@@ -3829,9 +3856,4 @@ async function init() {
   }
 }
 
-async function updateNetworthPrices() {
-  networthPrices = helper.getNetworthPrices();
-}
-
-setInterval(updateNetworthPrices, 15000);
 init();
