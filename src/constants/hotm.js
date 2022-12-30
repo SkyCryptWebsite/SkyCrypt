@@ -1443,3 +1443,5 @@ export const PRECURSOR_PARTS = {
   CONTROL_SWITCH: "Control Switch",
   SYNTHETIC_HEART: "Synthetic Heart",
 };
+
+export const COMMISSIONS_MILESTONE = 6;
