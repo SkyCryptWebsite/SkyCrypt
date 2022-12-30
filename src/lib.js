@@ -712,7 +712,7 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       const ITEM_PRICE = await getItemNetworth(item, { cache: true });
 
       if (ITEM_PRICE?.price > 0) {
-        itemLore.push("", `§7Item value: §c${ITEM_PRICE.price.toLocaleString()} coins`);
+        itemLore.push("", `§7Item value: §6${Math.round(ITEM_PRICE.price).toLocaleString()} coins §7(§6${helper.formatNumber(ITEM_PRICE.price)}§7)`);
       }
     }
 
