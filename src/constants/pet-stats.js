@@ -116,6 +116,9 @@ class Pet {
         case "health_regen":
           list.push(`§7Health Regen: ${formatStat(newStats[stat])}`);
           break;
+        case "fishing_speed":
+          list.push(`§7Fishing Speed: ${formatStat(newStats[stat])}`);
+          break;
         default:
           list.push(`§cUNKNOWN: ${stat}`);
           break;
