@@ -1162,27 +1162,34 @@ const metaDescription = getMetaDescription()
             <% }) %>
           </div>
           <% } %>
-          <% if(calculated.missingAccessories.missing.length > 0 || calculated.missingAccessories.upgrades.length > 0){ %>
-          <% if(items.accessories.length == 1){ %>
-          <br>
-          <% } %>
-          <button class="stat-sub-header extender" aria-controls="missing-accessories" aria-expanded="false">Missing Accessories</button>
-          <div class="pieces extendable" id="missing-accessories">
-            <br>
-            <p class="stat-sub-header">Missing Accessories<span data-tippy-content='Missing accessories that are <strong>not</strong> upgrades of another accessory.'></span></p>
-            <% for(const [index, accessory] of calculated.missingAccessories.missing.entries()){ %>
-            <div tabindex="0" data-missing-accessory-index="<%= index %>" class="rich-item piece piece-<%= accessory.rarity %>-bg missing-accessory">
-              <div style='background-image: url("<%= accessory.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
-            </div>
+          <% if(calculated.missingAccessories.missing.length > 0 || calculated.missingAccessories.upgrades.length > 0) {
+            <!-- Why does this exist? Won't touch it -->
+            if(items.accessories.length == 1) %> <br>
+
+            <button class="stat-sub-header extender" aria-controls="missing-accessories" aria-expanded="false">Missing Accessories</button>
+            <div class="pieces extendable" id="missing-accessories">
+              <br>
+
+              <% if(calculated.missingAccessories.missing.length > 0) { %>
+                <p class="stat-sub-header">Missing Accessories<span data-tippy-content='Missing accessories that are <strong>not</strong> upgrades of another accessory.'></span></p>
+                <% for(const [index, accessory] of calculated.missingAccessories.missing.entries()){ %>
+                  <div tabindex="0" data-missing-accessory-index="<%= index %>" class="rich-item piece piece-<%= accessory.rarity %>-bg missing-accessory">
+                    <div style='background-image: url("<%= accessory.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                  </div>
+                <% } %>
+              <% } %>
+
+              <% if (calculated.missingAccessories.upgrades.length > 0) { %>
+                <p class="stat-sub-header">Missing Accessory Upgrades<span data-tippy-content='Missing accessories that are upgrades of a lower tier accessory.'></span></p>
+                <% for(const [index, accessory] of calculated.missingAccessories.upgrades.entries()){ %>
+                  <div tabindex="0" data-upgrade-accessory-index="<%= index %>" class="rich-item piece piece-<%= accessory.rarity %>-bg missing-accessory">
+                    <div style='background-image: url("<%= accessory.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                  </div>
+                <% } %>
+              <% } %>
+
+              </div>
             <% } %>
-            <p class="stat-sub-header">Missing Accessory Upgrades<span data-tippy-content='Missing accessories that are upgrades of a lower tier accessory.'></span></p>
-            <% for(const [index, accessory] of calculated.missingAccessories.upgrades.entries()){ %>
-            <div tabindex="0" data-upgrade-accessory-index="<%= index %>" class="rich-item piece piece-<%= accessory.rarity %>-bg missing-accessory">
-              <div style='background-image: url("<%= accessory.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
-            </div>
-            <% } %>
-          </div>
-          <% } %>
           <% } %>
         </div>
       </div>
