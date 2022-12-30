@@ -709,10 +709,25 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     }
 
     if (item?.tag || item?.exp) {
+      if (item.tag?.ExtraAttributes?.id === "PET") {
+        item.tag.ExtraAttributes.petInfo =
+          JSON.stringify(item.tag.ExtraAttributes.petInfo) ?? item.tag.ExtraAttributes.petInfo;
+      }
+
       const ITEM_PRICE = await getItemNetworth(item, { cache: true });
 
       if (ITEM_PRICE?.price > 0) {
-        itemLore.push("", `§7Item value: §6${Math.round(ITEM_PRICE.price).toLocaleString()} coins §7(§6${helper.formatNumber(ITEM_PRICE.price)}§7)`);
+        itemLore.push(
+          "",
+          `§7Item value: §6${Math.round(ITEM_PRICE.price).toLocaleString()} coins §7(§6${helper.formatNumber(
+            ITEM_PRICE.price
+          )}§7)`
+        );
+      }
+
+      if (item.tag?.ExtraAttributes?.id === "PET") {
+        item.tag.ExtraAttributes.petInfo =
+          JSON.parse(item.tag.ExtraAttributes.petInfo) ?? item.tag.ExtraAttributes.petInfo;
       }
     }
 
