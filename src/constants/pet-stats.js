@@ -116,6 +116,9 @@ class Pet {
         case "health_regen":
           list.push(`§7Health Regen: ${formatStat(newStats[stat])}`);
           break;
+        case "fishing_speed":
+          list.push(`§7Fishing Speed: ${formatStat(newStats[stat])}`);
+          break;
         default:
           list.push(`§cUNKNOWN: ${stat}`);
           break;
@@ -644,7 +647,7 @@ class Rock extends Pet {
     const mult = getValue(this.rarity, { rare: 0.2, epic: 0.25 });
     return {
       name: "§6Fortify",
-      desc: [`§7While sitting on your rock, gain +§a${round(this.level * mult, 1)}% §7defense`],
+      desc: [`§7While sitting on your rock, gain §a+${round(this.level * mult, 1)}% §7defense`],
     };
   }
 
@@ -652,7 +655,7 @@ class Rock extends Pet {
     const mult = getValue(this.rarity, { legendary: 0.3 });
     return {
       name: "§6Steady Ground",
-      desc: [`§7While sitting on your rock, gain +§a${round(this.level * mult, 1)}§7% damage`],
+      desc: [`§7While sitting on your rock, gain §c+${round(this.level * mult, 1)}% §7damage`],
     };
   }
 }
@@ -1058,7 +1061,7 @@ class GoldenDragon extends Pet {
     const value = this.level * 0.00125;
     return {
       name: "§6Legendary Treasure",
-      desc: [`Gain §c${round(value, 4)}% damage §7for every million coins in your bank.`],
+      desc: [`§7Gain §c${round(value, 4)}% damage §7for every million coins in your bank.`],
     };
   }
 }
@@ -2866,6 +2869,7 @@ class Bingo extends Pet {
     return {
       health: 25 + this.level * 0.75,
       strength: 5 + this.level * 0.2,
+      speed: 25 + this.level * 0.5,
     };
   }
 
@@ -2898,7 +2902,9 @@ class Bingo extends Pet {
     const mult = getValue(this.rarity, { uncommon: 0.1 });
     return {
       name: "§6Fast Learner",
-      desc: [`§7Gain §c${floor(5 + this.level * mult, 1)}% §7more Skill Experience and §9Slayer §7Experience.`],
+      desc: [
+        `§7Gain §c${floor(5 + this.level * mult, 1)}% §7more Skill Experience, HOTM Experience, and Slayer Experience.`,
+      ],
     };
   }
 
@@ -2919,10 +2925,16 @@ class Bingo extends Pet {
   }
 
   get fifth() {
-    const mult = getValue(this.rarity, { legendary: 0.08 });
+    const mult = getValue(this.rarity, { legendary: 0.5 });
+
     return {
-      name: "§6Scavenger",
-      desc: [`§7Recover §b${round(2 + this.level * mult, 1)} mana §7when using mana.`],
+      name: "§6Recovery",
+      desc: [
+        `§7Upon death, your active potion effects will be retained with §c${round(
+          25 + this.level * mult,
+          1
+        )}% §7of their time.`,
+      ],
     };
   }
 }
@@ -3214,11 +3226,12 @@ class Kuudra extends Pet {
   }
 }
 
-class Raindeer extends Pet {
+class Reindeer extends Pet {
   get stats() {
     return {
       health: this.level * 1,
       sea_creature_chance: this.level * 0.05,
+      fishing_speed: this.level * 0.25,
     };
   }
 
@@ -3236,29 +3249,33 @@ class Raindeer extends Pet {
   }
 
   get second() {
-    const mult = getValue(this.rarity, { legendary: 1 });
+    const mult = getValue(this.rarity, { legendary: 0.75 });
 
     return {
       name: "§6Infused",
       desc: [
-        `§7Gives +§b${round(this.level * mult, 1)}${
-          SYMBOLS.fishing_speed
-        } Fishing Speed §7while on §cJerry's Workshop.`,
+        `§7Gives +§b${round(this.level * mult, 1)}${SYMBOLS.fishing_speed} Fishing Speed §7and §3+10 ${
+          SYMBOLS.sea_creature_chance
+        } Sea Creature Chance §7while on §cJerry's Workshop.`,
       ],
     };
   }
 
   get third() {
+    const mult = getValue(this.rarity, { legendary: 0.05 });
+
     return {
       name: "§6Snow Power",
-      desc: [`§7Grants §a+5% §7bonus gift chance during the §cGift Attack §7event.`],
+      desc: [`§7Grants §a+${round(this.level * mult, 1)}% §7bonus gift chance during the §cGift Attack §7event.`],
     };
   }
 
   get fourth() {
+    const mult = getValue(this.rarity, { legendary: 0.2 });
+
     return {
       name: "§6Icy Wind",
-      desc: [`§7Grants a §a+20% §7chance of getting double §bIce Essence§7.`],
+      desc: [`§7Grants a §a+${round(this.level * mult, 1)}% §7chance of getting double §bIce Essence§7.`],
     };
   }
 }
@@ -3349,7 +3366,7 @@ export const PET_STATS = {
   PIGMAN: Pigman,
   RABBIT: Rabbit,
   RAT: Rat,
-  REINDEER: Raindeer,
+  REINDEER: Reindeer,
   ROCK: Rock,
   SCATHA: Scatha,
   SHEEP: Sheep,

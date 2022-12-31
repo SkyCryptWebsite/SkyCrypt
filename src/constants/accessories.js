@@ -104,8 +104,9 @@ export const ACCESSORY_UPGRADES = {
   ENDER_ARTIFACT: ["ENDER_RELIC"],
   POWER_TALISMAN: ["POWER_RING", "POWER_ARTIFACT"],
   POWER_RING: ["POWER_ARTIFACT"],
-  BINGO_TALISMAN: ["BINGO_RING", "BINGO_ARTIFACT"],
-  BINGO_RING: ["BINGO_ARTIFACT"],
+  BINGO_TALISMAN: ["BINGO_RING", "BINGO_ARTIFACT", "BINGO_RELIC"],
+  BINGO_RING: ["BINGO_ARTIFACT", "BINGO_RELIC"],
+  BINGO_ARTIFACT: ["BINGO_RELIC"],
   ODGERS_BRONZE_TOOTH: ["ODGERS_SILVER_TOOTH", "ODGERS_GOLD_TOOTH", "ODGERS_DIAMOND_TOOTH"],
   ODGERS_SILVER_TOOTH: ["ODGERS_GOLD_TOOTH", "ODGERS_DIAMOND_TOOTH"],
   ODGERS_GOLD_TOOTH: ["ODGERS_DIAMOND_TOOTH"],
@@ -692,6 +693,11 @@ export const ACCESSORIES = {
     rarity: "rare",
     texture: "/head/d2dad868f8d865baa32d6158672d1b134db61ea56d33efa0c09f6ba6f276ff2",
   },
+  BINGO_RELIC: {
+    name: "Bingo Relic",
+    rarity: "epic",
+    texture: "/head/c515acf4a6ac698736e54def0bc78143c14449978e750afbb8d7ade0adf0ef00",
+  },
   JACOBUS_REGISTER: {
     name: "Jacobus Register",
     rarity: "legendary",
@@ -872,6 +878,11 @@ export const ACCESSORIES = {
     texture: "/head/92c1a6b294aed49dbf11c589520886b9f5d53b32a8955adcd57e2de3b629a31",
     name: "Glacial Artifact",
     rarity: "rare",
+  },
+  KUUDRA_FOLLOWER_ARTIFACT: {
+    texture: "/head/772011280b5b9ab18c55703943e7f11a19717974bb9541ca4b2723f7a5fab236",
+    name: "Kuudra Follower Artifact",
+    rarity: "epic",
   },
 };
 

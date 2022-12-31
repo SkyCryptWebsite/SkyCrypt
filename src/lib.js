@@ -2,7 +2,7 @@ import retry from "async-retry";
 import axios from "axios";
 import _ from "lodash";
 import minecraftData from "minecraft-data";
-import { getNetworth } from "skyhelper-networth";
+import { getItemNetworth, getPreDecodedNetworth } from "skyhelper-networth";
 import moment from "moment";
 import sanitize from "mongo-sanitize";
 import path from "path";
@@ -26,8 +26,6 @@ const hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
 const parseNbt = util.promisify(nbt.parse);
-
-let networthPrices = helper.getNetworthPrices();
 
 function getMinMax(profiles, min, ...path) {
   let output = null;
@@ -710,6 +708,29 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       }
     }
 
+    if (item?.tag || item?.exp) {
+      if (item.tag?.ExtraAttributes?.id === "PET") {
+        item.tag.ExtraAttributes.petInfo =
+          JSON.stringify(item.tag.ExtraAttributes.petInfo) ?? item.tag.ExtraAttributes.petInfo;
+      }
+
+      const ITEM_PRICE = await getItemNetworth(item, { cache: true });
+
+      if (ITEM_PRICE?.price > 0) {
+        itemLore.push(
+          "",
+          `§7Item Value: §6${Math.round(ITEM_PRICE.price).toLocaleString()} Coins §7(§6${helper.formatNumber(
+            ITEM_PRICE.price
+          )}§7)`
+        );
+      }
+
+      if (item.tag?.ExtraAttributes?.id === "PET") {
+        item.tag.ExtraAttributes.petInfo =
+          JSON.parse(item.tag.ExtraAttributes.petInfo) ?? item.tag.ExtraAttributes.petInfo;
+      }
+    }
+
     if (!("display_name" in item) && "id" in item) {
       const vanillaItem = mcData.items[item.id];
 
@@ -923,6 +944,7 @@ export const getItems = async (
   output.personal_vault = personal_vault;
   output.storage = storage;
   output.hotm = hotm;
+  output.candy_bag = candy_bag;
 
   const allItems = armor.concat(
     equipment,
@@ -1450,17 +1472,18 @@ async function getLevels(userProfile, hypixelProfile, levelCaps, profileMembers)
         skill: "runecrafting",
         type: "runecrafting",
       }),
-      social: Object.keys(profileMembers)
-        ? getLevelByXp(
-            Object.keys(profileMembers)
-              .map((member) => profileMembers[member].experience_skill_social2 || 0)
-              .reduce((a, b) => a + b, 0),
-            { skill: "social", type: "social" }
-          )
-        : getLevelByXp(userProfile.experience_skill_social2, {
-            skill: "social",
-            type: "social",
-          }),
+      social:
+        Object.keys(profileMembers || {}).length > 0
+          ? getLevelByXp(
+              Object.keys(profileMembers)
+                .map((member) => profileMembers[member].experience_skill_social2 || 0)
+                .reduce((a, b) => a + b, 0),
+              { skill: "social", type: "social" }
+            )
+          : getLevelByXp(userProfile.experience_skill_social2, {
+              skill: "social",
+              type: "social",
+            }),
     };
 
     for (const skill in skillLevels) {
@@ -1645,6 +1668,15 @@ export async function getStats(
 
   if (!items.no_inventory) {
     output.missingAccessories = getMissingAccessories(items.accessory_ids);
+
+    const PARTY_HAT_CRAB = items.accessory_ids.some((a) => a.startsWith("PARTY_HAT_CRAB"));
+
+    output.missingAccessories.missing =
+      PARTY_HAT_CRAB === true
+        ? output.missingAccessories.missing.filter(
+            (accessory) => accessory.tag?.ExtraAttributes?.name?.startsWith("PARTY_HAT_CRAB") === false
+          )
+        : output.missingAccessories.missing.entries();
   }
 
   output.base_stats = Object.assign({}, output.stats);
@@ -1953,7 +1985,9 @@ export async function getStats(
       for (const key in gameData) {
         if (key.startsWith("attempts") || key.startsWith("claims") || key.startsWith("best_score")) {
           let statKey = key.split("_");
-          const tierValue = statKey.pop();
+          let tierValue = parseInt(statKey.pop());
+          tierValue =
+            game === "numbers" ? tierValue + 2 : game === "simon" ? (tierValue === 5 ? 5 : tierValue + 1) : tierValue;
 
           statKey = statKey.join("_");
           const tierInfo = _.cloneDeep(constants.EXPERIMENTS.tiers[tierValue]);
@@ -1997,6 +2031,7 @@ export async function getStats(
   const mining = {
     commissions: {
       milestone: 0,
+      completions: hypixelProfile?.achievements?.skyblock_hard_working_miner || 0,
     },
   };
 
@@ -2049,12 +2084,16 @@ export async function getStats(
 
   output.crimsonIsles = crimsonIsles;
 
-  output.abiphone = userProfile.nether_island_player_data?.abiphone?.contact_data || {};
+  output.abiphone = {
+    contacts: userProfile.nether_island_player_data?.abiphone?.contact_data ?? {},
+    active: userProfile.nether_island_player_data?.abiphone?.active_contacts?.length || 0,
+  };
 
   // MISC
 
   const misc = {};
 
+  output.perks = userProfile.perks || {};
   misc.milestones = {};
   misc.objectives = {};
   misc.races = {};
@@ -2068,6 +2107,11 @@ export async function getStats(
   misc.auctions_sell = {};
   misc.auctions_buy = {};
   misc.claimed_items = {};
+  misc.effects = {
+    active: userProfile.active_effects || [],
+    paused: userProfile.paused_effects || [],
+    disabled: userProfile.disabled_potion_effects || [],
+  };
 
   if ("ender_crystals_destroyed" in userProfile.stats) {
     misc.dragons["ender_crystals_destroyed"] = userProfile.stats["ender_crystals_destroyed"];
@@ -2223,7 +2267,10 @@ export async function getStats(
   if ("favorite_arrow" in userProfile) {
     misc.uncategorized.favorite_arrow = {
       raw: userProfile.favorite_arrow,
-      formatted: `${helper.capitalizeFirstLetter(userProfile.favorite_arrow.replaceAll("_", " ").toLowerCase())}`,
+      formatted: `${userProfile.favorite_arrow
+        .split("_")
+        .map((word) => helper.capitalizeFirstLetter(word.toLowerCase()))
+        .join(" ")}`,
     };
   }
 
@@ -2279,7 +2326,24 @@ export async function getStats(
 
   */
 
-  output.networth = await getNetworth(userProfile, output.bank, { prices: networthPrices, onlyNetworth: true });
+  output.networth = await getPreDecodedNetworth(
+    userProfile,
+    {
+      armor: items.armor,
+      equipment: items.equipment,
+      wardrobe: items.wardrobe_inventory,
+      inventory: items.inventory,
+      enderchest: items.enderchest,
+      accessories: items.accessory_bag,
+      personal_vault: items.personal_vault,
+      storage: items.storage.concat(items.storage.map((item) => item.containsItems).flat()),
+      fishing_bag: items.fishing_bag,
+      potion_bag: items.potion_bag,
+      candy_inventory: items.candy_bag,
+    },
+    output.bank,
+    { cache: true, onlyNetworth: true }
+  );
 
   /*
     century cake effects
@@ -3824,9 +3888,4 @@ async function init() {
   }
 }
 
-async function updateNetworthPrices() {
-  networthPrices = helper.getNetworthPrices();
-}
-
-setInterval(updateNetworthPrices, 15000);
 init();

@@ -1080,7 +1080,3 @@ export function getAnimatedTexture(item) {
 
   return deepResults[0] ?? false;
 }
-
-export function getNetworthPrices() {
-  return fs.readJsonSync(getCacheFilePath(getCacheFolderPath(), "json", "networth-prices", "json"));
-}
