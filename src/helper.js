@@ -1084,7 +1084,7 @@ export function getAnimatedTexture(item) {
 
 export async function getItemPrice(item) {
   if (!item) return 0;
-  
+
   const prices = await getPrices(true);
 
   return prices[item.toLowerCase()] || prices[getId(item).toLowerCase()] || 0;

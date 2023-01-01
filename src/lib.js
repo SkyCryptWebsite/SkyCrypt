@@ -1673,24 +1673,21 @@ export async function getStats(
 
     output.missingAccessories.missing =
       PARTY_HAT_CRAB === true
-        ? output.missingAccessories.missing.filter(
-            (accessory) => accessory.name.startsWith("PARTY_HAT_CRAB") === false
-          )
+        ? output.missingAccessories.missing.filter((accessory) => accessory.name.startsWith("PARTY_HAT_CRAB") === false)
         : output.missingAccessories.missing.entries();
 
-
     Object.keys(output.missingAccessories).forEach((key) => {
-      output.missingAccessories[key].forEach(async item => {
-        const ITEM_PRICE = await helper.getItemPrice(item.name)
+      output.missingAccessories[key].forEach(async (item) => {
+        const ITEM_PRICE = await helper.getItemPrice(item.name);
         if (ITEM_PRICE === 0) return;
         item.tag ??= {};
         item.tag.display ??= {};
         item.tag.display.Lore ??= [];
         item.tag.display.Lore.push(
-          `§7Item Value: §6${Math.round(ITEM_PRICE).toLocaleString()} Coins §7(§6${helper.formatNumber(ITEM_PRICE)}§7)`,
-        )
+          `§7Item Value: §6${Math.round(ITEM_PRICE).toLocaleString()} Coins §7(§6${helper.formatNumber(ITEM_PRICE)}§7)`
+        );
       });
-  });
+    });
   }
 
   output.base_stats = Object.assign({}, output.stats);
