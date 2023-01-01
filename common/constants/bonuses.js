@@ -47,25 +47,16 @@ export const STATS_BONUS = {
   // Slayer
   slayer_zombie: {
     1: { health: 2 },
-    2: { health: 2 },
     3: { health: 3 },
-    4: { health: 3 },
     5: { health: 4 },
-    6: { health: 4 },
     7: { health: 5 },
-    8: { health: 5 },
     9: { health: 6 },
   },
   slayer_spider: {
     1: { crit_damage: 1 },
-    2: { crit_damage: 1 },
-    3: { crit_damage: 1 },
-    4: { crit_damage: 1 },
     5: { crit_damage: 2 },
-    6: { crit_damage: 2 },
     7: { crit_chance: 1 },
     8: { crit_damage: 3 },
-    9: { crit_damage: 3 },
   },
   slayer_wolf: {
     1: { speed: 1 },
