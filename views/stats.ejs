@@ -2804,12 +2804,14 @@ const metaDescription = getMetaDescription()
               let effects_tooltips = [];
               for (const key of Object.keys(calculated.misc.effects).sort()) {
                 effects_tooltips[key] ??= [];
-                for (const potion of calculated.misc.effects[key]) {
+                for (let potion of calculated.misc.effects[key]) {
                   if (key === "active") {
                     if (potion?.effect === undefined || potion?.level === null) continue;
                     effects_tooltips[key].push(`<span class="stat-value">${constants.POTION_EFFECTS[potion.effect]?.[potion.level].name.replace('Potion', '') || potion.effect.split('_').map((effect) => helper.capitalizeFirstLetter(effect.toLowerCase())).join(' ')}</span><br>`)
                   
                   } else {
+                    potion = potion?.effect || potion
+
                     effects_tooltips[key].push(`<span class="stat-value">${potion.split('_').map((effect) => helper.capitalizeFirstLetter(effect.toLowerCase())).join(' ')}</span><br>`);
                   }
                 }
