@@ -1,6 +1,6 @@
 export const REFORGES = {
-  lucky: {
-    prefix: "Lucky",
+  fortuitous: {
+    prefix: "Fortuitous",
     name: null,
     reforge: {
       crit_chance: 42 / 250,
@@ -8,7 +8,7 @@ export const REFORGES = {
       health: 32 / 250,
       defense: 12 / 250,
       strength: 46 / 250,
-    },
+    }
   },
   warrior: {
     prefix: "Warrior",

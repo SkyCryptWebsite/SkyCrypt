@@ -119,8 +119,8 @@ interface Item extends DisplayItem, ItemSlot {
   texture_pack?: Pack;
   isInactive?: boolean;
   hegemony?: {
-    [key: string]: string;
-  };
+    rarity: string;
+  }
 }
 
 interface ItemTag {
@@ -135,7 +135,7 @@ interface ItemTag {
 }
 
 interface ItemTagExtraAttributes {
-  [key: string]: unknown;
+  [key: string]: string;
 }
 
 interface ItemTagSkullOwner {
@@ -426,7 +426,9 @@ declare const calculated: SkyCryptPlayer & {
     [key: string]: number;
   };
   levels: {
-    [key: string]: Level;
+    [key: string]: {
+      level: number
+    } | Level;
   };
   members: SkyCryptPlayer[];
   mining: {
@@ -598,18 +600,17 @@ declare const calculated: SkyCryptPlayer & {
   perks: {
     [key: string]: number;
   };
-  selected_reforge: {
-    power_bonus: {
-      [key: string]: number;
-    };
-    reforge: string;
-  };
+  selected_reforge: number;
   hotm: {
-    tag: any;
-    display_name: HOTMNames | string;
     level: number;
+    tag: {
+      display: {
+        Lore: string;
+      }
+    };
+    display_name: string;
     disabled: boolean;
-  }[];
+  }[],
   active_effects: {
     effect: string;
     level: number;
@@ -622,6 +623,8 @@ interface SkyCryptRelativeTime {
 }
 
 interface SkyCryptPlayer {
+  hotm: any;
+  levels: any;
   display_name: string;
   display_emoji?: string;
   skin_data: {
@@ -641,6 +644,7 @@ interface PetBase extends DisplayItem {
 
 interface Pet extends PetBase {
   active: boolean;
+  type: string;
   candyUsed: number;
   exp: number;
   heldItem: string | null;
@@ -737,11 +741,3 @@ interface StatBonusType {
     [key in StatName]?: number;
   };
 }
-
-type HOTMNames =
-  | "Mining Speed I"
-  | "Mining Speed II"
-  | "Mining Fortune I"
-  | "Mining Fortune II"
-  | "Mining Madness"
-  | "Seasoned Mineman";
