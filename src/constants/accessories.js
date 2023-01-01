@@ -104,16 +104,27 @@ export const ACCESSORY_UPGRADES = {
   ENDER_ARTIFACT: ["ENDER_RELIC"],
   POWER_TALISMAN: ["POWER_RING", "POWER_ARTIFACT"],
   POWER_RING: ["POWER_ARTIFACT"],
-  BINGO_TALISMAN: ["BINGO_RING", "BINGO_ARTIFACT"],
-  BINGO_RING: ["BINGO_ARTIFACT"],
+  BINGO_TALISMAN: ["BINGO_RING", "BINGO_ARTIFACT", "BINGO_RELIC"],
+  BINGO_RING: ["BINGO_ARTIFACT", "BINGO_RELIC"],
+  BINGO_ARTIFACT: ["BINGO_RELIC"],
   ODGERS_BRONZE_TOOTH: ["ODGERS_SILVER_TOOTH", "ODGERS_GOLD_TOOTH", "ODGERS_DIAMOND_TOOTH"],
   ODGERS_SILVER_TOOTH: ["ODGERS_GOLD_TOOTH", "ODGERS_DIAMOND_TOOTH"],
   ODGERS_GOLD_TOOTH: ["ODGERS_DIAMOND_TOOTH"],
-  // BURNING_KUUDRA_CORE: ["FIERY_KUUDRA_CORE", "INFERNAL_KUUDRA_CORE"],
-  // FIERY_KUUDRA_CORE: ["INFERNAL_KUUDRA_CORE"],
+  BURNING_KUUDRA_CORE: ["FIERY_KUUDRA_CORE", "INFERNAL_KUUDRA_CORE"],
+  FIERY_KUUDRA_CORE: ["INFERNAL_KUUDRA_CORE"],
   BURSTSTOPPER_TALISMAN: ["BURSTSTOPPER_ARTIFACT"],
   GREAT_SPOOK_TALISMAN: ["GREAT_SPOOK_RING", "GREAT_SPOOK_ARTIFACT"],
   GREAT_SPOOK_RING: ["GREAT_SPOOK_ARTIFACT"],
+  DRACONIC_TALISMAN: ["DRACONIC_RING", "DRACONIC_ARTIFACT"],
+  DRACONIC_RING: ["DRACONIC_ARTIFACT"],
+  VACCINE_TALISMAN: ["VACCINE_RING", "VACCINE_ARTIFACT"],
+  VACCINE_RING: ["VACCINE_ARTIFACT"],
+  WHITE_GIFT_TALISMAN: ["GREEN_GIFT_TALISMAN", "BLUE_GIFT_TALISMAN", "PURPLE_GIFT_TALISMAN", "GOLD_GIFT_TALISMAN"],
+  GREEN_GIFT_TALISMAN: ["BLUE_GIFT_TALISMAN", "PURPLE_GIFT_TALISMAN", "GOLD_GIFT_TALISMAN"],
+  BLUE_GIFT_TALISMAN: ["PURPLE_GIFT_TALISMAN", "GOLD_GIFT_TALISMAN"],
+  PURPLE_GIFT_TALISMAN: ["GOLD_GIFT_TALISMAN"],
+  GLACIAL_TALISMAN: ["GLACIAL_RING", "GLACIAL_ARTIFACT"],
+  GLACIAL_RING: ["GLACIAL_ARTIFACT"],
 };
 
 export const ACCESSORY_DUPLICATES = {
@@ -682,6 +693,11 @@ export const ACCESSORIES = {
     rarity: "rare",
     texture: "/head/d2dad868f8d865baa32d6158672d1b134db61ea56d33efa0c09f6ba6f276ff2",
   },
+  BINGO_RELIC: {
+    name: "Bingo Relic",
+    rarity: "epic",
+    texture: "/head/c515acf4a6ac698736e54def0bc78143c14449978e750afbb8d7ade0adf0ef00",
+  },
   JACOBUS_REGISTER: {
     name: "Jacobus Register",
     rarity: "legendary",
@@ -707,21 +723,21 @@ export const ACCESSORIES = {
     rarity: "epic",
     texture: "/head/a2680a28962e9ad2d4872d06fba2cc60824fbb2d0824e42d958575b7563884aa",
   },
-  // BURNING_KUUDRA_CORE: {
-  //   name: "Burning Kuudra Core",
-  //   rarity: "rare",
-  //   texture: "/head/368743497820c08627d2cc5e891c0f9fc3793f75b6e41e140ac9b007d3b505a5",
-  // },
-  // FIERY_KUUDRA_CORE: {
-  //   name: "Fiery Kuudra Core",
-  //   rarity: "epic",
-  //   texture: "/head/200c16738c372484628ca15cf7b0731b810bd3142e07c1053b5e3da6b6e523ca",
-  // },
-  // INFERNAL_KUUDRA_CORE: {
-  //   name: "Infernal Kuudra Core",
-  //   rarity: "legendary",
-  //   texture: "/head/ece252963a5188cef8ede9d8523bd91d284a785b418b39eec29a91aea07c61e2",
-  // },
+  BURNING_KUUDRA_CORE: {
+    name: "Burning Kuudra Core",
+    rarity: "rare",
+    texture: "/head/368743497820c08627d2cc5e891c0f9fc3793f75b6e41e140ac9b007d3b505a5",
+  },
+  FIERY_KUUDRA_CORE: {
+    name: "Fiery Kuudra Core",
+    rarity: "epic",
+    texture: "/head/200c16738c372484628ca15cf7b0731b810bd3142e07c1053b5e3da6b6e523ca",
+  },
+  INFERNAL_KUUDRA_CORE: {
+    name: "Infernal Kuudra Core",
+    rarity: "legendary",
+    texture: "/head/ece252963a5188cef8ede9d8523bd91d284a785b418b39eec29a91aea07c61e2",
+  },
   BURSTSTOPPER_TALISMAN: {
     name: "Burststopper Talisman",
     rarity: "rare",
@@ -782,6 +798,91 @@ export const ACCESSORIES = {
     name: "Great Spook Artifact",
     rarity: "rare",
     texture: "/head/a89cc1ede755709debb7d1fe7ab8129ac8901788d8d8613b03eac157c23cc49c",
+  },
+  DRACONIC_TALISMAN: {
+    name: "Draconic Talisman",
+    rarity: "uncommon",
+    texture: "/head/11c51b946cb484b9c76b2c5bf5eab0c74c9ced95f35aa81e699bd5d9b57e20f",
+  },
+  DRACONIC_RING: {
+    name: "Draconic Ring",
+    rarity: "rare",
+    texture: "/head/fee1e74047277a70661a8eaf9c4c6ebf83554b275a16816ec79bba1bce320434",
+  },
+  DRACONIC_ARTIFACT: {
+    name: "Draconic Artifact",
+    rarity: "epic",
+    texture: "/head/ead7dcbe93401b3d3b4e5222ef8097aef4431f48064d0a0531fa0952c211e0e6",
+  },
+  ABICASE: {
+    name: "Abicase",
+    rarity: "rare",
+    texture: "/head/70ce32b90e16419319daf35e6ad01bb715d898548b9ef66dd799a00107e87376",
+  },
+  VACCINE_RING: {
+    name: "Vaccine Ring",
+    rarity: "uncommon",
+    texture: "/head/e48ee92b9ef1dd9f6083dab113fe1708fde4f4039ad2f85f06f317cefe49f3ad",
+  },
+  VACCINE_ARTIFACT: {
+    name: "Vaccine Artifact",
+    rarity: "rare",
+    texture: "/head/c4332067f9fa1695c3d577c3ef264355bee161b5e3a301906a4f443b002b92fa",
+  },
+  ARCHAEOLOGIST_COMPASS: {
+    name: "Archaeologist's Compass",
+    rarity: "common",
+    item: "/item/COMPASS",
+  },
+  TRAPPER_CREST: {
+    name: "Trapper Crest",
+    rarity: "common",
+    texture: "/head/3ae0da20c8598e91f322b6e8a7b0ee2c81f1b61e74386c437e75f446ffccc5e",
+  },
+  WHITE_GIFT_TALISMAN: {
+    texture: "/head/e47b37e67a89159bf4acc4a44d4328f4efc0181605142288e5eed1ab8aed913c",
+    name: "White Gift Talisman",
+    rarity: "common",
+  },
+  GREEN_GIFT_TALISMAN: {
+    texture: "/head/28dc3c84491c4ff103de6ea01880e2d83432cd4878b84d6b43253cc51fd978e7",
+    name: "Green Gift Talisman",
+    rarity: "uncommon",
+  },
+  BLUE_GIFT_TALISMAN: {
+    texture: "/head/5b85e29f29ec9a90e482ea5b8391bcb4560bbae0dcd15d7ce1d86016b4356e98",
+    name: "Blue Gift Talisman",
+    rarity: "rare",
+  },
+  PURPLE_GIFT_TALISMAN: {
+    texture: "/head/e9e39d91c04c30cc1f530fee798eed279dde60f95c2e1d155c0fdd361d0962ed",
+    name: "Purple Gift Talisman",
+    rarity: "epic",
+  },
+  GOLD_GIFT_TALISMAN: {
+    texture: "/head/abd98792dd92d9719894341ac9012a584c4428558fd2c712f78e5f0d4da85470",
+    name: "Gold Gift Talisman",
+    rarity: "legendary",
+  },
+  GLACIAL_TALISMAN: {
+    texture: "/head/b20b62faf12b91f4a8e149a2f9cb5f8d17443f51ec4d7d58f5967ecbbb2958",
+    name: "Glacial Talisman",
+    rarity: "common",
+  },
+  GLACIAL_RING: {
+    texture: "/head/9ce1ebc6c31efe5621142779a6c669221a271bae3b3115175bf03c976691",
+    name: "Glacial Ring",
+    rarity: "uncommon",
+  },
+  GLACIAL_ARTIFACT: {
+    texture: "/head/92c1a6b294aed49dbf11c589520886b9f5d53b32a8955adcd57e2de3b629a31",
+    name: "Glacial Artifact",
+    rarity: "rare",
+  },
+  KUUDRA_FOLLOWER_ARTIFACT: {
+    texture: "/head/772011280b5b9ab18c55703943e7f11a19717974bb9541ca4b2723f7a5fab236",
+    name: "Kuudra Follower Artifact",
+    rarity: "epic",
   },
 };
 

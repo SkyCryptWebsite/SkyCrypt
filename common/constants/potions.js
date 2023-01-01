@@ -1093,7 +1093,25 @@ export const POTION_EFFECTS = {
   WOLF_FUR: {
     1: {
       name: "Wolf Fur Mixin",
-      Description: `Gain +7 ${SYMBOLS.magic_find} Magic Find when slaying monsters in one hit!`,
+      description: `Gain +7 ${SYMBOLS.magic_find} Magic Find when slaying monsters in one hit!`,
+      bonus: {
+        magic_find: 7,
+      },
+    },
+  },
+  mushed_glowy_tonic: {
+    1: {
+      name: "Mushed Glowy Tonic",
+      description: `Grants ${SYMBOLS.fishing_speed} Fishing Speed.`,
+      bonus: {
+        fishing_speed: 30,
+      },
+    },
+  },
+  DEEPTERROR: {
+    1: {
+      name: "Deepterror Mixin",
+      description: `Gain +210 ${SYMBOLS.health} Health and +40 ${SYMBOLS.defense} Defense while in The End or Crimson Isle.`,
       bonus: {},
     },
   },

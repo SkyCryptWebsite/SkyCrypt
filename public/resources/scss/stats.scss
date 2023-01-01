@@ -587,6 +587,10 @@
   }
 }
 
+button.additional-player-stat {
+  cursor: pointer;
+}
+
 #reveal_socials {
   width: 29px;
   padding: 0;
@@ -1225,6 +1229,7 @@ a.additional-player-stat:hover {
 }
 
 .rich-item {
+  cursor: pointer;
   @media (hover: hover) {
     &::after {
       content: "";
