@@ -120,7 +120,7 @@ interface Item extends DisplayItem, ItemSlot {
   isInactive?: boolean;
   hegemony?: {
     rarity: string;
-  }
+  };
 }
 
 interface ItemTag {
@@ -426,9 +426,11 @@ declare const calculated: SkyCryptPlayer & {
     [key: string]: number;
   };
   levels: {
-    [key: string]: {
-      level: number
-    } | Level;
+    [key: string]:
+      | {
+          level: number;
+        }
+      | Level;
   };
   members: SkyCryptPlayer[];
   mining: {
@@ -606,11 +608,11 @@ declare const calculated: SkyCryptPlayer & {
     tag: {
       display: {
         Lore: string;
-      }
+      };
     };
     display_name: string;
     disabled: boolean;
-  }[],
+  }[];
   active_effects: {
     effect: string;
     level: number;

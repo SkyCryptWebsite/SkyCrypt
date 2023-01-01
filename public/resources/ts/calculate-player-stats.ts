@@ -240,11 +240,7 @@ export function getPlayerStats() {
 
   // Custom pet abilities
   const activePet = calculated.pets.find((a) => a.active === true) as Pet;
-  const petStats = getPetData(
-    stats,
-    activePet,
-    calculated
-  );
+  const petStats = getPetData(stats, activePet, calculated);
 
   Object.assign(stats, petStats.stats);
 
@@ -262,22 +258,31 @@ export function getPlayerStats() {
   for (const rarity of Object.keys(CONSTANTS.MAGICAL_POWER)) {
     const rarityNumber: number = parseInt(rarity);
     playerMagicalPower[rarityNumber] = 0;
-    playerMagicalPower[rarityNumber] += (CONSTANTS.MAGICAL_POWER as any)[rarity] * CONSTANTS.MAGICAL_POWER[rarity as keyof typeof CONSTANTS.MAGICAL_POWER];
+    playerMagicalPower[rarityNumber] +=
+      (CONSTANTS.MAGICAL_POWER as any)[rarity] *
+      CONSTANTS.MAGICAL_POWER[rarity as keyof typeof CONSTANTS.MAGICAL_POWER];
   }
 
   const mpTotal: number = Object.values(playerMagicalPower).reduce((a, b) => a + b);
 
   // ? Accessory reforge
-  if (calculated.selected_reforge && Object.keys(CONSTANTS.REFORGES).find((a) => a === calculated.selected_reforge.toString())) {
-    for (const [stat, value] of Object.entries((CONSTANTS as any).REFORGES[calculated.selected_reforge]?.reforge || {})) {
+  if (
+    calculated.selected_reforge &&
+    Object.keys(CONSTANTS.REFORGES).find((a) => a === calculated.selected_reforge.toString())
+  ) {
+    for (const [stat, value] of Object.entries(
+      (CONSTANTS as any).REFORGES[calculated.selected_reforge]?.reforge || {}
+    )) {
       const valueInt: number = parseFloat(value as string);
       stats[stat].reforge ??= 0;
       stats[stat].reforge += valueInt * mpTotal;
-    } 
+    }
 
     // ? Power Bonus from Reforge
     if ((CONSTANTS as any).REFORGES[calculated.selected_reforge].power_bonus !== undefined) {
-      for (const [stat, value] of Object.entries((CONSTANTS as any).REFORGES[calculated.selected_reforge].power_bonus)) {
+      for (const [stat, value] of Object.entries(
+        (CONSTANTS as any).REFORGES[calculated.selected_reforge].power_bonus
+      )) {
         stats[stat].reforge ??= 0;
         stats[stat].reforge += value as number;
       }
@@ -432,38 +437,45 @@ export function getPlayerStats() {
     stats.health.reaper_peppers = calculated.reaper_peppers_eaten;
   }
 
-
   if (healthMultiplier > 0) {
     stats.health.stats_multiplier ??= 0;
-    const totalHealth = Object.keys(stats.health).map((key) => stats.health[key as keyof ItemStats["health"]] ?? 0).reduce((a, b) => a + b, 0);
+    const totalHealth = Object.keys(stats.health)
+      .map((key) => stats.health[key as keyof ItemStats["health"]] ?? 0)
+      .reduce((a, b) => a + b, 0);
     stats.health.stats_multiplier = healthMultiplier > 0 ? totalHealth + totalHealth * healthMultiplier : 0;
   }
 
   if (ferocityMultiplier > 0) {
     stats.ferocity.stats_multiplier ??= 0;
-    const totalFerocity = Object.keys(stats.ferocity).map((key) => stats.ferocity[key as keyof ItemStats["ferocity"]] ?? 0).reduce((a, b) => a + b, 0);
+    const totalFerocity = Object.keys(stats.ferocity)
+      .map((key) => stats.ferocity[key as keyof ItemStats["ferocity"]] ?? 0)
+      .reduce((a, b) => a + b, 0);
     stats.ferocity.stats_multiplier = ferocityMultiplier > 0 ? totalFerocity + totalFerocity * ferocityMultiplier : 0;
   }
-  
+
   if (defenseMultiplier > 0) {
     stats.defense.stats_multiplier ??= 0;
-    const totalDefense = Object.keys(stats.defense).map((key) => stats.defense[key as keyof ItemStats["defense"]] ?? 0).reduce((a, b) => a + b, 0);
-    stats.defense.stats_multiplier = defenseMultiplier > 0 ? totalDefense + totalDefense * defenseMultiplier : 0;  
+    const totalDefense = Object.keys(stats.defense)
+      .map((key) => stats.defense[key as keyof ItemStats["defense"]] ?? 0)
+      .reduce((a, b) => a + b, 0);
+    stats.defense.stats_multiplier = defenseMultiplier > 0 ? totalDefense + totalDefense * defenseMultiplier : 0;
   }
 
   if (strengthMultiplier > 0) {
     stats.strength.stats_multiplier ??= 0;
-    const totalStrength = Object.keys(stats.strength).map((key) => stats.strength[key as keyof ItemStats["strength"]] ?? 0).reduce((a, b) => a + b, 0);
+    const totalStrength = Object.keys(stats.strength)
+      .map((key) => stats.strength[key as keyof ItemStats["strength"]] ?? 0)
+      .reduce((a, b) => a + b, 0);
     stats.strength.stats_multiplier = strengthMultiplier > 0 ? totalStrength + totalStrength * strengthMultiplier : 0;
   }
 
   if (bonusAttackSpeedMultiplier > 0) {
     stats.bonus_attack_speed.stats_multiplier ??= 0;
-    const totalBonusAttackSpeed = Object.keys(stats.bonus_attack_speed).map((key) => stats.bonus_attack_speed[key as keyof ItemStats["bonus_attack_speed"]] ?? 0).reduce((a, b) => a + b, 0);
+    const totalBonusAttackSpeed = Object.keys(stats.bonus_attack_speed)
+      .map((key) => stats.bonus_attack_speed[key as keyof ItemStats["bonus_attack_speed"]] ?? 0)
+      .reduce((a, b) => a + b, 0);
     stats.bonus_attack_speed.stats_multiplier =
-      bonusAttackSpeedMultiplier > 0
-        ? totalBonusAttackSpeed + totalBonusAttackSpeed * bonusAttackSpeedMultiplier
-        : 0;
+      bonusAttackSpeedMultiplier > 0 ? totalBonusAttackSpeed + totalBonusAttackSpeed * bonusAttackSpeedMultiplier : 0;
   }
 
   if (statsMultiplier > 0) {
@@ -471,7 +483,9 @@ export function getPlayerStats() {
       if (stat.includes("fortune" || stat == "pristine" || stat == "effective_health")) continue;
 
       stats[stat as keyof ItemStats].stat ??= 0;
-      const totalStat = Object.keys(stats[stat as keyof ItemStats]).map((key) => stats[stat as keyof ItemStats][key] ?? 0).reduce((a, b) => a + b, 0);
+      const totalStat = Object.keys(stats[stat as keyof ItemStats])
+        .map((key) => stats[stat as keyof ItemStats][key] ?? 0)
+        .reduce((a, b) => a + b, 0);
       stats[stat as keyof ItemStats].stat += totalStat * statsMultiplier;
     }
   }
@@ -484,8 +498,13 @@ export function getPlayerStats() {
 
   // Potion Effects
   for (const effect of calculated.active_effects) {
-    if (effect.effect === undefined || (CONSTANTS as any).POTION_EFFECTS[effect.effect as string][effect.level as number]?.bonus === undefined) continue;
-    for (const [stat, value] of Object.entries((CONSTANTS as any).POTION_EFFECTS[effect.effect][effect.level]?.bonus) || []) {
+    if (
+      effect.effect === undefined ||
+      (CONSTANTS as any).POTION_EFFECTS[effect.effect as string][effect.level as number]?.bonus === undefined
+    )
+      continue;
+    for (const [stat, value] of Object.entries((CONSTANTS as any).POTION_EFFECTS[effect.effect][effect.level]?.bonus) ||
+      []) {
       stats[stat].potion ??= 0;
       stats[stat].potion += value as number;
     }
@@ -640,7 +659,9 @@ function getPetData(stats: PlayerStats, pet: Pet, calculated: SkyCryptPlayer) {
   }
 
   if (pet.type == "BABY_YETI") {
-    const totalDefense = Object.keys(stats.defense).map((key) => stats.defense[key]).reduce((a, b) => a + b, 0);
+    const totalDefense = Object.keys(stats.defense)
+      .map((key) => stats.defense[key])
+      .reduce((a, b) => a + b, 0);
     if (pet.tier == "EPIC") {
       stats.defense.pet ??= 0;
       stats.defense.pet += totalDefense / (0.5 * pet.level.level);
@@ -782,7 +803,7 @@ function getPetData(stats: PlayerStats, pet: Pet, calculated: SkyCryptPlayer) {
   if (pet.type == "AMMONITE") {
     if (pet.tier == "LEGENDARY") {
       stats.sea_creature_chance.pet ??= 0;
-      calculated.hotm[0].display_name.split(" ")[1]
+      calculated.hotm[0].display_name.split(" ")[1];
     }
   }
 
