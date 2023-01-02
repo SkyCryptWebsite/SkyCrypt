@@ -31,4 +31,8 @@ export const SPECIAL_SETS = [
     pieces: ["ADAPTIVE_HELMET", "ADAPTIVE_CHESTPLATE", "ADAPTIVE_LEGGINGS", "ADAPTIVE_BOOTS"],
     name: "Adaptive Armor",
   },
+  {
+    pieces: ["TAURUS_HELMET", "FLAMING_CHESTPLATE", "MOOGMA_LEGGINGS", "SLUG_BOOTS"],
+    name: "Lava Sea Creature Armor",
+  },
 ];
