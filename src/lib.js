@@ -3381,6 +3381,8 @@ function getMiningCoreData(userProfile) {
     last_changed: data.current_daily_effect_last_changed || null,
   };
 
+  output.nodes = data.nodes || {};
+
   return output;
 }
 

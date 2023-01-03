@@ -1538,6 +1538,11 @@ const metaDescription = getMetaDescription()
               <span class="stat-name <%= max %>">Token of the Mountain:</span>
               <span class="stat-value <%= max %>"><%= mining.core.tokens.spent %>/<%= mining.core.tokens.total %></span>
               <br>
+              <!-- Peak of the Mountain -->
+              <% max = (mining.core.nodes["special_0"] || 0) === constants.MAX_PEAK_OF_THE_MOUNTAIN_LEVEL ? 'golden-text' : '' %>
+              <span class="stat-name <%= max %>">Peak of the Mountain:</span>
+              <span class="stat-value <%= max %>"><%= mining.core.nodes["special_0"] || 0 %>/<%= constants.MAX_PEAK_OF_THE_MOUNTAIN_LEVEL %></span>
+              <br>
               <!-- Mithril Powder -->
               <% max = mining.core.powder.mithril.total >= constants.HOTM.powder_for_max_nodes.mithril_powder ? 'golden-text' : '' %>
               <span class="stat-name <%= max %>">Mithril Powder:</span>
