@@ -2887,6 +2887,9 @@ class Bingo extends Pet {
     if (this.rarity >= LEGENDARY) {
       list.push(this.fifth);
     }
+    if (this.rarity >= MYTHIC) {
+      list.push(this.sixth);
+    }
     return list;
   }
 
@@ -2934,6 +2937,15 @@ class Bingo extends Pet {
           25 + this.level * mult,
           1
         )}% §7of their time.`,
+      ],
+    };
+  }
+
+  get sixth() {
+    return {
+      name: "§6Power Of Completion",
+      desc: [
+        `§7Gain §c+2 ${SYMBOLS.strength} Strength§7, §9+1 Crit Chance§7, and §c+5 ${SYMBOLS.health} Health §7per completed Personal Bingo Goal in the current Bingo Event.`,
       ],
     };
   }
