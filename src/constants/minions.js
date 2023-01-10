@@ -60,10 +60,12 @@ export const MINIONS = {
   ICE: {
     type: "mining",
     head: "/head/e500064321b12972f8e5750793ec1c823da4627535e9d12feaee78394b86dabe",
+    tiers: 12,
   },
   SNOW: {
     type: "mining",
     head: "/head/f6d180684c3521c9fc89478ba4405ae9ce497da8124fa0da5a0126431c4b78c3",
+    tiers: 12,
   },
   COAL: {
     type: "mining",

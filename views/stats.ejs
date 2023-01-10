@@ -256,7 +256,7 @@ function enrichmentToStatName(enrichment) {
 function getEnrichments(accessories) {
   const enrichmentCounts = {}
   const filteredAccessories = accessories
-    .filter(acc => ['legendary', 'mythic', 'divine', 'special', 'very_special'].includes(acc.rarity.toLowerCase()))
+    .filter(acc => ['legendary', 'mythic', 'divine', 'special', 'very_special'].includes(acc.rarity?.toLowerCase()))
 
   if (filteredAccessories.length > 0) {
     filteredAccessories.forEach(acc => {
@@ -839,61 +839,47 @@ const metaDescription = getMetaDescription()
           <span class='stat-name'><%= 'Networth' %></span><br>
           <span class='stat-info'>Networth calculations by SkyHelper</span>
           <br/><br/>
-          <span class='stat-name'>Purse: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.purse.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Bank: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.bank.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Sacks: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.sacks.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Armor: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.armor.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Equipment: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.equipment.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Wardrobe: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.wardrobe.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Inventory: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.inventory.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Ender Chest: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.enderchest.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Accessories: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.accessories.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Personal Vault: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.sacks.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Storage: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.storage.total.toFixed(2))) %>
-          </span><br/>
-          <span class='stat-name'>Pets: </span>
-          <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.types.pets.total.toFixed(2))) %>
-          </span><br/><br/>
+
+          <%
+          const networth_values = {
+            purse: "Purse",
+            bank: "Bank",
+            sacks: "Sacks",
+            armor: "Armor",
+            equipment: "Equipment",
+            wardrobe: "Wardrobe",
+            inventory: "Inventory",
+            enderchest: "Ender Chest",
+            accessories: "Accessories",
+            personal_vault: "Personal Vault",
+            storage: "Storage",
+            pets: "Pets",
+            fishing_bag: "Fishing Bag",
+            potion_bag: "Potion Bag",
+            candy_inventory: "Candy Bag"
+          }
+
+          for (const [key, name] of Object.entries(networth_values)) {
+            let value = key == "sacks" ? parseFloat(((calculated.networth.types.sacks?.total ?? 0) + (calculated.networth.types.essence?.total ?? 0)).toFixed(2)) :
+                        key == "purse" ? parseFloat((calculated.purse ?? 0).toFixed(2)) :
+                        key == "bank" ? parseFloat((calculated.bank ?? 0).toFixed(2)) :
+                        parseFloat((calculated.networth.types[key]?.total ?? 0).toFixed(2));
+
+            if (value > 0) { %>
+              <span class='stat-name'><%= name %>: </span>
+              <span class='stat-value'>
+              <%= helper.formatNumber(value) %>
+              </span><br/>
+            <% } %>
+          <% } %>
+          <br/>
           <span class='stat-name'>Unsoulbound Networth: </span>
           <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.unsoulboundNetworth.toFixed(2))) %>
+          <%= helper.formatNumber(parseFloat(calculated.networth.unsoulboundNetworth.toFixed(2))) %></span>
           </span><br/>
           <span class='stat-name'>Total Networth: </span>
           <span class='stat-value'>
-          <%= helper.formatNumber(parseFloat(calculated.networth.networth.toFixed(2))) %></span>
+          <%= Math.floor(calculated.networth.networth).toLocaleString() %> (<%= helper.formatNumber(parseFloat(calculated.networth.networth.toFixed(2))) %>)</span>
           </span><br/>
         ">
           <span class="stat-name">Networth: </span>
@@ -1119,7 +1105,7 @@ const metaDescription = getMetaDescription()
                 }
 
                 const mp_hegemony = rarities.hegemony ? constants.MAGICAL_POWER[rarities.hegemony.rarity] : 0
-                const mp_total = Object.values(player_magical_power).reduce((a, b) => a + b) + mp_hegemony + Math.floor(Object.keys(calculated.abiphone).length / 2);
+                const mp_total = Object.values(player_magical_power).reduce((a, b) => a + b) + mp_hegemony + Math.floor(calculated.abiphone.active / 2);
               %>
             <span data-tippy-content="
               Accessories Breakdown<br>
@@ -1136,8 +1122,8 @@ const metaDescription = getMetaDescription()
               <% if(rarities.hegemony) { %>
                 <span style='color: var(--§<%= constants.RARITY_COLORS[rarities.hegemony.rarity] %>);' class='grey-text'>Hegemony Artifact</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_hegemony.toLocaleString() %> MP</span><br>
               <% } %>
-              <% if (rarities.abicase && Math.floor(Object.keys(calculated.abiphone).length / 2) > 0) {%>
-                <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Abicase</span> = <span style='color: var(--§6);' class='grey-text'>+<%= Math.floor(Object.keys(calculated.abiphone).length / 2).toLocaleString() %> MP</span><br>
+              <% if (rarities.abicase && Math.floor(calculated.abiphone.active / 2) > 0) {%>
+                <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Abicase</span> = <span style='color: var(--§6);' class='grey-text'>+<%= Math.floor(calculated.abiphone.active / 2).toLocaleString() %> MP</span><br>
               <% } %>
               <br>
               Total: <span style='color: var(--§6);' class='grey-text'><%= mp_total.toLocaleString() %> Magical Power</span>
@@ -1176,27 +1162,34 @@ const metaDescription = getMetaDescription()
             <% }) %>
           </div>
           <% } %>
-          <% if(calculated.missingAccessories.missing.length > 0 || calculated.missingAccessories.upgrades.length > 0){ %>
-          <% if(items.accessories.length == 1){ %>
-          <br>
-          <% } %>
-          <button class="stat-sub-header extender" aria-controls="missing-accessories" aria-expanded="false">Missing Accessories</button>
-          <div class="pieces extendable" id="missing-accessories">
-            <br>
-            <p class="stat-sub-header">Missing Accessories<span data-tippy-content='Missing accessories that are <strong>not</strong> upgrades of another accessory.'></span></p>
-            <% for(const [index, accessory] of calculated.missingAccessories.missing.entries()){ %>
-            <div tabindex="0" data-missing-accessory-index="<%= index %>" class="rich-item piece piece-<%= accessory.rarity %>-bg missing-accessory">
-              <div style='background-image: url("<%= accessory.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
-            </div>
+          <% if(calculated.missingAccessories.missing.length > 0 || calculated.missingAccessories.upgrades.length > 0) {
+            <!-- Why does this exist? Won't touch it -->
+            if(items.accessories.length == 1) %> <br>
+
+            <button class="stat-sub-header extender" aria-controls="missing-accessories" aria-expanded="false">Missing Accessories</button>
+            <div class="pieces extendable" id="missing-accessories">
+              <br>
+
+              <% if(calculated.missingAccessories.missing.length > 0) { %>
+                <p class="stat-sub-header">Missing Accessories<span data-tippy-content='Missing accessories that are <strong>not</strong> upgrades of another accessory.'></span></p>
+                <% for(const [index, accessory] of calculated.missingAccessories.missing.entries()){ %>
+                  <div tabindex="0" data-missing-accessory-index="<%= index %>" class="rich-item piece piece-<%= accessory.rarity %>-bg missing-accessory">
+                    <div style='background-image: url("<%= accessory.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                  </div>
+                <% } %>
+              <% } %>
+
+              <% if (calculated.missingAccessories.upgrades.length > 0) { %>
+                <p class="stat-sub-header">Missing Accessory Upgrades<span data-tippy-content='Missing accessories that are upgrades of a lower tier accessory.'></span></p>
+                <% for(const [index, accessory] of calculated.missingAccessories.upgrades.entries()){ %>
+                  <div tabindex="0" data-upgrade-accessory-index="<%= index %>" class="rich-item piece piece-<%= accessory.rarity %>-bg missing-accessory">
+                    <div style='background-image: url("<%= accessory.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                  </div>
+                <% } %>
+              <% } %>
+
+              </div>
             <% } %>
-            <p class="stat-sub-header">Missing Accessory Upgrades<span data-tippy-content='Missing accessories that are upgrades of a lower tier accessory.'></span></p>
-            <% for(const [index, accessory] of calculated.missingAccessories.upgrades.entries()){ %>
-            <div tabindex="0" data-upgrade-accessory-index="<%= index %>" class="rich-item piece piece-<%= accessory.rarity %>-bg missing-accessory">
-              <div style='background-image: url("<%= accessory.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
-            </div>
-            <% } %>
-          </div>
-          <% } %>
           <% } %>
         </div>
       </div>
@@ -1460,9 +1453,13 @@ const metaDescription = getMetaDescription()
             <p class="stat-sub-header">Dwarven Mines & Crystal Hollows</p>
             <p class="stat-raw-values">
               <!-- Commissions Milestone -->
-              <% max = mining.commissions.milestone == 5 ? 'golden-text' : '' %>
+              <% max = mining.commissions.milestone == constants.COMMISSIONS_MILESTONE ? 'golden-text' : '' %>
               <span class="stat-name <%= max %>">Commissions Milestone:</span>
               <span class="stat-value <%= max %>"><%= mining.commissions.milestone.toLocaleString() %></span>
+              <br>
+              <!-- Commission Completions -->
+              <span class="stat-name">Commissions:</span>
+              <span class="stat-value" data-tippy-content="Commissions from achievements across profiles"><%= mining.commissions.completions.toLocaleString() %></span>
               <br>
               <!-- Crystal Hollows Pass -->
               <% const chpass = mining.core.crystal_hollows_last_access > Date.now() - 5*60*60*1000 %>
@@ -2453,7 +2450,32 @@ const metaDescription = getMetaDescription()
             </div>
             <% } %>
           </div>
+          <button class="stat-sub-header extender" aria-controls="essence-shop" aria-expanded="false">Essence Shop</button>
+          <div class="essence-shop extendable" id="essence-shop">
+            <div>
+              <% for (const essence of Object.keys(constants.ESSENCE_SHOP)) { %>
+                <div class="category-icon">
+                  <div style="background-image:url('<%= constants.ESSENCE[essence].head %>')" class="item-icon custom-icon"></div>
+                </div>
+                <span class="stat-sub-header"><%= helper.capitalizeFirstLetter(essence) %> Shop</span><br>
+                <br>
 
+                <% for (const perk of Object.keys(constants.ESSENCE_SHOP[essence])) {
+                  const essenceShop = constants.ESSENCE_SHOP[essence][perk];
+                  const playerPerk = Object.keys(calculated.perks).find(p => p === perk);
+                  %>
+
+                  <div class="chip-text">
+                    <span data-tippy-content="<%= essenceShop.description %>">
+                      <% max = calculated.perks[playerPerk] >= essenceShop.maxLevel ? 'golden-text' : '' %>
+                      <span class="stat-name <%= max %>"><%= essenceShop.name %>: </span><span class="stat-value <%= max %>"><%= calculated.perks[playerPerk] || 0 %></span>
+                    </span><br>
+                  </div>
+                <% } %>
+                <br>
+              <% } %>
+            </div>
+          </div>
           <% if(calculated.kills.length > 0 || calculated.deaths.length > 0){
           let totalKills = calculated.kills.length;
           let totalDeaths = calculated.deaths.length;
@@ -2769,6 +2791,48 @@ const metaDescription = getMetaDescription()
             <% } %>
           </p>
           <% } %>
+
+          <% if('effects' in calculated.misc){ 
+            if (Object.keys(calculated.misc.effects).some((key) => Object.keys(calculated.misc.effects[key]).length > 0)) { %>
+              <div class="category-header">
+                <div class="category-icon">
+                  <div class="item-icon custom-icon" style="background-image: url(/head/60226d4c1d30fbebecae939da900603e4cd0fed8592a1bb3e11f9ac92391a45a)"></div>
+                </div>
+                <span>Potions</span>
+              </div>
+              <% 
+              let effects_tooltips = [];
+              for (const key of Object.keys(calculated.misc.effects).sort()) {
+                effects_tooltips[key] ??= [];
+                for (let potion of calculated.misc.effects[key]) {
+                  if (key === "active") {
+                    if (potion?.effect === undefined || potion?.level === null) continue;
+                    effects_tooltips[key].push(`<span class="stat-value">${constants.POTION_EFFECTS[potion.effect]?.[potion.level].name.replace('Potion', '') || potion.effect.split('_').map((effect) => helper.capitalizeFirstLetter(effect.toLowerCase())).join(' ')}</span><br>`)
+                  
+                  } else {
+                    potion = potion?.effect || potion
+
+                    effects_tooltips[key].push(`<span class="stat-value">${potion.split('_').map((effect) => helper.capitalizeFirstLetter(effect.toLowerCase())).join(' ')}</span><br>`);
+                  }
+                }
+              }
+              %>
+              <p class="stat-raw-values">
+                <span <%- effects_tooltips['active'] ? `data-tippy-content='<span class="stat-name">Active Potion Effects: :</span><br>${effects_tooltips['active'].join("")}'` : "" %>>
+                  <span class="stat-name">Active Potion Effects: </span><span class="stat-value"><%= calculated.misc.effects.active.length %></span>
+                </span><br>
+        
+                <span <%- effects_tooltips['paused'] ? `data-tippy-content='<span class="stat-name">Paused Potion Effects: </span><br>${effects_tooltips['paused'].join("")}'` : "" %>>
+                  <span class="stat-name">Paused Potion Effects: </span><span class="stat-value"><%= calculated.misc.effects.paused.length %></span>
+                </span><br>
+
+                <span <%- effects_tooltips['disabled'] ? `data-tippy-content='<span class="stat-name">Disabled Potion Effects: </span><br>${effects_tooltips['disabled'].join("")}'` : "" %>>
+                  <span class="stat-name">Disabled Potion Effects: </span><span class="stat-value"><%= calculated.misc.effects.disabled.length %></span>
+                </span><br>
+              </p>
+            <% } %>
+          <% } %>
+
           <% if('profile_upgrades' in calculated.misc){ %>
           <div class="category-header">
             <div class="category-icon">
@@ -2842,8 +2906,9 @@ const metaDescription = getMetaDescription()
           </div>
           <p class="stat-raw-values">
             <% for (const [key, value] of Object.entries(calculated.misc.uncategorized)) { %>
-            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
-            <span class="stat-value"><%= value.formatted %></span><br>
+              <% max = key === "reaper_peppers_eaten" && value.raw === constants.MAX_REAPER_PEPPERS_EATEN ? 'golden-text': '' %>
+              <span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value <%= max %>"><%= value.formatted %> </span>
+              <br>
             <% } %>
           </p>
           <% } %>
