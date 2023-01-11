@@ -1674,7 +1674,7 @@ export async function getStats(
     output.missingAccessories.missing =
       PARTY_HAT_CRAB === true
         ? output.missingAccessories.missing.filter((accessory) => accessory.name.startsWith("PARTY_HAT_CRAB") === false)
-        : output.missingAccessories.missing.entries();
+        : output.missingAccessories.missing;
   }
 
   output.base_stats = Object.assign({}, output.stats);
