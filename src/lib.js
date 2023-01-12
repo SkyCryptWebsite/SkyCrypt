@@ -726,7 +726,10 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       }
 
       if (item.tag?.ExtraAttributes?.id === "PET") {
-        item.tag.ExtraAttributes.petInfo = typeof item.tag.ExtraAttributes.petInfo === "string" ? JSON.parse(item.tag.ExtraAttributes.petInfo) : item.tag.ExtraAttributes.petInfo;
+        item.tag.ExtraAttributes.petInfo =
+          typeof item.tag.ExtraAttributes.petInfo === "string"
+            ? JSON.parse(item.tag.ExtraAttributes.petInfo)
+            : item.tag.ExtraAttributes.petInfo;
       }
     }
 
