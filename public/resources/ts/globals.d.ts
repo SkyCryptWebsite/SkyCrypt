@@ -569,6 +569,7 @@ declare const calculated: SkyCryptPlayer & {
     amount: number;
   }[];
   reaper_peppers_eaten: number;
+  skyblock_level: Level;
 };
 
 interface SkyCryptRelativeTime {

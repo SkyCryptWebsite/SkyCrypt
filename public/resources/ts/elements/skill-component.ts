@@ -10,7 +10,7 @@ export class SkillComponent extends LitElement {
   skill?: string;
 
   @property({ attribute: "type" })
-  type?: "skill" | "dungeon" | "dungeon_class";
+  type?: "skill" | "dungeon" | "dungeon_class" | "skyblock_level";
 
   @property({ attribute: "icon" })
   icon = "icon-166_0";
@@ -89,6 +89,9 @@ export class SkillComponent extends LitElement {
 
       case "dungeon_class":
         return calculated.dungeons.classes[this.skill].experience;
+
+      case "skyblock_level":
+        return calculated.skyblock_level;
 
       default:
         return undefined;
