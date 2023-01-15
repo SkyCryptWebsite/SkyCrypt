@@ -1,0 +1,6 @@
+{
+	"parent": "item/block",
+	"textures": {
+		"0": "./personal_compactor_7000"
+	}
+}

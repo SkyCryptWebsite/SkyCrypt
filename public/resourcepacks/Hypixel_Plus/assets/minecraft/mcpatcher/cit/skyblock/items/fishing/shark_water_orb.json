@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "./water_orb_water",
+        "layer1": "./shark_water_orb"
+    }
+}

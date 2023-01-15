@@ -1,0 +1,7 @@
+{
+	"parent": "item/handheld_gauntlet",
+	"textures": {
+		"0": "./great_spook_gloves_hand",
+		"1": "./great_spook_gloves"
+	}
+}
