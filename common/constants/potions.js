@@ -1115,4 +1115,12 @@ export const POTION_EFFECTS = {
       bonus: {},
     },
   },
+  goblin_king_scent: {
+    1: {
+      name: "Goblin King Scent",
+      description:
+        "Allows the player to sneak into the main area of the Goblin Queen's Den behind the Queen's Guards to obtain the Amber Crystal.",
+      bonus: {},
+    },
+  },
 };

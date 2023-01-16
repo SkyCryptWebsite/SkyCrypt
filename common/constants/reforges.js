@@ -250,7 +250,7 @@ export const REFORGES = {
       crit_damage: 50,
     },
     reforge: {
-      strenght: 53 / 250,
+      strength: 53 / 250,
       intelligence: 267 / 250,
     },
   },
@@ -304,7 +304,7 @@ export const REFORGES = {
     name: "Hazmat Enderman",
     power_bonus: {
       defense: 100,
-      strenght: 50,
+      strength: 50,
     },
     reforge: {
       speed: 6 / 250,
@@ -312,7 +312,7 @@ export const REFORGES = {
       crit_damage: 58 / 250,
       health: 81 / 250,
       defense: 58 / 250,
-      strenght: 58 / 250,
+      strength: 58 / 250,
       intelligence: 87 / 250,
     },
   },

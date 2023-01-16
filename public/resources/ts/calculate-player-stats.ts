@@ -169,6 +169,8 @@ export function getPlayerStats() {
       for (const [stat, value] of Object.entries(
         CONSTANTS.CUSTOM_ARMOR_ABILTIES[armorSet as keyof typeof CONSTANTS.CUSTOM_ARMOR_ABILTIES].bonus
       )) {
+        if (stat.endsWith("Multiplier")) continue;
+
         stats[stat].armor ??= 0;
         if (stat.includes("_cap")) {
           stats[stat].armor = value;
@@ -500,9 +502,13 @@ export function getPlayerStats() {
   for (const effect of calculated.active_effects) {
     if (
       effect.effect === undefined ||
-      (CONSTANTS as any).POTION_EFFECTS[effect.effect as string][effect.level as number]?.bonus === undefined
-    )
+      (CONSTANTS as any).POTION_EFFECTS[effect.effect as string]?.[effect.level as number]?.bonus === undefined
+    ) {
+      console.log("If you're seeing this, please report this to the developer, thanks.");
+      console.log("Potion effect data:");
+      console.log(effect);
       continue;
+    }
     for (const [stat, value] of Object.entries((CONSTANTS as any).POTION_EFFECTS[effect.effect][effect.level]?.bonus) ||
       []) {
       stats[stat].potion ??= 0;

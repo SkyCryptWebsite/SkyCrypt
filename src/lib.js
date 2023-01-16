@@ -1833,7 +1833,7 @@ export async function getStats(
   output.harp_quest = userProfile.harp_quest;
   output.hotm = "mining_core" in userProfile ? await getHotmItems(userProfile) : [];
   output.active_effects = userProfile.active_effects || [];
-  output.selected_reforge = userProfile.accessory_bag_storage.selected_power || null;
+  output.selected_reforge = userProfile.accessory_bag_storage?.selected_power || null;
 
   output.essence = getEssence(userProfile, hypixelProfile);
 
