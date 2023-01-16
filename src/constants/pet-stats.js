@@ -81,7 +81,7 @@ class Pet {
           list.push(`§7Speed: ${formatStat(newStats[stat])}`);
           break;
         case "bonus_attack_speed":
-          list.push(`§7Bonus Attack Speed: ${formatStat(newStats[stat])}`);
+          list.push(`§7Bonus Attack Speed: ${formatStat(newStats[stat])}%`);
           break;
         case "sea_creature_chance":
           list.push(`§7Sea Creature Chance: ${formatStat(newStats[stat])}%`);
@@ -994,13 +994,11 @@ class GoldenDragon extends Pet {
   get stats() {
     const stats = {};
     if (this.level >= 100) {
-      stats.strength =
-        round(25 + Math.max(0, this.level - 100) * 0.25, 0) +
-        10 * Math.max(Math.floor(Math.log10(Math.abs(this.profile?.collections?.GOLD_INGOT?.totalAmount || 0))), 0);
+      const goldCollectionDigits = Math.max(this.profile?.collections?.GOLD_INGOT?.totalAmount.toString().length, 0);
+
+      stats.strength = round(25 + Math.max(0, this.level - 100) * 0.25, 0) + 10 * goldCollectionDigits;
       stats.bonus_attack_speed = round(25 + Math.max(0, this.level - 100) * 0.25, 0);
-      stats.magic_find =
-        round(25 + Math.max(0, this.level - 100) * 0.25, 0) +
-        2 * Math.max(Math.floor(Math.log10(Math.abs(this.profile?.collections?.GOLD_INGOT?.totalAmount || 0))), 0);
+      stats.magic_find = round(5 + Math.max(0, (this.level - 100) / 10) * 0.5, 0) + 2 * goldCollectionDigits;
     }
     return stats;
   }
