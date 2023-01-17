@@ -2393,12 +2393,13 @@ const metaDescription = getMetaDescription()
           <% } %>
         </div>
         <% } %>
-
+w
         <% function getDojoRank(points) {
             if (points >= 1000) return 'S'
             if (points >= 800) return 'A'
-            if (points >= 600) return 'C'
-            if (points >= 400) return 'D'
+            if (points >= 600) return 'B'
+            if (points >= 400) return 'C'
+            if (points >= 200) return 'D'
             return 'F'
           }
         if (Object.keys(calculated.crimsonIsles.dojo).length > 0) { %>
