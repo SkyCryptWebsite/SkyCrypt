@@ -2945,15 +2945,17 @@ class Wisp extends Pet {
     const healthMultiplier = getValue(this.rarity, { uncommon: 1, rare: 2.5, epic: 4, legendary: 6 });
     const intelligenceMultiplier = getValue(this.rarity, { rare: 0.5, epic: 1.25, legendary: 2.5 });
 
-    return this.rarity >= RARE
-      ? {
-          true_defense: this.level * trueDefenseMultiplier,
-          health: this.level * healthMultiplier,
-          intelligence: this.level * intelligenceMultiplier,
-        }
-      : {
-          health: this.level * healthMultiplier,
-        };
+    if (this.rarity <= UNCOMMON) {
+      return {
+        health: this.level * healthMultiplier,
+      };
+    } else {
+      return {
+        true_defense: this.level * trueDefenseMultiplier,
+        health: this.level * healthMultiplier,
+        intelligence: this.level * intelligenceMultiplier,
+      };
+    }
   }
 
   get abilities() {
