@@ -2996,7 +2996,7 @@ class Wisp extends Pet {
       { kills: 200000, defense: 600, true_defense: 60 },
     ];
 
-    const blazeKills = this.extra?.blazeKills ?? 0;
+    const blazeKills = this.extra?.blaze_kills ?? 0;
 
     let maxTier = false;
     let bonusIndex = BONUSES.findIndex((x) => x.kills > blazeKills);
