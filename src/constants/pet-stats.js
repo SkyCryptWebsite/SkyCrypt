@@ -3028,7 +3028,7 @@ class Wisp extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { uncommon: 0.3, rare: 0.4, epic: 0.45, legendary: 50 });
+    const mult = getValue(this.rarity, { uncommon: 0.3, rare: 0.4, epic: 0.45, legendary: 0.5 });
     const prc = round(this.level * mult, 1);
 
     return {
