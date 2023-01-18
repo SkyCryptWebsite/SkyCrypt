@@ -2941,11 +2941,19 @@ class Bingo extends Pet {
 
 class Wisp extends Pet {
   get stats() {
-    return {
-      true_defense: this.level * 0.1 + 5,
-      health: this.level * 1,
-      intelligence: this.level * 0.5,
-    };
+    const trueDefenseMultiplier = getValue(this.rarity, { rare: 0.15, epic: 0.3, legendary: 0.35 });
+    const healthMultiplier = getValue(this.rarity, { uncommon: 1, rare: 2.5, epic: 4, legendary: 6 });
+    const intelligenceMultiplier = getValue(this.rarity, { rare: 0.5, epic: 1.25, legendary: 2.5 });
+
+    return this.rarity >= RARE
+      ? {
+          true_defense: this.level * trueDefenseMultiplier,
+          health: this.level * healthMultiplier,
+          intelligence: this.level * intelligenceMultiplier,
+        }
+      : {
+          health: this.level * healthMultiplier,
+        };
   }
 
   get abilities() {
@@ -3020,7 +3028,7 @@ class Wisp extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { uncommon: 0.3, rare: 0.4, epic: 0.45, legenedary: 50 });
+    const mult = getValue(this.rarity, { uncommon: 0.3, rare: 0.4, epic: 0.45, legendary: 50 });
     const prc = round(this.level * mult, 1);
 
     return {
