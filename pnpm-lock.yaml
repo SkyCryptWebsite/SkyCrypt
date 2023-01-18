@@ -56,7 +56,7 @@ specifiers:
   sharp: ^0.30.7
   sitemap: ^7.1.1
   skinview3d: ^2.2.1
-  skyhelper-networth: ^1.8.5
+  skyhelper-networth: 1.9.0
   tippy.js: ^6.3.7
   ts-lit-plugin: ^1.2.1
   twemoji: ^14.0.2
@@ -98,7 +98,7 @@ dependencies:
   sharp: 0.30.7
   sitemap: 7.1.1
   skinview3d: 2.2.1
-  skyhelper-networth: 1.8.5
+  skyhelper-networth: 1.9.0
   tippy.js: 6.3.7
   twemoji: 14.0.2
   upng-js: 2.1.0
@@ -4089,8 +4089,8 @@ packages:
       three: 0.136.0
     dev: false
 
-  /skyhelper-networth/1.8.5:
-    resolution: {integrity: sha512-Thr4JV0uI+CZKUUyFAYVFiVMXCgeNqK02bbhA1dmPfWOZB+slZRTZcUKcxRlo4nCC0lK2xNMupWZHHyQVdEzYw==}
+  /skyhelper-networth/1.9.0:
+    resolution: {integrity: sha512-Kke8+ZC+T3+RHwGvBroZyrMkzQ7vqpykZn0Br/qy4GNPbnJoi5mNlN4YvsJfS0Js1k25QZA1UUuzpJdaBiAvpQ==}
     dependencies:
       axios: 0.27.2
       prismarine-nbt: 2.2.1
