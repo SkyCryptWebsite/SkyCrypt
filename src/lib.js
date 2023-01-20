@@ -2531,6 +2531,11 @@ export async function getPets(profile, userProfile) {
         }
       }
 
+      // push specific pet lore before stats added
+      if (constants.PET_DATA[pet.type]?.subLore !== undefined) {
+        lore.push(constants.PET_DATA[pet.type].subLore, " ")
+      }
+
       // push pet lore after held item stats added
       const stats = pet.ref.lore(pet.stats);
       stats.forEach((line) => {

@@ -139,6 +139,7 @@ export const PET_DATA = {
     maxLevel: 100,
     emoji: "🦓",
     category: "Mount",
+    subLore: "§7Run around town on your scary, yet trusty, steed!",
   },
   WOLF: {
     head: "/head/dc3dd984bb659849bd52994046964c22725f717e986b12d548fd169367d494",
@@ -212,6 +213,7 @@ export const PET_DATA = {
     maxTier: "legendary",
     maxLevel: 100,
     emoji: "⛄",
+    subLore: "§7Fight alongside your pet Snowman!",
   },
   TURTLE: {
     head: "/head/212b58c841b394863dbcc54de1c2ad2648af8f03e648988c1f9cef0bc20ee23c",
