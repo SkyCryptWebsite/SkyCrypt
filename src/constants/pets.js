@@ -412,10 +412,15 @@ export const PET_DATA = {
   RAT: {
     head: "/head/a8abb471db0ab78703011979dc8b40798a941f3a4dec3ec61cbeec2af8cffe8",
     type: "combat",
-    maxTier: "legendary",
+    maxTier: "mythic",
     maxLevel: 100,
     emoji: "🐀",
     category: "Morph",
+    upgrades: {
+      mythic: {
+        head: "/head/250de7097d939e447ca2d398441cba1d2a5e1a69052ac99c19ff20ad5a3f01ab",
+      },
+    },
   },
   BAL: {
     head: "/head/c469ba2047122e0a2de3c7437ad3dd5d31f1ac2d27abde9f8841e1d92a8c5b75",

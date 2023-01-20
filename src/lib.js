@@ -2466,6 +2466,11 @@ export async function getPets(profile, userProfile) {
       pet.texture_path = petData.hatching.head;
     }
 
+    // eslint-disable-next-line no-prototype-builtins
+    if (pet.rarity in (petData?.upgrades || {})) {
+      pet.texture_path = petData.upgrades[pet.rarity]?.head || pet.texture_path;
+    }
+
     let petSkin = null;
     if (pet.skin && constants.PET_SKINS?.[`PET_SKIN_${pet.skin}`]) {
       pet.texture_path = constants.PET_SKINS[`PET_SKIN_${pet.skin}`].texture;
@@ -2533,7 +2538,7 @@ export async function getPets(profile, userProfile) {
 
       // push specific pet lore before stats added
       if (constants.PET_DATA[pet.type]?.subLore !== undefined) {
-        lore.push(constants.PET_DATA[pet.type].subLore, " ")
+        lore.push(constants.PET_DATA[pet.type].subLore, " ");
       }
 
       // push pet lore after held item stats added

@@ -2435,7 +2435,7 @@ class BlueWhale extends Pet {
 class Ammonite extends Pet {
   get stats() {
     return {
-      sea_creature_chance: this.level * 0.05,
+      sea_creature_chance: this.level * 0.05 + (this.profile?.mining?.core?.tier?.level || 0),
     };
   }
 
@@ -2449,7 +2449,7 @@ class Ammonite extends Pet {
     return {
       name: "§6Heart of the Sea",
       desc: [
-        `§7Grants §3+${round(this.level * mult, 2)}${
+        `§7Grants §3+${round(this.level * mult, 2)} ${
           SYMBOLS.sea_creature_chance
         } Sea Creature Chance §7to your pet for each §5Heart of the Mountain §7level.`,
       ],
