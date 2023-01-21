@@ -1445,5 +1445,3 @@ export const PRECURSOR_PARTS = {
 };
 
 export const COMMISSIONS_MILESTONE = 6;
-
-export const COMMISSIONS_MILESTONE_COMPLETIONS = 750;

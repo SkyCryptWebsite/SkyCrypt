@@ -1458,9 +1458,8 @@ const metaDescription = getMetaDescription()
               <span class="stat-value <%= max %>"><%= mining.commissions.milestone.toLocaleString() %></span>
               <br>
               <!-- Commission Completions -->
-              <% max = mining.commissions.completions >= constants.COMMISSIONS_MILESTONE_COMPLETIONS ? 'golden-text' : '' %>
-              <span class="stat-name <%= max %>">Commissions:</span>
-              <span class="stat-value <%= max %>" data-tippy-content="Commissions from achievements across profiles"><%= mining.commissions.completions.toLocaleString() %></span>
+              <span class="stat-name">Commissions:</span>
+              <span class="stat-value" data-tippy-content="Commissions from achievements across profiles"><%= mining.commissions.completions.toLocaleString() %></span>
               <br>
               <!-- Crystal Hollows Pass -->
               <% const chpass = mining.core.crystal_hollows_last_access > Date.now() - 5*60*60*1000 %>
