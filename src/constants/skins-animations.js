@@ -778,7 +778,7 @@ const SKINS = [
   },
   {
     id: "PET_SKIN_GRIFFIN_REINDRAKE",
-    name: "Reindrak",
+    name: "Reindrake",
     texture: "/head/70beb4c7f5f8d14be3a04f6fa3573fa8bd59ea2236b66f05fba57c678ca37776",
     source: "firesale",
     release: new Date("2022-12-24 18:00:00 GMT+1").getTime(),
