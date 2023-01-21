@@ -771,10 +771,52 @@ const SKINS = [
   },
   {
     id: "PET_SKIN_ROCK_NORTH_STAR",
-    name: "North Star Rock",
+    name: "North Star",
     texture: "/head/45f5cab199508725ea2bbe3ed2d84b891c5d8b7ee7eaedc69e67196dc6fee3d9",
     source: "advent_calendar",
     release: new Date("2022-12-25 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_GRIFFIN_REINDRAKE",
+    name: "Reindrak",
+    texture: "/head/70beb4c7f5f8d14be3a04f6fa3573fa8bd59ea2236b66f05fba57c678ca37776",
+    source: "firesale",
+    release: new Date("2022-12-24 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_REINDEER_AURORA",
+    name: "Aurora",
+    texture: "/head/39f88de3aa15a64da4fe190ae1d674cfcafd4fbf4c29855c87671bd741625cc6",
+    source: "firesale",
+    release: new Date("2022-12-24 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "WITHER_GOGGLES_CELESTIAL",
+    name: "Celestial",
+    texture: "/head/dc1e2d4bd39ea253dda6a36f6bc352f69ef169facc2b767798c1816aaf70f498",
+    source: "firesale",
+    release: new Date("2023-01-13 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "WITHER_GOGGLES_CYBERPUNK",
+    name: "Cyberpunk",
+    texture: "/head/84046578650f0b44e6dc570555d61163be03201b717bd9f758244f83d941ffd2",
+    source: "firesale",
+    release: new Date("2023-01-13 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_RABBIT_LUNAR",
+    name: "Lunar",
+    texture: "/head/71e3f67fb39b2a1e01426aa091c5a6666b237286eb1c4c5fcbca505dfe1dbdc3",
+    source: "firesale",
+    release: new Date("2023-01-22 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "LUNAR_RABBIT_HAT",
+    name: "Lunar",
+    texure: "/head/550ce17991dcf18ce223cdf2103025a18b9d1750db2ad0924d6186b18dacb288",
+    source: "firesale",
+    release: new Date("2023-01-22 18:00:00 GMT+1").getTime(),
   },
 ];
 
