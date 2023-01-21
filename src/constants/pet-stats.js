@@ -1154,7 +1154,11 @@ class Ghoul extends Pet {
     const mult = getValue(this.rarity, { epic: 0.25 });
     return {
       name: "§6Amplified Healing",
-      desc: [`§7Grants §4${round(this.level * mult, 1)} ${SYMBOLS.vitality}§7, which increases your incoming healing.`],
+      desc: [
+        `§7Grants §4${round(this.level * mult, 1)} ${
+          SYMBOLS.vitality
+        } Vitality§7, which increases your incoming healing.`,
+      ],
     };
   }
 
