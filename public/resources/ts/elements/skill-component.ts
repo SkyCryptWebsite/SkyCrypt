@@ -62,7 +62,7 @@ export class SkillComponent extends LitElement {
       </div>
       <div class="skill-bar" data-skill="${skillName}">
         <div class="skill-progress-bar" style="--progress: ${level.level == level.levelCap ? 1 : level.progress}"></div>
-        ${"runecrafting" in calculated.levels
+        ${"runecrafting" in calculated.levels || "catacombs" in calculated.dungeons && ["dungeon_class", "dungeon"].includes(this.type) || this.type === "skyblock_level"
           ? html`<div class="skill-progress-text">
               ${this.hovering ? this.getHoverText(level) : this.getMainText(level)}
             </div>`
