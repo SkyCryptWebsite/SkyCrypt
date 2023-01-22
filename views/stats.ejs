@@ -1202,14 +1202,14 @@ const metaDescription = getMetaDescription()
           <%
             const uniquePets = _.uniq(
               calculated.pets
-                .filter(pet => !constants.PET_DATA[pet.type].bingoExclusive === true || calculated.profile.game_mode === 'bingo')
-                .map((pet) => constants.PET_DATA[pet.type].typeGroup ?? pet.type)
+                .filter(pet => !constants.PET_DATA[pet.type]?.bingoExclusive === true || calculated.profile.game_mode === 'bingo')
+                .map((pet) => constants.PET_DATA[pet.type]?.typeGroup ?? pet.type)
             )
             const totalPets = _.uniq(
               Object.entries(
                 Object.fromEntries(
                   Object.entries(constants.PET_DATA)
-                    .filter(pet => !pet[1].bingoExclusive === true || calculated.profile.game_mode === 'bingo')
+                    .filter(pet => !pet[1]?.bingoExclusive === true || calculated.profile.game_mode === 'bingo')
                 )
               )
                 .map(arr => arr[1].typeGroup || arr[0])
