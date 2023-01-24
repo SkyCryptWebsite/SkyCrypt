@@ -1,3 +1,4 @@
+// CREDITS: https://github.com/MattTheCuber
 import { db } from "../mongo.js";
 
 let items = await db.collection("items").find({ category: "accessory" }).toArray();
