@@ -1147,8 +1147,8 @@ export const getItems = async (
       }
     }
 
-    if (id in constants.ACCESSORY_UPGRADES) {
-      const accessoryUpgrades = constants.ACCESSORY_UPGRADES[id];
+    if (constants.getUpgradeList(id) !== undefined) {
+      const accessoryUpgrades = constants.getUpgradeList(id);
 
       if (accessories.find((a) => !a.isInactive && accessoryUpgrades.includes(helper.getId(a))) != undefined) {
         accessory.isInactive = true;
@@ -1159,8 +1159,8 @@ export const getItems = async (
       }
     }
 
-    if (id in constants.ACCESSORY_DUPLICATES) {
-      const accessoryDuplicates = constants.ACCESSORY_DUPLICATES[id];
+    if (id in constants.accessoryAliases) {
+      const accessoryDuplicates = constants.accessoryAliases[id];
 
       if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a))) != undefined) {
         accessory.isUnique = false;
@@ -2721,10 +2721,11 @@ function getPetScore(pets) {
 }
 
 function getMissingAccessories(accessories) {
-  const unique = Object.keys(constants.ACCESSORIES);
+  const ACCESSORIES = constants.getAllAccessories();
+  const unique = Object.keys(ACCESSORIES);
   unique.forEach((name) => {
-    if (name in constants.ACCESSORY_DUPLICATES) {
-      for (const duplicate of constants.ACCESSORY_DUPLICATES[name]) {
+    if (name in constants.accessoryAliases) {
+      for (const duplicate of constants.accessoryAliases[name]) {
         if (accessories.includes(duplicate)) {
           accessories[accessories.indexOf(duplicate)] = name;
           break;
@@ -2735,9 +2736,9 @@ function getMissingAccessories(accessories) {
 
   let missing = unique.filter((accessory) => !accessories.includes(accessory));
   missing.forEach((name) => {
-    if (name in constants.ACCESSORY_UPGRADES) {
+    if (constants.getUpgradeList(name) !== undefined) {
       //if the name is in the upgrades list
-      for (const upgrade of constants.ACCESSORY_UPGRADES[name]) {
+      for (const upgrade of constants.getUpgradeList(name)) {
         if (accessories.includes(upgrade)) {
           //if accessories list includes the upgrade
           missing = missing.filter((item) => item !== name);
@@ -2759,8 +2760,8 @@ function getMissingAccessories(accessories) {
     object.name ??= accessory;
 
     // MAIN ACCESSORIES
-    if (constants.ACCESSORIES[accessory] != null) {
-      const data = constants.ACCESSORIES[accessory];
+    if (ACCESSORIES[accessory] != null) {
+      const data = ACCESSORIES[accessory];
 
       object.texture_path = data.texture || null;
       object.display_name = data.name || null;
@@ -2777,11 +2778,10 @@ function getMissingAccessories(accessories) {
 
     let includes = false;
 
-    for (const array of Object.values(constants.ACCESSORY_UPGRADES)) {
-      if (array.includes(accessory)) {
-        includes = true;
-      }
-    }
+    if (constants.getUpgradeList(accessory)?.[0] !== accessory && constants.getUpgradeList(accessory) !== undefined) {
+      includes = true;
+    } 
+
     if (includes) {
       upgrades.push(object);
     } else {
