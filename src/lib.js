@@ -1147,18 +1147,6 @@ export const getItems = async (
       }
     }
 
-    if (constants.getUpgradeList(id) !== undefined) {
-      const accessoryUpgrades = constants.getUpgradeList(id);
-
-      if (accessories.find((a) => !a.isInactive && accessoryUpgrades.includes(helper.getId(a))) != undefined) {
-        accessory.isInactive = true;
-      }
-
-      if (accessories.find((a) => accessoryUpgrades.includes(helper.getId(a))) != undefined) {
-        accessory.isUnique = false;
-      }
-    }
-
     if (id in constants.accessoryAliases) {
       const accessoryDuplicates = constants.accessoryAliases[id];
 
@@ -2736,7 +2724,7 @@ function getMissingAccessories(accessories) {
 
   let missing = unique.filter((accessory) => !accessories.includes(accessory));
   missing.forEach((name) => {
-    if (constants.getUpgradeList(name) !== undefined) {
+    if (constants.getUpgradeList(name)) {
       //if the name is in the upgrades list
       for (const upgrade of constants.getUpgradeList(name)) {
         if (accessories.includes(upgrade)) {
@@ -2778,9 +2766,9 @@ function getMissingAccessories(accessories) {
 
     let includes = false;
 
-    if (constants.getUpgradeList(accessory)?.[0] !== accessory && constants.getUpgradeList(accessory) !== undefined) {
+    if (constants.getUpgradeList(accessory)?.[0] !== accessory && constants.getUpgradeList(accessory)) {
       includes = true;
-    } 
+    }
 
     if (includes) {
       upgrades.push(object);
