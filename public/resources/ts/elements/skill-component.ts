@@ -66,7 +66,7 @@ export class SkillComponent extends LitElement {
         ("catacombs" in calculated.dungeons && ["dungeon_class", "dungeon"].includes(this.type)) ||
         this.type === "skyblock_level"
           ? html`<div class="skill-progress-text">
-              ${this.hovering ? this.getHoverText(level) : this.getMainText(level)}
+              ${this.hovering ? this.getHoverText(level, this.type) : this.getMainText(level, this.type)}
             </div>`
           : undefined}
       </div>
@@ -103,12 +103,20 @@ export class SkillComponent extends LitElement {
   /**
    * @returns the text to be displayed when the user is not hovering
    */
-  private getMainText(level: Level): string {
+  private getMainText(level: Level, type: string): string {
     let mainText = formatNumber(level.xpCurrent, true);
+    if (type === "skyblock_level") {
+      level.progress = level.level / level.maxLevel;
+      const skillBar = document.querySelector(`.skill-bar[data-skill="Skyblock Level"]`);
+      if (skillBar) {
+        (skillBar.querySelector(".skill-progress-bar") as HTMLElement).style.setProperty("--progress", level.progress.toString());
+      } 
+    } 
+    
     if (level.xpForNext && level.xpForNext != Infinity) {
       mainText += ` / ${formatNumber(level.xpForNext, true)}`;
+      mainText += " XP";
     }
-    mainText += " XP";
 
     return mainText;
   }
@@ -116,12 +124,19 @@ export class SkillComponent extends LitElement {
   /**
    * @returns the text to be displayed when the user is hovering
    */
-  private getHoverText(level: Level): string {
+  private getHoverText(level: Level, type: string): string {
     let hoverText = level.xpCurrent.toLocaleString();
-    if (level.xpForNext && level.xpForNext != Infinity) {
+    if (type === "skyblock_level") {
+      hoverText = `${level.level} / ${level.maxLevel} Level`;
+      level.progress = level.xpCurrent / level.xpForNext;
+      const skillBar = document.querySelector(`.skill-bar[data-skill="Skyblock Level"]`)  as HTMLElement;
+      if (skillBar) {
+        (skillBar.querySelector(".skill-progress-bar") as HTMLElement).style.setProperty("--progress", level.progress.toString());
+      } 
+    } else if (level.xpForNext && level.xpForNext != Infinity) {
       hoverText += ` / ${level.xpForNext.toLocaleString()}`;
+      hoverText += " XP";
     }
-    hoverText += " XP";
 
     return hoverText;
   }
@@ -137,3 +152,4 @@ declare global {
     "skill-component": SkillComponent;
   }
 }
+ 
