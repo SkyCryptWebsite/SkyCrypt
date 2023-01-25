@@ -1692,6 +1692,21 @@ export async function getStats(
   if (!items.no_inventory) {
     output.missingAccessories = getMissingAccessories(items.accessory_ids);
 
+    for (const key of Object.keys(output.missingAccessories)) {
+      for (const item of output.missingAccessories[key]) {
+        const ITEM_PRICE = await helper.getItemPrice(item.name);
+
+        if (ITEM_PRICE === 0) continue;
+
+        item.tag ??= {};
+        item.tag.display ??= {};
+        item.tag.display.Lore ??= [];
+        item.tag.display.Lore.push(
+          `§7Item Value: §6${Math.round(ITEM_PRICE).toLocaleString()} Coins §7(§6${helper.formatNumber(ITEM_PRICE)}§7)`
+        );
+      }
+    }
+
     const PARTY_HAT_CRAB = items.accessory_ids.some((a) => a.startsWith("PARTY_HAT_CRAB"));
 
     output.missingAccessories.missing =
