@@ -1138,8 +1138,8 @@ export const getItems = async (
     }
 
     if (id.startsWith("PARTY_HAT_CRAB")) {
-      const CRAB_HAT = accessories.find((a) => helper.getId(a) == `${id}`);
-      const CRAB_HAT_ANIMATED = accessories.find((a) => helper.getId(a) == `${id}_ANIMATED`);
+      const CRAB_HAT = accessories.find((a) => helper.getId(a) == `PARTY_HAT_CRAB`);
+      const CRAB_HAT_ANIMATED = accessories.find((a) => helper.getId(a) == `PARTY_HAT_CRAB_ANIMATED`);
 
       if (CRAB_HAT && CRAB_HAT_ANIMATED) {
         CRAB_HAT.isUnique = false;
