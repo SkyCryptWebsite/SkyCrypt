@@ -2723,10 +2723,16 @@ function getMissingAccessories(accessories) {
   });
 
   let missing = unique.filter((accessory) => !accessories.includes(accessory));
+
   missing.forEach((name) => {
     if (constants.getUpgradeList(name)) {
-      //if the name is in the upgrades list
-      for (const upgrade of constants.getUpgradeList(name)) {
+      // if accessory has upgrades
+      for (const upgrade of constants
+        .getUpgradeList(name)
+        .filter(
+          (item) => constants.getUpgradeList(name).indexOf(item) > constants.getUpgradeList(name).indexOf(name)
+        )) {
+        // for (const upgrade of every upgrade after the current tier)
         if (accessories.includes(upgrade)) {
           //if accessories list includes the upgrade
           missing = missing.filter((item) => item !== name);
