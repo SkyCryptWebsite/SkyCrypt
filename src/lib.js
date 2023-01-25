@@ -536,7 +536,10 @@ async function processItems(base64, source, customTextures = false, packs, cache
 
     if (source !== undefined) {
       item.extra ??= {};
-      item.extra.source = source.split(" ").map((a) => a.charAt(0).toUpperCase() + a.slice(1)).join(" ")
+      item.extra.source = source
+        .split(" ")
+        .map((a) => a.charAt(0).toUpperCase() + a.slice(1))
+        .join(" ");
     }
 
     // Lore stuff
@@ -842,7 +845,9 @@ export const getItems = async (
 
   // Process inventories returned by API
   const armor =
-    "inv_armor" in profile ? await processItems(profile.inv_armor.data, "armor", customTextures, packs, options.cacheOnly) : [];
+    "inv_armor" in profile
+      ? await processItems(profile.inv_armor.data, "armor", customTextures, packs, options.cacheOnly)
+      : [];
   const equipment =
     "equippment_contents" in profile
       ? await processItems(profile.equippment_contents.data, "eqipment", customTextures, packs, options.cacheOnly)
@@ -868,7 +873,9 @@ export const getItems = async (
       ? await processItems(profile.fishing_bag.data, "fishing bag", customTextures, packs, options.cacheOnly)
       : [];
   const quiver =
-    "quiver" in profile ? await processItems(profile.quiver.data, "quiver", customTextures, packs, options.cacheOnly) : [];
+    "quiver" in profile
+      ? await processItems(profile.quiver.data, "quiver", customTextures, packs, options.cacheOnly)
+      : [];
   const potion_bag =
     "potion_bag" in profile
       ? await processItems(profile.potion_bag.data, "potion bag", customTextures, packs, options.cacheOnly)
@@ -879,7 +886,13 @@ export const getItems = async (
       : [];
   const personal_vault =
     "personal_vault_contents" in profile
-      ? await processItems(profile.personal_vault_contents.data, "personal vault", customTextures, packs, options.cacheOnly)
+      ? await processItems(
+          profile.personal_vault_contents.data,
+          "personal vault",
+          customTextures,
+          packs,
+          options.cacheOnly
+        )
       : [];
 
   let storage = [];
@@ -889,7 +902,13 @@ export const getItems = async (
       storage.push({});
 
       if (profile.backpack_contents[slot] && profile.backpack_icons[slot]) {
-        const icon = await processItems(profile.backpack_icons[slot].data, "storage", customTextures, packs, options.cacheOnly);
+        const icon = await processItems(
+          profile.backpack_icons[slot].data,
+          "storage",
+          customTextures,
+          packs,
+          options.cacheOnly
+        );
         const items = await processItems(
           profile.backpack_contents[slot].data,
           "storage",
@@ -1177,10 +1196,7 @@ export const getItems = async (
     if (accessory.isUnique === false || accessory.isInactive === true) {
       const source = accessory.extra?.source;
       if (source !== undefined) {
-        accessory.tag.display.Lore.push(
-          "",
-          `§7Location: §c${source}`
-        )
+        accessory.tag.display.Lore.push("", `§7Location: §c${source}`);
       }
     }
   }
