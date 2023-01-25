@@ -311,7 +311,7 @@ async function getBackpackContents(arraybuf) {
 }
 
 // Process items returned by API
-async function processItems(base64, customTextures = false, packs, cacheOnly = false) {
+async function processItems(base64, source, customTextures = false, packs, cacheOnly = false) {
   // API stores data as base64 encoded gzipped Minecraft NBT data
   const buf = Buffer.from(base64, "base64");
 
@@ -532,6 +532,11 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
         item.texture_pack.base_path =
           "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.basePath);
       }
+    }
+
+    if (source !== undefined) {
+      item.extra ??= {};
+      item.extra.source = source.split(" ").map((a) => a.charAt(0).toUpperCase() + a.slice(1)).join(" ")
     }
 
     // Lore stuff
@@ -837,44 +842,44 @@ export const getItems = async (
 
   // Process inventories returned by API
   const armor =
-    "inv_armor" in profile ? await processItems(profile.inv_armor.data, customTextures, packs, options.cacheOnly) : [];
+    "inv_armor" in profile ? await processItems(profile.inv_armor.data, "armor", customTextures, packs, options.cacheOnly) : [];
   const equipment =
     "equippment_contents" in profile
-      ? await processItems(profile.equippment_contents.data, customTextures, packs, options.cacheOnly)
+      ? await processItems(profile.equippment_contents.data, "eqipment", customTextures, packs, options.cacheOnly)
       : [];
   const inventory =
     "inv_contents" in profile
-      ? await processItems(profile.inv_contents.data, customTextures, packs, options.cacheOnly)
+      ? await processItems(profile.inv_contents.data, "inventory", customTextures, packs, options.cacheOnly)
       : [];
   const wardrobe_inventory =
     "wardrobe_contents" in profile
-      ? await processItems(profile.wardrobe_contents.data, customTextures, packs, options.cacheOnly)
+      ? await processItems(profile.wardrobe_contents.data, "wardrobe", customTextures, packs, options.cacheOnly)
       : [];
   let enderchest =
     "ender_chest_contents" in profile
-      ? await processItems(profile.ender_chest_contents.data, customTextures, packs, options.cacheOnly)
+      ? await processItems(profile.ender_chest_contents.data, "ender chest", customTextures, packs, options.cacheOnly)
       : [];
   const accessory_bag =
     "talisman_bag" in profile
-      ? await processItems(profile.talisman_bag.data, customTextures, packs, options.cacheOnly)
+      ? await processItems(profile.talisman_bag.data, "accessory bag", customTextures, packs, options.cacheOnly)
       : [];
   const fishing_bag =
     "fishing_bag" in profile
-      ? await processItems(profile.fishing_bag.data, customTextures, packs, options.cacheOnly)
+      ? await processItems(profile.fishing_bag.data, "fishing bag", customTextures, packs, options.cacheOnly)
       : [];
   const quiver =
-    "quiver" in profile ? await processItems(profile.quiver.data, customTextures, packs, options.cacheOnly) : [];
+    "quiver" in profile ? await processItems(profile.quiver.data, "quiver", customTextures, packs, options.cacheOnly) : [];
   const potion_bag =
     "potion_bag" in profile
-      ? await processItems(profile.potion_bag.data, customTextures, packs, options.cacheOnly)
+      ? await processItems(profile.potion_bag.data, "potion bag", customTextures, packs, options.cacheOnly)
       : [];
   const candy_bag =
     "candy_inventory_contents" in profile
-      ? await processItems(profile.candy_inventory_contents.data, customTextures, packs, options.cacheOnly)
+      ? await processItems(profile.candy_inventory_contents.data, "candy bag", customTextures, packs, options.cacheOnly)
       : [];
   const personal_vault =
     "personal_vault_contents" in profile
-      ? await processItems(profile.personal_vault_contents.data, customTextures, packs, options.cacheOnly)
+      ? await processItems(profile.personal_vault_contents.data, "personal vault", customTextures, packs, options.cacheOnly)
       : [];
 
   let storage = [];
@@ -884,9 +889,10 @@ export const getItems = async (
       storage.push({});
 
       if (profile.backpack_contents[slot] && profile.backpack_icons[slot]) {
-        const icon = await processItems(profile.backpack_icons[slot].data, customTextures, packs, options.cacheOnly);
+        const icon = await processItems(profile.backpack_icons[slot].data, "storage", customTextures, packs, options.cacheOnly);
         const items = await processItems(
           profile.backpack_contents[slot].data,
+          "storage",
           customTextures,
           packs,
           options.cacheOnly
@@ -1166,6 +1172,16 @@ export const getItems = async (
 
     if (accessory.tag?.ExtraAttributes?.talisman_enrichment != undefined) {
       accessory.enrichment = accessory.tag.ExtraAttributes.talisman_enrichment.toLowerCase();
+    }
+
+    if (accessory.isUnique === false || accessory.isInactive === true) {
+      const source = accessory.extra?.source;
+      if (source !== undefined) {
+        accessory.tag.display.Lore.push(
+          "",
+          `§7Location: §c${source}`
+        )
+      }
     }
   }
 
