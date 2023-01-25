@@ -1089,11 +1089,14 @@ export const getItems = async (
     accessories.push(insertAccessory);
     accessoryIds.push(id);
     accessoryRarities[insertAccessory.rarity]++;
-    if (id == "HEGEMONY_ARTIFACT") {
-      accessoryRarities.hegemony = { rarity: insertAccessory.rarity };
-    }
-    if (id === "ABICASE") {
-      accessoryRarities.abicase = { model: insertAccessory.extra?.model };
+    if (insertAccessory.isInactive === false) {
+      accessoryRarities[insertAccessory.rarity]++;
+      if (id == "HEGEMONY_ARTIFACT") {
+        accessoryRarities.hegemony = { rarity: insertAccessory.rarity };
+      }
+      if (id === "ABICASE") {
+        accessoryRarities.abicase = { model: insertAccessory.extra?.model };
+      }
     }
   }
 
