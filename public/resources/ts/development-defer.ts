@@ -22,7 +22,7 @@ document.addEventListener("click", (e) => {
     return;
   }
 
-  let item: DisplayItem | Item | Pet | indefined = undefined;
+  let item: DisplayItem | Item | Pet | undefined = undefined;
 
   if (element.hasAttribute("data-item-id")) {
     const itemId = element.getAttribute("data-item-id") as string;

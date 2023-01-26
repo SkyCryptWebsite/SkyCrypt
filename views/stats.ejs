@@ -1690,19 +1690,6 @@ const metaDescription = getMetaDescription()
               } %>
             </div>
             <% } %>
-            
-            <% if (calculated?.trophy_fish?.total_caught > 0) { %>
-              <button class="stat-sub-header extender" aria-controls="trophy-fish" aria-expanded="false">Trophy Fish</button>
-              <div class="collections extendable" id="trophy-fish">
-                <% let i = 0;
-                for (const [key, data] of Object.entries(calculated.trophy_fish.fish)) { %>
-                  <div tabindex="0" data-trophy-fish-index="<%= i %>" class="rich-item piece piece-none-bg trophy-fish">
-                    <div style='background-image: url("<%= constants.TROPHY_FISH[data.id].texture_path %>")' class="piece-icon item-icon custom-icon"></div>
-                  </div>
-                <% i++; 
-                } %>
-              </div>
-            <% } %>
           </div>
           <% if(calculated.enchanting.experimented){ %>
           <div class="stat-enchanting">
