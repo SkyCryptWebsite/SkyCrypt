@@ -2801,8 +2801,6 @@ export function getTrophyFish(userProfile) {
     progress: stageProgress,
   };
 
-  console.log(output);
-
   return output;
 }
 
