@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "items/bucket_empty",
+        "layer1": "./magma_bucket"
+    }
+}

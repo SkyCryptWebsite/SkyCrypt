@@ -1,0 +1,7 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "./nova_sword",
+        "layer1": "./nova_sword_flames"
+    }
+}
