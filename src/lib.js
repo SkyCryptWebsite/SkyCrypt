@@ -2861,18 +2861,26 @@ export function getTrophyFish(userProfile) {
 
   for (const key of Object.keys(constants.TROPHY_FISH)) {
     const id = key.toLowerCase();
+    const caught = userProfile.trophy_fish[id] || 0;
+    const caughtBronze = userProfile.trophy_fish[`${id}_bronze`] || 0;
+    const caughtSilver = userProfile.trophy_fish[`${id}_silver`] || 0;
+    const caughtGold = userProfile.trophy_fish[`${id}_gold`] || 0;
+    const caughtDiamond = userProfile.trophy_fish[`${id}_diamond`] || 0;
+    const highestType =
+      caughtDiamond > 0 ? "diamond" : caughtGold > 0 ? "gold" : caughtSilver > 0 ? "silver" : "bronze";
 
     output.fish.push({
       id: key,
       name: constants.TROPHY_FISH[key].display_name,
-      texture: constants.TROPHY_FISH[key].texture,
+      texture: constants.TROPHY_FISH[key].textures[highestType],
       description: constants.TROPHY_FISH[key].description,
       caught: {
-        total: userProfile.trophy_fish[id] || 0,
-        bronze: userProfile.trophy_fish[`${id}_bronze`] || 0,
-        silver: userProfile.trophy_fish[`${id}_silver`] || 0,
-        gold: userProfile.trophy_fish[`${id}_gold`] || 0,
-        diamond: userProfile.trophy_fish[`${id}_diamond`] || 0,
+        total: caught,
+        bronze: caughtBronze,
+        silver: caughtSilver,
+        gold: caughtGold,
+        diamond: caughtDiamond,
+        highestType: highestType,
       },
     });
   }
