@@ -1690,6 +1690,51 @@ const metaDescription = getMetaDescription()
               } %>
             </div>
             <% } %>
+            <button class="stat-sub-header extender" aria-expanded="false">Trophy Fish</button>
+            <div class="collections extendable">
+              <p class="stat-raw-values">
+                <span class="stat-name">Total Caught:</span>
+                <span class="stat-value"><%= calculated.trophy_fish.total_caught.toLocaleString() %></span>
+                <br>
+                <% max = calculated.trophy_fish.stage.type === "diamond" ? 'golden-text' : '' %>
+                <span class="stat-name <%= max %>">Current Stage:</span>
+                <span class="stat-value <%= max %>"><%= calculated.trophy_fish.stage.name %></span>
+                <% if (calculated.trophy_fish.stage.progress !== null) { %>
+                <span style='color: var(--§f);'> (<%= calculated.trophy_fish.stage.progress %>)</span>
+                <% } %>
+                <br>
+              </p>
+
+              <!-- ? Moves chips into next row. Reason - looks better -->
+              <div style="width:100%;"></div>
+
+              <div class="collections">
+                <% for (const fish of calculated.trophy_fish.fish) { %>
+                <div class="chip" data-tippy-content="<%= helper.renderLore(fish.description) %>">
+                  <div class="chip-icon-wrapper">
+                    <div style="background-image:url(/head/<%= fish.texture %>)" class="item-icon custom-icon"></div>
+                  </div>
+
+                  <div class="chip-text">
+                    <div class="trophy-fish-data">
+                      <div class="trophy-fish-info">
+                        <span class="trophy-fish-name"> <%= fish.name %> </span>
+                        <span class="trophy-fish-amount"> x<%= fish.caught.total.toLocaleString() %> </span>
+                      </div>
+
+                      <div class="trophy-fish-count">
+                        <div class="bronze-count count-format"></div><span><%= fish.caught.bronze.toLocaleString() %></span>
+                        <div class="silver-count count-format"></div><span><%= fish.caught.silver.toLocaleString() %></span>
+                        <div class="gold-count count-format"></div><span><%= fish.caught.gold.toLocaleString() %></span>
+                        <div class="diamond-count count-format"></div><span><%= fish.caught.diamond.toLocaleString() %></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <% } %>
+              </div>
+            </div>
+
           </div>
           <% if(calculated.enchanting.experimented){ %>
           <div class="stat-enchanting">

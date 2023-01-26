@@ -2036,6 +2036,56 @@ inventory-view {
   font-size: 14px;
 }
 
+.trophy-fish-data {
+  font-size: 16px;
+  font-weight: 450;
+
+  .trophy-fish-info {
+    .trophy-fish-name {
+      color: white;
+    }
+
+    .trophy-fish-amount {
+      color: rgba(var(--text-rgb), 0.7);
+      font-weight: 500;
+      margin-left: 4px;
+    }
+  }
+
+  .trophy-fish-count {
+    display: grid;
+    grid-template-columns: repeat(2, auto 1fr);
+    gap: 0px 4px;
+
+    text-align: left;
+    align-items: center;
+  }
+
+  .count-format {
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+  }
+
+  .bronze-count {
+    background-color: #a85c03;
+  }
+
+  .gold-count {
+    background-color: #feb801;
+  }
+
+  .silver-count {
+    background-color: #b4b4b5;
+    margin-left: 10px;
+  }
+
+  .diamond-count {
+    background-color: #68ecff;
+    margin-left: 10px;
+  }
+}
+
 .narrow-info-header {
   position: absolute;
   top: 0;
