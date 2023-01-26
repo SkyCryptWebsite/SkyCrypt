@@ -4,4 +4,3 @@ export * from "./constants/items.js";
 export * from "./constants/potions.js";
 export * from "./constants/rewards.js";
 export * from "./constants/stats.js";
-export * from "./constants/trophy-fish.js";

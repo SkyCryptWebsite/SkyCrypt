@@ -22,7 +22,7 @@ document.addEventListener("click", (e) => {
     return;
   }
 
-  let item: DisplayItem | Item | Pet | TrophyFish | undefined = undefined;
+  let item: DisplayItem | Item | Pet | indefined = undefined;
 
   if (element.hasAttribute("data-item-id")) {
     const itemId = element.getAttribute("data-item-id") as string;
@@ -34,8 +34,6 @@ document.addEventListener("click", (e) => {
   } else if (element.hasAttribute("data-missing-accessory-index")) {
     item =
       calculated.missingAccessories.missing[parseInt(element.getAttribute("data-missing-accessory-index") as string)];
-  } else if (element.hasAttribute("data-trophy-fish-index")) {
-    item = calculated.trophy_fish.fish[parseInt(element.getAttribute("data-trophy-fish-index") as string)];
   } else if (element.hasAttribute("data-upgrade-accessory-index")) {
     item =
       calculated.missingAccessories.upgrades[parseInt(element.getAttribute("data-upgrade-accessory-index") as string)];

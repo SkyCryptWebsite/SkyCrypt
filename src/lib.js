@@ -1800,8 +1800,6 @@ export async function getStats(
   output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
   output.bestiary = getBestiary(profile.uuid, profile);
 
-  output.trophy_fish = getTrophyFish(userProfile);
-
   output.social = hypixelProfile.socials;
 
   output.dungeons = getDungeons(userProfile, hypixelProfile);
@@ -2746,60 +2744,6 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
   }
 
   return output;
-}
-
-export function getTrophyFish(userProfile) {
-  const trophyFish = {
-    total_caught: 0,
-    rewards: [],
-    fish: {},
-  };
-
-  for (const key of Object.keys(constants.TROPHY_FISH)) {
-    trophyFish.fish[Object.keys(constants.TROPHY_FISH).indexOf(key)] = {
-      display_name: helper.generateItem(constants.TROPHY_FISH[key]).tag.display.Name,
-      type: key,
-      lore: helper.generateItem(constants.TROPHY_FISH[key]).tag.display.Lore,
-      texture_path: constants.TROPHY_FISH[key].texture_path,
-      total: userProfile.trophy_fish[key.toLowerCase()] || 0,
-      rarity: constants.TROPHY_FISH[key].rarity,
-      trophy_fish: true,
-      amounts: {
-        bronze: userProfile.trophy_fish[`${key.toLowerCase()}_bronze`] || 0,
-        silver: userProfile.trophy_fish[`${key.toLowerCase()}_silver`] || 0,
-        gold: userProfile.trophy_fish[`${key.toLowerCase()}_gold  `] || 0,
-        diamond: userProfile.trophy_fish[`${key.toLowerCase()}_diamond`] || 0,
-      },
-    };
-    if (
-      !trophyFish.fish[Object.keys(trophyFish.fish).length - 1].lore[
-        trophyFish.fish[Object.keys(trophyFish.fish).length - 1].lore.length - 1
-      ].includes(`§7Diamond: §b`)
-    ) {
-      trophyFish.fish[Object.keys(constants.TROPHY_FISH).indexOf(key)].lore.push(
-        "",
-        `§7Total: §f${trophyFish.fish[Object.keys(constants.TROPHY_FISH).indexOf(key)].total}`,
-        `§7Bronze: §c${trophyFish.fish[Object.keys(constants.TROPHY_FISH).indexOf(key)].amounts.bronze}`,
-        `§7Silver: §7${trophyFish.fish[Object.keys(constants.TROPHY_FISH).indexOf(key)].amounts.silver}`,
-        `§7Gold: §6${trophyFish.fish[Object.keys(constants.TROPHY_FISH).indexOf(key)].amounts.gold}`,
-        `§7Diamond: §b${trophyFish.fish[Object.keys(constants.TROPHY_FISH).indexOf(key)].amounts.diamond}`
-      );
-    }
-    const formattedLore = [];
-    for (const line of trophyFish.fish[Object.keys(constants.TROPHY_FISH).indexOf(key)].lore) {
-      formattedLore.push('<span class="lore-row wrap">' + helper.renderLore(line) + "</span>");
-    }
-
-    trophyFish.fish[Object.keys(constants.TROPHY_FISH).indexOf(key)].lore = formattedLore.join("");
-    trophyFish.fish[Object.keys(constants.TROPHY_FISH).indexOf(key)].display_name = helper
-      .renderLore(trophyFish.fish[Object.keys(constants.TROPHY_FISH).indexOf(key)].display_name)
-      .replace(");'>", "");
-  }
-
-  trophyFish.rewards = userProfile.trophy_fish.rewards;
-  trophyFish.total_caught = userProfile.trophy_fish.total_caught;
-
-  return trophyFish;
 }
 
 export function getBestiary(uuid, profile) {

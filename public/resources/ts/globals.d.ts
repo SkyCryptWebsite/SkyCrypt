@@ -569,26 +569,6 @@ declare const calculated: SkyCryptPlayer & {
     amount: number;
   }[];
   reaper_peppers_eaten: number;
-  trophy_fish: {
-    total_caught: number;
-    fish: {
-      [key: string]: {
-        display_name: string;
-        type: string;
-        lore: string;
-        texture_path: string;
-        rarity: string;
-        amount: number;
-        trophy_fish: boolean;
-        amounts: {
-          bronze: number;
-          silver: number;
-          gold: number;
-          diamond: number;
-        };
-      };
-    };
-  };
 };
 
 interface SkyCryptRelativeTime {
@@ -710,21 +690,5 @@ type StatsBonus = {
 interface StatBonusType {
   [key: string]: {
     [key in StatName]?: number;
-  };
-}
-
-interface TrophyFish extends Item {
-  display_name: string;
-  type: string;
-  lore: string;
-  texture_path: string;
-  rarity: string;
-  amount?: number;
-  trophy_fish: boolean;
-  amounts: {
-    bronze: number;
-    silver: number;
-    gold: number;
-    diamond: number;
   };
 }

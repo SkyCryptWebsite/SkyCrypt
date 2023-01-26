@@ -851,24 +851,6 @@ export function generateItem(data) {
     data.rarity = data.rarity.toLowerCase();
   }
 
-  if (data.trophy_fish && !data.tag?.display?.Lore) {
-    data.tag ??= {};
-    data.tag.display ??= {};
-    data.tag.display.Lore = [
-      data.description,
-      "",
-      "§7Bring this to the §fOdger §7at the",
-      "§7top of the Blazing Volcano",
-      "§7",
-      `§${RARITY_COLORS[data.rarity ?? "common"]} ${(data.rarity || "common").toUpperCase()} TROPHY FISH`,
-    ];
-
-    data.tag = data.tag ?? {};
-    data.tag.display = data.tag.display ?? {};
-    const rarityColor = data.rarity ? `§${RARITY_COLORS[data.rarity ?? "common"]}` : "";
-    data.tag.display.Name = `${rarityColor}${data.display_name}`;
-  }
-
   // Setting tag.display.Name using display_name if not specified
   if (data.display_name && !data.tag.display.Name) {
     data.tag = data.tag ?? {};
