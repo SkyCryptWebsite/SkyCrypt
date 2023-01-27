@@ -109,10 +109,13 @@ export class SkillComponent extends LitElement {
       level.progress = level.level / level.maxLevel;
       const skillBar = document.querySelector(`.skill-bar[data-skill="Skyblock Level"]`);
       if (skillBar) {
-        (skillBar.querySelector(".skill-progress-bar") as HTMLElement).style.setProperty("--progress", level.progress.toString());
-      } 
-    } 
-    
+        (skillBar.querySelector(".skill-progress-bar") as HTMLElement).style.setProperty(
+          "--progress",
+          level.progress.toString()
+        );
+      }
+    }
+
     if (level.xpForNext && level.xpForNext != Infinity) {
       mainText += ` / ${formatNumber(level.xpForNext, true)}`;
       mainText += " XP";
@@ -129,10 +132,13 @@ export class SkillComponent extends LitElement {
     if (type === "skyblock_level") {
       hoverText = `${level.level} / ${level.maxLevel} Level`;
       level.progress = level.xpCurrent / level.xpForNext;
-      const skillBar = document.querySelector(`.skill-bar[data-skill="Skyblock Level"]`)  as HTMLElement;
+      const skillBar = document.querySelector(`.skill-bar[data-skill="Skyblock Level"]`) as HTMLElement;
       if (skillBar) {
-        (skillBar.querySelector(".skill-progress-bar") as HTMLElement).style.setProperty("--progress", level.progress.toString());
-      } 
+        (skillBar.querySelector(".skill-progress-bar") as HTMLElement).style.setProperty(
+          "--progress",
+          level.progress.toString()
+        );
+      }
     } else if (level.xpForNext && level.xpForNext != Infinity) {
       hoverText += ` / ${level.xpForNext.toLocaleString()}`;
       hoverText += " XP";
@@ -152,4 +158,3 @@ declare global {
     "skill-component": SkillComponent;
   }
 }
- 
