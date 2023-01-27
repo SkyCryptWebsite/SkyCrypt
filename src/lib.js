@@ -1695,6 +1695,8 @@ export async function getStats(
     for (const key of Object.keys(output.missingAccessories)) {
       for (const item of output.missingAccessories[key]) {
         const ITEM_PRICE = await helper.getItemPrice(item.name);
+        item.extra ??= {};
+        item.extra.price = ITEM_PRICE;
 
         if (ITEM_PRICE === 0) continue;
 
@@ -1702,17 +1704,24 @@ export async function getStats(
         item.tag.display ??= {};
         item.tag.display.Lore ??= [];
         item.tag.display.Lore.push(
-          `§7Item Value: §6${Math.round(ITEM_PRICE).toLocaleString()} Coins §7(§6${helper.formatNumber(ITEM_PRICE)}§7)`
+          `§7Price: §6${Math.round(ITEM_PRICE).toLocaleString()} Coins §7(§6${helper.formatNumber(
+            ITEM_PRICE / constants.MAGICAL_POWER[item.rarity]
+          )} §7per MP)`
         );
       }
     }
 
-    const PARTY_HAT_CRAB = items.accessory_ids.some((a) => a.startsWith("PARTY_HAT_CRAB"));
+    for (const key of Object.keys(output.missingAccessories)) {
+      output.missingAccessories[key].sort((a, b) => {
+        const aPrice = a.extra?.price || 0;
+        const bPrice = b.extra?.price || 0;
 
-    output.missingAccessories.missing =
-      PARTY_HAT_CRAB === true
-        ? output.missingAccessories.missing.filter((accessory) => accessory.name.startsWith("PARTY_HAT_CRAB") === false)
-        : output.missingAccessories.missing;
+        if (aPrice === 0) return 1;
+        if (bPrice === 0) return -1;
+
+        return aPrice - bPrice;
+      });
+    }
   }
 
   output.base_stats = Object.assign({}, output.stats);

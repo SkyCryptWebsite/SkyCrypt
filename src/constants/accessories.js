@@ -150,10 +150,9 @@ export function getAllAccessories() {
     .concat(extraAccessories)
     .reduce((acc, item) => {
       if (item.material !== undefined && item.texture === undefined) {
-        const damage = item.damage ? `:${item.damage}` : "";
         acc[item.id] = {
           ...item,
-          texture: `/item/${item.material + damage}`,
+          texture: `/item/${item.material}:${item.damage}`,
         };
       } else {
         acc[item.id] = {
