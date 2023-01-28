@@ -724,6 +724,10 @@ a.additional-player-stat:hover {
   background-image: url(../img/icons/hypixel.png);
 }
 
+.additional-player-stat.external-namemc::after {
+  background-image: url(../img/icons/namemc.png);
+}
+
 #basic_stats {
   display: grid;
   grid-template-areas:
