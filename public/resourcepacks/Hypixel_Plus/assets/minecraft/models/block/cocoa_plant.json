@@ -1,0 +1,15 @@
+{
+    "parent": "block/cocoa_age2_s",
+	"display": {
+        "thirdperson": {
+            "rotation": [ 10, -45, 170 ],
+            "translation": [ 0, 1.5, -2.75 ],
+            "scale": [ 0.375, 0.375, 0.375 ]
+        },
+        "fixed": {
+            "rotation": [ 0, 90, 0 ],
+            "translation": [ -2.5, 0, -2 ],
+            "scale": [ 2, 2, 2 ]
+        }
+    }
+}

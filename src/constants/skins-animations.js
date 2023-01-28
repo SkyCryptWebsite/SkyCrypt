@@ -660,7 +660,7 @@ const SKINS = [
   {
     id: "PET_SKIN_ROCK_BLINKING",
     name: "Blinking",
-    texture: "/head/26ca4c9f9543238de127a0af424e2e0dcfe7ef26fbd21c9a026adac2caa1fe04",
+    texture: "/head/f814eadaa5da6e38f8536501d457a130adef9a025103bdd19dd4732d353509a0",
     source: "regalia",
     release: new Date("2022-08-18 00:00:00 GMT+1").getTime(),
   },

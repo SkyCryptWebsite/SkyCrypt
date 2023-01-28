@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "./pet_item_skill_boost_legendary",
+        "layer1": "items/iron_axe"
+    }
+}

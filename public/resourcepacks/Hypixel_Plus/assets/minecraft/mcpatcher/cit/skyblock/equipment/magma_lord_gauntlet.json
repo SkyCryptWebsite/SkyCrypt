@@ -1,0 +1,7 @@
+{
+	"parent": "item/handheld_gauntlet",
+	"textures": {
+		"0": "./magma_lord_gauntlet_hand",
+		"1": "./magma_lord_gauntlet"
+	}
+}

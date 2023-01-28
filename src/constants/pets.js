@@ -521,6 +521,13 @@ export const PET_DATA = {
     ignoresTierBoost: true,
     typeGroup: "WISP",
   },
+  REINDEER: {
+    head: "/head/a2df65c6fd19a58bee38252192ac7ce2cf1dc8632c3547a9228b6b697240d098",
+    type: "fishing",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🦌",
+  },
 };
 
 export const PET_VALUE = {

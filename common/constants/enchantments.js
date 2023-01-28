@@ -26,7 +26,7 @@ export const MAX_ENCHANTS = new Set([
   "Efficiency X",
   "Ender Slayer VII",
   "Execute VI",
-  "Experience IV",
+  "Experience V",
   "Expertise X",
   "Feather Falling X",
   "Feather Falling XX",
