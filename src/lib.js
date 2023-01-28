@@ -801,7 +801,7 @@ function getMinions(coopMembers) {
 }
 
 function getMinionSlots(minions) {
-  let uniqueMinions = minions.reduce((count, minion) => count + minion.levels.length, 0);
+  const uniqueMinions = minions.reduce((count, minion) => count + minion.levels.length, 0);
 
   const output = { currentSlots: 5, toNext: 5 };
 
