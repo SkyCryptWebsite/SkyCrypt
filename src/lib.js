@@ -752,69 +752,98 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 }
 
 function getMinions(coopMembers) {
-  const minions = [];
+  // create a map to store the minions
+  const minions = new Map();
 
-  const craftedGenerators = [];
+  // get an array of all the crafted generators from all the members
+  const craftedGenerators = coopMembers
+    // filter out members without crafted generators
+    .filter((member) => member.crafted_generators)
+    // get an array of their crafted generators
+    .map((member) => member.crafted_generators)
+    // flatten the array of arrays into a single array
+    .flat();
 
-  for (const member in coopMembers) {
-    if (!("crafted_generators" in coopMembers[member])) {
-      continue;
-    }
-
-    craftedGenerators.push(...coopMembers[member].crafted_generators);
-  }
-
+  // iterate over the crafted generators
   for (const generator of craftedGenerators) {
-    const split = generator.split("_");
+    // extract the minion name and level from the generator id
+    const [minionName, minionLevel] = generator.split("_");
+    // convert the level to an integer
+    const level = parseInt(minionLevel);
 
-    const minionLevel = parseInt(split.pop());
-    const minionName = split.join("_");
-
-    const minion = minions.find((a) => a.id == minionName);
-
-    if (minion == undefined) {
-      minions.push(
-        Object.assign({ id: minionName, maxLevel: 0, levels: [minionLevel] }, constants.MINIONS[minionName])
-      );
+    // check if the minion already exists in the map
+    if (!minions.has(minionName)) {
+      // if not, add it to the map with the level and other details from the constants
+      const minionDetails = constants.MINIONS[minionName];
+      minions.set(minionName, {
+        id: minionName,
+        maxLevel: 0,
+        levels: new Set([level]),
+        tiers: minionDetails.tiers || 11,
+        ...minionDetails,
+      });
     } else {
-      minion.levels.push(minionLevel);
+      // if it does, add the level to the existing minion's levels
+      minions.get(minionName).levels.add(level);
     }
   }
 
+  // iterate over the minions in the constants
   for (const minion in constants.MINIONS) {
-    if (minions.find((a) => a.id == minion) == undefined) {
-      minions.push(Object.assign({ id: minion, levels: [], maxLevel: 0 }, constants.MINIONS[minion]));
+    // check if the minion is not already in the map
+    if (!minions.has(minion)) {
+      // if not, add it to the map with an empty levels set and other details from the constants
+      const minionDetails = constants.MINIONS[minion];
+      minions.set(minion, {
+        id: minion,
+        levels: new Set(),
+        maxLevel: 0,
+        tiers: minionDetails.tiers || 11,
+        ...minionDetails,
+      });
     }
   }
 
-  for (const minion of minions) {
-    minion.levels = _.uniq(minion.levels.sort((a, b) => a - b));
+  // iterate over the minions in the map
+  for (const minion of minions.values()) {
+    // convert the set of levels to an array and sort it
+    minion.levels = [...minion.levels].sort((a, b) => a - b);
+    // compute the max level
     minion.maxLevel = minion.levels.length > 0 ? Math.max(...minion.levels) : 0;
-    minion.tiers = minion.tiers != null ? minion.tiers : 11;
-
+    // check if the minion has a name property, if not set it
     if (!("name" in minion)) {
-      minion.name = _.startCase(_.toLower(minion.id));
+      minion.name = minion.id.toLowerCase().replace(/_/g, " ");
     }
   }
 
-  return minions;
+  // return the minions as an array
+  return Array.from(minions.values());
 }
 
 function getMinionSlots(minions) {
-  const uniqueMinions = minions.reduce((count, minion) => count + minion.levels.length, 0);
+  // Count the number of unique minions in the minions array
+  const uniqueMinionsCount = minions.reduce((count, minion) => count + minion.levels.length, 0);
 
+  // Initialize an object to store the current and next slot information
   const output = { currentSlots: 5, toNext: 5 };
 
+  // Get the required number of unique minions for each slot
   const uniquesRequired = Object.keys(constants.MINION_SLOTS);
 
+  // Iterate through the required number of unique minions
   for (const uniques of uniquesRequired) {
-    if (parseInt(uniques) > uniqueMinions) {
+    // If the current number of unique minions is less than the required number
+    if (parseInt(uniques) > uniqueMinionsCount) {
+      // Set the current slots to the previous number of slots
       output.currentSlots = constants.MINION_SLOTS[uniquesRequired[uniquesRequired.indexOf(uniques) - 1]];
-      output.toNextSlot = parseInt(uniques) - uniqueMinions;
+      // Set the number of unique minions needed for the next slot
+      output.toNextSlot = parseInt(uniques) - uniqueMinionsCount;
+      // Exit the loop
       break;
     }
   }
 
+  // Return the output object
   return output;
 }
 
