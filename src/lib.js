@@ -3624,7 +3624,11 @@ export async function getProfile(
   }
 
   if (!profile) {
-    throw new Error("User not found in selected profile. This is probably due to a declined co-op invite.");
+    profile = profiles[0];
+
+    if (!profile) {
+      throw new Error("Couldn't find any Skyblock profile that belongs to this player.");
+    }
   }
 
   const userProfile = profile.members[paramPlayer];
