@@ -802,7 +802,7 @@ function getMinions(coopMembers) {
 
 function getMinionSlots(minions) {
   let uniqueMinions = minions.reduce((count, minion) => count + minion.levels.length, 0);
-  
+
   const output = { currentSlots: 5, toNext: 5 };
 
   const uniquesRequired = Object.keys(constants.MINION_SLOTS);
@@ -817,7 +817,6 @@ function getMinionSlots(minions) {
 
   return output;
 }
-
 
 export const getItems = async (
   profile,
