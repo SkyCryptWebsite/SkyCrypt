@@ -723,6 +723,7 @@ const metaDescription = getMetaDescription()
         <% if(calculated.guild.level){ %><span class='stat-name'>Level: </span><span class='stat-value'><%= calculated.guild.level %></span><br><% } %>
         ">Guild: <%= calculated.guild.name %></button><% } %>
         <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">Plancke</a>
+        <a href="https://namemc.com/profile/<%= calculated.uuid %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">NameMC</a>
         <div id="additional_socials">
           <button data-copy-text="<%= calculated.uuid %>" class="copy-text additional-player-stat">Copy UUID</button>
           <% if('DISCORD' in calculated.social){ %><button data-copy-text="<%= calculated.social.DISCORD %>" class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></button><% } %>
@@ -731,7 +732,6 @@ const metaDescription = getMetaDescription()
           <% if('INSTAGRAM' in calculated.social){ %><a data-tippy-content="Instagram" href="<%= calculated.social.INSTAGRAM %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-instagram"></a><% } %>
           <% if('TWITCH' in calculated.social){ %><a data-tippy-content="Twitch" href="<%= calculated.social.TWITCH %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitch"></a><% } %>
           <% if('HYPIXEL' in calculated.social){ %><a data-tippy-content="Hypixel Forums" href="<%= calculated.social.HYPIXEL %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-hypixel"></a><% } %>
-          <a data-tippy-content="NameMC" href="<%= `https://namemc.com/profile/${calculated.uuid}` %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-namemc"></a>
           <button class="additional-player-stat" id="reveal_socials" aria-label="reveal socials"></button>
         </div>
       </div>
