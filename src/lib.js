@@ -801,28 +801,23 @@ function getMinions(coopMembers) {
 }
 
 function getMinionSlots(minions) {
-  let uniqueMinions = 0;
-
-  for (const minion of minions) {
-    uniqueMinions += minion.levels.length;
-  }
-
+  let uniqueMinions = minions.reduce((count, minion) => count + minion.levels.length, 0);
+  
   const output = { currentSlots: 5, toNext: 5 };
 
-  const uniquesRequired = Object.keys(constants.MINION_SLOTS).sort((a, b) => parseInt(a) - parseInt(b));
+  const uniquesRequired = Object.keys(constants.MINION_SLOTS);
 
-  for (const [index, uniques] of uniquesRequired.entries()) {
-    if (parseInt(uniques) <= uniqueMinions) {
-      continue;
+  for (const uniques of uniquesRequired) {
+    if (parseInt(uniques) > uniqueMinions) {
+      output.currentSlots = constants.MINION_SLOTS[uniquesRequired[uniquesRequired.indexOf(uniques) - 1]];
+      output.toNextSlot = parseInt(uniques) - uniqueMinions;
+      break;
     }
-
-    output.currentSlots = constants.MINION_SLOTS[uniquesRequired[index - 1]];
-    output.toNextSlot = uniquesRequired[index] - uniqueMinions;
-    break;
   }
 
   return output;
 }
+
 
 export const getItems = async (
   profile,
