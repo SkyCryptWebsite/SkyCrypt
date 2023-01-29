@@ -2093,6 +2093,15 @@ export async function getStats(
     active: userProfile.nether_island_player_data?.abiphone?.active_contacts?.length || 0,
   };
 
+  output.skyblock_level = {
+    xp: userProfile.leveling?.experience || 0,
+    level: Math.floor(userProfile.leveling?.experience / 100 || 0),
+    maxLevel: 386,
+    progress: (userProfile.leveling?.experience % 100) / 100 || 0,
+    xpCurrent: userProfile.leveling?.experience % 100 || 0,
+    xpForNext: 100,
+  };
+
   // MISC
 
   const misc = {};

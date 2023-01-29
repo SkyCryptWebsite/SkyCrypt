@@ -48,6 +48,17 @@ export function getPlayerStats() {
     bonusAttackSpeedMultiplier = 0,
     ferocityMultiplier = 0;
 
+  // Skyblock Level
+  if (calculated.skyblock_level.level > 0) {
+    stats.health.skyblock_level ??= 0;
+    stats.strength.skyblock_level ??= 0;
+
+    stats.health.skyblock_level += calculated.skyblock_level.level * 5;
+    stats.strength.skyblock_level += Math.floor(calculated.skyblock_level.level / 5) * 1;
+
+    stats.health.skyblock_level += Math.floor(calculated.skyblock_level.level / 10) * 5;
+  }
+
   // Bestiary Level
   if (calculated?.bestiary.bonus > 0) {
     stats.health.bestiary ??= 0;
@@ -67,70 +78,63 @@ export function getPlayerStats() {
   }
 
   // Slayer Completion
-  for (const type of Object.keys(calculated.slayers) || []) {
-    for (const tiers of Object.keys(calculated.slayers[type as keyof typeof calculated.slayers]?.kills) || []) {
+  for (const type in calculated.slayers || {}) {
+    for (const tiers in calculated.slayers[type as keyof typeof calculated.slayers]?.kills || {}) {
+      stats.combat_wisdom.slayer ??= 0;
+
       if (parseInt(tiers) <= 3) {
-        temp[type] ??= 0;
-        temp[type] += 1;
-      } else if (parseInt(tiers) == 5) {
-        // Hypixel admins forgot to add tier 5 bosses to Wisdom calculation :/
-        temp[type] ??= 0;
-        temp[type] += 2;
+        stats.combat_wisdom.slayer += 1;
+      } else if (parseInt(tiers) == 4) {
+        stats.combat_wisdom.slayer += 2;
       }
     }
   }
 
-  for (const type of Object.keys(temp)) {
-    stats.combat_wisdom.slayer ??= 0;
-    stats.combat_wisdom.slayer += temp[type];
-  }
-
   // Heart Of The Mountain
+  const miningAbilities = [
+    "Mining Speed I",
+    "Mining Speed II",
+    "Mining Fortune I",
+    "Mining Fortune II",
+    "Mining Madness",
+    "Seasoned Mineman",
+  ];
+
   for (const a of calculated.hotm) {
-    if (
-      a.display_name == "Mining Speed I" ||
-      a.display_name == "Mining Speed II" ||
-      a.display_name == "Mining Fortune I" ||
-      a.display_name == "Mining Fortune II" ||
-      a.display_name == "Mining Madness" ||
-      a.display_name == "Seasoned Mineman"
-    ) {
+    if (miningAbilities.includes(a.display_name)) {
       a.level = parseInt(a.tag.display.Lore[1].split(" ")[1]);
-      a.disabled = a.tag.display.Lore[a.tag.display?.Lore.length - 1].includes("ENABLED") ? false : true || false;
-      if (a.display_name == "Mining Speed I" && a.disabled == false) {
+      a.disabled = !a.tag.display.Lore[a.tag.display?.Lore.length - 1].includes("ENABLED");
+
+      if (a.disabled === true) continue;
+
+      if (a.display_name === "Mining Speed I") {
         stats.mining_speed.heart_of_the_mountain ??= 0;
-        stats.mining_speed.heart_of_the_mountain += a.level * 20;
-      }
-      if (a.display_name == "Mining Speed II" && a.disabled == false) {
+        stats.mining_speed.heart_of_the_mountain = (stats.mining_speed.heart_of_the_mountain || 0) + a.level * 20;
+      } else if (a.display_name === "Mining Speed II") {
         stats.mining_speed.heart_of_the_mountain ??= 0;
-        stats.mining_speed.heart_of_the_mountain += a.level * 40;
-      }
-      if (a.display_name == "Mining Fortune I" && a.disabled == false) {
+        stats.mining_speed.heart_of_the_mountain = (stats.mining_speed.heart_of_the_mountain || 0) + a.level * 40;
+      } else if (["Mining Fortune II", "Mining Fortune I"].includes(a.display_name)) {
         stats.mining_fortune.heart_of_the_mountain ??= 0;
-        stats.mining_fortune.heart_of_the_mountain += a.level * 5;
-      }
-      if (a.display_name == "Mining Fortune II" && a.disabled == false) {
-        stats.mining_fortune.heart_of_the_mountain ??= 0;
-        stats.mining_fortune.heart_of_the_mountain += a.level * 5;
-      }
-      if (a.display_name == "Seasoned Mineman" && a.disabled == false) {
+        stats.mining_fortune.heart_of_the_mountain = (stats.mining_fortune.heart_of_the_mountain || 0) + a.level * 5;
+      } else if (a.display_name === "Seasoned Mineman") {
         stats.mining_wisdom.heart_of_the_mountain ??= 0;
-        stats.mining_wisdom.heart_of_the_mountain += 5 + parseInt(a.level.toString().split("/")[1]) * 0.1 || 0;
-      }
-      if (a.display_name == "Mining Madness" && a.disabled == false) {
+        stats.mining_wisdom.heart_of_the_mountain += 5 + a.level * 0.1;
+      } else if (a.display_name === "Mining Madness") {
         stats.mining_speed.heart_of_the_mountain ??= 0;
-        stats.mining_speed.heart_of_the_mountain += 50;
         stats.mining_fortune.heart_of_the_mountain ??= 0;
-        stats.mining_fortune.heart_of_the_mountain += 50;
+        stats.mining_speed.heart_of_the_mountain = (stats.mining_speed.heart_of_the_mountain || 0) + 50;
+        stats.mining_fortune.heart_of_the_mountain = (stats.mining_fortune.heart_of_the_mountain || 0) + 50;
       }
     }
   }
 
   // Harp Quest
   for (const harp in calculated.harp_quest || []) {
-    if (harp?.endsWith("_best_completion")) {
+    if (harp === undefined) continue;
+
+    if (harp.endsWith("_best_completion")) {
       stats.intelligence.harp ??= 0;
-      stats.intelligence.harp += CONSTANTS.HARP_QUEST[harp as keyof typeof CONSTANTS.HARP_QUEST];
+      stats.intelligence.harp += CONSTANTS.HARP_QUEST[harp as keyof typeof CONSTANTS.HARP_QUEST] || 0;
     }
   }
 
@@ -197,13 +201,6 @@ export function getPlayerStats() {
           .map((key) => stats.crit_damage[key])
           .reduce((a, b) => a + b, 0) / 2;
     }
-
-    // ? Obsidian Chestplate
-    /*
-    if (chestplate?.tag?.ExtraAttributes?.id == 'OBSIDIAN_CHESTPLATE') {
-      stats.speed.armor += itemCount.OBSIDIAN.armor / 20 ? (itemCount.OBSIDIAN.armor / 20).toFixed(0) : 0;
-    }
-    */
 
     // ? Glacite Armor
     if (
@@ -336,11 +333,8 @@ export function getPlayerStats() {
   }
 
   // Active accessories stats
-  const accessoryDuplicates: string[] = [];
   for (const item of items.accessories.filter((item) => (item as Item).isInactive === false)) {
     const itemData: Item = item as Item;
-    if (accessoryDuplicates.includes(itemData.tag?.ExtraAttributes?.id || "")) continue;
-    accessoryDuplicates.push(itemData.tag?.ExtraAttributes?.id || "");
 
     const bonusStats: ItemStats = helper.getStatsFromItem(item as Item);
 
@@ -353,7 +347,6 @@ export function getPlayerStats() {
       stats[name].accessories += value;
 
       if (itemData.tag?.ExtraAttributes?.id == "NIGHT_CRYSTAL" || itemData.tag?.ExtraAttributes?.id == "DAY_CRYSTAL") {
-        accessoryDuplicates.push(itemData.tag?.ExtraAttributes?.id);
         stats.health.accessories += 5;
         stats.strength.accessories += 5;
       }
@@ -377,7 +370,7 @@ export function getPlayerStats() {
   // Dungeoneering stats
   if (calculated.dungeons?.catacombs?.level?.level) {
     const bonusStats: ItemStats = getBonusStat(
-      Math.min(calculated.dungeons?.catacombs?.level?.maxLevel, 50),
+      Math.min(calculated.dungeons?.catacombs?.level?.level, 50),
       "skill_dungeoneering",
       calculated.dungeons.catacombs.level.maxLevel
     );
@@ -504,7 +497,7 @@ export function getPlayerStats() {
       effect.effect === undefined ||
       (CONSTANTS as any).POTION_EFFECTS[effect.effect as string]?.[effect.level as number]?.bonus === undefined
     ) {
-      console.log("If you're seeing this, please report this to the developer, thanks.");
+      console.log("If you're seeing this, please report this to the developers, thanks.");
       console.log("Potion effect data:");
       console.log(effect);
       continue;

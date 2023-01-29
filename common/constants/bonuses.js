@@ -4,6 +4,7 @@ export const STATS_BONUS = {
     1: { health: 2, farming_fortune: 4 },
     15: { health: 3, farming_fortune: 4 },
     20: { health: 4, farming_fortune: 4 },
+    25: { health: 5, farming_fortune: 4 },
   },
   skill_mining: {
     1: { defense: 1, mining_fortune: 4 },

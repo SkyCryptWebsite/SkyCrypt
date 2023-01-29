@@ -617,6 +617,7 @@ declare const calculated: SkyCryptPlayer & {
     effect: string;
     level: number;
   }[];
+  skyblock_level: Level;
 };
 
 interface SkyCryptRelativeTime {
