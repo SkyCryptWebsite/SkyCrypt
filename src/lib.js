@@ -2861,11 +2861,12 @@ export function getTrophyFish(userProfile) {
 
   for (const key of Object.keys(constants.TROPHY_FISH)) {
     const id = key.toLowerCase();
-    const caught = userProfile.trophy_fish[id] || 0;
-    const caughtBronze = userProfile.trophy_fish[`${id}_bronze`] || 0;
-    const caughtSilver = userProfile.trophy_fish[`${id}_silver`] || 0;
-    const caughtGold = userProfile.trophy_fish[`${id}_gold`] || 0;
-    const caughtDiamond = userProfile.trophy_fish[`${id}_diamond`] || 0;
+    const caught = (userProfile.trophy_fish && userProfile.trophy_fish[id]) || 0;
+    const caughtBronze = (userProfile.trophy_fish && userProfile.trophy_fish[`${id}_bronze`]) || 0;
+    const caughtSilver = (userProfile.trophy_fish && userProfile.trophy_fish[`${id}_silver`]) || 0;
+    const caughtGold = (userProfile.trophy_fish && userProfile.trophy_fish[`${id}_gold`]) || 0;
+    const caughtDiamond = (userProfile.trophy_fish && userProfile.trophy_fish[`${id}_diamond`]) || 0;
+
     const highestType =
       caughtDiamond > 0 ? "diamond" : caughtGold > 0 ? "gold" : caughtSilver > 0 ? "silver" : "bronze";
 
@@ -2888,8 +2889,8 @@ export function getTrophyFish(userProfile) {
   output.total_caught = userProfile.trophy_fish?.total_caught || 0;
 
   const { type: stageType, formatted: stageFormatted } =
-    constants.TROPHY_FISH_STAGES[userProfile.trophy_fish.rewards.length] || {};
-  const { type: stageProgressType } = constants.TROPHY_FISH_STAGES[userProfile.trophy_fish.rewards.length + 1] || {
+    constants.TROPHY_FISH_STAGES[(userProfile.trophy_fish?.rewards || []).length] || {};
+  const { type: stageProgressType } = constants.TROPHY_FISH_STAGES[(userProfile.trophy_fish?.rewards || []).length + 1] || {
     type: stageType,
   };
 
@@ -2904,7 +2905,7 @@ export function getTrophyFish(userProfile) {
         } / ${Object.keys(constants.TROPHY_FISH).length}`
       : null;
 
-  output.stage = {
+  output.stage = {  
     name: stageFormatted || "None",
     type: stageType,
     progress: stageProgress,
