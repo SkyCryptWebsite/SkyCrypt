@@ -331,20 +331,40 @@ export async function renderHead(url, scale) {
   return await canvas.toBuffer("image/png");
 }
 
+/**
+ * Loads and renders an armor with the specified type and color.
+ *
+ * @async
+ * @param {string} type - The type of the armor to be rendered.
+ * @param {string} color - The color of the armor to be rendered.
+ * @returns {Promise<Image>} The rendered armor image.
+ */
 export async function renderArmor(type, color) {
+  // Load the base image and overlay image of the armor
   const armorBase = await loadImage(path.resolve(textureDir, `leather_${type}.png`));
   const armorOverlay = await loadImage(path.resolve(textureDir, `leather_${type}_overlay.png`));
 
+  // Return the rendered colored item
   return await renderColoredItem("#" + color, armorBase, armorOverlay);
 }
 
+/**
+ * Loads and renders a potion with the specified type and color.
+ *
+ * @async
+ * @param {string} type - The type of the potion to be rendered.
+ * @param {string} color - The color of the potion to be rendered.
+ * @returns {Promise<Image>} The rendered potion image.
+ */
 export async function renderPotion(type, color) {
+  // Load the liquid image and bottle image of the potion
   const potionLiquid = await loadImage(path.resolve(textureDir, "potion_overlay.png"));
-  const potionBottlle = await loadImage(
+  const potionBottle = await loadImage(
     path.resolve(textureDir, type === "splash" ? "splash_potion.png" : "potion.png")
   );
 
-  return await renderColoredItem("#" + color, potionLiquid, potionBottlle);
+  // Return the rendered colored item
+  return await renderColoredItem("#" + color, potionLiquid, potionBottle);
 }
 
 export async function renderItem(skyblockId, query, db) {
