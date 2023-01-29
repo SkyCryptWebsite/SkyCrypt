@@ -17,63 +17,125 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const skew_a = 26 / 45;
 const skew_b = skew_a * 2;
 
+/**
+ * Check if a canvas image has transparency
+ * @param {HTMLCanvasElement} canvas - The canvas to check for transparency
+ * @returns {Boolean} - Returns true if the canvas has any transparent pixels, false otherwise
+ */
 function hasTransparency(canvas) {
+  // Get 2D context of canvas
   const ctx = canvas.getContext("2d");
+
+  // Get image data of canvas
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
+  // Loop through all the pixels in the image data
   for (let i = 3; i < imageData.length; i += 4) {
+    // Check the alpha channel (the 4th value) of each pixel
     if (imageData[i] < 255) {
+      // Return true if any alpha value is less than 255 (not fully opaque)
       return true;
     }
   }
 
+  // Return false if all alpha values are 255 (fully opaque)
   return false;
 }
 
+/**
+ * Resizes an image using canvas
+ * @param {HTMLCanvasElement | HTMLImageElement | HTMLVideoElement} src - The source image to resize
+ * @param {Number} scale - The scale factor to resize the image by
+ * @returns {HTMLCanvasElement} - A canvas element with the resized image
+ */
 function resize(src, scale) {
+  // Create a new canvas with resized dimensions
   const dst = createCanvas(scale * src.width, scale * src.height);
+  // Get 2D context of the new canvas
   const ctx = dst.getContext("2d");
 
-  // don't blur on resize
+  // Set the pattern quality to "fast" to avoid blurring on resize
   ctx.patternQuality = "fast";
 
+  // Draw the source image onto the new canvas with resized dimensions
   ctx.drawImage(src, 0, 0, src.width * scale, src.height * scale);
+
+  // Return the resized canvas
   return dst;
 }
 
+/**
+ * Crops and resizes an image using canvas
+ * @param {HTMLCanvasElement | HTMLImageElement | HTMLVideoElement} src - The source image to crop and resize
+ * @param {Number} x - The x coordinate of the top left corner of the crop area
+ * @param {Number} y - The y coordinate of the top left corner of the crop area
+ * @param {Number} width - The width of the crop area
+ * @param {Number} height - The height of the crop area
+ * @param {Number} scale - The scale factor to resize the cropped image by
+ * @returns {HTMLCanvasElement} - A canvas element with the cropped and resized image
+ */
 function getPart(src, x, y, width, height, scale) {
+  // Create a new canvas with resized dimensions
   const dst = createCanvas(scale * width, scale * height);
+  // Get 2D context of the new canvas
   const ctx = dst.getContext("2d");
 
-  // don't blur on resize
+  // Set the pattern quality to "fast" to avoid blurring on resize
   ctx.patternQuality = "fast";
 
+  // Draw the cropped area of the source image onto the new canvas with resized dimensions
   ctx.drawImage(src, x, y, width, height, 0, 0, width * scale, height * scale);
+
+  // Return the cropped and resized canvas
   return dst;
 }
 
+/**
+ * Flips an image horizontally using canvas
+ * @param {HTMLCanvasElement | HTMLImageElement | HTMLVideoElement} src - The source image to flip
+ * @returns {HTMLCanvasElement} - A canvas element with the flipped image
+ */
 function flipX(src) {
+  // Create a new canvas with the same dimensions as the source image
   const dst = createCanvas(src.width, src.height);
+  // Get 2D context of the new canvas
   const ctx = dst.getContext("2d");
 
+  // Translate the context to the center of the canvas
   ctx.translate(src.width, 0);
+  // Flip the context horizontally
   ctx.scale(-1, 1);
 
+  // Draw the source image onto the new canvas
   ctx.drawImage(src, 0, 0);
+
+  // Return the flipped canvas
   return dst;
 }
 
+/**
+ * Darkens an image using canvas
+ * @param {HTMLCanvasElement | HTMLImageElement | HTMLVideoElement} src - The source image to darken
+ * @param {Number} factor - A value between 0 and 1 representing the degree of darkness to apply
+ * @returns {HTMLCanvasElement} - A canvas element with the darkened image
+ */
 function darken(src, factor) {
+  // Create a new canvas with the same dimensions as the source image
   const dst = createCanvas(src.width, src.height);
+  // Get 2D context of the new canvas
   const ctx = dst.getContext("2d");
 
+  // Draw the source image onto the new canvas
   ctx.drawImage(src, 0, 0);
 
+  // Set the composite operation to "source-atop"
   ctx.globalCompositeOperation = "source-atop";
 
+  // Fill the canvas with a black rectangle with the specified opacity
   ctx.fillStyle = `rgba(0, 0, 0, ${factor})`;
   ctx.fillRect(0, 0, src.width, src.height);
 
+  // Return the darkened canvas
   return dst;
 }
 
