@@ -2890,7 +2890,9 @@ export function getTrophyFish(userProfile) {
 
   const { type: stageType, formatted: stageFormatted } =
     constants.TROPHY_FISH_STAGES[(userProfile.trophy_fish?.rewards || []).length] || {};
-  const { type: stageProgressType } = constants.TROPHY_FISH_STAGES[(userProfile.trophy_fish?.rewards || []).length + 1] || {
+  const { type: stageProgressType } = constants.TROPHY_FISH_STAGES[
+    (userProfile.trophy_fish?.rewards || []).length + 1
+  ] || {
     type: stageType,
   };
 
@@ -2905,7 +2907,7 @@ export function getTrophyFish(userProfile) {
         } / ${Object.keys(constants.TROPHY_FISH).length}`
       : null;
 
-  output.stage = {  
+  output.stage = {
     name: stageFormatted || "None",
     type: stageType,
     progress: stageProgress,
