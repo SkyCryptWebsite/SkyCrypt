@@ -12,6 +12,7 @@
 const rarityOrder = ["very_special", "special", "supreme", "divine", "mythic", "legendary", "epic", "rare", "uncommon", "common"];
 const slayerOrder = ["zombie", "spider", "wolf", "enderman", "blaze"];
 const badgeOrder = ["gold", "silver", "bronze"];
+const trophyFishOrder = ["bronze", "silver", "gold", "diamond"]
 
 const skillItems = {
   alchemy: "icon-379_0",
@@ -1768,8 +1769,8 @@ const metaDescription = getMetaDescription()
               } %>
             </div>
             <% } %>
-            <button class="stat-sub-header extender" aria-expanded="false">Trophy Fish</button>
-            <div class="collections extendable">
+            <button class="stat-sub-header extender" aria-controls="fishing-trophyfish" aria-expanded="false">Trophy Fish</button>
+            <div class="trophyfish extendable" id="fishing-trophyfish">
               <p class="stat-raw-values">
                 <span class="stat-name">Total Caught:</span>
                 <span class="stat-value"><%= calculated.trophy_fish.total_caught.toLocaleString() %></span>
@@ -1778,7 +1779,7 @@ const metaDescription = getMetaDescription()
                 <span class="stat-name <%= max %>">Current Stage:</span>
                 <span class="stat-value <%= max %>"><%= calculated.trophy_fish.stage.name %></span>
                 <% if (calculated.trophy_fish.stage.progress !== null) { %>
-                <span style='color: var(--§f);'> (<%= calculated.trophy_fish.stage.progress %>)</span>
+                  <span style='color: rgba(var(--text-rgb), 0.7);'> (<%= calculated.trophy_fish.stage.progress %>)</span>
                 <% } %>
                 <br>
               </p>
@@ -1786,7 +1787,7 @@ const metaDescription = getMetaDescription()
               <!-- ? Moves chips into next row. Reason - looks better -->
               <div style="width:100%;"></div>
 
-              <div class="collections">
+              <div class="trophy-fish">
                 <% for (const fish of calculated.trophy_fish.fish) { %>
                 <div class="chip" data-tippy-content="<%= helper.renderLore(fish.description) %>">
                   <div class="chip-icon-wrapper">
@@ -1801,10 +1802,21 @@ const metaDescription = getMetaDescription()
                       </div>
 
                       <div class="trophy-fish-count">
-                        <div class="bronze-count count-format"></div><span><%= fish.caught.bronze.toLocaleString() %></span>
-                        <div class="silver-count count-format"></div><span><%= fish.caught.silver.toLocaleString() %></span>
-                        <div class="gold-count count-format"></div><span><%= fish.caught.gold.toLocaleString() %></span>
-                        <div class="diamond-count count-format"></div><span><%= fish.caught.diamond.toLocaleString() %></span>
+                        <% for (const fishTier of trophyFishOrder) {
+                          let count = fish.caught[fishTier] ?? 0; %>
+                          <div class="<%= fishTier %>-count count-format"></div>
+                          <% if (count > 0) { %>
+                            <span class="count-value">
+                              <%= fish.caught[fishTier].toLocaleString() %>
+                            </span>
+                          <% } else { %>
+                            <span class="count-value">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="4 2 24 20">
+                                <path fill="currentColor" d="M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z" />
+                              </svg>
+                            </span>
+                          <% } %>
+                        <% } %>
                       </div>
                     </div>
                   </div>
@@ -2836,7 +2848,7 @@ const metaDescription = getMetaDescription()
           </p>
           <% } %>
 
-          <% if('effects' in calculated.misc){ 
+          <% if('effects' in calculated.misc){
             if (Object.keys(calculated.misc.effects).some((key) => Object.keys(calculated.misc.effects[key]).length > 0)) { %>
               <div class="category-header">
                 <div class="category-icon">
@@ -2844,7 +2856,7 @@ const metaDescription = getMetaDescription()
                 </div>
                 <span>Potions</span>
               </div>
-              <% 
+              <%
               let effects_tooltips = [];
               for (const key of Object.keys(calculated.misc.effects).sort()) {
                 effects_tooltips[key] ??= [];
@@ -2852,7 +2864,7 @@ const metaDescription = getMetaDescription()
                   if (key === "active") {
                     if (potion?.effect === undefined || potion?.level === null) continue;
                     effects_tooltips[key].push(`<span class="stat-value">${constants.POTION_EFFECTS[potion.effect]?.[potion.level].name.replace('Potion', '') || potion.effect.split('_').map((effect) => helper.capitalizeFirstLetter(effect.toLowerCase())).join(' ')}</span><br>`)
-                  
+
                   } else {
                     potion = potion?.effect || potion
 
@@ -2865,7 +2877,7 @@ const metaDescription = getMetaDescription()
                 <span <%- effects_tooltips['active'] ? `data-tippy-content='<span class="stat-name">Active Potion Effects: :</span><br>${effects_tooltips['active'].join("")}'` : "" %>>
                   <span class="stat-name">Active Potion Effects: </span><span class="stat-value"><%= calculated.misc.effects.active.length %></span>
                 </span><br>
-        
+
                 <span <%- effects_tooltips['paused'] ? `data-tippy-content='<span class="stat-name">Paused Potion Effects: </span><br>${effects_tooltips['paused'].join("")}'` : "" %>>
                   <span class="stat-name">Paused Potion Effects: </span><span class="stat-value"><%= calculated.misc.effects.paused.length %></span>
                 </span><br>

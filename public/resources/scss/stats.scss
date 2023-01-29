@@ -1984,7 +1984,8 @@ inventory-view {
 .collections,
 .minions,
 .stat-farming-crops,
-.sea-creatures {
+.sea-creatures,
+.trophy-fish {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -2046,14 +2047,11 @@ inventory-view {
   font-weight: 450;
 
   .trophy-fish-info {
-    .trophy-fish-name {
-      color: white;
-    }
+    margin-bottom: 2px;
 
     .trophy-fish-amount {
       color: rgba(var(--text-rgb), 0.7);
       font-weight: 500;
-      margin-left: 4px;
     }
   }
 
@@ -2061,9 +2059,19 @@ inventory-view {
     display: grid;
     grid-template-columns: repeat(2, auto 1fr);
     gap: 0px 4px;
+    height: 44px;
 
     text-align: left;
     align-items: center;
+  }
+
+  .count-value {
+    height: 22px;
+
+    svg {
+      width: 20px;
+      height: 22px;
+    }
   }
 
   .count-format {
