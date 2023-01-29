@@ -42,6 +42,12 @@ function hasTransparency(canvas) {
   return false;
 }
 
+/**
+ * Resizes an image using canvas
+ * @param {HTMLCanvasElement | HTMLImageElement | HTMLVideoElement} src - The source image to resize
+ * @param {Number} scale - The scale factor to resize the image by
+ * @returns {HTMLCanvasElement} - A canvas element with the resized image
+ */
 function resize(src, scale) {
   // Create a new canvas with resized dimensions
   const dst = createCanvas(scale * src.width, scale * src.height);
