@@ -171,7 +171,7 @@ async function renderColoredItem(color, baseImage, overlayImage) {
 
   ctx.drawImage(overlayImage, 0, 0);
 
-  return await canvas.toBuffer("image/png");
+  return canvas.toBuffer("image/png");
 }
 
 export async function renderHead(url, scale) {
@@ -328,7 +328,7 @@ export async function renderHead(url, scale) {
   );
   ctx.drawImage(hat_canvas, 0, 0);
 
-  return await canvas.toBuffer("image/png");
+  return canvas.toBuffer("image/png");
 }
 
 /**
@@ -341,8 +341,10 @@ export async function renderHead(url, scale) {
  */
 export async function renderArmor(type, color) {
   // Load the base image and overlay image of the armor
-  const armorBase = await loadImage(path.resolve(textureDir, `leather_${type}.png`));
-  const armorOverlay = await loadImage(path.resolve(textureDir, `leather_${type}_overlay.png`));
+  const [armorBase, armorOverlay] = await Promise.all([
+    loadImage(path.resolve(textureDir, `leather_${type}.png`)),
+    loadImage(path.resolve(textureDir, `leather_${type}_overlay.png`)),
+  ]);
 
   // Return the rendered colored item
   return await renderColoredItem("#" + color, armorBase, armorOverlay);
@@ -358,13 +360,13 @@ export async function renderArmor(type, color) {
  */
 export async function renderPotion(type, color) {
   // Load the liquid image and bottle image of the potion
-  const potionLiquid = await loadImage(path.resolve(textureDir, "potion_overlay.png"));
-  const potionBottle = await loadImage(
-    path.resolve(textureDir, type === "splash" ? "splash_potion.png" : "potion.png")
-  );
+  const [potionLiquid, potionBottlle] = await Promise.all([
+    loadImage(path.resolve(textureDir, "potion_overlay.png")),
+    loadImage(path.resolve(textureDir, type === "splash" ? "splash_potion.png" : "potion.png")),
+  ]);
 
   // Return the rendered colored item
-  return await renderColoredItem("#" + color, potionLiquid, potionBottle);
+  return await renderColoredItem("#" + color, potionLiquid, potionBottlle);
 }
 
 export async function renderItem(skyblockId, query, db) {
@@ -439,7 +441,7 @@ export async function renderItem(skyblockId, query, db) {
 
     const coords = rule.declarations[0].value.split(" ").map((a) => Math.abs(parseInt(a)));
 
-    outputTexture.image = await getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer("image/png");
+    outputTexture.image = getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer("image/png");
   }
 
   const customTexture = await customResources.getTexture(item, {
@@ -454,7 +456,7 @@ export async function renderItem(skyblockId, query, db) {
     }
 
     outputTexture.path = customTexture.path;
-    outputTexture.image = await fs.readFile(path.resolve(__dirname, "..", "public", customTexture.path));
+    outputTexture.image = fs.readFileSync(path.resolve(__dirname, "..", "public", customTexture.path));
   }
 
   if (!("image" in outputTexture)) {
@@ -465,8 +467,8 @@ export async function renderItem(skyblockId, query, db) {
 }
 
 export async function init() {
-  itemsSheet = await loadImage(path.resolve(__dirname, "..", "public", "resources", "img", "inventory", `items.png`));
-  itemsCss = css.parse(
-    await fs.readFile(path.resolve(__dirname, "..", "public", "resources", "css", `inventory.css`), "utf8")
-  );
+  [itemsSheet, itemsCss] = await Promise.all([
+    loadImage(path.resolve(__dirname, "..", "public", "resources", "img", "inventory", `items.png`)),
+    css.parse(fs.readFileSync(path.resolve(__dirname, "..", "public", "resources", "css", `inventory.css`), "utf8")),
+  ]);
 }
