@@ -1,0 +1,6 @@
+{
+	"parent": "item/block",
+	"textures": {
+		"0": "./enchanted_bone_block"
+	}
+}

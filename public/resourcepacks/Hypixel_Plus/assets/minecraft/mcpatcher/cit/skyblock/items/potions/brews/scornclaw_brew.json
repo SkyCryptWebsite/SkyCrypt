@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "./brew_mug",
+        "layer1": "./scornclaw_brew"
+    }
+}
