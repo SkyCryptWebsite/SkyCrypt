@@ -1,12 +1,15 @@
 import cluster from "cluster";
 
-if (cluster.isPrimary) {
-  await import("./master.js");
+const initCluster = async () => {
+  if (!cluster.isPrimary) {
+    return import("./app.js");
+  }
 
+  await import("./master.js");
   const os = await import("os");
 
   const totalCpus = os.cpus().length;
-  const cpus = Math.min(process.env?.NODE_ENV != "development" ? 8 : 2, totalCpus);
+  const cpus = Math.min(process.env?.NODE_ENV === "development" ? 2 : 8, totalCpus);
 
   for (let i = 0; i < cpus; i += 1) {
     cluster.fork();
@@ -22,6 +25,6 @@ if (cluster.isPrimary) {
   });
 
   console.log(`Running SkyBlock Stats on ${cpus} cores`);
-} else {
-  import("./app.js");
-}
+};
+
+initCluster();
