@@ -12,7 +12,7 @@ const credentialsFilePath = path.resolve(__dirname, "../credentials.json");
 
 /** @type {Credentials} */
 const defaultCredentials = {
-  hypixel_api_key: "",
+  hypixel_api_key: "PUT HYPIXEL API KEY HERE",
   dbUrl: "mongodb://localhost:27017",
   dbName: "sbstats",
   redisUrl: "redis://localhost:6379",
