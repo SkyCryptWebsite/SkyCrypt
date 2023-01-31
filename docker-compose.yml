@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 
 services:
   redis:
@@ -8,6 +8,7 @@ services:
     volumes:
       - ./devdata/redis:/data
     container_name: sc_redis
+    restart: always
 
   mongo:
     image: mongo:latest
@@ -19,3 +20,4 @@ services:
       - ./devdata/mongo:/data/db
     command: mongod --quiet --logpath /dev/null
     container_name: sc_mongo
+    restart: always
