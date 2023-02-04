@@ -828,7 +828,7 @@ function addPowerLoreStat(lore, stat, value) {
   const statData = constants.STATS_DATA[stat];
 
   lore.push(
-    `§${statData.color}${value >= 0 ? "+" : ""}${Math.round(value).toLocaleString()}${statData.symbol} ${
+    `§${statData.color}${value >= 0 ? "+" : ""}${Math.round(value).toLocaleString()} ${statData.symbol} ${
       statData.nameLore
     }`
   );
@@ -864,8 +864,7 @@ function getPower(name, magicalPower) {
     const combined = { ...stats };
 
     if (info.unique) {
-      lore.push("");
-      lore.push("§7Unique Power Bonus:");
+      lore.push("", "§7Unique Power Bonus:");
 
       for (const [name, value] of Object.entries(info.unique)) {
         if (!combined[name]) {
