@@ -263,6 +263,12 @@ function fillLore(element: HTMLElement) {
   } else if (element.hasAttribute("data-upgrade-accessory-index")) {
     item =
       calculated.missingAccessories.upgrades[parseInt(element.getAttribute("data-upgrade-accessory-index") as string)];
+  } else if (element.hasAttribute("data-power-selected")) {
+    item = calculated.selected_power;
+  } else if (element.hasAttribute("data-power-index")) {
+    item = calculated.unlocked_powers[parseInt(element.getAttribute("data-power-index") as string)];
+  } else if (element.hasAttribute("data-locked-power-index")) {
+    item = calculated.locked_powers[parseInt(element.getAttribute("data-locked-power-index") as string)];
   }
 
   if (item == undefined) {

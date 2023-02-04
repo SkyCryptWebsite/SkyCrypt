@@ -84,6 +84,26 @@ export function getPlayerStats() {
     }
   }
 
+  // Thaumaturgist power
+  if (calculated.selected_power) {
+    for (const [name, value] of Object.entries(calculated.selected_power.stats)) {
+      if (!allowedStats.includes(name)) {
+        continue;
+      }
+
+      stats[name].thaumaturgist_power = value;
+    }
+  }
+
+  // Tuning points
+  for (const [name, value] of Object.entries(calculated.tuning_points.distribution)) {
+    if (!allowedStats.includes(name)) {
+      continue;
+    }
+
+    stats[name].tuning_points = value;
+  }
+
   // Skill bonus stats
   for (const [skill, data] of Object.entries(calculated.levels)) {
     const bonusStats: ItemStats = getBonusStat(data.level, `skill_${skill}` as BonusType, data.maxLevel);
