@@ -1080,3 +1080,34 @@ export function getAnimatedTexture(item) {
 
   return deepResults[0] ?? false;
 }
+
+export function romanize(num) {
+  const lookup = { M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90, L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1 };
+  let roman = "";
+
+  for (const i in lookup) {
+    while (num >= lookup[i]) {
+      roman += i;
+      num -= lookup[i];
+    }
+  }
+  return roman;
+}
+
+export async function getBingoGoals(db, cacheOnly = false) {
+  const output = await db.collection("bingoData").findOne({ _id: "cardData" });
+
+  if (cacheOnly === true) {
+    return output;
+  }
+
+  // 12 hours cache
+  if (output === undefined || output.last_save + 43200000 < Date.now()) {
+    const { data: output } = await axios.get("https://api.hypixel.net/resources/skyblock/bingo");
+    output.last_save = Date.now();
+
+    await db.collection("bingoData").updateOne({ _id: "cardData" }, { $set: { output } }, { upsert: true });
+  }
+
+  return output;
+}

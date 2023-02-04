@@ -262,14 +262,20 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
     paramPlayer.length == 32 ? await helper.resolveUsernameOrUuid(paramPlayer, db).display_name : paramPlayer;
 
   try {
-    const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, {
-      updateArea: true,
+    const [{ profile, allProfiles }, bingoProfile] = await Promise.all([
+      lib.getProfile(db, paramPlayer, paramProfile, {
+        updateArea: true,
+        cacheOnly,
+        debugId,
+      }),
+      lib.getBingoProfile(db, paramPlayer, { cacheOnly, debugId }),
+    ]);
+
+    const items = await lib.getItems(profile.members[profile.uuid], bingoProfile, true, req.cookies.pack, {
       cacheOnly,
       debugId,
     });
-
-    const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack, { cacheOnly, debugId });
-    const calculated = await lib.getStats(db, profile, allProfiles, items, { cacheOnly, debugId });
+    const calculated = await lib.getStats(db, profile, bingoProfile, allProfiles, items, { cacheOnly, debugId });
 
     if (isFoolsDay) {
       calculated.skin_data.skinurl =
