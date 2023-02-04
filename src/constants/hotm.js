@@ -1445,3 +1445,5 @@ export const PRECURSOR_PARTS = {
 };
 
 export const COMMISSIONS_MILESTONE = 6;
+
+export const MAX_PEAK_OF_THE_MOUNTAIN_LEVEL = 7;
