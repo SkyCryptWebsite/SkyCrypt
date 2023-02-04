@@ -4,7 +4,7 @@ specifiers:
   '@rollup/plugin-commonjs': ^24.0.0
   '@rollup/plugin-node-resolve': ^15.0.0
   '@rollup/plugin-replace': ^5.0.0
-  '@rollup/plugin-typescript': ^10.0.0
+  '@rollup/plugin-typescript': ^11.0.0
   '@typescript-eslint/eslint-plugin': ^5.36.1
   '@typescript-eslint/parser': ^5.33.1
   apng2gif-bin: ^1.7.1
@@ -108,7 +108,7 @@ devDependencies:
   '@rollup/plugin-commonjs': 24.0.0_rollup@2.79.1
   '@rollup/plugin-node-resolve': 15.0.1_rollup@2.79.1
   '@rollup/plugin-replace': 5.0.1_rollup@2.79.1
-  '@rollup/plugin-typescript': 10.0.1_gypgyaqhine6mwjfvh7icfhviq
+  '@rollup/plugin-typescript': 11.0.0_gypgyaqhine6mwjfvh7icfhviq
   '@typescript-eslint/eslint-plugin': 5.40.0_25sstg4uu2sk4pm7xcyzuov7xq
   '@typescript-eslint/parser': 5.40.0_z4bbprzjrhnsfa24uvmcbu7f5q
   concurrently: 7.4.0
@@ -348,8 +348,8 @@ packages:
       rollup: 2.79.1
     dev: true
 
-  /@rollup/plugin-typescript/10.0.1_gypgyaqhine6mwjfvh7icfhviq:
-    resolution: {integrity: sha512-wBykxRLlX7EzL8BmUqMqk5zpx2onnmRMSw/l9M1sVfkJvdwfxogZQVNUM9gVMJbjRLDR5H6U0OMOrlDGmIV45A==}
+  /@rollup/plugin-typescript/11.0.0_gypgyaqhine6mwjfvh7icfhviq:
+    resolution: {integrity: sha512-goPyCWBiimk1iJgSTgsehFD5OOFHiAknrRJjqFCudcW8JtWiBlK284Xnn4flqMqg6YAjVG/EE+3aVzrL5qNSzQ==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       rollup: ^2.14.0||^3.0.0
