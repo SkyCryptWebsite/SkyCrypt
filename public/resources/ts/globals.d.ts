@@ -593,6 +593,7 @@ declare const calculated: SkyCryptPlayer & {
     total: number;
     used: number;
   };
+  skyblock_level: Level;
 };
 
 interface SkyCryptRelativeTime {

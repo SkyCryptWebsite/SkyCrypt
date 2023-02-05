@@ -1,10 +1,10 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@rollup/plugin-commonjs': ^23.0.0
+  '@rollup/plugin-commonjs': ^24.0.0
   '@rollup/plugin-node-resolve': ^15.0.0
   '@rollup/plugin-replace': ^5.0.0
-  '@rollup/plugin-typescript': ^10.0.0
+  '@rollup/plugin-typescript': ^11.0.0
   '@typescript-eslint/eslint-plugin': ^5.36.1
   '@typescript-eslint/parser': ^5.33.1
   apng2gif-bin: ^1.7.1
@@ -56,7 +56,7 @@ specifiers:
   sharp: ^0.30.7
   sitemap: ^7.1.1
   skinview3d: ^2.2.1
-  skyhelper-networth: ^1.8.5
+  skyhelper-networth: 1.11.0
   tippy.js: ^6.3.7
   ts-lit-plugin: ^1.2.1
   twemoji: ^14.0.2
@@ -98,17 +98,17 @@ dependencies:
   sharp: 0.30.7
   sitemap: 7.1.1
   skinview3d: 2.2.1
-  skyhelper-networth: 1.8.5
+  skyhelper-networth: 1.11.0
   tippy.js: 6.3.7
   twemoji: 14.0.2
   upng-js: 2.1.0
   uuid: 8.3.2
 
 devDependencies:
-  '@rollup/plugin-commonjs': 23.0.2_rollup@2.79.1
+  '@rollup/plugin-commonjs': 24.0.0_rollup@2.79.1
   '@rollup/plugin-node-resolve': 15.0.1_rollup@2.79.1
   '@rollup/plugin-replace': 5.0.1_rollup@2.79.1
-  '@rollup/plugin-typescript': 10.0.1_gypgyaqhine6mwjfvh7icfhviq
+  '@rollup/plugin-typescript': 11.0.0_gypgyaqhine6mwjfvh7icfhviq
   '@typescript-eslint/eslint-plugin': 5.40.0_25sstg4uu2sk4pm7xcyzuov7xq
   '@typescript-eslint/parser': 5.40.0_z4bbprzjrhnsfa24uvmcbu7f5q
   concurrently: 7.4.0
@@ -298,8 +298,8 @@ packages:
     resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}
     dev: false
 
-  /@rollup/plugin-commonjs/23.0.2_rollup@2.79.1:
-    resolution: {integrity: sha512-e9ThuiRf93YlVxc4qNIurvv+Hp9dnD+4PjOqQs5vAYfcZ3+AXSrcdzXnVjWxcGQOa6KGJFcRZyUI3ktWLavFjg==}
+  /@rollup/plugin-commonjs/24.0.0_rollup@2.79.1:
+    resolution: {integrity: sha512-0w0wyykzdyRRPHOb0cQt14mIBLujfAv6GgP6g8nvg/iBxEm112t3YPPq+Buqe2+imvElTka+bjNlJ/gB56TD8g==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       rollup: ^2.68.0||^3.0.0
@@ -312,7 +312,7 @@ packages:
       estree-walker: 2.0.2
       glob: 8.0.3
       is-reference: 1.2.1
-      magic-string: 0.26.7
+      magic-string: 0.27.0
       rollup: 2.79.1
     dev: true
 
@@ -348,8 +348,8 @@ packages:
       rollup: 2.79.1
     dev: true
 
-  /@rollup/plugin-typescript/10.0.1_gypgyaqhine6mwjfvh7icfhviq:
-    resolution: {integrity: sha512-wBykxRLlX7EzL8BmUqMqk5zpx2onnmRMSw/l9M1sVfkJvdwfxogZQVNUM9gVMJbjRLDR5H6U0OMOrlDGmIV45A==}
+  /@rollup/plugin-typescript/11.0.0_gypgyaqhine6mwjfvh7icfhviq:
+    resolution: {integrity: sha512-goPyCWBiimk1iJgSTgsehFD5OOFHiAknrRJjqFCudcW8JtWiBlK284Xnn4flqMqg6YAjVG/EE+3aVzrL5qNSzQ==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       rollup: ^2.14.0||^3.0.0
@@ -2989,6 +2989,13 @@ packages:
       sourcemap-codec: 1.4.8
     dev: true
 
+  /magic-string/0.27.0:
+    resolution: {integrity: sha512-8UnnX2PeRAPZuN12svgR9j7M1uWMovg/CEnIwIG0LFkXSJJe4PdfUGiTGl8V9bsBHFUtfVINcSyYxd7q+kx9fA==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.4.14
+    dev: true
+
   /make-dir/3.1.0:
     resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
     engines: {node: '>=8'}
@@ -4089,8 +4096,8 @@ packages:
       three: 0.136.0
     dev: false
 
-  /skyhelper-networth/1.8.5:
-    resolution: {integrity: sha512-Thr4JV0uI+CZKUUyFAYVFiVMXCgeNqK02bbhA1dmPfWOZB+slZRTZcUKcxRlo4nCC0lK2xNMupWZHHyQVdEzYw==}
+  /skyhelper-networth/1.11.0:
+    resolution: {integrity: sha512-8hWuibHUtcca99N+KaxaJcC+rkgjM020QrGioyN+pPxd+TsKhWdDmh1F4sD78p8HfRX22OTch3trOMgHksZsaQ==}
     dependencies:
       axios: 0.27.2
       prismarine-nbt: 2.2.1

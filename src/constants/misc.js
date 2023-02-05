@@ -630,7 +630,7 @@ export const ESSENCE_SHOP = {
     },
     fresh_tools_kuudra: {
       name: "Fresh Tools",
-      description: "2-10% chance to double the speed of repairing Elle's Ballista for 5s during the Kuudra Boss Fight.",
+      description: "2-15% chance to double the speed of repairing Elle's Ballista for 5s during the Kuudra Boss Fight.",
       maxLevel: 5,
     },
     headstart_kuudra: {
