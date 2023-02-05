@@ -92,6 +92,12 @@
       --skillbar: var(--maxedbar);
     }
 
+    &[type="skyblock_level"] {
+      margin-bottom: 25px;
+      padding-right: 24px;
+      width: 200%;
+    }
+
     .skill-icon {
       width: 36px;
       height: 36px;

@@ -31,6 +31,7 @@ const skillItems = {
   social: "icon-388_0",
   taming: "icon-383_0",
   tank: 'icon-299_0',
+  skyblock_level: 'head-2e2cc42015e6678f8fd49ccc01fbf787f1ba2c32bcf559a015332fc5db50',
 };
 
 const bestiary = {
@@ -888,6 +889,11 @@ const metaDescription = getMetaDescription()
         <% } %>
       </div>
       <div id="skill_levels_container">
+        <% if (calculated.skyblock_level.xp !== 0 && calculated.skyblock_level.level !== 0) {%>
+        <div class="skill-bars">
+          <skill-component skill="level" type="skyblock_level" icon="<%= skillItems.skyblock_level%>"></skill-component>
+        </div>
+        <% } %>
         <% if ('levels' in calculated) { %>
         <div class="skill-bars" data-api-enabled="<%= 'runecrafting' in calculated.levels %>">
           <skill-component skill="taming" type="skill" icon="<%= skillItems.taming %>"></skill-component>
