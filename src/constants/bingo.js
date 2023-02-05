@@ -22,8 +22,10 @@ function formatBingOItemLore(item, bingoData, { completed = false, custom = fals
   const output = [];
   // Personal Goal
   if (item.tiers === undefined && item.id !== undefined) {
-    output.push("§8Personal Goal");
-    output.push("");
+    if (custom === false) {
+      output.push("§8Personal Goal");
+      output.push("");
+    }
     if (Array.isArray(item.lore)) {
       output.push(...item.lore);
     } else {
