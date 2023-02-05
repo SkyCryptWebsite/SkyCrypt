@@ -1080,3 +1080,27 @@ export function getAnimatedTexture(item) {
 
   return deepResults[0] ?? false;
 }
+
+/**
+ * @param {string} enrichment
+ * @returns string
+ * @description takes an enrichment name and returns the corresponding stat name
+ */
+export function enrichmentToStatName(enrichment) {
+  switch (enrichment) {
+    case "walk_speed":
+      return "speed";
+
+    case "critical_chance":
+      return "crit_chance";
+
+    case "critical_damage":
+      return "crit_damage";
+
+    case "attack_speed":
+      return "bonus_attack_speed";
+
+    default:
+      return enrichment;
+  }
+}

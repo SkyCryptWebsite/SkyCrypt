@@ -839,7 +839,6 @@ function getPower(name, magicalPower) {
   const displayName = helper.titleCase(name);
 
   const itemData = {
-    power_name: name,
     display_name: displayName,
     tag: {
       display: {
@@ -884,6 +883,7 @@ function getPower(name, magicalPower) {
     itemData.Damage = info.Damage;
     itemData.texture_path = info.texture_path;
     itemData.tag.display.Lore = lore;
+    itemData.power_type = info.type;
     itemData.stats = combined;
   }
 
@@ -2190,51 +2190,31 @@ export async function getStats(
       output.selected_power = getPower(selectedPower, output.magical_power.total);
     }
 
-    const unlockedPowers = Object.entries(constants.POWERS)
-      .filter(
-        ([_, power]) => power.type === "Starter" || (output.levels.combat.level >= 15 && power.type === "Intermediate")
-      )
-      .map(([name, _]) => name);
+    const unlockedPowers = new Set(userProfile.accessory_bag_storage.unlocked_powers);
 
-    if ("unlocked_powers" in userProfile.accessory_bag_storage) {
-      unlockedPowers.push(...userProfile.accessory_bag_storage.unlocked_powers);
-    }
-
-    for (const [power] of Object.entries(constants.POWERS)) {
-      if (unlockedPowers.includes(power)) {
+    for (const name of Object.keys(constants.POWERS)) {
+      if (name === selectedPower) {
         continue;
       }
 
-      output.locked_powers.push(getPower(power, output.magical_power.total));
-    }
+      const power = getPower(name, output.magical_power.total);
+      const unlocked =
+        power.power_type === "Starter" ||
+        (power.power_type === "Intermediate" && output.levels.combat.level >= 15) ||
+        unlockedPowers.has(name);
 
-    const selectedIndex = unlockedPowers.indexOf(selectedPower);
-
-    if (selectedIndex !== -1) {
-      unlockedPowers.splice(selectedIndex, 1);
-    }
-
-    for (const power of unlockedPowers) {
-      output.unlocked_powers.push(getPower(power, output.magical_power.total));
+      output[unlocked ? "unlocked_powers" : "locked_powers"].push(power);
     }
 
     const tuning = userProfile.accessory_bag_storage.tuning.slot_0;
 
-    for (const [hypixelStat, stat] of Object.entries({
-      walk_speed: "speed",
-      critical_chance: "crit_chance",
-      critical_damage: "crit_damage",
-    })) {
-      tuning[stat] = tuning[hypixelStat];
-
-      delete tuning[hypixelStat];
-    }
-
     for (const [name, value] of Object.entries(tuning)) {
       if (!value) continue;
 
+      const stat = helper.enrichmentToStatName(name);
+
       output.tuning_points.used += value;
-      output.tuning_points.distribution[name] = value * constants.POWER_TUNING_MULTIPLIERS[name];
+      output.tuning_points.distribution[stat] = value * constants.POWER_TUNING_MULTIPLIERS[stat];
     }
   }
 

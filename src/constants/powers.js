@@ -1,126 +1,7 @@
 export const POWERS = {
-  fortuitous: {
-    type: "Starter",
-    id: 266,
-    stats: {
-      health: 3.35,
-      defense: 1.2,
-      strength: 4.8,
-      crit_chance: 4.35,
-      crit_damage: 4.8,
-    },
-  },
-  pretty: {
-    type: "Starter",
-    id: 38,
-    Damage: 8,
-    stats: {
-      health: 1.65,
-      defense: 1.2,
-      speed: 0.65,
-      strength: 4.8,
-      intelligence: 10.8,
-      crit_chance: 0.475,
-      crit_damage: 1.2,
-    },
-  },
-  protected: {
-    type: "Starter",
-    id: 307,
-    stats: {
-      health: 11.75,
-      defense: 10.8,
-      strength: 2.4,
-      crit_chance: 0.475,
-      crit_damage: 1.2,
-    },
-  },
-  simple: {
-    type: "Starter",
-    id: 1,
-    stats: {
-      health: 5.02,
-      defense: 3.6,
-      speed: 1.2,
-      strength: 3.6,
-      intelligence: 5.4,
-      crit_chance: 1.45,
-      crit_damage: 3.6,
-    },
-  },
-  warrior: {
-    type: "Starter",
-    id: 264,
-    stats: {
-      health: 3.35,
-      defense: 1.2,
-      strength: 8.4,
-      crit_chance: 2.4,
-      crit_damage: 6,
-    },
-  },
-  commando: {
-    type: "Intermediate",
-    id: 280,
-    stats: {
-      health: 5.02,
-      defense: 2.4,
-      strength: 8.4,
-      crit_chance: 0.475,
-      crit_damage: 8.4,
-    },
-  },
-  disciplined: {
-    type: "Intermediate",
-    id: 267,
-    stats: {
-      health: 5.02,
-      defense: 2.4,
-      strength: 7.2,
-      crit_chance: 1.45,
-      crit_damage: 7.2,
-    },
-  },
-  inspired: {
-    type: "Intermediate",
-    id: 351,
-    Damage: 4,
-    stats: {
-      health: 1.65,
-      defense: 1.2,
-      strength: 4.8,
-      intelligence: 16.2,
-      crit_chance: 0.95,
-      crit_damage: 3.6,
-    },
-  },
-  ominous: {
-    type: "Intermediate",
-    id: 410,
-    stats: {
-      health: 5.02,
-      speed: 0.95,
-      strength: 3.6,
-      intelligence: 6.1,
-      crit_chance: 1.45,
-      crit_damage: 3.6,
-      bonus_attack_speed: 0.9,
-    },
-  },
-  prepared: {
-    type: "Intermediate",
-    id: 297,
-    stats: {
-      health: 12.4,
-      speed: 11.3,
-      strength: 1.95,
-      crit_chance: 0.4,
-      crit_damage: 0.95,
-    },
-  },
   scorching: {
-    type: "Advanced Stone",
-    id: 400,
+    type: "Marvelous Stone",
+    texture_path: "/item/SCORCHED_BOOKS",
     stats: {
       strength: 8.4,
       crit_damage: 9.6,
@@ -131,8 +12,8 @@ export const POWERS = {
     },
   },
   healthy: {
-    type: "Advanced Stone",
-    texture_path: "/item/SCORCHED_BOOKS",
+    type: "Grandiose Stone",
+    texture_path: "/item/VITAMIN_DEATH",
     stats: {
       health: 33.6,
     },
@@ -141,7 +22,7 @@ export const POWERS = {
     },
   },
   slender: {
-    type: "Advanced Stone",
+    type: "Grandiose Stone",
     texture_path: "/item/HAZMAT_ENDERMAN",
     stats: {
       health: 8.4,
@@ -158,7 +39,7 @@ export const POWERS = {
     },
   },
   strong: {
-    type: "Advanced Stone",
+    type: "Grandiose Stone",
     texture_path: "/item/MANDRAA",
     stats: {
       strength: 12,
@@ -170,7 +51,7 @@ export const POWERS = {
     },
   },
   bizarre: {
-    type: "Advanced Stone",
+    type: "Master Stone",
     texture_path: "/item/ECCENTRIC_PAINTING",
     stats: {
       strength: -2.4,
@@ -182,7 +63,7 @@ export const POWERS = {
     },
   },
   demonic: {
-    type: "Advanced Stone",
+    type: "Master Stone",
     texture_path: "/item/HORNS_OF_TORMENT",
     stats: {
       strength: 5.5,
@@ -193,7 +74,7 @@ export const POWERS = {
     },
   },
   hurtful: {
-    type: "Advanced Stone",
+    type: "Master Stone",
     texture_path: "/item/MAGMA_URCHIN",
     stats: {
       strength: 4.8,
@@ -204,7 +85,7 @@ export const POWERS = {
     },
   },
   pleasant: {
-    type: "Advanced Stone",
+    type: "Master Stone",
     texture_path: "/item/PRECIOUS_PEARL",
     stats: {
       health: 13.45,
@@ -281,6 +162,19 @@ export const POWERS = {
   },
   shaded: {
     type: "Advanced Stone",
+    texture_path: "/item/DARK_ORB",
+    stats: {
+      speed: 0.6,
+      strength: 4.8,
+      crit_damage: 18,
+    },
+    unique: {
+      bonus_attack_speed: 3,
+      ferocity: 3,
+    },
+  },
+  sighted: {
+    type: "Advanced Stone",
     texture_path: "/item/ENDER_MONOCLE",
     stats: {
       intelligence: 36,
@@ -290,7 +184,7 @@ export const POWERS = {
     },
   },
   silky: {
-    type: "Advanced Stone",
+    type: "Intermediate Stone",
     texture_path: "/item/LUXURIOUS_SPOOL",
     stats: {
       speed: 0.6,
@@ -301,7 +195,7 @@ export const POWERS = {
     },
   },
   sweet: {
-    type: "Advanced Stone",
+    type: "Intermediate Stone",
     texture_path: "/item/ROCK_CANDY",
     stats: {
       health: 15.1,
@@ -310,6 +204,125 @@ export const POWERS = {
     },
     unique: {
       speed: 5,
+    },
+  },
+  commando: {
+    type: "Intermediate",
+    id: 280,
+    stats: {
+      health: 5.02,
+      defense: 2.4,
+      strength: 8.4,
+      crit_chance: 0.475,
+      crit_damage: 8.4,
+    },
+  },
+  disciplined: {
+    type: "Intermediate",
+    id: 267,
+    stats: {
+      health: 5.02,
+      defense: 2.4,
+      strength: 7.2,
+      crit_chance: 1.45,
+      crit_damage: 7.2,
+    },
+  },
+  inspired: {
+    type: "Intermediate",
+    id: 351,
+    Damage: 4,
+    stats: {
+      health: 1.65,
+      defense: 1.2,
+      strength: 4.8,
+      intelligence: 16.2,
+      crit_chance: 0.95,
+      crit_damage: 3.6,
+    },
+  },
+  ominous: {
+    type: "Intermediate",
+    id: 410,
+    stats: {
+      health: 5.02,
+      speed: 0.95,
+      strength: 3.6,
+      intelligence: 6.1,
+      crit_chance: 1.45,
+      crit_damage: 3.6,
+      bonus_attack_speed: 0.9,
+    },
+  },
+  prepared: {
+    type: "Intermediate",
+    id: 297,
+    stats: {
+      health: 12.4,
+      speed: 11.3,
+      strength: 1.95,
+      crit_chance: 0.4,
+      crit_damage: 0.95,
+    },
+  },
+  fortuitous: {
+    type: "Starter",
+    id: 266,
+    stats: {
+      health: 3.35,
+      defense: 1.2,
+      strength: 4.8,
+      crit_chance: 4.35,
+      crit_damage: 4.8,
+    },
+  },
+  pretty: {
+    type: "Starter",
+    id: 38,
+    Damage: 8,
+    stats: {
+      health: 1.65,
+      defense: 1.2,
+      speed: 0.65,
+      strength: 4.8,
+      intelligence: 10.8,
+      crit_chance: 0.475,
+      crit_damage: 1.2,
+    },
+  },
+  protected: {
+    type: "Starter",
+    id: 307,
+    stats: {
+      health: 11.75,
+      defense: 10.8,
+      strength: 2.4,
+      crit_chance: 0.475,
+      crit_damage: 1.2,
+    },
+  },
+  simple: {
+    type: "Starter",
+    id: 1,
+    stats: {
+      health: 5.02,
+      defense: 3.6,
+      speed: 1.2,
+      strength: 3.6,
+      intelligence: 5.4,
+      crit_chance: 1.45,
+      crit_damage: 3.6,
+    },
+  },
+  warrior: {
+    type: "Starter",
+    id: 264,
+    stats: {
+      health: 3.35,
+      defense: 1.2,
+      strength: 8.4,
+      crit_chance: 2.4,
+      crit_damage: 6,
     },
   },
 };

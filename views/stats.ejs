@@ -234,25 +234,6 @@ function formatEnrichment(string) {
   return enrichment
 }
 
-function enrichmentToStatName(enrichment) {
-  switch (enrichment) {
-    case 'walk_speed':
-      return 'speed'
-
-    case 'critical_chance':
-      return 'crit_chance'
-
-    case 'critical_damage':
-      return 'crit_damage'
-
-    case 'attack_speed':
-      return 'bonus_attack_speed'
-
-    default:
-      return enrichment
-  }
-}
-
 function getEnrichments(accessories) {
   const enrichmentCounts = {}
   const filteredAccessories = accessories
@@ -272,7 +253,7 @@ function getEnrichments(accessories) {
 <span class="stat-name">Enrichments: </span>
 <%
     for (const [enrichment, amount] of Object.entries(enrichmentCounts)) {
-      const stat = enrichmentToStatName(enrichment)
+      const stat = helper.enrichmentToStatName(enrichment)
       %>
 <span class="stat-value color-<%= stat.replaceAll("_", "-") %>">
   <%= amount %>× <%= formatEnrichment(enrichment) %>

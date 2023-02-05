@@ -575,13 +575,13 @@ declare const calculated: SkyCryptPlayer & {
     };
   };
   unlocked_powers: (Item & {
-    power_name: string;
+    power_type: string;
     stats: {
       [key in StatName]: number;
     };
   })[];
   locked_powers: (Item & {
-    power_name: string;
+    power_type: string;
     stats: {
       [key in StatName]: number;
     };
