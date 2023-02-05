@@ -850,7 +850,7 @@ export const getItems = async (
       : [];
   const equipment =
     "equippment_contents" in profile
-      ? await processItems(profile.equippment_contents.data, "eqipment", customTextures, packs, options.cacheOnly)
+      ? await processItems(profile.equippment_contents.data, "equipment", customTextures, packs, options.cacheOnly)
       : [];
   const inventory =
     "inv_contents" in profile
