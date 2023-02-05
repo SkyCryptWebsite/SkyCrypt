@@ -1,0 +1,8 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "items/potion_overlay",
+        "layer1": "items/potion_bottle_empty",
+        "layer2": "./fishing_xp_boost_potion"
+    }
+}

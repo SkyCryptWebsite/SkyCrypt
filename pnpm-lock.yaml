@@ -1,16 +1,16 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@rollup/plugin-commonjs': ^23.0.0
+  '@rollup/plugin-commonjs': ^24.0.0
   '@rollup/plugin-node-resolve': ^15.0.0
   '@rollup/plugin-replace': ^5.0.0
-  '@rollup/plugin-typescript': ^10.0.0
+  '@rollup/plugin-typescript': ^11.0.0
   '@typescript-eslint/eslint-plugin': ^5.36.1
   '@typescript-eslint/parser': ^5.33.1
   apng2gif-bin: ^1.7.1
   async-retry: ^1.3.3
-  axios: ^0.27.2
-  axios-debug-log: ^0.8.4
+  axios: ^1.0.0
+  axios-debug-log: ^1.0.0
   body-parser: ^1.20.0
   bowser: ^2.11.0
   canvas: ^2.10.1
@@ -29,7 +29,7 @@ specifiers:
   eslint-plugin-wc: ^1.3.2
   express: ^4.18.1
   express-session: ^1.17.3
-  fs-extra: ^10.1.0
+  fs-extra: ^11.0.0
   ioredis: ^5.2.3
   lilyweight: ^2.7.0
   lit: ^2.3.1
@@ -56,7 +56,7 @@ specifiers:
   sharp: ^0.30.7
   sitemap: ^7.1.1
   skinview3d: ^2.2.1
-  skyhelper-networth: ^1.8.5
+  skyhelper-networth: 1.11.0
   tippy.js: ^6.3.7
   ts-lit-plugin: ^1.2.1
   twemoji: ^14.0.2
@@ -67,8 +67,8 @@ specifiers:
 dependencies:
   apng2gif-bin: 1.7.1
   async-retry: 1.3.3
-  axios: 0.27.2
-  axios-debug-log: 0.8.4_axios@0.27.2
+  axios: 1.2.2
+  axios-debug-log: 1.0.0_axios@1.2.2
   body-parser: 1.20.1
   bowser: 2.11.0
   canvas: 2.10.1
@@ -79,7 +79,7 @@ dependencies:
   ejs: 3.1.8
   express: 4.18.2
   express-session: 1.17.3
-  fs-extra: 10.1.0
+  fs-extra: 11.1.0
   ioredis: 5.2.3
   lilyweight: 2.7.0
   lit: 2.4.0
@@ -98,17 +98,17 @@ dependencies:
   sharp: 0.30.7
   sitemap: 7.1.1
   skinview3d: 2.2.1
-  skyhelper-networth: 1.8.5
+  skyhelper-networth: 1.11.0
   tippy.js: 6.3.7
   twemoji: 14.0.2
   upng-js: 2.1.0
   uuid: 8.3.2
 
 devDependencies:
-  '@rollup/plugin-commonjs': 23.0.2_rollup@2.79.1
+  '@rollup/plugin-commonjs': 24.0.0_rollup@2.79.1
   '@rollup/plugin-node-resolve': 15.0.1_rollup@2.79.1
   '@rollup/plugin-replace': 5.0.1_rollup@2.79.1
-  '@rollup/plugin-typescript': 10.0.1_gypgyaqhine6mwjfvh7icfhviq
+  '@rollup/plugin-typescript': 11.0.0_gypgyaqhine6mwjfvh7icfhviq
   '@typescript-eslint/eslint-plugin': 5.40.0_25sstg4uu2sk4pm7xcyzuov7xq
   '@typescript-eslint/parser': 5.40.0_z4bbprzjrhnsfa24uvmcbu7f5q
   concurrently: 7.4.0
@@ -298,8 +298,8 @@ packages:
     resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}
     dev: false
 
-  /@rollup/plugin-commonjs/23.0.2_rollup@2.79.1:
-    resolution: {integrity: sha512-e9ThuiRf93YlVxc4qNIurvv+Hp9dnD+4PjOqQs5vAYfcZ3+AXSrcdzXnVjWxcGQOa6KGJFcRZyUI3ktWLavFjg==}
+  /@rollup/plugin-commonjs/24.0.0_rollup@2.79.1:
+    resolution: {integrity: sha512-0w0wyykzdyRRPHOb0cQt14mIBLujfAv6GgP6g8nvg/iBxEm112t3YPPq+Buqe2+imvElTka+bjNlJ/gB56TD8g==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       rollup: ^2.68.0||^3.0.0
@@ -312,7 +312,7 @@ packages:
       estree-walker: 2.0.2
       glob: 8.0.3
       is-reference: 1.2.1
-      magic-string: 0.26.7
+      magic-string: 0.27.0
       rollup: 2.79.1
     dev: true
 
@@ -348,8 +348,8 @@ packages:
       rollup: 2.79.1
     dev: true
 
-  /@rollup/plugin-typescript/10.0.1_gypgyaqhine6mwjfvh7icfhviq:
-    resolution: {integrity: sha512-wBykxRLlX7EzL8BmUqMqk5zpx2onnmRMSw/l9M1sVfkJvdwfxogZQVNUM9gVMJbjRLDR5H6U0OMOrlDGmIV45A==}
+  /@rollup/plugin-typescript/11.0.0_gypgyaqhine6mwjfvh7icfhviq:
+    resolution: {integrity: sha512-goPyCWBiimk1iJgSTgsehFD5OOFHiAknrRJjqFCudcW8JtWiBlK284Xnn4flqMqg6YAjVG/EE+3aVzrL5qNSzQ==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       rollup: ^2.14.0||^3.0.0
@@ -819,13 +819,13 @@ packages:
     engines: {node: '>= 4.5.0'}
     hasBin: true
 
-  /axios-debug-log/0.8.4_axios@0.27.2:
-    resolution: {integrity: sha512-DvmaJiYusndhfAjQ94HqlvhaVoEjOetwo9cpb+OVtOZNZTqdz0VAVed3ZjSQKpyM1g8jDXUXFx0Pg1DhUZzAdw==}
+  /axios-debug-log/1.0.0_axios@1.2.2:
+    resolution: {integrity: sha512-ZjMaEBEij9w+Vbk2Uc3XflchTT7j9rZdYD/snN+XQ5FRDq1QjZNhh0Izb3KSyarU5vTkiCvJyg1xDiQBHZZB9w==}
     peerDependencies:
-      axios: '>=0.17.0'
+      axios: '>=1.0.0'
     dependencies:
       '@types/debug': 4.1.7
-      axios: 0.27.2
+      axios: 1.2.2
       debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
@@ -836,6 +836,16 @@ packages:
     dependencies:
       follow-redirects: 1.15.2
       form-data: 4.0.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /axios/1.2.2:
+    resolution: {integrity: sha512-bz/J4gS2S3I7mpN/YZfGFTqhXTYzRho8Ay38w2otuuDR322KzFIWm/4W2K6gIwvWaws5n+mnb7D1lN9uD+QH6Q==}
+    dependencies:
+      follow-redirects: 1.15.2
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -2104,9 +2114,9 @@ packages:
     resolution: {integrity: sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==}
     dev: false
 
-  /fs-extra/10.1.0:
-    resolution: {integrity: sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==}
-    engines: {node: '>=12'}
+  /fs-extra/11.1.0:
+    resolution: {integrity: sha512-0rcTq621PD5jM/e0a3EJoGC/1TC5ZBCERW82LQuwfGnCa1V8w7dpYH1yNu+SLb6E5dkeCBzKEyLGlFrnr+dUyw==}
+    engines: {node: '>=14.14'}
     dependencies:
       graceful-fs: 4.2.10
       jsonfile: 6.1.0
@@ -2979,6 +2989,13 @@ packages:
       sourcemap-codec: 1.4.8
     dev: true
 
+  /magic-string/0.27.0:
+    resolution: {integrity: sha512-8UnnX2PeRAPZuN12svgR9j7M1uWMovg/CEnIwIG0LFkXSJJe4PdfUGiTGl8V9bsBHFUtfVINcSyYxd7q+kx9fA==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.4.14
+    dev: true
+
   /make-dir/3.1.0:
     resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
     engines: {node: '>=8'}
@@ -3600,6 +3617,10 @@ packages:
       ipaddr.js: 1.9.1
     dev: false
 
+  /proxy-from-env/1.1.0:
+    resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
+    dev: false
+
   /pstree.remy/1.1.8:
     resolution: {integrity: sha512-77DZwxQmxKnu3aR542U+X8FypNzbfJ+C5XQDk3uWjWxn6151aIMGthWYRXTqT1E5oJvg+ljaa2OJi+VfvCOQ8w==}
     dev: true
@@ -4075,8 +4096,8 @@ packages:
       three: 0.136.0
     dev: false
 
-  /skyhelper-networth/1.8.5:
-    resolution: {integrity: sha512-Thr4JV0uI+CZKUUyFAYVFiVMXCgeNqK02bbhA1dmPfWOZB+slZRTZcUKcxRlo4nCC0lK2xNMupWZHHyQVdEzYw==}
+  /skyhelper-networth/1.11.0:
+    resolution: {integrity: sha512-8hWuibHUtcca99N+KaxaJcC+rkgjM020QrGioyN+pPxd+TsKhWdDmh1F4sD78p8HfRX22OTch3trOMgHksZsaQ==}
     dependencies:
       axios: 0.27.2
       prismarine-nbt: 2.2.1

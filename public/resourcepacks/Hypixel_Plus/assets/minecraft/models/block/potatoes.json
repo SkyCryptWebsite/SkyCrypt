@@ -1,0 +1,17 @@
+{
+    "parent": "block/potatoes_stage3",
+	"display": {
+        "thirdperson": {
+            "rotation": [ 10, -45, 170 ],
+            "translation": [ 0, 1.5, -2.75 ],
+            "scale": [ 0.375, 0.375, 0.375 ]
+        },
+        "fixed": {
+            "scale": [ 1.5, 1.5, 1.5 ]
+        },
+        "gui": {
+            "scale": [ 1.5, 1.5, 1.5 ],
+            "translation": [ 0, 1.75, 0 ]
+        }
+    }
+}

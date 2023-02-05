@@ -94,7 +94,9 @@ function getXpByLevel(uncappedLevel, extra = {}) {
 
   /** the level that this player is caped at */
   const levelCap =
-    extra.cap ?? constants.DEFAULT_SKILL_CAPS[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
+    extra.cap ??
+    Math.max(uncappedLevel, constants.DEFAULT_SKILL_CAPS[extra.skill]) ??
+    Math.max(...Object.keys(xpTable).map((a) => Number(a)));
 
   /** the maximum level that any player can achieve (used for gold progress bars) */
   const maxLevel = constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
@@ -727,7 +729,9 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 
       if (item.tag?.ExtraAttributes?.id === "PET") {
         item.tag.ExtraAttributes.petInfo =
-          JSON.parse(item.tag.ExtraAttributes.petInfo) ?? item.tag.ExtraAttributes.petInfo;
+          typeof item.tag.ExtraAttributes.petInfo === "string"
+            ? JSON.parse(item.tag.ExtraAttributes.petInfo)
+            : item.tag.ExtraAttributes.petInfo;
       }
     }
 
@@ -2087,6 +2091,15 @@ export async function getStats(
     active: userProfile.nether_island_player_data?.abiphone?.active_contacts?.length || 0,
   };
 
+  output.skyblock_level = {
+    xp: userProfile.leveling?.experience || 0,
+    level: Math.floor(userProfile.leveling?.experience / 100 || 0),
+    maxLevel: 386,
+    progress: (userProfile.leveling?.experience % 100) / 100 || 0,
+    xpCurrent: userProfile.leveling?.experience % 100 || 0,
+    xpForNext: 100,
+  };
+
   // MISC
 
   const misc = {};
@@ -2466,6 +2479,11 @@ export async function getPets(profile, userProfile) {
       pet.texture_path = petData.hatching.head;
     }
 
+    // eslint-disable-next-line no-prototype-builtins
+    if (pet.rarity in (petData?.upgrades || {})) {
+      pet.texture_path = petData.upgrades[pet.rarity]?.head || pet.texture_path;
+    }
+
     let petSkin = null;
     if (pet.skin && constants.PET_SKINS?.[`PET_SKIN_${pet.skin}`]) {
       pet.texture_path = constants.PET_SKINS[`PET_SKIN_${pet.skin}`].texture;
@@ -2529,6 +2547,11 @@ export async function getPets(profile, userProfile) {
             pet.stats[stat] *= constants.PET_ITEMS[heldItem].multAllStats;
           }
         }
+      }
+
+      // push specific pet lore before stats added
+      if (constants.PET_DATA[pet.type]?.subLore !== undefined) {
+        lore.push(constants.PET_DATA[pet.type].subLore, " ");
       }
 
       // push pet lore after held item stats added
@@ -3381,6 +3404,8 @@ function getMiningCoreData(userProfile) {
     last_changed: data.current_daily_effect_last_changed || null,
   };
 
+  output.nodes = data.nodes || {};
+
   return output;
 }
 
@@ -3624,7 +3649,11 @@ export async function getProfile(
   }
 
   if (!profile) {
-    throw new Error("User not found in selected profile. This is probably due to a declined co-op invite.");
+    profile = profiles[0];
+
+    if (!profile) {
+      throw new Error("Couldn't find any Skyblock profile that belongs to this player.");
+    }
   }
 
   const userProfile = profile.members[paramPlayer];

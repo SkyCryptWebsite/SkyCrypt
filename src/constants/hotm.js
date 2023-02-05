@@ -59,24 +59,31 @@ const rewards = {
     1: {
       pickaxe_ability_level: 1,
       token_of_the_mountain: 1,
+      skyblock_experience: 25,
     },
     2: {
       forge_slot: 1,
+      skyblock_experience: 35,
     },
     3: {
       commission_slot: 1,
+      skyblock_experience: 50,
     },
     4: {
       mithril_powder_when_mining_mithril: 1,
+      skyblock_experience: 65,
     },
     5: {
       token_of_the_mountain: 1,
+      skyblock_experience: 75,
     },
     6: {
       gemstone_powder_when_mining_gemstones: 2,
+      skyblock_experience: 100,
     },
     7: {
       token_of_the_mountain: 1,
+      skyblock_experience: 125,
     },
   },
   rewards: {
@@ -119,6 +126,10 @@ const rewards = {
     gemstone_powder_when_mining_gemstones: {
       formatted: "§dGemstone Powder §7when mining §dGemstones",
       qtyColor: "d",
+    },
+    skyblock_experience: {
+      formatted: "§bSkyblock XP",
+      qtyColor: "b",
     },
   },
 };
@@ -1445,3 +1456,5 @@ export const PRECURSOR_PARTS = {
 };
 
 export const COMMISSIONS_MILESTONE = 6;
+
+export const MAX_PEAK_OF_THE_MOUNTAIN_LEVEL = 7;
