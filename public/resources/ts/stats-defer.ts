@@ -177,6 +177,11 @@ export function isEnchanted(item: Item): boolean {
     return true;
   }
 
+  // enchanted golden apple
+  if (item.id === 322 && item.Damage === 1) {
+    return true;
+  }
+
   //potions with actual effects (not water bottles)
   if (item.id === 373 && item.Damage !== 0) {
     return true;
