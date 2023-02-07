@@ -1906,6 +1906,10 @@ export async function getStats(
       const date = `${contestName[1]}_${contestName[0]}`;
       const crop = contestName.slice(2).join(":");
 
+      if (data.collected < 100) {
+        continue; // Contests aren't counted in game with less than 100 collection
+      }
+
       farming.crops[crop].contests++;
       farming.crops[crop].attended = true;
       if (farming.crops[crop].personal_best < data.collected) {
@@ -1925,19 +1929,25 @@ export async function getStats(
       if (contest.claimed) {
         placing.position = data.claimed_position || 0;
         placing.percentage = (data.claimed_position / data.claimed_participants) * 100;
+        const participants = data.claimed_participants;
 
-        if (placing.percentage <= 5) {
+        // Use the claimed medal if it exists and is valid
+        // This accounts for the farming mayor increased brackets perk
+        // Note: The medal brackets are the percentage + 1 extra person
+        if (contest.claimed_medal === "bronze" || contest.claimed_medal === "silver" || contest.claimed_medal === "gold") {
+          contest.medal = contest.claimed_medal;
+        } else if (placing.position <= participants * 0.05 + 1) {
           contest.medal = "gold";
-          farming.total_badges.gold++;
-          farming.crops[crop].badges.gold++;
-        } else if (placing.percentage <= 25) {
+        } else if (placing.position <= participants * 0.25 + 1) {
           contest.medal = "silver";
-          farming.total_badges.silver++;
-          farming.crops[crop].badges.silver++;
-        } else if (placing.percentage <= 60) {
+        } else if (placing.position <= participants * 0.6 + 1) {
           contest.medal = "bronze";
-          farming.total_badges.bronze++;
-          farming.crops[crop].badges.bronze++;
+        }
+
+        // Count the medal if it exists
+        if (contest.medal) {
+          farming.total_badges[contest.medal]++;
+          farming.crops[crop].badges[contest.medal]++;
         }
       }
 
