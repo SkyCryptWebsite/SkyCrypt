@@ -1990,7 +1990,8 @@ inventory-view {
   flex-wrap: wrap;
   gap: 8px;
 
-  &.sea-creatures {
+  &.sea-creatures,
+  &.trophy-fish {
     gap: 15px;
   }
 }
@@ -2415,7 +2416,8 @@ inventory-view {
   .collections,
   .minions,
   .stat-farming-crops,
-  .sea-creatures {
+  .sea-creatures,
+  .trophy-fish {
     flex-wrap: nowrap;
     overflow-x: auto;
     margin-left: calc(-1 * var(--padding));
@@ -2425,7 +2427,8 @@ inventory-view {
       contain-intrinsic-size: 200px 64px;
     }
 
-    &.sea-creatures {
+    &.sea-creatures,
+    &.trophy-fish {
       @supports (contain-intrinsic-size: 140px 230px) {
         contain-intrinsic-size: 140px 230px;
       }
