@@ -652,6 +652,7 @@ const metaDescription = getMetaDescription()
       </p>
     </figure>
     <% } %>
+    <% calculated.rank_prefix = helper.renderRank(calculated.hypixelProfile, calculated.skyblock_level.level); %>
     <div id="player_profile"><span class="text-stats-for">Stats for</span>
       <span tabindex="0" id="stats_for_player">
         <%- jerriefy(calculated.rank_prefix) %>
@@ -908,6 +909,9 @@ const metaDescription = getMetaDescription()
           <skill-component skill="carpentry" type="skill" icon="<%= skillItems.carpentry %>"></skill-component>
           <skill-component skill="runecrafting" type="skill" icon="<%= skillItems.runecrafting %>"></skill-component>
           <skill-component skill="social" type="skill" icon="<%= skillItems.social %>"></skill-component>
+          <% if (calculated.dungeons.catacombs.visited === true && Object.keys(calculated.dungeons).length > 0 && Object.keys(calculated.dungeons.catacombs.floors).length > 0) { %>
+          <skill-component skill="catacombs" type="dungeon" icon="<%= skillItems.catacombs %>"></skill-component>
+          <% } %>
           <% } else { %>
           <div class="no-access">Skills from achievements across profiles. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">Enable Skills API</a> for more accurate data.</div>
           <% } %>

@@ -524,12 +524,29 @@ export function parseRank(player) {
   return output;
 }
 
-export function renderRank({ rankText, rankColor, plusText, plusColor }) {
+function getLevelColor(level) {
+  if (level < 40) return "#b8b8b8";
+  if (level < 80) return "#ffffff";
+  if (level < 120) return "#5bda5b";
+  if (level < 160) return "#7486f0";
+  if (level < 240) return "#ffaa00";
+  if (level < 280) return "#fd64de";
+  if (level < 320) return "#58d6ed";
+  if (level < 360) return "#fb5858";
+  return "#b61e1e";
+}
+
+export function renderRank({ rankText, rankColor, plusText, plusColor }, level) {
   if (rankText === null) {
     return "";
   } else {
     return /*html*/ `
         <div class="rank-tag nice-colors-dark">
+            <div class="rank-name" style="background-color: var(--§8);">[
+              <div style="color: ${getLevelColor(level)};">${level}</div>
+              <div>]</div>
+            </div>
+
             <div class="rank-name" style="background-color: var(--§${rankColor})">${rankText}</div>
             ${
               plusText

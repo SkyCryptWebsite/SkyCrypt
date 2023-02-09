@@ -1806,7 +1806,7 @@ export async function getStats(
 
   output.guild = await helper.getGuild(profile.uuid, db, options.cacheOnly);
 
-  output.rank_prefix = helper.renderRank(hypixelProfile);
+  output.hypixelProfile = hypixelProfile;
   output.purse = userProfile.coin_purse || 0;
   output.uuid = profile.uuid;
   output.skin_data = playerObject.skin_data;
