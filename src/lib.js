@@ -2404,6 +2404,13 @@ export async function getStats(
   }
 
   for (const pet of output.pets) {
+    const ITEM_PRICE = await getItemNetworth(pet, { cache: true, onlyNetworth: true, returnItemData: false });
+    pet.lore += helper.renderLore(
+      `§7Item Value: §6${Math.round(ITEM_PRICE.price).toLocaleString()} Coins §7(§6${helper.formatNumber(
+        ITEM_PRICE.price
+      )}§7)`
+    );
+    pet.level = { level: pet.level, xpCurrent: pet.xp };
     if (!pet.active) {
       continue;
     }
