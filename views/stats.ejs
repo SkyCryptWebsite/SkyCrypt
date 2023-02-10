@@ -1869,7 +1869,7 @@ const metaDescription = getMetaDescription()
             <span class="stat-name">Selected Class: </span>
             <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span>
             <br>
-            <% max = calculated.dungeons.class_average === 50 ? "golden-text" : "" %>
+            <% max = calculated.dungeons.class_average >= 50 ? "golden-text" : "" %>
             <span class="stat-name <%= max %>">Class Average: </span>
             <span class="stat-value <%= max %>"><%= calculated.dungeons.class_average.toLocaleString() %></span>
             <br>
