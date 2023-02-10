@@ -2385,6 +2385,10 @@ export async function getStats(
   }
   userProfile.pets.push(...items.pets);
 
+  for (const pet of userProfile.pets) {
+    await getItemNetworth(pet, { cache: true, returnItemData: false });
+  }
+
   output.pets = await getPets(userProfile, output);
   output.missingPets = await getMissingPets(output.pets, profile.game_mode, output);
   output.petScore = getPetScore(output.pets);
@@ -2404,13 +2408,13 @@ export async function getStats(
   }
 
   for (const pet of output.pets) {
-    const ITEM_PRICE = await getItemNetworth(pet, { cache: true, onlyNetworth: true, returnItemData: false });
-    pet.lore += helper.renderLore(
-      `§7Item Value: §6${Math.round(ITEM_PRICE.price).toLocaleString()} Coins §7(§6${helper.formatNumber(
-        ITEM_PRICE.price
-      )}§7)`
-    );
-    pet.level = { level: pet.level, xpCurrent: pet.xp };
+    if (pet.price > 0) {
+      pet.lore += "<br>";
+      pet.lore += helper.renderLore(
+        `§7Item Value: §6${Math.round(pet.price).toLocaleString()} Coins §7(§6${helper.formatNumber(pet.price)}§7)`
+      );
+    }
+
     if (!pet.active) {
       continue;
     }
