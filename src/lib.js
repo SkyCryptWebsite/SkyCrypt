@@ -172,7 +172,7 @@ export function getLevelByXp(xp, extra = {}) {
     }
   }
 
-  if (extra.type == "dungeoneering" && !extra.class) {
+  if (extra.type == "dungeoneering") {
     while (xpCurrent >= 200000000) {
       uncappedLevel++;
       xpCurrent -= 200000000;
@@ -189,14 +189,14 @@ export function getLevelByXp(xp, extra = {}) {
   xpCurrent = Math.floor(xpCurrent);
 
   /** the level as displayed by in game UI */
-  const level = extra.type != "dungeoneering" && !extra.class ? Math.min(levelCap, uncappedLevel) : uncappedLevel;
+  const level = extra.type != "dungeoneering" ? Math.min(levelCap, uncappedLevel) : uncappedLevel;
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
   const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
   /** the fraction of the way toward the next level */
   const progress =
-    extra.type == "dungeoneering" && !extra.class && level > 50 ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+    extra.type == "dungeoneering" && level > 50 ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
   const levelWithProgress = level + progress;
@@ -3010,7 +3010,7 @@ export function getDungeons(userProfile, hypixelProfile) {
     }
 
     output.classes[className] = {
-      experience: getLevelByXp(data.experience, { type: "dungeoneering", class: className }),
+      experience: getLevelByXp(data.experience, { type: "dungeoneering" }),
       current: false,
     };
 
