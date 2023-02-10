@@ -524,7 +524,7 @@ export function parseRank(player) {
   return output;
 }
 
-export function renderRank({ rankText, rankColor, plusText, plusColor }, level) {
+export function renderRank({ rankText, rankColor, plusText, plusColor }) {
   if (rankText === null) {
     return "";
   } else {
