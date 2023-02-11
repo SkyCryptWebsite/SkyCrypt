@@ -198,7 +198,8 @@ export function getLevelByXp(xp, extra = {}) {
   const progress = extra.type == "dungeoneering" && level >= 50 ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
-  const levelWithProgress = extra.type == "dungeoneering" && level >= 50 ? level + xpCurrent / 200_000_000 : level + progress;
+  const levelWithProgress =
+    extra.type == "dungeoneering" && level >= 50 ? level + xpCurrent / 200_000_000 : level + progress;
 
   /** a floating point value representing the current level ignoring the in-game unlockable caps for example if you are half way to level 5 it would be 4.5 */
   const unlockableLevelWithProgress = extra.cap ? Math.min(uncappedLevel + progress, maxLevel) : levelWithProgress;
@@ -3026,19 +3027,15 @@ export function getDungeons(userProfile, hypixelProfile) {
   }
 
   output.used_classes = used_classes;
-  output.class_average.avrg_level = Object.keys(output.classes).map(
-    (key) => output.classes[key].experience.level / Object.keys(output.classes).length
-  ).reduce((a, b) => a + b, 0);
-
-  output.class_average.avrg_level_with_progress = Object.keys(output.classes).map(
-    (key) => output.classes[key].experience.levelWithProgress / Object.keys(output.classes).length
-  ).reduce((a, b) => a + b, 0);
-
-  output.class_average.max = Object.keys(output.classes).filter(
-    (key) => output.classes[key].experience.level >= 50
-  ).length === Object.keys(output.classes).length;
-
-  console.log(output.class_average)
+  output.class_average.avrg_level = Object.keys(output.classes)
+    .map((key) => output.classes[key].experience.level / Object.keys(output.classes).length)
+    .reduce((a, b) => a + b, 0);
+  output.class_average.avrg_level_with_progress = Object.keys(output.classes)
+    .map((key) => output.classes[key].experience.levelWithProgress / Object.keys(output.classes).length)
+    .reduce((a, b) => a + b, 0);
+  output.class_average.max =
+    Object.keys(output.classes).filter((key) => output.classes[key].experience.level >= 50).length ===
+    Object.keys(output.classes).length;
 
   output.selected_class = current_class;
   output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
