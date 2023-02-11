@@ -777,9 +777,9 @@ const metaDescription = getMetaDescription()
         <% if('levels' in calculated && 'runecrafting' in calculated.levels){ %>
         <div class="additional-stat"><span data-tippy-content="
           <span class='stat-name'>Total Skill XP: </span><span class='stat-value'><%= Math.round(calculated.total_skill_xp).toLocaleString() %></span>
-          <div class='tippy-explanation'>Total XP gained in all skills except Social and Runecrafting.</div>
+          <div class='tippy-explanation'>Total XP gained in all skills except Catacombs, Social and Runecrafting.</div>
           <span class='stat-name'>Average Level: </span><span class='stat-value'><%= calculated.average_level.toFixed(2) %></span>
-          <div class='tippy-explanation'>Average skill level over all skills except Social and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div><% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
+          <div class='tippy-explanation'>Average skill level over all skills except Catacombs, Social and Runecrafting<% if('runecrafting' in calculated.levels){ %>, includes progress to next level<% } %>.</div><% if('runecrafting' in calculated.levels){ %><span class='stat-name'>Average Level without progress: </span><span class='stat-value'><%= calculated.average_level_no_progress.toFixed(2) %></span>
           <div class='tippy-explanation'>Average skill level without including partial level progress.</div><% } %>
           "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level.toFixed(2) %></span></span></div>
         <% } %>
