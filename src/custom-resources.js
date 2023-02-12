@@ -515,9 +515,8 @@ export async function getTexture(item, options = { ignore_id: false, pack_ids: [
 
   if (options.pack_ids.length > 0) {
     tempPacks = tempPacks.filter((a) => options.pack_ids.includes(a.config.id));
+    tempPacks = tempPacks.sort((a, b) => options.pack_ids.indexOf(a) - options.pack_ids.indexOf(b));
   }
-
-  tempPacks = tempPacks.sort((a, b) => options.pack_ids.indexOf(a) - options.pack_ids.indexOf(b));
 
   for (const pack of tempPacks) {
     for (const texture of pack.textures) {

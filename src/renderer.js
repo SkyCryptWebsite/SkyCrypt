@@ -12,6 +12,9 @@ import * as customResources from "./custom-resources.js";
 import sanitize from "mongo-sanitize";
 import fs from "fs-extra";
 
+import * as app from "./app.js";
+import * as helper from "./helper.js";
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const skew_a = 26 / 45;
@@ -78,10 +81,10 @@ function darken(src, factor) {
 }
 
 const ACCESSORIES = [
-  "http://textures.minecraft.net/texture/5c577e7d31e5e04c2ce71e13e3962192d80bd54b55efaacaaea12966fe27bf9",
-  "http://textures.minecraft.net/texture/eaa44b170d749ce4099aa78d98945d193651484089efb87ba88892c6fed2af31",
-  "http://textures.minecraft.net/texture/651eb16f22dd7505be5dae06671803633a5abf8b2beeb5c60548670df0e59214",
-  "http://textures.minecraft.net/texture/317b51e086f201448a4b45b0b91e97faf4d1739071480be6d5cab0a054512164",
+  "5c577e7d31e5e04c2ce71e13e3962192d80bd54b55efaacaaea12966fe27bf9",
+  "eaa44b170d749ce4099aa78d98945d193651484089efb87ba88892c6fed2af31",
+  "651eb16f22dd7505be5dae06671803633a5abf8b2beeb5c60548670df0e59214",
+  "317b51e086f201448a4b45b0b91e97faf4d1739071480be6d5cab0a054512164",
 ];
 
 let itemsSheet, itemsCss;
@@ -112,7 +115,32 @@ async function renderColoredItem(color, baseImage, overlayImage) {
   return await canvas.toBuffer("image/png");
 }
 
-export async function renderHead(url, scale) {
+/**
+ * Gets either the cached texture or attempts to render and saves it
+ * @param {string} textureId
+ * @param {number} scale
+ * @returns Image of a rendered head
+ */
+export async function getHead(textureId, scale = 6.4) {
+  const filePath = helper.getCacheFilePath(app.CACHE_PATH, "head", textureId);
+  let file;
+
+  try {
+    file = await fs.readFile(filePath);
+  } catch (e) {
+    file = await renderHead(textureId, scale);
+
+    fs.writeFile(filePath, file, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  }
+
+  return file;
+}
+
+async function renderHead(textureId, scale) {
   const hat_factor = 0.94;
 
   const canvas = createCanvas(scale * 20, scale * 18.5);
@@ -125,7 +153,7 @@ export async function renderHead(url, scale) {
   const hat_bg = hat_bg_canvas.getContext("2d");
   const head = head_canvas.getContext("2d");
 
-  const skin = await loadImage(url);
+  const skin = await loadImage(`https://textures.minecraft.net/texture/${textureId}`);
 
   let head_bottom = resize(getPart(skin, 16, 0, 8, 8, 1), scale * (hat_factor + 0.01));
   const head_top = resize(getPart(skin, 8, 0, 8, 8, 1), scale * (hat_factor + 0.01));
@@ -176,7 +204,7 @@ export async function renderHead(url, scale) {
     hat_bg.setTransform(1, skew_a, 0, skew_b, 0, 0);
     hat_bg.drawImage(head_left_overlay, x + y, z - y, head_left_overlay.width, head_left_overlay.height);
 
-    if (!ACCESSORIES.includes(url)) {
+    if (!ACCESSORIES.includes(textureId)) {
       // hat back
       x = x_offset;
       y = 0;
@@ -269,14 +297,64 @@ export async function renderHead(url, scale) {
   return await canvas.toBuffer("image/png");
 }
 
-export async function renderArmor(type, color) {
+/**
+ * Gets either the cached texture or attempts to render and saves it
+ * @param {string} type
+ * @param {string} color
+ * @returns Image of a rendered armor piece
+ */
+export async function getArmor(type, color) {
+  const filePath = helper.getCacheFilePath(app.CACHE_PATH, `leather`, `${type}_${color}`);
+  let file;
+
+  try {
+    file = await fs.readFile(filePath);
+  } catch (e) {
+    file = await renderArmor(type, color);
+
+    fs.writeFile(filePath, file, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  }
+
+  return file;
+}
+
+async function renderArmor(type, color) {
   const armorBase = await loadImage(path.resolve(textureDir, `leather_${type}.png`));
   const armorOverlay = await loadImage(path.resolve(textureDir, `leather_${type}_overlay.png`));
 
   return await renderColoredItem("#" + color, armorBase, armorOverlay);
 }
 
-export async function renderPotion(type, color) {
+/**
+ * Gets either the cached texture or attempts to render and saves it
+ * @param {string} type
+ * @param {string} color
+ * @returns Image of a rendered potion
+ */
+export async function getPotion(type, color) {
+  const filePath = helper.getCacheFilePath(app.CACHE_PATH, `potion`, `${type}_${color}`);
+  let file;
+
+  try {
+    file = await fs.readFile(filePath);
+  } catch (e) {
+    file = await renderPotion(type, color);
+
+    fs.writeFile(filePath, file, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  }
+
+  return file;
+}
+
+async function renderPotion(type, color) {
   const potionLiquid = await loadImage(path.resolve(textureDir, "potion_overlay.png"));
   const potionBottlle = await loadImage(
     path.resolve(textureDir, type === "splash" ? "splash_potion.png" : "potion.png")
@@ -359,6 +437,7 @@ export async function renderItem(skyblockId, query, db) {
 
     outputTexture.image = await getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer("image/png");
   }
+
 
   const customTexture = await customResources.getTexture(item, {
     ignore_id: "name" in query,
