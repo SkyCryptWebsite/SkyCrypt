@@ -836,7 +836,7 @@ input[type="search"]::-webkit-search-cancel-button {
           transition: background-color 0.15s ease-out;
         }
 
-        &:hover:is([type=checkbox]) {
+        &:hover:is([type="checkbox"]) {
           background-color: rgba(var(--icon-rgb), 50%);
         }
       }
