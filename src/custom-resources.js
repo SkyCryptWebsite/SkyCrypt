@@ -111,6 +111,7 @@ export async function init() {
     fs.writeFileSync(RESOURCES_CACHE_FILE, JSON.stringify(resourcePacks));
   }
 
+  resourcePacks = resourcePacks.sort((a, b) => b.config.priority - a.config.priority);
   resourcePacks.forEach((pack) => {
     outputPacks.push(
       Object.assign(
@@ -488,14 +489,13 @@ async function loadResourcePacks() {
 }
 
 export function getPacks() {
-  return outputPacks.sort((a, b) => b.priority - a.priority);
+  return outputPacks;
 }
 
 export function getCompletePacks() {
   return resourcePacks;
 }
 
-export async function getTexture(item, options = { ignore_id: false, pack_ids: [], debug: false }) {
 export async function getTexture(
   item,
   options = { ignore_id: false, pack_ids: [], invert_order: false, debug: false }
@@ -519,7 +519,9 @@ export async function getTexture(
 
   if (options.pack_ids.length > 0) {
     tempPacks = tempPacks.filter((a) => options.pack_ids.includes(a.config.id));
-    tempPacks = tempPacks.sort((a, b) => options.pack_ids.indexOf(a) - options.pack_ids.indexOf(b));
+    tempPacks = tempPacks.sort((a, b) => options.pack_ids.indexOf(b) - options.pack_ids.indexOf(a));
+  }
+
   if (options.invert_order) {
     tempPacks = tempPacks.reverse();
   }
@@ -569,6 +571,8 @@ export async function getTexture(
       debugStats.processed_textures++;
 
       if (matches == texture.match.length) {
+        texture.weight = tempPacks.indexOf(pack);
+
         if (texture.weight < outputTexture.weight) {
           continue;
         }
