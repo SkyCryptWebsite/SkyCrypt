@@ -496,6 +496,10 @@ export function getCompletePacks() {
 }
 
 export async function getTexture(item, options = { ignore_id: false, pack_ids: [], debug: false }) {
+export async function getTexture(
+  item,
+  options = { ignore_id: false, pack_ids: [], invert_order: false, debug: false }
+) {
   if (!resourcesReady) {
     await readyPromise;
   }
@@ -516,6 +520,8 @@ export async function getTexture(item, options = { ignore_id: false, pack_ids: [
   if (options.pack_ids.length > 0) {
     tempPacks = tempPacks.filter((a) => options.pack_ids.includes(a.config.id));
     tempPacks = tempPacks.sort((a, b) => options.pack_ids.indexOf(a) - options.pack_ids.indexOf(b));
+  if (options.invert_order) {
+    tempPacks = tempPacks.reverse();
   }
 
   for (const pack of tempPacks) {
