@@ -746,7 +746,7 @@ input[type="search"]::-webkit-search-cancel-button {
     background-color: rgba(var(--text-rgb), 0.05);
     font-size: 14px;
 
-    &:not(:first-of-type) {
+    &:not(:first-of-type):not(.default-item) {
       margin-top: 15px;
     }
 
@@ -806,6 +806,7 @@ input[type="search"]::-webkit-search-cancel-button {
       mask-image: url(/resources/img/icons/check.svg);
       -webkit-mask-size: 100%;
       mask-size: 100%;
+      cursor: pointer;
 
       &:hover,
       &:focus-visible {
@@ -815,6 +816,7 @@ input[type="search"]::-webkit-search-cancel-button {
           -webkit-mask-image: url(/resources/img/icons/cancel.svg);
           mask-image: url(/resources/img/icons/cancel.svg);
           background-color: rgb(255 0 0 / 50%);
+          cursor: not-allowed;
         }
       }
 
@@ -829,12 +831,45 @@ input[type="search"]::-webkit-search-cancel-button {
       &:checked,
       &[aria-selected] {
         background-color: var(--icon-hex);
-        transition: background-color 0.15s ease-out;
+
+        &:not(:disabled) {
+          transition: background-color 0.15s ease-out;
+        }
+
+        &:hover:is([type=checkbox]) {
+          background-color: rgba(var(--icon-rgb), 50%);
+        }
       }
 
       &:focus-visible {
         animation: brighten 0.1s ease-out 0s 2 alternate;
       }
+    }
+  }
+
+  hr {
+    color: rgba(var(--text-rgb), 10%);
+    margin: 15px;
+  }
+
+  .list-button {
+    -webkit-appearance: none;
+    appearance: none;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    margin-top: 16px;
+    padding: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.1s;
+    background-color: rgba(var(--text-rgb), 0.65);
+    color: rgba(var(--background-rgb), 0.8);
+
+    &:hover {
+      background-color: rgba(var(--text-rgb), 0.8);
     }
   }
 }

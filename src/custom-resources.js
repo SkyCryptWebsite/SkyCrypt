@@ -116,7 +116,7 @@ export async function init() {
     outputPacks.push(
       Object.assign(
         {
-          basePath: "/" + path.relative(path.resolve(folderPath, "..", "public"), pack.basePath),
+          base_path: "/" + path.relative(path.resolve(folderPath, "..", "public"), pack.base_path ?? pack.basePath),
         },
         pack.config
       )
@@ -145,7 +145,7 @@ async function loadPackConfigs() {
       config.hash = await getFileHash(configPath);
 
       resourcePacks.push({
-        basePath,
+        base_path: basePath,
         config,
       });
     } catch (e) {
@@ -158,7 +158,7 @@ async function loadResourcePacks() {
   resourcePacks = resourcePacks.sort((a, b) => a.config.priority - b.config.priority);
 
   for (const pack of resourcePacks) {
-    pack.files = await getFiles(path.resolve(pack.basePath, "assets", "minecraft", "mcpatcher", "cit"));
+    pack.files = await getFiles(path.resolve(pack.base_path, "assets", "minecraft", "mcpatcher", "cit"));
     pack.textures = [];
 
     for (const file of pack.files) {
@@ -223,7 +223,7 @@ async function loadResourcePacks() {
             const topLayer = layers.pop();
 
             if (topLayer.startsWith("layer")) {
-              const layerPath = path.resolve(pack.basePath, "assets", "minecraft", model.textures[topLayer] + ".png");
+              const layerPath = path.resolve(pack.base_path, "assets", "minecraft", model.textures[topLayer] + ".png");
               await fs.access(layerPath, fs.F_OK);
 
               textureFile = layerPath;
@@ -581,7 +581,10 @@ export async function getTexture(
           continue;
         }
 
-        outputTexture = Object.assign({ pack: { basePath: pack.basePath, config: pack.config } }, texture);
+        outputTexture = Object.assign(
+          { pack: { base_path: pack.base_path ?? pack.basePath, config: pack.config } },
+          texture
+        );
       }
     }
 

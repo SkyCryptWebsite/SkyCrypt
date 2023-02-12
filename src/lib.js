@@ -532,7 +532,7 @@ async function processItems(base64, source, customTextures = false, packs, cache
         item.texture_path = "/" + customTexture.path;
         item.texture_pack = customTexture.pack.config;
         item.texture_pack.base_path =
-          "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.basePath);
+          "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.base_path);
       }
     }
 
@@ -3371,7 +3371,7 @@ function getHotmItems(userProfile, packs) {
       item.texture_path = "/" + customTexture.path;
       item.texture_pack = customTexture.pack.config;
       item.texture_pack.base_path =
-        "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.basePath);
+        "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.base_path);
     }
   });
 
