@@ -461,6 +461,7 @@ export async function renderItem(skyblockId, query, db) {
     }
 
     outputTexture.path = customTexture.path;
+    outputTexture.debug = customTexture.debug;
     outputTexture.image = await fs.readFile(path.resolve(__dirname, "..", "public", customTexture.path));
   }
 

@@ -27,6 +27,10 @@ router.all("/:itemId?", cors(), async (req, res, next) => {
       res.set("X-Texture-Path", `${item.path}`);
     }
 
+    if (item.debug) {
+      res.set("X-Texture-Debug", `${JSON.stringify(item.debug)}`);
+    }
+
     res.set("X-Cluster-ID", `${helper.getClusterId()}`);
     res.setHeader("Cache-Control", `public, max-age=${app.CACHE_MAX_AGE}`);
     res.contentType(item.mime);
