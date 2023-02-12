@@ -13,7 +13,7 @@ router.all("/:textureId", cors(), async (req, res, next) => {
   try {
     const { textureId } = req.params;
 
-    if (!/^[0-9a-fA-F]{64}$/.test(textureId)) {
+    if (!/^[0-9a-fA-F]+$/.test(textureId)) {
       handleError(res, new Error("invalid texture id: " + textureId), 400);
       return;
     }
