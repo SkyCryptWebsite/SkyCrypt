@@ -363,12 +363,23 @@ async function renderPotion(type, color) {
   return await renderColoredItem("#" + color, potionLiquid, potionBottlle);
 }
 
+/**
+ * Gets a texture of an item, either from stylesheet or from resource packs
+ * @param {string} skyblockId
+ * @param {*} query
+ * @param {*} db
+ * @returns Image of an item
+ */
 export async function renderItem(skyblockId, query, db) {
-  let item = { Damage: 0, id: -1 };
   query = sanitize(query);
 
+  const item = { id: -1, Damage: 0, Count: 1, tag: { ExtraAttributes: {} } };
+  let dbItem = {};
+
+  /**
+   * Look for DB items if possible with Skyblock ID or query name
+   */
   if (skyblockId) {
-    skyblockId = skyblockId.replace(".gif", "");
     skyblockId = sanitize(skyblockId);
 
     if (skyblockId.includes(":")) {
@@ -378,7 +389,7 @@ export async function renderItem(skyblockId, query, db) {
       query.damage = new Number(split[1]);
     }
 
-    item = Object.assign(item, await db.collection("items").findOne({ id: skyblockId }));
+    dbItem = await db.collection("items").findOne({ id: skyblockId });
   }
 
   if (query.name) {
@@ -390,7 +401,7 @@ export async function renderItem(skyblockId, query, db) {
     const filteredResults = results.filter((a) => a.name.toLowerCase() == query.name.toLowerCase());
 
     if (filteredResults.length > 0) {
-      item = Object.assign(item, filteredResults[0]);
+      dbItem = filteredResults[0];
     }
   }
 
@@ -399,31 +410,27 @@ export async function renderItem(skyblockId, query, db) {
   }
 
   if (query.damage) {
-    item.damage = query.damage;
+    item.Damage = query.damage;
   }
 
   if (query.name) {
-    item.name = query.name;
+    item.tag.display = { Name: query.name };
   }
 
-  if ("damage" in item) {
-    item.Damage = item.damage;
-    delete item.damage;
+  if ("item_id" in dbItem) {
+    item.id = dbItem.item_id;
   }
 
-  if ("item_id" in item) {
-    item.id = item.item_id;
+  if ("damage" in dbItem) {
+    item.Damage = dbItem.damage;
   }
 
-  if ("name" in item) {
-    item.tag = { display: { Name: item.name } };
+  if ("name" in dbItem) {
+    item.tag.display = { Name: dbItem.name };
   }
 
-  if ("texture" in item) {
-    return {
-      mime: "image/png",
-      image: await renderHead(`http://textures.minecraft.net/texture/${item.texture}`, 6.4),
-    };
+  if ("id" in dbItem) {
+    item.tag.ExtraAttributes.id = dbItem.id;
   }
 
   const outputTexture = { mime: "image/png" };
@@ -438,6 +445,9 @@ export async function renderItem(skyblockId, query, db) {
     outputTexture.image = await getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer("image/png");
   }
 
+  if ("texture" in dbItem) {
+    outputTexture.image = await getHead(item.texture);
+  }
 
   const customTexture = await customResources.getTexture(item, {
     ignore_id: "name" in query,
