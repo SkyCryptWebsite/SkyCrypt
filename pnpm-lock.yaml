@@ -41,7 +41,7 @@ specifiers:
   moment-duration-format: ^2.3.2
   moment-timezone: ^0.5.37
   mongo-sanitize: ^1.1.0
-  mongodb: ^4.9.1
+  mongodb: ^5.0.1
   node-fetch: ^3.2.10
   node-watch: ^0.7.3
   nodemon: ^2.0.19
@@ -72,7 +72,7 @@ dependencies:
   body-parser: 1.20.1
   bowser: 2.11.0
   canvas: 2.10.1
-  connect-mongo: 4.6.0_6bhpfk427vkdegtb2tddfnuqli
+  connect-mongo: 4.6.0_6byt3derkbzszvn72hsetm5dyy
   cookie-parser: 1.4.6
   cors: 2.8.5
   css: 3.0.0
@@ -90,7 +90,7 @@ dependencies:
   moment-duration-format: 2.3.2
   moment-timezone: 0.5.37
   mongo-sanitize: 1.1.0
-  mongodb: 4.10.0
+  mongodb: 5.0.1
   node-fetch: 3.2.10
   prismarine-nbt: 2.2.1
   progress: 2.0.3
@@ -940,11 +940,9 @@ packages:
     dependencies:
       fill-range: 7.0.1
 
-  /bson/4.7.0:
-    resolution: {integrity: sha512-VrlEE4vuiO1WTpfof4VmaVolCVYkYTgB9iWgYNOrVlnifpME/06fhFRmONgBhClD5pFC1t9ZWqFUQEQAzY43bA==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      buffer: 5.7.1
+  /bson/5.0.0:
+    resolution: {integrity: sha512-EL2KpZdyhshyyptj6pnQfnFKPoncD9KwZYvgmj/FXQiOUU1HWTHWmBOP4TZXU3YzStcI5qgpIl68YnMo16s26A==}
+    engines: {node: '>=14.20.1'}
     dev: false
 
   /buffer-from/1.1.2:
@@ -1193,7 +1191,7 @@ packages:
       yargs: 17.6.0
     dev: true
 
-  /connect-mongo/4.6.0_6bhpfk427vkdegtb2tddfnuqli:
+  /connect-mongo/4.6.0_6byt3derkbzszvn72hsetm5dyy:
     resolution: {integrity: sha512-8new4Z7NLP3CGP65Aw6ls3xDBeKVvHRSh39CXuDZTQsvpeeU9oNMzfFgvqmHqZ6gWpxIl663RyoVEmCAGf1yOg==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -1203,7 +1201,7 @@ packages:
       debug: 4.3.4
       express-session: 1.17.3
       kruptein: 3.0.5
-      mongodb: 4.10.0
+      mongodb: 5.0.1
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -3159,20 +3157,30 @@ packages:
     resolution: {integrity: sha512-6gB9AiJD+om2eZLxaPKIP5Q8P3Fr+s+17rVWso7hU0+MAzmIvIMlgTYuyvalDLTtE/p0gczcvJ8A3pbN1XmQ/A==}
     dev: false
 
-  /mongodb-connection-string-url/2.5.4:
-    resolution: {integrity: sha512-SeAxuWs0ez3iI3vvmLk/j2y+zHwigTDKQhtdxTgt5ZCOQQS5+HW4g45/Xw5vzzbn7oQXCNQ24Z40AkJsizEy7w==}
+  /mongodb-connection-string-url/2.6.0:
+    resolution: {integrity: sha512-WvTZlI9ab0QYtTYnuMLgobULWhokRjtC7db9LtcVfJ+Hsnyr5eo6ZtNAt3Ly24XZScGMelOcGtm7lSn0332tPQ==}
     dependencies:
       '@types/whatwg-url': 8.2.2
       whatwg-url: 11.0.0
     dev: false
 
-  /mongodb/4.10.0:
-    resolution: {integrity: sha512-My2QxLTw0Cc1O9gih0mz4mqo145Jq4rLAQx0Glk/Ha9iYBzYpt4I2QFNRIh35uNFNfe8KFQcdwY1/HKxXBkinw==}
-    engines: {node: '>=12.9.0'}
+  /mongodb/5.0.1:
+    resolution: {integrity: sha512-KpjtY+NWFmcic6UDYEdfn768ZTuKyv7CRaui7ZSd6q/0/o1AURMC7KygTUwB1Cl8V10Pe5NiP+Y2eBMCDs/ygQ==}
+    engines: {node: '>=14.20.1'}
+    peerDependencies:
+      '@aws-sdk/credential-providers': ^3.201.0
+      mongodb-client-encryption: ^2.3.0
+      snappy: ^7.2.2
+    peerDependenciesMeta:
+      '@aws-sdk/credential-providers':
+        optional: true
+      mongodb-client-encryption:
+        optional: true
+      snappy:
+        optional: true
     dependencies:
-      bson: 4.7.0
-      denque: 2.1.0
-      mongodb-connection-string-url: 2.5.4
+      bson: 5.0.0
+      mongodb-connection-string-url: 2.6.0
       socks: 2.7.1
     optionalDependencies:
       saslprep: 1.0.3
