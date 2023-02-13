@@ -30,7 +30,7 @@ specifiers:
   eslint-plugin-wc: ^1.3.2
   express: ^4.18.2
   express-session: ^1.17.3
-  fs-extra: ^11.0.0
+  fs-extra: ^11.1.0
   ioredis: ^5.2.3
   lilyweight: ^2.7.0
   lit: ^2.3.1
