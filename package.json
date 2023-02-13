@@ -7,10 +7,10 @@
   "engines": {
     "node": ">=16",
     "npm": "forbidden, use pnpm",
-    "pnpm": "^7.13.4",
+    "pnpm": "^7.27.0",
     "yarn": "forbidden, use pnpm"
   },
-  "packageManager": "pnpm@7.25.0",
+  "packageManager": "pnpm@7.27.0",
   "scripts": {
     "start": "node index",
     "dev": "pnpm i && concurrently -r \"pnpm nodemon\" \"pnpm scss:watch\" \"pnpm rollup:watch\"",
