@@ -43,7 +43,7 @@ const CONFIG = {
     commonjs(), // converts Node modules to ES modules
     production && terser(), // minify, but only in production
     production && // minify html strings inside javascript (aka lit-html)
-      minifyHTML({
+      minifyHTML.default({
         options: {
           minifyOptions: {
             conservativeCollapse: true,
