@@ -103,7 +103,7 @@
     "node-watch": "^0.7.3",
     "nodemon": "^2.0.19",
     "prettier": "2.8.1",
-    "rollup": "^2.79.0",
+    "rollup": "^3.0.0",
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-minify-html-literals": "^1.2.6",
     "rollup-plugin-terser": "^7.0.2",
