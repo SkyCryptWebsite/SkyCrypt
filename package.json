@@ -83,7 +83,7 @@
     "tippy.js": "^6.3.7",
     "twemoji": "^14.0.2",
     "upng-js": "^2.1.0",
-    "uuid": "^8.3.1"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",
