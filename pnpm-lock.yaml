@@ -14,7 +14,7 @@ specifiers:
   axios-debug-log: ^1.0.0
   body-parser: ^1.20.0
   bowser: ^2.11.0
-  canvas: ^2.10.1
+  canvas: ^2.11.0
   concurrently: ^7.3.0
   connect-mongo: ^4.6.0
   cookie-parser: ^1.4.6
@@ -71,7 +71,7 @@ dependencies:
   axios-debug-log: 1.0.0_axios@1.2.2
   body-parser: 1.20.1
   bowser: 2.11.0
-  canvas: 2.10.1
+  canvas: 2.11.0
   connect-mongo: 4.6.0_6byt3derkbzszvn72hsetm5dyy
   cookie-parser: 1.4.6
   cors: 2.8.5
@@ -1008,8 +1008,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /canvas/2.10.1:
-    resolution: {integrity: sha512-29pIjn9uwTUsIgJUNd7GXxKk8sg4iyJwLm1wIilNIqX1mVzXSc2nUij9exW1LqNpis1d2ebMYfMqTWcokZ4pdA==}
+  /canvas/2.11.0:
+    resolution: {integrity: sha512-bdTjFexjKJEwtIo0oRx8eD4G2yWoUOXP9lj279jmQ2zMnTQhT8C3512OKz3s+ZOaQlLbE7TuVvRDYDB3Llyy5g==}
     engines: {node: '>=6'}
     requiresBuild: true
     dependencies:
