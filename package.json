@@ -7,7 +7,7 @@
   "engines": {
     "node": ">=16",
     "npm": "forbidden, use pnpm",
-    "pnpm": "^7.27.0",
+    "pnpm": ">=7",
     "yarn": "forbidden, use pnpm"
   },
   "packageManager": "pnpm@7.27.0",

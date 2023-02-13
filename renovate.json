@@ -8,5 +8,11 @@
   "rebaseWhen": "behind-base-branch",
   "semanticCommits": "enabled",
   "schedule": ["* 0 * * *"],
-  "timezone": "UTC"
+  "timezone": "UTC",
+  "packageRules": [
+    {
+      "matchDepTypes": ["engines"],
+      "enabled": false
+    }
+  ]
 }
