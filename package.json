@@ -52,7 +52,7 @@
     "axios-debug-log": "^1.0.0",
     "body-parser": "^1.20.0",
     "bowser": "^2.11.0",
-    "canvas": "^2.10.1",
+    "canvas": "^2.11.0",
     "connect-mongo": "^4.6.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
