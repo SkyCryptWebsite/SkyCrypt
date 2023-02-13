@@ -1,7 +1,7 @@
 import typescript from "@rollup/plugin-typescript";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import { terser } from "rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
 import minifyHTML from "rollup-plugin-minify-html-literals";
 import nameMap from "./lib/rollup-plugin-name-map.js";
 import del from "rollup-plugin-delete";
