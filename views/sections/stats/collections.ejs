@@ -1,0 +1,65 @@
+<div class="stat-container stat-collections">
+   <a class="stat-anchor" id="Collections"></a>
+   <h2 class="stat-header">Collections</h2>
+   <div class="stat-content">
+      <% 
+      const collections = Object.values(calculated.collections);
+      const categories = [...new Set(collections.map(c => c.category))];
+      let maxedCategory = {}, totalCollections = {}, maxedCollections = {};
+      let totalMaxedCollections = 0, maxCollections = 0;
+
+      for (const category of categories) {
+         const categoryCollections = collections.filter(c => c.category == category);
+         maxedCollections[category] = categoryCollections.filter(c => c.tier >= c.maxTier).length;
+         totalCollections[category] = categoryCollections.length;
+
+         maxCollections += maxedCollections[category];
+         totalMaxedCollections += totalCollections[category];
+
+         maxedCategory[category] = maxedCollections[category] == totalCollections[category];
+      } %>
+
+      <span class="stat-name <%= maxCollections === totalMaxedCollections ? 'golden-text' : '' %>">Maxed Collections: </span>
+      <span class="stat-value <%= maxCollections === totalMaxedCollections ? 'golden-text' : '' %>"><%= maxCollections %> / <%= totalMaxedCollections %></span>
+
+      <% for (const category of categories) { %>
+         <div class="category-header">
+            <div class="category-icon">
+            <div class="item-icon <%= skillItems[category.toLowerCase()] %>"></div>
+            </div>
+            <span> <%= category %> </span>
+            <% if (maxedCategory[category]) { %>
+               <span class="category-header-maxed">max!</span>
+            <% } else { %>
+               <span class="category-header-detail">(<%= maxedCollections[category] %> / <%= totalCollections[category] %> max)</span>
+            <% } %>
+         </div>
+
+         <div class="collections">
+            <% 
+            for (const collection of collections.filter(c => c.category == category)) {
+               const amountsTooltip = collection.amounts.map(amount => `<span class="stat-name">${amount.username}: </span><span class="stat-value">${amount.amount.toLocaleString()}</span>`).join('<br>') + `<br><br><span class="stat-name">Total: </span><span class="stat-value">${collection.totalAmount.toLocaleString()}</span>`; %>
+
+               <div class="chip" data-tippy-content="<%= amountsTooltip %>">
+                  <div class="chip-icon-wrapper">
+                  <% if ("texture" in collection) { %>
+                     <div style="background-image:url(/head/<%= collection.texture %>)" class="item-icon custom-icon"></div>
+                  <% } else { %>
+                     <div class="item-icon icon-<%= collection.id %>_<%= collection.damage || 0 %>"></div>
+                  <% } %>
+                  </div>
+
+                  <div class="chip-text">
+                     <div class="collection-name <%= collection.tier == collection.maxTier ? 'max-stat' : '' %>">
+                        <span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span>
+                     </div>
+                     <div class="collection-amount">
+                        <span class="stat-name">Amount: </span><span class="stat-value"><%= collection.amount.toLocaleString() %></span>
+                     </div>
+                  </div>
+               </div>
+            <% } %>
+         </div>
+      <% } %>
+   </div>
+</div>

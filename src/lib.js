@@ -20,6 +20,8 @@ import { redisClient } from "./redis.js";
 import { calculateLilyWeight } from "./weight/lily-weight.js";
 import { calculateSenitherWeight } from "./weight/senither-weight.js";
 
+import * as stats from "./stats/index.js";
+
 const mcData = minecraftData("1.8.9");
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const hypixel = axios.create({
@@ -1825,7 +1827,7 @@ export async function getStats(
   output.members = members.filter((a) => a.uuid != profile.uuid);
   output.minions = getMinions(profile.members);
   output.minion_slots = getMinionSlots(output.minions);
-  output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
+  output.collections = await stats.getCollections(profile.uuid, profile, options.cacheOnly);
   output.bestiary = getBestiary(profile.uuid, profile);
   output.social = hypixelProfile.socials;
 
@@ -2816,57 +2818,6 @@ function getMissingAccessories(accessories) {
     missing: other,
     upgrades: upgrades,
   };
-}
-
-export async function getCollections(uuid, profile, cacheOnly = false) {
-  const output = {};
-
-  const userProfile = profile.members[uuid];
-
-  if (!("unlocked_coll_tiers" in userProfile) || !("collection" in userProfile)) {
-    return output;
-  }
-
-  const members = {};
-
-  (await Promise.all(Object.keys(profile.members).map((a) => helper.resolveUsernameOrUuid(a, db, cacheOnly)))).forEach(
-    (a) => (members[a.uuid] = a.display_name)
-  );
-
-  for (const collection of userProfile.unlocked_coll_tiers) {
-    const split = collection.split("_");
-    const tier = Math.max(0, parseInt(split.pop()));
-    const type = split.join("_");
-    const amount = userProfile.collection[type] || 0;
-    const amounts = [];
-    let totalAmount = 0;
-
-    for (const member in profile.members) {
-      const memberProfile = profile.members[member];
-
-      if ("collection" in memberProfile) {
-        amounts.push({ username: members[member], amount: memberProfile.collection[type] || 0 });
-      }
-    }
-
-    for (const memberAmount of amounts) {
-      totalAmount += memberAmount.amount;
-    }
-
-    if (!(type in output) || tier > output[type].tier) {
-      output[type] = { tier, amount, totalAmount, amounts };
-    }
-
-    const collectionData = constants.COLLECTION_DATA.find((a) => a.skyblockId == type);
-
-    for (const tier of collectionData?.tiers ?? []) {
-      if (totalAmount >= tier.amountRequired) {
-        output[type].tier = Math.max(tier.tier, output[type].tier);
-      }
-    }
-  }
-
-  return output;
 }
 
 export function getBestiary(uuid, profile) {
@@ -3901,7 +3852,9 @@ async function init() {
       try {
         const collectionData = constants.COLLECTION_DATA.find((a) => a.skyblockId == itemType);
 
+        collectionData.category = response.data.collections[type].name;
         collectionData.maxTier = item.maxTiers;
+        collectionData.name = item.name;
         collectionData.tiers = item.tiers;
       } catch (e) {
         if (e instanceof TypeError) {
