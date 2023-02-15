@@ -51,7 +51,7 @@ const rewards = {
       new_forgeable_items: 0,
     },
     7: {
-      token_of_the_mountain: 2,
+      token_of_the_mountain: 3,
       new_forgeable_items: 0,
     },
   },
@@ -59,23 +59,32 @@ const rewards = {
     1: {
       pickaxe_ability_level: 1,
       token_of_the_mountain: 1,
+      skyblock_experience: 25,
     },
     2: {
       forge_slot: 1,
+      skyblock_experience: 35,
     },
     3: {
       commission_slot: 1,
+      skyblock_experience: 50,
     },
     4: {
       mithril_powder_when_mining_mithril: 1,
+      skyblock_experience: 65,
     },
     5: {
       token_of_the_mountain: 1,
+      skyblock_experience: 75,
     },
     6: {
-      token_of_the_mountain: 1,
+      gemstone_powder_when_mining_gemstones: 2,
+      skyblock_experience: 100,
     },
-    7: {},
+    7: {
+      token_of_the_mountain: 1,
+      skyblock_experience: 125,
+    },
   },
   rewards: {
     token_of_the_mountain: {
@@ -113,6 +122,14 @@ const rewards = {
     mithril_powder_when_mining_mithril: {
       formatted: "§2Mithril Powder §7when mining §fMithril",
       qtyColor: "2",
+    },
+    gemstone_powder_when_mining_gemstones: {
+      formatted: "§dGemstone Powder §7when mining §dGemstones",
+      qtyColor: "d",
+    },
+    skyblock_experience: {
+      formatted: "§bSkyblock XP",
+      qtyColor: "b",
     },
   },
 };
@@ -748,21 +765,23 @@ class PeakOfTheMountain extends Node {
     this.id = "special_0";
     this.name = nodeNames[this.id];
     this.position = 18;
-    this.max_level = 5;
-    this.upgrade_type = "mithril_powder";
+    this.max_level = 7;
+    this.upgrade_type = data.level >= 5 ? "gemstone_powder" : "mithril_powder";
     this.requires = ["efficient_miner"];
     this.nodeType = "special";
   }
 
   get upgradeCost() {
     const nextLevel = this.level + 1;
-    return floor(25000 * nextLevel);
+    return nextLevel <= 5 ? floor(25000 * nextLevel) : floor(500000 + 250000 * (nextLevel - 6));
   }
 
   perk(level) {
     const output = [];
 
-    for (let tier = 1; tier <= level; tier++) {
+    const baseTier = level > this.level ? level : 1;
+
+    for (let tier = baseTier; tier <= level; tier++) {
       for (const [reward, qty] of Object.entries(rewards.potm[tier])) {
         const qtyColor = rewards.rewards[reward].qtyColor;
         const formatted = rewards.rewards[reward].formatted;
@@ -1435,3 +1454,7 @@ export const PRECURSOR_PARTS = {
   CONTROL_SWITCH: "Control Switch",
   SYNTHETIC_HEART: "Synthetic Heart",
 };
+
+export const COMMISSIONS_MILESTONE = 6;
+
+export const MAX_PEAK_OF_THE_MOUNTAIN_LEVEL = 7;

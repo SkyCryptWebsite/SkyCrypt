@@ -1,7 +1,6 @@
 import fs from "fs-extra";
 import path from "path";
-import { fileURLToPath } from "url";
-import { getClusterId, hasPath, getPath } from "./helper.js";
+import { getClusterId, getFolderPath, getCacheFolderPath, getCacheFilePath, hasPath, getPath } from "./helper.js";
 import mm from "micromatch";
 import util from "util";
 import apng2gif from "apng2gif-bin";
@@ -15,13 +14,27 @@ import UPNG from "upng-js";
 import RJSON from "relaxed-json";
 
 import child_process from "child_process";
+import { getFileHash } from "./hashes.js";
 const execFile = util.promisify(child_process.execFile);
 
 const NORMALIZED_SIZE = 128;
+const RESOURCE_CACHING = true;
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const folderPath = getFolderPath();
+const RESOURCE_PACK_FOLDER = path.resolve(getFolderPath(), "..", "public", "resourcepacks");
 
-const RESOURCE_PACK_FOLDER = path.resolve(__dirname, "..", "public", "resourcepacks");
+const cacheFolderPath = getCacheFolderPath(folderPath);
+const PACK_HASH_CACHE_FILE = getCacheFilePath(cacheFolderPath, "json", "pack_hashes", "json");
+const RESOURCES_CACHE_FILE = getCacheFilePath(cacheFolderPath, "json", "custom_resources", "json");
+
+let resourcesReady = false;
+const readyPromise = new Promise((resolve) => {
+  setInterval(() => {
+    if (resourcesReady) {
+      resolve();
+    }
+  }, 1000);
+});
 
 const removeFormatting = new RegExp("§[0-9a-z]{1}", "g");
 
@@ -33,7 +46,7 @@ async function getFiles(dir, fileList) {
   for (const file of files) {
     const fileStat = await fs.stat(path.resolve(dir, file));
 
-    if (await fileStat.isDirectory()) {
+    if (fileStat.isDirectory()) {
       fileList = await getFiles(path.resolve(dir, file), fileList);
     } else {
       fileList.push(path.resolve(dir, file));
@@ -53,11 +66,69 @@ function getFrame(src, frame) {
 }
 
 let resourcePacks = [];
+let packConfigHashes = {};
 
-async function init() {
+const outputPacks = [];
+
+export async function init() {
   console.log(`Custom Resources loading started on ${getClusterId(true)}.`);
   console.time(`custom_resources_${getClusterId()}`);
 
+  await loadPackConfigs();
+  let resourcesUpToDate = false;
+
+  try {
+    packConfigHashes = JSON.parse(fs.readFileSync(PACK_HASH_CACHE_FILE));
+
+    resourcePacks.forEach((pack) => {
+      if (packConfigHashes[pack.config.id] !== pack.config.hash) {
+        throw new Error("Config hashes were not matching!");
+      }
+    });
+
+    resourcesUpToDate = true;
+  } catch (e) {
+    resourcePacks.forEach((pack) => {
+      packConfigHashes[pack.config.id] = pack.config.hash;
+    });
+
+    fs.writeFileSync(PACK_HASH_CACHE_FILE, JSON.stringify(packConfigHashes));
+  }
+
+  try {
+    if (!RESOURCE_CACHING) {
+      throw new Error("Resource caching has been disabled!");
+    }
+
+    if (resourcesUpToDate) {
+      resourcePacks = JSON.parse(fs.readFileSync(RESOURCES_CACHE_FILE));
+    } else {
+      throw new Error("Resources need to be loaded!");
+    }
+  } catch (e) {
+    await loadResourcePacks();
+
+    fs.writeFileSync(RESOURCES_CACHE_FILE, JSON.stringify(resourcePacks));
+  }
+
+  resourcePacks.forEach((pack) => {
+    outputPacks.push(
+      Object.assign(
+        {
+          basePath: "/" + path.relative(path.resolve(folderPath, "..", "public"), pack.basePath),
+        },
+        pack.config
+      )
+    );
+  });
+
+  resourcesReady = true;
+
+  console.log(`Custom Resources loading done. (${getClusterId(true)})`);
+  console.timeEnd(`custom_resources_${getClusterId()}`);
+}
+
+async function loadPackConfigs() {
   for (const packOrFile of await fs.readdir(RESOURCE_PACK_FOLDER, { withFileTypes: true })) {
     if (!packOrFile.isDirectory()) {
       continue;
@@ -67,7 +138,10 @@ async function init() {
     const basePath = path.resolve(RESOURCE_PACK_FOLDER, pack);
 
     try {
-      const config = JSON.parse(fs.readFileSync(path.resolve(basePath, "config.json")));
+      const configPath = path.resolve(basePath, "config.json");
+
+      const config = JSON.parse(fs.readFileSync(configPath));
+      config.hash = await getFileHash(configPath);
 
       resourcePacks.push({
         basePath,
@@ -77,7 +151,9 @@ async function init() {
       console.log("Couldn't find config for resource pack", pack);
     }
   }
+}
 
+async function loadResourcePacks() {
   resourcePacks = resourcePacks.sort((a, b) => a.config.priority - b.config.priority);
 
   for (const pack of resourcePacks) {
@@ -91,6 +167,8 @@ async function init() {
 
       const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
       const properties = {};
+
+      if (!lines.some((line) => line.startsWith("nbt.ExtraAttributes.id"))) continue;
 
       for (const line of lines) {
         // Skipping comments
@@ -274,7 +352,7 @@ async function init() {
 
         texture.match.push({
           value: property.substring(4),
-          regex,
+          regex: regex.toString(),
         });
       }
 
@@ -407,56 +485,47 @@ async function init() {
       pack.textures.push(texture);
     }
   }
-
-  console.log(`Custom Resources loading done. (${getClusterId(true)})`);
-  console.timeEnd(`custom_resources_${getClusterId()}`);
 }
 
-const outputPacks = [];
-const readyPromise = init();
+export function getPacks() {
+  return outputPacks.sort((a, b) => b.priority - a.priority);
+}
 
-readyPromise.then(() => {
-  ready = true;
+export function getCompletePacks() {
+  return resourcePacks;
+}
 
-  for (const pack of resourcePacks) {
-    outputPacks.push(
-      Object.assign(
-        {
-          basePath: "/" + path.relative(path.resolve(__dirname, "..", "public"), pack.basePath),
-        },
-        pack.config
-      )
-    );
-  }
-});
-
-export let ready = false;
-export const packs = outputPacks;
-export const completePacks = resourcePacks;
-export async function getTexture(item, ignoreId = false, packIds) {
-  if (!ready) {
+export async function getTexture(item, options = { ignore_id: false, pack_ids: [], debug: false }) {
+  if (!resourcesReady) {
     await readyPromise;
   }
 
+  const timeStarted = Date.now();
+  const debugStats = {
+    processed_packs: 0,
+    processed_textures: 0,
+    found_matches: 0,
+  };
+
   let outputTexture = { weight: -9999 };
 
-  let _resourcePacks = resourcePacks;
+  let tempPacks = resourcePacks;
 
-  packIds = packIds !== undefined ? packIds.split(",") : [];
+  options.pack_ids = options.pack_ids !== undefined ? options.pack_ids.split(",") : [];
 
-  if (packIds.length > 0) {
-    _resourcePacks = _resourcePacks.filter((a) => packIds.includes(a.config.id));
+  if (options.pack_ids.length > 0) {
+    tempPacks = tempPacks.filter((a) => options.pack_ids.includes(a.config.id));
   }
 
-  _resourcePacks = _resourcePacks.sort((a, b) => packIds.indexOf(a) - packIds.indexOf(b));
+  tempPacks = tempPacks.sort((a, b) => options.pack_ids.indexOf(a) - options.pack_ids.indexOf(b));
 
-  for (const pack of _resourcePacks) {
+  for (const pack of tempPacks) {
     for (const texture of pack.textures) {
-      if (ignoreId === false && texture.id != item.id) {
+      if (options.ignore_id === false && texture.id != item.id) {
         continue;
       }
 
-      if (ignoreId === false && "damage" in texture && texture.damage != item.Damage) {
+      if (options.ignore_id === false && "damage" in texture && texture.damage != item.Damage) {
         continue;
       }
 
@@ -479,10 +548,20 @@ export async function getTexture(item, ignoreId = false, packIds) {
           matchValues = [matchValues];
         }
 
-        if (matchValues.some((matchValue) => regex.test(matchValue.toString().replace(removeFormatting, "")))) {
+        const slash = regex.lastIndexOf("/");
+        regex = new RegExp(regex.slice(1, slash), regex.slice(slash + 1));
+
+        if (
+          matchValues.some((matchValue) => {
+            return regex.test(matchValue.toString().replace(removeFormatting, ""));
+          })
+        ) {
           matches++;
         }
       }
+
+      debugStats.found_matches += matches;
+      debugStats.processed_textures++;
 
       if (matches == texture.match.length) {
         if (texture.weight < outputTexture.weight) {
@@ -496,13 +575,21 @@ export async function getTexture(item, ignoreId = false, packIds) {
         outputTexture = Object.assign({ pack: { basePath: pack.basePath, config: pack.config } }, texture);
       }
     }
+
+    debugStats.processed_packs++;
   }
 
   if (!("path" in outputTexture)) {
     return null;
   }
 
-  outputTexture.path = path.relative(path.resolve(__dirname, "..", "public"), outputTexture.path).replaceAll("\\", "/");
+  outputTexture.path = path
+    .relative(path.resolve(folderPath, "..", "public"), outputTexture.path)
+    .replaceAll("\\", "/");
+
+  debugStats.time_spent_ms = Date.now() - timeStarted;
+  outputTexture.debug = debugStats;
+
   process.send({ type: "used_pack", id: outputTexture?.pack.config.id });
 
   return outputTexture;

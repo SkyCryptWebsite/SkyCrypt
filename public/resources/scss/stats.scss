@@ -92,6 +92,12 @@
       --skillbar: var(--maxedbar);
     }
 
+    &[type="skyblock_level"] {
+      margin-bottom: 25px;
+      padding-right: 24px;
+      width: 200%;
+    }
+
     .skill-icon {
       width: 36px;
       height: 36px;
@@ -571,6 +577,10 @@
   &:hover::after {
     color: rgba(255, 255, 255, 0.9);
   }
+}
+
+button.additional-player-stat {
+  cursor: pointer;
 }
 
 #reveal_socials {
@@ -1157,6 +1167,7 @@ a.additional-player-stat:hover {
 }
 
 .rich-item {
+  cursor: pointer;
   @media (hover: hover) {
     &::after {
       content: "";

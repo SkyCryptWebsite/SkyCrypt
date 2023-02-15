@@ -6,6 +6,7 @@ import { v4 } from "uuid";
 import retry from "async-retry";
 import path from "path";
 import fs from "fs-extra";
+import { fileURLToPath } from "url";
 
 export { renderLore, formatNumber } from "../common/formatting.js";
 export * from "../common/helper.js";
@@ -953,10 +954,18 @@ export function parseItemTypeFromLore(lore) {
   };
 }
 
-export function getCacheFilePath(dirPath, type, name) {
+export function getFolderPath() {
+  return path.dirname(fileURLToPath(import.meta.url));
+}
+
+export function getCacheFolderPath() {
+  return path.resolve(getFolderPath(), "../cache");
+}
+
+export function getCacheFilePath(dirPath, type, name, format = "png") {
   // we don't care about folder optimization when we're developing
   if (process.env?.NODE_ENV == "development") {
-    return path.resolve(dirPath, `${type}_${name}.png`);
+    return path.resolve(dirPath, `${type}_${name}.${format}`);
   }
 
   const subdirs = [type];
@@ -984,7 +993,7 @@ export function getCacheFilePath(dirPath, type, name) {
     }
   }
 
-  return path.resolve(dirPath, `${subdirs.join("/")}/${type}_${name}.png`);
+  return path.resolve(dirPath, `${subdirs.join("/")}/${type}_${name}.${format}`);
 }
 
 function getCategoriesFromType(type) {

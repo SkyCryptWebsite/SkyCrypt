@@ -1,0 +1,28 @@
+{
+    "parent": "item/generated",
+    "display": {
+        "thirdperson": {
+            "rotation": [ 0, 90, -35 ],
+            "translation": [ 0, 2, -8.5 ],
+            "scale": [ 1.7, 1.7, 1.7 ]
+        },
+        "firstperson": {
+            "rotation": [ 0, -135, 25 ],
+            "translation": [ 0, 12, 4 ],
+            "scale": [ 3.4, 3.4, 3.4 ]
+        },
+        "ground": {
+            "scale": [ 2, 2, 2],
+            "translation": [ 0, 4, 0 ]
+        },
+        "gui": {
+            "rotation": [ 0, 180, 90 ],
+            "scale": [ 2, 2, 2 ],
+            "translation": [ 2.5, 2.5, 0 ]
+        },
+        "fixed": {
+            "scale": [ 2, 2, 2 ],
+            "translation": [ 2, 2, 0 ]
+        }
+    }
+}

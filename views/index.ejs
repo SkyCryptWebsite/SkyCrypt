@@ -90,19 +90,10 @@
     <% if(extra.favorites?.length){
         for(let profile of extra.favorites){
           if(profile.error) continue;
-
-          const lastUpdated = profile.last_updated;
-          let lastUpdatedText = "";
-          const diff = (+new Date() - lastUpdated) / 1000;
-
-          if(diff < 10 * 60)
-            lastUpdatedText = `<span class="stat-value">Currently online</span>`;
-          else
-            lastUpdatedText = `<span class="stat-name">Last online: </span><span class="stat-value">${moment(lastUpdated).fromNow()}</span>`;
       %>
     <a href="/stats/<%= profile.uuid %>" class="top-profile">
       <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
-      <div class="profile-name">
+      <div class="favorite-profile-name">
         <%= profile.username %>
         <% if('emojiImg' in profile){ %>
         <img class="emoji" draggable="false" src="<%= profile.emojiImg %>" alt="<%= profile.emojiImg.split('/').pop().split('.')[0] %>">
@@ -110,7 +101,6 @@
         <%-" " + extra.twemoji.parse(profile.emoji) %>
         <% } %>
       </div>
-      <div class="profile-last-online"><%- lastUpdatedText %></div>
       <svg class="profile-rank" viewBox="0 0 24 24">
         <title>Favorited profile</title>
         <%# mdi-star %>

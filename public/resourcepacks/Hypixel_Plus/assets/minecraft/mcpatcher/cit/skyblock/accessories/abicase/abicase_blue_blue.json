@@ -1,0 +1,6 @@
+{
+	"parent": "item/handheld_generated",
+	"textures": {
+		"layer0": "./abicase_blue_blue"
+	}
+}

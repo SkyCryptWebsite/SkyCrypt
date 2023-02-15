@@ -2,6 +2,7 @@ import retry from "async-retry";
 import axios from "axios";
 import _ from "lodash";
 import minecraftData from "minecraft-data";
+import { getItemNetworth, getPreDecodedNetworth } from "skyhelper-networth";
 import moment from "moment";
 import sanitize from "mongo-sanitize";
 import path from "path";
@@ -12,7 +13,7 @@ import { v4 } from "uuid";
 
 import * as constants from "./constants.js";
 import credentials from "./credentials.js";
-import { getTexture, packs } from "./custom-resources.js";
+import { getTexture } from "./custom-resources.js";
 import * as helper from "./helper.js";
 import { db } from "./mongo.js";
 import { redisClient } from "./redis.js";
@@ -93,7 +94,9 @@ function getXpByLevel(uncappedLevel, extra = {}) {
 
   /** the level that this player is caped at */
   const levelCap =
-    extra.cap ?? constants.DEFAULT_SKILL_CAPS[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
+    extra.cap ??
+    Math.max(uncappedLevel, constants.DEFAULT_SKILL_CAPS[extra.skill]) ??
+    Math.max(...Object.keys(xpTable).map((a) => Number(a)));
 
   /** the maximum level that any player can achieve (used for gold progress bars) */
   const maxLevel = constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
@@ -152,9 +155,6 @@ export function getLevelByXp(xp, extra = {}) {
   const levelCap =
     extra.cap ?? constants.DEFAULT_SKILL_CAPS[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
 
-  /** the maximum level that any player can achieve (used for gold progress bars) */
-  const maxLevel = constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
-
   /** the level ignoring the cap and using only the table */
   let uncappedLevel = 0;
 
@@ -172,17 +172,31 @@ export function getLevelByXp(xp, extra = {}) {
     }
   }
 
+  if (extra.type == "dungeoneering" && !extra.class) {
+    while (xpCurrent >= 200000000) {
+      uncappedLevel++;
+      xpCurrent -= 200000000;
+    }
+  }
+
+  /** the maximum level that any player can achieve (used for gold progress bars) */
+  const maxLevel =
+    extra.type == "dungeoneering" && uncappedLevel > 50
+      ? uncappedLevel
+      : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
+
   // not sure why this is floored but I'm leaving it in for now
   xpCurrent = Math.floor(xpCurrent);
 
   /** the level as displayed by in game UI */
-  const level = Math.min(levelCap, uncappedLevel);
+  const level = extra.type != "dungeoneering" && !extra.class ? Math.min(levelCap, uncappedLevel) : uncappedLevel;
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
   const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
   /** the fraction of the way toward the next level */
-  const progress = Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+  const progress =
+    extra.type == "dungeoneering" && !extra.class && level > 50 ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
   const levelWithProgress = level + progress;
@@ -352,6 +366,10 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
       }
     }
 
+    if (item.tag?.ExtraAttributes?.model != undefined) {
+      item.extra.model = item.tag.ExtraAttributes.model;
+    }
+
     if (item.tag?.ExtraAttributes?.hot_potato_count != undefined) {
       item.extra.hpbs = item.tag.ExtraAttributes.hot_potato_count;
     }
@@ -504,7 +522,10 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
     }
 
     if (item.tag?.ExtraAttributes?.skin == undefined && customTextures) {
-      const customTexture = await getTexture(item, false, packs);
+      const customTexture = await getTexture(item, {
+        ignore_id: false,
+        pack_ids: packs,
+      });
 
       if (customTexture) {
         item.animated = customTexture.animated;
@@ -686,6 +707,31 @@ async function processItems(base64, customTextures = false, packs, cacheOnly = f
 
       if (item.extra?.price_paid) {
         itemLore.push(`§7Price Paid at Dark Auction: §b${item.extra.price_paid.toLocaleString()} coins`);
+      }
+    }
+
+    if (item?.tag || item?.exp) {
+      if (item.tag?.ExtraAttributes?.id === "PET") {
+        item.tag.ExtraAttributes.petInfo =
+          JSON.stringify(item.tag.ExtraAttributes.petInfo) ?? item.tag.ExtraAttributes.petInfo;
+      }
+
+      const ITEM_PRICE = await getItemNetworth(item, { cache: true });
+
+      if (ITEM_PRICE?.price > 0) {
+        itemLore.push(
+          "",
+          `§7Item Value: §6${Math.round(ITEM_PRICE.price).toLocaleString()} Coins §7(§6${helper.formatNumber(
+            ITEM_PRICE.price
+          )}§7)`
+        );
+      }
+
+      if (item.tag?.ExtraAttributes?.id === "PET") {
+        item.tag.ExtraAttributes.petInfo =
+          typeof item.tag.ExtraAttributes.petInfo === "string"
+            ? JSON.parse(item.tag.ExtraAttributes.petInfo)
+            : item.tag.ExtraAttributes.petInfo;
       }
     }
 
@@ -902,6 +948,7 @@ export const getItems = async (
   output.personal_vault = personal_vault;
   output.storage = storage;
   output.hotm = hotm;
+  output.candy_bag = candy_bag;
 
   const allItems = armor.concat(
     equipment,
@@ -953,6 +1000,7 @@ export const getItems = async (
     special: 0,
     very_special: 0,
     hegemony: null,
+    abicase: null,
   };
 
   // Modify accessories on armor and add
@@ -1023,6 +1071,9 @@ export const getItems = async (
     if (id == "HEGEMONY_ARTIFACT") {
       accessoryRarities.hegemony = { rarity: insertAccessory.rarity };
     }
+    if (id === "ABICASE") {
+      accessoryRarities.abicase = { model: insertAccessory.extra?.model };
+    }
   }
 
   // Add inactive accessories from enderchest and backpacks
@@ -1088,6 +1139,16 @@ export const getItems = async (
       }
 
       accessoryIds.splice(accessoryIds.indexOf(id), 1, `WEDDING_RING_${maxTier}`);
+    }
+
+    if (id.startsWith("PARTY_HAT_CRAB")) {
+      const CRAB_HAT = accessories.find((a) => helper.getId(a) == `${id}`);
+      const CRAB_HAT_ANIMATED = accessories.find((a) => helper.getId(a) == `${id}_ANIMATED`);
+
+      if (CRAB_HAT && CRAB_HAT_ANIMATED) {
+        CRAB_HAT.isUnique = false;
+        CRAB_HAT.isInactive = true;
+      }
     }
 
     if (id in constants.ACCESSORY_UPGRADES) {
@@ -1375,7 +1436,7 @@ export const getItems = async (
   return output;
 };
 
-async function getLevels(userProfile, hypixelProfile, levelCaps) {
+async function getLevels(userProfile, hypixelProfile, levelCaps, profileMembers) {
   const output = {};
 
   let skillLevels;
@@ -1415,10 +1476,18 @@ async function getLevels(userProfile, hypixelProfile, levelCaps) {
         skill: "runecrafting",
         type: "runecrafting",
       }),
-      social: getLevelByXp(userProfile.experience_skill_social2, {
-        skill: "social",
-        type: "social",
-      }),
+      social:
+        Object.keys(profileMembers || {}).length > 0
+          ? getLevelByXp(
+              Object.keys(profileMembers)
+                .map((member) => profileMembers[member].experience_skill_social2 || 0)
+                .reduce((a, b) => a + b, 0),
+              { skill: "social", type: "social" }
+            )
+          : getLevelByXp(userProfile.experience_skill_social2, {
+              skill: "social",
+              type: "social",
+            }),
     };
 
     for (const skill in skillLevels) {
@@ -1536,7 +1605,8 @@ export async function getStats(
   const { levels, average_level, average_level_no_progress, total_skill_xp, average_level_rank } = await getLevels(
     userProfile,
     hypixelProfile,
-    levelCaps
+    levelCaps,
+    profile.members
   );
 
   output.levels = levels;
@@ -1602,44 +1672,13 @@ export async function getStats(
 
   if (!items.no_inventory) {
     output.missingAccessories = getMissingAccessories(items.accessory_ids);
-  }
 
-  if (!userProfile.pets) {
-    userProfile.pets = [];
-  }
-  userProfile.pets.push(...items.pets);
+    const PARTY_HAT_CRAB = items.accessory_ids.some((a) => a.startsWith("PARTY_HAT_CRAB"));
 
-  output.pets = await getPets(userProfile);
-  output.missingPets = await getMissingPets(output.pets, profile.game_mode);
-  output.petScore = getPetScore(output.pets);
-
-  const petScoreRequired = Object.keys(constants.PET_REWARDS).sort((a, b) => parseInt(b) - parseInt(a));
-
-  output.pet_bonus = {};
-
-  for (const score of petScoreRequired) {
-    if (parseInt(score) > output.petScore) {
-      continue;
-    }
-
-    output.pet_score_bonus = Object.assign({}, constants.PET_REWARDS[score]);
-
-    break;
-  }
-
-  for (const pet of output.pets) {
-    if (!pet.active) {
-      continue;
-    }
-
-    for (const stat in pet.stats) {
-      output.pet_bonus[stat] = (output.pet_bonus[stat] || 0) + pet.stats[stat];
-    }
-  }
-
-  // Apply pet score bonus
-  for (const stat in output.pet_score_bonus) {
-    output.stats[stat] += output.pet_score_bonus[stat];
+    output.missingAccessories.missing =
+      PARTY_HAT_CRAB === true
+        ? output.missingAccessories.missing.filter((accessory) => accessory.name.startsWith("PARTY_HAT_CRAB") === false)
+        : output.missingAccessories.missing;
   }
 
   output.base_stats = Object.assign({}, output.stats);
@@ -1948,7 +1987,9 @@ export async function getStats(
       for (const key in gameData) {
         if (key.startsWith("attempts") || key.startsWith("claims") || key.startsWith("best_score")) {
           let statKey = key.split("_");
-          const tierValue = statKey.pop();
+          let tierValue = parseInt(statKey.pop());
+          tierValue =
+            game === "numbers" ? tierValue + 2 : game === "simon" ? (tierValue === 5 ? 5 : tierValue + 1) : tierValue;
 
           statKey = statKey.join("_");
           const tierInfo = _.cloneDeep(constants.EXPERIMENTS.tiers[tierValue]);
@@ -1992,29 +2033,78 @@ export async function getStats(
   const mining = {
     commissions: {
       milestone: 0,
+      completions: hypixelProfile?.achievements?.skyblock_hard_working_miner || 0,
     },
   };
 
-  for (const key of userProfile.tutorial) {
-    if (key.startsWith("commission_milestone_reward_mining_xp_tier_")) {
-      const milestoneTier = key.slice(43);
-      if (mining.commissions.milestone < milestoneTier) {
-        mining.commissions.milestone = milestoneTier;
+  if (userProfile?.tutorial) {
+    for (const key of userProfile.tutorial) {
+      if (key.startsWith("commission_milestone_reward_mining_xp_tier_")) {
+        const milestoneTier = key.slice(43);
+        if (mining.commissions.milestone < milestoneTier) mining.commissions.milestone = milestoneTier;
       }
-    } else {
-      continue;
     }
   }
 
   mining.forge = await getForge(userProfile);
-  mining.core = await getMiningCoreData(userProfile);
+  mining.core = getMiningCoreData(userProfile);
 
   output.mining = mining;
+
+  // CRIMSON ISLES
+
+  const crimsonIsles = {
+    kuudra_completed_tiers: {},
+    dojo: {},
+    factions: {},
+    total_dojo_points: 0,
+  };
+
+  crimsonIsles.factions.selected_faction = userProfile.nether_island_player_data?.selected_faction ?? "None";
+  crimsonIsles.factions.mages_reputation = userProfile.nether_island_player_data?.mages_reputation ?? 0;
+  crimsonIsles.factions.barbarians_reputation = userProfile.nether_island_player_data?.barbarians_reputation ?? 0;
+
+  Object.keys(constants.KUUDRA_TIERS).forEach((key) => {
+    crimsonIsles.kuudra_completed_tiers[key] = {
+      name: constants.KUUDRA_TIERS[key].name,
+      head: constants.KUUDRA_TIERS[key].head,
+      completions: userProfile.nether_island_player_data?.kuudra_completed_tiers[key] ?? 0,
+    };
+  });
+
+  Object.keys(constants.DOJO).forEach((key) => {
+    key = key.replaceAll("dojo_points_", "").replaceAll("dojo_time_", "");
+    crimsonIsles.total_dojo_points += userProfile.nether_island_player_data?.dojo[`dojo_points_${key}`] ?? 0;
+    crimsonIsles.dojo[key.toUpperCase()] = {
+      name: constants.DOJO[key].name,
+      id: constants.DOJO[key].itemId,
+      damage: constants.DOJO[key].damage,
+      points: userProfile.nether_island_player_data?.dojo[`dojo_points_${key}`] ?? 0,
+      time: userProfile.nether_island_player_data?.dojo[`dojo_time_${key}`] ?? 0,
+    };
+  });
+
+  output.crimsonIsles = crimsonIsles;
+
+  output.abiphone = {
+    contacts: userProfile.nether_island_player_data?.abiphone?.contact_data ?? {},
+    active: userProfile.nether_island_player_data?.abiphone?.active_contacts?.length || 0,
+  };
+
+  output.skyblock_level = {
+    xp: userProfile.leveling?.experience || 0,
+    level: Math.floor(userProfile.leveling?.experience / 100 || 0),
+    maxLevel: 386,
+    progress: (userProfile.leveling?.experience % 100) / 100 || 0,
+    xpCurrent: userProfile.leveling?.experience % 100 || 0,
+    xpForNext: 100,
+  };
 
   // MISC
 
   const misc = {};
 
+  output.perks = userProfile.perks || {};
   misc.milestones = {};
   misc.objectives = {};
   misc.races = {};
@@ -2028,6 +2118,11 @@ export async function getStats(
   misc.auctions_sell = {};
   misc.auctions_buy = {};
   misc.claimed_items = {};
+  misc.effects = {
+    active: userProfile.active_effects || [],
+    paused: userProfile.paused_effects || [],
+    disabled: userProfile.disabled_potion_effects || [],
+  };
 
   if ("ender_crystals_destroyed" in userProfile.stats) {
     misc.dragons["ender_crystals_destroyed"] = userProfile.stats["ender_crystals_destroyed"];
@@ -2107,9 +2202,9 @@ export async function getStats(
       auctions_sold[key.replace("auctions_sold_", "")] = userProfile.stats[key];
     } else if (key.includes("auctions_bought_")) {
       auctions_bought[key.replace("auctions_bought_", "")] = userProfile.stats[key];
-    } else if (key.startsWith("kills_") && key.endsWith("_dragon")) {
+    } else if (key.startsWith("kills_") && key.endsWith("_dragon") && key !== "kills_master_wither_king_dragon") {
       misc.dragons["last_hits"] += userProfile.stats[key];
-    } else if (key.startsWith("deaths_") && key.endsWith("_dragon")) {
+    } else if (key.startsWith("deaths_") && key.endsWith("_dragon") && key !== "deaths_master_wither_king_dragon") {
       misc.dragons["deaths"] += userProfile.stats[key];
     } else if (key.includes("kills_corrupted_protector")) {
       misc.protector["last_hits"] = userProfile.stats[key];
@@ -2183,7 +2278,10 @@ export async function getStats(
   if ("favorite_arrow" in userProfile) {
     misc.uncategorized.favorite_arrow = {
       raw: userProfile.favorite_arrow,
-      formatted: `${helper.capitalizeFirstLetter(userProfile.favorite_arrow.replaceAll("_", " ").toLowerCase())}`,
+      formatted: `${userProfile.favorite_arrow
+        .split("_")
+        .map((word) => helper.capitalizeFirstLetter(word.toLowerCase()))
+        .join(" ")}`,
     };
   }
 
@@ -2235,6 +2333,30 @@ export async function getStats(
 
   /*
 
+    NETWORTH
+
+  */
+
+  output.networth = await getPreDecodedNetworth(
+    userProfile,
+    {
+      armor: items.armor,
+      equipment: items.equipment,
+      wardrobe: items.wardrobe_inventory,
+      inventory: items.inventory,
+      enderchest: items.enderchest,
+      accessories: items.accessory_bag,
+      personal_vault: items.personal_vault,
+      storage: items.storage.concat(items.storage.map((item) => item.containsItems).flat()),
+      fishing_bag: items.fishing_bag,
+      potion_bag: items.potion_bag,
+      candy_inventory: items.candy_bag,
+    },
+    output.bank,
+    { cache: true, onlyNetworth: true }
+  );
+
+  /*
     century cake effects
 
   */
@@ -2258,11 +2380,49 @@ export async function getStats(
 
   output.reaper_peppers_eaten = userProfile.reaper_peppers_eaten ?? 0;
 
+  if (!userProfile.pets) {
+    userProfile.pets = [];
+  }
+  userProfile.pets.push(...items.pets);
+
+  output.pets = await getPets(userProfile, output);
+  output.missingPets = await getMissingPets(output.pets, profile.game_mode, output);
+  output.petScore = getPetScore(output.pets);
+
+  const petScoreRequired = Object.keys(constants.PET_REWARDS).sort((a, b) => parseInt(b) - parseInt(a));
+
+  output.pet_bonus = {};
+
+  for (const score of petScoreRequired) {
+    if (parseInt(score) > output.petScore) {
+      continue;
+    }
+
+    output.pet_score_bonus = Object.assign({}, constants.PET_REWARDS[score]);
+
+    break;
+  }
+
+  for (const pet of output.pets) {
+    if (!pet.active) {
+      continue;
+    }
+
+    for (const stat in pet.stats) {
+      output.pet_bonus[stat] = (output.pet_bonus[stat] || 0) + pet.stats[stat];
+    }
+  }
+
+  // Apply pet score bonus
+  for (const stat in output.pet_score_bonus) {
+    output.stats[stat] += output.pet_score_bonus[stat];
+  }
+
   console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
   return output;
 }
 
-export async function getPets(profile) {
+export async function getPets(profile, userProfile) {
   let output = [];
 
   if (!("pets" in profile)) {
@@ -2300,7 +2460,6 @@ export async function getPets(profile) {
           Math.min(constants.RARITIES.indexOf(petData.maxTier), constants.RARITIES.indexOf(pet.rarity) + 1)
         ];
     }
-
     if (pet.heldItem == "PET_ITEM_VAMPIRE_FANG" || pet.heldItem == "PET_ITEM_TOY_JERRY") {
       if (constants.RARITIES.indexOf(pet.rarity) === constants.RARITIES.indexOf(petData.maxTier) - 1) {
         pet.rarity = petData.maxTier;
@@ -2318,6 +2477,11 @@ export async function getPets(profile) {
 
     if (petData.hatching?.level > pet.level.level) {
       pet.texture_path = petData.hatching.head;
+    }
+
+    // eslint-disable-next-line no-prototype-builtins
+    if (pet.rarity in (petData?.upgrades || {})) {
+      pet.texture_path = petData.upgrades[pet.rarity]?.head || pet.texture_path;
     }
 
     let petSkin = null;
@@ -2356,8 +2520,9 @@ export async function getPets(profile) {
     const rarity = constants.RARITIES.indexOf(pet.rarity);
 
     const searchName = pet.type in constants.PET_STATS ? pet.type : "???";
-    const petInstance = new constants.PET_STATS[searchName](rarity, pet.level.level, pet.extra);
+    const petInstance = new constants.PET_STATS[searchName](rarity, pet.level.level, pet.extra, userProfile);
     pet.stats = Object.assign({}, petInstance.stats);
+    petInstance.profile = null;
     pet.ref = petInstance;
 
     if (pet.heldItem) {
@@ -2382,6 +2547,11 @@ export async function getPets(profile) {
             pet.stats[stat] *= constants.PET_ITEMS[heldItem].multAllStats;
           }
         }
+      }
+
+      // push specific pet lore before stats added
+      if (constants.PET_DATA[pet.type]?.subLore !== undefined) {
+        lore.push(constants.PET_DATA[pet.type].subLore, " ");
       }
 
       // push pet lore after held item stats added
@@ -2515,14 +2685,14 @@ export async function getPets(profile) {
   return output;
 }
 
-async function getMissingPets(pets, gameMode) {
+async function getMissingPets(pets, gameMode, userProfile) {
   const profile = {
     pets: [],
   };
 
   const missingPets = [];
 
-  const ownedPetTypes = pets.map((pet) => constants.PET_DATA[pet.type].typeGroup ?? pet.type);
+  const ownedPetTypes = pets.map((pet) => constants.PET_DATA[pet.type]?.typeGroup || pet.type);
 
   for (const [petType, petData] of Object.entries(constants.PET_DATA)) {
     if (
@@ -2558,7 +2728,7 @@ async function getMissingPets(pets, gameMode) {
     profile.pets.push(pets[0]);
   }
 
-  return getPets(profile);
+  return getPets(profile, userProfile);
 }
 
 function getPetScore(pets) {
@@ -2728,13 +2898,13 @@ export function getBestiary(uuid, profile) {
 
       const boss = mob.boss == true ? "boss" : "regular";
 
-      let kills = bestiaryFamilies[mob.id] || 0;
-      let head = mob.head;
-      let itemId = mob.itemId;
-      let damage = mob.damage;
-      let name = mob.name;
-      let maxTier = mob.maxTier ?? 41;
-      let tier =
+      const kills = bestiaryFamilies[mob.id] || 0;
+      const head = mob.head;
+      const itemId = mob.itemId;
+      const damage = mob.damage;
+      const name = mob.name;
+      const maxTier = mob.maxTier ?? 41;
+      const tier =
         constants.BEASTIARY_KILLS[boss].filter((k) => k <= kills).length > maxTier
           ? maxTier
           : constants.BEASTIARY_KILLS[boss].filter((k) => k <= kills).length;
@@ -2840,7 +3010,7 @@ export function getDungeons(userProfile, hypixelProfile) {
     }
 
     output.classes[className] = {
-      experience: getLevelByXp(data.experience, { type: "dungeoneering" }),
+      experience: getLevelByXp(data.experience, { type: "dungeoneering", class: className }),
       current: false,
     };
 
@@ -2850,9 +3020,13 @@ export function getDungeons(userProfile, hypixelProfile) {
     if (className == current_class) {
       output.classes[className].current = true;
     }
+
+    output.class_average ??= 0;
+    output.class_average += output.classes[className].experience.level;
   }
 
   output.used_classes = used_classes;
+  output.class_average = output.class_average / Object.keys(output.classes).length;
 
   output.selected_class = current_class;
   output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
@@ -3143,7 +3317,10 @@ function getHotmItems(userProfile, packs) {
 
   // Processing textures
   output.forEach(async (item) => {
-    const customTexture = await getTexture(item, false, packs);
+    const customTexture = await getTexture(item, {
+      ignore_id: false,
+      pack_ids: packs,
+    });
 
     if (customTexture) {
       item.animated = customTexture.animated;
@@ -3167,7 +3344,7 @@ function getMiningCoreData(userProfile) {
 
   output.tier = getLevelByXp(data.experience, { type: "hotm" });
 
-  const totalTokens = helper.calcHotmTokens(output.tier.level, data.nodes.special_0);
+  const totalTokens = helper.calcHotmTokens(output.tier.level, data.nodes?.special_0 || 0);
   output.tokens = {
     total: totalTokens,
     spent: data.tokens_spent || 0,
@@ -3226,6 +3403,8 @@ function getMiningCoreData(userProfile) {
     effect: data.current_daily_effect || null,
     last_changed: data.current_daily_effect_last_changed || null,
   };
+
+  output.nodes = data.nodes || {};
 
   return output;
 }
@@ -3470,7 +3649,11 @@ export async function getProfile(
   }
 
   if (!profile) {
-    throw new Error("User not found in selected profile. This is probably due to a declined co-op invite.");
+    profile = profiles[0];
+
+    if (!profile) {
+      throw new Error("Couldn't find any Skyblock profile that belongs to this player.");
+    }
   }
 
   const userProfile = profile.members[paramPlayer];
@@ -3703,10 +3886,6 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
   } catch (e) {
     console.error(e);
   }
-}
-
-export function getPacks() {
-  return packs.sort((a, b) => b.priority - a.priority);
 }
 
 async function init() {

@@ -1,0 +1,6 @@
+{
+    "parent": "item/giant_handheld",
+    "textures": {
+        "layer0": "./giant_the_fish"
+    }
+}

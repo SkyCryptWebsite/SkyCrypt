@@ -1,0 +1,7 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "./shadow_fury",
+        "layer1": "./shadow_fury_flames"
+    }
+}

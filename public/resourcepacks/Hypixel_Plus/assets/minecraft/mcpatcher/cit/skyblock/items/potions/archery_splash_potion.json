@@ -1,0 +1,8 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "mcpatcher/cit/ui/achoo.png",
+        "layer1": "./archery_potion",
+        "layer2": "items/potion_bottle_splash"
+    }
+}
