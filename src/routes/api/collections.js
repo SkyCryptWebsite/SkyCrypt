@@ -1,5 +1,6 @@
 import * as helper from "../../helper.js";
 import * as lib from "../../lib.js";
+import * as stats from "../../stats/index.js";
 import express from "express";
 
 import { tableify } from "../api.js";
@@ -17,7 +18,7 @@ router.use(async (req, res, next) => {
   try {
     const { profile, uuid } = await lib.getProfile(db, req.player, req.profile, req.options);
 
-    const collections = await lib.getCollections(uuid, profile, req.options.cacheOnly);
+    const collections = await stats.getCollections(uuid, profile, req.options.cacheOnly);
 
     for (const collection in collections) {
       collections[collection].name = COLLECTION_DATA.find((a) => a.skyblockId == collection).name;
