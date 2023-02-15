@@ -94,8 +94,11 @@
 
     &[type="skyblock_level"] {
       margin-bottom: 25px;
-      padding-right: 24px;
-      width: 200%;
+
+      @media (min-width: 481px) {
+        padding-right: 24px;
+        width: 200%;
+      }
     }
 
     .skill-icon {
