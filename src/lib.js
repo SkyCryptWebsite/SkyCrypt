@@ -1544,7 +1544,7 @@ async function getLevels(userProfile, hypixelProfile, levelCaps, profileMembers)
   const skillNames = Object.keys(output.levels);
 
   for (const skill of skillNames) {
-    output.levels[skill].rank = await helper.getLeaderboardPosition(`skill_${skill}_xp`, output.levels[skill].xp)
+    output.levels[skill].rank = await helper.getLeaderboardPosition(`skill_${skill}_xp`, output.levels[skill].xp);
   }
 
   output.average_level_rank = await redisClient.zcount([`lb_average_level`, output.average_level, "+inf"]);
@@ -2984,7 +2984,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
       floors: floors,
     };
 
-    output[type].level.rank = await helper.getLeaderboardPosition(`dungeons_${type}_xp`, dungeon.experience)
+    output[type].level.rank = await helper.getLeaderboardPosition(`dungeons_${type}_xp`, dungeon.experience);
   }
 
   // Classes
@@ -3004,7 +3004,10 @@ export async function getDungeons(userProfile, hypixelProfile) {
       current: false,
     };
 
-    output.classes[className].experience.rank = await helper.getLeaderboardPosition(`dungeons_class_${className}_xp`, data.experience)
+    output.classes[className].experience.rank = await helper.getLeaderboardPosition(
+      `dungeons_class_${className}_xp`,
+      data.experience
+    );
 
     if (data.experience > 0) {
       used_classes = true;
@@ -3744,7 +3747,7 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
     userProfile.skyblock_level = {
       xp: userProfile.leveling?.experience || 0,
       level: Math.floor(userProfile.leveling?.experience / 100 || 0),
-    }
+    };
 
     userProfile.pet_score = 0;
 

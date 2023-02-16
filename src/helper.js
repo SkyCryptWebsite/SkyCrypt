@@ -1090,7 +1090,7 @@ export async function getLeaderboardPosition(lb, data) {
 
   const results = await multi.exec();
 
-  console.log(`Returning position of ${data} in ${lb} leaderboard in ${Date.now() - timeNow}ms`)
+  console.log(`Returning position of ${data} in ${lb} leaderboard in ${Date.now() - timeNow}ms`);
 
   return results[0][1] || 0;
 }
