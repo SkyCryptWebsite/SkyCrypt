@@ -248,117 +248,45 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
 
 export async function getGuild(uuid, db, cacheOnly = false) {
   uuid = sanitize(uuid);
-  const guildMember = await db.collection("guildMembers").findOne({ uuid });
+  const { gid: guildID } = await db.collection("guildMembers").findOne({ uuid });
+  
+  let guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildID) });
 
-  let guildObject = null;
-
-  if (cacheOnly && guildMember == undefined) {
-    return null;
-  }
-
-  if (guildMember != undefined && guildMember.gid !== null) {
-    guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildMember.gid) });
+  // Integrating from old caching system (new Date() -> Date.now())
+  if (typeof guildObject.last_updated === 'object') {
+    guildObject.last_updated = new Date(guildObject.last_updated).getTime();
   }
 
   if (
+    typeof guildObject.last_updated != "number" ||
+    guildObject == undefined ||
     cacheOnly ||
-    (guildMember != undefined &&
-      guildMember.gid !== null &&
-      (guildObject == undefined || Date.now() - guildMember.last_updated < 7200 * 1000))
+    Date.now() - guildObject.last_updated > 7200 * 1000 ||
+    guildObject.last_updated == undefined
   ) {
-    if (guildMember.gid !== null) {
-      const guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildMember.gid) });
+    const guildResponse = await hypixel.get("guild", {
+      params: { player: uuid, key: credentials.hypixel_api_key },
+    });
 
-      if (guildObject == undefined) {
-        return null;
-      }
+    ({ guild: guildObject } = guildResponse.data);
+    guildObject.last_updated = Date.now();
+    guildObject.membersList = guildObject.members;
+    guildObject.members = guildObject.members.length;
+    guildObject.gm = guildObject.membersList.find((member) =>
+      ["guild master", "guildmaster"].includes(member.rank.toLowerCase())
+    ).uuid;
+    guildObject.gmUser = await resolveUsernameOrUuid(guildObject.gm, db, true);
+    guildObject.rank = guildObject.membersList.find((member) => member.uuid == uuid).rank;
+    guildObject.level = getGuildLevel(guildObject.exp);
+    guildObject.id = guildObject._id;
 
-      guildObject.level = getGuildLevel(guildObject.exp);
-      guildObject.gmUser = guildObject.gm ? await resolveUsernameOrUuid(guildObject.gm, db, cacheOnly) : "None";
-      guildObject.rank = guildMember.rank;
-
-      return guildObject;
-    }
-
-    return null;
-  } else {
-    if (guildMember == undefined || Date.now() - guildMember.last_updated > 7200 * 1000) {
-      try {
-        const guildResponse = await hypixel.get("guild", {
-          params: { player: uuid, key: credentials.hypixel_api_key },
-        });
-
-        const { guild } = guildResponse.data;
-
-        let gm;
-
-        if (guild && guild !== null) {
-          for (const member of guild.members) {
-            if (["guild master", "guildmaster"].includes(member.rank.toLowerCase())) {
-              gm = member.uuid;
-            }
-          }
-
-          for (const member of guild.members) {
-            if (!gm && guild.ranks.find((a) => a.name.toLowerCase() == member.rank.toLowerCase()) == undefined) {
-              gm = member.uuid;
-            }
-
-            await db
-              .collection("guildMembers")
-              .updateOne(
-                { uuid: member.uuid },
-                { $set: { gid: guild._id, rank: member.rank, last_updated: new Date() } },
-                { upsert: true }
-              );
-          }
-
-          const guildMembers = await db.collection("guildMembers").find({ gid: guild._id }).toArray();
-
-          for (const member of guildMembers) {
-            if (guild.members.find((a) => a.uuid == member.uuid) == undefined) {
-              await db
-                .collection("guildMembers")
-                .updateOne({ uuid: member.uuid }, { $set: { gid: null, last_updated: new Date() } });
-            }
-          }
-
-          const guildObject = await db.collection("guilds").findOneAndUpdate(
-            { gid: guild._id },
-            {
-              $set: {
-                name: guild.name,
-                tag: guild.tag,
-                exp: guild.exp,
-                created: guild.created,
-                gm,
-                members: guild.members.length,
-                last_updated: new Date(),
-              },
-            },
-            { returnOriginal: false, upsert: true }
-          );
-
-          guildObject.value.level = getGuildLevel(guildObject.value.exp);
-          guildObject.value.gmUser = await resolveUsernameOrUuid(guildObject.value.gm, db);
-          guildObject.value.rank = guild.members.find((a) => a.uuid == uuid).rank;
-
-          return guildObject.value;
-        } else {
-          await db
-            .collection("guildMembers")
-            .findOneAndUpdate({ uuid }, { $set: { gid: null, last_updated: new Date() } }, { upsert: true });
-        }
-
-        return null;
-      } catch (e) {
-        console.error(e);
-        return null;
-      }
-    } else {
-      return null;
-    }
+    // Required otherwise mongoDB will throw an error
+    delete guildObject._id;
+    
+    await db.collection("guilds").updateOne({ gid: guildObject.id }, { $set: guildObject }, { upsert: true });
   }
+
+  return guildObject;
 }
 
 export function getGuildLevel(xp) {
