@@ -249,7 +249,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
 export async function getGuild(uuid, db, cacheOnly = false) {
   uuid = sanitize(uuid);
   const { gid: guildID } = await db.collection("guildMembers").findOne({ uuid });
-  
+
   let guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildID) });
 
   // Integrating from old caching system (new Date() -> Date.now())
