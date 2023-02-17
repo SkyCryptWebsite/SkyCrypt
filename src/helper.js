@@ -253,36 +253,38 @@ export async function getGuild(uuid, db, cacheOnly = false) {
   let guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildID) });
 
   // Integrating from old caching system (new Date() -> Date.now())
-  if (typeof guildObject.last_updated === 'object') {
+  if (typeof guildObject.last_updated === "object") {
     guildObject.last_updated = new Date(guildObject.last_updated).getTime();
   }
 
   if (
-    typeof guildObject.last_updated != "number" ||
     guildObject == undefined ||
     cacheOnly ||
     Date.now() - guildObject.last_updated > 7200 * 1000 ||
     guildObject.last_updated == undefined
   ) {
-    const guildResponse = await hypixel.get("guild", {
+    const {
+      data: { guild: guildResponse },
+    } = await hypixel.get("guild", {
       params: { player: uuid, key: credentials.hypixel_api_key },
     });
 
-    ({ guild: guildObject } = guildResponse.data);
-    guildObject.last_updated = Date.now();
-    guildObject.membersList = guildObject.members;
-    guildObject.members = guildObject.members.length;
-    guildObject.gm = guildObject.membersList.find((member) =>
+    const guildMaster = guildResponse.members.find((member) =>
       ["guild master", "guildmaster"].includes(member.rank.toLowerCase())
     ).uuid;
-    guildObject.gmUser = await resolveUsernameOrUuid(guildObject.gm, db, true);
-    guildObject.rank = guildObject.membersList.find((member) => member.uuid == uuid).rank;
-    guildObject.level = getGuildLevel(guildObject.exp);
-    guildObject.id = guildObject._id;
+    guildObject = {
+      ...guildResponse,
+      last_updated: Date.now(),
+      gm: guildMaster,
+      gmUser: await resolveUsernameOrUuid(guildMaster, db, true),
+      rank: guildResponse.members.find((member) => member.uuid == uuid).rank,
+      level: getGuildLevel(guildResponse.exp),
+      id: guildResponse._id,
+    };
 
     // Required otherwise mongoDB will throw an error
     delete guildObject._id;
-    
+
     await db.collection("guilds").updateOne({ gid: guildObject.id }, { $set: guildObject }, { upsert: true });
   }
 
