@@ -270,6 +270,10 @@ export async function getGuild(uuid, db, cacheOnly = false) {
       params: { player: uuid, key: credentials.hypixel_api_key },
     });
 
+    if (guildResponse === null) {
+      return null;
+    }
+
     const guildMaster = guildResponse.members.find((member) =>
       ["guild master", "guildmaster"].includes(member.rank.toLowerCase())
     ).uuid;
