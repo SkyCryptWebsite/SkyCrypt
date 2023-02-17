@@ -248,12 +248,13 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
 
 export async function getGuild(uuid, db, cacheOnly = false) {
   uuid = sanitize(uuid);
-  const { gid: guildID } = await db.collection("guildMembers").findOne({ uuid });
+  const cachedGuild = await db.collection("guildMembers").findOne({ uuid });
+  const guildID = cachedGuild?.gid;
 
   let guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildID) });
 
   // Integrating from old caching system (new Date() -> Date.now())
-  if (typeof guildObject.last_updated === "object") {
+  if (typeof guildObject?.last_updated === "object") {
     guildObject.last_updated = new Date(guildObject.last_updated).getTime();
   }
 
