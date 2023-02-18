@@ -11,6 +11,7 @@ import { fileURLToPath } from "url";
 import util from "util";
 import { v4 } from "uuid";
 
+import * as stats from "./stats.js";
 import * as constants from "./constants.js";
 import credentials from "./credentials.js";
 import { getTexture } from "./custom-resources.js";
@@ -19,8 +20,6 @@ import { db } from "./mongo.js";
 import { redisClient } from "./redis.js";
 import { calculateLilyWeight } from "./weight/lily-weight.js";
 import { calculateSenitherWeight } from "./weight/senither-weight.js";
-
-import * as stats from "./stats/index.js";
 
 const mcData = minecraftData("1.8.9");
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
