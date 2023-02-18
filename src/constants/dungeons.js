@@ -463,7 +463,7 @@ export const DUNGEONS = {
     },
     the_follower_3: {
       name: "The Follower, Part 3",
-      pages: 9, 
+      pages: 9,
     },
     the_father: {
       name: "The Father",
