@@ -3121,39 +3121,21 @@ export function getDungeons(userProfile, hypixelProfile) {
   output.boss_collections = collections;
 
   // Journal Entries
-  const journal_constants = constants.DUNGEONS.journals;
-  const journal_entries = dungeons.dungeon_journal.journal_entries;
+  const JOURNAL_CONSTANTS = constants.DUNGEONS.journals;
   const journals = {
     pages_collected: 0,
     journals_completed: 0,
     total_pages: 0,
-    maxed: false,
-    journal_entries: [],
+    journal_entries: dungeons.dungeon_journal.unlocked_journals,
   };
 
-  for (const entry_id in journal_entries) {
-    const entry = {
-      name: journal_constants[entry_id] ? journal_constants[entry_id].name : entry_id,
-      pages_collected: journal_entries[entry_id].length || 0,
-      total_pages: journal_constants[entry_id] ? journal_constants[entry_id].pages : null,
-    };
-
-    journals.pages_collected += entry.pages_collected;
-    if (entry.total_pages != null) {
-      if (entry.pages_collected >= entry.total_pages) {
-        journals.journals_completed++;
-      }
-    }
-
-    journals.journal_entries.push(entry);
+  for (const entryID of dungeons.dungeon_journal.unlocked_journals) {
+    journals.journals_completed += 1;
+    journals.pages_collected += JOURNAL_CONSTANTS[entryID]?.pages || 0;
   }
-
-  for (const entry_id in journal_constants) {
-    journals.total_pages += journal_constants[entry_id].pages || 0;
-  }
-
-  if (journals.pages_collected >= journals.total_pages) {
-    journals.maxed = true;
+  
+  for (const journal in JOURNAL_CONSTANTS) {
+    journals.total_pages += JOURNAL_CONSTANTS[journal].pages;
   }
 
   output.journals = journals;
