@@ -12,6 +12,7 @@ import minecraftData from "minecraft-data";
 const mcData = minecraftData("1.8.9");
 import UPNG from "upng-js";
 import RJSON from "relaxed-json";
+import cluster from "cluster";
 
 import child_process from "child_process";
 import { getFileHash } from "./hashes.js";
@@ -496,10 +497,9 @@ export function getCompletePacks() {
   return resourcePacks;
 }
 
-export async function getTexture(
-  item,
-  options = { ignore_id: false, pack_ids: [], invert_order: false, debug: false }
-) {
+export async function getTexture(item, options) {
+  options = Object.assign({ ignore_id: false, pack_ids: undefined, invert_order: false, debug: false }, options);
+
   if (!resourcesReady) {
     await readyPromise;
   }
@@ -522,7 +522,7 @@ export async function getTexture(
     tempPacks = tempPacks.sort((a, b) => options.pack_ids.indexOf(b) - options.pack_ids.indexOf(a));
   }
 
-  if (options.invert_order) {
+  if (!options.invert_order) {
     tempPacks = tempPacks.reverse();
   }
 
@@ -535,6 +535,8 @@ export async function getTexture(
       if (options.ignore_id === false && "damage" in texture && texture.damage != item.Damage) {
         continue;
       }
+
+      // TODO: recognize skyblock ids as a texture value
 
       let matches = 0;
 
@@ -602,7 +604,9 @@ export async function getTexture(
   debugStats.time_spent_ms = Date.now() - timeStarted;
   outputTexture.debug = debugStats;
 
-  process.send({ type: "used_pack", id: outputTexture?.pack.config.id });
+  if (cluster.isWorker) {
+    process.send({ type: "used_pack", id: outputTexture?.pack.config.id });
+  }
 
   return outputTexture;
 }
