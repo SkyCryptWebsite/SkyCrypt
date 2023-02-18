@@ -481,9 +481,13 @@ export const DUNGEONS = {
       name: "The Orb",
       pages: 6,
     },
-    necrons_magic_scroll: {
+    necrons_dilemma: {
       name: "Necron's Dilemma",
       pages: 10,
+    },
+    necrons_magic_scroll: {
+      name: "Necron's Magic Scroll",
+      pages: 0,
     },
     until_we_meet_again: {
       name: "Until we meet again",
