@@ -14,6 +14,7 @@ import fs from "fs-extra";
 
 import * as app from "./app.js";
 import * as helper from "./helper.js";
+import { getItemData } from "./helper/item.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -367,72 +368,12 @@ async function renderPotion(type, color) {
  * Gets a texture of an item, either from stylesheet or from resource packs
  * @param {string} skyblockId
  * @param {*} query
- * @param {*} db
  * @returns Image of an item
  */
-export async function renderItem(skyblockId, query, db) {
+export async function renderItem(skyblockId, query) {
   query = sanitize(query);
 
-  const item = { id: -1, Damage: 0, Count: 1, tag: { ExtraAttributes: {} } };
-  let dbItem = {};
-
-  /**
-   * Look for DB items if possible with Skyblock ID or query name
-   */
-  if (skyblockId) {
-    skyblockId = sanitize(skyblockId);
-
-    if (skyblockId.includes(":")) {
-      const split = skyblockId.split(":");
-
-      skyblockId = split[0];
-      query.damage = new Number(split[1]);
-    }
-
-    dbItem = await db.collection("items").findOne({ id: skyblockId });
-  }
-
-  if (query.name) {
-    const results = await db
-      .collection("items")
-      .find({ $text: { $search: query.name } })
-      .toArray();
-
-    const filteredResults = results.filter((a) => a.name.toLowerCase() == query.name.toLowerCase());
-
-    if (filteredResults.length > 0) {
-      dbItem = filteredResults[0];
-    }
-  }
-
-  if (query.id) {
-    item.id = query.id;
-  }
-
-  if (query.damage) {
-    item.Damage = query.damage;
-  }
-
-  if (query.name) {
-    item.tag.display = { Name: query.name };
-  }
-
-  if ("item_id" in dbItem) {
-    item.id = dbItem.item_id;
-  }
-
-  if ("damage" in dbItem) {
-    item.Damage = dbItem.damage;
-  }
-
-  if ("name" in dbItem) {
-    item.tag.display = { Name: dbItem.name };
-  }
-
-  if ("id" in dbItem) {
-    item.tag.ExtraAttributes.id = dbItem.id;
-  }
-
+  const item = getItemData(Object.assign(query, { skyblockId }));
   const outputTexture = { mime: "image/png" };
 
   for (const rule of itemsCss.stylesheet.rules) {
@@ -445,7 +386,7 @@ export async function renderItem(skyblockId, query, db) {
     outputTexture.image = await getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer("image/png");
   }
 
-  if ("texture" in dbItem) {
+  if ("texture" in item) {
     outputTexture.image = await getHead(item.texture);
   }
 
