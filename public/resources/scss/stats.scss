@@ -1990,7 +1990,8 @@ inventory-view {
 .collections,
 .minions,
 .stat-farming-crops,
-.sea-creatures {
+.sea-creatures,
+.bestiary {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -2039,11 +2040,13 @@ inventory-view {
   }
 }
 
-.collection-name {
+.collection-name,
+.bestiary-name {
   font-size: 18px;
 }
 
-.collection-amount {
+.collection-amount,
+.bestiary-amount {
   font-size: 14px;
 }
 
@@ -2363,7 +2366,8 @@ inventory-view {
   .collections,
   .minions,
   .stat-farming-crops,
-  .sea-creatures {
+  .sea-creatures,
+  .bestiary {
     flex-wrap: nowrap;
     overflow-x: auto;
     margin-left: calc(-1 * var(--padding));
