@@ -262,15 +262,13 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
     paramPlayer.length == 32 ? await helper.resolveUsernameOrUuid(paramPlayer, db).display_name : paramPlayer;
 
   try {
-    const [{ profile, allProfiles }, bingoProfile] = await Promise.all([
-      lib.getProfile(db, paramPlayer, paramProfile, {
-        updateArea: true,
-        cacheOnly,
-        debugId,
-      }),
-      lib.getBingoProfile(db, paramPlayer, { cacheOnly, debugId }),
-    ]);
+    const { profile, allProfiles } = await lib.getProfile(db, paramPlayer, paramProfile, {
+      updateArea: true,
+      cacheOnly,
+      debugId,
+    });
 
+    const bingoProfile = profile.game_mode === "bingo" ?  await lib.getBingoProfile(db, paramPlayer, { cacheOnly, debugId }) : {};
     const items = await lib.getItems(profile.members[profile.uuid], bingoProfile, true, req.cookies.pack, {
       cacheOnly,
       debugId,

@@ -947,10 +947,13 @@ export const getItems = async (
   output.hotm = hotm;
   output.candy_bag = candy_bag;
 
-  const { bingoRes: bingoData } = await helper.getBingoGoals(db);
-  const bingoProfilev2 = bingoProfile.events.find((profile) => profile.key === bingoData.id);
-
-  output.bingo_card = bingoProfilev2 !== undefined ? constants.getBingoItems(bingoProfilev2, bingoData.goals) : {};
+  output.bingo_card = {};
+  if (bingoProfile?.events !== undefined) {
+    const { bingoRes: bingoData } = await helper.getBingoGoals(db);
+    const bingoProfilev2 = bingoProfile.events.find((profile) => profile.key === bingoData.id);
+  
+    output.bingo_card = bingoProfilev2 !== undefined ? constants.getBingoItems(bingoProfilev2, bingoData.goals) : {};
+  }
 
   const allItems = armor.concat(
     equipment,
@@ -2293,11 +2296,13 @@ export async function getStats(
     };
   }
 
-  output.bingo = {
-    total: bingoProfile.events.length,
-    points: bingoProfile.events.reduce((a, b) => a + b.points, 0),
-    completed_goals: bingoProfile.events.reduce((a, b) => a + b.completed_goals.length, 0),
-  };
+  if (bingoProfile?.events !== undefined) {
+    output.bingo = {
+      total: bingoProfile.events.length,
+      points: bingoProfile.events.reduce((a, b) => a + b.points, 0),
+      completed_goals: bingoProfile.events.reduce((a, b) => a + b.completed_goals.length, 0),
+    };
+  }
 
   output.misc = misc;
   output.auctions_bought = auctions_bought;
