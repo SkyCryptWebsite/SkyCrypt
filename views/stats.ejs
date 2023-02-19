@@ -1881,9 +1881,16 @@ const metaDescription = getMetaDescription()
             <span class="stat-name">Selected Class: </span>
             <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span>
             <br>
-            <% max = calculated.dungeons.class_average === 50 ? "golden-text" : "" %>
-            <span class="stat-name <%= max %>">Class Average: </span>
-            <span class="stat-value <%= max %>"><%= calculated.dungeons.class_average.toLocaleString() %></span>
+            <% max = calculated.dungeons.class_average.max ? "golden-text" : "" %>
+            <span data-tippy-content="
+              <span class='stat-name'>Total Class XP: </span><span class='stat-value'><%= Math.round(calculated.dungeons.class_average.experience).toLocaleString() %></span>
+              <div class='tippy-explanation'>Total Class XP gained in Catacombs.</div>
+              <span class='stat-name'>Average Level: </span><span class='stat-value'><%= calculated.dungeons.class_average.avrg_level_with_progress.toFixed(2) %></span>
+              <div class='tippy-explanation'>Average class level, includes progress to next level.</div>
+
+              <span class='stat-name'>Average Class Level without progress: </span><span class='stat-value'><%= calculated.dungeons.class_average.avrg_level.toFixed(2) %></span>
+              <div class='tippy-explanation'>Average class level without including partial level progress.</div>">
+              <span class="stat-name <%= max %>">Class Average: </span><span class="stat-value <%= max %>"><%= calculated.dungeons.class_average.avrg_level.toFixed(2) %></span></span>
             <br>
             <% max = calculated.dungeons.catacombs.bonuses.item_boost === 465 ? "golden-text" : "" %>
             <span class="stat-name <%= max %>">Dungeon Item Boost: </span>

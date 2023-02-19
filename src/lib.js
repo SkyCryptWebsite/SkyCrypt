@@ -172,10 +172,10 @@ export function getLevelByXp(xp, extra = {}) {
     }
   }
 
-  if (extra.type == "dungeoneering" && !extra.class) {
-    while (xpCurrent >= 200000000) {
+  if (extra.type == "dungeoneering") {
+    while (xpCurrent >= 200_000_000) {
       uncappedLevel++;
-      xpCurrent -= 200000000;
+      xpCurrent -= 200_000_000;
     }
   }
 
@@ -189,17 +189,17 @@ export function getLevelByXp(xp, extra = {}) {
   xpCurrent = Math.floor(xpCurrent);
 
   /** the level as displayed by in game UI */
-  const level = extra.type != "dungeoneering" && !extra.class ? Math.min(levelCap, uncappedLevel) : uncappedLevel;
+  const level = extra.type != "dungeoneering" ? Math.min(levelCap, uncappedLevel) : uncappedLevel;
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
   const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
   /** the fraction of the way toward the next level */
-  const progress =
-    extra.type == "dungeoneering" && !extra.class && level > 50 ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+  const progress = extra.type == "dungeoneering" && level >= 50 ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
-  const levelWithProgress = level + progress;
+  const levelWithProgress =
+    extra.type == "dungeoneering" && level >= 50 ? level + xpCurrent / 200_000_000 : level + progress;
 
   /** a floating point value representing the current level ignoring the in-game unlockable caps for example if you are half way to level 5 it would be 4.5 */
   const unlockableLevelWithProgress = extra.cap ? Math.min(uncappedLevel + progress, maxLevel) : levelWithProgress;
@@ -3052,6 +3052,7 @@ export function getDungeons(userProfile, hypixelProfile) {
 
   // Classes
   output.classes = {};
+  output.class_average = {};
 
   let used_classes = false;
   const current_class = dungeons.selected_dungeon_class || "none";
@@ -3063,7 +3064,7 @@ export function getDungeons(userProfile, hypixelProfile) {
     }
 
     output.classes[className] = {
-      experience: getLevelByXp(data.experience, { type: "dungeoneering", class: className }),
+      experience: getLevelByXp(data.experience, { type: "dungeoneering" }),
       current: false,
     };
 
@@ -3074,12 +3075,20 @@ export function getDungeons(userProfile, hypixelProfile) {
       output.classes[className].current = true;
     }
 
-    output.class_average ??= 0;
-    output.class_average += output.classes[className].experience.level;
+    output.class_average.experience ??= 0;
+    output.class_average.experience += output.classes[className].experience.xp;
   }
 
   output.used_classes = used_classes;
-  output.class_average = output.class_average / Object.keys(output.classes).length;
+  output.class_average.avrg_level = Object.keys(output.classes)
+    .map((key) => output.classes[key].experience.level / Object.keys(output.classes).length)
+    .reduce((a, b) => a + b, 0);
+  output.class_average.avrg_level_with_progress = Object.keys(output.classes)
+    .map((key) => output.classes[key].experience.levelWithProgress / Object.keys(output.classes).length)
+    .reduce((a, b) => a + b, 0);
+  output.class_average.max =
+    Object.keys(output.classes).filter((key) => output.classes[key].experience.level >= 50).length ===
+    Object.keys(output.classes).length;
 
   output.selected_class = current_class;
   output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
