@@ -2257,15 +2257,17 @@ export async function getStats(
       output[unlocked ? "unlocked_powers" : "locked_powers"].push(power);
     }
 
-    const tuning = userProfile.accessory_bag_storage.tuning.slot_0;
+    const tuning = userProfile.accessory_bag_storage.tuning?.slot_0;
 
-    for (const [name, value] of Object.entries(tuning)) {
-      if (!value) continue;
+    if (tuning) {
+      for (const [name, value] of Object.entries(tuning)) {
+        if (!value) continue;
 
-      const stat = helper.enrichmentToStatName(name);
+        const stat = helper.enrichmentToStatName(name);
 
-      output.tuning_points.used += value;
-      output.tuning_points.distribution[stat] = value * constants.POWER_TUNING_MULTIPLIERS[stat];
+        output.tuning_points.used += value;
+        output.tuning_points.distribution[stat] = value * constants.POWER_TUNING_MULTIPLIERS[stat];
+      }
     }
   }
 
