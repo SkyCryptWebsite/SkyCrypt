@@ -39,7 +39,7 @@ function formatBingOItemLore(item, bingoData, { completed = false, custom = fals
       output.push("");
       if (item.requiredAmount) {
         output.push(`§7Progress:`);
-        output.push(`§aNaN §7/ §6${item.requiredAmount.toLocaleString()}`);
+        output.push(`§a${completed ? item.requiredAmount.toLocaleString() : 'NaN'} §7/ §6${item.requiredAmount.toLocaleString()}`);
         output.push("");
       }
 
