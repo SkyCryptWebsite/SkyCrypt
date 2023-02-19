@@ -1,7 +1,7 @@
 import typescript from "@rollup/plugin-typescript";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import { terser } from "rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
 import minifyHTML from "rollup-plugin-minify-html-literals";
 import nameMap from "./lib/rollup-plugin-name-map.js";
 import del from "rollup-plugin-delete";
@@ -43,7 +43,7 @@ const CONFIG = {
     commonjs(), // converts Node modules to ES modules
     production && terser(), // minify, but only in production
     production && // minify html strings inside javascript (aka lit-html)
-      minifyHTML({
+      minifyHTML.default({
         options: {
           minifyOptions: {
             conservativeCollapse: true,
