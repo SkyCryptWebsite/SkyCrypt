@@ -1906,7 +1906,7 @@ const metaDescription = getMetaDescription()
             <span class="stat-value <%= max %>"><%= helper.titleCase(calculated.dungeons.master_catacombs.highest_floor.replace("_", " ")) %></span>
             <br>
             <% } %>
-            <% max = calculated.dungeons.journals.maxed ? "golden-text" : "" %>
+            <% max = calculated.dungeons.journals.pages_collected === calculated.dungeons.journals.total_pages ? "golden-text" : "" %>
             <span class="stat-name <%= max %>">Journals Completed: </span>
             <span class="stat-value <%= max %>"><%= calculated.dungeons.journals.journals_completed %></span>
             <span class="grey-text"> (<%= calculated.dungeons.journals.pages_collected %>/<%= calculated.dungeons.journals.total_pages %>)</span>
