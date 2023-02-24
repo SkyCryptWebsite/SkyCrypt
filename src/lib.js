@@ -2674,10 +2674,10 @@ export async function getPets(profile, userProfile) {
 
     lore.push(
       "",
-      `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)} §6/ §e${helper.formatNumber(
+      `§7Total XP: §e${helper.formatNumber(pet.exp, true, 1)} §6/ §e${helper.formatNumber(
         pet.level.xpMaxLevel,
         true,
-        10
+        1
       )} §6(${Math.floor((pet.exp / pet.level.xpMaxLevel) * 100)}%)`
     );
 
