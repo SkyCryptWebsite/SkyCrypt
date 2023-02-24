@@ -1934,7 +1934,11 @@ export async function getStats(
         // Use the claimed medal if it exists and is valid
         // This accounts for the farming mayor increased brackets perk
         // Note: The medal brackets are the percentage + 1 extra person
-        if (contest.claimed_medal === "bronze" || contest.claimed_medal === "silver" || contest.claimed_medal === "gold") {
+        if (
+          contest.claimed_medal === "bronze" ||
+          contest.claimed_medal === "silver" ||
+          contest.claimed_medal === "gold"
+        ) {
           contest.medal = contest.claimed_medal;
         } else if (placing.position <= participants * 0.05 + 1) {
           contest.medal = "gold";
