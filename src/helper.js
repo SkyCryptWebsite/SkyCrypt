@@ -1001,11 +1001,11 @@ export function getCacheFilePath(dirPath, type, name, format = "png") {
 
 function getCategories(type, item) {
   const categories = [];
-  
+
   const enchantments = item?.tag?.ExtraAttributes?.enchantments || {};
-  Object.keys(enchantments).forEach(enchantment =>
-    Object.entries(ENCHANTMENTS_TO_CATEGORIES).forEach(([category, enchantmentList]) =>
-      enchantmentList.includes(enchantment) && categories.push(category)
+  Object.keys(enchantments).forEach((enchantment) =>
+    Object.entries(ENCHANTMENTS_TO_CATEGORIES).forEach(
+      ([category, enchantmentList]) => enchantmentList.includes(enchantment) && categories.push(category)
     )
   );
 
