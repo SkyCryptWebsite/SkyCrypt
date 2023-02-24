@@ -99,9 +99,7 @@ export function formatNumber(number, floor = false, decimals = 2) {
   const unformattedNumber = Math.abs(number);
 
   const abbrevIndex = Math.floor(Math.log10(unformattedNumber) / 3);
-  const shortNumber = (
-    unformattedNumber / Math.pow(10, abbrevIndex * 3)
-  ).toFixed(decimals);
+  const shortNumber = (unformattedNumber / Math.pow(10, abbrevIndex * 3)).toFixed(decimals);
 
   return `${shortNumber}${abbrev[abbrevIndex]}`;
 }
