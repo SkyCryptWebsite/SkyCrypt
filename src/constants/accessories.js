@@ -174,17 +174,6 @@ function getMaxAccessories() {
 
 export const UNIQUE_ACCESSORIES_COUNT = Object.keys(getMaxAccessories()).length;
 
-export const MAGICAL_POWER = {
-  common: 3,
-  uncommon: 5,
-  rare: 8,
-  epic: 12,
-  legendary: 16,
-  mythic: 22,
-  special: 3,
-  very_special: 5,
-};
-
 export const RECOMBABLE_ACCESSORIES_COUNT = getMaxAccessories().filter((accessory) => {
   if (specialAccessories[accessory.id]?.allowsRecomb === false) return false;
 

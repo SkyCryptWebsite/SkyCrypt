@@ -40,7 +40,6 @@ export function getPlayerStats() {
     health_cap: { base: 0 },
   };
   const allowedStats = Object.keys(stats);
-  const temp: { [key: string]: number } = {};
   let statsMultiplier = 0,
     healthMultiplier = 0,
     defenseMultiplier = 0,
@@ -240,6 +239,7 @@ export function getPlayerStats() {
   // Custom pet abilities
   const activePet = calculated.pets.find((a) => a.active === true) as Pet;
   const petStats = getPetData(stats, activePet, calculated);
+  console.log("pet", petStats.stats.farming_fortune);
 
   Object.assign(stats, petStats.stats);
 
@@ -508,6 +508,8 @@ export function getPlayerStats() {
       stats[stat].potion += value as number;
     }
   }
+
+  console.log(stats);
 
   return stats;
 }
@@ -833,7 +835,11 @@ function getPetData(stats: PlayerStats, pet: Pet, calculated: SkyCryptPlayer) {
   if (pet.type == "MOOSHROOM_COW") {
     if (pet.tier == "LEGENDARY") {
       stats.farming_fortune.pet ??= 0;
-      stats.farming_fortune.pet += stats.strength.pet / (40 - pet.level.level * 0.2);
+      const totalStrenght = Object.keys(stats.strength)
+        .map((key) => stats.strength[key as keyof ItemStats["strength"]] ?? 0)
+        .reduce((a, b) => a + b, 0);
+
+      stats.farming_fortune.pet += totalStrenght / (40 - pet.level.level * 0.2);
     }
   }
 
