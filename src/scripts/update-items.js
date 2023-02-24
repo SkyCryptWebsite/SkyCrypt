@@ -14,6 +14,7 @@ async function updateItems() {
       const item = {
         id: skyblockId,
         damage: 0,
+        tier: "common",
       };
 
       Object.assign(item, skyblockItem);
@@ -21,10 +22,6 @@ async function updateItems() {
     }
 
     items.forEach(async (item) => {
-      if (item.tier === undefined) {
-        item.tier = "common";
-      }
-      
       await db.collection("items").updateOne({ id: item.id }, { $set: item }, { upsert: true });
     });
   } catch (e) {
