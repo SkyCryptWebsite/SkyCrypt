@@ -21,6 +21,10 @@ async function updateItems() {
     }
 
     items.forEach(async (item) => {
+      if (item.tier === undefined) {
+        item.tier = "common";
+      }
+      
       await db.collection("items").updateOne({ id: item.id }, { $set: item }, { upsert: true });
     });
   } catch (e) {
