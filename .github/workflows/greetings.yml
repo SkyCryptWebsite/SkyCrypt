@@ -1,4 +1,4 @@
-name: SkyCryptGreetings
+name: "Greetings"
 
 on: [issues]
 
@@ -8,7 +8,8 @@ jobs:
     permissions:
       issues: write
     steps:
-      - uses: actions/first-interaction@v1
+      - name: Greet newcomer
+        uses: actions/first-interaction@v1
         continue-on-error: true
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
