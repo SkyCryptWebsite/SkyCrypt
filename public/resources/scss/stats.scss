@@ -94,8 +94,11 @@
 
     &[type="skyblock_level"] {
       margin-bottom: 25px;
-      padding-right: 24px;
-      width: 200%;
+
+      @media (min-width: 481px) {
+        padding-right: 24px;
+        width: 200%;
+      }
     }
 
     .skill-icon {
@@ -2494,7 +2497,6 @@ inventory-view {
 
   #skill_levels_container skill-component {
     width: 100%;
-    margin: 0;
   }
 
   .wardrobe .wardrobe-set {
