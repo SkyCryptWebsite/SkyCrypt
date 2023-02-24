@@ -14,6 +14,7 @@ async function updateItems() {
       const item = {
         id: skyblockId,
         damage: 0,
+        tier: "common",
       };
 
       Object.assign(item, skyblockItem);
