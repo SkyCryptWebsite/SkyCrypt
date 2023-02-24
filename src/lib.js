@@ -555,7 +555,7 @@ async function processItems(base64, source, customTextures = false, packs, cache
 
     if (lore.length > 0) {
       // item categories, rarity, recombobulated, dungeon, shiny
-      const itemType = helper.parseItemTypeFromLore(lore);
+      const itemType = helper.parseItemTypeFromLore(lore, item);
 
       for (const key in itemType) {
         item[key] = itemType[key];
