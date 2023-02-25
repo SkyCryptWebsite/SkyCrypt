@@ -2841,7 +2841,7 @@ function getMissingAccessories(accessories) {
 
       object.texture_path = data.texture || null;
       object.display_name = data.name || null;
-      object.rarity = data.rarity || null;
+      object.rarity = data.tier || data.rarity || null;
     } else {
       const data = await db.collection("items").findOne({ id: accessory });
 
