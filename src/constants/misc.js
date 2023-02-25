@@ -152,12 +152,15 @@ export const AREA_NAMES = {
   mining_2: "Deep Caverns",
   mining_3: "Dwarven Mines",
   combat_1: "Spider's Den",
-  combat_2: "Blazing Fortress",
+  crimson_isle: "Crimson Isle",
   combat_3: "The End",
-  farming_1: "The Barn",
-  farming_2: "Mushroom Desert",
+  farming_1: "The Farming Islands",
   foraging_1: "The Park",
+  dungeon: "Dungeon",
+  dungeon_hub: "Dungeon Hub",
   winter: "Jerry's Workshop",
+  instanced: "Kuudra's End",
+  garden: "The Garden",
 };
 
 export const COLOR_NAMES = {
@@ -346,7 +349,7 @@ export const INCREASE_MOST_STATS_EXCLUDE = [
 
 export const FAIRY_SOULS = {
   max: {
-    normal: 238,
+    normal: 239,
     stranded: 3,
   },
 };
