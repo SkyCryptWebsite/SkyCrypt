@@ -21,12 +21,12 @@ const execFile = util.promisify(child_process.execFile);
 const NORMALIZED_SIZE = 128;
 const RESOURCE_CACHING = true;
 
-const folderPath = getFolderPath();
+const FOLDER_PATH = getFolderPath();
 const RESOURCE_PACK_FOLDER = path.resolve(getFolderPath(), "..", "public", "resourcepacks");
 
-const cacheFolderPath = getCacheFolderPath(folderPath);
-const PACK_HASH_CACHE_FILE = getCacheFilePath(cacheFolderPath, "json", "pack_hashes", "json");
-const RESOURCES_CACHE_FILE = getCacheFilePath(cacheFolderPath, "json", "custom_resources", "json");
+const CACHE_FOLDER_PATH = getCacheFolderPath(FOLDER_PATH);
+const PACK_HASH_CACHE_FILE = getCacheFilePath(CACHE_FOLDER_PATH, "json", "pack_hashes", "json");
+const RESOURCES_CACHE_FILE = getCacheFilePath(CACHE_FOLDER_PATH, "json", "custom_resources", "json");
 
 let resourcesReady = false;
 const readyPromise = new Promise((resolve) => {
@@ -93,7 +93,6 @@ export async function init() {
 
     resourcesUpToDate = true;
   } catch (e) {
-    console.error(e);
     packConfigHashes = {};
     resourcePacks.forEach((pack) => {
       packConfigHashes[pack.config.id] = pack.config.hash;
@@ -604,7 +603,7 @@ export async function getTexture(item, options) {
   }
 
   outputTexture.path = path
-    .relative(path.resolve(folderPath, "..", "public"), outputTexture.path)
+    .relative(path.resolve(FOLDER_PATH, "..", "public"), outputTexture.path)
     .replaceAll("\\", "/");
 
   debugStats.time_spent_ms = Date.now() - timeStarted;
