@@ -122,7 +122,7 @@ export async function init() {
     outputPacks.push(
       Object.assign(
         {
-          base_path: "/" + path.relative(path.resolve(folderPath, "..", "public"), pack.base_path ?? pack.basePath),
+          base_path: "/" + path.relative(path.resolve(FOLDER_PATH, "..", "public"), pack.base_path ?? pack.basePath),
         },
         pack.config
       )
@@ -175,7 +175,9 @@ async function loadResourcePacks() {
       const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
       const properties = {};
 
-      if (!lines.some((line) => line.startsWith("nbt.ExtraAttributes.id"))) continue;
+      if (!lines.some((line) => line.startsWith("nbt.ExtraAttributes.id"))) {
+        continue;
+      }
 
       for (const line of lines) {
         // Skipping comments
@@ -354,6 +356,10 @@ async function loadResourcePacks() {
         } else if (regex.startsWith("regex:")) {
           regex = new RegExp(regex.substring(6));
         } else {
+          if (property == "nbt.ExtraAttributes.id") {
+            texture.skyblock_id = regex;
+          }
+
           regex = new RegExp(`^${_.escapeRegExp(regex)}$`);
         }
 
@@ -502,6 +508,16 @@ export function getCompletePacks() {
   return resourcePacks;
 }
 
+/**
+ * Processes all textures that could potentially be connected to an item, then throws the one with biggest priority
+ * @param {object} item
+ * @param {object} options
+ * @param {boolean} [options.ignore_id]
+ * @param {string[]} [options.pack_ids]
+ * @param {boolean} [options.invert_order]
+ * @param {boolean} [options.debug]
+ * @returns {object} Item's texture
+ */
 export async function getTexture(item, options) {
   options = Object.assign({ ignore_id: false, pack_ids: undefined, invert_order: false, debug: false }, options);
 
@@ -543,6 +559,14 @@ export async function getTexture(item, options) {
 
       // TODO: recognize skyblock ids as a texture value
 
+      if (
+        options.ignore_id === false &&
+        "skyblock_id" in texture &&
+        texture.skyblock_id != (item?.tag?.ExtraAttributes?.id ?? "")
+      ) {
+        continue;
+      }
+
       let matches = 0;
 
       for (const match of texture.match) {
@@ -578,8 +602,6 @@ export async function getTexture(item, options) {
       debugStats.processed_textures++;
 
       if (matches == texture.match.length) {
-        texture.weight = tempPacks.indexOf(pack);
-
         if (texture.weight < outputTexture.weight) {
           continue;
         }

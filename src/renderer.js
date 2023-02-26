@@ -366,14 +366,19 @@ async function renderPotion(type, color) {
 
 /**
  * Gets a texture of an item, either from stylesheet or from resource packs
- * @param {string} skyblockId
- * @param {*} query
+ * @param {string|undefined} skyblockId
+ * @param {object} query
  * @returns Image of an item
  */
 export async function renderItem(skyblockId, query) {
   query = sanitize(query);
+  let itemQuery = query ?? {};
 
-  const item = getItemData(Object.assign(query, { skyblockId }));
+  if (skyblockId !== undefined) {
+    itemQuery = Object.assign(query, { skyblockId });
+  }
+
+  const item = await getItemData(itemQuery);
   const outputTexture = { mime: "image/png" };
 
   for (const rule of itemsCss.stylesheet.rules) {
