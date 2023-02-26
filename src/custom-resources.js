@@ -81,6 +81,10 @@ export async function init() {
   try {
     packConfigHashes = JSON.parse(fs.readFileSync(PACK_HASH_CACHE_FILE));
 
+    if (Object.keys(packConfigHashes).length !== resourcePacks.length) {
+      throw new Error("The amount of config hashes does not match the amount of packs");
+    }
+
     resourcePacks.forEach((pack) => {
       if (packConfigHashes[pack.config.id] !== pack.config.hash) {
         throw new Error("Config hashes were not matching!");
@@ -89,6 +93,8 @@ export async function init() {
 
     resourcesUpToDate = true;
   } catch (e) {
+    console.error(e);
+    packConfigHashes = {};
     resourcePacks.forEach((pack) => {
       packConfigHashes[pack.config.id] = pack.config.hash;
     });
