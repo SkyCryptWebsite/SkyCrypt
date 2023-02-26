@@ -7,6 +7,7 @@ import retry from "async-retry";
 import path from "path";
 import fs from "fs-extra";
 import { fileURLToPath } from "url";
+import { getPrices } from "skyhelper-networth";
 
 export { renderLore, formatNumber } from "../common/formatting.js";
 export * from "../common/helper.js";
@@ -451,7 +452,7 @@ export function getPrice(orderSummary) {
   return orders.reduce((mean, value) => mean + (value[0] * value[1]) / totalWeight, 0);
 }
 
-export function getPrices(product) {
+export function getBazaarPrices(product) {
   return {
     buyPrice: getPrice(product.buy_summary),
     sellPrice: getPrice(product.sell_summary),
@@ -1110,4 +1111,12 @@ export async function getBingoGoals(db, cacheOnly = false) {
   }
 
   return output;
+}
+ 
+export async function getItemPrice(item) {
+  if (!item) return 0;
+
+  const prices = await getPrices(true);
+
+  return prices[item.toLowerCase()] || prices[getId(item).toLowerCase()] || 0;
 }

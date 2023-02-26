@@ -31,6 +31,7 @@ const skillItems = {
   social: "icon-388_0",
   taming: "icon-383_0",
   tank: 'icon-299_0',
+  skyblock_level: 'head-2e2cc42015e6678f8fd49ccc01fbf787f1ba2c32bcf559a015332fc5db50',
 };
 
 const bestiary = {
@@ -95,22 +96,23 @@ const slayerInfo = {
   },
 };
 
-const seaCreatures = [
+const seaCreatures = [ 
   "pond_squid",
+  "plhlegblast",
   "sea_walker",
   "night_squid",
   "frozen_steve",
-  "nurse_shark",
   "sea_guardian",
   "frosty_the_snowman",
-  "sea_witch",
   "scarecrow",
+  "nurse_shark",
+  "sea_witch",
   "sea_archer",
   "oasis_rabbit",
   "oasis_sheep",
-  "blue_shark",
   "monster_of_the_deep",
   "grinch",
+  "blue_shark",
   "catfish",
   "nightmare",
   "carrot_king",
@@ -118,19 +120,28 @@ const seaCreatures = [
   "sea_leech",
   "poisoned_water_worm",
   "flaming_worm",
-  "werewolf",
+  "magma_slug",
+  "moogma",
+  "lava_leech",
+  "pyroclastic_worm",
+  "lava_flame",
+  "fire_eel",
+  "taurus",
   "guardian_defender",
+  "werewolf",
   "deep_sea_protector",
+  "tiger_shark",
   "lava_blaze",
   "lava_pigman",
-  "tiger_shark",
   "water_hydra",
   "sea_emperor",
   "phantom_fisherman",
-  "zombie_miner",
   "great_white_shark",
+  "zombie_miner",
   "yeti",
   "grim_reaper",
+  "thunder",
+  "lord_jawbus", 
 ];
 
 const milestone_rarities = ["common", "uncommon", "rare", "epic", "legendary"];
@@ -888,6 +899,11 @@ const metaDescription = getMetaDescription()
         <% } %>
       </div>
       <div id="skill_levels_container">
+        <% if (calculated.skyblock_level.xp !== 0 && calculated.skyblock_level.level !== 0) {%>
+        <div class="skill-bars">
+          <skill-component skill="level" type="skyblock_level" icon="<%= skillItems.skyblock_level%>"></skill-component>
+        </div>
+        <% } %>
         <% if ('levels' in calculated) { %>
         <div class="skill-bars" data-api-enabled="<%= 'runecrafting' in calculated.levels %>">
           <skill-component skill="taming" type="skill" icon="<%= skillItems.taming %>"></skill-component>
@@ -1150,17 +1166,19 @@ const metaDescription = getMetaDescription()
             </div>
           </div>
           <% } %>
-          <% if(items.accessories.find(a => a.isUnique && a.isInactive) != undefined){ %>
+          <% const inactiveAccessories = items.accessories.filter(a => a.isInactive === true || a.isUnique === false); %>
+          <% if (inactiveAccessories.length > 0) { %>
           <div class="accessory-list">
             <p class="stat-sub-header">Inactive Accessories</p>
-            <% items.accessories.filter(a => a.isUnique && a.isInactive).forEach(item => { %>
+            <% for (const item of inactiveAccessories) { %>
             <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
               <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
               <div class="piece-shine"></div>
               <% } %>
+
               <% itemIcon(item, ['piece-icon']); %>
             </div>
-            <% }) %>
+            <% } %>
           </div>
           <% } %>
           <% if(calculated.missingAccessories.missing.length > 0 || calculated.missingAccessories.upgrades.length > 0) {
@@ -1203,14 +1221,14 @@ const metaDescription = getMetaDescription()
           <%
             const uniquePets = _.uniq(
               calculated.pets
-                .filter(pet => !constants.PET_DATA[pet.type].bingoExclusive === true || calculated.profile.game_mode === 'bingo')
-                .map((pet) => constants.PET_DATA[pet.type].typeGroup ?? pet.type)
+                .filter(pet => !constants.PET_DATA[pet.type]?.bingoExclusive === true || calculated.profile.game_mode === 'bingo')
+                .map((pet) => constants.PET_DATA[pet.type]?.typeGroup ?? pet.type)
             )
             const totalPets = _.uniq(
               Object.entries(
                 Object.fromEntries(
                   Object.entries(constants.PET_DATA)
-                    .filter(pet => !pet[1].bingoExclusive === true || calculated.profile.game_mode === 'bingo')
+                    .filter(pet => !pet[1]?.bingoExclusive === true || calculated.profile.game_mode === 'bingo')
                 )
               )
                 .map(arr => arr[1].typeGroup || arr[0])
@@ -1539,6 +1557,11 @@ const metaDescription = getMetaDescription()
               <span class="stat-name <%= max %>">Token of the Mountain:</span>
               <span class="stat-value <%= max %>"><%= mining.core.tokens.spent %>/<%= mining.core.tokens.total %></span>
               <br>
+              <!-- Peak of the Mountain -->
+              <% max = (mining.core.nodes["special_0"] || 0) === constants.MAX_PEAK_OF_THE_MOUNTAIN_LEVEL ? 'golden-text' : '' %>
+              <span class="stat-name <%= max %>">Peak of the Mountain:</span>
+              <span class="stat-value <%= max %>"><%= mining.core.nodes["special_0"] || 0 %>/<%= constants.MAX_PEAK_OF_THE_MOUNTAIN_LEVEL %></span>
+              <br>
               <!-- Mithril Powder -->
               <% max = mining.core.powder.mithril.total >= constants.HOTM.powder_for_max_nodes.mithril_powder ? 'golden-text' : '' %>
               <span class="stat-name <%= max %>">Mithril Powder:</span>
@@ -1859,9 +1882,16 @@ const metaDescription = getMetaDescription()
             <span class="stat-name">Selected Class: </span>
             <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span>
             <br>
-            <% max = calculated.dungeons.class_average === 50 ? "golden-text" : "" %>
-            <span class="stat-name <%= max %>">Class Average: </span>
-            <span class="stat-value <%= max %>"><%= calculated.dungeons.class_average.toLocaleString() %></span>
+            <% max = calculated.dungeons.class_average.max ? "golden-text" : "" %>
+            <span data-tippy-content="
+              <span class='stat-name'>Total Class XP: </span><span class='stat-value'><%= Math.round(calculated.dungeons.class_average.experience).toLocaleString() %></span>
+              <div class='tippy-explanation'>Total Class XP gained in Catacombs.</div>
+              <span class='stat-name'>Average Level: </span><span class='stat-value'><%= calculated.dungeons.class_average.avrg_level_with_progress.toFixed(2) %></span>
+              <div class='tippy-explanation'>Average class level, includes progress to next level.</div>
+
+              <span class='stat-name'>Average Class Level without progress: </span><span class='stat-value'><%= calculated.dungeons.class_average.avrg_level.toFixed(2) %></span>
+              <div class='tippy-explanation'>Average class level without including partial level progress.</div>">
+              <span class="stat-name <%= max %>">Class Average: </span><span class="stat-value <%= max %>"><%= calculated.dungeons.class_average.avrg_level.toFixed(2) %></span></span>
             <br>
             <% max = calculated.dungeons.catacombs.bonuses.item_boost === 465 ? "golden-text" : "" %>
             <span class="stat-name <%= max %>">Dungeon Item Boost: </span>
@@ -1877,7 +1907,7 @@ const metaDescription = getMetaDescription()
             <span class="stat-value <%= max %>"><%= helper.titleCase(calculated.dungeons.master_catacombs.highest_floor.replace("_", " ")) %></span>
             <br>
             <% } %>
-            <% max = calculated.dungeons.journals.maxed ? "golden-text" : "" %>
+            <% max = calculated.dungeons.journals.pages_collected === calculated.dungeons.journals.total_pages ? "golden-text" : "" %>
             <span class="stat-name <%= max %>">Journals Completed: </span>
             <span class="stat-value <%= max %>"><%= calculated.dungeons.journals.journals_completed %></span>
             <span class="grey-text"> (<%= calculated.dungeons.journals.pages_collected %>/<%= calculated.dungeons.journals.total_pages %>)</span>
@@ -2398,8 +2428,9 @@ const metaDescription = getMetaDescription()
         <% function getDojoRank(points) {
             if (points >= 1000) return 'S'
             if (points >= 800) return 'A'
-            if (points >= 600) return 'C'
-            if (points >= 400) return 'D'
+            if (points >= 600) return 'B'
+            if (points >= 400) return 'C'
+            if (points >= 200) return 'D'
             return 'F'
           }
         if (Object.keys(calculated.crimsonIsles.dojo).length > 0) { %>
