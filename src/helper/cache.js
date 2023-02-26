@@ -3,7 +3,8 @@ import fs from "fs-extra";
 import { fileURLToPath } from "url";
 
 export function getFolderPath() {
-  return path.dirname(fileURLToPath(import.meta.url));
+  // we need to go back a folder to have it point in main folder instead of src
+  return path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../");
 }
 
 export function getCacheFolderPath() {
