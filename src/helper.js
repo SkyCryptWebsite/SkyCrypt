@@ -964,11 +964,6 @@ export function getCacheFolderPath() {
 }
 
 export function getCacheFilePath(dirPath, type, name, format = "png") {
-  // we don't care about folder optimization when we're developing
-  if (process.env?.NODE_ENV == "development") {
-    return path.resolve(dirPath, `${type}_${name}.${format}`);
-  }
-
   const subdirs = [type];
 
   // for texture and head type, we get the first 2 characters to split them further
