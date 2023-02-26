@@ -1,5 +1,5 @@
 import fs from "fs-extra";
-import { getCacheFolderPath } from "../helper.js";
+import { getCacheFolderPath } from "../helper/cache.js";
 
 const CACHE_FOLDER = getCacheFolderPath();
 
