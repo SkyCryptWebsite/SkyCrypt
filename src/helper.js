@@ -1,11 +1,15 @@
 import cluster from "cluster";
 import axios from "axios";
 import sanitize from "mongo-sanitize";
+import retry from "async-retry";
+import path from "path";
 import "axios-debug-log";
 import { v4 } from "uuid";
-import retry from "async-retry";
+import { getPrices } from "skyhelper-networth";
+import { execSync } from "child_process";
 
 import { titleCase } from "../common/helper.js";
+import { getFolderPath } from "./helper/cache.js";
 
 export { renderLore, formatNumber } from "../common/formatting.js";
 export * from "../common/helper.js";
@@ -1038,4 +1042,19 @@ export function getAnimatedTexture(item) {
   });
 
   return deepResults[0] ?? false;
+}
+
+export async function getItemPrice(item) {
+  if (!item) return 0;
+
+  const prices = await getPrices(true);
+
+  return prices[item.toLowerCase()] || prices[getId(item).toLowerCase()] || 0;
+}
+
+export function getCommitHash() {
+  return execSync("git rev-parse HEAD", { cwd: path.resolve(getFolderPath(), "../") })
+    .toString()
+    .trim()
+    .slice(0, 10);
 }
