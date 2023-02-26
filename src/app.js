@@ -268,7 +268,8 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       debugId,
     });
 
-    const bingoProfile = profile.game_mode === "bingo" ?  await lib.getBingoProfile(db, paramPlayer, { cacheOnly, debugId }) : {};
+    const bingoProfile =
+      profile.game_mode === "bingo" ? await lib.getBingoProfile(db, paramPlayer, { cacheOnly, debugId }) : {};
     const items = await lib.getItems(profile.members[profile.uuid], bingoProfile, true, req.cookies.pack, {
       cacheOnly,
       debugId,

@@ -1103,7 +1103,7 @@ export async function getBingoGoals(db, cacheOnly = false) {
   }
 
   // 12 hours cache
-  if (output === undefined || output.last_save + 43200000 < Date.now()) {
+  if (output === null || output.last_save + 43200000 < Date.now()) {
     const { data: output } = await axios.get("https://api.hypixel.net/resources/skyblock/bingo");
     output.last_save = Date.now();
 
@@ -1112,7 +1112,7 @@ export async function getBingoGoals(db, cacheOnly = false) {
 
   return output;
 }
- 
+
 export async function getItemPrice(item) {
   if (!item) return 0;
 
