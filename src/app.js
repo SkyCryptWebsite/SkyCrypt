@@ -31,7 +31,6 @@ import { SitemapStream, streamToPromise } from "sitemap";
 import { createGzip } from "zlib";
 import twemoji from "twemoji";
 import cookieParser from "cookie-parser";
-import { execSync } from "child_process";
 
 import * as apiRoute from "./routes/api.js";
 import * as apiv2Route from "./routes/apiv2.js";
@@ -139,14 +138,7 @@ async function updateCacheOnly() {
 updateCacheOnly();
 setInterval(updateCacheOnly, 60_000 * 5);
 
-function updateCommitHash() {
-  return execSync("git rev-parse HEAD", { cwd: path.resolve(folderPath, "../") })
-    .toString()
-    .trim()
-    .slice(0, 10);
-}
-const commitHash = updateCommitHash();
-
+const commitHash = helper.getCommitHash();
 const featuredProfiles = fs.readJSONSync(helper.getCacheFilePath(CACHE_PATH, "json", "featured-profiles", "json"));
 
 // Wait for APIs to be ready..

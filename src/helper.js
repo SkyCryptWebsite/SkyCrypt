@@ -1081,11 +1081,3 @@ export function getAnimatedTexture(item) {
 
   return deepResults[0] ?? false;
 }
-
-export async function getItemPrice(item) {
-  if (!item) return 0;
-
-  const prices = await getPrices(true);
-
-  return prices[item.toLowerCase()] || prices[getId(item).toLowerCase()] || 0;
-}
