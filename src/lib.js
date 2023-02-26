@@ -3191,10 +3191,12 @@ export function getDungeons(userProfile, hypixelProfile) {
     journal_entries: dungeons.dungeon_journal.unlocked_journals,
   };
 
-  for (const entryID of dungeons.dungeon_journal.unlocked_journals) {
-    journals.journals_completed += 1;
-    journals.pages_collected += JOURNAL_CONSTANTS[entryID]?.pages || 0;
-  }
+  if (dungeons.dungeon_journal.unlocked_journals !== undefined) {
+    for (const entryID of dungeons.dungeon_journal.unlocked_journals) {
+      journals.journals_completed += 1;
+      journals.pages_collected += JOURNAL_CONSTANTS[entryID]?.pages || 0;
+    }
+  }   
 
   for (const journal in JOURNAL_CONSTANTS) {
     journals.total_pages += JOURNAL_CONSTANTS[journal].pages;
