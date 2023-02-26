@@ -397,7 +397,6 @@ export async function renderItem(skyblockId, query) {
 
   const customTexture = await customResources.getTexture(item, {
     ignore_id: "name" in query,
-    invert_order: "invert" in query,
     pack_ids: query.pack,
   });
 

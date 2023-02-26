@@ -514,12 +514,11 @@ export function getCompletePacks() {
  * @param {object} options
  * @param {boolean} [options.ignore_id]
  * @param {string[]} [options.pack_ids]
- * @param {boolean} [options.invert_order]
  * @param {boolean} [options.debug]
  * @returns {object} Item's texture
  */
 export async function getTexture(item, options) {
-  options = Object.assign({ ignore_id: false, pack_ids: undefined, invert_order: false, debug: false }, options);
+  options = Object.assign({ ignore_id: false, pack_ids: undefined, debug: false }, options);
 
   if (!resourcesReady) {
     await readyPromise;
@@ -543,9 +542,8 @@ export async function getTexture(item, options) {
     tempPacks = tempPacks.sort((a, b) => options.pack_ids.indexOf(b) - options.pack_ids.indexOf(a));
   }
 
-  if (!options.invert_order) {
-    tempPacks = tempPacks.reverse();
-  }
+  // reserve is needed because we want the most priority packs on the bottom of the array
+  tempPacks = tempPacks.reverse();
 
   for (const pack of tempPacks) {
     for (const texture of pack.textures) {
@@ -556,8 +554,6 @@ export async function getTexture(item, options) {
       if (options.ignore_id === false && "damage" in texture && texture.damage != item.Damage) {
         continue;
       }
-
-      // TODO: recognize skyblock ids as a texture value
 
       if (
         options.ignore_id === false &&
