@@ -205,7 +205,7 @@ async function loadResourcePacks() {
       }
 
       const texture = {
-        weight: 0,
+        weight: pack.config.priority,
         animated: false,
         file: path.basename(file),
         match: [],
@@ -326,7 +326,7 @@ async function loadResourcePacks() {
 
       for (const property in properties) {
         if (property == "weight") {
-          texture.weight = parseInt(properties[property]);
+          texture.weight += parseInt(properties[property]);
         }
 
         if (property == "items" || property == "matchItems") {
