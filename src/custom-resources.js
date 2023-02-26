@@ -175,10 +175,6 @@ async function loadResourcePacks() {
       const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
       const properties = {};
 
-      if (!lines.some((line) => line.startsWith("nbt.ExtraAttributes.id"))) {
-        continue;
-      }
-
       for (const line of lines) {
         // Skipping comments
         if (line.startsWith("#")) {
@@ -557,8 +553,8 @@ export async function getTexture(item, options) {
 
       if (
         options.ignore_id === false &&
-        "skyblock_id" in texture &&
-        texture.skyblock_id != (item?.tag?.ExtraAttributes?.id ?? "")
+        (("skyblock_id" in texture && texture.skyblock_id != (item?.tag?.ExtraAttributes?.id ?? "")) ||
+          (!("skyblock_id" in texture) && item?.tag?.ExtraAttributes?.id !== undefined))
       ) {
         continue;
       }
