@@ -1,10 +1,18 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
+  "extends": ["config:base", "group:allNonMajor"],
+  "enabledManagers": ["npm"],
+  "rangeStrategy": "bump",
   "prConcurrentLimit": 5,
   "prHourlyLimit": 0,
   "rebaseWhen": "behind-base-branch",
-  "timezone": "UTC",
+  "semanticCommits": "enabled",
   "schedule": ["* 0 * * *"],
-  "enabledManagers": ["npm"]
+  "timezone": "UTC",
+  "packageRules": [
+    {
+      "matchDepTypes": ["engines"],
+      "enabled": false
+    }
+  ]
 }

@@ -37,9 +37,9 @@ export function renderLore(text) {
   const formats = new Set();
 
   // @ts-ignore - this regex always matches so we don't need to check for null
-  for (let part of text.match(/(§[0-9a-fk-or])*[^§]*/g)) {
+  for (let part of text.match(/(§[0-9A-Fa-fk-or])*[^§]*/g)) {
     while (part.charAt(0) === "§") {
-      const code = part.charAt(1);
+      const code = part.charAt(1).toLowerCase();
 
       if (isColorCode(code)) {
         color = code;
