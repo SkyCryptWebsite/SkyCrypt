@@ -40,7 +40,7 @@
         for (const collection of collections.filter(c => c.category == category)) {
           const amountsTooltip = collection.amounts.map(amount => `<span class="stat-name">${amount.username}: </span><span class="stat-value">${amount.amount.toLocaleString()}</span>`).join('<br>') + `<br><br><span class="stat-name">Total: </span><span class="stat-value">${collection.totalAmount.toLocaleString()}</span>`; %>
 
-          <div class="chip" data-tippy-content="<%= amountsTooltip %>">
+          <div class="chip" data-tippy-content="<%= amountsTooltip %>" data-missing="<%= collection.totalAmount === 0 %>">
             <div class="chip-icon-wrapper">
             <% if ("texture" in collection) { %>
               <div style="background-image:url(/head/<%= collection.texture %>)" class="item-icon custom-icon"></div>
