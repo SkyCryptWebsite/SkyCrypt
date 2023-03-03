@@ -3196,7 +3196,7 @@ export function getDungeons(userProfile, hypixelProfile) {
       journals.journals_completed += 1;
       journals.pages_collected += JOURNAL_CONSTANTS[entryID]?.pages || 0;
     }
-  }   
+  }
 
   for (const journal in JOURNAL_CONSTANTS) {
     journals.total_pages += JOURNAL_CONSTANTS[journal].pages;
