@@ -947,9 +947,8 @@ export function parseItemTypeFromLore(lore, item) {
 
   // Parsing the match and returning data
   const r = match.groups;
-  const categories = r.type ? getCategories(r.type.trim().toLowerCase(), item) : [];
   return {
-    categories: categories,
+    categories: r.type ? getCategories(r.type.trim().toLowerCase(), item) : [],
     rarity: r.rarity.replaceAll(" ", "_").toLowerCase(),
     recombobulated: !!r.recomb && !!r.recomb2,
     dungeon: !!r.dungeon,
