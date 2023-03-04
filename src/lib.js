@@ -1092,7 +1092,6 @@ export const getItems = async (
 
     accessories.push(insertAccessory);
     accessoryIds.push(id);
-    accessoryRarities[insertAccessory.rarity]++;
     if (insertAccessory.isInactive === false) {
       accessoryRarities[insertAccessory.rarity]++;
       if (id == "HEGEMONY_ARTIFACT") {
