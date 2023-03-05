@@ -1694,7 +1694,7 @@ const metaDescription = getMetaDescription()
                   <div class="item-icon icon-<%= crop.icon %>"></div>
                 </div>
                 <div class="chip-text">
-                  <div class="collection-name <%= crop.unique_gold ? 'max-minion' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
+                  <div class="collection-name <%= crop.unique_gold ? 'max-stat' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
                   <div class="collection-amount">
                     <small class="stat-name">Personal Best: </small><small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small><br>
                     <small class="stat-name">Contests: </small><small class="stat-value"><%= crop.contests.toLocaleString() %></small><br>
