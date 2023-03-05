@@ -529,14 +529,36 @@ function getDescription() {
     description.push(line.join(' '), '\n', '\n')
   }
 
-	// Avg. skill
-	if (calculated.average_level) {
-		description.push(
-			`📚 Avg Skill Level: ${
-				Math.floor(calculated.average_level * 10) / 10
-			} `
-		)
-		description.push('\n')
+  // Skyblock Level
+  if (calculated.skyblock_level.xp !== 0 && calculated.skyblock_level.level !== 0) {
+    description.push(
+      `🌟 Skyblock Level: ${calculated.skyblock_level.level + calculated.skyblock_level.progress}`,
+      '\n'
+    )
+  }
+
+
+
+	if (calculated.average_level || calculated.dungeons.class_average) {
+    // Skill Average
+    if (calculated.average_level) {
+      description.push(
+        `📚 Avg Skill Level: ${
+          Math.floor(calculated.average_level * 10) / 10
+        } `
+      )
+    }
+
+    // Dungeons classs average
+    if (calculated.dungeons.class_average) {
+      description.push(
+        `⚔️  Avg Class Level: ${
+          Math.floor(calculated.dungeons.class_average.avrg_level_with_progress * 10) / 10
+        } `
+      )
+    }
+
+    description.push('\n')
 	}
 
 	// Weights
@@ -552,13 +574,21 @@ function getDescription() {
 		description.push('\n')
 	}
 
-	// Bank & purse
+	// Networth, Bank & purse
+  if (calculated.networth.noInventory === false) {
+      description.push(
+        `💸 Networth: ${helper.formatNumber(calculated.networth.networth, true)} `
+      )
+  }
+
 	if (calculated.bank) {
 		description.push(
 			`🏦 Bank: ${helper.formatNumber(calculated.bank, true)} `
 		)
 	}
-	description.push(`💰 Purse: ${helper.formatNumber(calculated.purse, true)}`)
+	description.push(
+    `💰 Purse: ${helper.formatNumber(calculated.purse, true)}`
+  )
 
 	// Done!
 	return description.join('')
