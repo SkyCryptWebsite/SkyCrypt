@@ -402,7 +402,7 @@ async function processItems(base64, source, customTextures = false, packs, cache
       const { farmed_cultivating } = item.tag.ExtraAttributes;
 
       if (farmed_cultivating > 0) {
-        item.extra.farmed_cultivating = farmed_cultivating;
+        item.extra.farmed_cultivating = item.tag?.ExtraAttributes?.mined_crops?.toString() ?? farmed_cultivating;
       }
     }
 
