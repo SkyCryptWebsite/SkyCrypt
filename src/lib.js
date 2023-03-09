@@ -1493,7 +1493,10 @@ async function getLevels(userProfile, hypixelProfile, levelCaps, profileMembers)
       runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting, {
         skill: "runecrafting",
         type: "runecrafting",
-        cap: hypixelProfile.rankText === null ? 3 : constants.DEFAULT_SKILL_CAPS.runecrafting,
+        cap:
+          hypixelProfile.rankText === null
+            ? constants.NON_RUNECRAFTING_LEVEL_CAP
+            : constants.DEFAULT_SKILL_CAPS.runecrafting,
       }),
       social:
         Object.keys(profileMembers || {}).length > 0
