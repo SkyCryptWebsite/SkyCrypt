@@ -1655,6 +1655,18 @@ const metaDescription = getMetaDescription()
             <% const farming = calculated.farming;
           if (farming.contests.attended_contests > 0) {%>
             <p class="stat-raw-values">
+              <span class="stat-name">Farming Weight: </span><span class="stat-value">
+              <span class="stat-value interactive-tooltip" data-tippy-content='
+                  <span class="stat-name">Farming Weight</span><br>
+                  <br/>
+                  <span class="stat-name">Crop Weight: </span><span class="stat-value"><%= parseFloat(calculated.weight.farming.crop_weight.toFixed(2)).toLocaleString() %></span><br>
+                  <% for (const crop of Object.values(calculated.weight.farming.crops)) { %>
+                    <div class="tippy-explanation"><%= crop.name %>: <%= parseFloat(crop.weight.toFixed(2)).toLocaleString() %></div>
+                  <% } %>
+                  <span class="stat-name">Bonus Weight: </span><span class="stat-value"><%= parseFloat(calculated.weight.farming.bonus_weight.toFixed(2)).toLocaleString() %></span><br>
+                  <span class="stat-info">View more detailed info on <a href="https://elitebot.dev/" class="no-underline">Elite</a></span><br>
+                '><%= parseFloat(calculated.weight.farming.weight.toFixed(2)).toLocaleString() %></span>
+              <br>
               <span class="stat-name">Pelts: </span><span class="stat-value"><%= calculated.farming.pelts.toLocaleString() %></span><br>
               <span class="stat-name">Contests attended: </span><span class="stat-value"><%= farming.contests.attended_contests.toLocaleString() %></span><br>
               <% max = farming.unique_golds == 10 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Golds: </span><span class="stat-value <%= max %>"><%= farming.unique_golds.toLocaleString() %></span><br>
