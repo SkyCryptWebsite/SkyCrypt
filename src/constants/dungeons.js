@@ -42,6 +42,12 @@ export const DUNGEONS = {
       floors: ["catacombs_7", "master_catacombs_7"],
       collection: "catacombs_7",
     },
+    kuudra: {
+      name: "Kuudra",
+      texture: "82ee25414aa7efb4a2b4901c6e33e5eaa705a6ab212ebebfd6a4de984125c7a0",
+      floors: [],
+      collection: "kuudra",
+    },
   },
   boss_collections: {
     catacombs_1: {
@@ -308,6 +314,87 @@ export const DUNGEONS = {
           name: "Diamond Necron Head",
           required: 1000,
           tier: 7,
+        },
+      },
+    },
+    kuudra: {
+      boss: "Kuudra",
+      max_tiers: 5,
+      rewards: {
+        essence_reward_1: {
+          name: "x400 Crimson Essence",
+          required: 10,
+          tier: 1,
+        },
+        teeth_reward_1: {
+          name: "x1 Kuudra Teeth",
+          required: 10,
+          tier: 1,
+        },
+        common_pet_1: {
+          name: "Kuudra Pet",
+          required: 10,
+          tier: 1,
+        },
+        essence_reward_2: {
+          name: "x1,000 Crimson Essence",
+          required: 100,
+          tier: 2,
+        },
+        teeth_reward_2: {
+          name: "x2 Kuudra Teeth",
+          required: 100,
+          tier: 2,
+        },
+        uncommon_chunk_2: {
+          name: "Kuudra Chunk",
+          required: 100,
+          tier: 2,
+        },
+        essence_reward_3: {
+          name: "x2,500 Crimson Essence",
+          required: 500,
+          tier: 3,
+        },
+        teeth_reward_3: {
+          name: "x4 Kuudra Teeth",
+          required: 500,
+          tier: 3,
+        },
+        rare_chunk_3: {
+          name: "Meaty Kuudra Chunk",
+          required: 500,
+          tier: 3,
+        },
+        essence_reward_4: {
+          name: "x10,000 Crimson Essence",
+          required: 2000,
+          tier: 4,
+        },
+        teeth_reward_4: {
+          name: "x8 Kuudra Teeth",
+          required: 2000,
+          tier: 4,
+        },
+        epic_chunk_4: {
+          name: "Hardened Kuudra Chunk",
+          required: 2000,
+          tier: 4,
+        },
+        essence_reward_5: {
+          name: "x20,000 Crimson Essence",
+          required: 5000,
+          tier: 5,
+        },
+        teeth_reward_5: {
+          name: "x12 Kuudra Teeth",
+          required: 5000,
+          tier: 5,
+        },
+        legendary_chunk_5: {
+          name: "Enriched Kuudra Chunk",
+          required: 5000,
+          tier: 5,
         },
       },
     },

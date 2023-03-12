@@ -395,22 +395,27 @@ export const KUUDRA_TIERS = {
   none: {
     name: "Basic",
     head: "bfd3e71838c0e76f890213120b4ce7449577736604338a8d28b4c86db2547e71",
+    collection: 1,
   },
   hot: {
     name: "Hot",
     head: "c0259e8964c3deb95b1233bb2dc82c986177e63ae36c11265cb385180bb91cc0",
+    collection: 2,
   },
   burning: {
     name: "Burning",
     head: "330f6f6e63b245f839e3ccdce5a5f22056201d0274411dfe5d94bbe449c4ece",
+    collection: 3,
   },
   fiery: {
     name: "Fiery",
     head: "bd854393bbf9444542502582d4b5a23cc73896506e2fc739d545bc35bc7b1c06",
+    collection: 4,
   },
   infernal: {
     name: "Infernal",
     head: "82ee25414aa7efb4a2b4901c6e33e5eaa705a6ab212ebebfd6a4de984125c7a0",
+    collection: 5,
   },
 };
 

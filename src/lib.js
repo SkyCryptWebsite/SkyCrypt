@@ -2984,6 +2984,7 @@ export function getDungeons(userProfile, hypixelProfile) {
   if (!output.catacombs.visited) return output;
 
   // Boss Collections
+  // TODO: Clean this code once we get to refactoring code (we should probably move this to collections.js)
   const collection_data = dungeons_data.boss_collections;
   const boss_data = dungeons_data.bosses;
   const collections = {};
@@ -2991,6 +2992,8 @@ export function getDungeons(userProfile, hypixelProfile) {
   for (const coll_id in collection_data) {
     const coll = collection_data[coll_id];
     const boss = boss_data[coll.boss];
+
+    if (boss?.floors === undefined) continue;
 
     for (const floor_id of boss.floors) {
       // This can be done much better. But I didn't want to deal with it.
@@ -3043,6 +3046,25 @@ export function getDungeons(userProfile, hypixelProfile) {
       }
     }
   }
+
+  const totalKuudraCollection = Object.entries(
+    userProfile.nether_island_player_data?.kuudra_completed_tiers ?? {}
+  ).map(([key, value]) => {
+    if (constants.KUUDRA_TIERS[key] === undefined) return 0;
+    
+    return parseInt(value) * constants.KUUDRA_TIERS[key].collection;
+  }).reduce((a, b) => a + b, 0);
+
+  collections["kuudra"] = {
+    name: boss_data.kuudra.name,
+    texture: boss_data.kuudra.texture,
+    tier: 0,
+    maxed: totalKuudraCollection >= Math.max(...Object.values(collection_data.kuudra.rewards).map(reward => reward.required)),
+    killed: totalKuudraCollection,
+    floors: {},
+    unclaimed: 0,
+    claimed: [],
+  };
 
   const tasks = userProfile.tutorial;
   for (const i in tasks) {

@@ -32,6 +32,7 @@ const skillItems = {
   taming: "icon-383_0",
   tank: 'icon-299_0',
   skyblock_level: 'head-2e2cc42015e6678f8fd49ccc01fbf787f1ba2c32bcf559a015332fc5db50',
+  bosses: "icon-397_1",
 };
 
 const bestiary = {
@@ -2027,39 +2028,6 @@ const metaDescription = getMetaDescription()
             <% } %>
           </div>
           <% } %>
-          <% } %>
-
-          <% if (calculated.dungeons.unlocked_collections) { %>
-          <p class="stat-sub-header">Boss Collections</p>
-          <div class="collections">
-            <%
-              for (let boss in calculated.dungeons.boss_collections) {
-                let collection = calculated.dungeons.boss_collections[boss];
-                let claimedTooltip = "";
-
-                if (collection.claimed.length > 0) {
-                  claimedTooltip += '<span class="stat-name">Claimed items:</span>';
-                  for (let item in collection.claimed) {
-                    claimedTooltip += `<br><span class="stat-value">- ${collection.claimed[item]}</span>`;
-                  }
-                  claimedTooltip += '<br>';
-                }
-
-                if (collection.unclaimed > 0) {
-                  claimedTooltip += `<span class="stat-name">Unclaimed items: </span><span class="stat-value">${collection.unclaimed}</span>`;
-                }
-            %>
-            <div class="chip" <% if (claimedTooltip != "") { %>data-tippy-content="<%= claimedTooltip %>" <% } %>>
-              <div class="chip-icon-wrapper">
-                <div style="background-image:url('/head/<%= collection.texture %>')" class="item-icon custom-icon"></div>
-              </div>
-              <div class="chip-text">
-                <div class="collection-name <%= collection.maxed ? 'max-stat' : '' %>"><span class="stat-name"><%= collection.name %> </span><% if (collection.tier > 0) { %><span class="stat-value"><%= collection.tier %></span><% } %></div>
-                <div class="collection-amount"><span class="stat-name">Bosses killed: </span><span class="stat-value"><%= collection.killed.toLocaleString() %></span></div>
-              </div>
-            </div>
-            <% } %>
-          </div>
           <% } %>
           <% } %>
         </div>
