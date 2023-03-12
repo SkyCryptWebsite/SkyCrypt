@@ -3047,19 +3047,21 @@ export function getDungeons(userProfile, hypixelProfile) {
     }
   }
 
-  const totalKuudraCollection = Object.entries(
-    userProfile.nether_island_player_data?.kuudra_completed_tiers ?? {}
-  ).map(([key, value]) => {
-    if (constants.KUUDRA_TIERS[key] === undefined) return 0;
-    
-    return parseInt(value) * constants.KUUDRA_TIERS[key].collection;
-  }).reduce((a, b) => a + b, 0);
+  const totalKuudraCollection = Object.entries(userProfile.nether_island_player_data?.kuudra_completed_tiers ?? {})
+    .map(([key, value]) => {
+      if (constants.KUUDRA_TIERS[key] === undefined) return 0;
+
+      return parseInt(value) * constants.KUUDRA_TIERS[key].collection;
+    })
+    .reduce((a, b) => a + b, 0);
 
   collections["kuudra"] = {
     name: boss_data.kuudra.name,
     texture: boss_data.kuudra.texture,
     tier: 0,
-    maxed: totalKuudraCollection >= Math.max(...Object.values(collection_data.kuudra.rewards).map(reward => reward.required)),
+    maxed:
+      totalKuudraCollection >=
+      Math.max(...Object.values(collection_data.kuudra.rewards).map((reward) => reward.required)),
     killed: totalKuudraCollection,
     floors: {},
     unclaimed: 0,
