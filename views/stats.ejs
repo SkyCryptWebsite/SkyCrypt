@@ -1660,7 +1660,11 @@ const metaDescription = getMetaDescription()
                   <span class="stat-name">Farming Weight</span><br>
                   <br/>
                   <span class="stat-name">Crop Weight: </span><span class="stat-value"><%= parseFloat(calculated.weight.farming.crop_weight.toFixed(2)).toLocaleString() %></span><br>
-                  <% for (const crop of Object.values(calculated.weight.farming.crops)) { %>
+                  <% for (const crop of Object.values(calculated.weight.farming.crops).sort((a, b) => {
+                    const nameA = a.name.toLowerCase();
+                    const nameB = b.name.toLowerCase();
+                    return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+                  })) { %>
                     <div class="tippy-explanation"><%= crop.name %>: <%= parseFloat(crop.weight.toFixed(2)).toLocaleString() %></div>
                   <% } %>
                   <span class="stat-name">Bonus Weight: </span><span class="stat-value"><%= parseFloat(calculated.weight.farming.bonus_weight.toFixed(2)).toLocaleString() %></span><br>
