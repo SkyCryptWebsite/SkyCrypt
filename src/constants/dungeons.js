@@ -399,7 +399,7 @@ export const DUNGEONS = {
     },
     the_study: {
       name: "The Study",
-      pages: 8,
+      pages: 9,
     },
     expedition_volume_1: {
       name: "The Expedition Volume 1",
@@ -446,20 +446,52 @@ export const DUNGEONS = {
       pages: 14,
     },
     the_apprentice_2: {
-      name: "The Apprentice 2",
+      name: "The Apprentice, Part 2",
       pages: 14,
     },
     the_apprentice_3: {
-      name: "The Apprentice 3",
-      pages: 34,
+      name: "The Apprentice, Part 3",
+      pages: 25,
     },
     the_follower_2: {
-      name: "The Follower 2",
-      pages: 13,
+      name: "The Follower, Part 2",
+      pages: 11,
     },
     murderer: {
       name: "Murderer",
-      pages: 18,
+      pages: 17,
+    },
+    the_follower_3: {
+      name: "The Follower, Part 3",
+      pages: 9,
+    },
+    the_father: {
+      name: "The Father",
+      pages: 5,
+    },
+    the_watcher: {
+      name: "The Watcher",
+      pages: 11,
+    },
+    memories: {
+      name: "Memories",
+      pages: 70,
+    },
+    the_orb: {
+      name: "The Orb",
+      pages: 6,
+    },
+    necrons_dilemma: {
+      name: "Necron's Dilemma",
+      pages: 10,
+    },
+    necrons_magic_scroll: {
+      name: "Necron's Magic Scroll",
+      pages: 0,
+    },
+    until_we_meet_again: {
+      name: "Until we meet again",
+      pages: 10,
     },
   },
 };

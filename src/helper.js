@@ -7,6 +7,7 @@ import retry from "async-retry";
 import path from "path";
 import fs from "fs-extra";
 import { fileURLToPath } from "url";
+import { getPrices } from "skyhelper-networth";
 
 export { renderLore, formatNumber } from "../common/formatting.js";
 export * from "../common/helper.js";
@@ -23,6 +24,7 @@ import {
   RARITY_COLORS,
   HOTM,
   TYPE_TO_CATEGORIES,
+  ENCHANTMENTS_TO_CATEGORIES,
   PET_DATA,
   PET_RARITY_OFFSET,
   PET_LEVELS,
@@ -452,7 +454,7 @@ export function getPrice(orderSummary) {
   return orders.reduce((mean, value) => mean + (value[0] * value[1]) / totalWeight, 0);
 }
 
-export function getPrices(product) {
+export function getBazaarPrices(product) {
   return {
     buyPrice: getPrice(product.buy_summary),
     sellPrice: getPrice(product.sell_summary),
@@ -915,7 +917,7 @@ export function convertHMS(seconds, format = "clock", alwaysTwoDigits = false) {
   }
 }
 
-export function parseItemTypeFromLore(lore) {
+export function parseItemTypeFromLore(lore, item) {
   const regex = new RegExp(
     `^(?<recomb>a )?(?<shiny>SHINY )?(?:(?<rarity>${RARITIES.map((x) => x.replaceAll("_", " ").toUpperCase()).join(
       "|"
@@ -947,7 +949,7 @@ export function parseItemTypeFromLore(lore) {
   // Parsing the match and returning data
   const r = match.groups;
   return {
-    categories: r.type ? getCategoriesFromType(r.type.trim().toLowerCase()) : [],
+    categories: r.type ? getCategories(r.type.trim().toLowerCase(), item) : [],
     rarity: r.rarity.replaceAll(" ", "_").toLowerCase(),
     recombobulated: !!r.recomb && !!r.recomb2,
     dungeon: !!r.dungeon,
@@ -997,8 +999,17 @@ export function getCacheFilePath(dirPath, type, name, format = "png") {
   return path.resolve(dirPath, `${subdirs.join("/")}/${type}_${name}.${format}`);
 }
 
-function getCategoriesFromType(type) {
-  return TYPE_TO_CATEGORIES[type] ?? ["unknown"];
+function getCategories(type, item) {
+  const categories = [];
+
+  const enchantments = item?.tag?.ExtraAttributes?.enchantments || {};
+  Object.keys(enchantments).forEach((enchantment) =>
+    Object.entries(ENCHANTMENTS_TO_CATEGORIES).forEach(
+      ([category, enchantmentList]) => enchantmentList.includes(enchantment) && categories.push(category)
+    )
+  );
+
+  return [...new Set(categories.concat(TYPE_TO_CATEGORIES[type]))];
 }
 
 export function generateDebugPets(type = "ALL") {
@@ -1093,4 +1104,12 @@ export async function getLeaderboardPosition(lb, data) {
   console.log(`Returning position of ${data} in ${lb} leaderboard in ${Date.now() - timeNow}ms`);
 
   return results[0][1] || 0;
+}
+
+export async function getItemPrice(item) {
+  if (!item) return 0;
+
+  const prices = await getPrices(true);
+
+  return prices[item.toLowerCase()] || prices[getId(item).toLowerCase()] || 0;
 }
