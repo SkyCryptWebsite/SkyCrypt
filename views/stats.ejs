@@ -2792,7 +2792,8 @@ const metaDescription = getMetaDescription()
           </div>
           <p class="stat-raw-values">
             <% for(const key in calculated.misc.damage){ %>
-            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= Math.floor(calculated.misc.damage[key]).toLocaleString() %></span><br>
+              <% const damage = calculated.misc.damage[key] > 100_000_000_000 ? helper.formatNumber(Math.floor(calculated.misc.damage[key]).toFixed(0), true) : Math.floor(calculated.misc.damage[key]).toLocaleString(); %>
+            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= damage %></span><br>
             <% } %>
           </p>
           <% } %>
