@@ -972,7 +972,7 @@ const metaDescription = getMetaDescription()
         <a class="nav-item" href="#Minions">Minions</a>
         <% if (calculated.bestiary?.categories){ %><a class="nav-item" href="#Bestiary">Bestiary</a><% } %>
         <% if(Object.keys(calculated.collections).length > 0){ %><a class="nav-item" href="#Collections">Collections</a><% } %>
-        <% if(Object.keys(calculated.crimsonIsles.kuudra_completed_tiers).length > 0 || Object.keys(calculated.crimsonIsles.dojo).length > 0){ %><a class="nav-item" href="#Crimson_Isle">Crimson Isle</a><% } %>
+        <% if (calculated.visited_zones.includes("crimson_isle") === true) { %><a class="nav-item" href="#Crimson_Isle">Crimson Isle</a><% } %>
         <% if(Object.keys(calculated.misc).length > 0){ %><a class="nav-item" href="#Misc"><abbr title="Miscellaneous">Misc</abbr></a><% } %>
       </div>
     </div>
@@ -1495,7 +1495,7 @@ const metaDescription = getMetaDescription()
             </div>
             <% } %>
 
-            <% if (!mining.core) { %>
+            <% if (mining.core === undefined || calculated.visited_modes.includes("crystal_hollows") === false || calculated.visited_modes.includes("mining_3") === false) { %>
             <p class="no-access"><%= calculated.display_name %> hasn't visited Dwarven Mines or Crystal Hollows yet.</p>
             <% } else { %>
             <p class="stat-sub-header">Dwarven Mines & Crystal Hollows</p>
@@ -1617,7 +1617,6 @@ const metaDescription = getMetaDescription()
             <div id="inventory_container">
               <inventory-view inventory-type="hotm"></inventory-view>
             </div>
-            <% } %>
 
             <p class="stat-sub-header">Forge</p>
             <%
@@ -1642,6 +1641,7 @@ const metaDescription = getMetaDescription()
             <p class="stat-raw-values">No items currently forging!</p>
             <% } %>
           </div>
+            <% } %>
 
           <% if(calculated.farming.talked){ %>
           <div class="stat-farming">
@@ -2423,7 +2423,7 @@ const metaDescription = getMetaDescription()
         </div>
       </div>
       <% } %>
-      <%if (Object.keys(calculated.crimsonIsles.kuudra_completed_tiers).length > 0 || Object.keys(calculated.crimsonIsles.dojo).length > 0) { %>
+      <% if (calculated.visited_zones.includes("crimson_isle") === true) { %>
       <div class="stat-container stat-collections">
         <a class="stat-anchor" id="Crimson_Isle"></a>
         <h2 class="stat-header">Crimson Isle</h2>
