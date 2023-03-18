@@ -529,15 +529,37 @@ function getDescription() {
     description.push(line.join(' '), '\n', '\n')
   }
 
-	// Avg. skill
-	if (calculated.average_level) {
-		description.push(
-			`📚 Avg Skill Level: ${
-				Math.floor(calculated.average_level * 10) / 10
-			} `
-		)
-		description.push('\n')
+  // Skyblock Level
+  if (calculated.skyblock_level.xp !== 0 && calculated.skyblock_level.level !== 0) {
+    description.push(
+      `🌟 Skyblock Level: ${calculated.skyblock_level.level + calculated.skyblock_level.progress}`,
+      '\n'
+    )
   }
+
+
+
+	if (calculated.average_level || calculated.dungeons.class_average) {
+    // Skill Average
+    if (calculated.average_level) {
+      description.push(
+        `📚 Avg Skill Level: ${
+          Math.floor(calculated.average_level * 10) / 10
+        } `
+      )
+    }
+
+    // Dungeons classs average
+    if (calculated.dungeons.class_average) {
+      description.push(
+        `⚔️  Avg Class Level: ${
+          Math.floor(calculated.dungeons.class_average.avrg_level_with_progress * 10) / 10
+        } `
+      )
+    }
+
+    description.push('\n')
+	}
 
 	// Weights
 	if (calculated.weight) {
@@ -552,13 +574,21 @@ function getDescription() {
 		description.push('\n')
 	}
 
-  // Bank & purse
-  if (calculated.bank) {
+	// Networth, Bank & purse
+  if (calculated.networth.noInventory === false) {
+      description.push(
+        `💸 Networth: ${helper.formatNumber(calculated.networth.networth, true)} `
+      )
+  }
+
+	if (calculated.bank) {
 		description.push(
 			`🏦 Bank: ${helper.formatNumber(calculated.bank, true)} `
 		)
 	}
-	description.push(`💰 Purse: ${helper.formatNumber(calculated.purse, true)}`)
+	description.push(
+    `💰 Purse: ${helper.formatNumber(calculated.purse, true)}`
+  )
 
 function getHighestRaritySword() {
 	let highestRaritySword
@@ -1690,7 +1720,7 @@ const metaDescription = getMetaDescription()
                   <div class="item-icon icon-<%= crop.icon %>"></div>
                 </div>
                 <div class="chip-text">
-                  <div class="collection-name <%= crop.unique_gold ? 'max-minion' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
+                  <div class="collection-name <%= crop.unique_gold ? 'max-stat' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
                   <div class="collection-amount">
                     <small class="stat-name">Personal Best: </small><small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small><br>
                     <small class="stat-name">Contests: </small><small class="stat-value"><%= crop.contests.toLocaleString() %></small><br>
@@ -2758,7 +2788,8 @@ const metaDescription = getMetaDescription()
           </div>
           <p class="stat-raw-values">
             <% for(const key in calculated.misc.damage){ %>
-            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= Math.floor(calculated.misc.damage[key]).toLocaleString() %></span><br>
+              <% const damage = calculated.misc.damage[key] > 100_000_000_000 ? helper.formatNumber(Math.floor(calculated.misc.damage[key]).toFixed(0), true) : Math.floor(calculated.misc.damage[key]).toLocaleString(); %>
+            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= damage %></span><br>
             <% } %>
           </p>
           <% } %>
