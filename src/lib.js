@@ -714,7 +714,7 @@ async function processItems(base64, source, customTextures = false, packs, cache
       }
 
       if (item.extra?.price_paid) {
-        itemLore.push(`§7Price Paid at Dark Auction: §b${item.extra.price_paid.toLocaleString()} coins`);
+        itemLore.push("", `§7Price Paid at Dark Auction: §6${item.extra.price_paid.toLocaleString()} Coins`);
       }
     }
 
