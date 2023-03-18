@@ -402,7 +402,7 @@ async function processItems(base64, source, customTextures = false, packs, cache
       const { farmed_cultivating } = item.tag.ExtraAttributes;
 
       if (farmed_cultivating > 0) {
-        item.extra.farmed_cultivating = farmed_cultivating;
+        item.extra.farmed_cultivating = item.tag?.ExtraAttributes?.mined_crops?.toString() ?? farmed_cultivating;
       }
     }
 
@@ -555,7 +555,7 @@ async function processItems(base64, source, customTextures = false, packs, cache
 
     if (lore.length > 0) {
       // item categories, rarity, recombobulated, dungeon, shiny
-      const itemType = helper.parseItemTypeFromLore(lore);
+      const itemType = helper.parseItemTypeFromLore(lore, item);
 
       for (const key in itemType) {
         item[key] = itemType[key];
@@ -1092,7 +1092,6 @@ export const getItems = async (
 
     accessories.push(insertAccessory);
     accessoryIds.push(id);
-    accessoryRarities[insertAccessory.rarity]++;
     if (insertAccessory.isInactive === false) {
       accessoryRarities[insertAccessory.rarity]++;
       if (id == "HEGEMONY_ARTIFACT") {
@@ -3191,9 +3190,11 @@ export function getDungeons(userProfile, hypixelProfile) {
     journal_entries: dungeons.dungeon_journal.unlocked_journals,
   };
 
-  for (const entryID of dungeons.dungeon_journal.unlocked_journals) {
-    journals.journals_completed += 1;
-    journals.pages_collected += JOURNAL_CONSTANTS[entryID]?.pages || 0;
+  if (dungeons.dungeon_journal.unlocked_journals !== undefined) {
+    for (const entryID of dungeons.dungeon_journal.unlocked_journals) {
+      journals.journals_completed += 1;
+      journals.pages_collected += JOURNAL_CONSTANTS[entryID]?.pages || 0;
+    }
   }
 
   for (const journal in JOURNAL_CONSTANTS) {

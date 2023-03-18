@@ -27,6 +27,7 @@ import {
   RARITY_COLORS,
   HOTM,
   TYPE_TO_CATEGORIES,
+  ENCHANTMENTS_TO_CATEGORIES,
   PET_DATA,
   PET_RARITY_OFFSET,
   PET_LEVELS,
@@ -919,7 +920,7 @@ export function convertHMS(seconds, format = "clock", alwaysTwoDigits = false) {
   }
 }
 
-export function parseItemTypeFromLore(lore) {
+export function parseItemTypeFromLore(lore, item) {
   const regex = new RegExp(
     `^(?<recomb>a )?(?<shiny>SHINY )?(?:(?<rarity>${RARITIES.map((x) => x.replaceAll("_", " ").toUpperCase()).join(
       "|"
@@ -951,7 +952,7 @@ export function parseItemTypeFromLore(lore) {
   // Parsing the match and returning data
   const r = match.groups;
   return {
-    categories: r.type ? getCategoriesFromType(r.type.trim().toLowerCase()) : [],
+    categories: r.type ? getCategories(r.type.trim().toLowerCase(), item) : [],
     rarity: r.rarity.replaceAll(" ", "_").toLowerCase(),
     recombobulated: !!r.recomb && !!r.recomb2,
     dungeon: !!r.dungeon,
@@ -959,8 +960,17 @@ export function parseItemTypeFromLore(lore) {
   };
 }
 
-function getCategoriesFromType(type) {
-  return TYPE_TO_CATEGORIES[type] ?? ["unknown"];
+function getCategories(type, item) {
+  const categories = [];
+
+  const enchantments = item?.tag?.ExtraAttributes?.enchantments || {};
+  Object.keys(enchantments).forEach((enchantment) =>
+    Object.entries(ENCHANTMENTS_TO_CATEGORIES).forEach(
+      ([category, enchantmentList]) => enchantmentList.includes(enchantment) && categories.push(category)
+    )
+  );
+
+  return [...new Set(categories.concat(TYPE_TO_CATEGORIES[type]))];
 }
 
 export function generateDebugPets(type = "ALL") {

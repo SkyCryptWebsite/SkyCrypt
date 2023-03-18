@@ -21,63 +21,125 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const skew_a = 26 / 45;
 const skew_b = skew_a * 2;
 
+/**
+ * Check if a canvas image has transparency
+ * @param {HTMLCanvasElement} canvas - The canvas to check for transparency
+ * @returns {Boolean} - Returns true if the canvas has any transparent pixels, false otherwise
+ */
 function hasTransparency(canvas) {
+  // Get 2D context of canvas
   const ctx = canvas.getContext("2d");
+
+  // Get image data of canvas
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
+  // Loop through all the pixels in the image data
   for (let i = 3; i < imageData.length; i += 4) {
+    // Check the alpha channel (the 4th value) of each pixel
     if (imageData[i] < 255) {
+      // Return true if any alpha value is less than 255 (not fully opaque)
       return true;
     }
   }
 
+  // Return false if all alpha values are 255 (fully opaque)
   return false;
 }
 
+/**
+ * Resizes an image using canvas
+ * @param {HTMLCanvasElement | HTMLImageElement | HTMLVideoElement} src - The source image to resize
+ * @param {Number} scale - The scale factor to resize the image by
+ * @returns {HTMLCanvasElement} - A canvas element with the resized image
+ */
 function resize(src, scale) {
+  // Create a new canvas with resized dimensions
   const dst = createCanvas(scale * src.width, scale * src.height);
+  // Get 2D context of the new canvas
   const ctx = dst.getContext("2d");
 
-  // don't blur on resize
+  // Set the pattern quality to "fast" to avoid blurring on resize
   ctx.patternQuality = "fast";
 
+  // Draw the source image onto the new canvas with resized dimensions
   ctx.drawImage(src, 0, 0, src.width * scale, src.height * scale);
+
+  // Return the resized canvas
   return dst;
 }
 
+/**
+ * Crops and resizes an image using canvas
+ * @param {HTMLCanvasElement | HTMLImageElement | HTMLVideoElement} src - The source image to crop and resize
+ * @param {Number} x - The x coordinate of the top left corner of the crop area
+ * @param {Number} y - The y coordinate of the top left corner of the crop area
+ * @param {Number} width - The width of the crop area
+ * @param {Number} height - The height of the crop area
+ * @param {Number} scale - The scale factor to resize the cropped image by
+ * @returns {HTMLCanvasElement} - A canvas element with the cropped and resized image
+ */
 function getPart(src, x, y, width, height, scale) {
+  // Create a new canvas with resized dimensions
   const dst = createCanvas(scale * width, scale * height);
+  // Get 2D context of the new canvas
   const ctx = dst.getContext("2d");
 
-  // don't blur on resize
+  // Set the pattern quality to "fast" to avoid blurring on resize
   ctx.patternQuality = "fast";
 
+  // Draw the cropped area of the source image onto the new canvas with resized dimensions
   ctx.drawImage(src, x, y, width, height, 0, 0, width * scale, height * scale);
+
+  // Return the cropped and resized canvas
   return dst;
 }
 
+/**
+ * Flips an image horizontally using canvas
+ * @param {HTMLCanvasElement | HTMLImageElement | HTMLVideoElement} src - The source image to flip
+ * @returns {HTMLCanvasElement} - A canvas element with the flipped image
+ */
 function flipX(src) {
+  // Create a new canvas with the same dimensions as the source image
   const dst = createCanvas(src.width, src.height);
+  // Get 2D context of the new canvas
   const ctx = dst.getContext("2d");
 
+  // Translate the context to the center of the canvas
   ctx.translate(src.width, 0);
+  // Flip the context horizontally
   ctx.scale(-1, 1);
 
+  // Draw the source image onto the new canvas
   ctx.drawImage(src, 0, 0);
+
+  // Return the flipped canvas
   return dst;
 }
 
+/**
+ * Darkens an image using canvas
+ * @param {HTMLCanvasElement | HTMLImageElement | HTMLVideoElement} src - The source image to darken
+ * @param {Number} factor - A value between 0 and 1 representing the degree of darkness to apply
+ * @returns {HTMLCanvasElement} - A canvas element with the darkened image
+ */
 function darken(src, factor) {
+  // Create a new canvas with the same dimensions as the source image
   const dst = createCanvas(src.width, src.height);
+  // Get 2D context of the new canvas
   const ctx = dst.getContext("2d");
 
+  // Draw the source image onto the new canvas
   ctx.drawImage(src, 0, 0);
 
+  // Set the composite operation to "source-atop"
   ctx.globalCompositeOperation = "source-atop";
 
+  // Fill the canvas with a black rectangle with the specified opacity
   ctx.fillStyle = `rgba(0, 0, 0, ${factor})`;
   ctx.fillRect(0, 0, src.width, src.height);
 
+  // Return the darkened canvas
   return dst;
 }
 
@@ -113,7 +175,7 @@ async function renderColoredItem(color, baseImage, overlayImage) {
 
   ctx.drawImage(overlayImage, 0, 0);
 
-  return await canvas.toBuffer("image/png");
+  return canvas.toBuffer("image/png");
 }
 
 /**
@@ -295,7 +357,7 @@ async function renderHead(textureId, scale) {
   );
   ctx.drawImage(hat_canvas, 0, 0);
 
-  return await canvas.toBuffer("image/png");
+  return canvas.toBuffer("image/png");
 }
 
 /**
@@ -323,10 +385,22 @@ export async function getArmor(type, color) {
   return file;
 }
 
+/**
+ * Loads and renders an armor with the specified type and color.
+ *
+ * @async
+ * @param {string} type - The type of the armor to be rendered.
+ * @param {string} color - The color of the armor to be rendered.
+ * @returns {Promise<Image>} The rendered armor image.
+ */
 async function renderArmor(type, color) {
-  const armorBase = await loadImage(path.resolve(textureDir, `leather_${type}.png`));
-  const armorOverlay = await loadImage(path.resolve(textureDir, `leather_${type}_overlay.png`));
+  // Load the base image and overlay image of the armor
+  const [armorBase, armorOverlay] = await Promise.all([
+    loadImage(path.resolve(textureDir, `leather_${type}.png`)),
+    loadImage(path.resolve(textureDir, `leather_${type}_overlay.png`)),
+  ]);
 
+  // Return the rendered colored item
   return await renderColoredItem("#" + color, armorBase, armorOverlay);
 }
 
@@ -355,12 +429,22 @@ export async function getPotion(type, color) {
   return file;
 }
 
+/**
+ * Loads and renders a potion with the specified type and color.
+ *
+ * @async
+ * @param {string} type - The type of the potion to be rendered.
+ * @param {string} color - The color of the potion to be rendered.
+ * @returns {Promise<Image>} The rendered potion image.
+ */
 async function renderPotion(type, color) {
-  const potionLiquid = await loadImage(path.resolve(textureDir, "potion_overlay.png"));
-  const potionBottlle = await loadImage(
-    path.resolve(textureDir, type === "splash" ? "splash_potion.png" : "potion.png")
-  );
+  // Load the liquid image and bottle image of the potion
+  const [potionLiquid, potionBottlle] = await Promise.all([
+    loadImage(path.resolve(textureDir, "potion_overlay.png")),
+    loadImage(path.resolve(textureDir, type === "splash" ? "splash_potion.png" : "potion.png")),
+  ]);
 
+  // Return the rendered colored item
   return await renderColoredItem("#" + color, potionLiquid, potionBottlle);
 }
 
@@ -388,7 +472,7 @@ export async function renderItem(skyblockId, query) {
 
     const coords = rule.declarations[0].value.split(" ").map((a) => Math.abs(parseInt(a)));
 
-    outputTexture.image = await getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer("image/png");
+    outputTexture.image = getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer("image/png");
   }
 
   if ("texture" in item) {
@@ -408,7 +492,7 @@ export async function renderItem(skyblockId, query) {
 
     outputTexture.path = customTexture.path;
     outputTexture.debug = customTexture.debug;
-    outputTexture.image = await fs.readFile(path.resolve(__dirname, "..", "public", customTexture.path));
+    outputTexture.image = fs.readFileSync(path.resolve(__dirname, "..", "public", customTexture.path));
   }
 
   if (!("image" in outputTexture)) {
@@ -419,8 +503,8 @@ export async function renderItem(skyblockId, query) {
 }
 
 export async function init() {
-  itemsSheet = await loadImage(path.resolve(__dirname, "..", "public", "resources", "img", "inventory", `items.png`));
-  itemsCss = css.parse(
-    await fs.readFile(path.resolve(__dirname, "..", "public", "resources", "css", `inventory.css`), "utf8")
-  );
+  [itemsSheet, itemsCss] = await Promise.all([
+    loadImage(path.resolve(__dirname, "..", "public", "resources", "img", "inventory", `items.png`)),
+    css.parse(fs.readFileSync(path.resolve(__dirname, "..", "public", "resources", "css", `inventory.css`), "utf8")),
+  ]);
 }
