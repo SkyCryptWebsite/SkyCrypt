@@ -26,7 +26,8 @@
     "scss:watch": "sass --watch public/resources/scss:public/resources/css",
     "rollup": "npx rollup -c",
     "rollup:watch": "npx rollup -c -w",
-    "nodemon": "nodemon index"
+    "nodemon": "nodemon index",
+    "benchmark:get-texture": "node misc/benchmarks/get-texture.js"
   },
   "repository": {
     "type": "git",
