@@ -1,0 +1,6 @@
+{
+	"parent": "item/skyblock/pet",
+	"textures": {
+		"0": "./magma_cube"
+	}
+}
