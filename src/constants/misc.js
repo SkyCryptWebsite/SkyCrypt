@@ -151,6 +151,7 @@ export const AREA_NAMES = {
   mining_1: "Gold Mine",
   mining_2: "Deep Caverns",
   mining_3: "Dwarven Mines",
+  crystal_hollows: "Crystal Hollows",
   combat_1: "Spider's Den",
   crimson_isle: "Crimson Isle",
   combat_3: "The End",
