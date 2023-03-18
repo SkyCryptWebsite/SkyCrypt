@@ -19,6 +19,7 @@ import { db } from "./mongo.js";
 import { redisClient } from "./redis.js";
 import { calculateLilyWeight } from "./weight/lily-weight.js";
 import { calculateSenitherWeight } from "./weight/senither-weight.js";
+import { getLeaderboardPosition } from "./helper/leaderboards.js";
 
 const mcData = minecraftData("1.8.9");
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -1566,7 +1567,7 @@ async function getLevels(userProfile, hypixelProfile, levelCaps, profileMembers)
   const skillNames = Object.keys(output.levels);
 
   for (const skill of skillNames) {
-    output.levels[skill].rank = await helper.getLeaderboardPosition(`skill_${skill}_xp`, output.levels[skill].xp);
+    output.levels[skill].rank = await getLeaderboardPosition(`skill_${skill}_xp`, output.levels[skill].xp);
   }
 
   output.average_level_rank = await redisClient.zcount([`lb_average_level`, output.average_level, "+inf"]);
@@ -2131,7 +2132,7 @@ export async function getStats(
     progress: (userProfile.leveling?.experience % 100) / 100 || 0,
     xpCurrent: userProfile.leveling?.experience % 100 || 0,
     xpForNext: 100,
-    rank: await helper.getLeaderboardPosition("skyblock_level_xp", userProfile.leveling?.experience || 0),
+    rank: await getLeaderboardPosition("skyblock_level_xp", userProfile.leveling?.experience || 0),
   };
 
   // MISC
@@ -3036,7 +3037,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
       floors: floors,
     };
 
-    output[type].level.rank = await helper.getLeaderboardPosition(`dungeons_${type}_xp`, dungeon.experience);
+    output[type].level.rank = await getLeaderboardPosition(`dungeons_${type}_xp`, dungeon.experience);
   }
 
   // Classes
@@ -3057,7 +3058,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
       current: false,
     };
 
-    output.classes[className].experience.rank = await helper.getLeaderboardPosition(
+    output.classes[className].experience.rank = await getLeaderboardPosition(
       `dungeons_class_${className}_xp`,
       data.experience
     );
@@ -3829,10 +3830,7 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
     values[`skill_${skill}_xp`] = getMax(memberProfiles, "data", "levels", "levels", skill, "xp");
   }
 
-  for (const key of getAllKeys(memberProfiles, "data", "skyblock_level")) {
-    values[`skyblock_level_${key}`] = getMax(memberProfiles, "data", "skyblock_level", key);
-  }
-
+  values[`skyblock_level_xp`] = getMax(memberProfiles, "data", "skyblock_level", "xp");
   values["slayer_xp"] = getMax(memberProfiles, "data", "slayer_xp");
 
   for (const slayer of getAllKeys(memberProfiles, "data", "slayer_bosses")) {

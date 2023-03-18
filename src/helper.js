@@ -12,7 +12,6 @@ import { getPrices } from "skyhelper-networth";
 export { renderLore, formatNumber } from "../common/formatting.js";
 export * from "../common/helper.js";
 import { titleCase } from "../common/helper.js";
-import { redisClient } from "./redis.js";
 
 import {
   GUILD_XP,
@@ -1091,19 +1090,6 @@ export function getAnimatedTexture(item) {
   });
 
   return deepResults[0] ?? false;
-}
-
-export async function getLeaderboardPosition(lb, data) {
-  const timeNow = Date.now();
-  const multi = redisClient.pipeline();
-
-  multi.zcount(`lb_${lb}`, data, "+inf");
-
-  const results = await multi.exec();
-
-  console.log(`Returning position of ${data} in ${lb} leaderboard in ${Date.now() - timeNow}ms`);
-
-  return results[0][1] || 0;
 }
 
 export async function getItemPrice(item) {
