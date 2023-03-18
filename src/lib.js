@@ -1119,11 +1119,8 @@ export const getItems = async (
     for (const accessory of items.filter((a) => a.categories.includes("accessory"))) {
       const id = helper.getId(accessory);
 
-      const insertAccessory = Object.assign({ isUnique: true, isInactive: true }, accessory);
+      const insertAccessory = Object.assign({ isUnique: false, isInactive: true }, accessory);
 
-      if (accessories.find((a) => helper.getId(a) == id) != undefined) {
-        insertAccessory.isUnique = false;
-      }
 
       accessories.push(insertAccessory);
       accessoryIds.push(id);
@@ -1134,55 +1131,12 @@ export const getItems = async (
   for (const accessory of accessories.concat(armor)) {
     const id = helper.getId(accessory);
 
-    if (id.startsWith("CAMPFIRE_TALISMAN_")) {
-      const tier = parseInt(id.split("_").pop());
-
-      const maxTier = Math.max(
-        ...accessories
-          .filter((a) => helper.getId(a).startsWith("CAMPFIRE_TALISMAN_"))
-          .map((a) => helper.getId(a).split("_").pop())
-      );
-
-      if (tier < maxTier) {
-        accessory.isUnique = false;
-        accessory.isInactive = true;
-      }
-
-      accessoryIds.splice(accessoryIds.indexOf(id), 1, `CAMPFIRE_TALISMAN_${maxTier}`);
-    }
-
-    if (id.startsWith("WEDDING_RING_")) {
-      const tier = parseInt(id.split("_").pop());
-
-      const maxTier = Math.max(
-        ...accessories
-          .filter((a) => helper.getId(a).startsWith("WEDDING_RING_"))
-          .map((a) => helper.getId(a).split("_").pop())
-      );
-
-      if (tier < maxTier) {
-        accessory.isUnique = false;
-        accessory.isInactive = true;
-      }
-
-      accessoryIds.splice(accessoryIds.indexOf(id), 1, `WEDDING_RING_${maxTier}`);
-    }
-
-    if (id.startsWith("PARTY_HAT_CRAB")) {
-      const CRAB_HAT = accessories.find((a) => helper.getId(a) == `PARTY_HAT_CRAB`);
-      const CRAB_HAT_ANIMATED = accessories.find((a) => helper.getId(a) == `PARTY_HAT_CRAB_ANIMATED`);
-
-      if (CRAB_HAT && CRAB_HAT_ANIMATED) {
-        CRAB_HAT.isUnique = false;
-        CRAB_HAT.isInactive = true;
-      }
-    }
-
     if (id in constants.accessoryAliases) {
       const accessoryDuplicates = constants.accessoryAliases[id];
 
       if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a))) != undefined) {
         accessory.isUnique = false;
+        accessory.isInactive = true;
       }
     }
   }
