@@ -1121,7 +1121,6 @@ export const getItems = async (
 
       const insertAccessory = Object.assign({ isUnique: false, isInactive: true }, accessory);
 
-
       accessories.push(insertAccessory);
       accessoryIds.push(id);
     }
