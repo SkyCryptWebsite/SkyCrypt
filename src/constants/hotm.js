@@ -640,21 +640,6 @@ class Mole extends Node {
       percent = 100;
     }
 
-    switch (blocks) {
-      case 1:
-        blocks = "1";
-        break;
-      case 2:
-        blocks = "a 2nd";
-        break;
-      case 3:
-        blocks = "a 3rd";
-        break;
-      default:
-        blocks = `a ${blocks}th`;
-        break;
-    }
-
     return [
       `§7When mining hard stone, you have a §a${percent}%§7 chance to mine §a${blocks}§7 adjacent hard stone block.`,
     ];
