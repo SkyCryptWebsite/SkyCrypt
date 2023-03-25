@@ -1895,9 +1895,7 @@ class Tarantula extends Pet {
     const mult = getValue(this.rarity, { epic: 0.5 });
     return {
       name: "§6Eight Legs",
-      desc: [
-        `§7Decreases the mana cost of Spider, Tarantula and Spirit boots by §a${round(this.level * mult, 1)}%§7.`,
-      ],
+      desc: [`§7Decreases the mana cost of Spider, Tarantula and Spirit boots by §a${round(this.level * mult, 1)}%§7.`],
     };
   }
 
