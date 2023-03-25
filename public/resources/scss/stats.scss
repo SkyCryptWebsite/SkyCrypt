@@ -1308,6 +1308,17 @@ a.additional-player-stat:hover {
   -webkit-mask-position: center center;
 }
 
+.piece-admin-bg,
+.style-scrollbar .piece-admin-bg + .item-lore::-webkit-scrollbar-thumb {
+  background-color: var(--§4);
+}
+.piece-admin-bg + .item-lore {
+  scrollbar-color: var(--§4) transparent;
+}
+.piece-admin-fg {
+  color: var(--§4) !important;
+}
+
 .piece-supreme-bg,
 .style-scrollbar .piece-supreme-bg + .item-lore::-webkit-scrollbar-thumb {
   background-color: var(--§4);
@@ -1422,6 +1433,9 @@ a.additional-player-stat:hover {
   --upgraded-from: #000;
   background-image: linear-gradient(to top right, transparent 0 90%, var(--upgraded-from) 90% 100%);
 
+  &.piece-admin-bg {
+    --upgraded-from: var(--§4);
+  }
   &.piece-very_special-bg {
     --upgraded-from: var(--§c);
   }
