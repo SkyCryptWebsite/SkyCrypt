@@ -1375,7 +1375,7 @@ class Horse extends Pet {
     const mult = getValue(this.rarity, { rare: 1.1, epic: 1.2 });
     return {
       name: "§6Run",
-      desc: [`§7Increase the speed of your mount by §a${round(this.level * mult, 1)}%§7.`],
+      desc: [`§7Increases the speed of your mount by §a${round(this.level * mult, 1)}%§7.`],
     };
   }
 
@@ -1670,7 +1670,7 @@ class SkeletonHorse extends Pet {
     const mult = getValue(this.rarity, { legendary: 1.5 });
     return {
       name: "§6Run",
-      desc: [`§7Increase the speed of your mount by §a${round(this.level * mult, 1)}%§7.`],
+      desc: [`§7Increases the speed of your mount by §a${round(this.level * mult, 1)}%§7.`],
     };
   }
 
@@ -1896,7 +1896,7 @@ class Tarantula extends Pet {
     return {
       name: "§6Eight Legs",
       desc: [
-        `§7Decreases the mana cost of Spider, Tarantula and Thorn's boots by §a${round(this.level * mult, 1)}%§7.`,
+        `§7Decreases the mana cost of Spider, Tarantula and Spirit boots by §a${round(this.level * mult, 1)}%§7.`,
       ],
     };
   }
@@ -3297,7 +3297,7 @@ class Reindeer extends Pet {
 
   get first() {
     return {
-      name: "§6Water Sprint",
+      name: "§6Winter Sprint",
       desc: [`§7Gain §ddouble §7pet §aEXP§7.`],
     };
   }
