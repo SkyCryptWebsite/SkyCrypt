@@ -107,6 +107,7 @@ export const MOB_NAMES = {
   master_sadan_statue: "Master Terracotta",
   master_tentaclees: "Master Fels",
   maxor: "Necron",
+  pig_rider: "Taurus",
 };
 
 export const RACE_OBJECTIVE_TO_STAT_NAME = {
