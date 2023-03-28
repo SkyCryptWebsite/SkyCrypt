@@ -1448,6 +1448,12 @@ const metaDescription = getMetaDescription()
                   <div class="inventory-tab-name">Quiver</div>
                 </button>
                 <% } %>
+                <% if(items.sacks.length > 0){ %>
+                  <div class="inventory-tab" data-inventory-type="sacks">
+                      <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/fb49a2cb90737993201fe72a1f1ab75c5c93c28f047f685ffad5ab20c7b0caf0)"></div>
+                      <div class="inventory-tab-name">Sacks</div>
+                  </div>
+                <% } %>
               </div>
             </div>
             <inventory-view></inventory-view>

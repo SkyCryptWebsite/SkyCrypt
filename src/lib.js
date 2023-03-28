@@ -974,6 +974,21 @@ export const getItems = async (
   output.storage = storage;
   output.hotm = hotm;
   output.candy_bag = candy_bag;
+  
+  const sacks = "sacks_counts" in profile ? await getSacks(profile.sacks_counts, armor.concat(
+    equipment,
+    inventory,
+    enderchest,
+    accessory_bag,
+    fishing_bag,
+    quiver,
+    potion_bag,
+    personal_vault,
+    wardrobe_inventory,
+    storage,
+    hotm,
+  )) : [];
+  output.sacks = sacks;
 
   const allItems = armor.concat(
     equipment,
@@ -986,7 +1001,8 @@ export const getItems = async (
     personal_vault,
     wardrobe_inventory,
     storage,
-    hotm
+    hotm,
+    sacks
   );
 
   for (const [index, item] of allItems.entries()) {
@@ -2930,6 +2946,116 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
   }
 
   return output;
+}
+
+const BASE_SACK = {
+  Count: 1,
+  Damage: 3,
+  id: 397,
+  rarity: "epic",
+};
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+async function getSacks(sacks_counts, items) {
+  const sacks = [];
+
+  const timeNow = Date.now();
+  for (const sackId in constants.SACKS) {
+    const sack = constants.SACKS[sackId];
+
+    if (sack.items.filter((a) => Object.keys(sacks_counts).includes(a)).length == 0) {
+      continue;
+    }
+
+    const sackItem = Object.assign({}, BASE_SACK);
+
+    sackItem.texture_path = `/head/${sack.texture}`;
+    sackItem.display_name = _.startCase(sackId.toLowerCase());
+    sackItem.tag = {
+      display: {
+        Lore: [],
+        Name: `§5${sackItem.display_name}`,
+      },
+    };
+
+
+    if (sackId == "GEMSTONE_SACK") {
+      /*let line = '';
+
+          for (const tier in gem_tiers) {
+              line += constants.RARITY_COLORS[gem_tiers[tier]];
+              line += _.startCase(tier.toLowerCase());
+
+              if (tier != 'PERFECT') {
+                  line += '§8 / ';
+              }
+          }
+
+          sackItem.tag.display.Lore.push(line, '');
+
+          for (const gem in constants.gem_types) {
+              let line = constants.gem_types[gem];
+              line += `${_.startCase(gem.toLowerCase())}§8: `;
+
+              for (const tier in gem_tiers) {
+                  line += constants.RARITY_COLORS[gem_tiers[tier]];
+                  line += (sacks_counts[`${tier}_${gem}_GEM`] ?? 0).toLocaleString();
+
+                  if (tier != 'PERFECT') {
+                      line += '§8 / ';
+                  }
+              }
+
+              sackItem.tag.display.Lore.push(line);
+          }*/
+    } else {
+      sackItem.containsItems = [];
+
+      for (const [index, item] of sack.items.entries()) {
+        const hypixelItem = await db.collection("items").findOne({ id: constants.ITEM_SACKS[item] ?? item });
+
+        const itemName = hypixelItem?.name ?? "Unknown";
+
+        const itemDescription = items.find((itemm) => {
+          if (itemm.tag?.ExtraAttributes?.id === sackId) {
+            console.log(itemm)
+            return itemm
+          }
+        })
+
+        const sackContent = {
+          Count: 1,
+          sack_count: sacks_counts[item] ?? 0,
+          Damage: hypixelItem?.damage ?? 3,
+          id: hypixelItem?.item_id ?? 397,
+          itemIndex: index,
+          display_name: itemName,
+          tag: {
+            display: {
+              Name: `§a${itemName}`,
+              Lore: [`§8Stored: §e${(sacks_counts[item] ?? 0).toLocaleString()}`],
+            },
+          },
+          categories: [],
+        };
+
+        if (hypixelItem?.glowing === true) {
+          sackContent.tag.ench = [];
+        }
+
+        if (sackContent.id == 397 && hypixelItem?.texture) {
+          sackContent.texture_path = `/head/${hypixelItem.texture}`;
+        }
+
+        sackItem.containsItems.push(sackContent);
+      }
+    }
+
+    sacks.push(sackItem);
+  }
+
+  console.log("Parsed sacks in " + Date.now() - timeNow + "ms")
+  return sacks;
 }
 
 export function getBestiary(uuid, profile) {
