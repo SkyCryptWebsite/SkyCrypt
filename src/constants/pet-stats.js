@@ -2121,7 +2121,7 @@ class Zombie extends Pet {
     const mult = getValue(this.rarity, { common: 0.15, epic: 0.25 });
     return {
       name: "§6Chomp",
-      desc: [`§7Gain §a+${round(this.level * mult, 1)} §7HP per Zombie kill.`],
+      desc: [`§7Heal §c+${round(this.level * mult, 1)} ${SYMBOLS.health} §7per Zombie kill.`],
     };
   }
 

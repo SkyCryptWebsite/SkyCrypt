@@ -2616,9 +2616,8 @@ export async function getPets(profile, userProfile) {
       });
 
       // now we push the lore of the held items
-      if (!heldItemObj) {
-        heldItemObj = constants.PET_ITEMS[heldItem];
-      }
+      heldItemObj = constants.PET_ITEMS[heldItem] ?? constants.PET_ITEMS["???"];
+      
       lore.push("", `§6Held Item: §${constants.RARITY_COLORS[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
 
       if (heldItem in constants.PET_ITEMS) {
