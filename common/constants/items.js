@@ -29,4 +29,5 @@ export const RARITY_COLORS = {
   supreme: "4",
   special: "c",
   very_special: "c",
+  admin: "4",
 };
