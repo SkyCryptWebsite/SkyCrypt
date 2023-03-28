@@ -50,6 +50,6 @@ export const ENCHANTMENTS_TO_CATEGORIES = {
     "turbo_mushrooms",
     "turbo_potato",
     "turbo_warts",
-    "turbo_wheat"
+    "turbo_wheat",
   ],
 };
