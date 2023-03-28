@@ -36,17 +36,20 @@ export const TYPE_TO_CATEGORIES = {
 
 export const ENCHANTMENTS_TO_CATEGORIES = {
   farming_tool: [
-    "delicate",
-    "harvesting",
     "cultivating",
+    "dedication",
+    "delicate",
+    "green_thumb",
+    "harvesting",
     "replenish",
+    "sunder",
     "turbo_cacti",
     "turbo_cane",
     "turbo_carrot",
+    "turbo_coco",
     "turbo_mushrooms",
     "turbo_potato",
     "turbo_warts",
-    "turbo_wheat",
-    "sunder",
+    "turbo_wheat"
   ],
 };
