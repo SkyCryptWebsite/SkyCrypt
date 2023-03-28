@@ -558,6 +558,11 @@ export const PET_VALUE = {
   }
 */
 export const PET_ITEMS = {
+  "???": {
+    name: "???",
+    tier: "COMMON",
+    description: "§7???",
+  },
   PET_ITEM_ALL_SKILLS_BOOST_COMMON: {
     name: "All Skills Exp Boost",
     tier: "COMMON",
@@ -843,5 +848,19 @@ export const PET_ITEMS = {
       mining_speed: 0.5,
       mining_fortune: 0.5,
     },
+  },
+  YELLOW_BANDANA: {
+    name: "Yellow Bandana",
+    tier: "RARE",
+    description: `§7Grants §6+30 ${SYMBOLS.farming_fortune} Farming Fortune§7.`,
+    stats: {
+      farming_fortune: 30,
+    },
+  },
+  GREEN_BANDANA: {
+    name: "Green Bandana",
+    tier: "EPIC",
+    description: `§7Grants §6+4 ${SYMBOLS.farming_fortune} Farming Fortune§7 for each Garden Level unlocked.`,
+    // TODO: Add statsPerLevel once Garden data comes to the API
   },
 };
