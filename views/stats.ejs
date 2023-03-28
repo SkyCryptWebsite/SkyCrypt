@@ -2423,12 +2423,12 @@ const metaDescription = getMetaDescription()
         </div>
       </div>
       <% } %>
-      <% if (calculated.visited_zones.includes("crimson_isle") === false) { %>
-        <p class="no-access"><%= calculated.display_name %> hasn't visited Crimson Isle yet.</p>
-      <% } else { %>
       <div class="stat-container stat-collections">
         <a class="stat-anchor" id="Crimson_Isle"></a>
         <h2 class="stat-header">Crimson Isle</h2>
+        <% if (calculated.visited_zones.includes("crimson_isle") === false) { %>
+          <p class="no-access"><%= calculated.display_name %> hasn't visited Crimson Isle yet.</p>
+        <% } else { %>
         <% if (Object.keys(calculated.crimsonIsles.factions).length > 0) { %>
         <p class="stat-raw-values stat-kills">
           <span class="stat-name">Selected Faction: </span><span class="stat-value"><%= calculated.crimsonIsles.factions.selected_faction.replaceAll('mages', 'Mage').replaceAll('barbarians', 'Barbarian') %></span><br>
