@@ -7,9 +7,7 @@ import express from "express";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import bodyParser from "body-parser";
-import cors from "cors";
 
-import axios from "axios";
 import "axios-debug-log";
 
 import fs from "fs-extra";
@@ -33,10 +31,17 @@ import { SitemapStream, streamToPromise } from "sitemap";
 import { createGzip } from "zlib";
 import twemoji from "twemoji";
 import cookieParser from "cookie-parser";
-import { execSync } from "child_process";
 
-import * as api from "./routes/api.js";
-import * as apiv2 from "./routes/apiv2.js";
+import * as apiRoute from "./routes/api.js";
+import * as apiv2Route from "./routes/apiv2.js";
+
+import * as textureRoute from "./routes/texture.js";
+import * as capeRoute from "./routes/cape.js";
+
+import * as itemRoute from "./routes/item.js";
+import * as headRoute from "./routes/head.js";
+import * as leatherRoute from "./routes/leather.js";
+import * as potionRoute from "./routes/potion.js";
 
 const folderPath = helper.getFolderPath();
 
@@ -79,7 +84,7 @@ if (process.env.NODE_ENV == "development") {
  * // this is static and never changes so it should be cached forever
  * res.setHeader("Cache-Control", `max-age=${maxMaxAge}`);
  */
-const maxMaxAge = 31536000;
+export const MAX_MAX_AGE = 31536000;
 
 /**
  * the number of seconds that mostly static resources should be cached for
@@ -87,7 +92,7 @@ const maxMaxAge = 31536000;
  * // this is only changes when a Dev updates it manually which doesn't happen very much so it should be cached for a long time
  * res.setHeader("Cache-Control", `max-age=${cacheMaxAge}`);
  */
-const cacheMaxAge = 30 * 24 * 60 * 60; // 30 days should be cached for
+export const CACHE_MAX_AGE = 30 * 24 * 60 * 60; // 30 days should be cached for
 
 /**
  * the number of seconds that frequently changing resources should be cached for
@@ -95,10 +100,10 @@ const cacheMaxAge = 30 * 24 * 60 * 60; // 30 days should be cached for
  * // this is could change at any time but it is not important that that updates goes to the user right away
  * res.setHeader("Cache-Control", `max-age=${volatileCacheMaxAge}`);
  */
-const volatileCacheMaxAge = 12 * 60 * 60; // 12 hours
+export const VOLATILE_CACHE_MAX_AGE = 12 * 60 * 60; // 12 hours
 
-const cachePath = helper.getCacheFolderPath(folderPath);
-await fs.ensureDir(cachePath);
+export const CACHE_PATH = helper.getCacheFolderPath(folderPath);
+await fs.ensureDir(CACHE_PATH);
 
 if (credentials.hypixel_api_key.length == 0) {
   throw new Error("Please enter a valid Hypixel API Key. Join mc.hypixel.net and enter /api to obtain one.");
@@ -133,20 +138,13 @@ async function updateCacheOnly() {
 updateCacheOnly();
 setInterval(updateCacheOnly, 60_000 * 5);
 
-function updateCommitHash() {
-  return execSync("git rev-parse HEAD", { cwd: path.resolve(folderPath, "../") })
-    .toString()
-    .trim()
-    .slice(0, 10);
-}
-const commitHash = updateCommitHash();
-
-const featuredProfiles = fs.readJSONSync(helper.getCacheFilePath(cachePath, "json", "featured-profiles", "json"));
+const commitHash = helper.getCommitHash();
+const featuredProfiles = fs.readJSONSync(helper.getCacheFilePath(CACHE_PATH, "json", "featured-profiles", "json"));
 
 // Wait for APIs to be ready..
 // Maybe these awaits are done wrong or just unnecessary, idk.. -Martin
-await apiv2.init();
-await api.init();
+await apiv2Route.init();
+await apiRoute.init();
 
 const app = express();
 const port = process.env.SKYCRYPT_PORT ?? 32464;
@@ -157,9 +155,9 @@ app.locals.moment = moment;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 express.static.mime.define({ "application/opensearchdescription+xml": ["osd"] });
-app.use("/resources/js", express.static("public/resources/js", { maxAge: maxMaxAge * 1000 }));
-app.use("/resources/css", express.static("public/resources/css", { maxAge: maxMaxAge * 1000 }));
-app.use(express.static("public", { maxAge: cacheMaxAge * 1000 }));
+app.use("/resources/js", express.static("public/resources/js", { maxAge: MAX_MAX_AGE * 1000 }));
+app.use("/resources/css", express.static("public/resources/css", { maxAge: MAX_MAX_AGE * 1000 }));
+app.use(express.static("public", { maxAge: CACHE_MAX_AGE * 1000 }));
 app.use(cookieParser());
 
 app.use(
@@ -347,211 +345,16 @@ app.all("/api", async (req, res, next) => {
   );
 });
 
-app.use("/api/v2", apiv2.router);
-app.use("/api", api.router);
+app.use("/api/v2", apiv2Route.router);
+app.use("/api", apiRoute.router);
 
-app.all("/texture/:uuid", cors(), async (req, res) => {
-  const { uuid } = req.params;
+app.use("/texture", textureRoute.router);
+app.use("/cape", capeRoute.router);
 
-  const filePath = helper.getCacheFilePath(cachePath, "texture", uuid);
-  res.set("X-Cluster-ID", `${helper.getClusterId()}`);
-
-  let file;
-
-  try {
-    file = await fs.readFile(filePath);
-  } catch (e) {
-    try {
-      file = (await axios.get(`https://textures.minecraft.net/texture/${uuid}`, { responseType: "arraybuffer" })).data;
-
-      fs.writeFile(filePath, file, (err) => {
-        if (err) {
-          console.error(err);
-        }
-      });
-    } catch (e) {
-      res.status(404);
-      res.send("texture not found");
-
-      return;
-    }
-  }
-
-  res.setHeader("Cache-Control", `public, max-age=${maxMaxAge}`);
-  res.contentType("image/png");
-  res.send(file);
-});
-
-app.all("/cape/:username", cors(), async (req, res) => {
-  res.set("X-Cluster-ID", `${helper.getClusterId()}`);
-
-  const { username } = req.params;
-
-  if (!/^[0-9a-zA-Z_]{1,16}$/.test(username)) {
-    res.status(400);
-    res.send("invalid username");
-    return;
-  }
-
-  const filePath = helper.getCacheFilePath(cachePath, "cape", username);
-
-  let file;
-
-  try {
-    // try to use file from disk
-    const fileStats = await fs.stat(filePath);
-
-    const optifineCape = await axios.head(`https://optifine.net/capes/${username}.png`);
-    const lastUpdated = moment(optifineCape.headers["last-modified"]);
-
-    if (lastUpdated.unix() > fileStats.mtime) {
-      throw new Error("optifine cape changed");
-    } else {
-      file = await fs.readFile(filePath);
-    }
-  } catch (e) {
-    // file on disk could not be used so try to get from network
-    try {
-      file = (await axios.get(`https://optifine.net/capes/${username}.png`, { responseType: "arraybuffer" })).data;
-
-      fs.writeFile(filePath, file, (err) => {
-        if (err) {
-          console.error(err);
-        }
-      });
-    } catch (e) {
-      res.status(204);
-      res.send("no cape for user");
-
-      return;
-    }
-  }
-
-  res.setHeader("Cache-Control", `public, max-age=${volatileCacheMaxAge}`);
-  res.contentType("image/png");
-  res.send(file);
-});
-
-app.all("/head/:uuid", cors(), async (req, res) => {
-  const { uuid } = req.params;
-
-  const filePath = helper.getCacheFilePath(cachePath, "head", uuid);
-
-  let file;
-
-  try {
-    file = await fs.readFile(filePath);
-  } catch (e) {
-    file = await renderer.renderHead(`http://textures.minecraft.net/texture/${uuid}`, 6.4);
-
-    fs.writeFile(filePath, file, (err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-  }
-
-  res.set("X-Cluster-ID", `${helper.getClusterId()}`);
-
-  res.setHeader("Cache-Control", `public, max-age=${cacheMaxAge}`);
-  res.contentType("image/png");
-  res.send(file);
-});
-
-app.all("/item(.gif)?/:skyblockId?", cors(), async (req, res) => {
-  const skyblockId = req.params.skyblockId || null;
-  const item = await renderer.renderItem(skyblockId, req.query, db);
-
-  res.set("X-Cluster-ID", `${helper.getClusterId()}`);
-
-  if (item.error) {
-    res.status(500);
-    res.send(item.error);
-    return;
-  }
-
-  if (item.path) {
-    res.set("X-Texture-Path", `${item.path}`);
-  }
-
-  res.setHeader("Cache-Control", `public, max-age=${cacheMaxAge}`);
-  res.contentType(item.mime);
-  res.send(item.image);
-});
-
-app.all("/leather/:type/:color", cors(), async (req, res) => {
-  const { type, color } = req.params;
-
-  try {
-    if (!["boots", "leggings", "chestplate", "helmet"].includes(type)) {
-      throw new Error("invalid armor type: " + type);
-    }
-
-    if (!/^[0-9a-fA-F]{6}$/.test(color)) {
-      throw new Error("invalid color: #" + color);
-    }
-  } catch (error) {
-    res.status(400);
-    res.send(error.message);
-    return;
-  }
-
-  const filePath = helper.getCacheFilePath(cachePath, `leather`, `${type}_${color}`);
-  let file;
-
-  try {
-    file = await fs.readFile(filePath);
-  } catch (e) {
-    file = await renderer.renderArmor(type, color);
-
-    fs.writeFile(filePath, file, (err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-  }
-
-  res.setHeader("Cache-Control", `public, max-age=${cacheMaxAge}`);
-  res.contentType("image/png");
-  res.send(file);
-});
-
-app.all("/potion/:type/:color", cors(), async (req, res) => {
-  const { type, color } = req.params;
-
-  try {
-    if (!["normal", "splash"].includes(type)) {
-      throw new Error("invalid armor type: " + type);
-    }
-
-    if (!/^[0-9a-fA-F]{6}$/.test(color)) {
-      throw new Error("invalid color: #" + color);
-    }
-  } catch (error) {
-    res.status(400);
-    res.send(error.message);
-    return;
-  }
-
-  const filePath = helper.getCacheFilePath(cachePath, `potion`, `${type}_${color}`);
-  let file;
-
-  try {
-    file = await fs.readFile(filePath);
-  } catch (e) {
-    file = await renderer.renderPotion(type, color);
-
-    fs.writeFile(filePath, file, (err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-  }
-
-  res.setHeader("Cache-Control", `public, max-age=${cacheMaxAge}`);
-  res.contentType("image/png");
-  res.send(file);
-});
+app.use("/item", itemRoute.router);
+app.use("/head", headRoute.router);
+app.use("/leather", leatherRoute.router);
+app.use("/potion", potionRoute.router);
 
 app.all("/robots.txt", async (req, res, next) => {
   res
@@ -618,7 +421,7 @@ app.all("/resources/img/logo_square.svg", async (req, res, next) => {
     background = color;
     foreground = "ffffff";
   }
-  res.setHeader("Cache-Control", `public, max-age=${cacheMaxAge}`);
+  res.setHeader("Cache-Control", `public, max-age=${CACHE_MAX_AGE}`);
   res.type("svg").send(/*xml*/ `
       <svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
         <title>SkyCrypt Logo</title>

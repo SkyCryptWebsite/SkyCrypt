@@ -72,6 +72,22 @@ document.querySelectorAll<HTMLFormElement>(".lookup-player").forEach((form) => {
   });
 });
 
+export function getCookie(cookieName: string): string | undefined {
+  if (document.cookie.length > 0) {
+    let cookieStart = document.cookie.indexOf(cookieName + "=");
+    if (cookieStart != -1) {
+      cookieStart = cookieStart + cookieName.length + 1;
+      let cookieEnd = document.cookie.indexOf(";", cookieStart);
+      if (cookieEnd == -1) {
+        cookieEnd = document.cookie.length;
+      }
+      return decodeURIComponent(document.cookie.substring(cookieStart, cookieEnd));
+    }
+  }
+
+  return undefined;
+}
+
 export function setCookie(name: string, value: string, days?: number): void {
   let expires = "";
   if (days) {
@@ -82,21 +98,32 @@ export function setCookie(name: string, value: string, days?: number): void {
   document.cookie = name + "=" + (value || "") + expires + "; SameSite=Lax; path=/";
 }
 
-function eraseCookie(name: string) {
-  document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+export function eraseCookie(name: string) {
+  document.cookie = name + "=; SameSite=Lax; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 }
 
 const expanders = document.querySelectorAll(".expander");
 for (const expander of expanders) {
   expander.addEventListener("click", () => {
-    import("./elements/theme-list");
+    switch (expander.id) {
+      case "packs-button":
+        import("./elements/pack-list");
+        break;
+
+      case "themes-button":
+        import("./elements/theme-list");
+        break;
+    }
+
     for (const otherExpander of expanders) {
       if (otherExpander != expander) {
         otherExpander.setAttribute("aria-expanded", "false");
       }
     }
+
     expander.setAttribute("aria-expanded", (expander.getAttribute("aria-expanded") != "true").toString());
   });
+
   const focusOutHandler = () => {
     setTimeout(() => {
       if (
@@ -108,34 +135,10 @@ for (const expander of expanders) {
       }
     });
   };
+
   expander.addEventListener("focusout", focusOutHandler);
   expander.nextElementSibling?.addEventListener("focusout", focusOutHandler);
 }
-
-document.querySelectorAll<HTMLButtonElement>('#packs-box button[name="pack"]').forEach((element) => {
-  element.addEventListener("click", (event) => {
-    const clickedButton = event.target as HTMLButtonElement;
-    const newPack = clickedButton.value;
-    if (newPack) {
-      setCookie("pack", newPack, 365);
-    } else {
-      eraseCookie("pack");
-    }
-
-    const oldElement = document.querySelector<HTMLButtonElement>(`#packs-box button[name="pack"][aria-selected]`);
-    oldElement?.removeAttribute("disabled");
-    oldElement?.removeAttribute("aria-selected");
-
-    if (page == "stats") {
-      clickedButton.classList.add("loading");
-      sessionStorage.setItem("open packs", "true");
-      window.location.reload();
-    } else {
-      clickedButton.setAttribute("aria-selected", "");
-      clickedButton.setAttribute("disabled", "");
-    }
-  });
-});
 
 tippy("*[data-tippy-content]");
 
