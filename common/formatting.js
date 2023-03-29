@@ -37,7 +37,7 @@ export function renderLore(text) {
   const formats = new Set();
 
   // @ts-ignore - this regex always matches so we don't need to check for null
-  for (let part of text.match(/(§[0-9A-Fa-fk-or])*[^§L]*/g)) {
+  for (let part of text.match(/(§[0-9A-Fa-fk-or])*[^§]*/g)) {
     formats.clear();
     while (part.charAt(0) === "§") {
       const code = part.charAt(1).toLowerCase();
