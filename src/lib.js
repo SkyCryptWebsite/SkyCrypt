@@ -974,20 +974,26 @@ export const getItems = async (
   output.storage = storage;
   output.hotm = hotm;
   output.candy_bag = candy_bag;
-  
-  const sacks = "sacks_counts" in profile ? await getSacks(profile.sacks_counts, armor.concat(
-    equipment,
-    inventory,
-    enderchest,
-    accessory_bag,
-    fishing_bag,
-    quiver,
-    potion_bag,
-    personal_vault,
-    wardrobe_inventory,
-    storage,
-    hotm,
-  )) : [];
+
+  const sacks =
+    "sacks_counts" in profile
+      ? await getSacks(
+          profile.sacks_counts,
+          armor.concat(
+            equipment,
+            inventory,
+            enderchest,
+            accessory_bag,
+            fishing_bag,
+            quiver,
+            potion_bag,
+            personal_vault,
+            wardrobe_inventory,
+            storage,
+            hotm
+          )
+        )
+      : [];
   output.sacks = sacks;
 
   const allItems = armor.concat(
@@ -2959,11 +2965,10 @@ const BASE_SACK = {
 async function getSacks(sacks_counts, items) {
   const sacks = [];
 
-  const timeNow = Date.now();
   for (const sackId in constants.SACKS) {
     const sack = constants.SACKS[sackId];
 
-    if (sack.items.filter((a) => Object.keys(sacks_counts).includes(a)).length == 0) {
+    if (sackId !== "RUNE_SACK" && sack.items.filter((a) => Object.keys(sacks_counts).includes(a)).length == 0) {
       continue;
     }
 
@@ -2978,36 +2983,33 @@ async function getSacks(sacks_counts, items) {
       },
     };
 
+    if (sackId === "RUNE_SACK") {
+      sackItem.containsItems = [];
+      for (const ID in sack.items) {
+        if (ID === "???") continue;
 
-    if (sackId == "GEMSTONE_SACK") {
-      /*let line = '';
+        const item = sack.items[ID] ?? sack.items["???"];
 
-          for (const tier in gem_tiers) {
-              line += constants.RARITY_COLORS[gem_tiers[tier]];
-              line += _.startCase(tier.toLowerCase());
+        const sackContent = {
+          Count: 1,
+          sack_count: sacks_counts[ID] ?? 0,
+          Damage: 3,
+          id: 397,
+          itemIndex: sackItem.containsItems.length,
+          display_name: item.display_name,
+          rarity: item.tier,
+          texture_path: `/head/${item.texture}`,
+          tag: {
+            display: {
+              Name: `§a${item.item}`,
+              Lore: [`§8Stored: §e${(sacks_counts[ID] ?? 0).toLocaleString()}`],
+            },
+          },
+          categories: [],
+        };
 
-              if (tier != 'PERFECT') {
-                  line += '§8 / ';
-              }
-          }
-
-          sackItem.tag.display.Lore.push(line, '');
-
-          for (const gem in constants.gem_types) {
-              let line = constants.gem_types[gem];
-              line += `${_.startCase(gem.toLowerCase())}§8: `;
-
-              for (const tier in gem_tiers) {
-                  line += constants.RARITY_COLORS[gem_tiers[tier]];
-                  line += (sacks_counts[`${tier}_${gem}_GEM`] ?? 0).toLocaleString();
-
-                  if (tier != 'PERFECT') {
-                      line += '§8 / ';
-                  }
-              }
-
-              sackItem.tag.display.Lore.push(line);
-          }*/
+        sackItem.containsItems.push(sackContent);
+      }
     } else {
       sackItem.containsItems = [];
 
@@ -3015,13 +3017,6 @@ async function getSacks(sacks_counts, items) {
         const hypixelItem = await db.collection("items").findOne({ id: constants.ITEM_SACKS[item] ?? item });
 
         const itemName = hypixelItem?.name ?? "Unknown";
-
-        const itemDescription = items.find((itemm) => {
-          if (itemm.tag?.ExtraAttributes?.id === sackId) {
-            console.log(itemm)
-            return itemm
-          }
-        })
 
         const sackContent = {
           Count: 1,
@@ -3054,7 +3049,6 @@ async function getSacks(sacks_counts, items) {
     sacks.push(sackItem);
   }
 
-  console.log("Parsed sacks in " + Date.now() - timeNow + "ms")
   return sacks;
 }
 
