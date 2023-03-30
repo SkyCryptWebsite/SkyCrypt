@@ -792,6 +792,13 @@ export const SACKS = {
   },
 };
 
+export const BASE_SACK = {
+  Count: 1,
+  Damage: 3,
+  id: 397,
+  rarity: "epic",
+};
+
 export const ITEM_SACKS = {
   HUNK_OF_BLUE_ICE: "BLUE_ICE_HUNK",
   HUNK_OF_ICE: "ICE_HUNK",

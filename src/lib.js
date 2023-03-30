@@ -2954,25 +2954,17 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
   return output;
 }
 
-const BASE_SACK = {
-  Count: 1,
-  Damage: 3,
-  id: 397,
-  rarity: "epic",
-};
-
-// eslint-disable-next-line @typescript-eslint/naming-convention
-async function getSacks(sacks_counts, items) {
+async function getSacks(sacksCounts) {
   const sacks = [];
 
   for (const sackId in constants.SACKS) {
     const sack = constants.SACKS[sackId];
 
-    if (sackId !== "RUNE_SACK" && sack.items.filter((a) => Object.keys(sacks_counts).includes(a)).length == 0) {
+    if (sackId !== "RUNE_SACK" && sack.items.filter((a) => Object.keys(sacksCounts).includes(a)).length == 0) {
       continue;
     }
 
-    const sackItem = Object.assign({}, BASE_SACK);
+    const sackItem = Object.assign({}, constants.BASE_SACK);
 
     sackItem.texture_path = `/head/${sack.texture}`;
     sackItem.display_name = _.startCase(sackId.toLowerCase());
@@ -2992,7 +2984,7 @@ async function getSacks(sacks_counts, items) {
 
         const sackContent = {
           Count: 1,
-          sack_count: sacks_counts[ID] ?? 0,
+          sack_count: sacksCounts[ID] ?? 0,
           Damage: 3,
           id: 397,
           itemIndex: sackItem.containsItems.length,
@@ -3002,7 +2994,7 @@ async function getSacks(sacks_counts, items) {
           tag: {
             display: {
               Name: `§a${item.item}`,
-              Lore: [`§8Stored: §e${(sacks_counts[ID] ?? 0).toLocaleString()}`],
+              Lore: [`§8Stored: §e${(sacksCounts[ID] ?? 0).toLocaleString()}`],
             },
           },
           categories: [],
@@ -3020,7 +3012,7 @@ async function getSacks(sacks_counts, items) {
 
         const sackContent = {
           Count: 1,
-          sack_count: sacks_counts[item] ?? 0,
+          sack_count: sacksCounts[item] ?? 0,
           Damage: hypixelItem?.damage ?? 3,
           id: hypixelItem?.item_id ?? 397,
           itemIndex: index,
@@ -3028,7 +3020,7 @@ async function getSacks(sacks_counts, items) {
           tag: {
             display: {
               Name: `§a${itemName}`,
-              Lore: [`§8Stored: §e${(sacks_counts[item] ?? 0).toLocaleString()}`],
+              Lore: [`§8Stored: §e${(sacksCounts[item] ?? 0).toLocaleString()}`],
             },
           },
           categories: [],
