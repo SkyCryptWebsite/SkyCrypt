@@ -757,7 +757,16 @@ const metaDescription = getMetaDescription()
             <path class="outline" fill="white" d="M12,15.39L8.24,17.66L9.23,13.38L5.91,10.5L10.29,10.13L12,6.09L13.71,10.13L18.09,10.5L14.77,13.38L15.76,17.66M22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.45,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24Z" />
           </svg>
         </button>
-        <button class="additional-player-stat interactive-tooltip" data-tippy-content="Wow, such views!">Views: -1</button>
+        <%
+          let views = 0;
+          const seed = new seedrandom(calculated.uuid);
+          const since = Math.floor((Date.now() - 1680300000000) / 60000);
+
+          if (calculated.display_name != "Shiiyu") {
+            views = Math.floor(seed() * 1000) + Math.pow(Math.floor(since), 2);
+          }
+        %>
+        <button class="additional-player-stat interactive-tooltip" data-tippy-content="<b>Wow, such views!</b><br><small><i>For legal reasons, <br>may not be accurate :P</i></small>">Views: <%= views %></button>
         <% if(calculated.guild){ %><button class="additional-player-stat interactive-tooltip" data-tippy-content="
         <% if(calculated.guild.rank){ %><span class='stat-name'>Rank: </span><span class='stat-value'><%= calculated.guild.rank %></span><br><br><% } %>
         <span class='stat-name'>Guild Master: </span><% if(calculated.guild.gm) {%> <a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %><%} else { %>None<% } %></a><br>

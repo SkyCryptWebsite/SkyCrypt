@@ -31,6 +31,7 @@ import { SitemapStream, streamToPromise } from "sitemap";
 import { createGzip } from "zlib";
 import twemoji from "twemoji";
 import cookieParser from "cookie-parser";
+import seedrandom from "seedrandom";
 
 import * as apiRoute from "./routes/api.js";
 import * as apiv2Route from "./routes/apiv2.js";
@@ -295,6 +296,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
         extra: await getExtra("stats", undefined, cacheOnly),
         fileHashes,
         fileNameMap,
+        seedrandom,
         page: "stats",
       },
       (err, html) => {

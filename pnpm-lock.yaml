@@ -54,6 +54,7 @@ specifiers:
   rollup-plugin-delete: ^2.0.0
   rollup-plugin-minify-html-literals: ^1.2.6
   sass: ^1.54.8
+  seedrandom: ^3.0.5
   sharp: ^0.30.7
   sitemap: ^7.1.1
   skinview3d: ^2.2.1
@@ -96,6 +97,7 @@ dependencies:
   prismarine-nbt: 2.2.1
   progress: 2.0.3
   relaxed-json: 1.0.3
+  seedrandom: 3.0.5
   sharp: 0.30.7
   sitemap: 7.1.1
   skinview3d: 2.2.1
@@ -3908,6 +3910,10 @@ packages:
 
   /sax/1.2.4:
     resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==}
+    dev: false
+
+  /seedrandom/3.0.5:
+    resolution: {integrity: sha512-8OwmbklUNzwezjGInmZ+2clQmExQPvomqjL7LFqOYqtmuxRgQYqOD3mHaU+MvZn5FLUeVxVfQjwLZW/n/JFuqg==}
     dev: false
 
   /semver/5.7.1:
