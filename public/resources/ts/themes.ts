@@ -265,6 +265,10 @@ window.addEventListener(
 
   const themeUrl = localStorage.getItem("currentThemeUrl");
   if (themeUrl != null) {
-    loadTheme(themeUrl);
+    if (themeUrl == "/resources/themes/default.json") {
+      loadTheme(`${themeUrl}?barry`);
+    } else {
+      loadTheme(themeUrl);
+    }
   }
 }
