@@ -96,7 +96,7 @@ const slayerInfo = {
   },
 };
 
-const seaCreatures = [ 
+const seaCreatures = [
   "pond_squid",
   "plhlegblast",
   "sea_walker",
@@ -142,7 +142,7 @@ const seaCreatures = [
   "yeti",
   "grim_reaper",
   "thunder",
-  "lord_jawbus", 
+  "lord_jawbus",
 ];
 
 const milestone_rarities = ["common", "uncommon", "rare", "epic", "legendary"];
@@ -340,15 +340,15 @@ function itemIcon(item, classes) {
 <%
 }
 
-function jerriefy(rank) {
+function barriefy(rank) {
   if (extra.isFoolsDay) {
-    rank = rank.replace("VIP", "JER");
-    rank = rank.replace("MVP", "JRY");
-    rank = rank.replace("HELPER", "JERRY");
-    rank = rank.replace("MOD", "JERRY");
-    rank = rank.replace("PIG", "JERRY");
-    rank = rank.replace("ADMIN", "SR JERRY");
-    rank = rank.replace("YOUTUBE", "YERRY");
+    rank = rank.replace("VIP", "BAR");
+    rank = rank.replace("MVP", "BRY");
+    rank = rank.replace("HELPER", "BARRY");
+    rank = rank.replace("MOD", "BARRY");
+    rank = rank.replace("PIG", "BARRY");
+    rank = rank.replace("ADMIN", "SR BARRY");
+    rank = rank.replace("YOUTUBE", "YARRY");
   }
   return rank;
 }
@@ -642,7 +642,7 @@ const metaDescription = getMetaDescription()
 <head>
   <title><%= calculated.display_name %><% if(calculated.display_emoji){ %> <%= calculated.display_emoji %><% } %> | SkyCrypt</title>
   <meta name="description" content="<%= metaDescription %>">
-  <link rel="icon" href="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
+  <link rel="icon" href="https://mc-heads.net/avatar/<%= extra.isFoolsDay ? 'f04c591b164746e848f3d6a451ee87a62dd193e5c45e94ed78e72df119aca426' : profile.uuid %>/32" sizes="32x32" type="image/png">
   <meta property="og:type" content="profile">
   <meta property="og:title" content="<%= metaTitle %>">
   <meta property="og:image" content="https://crafatar.com/avatars/<%= calculated.uuid %>?size=512&overlay">
@@ -695,7 +695,7 @@ const metaDescription = getMetaDescription()
     <% } %>
     <div id="player_profile"><span class="text-stats-for">Stats for</span>
       <span tabindex="0" id="stats_for_player">
-        <%- jerriefy(calculated.rank_prefix) %>
+        <%- barriefy(calculated.rank_prefix) %>
         <%= calculated.display_name %>
         <% if(calculated.display_emoji_img){ %>
         <img class="emoji" draggable="false" src="<%= calculated.display_emoji_img %>">
@@ -757,6 +757,7 @@ const metaDescription = getMetaDescription()
             <path class="outline" fill="white" d="M12,15.39L8.24,17.66L9.23,13.38L5.91,10.5L10.29,10.13L12,6.09L13.71,10.13L18.09,10.5L14.77,13.38L15.76,17.66M22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.45,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24Z" />
           </svg>
         </button>
+        <button class="additional-player-stat interactive-tooltip" data-tippy-content="Wow, such views!">Views: -1</button>
         <% if(calculated.guild){ %><button class="additional-player-stat interactive-tooltip" data-tippy-content="
         <% if(calculated.guild.rank){ %><span class='stat-name'>Rank: </span><span class='stat-value'><%= calculated.guild.rank %></span><br><br><% } %>
         <span class='stat-name'>Guild Master: </span><% if(calculated.guild.gm) {%> <a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %><%} else { %>None<% } %></a><br>
@@ -936,6 +937,10 @@ const metaDescription = getMetaDescription()
         </div>
         <% } %>
         <% if ('levels' in calculated) { %>
+        <div class="skill-bars" style="margin-bottom: 24px;" data-api-enabled="<%= 'runecrafting' in calculated.levels %>">
+          <skill-component skill="enchanting" type="skill" icon="<%= skillItems.enchanting %>"></skill-component>
+          <skill-component skill="alchemy" type="skill" icon="<%= skillItems.alchemy %>"></skill-component>
+        </div>
         <div class="skill-bars" data-api-enabled="<%= 'runecrafting' in calculated.levels %>">
           <skill-component skill="taming" type="skill" icon="<%= skillItems.taming %>"></skill-component>
           <skill-component skill="farming" type="skill" icon="<%= skillItems.farming %>"></skill-component>
@@ -943,8 +948,6 @@ const metaDescription = getMetaDescription()
           <skill-component skill="combat" type="skill" icon="<%= skillItems.combat %>"></skill-component>
           <skill-component skill="foraging" type="skill" icon="<%= skillItems.foraging %>"></skill-component>
           <skill-component skill="fishing" type="skill" icon="<%= skillItems.fishing %>"></skill-component>
-          <skill-component skill="enchanting" type="skill" icon="<%= skillItems.enchanting %>"></skill-component>
-          <skill-component skill="alchemy" type="skill" icon="<%= skillItems.alchemy %>"></skill-component>
           <% if ('runecrafting' in calculated.levels) { %>
           <skill-component skill="carpentry" type="skill" icon="<%= skillItems.carpentry %>"></skill-component>
           <skill-component skill="runecrafting" type="skill" icon="<%= skillItems.runecrafting %>"></skill-component>
@@ -1394,7 +1397,7 @@ const metaDescription = getMetaDescription()
               <div class="inventory-header-line"></div>
               <div class="inventory-tabs-container">
                 <%
-                    const inventoryIconUrl = `https://crafatar.com/renders/head/${extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : calculated.uuid }?size=32&overlay`
+                    const inventoryIconUrl = `https://mc-heads.net/head/${ extra.isFoolsDay ? 'f04c591b164746e848f3d6a451ee87a62dd193e5c45e94ed78e72df119aca426' : profile.uuid }/8`
                   %>
                 <button class="inventory-tab active-inventory" data-inventory-type="inventory">
                   <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url('<%= inventoryIconUrl %>')"></div>
@@ -2855,7 +2858,7 @@ const metaDescription = getMetaDescription()
           </p>
           <% } %>
 
-          <% if('effects' in calculated.misc){ 
+          <% if('effects' in calculated.misc){
             if (Object.keys(calculated.misc.effects).some((key) => Object.keys(calculated.misc.effects[key]).length > 0)) { %>
           <div class="category-header">
             <div class="category-icon">
@@ -2863,7 +2866,7 @@ const metaDescription = getMetaDescription()
             </div>
             <span>Potions</span>
           </div>
-          <% 
+          <%
               let effects_tooltips = [];
               for (const key of Object.keys(calculated.misc.effects).sort()) {
                 effects_tooltips[key] ??= [];
@@ -2871,7 +2874,7 @@ const metaDescription = getMetaDescription()
                   if (key === "active") {
                     if (potion?.effect === undefined || potion?.level === null) continue;
                     effects_tooltips[key].push(`<span class="stat-value">${constants.POTION_EFFECTS[potion.effect]?.[potion.level].name.replace('Potion', '') || potion.effect.split('_').map((effect) => helper.capitalizeFirstLetter(effect.toLowerCase())).join(' ')}</span><br>`)
-                  
+
                   } else {
                     potion = potion?.effect || potion
 

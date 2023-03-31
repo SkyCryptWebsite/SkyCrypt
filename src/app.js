@@ -111,8 +111,10 @@ if (credentials.hypixel_api_key.length == 0) {
 
 let isFoolsDay;
 function updateIsFoolsDay() {
-  const date = new Date();
-  isFoolsDay = date.getUTCMonth() === 3 && date.getUTCDate() === 1;
+  // const date = new Date();
+  // isFoolsDay = date.getUTCMonth() === 3 && date.getUTCDate() === 1;
+
+  isFoolsDay = true;
 }
 updateIsFoolsDay();
 setInterval(updateIsFoolsDay, 60_000);
@@ -271,7 +273,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
 
     if (isFoolsDay) {
       calculated.skin_data.skinurl =
-        "http://textures.minecraft.net/texture/b4bd832813ac38e68648938d7a32f6ba29801aaf317404367f214b78b4d4754c";
+        "http://textures.minecraft.net/texture/f04c591b164746e848f3d6a451ee87a62dd193e5c45e94ed78e72df119aca426";
     }
 
     console.debug(`${debugId}: starting page render.`);

@@ -1,5 +1,5 @@
 import { getCookie, setCookie } from "./common-defer";
-import { SkinViewer, createOrbitControls } from "skinview3d";
+import { SkinViewer, createOrbitControls, WalkingAnimation } from "skinview3d";
 import tippy from "tippy.js";
 
 import { renderLore } from "../../../common/formatting.js";
@@ -57,6 +57,9 @@ if (calculated.skin_data) {
 
   playerModel.appendChild(skinViewer.canvas);
 
+  skinViewer.animations.add(WalkingAnimation);
+  skinViewer.animations.speed = 3;
+
   skinViewer.camera.position.set(-18, -3, 58);
 
   const controls = createOrbitControls(skinViewer);
@@ -65,6 +68,7 @@ if (calculated.skin_data) {
 
   controls.enableZoom = false;
   controls.enablePan = false;
+
 
   /**
    * the average Z rotation of the arms

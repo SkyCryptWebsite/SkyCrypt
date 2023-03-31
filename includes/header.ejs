@@ -25,7 +25,7 @@
 <header>
   <div data-tippy-content="Supporting LGBTQ+ rights all around the year! ❤️<br><br>Click for a surprise. :)" class="pride-flag"></div>
   <script>document.querySelector(".pride-flag").classList.add(localStorage.getItem("currentFlag") ?? "logo");</script>
-  <a href="/" id="site_name">SkyCrypt</a>
+  <a href="/" id="site_name" data-tippy-content="Worship Barry">BarryCrypt</a>
   <button class="header-button expander" id="info-button" aria-expanded="false">
     About
   </button>
@@ -107,6 +107,23 @@
     <pack-list id="packs-box" class="expandable list"></pack-list>
   <% } %>
 </header>
+<div style="
+  position: fixed;
+  width: 100%;
+  top: 48px;
+  height: 26px;
+  background-color: aqua;
+  padding-top: 6px;
+  z-index: 100;
+">
+  <marquee width="60%" direction="left" style="
+    color: yellow;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+  ">
+    MCCiCrypt - Brand new MCC Island <a href="https://www.youtube.com/watch?v=HdACXdcMr10" target="_blank" rel="noreferrer">Fishing</a> stats viewer!!1! / Coming in 2-3 business days
+  </marquee>
+</div>
 <noscript style="
   position: fixed;
   top: 48px;
