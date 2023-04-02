@@ -2959,7 +2959,7 @@ async function getSacks(sacksCounts) {
         const item = sack.items[ID] ?? sack.items["???"];
 
         const sackContent = {
-          Count: sacksCounts[ID] ?? 0,
+          Count: sacksCounts[ID] ?? 1,
           sack_count: sacksCounts[ID] ?? 0,
           Damage: 3,
           id: 397,
@@ -2984,10 +2984,12 @@ async function getSacks(sacksCounts) {
       for (const [index, item] of sack.items.entries()) {
         const hypixelItem = await db.collection("items").findOne({ id: constants.ITEM_SACKS[item] ?? item });
 
-        const itemName = hypixelItem?.name ?? "Unknown";
+        const itemName = hypixelItem?.name ?? _.startCase(item.toLowerCase());
+
+        const count = sacksCounts[item] === 0 ? 1 : sacksCounts[item];
 
         const sackContent = {
-          Count: sacksCounts[item] ?? 0,
+          Count: count ?? 1,
           sack_count: sacksCounts[item] ?? 0,
           Damage: hypixelItem?.damage ?? 3,
           id: hypixelItem?.item_id ?? 397,
