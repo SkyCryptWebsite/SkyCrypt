@@ -975,12 +975,7 @@ export const getItems = async (
   output.hotm = hotm;
   output.candy_bag = candy_bag;
 
-  const sacks =
-    "sacks_counts" in profile
-      ? await getSacks(
-          profile.sacks_counts
-        )
-      : [];
+  const sacks = "sacks_counts" in profile ? await getSacks(profile.sacks_counts) : [];
   output.sacks = sacks;
 
   const allItems = armor.concat(
