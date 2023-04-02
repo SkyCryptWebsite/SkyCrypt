@@ -978,20 +978,7 @@ export const getItems = async (
   const sacks =
     "sacks_counts" in profile
       ? await getSacks(
-          profile.sacks_counts,
-          armor.concat(
-            equipment,
-            inventory,
-            enderchest,
-            accessory_bag,
-            fishing_bag,
-            quiver,
-            potion_bag,
-            personal_vault,
-            wardrobe_inventory,
-            storage,
-            hotm
-          )
+          profile.sacks_counts
         )
       : [];
   output.sacks = sacks;
@@ -2968,12 +2955,6 @@ async function getSacks(sacksCounts) {
 
     sackItem.texture_path = `/head/${sack.texture}`;
     sackItem.display_name = _.startCase(sackId.toLowerCase());
-    sackItem.tag = {
-      display: {
-        Lore: [],
-        Name: `§5${sackItem.display_name}`,
-      },
-    };
 
     if (sackId === "RUNE_SACK") {
       sackItem.containsItems = [];
@@ -2983,7 +2964,7 @@ async function getSacks(sacksCounts) {
         const item = sack.items[ID] ?? sack.items["???"];
 
         const sackContent = {
-          Count: 1,
+          Count: sacksCounts[ID] ?? 0,
           sack_count: sacksCounts[ID] ?? 0,
           Damage: 3,
           id: 397,
@@ -3011,7 +2992,7 @@ async function getSacks(sacksCounts) {
         const itemName = hypixelItem?.name ?? "Unknown";
 
         const sackContent = {
-          Count: 1,
+          Count: sacksCounts[item] ?? 0,
           sack_count: sacksCounts[item] ?? 0,
           Damage: hypixelItem?.damage ?? 3,
           id: hypixelItem?.item_id ?? 397,
