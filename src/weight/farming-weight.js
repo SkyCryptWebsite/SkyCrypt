@@ -65,11 +65,11 @@ export function calculateFarmingWeight(profile) {
 
     const mushroom_scaling = 90_178.06;
 
-    let mushroom_collection = profile?.collections?.MUSHROOM_COLLECTION.amount;
+    let mushroom_collection = profile?.collections?.MUSHROOM_COLLECTION?.amount ?? 0;
 
     let total = output.weight + mushroom_collection / mushroom_scaling;
-    let double_break_ratio = (output.crops.CACTUS.weight + output.crops.SUGAR_CANE.weight) / total;
-    let normal_ratio = (total - output.crops.CACTUS.weight - output.crops.SUGAR_CANE.weight) / total;
+    let double_break_ratio = total <= 0 ? 0 : (output.crops.CACTUS.weight + output.crops.SUGAR_CANE.weight) / total;
+    let normal_ratio = total <= 0 ? 0 : (total - output.crops.CACTUS.weight - output.crops.SUGAR_CANE.weight) / total;
 
     let mushroom_weight =
       double_break_ratio * (mushroom_collection / (2 * mushroom_scaling)) +
