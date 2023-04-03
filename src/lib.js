@@ -3546,7 +3546,7 @@ function calculateFarmingWeight(userProfile) {
   if (userProfile?.collections) {
     let weight = 0;
     for (const [name, crop] of Object.entries(crops)) {
-      let total = userProfile.collections[name].amount;
+      let total = userProfile.collections[name]?.amount ?? 0;
       let calculated = total / crop.weight;
       weight += calculated;
       output.crops[name] = {
