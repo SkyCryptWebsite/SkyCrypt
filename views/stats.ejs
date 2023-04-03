@@ -1643,7 +1643,6 @@ const metaDescription = getMetaDescription()
             <% } %>
           </div>
 
-          <% if(calculated.farming.talked){ %>
           <div class="stat-farming">
             <div class="category-header">
               <div class="category-icon" onclick="window.open('https://www.youtube.com/watch?v=pZaY1jV96jI')">
@@ -1652,8 +1651,6 @@ const metaDescription = getMetaDescription()
               <span>farming</span>
             </div>
 
-            <% const farming = calculated.farming;
-          if (farming.contests.attended_contests > 0) {%>
             <p class="stat-raw-values">
               <span class="stat-name">Farming Weight: </span><span class="stat-value">
               <span class="stat-value interactive-tooltip" data-tippy-content='
@@ -1672,10 +1669,14 @@ const metaDescription = getMetaDescription()
                 '><%= parseFloat(calculated.weight.farming.weight.toFixed(2)).toLocaleString() %></span>
               <br>
               <span class="stat-name">Pelts: </span><span class="stat-value"><%= calculated.farming.pelts.toLocaleString() %></span><br>
-              <span class="stat-name">Contests attended: </span><span class="stat-value"><%= farming.contests.attended_contests.toLocaleString() %></span><br>
-              <% max = farming.unique_golds == 10 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Golds: </span><span class="stat-value <%= max %>"><%= farming.unique_golds.toLocaleString() %></span><br>
+              <% const farming = calculated.farming;
+              if (farming.talked && farming.contests.attended_contests > 0) {%>
+                <span class="stat-name">Contests attended: </span><span class="stat-value"><%= farming.contests.attended_contests.toLocaleString() %></span><br>
+                <% max = farming.unique_golds == 10 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Golds: </span><span class="stat-value <%= max %>"><%= farming.unique_golds.toLocaleString() %></span><br>
+              <% } %>
             </p>
 
+            <% if (farming.talked && farming.contests.attended_contests > 0) {%>
             <p class="stat-raw-values">
               <% for(let badge of badgeOrder){ %>
               <span data-tippy-content='
@@ -1715,43 +1716,44 @@ const metaDescription = getMetaDescription()
               <% }); %>
             </div>
             <% } %>
+             
+            <% if(farming.talked) { %>
+              <% if(Object.keys(calculated.farming.crops).length > 0){ %>
+              <button class="stat-sub-header extender" aria-controls="farming-crops" aria-expanded="false">Farming Crops</button>
+              <div class="stat-farming-crops extendable" id="farming-crops">
+                <%
+                const crops = Object.values(calculated.farming.crops).sort((a, b) => {
+                  return b.contests - a.contests;
+                });
 
-            <% if(Object.keys(calculated.farming.crops).length > 0){ %>
-            <button class="stat-sub-header extender" aria-controls="farming-crops" aria-expanded="false">Farming Crops</button>
-            <div class="stat-farming-crops extendable" id="farming-crops">
-              <%
-              const crops = Object.values(calculated.farming.crops).sort((a, b) => {
-                return b.contests - a.contests;
-              });
+                for(const crop of crops){
+                  if(!crop.attended) continue;
 
-              for(const crop of crops){
-                if(!crop.attended) continue;
+                  let amountsTooltip = '';
 
-                let amountsTooltip = '';
-
-                for(let badge of badgeOrder)
-                  amountsTooltip += `
-                    <span class="stat-name">${helper.titleCase(badge)} Badges: </span>
-                    <span class="stat-value">${crop.badges[badge].toLocaleString()}</span><br>
-                  `;
-              %>
-              <div class="chip" data-tippy-content="<%= amountsTooltip %>">
-                <div class="chip-icon-wrapper">
-                  <div class="item-icon icon-<%= crop.icon %>"></div>
-                </div>
-                <div class="chip-text">
-                  <div class="collection-name <%= crop.unique_gold ? 'max-stat' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
-                  <div class="collection-amount">
-                    <small class="stat-name">Personal Best: </small><small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small><br>
-                    <small class="stat-name">Contests: </small><small class="stat-value"><%= crop.contests.toLocaleString() %></small><br>
+                  for(let badge of badgeOrder)
+                    amountsTooltip += `
+                      <span class="stat-name">${helper.titleCase(badge)} Badges: </span>
+                      <span class="stat-value">${crop.badges[badge].toLocaleString()}</span><br>
+                    `;
+                %>
+                <div class="chip" data-tippy-content="<%= amountsTooltip %>">
+                  <div class="chip-icon-wrapper">
+                    <div class="item-icon icon-<%= crop.icon %>"></div>
+                  </div>
+                  <div class="chip-text">
+                    <div class="collection-name <%= crop.unique_gold ? 'max-stat' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
+                    <div class="collection-amount">
+                      <small class="stat-name">Personal Best: </small><small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small><br>
+                      <small class="stat-name">Contests: </small><small class="stat-value"><%= crop.contests.toLocaleString() %></small><br>
+                    </div>
                   </div>
                 </div>
+                <% } %>
               </div>
               <% } %>
-            </div>
             <% } %>
           </div>
-          <% } %>
 
           <div class="stat-fishing">
             <div class="category-header">
