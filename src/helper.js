@@ -2,14 +2,14 @@ import cluster from "cluster";
 import axios from "axios";
 import sanitize from "mongo-sanitize";
 import retry from "async-retry";
-import path from "path";
+// import path from "path";
 import "axios-debug-log";
 import { v4 } from "uuid";
 import { getPrices } from "skyhelper-networth";
-import { execSync } from "child_process";
+// import { execSync } from "child_process";
 
 import { titleCase } from "../common/helper.js";
-import { getFolderPath } from "./helper/cache.js";
+// import { getFolderPath } from "./helper/cache.js";
 
 export { renderLore, formatNumber } from "../common/formatting.js";
 export * from "../common/helper.js";
