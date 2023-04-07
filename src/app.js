@@ -138,7 +138,7 @@ async function updateCacheOnly() {
 updateCacheOnly();
 setInterval(updateCacheOnly, 60_000 * 5);
 
-const commitHash = helper.getCommitHash();
+const commitHash = "N/A"; // helper.getCommitHash();
 const featuredProfiles = fs.readJSONSync(helper.getCacheFilePath(CACHE_PATH, "json", "featured-profiles", "json"));
 
 // Wait for APIs to be ready..

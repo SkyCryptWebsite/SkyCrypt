@@ -1063,8 +1063,12 @@ export async function getItemPrice(item) {
 }
 
 export function getCommitHash() {
+  return "N/A";
+
+  /*
   return execSync("git rev-parse HEAD", { cwd: path.resolve(getFolderPath(), "../") })
     .toString()
     .trim()
     .slice(0, 10);
+    */
 }
