@@ -2345,6 +2345,13 @@ export async function getStats(
     };
   }
 
+  if ("personal_bank_upgrade" in userProfile) {
+    misc.uncategorized.bank_cooldown = {
+      raw: userProfile.bank_cooldown,
+      formatted: constants.BANK_COOLDOWN[userProfile.personal_bank_upgrade ?? "Unknown"],
+    };
+  }
+
   output.misc = misc;
   output.auctions_bought = auctions_bought;
   output.auctions_sold = auctions_sold;
