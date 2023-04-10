@@ -2342,6 +2342,15 @@ export async function getStats(
     misc.uncategorized.reaper_peppers_eaten = {
       raw: userProfile.reaper_peppers_eaten,
       formatted: helper.formatNumber(userProfile.reaper_peppers_eaten),
+      maxed: userProfile.reaper_peppers_eaten === constants.MAX_REAPER_PEPPERS_EATEN,
+    };
+  }
+
+  if ("personal_bank_upgrade" in userProfile) {
+    misc.uncategorized.bank_cooldown = {
+      raw: userProfile.personal_bank_upgrade,
+      formatted: constants.BANK_COOLDOWN[userProfile.personal_bank_upgrade] ?? "Unknown",
+      maxed: userProfile.personal_bank_upgrade === Object.keys(constants.BANK_COOLDOWN).length
     };
   }
 

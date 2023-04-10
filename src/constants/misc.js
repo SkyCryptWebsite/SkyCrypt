@@ -679,3 +679,9 @@ export const ESSENCE_SHOP = {
     },
   },
 };
+
+export const BANK_COOLDOWN = {
+  1: "20 minutes",
+  2: "5 minutes",
+  3: "None",
+};
