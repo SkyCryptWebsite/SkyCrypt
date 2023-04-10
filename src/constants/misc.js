@@ -460,13 +460,6 @@ export const DOJO = {
 
 export const MAX_REAPER_PEPPERS_EATEN = 5;
 
-export const BANK_COOLDOWN = {
-  0: "1 hour",
-  1: "20 minutes",
-  2: "5 minutes",
-  3: "None"
-}
-
 export const ESSENCE_SHOP = {
   undead: {
     catacombs_boss_luck: {
