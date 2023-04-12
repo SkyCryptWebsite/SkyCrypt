@@ -318,7 +318,7 @@ class Pig extends Pet {
     return {
       name: "§6Sprint",
       desc: [
-        `§7While holding an Enchanted Carrot on a Stick, increase the speed of your mount by §a${round(
+        `§7While holding an §aEnchanted Carrot on a Stick§7, increase the speed of your mount by §a${round(
           this.level * mult,
           1
         )}%§7.`,
@@ -329,7 +329,7 @@ class Pig extends Pet {
   get fourth() {
     return {
       name: "§6Trample",
-      desc: [`§7While on your private island, break all crops your pig rides over§7.`],
+      desc: [`§7Your pig will break all crops that it walks over while on your private island or Garden. While riding, §6☘ Farming Fortune §7and §aFarming Exp §7gain is reduced by §a75%§7.`],
     };
   }
 }
