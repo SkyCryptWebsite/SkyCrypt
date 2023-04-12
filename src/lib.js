@@ -1050,30 +1050,8 @@ export const getItems = async (
     accessoryIds.push(id);
   }
 
-  // Add accessories from inventory
-  for (const accessory of inventory.filter((a) => a.categories.includes("accessory"))) {
-    const id = helper.getId(accessory);
-
-    if (id === "") {
-      continue;
-    }
-
-    const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
-
-    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
-      insertAccessory.isInactive = true;
-    }
-
-    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
-      insertAccessory.isUnique = false;
-    }
-
-    accessories.push(insertAccessory);
-    accessoryIds.push(id);
-  }
-
-  // Add accessories from accessory bag if not already in inventory
-  for (const accessory of accessory_bag) {
+  // Add accessories from inventory and accessory bag
+  for (const accessory of accessory_bag.concat(inventory.filter((a) => a.categories.includes("accessory")))) {
     const id = helper.getId(accessory);
 
     if (id === "") {
@@ -1104,7 +1082,7 @@ export const getItems = async (
   }
 
   // Add inactive accessories from enderchest and backpacks
-  for (const item of inventory.concat(enderchest, storage)) {
+  for (const item of enderchest.concat(storage)) {
     // filter out filler or empty slots (such as empty storage slot)
     if (!("categories" in item)) {
       continue;
