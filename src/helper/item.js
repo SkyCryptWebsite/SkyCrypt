@@ -12,7 +12,7 @@ import sanitize from "mongo-sanitize";
  */
 export async function getItemData(query = {}) {
   query = Object.assign({ skyblockId: undefined, id: undefined, name: undefined, damage: undefined }, query);
-  const item = { id: -1, Damage: 0, Count: 1, tag: { ExtraAttributes: {} } };
+  const item = { id: -1, damage: 0, Count: 1, tag: { ExtraAttributes: {} } };
   let dbItem = {};
 
   /**
@@ -61,7 +61,7 @@ export async function getItemData(query = {}) {
   }
 
   if ("damage" in dbItem) {
-    item.Damage = dbItem.damage;
+    item.damage = dbItem.damage;
   }
 
   if ("name" in dbItem) {
