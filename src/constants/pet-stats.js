@@ -1633,7 +1633,7 @@ class Rat extends Pet {
         } Magic Find §7for §a${round(
           20 + this.level * multTime,
           0
-        )} §7seconds after finding a yummy piece of Cheese! If the player gets a drop during this buff, you have a §a20% §7 chance to get it too.`,
+        )} §7seconds after finding a yummy piece of Cheese! If the player gets a drop during this buff, you have a §a20% §7chance to get it too.`,
       ],
     };
   }
