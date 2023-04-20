@@ -818,6 +818,27 @@ const SKINS = [
     source: "firesale",
     release: new Date("2023-01-22 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_SCATHA_ALBINO",
+    name: "Albino",
+    texture: "/head/d608fdc7c9c2fbb51fc7bbfca8874752d9435875d782654b4f1d2b2220e9d6ae",
+    source: "firesale",
+    release: new Date("2023-02-10 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_SCATHA_GOLDEN",
+    name: "Golden",
+    texture: "/head/4313bb28c6e2cfe4444a3eaacab53103cc91f9419015292facfd431e950bf71a",
+    source: "firesale",
+    release: new Date("2023-02-10 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_SCATHA_DARK",
+    name: "Dark",
+    texture: "/head/9b6946ddfdcdc5a894faa8f1b048728521dc0f93c751d6980f85b98a504a1789",
+    source: "firesale",
+    release: new Date("2023-02-10 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*

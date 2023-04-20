@@ -172,10 +172,10 @@ export function getLevelByXp(xp, extra = {}) {
     }
   }
 
-  if (extra.type == "dungeoneering" && !extra.class) {
-    while (xpCurrent >= 200000000) {
+  if (extra.type == "dungeoneering") {
+    while (xpCurrent >= 200_000_000) {
       uncappedLevel++;
-      xpCurrent -= 200000000;
+      xpCurrent -= 200_000_000;
     }
   }
 
@@ -189,17 +189,17 @@ export function getLevelByXp(xp, extra = {}) {
   xpCurrent = Math.floor(xpCurrent);
 
   /** the level as displayed by in game UI */
-  const level = extra.type != "dungeoneering" && !extra.class ? Math.min(levelCap, uncappedLevel) : uncappedLevel;
+  const level = extra.type != "dungeoneering" ? Math.min(levelCap, uncappedLevel) : uncappedLevel;
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
   const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
   /** the fraction of the way toward the next level */
-  const progress =
-    extra.type == "dungeoneering" && !extra.class && level > 50 ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+  const progress = extra.type == "dungeoneering" && level >= 50 ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
-  const levelWithProgress = level + progress;
+  const levelWithProgress =
+    extra.type == "dungeoneering" && level >= 50 ? level + xpCurrent / 200_000_000 : level + progress;
 
   /** a floating point value representing the current level ignoring the in-game unlockable caps for example if you are half way to level 5 it would be 4.5 */
   const unlockableLevelWithProgress = extra.cap ? Math.min(uncappedLevel + progress, maxLevel) : levelWithProgress;
@@ -402,7 +402,7 @@ async function processItems(base64, source, customTextures = false, packs, cache
       const { farmed_cultivating } = item.tag.ExtraAttributes;
 
       if (farmed_cultivating > 0) {
-        item.extra.farmed_cultivating = farmed_cultivating;
+        item.extra.farmed_cultivating = item.tag?.ExtraAttributes?.mined_crops?.toString() ?? farmed_cultivating;
       }
     }
 
@@ -532,7 +532,7 @@ async function processItems(base64, source, customTextures = false, packs, cache
         item.texture_path = "/" + customTexture.path;
         item.texture_pack = customTexture.pack.config;
         item.texture_pack.base_path =
-          "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.basePath);
+          "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.base_path);
       }
     }
 
@@ -555,7 +555,7 @@ async function processItems(base64, source, customTextures = false, packs, cache
 
     if (lore.length > 0) {
       // item categories, rarity, recombobulated, dungeon, shiny
-      const itemType = helper.parseItemTypeFromLore(lore);
+      const itemType = helper.parseItemTypeFromLore(lore, item);
 
       for (const key in itemType) {
         item[key] = itemType[key];
@@ -714,7 +714,7 @@ async function processItems(base64, source, customTextures = false, packs, cache
       }
 
       if (item.extra?.price_paid) {
-        itemLore.push(`§7Price Paid at Dark Auction: §b${item.extra.price_paid.toLocaleString()} coins`);
+        itemLore.push("", `§7Price Paid at Dark Auction: §6${item.extra.price_paid.toLocaleString()} Coins`);
       }
     }
 
@@ -1158,7 +1158,6 @@ export const getItems = async (
 
     accessories.push(insertAccessory);
     accessoryIds.push(id);
-
     if (insertAccessory.isInactive === false) {
       accessoryRarities[insertAccessory.rarity]++;
       if (id == "HEGEMONY_ARTIFACT") {
@@ -2565,6 +2564,10 @@ export async function getStats(
   }
   userProfile.pets.push(...items.pets);
 
+  for (const pet of userProfile.pets) {
+    await getItemNetworth(pet, { cache: true, returnItemData: false });
+  }
+
   output.pets = await getPets(userProfile, output);
   output.missingPets = await getMissingPets(output.pets, profile.game_mode, output);
   output.petScore = getPetScore(output.pets);
@@ -2584,6 +2587,13 @@ export async function getStats(
   }
 
   for (const pet of output.pets) {
+    if (pet.price > 0) {
+      pet.lore += "<br>";
+      pet.lore += helper.renderLore(
+        `§7Item Value: §6${Math.round(pet.price).toLocaleString()} Coins §7(§6${helper.formatNumber(pet.price)}§7)`
+      );
+    }
+
     if (!pet.active) {
       continue;
     }
@@ -2750,9 +2760,8 @@ export async function getPets(profile, userProfile) {
       });
 
       // now we push the lore of the held items
-      if (!heldItemObj) {
-        heldItemObj = constants.PET_ITEMS[heldItem];
-      }
+      heldItemObj = constants.PET_ITEMS[heldItem] ?? constants.PET_ITEMS["???"];
+
       lore.push("", `§6Held Item: §${constants.RARITY_COLORS[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
 
       if (heldItem in constants.PET_ITEMS) {
@@ -2974,7 +2983,7 @@ function getMissingAccessories(accessories) {
 
       object.texture_path = data.texture || null;
       object.display_name = data.name || null;
-      object.rarity = data.rarity || null;
+      object.rarity = data.tier || data.rarity || null;
     } else {
       const data = await db.collection("items").findOne({ id: accessory });
 
@@ -3185,6 +3194,7 @@ export function getDungeons(userProfile, hypixelProfile) {
 
   // Classes
   output.classes = {};
+  output.class_average = {};
 
   let used_classes = false;
   const current_class = dungeons.selected_dungeon_class || "none";
@@ -3196,7 +3206,7 @@ export function getDungeons(userProfile, hypixelProfile) {
     }
 
     output.classes[className] = {
-      experience: getLevelByXp(data.experience, { type: "dungeoneering", class: className }),
+      experience: getLevelByXp(data.experience, { type: "dungeoneering" }),
       current: false,
     };
 
@@ -3207,12 +3217,20 @@ export function getDungeons(userProfile, hypixelProfile) {
       output.classes[className].current = true;
     }
 
-    output.class_average ??= 0;
-    output.class_average += output.classes[className].experience.level;
+    output.class_average.experience ??= 0;
+    output.class_average.experience += output.classes[className].experience.xp;
   }
 
   output.used_classes = used_classes;
-  output.class_average = output.class_average / Object.keys(output.classes).length;
+  output.class_average.avrg_level = Object.keys(output.classes)
+    .map((key) => output.classes[key].experience.level / Object.keys(output.classes).length)
+    .reduce((a, b) => a + b, 0);
+  output.class_average.avrg_level_with_progress = Object.keys(output.classes)
+    .map((key) => output.classes[key].experience.levelWithProgress / Object.keys(output.classes).length)
+    .reduce((a, b) => a + b, 0);
+  output.class_average.max =
+    Object.keys(output.classes).filter((key) => output.classes[key].experience.level >= 50).length ===
+    Object.keys(output.classes).length;
 
   output.selected_class = current_class;
   output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
@@ -3307,39 +3325,23 @@ export function getDungeons(userProfile, hypixelProfile) {
   output.boss_collections = collections;
 
   // Journal Entries
-  const journal_constants = constants.DUNGEONS.journals;
-  const journal_entries = dungeons.dungeon_journal.journal_entries;
+  const JOURNAL_CONSTANTS = constants.DUNGEONS.journals;
   const journals = {
     pages_collected: 0,
     journals_completed: 0,
     total_pages: 0,
-    maxed: false,
-    journal_entries: [],
+    journal_entries: dungeons.dungeon_journal.unlocked_journals,
   };
 
-  for (const entry_id in journal_entries) {
-    const entry = {
-      name: journal_constants[entry_id] ? journal_constants[entry_id].name : entry_id,
-      pages_collected: journal_entries[entry_id].length || 0,
-      total_pages: journal_constants[entry_id] ? journal_constants[entry_id].pages : null,
-    };
-
-    journals.pages_collected += entry.pages_collected;
-    if (entry.total_pages != null) {
-      if (entry.pages_collected >= entry.total_pages) {
-        journals.journals_completed++;
-      }
+  if (dungeons.dungeon_journal.unlocked_journals !== undefined) {
+    for (const entryID of dungeons.dungeon_journal.unlocked_journals) {
+      journals.journals_completed += 1;
+      journals.pages_collected += JOURNAL_CONSTANTS[entryID]?.pages || 0;
     }
-
-    journals.journal_entries.push(entry);
   }
 
-  for (const entry_id in journal_constants) {
-    journals.total_pages += journal_constants[entry_id].pages || 0;
-  }
-
-  if (journals.pages_collected >= journals.total_pages) {
-    journals.maxed = true;
+  for (const journal in JOURNAL_CONSTANTS) {
+    journals.total_pages += JOURNAL_CONSTANTS[journal].pages;
   }
 
   output.journals = journals;
@@ -3513,7 +3515,7 @@ function getHotmItems(userProfile, packs) {
       item.texture_path = "/" + customTexture.path;
       item.texture_pack = customTexture.pack.config;
       item.texture_pack.base_path =
-        "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.basePath);
+        "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.base_path);
     }
   });
 

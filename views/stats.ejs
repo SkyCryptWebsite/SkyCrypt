@@ -121,12 +121,13 @@ const seaCreatures = [
   "poisoned_water_worm",
   "flaming_worm",
   "magma_slug",
+  "nutcracker",
   "moogma",
   "lava_leech",
   "pyroclastic_worm",
   "lava_flame",
   "fire_eel",
-  "taurus",
+  "pig_rider",
   "guardian_defender",
   "werewolf",
   "deep_sea_protector",
@@ -510,14 +511,36 @@ function getDescription() {
     description.push(line.join(' '), '\n', '\n')
   }
 
-	// Avg. skill
-	if (calculated.average_level) {
-		description.push(
-			`📚 Avg Skill Level: ${
-				Math.floor(calculated.average_level * 10) / 10
-			} `
-		)
-		description.push('\n')
+  // Skyblock Level
+  if (calculated.skyblock_level.xp !== 0 && calculated.skyblock_level.level !== 0) {
+    description.push(
+      `🌟 Skyblock Level: ${calculated.skyblock_level.level + calculated.skyblock_level.progress}`,
+      '\n'
+    )
+  }
+
+
+
+	if (calculated.average_level || calculated.dungeons.class_average) {
+    // Skill Average
+    if (calculated.average_level) {
+      description.push(
+        `📚 Avg Skill Level: ${
+          Math.floor(calculated.average_level * 10) / 10
+        } `
+      )
+    }
+
+    // Dungeons classs average
+    if (calculated.dungeons.class_average) {
+      description.push(
+        `⚔️  Avg Class Level: ${
+          Math.floor(calculated.dungeons.class_average.avrg_level_with_progress * 10) / 10
+        } `
+      )
+    }
+
+    description.push('\n')
 	}
 
 	// Weights
@@ -533,15 +556,23 @@ function getDescription() {
 		description.push('\n')
 	}
 
-	// Bank & purse
+	// Networth, Bank & purse
+  if (calculated.networth.noInventory === false) {
+      description.push(
+        `💸 Networth: ${helper.formatNumber(calculated.networth.networth, true)} `
+      )
+  }
+
 	if (calculated.bank) {
 		description.push(
 			`🏦 Bank: ${helper.formatNumber(calculated.bank, true)} `
 		)
 	}
-	description.push(`💰 Purse: ${helper.formatNumber(calculated.purse, true)}`)
+	description.push(
+    `💰 Purse: ${helper.formatNumber(calculated.purse, true)}`
+  )
 
-	// Done!
+  // Done!
 	return description.join('')
 }
 
@@ -1708,7 +1739,7 @@ const metaDescription = getMetaDescription()
                   <div class="item-icon icon-<%= crop.icon %>"></div>
                 </div>
                 <div class="chip-text">
-                  <div class="collection-name <%= crop.unique_gold ? 'max-minion' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
+                  <div class="collection-name <%= crop.unique_gold ? 'max-stat' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
                   <div class="collection-amount">
                     <small class="stat-name">Personal Best: </small><small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small><br>
                     <small class="stat-name">Contests: </small><small class="stat-value"><%= crop.contests.toLocaleString() %></small><br>
@@ -1895,9 +1926,16 @@ const metaDescription = getMetaDescription()
             <span class="stat-name">Selected Class: </span>
             <span class="stat-value"><%= helper.titleCase(calculated.dungeons.selected_class) %></span>
             <br>
-            <% max = calculated.dungeons.class_average === 50 ? "golden-text" : "" %>
-            <span class="stat-name <%= max %>">Class Average: </span>
-            <span class="stat-value <%= max %>"><%= calculated.dungeons.class_average.toLocaleString() %></span>
+            <% max = calculated.dungeons.class_average.max ? "golden-text" : "" %>
+            <span data-tippy-content="
+              <span class='stat-name'>Total Class XP: </span><span class='stat-value'><%= Math.round(calculated.dungeons.class_average.experience).toLocaleString() %></span>
+              <div class='tippy-explanation'>Total Class XP gained in Catacombs.</div>
+              <span class='stat-name'>Average Level: </span><span class='stat-value'><%= calculated.dungeons.class_average.avrg_level_with_progress.toFixed(2) %></span>
+              <div class='tippy-explanation'>Average class level, includes progress to next level.</div>
+
+              <span class='stat-name'>Average Class Level without progress: </span><span class='stat-value'><%= calculated.dungeons.class_average.avrg_level.toFixed(2) %></span>
+              <div class='tippy-explanation'>Average class level without including partial level progress.</div>">
+              <span class="stat-name <%= max %>">Class Average: </span><span class="stat-value <%= max %>"><%= calculated.dungeons.class_average.avrg_level.toFixed(2) %></span></span>
             <br>
             <% max = calculated.dungeons.catacombs.bonuses.item_boost === 465 ? "golden-text" : "" %>
             <span class="stat-name <%= max %>">Dungeon Item Boost: </span>
@@ -1913,7 +1951,7 @@ const metaDescription = getMetaDescription()
             <span class="stat-value <%= max %>"><%= helper.titleCase(calculated.dungeons.master_catacombs.highest_floor.replace("_", " ")) %></span>
             <br>
             <% } %>
-            <% max = calculated.dungeons.journals.maxed ? "golden-text" : "" %>
+            <% max = calculated.dungeons.journals.pages_collected === calculated.dungeons.journals.total_pages ? "golden-text" : "" %>
             <span class="stat-name <%= max %>">Journals Completed: </span>
             <span class="stat-value <%= max %>"><%= calculated.dungeons.journals.journals_completed %></span>
             <span class="grey-text"> (<%= calculated.dungeons.journals.pages_collected %>/<%= calculated.dungeons.journals.total_pages %>)</span>
@@ -2769,7 +2807,8 @@ const metaDescription = getMetaDescription()
           </div>
           <p class="stat-raw-values">
             <% for(const key in calculated.misc.damage){ %>
-            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= Math.floor(calculated.misc.damage[key]).toLocaleString() %></span><br>
+              <% const damage = calculated.misc.damage[key] > 100_000_000_000 ? helper.formatNumber(Math.floor(calculated.misc.damage[key]).toFixed(0), true) : Math.floor(calculated.misc.damage[key]).toLocaleString(); %>
+            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= damage %></span><br>
             <% } %>
           </p>
           <% } %>

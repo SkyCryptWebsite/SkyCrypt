@@ -33,3 +33,23 @@ export const TYPE_TO_CATEGORIES = {
   deployable: ["deployable"],
   "trophy fish": ["trophy_fish"],
 };
+
+export const ENCHANTMENTS_TO_CATEGORIES = {
+  farming_tool: [
+    "cultivating",
+    "dedication",
+    "delicate",
+    "green_thumb",
+    "harvesting",
+    "replenish",
+    "sunder",
+    "turbo_cacti",
+    "turbo_cane",
+    "turbo_carrot",
+    "turbo_coco",
+    "turbo_mushrooms",
+    "turbo_potato",
+    "turbo_warts",
+    "turbo_wheat",
+  ],
+};

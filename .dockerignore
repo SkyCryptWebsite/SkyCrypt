@@ -1,0 +1,8 @@
+# node modules
+node_modules
+
+# texture cache
+cache
+
+# api credentials
+credentials.json

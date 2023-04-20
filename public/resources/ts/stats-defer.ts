@@ -1,4 +1,4 @@
-import { setCookie } from "./common-defer";
+import { getCookie, setCookie } from "./common-defer";
 import { SkinViewer, createOrbitControls } from "skinview3d";
 import tippy from "tippy.js";
 
@@ -33,21 +33,6 @@ if ("share" in navigator) {
       url: location.href.split("#")[0],
     });
   });
-}
-
-function getCookie(cookieName: string) {
-  if (document.cookie.length > 0) {
-    let cookieStart = document.cookie.indexOf(cookieName + "=");
-    if (cookieStart != -1) {
-      cookieStart = cookieStart + cookieName.length + 1;
-      let cookieEnd = document.cookie.indexOf(";", cookieStart);
-      if (cookieEnd == -1) {
-        cookieEnd = document.cookie.length;
-      }
-      return decodeURIComponent(document.cookie.substring(cookieStart, cookieEnd));
-    }
-  }
-  return "";
 }
 
 tippy("*[data-tippy-content]:not(.interactive-tooltip)", {
@@ -568,7 +553,7 @@ function parseFavorites(cookie: string) {
 }
 
 function checkFavorite() {
-  const favorited = parseFavorites(getCookie("favorite")).includes(
+  const favorited = parseFavorites(getCookie("favorite") ?? "").includes(
     favoriteElement.getAttribute("data-username") as string
   );
   favoriteElement.setAttribute("aria-checked", favorited.toString());
@@ -585,7 +570,7 @@ favoriteElement.addEventListener("click", () => {
   if (uuid == "0c0b857f415943248f772164bf76795c") {
     favoriteNotification.setContent("No");
   } else {
-    const cookieArray = parseFavorites(getCookie("favorite"));
+    const cookieArray = parseFavorites(getCookie("favorite") ?? "");
     if (cookieArray.includes(uuid)) {
       cookieArray.splice(cookieArray.indexOf(uuid), 1);
 

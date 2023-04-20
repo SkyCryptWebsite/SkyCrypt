@@ -22,11 +22,11 @@ const CONFIG = {
     "public/resources/ts/stats-defer.ts",
     "public/resources/ts/development-defer.ts",
     "public/resources/ts/themes.ts",
+    "public/resources/ts/elements/bonus-stats.ts",
     "public/resources/ts/elements/local-time.ts",
     "public/resources/ts/elements/rich-item.ts",
     "public/resources/ts/elements/skill-component.ts",
     "public/resources/ts/elements/player-stat.ts",
-    "public/resources/ts/elements/bonus-stats.ts",
   ],
   output: {
     dir: "public/resources/js",
