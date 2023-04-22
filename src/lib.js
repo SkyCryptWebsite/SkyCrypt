@@ -1592,6 +1592,7 @@ export async function getStats(
   profile,
   allProfiles,
   items,
+  packs,
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getStats` }
 ) {
   const output = {};
@@ -1695,14 +1696,15 @@ export async function getStats(
   if (!items.no_inventory) {
     output.missingAccessories = getMissingAccessories(items.accessory_ids);
 
-    for (const key of Object.keys(output.missingAccessories)) {
+    for (const key in output.missingAccessories) {
       for (const item of output.missingAccessories[key]) {
         const ITEM_PRICE = await helper.getItemPrice(item.name);
-        item.extra ??= {};
-        item.extra.price = ITEM_PRICE;
-
         if (ITEM_PRICE === 0) continue;
 
+        item.extra ??= {};
+        item.extra.price = ITEM_PRICE ?? 0;
+
+        // add "Price: x coins (x per MP)" to lore
         item.tag ??= {};
         item.tag.display ??= {};
         item.tag.display.Lore ??= [];
@@ -1711,19 +1713,37 @@ export async function getStats(
             ITEM_PRICE / constants.MAGICAL_POWER[item.rarity]
           )} §7per MP)`
         );
+
+        // load custom resource pack
+        item.Damage = 3;
+        item.id = 397;
+        item.tag.ExtraAttributes ??= {};
+        item.tag.ExtraAttributes.id = item.name;
+
+        const customTexture = await getTexture(item, {
+          ignore_id: false,
+          pack_ids: packs,
+        });
+    
+        if (customTexture) {
+          item.animated = customTexture.animated;
+          item.texture_path = "/" + customTexture.path;
+          item.texture_pack = customTexture.pack.config;
+          item.texture_pack.base_path =
+            "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.base_path);
+        }
       }
-    }
 
-    for (const key of Object.keys(output.missingAccessories)) {
+      // sort by price
       output.missingAccessories[key].sort((a, b) => {
-        const aPrice = a.extra?.price || 0;
-        const bPrice = b.extra?.price || 0;
-
+        const aPrice = a.extra.price || 0;
+        const bPrice = b.extra.price || 0;
+  
         if (aPrice === 0) return 1;
         if (bPrice === 0) return -1;
-
+  
         return aPrice - bPrice;
-      });
+      })
     }
   }
 
