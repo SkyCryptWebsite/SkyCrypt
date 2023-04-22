@@ -848,35 +848,37 @@ const metaDescription = getMetaDescription()
           ];
         if (calculated.weight) {
           for (weight of weightSystems) { 
-            if ('runecrafting' in calculated.levels) {
-              if (weight.total > 0) { %>
-                <div class="additional-stat">
-                  <span data-tippy-content="
-                    <span class='stat-name'><%= weight.name %></span><br>
-                    <span class='stat-info'>Weight calculations by <%= weight.author %></span>
-                    <br/><br/>
-                    <span class='stat-name'>Skill: </span>
-                    <span class='stat-value'>
-                      <%= parseFloat(weight.skill.toFixed(2)).toLocaleString() %>
-                    </span><br/>
-                    <span class='stat-name'>Slayer: </span>
-                    <span class='stat-value'>
-                      <%= parseFloat(weight.slayer.toFixed(2)).toLocaleString() %>
-                    </span><br/>
-                    <span class='stat-name'>Dungeon: </span>
-                    <span class='stat-value'>
-                      <%= parseFloat(weight.dungeon.toFixed(2)).toLocaleString() %>
-                    </span><br/><br/>
-                    <span class='stat-name'>Total: </span>
-                    <span class='stat-value'>
-                      <%= parseFloat(weight.total.toFixed(2)).toLocaleString() %>
-                    </span>
-                  ">
-                  <span class="stat-name"><%= weight.name %>: </span>
-                  <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span></span>
-                </div>
-              <% } %>
-            <% } %>
+            // set weight to 0 if skills API is off (due to skill wipes & incorrect calculation)
+            if ('runecrafting' in calculated.levels === false) {
+              weight.total -= weight.skill;
+              weight.skill = 0;
+            } %>
+
+            <div class="additional-stat">
+              <span data-tippy-content="
+                <span class='stat-name'><%= weight.name %></span><br>
+                <span class='stat-info'>Weight calculations by <%= weight.author %></span>
+                <br/><br/>
+                <span class='stat-name'>Skill: </span>
+                <span class='stat-value'>
+                  <%= parseFloat(weight.skill.toFixed(2)).toLocaleString() %>
+                </span><br/>
+                <span class='stat-name'>Slayer: </span>
+                <span class='stat-value'>
+                  <%= parseFloat(weight.slayer.toFixed(2)).toLocaleString() %>
+                </span><br/>
+                <span class='stat-name'>Dungeon: </span>
+                <span class='stat-value'>
+                  <%= parseFloat(weight.dungeon.toFixed(2)).toLocaleString() %>
+                </span><br/><br/>
+                <span class='stat-name'>Total: </span>
+                <span class='stat-value'>
+                  <%= parseFloat(weight.total.toFixed(2)).toLocaleString() %>
+                </span>
+              ">
+              <span class="stat-name"><%= weight.name %>: </span>
+              <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span></span>
+            </div>
           <% } %>
         <% } %>
         <% if (!calculated.networth.noInventory) {%>
