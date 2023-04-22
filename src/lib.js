@@ -375,7 +375,7 @@ async function processItems(base64, source, customTextures = false, packs, cache
 
           if (itemData.id >= 298 && itemData.id <= 301) {
             const type = ["helmet", "chestplate", "leggings", "boots"][itemData.id - 298];
-            const color = helper.toHex(hypixelItem.color) ?? "955e3b";
+            const color = helper.RGBtoHex(hypixelItem.color) ?? "955e3b";
 
             itemData.texture_path = `/leather/${type}/${color}`;
           }
