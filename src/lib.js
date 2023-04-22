@@ -355,7 +355,7 @@ async function processItems(base64, source, customTextures = false, packs, cache
     ) {
       item.containsItems = [];
       for (const key in item.tag.ExtraAttributes) {
-        if (key.startsWith("personal_compact_")) {
+        if (key.startsWith("personal_compact_") || key.startsWith("personal_deletor_")) {
           const hypixelItem = await db.collection("items").findOne({ id: item.tag.ExtraAttributes[key] });
 
           const itemData = {
@@ -371,6 +371,13 @@ async function processItems(base64, source, customTextures = false, packs, cache
 
           if (hypixelItem.texture !== undefined) {
             itemData.texture_path = `/head/${hypixelItem.texture}`;
+          }
+
+          if (itemData.id >= 298 && itemData.id <= 301) {
+            const type = ["helmet", "chestplate", "leggings", "boots"][itemData.id - 298];
+            const color = helper.toHex(hypixelItem.color) ?? "955e3b";
+
+            itemData.texture_path = `/leather/${type}/${color}`;
           }
 
           item.containsItems.push(itemData);
