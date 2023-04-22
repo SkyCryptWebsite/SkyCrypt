@@ -86,7 +86,6 @@ function calcSkillWeight(skillGroup, level, experience) {
     };
   }
 
-
   return {
     weight: base,
     weight_overflow: Math.pow((experience - maxSkillLevelXP) / skillGroup.divider, 0.968),
