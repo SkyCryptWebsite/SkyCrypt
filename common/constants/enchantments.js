@@ -82,7 +82,7 @@ export const MAX_ENCHANTS = new Set([
   "Spiked Hook VI",
   "Strong Mana X",
   "Sugar Rush III",
-  "Sunder VI",
+  "Sunder V",
   "Syphon V",
   "Tabasco III",
   "Thorns III",
