@@ -1724,7 +1724,7 @@ export async function getStats(
           ignore_id: false,
           pack_ids: packs,
         });
-    
+
         if (customTexture) {
           item.animated = customTexture.animated;
           item.texture_path = "/" + customTexture.path;
@@ -1738,12 +1738,12 @@ export async function getStats(
       output.missingAccessories[key].sort((a, b) => {
         const aPrice = a.extra.price || 0;
         const bPrice = b.extra.price || 0;
-  
+
         if (aPrice === 0) return 1;
         if (bPrice === 0) return -1;
-  
+
         return aPrice - bPrice;
-      })
+      });
     }
   }
 
