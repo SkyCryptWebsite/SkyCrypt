@@ -65,7 +65,7 @@ const skillWeight = {
 };
 
 function calcSkillWeight(skillGroup, level, experience) {
-  if (skillGroup.exponent == undefined || skillGroup.divider == undefined) {
+  if (skillGroup.exponent == undefined || skillGroup.divider == undefined || level === undefined) {
     return {
       weight: 0,
       weight_overflow: 0,
@@ -85,6 +85,7 @@ function calcSkillWeight(skillGroup, level, experience) {
       weight_overflow: 0,
     };
   }
+
 
   return {
     weight: base,
