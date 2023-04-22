@@ -326,8 +326,7 @@ async function processItems(base64, source, customTextures = false, packs, cache
   for (const [index, item] of items.entries()) {
     if (
       item.tag?.display?.Name.includes("Backpack") ||
-      ["NEW_YEAR_CAKE_BAG", "BUILDERS_WAND", "BASKET_OF_SEEDS"].includes(item.tag?.ExtraAttributes?.id)
-    ) {
+      ["NEW_YEAR_CAKE_BAG", "BUILDERS_WAND", "BASKET_OF_SEEDS"].includes(item.tag?.ExtraAttributes?.id)) {
       let backpackData;
 
       for (const key of Object.keys(item.tag.ExtraAttributes)) {
@@ -348,7 +347,34 @@ async function processItems(base64, source, customTextures = false, packs, cache
 
       items.push(...backpackContents);
     }
+
+    if (item.tag?.ExtraAttributes?.id?.includes("PERSONAL_COMPACTOR_") || item.tag?.ExtraAttributes?.id?.includes("PERSONAL_DELETOR_")) {
+      item.containsItems = [];
+      for (const key in item.tag.ExtraAttributes) {
+        if (key.startsWith("personal_compact_")) {
+          const hypixelItem = await db.collection("items").findOne({ id: item.tag.ExtraAttributes[key] });
+
+          const itemData = {
+            Count: 1,
+            Damage: hypixelItem?.damage ?? 3,
+            id: hypixelItem?.item_id ?? 397,
+            itemIndex: item.containsItems.length,
+            glowing: hypixelItem.glowing,
+            display_name: hypixelItem.name,
+            rarity: hypixelItem.tier,
+            categories: [],
+          };
+
+          if (hypixelItem.texture !== undefined) {
+            itemData.texture_path = `/head/${hypixelItem.texture}`
+          }
+
+          item.containsItems.push(itemData)
+        }
+      }
+    }
   }
+
 
   for (const item of items) {
     // Get extra info about certain things
