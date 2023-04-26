@@ -640,21 +640,6 @@ class Mole extends Node {
       percent = 100;
     }
 
-    switch (blocks) {
-      case 1:
-        blocks = "1";
-        break;
-      case 2:
-        blocks = "a 2nd";
-        break;
-      case 3:
-        blocks = "a 3rd";
-        break;
-      default:
-        blocks = `a ${blocks}th`;
-        break;
-    }
-
     return [
       `§7When mining hard stone, you have a §a${percent}%§7 chance to mine §a${blocks}§7 adjacent hard stone block.`,
     ];
@@ -815,7 +800,7 @@ class StarPowder extends Node {
   }
 
   perk(level) {
-    return [`§7Mining Mithril Ore near §5Fallen Crystals §7gives §a+3 §7extra Mithril Powder.`];
+    return [`§7Mining Mithril Ore near §5Fallen Crystals §7gives §a3x §7Mithril Powder.`];
   }
 }
 
@@ -839,10 +824,10 @@ class SkyMall extends Node {
       "§7Every SkyBlock day, you receive a random buff in the §2Dwarven Mines§7.",
       "",
       "§7Possible Buffs",
-      `§8 ■ §7Gain §a+100 §6${SYMBOLS.mining_speed} Mining Speed.`,
-      `§8 ■ §7Gain §a+50 §6${SYMBOLS.mining_fortune} Mining Fortune.`,
+      `§8 ■ §7Gain §a+100 §6${SYMBOLS.mining_speed} Mining Speed§7.`,
+      `§8 ■ §7Gain §a+50 §6${SYMBOLS.mining_fortune} Mining Fortune§7.`,
       "§8 ■ §7Gain §a+15% §7chance to gain extra Powder while mining.",
-      "§8 ■ §7Reduce Pickaxe Ability cooldown by §a20%",
+      "§8 ■ §7Reduce Pickaxe Ability cooldown by §a20%§7.",
       "§8 ■ §7§a10x §7chance to find Goblins while mining.",
       "§8 ■ §7Gain §a5x §9Titanium §7drops.",
     ];
@@ -955,7 +940,7 @@ class FrontLoaded extends Node {
 
   perk(level) {
     return [
-      `§7Grants §a+100 §6${SYMBOLS.mining_speed} Mining Speed §7and §6${SYMBOLS.mining_fortune} Mining Fortune §7for the first §e2,500 §7ores you mine in a day.`,
+      `§7Grants §a+100 §6${SYMBOLS.mining_speed} Mining Speed §7and §6${SYMBOLS.mining_fortune} Mining Fortune §7as well as §a+2 base powder §7for the first §e2,500 §7ores you mine in a day.`,
     ];
   }
 }
