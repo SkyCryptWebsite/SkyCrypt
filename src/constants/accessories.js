@@ -71,6 +71,7 @@ const accessoryUpgrades = [
   ["WHITE_GIFT_TALISMAN", "GREEN_GIFT_TALISMAN", "BLUE_GIFT_TALISMAN", "PURPLE_GIFT_TALISMAN", "GOLD_GIFT_TALISMAN"],
   ["GLACIAL_TALISMAN", "GLACIAL_RING", "GLACIAL_ARTIFACT"],
   ["CROPIE_TALISMAN", "SQUASH_RING", "FERMENTO_ARTIFACT"],
+  ["KUUDRA_FOLLOWER_ARTIFACT", "KUUDRA_FOLLOWER_RELIC"],
 ];
 
 const ignoredAccessories = [
@@ -125,12 +126,14 @@ export const accessoryAliases = {
 };
 
 const extraAccessories = [
+  /*
   {
-    id: "KUUDRA_FOLLOWER_ARTIFACT",
-    texture: "772011280b5b9ab18c55703943e7f11a19717974bb9541ca4b2723f7a5fab236",
-    name: "Kuudra Follower Artifact",
-    rarity: "epic",
+    id: "ID",
+    texture: "TEXTURE",
+    name: "NAME",
+    rarity: "RARITY",
   },
+  */
 ];
 
 const specialAccessories = {
