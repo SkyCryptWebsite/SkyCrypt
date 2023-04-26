@@ -1652,22 +1652,22 @@ const metaDescription = getMetaDescription()
             </div>
 
             <p class="stat-raw-values">
-              <span class="stat-name">Farming Weight: </span><span class="stat-value">
-              <span class="stat-value interactive-tooltip" data-tippy-content='
-                  <span class="stat-name">Farming Weight</span><br>
-                  <br/>
-                  <span class="stat-name">Crop Weight: </span><span class="stat-value"><%= parseFloat(calculated.weight.farming.crop_weight.toFixed(2)).toLocaleString() %></span><br>
-                  <% for (const crop of Object.values(calculated.weight.farming.crops).sort((a, b) => {
-                    const nameA = a.name.toLowerCase();
-                    const nameB = b.name.toLowerCase();
-                    return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-                  })) { %>
-                    <div class="tippy-explanation"><%= crop.name %>: <%= parseFloat(crop.weight.toFixed(2)).toLocaleString() %></div>
+              <span data-tippy-content="
+                <span class='stat-name'>Farming Weight</span><br>
+                <span class='stat-info'>Weight calculations by Elite</span>
+                <br/><br/>
+                <% for (const crop of Object.values(calculated.weight.farming.crops).sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))) { %>
+                  <% if (crop.weight > 0) { %>
+                    <span class='stat-name'><%= crop.name %>: </span>
+                    <span class='stat-value'> <%= parseFloat(crop.weight.toFixed(2)).toLocaleString() %> </span><br/>
                   <% } %>
-                  <span class="stat-name">Bonus Weight: </span><span class="stat-value"><%= parseFloat(calculated.weight.farming.bonus_weight.toFixed(2)).toLocaleString() %></span><br>
-                  <span class="stat-info">View more detailed info on <a href="https://elitebot.dev/" class="no-underline">Elite</a></span><br>
-                '><%= parseFloat(calculated.weight.farming.weight.toFixed(2)).toLocaleString() %></span>
-              <br>
+                <% } %>
+                <br/>
+                <span class='stat-name'>Total: </span>
+                <span class='stat-value'><%= parseFloat(calculated.weight.farming.crop_weight.toFixed(2)).toLocaleString() %></span>">
+                <span class="stat-name">Farming Weight: </span>
+                <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span>
+              </span><br>
               <span class="stat-name">Pelts: </span><span class="stat-value"><%= calculated.farming.pelts.toLocaleString() %></span><br>
               <% const farming = calculated.farming;
               if (farming.talked && farming.contests.attended_contests > 0) {%>
