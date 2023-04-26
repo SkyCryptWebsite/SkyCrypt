@@ -1633,7 +1633,7 @@ class Rat extends Pet {
         } Magic Find §7for §a${round(
           20 + this.level * multTime,
           0
-        )} §7seconds after finding a yummy piece of Cheese! If the player gets a drop during this buff, you have a §a20% §7to get it too.`,
+        )} §7seconds after finding a yummy piece of Cheese! If the player gets a drop during this buff, you have a §a20% §7chance to get it too.`,
       ],
     };
   }
@@ -3235,7 +3235,7 @@ class Kuudra extends Pet {
 
     return {
       name: "§6Crimson",
-      desc: [`§7Grants §a${round(this.level * mult, 1)}% §7extra crimson essence.`],
+      desc: [`§7Grants §a${round(this.level * mult, 1)}% §7extra Crimson Essence.`],
     };
   }
 
@@ -3314,7 +3314,7 @@ class Reindeer extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 0.05 });
+    const mult = getValue(this.rarity, { legendary: 0.1 });
 
     return {
       name: "§6Snow Power",
