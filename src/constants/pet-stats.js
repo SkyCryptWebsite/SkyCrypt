@@ -329,7 +329,9 @@ class Pig extends Pet {
   get fourth() {
     return {
       name: "§6Trample",
-      desc: [`§7Your pig will break all crops that it walks over while on your private island or Garden. While riding, §6${SYMBOLS.farming_fortune} Farming Fortune §7and §aFarming Exp §7gain is reduced by §a75%§7.`],
+      desc: [
+        `§7Your pig will break all crops that it walks over while on your private island or Garden. While riding, §6${SYMBOLS.farming_fortune} Farming Fortune §7and §aFarming Exp §7gain is reduced by §a75%§7.`,
+      ],
     };
   }
 }
