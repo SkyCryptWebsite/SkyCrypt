@@ -2350,7 +2350,7 @@ export async function getStats(
     misc.uncategorized.bank_cooldown = {
       raw: userProfile.personal_bank_upgrade,
       formatted: constants.BANK_COOLDOWN[userProfile.personal_bank_upgrade] ?? "Unknown",
-      maxed: userProfile.personal_bank_upgrade === Object.keys(constants.BANK_COOLDOWN).length
+      maxed: userProfile.personal_bank_upgrade === Object.keys(constants.BANK_COOLDOWN).length,
     };
   }
 
