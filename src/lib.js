@@ -857,22 +857,36 @@ export const getItems = async (
     { name: "candy bag", property: "candy_inventory_contents" },
     { name: "personal vault", property: "personal_vault_contents" },
   ];
-  
-  const promises = inventoryTypes.filter((type) => type.property in profile).map((type) => {
-    return processItems(profile[type.property].data, type.name, customTextures, packs, options.cacheOnly);
-  });
-  
-  let [armor, equipment, inventory, wardrobe_inventory, enderchest, accessory_bag, fishing_bag, quiver, potion_bag, candy_bag, personal_vault] = await Promise.all(promises);  
+
+  const promises = inventoryTypes
+    .filter((type) => type.property in profile)
+    .map((type) => {
+      return processItems(profile[type.property].data, type.name, customTextures, packs, options.cacheOnly);
+    });
+
+  let [
+    armor,
+    equipment,
+    inventory,
+    wardrobe_inventory,
+    enderchest,
+    accessory_bag,
+    fishing_bag,
+    quiver,
+    potion_bag,
+    candy_bag,
+    personal_vault,
+  ] = await Promise.all(promises);
 
   let storage = [];
   if (profile.backpack_contents) {
     const storageSize = Math.max(18, Object.keys(profile.backpack_contents).length);
-    
+
     const promises = [];
-  
+
     for (let slot = 0; slot < storageSize; slot++) {
       storage.push({});
-  
+
       if (profile.backpack_contents[slot] && profile.backpack_icons[slot]) {
         const iconPromise = processItems(
           profile.backpack_icons[slot].data,
@@ -881,7 +895,7 @@ export const getItems = async (
           packs,
           options.cacheOnly
         );
-  
+
         const itemsPromise = processItems(
           profile.backpack_contents[slot].data,
           "storage",
@@ -889,25 +903,25 @@ export const getItems = async (
           packs,
           options.cacheOnly
         );
-  
+
         promises.push(iconPromise, itemsPromise);
-  
+
         (async (slot, iconPromise, itemsPromise) => {
           const [icon, items] = await Promise.all([iconPromise, itemsPromise]);
-  
+
           for (const [index, item] of items.entries()) {
             item.isInactive = true;
             item.inBackpack = true;
             item.item_index = index;
           }
-  
+
           const storageUnit = icon[0];
           storageUnit.containsItems = items;
           storage[slot] = storageUnit;
         })(slot, iconPromise, itemsPromise);
       }
     }
-  
+
     await Promise.all(promises);
   }
 
