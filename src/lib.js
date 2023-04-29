@@ -844,90 +844,71 @@ export const getItems = async (
   const timeStarted = Date.now();
 
   // Process inventories returned by API
-  const armor =
-    "inv_armor" in profile
-      ? await processItems(profile.inv_armor.data, "armor", customTextures, packs, options.cacheOnly)
-      : [];
-  const equipment =
-    "equippment_contents" in profile
-      ? await processItems(profile.equippment_contents.data, "equipment", customTextures, packs, options.cacheOnly)
-      : [];
-  const inventory =
-    "inv_contents" in profile
-      ? await processItems(profile.inv_contents.data, "inventory", customTextures, packs, options.cacheOnly)
-      : [];
-  const wardrobe_inventory =
-    "wardrobe_contents" in profile
-      ? await processItems(profile.wardrobe_contents.data, "wardrobe", customTextures, packs, options.cacheOnly)
-      : [];
-  let enderchest =
-    "ender_chest_contents" in profile
-      ? await processItems(profile.ender_chest_contents.data, "ender chest", customTextures, packs, options.cacheOnly)
-      : [];
-  const accessory_bag =
-    "talisman_bag" in profile
-      ? await processItems(profile.talisman_bag.data, "accessory bag", customTextures, packs, options.cacheOnly)
-      : [];
-  const fishing_bag =
-    "fishing_bag" in profile
-      ? await processItems(profile.fishing_bag.data, "fishing bag", customTextures, packs, options.cacheOnly)
-      : [];
-  const quiver =
-    "quiver" in profile
-      ? await processItems(profile.quiver.data, "quiver", customTextures, packs, options.cacheOnly)
-      : [];
-  const potion_bag =
-    "potion_bag" in profile
-      ? await processItems(profile.potion_bag.data, "potion bag", customTextures, packs, options.cacheOnly)
-      : [];
-  const candy_bag =
-    "candy_inventory_contents" in profile
-      ? await processItems(profile.candy_inventory_contents.data, "candy bag", customTextures, packs, options.cacheOnly)
-      : [];
-  const personal_vault =
-    "personal_vault_contents" in profile
-      ? await processItems(
-          profile.personal_vault_contents.data,
-          "personal vault",
-          customTextures,
-          packs,
-          options.cacheOnly
-        )
-      : [];
+  const inventoryTypes = [
+    { name: "armor", property: "inv_armor" },
+    { name: "equipment", property: "equippment_contents" },
+    { name: "inventory", property: "inv_contents" },
+    { name: "wardrobe", property: "wardrobe_contents" },
+    { name: "ender chest", property: "ender_chest_contents" },
+    { name: "accessory bag", property: "talisman_bag" },
+    { name: "fishing bag", property: "fishing_bag" },
+    { name: "quiver", property: "quiver" },
+    { name: "potion bag", property: "potion_bag" },
+    { name: "candy bag", property: "candy_inventory_contents" },
+    { name: "personal vault", property: "personal_vault_contents" },
+  ];
+  
+  const promises = inventoryTypes.filter((type) => type.property in profile).map((type) => {
+    return processItems(profile[type.property].data, type.name, customTextures, packs, options.cacheOnly);
+  });
+  
+  let [armor, equipment, inventory, wardrobe_inventory, enderchest, accessory_bag, fishing_bag, quiver, potion_bag, candy_bag, personal_vault] = await Promise.all(promises);  
 
   let storage = [];
   if (profile.backpack_contents) {
     const storageSize = Math.max(18, Object.keys(profile.backpack_contents).length);
+    
+    const promises = [];
+  
     for (let slot = 0; slot < storageSize; slot++) {
       storage.push({});
-
+  
       if (profile.backpack_contents[slot] && profile.backpack_icons[slot]) {
-        const icon = await processItems(
+        const iconPromise = processItems(
           profile.backpack_icons[slot].data,
           "storage",
           customTextures,
           packs,
           options.cacheOnly
         );
-        const items = await processItems(
+  
+        const itemsPromise = processItems(
           profile.backpack_contents[slot].data,
           "storage",
           customTextures,
           packs,
           options.cacheOnly
         );
-
-        for (const [index, item] of items.entries()) {
-          item.isInactive = true;
-          item.inBackpack = true;
-          item.item_index = index;
-        }
-
-        const storageUnit = icon[0];
-        storageUnit.containsItems = items;
-        storage[slot] = storageUnit;
+  
+        promises.push(iconPromise, itemsPromise);
+  
+        (async (slot, iconPromise, itemsPromise) => {
+          const [icon, items] = await Promise.all([iconPromise, itemsPromise]);
+  
+          for (const [index, item] of items.entries()) {
+            item.isInactive = true;
+            item.inBackpack = true;
+            item.item_index = index;
+          }
+  
+          const storageUnit = icon[0];
+          storageUnit.containsItems = items;
+          storage[slot] = storageUnit;
+        })(slot, iconPromise, itemsPromise);
       }
     }
+  
+    await Promise.all(promises);
   }
 
   const wardrobeColumns = wardrobe_inventory.length / 4;
