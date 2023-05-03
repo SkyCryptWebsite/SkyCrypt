@@ -1817,9 +1817,16 @@ export async function getStats(
 
   const userInfo = await db.collection("usernames").findOne({ uuid: profile.uuid });
 
-  const members = await Promise.all(
-    Object.keys(profile.members).map((a) => helper.resolveUsernameOrUuid(a, db, options.cacheOnly))
-  );
+  const memberUuids = [];
+  for (const [uuid, memberProfile] of Object.entries(profile.members)) {
+    if (memberProfile?.coop_invitation?.confirmed === false) {
+      continue;
+    }
+
+    memberUuids.push(uuid);
+  }
+
+  const members = await Promise.all(memberUuids.map((a) => helper.resolveUsernameOrUuid(a, db, options.cacheOnly)));
 
   if (userInfo) {
     output.display_name = userInfo.username;
