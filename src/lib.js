@@ -1704,7 +1704,7 @@ export async function getStats(
         item.tag.display.Lore ??= [];
         item.tag.display.Lore.push(
           `§7Price: §6${Math.round(ITEM_PRICE).toLocaleString()} Coins §7(§6${helper.formatNumber(
-            ITEM_PRICE / constants.MAGICAL_POWER[item.rarity]
+            ITEM_PRICE / helper.getMagicalPower(item.rarity, item.name)
           )} §7per MP)`
         );
       }
