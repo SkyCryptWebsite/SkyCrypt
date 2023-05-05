@@ -179,7 +179,10 @@ export function getLevelByXp(xp, extra = {}) {
   }
 
   /** the maximum level that any player can achieve (used for gold progress bars) */
-  const maxLevel = extra.ignoreCap === true && uncappedLevel >= levelCap ? uncappedLevel : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
+  const maxLevel =
+    extra.ignoreCap === true && uncappedLevel >= levelCap
+      ? uncappedLevel
+      : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
 
   // not sure why this is floored but I'm leaving it in for now
   xpCurrent = Math.floor(xpCurrent);
