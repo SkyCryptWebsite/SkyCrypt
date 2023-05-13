@@ -172,7 +172,7 @@ export function getLevelByXp(xp, extra = {}) {
     }
   }
 
-  /* adds support for catacombs level above 50 */
+  /** adds support for catacombs level above 50 */
   if (extra.type === "dungeoneering") {
     uncappedLevel += Math.floor(xpCurrent / 200_000_000);
     xpCurrent %= 200_000_000;
@@ -180,15 +180,13 @@ export function getLevelByXp(xp, extra = {}) {
 
   /** the maximum level that any player can achieve (used for gold progress bars) */
   const maxLevel =
-    extra.ignoreCap === true && uncappedLevel >= levelCap
-      ? uncappedLevel
-      : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
+    extra.ignoreCap && uncappedLevel >= levelCap ? uncappedLevel : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
 
   // not sure why this is floored but I'm leaving it in for now
   xpCurrent = Math.floor(xpCurrent);
 
   /** the level as displayed by in game UI */
-  const level = extra.ignoreCap === true ? uncappedLevel : Math.min(levelCap, uncappedLevel);
+  const level = extra.ignoreCap ? uncappedLevel : Math.min(levelCap, uncappedLevel);
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
   const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
