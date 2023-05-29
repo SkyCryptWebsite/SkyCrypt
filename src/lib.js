@@ -1105,7 +1105,7 @@ export const getItems = async (
   }
 
   // Don't account for lower tier versions of the same accessory
-  for (const accessory of accessories.concat(armor)) {
+  for (const accessory of accessories) {
     const id = helper.getId(accessory);
 
     if (id in constants.accessoryAliases) {
@@ -2784,7 +2784,7 @@ function getMissingAccessories(accessories) {
 
     let includes = false;
 
-    if (constants.getUpgradeList(accessory)?.[0] !== accessory && constants.getUpgradeList(accessory)) {
+    if (constants.getUpgradeList(accessory) && constants.getUpgradeList(accessory)[0] !== accessory) {
       includes = true;
     }
 
