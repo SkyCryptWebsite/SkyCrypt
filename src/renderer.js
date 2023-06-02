@@ -462,7 +462,7 @@ export async function renderItem(skyblockId, query) {
     itemQuery = Object.assign(query, { skyblockId });
   }
 
-  const item = await getItemData(itemQuery);
+  const item = await getItemData({ skyblockId, ...itemQuery });
   const outputTexture = { mime: "image/png" };
 
   for (const rule of itemsCss.stylesheet.rules) {
