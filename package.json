@@ -14,7 +14,6 @@
   "scripts": {
     "start": "node index",
     "dev": "pnpm i && concurrently -r \"pnpm nodemon\" \"pnpm scss:watch\" \"pnpm rollup:watch\"",
-    "postinstall": "node src/credentials.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "node src/credentials.js && node src/scripts/prepare-cache.js",
     "prestart": "pnpm scss && pnpm rollup",
