@@ -153,7 +153,7 @@ export function getLevelByXp(xp, extra = {}) {
 
   /** the level that this player is caped at */
   const levelCap =
-    extra.cap ?? constants.DEFAULT_SKILL_CAPS[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
+    extra.cap ?? constants.DEFAULT_SKILL_CAPS[extra.skill] ?? Math.max(...Object.keys(xpTable).map(Number));
 
   /** the level ignoring the cap and using only the table */
   let uncappedLevel = 0;
@@ -172,24 +172,20 @@ export function getLevelByXp(xp, extra = {}) {
     }
   }
 
-  if (extra.type == "dungeoneering") {
-    while (xpCurrent >= 200_000_000) {
-      uncappedLevel++;
-      xpCurrent -= 200_000_000;
-    }
+  /* adds support for catacombs level above 50 */
+  if (extra.type === "dungeoneering") {
+    uncappedLevel += Math.floor(xpCurrent / 200_000_000);
+    xpCurrent %= 200_000_000;
   }
 
   /** the maximum level that any player can achieve (used for gold progress bars) */
-  const maxLevel =
-    extra.type == "dungeoneering" && uncappedLevel > 50
-      ? uncappedLevel
-      : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
+  const maxLevel = extra.type === "dungeoneering" ? uncappedLevel : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
 
   // not sure why this is floored but I'm leaving it in for now
   xpCurrent = Math.floor(xpCurrent);
 
   /** the level as displayed by in game UI */
-  const level = extra.type != "dungeoneering" ? Math.min(levelCap, uncappedLevel) : uncappedLevel;
+  const level = extra.type !== "dungeoneering" ? Math.min(levelCap, uncappedLevel) : uncappedLevel;
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
   const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
@@ -532,7 +528,7 @@ async function processItems(base64, source, customTextures = false, packs, cache
         item.texture_path = "/" + customTexture.path;
         item.texture_pack = customTexture.pack.config;
         item.texture_pack.base_path =
-          "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.basePath);
+          "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.base_path);
       }
     }
 
@@ -714,7 +710,7 @@ async function processItems(base64, source, customTextures = false, packs, cache
       }
 
       if (item.extra?.price_paid) {
-        itemLore.push(`§7Price Paid at Dark Auction: §b${item.extra.price_paid.toLocaleString()} coins`);
+        itemLore.push("", `§7Price Paid at Dark Auction: §6${item.extra.price_paid.toLocaleString()} Coins`);
       }
     }
 
@@ -1237,11 +1233,7 @@ export const getItems = async (
 
     countsOfId[id] = (countsOfId[id] || 0) + 1;
 
-    if (id == "BONE_BOOMERANG") {
-      if (countsOfId[id] > 6) {
-        weapon.hidden = true;
-      }
-    } else if (countsOfId[id] > 2) {
+    if (countsOfId[id] > 2 && constants.RARITIES.indexOf(weapon.rarity) < constants.RARITIES.indexOf("legendary")) {
       weapon.hidden = true;
     }
   }
@@ -1440,6 +1432,10 @@ async function getLevels(userProfile, hypixelProfile, levelCaps, profileMembers)
       runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting, {
         skill: "runecrafting",
         type: "runecrafting",
+        cap:
+          hypixelProfile.rankText === null
+            ? constants.NON_RUNECRAFTING_LEVEL_CAP
+            : constants.DEFAULT_SKILL_CAPS.runecrafting,
       }),
       social:
         Object.keys(profileMembers || {}).length > 0
@@ -1764,9 +1760,16 @@ export async function getStats(
 
   const userInfo = await db.collection("usernames").findOne({ uuid: profile.uuid });
 
-  const members = await Promise.all(
-    Object.keys(profile.members).map((a) => helper.resolveUsernameOrUuid(a, db, options.cacheOnly))
-  );
+  const memberUuids = [];
+  for (const [uuid, memberProfile] of Object.entries(profile.members)) {
+    if (memberProfile?.coop_invitation?.confirmed === false) {
+      continue;
+    }
+
+    memberUuids.push(uuid);
+  }
+
+  const members = await Promise.all(memberUuids.map((a) => helper.resolveUsernameOrUuid(a, db, options.cacheOnly)));
 
   if (userInfo) {
     output.display_name = userInfo.username;
@@ -2285,6 +2288,15 @@ export async function getStats(
     misc.uncategorized.reaper_peppers_eaten = {
       raw: userProfile.reaper_peppers_eaten,
       formatted: helper.formatNumber(userProfile.reaper_peppers_eaten),
+      maxed: userProfile.reaper_peppers_eaten === constants.MAX_REAPER_PEPPERS_EATEN,
+    };
+  }
+
+  if ("personal_bank_upgrade" in userProfile) {
+    misc.uncategorized.bank_cooldown = {
+      raw: userProfile.personal_bank_upgrade,
+      formatted: constants.BANK_COOLDOWN[userProfile.personal_bank_upgrade] ?? "Unknown",
+      maxed: userProfile.personal_bank_upgrade === Object.keys(constants.BANK_COOLDOWN).length,
     };
   }
 
@@ -2374,6 +2386,10 @@ export async function getStats(
   }
   userProfile.pets.push(...items.pets);
 
+  for (const pet of userProfile.pets) {
+    await getItemNetworth(pet, { cache: true, returnItemData: false });
+  }
+
   output.pets = await getPets(userProfile, output);
   output.missingPets = await getMissingPets(output.pets, profile.game_mode, output);
   output.petScore = getPetScore(output.pets);
@@ -2393,6 +2409,13 @@ export async function getStats(
   }
 
   for (const pet of output.pets) {
+    if (pet.price > 0) {
+      pet.lore += "<br>";
+      pet.lore += helper.renderLore(
+        `§7Item Value: §6${Math.round(pet.price).toLocaleString()} Coins §7(§6${helper.formatNumber(pet.price)}§7)`
+      );
+    }
+
     if (!pet.active) {
       continue;
     }
@@ -2559,9 +2582,8 @@ export async function getPets(profile, userProfile) {
       });
 
       // now we push the lore of the held items
-      if (!heldItemObj) {
-        heldItemObj = constants.PET_ITEMS[heldItem];
-      }
+      heldItemObj = constants.PET_ITEMS[heldItem] ?? constants.PET_ITEMS["???"];
+
       lore.push("", `§6Held Item: §${constants.RARITY_COLORS[heldItemObj.tier.toLowerCase()]}${heldItemObj.name}`);
 
       if (heldItem in constants.PET_ITEMS) {
@@ -3315,7 +3337,7 @@ function getHotmItems(userProfile, packs) {
       item.texture_path = "/" + customTexture.path;
       item.texture_pack = customTexture.pack.config;
       item.texture_pack.base_path =
-        "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.basePath);
+        "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.base_path);
     }
   });
 

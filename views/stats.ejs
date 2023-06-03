@@ -121,12 +121,14 @@ const seaCreatures = [
   "poisoned_water_worm",
   "flaming_worm",
   "magma_slug",
+  "baby_magma_slug",
+  "nutcracker",
   "moogma",
   "lava_leech",
   "pyroclastic_worm",
   "lava_flame",
   "fire_eel",
-  "taurus",
+  "pig_rider",
   "guardian_defender",
   "werewolf",
   "deep_sea_protector",
@@ -846,9 +848,15 @@ const metaDescription = getMetaDescription()
             },
           ];
         if (calculated.weight) {
-          for (weight of weightSystems) { %>
-        <div class="additional-stat">
-          <span data-tippy-content="
+          for (weight of weightSystems) { 
+            // set weight to 0 if skills API is off (due to skill wipes & incorrect calculation)
+            if ('runecrafting' in calculated.levels === false) {
+              weight.total -= weight.skill;
+              weight.skill = 0;
+            } %>
+
+            <div class="additional-stat">
+              <span data-tippy-content="
                 <span class='stat-name'><%= weight.name %></span><br>
                 <span class='stat-info'>Weight calculations by <%= weight.author %></span>
                 <br/><br/>
@@ -869,11 +877,11 @@ const metaDescription = getMetaDescription()
                   <%= parseFloat(weight.total.toFixed(2)).toLocaleString() %>
                 </span>
               ">
-            <span class="stat-name"><%= weight.name %>: </span>
-            <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span></span>
-        </div>
-        <%}%>
-      <%}%>
+              <span class="stat-name"><%= weight.name %>: </span>
+              <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span></span>
+            </div>
+          <% } %>
+        <% } %>
         <% if (!calculated.networth.noInventory) {%>
         <div class="additional-stat">
           <span data-tippy-content="
@@ -944,8 +952,8 @@ const metaDescription = getMetaDescription()
           <skill-component skill="fishing" type="skill" icon="<%= skillItems.fishing %>"></skill-component>
           <skill-component skill="enchanting" type="skill" icon="<%= skillItems.enchanting %>"></skill-component>
           <skill-component skill="alchemy" type="skill" icon="<%= skillItems.alchemy %>"></skill-component>
-          <% if ('runecrafting' in calculated.levels) { %>
           <skill-component skill="carpentry" type="skill" icon="<%= skillItems.carpentry %>"></skill-component>
+          <% if ('runecrafting' in calculated.levels) { %>
           <skill-component skill="runecrafting" type="skill" icon="<%= skillItems.runecrafting %>"></skill-component>
           <skill-component skill="social" type="skill" icon="<%= skillItems.social %>"></skill-component>
           <% } else { %>
@@ -2968,7 +2976,7 @@ const metaDescription = getMetaDescription()
           </div>
           <p class="stat-raw-values">
             <% for (const [key, value] of Object.entries(calculated.misc.uncategorized)) { %>
-            <% max = key === "reaper_peppers_eaten" && value.raw === constants.MAX_REAPER_PEPPERS_EATEN ? 'golden-text': '' %>
+            <% max = value.maxed === true ? 'golden-text': '' %>
             <span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value <%= max %>"><%= value.formatted %> </span>
             <br>
             <% } %>
