@@ -1038,14 +1038,6 @@ export const getItems = async (
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
-      insertAccessory.isInactive = true;
-    }
-
-    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
-      insertAccessory.isUnique = false;
-    }
-
     accessories.push(insertAccessory);
     accessoryIds.push(id);
   }
@@ -1053,19 +1045,53 @@ export const getItems = async (
   // Add accessories from inventory and accessory bag
   for (const accessory of accessory_bag.concat(inventory.filter((a) => a.categories.includes("accessory")))) {
     const id = helper.getId(accessory);
-
     if (id === "") {
       continue;
     }
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
-      insertAccessory.isInactive = true;
+    // mark lower tiers as inactive
+    if (constants.getUpgradeList(id) !== undefined) {
+      accessories.find((a) => {
+        if (constants.getUpgradeList(id).includes(helper.getId(a)) === false) {
+          return;
+        }
+
+        insertAccessory.isInactive = true;
+        insertAccessory.isUnique = false;
+      })
     }
 
-    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
-      insertAccessory.isUnique = false;
+    // mark accessory inactive if player has two exactly same accessories
+    accessories.map((a) => { 
+      if (helper.getId(a) === helper.getId(insertAccessory)) {
+        insertAccessory.isInactive = true;
+        a.isInactive = true;
+
+        // give accessories with higher rarity priority, mark lower rarity as inactive
+        if (constants.RARITIES.indexOf(a.rarity) > constants.RARITIES.indexOf(insertAccessory.rarity)) {
+          a.isInactive = false;
+          a.isUnique = true;
+        } else if (constants.RARITIES.indexOf(insertAccessory.rarity) > constants.RARITIES.indexOf(a.rarity)) {
+          insertAccessory.isInactive = false;
+          insertAccessory.isUnique = true;
+        }
+      } 
+    })
+
+    // mark accessoriy aliases as inactive
+    for (const accessory of accessories) {
+      const id = helper.getId(accessory);
+
+      if (id in constants.accessoryAliases) {
+        const accessoryDuplicates = constants.accessoryAliases[id];
+
+        if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a))) != undefined) {
+          accessory.isUnique = false;
+          accessory.isInactive = true;
+        }
+      }
     }
 
     accessories.push(insertAccessory);
@@ -1101,20 +1127,6 @@ export const getItems = async (
 
       accessories.push(insertAccessory);
       accessoryIds.push(id);
-    }
-  }
-
-  // Don't account for lower tier versions of the same accessory
-  for (const accessory of accessories) {
-    const id = helper.getId(accessory);
-
-    if (id in constants.accessoryAliases) {
-      const accessoryDuplicates = constants.accessoryAliases[id];
-
-      if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a))) != undefined) {
-        accessory.isUnique = false;
-        accessory.isInactive = true;
-      }
     }
   }
 
