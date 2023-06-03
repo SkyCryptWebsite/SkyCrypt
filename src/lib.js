@@ -1060,11 +1060,11 @@ export const getItems = async (
 
         insertAccessory.isInactive = true;
         insertAccessory.isUnique = false;
-      })
+      });
     }
 
     // mark accessory inactive if player has two exactly same accessories
-    accessories.map((a) => { 
+    accessories.map((a) => {
       if (helper.getId(a) === helper.getId(insertAccessory)) {
         insertAccessory.isInactive = true;
         a.isInactive = true;
@@ -1077,8 +1077,8 @@ export const getItems = async (
           insertAccessory.isInactive = false;
           insertAccessory.isUnique = true;
         }
-      } 
-    })
+      }
+    });
 
     // mark accessoriy aliases as inactive
     for (const accessory of accessories) {
