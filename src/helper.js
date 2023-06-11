@@ -1098,3 +1098,9 @@ export function getCommitHash() {
     .slice(0, 10);
     */
 }
+
+export function RGBtoHex(rgb) {
+  const [r, g, b] = rgb.split(",").map((c) => parseInt(c.trim()));
+
+  return [r, g, b].map((c) => c.toString(16).padStart(2, "0")).join("");
+}

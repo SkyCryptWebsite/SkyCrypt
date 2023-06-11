@@ -344,6 +344,42 @@ async function processItems(base64, source, customTextures = false, packs, cache
 
       items.push(...backpackContents);
     }
+
+    if (
+      item.tag?.ExtraAttributes?.id?.includes("PERSONAL_COMPACTOR_") ||
+      item.tag?.ExtraAttributes?.id?.includes("PERSONAL_DELETOR_")
+    ) {
+      item.containsItems = [];
+      for (const key in item.tag.ExtraAttributes) {
+        if (key.startsWith("personal_compact_") || key.startsWith("personal_deletor_")) {
+          const hypixelItem = await db.collection("items").findOne({ id: item.tag.ExtraAttributes[key] });
+
+          const itemData = {
+            Count: 1,
+            Damage: hypixelItem?.damage ?? 3,
+            id: hypixelItem?.item_id ?? 397,
+            itemIndex: item.containsItems.length,
+            glowing: hypixelItem.glowing,
+            display_name: hypixelItem.name,
+            rarity: hypixelItem.tier,
+            categories: [],
+          };
+
+          if (hypixelItem.texture !== undefined) {
+            itemData.texture_path = `/head/${hypixelItem.texture}`;
+          }
+
+          if (itemData.id >= 298 && itemData.id <= 301) {
+            const type = ["helmet", "chestplate", "leggings", "boots"][itemData.id - 298];
+            const color = helper.RGBtoHex(hypixelItem.color) ?? "955e3b";
+
+            itemData.texture_path = `/leather/${type}/${color}`;
+          }
+
+          item.containsItems.push(itemData);
+        }
+      }
+    }
   }
 
   for (const item of items) {
