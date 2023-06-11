@@ -139,7 +139,7 @@ function getXpByLevel(uncappedLevel, extra = {}) {
 /**
  * gets the level and some other information from an xp amount
  * @param {number} xp
- * @param {{type?: string, cap?: number, skill?: string}} extra
+ * @param {{type?: string, cap?: number, skill?: string, ignoreCap?: boolean }} extra
  * @param type the type of levels (used to determine which xp table to use)
  * @param cap override the cap highest level the player can reach
  * @param skill the key of default_skill_caps
@@ -172,30 +172,30 @@ export function getLevelByXp(xp, extra = {}) {
     }
   }
 
-  /* adds support for catacombs level above 50 */
+  /** adds support for catacombs level above 50 */
   if (extra.type === "dungeoneering") {
     uncappedLevel += Math.floor(xpCurrent / 200_000_000);
     xpCurrent %= 200_000_000;
   }
 
   /** the maximum level that any player can achieve (used for gold progress bars) */
-  const maxLevel = extra.type === "dungeoneering" ? uncappedLevel : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
+  const maxLevel =
+    extra.ignoreCap && uncappedLevel >= levelCap ? uncappedLevel : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
 
   // not sure why this is floored but I'm leaving it in for now
   xpCurrent = Math.floor(xpCurrent);
 
   /** the level as displayed by in game UI */
-  const level = extra.type !== "dungeoneering" ? Math.min(levelCap, uncappedLevel) : uncappedLevel;
+  const level = extra.ignoreCap ? uncappedLevel : Math.min(levelCap, uncappedLevel);
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
   const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
   /** the fraction of the way toward the next level */
-  const progress = extra.type == "dungeoneering" && level >= 50 ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+  const progress = level >= levelCap ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
-  const levelWithProgress =
-    extra.type == "dungeoneering" && level >= 50 ? level + xpCurrent / 200_000_000 : level + progress;
+  const levelWithProgress = level + progress;
 
   /** a floating point value representing the current level ignoring the in-game unlockable caps for example if you are half way to level 5 it would be 4.5 */
   const unlockableLevelWithProgress = extra.cap ? Math.min(uncappedLevel + progress, maxLevel) : levelWithProgress;
@@ -3062,7 +3062,7 @@ export function getDungeons(userProfile, hypixelProfile) {
     output[type] = {
       id: dungeon_id,
       visited: true,
-      level: getLevelByXp(dungeon.experience, { type: "dungeoneering" }),
+      level: getLevelByXp(dungeon.experience, { type: "dungeoneering", ignoreCap: true }),
       highest_floor:
         dungeons_data.floors[`${type}_${highest_floor}`] && dungeons_data.floors[`${type}_${highest_floor}`].name
           ? dungeons_data.floors[`${type}_${highest_floor}`].name
@@ -3085,7 +3085,7 @@ export function getDungeons(userProfile, hypixelProfile) {
     }
 
     output.classes[className] = {
-      experience: getLevelByXp(data.experience, { type: "dungeoneering" }),
+      experience: getLevelByXp(data.experience, { type: "dungeoneering", ignoreCap: true }),
       current: false,
     };
 
