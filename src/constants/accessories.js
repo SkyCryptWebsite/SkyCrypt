@@ -122,7 +122,8 @@ export const accessoryAliases = {
     "CAMPFIRE_TALISMAN_28",
     "CAMPFIRE_TALISMAN_29",
   ],
-  PARTY_HAT_CRAB: ["PARTY_HAT_CRAB_ANIMATED"],
+  PARTY_HAT_CRAB: ["PARTY_HAT_CRAB_ANIMATED", "PARTY_HAT_SLOTH"],
+  DANTE_TALISMAN: ["DANTE_RING"]
 };
 
 const extraAccessories = [
