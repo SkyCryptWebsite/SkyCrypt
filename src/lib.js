@@ -353,6 +353,9 @@ async function processItems(base64, source, customTextures = false, packs, cache
       for (const key in item.tag.ExtraAttributes) {
         if (key.startsWith("personal_compact_") || key.startsWith("personal_deletor_")) {
           const hypixelItem = await db.collection("items").findOne({ id: item.tag.ExtraAttributes[key] });
+          if (hypixelItem === null) {
+            continue;
+          }
 
           const itemData = {
             Count: 1,
