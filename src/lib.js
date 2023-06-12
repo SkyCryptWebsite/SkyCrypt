@@ -353,22 +353,19 @@ async function processItems(base64, source, customTextures = false, packs, cache
       for (const key in item.tag.ExtraAttributes) {
         if (key.startsWith("personal_compact_") || key.startsWith("personal_deletor_")) {
           const hypixelItem = await db.collection("items").findOne({ id: item.tag.ExtraAttributes[key] });
-          if (hypixelItem === null) {
-            continue;
-          }
 
           const itemData = {
             Count: 1,
             Damage: hypixelItem?.damage ?? 3,
             id: hypixelItem?.item_id ?? 397,
             itemIndex: item.containsItems.length,
-            glowing: hypixelItem.glowing,
-            display_name: hypixelItem.name,
-            rarity: hypixelItem.tier,
+            glowing: hypixelItem?.glowing ?? false,
+            display_name: hypixelItem?.name ?? _.startCase(item.tag.ExtraAttributes[key].replace(/_/g, " ")),
+            rarity: hypixelItem?.tier ?? "common",
             categories: [],
           };
 
-          if (hypixelItem.texture !== undefined) {
+          if (hypixelItem?.texture !== undefined) {
             itemData.texture_path = `/head/${hypixelItem.texture}`;
           }
 
@@ -377,6 +374,10 @@ async function processItems(base64, source, customTextures = false, packs, cache
             const color = helper.RGBtoHex(hypixelItem.color) ?? "955e3b";
 
             itemData.texture_path = `/leather/${type}/${color}`;
+          }
+
+          if (hypixelItem === null) {
+            itemData.texture_path = "/head/bc8ea1f51f253ff5142ca11ae45193a4ad8c3ab5e9c6eec8ba7a4fcb7bac40"
           }
 
           item.containsItems.push(itemData);
