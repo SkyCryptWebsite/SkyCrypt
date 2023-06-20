@@ -221,14 +221,13 @@ function getSlayerLevel(slayer, slayerName) {
   let progress = 0;
   let xpForNext = 0;
 
-
   if (constants.SLAYER_XP[slayerName] === undefined) {
-    return { 
-      currentLevel, 
+    return {
+      currentLevel,
       xp: 0,
       maxLevel: 0,
-      progress: 0, 
-      xpForNext, 
+      progress: 0,
+      xpForNext,
     };
   }
 
