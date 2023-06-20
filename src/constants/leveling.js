@@ -249,7 +249,7 @@ export const SLAYER_XP = {
     8: 400000,
     9: 1000000,
   },
-fe  vampire: {
+  vampire: {
     1: 20,
     2: 75,
     3: 240,
