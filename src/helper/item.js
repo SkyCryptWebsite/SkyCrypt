@@ -11,14 +11,14 @@ import sanitize from "mongo-sanitize";
  * @returns {*} Item Data
  */
 export async function getItemData(query = {}) {
-  query = Object.assign({ skyblockId: undefined, id: undefined, name: undefined, damage: undefined }, query);
+  query = Object.assign({ skyblockId: undefined, id: undefined, name: undefined, Damage: undefined }, query);
   const item = { id: -1, damage: 0, Count: 1, tag: { ExtraAttributes: {} } };
   let dbItem = {};
 
   /**
    * Look for DB items if possible with Skyblock ID or query name
    */
-  if (query.skyblockId !== undefined) {
+  if (query.skyblockId !== undefined && query.skyblockId !== null) {
     query.skyblockId = sanitize(query.skyblockId);
 
     if (query.skyblockId.includes(":")) {
@@ -28,7 +28,7 @@ export async function getItemData(query = {}) {
       query.damage = new Number(split[1]);
     }
 
-    dbItem = (await db.collection("items").findOne({ id: query.skyblockId })) ?? {};
+    dbItem = Object.assign(item, await db.collection("items").findOne({ id: query.skyblockId }));
   }
 
   if (query.name !== undefined) {
@@ -48,10 +48,6 @@ export async function getItemData(query = {}) {
     item.id = query.id;
   }
 
-  if (query.damage !== undefined) {
-    item.Damage = query.damage;
-  }
-
   if (query.name !== undefined) {
     item.tag.display = { Name: query.name };
   }
@@ -61,7 +57,7 @@ export async function getItemData(query = {}) {
   }
 
   if ("damage" in dbItem) {
-    item.damage = dbItem.damage;
+    item.Damage = query.damage ?? dbItem.damage;
   }
 
   if ("name" in dbItem) {
