@@ -226,7 +226,7 @@ function getSlayerLevel(slayer, slayerName) {
       currentLevel,
       xp: 0,
       maxLevel: 0,
-      progress: 0,
+      progress,
       xpForNext,
     };
   }
