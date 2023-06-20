@@ -215,11 +215,22 @@ export function getLevelByXp(xp, extra = {}) {
 }
 
 function getSlayerLevel(slayer, slayerName) {
-  const { xp, claimed_levels } = slayer;
+  const { xp = 0, claimed_levels } = slayer;
 
   let currentLevel = 0;
   let progress = 0;
   let xpForNext = 0;
+
+
+  if (constants.SLAYER_XP[slayerName] === undefined) {
+    return { 
+      currentLevel, 
+      xp: 0,
+      maxLevel: 0,
+      progress: 0, 
+      xpForNext, 
+    };
+  }
 
   const maxLevel = Math.max(...Object.keys(constants.SLAYER_XP[slayerName]));
 

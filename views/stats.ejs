@@ -10,7 +10,7 @@
 ..######...#######..##....##..######.....##....##.....##.##....##....##.....######.
 */
 const rarityOrder = ["very_special", "special", "supreme", "divine", "mythic", "legendary", "epic", "rare", "uncommon", "common"];
-const slayerOrder = ["zombie", "spider", "wolf", "enderman", "blaze"];
+const slayerOrder = ["zombie", "spider", "wolf", "enderman", "blaze", "vampire"];
 const badgeOrder = ["gold", "silver", "bronze"];
 
 const skillItems = {
@@ -94,6 +94,10 @@ const slayerInfo = {
     boss: "Inferno Demonlord",
     head: "/head/b20657e24b56e1b2f8fc219da1de788c0c24f36388b1a409d0cd2d8dba44aa3b",
   },
+  vampire: {
+    boss: "Riftstalker Bloodfiend",
+    head: "/head/5aa29ea961757dc3c90bfabf302c5abe9d308fb4a7d3864e5788ad2cc9160aa2"
+  }
 };
 
 const seaCreatures = [ 
@@ -179,6 +183,7 @@ const slayerEmojis = {
   wolf: "🐺",
   enderman: "🔮",
   blaze: "🔥",
+  vampire: "🩸"
 };
 
 const KUUDRA = {
@@ -2141,7 +2146,6 @@ const metaDescription = getMetaDescription()
           </p>
           <div class="slayer-containers narrow-info-container-wrapper">
             <%
-          let maxSlayerLevel = 0;
 
           for(const slayerName in calculated.slayers){
             const slayer = calculated.slayers[slayerName];
@@ -2151,56 +2155,68 @@ const metaDescription = getMetaDescription()
             }
           }
 
-          for(const slayerName of Object.keys(calculated.slayers).sort((a, b) => slayerOrder.indexOf(a) - slayerOrder.indexOf(b))){
+          
+          const slayerNames = Object.keys(calculated.slayers).sort((a, b) => slayerOrder.indexOf(a) - slayerOrder.indexOf(b));
+          for (const slayerName of slayerNames){
+            const slayer = calculated.slayers[slayerName]
 
-            const slayer = calculated.slayers[slayerName];
-
-            if(slayer.xp === undefined || slayer.xp == 0)
+            if (slayer.xp === undefined || slayer.xp == 0) {
               continue;
+            }
 
-            if(Object.keys(slayer.kills).length == 0)
+            if (Object.keys(slayer.kills).length == 0) {
               slayer.kills['1'] = 0;
+            }
 
-            maxSlayerLevel = Math.max(maxSlayerLevel, slayer.level.currentLevel);
+            const maxSlayerLevel = slayer.level.currentLevel;
+            const totalKills = Object.values(slayer.kills).reduce((a, b) => a + b, 0);
 
-            let totalKills = 0;
-
-            for(const tier in slayer.kills)
-              totalKills += slayer.kills[tier];
-
+            if (slayerInfo[slayerName] === undefined) {
+              continue;
+            } 
             %>
+
             <div class="narrow-info-container slayer">
               <div class="narrow-info-header">
                 <div class="floor-icon" style="background-image: url(<%= slayerInfo[slayerName].head %>)"></div>
-                <span><%= slayerInfo[slayerName].boss %></span>
+                <span> <%= slayerInfo[slayerName].boss %> </span>
               </div>
+
               <div class="slayer-kills">
                 <% for(const [index, tier] of Object.keys(slayer.kills).entries()){ %>
-                <div class="slayer-kill">
-                  <div class="tier-name">Tier <%= romanize(tier) %></div>
-                  <div class="tier-kills"><%= slayer.kills[tier].toLocaleString() %></div>
-                </div>
+                  <div class="slayer-kill">
+                    <div class="tier-name">Tier <%= romanize(tier) %></div>
+                    <div class="tier-kills"><%= slayer.kills[tier].toLocaleString() %></div>
+                  </div>
                 <% } %>
                 <div class="slayer-kill">
                   <div class="tier-name">Total</div>
                   <div class="tier-kills"><%= totalKills.toLocaleString() %></div>
                 </div>
               </div>
-              <% if(slayer.level.unclaimed){ %>
-              <div class="slayer-unclaimed">unclaimed slayer rewards!</div>
+
+              <% if (slayer.level.unclaimed){ %>
+                div class="slayer-unclaimed">unclaimed slayer rewards!</div>
               <% } %>
-              <% max = slayer.level.currentLevel == slayer.level.maxLevel ? 'golden-text' : '' %><span class="<%= max %> stat-name slayer-level"><%= slayerName %> level <span class="stat-value <%= max %>"><%= slayer.level.currentLevel %></span></span>
+              
+              <% max = slayer.level.currentLevel == slayer.level.maxLevel ? 'golden-text' : '' %>
+              <span class="<%= max %> stat-name slayer-level">
+                <%= slayerName %> level <span class="stat-value <%= max %>"><%= slayer.level.currentLevel %></span>
+              </span>
+
               <div class="slayer-bar <%= slayer.level.currentLevel == slayer.level.maxLevel ? 'maxed-slayer' : ''%>">
                 <div class="skill-progress-bar slayer-progress-bar" style="--progress: <%= slayer.level.currentLevel == slayer.level.maxLevel ? 1 : slayer.level.progress %>"></div>
                 <div class="skill-progress-text slayer-progress-text">
-                  <%= slayer.level.xp.toLocaleString() %><% if(slayer.level.xpForNext != 0){ %> / <%= slayer.level.xpForNext.toLocaleString() %><% } %> XP
+                  <%= slayer.level.xp.toLocaleString() %><% if(slayer.level.xpForNext != 0) { %> / <%= slayer.level.xpForNext.toLocaleString() %> <% } %> XP
                 </div>
               </div>
             </div>
             <% } %>
           </div>
-          <% if(maxSlayerLevel > 0){ %>
-          <div data-bonus-stats="slayer_zombie,slayer_spider,slayer_wolf,slayer_enderman"></div>
+          <% 
+          const maxSlayerLevel = Math.max(...Object.values(calculated.slayers).map(slayer => slayer.level?.currentLevel ?? 0));
+          if (maxSlayerLevel > 0){ %>
+            <div data-bonus-stats="slayer_zombie,slayer_spider,slayer_wolf,slayer_enderman"></div>
           <% } %>
           <% } %>
         </div>
