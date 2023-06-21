@@ -2139,7 +2139,7 @@ class Zombie extends Pet {
     const mult = getValue(this.rarity, { legendary: 0.2 });
     return {
       name: "§6Living Dead",
-      desc: [`§7Increases all stats on§7§2undead ${SYMBOLS.undead} §7armor by §a${round(this.level * mult, 1)}%§7.`],
+      desc: [`§7Increases all stats on §7§2undead ${SYMBOLS.undead} §7armor by §a${round(this.level * mult, 1)}%§7.`],
     };
   }
 }
