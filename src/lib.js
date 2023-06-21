@@ -2547,6 +2547,8 @@ export async function getStats(
     output.stats[stat] += output.pet_score_bonus[stat];
   }
 
+  output.rift = getRiftData(userProfile);
+
   console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
   return output;
 }
@@ -3583,6 +3585,50 @@ function getProfileUpgrades(profile) {
       output[u.upgrade] = Math.max(output[u.upgrade] || 0, u.tier);
     }
   }
+  return output;
+}
+
+function getRiftData(userProfile) {
+  const output = {};
+
+  if (!userProfile.visited_zones.includes("rift")) return output;
+
+  let timecharms = {};
+
+  let timecharmObjectives = [
+    "rift_accessory_1",
+    "rift_accessory_2",
+    "rift_accessory_3",
+    "rift_accessory_4",
+    "rift_accessory_5",
+    "rift_accessory_6",
+    "rift_cave_4_craft_timecharm", // Vampiric Timecharm (7th)
+  ];
+
+  let obtainedTimecharms = 0;
+
+  for (let value of timecharmObjectives) {
+    let charmId = value.includes("craft_timecharm") ? 7 : parseInt(value.split("_").pop());
+    let charm = {
+      obtained: false,
+      name: constants.TIMECHARMS[charmId].name,
+      id: constants.TIMECHARMS[charmId].itemId,
+      damage: constants.TIMECHARMS[charmId].damage,
+    };
+
+    if (userProfile.objectives[value]?.progress) {
+      charm.obtained = true;
+      charm.obtainedDate = userProfile.objectives[value]?.completed_at;
+      obtainedTimecharms++;
+    }
+
+    timecharms[charmId] = charm;
+  }
+
+  output.obtainedTimecharms = obtainedTimecharms;
+
+  output.timecharms = timecharms;
+
   return output;
 }
 
