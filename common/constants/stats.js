@@ -244,8 +244,8 @@ export const STATS_DATA = {
     nameTiny: "U",
     symbol: "༕",
     suffix: "",
-    color: "2"
-  }
+    color: "2",
+  },
 };
 
 const symbols = {
