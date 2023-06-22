@@ -3629,6 +3629,8 @@ function getRiftData(userProfile) {
 
   output.timecharms = timecharms;
 
+  output.lifetimeMotes = userProfile.stats.rift_lifetime_motes_earned;
+
   return output;
 }
 
