@@ -237,6 +237,24 @@ export const STATS_DATA = {
     suffix: "",
     color: "3",
   },
+  mana_regen: {
+    name: "Mana Regen",
+    nameLore: "Mana Regen",
+    nameShort: "Mana Regen",
+    nameTiny: "MPR",
+    symbol: "🗲",
+    suffix: "",
+    color: "b",
+  },
+  rift_time: {
+    name: "Rift Time",
+    nameLore: "Rift Time",
+    nameShort: "Rift Time",
+    nameTiny: "RT",
+    symbol: "ф",
+    suffix: "",
+    color: "a",
+  },
 };
 
 const symbols = {

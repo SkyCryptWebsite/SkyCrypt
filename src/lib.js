@@ -2488,6 +2488,8 @@ export async function getStats(
 
   output.reaper_peppers_eaten = userProfile.reaper_peppers_eaten ?? 0;
 
+  output.objectives = userProfile.objectives ?? 0;
+
   if (!userProfile.pets) {
     userProfile.pets = [];
   }
@@ -2541,7 +2543,7 @@ export async function getStats(
   return output;
 }
 
-export async function getPets(profile, userProfile) {
+export async function getPets(profile, calculated) {
   let output = [];
 
   if (!("pets" in profile)) {
@@ -2549,7 +2551,7 @@ export async function getPets(profile, userProfile) {
   }
 
   // debug pets
-  // profile.pets = helper.generateDebugPets("BINGO");
+  // profile.pets = helper.generateDebugPets("TARANTULA");
 
   for (const pet of profile.pets) {
     if (!("tier" in pet)) {
@@ -2639,9 +2641,8 @@ export async function getPets(profile, userProfile) {
     const rarity = constants.RARITIES.indexOf(pet.rarity);
 
     const searchName = pet.type in constants.PET_STATS ? pet.type : "???";
-    const petInstance = new constants.PET_STATS[searchName](rarity, pet.level.level, pet.extra, userProfile);
+    const petInstance = new constants.PET_STATS[searchName](rarity, pet.level.level, pet.extra, calculated ?? profile);
     pet.stats = Object.assign({}, petInstance.stats);
-    petInstance.profile = null;
     pet.ref = petInstance;
 
     if (pet.heldItem) {
@@ -2736,11 +2737,16 @@ export async function getPets(profile, userProfile) {
 
       const progress = Math.ceil(pet.level.progress * 20);
       const numerator = pet.level.xpCurrent.toLocaleString();
-      const denominator = helper.formatNumber(pet.level.xpForNext, false, 10);
+      const denominator = helper.formatNumber(pet.level.xpForNext, false);
 
       lore.push(`§2${"-".repeat(progress)}§f${"-".repeat(20 - progress)} §e${numerator} §6/ §e${denominator}`);
     } else {
       lore.push("§bMAX LEVEL");
+    }
+
+    let progress = Math.floor((pet.exp / pet.level.xpMaxLevel) * 100);
+    if (isNaN(progress)) {
+      progress = 0;
     }
 
     lore.push(
@@ -2749,7 +2755,7 @@ export async function getPets(profile, userProfile) {
         pet.level.xpMaxLevel,
         true,
         1
-      )} §6(${Math.floor((pet.exp / pet.level.xpMaxLevel) * 100)}%)`
+      )} §6(${progress.toLocaleString()}%)`
     );
 
     if (petData.obtainsExp !== "feed") {
@@ -2764,6 +2770,7 @@ export async function getPets(profile, userProfile) {
 
     pet.display_name = `${petName}${petSkin ? " ✦" : ""}`;
     pet.emoji = petData.emoji;
+    pet.ref.profile = null;
 
     output.push(pet);
   }
@@ -2846,7 +2853,10 @@ async function getMissingPets(pets, gameMode, userProfile) {
     profile.pets.push(pets[0]);
   }
 
-  return getPets(profile, userProfile);
+  profile.objectives = userProfile.objectives;
+  profile.collections = userProfile.collections;
+
+  return await getPets(profile);
 }
 
 function getPetScore(pets) {

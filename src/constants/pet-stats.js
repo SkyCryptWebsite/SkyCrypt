@@ -9,11 +9,11 @@ const LEGENDARY = RARITIES.indexOf("legendary");
 const MYTHIC = RARITIES.indexOf("mythic");
 
 function formatStat(stat) {
-  const statFloored = Math.floor(stat);
-  if (statFloored > 0) {
-    return `§a+${statFloored}`;
+  const formattedStat = stat.toFixed(2).replace(/\.?0+$/, '');
+  if (stat > 0) {
+    return `§a+${formattedStat}`;
   } else {
-    return `§a${statFloored}`;
+    return `§a${formattedStat}`;
   }
 }
 
@@ -118,6 +118,12 @@ class Pet {
           break;
         case "fishing_speed":
           list.push(`§7Fishing Speed: ${formatStat(newStats[stat])}`);
+          break;
+        case "rift_time":
+          list.push(`§7Rift Time: §a${formatStat(newStats[stat])}s`);
+          break;
+        case "mana_regen":
+          list.push(`§7Mana Regen: §a${formatStat(newStats[stat])}%`);
           break;
         default:
           list.push(`§cUNKNOWN: ${stat}`);
@@ -1008,9 +1014,9 @@ class GoldenDragon extends Pet {
     if (this.level >= 100) {
       const goldCollectionDigits = this.profile?.collections?.GOLD_INGOT?.totalAmount.toString().length ?? 0;
 
-      stats.strength = round(25 + Math.max(0, this.level - 100) * 0.25, 0) + 10 * goldCollectionDigits;
-      stats.bonus_attack_speed = round(25 + Math.max(0, this.level - 100) * 0.25, 0);
-      stats.magic_find = round(5 + Math.max(0, (this.level - 100) / 10) * 0.5, 0) + 2 * goldCollectionDigits;
+      stats.strength = Math.floor(25 + Math.max(0, this.level - 100) * 0.25) + 10 * goldCollectionDigits;
+      stats.bonus_attack_speed = Math.floor(25 + Math.max(0, this.level - 100) * 0.25);
+      stats.magic_find = Math.floor(5 + Math.max(0, (this.level - 100) / 10) * 0.5) + 2 * goldCollectionDigits;
     }
     return stats;
   }
@@ -1315,11 +1321,14 @@ class Guardian extends Pet {
     if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
+    if (this.rarity >= MYTHIC) {
+      list.push(this.fourth);
+    }
     return list;
   }
 
   get first() {
-    const mult = getValue(this.rarity, { common: 0.02, uncommon: 0.06, rare: 0.1, epic: 0.15, legendary: 0.2 });
+    const mult = getValue(this.rarity, { common: 0.02, uncommon: 0.06, rare: 0.1, epic: 0.15, legendary: 0.2, mythic: 1.2 });
     return {
       name: "§6Lazerbeam",
       desc: [
@@ -1344,6 +1353,14 @@ class Guardian extends Pet {
       name: "§6Mana Pool",
       desc: [`§7Regenerate §b${round(this.level * mult, 1)}% §7extra mana, doubled when near or in water§7.`],
     };
+  }
+
+  get fourth() {
+    const mult = getValue(this.rarity, { mythic: 0.07 });
+    return {
+      name: "§6Lucky Seven",
+      desc: [`§7Gain §b +${round(this.level * mult, 1)}% §7chance to find §5ultra rare §7books in §dSuperpairs.`]
+    }
   }
 }
 
@@ -1796,6 +1813,9 @@ class Spider extends Pet {
     if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
+    if (this.rarity >= MYTHIC) {
+      list.push(this.fourth);
+    }
     return list;
   }
 
@@ -1824,6 +1844,13 @@ class Spider extends Pet {
       name: "§6Spider Whisperer",
       desc: [`§7Spider and tarantula minions work §a${round(this.level * mult, 1)}% §7faster while on your island.`],
     };
+  }
+
+  get fourth() {
+    return {
+      name: "§6Web Battlefield",
+      desc: [`§7Killing mob grants §c+6 ${SYMBOLS.strength} Strength §7and §b+1 ${SYMBOLS.magic_find} Magic Find §7for §a40s §7to all players staying within §a20 §7blocks of where they died. §8Stacks up to 10 times.`]
+    }
   }
 }
 
@@ -1882,6 +1909,9 @@ class Tarantula extends Pet {
     if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
+    if (this.rarity >= MYTHIC) {
+      list.push(this.fourth);
+    }
     return list;
   }
 
@@ -1902,11 +1932,18 @@ class Tarantula extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 0.5 });
+    const mult = getValue(this.rarity, { legendary: 0.005 });
     return {
       name: "§6Arachnid Slayer",
-      desc: [`§7Grants §a${round(this.level * mult, 1)}% §3${SYMBOLS.wisdom} Combat Wisdom §7against §aSpiders§7.`],
+      desc: [`§7Gain §b${round(1 + this.level * mult, 1)}x §7Combat XP against §aSpiders§7.`],
     };
+  }
+
+  get fourth() {
+    return {
+      name: "§6Web Battlefield",
+      desc: [`§7Killing mob grants §c+6 ${SYMBOLS.strength} Strength §7and §b+1 ${SYMBOLS.magic_find} Magic Find §7for §a40s §7to all players staying within §a20 §7blocks of where they died. §8Stacks up to 10 times.`]
+    }
   }
 }
 
@@ -2293,6 +2330,46 @@ class Monkey extends Pet {
       desc: [`§7Reduce the cooldown of Jungle Axe and Treecapitator by §a${round(this.level * mult, 1)}%§7.`],
     };
   }
+}
+
+class Montezuma extends Pet {
+  get stats() {
+    const riftSouls =
+      "objectives" in (this.profile ?? {})
+        ? Object.entries(this.profile.objectives).find(
+            ([key, value]) => key.startsWith("rift_") && key.endsWith("_soul") && value.status === "COMPLETE"
+          )?.length ?? 0
+        : 0;
+
+    return {
+      rift_time: riftSouls * 15,
+      mana_regen: riftSouls * 2,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first];
+    if (this.rarity >= RARE) {
+      list.push(this.second);
+    }
+
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6Nine Lives",
+      desc: [`§7Gain §a+15${SYMBOLS.rift_time} Rift Time §7per Soul piece.`],
+    };
+  }
+
+  get second() {
+    return {
+      name: "§6Trickery",
+      desc: [`§7Gain §b+2 ${SYMBOLS.mana_regen} Mana Regen §7per soul piece found.`]
+    }
+  }
+
 }
 
 class Ocelot extends Pet {
@@ -3174,7 +3251,7 @@ class Snail extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { common: 0.1, uncommon: 0.2, rare: 0.3 });
+    const mult = getValue(this.rarity, { comMONTEZUMA: 0.1, uncommon: 0.2, rare: 0.3 });
 
     return {
       name: "§6Red Sand Enjoyer",
@@ -3334,6 +3411,28 @@ class Reindeer extends Pet {
   }
 }
 
+class RiftFerret extends Pet {
+  get stats() {
+    return {
+      speed: 0.5 * this.level,
+      intelligence: -0.02 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first];
+
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6Orbs are Fun",
+      desc: [`§7Gain §a+10% §7experience from §bXP Orbs§7.`],
+    };
+  }
+}
+
 class QuestionMark extends Pet {
   get stats() {
     return {};
@@ -3412,6 +3511,7 @@ export const PET_STATS = {
   MEGALODON: Megalodon,
   MITHRIL_GOLEM: MithrilGolem,
   MONKEY: Monkey,
+  MONTEZUMA: Montezuma,
   MOOSHROOM_COW: MooshroomCow,
   OCELOT: Ocelot,
   PARROT: Parrot,
@@ -3421,6 +3521,7 @@ export const PET_STATS = {
   RABBIT: Rabbit,
   RAT: Rat,
   REINDEER: Reindeer,
+  RIFT_FERRET: RiftFerret,
   ROCK: Rock,
   SCATHA: Scatha,
   SHEEP: Sheep,
