@@ -9,7 +9,7 @@ const LEGENDARY = RARITIES.indexOf("legendary");
 const MYTHIC = RARITIES.indexOf("mythic");
 
 function formatStat(stat) {
-  const formattedStat = stat.toFixed(2).replace(/\.?0+$/, '');
+  const formattedStat = stat.toFixed(2).replace(/\.?0+$/, "");
   if (stat > 0) {
     return `§a+${formattedStat}`;
   } else {
@@ -1328,7 +1328,14 @@ class Guardian extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { common: 0.02, uncommon: 0.06, rare: 0.1, epic: 0.15, legendary: 0.2, mythic: 1.2 });
+    const mult = getValue(this.rarity, {
+      common: 0.02,
+      uncommon: 0.06,
+      rare: 0.1,
+      epic: 0.15,
+      legendary: 0.2,
+      mythic: 1.2,
+    });
     return {
       name: "§6Lazerbeam",
       desc: [
@@ -1359,8 +1366,8 @@ class Guardian extends Pet {
     const mult = getValue(this.rarity, { mythic: 0.07 });
     return {
       name: "§6Lucky Seven",
-      desc: [`§7Gain §b +${round(this.level * mult, 1)}% §7chance to find §5ultra rare §7books in §dSuperpairs.`]
-    }
+      desc: [`§7Gain §b +${round(this.level * mult, 1)}% §7chance to find §5ultra rare §7books in §dSuperpairs.`],
+    };
   }
 }
 
@@ -1849,8 +1856,10 @@ class Spider extends Pet {
   get fourth() {
     return {
       name: "§6Web Battlefield",
-      desc: [`§7Killing mob grants §c+6 ${SYMBOLS.strength} Strength §7and §b+1 ${SYMBOLS.magic_find} Magic Find §7for §a40s §7to all players staying within §a20 §7blocks of where they died. §8Stacks up to 10 times.`]
-    }
+      desc: [
+        `§7Killing mob grants §c+6 ${SYMBOLS.strength} Strength §7and §b+1 ${SYMBOLS.magic_find} Magic Find §7for §a40s §7to all players staying within §a20 §7blocks of where they died. §8Stacks up to 10 times.`,
+      ],
+    };
   }
 }
 
@@ -1942,8 +1951,10 @@ class Tarantula extends Pet {
   get fourth() {
     return {
       name: "§6Web Battlefield",
-      desc: [`§7Killing mob grants §c+6 ${SYMBOLS.strength} Strength §7and §b+1 ${SYMBOLS.magic_find} Magic Find §7for §a40s §7to all players staying within §a20 §7blocks of where they died. §8Stacks up to 10 times.`]
-    }
+      desc: [
+        `§7Killing mob grants §c+6 ${SYMBOLS.strength} Strength §7and §b+1 ${SYMBOLS.magic_find} Magic Find §7for §a40s §7to all players staying within §a20 §7blocks of where they died. §8Stacks up to 10 times.`,
+      ],
+    };
   }
 }
 
@@ -2366,10 +2377,9 @@ class Montezuma extends Pet {
   get second() {
     return {
       name: "§6Trickery",
-      desc: [`§7Gain §b+2 ${SYMBOLS.mana_regen} Mana Regen §7per soul piece found.`]
-    }
+      desc: [`§7Gain §b+2 ${SYMBOLS.mana_regen} Mana Regen §7per soul piece found.`],
+    };
   }
-
 }
 
 class Ocelot extends Pet {
