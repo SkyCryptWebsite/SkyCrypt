@@ -166,44 +166,6 @@ jobs:
       - name: Build SCSS
         run: pnpm scss
 
-  deploy-production:
-    name: deploy (production)
-    if: |
-      github.ref == 'refs/heads/production'
-      && github.repository_owner == 'SkyCryptWebsite'
-      && github.event_name != 'pull_request'
-    needs: [typescript, rollup, scss]
-    runs-on: ubuntu-latest
-    steps:
-      - name: SSH and Deploy to Production
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          port: ${{ secrets.VPS_PORT }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_KEY }}
-          script_stop: true
-          script: ~/deploy-production.sh
-
-  deploy-development:
-    name: deploy (development)
-    if: |
-      github.ref == 'refs/heads/development'
-      && github.repository_owner == 'SkyCryptWebsite'
-      && github.event_name != 'pull_request'
-    needs: [typescript, rollup, scss]
-    runs-on: ubuntu-latest
-    steps:
-      - name: SSH and Deploy to Development
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          port: ${{ secrets.VPS_PORT }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_KEY }}
-          script_stop: true
-          script: ~/deploy-development.sh
-
   package-container:
     name: package container
     if: |
