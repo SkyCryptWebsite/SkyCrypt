@@ -2571,7 +2571,7 @@ export async function getPets(profile, calculated) {
     const petData = constants.PET_DATA[pet.type] ?? {
       head: "/head/bc8ea1f51f253ff5142ca11ae45193a4ad8c3ab5e9c6eec8ba7a4fcb7bac40",
       type: "???",
-      maxTier: "LEGENDARY",
+      maxTier: "legendary",
       maxLevel: 100,
       emoji: "❓",
     };
