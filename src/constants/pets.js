@@ -538,15 +538,15 @@ export const PET_DATA = {
   RIFT_FERRET: {
     head: "/head/b6b11399448260185da1d17e54c984515faab6d8585f00972451ec2b43d46f94",
     type: "combat",
-    maxTier: "epic",
-    maxLevel: 1,
+    maxTier: "legendary",
+    maxLevel: 100,
     emoji: "🦝",
   },
   MONTEZUMA: {
     head: "/head/df656c06e8a5cb4692564ee21748bddec9d785d1834284aaa1439601bba47d6b",
     type: "combat",
     maxTier: "epic",
-    maxLevel: 1,
+    maxLevel: 100,
     emoji: "💀",
   },
 };
