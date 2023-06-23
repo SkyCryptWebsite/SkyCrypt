@@ -65,7 +65,7 @@ const skillWeight = {
 };
 
 function calcSkillWeight(skillGroup, level, experience) {
-  if (skillGroup.exponent == undefined || skillGroup.divider == undefined) {
+  if (skillGroup.exponent == undefined || skillGroup.divider == undefined || level === undefined) {
     return {
       weight: 0,
       weight_overflow: 0,
@@ -251,6 +251,10 @@ export function calculateSenitherWeight(profile) {
   // slayer
   for (const slayerName in profile.slayers) {
     const data = profile.slayers[slayerName];
+    if (data === undefined) {
+      continue;
+    }
+
     const sw = calcSlayerWeight(slayerName, data.level.xp);
 
     output.slayer.slayers[slayerName] = sw.weight + sw.weight_overflow;

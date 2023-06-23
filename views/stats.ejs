@@ -10,7 +10,7 @@
 ..######...#######..##....##..######.....##....##.....##.##....##....##.....######.
 */
 const rarityOrder = ["very_special", "special", "supreme", "divine", "mythic", "legendary", "epic", "rare", "uncommon", "common"];
-const slayerOrder = ["zombie", "spider", "wolf", "enderman", "blaze"];
+const slayerOrder = ["zombie", "spider", "wolf", "enderman", "blaze", "vampire"];
 const badgeOrder = ["gold", "silver", "bronze"];
 const trophyFishOrder = ["bronze", "silver", "gold", "diamond"]
 
@@ -95,6 +95,10 @@ const slayerInfo = {
     boss: "Inferno Demonlord",
     head: "/head/b20657e24b56e1b2f8fc219da1de788c0c24f36388b1a409d0cd2d8dba44aa3b",
   },
+  vampire: {
+    boss: "Riftstalker Bloodfiend",
+    head: "/head/5aa29ea961757dc3c90bfabf302c5abe9d308fb4a7d3864e5788ad2cc9160aa2"
+  }
 };
 
 const seaCreatures = [ 
@@ -122,12 +126,14 @@ const seaCreatures = [
   "poisoned_water_worm",
   "flaming_worm",
   "magma_slug",
+  "baby_magma_slug",
+  "nutcracker",
   "moogma",
   "lava_leech",
   "pyroclastic_worm",
   "lava_flame",
   "fire_eel",
-  "taurus",
+  "pig_rider",
   "guardian_defender",
   "werewolf",
   "deep_sea_protector",
@@ -178,6 +184,7 @@ const slayerEmojis = {
   wolf: "🐺",
   enderman: "🔮",
   blaze: "🔥",
+  vampire: "🩸"
 };
 
 const KUUDRA = {
@@ -530,14 +537,36 @@ function getDescription() {
     description.push(line.join(' '), '\n', '\n')
   }
 
-	// Avg. skill
-	if (calculated.average_level) {
-		description.push(
-			`📚 Avg Skill Level: ${
-				Math.floor(calculated.average_level * 10) / 10
-			} `
-		)
-		description.push('\n')
+  // Skyblock Level
+  if (calculated.skyblock_level.xp !== 0 && calculated.skyblock_level.level !== 0) {
+    description.push(
+      `🌟 Skyblock Level: ${calculated.skyblock_level.level + calculated.skyblock_level.progress}`,
+      '\n'
+    )
+  }
+
+
+
+	if (calculated.average_level || calculated.dungeons.class_average) {
+    // Skill Average
+    if (calculated.average_level) {
+      description.push(
+        `📚 Avg Skill Level: ${
+          Math.floor(calculated.average_level * 10) / 10
+        } `
+      )
+    }
+
+    // Dungeons classs average
+    if (calculated.dungeons.class_average) {
+      description.push(
+        `⚔️  Avg Class Level: ${
+          Math.floor(calculated.dungeons.class_average.avrg_level_with_progress * 10) / 10
+        } `
+      )
+    }
+
+    description.push('\n')
 	}
 
 	// Weights
@@ -553,15 +582,23 @@ function getDescription() {
 		description.push('\n')
 	}
 
-	// Bank & purse
+	// Networth, Bank & purse
+  if (calculated.networth.noInventory === false) {
+      description.push(
+        `💸 Networth: ${helper.formatNumber(calculated.networth.networth, true)} `
+      )
+  }
+
 	if (calculated.bank) {
 		description.push(
 			`🏦 Bank: ${helper.formatNumber(calculated.bank, true)} `
 		)
 	}
-	description.push(`💰 Purse: ${helper.formatNumber(calculated.purse, true)}`)
+	description.push(
+    `💰 Purse: ${helper.formatNumber(calculated.purse, true)}`
+  )
 
-	// Done!
+  // Done!
 	return description.join('')
 }
 
@@ -817,9 +854,15 @@ const metaDescription = getMetaDescription()
             },
           ];
         if (calculated.weight) {
-          for (weight of weightSystems) { %>
-        <div class="additional-stat">
-          <span data-tippy-content="
+          for (weight of weightSystems) { 
+            // set weight to 0 if skills API is off (due to skill wipes & incorrect calculation)
+            if ('runecrafting' in calculated.levels === false) {
+              weight.total -= weight.skill;
+              weight.skill = 0;
+            } %>
+
+            <div class="additional-stat">
+              <span data-tippy-content="
                 <span class='stat-name'><%= weight.name %></span><br>
                 <span class='stat-info'>Weight calculations by <%= weight.author %></span>
                 <br/><br/>
@@ -840,11 +883,11 @@ const metaDescription = getMetaDescription()
                   <%= parseFloat(weight.total.toFixed(2)).toLocaleString() %>
                 </span>
               ">
-            <span class="stat-name"><%= weight.name %>: </span>
-            <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span></span>
-        </div>
-        <%}%>
-      <%}%>
+              <span class="stat-name"><%= weight.name %>: </span>
+              <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span></span>
+            </div>
+          <% } %>
+        <% } %>
         <% if (!calculated.networth.noInventory) {%>
         <div class="additional-stat">
           <span data-tippy-content="
@@ -915,8 +958,8 @@ const metaDescription = getMetaDescription()
           <skill-component skill="fishing" type="skill" icon="<%= skillItems.fishing %>"></skill-component>
           <skill-component skill="enchanting" type="skill" icon="<%= skillItems.enchanting %>"></skill-component>
           <skill-component skill="alchemy" type="skill" icon="<%= skillItems.alchemy %>"></skill-component>
-          <% if ('runecrafting' in calculated.levels) { %>
           <skill-component skill="carpentry" type="skill" icon="<%= skillItems.carpentry %>"></skill-component>
+          <% if ('runecrafting' in calculated.levels) { %>
           <skill-component skill="runecrafting" type="skill" icon="<%= skillItems.runecrafting %>"></skill-component>
           <skill-component skill="social" type="skill" icon="<%= skillItems.social %>"></skill-component>
           <% } else { %>
@@ -1695,7 +1738,7 @@ const metaDescription = getMetaDescription()
                   <div class="item-icon icon-<%= crop.icon %>"></div>
                 </div>
                 <div class="chip-text">
-                  <div class="collection-name <%= crop.unique_gold ? 'max-minion' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
+                  <div class="collection-name <%= crop.unique_gold ? 'max-stat' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
                   <div class="collection-amount">
                     <small class="stat-name">Personal Best: </small><small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small><br>
                     <small class="stat-name">Contests: </small><small class="stat-value"><%= crop.contests.toLocaleString() %></small><br>
@@ -2159,7 +2202,6 @@ const metaDescription = getMetaDescription()
           </p>
           <div class="slayer-containers narrow-info-container-wrapper">
             <%
-          let maxSlayerLevel = 0;
 
           for(const slayerName in calculated.slayers){
             const slayer = calculated.slayers[slayerName];
@@ -2169,56 +2211,68 @@ const metaDescription = getMetaDescription()
             }
           }
 
-          for(const slayerName of Object.keys(calculated.slayers).sort((a, b) => slayerOrder.indexOf(a) - slayerOrder.indexOf(b))){
+          
+          const slayerNames = Object.keys(calculated.slayers).sort((a, b) => slayerOrder.indexOf(a) - slayerOrder.indexOf(b));
+          for (const slayerName of slayerNames){
+            const slayer = calculated.slayers[slayerName]
 
-            const slayer = calculated.slayers[slayerName];
-
-            if(slayer.xp === undefined || slayer.xp == 0)
+            if (slayer.xp === undefined || slayer.xp == 0) {
               continue;
+            }
 
-            if(Object.keys(slayer.kills).length == 0)
+            if (Object.keys(slayer.kills).length == 0) {
               slayer.kills['1'] = 0;
+            }
 
-            maxSlayerLevel = Math.max(maxSlayerLevel, slayer.level.currentLevel);
+            const maxSlayerLevel = slayer.level.currentLevel;
+            const totalKills = Object.values(slayer.kills).reduce((a, b) => a + b, 0);
 
-            let totalKills = 0;
-
-            for(const tier in slayer.kills)
-              totalKills += slayer.kills[tier];
-
+            if (slayerInfo[slayerName] === undefined) {
+              continue;
+            } 
             %>
+
             <div class="narrow-info-container slayer">
               <div class="narrow-info-header">
                 <div class="floor-icon" style="background-image: url(<%= slayerInfo[slayerName].head %>)"></div>
-                <span><%= slayerInfo[slayerName].boss %></span>
+                <span> <%= slayerInfo[slayerName].boss %> </span>
               </div>
+
               <div class="slayer-kills">
                 <% for(const [index, tier] of Object.keys(slayer.kills).entries()){ %>
-                <div class="slayer-kill">
-                  <div class="tier-name">Tier <%= romanize(tier) %></div>
-                  <div class="tier-kills"><%= slayer.kills[tier].toLocaleString() %></div>
-                </div>
+                  <div class="slayer-kill">
+                    <div class="tier-name">Tier <%= romanize(tier) %></div>
+                    <div class="tier-kills"><%= slayer.kills[tier].toLocaleString() %></div>
+                  </div>
                 <% } %>
                 <div class="slayer-kill">
                   <div class="tier-name">Total</div>
                   <div class="tier-kills"><%= totalKills.toLocaleString() %></div>
                 </div>
               </div>
-              <% if(slayer.level.unclaimed){ %>
-              <div class="slayer-unclaimed">unclaimed slayer rewards!</div>
+
+              <% if (slayer.level.unclaimed){ %>
+                div class="slayer-unclaimed">unclaimed slayer rewards!</div>
               <% } %>
-              <% max = slayer.level.currentLevel == slayer.level.maxLevel ? 'golden-text' : '' %><span class="<%= max %> stat-name slayer-level"><%= slayerName %> level <span class="stat-value <%= max %>"><%= slayer.level.currentLevel %></span></span>
+              
+              <% max = slayer.level.currentLevel == slayer.level.maxLevel ? 'golden-text' : '' %>
+              <span class="<%= max %> stat-name slayer-level">
+                <%= slayerName %> level <span class="stat-value <%= max %>"><%= slayer.level.currentLevel %></span>
+              </span>
+
               <div class="slayer-bar <%= slayer.level.currentLevel == slayer.level.maxLevel ? 'maxed-slayer' : ''%>">
                 <div class="skill-progress-bar slayer-progress-bar" style="--progress: <%= slayer.level.currentLevel == slayer.level.maxLevel ? 1 : slayer.level.progress %>"></div>
                 <div class="skill-progress-text slayer-progress-text">
-                  <%= slayer.level.xp.toLocaleString() %><% if(slayer.level.xpForNext != 0){ %> / <%= slayer.level.xpForNext.toLocaleString() %><% } %> XP
+                  <%= slayer.level.xp.toLocaleString() %><% if(slayer.level.xpForNext != 0) { %> / <%= slayer.level.xpForNext.toLocaleString() %> <% } %> XP
                 </div>
               </div>
             </div>
             <% } %>
           </div>
-          <% if(maxSlayerLevel > 0){ %>
-          <div data-bonus-stats="slayer_zombie,slayer_spider,slayer_wolf,slayer_enderman"></div>
+          <% 
+          const maxSlayerLevel = Math.max(...Object.values(calculated.slayers).map(slayer => slayer.level?.currentLevel ?? 0));
+          if (maxSlayerLevel > 0){ %>
+            <div data-bonus-stats="slayer_zombie,slayer_spider,slayer_wolf,slayer_enderman"></div>
           <% } %>
           <% } %>
         </div>
@@ -2818,7 +2872,8 @@ const metaDescription = getMetaDescription()
           </div>
           <p class="stat-raw-values">
             <% for(const key in calculated.misc.damage){ %>
-            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= Math.floor(calculated.misc.damage[key]).toLocaleString() %></span><br>
+              <% const damage = calculated.misc.damage[key] > 100_000_000_000 ? helper.formatNumber(Math.floor(calculated.misc.damage[key]).toFixed(0), true) : Math.floor(calculated.misc.damage[key]).toLocaleString(); %>
+            <span class="stat-name"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value"><%= damage %></span><br>
             <% } %>
           </p>
           <% } %>
@@ -2993,7 +3048,7 @@ const metaDescription = getMetaDescription()
           </div>
           <p class="stat-raw-values">
             <% for (const [key, value] of Object.entries(calculated.misc.uncategorized)) { %>
-            <% max = key === "reaper_peppers_eaten" && value.raw === constants.MAX_REAPER_PEPPERS_EATEN ? 'golden-text': '' %>
+            <% max = value.maxed === true ? 'golden-text': '' %>
             <span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span><span class="stat-value <%= max %>"><%= value.formatted %> </span>
             <br>
             <% } %>

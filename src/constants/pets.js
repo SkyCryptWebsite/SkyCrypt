@@ -558,6 +558,11 @@ export const PET_VALUE = {
   }
 */
 export const PET_ITEMS = {
+  "???": {
+    name: "???",
+    tier: "COMMON",
+    description: "§7???",
+  },
   PET_ITEM_ALL_SKILLS_BOOST_COMMON: {
     name: "All Skills Exp Boost",
     tier: "COMMON",
@@ -833,7 +838,7 @@ export const PET_ITEMS = {
   PET_ITEM_FLYING_PIG: {
     name: "Flying Pig",
     tier: "UNCOMMON",
-    description: `§7Grants your pig pet the ability to fly while on your private island! You also don't need to hold a carrot on a stick to control your pig.`,
+    description: `§7Grants your pig pet the ability to fly while on your private island and garden! You also don't need to hold a carrot on a stick to control your pig.`,
   },
   PET_ITEM_QUICK_CLAW: {
     name: "Quick Claw",
@@ -843,5 +848,19 @@ export const PET_ITEMS = {
       mining_speed: 0.5,
       mining_fortune: 0.5,
     },
+  },
+  YELLOW_BANDANA: {
+    name: "Yellow Bandana",
+    tier: "RARE",
+    description: `§7Grants §6+30 ${SYMBOLS.farming_fortune} Farming Fortune§7.`,
+    stats: {
+      farming_fortune: 30,
+    },
+  },
+  GREEN_BANDANA: {
+    name: "Green Bandana",
+    tier: "EPIC",
+    description: `§7Grants §6+4 ${SYMBOLS.farming_fortune} Farming Fortune§7 for each Garden Level unlocked.`,
+    // TODO: Add statsPerLevel once Garden data comes to the API
   },
 };

@@ -1,0 +1,6 @@
+{
+	"parent": "item/skyblock/pet",
+	"textures": {
+		"0": "./grown_up_baby_yeti"
+	}
+}

@@ -107,6 +107,7 @@ export const MOB_NAMES = {
   master_sadan_statue: "Master Terracotta",
   master_tentaclees: "Master Fels",
   maxor: "Necron",
+  pig_rider: "Taurus",
 };
 
 export const RACE_OBJECTIVE_TO_STAT_NAME = {
@@ -151,6 +152,7 @@ export const AREA_NAMES = {
   mining_1: "Gold Mine",
   mining_2: "Deep Caverns",
   mining_3: "Dwarven Mines",
+  crystal_hollows: "Crystal Hollows",
   combat_1: "Spider's Den",
   crimson_isle: "Crimson Isle",
   combat_3: "The End",
@@ -349,7 +351,7 @@ export const INCREASE_MOST_STATS_EXCLUDE = [
 
 export const FAIRY_SOULS = {
   max: {
-    normal: 239,
+    normal: 240,
     stranded: 3,
   },
 };
@@ -669,4 +671,10 @@ export const ESSENCE_SHOP = {
       maxLevel: 5,
     },
   },
+};
+
+export const BANK_COOLDOWN = {
+  1: "20 minutes",
+  2: "5 minutes",
+  3: "None",
 };
