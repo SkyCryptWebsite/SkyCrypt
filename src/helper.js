@@ -32,6 +32,7 @@ import {
   PET_RARITY_OFFSET,
   PET_LEVELS,
   ITEM_ANIMATIONS,
+  MAGICAL_POWER,
 } from "./constants.js";
 
 import credentials from "./credentials.js";
@@ -1078,12 +1079,37 @@ export function enrichmentToStatName(enrichment) {
   }
 }
 
+/**
+ * Returns the price of the item. Returns 0 if the item is not found or if the item argument is falsy.
+ * @param {string} item - The ID of the item to retrieve the price for.
+ * @returns {number}
+ * @returns {Promise<number>}
+ */
 export async function getItemPrice(item) {
   if (!item) return 0;
 
   const prices = await getPrices(true);
 
-  return prices[item.toLowerCase()] || prices[getId(item).toLowerCase()] || 0;
+  return prices[item.toLowerCase()] ?? prices[getId(item).toLowerCase()] ?? 0;
+}
+
+/**
+ * Returns the magical power of an item based on its rarity and optional ID.
+ * @param {string} rarity - The rarity of the item. See {@link MAGICAL_POWER}.
+ * @param {string|null} [id=null] - (Optional) The ID of the item.
+ * @returns {number} Returns 0 if `rarity` is undefined or if `rarity` is not a valid rarity value.
+ */
+export function getMagicalPower(rarity, id = null) {
+  if (rarity === undefined) return 0;
+
+  if (id !== null && typeof id === "string") {
+    // Hegemony artifact provides double MP
+    if (id === "HEGEMONY_ARTIFACT") {
+      return 2 * (MAGICAL_POWER[rarity] ?? 0);
+    }
+  }
+
+  return MAGICAL_POWER[rarity] ?? 0;
 }
 
 export function getCommitHash() {
@@ -1095,4 +1121,10 @@ export function getCommitHash() {
     .trim()
     .slice(0, 10);
     */
+}
+
+export function RGBtoHex(rgb) {
+  const [r, g, b] = rgb.split(",").map((c) => parseInt(c.trim()));
+
+  return [r, g, b].map((c) => c.toString(16).padStart(2, "0")).join("");
 }

@@ -39,7 +39,6 @@ export const ENCHANTMENTS_TO_CATEGORIES = {
     "cultivating",
     "dedication",
     "delicate",
-    "green_thumb",
     "harvesting",
     "replenish",
     "sunder",

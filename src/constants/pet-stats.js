@@ -318,7 +318,7 @@ class Pig extends Pet {
     return {
       name: "§6Sprint",
       desc: [
-        `§7While holding an Enchanted Carrot on a Stick, increase the speed of your mount by §a${round(
+        `§7While holding an §aEnchanted Carrot on a Stick§7, increase the speed of your mount by §a${round(
           this.level * mult,
           1
         )}%§7.`,
@@ -329,7 +329,9 @@ class Pig extends Pet {
   get fourth() {
     return {
       name: "§6Trample",
-      desc: [`§7While on your private island, break all crops your pig rides over§7.`],
+      desc: [
+        `§7Your pig will break all crops that it walks over while on your private island or Garden. While riding, §6${SYMBOLS.farming_fortune} Farming Fortune §7and §aFarming Exp §7gain is reduced by §a75%§7.`,
+      ],
     };
   }
 }
@@ -1633,7 +1635,7 @@ class Rat extends Pet {
         } Magic Find §7for §a${round(
           20 + this.level * multTime,
           0
-        )} §7seconds after finding a yummy piece of Cheese! If the player gets a drop during this buff, you have a §a20% §7to get it too.`,
+        )} §7seconds after finding a yummy piece of Cheese! If the player gets a drop during this buff, you have a §a20% §7chance to get it too.`,
       ],
     };
   }
@@ -3235,7 +3237,7 @@ class Kuudra extends Pet {
 
     return {
       name: "§6Crimson",
-      desc: [`§7Grants §a${round(this.level * mult, 1)}% §7extra crimson essence.`],
+      desc: [`§7Grants §a${round(this.level * mult, 1)}% §7extra Crimson Essence.`],
     };
   }
 
@@ -3314,7 +3316,7 @@ class Reindeer extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 0.05 });
+    const mult = getValue(this.rarity, { legendary: 0.1 });
 
     return {
       name: "§6Snow Power",

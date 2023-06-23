@@ -139,7 +139,7 @@ function getXpByLevel(uncappedLevel, extra = {}) {
 /**
  * gets the level and some other information from an xp amount
  * @param {number} xp
- * @param {{type?: string, cap?: number, skill?: string}} extra
+ * @param {{type?: string, cap?: number, skill?: string, ignoreCap?: boolean }} extra
  * @param type the type of levels (used to determine which xp table to use)
  * @param cap override the cap highest level the player can reach
  * @param skill the key of default_skill_caps
@@ -153,7 +153,7 @@ export function getLevelByXp(xp, extra = {}) {
 
   /** the level that this player is caped at */
   const levelCap =
-    extra.cap ?? constants.DEFAULT_SKILL_CAPS[extra.skill] ?? Math.max(...Object.keys(xpTable).map((a) => Number(a)));
+    extra.cap ?? constants.DEFAULT_SKILL_CAPS[extra.skill] ?? Math.max(...Object.keys(xpTable).map(Number));
 
   /** the level ignoring the cap and using only the table */
   let uncappedLevel = 0;
@@ -172,34 +172,30 @@ export function getLevelByXp(xp, extra = {}) {
     }
   }
 
-  if (extra.type == "dungeoneering") {
-    while (xpCurrent >= 200_000_000) {
-      uncappedLevel++;
-      xpCurrent -= 200_000_000;
-    }
+  /** adds support for catacombs level above 50 */
+  if (extra.type === "dungeoneering") {
+    uncappedLevel += Math.floor(xpCurrent / 200_000_000);
+    xpCurrent %= 200_000_000;
   }
 
   /** the maximum level that any player can achieve (used for gold progress bars) */
   const maxLevel =
-    extra.type == "dungeoneering" && uncappedLevel > 50
-      ? uncappedLevel
-      : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
+    extra.ignoreCap && uncappedLevel >= levelCap ? uncappedLevel : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
 
   // not sure why this is floored but I'm leaving it in for now
   xpCurrent = Math.floor(xpCurrent);
 
   /** the level as displayed by in game UI */
-  const level = extra.type != "dungeoneering" ? Math.min(levelCap, uncappedLevel) : uncappedLevel;
+  const level = extra.ignoreCap ? uncappedLevel : Math.min(levelCap, uncappedLevel);
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
   const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
   /** the fraction of the way toward the next level */
-  const progress = extra.type == "dungeoneering" && level >= 50 ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+  const progress = level >= levelCap ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
-  const levelWithProgress =
-    extra.type == "dungeoneering" && level >= 50 ? level + xpCurrent / 200_000_000 : level + progress;
+  const levelWithProgress = level + progress;
 
   /** a floating point value representing the current level ignoring the in-game unlockable caps for example if you are half way to level 5 it would be 4.5 */
   const unlockableLevelWithProgress = extra.cap ? Math.min(uncappedLevel + progress, maxLevel) : levelWithProgress;
@@ -219,11 +215,21 @@ export function getLevelByXp(xp, extra = {}) {
 }
 
 function getSlayerLevel(slayer, slayerName) {
-  const { xp, claimed_levels } = slayer;
+  const { xp = 0, claimed_levels } = slayer;
 
   let currentLevel = 0;
   let progress = 0;
   let xpForNext = 0;
+
+  if (constants.SLAYER_XP[slayerName] === undefined) {
+    return {
+      currentLevel,
+      xp: 0,
+      maxLevel: 0,
+      progress,
+      xpForNext,
+    };
+  }
 
   const maxLevel = Math.max(...Object.keys(constants.SLAYER_XP[slayerName]));
 
@@ -347,6 +353,42 @@ async function processItems(base64, source, customTextures = false, packs, cache
       item.containsItems = [];
 
       items.push(...backpackContents);
+    }
+
+    if (
+      item.tag?.ExtraAttributes?.id?.includes("PERSONAL_COMPACTOR_") ||
+      item.tag?.ExtraAttributes?.id?.includes("PERSONAL_DELETOR_")
+    ) {
+      item.containsItems = [];
+      for (const key in item.tag.ExtraAttributes) {
+        if (key.startsWith("personal_compact_") || key.startsWith("personal_deletor_")) {
+          const hypixelItem = await db.collection("items").findOne({ id: item.tag.ExtraAttributes[key] });
+
+          const itemData = {
+            Count: 1,
+            Damage: hypixelItem?.damage ?? 3,
+            id: hypixelItem?.item_id ?? 397,
+            itemIndex: item.containsItems.length,
+            glowing: hypixelItem.glowing,
+            display_name: hypixelItem.name,
+            rarity: hypixelItem.tier,
+            categories: [],
+          };
+
+          if (hypixelItem.texture !== undefined) {
+            itemData.texture_path = `/head/${hypixelItem.texture}`;
+          }
+
+          if (itemData.id >= 298 && itemData.id <= 301) {
+            const type = ["helmet", "chestplate", "leggings", "boots"][itemData.id - 298];
+            const color = helper.RGBtoHex(hypixelItem.color) ?? "955e3b";
+
+            itemData.texture_path = `/leather/${type}/${color}`;
+          }
+
+          item.containsItems.push(itemData);
+        }
+      }
     }
   }
 
@@ -1360,11 +1402,7 @@ export const getItems = async (
 
     countsOfId[id] = (countsOfId[id] || 0) + 1;
 
-    if (id == "BONE_BOOMERANG") {
-      if (countsOfId[id] > 6) {
-        weapon.hidden = true;
-      }
-    } else if (countsOfId[id] > 2) {
+    if (countsOfId[id] > 2 && constants.RARITIES.indexOf(weapon.rarity) < constants.RARITIES.indexOf("legendary")) {
       weapon.hidden = true;
     }
   }
@@ -1563,6 +1601,10 @@ async function getLevels(userProfile, hypixelProfile, levelCaps, profileMembers)
       runecrafting: getLevelByXp(userProfile.experience_skill_runecrafting, {
         skill: "runecrafting",
         type: "runecrafting",
+        cap:
+          hypixelProfile.rankText === null
+            ? constants.NON_RUNECRAFTING_LEVEL_CAP
+            : constants.DEFAULT_SKILL_CAPS.runecrafting,
       }),
       social:
         Object.keys(profileMembers || {}).length > 0
@@ -1774,7 +1816,7 @@ export async function getStats(
         item.tag.display.Lore ??= [];
         item.tag.display.Lore.push(
           `§7Price: §6${Math.round(ITEM_PRICE).toLocaleString()} Coins §7(§6${helper.formatNumber(
-            ITEM_PRICE / constants.MAGICAL_POWER[item.rarity]
+            ITEM_PRICE / helper.getMagicalPower(item.rarity, item.name)
           )} §7per MP)`
         );
       }
@@ -1887,9 +1929,16 @@ export async function getStats(
 
   const userInfo = await db.collection("usernames").findOne({ uuid: profile.uuid });
 
-  const members = await Promise.all(
-    Object.keys(profile.members).map((a) => helper.resolveUsernameOrUuid(a, db, options.cacheOnly))
-  );
+  const memberUuids = [];
+  for (const [uuid, memberProfile] of Object.entries(profile.members)) {
+    if (memberProfile?.coop_invitation?.confirmed === false) {
+      continue;
+    }
+
+    memberUuids.push(uuid);
+  }
+
+  const members = await Promise.all(memberUuids.map((a) => helper.resolveUsernameOrUuid(a, db, options.cacheOnly)));
 
   if (userInfo) {
     output.display_name = userInfo.username;
@@ -2018,6 +2067,10 @@ export async function getStats(
       const date = `${contestName[1]}_${contestName[0]}`;
       const crop = contestName.slice(2).join(":");
 
+      if (data.collected < 100) {
+        continue; // Contests aren't counted in game with less than 100 collection
+      }
+
       farming.crops[crop].contests++;
       farming.crops[crop].attended = true;
       if (farming.crops[crop].personal_best < data.collected) {
@@ -2037,19 +2090,29 @@ export async function getStats(
       if (contest.claimed) {
         placing.position = data.claimed_position || 0;
         placing.percentage = (data.claimed_position / data.claimed_participants) * 100;
+        const participants = data.claimed_participants;
 
-        if (placing.percentage <= 5) {
+        // Use the claimed medal if it exists and is valid
+        // This accounts for the farming mayor increased brackets perk
+        // Note: The medal brackets are the percentage + 1 extra person
+        if (
+          contest.claimed_medal === "bronze" ||
+          contest.claimed_medal === "silver" ||
+          contest.claimed_medal === "gold"
+        ) {
+          contest.medal = contest.claimed_medal;
+        } else if (placing.position <= participants * 0.05 + 1) {
           contest.medal = "gold";
-          farming.total_badges.gold++;
-          farming.crops[crop].badges.gold++;
-        } else if (placing.percentage <= 25) {
+        } else if (placing.position <= participants * 0.25 + 1) {
           contest.medal = "silver";
-          farming.total_badges.silver++;
-          farming.crops[crop].badges.silver++;
-        } else if (placing.percentage <= 60) {
+        } else if (placing.position <= participants * 0.6 + 1) {
           contest.medal = "bronze";
-          farming.total_badges.bronze++;
-          farming.crops[crop].badges.bronze++;
+        }
+
+        // Count the medal if it exists
+        if (contest.medal) {
+          farming.total_badges[contest.medal]++;
+          farming.crops[crop].badges[contest.medal]++;
         }
       }
 
@@ -2475,6 +2538,15 @@ export async function getStats(
     misc.uncategorized.reaper_peppers_eaten = {
       raw: userProfile.reaper_peppers_eaten,
       formatted: helper.formatNumber(userProfile.reaper_peppers_eaten),
+      maxed: userProfile.reaper_peppers_eaten === constants.MAX_REAPER_PEPPERS_EATEN,
+    };
+  }
+
+  if ("personal_bank_upgrade" in userProfile) {
+    misc.uncategorized.bank_cooldown = {
+      raw: userProfile.personal_bank_upgrade,
+      formatted: constants.BANK_COOLDOWN[userProfile.personal_bank_upgrade] ?? "Unknown",
+      maxed: userProfile.personal_bank_upgrade === Object.keys(constants.BANK_COOLDOWN).length,
     };
   }
 
@@ -2816,10 +2888,10 @@ export async function getPets(profile, userProfile) {
 
     lore.push(
       "",
-      `§7Total XP: §e${helper.formatNumber(pet.exp, true, 10)} §6/ §e${helper.formatNumber(
+      `§7Total XP: §e${helper.formatNumber(pet.exp, true, 1)} §6/ §e${helper.formatNumber(
         pet.level.xpMaxLevel,
         true,
-        10
+        1
       )} §6(${Math.floor((pet.exp / pet.level.xpMaxLevel) * 100)}%)`
     );
 
@@ -3183,7 +3255,7 @@ export function getDungeons(userProfile, hypixelProfile) {
     output[type] = {
       id: dungeon_id,
       visited: true,
-      level: getLevelByXp(dungeon.experience, { type: "dungeoneering" }),
+      level: getLevelByXp(dungeon.experience, { type: "dungeoneering", ignoreCap: true }),
       highest_floor:
         dungeons_data.floors[`${type}_${highest_floor}`] && dungeons_data.floors[`${type}_${highest_floor}`].name
           ? dungeons_data.floors[`${type}_${highest_floor}`].name
@@ -3206,7 +3278,7 @@ export function getDungeons(userProfile, hypixelProfile) {
     }
 
     output.classes[className] = {
-      experience: getLevelByXp(data.experience, { type: "dungeoneering" }),
+      experience: getLevelByXp(data.experience, { type: "dungeoneering", ignoreCap: true }),
       current: false,
     };
 

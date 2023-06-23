@@ -839,6 +839,20 @@ const SKINS = [
     source: "firesale",
     release: new Date("2023-02-10 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_AMMONITE_MAGMA",
+    name: "Magma",
+    texture: "/head/7008b8d08f812efe328f898aa7ccf70a68c7dded3ba715490e25065e7ff34d13",
+    source: "firesale",
+    release: new Date("2023-04-21 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_AMMONITE_NATURAL",
+    name: "Natural",
+    texture: "/head/f1546d6a690ecf22a5a93812435ddacbbe9c278a02ea38039d938313344dba53",
+    source: "firesale",
+    release: new Date("2023-04-21 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*

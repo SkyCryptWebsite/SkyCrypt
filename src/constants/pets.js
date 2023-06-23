@@ -838,7 +838,7 @@ export const PET_ITEMS = {
   PET_ITEM_FLYING_PIG: {
     name: "Flying Pig",
     tier: "UNCOMMON",
-    description: `§7Grants your pig pet the ability to fly while on your private island! You also don't need to hold a carrot on a stick to control your pig.`,
+    description: `§7Grants your pig pet the ability to fly while on your private island and garden! You also don't need to hold a carrot on a stick to control your pig.`,
   },
   PET_ITEM_QUICK_CLAW: {
     name: "Quick Claw",

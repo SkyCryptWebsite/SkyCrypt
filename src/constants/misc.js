@@ -351,7 +351,7 @@ export const INCREASE_MOST_STATS_EXCLUDE = [
 
 export const FAIRY_SOULS = {
   max: {
-    normal: 239,
+    normal: 240,
     stranded: 3,
   },
 };
@@ -671,4 +671,10 @@ export const ESSENCE_SHOP = {
       maxLevel: 5,
     },
   },
+};
+
+export const BANK_COOLDOWN = {
+  1: "20 minutes",
+  2: "5 minutes",
+  3: "None",
 };
