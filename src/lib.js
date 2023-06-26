@@ -1922,6 +1922,7 @@ export async function getStats(
   output.minion_slots = getMinionSlots(output.minions);
   output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
   output.bestiary = getBestiary(profile.uuid, profile);
+
   output.social = hypixelProfile.socials;
 
   output.dungeons = getDungeons(userProfile, hypixelProfile);
@@ -2194,6 +2195,8 @@ export async function getStats(
   });
 
   output.crimsonIsles = crimsonIsles;
+
+  output.trophy_fish = getTrophyFish(userProfile);
 
   output.abiphone = {
     contacts: userProfile.nether_island_player_data?.abiphone?.contact_data ?? {},
@@ -3003,6 +3006,73 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
   return output;
 }
 
+export function getTrophyFish(userProfile) {
+  const output = {
+    total_caught: 0,
+    stage: {
+      name: null,
+      progress: null,
+    },
+    fish: [],
+  };
+
+  for (const key of Object.keys(constants.TROPHY_FISH)) {
+    const id = key.toLowerCase();
+    const caught = (userProfile.trophy_fish && userProfile.trophy_fish[id]) || 0;
+    const caughtBronze = (userProfile.trophy_fish && userProfile.trophy_fish[`${id}_bronze`]) || 0;
+    const caughtSilver = (userProfile.trophy_fish && userProfile.trophy_fish[`${id}_silver`]) || 0;
+    const caughtGold = (userProfile.trophy_fish && userProfile.trophy_fish[`${id}_gold`]) || 0;
+    const caughtDiamond = (userProfile.trophy_fish && userProfile.trophy_fish[`${id}_diamond`]) || 0;
+
+    const highestType =
+      caughtDiamond > 0 ? "diamond" : caughtGold > 0 ? "gold" : caughtSilver > 0 ? "silver" : "bronze";
+
+    output.fish.push({
+      id: key,
+      name: constants.TROPHY_FISH[key].display_name,
+      texture: constants.TROPHY_FISH[key].textures[highestType],
+      description: constants.TROPHY_FISH[key].description,
+      caught: {
+        total: caught,
+        bronze: caughtBronze,
+        silver: caughtSilver,
+        gold: caughtGold,
+        diamond: caughtDiamond,
+        highestType: highestType,
+      },
+    });
+  }
+
+  output.total_caught = userProfile.trophy_fish?.total_caught || 0;
+
+  const { type: stageType, formatted: stageFormatted } =
+    constants.TROPHY_FISH_STAGES[(userProfile.trophy_fish?.rewards || []).length] || {};
+  const { type: stageProgressType } = constants.TROPHY_FISH_STAGES[
+    (userProfile.trophy_fish?.rewards || []).length + 1
+  ] || {
+    type: stageType,
+  };
+
+  const stageProgress =
+    stageType === "diamond"
+      ? null
+      : stageType
+      ? `${
+          Object.keys(userProfile.trophy_fish).filter(
+            (a) => a.endsWith(stageProgressType) && userProfile.trophy_fish[a] > 0
+          ).length
+        } / ${Object.keys(constants.TROPHY_FISH).length}`
+      : null;
+
+  output.stage = {
+    name: stageFormatted || "None",
+    type: stageType,
+    progress: stageProgress,
+  };
+
+  return output;
+}
+
 export function getBestiary(uuid, profile) {
   const output = {};
 
@@ -3061,7 +3131,6 @@ export function getBestiary(uuid, profile) {
 
   return result;
 }
-
 export function getDungeons(userProfile, hypixelProfile) {
   const output = {};
 
