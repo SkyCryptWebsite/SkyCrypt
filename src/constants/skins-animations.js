@@ -853,6 +853,20 @@ const SKINS = [
     source: "firesale",
     release: new Date("2023-04-21 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_WHALE_COSMIC",
+    name: "Cosmic",
+    texture: "/head/1a68f59a187f5b7183df2ea708a6e4704845afd433272cd32cbed52286db1fd3",
+    source: "firesale",
+    release: new Date("2023-06-02 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_MONKEY_LEMUR",
+    name: "Lemur",
+    texture: "/head/b6f45eb8a8bef3f8ee406ac0923d8626c5e5b7ff511cfbd417c994b68941f104",
+    source: "firesale",
+    release: new Date("2023-06-19 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
