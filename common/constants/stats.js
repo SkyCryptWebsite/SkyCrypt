@@ -254,6 +254,14 @@ export const STATS_DATA = {
     symbol: "ф",
     suffix: "",
     color: "a",
+  undead: {
+    name: "Undead",
+    nameLore: "Undead",
+    nameShort: "Undead",
+    nameTiny: "U",
+    symbol: "༕",
+    suffix: "",
+    color: "2",
   },
 };
 
