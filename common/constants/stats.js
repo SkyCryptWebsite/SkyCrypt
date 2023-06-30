@@ -254,6 +254,7 @@ export const STATS_DATA = {
     symbol: "ф",
     suffix: "",
     color: "a",
+  },
   undead: {
     name: "Undead",
     nameLore: "Undead",
