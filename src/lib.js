@@ -2210,7 +2210,7 @@ export async function getStats(
   output.skyblock_level = {
     xp: userProfile.leveling?.experience || 0,
     level: Math.floor(userProfile.leveling?.experience / 100 || 0),
-    maxLevel: 386,
+    maxLevel: 416,
     progress: (userProfile.leveling?.experience % 100) / 100 || 0,
     xpCurrent: userProfile.leveling?.experience % 100 || 0,
     xpForNext: 100,
