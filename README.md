@@ -34,7 +34,7 @@ A more explanatory guide can be found in <a href="/CONTRIBUTING.md">CONTRIBUTING
 
 Clone the project and and run `pnpm i` to install the dependencies.
 
-Now open `credentials.json` and enter a valid Hypixel API Key. You can obtain one by joining `mc.hypixel.net` and writing `/api` in chat.
+Now open `credentials.json` and enter a valid Hypixel API Key. You can obtain one by going to `developer.hypixel.net/dashboard` and clicking `Create API Key`.
 
 `mongod` needs to be running as a service in the background and the `redis-server` needs to be started.
 
