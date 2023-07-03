@@ -1,4 +1,4 @@
-export const COLLECTION_TYPES = ["farming", "mining", "combat", "foraging", "fishing"];
+export const COLLECTION_TYPES = ["farming", "mining", "combat", "foraging", "fishing", "rift"];
 
 export const COLLECTION_DATA = [
   {
@@ -536,5 +536,20 @@ export const COLLECTION_DATA = [
     name: "Magmafish",
     texture: "f56b5955b295522c9689481960c01a992ca1c7754cf4ee313c8dd0c356d335f",
     maxTier: 12,
+  },
+  {
+    type: "rift",
+    skyblockId: "WILTED_BERBERIS",
+    name: "Wilted Berberis",
+    id: 32,
+    damage: 0,
+    maxTier: 4,
+  },
+  {
+    type: "rift",
+    skyblockId: "METAL_HEART",
+    name: "Living Metal Heart",
+    texture: "f0278ee53a53b7733c7b8452fcf794dfbfbc3b032e750a6993573b5bd0299135",
+    maxTier: 4,
   },
 ];
