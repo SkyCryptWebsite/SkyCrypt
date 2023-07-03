@@ -567,4 +567,20 @@ export const COLLECTION_DATA = [
     texture: "4ce0a230acd6436abc86f13be72e9ba94537ee54f0325bb862577a1e062f37",
     maxTier: 4,
   },
+  {
+    type: "rift",
+    skyblockId: "HEMOVIBE",
+    name: "Hemovibe",
+    id: 73,
+    damage: 0,
+    maxTier: 9,
+  },
+  {
+    type: "rift",
+    skyblockId: "HALF_EATEN_CARROT",
+    name: "HALF_EATEN_CARROT",
+    id: 391,
+    damage: 0,
+    maxTier: 9,
+  },
 ];
