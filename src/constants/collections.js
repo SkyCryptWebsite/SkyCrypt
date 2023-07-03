@@ -578,7 +578,7 @@ export const COLLECTION_DATA = [
   {
     type: "rift",
     skyblockId: "HALF_EATEN_CARROT",
-    name: "HALF_EATEN_CARROT",
+    name: "Half-Eaten Carrot",
     id: 391,
     damage: 0,
     maxTier: 9,
