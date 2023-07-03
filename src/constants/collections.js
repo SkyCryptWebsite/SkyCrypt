@@ -552,4 +552,19 @@ export const COLLECTION_DATA = [
     texture: "f0278ee53a53b7733c7b8452fcf794dfbfbc3b032e750a6993573b5bd0299135",
     maxTier: 4,
   },
+  {
+    type: "rift",
+    skyblockId: "CADUCOUS_STEM",
+    name: "Caducous Stem",
+    id: 175,
+    damage: 4,
+    maxTier: 4,
+  },
+  {
+    type: "rift",
+    skyblockId: "AGARICUS_CAP",
+    name: "Agaricus Cap",
+    texture: "4ce0a230acd6436abc86f13be72e9ba94537ee54f0325bb862577a1e062f37",
+    maxTier: 4,
+  },
 ];
