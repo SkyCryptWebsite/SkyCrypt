@@ -85,7 +85,7 @@ export const TROPHY_FISH = {
   },
   OBFUSCATED_FISH_1: {
     display_name: "Obfuscated 1",
-    description: "§7Caught with §fCorrupted Bait§7.",
+    description: "§7Caught with Corrupted Bait or by using Obfuscated 3 as bait.",
     textures: {
       bronze: "e1f4d91e1bf8d3c4258fe0f28ec2fa40670e25ba06ac4b5cb1abf52a83731a9c",
       diamond: "caa0b4b4f443257e83176df4ffd550de7ee89867e506b9c1ca53f33611327929",
@@ -105,7 +105,7 @@ export const TROPHY_FISH = {
   },
   OBFUSCATED_FISH_3: {
     display_name: "Obfuscated 3",
-    description: "§7Caught with §9Obfuscated 2 §7as bait.",
+    description: "§7Caught with Obfuscated 2 as bait.",
     textures: {
       bronze: "df478663687d16f79b9c32546a7c3ec2736e87ce69779991e52deaf622abd8c2",
       silver: "3c800c71b925587213382eeaaa426ed63112503e278ff9f5b3d39dbdb95d31d0",
@@ -125,7 +125,7 @@ export const TROPHY_FISH = {
   },
   SLUGFISH: {
     display_name: "Slugfish",
-    description: "§7Caught when the bobber has been active for at least §a30 §7seconds.",
+    description: "§7Caught when the bobber has been active for at least §a20 §7seconds.",
     textures: {
       bronze: "c1de9e49ecc8d6209c783bfd1684a89e624a4e483a86023c6df57f77d5b75890",
       diamond: "a5d717aa5c9063181283811d265bfd0ffdc7eda09a0984cee59578b4a5efd4a1",
