@@ -79,44 +79,28 @@ export function renderLore(text) {
 /**
  * @param {number} number the number to be formatted
  * @param {boolean} floor rounds down if true, up if false
- * @param {number} rounding power of ten of the number of digits you want after the decimal point
+ * @param {number} decimals number of decimal places
  *
  * @returns {string} formatted number
  *
- * @example formatNumber(123456798, true, 10) = "123.4M"
- * @example formatNumber(123456798, true, 100) = "123.45M"
+ * @example formatNumber(123456798, true, 1 = "123.4M"
+ * @example formatNumber(123456798, true, 2) = "123.45M"
  */
-export function formatNumber(number, floor, rounding = 10) {
-  if (number < 1000) {
-    return String(Math.floor(number));
-  } else if (number < 10000) {
-    if (floor) {
-      return (Math.floor((number / 1000) * rounding) / rounding).toFixed(rounding.toString().length - 1) + "K";
-    } else {
-      return (Math.ceil((number / 1000) * rounding) / rounding).toFixed(rounding.toString().length - 1) + "K";
-    }
-  } else if (number < 1000000) {
-    if (floor) {
-      return Math.floor(number / 1000) + "K";
-    } else {
-      return Math.ceil(number / 1000) + "K";
-    }
-  } else if (number < 1000000000) {
-    if (floor) {
-      return (Math.floor((number / 1000 / 1000) * rounding) / rounding).toFixed(rounding.toString().length - 1) + "M";
-    } else {
-      return (Math.ceil((number / 1000 / 1000) * rounding) / rounding).toFixed(rounding.toString().length - 1) + "M";
-    }
-  } else if (floor) {
-    return (
-      (Math.floor((number / 1000 / 1000 / 1000) * rounding * 10) / (rounding * 10)).toFixed(
-        rounding.toString().length
-      ) + "B"
-    );
-  } else {
-    return (
-      (Math.ceil((number / 1000 / 1000 / 1000) * rounding * 10) / (rounding * 10)).toFixed(rounding.toString().length) +
-      "B"
-    );
+
+export function formatNumber(number, floor = false, decimals = 2) {
+  if (number === undefined) return 0;
+
+  if (floor === true) {
+    number = Math.floor(number);
   }
+
+  if (number < 1000) return number.toLocaleString();
+
+  const abbrev = ["", "K", "M", "B", "T"];
+  const unformattedNumber = Math.abs(number);
+
+  const abbrevIndex = Math.floor(Math.log10(unformattedNumber) / 3);
+  const shortNumber = (unformattedNumber / Math.pow(10, abbrevIndex * 3)).toFixed(decimals);
+
+  return `${shortNumber}${abbrev[abbrevIndex]}`;
 }

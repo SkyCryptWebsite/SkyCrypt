@@ -46,6 +46,7 @@ You can now run `pnpm start` to start it. You will be able to access the site on
   - [FurfSky Reborn](https://hypixel.net/threads/4101579) by The Reborn Team
   - [RNBW+](https://hypixel.net/threads/3470904) by rainbowcraft2
   - [Hypixel Skyblock Pack](https://hypixel.net/threads/2103515) by Packs HQ
+  - [Hypixel Plus](https://hypixel.net/threads/4174260) by ic22487
   - [Vanilla+](https://hypixel.net/threads/2147652) by TBlazeWarriorT
   - [Worlds and Beyond](https://hypixel.net/threads/3597207) by Skeletony\_
   - [Default Minecraft Textures](https://www.minecraft.net/) by Mojang

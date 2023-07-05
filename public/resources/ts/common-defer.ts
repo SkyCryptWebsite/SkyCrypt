@@ -13,7 +13,10 @@ function validateURL(url: string) {
       if (urlSegments[1].match(/^[A-Za-z]+/)) {
         urlSegments[1] = urlSegments[1].charAt(0).toUpperCase() + urlSegments[1].substring(1).toLowerCase();
       } else if (!urlSegments[1].match(/^([0-9a-fA-F]{32})$/)) {
-        throw new Error(`"${urlSegments[1]}" is not a valid profile name or ID`);
+        if (urlSegments[1] === "") {
+          throw new Error(`please enter valid profile name or UUID after "/"`);
+        }
+        throw new Error(`"${urlSegments[1]}" is not a valid profile name or UUID`);
       }
     }
     if (
