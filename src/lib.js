@@ -943,6 +943,7 @@ function getPower(name, magicalPower) {
     itemData.tag.display.Lore = lore;
     itemData.power_type = info.type;
     itemData.stats = combined;
+    itemData.unlocked_at = info.unlocked_at;
   }
 
   return helper.generateItem(itemData);

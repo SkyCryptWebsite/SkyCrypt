@@ -62,6 +62,22 @@ export const POWERS = {
       ability_damage: 5,
     },
   },
+  bubba: {
+    type: "Master Stone",
+    texture_path: "/item/BUBBA_BLISTER",
+    stats: {
+      strength: 6,
+      crit_damage: 10.8,
+      defense: -9.6,
+      true_defense: 1.2,
+      bonus_attack_speed: 1.8,
+      health: 5.1,
+      crit_chance: 0.9,
+    },
+    unique: {
+      combat_wisdom: 2,
+    },
+  },
   demonic: {
     type: "Master Stone",
     texture_path: "/item/HORNS_OF_TORMENT",
@@ -115,6 +131,20 @@ export const POWERS = {
     },
     unique: {
       bonus_attack_speed: 10,
+    },
+  },
+  crumbly: {
+    type: "Advanced Stone",
+    texture_path: "/item/CHOCOLATE_CHIP",
+    stats: {
+      mending: 1.8,
+      intelligence: 5.4,
+      true_defense: 0.6,
+      vitality: 2.4,
+      health: 10.1,
+    },
+    unique: {
+      speed: 25,
     },
   },
   forceful: {
@@ -206,6 +236,19 @@ export const POWERS = {
       speed: 5,
     },
   },
+  sanguisuge: {
+    type: "Starter",
+    texture_path: "/item/DISPLACED_LEECH",
+    stats: {
+      strength: 12,
+      vitality: 1.2,
+      crit_damage: 4.8,
+      health: 5.1,
+    },
+    unique: {
+      intelligence: 100,
+    },
+  },
   commando: {
     type: "Intermediate",
     id: 280,
@@ -216,6 +259,7 @@ export const POWERS = {
       crit_chance: 0.475,
       crit_damage: 8.4,
     },
+    unlocked_at: 15,
   },
   disciplined: {
     type: "Intermediate",
@@ -227,6 +271,7 @@ export const POWERS = {
       crit_chance: 1.45,
       crit_damage: 7.2,
     },
+    unlocked_at: 15,
   },
   inspired: {
     type: "Intermediate",
@@ -240,6 +285,7 @@ export const POWERS = {
       crit_chance: 0.95,
       crit_damage: 3.6,
     },
+    unlocked_at: 15,
   },
   ominous: {
     type: "Intermediate",
@@ -253,6 +299,7 @@ export const POWERS = {
       crit_damage: 3.6,
       bonus_attack_speed: 0.9,
     },
+    unlocked_at: 15,
   },
   prepared: {
     type: "Intermediate",
@@ -264,6 +311,7 @@ export const POWERS = {
       crit_chance: 0.4,
       crit_damage: 0.95,
     },
+    unlocked_at: 15,
   },
   fortuitous: {
     type: "Starter",
@@ -275,6 +323,7 @@ export const POWERS = {
       crit_chance: 4.35,
       crit_damage: 4.8,
     },
+    unlocked_at: 0,
   },
   pretty: {
     type: "Starter",
@@ -289,6 +338,7 @@ export const POWERS = {
       crit_chance: 0.475,
       crit_damage: 1.2,
     },
+    unlocked_at: 0,
   },
   protected: {
     type: "Starter",
@@ -300,6 +350,7 @@ export const POWERS = {
       crit_chance: 0.475,
       crit_damage: 1.2,
     },
+    unlocked_at: 0,
   },
   simple: {
     type: "Starter",
@@ -313,6 +364,7 @@ export const POWERS = {
       crit_chance: 1.45,
       crit_damage: 3.6,
     },
+    unlocked_at: 0,
   },
   warrior: {
     type: "Starter",
@@ -324,6 +376,7 @@ export const POWERS = {
       crit_chance: 2.4,
       crit_damage: 6,
     },
+    unlocked_at: 0,
   },
 };
 
