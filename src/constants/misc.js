@@ -163,6 +163,7 @@ export const AREA_NAMES = {
   winter: "Jerry's Workshop",
   instanced: "Kuudra's End",
   garden: "The Garden",
+  rift: "Rift",
 };
 
 export const COLOR_NAMES = {

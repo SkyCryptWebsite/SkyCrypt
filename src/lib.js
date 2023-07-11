@@ -369,13 +369,13 @@ async function processItems(base64, source, customTextures = false, packs, cache
             Damage: hypixelItem?.damage ?? 3,
             id: hypixelItem?.item_id ?? 397,
             itemIndex: item.containsItems.length,
-            glowing: hypixelItem.glowing,
-            display_name: hypixelItem.name,
-            rarity: hypixelItem.tier,
+            glowing: hypixelItem?.glowing ?? false,
+            display_name: hypixelItem?.name ?? _.startCase(item.tag.ExtraAttributes[key].replace(/_/g, " ")),
+            rarity: hypixelItem?.tier ?? "common",
             categories: [],
           };
 
-          if (hypixelItem.texture !== undefined) {
+          if (hypixelItem?.texture !== undefined) {
             itemData.texture_path = `/head/${hypixelItem.texture}`;
           }
 
@@ -384,6 +384,10 @@ async function processItems(base64, source, customTextures = false, packs, cache
             const color = helper.RGBtoHex(hypixelItem.color) ?? "955e3b";
 
             itemData.texture_path = `/leather/${type}/${color}`;
+          }
+
+          if (hypixelItem === null) {
+            itemData.texture_path = "/head/bc8ea1f51f253ff5142ca11ae45193a4ad8c3ab5e9c6eec8ba7a4fcb7bac40";
           }
 
           item.containsItems.push(itemData);
@@ -1988,6 +1992,7 @@ export async function getStats(
   output.minion_slots = getMinionSlots(output.minions);
   output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
   output.bestiary = getBestiary(profile.uuid, profile);
+
   output.social = hypixelProfile.socials;
 
   output.dungeons = getDungeons(userProfile, hypixelProfile);
@@ -2261,6 +2266,8 @@ export async function getStats(
 
   output.crimsonIsles = crimsonIsles;
 
+  output.trophy_fish = getTrophyFish(userProfile);
+
   output.abiphone = {
     contacts: userProfile.nether_island_player_data?.abiphone?.contact_data ?? {},
     active: userProfile.nether_island_player_data?.abiphone?.active_contacts?.length || 0,
@@ -2336,7 +2343,7 @@ export async function getStats(
   output.skyblock_level = {
     xp: userProfile.leveling?.experience || 0,
     level: Math.floor(userProfile.leveling?.experience / 100 || 0),
-    maxLevel: 386,
+    maxLevel: 416,
     progress: (userProfile.leveling?.experience % 100) / 100 || 0,
     xpCurrent: userProfile.leveling?.experience % 100 || 0,
     xpForNext: 100,
@@ -2631,6 +2638,8 @@ export async function getStats(
 
   output.reaper_peppers_eaten = userProfile.reaper_peppers_eaten ?? 0;
 
+  output.objectives = userProfile.objectives ?? 0;
+
   if (!userProfile.pets) {
     userProfile.pets = [];
   }
@@ -2684,7 +2693,7 @@ export async function getStats(
   return output;
 }
 
-export async function getPets(profile, userProfile) {
+export async function getPets(profile, calculated) {
   let output = [];
 
   if (!("pets" in profile)) {
@@ -2692,7 +2701,7 @@ export async function getPets(profile, userProfile) {
   }
 
   // debug pets
-  // profile.pets = helper.generateDebugPets("BINGO");
+  // profile.pets = helper.generateDebugPets("TARANTULA");
 
   for (const pet of profile.pets) {
     if (!("tier" in pet)) {
@@ -2702,7 +2711,7 @@ export async function getPets(profile, userProfile) {
     const petData = constants.PET_DATA[pet.type] ?? {
       head: "/head/bc8ea1f51f253ff5142ca11ae45193a4ad8c3ab5e9c6eec8ba7a4fcb7bac40",
       type: "???",
-      maxTier: "LEGENDARY",
+      maxTier: "legendary",
       maxLevel: 100,
       emoji: "❓",
     };
@@ -2782,9 +2791,8 @@ export async function getPets(profile, userProfile) {
     const rarity = constants.RARITIES.indexOf(pet.rarity);
 
     const searchName = pet.type in constants.PET_STATS ? pet.type : "???";
-    const petInstance = new constants.PET_STATS[searchName](rarity, pet.level.level, pet.extra, userProfile);
+    const petInstance = new constants.PET_STATS[searchName](rarity, pet.level.level, pet.extra, calculated ?? profile);
     pet.stats = Object.assign({}, petInstance.stats);
-    petInstance.profile = null;
     pet.ref = petInstance;
 
     if (pet.heldItem) {
@@ -2879,11 +2887,16 @@ export async function getPets(profile, userProfile) {
 
       const progress = Math.ceil(pet.level.progress * 20);
       const numerator = pet.level.xpCurrent.toLocaleString();
-      const denominator = helper.formatNumber(pet.level.xpForNext, false, 10);
+      const denominator = helper.formatNumber(pet.level.xpForNext, false);
 
       lore.push(`§2${"-".repeat(progress)}§f${"-".repeat(20 - progress)} §e${numerator} §6/ §e${denominator}`);
     } else {
       lore.push("§bMAX LEVEL");
+    }
+
+    let progress = Math.floor((pet.exp / pet.level.xpMaxLevel) * 100);
+    if (isNaN(progress)) {
+      progress = 0;
     }
 
     lore.push(
@@ -2892,7 +2905,7 @@ export async function getPets(profile, userProfile) {
         pet.level.xpMaxLevel,
         true,
         1
-      )} §6(${Math.floor((pet.exp / pet.level.xpMaxLevel) * 100)}%)`
+      )} §6(${progress.toLocaleString()}%)`
     );
 
     if (petData.obtainsExp !== "feed") {
@@ -2907,6 +2920,7 @@ export async function getPets(profile, userProfile) {
 
     pet.display_name = `${petName}${petSkin ? " ✦" : ""}`;
     pet.emoji = petData.emoji;
+    pet.ref.profile = null;
 
     output.push(pet);
   }
@@ -2989,7 +3003,10 @@ async function getMissingPets(pets, gameMode, userProfile) {
     profile.pets.push(pets[0]);
   }
 
-  return getPets(profile, userProfile);
+  profile.objectives = userProfile.objectives;
+  profile.collections = userProfile.collections;
+
+  return await getPets(profile);
 }
 
 function getPetScore(pets) {
@@ -3136,6 +3153,73 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
   return output;
 }
 
+export function getTrophyFish(userProfile) {
+  const output = {
+    total_caught: 0,
+    stage: {
+      name: null,
+      progress: null,
+    },
+    fish: [],
+  };
+
+  for (const key of Object.keys(constants.TROPHY_FISH)) {
+    const id = key.toLowerCase();
+    const caught = (userProfile.trophy_fish && userProfile.trophy_fish[id]) || 0;
+    const caughtBronze = (userProfile.trophy_fish && userProfile.trophy_fish[`${id}_bronze`]) || 0;
+    const caughtSilver = (userProfile.trophy_fish && userProfile.trophy_fish[`${id}_silver`]) || 0;
+    const caughtGold = (userProfile.trophy_fish && userProfile.trophy_fish[`${id}_gold`]) || 0;
+    const caughtDiamond = (userProfile.trophy_fish && userProfile.trophy_fish[`${id}_diamond`]) || 0;
+
+    const highestType =
+      caughtDiamond > 0 ? "diamond" : caughtGold > 0 ? "gold" : caughtSilver > 0 ? "silver" : "bronze";
+
+    output.fish.push({
+      id: key,
+      name: constants.TROPHY_FISH[key].display_name,
+      texture: constants.TROPHY_FISH[key].textures[highestType],
+      description: constants.TROPHY_FISH[key].description,
+      caught: {
+        total: caught,
+        bronze: caughtBronze,
+        silver: caughtSilver,
+        gold: caughtGold,
+        diamond: caughtDiamond,
+        highestType: highestType,
+      },
+    });
+  }
+
+  output.total_caught = userProfile.trophy_fish?.total_caught || 0;
+
+  const { type: stageType, formatted: stageFormatted } =
+    constants.TROPHY_FISH_STAGES[(userProfile.trophy_fish?.rewards || []).length] || {};
+  const { type: stageProgressType } = constants.TROPHY_FISH_STAGES[
+    (userProfile.trophy_fish?.rewards || []).length + 1
+  ] || {
+    type: stageType,
+  };
+
+  const stageProgress =
+    stageType === "diamond"
+      ? null
+      : stageType
+      ? `${
+          Object.keys(userProfile.trophy_fish).filter(
+            (a) => a.endsWith(stageProgressType) && userProfile.trophy_fish[a] > 0
+          ).length
+        } / ${Object.keys(constants.TROPHY_FISH).length}`
+      : null;
+
+  output.stage = {
+    name: stageFormatted || "None",
+    type: stageType,
+    progress: stageProgress,
+  };
+
+  return output;
+}
+
 export function getBestiary(uuid, profile) {
   const output = {};
 
@@ -3194,7 +3278,6 @@ export function getBestiary(uuid, profile) {
 
   return result;
 }
-
 export function getDungeons(userProfile, hypixelProfile) {
   const output = {};
 

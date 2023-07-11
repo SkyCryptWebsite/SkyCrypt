@@ -2008,12 +2008,14 @@ inventory-view {
 .collections,
 .minions,
 .stat-farming-crops,
-.sea-creatures {
+.sea-creatures,
+.trophy-fish {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 
-  &.sea-creatures {
+  &.sea-creatures,
+  &.trophy-fish {
     gap: 15px;
   }
 }
@@ -2063,6 +2065,63 @@ inventory-view {
 
 .collection-amount {
   font-size: 14px;
+}
+
+.trophy-fish-data {
+  font-size: 16px;
+  font-weight: 450;
+
+  .trophy-fish-info {
+    margin-bottom: 2px;
+
+    .trophy-fish-amount {
+      color: rgba(var(--text-rgb), 0.7);
+      font-weight: 500;
+    }
+  }
+
+  .trophy-fish-count {
+    display: grid;
+    grid-template-columns: repeat(2, auto 1fr);
+    gap: 0px 4px;
+    height: 44px;
+
+    text-align: left;
+    align-items: center;
+  }
+
+  .count-value {
+    height: 22px;
+
+    svg {
+      width: 20px;
+      height: 22px;
+    }
+  }
+
+  .count-format {
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+  }
+
+  .bronze-count {
+    background-color: #a85c03;
+  }
+
+  .gold-count {
+    background-color: #feb801;
+  }
+
+  .silver-count {
+    background-color: #b4b4b5;
+    margin-left: 10px;
+  }
+
+  .diamond-count {
+    background-color: #68ecff;
+    margin-left: 10px;
+  }
 }
 
 .narrow-info-header {
@@ -2381,7 +2440,8 @@ inventory-view {
   .collections,
   .minions,
   .stat-farming-crops,
-  .sea-creatures {
+  .sea-creatures,
+  .trophy-fish {
     flex-wrap: nowrap;
     overflow-x: auto;
     margin-left: calc(-1 * var(--padding));
@@ -2391,7 +2451,8 @@ inventory-view {
       contain-intrinsic-size: 200px 64px;
     }
 
-    &.sea-creatures {
+    &.sea-creatures,
+    &.trophy-fish {
       @supports (contain-intrinsic-size: 140px 230px) {
         contain-intrinsic-size: 140px 230px;
       }
