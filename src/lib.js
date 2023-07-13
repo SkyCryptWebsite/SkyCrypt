@@ -19,6 +19,7 @@ import { db } from "./mongo.js";
 import { redisClient } from "./redis.js";
 import { calculateLilyWeight } from "./weight/lily-weight.js";
 import { calculateSenitherWeight } from "./weight/senither-weight.js";
+import { calculateFarmingWeight } from "./weight/farming-weight.js";
 
 const mcData = minecraftData("1.8.9");
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -2397,6 +2398,7 @@ export async function getStats(
   output.weight = {
     senither: calculateSenitherWeight(output),
     lily: calculateLilyWeight(output),
+    farming: calculateFarmingWeight(output),
   };
 
   /*
