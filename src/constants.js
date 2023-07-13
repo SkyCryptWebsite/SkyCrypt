@@ -18,5 +18,6 @@ export * from "./constants/random-emoji.js";
 export * from "./constants/skills.js";
 export * from "./constants/skins-animations.js";
 export * from "./constants/tags.js";
+export * from "./constants/trophy-fish.js";
 export * from "./constants/accessories.js";
 export * from "./constants/rift.js";

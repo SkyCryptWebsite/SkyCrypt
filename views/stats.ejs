@@ -10,8 +10,9 @@
 ..######...#######..##....##..######.....##....##.....##.##....##....##.....######.
 */
 const rarityOrder = ["very_special", "special", "supreme", "divine", "mythic", "legendary", "epic", "rare", "uncommon", "common"];
-const slayerOrder = ["zombie", "spider", "wolf", "enderman", "blaze", "vampire"];
+const slayerOrder = ["zombie", "spider", "wolf", "enderman", "vampire", "blaze"];
 const badgeOrder = ["gold", "silver", "bronze"];
+const trophyFishOrder = ["bronze", "silver", "gold", "diamond"]
 
 const skillItems = {
   alchemy: "icon-379_0",
@@ -1835,8 +1836,63 @@ const metaDescription = getMetaDescription()
               } %>
             </div>
             <% } %>
-          </div>
+            <button class="stat-sub-header extender" aria-controls="fishing-trophyfish" aria-expanded="false">Trophy Fish</button>
+            <div class="trophyfish extendable" id="fishing-trophyfish">
+              <p class="stat-raw-values">
+                <span class="stat-name">Total Caught:</span>
+                <span class="stat-value"><%= calculated.trophy_fish.total_caught.toLocaleString() %></span>
+                <br>
+                <% max = calculated.trophy_fish.stage.type === "diamond" ? 'golden-text' : '' %>
+                <span class="stat-name <%= max %>">Current Stage:</span>
+                <span class="stat-value <%= max %>"><%= calculated.trophy_fish.stage.name %></span>
+                <% if (calculated.trophy_fish.stage.progress !== null) { %>
+                  <span style='color: rgba(var(--text-rgb), 0.7);'> (<%= calculated.trophy_fish.stage.progress %>)</span>
+                <% } %>
+                <br>
+              </p>
 
+              <!-- ? Moves chips into next row. Reason - looks better -->
+              <div style="width:100%;"></div>
+
+              <div class="trophy-fish">
+                <% for (const fish of calculated.trophy_fish.fish) { %>
+                <div class="chip" data-tippy-content="<%= helper.renderLore(fish.description) %>">
+                  <div class="chip-icon-wrapper">
+                    <div style="background-image:url(/head/<%= fish.texture %>)" class="item-icon custom-icon"></div>
+                  </div>
+
+                  <div class="chip-text">
+                    <div class="trophy-fish-data">
+                      <div class="trophy-fish-info">
+                        <span class="stat-name"> <%= fish.name %> </span>
+                        <span class="trophy-fish-amount"> x<%= fish.caught.total.toLocaleString() %> </span>
+                      </div>
+
+                      <div class="trophy-fish-count">
+                        <% for (const fishTier of trophyFishOrder) {
+                          let count = fish.caught[fishTier] ?? 0; %>
+                          <div class="<%= fishTier %>-count count-format"></div>
+                          <% if (count > 0) { %>
+                            <span class="count-value">
+                              <%= fish.caught[fishTier].toLocaleString() %>
+                            </span>
+                          <% } else { %>
+                            <span class="count-value">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="4 2 24 20">
+                                <path fill="currentColor" d="M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z" />
+                              </svg>
+                            </span>
+                          <% } %>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <% } %>
+              </div>
+            </div>
+
+          </div>
           <% if(calculated.enchanting.experimented){ %>
           <div class="stat-enchanting">
             <div class="category-header">
@@ -2197,7 +2253,7 @@ const metaDescription = getMetaDescription()
               </div>
 
               <% if (slayer.level.unclaimed){ %>
-                div class="slayer-unclaimed">unclaimed slayer rewards!</div>
+                <div class="slayer-unclaimed">unclaimed slayer rewards!</div>
               <% } %>
               
               <% max = slayer.level.currentLevel == slayer.level.maxLevel ? 'golden-text' : '' %>
@@ -2922,7 +2978,7 @@ const metaDescription = getMetaDescription()
           </p>
           <% } %>
 
-          <% if('effects' in calculated.misc){ 
+          <% if('effects' in calculated.misc){
             if (Object.keys(calculated.misc.effects).some((key) => Object.keys(calculated.misc.effects[key]).length > 0)) { %>
           <div class="category-header">
             <div class="category-icon">
@@ -2938,7 +2994,7 @@ const metaDescription = getMetaDescription()
                   if (key === "active") {
                     if (potion?.effect === undefined || potion?.level === null) continue;
                     effects_tooltips[key].push(`<span class="stat-value">${constants.POTION_EFFECTS[potion.effect]?.[potion.level].name.replace('Potion', '') || potion.effect.split('_').map((effect) => helper.capitalizeFirstLetter(effect.toLowerCase())).join(' ')}</span><br>`)
-                  
+
                   } else {
                     potion = potion?.effect || potion
 
