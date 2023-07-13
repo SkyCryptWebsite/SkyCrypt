@@ -12,6 +12,10 @@ import * as customResources from "./custom-resources.js";
 import sanitize from "mongo-sanitize";
 import fs from "fs-extra";
 
+import * as app from "./app.js";
+import * as helper from "./helper.js";
+import { getItemData } from "./helper/item.js";
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const skew_a = 26 / 45;
@@ -140,10 +144,10 @@ function darken(src, factor) {
 }
 
 const ACCESSORIES = [
-  "http://textures.minecraft.net/texture/5c577e7d31e5e04c2ce71e13e3962192d80bd54b55efaacaaea12966fe27bf9",
-  "http://textures.minecraft.net/texture/eaa44b170d749ce4099aa78d98945d193651484089efb87ba88892c6fed2af31",
-  "http://textures.minecraft.net/texture/651eb16f22dd7505be5dae06671803633a5abf8b2beeb5c60548670df0e59214",
-  "http://textures.minecraft.net/texture/317b51e086f201448a4b45b0b91e97faf4d1739071480be6d5cab0a054512164",
+  "5c577e7d31e5e04c2ce71e13e3962192d80bd54b55efaacaaea12966fe27bf9",
+  "eaa44b170d749ce4099aa78d98945d193651484089efb87ba88892c6fed2af31",
+  "651eb16f22dd7505be5dae06671803633a5abf8b2beeb5c60548670df0e59214",
+  "317b51e086f201448a4b45b0b91e97faf4d1739071480be6d5cab0a054512164",
 ];
 
 let itemsSheet, itemsCss;
@@ -174,7 +178,32 @@ async function renderColoredItem(color, baseImage, overlayImage) {
   return canvas.toBuffer("image/png");
 }
 
-export async function renderHead(url, scale) {
+/**
+ * Gets either the cached texture or attempts to render and saves it
+ * @param {string} textureId
+ * @param {number} scale
+ * @returns Image of a rendered head
+ */
+export async function getHead(textureId, scale = 6.4) {
+  const filePath = helper.getCacheFilePath(app.CACHE_PATH, "head", textureId);
+  let file;
+
+  try {
+    file = await fs.readFile(filePath);
+  } catch (e) {
+    file = await renderHead(textureId, scale);
+
+    fs.writeFile(filePath, file, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  }
+
+  return file;
+}
+
+async function renderHead(textureId, scale) {
   const hat_factor = 0.94;
 
   const canvas = createCanvas(scale * 20, scale * 18.5);
@@ -187,7 +216,7 @@ export async function renderHead(url, scale) {
   const hat_bg = hat_bg_canvas.getContext("2d");
   const head = head_canvas.getContext("2d");
 
-  const skin = await loadImage(url);
+  const skin = await loadImage(`https://textures.minecraft.net/texture/${textureId}`);
 
   let head_bottom = resize(getPart(skin, 16, 0, 8, 8, 1), scale * (hat_factor + 0.01));
   const head_top = resize(getPart(skin, 8, 0, 8, 8, 1), scale * (hat_factor + 0.01));
@@ -238,7 +267,7 @@ export async function renderHead(url, scale) {
     hat_bg.setTransform(1, skew_a, 0, skew_b, 0, 0);
     hat_bg.drawImage(head_left_overlay, x + y, z - y, head_left_overlay.width, head_left_overlay.height);
 
-    if (!ACCESSORIES.includes(url)) {
+    if (!ACCESSORIES.includes(textureId)) {
       // hat back
       x = x_offset;
       y = 0;
@@ -332,6 +361,31 @@ export async function renderHead(url, scale) {
 }
 
 /**
+ * Gets either the cached texture or attempts to render and saves it
+ * @param {string} type
+ * @param {string} color
+ * @returns Image of a rendered armor piece
+ */
+export async function getArmor(type, color) {
+  const filePath = helper.getCacheFilePath(app.CACHE_PATH, `leather`, `${type}_${color}`);
+  let file;
+
+  try {
+    file = await fs.readFile(filePath);
+  } catch (e) {
+    file = await renderArmor(type, color);
+
+    fs.writeFile(filePath, file, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  }
+
+  return file;
+}
+
+/**
  * Loads and renders an armor with the specified type and color.
  *
  * @async
@@ -339,7 +393,7 @@ export async function renderHead(url, scale) {
  * @param {string} color - The color of the armor to be rendered.
  * @returns {Promise<Image>} The rendered armor image.
  */
-export async function renderArmor(type, color) {
+async function renderArmor(type, color) {
   // Load the base image and overlay image of the armor
   const [armorBase, armorOverlay] = await Promise.all([
     loadImage(path.resolve(textureDir, `leather_${type}.png`)),
@@ -351,6 +405,31 @@ export async function renderArmor(type, color) {
 }
 
 /**
+ * Gets either the cached texture or attempts to render and saves it
+ * @param {string} type
+ * @param {string} color
+ * @returns Image of a rendered potion
+ */
+export async function getPotion(type, color) {
+  const filePath = helper.getCacheFilePath(app.CACHE_PATH, `potion`, `${type}_${color}`);
+  let file;
+
+  try {
+    file = await fs.readFile(filePath);
+  } catch (e) {
+    file = await renderPotion(type, color);
+
+    fs.writeFile(filePath, file, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  }
+
+  return file;
+}
+
+/**
  * Loads and renders a potion with the specified type and color.
  *
  * @async
@@ -358,7 +437,7 @@ export async function renderArmor(type, color) {
  * @param {string} color - The color of the potion to be rendered.
  * @returns {Promise<Image>} The rendered potion image.
  */
-export async function renderPotion(type, color) {
+async function renderPotion(type, color) {
   // Load the liquid image and bottle image of the potion
   const [potionLiquid, potionBottlle] = await Promise.all([
     loadImage(path.resolve(textureDir, "potion_overlay.png")),
@@ -369,69 +448,21 @@ export async function renderPotion(type, color) {
   return await renderColoredItem("#" + color, potionLiquid, potionBottlle);
 }
 
-export async function renderItem(skyblockId, query, db) {
-  let item = { Damage: 0, id: -1 };
+/**
+ * Gets a texture of an item, either from stylesheet or from resource packs
+ * @param {string|undefined} skyblockId
+ * @param {object} query
+ * @returns Image of an item
+ */
+export async function renderItem(skyblockId, query) {
   query = sanitize(query);
+  let itemQuery = query ?? {};
 
-  if (skyblockId) {
-    skyblockId = skyblockId.replace(".gif", "");
-    skyblockId = sanitize(skyblockId);
-
-    if (skyblockId.includes(":")) {
-      const split = skyblockId.split(":");
-
-      skyblockId = split[0];
-      query.damage = new Number(split[1]);
-    }
-
-    item = Object.assign(item, await db.collection("items").findOne({ id: skyblockId }));
+  if (skyblockId !== undefined) {
+    itemQuery = Object.assign(query, { skyblockId });
   }
 
-  if (query.name) {
-    const results = await db
-      .collection("items")
-      .find({ $text: { $search: query.name } })
-      .toArray();
-
-    const filteredResults = results.filter((a) => a.name.toLowerCase() == query.name.toLowerCase());
-
-    if (filteredResults.length > 0) {
-      item = Object.assign(item, filteredResults[0]);
-    }
-  }
-
-  if (query.id) {
-    item.id = query.id;
-  }
-
-  if (query.damage) {
-    item.damage = query.damage;
-  }
-
-  if (query.name) {
-    item.name = query.name;
-  }
-
-  if ("damage" in item) {
-    item.Damage = item.damage;
-    delete item.damage;
-  }
-
-  if ("item_id" in item) {
-    item.id = item.item_id;
-  }
-
-  if ("name" in item) {
-    item.tag = { display: { Name: item.name } };
-  }
-
-  if ("texture" in item) {
-    return {
-      mime: "image/png",
-      image: await renderHead(`http://textures.minecraft.net/texture/${item.texture}`, 6.4),
-    };
-  }
-
+  const item = await getItemData({ skyblockId, ...itemQuery });
   const outputTexture = { mime: "image/png" };
 
   for (const rule of itemsCss.stylesheet.rules) {
@@ -442,6 +473,10 @@ export async function renderItem(skyblockId, query, db) {
     const coords = rule.declarations[0].value.split(" ").map((a) => Math.abs(parseInt(a)));
 
     outputTexture.image = getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer("image/png");
+  }
+
+  if ("texture" in item) {
+    outputTexture.image = await getHead(item.texture);
   }
 
   const customTexture = await customResources.getTexture(item, {
@@ -456,6 +491,7 @@ export async function renderItem(skyblockId, query, db) {
     }
 
     outputTexture.path = customTexture.path;
+    outputTexture.debug = customTexture.debug;
     outputTexture.image = fs.readFileSync(path.resolve(__dirname, "..", "public", customTexture.path));
   }
 

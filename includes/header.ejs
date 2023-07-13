@@ -105,35 +105,7 @@
         }
       </script>
     </button>
-    <div id="packs-box" class="expandable list">
-      <%
-        const defaultPack = {
-          name: "Default",
-          author: "Various Artists",
-          basePath: "/resources/img",
-          url: "",
-          id: null
-        }
-      %>
-      <% for(const pack of [defaultPack, ...extra.packs].filter(a => !a.hidden)) { %>
-        <label class="list-item">
-          <img class="icon pack-icon" src="<%= pack.basePath + '/pack.png' %>" alt="" loading="lazy">
-          <a class="name" href="<%= pack.url %>" target="_blank" rel="noreferrer"><%= pack.name %> <% if(pack.version){ %><small><%= pack.version %></small><% } %></a><br>
-          <div class="author">by <span><%= pack.author %></span></div>
-          <button
-            name="pack"
-            value="<%= pack.id %>"
-            <% if (pack.disabled) { %>
-              title="Disabled due to unknown issues."
-              disabled
-            <% } else if (req.cookies.pack == pack.id) { %>
-              aria-selected
-              disabled
-            <% } %>
-          ></button>
-        </label>
-      <% } %>
-    </div>
+    <pack-list id="packs-box" class="expandable list"></pack-list>
   <% } %>
 </header>
 <noscript style="

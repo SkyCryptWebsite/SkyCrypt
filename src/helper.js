@@ -1,17 +1,21 @@
 import cluster from "cluster";
 import axios from "axios";
 import sanitize from "mongo-sanitize";
+import retry from "async-retry";
+// import path from "path";
 import "axios-debug-log";
 import { v4 } from "uuid";
-import retry from "async-retry";
-import path from "path";
-import fs from "fs-extra";
-import { fileURLToPath } from "url";
 import { getPrices } from "skyhelper-networth";
+// import { execSync } from "child_process";
+
+import { titleCase } from "../common/helper.js";
+// import { getFolderPath } from "./helper/cache.js";
 
 export { renderLore, formatNumber } from "../common/formatting.js";
 export * from "../common/helper.js";
-import { titleCase } from "../common/helper.js";
+
+export * from "./helper/cache.js";
+export * from "./helper/item.js";
 
 import {
   GUILD_XP,
@@ -28,6 +32,7 @@ import {
   PET_RARITY_OFFSET,
   PET_LEVELS,
   ITEM_ANIMATIONS,
+  MAGICAL_POWER,
 } from "./constants.js";
 
 import credentials from "./credentials.js";
@@ -956,48 +961,6 @@ export function parseItemTypeFromLore(lore, item) {
   };
 }
 
-export function getFolderPath() {
-  return path.dirname(fileURLToPath(import.meta.url));
-}
-
-export function getCacheFolderPath() {
-  return path.resolve(getFolderPath(), "../cache");
-}
-
-export function getCacheFilePath(dirPath, type, name, format = "png") {
-  // we don't care about folder optimization when we're developing
-  if (process.env?.NODE_ENV == "development") {
-    return path.resolve(dirPath, `${type}_${name}.${format}`);
-  }
-
-  const subdirs = [type];
-
-  // for texture and head type, we get the first 2 characters to split them further
-  if (type == "texture" || type == "head") {
-    subdirs.push(name.slice(0, 2));
-  }
-
-  // for potion and leather type, we get what variant they are to split them further
-  if (type == "leather" || type == "potion") {
-    subdirs.push(name.split("_")[0]);
-  }
-
-  // check if the entire folder path is available
-  if (!fs.pathExistsSync(path.resolve(dirPath, subdirs.join("/")))) {
-    // check if every subdirectory is available
-    for (let i = 1; i <= subdirs.length; i++) {
-      const checkDirs = subdirs.slice(0, i);
-      const checkPath = path.resolve(dirPath, checkDirs.join("/"));
-
-      if (!fs.pathExistsSync(checkPath)) {
-        fs.mkdirSync(checkPath);
-      }
-    }
-  }
-
-  return path.resolve(dirPath, `${subdirs.join("/")}/${type}_${name}.${format}`);
-}
-
 function getCategories(type, item) {
   const categories = [];
 
@@ -1092,10 +1055,52 @@ export function getAnimatedTexture(item) {
   return deepResults[0] ?? false;
 }
 
+/**
+ * Returns the price of the item. Returns 0 if the item is not found or if the item argument is falsy.
+ * @param {string} item - The ID of the item to retrieve the price for.
+ * @returns {number}
+ * @returns {Promise<number>}
+ */
 export async function getItemPrice(item) {
   if (!item) return 0;
 
   const prices = await getPrices(true);
 
-  return prices[item.toLowerCase()] || prices[getId(item).toLowerCase()] || 0;
+  return prices[item.toLowerCase()] ?? prices[getId(item).toLowerCase()] ?? 0;
+}
+
+/**
+ * Returns the magical power of an item based on its rarity and optional ID.
+ * @param {string} rarity - The rarity of the item. See {@link MAGICAL_POWER}.
+ * @param {string|null} [id=null] - (Optional) The ID of the item.
+ * @returns {number} Returns 0 if `rarity` is undefined or if `rarity` is not a valid rarity value.
+ */
+export function getMagicalPower(rarity, id = null) {
+  if (rarity === undefined) return 0;
+
+  if (id !== null && typeof id === "string") {
+    // Hegemony artifact provides double MP
+    if (id === "HEGEMONY_ARTIFACT") {
+      return 2 * (MAGICAL_POWER[rarity] ?? 0);
+    }
+  }
+
+  return MAGICAL_POWER[rarity] ?? 0;
+}
+
+export function getCommitHash() {
+  return "N/A";
+
+  /*
+  return execSync("git rev-parse HEAD", { cwd: path.resolve(getFolderPath(), "../") })
+    .toString()
+    .trim()
+    .slice(0, 10);
+    */
+}
+
+export function RGBtoHex(rgb) {
+  const [r, g, b] = rgb.split(",").map((c) => parseInt(c.trim()));
+
+  return [r, g, b].map((c) => c.toString(16).padStart(2, "0")).join("");
 }
