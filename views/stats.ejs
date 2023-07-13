@@ -2615,7 +2615,7 @@ const metaDescription = getMetaDescription()
           <span class="stat-name <%= max %>">Timecharms obtained: </span><span class="stat-value <%= max %>"><%= calculated.rift.timecharms.obtained_timecharms %></span><br><br>
           <div class="collections">
             <% for (const timecharm of calculated.rift.timecharms.timecharms) { %>
-              <div class="chip">
+              <div class="chip" data-missing="<%= timecharm.unlocked === false %>">
                 <div class="chip-icon-wrapper">
                   <div class="item-icon icon-<%= timecharm.id %>_<%= timecharm.damage %>"></div>
                 </div>
