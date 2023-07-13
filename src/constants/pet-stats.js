@@ -2345,15 +2345,10 @@ class Monkey extends Pet {
 
 class Montezuma extends Pet {
   get stats() {
-    const riftSouls =
-      "objectives" in (this.profile ?? {})
-        ? Object.entries(this.profile.objectives).find(
-            ([key, value]) => key.startsWith("rift_") && key.endsWith("_soul") && value.status === "COMPLETE"
-          )?.length ?? 0
-        : 0;
+    const riftSouls = (this.profile?.rift?.dead_cats?.found_cats ?? []).length;
 
     return {
-      rift_time: riftSouls * 15,
+      rift_time: 10 + riftSouls * 15,
       mana_regen: riftSouls * 2,
     };
   }
@@ -3521,7 +3516,7 @@ export const PET_STATS = {
   MEGALODON: Megalodon,
   MITHRIL_GOLEM: MithrilGolem,
   MONKEY: Monkey,
-  MONTEZUMA: Montezuma,
+  FRACTURED_MONTEZUMA_SOUL: Montezuma,
   MOOSHROOM_COW: MooshroomCow,
   OCELOT: Ocelot,
   PARROT: Parrot,

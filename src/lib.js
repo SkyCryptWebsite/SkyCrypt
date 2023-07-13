@@ -2507,10 +2507,17 @@ export async function getStats(
 
   output.objectives = userProfile.objectives ?? 0;
 
+  output.rift = userProfile.rift ?? {};
+
   if (!userProfile.pets) {
     userProfile.pets = [];
   }
   userProfile.pets.push(...items.pets);
+
+  if (userProfile.rift?.dead_cats?.montezuma !== undefined) {
+    userProfile.pets.push(userProfile.rift.dead_cats.montezuma);
+    userProfile.pets.at(-1).active = false;
+  }
 
   for (const pet of userProfile.pets) {
     await getItemNetworth(pet, { cache: true, returnItemData: false });
@@ -2870,7 +2877,7 @@ async function getMissingPets(pets, gameMode, userProfile) {
     profile.pets.push(pets[0]);
   }
 
-  profile.objectives = userProfile.objectives;
+  profile.rift = userProfile.rift;
   profile.collections = userProfile.collections;
 
   return await getPets(profile);
