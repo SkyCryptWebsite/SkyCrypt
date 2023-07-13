@@ -1694,10 +1694,10 @@ const metaDescription = getMetaDescription()
             <p class="stat-raw-values">
               <% for(let badge of badgeOrder){ %>
               <span data-tippy-content='
-                  <span class="stat-name">Current: </span><span class="stat-value"><%= farming.current_badges[badge].toLocaleString() %> Badges</span><br>
-                  <span class="stat-name">Total: </span><span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %> Badges</span>
+                  <span class="stat-name">Current: </span><span class="stat-value"><%= farming.current_badges[badge].toLocaleString() %> Medals</span><br>
+                  <span class="stat-name">Total: </span><span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %> Medals</span>
                 '>
-                <span class="stat-name"><%= badge %> badges: </span>
+                <span class="stat-name"><%= badge %> medals: </span>
                 <span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %></span></span><br>
               <% } %>
             </p>
@@ -1747,7 +1747,7 @@ const metaDescription = getMetaDescription()
 
                   for(let badge of badgeOrder)
                     amountsTooltip += `
-                      <span class="stat-name">${helper.titleCase(badge)} Badges: </span>
+                      <span class="stat-name">${helper.titleCase(badge)} Medals: </span>
                       <span class="stat-value">${crop.badges[badge].toLocaleString()}</span><br>
                     `;
                 %>
