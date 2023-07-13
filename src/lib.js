@@ -1084,56 +1084,60 @@ export const getItems = async (
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
-      insertAccessory.isInactive = true;
-    }
-
-    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
-      insertAccessory.isUnique = false;
-    }
-
     accessories.push(insertAccessory);
     accessoryIds.push(id);
   }
 
-  // Add accessories from inventory
-  for (const accessory of inventory.filter((a) => a.categories.includes("accessory"))) {
+  // Add accessories from inventory and accessory bag
+  for (const accessory of accessory_bag.concat(inventory.filter((a) => a.categories.includes("accessory")))) {
     const id = helper.getId(accessory);
-
     if (id === "") {
       continue;
     }
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
-      insertAccessory.isInactive = true;
+    // mark lower tiers as inactive
+    if (constants.getUpgradeList(id) !== undefined) {
+      accessories.find((a) => {
+        if (constants.getUpgradeList(id).includes(helper.getId(a)) === false) {
+          return;
+        }
+
+        insertAccessory.isInactive = true;
+        insertAccessory.isUnique = false;
+      });
     }
 
-    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
-      insertAccessory.isUnique = false;
-    }
+    // mark accessory inactive if player has two exactly same accessories
+    accessories.map((a) => {
+      if (helper.getId(a) === helper.getId(insertAccessory)) {
+        insertAccessory.isInactive = true;
+        a.isInactive = true;
 
-    accessories.push(insertAccessory);
-    accessoryIds.push(id);
-  }
+        // give accessories with higher rarity priority, mark lower rarity as inactive
+        if (constants.RARITIES.indexOf(a.rarity) > constants.RARITIES.indexOf(insertAccessory.rarity)) {
+          a.isInactive = false;
+          a.isUnique = true;
+        } else if (constants.RARITIES.indexOf(insertAccessory.rarity) > constants.RARITIES.indexOf(a.rarity)) {
+          insertAccessory.isInactive = false;
+          insertAccessory.isUnique = true;
+        }
+      }
+    });
 
-  // Add accessories from accessory bag if not already in inventory
-  for (const accessory of accessory_bag) {
-    const id = helper.getId(accessory);
+    // mark accessoriy aliases as inactive
+    for (const accessory of accessories) {
+      const id = helper.getId(accessory);
 
-    if (id === "") {
-      continue;
-    }
+      if (id in constants.accessoryAliases) {
+        const accessoryDuplicates = constants.accessoryAliases[id];
 
-    const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
-
-    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
-      insertAccessory.isInactive = true;
-    }
-
-    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
-      insertAccessory.isUnique = false;
+        if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a))) != undefined) {
+          accessory.isUnique = false;
+          accessory.isInactive = true;
+        }
+      }
     }
 
     accessories.push(insertAccessory);
@@ -1150,7 +1154,7 @@ export const getItems = async (
   }
 
   // Add inactive accessories from enderchest and backpacks
-  for (const item of inventory.concat(enderchest, storage)) {
+  for (const item of enderchest.concat(storage)) {
     // filter out filler or empty slots (such as empty storage slot)
     if (!("categories" in item)) {
       continue;
@@ -1165,71 +1169,10 @@ export const getItems = async (
     for (const accessory of items.filter((a) => a.categories.includes("accessory"))) {
       const id = helper.getId(accessory);
 
-      const insertAccessory = Object.assign({ isUnique: true, isInactive: true }, accessory);
-
-      if (accessories.find((a) => helper.getId(a) == id) != undefined) {
-        insertAccessory.isUnique = false;
-      }
+      const insertAccessory = Object.assign({ isUnique: false, isInactive: true }, accessory);
 
       accessories.push(insertAccessory);
       accessoryIds.push(id);
-    }
-  }
-
-  // Don't account for lower tier versions of the same accessory
-  for (const accessory of accessories.concat(armor)) {
-    const id = helper.getId(accessory);
-
-    if (id.startsWith("CAMPFIRE_TALISMAN_")) {
-      const tier = parseInt(id.split("_").pop());
-
-      const maxTier = Math.max(
-        ...accessories
-          .filter((a) => helper.getId(a).startsWith("CAMPFIRE_TALISMAN_"))
-          .map((a) => helper.getId(a).split("_").pop())
-      );
-
-      if (tier < maxTier) {
-        accessory.isUnique = false;
-        accessory.isInactive = true;
-      }
-
-      accessoryIds.splice(accessoryIds.indexOf(id), 1, `CAMPFIRE_TALISMAN_${maxTier}`);
-    }
-
-    if (id.startsWith("WEDDING_RING_")) {
-      const tier = parseInt(id.split("_").pop());
-
-      const maxTier = Math.max(
-        ...accessories
-          .filter((a) => helper.getId(a).startsWith("WEDDING_RING_"))
-          .map((a) => helper.getId(a).split("_").pop())
-      );
-
-      if (tier < maxTier) {
-        accessory.isUnique = false;
-        accessory.isInactive = true;
-      }
-
-      accessoryIds.splice(accessoryIds.indexOf(id), 1, `WEDDING_RING_${maxTier}`);
-    }
-
-    if (id.startsWith("PARTY_HAT_CRAB")) {
-      const CRAB_HAT = accessories.find((a) => helper.getId(a) == `PARTY_HAT_CRAB`);
-      const CRAB_HAT_ANIMATED = accessories.find((a) => helper.getId(a) == `PARTY_HAT_CRAB_ANIMATED`);
-
-      if (CRAB_HAT && CRAB_HAT_ANIMATED) {
-        CRAB_HAT.isUnique = false;
-        CRAB_HAT.isInactive = true;
-      }
-    }
-
-    if (id in constants.accessoryAliases) {
-      const accessoryDuplicates = constants.accessoryAliases[id];
-
-      if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a))) != undefined) {
-        accessory.isUnique = false;
-      }
     }
   }
 
@@ -2954,7 +2897,7 @@ function getMissingAccessories(accessories) {
 
     let includes = false;
 
-    if (constants.getUpgradeList(accessory)?.[0] !== accessory && constants.getUpgradeList(accessory)) {
+    if (constants.getUpgradeList(accessory) && constants.getUpgradeList(accessory)[0] !== accessory) {
       includes = true;
     }
 
