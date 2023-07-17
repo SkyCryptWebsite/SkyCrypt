@@ -8,11 +8,14 @@ declare namespace extra {
 }
 
 interface Pack {
-  base_path: string;
   id: string;
+  base_path: string;
+  priority: number;
   name: string;
   author: string;
   url: string;
+  version?: string;
+  default?: boolean;
 }
 
 interface Theme {
@@ -569,6 +572,7 @@ declare const calculated: SkyCryptPlayer & {
     amount: number;
   }[];
   reaper_peppers_eaten: number;
+  skyblock_level: Level;
 };
 
 interface SkyCryptRelativeTime {

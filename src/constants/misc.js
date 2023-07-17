@@ -2,6 +2,7 @@
 export const BLOCKED_PLAYERS = [
   "20934ef9488c465180a78f861586b4cf", // Minikloon (Admin)
   "f025c1c7f55a4ea0b8d93f47d17dfe0f", // Plancke (Admin)
+  "c552c04a40fb4a17bf549a031b3ab1a1", // LandonHP (Admin)
 ];
 
 // Number of kills required for each level of expertise
@@ -106,6 +107,7 @@ export const MOB_NAMES = {
   master_sadan_statue: "Master Terracotta",
   master_tentaclees: "Master Fels",
   maxor: "Necron",
+  pig_rider: "Taurus",
 };
 
 export const RACE_OBJECTIVE_TO_STAT_NAME = {
@@ -150,13 +152,18 @@ export const AREA_NAMES = {
   mining_1: "Gold Mine",
   mining_2: "Deep Caverns",
   mining_3: "Dwarven Mines",
+  crystal_hollows: "Crystal Hollows",
   combat_1: "Spider's Den",
-  combat_2: "Blazing Fortress",
+  crimson_isle: "Crimson Isle",
   combat_3: "The End",
-  farming_1: "The Barn",
-  farming_2: "Mushroom Desert",
+  farming_1: "The Farming Islands",
   foraging_1: "The Park",
+  dungeon: "Dungeon",
+  dungeon_hub: "Dungeon Hub",
   winter: "Jerry's Workshop",
+  instanced: "Kuudra's End",
+  garden: "The Garden",
+  rift: "Rift",
 };
 
 export const COLOR_NAMES = {
@@ -345,7 +352,7 @@ export const INCREASE_MOST_STATS_EXCLUDE = [
 
 export const FAIRY_SOULS = {
   max: {
-    normal: 238,
+    normal: 242,
     stranded: 3,
   },
 };
@@ -630,7 +637,7 @@ export const ESSENCE_SHOP = {
     },
     fresh_tools_kuudra: {
       name: "Fresh Tools",
-      description: "2-10% chance to double the speed of repairing Elle's Ballista for 5s during the Kuudra Boss Fight.",
+      description: "2-15% chance to double the speed of repairing Elle's Ballista for 5s during the Kuudra Boss Fight.",
       maxLevel: 5,
     },
     headstart_kuudra: {
@@ -665,4 +672,10 @@ export const ESSENCE_SHOP = {
       maxLevel: 5,
     },
   },
+};
+
+export const BANK_COOLDOWN = {
+  1: "20 minutes",
+  2: "5 minutes",
+  3: "None",
 };

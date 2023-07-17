@@ -1,0 +1,6 @@
+{
+	"parent": "item/skyblock/pet",
+	"textures": {
+		"0": "./baby_chick_chicken"
+	}
+}

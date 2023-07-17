@@ -1,0 +1,16 @@
+name: "Mark Conflicts"
+
+on:
+  push:
+  pull_request_target:
+    types: [synchronize]
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for PR conflicts
+        uses: eps1lon/actions-label-merge-conflict@releases/2.x
+        with:
+          dirtyLabel: "has conflicts"
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"

@@ -59,24 +59,31 @@ const rewards = {
     1: {
       pickaxe_ability_level: 1,
       token_of_the_mountain: 1,
+      skyblock_experience: 25,
     },
     2: {
       forge_slot: 1,
+      skyblock_experience: 35,
     },
     3: {
       commission_slot: 1,
+      skyblock_experience: 50,
     },
     4: {
       mithril_powder_when_mining_mithril: 1,
+      skyblock_experience: 65,
     },
     5: {
       token_of_the_mountain: 1,
+      skyblock_experience: 75,
     },
     6: {
       gemstone_powder_when_mining_gemstones: 2,
+      skyblock_experience: 100,
     },
     7: {
       token_of_the_mountain: 1,
+      skyblock_experience: 125,
     },
   },
   rewards: {
@@ -119,6 +126,10 @@ const rewards = {
     gemstone_powder_when_mining_gemstones: {
       formatted: "§dGemstone Powder §7when mining §dGemstones",
       qtyColor: "d",
+    },
+    skyblock_experience: {
+      formatted: "§bSkyblock XP",
+      qtyColor: "b",
     },
   },
 };
@@ -629,21 +640,6 @@ class Mole extends Node {
       percent = 100;
     }
 
-    switch (blocks) {
-      case 1:
-        blocks = "1";
-        break;
-      case 2:
-        blocks = "a 2nd";
-        break;
-      case 3:
-        blocks = "a 3rd";
-        break;
-      default:
-        blocks = `a ${blocks}th`;
-        break;
-    }
-
     return [
       `§7When mining hard stone, you have a §a${percent}%§7 chance to mine §a${blocks}§7 adjacent hard stone block.`,
     ];
@@ -804,7 +800,7 @@ class StarPowder extends Node {
   }
 
   perk(level) {
-    return [`§7Mining Mithril Ore near §5Fallen Crystals §7gives §a+3 §7extra Mithril Powder.`];
+    return [`§7Mining Mithril Ore near §5Fallen Crystals §7gives §a3x §7Mithril Powder.`];
   }
 }
 
@@ -828,10 +824,10 @@ class SkyMall extends Node {
       "§7Every SkyBlock day, you receive a random buff in the §2Dwarven Mines§7.",
       "",
       "§7Possible Buffs",
-      `§8 ■ §7Gain §a+100 §6${SYMBOLS.mining_speed} Mining Speed.`,
-      `§8 ■ §7Gain §a+50 §6${SYMBOLS.mining_fortune} Mining Fortune.`,
+      `§8 ■ §7Gain §a+100 §6${SYMBOLS.mining_speed} Mining Speed§7.`,
+      `§8 ■ §7Gain §a+50 §6${SYMBOLS.mining_fortune} Mining Fortune§7.`,
       "§8 ■ §7Gain §a+15% §7chance to gain extra Powder while mining.",
-      "§8 ■ §7Reduce Pickaxe Ability cooldown by §a20%",
+      "§8 ■ §7Reduce Pickaxe Ability cooldown by §a20%§7.",
       "§8 ■ §7§a10x §7chance to find Goblins while mining.",
       "§8 ■ §7Gain §a5x §9Titanium §7drops.",
     ];
@@ -944,7 +940,7 @@ class FrontLoaded extends Node {
 
   perk(level) {
     return [
-      `§7Grants §a+100 §6${SYMBOLS.mining_speed} Mining Speed §7and §6${SYMBOLS.mining_fortune} Mining Fortune §7for the first §e2,500 §7ores you mine in a day.`,
+      `§7Grants §a+100 §6${SYMBOLS.mining_speed} Mining Speed §7and §6${SYMBOLS.mining_fortune} Mining Fortune §7as well as §a+2 base powder §7for the first §e2,500 §7ores you mine in a day.`,
     ];
   }
 }
@@ -1445,3 +1441,5 @@ export const PRECURSOR_PARTS = {
 };
 
 export const COMMISSIONS_MILESTONE = 6;
+
+export const MAX_PEAK_OF_THE_MOUNTAIN_LEVEL = 7;
