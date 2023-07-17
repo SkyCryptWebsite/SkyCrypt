@@ -34,7 +34,7 @@ A more explanatory guide can be found in <a href="/CONTRIBUTING.md">CONTRIBUTING
 
 Clone the project and and run `pnpm i` to install the dependencies.
 
-Now open `credentials.json` and enter a valid Hypixel API Key. You can obtain one by joining `mc.hypixel.net` and writing `/api` in chat.
+Now open `credentials.json` and enter a valid Hypixel API Key. You can obtain one by going to `developer.hypixel.net/dashboard` and clicking `Create API Key`.
 
 `mongod` needs to be running as a service in the background and the `redis-server` needs to be started.
 
@@ -46,6 +46,7 @@ You can now run `pnpm start` to start it. You will be able to access the site on
   - [FurfSky Reborn](https://hypixel.net/threads/4101579) by The Reborn Team
   - [RNBW+](https://hypixel.net/threads/3470904) by rainbowcraft2
   - [Hypixel Skyblock Pack](https://hypixel.net/threads/2103515) by Packs HQ
+  - [Hypixel Plus](https://hypixel.net/threads/4174260) by ic22487
   - [Vanilla+](https://hypixel.net/threads/2147652) by TBlazeWarriorT
   - [Worlds and Beyond](https://hypixel.net/threads/3597207) by Skeletony\_
   - [Default Minecraft Textures](https://www.minecraft.net/) by Mojang

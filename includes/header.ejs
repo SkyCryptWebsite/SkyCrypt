@@ -64,6 +64,7 @@
           <ul>
             <li><a rel="noreferrer" href="https://github.com/Senither/hypixel-skyblock-facade" target="_blank">Hypixel SkyBlock Facade</a> by <span class="name">Senither</span></li>
             <li><a rel="noreferrer" href="https://github.com/Antonio32A/lilyweight" target="_blank">lilyweight</a> by <span class="name">LappySheep</span> and <span class="name">Antonio32A</span></li>
+            <li><a rel="noreferrer" href="https://elitebot.dev/" target="_blank">Farming Weight</a> by <span class="name">Elite</span></li>
           </ul>
         </li>
         <li>Networth: <a rel="noreferrer" href="https://www.npmjs.com/package/skyhelper-networth" target="_blank">SkyHelper Networth</a> by <span class="name">SkyHelper</span></li>
@@ -104,35 +105,7 @@
         }
       </script>
     </button>
-    <div id="packs-box" class="expandable list">
-      <%
-        const defaultPack = {
-          name: "Default",
-          author: "Various Artists",
-          basePath: "/resources/img",
-          url: "",
-          id: null
-        }
-      %>
-      <% for(const pack of [defaultPack, ...extra.packs].filter(a => !a.hidden)) { %>
-        <label class="list-item">
-          <img class="icon pack-icon" src="<%= pack.basePath + '/pack.png' %>" alt="" loading="lazy">
-          <a class="name" href="<%= pack.url %>" target="_blank" rel="noreferrer"><%= pack.name %> <% if(pack.version){ %><small><%= pack.version %></small><% } %></a><br>
-          <div class="author">by <span><%= pack.author %></span></div>
-          <button
-            name="pack"
-            value="<%= pack.id %>"
-            <% if (pack.disabled) { %>
-              title="Disabled due to unknown issues."
-              disabled
-            <% } else if (req.cookies.pack == pack.id) { %>
-              aria-selected
-              disabled
-            <% } %>
-          ></button>
-        </label>
-      <% } %>
-    </div>
+    <pack-list id="packs-box" class="expandable list"></pack-list>
   <% } %>
 </header>
 <noscript style="

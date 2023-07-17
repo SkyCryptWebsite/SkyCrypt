@@ -1,0 +1,24 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "./lapis_helmet_top",
+    "front": "./lapis_helmet_front",
+    "side": "./lapis_helmet_side"
+  },
+  "display": {
+    "thirdperson": {
+      "rotation": [0, -45, 180],
+      "translation": [0, 1, -2.75],
+      "scale": [0.25, 0.25, 0.25]
+    },
+    "firstperson": {
+      "rotation": [0, -90, 0],
+      "translation": [0, 0, 0],
+      "scale": [0.5, 0.5, 0.5]
+    },
+    "gui": {
+      "rotation": [0, 0, 0],
+      "scale": [0.7, 0.7, 0.7]
+    }
+  }
+}

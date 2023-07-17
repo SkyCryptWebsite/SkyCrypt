@@ -12,76 +12,142 @@ import * as customResources from "./custom-resources.js";
 import sanitize from "mongo-sanitize";
 import fs from "fs-extra";
 
+import * as app from "./app.js";
+import * as helper from "./helper.js";
+import { getItemData } from "./helper/item.js";
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const skew_a = 26 / 45;
 const skew_b = skew_a * 2;
 
+/**
+ * Check if a canvas image has transparency
+ * @param {HTMLCanvasElement} canvas - The canvas to check for transparency
+ * @returns {Boolean} - Returns true if the canvas has any transparent pixels, false otherwise
+ */
 function hasTransparency(canvas) {
+  // Get 2D context of canvas
   const ctx = canvas.getContext("2d");
+
+  // Get image data of canvas
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
+  // Loop through all the pixels in the image data
   for (let i = 3; i < imageData.length; i += 4) {
+    // Check the alpha channel (the 4th value) of each pixel
     if (imageData[i] < 255) {
+      // Return true if any alpha value is less than 255 (not fully opaque)
       return true;
     }
   }
 
+  // Return false if all alpha values are 255 (fully opaque)
   return false;
 }
 
+/**
+ * Resizes an image using canvas
+ * @param {HTMLCanvasElement | HTMLImageElement | HTMLVideoElement} src - The source image to resize
+ * @param {Number} scale - The scale factor to resize the image by
+ * @returns {HTMLCanvasElement} - A canvas element with the resized image
+ */
 function resize(src, scale) {
+  // Create a new canvas with resized dimensions
   const dst = createCanvas(scale * src.width, scale * src.height);
+  // Get 2D context of the new canvas
   const ctx = dst.getContext("2d");
 
-  // don't blur on resize
+  // Set the pattern quality to "fast" to avoid blurring on resize
   ctx.patternQuality = "fast";
 
+  // Draw the source image onto the new canvas with resized dimensions
   ctx.drawImage(src, 0, 0, src.width * scale, src.height * scale);
+
+  // Return the resized canvas
   return dst;
 }
 
+/**
+ * Crops and resizes an image using canvas
+ * @param {HTMLCanvasElement | HTMLImageElement | HTMLVideoElement} src - The source image to crop and resize
+ * @param {Number} x - The x coordinate of the top left corner of the crop area
+ * @param {Number} y - The y coordinate of the top left corner of the crop area
+ * @param {Number} width - The width of the crop area
+ * @param {Number} height - The height of the crop area
+ * @param {Number} scale - The scale factor to resize the cropped image by
+ * @returns {HTMLCanvasElement} - A canvas element with the cropped and resized image
+ */
 function getPart(src, x, y, width, height, scale) {
+  // Create a new canvas with resized dimensions
   const dst = createCanvas(scale * width, scale * height);
+  // Get 2D context of the new canvas
   const ctx = dst.getContext("2d");
 
-  // don't blur on resize
+  // Set the pattern quality to "fast" to avoid blurring on resize
   ctx.patternQuality = "fast";
 
+  // Draw the cropped area of the source image onto the new canvas with resized dimensions
   ctx.drawImage(src, x, y, width, height, 0, 0, width * scale, height * scale);
+
+  // Return the cropped and resized canvas
   return dst;
 }
 
+/**
+ * Flips an image horizontally using canvas
+ * @param {HTMLCanvasElement | HTMLImageElement | HTMLVideoElement} src - The source image to flip
+ * @returns {HTMLCanvasElement} - A canvas element with the flipped image
+ */
 function flipX(src) {
+  // Create a new canvas with the same dimensions as the source image
   const dst = createCanvas(src.width, src.height);
+  // Get 2D context of the new canvas
   const ctx = dst.getContext("2d");
 
+  // Translate the context to the center of the canvas
   ctx.translate(src.width, 0);
+  // Flip the context horizontally
   ctx.scale(-1, 1);
 
+  // Draw the source image onto the new canvas
   ctx.drawImage(src, 0, 0);
+
+  // Return the flipped canvas
   return dst;
 }
 
+/**
+ * Darkens an image using canvas
+ * @param {HTMLCanvasElement | HTMLImageElement | HTMLVideoElement} src - The source image to darken
+ * @param {Number} factor - A value between 0 and 1 representing the degree of darkness to apply
+ * @returns {HTMLCanvasElement} - A canvas element with the darkened image
+ */
 function darken(src, factor) {
+  // Create a new canvas with the same dimensions as the source image
   const dst = createCanvas(src.width, src.height);
+  // Get 2D context of the new canvas
   const ctx = dst.getContext("2d");
 
+  // Draw the source image onto the new canvas
   ctx.drawImage(src, 0, 0);
 
+  // Set the composite operation to "source-atop"
   ctx.globalCompositeOperation = "source-atop";
 
+  // Fill the canvas with a black rectangle with the specified opacity
   ctx.fillStyle = `rgba(0, 0, 0, ${factor})`;
   ctx.fillRect(0, 0, src.width, src.height);
 
+  // Return the darkened canvas
   return dst;
 }
 
 const ACCESSORIES = [
-  "http://textures.minecraft.net/texture/5c577e7d31e5e04c2ce71e13e3962192d80bd54b55efaacaaea12966fe27bf9",
-  "http://textures.minecraft.net/texture/eaa44b170d749ce4099aa78d98945d193651484089efb87ba88892c6fed2af31",
-  "http://textures.minecraft.net/texture/651eb16f22dd7505be5dae06671803633a5abf8b2beeb5c60548670df0e59214",
-  "http://textures.minecraft.net/texture/317b51e086f201448a4b45b0b91e97faf4d1739071480be6d5cab0a054512164",
+  "5c577e7d31e5e04c2ce71e13e3962192d80bd54b55efaacaaea12966fe27bf9",
+  "eaa44b170d749ce4099aa78d98945d193651484089efb87ba88892c6fed2af31",
+  "651eb16f22dd7505be5dae06671803633a5abf8b2beeb5c60548670df0e59214",
+  "317b51e086f201448a4b45b0b91e97faf4d1739071480be6d5cab0a054512164",
 ];
 
 let itemsSheet, itemsCss;
@@ -109,10 +175,35 @@ async function renderColoredItem(color, baseImage, overlayImage) {
 
   ctx.drawImage(overlayImage, 0, 0);
 
-  return await canvas.toBuffer("image/png");
+  return canvas.toBuffer("image/png");
 }
 
-export async function renderHead(url, scale) {
+/**
+ * Gets either the cached texture or attempts to render and saves it
+ * @param {string} textureId
+ * @param {number} scale
+ * @returns Image of a rendered head
+ */
+export async function getHead(textureId, scale = 6.4) {
+  const filePath = helper.getCacheFilePath(app.CACHE_PATH, "head", textureId);
+  let file;
+
+  try {
+    file = await fs.readFile(filePath);
+  } catch (e) {
+    file = await renderHead(textureId, scale);
+
+    fs.writeFile(filePath, file, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  }
+
+  return file;
+}
+
+async function renderHead(textureId, scale) {
   const hat_factor = 0.94;
 
   const canvas = createCanvas(scale * 20, scale * 18.5);
@@ -125,7 +216,7 @@ export async function renderHead(url, scale) {
   const hat_bg = hat_bg_canvas.getContext("2d");
   const head = head_canvas.getContext("2d");
 
-  const skin = await loadImage(url);
+  const skin = await loadImage(`https://textures.minecraft.net/texture/${textureId}`);
 
   let head_bottom = resize(getPart(skin, 16, 0, 8, 8, 1), scale * (hat_factor + 0.01));
   const head_top = resize(getPart(skin, 8, 0, 8, 8, 1), scale * (hat_factor + 0.01));
@@ -176,7 +267,7 @@ export async function renderHead(url, scale) {
     hat_bg.setTransform(1, skew_a, 0, skew_b, 0, 0);
     hat_bg.drawImage(head_left_overlay, x + y, z - y, head_left_overlay.width, head_left_overlay.height);
 
-    if (!ACCESSORIES.includes(url)) {
+    if (!ACCESSORIES.includes(textureId)) {
       // hat back
       x = x_offset;
       y = 0;
@@ -266,88 +357,112 @@ export async function renderHead(url, scale) {
   );
   ctx.drawImage(hat_canvas, 0, 0);
 
-  return await canvas.toBuffer("image/png");
+  return canvas.toBuffer("image/png");
 }
 
-export async function renderArmor(type, color) {
-  const armorBase = await loadImage(path.resolve(textureDir, `leather_${type}.png`));
-  const armorOverlay = await loadImage(path.resolve(textureDir, `leather_${type}_overlay.png`));
+/**
+ * Gets either the cached texture or attempts to render and saves it
+ * @param {string} type
+ * @param {string} color
+ * @returns Image of a rendered armor piece
+ */
+export async function getArmor(type, color) {
+  const filePath = helper.getCacheFilePath(app.CACHE_PATH, `leather`, `${type}_${color}`);
+  let file;
 
+  try {
+    file = await fs.readFile(filePath);
+  } catch (e) {
+    file = await renderArmor(type, color);
+
+    fs.writeFile(filePath, file, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  }
+
+  return file;
+}
+
+/**
+ * Loads and renders an armor with the specified type and color.
+ *
+ * @async
+ * @param {string} type - The type of the armor to be rendered.
+ * @param {string} color - The color of the armor to be rendered.
+ * @returns {Promise<Image>} The rendered armor image.
+ */
+async function renderArmor(type, color) {
+  // Load the base image and overlay image of the armor
+  const [armorBase, armorOverlay] = await Promise.all([
+    loadImage(path.resolve(textureDir, `leather_${type}.png`)),
+    loadImage(path.resolve(textureDir, `leather_${type}_overlay.png`)),
+  ]);
+
+  // Return the rendered colored item
   return await renderColoredItem("#" + color, armorBase, armorOverlay);
 }
 
-export async function renderPotion(type, color) {
-  const potionLiquid = await loadImage(path.resolve(textureDir, "potion_overlay.png"));
-  const potionBottlle = await loadImage(
-    path.resolve(textureDir, type === "splash" ? "splash_potion.png" : "potion.png")
-  );
+/**
+ * Gets either the cached texture or attempts to render and saves it
+ * @param {string} type
+ * @param {string} color
+ * @returns Image of a rendered potion
+ */
+export async function getPotion(type, color) {
+  const filePath = helper.getCacheFilePath(app.CACHE_PATH, `potion`, `${type}_${color}`);
+  let file;
 
+  try {
+    file = await fs.readFile(filePath);
+  } catch (e) {
+    file = await renderPotion(type, color);
+
+    fs.writeFile(filePath, file, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  }
+
+  return file;
+}
+
+/**
+ * Loads and renders a potion with the specified type and color.
+ *
+ * @async
+ * @param {string} type - The type of the potion to be rendered.
+ * @param {string} color - The color of the potion to be rendered.
+ * @returns {Promise<Image>} The rendered potion image.
+ */
+async function renderPotion(type, color) {
+  // Load the liquid image and bottle image of the potion
+  const [potionLiquid, potionBottlle] = await Promise.all([
+    loadImage(path.resolve(textureDir, "potion_overlay.png")),
+    loadImage(path.resolve(textureDir, type === "splash" ? "splash_potion.png" : "potion.png")),
+  ]);
+
+  // Return the rendered colored item
   return await renderColoredItem("#" + color, potionLiquid, potionBottlle);
 }
 
-export async function renderItem(skyblockId, query, db) {
-  let item = { Damage: 0, id: -1 };
+/**
+ * Gets a texture of an item, either from stylesheet or from resource packs
+ * @param {string|undefined} skyblockId
+ * @param {object} query
+ * @returns Image of an item
+ */
+export async function renderItem(skyblockId, query) {
   query = sanitize(query);
+  let itemQuery = query ?? {};
 
-  if (skyblockId) {
-    skyblockId = skyblockId.replace(".gif", "");
-    skyblockId = sanitize(skyblockId);
-
-    if (skyblockId.includes(":")) {
-      const split = skyblockId.split(":");
-
-      skyblockId = split[0];
-      query.damage = new Number(split[1]);
-    }
-
-    item = Object.assign(item, await db.collection("items").findOne({ id: skyblockId }));
+  if (skyblockId !== undefined) {
+    itemQuery = Object.assign(query, { skyblockId });
   }
 
-  if (query.name) {
-    const results = await db
-      .collection("items")
-      .find({ $text: { $search: query.name } })
-      .toArray();
-
-    const filteredResults = results.filter((a) => a.name.toLowerCase() == query.name.toLowerCase());
-
-    if (filteredResults.length > 0) {
-      item = Object.assign(item, filteredResults[0]);
-    }
-  }
-
-  if (query.id) {
-    item.id = query.id;
-  }
-
-  if (query.damage) {
-    item.damage = query.damage;
-  }
-
-  if (query.name) {
-    item.name = query.name;
-  }
-
-  if ("damage" in item) {
-    item.Damage = item.damage;
-    delete item.damage;
-  }
-
-  if ("item_id" in item) {
-    item.id = item.item_id;
-  }
-
-  if ("name" in item) {
-    item.tag = { display: { Name: item.name } };
-  }
-
-  if ("texture" in item) {
-    return {
-      mime: "image/png",
-      image: await renderHead(`http://textures.minecraft.net/texture/${item.texture}`, 6.4),
-    };
-  }
-
+  const item = await getItemData({ skyblockId, ...itemQuery });
   const outputTexture = { mime: "image/png" };
 
   for (const rule of itemsCss.stylesheet.rules) {
@@ -357,7 +472,11 @@ export async function renderItem(skyblockId, query, db) {
 
     const coords = rule.declarations[0].value.split(" ").map((a) => Math.abs(parseInt(a)));
 
-    outputTexture.image = await getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer("image/png");
+    outputTexture.image = getPart(itemsSheet, ...coords, 128, 128, 1).toBuffer("image/png");
+  }
+
+  if ("texture" in item) {
+    outputTexture.image = await getHead(item.texture);
   }
 
   const customTexture = await customResources.getTexture(item, {
@@ -372,7 +491,8 @@ export async function renderItem(skyblockId, query, db) {
     }
 
     outputTexture.path = customTexture.path;
-    outputTexture.image = await fs.readFile(path.resolve(__dirname, "..", "public", customTexture.path));
+    outputTexture.debug = customTexture.debug;
+    outputTexture.image = fs.readFileSync(path.resolve(__dirname, "..", "public", customTexture.path));
   }
 
   if (!("image" in outputTexture)) {
@@ -383,8 +503,8 @@ export async function renderItem(skyblockId, query, db) {
 }
 
 export async function init() {
-  itemsSheet = await loadImage(path.resolve(__dirname, "..", "public", "resources", "img", "inventory", `items.png`));
-  itemsCss = css.parse(
-    await fs.readFile(path.resolve(__dirname, "..", "public", "resources", "css", `inventory.css`), "utf8")
-  );
+  [itemsSheet, itemsCss] = await Promise.all([
+    loadImage(path.resolve(__dirname, "..", "public", "resources", "img", "inventory", `items.png`)),
+    css.parse(fs.readFileSync(path.resolve(__dirname, "..", "public", "resources", "css", `inventory.css`), "utf8")),
+  ]);
 }
