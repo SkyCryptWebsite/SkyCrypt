@@ -249,6 +249,13 @@ export const SLAYER_XP = {
     8: 400000,
     9: 1000000,
   },
+  vampire: {
+    1: 20,
+    2: 75,
+    3: 240,
+    4: 840,
+    5: 2400,
+  },
 };
 
 export const HOTM_XP = {

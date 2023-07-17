@@ -1,9 +1,15 @@
 # syntax=docker/dockerfile:1
-FROM node:current-slim
+FROM node:18-slim
 LABEL maintainer="SkyCrypt"
-RUN mkdir -p /usr/src/main
-WORKDIR '/usr/src/main'
-COPY . /usr/src/main
+
+RUN mkdir -p /skycrypt
+WORKDIR '/skycrypt'
+COPY . /skycrypt
+
 RUN npm install -g pnpm
-RUN pnpm i && pnpm build
+RUN pnpm i
+
+VOLUME /skycrypt/cache
+
+CMD [ "pnpm", "start" ]
 EXPOSE 32464
