@@ -1026,8 +1026,11 @@ export const getItems = async (
   output.bingo_card = {};
   if (bingoProfile?.events !== undefined) {
     const bingoRes = await helper.getBingoGoals(db);
-    const bingoData = bingoRes.output;
+    if (bingoRes === null) {
+      throw new Error("Failed to fetch bingo goals");
+    }
 
+    const bingoData = bingoRes.output;
     const bingoProfilev2 = bingoProfile.events.find((profile) => profile.key === bingoData.id);
 
     output.bingo_card = bingoProfilev2 !== undefined ? constants.getBingoItems(bingoProfilev2, bingoData.goals) : {};
