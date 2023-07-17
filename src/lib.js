@@ -3140,7 +3140,7 @@ function getRift(userProfile) {
     dead_cats: {
       montezuma: rift?.dead_cats?.montezuma ?? {},
       found_cats: rift?.dead_cats?.found_cats ?? [],
-    }
+    },
   };
 }
 
