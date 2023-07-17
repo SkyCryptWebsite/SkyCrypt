@@ -163,6 +163,7 @@ export const AREA_NAMES = {
   winter: "Jerry's Workshop",
   instanced: "Kuudra's End",
   garden: "The Garden",
+  rift: "Rift",
 };
 
 export const COLOR_NAMES = {
@@ -351,7 +352,7 @@ export const INCREASE_MOST_STATS_EXCLUDE = [
 
 export const FAIRY_SOULS = {
   max: {
-    normal: 239,
+    normal: 242,
     stranded: 3,
   },
 };
@@ -676,4 +677,10 @@ export const ESSENCE_SHOP = {
       maxLevel: 5,
     },
   },
+};
+
+export const BANK_COOLDOWN = {
+  1: "20 minutes",
+  2: "5 minutes",
+  3: "None",
 };

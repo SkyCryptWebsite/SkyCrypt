@@ -2,14 +2,14 @@ import cluster from "cluster";
 import axios from "axios";
 import sanitize from "mongo-sanitize";
 import retry from "async-retry";
-import path from "path";
+// import path from "path";
 import "axios-debug-log";
 import { v4 } from "uuid";
 import { getPrices } from "skyhelper-networth";
-import { execSync } from "child_process";
+// import { execSync } from "child_process";
 
 import { titleCase } from "../common/helper.js";
-import { getFolderPath } from "./helper/cache.js";
+// import { getFolderPath } from "./helper/cache.js";
 
 export { renderLore, formatNumber } from "../common/formatting.js";
 export * from "../common/helper.js";
@@ -32,6 +32,7 @@ import {
   PET_RARITY_OFFSET,
   PET_LEVELS,
   ITEM_ANIMATIONS,
+  MAGICAL_POWER,
 } from "./constants.js";
 
 import credentials from "./credentials.js";
@@ -1054,17 +1055,52 @@ export function getAnimatedTexture(item) {
   return deepResults[0] ?? false;
 }
 
+/**
+ * Returns the price of the item. Returns 0 if the item is not found or if the item argument is falsy.
+ * @param {string} item - The ID of the item to retrieve the price for.
+ * @returns {number}
+ * @returns {Promise<number>}
+ */
 export async function getItemPrice(item) {
   if (!item) return 0;
 
   const prices = await getPrices(true);
 
-  return prices[item.toLowerCase()] || prices[getId(item).toLowerCase()] || 0;
+  return prices[item.toLowerCase()] ?? prices[getId(item).toLowerCase()] ?? 0;
+}
+
+/**
+ * Returns the magical power of an item based on its rarity and optional ID.
+ * @param {string} rarity - The rarity of the item. See {@link MAGICAL_POWER}.
+ * @param {string|null} [id=null] - (Optional) The ID of the item.
+ * @returns {number} Returns 0 if `rarity` is undefined or if `rarity` is not a valid rarity value.
+ */
+export function getMagicalPower(rarity, id = null) {
+  if (rarity === undefined) return 0;
+
+  if (id !== null && typeof id === "string") {
+    // Hegemony artifact provides double MP
+    if (id === "HEGEMONY_ARTIFACT") {
+      return 2 * (MAGICAL_POWER[rarity] ?? 0);
+    }
+  }
+
+  return MAGICAL_POWER[rarity] ?? 0;
 }
 
 export function getCommitHash() {
+  return "N/A";
+
+  /*
   return execSync("git rev-parse HEAD", { cwd: path.resolve(getFolderPath(), "../") })
     .toString()
     .trim()
     .slice(0, 10);
+    */
+}
+
+export function RGBtoHex(rgb) {
+  const [r, g, b] = rgb.split(",").map((c) => parseInt(c.trim()));
+
+  return [r, g, b].map((c) => c.toString(16).padStart(2, "0")).join("");
 }
