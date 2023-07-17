@@ -3137,6 +3137,10 @@ function getRift(userProfile) {
       timecharms: timecharms,
       obtained_timecharms: timecharms.filter((a) => a.unlocked).length,
     },
+    dead_cats: {
+      montezuma: rift?.dead_cats?.montezuma ?? {},
+      found_cats: rift?.dead_cats?.found_cats ?? [],
+    }
   };
 }
 
