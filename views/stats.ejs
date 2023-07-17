@@ -149,6 +149,7 @@ const seaCreatures = [
   "grim_reaper",
   "thunder",
   "lord_jawbus", 
+  "agarimoo"
 ];
 
 const milestone_rarities = ["common", "uncommon", "rare", "epic", "legendary"];
@@ -987,6 +988,7 @@ const metaDescription = getMetaDescription()
         <% if (calculated.bestiary?.categories){ %><a class="nav-item" href="#Bestiary">Bestiary</a><% } %>
         <% if(Object.keys(calculated.collections).length > 0){ %><a class="nav-item" href="#Collections">Collections</a><% } %>
         <% if(Object.keys(calculated.crimsonIsles.kuudra_completed_tiers).length > 0 || Object.keys(calculated.crimsonIsles.dojo).length > 0){ %><a class="nav-item" href="#Crimson_Isle">Crimson Isle</a><% } %>
+        <% if(calculated.rift !== null){ %><a class="nav-item" href="#Rift"><abbr title="RIft">Rift</abbr></a><% } %>
         <% if(Object.keys(calculated.misc).length > 0){ %><a class="nav-item" href="#Misc"><abbr title="Miscellaneous">Misc</abbr></a><% } %>
       </div>
     </div>
@@ -1657,7 +1659,6 @@ const metaDescription = getMetaDescription()
             <% } %>
           </div>
 
-          <% if(calculated.farming.talked){ %>
           <div class="stat-farming">
             <div class="category-header">
               <div class="category-icon" onclick="window.open('https://www.youtube.com/watch?v=pZaY1jV96jI')">
@@ -1666,21 +1667,39 @@ const metaDescription = getMetaDescription()
               <span>farming</span>
             </div>
 
-            <% const farming = calculated.farming;
-          if (farming.contests.attended_contests > 0) {%>
             <p class="stat-raw-values">
+              <span data-tippy-content="
+                <span class='stat-name'>Farming Weight</span><br>
+                <span class='stat-info'>Weight calculations by Elite</span>
+                <br/><br/>
+                <% for (const crop of Object.values(calculated.weight.farming.crops).sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))) { %>
+                  <% if (crop.weight > 0) { %>
+                    <span class='stat-name'><%= crop.name %>: </span>
+                    <span class='stat-value'> <%= parseFloat(crop.weight.toFixed(2)).toLocaleString() %> </span><br/>
+                  <% } %>
+                <% } %>
+                <br/>
+                <span class='stat-name'>Total: </span>
+                <span class='stat-value'><%= parseFloat(calculated.weight.farming.crop_weight.toFixed(2)).toLocaleString() %></span>">
+                <span class="stat-name">Farming Weight: </span>
+                <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span>
+              </span><br>
               <span class="stat-name">Pelts: </span><span class="stat-value"><%= calculated.farming.pelts.toLocaleString() %></span><br>
-              <span class="stat-name">Contests attended: </span><span class="stat-value"><%= farming.contests.attended_contests.toLocaleString() %></span><br>
-              <% max = farming.unique_golds == 10 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Golds: </span><span class="stat-value <%= max %>"><%= farming.unique_golds.toLocaleString() %></span><br>
+              <% const farming = calculated.farming;
+              if (farming.talked && farming.contests.attended_contests > 0) {%>
+                <span class="stat-name">Contests attended: </span><span class="stat-value"><%= farming.contests.attended_contests.toLocaleString() %></span><br>
+                <% max = farming.unique_golds == 10 ? 'golden-text' : '' %><span class="stat-name <%= max %>">Unique Golds: </span><span class="stat-value <%= max %>"><%= farming.unique_golds.toLocaleString() %></span><br>
+              <% } %>
             </p>
 
+            <% if (farming.talked && farming.contests.attended_contests > 0) {%>
             <p class="stat-raw-values">
               <% for(let badge of badgeOrder){ %>
               <span data-tippy-content='
-                  <span class="stat-name">Current: </span><span class="stat-value"><%= farming.current_badges[badge].toLocaleString() %> Badges</span><br>
-                  <span class="stat-name">Total: </span><span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %> Badges</span>
+                  <span class="stat-name">Current: </span><span class="stat-value"><%= farming.current_badges[badge].toLocaleString() %> Medals</span><br>
+                  <span class="stat-name">Total: </span><span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %> Medals</span>
                 '>
-                <span class="stat-name"><%= badge %> badges: </span>
+                <span class="stat-name"><%= badge %> medals: </span>
                 <span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %></span></span><br>
               <% } %>
             </p>
@@ -1713,43 +1732,44 @@ const metaDescription = getMetaDescription()
               <% }); %>
             </div>
             <% } %>
+             
+            <% if(farming.talked) { %>
+              <% if(Object.keys(calculated.farming.crops).length > 0){ %>
+              <button class="stat-sub-header extender" aria-controls="farming-crops" aria-expanded="false">Farming Crops</button>
+              <div class="stat-farming-crops extendable" id="farming-crops">
+                <%
+                const crops = Object.values(calculated.farming.crops).sort((a, b) => {
+                  return b.contests - a.contests;
+                });
 
-            <% if(Object.keys(calculated.farming.crops).length > 0){ %>
-            <button class="stat-sub-header extender" aria-controls="farming-crops" aria-expanded="false">Farming Crops</button>
-            <div class="stat-farming-crops extendable" id="farming-crops">
-              <%
-              const crops = Object.values(calculated.farming.crops).sort((a, b) => {
-                return b.contests - a.contests;
-              });
+                for(const crop of crops){
+                  if(!crop.attended) continue;
 
-              for(const crop of crops){
-                if(!crop.attended) continue;
+                  let amountsTooltip = '';
 
-                let amountsTooltip = '';
-
-                for(let badge of badgeOrder)
-                  amountsTooltip += `
-                    <span class="stat-name">${helper.titleCase(badge)} Badges: </span>
-                    <span class="stat-value">${crop.badges[badge].toLocaleString()}</span><br>
-                  `;
-              %>
-              <div class="chip" data-tippy-content="<%= amountsTooltip %>">
-                <div class="chip-icon-wrapper">
-                  <div class="item-icon icon-<%= crop.icon %>"></div>
-                </div>
-                <div class="chip-text">
-                  <div class="collection-name <%= crop.unique_gold ? 'max-stat' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
-                  <div class="collection-amount">
-                    <small class="stat-name">Personal Best: </small><small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small><br>
-                    <small class="stat-name">Contests: </small><small class="stat-value"><%= crop.contests.toLocaleString() %></small><br>
+                  for(let badge of badgeOrder)
+                    amountsTooltip += `
+                      <span class="stat-name">${helper.titleCase(badge)} Medals: </span>
+                      <span class="stat-value">${crop.badges[badge].toLocaleString()}</span><br>
+                    `;
+                %>
+                <div class="chip" data-tippy-content="<%= amountsTooltip %>">
+                  <div class="chip-icon-wrapper">
+                    <div class="item-icon icon-<%= crop.icon %>"></div>
+                  </div>
+                  <div class="chip-text">
+                    <div class="collection-name <%= crop.unique_gold ? 'max-stat' : '' %>"><span class="stat-name"><%= crop.name %></span></div>
+                    <div class="collection-amount">
+                      <small class="stat-name">Personal Best: </small><small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small><br>
+                      <small class="stat-name">Contests: </small><small class="stat-value"><%= crop.contests.toLocaleString() %></small><br>
+                    </div>
                   </div>
                 </div>
+                <% } %>
               </div>
               <% } %>
-            </div>
             <% } %>
           </div>
-          <% } %>
 
           <div class="stat-fishing">
             <div class="category-header">
@@ -2566,6 +2586,77 @@ const metaDescription = getMetaDescription()
         <% } %>
       </div>
       <% } %>
+
+      <% if (calculated.rift !== null) { %>
+        <div class="stat-container stat-collections">
+          <a class="stat-anchor" id="Rift"></a>
+          <h2 class="stat-header">Rift</h2>
+          <span data-tippy-content="
+            <span class='stat-name'>Lifetime Motes: </span><span class='stat-value'><%= Math.floor(calculated.rift.motes.lifetime).toLocaleString() %></span>
+            <div class='tippy-explanation'>Total Motes earned in Rift.</div>
+            <span class='stat-name'>Mote Orbs: </span><span class='stat-value'><%= Math.floor(calculated.rift.motes.orbs).toLocaleString() %></span>
+            <div class='tippy-explanation'>Amount of Mote Orbs player has picked up inside of the Rift.</div>
+            ">
+            <span class="stat-name">Motes: </span><span class="stat-value"><%= Math.floor(calculated.rift.motes.purse).toLocaleString() %></span></span>
+          <br>
+
+
+          <span data-tippy-content="
+            <span class='stat-name'>Progress: </span><span class='stat-value'><%= (calculated.rift.enigma.souls / calculated.rift.enigma.total_souls * 100).toFixed(2) %>%</span>
+            <div class='tippy-explanation'>Percentage of Enigma Souls found.</div>
+            ">
+            <% max = calculated.rift.enigma.souls === calculated.rift.enigma.total_souls ? 'golden-text' : '' %>
+            <span class="stat-name <%= max %>">Enigma Souls: </span><span class="stat-value <%= max %>"><%= calculated.rift.enigma.souls %> / <%= calculated.rift.enigma.total_souls %></span></span>
+          <br>
+
+
+          <p class="stat-sub-header">Porhtal</p>
+          <% const porhtalsUnlocked = calculated.rift.wither_cage.killed_eyes.filter((a) => a.unlocked === true).length %>
+          <% max = porhtalsUnlocked === calculated.rift.wither_cage.killed_eyes.length ? 'golden-text' : '' %>
+          <span class="stat-name <%= max %>">Porhtals unlocked: </span><span class="stat-value <%= max %>"><%= porhtalsUnlocked %></span><br><br>
+          <div class="collections">
+            <% for (const portal of calculated.rift.wither_cage.killed_eyes) { %>
+              <div class="chip" data-missing="<%= portal.unlocked === false %>">
+                <div class="chip-icon-wrapper">
+                  <div style="background-image:url('/head/<%= portal.texture %>')" class="item-icon custom-icon"></div>
+                </div>
+
+                <div class="chip-text">
+                  <div class="collection-name"><span class="stat-name"><%= portal.name %> </span></div>
+                </div>
+              </div>
+            <% } %>
+          </div>
+
+
+          <p class="stat-sub-header">Timecharms</p>
+          <% max = calculated.rift.timecharms.obtained_timecharms === calculated.rift.timecharms.timecharms.length ? 'golden-text' : '' %>
+          <span class="stat-name <%= max %>">Timecharms obtained: </span><span class="stat-value <%= max %>"><%= calculated.rift.timecharms.obtained_timecharms %></span><br><br>
+          <div class="collections">
+            <% for (const timecharm of calculated.rift.timecharms.timecharms) { %>
+              <div class="chip" data-missing="<%= timecharm.unlocked === false %>">
+                <div class="chip-icon-wrapper">
+                  <div class="item-icon icon-<%= timecharm.id %>_<%= timecharm.damage %>"></div>
+                </div>
+
+                <div class="chip-text">
+                  <% max = timecharm.unlocked === true ? 'golden-text' : '' %>
+                  <div class="collection-name <%= max %>"><span class="stat-name"><%= timecharm.name %> </span></div>
+                  <div class="collection-amount">
+                    <% if (timecharm.unlocked === true) { %>
+                      <span class="stat-name">Obtained: </span><span class="stat-value" data-tippy-content='Obtained on <local-time timestamp="<%= timecharm.unlocked_at  %>"></local-time>'><%= moment(timecharm.unlocked_at).fromNow() %></span>
+                    <% } else { %>
+                      <span class="stat-name">Not Obtained!</span>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            <% } %>   
+          </div>
+        </div>
+      <% } %>
+
+
       <% if(Object.keys(calculated.misc).length > 0){ %>
       <div class="stat-container stat-misc">
         <a class="stat-anchor" id="Misc"></a>

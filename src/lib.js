@@ -19,6 +19,7 @@ import { db } from "./mongo.js";
 import { redisClient } from "./redis.js";
 import { calculateLilyWeight } from "./weight/lily-weight.js";
 import { calculateSenitherWeight } from "./weight/senither-weight.js";
+import { calculateFarmingWeight } from "./weight/farming-weight.js";
 
 const mcData = minecraftData("1.8.9");
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -1084,56 +1085,60 @@ export const getItems = async (
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
-      insertAccessory.isInactive = true;
-    }
-
-    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
-      insertAccessory.isUnique = false;
-    }
-
     accessories.push(insertAccessory);
     accessoryIds.push(id);
   }
 
-  // Add accessories from inventory
-  for (const accessory of inventory.filter((a) => a.categories.includes("accessory"))) {
+  // Add accessories from inventory and accessory bag
+  for (const accessory of accessory_bag.concat(inventory.filter((a) => a.categories.includes("accessory")))) {
     const id = helper.getId(accessory);
-
     if (id === "") {
       continue;
     }
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
-      insertAccessory.isInactive = true;
+    // mark lower tiers as inactive
+    if (constants.getUpgradeList(id) !== undefined) {
+      accessories.find((a) => {
+        if (constants.getUpgradeList(id).includes(helper.getId(a)) === false) {
+          return;
+        }
+
+        insertAccessory.isInactive = true;
+        insertAccessory.isUnique = false;
+      });
     }
 
-    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
-      insertAccessory.isUnique = false;
-    }
+    // mark accessory inactive if player has two exactly same accessories
+    accessories.map((a) => {
+      if (helper.getId(a) === helper.getId(insertAccessory)) {
+        insertAccessory.isInactive = true;
+        a.isInactive = true;
 
-    accessories.push(insertAccessory);
-    accessoryIds.push(id);
-  }
+        // give accessories with higher rarity priority, mark lower rarity as inactive
+        if (constants.RARITIES.indexOf(a.rarity) > constants.RARITIES.indexOf(insertAccessory.rarity)) {
+          a.isInactive = false;
+          a.isUnique = true;
+        } else if (constants.RARITIES.indexOf(insertAccessory.rarity) > constants.RARITIES.indexOf(a.rarity)) {
+          insertAccessory.isInactive = false;
+          insertAccessory.isUnique = true;
+        }
+      }
+    });
 
-  // Add accessories from accessory bag if not already in inventory
-  for (const accessory of accessory_bag) {
-    const id = helper.getId(accessory);
+    // mark accessoriy aliases as inactive
+    for (const accessory of accessories) {
+      const id = helper.getId(accessory);
 
-    if (id === "") {
-      continue;
-    }
+      if (id in constants.accessoryAliases) {
+        const accessoryDuplicates = constants.accessoryAliases[id];
 
-    const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
-
-    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
-      insertAccessory.isInactive = true;
-    }
-
-    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
-      insertAccessory.isUnique = false;
+        if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a))) != undefined) {
+          accessory.isUnique = false;
+          accessory.isInactive = true;
+        }
+      }
     }
 
     accessories.push(insertAccessory);
@@ -1150,7 +1155,7 @@ export const getItems = async (
   }
 
   // Add inactive accessories from enderchest and backpacks
-  for (const item of inventory.concat(enderchest, storage)) {
+  for (const item of enderchest.concat(storage)) {
     // filter out filler or empty slots (such as empty storage slot)
     if (!("categories" in item)) {
       continue;
@@ -1165,71 +1170,10 @@ export const getItems = async (
     for (const accessory of items.filter((a) => a.categories.includes("accessory"))) {
       const id = helper.getId(accessory);
 
-      const insertAccessory = Object.assign({ isUnique: true, isInactive: true }, accessory);
-
-      if (accessories.find((a) => helper.getId(a) == id) != undefined) {
-        insertAccessory.isUnique = false;
-      }
+      const insertAccessory = Object.assign({ isUnique: false, isInactive: true }, accessory);
 
       accessories.push(insertAccessory);
       accessoryIds.push(id);
-    }
-  }
-
-  // Don't account for lower tier versions of the same accessory
-  for (const accessory of accessories.concat(armor)) {
-    const id = helper.getId(accessory);
-
-    if (id.startsWith("CAMPFIRE_TALISMAN_")) {
-      const tier = parseInt(id.split("_").pop());
-
-      const maxTier = Math.max(
-        ...accessories
-          .filter((a) => helper.getId(a).startsWith("CAMPFIRE_TALISMAN_"))
-          .map((a) => helper.getId(a).split("_").pop())
-      );
-
-      if (tier < maxTier) {
-        accessory.isUnique = false;
-        accessory.isInactive = true;
-      }
-
-      accessoryIds.splice(accessoryIds.indexOf(id), 1, `CAMPFIRE_TALISMAN_${maxTier}`);
-    }
-
-    if (id.startsWith("WEDDING_RING_")) {
-      const tier = parseInt(id.split("_").pop());
-
-      const maxTier = Math.max(
-        ...accessories
-          .filter((a) => helper.getId(a).startsWith("WEDDING_RING_"))
-          .map((a) => helper.getId(a).split("_").pop())
-      );
-
-      if (tier < maxTier) {
-        accessory.isUnique = false;
-        accessory.isInactive = true;
-      }
-
-      accessoryIds.splice(accessoryIds.indexOf(id), 1, `WEDDING_RING_${maxTier}`);
-    }
-
-    if (id.startsWith("PARTY_HAT_CRAB")) {
-      const CRAB_HAT = accessories.find((a) => helper.getId(a) == `PARTY_HAT_CRAB`);
-      const CRAB_HAT_ANIMATED = accessories.find((a) => helper.getId(a) == `PARTY_HAT_CRAB_ANIMATED`);
-
-      if (CRAB_HAT && CRAB_HAT_ANIMATED) {
-        CRAB_HAT.isUnique = false;
-        CRAB_HAT.isInactive = true;
-      }
-    }
-
-    if (id in constants.accessoryAliases) {
-      const accessoryDuplicates = constants.accessoryAliases[id];
-
-      if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a))) != undefined) {
-        accessory.isUnique = false;
-      }
     }
   }
 
@@ -2454,6 +2398,7 @@ export async function getStats(
   output.weight = {
     senither: calculateSenitherWeight(output),
     lily: calculateLilyWeight(output),
+    farming: calculateFarmingWeight(output),
   };
 
   /*
@@ -2507,7 +2452,7 @@ export async function getStats(
 
   output.objectives = userProfile.objectives ?? 0;
 
-  output.rift = userProfile.rift ?? {};
+  output.rift = getRift(userProfile);
 
   if (!userProfile.pets) {
     userProfile.pets = [];
@@ -2959,7 +2904,7 @@ function getMissingAccessories(accessories) {
 
     let includes = false;
 
-    if (constants.getUpgradeList(accessory)?.[0] !== accessory && constants.getUpgradeList(accessory)) {
+    if (constants.getUpgradeList(accessory) && constants.getUpgradeList(accessory)[0] !== accessory) {
       includes = true;
     }
 
@@ -3152,6 +3097,49 @@ export function getBestiary(uuid, profile) {
 
   return result;
 }
+
+function getRift(userProfile) {
+  if (!("rift" in userProfile) || (userProfile.visited_zones && userProfile.visited_zones.includes("rift") === false)) {
+    return null;
+  }
+
+  const rift = userProfile.rift;
+
+  const killedEyes = [];
+  for (const [key, data] of constants.RIFT_EYES.entries()) {
+    data.unlocked = rift.wither_cage?.killed_eyes && rift.wither_cage.killed_eyes[key] !== undefined;
+
+    killedEyes.push(data);
+  }
+
+  const timecharms = [];
+  for (const [key, data] of constants.RIFT_TIMECHARMS.entries()) {
+    data.unlocked = rift.gallery?.secured_trophies && rift.gallery.secured_trophies[key]?.type !== undefined;
+    data.unlocked_at = rift.gallery?.secured_trophies && rift.gallery.secured_trophies[key]?.timestamp;
+
+    timecharms.push(data);
+  }
+
+  return {
+    motes: {
+      purse: userProfile.motes_purse ?? 0,
+      lifetime: userProfile.stats.rift_lifetime_motes_earned ?? 0,
+      orbs: userProfile.stats.rift_motes_orb_pickup ?? 0,
+    },
+    enigma: {
+      souls: rift.enigma.found_souls?.length ?? 0,
+      total_souls: constants.RIFT_ENIGMA_SOULS,
+    },
+    wither_cage: {
+      killed_eyes: killedEyes,
+    },
+    timecharms: {
+      timecharms: timecharms,
+      obtained_timecharms: timecharms.filter((a) => a.unlocked).length,
+    },
+  };
+}
+
 export function getDungeons(userProfile, hypixelProfile) {
   const output = {};
 
