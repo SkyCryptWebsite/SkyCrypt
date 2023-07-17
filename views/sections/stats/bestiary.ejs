@@ -5,7 +5,7 @@
     <p class="stat-raw-values">
       <% max = calculated.bestiary.tiers === calculated.bestiary.maxTiers ? 'golden-text' : ''; %> 
       <span class="stat-name <%= max %>">Maxed Bestiaries: </span><span class="stat-value <%= max %>"><%= calculated.bestiary.tiers %> / <%= calculated.bestiary.maxTiers %></span><br>
-      <span class="stat-name <%= max %>">Level: </span><span class="stat-value <%= max %>"><%= calculated.bestiary.level.toLocaleString() %> / <%= calculated.bestiary.maxTiers / 10 %></span>
+      <span class="stat-name <%= max %>">Level: </span><span class="stat-value <%= max %>"><%= calculated.bestiary.level.toLocaleString() %> / <%= calculated.bestiary.maxLevel %></span>
     </p>
 
     <% const bestiaryCategories = calculated.bestiary.categories %>

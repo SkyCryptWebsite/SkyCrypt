@@ -946,7 +946,7 @@ const metaDescription = getMetaDescription()
         <a class="nav-item" href="#Dungeons">Dungeons</a>
         <a class="nav-item" href="#Slayer">Slayer</a>
         <a class="nav-item" href="#Minions">Minions</a>
-        <% if (calculated.bestiary?.categories){ %><a class="nav-item" href="#Bestiary">Bestiary</a><% } %>
+        <% if (calculated.bestiary !== null){ %><a class="nav-item" href="#Bestiary">Bestiary</a><% } %>
         <% if(Object.keys(calculated.collections).length > 0){ %><a class="nav-item" href="#Collections">Collections</a><% } %>
         <% if(Object.keys(calculated.crimsonIsles.kuudra_completed_tiers).length > 0 || Object.keys(calculated.crimsonIsles.dojo).length > 0){ %><a class="nav-item" href="#Crimson_Isle">Crimson Isle</a><% } %>
         <% if(calculated.rift !== null){ %><a class="nav-item" href="#Rift"><abbr title="RIft">Rift</abbr></a><% } %>
@@ -2339,7 +2339,7 @@ const metaDescription = getMetaDescription()
         </div>
       </div>
 
-      <% if ("categories" in calculated.bestiary === true) {%>
+      <% if (calculated.bestiary !== null) {%>
         <%- include('./sections/stats/bestiary.ejs', {}); %>
       <% } %>
 
