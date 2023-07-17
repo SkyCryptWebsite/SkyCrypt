@@ -1666,9 +1666,9 @@ const metaDescription = getMetaDescription()
             </div>
 
             <p class="stat-raw-values">
-              <span data-tippy-content="
+              <span class="interactive-tooltip" data-tippy-content="
                 <span class='stat-name'>Farming Weight</span><br>
-                <span class='stat-info'>Weight calculations by Elite</span>
+                <span class='stat-info'>Weight calculations by <a href='https://elitebot.dev' target='_blank' rel='noreferrer'>Elite</a></span>
                 <br/><br/>
                 <% for (const crop of Object.values(calculated.weight.farming.crops).sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))) { %>
                   <% if (crop.weight > 0) { %>
