@@ -239,7 +239,7 @@ export const PET_DATA = {
   GUARDIAN: {
     head: "/head/221025434045bda7025b3e514b316a4b770c6faa4ba9adb4be3809526db77f9d",
     type: "enchanting",
-    maxTier: "legendary",
+    maxTier: "mythic",
     maxLevel: 100,
     emoji: "🐡",
   },
@@ -274,7 +274,7 @@ export const PET_DATA = {
   SPIDER: {
     head: "/head/cd541541daaff50896cd258bdbdd4cf80c3ba816735726078bfe393927e57f1",
     type: "combat",
-    maxTier: "legendary",
+    maxTier: "mythic",
     maxLevel: 100,
     emoji: "🕷️",
   },
@@ -367,7 +367,7 @@ export const PET_DATA = {
   TARANTULA: {
     head: "/head/8300986ed0a04ea79904f6ae53f49ed3a0ff5b1df62bba622ecbd3777f156df8",
     type: "combat",
-    maxTier: "legendary",
+    maxTier: "mythic",
     maxLevel: 100,
     emoji: "🕸️",
   },
@@ -535,6 +535,20 @@ export const PET_DATA = {
     maxLevel: 100,
     emoji: "🦌",
   },
+  RIFT_FERRET: {
+    head: "/head/b6b11399448260185da1d17e54c984515faab6d8585f00972451ec2b43d46f94",
+    type: "combat",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🦝",
+  },
+  MONTEZUMA: {
+    head: "/head/df656c06e8a5cb4692564ee21748bddec9d785d1834284aaa1439601bba47d6b",
+    type: "combat",
+    maxTier: "epic",
+    maxLevel: 100,
+    emoji: "💀",
+  },
 };
 
 export const PET_VALUE = {
@@ -558,6 +572,11 @@ export const PET_VALUE = {
   }
 */
 export const PET_ITEMS = {
+  "???": {
+    name: "???",
+    tier: "COMMON",
+    description: "§7???",
+  },
   PET_ITEM_ALL_SKILLS_BOOST_COMMON: {
     name: "All Skills Exp Boost",
     tier: "COMMON",
@@ -833,7 +852,7 @@ export const PET_ITEMS = {
   PET_ITEM_FLYING_PIG: {
     name: "Flying Pig",
     tier: "UNCOMMON",
-    description: `§7Grants your pig pet the ability to fly while on your private island! You also don't need to hold a carrot on a stick to control your pig.`,
+    description: `§7Grants your pig pet the ability to fly while on your private island and garden! You also don't need to hold a carrot on a stick to control your pig.`,
   },
   PET_ITEM_QUICK_CLAW: {
     name: "Quick Claw",
@@ -843,5 +862,33 @@ export const PET_ITEMS = {
       mining_speed: 0.5,
       mining_fortune: 0.5,
     },
+  },
+  YELLOW_BANDANA: {
+    name: "Yellow Bandana",
+    tier: "RARE",
+    description: `§7Grants §6+30 ${SYMBOLS.farming_fortune} Farming Fortune§7.`,
+    stats: {
+      farming_fortune: 30,
+    },
+  },
+  GREEN_BANDANA: {
+    name: "Green Bandana",
+    tier: "EPIC",
+    description: `§7Grants §6+4 ${SYMBOLS.farming_fortune} Farming Fortune§7 for each Garden Level unlocked.`,
+    // TODO: Add statsPerLevel once Garden data comes to the API
+  },
+  DEAD_CAT_FOOD: {
+    name: "Dead Cat Food",
+    tier: "RARE",
+    description: "§7Grants §a+30 ${SYMBOLS.rift_time} Rift Time §7and §b5 ${SYMBOLS.mana_regen} Mana Regen§7.",
+    stats: {
+      rift_time: 30,
+      mana_regen: 5,
+    },
+  },
+  FOUR_EYED_FISH: {
+    name: "Four-Eyed Fish",
+    tier: "EPIC",
+    description: `§7Gain §6+2,000 Coins §7when digging up any §eGriffin Burrow§7.\n§7Grants §b+10 ${SYMBOLS.magic_find} Magic Find §7and §a+55 ${SYMBOLS.defense} Defense§7.`,
   },
 };

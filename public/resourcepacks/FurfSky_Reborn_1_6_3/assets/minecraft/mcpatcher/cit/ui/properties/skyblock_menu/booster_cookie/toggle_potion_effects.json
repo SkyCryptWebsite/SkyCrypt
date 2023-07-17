@@ -1,0 +1,7 @@
+{
+  "parent": "item/skyblock/item",
+  "textures": {
+        "layer0": "mcpatcher/cit/ui/textures/active_effects",
+        "layer1": "mcpatcher/cit/ui/textures/active_effects"
+  }
+}

@@ -7,7 +7,7 @@ const FEATURED_PROFILES = [
     // metalcupcake5
     uuid: "b44d2d5272dc49c28185b2d6a158d80a",
     type: "MAINTAINER",
-    message: "a dev or something idk",
+    message: "nyaaaa~ :3",
   },
   {
     // MartinNemi03
