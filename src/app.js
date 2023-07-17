@@ -106,7 +106,9 @@ export const CACHE_PATH = helper.getCacheFolderPath(folderPath);
 await fs.ensureDir(CACHE_PATH);
 
 if (credentials.hypixel_api_key.length == 0) {
-  throw new Error("Please enter a valid Hypixel API Key. Join mc.hypixel.net and enter /api to obtain one.");
+  throw new Error(
+    "Please enter a valid Hypixel API Key. Go to developer.hypixel.net/dashboard and click Create API Key to obtain one."
+  );
 }
 
 let isFoolsDay;
