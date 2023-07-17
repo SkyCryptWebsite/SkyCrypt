@@ -3124,7 +3124,7 @@ function getRift(userProfile) {
   };
 }
 
-export function getDungeons(userProfile, hypixelProfile) {
+export async function getDungeons(userProfile, hypixelProfile) {
   const output = {};
 
   const dungeons = userProfile.dungeons;
