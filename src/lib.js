@@ -2320,9 +2320,7 @@ export async function getStats(
 
       const power = getPower(name, output.magical_power.total);
       const unlocked =
-        power.power_type === "Starter" ||
-        (power.power_type === "Intermediate" && output.levels.combat.level >= 15) ||
-        unlockedPowers.has(name);
+        ("unlocked_at" in power && output.levels.combat.level >= power.unlocked_at) || unlockedPowers.has(name);
 
       output[unlocked ? "unlocked_powers" : "locked_powers"].push(power);
     }
