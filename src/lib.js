@@ -20,6 +20,7 @@ import { redisClient } from "./redis.js";
 import { calculateLilyWeight } from "./weight/lily-weight.js";
 import { calculateSenitherWeight } from "./weight/senither-weight.js";
 import { calculateFarmingWeight } from "./weight/farming-weight.js";
+import * as stats from "./stats/stats.js";
 
 const mcData = minecraftData("1.8.9");
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -320,7 +321,7 @@ async function getBackpackContents(arraybuf) {
 }
 
 // Process items returned by API
-async function processItems(base64, source, customTextures = false, packs, cacheOnly = false) {
+export async function processItems(base64, source, customTextures = false, packs, cacheOnly = false) {
   // API stores data as base64 encoded gzipped Minecraft NBT data
   const buf = Buffer.from(base64, "base64");
 
@@ -1007,6 +1008,9 @@ export const getItems = async (
 
   let hotm = "mining_core" in profile ? await getHotmItems(profile, packs) : [];
 
+  const museum =
+    "museum" in profile ? await stats.getMuseumItems(profile, customTextures, packs, options.cacheOnly) : [];
+
   output.armor = armor.filter((x) => x.rarity);
   output.equipment = equipment.filter((x) => x.rarity);
   output.wardrobe = wardrobe;
@@ -1021,6 +1025,7 @@ export const getItems = async (
   output.storage = storage;
   output.hotm = hotm;
   output.candy_bag = candy_bag;
+  output.museum = museum;
 
   const allItems = armor.concat(
     equipment,
@@ -3902,6 +3907,61 @@ export async function getProfile(
 
   console.debug(`${options.debugId}: getProfile returned. (${Date.now() - timeStarted}ms)`);
   return { profile: profile, allProfiles: allSkyBlockProfiles, uuid: paramPlayer };
+}
+
+export async function getMuseum(
+  db,
+  paramProfile,
+  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` }
+) {
+  console.debug(`${options.debugId}: getMuseum called.`);
+  const timeStarted = Date.now();
+
+  const profileID = paramProfile.profile_id;
+  if (profileID.length !== 36) {
+    throw new Error("Invalid profile ID.");
+  }
+
+  let museumData = await db.collection("museumCache").findOne({ profile_id: profileID });
+
+  if (!options.cacheOnly && (museumData == undefined || museumData.last_save < Date.now() - 1000 * 60 * 5)) {
+    try {
+      const params = {
+        key: credentials.hypixel_api_key,
+        profile: profileID,
+      };
+
+      const response = await retry(
+        async () => {
+          return await hypixel.get("skyblock/museum", { params });
+        },
+        { retries: 2 }
+      );
+
+      const { data } = response;
+
+      if (data === undefined || data.success === false) {
+        throw new Error("Request to Hypixel API failed. Please try again!");
+      }
+
+      if (data.members === null || Object.keys(data.members).length === 0) {
+        //throw new Error("Profile doesn't have a museum.");
+        return null;
+      }
+
+      museumData = { museum: data.members, last_save: Date.now() };
+      db.collection("museumCache").updateOne({ profile_id: profileID }, { $set: museumData }, { upsert: true });
+    } catch (e) {
+      if (e?.response?.data?.cause != undefined) {
+        throw new Error(`Hypixel API Error: ${e.response.data.cause}.`);
+      }
+
+      throw new Error(`Hypixel API Error: Failed to fetch Museum data.`);
+    }
+  }
+
+  console.debug(`${options.debugId}: getMuseum returned. (${Date.now() - timeStarted}ms)`);
+  return museumData.museum;
 }
 
 async function updateLeaderboardPositions(db, uuid, allProfiles) {

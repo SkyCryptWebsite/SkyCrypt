@@ -1679,7 +1679,7 @@ a.additional-player-stat:hover {
 inventory-view {
   display: grid;
   place-content: center center;
-  --inventory-width: clamp(300px, calc(100vw - 40px), 700px);
+  --inventory-width: clamp(300px, calc(100vw - 40px), 780px);
   gap: calc(var(--inventory-width) * 0.01);
   padding: calc(var(--inventory-width) * 0.01);
   grid-template-columns: repeat(9, calc(var(--inventory-width) * 0.1));

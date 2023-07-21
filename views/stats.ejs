@@ -1464,6 +1464,13 @@ const metaDescription = getMetaDescription()
                   <div class="inventory-tab-name">Quiver</div>
                 </button>
                 <% } %>
+
+                <% if (calculated.museum !== undefined) { %>
+                  <button class="inventory-tab" data-inventory-type="museum">
+                    <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/438cf3f8e54afc3b3f91d20a49f324dca1486007fe545399055524c17941f4dc)"></div>
+                    <div class="inventory-tab-name">Museum</div>
+                  </button>
+                <% } %>
               </div>
             </div>
             <inventory-view></inventory-view>
@@ -2655,7 +2662,6 @@ const metaDescription = getMetaDescription()
           </div>
         </div>
       <% } %>
-
 
       <% if(Object.keys(calculated.misc).length > 0){ %>
       <div class="stat-container stat-misc">

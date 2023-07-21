@@ -268,6 +268,11 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       debugId,
     });
 
+    const museum = await lib.getMuseum(db, profile, { cacheOnly, debugId });
+    for (const member in museum) {
+      profile.members[member].museum = museum[member];
+    }
+
     const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack, { cacheOnly, debugId });
     const calculated = await lib.getStats(db, profile, allProfiles, items, { cacheOnly, debugId });
 

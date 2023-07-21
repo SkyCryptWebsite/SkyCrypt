@@ -11,6 +11,7 @@ export * from "./constants/items.js";
 export * from "./constants/leveling.js";
 export * from "./constants/minions.js";
 export * from "./constants/misc.js";
+export * from "./constants/museum.js";
 export * from "./constants/pet-stats.js";
 export * from "./constants/pets.js";
 export * from "./constants/promotions.js";

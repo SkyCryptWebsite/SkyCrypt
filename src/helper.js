@@ -859,8 +859,24 @@ export function generateItem(data) {
     data.rarity = data.rarity.toLowerCase();
   }
 
+  if (data.name && (data.display_name === undefined || data.display_name?.length === 0)) {
+    data.display_name = data.name;
+  }
+
+  if (!data.rarity && data.tier) {
+    data.rarity = data.tier.toLowerCase();
+  }
+
+  if (data.item_id) {
+    data.id = data.item_id;
+  }
+
+  if (data.damage) {
+    data.Damage = data.damage;
+  }
+
   // Setting tag.display.Name using display_name if not specified
-  if (data.display_name && !data.tag.display.Name) {
+  if (data.display_name && !data.tag?.display?.Name) {
     data.tag = data.tag ?? {};
     data.tag.display = data.tag.display ?? {};
     const rarityColor = data.rarity ? `§${RARITY_COLORS[data.rarity ?? "common"]}` : "";
@@ -1103,4 +1119,42 @@ export function RGBtoHex(rgb) {
   const [r, g, b] = rgb.split(",").map((c) => parseInt(c.trim()));
 
   return [r, g, b].map((c) => c.toString(16).padStart(2, "0")).join("");
+}
+
+/**
+ * Adds lore to an item's display tag.
+ *
+ * @param {Item} item - The item to add lore to.
+ * @param {string|string[]} lore - The lore to add to the item. If a string is provided, it will be converted to an array.
+ * @returns {Item} The modified item.
+ */
+export function addToItemLore(item, lore) {
+  if (typeof lore === "string") {
+    console.log("Converting lore to array");
+    lore = [lore];
+  }
+
+  item.tag ??= {};
+  item.tag.display ??= {};
+  item.tag.display.Lore ??= [];
+  item.tag.display.Lore = item.tag.display.Lore.concat(lore);
+
+  return item;
+}
+
+/**
+ * Returns a formatted progress bar string based on the given amount and total.
+ *
+ * @param {number} amount - The current amount.
+ * @param {number} total - The total amount.
+ * @param {string} [color="a"] - The color of the progress bar.
+ * @returns {string} The formatted progress bar string.
+ */
+export function formatProgressBar(amount, total, color = "a") {
+  const barLength = 25;
+  const progress = Math.min(1, amount / total);
+  const progressBars = Math.floor(progress * barLength);
+  const emptyBars = barLength - progressBars;
+
+  return `${`§${color}§l§m-`.repeat(progressBars)}${"§f§l§m-".repeat(emptyBars)}§r`;
 }

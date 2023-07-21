@@ -45,6 +45,8 @@ export class InventoryView extends LitElement {
       }
     } else if (this.inventoryType === "hotm") {
       pagesize = 7 * 9;
+    } else if (this.inventoryType === "museum") {
+      pagesize = 6 * 9;
     }
 
     inventory.forEach((item, index) => {

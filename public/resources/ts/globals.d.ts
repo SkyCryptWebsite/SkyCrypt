@@ -149,6 +149,7 @@ interface ItemTagDisplay {
 
 interface Backpack extends Item {
   containsItems: Item[];
+  numPagesContainsInventory?: number;
 }
 
 interface Level {
