@@ -987,7 +987,7 @@ const metaDescription = getMetaDescription()
         <a class="nav-item" href="#Slayer">Slayer</a>
         <a class="nav-item" href="#Minions">Minions</a>
         <% if (calculated.bestiary?.categories){ %><a class="nav-item" href="#Bestiary">Bestiary</a><% } %>
-        <% if(Object.keys(calculated.collections).length > 0){ %><a class="nav-item" href="#Collections">Collections</a><% } %>
+        <% if(calculated.collections !== null){ %><a class="nav-item" href="#Collections">Collections</a><% } %>
         <% if(Object.keys(calculated.crimsonIsles.kuudra_completed_tiers).length > 0 || Object.keys(calculated.crimsonIsles.dojo).length > 0){ %><a class="nav-item" href="#Crimson_Isle">Crimson Isle</a><% } %>
         <% if(calculated.rift !== null){ %><a class="nav-item" href="#Rift"><abbr title="RIft">Rift</abbr></a><% } %>
         <% if(Object.keys(calculated.misc).length > 0){ %><a class="nav-item" href="#Misc"><abbr title="Miscellaneous">Misc</abbr></a><% } %>
@@ -2413,7 +2413,7 @@ const metaDescription = getMetaDescription()
       </div>
       <% } %>
 
-      <% if(Object.keys(calculated.collections).length > 0){ %>
+      <% if (calculated.collections !== null){ %>
         <%- include('./sections/stats/collections.ejs', { skillItems: skillItems }); %>
       <% } %>
 

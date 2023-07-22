@@ -1,6 +1,6 @@
 import * as helper from "../../helper.js";
 import * as lib from "../../lib.js";
-import * as stats from "../../stats.js";
+import * as stats from "../../stats/stats.js";
 import express from "express";
 
 import { tableify } from "../api.js";

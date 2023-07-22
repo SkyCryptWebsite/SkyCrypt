@@ -17,7 +17,8 @@
       totalMaxedCollections += totalCollections[category];
 
       maxedCategory[category] = maxedCollections[category] == totalCollections[category];
-    } %>
+    } 
+    %>
 
     <span class="stat-name <%= maxCollections === totalMaxedCollections ? 'golden-text' : '' %>">Maxed Collections: </span>
     <span class="stat-value <%= maxCollections === totalMaxedCollections ? 'golden-text' : '' %>"><%= maxCollections %> / <%= totalMaxedCollections %></span>
@@ -42,17 +43,18 @@
 
           <div class="chip" data-tippy-content="<%= amountsTooltip %>" data-missing="<%= collection.totalAmount === 0 %>">
             <div class="chip-icon-wrapper">
-            <% if ("texture" in collection) { %>
-              <div style="background-image:url(/head/<%= collection.texture %>)" class="item-icon custom-icon"></div>
-            <% } else { %>
-              <div class="item-icon icon-<%= collection.id %>_<%= collection.damage || 0 %>"></div>
-            <% } %>
+              <% if ("texture" in collection) { %>
+                <div style="background-image:url(/head/<%= collection.texture %>)" class="item-icon custom-icon"></div>
+              <% } else { %>
+                <div class="item-icon icon-<%= collection.id %>_<%= collection.damage || 0 %>"></div>
+              <% } %>
             </div>
 
             <div class="chip-text">
               <div class="collection-name <%= collection.tier == collection.maxTier ? 'max-stat' : '' %>">
                 <span class="stat-name"><%= collection.name %> </span><span class="stat-value"><%= collection.tier %></span>
               </div>
+
               <div class="collection-amount">
                 <span class="stat-name">Amount: </span><span class="stat-value"><%= collection.amount.toLocaleString() %></span>
               </div>

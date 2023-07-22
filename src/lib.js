@@ -11,7 +11,7 @@ import { fileURLToPath } from "url";
 import util from "util";
 import { v4 } from "uuid";
 
-import * as stats from "./stats.js";
+import * as stats from "./stats/stats.js";
 import * as constants from "./constants.js";
 import credentials from "./credentials.js";
 import { getTexture } from "./custom-resources.js";
@@ -3265,19 +3265,24 @@ export function getDungeons(userProfile, hypixelProfile) {
 
   const totalKuudraCollection = Object.entries(userProfile.nether_island_player_data?.kuudra_completed_tiers ?? {})
     .map(([key, value]) => {
-      if (constants.KUUDRA_TIERS[key] === undefined) return 0;
+      if (constants.KUUDRA_TIERS[key] === undefined) {
+        return 0;
+      }
 
-      return parseInt(value) * constants.KUUDRA_TIERS[key].collection;
+      const amount = (Object.keys(constants.KUUDRA_TIERS).indexOf(key) ?? 0) + 1;
+
+      return parseInt(value) * amount;
     })
     .reduce((a, b) => a + b, 0);
 
   collections["kuudra"] = {
     name: boss_data.kuudra.name,
     texture: boss_data.kuudra.texture,
-    tier: 0,
+    tier: Object.values(collection_data.kuudra.rewards).reduce((max, reward) => Math.max(max, reward.tier), 0),
+    maxTier: collection_data.kuudra.max_tiers,
     maxed:
       totalKuudraCollection >=
-      Math.max(...Object.values(collection_data.kuudra.rewards).map((reward) => reward.required)),
+      Object.values(collection_data.kuudra.rewards).reduce((max, reward) => Math.max(max, reward.required), 0),
     killed: totalKuudraCollection,
     floors: {},
     unclaimed: 0,
