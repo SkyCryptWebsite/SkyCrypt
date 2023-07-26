@@ -1073,6 +1073,7 @@ export const getItems = async (
     very_special: 0,
     hegemony: null,
     abicase: null,
+    rift_prism: profile.rift?.access?.consumed_prism ? { consumed: true } : null,
   };
 
   // Modify accessories on armor and add
@@ -1112,6 +1113,10 @@ export const getItems = async (
 
     // mark accessory inactive if player has two exactly same accessories
     accessories.map((a) => {
+      if (a.isInactive == true) {
+        return;
+      }
+
       if (helper.getId(a) === helper.getId(insertAccessory)) {
         insertAccessory.isInactive = true;
         a.isInactive = true;
@@ -1120,24 +1125,36 @@ export const getItems = async (
         if (constants.RARITIES.indexOf(a.rarity) > constants.RARITIES.indexOf(insertAccessory.rarity)) {
           a.isInactive = false;
           a.isUnique = true;
+          insertAccessory.isUnique = false;
         } else if (constants.RARITIES.indexOf(insertAccessory.rarity) > constants.RARITIES.indexOf(a.rarity)) {
           insertAccessory.isInactive = false;
           insertAccessory.isUnique = true;
+          a.isUnique = false;
+        } else {
+          insertAccessory.isInactive = false;
+          insertAccessory.isUnique = false;
+          a.isInactive = true;
+          a.isUnique = true;
         }
       }
     });
 
-    // mark accessoriy aliases as inactive
-    for (const accessory of accessories) {
-      const id = helper.getId(accessory);
+    // mark accessory aliases as inactive
+    const accessoryAliases = constants.accessoryAliases;
+    if (id in accessoryAliases || Object.keys(accessoryAliases).find((a) => accessoryAliases[a].includes(id))) {
+      let accessoryDuplicates = constants.accessoryAliases[id];
+      if (accessoryDuplicates === undefined) {
+        const aliases = Object.keys(accessoryAliases).filter((a) => accessoryAliases[a].includes(id));
+        accessoryDuplicates = aliases.concat(constants.accessoryAliases[aliases]);
+      }
 
-      if (id in constants.accessoryAliases) {
-        const accessoryDuplicates = constants.accessoryAliases[id];
-
-        if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a))) != undefined) {
-          accessory.isUnique = false;
-          accessory.isInactive = true;
-        }
+      for (const duplicate of accessoryDuplicates) {
+        accessory_bag.concat(inventory.filter((a) => a.categories.includes("accessory"))).map((a) => {
+          if (helper.getId(a) === duplicate) {
+            a.isInactive = true;
+            a.isUnique = false;
+          }
+        });
       }
     }
 
@@ -1168,12 +1185,9 @@ export const getItems = async (
     }
 
     for (const accessory of items.filter((a) => a.categories.includes("accessory"))) {
-      const id = helper.getId(accessory);
-
       const insertAccessory = Object.assign({ isUnique: false, isInactive: true }, accessory);
 
       accessories.push(insertAccessory);
-      accessoryIds.push(id);
     }
   }
 
@@ -1195,6 +1209,10 @@ export const getItems = async (
         accessory.tag.display.Lore.push("", `§7Location: §c${source}`);
       }
     }
+  }
+
+  if (accessoryRarities.rift_prism?.consumed) {
+    accessoryIds.push("RIFT_PRISM");
   }
 
   output.accessories = accessories;
@@ -1582,6 +1600,7 @@ export async function getStats(
   profile,
   allProfiles,
   items,
+  packs,
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getStats` }
 ) {
   const output = {};
@@ -1685,26 +1704,41 @@ export async function getStats(
   if (!items.no_inventory) {
     output.missingAccessories = getMissingAccessories(items.accessory_ids);
 
-    for (const key of Object.keys(output.missingAccessories)) {
+    for (const key in output.missingAccessories) {
       for (const item of output.missingAccessories[key]) {
-        const ITEM_PRICE = await helper.getItemPrice(item.name);
-        item.extra ??= {};
-        item.extra.price = ITEM_PRICE;
+        let price = 0;
 
-        if (ITEM_PRICE === 0) continue;
+        if (item.customPrice === true) {
+          if (item.upgrade) {
+            price = (await helper.getItemPrice(item.upgrade.item)) * item.upgrade.cost[item.rarity];
+          }
 
-        item.tag ??= {};
-        item.tag.display ??= {};
-        item.tag.display.Lore ??= [];
-        item.tag.display.Lore.push(
-          `§7Price: §6${Math.round(ITEM_PRICE).toLocaleString()} Coins §7(§6${helper.formatNumber(
-            ITEM_PRICE / helper.getMagicalPower(item.rarity, item.name)
-          )} §7per MP)`
-        );
+          if (item.id === "POWER_ARTIFACT") {
+            for (const { slot_type: slot } of item.gemstone_slots) {
+              price += await helper.getItemPrice(`PERFECT_${slot}_GEM`);
+            }
+          }
+        } else {
+          price = await helper.getItemPrice(item.id);
+        }
+
+        item.extra = { price };
+        if (price > 0) {
+          helper.addToItemLore(
+            item,
+            `§7Price: §6${Math.round(price).toLocaleString()} Coins §7(§6${helper.formatNumber(
+              Math.floor(price / helper.getMagicalPower(item.rarity, item.name))
+            )} §7per MP)`
+          );
+        }
+
+        item.tag = { ExtraAttributes: { id: item.id } };
+        item.Damage = item.damage ?? 3;
+        item.id = item.item_id ?? 397;
+
+        helper.applyResourcePack(item, packs);
       }
-    }
 
-    for (const key of Object.keys(output.missingAccessories)) {
       output.missingAccessories[key].sort((a, b) => {
         const aPrice = a.extra?.price || 0;
         const bPrice = b.extra?.price || 0;
@@ -2838,77 +2872,61 @@ function getPetScore(pets) {
 function getMissingAccessories(accessories) {
   const ACCESSORIES = constants.getAllAccessories();
   const unique = Object.keys(ACCESSORIES);
-  unique.forEach((name) => {
-    if (name in constants.accessoryAliases) {
-      for (const duplicate of constants.accessoryAliases[name]) {
-        if (accessories.includes(duplicate)) {
-          accessories[accessories.indexOf(duplicate)] = name;
-          break;
-        }
+  for (const name of unique) {
+    if (name in constants.accessoryAliases === false) continue;
+
+    for (const duplicate of constants.accessoryAliases[name]) {
+      if (accessories.includes(duplicate) === true) {
+        accessories[accessories.indexOf(duplicate)] = name;
       }
     }
-  });
+  }
 
   let missing = unique.filter((accessory) => !accessories.includes(accessory));
+  for (const name of missing) {
+    const upgrades = constants.getUpgradeList(name);
+    if (upgrades === undefined) {
+      continue;
+    }
 
-  missing.forEach((name) => {
-    if (constants.getUpgradeList(name)) {
-      // if accessory has upgrades
-      for (const upgrade of constants
-        .getUpgradeList(name)
-        .filter(
-          (item) => constants.getUpgradeList(name).indexOf(item) > constants.getUpgradeList(name).indexOf(name)
-        )) {
-        // for (const upgrade of every upgrade after the current tier)
-        if (accessories.includes(upgrade)) {
-          //if accessories list includes the upgrade
-          missing = missing.filter((item) => item !== name);
-          break;
-        }
+    for (const upgrade of upgrades.filter((item) => upgrades.indexOf(item) > upgrades.indexOf(name))) {
+      if (accessories.includes(upgrade) === true) {
+        missing = missing.filter((item) => item !== name);
       }
     }
-  });
+  }
 
   const upgrades = [];
   const other = [];
-  missing.forEach(async (accessory) => {
-    const object = {
-      display_name: null,
-      rarity: null,
-      texture_path: null,
-    };
+  for (const accessory of missing) {
+    if (ACCESSORIES[accessory].rarities) {
+      for (const rarity of ACCESSORIES[accessory].rarities) {
+        const object = {
+          ...ACCESSORIES[accessory],
+          display_name: ACCESSORIES[accessory].name ?? null,
+          rarity: rarity ?? null,
+          texture_path: ACCESSORIES[accessory].texture ?? null,
+        };
 
-    object.name ??= accessory;
-
-    // MAIN ACCESSORIES
-    if (ACCESSORIES[accessory] != null) {
-      const data = ACCESSORIES[accessory];
-
-      object.texture_path = data.texture || null;
-      object.display_name = data.name || null;
-      object.rarity = data.tier || data.rarity || null;
-    } else {
-      const data = await db.collection("items").findOne({ id: accessory });
-
-      if (data) {
-        object.texture_path = data.texture ? `/head/${data.texture}` : `/item/${accessory}`;
-        object.display_name = data.name;
-        object.rarity = data.tier.toLowerCase();
+        upgrades.push(object);
       }
     }
 
-    let includes = false;
+    const object = {
+      display_name: ACCESSORIES[accessory].name ?? null,
+      id: accessory,
+      rarity: ACCESSORIES[accessory].tier ?? null,
+      texture_path: ACCESSORIES[accessory].texture ?? null,
+      item_id: ACCESSORIES[accessory].item_id ?? null,
+      damage: ACCESSORIES[accessory].damage ?? null,
+    };
 
     if (constants.getUpgradeList(accessory) && constants.getUpgradeList(accessory)[0] !== accessory) {
-      includes = true;
-    }
-
-    if (includes) {
       upgrades.push(object);
     } else {
       other.push(object);
     }
-  });
+  }
 
   return {
     missing: other,

@@ -1144,15 +1144,16 @@ const metaDescription = getMetaDescription()
           <% }else{ %>
           <p class="stat-raw-values">
             <%
-                const maxTalis = items.accessories.filter(a => a.isUnique).length >= constants.UNIQUE_ACCESSORIES_COUNT ? 'golden-text': ''
-                const maxRecombTalis = items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length >= constants.RECOMBABLE_ACCESSORIES_COUNT ? 'golden-text': ''
-              %>
+              const talis = items.accessories.filter(a => a.isUnique).length + (items.accessory_rarities.rift_prism?.consumed ? 1 : 0)
+              const maxTalis = talis >= constants.UNIQUE_ACCESSORIES_COUNT ? 'golden-text': ''
+              const maxRecombTalis = items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length >= constants.RECOMBABLE_ACCESSORIES_COUNT ? 'golden-text': ''
+            %>
 
             <span class="stat-name <%= maxTalis %>">Unique Accessories: </span>
-            <span class="stat-value <%= maxTalis %>"><%= items.accessories.filter(a => a.isUnique).length %> / <%= constants.UNIQUE_ACCESSORIES_COUNT %></span>
+            <span class="stat-value <%= maxTalis %>"><%= talis %> / <%= constants.UNIQUE_ACCESSORIES_COUNT %></span>
             <br>
             <span class="stat-name <%= maxTalis %>">Completion: </span>
-            <span class="stat-value percent <%= maxTalis %>"><%= Math.round(items.accessories.filter(a => a.isUnique).length / constants.UNIQUE_ACCESSORIES_COUNT * 100) %></span>
+            <span class="stat-value percent <%= maxTalis %>"><%= Math.round(talis / constants.UNIQUE_ACCESSORIES_COUNT * 100) %></span>
             <br>
             <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
             <span class="stat-value <%= maxRecombTalis %>"><%= items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= constants.RECOMBABLE_ACCESSORIES_COUNT %></span>
@@ -1166,8 +1167,10 @@ const metaDescription = getMetaDescription()
                   player_magical_power[rarity] += rarities[rarity] * constants.MAGICAL_POWER[rarity];
                 }
 
-                const mp_hegemony = rarities.hegemony ? constants.MAGICAL_POWER[rarities.hegemony.rarity] : 0
-                const mp_total = Object.values(player_magical_power).reduce((a, b) => a + b) + mp_hegemony + Math.floor(calculated.abiphone.active / 2);
+                const mp_hegemony = rarities.hegemony ? constants.MAGICAL_POWER[rarities.hegemony.rarity] * 2 : 0
+                const mp_abiphone = rarities.abicase ? Math.floor(calculated.abiphone.active / 2) : 0
+                const mp_rift_prism = rarities.rift_prism?.consumed ? constants.MAGICAL_POWER["rare"] : 0;
+                const mp_total = Object.values(player_magical_power).reduce((a, b) => a + b) + mp_hegemony + mp_abiphone + mp_rift_prism;
               %>
             <span data-tippy-content="
               Accessories Breakdown<br>
@@ -1181,11 +1184,14 @@ const metaDescription = getMetaDescription()
               <span style='color: var(--§6);' class='grey-text'>3 MP</span> × <span style='color: var(--§c);' class='grey-text'><%= rarities.special %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.special.toLocaleString() %> MP</span><br>
               <span style='color: var(--§6);' class='grey-text'>5 MP</span> × <span style='color: var(--§c);' class='grey-text'><%= rarities.very_special %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.very_special.toLocaleString() %> MP</span><br>
               <br>
-              <% if(rarities.hegemony) { %>
+              <% if (mp_hegemony) { %>
                 <span style='color: var(--§<%= constants.RARITY_COLORS[rarities.hegemony.rarity] %>);' class='grey-text'>Hegemony Artifact</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_hegemony.toLocaleString() %> MP</span><br>
               <% } %>
-              <% if (rarities.abicase && Math.floor(calculated.abiphone.active / 2) > 0) {%>
-                <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Abicase</span> = <span style='color: var(--§6);' class='grey-text'>+<%= Math.floor(calculated.abiphone.active / 2).toLocaleString() %> MP</span><br>
+              <% if (mp_abiphone) { %>
+                <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Abicase</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_abiphone %> MP</span><br>
+              <% } %>
+              <% if (mp_rift_prism) { %>
+                <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Rift Prism:</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_rift_prism %> MP</span><br>
               <% } %>
               <br>
               Total: <span style='color: var(--§6);' class='grey-text'><%= mp_total.toLocaleString() %> Magical Power</span>
@@ -1211,7 +1217,7 @@ const metaDescription = getMetaDescription()
             </div>
           </div>
           <% } %>
-          <% const inactiveAccessories = items.accessories.filter(a => a.isInactive === true || a.isUnique === false); %>
+          <% const inactiveAccessories = items.accessories.filter(a => a.isInactive === true); %>
           <% if (inactiveAccessories.length > 0) { %>
           <div class="accessory-list">
             <p class="stat-sub-header">Inactive Accessories</p>

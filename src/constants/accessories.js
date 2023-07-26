@@ -92,9 +92,6 @@ const ignoredAccessories = [
   "OLD_BOOT",
   "ARGOFAY_TRINKET",
   "DEFECTIVE_MONITOR",
-  "HOCUS_POCUS_CIPHER",
-  "TINY_DANCER",
-  "MINIATURIZED_TUBULATOR",
   "PUNCHCARD_ARTIFACT",
   "HARMONIOUS_SURGERY_TOOLKIT",
   "CRUX_TALISMAN_1",
@@ -145,13 +142,43 @@ const extraAccessories = [
     id: "ID",
     texture: "TEXTURE",
     name: "NAME",
-    rarity: "RARITY",
+    tier: "RARITY",
   },
   */
 ];
 
 const specialAccessories = {
+  BOOK_OF_PROGRESSION: {
+    allowsRecomb: false,
+    rarities: ["uncommon", "rare", "epic", "legendary", "mythic"],
+    customPrice: true,
+  },
   PANDORAS_BOX: {
+    allowsRecomb: false,
+    rarities: ["uncommon", "rare", "epic", "legendary", "mythic"],
+    customPrice: true,
+  },
+  TRAPPER_CREST: {
+    rarities: ["uncommon"],
+    customPrice: true,
+  },
+  PULSE_RING: {
+    rarities: ["rare", "epic", "legendary"],
+    customPrice: true,
+    upgrade: {
+      item: "THUNDER_IN_A_BOTTLE",
+      cost: {
+        rare: 3,
+        epic: 20,
+        legendary: 100,
+      },
+    },
+  },
+  POWER_ARTIFACT: {
+    rarities: ["epic"],
+    customPrice: true,
+  },
+  RIFT_PRISM: {
     allowsRecomb: false,
   },
 };
@@ -166,11 +193,14 @@ export function getAllAccessories() {
       return true;
     })
     .concat(extraAccessories)
+    .map((item) => Object.assign(item, specialAccessories[item.id] || {}))
     .reduce((acc, item) => {
       if (item.material !== undefined && item.texture === undefined) {
         acc[item.id] = {
           ...item,
           texture: `/item/${item.material}:${item.damage}`,
+          item_id: item.item_id,
+          damage: item.damage,
         };
       } else {
         acc[item.id] = {
