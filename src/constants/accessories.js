@@ -1,4 +1,4 @@
-// CREDITS: https://github.com/MattTheCuber
+// CREDITS: https://github.com/MattTheCuber (Modified)
 import { db } from "../mongo.js";
 
 let items = await db.collection("items").find({ category: "accessory" }).toArray();
@@ -184,32 +184,34 @@ const specialAccessories = {
 };
 
 export function getAllAccessories() {
-  return items
-    .filter((item) => {
-      if (ignoredAccessories.includes(item.id)) return false;
+  const output = items.reduce((accessory, item) => {
+    if (ignoredAccessories.includes(item.id)) return accessory;
 
-      if (Object.values(accessoryAliases).find((list) => list.includes(item.id))) return false;
+    if (Object.values(accessoryAliases).find((list) => list.includes(item.id))) return accessory;
 
-      return true;
-    })
-    .concat(extraAccessories)
-    .map((item) => Object.assign(item, specialAccessories[item.id] || {}))
-    .reduce((acc, item) => {
-      if (item.material !== undefined && item.texture === undefined) {
-        acc[item.id] = {
+    accessory.push({
+      ...item,
+      texture_path: item.texture !== undefined ? `/head/${item.texture}` : `/item/${item.material}:${item.damage}`,
+      item_id: item.item_id,
+      damage: item.damage,
+    });
+
+    const specialAccessory = specialAccessories[item.id];
+    if (specialAccessory?.rarities) {
+      for (const rarity of specialAccessory.rarities) {
+        accessory.push({
           ...item,
-          texture: `/item/${item.material}:${item.damage}`,
-          item_id: item.item_id,
-          damage: item.damage,
-        };
-      } else {
-        acc[item.id] = {
-          ...item,
-          texture: `/head/${item.texture}`,
-        };
+          ...specialAccessory,
+          tier: rarity,
+          texture_path: item.texture !== undefined ? `/head/${item.texture}` : `/item/${item.material}:${item.damage}`,
+        });
       }
-      return acc;
-    }, {});
+    }
+
+    return accessory;
+  }, []);
+
+  return output.concat(extraAccessories);
 }
 
 function getMaxAccessories() {
