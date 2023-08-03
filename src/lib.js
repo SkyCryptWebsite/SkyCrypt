@@ -193,7 +193,7 @@ export function getLevelByXp(xp, extra = {}) {
   const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
   /** the fraction of the way toward the next level */
-  const progress = level >= levelCap ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+  const progress = level >= levelCap ? (extra.ignoreCap ? 1 : 0) : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
   const levelWithProgress = level + progress;
