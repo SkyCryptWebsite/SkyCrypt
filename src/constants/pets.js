@@ -891,4 +891,9 @@ export const PET_ITEMS = {
     tier: "EPIC",
     description: `§7Gain §6+2,000 Coins §7when digging up any §eGriffin Burrow§7.\n§7Grants §b+10 ${SYMBOLS.magic_find} Magic Find §7and §a+55 ${SYMBOLS.defense} Defense§7.`,
   },
+  PET_ITEM_BINGO_BOOSTER: {
+    name: "Bingo Booster",
+    tier: "EPIC",
+    description: "§7Double the efficiency of the §6Lucky Looting §7perk of your Bingo pet.",
+  },
 };
