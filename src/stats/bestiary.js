@@ -1,119 +1,78 @@
 import * as constants from "../constants.js";
 
-/**
- * @typedef {Object} Mob
- * @property {string} name - The name of the mob.
- * @property {string} texture - The texture of the mob.
- * @property {number} itemId - The itemId of the mob item texture.
- * @property {number} damage - The damage of an mob's item texture.
- * @property {number} kills - The kills of the mob.
- * @property {number} tier - The tier of the mob.
- * @property {number} maxTier - The maximum tier of the mob.
- * @property {number} currentTier - The current tier of the mob.
- * @property {number} nextTier - The next tier of the mob.
- * @property {string} id - The id of the mob.
- */
+function formatBestiaryMobs(userProfile, mobs) {
+  const output = [];
+  for (const mob of mobs) {
+    const mobBracket = constants.BESTIARY_BRACKETS[mob.bracket];
 
-/**
- * @typedef {Object} Category
- * @property {string} name - The name of the category.
- * @property {string} texture - The texture of the category.
- * @property {Mob[]} mobs - The mobs in the category.
- * @property {number} maxedAmount - The maximum amount of the category that can be maxed.
- * @property {number} totalAmount - The total amount of the category.
- * @property {boolean} maxed - Whether the category is maxed or not.
- */
+    const totalKills = mob.mobs.reduce((acc, cur) => {
+      return acc + (userProfile.bestiary.kills[cur] ?? 0);
+    }, 0);
 
-/**
- * @typedef {Object} Bestiary
- * @property {Object.<string, Category>} categories - The categories.
- * @property {number} tiers - Amount of tiers unlocked by player.
- * @property {number} maxTiers - The maximum amount of tiers.
- * @property {number} maxedAmount - The maximum amount of the mob that can be maxed.
- * @property {number} totalAmount - The total amount of the mob player has maxed.
- * @property {number} level - The level.
- * @property {number} bonus - The bonus.
- */
+    const maxKills = mob.cap;
+    const nextTierKills = mobBracket.find((tier) => totalKills < tier && tier <= maxKills);
+    const tier = nextTierKills ? mobBracket.indexOf(nextTierKills) : mobBracket.indexOf(maxKills) + 1;
 
-/**
- * Returns a Bestiary object containing information about a player's bestiary progress.
- *
- * @param {string} uuid - The UUID of the player to get the Bestiary for.
- * @returns {Bestiary} - The Bestiary object.
- */
+    output.push({
+      name: mob.name,
+      texture: mob.texture,
+      kills: totalKills,
+      nextTierKills: nextTierKills ?? null,
+      maxKills: maxKills,
+      tier: tier,
+      maxTier: mobBracket.indexOf(maxKills) + 1,
+    });
+  }
+
+  return output;
+}
 
 export function getBestiary(userProfile) {
   try {
-    if (userProfile.bestiary === undefined) {
+    if (userProfile.bestiary?.kills === undefined) {
       return null;
     }
 
-    const bestiaryFamilies = Object.entries(userProfile.bestiary)
-      .filter(([name]) => name.startsWith("kills_family_"))
-      .reduce((families, [name, value]) => ({ ...families, [name]: value }), {});
-
     const output = {};
-    for (const category in constants.BESTIARY) {
-      const { name, texture } = constants.BESTIARY[category];
-      for (const mob of constants.BESTIARY[category].mobs) {
-        const boss = mob.boss ? "boss" : "regular";
-        const mobName = mob.name;
+    let tiersUnlocked = 0,
+      totalTiers = 0;
+    for (const [category, data] of Object.entries(constants.BESTIARY)) {
+      const { name, texture, mobs } = data;
+      output[category] = {
+        name,
+        texture,
+      };
 
-        const maxTier = mob.maxTier ?? 41;
-        const kills = bestiaryFamilies[mob.id] ?? 0;
-        const tier = Math.min(constants.BESTIARY_KILLS[boss].filter((k) => k <= kills).length, maxTier);
-        const nextTier = constants.BESTIARY_KILLS[boss][tier];
-        const maxed = tier >= maxTier;
+      if (category === "fishing") {
+        for (const [key, value] of Object.entries(data)) {
+          output[category][key] = {
+            name: value.name,
+            texture: value.texture,
+          };
 
-        output[category] ??= {
-          name,
-          texture,
-          mobs: [],
-        };
-        output[category].mobs.push({
-          name: mobName,
-          texture: mob.texture,
-          itemId: mob.itemId,
-          damage: mob.damage,
-          boss,
-          kills,
-          tier,
-          maxTier,
-          currentTier: tier,
-          nextTier,
-          maxed,
-        });
+          output[category][key].mobs = formatBestiaryMobs(userProfile, value.mobs);
+
+          tiersUnlocked += output[category][key].mobs.reduce((acc, cur) => acc + cur.tier, 0);
+          totalTiers += output[category][key].mobs.reduce((acc, cur) => acc + cur.maxTier, 0);
+          output[category][key].mobsUnlocked = output[category][key].mobs.length;
+          output[category][key].mobsMaxed = output[category][key].mobs.filter((mob) => mob.tier === mob.maxTier).length;
+        }
+      } else {
+        output[category].mobs = formatBestiaryMobs(userProfile, mobs);
+        output[category].mobsUnlocked = output[category].mobs.length;
+        output[category].mobsMaxed = output[category].mobs.filter((mob) => mob.tier === mob.maxTier).length;
+
+        tiersUnlocked += output[category].mobs.reduce((acc, cur) => acc + cur.tier, 0);
+        totalTiers += output[category].mobs.reduce((acc, cur) => acc + cur.maxTier, 0);
       }
-
-      output[category].maxedAmount = output[category].mobs.filter((mob) => mob.maxed).length;
-      output[category].totalAmount = output[category].mobs.length;
-      output[category].maxed = output[category].maxedAmount === output[category].totalAmount;
     }
-
-    const tiers = Object.values(output)
-      .map((category) => category.mobs.map((mob) => mob.tier))
-      .flat()
-      .reduce((a, b) => a + b, 0);
-
-    const maxTiers = Object.values(output)
-      .map((category) => category.mobs.map((mob) => mob.maxTier))
-      .flat()
-      .reduce((a, b) => a + b, 0);
-
-    const unlockedBestiaries = Object.values(output)
-      .map((category) => category.mobs.filter((mob) => mob.maxed).length)
-      .reduce((a, b) => a + b, 0);
-    const totalBestiaries = Object.values(output)
-      .map((category) => category.mobs.length)
-      .reduce((a, b) => a + b, 0);
 
     return {
       categories: output,
-      tiers: unlockedBestiaries,
-      maxTiers: totalBestiaries,
-      level: tiers / 10,
-      maxLevel: maxTiers / 10,
-      bonus: Math.floor(tiers / 5),
+      tiersUnlocked,
+      totalTiers,
+      milestone: tiersUnlocked / 10,
+      maxMilestone: totalTiers / 10,
     };
   } catch (error) {
     console.log(error);
