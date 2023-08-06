@@ -19,6 +19,7 @@ import { db } from "./mongo.js";
 import { redisClient } from "./redis.js";
 import { calculateLilyWeight } from "./weight/lily-weight.js";
 import { calculateSenitherWeight } from "./weight/senither-weight.js";
+import * as stats from "./stats.js";
 
 const mcData = minecraftData("1.8.9");
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -1021,7 +1022,7 @@ export const getItems = async (
   output.hotm = hotm;
   output.candy_bag = candy_bag;
 
-  const sacks = "sacks_counts" in profile ? await getSacks(profile.sacks_counts) : [];
+  const sacks = "sacks_counts" in profile ? await stats.getSacks(profile.sacks_counts) : [];
   output.sacks = sacks;
 
   const allItems = armor.concat(
@@ -3024,92 +3025,6 @@ export async function getCollections(uuid, profile, cacheOnly = false) {
   return output;
 }
 
-async function getSacks(sacksCounts) {
-  const sacks = [];
-
-  for (const sackId in constants.SACKS) {
-    const sack = constants.SACKS[sackId];
-
-    if (sackId !== "RUNE_SACK" && sack.items.filter((a) => Object.keys(sacksCounts).includes(a)).length == 0) {
-      continue;
-    }
-
-    const sackItem = Object.assign({}, constants.BASE_SACK);
-
-    sackItem.texture_path = `/head/${sack.texture}`;
-    sackItem.display_name = _.startCase(sackId.toLowerCase());
-
-    if (sackId === "RUNE_SACK") {
-      sackItem.containsItems = [];
-      for (const ID in sack.items) {
-        if (ID === "???") continue;
-
-        const item = sack.items[ID] ?? sack.items["???"];
-
-        const sackContent = {
-          Count: sacksCounts[ID] ?? 1,
-          sack_count: sacksCounts[ID] ?? 0,
-          Damage: 3,
-          id: 397,
-          itemIndex: sackItem.containsItems.length,
-          display_name: item.display_name,
-          rarity: item.tier,
-          texture_path: `/head/${item.texture}`,
-          tag: {
-            display: {
-              Name: `§a${item.item}`,
-              Lore: [`§8Stored: §e${(sacksCounts[ID] ?? 0).toLocaleString()}`],
-            },
-          },
-          categories: [],
-        };
-
-        sackItem.containsItems.push(sackContent);
-      }
-    } else {
-      sackItem.containsItems = [];
-
-      for (const [index, item] of sack.items.entries()) {
-        const hypixelItem = await db.collection("items").findOne({ id: constants.ITEM_SACKS[item] ?? item });
-
-        const itemName = hypixelItem?.name ?? _.startCase(item.toLowerCase());
-
-        const count = sacksCounts[item] === 0 ? 1 : sacksCounts[item];
-
-        const sackContent = {
-          Count: count ?? 1,
-          sack_count: sacksCounts[item] ?? 0,
-          Damage: hypixelItem?.damage ?? 3,
-          id: hypixelItem?.item_id ?? 397,
-          itemIndex: index,
-          display_name: itemName,
-          tag: {
-            display: {
-              Name: `§a${itemName}`,
-              Lore: [`§8Stored: §e${(sacksCounts[item] ?? 0).toLocaleString()}`],
-            },
-          },
-          categories: [],
-        };
-
-        if (hypixelItem?.glowing === true) {
-          sackContent.tag.ench = [];
-        }
-
-        if (sackContent.id == 397 && hypixelItem?.texture) {
-          sackContent.texture_path = `/head/${hypixelItem.texture}`;
-        }
-
-        sackItem.containsItems.push(sackContent);
-      }
-    }
-
-    sacks.push(sackItem);
-  }
-
-  return sacks;
-}
-
 export function getTrophyFish(userProfile) {
   const output = {
     total_caught: 0,
@@ -3235,6 +3150,7 @@ export function getBestiary(uuid, profile) {
 
   return result;
 }
+
 export function getDungeons(userProfile, hypixelProfile) {
   const output = {};
 

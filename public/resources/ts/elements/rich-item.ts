@@ -57,7 +57,7 @@ export class InventoryView extends LitElement {
     return html`
       <div style="${ifDefined(style)}" class="${classMap(classes)}"></div>
       ${this.item.Count != 1
-        ? html`<div class="item-count">${formatNumber(this.item.Count, false, 10)}</div>`
+        ? html`<div class="item-count">${formatNumber(this.item.Count, false, 0)}</div>`
         : undefined}
     `;
   }

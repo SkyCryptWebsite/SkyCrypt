@@ -402,468 +402,212 @@ export const SACKS = {
     texture: "fb96c585ccd35f073da38d165cb9bb18ff136f1a184eee3f44725354640ebbd4",
   },
   RUNE_SACK: {
-    items: {
-      "???": {
-        display_name: "§7◆ ??? Rune ?",
-        texture: "82b8207a5fe192cd477e921466197c8af749af18dd1ef389e2733a2f74d0928b",
-        tier: "common",
-      },
-      RUNE_BITE_1: {
-        display_name: "◆ Bite Rune I",
+    items: [
+      {
+        name: "◆ Bite Rune",
         texture: "43a1ad4fcc42fb63c681328e42d63c83ca193b333af2a426728a25a8cc600692",
-        tier: "epic",
+        rarity: "epic",
+        items: ["RUNE_BITE_1", "RUNE_BITE_2", "RUNE_BITE_3"],
       },
-      RUNE_BITE_2: {
-        display_name: "◆ Bite Rune II",
-        texture: "43a1ad4fcc42fb63c681328e42d63c83ca193b333af2a426728a25a8cc600692",
-        tier: "epic",
-      },
-      RUNE_BITE_3: {
-        display_name: "◆ Bite Rune III",
-        texture: "43a1ad4fcc42fb63c681328e42d63c83ca193b333af2a426728a25a8cc600692",
-        tier: "epic",
-      },
-      RUNE_BLOOD_2_1: {
-        display_name: "◆ Blood Rune I",
+      {
+        name: "◆ Blood Rune",
         texture: "e02677053dc54245dac4b399d14aae21ee71a010bd9c336c8ecee1a0dbe8f58b",
-        tier: "common",
+        rarity: "common",
+        items: ["RUNE_BLOOD_2_1", "RUNE_BLOOD_2_2", "RUNE_BLOOD_2_3"],
       },
-      RUNE_BLOOD_2_2: {
-        display_name: "◆ Blood Rune II",
-        texture: "e02677053dc54245dac4b399d14aae21ee71a010bd9c336c8ecee1a0dbe8f58b",
-        tier: "common",
+      {
+        name: "◆ Clouds Rune",
+        texture: "2273740d454de962484712f9835e35119b37ab867fa6982d5cc1f333c2334e59",
+        rarity: "epic",
+        items: ["RUNE_CLOUDS_1", "RUNE_CLOUDS_2", "RUNE_CLOUDS_3"],
       },
-      RUNE_BLOOD_2_3: {
-        display_name: "◆ Blood Rune III",
-        texture: "e02677053dc54245dac4b399d14aae21ee71a010bd9c336c8ecee1a0dbe8f58b",
-        tier: "common",
-      },
-      RUNE_COUTURE_1: {
-        display_name: "◆ Couture Rune II",
+      {
+        name: "◆ Couture Rune",
         texture: "734fb3203233efbae82628bd4fca7348cd071e5b7b52407f1d1d2794e31799ff",
-        tier: "legendary",
+        rarity: "legendary",
+        items: ["RUNE_COUTURE_1", "RUNE_COUTURE_2", "RUNE_COUTURE_3"],
       },
-      RUNE_COUTURE_3: {
-        display_name: "◆ Couture Rune III",
-        texture: "734fb3203233efbae82628bd4fca7348cd071e5b7b52407f1d1d2794e31799ff",
-        tier: "legendary",
-      },
-      RUNE_DRAGON_1: {
-        display_name: "◆ End Rune I",
+      {
+        name: "◆ End Rune",
         texture: "3b11fb90db7f57beb435954013b1c7ef776c6bd96cbf3308aa8ebac29591ebbd",
-        tier: "epic",
+        rarity: "epic",
+        items: ["RUNE_DRAGON_1", "RUNE_DRAGON_2", "RUNE_DRAGON_3"],
       },
-      RUNE_DRAGON_2: {
-        display_name: "◆ End Rune II",
-        texture: "3b11fb90db7f57beb435954013b1c7ef776c6bd96cbf3308aa8ebac29591ebbd",
-        tier: "epic",
-      },
-      RUNE_DRAGON_3: {
-        display_name: "◆ End Rune III",
-        texture: "3b11fb90db7f57beb435954013b1c7ef776c6bd96cbf3308aa8ebac29591ebbd",
-        tier: "epic",
-      },
-      RUNE_ENCHANT_1: {
-        display_name: "◆ Enchant Rune I",
+      {
+        name: "◆ Enchant Rune",
         texture: "59ffacec6ee5a23d9cb24a2fe9dc15b24488f5f71006924560bf12148421ae6d",
-        tier: "legendary",
+        rarity: "legendary",
+        items: ["RUNE_ENCHANT_1", "RUNE_ENCHANT_2", "RUNE_ENCHANT_3"],
       },
-      RUNE_ENCHANT_2: {
-        display_name: "◆ Enchant Rune II",
-        texture: "59ffacec6ee5a23d9cb24a2fe9dc15b24488f5f71006924560bf12148421ae6d",
-        tier: "legendary",
-      },
-      RUNE_ENCHANT_3: {
-        display_name: "◆ Enchant Rune III",
-        texture: "59ffacec6ee5a23d9cb24a2fe9dc15b24488f5f71006924560bf12148421ae6d",
-        tier: "legendary",
-      },
-      RUNE_ENDERSNAKE_1: {
-        display_name: "◆ Endersnake Rune I",
+      {
+        name: "◆ Endersnake Rune",
         texture: "c3a9acbb7d3d49b1d54d26111104d0da57d8b4ab37885b4bbd240ac71074cad2",
-        tier: "legendary",
+        rarity: "legendary",
+        items: ["RUNE_ENDERSNAKE_1", "RUNE_ENDERSNAKE_2", "RUNE_ENDERSNAKE_3"],
       },
-      RUNE_ENDERSNAKE_2: {
-        display_name: "◆ Endersnake Rune II",
-        texture: "c3a9acbb7d3d49b1d54d26111104d0da57d8b4ab37885b4bbd240ac71074cad2",
-        tier: "legendary",
-      },
-      RUNE_ENDERSNAKE_3: {
-        display_name: "◆ Endersnake Rune III",
-        texture: "c3a9acbb7d3d49b1d54d26111104d0da57d8b4ab37885b4bbd240ac71074cad2",
-        tier: "legendary",
-      },
-      RUNE_FIERY_BURST_1: {
-        display_name: "◆ Fiery Burst Rune I",
+      {
+        name: "◆ Fiery Burst Rune",
         texture: "8d620e4e3d3abfed6ad81a58a56bcd085d9e9efc803cabb21fa6c9e3969e2d2e",
-        tier: "legendary",
+        rarity: "legendary",
+        items: ["RUNE_FIERY_BURST_1", "RUNE_FIERY_BURST_2", "RUNE_FIERY_BURST_3"],
       },
-      RUNE_FIERY_BURST_2: {
-        display_name: "◆ Fiery Burst Rune II",
-        texture: "8d620e4e3d3abfed6ad81a58a56bcd085d9e9efc803cabb21fa6c9e3969e2d2e",
-        tier: "legendary",
-      },
-      RUNE_FIERY_BURST_3: {
-        display_name: "◆ Fiery Burst Rune III",
-        texture: "8d620e4e3d3abfed6ad81a58a56bcd085d9e9efc803cabb21fa6c9e3969e2d2e",
-        tier: "legendary",
-      },
-      RUNE_FIRE_SPIRAL_1: {
-        display_name: "◆ Fire Spiral Rune I",
+      {
+        name: "◆ Fire Spiral Rune",
         texture: "8301aa86cafd4b2d732a9b4894cfcfc65edc828e8571b45dbf0a3ba96575cccf",
-        tier: "rare",
+        rarity: "rare",
+        items: ["RUNE_FIRE_SPIRAL_1", "RUNE_FIRE_SPIRAL_2", "RUNE_FIRE_SPIRAL_3"],
       },
-      RUNE_FIRE_SPIRAL_2: {
-        display_name: "◆ Fire Spiral Rune II",
-        texture: "8301aa86cafd4b2d732a9b4894cfcfc65edc828e8571b45dbf0a3ba96575cccf",
-        tier: "rare",
-      },
-      RUNE_FIRE_SPIRAL_3: {
-        display_name: "◆ Fire Spiral Rune III",
-        texture: "8301aa86cafd4b2d732a9b4894cfcfc65edc828e8571b45dbf0a3ba96575cccf",
-        tier: "rare",
-      },
-      RUNE_GEM_1: {
-        display_name: "◆ Gem Rune I",
+      {
+        name: "◆ Gem Rune",
         texture: "43a1ad4fcc42fb63c681328e42d63c83ca193b333af2a426728a25a8cc600692",
-        tier: "common",
+        rarity: "common",
+        items: ["RUNE_GEM_1", "RUNE_GEM_2", "RUNE_GEM_3"],
       },
-      RUNE_GEM_2: {
-        display_name: "◆ Gem Rune II",
-        texture: "43a1ad4fcc42fb63c681328e42d63c83ca193b333af2a426728a25a8cc600692",
-        tier: "common",
-      },
-      RUNE_GEM_3: {
-        display_name: "◆ Gem Rune III",
-        texture: "43a1ad4fcc42fb63c681328e42d63c83ca193b333af2a426728a25a8cc600692",
-        tier: "common",
-      },
-      RUNE_GOLDEN_1: {
-        display_name: "◆ Golden Rune I",
+      {
+        name: "◆ Golden Rune",
         texture: "35f4861aa5b22ee28a90e75dab45d221efd14c0b1ecc8ee998fb67e43bb8f3de",
-        tier: "epic",
+        rarity: "epic",
+        items: ["RUNE_GOLDEN_1", "RUNE_GOLDEN_2", "RUNE_GOLDEN_3"],
       },
-      RUNE_GOLDEN_2: {
-        display_name: "◆ Golden Rune II",
-        texture: "35f4861aa5b22ee28a90e75dab45d221efd14c0b1ecc8ee998fb67e43bb8f3de",
-        tier: "epic",
-      },
-      RUNE_GOLDEN_3: {
-        display_name: "◆ Golden Rune III",
-        texture: "35f4861aa5b22ee28a90e75dab45d221efd14c0b1ecc8ee998fb67e43bb8f3de",
-        tier: "epic",
-      },
-      RUNE_GRAND_SEARING_3: {
-        display_name: "◆ Grand Searing Rune III",
+      {
+        name: "◆ Grand Searing Rune",
         texture: "87217a791685cf4fbb78674756a4f9793ae5fd0525dae362b491cc7a472ec64b",
-        tier: "legendary",
+        rarity: "legendary",
+        items: ["RUNE_GRAND_SEARING_3"],
       },
-      RUNE_HEARTS_1: {
-        display_name: "◆ Hearts Rune I",
+      {
+        name: "◆ Hearts Rune",
         texture: "2c1c179ad51955f1522c48ea9931f09c162741b45e22e9d3feb682c7e5ed8274",
-        tier: "rare",
+        rarity: "rare",
+        items: ["RUNE_HEARTS_1", "RUNE_HEARTS_2", "RUNE_HEARTS_3"],
       },
-      RUNE_HEARTS_2: {
-        display_name: "◆ Hearts Rune II",
-        texture: "2c1c179ad51955f1522c48ea9931f09c162741b45e22e9d3feb682c7e5ed8274",
-        tier: "rare",
-      },
-      RUNE_HEARTS_3: {
-        display_name: "◆ Hearts Rune III",
-        texture: "2c1c179ad51955f1522c48ea9931f09c162741b45e22e9d3feb682c7e5ed8274",
-        tier: "rare",
-      },
-      RUNE_HOT_1: {
-        display_name: "◆ Hot Rune I",
+      {
+        name: "◆ Hot Rune",
         texture: "26660b016d05645fffd1f48b792d1abe5d8f30dc96567569ae1d982d250b693c",
-        tier: "uncommon",
+        rarity: "uncommon",
+        items: ["RUNE_HOT_1", "RUNE_HOT_2", "RUNE_HOT_3"],
       },
-      RUNE_HOT_2: {
-        display_name: "◆ Hot Rune II",
-        texture: "26660b016d05645fffd1f48b792d1abe5d8f30dc96567569ae1d982d250b693c",
-        tier: "uncommon",
-      },
-      RUNE_HOT_3: {
-        display_name: "◆ Hot Rune III",
-        texture: "26660b016d05645fffd1f48b792d1abe5d8f30dc96567569ae1d982d250b693c",
-        tier: "uncommon",
-      },
-      RUNE_ICE_1: {
-        display_name: "◆ Ice Rune I",
+      {
+        name: "◆ Ice Rune",
         texture: "cdc57c75adf39ec6f0e0916049dd9671e98a8a1e600104e84e645c988950bd7",
-        tier: "rare",
+        rarity: "rare",
+        items: ["RUNE_ICE_1", "RUNE_ICE_2", "RUNE_ICE_3"],
       },
-      RUNE_ICE_2: {
-        display_name: "◆ Ice Rune II",
-        texture: "cdc57c75adf39ec6f0e0916049dd9671e98a8a1e600104e84e645c988950bd7",
-        tier: "rare",
-      },
-      RUNE_ICE_3: {
-        display_name: "◆ Ice Rune III",
-        texture: "cdc57c75adf39ec6f0e0916049dd9671e98a8a1e600104e84e645c988950bd7",
-        tier: "rare",
-      },
-      RUNE_JERRY_3: {
-        display_name: "◆ Jerry Rune III",
+      {
+        name: "◆ Jerry Rune",
         texture: "a1353ba65b6521f922b6464d17af39bddd43c984b8a227d99161594eba7a14c4",
-        tier: "common",
+        rarity: "common",
+        items: ["RUNE_JERRY_3"],
       },
-      RUNE_LAVATEARS_1: {
-        display_name: "◆ Lavatears Rune I",
+      {
+        name: "◆ Lavatears Rune",
         texture: "8c8ccd5f863d82bb097b926bc5f4cca97b19f46e11b3a3a59d001adb89886773",
-        tier: "legendary",
+        rarity: "legendary",
+        items: ["RUNE_LAVATEARS_1", "RUNE_LAVATEARS_2", "RUNE_LAVATEARS_3"],
       },
-      RUNE_LAVATEARS_2: {
-        display_name: "◆ Lavatears Rune II",
-        texture: "8c8ccd5f863d82bb097b926bc5f4cca97b19f46e11b3a3a59d001adb89886773",
-        tier: "legendary",
-      },
-      RUNE_LAVATEARS_3: {
-        display_name: "◆ Lavatears Rune III",
-        texture: "8c8ccd5f863d82bb097b926bc5f4cca97b19f46e11b3a3a59d001adb89886773",
-        tier: "legendary",
-      },
-      RUNE_LAVA_1: {
-        display_name: "◆ Lava Rune I",
+      {
+        name: "◆ Lava Rune",
         texture: "b13d903f601034ac3400d2625fef104e9b0940746c554193f6d9e85a84a966a1",
-        tier: "common",
+        rarity: "common",
+        items: ["RUNE_LAVA_1", "RUNE_LAVA_2", "RUNE_LAVA_3"],
       },
-      RUNE_LAVA_2: {
-        display_name: "◆ Lava Rune II",
-        texture: "b13d903f601034ac3400d2625fef104e9b0940746c554193f6d9e85a84a966a1",
-        tier: "common",
-      },
-      RUNE_LAVA_3: {
-        display_name: "◆ Lava Rune III",
-        texture: "b13d903f601034ac3400d2625fef104e9b0940746c554193f6d9e85a84a966a1",
-        tier: "common",
-      },
-      RUNE_LIGHTNING_1: {
-        display_name: "◆ Lightning Rune I",
+      {
+        name: "◆ Lightning Rune",
         texture: "b85bcf7f82d34db89a95addf8e53253e2d9554c6fd2f2e39e24362d243a0ccf7",
-        tier: "legendary",
+        rarity: "legendary",
+        items: ["RUNE_LIGHTNING_1", "RUNE_LIGHTNING_2", "RUNE_LIGHTNING_3"],
       },
-      RUNE_LIGHTNING_2: {
-        display_name: "◆ Lightning Rune II",
-        texture: "b85bcf7f82d34db89a95addf8e53253e2d9554c6fd2f2e39e24362d243a0ccf7",
-        tier: "legendary",
-      },
-      RUNE_LIGHTNING_3: {
-        display_name: "◆ Lightning Rune III",
-        texture: "b85bcf7f82d34db89a95addf8e53253e2d9554c6fd2f2e39e24362d243a0ccf7",
-        tier: "legendary",
-      },
-      RUNE_MAGIC_1: {
-        display_name: "◆ Magical Rune I",
+      {
+        name: "◆ Magical Rune",
         texture: "24480e39ea63e347d268de83090d09984bf34394118848348bf4eb57490ce9d2",
-        tier: "rare",
+        rarity: "rare",
+        items: ["RUNE_MAGIC_1", "RUNE_MAGIC_2", "RUNE_MAGIC_3"],
       },
-      RUNE_MAGIC_2: {
-        display_name: "◆ Magical Rune II",
-        texture: "24480e39ea63e347d268de83090d09984bf34394118848348bf4eb57490ce9d2",
-        tier: "rare",
-      },
-      RUNE_MAGIC_3: {
-        display_name: "◆ Magical Rune III",
-        texture: "24480e39ea63e347d268de83090d09984bf34394118848348bf4eb57490ce9d2",
-        tier: "rare",
-      },
-      RUNE_MUSIC_1: {
-        display_name: "◆ Music Rune I",
+      {
+        name: "◆ Music Rune",
         texture: "3b481c31dc683bdcb7d375a7c5db7ac7adf9e9fe8b6c04a64931613e29fe470e",
-        tier: "epic",
+        rarity: "epic",
+        items: ["RUNE_MUSIC_1", "RUNE_MUSIC_2", "RUNE_MUSIC_3"],
       },
-      RUNE_MUSIC_2: {
-        display_name: "◆ Music Rune II",
-        texture: "3b481c31dc683bdcb7d375a7c5db7ac7adf9e9fe8b6c04a64931613e29fe470e",
-        tier: "epic",
-      },
-      RUNE_MUSIC_3: {
-        display_name: "◆ Music Rune III",
-        texture: "3b481c31dc683bdcb7d375a7c5db7ac7adf9e9fe8b6c04a64931613e29fe470e",
-        tier: "epic",
-      },
-      RUNE_RAINBOW_1: {
-        display_name: "◆ Rainbow Rune I",
+      {
+        name: "◆ Rainbow Rune",
         texture: "72114a80357463fe2f59e397aab9fc66d482a65d524f8870d21c724c18ecf757",
-        tier: "legendary",
+        rarity: "legendary",
+        items: ["RUNE_RAINBOW_1", "RUNE_RAINBOW_2", "RUNE_RAINBOW_3"],
       },
-      RUNE_RAINBOW_2: {
-        display_name: "◆ Rainbow Rune II",
-        texture: "72114a80357463fe2f59e397aab9fc66d482a65d524f8870d21c724c18ecf757",
-        tier: "legendary",
-      },
-      RUNE_RAINBOW_3: {
-        display_name: "◆ Rainbow Rune III",
-        texture: "72114a80357463fe2f59e397aab9fc66d482a65d524f8870d21c724c18ecf757",
-        tier: "legendary",
-      },
-      RUNE_REDSTONE_1: {
-        display_name: "◆ Redstone Rune I",
+      {
+        name: "◆ Redstone Rune",
         texture: "87a7a894057d4a1ff22a161d76600f719da57916633f683808cf4d358bb73a21",
-        tier: "rare",
+        rarity: "rare",
+        items: ["RUNE_REDSTONE_1", "RUNE_REDSTONE_2", "RUNE_REDSTONE_3"],
       },
-      RUNE_REDSTONE_2: {
-        display_name: "◆ Redstone Rune II",
-        texture: "87a7a894057d4a1ff22a161d76600f719da57916633f683808cf4d358bb73a21",
-        tier: "rare",
-      },
-      RUNE_REDSTONE_3: {
-        display_name: "◆ Redstone Rune III",
-        texture: "87a7a894057d4a1ff22a161d76600f719da57916633f683808cf4d358bb73a21",
-        tier: "rare",
-      },
-      RUNE_SMOKEY_1: {
-        display_name: "◆ Smokey Rune I",
+      {
+        name: "◆ Smokey Rune",
         texture: "e4d8a8d527f65a4f434f894f7ee42eb843015bda7927c63c6ea8a754afe9bb1b",
-        tier: "common",
+        rarity: "common",
+        items: ["RUNE_SMOKEY_1", "RUNE_SMOKEY_2", "RUNE_SMOKEY_3"],
       },
-      RUNE_SMOKEY_2: {
-        display_name: "◆ Smokey Rune II",
-        texture: "e4d8a8d527f65a4f434f894f7ee42eb843015bda7927c63c6ea8a754afe9bb1b",
-        tier: "common",
-      },
-      RUNE_SMOKEY_3: {
-        display_name: "◆ Smokey Rune III",
-        texture: "e4d8a8d527f65a4f434f894f7ee42eb843015bda7927c63c6ea8a754afe9bb1b",
-        tier: "common",
-      },
-      RUNE_SNAKE_1: {
-        display_name: "◆ Snake Rune I",
+      {
+        name: "◆ Snake Rune",
         texture: "2c4a65c689b2d36409100a60c2ab8d3d0a67ce94eea3c1f7ac974fd893568b5d",
-        tier: "legendary",
+        rarity: "legendary",
+        items: ["RUNE_SNAKE_1", "RUNE_SNAKE_2", "RUNE_SNAKE_3"],
       },
-      RUNE_SNAKE_2: {
-        display_name: "◆ Snake Rune II",
-        texture: "2c4a65c689b2d36409100a60c2ab8d3d0a67ce94eea3c1f7ac974fd893568b5d",
-        tier: "legendary",
-      },
-      RUNE_SNAKE_3: {
-        display_name: "◆ Snake Rune III",
-        texture: "2c4a65c689b2d36409100a60c2ab8d3d0a67ce94eea3c1f7ac974fd893568b5d",
-        tier: "legendary",
-      },
-      RUNE_SNOW_1: {
-        display_name: "◆ Snow Rune I",
+      {
+        name: "◆ Snow Rune",
         texture: "cdc57c75adf39ec6f0e0916049dd9671e98a8a1e600104e84e645c988950bd7",
-        tier: "common",
+        rarity: "common",
+        items: ["RUNE_SNOW_1", "RUNE_SNOW_2", "RUNE_SNOW_3"],
       },
-      RUNE_SNOW_2: {
-        display_name: "◆ Snow Rune II",
-        texture: "cdc57c75adf39ec6f0e0916049dd9671e98a8a1e600104e84e645c988950bd7",
-        tier: "common",
+      {
+        name: "◆ Soultwist Rune",
+        texture: "f5ffdfbd490fc7310d61a1c4c35a4e0cd2f9fccc1239c6a4bcd7dec05e25ea67",
+        rarity: "epic",
+        items: ["RUNE_SOULTWIST_1", "RUNE_SOULTWIST_2", "RUNE_SOULTWIST_3"],
       },
-      RUNE_SNOW_3: {
-        display_name: "◆ Snow Rune III",
-        texture: "cdc57c75adf39ec6f0e0916049dd9671e98a8a1e600104e84e645c988950bd7",
-        tier: "common",
-      },
-      RUNE_SPARKLING_1: {
-        display_name: "◆ Sparkling Rune I",
+      {
+        name: "◆ Sparkling Rune",
         texture: "f1e2428cb359988f4c4ff0e61de21385c62269de19a69762d773223b75dd1666",
-        tier: "rare",
+        rarity: "rare",
+        items: ["RUNE_SPARKLING_1", "RUNE_SPARKLING_2", "RUNE_SPARKLING_3"],
       },
-      RUNE_SPARKLING_2: {
-        display_name: "◆ Sparkling Rune II",
-        texture: "f1e2428cb359988f4c4ff0e61de21385c62269de19a69762d773223b75dd1666",
-        tier: "rare",
-      },
-      RUNE_SPARKLING_3: {
-        display_name: "◆ Sparkling Rune III",
-        texture: "f1e2428cb359988f4c4ff0e61de21385c62269de19a69762d773223b75dd1666",
-        tier: "rare",
-      },
-      RUNE_SPIRIT_1: {
-        display_name: "◆ Spirit Rune I",
+      {
+        name: "◆ Spirit Rune",
         texture: "c738b8af8d7ce1a26dc6d40180b3589403e11ef36a66d7c4590037732829542e",
-        tier: "rare",
+        rarity: "rare",
+        items: ["RUNE_SPIRIT_1", "RUNE_SPIRIT_2", "RUNE_SPIRIT_3"],
       },
-      RUNE_SPIRIT_2: {
-        display_name: "◆ Spirit Rune II",
-        texture: "c738b8af8d7ce1a26dc6d40180b3589403e11ef36a66d7c4590037732829542e",
-        tier: "rare",
-      },
-      RUNE_SPIRIT_3: {
-        display_name: "◆ Spirit Rune III",
-        texture: "c738b8af8d7ce1a26dc6d40180b3589403e11ef36a66d7c4590037732829542e",
-        tier: "rare",
-      },
-      RUNE_TIDAL_1: {
-        display_name: "◆ Tidal Rune I",
+      {
+        name: "◆ Tidal Rune",
         texture: "69671047c6ade8a9c4d6a581bc26d284a54ae32e85c34ce69d81f92799bf3fbb",
-        tier: "legendary",
+        rarity: "legendary",
+        items: ["RUNE_TIDAL_1", "RUNE_TIDAL_2", "RUNE_TIDAL_3"],
       },
-      RUNE_TIDAL_2: {
-        display_name: "◆ Tidal Rune II",
-        texture: "69671047c6ade8a9c4d6a581bc26d284a54ae32e85c34ce69d81f92799bf3fbb",
-        tier: "legendary",
-      },
-      RUNE_TIDAL_3: {
-        display_name: "◆ Tidal Rune III",
-        texture: "69671047c6ade8a9c4d6a581bc26d284a54ae32e85c34ce69d81f92799bf3fbb",
-        tier: "legendary",
-      },
-      RUNE_WAKE_1: {
-        display_name: "◆ Wake Rune I",
+      {
+        name: "◆ Wake Rune",
         texture: "977c1fc93216e96d435cf962e1173de8d1a249b644894d72676eba732fcd56e7",
-        tier: "legendary",
+        rarity: "legendary",
+        items: ["RUNE_WAKE_1", "RUNE_WAKE_2", "RUNE_WAKE_3"],
       },
-      RUNE_WAKE_2: {
-        display_name: "◆ Wake Rune II",
-        texture: "977c1fc93216e96d435cf962e1173de8d1a249b644894d72676eba732fcd56e7",
-        tier: "legendary",
-      },
-      RUNE_WAKE_3: {
-        display_name: "◆ Wake Rune III",
-        texture: "977c1fc93216e96d435cf962e1173de8d1a249b644894d72676eba732fcd56e7",
-        tier: "legendary",
-      },
-      RUNE_WHITE_SPIRAL_1: {
-        display_name: "◆ White Spiral Rune I",
+      {
+        name: "◆ White Spiral Rune",
         texture: "3ef2432ef305361384d4318df5bda5bd1ac2d9bea06d1f5cfead6dd87e37ddf5",
-        tier: "uncommon",
+        rarity: "uncommon",
+        items: ["RUNE_WHITE_SPIRAL_1", "RUNE_WHITE_SPIRAL_2", "RUNE_WHITE_SPIRAL_3"],
       },
-      RUNE_WHITE_SPIRAL_2: {
-        display_name: "◆ White Spiral Rune II",
-        texture: "3ef2432ef305361384d4318df5bda5bd1ac2d9bea06d1f5cfead6dd87e37ddf5",
-        tier: "uncommon",
-      },
-      RUNE_WHITE_SPIRAL_3: {
-        display_name: "◆ White Spiral Rune III",
-        texture: "3ef2432ef305361384d4318df5bda5bd1ac2d9bea06d1f5cfead6dd87e37ddf5",
-        tier: "uncommon",
-      },
-      RUNE_ZAP_1: {
-        display_name: "◆ Zap Rune I",
+      {
+        name: "◆ Zap Rune",
         texture: "ed0947c40de6789f6cfa2370add2a04c9855e45fde9483d655101e9510288ee8",
-        tier: "uncommon",
+        rarity: "uncommon",
+        items: ["RUNE_ZAP_1", "RUNE_ZAP_2", "RUNE_ZAP_3"],
       },
-      RUNE_ZAP_2: {
-        display_name: "◆ Zap Rune II",
-        texture: "ed0947c40de6789f6cfa2370add2a04c9855e45fde9483d655101e9510288ee8",
-        tier: "uncommon",
-      },
-      RUNE_ZAP_3: {
-        display_name: "◆ Zap Rune III",
-        texture: "ed0947c40de6789f6cfa2370add2a04c9855e45fde9483d655101e9510288ee8",
-        tier: "uncommon",
-      },
-      RUNE_ZOMBIE_SLAYER_1: {
-        display_name: "◆ Pestilence Rune I",
+      {
+        name: "◆ Pestilence Rune",
         texture: "a8c4811395fbf7f620f05cc3175cef1515aaf775ba04a01045027f0693a90147",
-        tier: "rare",
+        rarity: "rare",
+        items: ["RUNE_ZOMBIE_SLAYER_1", "RUNE_ZOMBIE_SLAYER_2", "RUNE_ZOMBIE_SLAYER_3"],
       },
-      RUNE_ZOMBIE_SLAYER_2: {
-        display_name: "◆ Pestilence Rune II",
-        texture: "a8c4811395fbf7f620f05cc3175cef1515aaf775ba04a01045027f0693a90147",
-        tier: "rare",
-      },
-      RUNE_ZOMBIE_SLAYER_3: {
-        display_name: "◆ Pestilence Rune III",
-        texture: "a8c4811395fbf7f620f05cc3175cef1515aaf775ba04a01045027f0693a90147",
-        tier: "rare",
-      },
-    },
+    ],
     texture: "e91eb4ee3ecce3447483a1f151c11facc9de25577ab7b51fbf3d9c2b2a4b69fc",
   },
   SLAYER_SACK: {
