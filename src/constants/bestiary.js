@@ -623,7 +623,7 @@ export const BESTIARY = {
     ],
   },
   mining_3: {
-    name: "Drawven Mines",
+    name: "Dwarven Mines",
     texture: "/head/6b20b23c1aa2be0270f016b4c90d6ee6b8330a17cfef87869d6ad60b2ffbf3b5",
     mobs: [
       {
@@ -1656,7 +1656,7 @@ export const BESTIARY = {
       {
         name: "Lost Adventurer",
         cap: 10000,
-        texture: "/head//1e0329f42192ee7c1a0c704f82dbbbe7c00fbfa3f020c1067a208630b991b988",
+        texture: "/head/1e0329f42192ee7c1a0c704f82dbbbe7c00fbfa3f020c1067a208630b991b988",
         mobs: [
           "lost_adventurer_80",
           "lost_adventurer_81",
