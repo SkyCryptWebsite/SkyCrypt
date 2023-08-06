@@ -352,7 +352,7 @@ export const INCREASE_MOST_STATS_EXCLUDE = [
 
 export const FAIRY_SOULS = {
   max: {
-    normal: 240,
+    normal: 242,
     stranded: 3,
   },
 };
