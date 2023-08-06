@@ -8,7 +8,15 @@ export async function getSacks(sacksCounts) {
     for (const sackId in constants.SACKS) {
       const sack = constants.SACKS[sackId];
 
-      if (sackId !== "RUNE_SACK" && sack.items.filter((a) => Object.keys(sacksCounts).includes(a)).length == 0) {
+      if (
+        sack.items.filter((a) => {
+          if (typeof a === "object") {
+            return a.items.filter((b) => Object.keys(sacksCounts).includes(b)).length > 0;
+          }
+
+          return Object.keys(sacksCounts).includes(a);
+        }).length == 0
+      ) {
         continue;
       }
 
