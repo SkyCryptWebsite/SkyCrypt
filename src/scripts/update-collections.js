@@ -32,9 +32,6 @@ async function updateCollections() {
     await db
       .collection("collections")
       .updateOne({ _id: "collections" }, { $set: { collections: output } }, { upsert: true });
-
-    // const cachedCollections = await db.collection("collections").findOne({ _id: "collections" });
-    // console.log(cachedCollections);
   } catch (e) {
     console.error(e);
   }
