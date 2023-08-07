@@ -11,7 +11,7 @@ import { fileURLToPath } from "url";
 import util from "util";
 import { v4 } from "uuid";
 
-import * as stats from "./stats/stats.js";
+import * as stats from "./stats.js";
 import * as constants from "./constants.js";
 import credentials from "./credentials.js";
 import { getTexture } from "./custom-resources.js";
@@ -4066,34 +4066,3 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
     console.error(e);
   }
 }
-
-async function init() {
-  const response = await axios("https://api.hypixel.net/resources/skyblock/collections");
-
-  if (!response?.data?.collections) {
-    return;
-  }
-
-  for (const type in response.data.collections) {
-    for (const itemType in response.data.collections[type].items) {
-      const item = response.data.collections[type].items[itemType];
-      try {
-        const collectionData = constants.COLLECTION_DATA.find((a) => a.skyblockId == itemType);
-
-        collectionData.category = response.data.collections[type].name;
-        collectionData.maxTier = item.maxTiers;
-        collectionData.name = item.name;
-        collectionData.tiers = item.tiers;
-      } catch (e) {
-        if (e instanceof TypeError) {
-          //Collection Data filter error
-        } else {
-          //Throw exception unchanged
-          throw e;
-        }
-      }
-    }
-  }
-}
-
-init();

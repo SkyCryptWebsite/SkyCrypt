@@ -1,6 +1,6 @@
-import { COLLECTION_DATA } from "./constants/collections.js";
-import moment from "moment";
 import momentDurationFormat from "moment-duration-format";
+import { db } from "./mongo.js";
+import moment from "moment";
 momentDurationFormat(moment);
 
 import { getLevelByXp } from "./lib.js";
@@ -68,7 +68,7 @@ const titleCase = (string) => {
   return split.join(" ");
 };
 
-export default (name) => {
+export default async (name) => {
   const lbName = name.split("_").slice(1).join("_");
 
   const options = Object.assign({}, defaultOptions);
@@ -82,11 +82,15 @@ export default (name) => {
     }
   }
 
+  const { collections: COLLECTION_DATA } = await db.collection("collections").findOne({ _id: "collections" });
   if (lbName.startsWith("collection_")) {
     const collectionName = lbName.split("_").slice(1).join("_").toUpperCase();
-    const collectionData = COLLECTION_DATA.filter((a) => a.skyblockId == collectionName);
+    const collectionData = Object.values(COLLECTION_DATA)
+      .map((a) => a.items)
+      .flat()
+      .find((a) => a.id === collectionName);
 
-    if (collectionData.length > 0) {
+    if (collectionData?.length > 0) {
       options["name"] = collectionData[0].name + " Collection";
     }
   }

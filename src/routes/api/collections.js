@@ -1,11 +1,10 @@
 import * as helper from "../../helper.js";
 import * as lib from "../../lib.js";
-import * as stats from "../../stats/stats.js";
+import * as stats from "../../stats.js";
 import express from "express";
 
 import { tableify } from "../api.js";
 import { db } from "../../mongo.js";
-import { COLLECTION_DATA } from "../../constants.js";
 
 const router = express.Router();
 
@@ -21,7 +20,8 @@ router.use(async (req, res, next) => {
     const collections = await stats.getCollections(uuid, profile, req.options.cacheOnly);
 
     for (const collection in collections) {
-      collections[collection].name = COLLECTION_DATA.find((a) => a.skyblockId == collection).name;
+      // commented this out because cba to update this and endpoint got deprecated
+      // collections[collection].name = COLLECTION_DATA.find((a) => a.skyblockId == collection).name;
     }
 
     res.send(

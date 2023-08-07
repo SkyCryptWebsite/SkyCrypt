@@ -7,5 +7,6 @@ await Promise.all([
   import("./scripts/clear-favorite-cache.js"),
   import("./scripts/update-bazaar.js"),
   import("./scripts/update-items.js"),
+  import("./scripts/update-collections.js"),
   import("./scripts/update-featured-profiles.js"),
 ]);
