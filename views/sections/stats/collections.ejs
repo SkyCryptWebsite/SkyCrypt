@@ -54,7 +54,7 @@
       </div>
 
       <span> Bosses </span>
-      <% const maxedTiers = Object.values(calculated.dungeons.boss_collections).filter(boss => boss.maxTier === boss.tier).length; %>
+      <% const maxedTiers = Object.values(calculated.dungeons.boss_collections).filter(boss => boss.maxed).length; %>
       <% const totalTiers = Object.values(calculated.dungeons.boss_collections).length; %>
       <% if (maxedTiers === totalTiers) { %>
         <span class="category-header-maxed">max!</span>
