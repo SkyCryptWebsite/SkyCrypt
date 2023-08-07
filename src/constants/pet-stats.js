@@ -3160,7 +3160,7 @@ class Wisp extends Pet {
 
     return {
       name: "§6Blaze Slayer",
-      desc: [`§7Grants §b${round(1 + this.level * mult, 1)}x §7Combat XP from §aBlazes§7.`],
+      desc: [`§7Grants §b${round(1 + this.level * mult, 1)}x §7Combat XP against §aBlazes§7.`],
     };
   }
 
