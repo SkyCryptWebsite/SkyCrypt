@@ -1,5 +1,5 @@
 import * as helper from "../../../common/helper.js";
-import { STATS_BONUS } from "../../../common/constants.js";
+import { STATS_BONUS, FORBIDDEN_STATS, HARP_QUEST, POTION_EFFECTS } from "../../../common/constants.js";
 
 export function getPlayerStats() {
   const stats: PlayerStats = {
@@ -22,9 +22,80 @@ export function getPlayerStats() {
     farming_fortune: { base: 0 },
     foraging_fortune: { base: 0 },
     pristine: { base: 0 },
+    fishing_speed: { base: 0 },
+    health_regen: { base: 100 },
+    vitality: { base: 100 },
+    mending: { base: 100 },
+    combat_wisdom: { base: 0 },
+    mining_wisdom: { base: 0 },
+    farming_wisdom: { base: 0 },
+    foraging_wisdom: { base: 0 },
+    fishing_wisdom: { base: 0 },
+    enchanting_wisdom: { base: 0 },
+    alchemy_wisdom: { base: 0 },
+    carpentry_wisdom: { base: 0 },
+    runecrafting_wisdom: { base: 0 },
+    social_wisdom: { base: 0 },
   };
 
   const allowedStats = Object.keys(stats);
+
+  // Skyblock Level
+  if (calculated.skyblock_level.level && calculated.skyblock_level.level > 0) {
+    stats.health.skyblock_level = calculated.skyblock_level.level * 5;
+    stats.strength.skyblock_level =
+      Math.floor(calculated.skyblock_level.level / 5) + Math.floor(calculated.skyblock_level.level / 10) * 5;
+  }
+
+  // Bestiary
+  if (calculated.bestiary.milestone && calculated.bestiary.milestone > 0) {
+    stats.strength.bestiary = calculated.bestiary.milestone * 2;
+  }
+
+  // Unique Pets
+  if (calculated.pet_score_bonus.magic_find && calculated.pet_score_bonus.magic_find > 0) {
+    stats.magic_find.pet_score = calculated.pet_score_bonus.magic_find;
+  }
+
+  // Jacob's Farming Shop
+  if (calculated.farming.perks.double_drops && calculated.farming.perks.double_drops > 0) {
+    stats.farming_fortune.jacob_double_drops = calculated.farming.perks.double_drops * 2;
+  }
+
+  // Slayer Completion
+  for (const value of Object.values(calculated.slayers ?? {})) {
+    stats.combat_wisdom.slayer ??= 0;
+    for (const tier in value.kills) {
+      if (parseInt(tier) <= 3) {
+        stats.combat_wisdom.slayer += 1;
+        continue;
+      }
+
+      stats.combat_wisdom.slayer += 2;
+    }
+  }
+
+  // Heart of the Mountain
+  for (const ability of items.hotm) {
+    const item = ability as Item;
+    if (item.tag?.ExtraAttributes === undefined || item.tag.ExtraAttributes?.enabled === false) {
+      continue;
+    }
+
+    const maxLevel = item.tag.ExtraAttributes?.max_level as number;
+    const level = item.tag.ExtraAttributes?.level as number;
+    const id = item.tag.ExtraAttributes?.id as string;
+
+    const bonusStats: ItemStats = getBonusStat(level, `HOTM_perk_${id}` as BonusType, maxLevel);
+    for (const [name, value] of Object.entries(bonusStats)) {
+      if (!allowedStats.includes(name)) {
+        continue;
+      }
+
+      stats[name].heart_of_the_mountain ??= 0;
+      stats[name].heart_of_the_mountain += value;
+    }
+  }
 
   // Active armor stats
   for (const piece of items.armor) {
@@ -38,6 +109,32 @@ export function getPlayerStats() {
       stats[name].armor ??= 0;
       stats[name].armor += value;
     }
+  }
+
+  // Harp Quest
+  for (const harp in calculated.harp_quest || {}) {
+    const harpID = harp as HarpQuestSongs;
+    if (harpID.endsWith("_best_completion") === false) {
+      continue;
+    }
+
+    stats.intelligence.harp ??= 0;
+    stats.intelligence.harp += HARP_QUEST[harpID];
+  }
+
+  // Essence Shop
+  for (const perk in calculated.perks ?? {}) {
+    if (perk in FORBIDDEN_STATS === false) {
+      continue;
+    }
+
+    const name = perk.split("_")[1];
+    if (!allowedStats.includes(name)) {
+      continue;
+    }
+
+    stats[name].essence_shop ??= 0;
+    stats[name].essence_shop += calculated.perks[perk];
   }
 
   // Active equipment stats
@@ -134,20 +231,6 @@ export function getPlayerStats() {
     }
   }
 
-  // Fairy souls
-  if (calculated.fairy_exchanges) {
-    const bonusStats: ItemStats = getFairyBonus(calculated.fairy_exchanges);
-
-    for (const [name, value] of Object.entries(bonusStats)) {
-      if (!allowedStats.includes(name)) {
-        continue;
-      }
-
-      stats[name].fairy_souls ??= 0;
-      stats[name].fairy_souls += value;
-    }
-  }
-
   // New year cake bag
   {
     const cakeBag = items.accessory_bag.find((x) => (x as Item).tag?.ExtraAttributes?.id === "NEW_YEAR_CAKE_BAG");
@@ -162,19 +245,38 @@ export function getPlayerStats() {
   }
 
   if (calculated.century_cakes) {
-    for (const century_cake of calculated.century_cakes) {
-      if (!allowedStats.includes(century_cake.stat)) {
+    for (const centuryCake of calculated.century_cakes) {
+      if (!allowedStats.includes(centuryCake.stat)) {
         continue;
       }
 
-      stats[century_cake.stat].cakes ??= 0;
-      stats[century_cake.stat].cakes += century_cake.amount;
+      stats[centuryCake.stat].cakes ??= 0;
+      stats[centuryCake.stat].cakes += centuryCake.amount;
     }
   }
 
   // Reaper peppers
   if (calculated.reaper_peppers_eaten > 0) {
     stats.health.reaper_peppers = calculated.reaper_peppers_eaten;
+  }
+
+  // Active Potion Effects
+  for (const effect of calculated.misc.effects.active) {
+    if (effect.effect in POTION_EFFECTS === false) {
+      console.log(`Unknown potion effect: ${effect.effect}`);
+      continue;
+    }
+
+    const effectLevel = effect.level;
+    const effectID = effect.effect as PotionEffectIDs;
+    for (const [name, value] of Object.entries(POTION_EFFECTS[effectID].bonuses)) {
+      if (!allowedStats.includes(name)) {
+        continue;
+      }
+
+      stats[name].potion ??= 0;
+      stats[name].potion += value[effectLevel - 1];
+    }
   }
 
   return stats;
@@ -211,23 +313,6 @@ function getBonusStat(level: number, key: BonusType, max: number) {
         bonus[statName] = (bonus[statName] || 0) + (stepBonuses?.[statName] ?? 0);
       }
     }
-  }
-
-  return bonus;
-}
-
-function getFairyBonus(fairyExchanges: number) {
-  const bonus: ItemStats = {};
-
-  bonus.speed = Math.floor(fairyExchanges / 10);
-  bonus.health = 0;
-  bonus.defense = 0;
-  bonus.strength = 0;
-
-  for (let i = 0; i < fairyExchanges; i++) {
-    bonus.health += 3 + Math.floor(i / 2);
-    bonus.defense += (i + 1) % 5 == 0 ? 2 : 1;
-    bonus.strength += (i + 1) % 5 == 0 ? 2 : 1;
   }
 
   return bonus;

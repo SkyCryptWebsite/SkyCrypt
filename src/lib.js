@@ -2165,6 +2165,7 @@ export async function getStats(
   const misc = {};
 
   output.perks = userProfile.perks || {};
+  output.harp_quest = userProfile.harp_quest || {};
   misc.milestones = {};
   misc.objectives = {};
   misc.races = {};
@@ -3462,6 +3463,12 @@ function getHotmItems(userProfile, packs) {
         display: {
           Name: node.displayName,
           Lore: node.lore,
+        },
+        ExtraAttributes: {
+          id: node.id,
+          enabled: node.enabled,
+          level: node.level,
+          max_level: node.max_level,
         },
       },
       position: node.position7x9,

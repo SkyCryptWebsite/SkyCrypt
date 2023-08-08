@@ -75,7 +75,21 @@ type StatName =
   | "mining_fortune"
   | "farming_fortune"
   | "foraging_fortune"
-  | "pristine";
+  | "pristine"
+  | "fishing_speed"
+  | "health_regen"
+  | "vitality"
+  | "mending"
+  | "combat_wisdom"
+  | "mining_wisdom"
+  | "farming_wisdom"
+  | "foraging_wisdom"
+  | "fishing_wisdom"
+  | "enchanting_wisdom"
+  | "alchemy_wisdom"
+  | "carpentry_wisdom"
+  | "runecrafting_wisdom"
+  | "social_wisdom";
 
 interface DisplayItem {
   display_name: string;
@@ -493,6 +507,20 @@ declare const calculated: SkyCryptPlayer & {
       most_winter_magma_damage_dealt: number;
       most_winter_snowballs_hit: number;
     };
+    effects: {
+      active: {
+        effect: string;
+        level: number;
+        modifiers: {
+          key: string;
+          amp: number;
+        }[];
+        ticks_remaining: number;
+        infinite: boolean;
+      }[];
+      inactive: string[];
+      disabled: string[];
+    };
   };
   missingPets: PetBase[];
   missingAccessories: {
@@ -573,6 +601,19 @@ declare const calculated: SkyCryptPlayer & {
   }[];
   reaper_peppers_eaten: number;
   skyblock_level: Level;
+  bestiary: {
+    categories: BestiaryCategory[];
+    tiersUnlocked: number;
+    totalTiers: number;
+    milestone: number;
+    maxMilestone: number;
+  };
+  harp_quest: {
+    [key: string]: number;
+  };
+  perks: {
+    [key: string]: number;
+  };
 };
 
 interface SkyCryptRelativeTime {
@@ -685,7 +726,13 @@ type BonusType =
   | "slayer_spider"
   | "slayer_wolf"
   | "slayer_enderman"
-  | "slayer_blaze";
+  | "slayer_blaze"
+  | "HOTM_perk_mining_speed"
+  | "HOTM_perk_mining_speed_2"
+  | "HOTM_perk_mining_fortune"
+  | "HOTM_perk_mining_fortune_2"
+  | "HOTM_perk_mining_madness"
+  | "HOTM_perk_mining_experience";
 
 type StatsBonus = {
   [key in BonusType]: StatBonusType;
@@ -696,3 +743,70 @@ interface StatBonusType {
     [key in StatName]?: number;
   };
 }
+
+interface BestiaryCategory {
+  name: string;
+  texture: string;
+  mobs: BestiaryMob[];
+  mobsUnlocked: number;
+  mobsMaxed: number;
+}
+
+interface BestiaryMob {
+  name: string;
+  texture: string;
+  kills: number;
+  nextTierKills: number;
+  maxKills: number;
+  tier: number;
+  maxTier: number;
+}
+
+type HarpQuestSongs =
+  | "song_hymn_joy_best_completion"
+  | "song_frere_jacques_best_completion"
+  | "song_amazing_grace_best_completion"
+  | "song_brahms_best_completion"
+  | "song_happy_birthday_best_completion"
+  | "song_greensleeves_best_completion"
+  | "song_jeopardy_best_completion"
+  | "song_minuet_best_completion"
+  | "song_joy_world_best_completion"
+  | "song_pure_imagination_best_completion"
+  | "song_vie_en_rose_best_completion"
+  | "song_fire_and_flames_best_completion"
+  | "song_pachelbel_best_completion";
+
+type PotionEffectIDs =
+  | "true_defense"
+  | "strength"
+  | "regeneration"
+  | "enchanting_xp_boost"
+  | "stun"
+  | "experience"
+  | "rabbit"
+  | "magic_find"
+  | "water_breathing"
+  | "combat_xp_boost"
+  | "fire_resistance"
+  | "jump_boost"
+  | "resistance"
+  | "fishing_xp_boost"
+  | "agility"
+  | "archery"
+  | "critical"
+  | "speed"
+  | "farming_xp_boost"
+  | "adrenaline"
+  | "spelunker"
+  | "dodge"
+  | "spirit"
+  | "pet_luck"
+  | "mining_xp_boost"
+  | "haste"
+  | "burning"
+  | "mana"
+  | "foraging_xp_boost"
+  | "alchemy_xp_boost"
+  | "jerry_candy"
+  | "night_vision";

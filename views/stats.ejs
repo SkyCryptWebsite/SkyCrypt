@@ -3034,22 +3034,22 @@ const metaDescription = getMetaDescription()
             <span>Potions</span>
           </div>
           <% 
-              let effects_tooltips = [];
-              for (const key of Object.keys(calculated.misc.effects).sort()) {
-                effects_tooltips[key] ??= [];
-                for (let potion of calculated.misc.effects[key]) {
-                  if (key === "active") {
-                    if (potion?.effect === undefined || potion?.level === null) continue;
-                    effects_tooltips[key].push(`<span class="stat-value">${constants.POTION_EFFECTS[potion.effect]?.[potion.level].name.replace('Potion', '') || potion.effect.split('_').map((effect) => helper.capitalizeFirstLetter(effect.toLowerCase())).join(' ')}</span><br>`)
+          const effects_tooltips = [];
+          for (const type in calculated.misc.effects) {
+            effects_tooltips[type] ??= [];
+            for (const potion of calculated.misc.effects[type]) {
+              if (type === "active") {
+                const potionName = constants.POTION_EFFECTS[potion.effect].name ?? _.startCase(potion.effect.split('_').join(' '));
 
-                  } else {
-                    potion = potion?.effect || potion
+                effects_tooltips[type].push(`<span class="stat-value">${potionName}</span><br>`)
+              } else {
+                const potionName = _.startCase((potion?.effect ?? potion).split('_').join(' '));
 
-                    effects_tooltips[key].push(`<span class="stat-value">${potion.split('_').map((effect) => helper.capitalizeFirstLetter(effect.toLowerCase())).join(' ')}</span><br>`);
-                  }
-                }
+                effects_tooltips[type].push(`<span class="stat-value">${potionName}</span><br>`);
               }
-              %>
+            }
+          }
+          %>
           <p class="stat-raw-values">
             <span <%- effects_tooltips['active'] ? `data-tippy-content='<span class="stat-name">Active Potion Effects: :</span><br>${effects_tooltips['active'].join("")}'` : "" %>>
               <span class="stat-name">Active Potion Effects: </span><span class="stat-value"><%= calculated.misc.effects.active.length %></span>
