@@ -881,6 +881,12 @@ const SKINS = [
     source: "firesale",
     release: new Date("2023-07-29 18:00:00 GMT+1").getTime(),
   },
+    id: "PET_SKIN_PARROT_BUCCANEER",
+    name: "Buccaneer",
+    texture: "/head/385de4d50ab148f68fa377cdd760f9d23f20d503b3e1c1ad74120029ccdc7299",
+    source: "firesale",
+    release: new Date("2023-07-15 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*

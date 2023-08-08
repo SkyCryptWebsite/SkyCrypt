@@ -64,3 +64,5 @@ export const RIFT_TIMECHARMS = [
 ];
 
 export const RIFT_ENIGMA_SOULS = 42;
+
+export const MAX_GRUBBER_STACKS = 5;
