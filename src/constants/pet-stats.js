@@ -1133,7 +1133,9 @@ class Enderman extends Pet {
     const mult = getValue(this.rarity, { mythic: 0.4 });
     return {
       name: "§6Enderman Slayer",
-      desc: [`§7Grants §a${round(this.level * mult, 1)}% §3${SYMBOLS.combat_wisdom} Combat Wisdom §7against §aEndermen§7.`],
+      desc: [
+        `§7Grants §a${round(this.level * mult, 1)}% §3${SYMBOLS.combat_wisdom} Combat Wisdom §7against §aEndermen§7.`,
+      ],
     };
   }
 }
