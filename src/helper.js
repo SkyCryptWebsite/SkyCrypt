@@ -1086,6 +1086,11 @@ export function getMagicalPower(rarity, id = null) {
     if (id === "HEGEMONY_ARTIFACT") {
       return 2 * (MAGICAL_POWER[rarity] ?? 0);
     }
+
+    // Rift Prism grants 11 MP
+    if (id === "RIFT_PRISM") {
+      return 11;
+    }
   }
 
   return MAGICAL_POWER[rarity] ?? 0;

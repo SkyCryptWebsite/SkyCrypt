@@ -1736,7 +1736,7 @@ export async function getStats(
           helper.addToItemLore(
             item,
             `§7Price: §6${Math.round(price).toLocaleString()} Coins §7(§6${helper.formatNumber(
-              Math.floor(price / helper.getMagicalPower(item.rarity, item.name))
+              Math.floor(price / helper.getMagicalPower(item.rarity, item.id))
             )} §7per MP)`
           );
         }
