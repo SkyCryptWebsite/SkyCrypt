@@ -36,6 +36,7 @@ import {
 } from "./constants.js";
 
 import credentials from "./credentials.js";
+export { owoifyMessage } from "./constants/owo/index.js";
 
 const hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",

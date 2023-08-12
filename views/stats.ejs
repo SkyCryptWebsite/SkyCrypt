@@ -349,15 +349,15 @@ function itemIcon(item, classes) {
 }
 
 function jerriefy(rank) {
-  if (extra.isFoolsDay) {
-    rank = rank.replace("VIP", "JER");
-    rank = rank.replace("MVP", "JRY");
-    rank = rank.replace("HELPER", "JERRY");
-    rank = rank.replace("MOD", "JERRY");
-    rank = rank.replace("PIG", "JERRY");
-    rank = rank.replace("ADMIN", "SR JERRY");
-    rank = rank.replace("YOUTUBE", "YERRY");
-  }
+  //if (extra.isFoolsDay) {
+    rank = rank.replace("VIP", "VwV");
+    rank = rank.replace("MVP", "MwP");
+    rank = rank.replace("HELPER", "HEWPER");
+    rank = rank.replace("MOD", "MOWD");
+    rank = rank.replace("PIG", "PWIG");
+    rank = rank.replace("ADMIN", "AWDMIN");
+    rank = rank.replace("YOUTUBE", "YOWUTUBE");
+  //}
   return rank;
 }
 
@@ -650,10 +650,10 @@ const metaDescription = getMetaDescription()
 <head>
   <title><%= calculated.display_name %><% if(calculated.display_emoji){ %> <%= calculated.display_emoji %><% } %> | SkyCrypt</title>
   <meta name="description" content="<%= metaDescription %>">
-  <link rel="icon" href="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
+  <link rel="icon" href="https://crafatar.com/avatars/6f073c24176b408a8605116518e7c0ca?size=32&overlay" sizes="32x32" type="image/png">
   <meta property="og:type" content="profile">
   <meta property="og:title" content="<%= metaTitle %>">
-  <meta property="og:image" content="https://crafatar.com/avatars/<%= calculated.uuid %>?size=512&overlay">
+  <meta property="og:image" content="https://crafatar.com/avatars/6f073c24176b408a8605116518e7c0ca?size=512&overlay">
   <meta property="og:description" content="<%= description %>">
   <meta property="og:profile:username" content="<%= calculated.display_name %>">
   <meta name="twitter:card" content="summary">
@@ -701,10 +701,10 @@ const metaDescription = getMetaDescription()
       </p>
     </figure>
     <% } %>
-    <div id="player_profile"><span class="text-stats-for">Stats for</span>
+    <div id="player_profile"><span class="text-stats-for">Stwats fow</span>
       <span tabindex="0" id="stats_for_player">
         <%- jerriefy(calculated.rank_prefix) %>
-        <%= calculated.display_name %>
+        <%= helper.owoifyMessage(calculated.display_name) %>
         <% if(calculated.display_emoji_img){ %>
         <img class="emoji" draggable="false" src="<%= calculated.display_emoji_img %>">
         <% }else if(calculated.display_emoji){ %>
@@ -714,7 +714,7 @@ const metaDescription = getMetaDescription()
           <% calculated.members.forEach(member => { %>
           <li>
             <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>">
-              <%= member.display_name %>
+              <%= helper.owoifyMessage(member.display_name) %>
               <% if(member.emojiImg){ %>
               <img class="emoji" draggable="false" src="<%= member.emojiImg %>">
               <% }else if(member.emoji){ %>
@@ -727,7 +727,7 @@ const metaDescription = getMetaDescription()
       </span>
       <span class="text-on"> on </span>
       <span tabindex="0" id="stats_for_profile">
-        <%= calculated.profile.cute_name %>
+        <%= helper.owoifyMessage(calculated.profile.cute_name) %>
         <% if (calculated.profile.game_mode == 'ironman') { %>
         <img src="/resources/img/icons/ironman.png" class="emoji" alt="ironman">
         <% } %>
@@ -742,7 +742,7 @@ const metaDescription = getMetaDescription()
           <% let _profile = calculated.profiles[profile_id]; %>
           <li>
             <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>">
-              <%= _profile.cute_name %>
+              <%= helper.owoifyMessage(_profile.cute_name) %>
               <% if (_profile.game_mode == 'ironman') { %>
               <img src="/resources/img/icons/ironman.png" class="emoji">
               <% } %>
@@ -771,8 +771,8 @@ const metaDescription = getMetaDescription()
         <% if(calculated.guild.tag){ %><span class='stat-name'>Tag: </span><span class='stat-value'><%- helper.renderLore('§f'+calculated.guild.tag) %></span><br><% } %>
         <% if(calculated.guild.members){ %><span class='stat-name'>Members: </span><span class='stat-value'><%= calculated.guild.members %></span><br><% } %>
         <% if(calculated.guild.level){ %><span class='stat-name'>Level: </span><span class='stat-value'><%= calculated.guild.level %></span><br><% } %>
-        ">Guild: <%= calculated.guild.name %></button><% } %>
-        <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">Plancke</a>
+        ">Guild: <%= helper.owoifyMessage(calculated.guild.name) %></button><% } %>
+        <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link"><%= helper.owoifyMessage("Plancke") %></a>
         <div id="additional_socials">
           <button data-copy-text="<%= calculated.uuid %>" class="copy-text additional-player-stat">Copy UUID</button>
           <% if('DISCORD' in calculated.social){ %><button data-copy-text="<%= calculated.social.DISCORD %>" class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></button><% } %>
@@ -1482,7 +1482,7 @@ const metaDescription = getMetaDescription()
               <div class="category-icon">
                 <div class="item-icon icon-274_0"></div>
               </div>
-              <span>mining</span>
+              <span class="category-name">mining</span>
             </div>
 
             <% const mining = calculated.mining; %>
@@ -1664,7 +1664,7 @@ const metaDescription = getMetaDescription()
               <div class="category-icon" onclick="window.open('https://www.youtube.com/watch?v=pZaY1jV96jI')">
                 <div class="item-icon icon-294_0"></div>
               </div>
-              <span>farming</span>
+              <span class="category-name">farming</span>
             </div>
 
             <p class="stat-raw-values">
@@ -1776,7 +1776,7 @@ const metaDescription = getMetaDescription()
               <div class="category-icon">
                 <div class="item-icon icon-346_0"></div>
               </div>
-              <span>fishing</span>
+              <span class="category-name">fishing</span>
             </div>
 
             <%
@@ -1846,7 +1846,7 @@ const metaDescription = getMetaDescription()
                 if(creature?.amount > 0 ) {
                   %>
               <div class="sea-creature">
-                <div class="sea-creature-name"><span><%= creature.entityName %></span></div>
+                <div class="sea-creature-name"><span class="narrow-info-name"><%= creature.entityName %></span></div>
                 <div class="sea-creature-image" style="background-image: url(/resources/img/sea_creatures/<%= creature.entityId %>.webp)"></div>
                 <div class="sea-creature-kills"><span class="stat-value"><%= creature.amount.toLocaleString() %></span><span class="stat-name"> Kill<%= creature.amount != 1 ? 's' : '' %></span></div>
               </div>
@@ -1918,7 +1918,7 @@ const metaDescription = getMetaDescription()
               <div class="category-icon">
                 <div class="item-icon icon-116_0"></div>
               </div>
-              <span>enchanting</span>
+              <span class="category-name">enchanting</span>
             </div>
 
             <% const enchanting = calculated.enchanting; %>
@@ -1928,7 +1928,7 @@ const metaDescription = getMetaDescription()
             const game_data = enchanting.experiments[game]; %>
               <div class="narrow-info-container">
                 <div class="narrow-info-header">
-                  <span><%= game_data.name %></span>
+                  <span class="narrow-info-name"><%= game_data.name %></span>
                 </div>
                 <span>
                   <p class="stat-raw-values">
@@ -2040,7 +2040,7 @@ const metaDescription = getMetaDescription()
             <div class="narrow-info-container">
               <div class="narrow-info-header">
                 <div class="floor-icon" style="background-image: url(/head/<%= floor.icon_texture %>)"></div>
-                <span><%= floor.name.replace("_", " ") %></span>
+                <span class="narrow-info-name"><%= floor.name.replace("_", " ") %></span>
               </div>
               <span>
                 <button class="stat-sub-header extender" aria-controls="floor-<%= id %>" aria-expanded="false">Floor Stats</button>
@@ -2255,7 +2255,7 @@ const metaDescription = getMetaDescription()
             <div class="narrow-info-container slayer">
               <div class="narrow-info-header">
                 <div class="floor-icon" style="background-image: url(<%= slayerInfo[slayerName].head %>)"></div>
-                <span> <%= slayerInfo[slayerName].boss %> </span>
+                <span class="narrow-info-name"> <%= slayerInfo[slayerName].boss %> </span>
               </div>
 
               <div class="slayer-kills">
@@ -2345,7 +2345,7 @@ const metaDescription = getMetaDescription()
             <div class="category-icon">
               <div class="item-icon <%= skillItems[type] %>"></div>
             </div>
-            <span><%= type %></span>
+            <span class="category-name"><%= type %></span>
 
             <% if(uniqueMinionsType[type] >= minionsType[type]){ %>
             <span class="category-header-maxed">max!</span>
@@ -2415,7 +2415,7 @@ const metaDescription = getMetaDescription()
           <% for(const island of Object.keys(calculated.bestiary.categories)) { %>
           <div class="category-header">
             <div class="floor-icon" style="background-image: url(<%= bestiary[island].head %>)"></div>
-            <span><%= bestiary[island].name %></span>
+            <span class="category-name"><%= bestiary[island].name %></span>
             <% if (mBestiaryOnIsland[island]) {%>
             <span class="category-header-maxed">max!</span>
             <%} else {%>
@@ -2482,7 +2482,7 @@ const metaDescription = getMetaDescription()
             <div class="category-icon">
               <div class="item-icon <%= skillItems[type] %>"></div>
             </div>
-            <span><%= type %></span>
+            <span class="category-name"><%= type %></span>
             <% if(maxOfType >= totalOfType){ %>
             <span class="category-header-maxed">max!</span>
             <% }else{ %>
@@ -2670,7 +2670,7 @@ const metaDescription = getMetaDescription()
             <div class="category-icon">
               <div class="item-icon custom-icon" style="background-image: url(/head/1e5574a4ef94ef4ca300d02f644d98be07dbfba7df78808e8a9a021b067d996d)"></div>
             </div>
-            <span>Essence</span>
+            <span class="category-name">Essence</span>
           </div>
           <div class="collections">
             <% for (const [key, value] of Object.entries(calculated.essence)) { %>
@@ -2721,7 +2721,7 @@ const metaDescription = getMetaDescription()
           <div class="category-header">
             <div class="category-icon">
               <div class="item-icon icon-267_0"></div>
-            </div><span>kills</span>
+            </div><span class="category-name">kills</span>
           </div>
           <p class="stat-raw-values stat-kills">
             <span class="stat-name">Total Kills: </span><span class="stat-value"><%= calculated.kills.map(a => a.amount).reduce((a, b) => a + b, 0).toLocaleString() %></span><br>
@@ -2786,7 +2786,7 @@ const metaDescription = getMetaDescription()
           <div class="category-header">
             <div class="category-icon">
               <div class="item-icon icon-317_0"></div>
-            </div><span>races</span>
+            </div><span class="category-name">races</span>
           </div>
 
           <div class="race-containers narrow-info-container-wrapper">
@@ -2904,7 +2904,7 @@ const metaDescription = getMetaDescription()
           <div class="category-header">
             <div class="category-icon">
               <div class="item-icon custom-icon" style="background-image: url(/head/b73a2114136b8ee4926caa51785414036a2b76e4f1668cb89d99716c421)"></div>
-            </div><span>Gifts</span>
+            </div><span class="category-name">Gifts</span>
           </div>
           <p class="stat-raw-values">
             <% for(const key in calculated.misc.gifts){ %>
@@ -2916,7 +2916,7 @@ const metaDescription = getMetaDescription()
           <div class="category-header">
             <div class="category-icon">
               <div class="item-icon icon-332_0"></div>
-            </div><span>Season of jerry</span>
+            </div><span class="category-name">Season of jerry</span>
           </div>
           <p class="stat-raw-values">
             <% for(const key in calculated.misc.winter){ %>
@@ -2928,7 +2928,7 @@ const metaDescription = getMetaDescription()
           <div class="category-header">
             <div class="category-icon">
               <div class="item-icon custom-icon" style="background-image: url(/head/aec3ff563290b13ff3bcc36898af7eaa988b6cc18dc254147f58374afe9b21b9)"></div>
-            </div><span>Dragons</span>
+            </div><span class="category-name">Dragons</span>
           </div>
           <p class="stat-raw-values">
             <% for(const key in calculated.misc.dragons){
@@ -2950,7 +2950,7 @@ const metaDescription = getMetaDescription()
           <div class="category-header">
             <div class="category-icon">
               <div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/89091d79ea0f59ef7ef94d7bba6e5f17f2f7d4572c44f90f76c4819a714)"></div>
-            </div><span>Endstone protectors</span>
+            </div><span class="category-name">Endstone protectors</span>
           </div>
           <p class="stat-raw-values">
             <% for(const key in calculated.misc.protector){ %>
@@ -2962,7 +2962,7 @@ const metaDescription = getMetaDescription()
           <div class="category-header">
             <div class="category-icon">
               <div class="item-icon icon-267_0"></div>
-            </div><span>Damage</span>
+            </div><span class="category-name">Damage</span>
           </div>
           <p class="stat-raw-values">
             <% for(const key in calculated.misc.damage){ %>
@@ -2975,7 +2975,7 @@ const metaDescription = getMetaDescription()
           <div class="category-header">
             <div class="category-icon">
               <div class="item-icon custom-icon" style="background-image: url(/head/93c8aa3fde295fa9f9c27f734bdbab11d33a2e43e855accd7465352377413b)"></div>
-            </div><span>Pet milestones</span>
+            </div><span class="category-name">Pet milestones</span>
           </div>
           <p class="stat-raw-values">
             <% for(const key in calculated.misc.milestones){
@@ -3011,7 +3011,7 @@ const metaDescription = getMetaDescription()
           <div class="category-header">
             <div class="category-icon">
               <div class="item-icon custom-icon" style="background-image: url(/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8)"></div>
-            </div><span>Griffin burrows</span>
+            </div><span class="category-name">Griffin burrows</span>
           </div>
           <p class="stat-raw-values">
             <%  let burrow_naming = {"dug_next": "dug_arrows", "dug_combat": "dug_monsters"}
@@ -3034,7 +3034,7 @@ const metaDescription = getMetaDescription()
             <div class="category-icon">
               <div class="item-icon custom-icon" style="background-image: url(/head/60226d4c1d30fbebecae939da900603e4cd0fed8592a1bb3e11f9ac92391a45a)"></div>
             </div>
-            <span>Potions</span>
+            <span class="category-name">Potions</span>
           </div>
           <% 
               let effects_tooltips = [];
@@ -3073,7 +3073,7 @@ const metaDescription = getMetaDescription()
           <div class="category-header">
             <div class="category-icon">
               <div class="item-icon icon-154_0"></div>
-            </div><span>Profile upgrades</span>
+            </div><span class="category-name">Profile upgrades</span>
           </div>
           <p class="stat-raw-values">
             <% for(const upgrade in constants.PROFILE_UPGRADES){ %>
@@ -3085,7 +3085,7 @@ const metaDescription = getMetaDescription()
           <div class=" category-header">
             <div class="category-icon">
               <div class="item-icon icon-266_0"></div>
-            </div><span>Auctions sold</span>
+            </div><span class="category-name">Auctions sold</span>
           </div>
           <p class="stat-raw-values">
             <% for(const key in calculated.misc.auctions_sell){
@@ -3103,7 +3103,7 @@ const metaDescription = getMetaDescription()
           <div class="category-header">
             <div class="category-icon">
               <div class="item-icon icon-264_0"></div>
-            </div><span>Auctions bought</span>
+            </div><span class="category-name">Auctions bought</span>
           </div>
           <p class="stat-raw-values">
             <% for(const key in calculated.misc.auctions_buy){
@@ -3122,7 +3122,7 @@ const metaDescription = getMetaDescription()
           <div class="category-header">
             <div class="category-icon">
               <div class="item-icon icon-339_0"></div>
-            </div><span>Claimed items</span>
+            </div><span class="category-name">Claimed items</span>
           </div>
           <p class="stat-raw-values">
             <% for(const key in calculated.misc.claimed_items){
@@ -3138,7 +3138,7 @@ const metaDescription = getMetaDescription()
           <div class="category-header">
             <div class="category-icon">
               <div class="item-icon icon-421_0"></div>
-            </div><span>Uncategorized</span>
+            </div><span class="category-name">Uncategorized</span>
           </div>
           <p class="stat-raw-values">
             <% for (const [key, value] of Object.entries(calculated.misc.uncategorized)) { %>

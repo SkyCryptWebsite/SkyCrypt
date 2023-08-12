@@ -2,6 +2,7 @@ import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { until } from "lit/directives/until.js";
 import { loadTheme, getTheme } from "../themes";
+import { owoifyMessage } from "../../../../src/constants/owo";
 
 const themeURLs = [
   "default",
@@ -12,6 +13,7 @@ const themeURLs = [
   "draconic",
   "burning-cinnabar",
   "candycane",
+  "owo",
 ].map((name) => `/resources/themes/${name}.json`);
 
 themeURLs.push(...JSON.parse(localStorage.getItem("customThemeUrls") ?? "[]"));
@@ -36,8 +38,8 @@ export class ThemeList extends LitElement {
       return html`
         <label class="list-item" @change="${() => this.select(url)}">
           <img class="icon" src="${icon}" alt="" />
-          <span class="name">${theme.name}</span>
-          <div class="author">by <span>${theme.author}</span></div>
+          <span class="name">${owoifyMessage(theme.name)}</span>
+          <div class="author">by <span>${owoifyMessage(theme.author)}</span></div>
           <input type="radio" name="theme" value="${url}" ?checked="${this.selected == url}" />
         </label>
       `;

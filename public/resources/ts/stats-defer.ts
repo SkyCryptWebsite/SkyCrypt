@@ -6,6 +6,8 @@ import { renderLore } from "../../../common/formatting.js";
 
 import { getPlayerStats } from "./calculate-player-stats";
 
+import { owoifyMessage } from "../../../src/constants/owo/index.js";
+
 import("./elements/inventory-view");
 
 const favoriteElement = document.querySelector(".favorite") as HTMLButtonElement;
@@ -48,7 +50,7 @@ if (calculated.skin_data) {
     width: playerModel.offsetWidth,
     height: playerModel.offsetHeight,
     model: calculated.skin_data.model,
-    skin: "/texture/" + calculated.skin_data.skinurl.split("/").pop(),
+    skin: "/texture/d3fc6e5e14b3523466b895132e6cf6dc43e3a4dda712ebc6b9c572eac05ce251",
     cape:
       calculated.skin_data.capeurl != undefined
         ? "/texture/" + calculated.skin_data.capeurl.split("/").pop()
@@ -258,11 +260,11 @@ function fillLore(element: HTMLElement) {
   const itemNameHtml = renderLore((item as Item).tag?.display?.Name ?? item.display_name ?? "???");
   const isMulticolor = (itemNameHtml.match(/<\/span>/g) || []).length > 1;
   itemNameContent.dataset.multicolor = String(isMulticolor);
-  itemNameContent.innerHTML = isMulticolor ? itemNameHtml : item.display_name ?? "???";
+  itemNameContent.innerHTML = owoifyMessage(isMulticolor ? itemNameHtml : item.display_name ?? "???");
 
   if (element.hasAttribute("data-pet-index")) {
     itemNameContent.dataset.multicolor = "false";
-    itemNameContent.innerHTML = `[Lvl ${(item as Pet).level.level}] ${item.display_name}`;
+    itemNameContent.innerHTML = owoifyMessage(`[Lvl ${(item as Pet).level.level}] ${item.display_name}`);
   }
 
   if (item.texture_path) {
@@ -285,7 +287,7 @@ function fillLore(element: HTMLElement) {
     itemLore.innerHTML = item.lore;
   } else if ("tag" in item && Array.isArray(item.tag.display?.Lore)) {
     itemLore.innerHTML = item.tag.display.Lore.map(
-      (line: string) => '<span class="lore-row">' + renderLore(line) + "</span>"
+      (line: string) => '<span class="lore-row">' + renderLore(owoifyMessage(line)) + "</span>"
     ).join("");
   } else {
     itemLore.innerHTML = "";
@@ -920,3 +922,48 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
     element.appendChild(node);
   });
 }
+
+tippy("*[data-tippy-content]:not(.interactive-tooltip)", {
+  trigger: "mouseenter click",
+});
+
+const statNameElements = document.querySelectorAll(".stat-name");
+statNameElements.forEach((element) => {
+  element.textContent = owoifyMessage(element.textContent);
+});
+
+const statValueElements = document.querySelectorAll(".stat-value");
+statValueElements.forEach((element) => {
+  element.textContent = owoifyMessage(element.textContent);
+});
+
+const statSubHeaderElements = document.querySelectorAll(".stat-sub-header");
+statSubHeaderElements.forEach((element) => {
+  element.textContent = owoifyMessage(element.textContent);
+});
+
+const narrowInfoHeaderElements = document.querySelectorAll(".narrow-info-name");
+narrowInfoHeaderElements.forEach((element) => {
+  element.textContent = owoifyMessage(element.textContent);
+});
+
+const statHeaderElements = document.querySelectorAll(".stat-header");
+statHeaderElements.forEach((element) => {
+  element.textContent = owoifyMessage(element.textContent);
+});
+
+const inventoryTabNameElements = document.querySelectorAll(".inventory-tab-name");
+inventoryTabNameElements.forEach((element) => {
+  element.textContent = owoifyMessage(element.textContent);
+});
+
+const categoryNameElements = document.querySelectorAll(".category-name");
+categoryNameElements.forEach((element) => {
+  element.textContent = owoifyMessage(element.textContent);
+});
+
+// nav-item"
+const navItemElements = document.querySelectorAll(".nav-item");
+navItemElements.forEach((element) => {
+  element.textContent = owoifyMessage(element.textContent);
+});

@@ -20,6 +20,7 @@ import { redisClient } from "./redis.js";
 import { calculateLilyWeight } from "./weight/lily-weight.js";
 import { calculateSenitherWeight } from "./weight/senither-weight.js";
 import { calculateFarmingWeight } from "./weight/farming-weight.js";
+import { owoifyMessage } from "./constants/owo/index.js";
 
 const mcData = minecraftData("1.8.9");
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -592,7 +593,7 @@ async function processItems(base64, source, customTextures = false, packs, cache
     }
 
     // Lore stuff
-    const itemLore = item?.tag?.display?.Lore ?? [];
+    let itemLore = item?.tag?.display?.Lore ?? [];
     const lore_raw = [...itemLore];
 
     const lore = lore_raw != null ? lore_raw.map((a) => (a = helper.getRawLore(a))) : [];
