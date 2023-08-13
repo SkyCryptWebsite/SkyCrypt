@@ -3141,6 +3141,10 @@ function getRift(userProfile) {
       montezuma: rift?.dead_cats?.montezuma ?? {},
       found_cats: rift?.dead_cats?.found_cats ?? [],
     },
+    castle: {
+      grubber_stacks: rift.castle?.grubber_stacks ?? 0,
+      max_burgers: constants.MAX_GRUBBER_STACKS,
+    },
   };
 }
 
