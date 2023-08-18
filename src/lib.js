@@ -193,7 +193,7 @@ export function getLevelByXp(xp, extra = {}) {
   const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
   /** the fraction of the way toward the next level */
-  const progress = level >= levelCap ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+  const progress = level >= levelCap ? (extra.ignoreCap ? 1 : 0) : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
   const levelWithProgress = level + progress;
@@ -382,9 +382,12 @@ async function processItems(base64, source, customTextures = false, packs, cache
 
           if (itemData.id >= 298 && itemData.id <= 301) {
             const type = ["helmet", "chestplate", "leggings", "boots"][itemData.id - 298];
-            const color = helper.RGBtoHex(hypixelItem.color) ?? "955e3b";
 
-            itemData.texture_path = `/leather/${type}/${color}`;
+            if (hypixelItem?.color !== undefined) {
+              const color = helper.RGBtoHex(hypixelItem.color) ?? "955e3b";
+
+              itemData.texture_path = `/leather/${type}/${color}`;
+            }
           }
 
           if (hypixelItem === null) {
@@ -1813,7 +1816,7 @@ export async function getStats(
 
   const memberUuids = [];
   for (const [uuid, memberProfile] of Object.entries(profile?.members ?? {})) {
-    if (memberProfile?.coop_invitation?.confirmed === false) {
+    if (memberProfile?.coop_invitation?.confirmed === false || memberProfile.deletion_notice?.timestamp !== undefined) {
       continue;
     }
 
@@ -2459,6 +2462,11 @@ export async function getStats(
   }
   userProfile.pets.push(...items.pets);
 
+  if (userProfile.rift?.dead_cats?.montezuma !== undefined) {
+    userProfile.pets.push(userProfile.rift.dead_cats.montezuma);
+    userProfile.pets.at(-1).active = false;
+  }
+
   for (const pet of userProfile.pets) {
     await getItemNetworth(pet, { cache: true, returnItemData: false });
   }
@@ -2817,7 +2825,7 @@ async function getMissingPets(pets, gameMode, userProfile) {
     profile.pets.push(pets[0]);
   }
 
-  profile.objectives = userProfile.objectives;
+  profile.rift = userProfile.rift;
   profile.collections = userProfile.collections;
 
   return await getPets(profile);
@@ -3131,6 +3139,10 @@ function getRift(userProfile) {
     timecharms: {
       timecharms: timecharms,
       obtained_timecharms: timecharms.filter((a) => a.unlocked).length,
+    },
+    dead_cats: {
+      montezuma: rift?.dead_cats?.montezuma ?? {},
+      found_cats: rift?.dead_cats?.found_cats ?? [],
     },
     castle: {
       grubber_stacks: rift.castle?.grubber_stacks ?? 0,

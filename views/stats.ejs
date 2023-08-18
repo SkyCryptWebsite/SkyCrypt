@@ -1668,9 +1668,9 @@ const metaDescription = getMetaDescription()
             </div>
 
             <p class="stat-raw-values">
-              <span data-tippy-content="
+              <span class="interactive-tooltip" data-tippy-content="
                 <span class='stat-name'>Farming Weight</span><br>
-                <span class='stat-info'>Weight calculations by Elite</span>
+                <span class='stat-info'>Weight calculations by <a href='https://elitebot.dev' target='_blank' rel='noreferrer'>Elite</a></span>
                 <br/><br/>
                 <% for (const crop of Object.values(calculated.weight.farming.crops).sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))) { %>
                   <% if (crop.weight > 0) { %>
@@ -1682,8 +1682,7 @@ const metaDescription = getMetaDescription()
                 <span class='stat-name'>Total: </span>
                 <span class='stat-value'><%= parseFloat(calculated.weight.farming.crop_weight.toFixed(2)).toLocaleString() %></span>">
                 <span class="stat-name">Farming Weight: </span>
-                <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span>
-              </span><br>
+                <span class="stat-value"><%= calculated.weight.farming.weight.toFixed(2).toLocaleString() %></span></span><br>
               <span class="stat-name">Pelts: </span><span class="stat-value"><%= calculated.farming.pelts.toLocaleString() %></span><br>
               <% const farming = calculated.farming;
               if (farming.talked && farming.contests.attended_contests > 0) {%>

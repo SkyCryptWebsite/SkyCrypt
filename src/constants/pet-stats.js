@@ -1130,10 +1130,10 @@ class Enderman extends Pet {
   }
 
   get fourth() {
-    const mult = getValue(this.rarity, { mythic: 0.4 });
+    const mult = getValue(this.rarity, { mythic: 0.004 });
     return {
       name: "§6Enderman Slayer",
-      desc: [`§7Grants §a${round(this.level * mult, 1)}% §3${SYMBOLS.wisdom} Combat Wisdom §7against §aEndermen§7.`],
+      desc: [`§7Grants §b${round(1 + this.level * mult, 1)}x §7Combat XP against §aEndermen§7.`],
     };
   }
 }
@@ -2345,15 +2345,10 @@ class Monkey extends Pet {
 
 class Montezuma extends Pet {
   get stats() {
-    const riftSouls =
-      "objectives" in (this.profile ?? {})
-        ? Object.entries(this.profile.objectives).find(
-            ([key, value]) => key.startsWith("rift_") && key.endsWith("_soul") && value.status === "COMPLETE"
-          )?.length ?? 0
-        : 0;
+    const riftSouls = (this.profile?.rift?.dead_cats?.found_cats ?? []).length;
 
     return {
-      rift_time: riftSouls * 15,
+      rift_time: 10 + riftSouls * 15,
       mana_regen: riftSouls * 2,
     };
   }
@@ -3156,12 +3151,11 @@ class Wisp extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { uncommon: 0.3, rare: 0.4, epic: 0.45, legendary: 0.5 });
-    const prc = round(this.level * mult, 1);
+    const mult = getValue(this.rarity, { uncommon: 0.004 });
 
     return {
       name: "§6Blaze Slayer",
-      desc: [`§7Grants §a+${prc}% §3${SYMBOLS.wisdom} Combat Wisdom §7from §aBlazes§7.`],
+      desc: [`§7Grants §b${round(1 + this.level * mult, 1)}x §7Combat XP against §aBlazes§7.`],
     };
   }
 
@@ -3521,7 +3515,7 @@ export const PET_STATS = {
   MEGALODON: Megalodon,
   MITHRIL_GOLEM: MithrilGolem,
   MONKEY: Monkey,
-  MONTEZUMA: Montezuma,
+  FRACTURED_MONTEZUMA_SOUL: Montezuma,
   MOOSHROOM_COW: MooshroomCow,
   OCELOT: Ocelot,
   PARROT: Parrot,
