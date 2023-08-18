@@ -1815,7 +1815,7 @@ export async function getStats(
   const userInfo = await db.collection("usernames").findOne({ uuid: profile.uuid });
 
   const memberUuids = [];
-  for (const [uuid, memberProfile] of Object.entries(profile.members)) {
+  for (const [uuid, memberProfile] of Object.entries(profile?.members ?? {})) {
     if (memberProfile?.coop_invitation?.confirmed === false || memberProfile.deletion_notice?.timestamp !== undefined) {
       continue;
     }
