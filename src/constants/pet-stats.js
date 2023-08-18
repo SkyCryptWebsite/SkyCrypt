@@ -1130,10 +1130,10 @@ class Enderman extends Pet {
   }
 
   get fourth() {
-    const mult = getValue(this.rarity, { mythic: 0.4 });
+    const mult = getValue(this.rarity, { mythic: 0.004 });
     return {
       name: "§6Enderman Slayer",
-      desc: [`§7Grants §a${round(this.level * mult, 1)}% §3${SYMBOLS.wisdom} Combat Wisdom §7against §aEndermen§7.`],
+      desc: [`§7Grants §b${round(1 + this.level * mult, 1)}x §7Combat XP against §aEndermen§7.`],
     };
   }
 }
@@ -3151,12 +3151,11 @@ class Wisp extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { uncommon: 0.3, rare: 0.4, epic: 0.45, legendary: 0.5 });
-    const prc = round(this.level * mult, 1);
+    const mult = getValue(this.rarity, { uncommon: 0.004 });
 
     return {
       name: "§6Blaze Slayer",
-      desc: [`§7Grants §a+${prc}% §3${SYMBOLS.wisdom} Combat Wisdom §7from §aBlazes§7.`],
+      desc: [`§7Grants §b${round(1 + this.level * mult, 1)}x §7Combat XP against §aBlazes§7.`],
     };
   }
 
