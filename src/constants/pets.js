@@ -542,8 +542,11 @@ export const PET_DATA = {
     maxLevel: 100,
     emoji: "🦝",
   },
-  MONTEZUMA: {
+  FRACTURED_MONTEZUMA_SOUL: {
     head: "/head/df656c06e8a5cb4692564ee21748bddec9d785d1834284aaa1439601bba47d6b",
+    name: {
+      default: "Montezuma",
+    },
     type: "combat",
     maxTier: "epic",
     maxLevel: 100,
