@@ -1813,7 +1813,7 @@ export async function getStats(
 
   const memberUuids = [];
   for (const [uuid, memberProfile] of Object.entries(profile.members)) {
-    if (memberProfile?.coop_invitation?.confirmed === false) {
+    if (memberProfile?.coop_invitation?.confirmed === false || memberProfile.deletion_notice?.timestamp !== undefined) {
       continue;
     }
 
