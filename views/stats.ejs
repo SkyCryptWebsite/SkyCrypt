@@ -2781,124 +2781,137 @@ const metaDescription = getMetaDescription()
           </div>
           <% } %>
 
-          <% if('races' in calculated.misc){ %>
-          <div class="category-header">
-            <div class="category-icon">
-              <div class="item-icon icon-317_0"></div>
-            </div><span>races</span>
-          </div>
+          <% if ('races' in calculated.misc) { %>
+            <div class="category-header">
+              <div class="category-icon">
+                <div class="item-icon icon-317_0"></div>
+              </div>
+              <span>races</span>
+            </div>
 
-          <div class="race-containers narrow-info-container-wrapper">
-            <%
+            <div class="race-containers narrow-info-container-wrapper">
+              <%
+              const types = ["anything", "no_pearls", "no_abilities", "nothing"];
               const races = [
-                { id: "dungeon_hub_crystal_core", name: "Crystal Core", icon: '399_0' },
-                { id: "dungeon_hub_giant_mushroom", name: "Giant Mushroom", icon: '100_0' },
-                { id: "dungeon_hub_precursor_ruins", name: "Precursor Ruins", icon: '98_1' }
+                { id: "dungeon_hub_crystal_core", name: "Crystal Core", icon: "399_0" },
+                { id: "dungeon_hub_giant_mushroom", name: "Giant Mushroom", icon: "100_0" },
+                { id: "dungeon_hub_precursor_ruins", name: "Precursor Ruins", icon: "98_1" },
               ];
 
-              const types = ["anything", "no_pearls", "no_abilities", "nothing"];
+              for (const race of races) {
+                const times = Object.keys(calculated.misc.races).filter((a) => a.startsWith(race.id));
+                if (times.length === 0) { 
+                  continue;
+                } %>
 
-              for(const race of races){
-                const times = Object.keys(calculated.misc.races).filter(a => a.startsWith(race.id));
+                <div class="narrow-info-container">
+                  <div class="narrow-info-header"><%= race.name %></div>
+                  <div class="narrow-info-content">
+                    <%
+                    const races_no_return = times.filter((a) => a.includes("no_return"));
+                    if (races_no_return.length > 0) { %>
+                      <div class="narrow-info-section-header">No Return:</div>
+                    <% } %>
 
-                if(times.length > 0){
-                %>
-            <div class="narrow-info-container">
-              <div class="narrow-info-header"><%= race.name %></div>
-              <div class="narrow-info-content">
-                <%
-                    const races_no_return = times.filter(a => a.includes("no_return"));
-                    const races_with_return = times.filter(a => a.includes("with_return"));
-
-                    if(races_no_return.length > 0){ %>
-                <div class="narrow-info-section-header">No Return:</div>
-                <% }
-
-                    for(const type of types){
+                    <% for (const type of types) {
                       const key = `${race.id}_${type}_no_return_best_time`;
-                      const duration = calculated.misc.races[key] ?? 0;
                       const raceTier = calculated.misc.objectives.completedRaces[key] ?? 0;
-
-                      if(duration == 0)
+                      
+                      const duration = calculated.misc.races[key] ?? 0;
+                      if (duration == 0) {
                         continue;
+                      }
 
                       let raceDuration = moment.duration(duration, "milliseconds").format("m:ss.SSS");
+                      if (duration < 1000) {
+                        raceDuration = "0." + raceDuration;
+                      } %>
 
-                      if(duration < 1000)
-                        raceDuration = '0.' + raceDuration;
-                      %>
-                <div class="narrow-info-flexsb">
-                  <div>
-                    <span class="stat-name"><%= helper.titleCase(type.split("_").join(" ")) %>: </span>
-                    <span class="stat-value"><%= raceDuration %></span>
-                  </div>
-                  <div>
-                    <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
-                  </div>
-                </div>
-                <% }
+                      <div class="narrow-info-flexsb">
+                        <div>
+                          <span class="stat-name"><%= helper.titleCase(type.split("_").join(" ")) %>: </span>
+                          <span class="stat-value"><%= raceDuration %></span>
+                        </div>
+                        <div>
+                          <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
+                        </div>
+                      </div>
+                    <% } %>
 
-                    if(races_with_return.length > 0){ %>
-                <div class="narrow-info-section-header">With Return:</div>
-                <% }
 
-                    for(const type of types){
+                    <% 
+                    const races_with_return = times.filter((a) => a.includes("with_return"));
+                    if (races_with_return.length > 0) { %>
+                      <div class="narrow-info-section-header">With Return:</div>
+                    <% } %>
+
+                    <% for (const type of types) {
                       const key = `${race.id}_${type}_with_return_best_time`;
-                      const duration = calculated.misc.races[key] ?? 0;
                       const raceTier = calculated.misc.objectives.completedRaces[key] ?? 0;
-
-                      if(duration == 0)
+                      
+                      const duration = calculated.misc.races[key] ?? 0;
+                      if (duration == 0) {
                         continue;
+                      }
 
                       let raceDuration = moment.duration(duration, "milliseconds").format("m:ss.SSS");
+                      if (duration < 1000) {
+                        raceDuration = "0." + raceDuration;
+                      } %>
 
-                      if(duration < 1000)
-                        raceDuration = '0.' + raceDuration;
-                      %>
-                <div class="narrow-info-flexsb">
-                  <div>
-                    <span class="stat-name"><%= helper.titleCase(type.split("_").join(" ")) %>: </span>
-                    <span class="stat-value"><%= raceDuration %></span>
-                  </div>
-                  <div>
-                    <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
+                      <div class="narrow-info-flexsb">
+                        <div>
+                          <span class="stat-name"><%= helper.titleCase(type.split("_").join(" ")) %>: </span>
+                          <span class="stat-value"><%= raceDuration %></span>
+                        </div>
+                        <div>
+                          <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
+                        </div>
+                      </div>
+                    <% } %>
                   </div>
                 </div>
-                <% } %>
-              </div>
-            </div>
-            <%
-                }
-              }
-              %>
-            <div class="narrow-info-container">
-              <div class="narrow-info-header">Other Races</div>
-              <div class="narrow-info-content">
-                <% for(const key in calculated.misc.races){
-                      if(key.startsWith('dungeon_hub'))
-                        continue;
+              <% } %>
 
-                      const raceName = helper.capitalizeFirstLetter(key.replace(/_race_best_time.*/, "").split("_").join(" "));
-                      let raceDuration = moment.duration(calculated.misc.races[key], "milliseconds").format("m:ss.SSS");
-                      const raceTier = calculated.misc.objectives.completedRaces[key] ?? 0;
+              <div class="narrow-info-container">
+                <div class="narrow-info-header">Other Races</div>
+                <div class="narrow-info-content">
+                  <% 
+                  for (const key in calculated.misc.races) {
+                    if (key.startsWith("dungeon_hub")) {
+                      continue;
+                    }
 
-                      if(calculated.misc.races[key] < 1000)
-                        raceDuration = '0.' + raceDuration;
-                    %>
-                <div class="narrow-info-flexsb">
-                  <div>
-                    <span class="stat-name"><%= raceName %>: </span>
-                    <span class="stat-value"><%= raceDuration %></span>
-                  </div>
-                  <div>
-                    <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
-                  </div>
+                    let raceTier = calculated.misc.objectives.completedRaces[key] ?? 0;
+                    const raceName = helper.capitalizeFirstLetter(
+                      key.replace(/_race_best_time.*/, "").split("_").join(" ")
+                    );
+
+                    let raceDuration = moment.duration(calculated.misc.races[key], "milliseconds").format("m:ss.SSS");
+                    if (calculated.misc.races[key] < 1000) {
+                      raceDuration = "0." + raceDuration;
+                    } 
+
+                    // Hypixel forgot to add rift race to objectives so temp fix
+                    if (key === "rift_race_best_time") {
+                      raceTier = 4;
+                    } %>
+
+                    <div class="narrow-info-flexsb">
+                      <div>
+                        <span class="stat-name"><%= raceName %>: </span>
+                        <span class="stat-value"><%= raceDuration %></span>
+                      </div>
+                      <div>
+                        <span class="stat-value"><%= helper.renderRaceTier(raceTier) %></span>
+                      </div>
+                    </div>
+                  <% } %>
                 </div>
-                <% } %>
               </div>
             </div>
-          </div>
           <% } %>
+
           <% if('gifts' in calculated.misc){ %>
           <div class="category-header">
             <div class="category-icon">
