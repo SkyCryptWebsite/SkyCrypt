@@ -274,38 +274,31 @@ function enrichmentToStatName(enrichment) {
 }
 
 function getEnrichments(accessories) {
-  const enrichmentCounts = {}
-  const filteredAccessories = accessories
-    .filter(acc => ['legendary', 'mythic', 'divine', 'special', 'very_special'].includes(acc.rarity?.toLowerCase()))
-
-  if (filteredAccessories.length > 0) {
-    filteredAccessories.forEach(acc => {
-      const enrichment = acc.enrichment || 'missing_enrichment!'
-
-      if (!enrichmentCounts[enrichment]) {
-        enrichmentCounts[enrichment] = 0
-      }
-      enrichmentCounts[enrichment] += 1
-    })
-
-    %>
-<span class="stat-name">Enrichments: </span>
-<%
-    for (const [enrichment, amount] of Object.entries(enrichmentCounts)) {
-      const stat = enrichmentToStatName(enrichment)
-      %>
-<span class="stat-value color-<%= stat.replaceAll("_", "-") %>">
-  <%= amount %>× <%= formatEnrichment(enrichment) %>
-</span>
-<%
-      if (enrichment !== Object.keys(enrichmentCounts).pop()) {
-        %><span class="bonus-divider" role="separator"> // </span><%
-      }
-    }
-    %>
-<%
+  const filteredAccessories = accessories.filter((acc) => constants.RARITIES.indexOf(acc.rarity) >= 4);
+  if (filteredAccessories.length === 0) {
+    return;
   }
-}
+  
+  const enrichmentCounts = {};
+  filteredAccessories.map((accessory) => {
+    if (constants.SPECIAL_ACCESSORIES[helper.getId(accessory)]?.allowsEnrichment === false) return;
+
+    return enrichmentCounts[accessory.enrichment ?? 'missing_enrichment!'] = (enrichmentCounts[accessory.enrichment ?? 'missing_enrichment!'] ?? 0) + 1;
+  })%>
+
+  <span class="stat-name">Enrichments: </span>
+  <% for (const [enrichment, amount] of Object.entries(enrichmentCounts)) {
+      const stat = enrichmentToStatName(enrichment); %>
+
+      <span class="stat-value color-<%= stat.replaceAll("_", "-") %>">
+        <%= amount %>× <%= formatEnrichment(enrichment) %>
+      </span>
+      
+      <% if (enrichment !== Object.keys(enrichmentCounts).pop()) { %>
+        <span class="bonus-divider" role="separator"> // </span>
+      <% } %>
+    <% } %>
+<% }
 
 function isEnchanted(item) {
   // heads

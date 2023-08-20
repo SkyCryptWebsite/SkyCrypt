@@ -147,7 +147,7 @@ const extraAccessories = [
   */
 ];
 
-const specialAccessories = {
+export const SPECIAL_ACCESSORIES = {
   BOOK_OF_PROGRESSION: {
     allowsRecomb: false,
     rarities: ["uncommon", "rare", "epic", "legendary", "mythic"],
@@ -181,6 +181,9 @@ const specialAccessories = {
   RIFT_PRISM: {
     allowsRecomb: false,
   },
+  HOCUS_POCUS_CIPHER: {
+    allowsEnrichment: false,
+  },
 };
 
 export function getAllAccessories() {
@@ -196,7 +199,7 @@ export function getAllAccessories() {
       damage: item.damage,
     });
 
-    const specialAccessory = specialAccessories[item.id];
+    const specialAccessory = SPECIAL_ACCESSORIES[item.id];
     if (specialAccessory?.rarities) {
       for (const rarity of specialAccessory.rarities) {
         accessory.push({
@@ -236,7 +239,7 @@ export const MAGICAL_POWER = {
 };
 
 export const RECOMBABLE_ACCESSORIES_COUNT = getMaxAccessories().filter((accessory) => {
-  if (specialAccessories[accessory.id]?.allowsRecomb === false) return false;
+  if (SPECIAL_ACCESSORIES[accessory.id]?.allowsRecomb === false) return false;
 
   return true;
 }).length;
