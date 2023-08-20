@@ -225,7 +225,7 @@ function getMaxAccessories() {
   });
 }
 
-export const UNIQUE_ACCESSORIES_COUNT = Object.keys(getMaxAccessories()).length;
+export const UNIQUE_ACCESSORIES_COUNT = new Set(Object.values(getMaxAccessories()).map((item) => item.id)).size;
 
 export const MAGICAL_POWER = {
   common: 3,
@@ -238,11 +238,11 @@ export const MAGICAL_POWER = {
   very_special: 5,
 };
 
-export const RECOMBABLE_ACCESSORIES_COUNT = getMaxAccessories().filter((accessory) => {
-  if (SPECIAL_ACCESSORIES[accessory.id]?.allowsRecomb === false) return false;
-
-  return true;
-}).length;
+export const RECOMBABLE_ACCESSORIES_COUNT = new Set(
+  getMaxAccessories()
+    .filter((a) => SPECIAL_ACCESSORIES[a.id]?.allowsRecomb !== false)
+    .map((a) => a.id)
+).size;
 
 export function getUpgradeList(id) {
   return accessoryUpgrades.find((list) => list.includes(id));
