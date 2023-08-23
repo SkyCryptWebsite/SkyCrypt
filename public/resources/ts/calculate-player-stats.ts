@@ -59,7 +59,7 @@ export function getPlayerStats() {
 
   // Jacob's Farming Shop
   if (calculated.farming.perks.double_drops && calculated.farming.perks.double_drops > 0) {
-    stats.farming_fortune.jacob_double_drops = calculated.farming.perks.double_drops * 2;
+    stats.farming_fortune.jacob_double_drops = calculated.farming.perks.double_drops * 4;
   }
 
   // Slayer Completion
