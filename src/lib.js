@@ -1826,7 +1826,7 @@ export async function getStats(
   const members = await Promise.all(
     memberUuids.map(async (a) => {
       return {
-        ...await helper.resolveUsernameOrUuid(a, db, options.cacheOnly),
+        ...(await helper.resolveUsernameOrUuid(a, db, options.cacheOnly)),
         removed: profile.members[a]?.removed || false,
       };
     })
