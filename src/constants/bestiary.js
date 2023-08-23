@@ -497,7 +497,7 @@ export const BESTIARY = {
       },
       {
         name: "Ghast",
-        cap: 1000,
+        cap: 3000,
         texture: "/head/de8a38e9afbd3da10d19b577c55c7bfd6b4f2e407e44d4017b23be9167abff02",
         mobs: ["ghast_85", "dive_ghast_90"],
         bracket: 4,
@@ -696,7 +696,7 @@ export const BESTIARY = {
       },
       {
         name: "Treasure Hoarder",
-        cap: 3000,
+        cap: 4000,
         texture: "/head/b2b12a814ced8af02cddf29a37e7f3011e430e8a18b38b706f27c6bd31650b65",
         mobs: ["treasure_hoarder_70"],
         bracket: 3,
@@ -2018,6 +2018,7 @@ export const BESTIARY = {
         texture: "/head/88eb68a4d38e9f446b8e99275f160302f366ef10216abf948487e582512bd0f3",
         mobs: [
           "dungeon_respawning_skeleton_40",
+          "dungeon_respawning_skeleton_skull_40",
           "dungeon_respawning_skeleton_40",
           "dungeon_respawning_skeleton_60",
           "dungeon_respawning_skeleton_60",
