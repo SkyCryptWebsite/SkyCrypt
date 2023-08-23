@@ -859,7 +859,7 @@ export const PET_ITEMS = {
   },
   PET_ITEM_QUICK_CLAW: {
     name: "Quick Claw",
-    tier: "RARE",
+    tier: "EPIC",
     description: `§7Every 2 pet level you gain §6+1 ${SYMBOLS.mining_speed} Mining Speed §7and §6+1 §6${SYMBOLS.mining_fortune} Mining Fortune§7.`,
     statsPerLevel: {
       mining_speed: 0.5,
@@ -898,5 +898,10 @@ export const PET_ITEMS = {
     name: "Bingo Booster",
     tier: "EPIC",
     description: "§7Double the efficiency of the §6Lucky Looting §7perk of your Bingo pet.",
+  },
+  BEJEWELED_COLLAR: {
+    name: "Bejeweled Collar",
+    tier: "RARE",
+    description: `§7Grants §6+25 ${SYMBOLS.mining_speed} Mining Speed §7and §6+10 ${SYMBOLS.mining_fortune} Mining Fortune§7.`,
   },
 };

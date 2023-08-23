@@ -10,4 +10,7 @@ export const PET_REWARDS = {
   225: { magic_find: 8 },
   275: { magic_find: 9 },
   325: { magic_find: 10 },
+  375: { magic_find: 11 },
+  450: { magic_find: 12 },
+  500: { magic_find: 13 },
 };
