@@ -1817,13 +1817,20 @@ export async function getStats(
   const memberUuids = [];
   for (const [uuid, memberProfile] of Object.entries(profile?.members ?? {})) {
     if (memberProfile?.coop_invitation?.confirmed === false || memberProfile.deletion_notice?.timestamp !== undefined) {
-      continue;
+      memberProfile.removed = true;
     }
 
     memberUuids.push(uuid);
   }
 
-  const members = await Promise.all(memberUuids.map((a) => helper.resolveUsernameOrUuid(a, db, options.cacheOnly)));
+  const members = await Promise.all(
+    memberUuids.map(async (a) => {
+      return {
+        ...await helper.resolveUsernameOrUuid(a, db, options.cacheOnly),
+        removed: profile.members[a]?.removed || false,
+      };
+    })
+  );
 
   if (userInfo) {
     output.display_name = userInfo.username;
@@ -1831,6 +1838,7 @@ export async function getStats(
     members.push({
       uuid: profile.uuid,
       display_name: userInfo.username,
+      removed: profile.members[profile.uuid]?.removed || false,
     });
 
     if ("emoji" in userInfo) {
