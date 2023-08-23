@@ -741,7 +741,7 @@ const metaDescription = getMetaDescription()
           <% for(let profile_id in calculated.profiles){ %>
           <% let _profile = calculated.profiles[profile_id]; %>
           <li>
-            <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.cute_name %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>">
+            <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>">
               <%= _profile.cute_name %>
               <% if (_profile.game_mode == 'ironman') { %>
               <img src="/resources/img/icons/ironman.png" class="emoji">
