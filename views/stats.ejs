@@ -1270,7 +1270,8 @@ const metaDescription = getMetaDescription()
               max = petScore >= Math.max(...Object.keys(petRewards)) ? 'golden-text' : ''
             %>
             <span data-tippy-content="
-              Increase your pet score by collecting unique pets with a high rarity.<br><br>
+              Pet score is calculated based on how many unique pets you have and the rarity of these pets.<br><br>
+              You gain an additional score for each max level pet you have!<br><br>
               <table>
               <%
               const entries = Object.entries(petRewards)

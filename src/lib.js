@@ -2842,14 +2842,27 @@ async function getMissingPets(pets, gameMode, userProfile) {
 
 function getPetScore(pets) {
   const highestRarity = {};
-
   for (const pet of pets) {
     if (!(pet.type in highestRarity) || constants.PET_VALUE[pet.rarity] > highestRarity[pet.type]) {
       highestRarity[pet.type] = constants.PET_VALUE[pet.rarity];
     }
   }
 
-  return Object.values(highestRarity).reduce((a, b) => a + b, 0);
+  const highestLevel = {};
+  for (const pet of pets) {
+    if (!(pet.type in highestLevel) || pet.level.level > highestLevel[pet.type]) {
+      if (pet.level.level < constants.PET_DATA[pet.type].maxLevel) {
+        continue;
+      }
+
+      highestLevel[pet.type] = 1;
+    }
+  }
+
+  const output =
+    Object.values(highestRarity).reduce((a, b) => a + b, 0) + Object.values(highestLevel).reduce((a, b) => a + b, 0);
+
+  return output;
 }
 
 function getMissingAccessories(accessories) {
