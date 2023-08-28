@@ -2513,7 +2513,7 @@ const metaDescription = getMetaDescription()
           <p class="stat-sub-header">Porhtal</p>
           <% const porhtalsUnlocked = calculated.rift.wither_cage.killed_eyes.filter((a) => a.unlocked === true).length %>
           <% max = porhtalsUnlocked === calculated.rift.wither_cage.killed_eyes.length ? 'golden-text' : '' %>
-          <span class="stat-name <%= max %>">Porhtals unlocked: </span><span class="stat-value <%= max %>"><%= porhtalsUnlocked %></span><br><br>
+          <span class="stat-name <%= max %>">Eyes Unlocked: </span><span class="stat-value <%= max %>"><%= porhtalsUnlocked %></span><br><br>
           <div class="collections">
             <% for (const portal of calculated.rift.wither_cage.killed_eyes) { %>
               <div class="chip" data-missing="<%= portal.unlocked === false %>">
