@@ -3719,7 +3719,7 @@ export async function getProfile(
   let skyBlockProfiles = [];
 
   if (paramProfile) {
-    if (paramProfile.length == 32) {
+    if (paramProfile.length == 36) {
       skyBlockProfiles = allSkyBlockProfiles.filter((a) => a.profile_id.toLowerCase() == paramProfile);
     } else {
       skyBlockProfiles = allSkyBlockProfiles.filter((a) => a.cute_name.toLowerCase() == paramProfile);
