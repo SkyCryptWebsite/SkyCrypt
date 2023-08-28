@@ -11,6 +11,7 @@ import { fileURLToPath } from "url";
 import util from "util";
 import { v4 } from "uuid";
 
+import * as stats from "./stats.js";
 import * as constants from "./constants.js";
 import credentials from "./credentials.js";
 import { getTexture } from "./custom-resources.js";
@@ -1872,7 +1873,7 @@ export async function getStats(
   output.minions = getMinions(profile.members);
   output.minion_slots = getMinionSlots(output.minions);
   output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
-  output.bestiary = getBestiary(profile.uuid, profile);
+  output.bestiary = stats.getBestiary(userProfile);
 
   output.social = hypixelProfile.socials;
 
@@ -3040,65 +3041,6 @@ export function getTrophyFish(userProfile) {
   };
 
   return output;
-}
-
-export function getBestiary(uuid, profile) {
-  const output = {};
-
-  const userProfile = profile.members[uuid];
-
-  if (!("unlocked_coll_tiers" in userProfile) || !("collection" in userProfile)) {
-    return output;
-  }
-
-  const result = {
-    level: 0,
-    categories: {},
-  };
-
-  let totalCollection = 0;
-  const bestiaryFamilies = {};
-  for (const [name, value] of Object.entries(userProfile.bestiary || {})) {
-    if (name.startsWith("kills_family_")) {
-      bestiaryFamilies[name] = value;
-    }
-  }
-
-  for (const family of Object.keys(constants.BESTIARY)) {
-    result.categories[family] = {};
-    for (const mob of constants.BESTIARY[family].mobs) {
-      const mobName = mob.id.substring(13);
-
-      const boss = mob.boss == true ? "boss" : "regular";
-
-      const kills = bestiaryFamilies[mob.id] || 0;
-      const head = mob.head;
-      const itemId = mob.itemId;
-      const damage = mob.damage;
-      const name = mob.name;
-      const maxTier = mob.maxTier ?? 41;
-      const tier =
-        constants.BEASTIARY_KILLS[boss].filter((k) => k <= kills).length > maxTier
-          ? maxTier
-          : constants.BEASTIARY_KILLS[boss].filter((k) => k <= kills).length;
-      totalCollection += tier;
-
-      result.categories[family][mobName] = {
-        head: head,
-        name: name,
-        itemId: itemId,
-        damage: damage,
-        tier: tier,
-        maxTier: maxTier,
-        kills: kills,
-      };
-    }
-  }
-  result.tiersUnlocked = totalCollection;
-  result.level = totalCollection / 10;
-  result.bonus = result.level.toFixed(0) * 2;
-
-  return result;
 }
 
 function getRift(userProfile) {
