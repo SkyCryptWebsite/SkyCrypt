@@ -20,6 +20,7 @@ import { db } from "./mongo.js";
 import { redisClient } from "./redis.js";
 import { calculateLilyWeight } from "./weight/lily-weight.js";
 import { calculateSenitherWeight } from "./weight/senither-weight.js";
+import { getLeaderboardPosition } from "./helper/leaderboards.js";
 import { calculateFarmingWeight } from "./weight/farming-weight.js";
 
 const mcData = minecraftData("1.8.9");
@@ -1557,23 +1558,10 @@ async function getLevels(userProfile, hypixelProfile, levelCaps, profileMembers)
     output.total_skill_xp = totalSkillXp;
   }
 
-  const multi = redisClient.pipeline();
-
   const skillNames = Object.keys(output.levels);
 
   for (const skill of skillNames) {
-    if (output.levels[skill].xp == null) {
-      output.levels[skill].rank = 0;
-      continue;
-    }
-
-    multi.zcount(`lb_skill_${skill}_xp`, output.levels[skill].xp, "+inf");
-  }
-
-  const results = await multi.exec();
-
-  for (const [index, skill] of skillNames.entries()) {
-    output.levels[skill].rank = results[index][1];
+    output.levels[skill].rank = await getLeaderboardPosition(`skill_${skill}_xp`, output.levels[skill].xp);
   }
 
   output.average_level_rank = await redisClient.zcount([`lb_average_level`, output.average_level, "+inf"]);
@@ -1885,7 +1873,7 @@ export async function getStats(
 
   output.social = hypixelProfile.socials;
 
-  output.dungeons = getDungeons(userProfile, hypixelProfile);
+  output.dungeons = await getDungeons(userProfile, hypixelProfile);
 
   output.essence = getEssence(userProfile, hypixelProfile);
 
@@ -2170,6 +2158,7 @@ export async function getStats(
     progress: (userProfile.leveling?.experience % 100) / 100 || 0,
     xpCurrent: userProfile.leveling?.experience % 100 || 0,
     xpForNext: 100,
+    rank: await getLeaderboardPosition("skyblock_level_xp", userProfile.leveling?.experience || 0),
   };
 
   // MISC
@@ -3114,7 +3103,7 @@ function getRift(userProfile) {
   };
 }
 
-export function getDungeons(userProfile, hypixelProfile) {
+export async function getDungeons(userProfile, hypixelProfile) {
   const output = {};
 
   const dungeons = userProfile.dungeons;
@@ -3181,6 +3170,8 @@ export function getDungeons(userProfile, hypixelProfile) {
           : `floor_${highest_floor}`,
       floors: floors,
     };
+
+    output[type].level.rank = await getLeaderboardPosition(`dungeons_${type}_xp`, dungeon.experience);
   }
 
   // Classes
@@ -3200,6 +3191,11 @@ export function getDungeons(userProfile, hypixelProfile) {
       experience: getLevelByXp(data.experience, { type: "dungeoneering", ignoreCap: true }),
       current: false,
     };
+
+    output.classes[className].experience.rank = await getLeaderboardPosition(
+      `dungeons_class_${className}_xp`,
+      data.experience
+    );
 
     if (data.experience > 0) {
       used_classes = true;
@@ -3928,6 +3924,11 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
       }
     }
 
+    userProfile.skyblock_level = {
+      xp: userProfile.leveling?.experience || 0,
+      level: Math.floor(userProfile.leveling?.experience / 100 || 0),
+    };
+
     userProfile.pet_score = 0;
 
     const maxPetRarity = {};
@@ -3963,6 +3964,7 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
     values[`skill_${skill}_xp`] = getMax(memberProfiles, "data", "levels", "levels", skill, "xp");
   }
 
+  values[`skyblock_level_xp`] = getMax(memberProfiles, "data", "skyblock_level", "xp");
   values["slayer_xp"] = getMax(memberProfiles, "data", "slayer_xp");
 
   for (const slayer of getAllKeys(memberProfiles, "data", "slayer_bosses")) {
