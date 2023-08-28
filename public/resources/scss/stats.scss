@@ -547,6 +547,10 @@
     color: rgba(var(--text-rgb), 0.8);
     line-height: normal;
   }
+
+  .kicked {
+    text-decoration: line-through;
+  }
 }
 
 #additional_player_stats {

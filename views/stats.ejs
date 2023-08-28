@@ -675,7 +675,7 @@ const metaDescription = getMetaDescription()
           <% calculated.members.forEach(member => { %>
           <li>
             <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>">
-              <%= member.display_name %>
+              <span class="<%= member.removed === true ? "kicked" : "" %>"> <%= member.display_name %> </span>
               <% if(member.emojiImg){ %>
               <img class="emoji" draggable="false" src="<%= member.emojiImg %>">
               <% }else if(member.emoji){ %>
