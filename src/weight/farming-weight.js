@@ -5,7 +5,7 @@ const crops = {
   },
   CARROT_ITEM: {
     name: "Carrot",
-    weight: 300_000,
+    weight: 302_061.86,
   },
   "INK_SACK:3": {
     name: "Cocoa Bean",
@@ -13,7 +13,7 @@ const crops = {
   },
   MELON: {
     name: "Melon",
-    weight: 450_324.6,
+    weight: 485_308.47,
   },
   NETHER_STALK: {
     name: "Nether Wart",
@@ -25,7 +25,7 @@ const crops = {
   },
   PUMPKIN: {
     name: "Pumpkin",
-    weight: 90_066.27,
+    weight: 98_284.71,
   },
   SUGAR_CANE: {
     name: "Sugar Cane",
