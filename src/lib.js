@@ -896,8 +896,8 @@ export const getItems = async (
 ) => {
   const output = {};
 
-  console.debug(`${options.debugId}: getItems called.`);
-  const timeStarted = Date.now();
+  // console.debug(`${options.debugId}: getItems called.`);
+  // const timeStarted = Date.now();
 
   // Process inventories returned by API
   const armor =
@@ -1445,7 +1445,7 @@ export const getItems = async (
       constants.RARITIES[Math.max(...equipment.map((a) => helper.rarityNameToInt(a.rarity)))];
   }
 
-  console.debug(`${options.debugId}: getItems returned. (${Date.now() - timeStarted}ms)`);
+  // console.debug(`${options.debugId}: getItems returned. (${Date.now() - timeStarted}ms)`);
   return output;
 };
 
@@ -1578,8 +1578,8 @@ export async function getStats(
 ) {
   const output = {};
 
-  console.debug(`${options.debugId}: getStats called.`);
-  const timeStarted = Date.now();
+  // console.debug(`${options.debugId}: getStats called.`);
+  // const timeStarted = Date.now();
 
   const userProfile = profile.members[profile.uuid];
   const hypixelProfile = await helper.getRank(profile.uuid, db, options.cacheOnly);
@@ -2509,7 +2509,7 @@ export async function getStats(
     output.stats[stat] += output.pet_score_bonus[stat];
   }
 
-  console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
+  // console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
   return output;
 }
 
@@ -3640,8 +3640,8 @@ export async function getProfile(
   paramProfile,
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` }
 ) {
-  console.debug(`${options.debugId}: getProfile called.`);
-  const timeStarted = Date.now();
+  // console.debug(`${options.debugId}: getProfile called.`);
+  // const timeStarted = Date.now();
 
   if (paramPlayer.length != 32) {
     try {
@@ -3875,7 +3875,7 @@ export async function getProfile(
       .catch(console.error);
   }
 
-  console.debug(`${options.debugId}: getProfile returned. (${Date.now() - timeStarted}ms)`);
+  // console.debug(`${options.debugId}: getProfile returned. (${Date.now() - timeStarted}ms)`);
   return { profile: profile, allProfiles: allSkyBlockProfiles, uuid: paramPlayer };
 }
 
