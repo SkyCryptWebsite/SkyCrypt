@@ -106,7 +106,9 @@ export const CACHE_PATH = helper.getCacheFolderPath(folderPath);
 await fs.ensureDir(CACHE_PATH);
 
 if (credentials.hypixel_api_key.length == 0) {
-  throw new Error("Please enter a valid Hypixel API Key. Join mc.hypixel.net and enter /api to obtain one.");
+  throw new Error(
+    "Please enter a valid Hypixel API Key. Go to developer.hypixel.net/dashboard and click Create API Key to obtain one."
+  );
 }
 
 let isFoolsDay;
@@ -124,7 +126,7 @@ async function updateCacheOnly() {
     const response = await fetch(
       `https://api.hypixel.net/skyblock/profiles?uuid=${hypixelUUID}&key=${credentials.hypixel_api_key}`
     );
-    forceCacheOnly = false;
+    //forceCacheOnly = false;
     // 429 = key throttle
     if (!response.ok && response.status != 429) {
       forceCacheOnly = true;

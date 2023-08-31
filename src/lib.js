@@ -11,6 +11,7 @@ import { fileURLToPath } from "url";
 import util from "util";
 import { v4 } from "uuid";
 
+import * as stats from "./stats.js";
 import * as constants from "./constants.js";
 import credentials from "./credentials.js";
 import { getTexture } from "./custom-resources.js";
@@ -19,6 +20,8 @@ import { db } from "./mongo.js";
 import { redisClient } from "./redis.js";
 import { calculateLilyWeight } from "./weight/lily-weight.js";
 import { calculateSenitherWeight } from "./weight/senither-weight.js";
+import { getLeaderboardPosition } from "./helper/leaderboards.js";
+import { calculateFarmingWeight } from "./weight/farming-weight.js";
 
 const mcData = minecraftData("1.8.9");
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -192,7 +195,7 @@ export function getLevelByXp(xp, extra = {}) {
   const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
 
   /** the fraction of the way toward the next level */
-  const progress = level >= levelCap ? 1 : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+  const progress = level >= levelCap ? (extra.ignoreCap ? 1 : 0) : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
   const levelWithProgress = level + progress;
@@ -381,9 +384,12 @@ async function processItems(base64, source, customTextures = false, packs, cache
 
           if (itemData.id >= 298 && itemData.id <= 301) {
             const type = ["helmet", "chestplate", "leggings", "boots"][itemData.id - 298];
-            const color = helper.RGBtoHex(hypixelItem.color) ?? "955e3b";
 
-            itemData.texture_path = `/leather/${type}/${color}`;
+            if (hypixelItem?.color !== undefined) {
+              const color = helper.RGBtoHex(hypixelItem.color) ?? "955e3b";
+
+              itemData.texture_path = `/leather/${type}/${color}`;
+            }
           }
 
           if (hypixelItem === null) {
@@ -1084,56 +1090,60 @@ export const getItems = async (
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
-      insertAccessory.isInactive = true;
-    }
-
-    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
-      insertAccessory.isUnique = false;
-    }
-
     accessories.push(insertAccessory);
     accessoryIds.push(id);
   }
 
-  // Add accessories from inventory
-  for (const accessory of inventory.filter((a) => a.categories.includes("accessory"))) {
+  // Add accessories from inventory and accessory bag
+  for (const accessory of accessory_bag.concat(inventory.filter((a) => a.categories.includes("accessory")))) {
     const id = helper.getId(accessory);
-
     if (id === "") {
       continue;
     }
 
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
-    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
-      insertAccessory.isInactive = true;
+    // mark lower tiers as inactive
+    if (constants.getUpgradeList(id) !== undefined) {
+      accessories.find((a) => {
+        if (constants.getUpgradeList(id).includes(helper.getId(a)) === false) {
+          return;
+        }
+
+        insertAccessory.isInactive = true;
+        insertAccessory.isUnique = false;
+      });
     }
 
-    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
-      insertAccessory.isUnique = false;
-    }
+    // mark accessory inactive if player has two exactly same accessories
+    accessories.map((a) => {
+      if (helper.getId(a) === helper.getId(insertAccessory)) {
+        insertAccessory.isInactive = true;
+        a.isInactive = true;
 
-    accessories.push(insertAccessory);
-    accessoryIds.push(id);
-  }
+        // give accessories with higher rarity priority, mark lower rarity as inactive
+        if (constants.RARITIES.indexOf(a.rarity) > constants.RARITIES.indexOf(insertAccessory.rarity)) {
+          a.isInactive = false;
+          a.isUnique = true;
+        } else if (constants.RARITIES.indexOf(insertAccessory.rarity) > constants.RARITIES.indexOf(a.rarity)) {
+          insertAccessory.isInactive = false;
+          insertAccessory.isUnique = true;
+        }
+      }
+    });
 
-  // Add accessories from accessory bag if not already in inventory
-  for (const accessory of accessory_bag) {
-    const id = helper.getId(accessory);
+    // mark accessoriy aliases as inactive
+    for (const accessory of accessories) {
+      const id = helper.getId(accessory);
 
-    if (id === "") {
-      continue;
-    }
+      if (id in constants.accessoryAliases) {
+        const accessoryDuplicates = constants.accessoryAliases[id];
 
-    const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
-
-    if (accessories.find((a) => !a.isInactive && helper.getId(a) == id) != undefined) {
-      insertAccessory.isInactive = true;
-    }
-
-    if (accessories.find((a) => helper.getId(a) == id) != undefined) {
-      insertAccessory.isUnique = false;
+        if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a))) != undefined) {
+          accessory.isUnique = false;
+          accessory.isInactive = true;
+        }
+      }
     }
 
     accessories.push(insertAccessory);
@@ -1150,7 +1160,7 @@ export const getItems = async (
   }
 
   // Add inactive accessories from enderchest and backpacks
-  for (const item of inventory.concat(enderchest, storage)) {
+  for (const item of enderchest.concat(storage)) {
     // filter out filler or empty slots (such as empty storage slot)
     if (!("categories" in item)) {
       continue;
@@ -1165,71 +1175,10 @@ export const getItems = async (
     for (const accessory of items.filter((a) => a.categories.includes("accessory"))) {
       const id = helper.getId(accessory);
 
-      const insertAccessory = Object.assign({ isUnique: true, isInactive: true }, accessory);
-
-      if (accessories.find((a) => helper.getId(a) == id) != undefined) {
-        insertAccessory.isUnique = false;
-      }
+      const insertAccessory = Object.assign({ isUnique: false, isInactive: true }, accessory);
 
       accessories.push(insertAccessory);
       accessoryIds.push(id);
-    }
-  }
-
-  // Don't account for lower tier versions of the same accessory
-  for (const accessory of accessories.concat(armor)) {
-    const id = helper.getId(accessory);
-
-    if (id.startsWith("CAMPFIRE_TALISMAN_")) {
-      const tier = parseInt(id.split("_").pop());
-
-      const maxTier = Math.max(
-        ...accessories
-          .filter((a) => helper.getId(a).startsWith("CAMPFIRE_TALISMAN_"))
-          .map((a) => helper.getId(a).split("_").pop())
-      );
-
-      if (tier < maxTier) {
-        accessory.isUnique = false;
-        accessory.isInactive = true;
-      }
-
-      accessoryIds.splice(accessoryIds.indexOf(id), 1, `CAMPFIRE_TALISMAN_${maxTier}`);
-    }
-
-    if (id.startsWith("WEDDING_RING_")) {
-      const tier = parseInt(id.split("_").pop());
-
-      const maxTier = Math.max(
-        ...accessories
-          .filter((a) => helper.getId(a).startsWith("WEDDING_RING_"))
-          .map((a) => helper.getId(a).split("_").pop())
-      );
-
-      if (tier < maxTier) {
-        accessory.isUnique = false;
-        accessory.isInactive = true;
-      }
-
-      accessoryIds.splice(accessoryIds.indexOf(id), 1, `WEDDING_RING_${maxTier}`);
-    }
-
-    if (id.startsWith("PARTY_HAT_CRAB")) {
-      const CRAB_HAT = accessories.find((a) => helper.getId(a) == `PARTY_HAT_CRAB`);
-      const CRAB_HAT_ANIMATED = accessories.find((a) => helper.getId(a) == `PARTY_HAT_CRAB_ANIMATED`);
-
-      if (CRAB_HAT && CRAB_HAT_ANIMATED) {
-        CRAB_HAT.isUnique = false;
-        CRAB_HAT.isInactive = true;
-      }
-    }
-
-    if (id in constants.accessoryAliases) {
-      const accessoryDuplicates = constants.accessoryAliases[id];
-
-      if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a))) != undefined) {
-        accessory.isUnique = false;
-      }
     }
   }
 
@@ -1609,23 +1558,10 @@ async function getLevels(userProfile, hypixelProfile, levelCaps, profileMembers)
     output.total_skill_xp = totalSkillXp;
   }
 
-  const multi = redisClient.pipeline();
-
   const skillNames = Object.keys(output.levels);
 
   for (const skill of skillNames) {
-    if (output.levels[skill].xp == null) {
-      output.levels[skill].rank = 0;
-      continue;
-    }
-
-    multi.zcount(`lb_skill_${skill}_xp`, output.levels[skill].xp, "+inf");
-  }
-
-  const results = await multi.exec();
-
-  for (const [index, skill] of skillNames.entries()) {
-    output.levels[skill].rank = results[index][1];
+    output.levels[skill].rank = await getLeaderboardPosition(`skill_${skill}_xp`, output.levels[skill].xp);
   }
 
   output.average_level_rank = await redisClient.zcount([`lb_average_level`, output.average_level, "+inf"]);
@@ -1868,15 +1804,22 @@ export async function getStats(
   const userInfo = await db.collection("usernames").findOne({ uuid: profile.uuid });
 
   const memberUuids = [];
-  for (const [uuid, memberProfile] of Object.entries(profile.members)) {
-    if (memberProfile?.coop_invitation?.confirmed === false) {
-      continue;
+  for (const [uuid, memberProfile] of Object.entries(profile?.members ?? {})) {
+    if (memberProfile?.coop_invitation?.confirmed === false || memberProfile.deletion_notice?.timestamp !== undefined) {
+      memberProfile.removed = true;
     }
 
     memberUuids.push(uuid);
   }
 
-  const members = await Promise.all(memberUuids.map((a) => helper.resolveUsernameOrUuid(a, db, options.cacheOnly)));
+  const members = await Promise.all(
+    memberUuids.map(async (a) => {
+      return {
+        ...(await helper.resolveUsernameOrUuid(a, db, options.cacheOnly)),
+        removed: profile.members[a]?.removed || false,
+      };
+    })
+  );
 
   if (userInfo) {
     output.display_name = userInfo.username;
@@ -1884,6 +1827,7 @@ export async function getStats(
     members.push({
       uuid: profile.uuid,
       display_name: userInfo.username,
+      removed: profile.members[profile.uuid]?.removed || false,
     });
 
     if ("emoji" in userInfo) {
@@ -1925,11 +1869,11 @@ export async function getStats(
   output.minions = getMinions(profile.members);
   output.minion_slots = getMinionSlots(output.minions);
   output.collections = await getCollections(profile.uuid, profile, options.cacheOnly);
-  output.bestiary = getBestiary(profile.uuid, profile);
+  output.bestiary = stats.getBestiary(userProfile);
 
   output.social = hypixelProfile.socials;
 
-  output.dungeons = getDungeons(userProfile, hypixelProfile);
+  output.dungeons = await getDungeons(userProfile, hypixelProfile);
 
   output.essence = getEssence(userProfile, hypixelProfile);
 
@@ -2214,6 +2158,7 @@ export async function getStats(
     progress: (userProfile.leveling?.experience % 100) / 100 || 0,
     xpCurrent: userProfile.leveling?.experience % 100 || 0,
     xpForNext: 100,
+    rank: await getLeaderboardPosition("skyblock_level_xp", userProfile.leveling?.experience || 0),
   };
 
   // MISC
@@ -2454,6 +2399,7 @@ export async function getStats(
   output.weight = {
     senither: calculateSenitherWeight(output),
     lily: calculateLilyWeight(output),
+    farming: calculateFarmingWeight(output),
   };
 
   /*
@@ -2507,10 +2453,17 @@ export async function getStats(
 
   output.objectives = userProfile.objectives ?? 0;
 
+  output.rift = getRift(userProfile);
+
   if (!userProfile.pets) {
     userProfile.pets = [];
   }
   userProfile.pets.push(...items.pets);
+
+  if (userProfile.rift?.dead_cats?.montezuma !== undefined) {
+    userProfile.pets.push(userProfile.rift.dead_cats.montezuma);
+    userProfile.pets.at(-1).active = false;
+  }
 
   for (const pet of userProfile.pets) {
     await getItemNetworth(pet, { cache: true, returnItemData: false });
@@ -2870,7 +2823,7 @@ async function getMissingPets(pets, gameMode, userProfile) {
     profile.pets.push(pets[0]);
   }
 
-  profile.objectives = userProfile.objectives;
+  profile.rift = userProfile.rift;
   profile.collections = userProfile.collections;
 
   return await getPets(profile);
@@ -2878,14 +2831,27 @@ async function getMissingPets(pets, gameMode, userProfile) {
 
 function getPetScore(pets) {
   const highestRarity = {};
-
   for (const pet of pets) {
     if (!(pet.type in highestRarity) || constants.PET_VALUE[pet.rarity] > highestRarity[pet.type]) {
       highestRarity[pet.type] = constants.PET_VALUE[pet.rarity];
     }
   }
 
-  return Object.values(highestRarity).reduce((a, b) => a + b, 0);
+  const highestLevel = {};
+  for (const pet of pets) {
+    if (!(pet.type in highestLevel) || pet.level.level > highestLevel[pet.type]) {
+      if (pet.level.level < constants.PET_DATA[pet.type].maxLevel) {
+        continue;
+      }
+
+      highestLevel[pet.type] = 1;
+    }
+  }
+
+  const output =
+    Object.values(highestRarity).reduce((a, b) => a + b, 0) + Object.values(highestLevel).reduce((a, b) => a + b, 0);
+
+  return output;
 }
 
 function getMissingAccessories(accessories) {
@@ -2952,7 +2918,7 @@ function getMissingAccessories(accessories) {
 
     let includes = false;
 
-    if (constants.getUpgradeList(accessory)?.[0] !== accessory && constants.getUpgradeList(accessory)) {
+    if (constants.getUpgradeList(accessory) && constants.getUpgradeList(accessory)[0] !== accessory) {
       includes = true;
     }
 
@@ -3087,65 +3053,57 @@ export function getTrophyFish(userProfile) {
   return output;
 }
 
-export function getBestiary(uuid, profile) {
-  const output = {};
-
-  const userProfile = profile.members[uuid];
-
-  if (!("unlocked_coll_tiers" in userProfile) || !("collection" in userProfile)) {
-    return output;
+function getRift(userProfile) {
+  if (!("rift" in userProfile) || (userProfile.visited_zones && userProfile.visited_zones.includes("rift") === false)) {
+    return null;
   }
 
-  const result = {
-    level: 0,
-    categories: {},
+  const rift = userProfile.rift;
+
+  const killedEyes = [];
+  for (const [key, data] of constants.RIFT_EYES.entries()) {
+    data.unlocked = rift.wither_cage?.killed_eyes && rift.wither_cage.killed_eyes[key] !== undefined;
+
+    killedEyes.push(data);
+  }
+
+  const timecharms = [];
+  for (const [key, data] of constants.RIFT_TIMECHARMS.entries()) {
+    data.unlocked = rift.gallery?.secured_trophies && rift.gallery.secured_trophies[key]?.type !== undefined;
+    data.unlocked_at = rift.gallery?.secured_trophies && rift.gallery.secured_trophies[key]?.timestamp;
+
+    timecharms.push(data);
+  }
+
+  return {
+    motes: {
+      purse: userProfile.motes_purse ?? 0,
+      lifetime: userProfile.stats.rift_lifetime_motes_earned ?? 0,
+      orbs: userProfile.stats.rift_motes_orb_pickup ?? 0,
+    },
+    enigma: {
+      souls: rift.enigma.found_souls?.length ?? 0,
+      total_souls: constants.RIFT_ENIGMA_SOULS,
+    },
+    wither_cage: {
+      killed_eyes: killedEyes,
+    },
+    timecharms: {
+      timecharms: timecharms,
+      obtained_timecharms: timecharms.filter((a) => a.unlocked).length,
+    },
+    dead_cats: {
+      montezuma: rift?.dead_cats?.montezuma ?? {},
+      found_cats: rift?.dead_cats?.found_cats ?? [],
+    },
+    castle: {
+      grubber_stacks: rift.castle?.grubber_stacks ?? 0,
+      max_burgers: constants.MAX_GRUBBER_STACKS,
+    },
   };
-
-  let totalCollection = 0;
-  const bestiaryFamilies = {};
-  for (const [name, value] of Object.entries(userProfile.bestiary || {})) {
-    if (name.startsWith("kills_family_")) {
-      bestiaryFamilies[name] = value;
-    }
-  }
-
-  for (const family of Object.keys(constants.BESTIARY)) {
-    result.categories[family] = {};
-    for (const mob of constants.BESTIARY[family].mobs) {
-      const mobName = mob.id.substring(13);
-
-      const boss = mob.boss == true ? "boss" : "regular";
-
-      const kills = bestiaryFamilies[mob.id] || 0;
-      const head = mob.head;
-      const itemId = mob.itemId;
-      const damage = mob.damage;
-      const name = mob.name;
-      const maxTier = mob.maxTier ?? 41;
-      const tier =
-        constants.BEASTIARY_KILLS[boss].filter((k) => k <= kills).length > maxTier
-          ? maxTier
-          : constants.BEASTIARY_KILLS[boss].filter((k) => k <= kills).length;
-      totalCollection += tier;
-
-      result.categories[family][mobName] = {
-        head: head,
-        name: name,
-        itemId: itemId,
-        damage: damage,
-        tier: tier,
-        maxTier: maxTier,
-        kills: kills,
-      };
-    }
-  }
-  result.tiersUnlocked = totalCollection;
-  result.level = totalCollection / 10;
-  result.bonus = result.level.toFixed(0) * 2;
-
-  return result;
 }
-export function getDungeons(userProfile, hypixelProfile) {
+
+export async function getDungeons(userProfile, hypixelProfile) {
   const output = {};
 
   const dungeons = userProfile.dungeons;
@@ -3212,6 +3170,8 @@ export function getDungeons(userProfile, hypixelProfile) {
           : `floor_${highest_floor}`,
       floors: floors,
     };
+
+    output[type].level.rank = await getLeaderboardPosition(`dungeons_${type}_xp`, dungeon.experience);
   }
 
   // Classes
@@ -3231,6 +3191,11 @@ export function getDungeons(userProfile, hypixelProfile) {
       experience: getLevelByXp(data.experience, { type: "dungeoneering", ignoreCap: true }),
       current: false,
     };
+
+    output.classes[className].experience.rank = await getLeaderboardPosition(
+      `dungeons_class_${className}_xp`,
+      data.experience
+    );
 
     if (data.experience > 0) {
       used_classes = true;
@@ -3771,7 +3736,7 @@ export async function getProfile(
   let skyBlockProfiles = [];
 
   if (paramProfile) {
-    if (paramProfile.length == 32) {
+    if (paramProfile.length == 36) {
       skyBlockProfiles = allSkyBlockProfiles.filter((a) => a.profile_id.toLowerCase() == paramProfile);
     } else {
       skyBlockProfiles = allSkyBlockProfiles.filter((a) => a.cute_name.toLowerCase() == paramProfile);
@@ -3959,6 +3924,11 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
       }
     }
 
+    userProfile.skyblock_level = {
+      xp: userProfile.leveling?.experience || 0,
+      level: Math.floor(userProfile.leveling?.experience / 100 || 0),
+    };
+
     userProfile.pet_score = 0;
 
     const maxPetRarity = {};
@@ -3994,6 +3964,7 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
     values[`skill_${skill}_xp`] = getMax(memberProfiles, "data", "levels", "levels", skill, "xp");
   }
 
+  values[`skyblock_level_xp`] = getMax(memberProfiles, "data", "skyblock_level", "xp");
   values["slayer_xp"] = getMax(memberProfiles, "data", "slayer_xp");
 
   for (const slayer of getAllKeys(memberProfiles, "data", "slayer_bosses")) {
