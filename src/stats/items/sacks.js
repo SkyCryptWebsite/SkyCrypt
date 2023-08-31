@@ -1,5 +1,5 @@
-import * as constants from "../constants.js";
-import { db } from "../mongo.js";
+import * as constants from "../../constants.js";
+import { db } from "../../mongo.js";
 import _ from "lodash";
 
 export async function getSacks(sacksCounts) {
@@ -8,15 +8,12 @@ export async function getSacks(sacksCounts) {
     for (const sackId in constants.SACKS) {
       const sack = constants.SACKS[sackId];
 
-      if (
-        sack.items.filter((a) => {
-          if (typeof a === "object") {
-            return a.items.filter((b) => Object.keys(sacksCounts).includes(b)).length > 0;
-          }
+      const sackItems = sack.items.filter((a) => {
+        const items = typeof a === "object" ? a.items : [a];
 
-          return Object.keys(sacksCounts).includes(a);
-        }).length == 0
-      ) {
+        return items.some((b) => Object.keys(sacksCounts).includes(b));
+      });
+      if (sackItems.length === 0) {
         continue;
       }
 
@@ -59,13 +56,16 @@ export async function getSacks(sacksCounts) {
       } else {
         for (const item of sack.items) {
           const hypixelItem = await db.collection("items").findOne({ id: constants.ITEM_SACKS[item] ?? item });
-          const itemName = hypixelItem?.name ?? _.startCase(item.toLowerCase());
+          if (hypixelItem === null) {
+            continue;
+          }
 
+          const itemName = hypixelItem.name ?? _.startCase(item.toLowerCase());
           const count = sacksCounts[item] === 0 ? 1 : sacksCounts[item];
           const sackContent = {
             Count: count ?? 1,
-            Damage: hypixelItem?.damage ?? 3,
-            id: hypixelItem?.item_id ?? 397,
+            Damage: hypixelItem.damage ?? 3,
+            id: hypixelItem.item_id ?? 397,
             itemIndex: sackItem.containsItems.length,
             display_name: itemName,
             tag: {
@@ -77,11 +77,11 @@ export async function getSacks(sacksCounts) {
             categories: [],
           };
 
-          if (hypixelItem?.glowing === true) {
+          if (hypixelItem.glowing === true) {
             sackContent.tag.ench = [];
           }
 
-          if (sackContent.id == 397 && hypixelItem?.texture) {
+          if (sackContent.id == 397 && hypixelItem.texture) {
             sackContent.texture_path = `/head/${hypixelItem.texture}`;
           }
 
