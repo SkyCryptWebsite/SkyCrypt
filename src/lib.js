@@ -11,7 +11,6 @@ import { fileURLToPath } from "url";
 import util from "util";
 import { v4 } from "uuid";
 
-import * as stats from "./stats.js";
 import * as constants from "./constants.js";
 import credentials from "./credentials.js";
 import { getTexture } from "./custom-resources.js";
