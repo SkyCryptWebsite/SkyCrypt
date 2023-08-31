@@ -3669,11 +3669,10 @@ export async function getProfile(
 
   let lastCachedSave = 0;
 
-  const profileData = [];
   if (profileObject) {
-    for (const pId of Object.keys(profileObject.profiles)) {
-      profileData.push(await db.collection("profileCache").findOne({ profile_id: pId }));
-    }
+    const profileData = db
+      .collection("profileCache")
+      .find({ profile_id: { $in: Object.keys(profileObject.profiles) } });
     for await (const doc of profileData) {
       if (doc.members?.[paramPlayer] == undefined) {
         continue;
