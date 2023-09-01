@@ -24,7 +24,8 @@
           
           <div class="bestiary">
             <% for (const family of value.mobs) { %>
-              <% const amountsTooltip = family.kills >= family.nextTierKills ? `<span class="stat-name">Progress: </span><span class="stat-value max-stat category-header-maxed">max!</span><br>` : `<span class="stat-name">Progress: </span><span class="stat-value">${family.kills.toLocaleString()} / ${family.nextTierKills.toLocaleString()}</span><br>`; %>
+              <% console.log(family) %>
+              <% const amountsTooltip = family.kills >= family.nextTierKills ? `<span class="stat-name">Progress: </span><span class="stat-value max-stat category-header-maxed">max!</span><br>` : `<span class="stat-name">Progress to Tier ${family.tier + 1}: </span><span class="stat-value">${family.kills.toLocaleString()} / ${family.nextTierKills.toLocaleString()}</span><br><br><span class="stat-name">Overall Progress: </span><span class="stat-value">${family.kills.toLocaleString()} / ${family.maxKills.toLocaleString()}</span><br>`; %>
               <div class="chip" data-missing="<%= family.kills === 0%>" data-tippy-content="<%= amountsTooltip %>">
                 <div class="chip-icon-wrapper">
                   <div style="background-image:url(<%= family.texture %>)" class="item-icon custom-icon"></div>
@@ -53,7 +54,7 @@
 
         <div class="bestiary">
           <% for (const family of data.mobs) { %>
-            <% const amountsTooltip = family.kills >= family.nextTierKills ? `<span class="stat-name">Progress: </span><span class="stat-value max-stat category-header-maxed">max!</span><br>` : `<span class="stat-name">Progress: </span><span class="stat-value">${family.kills.toLocaleString()} / ${family.nextTierKills.toLocaleString()}</span><br>`; %>
+            <% const amountsTooltip = family.kills >= family.nextTierKills ? `<span class="stat-name">Progress: </span><span class="stat-value max-stat category-header-maxed">max!</span><br>` : `<span class="stat-name">Progress to Tier ${family.tier + 1}: </span><span class="stat-value">${family.kills.toLocaleString()} / ${family.nextTierKills.toLocaleString()}</span><br><br><span class="stat-name">Overall Progress: </span><span class="stat-value">${family.kills.toLocaleString()} / ${family.maxKills.toLocaleString()}</span><br>`; %>
             <div class="chip" data-missing="<%= family.kills === 0%>" data-tippy-content="<%= amountsTooltip %>">
               <div class="chip-icon-wrapper">
                 <div style="background-image:url(<%= family.texture %>)" class="item-icon custom-icon"></div>
