@@ -268,8 +268,13 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       debugId,
     });
 
-    const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack, { cacheOnly, debugId });
-    const calculated = await lib.getStats(db, profile, allProfiles, items, { cacheOnly, debugId });
+    const bingoProfile =
+      profile.game_mode === "bingo" ? await lib.getBingoProfile(db, paramPlayer, { cacheOnly, debugId }) : {};
+    const items = await lib.getItems(profile.members[profile.uuid], bingoProfile, true, req.cookies.pack, {
+      cacheOnly,
+      debugId,
+    });
+    const calculated = await lib.getStats(db, profile, bingoProfile, allProfiles, items, { cacheOnly, debugId });
 
     if (isFoolsDay) {
       calculated.skin_data.skinurl =
