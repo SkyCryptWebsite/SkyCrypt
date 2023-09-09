@@ -5,6 +5,7 @@ import tippy from "tippy.js";
 import { renderLore } from "../../../common/formatting.js";
 
 import { getPlayerStats } from "./calculate-player-stats";
+import { RARITY_COLORS } from "../../../common/constants.js";
 
 import("./elements/inventory-view");
 
@@ -255,11 +256,19 @@ function fillLore(element: HTMLElement) {
     return;
   }
 
+  const itemNameString = ((item as Item).tag?.display?.Name ?? item.display_name ?? "???") as string;
+  const colorCode = itemNameString.match(/^§([0-9a-fklmnor])/i);
+  if (colorCode && colorCode[1]) {
+    itemName.style.backgroundColor = `var(--§${colorCode[1]})`;
+  } else {
+    itemName.style.backgroundColor = `var(--§${(RARITY_COLORS as RarityColors)[item.rarity || "common"]})`;
+  }
+
   itemName.className = `item-name piece-${item.rarity || "common"}-bg nice-colors-dark`;
   const itemNameHtml = renderLore((item as Item).tag?.display?.Name ?? item.display_name ?? "???");
   const isMulticolor = (itemNameHtml.match(/<\/span>/g) || []).length > 1;
   itemNameContent.dataset.multicolor = String(isMulticolor);
-  itemNameContent.innerHTML = isMulticolor ? itemNameHtml : item.display_name ?? "???";
+  itemNameContent.innerHTML = isMulticolor ? itemNameHtml : itemNameString.replace(/§([0-9a-fklmnor])/gi, "") ?? "???";
 
   if (element.hasAttribute("data-pet-index")) {
     itemNameContent.dataset.multicolor = "false";
