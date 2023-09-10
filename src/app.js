@@ -274,7 +274,10 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       cacheOnly,
       debugId,
     });
-    const calculated = await lib.getStats(db, profile, bingoProfile, allProfiles, items, req.cookies.pack, { cacheOnly, debugId });
+    const calculated = await lib.getStats(db, profile, bingoProfile, allProfiles, items, req.cookies.pack, {
+      cacheOnly,
+      debugId,
+    });
 
     if (isFoolsDay) {
       calculated.skin_data.skinurl =
