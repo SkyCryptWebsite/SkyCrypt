@@ -890,7 +890,7 @@ function getMinionSlots(minions) {
 
 export const getItems = async (
   profile,
-  bingoProfile,
+  paramBingo,
   customTextures = false,
   packs,
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getItems` }
@@ -1029,16 +1029,18 @@ export const getItems = async (
   output.candy_bag = candy_bag;
 
   output.bingo_card = {};
-  if (bingoProfile?.events !== undefined) {
-    const bingoRes = await helper.getBingoGoals(db);
-    if (bingoRes === null) {
-      throw new Error("Failed to fetch bingo goals");
+  if (paramBingo && paramBingo.events) {
+    const bingoData = await helper.getBingoGoals(db, options.cacheOnly);
+    if (bingoData === null || bingoData.goals === undefined) {
+      throw new Error("Failed to fetch Bingo data. Please try again later.");
     }
 
-    const bingoData = bingoRes.output;
-    const bingoProfilev2 = bingoProfile.events.find((profile) => profile.key === bingoData.id);
+    const bingoProfile = paramBingo.events.find((profile) => profile.key === bingoData.id);
 
-    output.bingo_card = bingoProfilev2 !== undefined ? constants.getBingoItems(bingoProfilev2, bingoData.goals) : {};
+    const completedBingoGoals = bingoProfile?.completed_goals ?? [];
+    const bingoGoals = bingoData.goals;
+
+    output.bingo_card = bingoProfile !== undefined ? stats.getBingoItems(completedBingoGoals, bingoGoals) : {};
   }
 
   const allItems = armor.concat(
@@ -1586,7 +1588,7 @@ async function getLevels(userProfile, hypixelProfile, levelCaps, profileMembers)
 export async function getStats(
   db,
   profile,
-  bingoProfile,
+  paramBingo,
   allProfiles,
   items,
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getStats` }
@@ -2384,11 +2386,11 @@ export async function getStats(
     };
   }
 
-  if (bingoProfile?.events !== undefined) {
+  if (paramBingo && paramBingo.events) {
     output.bingo = {
-      total: bingoProfile.events.length,
-      points: bingoProfile.events.reduce((a, b) => a + b.points, 0),
-      completed_goals: bingoProfile.events.reduce((a, b) => a + b.completed_goals.length, 0),
+      total_profiles: paramBingo.events.length,
+      total_points: paramBingo.events.reduce((a, b) => a + b.points, 0),
+      total_completed_goals: paramBingo.events.reduce((a, b) => a + b.completed_goals.length, 0),
     };
   }
 

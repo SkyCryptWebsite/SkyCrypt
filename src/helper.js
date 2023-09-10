@@ -1004,14 +1004,20 @@ export function romanize(num) {
 }
 
 export async function getBingoGoals(db, cacheOnly = false) {
-  const output = await db.collection("bingoData").findOne({ _id: "cardData" });
+  const cachedBingoData = await db.collection("bingoData").findOne({ _id: "cardData" });
 
+  const output = cachedBingoData?.output;
   if (cacheOnly === true) {
     return output;
   }
 
-  // 12 hours cache
-  if (output === null || output.last_save + 43200000 < Date.now()) {
+  // Check if it's the first day of the month and the data hasn't been updated in the last 24 hours,
+  // or if the data hasn't been updated in the last 12 hours (in case Hypixel changes goals).
+  if (
+    output == null ||
+    output.last_save + 43200000 < Date.now() ||
+    (new Date().getUTCDate() === 1 && output.last_save + 86400000 < Date.now())
+  ) {
     const { data: output } = await axios.get("https://api.hypixel.net/resources/skyblock/bingo");
     output.last_save = Date.now();
 
@@ -1069,4 +1075,21 @@ export function RGBtoHex(rgb) {
   const [r, g, b] = rgb.split(",").map((c) => parseInt(c.trim()));
 
   return [r, g, b].map((c) => c.toString(16).padStart(2, "0")).join("");
+}
+
+/**
+ * Returns a formatted progress bar string based on the given amount and total.
+ *
+ * @param {number} amount - The current amount.
+ * @param {number} total - The total amount.
+ * @param {string} [color="a"] - The color of the progress bar.
+ * @returns {string} The formatted progress bar string.
+ */
+export function formatProgressBar(amount, total, completedColor = "a", missingColor = "f") {
+  const barLength = 25;
+  const progress = Math.min(1, amount / total);
+  const progressBars = Math.floor(progress * barLength);
+  const emptyBars = barLength - progressBars;
+
+  return `${`§${completedColor}§l§m-`.repeat(progressBars)}${`§${missingColor}§l§m-`.repeat(emptyBars)}§r`;
 }
