@@ -76,7 +76,7 @@
           claimedTooltip += collection.unclaimed.map(item => `<span class="stat-value">- ${item}</span><br>`).join('');
         } %>
 
-        <div class="chip" data-tippy-content="<%= claimedTooltip %>" data-missing="<%= collection.killed === 0 %>">
+        <div class="chip" data-tippy-content="<%= claimedTooltip === "" ?  "No items claimed" : claimedTooltip %>" data-missing="<%= collection.killed === 0 %>">
           <div class="chip-icon-wrapper">
             <div style="background-image:url(/head/<%= collection.texture %>)" class="item-icon custom-icon"></div>
           </div>

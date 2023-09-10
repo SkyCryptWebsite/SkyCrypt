@@ -3275,7 +3275,9 @@ export async function getDungeons(userProfile, hypixelProfile) {
   collections["kuudra"] = {
     name: boss_data.kuudra.name,
     texture: boss_data.kuudra.texture,
-    tier: Object.values(collection_data.kuudra.rewards).reduce((max, reward) => Math.max(max, reward.tier), 0),
+    tier:
+      (Object.values(collection_data.kuudra.rewards).find((value) => totalKuudraCollection < value.required)?.tier ??
+        6) - 1,
     maxTier: collection_data.kuudra.max_tiers,
     maxed:
       totalKuudraCollection >=
