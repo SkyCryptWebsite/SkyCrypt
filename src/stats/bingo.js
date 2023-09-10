@@ -116,7 +116,7 @@ export function getBingoItems(completedGoals, bingoData) {
       if (Array.isArray(itemData.lore)) {
         itemData.lore = helper.renderLore(itemData.lore.join("<br>"));
       }
-      
+
       itemData.display_name = itemData.display_name.split(/[0-9]/)[0];
       if (itemData.display_name.endsWith("#")) {
         itemData.display_name += parseInt(itemData.positions.indexOf(slot)) + 1;
