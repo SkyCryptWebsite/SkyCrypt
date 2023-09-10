@@ -890,14 +890,15 @@ function getMinionSlots(minions) {
 
 export const getItems = async (
   profile,
+  bingoProfile,
   customTextures = false,
   packs,
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getItems` }
 ) => {
   const output = {};
 
-  console.debug(`${options.debugId}: getItems called.`);
-  const timeStarted = Date.now();
+  // console.debug(`${options.debugId}: getItems called.`);
+  // const timeStarted = Date.now();
 
   // Process inventories returned by API
   const armor =
@@ -1026,6 +1027,19 @@ export const getItems = async (
   output.storage = storage;
   output.hotm = hotm;
   output.candy_bag = candy_bag;
+
+  output.bingo_card = {};
+  if (bingoProfile?.events !== undefined) {
+    const bingoRes = await helper.getBingoGoals(db);
+    if (bingoRes === null) {
+      throw new Error("Failed to fetch bingo goals");
+    }
+
+    const bingoData = bingoRes.output;
+    const bingoProfilev2 = bingoProfile.events.find((profile) => profile.key === bingoData.id);
+
+    output.bingo_card = bingoProfilev2 !== undefined ? constants.getBingoItems(bingoProfilev2, bingoData.goals) : {};
+  }
 
   const allItems = armor.concat(
     equipment,
@@ -1445,7 +1459,7 @@ export const getItems = async (
       constants.RARITIES[Math.max(...equipment.map((a) => helper.rarityNameToInt(a.rarity)))];
   }
 
-  console.debug(`${options.debugId}: getItems returned. (${Date.now() - timeStarted}ms)`);
+  // console.debug(`${options.debugId}: getItems returned. (${Date.now() - timeStarted}ms)`);
   return output;
 };
 
@@ -1572,14 +1586,15 @@ async function getLevels(userProfile, hypixelProfile, levelCaps, profileMembers)
 export async function getStats(
   db,
   profile,
+  bingoProfile,
   allProfiles,
   items,
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getStats` }
 ) {
   const output = {};
 
-  console.debug(`${options.debugId}: getStats called.`);
-  const timeStarted = Date.now();
+  // console.debug(`${options.debugId}: getStats called.`);
+  // const timeStarted = Date.now();
 
   const userProfile = profile.members[profile.uuid];
   const hypixelProfile = await helper.getRank(profile.uuid, db, options.cacheOnly);
@@ -2369,6 +2384,14 @@ export async function getStats(
     };
   }
 
+  if (bingoProfile?.events !== undefined) {
+    output.bingo = {
+      total: bingoProfile.events.length,
+      points: bingoProfile.events.reduce((a, b) => a + b.points, 0),
+      completed_goals: bingoProfile.events.reduce((a, b) => a + b.completed_goals.length, 0),
+    };
+  }
+
   output.misc = misc;
   output.auctions_bought = auctions_bought;
   output.auctions_sold = auctions_sold;
@@ -2509,7 +2532,7 @@ export async function getStats(
     output.stats[stat] += output.pet_score_bonus[stat];
   }
 
-  console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
+  // console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
   return output;
 }
 
@@ -3618,8 +3641,8 @@ export async function getProfile(
   paramProfile,
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` }
 ) {
-  console.debug(`${options.debugId}: getProfile called.`);
-  const timeStarted = Date.now();
+  // console.debug(`${options.debugId}: getProfile called.`);
+  // const timeStarted = Date.now();
 
   if (paramPlayer.length != 32) {
     try {
@@ -3853,8 +3876,78 @@ export async function getProfile(
       .catch(console.error);
   }
 
-  console.debug(`${options.debugId}: getProfile returned. (${Date.now() - timeStarted}ms)`);
+  // console.debug(`${options.debugId}: getProfile returned. (${Date.now() - timeStarted}ms)`);
   return { profile: profile, allProfiles: allSkyBlockProfiles, uuid: paramPlayer };
+}
+
+export async function getBingoProfile(
+  db,
+  paramPlayer,
+  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` }
+) {
+  console.debug(`${options.debugId}: getBingoProfile called.`);
+  const timeStarted = Date.now();
+
+  if (paramPlayer.length != 32) {
+    try {
+      const { uuid } = await helper.resolveUsernameOrUuid(paramPlayer, db);
+
+      paramPlayer = uuid;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  const params = {
+    key: credentials.hypixel_api_key,
+    uuid: paramPlayer,
+  };
+
+  let profileData = (await db.collection("bingoProfilesCache").findOne({ uuid: sanitize(paramPlayer) })) || {
+    last_save: 0,
+  };
+
+  const lastCachedSave = profileData.last_save ?? 0;
+  if (
+    (!options.cacheOnly &&
+      ((Date.now() - lastCachedSave > 190 * 1000 && Date.now() - lastCachedSave < 300 * 1000) ||
+        Date.now() - profileData.last_save >= 300 * 1000)) ||
+    lastCachedSave === 0
+  ) {
+    try {
+      const response = await retry(
+        async () => {
+          return await hypixel.get("skyblock/bingo", { params });
+        },
+        { retries: 2 }
+      );
+
+      const { data } = response;
+
+      if (!data.success) {
+        throw new Error("Request to Hypixel API failed. Please try again!");
+      }
+
+      profileData = data;
+      profileData.last_save = Date.now();
+
+      db.collection("bingoProfilesCache").updateOne(
+        { uuid: sanitize(paramPlayer) },
+        { $set: profileData },
+        { upsert: true }
+      );
+    } catch (e) {
+      if (e?.response?.data?.cause != undefined) {
+        throw new Error(`Hypixel API Error: ${e.response.data.cause}.`);
+      }
+
+      throw e;
+    }
+  }
+
+  console.debug(`${options.debugId}: getBingoProfile returned. (${Date.now() - timeStarted}ms)`);
+  return profileData;
 }
 
 async function updateLeaderboardPositions(db, uuid, allProfiles) {

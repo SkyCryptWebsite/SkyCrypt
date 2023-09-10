@@ -952,6 +952,7 @@ const metaDescription = getMetaDescription()
         <% if(calculated.collections !== null){ %><a class="nav-item" href="#Collections">Collections</a><% } %>
         <% if(Object.keys(calculated.crimsonIsles.kuudra_completed_tiers).length > 0 || Object.keys(calculated.crimsonIsles.dojo).length > 0){ %><a class="nav-item" href="#Crimson_Isle">Crimson Isle</a><% } %>
         <% if(calculated.rift !== null){ %><a class="nav-item" href="#Rift"><abbr title="RIft">Rift</abbr></a><% } %>
+        <% if (calculated.profile.game_mode === "bingo") { %> <a class="nav-item" href="#Bingo"><abbr title="Bingo">Bingo</abbr></a> <% } %>
         <% if(Object.keys(calculated.misc).length > 0){ %><a class="nav-item" href="#Misc"><abbr title="Miscellaneous">Misc</abbr></a><% } %>
       </div>
     </div>
@@ -1611,7 +1612,7 @@ const metaDescription = getMetaDescription()
               <% } else { %>
               <span class="stat-value">Unknown item</span>
               <script>
-                console.error("Unknown forge item id: <%= process.id.split('UNKNOWN-')[1] %>")
+                console.error( "Unknown forge item id: <%= process.id.split('UNKNOWN-')[1] %>" )
               </script>
               <% } %>
             </div>
@@ -2380,6 +2381,7 @@ const metaDescription = getMetaDescription()
       </div>
       <% } %>
 
+
       <% if (calculated.rift !== null) { %>
         <div class="stat-container stat-collections">
           <a class="stat-anchor" id="Rift"></a>
@@ -2453,6 +2455,41 @@ const metaDescription = getMetaDescription()
       <% } %>
 
 
+      <% if (calculated.profile.game_mode === "bingo") { %>
+        <div class="stat-container stat-bingo">
+          <a class="stat-anchor" id="Bingo"></a>
+          <h2 class="stat-header">Bingo</h2>
+          <div class="stat-content">
+            <p class="stat-raw-values">
+              <span class="stat-name">Bingo Profiles:</span>
+              <span class="stat-value"><%= calculated.bingo.total.toLocaleString() %></span>
+              <br>
+              <span class="stat-name">Completed Goals:</span>
+              <span class="stat-value"><%= calculated.bingo.completed_goals.toLocaleString() %></span>
+              <br>
+              <span class="stat-name">Points:</span>
+              <span class="stat-value" data-tippy-content="<span class='stat-value'>Total points earned, not current balance.</span><br>"><%= calculated.bingo.points.toLocaleString() %></span>
+              <br>
+            </p>
+            <div class="stat-bingo">
+              <div class="category-header">
+                <div class="category-icon">
+                  <div class="item-icon icon-388_0"></div>
+                </div>
+                <span>Bingo Card</span>
+              </div>
+              <% if (Object.keys(items.bingo_card).length !== 0) { %>
+              <div id="inventory_container">
+                <inventory-view inventory-type="bingo_card"></inventory-view>
+              </div>
+              <% } else { %>
+              <p> This player hasn't participated in the latest bingo event.</p>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      <% } %>
+      
       <% if(Object.keys(calculated.misc).length > 0){ %>
       <div class="stat-container stat-misc">
         <a class="stat-anchor" id="Misc"></a>
@@ -2948,14 +2985,14 @@ const metaDescription = getMetaDescription()
   </main>
   <%- include('../includes/footer'); %>
   <script>
-    const items = JSON.parse(`<%- JSON.stringify(items).replaceAll('\\', '\\\\') %>`);
-    const calculated = JSON.parse(`<%- JSON.stringify(calculated).replaceAll('\\', '\\\\') %>`);
+    const items = JSON.parse( `<%- JSON.stringify(items).replaceAll('\\', '\\\\') %>` );
+    const calculated = JSON.parse( `<%- JSON.stringify(calculated).replaceAll('\\', '\\\\') %>` );
     <%
       const clientConstants = {
         MAX_FAVORITES: constants.MAX_FAVORITES,
       }
     %>
-    const constants = JSON.parse(`<%- JSON.stringify(clientConstants).replaceAll('\\', '\\\\') %>`);
+    const constants = JSON.parse( `<%- JSON.stringify(clientConstants).replaceAll('\\', '\\\\') %>` );
   </script>
 </body>
 
