@@ -52,7 +52,7 @@ export const STATS_BONUS = {
   slayer_spider: {
     1: { crit_damage: 1 },
     5: { crit_damage: 2 },
-    7: { crit_chance: 1 },
+    7: { crit_damage: 2 },
     8: { crit_damage: 3 },
   },
   slayer_wolf: {

@@ -72,5 +72,5 @@ const FEATURED_PROFILES = [
   const cachePath = helper.getCacheFolderPath(helper.getFolderPath());
   await fs.writeJson(helper.getCacheFilePath(cachePath, "json", "featured-profiles", "json"), FEATURED_PROFILES);
 
-  console.log("Featured profiles updated!");
+  // console.log("Featured profiles updated!");
 }

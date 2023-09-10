@@ -685,8 +685,11 @@ class GreatExplorer extends Node {
   }
 
   perk(level) {
-    const val = 20 + (level - 1) * 4;
-    return [`§7Grants §a+${val}%§7 §7chance to find treasure.`];
+    const perc = 20 + (level - 1) * 4;
+    const val = 1 + Math.floor(level / 5);
+    return [
+      `§7Boosts the chance to find treasure chests while mining in the §5Crystal Hollows §7by §a${perc}% §7and reduces the amount of locks on the chest by §a${val}§7.`,
+    ];
   }
 }
 

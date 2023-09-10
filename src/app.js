@@ -56,7 +56,7 @@ const fileNameMapFileName = path.join(folderPath, "../public/resources/js/file-n
 
 while (!fs.existsSync(fileNameMapFileName)) {
   console.log(`waiting for: "${fileNameMapFileName}" make sure you ran rollup`);
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 }
 
 let fileNameMap = JSON.parse(fs.readFileSync(fileNameMapFileName));
@@ -126,7 +126,7 @@ async function updateCacheOnly() {
     const response = await fetch(
       `https://api.hypixel.net/skyblock/profiles?uuid=${hypixelUUID}&key=${credentials.hypixel_api_key}`
     );
-    forceCacheOnly = false;
+    //forceCacheOnly = false;
     // 429 = key throttle
     if (!response.ok && response.status != 429) {
       forceCacheOnly = true;
@@ -248,7 +248,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
   const debugId = helper.generateDebugId("stats");
   const timeStarted = Date.now();
 
-  console.debug(`${debugId}: stats page was called.`);
+  // console.debug(`${debugId}: stats page was called.`);
 
   const paramPlayer = req.params.player
     .toLowerCase()
@@ -268,16 +268,21 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       debugId,
     });
 
-    const items = await lib.getItems(profile.members[profile.uuid], true, req.cookies.pack, { cacheOnly, debugId });
-    const calculated = await lib.getStats(db, profile, allProfiles, items, req.cookies.pack, { cacheOnly, debugId });
+    const bingoProfile =
+      profile.game_mode === "bingo" ? await lib.getBingoProfile(db, paramPlayer, { cacheOnly, debugId }) : {};
+    const items = await lib.getItems(profile.members[profile.uuid], bingoProfile, true, req.cookies.pack, {
+      cacheOnly,
+      debugId,
+    });
+    const calculated = await lib.getStats(db, profile, bingoProfile, allProfiles, items, req.cookies.pack, { cacheOnly, debugId });
 
     if (isFoolsDay) {
       calculated.skin_data.skinurl =
         "http://textures.minecraft.net/texture/b4bd832813ac38e68648938d7a32f6ba29801aaf317404367f214b78b4d4754c";
     }
 
-    console.debug(`${debugId}: starting page render.`);
-    const renderStart = Date.now();
+    // console.debug(`${debugId}: starting page render.`);
+    // const renderStart = Date.now();
 
     if (req.cookies.pack) {
       process.send({ type: "selected_pack", id: req.cookies.pack });
@@ -299,7 +304,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       },
       (err, html) => {
         if (err) console.error(err);
-        else console.debug(`${debugId}: page successfully rendered. (${Date.now() - renderStart}ms)`);
+        // else console.debug(`${debugId}: page successfully rendered. (${Date.now() - renderStart}ms)`);
 
         res.set("X-Debug-ID", `${debugId}`);
         res.set("X-Process-Time", `${Date.now() - timeStarted}`);
