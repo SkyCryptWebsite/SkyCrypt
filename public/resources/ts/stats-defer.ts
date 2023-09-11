@@ -124,6 +124,7 @@ export const ALL_ITEMS = new Map(
     items.wardrobe_inventory,
     items.storage,
     items.hotm,
+    items.bingo_card,
     items.museum,
   ]
     .flat()

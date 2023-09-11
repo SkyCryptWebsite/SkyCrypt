@@ -25,7 +25,7 @@ async function capLeaderboards() {
 
   await multi.exec();
 
-  console.log(`Capped ${keys.length} leaderboards in Redis!`);
+  // console.log(`Capped ${keys.length} leaderboards in Redis!`);
   setTimeout(capLeaderboards, 30 * 60 * 1000);
 }
 
