@@ -870,7 +870,7 @@ const SKINS = [
   {
     id: "PET_SKIN_ENDER_DRAGON_BABY_BLUE",
     name: "Baby Blue",
-    texture: "49582fa21c45c40a80a9a791842f71078f47c335d627bb560eb86dad641a8c4",
+    texture: "/head/49582fa21c45c40a80a9a791842f71078f47c335d627bb560eb86dad641a8c4",
     source: "firesale",
     release: new Date("2023-07-29 18:00:00 GMT+1").getTime(),
   },
@@ -878,7 +878,7 @@ const SKINS = [
     id: "PET_SKIN_ENDER_DRAGON_BABY",
     name: "Baby",
     texture: "24e73adc6be7922d0d6287192b48b4afcd6d72207773d0b15a1903b051ec0c22",
-    source: "firesale",
+    source: "/head/firesale",
     release: new Date("2023-07-29 18:00:00 GMT+1").getTime(),
   },
   {
