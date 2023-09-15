@@ -1410,7 +1410,10 @@ export const getItems = async (
           a.tag?.ExtraAttributes?.modifier == armor[0].tag.ExtraAttributes.modifier
       ).length == 4
     ) {
-      reforgeName = armor[0].display_name.split(" ")[0];
+      reforgeName = armor[0].display_name
+        .replace(/[^A-Za-z0-9 -']/g, "")
+        .trim()
+        .split(" ")[0];
     }
 
     // Handling normal sets of armor
