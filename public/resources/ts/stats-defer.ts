@@ -924,6 +924,10 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
       }
     }
 
+    if (Object.keys(bonusStats).length === 0) {
+      return;
+    }
+
     const node = document.createElement("bonus-stats");
     node.data = bonusStats;
 
