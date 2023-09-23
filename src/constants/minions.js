@@ -305,6 +305,10 @@ export const MINIONS = {
     type: "combat",
     head: "/head/665c54366f88fb3280b1c3fc500ce2b799c8dd327ab6d41c9bc959488f5cfd92",
   },
+  VAMPIRE: {
+    type: "combat",
+    head: "/head/5b0c2db42e90f83fae6551c96e83669211a77c2c155c54d1523af3079f9565ed",
+  },
 };
 
 let totalUniqueMinions = 0;

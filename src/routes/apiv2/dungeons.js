@@ -29,7 +29,7 @@ router.get("/:player/:profile", async (req, res, next) => {
       const userProfile = singleProfile.members[profile.uuid];
       const hypixelProfile = await helper.getRank(profile.uuid, db, req.cacheOnly);
 
-      const dungeonData = lib.getDungeons(userProfile, hypixelProfile);
+      const dungeonData = await lib.getDungeons(userProfile, hypixelProfile);
 
       output = {
         profile_id: singleProfile.profile_id,
@@ -54,7 +54,7 @@ router.get("/:player", async (req, res, next) => {
       const userProfile = singleProfile.members[profile.uuid];
       const hypixelProfile = await helper.getRank(profile.uuid, db, req.cacheOnly);
 
-      const dungeonData = lib.getDungeons(userProfile, hypixelProfile);
+      const dungeonData = await lib.getDungeons(userProfile, hypixelProfile);
 
       output.profiles[singleProfile.profile_id] = {
         profile_id: singleProfile.profile_id,

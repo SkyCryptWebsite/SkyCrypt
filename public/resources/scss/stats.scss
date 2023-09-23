@@ -547,6 +547,10 @@
     color: rgba(var(--text-rgb), 0.8);
     line-height: normal;
   }
+
+  .kicked {
+    text-decoration: line-through;
+  }
 }
 
 #additional_player_stats {
@@ -1996,6 +2000,9 @@ inventory-view {
   margin-top: 15px;
   height: 32px;
   line-height: 32px;
+  white-space: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 .category-header-maxed {
@@ -2038,6 +2045,7 @@ inventory-view {
 .minions,
 .stat-farming-crops,
 .sea-creatures,
+.bestiary,
 .trophy-fish {
   display: flex;
   flex-wrap: wrap;
@@ -2063,7 +2071,7 @@ inventory-view {
 
   &[data-missing="true"] {
     filter: grayscale(1);
-    opacity: 0.75;
+    opacity: 0.5;
   }
 
   .chip-icon-wrapper {
@@ -2088,11 +2096,13 @@ inventory-view {
   }
 }
 
-.collection-name {
+.collection-name,
+.bestiary-name {
   font-size: 18px;
 }
 
-.collection-amount {
+.collection-amount,
+.bestiary-amount {
   font-size: 14px;
 }
 
@@ -2470,6 +2480,7 @@ inventory-view {
   .minions,
   .stat-farming-crops,
   .sea-creatures,
+  .bestiary,
   .trophy-fish {
     flex-wrap: nowrap;
     overflow-x: auto;

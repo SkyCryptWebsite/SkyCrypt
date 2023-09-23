@@ -685,8 +685,11 @@ class GreatExplorer extends Node {
   }
 
   perk(level) {
-    const val = 20 + (level - 1) * 4;
-    return [`§7Grants §a+${val}%§7 §7chance to find treasure.`];
+    const perc = 20 + (level - 1) * 4;
+    const val = 1 + Math.floor(level / 5);
+    return [
+      `§7Boosts the chance to find treasure chests while mining in the §5Crystal Hollows §7by §a${perc}% §7and reduces the amount of locks on the chest by §a${val}§7.`,
+    ];
   }
 }
 
@@ -1028,9 +1031,10 @@ class Crystallized extends Node {
   }
 
   perk(level) {
-    const val = 20 + (level - 1) * 6;
+    const speed = 20 + (level - 1) * 6;
+    const fortune = 20 + (level - 1) * 5;
     return [
-      `§7Grants §a+${val} §6${SYMBOLS.mining_speed} Mining Speed §7and a §a${val}% §7chance to deal §a+1 §7extra damage near §5Fallen Stars§7.`,
+      `§7Increases §6${speed} ${SYMBOLS.mining_speed} Mining Speed §7and §6${fortune} ${SYMBOLS.mining_fortune} Mining Fortune §7near §5Fallen Stars§7.`,
     ];
   }
 }

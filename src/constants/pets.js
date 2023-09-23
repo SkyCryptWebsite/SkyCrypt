@@ -542,8 +542,11 @@ export const PET_DATA = {
     maxLevel: 100,
     emoji: "🦝",
   },
-  MONTEZUMA: {
+  FRACTURED_MONTEZUMA_SOUL: {
     head: "/head/df656c06e8a5cb4692564ee21748bddec9d785d1834284aaa1439601bba47d6b",
+    name: {
+      default: "Montezuma",
+    },
     type: "combat",
     maxTier: "epic",
     maxLevel: 100,
@@ -856,7 +859,7 @@ export const PET_ITEMS = {
   },
   PET_ITEM_QUICK_CLAW: {
     name: "Quick Claw",
-    tier: "RARE",
+    tier: "EPIC",
     description: `§7Every 2 pet level you gain §6+1 ${SYMBOLS.mining_speed} Mining Speed §7and §6+1 §6${SYMBOLS.mining_fortune} Mining Fortune§7.`,
     statsPerLevel: {
       mining_speed: 0.5,
@@ -880,7 +883,7 @@ export const PET_ITEMS = {
   DEAD_CAT_FOOD: {
     name: "Dead Cat Food",
     tier: "RARE",
-    description: "§7Grants §a+30 ${SYMBOLS.rift_time} Rift Time §7and §b5 ${SYMBOLS.mana_regen} Mana Regen§7.",
+    description: `§7Grants §a+30 ${SYMBOLS.rift_time} Rift Time §7and §b5 ${SYMBOLS.mana_regen} Mana Regen§7.`,
     stats: {
       rift_time: 30,
       mana_regen: 5,
@@ -890,5 +893,15 @@ export const PET_ITEMS = {
     name: "Four-Eyed Fish",
     tier: "EPIC",
     description: `§7Gain §6+2,000 Coins §7when digging up any §eGriffin Burrow§7.\n§7Grants §b+10 ${SYMBOLS.magic_find} Magic Find §7and §a+55 ${SYMBOLS.defense} Defense§7.`,
+  },
+  PET_ITEM_BINGO_BOOSTER: {
+    name: "Bingo Booster",
+    tier: "EPIC",
+    description: "§7Double the efficiency of the §6Lucky Looting §7perk of your Bingo pet.",
+  },
+  BEJEWELED_COLLAR: {
+    name: "Bejeweled Collar",
+    tier: "RARE",
+    description: `§7Grants §6+25 ${SYMBOLS.mining_speed} Mining Speed §7and §6+10 ${SYMBOLS.mining_fortune} Mining Fortune§7.`,
   },
 };
