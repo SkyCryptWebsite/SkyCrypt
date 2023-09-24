@@ -1030,7 +1030,7 @@ export const getItems = async (
   output.storage = storage;
   output.hotm = hotm;
   output.candy_bag = candy_bag;
-  output.museum = museum ?? [];
+  output.museum = museum;
 
   output.bingo_card = {};
   if (bingoProfile?.events !== undefined) {

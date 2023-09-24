@@ -1,6 +1,6 @@
-import * as constants from "../constants.js";
-import { processItems } from "../lib.js";
-import * as helper from "../helper.js";
+import * as constants from "../../constants.js";
+import { processItems } from "../../lib.js";
+import * as helper from "../../helper.js";
 import _ from "lodash";
 
 async function processMuseumItems(items, museumData, customTextures, packs, options = { cacheOnly: false }) {
