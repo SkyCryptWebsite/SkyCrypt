@@ -26,7 +26,7 @@ async function processMuseumItems(items, museumData, customTextures, packs, opti
     museumData[id] = {
       donated_time: donatedTime,
       borrowing: borrowing ?? false,
-      data: encodedData,
+      data: encodedData.filter((i) => i.id),
     };
   }
 }
