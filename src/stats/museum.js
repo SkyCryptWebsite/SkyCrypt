@@ -4,29 +4,38 @@ import * as helper from "../helper.js";
 import _ from "lodash";
 
 async function processMuseumItems(items, museumData, customTextures, packs, options = { cacheOnly: false }) {
-  for (const item of items) {
-    if (item.items?.data === undefined) continue;
+  for (const [id, data] of Object.entries(items)) {
+    const {
+      donated_time: donatedTime,
+      borrowing,
+      items: { data: decodedData },
+    } = data;
 
-    const data = await processItems(item.items.data, "museum", customTextures, packs, options.cacheOnly);
+    const encodedData = await processItems(decodedData, "museum", customTextures, packs, options.cacheOnly);
 
-    if (item.donated_time) {
-      data.map((i) =>
-        helper.addToItemLore(i, ["", `§7Donated: §c<local-time timestamp="${item.donated_time}"></local-time>`])
+    if (donatedTime) {
+      encodedData.map((i) =>
+        helper.addToItemLore(i, ["", `§7Donated: §c<local-time timestamp="${donatedTime}"></local-time>`])
       );
     }
 
-    if (item.borrowing) {
-      data.map((i) => helper.addToItemLore(i, ["", `§7Status: §cBorrowing`]));
+    if (borrowing) {
+      encodedData.map((i) => helper.addToItemLore(i, ["", `§7Status: §cBorrowing`]));
     }
 
-    museumData.push(...data);
+    museumData[id] = {
+      donated_time: donatedTime,
+      borrowing: borrowing ?? false,
+      data: encodedData,
+    };
   }
 }
 
 async function getMuseumData(profile, customTextures, packs, options = { cacheOnly: false }) {
-  const museumData = { items: [], special: [] };
+  const museumData = { items: {}, special: [] };
+
   await Promise.all([
-    processMuseumItems(Object.values(profile.museum.items), museumData.items, customTextures, packs, options),
+    processMuseumItems(profile.museum.items, museumData.items, customTextures, packs, options),
     processMuseumItems(profile.museum.special, museumData.special, customTextures, packs, options),
   ]);
 
@@ -34,7 +43,7 @@ async function getMuseumData(profile, customTextures, packs, options = { cacheOn
 }
 
 function markChildrenAsDonated(children, output) {
-  output.items[children] = {
+  output[children] = {
     donated_as_child: true,
   };
 
@@ -51,69 +60,46 @@ async function processMuseum(profile, customTextures, packs, options = { cacheOn
   }
 
   const processedMuseumData = await getMuseumData(profile, customTextures, packs, options);
-  const output = {
-    items: [],
-    specialItems: processedMuseumData.special,
-  };
 
-  const museumItemsData = member.items;
+  const output = {};
   for (const item of constants.getMuseumItems()) {
-    const itemData = museumItemsData[item];
+    const itemData = processedMuseumData.items[item];
     if (itemData === undefined) {
       continue;
     }
 
-    output.items[item] = {
-      donated_time: itemData.donated_time,
-      borrowing: itemData.borrowing,
-      itemData: processedMuseumData.items.find((i) => helper.getId(i) === item),
-    };
-
-    // Could be done better but can't be bothered right now
-    if (output.items[item].itemData === undefined) {
-      if (constants.MUSEUM.armor_to_id[item] !== undefined) {
-        output.items[item].itemData = processedMuseumData.items.find((i) =>
-          helper.getId(i).includes(constants.MUSEUM.armor_to_id[item][0])
-        );
-      }
-
-      if (output.items[item].itemData === undefined) {
-        const alias = constants.MUSEUM.aliases[item];
-        if (alias !== undefined) {
-          output.items[item].itemData = processedMuseumData.items.find((i) => helper.getId(i) === alias);
-        }
-      }
-    }
+    output[item] = itemData;
 
     const children = constants.MUSEUM.children[item];
-    if (children !== undefined && output.items[item] !== undefined) {
-      markChildrenAsDonated(children, output);
+    if (children !== undefined) {
+      markChildrenAsDonated(children, processedMuseumData.items[item]);
     }
   }
 
   return {
-    ...output,
-    value: profile.museum?.value ?? 0,
-    appraisal: profile.museum?.appraisal,
+    value: profile.museum.value ?? 0,
+    appraisal: profile.museum.appraisal,
     total: {
-      amount: Object.keys(output.items).length,
+      amount: Object.keys(output).length,
       total: constants.getMuseumItems().length,
     },
     weapons: {
-      amount: Object.keys(output.items).filter((i) => constants.MUSEUM.weapons.includes(i)).length,
+      amount: Object.keys(output).filter((i) => constants.MUSEUM.weapons.includes(i)).length,
       total: constants.MUSEUM.weapons.length,
     },
     armor: {
-      amount: Object.keys(output.items).filter((i) => constants.MUSEUM.armor.includes(i)).length,
+      amount: Object.keys(output).filter((i) => constants.MUSEUM.armor.includes(i)).length,
       total: constants.MUSEUM.armor.length,
     },
     rarities: {
-      amount: Object.keys(output.items).filter((i) => constants.MUSEUM.rarities.includes(i)).length,
+      amount: Object.keys(output).filter((i) => constants.MUSEUM.rarities.includes(i)).length,
       total: constants.MUSEUM.rarities.length,
     },
     special: {
       amount: processedMuseumData.special.length,
     },
+    items: output,
+    specialItems: processedMuseumData.special,
   };
 }
 
@@ -139,11 +125,11 @@ export async function getMuseumItems(profile, customTextures, packs, options = {
         continue;
       }
 
-      const museumItems = (constants.MUSEUM[inventoryType] ?? museum.specialItems).length;
+      const museumItems = museum[inventoryType].total ?? museum[inventoryType].amount;
       const pages = Math.ceil(museumItems / constants.MUSEUM.item_slots.length);
 
       for (let page = 0; page < pages; page++) {
-        // ? UI
+        // FRAME
         for (let i = 0; i < 6 * 9; i++) {
           if (output[item.position].containsItems[i]) {
             const presetItem = output[item.position].containsItems[i];
@@ -156,42 +142,67 @@ export async function getMuseumItems(profile, customTextures, packs, options = {
           output[item.position].containsItems[i + page * 54] ??= helper.generateItem({ id: undefined });
         }
 
+        // CLEAR FIRST 4 ITEMS
         for (let i = 0; i < 4; i++) {
           output[item.position].containsItems[i + page * 54] = helper.generateItem({ id: undefined });
         }
 
-        // ? ITEMS
+        // CATEGORIES
         for (const [index, slot] of Object.entries(constants.MUSEUM.item_slots)) {
           const itemSlot = parseInt(index) + page * constants.MUSEUM.item_slots.length;
+
+          // SPECIAL ITEMS CATEGORY
           if (inventoryType === "special") {
             const museumItem = museum.specialItems[itemSlot];
             if (museumItem === undefined) {
               continue;
             }
 
-            output[item.position].containsItems[slot + page * 54] = helper.generateItem(museumItem);
-          } else {
-            const itemId = constants.MUSEUM[inventoryType][itemSlot];
-            const museumItem = museum.items[itemId];
-
-            const itemData = museumItem
-              ? museumItem.itemData ?? constants.MUSEUM.higher_tier_donated
-              : constants.MUSEUM.missing_item[inventoryType];
-
-            itemData.display_name = _.startCase(constants.MUSEUM.armor_to_id[itemId]?.[0] ?? itemId);
-            if (itemData.display_name === "") {
-              continue;
-            }
+            const itemData = museumItem.data[0];
 
             output[item.position].containsItems[slot + page * 54] = helper.generateItem(itemData);
+            continue;
           }
+
+          // WEAPONS, ARMOR & RARITIES
+          const itemId = constants.MUSEUM[inventoryType][itemSlot];
+          if (itemId === undefined) {
+            continue;
+          }
+
+          const museumItem = museum.items[itemId];
+
+          // MISSING ITEM
+          if (museumItem === undefined) {
+            const itemData = constants.MUSEUM.missing_item[inventoryType];
+            itemData.display_name = _.startCase(constants.MUSEUM.armor_to_id[itemId] ?? itemId);
+
+            output[item.position].containsItems[slot + page * 54] = helper.generateItem(itemData);
+            continue;
+          }
+
+          // DONATED HIGHER TIER
+          if (museumItem.donated_as_child) {
+            const itemData = constants.MUSEUM.higher_tier_donated;
+            itemData.display_name = _.startCase(constants.MUSEUM.armor_to_id[itemId] ?? itemId);
+
+            output[item.position].containsItems[slot + page * 54] = helper.generateItem(itemData);
+            continue;
+          }
+
+          // NORMAL ITEM
+          const itemData = museumItem.data[0];
+          if (museumItem.data.length > 1) {
+            itemData.containsItems = museumItem.data.map((i) => helper.generateItem(i));
+          }
+
+          output[item.position].containsItems[slot + page * 54] = helper.generateItem(itemData);
         }
       }
     }
 
     return output;
   } catch (error) {
-    console.log(error);
     return null;
   }
 }

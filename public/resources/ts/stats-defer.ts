@@ -129,8 +129,8 @@ export const ALL_ITEMS = new Map(
   ]
     .flat()
     .flatMap((item) => {
-      if ("containsItems" in item) {
-        return [item, ...item.containsItems];
+      if ("containsItems" in item && item.containsItems != undefined) {
+        return [item, ...item.containsItems, ...item.containsItems.map((i) => i.containsItems ?? [])].flat();
       } else {
         return item;
       }
