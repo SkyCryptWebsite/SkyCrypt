@@ -967,7 +967,7 @@ const metaDescription = getMetaDescription()
       if(Object.keys(calculated.collections).length == 0)
         notAvailable.push('Collections');
 
-      if (items.museum.length === 0)
+      if (items.museum?.length === 0)
         notAvailable.push('Museum')
     %>
       <% if (notAvailable.length > 0 || ['ironman', 'bingo', 'island'].includes(calculated.profile.game_mode)) { %>

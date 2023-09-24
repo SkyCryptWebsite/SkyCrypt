@@ -72,7 +72,7 @@ async function processMuseum(profile, customTextures, packs, options = { cacheOn
 
     const children = constants.MUSEUM.children[item];
     if (children !== undefined) {
-      markChildrenAsDonated(children, processedMuseumData.items[item]);
+      markChildrenAsDonated(children, output);
     }
   }
 
