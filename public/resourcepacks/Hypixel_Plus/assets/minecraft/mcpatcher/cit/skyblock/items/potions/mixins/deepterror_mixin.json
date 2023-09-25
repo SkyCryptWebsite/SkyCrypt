@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "./mixin_glass",
+        "layer1": "./deepterror_mixin"
+    }
+}

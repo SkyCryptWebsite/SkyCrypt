@@ -883,7 +883,7 @@ export const PET_ITEMS = {
   DEAD_CAT_FOOD: {
     name: "Dead Cat Food",
     tier: "RARE",
-    description: "§7Grants §a+30 ${SYMBOLS.rift_time} Rift Time §7and §b5 ${SYMBOLS.mana_regen} Mana Regen§7.",
+    description: `§7Grants §a+30 ${SYMBOLS.rift_time} Rift Time §7and §b5 ${SYMBOLS.mana_regen} Mana Regen§7.`,
     stats: {
       rift_time: 30,
       mana_regen: 5,

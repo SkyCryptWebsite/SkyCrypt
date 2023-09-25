@@ -1414,7 +1414,10 @@ export const getItems = async (
           a.tag?.ExtraAttributes?.modifier == armor[0].tag.ExtraAttributes.modifier
       ).length == 4
     ) {
-      reforgeName = armor[0].display_name.split(" ")[0];
+      reforgeName = armor[0].display_name
+        .replace(/[^A-Za-z0-9 -']/g, "")
+        .trim()
+        .split(" ")[0];
     }
 
     // Handling normal sets of armor
@@ -3696,11 +3699,10 @@ export async function getProfile(
 
   let lastCachedSave = 0;
 
-  const profileData = [];
   if (profileObject) {
-    for (const pId of Object.keys(profileObject.profiles)) {
-      profileData.push(await db.collection("profileCache").findOne({ profile_id: pId }));
-    }
+    const profileData = db
+      .collection("profileCache")
+      .find({ profile_id: { $in: Object.keys(profileObject.profiles) } });
     for await (const doc of profileData) {
       if (doc.members?.[paramPlayer] == undefined) {
         continue;

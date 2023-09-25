@@ -1970,6 +1970,9 @@ inventory-view {
   margin-top: 15px;
   height: 32px;
   line-height: 32px;
+  white-space: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 .category-header-maxed {
