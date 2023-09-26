@@ -868,6 +868,13 @@ const SKINS = [
     release: new Date("2023-06-19 18:00:00 GMT+1").getTime(),
   },
   {
+    id: "PET_SKIN_PARROT_BUCCANEER",
+    name: "Buccaneer",
+    texture: "/head/385de4d50ab148f68fa377cdd760f9d23f20d503b3e1c1ad74120029ccdc7299",
+    source: "firesale",
+    release: new Date("2023-07-15 18:00:00 GMT+1").getTime(),
+  },
+  {
     id: "PET_SKIN_ENDER_DRAGON_BABY_BLUE",
     name: "Baby Blue",
     texture: "/head/49582fa21c45c40a80a9a791842f71078f47c335d627bb560eb86dad641a8c4",
@@ -882,11 +889,18 @@ const SKINS = [
     release: new Date("2023-07-29 18:00:00 GMT+1").getTime(),
   },
   {
-    id: "PET_SKIN_PARROT_BUCCANEER",
-    name: "Buccaneer",
-    texture: "/head/385de4d50ab148f68fa377cdd760f9d23f20d503b3e1c1ad74120029ccdc7299",
+    id: "PET_SKIN_TURTLE_ANCIENT",
+    name: "Ancient",
+    texture: "/head/5a85b6d364e8cd9dc777c0beed34e1af28d1bd6777a93852073c142a8ae17586",
     source: "firesale",
-    release: new Date("2023-07-15 18:00:00 GMT+1").getTime(),
+    release: new Date("2023-09-03 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_TURTLE_ANCIENT_GOLDEN",
+    name: "Golden Ancient",
+    textur: "/head/b972da505e9e55e32039c5d8f5dbb2f12ab52eea02bec3df6a40adb8b8fecbb0",
+    source: "firesale",
+    release: new Date("2023-09-03 18:00:00 GMT+1").getTime(),
   },
 ];
 
