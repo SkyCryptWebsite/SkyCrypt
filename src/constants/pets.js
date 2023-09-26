@@ -551,6 +551,7 @@ export const PET_DATA = {
     maxTier: "epic",
     maxLevel: 100,
     emoji: "💀",
+    ignoredInPetScoreCalculation: true,
   },
 };
 

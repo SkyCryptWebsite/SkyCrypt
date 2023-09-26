@@ -2858,6 +2858,10 @@ async function getMissingPets(pets, gameMode, userProfile) {
 function getPetScore(pets) {
   const highestRarity = {};
   for (const pet of pets) {
+    if (constants.PET_DATA[pet.type].ignoredInPetScoreCalculation === true) {
+      continue;
+    }
+
     if (!(pet.type in highestRarity) || constants.PET_VALUE[pet.rarity] > highestRarity[pet.type]) {
       highestRarity[pet.type] = constants.PET_VALUE[pet.rarity];
     }
@@ -2865,6 +2869,10 @@ function getPetScore(pets) {
 
   const highestLevel = {};
   for (const pet of pets) {
+    if (constants.PET_DATA[pet.type].ignoredInPetScoreCalculation === true) {
+      continue;
+    }
+
     if (!(pet.type in highestLevel) || pet.level.level > highestLevel[pet.type]) {
       if (pet.level.level < constants.PET_DATA[pet.type].maxLevel) {
         continue;
