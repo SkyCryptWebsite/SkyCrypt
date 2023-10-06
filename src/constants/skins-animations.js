@@ -902,6 +902,27 @@ const SKINS = [
     source: "firesale",
     release: new Date("2023-09-03 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_BABY_YETI_DARK_SASQUATCH",
+    name: "Dark Sasquatch",
+    textur: "/head/e8aebb0944fbfaa30ee685684abe2340a532dd21da7e364adb6e839f06466adc",
+    source: "firesale",
+    release: new Date("2023-09-30 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_BABY_YETI_MIDNIGHT",
+    name: "Midnight",
+    textur: "/head/4005bdfb52117b6e9b177ee2dc7b80cd61d6861cd66d87a2a389060ced6894",
+    source: "firesale",
+    release: new Date("2023-09-30 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_BABY_YETI_LIGHT_SASQUATCH",
+    name: "Light Sasquatch",
+    textur: "/head/128aa536588508afb2648253edee46849f308165d382f8ab883bf6de4a135d39",
+    source: "firesale",
+    release: new Date("2023-09-30 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
