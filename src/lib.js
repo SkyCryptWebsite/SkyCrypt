@@ -1692,7 +1692,7 @@ export async function getStats(
     output.slayers = Object.assign({}, slayers);
   }
 
-  if (!items.no_inventory) {
+  if (!items.no_inventory && items.accessory_ids) {
     output.missingAccessories = getMissingAccessories(items.accessory_ids);
 
     for (const key of Object.keys(output.missingAccessories)) {
