@@ -9,6 +9,13 @@ services:
       - ./devdata/redis:/data
     container_name: sc_redis
 
+  skycrypt:
+    build: .
+    volumes:
+      - ./credentials.json:/skycrypt/credentials.json
+    ports:
+      - 32464:32464
+
   mongo:
     image: mongo:latest
     ports:
