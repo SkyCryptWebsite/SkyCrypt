@@ -3970,6 +3970,10 @@ export async function getBingoProfile(
         { upsert: true }
       );
     } catch (e) {
+      if (e?.response?.data?.cause === "No bingo data could be found") {
+        return null;
+      }
+
       if (e?.response?.data?.cause != undefined) {
         throw new Error(`Hypixel API Error: ${e.response.data.cause}.`);
       }
