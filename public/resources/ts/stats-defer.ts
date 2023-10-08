@@ -333,7 +333,6 @@ function fillLore(element: HTMLElement) {
 
     backpackContents.setAttribute("backpack-id", item.itemId);
     backpackContents.setAttribute("inventory-type", "backpack");
-    console.log(backpackContents);
   } else {
     backpackContents.classList.remove("contains-backpack");
   }
