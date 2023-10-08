@@ -281,14 +281,15 @@ export async function getGuild(uuid, db, cacheOnly = false) {
       return null;
     }
 
-    const guildMaster = guildResponse.members.find((member) =>
-      ["guild master", "guildmaster"].includes(member.rank.toLowerCase())
-    ).uuid;
+    const guildMaster =
+      guildResponse.members.find((member) => ["guild master", "guildmaster"].includes(member.rank.toLowerCase()))
+        ?.uuid ?? null;
+
     guildObject = {
       ...guildResponse,
       last_updated: Date.now(),
       gm: guildMaster,
-      gmUser: await resolveUsernameOrUuid(guildMaster, db, true),
+      gmUser: guildMaster ? await resolveUsernameOrUuid(guildMaster, db, true) : null,
       rank: guildResponse.members.find((member) => member.uuid == uuid).rank,
       level: getGuildLevel(guildResponse.exp),
       id: guildResponse._id,
