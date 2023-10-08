@@ -884,7 +884,7 @@ const SKINS = [
   {
     id: "PET_SKIN_ENDER_DRAGON_BABY",
     name: "Baby",
-    texture: "24e73adc6be7922d0d6287192b48b4afcd6d72207773d0b15a1903b051ec0c22",
+    texture: "/head/24e73adc6be7922d0d6287192b48b4afcd6d72207773d0b15a1903b051ec0c22",
     source: "/head/firesale",
     release: new Date("2023-07-29 18:00:00 GMT+1").getTime(),
   },
