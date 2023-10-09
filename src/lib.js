@@ -3205,7 +3205,12 @@ export async function getDungeons(userProfile, hypixelProfile) {
     output[type] = {
       id: dungeon_id,
       visited: true,
-      level: getLevelByXp(dungeon.experience, { type: "dungeoneering", skill: "dungeoneering", ignoreCap: true, infinite: true }),
+      level: getLevelByXp(dungeon.experience, {
+        type: "dungeoneering",
+        skill: "dungeoneering",
+        ignoreCap: true,
+        infinite: true,
+      }),
       highest_floor:
         dungeons_data.floors[`${type}_${highest_floor}`] && dungeons_data.floors[`${type}_${highest_floor}`].name
           ? dungeons_data.floors[`${type}_${highest_floor}`].name
