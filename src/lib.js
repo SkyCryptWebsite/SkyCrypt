@@ -329,7 +329,7 @@ async function getBackpackContents(arraybuf) {
 }
 
 // Process items returned by API
-export async function processItems(base64, source, customTextures = false, packs, cacheOnly = false) {
+async function processItems(base64, source, customTextures = false, packs, cacheOnly = false) {
   // API stores data as base64 encoded gzipped Minecraft NBT data
   const buf = Buffer.from(base64, "base64");
 
