@@ -29,7 +29,7 @@ Before contributing to SkyCrypt, make sure you install the development environme
 
 2. Run `pnpm i` in the project directory to install the necessary dependencies.
    - Some operating systems may require extra dependencies, such as [node-canvas](https://github.com/Automattic/node-canvas/wiki)
-3. On minecraft, log into `mc.hypixel.net`. Run the command `/api`, and copy the result.
+3. Go to `developer.hypixel.net/dashboard`. Click `Create API Key` and copy the result.
 4. Open `credentials.json` and input your Hypixel API key into the `hypixel_api_key` field.
 5. In the `dbUrl` field, input your MongoDB url. In the `dbName` field, input the name of the database you would like to use.
 6. (optional) If you are not using the default Redis port or you are using Redis remotely, you can configure the Redis URL with the `redisUrl` field in `credentials.json`

@@ -12,6 +12,7 @@ export const RARITIES = [
   "supreme",
   "special",
   "very_special",
+  "admin",
 ];
 
 /** @typedef {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"a"|"b"|"c"|"d"|"e"|"f"} ColorCode */
@@ -28,4 +29,5 @@ export const RARITY_COLORS = {
   supreme: "4",
   special: "c",
   very_special: "c",
+  admin: "4",
 };

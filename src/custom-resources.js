@@ -12,6 +12,7 @@ import minecraftData from "minecraft-data";
 const mcData = minecraftData("1.8.9");
 import UPNG from "upng-js";
 import RJSON from "relaxed-json";
+import cluster from "cluster";
 
 import child_process from "child_process";
 import { getFileHash } from "./hashes.js";
@@ -20,12 +21,12 @@ const execFile = util.promisify(child_process.execFile);
 const NORMALIZED_SIZE = 128;
 const RESOURCE_CACHING = true;
 
-const folderPath = getFolderPath();
+const FOLDER_PATH = getFolderPath();
 const RESOURCE_PACK_FOLDER = path.resolve(getFolderPath(), "..", "public", "resourcepacks");
 
-const cacheFolderPath = getCacheFolderPath(folderPath);
-const PACK_HASH_CACHE_FILE = getCacheFilePath(cacheFolderPath, "json", "pack_hashes", "json");
-const RESOURCES_CACHE_FILE = getCacheFilePath(cacheFolderPath, "json", "custom_resources", "json");
+const CACHE_FOLDER_PATH = getCacheFolderPath(FOLDER_PATH);
+const PACK_HASH_CACHE_FILE = getCacheFilePath(CACHE_FOLDER_PATH, "json", "pack_hashes", "json");
+const RESOURCES_CACHE_FILE = getCacheFilePath(CACHE_FOLDER_PATH, "json", "custom_resources", "json");
 
 let resourcesReady = false;
 const readyPromise = new Promise((resolve) => {
@@ -80,6 +81,10 @@ export async function init() {
   try {
     packConfigHashes = JSON.parse(fs.readFileSync(PACK_HASH_CACHE_FILE));
 
+    if (Object.keys(packConfigHashes).length !== resourcePacks.length) {
+      throw new Error("The amount of config hashes does not match the amount of packs");
+    }
+
     resourcePacks.forEach((pack) => {
       if (packConfigHashes[pack.config.id] !== pack.config.hash) {
         throw new Error("Config hashes were not matching!");
@@ -88,6 +93,7 @@ export async function init() {
 
     resourcesUpToDate = true;
   } catch (e) {
+    packConfigHashes = {};
     resourcePacks.forEach((pack) => {
       packConfigHashes[pack.config.id] = pack.config.hash;
     });
@@ -111,11 +117,12 @@ export async function init() {
     fs.writeFileSync(RESOURCES_CACHE_FILE, JSON.stringify(resourcePacks));
   }
 
+  resourcePacks = resourcePacks.sort((a, b) => b.config.priority - a.config.priority);
   resourcePacks.forEach((pack) => {
     outputPacks.push(
       Object.assign(
         {
-          basePath: "/" + path.relative(path.resolve(folderPath, "..", "public"), pack.basePath),
+          base_path: "/" + path.relative(path.resolve(FOLDER_PATH, "..", "public"), pack.base_path ?? pack.basePath),
         },
         pack.config
       )
@@ -144,7 +151,7 @@ async function loadPackConfigs() {
       config.hash = await getFileHash(configPath);
 
       resourcePacks.push({
-        basePath,
+        base_path: basePath,
         config,
       });
     } catch (e) {
@@ -157,7 +164,7 @@ async function loadResourcePacks() {
   resourcePacks = resourcePacks.sort((a, b) => a.config.priority - b.config.priority);
 
   for (const pack of resourcePacks) {
-    pack.files = await getFiles(path.resolve(pack.basePath, "assets", "minecraft", "mcpatcher", "cit"));
+    pack.files = await getFiles(path.resolve(pack.base_path, "assets", "minecraft", "mcpatcher", "cit"));
     pack.textures = [];
 
     for (const file of pack.files) {
@@ -167,8 +174,6 @@ async function loadResourcePacks() {
 
       const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
       const properties = {};
-
-      if (!lines.some((line) => line.startsWith("nbt.ExtraAttributes.id"))) continue;
 
       for (const line of lines) {
         // Skipping comments
@@ -196,7 +201,7 @@ async function loadResourcePacks() {
       }
 
       const texture = {
-        weight: 0,
+        weight: pack.config.priority,
         animated: false,
         file: path.basename(file),
         match: [],
@@ -222,7 +227,7 @@ async function loadResourcePacks() {
             const topLayer = layers.pop();
 
             if (topLayer.startsWith("layer")) {
-              const layerPath = path.resolve(pack.basePath, "assets", "minecraft", model.textures[topLayer] + ".png");
+              const layerPath = path.resolve(pack.base_path, "assets", "minecraft", model.textures[topLayer] + ".png");
               await fs.access(layerPath, fs.F_OK);
 
               textureFile = layerPath;
@@ -317,7 +322,7 @@ async function loadResourcePacks() {
 
       for (const property in properties) {
         if (property == "weight") {
-          texture.weight = parseInt(properties[property]);
+          texture.weight += parseInt(properties[property]);
         }
 
         if (property == "items" || property == "matchItems") {
@@ -347,6 +352,10 @@ async function loadResourcePacks() {
         } else if (regex.startsWith("regex:")) {
           regex = new RegExp(regex.substring(6));
         } else {
+          if (property == "nbt.ExtraAttributes.id") {
+            texture.skyblock_id = regex;
+          }
+
           regex = new RegExp(`^${_.escapeRegExp(regex)}$`);
         }
 
@@ -488,14 +497,25 @@ async function loadResourcePacks() {
 }
 
 export function getPacks() {
-  return outputPacks.sort((a, b) => b.priority - a.priority);
+  return outputPacks;
 }
 
 export function getCompletePacks() {
   return resourcePacks;
 }
 
-export async function getTexture(item, options = { ignore_id: false, pack_ids: [], debug: false }) {
+/**
+ * Processes all textures that could potentially be connected to an item, then throws the one with biggest priority
+ * @param {object} item
+ * @param {object} options
+ * @param {boolean} [options.ignore_id]
+ * @param {string[]} [options.pack_ids]
+ * @param {boolean} [options.debug]
+ * @returns {object} Item's texture
+ */
+export async function getTexture(item, options) {
+  options = Object.assign({ ignore_id: false, pack_ids: undefined, debug: false }, options);
+
   if (!resourcesReady) {
     await readyPromise;
   }
@@ -511,13 +531,16 @@ export async function getTexture(item, options = { ignore_id: false, pack_ids: [
 
   let tempPacks = resourcePacks;
 
-  options.pack_ids = options.pack_ids !== undefined ? options.pack_ids.split(",") : [];
+  options.pack_ids =
+    options.pack_ids !== undefined && typeof options.pack_ids === "string" ? options.pack_ids.split(",") : [];
 
   if (options.pack_ids.length > 0) {
     tempPacks = tempPacks.filter((a) => options.pack_ids.includes(a.config.id));
+    tempPacks = tempPacks.sort((a, b) => options.pack_ids.indexOf(b) - options.pack_ids.indexOf(a));
   }
 
-  tempPacks = tempPacks.sort((a, b) => options.pack_ids.indexOf(a) - options.pack_ids.indexOf(b));
+  // reserve is needed because we want the most priority packs on the bottom of the array
+  tempPacks = tempPacks.reverse();
 
   for (const pack of tempPacks) {
     for (const texture of pack.textures) {
@@ -526,6 +549,14 @@ export async function getTexture(item, options = { ignore_id: false, pack_ids: [
       }
 
       if (options.ignore_id === false && "damage" in texture && texture.damage != item.Damage) {
+        continue;
+      }
+
+      if (
+        options.ignore_id === false &&
+        (("skyblock_id" in texture && texture.skyblock_id != (item?.tag?.ExtraAttributes?.id ?? "")) ||
+          (!("skyblock_id" in texture) && item?.tag?.ExtraAttributes?.id !== undefined))
+      ) {
         continue;
       }
 
@@ -572,7 +603,10 @@ export async function getTexture(item, options = { ignore_id: false, pack_ids: [
           continue;
         }
 
-        outputTexture = Object.assign({ pack: { basePath: pack.basePath, config: pack.config } }, texture);
+        outputTexture = Object.assign(
+          { pack: { base_path: pack.base_path ?? pack.basePath, config: pack.config } },
+          texture
+        );
       }
     }
 
@@ -584,13 +618,15 @@ export async function getTexture(item, options = { ignore_id: false, pack_ids: [
   }
 
   outputTexture.path = path
-    .relative(path.resolve(folderPath, "..", "public"), outputTexture.path)
+    .relative(path.resolve(FOLDER_PATH, "..", "public"), outputTexture.path)
     .replaceAll("\\", "/");
 
   debugStats.time_spent_ms = Date.now() - timeStarted;
   outputTexture.debug = debugStats;
 
-  process.send({ type: "used_pack", id: outputTexture?.pack.config.id });
+  if (cluster.isWorker) {
+    process.send({ type: "used_pack", id: outputTexture?.pack.config.id });
+  }
 
   return outputTexture;
 }

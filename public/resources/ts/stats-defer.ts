@@ -1,10 +1,11 @@
-import { setCookie } from "./common-defer";
+import { getCookie, setCookie } from "./common-defer";
 import { SkinViewer, createOrbitControls } from "skinview3d";
 import tippy from "tippy.js";
 
 import { renderLore } from "../../../common/formatting.js";
 
 import { getPlayerStats } from "./calculate-player-stats";
+import { RARITY_COLORS } from "../../../common/constants.js";
 
 import("./elements/inventory-view");
 
@@ -33,21 +34,6 @@ if ("share" in navigator) {
       url: location.href.split("#")[0],
     });
   });
-}
-
-function getCookie(cookieName: string) {
-  if (document.cookie.length > 0) {
-    let cookieStart = document.cookie.indexOf(cookieName + "=");
-    if (cookieStart != -1) {
-      cookieStart = cookieStart + cookieName.length + 1;
-      let cookieEnd = document.cookie.indexOf(";", cookieStart);
-      if (cookieEnd == -1) {
-        cookieEnd = document.cookie.length;
-      }
-      return decodeURIComponent(document.cookie.substring(cookieStart, cookieEnd));
-    }
-  }
-  return "";
 }
 
 tippy("*[data-tippy-content]:not(.interactive-tooltip)", {
@@ -139,6 +125,7 @@ export const ALL_ITEMS = new Map(
     items.wardrobe_inventory,
     items.storage,
     items.hotm,
+    items.bingo_card,
   ]
     .flat()
     .flatMap((item) => {
@@ -269,11 +256,19 @@ function fillLore(element: HTMLElement) {
     return;
   }
 
+  const itemNameString = ((item as Item).tag?.display?.Name ?? item.display_name ?? "???") as string;
+  const colorCode = itemNameString.match(/^§([0-9a-fklmnor])/i);
+  if (colorCode && colorCode[1]) {
+    itemName.style.backgroundColor = `var(--§${colorCode[1]})`;
+  } else {
+    itemName.style.backgroundColor = `var(--§${(RARITY_COLORS as RarityColors)[item.rarity || "common"]})`;
+  }
+
   itemName.className = `item-name piece-${item.rarity || "common"}-bg nice-colors-dark`;
   const itemNameHtml = renderLore((item as Item).tag?.display?.Name ?? item.display_name ?? "???");
   const isMulticolor = (itemNameHtml.match(/<\/span>/g) || []).length > 1;
   itemNameContent.dataset.multicolor = String(isMulticolor);
-  itemNameContent.innerHTML = isMulticolor ? itemNameHtml : item.display_name ?? "???";
+  itemNameContent.innerHTML = isMulticolor ? itemNameHtml : itemNameString.replace(/§([0-9a-fklmnor])/gi, "") ?? "???";
 
   if (element.hasAttribute("data-pet-index")) {
     itemNameContent.dataset.multicolor = "false";
@@ -562,7 +557,7 @@ function parseFavorites(cookie: string) {
 }
 
 function checkFavorite() {
-  const favorited = parseFavorites(getCookie("favorite")).includes(
+  const favorited = parseFavorites(getCookie("favorite") ?? "").includes(
     favoriteElement.getAttribute("data-username") as string
   );
   favoriteElement.setAttribute("aria-checked", favorited.toString());
@@ -579,7 +574,7 @@ favoriteElement.addEventListener("click", () => {
   if (uuid == "0c0b857f415943248f772164bf76795c") {
     favoriteNotification.setContent("No");
   } else {
-    const cookieArray = parseFavorites(getCookie("favorite"));
+    const cookieArray = parseFavorites(getCookie("favorite") ?? "");
     if (cookieArray.includes(uuid)) {
       cookieArray.splice(cookieArray.indexOf(uuid), 1);
 
@@ -927,6 +922,10 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
           bonusStats[stat] += stats[stat][target];
         }
       }
+    }
+
+    if (Object.keys(bonusStats).length === 0) {
+      return;
     }
 
     const node = document.createElement("bonus-stats");

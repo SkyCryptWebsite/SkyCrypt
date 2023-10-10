@@ -7,7 +7,7 @@ const FEATURED_PROFILES = [
     // metalcupcake5
     uuid: "b44d2d5272dc49c28185b2d6a158d80a",
     type: "MAINTAINER",
-    message: "a dev or something idk",
+    message: "nyaaaa~ :3",
   },
   {
     // MartinNemi03
@@ -72,5 +72,5 @@ const FEATURED_PROFILES = [
   const cachePath = helper.getCacheFolderPath(helper.getFolderPath());
   await fs.writeJson(helper.getCacheFilePath(cachePath, "json", "featured-profiles", "json"), FEATURED_PROFILES);
 
-  console.log("Featured profiles updated!");
+  // console.log("Featured profiles updated!");
 }

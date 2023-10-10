@@ -8,11 +8,14 @@ declare namespace extra {
 }
 
 interface Pack {
-  base_path: string;
   id: string;
+  base_path: string;
+  priority: number;
   name: string;
   author: string;
   url: string;
+  version?: string;
+  default?: boolean;
 }
 
 interface Theme {
@@ -692,4 +695,10 @@ interface StatBonusType {
   [key: string]: {
     [key in StatName]?: number;
   };
+}
+
+type ColorCode = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "a" | "b" | "c" | "d" | "e" | "f";
+
+interface RarityColors {
+  [key: string]: ColorCode;
 }

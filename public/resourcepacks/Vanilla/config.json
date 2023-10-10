@@ -1,0 +1,8 @@
+{
+  "id": "VANILLA",
+  "name": "Vanilla",
+  "author": "Mojang",
+  "url": "https://minecraft.net/",
+  "priority": -1,
+  "default": true
+}
