@@ -2183,6 +2183,8 @@ export async function getStats(
 
   const misc = {};
 
+  output.visited_zones = userProfile.visited_zones || [];
+  output.visited_modes = userProfile.visited_modes || [];
   output.perks = userProfile.perks || {};
   misc.milestones = {};
   misc.objectives = {};
