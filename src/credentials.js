@@ -56,4 +56,16 @@ if (hasBeenModified) {
   writeFile(credentials);
 }
 
+if (process.env.HYPIXEL_API_KEY) {
+  credentials.hypixel_api_key = process.env.HYPIXEL_API_KEY;
+}
+
+if (process.env.MONGO_CONNECTION_STRING) {
+  credentials.dbUrl = process.env.MONGO_CONNECTION_STRING;
+}
+
+if (process.env.REDIS_CONNECTION_STRING) {
+  credentials.redisUrl = process.env.REDIS_CONNECTION_STRING;
+}
+
 export default credentials;
