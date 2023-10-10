@@ -5,6 +5,7 @@ import tippy from "tippy.js";
 import { renderLore } from "../../../common/formatting.js";
 
 import { getPlayerStats } from "./calculate-player-stats";
+import { RARITY_COLORS } from "../../../common/constants.js";
 
 import("./elements/inventory-view");
 
@@ -125,6 +126,7 @@ export const ALL_ITEMS = new Map(
     items.storage,
     items.hotm,
     items.sacks,
+    items.bingo_card,
   ]
     .flat()
     .flatMap((item) => {
@@ -255,11 +257,19 @@ function fillLore(element: HTMLElement) {
     return;
   }
 
+  const itemNameString = ((item as Item).tag?.display?.Name ?? item.display_name ?? "???") as string;
+  const colorCode = itemNameString.match(/^§([0-9a-fklmnor])/i);
+  if (colorCode && colorCode[1]) {
+    itemName.style.backgroundColor = `var(--§${colorCode[1]})`;
+  } else {
+    itemName.style.backgroundColor = `var(--§${(RARITY_COLORS as RarityColors)[item.rarity || "common"]})`;
+  }
+
   itemName.className = `item-name piece-${item.rarity || "common"}-bg nice-colors-dark`;
   const itemNameHtml = renderLore((item as Item).tag?.display?.Name ?? item.display_name ?? "???");
   const isMulticolor = (itemNameHtml.match(/<\/span>/g) || []).length > 1;
   itemNameContent.dataset.multicolor = String(isMulticolor);
-  itemNameContent.innerHTML = isMulticolor ? itemNameHtml : item.display_name ?? "???";
+  itemNameContent.innerHTML = isMulticolor ? itemNameHtml : itemNameString.replace(/§([0-9a-fklmnor])/gi, "") ?? "???";
 
   if (element.hasAttribute("data-pet-index")) {
     itemNameContent.dataset.multicolor = "false";
@@ -913,6 +923,10 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
           bonusStats[stat] += stats[stat][target];
         }
       }
+    }
+
+    if (Object.keys(bonusStats).length === 0) {
+      return;
     }
 
     const node = document.createElement("bonus-stats");

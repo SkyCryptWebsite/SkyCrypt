@@ -2,6 +2,7 @@ export * from "../common/constants.js";
 
 export * from "./constants/armor.js";
 export * from "./constants/bestiary.js";
+export * from "./constants/bingo.js";
 export * from "./constants/collections.js";
 export * from "./constants/dungeons.js";
 export * from "./constants/forge.js";

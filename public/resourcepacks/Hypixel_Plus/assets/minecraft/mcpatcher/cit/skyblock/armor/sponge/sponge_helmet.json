@@ -1,6 +1,7 @@
 {
-	"parent": "item/skull_item",
+	"parent": "item/helmet",
 	"textures": {
-		"0": "./sponge_helmet"
+		"0": "./sponge_helmet_armor",
+		"1": "./sponge_helmet"
 	}
 }
