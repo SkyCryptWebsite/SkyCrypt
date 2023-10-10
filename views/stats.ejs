@@ -1992,8 +1992,17 @@ const metaDescription = getMetaDescription()
             <span class="stat-value <%= max %>"><%= calculated.dungeons.journals.journals_completed %></span>
             <span class="grey-text"> (<%= calculated.dungeons.journals.pages_collected %>/<%= calculated.dungeons.journals.total_pages %>)</span>
             <br>
-            <span class="stat-name">Secrets Found: </span>
-            <span class="stat-value" data-tippy-content="Secrets from achievements across profiles"><%= calculated.dungeons.secrets_found.toLocaleString() %></span>
+            <% const completions = calculated.dungeons.catacombs.completions + calculated.dungeons.master_catacombs.completions; %>
+            <% const secretsFound = calculated.dungeons.secrets_found; %>
+            <% const secretsPerCompletion = completions > 0 ? (secretsFound / completions).toFixed(2) : 0 %>
+            <span data-tippy-content="Secrets from achievements across profiles">              
+              <span class="stat-name">Secrets Found: </span>
+              <span class="stat-value"><%= secretsFound.toLocaleString() %></span>
+              <span class="grey-text"> (<%= secretsPerCompletion %> S/R)</span></span>
+            <br>
+            <% const bloodMobKills = calculated.bestiary ? calculated.bestiary.categories["catacombs"].mobs.find((mob) => mob.name === "Undead").kills : 0%>
+            <span class="stat-name">Blood Mob Kills: </span>
+            <span class="stat-value"><%= bloodMobKills.toLocaleString() %></span>
           </p>
 
           <p class="stat-sub-header">Catacombs</p>

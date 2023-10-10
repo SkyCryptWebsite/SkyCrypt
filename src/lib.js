@@ -3203,6 +3203,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
           ? dungeons_data.floors[`${type}_${highest_floor}`].name
           : `floor_${highest_floor}`,
       floors: floors,
+      completions: Object.values(floors).reduce((a, b) => a + (b.stats?.tier_completions ?? 0), 0),
     };
 
     output[type].level.rank = await getLeaderboardPosition(`dungeons_${type}_xp`, dungeon.experience);
