@@ -1,6 +1,0 @@
-{
-	"parent": "item/skull_item",
-	"textures": {
-		"0": "./new_year_cake_bag"
-	}
-}

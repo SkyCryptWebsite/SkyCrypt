@@ -531,7 +531,8 @@ export async function getTexture(item, options) {
 
   let tempPacks = resourcePacks;
 
-  options.pack_ids = options.pack_ids !== undefined ? options.pack_ids.split(",") : [];
+  options.pack_ids =
+    options.pack_ids !== undefined && typeof options.pack_ids === "string" ? options.pack_ids.split(",") : [];
 
   if (options.pack_ids.length > 0) {
     tempPacks = tempPacks.filter((a) => options.pack_ids.includes(a.config.id));

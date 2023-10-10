@@ -1410,7 +1410,10 @@ export const getItems = async (
           a.tag?.ExtraAttributes?.modifier == armor[0].tag.ExtraAttributes.modifier
       ).length == 4
     ) {
-      reforgeName = armor[0].display_name.split(" ")[0];
+      reforgeName = armor[0].display_name
+        .replace(/[^A-Za-z0-9 -']/g, "")
+        .trim()
+        .split(" ")[0];
     }
 
     // Handling normal sets of armor
@@ -1689,7 +1692,7 @@ export async function getStats(
     output.slayers = Object.assign({}, slayers);
   }
 
-  if (!items.no_inventory) {
+  if (!items.no_inventory && items.accessory_ids) {
     output.missingAccessories = getMissingAccessories(items.accessory_ids);
 
     for (const key of Object.keys(output.missingAccessories)) {
@@ -2180,6 +2183,8 @@ export async function getStats(
 
   const misc = {};
 
+  output.visited_zones = userProfile.visited_zones || [];
+  output.visited_modes = userProfile.visited_modes || [];
   output.perks = userProfile.perks || {};
   misc.milestones = {};
   misc.objectives = {};
@@ -2855,6 +2860,10 @@ async function getMissingPets(pets, gameMode, userProfile) {
 function getPetScore(pets) {
   const highestRarity = {};
   for (const pet of pets) {
+    if (constants.PET_DATA[pet.type].ignoredInPetScoreCalculation === true) {
+      continue;
+    }
+
     if (!(pet.type in highestRarity) || constants.PET_VALUE[pet.rarity] > highestRarity[pet.type]) {
       highestRarity[pet.type] = constants.PET_VALUE[pet.rarity];
     }
@@ -2862,6 +2871,10 @@ function getPetScore(pets) {
 
   const highestLevel = {};
   for (const pet of pets) {
+    if (constants.PET_DATA[pet.type].ignoredInPetScoreCalculation === true) {
+      continue;
+    }
+
     if (!(pet.type in highestLevel) || pet.level.level > highestLevel[pet.type]) {
       if (pet.level.level < constants.PET_DATA[pet.type].maxLevel) {
         continue;
@@ -3141,6 +3154,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
           ? dungeons_data.floors[`${type}_${highest_floor}`].name
           : `floor_${highest_floor}`,
       floors: floors,
+      completions: Object.values(floors).reduce((a, b) => a + (b.stats?.tier_completions ?? 0), 0),
     };
 
     output[type].level.rank = await getLeaderboardPosition(`dungeons_${type}_xp`, dungeon.experience);
@@ -3672,11 +3686,10 @@ export async function getProfile(
 
   let lastCachedSave = 0;
 
-  const profileData = [];
   if (profileObject) {
-    for (const pId of Object.keys(profileObject.profiles)) {
-      profileData.push(await db.collection("profileCache").findOne({ profile_id: pId }));
-    }
+    const profileData = db
+      .collection("profileCache")
+      .find({ profile_id: { $in: Object.keys(profileObject.profiles) } });
     for await (const doc of profileData) {
       if (doc.members?.[paramPlayer] == undefined) {
         continue;
@@ -3940,6 +3953,10 @@ export async function getBingoProfile(
         { upsert: true }
       );
     } catch (e) {
+      if (e?.response?.data?.cause === "No bingo data could be found") {
+        return null;
+      }
+
       if (e?.response?.data?.cause != undefined) {
         throw new Error(`Hypixel API Error: ${e.response.data.cause}.`);
       }
