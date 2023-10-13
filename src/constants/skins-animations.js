@@ -923,6 +923,13 @@ const SKINS = [
     source: "firesale",
     release: new Date("2023-09-30 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_ENDERMITE_DYNAMITE",
+    name: "Dynamite",
+    texture: "/head/9ebfdace31ac59cdd397869ac4471d8c7ddb4b4d6fa5e9928bbda45f092230d0",
+    source: "tyashoi_alchemist",
+    release: new Date("2023-10-03 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
