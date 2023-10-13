@@ -41,7 +41,7 @@ const FEATURED_PROFILES = [
   },
   {
     // DuckySoLucky
-    uuid: "dec987bbfa734d63bb9d566139232f81",
+    uuid: "4855c53ee4fb4100997600a92fc50984",
     type: "CONTRIBUTOR",
     message: 'Best Ratter EU',
   },
