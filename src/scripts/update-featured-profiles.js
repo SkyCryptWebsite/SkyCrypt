@@ -78,7 +78,7 @@ const FEATURED_PROFILES = [
 
       FEATURED_PROFILES[index].username = profile.display_name;
       FEATURED_PROFILES[index].emoji = profile?.emoji;
-    }),
+    })
   );
 
   const cachePath = helper.getCacheFolderPath(helper.getFolderPath());
