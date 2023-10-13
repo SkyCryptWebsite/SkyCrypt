@@ -37,13 +37,13 @@ const FEATURED_PROFILES = [
     // WarpWing
     uuid: "7d7b04b49c24433cacc60a3da66eba01",
     type: "MAINTAINER",
-    message: 'Grandmaster of Unit Testing',
+    message: "Grandmaster of Unit Testing",
   },
   {
     // DuckySoLucky
-    uuid: "4855c53ee4fb4100997600a92fc50984",
+    uuid: "dec987bbfa734d63bb9d566139232f81",
     type: "CONTRIBUTOR",
-    message: 'Best Ratter EU',
+    message: "Best Ratter EU",
   },
   {
     // LeaPhant
@@ -78,7 +78,7 @@ const FEATURED_PROFILES = [
 
       FEATURED_PROFILES[index].username = profile.display_name;
       FEATURED_PROFILES[index].emoji = profile?.emoji;
-    })
+    }),
   );
 
   const cachePath = helper.getCacheFolderPath(helper.getFolderPath());
