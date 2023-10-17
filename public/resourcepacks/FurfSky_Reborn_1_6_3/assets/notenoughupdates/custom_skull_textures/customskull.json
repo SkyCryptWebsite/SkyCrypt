@@ -1,0 +1,1525 @@
+{	"f5c41359-bb06-3ce6-9ca3-467c9296546a": 
+		{
+		"texture": "helmets/arachne_helmet"
+		},
+	"5e57207a-9085-3dd3-aace-ff1272a0bee3": 
+		{
+		"texture": "helmets/aurora_helmet"
+		},
+	"92c8df7e-054f-36cc-915a-52324cc1084a": 
+		{
+		"texture": "helmets/berserk_helmet"
+		},
+	"0e14f27f-a29b-33d6-a3d2-1925b4d64ee2": 
+		{
+		"texture": "helmets/burning_aurora_helmet"
+		},
+	"eb9a27c8-1436-346b-a235-268f49c21e7c": 
+		{
+		"model": "helmets/burning_crimson_helmet"
+		},
+	"633cdb76-c0d8-3ac7-b141-00f724750934": 
+		{
+		"model": "helmets/burning_fervor_helmet"
+		},
+	"7b63578c-5204-3816-ab74-126ba730e2b5": 
+		{
+		"model": "helmets/burning_terror_helmet"
+		},
+	"9e71c72a-85be-3e7e-8e5a-2ad7498b3aeb": 
+		{
+		"texture": "helmets/crimson_helmet"
+		},
+	"479dc83d-b320-38b3-a82f-2dfef15a95fe": 
+		{
+		"texture": "helmets/cropie_helmet"
+		},
+	"795d1347-6d0a-3ed7-a340-383b202e4d86": 
+		{
+		"texture": "helmets/dark_goggles"
+		},
+	"0d4846bb-7eb0-3b66-a04f-c50a6ee167d1": 
+		{
+		"texture": "helmets/divan_helmet"
+		},
+	"b718a978-c064-3bbf-9faf-66641e2cc58a": 
+		{
+		"texture": "helmets/diver_mask"
+		},
+	"3e95761b-f469-3943-a4f1-318bd0a1fd40": 
+		{
+		"texture": "helmets/dungeon_goldor_helmet"
+		},
+	"8142d49d-90e8-3e1c-8581-c98882a97ea5": 
+		{
+		"texture": "helmets/dungeon_maxor_helmet"
+		},
+	"ae123a50-b032-3fbd-8450-9b41cd7c64b9": 
+		{
+		"texture": "helmets/dungeon_necron_helmet"
+		},
+	"82fb0f51-2e6a-3319-9904-1d6ae5adc026": 
+		{
+		"texture": "helmets/dungeon_storm_helmet"
+		},
+	"bc554a7a-507a-3ee7-809c-1820f86e1ceb": 
+		{
+		"texture": "helmets/ember_helmet"
+		},
+	"23d38889-0bf4-3d03-9d1a-e2be0daf244b": 
+		{
+		"texture": "helmets/ender_helmet"
+		},
+	"8aa37c82-f887-30fa-ad8e-41f69b4cf46c": 
+		{
+		"model": "helmets/fermento_helmet"
+		},
+	"15567843-d045-3620-b31b-77f5728fc9e2": 
+		{
+		"texture": "helmets/fervor_helmet"
+		},
+	"c2539984-adda-3461-abbc-758bae593115": 
+		{
+		"texture": "helmets/fiery_aurora_helmet"
+		},
+	"b9f650e7-9ca7-3c0f-a018-7590f337be36": 
+		{
+		"model": "helmets/fiery_crimson_helmet"
+		},
+	"6c1d39ed-34c3-3085-9aaa-0039042c1f83": 
+		{
+		"model": "helmets/fiery_fervor_helmet"
+		},
+	"2b529cab-98f1-352f-8357-e7d5ef06b9be": 
+		{
+		"model": "helmets/fiery_terror_helmet"
+		},
+	"525b1ad8-fb3f-3a62-bd80-da5428a7ac2e": 
+		{
+		"texture": "helmets/final_destination_helmet"
+		},
+	"a8055d62-a1ee-333f-8fd7-7dc1bf85395c": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_1"
+		},
+	"39ba8a8b-29a7-3cea-8a96-2fafa7ed01e7": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_2"
+		},
+	"596b08aa-f538-33b1-bd83-01fe27530890": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_3"
+		},
+	"9e6d5c15-4de6-3a56-b695-70321c261bd0": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_4"
+		},
+	"48b86594-e62f-392a-9e9a-4ea7e684fc5a": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_5"
+		},
+	"74b6b21f-658f-3f98-9e9d-4846fda2521f": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_6"
+		},
+	"90bd858f-866f-30a8-b5fc-ee8ae018cfb4": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_7"
+		},
+	"d133cb13-e7a7-38f9-bf4b-ab30bf42664e": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_8"
+		},
+	"63e8f843-2565-3e6e-a225-5df3ca3faa1d": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_9"
+		},
+	"2db5829c-e9ce-3340-8cba-5e11f4fe6134": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_10"
+		},
+	"d635294c-631b-33f1-b856-97a13341e29c": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_11"
+		},
+	"7d1f5c88-e645-3b0e-bc48-9d5f7ece483f": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_12"
+		},
+	"293c421d-5ab0-3ffa-8051-2dd34af45da1": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_13"
+		},
+	"d434bd43-90a1-3b5c-be56-663ada8f3ea2": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_14"
+		},
+	"5f548fee-f689-3228-8366-b798a90fea19": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_15"
+		},
+	"5aa65bd0-b9d6-3e93-8c71-ee092f18ca4e": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_16"
+		},
+	"9dc66161-98ea-31ba-87c4-e038293a83f4": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_17"
+		},
+	"69a07857-ade3-373a-aa7f-18eae0072503": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_18"
+		},
+	"59c599ca-33fd-3762-9139-58b17c80cbba": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_19"
+		},
+	"60e512d1-40e6-340e-b4ce-9017520c475c": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_20"
+		},
+	"7566c6d1-5e65-3b1b-8290-42943069ca2f": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_21"
+		},
+	"97fdd432-c5f7-3f0f-a4e1-e8daf87a7e14": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_22"
+		},
+	"f9d3e136-a35b-372a-a142-0f2b6f70ea29": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_23"
+		},
+	"11bf9a8e-31e1-3d41-8cc6-d1116cb4fdf4": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_24"
+		},
+	"e9ac8c68-58d8-3f3d-b0ef-ce0176598201": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_25"
+		},
+	"f82376a2-9dab-3225-ae75-116b1ed2218a": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_26"
+		},
+	"66a705c7-47a7-3be7-9448-95ecd0540578": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_27"
+		},
+	"644abf71-f736-36c6-9b53-a00cc1a08cba": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_28"
+		},
+	"94bf8bb3-fa9e-3634-b0ea-e13a825bfb93": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_29"
+		},
+	"8f35833a-a19a-3e53-8c49-ade186286f59": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_30"
+		},
+	"f56235bf-67ef-33fd-9c5c-4925e139db7e": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_31"
+		},
+	"d9434b02-6527-352c-a040-eef1e031a18b": 
+		{
+		"texture": "helmets/gemstone_skin/amber/gemstone_skin_amber_32"
+		},
+	"fec7c9b5-e431-3b27-9a0b-56a220dd9f43": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_1"
+		},
+	"87ab78ce-ff4c-3c85-b275-e1497b2a75c6": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_1"
+		},
+	"b7af65b4-4e51-3bec-8f3e-5109d3f56228": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_2"
+		},
+	"2d47ad96-d04c-3944-adec-dcd59b316515": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_3"
+		},
+	"ee25a69a-980b-3319-bcf6-f34d62ff15e4": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_4"
+		},
+	"b8becba8-37c8-3fc7-bd2b-f4960213b265": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_5"
+		},
+	"13c4d320-2680-3aa2-aea9-0f4bfe1e202c": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_6"
+		},
+	"443f4446-50bb-3ed7-93a7-049e1c58e27b": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_7"
+		},
+	"a4d2fc27-e8df-3702-b6aa-75045533cc82": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_8"
+		},
+	"6da6f1ef-76bf-39f5-a5b1-56d958bb2952": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_9"
+		},
+	"84d031c0-b8cc-3fca-84aa-e2978a6749f6": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_10"
+		},
+	"c682a523-2cbd-3367-8169-75d6c585fcce": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_11"
+		},
+	"e0ff8bea-1236-3b4d-9498-8b9cafebd2b2": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_12"
+		},
+	"a48596e2-341c-3b07-b293-4ee1e6e2ae4b": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_13"
+		},
+	"9e1b07e5-69b8-369b-88da-ef7366746cd9": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_14"
+		},
+	"1762ec6c-df38-3ae6-ac43-c076acd0789b": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_15"
+		},
+	"c9c641bb-236f-3ba5-8531-d72bd4a1b48d": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_16"
+		},
+	"9fdd9c40-a096-37ea-9666-4f43a2c5e93c": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_17"
+		},
+	"3fce19be-5c61-3470-868e-cee1662ffbfe": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_18"
+		},
+	"dc8f4ecf-d660-3d64-acce-cfac3127000e": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_19"
+		},
+	"6f0f2954-760b-3f16-8af8-74ab5774dd43": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_20"
+		},
+	"38b9b420-e92a-3951-a527-252891fee798": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_21"
+		},
+	"1948cfbe-0a76-38e4-b916-db1fccc5b7a2": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_22"
+		},
+	"39f21760-8d16-394a-8de0-6ce3c8436d0e": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_23"
+		},
+	"68e122c6-fdc5-35cf-9c52-5a1793e0cf2e": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_24"
+		},
+	"79c9fa7a-d435-3648-a074-bdf94b0ddbec": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_25"
+		},
+	"235df71b-db10-30b3-81f1-7a4af904e20e": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_26"
+		},
+	"2520899f-9c1e-3469-9d21-3c01d5e66da0": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_27"
+		},
+	"0f432878-06ce-3183-8be8-b00da2b754cf": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_28"
+		},
+	"b79b5103-36ae-36e7-8373-e7af8f4ab46c": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_29"
+		},
+	"21b62cad-a51e-3756-b0f5-52a5ceccddef": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_30"
+		},
+	"2acc450f-4ce0-3929-8ee1-03f14700f557": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_31"
+		},
+	"b573c9b3-c793-3864-93ac-4467cb0e28a3": 
+		{
+		"texture": "helmets/gemstone_skin/amethyst/gemstone_skin_amethyst_32"
+		},
+	"630cfd4e-fe32-39a6-a704-0fe99562b961": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_1"
+		},
+	"3cf46ef2-130b-369d-b015-69c4d7285888": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_2"
+		},
+	"9b87f09a-f571-3aaf-95cc-beda320ec767": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_3"
+		},
+	"212b8d3f-9454-3be7-a58b-1795ecbcaad1": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_4"
+		},
+	"acf24e2b-d0af-324b-9f1a-0b3fdb28ae4c": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_5"
+		},
+	"80a8737d-43a7-3589-b186-263c46d0ec5c": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_6"
+		},
+	"41dbeaa8-c895-3705-89d9-2880052de58f": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_7"
+		},
+	"8044ef6e-51b5-3258-961d-a1b44eaf0711": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_8"
+		},
+	"3f2184c8-8fea-35f0-87c4-14af066c3cb4": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_9"
+		},
+	"3939c520-c85e-3509-961d-bee045d53555": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_10"
+		},
+	"2ee85b06-4bde-3698-ba07-1c0029779608": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_11"
+		},
+	"37dfa591-fabe-3b0a-a639-52b78f40cbed": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_12"
+		},
+	"e59a356d-e588-36c2-9390-de911b95bd3b": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_13"
+		},
+	"a05e0112-fe00-36c0-9c04-9b027b87e243": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_14"
+		},
+	"58b2866b-9eac-35fd-9ac3-c4313057bfca": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_15"
+		},
+	"7a2d4f2f-9df2-3986-8b5e-a327b99632cb": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_16"
+		},
+	"c70c3a28-a100-37f9-ba30-e8eb68003f0c": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_17"
+		},
+	"9ac6e3b6-1ca1-3983-b5f7-60d6d585d4a6": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_18"
+		},
+	"75acad17-6b46-3395-87ab-5e7921067a5c": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_19"
+		},
+	"658d02e8-3554-31dc-89f9-bb1d58ed206a": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_20"
+		},
+	"c7bc78a2-f2d0-34a0-bda5-5a27d374b144": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_21"
+		},
+	"bdc78bd4-a5ff-35d3-80fa-2a8fd9aacf6a": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_22"
+		},
+	"a70556aa-0099-3273-beb2-1eee3b21cb80": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_23"
+		},
+	"a724b82d-47b1-3a7f-a2c1-f070afe1f5db": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_24"
+		},
+	"0265d43a-2bbb-33e8-9948-3fd167f41328": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_25"
+		},
+	"5d8bc38e-838a-3d17-9bf2-cd9d74c7a56d": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_26"
+		},
+	"d49f6ae7-ed8a-3de5-92b9-36301f9ad0e4": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_27"
+		},
+	"41239d44-d971-38e3-81a6-efaa827fb903": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_28"
+		},
+	"c9e61f32-fed7-33c8-a0b8-50d034597290": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_29"
+		},
+	"960a87cb-2386-3ad0-abbf-24b555dc7e10": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_30"
+		},
+	"35626ae0-e3ec-38d1-a9c7-13fd42aab50e": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_31"
+		},
+	"cbb98a20-d98f-36a5-88d9-d684f786e384": 
+		{
+		"texture": "helmets/gemstone_skin/jade/gemstone_skin_jade_32"
+		},
+	"baf3e574-c357-3c69-9589-c318c3205616": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_1"
+		},
+	"06747227-d705-3372-b32a-9e45c5ffba49": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_2"
+		},
+	"4a015d4e-9e0b-373b-b893-3972257ff845": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_3"
+		},
+	"b5da1a43-e863-3146-a03f-c2e0998b09d8": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_4"
+		},
+	"389eb9e6-a63a-37b6-a221-b92cc0c3493c": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_5"
+		},
+	"fa78b0a0-50da-32b9-8f22-640b20969643": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_6"
+		},
+	"b7678739-6caa-32be-ad40-7b54b1d688b0": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_7"
+		},
+	"9e83687f-c3eb-3560-aba8-2e857c9c53c2": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_8"
+		},
+	"7c5d6b02-4e06-36ce-9b9d-b6c7d77b6329": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_9"
+		},
+	"e4601d06-227b-3ad6-8c38-76fab40d82ba": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_10"
+		},
+	"d3422ac8-64c6-356a-9bfd-67cf9f6ea8bb": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_11"
+		},
+	"2dcdaed2-354b-34d3-9731-ae496e6b22ab": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_12"
+		},
+	"b440e20e-9b1c-3085-9475-aba648f718f2": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_13"
+		},
+	"1c5d8030-f279-3282-9556-065b0f3d2200": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_14"
+		},
+	"407980bd-b2ae-3c6b-a72e-d3d4ffec1d8d": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_15"
+		},
+	"ec9a972b-f1b0-3e8d-bae7-c04bd3ee81a3": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_16"
+		},
+	"2e199de2-9c52-36f7-afd9-374c2077c6c6": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_17"
+		},
+	"cb337a3b-170c-3f6e-a23d-17f503972848": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_18"
+		},
+	"d4b16a39-4ac5-3814-ab73-920167776b7f": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_19"
+		},
+	"5f69ae2b-dbf9-371f-9997-6c892bd8832c": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_20"
+		},
+	"1598421a-d6f5-3064-859e-f3096baf0cea": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_21"
+		},
+	"587f67ae-ada3-32e9-95cc-29c99a2f7790": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_22"
+		},
+	"95e9080b-48be-31bd-a7a5-9aa1ea78dd12": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_23"
+		},
+	"a585665c-2212-3d56-8c36-0732b13b6a47": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_24"
+		},
+	"f41cf7bd-0c86-3336-97fb-a120e1ec282b": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_25"
+		},
+	"dbaaf5e2-98dc-3e80-9295-595db700fa18": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_26"
+		},
+	"4bcffb33-0a9e-3d3b-94bb-3a132abe275c": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_27"
+		},
+	"a5669242-837a-3a31-9da0-721820dad6ee": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_28"
+		},
+	"9b304571-1718-3193-b320-9b5d99f0cc82": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_29"
+		},
+	"ac0360ab-73ff-3615-b367-2c9156b1f052": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_30"
+		},
+	"125d6be3-d6c4-3c81-856e-dba5105cf1cd": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_31"
+		},
+	"fdb7f607-2c57-3314-8dcd-063fed787a2d": 
+		{
+		"texture": "helmets/gemstone_skin/jasper/gemstone_skin_jasper_32"
+		},
+	"224f8e01-9766-3526-b0cd-fae47287cfd5": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_1"
+		},
+	"cb250880-f58a-38a8-a105-1c6d21c1caf4": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_1"
+		},
+	"82bbf365-722b-3f29-9bb8-98105726c472": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_2"
+		},
+	"50e0fa51-9442-32ae-aae9-74db46fc1eea": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_3"
+		},
+	"b94a7fb7-3826-3db2-8d28-d8b168c68e94": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_4"
+		},
+	"c8289021-9136-3043-ba19-1fd6b1fd2155": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_5"
+		},
+	"0b2cefa1-63d9-3d51-84bc-b29c859de41f": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_6"
+		},
+	"683ad6cf-f064-3720-bc1a-7b9b1b642dfb": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_7"
+		},
+	"147b1c3a-9f8c-325c-a353-38f52a1c5d71": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_8"
+		},
+	"7114d41b-0888-3785-b18a-46a581b9dc22": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_9"
+		},
+	"2d43084d-75da-309e-9f68-52a7b1f76635": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_10"
+		},
+	"285989b7-071c-3e72-bbcb-84d0a164b9bc": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_11"
+		},
+	"5f505159-5999-3229-9719-069a3c5d0fbe": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_12"
+		},
+	"03e4d435-3784-385c-8e21-3f977e6c64ec": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_13"
+		},
+	"2c41335a-494c-33db-89af-9dd0e721ea53": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_14"
+		},
+	"8f9a5e02-6357-3dac-abd1-55ad46786f7b": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_15"
+		},
+	"563be4e2-62cc-37e1-9a45-ad39a56deaca": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_16"
+		},
+	"45621c3a-b1c7-3599-be2e-64c727e25916": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_17"
+		},
+	"13b25f5e-f336-381d-bdc7-2de1d7e1818e": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_18"
+		},
+	"b1818a54-9ec4-3aa3-99ff-0eab206e479c": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_19"
+		},
+	"fd73716e-eeed-31bd-829e-d89bb9221366": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_20"
+		},
+	"af82bc31-712c-3598-a358-36b2c37a712f": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_21"
+		},
+	"5485909e-1421-3bcf-91bb-a0069bc89f8b": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_22"
+		},
+	"67966548-632e-354e-b2d7-e87baf8e8ca1": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_23"
+		},
+	"f8e8da3c-30ab-32ea-9a5f-fe9da589e39f": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_24"
+		},
+	"7a7f2783-0286-333f-884b-f3e4f8fdf287": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_25"
+		},
+	"029e0390-e884-39b7-aafa-2f66bfc77fde": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_26"
+		},
+	"050c0668-74da-3076-9000-452f8040d361": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_27"
+		},
+	"bdc2c39f-5bc7-3c42-976d-3b7a77930505": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_28"
+		},
+	"a86e4185-36c3-3983-b378-1c7c6bfd087b": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_29"
+		},
+	"d3f79045-489f-330d-8509-ff522011d774": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_30"
+		},
+	"23560720-879d-3c6c-9d30-2d8e71ae365b": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_31"
+		},
+	"ade024ba-9d61-384c-9bc4-fab2f0becbb1": 
+		{
+		"texture": "helmets/gemstone_skin/opal/gemstone_skin_opal_32"
+		},
+	"1ec42184-0346-3260-a549-5d0ee12261e8": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_1"
+		},
+	"c5c66b5b-a28e-31cc-b42d-79cf7dad4718": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_1"
+		},
+	"78190dd3-38ae-313e-a25d-0955c72cab9e": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_2"
+		},
+	"d318c1aa-e4fb-3416-90d1-881d5fc40885": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_3"
+		},
+	"0335ad69-4a10-3781-aa50-68ed1afd4135": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_4"
+		},
+	"02198665-40d5-38e9-8453-c51f79811e8e": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_5"
+		},
+	"65fbcf59-a8a2-3043-9470-e4b0ac288f3a": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_6"
+		},
+	"d2842e25-35f1-3992-a8e7-1b303595bffa": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_7"
+		},
+	"69d78d59-6741-388e-b89d-db909979f662": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_8"
+		},
+	"119c5fcc-3440-32a5-b87c-6372da51a630": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_9"
+		},
+	"c1840318-5a8a-3aac-8df6-bc9e92c648ff": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_10"
+		},
+	"ea6589ea-922a-3c46-826b-577489c37888": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_11"
+		},
+	"f5d1b7dc-c00d-3f3e-84d0-2c7ec1e07c85": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_12"
+		},
+	"a2575580-9c59-3853-83ce-302d796d19c7": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_13"
+		},
+	"c64d944f-3453-3ed6-b7a0-24622e0ee035": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_14"
+		},
+	"57443d6a-8d2a-3e44-8b5c-686e74148f62": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_15"
+		},
+	"0fd34a06-e8f5-3e41-a989-5a4070ddcc50": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_16"
+		},
+	"8f3bebf8-7c2f-36cc-a96e-1123de1b23f0": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_17"
+		},
+	"c486f6c8-7ddf-3823-abca-161f321c1ff0": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_18"
+		},
+	"8535ef7f-d374-359c-bdea-daad8da3ec55": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_19"
+		},
+	"2597603a-8efe-3871-8058-f7093db94680": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_20"
+		},
+	"63f146f6-4bb1-343f-9db4-d86ffc0be6f3": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_21"
+		},
+	"4cd0c760-6612-32ea-8967-27c72b6bd29d": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_22"
+		},
+	"ed1a579c-3b19-38ff-b67b-6225fee33dce": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_23"
+		},
+	"1ac6cd52-2f21-3dd5-9ca5-58bc25d532aa": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_24"
+		},
+	"4e00dd78-d1ae-3da3-8e61-092d7a04d292": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_25"
+		},
+	"0a468340-444b-3854-b86b-74c0791a14c0": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_26"
+		},
+	"63b3eeb0-9898-3136-8e20-3dece7bc2ee7": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_27"
+		},
+	"4da365dc-2062-32e0-8e8d-fdb659b9a8c8": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_28"
+		},
+	"c58eaacb-f6e2-37e5-820e-9c9051614d68": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_29"
+		},
+	"7a299359-1137-3a6b-9e42-6c45807d59ef": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_30"
+		},
+	"a110ebca-c510-31bd-9191-c28016ae1e77": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_31"
+		},
+	"6d6688f1-8d5a-3b18-8511-ab78fa8a333a": 
+		{
+		"texture": "helmets/gemstone_skin/ruby/gemstone_skin_ruby_32"
+		},
+	"294083bc-9b60-37a8-898f-130e5dea9137": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_1"
+		},
+	"cf179f60-6b48-3f83-a2cf-048302555879": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_2"
+		},
+	"d92d1cb1-c92e-3d8c-9c3c-969aa68ec412": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_3"
+		},
+	"450ac5d3-362b-37a2-b505-8965a15adf80": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_4"
+		},
+	"ebd8d2c2-647e-3e10-a6a6-cfe83efeac8d": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_5"
+		},
+	"e0b40860-6ffc-39f0-addf-ee89ccea17fc": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_6"
+		},
+	"a1aa6784-f627-3e3c-9662-8ebde5c86362": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_7"
+		},
+	"67042cde-0bca-3d8e-a988-92fefe6226d8": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_8"
+		},
+	"24d59ea5-a673-3678-ab41-9f8ca2fb4291": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_9"
+		},
+	"fa6194df-c76b-38f1-a4f0-6d689d2f40de": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_10"
+		},
+	"7f694c19-4f52-3c75-b6ef-52f36d654a0c": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_11"
+		},
+	"ea268903-b1b8-3b49-90c7-6ab6e356045a": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_12"
+		},
+	"d9b3fe2e-a590-3089-93b6-5428f7c02abe": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_13"
+		},
+	"4cccd1b2-aa79-39f6-a3da-5d8c8b41490f": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_14"
+		},
+	"5f72db68-281f-33e9-ad2d-774a13ed373b": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_15"
+		},
+	"33ede638-9781-320f-aaed-557344ee2cd3": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_16"
+		},
+	"132636c4-9869-381e-8d67-2eb08d2bd1f4": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_17"
+		},
+	"b826a261-de47-3eee-bcd2-3294f72c289d": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_18"
+		},
+	"04da582f-6d0e-35e3-9613-8c91868d54da": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_19"
+		},
+	"1629b3bd-95aa-3ca4-a136-aeeba1b091de": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_20"
+		},
+	"4119db65-1a5e-358c-870c-28dec1da696f": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_21"
+		},
+	"369d3c18-da35-3c55-b79e-65c3109211de": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_22"
+		},
+	"0617bbf0-9974-3f56-8a2f-4d3028600e31": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_23"
+		},
+	"db490e96-3835-3f63-842a-62c5e237aeca": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_24"
+		},
+	"634c1824-cb90-3db8-9117-d58531d92d94": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_25"
+		},
+	"d7ebd086-a1c2-3a73-b5a5-7e93646cb1ec": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_26"
+		},
+	"900357fb-30e4-3386-b4ec-b6e939e1207f": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_27"
+		},
+	"f31e3b11-e376-3610-bd84-27284cccd89e": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_28"
+		},
+	"72298074-85a4-302c-8098-c5ff1527117e": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_29"
+		},
+	"0324c28b-1396-3b43-b91c-41b0f4b62256": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_30"
+		},
+	"7acd9bc3-c700-3a7b-b271-91f3cf1d1121": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_31"
+		},
+	"c2dbb510-652a-312d-99eb-0ff5aa125e80": 
+		{
+		"texture": "helmets/gemstone_skin/sapphire/gemstone_skin_sapphire_32"
+		},
+	"58cb6e07-c2ba-3a12-8232-4c525fec62c7": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_1"
+		},
+	"491bcca2-02a6-3858-b234-c33436bc83cc": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_1"
+		},
+	"4177229b-c61b-308d-8b74-9f9760d84b20": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_1"
+		},
+	"e86a2a74-4ae7-30b5-9782-20d6cd6e39ba": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_2"
+		},
+	"c8fe6fd0-7083-3c17-8350-0bce0b56c051": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_3"
+		},
+	"691812ef-36d7-3318-aa8a-d8030dd7642a": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_4"
+		},
+	"e90ee7ca-27d1-3e4b-82c8-d7d45ae3a024": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_5"
+		},
+	"d8a01fff-7325-31a7-9ce3-09555bbd7c06": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_6"
+		},
+	"6d74686c-b464-392b-bc68-9794f934008f": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_7"
+		},
+	"f060d2e2-cb61-3655-8d34-dcfb1de76a37": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_8"
+		},
+	"e3a68537-3a0f-3ea4-b1b6-88838db6666b": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_9"
+		},
+	"4047dbf3-348c-38ef-80a8-a4117d275170": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_10"
+		},
+	"86f4bddd-3ef1-3e80-b6d7-c359dac4a56a": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_11"
+		},
+	"027e7da0-c941-39e9-bec8-be167d3e1ed3": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_12"
+		},
+	"5c34d0b0-c280-3887-ae97-df31302c4f56": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_13"
+		},
+	"ca8cc088-44dd-3cfa-91ab-096341816586": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_14"
+		},
+	"595b43ff-9170-38f2-a58d-6d6e87c6d7e3": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_15"
+		},
+	"b944a2cf-ef72-3395-949c-9821067dada3": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_16"
+		},
+	"f873b04b-e282-36a6-a5b3-5d8223bd8b09": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_17"
+		},
+	"ee2bede0-1a80-3793-b00e-5bb97be14414": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_18"
+		},
+	"0400d06a-f3cb-3fea-9e47-9a85fcb0b889": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_19"
+		},
+	"5eb4b42c-c828-3bc8-9bed-52e5ff53f20a": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_20"
+		},
+	"0850dfd0-561b-3c67-837e-8a8e1b1553ea": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_21"
+		},
+	"6dde501c-1cea-306c-99fc-ebdb1e99f37f": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_22"
+		},
+	"f9a392a1-8875-351c-a352-d2d3e93b6aeb": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_23"
+		},
+	"d0afa007-04a5-3fd2-9604-66e65ac8194f": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_24"
+		},
+	"1d99810b-98e5-3e2d-b9e0-13ac1322de07": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_25"
+		},
+	"380e864d-2dad-3a85-b034-12944f4ee294": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_26"
+		},
+	"6f179793-b343-3998-92de-5299e581d264": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_27"
+		},
+	"bb162682-407b-35d7-bb79-987ec841261f": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_28"
+		},
+	"df59944d-fa01-323f-b86c-458344e6e1b9": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_29"
+		},
+	"fccc25bb-f0ed-3aeb-9ef3-9137df229ca1": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_30"
+		},
+	"07329709-2ecd-38f0-830f-0261bb37d229": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_31"
+		},
+	"8aec315d-1d82-3a27-939c-abbcec844b0b": 
+		{
+		"texture": "helmets/gemstone_skin/topaz/gemstone_skin_topaz_32"
+		},
+	"7b5eba12-eea5-3b0f-968b-cf8578bee45b": 
+		{
+		"texture": "helmets/goldor_helmet"
+		},
+	"ebe7fc8c-125a-3c6e-8280-658c581626d6": 
+		{
+		"texture": "helmets/happy_mask"
+		},
+	"1a136205-4ff3-3028-bb5b-c2ef8a047399": 
+		{
+		"texture": "helmets/helmet_of_the_rising_sun"
+		},
+	"881e59ef-cb3d-3ad7-bdab-ddf2520a6806": 
+		{
+		"texture": "helmets/holy_dragon_helmet"
+		},
+	"d6ea2384-3dd2-3526-a2e8-df5b5eda55a9": 
+		{
+		"texture": "helmets/hot_aurora_helmet"
+		},
+	"99e13f93-ae1f-3c3a-823c-8341e538d381": 
+		{
+		"model": "helmets/hot_crimson_helmet"
+		},
+	"7e209c28-4808-3054-9123-56b6b4606134": 
+		{
+		"model": "helmets/hot_fervor_helmet"
+		},
+	"8b372a0a-7f2c-38ab-bba7-c26bf54fec5f": 
+		{
+		"model": "helmets/hot_terror_helmet"
+		},
+	"ba278566-451e-315a-9890-ea7f3667724d": 
+		{
+		"texture": "helmets/infernal_aurora_helmet"
+		},
+	"50c73058-c4b1-3238-94ab-566892f1eaa8": 
+		{
+		"model": "helmets/infernal_crimson_helmet"
+		},
+	"e981b8ba-aa36-3fef-8adb-cccbb3d2f6c0": 
+		{
+		"model": "helmets/infernal_fervor_helmet"
+		},
+	"52a48424-e9ad-3027-aa25-59207202bb60": 
+		{
+		"model": "helmets/infernal_terror_helmet"
+		},
+	"accb5b21-2b62-318b-9813-99b0d21f5028": 
+		{
+		"texture": "helmets/kalhuiki_mask"
+		},
+	"08fa7d94-8a0e-36ab-8275-8ddbfda36936": 
+		{
+		"texture": "helmets/krampus_helmet"
+		},
+	"9cbfb783-8572-3d4e-a1eb-a4734bc4d67e": 
+		{
+		"texture": "helmets/lantern_helmet"
+		},
+	"1c6cacce-ec3e-34d3-82fb-54e8e7ea00a3": 
+		{
+		"model": "helmets/leaf_skin"
+		},
+	"96e81b81-7c46-322e-8f6b-e0b4eba52aff": 
+		{
+		"model": "helmets/magma_lord_helmet"
+		},
+	"27508566-a773-3516-8903-9e405064893e": 
+		{
+		"texture": "helmets/mastiff_crown"
+		},
+	"ee05abe4-347b-3ea5-8248-fae93392140e": 
+		{
+		"texture": "helmets/maxor_helmet"
+		},
+	"63fcdb3b-2514-3e8b-b259-3acfd4aad50a": 
+		{
+		"texture": "helmets/mender_crown"
+		},
+	"57893e0f-a314-32fc-ab99-4c4e6cb20f07": 
+		{
+		"texture": "helmets/mender_fedora"
+		},
+	"4a3fc537-0fd3-3e3a-ab1b-cc5b7ed581db": 
+		{
+		"texture": "helmets/mender_helmet"
+		},
+	"7e24c542-e7c7-3fee-94b5-415eeaf3e169": 
+		{
+		"texture": "helmets/necromancer_lord_helmet"
+		},
+	"16b91b55-02b7-3315-bd9a-7da8467e4a96": 
+		{
+		"texture": "helmets/necron_helmet"
+		},
+	"b11f27af-d60d-37b3-b4d8-cf51dc5843df": 
+		{
+		"model": "helmets/nutcracker_helmet"
+		},
+	"53b0f579-fb7b-338f-a224-447fc7006b41": 
+		{
+		"texture": "helmets/old_dragon_helmet"
+		},
+	"177c6862-dc55-37c3-acca-43e5d4b7d101": 
+		{
+		"texture": "helmets/pig_mask"
+		},
+	"3b0f53e5-0eae-321a-ba65-fa653ee97064": 
+		{
+		"texture": "helmets/protector_dragon_helmet"
+		},
+	"e4ce209b-10c5-34d2-8fae-a0b652e74354": 
+		{
+		"texture": "helmets/rampart_helmet"
+		},
+	"f4d7f301-cd28-353c-8027-8c617257b861": 
+		{
+		"texture": "helmets/reaper_mask"
+		},
+	"cc553c34-157d-3183-bdf2-fee34b8b68e4": 
+		{
+		"texture": "helmets/reinforced_skin"
+		},
+	"c5ea514f-3627-3045-9b0f-0d2d58e53985": 
+		{
+		"texture": "helmets/rekindled_ember_helmet"
+		},
+	"8c29f21d-0af3-324e-982b-dca5c7659bc4": 
+		{
+		"texture": "helmets/shadow_assassin_helmet"
+		},
+	"e23b008e-298b-3219-9670-a36b72cf76de": 
+		{
+		"texture": "helmets/shadow_goggles"
+		},
+	"bafabf7d-16e6-32fb-9720-812419bacc73": 
+		{
+		"texture": "helmets/shark_scale_helmet"
+		},
+	"6d469ca1-380e-3d0e-8d6d-a8bd60908578": 
+		{
+		"texture": "helmets/shimmering_light_hood"
+		},
+	"a861cd92-4a61-37fc-a9ba-712a6f7965b0": 
+		{
+		"texture": "helmets/squash_helmet"
+		},
+	"a3552cdc-39ab-3f9f-9373-61c035f61b7d": 
+		{
+		"texture": "helmets/storm_helmet"
+		},
+	"c671b34e-b143-30f3-b66d-5311f48fefc6": 
+		{
+		"texture": "helmets/strong_dragon_helmet"
+		},
+	"f69ba621-a8b6-31a7-8de1-dc7ade140e1d": 
+		{
+		"texture": "helmets/superior_dragon_helmet"
+		},
+	"5f4a4af3-d4f0-3250-82ed-09e38250f98b": 
+		{
+		"texture": "helmets/taurus_helmet"
+		},
+	"f19f1c2e-ebfb-3fdf-b0c8-f12a139916e5": 
+		{
+		"texture": "helmets/terror_helmet"
+		},
+	"59b6841a-2d15-36c1-ad9a-da70cec72354": 
+		{
+		"texture": "helmets/thunder_helmet"
+		},
+	"11bc9124-7c0b-3fff-aaa0-4502a328aa7a": 
+		{
+		"model": "helmets/true_warden_helmet/frame_1/true_warden_helmet"
+		},
+	"6e6d05e3-a5a5-3d51-a2de-9f37bf9a0589": 
+		{
+		"model": "helmets/true_warden_helmet/frame_2/true_warden_helmet"
+		},
+	"1751c88f-5643-3967-afff-cd69929870a1": 
+		{
+		"model": "helmets/true_warden_helmet/frame_3/true_warden_helmet"
+		},
+	"020c1759-e9b1-399d-980f-3745851eb076": 
+		{
+		"model": "helmets/true_warden_helmet/frame_4/true_warden_helmet"
+		},
+	"7fa6cb2f-de16-3a2c-a988-aae19304d1df": 
+		{
+		"model": "helmets/true_warden_helmet/frame_5/true_warden_helmet"
+		},
+	"cc4652ba-88f3-3b62-9ec3-066a08217baf": 
+		{
+		"model": "helmets/true_warden_helmet/frame_6/true_warden_helmet"
+		},
+	"e2679835-78dd-3e2e-bb75-89b149407e85": 
+		{
+		"model": "helmets/true_warden_helmet/frame_7/true_warden_helmet"
+		},
+	"cda2f75e-318f-324b-89a2-00f4ce72bde0": 
+		{
+		"model": "helmets/true_warden_helmet/frame_8/true_warden_helmet"
+		},
+	"0a246014-5192-32dd-b432-a4eea1ef7e82": 
+		{
+		"model": "helmets/true_warden_helmet/frame_9/true_warden_helmet"
+		},
+	"2698b6e1-7e71-3230-80eb-949621c32c3d": 
+		{
+		"model": "helmets/true_warden_helmet/frame_10/true_warden_helmet"
+		},
+	"9c79973e-26c0-3e8c-b4a4-402e1225301d": 
+		{
+		"model": "helmets/true_warden_helmet/frame_11/true_warden_helmet"
+		},
+	"8584e5d0-47fc-388b-b3c8-f89a62f375bf": 
+		{
+		"texture": "helmets/unstable_dragon_helmet"
+		},
+	"4f6eef4a-c9f2-3f84-832b-a94b89a3e167": 
+		{
+		"texture": "helmets/warden_helmet"
+		},
+	"4434ee4f-15ca-37b9-90e9-fc6ae7a002d2": 
+		{
+		"texture": "helmets/wet_pumpkin"
+		},
+	"b3c79a6a-103a-33cf-8ae2-579722654939": 
+		{
+		"texture": "helmets/wise_dragon_helmet"
+		},
+	"a4baabfd-565a-33f1-a52b-b120cb7c749b": 
+		{
+		"texture": "helmets/wither_goggles"
+		},
+	"cf225c71-a676-30a0-90da-75907b9a99d0": 
+		{
+		"texture": "helmets/wither_helmet"
+		},
+	"9eb38351-9efb-3794-868e-467fda180847": 
+		{
+		"texture": "helmets/wyld_helmet"
+		},
+	"68fdf966-47cb-328e-a195-c6f154127cd9": 
+		{
+		"texture": "helmets/young_dragon_helmet"
+		},
+	"1e29791f-25fe-370b-8dde-bdf364fda47c": 
+		{
+		"model": "items/bob_omb/bob_omb"
+		},
+	"87e89bea-b2db-3d69-8429-16f5c4b889a0": 
+		{
+		"model": "items/divan_alloy/divan_alloy"
+		},
+	"c2dff370-4ecc-3f5a-a8fd-66efdd3013a9": 
+		{
+		"model": "items/divan_fragment/divan_fragment"
+		},
+	"a1d42000-e7c0-3c3e-bc11-2c8de9d568e4": 
+		{
+		"model": "items/fine_amber_gemstone/fine_amber_gemstone"
+		},
+	"f933e7f9-cc20-313a-a43f-5f11b3e8a441": 
+		{
+		"model": "items/fine_amethyst_gemstone/fine_amethyst_gemstone"
+		},
+	"13e221e0-7f14-38d3-ac19-48ae55ee277f": 
+		{
+		"model": "items/fine_jade_gemstone/fine_jade_gemstone"
+		},
+	"e942eb66-a350-38e5-aafa-0dfc3e17b4ac": 
+		{
+		"model": "items/fine_jasper_gemstone/fine_jasper_gemstone"
+		},
+	"ab2952c6-003c-38ea-bd83-9844698391a5": 
+		{
+		"model": "items/fine_ruby_gemstone/fine_ruby_gemstone"
+		},
+	"40df80a0-70ad-3895-a4fa-a9eafb7d7469": 
+		{
+		"model": "items/fine_sapphire_gemstone/fine_sapphire_gemstone"
+		},
+	"83e79d1d-aabf-3369-a7d0-b5215f9147b9": 
+		{
+		"model": "items/fine_topaz_gemstone/fine_topaz_gemstone"
+		},
+	"60d70a39-9d29-3700-9df3-fc0330550817": 
+		{
+		"model": "items/flawed_amber_gemstone/flawed_amber_gemstone"
+		},
+	"be8cf0ae-a442-36c0-9f5a-5645c8117382": 
+		{
+		"model": "items/flawed_amethyst_gemstone/flawed_amethyst_gemstone"
+		},
+	"041c5b55-875b-3f20-a97e-98610afc3ecb": 
+		{
+		"model": "items/flawed_jade_gemstone/flawed_jade_gemstone"
+		},
+	"45454bb7-2efe-3f7f-95e4-a0389a069335": 
+		{
+		"model": "items/flawed_jasper_gemstone/flawed_jasper_gemstone"
+		},
+	"b5c84278-118b-3634-89e0-547cb6166c0a": 
+		{
+		"model": "items/flawed_ruby_gemstone/flawed_ruby_gemstone"
+		},
+	"b4ea250e-6e58-356f-9584-ba4012a2baa9": 
+		{
+		"model": "items/flawed_sapphire_gemstone/flawed_sapphire_gemstone"
+		},
+	"92e8050b-b823-3ba5-9bde-48e75cf2eef5": 
+		{
+		"model": "items/flawed_topaz_gemstone/flawed_topaz_gemstone"
+		},
+	"4ba0166e-5f5b-3d51-9d33-3b5cc86a2fe8": 
+		{
+		"model": "items/flawless_amber_gemstone/flawless_amber_gemstone"
+		},
+	"b771bdf4-fe8a-3ca1-a0ce-8a07c1b0235f": 
+		{
+		"model": "items/flawless_amethyst_gemstone/flawless_amethyst_gemstone"
+		},
+	"f8c140e4-0d47-31a9-b164-e698be919a1b": 
+		{
+		"model": "items/flawless_jade_gemstone/flawless_jade_gemstone"
+		},
+	"2e6c5c05-adb7-32ec-86bb-f12c5a986638": 
+		{
+		"model": "items/flawless_jasper_gemstone/flawless_jasper_gemstone"
+		},
+	"93d1453b-80c9-3a09-9d64-f4f08d149970": 
+		{
+		"model": "items/flawless_ruby_gemstone/flawless_ruby_gemstone"
+		},
+	"117141f7-b729-3bf5-b38c-bfc89f50abde": 
+		{
+		"model": "items/flawless_sapphire_gemstone/flawless_sapphire_gemstone"
+		},
+	"864eb25a-2b1b-3b6b-8fe2-8858b831c6bd": 
+		{
+		"model": "items/flawless_topaz_gemstone/flawless_topaz_gemstone"
+		},
+	"bd4fa6b7-d6bf-393d-8601-00e048d57d91": 
+		{
+		"model": "items/gemstone_mixture/gemstone_mixture"
+		},
+	"ab6dcbe9-0ddc-3230-98bb-94dbf3d844b0": 
+		{
+		"model": "items/helix/helix"
+		},
+	"b569ed03-94ae-3da9-a01d-9726633d5b8b": 
+		{
+		"model": "items/jaderald/jaderald"
+		},
+	"e6670331-bbb6-301f-b8c4-84d8597843fd": 
+		{
+		"model": "items/oil_barrel/oil_barrel"
+		},
+	"6d7137b3-66e3-31b1-bd58-eda4b5708ed5": 
+		{
+		"model": "items/precious_pearl/precious_pearl"
+		},
+	"8652e408-c077-3d58-866a-7c9cb641942e": 
+		{
+		"model": "items/prehistoric_egg/prehistoric_egg"
+		},
+	"846bf289-3768-363e-a699-aee70548f70d": 
+		{
+		"model": "items/quick_claw/quick_claw"
+		},
+	"163f66cb-f787-34c8-8861-f37c0d3d8bb3": 
+		{
+		"model": "items/treasurite/treasurite"
+		},
+	"b79aa74e-f5ac-3d6b-a9a8-169b227f9699": 
+		{
+		"model": "items/wishing_compass/wishing_compass"
+		}
+}
