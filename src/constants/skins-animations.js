@@ -912,7 +912,7 @@ const SKINS = [
   {
     id: "PET_SKIN_BABY_YETI_MIDNIGHT",
     name: "Midnight",
-    texture: "/head/4005bdfb52117b6e9b177ee2dc7b80cd61d6861cd66d87a2a389060ced6894",
+    texture: "/head/128aa536588508afb2648253edee46849f308165d382f8ab883bf6de4a135d39",
     source: "firesale",
     release: new Date("2023-09-30 18:00:00 GMT+1").getTime(),
   },
