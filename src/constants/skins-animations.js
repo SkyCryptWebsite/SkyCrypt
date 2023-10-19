@@ -912,7 +912,7 @@ const SKINS = [
   {
     id: "PET_SKIN_BABY_YETI_MIDNIGHT",
     name: "Midnight",
-    texture: "/head/4005bdfb52117b6e9b177ee2dc7b80cd61d6861cd66d87a2a389060ced6894",
+    texture: "/head/128aa536588508afb2648253edee46849f308165d382f8ab883bf6de4a135d39",
     source: "firesale",
     release: new Date("2023-09-30 18:00:00 GMT+1").getTime(),
   },
@@ -926,7 +926,7 @@ const SKINS = [
   {
     id: "PET_SKIN_ENDERMITE_DYNAMITE",
     name: "Dynamite",
-    texture: "/head/9ebfdace31ac59cdd397869ac4471d8c7ddb4b4d6fa5e9928bbda45f092230d0",
+    texture: "/head/4005bdfb52117b6e9b177ee2dc7b80cd61d6861cd66d87a2a389060ced6894",
     source: "tyashoi_alchemist",
     release: new Date("2023-10-03 18:00:00 GMT+1").getTime(),
   },
