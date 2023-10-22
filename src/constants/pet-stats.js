@@ -3214,7 +3214,7 @@ class MooshroomCow extends Pet {
   get stats() {
     return {
       health: this.level * 1,
-      farming_fortune: 10 + this.level * 0.7,
+      farming_fortune: 10 + this.level * 1,
     };
   }
 
