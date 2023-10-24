@@ -884,7 +884,7 @@ const SKINS = [
   {
     id: "PET_SKIN_ENDER_DRAGON_BABY",
     name: "Baby",
-    texture: "24e73adc6be7922d0d6287192b48b4afcd6d72207773d0b15a1903b051ec0c22",
+    texture: "/head/24e73adc6be7922d0d6287192b48b4afcd6d72207773d0b15a1903b051ec0c22",
     source: "/head/firesale",
     release: new Date("2023-07-29 18:00:00 GMT+1").getTime(),
   },
@@ -898,9 +898,37 @@ const SKINS = [
   {
     id: "PET_SKIN_TURTLE_ANCIENT_GOLDEN",
     name: "Golden Ancient",
-    textur: "/head/b972da505e9e55e32039c5d8f5dbb2f12ab52eea02bec3df6a40adb8b8fecbb0",
+    texture: "/head/b972da505e9e55e32039c5d8f5dbb2f12ab52eea02bec3df6a40adb8b8fecbb0",
     source: "firesale",
     release: new Date("2023-09-03 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_BABY_YETI_DARK_SASQUATCH",
+    name: "Dark Sasquatch",
+    texture: "/head/e8aebb0944fbfaa30ee685684abe2340a532dd21da7e364adb6e839f06466adc",
+    source: "firesale",
+    release: new Date("2023-09-30 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_BABY_YETI_MIDNIGHT",
+    name: "Midnight",
+    texture: "/head/128aa536588508afb2648253edee46849f308165d382f8ab883bf6de4a135d39",
+    source: "firesale",
+    release: new Date("2023-09-30 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_BABY_YETI_LIGHT_SASQUATCH",
+    name: "Light Sasquatch",
+    texture: "/head/128aa536588508afb2648253edee46849f308165d382f8ab883bf6de4a135d39",
+    source: "firesale",
+    release: new Date("2023-09-30 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_ENDERMITE_DYNAMITE",
+    name: "Dynamite",
+    texture: "/head/4005bdfb52117b6e9b177ee2dc7b80cd61d6861cd66d87a2a389060ced6894",
+    source: "tyashoi_alchemist",
+    release: new Date("2023-10-03 18:00:00 GMT+1").getTime(),
   },
 ];
 

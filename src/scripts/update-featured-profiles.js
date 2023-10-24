@@ -34,6 +34,18 @@ const FEATURED_PROFILES = [
     message: '<span class="stat-name">Last online: </span><span class="stat-value">January 1st, 1970</span>',
   },
   {
+    // WarpWing
+    uuid: "7d7b04b49c24433cacc60a3da66eba01",
+    type: "MAINTAINER",
+    message: "Grandmaster of Unit Testing",
+  },
+  {
+    // DuckySoLucky
+    uuid: "dec987bbfa734d63bb9d566139232f81",
+    type: "CONTRIBUTOR",
+    message: "Best Ratter EU",
+  },
+  {
     // LeaPhant
     uuid: "1915444928b64d8b8973df8044f8cdb7",
     type: "CONTRIBUTOR",

@@ -164,6 +164,7 @@ export const AREA_NAMES = {
   instanced: "Kuudra's End",
   garden: "The Garden",
   rift: "Rift",
+  kuudra: "Kuudra's Hollow",
 };
 
 export const COLOR_NAMES = {

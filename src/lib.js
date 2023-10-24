@@ -1692,7 +1692,7 @@ export async function getStats(
     output.slayers = Object.assign({}, slayers);
   }
 
-  if (!items.no_inventory) {
+  if (!items.no_inventory && items.accessory_ids) {
     output.missingAccessories = getMissingAccessories(items.accessory_ids);
 
     for (const key of Object.keys(output.missingAccessories)) {
@@ -2183,6 +2183,8 @@ export async function getStats(
 
   const misc = {};
 
+  output.visited_zones = userProfile.visited_zones || [];
+  output.visited_modes = userProfile.visited_modes || [];
   output.perks = userProfile.perks || {};
   misc.milestones = {};
   misc.objectives = {};
@@ -3203,6 +3205,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
           ? dungeons_data.floors[`${type}_${highest_floor}`].name
           : `floor_${highest_floor}`,
       floors: floors,
+      completions: Object.values(floors).reduce((a, b) => a + (b.stats?.tier_completions ?? 0), 0),
     };
 
     output[type].level.rank = await getLeaderboardPosition(`dungeons_${type}_xp`, dungeon.experience);
@@ -3970,6 +3973,10 @@ export async function getBingoProfile(
         { upsert: true }
       );
     } catch (e) {
+      if (e?.response?.data?.cause === "No bingo data could be found") {
+        return null;
+      }
+
       if (e?.response?.data?.cause != undefined) {
         throw new Error(`Hypixel API Error: ${e.response.data.cause}.`);
       }

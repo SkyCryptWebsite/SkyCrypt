@@ -15,10 +15,11 @@ router.use((req, res, next) => {
 router.use(async (req, res, next) => {
   try {
     const { profile, allProfiles, uuid } = await lib.getProfile(db, req.player, req.profile, req.options);
+    const bingoProfile = await lib.getBingoProfile(db, req.player, req.options);
     const userProfile = profile.members[uuid];
 
-    const items = await lib.getItems(userProfile, false, undefined, req.options);
-    const calculated = await lib.getStats(db, profile, allProfiles, items, req.options);
+    const items = await lib.getItems(userProfile, bingoProfile, false, undefined, req.options);
+    const calculated = await lib.getStats(db, profile, bingoProfile, allProfiles, items, req.options);
 
     const response = [];
 

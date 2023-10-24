@@ -3083,6 +3083,7 @@ class Bingo extends Pet {
 
 class Wisp extends Pet {
   get stats() {
+    const damageMulitiplier = getValue(this.rarity, { common: 0.1, uncommon: 0.15, rare: 0.2, epic: 0.25 });
     const trueDefenseMultiplier = getValue(this.rarity, { rare: 0.15, epic: 0.3, legendary: 0.35 });
     const healthMultiplier = getValue(this.rarity, { uncommon: 1, rare: 2.5, epic: 4, legendary: 6 });
     const intelligenceMultiplier = getValue(this.rarity, { rare: 0.5, epic: 1.25, legendary: 2.5 });
@@ -3090,10 +3091,12 @@ class Wisp extends Pet {
     if (this.rarity <= UNCOMMON) {
       return {
         health: this.level * healthMultiplier,
+        damage: this.level * damageMulitiplier,
       };
     } else {
       return {
         intelligence: this.level * intelligenceMultiplier,
+        damage: this.level * damageMulitiplier,
         true_defense: this.level * trueDefenseMultiplier,
         health: this.level * healthMultiplier,
       };
@@ -3112,9 +3115,14 @@ class Wisp extends Pet {
   }
 
   get first() {
+    const mult = getValue(this.rarity, { common: 15, uncommon: 25, epic: 40, legendary: 50 });
     return {
       name: "§6Drophammer",
-      desc: [`§7Lets you break fire pillars§7.`],
+      desc: [
+        "§7Lets you break fire pillars,",
+        `§7which heals you for §c${mult}% §7of`,
+        `§7your max §c${SYMBOLS.health} §7over §a3s§7.`,
+      ],
     };
   }
 
