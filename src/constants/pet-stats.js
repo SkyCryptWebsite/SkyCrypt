@@ -679,7 +679,12 @@ class MithrilGolem extends Pet {
     const mult = getValue(this.rarity, { mythic: 0.1 });
     return {
       name: "§6Refined Senses",
-      desc: [`§7Increases your §b${SYMBOLS.magic_find} Magic find §7by §a${round(this.level * mult, 1)}% §7when on a Mining Island.`],
+      desc: [
+        `§7Increases your §b${SYMBOLS.magic_find} Magic find §7by §a${round(
+          this.level * mult,
+          1
+        )}% §7when on a Mining Island.`,
+      ],
     };
   }
 }
