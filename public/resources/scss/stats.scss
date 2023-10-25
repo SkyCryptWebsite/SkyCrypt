@@ -1971,8 +1971,14 @@ inventory-view {
   height: 32px;
   line-height: 32px;
   white-space: nowrap;
-  overflow-x: scroll;
-  overflow-y: hidden;
+}
+
+@media (max-width: 767px) {
+  .category-header {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
 }
 
 .category-header-maxed {

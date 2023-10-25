@@ -551,6 +551,7 @@ export const PET_DATA = {
     maxTier: "epic",
     maxLevel: 100,
     emoji: "💀",
+    ignoredInPetScoreCalculation: true,
   },
 };
 
@@ -893,6 +894,10 @@ export const PET_ITEMS = {
     name: "Four-Eyed Fish",
     tier: "EPIC",
     description: `§7Gain §6+2,000 Coins §7when digging up any §eGriffin Burrow§7.\n§7Grants §b+10 ${SYMBOLS.magic_find} Magic Find §7and §a+55 ${SYMBOLS.defense} Defense§7.`,
+    stats: {
+      magic_find: 10,
+      defense: 55,
+    },
   },
   PET_ITEM_BINGO_BOOSTER: {
     name: "Bingo Booster",
@@ -903,5 +908,9 @@ export const PET_ITEMS = {
     name: "Bejeweled Collar",
     tier: "RARE",
     description: `§7Grants §6+25 ${SYMBOLS.mining_speed} Mining Speed §7and §6+10 ${SYMBOLS.mining_fortune} Mining Fortune§7.`,
+    stats: {
+      mining_speed: 25,
+      mining_fortune: 10,
+    },
   },
 };

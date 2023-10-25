@@ -126,7 +126,7 @@ async function updateCacheOnly() {
     const response = await fetch(
       `https://api.hypixel.net/skyblock/profiles?uuid=${hypixelUUID}&key=${credentials.hypixel_api_key}`
     );
-    //forceCacheOnly = false;
+    forceCacheOnly = false;
     // 429 = key throttle
     if (!response.ok && response.status != 429) {
       forceCacheOnly = true;
