@@ -2549,7 +2549,7 @@ export async function getPets(profile, calculated) {
   }
 
   // debug pets
-  // profile.pets = helper.generateDebugPets("MITHRIL_GOLEM");
+  // profile.pets = helper.generateDebugPets("EERIE");
 
   for (const pet of profile.pets) {
     if (!("tier" in pet)) {

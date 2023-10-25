@@ -262,6 +262,10 @@ class Eerie extends Pet {
   get abilities() {
     const list = [this.first];
 
+    if (this.rarity >= RARE) {
+      list.push(this.second);
+    }
+
     return list;
   }
 
@@ -271,6 +275,13 @@ class Eerie extends Pet {
       desc: [
         "§5Fear §7from §5Great Spook §5Armor §7in your §bwardrobe §7applies to you, even if you aren't wearing it.",
       ],
+    };
+  }
+
+  get second() {
+    return {
+      name: "§6Fearama",
+      desc: [`§7Increases §cdamage §7dealt to Spooky Mobs by §a0.1 §7or §a1% §7for every §5Fear §7you have.`],
     };
   }
 }
