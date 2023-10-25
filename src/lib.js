@@ -2549,7 +2549,7 @@ export async function getPets(profile, calculated) {
   }
 
   // debug pets
-  // profile.pets = helper.generateDebugPets("TARANTULA");
+  // profile.pets = helper.generateDebugPets("MITHRIL_GOLEM");
 
   for (const pet of profile.pets) {
     if (!("tier" in pet)) {
@@ -2860,7 +2860,7 @@ async function getMissingPets(pets, gameMode, userProfile) {
 function getPetScore(pets) {
   const highestRarity = {};
   for (const pet of pets) {
-    if (constants.PET_DATA[pet.type].ignoredInPetScoreCalculation === true) {
+    if (constants.PET_DATA[pet.type]?.ignoredInPetScoreCalculation === true) {
       continue;
     }
 
@@ -2871,12 +2871,12 @@ function getPetScore(pets) {
 
   const highestLevel = {};
   for (const pet of pets) {
-    if (constants.PET_DATA[pet.type].ignoredInPetScoreCalculation === true) {
+    if (constants.PET_DATA[pet.type]?.ignoredInPetScoreCalculation === true) {
       continue;
     }
 
     if (!(pet.type in highestLevel) || pet.level.level > highestLevel[pet.type]) {
-      if (pet.level.level < constants.PET_DATA[pet.type].maxLevel) {
+      if (constants.PET_DATA[pet.type] && pet.level.level < constants.PET_DATA[pet.type].maxLevel) {
         continue;
       }
 

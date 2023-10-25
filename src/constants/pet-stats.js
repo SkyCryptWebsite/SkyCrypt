@@ -251,6 +251,30 @@ class Chicken extends Pet {
   }
 }
 
+class Eerie extends Pet {
+  get stats() {
+    return {
+      speed: this.level * 0.1,
+      intelligence: this.level * 0.5,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first];
+
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6Fearnesy",
+      desc: [
+        "§5Fear §7from §5Great Spook §5Armor §7in your §bwardrobe §7applies to you, even if you aren't wearing it.",
+      ],
+    };
+  }
+}
+
 class Elephant extends Pet {
   get stats() {
     return {
@@ -619,6 +643,9 @@ class MithrilGolem extends Pet {
     if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
+    if (this.rarity >= MYTHIC) {
+      list.push(this.fourth);
+    }
     return list;
   }
 
@@ -636,7 +663,7 @@ class MithrilGolem extends Pet {
     const mult = getValue(this.rarity, { rare: 0.1, epic: 0.2 });
     return {
       name: "§6The Smell Of Powder",
-      desc: [`§7Gain §a+${round(this.level * mult, 1)}% §7chance to gain extra §2Mithril Powder §7while mining.`],
+      desc: [`§7Gain §a+${round(this.level * mult, 1)}% §7more §2Mithril Powder §7while mining.`],
     };
   }
 
@@ -644,7 +671,15 @@ class MithrilGolem extends Pet {
     const mult = getValue(this.rarity, { legendary: 0.2 });
     return {
       name: "§6Danger Averse",
-      desc: [`§7Increases your combat stats by §a+${round(this.level * mult, 1)}% §7on mining islands.`],
+      desc: [`§7Increases your combat stats by §a+${round(this.level * mult, 1)}% §7on a Mining Island.`],
+    };
+  }
+
+  get fourth() {
+    const mult = getValue(this.rarity, { mythic: 0.1 });
+    return {
+      name: "§6Refined Senses",
+      desc: [`§7Increases your §b${SYMBOLS.magic_find} Magic find §7by §a${round(this.level * mult, 1)}% §7when on a Mining Island`],
     };
   }
 }
@@ -3522,6 +3557,7 @@ export const PET_STATS = {
   FROST_WISP: Wisp,
   GLACIAL_WISP: Wisp,
   SUBZERO_WISP: Wisp,
+  EERIE: Eerie,
   ELEPHANT: Elephant,
   ENDER_DRAGON: EnderDragon,
   ENDERMAN: Enderman,
