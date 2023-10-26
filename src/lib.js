@@ -75,6 +75,8 @@ function getXpTable(type) {
       return constants.DUNGEONEERING_XP;
     case "hotm":
       return constants.HOTM_XP;
+    case "skyblock_level":
+      return constants.SKYBLOCK_XP;
     default:
       return constants.LEVELING_XP;
   }
@@ -142,9 +144,12 @@ function getXpByLevel(uncappedLevel, extra = {}) {
 /**
  * gets the level and some other information from an xp amount
  * @param {number} xp
- * @param {{type?: string, cap?: number, skill?: string, ignoreCap?: boolean }} extra
+ * @param {{type?: string, cap?: number, skill?: string, ignoreCap?: boolean, infinite?: boolean }} extra
  * @param type the type of levels (used to determine which xp table to use)
  * @param cap override the cap highest level the player can reach
+ * @param skill the id of the skill (used to determine the default cap)
+ * @param ignoreCap whether to ignore the in-game cap or not
+ * @param infinite repeats the last level's experience requirement infinitely
  * @param skill the key of default_skill_caps
  */
 export function getLevelByXp(xp, extra = {}) {
@@ -175,10 +180,12 @@ export function getLevelByXp(xp, extra = {}) {
     }
   }
 
-  /** adds support for catacombs level above 50 */
-  if (extra.type === "dungeoneering") {
-    uncappedLevel += Math.floor(xpCurrent / 200_000_000);
-    xpCurrent %= 200_000_000;
+  /** adds support for infinite leveling (dungeoneering and skyblock level) */
+  if (extra.infinite) {
+    const maxExperience = Object.values(xpTable).at(-1);
+
+    uncappedLevel += Math.floor(xpCurrent / maxExperience);
+    xpCurrent %= maxExperience;
   }
 
   /** the maximum level that any player can achieve (used for gold progress bars) */
@@ -192,10 +199,10 @@ export function getLevelByXp(xp, extra = {}) {
   const level = extra.ignoreCap ? uncappedLevel : Math.min(levelCap, uncappedLevel);
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
-  const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
+  const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1] ?? Object.values(xpTable).at(-1)) : Infinity;
 
   /** the fraction of the way toward the next level */
-  const progress = level >= levelCap ? (extra.ignoreCap ? 1 : 0) : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+  const progress = level >= maxLevel ? (extra.ignoreCap ? 1 : 0) : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
   const levelWithProgress = level + progress;
@@ -2169,15 +2176,15 @@ export async function getStats(
     active: userProfile.nether_island_player_data?.abiphone?.active_contacts?.length || 0,
   };
 
-  output.skyblock_level = {
-    xp: userProfile.leveling?.experience || 0,
-    level: Math.floor(userProfile.leveling?.experience / 100 || 0),
-    maxLevel: 416,
-    progress: (userProfile.leveling?.experience % 100) / 100 || 0,
-    xpCurrent: userProfile.leveling?.experience % 100 || 0,
-    xpForNext: 100,
-    rank: await getLeaderboardPosition("skyblock_level_xp", userProfile.leveling?.experience || 0),
-  };
+  const skyblockExperience = userProfile.leveling?.experience ?? 0;
+  output.skyblock_level = getLevelByXp(skyblockExperience, {
+    skill: "skyblock_level",
+    type: "skyblock_level",
+    infinite: true,
+    ignoreCap: true,
+  });
+
+  output.skyblock_level.rank = await getLeaderboardPosition("skyblock_level", skyblockExperience);
 
   // MISC
 
@@ -3199,7 +3206,12 @@ export async function getDungeons(userProfile, hypixelProfile) {
     output[type] = {
       id: dungeon_id,
       visited: true,
-      level: getLevelByXp(dungeon.experience, { type: "dungeoneering", ignoreCap: true }),
+      level: getLevelByXp(dungeon.experience, {
+        type: "dungeoneering",
+        skill: "dungeoneering",
+        ignoreCap: true,
+        infinite: true,
+      }),
       highest_floor:
         dungeons_data.floors[`${type}_${highest_floor}`] && dungeons_data.floors[`${type}_${highest_floor}`].name
           ? dungeons_data.floors[`${type}_${highest_floor}`].name
@@ -3225,7 +3237,12 @@ export async function getDungeons(userProfile, hypixelProfile) {
     }
 
     output.classes[className] = {
-      experience: getLevelByXp(data.experience, { type: "dungeoneering", ignoreCap: true }),
+      experience: getLevelByXp(data.experience, {
+        type: "dungeoneering",
+        skill: "dungeoneering",
+        ignoreCap: true,
+        infinite: true,
+      }),
       current: false,
     };
 
