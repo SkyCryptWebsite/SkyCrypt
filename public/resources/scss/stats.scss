@@ -1551,7 +1551,8 @@ a.additional-player-stat:hover {
 }
 
 .missing-pet,
-.missing-accessory {
+.missing-accessory,
+.missing-power {
   filter: grayscale(0.8);
   transition: filter 0.2s;
 
@@ -2660,6 +2661,23 @@ bonus-stats {
   margin: 16px 0;
   bonus-stats p {
     margin: 0;
+  }
+}
+
+.stats-tuning {
+  bonus-stats p {
+    margin: 0;
+  }
+}
+
+.selected-power {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 20px;
+
+  .piece {
+    margin-top: 0;
   }
 }
 

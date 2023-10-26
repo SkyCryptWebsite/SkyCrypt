@@ -1023,6 +1023,30 @@ export async function getBingoGoals(db, cacheOnly = false) {
 }
 
 /**
+ * @param {string} enrichment
+ * @returns string
+ * @description takes an enrichment name and returns the corresponding stat name
+ */
+export function enrichmentToStatName(enrichment) {
+  switch (enrichment) {
+    case "walk_speed":
+      return "speed";
+
+    case "critical_chance":
+      return "crit_chance";
+
+    case "critical_damage":
+      return "crit_damage";
+
+    case "attack_speed":
+      return "bonus_attack_speed";
+
+    default:
+      return enrichment;
+  }
+}
+
+/**
  * Returns the price of the item. Returns 0 if the item is not found or if the item argument is falsy.
  * @param {string} item - The ID of the item to retrieve the price for.
  * @returns {number}

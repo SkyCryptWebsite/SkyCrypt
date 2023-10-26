@@ -888,6 +888,73 @@ function getMinionSlots(minions) {
   return output;
 }
 
+function addPowerLoreStat(lore, stat, value) {
+  const statData = constants.STATS_DATA[stat];
+
+  lore.push(
+    `§${statData.color}${value >= 0 ? "+" : ""}${Math.round(value).toLocaleString()} ${statData.symbol} ${
+      statData.nameLore
+    }`
+  );
+}
+
+function getPower(name, magicalPower) {
+  const powerMultiplier = 29.97 * Math.pow(Math.log(0.0019 * magicalPower + 1), 1.2);
+  const displayName = helper.titleCase(name);
+
+  const itemData = {
+    display_name: displayName,
+    tag: {
+      display: {
+        name: displayName,
+      },
+    },
+    stats: {},
+  };
+
+  if (name in constants.POWERS) {
+    const info = constants.POWERS[name];
+
+    const stats = {};
+    const lore = [`§8${info.type} Power`, "", "§7Stats:"];
+
+    for (const [name, value] of Object.entries(info.stats)) {
+      stats[name] = value * powerMultiplier;
+
+      addPowerLoreStat(lore, name, stats[name]);
+    }
+
+    const combined = { ...stats };
+
+    if (info.unique) {
+      lore.push("", "§7Unique Power Bonus:");
+
+      for (const [name, value] of Object.entries(info.unique)) {
+        if (!combined[name]) {
+          combined[name] = value;
+        } else {
+          combined[name] += value;
+        }
+
+        addPowerLoreStat(lore, name, value);
+      }
+    }
+
+    lore.push("", `You Have: §6${magicalPower} Magical Power`);
+
+    itemData.id = info.id;
+    itemData.rarity = "uncommon";
+    itemData.Damage = info.Damage;
+    itemData.texture_path = info.texture_path;
+    itemData.tag.display.Lore = lore;
+    itemData.power_type = info.type;
+    itemData.stats = combined;
+    itemData.unlocked_at = info.unlocked_at;
+  }
+
+  return helper.generateItem(itemData);
+}
+
 export const getItems = async (
   profile,
   bingoProfile,
@@ -2168,6 +2235,71 @@ export async function getStats(
     contacts: userProfile.nether_island_player_data?.abiphone?.contact_data ?? {},
     active: userProfile.nether_island_player_data?.abiphone?.active_contacts?.length || 0,
   };
+
+  output.magical_power = {
+    total: 0,
+  };
+
+  for (const [rarity, value] of Object.entries(constants.MAGICAL_POWER)) {
+    output.magical_power[rarity] = items.accessory_rarities[rarity] * value || 0;
+  }
+
+  output.magical_power.hegemony = items.accessory_rarities.hegemony
+    ? constants.MAGICAL_POWER[items.accessory_rarities.hegemony.rarity]
+    : 0;
+
+  if (items.accessory_rarities.abicase) {
+    output.magical_power.abicase = Math.floor(output.abiphone.active / 2);
+  }
+
+  for (const value of Object.values(output.magical_power)) {
+    output.magical_power.total += value;
+  }
+
+  output.selected_power = null;
+  output.unlocked_powers = [];
+  output.locked_powers = [];
+
+  output.tuning_points = {
+    distribution: {},
+    total: Math.floor(output.magical_power.total / 10),
+    used: 0,
+  };
+
+  if ("accessory_bag_storage" in userProfile) {
+    const selectedPower = userProfile.accessory_bag_storage.selected_power;
+
+    if (selectedPower) {
+      output.selected_power = getPower(selectedPower, output.magical_power.total);
+    }
+
+    const unlockedPowers = new Set(userProfile.accessory_bag_storage.unlocked_powers);
+
+    for (const name of Object.keys(constants.POWERS)) {
+      if (name === selectedPower) {
+        continue;
+      }
+
+      const power = getPower(name, output.magical_power.total);
+      const unlocked =
+        ("unlocked_at" in power && output.levels.combat.level >= power.unlocked_at) || unlockedPowers.has(name);
+
+      output[unlocked ? "unlocked_powers" : "locked_powers"].push(power);
+    }
+
+    const tuning = userProfile.accessory_bag_storage.tuning?.slot_0;
+
+    if (tuning) {
+      for (const [name, value] of Object.entries(tuning)) {
+        if (!value) continue;
+
+        const stat = helper.enrichmentToStatName(name);
+
+        output.tuning_points.used += value;
+        output.tuning_points.distribution[stat] = value * constants.POWER_TUNING_MULTIPLIERS[stat];
+      }
+    }
+  }
 
   output.skyblock_level = {
     xp: userProfile.leveling?.experience || 0,

@@ -572,6 +572,30 @@ declare const calculated: SkyCryptPlayer & {
     amount: number;
   }[];
   reaper_peppers_eaten: number;
+  selected_power: Item & {
+    stats: {
+      [key in StatName]: number;
+    };
+  };
+  unlocked_powers: (Item & {
+    power_type: string;
+    stats: {
+      [key in StatName]: number;
+    };
+  })[];
+  locked_powers: (Item & {
+    power_type: string;
+    stats: {
+      [key in StatName]: number;
+    };
+  })[];
+  tuning_points: {
+    distribution: {
+      [key in StatName]: number;
+    };
+    total: number;
+    used: number;
+  };
   skyblock_level: Level;
 };
 

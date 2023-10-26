@@ -237,6 +237,15 @@ export const STATS_DATA = {
     suffix: "",
     color: "3",
   },
+  combat_wisdom: {
+    name: "Combat Wisdom",
+    nameLore: "Combat Wisdom",
+    nameShort: "Combat Wisdom",
+    nameTiny: "CW",
+    symbol: "☯",
+    suffix: "",
+    color: "3",
+  },
   mana_regen: {
     name: "Mana Regen",
     nameLore: "Mana Regen",
