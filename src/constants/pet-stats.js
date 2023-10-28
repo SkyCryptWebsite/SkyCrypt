@@ -266,6 +266,10 @@ class Eerie extends Pet {
       list.push(this.second);
     }
 
+    if (this.rarity >= LEGENDARY) {
+      list.push(this.third);
+    }
+
     return list;
   }
 
@@ -282,6 +286,20 @@ class Eerie extends Pet {
     return {
       name: "§6Fearama",
       desc: [`§7Increases §cdamage §7dealt to Spooky Mobs by §a0.1 §7or §a1% §7for every §5Fear §7you have.`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.01 });
+
+    return {
+      name: "§6Fearcreasing",
+      desc: [
+        `§7Gives §a${round(
+          (this.level / 2) * mult,
+          1
+        )} §5Fear §7for every §a10 §cPrimal Fears §7killed, up to §a150 §cPrimal Fears§7.`,
+      ],
     };
   }
 }
