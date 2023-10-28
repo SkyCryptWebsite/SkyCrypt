@@ -1,3 +1,5 @@
+import { getHighestLeaderboardValue } from "../helper/leaderboards.js";
+
 export const LEVELING_XP = {
   1: 50,
   2: 125,
@@ -61,6 +63,11 @@ export const LEVELING_XP = {
   60: 7000000,
 };
 
+let skyblockLevelCap = Math.floor(Math.max(await getHighestLeaderboardValue("skyblock_level_xp"), 41718) / 100);
+setInterval(async () => {
+  skyblockLevelCap = Math.floor(Math.max(await getHighestLeaderboardValue("skyblock_level_xp"), 41718) / 100);
+}, 1000 * 60 * 60 * 24);
+
 export const DEFAULT_SKILL_CAPS = {
   farming: 50,
   mining: 60,
@@ -73,6 +80,8 @@ export const DEFAULT_SKILL_CAPS = {
   carpentry: 50,
   runecrafting: 25,
   social: 25,
+  dungeoneering: 50,
+  skyblock_level: skyblockLevelCap,
 };
 
 export const MAXED_SKILL_CAPS = {
@@ -186,6 +195,11 @@ export const DUNGEONEERING_XP = {
   48: 75000000,
   49: 93000000,
   50: 116250000,
+  51: 200000000,
+};
+
+export const SKYBLOCK_XP = {
+  1: 100,
 };
 
 export const GUILD_XP = [
