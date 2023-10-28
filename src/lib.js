@@ -185,7 +185,7 @@ export function getLevelByXp(xp, extra = {}) {
     const maxExperience = Object.values(xpTable).at(-1);
 
     uncappedLevel += Math.floor(xpRemaining / maxExperience);
-    xpRemaining %= maxExperience; 
+    xpRemaining %= maxExperience;
     xpCurrent = xpRemaining;
   }
 
