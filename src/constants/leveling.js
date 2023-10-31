@@ -63,9 +63,9 @@ export const LEVELING_XP = {
   60: 7000000,
 };
 
-let skyblockLevelCap = Math.floor(Math.max(await getHighestLeaderboardValue("skyblock_level_xp"), 41718) / 100);
+let skyblockLevelSkillCap = Math.floor((await getHighestLeaderboardValue("skyblock_level_xp")) / 100);
 setInterval(async () => {
-  skyblockLevelCap = Math.floor(Math.max(await getHighestLeaderboardValue("skyblock_level_xp"), 41718) / 100);
+  skyblockLevelSkillCap = Math.floor((await getHighestLeaderboardValue("skyblock_level_xp")) / 100);
 }, 1000 * 60 * 60 * 24);
 
 export const DEFAULT_SKILL_CAPS = {
@@ -81,7 +81,7 @@ export const DEFAULT_SKILL_CAPS = {
   runecrafting: 25,
   social: 25,
   dungeoneering: 50,
-  skyblock_level: skyblockLevelCap,
+  skyblock_level: skyblockLevelSkillCap,
 };
 
 export const MAXED_SKILL_CAPS = {
