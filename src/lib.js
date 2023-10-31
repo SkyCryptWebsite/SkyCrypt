@@ -184,8 +184,9 @@ export function getLevelByXp(xp, extra = {}) {
   if (extra.infinite) {
     const maxExperience = Object.values(xpTable).at(-1);
 
-    uncappedLevel += Math.floor(xpCurrent / maxExperience);
-    xpCurrent %= maxExperience;
+    uncappedLevel += Math.floor(xpRemaining / maxExperience);
+    xpRemaining %= maxExperience;
+    xpCurrent = xpRemaining;
   }
 
   /** the maximum level that any player can achieve (used for gold progress bars) */
