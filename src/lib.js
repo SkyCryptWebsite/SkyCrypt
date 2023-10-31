@@ -3222,7 +3222,6 @@ export async function getDungeons(userProfile, hypixelProfile) {
     };
 
     output[type].level.rank = await getLeaderboardPosition(`dungeons_${type}_xp`, dungeon.experience);
-    if (output[type].level.level > 50) console.log(output[type].level);
   }
 
   // Classes
