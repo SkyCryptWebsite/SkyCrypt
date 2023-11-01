@@ -299,6 +299,7 @@ class Eerie extends Pet {
           (this.level / 2) * mult,
           1
         )} §5Fear §7for every §a10 §cPrimal Fears §7killed, up to §a150 §cPrimal Fears§7.`,
+        "§cPrimal Fear Kills§7: (§c???§7/§a150§7)",
       ],
     };
   }
@@ -982,6 +983,9 @@ class BlackCat extends Pet {
     if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
+    if (this.rarity >= MYTHIC) {
+      list.push(this.fourth);
+    }
     return list;
   }
 
@@ -1006,6 +1010,14 @@ class BlackCat extends Pet {
     return {
       name: "§6Supernatural",
       desc: [`§7Grants §b${floor(this.level * mult, 1)} ${SYMBOLS.magic_find} Magic Find§7.`],
+    };
+  }
+
+  get fourth() {
+    const value = 0.1 + (this.level - 1) * ((15 - 0.1) / (100 - 1));
+    return {
+      name: "§6Looting",
+      desc: [`§7Gain §c${value.toFixed(1)}% §7more collection items from monsters!`],
     };
   }
 }
