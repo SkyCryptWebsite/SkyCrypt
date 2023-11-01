@@ -1017,7 +1017,7 @@ class BlackCat extends Pet {
     const value = 0.1 + (this.level - 1) * ((15 - 0.1) / (100 - 1));
     return {
       name: "§6Looting",
-      desc: [`§7Gain §c${value.toFixed(1)}% §7more collection items from monsters!`],
+      desc: [`§7Gain §c${round(value, 1)}% §7more collection items from monsters!`],
     };
   }
 }
