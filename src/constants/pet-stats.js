@@ -1014,7 +1014,7 @@ class BlackCat extends Pet {
   }
 
   get fourth() {
-    const value = getValue(this.rarity, { mythic: 0.15 })
+    const value = getValue(this.rarity, { mythic: 0.15 });
     return {
       name: "§6Looting",
       desc: [`§7Gain §c${floor(this.level * value, 1)}% §7more collection items from monsters!`],
