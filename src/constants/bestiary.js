@@ -627,6 +627,13 @@ export const BESTIARY = {
     texture: "/head/6b20b23c1aa2be0270f016b4c90d6ee6b8330a17cfef87869d6ad60b2ffbf3b5",
     mobs: [
       {
+        name: "Diamond Goblin",
+        cap: 100,
+        texture: "/head/81d2116827a41a713660bb52c9ba3bc6dd038175afb74a473b85f0cf60ff70e2",
+        mobs: ["goblin_500"],
+        bracket: 7,
+      },
+      {
         name: "Ghost",
         cap: 250000,
         texture: "/head/981977918a1180e0dec879e6bcd1aa39494977bb913be2ab01aff1db1fa4",

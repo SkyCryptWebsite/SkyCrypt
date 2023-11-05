@@ -397,7 +397,7 @@ export const PET_DATA = {
   MITHRIL_GOLEM: {
     head: "/head/c1b2dfe8ed5dffc5b1687bc1c249c39de2d8a6c3d90305c95f6d1a1a330a0b1",
     type: "mining",
-    maxTier: "legendary",
+    maxTier: "mythic",
     maxLevel: 100,
     emoji: "🗿",
   },
@@ -552,6 +552,13 @@ export const PET_DATA = {
     maxLevel: 100,
     emoji: "💀",
     ignoredInPetScoreCalculation: true,
+  },
+  EERIE: {
+    head: "/head/c3af70c6ff76ba48f24ee8a2063a5b50bbfabf409f4795248a292f8289f47c98",
+    type: "combat",
+    maxTier: "common",
+    maxLevel: 100,
+    emoji: "🕷️",
   },
 };
 

@@ -3,6 +3,7 @@ export const BLOCKED_PLAYERS = [
   "20934ef9488c465180a78f861586b4cf", // Minikloon (Admin)
   "f025c1c7f55a4ea0b8d93f47d17dfe0f", // Plancke (Admin)
   "c552c04a40fb4a17bf549a031b3ab1a1", // LandonHP (Admin)
+  "fc7e31ef7bfe41e7aa5d7e2db14bedd0", // Kazius1 (Admin)
 ];
 
 // Number of kills required for each level of expertise
