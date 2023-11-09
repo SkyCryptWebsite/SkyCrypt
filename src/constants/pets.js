@@ -374,7 +374,7 @@ export const PET_DATA = {
   BLACK_CAT: {
     head: "/head/e4b45cbaa19fe3d68c856cd3846c03b5f59de81a480eec921ab4fa3cd81317",
     type: "combat",
-    maxTier: "legendary",
+    maxTier: "mythic",
     maxLevel: 100,
     emoji: "🐈‍⬛",
   },
