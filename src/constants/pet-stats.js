@@ -251,6 +251,60 @@ class Chicken extends Pet {
   }
 }
 
+class Eerie extends Pet {
+  get stats() {
+    return {
+      speed: this.level * 0.1,
+      intelligence: this.level * 0.5,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first];
+
+    if (this.rarity >= RARE) {
+      list.push(this.second);
+    }
+
+    if (this.rarity >= LEGENDARY) {
+      list.push(this.third);
+    }
+
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6Fearnesy",
+      desc: [
+        "§5Fear §7from §5Great Spook §5Armor §7in your §bwardrobe §7applies to you, even if you aren't wearing it.",
+      ],
+    };
+  }
+
+  get second() {
+    return {
+      name: "§6Fearama",
+      desc: [`§7Increases §cdamage §7dealt to Spooky Mobs by §a0.1 §7or §a1% §7for every §5Fear §7you have.`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.01 });
+
+    return {
+      name: "§6Fearcreasing",
+      desc: [
+        `§7Gives §a${round(
+          (this.level / 2) * mult,
+          1
+        )} §5Fear §7for every §a10 §cPrimal Fears §7killed, up to §a150 §cPrimal Fears§7.`,
+        "§cPrimal Fear Kills§7: (§c???§7/§a150§7)",
+      ],
+    };
+  }
+}
+
 class Elephant extends Pet {
   get stats() {
     return {
@@ -619,6 +673,9 @@ class MithrilGolem extends Pet {
     if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
+    if (this.rarity >= MYTHIC) {
+      list.push(this.fourth);
+    }
     return list;
   }
 
@@ -636,7 +693,7 @@ class MithrilGolem extends Pet {
     const mult = getValue(this.rarity, { rare: 0.1, epic: 0.2 });
     return {
       name: "§6The Smell Of Powder",
-      desc: [`§7Gain §a+${round(this.level * mult, 1)}% §7chance to gain extra §2Mithril Powder §7while mining.`],
+      desc: [`§7Gain §a+${round(this.level * mult, 1)}% §7more §2Mithril Powder §7while mining.`],
     };
   }
 
@@ -644,7 +701,20 @@ class MithrilGolem extends Pet {
     const mult = getValue(this.rarity, { legendary: 0.2 });
     return {
       name: "§6Danger Averse",
-      desc: [`§7Increases your combat stats by §a+${round(this.level * mult, 1)}% §7on mining islands.`],
+      desc: [`§7Increases your combat stats by §a+${round(this.level * mult, 1)}% §7on a Mining Island.`],
+    };
+  }
+
+  get fourth() {
+    const mult = getValue(this.rarity, { mythic: 0.1 });
+    return {
+      name: "§6Refined Senses",
+      desc: [
+        `§7Increases your §b${SYMBOLS.magic_find} Magic find §7by §a${round(
+          this.level * mult,
+          1
+        )}% §7when on a Mining Island.`,
+      ],
     };
   }
 }
@@ -913,6 +983,9 @@ class BlackCat extends Pet {
     if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
+    if (this.rarity >= MYTHIC) {
+      list.push(this.fourth);
+    }
     return list;
   }
 
@@ -937,6 +1010,14 @@ class BlackCat extends Pet {
     return {
       name: "§6Supernatural",
       desc: [`§7Grants §b${floor(this.level * mult, 1)} ${SYMBOLS.magic_find} Magic Find§7.`],
+    };
+  }
+
+  get fourth() {
+    const value = getValue(this.rarity, { mythic: 0.15 });
+    return {
+      name: "§6Looting",
+      desc: [`§7Gain §c${floor(this.level * value, 1)}% §7more collection items from monsters!`],
     };
   }
 }
@@ -3214,7 +3295,7 @@ class MooshroomCow extends Pet {
   get stats() {
     return {
       health: this.level * 1,
-      farming_fortune: 10 + this.level * 0.7,
+      farming_fortune: 10 + this.level * 1,
     };
   }
 
@@ -3522,6 +3603,7 @@ export const PET_STATS = {
   FROST_WISP: Wisp,
   GLACIAL_WISP: Wisp,
   SUBZERO_WISP: Wisp,
+  EERIE: Eerie,
   ELEPHANT: Elephant,
   ENDER_DRAGON: EnderDragon,
   ENDERMAN: Enderman,

@@ -374,7 +374,7 @@ export const PET_DATA = {
   BLACK_CAT: {
     head: "/head/e4b45cbaa19fe3d68c856cd3846c03b5f59de81a480eec921ab4fa3cd81317",
     type: "combat",
-    maxTier: "legendary",
+    maxTier: "mythic",
     maxLevel: 100,
     emoji: "🐈‍⬛",
   },
@@ -397,7 +397,7 @@ export const PET_DATA = {
   MITHRIL_GOLEM: {
     head: "/head/c1b2dfe8ed5dffc5b1687bc1c249c39de2d8a6c3d90305c95f6d1a1a330a0b1",
     type: "mining",
-    maxTier: "legendary",
+    maxTier: "mythic",
     maxLevel: 100,
     emoji: "🗿",
   },
@@ -552,6 +552,13 @@ export const PET_DATA = {
     maxLevel: 100,
     emoji: "💀",
     ignoredInPetScoreCalculation: true,
+  },
+  EERIE: {
+    head: "/head/c3af70c6ff76ba48f24ee8a2063a5b50bbfabf409f4795248a292f8289f47c98",
+    type: "combat",
+    maxTier: "common",
+    maxLevel: 100,
+    emoji: "🕷️",
   },
 };
 
@@ -912,5 +919,11 @@ export const PET_ITEMS = {
       mining_speed: 25,
       mining_fortune: 10,
     },
+  },
+  UNCOMMON_PARTY_HAT: {
+    name: "Uncommon Party Hat",
+    tier: "UNCOMMON",
+    description:
+      "§7Adds particles matching your §c+ §7color to your pet and yourself, defaulting to red. §8Editable in Hypixel lobbies.",
   },
 };

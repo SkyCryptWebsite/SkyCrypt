@@ -75,6 +75,8 @@ function getXpTable(type) {
       return constants.DUNGEONEERING_XP;
     case "hotm":
       return constants.HOTM_XP;
+    case "skyblock_level":
+      return constants.SKYBLOCK_XP;
     default:
       return constants.LEVELING_XP;
   }
@@ -142,9 +144,12 @@ function getXpByLevel(uncappedLevel, extra = {}) {
 /**
  * gets the level and some other information from an xp amount
  * @param {number} xp
- * @param {{type?: string, cap?: number, skill?: string, ignoreCap?: boolean }} extra
+ * @param {{type?: string, cap?: number, skill?: string, ignoreCap?: boolean, infinite?: boolean }} extra
  * @param type the type of levels (used to determine which xp table to use)
  * @param cap override the cap highest level the player can reach
+ * @param skill the id of the skill (used to determine the default cap)
+ * @param ignoreCap whether to ignore the in-game cap or not
+ * @param infinite repeats the last level's experience requirement infinitely
  * @param skill the key of default_skill_caps
  */
 export function getLevelByXp(xp, extra = {}) {
@@ -175,10 +180,13 @@ export function getLevelByXp(xp, extra = {}) {
     }
   }
 
-  /** adds support for catacombs level above 50 */
-  if (extra.type === "dungeoneering") {
-    uncappedLevel += Math.floor(xpCurrent / 200_000_000);
-    xpCurrent %= 200_000_000;
+  /** adds support for infinite leveling (dungeoneering and skyblock level) */
+  if (extra.infinite) {
+    const maxExperience = Object.values(xpTable).at(-1);
+
+    uncappedLevel += Math.floor(xpRemaining / maxExperience);
+    xpRemaining %= maxExperience;
+    xpCurrent = xpRemaining;
   }
 
   /** the maximum level that any player can achieve (used for gold progress bars) */
@@ -192,10 +200,10 @@ export function getLevelByXp(xp, extra = {}) {
   const level = extra.ignoreCap ? uncappedLevel : Math.min(levelCap, uncappedLevel);
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
-  const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1]) : Infinity;
+  const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1] ?? Object.values(xpTable).at(-1)) : Infinity;
 
   /** the fraction of the way toward the next level */
-  const progress = level >= levelCap ? (extra.ignoreCap ? 1 : 0) : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
+  const progress = level >= maxLevel ? (extra.ignoreCap ? 1 : 0) : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
 
   /** a floating point value representing the current level for example if you are half way to level 5 it would be 4.5 */
   const levelWithProgress = level + progress;
@@ -1096,6 +1104,7 @@ export const getItems = async (
     very_special: 0,
     hegemony: null,
     abicase: null,
+    rift_prism: profile.rift?.access?.consumed_prism ? { consumed: true } : null,
   };
 
   // Modify accessories on armor and add
@@ -1109,7 +1118,10 @@ export const getItems = async (
     const insertAccessory = Object.assign({ isUnique: true, isInactive: false }, accessory);
 
     accessories.push(insertAccessory);
-    accessoryIds.push(id);
+    accessoryIds.push({
+      id: id,
+      rarity: insertAccessory.rarity,
+    });
   }
 
   // Add accessories from inventory and accessory bag
@@ -1135,6 +1147,10 @@ export const getItems = async (
 
     // mark accessory inactive if player has two exactly same accessories
     accessories.map((a) => {
+      if (a.isInactive == true) {
+        return;
+      }
+
       if (helper.getId(a) === helper.getId(insertAccessory)) {
         insertAccessory.isInactive = true;
         a.isInactive = true;
@@ -1143,29 +1159,44 @@ export const getItems = async (
         if (constants.RARITIES.indexOf(a.rarity) > constants.RARITIES.indexOf(insertAccessory.rarity)) {
           a.isInactive = false;
           a.isUnique = true;
+          insertAccessory.isUnique = false;
         } else if (constants.RARITIES.indexOf(insertAccessory.rarity) > constants.RARITIES.indexOf(a.rarity)) {
           insertAccessory.isInactive = false;
           insertAccessory.isUnique = true;
+          a.isUnique = false;
+        } else {
+          insertAccessory.isInactive = false;
+          insertAccessory.isUnique = false;
+          a.isInactive = true;
+          a.isUnique = true;
         }
       }
     });
 
-    // mark accessoriy aliases as inactive
-    for (const accessory of accessories) {
-      const id = helper.getId(accessory);
+    // mark accessory aliases as inactive
+    const accessoryAliases = constants.accessoryAliases;
+    if (id in accessoryAliases || Object.keys(accessoryAliases).find((a) => accessoryAliases[a].includes(id))) {
+      let accessoryDuplicates = constants.accessoryAliases[id];
+      if (accessoryDuplicates === undefined) {
+        const aliases = Object.keys(accessoryAliases).filter((a) => accessoryAliases[a].includes(id));
+        accessoryDuplicates = aliases.concat(constants.accessoryAliases[aliases]);
+      }
 
-      if (id in constants.accessoryAliases) {
-        const accessoryDuplicates = constants.accessoryAliases[id];
-
-        if (accessories.find((a) => accessoryDuplicates.includes(helper.getId(a))) != undefined) {
-          accessory.isUnique = false;
-          accessory.isInactive = true;
-        }
+      for (const duplicate of accessoryDuplicates) {
+        accessory_bag.concat(inventory.filter((a) => a.categories.includes("accessory"))).map((a) => {
+          if (helper.getId(a) === duplicate) {
+            a.isInactive = true;
+            a.isUnique = false;
+          }
+        });
       }
     }
 
     accessories.push(insertAccessory);
-    accessoryIds.push(id);
+    accessoryIds.push({
+      id: id,
+      rarity: insertAccessory.rarity,
+    });
     if (insertAccessory.isInactive === false) {
       accessoryRarities[insertAccessory.rarity]++;
       if (id == "HEGEMONY_ARTIFACT") {
@@ -1191,12 +1222,9 @@ export const getItems = async (
     }
 
     for (const accessory of items.filter((a) => a.categories.includes("accessory"))) {
-      const id = helper.getId(accessory);
-
       const insertAccessory = Object.assign({ isUnique: false, isInactive: true }, accessory);
 
       accessories.push(insertAccessory);
-      accessoryIds.push(id);
     }
   }
 
@@ -1218,6 +1246,13 @@ export const getItems = async (
         accessory.tag.display.Lore.push("", `§7Location: §c${source}`);
       }
     }
+  }
+
+  if (accessoryRarities.rift_prism?.consumed) {
+    accessoryIds.push({
+      id: "RIFT_PRISM",
+      rarity: "rare",
+    });
   }
 
   output.accessories = accessories;
@@ -1596,6 +1631,7 @@ export async function getStats(
   bingoProfile,
   allProfiles,
   items,
+  packs,
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getStats` }
 ) {
   const output = {};
@@ -1699,26 +1735,43 @@ export async function getStats(
   if (!items.no_inventory && items.accessory_ids) {
     output.missingAccessories = getMissingAccessories(items.accessory_ids);
 
-    for (const key of Object.keys(output.missingAccessories)) {
+    for (const key in output.missingAccessories) {
       for (const item of output.missingAccessories[key]) {
-        const ITEM_PRICE = await helper.getItemPrice(item.name);
-        item.extra ??= {};
-        item.extra.price = ITEM_PRICE;
+        let price = 0;
 
-        if (ITEM_PRICE === 0) continue;
+        if (item.customPrice === true) {
+          if (item.upgrade) {
+            price = (await helper.getItemPrice(item.upgrade.item)) * item.upgrade.cost[item.rarity];
+          }
+
+          if (item.id === "POWER_ARTIFACT") {
+            for (const { slot_type: slot } of item.gemstone_slots) {
+              price += await helper.getItemPrice(`PERFECT_${slot}_GEM`);
+            }
+          }
+        } else {
+          price = await helper.getItemPrice(item.id);
+        }
+
+        item.extra = { price };
+        if (price > 0) {
+          helper.addToItemLore(
+            item,
+            `§7Price: §6${Math.round(price).toLocaleString()} Coins §7(§6${helper.formatNumber(
+              Math.floor(price / helper.getMagicalPower(item.rarity, item.id))
+            )} §7per MP)`
+          );
+        }
 
         item.tag ??= {};
-        item.tag.display ??= {};
-        item.tag.display.Lore ??= [];
-        item.tag.display.Lore.push(
-          `§7Price: §6${Math.round(ITEM_PRICE).toLocaleString()} Coins §7(§6${helper.formatNumber(
-            ITEM_PRICE / helper.getMagicalPower(item.rarity, item.name)
-          )} §7per MP)`
-        );
-      }
-    }
+        item.tag.ExtraAttributes ??= {};
+        item.tag.ExtraAttributes.id ??= item.id;
+        item.Damage ??= item.damage;
+        item.id = item.item_id;
 
-    for (const key of Object.keys(output.missingAccessories)) {
+        helper.applyResourcePack(item, packs);
+      }
+
       output.missingAccessories[key].sort((a, b) => {
         const aPrice = a.extra?.price || 0;
         const bPrice = b.extra?.price || 0;
@@ -2173,15 +2226,15 @@ export async function getStats(
     active: userProfile.nether_island_player_data?.abiphone?.active_contacts?.length || 0,
   };
 
-  output.skyblock_level = {
-    xp: userProfile.leveling?.experience || 0,
-    level: Math.floor(userProfile.leveling?.experience / 100 || 0),
-    maxLevel: 416,
-    progress: (userProfile.leveling?.experience % 100) / 100 || 0,
-    xpCurrent: userProfile.leveling?.experience % 100 || 0,
-    xpForNext: 100,
-    rank: await getLeaderboardPosition("skyblock_level_xp", userProfile.leveling?.experience || 0),
-  };
+  const skyblockExperience = userProfile.leveling?.experience ?? 0;
+  output.skyblock_level = getLevelByXp(skyblockExperience, {
+    skill: "skyblock_level",
+    type: "skyblock_level",
+    infinite: true,
+    ignoreCap: true,
+  });
+
+  output.skyblock_level.rank = await getLeaderboardPosition("skyblock_level_xp", skyblockExperience);
 
   // MISC
 
@@ -2553,7 +2606,7 @@ export async function getPets(profile, calculated) {
   }
 
   // debug pets
-  // profile.pets = helper.generateDebugPets("TARANTULA");
+  // profile.pets = helper.generateDebugPets("EERIE");
 
   for (const pet of profile.pets) {
     if (!("tier" in pet)) {
@@ -2864,7 +2917,7 @@ async function getMissingPets(pets, gameMode, userProfile) {
 function getPetScore(pets) {
   const highestRarity = {};
   for (const pet of pets) {
-    if (constants.PET_DATA[pet.type].ignoredInPetScoreCalculation === true) {
+    if (constants.PET_DATA[pet.type]?.ignoredInPetScoreCalculation === true) {
       continue;
     }
 
@@ -2875,12 +2928,12 @@ function getPetScore(pets) {
 
   const highestLevel = {};
   for (const pet of pets) {
-    if (constants.PET_DATA[pet.type].ignoredInPetScoreCalculation === true) {
+    if (constants.PET_DATA[pet.type]?.ignoredInPetScoreCalculation === true) {
       continue;
     }
 
     if (!(pet.type in highestLevel) || pet.level.level > highestLevel[pet.type]) {
-      if (pet.level.level < constants.PET_DATA[pet.type].maxLevel) {
+      if (constants.PET_DATA[pet.type] && pet.level.level < constants.PET_DATA[pet.type].maxLevel) {
         continue;
       }
 
@@ -2894,80 +2947,83 @@ function getPetScore(pets) {
   return output;
 }
 
+/**
+ * Checks if an accessory is present in an array of accessories.
+ *
+ * @param {Object[]} accessories - The array of accessories to search.
+ * @param {Object|string} accessory - The accessory object or ID to find.
+ * @param {Object} [options] - The options object.
+ * @param {boolean} [options.ignoreRarity=false] - Whether to ignore the rarity of the accessory when searching.
+ * @returns {boolean} True if the accessory is found, false otherwise.
+ */
+function hasAccessory(accessories, accessory, options = { ignoreRarity: false }) {
+  const id = typeof accessory === "object" ? accessory.id : accessory;
+
+  if (options.ignoreRarity === false) {
+    return accessories.some(
+      (a) => a.id === id && constants.RARITIES.indexOf(a.rarity) >= constants.RARITIES.indexOf(accessory.rarity)
+    );
+  } else {
+    return accessories.some((a) => a.id === id);
+  }
+}
+
+/**
+ * Finds an accessory in an array of accessories by its ID.
+ *
+ * @param {Object[]} accessories - The array of accessories to search.
+ * @param {string} accessory - The ID of the accessory to find.
+ * @returns {Object|undefined} The accessory object if found, or undefined if not found.
+ */
+function getAccessory(accessories, accessory) {
+  return accessories.find((a) => a.id === accessory);
+}
+
 function getMissingAccessories(accessories) {
   const ACCESSORIES = constants.getAllAccessories();
-  const unique = Object.keys(ACCESSORIES);
-  unique.forEach((name) => {
-    if (name in constants.accessoryAliases) {
-      for (const duplicate of constants.accessoryAliases[name]) {
-        if (accessories.includes(duplicate)) {
-          accessories[accessories.indexOf(duplicate)] = name;
-          break;
-        }
+  const unique = ACCESSORIES.map(({ id, tier: rarity }) => ({ id, rarity }));
+
+  for (const { id } of unique) {
+    if (id in constants.accessoryAliases === false) continue;
+
+    for (const duplicate of constants.accessoryAliases[id]) {
+      if (hasAccessory(accessories, duplicate, { ignoreRarity: true }) === true) {
+        getAccessory(accessories, duplicate).id = id;
       }
     }
-  });
+  }
 
-  let missing = unique.filter((accessory) => !accessories.includes(accessory));
+  let missing = unique.filter((accessory) => hasAccessory(accessories, accessory) === false);
+  for (const { id } of missing) {
+    const upgrades = constants.getUpgradeList(id);
+    if (upgrades === undefined) {
+      continue;
+    }
 
-  missing.forEach((name) => {
-    if (constants.getUpgradeList(name)) {
-      // if accessory has upgrades
-      for (const upgrade of constants
-        .getUpgradeList(name)
-        .filter(
-          (item) => constants.getUpgradeList(name).indexOf(item) > constants.getUpgradeList(name).indexOf(name)
-        )) {
-        // for (const upgrade of every upgrade after the current tier)
-        if (accessories.includes(upgrade)) {
-          //if accessories list includes the upgrade
-          missing = missing.filter((item) => item !== name);
-          break;
-        }
+    for (const upgrade of upgrades.filter((item) => upgrades.indexOf(item) > upgrades.indexOf(id))) {
+      if (hasAccessory(accessories, upgrade) === true) {
+        missing = missing.filter((item) => item.id !== id);
       }
     }
-  });
+  }
 
   const upgrades = [];
   const other = [];
-  missing.forEach(async (accessory) => {
+  for (const { id, rarity } of missing) {
+    const ACCESSORY = ACCESSORIES.find((a) => a.id === id && a.tier === rarity);
+
     const object = {
-      display_name: null,
-      rarity: null,
-      texture_path: null,
+      ...ACCESSORY,
+      display_name: ACCESSORY.name ?? null,
+      rarity: rarity,
     };
 
-    object.name ??= accessory;
-
-    // MAIN ACCESSORIES
-    if (ACCESSORIES[accessory] != null) {
-      const data = ACCESSORIES[accessory];
-
-      object.texture_path = data.texture || null;
-      object.display_name = data.name || null;
-      object.rarity = data.tier || data.rarity || null;
-    } else {
-      const data = await db.collection("items").findOne({ id: accessory });
-
-      if (data) {
-        object.texture_path = data.texture ? `/head/${data.texture}` : `/item/${accessory}`;
-        object.display_name = data.name;
-        object.rarity = data.tier.toLowerCase();
-      }
-    }
-
-    let includes = false;
-
-    if (constants.getUpgradeList(accessory) && constants.getUpgradeList(accessory)[0] !== accessory) {
-      includes = true;
-    }
-
-    if (includes) {
+    if ((constants.getUpgradeList(id) && constants.getUpgradeList(id)[0] !== id) || ACCESSORY.rarities) {
       upgrades.push(object);
     } else {
       other.push(object);
     }
-  });
+  }
 
   return {
     missing: other,
@@ -3203,7 +3259,12 @@ export async function getDungeons(userProfile, hypixelProfile) {
     output[type] = {
       id: dungeon_id,
       visited: true,
-      level: getLevelByXp(dungeon.experience, { type: "dungeoneering", ignoreCap: true }),
+      level: getLevelByXp(dungeon.experience, {
+        type: "dungeoneering",
+        skill: "dungeoneering",
+        ignoreCap: true,
+        infinite: true,
+      }),
       highest_floor:
         dungeons_data.floors[`${type}_${highest_floor}`] && dungeons_data.floors[`${type}_${highest_floor}`].name
           ? dungeons_data.floors[`${type}_${highest_floor}`].name
@@ -3229,7 +3290,12 @@ export async function getDungeons(userProfile, hypixelProfile) {
     }
 
     output.classes[className] = {
-      experience: getLevelByXp(data.experience, { type: "dungeoneering", ignoreCap: true }),
+      experience: getLevelByXp(data.experience, {
+        type: "dungeoneering",
+        skill: "dungeoneering",
+        ignoreCap: true,
+        infinite: true,
+      }),
       current: false,
     };
 

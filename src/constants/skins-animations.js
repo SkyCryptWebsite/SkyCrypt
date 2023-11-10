@@ -926,9 +926,30 @@ const SKINS = [
   {
     id: "PET_SKIN_ENDERMITE_DYNAMITE",
     name: "Dynamite",
-    texture: "/head/4005bdfb52117b6e9b177ee2dc7b80cd61d6861cd66d87a2a389060ced6894",
+    texture: "/head/9ebfdace31ac59cdd397869ac4471d8c7ddb4b4d6fa5e9928bbda45f092230d0",
     source: "tyashoi_alchemist",
     release: new Date("2023-10-03 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_WOLF_HUSKY",
+    name: "Husky",
+    texture: "/head/7a558f634d802974dc6ab7e1a4aa72ade63c356268ef2e512f4c09d050e6cf0b",
+    source: "firesale",
+    release: new Date("2023-10-14 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_BAT_CANDY",
+    name: "Candy",
+    texture: "/head/44a22f845e588a1380f429e4d98732453995bebbefa1ba79b5134ca70ad78995",
+    source: "firesale",
+    release: new Date("2023-10-28 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_BAT_BONE",
+    name: "Bone",
+    texture: "/head/2444eb6f238a00528a7f9bfbdcd6c6b0bac8bdb1e3749ef4f0931013c78b8804",
+    source: "firesale",
+    release: new Date("2023-10-28 18:00:00 GMT+1").getTime(),
   },
 ];
 
