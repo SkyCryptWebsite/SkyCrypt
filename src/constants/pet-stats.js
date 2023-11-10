@@ -3261,7 +3261,7 @@ class Wisp extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { uncommon: 0.003, rare: 0.004 });
+    const mult = getValue(this.rarity, { uncommon: 0.003, rare: 0.004, legendary: 0.005 });
 
     return {
       name: "§6Blaze Slayer",
