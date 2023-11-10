@@ -2230,7 +2230,7 @@ export async function getStats(
     ignoreCap: true,
   });
 
-  output.skyblock_level.rank = await getLeaderboardPosition("skyblock_level", skyblockExperience);
+  output.skyblock_level.rank = await getLeaderboardPosition("skyblock_level_xp", skyblockExperience);
 
   // MISC
 
