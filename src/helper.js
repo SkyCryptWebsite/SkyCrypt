@@ -2,10 +2,12 @@ import cluster from "cluster";
 import axios from "axios";
 import sanitize from "mongo-sanitize";
 import retry from "async-retry";
-// import path from "path";
+import path from "path";
 import "axios-debug-log";
 import { v4 } from "uuid";
 import { getPrices } from "skyhelper-networth";
+import { getTexture } from "./custom-resources.js";
+import { fileURLToPath } from "url";
 // import { execSync } from "child_process";
 
 import { titleCase } from "../common/helper.js";
@@ -37,6 +39,7 @@ import {
 
 import credentials from "./credentials.js";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
@@ -1050,6 +1053,11 @@ export function getMagicalPower(rarity, id = null) {
     if (id === "HEGEMONY_ARTIFACT") {
       return 2 * (MAGICAL_POWER[rarity] ?? 0);
     }
+
+    // Rift Prism grants 11 MP
+    if (id === "RIFT_PRISM") {
+      return 11;
+    }
   }
 
   return MAGICAL_POWER[rarity] ?? 0;
@@ -1070,4 +1078,48 @@ export function RGBtoHex(rgb) {
   const [r, g, b] = rgb.split(",").map((c) => parseInt(c.trim()));
 
   return [r, g, b].map((c) => c.toString(16).padStart(2, "0")).join("");
+}
+
+/**
+ * Adds lore to an item's display tag.
+ *
+ * @param {Item} item - The item to add lore to.
+ * @param {string|string[]} lore - The lore to add to the item. If a string is provided, it will be converted to an array.
+ * @returns {Item} The modified item.
+ */
+export function addToItemLore(item, lore) {
+  if (typeof lore === "string") {
+    lore = [lore];
+  }
+
+  item.tag ??= {};
+  item.tag.display ??= {};
+  item.tag.display.Lore ??= [];
+  item.tag.display.Lore = item.tag.display.Lore.concat(lore);
+
+  return item;
+}
+
+/**
+ * Applies a resource pack to an item, modifying its texture and animation properties if a custom texture is found.
+ *
+ * @param {Item} item - The item to apply the resource pack to.
+ * @param {string[]} packs - The ID or array of IDs of the resource pack(s) to search for the custom texture.
+ * @returns {Promise<Item>} A Promise that resolves with the modified item.
+ */
+export async function applyResourcePack(item, packs) {
+  const customTexture = await getTexture(item, {
+    ignore_id: false,
+    pack_ids: packs,
+  });
+
+  if (customTexture) {
+    item.animated = customTexture.animated;
+    item.texture_path = "/" + customTexture.path;
+    item.texture_pack = customTexture.pack.config;
+    item.texture_pack.base_path =
+      "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.base_path);
+  }
+
+  return item;
 }
