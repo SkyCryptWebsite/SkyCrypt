@@ -920,4 +920,10 @@ export const PET_ITEMS = {
       mining_fortune: 10,
     },
   },
+  UNCOMMON_PARTY_HAT: {
+    name: "Uncommon Party Hat",
+    tier: "UNCOMMON",
+    description:
+      "§7Adds particles matching your §c+ §7color to your pet and yourself, defaulting to red. §8Editable in Hypixel lobbies.",
+  },
 };
