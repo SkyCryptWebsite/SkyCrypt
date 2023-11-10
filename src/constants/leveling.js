@@ -68,6 +68,11 @@ setInterval(async () => {
   skyblockLevelSkillCap = Math.floor((await getHighestLeaderboardValue("skyblock_level_xp")) / 100);
 }, 1000 * 60 * 60 * 24);
 
+let skyblockLevelMaxExperience = (await getHighestLeaderboardValue("skyblock_level_xp")) % 100;
+setInterval(async () => {
+  skyblockLevelMaxExperience = (await getHighestLeaderboardValue("skyblock_level_xp")) % 100;
+}, 1000 * 60 * 60 * 24);
+
 export const DEFAULT_SKILL_CAPS = {
   farming: 50,
   mining: 60,
@@ -86,6 +91,10 @@ export const DEFAULT_SKILL_CAPS = {
 
 export const MAXED_SKILL_CAPS = {
   farming: 60,
+};
+
+export const MAXED_SKILL_XP = {
+  skyblock_level: skyblockLevelMaxExperience,
 };
 
 export const RUNECRAFTING_XP = {
