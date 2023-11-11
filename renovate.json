@@ -16,9 +16,8 @@
     },
     {
       "matchPackageNames": ["skyhelper-networth"],
-      "updateTypes": ["bump"],
-      "automerge": true,
-      "schedule": "after 5pm every weekday"
+      "updateTypes": ["minor"],
+      "automerge": true
     }
   ]
 }
