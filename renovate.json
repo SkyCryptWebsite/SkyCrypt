@@ -9,6 +9,7 @@
   "semanticCommits": "enabled",
   "schedule": ["* 0 * * *"],
   "timezone": "UTC",
+  "includeForks": true,
   "packageRules": [
     {
       "matchDepTypes": ["engines"],
