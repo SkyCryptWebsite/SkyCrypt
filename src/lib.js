@@ -1060,7 +1060,8 @@ export const getItems = async (
     personal_vault,
     wardrobe_inventory,
     storage,
-    hotm
+    hotm,
+    candy_bag
   );
 
   for (const [index, item] of allItems.entries()) {

@@ -123,6 +123,7 @@ export const ALL_ITEMS = new Map(
     items.potion_bag,
     items.personal_vault,
     items.wardrobe_inventory,
+    items.candy_bag,
     items.storage,
     items.hotm,
     items.bingo_card,
