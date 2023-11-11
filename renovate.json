@@ -15,7 +15,6 @@
       "enabled": false
     },
     {
-      "matchDepType": "direct",
       "matchPackageNames": ["skyhelper-networth"],
       "updateTypes": ["bump"],
       "automerge": true,
