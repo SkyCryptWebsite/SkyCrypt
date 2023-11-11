@@ -164,11 +164,6 @@ async function loadResourcePacks() {
   resourcePacks = resourcePacks.sort((a, b) => a.config.priority - b.config.priority);
 
   for (const pack of resourcePacks) {
-    if (["VANILLA", "FURFSKY_REBORN"].includes(pack.config.id) === false) {
-      continue;
-    }
-    // console.log("LOADING", pack.config.id);
-
     pack.files = await getFiles(path.resolve(pack.base_path, "assets", "minecraft", "mcpatcher", "cit"));
     pack.textures = [];
 
