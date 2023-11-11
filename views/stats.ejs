@@ -1419,11 +1419,16 @@ const metaDescription = getMetaDescription()
                   <div class="inventory-tab-name"><abbr title="Fishing Bag">Fish</abbr></div>
                 </button>
                 <% } %>
-
                 <% if(items.quiver.length > 0){ %>
                 <button class="inventory-tab" data-inventory-type="quiver">
                   <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/4cb3acdc11ca747bf710e59f4c8e9b3d949fdd364c6869831ca878f0763d1787)"></div>
                   <div class="inventory-tab-name">Quiver</div>
+                </button>
+                <% } %>
+                <% if(items.sacks.length > 0){ %>
+                  <button class="inventory-tab" data-inventory-type="sacks">
+                  <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/fb49a2cb90737993201fe72a1f1ab75c5c93c28f047f685ffad5ab20c7b0caf0)"></div>
+                  <div class="inventory-tab-name">Sacks</div>
                 </button>
                 <% } %>
               </div>

@@ -12,6 +12,7 @@ import {
   mousemoveLoreListener,
   showBackpack,
 } from "../stats-defer";
+import { formatNumber } from "../../../../common/formatting";
 
 @customElement("rich-item")
 export class InventoryView extends LitElement {
@@ -55,7 +56,9 @@ export class InventoryView extends LitElement {
     }
     return html`
       <div style="${ifDefined(style)}" class="${classMap(classes)}"></div>
-      ${this.item.Count != 1 ? html`<div class="item-count">${this.item.Count}</div>` : undefined}
+      ${this.item.Count != 1
+        ? html`<div class="item-count">${formatNumber(this.item.Count, false, 0)}</div>`
+        : undefined}
     `;
   }
 

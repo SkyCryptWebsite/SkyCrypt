@@ -11,7 +11,6 @@ import { fileURLToPath } from "url";
 import util from "util";
 import { v4 } from "uuid";
 
-import * as stats from "./stats.js";
 import * as constants from "./constants.js";
 import credentials from "./credentials.js";
 import { getTexture } from "./custom-resources.js";
@@ -22,6 +21,7 @@ import { calculateLilyWeight } from "./weight/lily-weight.js";
 import { calculateSenitherWeight } from "./weight/senither-weight.js";
 import { getLeaderboardPosition } from "./helper/leaderboards.js";
 import { calculateFarmingWeight } from "./weight/farming-weight.js";
+import * as stats from "./stats.js";
 
 const mcData = minecraftData("1.8.9");
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -1036,6 +1036,9 @@ export const getItems = async (
   output.hotm = hotm;
   output.candy_bag = candy_bag;
 
+  const sacks = "sacks_counts" in profile ? await stats.getSacks(profile.sacks_counts) : [];
+  output.sacks = sacks;
+
   output.bingo_card = {};
   if (bingoProfile?.events !== undefined) {
     const bingoRes = await helper.getBingoGoals(db);
@@ -1060,7 +1063,8 @@ export const getItems = async (
     personal_vault,
     wardrobe_inventory,
     storage,
-    hotm
+    hotm,
+    sacks
   );
 
   for (const [index, item] of allItems.entries()) {
