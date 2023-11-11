@@ -19,7 +19,7 @@ import { getFileHash } from "./hashes.js";
 const execFile = util.promisify(child_process.execFile);
 
 const NORMALIZED_SIZE = 128;
-const RESOURCE_CACHING = true;
+const RESOURCE_CACHING = false;
 
 const FOLDER_PATH = getFolderPath();
 const RESOURCE_PACK_FOLDER = path.resolve(getFolderPath(), "..", "public", "resourcepacks");
@@ -164,6 +164,11 @@ async function loadResourcePacks() {
   resourcePacks = resourcePacks.sort((a, b) => a.config.priority - b.config.priority);
 
   for (const pack of resourcePacks) {
+    if (["VANILLA", "FURFSKY_REBORN"].includes(pack.config.id) === false) {
+      continue;
+    }
+    // console.log("LOADING", pack.config.id);
+
     pack.files = await getFiles(path.resolve(pack.base_path, "assets", "minecraft", "mcpatcher", "cit"));
     pack.textures = [];
 
@@ -487,7 +492,16 @@ async function loadResourcePacks() {
           const apng = UPNG.encode(pngFrames, NORMALIZED_SIZE, NORMALIZED_SIZE, 0, pngDelays);
 
           await fs.writeFile(textureFile, Buffer.from(apng));
-          await execFile(apng2gif, [textureFile, textureFile.replace(".png", ".gif")]);
+
+          try {
+            if (fs.existsSync(textureFile.replace(".png", ".gif"))) {
+              await execFile(apng2gif, [textureFile, "-o", textureFile.replace(".png", ".gif")]);
+            } else {
+              await execFile(apng2gif, [textureFile, "-o", textureFile]);
+            }
+          } catch (error) {
+            console.log(error);
+          }
         }
       }
 
@@ -554,8 +568,8 @@ export async function getTexture(item, options) {
 
       if (
         options.ignore_id === false &&
-        (("skyblock_id" in texture && texture.skyblock_id != (item?.tag?.ExtraAttributes?.id ?? "")) ||
-          (!("skyblock_id" in texture) && item?.tag?.ExtraAttributes?.id !== undefined))
+        texture.skyblock_id === undefined &&
+        (!texture.match || texture.skyblock_id === item.tag?.ExtraAttributes?.id)
       ) {
         continue;
       }
