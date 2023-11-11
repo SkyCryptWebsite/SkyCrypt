@@ -193,6 +193,9 @@ export function getLevelByXp(xp, extra = {}) {
   const maxLevel =
     extra.ignoreCap && uncappedLevel >= levelCap ? uncappedLevel : constants.MAXED_SKILL_CAPS[extra.skill] ?? levelCap;
 
+  /** the maximum amount of experience that any player can acheive (used for skyblock level gold progress bar) */
+  const maxExperience = constants.MAXED_SKILL_XP[extra.skill];
+
   // not sure why this is floored but I'm leaving it in for now
   xpCurrent = Math.floor(xpCurrent);
 
@@ -200,7 +203,8 @@ export function getLevelByXp(xp, extra = {}) {
   const level = extra.ignoreCap ? uncappedLevel : Math.min(levelCap, uncappedLevel);
 
   /** the amount amount of xp needed to reach the next level (used for calculation progress to next level) */
-  const xpForNext = level < maxLevel ? Math.ceil(xpTable[level + 1] ?? Object.values(xpTable).at(-1)) : Infinity;
+  const xpForNext =
+    level < maxLevel ? Math.ceil(xpTable[level + 1] ?? Object.values(xpTable).at(-1)) : maxExperience ?? Infinity;
 
   /** the fraction of the way toward the next level */
   const progress = level >= maxLevel ? (extra.ignoreCap ? 1 : 0) : Math.max(0, Math.min(xpCurrent / xpForNext, 1));
@@ -211,11 +215,14 @@ export function getLevelByXp(xp, extra = {}) {
   /** a floating point value representing the current level ignoring the in-game unlockable caps for example if you are half way to level 5 it would be 4.5 */
   const unlockableLevelWithProgress = extra.cap ? Math.min(uncappedLevel + progress, maxLevel) : levelWithProgress;
 
+  console.log(xpForNext);
+
   return {
     xp,
     level,
     maxLevel,
     xpCurrent,
+    maxExperience,
     xpForNext,
     progress,
     levelCap,

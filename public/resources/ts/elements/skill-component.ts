@@ -38,7 +38,7 @@ export class SkillComponent extends LitElement {
     }
 
     const skillName = this.skill[0].toUpperCase() + this.skill.substring(1);
-    this.maxed = level.level === level.maxLevel;
+    this.maxed = level.maxExperience ? level.xpCurrent === level.maxExperience : level.level === level.maxLevel;
 
     return html`
       <div
@@ -61,10 +61,8 @@ export class SkillComponent extends LitElement {
         ${skillName} <span class="skill-level">${level.level >= 0 ? level.level : "?"}</span>
       </div>
       <div class="skill-bar" data-skill="${skillName}">
-        <div class="skill-progress-bar" style="--progress: ${level.level == level.levelCap ? 1 : level.progress}"></div>
-        ${"runecrafting" in calculated.levels ||
-        ("catacombs" in calculated.dungeons && ["dungeon_class", "dungeon"].includes(this.type)) ||
-        this.type === "skyblock_level"
+        <div class="skill-progress-bar" style="--progress: ${this.getProgress(level, this.type)}"></div>
+        ${"runecrafting" in calculated.levels
           ? html`<div class="skill-progress-text">
               ${this.hovering ? this.getHoverText(level, this.type) : this.getMainText(level, this.type)}
             </div>`
@@ -105,8 +103,10 @@ export class SkillComponent extends LitElement {
    */
   private getMainText(level: Level, type: string): string {
     let mainText = formatNumber(level.xpCurrent, true);
+
     if (type === "skyblock_level") {
-      level.progress = level.level / level.maxLevel;
+      level.progress = this.getProgress(level, type);
+
       const skillBar = document.querySelector(`.skill-bar[data-skill="Skyblock Level"]`);
       if (skillBar) {
         (skillBar.querySelector(".skill-progress-bar") as HTMLElement).style.setProperty(
@@ -116,9 +116,12 @@ export class SkillComponent extends LitElement {
       }
     }
 
-    if (level.xpForNext && level.xpForNext != Infinity) {
-      mainText += ` / ${formatNumber(level.xpForNext, true)}`;
-      mainText += " XP";
+    if (level.xpForNext && level.xpForNext !== Infinity) {
+      if (level.level === level.maxLevel && level.xpCurrent === level.xpForNext) {
+        return mainText;
+      }
+
+      mainText += ` / ${formatNumber(level.xpForNext, true)} XP`;
     }
 
     return mainText;
@@ -131,7 +134,8 @@ export class SkillComponent extends LitElement {
     let hoverText = level.xpCurrent.toLocaleString();
     if (type === "skyblock_level") {
       hoverText = `${level.level} / ${level.maxLevel} Level`;
-      level.progress = level.xpCurrent / level.xpForNext;
+      level.progress = this.getProgress(level, type);
+
       const skillBar = document.querySelector(`.skill-bar[data-skill="Skyblock Level"]`) as HTMLElement;
       if (skillBar) {
         (skillBar.querySelector(".skill-progress-bar") as HTMLElement).style.setProperty(
@@ -140,11 +144,21 @@ export class SkillComponent extends LitElement {
         );
       }
     } else if (level.xpForNext && level.xpForNext != Infinity) {
-      hoverText += ` / ${level.xpForNext.toLocaleString()}`;
-      hoverText += " XP";
+      hoverText += ` / ${level.xpForNext.toLocaleString()} XP`;
     }
 
     return hoverText;
+  }
+
+  /**
+   * @returns the progress to maxing the skill
+   */
+  private getProgress(level: Level, type: string): number {
+    if (type === "skyblock_level" && level.level === level.maxLevel && level.maxExperience) {
+      return level.xpCurrent / level.maxExperience;
+    }
+
+    return level.level / level.maxLevel;
   }
 
   // disable shadow root

@@ -163,6 +163,7 @@ interface Level {
   levelWithProgress: number;
   rank?: number;
   unlockableLevelWithProgress: number;
+  maxExperience?: number;
 }
 
 declare namespace constants {
