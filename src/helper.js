@@ -2,10 +2,12 @@ import cluster from "cluster";
 import axios from "axios";
 import sanitize from "mongo-sanitize";
 import retry from "async-retry";
-// import path from "path";
+import path from "path";
 import "axios-debug-log";
 import { v4 } from "uuid";
 import { getPrices } from "skyhelper-networth";
+import { getTexture } from "./custom-resources.js";
+import { fileURLToPath } from "url";
 // import { execSync } from "child_process";
 
 import { titleCase } from "../common/helper.js";
@@ -37,6 +39,7 @@ import {
 
 import credentials from "./credentials.js";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
@@ -255,117 +258,53 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
 
 export async function getGuild(uuid, db, cacheOnly = false) {
   uuid = sanitize(uuid);
-  const guildMember = await db.collection("guildMembers").findOne({ uuid });
+  const cachedGuild = await db.collection("guildMembers").findOne({ uuid });
+  const guildID = cachedGuild?.gid;
 
-  let guildObject = null;
+  let guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildID) });
 
-  if (cacheOnly && guildMember == undefined) {
-    return null;
-  }
-
-  if (guildMember != undefined && guildMember.gid !== null) {
-    guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildMember.gid) });
+  // Integrating from old caching system (new Date() -> Date.now())
+  if (typeof guildObject?.last_updated === "object") {
+    guildObject.last_updated = new Date(guildObject.last_updated).getTime();
   }
 
   if (
+    guildObject == undefined ||
     cacheOnly ||
-    (guildMember != undefined &&
-      guildMember.gid !== null &&
-      (guildObject == undefined || Date.now() - guildMember.last_updated < 7200 * 1000))
+    Date.now() - guildObject.last_updated > 7200 * 1000 ||
+    guildObject.last_updated == undefined
   ) {
-    if (guildMember.gid !== null) {
-      const guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildMember.gid) });
+    const {
+      data: { guild: guildResponse },
+    } = await hypixel.get("guild", {
+      params: { player: uuid, key: credentials.hypixel_api_key },
+    });
 
-      if (guildObject == undefined) {
-        return null;
-      }
-
-      guildObject.level = getGuildLevel(guildObject.exp);
-      guildObject.gmUser = guildObject.gm ? await resolveUsernameOrUuid(guildObject.gm, db, cacheOnly) : "None";
-      guildObject.rank = guildMember.rank;
-
-      return guildObject;
-    }
-
-    return null;
-  } else {
-    if (guildMember == undefined || Date.now() - guildMember.last_updated > 7200 * 1000) {
-      try {
-        const guildResponse = await hypixel.get("guild", {
-          params: { player: uuid, key: credentials.hypixel_api_key },
-        });
-
-        const { guild } = guildResponse.data;
-
-        let gm;
-
-        if (guild && guild !== null) {
-          for (const member of guild.members) {
-            if (["guild master", "guildmaster"].includes(member.rank.toLowerCase())) {
-              gm = member.uuid;
-            }
-          }
-
-          for (const member of guild.members) {
-            if (!gm && guild.ranks.find((a) => a.name.toLowerCase() == member.rank.toLowerCase()) == undefined) {
-              gm = member.uuid;
-            }
-
-            await db
-              .collection("guildMembers")
-              .updateOne(
-                { uuid: member.uuid },
-                { $set: { gid: guild._id, rank: member.rank, last_updated: new Date() } },
-                { upsert: true }
-              );
-          }
-
-          const guildMembers = await db.collection("guildMembers").find({ gid: guild._id }).toArray();
-
-          for (const member of guildMembers) {
-            if (guild.members.find((a) => a.uuid == member.uuid) == undefined) {
-              await db
-                .collection("guildMembers")
-                .updateOne({ uuid: member.uuid }, { $set: { gid: null, last_updated: new Date() } });
-            }
-          }
-
-          const guildObject = await db.collection("guilds").findOneAndUpdate(
-            { gid: guild._id },
-            {
-              $set: {
-                name: guild.name,
-                tag: guild.tag,
-                exp: guild.exp,
-                created: guild.created,
-                gm,
-                members: guild.members.length,
-                last_updated: new Date(),
-              },
-            },
-            { returnOriginal: false, upsert: true }
-          );
-
-          guildObject.value.level = getGuildLevel(guildObject.value.exp);
-          guildObject.value.gmUser = await resolveUsernameOrUuid(guildObject.value.gm, db);
-          guildObject.value.rank = guild.members.find((a) => a.uuid == uuid).rank;
-
-          return guildObject.value;
-        } else {
-          await db
-            .collection("guildMembers")
-            .findOneAndUpdate({ uuid }, { $set: { gid: null, last_updated: new Date() } }, { upsert: true });
-        }
-
-        return null;
-      } catch (e) {
-        console.error(e);
-        return null;
-      }
-    } else {
+    if (guildResponse === null) {
       return null;
     }
+
+    const guildMaster =
+      guildResponse.members.find((member) => ["guild master", "guildmaster"].includes(member.rank.toLowerCase()))
+        ?.uuid ?? null;
+
+    guildObject = {
+      ...guildResponse,
+      last_updated: Date.now(),
+      gm: guildMaster,
+      gmUser: guildMaster ? await resolveUsernameOrUuid(guildMaster, db, true) : null,
+      rank: guildResponse.members.find((member) => member.uuid == uuid).rank,
+      level: getGuildLevel(guildResponse.exp),
+      id: guildResponse._id,
+    };
+
+    // Required otherwise mongoDB will throw an error
+    delete guildObject._id;
+
+    await db.collection("guilds").updateOne({ gid: guildObject.id }, { $set: guildObject }, { upsert: true });
   }
+
+  return guildObject;
 }
 
 export function getGuildLevel(xp) {
@@ -1055,6 +994,37 @@ export function getAnimatedTexture(item) {
   return deepResults[0] ?? false;
 }
 
+export function romanize(num) {
+  const lookup = { M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90, L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1 };
+  let roman = "";
+
+  for (const i in lookup) {
+    while (num >= lookup[i]) {
+      roman += i;
+      num -= lookup[i];
+    }
+  }
+  return roman;
+}
+
+export async function getBingoGoals(db, cacheOnly = false) {
+  const output = await db.collection("bingoData").findOne({ _id: "cardData" });
+
+  if (cacheOnly === true) {
+    return output;
+  }
+
+  // 12 hours cache
+  if (output === null || output.last_save + 43200000 < Date.now()) {
+    const { data: output } = await axios.get("https://api.hypixel.net/resources/skyblock/bingo");
+    output.last_save = Date.now();
+
+    await db.collection("bingoData").updateOne({ _id: "cardData" }, { $set: { output } }, { upsert: true });
+  }
+
+  return output;
+}
+
 /**
  * Returns the price of the item. Returns 0 if the item is not found or if the item argument is falsy.
  * @param {string} item - The ID of the item to retrieve the price for.
@@ -1083,6 +1053,11 @@ export function getMagicalPower(rarity, id = null) {
     if (id === "HEGEMONY_ARTIFACT") {
       return 2 * (MAGICAL_POWER[rarity] ?? 0);
     }
+
+    // Rift Prism grants 11 MP
+    if (id === "RIFT_PRISM") {
+      return 11;
+    }
   }
 
   return MAGICAL_POWER[rarity] ?? 0;
@@ -1103,4 +1078,48 @@ export function RGBtoHex(rgb) {
   const [r, g, b] = rgb.split(",").map((c) => parseInt(c.trim()));
 
   return [r, g, b].map((c) => c.toString(16).padStart(2, "0")).join("");
+}
+
+/**
+ * Adds lore to an item's display tag.
+ *
+ * @param {Item} item - The item to add lore to.
+ * @param {string|string[]} lore - The lore to add to the item. If a string is provided, it will be converted to an array.
+ * @returns {Item} The modified item.
+ */
+export function addToItemLore(item, lore) {
+  if (typeof lore === "string") {
+    lore = [lore];
+  }
+
+  item.tag ??= {};
+  item.tag.display ??= {};
+  item.tag.display.Lore ??= [];
+  item.tag.display.Lore = item.tag.display.Lore.concat(lore);
+
+  return item;
+}
+
+/**
+ * Applies a resource pack to an item, modifying its texture and animation properties if a custom texture is found.
+ *
+ * @param {Item} item - The item to apply the resource pack to.
+ * @param {string[]} packs - The ID or array of IDs of the resource pack(s) to search for the custom texture.
+ * @returns {Promise<Item>} A Promise that resolves with the modified item.
+ */
+export async function applyResourcePack(item, packs) {
+  const customTexture = await getTexture(item, {
+    ignore_id: false,
+    pack_ids: packs,
+  });
+
+  if (customTexture) {
+    item.animated = customTexture.animated;
+    item.texture_path = "/" + customTexture.path;
+    item.texture_pack = customTexture.pack.config;
+    item.texture_pack.base_path =
+      "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.base_path);
+  }
+
+  return item;
 }

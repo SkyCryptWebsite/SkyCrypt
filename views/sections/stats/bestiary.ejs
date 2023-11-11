@@ -1,0 +1,74 @@
+<div class="stat-container stat-bestiary">
+  <a class="stat-anchor" id="Bestiary"></a>
+  <h2 class="stat-header">Bestiary</h2>
+  <div class="stat-content">
+    <p class="stat-raw-values">
+      <% max = calculated.bestiary.tiersUnlocked === calculated.bestiary.totalTiers ? 'golden-text' : ''; %> 
+      <span class="stat-name <%= max %>">Tiers Unlocked: </span><span class="stat-value <%= max %>"><%= calculated.bestiary.tiersUnlocked.toLocaleString() %> / <%= calculated.bestiary.totalTiers.toLocaleString() %></span><br>
+      <span class="stat-name <%= max %>">Milestone: </span><span class="stat-value <%= max %>"><%= calculated.bestiary.milestone %> / <%= calculated.bestiary.maxMilestone %></span>
+    </p>
+
+    <% for (const [category, data] of Object.entries(calculated.bestiary.categories)) { %>
+      <% if (category === "fishing") { %>
+        <% for (const [key, value] of Object.entries(calculated.bestiary.categories[category])) { %>
+          <% if (["name", "texture"].includes(key)) continue; %>
+          <div class="category-header">
+            <div class="floor-icon" style="background-image: url(<%= value.texture %>)"></div>
+            <span><%= value.name %></span>
+            <% if (value.mobsUnlocked === value.mobsMaxed) { %>
+              <span class="category-header-maxed">max!</span>
+            <% } else {%>
+              <span class="category-header-detail">(<%= value.mobsMaxed %> / <%= value.mobsUnlocked %> max)</span>
+            <% } %>
+          </div>
+          
+          <div class="bestiary">
+            <% for (const family of value.mobs) { %>
+              <% const amountsTooltip = family.kills >= family.nextTierKills ? `<span class="stat-name">Progress: </span><span class="stat-value max-stat category-header-maxed">max!</span><br>` : `<span class="stat-name">Progress to Tier ${family.tier + 1}: </span><span class="stat-value">${family.kills.toLocaleString()} / ${family.nextTierKills.toLocaleString()}</span><br><br><span class="stat-name">Overall Progress: </span><span class="stat-value">${family.kills.toLocaleString()} / ${family.maxKills.toLocaleString()}</span><br>`; %>
+              <div class="chip" data-missing="<%= family.kills === 0%>" data-tippy-content="<%= amountsTooltip %>">
+                <div class="chip-icon-wrapper">
+                  <div style="background-image:url(<%= family.texture %>)" class="item-icon custom-icon"></div>
+                </div>
+                
+                <div class="chip-text">
+                  <% max = family.tier >= family.maxTier ? 'max-stat' : ''; %>
+                  <div class="bestiary-name <%= max %>"><span class="stat-name"><%= family.name %> </span><span class="stat-value"><%= family.tier %></span></div>
+                  <div class="bestiary-amount"><span class="stat-name">Kills: </span><span class="stat-value"><%= family.kills.toLocaleString() %></span></div>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        <% } %>
+
+      <% } else { %>
+        <div class="category-header">
+          <div class="floor-icon" style="background-image: url(<%= data.texture %>)"></div>
+          <span><%= data.name %></span>
+          <% if (data.mobsUnlocked === data.mobsMaxed ) { %>
+            <span class="category-header-maxed">max!</span>
+          <% } else {%>
+            <span class="category-header-detail">(<%= data.mobsMaxed %> / <%= data.mobsUnlocked %> max)</span>
+          <% } %>
+        </div>
+
+        <div class="bestiary">
+          <% for (const family of data.mobs) { %>
+            <% const amountsTooltip = family.kills >= family.nextTierKills ? `<span class="stat-name">Progress: </span><span class="stat-value max-stat category-header-maxed">max!</span><br>` : `<span class="stat-name">Progress to Tier ${family.tier + 1}: </span><span class="stat-value">${family.kills.toLocaleString()} / ${family.nextTierKills.toLocaleString()}</span><br><br><span class="stat-name">Overall Progress: </span><span class="stat-value">${family.kills.toLocaleString()} / ${family.maxKills.toLocaleString()}</span><br>`; %>
+            <div class="chip" data-missing="<%= family.kills === 0%>" data-tippy-content="<%= amountsTooltip %>">
+              <div class="chip-icon-wrapper">
+                <div style="background-image:url(<%= family.texture %>)" class="item-icon custom-icon"></div>
+              </div>
+              
+              <div class="chip-text">
+                <% max = family.tier >= family.maxTier ? 'max-stat' : ''; %>
+                <div class="bestiary-name <%= max %>"><span class="stat-name"><%= family.name %> </span><span class="stat-value"><%= family.tier %></span></div>
+                <div class="bestiary-amount"><span class="stat-name">Kills: </span><span class="stat-value"><%= family.kills.toLocaleString() %></span></div>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
+    <% } %>
+
+  </div>
+</div>

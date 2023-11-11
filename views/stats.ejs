@@ -35,45 +35,6 @@ const skillItems = {
   skyblock_level: 'head-2e2cc42015e6678f8fd49ccc01fbf787f1ba2c32bcf559a015332fc5db50',
 };
 
-const bestiary = {
-  private: {
-    head: "/head/c9c8881e42915a9d29bb61a16fb26d059913204d265df5b439b3d792acd56",
-    name: "Private Island",
-  },
-  hub: {
-    head: "/head/d7cc6687423d0570d556ac53e0676cb563bbdd9717cd8269bdebed6f6d4e7bf8",
-    name: "Hub",
-  },
-  spiders: {
-    head: "/head/c754318a3376f470e481dfcd6c83a59aa690ad4b4dd7577fdad1c2ef08d8aee6",
-    name: "Spider's Den",
-  },
-  fortress: {
-    head: "/head/c3687e25c632bce8aa61e0d64c24e694c3eea629ea944f4cf30dcfb4fbce071",
-    name: "Crimson Isle",
-  },
-  end: {
-    head: "/head/7840b87d52271d2a755dedc82877e0ed3df67dcc42ea479ec146176b02779a5",
-    name: "The End",
-  },
-  caverns: {
-    head: "/head/569a1f114151b4521373f34bc14c2963a5011cdc25a6554c48c708cd96ebfc",
-    name: "Deep Caverns",
-  },
-  park: {
-    head: "/head/a221f813dacee0fef8c59f76894dbb26415478d9ddfc44c2e708a6d3b7549b",
-    name: "The Park",
-  },
-  spooky: {
-    head: "/head/8db711ff52eedda59c434bb03169763d7c40b5b89127778feacd63aa94dfc",
-    name: "Spooky Festival",
-  },
-  catacombs: {
-    head: "/head/964e1c3e315c8d8fffc37985b6681c5bd16a6f97ffd07199e8a05efbef103793",
-    name: "Catacombs",
-  },
-}
-
 const slayerInfo = {
   zombie: {
     boss: "Revenant Horror",
@@ -274,38 +235,31 @@ function enrichmentToStatName(enrichment) {
 }
 
 function getEnrichments(accessories) {
-  const enrichmentCounts = {}
-  const filteredAccessories = accessories
-    .filter(acc => ['legendary', 'mythic', 'divine', 'special', 'very_special'].includes(acc.rarity?.toLowerCase()))
-
-  if (filteredAccessories.length > 0) {
-    filteredAccessories.forEach(acc => {
-      const enrichment = acc.enrichment || 'missing_enrichment!'
-
-      if (!enrichmentCounts[enrichment]) {
-        enrichmentCounts[enrichment] = 0
-      }
-      enrichmentCounts[enrichment] += 1
-    })
-
-    %>
-<span class="stat-name">Enrichments: </span>
-<%
-    for (const [enrichment, amount] of Object.entries(enrichmentCounts)) {
-      const stat = enrichmentToStatName(enrichment)
-      %>
-<span class="stat-value color-<%= stat.replaceAll("_", "-") %>">
-  <%= amount %>× <%= formatEnrichment(enrichment) %>
-</span>
-<%
-      if (enrichment !== Object.keys(enrichmentCounts).pop()) {
-        %><span class="bonus-divider" role="separator"> // </span><%
-      }
-    }
-    %>
-<%
+  const filteredAccessories = accessories.filter((acc) => constants.RARITIES.indexOf(acc.rarity) >= 4);
+  if (filteredAccessories.length === 0) {
+    return;
   }
-}
+  
+  const enrichmentCounts = {};
+  filteredAccessories.map((accessory) => {
+    if (constants.SPECIAL_ACCESSORIES[helper.getId(accessory)]?.allowsEnrichment === false) return;
+
+    return enrichmentCounts[accessory.enrichment ?? 'missing_enrichment!'] = (enrichmentCounts[accessory.enrichment ?? 'missing_enrichment!'] ?? 0) + 1;
+  })%>
+
+  <span class="stat-name">Enrichments: </span>
+  <% for (const [enrichment, amount] of Object.entries(enrichmentCounts)) {
+      const stat = enrichmentToStatName(enrichment); %>
+
+      <span class="stat-value color-<%= stat.replaceAll("_", "-") %>">
+        <%= amount %>× <%= formatEnrichment(enrichment) %>
+      </span>
+      
+      <% if (enrichment !== Object.keys(enrichmentCounts).pop()) { %>
+        <span class="bonus-divider" role="separator"> // </span>
+      <% } %>
+    <% } %>
+<% }
 
 function isEnchanted(item) {
   // heads
@@ -714,7 +668,7 @@ const metaDescription = getMetaDescription()
           <% calculated.members.forEach(member => { %>
           <li>
             <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>">
-              <%= member.display_name %>
+              <span class="<%= member.removed === true ? "kicked" : "" %>"> <%= member.display_name %> </span>
               <% if(member.emojiImg){ %>
               <img class="emoji" draggable="false" src="<%= member.emojiImg %>">
               <% }else if(member.emoji){ %>
@@ -769,7 +723,7 @@ const metaDescription = getMetaDescription()
         <% if(calculated.guild.rank){ %><span class='stat-name'>Rank: </span><span class='stat-value'><%= calculated.guild.rank %></span><br><br><% } %>
         <span class='stat-name'>Guild Master: </span><% if(calculated.guild.gm) {%> <a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %><%} else { %>None<% } %></a><br>
         <% if(calculated.guild.tag){ %><span class='stat-name'>Tag: </span><span class='stat-value'><%- helper.renderLore('§f'+calculated.guild.tag) %></span><br><% } %>
-        <% if(calculated.guild.members){ %><span class='stat-name'>Members: </span><span class='stat-value'><%= calculated.guild.members %></span><br><% } %>
+        <% if(calculated.guild.members){ %><span class='stat-name'>Members: </span><span class='stat-value'><%= typeof calculated.guild.members == 'number' ? calculated.guild.members : calculated.guild.members.length %></span><br><% } %>
         <% if(calculated.guild.level){ %><span class='stat-name'>Level: </span><span class='stat-value'><%= calculated.guild.level %></span><br><% } %>
         ">Guild: <%= calculated.guild.name %></button><% } %>
         <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">Plancke</a>
@@ -986,10 +940,11 @@ const metaDescription = getMetaDescription()
         <a class="nav-item" href="#Dungeons">Dungeons</a>
         <a class="nav-item" href="#Slayer">Slayer</a>
         <a class="nav-item" href="#Minions">Minions</a>
-        <% if (calculated.bestiary?.categories){ %><a class="nav-item" href="#Bestiary">Bestiary</a><% } %>
+        <% if (calculated.bestiary !== null){ %><a class="nav-item" href="#Bestiary">Bestiary</a><% } %>
         <% if(Object.keys(calculated.collections).length > 0){ %><a class="nav-item" href="#Collections">Collections</a><% } %>
-        <% if(Object.keys(calculated.crimsonIsles.kuudra_completed_tiers).length > 0 || Object.keys(calculated.crimsonIsles.dojo).length > 0){ %><a class="nav-item" href="#Crimson_Isle">Crimson Isle</a><% } %>
+        <a class="nav-item" href="#Crimson_Isle">Crimson Isle</a>
         <% if(calculated.rift !== null){ %><a class="nav-item" href="#Rift"><abbr title="RIft">Rift</abbr></a><% } %>
+        <% if (calculated.profile.game_mode === "bingo") { %> <a class="nav-item" href="#Bingo"><abbr title="Bingo">Bingo</abbr></a> <% } %>
         <% if(Object.keys(calculated.misc).length > 0){ %><a class="nav-item" href="#Misc"><abbr title="Miscellaneous">Misc</abbr></a><% } %>
       </div>
     </div>
@@ -1145,15 +1100,16 @@ const metaDescription = getMetaDescription()
           <% }else{ %>
           <p class="stat-raw-values">
             <%
-                const maxTalis = items.accessories.filter(a => a.isUnique).length >= constants.UNIQUE_ACCESSORIES_COUNT ? 'golden-text': ''
-                const maxRecombTalis = items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length >= constants.RECOMBABLE_ACCESSORIES_COUNT ? 'golden-text': ''
-              %>
+              const talis = items.accessories.filter(a => a.isUnique).length + (items.accessory_rarities.rift_prism?.consumed ? 1 : 0)
+              const maxTalis = talis >= constants.UNIQUE_ACCESSORIES_COUNT ? 'golden-text': ''
+              const maxRecombTalis = items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length >= constants.RECOMBABLE_ACCESSORIES_COUNT ? 'golden-text': ''
+            %>
 
             <span class="stat-name <%= maxTalis %>">Unique Accessories: </span>
-            <span class="stat-value <%= maxTalis %>"><%= items.accessories.filter(a => a.isUnique).length %> / <%= constants.UNIQUE_ACCESSORIES_COUNT %></span>
+            <span class="stat-value <%= maxTalis %>"><%= talis %> / <%= constants.UNIQUE_ACCESSORIES_COUNT %></span>
             <br>
             <span class="stat-name <%= maxTalis %>">Completion: </span>
-            <span class="stat-value percent <%= maxTalis %>"><%= Math.round(items.accessories.filter(a => a.isUnique).length / constants.UNIQUE_ACCESSORIES_COUNT * 100) %></span>
+            <span class="stat-value percent <%= maxTalis %>"><%= Math.round(talis / constants.UNIQUE_ACCESSORIES_COUNT * 100) %></span>
             <br>
             <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
             <span class="stat-value <%= maxRecombTalis %>"><%= items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= constants.RECOMBABLE_ACCESSORIES_COUNT %></span>
@@ -1167,8 +1123,10 @@ const metaDescription = getMetaDescription()
                   player_magical_power[rarity] += rarities[rarity] * constants.MAGICAL_POWER[rarity];
                 }
 
-                const mp_hegemony = rarities.hegemony ? constants.MAGICAL_POWER[rarities.hegemony.rarity] : 0
-                const mp_total = Object.values(player_magical_power).reduce((a, b) => a + b) + mp_hegemony + Math.floor(calculated.abiphone.active / 2);
+                const mp_hegemony = rarities.hegemony ? constants.MAGICAL_POWER[rarities.hegemony.rarity] * 2 : 0
+                const mp_abiphone = rarities.abicase ? Math.floor(calculated.abiphone.active / 2) : 0
+                const mp_rift_prism = rarities.rift_prism?.consumed ? 11 : 0;
+                const mp_total = Object.values(player_magical_power).reduce((a, b) => a + b) + mp_hegemony + mp_abiphone + mp_rift_prism - 22;
               %>
             <span data-tippy-content="
               Accessories Breakdown<br>
@@ -1182,11 +1140,14 @@ const metaDescription = getMetaDescription()
               <span style='color: var(--§6);' class='grey-text'>3 MP</span> × <span style='color: var(--§c);' class='grey-text'><%= rarities.special %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.special.toLocaleString() %> MP</span><br>
               <span style='color: var(--§6);' class='grey-text'>5 MP</span> × <span style='color: var(--§c);' class='grey-text'><%= rarities.very_special %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.very_special.toLocaleString() %> MP</span><br>
               <br>
-              <% if(rarities.hegemony) { %>
+              <% if (mp_hegemony) { %>
                 <span style='color: var(--§<%= constants.RARITY_COLORS[rarities.hegemony.rarity] %>);' class='grey-text'>Hegemony Artifact</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_hegemony.toLocaleString() %> MP</span><br>
               <% } %>
-              <% if (rarities.abicase && Math.floor(calculated.abiphone.active / 2) > 0) {%>
-                <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Abicase</span> = <span style='color: var(--§6);' class='grey-text'>+<%= Math.floor(calculated.abiphone.active / 2).toLocaleString() %> MP</span><br>
+              <% if (mp_abiphone) { %>
+                <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Abicase</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_abiphone %> MP</span><br>
+              <% } %>
+              <% if (mp_rift_prism) { %>
+                <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Rift Prism:</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_rift_prism %> MP</span><br>
               <% } %>
               <br>
               Total: <span style='color: var(--§6);' class='grey-text'><%= mp_total.toLocaleString() %> Magical Power</span>
@@ -1212,7 +1173,7 @@ const metaDescription = getMetaDescription()
             </div>
           </div>
           <% } %>
-          <% const inactiveAccessories = items.accessories.filter(a => a.isInactive === true || a.isUnique === false); %>
+          <% const inactiveAccessories = items.accessories.filter(a => a.isInactive === true); %>
           <% if (inactiveAccessories.length > 0) { %>
           <div class="accessory-list">
             <p class="stat-sub-header">Inactive Accessories</p>
@@ -1310,7 +1271,8 @@ const metaDescription = getMetaDescription()
               max = petScore >= Math.max(...Object.keys(petRewards)) ? 'golden-text' : ''
             %>
             <span data-tippy-content="
-              Increase your pet score by collecting unique pets with a high rarity.<br><br>
+              Pet score is calculated based on how many unique pets you have and the rarity of these pets.<br><br>
+              You gain an additional score for each max level pet you have!<br><br>
               <table>
               <%
               const entries = Object.entries(petRewards)
@@ -1512,7 +1474,7 @@ const metaDescription = getMetaDescription()
             </div>
             <% } %>
 
-            <% if (!mining.core) { %>
+            <% if (mining.core === undefined || calculated.visited_modes.includes("crystal_hollows") === false || calculated.visited_modes.includes("mining_3") === false) { %>
             <p class="no-access"><%= calculated.display_name %> hasn't visited Dwarven Mines or Crystal Hollows yet.</p>
             <% } else { %>
             <p class="stat-sub-header">Dwarven Mines & Crystal Hollows</p>
@@ -1634,7 +1596,6 @@ const metaDescription = getMetaDescription()
             <div id="inventory_container">
               <inventory-view inventory-type="hotm"></inventory-view>
             </div>
-            <% } %>
 
             <p class="stat-sub-header">Forge</p>
             <%
@@ -1648,7 +1609,7 @@ const metaDescription = getMetaDescription()
               <% } else { %>
               <span class="stat-value">Unknown item</span>
               <script>
-                console.error("Unknown forge item id: <%= process.id.split('UNKNOWN-')[1] %>")
+                console.error( "Unknown forge item id: <%= process.id.split('UNKNOWN-')[1] %>" )
               </script>
               <% } %>
             </div>
@@ -1659,6 +1620,7 @@ const metaDescription = getMetaDescription()
             <p class="stat-raw-values">No items currently forging!</p>
             <% } %>
           </div>
+            <% } %>
 
           <div class="stat-farming">
             <div class="category-header">
@@ -1669,9 +1631,9 @@ const metaDescription = getMetaDescription()
             </div>
 
             <p class="stat-raw-values">
-              <span data-tippy-content="
+              <span class="interactive-tooltip" data-tippy-content="
                 <span class='stat-name'>Farming Weight</span><br>
-                <span class='stat-info'>Weight calculations by Elite</span>
+                <span class='stat-info'>Weight calculations by <a href='https://elitebot.dev' target='_blank' rel='noreferrer'>Elite</a></span>
                 <br/><br/>
                 <% for (const crop of Object.values(calculated.weight.farming.crops).sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))) { %>
                   <% if (crop.weight > 0) { %>
@@ -1680,11 +1642,10 @@ const metaDescription = getMetaDescription()
                   <% } %>
                 <% } %>
                 <br/>
-                <span class='stat-name'>Total: </span>
+                <span class='stat-name'>Total Crop Weight: </span>
                 <span class='stat-value'><%= parseFloat(calculated.weight.farming.crop_weight.toFixed(2)).toLocaleString() %></span>">
                 <span class="stat-name">Farming Weight: </span>
-                <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span>
-              </span><br>
+                <span class="stat-value"><%= calculated.weight.farming.weight.toFixed(2).toLocaleString() %></span></span><br>
               <span class="stat-name">Pelts: </span><span class="stat-value"><%= calculated.farming.pelts.toLocaleString() %></span><br>
               <% const farming = calculated.farming;
               if (farming.talked && farming.contests.attended_contests > 0) {%>
@@ -2031,8 +1992,17 @@ const metaDescription = getMetaDescription()
             <span class="stat-value <%= max %>"><%= calculated.dungeons.journals.journals_completed %></span>
             <span class="grey-text"> (<%= calculated.dungeons.journals.pages_collected %>/<%= calculated.dungeons.journals.total_pages %>)</span>
             <br>
-            <span class="stat-name">Secrets Found: </span>
-            <span class="stat-value" data-tippy-content="Secrets from achievements across profiles"><%= calculated.dungeons.secrets_found.toLocaleString() %></span>
+            <% const completions = calculated.dungeons.catacombs.completions + calculated.dungeons.master_catacombs.completions; %>
+            <% const secretsFound = calculated.dungeons.secrets_found; %>
+            <% const secretsPerCompletion = completions > 0 ? (secretsFound / completions).toFixed(2) : 0 %>
+            <span data-tippy-content="Secrets from achievements across profiles">              
+              <span class="stat-name">Secrets Found: </span>
+              <span class="stat-value"><%= secretsFound.toLocaleString() %></span>
+              <span class="grey-text"> (<%= secretsPerCompletion %> S/R)</span></span>
+            <br>
+            <% const bloodMobKills = calculated.bestiary ? calculated.bestiary.categories["catacombs"].mobs.find((mob) => mob.name === "Undead").kills : 0%>
+            <span class="stat-name">Blood Mob Kills: </span>
+            <span class="stat-value"><%= bloodMobKills.toLocaleString() %></span>
           </p>
 
           <p class="stat-sub-header">Catacombs</p>
@@ -2379,71 +2349,8 @@ const metaDescription = getMetaDescription()
         </div>
       </div>
 
-      <% if (calculated.bestiary?.categories) {%>
-      <div class="stat-container stat-bestiary">
-        <a class="stat-anchor" id="Bestiary"></a>
-        <h2 class="stat-header">Bestiary</h2>
-        <div class="stat-content">
-          <%
-              let maxedBestiaryOnIsland = {}, bestariesOnIsland = {}, totalBestires = 0, totalMaxedBeasteries = 0, mBestiaryOnIsland = {}, maxLevel = 0;
-              for(const island of Object.keys(calculated.bestiary.categories)) {
-                for (const family of Object.keys(calculated.bestiary.categories[island])) {
-                  totalBestires += 1;
-                  maxLevel += calculated.bestiary.categories[island][family].maxTier;
-                  if (!bestariesOnIsland[island]) bestariesOnIsland[island] = 0;
-                  if (!maxedBestiaryOnIsland[island]) maxedBestiaryOnIsland[island] = 0;
-                  if (!mBestiaryOnIsland[island]) mBestiaryOnIsland[island] = false;
-                  bestariesOnIsland[island]++;
-                  if (calculated.bestiary.categories[island][family].tier >= calculated.bestiary.categories[island][family].maxTier) {
-                      totalMaxedBeasteries++;
-                      maxedBestiaryOnIsland[island]++;
-                  }
-                  if (maxedBestiaryOnIsland[island] >= bestariesOnIsland[island]) {
-                      mBestiaryOnIsland[island] = true;
-                  } else {
-                      mBestiaryOnIsland[island] = false;
-                  }
-                }
-              }
-            %>
-          <% maxLevel = maxLevel / 10 %>
-
-          <p class="stat-raw-values">
-            <% totalMaxedBeasteries >= totalBestires ? 'golden-text' : '' %><span class="stat-name <%= totalMaxedBeasteries >= totalBestires %>">Maxed Beasteries: </span><span class="stat-value <%= totalMaxedBeasteries >= totalBestires %>"><%= totalMaxedBeasteries %> / <%= totalBestires%></span><br>
-            <% calculated.bestiary.level >= maxLevel ? 'golden-text' : '' %><span class="stat-name <%= totalMaxedBeasteries >= maxLevel %>">Level: </span><span class="stat-value <%= totalMaxedBeasteries >= maxLevel %>"><%= calculated.bestiary.level.toLocaleString() %> / <%= maxLevel%></span>
-          </p>
-
-          <% for(const island of Object.keys(calculated.bestiary.categories)) { %>
-          <div class="category-header">
-            <div class="floor-icon" style="background-image: url(<%= bestiary[island].head %>)"></div>
-            <span><%= bestiary[island].name %></span>
-            <% if (mBestiaryOnIsland[island]) {%>
-            <span class="category-header-maxed">max!</span>
-            <%} else {%>
-            <span class="category-header-detail">(<%= maxedBestiaryOnIsland[island] %> / <%= bestariesOnIsland[island] %> max)</span>
-            <%}%>
-            </div>
-            <span class="category-header-detail"></span>
-            <div class="collections">
-              <% for (const family of Object.keys(calculated.bestiary.categories[island])) { %>
-            <div class="chip" data-missing="<%= calculated.bestiary.categories[island][family].kills%>">
-              <div class="chip-icon-wrapper">
-                <% if (calculated.bestiary.categories[island][family].head) { %>
-                <div style="background-image:url(/head/<%= calculated.bestiary.categories[island][family].head %>)" class="item-icon custom-icon"></div>
-                <% } else { %>
-                <div class="item-icon icon-<%= calculated.bestiary.categories[island][family].itemId %>_<%= calculated.bestiary.categories[island][family].damage %>"></div>
-                <% } %>
-              </div>
-              <div class="chip-text">
-                <div class="collection-name <%= calculated.bestiary.categories[island][family].tier >= calculated.bestiary.categories[island][family].maxTier ? 'max-stat' : '' %>"><span class="stat-name"><%= calculated.bestiary.categories[island][family].name %> </span><span class="stat-value"><%= calculated.bestiary.categories[island][family].tier %></span></div>
-                <div class="collection-amount"><span class="stat-name">Kills: </span><span class="stat-value"><%= calculated.bestiary.categories[island][family].kills.toLocaleString() %></span></div>
-              </div>
-            </div>
-            <% } %>
-          </div>
-          <% } %>
-        </div>
-      </div>
+      <% if (calculated.bestiary !== null) {%>
+        <%- include('./sections/stats/bestiary.ejs', {}); %>
       <% } %>
 
       <% if(Object.keys(calculated.collections).length > 0){ %>
@@ -2524,10 +2431,12 @@ const metaDescription = getMetaDescription()
         </div>
       </div>
       <% } %>
-      <%if (Object.keys(calculated.crimsonIsles.kuudra_completed_tiers).length > 0 || Object.keys(calculated.crimsonIsles.dojo).length > 0) { %>
       <div class="stat-container stat-collections">
         <a class="stat-anchor" id="Crimson_Isle"></a>
         <h2 class="stat-header">Crimson Isle</h2>
+        <% if (calculated.visited_zones.includes("crimson_isle") === false) { %>
+          <p class="no-access"><%= calculated.display_name %> hasn't visited the Crimson Isle yet.</p>
+        <% } else { %>
         <% if (Object.keys(calculated.crimsonIsles.factions).length > 0) { %>
         <p class="stat-raw-values stat-kills">
           <span class="stat-name">Selected Faction: </span><span class="stat-value"><%= calculated.crimsonIsles.factions.selected_faction.replaceAll('mages', 'Mage').replaceAll('barbarians', 'Barbarian') %></span><br>
@@ -2588,6 +2497,7 @@ const metaDescription = getMetaDescription()
       </div>
       <% } %>
 
+
       <% if (calculated.rift !== null) { %>
         <div class="stat-container stat-collections">
           <a class="stat-anchor" id="Rift"></a>
@@ -2611,10 +2521,13 @@ const metaDescription = getMetaDescription()
           <br>
 
 
+          <% max = calculated.rift.castle.grubber_stacks === calculated.rift.castle.max_burgers ? 'golden-text' : '' %>
+          <span class="stat-name <%= max %>">McGrubber's Burgers: </span><span class="stat-value <%= max %>"><%= calculated.rift.castle.grubber_stacks %> / <%= calculated.rift.castle.max_burgers %></span>
+
           <p class="stat-sub-header">Porhtal</p>
           <% const porhtalsUnlocked = calculated.rift.wither_cage.killed_eyes.filter((a) => a.unlocked === true).length %>
           <% max = porhtalsUnlocked === calculated.rift.wither_cage.killed_eyes.length ? 'golden-text' : '' %>
-          <span class="stat-name <%= max %>">Porhtals unlocked: </span><span class="stat-value <%= max %>"><%= porhtalsUnlocked %></span><br><br>
+          <span class="stat-name <%= max %>">Eyes Unlocked: </span><span class="stat-value <%= max %>"><%= porhtalsUnlocked %></span><br><br>
           <div class="collections">
             <% for (const portal of calculated.rift.wither_cage.killed_eyes) { %>
               <div class="chip" data-missing="<%= portal.unlocked === false %>">
@@ -2658,6 +2571,41 @@ const metaDescription = getMetaDescription()
       <% } %>
 
 
+      <% if (calculated.profile.game_mode === "bingo") { %>
+        <div class="stat-container stat-bingo">
+          <a class="stat-anchor" id="Bingo"></a>
+          <h2 class="stat-header">Bingo</h2>
+          <div class="stat-content">
+            <p class="stat-raw-values">
+              <span class="stat-name">Bingo Profiles:</span>
+              <span class="stat-value"><%= calculated.bingo.total.toLocaleString() %></span>
+              <br>
+              <span class="stat-name">Completed Goals:</span>
+              <span class="stat-value"><%= calculated.bingo.completed_goals.toLocaleString() %></span>
+              <br>
+              <span class="stat-name">Points:</span>
+              <span class="stat-value" data-tippy-content="<span class='stat-value'>Total points earned, not current balance.</span><br>"><%= calculated.bingo.points.toLocaleString() %></span>
+              <br>
+            </p>
+            <div class="stat-bingo">
+              <div class="category-header">
+                <div class="category-icon">
+                  <div class="item-icon icon-388_0"></div>
+                </div>
+                <span>Bingo Card</span>
+              </div>
+              <% if (Object.keys(items.bingo_card).length !== 0) { %>
+              <div id="inventory_container">
+                <inventory-view inventory-type="bingo_card"></inventory-view>
+              </div>
+              <% } else { %>
+              <p> This player hasn't participated in the latest bingo event.</p>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      <% } %>
+      
       <% if(Object.keys(calculated.misc).length > 0){ %>
       <div class="stat-container stat-misc">
         <a class="stat-anchor" id="Misc"></a>
@@ -3153,14 +3101,14 @@ const metaDescription = getMetaDescription()
   </main>
   <%- include('../includes/footer'); %>
   <script>
-    const items = JSON.parse(`<%- JSON.stringify(items).replaceAll('\\', '\\\\') %>`);
-    const calculated = JSON.parse(`<%- JSON.stringify(calculated).replaceAll('\\', '\\\\') %>`);
+    const items = JSON.parse( `<%- JSON.stringify(items).replaceAll('\\', '\\\\') %>` );
+    const calculated = JSON.parse( `<%- JSON.stringify(calculated).replaceAll('\\', '\\\\') %>` );
     <%
       const clientConstants = {
         MAX_FAVORITES: constants.MAX_FAVORITES,
       }
     %>
-    const constants = JSON.parse(`<%- JSON.stringify(clientConstants).replaceAll('\\', '\\\\') %>`);
+    const constants = JSON.parse( `<%- JSON.stringify(clientConstants).replaceAll('\\', '\\\\') %>` );
   </script>
 </body>
 
