@@ -787,7 +787,7 @@ const metaDescription = getMetaDescription()
           "><span class="stat-name">Average Skill Level: </span><span class="stat-value"><%= calculated.average_level.toFixed(2) %></span></span></div>
         <% } %>
         <div class="additional-stat">
-          <span data-tippy-content="<%= (calculated.fairy_souls.progress*100).toFixed(2) %>% of fairy souls found."><span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span></span>
+          <span data-tippy-content="<%= calculated.fairy_souls.progress %>% of fairy souls found."><span class="stat-name">Fairy Souls: </span><span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span></span>
         </div>
         <%
           const weightSystems = [

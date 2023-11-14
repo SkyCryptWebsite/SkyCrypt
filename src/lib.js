@@ -215,8 +215,6 @@ export function getLevelByXp(xp, extra = {}) {
   /** a floating point value representing the current level ignoring the in-game unlockable caps for example if you are half way to level 5 it would be 4.5 */
   const unlockableLevelWithProgress = extra.cap ? Math.min(uncappedLevel + progress, maxLevel) : levelWithProgress;
 
-  console.log(xpForNext);
-
   return {
     xp,
     level,
@@ -1648,20 +1646,7 @@ export async function getStats(
 
   output.stats = Object.assign({}, constants.BASE_STATS);
 
-  // fairy souls
-  if (isNaN(userProfile.fairy_souls_collected)) {
-    userProfile.fairy_souls_collected = 0;
-  }
-
-  const totalSouls =
-    profile.game_mode === "island" ? constants.FAIRY_SOULS.max.stranded : constants.FAIRY_SOULS.max.normal;
-
-  output.fairy_souls = {
-    collected: userProfile.fairy_souls_collected,
-    total: totalSouls,
-    progress: userProfile.fairy_souls_collected / totalSouls,
-  };
-  output.fairy_exchanges = userProfile.fairy_exchanges;
+  output.fairy_souls = stats.getFairySouls(userProfile, profile);
 
   // levels
   const levelCaps = {
@@ -3810,7 +3795,7 @@ export async function getProfile(
       profileObject.last_update = Date.now();
       response = await retry(
         async () => {
-          return await hypixel.get("skyblock/profiles", { params });
+          return await hypixel.get("v2/skyblock/profiles", { params });
         },
         { retries: 2 }
       );
