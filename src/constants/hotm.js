@@ -742,7 +742,7 @@ class GoblinKiller extends Node {
 
   perk(level) {
     return [
-      `§7Killing a §6Golden Goblin §7gives §2200 §7extra §2Mithril Powder§7, while killing other Goblins gives some based on their wits.`,
+      `§7Killing a §6Golden Goblin §7or §bDiamond Goblin §7gives §2200 §7extra §2Mithril Powder§7, while killing other Goblins gives some based on their wits.`,
     ];
   }
 }
@@ -988,7 +988,14 @@ class LuckOfTheCave extends Node {
 
   perk(level) {
     const val = 5 + level * 1;
-    return [`§7Increases the chance for you to trigger rare occurrences in §2Dwarven Mines §7by §a${val}%§7.`];
+    return [
+      `§7Increases the chance for you to trigger rare occurrences in §2Dwarven Mines §7by §a${val}%§7.`,
+      ``,
+      `§7Rare occurrences include:`,
+      `§8§l· §6Golden Goblins`,
+      `§8§l· §5Fallen Stars`,
+      `§8§l· §6Powder Ghasts`,
+    ];
   }
 }
 
@@ -1031,9 +1038,10 @@ class Crystallized extends Node {
   }
 
   perk(level) {
-    const val = 20 + (level - 1) * 6;
+    const speed = 20 + (level - 1) * 6;
+    const fortune = 20 + (level - 1) * 5;
     return [
-      `§7Grants §a+${val} §6${SYMBOLS.mining_speed} Mining Speed §7and a §a${val}% §7chance to deal §a+1 §7extra damage near §5Fallen Stars§7.`,
+      `§7Increases §6${speed} ${SYMBOLS.mining_speed} Mining Speed §7and §6${fortune} ${SYMBOLS.mining_fortune} Mining Fortune §7near §5Fallen Stars§7.`,
     ];
   }
 }

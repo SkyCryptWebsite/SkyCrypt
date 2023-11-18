@@ -13,6 +13,13 @@
     {
       "matchDepTypes": ["engines"],
       "enabled": false
+    },
+    {
+      "matchDepType": "direct",
+      "matchPackageNames": ["skyhelper-networth"],
+      "updateTypes": ["bump"],
+      "automerge": true,
+      "schedule": "after 5pm every weekday"
     }
   ]
 }

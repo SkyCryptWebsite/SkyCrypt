@@ -126,7 +126,7 @@ async function updateCacheOnly() {
     const response = await fetch(
       `https://api.hypixel.net/skyblock/profiles?uuid=${hypixelUUID}&key=${credentials.hypixel_api_key}`
     );
-    //forceCacheOnly = false;
+    forceCacheOnly = false;
     // 429 = key throttle
     if (!response.ok && response.status != 429) {
       forceCacheOnly = true;
@@ -274,7 +274,10 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       cacheOnly,
       debugId,
     });
-    const calculated = await lib.getStats(db, profile, paramBingo, allProfiles, items, { cacheOnly, debugId });
+    const calculated = await lib.getStats(db, profile, paramBingo, allProfiles, items, req.cookies.pack, {
+      cacheOnly,
+      debugId,
+    });
 
     if (isFoolsDay) {
       calculated.skin_data.skinurl =
