@@ -1654,6 +1654,8 @@ export async function getStats(
 
   output.perks = userProfile.player_data.perks || {};
 
+  output.harp_quest = userProfile.quests.harp_quest || {};
+
   output.misc = stats.getMisc(profile, userProfile, hypixelProfile);
 
   output.bingo = stats.getBingoData(bingoProfile);
@@ -1829,6 +1831,12 @@ function getHotmItems(userProfile, packs) {
           Name: node.displayName,
           Lore: node.lore,
         },
+      },
+      ExtraAttributes: {
+        id: node.id,
+        enabled: node.enabled,
+        level: node.level,
+        max_level: node.max_level,
       },
       position: node.position7x9,
     });

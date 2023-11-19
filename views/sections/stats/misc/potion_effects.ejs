@@ -23,16 +23,11 @@
                 console.log("Unknown potion effect: <%= potion.effect %>")    
             </script>
           <% }
-
-          if (potionData[potion.level] === undefined) { %>
-            <script>
-                console.log("Unknown potion level: <%= potion.level %>")    
-            </script>
-          <% }
+          continue;
         
             
           effects_tooltips[key].push(`
-            <span class="stat-value">${potionData[potion.level].name ?? helper.titleCase(potion.effect.replace("_", " "))}</span>
+            <span class="stat-value">${potionData.name ?? helper.titleCase(potion.effect.replace("_", " "))}</span>
             <br>
           `);
         } else {
