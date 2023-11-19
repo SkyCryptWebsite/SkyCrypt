@@ -1,0 +1,52 @@
+<% 
+
+const raceOrder = ["crystal_core", "giant_mushroom", "precursor_ruins", "other"]
+
+%>
+
+<% if ('races' in calculated.misc) { %>
+  <div class="category-header">
+    <div class="category-icon">
+      <div class="item-icon icon-317_0"></div>
+    </div>
+    <span>races</span>
+  </div>
+
+  <div class="race-containers narrow-info-container-wrapper">
+    <% for (const [category, data] of Object.entries(calculated.misc.races).sort((a, b) => raceOrder.indexOf(a[0]) - raceOrder.indexOf(b[0]))) { %>
+      <div class="narrow-info-container">
+        <div class="narrow-info-header"><%= data.name %></div>
+        <div class="narrow-info-content">
+          <% for (const [subcategory, race] of Object.entries(data.races)) { %>
+            <% if (race.name !== undefined) { %>
+              <div class="narrow-info-flexsb">
+                <div>
+                  <span class="stat-name"><%= race.name %>: </span>
+                  <span class="stat-value"><%= race.time %></span>
+                </div>
+        
+                <div>
+                  <span class="stat-value"><%= helper.renderRaceTier(race.tier) %></span>
+                </div>
+              </div>
+            <% } else { %>
+              <div class="narrow-info-section-header"><%= helper.titleCase(subcategory.replace("_", " ")) %>:</div>
+              <% for (const subcategoryRace of Object.values(race)) { %>
+                <div class="narrow-info-flexsb">
+                  <div>
+                    <span class="stat-name"><%= subcategoryRace.name %>: </span>
+                    <span class="stat-value"><%= subcategoryRace.time %></span>
+                  </div>
+          
+                  <div>
+                    <span class="stat-value"><%= helper.renderRaceTier(subcategoryRace.tier) %></span>
+                  </div>
+                </div>
+              <% } %>
+            <% } %>
+          <% } %>
+        </div>
+      </div>
+    <% } %>
+  </div>
+<% } %>

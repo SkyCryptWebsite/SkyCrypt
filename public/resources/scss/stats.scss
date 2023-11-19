@@ -882,19 +882,23 @@ a.additional-player-stat:hover {
   }
 }
 
-.stat-health,
-.stat-strength,
-.stat-ferocity,
-.stat-ability-damage,
-.color-health,
-.color-strength,
+.color-ability-damage,
 .color-ferocity,
-.color-ability-damage {
+.color-health,
+.color-health-regen,
+.color-strength,
+.stat-ability-damage,
+.stat-ferocity,
+.stat-health,
+.stat-health-regen,
+.stat-strength {
   color: var(--§c);
 }
 
 .stat-defense,
-.color-defense {
+.stat-mending,
+.color-defense,
+.color-mending {
   color: var(--§a);
 }
 
@@ -920,16 +924,37 @@ a.additional-player-stat:hover {
   color: var(--§b);
 }
 
+.stat-alchemy-wisdom,
+.color-alchemy-wisdom,
+.stat-carpentry-wisdom,
+.color-carpentry-wisdom,
+.stat-combat-wisdom,
+.color-combat-wisdom,
+.stat-enchanting-wisdom,
+.color-carpentry-wisdom,
+.stat-farming-wisdom,
+.color-farming-wisdom,
+.stat-fishing-wisdom,
+.color-fishing-wisdom,
+.stat-foraging-wisdom,
+.color-foraging-wisdom,
+.stat-mining-wisdom,
+.color-mining-wisdom,
+.stat-runecrafting-wisdom,
+.color-runecrafting-wisdom,
 .stat-sea-creature-chance,
-.color-sea-creature-chance {
+.color-sea-creature-chance,
+.stat-social-wisdom,
+.color-social-wisdom {
   color: var(--§3);
 }
 
 .stat-magic-find,
-.color-magic-find {
+.color-magic-find,
+.stat-fishing-speed,
+.color-fishing-speed {
   color: var(--§b);
 }
-
 .stat-pet-luck,
 .color-pet-luck {
   color: var(--§d);
@@ -968,6 +993,11 @@ a.additional-player-stat:hover {
 .stat-true-defense,
 .color-true-defense {
   color: var(--§f);
+}
+
+.stat-vitality,
+.color-vitality {
+  color: var(--§4);
 }
 
 .stat-container {
@@ -1971,14 +2001,8 @@ inventory-view {
   height: 32px;
   line-height: 32px;
   white-space: nowrap;
-}
-
-@media (max-width: 767px) {
-  .category-header {
-    -webkit-overflow-scrolling: touch;
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 .category-header-maxed {

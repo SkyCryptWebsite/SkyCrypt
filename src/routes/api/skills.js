@@ -23,15 +23,15 @@ router.use(async (req, res, next) => {
 
     const response = [];
 
-    for (const skill in calculated.levels) {
-      const pushArr = [helper.titleCase(skill), calculated.levels[skill].level.toString()];
+    for (const skill in calculated.skills.skills) {
+      const pushArr = [helper.titleCase(skill), calculated.skills.skills[skill].level.toString()];
 
       if ("progress" in req.query) {
         pushArr.push(
-          calculated.levels[skill].maxLevel,
-          calculated.levels[skill].xp,
-          calculated.levels[skill].xpCurrent,
-          calculated.levels[skill].xpForNext
+          calculated.skills.skills[skill].maxLevel,
+          calculated.skills.skills[skill].xp,
+          calculated.skills.skills[skill].xpCurrent,
+          calculated.skills.skills[skill].xpForNext
         );
       }
 

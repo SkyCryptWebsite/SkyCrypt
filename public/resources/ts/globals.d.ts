@@ -190,11 +190,14 @@ declare const calculated: SkyCryptPlayer & {
   };
   current_area: string;
   deaths: {
-    amount: number;
-    entityId: string;
-    entityName: string;
-    type: "deaths";
-  }[];
+    deaths: {
+      amount: number;
+      entity_id: string;
+      entity_name: string;
+      type: "deaths";
+    }[];
+    total: number;
+  };
   dungeons: {
     boss_collections: {
       [key: string]: {
@@ -252,9 +255,12 @@ declare const calculated: SkyCryptPlayer & {
       visited: boolean;
     };
     classes: {
-      [key: string]: {
-        current: boolean;
-        experience: Level;
+      selected_class: string;
+      classes: {
+        [key: string]: {
+          level: Level;
+          current: boolean;
+        };
       };
     };
     dungeonsWeight: number;
@@ -400,17 +406,25 @@ declare const calculated: SkyCryptPlayer & {
     tag: string;
   } | null;
   kills: {
-    amount: number;
-    entityId: string;
-    entityName: string;
-    type: "kills";
-  }[];
+    kills: {
+      amount: number;
+      entity_id: string;
+      entity_name: string;
+      type: "kills";
+    }[];
+    total: number;
+  };
   last_updated: SkyCryptRelativeTime;
   level_caps: {
     [key: string]: number;
   };
-  levels: {
-    [key: string]: Level;
+  skills: {
+    skills: {
+      [key: string]: Level;
+    };
+    averageSkillLevel: number;
+    averageSkillLevelWithoutProgress: number;
+    totalSkillXp: number;
   };
   members: SkyCryptPlayer[];
   mining: {
@@ -494,8 +508,14 @@ declare const calculated: SkyCryptPlayer & {
       most_winter_magma_damage_dealt: number;
       most_winter_snowballs_hit: number;
     };
+    uncategorized: {
+      [key: string]: {
+        raw?: number;
+        formatted?: string;
+        maxed?: boolean;
+      };
+    };
   };
-  missingPets: PetBase[];
   missingAccessories: {
     [key in "missing" | "upgrades"]: DisplayItem[];
   };
@@ -506,7 +526,10 @@ declare const calculated: SkyCryptPlayer & {
   pet_score_bonus: {
     [key in StatName]?: number;
   };
-  pets: Pet[];
+  pets: {
+    pets: Pet[];
+    missing: PetBase[];
+  };
   profile: Profile;
   profiles: {
     [key: string]: Profile & {
@@ -572,7 +595,6 @@ declare const calculated: SkyCryptPlayer & {
     stat: string;
     amount: number;
   }[];
-  reaper_peppers_eaten: number;
   skyblock_level: Level;
 };
 

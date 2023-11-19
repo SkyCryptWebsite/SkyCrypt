@@ -1,0 +1,70 @@
+<div class="stat-container stat-minions">
+  <a class="stat-anchor" id="Minions"></a>
+  <h2 class="stat-header">Minions</h2>
+  <div class="stat-content">
+    <p class="stat-raw-values">
+      <!-- Unique Minions -->
+      <% max = calculated.minions.maxedTiers === calculated.minions.totalTiers ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Unique Minions: </span>
+      <span class="stat-value <%= max %>"><%= calculated.minions.maxedTiers %> / <%= calculated.minions.totalTiers %></span>
+      <span class="grey-text"> (<%= Math.floor(calculated.minions.maxedTiers / calculated.minions.totalTiers * 100) %>%)</span>
+      <br>
+
+      <!-- Minion Slots -->
+      <% max = calculated.minions.minion_slots.current == constants.MINIONS_MAX_SLOTS ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Minion Slots: </span>
+      <span class="stat-value <%= max %>"><%= calculated.minions.minion_slots.current %>
+      </span><span class=" grey-text"> (<%= calculated.minions.minion_slots.next %> to next slot)</span>
+      <br>
+
+      <!-- Bonus Minion Slots (Community Shop) -->
+      <% max = calculated.misc.profile_upgrades.minion_slots === 5 ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Bonus Minion Slots: </span>
+      <span class="stat-value <%= max %>"><%= calculated.misc.profile_upgrades.minion_slots %> / <%= constants.PROFILE_UPGRADES['minion_slots'] %></span>
+      <br>
+
+      <!-- Maxed Minions -->
+      <% max = calculated.minions.maxedMinions === calculated.minions.totalMinions ? 'golden-text' : '' %>
+      <span class=" stat-name <%= max %>">Maxed Minions: </span>
+      <span class="stat-value <%= max %>"><%= calculated.minions.maxedMinions %> / <%= calculated.minions.totalMinions %></span>
+      <br>
+    </p>
+  
+    <!-- Unlocked Minions -->
+    <% for (const [category, categoryData] of Object.entries(calculated.minions.minions)) { %>
+      <% if (categoryData.minions === undefined) continue; %>
+      <div class="category-header">
+        <div class="category-icon">
+          <div class="item-icon <%= skillItems[category.toLowerCase()] ?? "icon-166_0" %>"></div>
+        </div>
+        <span> <%= category %> </span>
+        <% if (categoryData.maxedMinions === categoryData.totalMinions) { %>
+          <span class="category-header-maxed">max!</span>
+        <% } else { %>
+          <span class="category-header-detail">(<%= categoryData.maxedMinions %> / <%= categoryData.totalMinions %> max)</span>
+        <% } %>
+      </div>
+
+      <div class="collections">  
+        <% for (const minion of categoryData.minions) { 
+          let amountsTooltip = "";
+          for (let i = 1; i <= minion.tiers.length; i++) {
+            amountsTooltip += `<div class='minion-variant ${minion.tiers.includes(i) ? "minion-crafted" : ""}'>${romanize(i)}</div>`
+          } %>
+
+          <div class="chip" data-tippy-content='<%= amountsTooltip %>' data-missing="<%= minion.tier === 0 %>">
+            <div class="chip-icon-wrapper">
+              <div style="background-image:url(<%= minion.texture %>)" class="item-icon custom-icon"></div>
+            </div>
+            <div class="chip-text">
+              <div class="collection-name <%= minion.tier == minion.maxTier ? 'max-stat' : '' %>">
+                <span class="stat-name"> <%= minion.name %> </span>
+                <span class="stat-value"> <%= minion.tier %> </span>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+</div>
+</div>

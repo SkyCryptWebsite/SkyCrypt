@@ -62,7 +62,7 @@ export class SkillComponent extends LitElement {
       </div>
       <div class="skill-bar" data-skill="${skillName}">
         <div class="skill-progress-bar" style="--progress: ${this.getProgress(level, this.type)}"></div>
-        ${"runecrafting" in calculated.levels
+        ${"runecrafting" in calculated.skills.skills
           ? html`<div class="skill-progress-text">
               ${this.hovering ? this.getHoverText(level, this.type) : this.getMainText(level, this.type)}
             </div>`
@@ -78,7 +78,7 @@ export class SkillComponent extends LitElement {
 
     switch (this.type) {
       case "skill":
-        return calculated.levels[this.skill];
+        return calculated.skills.skills[this.skill];
 
       case "dungeon":
         if (this.skill === "catacombs") {
@@ -88,7 +88,7 @@ export class SkillComponent extends LitElement {
         }
 
       case "dungeon_class":
-        return calculated.dungeons.classes[this.skill].experience;
+        return calculated.dungeons.classes.classes[this.skill].level;
 
       case "skyblock_level":
         return calculated.skyblock_level;

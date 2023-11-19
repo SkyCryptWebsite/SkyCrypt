@@ -1,4 +1,4 @@
-import { COLLECTION_DATA } from "./constants/collections.js";
+import { db } from "./mongo.js";
 import moment from "moment";
 import momentDurationFormat from "moment-duration-format";
 momentDurationFormat(moment);
@@ -82,14 +82,20 @@ export default (name) => {
     }
   }
 
-  if (lbName.startsWith("collection_")) {
-    const collectionName = lbName.split("_").slice(1).join("_").toUpperCase();
-    const collectionData = COLLECTION_DATA.filter((a) => a.skyblockId == collectionName);
+  async () => {
+    const { collections: COLLECTION_DATA } = await db.collection("collections").findOne({ _id: "collections" });
+    if (lbName.startsWith("collection_")) {
+      const collectionName = lbName.split("_").slice(1).join("_").toUpperCase();
+      const collectionData = Object.values(COLLECTION_DATA)
+        .map((a) => a.items)
+        .flat()
+        .find((a) => a.id === collectionName);
 
-    if (collectionData.length > 0) {
-      options["name"] = collectionData[0].name + " Collection";
+      if (collectionData?.length > 0) {
+        options["name"] = collectionData[0].name + " Collection";
+      }
     }
-  }
+  };
 
   if (lbName.includes("_best_time") || lbName.includes("_fastest_time")) {
     options["sortedBy"] = 1;

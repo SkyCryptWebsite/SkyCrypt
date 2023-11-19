@@ -242,9 +242,9 @@ function fillLore(element: HTMLElement) {
     const itemId = element.getAttribute("data-item-id") as string;
     item = ALL_ITEMS.get(itemId) as Item;
   } else if (element.hasAttribute("data-pet-index")) {
-    item = calculated.pets[parseInt(element.getAttribute("data-pet-index") as string)];
+    item = calculated.pets.pets[parseInt(element.getAttribute("data-pet-index") as string)];
   } else if (element.hasAttribute("data-missing-pet-index")) {
-    item = calculated.missingPets[parseInt(element.getAttribute("data-missing-pet-index") as string)];
+    item = calculated.pets.missing[parseInt(element.getAttribute("data-missing-pet-index") as string)];
   } else if (element.hasAttribute("data-missing-accessory-index")) {
     item =
       calculated.missingAccessories.missing[parseInt(element.getAttribute("data-missing-accessory-index") as string)];
@@ -744,7 +744,8 @@ if (showStats != null) {
 
 for (const element of document.querySelectorAll(".kills-deaths-container .show-all.enabled")) {
   const parent = element.parentElement as HTMLElement;
-  const kills = calculated[element.getAttribute("data-type") as "kills" | "deaths"];
+  const type = element.getAttribute("data-type") as "kills" | "deaths";
+  const kills = type === "kills" ? calculated.kills.kills : calculated.deaths.deaths;
 
   element.addEventListener("click", () => {
     parent.style.maxHeight = parent.offsetHeight + "px";
@@ -765,7 +766,7 @@ for (const element of document.querySelectorAll(".kills-deaths-container .show-a
       statSeparator.className = "stat-separator";
 
       killRank.innerHTML = "#" + (index + 11) + "&nbsp;";
-      killEntity.innerHTML = kill.entityName;
+      killEntity.innerHTML = kill.entity_name;
       killAmount.innerHTML = kill.amount.toLocaleString();
       statSeparator.innerHTML = ":&nbsp;";
 

@@ -1,0 +1,91 @@
+<% if ('dragons' in calculated.misc) { %>
+  <div class="category-header">
+    <div class="category-icon">
+      <div class="item-icon custom-icon" style="background-image: url(/head/aec3ff563290b13ff3bcc36898af7eaa988b6cc18dc254147f58374afe9b21b9)"></div>
+    </div>
+    
+    <span>Dragons</span>
+  </div>
+
+  <p class="stat-raw-values">
+    <!-- Most Damage -->
+    <%  let tooltip = "";
+    for (const key in calculated.misc.dragons.most_damage) {
+      if (key === "best") {
+        continue;
+      }
+ 
+      tooltip += `<span class="stat-name">${helper.capitalizeFirstLetter(key)}: </span><span class="stat-value">${Math.floor(calculated.misc.dragons.most_damage[key]).toLocaleString()}</span><br>`;
+    } %>
+
+    <span data-tippy-content='<%= tooltip %>'>
+      <span class="stat-name">Most Damage: </span>
+      <span class="stat-value"><%= Math.floor(calculated.misc.dragons.most_damage.best).toLocaleString() %></span>
+    </span>
+    <br>
+
+    <!-- Fastest Kill -->
+    <%  tooltip = "";
+    for (const key in calculated.misc.dragons.fastest_kill) {
+      if (key === "best") {
+        continue;
+      }
+ 
+      tooltip += `<span class="stat-name">${helper.capitalizeFirstLetter(key)}: </span><span class="stat-value">${moment.duration(calculated.misc.dragons.fastest_kill[key], "milliseconds").format("m:ss.SSS")}s</span><br>`;
+    } %>
+
+    <span data-tippy-content='<%= tooltip %>'>
+      <span class="stat-name">Fastest Kill: </span>
+      <span class="stat-value"><%= moment.duration(calculated.misc.dragons.fastest_kill.best, "milliseconds").format("m:ss.SSS") %>s</span>
+    </span>
+    <br>
+    
+    <!-- Last Hits (Kills) -->
+    <% tooltip = "";
+    for (const key in calculated.misc.dragons.kills) {
+      if (key === "total") {
+        continue;
+      }
+     
+      tooltip += `<span class="stat-name">${helper.capitalizeFirstLetter(key)}: </span><span class="stat-value">${calculated.misc.dragons.kills[key].toLocaleString()}</span><br>`;
+    } %>
+
+    <span data-tippy-content='<%= tooltip %>'>
+      <span class="stat-name">Last Hits: </span>
+      <span class="stat-value"><%= calculated.misc.dragons.kills.total.toLocaleString() %></span>
+    </span>
+    <br>
+    
+    <!-- Deaths -->
+    <% tooltip = "";
+    for (const key in calculated.misc.dragons.deaths) {
+      if (key === "total") {
+        continue;
+      }
+     
+      tooltip += `<span class="stat-name">${helper.capitalizeFirstLetter(key)}: </span><span class="stat-value">${calculated.misc.dragons.deaths[key].toLocaleString()}</span><br>`;
+    } %>
+    <span data-tippy-content='<%= tooltip %>'>
+      <span class="stat-name">Deaths: </span>
+      <span class="stat-value"><%= calculated.misc.dragons.deaths.total.toLocaleString() %></span>
+    </span>
+  </p>
+<% } %>
+
+<% if ('endstone_protector' in calculated.misc) { %>
+  <div class="category-header">
+    <div class="category-icon">
+      <div class="item-icon custom-icon" style="background-image: url(https://sky.lea.moe/head/89091d79ea0f59ef7ef94d7bba6e5f17f2f7d4572c44f90f76c4819a714)"></div>
+    </div><span>Endstone Protector</span>
+  </div>
+
+  <p class="stat-raw-values">
+    <span class="stat-name">Kills: </span>
+    <span class="stat-value"><%= calculated.misc.endstone_protector.kills.toLocaleString() %></span>
+    <br>
+
+    <span class="stat-name">Deaths: </span>
+    <span class="stat-value"><%= calculated.misc.endstone_protector.deaths.toLocaleString() %></span>
+    <br>
+  </p>
+<% } %>

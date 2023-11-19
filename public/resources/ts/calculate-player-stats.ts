@@ -56,7 +56,7 @@ export function getPlayerStats() {
 
   // Active pet stats
   {
-    const activePet = calculated.pets.find((pet) => pet.active);
+    const activePet = calculated.pets.pets.find((pet) => pet.active);
 
     if (activePet) {
       for (const [name, value] of Object.entries(activePet.stats)) {
@@ -85,7 +85,7 @@ export function getPlayerStats() {
   }
 
   // Skill bonus stats
-  for (const [skill, data] of Object.entries(calculated.levels)) {
+  for (const [skill, data] of Object.entries(calculated.skills.skills)) {
     const bonusStats: ItemStats = getBonusStat(data.level, `skill_${skill}` as BonusType, data.maxLevel);
 
     for (const [name, value] of Object.entries(bonusStats)) {
@@ -117,7 +117,7 @@ export function getPlayerStats() {
   }
 
   // Slayer bonus stats
-  for (const [slayer, data] of Object.entries(calculated.slayers)) {
+  /*for (const [slayer, data] of Object.entries(calculated.slayers)) {
     const bonusStats: ItemStats = getBonusStat(
       data.level.currentLevel,
       `slayer_${slayer}` as BonusType,
@@ -132,7 +132,7 @@ export function getPlayerStats() {
       stats[name][`slayer_${slayer}`] ??= 0;
       stats[name][`slayer_${slayer}`] += value;
     }
-  }
+  }*/
 
   // Fairy souls
   if (calculated.fairy_exchanges) {
@@ -173,8 +173,11 @@ export function getPlayerStats() {
   }
 
   // Reaper peppers
-  if (calculated.reaper_peppers_eaten > 0) {
-    stats.health.reaper_peppers = calculated.reaper_peppers_eaten;
+  if (
+    "reaper_peppers_eaten" in calculated.misc.uncategorized &&
+    calculated.misc.uncategorized.reaper_peppers_eaten.raw
+  ) {
+    stats.health.reaper_peppers = calculated.misc.uncategorized.reaper_peppers_eaten.raw;
   }
 
   return stats;

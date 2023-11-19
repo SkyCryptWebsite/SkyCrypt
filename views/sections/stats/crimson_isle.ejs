@@ -1,0 +1,109 @@
+<% 
+
+function getDojoRank(points) {
+    if (points >= 1000) return 'S'
+    if (points >= 800) return 'A'
+    if (points >= 600) return 'B'
+    if (points >= 400) return 'C'
+    if (points >= 200) return 'D'
+    return 'F'
+}
+%>
+
+<div class="stat-container stat-collections">
+  <a class="stat-anchor" id="Crimson_Isle"></a>
+  <h2 class="stat-header">Crimson Isle</h2>
+  <% if (calculated.visited_zones.includes("crimson_isle") === false) { %>
+    <p class="no-access">
+      <%= calculated.display_name %> hasn't visited the Crimson Isle yet.
+    </p>
+  <% } else { %>
+    <% if (calculated.crimson_isle.factions !== undefined) { %>
+      <!-- Selected Faction -->
+      <span class="stat-name">Selected Faction: </span>
+      <span class="stat-value"><%= calculated.crimson_isle.factions.selected_faction %></span>
+      <br>
+      
+      <!-- Mage Faction Reputation  -->
+      <% max = calculated.crimson_isle.factions.mages_reputation >= 12000 ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Mage Reputation: </span>
+      <span class="stat-value <%= max %>"><%= calculated.crimson_isle.factions.mages_reputation.toLocaleString() %></span>
+      <br>
+      
+      <!-- Barbarian Faction Reputation -->
+      <% max = calculated.crimson_isle.factions.barbarians_reputation >= 12000 ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Barbarian Reputation: </span>
+      <span class="stat-value <%= max %>"><%= calculated.crimson_isle.factions.barbarians_reputation.toLocaleString() %></span>
+      <br>
+    <% } %>
+
+    <% if (calculated.crimson_isle.kuudra !== undefined) { %>
+      <p class="stat-sub-header">Kuudra Completions</p>
+      <span class="stat-name">Total Completions: </span>
+      <span class="stat-value"><%= calculated.crimson_isle.kuudra.total.toLocaleString() %></span>
+      <br>
+      <br>
+
+      <div class="collections">
+        <% for (const tier in calculated.crimson_isle.kuudra.tiers) { %>
+          <% const collection = calculated.crimson_isle.kuudra.tiers[tier];%>
+          <div class="chip">
+            <div class="chip-icon-wrapper">
+              <div style="background-image:url(<%= collection.head %>)" class="item-icon custom-icon"></div>
+            </div>
+            <div class="chip-text">
+              <div class="collection-name">
+                <span class="stat-name"><%= collection.name %></span>
+              </div>
+              <div class="collection-amount">
+                <span class="stat-name">Kills: </span>
+                <span class="stat-value"><%= collection.completions.toLocaleString() %></span>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+
+    <% if (calculated.crimson_isle.dojo?.total_points) { %>
+      <p class="stat-sub-header">Dojo Completions</p>
+        
+      <!-- Dojo Points -->
+      <% max = calculated.crimson_isle.dojo.total_points >= 7000 ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Total Points: </span>
+      <span class="stat-value <%= max %>"><%= calculated.crimson_isle.dojo.total_points.toLocaleString() %></span>
+      <br>
+      <br>
+
+
+      <div class="collections">
+        <% for (const type in calculated.crimson_isle.dojo.dojo) { %>
+          <% const dojo = calculated.crimson_isle.dojo.dojo[type]; %>
+          <div class="chip">
+            <div class="chip-icon-wrapper">
+              <div class="item-icon icon-<%= dojo.id %>_<%= dojo.damage %>"></div>
+            </div>
+
+            <div class="chip-text">
+              <div class="collection-name <%= dojo.points >= 1000 ? 'max-stat' : '' %>">
+                <span class="stat-name"><%= dojo.name %> </span>
+              </div>
+              <div class="collection-amount">
+                <span class="stat-name">Points: </span>
+                <span class="stat-value"><%= dojo.points.toLocaleString() %></span>
+                <br>
+
+                <span class="stat-name">Rank: </span>
+                <span class="stat-value"><%= getDojoRank(dojo.points) %></span>
+                <br>
+
+                <span class="stat-name">Time: </span>
+                <span class="stat-value"><%= (dojo.time / 1000).toLocaleString() %> Seconds</span>
+              </div>
+            </div>
+        </div>
+      <% } %>
+      </div>
+    <% } %>
+  <% } %>
+</div>

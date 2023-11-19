@@ -28,9 +28,9 @@ document.addEventListener("click", (e) => {
     const itemId = element.getAttribute("data-item-id") as string;
     item = ALL_ITEMS.get(itemId) as Item;
   } else if (element.hasAttribute("data-pet-index")) {
-    item = calculated.pets[parseInt(element.getAttribute("data-pet-index") as string)];
+    item = calculated.pets.pets[parseInt(element.getAttribute("data-pet-index") as string)];
   } else if (element.hasAttribute("data-missing-pet-index")) {
-    item = calculated.missingPets[parseInt(element.getAttribute("data-missing-pet-index") as string)];
+    item = calculated.pets.missing[parseInt(element.getAttribute("data-missing-pet-index") as string)];
   } else if (element.hasAttribute("data-missing-accessory-index")) {
     item =
       calculated.missingAccessories.missing[parseInt(element.getAttribute("data-missing-accessory-index") as string)];

@@ -18,7 +18,7 @@ export async function getItemData(query = {}) {
   /**
    * Look for DB items if possible with Skyblock ID or query name
    */
-  if (query.skyblockId !== undefined && query.skyblockId !== null) {
+  if (query.skyblockId !== undefined && query.skyblockId !== null)  {
     query.skyblockId = sanitize(query.skyblockId);
 
     if (query.skyblockId.includes(":")) {
@@ -28,7 +28,7 @@ export async function getItemData(query = {}) {
       query.damage = new Number(split[1]);
     }
 
-    dbItem = Object.assign(item, await db.collection("items").findOne({ id: query.skyblockId }));
+    dbItem = { ...item, ...(await db.collection("items").findOne({ id: query.skyblockId })) };
   }
 
   if (query.name !== undefined) {

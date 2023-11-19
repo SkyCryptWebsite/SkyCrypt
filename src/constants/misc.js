@@ -147,6 +147,21 @@ export const RACE_OBJECTIVE_TO_STAT_NAME = {
   complete_the_crystal_core_nothing_no_return_race: "dungeon_hub_crystal_core_nothing_no_return_best_time",
 };
 
+export const CUSTOM_RACE_IDS = {
+  woods_race_best_time: "foraging_race_best_time",
+  chicken_race_best_time: "chicken_race_best_time_2",
+};
+
+export const RACE_NAMES = {
+  crystal_core: "Crystal Core",
+  giant_mushroom: "Giant Mushroom",
+  precursor_ruins: "Precursor Ruins",
+  foraging_race: "Foraging",
+  end_race: "End",
+  chicken_race: "Chicken",
+  rift_race: "Rift",
+};
+
 export const AREA_NAMES = {
   dynamic: "Private Island",
   hub: "Hub",
@@ -396,30 +411,30 @@ export const ESSENCE = {
   },
 };
 
-export const STAT_MAPPINGS = {
+export const CENTURY_CAKE_STATS = {
   walk_speed: "speed",
 };
 
 export const KUUDRA_TIERS = {
   none: {
     name: "Basic",
-    head: "bfd3e71838c0e76f890213120b4ce7449577736604338a8d28b4c86db2547e71",
+    head: "/head/bfd3e71838c0e76f890213120b4ce7449577736604338a8d28b4c86db2547e71",
   },
   hot: {
     name: "Hot",
-    head: "c0259e8964c3deb95b1233bb2dc82c986177e63ae36c11265cb385180bb91cc0",
+    head: "/head/c0259e8964c3deb95b1233bb2dc82c986177e63ae36c11265cb385180bb91cc0",
   },
   burning: {
     name: "Burning",
-    head: "330f6f6e63b245f839e3ccdce5a5f22056201d0274411dfe5d94bbe449c4ece",
+    head: "/head/330f6f6e63b245f839e3ccdce5a5f22056201d0274411dfe5d94bbe449c4ece",
   },
   fiery: {
     name: "Fiery",
-    head: "bd854393bbf9444542502582d4b5a23cc73896506e2fc739d545bc35bc7b1c06",
+    head: "/head/bd854393bbf9444542502582d4b5a23cc73896506e2fc739d545bc35bc7b1c06",
   },
   infernal: {
     name: "Infernal",
-    head: "82ee25414aa7efb4a2b4901c6e33e5eaa705a6ab212ebebfd6a4de984125c7a0",
+    head: "/head/82ee25414aa7efb4a2b4901c6e33e5eaa705a6ab212ebebfd6a4de984125c7a0",
   },
 };
 
@@ -680,4 +695,38 @@ export const BANK_COOLDOWN = {
   1: "20 minutes",
   2: "5 minutes",
   3: "None",
+};
+
+export const SLAYER_INFO = {
+  zombie: {
+    name: "Revenant Horror",
+    head: "/head/1fc0184473fe882d2895ce7cbc8197bd40ff70bf10d3745de97b6c2a9c5fc78f",
+  },
+  spider: {
+    name: "Tarantula Broodfather",
+    head: "/head/9d7e3b19ac4f3dee9c5677c135333b9d35a7f568b63d1ef4ada4b068b5a25",
+  },
+  wolf: {
+    name: "Sven Packmaster",
+    head: "/head/f83a2aa9d3734b919ac24c9659e5e0f86ecafbf64d4788cfa433bbec189e8",
+  },
+  enderman: {
+    name: "Voidgloom Seraph",
+    head: "/head/1b09a3752510e914b0bdc9096b392bb359f7a8e8a9566a02e7f66faff8d6f89e",
+  },
+  blaze: {
+    name: "Inferno Demonlord",
+    head: "/head/b20657e24b56e1b2f8fc219da1de788c0c24f36388b1a409d0cd2d8dba44aa3b",
+  },
+  vampire: {
+    name: "Riftstalker Bloodfiend",
+    head: "/head/5aa29ea961757dc3c90bfabf302c5abe9d308fb4a7d3864e5788ad2cc9160aa2",
+  },
+};
+
+export const MILESTONE_RARITIES = ["common", "uncommon", "rare", "epic", "legendary"];
+
+export const PET_MILESTONES = {
+  sea_creatures_killed: [250, 1000, 2500, 5000, 10000],
+  ores_mined: [2500, 7500, 20000, 100000, 250000],
 };
