@@ -1,7 +1,6 @@
 import moment from "moment";
 import * as constants from "../constants.js";
 import * as helper from "../helper.js";
-import _ from "lodash";
 
 /**
  * Returns an object containing the number of fairy souls collected by the user, the total number of fairy souls available to collect, the progress made towards collecting all fairy souls, and the number of fairy exchanges made by the user.

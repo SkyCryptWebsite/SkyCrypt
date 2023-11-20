@@ -1,6 +1,5 @@
 import * as constants from "../constants.js";
 import * as helper from "../helper.js";
-import _ from "lodash";
 
 /**
  * Checks if an accessory is present in an array of accessories.

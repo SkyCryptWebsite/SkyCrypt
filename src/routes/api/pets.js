@@ -4,6 +4,7 @@ import express from "express";
 
 import { tableify } from "../api.js";
 import { db } from "../../mongo.js";
+import { getPets } from "../../stats.js";
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ router.use(async (req, res, next) => {
     const { profile, uuid } = await lib.getProfile(db, req.player, req.profile, req.options);
     const userProfile = profile.members[uuid];
 
-    const pets = await lib.getPets(userProfile);
+    const pets = await getPets(userProfile, userProfile, [], profile);
 
     for (const pet of pets) {
       delete pet.lore;

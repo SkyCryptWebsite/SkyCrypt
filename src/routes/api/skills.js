@@ -4,6 +4,7 @@ import express from "express";
 
 import { tableify } from "../api.js";
 import { db } from "../../mongo.js";
+import { getItems } from "../../stats.js";
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.use(async (req, res, next) => {
     const bingoProfile = await lib.getBingoProfile(db, req.player, req.options);
     const userProfile = profile.members[uuid];
 
-    const items = await lib.getItems(userProfile, bingoProfile, false, undefined, req.options);
+    const items = await getItems(userProfile, bingoProfile, false, undefined, req.options);
     const calculated = await lib.getStats(db, profile, bingoProfile, allProfiles, items, req.options);
 
     const response = [];

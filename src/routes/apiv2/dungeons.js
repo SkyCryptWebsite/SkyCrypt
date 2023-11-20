@@ -3,6 +3,7 @@ import * as lib from "../../lib.js";
 import express from "express";
 
 import { db } from "../../mongo.js";
+import { getDungeons } from "../../stats.js";
 
 const router = express.Router();
 
@@ -29,7 +30,7 @@ router.get("/:player/:profile", async (req, res, next) => {
       const userProfile = singleProfile.members[profile.uuid];
       const hypixelProfile = await helper.getRank(profile.uuid, db, req.cacheOnly);
 
-      const dungeonData = await lib.getDungeons(userProfile, hypixelProfile);
+      const dungeonData = await getDungeons(userProfile, hypixelProfile);
 
       output = {
         profile_id: singleProfile.profile_id,
@@ -54,7 +55,7 @@ router.get("/:player", async (req, res, next) => {
       const userProfile = singleProfile.members[profile.uuid];
       const hypixelProfile = await helper.getRank(profile.uuid, db, req.cacheOnly);
 
-      const dungeonData = await lib.getDungeons(userProfile, hypixelProfile);
+      const dungeonData = await getDungeons(userProfile, hypixelProfile);
 
       output.profiles[singleProfile.profile_id] = {
         profile_id: singleProfile.profile_id,
