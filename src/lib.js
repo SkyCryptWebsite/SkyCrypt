@@ -1,4 +1,4 @@
-// import { getPreDecodedNetworth } from "skyhelper-networth";
+import { getPreDecodedNetworth } from "skyhelper-networth";
 import sanitize from "mongo-sanitize";
 import retry from "async-retry";
 import axios from "axios";
@@ -159,24 +159,25 @@ export async function getStats(
 
   output.accessories = await stats.getMissingAccessories(output, items, packs);
 
-  output.networth = /*await getPreDecodedNetworth(
-    userProfile,
-    {
-      armor: items.armor,
-      equipment: items.equipment,
-      wardrobe: items.wardrobe_inventory,
-      inventory: items.inventory,
-      enderchest: items.enderchest,
-      accessories: items.accessory_bag,
-      personal_vault: items.personal_vault,
-      storage: items.storage.concat(items.storage.map((item) => item.containsItems).flat()),
-      fishing_bag: items.fishing_bag,
-      potion_bag: items.potion_bag,
-      candy_inventory: items.candy_bag,
-    },
-    output.bank,
-    { cache: true, onlyNetworth: true }
-  )*/ {};
+  output.networth =
+    (await getPreDecodedNetworth(
+      userProfile,
+      {
+        armor: items.armor.armor,
+        equipment: items.equipment.equipment,
+        wardrobe: items.wardrobe_inventory,
+        inventory: items.inventory,
+        enderchest: items.enderchest,
+        accessories: items.accessory_bag,
+        personal_vault: items.personal_vault,
+        storage: items.storage.concat(items.storage.map((item) => item.containsItems).flat()),
+        fishing_bag: items.fishing_bag,
+        potion_bag: items.potion_bag,
+        candy_inventory: items.candy_bag,
+      },
+      output.bank,
+      { cache: true, onlyNetworth: true }
+    )) ?? {};
 
   output.temp_stats = stats.getTempStats(userProfile);
 

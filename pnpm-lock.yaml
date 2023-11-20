@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   apng2gif-bin:
     specifier: ^1.7.1
@@ -101,8 +105,8 @@ dependencies:
     specifier: ^2.2.1
     version: 2.2.1
   skyhelper-networth:
-    specifier: ^1.14.1
-    version: 1.14.1
+    specifier: ^1.17.4
+    version: 1.17.4
   tippy.js:
     specifier: ^6.3.7
     version: 6.3.7
@@ -3066,6 +3070,7 @@ packages:
 
   /memory-pager@1.5.0:
     resolution: {integrity: sha512-ZS4Bp4r/Zoeq6+NLJpP+0Zzm0pR8whtGPf1XExKLJBAczGMnSi3It14OiNCStjQjM6NU1okjQGSxgEZN8eBYKg==}
+    requiresBuild: true
     dev: false
     optional: true
 
@@ -4138,8 +4143,8 @@ packages:
       three: 0.136.0
     dev: false
 
-  /skyhelper-networth@1.14.1:
-    resolution: {integrity: sha512-UsRTBiR3Q7ZjeDaT4VlMYq1z27gb1I3SZ7qGowWGNK6TyoSFAIeEbB/JWmaLmfj8Az6gh4GRXS2aHP0JDoVxHg==}
+  /skyhelper-networth@1.17.4:
+    resolution: {integrity: sha512-dIuCtjSyQHpPuZllbkArVU8niJI1XhfQQod9hCdruu6K0LcakuIQ+crnJ1uLWnjUtitlBcT6nq5Yxsb04OqM4A==}
     dependencies:
       axios: 0.27.2
       prismarine-nbt: 2.2.1
@@ -4262,6 +4267,7 @@ packages:
 
   /sparse-bitfield@3.0.3:
     resolution: {integrity: sha512-kvzhi7vqKTfkh0PZU+2D2PIllw2ymqJKujUcyPMd9Y75Nv4nPbGJZXNhxsgdQab2BmlDct1YnfQCguEvHr7VsQ==}
+    requiresBuild: true
     dependencies:
       memory-pager: 1.5.0
     dev: false
