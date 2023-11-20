@@ -172,11 +172,13 @@ function getMetaDescription() {
 	const highestRaritySword = getHighestRaritySword()
 
 	// Base
+  /*
 	description.push(
 		`${calculated.display_name} has been playing SkyBlock for ${moment(
 			calculated.user_data.first_join.unix
 		).fromNow(true)}`
 	)
+  */
 
 	// Armor set
 	if (items.armor_set) {
@@ -209,10 +211,12 @@ function getDescription() {
 	const description = []
 
 	// Fairy souls
+  /*
 	description.push(
 		`🧚 ${calculated.fairy_souls.collected}/${calculated.fairy_souls.total} Fairy Souls`,
 		'\n'
 	)
+  */
 
 	// Armor
 	if (items.armor_set) {
@@ -582,7 +586,7 @@ const metaDescription = getMetaDescription()
         <a class="nav-item" href="#Armor">Armor</a>
         <% if (items.no_inventory) { %><a class="nav-item" href="#Weapons">Weapons</a><% } %>
         <% if (items.no_inventory) { %><a class="nav-item" href="#Accessories">Accessories</a><% } %>
-        <% if (calculated.pets.pets.length > 0) { %><a class="nav-item" href="#Pets">Pets</a><% } %>
+        <% if (calculated.pets && calculated.pets.pets.length > 0) { %><a class="nav-item" href="#Pets">Pets</a><% } %>
         <% if (items.no_inventory) { %><a class="nav-item" href="#Inventory">Inventory</a><% } %>
         <a class="nav-item" href="#Skills">Skills</a>
         <a class="nav-item" href="#Dungeons">Dungeons</a>
@@ -606,7 +610,7 @@ const metaDescription = getMetaDescription()
       if (items.no_personal_vault)
         notAvailable.push('Personal Vault');
 
-      if (Object.keys(calculated.collections).length == 0)
+      if (calculated.collections &&  calculated.collections.collections && calculated.collections.collections.length == 0)
         notAvailable.push('Collections');
     %>
       <% if (notAvailable.length > 0 || ['ironman', 'bingo', 'island'].includes(calculated.profile.game_mode)) { %>
@@ -643,7 +647,9 @@ const metaDescription = getMetaDescription()
         <%- include('./sections/stats/items/weapons.ejs', { getRarityUpgradeClass, rarityOrder, isEnchanted }); %>
 
         <!-- Accessories (Active, Inactive and Missing) -->
-        <%- include('./sections/stats/items/accessories.ejs', { getRarityUpgradeClass, rarityOrder, isEnchanted }); %>
+        <% if (calculated.accessories !== undefined) { %>
+          <%- include('./sections/stats/items/accessories.ejs', { getRarityUpgradeClass, rarityOrder, isEnchanted }); %>
+        <% } %>
       <% } %>
 
       <!-- Pets -->
@@ -664,14 +670,19 @@ const metaDescription = getMetaDescription()
       <%- include('./sections/stats/slayer.ejs', { helper }); %>
 
       <!-- Minions -->
-      <%- include('./sections/stats/minions.ejs', { skillItems }); %>
+      <!-- Show only if player has unlocked a minion -->
+      <% if (calculated.minions.totalMinions > 0) { %>
+        <%- include('./sections/stats/minions.ejs', { skillItems }); %>
+      <% } %>
 
-      <% if (calculated.bestiary !== null) {%>
+      <% if (calculated.bestiary !== undefined) {%>
         <%- include('./sections/stats/bestiary.ejs', {}); %>
       <% } %>
 
       <!-- Collections -->
-      <%- include('./sections/stats/collections.ejs', { skillItems }); %>
+      <% if (calculated.collections !== undefined) { %>
+        <%- include('./sections/stats/collections.ejs', { skillItems }); %>
+      <% } %>
 
       <!-- Crimson Isle -->
       <%- include('./sections/stats/crimson_isle.ejs', {}); %>
@@ -680,7 +691,7 @@ const metaDescription = getMetaDescription()
       <%- include('./sections/stats/rift.ejs', {}); %>
 
       <!-- Bingo -->
-      <% if (calculated.profile.game_mode === "bingo") { %>
+      <% if (calculated.profile.game_mode === "bingo" && calculated.bingo !== undefined) { %>
         <%- include('./sections/stats/bingo.ejs', {}); %>
       <% } %>
       

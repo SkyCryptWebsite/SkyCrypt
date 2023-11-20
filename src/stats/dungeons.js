@@ -45,12 +45,12 @@ function getFloors(type, dungeon) {
 
 function getEssence(userProfile) {
   const output = {};
+  if (userProfile.currencies === undefined || userProfile.currencies.essence == undefined) {
+    return;
+  }
 
   for (const essence in constants.ESSENCE) {
-    if (
-      userProfile.currencies.essence == undefined ||
-      userProfile.currencies.essence[essence.toUpperCase()] == undefined
-    ) {
+    if (userProfile.currencies.essence[essence.toUpperCase()] == undefined) {
       output[essence] = 0;
       continue;
     }

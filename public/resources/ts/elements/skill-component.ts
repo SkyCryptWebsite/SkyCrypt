@@ -154,6 +154,7 @@ export class SkillComponent extends LitElement {
    * @returns the progress to maxing the skill
    */
   private getProgress(level: Level, type: string, global?: boolean): number {
+    console.log(level, type, global);
     if (type === "skyblock_level") {
       if (level.level === level.maxLevel && level.maxExperience) {
         return level.xpCurrent / level.maxExperience;
@@ -163,7 +164,7 @@ export class SkillComponent extends LitElement {
     }
 
     if (global === true) {
-      return Math.min(level.xpCurrent / level.xpForNext, 1);
+      return level.progress ?? Math.min(level.xpCurrent / level.xpForNext, 1);
     }
 
     return level.level / level.maxLevel;

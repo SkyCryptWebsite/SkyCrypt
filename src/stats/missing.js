@@ -153,7 +153,7 @@ export async function getMissingAccessories(calculated, items, packs) {
 
   output.magical_power = {
     accessories: activeAccessories.reduce((a, b) => a + helper.getMagicalPower(b.rarity, helper.getId(b)), 0),
-    abiphone: Math.floor(calculated.crimson_isle.abiphone.active / 2),
+    abiphone: calculated.crimson_isle?.abiphone?.active ? Math.floor(calculated.crimson_isle.abiphone.active / 2) : 0,
     rift_prism: accessoryIds.find((a) => a.id === "RIFT_PRISM") ? 11 : 0,
   };
 

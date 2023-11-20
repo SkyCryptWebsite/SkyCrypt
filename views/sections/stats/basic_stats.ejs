@@ -8,7 +8,7 @@
 
   <div id="additional_stats_container">
     <!-- Current Area -->
-    <% if ("current_area" in calculated.user_data.current_area && calculated.user_data.current_area.current_area !== undefined) { %>
+    <% if (calculated.user_data?.current_area?.current_area !== undefined) { %>
       <div class="additional-stat"> 
         <span class="stat-name"><%= calculated.user_data.current_area_updated ? 'Current' : 'Last' %> Area: </span>
         <span class="stat-value"><%= calculated.user_data.current_area.current_area %></span>
@@ -16,12 +16,14 @@
     <% } %>
 
     <!-- Joined -->
-    <div class="additional-stat">
-      <span data-tippy-content='Joined on <local-time timestamp="<%= calculated.user_data.first_join.unix %>"></local-time>'>
-        <span class="stat-name">Joined: </span>
-        <span class="stat-value"><%= calculated.user_data.first_join.text %></span>
-      </span>
-    </div>  
+    <% if (calculated.user_data?.first_join !== undefined) { %>
+      <div class="additional-stat">
+        <span data-tippy-content='Joined on <local-time timestamp="<%= calculated.user_data.first_join.unix %>"></local-time>'>
+          <span class="stat-name">Joined: </span>
+          <span class="stat-value"><%= calculated.user_data.first_join.text %></span>
+        </span>
+      </div> 
+    <% } %> 
     
     <!-- Purse -->
     <div class="additional-stat">
@@ -65,12 +67,14 @@
     <% } %>
 
     <!-- Fairy Souls -->
-    <div class="additional-stat">
-      <span data-tippy-content="<%= calculated.fairy_souls.progress %>% of fairy souls found.">
-        <span class="stat-name">Fairy Souls: </span>
-        <span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
-      </span>
-    </div>
+    <% if (calculated.fairy_souls !== undefined) { %>
+      <div class="additional-stat">
+        <span data-tippy-content="<%= calculated.fairy_souls.progress %>% of fairy souls found.">
+          <span class="stat-name">Fairy Souls: </span>
+          <span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
+        </span>
+      </div>
+    <% } %>
 
     <!-- Weight -->
     <% if (calculated.weight) {

@@ -109,9 +109,11 @@ function getBossCollections(dungeons, kuudra) {
     bossCompletions[floor] += data.stats.tier_completions ?? 0;
   }
 
-  for (const [floor, data] of Object.entries(dungeons.master_catacombs.floors)) {
-    bossCompletions[floor] ??= 0;
-    bossCompletions[floor] += (data.stats.tier_completions ?? 0) * 2;
+  if (dungeons.master_catacombs?.floors) {
+    for (const [floor, data] of Object.entries(dungeons.master_catacombs.floors)) {
+      bossCompletions[floor] ??= 0;
+      bossCompletions[floor] += (data.stats.tier_completions ?? 0) * 2;
+    }
   }
 
   for (const collection of constants.BOSS_COLLECTIONS) {
@@ -119,7 +121,7 @@ function getBossCollections(dungeons, kuudra) {
 
     const { name, texture } = collection;
 
-    const amount = bossCompletions[index];
+    const amount = bossCompletions[index] ?? 0;
 
     const maxAmount = collection.rewards[collection.rewards.length - 1]?.required;
 

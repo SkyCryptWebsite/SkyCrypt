@@ -10,33 +10,39 @@
 
   <p class="stat-raw-values">
     <!-- Fees Paid -->
-    <span class="stat-name">Fees: </span>
-    <span class="stat-value"><%= calculated.misc.auctions.fees.toLocaleString() %></span>
-    <br>
+    <% if (calculated.misc.auctions.fees !== undefined) { %> 
+      <span class="stat-name">Fees: </span>
+      <span class="stat-value"><%= calculated.misc.auctions.fees.toLocaleString() %></span>
+      <br>
+    <% } %>
 
     <!-- Coins Earned -->
-    <span class="stat-name">Coins Earned: </span>
-    <span class="stat-value"><%= calculated.misc.auctions.gold_earned.toLocaleString() %></span>
-    <br>
+    <% if (calculated.misc.auctions.gold_earned !== undefined) { %>
+      <span class="stat-name">Coins Earned: </span>
+      <span class="stat-value"><%= calculated.misc.auctions.gold_earned.toLocaleString() %></span>
+      <br>
+    <% } %>
 
 
     <!-- Items Sold -->
-    <% let tooltip = "";
-    for (const [rarity, amount] of Object.entries(calculated.misc.auctions.total_sold)) {
-      tooltip += `
-        <span class="stat-name piece-${rarity.toLowerCase()}-fg">${helper.capitalizeFirstLetter(rarity)}: </span>
-        <span class="stat-value">${amount.toLocaleString()}</span>
-        <br>
-      `;
-    }
+    <% if (calculated.misc.auctions.total_sold !== undefined) { %>
+      <% let tooltip = "";
+      for (const [rarity, amount] of Object.entries(calculated.misc.auctions.total_sold)) {
+        tooltip += `
+          <span class="stat-name piece-${rarity.toLowerCase()}-fg">${helper.capitalizeFirstLetter(rarity)}: </span>
+          <span class="stat-value">${amount.toLocaleString()}</span>
+          <br>
+        `;
+      }
     
-    const itemsSold = Object.values(calculated.misc.auctions.total_sold).reduce((a, b) => a + b, 0); %>
+      const itemsSold = Object.values(calculated.misc.auctions.total_sold).reduce((a, b) => a + b, 0); %>
 
-    <span data-tippy-content='<%= tooltip %>'>
-      <span class="stat-name">Items Sold: </span>
-      <span class="stat-value"><%= itemsSold.toLocaleString() %> </span>
-    </span>
-    <br>
+      <span data-tippy-content='<%= tooltip %>'>
+        <span class="stat-name">Items Sold: </span>
+        <span class="stat-value"><%= itemsSold.toLocaleString() %> </span>
+      </span>
+      <br>
+    <% } %>
   </p>
 
 
@@ -50,41 +56,51 @@
 
   <p class="stat-raw-values">
     <!-- Bids -->
-    <span class="stat-name">Bids: </span>
-    <span class="stat-value"><%= calculated.misc.auctions.bids.toLocaleString() %></span>
-    <br>
+    <% if (calculated.misc.auctions.bids !== undefined) { %>
+      <span class="stat-name">Bids: </span>
+      <span class="stat-value"><%= calculated.misc.auctions.bids.toLocaleString() %></span>
+      <br>
+    <% } %>
 
     <!-- Highest Bid -->
-    <span class="stat-name">Highest Bid: </span>
-    <span class="stat-value"><%= calculated.misc.auctions.highest_bid.toLocaleString() %></span>
-    <br>
+    <% if (calculated.misc.auctions.highest_bid !== undefined) { %> 
+      <span class="stat-name">Highest Bid: </span>
+      <span class="stat-value"><%= calculated.misc.auctions.highest_bid.toLocaleString() %></span>
+      <br>
+    <% } %>
 
     <!-- Won Auctions -->
-    <span class="stat-name">Won: </span>
-    <span class="stat-value"><%= calculated.misc.auctions.won.toLocaleString() %></span>
-    <br>
+    <% if (calculated.misc.auctions.won !== undefined) { %>
+      <span class="stat-name">Won: </span>
+      <span class="stat-value"><%= calculated.misc.auctions.won.toLocaleString() %></span>
+      <br>
+    <% } %>
 
     <!-- Coins Spent -->
-    <span class="stat-name">Coins Spent: </span>
-    <span class="stat-value"><%= calculated.misc.auctions.gold_spent.toLocaleString() %></span>
-    <br>
+    <% if (calculated.misc.auctions.gold_spent !== undefined) { %>
+      <span class="stat-name">Coins Spent: </span>
+      <span class="stat-value"><%= calculated.misc.auctions.gold_spent.toLocaleString() %></span>
+      <br>
+    <% } %>
 
     <!-- Items Bought -->
-    <% tooltip = "";
-    for (const [rarity, amount] of Object.entries(calculated.misc.auctions.total_bought)) {
-      tooltip += `
-        <span class="stat-name piece-${rarity.toLowerCase()}-fg">${helper.capitalizeFirstLetter(rarity)}: </span>
-        <span class="stat-value">${amount.toLocaleString()}</span>
-        <br>
-      `;
-    }
+    <% if (calculated.misc.auctions.total_bought !== undefined) { %>
+      <% tooltip = "";
+      for (const [rarity, amount] of Object.entries(calculated.misc.auctions.total_bought)) {
+        tooltip += `
+          <span class="stat-name piece-${rarity.toLowerCase()}-fg">${helper.capitalizeFirstLetter(rarity)}: </span>
+          <span class="stat-value">${amount.toLocaleString()}</span>
+          <br>
+        `;
+      }
 
-    const itemsBought = Object.values(calculated.misc.auctions.total_bought).reduce((a, b) => a + b, 0); %>
+      const itemsBought = Object.values(calculated.misc.auctions.total_bought).reduce((a, b) => a + b, 0); %>
 
-    <span data-tippy-content='<%= tooltip %>'>
-      <span class="stat-name">Items Bought: </span>
-      <span class="stat-value"><%= itemsBought.toLocaleString() %> </span>
-    </span>
+      <span data-tippy-content='<%= tooltip %>'>
+        <span class="stat-name">Items Bought: </span>
+        <span class="stat-value"><%= itemsBought.toLocaleString() %> </span>
+      </span>
+    <% } %>
     <br>
 <% } %>
 

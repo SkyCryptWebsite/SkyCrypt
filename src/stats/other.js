@@ -17,6 +17,10 @@ import moment from "moment";
  * }} - An object containing the user's first join date and current area information.
  */
 export function getUserData(userProfile) {
+  if (userProfile.profile === undefined) {
+    return;
+  }
+
   return {
     first_join: {
       unix: userProfile.profile.first_join,
@@ -42,7 +46,7 @@ export function getUserData(userProfile) {
 export function getCurrenciesData(userProfile, profile) {
   return {
     bank: profile.banking?.balance ?? 0,
-    purse: userProfile.currencies.coin_purse || 0,
+    purse: userProfile.currencies?.coin_purse || 0,
   };
 }
 
@@ -57,11 +61,11 @@ export function getCurrenciesData(userProfile, profile) {
  * }[]} An array of objects containing kill statistics.
  */
 export function getKills(userProfile) {
-  const output = {
-    kills: [],
-    total: 0,
-  };
+  if (userProfile.player_stats?.kills === undefined) {
+    return;
+  }
 
+  const output = { kills: [], total: 0 };
   for (const entityId in userProfile.player_stats.kills) {
     if (userProfile.player_stats.kills[entityId] === 0 || entityId === "total") {
       continue;
@@ -99,11 +103,11 @@ export function getKills(userProfile) {
  * }[]} An array of objects containing death statistics.
  */
 export function getDeaths(userProfile) {
-  const output = {
-    deaths: [],
-    total: 0,
-  };
+  if (userProfile.player_stats?.deaths === undefined) {
+    return;
+  }
 
+  const output = { deaths: [], total: 0 };
   for (const entityId in userProfile.player_stats.deaths) {
     if (userProfile.player_stats.deaths[entityId] === 0 || entityId === "total") {
       continue;

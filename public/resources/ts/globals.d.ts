@@ -56,19 +56,31 @@ declare function applyProcessedTheme(processedTheme: ProcessedTheme): void;
 
 declare const items: {
   accessories: {
-    accessories: Item[];
+    accessories: (ItemSlot | Item | Backpack)[];
   };
   equipment: {
-    equipment: Item[];
+    equipment: (ItemSlot | Item | Backpack)[];
     set_name: string;
     set_rarity: string;
   };
   armor: {
-    armor: Item[];
+    armor: (ItemSlot | Item | Backpack)[];
     set_name: string;
     set_rarity: string;
   };
-  hotm: Item[];
+  hotm: (ItemSlot | Item | Backpack)[];
+  inventory: (ItemSlot | Item | Backpack)[];
+  enderchest: (ItemSlot | Item | Backpack)[];
+  accessory_bag: (ItemSlot | Item | Backpack)[];
+  fishing_bag: (ItemSlot | Item | Backpack)[];
+  quiver: (ItemSlot | Item | Backpack)[];
+  potion_bag: (ItemSlot | Item | Backpack)[];
+  personal_vault: (ItemSlot | Item | Backpack)[];
+  wardrobe_inventory: (ItemSlot | Item | Backpack)[];
+  candy_bag: (ItemSlot | Item | Backpack)[];
+  storage: (ItemSlot | Item | Backpack)[];
+  bingo_card: (ItemSlot | Item | Backpack)[];
+
   // [key: string]: (ItemSlot | Item | Backpack)[];
 };
 
@@ -379,7 +391,7 @@ declare const calculated: SkyCryptPlayer & {
     progress: number;
     total: number;
   };
-  farming: {
+  farming?: {
     contests: {
       all_contests: {
         claimed: boolean;
@@ -538,7 +550,7 @@ declare const calculated: SkyCryptPlayer & {
       most_winter_magma_damage_dealt: number;
       most_winter_snowballs_hit: number;
     };
-    uncategorized: {
+    uncategorized?: {
       [key: string]: {
         raw?: number;
         formatted?: string;

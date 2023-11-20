@@ -123,6 +123,5 @@ export function getFarming(userProfile) {
 
     farming.contests = contests;
   }
-
   return farming;
 }

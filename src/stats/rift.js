@@ -25,8 +25,8 @@ export function getRift(userProfile) {
   return {
     motes: {
       purse: userProfile.currencies?.motes_purse ?? 0,
-      lifetime: userProfile.player_stats.rift.lifetime_motes_earned ?? 0,
-      orbs: userProfile.player_stats.rift.motes_orb_pickup ?? 0,
+      lifetime: userProfile.player_stats.rift?.lifetime_motes_earned ?? 0,
+      orbs: userProfile.player_stats.rift?.motes_orb_pickup ?? 0,
     },
     enigma: {
       souls: rift.enigma.found_souls?.length ?? 0,

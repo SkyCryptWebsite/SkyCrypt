@@ -18,10 +18,12 @@
       <br>
 
       <!-- Bonus Minion Slots (Community Shop) -->
-      <% max = calculated.misc.profile_upgrades.minion_slots === 5 ? 'golden-text' : '' %>
-      <span class="stat-name <%= max %>">Bonus Minion Slots: </span>
-      <span class="stat-value <%= max %>"><%= calculated.misc.profile_upgrades.minion_slots %> / <%= constants.PROFILE_UPGRADES['minion_slots'] %></span>
-      <br>
+      <% if (calculated.misc?.profile_upgrades?.minion_slots !== undefined) { %> 
+        <% max = calculated.misc.profile_upgrades.minion_slots === 5 ? 'golden-text' : '' %>
+        <span class="stat-name <%= max %>">Bonus Minion Slots: </span>
+        <span class="stat-value <%= max %>"><%= calculated.misc.profile_upgrades.minion_slots %> / <%= constants.PROFILE_UPGRADES['minion_slots'] %></span>
+        <br>
+      <% } %>
 
       <!-- Maxed Minions -->
       <% max = calculated.minions.maxedMinions === calculated.minions.totalMinions ? 'golden-text' : '' %>

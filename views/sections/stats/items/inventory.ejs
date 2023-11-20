@@ -2,7 +2,7 @@
   <a class="stat-anchor" id="Inventory"></a>
   <h2 class="stat-header">Inventory</h2>
   <div class="stat-content">
-    <% if (items.no_inventory) { %>
+    <% if (items.disabled?.inventory) { %>
       <div class="no-access">
         <%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.
       </div>

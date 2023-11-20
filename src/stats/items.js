@@ -45,7 +45,11 @@ export async function getItems(
         options.cacheOnly
       );
     } else if (type.bagContents === true) {
-      if (profile.inventory.bag_contents === undefined || profile.inventory.bag_contents[type.property] === undefined) {
+      if (
+        profile.inventory === undefined ||
+        profile.inventory.bag_contents === undefined ||
+        profile.inventory.bag_contents[type.property] === undefined
+      ) {
         return [];
       }
 
@@ -79,8 +83,8 @@ export async function getItems(
     personal_vault,
   ] = await Promise.all(promises);
 
-  let storage = [];
-  if (profile.inventory.backpack_contents) {
+  const storage = [];
+  if (profile.inventory && profile.inventory.backpack_contents) {
     const storageSize = Math.max(18, Object.keys(profile.inventory.backpack_contents).length);
 
     const promises = [];

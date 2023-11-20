@@ -1,4 +1,8 @@
 export function getFishing(userProfile) {
+  if (userProfile.player_stats === undefined) {
+    return;
+  }
+
   return {
     total: userProfile.player_stats.items_fished?.total ?? 0,
     treasure: userProfile.player_stats.items_fished?.treasure ?? 0,

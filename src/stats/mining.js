@@ -127,13 +127,15 @@ export async function getMining(userProfile, hypixelProfile) {
     core: {},
   };
 
-  for (const key of userProfile.objectives.tutorial) {
-    if (key.startsWith("commission_milestone_reward_mining_xp_tier_") === false) {
-      continue;
-    }
+  if (userProfile.objectives?.tutorial !== undefined) {
+    for (const key of userProfile.objectives.tutorial) {
+      if (key.startsWith("commission_milestone_reward_mining_xp_tier_") === false) {
+        continue;
+      }
 
-    const tier = parseInt(key.slice(43));
-    mining.commissions.milestone = Math.max(mining.commissions.milestone, tier);
+      const tier = parseInt(key.slice(43));
+      mining.commissions.milestone = Math.max(mining.commissions.milestone, tier);
+    }
   }
 
   mining.core = getMiningCoreData(userProfile);

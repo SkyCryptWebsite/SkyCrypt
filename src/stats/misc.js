@@ -12,6 +12,10 @@ import _ from "lodash";
 
 export function getFairySouls(userProfile, profile) {
   try {
+    if (userProfile.fairy_soul === undefined) {
+      return;
+    }
+
     if (isNaN(userProfile.fairy_soul.total_collected)) {
       return {
         collected: 0,
@@ -112,7 +116,7 @@ function getMiscUncategorized(userProfile) {
 
 function getPetMilestone(type, amount) {
   return {
-    amount: amount,
+    amount: amount ?? 0,
     rarity: constants.MILESTONE_RARITIES[constants.PET_MILESTONES[type].findLastIndex((x) => amount >= x)] ?? "common",
     total: constants.PET_MILESTONES[type].at(-1),
     progress: Math.min((amount / constants.PET_MILESTONES[type].at(-1)) * 100, 100).toFixed(2),
@@ -120,8 +124,11 @@ function getPetMilestone(type, amount) {
 }
 
 export function getMisc(profile, userProfile, hypixelProfile) {
-  const misc = {};
+  if (userProfile.player_stats === undefined) {
+    return;
+  }
 
+  const misc = {};
   if ("races" in userProfile.player_stats) {
     misc.races = {};
     const races = userProfile.player_stats.races;
@@ -182,8 +189,8 @@ export function getMisc(profile, userProfile, hypixelProfile) {
 
   if ("gifts" in userProfile.player_stats) {
     misc.gifts = {
-      given: userProfile.player_stats.gifts.total_given,
-      received: userProfile.player_stats.gifts.total_received,
+      given: userProfile.player_stats.gifts.total_given ?? 0,
+      received: userProfile.player_stats.gifts.total_received ?? 0,
     };
   }
 
@@ -219,8 +226,8 @@ export function getMisc(profile, userProfile, hypixelProfile) {
   }
 
   if (
-    userProfile.player_stats.kills.corrupted_protector !== undefined ||
-    userProfile.player_stats.deaths.corrupted_protector !== undefined
+    userProfile.player_stats.kills?.corrupted_protector !== undefined ||
+    userProfile.player_stats.deaths?.corrupted_protector !== undefined
   ) {
     misc.endstone_protector = {
       kills: userProfile.player_stats.kills.corrupted_protector ?? 0,

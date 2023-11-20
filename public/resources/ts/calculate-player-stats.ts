@@ -48,17 +48,17 @@ export function getPlayerStats() {
   }
 
   // Bestiary
-  if (calculated.bestiary && calculated.bestiary.milestone > 0) {
+  if (calculated?.bestiary?.milestone !== undefined) {
     stats.strength.bestiary = calculated.bestiary.milestone * 2;
   }
 
   // Unique Pets
-  if (calculated.pets.pet_score && calculated.pets.pet_score.amount > 0) {
+  if (calculated.pets.pet_score.amount !== undefined) {
     stats.magic_find.pet_score = calculated.pets.pet_score.amount;
   }
 
   // Jacob's Farming Shop
-  if (calculated.farming.perks.double_drops && calculated.farming.perks.double_drops > 0) {
+  if (calculated?.farming?.perks?.double_drops !== undefined) {
     stats.farming_fortune.jacob_double_drops = calculated.farming.perks.double_drops * 4;
   }
 
@@ -216,7 +216,7 @@ export function getPlayerStats() {
   }
 
   // Slayer bonus stats
-  if (calculated.slayer && calculated.slayer.slayers) {
+  if (calculated.slayer?.slayers !== undefined) {
     for (const [slayer, data] of Object.entries(calculated.slayer.slayers)) {
       const bonusStats: ItemStats = getBonusStat(
         data.level.currentLevel,
@@ -262,30 +262,28 @@ export function getPlayerStats() {
   }
 
   // Reaper peppers
-  if (
-    "uncategorized" in calculated.misc &&
-    "reaper_peppers_eaten" in calculated.misc.uncategorized &&
-    "raw" in calculated.misc.uncategorized.reaper_peppers_eaten
-  ) {
+  if (calculated?.misc?.uncategorized?.reaper_peppers_eaten?.raw !== undefined) {
     stats.health.reaper_peppers = calculated.misc.uncategorized.reaper_peppers_eaten.raw as number;
   }
 
   // Active Potion Effects
-  for (const effect of calculated.misc.effects.active) {
-    if (effect.effect in POTION_EFFECTS === false) {
-      console.log(`Unknown potion effect: ${effect.effect}`);
-      continue;
-    }
-
-    const effectLevel = effect.level;
-    const effectID = effect.effect as PotionEffectIDs;
-    for (const [name, value] of Object.entries(POTION_EFFECTS[effectID].bonuses)) {
-      if (!allowedStats.includes(name)) {
+  if (calculated?.misc?.effects?.active) {
+    for (const effect of calculated.misc.effects.active) {
+      if (effect.effect in POTION_EFFECTS === false) {
+        console.log(`Unknown potion effect: ${effect.effect}`);
         continue;
       }
 
-      stats[name].potion ??= 0;
-      stats[name].potion += value[effectLevel - 1];
+      const effectLevel = effect.level;
+      const effectID = effect.effect as PotionEffectIDs;
+      for (const [name, value] of Object.entries(POTION_EFFECTS[effectID].bonuses)) {
+        if (!allowedStats.includes(name)) {
+          continue;
+        }
+
+        stats[name].potion ??= 0;
+        stats[name].potion += value[effectLevel - 1];
+      }
     }
   }
 

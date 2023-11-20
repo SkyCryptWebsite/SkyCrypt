@@ -53,7 +53,8 @@
         <br>
       
         <% const activePet = calculated.pets.pets.find(pet => pet.active === true) %>
-        <p class="stat-sub-header">Active Pet</p>
+        <% if (activePet !== undefined) { %>
+          <p class="stat-sub-header">Active Pet</p>
           <div class="pieces">
             <div tabindex="0" data-pet-index="0" class="active-pet rich-item piece piece-<%= activePet.rarity %>-bg <%= getRarityUpgradeClass(activePet) %>">
               <% if (rarityOrder.indexOf(activePet.rarity) <= 4) { %>
@@ -68,7 +69,9 @@
               <div class="pet-level">Level <%= activePet.level.level %></div>
             </div>
           </div>
-        <div data-bonus-stats="pet"></div>
+          
+          <div data-bonus-stats="pet"></div>
+        <% } %>
       </p>
 
 
@@ -98,7 +101,7 @@
 
       <!-- Other pets -->
       <% const otherPets = calculated.pets.pets.filter(pet => !uniquePets.includes(pet));
-      if (otherPets) { %> 
+      if (otherPets.length > 0) { %> 
         <button class="stat-sub-header extender" aria-controls="showmore-pets" aria-expanded="false">Show More Pets</button>
         <div class="pieces extendable" id="showmore-pets">
           <div class="pieces"> 

@@ -428,7 +428,7 @@ export async function getPets(userProfile, calculated, items, profile) {
   const output = {};
 
   // Get pets from profile
-  const pets = userProfile.pets_data.pets ?? [];
+  const pets = userProfile.pets_data?.pets ?? [];
 
   // Adds pets from inventories
   pets.push(...items.pets);

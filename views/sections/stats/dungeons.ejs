@@ -64,7 +64,7 @@ function formatDungeonStat(stat, type) {
         <br>
 
         <!-- Highest Floor Beaten (Master) -->
-        <% if (calculated.dungeons.master_catacombs.highest_floor) { %>
+        <% if (calculated.dungeons.master_catacombs?.highest_floor) { %>
           <% max = calculated.dungeons.master_catacombs.highest_floor === "floor_7" ? "golden-text" : "" %>
           <span class="stat-name <%= max %>">Highest Floor Beaten (master): </span>
           <span class="stat-value <%= max %>"><%= helper.titleCase(calculated.dungeons.master_catacombs.highest_floor.replace("_", " ")) %></span>

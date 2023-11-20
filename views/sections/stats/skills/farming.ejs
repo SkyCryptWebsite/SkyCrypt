@@ -49,9 +49,11 @@ function itemIcon(item, classes) { %>
     <% } %>
 
     <!-- Pelts -->
-    <span class="stat-name">Pelts: </span>
-    <span class="stat-value"><%= calculated.farming.pelts.toLocaleString() %></span>
-    <br>
+    <% if (calculated.farming.pelts !== undefined) { %> 
+      <span class="stat-name">Pelts: </span>
+      <span class="stat-value"><%= calculated.farming.pelts.toLocaleString() %></span>
+      <br>
+    <% } %>
 
     <% 
     const farming = calculated.farming;
