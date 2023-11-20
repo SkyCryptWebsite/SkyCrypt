@@ -158,7 +158,7 @@ export async function getStats(
   output.weight = stats.getWeight(output);
 
   output.accessories = await stats.getMissingAccessories(output, items, packs);
-  
+
   output.networth = /*await getPreDecodedNetworth(
     userProfile,
     {

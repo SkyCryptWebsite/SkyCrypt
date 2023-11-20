@@ -18,7 +18,7 @@ export async function getItemData(query = {}) {
   /**
    * Look for DB items if possible with Skyblock ID or query name
    */
-  if (query.skyblockId !== undefined && query.skyblockId !== null)  {
+  if (query.skyblockId !== undefined && query.skyblockId !== null) {
     query.skyblockId = sanitize(query.skyblockId);
 
     if (query.skyblockId.includes(":")) {

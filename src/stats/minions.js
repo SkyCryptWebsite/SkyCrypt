@@ -81,7 +81,7 @@ function getMinionSlots(minions) {
 
 export function getMinions(profile) {
   const output = {};
-  
+
   output.minions = getProfileMinions(profile.members);
 
   output.totalMinions = Object.values(output.minions).reduce((a, b) => a + b.totalMinions, 0);
