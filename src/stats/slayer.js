@@ -51,7 +51,7 @@ function getSlayerLevel(slayer, slayerName) {
 }
 
 export function getSlayer(userProfile) {
-  if ("slayer_bosses" in userProfile.slayer === false) {
+  if (userProfile.slayer === undefined || "slayer_bosses" in userProfile.slayer === false) {
     return;
   }
 

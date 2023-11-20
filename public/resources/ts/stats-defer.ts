@@ -246,11 +246,9 @@ function fillLore(element: HTMLElement) {
   } else if (element.hasAttribute("data-missing-pet-index")) {
     item = calculated.pets.missing[parseInt(element.getAttribute("data-missing-pet-index") as string)];
   } else if (element.hasAttribute("data-missing-accessory-index")) {
-    item =
-      calculated.missingAccessories.missing[parseInt(element.getAttribute("data-missing-accessory-index") as string)];
+    item = calculated.accessories.missing[parseInt(element.getAttribute("data-missing-accessory-index") as string)];
   } else if (element.hasAttribute("data-upgrade-accessory-index")) {
-    item =
-      calculated.missingAccessories.upgrades[parseInt(element.getAttribute("data-upgrade-accessory-index") as string)];
+    item = calculated.accessories.upgrades[parseInt(element.getAttribute("data-upgrade-accessory-index") as string)];
   }
 
   if (item == undefined) {

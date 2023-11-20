@@ -54,7 +54,23 @@ interface ProcessedTheme {
 
 declare function applyProcessedTheme(processedTheme: ProcessedTheme): void;
 
-declare const items: { [key: string]: (ItemSlot | Item | Backpack)[] };
+declare const items: {
+  accessories: {
+    accessories: Item[];
+  };
+  equipment: {
+    equipment: Item[];
+    set_name: string;
+    set_rarity: string;
+  };
+  armor: {
+    armor: Item[];
+    set_name: string;
+    set_rarity: string;
+  };
+  hotm: Item[];
+  // [key: string]: (ItemSlot | Item | Backpack)[];
+};
 
 type StatName =
   | "health"
@@ -544,7 +560,7 @@ declare const calculated: SkyCryptPlayer & {
       disabled: string[];
     };
   };
-  missingAccessories: {
+  accessories: {
     [key in "missing" | "upgrades"]: DisplayItem[];
   };
   petScore: number;
@@ -586,7 +602,7 @@ declare const calculated: SkyCryptPlayer & {
     blaze: number;
   };
   slayer: {
-    slayers: {
+    slayers?: {
       [key in SlayerName]: {
         boss_kills_tier_0?: number;
         boss_kills_tier_1?: number;
@@ -637,7 +653,7 @@ declare const calculated: SkyCryptPlayer & {
     amount: number;
   }[];
   skyblock_level: Level;
-  bestiary: {
+  bestiary?: {
     categories: BestiaryCategory[];
     tiersUnlocked: number;
     totalTiers: number;

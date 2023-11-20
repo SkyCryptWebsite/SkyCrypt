@@ -4,7 +4,7 @@ import * as helper from "../helper.js";
 import { db } from "../mongo.js";
 import moment from "moment";
 
-function getMiningCoreData(userProfile) {
+export function getMiningCoreData(userProfile) {
   const output = {};
 
   const data = userProfile.mining_core;

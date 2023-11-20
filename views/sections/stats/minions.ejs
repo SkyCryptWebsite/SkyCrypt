@@ -49,7 +49,7 @@
         <% for (const minion of categoryData.minions) { 
           let amountsTooltip = "";
           for (let i = 1; i <= minion.tiers.length; i++) {
-            amountsTooltip += `<div class='minion-variant ${minion.tiers.includes(i) ? "minion-crafted" : ""}'>${romanize(i)}</div>`
+            amountsTooltip += `<div class='minion-variant ${minion.tiers.includes(i) ? "minion-crafted" : ""}'>${helper.romanize(i)}</div>`
           } %>
 
           <div class="chip" data-tippy-content='<%= amountsTooltip %>' data-missing="<%= minion.tier === 0 %>">

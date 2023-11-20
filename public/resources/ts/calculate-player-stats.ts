@@ -48,7 +48,7 @@ export function getPlayerStats() {
   }
 
   // Bestiary
-  if (calculated.bestiary.milestone && calculated.bestiary.milestone > 0) {
+  if (calculated.bestiary && calculated.bestiary.milestone > 0) {
     stats.strength.bestiary = calculated.bestiary.milestone * 2;
   }
 
@@ -63,15 +63,17 @@ export function getPlayerStats() {
   }
 
   // Slayer Completion
-  for (const value of Object.values(calculated.slayer.slayers ?? {})) {
-    stats.combat_wisdom.slayer ??= 0;
-    for (const tier in value.kills) {
-      if (parseInt(tier) <= 3) {
-        stats.combat_wisdom.slayer += 1;
-        continue;
-      }
+  if (calculated.slayer && calculated.slayer.slayers) {
+    for (const value of Object.values(calculated.slayer.slayers ?? {})) {
+      stats.combat_wisdom.slayer ??= 0;
+      for (const tier in value.kills) {
+        if (parseInt(tier) <= 3) {
+          stats.combat_wisdom.slayer += 1;
+          continue;
+        }
 
-      stats.combat_wisdom.slayer += 2;
+        stats.combat_wisdom.slayer += 2;
+      }
     }
   }
 
@@ -98,7 +100,7 @@ export function getPlayerStats() {
   }
 
   // Active armor stats
-  for (const piece of items.armor) {
+  for (const piece of items.armor.armor) {
     const bonusStats: ItemStats = helper.getStatsFromItem(piece as Item);
 
     for (const [name, value] of Object.entries(bonusStats)) {
@@ -138,7 +140,7 @@ export function getPlayerStats() {
   }
 
   // Active equipment stats
-  for (const piece of items.equipment) {
+  for (const piece of items.equipment.equipment) {
     const bonusStats: ItemStats = helper.getStatsFromItem(piece as Item);
 
     for (const [name, value] of Object.entries(bonusStats)) {
@@ -168,7 +170,7 @@ export function getPlayerStats() {
   }
 
   // Active accessories stats
-  for (const item of items.accessories.filter((item) => !(item as Item).isInactive)) {
+  for (const item of items.accessories.accessories.filter((item) => !(item as Item).isInactive)) {
     const bonusStats: ItemStats = helper.getStatsFromItem(item as Item);
 
     for (const [name, value] of Object.entries(bonusStats)) {
@@ -214,26 +216,30 @@ export function getPlayerStats() {
   }
 
   // Slayer bonus stats
-  for (const [slayer, data] of Object.entries(calculated.slayer.slayers)) {
-    const bonusStats: ItemStats = getBonusStat(
-      data.level.currentLevel,
-      `slayer_${slayer}` as BonusType,
-      data.level.maxLevel
-    );
+  if (calculated.slayer && calculated.slayer.slayers) {
+    for (const [slayer, data] of Object.entries(calculated.slayer.slayers)) {
+      const bonusStats: ItemStats = getBonusStat(
+        data.level.currentLevel,
+        `slayer_${slayer}` as BonusType,
+        data.level.maxLevel
+      );
 
-    for (const [name, value] of Object.entries(bonusStats)) {
-      if (!allowedStats.includes(name)) {
-        continue;
+      for (const [name, value] of Object.entries(bonusStats)) {
+        if (!allowedStats.includes(name)) {
+          continue;
+        }
+
+        stats[name][`slayer_${slayer}`] ??= 0;
+        stats[name][`slayer_${slayer}`] += value;
       }
-
-      stats[name][`slayer_${slayer}`] ??= 0;
-      stats[name][`slayer_${slayer}`] += value;
     }
   }
 
   // New year cake bag
   {
-    const cakeBag = items.accessory_bag.find((x) => (x as Item).tag?.ExtraAttributes?.id === "NEW_YEAR_CAKE_BAG");
+    const cakeBag = items.accessories.accessories.find(
+      (x) => (x as Item).tag?.ExtraAttributes?.id === "NEW_YEAR_CAKE_BAG"
+    );
 
     if (cakeBag && (cakeBag as Backpack).containsItems) {
       const totalCakes = (cakeBag as Backpack).containsItems.filter((x) => x.display_name).length;
@@ -257,10 +263,11 @@ export function getPlayerStats() {
 
   // Reaper peppers
   if (
+    "uncategorized" in calculated.misc &&
     "reaper_peppers_eaten" in calculated.misc.uncategorized &&
-    calculated.misc.uncategorized.reaper_peppers_eaten.raw
+    "raw" in calculated.misc.uncategorized.reaper_peppers_eaten
   ) {
-    stats.health.reaper_peppers = calculated.misc.uncategorized.reaper_peppers_eaten.raw;
+    stats.health.reaper_peppers = calculated.misc.uncategorized.reaper_peppers_eaten.raw as number;
   }
 
   // Active Potion Effects

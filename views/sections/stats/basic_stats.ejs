@@ -8,7 +8,7 @@
 
   <div id="additional_stats_container">
     <!-- Current Area -->
-    <% if ("current_area" in calculated.user_data.current_area) { %>
+    <% if ("current_area" in calculated.user_data.current_area && calculated.user_data.current_area.current_area !== undefined) { %>
       <div class="additional-stat"> 
         <span class="stat-name"><%= calculated.user_data.current_area_updated ? 'Current' : 'Last' %> Area: </span>
         <span class="stat-value"><%= calculated.user_data.current_area.current_area %></span>

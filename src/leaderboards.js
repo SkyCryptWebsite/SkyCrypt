@@ -1,9 +1,8 @@
 import { db } from "./mongo.js";
 import moment from "moment";
 import momentDurationFormat from "moment-duration-format";
+import { getLevelByXp } from "./stats/skills/leveling.js";
 momentDurationFormat(moment);
-
-import { getLevelByXp } from "./lib.js";
 
 const defaultOptions = {
   mappedBy: "uuid",

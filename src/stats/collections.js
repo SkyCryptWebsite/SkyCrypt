@@ -99,6 +99,9 @@ export async function getCollections(uuid, profile, dungeons, kuudra, cacheOnly 
 
 function getBossCollections(dungeons, kuudra) {
   const output = [];
+  if (dungeons === undefined) {
+    return output;
+  }
 
   const bossCompletions = {};
   for (const [floor, data] of Object.entries(dungeons.catacombs.floors)) {

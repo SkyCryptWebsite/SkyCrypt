@@ -228,7 +228,7 @@ export function calculateSenitherWeight(profile) {
   }
 
   // dungeon classes
-  if (dungeons.classes?.classes) {
+  if (dungeons?.classes?.classes) {
     for (const className of Object.keys(dungeons.classes.classes)) {
       const dungeonClass = dungeons.classes.classes[className];
       const xp = dungeonClass.level;
@@ -244,7 +244,7 @@ export function calculateSenitherWeight(profile) {
   }
 
   // slayer
-  for (const slayerName in profile.slayer.slayers) {
+  for (const slayerName in profile.slayer?.slayers) {
     const slayer = profile.slayer.slayers[slayerName];
 
     const sw = calcSlayerWeight(slayerName, slayer.level.xp);

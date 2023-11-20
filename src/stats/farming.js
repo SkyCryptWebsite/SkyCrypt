@@ -1,6 +1,10 @@
 import * as constants from "../constants.js";
 
 export function getFarming(userProfile) {
+  if (userProfile.jacobs_contest === undefined) {
+    return;
+  }
+
   const farming = {
     talked: userProfile.jacobs_contest?.talked || false,
     pelts: userProfile.trapper_quest?.pelt_count || 0,
@@ -9,9 +13,9 @@ export function getFarming(userProfile) {
   if (farming.talked) {
     // Your current badges
     farming.current_badges = {
-      bronze: userProfile.jacobs_contest.medals_inv.bronze || 0,
-      silver: userProfile.jacobs_contest.medals_inv.silver || 0,
-      gold: userProfile.jacobs_contest.medals_inv.gold || 0,
+      bronze: userProfile.jacobs_contest.medals_inv?.bronze || 0,
+      silver: userProfile.jacobs_contest.medals_inv?.silver || 0,
+      gold: userProfile.jacobs_contest.medals_inv?.gold || 0,
     };
 
     // Your total badges

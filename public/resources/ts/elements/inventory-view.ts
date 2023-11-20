@@ -15,6 +15,9 @@ export class InventoryView extends LitElement {
   preview = false;
 
   protected render(): TemplateResult[] {
+    // TODO: fix types for items
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     let inventory = items[this.inventoryType] ?? [];
 
     let pagesize = 5 * 9;
@@ -49,7 +52,7 @@ export class InventoryView extends LitElement {
       pagesize = 6 * 9;
     }
 
-    inventory.forEach((item, index) => {
+    inventory.forEach((item: Item, index: number) => {
       if (index % pagesize === 0 && index !== 0) {
         itemTemplateResults.push(html`<hr />`);
       }

@@ -42,6 +42,7 @@ import * as itemRoute from "./routes/item.js";
 import * as headRoute from "./routes/head.js";
 import * as leatherRoute from "./routes/leather.js";
 import * as potionRoute from "./routes/potion.js";
+import * as stats from "./stats.js";
 
 const folderPath = helper.getFolderPath();
 
@@ -270,7 +271,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
 
     const paramBingo =
       profile.game_mode === "bingo" ? await lib.getBingoProfile(db, paramPlayer, { cacheOnly, debugId }) : null;
-    const items = await lib.getItems(profile.members[profile.uuid], paramBingo, true, req.cookies.pack, {
+    const items = await stats.getItems(profile.members[profile.uuid], paramBingo, true, req.cookies.pack, {
       cacheOnly,
       debugId,
     });
@@ -307,7 +308,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       },
       (err, html) => {
         if (err) console.error(err);
-        // else console.debug(`${debugId}: page successfully rendered. (${Date.now() - renderStart}ms)`);
+        else console.debug(`${debugId}: page successfully rendered. (${Date.now() - renderStart}ms)`);
 
         res.set("X-Debug-ID", `${debugId}`);
         res.set("X-Process-Time", `${Date.now() - timeStarted}`);

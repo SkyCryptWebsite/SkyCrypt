@@ -76,77 +76,14 @@ const KUUDRA = {
 .##........#######..##....##..######.....##....####..#######..##....##..######.
 */
 
-function romanize(num) {
-	if (!+num)
-		return false;
-	var	digits = String(+num).split(""),
-		key = ["","C","CC","CCC","CD","D","DC","DCC","DCCC","CM",
-		     "","X","XX","XXX","XL","L","LX","LXX","LXXX","XC",
-		     "","I","II","III","IV","V","VI","VII","VIII","IX"],
-		roman = "",
-		i = 3;
-	while (i--)
-		roman = (key[+digits.pop() + (i * 10)] || "") + roman;
-	return Array(+digits.join("") + 1).join("M") + roman;
-};
+function getRarityUpgradeClass(item) {
+  let upgrades = 0
 
-function formatReforge(string) {
-  let reforge = string.split('_').join(' ').trim()
-  reforge = reforge.charAt(0).toUpperCase() + reforge.slice(1)
-  return reforge
+  upgrades += item.extra?.recombobulated ? 1 : 0
+  upgrades += item.heldItem === 'PET_ITEM_TIER_BOOST' && !item.ignoresTierBoost ? 1 : 0
+
+  return upgrades > 0 ? `piece-rarity-upgrade-${upgrades}` : ''
 }
-
-function formatEnrichment(string) {
-  let enrichment = string.split('_').join(' ').trim()
-  enrichment = helper.titleCase(enrichment)
-  return enrichment
-}
-
-function enrichmentToStatName(enrichment) {
-  switch (enrichment) {
-    case 'walk_speed':
-      return 'speed'
-
-    case 'critical_chance':
-      return 'crit_chance'
-
-    case 'critical_damage':
-      return 'crit_damage'
-
-    case 'attack_speed':
-      return 'bonus_attack_speed'
-
-    default:
-      return enrichment
-  }
-}
-
-function getEnrichments(accessories) {
-  const filteredAccessories = accessories.filter((acc) => constants.RARITIES.indexOf(acc.rarity) >= 4);
-  if (filteredAccessories.length === 0) {
-    return;
-  }
-  
-  const enrichmentCounts = {};
-  filteredAccessories.map((accessory) => {
-    if (constants.SPECIAL_ACCESSORIES[helper.getId(accessory)]?.allowsEnrichment === false) return;
-
-    return enrichmentCounts[accessory.enrichment ?? 'missing_enrichment!'] = (enrichmentCounts[accessory.enrichment ?? 'missing_enrichment!'] ?? 0) + 1;
-  })%>
-
-  <span class="stat-name">Enrichments: </span>
-  <% for (const [enrichment, amount] of Object.entries(enrichmentCounts)) {
-      const stat = enrichmentToStatName(enrichment); %>
-
-      <span class="stat-value color-<%= stat.replaceAll("_", "-") %>">
-        <%= amount %>× <%= formatEnrichment(enrichment) %>
-      </span>
-      
-      <% if (enrichment !== Object.keys(enrichmentCounts).pop()) { %>
-        <span class="bonus-divider" role="separator"> // </span>
-      <% } %>
-    <% } %>
-<% }
 
 function isEnchanted(item) {
   // heads
@@ -177,12 +114,12 @@ function isEnchanted(item) {
 
 function itemIcon(item, classes) {
   %>
-<div <% if(item.texture_path){ %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
+<div <% if (item.texture_path) { %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
       <%= classes.join(" ") %>
       item-icon
-      <% if(isEnchanted(item)){ %>is-enchanted <% } %>
-      <% if(item.texture_path){ %>custom-icon<% } %>
-      <% if(item.Damage != 0){ %>icon-<%= item.id %>_0<% } %>
+      <% if (isEnchanted(item)) { %>is-enchanted <% } %>
+      <% if (item.texture_path) { %>custom-icon<% } %>
+      <% if (item.Damage != 0) { %>icon-<%= item.id %>_0<% } %>
       icon-<%= item.id %>_<%= item.Damage %>
     ">
 </div>
@@ -200,15 +137,6 @@ function jerriefy(rank) {
     rank = rank.replace("YOUTUBE", "YERRY");
   }
   return rank;
-}
-
-function getRarityUpgradeClass(item) {
-  let upgrades = 0
-
-  upgrades += item.extra?.recombobulated ? 1 : 0
-  upgrades += item.heldItem === 'PET_ITEM_TIER_BOOST' && !item.ignoresTierBoost ? 1 : 0
-
-  return upgrades > 0 ? `piece-rarity-upgrade-${upgrades}` : ''
 }
 
 function getMetaTitle() {
@@ -365,6 +293,7 @@ function getDescription() {
   */
 
   // Dungeons
+  /*
   if ('dungeons' in calculated && calculated.dungeons.catacombs?.level?.level > 0) {
     const line = []
 
@@ -382,6 +311,7 @@ function getDescription() {
 
     description.push(line.join(' '), '\n', '\n')
   }
+  */
 
   // Skyblock Level
   if (calculated.skyblock_level.xp !== 0 && calculated.skyblock_level.level !== 0) {
@@ -393,6 +323,7 @@ function getDescription() {
 
 
 
+  /*
 	if (calculated.average_level || calculated.dungeons.class_average) {
     // Skill Average
     if (calculated.average_level) {
@@ -414,6 +345,7 @@ function getDescription() {
 
     description.push('\n')
 	}
+  */
 
 	// Weights
   /*
@@ -491,7 +423,7 @@ const metaDescription = getMetaDescription()
 <html lang="en">
 
 <head>
-  <title><%= calculated.display_name %><% if(calculated.display_emoji){ %> <%= calculated.display_emoji %><% } %> | SkyCrypt</title>
+  <title><%= calculated.display_name %><% if (calculated.display_emoji) { %> <%= calculated.display_emoji %><% } %> | SkyCrypt</title>
   <meta name="description" content="<%= metaDescription %>">
   <link rel="icon" href="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
   <meta property="og:type" content="profile">
@@ -533,7 +465,7 @@ const metaDescription = getMetaDescription()
     <div id="player_model"></div>
   </div>
   <main id="wrapper" data-sticky-container>
-    <% if(extra.cacheOnly) { %>
+    <% if (extra.cacheOnly) { %>
     <figure class="banner error">
       <figcaption>Cache Only Mode!</figcaption>
       <p>
@@ -548,9 +480,9 @@ const metaDescription = getMetaDescription()
       <span tabindex="0" id="stats_for_player">
         <%- jerriefy(calculated.rank_prefix) %>
         <%= calculated.display_name %>
-        <% if(calculated.display_emoji_img){ %>
+        <% if (calculated.display_emoji_img) { %>
         <img class="emoji" draggable="false" src="<%= calculated.display_emoji_img %>">
-        <% }else if(calculated.display_emoji){ %>
+        <% }else if (calculated.display_emoji) { %>
         <%- extra.twemoji.parse(calculated.display_emoji) %>
         <% } %>
         <ul id="other_players">
@@ -558,9 +490,9 @@ const metaDescription = getMetaDescription()
           <li>
             <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>">
               <span class="<%= member.removed === true ? "kicked" : "" %>"> <%= member.display_name %> </span>
-              <% if(member.emojiImg){ %>
+              <% if (member.emojiImg) { %>
               <img class="emoji" draggable="false" src="<%= member.emojiImg %>">
-              <% }else if(member.emoji){ %>
+              <% }else if (member.emoji) { %>
               <%- extra.twemoji.parse(member.emoji) %>
               <% } %>
             </a>
@@ -581,7 +513,7 @@ const metaDescription = getMetaDescription()
         <%- extra.twemoji.parse("🌴") %>
         <% } %>
         <ul id="other_profiles">
-          <% for(let profile_id in calculated.profiles){ %>
+          <% for(let profile_id in calculated.profiles) { %>
           <% let _profile = calculated.profiles[profile_id]; %>
           <li>
             <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>">
@@ -608,33 +540,36 @@ const metaDescription = getMetaDescription()
             <path class="outline" fill="white" d="M12,15.39L8.24,17.66L9.23,13.38L5.91,10.5L10.29,10.13L12,6.09L13.71,10.13L18.09,10.5L14.77,13.38L15.76,17.66M22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.45,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24Z" />
           </svg>
         </button>
-        <% if(calculated.guild){ %><button class="additional-player-stat interactive-tooltip" data-tippy-content="
-        <% if(calculated.guild.rank){ %><span class='stat-name'>Rank: </span><span class='stat-value'><%= calculated.guild.rank %></span><br><br><% } %>
-        <span class='stat-name'>Guild Master: </span><% if(calculated.guild.gm) {%> <a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %><%} else { %>None<% } %></a><br>
-        <% if(calculated.guild.tag){ %><span class='stat-name'>Tag: </span><span class='stat-value'><%- helper.renderLore('§f'+calculated.guild.tag) %></span><br><% } %>
-        <% if(calculated.guild.members){ %><span class='stat-name'>Members: </span><span class='stat-value'><%= typeof calculated.guild.members == 'number' ? calculated.guild.members : calculated.guild.members.length %></span><br><% } %>
-        <% if(calculated.guild.level){ %><span class='stat-name'>Level: </span><span class='stat-value'><%= calculated.guild.level %></span><br><% } %>
+        <% if (calculated.guild) { %><button class="additional-player-stat interactive-tooltip" data-tippy-content="
+        <% if (calculated.guild.rank) { %><span class='stat-name'>Rank: </span><span class='stat-value'><%= calculated.guild.rank %></span><br><br><% } %>
+        <span class='stat-name'>Guild Master: </span><% if (calculated.guild.gm) {%> <a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %><%} else { %>None<% } %></a><br>
+        <% if (calculated.guild.tag) { %><span class='stat-name'>Tag: </span><span class='stat-value'><%- helper.renderLore('§f'+calculated.guild.tag) %></span><br><% } %>
+        <% if (calculated.guild.members) { %><span class='stat-name'>Members: </span><span class='stat-value'><%= typeof calculated.guild.members == 'number' ? calculated.guild.members : calculated.guild.members.length %></span><br><% } %>
+        <% if (calculated.guild.level) { %><span class='stat-name'>Level: </span><span class='stat-value'><%= calculated.guild.level %></span><br><% } %>
         ">Guild: <%= calculated.guild.name %></button><% } %>
         <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">Plancke</a>
         <div id="additional_socials">
           <button data-copy-text="<%= calculated.uuid %>" class="copy-text additional-player-stat">Copy UUID</button>
-          <% if('DISCORD' in calculated.social){ %><button data-copy-text="<%= calculated.social.DISCORD %>" class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></button><% } %>
-          <% if('TWITTER' in calculated.social){ %><a data-tippy-content="Twitter" href="<%= calculated.social.TWITTER %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitter"></a><% } %>
-          <% if('YOUTUBE' in calculated.social){ %><a data-tippy-content="YouTube" href="<%= calculated.social.YOUTUBE %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-youtube"></a><% } %>
-          <% if('INSTAGRAM' in calculated.social){ %><a data-tippy-content="Instagram" href="<%= calculated.social.INSTAGRAM %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-instagram"></a><% } %>
-          <% if('TWITCH' in calculated.social){ %><a data-tippy-content="Twitch" href="<%= calculated.social.TWITCH %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitch"></a><% } %>
-          <% if('HYPIXEL' in calculated.social){ %><a data-tippy-content="Hypixel Forums" href="<%= calculated.social.HYPIXEL %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-hypixel"></a><% } %>
+          <% if ('DISCORD' in calculated.social) { %><button data-copy-text="<%= calculated.social.DISCORD %>" class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></button><% } %>
+          <% if ('TWITTER' in calculated.social) { %><a data-tippy-content="Twitter" href="<%= calculated.social.TWITTER %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitter"></a><% } %>
+          <% if ('YOUTUBE' in calculated.social) { %><a data-tippy-content="YouTube" href="<%= calculated.social.YOUTUBE %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-youtube"></a><% } %>
+          <% if ('INSTAGRAM' in calculated.social) { %><a data-tippy-content="Instagram" href="<%= calculated.social.INSTAGRAM %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-instagram"></a><% } %>
+          <% if ('TWITCH' in calculated.social) { %><a data-tippy-content="Twitch" href="<%= calculated.social.TWITCH %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitch"></a><% } %>
+          <% if ('HYPIXEL' in calculated.social) { %><a data-tippy-content="Hypixel Forums" href="<%= calculated.social.HYPIXEL %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-hypixel"></a><% } %>
           <button class="additional-player-stat" id="reveal_socials" aria-label="reveal socials"></button>
         </div>
       </div>
     </div>
-    <% if(calculated.uuid == "b876ec32e396476ba1158438d83c67d4") { %>
-    <div id="techno-support">
-      <span class="support-title">Thank you for everything, Technoblade.</span><br>
-      <p class="support-text">
-        If you can, <a href="https://www.curesarcoma.org/donate/" target="_blank">donate</a> to the Sarcoma Foundation of America and <a href="https://technoblade.com/" target="_blank">buy</a> his merch.
-      </p>
-    </div>
+
+    <!-- Technoblade Support -->
+    <% if (calculated.uuid == "b876ec32e396476ba1158438d83c67d4") { %>
+      <div id="techno-support">
+        <span class="support-title">Thank you for everything, Technoblade.</span>
+        <br>
+        <p class="support-text">
+          If you can, <a href="https://www.curesarcoma.org/donate/" target="_blank">donate</a> to the Sarcoma Foundation of America and <a href="https://technoblade.com/" target="_blank">buy</a> his merch.
+        </p>
+      </div>
     <% } %>
 
     <!-- Basic Stats (Skills, player stats and custom calculations) -->
@@ -645,386 +580,91 @@ const metaDescription = getMetaDescription()
       <div id="nav_bar_background"></div>
       <div id="nav_items_container">
         <a class="nav-item" href="#Armor">Armor</a>
-        <% if(!items.no_inventory){ %><a class="nav-item" href="#Weapons">Weapons</a><% } %>
-        <% if(!items.no_inventory){ %><a class="nav-item" href="#Accessories">Accessories</a><% } %>
-        <% if(calculated.pets.pets.length > 0){ %><a class="nav-item" href="#Pets">Pets</a><% } %>
-        <% if(!items.no_inventory){ %><a class="nav-item" href="#Inventory">Inventory</a><% } %>
+        <% if (items.no_inventory) { %><a class="nav-item" href="#Weapons">Weapons</a><% } %>
+        <% if (items.no_inventory) { %><a class="nav-item" href="#Accessories">Accessories</a><% } %>
+        <% if (calculated.pets.pets.length > 0) { %><a class="nav-item" href="#Pets">Pets</a><% } %>
+        <% if (items.no_inventory) { %><a class="nav-item" href="#Inventory">Inventory</a><% } %>
         <a class="nav-item" href="#Skills">Skills</a>
         <a class="nav-item" href="#Dungeons">Dungeons</a>
         <a class="nav-item" href="#Slayer">Slayer</a>
         <a class="nav-item" href="#Minions">Minions</a>
-        <% if (calculated.bestiary !== null){ %><a class="nav-item" href="#Bestiary">Bestiary</a><% } %>
-        <% if(Object.keys(calculated.collections).length > 0){ %><a class="nav-item" href="#Collections">Collections</a><% } %>
+        <% if (calculated.bestiary) { %><a class="nav-item" href="#Bestiary">Bestiary</a><% } %>
+        <% if (calculated.collections) { %><a class="nav-item" href="#Collections">Collections</a><% } %>
         <a class="nav-item" href="#Crimson_Isle">Crimson Isle</a>
-        <% if(calculated.rift !== null){ %><a class="nav-item" href="#Rift"><abbr title="RIft">Rift</abbr></a><% } %>
+        <% if (calculated.rif) { %><a class="nav-item" href="#Rift"><abbr title="RIft">Rift</abbr></a><% } %>
         <% if (calculated.profile.game_mode === "bingo") { %> <a class="nav-item" href="#Bingo"><abbr title="Bingo">Bingo</abbr></a> <% } %>
-        <% if(Object.keys(calculated.misc).length > 0){ %><a class="nav-item" href="#Misc"><abbr title="Miscellaneous">Misc</abbr></a><% } %>
+        <% if (calculated.misc) { %><a class="nav-item" href="#Misc"><abbr title="Miscellaneous">Misc</abbr></a><% } %>
       </div>
     </div>
     <div class="stat-containers">
       <%
       const notAvailable = [];
 
-      if(items.no_inventory)
+      if (items.no_inventory)
         notAvailable.push('Weapons', 'Accessories', 'Inventory', 'Storage');
 
-      if(items.no_personal_vault)
+      if (items.no_personal_vault)
         notAvailable.push('Personal Vault');
 
-      if(Object.keys(calculated.collections).length == 0)
+      if (Object.keys(calculated.collections).length == 0)
         notAvailable.push('Collections');
     %>
       <% if (notAvailable.length > 0 || ['ironman', 'bingo', 'island'].includes(calculated.profile.game_mode)) { %>
       <div class="stat-container info-container-wrapper">
         <div class="info-container">
           <div class="info-header">Notice</div>
-          <% if(notAvailable.length > 0){ %>
+          <% if (notAvailable.length > 0) { %>
           <%= notAvailable.join(', ') %> not available for <%= calculated.display_name %> due to limited API access.<br><span><a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.</span>
           <% } %>
-          <% if(calculated.profile.game_mode == 'ironman'){ %>
-          <% if(notAvailable.length > 0){ %><br><br><% } %>
+          <% if (calculated.profile.game_mode == 'ironman') { %>
+          <% if (notAvailable.length > 0) { %><br><br><% } %>
           This is an <strong>Ironman</strong> profile. The player cannot use the auction house, bazaar, trade, or pick up drops from other players.
           <% } %>
-          <% if(calculated.profile.game_mode == 'bingo'){ %>
-          <% if(notAvailable.length > 0){ %><br><br><% } %>
+          <% if (calculated.profile.game_mode == 'bingo') { %>
+          <% if (notAvailable.length > 0) { %><br><br><% } %>
           This is a <strong>Bingo</strong> profile. The player cannot spend gems, use the auction house, bazaar, trade, or pick up drops from other players.
           <% } %>
-          <% if(calculated.profile.game_mode == 'island'){ %>
-          <% if(notAvailable.length > 0){ %><br><br><% } %>
+          <% if (calculated.profile.game_mode == 'island') { %>
+          <% if (notAvailable.length > 0) { %><br><br><% } %>
           This is a <strong>Stranded</strong> profile. The player cannot leave their skyblock island or trade with other players.
           <% } %>
         </div>
       </div>
       <% } %>
 
-      <div class="stat-container stat-armor">
-        <a class="stat-anchor" id="Armor"></a>
-        <h2 class="stat-header">Armor</h2>
-        <div class="stat-content">
-          <% if(items.armor.length == 0){ %>
-          <div class="no-access"><%= calculated.display_name %> doesn't have any armor equipped.</div>
-          <% }else{ %>
-          <% if(items.armor_set) { %>
-          <p class="stat-raw-values">
-            <span class="stat-name">Set: </span><span class="stat-value piece-<%= items.armor_set_rarity %>-fg"><%= items.armor_set %></span>
-          </p>
-          <% } %>
-          <div class="pieces">
-            <% for(const item of items.armor.slice().reverse()){ %>
-            <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
-              <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
-              <div class="piece-shine"></div>
-              <% } %>
-              <% itemIcon(item, ['piece-icon']); %>
-            </div>
-            <% } %>
-            <div data-bonus-stats="armor"></div>
-          </div>
-          <% } %>
-          <p class="stat-sub-header">Equipment</p>
-          <% if(Object.keys(items.equipment).length == 0){ %>
-          <div class="no-access"><%= calculated.display_name %> doesn't have any equipment equipped.</div>
-          <% }else{ %>
-          <div class="pieces">
-            <% for(const item of items.equipment.slice().reverse()){ %>
-            <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
-              <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
-              <div class="piece-shine"></div>
-              <% } %>
-              <% itemIcon(item, ['piece-icon']); %>
-            </div>
-            <% } %>
-            <div data-bonus-stats="equipment"></div>
-          </div>
-          <% } %>
-        </div>
-      </div>
-      <% if(items.wardrobe.length > 0){ %>
-      <p class="stat-sub-header">Wardrobe</p>
-      <div class="pieces wardrobe">
-        <% for(const set of items.wardrobe){ %>
-        <div class="wardrobe-set">
-          <% for(const [index, item] of set.entries()) { %>
-          <% if (item) { %>
-          <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %> index-<%= index %>">
-            <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
-            <div class="piece-shine"></div>
-            <% } %>
-            <% itemIcon(item, ['piece-icon']); %>
-          </div>
-          <% } else { %>
-          <div class="piece armor-placeholder index-<%= index %>">
-            <div class="piece-icon item-icon custom-icon"></div>
-          </div>
-          <% } %>
-          <% } %>
-        </div>
-        <% } %>
-        <% } %>
-      </div>
-      <% if(!items.no_inventory){ %>
-      <div class="stat-container stat-weapons">
-        <a class="stat-anchor" id="Weapons"></a>
-        <h2 class="stat-header">Weapons</h2>
-        <div class="stat-content">
-          <% if (items.weapons.length == 0) { %>
-          <div class="no-access"><%= calculated.display_name %> doesn't have any weapons.</div>
-          <% } else { %>
-          <% if (items.highest_rarity_sword) { %>
-          <p class="stat-raw-values">
-            <span class="stat-name">Active Weapon: </span>
-            <span class="stat-active-weapon stat-value"><%- helper.renderLore(items.highest_rarity_sword.tag.display.Name) %></span>
-          </p>
-          <% } else if (items.weapons.length > 0) { %>
-          <p class="stat-raw-values">
-            <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-common-fg">None</span>
-          </p>
-          <% } %>
-          <div class="pieces">
-            <%
-                items.weapons.filter(a => !a.hidden).forEach(item => {
-              %>
-            <div tabindex="0" data-item-id="<%= item.itemId %>" class="
-                      rich-item
-                      piece
-                      piece-<%= item.rarity %>-bg
-                      <%= getRarityUpgradeClass(item) %>
-                    ">
-              <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
-              <div class="piece-shine"></div>
-              <% } %>
-              <% itemIcon(item, ['piece-icon']); %>
-            </div>
-            <%
-                });
-              %>
-          </div>
-          <% } %>
-        </div>
-      </div>
-      <div class="stat-container stat-accessories">
-        <a class="stat-anchor" id="Accessories"></a>
-        <h2 class="stat-header">Accessories</h2>
-        <div class="stat-content">
-          <% if(items.no_inventory){ %>
-          <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.</div>
-          <% }else if(items.accessories.length == 0){ %>
-          <div class="no-access"><%= calculated.display_name %> doesn't have any accessories.</div>
-          <% }else{ %>
-          <p class="stat-raw-values">
-            <%
-              const talis = items.accessories.filter(a => a.isUnique).length + (items.accessory_rarities.rift_prism?.consumed ? 1 : 0)
-              const maxTalis = talis >= constants.UNIQUE_ACCESSORIES_COUNT ? 'golden-text': ''
-              const maxRecombTalis = items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length >= constants.RECOMBABLE_ACCESSORIES_COUNT ? 'golden-text': ''
-            %>
+      <!-- Armor (Armor and Equipment) -->
+      <%- include('./sections/stats/items/armor.ejs', { getRarityUpgradeClass, rarityOrder, isEnchanted }); %>
 
-            <span class="stat-name <%= maxTalis %>">Unique Accessories: </span>
-            <span class="stat-value <%= maxTalis %>"><%= talis %> / <%= constants.UNIQUE_ACCESSORIES_COUNT %></span>
-            <br>
-            <span class="stat-name <%= maxTalis %>">Completion: </span>
-            <span class="stat-value percent <%= maxTalis %>"><%= Math.round(talis / constants.UNIQUE_ACCESSORIES_COUNT * 100) %></span>
-            <br>
-            <span class="stat-name <%= maxRecombTalis %>">Recombobulated: </span>
-            <span class="stat-value <%= maxRecombTalis %>"><%= items.accessories.filter(a => a.isUnique && a.extra?.recombobulated).length %> / <%= constants.RECOMBABLE_ACCESSORIES_COUNT %></span>
-            <br>
-            <%
-                const rarities = items.accessory_rarities;
-                const player_magical_power = {}
+      <!-- Wardrobe -->
+      <%- include('./sections/stats/items/wardrobe.ejs', { getRarityUpgradeClass, rarityOrder, isEnchanted }); %>
 
-                for (const rarity in constants.MAGICAL_POWER) {
-                  player_magical_power[rarity] = 0
-                  player_magical_power[rarity] += rarities[rarity] * constants.MAGICAL_POWER[rarity];
-                }
+      <% if (!items.no_inventory) { %>
+        <!-- Weapons -->
+        <%- include('./sections/stats/items/weapons.ejs', { getRarityUpgradeClass, rarityOrder, isEnchanted }); %>
 
-                const mp_hegemony = rarities.hegemony ? constants.MAGICAL_POWER[rarities.hegemony.rarity] * 2 : 0
-                const mp_abiphone = rarities.abicase ? Math.floor(calculated.abiphone.active / 2) : 0
-                const mp_rift_prism = rarities.rift_prism?.consumed ? 11 : 0;
-                const mp_total = Object.values(player_magical_power).reduce((a, b) => a + b) + mp_hegemony + mp_abiphone + mp_rift_prism - 22;
-              %>
-            <span data-tippy-content="
-              Accessories Breakdown<br>
-              <span style='color: var(--§8);' class='grey-text'>From your accessory bag</span><br><br>
-              <span style='color: var(--§6);' class='grey-text'>22 MP</span> × <span style='color: var(--§d);' class='grey-text'><%= rarities.mythic %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.mythic.toLocaleString() %> MP</span><br>
-              <span style='color: var(--§6);' class='grey-text'>16 MP</span> × <span style='color: var(--§6);' class='grey-text'><%= rarities.legendary %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.legendary.toLocaleString() %> MP</span><br>
-              <span style='color: var(--§6);' class='grey-text'>12 MP</span> × <span style='color: var(--§5);' class='grey-text'><%= rarities.epic %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.epic.toLocaleString() %> MP</span><br>
-              <span style='color: var(--§6);' class='grey-text'>8 MP</span> × <span style='color: var(--§1);' class='grey-text'><%= rarities.rare %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.rare.toLocaleString() %> MP</span><br>
-              <span style='color: var(--§6);' class='grey-text'>5 MP</span> × <span style='color: var(--§a);' class='grey-text'><%= rarities.uncommon %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.uncommon.toLocaleString() %> MP</span><br>
-              <span style='color: var(--§6);' class='grey-text'>3 MP</span> × <span style='color: var(--§f);' class='grey-text'><%= rarities.common %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.common.toLocaleString() %> MP</span><br>
-              <span style='color: var(--§6);' class='grey-text'>3 MP</span> × <span style='color: var(--§c);' class='grey-text'><%= rarities.special %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.special.toLocaleString() %> MP</span><br>
-              <span style='color: var(--§6);' class='grey-text'>5 MP</span> × <span style='color: var(--§c);' class='grey-text'><%= rarities.very_special %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= player_magical_power.very_special.toLocaleString() %> MP</span><br>
-              <br>
-              <% if (mp_hegemony) { %>
-                <span style='color: var(--§<%= constants.RARITY_COLORS[rarities.hegemony.rarity] %>);' class='grey-text'>Hegemony Artifact</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_hegemony.toLocaleString() %> MP</span><br>
-              <% } %>
-              <% if (mp_abiphone) { %>
-                <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Abicase</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_abiphone %> MP</span><br>
-              <% } %>
-              <% if (mp_rift_prism) { %>
-                <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Rift Prism:</span> = <span style='color: var(--§6);' class='grey-text'>+<%= mp_rift_prism %> MP</span><br>
-              <% } %>
-              <br>
-              Total: <span style='color: var(--§6);' class='grey-text'><%= mp_total.toLocaleString() %> Magical Power</span>
-              ">
-              <span class="stat-name">Magical Power: </span><span class="stat-value"><%= mp_total.toLocaleString() %></span>
-            </span>
-          </p>
-          <% if(items.accessories.find(a => !a.isInactive) != undefined){ %>
-          <div class="accessory-list">
-            <p class="stat-sub-header" style="margin-bottom: 5px">Active Accessories</p>
-            <% items.accessories.filter(a => !a.isInactive).forEach(item => {
-                  %>
-            <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
-              <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
-              <div class="piece-shine"></div>
-              <% } %>
-              <% itemIcon(item, ['piece-icon']); %>
-            </div>
-            <% }) %>
-            <div class="accessories-extras">
-              <div><%- getEnrichments(items.accessories.filter(a => a.isUnique && !a.isInactive)) %></div>
-              <div data-bonus-stats="accessories,new_year_cake_bag"></div>
-            </div>
-          </div>
-          <% } %>
-          <% const inactiveAccessories = items.accessories.filter(a => a.isInactive === true); %>
-          <% if (inactiveAccessories.length > 0) { %>
-          <div class="accessory-list">
-            <p class="stat-sub-header">Inactive Accessories</p>
-            <% for (const item of inactiveAccessories) { %>
-            <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
-              <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
-              <div class="piece-shine"></div>
-              <% } %>
-
-              <% itemIcon(item, ['piece-icon']); %>
-            </div>
-            <% } %>
-          </div>
-          <% } %>
-          <% if(calculated.missingAccessories.missing.length > 0 || calculated.missingAccessories.upgrades.length > 0) {
-            <!-- Why does this exist? Won't touch it -->
-            if(items.accessories.length == 1) %> <br>
-
-          <button class="stat-sub-header extender" aria-controls="missing-accessories" aria-expanded="false">Missing Accessories</button>
-          <div class="pieces extendable" id="missing-accessories">
-            <br>
-
-            <% if(calculated.missingAccessories.missing.length > 0) { %>
-            <p class="stat-sub-header">Missing Accessories<span data-tippy-content='Missing accessories that are <strong>not</strong> upgrades of another accessory.'></span></p>
-            <% for(const [index, accessory] of calculated.missingAccessories.missing.entries()){ %>
-            <div tabindex="0" data-missing-accessory-index="<%= index %>" class="rich-item piece piece-<%= accessory.rarity %>-bg missing-accessory">
-              <div style='background-image: url("<%= accessory.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
-            </div>
-            <% } %>
-            <% } %>
-
-            <% if (calculated.missingAccessories.upgrades.length > 0) { %>
-            <p class="stat-sub-header">Missing Accessory Upgrades<span data-tippy-content='Missing accessories that are upgrades of a lower tier accessory.'></span></p>
-            <% for(const [index, accessory] of calculated.missingAccessories.upgrades.entries()){ %>
-            <div tabindex="0" data-upgrade-accessory-index="<%= index %>" class="rich-item piece piece-<%= accessory.rarity %>-bg missing-accessory">
-              <div style='background-image: url("<%= accessory.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
-            </div>
-            <% } %>
-            <% } %>
-
-          </div>
-          <% } %>
-          <% } %>
-        </div>
-      </div>
+        <!-- Accessories (Active, Inactive and Missing) -->
+        <%- include('./sections/stats/items/accessories.ejs', { getRarityUpgradeClass, rarityOrder, isEnchanted }); %>
       <% } %>
 
       <!-- Pets -->
       <%- include('./sections/stats/pets.ejs', { getRarityUpgradeClass, rarityOrder }); %>
 
-      <% if(!items.no_inventory){ %>
-      <div class="stat-container stat-inventory">
-        <a class="stat-anchor" id="Inventory"></a>
-        <h2 class="stat-header">Inventory</h2>
-        <div class="stat-content">
-          <% if(items.no_inventory){ %>
-          <div class="no-access"><%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.</div>
-          <% }else{ %>
-          <div id="inventory_container">
-            <div id="inventory_header">
-              <div class="inventory-header-line"></div>
-              <div class="inventory-tabs-container">
-                <%
-                    const inventoryIconUrl = `https://crafatar.com/renders/head/${extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : calculated.uuid }?size=32&overlay`
-                  %>
-                <button class="inventory-tab active-inventory" data-inventory-type="inventory">
-                  <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url('<%= inventoryIconUrl %>')"></div>
-                  <div class="inventory-tab-name"><abbr title="Inventory">Inv</abbr></div>
-                </button>
-
-                <% if(items.storage.length > 0){ %>
-                <button class="inventory-tab" data-inventory-type="storage">
-                  <div class="inventory-tab-icon item-icon icon-54_0"></div>
-                  <div class="inventory-tab-name">Storage</div>
-                </button>
-                <% } %>
-
-                <% if(items.enderchest.length > 0){ %>
-                <button class="inventory-tab" data-inventory-type="enderchest">
-                  <div class="inventory-tab-icon item-icon icon-130_0"></div>
-                  <div class="inventory-tab-name"><abbr title="Enderchest">Ender</abbr></div>
-                </button>
-                <% } %>
-
-                <% if(items.personal_vault.length > 0){ %>
-                <button class="inventory-tab" data-inventory-type="personal_vault">
-                  <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/f7aadff9ddc546fdcec6ed5919cc39dfa8d0c07ff4bc613a19f2e6d7f2593)"></div>
-                  <div class="inventory-tab-name"><abbr title="Personal Vault">Vault</abbr></div>
-                </button>
-                <% } %>
-
-                <% if(items.accessory_bag.length > 0){ %>
-                <button class="inventory-tab" data-inventory-type="accessory_bag">
-                  <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/961a918c0c49ba8d053e522cb91abc74689367b4d8aa06bfc1ba9154730985ff)"></div>
-                  <div class="inventory-tab-name"><abbr title="Accessory Bag">Accs</abbr></div>
-                </button>
-                <% } %>
-
-                <% if(items.potion_bag.length > 0){ %>
-                <button class="inventory-tab" data-inventory-type="potion_bag">
-                  <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/9f8b82427b260d0a61e6483fc3b2c35a585851e08a9a9df372548b4168cc817c)"></div>
-                  <div class="inventory-tab-name"><abbr title="Potion Bag">Pots</abbr></div>
-                </button>
-                <% } %>
-
-                <% if(items.fishing_bag.length > 0){ %>
-                <button class="inventory-tab" data-inventory-type="fishing_bag">
-                  <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/eb8e297df6b8dffcf135dba84ec792d420ad8ecb458d144288572a84603b1631)"></div>
-                  <div class="inventory-tab-name"><abbr title="Fishing Bag">Fish</abbr></div>
-                </button>
-                <% } %>
-
-                <% if(items.quiver.length > 0){ %>
-                <button class="inventory-tab" data-inventory-type="quiver">
-                  <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/4cb3acdc11ca747bf710e59f4c8e9b3d949fdd364c6869831ca878f0763d1787)"></div>
-                  <div class="inventory-tab-name">Quiver</div>
-                </button>
-                <% } %>
-              </div>
-            </div>
-            <inventory-view></inventory-view>
-          </div>
-          <% } %>
-        </div>
-      </div>
+      <% if (!items.no_inventory) { %>
+        <!-- Inventories (Inventory, Storage, Ender Chest, Vault, Accessories, Pots, Fish, Quiver) -->
+        <%- include('./sections/stats/items/inventory.ejs', { getRarityUpgradeClass, rarityOrder, isEnchanted }); %>
       <% } %>
       
       <!-- Skills -->
-      <%- include('./sections/stats/skills.ejs', {}); %>
+      <%- include('./sections/stats/skills.ejs', { getRarityUpgradeClass, rarityOrder, isEnchanted }); %>
 
       <!-- Dungeons -->
       <%- include('./sections/stats/dungeons.ejs', { skillItems }); %>
 
       <!-- Slayer -->
-      <%- include('./sections/stats/slayer.ejs', { romanize, helper }); %>
+      <%- include('./sections/stats/slayer.ejs', { helper }); %>
 
       <!-- Minions -->
-      <%- include('./sections/stats/minions.ejs', { skillItems, romanize }); %>
+      <%- include('./sections/stats/minions.ejs', { skillItems }); %>
 
       <% if (calculated.bestiary !== null) {%>
         <%- include('./sections/stats/bestiary.ejs', {}); %>

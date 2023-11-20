@@ -61,7 +61,7 @@ export class SkillComponent extends LitElement {
         ${skillName} <span class="skill-level">${level.level >= 0 ? level.level : "?"}</span>
       </div>
       <div class="skill-bar" data-skill="${skillName}">
-        <div class="skill-progress-bar" style="--progress: ${this.getProgress(level, this.type)}"></div>
+        <div class="skill-progress-bar" style="--progress: ${this.getProgress(level, this.type, true)}"></div>
         ${"runecrafting" in calculated.skills.skills
           ? html`<div class="skill-progress-text">
               ${this.hovering ? this.getHoverText(level, this.type) : this.getMainText(level, this.type)}
@@ -153,9 +153,17 @@ export class SkillComponent extends LitElement {
   /**
    * @returns the progress to maxing the skill
    */
-  private getProgress(level: Level, type: string): number {
-    if (type === "skyblock_level" && level.level === level.maxLevel && level.maxExperience) {
-      return level.xpCurrent / level.maxExperience;
+  private getProgress(level: Level, type: string, global?: boolean): number {
+    if (type === "skyblock_level") {
+      if (level.level === level.maxLevel && level.maxExperience) {
+        return level.xpCurrent / level.maxExperience;
+      }
+
+      return level.progress;
+    }
+
+    if (global === true) {
+      return Math.min(level.xpCurrent / level.xpForNext, 1);
     }
 
     return level.level / level.maxLevel;

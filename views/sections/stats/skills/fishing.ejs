@@ -53,7 +53,17 @@ const seaCreatures = [
   "agarimoo"
 ];
 
-%>
+function itemIcon(item, classes) { %>
+  <div <% if(item.texture_path){ %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
+    <%= classes.join(" ") %>
+      item-icon
+      <% if (isEnchanted(item)) { %> is-enchanted <% } %>
+      <% if (item.texture_path) { %> custom-icon <% } %>
+      <% if (item.Damage != 0) { %> icon-<%= item.id %>_0 <% } %>
+      icon-<%= item.id %>_<%= item.Damage %>
+    ">
+  </div>
+<% } %>
 
 <div class="stat-fishing">
   <div class="category-header">

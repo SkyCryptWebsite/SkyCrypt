@@ -1,0 +1,86 @@
+<div class="stat-container stat-inventory">
+  <a class="stat-anchor" id="Inventory"></a>
+  <h2 class="stat-header">Inventory</h2>
+  <div class="stat-content">
+    <% if (items.no_inventory) { %>
+      <div class="no-access">
+        <%= calculated.display_name %> doesn't have inventory access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.
+      </div>
+    <% } else { %>
+      <div id="inventory_container">
+        <div id="inventory_header">
+          <div class="inventory-header-line"></div>
+          <div class="inventory-tabs-container">
+            <% const inventoryIconUrl = `https://crafatar.com/renders/head/${extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : calculated.uuid }?size=32&overlay` %>
+            <button class="inventory-tab active-inventory" data-inventory-type="inventory">
+              <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url('<%= inventoryIconUrl %>')"></div>
+              <div class="inventory-tab-name">
+                <abbr title="Inventory">Inv</abbr>
+              </div>
+            </button>
+
+            <% if (items.storage.length > 0) { %>
+              <button class="inventory-tab" data-inventory-type="storage">
+                <div class="inventory-tab-icon item-icon icon-54_0"></div>
+                <div class="inventory-tab-name">Storage</div>
+              </button>
+            <% } %>
+
+            <% if (items.enderchest.length > 0) {%>
+              <button class="inventory-tab" data-inventory-type="enderchest">
+                <div class="inventory-tab-icon item-icon icon-130_0"></div>
+                <div class="inventory-tab-name">
+                  <abbr title="Enderchest">Ender</abbr>
+                </div>
+              </button>
+            <% } %>
+
+            <% if (items.personal_vault.length > 0) {%>
+              <button class="inventory-tab" data-inventory-type="personal_vault">
+                <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/f7aadff9ddc546fdcec6ed5919cc39dfa8d0c07ff4bc613a19f2e6d7f2593)"></div>
+                <div class="inventory-tab-name">
+                  <abbr title="Personal Vault">Vault</abbr>
+                </div>
+              </button>
+            <% } %>
+
+            <% if (items.accessory_bag.length > 0) {%>
+              <button class="inventory-tab" data-inventory-type="accessory_bag">
+                <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/961a918c0c49ba8d053e522cb91abc74689367b4d8aa06bfc1ba9154730985ff)"></div>
+                <div class="inventory-tab-name">
+                  <abbr title="Accessory Bag">Accs</abbr>
+                </div>
+              </button>
+            <% } %>
+
+            <% if (items.potion_bag.length > 0) {%>
+              <button class="inventory-tab" data-inventory-type="potion_bag">
+                <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/9f8b82427b260d0a61e6483fc3b2c35a585851e08a9a9df372548b4168cc817c)"></div>
+                <div class="inventory-tab-name">
+                  <abbr title="Potion Bag">Pots</abbr>
+                </div>
+              </button>
+            <% } %>
+
+            <% if (items.fishing_bag.length > 0) {%>
+              <button class="inventory-tab" data-inventory-type="fishing_bag">
+                <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/eb8e297df6b8dffcf135dba84ec792d420ad8ecb458d144288572a84603b1631)"></div>
+                <div class="inventory-tab-name">
+                  <abbr title="Fishing Bag">Fish</abbr>
+                </div>
+              </button>
+            <% } %>
+
+            <% if (items.quiver.length > 0) {%>
+              <button class="inventory-tab" data-inventory-type="quiver">
+                <div class="inventory-tab-icon item-icon custom-icon" style="background-image: url(/head/4cb3acdc11ca747bf710e59f4c8e9b3d949fdd364c6869831ca878f0763d1787)"></div>
+                <div class="inventory-tab-name">Quiver</div>
+              </button>
+            <% } %>
+            </div>
+        </div>
+        <inventory-view></inventory-view>
+      </div>
+    <% } %>
+  </div>
+</div>

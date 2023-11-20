@@ -54,7 +54,7 @@ function formatSlayerCoinsSpent(coins) {
             <div class="slayer-kills">
               <% for (const [index, type] of Object.keys(slayer.kills).entries()){ %>
                 <div class="slayer-kill">
-                  <div class="tier-name"><%= type.length === 1 ? `Tier ${romanize(type)}` : helper.capitalizeFirstLetter(type) %></div>
+                  <div class="tier-name"><%= type.length === 1 ? `Tier ${helper.romanize(type)}` : helper.capitalizeFirstLetter(type) %></div>
                   <div class="tier-kills"><%= slayer.kills[type].toLocaleString() %></div>
                 </div>
               <% } %>

@@ -4,7 +4,9 @@
     <h2 class="stat-header">Miscellaneous</h2>
     <div class="stat-content">
       <!-- Essence (Essence and Essence Shop) -->
-      <%- include('./misc/essence.ejs', {}); %>
+      <% if (calculated.dungeons?.essence !== undefined) { %> 
+        <%- include('./misc/essence.ejs', {}); %>
+      <% } %>
 
       <!-- Kills and Deaths -->
       <%- include('./misc/kills_deaths.ejs', {}); %>
@@ -22,7 +24,9 @@
       <%- include('./misc/damage.ejs', {}); %>
 
       <!-- Milestones (Pet Milestones) -->
-      <%- include('./misc/milestones.ejs', {}); %>
+      <% if (calculated.misc.pet_milestones !== undefined) { %>
+        <%- include('./misc/milestones.ejs', {}); %>
+      <% } %>
 
       <!-- Mythological Event (Burrows) -->
       <%- include('./misc/mythological_event.ejs', {}); %>

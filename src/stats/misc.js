@@ -113,7 +113,7 @@ function getMiscUncategorized(userProfile) {
 function getPetMilestone(type, amount) {
   return {
     amount: amount,
-    rarity: constants.MILESTONE_RARITIES[constants.PET_MILESTONES[type].findLastIndex((x) => amount >= x)],
+    rarity: constants.MILESTONE_RARITIES[constants.PET_MILESTONES[type].findLastIndex((x) => amount >= x)] ?? "common",
     total: constants.PET_MILESTONES[type].at(-1),
     progress: Math.min((amount / constants.PET_MILESTONES[type].at(-1)) * 100, 100).toFixed(2),
   };

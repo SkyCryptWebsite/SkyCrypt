@@ -30,7 +30,7 @@ function formatBestiaryMobs(userProfile, mobs) {
 export function getBestiary(userProfile) {
   try {
     if (userProfile.bestiary?.kills === undefined) {
-      return null;
+      return;
     }
 
     const output = {};
