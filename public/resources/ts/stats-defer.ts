@@ -113,8 +113,8 @@ tippy(".interactive-tooltip", {
 
 export const ALL_ITEMS = new Map(
   [
-    items.armor,
-    items.equipment,
+    items.armor.armor,
+    items.equipment.equipment,
     items.inventory,
     items.enderchest,
     items.accessory_bag,
