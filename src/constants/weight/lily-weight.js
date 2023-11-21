@@ -9,7 +9,17 @@ const SLAYER_ORDER = ["zombie", "spider", "wolf", "enderman", "blaze"];
  * @returns {{[key:string]:number}}
  */
 function getTierCompletions(floors = {}) {
-  return Object.fromEntries(Object.entries(floors).map(([key, value]) => [key, value.stats.tier_completions ?? 0]));
+  return Object.fromEntries(
+    Object.entries(floors)
+      .map(([key, value]) => {
+        if (key === "total" || key === "best") {
+          return [];
+        }
+
+        return [key, value.stats.tier_completions ?? 0];
+      })
+      .filter(([, value]) => value > 0)
+  );
 }
 
 export function calculateLilyWeight(userProfile) {
@@ -20,6 +30,8 @@ export function calculateLilyWeight(userProfile) {
   const masterCataCompletions = getTierCompletions(userProfile.dungeons?.master_catacombs?.floors ?? {});
 
   const cataXP = userProfile.dungeons?.catacombs?.level?.xp ?? 0;
+
+  console.log(cataCompletions, masterCataCompletions, cataXP);
 
   const slayerXP = SLAYER_ORDER.map((key) => userProfile.slayer?.slayers?.[key]?.level?.xp ?? 0);
 
