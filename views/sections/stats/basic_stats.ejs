@@ -100,7 +100,7 @@
       ];
 
       for (weight of weightSystems) {
-        if ("runecrafting" in calculated.skills === false) {
+        if ("runecrafting" in calculated.skills.skills === false) {
           weight.total -= weight.skill;
           weight.skill = 0;
         } %>
