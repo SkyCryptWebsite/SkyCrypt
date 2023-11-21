@@ -2138,6 +2138,82 @@ export const BESTIARY = {
       },
     ],
   },
+  garden: {
+    name: "Garden",
+    texture: "/head/f4880d2c1e7b86e87522e20882656f45bafd42f94932b2c5e0d6ecaa490cb4c",
+    mobs: [
+      {
+        name: "Beetle",
+        texture: "/head/35590d5326a65d55b2bc60c5cd194c13d6125658d3d4c60ece1d9becfacea93c",
+        cap: 250,
+        mobs: ["pest_beetle_1"],
+        bracket: 6,
+      },
+      {
+        name: "Cricket",
+        texture: "/head/7b50d6e6bf907fa4e3c44f465cd2c4f79124b5703a2df22fac6376b1b91703cf",
+        cap: 250,
+        mobs: ["pest_cricket_1"],
+        bracket: 6,
+      },
+      {
+        name: "Earthworm",
+        texture: "/head/6403ba4027a333d8d2fd32ab59d1cfdbaa7d908d80d2381db2a69cbe65450ad8",
+        cap: 250,
+        mobs: ["pest_worm_1"],
+        bracket: 6,
+      },
+      {
+        name: "Fly",
+        texture: "/head/9d90e777826a52461368e26d1b2e19bfa1ba582d602483e545f4124d0f731842",
+        cap: 250,
+        mobs: ["pest_fly_1"],
+        bracket: 6,
+      },
+      {
+        name: "Locust",
+        texture: "/head/4b24a482a32db1ea78fb98060b0c2fa4a373cbd18a68edddeb7419455a59cda9",
+        cap: 250,
+        mobs: ["pest_locust_1"],
+        bracket: 6,
+      },
+      {
+        name: "Mite",
+        texture: "/head/be6baf6431a9daa2ca604d5a3c26e9a761d5952f0817174a4fe0b764616e21ff",
+        cap: 250,
+        mobs: ["pest_mite_1"],
+        bracket: 6,
+      },
+      {
+        name: "Mosquito",
+        texture: "/head/52a9fe05bc663efcd12e56a3ccc5ec035bf577b78708548b6f4ffcf1d30eccfe",
+        cap: 250,
+        mobs: ["pest_mosquito_1"],
+        bracket: 6,
+      },
+      {
+        name: "Moth",
+        texture: "/head/65485c4b34e5b5470be94de100e61f7816f81bc5a11dfdf0eccf890172da5d0a",
+        cap: 250,
+        mobs: ["pest_moth_1"],
+        bracket: 6,
+      },
+      {
+        name: "Rat",
+        texture: "/head/a8abb471db0ab78703011979dc8b40798a941f3a4dec3ec61cbeec2af8cffe8",
+        cap: 250,
+        mobs: ["pest_rat_1"],
+        bracket: 6,
+      },
+      {
+        name: "Slug",
+        texture: "/head/7a79d0fd677b54530961117ef84adc206e2cc5045c1344d61d776bf8ac2fe1ba",
+        cap: 250,
+        mobs: ["pest_slug_1"],
+        bracket: 6,
+      },
+    ],
+  },
 };
 
 export const BESTIARY_BRACKETS = {
