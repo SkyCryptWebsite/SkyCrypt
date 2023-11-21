@@ -30,7 +30,7 @@ export function calculateLilyWeight(userProfile) {
   const masterCataCompletions = getTierCompletions(userProfile.dungeons?.master_catacombs?.floors ?? {});
 
   const cataXP = userProfile.dungeons?.catacombs?.level?.xp ?? 0;
-  
+
   const slayerXP = SLAYER_ORDER.map((key) => userProfile.slayer?.slayers?.[key]?.level?.xp ?? 0);
 
   return LilyWeight.getWeightRaw(skillLevels, skillXP, cataCompletions, masterCataCompletions, cataXP, slayerXP);
