@@ -5,3 +5,4 @@ export * from "./bingo.js";
 export * from "./category.js";
 export * from "./armor.js";
 export * from "./equipment.js";
+export * from "./museum.js";

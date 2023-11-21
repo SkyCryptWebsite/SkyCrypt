@@ -283,7 +283,7 @@ export async function getProfile(
   }
 
   if (allSkyBlockProfiles.length == 0) {
-    throw new Error("Player has no SkyBlock profiles.");
+    throw new SkyCryptError("Player has no SkyBlock profiles.");
   }
 
   for (const profile of allSkyBlockProfiles) {
@@ -508,4 +508,59 @@ export async function getBingoProfile(
 
   console.debug(`${options.debugId}: getBingoProfile returned. (${Date.now() - timeStarted}ms)`);
   return profileData;
+}
+
+export async function getMuseum(
+  db,
+  paramProfile,
+  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` }
+) {
+  console.debug(`${options.debugId}: getMuseum called.`);
+  const timeStarted = Date.now();
+
+  const profileID = paramProfile.profile_id;
+  if (profileID.length !== 36) {
+    throw new SkyCryptError("Invalid profile ID.");
+  }
+
+  let museumData = await db.collection("museumCache").findOne({ profile_id: profileID });
+
+  if (!options.cacheOnly && (museumData == undefined || museumData.last_save < Date.now() - 1000 * 60 * 5)) {
+    try {
+      const params = {
+        key: credentials.hypixel_api_key,
+        profile: profileID,
+      };
+
+      const response = await retry(
+        async () => {
+          return await hypixel.get("skyblock/museum", { params });
+        },
+        { retries: 2 }
+      );
+
+      const { data } = response;
+
+      if (data === undefined || data.success === false) {
+        throw new SkyCryptError("Request to Hypixel API failed. Please try again!");
+      }
+
+      if (data.members === null || Object.keys(data.members).length === 0) {
+        return null;
+      }
+
+      museumData = { museum: data.members, last_save: Date.now() };
+      db.collection("museumCache").updateOne({ profile_id: profileID }, { $set: museumData }, { upsert: true });
+    } catch (e) {
+      console.log(e);
+      if (e?.response?.data?.cause != undefined) {
+        throw new SkyCryptError(`Hypixel API Error: ${e.response.data.cause}.`);
+      }
+
+      throw new SkyCryptError(`Hypixel API Error: Failed to fetch Museum data.`);
+    }
+  }
+
+  console.debug(`${options.debugId}: getMuseum returned. (${Date.now() - timeStarted}ms)`);
+  return museumData.museum;
 }

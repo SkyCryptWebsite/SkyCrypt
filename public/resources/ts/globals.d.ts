@@ -80,8 +80,7 @@ declare const items: {
   candy_bag: (ItemSlot | Item | Backpack)[];
   storage: (ItemSlot | Item | Backpack)[];
   bingo_card: (ItemSlot | Item | Backpack)[];
-
-  // [key: string]: (ItemSlot | Item | Backpack)[];
+  museum: (ItemSlot | Item | Backpack)[];
 };
 
 type StatName =
@@ -146,6 +145,7 @@ interface Item extends DisplayItem, ItemSlot {
   tag: ItemTag;
   texture_pack?: Pack;
   isInactive?: boolean;
+  containsItems: Item[];
 }
 
 interface ItemTag {

@@ -127,11 +127,12 @@ export const ALL_ITEMS = new Map(
     items.storage,
     items.hotm,
     items.bingo_card,
+    items.museum,
   ]
     .flat()
     .flatMap((item) => {
       if ("containsItems" in item) {
-        return [item, ...item.containsItems];
+        return [item, ...item.containsItems, ...item.containsItems.map((i) => i.containsItems ?? [])].flat();
       } else {
         return item;
       }

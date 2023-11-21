@@ -271,6 +271,11 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       debugId,
     });
 
+    const museum = await lib.getMuseum(db, profile, { cacheOnly, debugId });
+    for (const member in museum) {
+      profile.members[member].museum = museum[member];
+    }
+
     const paramBingo =
       profile.game_mode === "bingo" ? await lib.getBingoProfile(db, paramPlayer, { cacheOnly, debugId }) : null;
     const items = await stats.getItems(profile.members[profile.uuid], paramBingo, true, req.cookies.pack, {
@@ -321,41 +326,39 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
     );
   } catch (e) {
     if (e instanceof SkyCryptError === false) {
-      const webhookUrl = credentials.discordWebhook;
-      if (webhookUrl === undefined) {
-        return;
+      const webhookUrl = credentials.discord_webhook;
+      if (webhookUrl !== undefined) {
+        let description = "";
+        if (playerUsername) {
+          description += `Username: \`${playerUsername}\`\n`;
+        }
+
+        if (req.params) {
+          description += `Options: \`${JSON.stringify(req.params)}\`\n`;
+        }
+
+        if (paramProfile) {
+          description += `Profile: \`${paramProfile}\`\n`;
+        }
+
+        description += `Link: https://sky.shiiyu.moe/stats/${paramPlayer}${paramProfile ? `/${paramProfile}` : ""}\n`;
+        description += `\`\`\`${e.stack}\`\`\``;
+
+        const embed = {
+          title: "Error",
+          description: description,
+          color: 16711680,
+          fields: [],
+          footer: {
+            text: `by @duckysolucky`,
+            icon_url: "https://imgur.com/tgwQJTX.png",
+          },
+        };
+
+        axios.post(webhookUrl, { embeds: [embed] }).catch((error) => {
+          console.log(error);
+        });
       }
-
-      let description = "";
-      if (playerUsername) {
-        description += `Username: \`${playerUsername}\`\n`;
-      }
-
-      if (req.params) {
-        description += `Options: \`${JSON.stringify(req.params)}\`\n`;
-      }
-
-      if (paramProfile) {
-        description += `Profile: \`${paramProfile}\`\n`;
-      }
-
-      description += `Link: https://sky.shiiyu.moe/stats/${paramPlayer}${paramProfile ? `/${paramProfile}` : ""}\n`;
-      description += `\`\`\`${e.stack}\`\`\``;
-
-      const embed = {
-        title: "Error",
-        description: description,
-        color: 16711680,
-        fields: [],
-        footer: {
-          text: `by @duckysolucky`,
-          icon_url: "https://imgur.com/tgwQJTX.png",
-        },
-      };
-
-      axios.post(webhookUrl, { embeds: [embed] }).catch((error) => {
-        console.error("Error sending embed:", error);
-      });
     }
 
     const favorites = parseFavorites(req.cookies.favorite);

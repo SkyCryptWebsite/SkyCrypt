@@ -50,6 +50,8 @@ export class InventoryView extends LitElement {
       pagesize = 7 * 9;
     } else if (this.inventoryType === "bingo_card") {
       pagesize = 6 * 9;
+    } else if (this.inventoryType === "museum") {
+      pagesize = 6 * 9;
     }
 
     inventory.forEach((item: Item, index: number) => {

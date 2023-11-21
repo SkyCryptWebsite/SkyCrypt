@@ -798,8 +798,24 @@ export function generateItem(data) {
     data.rarity = data.rarity.toLowerCase();
   }
 
+  if (data.name && (data.display_name === undefined || data.display_name?.length === 0)) {
+    data.display_name = data.name;
+  }
+
+  if (!data.rarity && data.tier) {
+    data.rarity = data.tier.toLowerCase();
+  }
+
+  if (data.item_id) {
+    data.id = data.item_id;
+  }
+
+  if (data.damage) {
+    data.Damage = data.damage;
+  }
+
   // Setting tag.display.Name using display_name if not specified
-  if (data.display_name && !data.tag.display.Name) {
+  if (data.display_name && !data.tag?.display?.Name) {
     data.tag = data.tag ?? {};
     data.tag.display = data.tag.display ?? {};
     const rarityColor = data.rarity ? `§${RARITY_COLORS[data.rarity ?? "common"]}` : "";
