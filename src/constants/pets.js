@@ -565,8 +565,8 @@ export const PET_DATA = {
     type: "farming",
     maxTier: "legendary",
     maxLevel: 100,
-    emoji: "🐌"
-  }
+    emoji: "🐌",
+  },
 };
 
 export const PET_VALUE = {
