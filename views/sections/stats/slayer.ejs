@@ -43,7 +43,10 @@ function formatSlayerCoinsSpent(coins) {
       <div class="slayer-containers narrow-info-container-wrapper">
         <% const slayerNames = Object.keys(calculated.slayer.slayers).sort((a, b) => slayerOrder.indexOf(a) - slayerOrder.indexOf(b));
         for (const slayerName of slayerNames) {
-          const slayer = calculated.slayer.slayers[slayerName]; %>
+          const slayer = calculated.slayer.slayers[slayerName]; 
+          if (slayer.level.currentLevel === 0) {
+            continue;
+          } %>
 
           <div class="narrow-info-container slayer">
             <div class="narrow-info-header">
