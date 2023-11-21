@@ -63,9 +63,6 @@ const slayerEmojis = {
   vampire: "🩸"
 };
 
-const KUUDRA = {
-  head: "1f0239fb498e5907ede12ab32629ee95f0064574a9ffdff9fc3a1c8e2ec17587",
-}
 /*
 .########.##.....##.##....##..######..########.####..#######..##....##..######.
 .##.......##.....##.###...##.##....##....##.....##..##.....##.###...##.##....##
@@ -112,19 +109,17 @@ function isEnchanted(item) {
   return false;
 }
 
-function itemIcon(item, classes) {
-  %>
-<div <% if (item.texture_path) { %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
-      <%= classes.join(" ") %>
+function itemIcon(item, classes) { %>
+  <div <% if (item.texture_path) { %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
+    <%= classes.join(" ") %>
       item-icon
-      <% if (isEnchanted(item)) { %>is-enchanted <% } %>
-      <% if (item.texture_path) { %>custom-icon<% } %>
-      <% if (item.Damage != 0) { %>icon-<%= item.id %>_0<% } %>
+      <% if (isEnchanted(item)) { %> is-enchanted <% } %>
+      <% if (item.texture_path) { %> custom-icon <% } %>
+      <% if (item.Damage != 0) { %> icon-<%= item.id %>_0 <% } %>
       icon-<%= item.id %>_<%= item.Damage %>
     ">
-</div>
-<%
-}
+  </div>
+<% } 
 
 function jerriefy(rank) {
   if (extra.isFoolsDay) {
@@ -136,277 +131,175 @@ function jerriefy(rank) {
     rank = rank.replace("ADMIN", "SR JERRY");
     rank = rank.replace("YOUTUBE", "YERRY");
   }
+
   return rank;
 }
 
 function getMetaTitle() {
-	let metaTitle = calculated.display_name
-
-	if (calculated.display_emoji) {
-		metaTitle += calculated.display_emoji
-	}
+  let metaTitle = calculated.display_name;
+  if (calculated.display_emoji) {
+    metaTitle += calculated.display_emoji;
+  }
 
   switch (calculated.profile.game_mode) {
-    case 'ironman':
-      metaTitle += ` (${calculated.profile.cute_name}♻️)`
+    case "ironman":
+      metaTitle += ` (${calculated.profile.cute_name} ♻️)`;
       break;
 
-    case 'bingo':
-      metaTitle += ` (${calculated.profile.cute_name}🎲)`
+    case "bingo":
+      metaTitle += ` (${calculated.profile.cute_name} 🎲)`;
       break;
 
-    case 'island':
-      metaTitle += ` (${calculated.profile.cute_name}🌴)`
+    case "island":
+      metaTitle += ` (${calculated.profile.cute_name} 🌴)`;
       break;
 
     default:
-		  metaTitle += ` (${calculated.profile.cute_name})`
+      metaTitle += ` (${calculated.profile.cute_name})`;
       break;
   }
 
-	return metaTitle
+  return metaTitle;
 }
 
+
 function getMetaDescription() {
-	const description = []
-	const highestRaritySword = getHighestRaritySword()
+	let description = "";
 
 	// Base
-  /*
-	description.push(
-		`${calculated.display_name} has been playing SkyBlock for ${moment(
-			calculated.user_data.first_join.unix
-		).fromNow(true)}`
-	)
-  */
+  if (calculated.user_data?.first_join?.unix !== undefined) {
+	  description += `${calculated.display_name} has been playing SkyBlock for ${moment(calculated.user_data.first_join.unix).fromNow(true)}`;
+  }
+
+  const highestRaritySword = items.weapons?.highest_priority_weapon?.display_name;
 
 	// Armor set
-	if (items.armor_set) {
-		description.push(
-			highestRaritySword
-				? `, is wearing ${items.armor_set}`
-				: ` and is wearing ${items.armor_set}`
-		)
-	}
+  if (items.armor?.set_name !== undefined) {
+    if (highestRaritySword !== undefined) {
+      description += `, is wearing ${items.armor.set_name}`;
+    } else {
+      description += `and is wearing ${items.armor.set_name}`;
+    }
+  }
 
 	// Sword
-	if (highestRaritySword) {
-		description.push(
-			items.armor_set
-				? ` and fighting with ${helper.aOrAn(
-						highestRaritySword
-				  )} ${highestRaritySword}`
-				: ` and is fighting with ${helper.aOrAn(
-						highestRaritySword
-				  )} ${highestRaritySword}`
-		)
+	if (highestRaritySword !== undefined) {
+    description += items.armor?.set_name
+      ? ` and fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`
+      : ` and is fighting with ${helper.aOrAn(highestRaritySword)} ${highestRaritySword}`;
 	}
 
-	description.push('.')
-
-	return description.join('')
+	return description;
 }
 
 function getDescription() {
-	const description = []
-
-	// Fairy souls
-  /*
-	description.push(
-		`🧚 ${calculated.fairy_souls.collected}/${calculated.fairy_souls.total} Fairy Souls`,
-		'\n'
-	)
-  */
-
-	// Armor
-	if (items.armor_set) {
-		description.push(`🛡️ ${items.armor_set}`, '\n')
-	}
-
-	// Sword
-	const highestRaritySword = getHighestRaritySword()
-	if (highestRaritySword) {
-		description.push(`🗡️ ${highestRaritySword}`, '\n')
-	}
-
-	// Skills
-	if ('levels' in calculated) {
-		let { levels } = calculated
-
-		let skillsSorted = Object.keys(levels).sort(
-			(a, b) =>
-				levels[b].level +
-				levels[b].progress -
-				(levels[a].level + levels[a].progress)
-		)
-
-    /*
-		const skillAmount =
-			calculated.pets.filter((a) => a.active).length >= 1 ? 1 : 2
-
-		for (let i = 0; i < skillAmount; i++) {
-			const skill = skillsSorted[i]
-			const skillName = skill.charAt(0).toUpperCase() + skill.slice(1)
-
-			if (levels[skill].level == 0) {
-				break
-			}
-
-			description.push(
-				`${skillEmojis[skill]} ${skillName} ${levels[skill].level}`,
-				'\n'
-			)
-		}
-    */
-	}
-
-	// Pet
-  /*
-	if (calculated.pets.filter((a) => a.active).length >= 1) {
-		const activePet = calculated.pets.find((a) => a.active)
-
-		description.push(
-			`${activePet.emoji} ${helper.titleCase(activePet.rarity)} ${
-				activePet.display_name
-			} (Lvl ${activePet.level.level})`,
-			'\n'
-		)
-	}
-  */
-
-	// Line break
-	description.push('\n')
-
-	// Slayers
-  /*
-	if (calculated.slayer_coins_spent.total > 0) {
-		description.push('🤺 Slayer: ')
-
-		for (const slayer of slayerOrder) {
-			if (!calculated.slayers[slayer]) {
-				continue
-			}
-
-			const slayerInfo = calculated.slayers[slayer]
-			description.push(
-				`${slayerEmojis[slayer]} ${slayerInfo.level.currentLevel}  `
-			)
-		}
-		description.push('\n')
-	}
-  */
-
-  // Dungeons
-  /*
-  if ('dungeons' in calculated && calculated.dungeons.catacombs?.level?.level > 0) {
-    const line = []
-
-    if (calculated.dungeons.catacombs?.level) {
-      line.push(`${skillEmojis["dungeons"]} Catacombs: ${calculated.dungeons.catacombs.level.level}`)
-    }
-
-    if (calculated.dungeons.classes) {
-      const classesLine = []
-      for (const [dclass, data] of Object.entries(calculated.dungeons.classes)) {
-        classesLine.push(`${skillEmojis[dclass]} ${data.experience?.level ?? 0}`)
-      }
-      line.push(`(${classesLine.join('  ')})`)
-    }
-
-    description.push(line.join(' '), '\n', '\n')
-  }
-  */
+  let output = "";
 
   // Skyblock Level
   if (calculated.skyblock_level.xp !== 0 && calculated.skyblock_level.level !== 0) {
-    description.push(
-      `🌟 Skyblock Level: ${calculated.skyblock_level.level + calculated.skyblock_level.progress}`,
-      '\n'
-    )
+    output += `🌟 Skyblock Level: ${calculated.skyblock_level.level + calculated.skyblock_level.progress}\n`;
   }
 
+  // Armor
+  if (items.armor?.set_name !== undefined) {
+    output += `🛡️ ${items.armor.set_name}\n`;
+  }
 
+  // Sword
+  if (items.weapons?.highest_priority_weapon !== undefined) {
+    output += `🗡️ ${items.weapons.highest_priority_weapon.display_name}\n`;
+  }
 
-  /*
-	if (calculated.average_level || calculated.dungeons.class_average) {
+  // Skills
+  const skills = calculated.skills?.skills;
+  if (skills !== undefined) {
+    const skill = Object.keys(skills).sort((a, b) => skills[b].level.xp - skills[a].level.xp)[0];
+
+    if (skills[skill].level !== undefined) {
+      output += `${skillEmojis[skill]} ${helper.titleCase(skill)} ${skills[skill].level}\n`;
+    }
+  }
+
+  // Pet
+  if (calculated.pets?.pets !== undefined) {
+    const activePet = calculated.pets.pets.find((a) => a.active);
+    if (activePet !== undefined) {
+      output += `${activePet.emoji} ${helper.titleCase(activePet.rarity)} ${activePet.display_name} (Lvl ${activePet.level.level})\n`;
+    }
+  }
+
+  // Line break
+  output += "\n";
+
+  // Slayers
+  if (calculated.slayer?.total_slayer_xp > 0) {
+    output += "🤺 Slayer: ";
+
+    const slayerOrder = ["zombie", "spider", "wolf", "enderman", "vampire", "blaze"];
+    for (const slayer of slayerOrder) {
+      if (calculated.slayer.slayers[slayer] === undefined) {
+        continue;
+      }
+
+      const slayerInfo = calculated.slayer.slayers[slayer];
+      if (slayerInfo.level.level === 0) {
+        continue;
+      }
+
+      output += `${slayerEmojis[slayer]} ${slayerInfo.level.currentLevel} `;
+    }
+
+    output += "\n";
+  }
+
+  // Dungeons
+  if (calculated.dungeons !== undefined) {
+    const catacombs = calculated.dungeons.catacombs?.level?.level ?? 0;
+    if (catacombs > 0) {
+      output += `${skillEmojis["dungeons"]} Catacombs: ${catacombs}\n`;
+    }
+
+    const classes = calculated.dungeons?.classes?.classes;
+    if (classes !== undefined) {
+      const classesLine = [];
+      for (const [dclass, data] of Object.entries(classes)) {
+        output += `${skillEmojis[dclass]} ${data.experience?.level ?? 0}\n`;
+      }
+    }
+
+    output += "\n";
+  }
+
+  output += "\n";
+
+  if (calculated.skills?.averageSkillLevel || calculated.dungeons?.classes?.average_level) {
     // Skill Average
-    if (calculated.average_level) {
-      description.push(
-        `📚 Avg Skill Level: ${
-          Math.floor(calculated.average_level * 10) / 10
-        } `
-      )
+    if (calculated.skills.averageSkillLevel !== undefined) {
+      output += `📚 Avg Skill Level: ${calculated.skills.averageSkillLevel.toFixed(2)}\n`;
     }
 
     // Dungeons classs average
-    if (calculated.dungeons.class_average) {
-      description.push(
-        `⚔️  Avg Class Level: ${
-          Math.floor(calculated.dungeons.class_average.avrg_level_with_progress * 10) / 10
-        } `
-      )
+    if (calculated.dungeons?.classes?.average_level) {
+      output += `⚔️  Avg Class Level: ${calculated.dungeons?.classes?.average_level.toFixed(2)}\n`;
     }
 
-    description.push('\n')
-	}
-  */
-
-	// Weights
-  /*
-	if (calculated.weight) {
-		description.push(
-			`💪 Senither Weight: ${Math.floor(
-				calculated.weight.senither.overall
-			).toLocaleString()} `,
-			`💪 Lily Weight: ${Math.floor(
-				calculated.weight.lily.total
-			).toLocaleString()}`
-		)
-		description.push('\n')
-	}
-  */
-
-	// Networth, Bank & purse
-  if (calculated.networth.noInventory === false) {
-      description.push(
-        `💸 Networth: ${helper.formatNumber(calculated.networth.networth, true)} `
-      )
+    output += "\n";
   }
 
-	if (calculated.bank) {
-		description.push(
-			`🏦 Bank: ${helper.formatNumber(calculated.bank, true)} `
-		)
-	}
-	description.push(
-    `💰 Purse: ${helper.formatNumber(calculated.purse, true)}`
-  )
+  // Networth, Bank & purse
+  if (calculated.networth.noInventory === false) {
+    output += `💸 Networth: ${helper.formatNumber(calculated.networth.networth, true)} \n`;
+  }
 
-  // Done!
-	return description.join('')
-}
+  if (calculated.currencies?.bank !== undefined) {
+    output += `🏦 Bank: ${helper.formatNumber(calculated.currencies.bank, true)} \n`;
+  }
 
-function getHighestRaritySword() {
-	let highestRaritySword
+  if (calculated.currencies.purse !== undefined) {
+    output += `💰 Purse: ${helper.formatNumber(calculated.currencies.purse, true)}\n`;
+  }
 
-	if (!items.highest_rarity_sword) {
-		return highestRaritySword
-	}
-
-	highestRaritySword = items.highest_rarity_sword.display_name
-
-	if (items.highest_rarity_sword?.tag?.ExtraAttributes?.id == 'MIDAS_SWORD') {
-		highestRaritySword = highestRaritySword.replace(
-			'Midas',
-			`${helper.formatNumber(
-				items.highest_rarity_sword.tag.ExtraAttributes.winning_bid,
-				true,
-				1
-			)} Midas`
-		)
-	}
-
-	return highestRaritySword
+  return output;
 }
 
 /*
@@ -517,7 +410,7 @@ const metaDescription = getMetaDescription()
         <%- extra.twemoji.parse("🌴") %>
         <% } %>
         <ul id="other_profiles">
-          <% for(let profile_id in calculated.profiles) { %>
+          <% for (let profile_id in calculated.profiles) { %>
           <% let _profile = calculated.profiles[profile_id]; %>
           <li>
             <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>">
@@ -699,15 +592,13 @@ const metaDescription = getMetaDescription()
       <%- include('./sections/stats/misc.ejs', { rarityOrder }); %>
     </div>
   </main>
+
   <%- include('../includes/footer'); %>
+
   <script>
     const items = JSON.parse( `<%- JSON.stringify(items).replaceAll('\\', '\\\\') %>` );
     const calculated = JSON.parse( `<%- JSON.stringify(calculated).replaceAll('\\', '\\\\') %>` );
-    <%
-      const clientConstants = {
-        MAX_FAVORITES: constants.MAX_FAVORITES,
-      }
-    %>
+    <% const clientConstants = { MAX_FAVORITES: constants.MAX_FAVORITES } %>
     const constants = JSON.parse( `<%- JSON.stringify(clientConstants).replaceAll('\\', '\\\\') %>` );
   </script>
 </body>

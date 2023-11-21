@@ -81,14 +81,14 @@
         <p class="stat-sub-header"><%= activePet ? 'Other Pets' : '' %></p>
 
         <div class="pieces">
-          <% for(const [index, pet] of uniquePets.entries()) {
+          <% for (const [index, pet] of uniquePets.entries()) {
             if (pet.active === true) { 
               continue;
             } %>
 
             <div tabindex="0" data-pet-index="<%= calculated.pets.pets.indexOf(pet) %>" class="other-pet rich-item piece piece-<%= pet.rarity %>-bg <%= getRarityUpgradeClass(pet) %>">
             
-              <% if(rarityOrder.indexOf(pet.rarity) <= 4) { %>
+              <% if (rarityOrder.indexOf(pet.rarity) <= 4) { %>
                 <div class="piece-shine"></div>
               <% } %>
 
@@ -105,14 +105,14 @@
         <button class="stat-sub-header extender" aria-controls="showmore-pets" aria-expanded="false">Show More Pets</button>
         <div class="pieces extendable" id="showmore-pets">
           <div class="pieces"> 
-            <% for(const [index, pet] of otherPets.entries()) {
+            <% for (const [index, pet] of otherPets.entries()) {
               if (pet.active === true) { 
                 continue;
               } %>
 
               <div tabindex="0" data-pet-index="<%= calculated.pets.pets.indexOf(pet) %>" class="other-pet rich-item piece piece-<%= pet.rarity %>-bg <%= getRarityUpgradeClass(pet) %>">
             
-                <% if(rarityOrder.indexOf(pet.rarity) <= 4) { %>
+                <% if (rarityOrder.indexOf(pet.rarity) <= 4) { %>
                   <div class="piece-shine"></div>
                 <% } %>
 

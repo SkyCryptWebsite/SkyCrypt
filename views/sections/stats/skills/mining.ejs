@@ -29,7 +29,7 @@ function formatNucleusCrystal(crystal, state) {
 }
 
 function itemIcon(item, classes) { %>
-  <div <% if(item.texture_path){ %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
+  <div <% if (item.texture_path) { %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
     <%= classes.join(" ") %>
       item-icon
       <% if (isEnchanted(item)) { %> is-enchanted <% } %>
@@ -69,7 +69,7 @@ function itemIcon(item, classes) { %>
     <div class="pieces">
       <% for (const item of items.mining_tools.filter(a => !a.hidden)) { %>
         <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
-          <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
+          <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
             <div class="piece-shine"></div>
           <% } %>
 

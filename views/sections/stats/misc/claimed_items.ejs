@@ -8,7 +8,7 @@
   </div>
 
   <p class="stat-raw-values">
-    <% for(const key in calculated.misc.claimed_items) {
+    <% for (const key in calculated.misc.claimed_items) {
       const timestamp = calculated.misc.claimed_items[key]; %>
 
       <span class="stat-name"><%= helper.titleCase(key.replace("_", " ")); %>: </span>

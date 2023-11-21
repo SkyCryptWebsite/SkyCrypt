@@ -42,7 +42,7 @@
     <% } %>
 
     <!-- Skills (Total Skill XP, Average Skill Level, Average Skill Level without progress)-->
-    <% if('skills' in calculated && 'runecrafting' in calculated.skills.skills) { %>
+    <% if ('skills' in calculated && 'runecrafting' in calculated.skills.skills) { %>
       <div class="additional-stat">
         <span data-tippy-content="
           <span class='stat-name'>Total Skill XP: </span>
@@ -53,7 +53,7 @@
           <span class='stat-value'><%= calculated.skills.averageSkillLevel.toFixed(2) %></span>
           <div class='tippy-explanation'>Average skill level over all skills except Social and Runecrafting<% if ('runecrafting' in calculated.skills.skills) { %>, includes progress to next level. <% } %></div>
 
-          <% if('runecrafting' in calculated.skills.skills){ %>
+          <% if ('runecrafting' in calculated.skills.skills) { %>
             <span class='stat-name'>Average Level without progress: </span>
             <span class='stat-value'><%= calculated.skills.averageSkillLevelWithoutProgress.toFixed(2) %></span>
 

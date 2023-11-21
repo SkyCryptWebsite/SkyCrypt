@@ -7,7 +7,7 @@
     <span>enchanting</span>
   </div>
 
-  <% if(calculated.enchanting.unlocked === false) { %>
+  <% if (calculated.enchanting.unlocked === false) { %>
     <p class="stat-raw-values">
       <%= calculated.display_name %> hasn't done any experiments yet.
     </p>
@@ -33,7 +33,7 @@
               <% } %>
             </p>
 
-            <% for(let tier in game_data.tiers) {
+            <% for (let tier in game_data.tiers) {
               const tier_data = game_data.tiers[tier]; %>
               <hr>
               <div class="chip">

@@ -3,7 +3,7 @@
 const badgeOrder = ["gold", "silver", "bronze"];
 
 function itemIcon(item, classes) { %>
-  <div <% if(item.texture_path){ %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
+  <div <% if (item.texture_path) { %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
     <%= classes.join(" ") %>
       item-icon
       <% if (isEnchanted(item)) { %> is-enchanted <% } %>
@@ -74,7 +74,7 @@ function itemIcon(item, classes) { %>
   <!-- Medals -->
   <% if (farming.talked && farming.contests.attended_contests > 0) {%>
     <p class="stat-raw-values">
-      <% for(const badge of badgeOrder) { %>
+      <% for (const badge of badgeOrder) { %>
         <span data-tippy-content='
           <span class="stat-name">Current: </span><span class="stat-value"><%= farming.current_badges[badge].toLocaleString() %> Medals</span><br>
           <span class="stat-name">Total: </span><span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %> Medals</span>
@@ -93,9 +93,9 @@ function itemIcon(item, classes) { %>
   <% } %>
 
   <!-- Farming Tools -->
-  <% if(items.farming_tools.length > 0){ %>
+  <% if (items.farming_tools.length > 0) { %>
     <p class="stat-sub-header">Farming Tools</p>
-    <% if(items.highest_rarity_farming_tool){ %>
+    <% if (items.highest_rarity_farming_tool) { %>
       <p class="stat-raw-values">
         <span class="stat-name">Active Tool: </span>
         <span class="stat-active-hoe stat-value"><%- helper.renderLore(items.highest_rarity_farming_tool.tag.display.Name) %></span>
@@ -109,7 +109,7 @@ function itemIcon(item, classes) { %>
     <div class="pieces">
       <% for (const item of items.farming_tools.filter(a => !a.hidden)) { %>
         <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
-          <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
+          <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
             <div class="piece-shine"></div>
           <% } %>
 
@@ -121,13 +121,13 @@ function itemIcon(item, classes) { %>
     
   <!-- Farming Crops -->
   <% if (farming.talked) { %>
-    <% if(Object.keys(calculated.farming.crops).length > 0){ %>
+    <% if (Object.keys(calculated.farming.crops).length > 0) { %>
     <button class="stat-sub-header extender" aria-controls="farming-crops" aria-expanded="false">Farming Crops</button>
     <div class="stat-farming-crops extendable" id="farming-crops">
       <%
       const crops = Object.values(calculated.farming.crops).sort((a, b) => b.contests - a.contests);
 
-      for(const crop of crops){
+      for (const crop of crops) {
         if (crop.attended === false) {
           continue;
         }

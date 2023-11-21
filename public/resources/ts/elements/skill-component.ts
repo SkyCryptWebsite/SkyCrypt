@@ -62,7 +62,7 @@ export class SkillComponent extends LitElement {
       </div>
       <div class="skill-bar" data-skill="${skillName}">
         <div class="skill-progress-bar" style="--progress: ${level.level == level.levelCap ? 1 : level.progress}"></div>
-        ${this.isAPIEnabled(this.type, this.skill, level)
+        ${this.isAPIEnabled()
           ? html`<div class="skill-progress-text">
               ${this.hovering ? this.getHoverText(level, this.type) : this.getMainText(level, this.type)}
             </div>`
@@ -103,7 +103,6 @@ export class SkillComponent extends LitElement {
    */
   private getMainText(level: Level, type: string): string {
     let mainText = formatNumber(level.xpCurrent, true);
-    console.log(type, level);
 
     if (type === "skyblock_level") {
       level.progress =
@@ -159,27 +158,7 @@ export class SkillComponent extends LitElement {
     return hoverText;
   }
 
-  /**
-   * @returns the progress to maxing the skill
-   */
-  private getProgress(level: Level, type: string, global?: boolean): number {
-    console.log(level, type, global);
-    if (type === "skyblock_level") {
-      if (level.level === level.maxLevel && level.maxExperience) {
-        return level.xpCurrent / level.maxExperience;
-      }
-
-      return level.progress;
-    }
-
-    if (global === true) {
-      return level.progress ?? Math.min(level.xpCurrent / level.xpForNext, 1);
-    }
-
-    return level.level / level.maxLevel;
-  }
-
-  private isAPIEnabled(type: string, skill: string, level: Level): boolean {
+  private isAPIEnabled(): boolean {
     if (this.type === "skill" && "runecrafting" in calculated.skills.skills === false) {
       return false;
     }

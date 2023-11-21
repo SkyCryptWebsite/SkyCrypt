@@ -1,5 +1,5 @@
 <% function itemIcon(item, classes) { %>
-  <div <% if(item.texture_path){ %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
+  <div <% if (item.texture_path) { %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
     <%= classes.join(" ") %>
       item-icon
       <% if (isEnchanted(item)) { %> is-enchanted <% } %>
@@ -17,14 +17,14 @@
     <% if (items.armor.armor.length == 0) { %>
       <div class="no-access"><%= calculated.display_name %> doesn't have any armor equipped.</div>
     <% } else { %>
-      <% if(items.armor.set_name) { %>
+      <% if (items.armor.set_name) { %>
         <p class="stat-raw-values">
           <span class="stat-name">Set: </span><span class="stat-value piece-<%= items.armor.set_rarity %>-fg"><%= items.armor.set_name %></span>
         </p>
       <% } %>
 
       <div class="pieces">
-        <% for(const item of items.armor.armor.slice().reverse()){ %>
+        <% for (const item of items.armor.armor.slice().reverse()) { %>
           <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
             <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
               <div class="piece-shine"></div>
@@ -39,13 +39,13 @@
     <% } %>
 
     <p class="stat-sub-header">Equipment</p>
-    <% if(Object.keys(items.equipment.equipment).length == 0){ %>
+    <% if (Object.keys(items.equipment.equipment).length == 0) { %>
       <div class="no-access"><%= calculated.display_name %> doesn't have any equipment equipped.</div>
     <% } else { %>
       <div class="pieces">
-        <% for(const item of items.equipment.equipment.slice().reverse()){ %>
+        <% for (const item of items.equipment.equipment.slice().reverse()) { %>
           <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
-            <% if(rarityOrder.indexOf(item.rarity) <= 4){ %>
+            <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
               <div class="piece-shine"></div>
               <% } %>
 

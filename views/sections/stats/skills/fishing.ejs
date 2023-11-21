@@ -54,7 +54,7 @@ const seaCreatures = [
 ];
 
 function itemIcon(item, classes) { %>
-  <div <% if(item.texture_path){ %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
+  <div <% if (item.texture_path) { %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
     <%= classes.join(" ") %>
       item-icon
       <% if (isEnchanted(item)) { %> is-enchanted <% } %>
