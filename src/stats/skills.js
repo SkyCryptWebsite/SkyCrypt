@@ -8,7 +8,7 @@ async function getLevels(userProfile, profileMembers, hypixelProfile, levelCaps)
     const SKILL = userProfile.player_data.experience;
 
     const socialExperience = Object.keys(profileMembers).reduce((a, b) => {
-      return a + profileMembers[b].player_data.experience?.SKILL_SOCIAL || 0;
+      return a + profileMembers[b].player_data?.experience?.SKILL_SOCIAL || 0;
     }, 0);
 
     Object.assign(skillLevels, {
