@@ -101,7 +101,8 @@ export async function getDungeons(userProfile, hypixelProfile) {
     selected_class: dungeons.selected_dungeon_class ?? "none",
     classes: {},
   };
-  for (const className of Object.keys(dungeons.player_classes)) {
+
+  for (const className of Object.keys(dungeons?.player_classes ?? {})) {
     const data = dungeons.player_classes[className];
     if (isNaN(data.experience) === true) {
       data.experience = 0;
