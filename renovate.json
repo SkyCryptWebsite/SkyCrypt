@@ -9,17 +9,16 @@
   "semanticCommits": "enabled",
   "schedule": ["* 0 * * *"],
   "timezone": "UTC",
+  "includeForks": true,
   "packageRules": [
     {
       "matchDepTypes": ["engines"],
       "enabled": false
     },
     {
-      "matchDepType": "direct",
       "matchPackageNames": ["skyhelper-networth"],
-      "updateTypes": ["bump"],
-      "automerge": true,
-      "schedule": "after 5pm every weekday"
+      "updateTypes": ["minor"],
+      "automerge": true
     }
   ]
 }
