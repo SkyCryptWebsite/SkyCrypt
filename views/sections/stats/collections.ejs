@@ -1,0 +1,48 @@
+<div class="stat-container stat-collections">
+  <a class="stat-anchor" id="Collections"></a>
+  <h2 class="stat-header">Collections</h2>
+  <div class="stat-content">
+
+    <% max = calculated.collections.maxedCollections === calculated.collections.totalCollections ? 'golden-text' : ''; %>
+    <span class="stat-name <%= max %>">Maxed Collections: </span>
+    <span class="stat-value <%= max %>"><%= calculated.collections.maxedCollections %> / <%= calculated.collections.totalCollections %></span>
+
+    <% for (const [category, categoryData] of Object.entries(calculated.collections)) { %>
+      <% if (categoryData.collections === undefined) continue; %>
+      <div class="category-header">
+        <div class="category-icon">
+          <div class="item-icon <%= skillItems[category.toLowerCase()] ?? "icon-166_0" %>"></div>
+        </div>
+        <span> <%= category %> </span>
+        <% if (categoryData.maxTiers === categoryData.totalTiers) { %>
+          <span class="category-header-maxed">max!</span>
+        <% } else { %>
+          <span class="category-header-detail">(<%= categoryData.maxTiers %> / <%= categoryData.totalTiers %> max)</span>
+        <% } %>
+      </div>
+      <div class="collections">  
+        <% for (const collection of categoryData.collections) { 
+          let amountsTooltip = "";
+
+          if (collection.amounts !== undefined) { 
+            amountsTooltip = collection.amounts.map(amount => `<span class="stat-name">${amount.username}: </span><span class="stat-value">${amount.amount.toLocaleString()}</span>`).join('<br>') + `<br><br><span class="stat-name">Total: </span><span class="stat-value">${collection.totalAmount.toLocaleString()}</span>`;
+          } %>
+          <div class="chip" data-tippy-content='<%= amountsTooltip %>' data-missing="<%= collection.totalAmount === 0 %>">
+            <div class="chip-icon-wrapper">
+              <div style="background-image:url(<%= collection.texture %>)" class="item-icon custom-icon"></div>
+            </div>
+            <div class="chip-text">
+              <div class="collection-name <%= collection.tier == collection.maxTier ? 'max-stat' : '' %>">
+                <span class="stat-name"> <%= collection.name %> </span>
+                <span class="stat-value"> <%= collection.tier %> </span>
+              </div>
+              <div class="collection-amount">
+                <span class="stat-name">Amount: </span> <span class="stat-value"><%= collection.amount.toLocaleString() %></span>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+</div>

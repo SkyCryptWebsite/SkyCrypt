@@ -32,7 +32,7 @@ Before contributing to SkyCrypt, make sure you install the development environme
 3. Go to `developer.hypixel.net/dashboard`. Click `Create API Key` and copy the result.
 4. Open `credentials.json` and input your Hypixel API key into the `hypixel_api_key` field.
 5. In the `dbUrl` field, input your MongoDB url. In the `dbName` field, input the name of the database you would like to use.
-6. (optional) If you are not using the default Redis port or you are using Redis remotely, you can configure the Redis URL with the `redisUrl` field in `credentials.json`
+6. (optional) If you are not using the default Redis port or you are using Redis remotely, you can configure the Redis URL with the `redisUrl` field in `credentials.json`. Also `discord_webhook` if you want to send error remotely, useful in production to detect bugs.
 7. Making sure your Mongo and Redis instances are running, run `pnpm start` for production or `pnpm dev` for development in the project directory. You should now be able to access the site at http://localhost:32464/
 
 ### VS-Code

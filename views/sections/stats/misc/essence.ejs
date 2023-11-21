@@ -1,0 +1,57 @@
+<div class="category-header">
+  <div class="category-icon">
+    <div class="item-icon custom-icon" style="background-image: url(/head/1e5574a4ef94ef4ca300d02f644d98be07dbfba7df78808e8a9a021b067d996d)"></div>
+  </div>
+  <span>Essence</span>
+</div>
+
+<div class="collections">
+  <% for (const [key, value] of Object.entries(calculated.dungeons.essence)) { %>
+    <div class="chip" data-missing="<%= value === 0 %>">
+      <div class="chip-icon-wrapper">
+        <div style="background-image:url('<%= constants.ESSENCE[key].head %>')" class="item-icon custom-icon"></div>
+      </div>
+
+      <div class="chip-text">
+        <div class="collection-name">
+            <span class="stat-name"><%= constants.ESSENCE[key].name %></span>
+        </div>
+        <div class="collection-amount">
+            <span class="stat-name">Amount: </span>
+            <span class="stat-value"><%= value.toLocaleString() %></span>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</div>
+
+<% if ("perks" in calculated) { %>
+  <button class="stat-sub-header extender" aria-controls="essence-shop" aria-expanded="false">Essence Shop</button>
+  <div class="essence-shop extendable" id="essence-shop">
+    <div>
+      <% for (const essence of Object.keys(constants.ESSENCE_SHOP)) { %>
+        <div class="category-icon">
+          <div style="background-image:url('<%= constants.ESSENCE[essence].head %>')" class="item-icon custom-icon"></div>
+        </div>
+
+        <span class="stat-sub-header"><%= helper.capitalizeFirstLetter(essence) %> Shop</span><br>
+        <br>
+
+        <% for (const perk of Object.keys(constants.ESSENCE_SHOP[essence])) {
+          const essenceShop = constants.ESSENCE_SHOP[essence][perk];
+          const playerPerk = Object.keys(calculated.perks).find(p => p === perk); %>
+
+          <div class="chip-text">
+            <span data-tippy-content="<%= essenceShop.description %>">
+              <% max = calculated.perks[playerPerk] >= essenceShop.maxLevel ? 'golden-text' : '' %>
+              <span class="stat-name <%= max %>"><%= essenceShop.name %>: </span>
+              <span class="stat-value <%= max %>"><%= calculated.perks[playerPerk] || 0 %></span>
+            </span>
+            <br>
+          </div>
+        <% } %>
+        <br>
+      <% } %>
+    </div>
+  </div>
+<% } %>

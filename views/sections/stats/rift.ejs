@@ -1,0 +1,85 @@
+
+<div class="stat-container stat-collections">
+  <a class="stat-anchor" id="Rift"></a>
+  <h2 class="stat-header">Rift</h2>
+  <div class="stat-content">
+    <!-- Motes Earned in the Rift -->
+    <span data-tippy-content="
+      <span class='stat-name'>Lifetime Motes: </span><span class='stat-value'><%= Math.floor(calculated.rift.motes.lifetime).toLocaleString() %></span>
+      <div class='tippy-explanation'>Total Motes earned in Rift.</div>
+      <span class='stat-name'>Mote Orbs: </span><span class='stat-value'><%= Math.floor(calculated.rift.motes.orbs).toLocaleString() %></span>
+      <div class='tippy-explanation'>Amount of Mote Orbs player has picked up inside of the Rift.</div>
+    ">
+      <span class="stat-name">Motes: </span>
+      <span class="stat-value"><%= Math.floor(calculated.rift.motes.purse).toLocaleString() %></span>
+    </span>
+    <br>
+
+    <!-- Enigma Souls -->
+    <span data-tippy-content="
+      <span class='stat-name'>Progress: </span><span class='stat-value'><%= (calculated.rift.enigma.souls / calculated.rift.enigma.total_souls * 100).toFixed(2) %>%</span>
+      <div class='tippy-explanation'>Percentage of Enigma Souls found.</div>
+    ">
+      <% max = calculated.rift.enigma.souls === calculated.rift.enigma.total_souls ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Enigma Souls: </span>
+      <span class="stat-value <%= max %>"><%= calculated.rift.enigma.souls %> / <%= calculated.rift.enigma.total_souls %></span>
+    </span>
+    <br>
+
+    <!-- McGrubber's Burgers -->
+    <% max = calculated.rift.castle.grubber_stacks === calculated.rift.castle.max_burgers ? 'golden-text' : '' %>
+    <span class="stat-name <%= max %>">McGrubber's Burgers: </span>
+    <span class="stat-value <%= max %>"><%= calculated.rift.castle.grubber_stacks %> / <%= calculated.rift.castle.max_burgers %></span>
+    <br>
+
+    <!-- Porhtals Unlocked -->
+    <p class="stat-sub-header">Porhtal</p>
+    <% const porhtalsUnlocked = calculated.rift.wither_cage.killed_eyes.filter((a) => a.unlocked === true).length %>
+    <% max = porhtalsUnlocked === calculated.rift.wither_cage.killed_eyes.length ? 'golden-text' : '' %>
+    <span class="stat-name <%= max %>">Eyes Unlocked: </span><span class="stat-value <%= max %>"><%= porhtalsUnlocked %></span><br><br>
+    <div class="collections">
+      <% for (const portal of calculated.rift.wither_cage.killed_eyes) { %>
+        <div class="chip" data-missing="<%= portal.unlocked === false %>">
+          <div class="chip-icon-wrapper">
+            <div style="background-image:url('/head/<%= portal.texture %>')" class="item-icon custom-icon"></div>
+          </div>
+
+          <div class="chip-text">
+            <div class="collection-name"><span class="stat-name"><%= portal.name %> </span></div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+
+
+    <!-- Timecharms Obtained -->
+    <p class="stat-sub-header">Timecharms</p>
+    <% max = calculated.rift.timecharms.obtained_timecharms === calculated.rift.timecharms.timecharms.length ? 'golden-text' : '' %>
+    <span class="stat-name <%= max %>">Timecharms obtained: </span>
+    <span class="stat-value <%= max %>"><%= calculated.rift.timecharms.obtained_timecharms %></span>
+    <br>
+    <br>
+
+    <div class="collections">
+      <% for (const timecharm of calculated.rift.timecharms.timecharms) { %>
+        <div class="chip" data-missing="<%= timecharm.unlocked === false %>">
+          <div class="chip-icon-wrapper">
+            <div class="item-icon icon-<%= timecharm.id %>_<%= timecharm.damage %>"></div>
+          </div>
+
+          <div class="chip-text">
+            <% max = timecharm.unlocked === true ? 'golden-text' : '' %>
+            <div class="collection-name <%= max %>"><span class="stat-name"><%= timecharm.name %> </span></div>
+            <div class="collection-amount">
+              <% if (timecharm.unlocked === true) { %>
+                <span class="stat-name">Obtained: </span><span class="stat-value" data-tippy-content='Obtained on <local-time timestamp="<%= timecharm.unlocked_at  %>"></local-time>'><%= moment(timecharm.unlocked_at).fromNow() %></span>
+              <% } else { %>
+                <span class="stat-name">Not Obtained!</span>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      <% } %>   
+    </div>
+  </div>
+</div>

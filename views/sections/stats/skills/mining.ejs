@@ -1,0 +1,242 @@
+<% 
+
+function formatNucleusCrystal(crystal, state) {
+  if (!state) {
+    state = 'NOT_FOUND'
+  }
+  let formatted = state.split('_').join(' ').trim()
+  formatted = helper.titleCase(formatted)
+
+  let color = 'f';
+  switch (state) {
+    case 'NOT_FOUND':
+      color = 'c'
+      break;
+    case 'FOUND':
+      color = 'e'
+      break;
+    case 'PLACED':
+      color = 'a'
+      break;
+  }
+
+  // Jasper and Ruby do not have a PLACED state
+  if (['jasper', 'ruby'].includes(crystal) && state === 'FOUND') {
+    color = 'a'
+  }
+
+  return `<span style='color: var(--§${color});'>${formatted}</span>`
+}
+
+function itemIcon(item, classes) { %>
+  <div <% if (item.texture_path) { %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
+    <%= classes.join(" ") %>
+      item-icon
+      <% if (isEnchanted(item)) { %> is-enchanted <% } %>
+      <% if (item.texture_path) { %> custom-icon <% } %>
+      <% if (item.Damage != 0) { %> icon-<%= item.id %>_0 <% } %>
+      icon-<%= item.id %>_<%= item.Damage %>
+    ">
+  </div>
+<% } %>
+
+
+<div class="stat-mining">
+  <div class="category-header">
+    <div class="category-icon">
+      <div class="item-icon icon-274_0"></div>
+    </div>
+    <span>mining</span>
+  </div>
+
+  <% const mining = calculated.mining; %>
+
+  <!-- Currently Active Tool -->
+  <% if (items.mining_tools.length > 0) { %>
+    <p class="stat-sub-header">Mining Tools</p>
+    <% if (items.highest_rarity_mining_tool) { %>
+      <p class="stat-raw-values">
+        <span class="stat-name">Active Tool: </span>
+        <span class="stat-active-pickaxe stat-value"><%- helper.renderLore(items.highest_rarity_mining_tool.tag.display.Name) %></span>
+      </p>
+    <% } else { %>
+      <p class="stat-raw-values">
+        <span class="stat-name">Active Tool: </span><span class="stat-active-pickaxe stat-value piece-common-fg">None</span>
+      </p>
+    <% } %>
+
+    <!-- Mining Tools -->
+    <div class="pieces">
+      <% for (const item of items.mining_tools.filter(a => !a.hidden)) { %>
+        <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
+          <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
+            <div class="piece-shine"></div>
+          <% } %>
+
+          <% itemIcon(item, ['piece-icon']); %>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+
+  <% if (mining.core === undefined || calculated.visited_modes.includes("crystal_hollows") === false || calculated.visited_modes.includes("mining_3") === false) { %>
+    <p class="no-access">
+      <%= calculated.display_name %> hasn't visited Dwarven Mines or Crystal Hollows yet.
+    </p>
+  <% } else { %>
+    <p class="stat-sub-header">Dwarven Mines & Crystal Hollows</p>
+    <p class="stat-raw-values">
+      <!-- Commissions Milestone -->
+      <% max = mining.commissions.milestone == constants.COMMISSIONS_MILESTONE ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Commissions Milestone:</span>
+      <span class="stat-value <%= max %>"><%= mining.commissions.milestone.toLocaleString() %></span>
+      <br>
+
+      <!-- Commission Completions -->
+      <span class="stat-name">Commissions:</span>
+      <span class="stat-value" data-tippy-content="Commissions from achievements across profiles"><%= mining.commissions.completions.toLocaleString() %></span>
+      <br>
+
+      <!-- Crystal Hollows Pass -->
+      <% const chpass = mining.core.crystal_hollows_last_access > Date.now() - 5*60*60*1000 %>
+      <% max = chpass ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Crystal Hollows Pass:</span>
+      <span class="stat-value <%= max %>" data-tippy-content="
+        <span class='stat-name'>Last purchased:</span>
+        <span class='stat-value'>
+        <%= mining.core.crystal_hollows_last_access > 0 ? `<local-time timestamp='${mining.core.crystal_hollows_last_access}'></local-time>` : "Never" %>
+        </span>
+      ">
+        <%= chpass ? 'Purchased' : 'Expired' %>
+      </span>
+      <br>
+
+      <!-- Crystal Nucleus -->
+      <% const delivered_parts = mining.core.crystal_nucleus?.precursor?.parts_delivered || [];  
+
+      const precursor_parts = {};
+      for (const [partId, partName] of Object.entries(constants.PRECURSOR_PARTS)) {
+        precursor_parts[partName] = delivered_parts.indexOf(partId) > -1;
+      } %>
+
+      <span class="stat-name">Crystal Nucleus:</span>
+      <span class="stat-value" data-tippy-content="
+        <span class='stat-name'>Crystals:</span>
+        <br>
+        <span class='stat-name'>- Jade:</span>
+        <span class='stat-value'><%= formatNucleusCrystal('jade', mining.core.crystal_nucleus.crystals?.jade_crystal?.state) %></span>
+        <br>
+        <span class='stat-name'>- Amber:</span>
+        <span class='stat-value'><%= formatNucleusCrystal('amber', mining.core.crystal_nucleus.crystals?.amber_crystal?.state) %></span>
+        <br>
+        <span class='stat-name'>- Amethyst:</span>
+        <span class='stat-value'><%= formatNucleusCrystal('amethyst', mining.core.crystal_nucleus.crystals?.amethyst_crystal?.state) %></span>
+        <br>
+        <span class='stat-name'>- Sapphire:</span>
+        <span class='stat-value'><%= formatNucleusCrystal('sapphire', mining.core.crystal_nucleus.crystals?.sapphire_crystal?.state) %></span>
+        <br>
+        <span class='stat-name'>- Topaz:</span>
+        <span class='stat-value'><%= formatNucleusCrystal('topaz', mining.core.crystal_nucleus.crystals?.topaz_crystal?.state) %></span>
+        <br>
+        <br>
+        <span class='stat-name'>Other Crystals:</span>
+        <br>
+        <span class='stat-name'>- Ruby:</span>
+        <span class='stat-value'><%= formatNucleusCrystal('ruby', mining.core.crystal_nucleus.crystals?.ruby_crystal?.state) %></span>
+        <br>
+        <span class='stat-name'>- Jasper:</span>
+        <span class='stat-value'><%= formatNucleusCrystal('jasper', mining.core.crystal_nucleus.crystals?.jasper_crystal?.state) %></span>
+        <% if ((mining.core.crystal_nucleus.crystals?.sapphire_crystal?.state || 'NOT_FOUND') === 'NOT_FOUND') { %>
+        <br>
+        <br>
+        <span class='stat-name'>Precursor parts delivered:</span>
+        <br>
+        <% for (const [part, delivered] of Object.entries(precursor_parts)) { %>
+          <span class='stat-value' style='color: var(--§<%= delivered ? 'a' : 'c' %>)'><%= delivered ? '✔' : '✖' %> <%= part %></span><br>
+        <% } %>
+        <% } %>
+      ">
+        Completed <%= mining.core.crystal_nucleus.times_completed.toLocaleString() %> times
+      </span>
+      <br>
+    </p>
+
+    <p class="stat-sub-header">Heart of the Mountain</p>
+    <p class="stat-raw-values">
+      <!-- Tier -->
+      <% max = mining.core.level.level === constants.HOTM.tiers ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Tier:</span>
+      <span class="stat-value <%= max %>"><%= mining.core.level.level %></span>
+      <br>
+
+      <!-- Token of the Mountain -->
+      <% mining.core.tokens.spent > mining.core.tokens.total ? mining.core.tokens.total = mining.core.tokens.spent : null %>
+      <% max = mining.core.tokens.spent === mining.core.tokens.total ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Token of the Mountain:</span>
+      <span class="stat-value <%= max %>"><%= mining.core.tokens.spent %>/<%= mining.core.tokens.total %></span>
+      <br>
+
+      <!-- Peak of the Mountain -->
+      <% max = (mining.core.nodes["special_0"] || 0) === constants.MAX_PEAK_OF_THE_MOUNTAIN_LEVEL ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Peak of the Mountain:</span>
+      <span class="stat-value <%= max %>"><%= mining.core.nodes["special_0"] || 0 %>/<%= constants.MAX_PEAK_OF_THE_MOUNTAIN_LEVEL %></span>
+      <br>
+
+      <!-- Mithril Powder -->
+      <% max = mining.core.powder.mithril.total >= constants.HOTM.powder_for_max_nodes.mithril_powder ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Mithril Powder:</span>
+      <span class="stat-value <%= max %>" data-tippy-content="
+        <span class='stat-name'>Total:</span> <span class='stat-value'><%= mining.core.powder.mithril.total.toLocaleString() %></span><br>
+        <span class='stat-name'>Spent:</span> <span class='stat-value'><%= mining.core.powder.mithril.spent.toLocaleString() %></span><br>
+        <span class='stat-name'>Available:</span> <span class='stat-value'><%= mining.core.powder.mithril.available.toLocaleString() %></span>
+      ">
+        <%= mining.core.powder.mithril.total.toLocaleString() %>
+      </span>
+      <br>
+
+      <!-- Gemstone Powder -->
+      <% max = mining.core.powder.gemstone.total >= constants.HOTM.powder_for_max_nodes.gemstone_powder ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Gemstone Powder:</span>
+      <span class="stat-value <%= max %>" data-tippy-content="
+        <span class='stat-name'>Total:</span> <span class='stat-value'><%= mining.core.powder.gemstone.total.toLocaleString() %></span><br>
+        <span class='stat-name'>Spent:</span> <span class='stat-value'><%= mining.core.powder.gemstone.spent.toLocaleString() %></span><br>
+        <span class='stat-name'>Available:</span> <span class='stat-value'><%= mining.core.powder.gemstone.available.toLocaleString() %></span>
+      ">
+        <%= mining.core.powder.gemstone.total.toLocaleString() %>
+      </span>
+      <br>
+
+      <!-- Pickaxe Ability -->
+      <span class="stat-name">Pickaxe Ability:</span>
+      <span class="stat-value"><%= mining.core.selected_pickaxe_ability || 'None' %></span>
+    </p>
+
+    <div id="inventory_container">
+      <inventory-view inventory-type="hotm"></inventory-view>
+    </div>
+
+    <p class="stat-sub-header">Forge</p>
+    <% if (mining.forge?.processes?.length > 0) {
+      for (const process of mining.forge.processes) { %>
+        <div class="forge-item">
+          <p class="stat-name forge-slot">Slot <%= process.slot %>:</p>
+          <% if (process.id.startsWith("UNKNOWN-") === false) { %>
+            <span data-tippy-content="<local-time timestamp='<%= process.timeFinished %>'></local-time>" class="stat-value">
+              <%= process.name %> - <%= process.timeFinished < Date.now() ? "ended" : `ending ${process.timeFinishedText}`%>
+            </span>
+          <% } else { %>
+            <span class="stat-value">Unknown item</span>
+
+            <script>
+              console.error( "Unknown forge item id: <%= process.id.split('UNKNOWN-')[1] %>" )
+            </script>
+          <% } %>
+        </div>
+      <% } %>
+    <% } else { %>
+      <p class="stat-raw-values">
+        No items currently forging!
+      </p>
+    <% } %>
+  <% } %>
+</div>

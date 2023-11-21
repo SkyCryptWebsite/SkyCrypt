@@ -22,3 +22,4 @@ export * from "./constants/skins-animations.js";
 export * from "./constants/tags.js";
 export * from "./constants/trophy-fish.js";
 export * from "./constants/accessories.js";
+export * from "./constants/museum.js";

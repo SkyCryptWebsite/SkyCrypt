@@ -1,0 +1,25 @@
+<div class="stat-container stat-skills">
+  <a class="stat-anchor" id="Skills"></a>
+  <h2 class="stat-header">Skills</h2>
+  <div class="stat-content">
+    <!-- Mining -->
+    <% if (calculated.mining !== undefined) { %>
+      <%- include('./skills/mining.ejs', {}) %>
+    <% } %>
+
+    <!-- Farming -->
+    <% if (calculated.farming !== undefined) { %>
+      <%- include('./skills/farming.ejs', { getRarityUpgradeClass, rarityOrder }) %>
+    <% } %>
+      
+    <!-- Fishing -->
+    <% if (calculated.fishing !== undefined) { %>
+      <%- include('./skills/fishing.ejs', {}) %>
+    <% } %>
+
+    <!-- Enchanting -->
+    <% if (calculated.enchanting !== undefined) { %>
+      <%- include('./skills/enchanting.ejs', {}) %>
+    <% } %>
+  </div>
+</div>

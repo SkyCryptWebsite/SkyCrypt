@@ -1,4 +1,4 @@
-export const themes = new Map<string, Promise<Theme>>();
+export const THEMES = new Map<string, Promise<Theme>>();
 
 /**
  * converts a hex color to it's rgb components
@@ -33,12 +33,12 @@ async function fetchTheme(urlString: string): Promise<Theme> {
 }
 
 export function getTheme(urlString: string): Promise<Theme> {
-  const themeFromMap = themes.get(urlString);
+  const themeFromMap = THEMES.get(urlString);
   if (themeFromMap !== undefined) {
     return themeFromMap;
   } else {
     const themeFromFetch = fetchTheme(urlString);
-    themes.set(urlString, themeFromFetch);
+    THEMES.set(urlString, themeFromFetch);
     return themeFromFetch;
   }
 }

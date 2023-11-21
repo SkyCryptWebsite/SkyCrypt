@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { MongoClient } from "mongodb";
 import credentials from "./credentials.js";
 

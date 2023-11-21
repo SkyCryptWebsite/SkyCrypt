@@ -1,0 +1,49 @@
+
+<div class="stat-container stat-misc">
+  <a class="stat-anchor" id="Misc"></a>
+  <h2 class="stat-header">Miscellaneous</h2>
+  <div class="stat-content">
+    <!-- Essence (Essence and Essence Shop) -->
+    <% if (calculated.dungeons?.essence !== undefined) { %> 
+      <%- include('./misc/essence.ejs', {}); %>
+    <% } %>
+
+    <!-- Kills and Deaths -->
+    <%- include('./misc/kills_deaths.ejs', {}); %>
+
+    <!-- Races -->
+    <%- include('./misc/races.ejs', {}); %>
+
+    <!-- Winter Island Stats (Gifts, Season of Jerry) -->
+    <%- include('./misc/winter_island.ejs', {}); %>
+
+    <!-- End Island (Dragons, Endstone Protector) -->
+    <%- include('./misc/end_island.ejs', {}); %>
+
+    <!-- Damage (Highest Critical  Damage) -->
+    <%- include('./misc/damage.ejs', {}); %>
+
+    <!-- Milestones (Pet Milestones) -->
+    <% if (calculated.misc.pet_milestones !== undefined) { %>
+      <%- include('./misc/milestones.ejs', {}); %>
+    <% } %>
+
+    <!-- Mythological Event (Burrows) -->
+    <%- include('./misc/mythological_event.ejs', {}); %>
+
+    <!-- Potion Effects -->
+    <%- include('./misc/potion_effects.ejs', {}); %>
+
+    <!-- Profile Upgrades -->
+    <%- include('./misc/profile_upgrades.ejs', {}); %>
+
+    <!-- Auctions (Bought and Sold) -->
+    <%- include('./misc/auctions.ejs', { rarityOrder }); %>
+
+    <!-- Claimed Items -->
+    <%- include('./misc/claimed_items.ejs', {}); %>
+
+    <!-- Uncategorized -->
+    <%- include('./misc/uncategorized.ejs', {}); %>
+  </div>
+</div>

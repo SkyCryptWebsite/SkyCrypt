@@ -1,0 +1,45 @@
+<% if ('mythological_event' in calculated.misc) { %>
+  <div class="category-header">
+    <div class="category-icon">
+      <div class="item-icon custom-icon" style="background-image: url(/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8)"></div>
+    </div>
+    
+    <span>Mythological Event</span>
+  </div>
+  
+  <p class="stat-raw-values">
+    <!-- Mytholocial Event Kills -->
+    <span class="stat-name">Kills: </span>
+    <span class="stat-value"><%= calculated.misc.mythological_event.kills.toLocaleString() %></span>
+    <br>
+
+    <%  
+    const burrow_naming = {
+        burrows_chains_complete: "Chains Completed",
+        burrows_dug_treasure: "Dug Treasure",
+        burrows_dug_next: "Dug Arrows",
+        burrows_dug_combat: "Dug Monsters",
+    }
+    for (const key in calculated.misc.mythological_event) {
+      if (key === "kills") {
+        continue;
+      }
+
+      
+      let tooltip = "";
+      for (const rarity in calculated.misc.mythological_event[key]) {
+        if (rarity === "null" || rarity === "total") {
+          continue;
+        }
+  
+        tooltip += `<span class="stat-name piece-${rarity.toLowerCase()}-fg">${helper.capitalizeFirstLetter(rarity)}: </span><span class="stat-value">${calculated.misc.mythological_event[key][rarity].toLocaleString()}</span><br>`;
+      } %>
+
+      <span data-tippy-content='<span class="stat-name">Rarities used:</span><br><%= tooltip %>'>
+        <span class="stat-name"><%= burrow_naming[key]; %>: </span>
+        <span class="stat-value"><%= calculated.misc.mythological_event[key].total.toLocaleString() %></span>
+      </span>
+      <br>
+    <% } %>
+  </p>
+<% } %>

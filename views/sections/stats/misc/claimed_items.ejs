@@ -1,0 +1,19 @@
+<% if ('claimed_items' in calculated.misc) { %>
+  <div class="category-header">
+    <div class="category-icon">
+      <div class="item-icon icon-339_0"></div>
+    </div>
+    
+    <span>Claimed items</span>
+  </div>
+
+  <p class="stat-raw-values">
+    <% for (const key in calculated.misc.claimed_items) {
+      const timestamp = calculated.misc.claimed_items[key]; %>
+
+      <span class="stat-name"><%= helper.titleCase(key.replace("_", " ")); %>: </span>
+      <span class="stat-value" data-tippy-content='Claimed on <local-time timestamp="<%= timestamp %>"></local-time>'><%= moment(timestamp).fromNow() %></span>
+      <br>
+    <% } %>
+  </p>
+<% } %>

@@ -1,0 +1,70 @@
+<% if (calculated.kills?.total > 0 || calculated.deaths?.total > 0) { %>
+  <div class="category-header">
+    <div class="category-icon">
+      <div class="item-icon icon-267_0"></div>
+    </div><span>kills</span>
+  </div>
+
+  <p class="stat-raw-values stat-kills">
+    <% if (calculated.kills?.total !== undefined) { %>
+      <span class="stat-name">Total Kills: </span><span class="stat-value"><%= calculated.kills.total.toLocaleString() %></span>
+      <br>
+    <% } %>
+
+    <% if (calculated.deaths?.total !== undefined) { %>
+      <span class="stat-name">Total Deaths: </span><span class="stat-value"><%= calculated.deaths.total.toLocaleString() %></span>
+    <% } %>
+  </p>
+
+  <div class="kills-deaths-container narrow-info-container-wrapper">
+    <% if (calculated.kills?.total !== undefined) { %>
+      <div class="narrow-info-container top-kills">
+        <div class="narrow-info-header">Kills</div>
+        <div class="narrow-info-content">
+          <% let rows = Math.min(calculated.kills.total, 10);
+          for (let i = 0; i < rows; i++) { 
+            const kill = calculated.kills.kills[i];
+
+            if (kill !== undefined) { %>
+              <div class="kill-stat">
+                <div class="kill-rank">#<%= i + 1 %>&nbsp;</div>
+                <div class="kill-entity"><%= kill.entity_name %></div>
+                <div class="stat-separator">:&nbsp;</div>
+                <div class="kill-amount"><%= kill.amount.toLocaleString() %></div>
+              </div>
+            <% } %>
+          <% } %>
+
+          <% if (calculated.kills.kills.length > 10) { %>
+            <button class="kill-stat show-all <%= calculated.kills.kills.length > 10 ? 'enabled' : '' %>" data-type="kills">show all</button>
+          <% } %>
+        </div>
+      </div>
+    <% } %>
+
+    <% if (calculated.deaths?.total !== undefined) { %>
+      <div class="narrow-info-container top-kills">
+        <div class="narrow-info-header">Deaths</div>
+        <div class="narrow-info-content">
+          <% rows = Math.min(calculated.deaths.total, 10);
+          for (let i = 0; i < rows; i++) { 
+            const death = calculated.deaths.deaths[i];
+
+            if (death !== undefined) { %>
+              <div class="kill-stat">
+              <div class="kill-rank">#<%= i + 1 %>&nbsp;</div>
+              <div class="kill-entity"><%= death.entity_name %></div>
+              <div class="stat-separator">:&nbsp;</div>
+              <div class="kill-amount"><%= death.amount.toLocaleString() %></div>
+              </div>
+            <% } %>
+          <% } %>
+
+          <% if (calculated.deaths.deaths.length > 10) { %>
+            <button class="kill-stat show-all <%= calculated.deaths.deaths.length > 10 ? 'enabled' : '' %>" data-type="deaths">show all</button>
+          <% } %>  
+        </div>
+      </div>
+    <% } %>
+  </div>
+<% } %>

@@ -1,0 +1,55 @@
+<% if ('gifts' in calculated.misc) { %>
+  <div class="category-header">
+    <div class="category-icon">
+      <div class="item-icon custom-icon" style="background-image: url(/head/b73a2114136b8ee4926caa51785414036a2b76e4f1668cb89d99716c421)"></div>
+    </div>
+
+    <span>Gifts</span>
+  </div>
+
+  <p class="stat-raw-values">
+    <!-- Gifts Given -->
+    <span class="stat-name">Gifts Given: </span>
+    <span class="stat-value"><%= calculated.misc.gifts.given.toLocaleString() %></span>
+    <br>
+
+    <!-- Gifts Received -->
+    <span class="stat-name">Gifts Received: </span>
+    <span class="stat-value"><%= calculated.misc.gifts.received.toLocaleString() %></span>
+    <br>
+  </p>
+<% } %>
+
+
+
+<% if ('winter' in calculated.misc) { %>
+  <div class="category-header">
+    <div class="category-icon">
+      <div class="item-icon icon-332_0"></div>
+    </div>
+    
+    <span>Season of jerry</span>
+  </div>
+
+  <p class="stat-raw-values">
+    <!-- Most Snowballs Hit -->
+    <span class="stat-name">Most Winter Snowballs Hit: </span>
+    <span class="stat-value"><%= calculated.misc.winter.most_snowballs_hit.toLocaleString() %></span>
+    <br>
+
+    <!-- Most Damage Dealt -->
+    <span class="stat-name">Most Winter Damage Dealt: </span>
+    <span class="stat-value"><%= calculated.misc.winter.most_damage_dealt.toLocaleString() %></span>
+    <br>
+
+    <!-- Most Magma Damage Dealt -->
+    <span class="stat-name">Most Winter Magma Damage Dealt: </span>
+    <span class="stat-value"><%= calculated.misc.winter.most_magma_damage_dealt.toLocaleString() %></span>
+    <br>
+
+    <!-- Most Cannonballs Hit -->
+    <span class="stat-name">Most Winter Cannonballs Hit: </span>
+    <span class="stat-value"><%= calculated.misc.winter.most_cannonballs_hit.toLocaleString() %></span>
+    <br>
+  </p>
+<% } %>

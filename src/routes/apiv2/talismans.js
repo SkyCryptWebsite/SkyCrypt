@@ -4,6 +4,7 @@ import express from "express";
 
 import { db } from "../../mongo.js";
 import { handleError } from "../apiv2.js";
+import { getItems } from "../../stats.js";
 
 const router = express.Router();
 
@@ -24,7 +25,7 @@ router.get("/:player/:profile", async (req, res, next) => {
         continue;
       }
 
-      const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", req.options);
+      const items = await getItems(singleProfile.members[profile.uuid], false, "", req.options);
       const accessories = items.accessories;
 
       output = {
@@ -54,7 +55,7 @@ router.get("/:player", async (req, res, next) => {
     for (const singleProfile of allProfiles) {
       const userProfile = singleProfile.members[profile.uuid];
 
-      const items = await lib.getItems(userProfile, false, "", req.options);
+      const items = await getItems(userProfile, false, "", req.options);
       const accessories = items.accessories;
 
       output.profiles[singleProfile.profile_id] = {

@@ -1,0 +1,236 @@
+<div id="basic_stats">
+  <div id="skin_display_mobile"></div>
+
+  <div id="base_stats_wrapper">
+    <div id="base_stats_container"></div>
+    <button id="show_stats">Show Stats</button>
+  </div>
+
+  <div id="additional_stats_container">
+    <!-- Current Area -->
+    <% if (calculated.user_data?.current_area?.current_area !== undefined) { %>
+      <div class="additional-stat"> 
+        <span class="stat-name"><%= calculated.user_data.current_area_updated ? 'Current' : 'Last' %> Area: </span>
+        <span class="stat-value"><%= calculated.user_data.current_area.current_area %></span>
+      </div>
+    <% } %>
+
+    <!-- Joined -->
+    <% if (calculated.user_data?.first_join !== undefined) { %>
+      <div class="additional-stat">
+        <span data-tippy-content='Joined on <local-time timestamp="<%= calculated.user_data.first_join.unix %>"></local-time>'>
+          <span class="stat-name">Joined: </span>
+          <span class="stat-value"><%= calculated.user_data.first_join.text %></span>
+        </span>
+      </div> 
+    <% } %> 
+    
+    <!-- Purse -->
+    <div class="additional-stat">
+      <span class="stat-name">Purse: </span>
+        <span class="stat-value"><%= helper.formatNumber(calculated.currencies.purse, true) %> Coin<%= Math.floor(calculated.currencies.purse) == 1 ? '': 's' %>
+      </span>
+    </div>
+    
+    <!-- Bank -->
+    <% if ('bank' in calculated.currencies) { %>
+      <div class="additional-stat">
+        <span class="stat-name">Bank Account: </span>
+          <span class="stat-value"><%= helper.formatNumber(calculated.currencies.bank, true) %> Coin<%= Math.floor(calculated.currencies.bank) == 1 ? '': 's' %>
+        </span>
+      </div>
+    <% } %>
+
+    <!-- Skills (Total Skill XP, Average Skill Level, Average Skill Level without progress)-->
+    <% if ('skills' in calculated && 'runecrafting' in calculated.skills.skills) { %>
+      <div class="additional-stat">
+        <span data-tippy-content="
+          <span class='stat-name'>Total Skill XP: </span>
+          <span class='stat-value'><%= Math.round(calculated.skills.totalSkillXp).toLocaleString() %></span>
+          <div class='tippy-explanation'>Total XP gained in all skills except Social and Runecrafting.</div>
+
+          <span class='stat-name'>Average Level: </span>
+          <span class='stat-value'><%= calculated.skills.averageSkillLevel.toFixed(2) %></span>
+          <div class='tippy-explanation'>Average skill level over all skills except Social and Runecrafting<% if ('runecrafting' in calculated.skills.skills) { %>, includes progress to next level. <% } %></div>
+
+          <% if ('runecrafting' in calculated.skills.skills) { %>
+            <span class='stat-name'>Average Level without progress: </span>
+            <span class='stat-value'><%= calculated.skills.averageSkillLevelWithoutProgress.toFixed(2) %></span>
+
+            <div class='tippy-explanation'>Average skill level without including partial level progress.</div>
+          <% } %>">
+
+          <span class="stat-name">Average Skill Level: </span>
+          <span class="stat-value"><%= calculated.skills.averageSkillLevel.toFixed(2) %></span>
+        </span>
+      </div>
+    <% } %>
+
+    <!-- Fairy Souls -->
+    <% if (calculated.fairy_souls !== undefined) { %>
+      <div class="additional-stat">
+        <span data-tippy-content="<%= calculated.fairy_souls.progress %>% of fairy souls found.">
+          <span class="stat-name">Fairy Souls: </span>
+          <span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
+        </span>
+      </div>
+    <% } %>
+
+    <!-- Weight -->
+    <% if (calculated.weight) {
+      const weightSystems = [
+        {
+          name: "Senither Weight",
+          author: "Senither",
+          skill: calculated.weight.senither.skill.total,
+          slayer: calculated.weight.senither.slayer.total,
+          dungeon: calculated.weight.senither.dungeon.total,
+          total: calculated.weight.senither.overall,
+        },
+        {
+          name: "Lily Weight",
+          author: "LappySheep",
+          skill: calculated.weight.lily.skill.base + calculated.weight.lily.skill.overflow,
+          slayer: calculated.weight.lily.slayer,
+          dungeon: calculated.weight.lily.catacombs.experience +
+            calculated.weight.lily.catacombs.completion.base +
+            calculated.weight.lily.catacombs.completion.master,
+          total: calculated.weight.lily.total,
+        },
+      ];
+
+      for (weight of weightSystems) {
+        if ("runecrafting" in calculated.skills.skills === false) {
+          weight.total -= weight.skill;
+          weight.skill = 0;
+        } %>
+
+        <div class="additional-stat">
+          <span data-tippy-content="
+            <span class='stat-name'><%= weight.name %></span><br>
+            <span class='stat-info'>Weight calculations by <%= weight.author %></span>
+            <br/><br/>
+            <span class='stat-name'>Skill: </span>
+            <span class='stat-value'>
+            <%= parseFloat(weight.skill.toFixed(2)).toLocaleString() %>
+            </span><br/>
+            <span class='stat-name'>Slayer: </span>
+            <span class='stat-value'>
+            <%= parseFloat(weight.slayer.toFixed(2)).toLocaleString() %>
+            </span><br/>
+            <span class='stat-name'>Dungeon: </span>
+            <span class='stat-value'>
+            <%= parseFloat(weight.dungeon.toFixed(2)).toLocaleString() %>
+            </span><br/><br/>
+            <span class='stat-name'>Total: </span>
+            <span class='stat-value'>
+            <%= parseFloat(weight.total.toFixed(2)).toLocaleString() %>
+            </span>
+            ">
+            <span class="stat-name"><%= weight.name %>: </span>
+            <span class="stat-value"><%= parseFloat(Math.round(weight.total)).toLocaleString() %></span>
+          </span>
+        </div>
+      <% } %>
+    <% } %> 
+
+    <!-- Networth -->
+    <% if (calculated.networth.noInventory === false) { %>
+      <div class="additional-stat">
+        <span data-tippy-content="
+          <span class='stat-name'><%= 'Networth' %></span><br>
+          <span class='stat-info'>Networth calculations by SkyHelper</span>
+          <br/><br/>
+
+          <%
+          const networth_values = {
+            purse: "Purse",
+            bank: "Bank",
+            sacks: "Sacks",
+            armor: "Armor",
+            equipment: "Equipment",
+            wardrobe: "Wardrobe",
+            inventory: "Inventory",
+            enderchest: "Ender Chest",
+            accessories: "Accessories",
+            personal_vault: "Personal Vault",
+            storage: "Storage",
+            pets: "Pets",
+            fishing_bag: "Fishing Bag",
+            potion_bag: "Potion Bag",
+            candy_inventory: "Candy Bag"
+          }
+
+          let value = 0;
+          for (const [key, name] of Object.entries(networth_values)) {
+            if (key === "sacks") {
+              value = calculated.networth.types.sacks.total + calculated.networth.types.essence.total;
+            } else if (key === "purse") {
+              value = calculated.currencies.purse;
+            } else if (key === "bank") {
+              value = calculated.currencies.bank;
+            } else {
+              value = calculated.networth.types[key].total;
+            }
+
+            if (value > 0) { %>
+              <span class='stat-name'><%= name %>: </span>
+              <span class='stat-value'><%= helper.formatNumber(value) %></span>
+              <br/>
+            <% } %>
+          <% } %>
+          <br/>
+
+          <!-- Unsoulbound Networth -->
+          <span class='stat-name'>Unsoulbound Networth: </span>
+          <span class='stat-value'><%= helper.formatNumber(calculated.networth.unsoulboundNetworth, true) %></span>
+          <br/>
+
+          <!-- Total Networth -->
+          <span class='stat-name'>Total Networth: </span>
+          <span class='stat-value'><%= Math.floor(calculated.networth.networth).toLocaleString() %> (<%= helper.formatNumber(calculated.networth.networth, true) %>)</span>
+          <br/>
+        ">
+          <span class="stat-name">Networth: </span>
+          <span class="stat-value"><%= helper.formatNumber(parseFloat(Math.round(calculated.networth.networth))) %></span>
+        </span>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Skill Components -->
+  <div id="skill_levels_container">
+    <% if (calculated.skyblock_level.xp !== 0 && calculated.skyblock_level.level !== 0) {%>
+      <div class="skill-bars">
+        <skill-component skill="level" type="skyblock_level" icon="<%= skillItems.skyblock_level%>"></skill-component>
+      </div>
+    <% } %>
+
+    <% if ('skills' in calculated) { %>
+      <div class="skill-bars" data-api-enabled="<%= 'runecrafting' in calculated.skills.skills %>">
+        <skill-component skill="taming" type="skill" icon="<%= skillItems.taming %>"></skill-component>
+        <skill-component skill="farming" type="skill" icon="<%= skillItems.farming %>"></skill-component>
+        <skill-component skill="mining" type="skill" icon="<%= skillItems.mining %>"></skill-component>
+        <skill-component skill="combat" type="skill" icon="<%= skillItems.combat %>"></skill-component>
+        <skill-component skill="foraging" type="skill" icon="<%= skillItems.foraging %>"></skill-component>
+        <skill-component skill="fishing" type="skill" icon="<%= skillItems.fishing %>"></skill-component>
+        <skill-component skill="enchanting" type="skill" icon="<%= skillItems.enchanting %>"></skill-component>
+        <skill-component skill="alchemy" type="skill" icon="<%= skillItems.alchemy %>"></skill-component>
+        <skill-component skill="carpentry" type="skill" icon="<%= skillItems.carpentry %>"></skill-component>
+
+        <% if ('runecrafting' in calculated.skills.skills) { %>
+          <skill-component skill="runecrafting" type="skill" icon="<%= skillItems.runecrafting %>"></skill-component>
+          <skill-component skill="social" type="skill" icon="<%= skillItems.social %>"></skill-component>
+        <% } else { %>
+          <div class="no-access">
+            Skills from achievements across profiles. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">Enable Skills API</a> for more accurate data.
+          </div>
+        <% } %>
+      </div>
+    <% } else { %>
+      <div class="no-access">
+        <%= calculated.display_name %> doesn't have skills access via API enabled. <a target="_blank" class="enable-api" href="/resources/video/enable-api.mp4">See here</a> how to enable full API access.
+      </div>
+    <% } %>
+  </div>
+</div>   

@@ -1,7 +1,7 @@
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import * as helper from "../../../../common/helper.js";
-import { STATS_DATA } from "../../../../common/constants.js";
+import { STATS_DATA, HIDDEN_STATS } from "../../../../common/constants.js";
 
 @customElement("player-stat")
 export class PlayerStat extends LitElement {
@@ -28,6 +28,10 @@ export class PlayerStat extends LitElement {
     const suffix = STATS_DATA[this.stat].suffix;
 
     const tooltip = this.getTooltip(this.data, name, suffix, value, this.special);
+
+    if (HIDDEN_STATS.includes(this.stat) && value === 0) {
+      return undefined;
+    }
 
     return html`
       <div data-stat="${this.stat}" class="basic-stat stat-${this.stat.replaceAll("_", "-")}">

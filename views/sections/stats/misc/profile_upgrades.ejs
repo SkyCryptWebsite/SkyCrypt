@@ -1,0 +1,18 @@
+<% if ('profile_upgrades' in calculated.misc) { %>
+  <div class="category-header">
+    <div class="category-icon">
+      <div class="item-icon icon-154_0"></div>
+    </div>
+    
+    <span>Profile upgrades</span>
+  </div>
+
+  <p class="stat-raw-values">
+    <% for (const upgrade in constants.PROFILE_UPGRADES) { %>
+      <% max = calculated.misc.profile_upgrades[upgrade] === constants.PROFILE_UPGRADES[upgrade] ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>"><%= helper.titleCase(upgrade.replace("_", " ")); %>: </span>
+      <span class="stat-value <%= max %>"><%= calculated.misc.profile_upgrades[upgrade] %> / <%= constants.PROFILE_UPGRADES[upgrade] %></span>
+      <br>
+    <% } %>
+  </p>
+<% } %>

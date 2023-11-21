@@ -1,0 +1,68 @@
+
+<div class="stat-enchanting">
+  <div class="category-header">
+    <div class="category-icon">
+      <div class="item-icon icon-116_0"></div>
+    </div>
+    <span>enchanting</span>
+  </div>
+
+  <% if (calculated.enchanting.unlocked === false) { %>
+    <p class="stat-raw-values">
+      <%= calculated.display_name %> hasn't done any experiments yet.
+    </p>
+  <% } else { %>
+    <% const enchanting = calculated.enchanting; %>
+    <button class="stat-sub-header extender" aria-controls="Experiments" aria-expanded="false">Experiments</button>
+    <div class="stat-experiments extendable narrow-info-container-wrapper" id="Experiments">
+      <% for (let game in enchanting.experiments) {
+        const game_data = enchanting.experiments[game]; %>
+        <div class="narrow-info-container">
+          <div class="narrow-info-header">
+            <span><%= game_data.name %></span>
+          </div>
+
+          <span>
+            <p class="stat-raw-values">
+              <%
+              const game_stats = helper.sortObject(game_data.stats);
+              for (const stat in game_stats) { %>
+                <span class="stat-name"><%= helper.titleCase(stat.replace('_', ' ')) %>: </span>
+                <span class="stat-value"><%= (stat == 'last_attempt' || stat == 'last_claimed') ? game_stats[stat].text : game_stats[stat] %></span>
+                <br>
+              <% } %>
+            </p>
+
+            <% for (let tier in game_data.tiers) {
+              const tier_data = game_data.tiers[tier]; %>
+              <hr>
+              <div class="chip">
+                <div class="chip-icon-wrapper">
+                  <div class="item-icon icon-<%= tier_data.icon.replace(':', '_'); %>"></div>
+                </div>
+
+                <div class="chip-text">
+                  <div class="collection-name">
+                    <span class="stat-name"><%= tier_data.name %></span>
+                  </div>
+
+                  <div class="collection-amount">
+                    <% for (const info in tier_data) {
+                      if (info == 'name' || info == 'icon') {
+                        continue;
+                      } %>
+                        
+                      <small class="stat-name"><%= helper.titleCase(info.replace('_', ' ')) %>: </small>
+                      <small class="stat-value"><%= tier_data[info] %></small>
+                      <br>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            <% } %>
+          </span>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+</div>

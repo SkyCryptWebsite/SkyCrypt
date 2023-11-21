@@ -624,9 +624,9 @@ export function getClusterId(fullName = false) {
   return cluster.isWorker ? `w${cluster.worker.id}` : "m";
 }
 
-export const generateDebugId = (endpointName = "unknown") => {
+export function generateDebugId(endpointName = "unknown") {
   return `${getClusterId()}/${endpointName}_${Date.now()}.${Math.floor(Math.random() * 9000 + 1000)}`;
-};
+}
 
 export function generateUUID() {
   let u = "",
@@ -661,22 +661,22 @@ export function parseItemGems(gems, rarity) {
 
   const parsed = [];
   for (const [key, value] of Object.entries(gems)) {
-    const slot_type = key.split("_")[0];
+    const slotType = key.split("_")[0];
 
-    if (slots.ignore.includes(key) || (slots.special.includes(slot_type) && key.endsWith("_gem"))) {
+    if (slots.ignore.includes(key) || (slots.special.includes(slotType) && key.endsWith("_gem"))) {
       continue;
     }
 
-    if (slots.special.includes(slot_type)) {
+    if (slots.special.includes(slotType)) {
       parsed.push({
-        slot_type,
+        slot_type: slotType,
         slot_number: +key.split("_")[1],
         gem_type: gems[`${key}_gem`],
         gem_tier: value?.quality || value,
       });
-    } else if (slots.normal.includes(slot_type)) {
+    } else if (slots.normal.includes(slotType)) {
       parsed.push({
-        slot_type,
+        slot_type: slotType,
         slot_number: +key.split("_")[1],
         gem_type: key.split("_")[0],
         gem_tier: value?.quality || value,
@@ -713,19 +713,19 @@ export function generateGemLore(type, tier, rarity) {
 
   // Gem stats
   if (rarity) {
-    const gemstone_stats = GEMSTONES[type.toUpperCase()]?.stats?.[tier.toUpperCase()];
-    if (gemstone_stats) {
-      Object.keys(gemstone_stats).forEach((stat) => {
-        let stat_value = gemstone_stats[stat][rarityNameToInt(rarity)];
+    const gemstoneStats = GEMSTONES[type.toUpperCase()]?.stats?.[tier.toUpperCase()];
+    if (gemstoneStats) {
+      Object.keys(gemstoneStats).forEach((stat) => {
+        let statValue = gemstoneStats[stat][rarityNameToInt(rarity)];
 
         // Fallback since skyblock devs didn't code all gemstone stats for divine rarity yet
         // ...they didn't expect people to own divine tier items other than divan's drill
-        if (rarity.toUpperCase() === "DIVINE" && stat_value === null) {
-          stat_value = gemstone_stats[stat][rarityNameToInt("MYTHIC")];
+        if (rarity.toUpperCase() === "DIVINE" && statValue === null) {
+          statValue = gemstoneStats[stat][rarityNameToInt("MYTHIC")];
         }
 
-        if (stat_value) {
-          stats.push(["§", STATS_DATA[stat].color, "+", stat_value, " ", STATS_DATA[stat].symbol].join(""));
+        if (statValue) {
+          stats.push(["§", STATS_DATA[stat].color, "+", statValue, " ", STATS_DATA[stat].symbol].join(""));
         } else {
           stats.push("§c§oMISSING VALUE§r");
         }
@@ -775,7 +775,7 @@ export function generateItem(data) {
     };
   }
 
-  const default_data = {
+  const DEFAULT_DATA = {
     id: 389,
     Damage: 0,
     Count: 1,
@@ -798,8 +798,24 @@ export function generateItem(data) {
     data.rarity = data.rarity.toLowerCase();
   }
 
+  if (data.name && (data.display_name === undefined || data.display_name?.length === 0)) {
+    data.display_name = data.name;
+  }
+
+  if (!data.rarity && data.tier) {
+    data.rarity = data.tier.toLowerCase();
+  }
+
+  if (data.item_id) {
+    data.id = data.item_id;
+  }
+
+  if (data.damage) {
+    data.Damage = data.damage;
+  }
+
   // Setting tag.display.Name using display_name if not specified
-  if (data.display_name && !data.tag.display.Name) {
+  if (data.display_name && !data.tag?.display?.Name) {
     data.tag = data.tag ?? {};
     data.tag.display = data.tag.display ?? {};
     const rarityColor = data.rarity ? `§${RARITY_COLORS[data.rarity ?? "common"]}` : "";
@@ -807,7 +823,7 @@ export function generateItem(data) {
   }
 
   // Creating final item
-  return Object.assign(default_data, data);
+  return Object.assign(DEFAULT_DATA, data);
 }
 
 /**
@@ -1008,14 +1024,20 @@ export function romanize(num) {
 }
 
 export async function getBingoGoals(db, cacheOnly = false) {
-  const output = await db.collection("bingoData").findOne({ _id: "cardData" });
+  const cachedBingoData = await db.collection("bingoData").findOne({ _id: "cardData" });
 
+  const output = cachedBingoData?.output;
   if (cacheOnly === true) {
     return output;
   }
 
-  // 12 hours cache
-  if (output === null || output.last_save + 43200000 < Date.now()) {
+  // Check if it's the first day of the month and the data hasn't been updated in the last 24 hours,
+  // or if the data hasn't been updated in the last 12 hours (in case Hypixel changes goals).
+  if (
+    output == null ||
+    output.last_save + 43200000 < Date.now() ||
+    (new Date().getUTCDate() === 1 && output.last_save + 86400000 < Date.now())
+  ) {
     const { data: output } = await axios.get("https://api.hypixel.net/resources/skyblock/bingo");
     output.last_save = Date.now();
 
@@ -1074,10 +1096,27 @@ export function getCommitHash() {
     */
 }
 
-export function RGBtoHex(rgb) {
+export function rgbToHex(rgb) {
   const [r, g, b] = rgb.split(",").map((c) => parseInt(c.trim()));
 
   return [r, g, b].map((c) => c.toString(16).padStart(2, "0")).join("");
+}
+
+/**
+ * Returns a formatted progress bar string based on the given amount and total.
+ *
+ * @param {number} amount - The current amount.
+ * @param {number} total - The total amount.
+ * @param {string} [color="a"] - The color of the progress bar.
+ * @returns {string} The formatted progress bar string.
+ */
+export function formatProgressBar(amount, total, completedColor = "a", missingColor = "f") {
+  const barLength = 25;
+  const progress = Math.min(1, amount / total);
+  const progressBars = Math.floor(progress * barLength);
+  const emptyBars = barLength - progressBars;
+
+  return `${`§${completedColor}§l§m-`.repeat(progressBars)}${`§${missingColor}§l§m-`.repeat(emptyBars)}§r`;
 }
 
 /**

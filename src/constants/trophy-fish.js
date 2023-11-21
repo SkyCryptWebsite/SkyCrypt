@@ -185,21 +185,4 @@ export const TROPHY_FISH = {
   },
 };
 
-export const TROPHY_FISH_STAGES = {
-  1: {
-    formatted: `Bronze Hunter`,
-    type: "bronze",
-  },
-  2: {
-    formatted: `Silver Hunter`,
-    type: "silver",
-  },
-  3: {
-    formatted: `Gold Hunter`,
-    type: "gold",
-  },
-  4: {
-    formatted: `Diamond Hunter`,
-    type: "diamond",
-  },
-};
+export const TROPHY_FISH_STAGES = ["Bronze Hunter", "Silver Hunter", "Gold Hunter", "Diamond Hunter"];

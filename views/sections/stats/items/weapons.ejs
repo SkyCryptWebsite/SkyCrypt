@@ -1,0 +1,45 @@
+<% function itemIcon(item, classes) { %>
+  <div <% if (item.texture_path) { %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
+    <%= classes.join(" ") %>
+      item-icon
+      <% if (isEnchanted(item)) { %> is-enchanted <% } %>
+      <% if (item.texture_path) { %> custom-icon <% } %>
+      <% if (item.Damage != 0) { %> icon-<%= item.id %>_0 <% } %>
+      icon-<%= item.id %>_<%= item.Damage %>
+    ">
+  </div>
+<% } %>
+
+<div class="stat-container stat-weapons">
+  <a class="stat-anchor" id="Weapons"></a>
+  <h2 class="stat-header">Weapons</h2>
+  <div class="stat-content">
+    <% if (items.weapons.weapons.length == 0) { %>
+      <div class="no-access"><%= calculated.display_name %> doesn't have any weapons.</div>
+    <% } else { %>
+      <% if (items.weapons.highest_priority_weapon) { %>
+        <p class="stat-raw-values">
+          <span class="stat-name">Active Weapon: </span>
+         <span class="stat-active-weapon stat-value"><%- helper.renderLore(items.weapons.highest_priority_weapon.tag.display.Name) %></span>
+        </p>
+      <% } else if (items.weapons.weapons.length > 0) { %>
+        <p class="stat-raw-values">
+          <span class="stat-name">Active Weapon: </span><span class="stat-active-weapon stat-value piece-common-fg">None</span>
+        </p>
+      <% } %>
+
+
+      <div class="pieces">
+        <% for (const item of items.weapons.weapons.filter(a => !a.hidden)) { %>
+          <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
+            <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
+              <div class="piece-shine"></div>
+            <% } %>
+
+            <% itemIcon(item, ['piece-icon']); %>
+          </div>
+        <% };%>
+      </div>
+    <% } %>
+  </div>
+</div>

@@ -4,6 +4,7 @@ import express from "express";
 
 import { tableify, handleError } from "../api.js";
 import { db } from "../../mongo.js";
+import { getItems } from "../../stats.js";
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ router.use(async (req, res, next) => {
     const { profile, uuid } = await lib.getProfile(db, req.player, req.profile, { cacheOnly: true });
     const userProfile = profile.members[uuid];
 
-    const items = await lib.getItems(userProfile, false, undefined, req.options);
+    const items = await getItems(userProfile, false, undefined, req.options);
 
     const allItems = items.armor.concat(items.inventory, items.accessory_bag, items.enderchest);
 

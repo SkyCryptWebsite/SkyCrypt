@@ -1,0 +1,128 @@
+<% if (calculated.pets.pets.length > 0) { %>
+  <div class="stat-container stat-pets">
+    <a class="stat-anchor" id="Pets"></a>
+    <h2 class="stat-header">Pets</h2>
+    <div class="stat-content">
+      <p class="stat-raw-values">
+        <!-- Unique Pets -->
+        <% max = calculated.pets.amount_pets >= calculated.pets.total_pets ? 'golden-text': '' %>
+        <span class="stat-name <%= max %>">Unique Pets: </span>
+        <span class="stat-value <%= max %>"><%= calculated.pets.amount_pets %> / <%= calculated.pets.total_pets %></span>
+        <br>
+
+        <!-- Unique Pet Skins -->
+        <% max = calculated.pets.amount_pet_skins >= calculated.pets.total_pet_skins ? 'golden-text': '' %>
+        <span class="stat-name <%= max %>">Unique Pet Skins: </span>
+        <span class="stat-value <%= max %>"><%= calculated.pets.amount_pet_skins %> / <%= calculated.pets.total_pet_skins %></span>
+        <br>
+
+         <!-- Pet Score -->
+        <span data-tippy-content="
+          Pet score is calculated based on how many unique pets you have and the rarity of these pets.<br><br>
+          You gain an additional score for each max level pet you have!<br><br>
+          <table>
+            <% for (const [score, data] of Object.entries(constants.PET_REWARDS)) { %>
+              <tr><td><%= score %> Score: </td><td><span class='color-magic-find grey-text'>+<%= data.magic_find %> Magic Find</span>
+                
+              <% if (data.magic_find === calculated.pets.pet_score.amount) { %> 
+                <span style='color: var(--§5);' class='grey-text'> «</span>
+              <% } %>
+
+              </td>
+            <% } %>
+          </table>
+        ">
+          <% max = calculated.pets.pet_score.total >= Math.max(...Object.keys(constants.PET_REWARDS)) ? 'golden-text': '' %>
+          <span class="stat-name <%= max %>">Pet Score: </span>
+          <span class="stat-value <%= max %>"><%= calculated.pets.pet_score.total %></span>
+          <% if (calculated.pets.pet_score.amount > 0) { %>
+            <span class="grey-text color-magic-find"> (+<%= calculated.pets.pet_score.amount %> <abbr title="Magic Find">MF</abbr>)</span>
+          <% } %>
+        </span>
+        <br>
+
+        <!-- Total Candy Used -->
+        <% max = calculated.pets.total_candy_used === 0 ? 'golden-text': '' %>
+        <span class="stat-name <%= max %>">Total Candies Used: </span>
+        <span class="stat-value <%= max %>"><%= calculated.pets.total_candy_used %></span>
+        <br>
+
+        <!-- Total Pet XP -->
+        <span class="stat-name">Total Pet XP: </span>
+        <span class="stat-value"><%= helper.formatNumber(calculated.pets.total_pet_xp, true) %></span>
+        <br>
+      
+        <% const activePet = calculated.pets.pets.find(pet => pet.active === true) %>
+        <% if (activePet !== undefined) { %>
+          <p class="stat-sub-header">Active Pet</p>
+          <div class="pieces">
+            <div tabindex="0" data-pet-index="0" class="active-pet rich-item piece piece-<%= activePet.rarity %>-bg <%= getRarityUpgradeClass(activePet) %>">
+              <% if (rarityOrder.indexOf(activePet.rarity) <= 4) { %>
+                <div class="piece-shine"></div>
+              <% } %>
+
+              <div style='background-image: url("<%= activePet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+            </div>
+
+            <div class="active-pet-info">
+              <div class="pet-name piece-<%= activePet.rarity %>-fg"><%= activePet.rarity %> <%- activePet.display_name %></div>
+              <div class="pet-level">Level <%= activePet.level.level %></div>
+            </div>
+          </div>
+          
+          <div data-bonus-stats="pet"></div>
+        <% } %>
+      </p>
+
+
+      <!-- Only Unique Pets are shown (only one of each type) -->
+      <% const uniquePets = _.uniqBy(calculated.pets.pets, 'type'); %>
+      <% if (uniquePets) { %>
+        <p class="stat-sub-header"><%= activePet ? 'Other Pets' : '' %></p>
+
+        <div class="pieces">
+          <% for (const [index, pet] of uniquePets.entries()) {
+            if (pet.active === true) { 
+              continue;
+            } %>
+
+            <div tabindex="0" data-pet-index="<%= calculated.pets.pets.indexOf(pet) %>" class="other-pet rich-item piece piece-<%= pet.rarity %>-bg <%= getRarityUpgradeClass(pet) %>">
+            
+              <% if (rarityOrder.indexOf(pet.rarity) <= 4) { %>
+                <div class="piece-shine"></div>
+              <% } %>
+
+              <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+              <div class="other-pet-level"><abbr title="Level">Lvl</abbr> <%= pet.level.level %></div>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
+
+      <!-- Other pets -->
+      <% const otherPets = calculated.pets.pets.filter(pet => !uniquePets.includes(pet));
+      if (otherPets.length > 0) { %> 
+        <button class="stat-sub-header extender" aria-controls="showmore-pets" aria-expanded="false">Show More Pets</button>
+        <div class="pieces extendable" id="showmore-pets">
+          <div class="pieces"> 
+            <% for (const [index, pet] of otherPets.entries()) {
+              if (pet.active === true) { 
+                continue;
+              } %>
+
+              <div tabindex="0" data-pet-index="<%= calculated.pets.pets.indexOf(pet) %>" class="other-pet rich-item piece piece-<%= pet.rarity %>-bg <%= getRarityUpgradeClass(pet) %>">
+            
+                <% if (rarityOrder.indexOf(pet.rarity) <= 4) { %>
+                  <div class="piece-shine"></div>
+                <% } %>
+
+                <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+                <div class="other-pet-level"><abbr title="Level">Lvl</abbr> <%= pet.level.level %></div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      <% } %>
+    </p>
+</div>
+<% } %>

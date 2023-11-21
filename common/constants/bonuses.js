@@ -39,7 +39,9 @@ export const STATS_BONUS = {
     51: { health: 0 },
   },
   skill_social: {},
-  skill_carpentry: {},
+  skill_carpentry: {
+    1: { health: 1 },
+  },
   skill_runecrafting: {},
   // Slayers
   slayer_zombie: {
@@ -83,9 +85,27 @@ export const STATS_BONUS = {
     3: { health: 4 },
     4: { true_defense: 1 },
     5: { health: 5 },
-    6: {},
+    6: { strength: 2 },
     7: { health: 6 },
     8: { true_defense: 2 },
     9: { health: 7 },
+  },
+  HOTM_perk_mining_speed: {
+    1: { mining_speed: 20 },
+  },
+  HOTM_perk_mining_speed_2: {
+    1: { mining_speed: 40 },
+  },
+  HOTM_perk_mining_fortune: {
+    1: { mining_fortune: 5 },
+  },
+  HOTM_perk_mining_fortune_2: {
+    1: { mining_fortune: 5 },
+  },
+  HOTM_perk_mining_madness: {
+    1: { mining_speed: 50, mining_fortune: 50 },
+  },
+  HOTM_perk_mining_experience: {
+    1: { mining_wisdom: 0.1 },
   },
 };

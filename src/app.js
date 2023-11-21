@@ -1,6 +1,6 @@
 // this file never runs on the master thread
 import * as lib from "./lib.js";
-import { getFileHashes, getFileHash, hashedDirectories } from "./hashes.js";
+import { getFileHashes, getFileHash, HASHED_DIRECTORIES } from "./hashes.js";
 import fetch from "node-fetch";
 
 import express from "express";
@@ -11,6 +11,7 @@ import bodyParser from "body-parser";
 import "axios-debug-log";
 
 import fs from "fs-extra";
+import axios from "axios";
 
 import path from "path";
 import * as renderer from "./renderer.js";
@@ -42,6 +43,8 @@ import * as itemRoute from "./routes/item.js";
 import * as headRoute from "./routes/head.js";
 import * as leatherRoute from "./routes/leather.js";
 import * as potionRoute from "./routes/potion.js";
+import * as stats from "./stats.js";
+import { SkyCryptError } from "./constants/error.js";
 
 const folderPath = helper.getFolderPath();
 
@@ -66,7 +69,7 @@ if (process.env.NODE_ENV == "development") {
 
   watch("public/resources/css", { recursive: true }, async (evt, name) => {
     const [, , directory, fileName] = name.split(/\/|\\/);
-    if (hashedDirectories.includes(directory)) {
+    if (HASHED_DIRECTORIES.includes(directory)) {
       fileHashes[directory][fileName] = await getFileHash(name);
     }
   });
@@ -248,7 +251,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
   const debugId = helper.generateDebugId("stats");
   const timeStarted = Date.now();
 
-  // console.debug(`${debugId}: stats page was called.`);
+  console.debug(`${debugId}: stats page was called.`);
 
   const paramPlayer = req.params.player
     .toLowerCase()
@@ -268,13 +271,18 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       debugId,
     });
 
-    const bingoProfile =
-      profile.game_mode === "bingo" ? await lib.getBingoProfile(db, paramPlayer, { cacheOnly, debugId }) : {};
-    const items = await lib.getItems(profile.members[profile.uuid], bingoProfile, true, req.cookies.pack, {
+    const museum = await lib.getMuseum(db, profile, { cacheOnly, debugId });
+    for (const member in museum) {
+      profile.members[member].museum = museum[member];
+    }
+
+    const paramBingo =
+      profile.game_mode === "bingo" ? await lib.getBingoProfile(db, paramPlayer, { cacheOnly, debugId }) : null;
+    const items = await stats.getItems(profile.members[profile.uuid], paramBingo, true, req.cookies.pack, {
       cacheOnly,
       debugId,
     });
-    const calculated = await lib.getStats(db, profile, bingoProfile, allProfiles, items, req.cookies.pack, {
+    const calculated = await lib.getStats(db, profile, paramBingo, allProfiles, items, req.cookies.pack, {
       cacheOnly,
       debugId,
     });
@@ -284,8 +292,8 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
         "http://textures.minecraft.net/texture/b4bd832813ac38e68648938d7a32f6ba29801aaf317404367f214b78b4d4754c";
     }
 
-    // console.debug(`${debugId}: starting page render.`);
-    // const renderStart = Date.now();
+    console.debug(`${debugId}: starting page render.`);
+    const renderStart = Date.now();
 
     if (req.cookies.pack) {
       process.send({ type: "selected_pack", id: req.cookies.pack });
@@ -306,15 +314,53 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
         page: "stats",
       },
       (err, html) => {
-        if (err) console.error(err);
-        // else console.debug(`${debugId}: page successfully rendered. (${Date.now() - renderStart}ms)`);
+        if (err) {
+          throw new SkyCryptError(err);
+        }
 
+        console.debug(`${debugId}: page successfully rendered. (${Date.now() - renderStart}ms)`);
         res.set("X-Debug-ID", `${debugId}`);
         res.set("X-Process-Time", `${Date.now() - timeStarted}`);
         res.send(html);
       }
     );
   } catch (e) {
+    if (e instanceof SkyCryptError === false) {
+      const webhookUrl = credentials.discord_webhook;
+      if (webhookUrl !== undefined) {
+        let description = "";
+        if (playerUsername) {
+          description += `Username: \`${playerUsername}\`\n`;
+        }
+
+        if (req.params) {
+          description += `Options: \`${JSON.stringify(req.params)}\`\n`;
+        }
+
+        if (paramProfile) {
+          description += `Profile: \`${paramProfile}\`\n`;
+        }
+
+        description += `Link: https://sky.shiiyu.moe/stats/${paramPlayer}${paramProfile ? `/${paramProfile}` : ""}\n`;
+        description += `\`\`\`${e.stack}\`\`\``;
+
+        const embed = {
+          title: "Error",
+          description: description,
+          color: 16711680,
+          fields: [],
+          footer: {
+            text: `by @duckysolucky`,
+            icon_url: "https://imgur.com/tgwQJTX.png",
+          },
+        };
+
+        axios.post(webhookUrl, { embeds: [embed] }).catch((error) => {
+          console.log(error);
+        });
+      }
+    }
+
     const favorites = parseFavorites(req.cookies.favorite);
 
     console.debug(`${debugId}: an error has occurred.`);

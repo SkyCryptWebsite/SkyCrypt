@@ -28,7 +28,7 @@ export async function getItemData(query = {}) {
       query.damage = new Number(split[1]);
     }
 
-    dbItem = Object.assign(item, await db.collection("items").findOne({ id: query.skyblockId }));
+    dbItem = { ...item, ...(await db.collection("items").findOne({ id: query.skyblockId })) };
   }
 
   if (query.name !== undefined) {
