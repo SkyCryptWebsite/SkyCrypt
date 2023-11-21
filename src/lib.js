@@ -174,9 +174,10 @@ export async function getStats(
         fishing_bag: items.fishing_bag,
         potion_bag: items.potion_bag,
         candy_inventory: items.candy_bag,
+        museum: [],
       },
-      output.bank,
-      { cache: true, onlyNetworth: true }
+      output.currencies.bank,
+      { cache: true, onlyNetworth: true, v2Endpoint: true }
     )) ?? {};
 
   output.temp_stats = stats.getTempStats(userProfile);

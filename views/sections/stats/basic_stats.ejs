@@ -161,20 +161,21 @@
             candy_inventory: "Candy Bag"
           }
 
+          let value = 0;
           for (const [key, name] of Object.entries(networth_values)) {
             if (key === "sacks") {
-                value = helper.formatNumber(calculated.networth.types.sacks.total + calculated.networth.types.essence.total);
+              value = calculated.networth.types.sacks.total + calculated.networth.types.essence.total;
             } else if (key === "purse") {
-                value = helper.formatNumber(calculated.currencies.purse);
+              value = calculated.currencies.purse;
             } else if (key === "bank") {
-                value = helper.formatNumber(calculated.currencies.bank);
+              value = calculated.currencies.bank;
             } else {
-                value = helper.formatNumber(calculated.networth.types[key].total)
+              value = calculated.networth.types[key].total;
             }
 
             if (value > 0) { %>
               <span class='stat-name'><%= name %>: </span>
-              <span class='stat-value'><%= value %></span>
+              <span class='stat-value'><%= helper.formatNumber(value) %></span>
               <br/>
             <% } %>
           <% } %>
