@@ -624,9 +624,9 @@ export function getClusterId(fullName = false) {
   return cluster.isWorker ? `w${cluster.worker.id}` : "m";
 }
 
-export const generateDebugId = (endpointName = "unknown") => {
+export function generateDebugId(endpointName = "unknown") {
   return `${getClusterId()}/${endpointName}_${Date.now()}.${Math.floor(Math.random() * 9000 + 1000)}`;
-};
+}
 
 export function generateUUID() {
   let u = "",
@@ -661,22 +661,22 @@ export function parseItemGems(gems, rarity) {
 
   const parsed = [];
   for (const [key, value] of Object.entries(gems)) {
-    const slot_type = key.split("_")[0];
+    const slotType = key.split("_")[0];
 
-    if (slots.ignore.includes(key) || (slots.special.includes(slot_type) && key.endsWith("_gem"))) {
+    if (slots.ignore.includes(key) || (slots.special.includes(slotType) && key.endsWith("_gem"))) {
       continue;
     }
 
-    if (slots.special.includes(slot_type)) {
+    if (slots.special.includes(slotType)) {
       parsed.push({
-        slot_type,
+        slot_type: slotType,
         slot_number: +key.split("_")[1],
         gem_type: gems[`${key}_gem`],
         gem_tier: value?.quality || value,
       });
-    } else if (slots.normal.includes(slot_type)) {
+    } else if (slots.normal.includes(slotType)) {
       parsed.push({
-        slot_type,
+        slot_type: slotType,
         slot_number: +key.split("_")[1],
         gem_type: key.split("_")[0],
         gem_tier: value?.quality || value,
@@ -713,19 +713,19 @@ export function generateGemLore(type, tier, rarity) {
 
   // Gem stats
   if (rarity) {
-    const gemstone_stats = GEMSTONES[type.toUpperCase()]?.stats?.[tier.toUpperCase()];
-    if (gemstone_stats) {
-      Object.keys(gemstone_stats).forEach((stat) => {
-        let stat_value = gemstone_stats[stat][rarityNameToInt(rarity)];
+    const gemstoneStats = GEMSTONES[type.toUpperCase()]?.stats?.[tier.toUpperCase()];
+    if (gemstoneStats) {
+      Object.keys(gemstoneStats).forEach((stat) => {
+        let statValue = gemstoneStats[stat][rarityNameToInt(rarity)];
 
         // Fallback since skyblock devs didn't code all gemstone stats for divine rarity yet
         // ...they didn't expect people to own divine tier items other than divan's drill
-        if (rarity.toUpperCase() === "DIVINE" && stat_value === null) {
-          stat_value = gemstone_stats[stat][rarityNameToInt("MYTHIC")];
+        if (rarity.toUpperCase() === "DIVINE" && statValue === null) {
+          statValue = gemstoneStats[stat][rarityNameToInt("MYTHIC")];
         }
 
-        if (stat_value) {
-          stats.push(["§", STATS_DATA[stat].color, "+", stat_value, " ", STATS_DATA[stat].symbol].join(""));
+        if (statValue) {
+          stats.push(["§", STATS_DATA[stat].color, "+", statValue, " ", STATS_DATA[stat].symbol].join(""));
         } else {
           stats.push("§c§oMISSING VALUE§r");
         }
@@ -775,7 +775,7 @@ export function generateItem(data) {
     };
   }
 
-  const default_data = {
+  const DEFAULT_DATA = {
     id: 389,
     Damage: 0,
     Count: 1,
@@ -807,7 +807,7 @@ export function generateItem(data) {
   }
 
   // Creating final item
-  return Object.assign(default_data, data);
+  return Object.assign(DEFAULT_DATA, data);
 }
 
 /**
@@ -1080,7 +1080,7 @@ export function getCommitHash() {
     */
 }
 
-export function RGBtoHex(rgb) {
+export function rgbToHex(rgb) {
   const [r, g, b] = rgb.split(",").map((c) => parseInt(c.trim()));
 
   return [r, g, b].map((c) => c.toString(16).padStart(2, "0")).join("");

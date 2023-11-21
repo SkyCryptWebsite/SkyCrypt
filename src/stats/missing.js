@@ -38,9 +38,9 @@ function getMissing(accessories) {
   const unique = ACCESSORIES.map(({ id, tier: rarity }) => ({ id, rarity }));
 
   for (const { id } of unique) {
-    if (id in constants.accessoryAliases === false) continue;
+    if (id in constants.ACCESSORY_ALIASES === false) continue;
 
-    for (const duplicate of constants.accessoryAliases[id]) {
+    for (const duplicate of constants.ACCESSORY_ALIASES[id]) {
       if (hasAccessory(accessories, duplicate, { ignoreRarity: true }) === true) {
         getAccessory(accessories, duplicate).id = id;
       }

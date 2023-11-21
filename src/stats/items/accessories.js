@@ -86,12 +86,12 @@ export function getAccessories(userProfile, armor, accessoryBag, inventory, ende
     });
 
     // mark accessory aliases as inactive
-    const accessoryAliases = constants.accessoryAliases;
-    if (id in accessoryAliases || Object.keys(accessoryAliases).find((a) => accessoryAliases[a].includes(id))) {
-      let accessoryDuplicates = constants.accessoryAliases[id];
+    const ACCESSORY_ALIASES = constants.ACCESSORY_ALIASES;
+    if (id in ACCESSORY_ALIASES || Object.keys(ACCESSORY_ALIASES).find((a) => ACCESSORY_ALIASES[a].includes(id))) {
+      let accessoryDuplicates = constants.ACCESSORY_ALIASES[id];
       if (accessoryDuplicates === undefined) {
-        const aliases = Object.keys(accessoryAliases).filter((a) => accessoryAliases[a].includes(id));
-        accessoryDuplicates = aliases.concat(constants.accessoryAliases[aliases]);
+        const aliases = Object.keys(ACCESSORY_ALIASES).filter((a) => ACCESSORY_ALIASES[a].includes(id));
+        accessoryDuplicates = aliases.concat(constants.ACCESSORY_ALIASES[aliases]);
       }
 
       for (const duplicate of accessoryDuplicates) {

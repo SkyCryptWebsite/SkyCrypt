@@ -6,7 +6,7 @@ import { promisify } from "util";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export const hashedDirectories = ["css"];
+export const HASHED_DIRECTORIES = ["css"];
 
 export function getFileHash(filename) {
   return new Promise((resolve, reject) => {
@@ -26,7 +26,7 @@ export function getFileHash(filename) {
 }
 
 export function getFileHashes() {
-  const directoryPromises = hashedDirectories.map(async (directory) => {
+  const directoryPromises = HASHED_DIRECTORIES.map(async (directory) => {
     const readdirPromise = promisify(fs.readdir);
 
     const fileNames = await readdirPromise(path.join(__dirname, "../public/resources", directory));
@@ -49,8 +49,8 @@ export function getFileHashes() {
   return Promise.all(directoryPromises).then((directories) => {
     const directoriesObject = {};
 
-    for (let i = 0; i < hashedDirectories.length; i++) {
-      directoriesObject[hashedDirectories[i]] = directories[i];
+    for (let i = 0; i < HASHED_DIRECTORIES.length; i++) {
+      directoriesObject[HASHED_DIRECTORIES[i]] = directories[i];
     }
 
     return directoriesObject;

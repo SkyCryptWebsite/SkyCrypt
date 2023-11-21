@@ -111,7 +111,7 @@ export async function processItems(base64, source, customTextures = false, packs
             const type = ["helmet", "chestplate", "leggings", "boots"][itemData.id - 298];
 
             if (hypixelItem?.color !== undefined) {
-              const color = helper.RGBtoHex(hypixelItem.color) ?? "955e3b";
+              const color = helper.rgbToHex(hypixelItem.color) ?? "955e3b";
 
               itemData.texture_path = `/leather/${type}/${color}`;
             }
@@ -136,9 +136,9 @@ export async function processItems(base64, source, customTextures = false, packs
     }
 
     if (item.tag?.ExtraAttributes?.rarity_upgrades != undefined) {
-      const { rarity_upgrades } = item.tag.ExtraAttributes;
+      const rarityUpgrades = item.tag.ExtraAttributes.rarity_upgrades;
 
-      if (rarity_upgrades > 0) {
+      if (rarityUpgrades > 0) {
         item.extra.recombobulated = true;
       }
     }
@@ -152,42 +152,50 @@ export async function processItems(base64, source, customTextures = false, packs
     }
 
     if (item.tag?.ExtraAttributes?.expertise_kills != undefined) {
-      const { expertise_kills } = item.tag.ExtraAttributes;
+      const expertiseKills = item.tag.ExtraAttributes.expertise_kills;
 
-      if (expertise_kills > 0) {
-        item.extra.expertise_kills = expertise_kills;
+      if (expertiseKills > 0) {
+        item.extra.expertise_kills = expertiseKills;
+      }
+    }
+
+    if (item.tag?.ExtraAttributes?.compact_blocks !== undefined) {
+      const compactBlocks = item.tag.ExtraAttributes.compact_blocks;
+
+      if (compactBlocks > 0) {
+        item.extra.compact_blocks = compactBlocks;
       }
     }
 
     if (item.tag?.ExtraAttributes?.hecatomb_s_runs != undefined) {
-      const { hecatomb_s_runs } = item.tag.ExtraAttributes;
+      const hecatombSRuns = item.tag.ExtraAttributes.hecatomb_s_runs;
 
-      if (hecatomb_s_runs > 0) {
-        item.extra.hecatomb_s_runs = hecatomb_s_runs;
+      if (hecatombSRuns > 0) {
+        item.extra.hecatomb_s_runs = hecatombSRuns;
       }
     }
 
     if (item.tag?.ExtraAttributes?.champion_combat_xp != undefined) {
-      const { champion_combat_xp } = item.tag.ExtraAttributes;
+      const championCombatXp = item.tag.ExtraAttributes.champion_combat_xp;
 
-      if (champion_combat_xp > 0) {
-        item.extra.champion_combat_xp = champion_combat_xp;
+      if (championCombatXp > 0) {
+        item.extra.champion_combat_xp = championCombatXp;
       }
     }
 
     if (item.tag?.ExtraAttributes?.farmed_cultivating != undefined) {
-      const { farmed_cultivating } = item.tag.ExtraAttributes;
+      const farmedCultivating = item.tag.ExtraAttributes.farmed_cultivating;
 
-      if (farmed_cultivating > 0) {
-        item.extra.farmed_cultivating = item.tag?.ExtraAttributes?.mined_crops?.toString() ?? farmed_cultivating;
+      if (farmedCultivating > 0) {
+        item.extra.farmed_cultivating = farmedCultivating.toString();
       }
     }
 
     if (item.tag?.ExtraAttributes?.blocks_walked != undefined) {
-      const { blocks_walked } = item.tag.ExtraAttributes;
+      const blocksWalked = item.tag.ExtraAttributes.blocks_walked;
 
-      if (blocks_walked > 0) {
-        item.extra.blocks_walked = blocks_walked;
+      if (blocksWalked > 0) {
+        item.extra.blocks_walked = blocksWalked;
       }
     }
 
@@ -323,9 +331,9 @@ export async function processItems(base64, source, customTextures = false, packs
 
     // Lore stuff
     const itemLore = item?.tag?.display?.Lore ?? [];
-    const lore_raw = [...itemLore];
+    const loreRaw = [...itemLore];
 
-    const lore = lore_raw != null ? lore_raw.map((a) => (a = helper.getRawLore(a))) : [];
+    const lore = loreRaw != null ? loreRaw.map((a) => (a = helper.getRawLore(a))) : [];
 
     item.rarity = null;
     item.categories = [];
@@ -359,18 +367,38 @@ export async function processItems(base64, source, customTextures = false, packs
         );
       }
 
-      if (item.extra?.expertise_kills) {
-        const expertise_kills = item.extra.expertise_kills;
+      if (item.extra?.compact_blocks) {
+        const compactBlocks = item.extra.compact_blocks;
 
-        if (lore_raw) {
-          itemLore.push("", `§7Expertise Kills: §c${expertise_kills.toLocaleString()}`);
-          if (expertise_kills >= 15000) {
+        if (loreRaw) {
+          itemLore.push("", `§7Ores Mined: §c${compactBlocks.toLocaleString()}`);
+          if (compactBlocks >= 15000) {
             itemLore.push(`§8MAXED OUT!`);
           } else {
             let toNextLevel = 0;
-            for (const e of constants.EXPERTISE_KILLS_LADDER) {
-              if (expertise_kills < e) {
-                toNextLevel = e - expertise_kills;
+            for (const e of constants.ENCHANTMENT_LADDERS.compact_ores) {
+              if (compactBlocks < e) {
+                toNextLevel = e - compactBlocks;
+                break;
+              }
+            }
+            itemLore.push(`§8${toNextLevel.toLocaleString()} ores to tier up!`);
+          }
+        }
+      }
+
+      if (item.extra?.expertise_kills) {
+        const expertiseKills = item.extra.expertise_kills;
+
+        if (loreRaw) {
+          itemLore.push("", `§7Expertise Kills: §c${expertiseKills.toLocaleString()}`);
+          if (expertiseKills >= 15000) {
+            itemLore.push(`§8MAXED OUT!`);
+          } else {
+            let toNextLevel = 0;
+            for (const e of constants.ENCHANTMENT_LADDERS.expertise_kills) {
+              if (expertiseKills < e) {
+                toNextLevel = e - expertiseKills;
                 break;
               }
             }
@@ -380,17 +408,17 @@ export async function processItems(base64, source, customTextures = false, packs
       }
 
       if (item.extra?.hecatomb_s_runs) {
-        const hecatomb_s_runs = item.extra.hecatomb_s_runs;
+        const hecatombSRuns = item.extra.hecatomb_s_runs;
 
-        if (lore_raw) {
-          itemLore.push("", `§7Hecatomb Runs: §c${hecatomb_s_runs.toLocaleString()}`);
-          if (hecatomb_s_runs >= 100) {
+        if (loreRaw) {
+          itemLore.push("", `§7Hecatomb Runs: §c${hecatombSRuns.toLocaleString()}`);
+          if (hecatombSRuns >= 100) {
             itemLore.push(`§8MAXED OUT!`);
           } else {
             let toNextLevel = 0;
-            for (const e of constants.hecatomb_s_runs_ladder) {
-              if (hecatomb_s_runs < e) {
-                toNextLevel = e - hecatomb_s_runs;
+            for (const e of constants.ENCHANTMENT_LADDERS.hecatomb_s_runs) {
+              if (hecatombSRuns < e) {
+                toNextLevel = e - hecatombSRuns;
                 break;
               }
             }
@@ -400,17 +428,17 @@ export async function processItems(base64, source, customTextures = false, packs
       }
 
       if (item.extra?.champion_combat_xp) {
-        const champion_combat_xp = Math.floor(item.extra.champion_combat_xp);
+        const championCombatXp = Math.floor(item.extra.champion_combat_xp);
 
-        if (lore_raw) {
-          itemLore.push("", `§7Champion XP: §c${champion_combat_xp.toLocaleString()}`);
-          if (champion_combat_xp >= 3000000) {
+        if (loreRaw) {
+          itemLore.push("", `§7Champion XP: §c${championCombatXp.toLocaleString()}`);
+          if (championCombatXp >= 3000000) {
             itemLore.push(`§8MAXED OUT!`);
           } else {
             let toNextLevel = 0;
-            for (const e of constants.champion_xp_ladder) {
-              if (champion_combat_xp < e) {
-                toNextLevel = Math.floor(e - champion_combat_xp);
+            for (const e of constants.ENCHANTMENT_LADDERS.champion_xp) {
+              if (championCombatXp < e) {
+                toNextLevel = Math.floor(e - championCombatXp);
                 break;
               }
             }
@@ -420,17 +448,17 @@ export async function processItems(base64, source, customTextures = false, packs
       }
 
       if (item.extra?.farmed_cultivating) {
-        const farmed_cultivating = Math.floor(item.extra.farmed_cultivating);
+        const farmedCultivating = Math.floor(item.extra.farmed_cultivating);
 
-        if (lore_raw) {
-          itemLore.push("", `§7Cultivating Crops: §c${farmed_cultivating.toLocaleString()}`);
-          if (farmed_cultivating >= 100000000) {
+        if (loreRaw) {
+          itemLore.push("", `§7Cultivating Crops: §c${farmedCultivating.toLocaleString()}`);
+          if (farmedCultivating >= 100000000) {
             itemLore.push(`§8MAXED OUT!`);
           } else {
             let toNextLevel = 0;
-            for (const e of constants.cultivating_crops_ladder) {
-              if (farmed_cultivating < e) {
-                toNextLevel = Math.floor(e - farmed_cultivating);
+            for (const e of constants.ENCHANTMENT_LADDERS.cultivating_crops) {
+              if (farmedCultivating < e) {
+                toNextLevel = Math.floor(e - farmedCultivating);
                 break;
               }
             }
@@ -440,17 +468,17 @@ export async function processItems(base64, source, customTextures = false, packs
       }
 
       if (item.extra?.blocks_walked) {
-        const blocks_walked = item.extra.blocks_walked;
+        const blocksWalked = item.extra.blocks_walked;
 
-        if (lore_raw) {
-          itemLore.push("", `§7Blocks Walked: §c${blocks_walked.toLocaleString()}`);
-          if (blocks_walked >= 100000) {
+        if (loreRaw) {
+          itemLore.push("", `§7Blocks Walked: §c${blocksWalked.toLocaleString()}`);
+          if (blocksWalked >= 100000) {
             itemLore.push(`§8MAXED OUT!`);
           } else {
             let toNextLevel = 0;
             for (const e of constants.PREHISTORIC_EGG_BLOCKS_WALKED_LADDER) {
-              if (blocks_walked < e) {
-                toNextLevel = e - blocks_walked;
+              if (blocksWalked < e) {
+                toNextLevel = e - blocksWalked;
                 break;
               }
             }

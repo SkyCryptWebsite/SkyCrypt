@@ -43,33 +43,33 @@ function writeFile(newValue) {
 let hasBeenModified = false;
 
 /** @type {Credentials} */
-const credentials = readFile() ?? {};
+const CREDENTIALS = readFile() ?? {};
 
 for (const key in defaultCredentials) {
-  if (credentials[key] == undefined) {
-    credentials[key] = defaultCredentials[key];
+  if (CREDENTIALS[key] == undefined) {
+    CREDENTIALS[key] = defaultCredentials[key];
     hasBeenModified = true;
   }
 }
 
 if (hasBeenModified) {
-  writeFile(credentials);
+  writeFile(CREDENTIALS);
 }
 
 if (process.env.HYPIXEL_API_KEY) {
-  credentials.hypixel_api_key = process.env.HYPIXEL_API_KEY;
+  CREDENTIALS.hypixel_api_key = process.env.HYPIXEL_API_KEY;
 }
 
 if (process.env.MONGO_CONNECTION_STRING) {
-  credentials.dbUrl = process.env.MONGO_CONNECTION_STRING;
+  CREDENTIALS.dbUrl = process.env.MONGO_CONNECTION_STRING;
 }
 
 if (process.env.REDIS_CONNECTION_STRING) {
-  credentials.redisUrl = process.env.REDIS_CONNECTION_STRING;
+  CREDENTIALS.redisUrl = process.env.REDIS_CONNECTION_STRING;
 }
 
 if (process.env.DISCORD_WEBHOOK) {
-  credentials.discord_webhook = process.env.DISCORD_WEBHOOK;
+  CREDENTIALS.discord_webhook = process.env.DISCORD_WEBHOOK;
 }
 
-export default credentials;
+export default CREDENTIALS;

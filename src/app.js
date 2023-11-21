@@ -1,6 +1,6 @@
 // this file never runs on the master thread
 import * as lib from "./lib.js";
-import { getFileHashes, getFileHash, hashedDirectories } from "./hashes.js";
+import { getFileHashes, getFileHash, HASHED_DIRECTORIES } from "./hashes.js";
 import fetch from "node-fetch";
 
 import express from "express";
@@ -69,7 +69,7 @@ if (process.env.NODE_ENV == "development") {
 
   watch("public/resources/css", { recursive: true }, async (evt, name) => {
     const [, , directory, fileName] = name.split(/\/|\\/);
-    if (hashedDirectories.includes(directory)) {
+    if (HASHED_DIRECTORIES.includes(directory)) {
       fileHashes[directory][fileName] = await getFileHash(name);
     }
   });

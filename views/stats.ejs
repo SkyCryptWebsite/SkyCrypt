@@ -552,10 +552,10 @@ const metaDescription = getMetaDescription()
       <div id="nav_bar_background"></div>
       <div id="nav_items_container">
         <% if (items.armor !== undefined) { %> <a class="nav-item" href="#Armor">Armor</a> <% } %>
-        <% if (items.disabled?.inventory === undefined) { %> <a class="nav-item" href="#Weapons">Weapons</a> <% } %>
-        <% if (items.disabled?.inventory === undefined) { %> <a class="nav-item" href="#Accessories">Accessories</a> <% } %>
+        <% if (items.disabled?.inventory === false) { %> <a class="nav-item" href="#Weapons">Weapons</a> <% } %>
+        <% if (items.disabled?.inventory === false) { %> <a class="nav-item" href="#Accessories">Accessories</a> <% } %>
         <% if (calculated.pets !== undefined) { %> <a class="nav-item" href="#Pets">Pets</a> <% } %>
-        <% if (items.disabled?.inventory === undefined) { %> <a class="nav-item" href="#Inventory">Inventory</a> <% } %>
+        <% if (items.disabled?.inventory === false) { %> <a class="nav-item" href="#Inventory">Inventory</a> <% } %>
         <a class="nav-item" href="#Skills">Skills</a>
         <% if (calculated.dungeons !== undefined) { %> <a class="nav-item" href="#Dungeons">Dungeons</a> <% } %>
         <% if (calculated.slayer !== undefined) { %> <a class="nav-item" href="#Slayer">Slayer</a> <% } %>
@@ -631,7 +631,7 @@ const metaDescription = getMetaDescription()
         <%- include('./sections/stats/items/wardrobe.ejs', { getRarityUpgradeClass, rarityOrder, isEnchanted }); %>
       <% } %>
 
-      <% if (items.disabled?.inventory === undefined) { %>
+      <% if (items.disabled?.inventory === false) { %>
         <!-- Weapons -->
         <% if (items.weapons !== undefined) { %>
           <%- include('./sections/stats/items/weapons.ejs', { getRarityUpgradeClass, rarityOrder, isEnchanted }); %>
@@ -648,7 +648,7 @@ const metaDescription = getMetaDescription()
         <%- include('./sections/stats/pets.ejs', { getRarityUpgradeClass, rarityOrder }); %>
       <% } %>
 
-      <% if (!items.no_inventory) { %>
+      <% if (items.disabled?.inventory === false) { %>
         <!-- Inventories (Inventory, Storage, Ender Chest, Vault, Accessories, Pots, Fish, Quiver) -->
         <%- include('./sections/stats/items/inventory.ejs', { getRarityUpgradeClass, rarityOrder, isEnchanted }); %>
       <% } %>

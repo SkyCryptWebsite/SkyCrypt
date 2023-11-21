@@ -108,7 +108,7 @@ const ignoredAccessories = [
   "GENERAL_MEDALLION",
 ];
 
-export const accessoryAliases = {
+export const ACCESSORY_ALIASES = {
   WEDDING_RING_0: ["WEDDING_RING_1"],
   WEDDING_RING_2: ["WEDDING_RING_3"],
   WEDDING_RING_4: ["WEDDING_RING_5", "WEDDING_RING_6"],
@@ -193,7 +193,7 @@ export function getAllAccessories() {
   const output = items.reduce((accessory, item) => {
     if (ignoredAccessories.includes(item.id)) return accessory;
 
-    if (Object.values(accessoryAliases).find((list) => list.includes(item.id))) return accessory;
+    if (Object.values(ACCESSORY_ALIASES).find((list) => list.includes(item.id))) return accessory;
 
     accessory.push({
       ...item,
