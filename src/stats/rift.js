@@ -29,7 +29,7 @@ export function getRift(userProfile) {
       orbs: userProfile.player_stats.rift?.motes_orb_pickup ?? 0,
     },
     enigma: {
-      souls: rift.enigma.found_souls?.length ?? 0,
+      souls: rift.enigma?.found_souls?.length ?? 0,
       total_souls: constants.RIFT_ENIGMA_SOULS,
     },
     wither_cage: {
