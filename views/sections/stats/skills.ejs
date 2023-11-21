@@ -3,7 +3,9 @@
   <h2 class="stat-header">Skills</h2>
   <div class="stat-content">
     <!-- Mining -->
-    <%- include('./skills/mining.ejs', {}) %>
+    <% if (calculated.mining !== undefined) { %>
+      <%- include('./skills/mining.ejs', {}) %>
+    <% } %>
 
     <!-- Farming -->
     <% if (calculated.farming !== undefined) { %>
@@ -16,6 +18,8 @@
     <% } %>
 
     <!-- Enchanting -->
-    <%- include('./skills/enchanting.ejs', {}) %>
+    <% if (calculated.enchanting !== undefined) { %>
+      <%- include('./skills/enchanting.ejs', {}) %>
+    <% } %>
   </div>
 </div>

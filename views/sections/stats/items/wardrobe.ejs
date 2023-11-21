@@ -10,27 +10,26 @@
   </div>
 <% } %>
 
-<% if (items.wardrobe.length > 0) { %>
-  <p class="stat-sub-header">Wardrobe</p>
-  <div class="pieces wardrobe">
-    <% for (const set of items.wardrobe) { %>
-      <div class="wardrobe-set">
-        <% for (const [index, item] of set.entries()) { %>
-          <% if (item) { %>
-            <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %> index-<%= index %>">
-              <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
-                <div class="piece-shine"></div>
-              <% } %>
+
+<p class="stat-sub-header">Wardrobe</p>
+<div class="pieces wardrobe">
+  <% for (const set of items.wardrobe) { %>
+    <div class="wardrobe-set">
+      <% for (const [index, item] of set.entries()) { %>
+        <% if (item) { %>
+          <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %> index-<%= index %>">
+            <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
+              <div class="piece-shine"></div>
+            <% } %>
               
-              <% itemIcon(item, ['piece-icon']); %>
-            </div>
-          <% } else { %>
-            <div class="piece armor-placeholder index-<%= index %>">
-              <div class="piece-icon item-icon custom-icon"></div>
-            </div>
-          <% } %>
+            <% itemIcon(item, ['piece-icon']); %>
+          </div>
+        <% } else { %>
+          <div class="piece armor-placeholder index-<%= index %>">
+            <div class="piece-icon item-icon custom-icon"></div>
+          </div>
         <% } %>
-      </div>
-    <% } %>
-  </div>
-<% } %>
+      <% } %>
+    </div>
+  <% } %>
+</div>

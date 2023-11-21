@@ -19,7 +19,7 @@ function formatDungeonStat(stat, type) {
   <a class="stat-anchor" id="Dungeons"></a>
   <h2 class="stat-header">Dungeons</h2>
   <div class="stat-content">
-    <% if (calculated.dungeons === undefined || calculated.dungeons.catacombs.visited === false) { %>
+    <% if (calculated.dungeons.catacombs.visited === false) { %>
       <p class="stat-raw-values">
         <%= calculated.display_name %> hasn't entered any dungeon yet.
       </p>
@@ -242,7 +242,7 @@ function formatDungeonStat(stat, type) {
               </div>
 
               <div class="chip-text">
-                <div class="collection-name <%= collection.maxed ? 'max-stat' : '' %>"><span class="stat-name"><%= collection.name %> </span><% if (collection.tier > 0) { %><span class="stat-value"><%= collection.tier %></span><% } %></div>
+                <div class="collection-name <%= collection.maxed ? 'max-stat' : '' %>"><span class="stat-name"><%= collection.name %> </span><% if (collection.tier > 0) { %> <span class="stat-value"><%= collection.tier %></span> <% } %></div>
                 <div class="collection-amount"><span class="stat-name">Bosses killed: </span><span class="stat-value"><%= collection.killed.toLocaleString() %></span></div>
               </div>
             </div>

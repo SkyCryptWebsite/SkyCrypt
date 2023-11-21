@@ -2,7 +2,7 @@ import * as constants from "../constants.js";
 
 export function getRift(userProfile) {
   if (!("rift" in userProfile) || (userProfile.visited_zones && userProfile.visited_zones.includes("rift") === false)) {
-    return null;
+    return;
   }
 
   const rift = userProfile.rift;
