@@ -68,4 +68,8 @@ if (process.env.REDIS_CONNECTION_STRING) {
   credentials.redisUrl = process.env.REDIS_CONNECTION_STRING;
 }
 
+if (process.env.DISCORD_WEBHOOK) {
+  credentials.discord_webhook = process.env.DISCORD_WEBHOOK;
+}
+
 export default credentials;

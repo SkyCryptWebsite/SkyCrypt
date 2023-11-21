@@ -7,6 +7,7 @@ import * as constants from "./constants.js";
 import credentials from "./credentials.js";
 import * as helper from "./helper.js";
 import * as stats from "./stats.js";
+import { SkyCryptError } from "./constants/error.js";
 
 const hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
@@ -207,7 +208,7 @@ export async function getProfile(
       paramPlayer = uuid;
     } catch (e) {
       console.error(e);
-      throw e;
+      throw new SkyCryptError(e);
     }
   }
 
@@ -264,20 +265,20 @@ export async function getProfile(
       const { data } = response;
 
       if (!data.success) {
-        throw new Error("Request to Hypixel API failed. Please try again!");
+        throw new SkyCryptError("Request to Hypixel API failed. Please try again!");
       }
 
       if (data.profiles == null) {
-        throw new Error("Player has no SkyBlock profiles.");
+        throw new SkyCryptError("Player has no SkyBlock profiles.");
       }
 
       allSkyBlockProfiles = data.profiles;
     } catch (e) {
       if (e?.response?.data?.cause != undefined) {
-        throw new Error(`Hypixel API Error: ${e.response.data.cause}.`);
+        throw new SkyCryptError(`Hypixel API Error: ${e.response.data.cause}.`);
       }
 
-      throw e;
+      throw new SkyCryptError(e);
     }
   }
 
@@ -314,7 +315,7 @@ export async function getProfile(
 
     if (memberCount == 0) {
       if (paramProfile) {
-        throw new Error("Uh oh, this SkyBlock profile has no players.");
+        throw new SkyCryptError("Uh oh, this SkyBlock profile has no players.");
       }
 
       continue;
@@ -324,7 +325,7 @@ export async function getProfile(
   }
 
   if (profiles.length == 0) {
-    throw new Error("No data returned by Hypixel API, please try again!");
+    throw new SkyCryptError("No data returned by Hypixel API, please try again!");
   }
 
   let profile;
@@ -383,7 +384,7 @@ export async function getProfile(
     profile = profiles[0];
 
     if (!profile) {
-      throw new Error("Couldn't find any Skyblock profile that belongs to this player.");
+      throw new SkyCryptError("Couldn't find any Skyblock profile that belongs to this player.");
     }
   }
 
@@ -481,7 +482,7 @@ export async function getBingoProfile(
       const { data } = response;
 
       if (!data.success) {
-        throw new Error("Request to Hypixel API failed. Please try again!");
+        throw new SkyCryptError("Request to Hypixel API failed. Please try again!");
       }
 
       profileData = data;
@@ -498,7 +499,7 @@ export async function getBingoProfile(
       }
 
       if (e?.response?.data?.cause != undefined) {
-        throw new Error(`Hypixel API Error: ${e.response.data.cause}.`);
+        throw new SkyCryptError(`Hypixel API Error: ${e.response.data.cause}.`);
       }
 
       throw e;

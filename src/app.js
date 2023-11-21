@@ -11,6 +11,7 @@ import bodyParser from "body-parser";
 import "axios-debug-log";
 
 import fs from "fs-extra";
+import axios from "axios";
 
 import path from "path";
 import * as renderer from "./renderer.js";
@@ -43,6 +44,7 @@ import * as headRoute from "./routes/head.js";
 import * as leatherRoute from "./routes/leather.js";
 import * as potionRoute from "./routes/potion.js";
 import * as stats from "./stats.js";
+import { SkyCryptError } from "./constants/error.js";
 
 const folderPath = helper.getFolderPath();
 
@@ -307,15 +309,55 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
         page: "stats",
       },
       (err, html) => {
-        if (err) console.error(err);
-        else console.debug(`${debugId}: page successfully rendered. (${Date.now() - renderStart}ms)`);
+        if (err) {
+          throw new SkyCryptError(err);
+        }
 
+        console.debug(`${debugId}: page successfully rendered. (${Date.now() - renderStart}ms)`);
         res.set("X-Debug-ID", `${debugId}`);
         res.set("X-Process-Time", `${Date.now() - timeStarted}`);
         res.send(html);
       }
     );
   } catch (e) {
+    if (e instanceof SkyCryptError === false) {
+      const webhookUrl = credentials.discordWebhook;
+      if (webhookUrl === undefined) {
+        return;
+      }
+
+      let description = "";
+      if (playerUsername) {
+        description += `Username: \`${playerUsername}\`\n`;
+      }
+
+      if (req.params) {
+        description += `Options: \`${JSON.stringify(req.params)}\`\n`;
+      }
+
+      if (paramProfile) {
+        description += `Profile: \`${paramProfile}\`\n`;
+      }
+
+      description += `Link: https://sky.shiiyu.moe/stats/${paramPlayer}${paramProfile ? `/${paramProfile}` : ""}\n`;
+      description += `\`\`\`${e.stack}\`\`\``;
+
+      const embed = {
+        title: "Error",
+        description: description,
+        color: 16711680,
+        fields: [],
+        footer: {
+          text: `by @duckysolucky`,
+          icon_url: "https://imgur.com/tgwQJTX.png",
+        },
+      };
+
+      axios.post(webhookUrl, { embeds: [embed] }).catch((error) => {
+        console.error("Error sending embed:", error);
+      });
+    }
+
     const favorites = parseFavorites(req.cookies.favorite);
 
     console.debug(`${debugId}: an error has occurred.`);
