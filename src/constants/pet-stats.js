@@ -706,7 +706,7 @@ class MithrilGolem extends Pet {
     const mult = getValue(this.rarity, { legendary: 0.2 });
     return {
       name: "§6Danger Averse",
-      desc: [`§7Increases your combat stats by §a+${round(this.level * mult, 1)}% §7on a Mining Island.`],
+      desc: [`§7Increases MOST combat stats by §a+${round(this.level * mult, 1)}% §7on mining islands.`],
     };
   }
 
@@ -867,6 +867,57 @@ class Silverfish extends Pet {
     return {
       name: "§6Dexterity",
       desc: [`§7Gives permanent haste III§7.`],
+    };
+  }
+}
+
+class Slug extends Pet {
+  get stats() {
+    return {
+      intelligence: this.level * 0.25,
+      defense: this.level * 0.2,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second];
+
+    if (this.rarity >= LEGENDARY) {
+      list.push(this.third);
+    }
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, { epic: 0.2 });
+    return {
+      name: "§6Slow and Steady",
+      desc: [
+        `§7When fishing in the §cCrimson §cIsle§7, §aSlugfish §7take §a${round(
+          this.level * mult,
+          1
+        )}% §7less time to catch.`,
+      ],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { epic: 0.4 });
+    return {
+      name: "§6Pest Friends",
+      desc: [`§7Grants §a${round(this.level * mult, 1)} §a${SYMBOLS.bonus_pest_chance} Bonus Pest Chance.`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+    return {
+      name: "§6Repugnant Aroma",
+      desc: [
+        `§7When farming in a plot affected by a §aSprayonator§7, gain §6+${round(this.level * mult, 1)} ${
+          SYMBOLS.farming_fortune
+        } Farming Fortune§7.`,
+      ],
     };
   }
 }
@@ -3648,6 +3699,7 @@ export const PET_STATS = {
   SCATHA: Scatha,
   SHEEP: Sheep,
   SILVERFISH: Silverfish,
+  SLUG: Slug,
   SKELETON_HORSE: SkeletonHorse,
   SKELETON: Skeleton,
   SNAIL: Snail,

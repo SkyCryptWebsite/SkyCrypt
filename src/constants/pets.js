@@ -560,6 +560,13 @@ export const PET_DATA = {
     maxLevel: 100,
     emoji: "🕷️",
   },
+  SLUG: {
+    head: "/head/7a79d0fd677b54530961117ef84adc206e2cc5045c1344d61d776bf8ac2fe1ba",
+    type: "farming",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🐌"
+  }
 };
 
 export const PET_VALUE = {

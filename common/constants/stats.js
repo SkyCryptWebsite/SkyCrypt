@@ -344,6 +344,13 @@ export const STATS_DATA = {
     suffix: "",
     color: "3",
   },
+  bonus_pest_chance: {
+    name: "Bonus Pest Chance",
+    nameLore: "Bonus Pest Chance",
+    nameShort: "Bonus Pest Chance",
+    nameTiny: "BPC",
+    symbol: "ൠ",
+  },
 };
 
 export const HIDDEN_STATS = [
