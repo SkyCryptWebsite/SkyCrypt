@@ -37,7 +37,7 @@ function getDojoRank(points) {
       <br>
     <% } %>
 
-    <% if (calculated.crimson_isle.kuudra !== undefined) { %>
+    <% if (calculated.crimson_isle.kuudra !== undefined && calculated.crimson_isle.kuudra.total > 0) { %>
       <p class="stat-sub-header">Kuudra Completions</p>
       <span class="stat-name">Total Completions: </span>
       <span class="stat-value"><%= calculated.crimson_isle.kuudra.total.toLocaleString() %></span>

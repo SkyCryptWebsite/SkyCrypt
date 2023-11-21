@@ -77,7 +77,7 @@ function getMiscUncategorized(userProfile) {
 
     output.favorite_arrow = {
       raw: favoriteArrow,
-      formatted: `${helper.titleCase(favoriteArrow)}`,
+      formatted: `${helper.titleCase(favoriteArrow.replace("_", " "))}`,
     };
   }
 

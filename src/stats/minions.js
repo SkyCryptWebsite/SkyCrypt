@@ -38,17 +38,16 @@ function getProfileMinions(coopMembers) {
       minions: [],
     };
 
-    const categoryMinions = minions.filter((a) => Object.keys(constants.MINIONS[category]).includes(a.id));
-    for (const minion of categoryMinions) {
-      const minionData = constants.MINIONS[category][minion.id];
+    for (const [id, data] of Object.entries(constants.MINIONS[category])) {
+      const minion = minions.find((m) => m.id === id);
 
       output[category].minions.push({
-        id: minion.id,
-        name: minionData.name ?? helper.titleCase(minion.id.replace("_", " ")),
-        texture: minionData.texture,
-        tiers: _.uniq(minion.tiers.sort((a, b) => a - b)),
-        tier: minion.tiers.length > 0 ? Math.max(...minion.tiers) : 0,
-        maxTier: minionData.maxTier ?? 11,
+        id: id,
+        name: data.name ?? helper.titleCase(id.replace("_", " ")),
+        texture: data.texture,
+        tiers: minion?.tiers?.length > 0 ? _.uniq(minion.tiers.sort((a, b) => a - b)) : [],
+        tier: minion?.tiers?.length > 0 ? Math.max(...minion.tiers) : 0,
+        maxTier: data.maxTier ?? 11,
       });
     }
 
@@ -56,7 +55,7 @@ function getProfileMinions(coopMembers) {
     output[category].maxedMinions = output[category].minions.filter((m) => m.tier === m.maxTier).length;
 
     output[category].totalTiers = output[category].minions.reduce((a, b) => a + b.tiers.length, 0);
-    output[category].maxedTiers = output[category].minions.reduce((a, b) => a + b.maxTier, 0);
+    output[category].maxedTiers = output[category].minions.filter((m) => m.tier === m.maxTier).length;
   }
 
   return output;

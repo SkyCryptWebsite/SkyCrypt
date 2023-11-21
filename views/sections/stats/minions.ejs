@@ -50,7 +50,7 @@
       <div class="collections">  
         <% for (const minion of categoryData.minions) { 
           let amountsTooltip = "";
-          for (let i = 1; i <= minion.tiers.length; i++) {
+          for (let i = 1; i <= minion.maxTier; i++) {
             amountsTooltip += `<div class='minion-variant ${minion.tiers.includes(i) ? "minion-crafted" : ""}'>${helper.romanize(i)}</div>`
           } %>
 
