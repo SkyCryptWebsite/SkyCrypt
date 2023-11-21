@@ -227,16 +227,6 @@ export const STATS_DATA = {
     suffix: "",
     color: "a",
   },
-  // todo: remove this once #1639 is merged and update wisdom values
-  wisdom: {
-    name: "Wisdom",
-    nameLore: "Wisdom",
-    nameShort: "Wisdom",
-    nameTiny: "W",
-    symbol: "☯",
-    suffix: "",
-    color: "3",
-  },
   mana_regen: {
     name: "Mana Regen",
     nameLore: "Mana Regen",
