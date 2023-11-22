@@ -19,7 +19,7 @@ import { getFileHash } from "./hashes.js";
 const execFile = util.promisify(child_process.execFile);
 
 const NORMALIZED_SIZE = 128;
-const RESOURCE_CACHING = false;
+const RESOURCE_CACHING = true;
 
 const FOLDER_PATH = getFolderPath();
 const RESOURCE_PACK_FOLDER = path.resolve(getFolderPath(), "..", "public", "resourcepacks");

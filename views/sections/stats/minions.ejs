@@ -4,17 +4,19 @@
   <div class="stat-content">
     <p class="stat-raw-values">
       <!-- Unique Minions -->
-      <% max = calculated.minions.maxedTiers === calculated.minions.totalTiers ? 'golden-text' : '' %>
+      <% max = calculated.minions.unlockedTiers === calculated.minions.unlockableTiers ? 'golden-text' : '' %>
       <span class="stat-name <%= max %>">Unique Minions: </span>
-      <span class="stat-value <%= max %>"><%= calculated.minions.maxedTiers %> / <%= calculated.minions.totalTiers %></span>
-      <span class="grey-text"> (<%= Math.floor(calculated.minions.maxedTiers / calculated.minions.totalTiers * 100) %>%)</span>
+      <span class="stat-value <%= max %>"><%= calculated.minions.unlockedTiers %> / <%= calculated.minions.unlockableTiers %></span>
+      <% if (calculated.minions.unlockedTiers && calculated.minions.unlockableTiers) { %>
+        <span class="grey-text"> (<%= Math.floor(calculated.minions.unlockedTiers / calculated.minions.unlockableTiers * 100) %>%)</span>
+      <% } %>
       <br>
 
       <!-- Minion Slots -->
       <% max = calculated.minions.minion_slots.current == constants.MINIONS_MAX_SLOTS ? 'golden-text' : '' %>
       <span class="stat-name <%= max %>">Minion Slots: </span>
-      <span class="stat-value <%= max %>"><%= calculated.minions.minion_slots.current %>
-      </span><span class=" grey-text"> (<%= calculated.minions.minion_slots.next %> to next slot)</span>
+      <span class="stat-value <%= max %>"><%= calculated.minions.minion_slots.current %></span>
+      <span class=" grey-text"> (<%= calculated.minions.minion_slots.next %> to next slot)</span>
       <br>
 
       <!-- Bonus Minion Slots (Community Shop) -->

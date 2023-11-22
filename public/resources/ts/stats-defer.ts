@@ -127,7 +127,7 @@ export const ALL_ITEMS = new Map(
     items.storage,
     items.hotm,
     items.bingo_card,
-    //items.museum,
+    items.museum,
   ]
     .flat()
     .flatMap((item) => {

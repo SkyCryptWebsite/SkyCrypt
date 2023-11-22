@@ -7,6 +7,10 @@ import _ from "lodash";
 // pairings = Superpairs
 
 export function getEnchanting(userProfile) {
+  if (userProfile.experimentation === undefined) {
+    return;
+  }
+
   const enchanting = {
     unlocked: userProfile.experimentation !== undefined,
     experiments: {},

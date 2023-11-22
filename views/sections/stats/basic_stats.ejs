@@ -26,14 +26,16 @@
     <% } %> 
     
     <!-- Purse -->
-    <div class="additional-stat">
-      <span class="stat-name">Purse: </span>
-        <span class="stat-value"><%= helper.formatNumber(calculated.currencies.purse, true) %> Coin<%= Math.floor(calculated.currencies.purse) == 1 ? '': 's' %>
-      </span>
-    </div>
+    <% if ('purse' in calculated.currencies && calculated.currencies.purse > 0) { %>
+      <div class="additional-stat">
+        <span class="stat-name">Purse: </span>
+          <span class="stat-value"><%= helper.formatNumber(calculated.currencies.purse, true) %> Coin<%= Math.floor(calculated.currencies.purse) == 1 ? '': 's' %>
+        </span>
+      </div>
+    <% } %> 
     
     <!-- Bank -->
-    <% if ('bank' in calculated.currencies) { %>
+    <% if ('bank' in calculated.currencies && calculated.currencies.bank > 0) { %>
       <div class="additional-stat">
         <span class="stat-name">Bank Account: </span>
           <span class="stat-value"><%= helper.formatNumber(calculated.currencies.bank, true) %> Coin<%= Math.floor(calculated.currencies.bank) == 1 ? '': 's' %>
@@ -103,6 +105,10 @@
         if ("runecrafting" in calculated.skills.skills === false) {
           weight.total -= weight.skill;
           weight.skill = 0;
+        }
+        
+        if (weight.total === 0) {
+          continue;
         } %>
 
         <div class="additional-stat">
