@@ -80,7 +80,7 @@ declare const items: {
   candy_bag: (ItemSlot | Item | Backpack)[];
   storage: (ItemSlot | Item | Backpack)[];
   bingo_card: (ItemSlot | Item | Backpack)[];
-  museum: (ItemSlot | Item | Backpack)[];
+  //museum: (ItemSlot | Item | Backpack)[];
 };
 
 type StatName =

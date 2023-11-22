@@ -175,7 +175,7 @@ export async function getStats(
         fishing_bag: items.fishing_bag,
         potion_bag: items.potion_bag,
         candy_inventory: items.candy_bag,
-        museum: [],
+        //museum: [],
       },
       output.currencies.bank,
       { cache: true, onlyNetworth: true, v2Endpoint: true }

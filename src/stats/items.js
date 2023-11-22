@@ -147,11 +147,11 @@ export async function getItems(
   output.hotm = hotm;
   output.candy_bag = candy_bag;
 
-  const museum =
-    "museum" in profile ? await items.getMuseumItems(profile, customTextures, packs, options.cacheOnly) : [];
+  // const museum =
+  //   "museum" in profile ? await items.getMuseumItems(profile, customTextures, packs, options.cacheOnly) : [];
 
-  output.museumItems = museum?.museumItems ?? [];
-  output.museum = museum?.museum ?? [];
+  // output.museumItems = museum?.museumItems ?? [];
+  // output.museum = museum?.museum ?? [];
 
   output.bingo_card = await items.getBingoCard(paramBingo, options.cacheOnly);
 
