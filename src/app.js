@@ -271,10 +271,10 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       debugId,
     });
 
-    /*const museum = await lib.getMuseum(db, profile, { cacheOnly, debugId });
+    const museum = await lib.getMuseum(db, profile, { cacheOnly, debugId });
     for (const member in museum) {
       profile.members[member].museum = museum[member];
-    }*/
+    }
 
     const paramBingo =
       profile.game_mode === "bingo" ? await lib.getBingoProfile(db, paramPlayer, { cacheOnly, debugId }) : null;

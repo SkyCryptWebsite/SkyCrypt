@@ -2,13 +2,16 @@
   <a class="stat-anchor" id="Collections"></a>
   <h2 class="stat-header">Collections</h2>
   <div class="stat-content">
-
+    
     <% max = calculated.collections.maxedCollections === calculated.collections.totalCollections ? 'golden-text' : ''; %>
     <span class="stat-name <%= max %>">Maxed Collections: </span>
     <span class="stat-value <%= max %>"><%= calculated.collections.maxedCollections %> / <%= calculated.collections.totalCollections %></span>
-
+    
     <% for (const [category, categoryData] of Object.entries(calculated.collections)) { %>
-      <% if (categoryData.collections === undefined) continue; %>
+      <% if (categoryData.collections === undefined || categoryData.collections.length === 0) {
+        continue;
+      } %>
+
       <div class="category-header">
         <div class="category-icon">
           <div class="item-icon <%= skillItems[category.toLowerCase()] ?? "icon-166_0" %>"></div>
