@@ -4,7 +4,7 @@ import * as constants from "../constants.js";
 
 async function getLevels(userProfile, profileMembers, hypixelProfile, levelCaps) {
   const skillLevels = {};
-  if ("experience" in userProfile.player_data ?? {}) {
+  if (userProfile && ("experience" in userProfile.player_data ?? {})) {
     const SKILL = userProfile.player_data.experience;
 
     const socialExperience = Object.keys(profileMembers).reduce((a, b) => {
