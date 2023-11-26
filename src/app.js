@@ -11,7 +11,6 @@ import bodyParser from "body-parser";
 import "axios-debug-log";
 
 import fs from "fs-extra";
-import axios from "axios";
 
 import path from "path";
 import * as renderer from "./renderer.js";
