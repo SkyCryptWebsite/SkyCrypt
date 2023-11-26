@@ -1187,10 +1187,6 @@ export async function sendWebhookMessage(e, req) {
       description: description,
       color: 16711680,
       fields: [],
-      footer: {
-        text: `by @duckysolucky`,
-        icon_url: "https://imgur.com/tgwQJTX.png",
-      },
     };
 
     axios.post(webhookUrl, { embeds: [embed] }).catch((error) => {
