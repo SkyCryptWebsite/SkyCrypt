@@ -26,7 +26,7 @@ export async function getCollections(uuid, profile, dungeons, kuudra, cacheOnly 
 
   const userProfile = profile.members[uuid];
   if (
-    (userProfile?.player_data && !("unlocked_coll_tiers" in userProfile.player_data)) ||
+    (userProfile?.player_data && !("unlocked_coll_tiers" in (userProfile?.player_data ?? {}))) ||
     !("collection" in userProfile)
   ) {
     return;

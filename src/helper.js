@@ -1162,3 +1162,35 @@ export async function applyResourcePack(item, packs) {
 
   return item;
 }
+
+export async function sendWebhookMessage(e, req) {
+  const webhookUrl = credentials.discord_webhook;
+  if (webhookUrl !== undefined && req.params !== undefined) {
+    let description = "";
+    const playerUsername = req.params.player;
+    if (playerUsername) {
+      description += `Username: \`${playerUsername}\`\n`;
+    }
+
+    description += `Options: \`${JSON.stringify(req.params)}\`\n`;
+
+    const paramProfile = req.params.profile;
+    if (paramProfile) {
+      description += `Profile: \`${paramProfile}\`\n`;
+    }
+
+    description += `Link: https://sky.shiiyu.moe/stats/${playerUsername}${paramProfile ? `/${paramProfile}` : ""}\n`;
+    description += `\`\`\`${e.stack}\`\`\``;
+
+    const embed = {
+      title: "Error",
+      description: description,
+      color: 16711680,
+      fields: [],
+    };
+
+    axios.post(webhookUrl, { embeds: [embed] }).catch((error) => {
+      console.log(error);
+    });
+  }
+}
