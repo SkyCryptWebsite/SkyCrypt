@@ -90,7 +90,7 @@ function getMiscUncategorized(userProfile) {
     };
   }
 
-  if ("reaper_peppers_eaten" in userProfile.player_data) {
+  if (userProfile?.player_data && "reaper_peppers_eaten" in userProfile.player_data) {
     const reaperPeppersEaten = userProfile.player_data.reaper_peppers_eaten;
 
     output.reaper_peppers_eaten = {
