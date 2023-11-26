@@ -202,7 +202,7 @@ export function getMisc(profile, userProfile, hypixelProfile) {
     };
   }
 
-  if (userProfile.player_stats.end_island?.dragon_fight !== undefined) {
+  if (userProfile.player_stats.end_island?.dragon_fight !== undefined && userProfile.player_stats?.kills) {
     const dragonKills = Object.keys(userProfile.player_stats.kills)
       .filter((key) => key.endsWith("_dragon") && !key.startsWith("master_wither_king"))
       .reduce((obj, key) => ({ ...obj, [key.replace("_dragon", "")]: userProfile.player_stats.kills[key] }), {});

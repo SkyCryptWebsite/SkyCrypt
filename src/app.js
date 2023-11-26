@@ -315,7 +315,10 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       },
       (err, html) => {
         if (err) {
-          throw new SkyCryptError(err);
+          console.debug(`${debugId}: an error has occurred.`);
+          console.error(err);
+
+          helper.sendWebhookMessage(err, req);
         }
 
         console.debug(`${debugId}: page successfully rendered. (${Date.now() - renderStart}ms)`);
@@ -326,38 +329,8 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
     );
   } catch (e) {
     if (e instanceof SkyCryptError === false) {
-      const webhookUrl = credentials.discord_webhook;
-      if (webhookUrl !== undefined) {
-        let description = "";
-        if (playerUsername) {
-          description += `Username: \`${playerUsername}\`\n`;
-        }
-
-        if (req.params) {
-          description += `Options: \`${JSON.stringify(req.params)}\`\n`;
-        }
-
-        if (paramProfile) {
-          description += `Profile: \`${paramProfile}\`\n`;
-        }
-
-        description += `Link: https://sky.shiiyu.moe/stats/${paramPlayer}${paramProfile ? `/${paramProfile}` : ""}\n`;
-        description += `\`\`\`${e.stack}\`\`\``;
-
-        const embed = {
-          title: "Error",
-          description: description,
-          color: 16711680,
-          fields: [],
-          footer: {
-            text: `by @duckysolucky`,
-            icon_url: "https://imgur.com/tgwQJTX.png",
-          },
-        };
-
-        axios.post(webhookUrl, { embeds: [embed] }).catch((error) => {
-          console.log(error);
-        });
+      if (e.message !== "socket hang up") {
+        helper.sendWebhookMessage(e, req);
       }
     }
 

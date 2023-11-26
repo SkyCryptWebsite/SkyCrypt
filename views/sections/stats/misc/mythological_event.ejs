@@ -9,9 +9,11 @@
   
   <p class="stat-raw-values">
     <!-- Mytholocial Event Kills -->
-    <span class="stat-name">Kills: </span>
-    <span class="stat-value"><%= calculated.misc.mythological_event.kills.toLocaleString() %></span>
-    <br>
+    <% if (calculated.misc.mythological_event.kills !== undefined) { %>
+      <span class="stat-name">Kills: </span>
+      <span class="stat-value"><%= calculated.misc.mythological_event.kills.toLocaleString() %></span>
+      <br>
+    <% } %>
 
     <%  
     const burrow_naming = {

@@ -140,11 +140,11 @@ export async function getStats(
 
   output.skyblock_level = await stats.getSkyBlockLevel(userProfile);
 
-  output.visited_zones = userProfile.player_data.visited_zones || [];
+  output.visited_zones = userProfile.player_data?.visited_zones || [];
 
-  output.visited_modes = userProfile.player_data.visited_modes || [];
+  output.visited_modes = userProfile.player_data?.visited_modes || [];
 
-  output.perks = userProfile.player_data.perks || {};
+  output.perks = userProfile.player_data?.perks || {};
 
   output.harp_quest = userProfile.quests?.harp_quest || {};
 
