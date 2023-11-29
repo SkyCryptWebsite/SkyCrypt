@@ -77,6 +77,12 @@ export async function getDungeons(userProfile, hypixelProfile) {
 
     const id = `dungeon_${type}`;
     const floors = getFloors(type, dungeon);
+    const completions = Object.values(floors).reduce((a, b) => a + (b.stats?.tier_completions ?? 0), 0);
+    if (completions === 0) {
+      output[type] = { visited: false };
+      continue;
+    }
+
     output[type] = {
       id: id,
       visited: true,
@@ -88,13 +94,13 @@ export async function getDungeons(userProfile, hypixelProfile) {
       }),
       highest_floor: `floor_${dungeon.highest_tier_completed ?? 0}`,
       floors: floors,
-      completions: Object.values(floors).reduce((a, b) => a + (b.stats?.tier_completions ?? 0), 0),
+      completions: completions,
     };
 
     output[type].level.rank = await getLeaderboardPosition(`dungeons_${type}_xp`, dungeon.experience);
   }
 
-  output.floor_completions = (output.catacombs.completions ?? 0) + (output.master_catacombs?.completions ?? 0);
+  output.floor_completions = (output.catacombs?.completions ?? 0) + (output.master_catacombs?.completions ?? 0);
 
   // Classes
   output.classes = {

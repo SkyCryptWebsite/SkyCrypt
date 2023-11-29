@@ -97,7 +97,7 @@ export async function getCollections(uuid, profile, dungeons, kuudra, cacheOnly 
 
 function getBossCollections(dungeons, kuudra) {
   const output = [];
-  if (dungeons === undefined) {
+  if (dungeons?.catacombs?.floors === undefined) {
     return output;
   }
 

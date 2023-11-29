@@ -11,7 +11,7 @@ function formatSlayerCoinsSpent(coins) {
   <a class="stat-anchor" id="Slayer"></a>
   <h2 class="stat-header">Slayer</h2>
   <div class="stat-content">
-    <% if (calculated.slayer === undefined) { %>
+    <% if (calculated.slayer === undefined || calculated.slayer.total_slayer_xp === 0) { %>
       <p class="stat-raw-values"> <%= calculated.display_name %> hasn't played any Slayer yet. </p>
     <% } else { %>
       <p class="stat-raw-values">
