@@ -189,6 +189,8 @@ export async function getStats(
 
   console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
 
+  stats.updateLeaderboardData(profile.uuid, output);
+
   return output;
 }
 

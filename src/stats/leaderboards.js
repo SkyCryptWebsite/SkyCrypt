@@ -1,4 +1,9 @@
-// TODO: Full rewrite needed
+import { redisClient } from "../redis.js";
+import * as helper from "../helper.js";
+import * as constants from "../constants.js";
+import * as stats from "../stats.js";
+import _ from "lodash";
+import fs from "fs";
 
 /*
 import { redisClient } from "../redis.js";
@@ -227,3 +232,24 @@ async function updateLeaderboardPositions(db, uuid, allProfiles) {
   }
 }
 */
+
+export async function updateLeaderboardData(uuid, calculated) {
+  if (constants.BLOCKED_PLAYERS.includes(uuid)) {
+    return;
+  }
+
+  console.log(calculated);
+
+  // await fs.writeFileSync("./leaderboard.json", JSON.stringify(calculated, null, 2));
+
+  const values = {};
+
+  const multi = redisClient.pipeline();
+  for (const key in values) {
+    if (values[key] === null) {
+      continue;
+    }
+
+    multi.zadd(`lb_${key}`, values[key], uuid);
+  }
+}
