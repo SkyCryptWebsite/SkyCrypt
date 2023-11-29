@@ -10,6 +10,10 @@ function getFloors(type, dungeon) {
     }
 
     for (const floor of Object.keys(dungeon[key])) {
+      if (floor === "total") {
+        continue;
+      }
+
       if (!floors[floor]) {
         floors[floor] = {
           name: `floor_${floor}`,
