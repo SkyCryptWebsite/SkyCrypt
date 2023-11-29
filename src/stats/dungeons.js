@@ -10,7 +10,7 @@ function getFloors(type, dungeon) {
     }
 
     for (const floor of Object.keys(dungeon[key])) {
-      if (floor === "total") {
+      if (floor === "total" || floor === "best") {
         continue;
       }
 
