@@ -29,7 +29,13 @@
 
           if (collection.amounts !== undefined) { 
             amountsTooltip = collection.amounts.map(amount => `<span class="stat-name">${amount.username}: </span><span class="stat-value">${amount.amount.toLocaleString()}</span>`).join('<br>') + `<br><br><span class="stat-name">Total: </span><span class="stat-value">${collection.totalAmount.toLocaleString()}</span>`;
+          } else if (collection.rewards !== undefined) {
+            amountsTooltip = `<span class="stat-name">Rewards:</span>`;
+            for (const reward of collection.rewards) {
+              amountsTooltip += `<br><span class="stat-value">- ${reward.name}</span>`;
+            }
           } %>
+
           <div class="chip" data-tippy-content='<%= amountsTooltip %>' data-missing="<%= collection.totalAmount === 0 %>">
             <div class="chip-icon-wrapper">
               <div style="background-image:url(<%= collection.texture %>)" class="item-icon custom-icon"></div>
