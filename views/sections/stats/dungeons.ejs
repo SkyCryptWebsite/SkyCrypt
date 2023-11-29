@@ -101,7 +101,6 @@ function formatDungeonStat(stat, type) {
       <p class="stat-sub-header">Catacombs</p>
       <div class="floor-containers narrow-info-container-wrapper">
         <% for (let [id, floor] of Object.entries(calculated.dungeons.catacombs.floors)) { %>
-
           <div class="narrow-info-container">
             <div class="narrow-info-header">
               <div class="floor-icon" style="background-image: url(/head/<%= floor.icon_texture %>)"></div>
