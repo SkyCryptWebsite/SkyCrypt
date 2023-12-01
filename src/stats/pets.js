@@ -76,7 +76,7 @@ function getProfilePets(pets, calculated) {
     return output;
   }
 
-  //// debug pets
+  // debug pets
   // pets = helper.generateDebugPets("SNOWMAN");
 
   for (const pet of pets) {
