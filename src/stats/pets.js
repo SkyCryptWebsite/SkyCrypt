@@ -76,8 +76,8 @@ function getProfilePets(pets, calculated) {
     return output;
   }
 
-  // debug pets
-  // pets = helper.generateDebugPets("SLUG");
+  //// debug pets
+  // pets = helper.generateDebugPets("SNOWMAN");
 
   for (const pet of pets) {
     if ("tier" in pet === false) {
