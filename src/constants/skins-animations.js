@@ -1021,6 +1021,62 @@ const SKINS = [
     source: "firesale",
     release: new Date("2023-11-18 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_ENDERMAN_BLUE_MOON",
+    name: "Blue Moon",
+    texture: "/head/181586f6e79169d79570e319b2f08895cf366ca3ac506af88f831510783f8987",
+    source: "firesale",
+    release: new Date("2023-11-25 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_ENDERMAN_SUN",
+    name: "Sun",
+    texture: "/head/7f261e3fe875dd75a7fbd4ea7b1932ca2f3e18665a80f32429e4f3fe504dca76",
+    source: "firesale",
+    release: new Date("2023-11-25 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_ENDERMAN_NEBULA",
+    name: "Nebula",
+    texture: "/head/b32907495cfb0cf38bb0cdd2cd1822111cb6469088cd98423143815b55dbbd4a",
+    source: "firesale",
+    release: new Date("2023-11-25 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_CHICKEN_RUBBER",
+    name: "Rubber Chicken",
+    texture: "/head/414b3d49dfaf37ce453deb2cafb67dd4b4701195bacc0b6d9a38ac32e34a3eb2",
+    source: "firesale",
+    release: new Date("2023-11-25 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_SLUG_AZURE_SEA_SLUG",
+    name: "Azure Sea",
+    texture: "/head/164e899de34b54cc75cf0959067678d2c4173f1da0fc3f8ba1384b6a58a6d847",
+    source: "firesale",
+    release: new Date("2023-12-02 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_SLUG_LEAF_SHEEP_SEA_SLUG",
+    name: "Leaf Sheep Sea",
+    texture: "/head/c55803ea21a24393b5f5e16b72121e658c67696ffa599b13d8127a7fef5183b",
+    source: "firesale",
+    release: new Date("2023-12-02 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_SLUG_VIOLET_SEA_SLUG",
+    name: "Violet Sea",
+    texture: "/head/d1ded62405522ec72b8c4ef306e1098b3ede765d971d574ffa03c0b099f803a6",
+    source: "firesale",
+    release: new Date("2023-12-02 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_SNAIL_RAINBOW",
+    name: "Rainbow",
+    texture: "/head/e95522a1aabe6709ee077de132ae1e501b84e98d5bb0d531ca3d637c121297f6",
+    source: "firesale",
+    release: new Date("2023-12-02 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
