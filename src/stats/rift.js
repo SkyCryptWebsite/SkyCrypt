@@ -15,9 +15,11 @@ export function getRift(userProfile) {
   }
 
   const timecharms = [];
-  for (const [key, data] of constants.RIFT_TIMECHARMS.entries()) {
-    data.unlocked = rift.gallery?.secured_trophies && rift.gallery.secured_trophies[key]?.type !== undefined;
-    data.unlocked_at = rift.gallery?.secured_trophies && rift.gallery.secured_trophies[key]?.timestamp;
+  for (const data of constants.RIFT_TIMECHARMS) {
+    const charmData = rift.gallery?.secured_trophies && rift.gallery.secured_trophies.find((a) => a.type === data.type);
+
+    data.unlocked = charmData !== undefined;
+    data.unlocked_at = charmData?.timestamp;
 
     timecharms.push(data);
   }
