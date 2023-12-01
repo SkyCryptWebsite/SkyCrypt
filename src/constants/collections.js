@@ -227,4 +227,30 @@ export const BOSS_COLLECTIONS = [
       },
     ],
   },
+  {
+    name: "Kuudra",
+    texture: "/head/82ee25414aa7efb4a2b4901c6e33e5eaa705a6ab212ebebfd6a4de984125c7a0",
+    rewards: [
+      {
+        name: "Kuudra Pet",
+        required: 10,
+      },
+      {
+        name: "Kuudra Chunk",
+        required: 100,
+      },
+      {
+        name: "Meaty Kuudra Chunk",
+        required: 500,
+      },
+      {
+        name: "Hardened Kuudra Chunk",
+        required: 2000,
+      },
+      {
+        name: "Enriched Kuudra Chunk",
+        required: 5000,
+      },
+    ],
+  },
 ];
