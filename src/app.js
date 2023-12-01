@@ -312,12 +312,33 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
         fileNameMap,
         page: "stats",
       },
-      (err, html) => {
+      async (err, html) => {
         if (err) {
           console.debug(`${debugId}: an error has occurred.`);
           console.error(err);
 
           helper.sendWebhookMessage(err, req);
+
+          const favorites = parseFavorites(req.cookies.favorite);
+          res.render(
+            "index",
+            {
+              req,
+              error: "An error has occurred. Please contact developers on Discord if this issue persists.",
+              player: playerUsername,
+              extra: await getExtra("index", favorites, cacheOnly),
+              promotion: weightedRandom(constants.PROMOTIONS),
+              fileHashes,
+              fileNameMap,
+              helper,
+              page: "index",
+            },
+            (err, html) => {
+              res.set("X-Debug-ID", `${debugId}`);
+              res.set("X-Process-Time", `${Date.now() - timeStarted}`);
+              res.send(html);
+            }
+          );
         }
 
         console.debug(`${debugId}: page successfully rendered. (${Date.now() - renderStart}ms)`);
