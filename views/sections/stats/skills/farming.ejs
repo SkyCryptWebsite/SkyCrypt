@@ -23,27 +23,34 @@ function itemIcon(item, classes) { %>
   </div>
 
   <p class="stat-raw-values">
-    <% if (calculated.weight?.farming) { %>
+    <% const farmingWeight = calculated.weight?.farming;
+    if (farmingWeight !== undefined) { %>
       <!-- Farming Weight -->
       <span class="interactive-tooltip" data-tippy-content="
         <span class='stat-name'>Farming Weight</span><br>
         <span class='stat-info'>Weight calculations by <a href='https://elitebot.dev' target='_blank' rel='noreferrer'>Elite</a></span>
         <br/>
         <br/>
-        <% const crops = Object.values(calculated.weight.farming.crops).sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())); %>
-        <% for (const crop of crops) { %>
-          <% if (crop.weight > 0) { %>
-            <span class='stat-name'><%= crop.name %>: </span>
-            <span class='stat-value'> <%= parseFloat(crop.weight.toFixed(2)).toLocaleString() %> </span><br/>
-          <% } %>
+        <% const crops = Object.values(farmingWeight.crops).sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())); %>
+        <% for (const crop of crops) {
+           if (crop.weight === 0) {
+            continue;
+          } %>
+            
+          <span class='stat-name'><%= crop.name %>: </span>
+          <span class='stat-value'> <%= parseFloat(crop.weight.toFixed(2)).toLocaleString() %> </span><br/>
         <% } %>
         <br/>
 
-        <span class='stat-name'>Total Crop Weight: </span>
-        <span class='stat-value'><%= parseFloat(calculated.weight.farming.crop_weight.toFixed(2)).toLocaleString() %></span>">
+        <% for (const [key, value] of Object.entries(farmingWeight.bonuses)) { %>
+          <span class='stat-name'><%= helper.titleCase(key.replaceAll("_", " ")) %>: </span>
+          <span class='stat-value'><%= value.weight.toLocaleString() %></span>
+          <br>
+        <% } %>
+        ">
 
         <span class="stat-name">Farming Weight: </span>
-        <span class="stat-value"><%= parseFloat(calculated.weight.farming.weight.toFixed(2)).toLocaleString() %></span>
+        <span class="stat-value"><%= parseFloat(farmingWeight.weight.toFixed(2)).toLocaleString() %></span>
       </span>
       <br>
     <% } %>

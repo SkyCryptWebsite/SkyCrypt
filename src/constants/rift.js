@@ -28,36 +28,43 @@ export const RIFT_EYES = [
 export const RIFT_TIMECHARMS = [
   {
     name: "Supreme Timecharm",
+    type: "wyldly_supreme",
     id: 18,
     damage: 1,
   },
   {
     name: "mrahcemiT esrevrorriM",
+    type: "mirrored",
     id: 20,
     damage: 0,
   },
   {
     name: "Chicken N Egg Timecharm",
+    type: "chicken_n_egg",
     id: 88,
     damage: 0,
   },
   {
     name: "SkyBlock Citizen Timecharm",
+    type: "citizen",
     id: 84,
     damage: 0,
   },
   {
     name: "Living Timecharm",
+    type: "lazy_living",
     id: 21,
     damage: 0,
   },
   {
     name: "Globulate Timecharm",
+    type: "slime",
     id: 165,
     damage: 0,
   },
   {
     name: "Vampiric Timecharm",
+    type: "vampiric",
     id: 152,
     damage: 0,
   },

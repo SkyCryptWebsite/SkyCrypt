@@ -97,7 +97,7 @@ export async function getCollections(uuid, profile, dungeons, kuudra, cacheOnly 
 
 function getBossCollections(dungeons, kuudra) {
   const output = [];
-  if (dungeons === undefined) {
+  if (dungeons?.catacombs?.floors === undefined) {
     return output;
   }
 
@@ -119,13 +119,20 @@ function getBossCollections(dungeons, kuudra) {
 
     const { name, texture } = collection;
 
-    const amount = bossCompletions[index] ?? 0;
+    let amount = bossCompletions[index] ?? 0;
+    if (name === "Kuudra" && kuudra?.kuudra?.tiers !== undefined) {
+      amount = Object.values(kuudra.kuudra.tiers).reduce((a, b, index) => {
+        return a + (index + 1) * b.completions;
+      }, 0);
+    }
 
     const maxAmount = collection.rewards[collection.rewards.length - 1]?.required;
 
     const tier = collection.rewards.filter((a) => a.required <= amount).length ?? 0;
 
     const maxTier = collection.rewards.length;
+
+    const rewards = collection.rewards.filter((reward) => reward.required <= amount);
 
     output.push({
       name,
@@ -134,21 +141,7 @@ function getBossCollections(dungeons, kuudra) {
       maxAmount,
       tier,
       maxTier,
-    });
-  }
-
-  if (kuudra?.kuudra?.tiers) {
-    const completions = Object.values(kuudra.kuudra.tiers).reduce((a, b, index) => {
-      return a + (index + 1) * b.completions;
-    }, 0);
-
-    output.push({
-      name: "Kuudra",
-      texture: "/head/82ee25414aa7efb4a2b4901c6e33e5eaa705a6ab212ebebfd6a4de984125c7a0",
-      amount: completions,
-      maxAmount: 5000,
-      tier: Math.min(Math.floor(completions / 500), 5), // TODO: Fix this (it's not accurate)
-      maxTier: 5,
+      rewards,
     });
   }
 

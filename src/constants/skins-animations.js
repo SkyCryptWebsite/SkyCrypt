@@ -1022,13 +1022,6 @@ const SKINS = [
     release: new Date("2023-11-18 18:00:00 GMT+1").getTime(),
   },
   {
-    id: "PET_SKIN_ENDERMAN_BLUE_MOON",
-    name: "Blue Moon",
-    texture: "/head/181586f6e79169d79570e319b2f08895cf366ca3ac506af88f831510783f8987",
-    source: "firesale",
-    release: new Date("2023-11-25 18:00:00 GMT+1").getTime(),
-  },
-  {
     id: "PET_SKIN_ENDERMAN_SUN",
     name: "Sun",
     texture: "/head/7f261e3fe875dd75a7fbd4ea7b1932ca2f3e18665a80f32429e4f3fe504dca76",
@@ -1039,6 +1032,13 @@ const SKINS = [
     id: "PET_SKIN_ENDERMAN_NEBULA",
     name: "Nebula",
     texture: "/head/b32907495cfb0cf38bb0cdd2cd1822111cb6469088cd98423143815b55dbbd4a",
+    source: "firesale",
+    release: new Date("2023-11-25 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_ENDERMAN_BLUE_MOON",
+    name: "Blue Moon",
+    texture: "/head/181586f6e79169d79570e319b2f08895cf366ca3ac506af88f831510783f8987",
     source: "firesale",
     release: new Date("2023-11-25 18:00:00 GMT+1").getTime(),
   },

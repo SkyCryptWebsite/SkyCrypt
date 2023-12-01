@@ -459,7 +459,7 @@ const metaDescription = getMetaDescription()
             <% } %>
 
             <!-- Guild Grand Master -->
-            <% if (calculated.guild.gm !== undefined) { %> 
+            <% if (calculated.guild.gm != undefined) { %> 
               <span class='stat-name'>Guild Master: </span>
               <a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %></a>
               <br>

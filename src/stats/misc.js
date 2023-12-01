@@ -254,11 +254,7 @@ export function getMisc(profile, userProfile, hypixelProfile) {
     misc.mythological_event = userProfile.player_stats.mythos;
   }
 
-  if (
-    userProfile.player_data.active_effects !== undefined ||
-    userProfile.player_data.paused_effects !== undefined ||
-    userProfile.player_data.disabled_potion_effects !== undefined
-  ) {
+  if (userProfile.player_data !== undefined) {
     misc.effects = {
       active: userProfile.player_data.active_effects || [],
       paused: userProfile.player_data.paused_effects || [],

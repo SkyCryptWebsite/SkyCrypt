@@ -123,7 +123,7 @@ export function calculateFarmingWeight(userProfile) {
     bonus += goldMedalBonus;
   }
 
-  if (userProfile?.minions) {
+  if (userProfile.minions !== undefined) {
     const FARMING_MINIONS = [
       "WHEAT",
       "CARROT",
@@ -143,7 +143,7 @@ export function calculateFarmingWeight(userProfile) {
         continue;
       }
 
-      if (minion.maxLevel == 12) {
+      if (minion.tier == 12) {
         count++;
         bonus += 5;
       }
