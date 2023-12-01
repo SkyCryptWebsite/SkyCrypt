@@ -56,9 +56,7 @@ function formatBingOItemLore(item, bingoData, completed = false) {
     );
 
     output.push(
-      `${helper.formatProgressBar(total, nextTierAmount)} §e${total.toLocaleString()} §6/ §e${helper.formatNumber(
-        nextTierAmount
-      )}`
+      `${helper.formatProgressBar(total, 20)} §e${total.toLocaleString()} §6/ §e${helper.formatNumber(nextTierAmount)}`
     );
 
     const index = bingoData.filter((goal) => goal.tiers !== undefined).indexOf(item);
