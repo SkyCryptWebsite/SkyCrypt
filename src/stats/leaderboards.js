@@ -36,7 +36,7 @@ export async function updateLeaderboardData(
   allProfiles,
   options = {
     cacheOnly: true,
-    debugid: `${helper.getClusterId()}/unknown@updateLeaderboardData`,
+    debugId: `${helper.getClusterId()}/unknown@updateLeaderboardData`,
     updateLeaderboards: false,
   }
 ) {
@@ -44,6 +44,9 @@ export async function updateLeaderboardData(
     if (constants.BLOCKED_PLAYERS.includes(uuid)) {
       return;
     }
+
+    console.debug(`${options.debugId}: updateLeaderboardData called.`);
+    const timeStarted = Date.now();
 
     const values = {};
     for (const profile of allProfiles) {
@@ -321,6 +324,8 @@ export async function updateLeaderboardData(
 
       multi.zadd(`lb_${key}`, values[key], uuid);
     }
+
+    console.log(`${options.debugId}: updateLeaderboardData returned. (${Date.now() - timeStarted}ms)`);
   } catch (e) {
     const req = { params: { player: uuid } };
 
