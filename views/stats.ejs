@@ -263,7 +263,7 @@ function getDescription() {
     if (classes !== undefined) {
       const classesLine = [];
       for (const [dclass, data] of Object.entries(classes)) {
-        output += `${skillEmojis[dclass]} ${data.experience?.level ?? 0}\n`;
+        output += `${skillEmojis[dclass]} ${data.experience?.level ?? 0} `;
       }
     }
 
@@ -298,6 +298,8 @@ function getDescription() {
   if (calculated.currencies.purse !== undefined) {
     output += `💰 Purse: ${helper.formatNumber(calculated.currencies.purse, true)}\n`;
   }
+
+  console.log(output)
 
   return output;
 }
