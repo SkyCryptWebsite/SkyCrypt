@@ -276,7 +276,6 @@ function fillLore(element: HTMLElement) {
   }
 
   if (item.texture_path) {
-    console.log(item);
     itemIcon.style.backgroundImage = 'url("' + item.texture_path + '")';
     itemIcon.className = "stats-piece-icon item-icon custom-icon";
   } else if ("id" in item) {
