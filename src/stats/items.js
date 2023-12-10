@@ -16,90 +16,121 @@ export async function getItems(
   const timeStarted = Date.now();
 
   // Process inventories returned by API
-  const inventoryTypes = [
-    { name: "armor", property: "inv_armor" },
-    { name: "equipment", property: "equipment_contents" },
-    { name: "inventory", property: "inv_contents" },
-    { name: "wardrobe", property: "wardrobe_contents" },
-    { name: "ender chest", property: "ender_chest_contents" },
-    { name: "accessory bag", property: "talisman_bag", bagContents: true },
-    { name: "fishing bag", property: "fishing_bag", bagContents: true },
-    { name: "quiver", property: "quiver", bagContents: true },
-    { name: "potion bag", property: "potion_bag", bagContents: true },
-    { name: "candy bag", property: "candy_inventory_contents", shared: true },
-    { name: "personal vault", property: "personal_vault_contents" },
-  ];
+  const armor =
+    "inv_armor" in profile.inventory
+      ? await processItems(profile.inventory.inv_armor.data, "armor", customTextures, packs, options.cacheOnly)
+      : [];
+  const equipment =
+    "equipment_contents" in profile.inventory
+      ? await processItems(
+          profile.inventory.equipment_contents.data,
+          "equipment",
+          customTextures,
+          packs,
+          options.cacheOnly
+        )
+      : [];
+  const inventory =
+    "inv_contents" in profile.inventory
+      ? await processItems(profile.inventory.inv_contents.data, "inventory", customTextures, packs, options.cacheOnly)
+      : [];
+  const wardrobe_inventory =
+    "wardrobe_contents" in profile.inventory
+      ? await processItems(
+          profile.inventory.wardrobe_contents.data,
+          "wardrobe",
+          customTextures,
+          packs,
+          options.cacheOnly
+        )
+      : [];
+  const enderchest =
+    "ender_chest_contents" in profile.inventory
+      ? await processItems(
+          profile.inventory.ender_chest_contents.data,
+          "ender chest",
+          customTextures,
+          packs,
+          options.cacheOnly
+        )
+      : [];
+  const accessory_bag =
+    "talisman_bag" in profile.inventory.bag_contents
+      ? await processItems(
+          profile.inventory.bag_contents.talisman_bag.data,
+          "accessory bag",
+          customTextures,
+          packs,
+          options.cacheOnly
+        )
+      : [];
+  const fishing_bag =
+    "fishing_bag" in profile.inventory.bag_contents
+      ? await processItems(
+          profile.inventory.bag_contents.fishing_bag.data,
+          "fishing bag",
+          customTextures,
+          packs,
+          options.cacheOnly
+        )
+      : [];
+  const quiver =
+    "quiver" in profile.inventory.bag_contents
+      ? await processItems(
+          profile.inventory.bag_contents.quiver.data,
+          "quiver",
+          customTextures,
+          packs,
+          options.cacheOnly
+        )
+      : [];
+  const potion_bag =
+    "potion_bag" in profile.inventory.bag_contents
+      ? await processItems(
+          profile.inventory.bag_contents.potion_bag.data,
+          "potion bag",
+          customTextures,
+          packs,
+          options.cacheOnly
+        )
+      : [];
+  const candy_bag = profile.shared_inventory
+    ? "candy_inventory_contents" in profile.shared_inventory
+      ? await processItems(
+          profile.shared_inventory.candy_inventory_contents.data,
+          "candy bag",
+          customTextures,
+          packs,
+          options.cacheOnly
+        )
+      : []
+    : [];
+  const personal_vault =
+    "personal_vault_contents" in profile.inventory
+      ? await processItems(
+          profile.inventory.personal_vault_contents.data,
+          "personal vault",
+          customTextures,
+          packs,
+          options.cacheOnly
+        )
+      : [];
 
-  const promises = inventoryTypes.map((type) => {
-    if (type.shared === true) {
-      if (profile.shared_inventory === undefined || profile.shared_inventory[type.property] === undefined) {
-        return [];
-      }
-
-      return processItems(
-        profile.shared_inventory[type.property].data,
-        type.name,
-        customTextures,
-        packs,
-        options.cacheOnly
-      );
-    } else if (type.bagContents === true) {
-      if (
-        profile.inventory === undefined ||
-        profile.inventory.bag_contents === undefined ||
-        profile.inventory.bag_contents[type.property] === undefined
-      ) {
-        return [];
-      }
-
-      return processItems(
-        profile.inventory.bag_contents[type.property].data,
-        type.name,
-        customTextures,
-        packs,
-        options.cacheOnly
-      );
-    } else {
-      if (profile.inventory === undefined || profile.inventory[type.property] === undefined) {
-        return [];
-      }
-
-      return processItems(profile.inventory[type.property].data, type.name, customTextures, packs, options.cacheOnly);
-    }
-  });
-
-  let [
-    armor,
-    equipment,
-    inventory,
-    wardrobe_inventory,
-    enderchest,
-    accessory_bag,
-    fishing_bag,
-    quiver,
-    potion_bag,
-    candy_bag,
-    personal_vault,
-  ] = await Promise.all(promises);
-
-  const storage = [];
-  if (profile.inventory && profile.inventory.backpack_contents) {
+  let storage = [];
+  if (profile.inventory.backpack_contents) {
     const storageSize = Math.max(18, Object.keys(profile.inventory.backpack_contents).length);
-
-    const promises = [];
-
     for (let slot = 0; slot < storageSize; slot++) {
       storage.push({});
 
       if (profile.inventory.backpack_contents[slot] && profile.inventory.backpack_icons[slot]) {
-        const iconPromise = processItems(
+        const icon = await processItems(
           profile.inventory.backpack_icons[slot].data,
           "storage",
           customTextures,
           packs,
           options.cacheOnly
         );
-        const itemsPromise = await processItems(
+        const items = await processItems(
           profile.inventory.backpack_contents[slot].data,
           "storage",
           customTextures,
@@ -107,26 +138,20 @@ export async function getItems(
           options.cacheOnly
         );
 
-        promises.push(iconPromise, itemsPromise);
+        for (const [index, item] of items.entries()) {
+          item.isInactive = true;
+          item.inBackpack = true;
+          item.item_index = index;
+        }
 
-        (async (slot, iconPromise, itemsPromise) => {
-          const [icon, items] = await Promise.all([iconPromise, itemsPromise]);
-
-          for (const [index, item] of items.entries()) {
-            item.isInactive = true;
-            item.inBackpack = true;
-            item.item_index = index;
-          }
-
-          const storageUnit = icon[0];
-          storageUnit.containsItems = items;
-          storage[slot] = storageUnit;
-        })(slot, iconPromise, itemsPromise);
+        const storageUnit = icon[0];
+        storageUnit.containsItems = items;
+        storage[slot] = storageUnit;
       }
     }
-
-    await Promise.all(promises);
   }
+
+  console.log(`It took ${Date.now() - timeStarted}ms to process inventories.`);
 
   const wardrobe = items.getWardrobe(wardrobe_inventory);
 
