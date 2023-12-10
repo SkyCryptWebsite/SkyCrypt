@@ -21,7 +21,6 @@ export class GuildButton extends LitElement {
   }
 
   async loadGuildData(): Promise<void> {
-    console.log("Loading guild data...");
     this.message = "Loading Guild...";
     this.requestUpdate();
 
@@ -34,7 +33,6 @@ export class GuildButton extends LitElement {
       }
 
       this.message = `Guild: ${guild.name}`;
-      console.log(guild);
 
       let tooltipContent = "";
       if (guild.player.rank !== undefined) {

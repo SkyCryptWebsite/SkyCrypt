@@ -114,21 +114,21 @@ tippy(".interactive-tooltip", {
 
 export const ALL_ITEMS = new Map(
   [
-    items.armor?.armor ?? [],
-    items.equipment?.equipment ?? [],
-    items.inventory ?? [],
-    items.enderchest ?? [],
-    items.accessory_bag ?? [],
-    items.fishing_bag ?? [],
-    items.quiver ?? [],
-    items.potion_bag ?? [],
-    items.personal_vault ?? [],
-    items.wardrobe_inventory ?? [],
-    items.candy_bag ?? [],
-    items.storage ?? [],
-    items.hotm ?? [],
-    items.bingo_card ?? [],
-    items.museum ?? [],
+    items.armor.armor,
+    items.equipment.equipment,
+    items.inventory,
+    items.enderchest,
+    items.accessory_bag,
+    items.fishing_bag,
+    items.quiver,
+    items.potion_bag,
+    items.personal_vault,
+    items.wardrobe_inventory,
+    items.candy_bag,
+    items.storage,
+    items.hotm,
+    items.bingo_card,
+    items.museum,
   ]
     .flat()
     .flatMap((item) => {

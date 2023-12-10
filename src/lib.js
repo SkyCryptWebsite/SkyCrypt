@@ -165,17 +165,17 @@ export async function getStats(
     (await getPreDecodedNetworth(
       userProfile,
       {
-        armor: items.armor?.armor ?? [],
-        equipment: items.equipment?.equipment ?? [],
-        wardrobe: items.wardrobe_inventory ?? [],
-        inventory: items.inventory ?? [],
-        enderchest: items.enderchest ?? [],
-        accessories: items.accessory_bag ?? [],
-        personal_vault: items.personal_vault ?? [],
-        storage: items.storage ? items.storage.concat(items.storage.map((item) => item.containsItems).flat()) : [],
-        fishing_bag: items.fishing_bag ?? [],
-        potion_bag: items.potion_bag ?? [],
-        candy_inventory: items.candy_bag ?? [],
+        armor: items.armor.armor,
+        equipment: items.equipment.equipment,
+        wardrobe: items.wardrobe_inventory,
+        inventory: items.inventory,
+        enderchest: items.enderchest,
+        accessories: items.accessory_bag,
+        personal_vault: items.personal_vault,
+        storage: items.storage.concat(items.storage.map((item) => item.containsItems).flat()),
+        fishing_bag: items.fishing_bag,
+        potion_bag: items.potion_bag,
+        candy_inventory: items.candy_bag,
         //museum: [],
       },
       output.currencies.bank,
@@ -546,7 +546,6 @@ export async function getMuseum(
       }
 
       if (data.members === null || Object.keys(data.members).length === 0) {
-        console.debug(`${options.debugId}: getMuseum returned. (${Date.now() - timeStarted}ms)`);
         return null;
       }
 
@@ -563,7 +562,7 @@ export async function getMuseum(
   }
 
   console.debug(`${options.debugId}: getMuseum returned. (${Date.now() - timeStarted}ms)`);
-  return museumData?.museum;
+  return museumData.museum;
 }
 
 export async function getGuild(

@@ -868,26 +868,6 @@ type PotionEffectIDs =
   | "jerry_candy"
   | "night_vision";
 
-/*
-  {
-    "_id": "6575a13a655c1faad7673f97",
-    "uuid": "4855c53ee4fb4100997600a92fc50984",
-    "guildMaster": {
-        "uuid": "2700c8b565c74d8e9be5eb7a6ae19295",
-        "username": "CatboyDark"
-    },
-    "last_updated": 1702209559840,
-    "level": 213,
-    "members": 116,
-    "name": "WristSpasm",
-    "player": {
-        "uuid": "4855c53ee4fb4100997600a92fc50984",
-        "username": "DuckySoSkilled",
-        "rank": "Staff"
-    },
-    "tag": "MEOW"
-}*/
-
 type Guild = GuildResponse | null;
 
 interface GuildResponse {
