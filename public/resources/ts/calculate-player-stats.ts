@@ -78,7 +78,7 @@ export function getPlayerStats() {
   }
 
   // Heart of the Mountain
-  for (const ability of items.hotm) {
+  for (const ability of items?.hotm ?? []) {
     const item = ability as Item;
     if (item.tag?.ExtraAttributes === undefined || item.tag.ExtraAttributes?.enabled === false) {
       continue;
@@ -100,16 +100,18 @@ export function getPlayerStats() {
   }
 
   // Active armor stats
-  for (const piece of items.armor.armor) {
-    const bonusStats: ItemStats = helper.getStatsFromItem(piece as Item);
+  if (items?.armor?.armor !== undefined) {
+    for (const piece of items.armor.armor) {
+      const bonusStats: ItemStats = helper.getStatsFromItem(piece as Item);
 
-    for (const [name, value] of Object.entries(bonusStats)) {
-      if (!allowedStats.includes(name)) {
-        continue;
+      for (const [name, value] of Object.entries(bonusStats)) {
+        if (!allowedStats.includes(name)) {
+          continue;
+        }
+
+        stats[name].armor ??= 0;
+        stats[name].armor += value;
       }
-
-      stats[name].armor ??= 0;
-      stats[name].armor += value;
     }
   }
 
@@ -140,16 +142,18 @@ export function getPlayerStats() {
   }
 
   // Active equipment stats
-  for (const piece of items.equipment.equipment) {
-    const bonusStats: ItemStats = helper.getStatsFromItem(piece as Item);
+  if (items?.equipment?.equipment !== undefined) {
+    for (const piece of items.equipment.equipment) {
+      const bonusStats: ItemStats = helper.getStatsFromItem(piece as Item);
 
-    for (const [name, value] of Object.entries(bonusStats)) {
-      if (!allowedStats.includes(name)) {
-        continue;
+      for (const [name, value] of Object.entries(bonusStats)) {
+        if (!allowedStats.includes(name)) {
+          continue;
+        }
+
+        stats[name].equipment ??= 0;
+        stats[name].equipment += value;
       }
-
-      stats[name].equipment ??= 0;
-      stats[name].equipment += value;
     }
   }
 
@@ -170,16 +174,18 @@ export function getPlayerStats() {
   }
 
   // Active accessories stats
-  for (const item of items.accessories.accessories.filter((item) => !(item as Item).isInactive)) {
-    const bonusStats: ItemStats = helper.getStatsFromItem(item as Item);
+  if (items?.accessories?.accessories !== undefined) {
+    for (const item of items.accessories.accessories.filter((item) => !(item as Item).isInactive)) {
+      const bonusStats: ItemStats = helper.getStatsFromItem(item as Item);
 
-    for (const [name, value] of Object.entries(bonusStats)) {
-      if (!allowedStats.includes(name)) {
-        continue;
+      for (const [name, value] of Object.entries(bonusStats)) {
+        if (!allowedStats.includes(name)) {
+          continue;
+        }
+
+        stats[name].accessories ??= 0;
+        stats[name].accessories += value;
       }
-
-      stats[name].accessories ??= 0;
-      stats[name].accessories += value;
     }
   }
 
@@ -236,7 +242,7 @@ export function getPlayerStats() {
   }
 
   // New year cake bag
-  {
+  if (items?.accessories?.accessories !== undefined) {
     const cakeBag = items.accessories.accessories.find(
       (x) => (x as Item).tag?.ExtraAttributes?.id === "NEW_YEAR_CAKE_BAG"
     );

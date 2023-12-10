@@ -52,7 +52,7 @@ function itemIcon(item, classes) { %>
   <% const mining = calculated.mining; %>
 
   <!-- Currently Active Tool -->
-  <% if (items.mining_tools.length > 0) { %>
+  <% if (items.mining_tools?.length > 0) { %>
     <p class="stat-sub-header">Mining Tools</p>
     <% if (items.highest_rarity_mining_tool) { %>
       <p class="stat-raw-values">

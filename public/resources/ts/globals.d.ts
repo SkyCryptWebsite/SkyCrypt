@@ -434,19 +434,6 @@ declare const calculated: SkyCryptPlayer & {
     treasure: number;
     treasure_large: number;
   };
-  guild: {
-    created: number;
-    exp: number;
-    gid: string;
-    gm: string;
-    gmUser: SkyCryptPlayer;
-    last_updated: string;
-    level: number;
-    members: number;
-    name: string;
-    rank: string;
-    tag: string;
-  } | null;
   kills: {
     kills: {
       amount: number;
@@ -880,3 +867,41 @@ type PotionEffectIDs =
   | "alchemy_xp_boost"
   | "jerry_candy"
   | "night_vision";
+
+/*
+  {
+    "_id": "6575a13a655c1faad7673f97",
+    "uuid": "4855c53ee4fb4100997600a92fc50984",
+    "guildMaster": {
+        "uuid": "2700c8b565c74d8e9be5eb7a6ae19295",
+        "username": "CatboyDark"
+    },
+    "last_updated": 1702209559840,
+    "level": 213,
+    "members": 116,
+    "name": "WristSpasm",
+    "player": {
+        "uuid": "4855c53ee4fb4100997600a92fc50984",
+        "username": "DuckySoSkilled",
+        "rank": "Staff"
+    },
+    "tag": "MEOW"
+}*/
+
+type Guild = GuildResponse | null;
+
+interface GuildResponse {
+  guildMaster: {
+    uuid?: string;
+    username?: string;
+  };
+  level: number;
+  members: number;
+  name: string;
+  player: {
+    uuid: string;
+    username: string;
+    rank: string;
+  };
+  tag?: string;
+}

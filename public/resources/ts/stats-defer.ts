@@ -8,6 +8,7 @@ import { getPlayerStats } from "./calculate-player-stats";
 import { RARITY_COLORS } from "../../../common/constants.js";
 
 import("./elements/inventory-view");
+import("./elements/guild-button");
 
 const favoriteElement = document.querySelector(".favorite") as HTMLButtonElement;
 
@@ -113,21 +114,21 @@ tippy(".interactive-tooltip", {
 
 export const ALL_ITEMS = new Map(
   [
-    items.armor.armor,
-    items.equipment.equipment,
-    items.inventory,
-    items.enderchest,
-    items.accessory_bag,
-    items.fishing_bag,
-    items.quiver,
-    items.potion_bag,
-    items.personal_vault,
-    items.wardrobe_inventory,
-    items.candy_bag,
-    items.storage,
-    items.hotm,
-    items.bingo_card,
-    items.museum,
+    items.armor?.armor ?? [],
+    items.equipment?.equipment ?? [],
+    items.inventory ?? [],
+    items.enderchest ?? [],
+    items.accessory_bag ?? [],
+    items.fishing_bag ?? [],
+    items.quiver ?? [],
+    items.potion_bag ?? [],
+    items.personal_vault ?? [],
+    items.wardrobe_inventory ?? [],
+    items.candy_bag ?? [],
+    items.storage ?? [],
+    items.hotm ?? [],
+    items.bingo_card ?? [],
+    items.museum ?? [],
   ]
     .flat()
     .flatMap((item) => {
