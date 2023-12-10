@@ -151,8 +151,6 @@ export async function getItems(
     }
   }
 
-  console.log(`It took ${Date.now() - timeStarted}ms to process inventories.`);
-
   const wardrobe = items.getWardrobe(wardrobe_inventory);
 
   const hotm = "mining_core" in profile ? await items.getHotmItems(profile, packs) : [];

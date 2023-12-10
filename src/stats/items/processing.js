@@ -48,14 +48,11 @@ async function getBackpackContents(arraybuf) {
 
 // Process items returned by API
 export async function processItems(base64, source, customTextures = false, packs, cacheOnly = false) {
-  const timeNow = Date.now();
   // API stores data as base64 encoded gzipped Minecraft NBT data
   const buf = Buffer.from(base64, "base64");
 
   let data = await parseNbt(buf);
   data = nbt.simplify(data);
-
-  console.log(`Parsed NBT in ${Date.now() - timeNow}ms.`);
 
   let items = data.i;
 
@@ -567,8 +564,6 @@ export async function processItems(base64, source, customTextures = false, packs
   }
 
   items = items.filter((a) => !a.inBackpack);
-
-  console.log(`Processed ${items.length} items in ${Date.now() - timeNow}ms.`);
 
   return items;
 }
