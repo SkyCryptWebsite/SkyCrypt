@@ -575,7 +575,7 @@ export async function getGuild(
   const timeStarted = Date.now();
 
   let output = await db.collection("guildCache").findOne({ uuid: paramPlayer });
-  if (/*!options.cacheOnly && (!output || output.last_save < Date.now() - 1000 * 60 * 5)*/ true) {
+  if (!options.cacheOnly && (!output || output.last_save < Date.now() - 1000 * 60 * 5)) {
     try {
       const params = {
         key: credentials.hypixel_api_key,
