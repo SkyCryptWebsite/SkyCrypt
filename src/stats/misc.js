@@ -270,6 +270,18 @@ export function getMisc(profile, userProfile, hypixelProfile) {
 
   if ("auctions" in userProfile.player_stats) {
     misc.auctions = userProfile.player_stats.auctions;
+    
+    misc.auctions.total_sold = Object.entries(misc.auctions.total_sold)
+      .sort((a, b) => {
+        return constants.RARITIES.indexOf(a[0].toLowerCase()) - constants.RARITIES.indexOf(b[0].toLowerCase());
+      })
+      .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+
+    misc.auctions.total_bought = Object.entries(misc.auctions.total_bought)
+      .sort((a, b) => {
+        return constants.RARITIES.indexOf(a[0].toLowerCase()) - constants.RARITIES.indexOf(b[0].toLowerCase());
+      })
+      .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
   }
 
   if (hypixelProfile.claimed_items) {
