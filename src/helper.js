@@ -1189,7 +1189,7 @@ export async function sendWebhookMessage(e, req) {
       fields: [],
     };
 
-    axios.post(webhookUrl, { embeds: [embed] }).catch((error) => {
+    await axios.post(webhookUrl, { embeds: [embed] }).catch((error) => {
       console.log(error);
     });
   }
