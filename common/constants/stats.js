@@ -344,6 +344,15 @@ export const STATS_DATA = {
     suffix: "",
     color: "3",
   },
+  taming_wisdom: {
+    name: "Taming Wisdom",
+    nameLore: "Taming Wisdom",
+    nameShort: "Taming Wisdom",
+    nameTiny: "TW",
+    symbol: "☯",
+    suffix: "",
+    color: "3",
+  },
   bonus_pest_chance: {
     name: "Bonus Pest Chance",
     nameLore: "Bonus Pest Chance",

@@ -2581,6 +2581,44 @@ class Ocelot extends Pet {
   }
 }
 
+class Owl extends Pet {
+  get stats() {
+    return {};
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6Training Refunds",
+      desc: [`§7The more coins to spend on Fann's Sessions, the less coins they will cost. §8(max 5% off).`],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 0.1 });
+    return {
+      name: "§6Efficient Trainer",
+      desc: [
+        `§7Makes training sessions at Fann more efficient when added into a session.`,
+        ``,
+        `§7Increased EXP: §b+${round(this.level * mult, 1)}% EXP.`,
+      ],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.05 });
+    return {
+      name: "§6Fast Learner",
+      desc: [`§7Passively grants §3+${round(this.level * mult, 2)} ${SYMBOLS.taming_wisdom} Taming Wisdom§7`],
+    };
+  }
+}
 class BabyYeti extends Pet {
   get stats() {
     return {
@@ -3687,6 +3725,7 @@ export const PET_STATS = {
   FRACTURED_MONTEZUMA_SOUL: Montezuma,
   MOOSHROOM_COW: MooshroomCow,
   OCELOT: Ocelot,
+  OWL: Owl,
   PARROT: Parrot,
   PHOENIX: Phoenix,
   PIG: Pig,

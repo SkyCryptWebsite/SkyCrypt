@@ -567,6 +567,14 @@ export const PET_DATA = {
     maxLevel: 100,
     emoji: "🐌",
   },
+  OWL: {
+    head: "/head/da3216da54e7368fb40b721239ad95e07ef4f97d93f1c42ff319bab9a53882af",
+    type: "taming",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🦉",
+    passivePerks: true,
+  },
 };
 
 export const PET_VALUE = {
