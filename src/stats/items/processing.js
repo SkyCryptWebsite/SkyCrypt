@@ -258,7 +258,7 @@ export async function processItems(base64, source, customTextures = false, packs
     if (item.tag?.display?.color) {
       const hex = item.tag.display.color.toString(16).padStart(6, "0");
 
-      item.color = hex.toUpperCase()
+      item.color = hex.toUpperCase();
     }
 
     // Set custom texture for colored leather armor

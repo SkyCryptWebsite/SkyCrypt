@@ -268,12 +268,11 @@ function fillLore(element: HTMLElement) {
     itemName.style.backgroundColor = `var(--§${(RARITY_COLORS as RarityColors)[item.rarity || "common"]})`;
   }
 
-  
   const itemNameHtml = renderLore(itemNameString);
   const isMulticolor = (itemNameHtml.match(/<\/span>/g) || []).length > 1;
-  
+
   itemNameContent.innerHTML = isMulticolor ? itemNameHtml : itemNameString.replace(/§([0-9a-fklmnor])/gi, "") ?? "???";
-  
+
   itemNameContent.dataset.multicolor = String(isMulticolor);
 
   if (element.hasAttribute("data-pet-index")) {
