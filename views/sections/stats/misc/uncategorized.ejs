@@ -8,7 +8,11 @@
   </div>
 
   <p class="stat-raw-values">
-    <% for (const [key, value] of Object.entries(calculated.misc.uncategorized)) { %>
+    <% for (const [key, value] of Object.entries(calculated.misc.uncategorized)) {
+      if (value.raw === 0) {
+        continue;
+      } %>
+
       <% max = value.maxed === true ? 'golden-text': '' %>
       <span class="stat-name <%= max %>"><%= helper.capitalizeFirstLetter(key.split("_").join(" ")); %>: </span>
       <span class="stat-value <%= max %>"><%= value.formatted %> </span>
