@@ -273,6 +273,8 @@ function fillLore(element: HTMLElement) {
 
   itemNameContent.innerHTML = isMulticolor ? itemNameHtml : itemNameString.replace(/§([0-9a-fklmnor])/gi, "") ?? "???";
 
+  statsContent.style.setProperty("--scrollbar-color", itemName.style.backgroundColor);
+
   itemNameContent.dataset.multicolor = String(isMulticolor);
 
   if (element.hasAttribute("data-pet-index")) {
