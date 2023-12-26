@@ -160,6 +160,14 @@ export async function getStats(
 
   output.accessories = await stats.getMissingAccessories(output, items, packs);
 
+  const specialMuseumItems = items.museumItems.specialItems.map((a) => a.data).flat();
+  const normalMuseumItems = Object.values(items.museumItems.items)
+    .filter((a) => a && a.data !== undefined && a.borrowing === false)
+    .map((a) => a.data)
+    .flat();
+
+  const museumItems = [...normalMuseumItems, ...specialMuseumItems];
+
   output.networth =
     (await getPreDecodedNetworth(
       userProfile,
@@ -175,7 +183,7 @@ export async function getStats(
         fishing_bag: items.fishing_bag,
         potion_bag: items.potion_bag,
         candy_inventory: items.candy_bag,
-        //museum: [],
+        museum: museumItems,
       },
       output.currencies.bank,
       { cache: true, onlyNetworth: true, v2Endpoint: true }

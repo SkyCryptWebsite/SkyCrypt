@@ -105,8 +105,8 @@ dependencies:
     specifier: ^2.2.1
     version: 2.2.1
   skyhelper-networth:
-    specifier: ^1.17.4
-    version: 1.17.4
+    specifier: ^1.18.0
+    version: 1.18.0
   tippy.js:
     specifier: ^6.3.7
     version: 6.3.7
@@ -898,17 +898,18 @@ packages:
       - supports-color
     dev: false
 
-  /axios@0.27.2:
-    resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==}
+  /axios@1.2.2:
+    resolution: {integrity: sha512-bz/J4gS2S3I7mpN/YZfGFTqhXTYzRho8Ay38w2otuuDR322KzFIWm/4W2K6gIwvWaws5n+mnb7D1lN9uD+QH6Q==}
     dependencies:
       follow-redirects: 1.15.2
       form-data: 4.0.0
+      proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /axios@1.2.2:
-    resolution: {integrity: sha512-bz/J4gS2S3I7mpN/YZfGFTqhXTYzRho8Ay38w2otuuDR322KzFIWm/4W2K6gIwvWaws5n+mnb7D1lN9uD+QH6Q==}
+  /axios@1.6.2:
+    resolution: {integrity: sha512-7i24Ri4pmDRfJTR7LDBhsOTtcm+9kjX5WiY1X3wIisx6G9So3pfMkEiU7emUBe46oceVImccTEM3k6C5dbVW8A==}
     dependencies:
       follow-redirects: 1.15.2
       form-data: 4.0.0
@@ -4143,10 +4144,10 @@ packages:
       three: 0.136.0
     dev: false
 
-  /skyhelper-networth@1.17.4:
-    resolution: {integrity: sha512-dIuCtjSyQHpPuZllbkArVU8niJI1XhfQQod9hCdruu6K0LcakuIQ+crnJ1uLWnjUtitlBcT6nq5Yxsb04OqM4A==}
+  /skyhelper-networth@1.18.0:
+    resolution: {integrity: sha512-EtEOVcQojfTf4Ltw4c6rQBs2SnDg7FUJLJWTp8FdNlCDsEQFDf7HVRjSpx3xzZo7/9aIg08RE9g7ThqJwrkJZw==}
     dependencies:
-      axios: 0.27.2
+      axios: 1.6.2
       prismarine-nbt: 2.2.1
     transitivePeerDependencies:
       - debug
