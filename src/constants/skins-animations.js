@@ -1077,6 +1077,41 @@ const SKINS = [
     source: "firesale",
     release: new Date("2023-12-02 18:00:00 GMT+1").getTime(),
   },
+  {
+    id: "PET_SKIN_CAT_SPACE_KITTY",
+    name: "Space Kitty",
+    texture: "/head/c6f8dfc25e70cc036774e77253349c548a10f232a999b7287a84b2f9b5c6c4a8",
+    source: "firesale",
+    release: new Date("2023-12-16 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_WOLF_DOGE",
+    name: "Doge",
+    texture: "/head/8e19ac0af105a22640b764815687bf069336ede7c63c0c9fbb843e22d172d0b1",
+    source: "firesale",
+    release: new Date("2023-12-16 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_ZOMBIE_SENTINEL",
+    name: "Sentinel",
+    texture: "/head/2422c02fe18d29ed2e3554febab7ef4e3f17c85a6cc379aec5d89aec233b78cb",
+    source: "firesale",
+    release: new Date("2023-12-23 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_ZOMBIE_BRAIN_FREEZE",
+    name: "Brain Freeze",
+    texture: "/head/b1abfeefe236b3c9a23a71b30d0c7892133423d6b40bfa21e8d8d66cde8d8e19",
+    source: "firesale",
+    release: new Date("2023-12-23 18:00:00 GMT+1").getTime(),
+  },
+  {
+    id: "PET_SKIN_ZOMBIE_BIG_BRAIN",
+    name: "Big Brain",
+    texture: "/head/3871a02f09137806064c3e90d9bb8e0346fe73a392679da0a6584c605b0724fb",
+    source: "firesale",
+    release: new Date("2023-12-23 18:00:00 GMT+1").getTime(),
+  },
 ];
 
 /*
