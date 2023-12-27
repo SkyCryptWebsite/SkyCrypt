@@ -28,6 +28,10 @@
     <% if (calculated.misc.auctions.total_sold !== undefined) { %>
       <% let tooltip = "";
       for (const [rarity, amount] of Object.entries(calculated.misc.auctions.total_sold)) {
+        if (rarity === "total") {
+          continue;
+        }
+
         tooltip += `
           <span class="stat-name piece-${rarity.toLowerCase()}-fg">${helper.capitalizeFirstLetter(rarity)}: </span>
           <span class="stat-value">${amount.toLocaleString()}</span>
@@ -87,6 +91,10 @@
     <% if (calculated.misc.auctions.total_bought !== undefined) { %>
       <% tooltip = "";
       for (const [rarity, amount] of Object.entries(calculated.misc.auctions.total_bought)) {
+        if (rarity === "total") {
+          continue;
+        }
+        
         tooltip += `
           <span class="stat-name piece-${rarity.toLowerCase()}-fg">${helper.capitalizeFirstLetter(rarity)}: </span>
           <span class="stat-value">${amount.toLocaleString()}</span>
