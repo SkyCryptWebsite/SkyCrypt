@@ -13,6 +13,45 @@ const hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
 
+async function executeFunctions(functions) {
+  const errors = {};
+  const results = {};
+
+  async function handlePromise(key, fn, args, promise, awaitPromises, condition) {
+    try {
+      if (condition) {
+        if (promise !== undefined) {
+          Object.assign(args.output, results);
+        }
+        results[key] = await fn(...Object.values(args));
+      }
+    } catch (error) {
+      console.error(`Failed to execute function ${key}: ${error}`);
+      errors[key] = error;
+    }
+  }
+
+  const promises = Object.entries(functions).map(([key, { fn, args, promise }]) =>
+    handlePromise(key, fn, args, promise, undefined, promise === undefined)
+  );
+
+  await Promise.all(promises);
+
+  const promises2 = Object.entries(functions).map(([key, { fn, args, promise, awaitPromises }]) =>
+    handlePromise(key, fn, args, promise, awaitPromises, promise !== undefined && awaitPromises === undefined)
+  );
+
+  await Promise.all(promises2);
+
+  const promises3 = Object.entries(functions).map(([key, { fn, args, promise, awaitPromises }]) =>
+    handlePromise(key, fn, args, promise, awaitPromises, promise !== undefined && awaitPromises !== undefined)
+  );
+
+  await Promise.all(promises3);
+
+  return { results, errors };
+}
+
 export async function getStats(
   db,
   profile,
@@ -20,7 +59,7 @@ export async function getStats(
   allProfiles,
   items,
   packs,
-  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getStats` }
+  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getStats`, updateLeaderboards: true }
 ) {
   const output = {};
 
@@ -31,17 +70,6 @@ export async function getStats(
   const hypixelProfile = await helper.getRank(profile.uuid, db, options.cacheOnly);
 
   output.stats = Object.assign({}, constants.BASE_STATS);
-
-  output.fairy_souls = stats.getFairySouls(userProfile, profile);
-
-  output.skills = await stats.getSkills(userProfile, hypixelProfile, profile.members);
-
-  output.slayer = stats.getSlayer(userProfile);
-
-  output.base_stats = Object.assign({}, output.stats);
-
-  output.kills = stats.getKills(userProfile);
-  output.deaths = stats.getDeaths(userProfile);
 
   const playerObject = await helper.resolveUsernameOrUuid(profile.uuid, db, options.cacheOnly);
 
@@ -93,7 +121,8 @@ export async function getStats(
     }
   }
 
-  output.guild = await helper.getGuild(profile.uuid, db, options.cacheOnly);
+  // fetches the guild and stores it in the database, on the front end it will be fetched from the database if the button is clicked
+  getGuild(db, profile.uuid, options);
 
   output.rank_prefix = helper.renderRank(hypixelProfile);
   output.uuid = profile.uuid;
@@ -112,33 +141,7 @@ export async function getStats(
 
   output.members = members.filter((a) => a.uuid != profile.uuid);
 
-  output.minions = stats.getMinions(profile);
-
-  output.bestiary = stats.getBestiary(userProfile);
-
   output.social = hypixelProfile.socials;
-
-  output.dungeons = await stats.getDungeons(userProfile, hypixelProfile);
-
-  output.fishing = stats.getFishing(userProfile);
-
-  output.farming = stats.getFarming(userProfile);
-
-  output.enchanting = stats.getEnchanting(userProfile);
-
-  output.mining = await stats.getMining(userProfile, hypixelProfile);
-
-  output.crimson_isle = stats.getCrimsonIsle(userProfile);
-
-  output.collections = await stats.getCollections(
-    profile.uuid,
-    profile,
-    output.dungeons,
-    output.crimson_isle,
-    options.cacheOnly
-  );
-
-  output.skyblock_level = await stats.getSkyBlockLevel(userProfile);
 
   output.visited_zones = userProfile.player_data?.visited_zones || [];
 
@@ -148,46 +151,74 @@ export async function getStats(
 
   output.harp_quest = userProfile.quests?.harp_quest || {};
 
-  output.misc = stats.getMisc(profile, userProfile, hypixelProfile);
-
-  output.bingo = stats.getBingoData(bingoProfile);
-
-  output.user_data = stats.getUserData(userProfile);
-
-  output.currencies = stats.getCurrenciesData(userProfile, profile);
-
-  output.weight = stats.getWeight(output);
-
-  output.accessories = await stats.getMissingAccessories(output, items, packs);
-
   output.networth =
     (await getPreDecodedNetworth(
       userProfile,
       {
-        armor: items.armor.armor,
-        equipment: items.equipment.equipment,
-        wardrobe: items.wardrobe_inventory,
-        inventory: items.inventory,
-        enderchest: items.enderchest,
-        accessories: items.accessory_bag,
-        personal_vault: items.personal_vault,
-        storage: items.storage.concat(items.storage.map((item) => item.containsItems).flat()),
-        fishing_bag: items.fishing_bag,
-        potion_bag: items.potion_bag,
-        candy_inventory: items.candy_bag,
+        armor: items.armor?.armor ?? [],
+        equipment: items.equipment?.equipment ?? [],
+        wardrobe: items.wardrobe_inventory ?? [],
+        inventory: items.inventory ?? [],
+        enderchest: items.enderchest ?? [],
+        accessories: items.accessory_bag ?? [],
+        personal_vault: items.personal_vault ?? [],
+        storage: items.storage ? items.storage.concat(items.storage.map((item) => item.containsItems).flat()) : [],
+        fishing_bag: items.fishing_bag ?? [],
+        potion_bag: items.potion_bag ?? [],
+        candy_inventory: items.candy_bag ?? [],
         //museum: [],
       },
-      output.currencies.bank,
+      output.currencies?.bank ?? 0,
       { cache: true, onlyNetworth: true, v2Endpoint: true }
     )) ?? {};
 
-  output.temp_stats = stats.getTempStats(userProfile);
+  const profileMembers = profile.members;
+  const uuid = profile.uuid;
 
-  output.rift = stats.getRift(userProfile);
+  const functions = {
+    fairy_souls: { fn: stats.getFairySouls, args: { userProfile, profile } },
+    skills: { fn: stats.getSkills, args: { userProfile, hypixelProfile, members: profileMembers } },
+    slayer: { fn: stats.getSlayer, args: { userProfile } },
+    kills: { fn: stats.getKills, args: { userProfile } },
+    deaths: { fn: stats.getDeaths, args: { userProfile } },
+    minions: { fn: stats.getMinions, args: { profile } },
+    bestiary: { fn: stats.getBestiary, args: { userProfile } },
+    dungeons: { fn: stats.getDungeons, args: { userProfile, hypixelProfile } },
+    fishing: { fn: stats.getFishing, args: { userProfile } },
+    farming: { fn: stats.getFarming, args: { userProfile } },
+    enchanting: { fn: stats.getEnchanting, args: { userProfile } },
+    mining: { fn: stats.getMining, args: { userProfile, hypixelProfile } },
+    crimson_isle: { fn: stats.getCrimsonIsle, args: { userProfile } },
+    collections: { fn: stats.getCollections, args: { uuid, profile, output }, promise: true },
+    skyblock_level: { fn: stats.getSkyBlockLevel, args: { userProfile } },
+    misc: { fn: stats.getMisc, args: { profile, userProfile, hypixelProfile } },
+    bingo: { fn: stats.getBingoData, args: { bingoProfile } },
+    user_data: { fn: stats.getUserData, args: { userProfile } },
+    currencies: { fn: stats.getCurrenciesData, args: { userProfile, profile } },
+    weight: { fn: stats.getWeight, args: { output }, promise: true },
+    accessories: { fn: stats.getMissingAccessories, args: { output, items, packs } },
+    temp_stats: { fn: stats.getTempStats, args: { userProfile } },
+    rift: { fn: stats.getRift, args: { userProfile } },
+    pets: { fn: stats.getPets, args: { userProfile, output, items, profile }, promise: true, awaitPromises: true },
+  };
 
-  output.pets = await stats.getPets(userProfile, output, items, profile);
+  const { results, errors } = await executeFunctions(functions, [userProfile, hypixelProfile, profile.members]);
+
+  Object.assign(output, results);
+  output.errors = errors;
+  if (Object.keys(errors).length > 0) {
+    for (const error in errors) {
+      helper.sendWebhookMessage(errors[error], { params: { player: profile.uuid, profile: profile.profile_id } });
+    }
+  }
 
   console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
+
+  if (options.updateLeaderboards === true) {
+    stats.updateLeaderboardData(profile.uuid, allProfiles, {
+      debugId: `${helper.getClusterId()}/${profile.uuid}@updateLeaderboardData`,
+    });
+  }
 
   return output;
 }
@@ -524,8 +555,7 @@ export async function getMuseum(
   }
 
   let museumData = await db.collection("museumCache").findOne({ profile_id: profileID });
-
-  if (!options.cacheOnly && (museumData == undefined || museumData.last_save < Date.now() - 1000 * 60 * 5)) {
+  if (!options.cacheOnly && (museumData == undefined || museumData.last_save < Date.now() - 1000 * 60 * 30)) {
     try {
       const params = {
         key: credentials.hypixel_api_key,
@@ -546,6 +576,7 @@ export async function getMuseum(
       }
 
       if (data.members === null || Object.keys(data.members).length === 0) {
+        console.debug(`${options.debugId}: getMuseum returned. (${Date.now() - timeStarted}ms)`);
         return null;
       }
 
@@ -562,5 +593,85 @@ export async function getMuseum(
   }
 
   console.debug(`${options.debugId}: getMuseum returned. (${Date.now() - timeStarted}ms)`);
-  return museumData.museum;
+  return museumData?.museum;
+}
+
+export async function getGuild(
+  db,
+  paramPlayer,
+  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getGuild` }
+) {
+  console.debug(`${options.debugId}: getGuild called.`);
+
+  const timeStarted = Date.now();
+
+  let output = await db.collection("guildCache").findOne({ uuid: paramPlayer });
+  if (!options.cacheOnly && (!output || output.last_save < Date.now() - 1000 * 60 * 5)) {
+    try {
+      const params = {
+        key: credentials.hypixel_api_key,
+        player: paramPlayer,
+      };
+
+      const response = await retry(
+        async () => {
+          return await hypixel.get("guild", { params });
+        },
+        { retries: 2 }
+      );
+
+      const { data } = response;
+
+      if (data === undefined || data.success === false) {
+        throw new SkyCryptError("Request to Hypixel API failed. Please try again!");
+      }
+
+      const guildData = data.guild;
+      if (!guildData) {
+        console.debug(`${options.debugId}: getGuild returned. (${Date.now() - timeStarted}ms)`);
+        return null;
+      }
+
+      const findMemberByRank = (members, rank) => members.find((member) => rank.includes(member.rank.toLowerCase()));
+      const findMemberByUuid = (members, uuid) => members.find((member) => member.uuid == uuid);
+
+      // we love Hypixel's consistency
+      const guildMasterRank = ["guild master", "guildmaster"];
+      const guildMaster = findMemberByRank(guildData.members, guildMasterRank);
+      const guildMasterDetails = guildMaster ? await helper.resolveUsernameOrUuid(guildMaster?.uuid, db, true) : null;
+
+      const playerMember = findMemberByUuid(guildData.members, paramPlayer);
+      const playerDetails = await helper.resolveUsernameOrUuid(paramPlayer, db, true);
+
+      output = {
+        last_updated: Date.now(),
+        guildMaster: {
+          uuid: guildMaster?.uuid,
+          username: guildMasterDetails ? guildMasterDetails?.display_name : null,
+        },
+        player: {
+          uuid: paramPlayer,
+          username: playerDetails?.display_name,
+          rank: playerMember.rank,
+        },
+        name: guildData.name,
+        level: helper.getGuildLevel(guildData.exp),
+        members: guildData.members.length,
+        tag: guildData.tag,
+      };
+
+      db.collection("guildCache").updateOne({ uuid: paramPlayer }, { $set: output }, { upsert: true });
+    } catch (e) {
+      console.log(e);
+
+      if (e?.response?.data?.cause != undefined) {
+        throw new SkyCryptError(`Hypixel API Error: ${e.response.data.cause}.`);
+      }
+
+      throw new SkyCryptError(`Hypixel API Error: Failed to fetch Guild data.`);
+    }
+  }
+
+  console.debug(`${options.debugId}: getGuild returned. (${Date.now() - timeStarted}ms)`);
+  return output;
 }

@@ -256,57 +256,6 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
   }
 }
 
-export async function getGuild(uuid, db, cacheOnly = false) {
-  uuid = sanitize(uuid);
-  const cachedGuild = await db.collection("guildMembers").findOne({ uuid });
-  const guildID = cachedGuild?.gid;
-
-  let guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildID) });
-
-  // Integrating from old caching system (new Date() -> Date.now())
-  if (typeof guildObject?.last_updated === "object") {
-    guildObject.last_updated = new Date(guildObject.last_updated).getTime();
-  }
-
-  if (
-    guildObject == undefined ||
-    cacheOnly ||
-    Date.now() - guildObject.last_updated > 7200 * 1000 ||
-    guildObject.last_updated == undefined
-  ) {
-    const {
-      data: { guild: guildResponse },
-    } = await hypixel.get("guild", {
-      params: { player: uuid, key: credentials.hypixel_api_key },
-    });
-
-    if (guildResponse === null) {
-      return null;
-    }
-
-    const guildMaster =
-      guildResponse.members.find((member) => ["guild master", "guildmaster"].includes(member.rank.toLowerCase()))
-        ?.uuid ?? null;
-
-    guildObject = {
-      ...guildResponse,
-      last_updated: Date.now(),
-      gm: guildMaster,
-      gmUser: guildMaster ? await resolveUsernameOrUuid(guildMaster, db, true) : null,
-      rank: guildResponse.members.find((member) => member.uuid == uuid).rank,
-      level: getGuildLevel(guildResponse.exp),
-      id: guildResponse._id,
-    };
-
-    // Required otherwise mongoDB will throw an error
-    delete guildObject._id;
-
-    await db.collection("guilds").updateOne({ gid: guildObject.id }, { $set: guildObject }, { upsert: true });
-  }
-
-  return guildObject;
-}
-
 export function getGuildLevel(xp) {
   let level = 0;
 
@@ -1189,7 +1138,7 @@ export async function sendWebhookMessage(e, req) {
       fields: [],
     };
 
-    axios.post(webhookUrl, { embeds: [embed] }).catch((error) => {
+    await axios.post(webhookUrl, { embeds: [embed] }).catch((error) => {
       console.log(error);
     });
   }

@@ -114,7 +114,8 @@ export async function getMuseumItems(profile, customTextures, packs, options = {
     output[i] = helper.generateItem({ id: undefined });
   }
 
-  for (const item of constants.MUSEUM.inventory) {
+  for (const itemData of constants.MUSEUM.inventory) {
+    const item = _.cloneDeep(itemData);
     updateMuseumItemProgress(item, museum);
 
     output[item.position] = helper.generateItem(item);

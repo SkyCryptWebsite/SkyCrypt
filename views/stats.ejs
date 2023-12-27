@@ -263,7 +263,7 @@ function getDescription() {
     if (classes !== undefined) {
       const classesLine = [];
       for (const [dclass, data] of Object.entries(classes)) {
-        output += `${skillEmojis[dclass]} ${data.experience?.level ?? 0}\n`;
+        output += `${skillEmojis[dclass]} ${data.experience?.level ?? 0} `;
       }
     }
 
@@ -373,6 +373,22 @@ const metaDescription = getMetaDescription()
       </figure>
     <% } %>
 
+    <% if (Object.keys(calculated.errors).length > 0) { %>
+      <figure class="banner error">
+        <figcaption>An unexpected error has occurred.</figcaption>
+        <p>
+          <% for (let error in calculated.errors) { %>
+            <% console.log(calculated.errors[error]) %>
+            <%- calculated.errors[error] %>
+            
+            <br>
+          <% } %>
+          <br>
+          <strong>Please report the error on our <a href="https://discord.gg/cNgADv2kEQ" target="_blank" rel="noreferrer">Discord</a>.</strong>
+        </p>
+      </figure>
+    <% } %>
+
     <div id="player_profile"><span class="text-stats-for">Stats for</span>
       <span tabindex="0" id="stats_for_player">
         <!-- Player Rank -->
@@ -448,47 +464,7 @@ const metaDescription = getMetaDescription()
           </svg>
         </button>
 
-        <!-- Guild Button -->
-        <% if (calculated.guild) { %> 
-          <button class="additional-player-stat interactive-tooltip" data-tippy-content="
-            <% if (calculated.guild.rank !== undefined) { %>
-              <span class='stat-name'>Rank: </span>
-              <span class='stat-value'><%= calculated.guild.rank %></span>
-              <br>
-              <br> 
-            <% } %>
-
-            <!-- Guild Grand Master -->
-            <% if (calculated.guild.gm != undefined) { %> 
-              <span class='stat-name'>Guild Master: </span>
-              <a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %></a>
-              <br>
-            <% } %>
-
-            <!-- Guild Tag -->
-            <% if (calculated.guild.tag !== undefined) { %> 
-              <span class='stat-name'>Tag: </span>
-              <span class='stat-value'><%- helper.renderLore('§f'+calculated.guild.tag) %></span>
-              <br> 
-            <% } %>
-
-            <!-- Guild Members -->
-            <% if (calculated.guild.members !== undefined) { %> 
-              <span class='stat-name'>Members: </span>
-              <span class='stat-value'><%= calculated.guild.members.length %></span>
-              <br> 
-            <% } %>
-
-            <!-- Guild Level -->
-            <% if (calculated.guild.level !== undefined) { %> 
-              <span class='stat-name'>Level: </span>
-              <span class='stat-value'><%= calculated.guild.level %></span>
-              <br> 
-            <% } %>
-          ">
-            Guild: <%= calculated.guild.name %>
-          </button> 
-        <% } %>
+        <guild-button class="additional-player-stat"></guild-button>
 
         <!-- Placnke Button-->
         <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">Plancke</a>
@@ -584,7 +560,7 @@ const metaDescription = getMetaDescription()
         notAvailable.push('Collections');
       }
 
-      if (notAvailable.length > 0 || calculated.profile.game_mode !== "normal") { %>
+      if (notAvailable.length > 0 || calculated.profile.game_mode && calculated.profile.game_mode !== "normal") { %>
         <div class="stat-container info-container-wrapper">
           <div class="info-container">
             <div class="info-header">Notice</div>

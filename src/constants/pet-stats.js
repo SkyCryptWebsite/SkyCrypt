@@ -1923,13 +1923,18 @@ class Snowman extends Pet {
   get stats() {
     return {
       damage: this.level * 0.25,
-      crit_damage: this.level * 0.25,
       strength: this.level * 0.25,
+      crit_damage: this.level * 0.25,
     };
   }
 
   get abilities() {
     const list = [this.first, this.second, this.third];
+
+    if (this.rarity >= LEGENDARY) {
+      list.push(this.fourth);
+    }
+
     return list;
   }
 
@@ -1960,6 +1965,14 @@ class Snowman extends Pet {
       desc: [
         `§7Your snowman fires a snowball dealing §a5x §7your §c${SYMBOLS.strength} Strength §7when a mob gets close to you (1s cooldown).`,
       ],
+    };
+  }
+
+  get fourth() {
+    const mult = getValue(this.rarity, { mythic: 0.5 });
+    return {
+      name: "§6Ouch",
+      desc: [`§7Your snowballs have §a${round(this.level * mult, 1)}% §7chance chance to dealing §cdouble §7damage!`],
     };
   }
 }

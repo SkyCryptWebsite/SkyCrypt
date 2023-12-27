@@ -634,6 +634,11 @@ export const ESSENCE_SHOP = {
       description: "Gain 1-10% extra Gifts from the Gift Attack event.",
       maxLevel: 10,
     },
+    drake_piper: {
+      name: "Drake Piper",
+      description: "Increases the chance to spawn a Reindrake by 10% while fishing on Jerry's Workshop.",
+      maxLevel: 1,
+    },
   },
   crimson: {
     strongarm_kuudra: {

@@ -5,7 +5,7 @@ export const TYPE_TO_CATEGORIES = {
   boots: ["armor", "boots"],
   sword: ["weapon", "sword"],
   bow: ["weapon", "bow"],
-  longsword: ["weapon", "longsword"],
+  longsword: ["weapon", "longsword", "sword"],
   wand: ["weapon", "wand"],
   hatccessory: ["armor", "helmet", "accessory", "hatccessory"],
   gauntlet: ["weapon", "mining_tool", "tool", "gauntlet"],
