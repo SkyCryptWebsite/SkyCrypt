@@ -373,6 +373,22 @@ const metaDescription = getMetaDescription()
       </figure>
     <% } %>
 
+    <% if (Object.keys(calculated.errors).length > 0) { %>
+      <figure class="banner error">
+        <figcaption>An unexpected error has occurred.</figcaption>
+        <p>
+          <% for (let error in calculated.errors) { %>
+            <% console.log(calculated.errors[error]) %>
+            <%- calculated.errors[error] %>
+            
+            <br>
+          <% } %>
+          <br>
+          <strong>Please report the error on our <a href="https://discord.gg/cNgADv2kEQ" target="_blank" rel="noreferrer">Discord</a>.</strong>
+        </p>
+      </figure>
+    <% } %>
+
     <div id="player_profile"><span class="text-stats-for">Stats for</span>
       <span tabindex="0" id="stats_for_player">
         <!-- Player Rank -->

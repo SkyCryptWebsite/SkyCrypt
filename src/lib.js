@@ -13,6 +13,45 @@ const hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
 
+async function executeFunctions(functions) {
+  const errors = {};
+  const results = {};
+
+  async function handlePromise(key, fn, args, promise, awaitPromises, condition) {
+    try {
+      if (condition) {
+        if (promise !== undefined) {
+          Object.assign(args.output, results);
+        }
+        results[key] = await fn(...Object.values(args));
+      }
+    } catch (error) {
+      console.error(`Failed to execute function ${key}: ${error}`);
+      errors[key] = error;
+    }
+  }
+
+  const promises = Object.entries(functions).map(([key, { fn, args, promise }]) =>
+    handlePromise(key, fn, args, promise, undefined, promise === undefined)
+  );
+
+  await Promise.all(promises);
+
+  const promises2 = Object.entries(functions).map(([key, { fn, args, promise, awaitPromises }]) =>
+    handlePromise(key, fn, args, promise, awaitPromises, promise !== undefined && awaitPromises === undefined)
+  );
+
+  await Promise.all(promises2);
+
+  const promises3 = Object.entries(functions).map(([key, { fn, args, promise, awaitPromises }]) =>
+    handlePromise(key, fn, args, promise, awaitPromises, promise !== undefined && awaitPromises !== undefined)
+  );
+
+  await Promise.all(promises3);
+
+  return { results, errors };
+}
+
 export async function getStats(
   db,
   profile,
@@ -31,17 +70,6 @@ export async function getStats(
   const hypixelProfile = await helper.getRank(profile.uuid, db, options.cacheOnly);
 
   output.stats = Object.assign({}, constants.BASE_STATS);
-
-  output.fairy_souls = stats.getFairySouls(userProfile, profile);
-
-  output.skills = await stats.getSkills(userProfile, hypixelProfile, profile.members);
-
-  output.slayer = stats.getSlayer(userProfile);
-
-  output.base_stats = Object.assign({}, output.stats);
-
-  output.kills = stats.getKills(userProfile);
-  output.deaths = stats.getDeaths(userProfile);
 
   const playerObject = await helper.resolveUsernameOrUuid(profile.uuid, db, options.cacheOnly);
 
@@ -113,33 +141,7 @@ export async function getStats(
 
   output.members = members.filter((a) => a.uuid != profile.uuid);
 
-  output.minions = stats.getMinions(profile);
-
-  output.bestiary = stats.getBestiary(userProfile);
-
   output.social = hypixelProfile.socials;
-
-  output.dungeons = await stats.getDungeons(userProfile, hypixelProfile);
-
-  output.fishing = stats.getFishing(userProfile);
-
-  output.farming = stats.getFarming(userProfile);
-
-  output.enchanting = stats.getEnchanting(userProfile);
-
-  output.mining = await stats.getMining(userProfile, hypixelProfile);
-
-  output.crimson_isle = stats.getCrimsonIsle(userProfile);
-
-  output.collections = await stats.getCollections(
-    profile.uuid,
-    profile,
-    output.dungeons,
-    output.crimson_isle,
-    options.cacheOnly
-  );
-
-  output.skyblock_level = await stats.getSkyBlockLevel(userProfile);
 
   output.visited_zones = userProfile.player_data?.visited_zones || [];
 
@@ -148,18 +150,6 @@ export async function getStats(
   output.perks = userProfile.player_data?.perks || {};
 
   output.harp_quest = userProfile.quests?.harp_quest || {};
-
-  output.misc = stats.getMisc(profile, userProfile, hypixelProfile);
-
-  output.bingo = stats.getBingoData(bingoProfile);
-
-  output.user_data = stats.getUserData(userProfile);
-
-  output.currencies = stats.getCurrenciesData(userProfile, profile);
-
-  output.weight = stats.getWeight(output);
-
-  output.accessories = await stats.getMissingAccessories(output, items, packs);
 
   output.networth =
     (await getPreDecodedNetworth(
@@ -178,15 +168,49 @@ export async function getStats(
         candy_inventory: items.candy_bag ?? [],
         //museum: [],
       },
-      output.currencies.bank,
+      output.currencies?.bank ?? 0,
       { cache: true, onlyNetworth: true, v2Endpoint: true }
     )) ?? {};
 
-  output.temp_stats = stats.getTempStats(userProfile);
+  const profileMembers = profile.members;
+  const uuid = profile.uuid;
 
-  output.rift = stats.getRift(userProfile);
+  const functions = {
+    fairy_souls: { fn: stats.getFairySouls, args: { userProfile, profile } },
+    skills: { fn: stats.getSkills, args: { userProfile, hypixelProfile, members: profileMembers } },
+    slayer: { fn: stats.getSlayer, args: { userProfile } },
+    kills: { fn: stats.getKills, args: { userProfile } },
+    deaths: { fn: stats.getDeaths, args: { userProfile } },
+    minions: { fn: stats.getMinions, args: { profile } },
+    bestiary: { fn: stats.getBestiary, args: { userProfile } },
+    dungeons: { fn: stats.getDungeons, args: { userProfile, hypixelProfile } },
+    fishing: { fn: stats.getFishing, args: { userProfile } },
+    farming: { fn: stats.getFarming, args: { userProfile } },
+    enchanting: { fn: stats.getEnchanting, args: { userProfile } },
+    mining: { fn: stats.getMining, args: { userProfile, hypixelProfile } },
+    crimson_isle: { fn: stats.getCrimsonIsle, args: { userProfile } },
+    collections: { fn: stats.getCollections, args: { uuid, profile, output }, promise: true },
+    skyblock_level: { fn: stats.getSkyBlockLevel, args: { userProfile } },
+    misc: { fn: stats.getMisc, args: { profile, userProfile, hypixelProfile } },
+    bingo: { fn: stats.getBingoData, args: { bingoProfile } },
+    user_data: { fn: stats.getUserData, args: { userProfile } },
+    currencies: { fn: stats.getCurrenciesData, args: { userProfile, profile } },
+    weight: { fn: stats.getWeight, args: { output }, promise: true },
+    accessories: { fn: stats.getMissingAccessories, args: { output, items, packs } },
+    temp_stats: { fn: stats.getTempStats, args: { userProfile } },
+    rift: { fn: stats.getRift, args: { userProfile } },
+    pets: { fn: stats.getPets, args: { userProfile, output, items, profile }, promise: true, awaitPromises: true },
+  };
 
-  output.pets = await stats.getPets(userProfile, output, items, profile);
+  const { results, errors } = await executeFunctions(functions, [userProfile, hypixelProfile, profile.members]);
+
+  Object.assign(output, results);
+  output.errors = errors;
+  if (Object.keys(errors).length > 0) {
+    for (const error in errors) {
+      helper.sendWebhookMessage(errors[error], { params: { player: profile.uuid, profile: profile.profile_id } });
+    }
+  }
 
   console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
 

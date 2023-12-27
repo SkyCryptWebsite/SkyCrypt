@@ -318,7 +318,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
           console.debug(`${debugId}: an error has occurred.`);
           console.error(err);
 
-          helper.sendWebhookMessage(err, req);
+          await helper.sendWebhookMessage(err, req);
 
           const favorites = parseFavorites(req.cookies.favorite);
           res.render(

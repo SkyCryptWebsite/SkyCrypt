@@ -48,12 +48,12 @@ export function getPlayerStats() {
   }
 
   // Bestiary
-  if (calculated?.bestiary?.milestone !== undefined) {
+  if (calculated.bestiary?.milestone !== undefined) {
     stats.strength.bestiary = calculated.bestiary.milestone * 2;
   }
 
   // Unique Pets
-  if (calculated.pets.pet_score.amount !== undefined) {
+  if (calculated.pets?.pet_score?.amount !== undefined) {
     stats.magic_find.pet_score = calculated.pets.pet_score.amount;
   }
 
@@ -154,7 +154,7 @@ export function getPlayerStats() {
   }
 
   // Active pet stats
-  {
+  if (calculated.pets?.pets !== undefined) {
     const activePet = calculated.pets.pets.find((pet) => pet.active);
 
     if (activePet) {
