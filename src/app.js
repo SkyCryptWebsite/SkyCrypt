@@ -284,6 +284,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
     const calculated = await lib.getStats(db, profile, paramBingo, allProfiles, items, req.cookies.pack, {
       cacheOnly,
       debugId,
+      updateLeaderboards: true,
     });
 
     if (isFoolsDay) {

@@ -561,11 +561,7 @@ export async function getTexture(item, options) {
         continue;
       }
 
-      if (
-        options.ignore_id === false &&
-        texture.skyblock_id === undefined &&
-        (!texture.match || texture.skyblock_id === item.tag?.ExtraAttributes?.id)
-      ) {
+      if (options.ignore_id === false && texture.match === undefined && "skyblock_id" in texture === false) {
         continue;
       }
 

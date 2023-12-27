@@ -8,6 +8,7 @@ import { getPlayerStats } from "./calculate-player-stats";
 import { RARITY_COLORS } from "../../../common/constants.js";
 
 import("./elements/inventory-view");
+import("./elements/guild-button");
 
 const favoriteElement = document.querySelector(".favorite") as HTMLButtonElement;
 
@@ -309,7 +310,7 @@ function fillLore(element: HTMLElement) {
     packContent.classList.add("pack-credit");
 
     const packIcon = document.createElement("img");
-    packIcon.setAttribute("src", item.texture_pack.base_path + "/pack.png");
+    packIcon.setAttribute("src", item.texture_pack.base_path.replace("public/", "") + "/pack.png");
     packIcon.classList.add("icon");
 
     const packName = document.createElement("div");

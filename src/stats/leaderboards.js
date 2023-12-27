@@ -1,229 +1,334 @@
-// TODO: Full rewrite needed
-
-/*
 import { redisClient } from "../redis.js";
 import * as helper from "../helper.js";
 import * as constants from "../constants.js";
 import * as stats from "../stats.js";
+import * as lib from "../lib.js";
+import { db } from "../mongo.js";
 import _ from "lodash";
 
-function getMinMax(profiles, min, ...path) {
-  let output = null;
+function getMax(calculated, value, path) {
+  const currentValue = value ?? 0;
+  const newValue = _.get(calculated, path) ?? 0;
 
-  const compareValues = profiles.map((a) => helper.getPath(a, ...path)).filter((a) => !isNaN(a));
-
-  if (compareValues.length == 0) {
-    return output;
+  if (newValue > currentValue) {
+    return newValue;
   }
 
-  if (min) {
-    output = Math.min(...compareValues);
-  } else {
-    output = Math.max(...compareValues);
-  }
-
-  if (isNaN(output)) {
-    return null;
-  }
-
-  return output;
+  return currentValue;
 }
 
-function getMax(profiles, ...path) {
-  return getMinMax(profiles, false, ...path);
+function processBestiaryMobs(values, calculated, mobs, category, subCategory = null) {
+  for (const mob of mobs) {
+    const mobId = mob.name.replaceAll(" ", "_").toLowerCase();
+    const path = ["bestiary", "categories", category];
+    if (subCategory) {
+      path.push(subCategory);
+    }
+
+    path.push("mobs", mobs.indexOf(mob), "kills");
+
+    values[`bestiary_${mobId}_kills`] = getMax(calculated, values[`bestiary_${mobId}_kills`], path);
+  }
 }
 
-function getAllKeys(profiles, ...path) {
-  return _.uniq([].concat(...profiles.map((a) => _.keys(helper.getPath(a, ...path)))));
-}
-
-async function updateLeaderboardPositions(db, uuid, allProfiles) {
-  if (constants.BLOCKED_PLAYERS.includes(uuid)) {
-    return;
+export async function updateLeaderboardData(
+  uuid,
+  allProfiles,
+  options = {
+    cacheOnly: true,
+    debugId: `${helper.getClusterId()}/unknown@updateLeaderboardData`,
+    updateLeaderboards: false,
   }
-
-  const hypixelProfile = await helper.getRank(uuid, db, true);
-
-  const memberProfiles = [];
-
-  for (const singleProfile of allProfiles) {
-    const userProfile = singleProfile.members[uuid];
-
-    if (userProfile == null) {
-      continue;
+) {
+  try {
+    if (constants.BLOCKED_PLAYERS.includes(uuid)) {
+      return;
     }
 
-    userProfile.levels = await stats.getSkills(userProfile, hypixelProfile);
+    console.debug(`${options.debugId}: updateLeaderboardData called.`);
+    const timeStarted = Date.now();
 
-    let totalSlayerXp = 0;
-
-    userProfile.slayer_xp = 0;
-
-    if (userProfile.slayer_bosses != undefined) {
-      for (const slayer in userProfile.slayer_bosses) {
-        totalSlayerXp += userProfile.slayer_bosses[slayer].xp || 0;
-      }
-
-      userProfile.slayer_xp = totalSlayerXp;
-
-      for (const mountMob in constants.MOB_MOUNTS) {
-        const mounts = constants.MOB_MOUNTS[mountMob];
-
-        userProfile.stats[`kills_${mountMob}`] = 0;
-        userProfile.stats[`deaths_${mountMob}`] = 0;
-
-        for (const mount of mounts) {
-          userProfile.stats[`kills_${mountMob}`] += userProfile.stats[`kills_${mount}`] || 0;
-          userProfile.stats[`deaths_${mountMob}`] += userProfile.stats[`deaths_${mount}`] || 0;
-
-          delete userProfile.stats[`kills_${mount}`];
-          delete userProfile.stats[`deaths_${mount}`];
-        }
-      }
-    }
-
-    userProfile.skyblock_level = {
-      xp: userProfile.leveling?.experience || 0,
-      level: Math.floor(userProfile.leveling?.experience / 100 || 0),
-    };
-
-    userProfile.pet_score = 0;
-
-    const maxPetRarity = {};
-    if (Array.isArray(userProfile.pets)) {
-      for (const pet of userProfile.pets) {
-        if (!("tier" in pet)) {
-          continue;
-        }
-
-        maxPetRarity[pet.type] = Math.max(maxPetRarity[pet.type] || 0, constants.PET_VALUE[pet.tier.toLowerCase()]);
-      }
-
-      for (const key in maxPetRarity) {
-        userProfile.pet_score += maxPetRarity[key];
-      }
-    }
-
-    memberProfiles.push({
-      profile_id: singleProfile.profile_id,
-      data: userProfile,
-    });
-  }
-
-  const values = {};
-
-  values["pet_score"] = getMax(memberProfiles, "data", "pet_score");
-
-  values["fairy_souls"] = getMax(memberProfiles, "data", "fairy_souls_collected");
-  values["average_level"] = getMax(memberProfiles, "data", "levels", "average_level");
-  values["total_skill_xp"] = getMax(memberProfiles, "data", "levels", "total_skill_xp");
-
-  for (const skill of getAllKeys(memberProfiles, "data", "levels", "levels")) {
-    values[`skill_${skill}_xp`] = getMax(memberProfiles, "data", "levels", "levels", skill, "xp");
-  }
-
-  values[`skyblock_level_xp`] = getMax(memberProfiles, "data", "skyblock_level", "xp");
-  values["slayer_xp"] = getMax(memberProfiles, "data", "slayer_xp");
-
-  for (const slayer of getAllKeys(memberProfiles, "data", "slayer_bosses")) {
-    for (const key of getAllKeys(memberProfiles, "data", "slayer_bosses", slayer)) {
-      if (!key.startsWith("boss_kills_tier")) {
+    const values = {};
+    for (const profile of allProfiles) {
+      if (profile.cute_name !== "Blueberry") {
         continue;
       }
 
-      const tier = key.split("_").pop();
-
-      values[`${slayer}_slayer_boss_kills_tier_${tier}`] = getMax(memberProfiles, "data", "slayer_bosses", slayer, key);
-    }
-
-    values[`${slayer}_slayer_xp`] = getMax(memberProfiles, "data", "slayer_bosses", slayer, "xp");
-  }
-
-  for (const item of getAllKeys(memberProfiles, "data", "collection")) {
-    values[`collection_${item.toLowerCase()}`] = getMax(memberProfiles, "data", "collection", item);
-  }
-
-  for (const stat of getAllKeys(memberProfiles, "data", "stats")) {
-    values[stat] = getMax(memberProfiles, "data", "stats", stat);
-  }
-
-  // Dungeons (Mainly Catacombs now.)
-  for (const stat of getAllKeys(memberProfiles, "data", "dungeons", "dungeon_types", "catacombs")) {
-    switch (stat) {
-      case "best_runs":
-      case "highest_tier_completed":
-        break;
-      case "experience":
-        values[`dungeons_catacombs_xp`] = getMax(
-          memberProfiles,
-          "data",
-          "dungeons",
-          "dungeon_types",
-          "catacombs",
-          "experience"
-        );
-        break;
-      default:
-        for (const floor of getAllKeys(memberProfiles, "data", "dungeons", "dungeon_types", "catacombs", stat)) {
-          const floorId = `catacombs_${floor}`;
-          if (!constants.DUNGEONS.floors[floorId] || !constants.DUNGEONS.floors[floorId].name) continue;
-
-          const floorName = constants.DUNGEONS.floors[floorId].name;
-          values[`dungeons_catacombs_${floorName}_${stat}`] = getMax(
-            memberProfiles,
-            "data",
-            "dungeons",
-            "dungeon_types",
-            "catacombs",
-            stat,
-            floor
-          );
-        }
-    }
-  }
-
-  for (const dungeonClass of getAllKeys(memberProfiles, "data", "dungeons", "player_classes")) {
-    values[`dungeons_class_${dungeonClass}_xp`] = getMax(
-      memberProfiles,
-      "data",
-      "dungeons",
-      "player_classes",
-      dungeonClass,
-      "experience"
-    );
-  }
-
-  values[`dungeons_secrets_found`] = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
-
-  const multi = redisClient.pipeline();
-
-  for (const key in values) {
-    if (values[key] == null) {
-      continue;
-    }
-
-    multi.zadd(`lb_${key}`, values[key], uuid);
-  }
-  for (const singleProfile of allProfiles) {
-    if (singleProfile.banking?.balance != undefined) {
-      multi.zadd(`lb_bank`, singleProfile.banking.balance, singleProfile.profile_id);
-    }
-
-    const minionCrafts = [];
-
-    for (const member in singleProfile.members) {
-      if (Array.isArray(singleProfile.members[member].crafted_generators)) {
-        minionCrafts.push(...singleProfile.members[member].crafted_generators);
+      const museum = await lib.getMuseum(db, profile, options);
+      for (const member in museum) {
+        profile.members[member].museum = museum[member];
       }
+
+      const paramBingo = profile.game_mode === "bingo" ? await lib.getBingoProfile(db, uuid, options) : null;
+      const items = await stats.getItems(profile.members[profile.uuid], paramBingo, true, [], options);
+      const calculated = await lib.getStats(db, profile, paramBingo, allProfiles, items, [], options);
+
+      if (calculated.skills?.skills !== undefined) {
+        for (const skill in calculated.skills.skills) {
+          values[`skill_${skill}_xp`] = getMax(calculated, values[`skill_${skill}_xp`], [
+            "skills",
+            "skills",
+            skill,
+            "xp",
+          ]);
+        }
+
+        values["total_skill_xp"] = getMax(calculated, values["total_skill_xp"], ["skills", "totalSkillXp"]);
+      }
+
+      if (calculated.slayer !== undefined) {
+        for (const slayer in calculated.slayer.slayers) {
+          values[`slayer_${slayer}_xp`] = getMax(calculated, values[`slayer_${slayer}_xp`], [
+            "slayer",
+            "slayers",
+            slayer,
+            "level",
+            "xp",
+          ]);
+
+          for (const tier in calculated.slayer.slayers[slayer].kills) {
+            const formattedTier = tier === "total" ? "total" : `tier_${tier}`;
+
+            values[`slayer_${slayer}_${formattedTier}_kills`] = getMax(
+              calculated,
+              values[`slayer_${slayer}_${formattedTier}_kills`],
+              ["slayer", "slayers", slayer, "kills", tier]
+            );
+          }
+        }
+
+        values["total_slayer_xp"] = getMax(calculated, values["total_slayer_xp"], ["slayer", "total_slayer_xp"]);
+      }
+
+      if (calculated.bestiary !== undefined) {
+        for (const category in calculated.bestiary.categories) {
+          const categoryData = calculated.bestiary.categories[category];
+
+          if (categoryData.mobs === undefined) {
+            for (const subCategory in categoryData) {
+              if (subCategory === "name" || subCategory === "texture") {
+                continue;
+              }
+
+              processBestiaryMobs(values, calculated, categoryData[subCategory].mobs, category, subCategory);
+            }
+          } else {
+            processBestiaryMobs(values, calculated, categoryData.mobs, category);
+          }
+        }
+
+        values["bestiary_milestone"] = getMax(calculated, values["bestiary_milestone"], ["bestiary", "milestone"]);
+      }
+
+      if (calculated.mining.core?.powder !== undefined) {
+        for (const powder in calculated.mining.core.powder) {
+          for (const key in calculated.mining.core.powder[powder]) {
+            values[`${powder}_powder_${key}`] = getMax(calculated, values[`${powder}_powder_${key}`], [
+              "mining",
+              "core",
+              "powder",
+              powder,
+              key,
+            ]);
+          }
+        }
+      }
+
+      values["mining_commissions"] = getMax(calculated, values["mining_commissions"], [
+        "mining",
+        "commissions",
+        "completions",
+      ]);
+
+      values["crystal_nucleus_completed"] = getMax(calculated, values["crystal_nucleus_completed"], [
+        "mining",
+        "core",
+        "crystal_nucleus",
+        "times_completed",
+      ]);
+
+      if (calculated.dungeons !== undefined) {
+        values["skill_dungeoneering_xp"] = getMax(calculated, values["skill_dungeoneering_xp"], [
+          "dungeons",
+          "catacombs",
+          "level",
+          "xp",
+        ]);
+
+        values["dungeons_catacombs_completions"] = getMax(calculated, values["dungeons_catacombs_completions"], [
+          "dungeons",
+          "catacombs",
+          "completions",
+        ]);
+
+        values["dungeons_secrets_found"] = getMax(calculated, values["dungeons_secrets_found"], [
+          "dungeons",
+          "secrets_found",
+        ]);
+
+        if (calculated.dungeons?.classes?.classes !== undefined) {
+          for (const className in calculated.dungeons.classes.classes) {
+            values[`dungeons_${className}_class_xp`] = getMax(calculated, values[`dungeons_${className}_class_xp`], [
+              "dungeons",
+              "classes",
+              "classes",
+              className,
+              "level",
+              "xp",
+            ]);
+          }
+        }
+
+        values["dungeons_classes_total_xp"] = getMax(calculated, values["dungeons_classes_total_xp"], [
+          "dungeons",
+          "classes",
+          "experience",
+        ]);
+
+        values["dungeons_classes_average_level"] = getMax(calculated, values["dungeons_classes_average_level"], [
+          "dungeons",
+          "classes",
+          "average_level",
+        ]);
+
+        for (const [key, value] of Object.entries(calculated.dungeons)) {
+          if (["catacombs", "master_catacombs"].includes(key) === false) {
+            continue;
+          }
+
+          for (const [floor, floorData] of Object.entries(value.floors)) {
+            if (floorData?.stats === undefined) {
+              continue;
+            }
+
+            for (const stat in floorData.stats) {
+              values[`dungeons_${key}_floor_${floor}_${stat}`] = getMax(
+                calculated,
+                values[`dungeons_${key}_floor_${floor}_${stat}`],
+                ["dungeons", key, "floors", floor, "stats", stat]
+              );
+            }
+          }
+        }
+      }
+
+      if (calculated.crimson_isle !== undefined) {
+        const crimsonIsle = calculated.crimson_isle;
+
+        values["crimson_isle_factions_mages_reputation"] = getMax(
+          calculated,
+          values["crimson_isle_factions_mages_reputation"],
+          ["crimson_isle", "factions", "mages_reputation"]
+        );
+
+        values["crimson_isle_factions_barbarians_reputation"] = getMax(
+          calculated,
+          values["crimson_isle_factions_barbarians_reputation"],
+          ["crimson_isle", "factions", "barbarians_reputation"]
+        );
+
+        if (crimsonIsle?.kuudra?.tiers !== undefined) {
+          for (const tier in crimsonIsle.kuudra.tiers) {
+            values[`crimson_isle_kuudra_tier_${tier}_kills`] = getMax(
+              calculated,
+              values[`crimson_isle_kuudra_tier_${tier}_kills`],
+              ["crimson_isle", "kuudra", "tiers", tier, "completions"]
+            );
+          }
+        }
+
+        values["crimson_isle_kuudra_total_kills"] = getMax(calculated, values["crimson_isle_kuudra_total_kills"], [
+          "crimson_isle",
+          "kuudra",
+          "total",
+        ]);
+
+        if (crimsonIsle.dojo !== undefined) {
+          for (const challenge in crimsonIsle.dojo.dojo) {
+            const id = crimsonIsle.dojo.dojo[challenge].name.toLowerCase();
+
+            values[`crimson_isle_dojo_${id}_points`] = getMax(calculated, values[`crimson_isle_dojo_${id}_points`], [
+              "crimson_isle",
+              "dojo",
+              "dojo",
+              challenge,
+              "points",
+            ]);
+
+            values[`crimson_isle_dojo_${id}_time`] = getMax(calculated, values[`crimson_isle_dojo_${id}_time`], [
+              "crimson_isle",
+              "dojo",
+              "dojo",
+              challenge,
+              "time",
+            ]);
+          }
+        }
+
+        values["crimson_isle_dojo_total_points"] = getMax(calculated, values["crimson_isle_dojo_total_points"], [
+          "crimson_isle",
+          "dojo",
+          "total_points",
+        ]);
+      }
+
+      if (calculated.collections !== undefined) {
+        for (const [category, categoryData] of Object.entries(calculated.collections)) {
+          if (categoryData.collections === undefined) {
+            continue;
+          }
+
+          for (const collection of categoryData.collections) {
+            const amount = collection.totalAmont ? "totalAmount" : "amount";
+            const id = (collection.id ?? collection.name).toLowerCase();
+
+            values[`collection_${id}_amount`] = getMax(calculated, values[`collection_${id}_amount`], [
+              "collections",
+              category,
+              "collections",
+              categoryData.collections.indexOf(collection),
+              amount,
+            ]);
+          }
+        }
+      }
+
+      values["skyblock_level_xp"] = getMax(calculated, values["skyblock_level_xp"], ["skyblock_level", "xp"]);
+
+      values["first_join"] = getMax(calculated, values["first_join"], ["user_data", "first_join", "unix"]);
+
+      if (calculated.currencies !== undefined) {
+        for (const currency in calculated.currencies) {
+          values[`currency_${currency}`] = getMax(calculated, values[`currency_${currency}`], ["currencies", currency]);
+        }
+      }
+
+      values["networth"] = getMax(calculated, values["networth"], ["networth", "networth"]);
+      values["unsoulbound_networth"] = getMax(calculated, values["unsoulbound_networth"], [
+        "networth",
+        "unsoulboundNetworth",
+      ]);
+
+      values["total_pets"] = getMax(calculated, values["total_pets"], ["pets", "total_pets"]);
+      values["total_pet_skins"] = getMax(calculated, values["total_pet_skins"], ["pets", "amount_pet_skins"]);
+      values["total_pet_xp"] = getMax(calculated, values["total_pet_xp"], ["pets", "total_pet_xp"]);
+
+      values["total_fairy_souls"] = getMax(calculated, values["total_fairy_souls"], ["fairy_souls", "total"]);
     }
 
-    multi.zadd(`lb_unique_minions`, _.uniq(minionCrafts).length, singleProfile.profile_id);
-  }
+    const multi = redisClient.pipeline();
+    for (const key in values) {
+      if (!values[key]) {
+        continue;
+      }
 
-  try {
-    await multi.exec();
+      multi.zadd(`lb_${key}`, values[key], uuid);
+    }
+
+    console.log(`${options.debugId}: updateLeaderboardData returned. (${Date.now() - timeStarted}ms)`);
   } catch (e) {
-    console.error(e);
+    const req = { params: { player: uuid } };
+
+    helper.sendWebhookMessage(e, req, "updateLeaderboardData");
   }
 }
-*/

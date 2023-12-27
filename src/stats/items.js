@@ -203,6 +203,8 @@ export async function getItems(
     personal_vault: personal_vault.length === 0,
   };
 
+  output.allItems = allItems;
+
   console.debug(`${options.debugId}: getItems returned. (${Date.now() - timeStarted}ms)`);
   return output;
 }
