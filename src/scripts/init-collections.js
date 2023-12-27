@@ -37,4 +37,7 @@ await Promise.all([
 
   db.collection("usernames").createIndex({ username: "text" }),
   db.collection("usernames").createIndex({ uuid: 1 }, { unique: true }),
+
+  db.collection("guildCache").createIndex({ uuid: 1 }, { unique: true }),
+  db.collection("guildCache").createIndex({ last_update: 1 }, { expireAfterSeconds: 1209600 }),
 ]);

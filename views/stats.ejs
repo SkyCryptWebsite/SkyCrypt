@@ -448,47 +448,7 @@ const metaDescription = getMetaDescription()
           </svg>
         </button>
 
-        <!-- Guild Button -->
-        <% if (calculated.guild) { %> 
-          <button class="additional-player-stat interactive-tooltip" data-tippy-content="
-            <% if (calculated.guild.rank !== undefined) { %>
-              <span class='stat-name'>Rank: </span>
-              <span class='stat-value'><%= calculated.guild.rank %></span>
-              <br>
-              <br> 
-            <% } %>
-
-            <!-- Guild Grand Master -->
-            <% if (calculated.guild.gm != undefined) { %> 
-              <span class='stat-name'>Guild Master: </span>
-              <a href='/stats/<%= calculated.guild.gm %>' class='no-underline stat-value'><%= calculated.guild.gmUser.display_name %></a>
-              <br>
-            <% } %>
-
-            <!-- Guild Tag -->
-            <% if (calculated.guild.tag !== undefined) { %> 
-              <span class='stat-name'>Tag: </span>
-              <span class='stat-value'><%- helper.renderLore('§f'+calculated.guild.tag) %></span>
-              <br> 
-            <% } %>
-
-            <!-- Guild Members -->
-            <% if (calculated.guild.members !== undefined) { %> 
-              <span class='stat-name'>Members: </span>
-              <span class='stat-value'><%= calculated.guild.members.length %></span>
-              <br> 
-            <% } %>
-
-            <!-- Guild Level -->
-            <% if (calculated.guild.level !== undefined) { %> 
-              <span class='stat-name'>Level: </span>
-              <span class='stat-value'><%= calculated.guild.level %></span>
-              <br> 
-            <% } %>
-          ">
-            Guild: <%= calculated.guild.name %>
-          </button> 
-        <% } %>
+        <guild-button class="additional-player-stat"></guild-button>
 
         <!-- Placnke Button-->
         <a href="https://plancke.io/hypixel/player/stats/<%= calculated.display_name %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link">Plancke</a>
