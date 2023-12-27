@@ -309,7 +309,7 @@ function fillLore(element: HTMLElement) {
     packContent.classList.add("pack-credit");
 
     const packIcon = document.createElement("img");
-    packIcon.setAttribute("src", item.texture_pack.base_path + "/pack.png");
+    packIcon.setAttribute("src", item.texture_pack.base_path.replace("public/", "") + "/pack.png");
     packIcon.classList.add("icon");
 
     const packName = document.createElement("div");
