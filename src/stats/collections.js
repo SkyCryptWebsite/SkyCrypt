@@ -21,7 +21,7 @@ import { db } from "../mongo.js";
  *   amounts: {username: string, amount: number}[],
  * }[]}>} An object containing the player's collection data, with each collection's data organized by its ID.
  */
-export async function getCollections(uuid, profile, dungeons, kuudra, cacheOnly = false) {
+export async function getCollections(uuid, profile, calculated, cacheOnly = false) {
   const output = {};
 
   const userProfile = profile.members[uuid];
@@ -77,6 +77,8 @@ export async function getCollections(uuid, profile, dungeons, kuudra, cacheOnly 
     output[category].maxTiers = output[category].collections.filter((a) => a.tier === a.maxTier).length;
   }
 
+  const dungeons = calculated.dungeons ?? {};
+  const kuudra = calculated.crimson_isle?.kuudra ?? {};
   const bossCollections = getBossCollections(dungeons, kuudra);
   output["BOSS"] = {
     name: "Boss Collections",
@@ -120,8 +122,8 @@ function getBossCollections(dungeons, kuudra) {
     const { name, texture } = collection;
 
     let amount = bossCompletions[index] ?? 0;
-    if (name === "Kuudra" && kuudra?.kuudra?.tiers !== undefined) {
-      amount = Object.values(kuudra.kuudra.tiers).reduce((a, b, index) => {
+    if (name === "Kuudra" && kuudra.tiers !== undefined) {
+      amount = Object.values(kuudra.tiers).reduce((a, b, index) => {
         return a + (index + 1) * b.completions;
       }, 0);
     }

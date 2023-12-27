@@ -284,6 +284,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
     const calculated = await lib.getStats(db, profile, paramBingo, allProfiles, items, req.cookies.pack, {
       cacheOnly,
       debugId,
+      updateLeaderboards: true,
     });
 
     if (isFoolsDay) {
@@ -317,7 +318,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
           console.debug(`${debugId}: an error has occurred.`);
           console.error(err);
 
-          helper.sendWebhookMessage(err, req);
+          await helper.sendWebhookMessage(err, req);
 
           const favorites = parseFavorites(req.cookies.favorite);
           res.render(

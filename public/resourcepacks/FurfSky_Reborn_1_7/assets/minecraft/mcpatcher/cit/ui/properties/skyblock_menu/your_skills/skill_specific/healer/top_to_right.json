@@ -1,7 +1,0 @@
-{
-  "parent": "item/skyblock/item",
-  "textures": {
-        "layer0": "mcpatcher/cit/ui/textures/top_to_right_complete_bar_green",
-        "layer1": "mcpatcher/cit/ui/textures/top_to_right_complete_bar_green"
-  }
-}
