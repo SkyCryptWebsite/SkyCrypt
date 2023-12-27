@@ -93,7 +93,8 @@ export async function getStats(
     }
   }
 
-  output.guild = await helper.getGuild(profile.uuid, db, options.cacheOnly);
+  // fetches the guild and stores it in the database, on the front end it will be fetched from the database if the button is clicked
+  getGuild(db, profile.uuid, options);
 
   output.rank_prefix = helper.renderRank(hypixelProfile);
   output.uuid = profile.uuid;
@@ -530,8 +531,7 @@ export async function getMuseum(
   }
 
   let museumData = await db.collection("museumCache").findOne({ profile_id: profileID });
-
-  if (!options.cacheOnly && (museumData == undefined || museumData.last_save < Date.now() - 1000 * 60 * 5)) {
+  if (!options.cacheOnly && (museumData == undefined || museumData.last_save < Date.now() - 1000 * 60 * 30)) {
     try {
       const params = {
         key: credentials.hypixel_api_key,
@@ -570,4 +570,84 @@ export async function getMuseum(
 
   console.debug(`${options.debugId}: getMuseum returned. (${Date.now() - timeStarted}ms)`);
   return museumData?.museum;
+}
+
+export async function getGuild(
+  db,
+  paramPlayer,
+  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getGuild` }
+) {
+  console.debug(`${options.debugId}: getGuild called.`);
+
+  const timeStarted = Date.now();
+
+  let output = await db.collection("guildCache").findOne({ uuid: paramPlayer });
+  if (!options.cacheOnly && (!output || output.last_save < Date.now() - 1000 * 60 * 5)) {
+    try {
+      const params = {
+        key: credentials.hypixel_api_key,
+        player: paramPlayer,
+      };
+
+      const response = await retry(
+        async () => {
+          return await hypixel.get("guild", { params });
+        },
+        { retries: 2 }
+      );
+
+      const { data } = response;
+
+      if (data === undefined || data.success === false) {
+        throw new SkyCryptError("Request to Hypixel API failed. Please try again!");
+      }
+
+      const guildData = data.guild;
+      if (!guildData) {
+        console.debug(`${options.debugId}: getGuild returned. (${Date.now() - timeStarted}ms)`);
+        return null;
+      }
+
+      const findMemberByRank = (members, rank) => members.find((member) => rank.includes(member.rank.toLowerCase()));
+      const findMemberByUuid = (members, uuid) => members.find((member) => member.uuid == uuid);
+
+      // we love Hypixel's consistency
+      const guildMasterRank = ["guild master", "guildmaster"];
+      const guildMaster = findMemberByRank(guildData.members, guildMasterRank);
+      const guildMasterDetails = guildMaster ? await helper.resolveUsernameOrUuid(guildMaster?.uuid, db, true) : null;
+
+      const playerMember = findMemberByUuid(guildData.members, paramPlayer);
+      const playerDetails = await helper.resolveUsernameOrUuid(paramPlayer, db, true);
+
+      output = {
+        last_updated: Date.now(),
+        guildMaster: {
+          uuid: guildMaster?.uuid,
+          username: guildMasterDetails ? guildMasterDetails?.display_name : null,
+        },
+        player: {
+          uuid: paramPlayer,
+          username: playerDetails?.display_name,
+          rank: playerMember.rank,
+        },
+        name: guildData.name,
+        level: helper.getGuildLevel(guildData.exp),
+        members: guildData.members.length,
+        tag: guildData.tag,
+      };
+
+      db.collection("guildCache").updateOne({ uuid: paramPlayer }, { $set: output }, { upsert: true });
+    } catch (e) {
+      console.log(e);
+
+      if (e?.response?.data?.cause != undefined) {
+        throw new SkyCryptError(`Hypixel API Error: ${e.response.data.cause}.`);
+      }
+
+      throw new SkyCryptError(`Hypixel API Error: Failed to fetch Guild data.`);
+    }
+  }
+
+  console.debug(`${options.debugId}: getGuild returned. (${Date.now() - timeStarted}ms)`);
+  return output;
 }

@@ -8,6 +8,7 @@ import { getPlayerStats } from "./calculate-player-stats";
 import { RARITY_COLORS } from "../../../common/constants.js";
 
 import("./elements/inventory-view");
+import("./elements/guild-button");
 
 const favoriteElement = document.querySelector(".favorite") as HTMLButtonElement;
 

@@ -14,6 +14,7 @@ import { router as leaderboardRouter } from "./apiv2/leaderboard.js";
 import { router as profileRouter } from "./apiv2/profile.js";
 import { router as slayersRouter } from "./apiv2/slayers.js";
 import { router as talismansRouter } from "./apiv2/talismans.js";
+import { router as guildRouter } from "./apiv2/guild.js";
 
 const router = express.Router();
 router.use(cors());
@@ -75,6 +76,7 @@ router.use("/leaderboard", leaderboardRouter);
 router.use("/profile", profileRouter);
 router.use("/slayers", slayersRouter);
 router.use("/talismans", talismansRouter);
+router.use("/guild", guildRouter);
 
 // Handler of non-existing endpoints
 router.get("/*", async (req, res) => {
