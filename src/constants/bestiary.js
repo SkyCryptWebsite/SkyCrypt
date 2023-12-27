@@ -301,7 +301,7 @@ export const BESTIARY = {
       },
       {
         name: "Silverfish",
-        cap: 40000,
+        cap: 10000,
         texture: "/head/da91dab8391af5fda54acd2c0b18fbd819b865e1a8f1d623813fa761e924540",
         mobs: [
           "jockey_shot_silverfish_3",
@@ -315,10 +315,10 @@ export const BESTIARY = {
       },
       {
         name: "Spider Jockey",
-        cap: 10000,
+        cap: 4000,
         texture: "/head/70939373cafe4b1f5397aafd09f3bb1663e7b629a41a75fbdc1860b6bf8b475f",
         mobs: ["spider_jockey_3", "spider_jockey_42", "spider_jockey_5"],
-        bracket: 2,
+        bracket: 3,
       },
       {
         name: "Splitter Spider",
@@ -336,10 +336,10 @@ export const BESTIARY = {
       },
       {
         name: "Voracious Spider",
-        cap: 40000,
+        cap: 10000,
         texture: "/head/8300986ed0a04ea79904f6ae53f49ed3a0ff5b1df62bba622ecbd3777f156df8",
         mobs: ["voracious_spider_50", "voracious_spider_42", "voracious_spider_45", "voracious_spider_10"],
-        bracket: 1,
+        bracket: 2,
       },
       {
         name: "Weaver Spider",
@@ -400,10 +400,10 @@ export const BESTIARY = {
       },
       {
         name: "Obsidian Defender",
-        cap: 25000,
+        cap: 10000,
         texture: "/head/bce155224ea4bc49a8e9190737cb0417d8a7c38a037d8d0382dde4829c103590",
         mobs: ["obsidian_wither_55"],
-        bracket: 4,
+        bracket: 5,
       },
       {
         name: "Voidling Extremist",
@@ -421,17 +421,17 @@ export const BESTIARY = {
       },
       {
         name: "Watcher",
-        cap: 25000,
+        cap: 10000,
         texture: "/head/daa8fc8de6417b48d48c80b443cf5326e3d9da4dbe9b25fcd49549d96168fc0",
         mobs: ["watcher_55"],
-        bracket: 4,
+        bracket: 5,
       },
       {
         name: "Zealot",
-        cap: 100000,
+        cap: 25000,
         texture: "/item/ENDER_CHEST",
         mobs: ["zealot_bruiser_100", "zealot_enderman_55"],
-        bracket: 3,
+        bracket: 4,
       },
     ],
   },
@@ -549,7 +549,7 @@ export const BESTIARY = {
         cap: 10000,
         texture: "/head/7953b6c68448e7e6b6bf8fb273d7203acd8e1be19e81481ead51f45de59a8",
         mobs: ["wither_skeleton_70"],
-        bracket: 3,
+        bracket: 4,
       },
       {
         name: "Wither Spectre",
@@ -571,6 +571,20 @@ export const BESTIARY = {
         texture: "/head/3f86b3affbf65a91faf084a0cd70e40455130ea99b2b3844d2510e1c8b3a5746",
         mobs: ["vanquisher_100"],
         bracket: 5,
+      },
+      {
+        name: "Kada Knight",
+        cap: 3000,
+        texture: "/head/74e9c6e98582ffd8ff8feb3322cd1849c43fb16b158abb11ca7b42eda7743eb",
+        mobs: ["kada_knight_90"],
+        bracket: 4,
+      },
+      {
+        name: "Magma Cube Rider",
+        cap: 3000,
+        texture: "/head/74e9c6e98582ffd8ff8feb3322cd1849c43fb16b158abb11ca7b42eda7743eb",
+        mobs: ["magma_cube_rider_90"],
+        bracket: 4,
       },
     ],
   },
@@ -976,10 +990,10 @@ export const BESTIARY = {
       },
       {
         name: "Explosive Imp",
-        cap: 10000,
+        cap: 3000,
         texture: "/head/deebb8b03cd27d3435e115616b8ed35dcb427af5b0b1cc526d3265a72d493e",
         mobs: ["explosive_imp_100", "explosive_imp_200", "explosive_imp_300", "explosive_imp_400", "explosive_imp_500"],
-        bracket: 3,
+        bracket: 4,
       },
       {
         name: "Inferno Magma Cube",
@@ -1233,7 +1247,7 @@ export const BESTIARY = {
           bracket: 4,
         },
         {
-          name: "Zombie Miner",
+          name: "Abyssal Miner",
           cap: 250,
           texture: "/head/58be05cfae2c6a7d47da2ce88b3e00c72a145cc3218f041b3dd5bd5fa5ca827",
           mobs: ["zombie_miner_150"],
@@ -1468,7 +1482,7 @@ export const BESTIARY = {
     mobs: [
       {
         name: "Angry Archeologist",
-        cap: 10000,
+        cap: 3000,
         texture: "/head/c48c783458e4cf8518e8ab5863fbc4cb948f90568eeb9a60d16c4fde2b96c033",
         mobs: [
           "diamond_guy_80",
@@ -1492,7 +1506,7 @@ export const BESTIARY = {
           "master_diamond_guy_160",
           "master_diamond_guy_170",
         ],
-        bracket: 5,
+        bracket: 7,
       },
       {
         name: "Lonely Spider",
@@ -1633,7 +1647,7 @@ export const BESTIARY = {
           "master_tentaclees_100",
           "master_tentaclees_110",
         ],
-        bracket: 4,
+        bracket: 5,
       },
       {
         name: "Golem",
@@ -1644,7 +1658,7 @@ export const BESTIARY = {
       },
       {
         name: "King Midas",
-        cap: 1000,
+        cap: 750,
         texture: "/head/62bca085750043503f5df9f7def824a2e3acfc27842bcd09d2b6695881e832f5",
         mobs: [
           "king_midas_130",
@@ -1658,11 +1672,11 @@ export const BESTIARY = {
           "master_king_midas_160",
           "master_king_midas_170",
         ],
-        bracket: 5,
+        bracket: 6,
       },
       {
         name: "Lost Adventurer",
-        cap: 10000,
+        cap: 3000,
         texture: "/head/1e0329f42192ee7c1a0c704f82dbbbe7c00fbfa3f020c1067a208630b991b988",
         mobs: [
           "lost_adventurer_80",
@@ -1756,7 +1770,7 @@ export const BESTIARY = {
           "master_lost_adventurer_163",
           "master_lost_adventurer_164",
         ],
-        bracket: 5,
+        bracket: 7,
       },
       {
         name: "Mimic",
@@ -1781,7 +1795,7 @@ export const BESTIARY = {
       },
       {
         name: "Shadow Assassin",
-        cap: 10000,
+        cap: 3000,
         texture: "/head/3399e00f404411e465d74388df132d51fe868ecf86f1c073faffa1d9172ec0f3",
         mobs: [
           "shadow_assassin_120",
@@ -1799,7 +1813,7 @@ export const BESTIARY = {
           "master_shadow_assassin_170",
           "master_shadow_assassin_171",
         ],
-        bracket: 5,
+        bracket: 7,
       },
       {
         name: "Skeleton Grunt",
@@ -2095,7 +2109,7 @@ export const BESTIARY = {
       },
       {
         name: "Zombie Knight",
-        cap: 25000,
+        cap: 10000,
         texture: "/head/25d2f31ba162fe6272e831aed17f53213db6fa1c4cbe4fc827f3963cc98b9",
         mobs: [
           "zombie_knight_86",
@@ -2109,7 +2123,7 @@ export const BESTIARY = {
           "master_zombie_knight_116",
           "master_zombie_knight_126",
         ],
-        bracket: 4,
+        bracket: 5,
       },
       {
         name: "Zombie Lord",
@@ -2236,6 +2250,6 @@ export const BESTIARY_BRACKETS = {
   5: [
     1, 2, 3, 5, 7, 10, 15, 20, 25, 30, 60, 120, 200, 300, 400, 500, 600, 720, 860, 1000, 2000, 4000, 6000, 8000, 10000,
   ],
-  6: [1, 2, 3, 5, 7, 9, 14, 17, 21, 25, 50, 80, 125, 175, 250, 325, 425, 525, 625, 750, 1500],
-  7: [1, 2, 3, 5, 7, 9, 11, 14, 17, 20, 30, 40, 55, 75, 100, 150, 200, 275, 375, 500, 1000],
+  6: [1, 2, 3, 5, 7, 9, 14, 17, 21, 25, 50, 80, 125, 175, 250, 325, 425, 525, 625, 750, 1500, 3000, 4500, 6000, 7500],
+  7: [1, 2, 3, 5, 7, 9, 11, 14, 17, 20, 30, 40, 55, 75, 100, 150, 200, 275, 375, 500, 1000, 1500, 2000, 2500, 3000],
 };
