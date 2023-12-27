@@ -196,7 +196,7 @@ export async function updateLeaderboardData(
             continue;
           }
 
-          for (const [floor, floorData] of Object.entries(value.floors)) {
+          for (const [floor, floorData] of Object.entries(value.floors ?? {})) {
             if (floorData?.stats === undefined) {
               continue;
             }
