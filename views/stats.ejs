@@ -560,7 +560,7 @@ const metaDescription = getMetaDescription()
         notAvailable.push('Collections');
       }
 
-      if (notAvailable.length > 0 || calculated.profile.game_mode !== "normal") { %>
+      if (notAvailable.length > 0 || calculated.profile.game_mode && calculated.profile.game_mode !== "normal") { %>
         <div class="stat-container info-container-wrapper">
           <div class="info-container">
             <div class="info-header">Notice</div>
