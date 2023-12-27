@@ -210,7 +210,7 @@ export const PET_DATA = {
   SNOWMAN: {
     head: "/head/11136616d8c4a87a54ce78a97b551610c2b2c8f6d410bc38b858f974b113b208",
     type: "combat",
-    maxTier: "legendary",
+    maxTier: "mythic",
     maxLevel: 100,
     emoji: "⛄",
     subLore: "§7Fight alongside your pet Snowman!",
