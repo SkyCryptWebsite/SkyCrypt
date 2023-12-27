@@ -55,15 +55,13 @@
 
 
     <!-- Timecharms Obtained -->
-    <% if (calculated.rift.timecharms.obtained_timecharms > 0) { %>
-      <p class="stat-sub-header">Timecharms</p>
-      <% max = calculated.rift.timecharms.obtained_timecharms === calculated.rift.timecharms.timecharms.length ? 'golden-text' : '' %>
-      <span class="stat-name <%= max %>">Timecharms obtained: </span>
-      <span class="stat-value <%= max %>"><%= calculated.rift.timecharms.obtained_timecharms %></span>
-      <br>
-      <br>
-    <% } %>
-
+    <p class="stat-sub-header">Timecharms</p>
+    <% max = calculated.rift.timecharms.obtained_timecharms === calculated.rift.timecharms.timecharms.length ? 'golden-text' : '' %>
+    <span class="stat-name <%= max %>">Timecharms obtained: </span>
+    <span class="stat-value <%= max %>"><%= calculated.rift.timecharms.obtained_timecharms %></span>
+    <br>
+    <br>
+    
     <div class="collections">
       <% for (const timecharm of calculated.rift.timecharms.timecharms) { %>
         <div class="chip" data-missing="<%= timecharm.unlocked === false %>">
