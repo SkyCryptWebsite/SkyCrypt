@@ -151,11 +151,15 @@ export async function getStats(
 
   output.harp_quest = userProfile.quests?.harp_quest || {};
 
-  const specialMuseumItems = items.museumItems.specialItems.map((a) => a.data).flat();
-  const normalMuseumItems = Object.values(items.museumItems.items)
-    .filter((a) => a && a.data !== undefined && a.borrowing === false)
-    .map((a) => a.data)
-    .flat();
+  const specialMuseumItems = items.museumItems.specialItems
+    ? items.museumItems.specialItems.map((a) => a.data).flat()
+    : [];
+  const normalMuseumItems = items.museumItems.items
+    ? Object.values(items.museumItems.items)
+        .filter((a) => a && a.data !== undefined && a.borrowing === false)
+        .map((a) => a.data)
+        .flat()
+    : [];
 
   const museumItems = [...normalMuseumItems, ...specialMuseumItems];
 
