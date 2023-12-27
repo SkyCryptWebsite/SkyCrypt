@@ -431,7 +431,9 @@ export async function getPets(userProfile, calculated, items, profile) {
   const pets = userProfile.pets_data?.pets ?? [];
 
   // Adds pets from inventories
-  pets.push(...items.pets);
+  if (items.pets !== undefined) {
+    pets.push(...items.pets);
+  }
 
   // Add Montezume pet from the Rift
   if (userProfile.rift?.dead_cats?.montezuma !== undefined) {

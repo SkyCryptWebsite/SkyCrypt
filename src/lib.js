@@ -20,7 +20,7 @@ export async function getStats(
   allProfiles,
   items,
   packs,
-  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getStats` }
+  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getStats`, updateLeaderboards: true }
 ) {
   const output = {};
 
@@ -164,17 +164,17 @@ export async function getStats(
     (await getPreDecodedNetworth(
       userProfile,
       {
-        armor: items.armor.armor,
-        equipment: items.equipment.equipment,
-        wardrobe: items.wardrobe_inventory,
-        inventory: items.inventory,
-        enderchest: items.enderchest,
-        accessories: items.accessory_bag,
-        personal_vault: items.personal_vault,
-        storage: items.storage.concat(items.storage.map((item) => item.containsItems).flat()),
-        fishing_bag: items.fishing_bag,
-        potion_bag: items.potion_bag,
-        candy_inventory: items.candy_bag,
+        armor: items.armor?.armor ?? [],
+        equipment: items.equipment?.equipment ?? [],
+        wardrobe: items.wardrobe_inventory ?? [],
+        inventory: items.inventory ?? [],
+        enderchest: items.enderchest ?? [],
+        accessories: items.accessory_bag ?? [],
+        personal_vault: items.personal_vault ?? [],
+        storage: items.storage ? items.storage.concat(items.storage.map((item) => item.containsItems).flat()) : [],
+        fishing_bag: items.fishing_bag ?? [],
+        potion_bag: items.potion_bag ?? [],
+        candy_inventory: items.candy_bag ?? [],
         //museum: [],
       },
       output.currencies.bank,
@@ -188,6 +188,12 @@ export async function getStats(
   output.pets = await stats.getPets(userProfile, output, items, profile);
 
   console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
+
+  if (options.updateLeaderboards === true) {
+    stats.updateLeaderboardData(profile.uuid, allProfiles, {
+      debugId: `${helper.getClusterId()}/${profile.uuid}@updateLeaderboardData`,
+    });
+  }
 
   return output;
 }
@@ -546,6 +552,7 @@ export async function getMuseum(
       }
 
       if (data.members === null || Object.keys(data.members).length === 0) {
+        console.debug(`${options.debugId}: getMuseum returned. (${Date.now() - timeStarted}ms)`);
         return null;
       }
 
@@ -562,5 +569,5 @@ export async function getMuseum(
   }
 
   console.debug(`${options.debugId}: getMuseum returned. (${Date.now() - timeStarted}ms)`);
-  return museumData.museum;
+  return museumData?.museum;
 }

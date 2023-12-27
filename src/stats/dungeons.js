@@ -101,7 +101,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
       completions: completions,
     };
 
-    output[type].level.rank = await getLeaderboardPosition(`dungeons_${type}_xp`, dungeon.experience);
+    output[type].level.rank = await getLeaderboardPosition(`skill_dungeoneering_xp`, dungeon.experience);
   }
 
   output.floor_completions = (output.catacombs?.completions ?? 0) + (output.master_catacombs?.completions ?? 0);
