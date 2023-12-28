@@ -446,7 +446,7 @@ export async function getPets(userProfile, calculated, items, profile) {
   }
 
   output.pets = getProfilePets(pets, calculated);
-  output.missing = getMissingPets(output.pets, profile.game_mode, output);
+  output.missing = getMissingPets(output.pets, profile.game_mode, calculated);
   output.pet_score = getPetScore(output.pets);
   Object.assign(output, getMiscPetData(calculated, output.pets));
 
