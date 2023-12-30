@@ -523,21 +523,22 @@ export function getCompletePacks() {
 
 const textureMap = new Map();
 const allTextures = new Map();
-setTimeout(() => {
+setTimeout(async () => {
   if (resourcePacks.length > 0) {
-    for (const pack of resourcePacks) {
-      const packID = pack.config.id;
-
-      for (const texture of pack.textures) {
-        if ("skyblock_id" in texture) {
-          textureMap.set(`${packID}:${texture.skyblock_id}`, texture);
-          allTextures.set(texture.skyblock_id, true);
-        }
-      }
+    if (!resourcesReady) {
+      await readyPromise;
     }
 
-    console.log(`Loaded ${textureMap.size} SkyBlock textures.`);
-    console.log(`Loaded ${allTextures.size} SkyBlock items.`);
+    for (const pack of resourcePacks) {
+      for (const texture of pack.textures) {
+        if ("skyblock_id" in texture === false) {
+          continue;
+        }
+
+        textureMap.set(`${pack.config.id}:${texture.skyblock_id}`, texture);
+        allTextures.set(texture.skyblock_id, true);
+      }
+    }
   }
 }, 1000);
 
@@ -551,11 +552,11 @@ setTimeout(() => {
  * @returns {object} Item's texture
  */
 export function getTexture(item, { ignore_id = false, pack_ids = [], debug = false } = {}) {
-  const timeStarted = Date.now();
-
-  if (allTextures.has(getId(item)) === false && getId(item) !== "") {
+  if (allTextures.has(getId(item)) === false || getId(item) === "") {
     return null;
   }
+
+  const timeStarted = Date.now();
 
   const debugStats = {
     processed_packs: 0,
