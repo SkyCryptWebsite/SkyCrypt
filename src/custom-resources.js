@@ -551,7 +551,7 @@ setTimeout(async () => {
  * @param {boolean} [options.debug]
  * @returns {object} Item's texture
  */
-export function getTexture(item, { ignore_id = false, pack_ids = [], debug = false } = {}) {
+export async function getTexture(item, { ignore_id = false, pack_ids = [], debug = false } = {}) {
   if (allTextures.has(getId(item)) === false || getId(item) === "") {
     return null;
   }
