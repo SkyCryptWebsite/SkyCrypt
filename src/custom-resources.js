@@ -587,18 +587,27 @@ export async function getTexture(item, { ignore_id = false, pack_ids = [], debug
         },
         cachedTexture
       );
+
       debugStats.found_matches++;
       break;
     }
 
     for (const texture of pack.textures) {
-      if (!ignore_id && texture.id != item.id) continue;
-      if (!ignore_id && "damage" in texture && texture.damage != item.Damage) continue;
-      if (!ignore_id && texture.match === undefined && !("skyblock_id" in texture)) continue;
+      if (!ignore_id && texture.id != item.id) {
+        continue;
+      }
+
+      if (!ignore_id && "damage" in texture && texture.damage != item.Damage) {
+        continue;
+      }
+
+      if (!ignore_id && texture.match === undefined && !("skyblock_id" in texture)) {
+        continue;
+      }
 
       let matches = 0;
-      let matchValues = [];
 
+      let matchValues = [];
       for (const match of texture.match) {
         let { value, regex } = match;
 
@@ -606,7 +615,9 @@ export async function getTexture(item, { ignore_id = false, pack_ids = [], debug
           value = value.slice(0, -2);
         }
 
-        if (!hasPath(item, "tag", ...value.split("."))) continue;
+        if (hasPath(item, "tag", ...value.split(".")) == false) {
+          continue;
+        }
 
         matchValues = getPath(item, "tag", ...value.split("."));
         matchValues = Array.isArray(matchValues) ? matchValues : [matchValues];
