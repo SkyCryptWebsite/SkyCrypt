@@ -1,6 +1,14 @@
 import fs from "fs-extra";
 import path from "path";
-import { getClusterId, getFolderPath, getCacheFolderPath, getCacheFilePath, hasPath, getPath } from "./helper.js";
+import {
+  getClusterId,
+  getFolderPath,
+  getCacheFolderPath,
+  getCacheFilePath,
+  hasPath,
+  getPath,
+  getId,
+} from "./helper.js";
 import mm from "micromatch";
 import util from "util";
 import apng2gif from "apng2gif-bin";
@@ -513,6 +521,26 @@ export function getCompletePacks() {
   return resourcePacks;
 }
 
+const textureMap = new Map();
+const allTextures = new Map();
+setTimeout(() => {
+  if (resourcePacks.length > 0) {
+    for (const pack of resourcePacks) {
+      const packID = pack.config.id;
+
+      for (const texture of pack.textures) {
+        if ("skyblock_id" in texture) {
+          textureMap.set(`${packID}:${texture.skyblock_id}`, texture);
+          allTextures.set(texture.skyblock_id, true);
+        }
+      }
+    }
+
+    console.log(`Loaded ${textureMap.size} SkyBlock textures.`);
+    console.log(`Loaded ${allTextures.size} SkyBlock items.`);
+  }
+}, 1000);
+
 /**
  * Processes all textures that could potentially be connected to an item, then throws the one with biggest priority
  * @param {object} item
@@ -522,14 +550,13 @@ export function getCompletePacks() {
  * @param {boolean} [options.debug]
  * @returns {object} Item's texture
  */
-export async function getTexture(item, options) {
-  options = Object.assign({ ignore_id: false, pack_ids: undefined, debug: false }, options);
+export function getTexture(item, { ignore_id = false, pack_ids = [], debug = false } = {}) {
+  const timeStarted = Date.now();
 
-  if (!resourcesReady) {
-    await readyPromise;
+  if (allTextures.has(getId(item)) === false && getId(item) !== "") {
+    return null;
   }
 
-  const timeStarted = Date.now();
   const debugStats = {
     processed_packs: 0,
     processed_textures: 0,
@@ -540,58 +567,54 @@ export async function getTexture(item, options) {
 
   let tempPacks = resourcePacks;
 
-  options.pack_ids =
-    options.pack_ids !== undefined && typeof options.pack_ids === "string" ? options.pack_ids.split(",") : [];
+  pack_ids = pack_ids && typeof pack_ids === "string" ? pack_ids.split(",") : [];
+  const packIdsSet = new Set(pack_ids);
 
-  if (options.pack_ids.length > 0) {
-    tempPacks = tempPacks.filter((a) => options.pack_ids.includes(a.config.id));
-    tempPacks = tempPacks.sort((a, b) => options.pack_ids.indexOf(b) - options.pack_ids.indexOf(a));
+  if (pack_ids.length > 0) {
+    tempPacks = tempPacks
+      .filter((a) => packIdsSet.has(a.config.id))
+      .sort((a, b) => pack_ids.indexOf(b) - pack_ids.indexOf(a))
+      .reverse();
   }
 
-  // reserve is needed because we want the most priority packs on the bottom of the array
-  tempPacks = tempPacks.reverse();
-
   for (const pack of tempPacks) {
+    const cachedTexture = textureMap.get(`${pack.config.id}:${getId(item)}`);
+    if (cachedTexture && cachedTexture.weight > outputTexture.weight) {
+      // console.log(`Found cached texture for ${pack.config.id}:${getId(item)}`);
+      outputTexture = Object.assign(
+        {
+          pack: { base_path: pack.base_path ?? pack.basePath, config: pack.config, skyblock_id: item.id },
+        },
+        cachedTexture
+      );
+      debugStats.found_matches++;
+      break;
+    }
+
     for (const texture of pack.textures) {
-      if (options.ignore_id === false && texture.id != item.id) {
-        continue;
-      }
-
-      if (options.ignore_id === false && "damage" in texture && texture.damage != item.Damage) {
-        continue;
-      }
-
-      if (options.ignore_id === false && texture.match === undefined && "skyblock_id" in texture === false) {
-        continue;
-      }
+      if (!ignore_id && texture.id != item.id) continue;
+      if (!ignore_id && "damage" in texture && texture.damage != item.Damage) continue;
+      if (!ignore_id && texture.match === undefined && !("skyblock_id" in texture)) continue;
 
       let matches = 0;
+      let matchValues = [];
 
       for (const match of texture.match) {
         let { value, regex } = match;
 
         if (value.endsWith(".*")) {
-          value = value.substring(0, value.length - 2);
+          value = value.slice(0, -2);
         }
 
-        if (!hasPath(item, "tag", ...value.split("."))) {
-          continue;
-        }
+        if (!hasPath(item, "tag", ...value.split("."))) continue;
 
-        let matchValues = getPath(item, "tag", ...value.split("."));
-
-        if (!Array.isArray(matchValues)) {
-          matchValues = [matchValues];
-        }
+        matchValues = getPath(item, "tag", ...value.split("."));
+        matchValues = Array.isArray(matchValues) ? matchValues : [matchValues];
 
         const slash = regex.lastIndexOf("/");
         regex = new RegExp(regex.slice(1, slash), regex.slice(slash + 1));
 
-        if (
-          matchValues.some((matchValue) => {
-            return regex.test(matchValue.toString().replace(removeFormatting, ""));
-          })
-        ) {
+        if (matchValues.some((matchValue) => regex.test(matchValue.toString().replace(removeFormatting, "")))) {
           matches++;
         }
       }
@@ -600,11 +623,10 @@ export async function getTexture(item, options) {
       debugStats.processed_textures++;
 
       if (matches == texture.match.length) {
-        if (texture.weight < outputTexture.weight) {
-          continue;
-        }
-
-        if (texture.weight == outputTexture.weight && texture.file < outputTexture.file) {
+        if (
+          texture.weight < outputTexture.weight ||
+          (texture.weight == outputTexture.weight && texture.file < outputTexture.file)
+        ) {
           continue;
         }
 
@@ -622,10 +644,7 @@ export async function getTexture(item, options) {
     return null;
   }
 
-  outputTexture.path = path
-    .relative(path.resolve(FOLDER_PATH, "..", "public"), outputTexture.path)
-    .replaceAll("\\", "/");
-
+  outputTexture.path = path.posix.relative(path.resolve(FOLDER_PATH, "..", "public"), outputTexture.path);
   debugStats.time_spent_ms = Date.now() - timeStarted;
   outputTexture.debug = debugStats;
 

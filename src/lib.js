@@ -226,11 +226,11 @@ export async function getStats(
 
   console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
 
-  if (options.updateLeaderboards === true) {
+  /*if (options.updateLeaderboards === true) {
     stats.updateLeaderboardData(profile.uuid, allProfiles, {
       debugId: `${helper.getClusterId()}/${profile.uuid}@updateLeaderboardData`,
     });
-  }
+  }*/
 
   return output;
 }
