@@ -581,7 +581,6 @@ export async function getTexture(item, { ignore_id = false, pack_ids = [], debug
   for (const pack of tempPacks) {
     const cachedTexture = textureMap.get(`${pack.config.id}:${getId(item)}`);
     if (cachedTexture && cachedTexture.weight > outputTexture.weight) {
-      // console.log(`Found cached texture for ${pack.config.id}:${getId(item)}`);
       outputTexture = Object.assign(
         {
           pack: { base_path: pack.base_path ?? pack.basePath, config: pack.config, skyblock_id: item.id },
