@@ -473,37 +473,39 @@ const metaDescription = getMetaDescription()
           <!-- Copy UUID Button -->
           <button data-copy-text="<%= calculated.uuid %>" class="copy-text additional-player-stat">Copy UUID</button>
           
-          <!-- Discord Button -->
-          <% if ('DISCORD' in calculated.social) { %> 
-            <button data-copy-text="<%= calculated.social.DISCORD %>" class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></button> 
-          <% } %>
+          <% if ('social' in calculated && Object.keys(calculated.social).length > 0) { %>
+            <!-- Discord Button -->
+            <% if ('DISCORD' in calculated.social) { %> 
+              <button data-copy-text="<%= calculated.social.DISCORD %>" class="additional-player-stat copy-text external-discord external-icon"><%= calculated.social.DISCORD %></button> 
+            <% } %>
 
-          <!-- Twitter Button -->
-          <% if ('TWITTER' in calculated.social) { %> 
-            <a data-tippy-content="Twitter" href="<%= calculated.social.TWITTER %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitter"></a> 
-          <% } %>
+            <!-- Twitter Button -->
+            <% if ('TWITTER' in calculated.social) { %> 
+              <a data-tippy-content="Twitter" href="<%= calculated.social.TWITTER %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitter"></a> 
+            <% } %>
 
-          <!-- Youtube Button -->
-          <% if ('YOUTUBE' in calculated.social) { %> 
-            <a data-tippy-content="YouTube" href="<%= calculated.social.YOUTUBE %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-youtube"></a> 
-          <% } %>
+            <!-- Youtube Button -->
+            <% if ('YOUTUBE' in calculated.social) { %> 
+              <a data-tippy-content="YouTube" href="<%= calculated.social.YOUTUBE %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-youtube"></a> 
+            <% } %>
 
-          <!-- Instagram Button -->
-          <% if ('INSTAGRAM' in calculated.social) { %> 
-            <a data-tippy-content="Instagram" href="<%= calculated.social.INSTAGRAM %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-instagram"></a> 
-          <% } %>
+            <!-- Instagram Button -->
+            <% if ('INSTAGRAM' in calculated.social) { %> 
+              <a data-tippy-content="Instagram" href="<%= calculated.social.INSTAGRAM %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-instagram"></a> 
+            <% } %>
 
-          <!-- Twitch Button -->
-          <% if ('TWITCH' in calculated.social) { %> 
-            <a data-tippy-content="Twitch" href="<%= calculated.social.TWITCH %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitch"></a> 
-          <% } %>
+            <!-- Twitch Button -->
+            <% if ('TWITCH' in calculated.social) { %> 
+              <a data-tippy-content="Twitch" href="<%= calculated.social.TWITCH %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-twitch"></a> 
+            <% } %>
 
-          <!-- Hypixel Button -->
-          <% if ('HYPIXEL' in calculated.social) { %> 
-            <a data-tippy-content="Hypixel Forums" href="<%= calculated.social.HYPIXEL %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-hypixel"></a> 
-          <% } %>
+            <!-- Hypixel Button -->
+            <% if ('HYPIXEL' in calculated.social) { %> 
+              <a data-tippy-content="Hypixel Forums" href="<%= calculated.social.HYPIXEL %>" target="_blank" rel="noreferrer" class="additional-player-stat external-link external-icon external-hypixel"></a> 
+            <% } %>
 
-          <button class="additional-player-stat" id="reveal_socials" aria-label="reveal socials"></button>
+            <button class="additional-player-stat" id="reveal_socials" aria-label="reveal socials"></button>
+          <% } %>
         </div>
       </div>
     </div>
