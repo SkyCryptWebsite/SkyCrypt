@@ -1,7 +1,6 @@
 import { getLevelByXp } from "./skills/leveling.js";
 import * as constants from "../constants.js";
 import * as helper from "../helper.js";
-import { db } from "../mongo.js";
 import moment from "moment";
 
 export function getMiningCoreData(userProfile) {
