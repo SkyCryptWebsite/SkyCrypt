@@ -629,9 +629,5 @@ export async function getTexture(item, options) {
   debugStats.time_spent_ms = Date.now() - timeStarted;
   outputTexture.debug = debugStats;
 
-  if (cluster.isWorker) {
-    process.send({ type: "used_pack", id: outputTexture?.pack.config.id });
-  }
-
   return outputTexture;
 }

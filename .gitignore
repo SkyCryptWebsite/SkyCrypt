@@ -67,3 +67,6 @@ package-lock.json
 
 # local dev files
 devdata/*
+
+# generated metrics
+public/metrics.json

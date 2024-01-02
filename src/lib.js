@@ -63,6 +63,7 @@ export async function getStats(
 ) {
   const output = {};
 
+  helper.sendMetric("function_getstats_call");
   console.debug(`${options.debugId}: getStats called.`);
   const timeStarted = Date.now();
 
@@ -224,6 +225,7 @@ export async function getStats(
     }
   }
 
+  helper.sendMetric("function_getstats_return");
   console.debug(`${options.debugId}: getStats returned. (${Date.now() - timeStarted}ms)`);
 
   if (options.updateLeaderboards === true) {
@@ -241,6 +243,7 @@ export async function getProfile(
   paramProfile,
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` }
 ) {
+  helper.sendMetric("function_getprofile_call");
   console.debug(`${options.debugId}: getProfile called.`);
   const timeStarted = Date.now();
 
@@ -475,6 +478,7 @@ export async function getProfile(
       .catch(console.error);
   }
 
+  helper.sendMetric("function_getprofile_return");
   console.debug(`${options.debugId}: getProfile returned. (${Date.now() - timeStarted}ms)`);
   return { profile: profile, allProfiles: allSkyBlockProfiles, uuid: paramPlayer };
 }
@@ -484,6 +488,7 @@ export async function getBingoProfile(
   paramPlayer,
   options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` }
 ) {
+  helper.sendMetric("function_getbingoprofile_call");
   console.debug(`${options.debugId}: getBingoProfile called.`);
   const timeStarted = Date.now();
 
@@ -549,6 +554,7 @@ export async function getBingoProfile(
     }
   }
 
+  helper.sendMetric("function_getbingoprofile_return");
   console.debug(`${options.debugId}: getBingoProfile returned. (${Date.now() - timeStarted}ms)`);
   return profileData;
 }

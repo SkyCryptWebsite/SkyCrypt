@@ -32,6 +32,7 @@ router.get("/", async (req, res, next) => {
       };
     }
 
+    helper.sendMetric("endpoint_apiv2_bazaar_success");
     res.json(output);
   } catch (e) {
     next(e);

@@ -15,6 +15,7 @@ router.get("/:guild", async (req, res, next) => {
   try {
     const output = await lib.getGuild(db, req.params.guild, req.options);
 
+    helper.sendMetric("endpoint_apiv2_guild_success");
     res.json(output);
   } catch (e) {
     next(e);
