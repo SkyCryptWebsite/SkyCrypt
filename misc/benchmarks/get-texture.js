@@ -36,7 +36,8 @@ const suite = new Benchmark.Suite("custom-resources: getTexture", {
 
     const itemCompleteData = {
       benchmark_hz: event.target.hz,
-      hz_per_texture: event.target.hz / textureData.debug.processed_textures,
+      hz_per_texture:
+        textureData.debug.processed_textures !== 0 ? event.target.hz / textureData.debug.processed_textures : 0,
       processed_textures: textureData.debug.processed_textures,
     };
 
