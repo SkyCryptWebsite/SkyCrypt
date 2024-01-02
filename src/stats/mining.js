@@ -98,7 +98,7 @@ async function getForge(userProfile) {
           forgeTime *= constants.QUICK_FORGE_MULTIPLIER[quickForge];
         }
 
-        const dbObject = await db.collection("items").findOne({ id: item.id });
+        const dbObject = constants.ITEMS.get(item.id);
         forgeItem.name = item.id == "PET" ? "[Lvl 1] Ammonite" : dbObject ? dbObject.name : item.id;
 
         const timeFinished = item.startTime + forgeTime;

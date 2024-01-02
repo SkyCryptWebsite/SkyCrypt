@@ -1,5 +1,7 @@
 import { db } from "../mongo.js";
 import sanitize from "mongo-sanitize";
+import * as constants from "../constants.js";
+import * as helper from "../helper.js";
 
 /**
  * Gathers Item Data visualized similarily to in-game NBT format based on a query
@@ -28,7 +30,7 @@ export async function getItemData(query = {}) {
       query.damage = new Number(split[1]);
     }
 
-    dbItem = { ...item, ...(await db.collection("items").findOne({ id: query.skyblockId })) };
+    dbItem = { ...item, ...constants.ITEMS.get(query.skyblockId) };
   }
 
   if (query.name !== undefined) {
@@ -66,6 +68,24 @@ export async function getItemData(query = {}) {
 
   if ("id" in dbItem) {
     item.tag.ExtraAttributes.id = dbItem.id;
+  }
+
+  if ("texture" in dbItem) {
+    item.texture_path = `/head/${dbItem.texture}`;
+  }
+
+  if (dbItem.item_id >= 298 && dbItem.item_id <= 301) {
+    const type = ["helmet", "chestplate", "leggings", "boots"][dbItem.item_id - 298];
+
+    if (dbItem?.color !== undefined) {
+      const color = helper.rgbToHex(dbItem.color) ?? "955e3b";
+
+      item.texture_path = `/leather/${type}/${color}`;
+    }
+  }
+
+  if (item === null) {
+    item.texture_path = "/head/bc8ea1f51f253ff5142ca11ae45193a4ad8c3ab5e9c6eec8ba7a4fcb7bac40";
   }
 
   return item;

@@ -1,3 +1,4 @@
+import * as constants from "../constants.js";
 import { db } from "../mongo.js";
 import axios from "axios";
 
@@ -16,7 +17,7 @@ async function updateCollections() {
         name: collection.name,
         items: await Promise.all(
           Object.keys(collection.items).map(async (id) => {
-            const itemData = await db.collection("items").findOne({ id: id });
+            const itemData = constants.ITEMS.get(id);
             return {
               id,
               name: collection.items[id].name,
