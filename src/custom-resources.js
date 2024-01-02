@@ -12,7 +12,6 @@ import minecraftData from "minecraft-data";
 const mcData = minecraftData("1.8.9");
 import UPNG from "upng-js";
 import RJSON from "relaxed-json";
-import cluster from "cluster";
 
 import child_process from "child_process";
 import { getFileHash } from "./hashes.js";
