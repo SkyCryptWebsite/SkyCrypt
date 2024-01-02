@@ -20,9 +20,10 @@ async function executeFunctions(functions) {
   async function handlePromise(key, fn, args, promise, awaitPromises, condition) {
     try {
       if (condition) {
-        if (promise !== undefined) {
+        if (promise !== undefined && args.output) {
           Object.assign(args.output, results);
         }
+
         results[key] = await fn(...Object.values(args));
       }
     } catch (error) {
@@ -163,26 +164,23 @@ export async function getStats(
 
   const museumItems = [...normalMuseumItems, ...specialMuseumItems];
 
-  output.networth =
-    (await getPreDecodedNetworth(
-      userProfile,
-      {
-        armor: items.armor?.armor ?? [],
-        equipment: items.equipment?.equipment ?? [],
-        wardrobe: items.wardrobe_inventory ?? [],
-        inventory: items.inventory ?? [],
-        enderchest: items.enderchest ?? [],
-        accessories: items.accessory_bag ?? [],
-        personal_vault: items.personal_vault ?? [],
-        storage: items.storage ? items.storage.concat(items.storage.map((item) => item.containsItems).flat()) : [],
-        fishing_bag: items.fishing_bag ?? [],
-        potion_bag: items.potion_bag ?? [],
-        candy_inventory: items.candy_bag ?? [],
-        museum: museumItems,
-      },
-      output.currencies?.bank ?? 0,
-      { cache: true, onlyNetworth: true, v2Endpoint: true }
-    )) ?? {};
+  const networthItems = {
+    armor: items.armor?.armor ?? [],
+    equipment: items.equipment?.equipment ?? [],
+    wardrobe: items.wardrobe_inventory ?? [],
+    inventory: items.inventory ?? [],
+    enderchest: items.enderchest ?? [],
+    accessories: items.accessory_bag ?? [],
+    personal_vault: items.personal_vault ?? [],
+    storage: items.storage ? items.storage.concat(items.storage.map((item) => item.containsItems).flat()) : [],
+    fishing_bag: items.fishing_bag ?? [],
+    potion_bag: items.potion_bag ?? [],
+    candy_inventory: items.candy_bag ?? [],
+    museum: museumItems,
+  };
+
+  const bank = profile.banking?.balance ?? 0;
+  const networthOptions = { cache: true, onlyNetworth: true, v2Endpoint: true };
 
   const profileMembers = profile.members;
   const uuid = profile.uuid;
@@ -211,6 +209,7 @@ export async function getStats(
     accessories: { fn: stats.getMissingAccessories, args: { output, items, packs } },
     temp_stats: { fn: stats.getTempStats, args: { userProfile } },
     rift: { fn: stats.getRift, args: { userProfile } },
+    networth: { fn: getPreDecodedNetworth, args: { userProfile, networthItems, bank, networthOptions }, promise: true },
     pets: { fn: stats.getPets, args: { userProfile, output, items, profile }, promise: true, awaitPromises: true },
   };
 
