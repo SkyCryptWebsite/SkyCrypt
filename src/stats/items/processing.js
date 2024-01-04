@@ -497,27 +497,31 @@ export async function processItems(base64, source, customTextures = false, packs
     }
 
     if (item?.tag || item?.exp) {
-      if (item.tag?.ExtraAttributes?.id === "PET") {
-        item.tag.ExtraAttributes.petInfo =
-          JSON.stringify(item.tag.ExtraAttributes.petInfo) ?? item.tag.ExtraAttributes.petInfo;
-      }
+      try {
+        if (item.tag?.ExtraAttributes?.id === "PET") {
+          item.tag.ExtraAttributes.petInfo =
+            JSON.stringify(item.tag.ExtraAttributes.petInfo) ?? item.tag.ExtraAttributes.petInfo;
+        }
 
-      const ITEM_PRICE = await getItemNetworth(item, { cache: true });
+        const ITEM_PRICE = await getItemNetworth(item, { cache: true });
 
-      if (ITEM_PRICE?.price > 0) {
-        itemLore.push(
-          "",
-          `§7Item Value: §6${Math.round(ITEM_PRICE.price).toLocaleString()} Coins §7(§6${helper.formatNumber(
-            ITEM_PRICE.price
-          )}§7)`
-        );
-      }
+        if (ITEM_PRICE?.price > 0) {
+          itemLore.push(
+            "",
+            `§7Item Value: §6${Math.round(ITEM_PRICE.price).toLocaleString()} Coins §7(§6${helper.formatNumber(
+              ITEM_PRICE.price
+            )}§7)`
+          );
+        }
 
-      if (item.tag?.ExtraAttributes?.id === "PET") {
-        item.tag.ExtraAttributes.petInfo =
-          typeof item.tag.ExtraAttributes.petInfo === "string"
-            ? JSON.parse(item.tag.ExtraAttributes.petInfo)
-            : item.tag.ExtraAttributes.petInfo;
+        if (item.tag?.ExtraAttributes?.id === "PET") {
+          item.tag.ExtraAttributes.petInfo =
+            typeof item.tag.ExtraAttributes.petInfo === "string"
+              ? JSON.parse(item.tag.ExtraAttributes.petInfo)
+              : item.tag.ExtraAttributes.petInfo;
+        }
+      } catch (error) {
+        itemLore.push("", `§7Item Value: §cAn error occurred while calculating the value of this item.`);
       }
     }
 
