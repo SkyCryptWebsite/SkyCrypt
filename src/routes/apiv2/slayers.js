@@ -39,6 +39,7 @@ router.get("/:player/:profile", async (req, res, next) => {
       };
     }
 
+    helper.sendMetric("endpoint_apiv2_slayers_profile_success");
     res.json(output);
   } catch (e) {
     next(e);
@@ -67,6 +68,7 @@ router.get("/:player", async (req, res, next) => {
       };
     }
 
+    helper.sendMetric("endpoint_apiv2_slayers_player_success");
     res.json(output);
   } catch (e) {
     next(e);

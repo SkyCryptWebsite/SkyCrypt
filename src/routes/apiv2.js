@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import sanitize from "mongo-sanitize";
 import leaderboard from "../leaderboards.js";
+import * as helper from "../helper.js";
 
 import { getCompletePacks } from "../custom-resources.js";
 import { db } from "../mongo.js";
@@ -50,8 +51,10 @@ router.use(async (req, res, next) => {
  */
 router.get("/packs", async (req, res) => {
   if (req.apiKey) {
+    helper.sendMetric("endpoint_apiv2_packs_success");
     res.json(getCompletePacks());
   } else {
+    helper.sendMetric("endpoint_apiv2_packs_fail");
     res.status(404).json({ error: "This endpoint isn't available to the public." });
   }
 });
@@ -65,6 +68,7 @@ router.get("/packs", async (req, res) => {
  * @todo Remake how leaderboards work in their entirety.
  */
 router.get("/leaderboards", async (req, res) => {
+  helper.sendMetric("endpoint_apiv2_leaderboards");
   res.json(leaderboards);
 });
 
@@ -80,17 +84,20 @@ router.use("/guild", guildRouter);
 
 // Handler of non-existing endpoints
 router.get("/*", async (req, res) => {
+  helper.sendMetric("endpoint_apiv2_fail_notfound");
   handleError(res, new Error("Endpoint was not found."), 404, false);
 });
 
 // Handler of unsupported methods
 router.all("/*", async (req, res) => {
+  helper.sendMetric("endpoint_apiv2_fail_onlyget");
   handleError(res, new Error("API v2 only supports GET requests."), 405, false);
 });
 
 // Error handler for all /api/v2 endpoints
 // Meant to be a safenet if some endpoint returns an error.
 router.use((err, req, res, next) => {
+  helper.sendMetric("endpoint_apiv2_fail");
   handleError(res, err);
 });
 

@@ -20,7 +20,6 @@ import minecraftData from "minecraft-data";
 const mcData = minecraftData("1.8.9");
 import UPNG from "upng-js";
 import RJSON from "relaxed-json";
-import cluster from "cluster";
 
 import child_process from "child_process";
 import { getFileHash } from "./hashes.js";
@@ -658,10 +657,6 @@ export async function getTexture(item, { ignore_id = false, pack_ids = [], debug
   outputTexture.path = path.posix.relative(path.resolve(FOLDER_PATH, "..", "public"), outputTexture.path);
   debugStats.time_spent_ms = Date.now() - timeStarted;
   outputTexture.debug = debugStats;
-
-  if (cluster.isWorker) {
-    process.send({ type: "used_pack", id: outputTexture?.pack.config.id });
-  }
 
   return outputTexture;
 }

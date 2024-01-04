@@ -18,6 +18,7 @@ export * from "../common/helper.js";
 
 export * from "./helper/cache.js";
 export * from "./helper/item.js";
+export * from "./helper/metrics.js";
 
 import {
   GUILD_XP,

@@ -91,6 +91,7 @@ router.get("/:lbName", async (req, res, next) => {
       output.positions.push(lbPosition);
     }
 
+    helper.sendMetric("endpoint_apiv2_leaderboard_success");
     res.json(output);
   } catch (e) {
     next(e);

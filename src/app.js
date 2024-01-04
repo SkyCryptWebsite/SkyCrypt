@@ -295,10 +295,6 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
     console.debug(`${debugId}: starting page render.`);
     const renderStart = Date.now();
 
-    if (req.cookies.pack) {
-      process.send({ type: "selected_pack", id: req.cookies.pack });
-    }
-
     res.render(
       "stats",
       {
