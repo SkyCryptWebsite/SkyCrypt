@@ -1,5 +1,4 @@
 import { db } from "../mongo.js";
-import { ITEM_TAGS } from "../constants.js";
 
 await Promise.all([
   db.collection("apiKeys").createIndex({ key: 1 }, { unique: true }),
@@ -21,10 +20,6 @@ await Promise.all([
   db.collection("hypixelPlayers").createIndex({ last_updated: 1 }, { expireAfterSeconds: 1209600 }),
 
   db.collection("items").createIndex({ id: 1 }, { unique: true }),
-  db.collection("items").createIndex({ name: "text", tag: "text" }),
-  Promise.all(
-    Object.entries(ITEM_TAGS).map(([id, item]) => db.collection("items").updateOne({ id }, { $set: { tag: item } }))
-  ),
 
   db.collection("members").createIndex({ uuid: 1, profile_id: 1 }, { unique: true }),
 

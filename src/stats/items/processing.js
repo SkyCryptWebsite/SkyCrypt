@@ -7,10 +7,10 @@ const mcData = minecraftData("1.8.9");
 import { fileURLToPath } from "url";
 import { db } from "../../mongo.js";
 import path from "path";
-import _ from "lodash";
 
 import util from "util";
 import nbt from "prismarine-nbt";
+import { v4 } from "uuid";
 const parseNbt = util.promisify(nbt.parse);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -90,36 +90,9 @@ export async function processItems(base64, source, customTextures = false, packs
       item.containsItems = [];
       for (const key in item.tag.ExtraAttributes) {
         if (key.startsWith("personal_compact_") || key.startsWith("personal_deletor_")) {
-          const hypixelItem = await db.collection("items").findOne({ id: item.tag.ExtraAttributes[key] });
+          const itemData = await helper.getItemData({ skyblockId: item.tag.ExtraAttributes[key] });
 
-          const itemData = {
-            Count: 1,
-            Damage: hypixelItem?.damage ?? 3,
-            id: hypixelItem?.item_id ?? 397,
-            itemIndex: item.containsItems.length,
-            glowing: hypixelItem?.glowing ?? false,
-            display_name: hypixelItem?.name ?? _.startCase(item.tag.ExtraAttributes[key].replace(/_/g, " ")),
-            rarity: hypixelItem?.tier ?? "common",
-            categories: [],
-          };
-
-          if (hypixelItem?.texture !== undefined) {
-            itemData.texture_path = `/head/${hypixelItem.texture}`;
-          }
-
-          if (itemData.id >= 298 && itemData.id <= 301) {
-            const type = ["helmet", "chestplate", "leggings", "boots"][itemData.id - 298];
-
-            if (hypixelItem?.color !== undefined) {
-              const color = helper.rgbToHex(hypixelItem.color) ?? "955e3b";
-
-              itemData.texture_path = `/leather/${type}/${color}`;
-            }
-          }
-
-          if (hypixelItem === null) {
-            itemData.texture_path = "/head/bc8ea1f51f253ff5142ca11ae45193a4ad8c3ab5e9c6eec8ba7a4fcb7bac40";
-          }
+          itemData.itemId = v4();
 
           item.containsItems.push(itemData);
         }

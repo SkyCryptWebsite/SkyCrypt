@@ -1,3 +1,5 @@
+import { db } from "../mongo.js";
+
 export const TYPE_TO_CATEGORIES = {
   helmet: ["armor", "helmet"],
   chestplate: ["armor", "chestplate"],
@@ -52,3 +54,15 @@ export const ENCHANTMENTS_TO_CATEGORIES = {
     "turbo_wheat",
   ],
 };
+
+export const ITEMS = new Map();
+
+async function updateItems() {
+  const items = await db.collection("items").find().toArray();
+  for (const item of items) {
+    ITEMS.set(item.id, item);
+  }
+}
+
+updateItems();
+setTimeout(updateItems, 1000 * 60 * 60 * 12); // 12 hours
